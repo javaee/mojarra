@@ -1,5 +1,5 @@
 /*
- * $Id: CarActionListener.java,v 1.11 2003/10/07 23:25:42 rlubke Exp $
+ * $Id: CarActionListener.java,v 1.12 2003/11/11 01:34:03 jvisvanathan Exp $
  */
 
 /*
@@ -89,7 +89,7 @@ public class CarActionListener implements ActionListener {
         // the user decides to start all over from StoreFront page, then we
         // need to reset the package back to "Custom", so that old package
         // selections are lost.
-        (Util.getValueBinding("CarServer.currentPackageName")).
+        (Util.getValueBinding("#{CarServer.currentPackageName}")).
             setValue(context, "Custom"); 
         updateComponentState(context, event.getComponent());
         changeButtonStyle("Custom", event.getComponent()); 
@@ -105,7 +105,7 @@ public class CarActionListener implements ActionListener {
         UIComponent foundComponent = null;
         // get the available option for car package selected
         Properties packageProps = (Properties) 
-        ((Util.getValueBinding("CarServer.currentPackage.packageProperties")).
+        ((Util.getValueBinding("#{CarServer.currentPackage.packageProperties}")).
                 getValue(context));
         if ( packageProps == null) {
             return;
@@ -125,7 +125,7 @@ public class CarActionListener implements ActionListener {
                 return;
             }
             String packageName = (String)
-                (Util.getValueBinding("CarServer.currentPackageName")).
+                (Util.getValueBinding("#{CarServer.currentPackageName}")).
                 getValue(context); 
             
             // propValue of 0 represents, the option will be enabled and 
@@ -163,7 +163,7 @@ public class CarActionListener implements ActionListener {
      */
     public void changeButtonStyle(String packName, UIComponent component) {
         UIComponent foundComponent = null;
-        foundComponent = component.findComponent("custom");
+        foundComponent = component.findComponent("Custom");
         if (foundComponent == null) {
             return;
         }
@@ -173,7 +173,7 @@ public class CarActionListener implements ActionListener {
             foundComponent.getAttributes().put("styleClass", "package-unselected"); 
         }
         
-        foundComponent = component.findComponent("standard");
+        foundComponent = component.findComponent("Standard");
         if (foundComponent == null) {
             return;
         }
@@ -183,7 +183,7 @@ public class CarActionListener implements ActionListener {
             foundComponent.getAttributes().put("styleClass", "package-unselected"); 
         }
         
-        foundComponent = component.findComponent("performance");
+        foundComponent = component.findComponent("Performance");
         if (foundComponent == null) {
             return;
         }
@@ -193,7 +193,7 @@ public class CarActionListener implements ActionListener {
             foundComponent.getAttributes().put("styleClass", "package-unselected"); 
         }
         
-        foundComponent = component.findComponent("deluxe");
+        foundComponent = component.findComponent("Deluxe");
         if (foundComponent == null) {
             return;
         }
@@ -222,7 +222,7 @@ public class CarActionListener implements ActionListener {
           
         } 
         if ( carId != 0 ) {
-            (Util.getValueBinding("CarServer.carId")).
+            (Util.getValueBinding("#{CarServer.carId}")).
                     setValue(context, new Integer(carId));
         }    
     }

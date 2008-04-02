@@ -74,23 +74,23 @@
         <TR>
             <TD WIDTH="100%">
             <h:graphic_image  
-                valueRef="CarServer.carImage" />
+                value="#{CarServer.carImage}" />
                 <BR>
             <B> <FONT SIZE="4" COLOR="#330066" FACE="Arial, Helvetica">
             <h:output_text  
-                valueRef="CarServer.carTitle" 
+                value="#{CarServer.carTitle}" 
                  />
             </FONT></B>
             <FONT FACE="Arial, Helvetica"><BR> <BR>
             <h:output_text  
-                valueRef="CarServer.carDesc" />
+                value="#{CarServer.carDesc}" />
             <BR> <BR>
             </FONT><B><FONT COLOR="#93B629" FACE="Arial, Helvetica">
             <h:output_text value="#{carDemoBundle.basePriceLabel}" />
 
             </FONT></B><FONT FACE="Arial, Helvetica"> 
             <h:output_text   
-                valueRef="CarServer.carBasePrice" />
+                value="#{CarServer.carBasePrice}" />
 
             <BR> </FONT><B>
             <FONT COLOR="#93B629" FACE="Arial, Helvetica">
@@ -99,7 +99,7 @@
             </FONT></B>
             <FONT FACE="Arial, Helvetica">
             <h:output_text   
-                valueRef="CarServer.carCurrentPrice" />
+                value="#{CarServer.carCurrentPrice}" />
 
             <BR> <BR>
             <h:command_button value="#{carDemoBundle.buy}" 
@@ -111,7 +111,7 @@
         </TR>
         <TR>
             <TD WIDTH="100%" BGCOLOR="white"><B><FONT SIZE="4" COLOR="#330066" FACE="Arial, Helvetica">
-            <h:output_text value="carDemoBundle.OptionsPackages" />
+            <h:output_text value="#{carDemoBundle.OptionsPackages}" />
             </FONT></B></TD>
         </TR>
         <TR>
@@ -119,20 +119,20 @@
             <h:output_text value="#{carDemoBundle.Package}" />
             </FONT></B>
             <BR>
-            <h:command_button id="custom" action="custom"
-                styleClass="package-selected"
+            <h:command_button id="Custom" action="Custom"
+                styleClass="package-selected" override="false"
                 value="#{carDemoBundle.Custom}">
                 <f:action_listener type="cardemo.CarPackageListener" />
             </h:command_button>
-            <h:command_button id="standard" action="standard" 
+            <h:command_button id="Standard" action="Standard" 
                 value="#{carDemoBundle.Standard}">
                 <f:action_listener type="cardemo.CarPackageListener" />
             </h:command_button>
-            <h:command_button id="performance" action="performance"
+            <h:command_button id="Performance" action="Performance"
                 value="#{carDemoBundle.Performance}">
                 <f:action_listener type="cardemo.CarPackageListener" />
             </h:command_button>
-            <h:command_button id="deluxe" action="deluxe"
+            <h:command_button id="Deluxe" action="Deluxe"
                 value="#{carDemoBundle.Deluxe}">
                 <f:action_listener type="cardemo.CarPackageListener" />
             </h:command_button>
@@ -148,10 +148,10 @@
                 </FONT></B></P>
                 <BLOCKQUOTE><P><FONT FACE="Arial, Helvetica">
                 <h:selectone_menu  id="currentEngine"
-                     valueRef="CarServer.currentEngineOption">
+                     value="#{CarServer.currentEngineOption}">
                      <f:valuechange_listener type="cardemo.PackageValueChanged" />
                     <f:selectitems  
-                        valueRef="CarServer.engineOption"/>
+                        value="#{CarServer.engineOption}"/>
                 </h:selectone_menu>    
                 </FONT></P></BLOCKQUOTE>
                 </TD>
@@ -161,10 +161,10 @@
                 <FONT FACE="Arial, Helvetica"></FONT></P>
                 <BLOCKQUOTE><P><FONT FACE="Arial, Helvetica">
                 <h:selectone_radio  id="currentBrake"
-                    valueRef="CarServer.currentBrakeOption">
+                    value="#{CarServer.currentBrakeOption}">
                     <f:valuechange_listener type="cardemo.PackageValueChanged" />
                     <f:selectitems  
-                        valueRef="CarServer.brakeOption"/>
+                        value="#{CarServer.brakeOption}"/>
                 </h:selectone_radio>
                 </FONT></P></BLOCKQUOTE>
                 </TD>
@@ -178,10 +178,10 @@
                 <FONT FACE="Arial, Helvetica"></FONT></P>
                 <BLOCKQUOTE><P><FONT FACE="Arial, Helvetica">
                 <h:selectone_menu  id="currentSuspension"
-                    valueRef="CarServer.currentSuspensionOption">
+                    value="#{CarServer.currentSuspensionOption}">
                      <f:valuechange_listener type="cardemo.PackageValueChanged" />
                     <f:selectitems  
-                        valueRef="CarServer.suspensionOption"/>
+                        value="#{CarServer.suspensionOption}"/>
                 </h:selectone_menu>
                 </FONT></P> </BLOCKQUOTE>
                 </TD>
@@ -193,10 +193,10 @@
                 <FONT FACE="Arial, Helvetica"></FONT></P>
                 <BLOCKQUOTE><P><FONT FACE="Arial, Helvetica">
                 <h:selectone_radio  id="currentSpeaker"
-                    valueRef="CarServer.currentSpeakerOption" >
+                    value="#{CarServer.currentSpeakerOption}" >
                     <f:valuechange_listener type="cardemo.PackageValueChanged" />
                    <f:selectitems  
-                        valueRef="CarServer.speakerOption"/>
+                        value="#{CarServer.speakerOption}"/>
                 </h:selectone_radio>
                 </FONT></P> </BLOCKQUOTE>
                 </TD>
@@ -209,10 +209,10 @@
                 <FONT FACE="Arial, Helvetica"></FONT></P>
                 <BLOCKQUOTE> <P><FONT FACE="Arial, Helvetica">
                 <h:selectone_radio  id="currentAudio"
-                    valueRef="CarServer.currentAudioOption">
+                    value="#{CarServer.currentAudioOption}">
                      <f:valuechange_listener type="cardemo.PackageValueChanged" />
                     <f:selectitems  
-                        valueRef="CarServer.audioOption"/>
+                        value="#{CarServer.audioOption}"/>
                 </h:selectone_radio>
                 </FONT></P> 
                 </BLOCKQUOTE>
@@ -225,10 +225,10 @@
                 <FONT FACE="Arial, Helvetica"></FONT></P>
                 <BLOCKQUOTE> <P><FONT FACE="Arial, Helvetica">
                 <h:selectone_menu  id="currentTransmission"
-                    valueRef="CarServer.currentTransmissionOption">
+                    value="#{CarServer.currentTransmissionOption}">
                      <f:valuechange_listener type="cardemo.PackageValueChanged" />
                     <f:selectitems  
-                        valueRef="CarServer.transmissionOption"/>
+                        value="#{CarServer.transmissionOption}"/>
                 </h:selectone_menu>
                 </FONT></P> </BLOCKQUOTE>
                 </TD>
@@ -250,7 +250,7 @@
             <TR>
                 <TD> 
                 <h:selectboolean_checkbox id="sunroof" title="Sunroof" 
-                    alt="Sunroof" valueRef="CarServer.currentPackage.sunRoofSelected">
+                    alt="Sunroof" value="#{CarServer.currentPackage.sunRoofSelected}">
                      <f:valuechange_listener type="cardemo.PackageValueChanged" />
                  </h:selectboolean_checkbox>    
                 </TD>																		
@@ -260,7 +260,7 @@
                 <TD>
                 <h:selectboolean_checkbox id="cruisecontrol" 
                     title="Cruise Control"  
-                    valueRef="CarServer.currentPackage.cruiseControlSelected" >
+                    value="#{CarServer.currentPackage.cruiseControlSelected}" >
                      <f:valuechange_listener type="cardemo.PackageValueChanged" />
                  </h:selectboolean_checkbox>
 
@@ -271,7 +271,7 @@
                 <TD>
                 <h:selectboolean_checkbox id="keylessentry" 
                     title="Keyless Entry"  alt="Keyless Entry"
-                    valueRef="CarServer.currentPackage.keylessEntrySelected" >
+                    value="#{CarServer.currentPackage.keylessEntrySelected}" >
                      <f:valuechange_listener type="cardemo.PackageValueChanged" />
                  </h:selectboolean_checkbox>
 
@@ -284,17 +284,17 @@
                 <TD> 
                 <h:selectboolean_checkbox id="securitySystem"
                     title="Security System"  alt="Security System"
-                    valueRef="CarServer.currentPackage.securitySystemSelected" >
+                    value="#{CarServer.currentPackage.securitySystemSelected}" >
                      <f:valuechange_listener type="cardemo.PackageValueChanged" />
                  </h:selectboolean_checkbox>
 
                 </TD>
                 <TD>
-                <h:output_text value="{carDemoBundle.securityLabel}" />  
+                <h:output_text value="#{carDemoBundle.securityLabel}" />  
                 </TD>
                 <TD>
                 <h:selectboolean_checkbox id="skirack" title="Ski Rack"  
-                    alt="Ski Rack" valueRef="CarServer.currentPackage.skiRackSelected"
+                    alt="Ski Rack" value="#{CarServer.currentPackage.skiRackSelected}"
                      >
                      <f:valuechange_listener type="cardemo.PackageValueChanged" />
                  </h:selectboolean_checkbox>
@@ -305,7 +305,7 @@
                 <TD>
                 <h:selectboolean_checkbox id="towPackage" title="Tow Package"  
                     alt="Tow Package" 
-                    valueRef="CarServer.currentPackage.towPackageSelected" >
+                    value="#{CarServer.currentPackage.towPackageSelected}" >
                      <f:valuechange_listener type="cardemo.PackageValueChanged" />
                  </h:selectboolean_checkbox>
 
@@ -317,7 +317,7 @@
             <TR>
                 <TD>
                 <h:selectboolean_checkbox id="gps" title="GPS" alt="GPS"
-                    valueRef="CarServer.currentPackage.gpsSelected"  >
+                    value="#{CarServer.currentPackage.gpsSelected}"  >
                      <f:valuechange_listener type="cardemo.PackageValueChanged" />
                  </h:selectboolean_checkbox>
                 </FONT> 

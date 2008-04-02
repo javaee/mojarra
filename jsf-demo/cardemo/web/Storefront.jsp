@@ -128,7 +128,7 @@
 
             <BR>
             <h:command_button action="more3"
-                 value="carDemoBundle.moreButton" >
+                 value="#{carDemoBundle.moreButton}" >
                 <f:action_listener type="cardemo.CarActionListener"/>
             </h:command_button>
             </TD>
@@ -149,7 +149,7 @@
 
             <BR>
             <h:command_button  action="more4" 
-                 value="carDemoBundle.moreButton" >
+                 value="#{carDemoBundle.moreButton}" >
                <f:action_listener type="cardemo.CarActionListener"/>
             </h:command_button>
             </TD>

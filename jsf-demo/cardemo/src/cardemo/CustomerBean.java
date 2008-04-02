@@ -1,5 +1,5 @@
 /*
- * $Id: CustomerBean.java,v 1.8 2003/10/15 16:59:57 jvisvanathan Exp $
+ * $Id: CustomerBean.java,v 1.9 2003/11/11 01:34:03 jvisvanathan Exp $
  */
 /*
  * Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
@@ -142,7 +142,7 @@ public class CustomerBean extends Object {
         state = sT;
     }
     
-    public String saveState() {
+    public String getState() {
         return state;
     }
     

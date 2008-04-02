@@ -80,7 +80,7 @@ public class PackageValueChanged implements ValueChangeListener {
             String currentPrice;
             int cPrice = 0;
             currentPrice = (String)
-            (Util.getValueBinding("CarServer.carCurrentPrice"))
+            (Util.getValueBinding("#{CarServer.carCurrentPrice}"))
             .getValue(context);
             cPrice = Integer.parseInt(currentPrice);
             log.debug("Component Id: "+componentId);
@@ -108,7 +108,7 @@ public class PackageValueChanged implements ValueChangeListener {
             }
             // update model value
             currentPrice = Integer.toString(cPrice);
-            (Util.getValueBinding("CarServer.carCurrentPrice")).
+            (Util.getValueBinding("#{CarServer.carCurrentPrice}")).
             setValue(context,currentPrice);
         } catch (NumberFormatException ignored) {}
         
@@ -138,7 +138,7 @@ public class PackageValueChanged implements ValueChangeListener {
             return 0;
         }    
         CarServer carServer =(CarServer)
-                (Util.getValueBinding("CarServer")).getValue(context);    
+                (Util.getValueBinding("#{CarServer}")).getValue(context);    
         return carServer.getPriceForOption(option);
     }
     

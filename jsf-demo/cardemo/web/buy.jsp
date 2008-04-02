@@ -48,6 +48,7 @@
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
 
+<f:loadBundle basename="cardemo.Resources" var="carDemoBundle"/>
 <body bgcolor="#FFFFFF">
 <f:view>  
 
@@ -67,7 +68,7 @@
 
 <tr>
 <td WIDTH="100%"><b><font face="Arial, Helvetica"><FONT SIZE="4" COLOR="#330066" FACE="Arial, Helvetica">
-<h:output_text  valueRef="CurrentOptionServer.carTitle" />
+<h:output_text  value="#{CarServer.carTitle}" />
 </FONT></B>
 
 
@@ -82,61 +83,61 @@
 
     <h:output_text value="#{carDemoBundle.Engine}" />
 
-    <h:output_text valueRef="CarServer.currentEngineOption"  />
+    <h:output_text value="#{CarServer.currentEngineOption}"  />
 
     <h:output_text value="#{carDemoBundle.Brakes}" />
 
-    <h:output_text  valueRef="CarServer.currentBrakeOption" />
+    <h:output_text  value="#{CarServer.currentBrakeOption}" />
 
     <h:output_text  value="#{carDemoBundle.Suspension}" />
 
-    <h:output_text  valueRef="CarServer.currentSuspensionOption" />
+    <h:output_text  value="#{CarServer.currentSuspensionOption}" />
 
     <h:output_text  value="#{carDemoBundle.Speakers}" />
 
-    <h:output_text  valueRef="CarServer.currentSpeakerOption" />
+    <h:output_text  value="#{CarServer.currentSpeakerOption}" />
 
     <h:output_text  value="#{carDemoBundle.Audio}" />
 
-    <h:output_text  valueRef="CarServer.currentAudioOption" />
+    <h:output_text  value="#{CarServer.currentAudioOption}" />
 
     <h:output_text  value="#{carDemoBundle.Transmission}" />
 
-    <h:output_text  valueRef="CarServer.currentTransmissionOption" />
+    <h:output_text  value="#{CarServer.currentTransmissionOption}" />
 
     <h:output_text  value="#{carDemoBundle.sunroofLabel}"  />
 
-    <h:output_text  valueRef="CarServer.currentPackage.sunRoofSelected" />
+    <h:output_text  value="#{CarServer.currentPackage.sunRoofSelected}" />
 
     <h:output_text  value="#{carDemoBundle.cruiseLabel}"  />
 
-    <h:output_text  valueRef="CarServer.currentPackage.cruiseControlSelected" />
+    <h:output_text  value="#{CarServer.currentPackage.cruiseControlSelected}" />
 
     <h:output_text value="#{carDemoBundle.keylessLabel}"  />
 
-    <h:output_text  valueRef="CarServer.currentPackage.keylessEntrySelected" />
+    <h:output_text  value="#{CarServer.currentPackage.keylessEntrySelected}" />
 
     <h:output_text  value="#{carDemoBundle.securityLabel}"  />
 
-    <h:output_text  valueRef="CarServer.currentPackage.securitySystemSelected" />
+    <h:output_text  value="#{CarServer.currentPackage.securitySystemSelected}" />
 
     <h:output_text  value="#{carDemoBundle.skiRackLabel}"  />
 
-    <h:output_text  valueRef="CarServer.currentPackage.skiRackSelected" />
+    <h:output_text  value="#{CarServer.currentPackage.skiRackSelected}" />
 
     <h:output_text  value="#{carDemoBundle.towPkgLabel}"  />
 
-    <h:output_text  valueRef="CarServer.currentPackage.towPackageSelected" />
+    <h:output_text  value="#{CarServer.currentPackage.towPackageSelected}" />
 
     <h:output_text  value="#{carDemoBundle.gpsLabel}"  />
 
-    <h:output_text  valueRef="CarServer.currentPackage.gpsSelected" />
+    <h:output_text  value="#{CarServer.currentPackage.gpsSelected}" />
     
   <f:facet name="footer">
      <h:panel_group>
         <h:output_text  value="#{carDemoBundle.yourPriceLabel}"  />
         &nbsp;
-        <h:output_text  valueRef="CarServer.carCurrentPrice" />
+        <h:output_text  value="#{CarServer.carCurrentPrice}" />
      </h:panel_group>
   </f:facet>
 

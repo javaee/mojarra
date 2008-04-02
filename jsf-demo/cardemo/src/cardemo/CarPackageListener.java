@@ -1,5 +1,5 @@
 /*
- * $Id: CarPackageListener.java,v 1.2 2003/09/25 17:48:02 horwat Exp $
+ * $Id: CarPackageListener.java,v 1.3 2003/11/11 01:34:03 jvisvanathan Exp $
  */
 
 /*
@@ -47,6 +47,7 @@ package cardemo;
 import com.sun.faces.util.Util;
 
 import javax.faces.component.UIComponent;
+import javax.faces.component.UICommand;
 import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseId;
 import javax.faces.event.ActionEvent;
@@ -88,10 +89,10 @@ public class CarPackageListener extends CarActionListener implements ActionListe
         // Note: Name of the Package resources file must match the key attribute
         // of the UICommand component. The key was chosen so that it is not
         // dependent in any locale
-        String packageKey = (String)component.getAttributes().get("key");
-        (Util.getValueBinding("CarServer.currentPackageName")).
-                setValue(context, packageKey);
+        String packageAction = (String)((UICommand)component).getAction();
+        (Util.getValueBinding("#{CarServer.currentPackageName}")).
+                setValue(context, packageAction);
         updateComponentState(context, component);
-        changeButtonStyle(packageKey, component);
+        changeButtonStyle(packageAction, component);
     }     
 } // end of class CarPackageListener

@@ -50,7 +50,9 @@
 </head>
 <body>
 <jsp:useBean id="creditCardConverter" class="cardemo.CreditCardConverter" scope="session" />
-<f:loadBundle basename="cardemo.Resources" var="cardemoBundle"/>
+
+<f:loadBundle
+	    basename="cardemo.Resources" var="carDemoBundle"/>
 
 <f:view>
 <h:form >
@@ -72,15 +74,15 @@
                                 <h:output_text value="#{carDemoBundle.titleLabel}" /></font></td>
                                 <td valign="top"> <font face="Arial, Helvetica">
                                     <h:selectone_menu id="title" 
-                                                       valueRef="CustomerBean.currentTitle">
-                                        <f:selectitems valueRef="CustomerBean.titleOptions" />
+                                                       value="#{CustomerBean.currentTitle}">
+                                        <f:selectitems value="#{CustomerBean.titleOptions}" />
                                     </h:selectone_menu></font></td>
                               </tr>
                               <tr> 
                                 <td valign="top" align="right"><font face="Arial, Helvetica"> 
                                 <h:output_text value="#{carDemoBundle.firstLabel}" /></font></td>
                                 <td valign="top"> <font face="Arial, Helvetica">
-      <h:input_text  valueRef="CustomerBean.firstName" > 
+      <h:input_text  value="#{CustomerBean.firstName}" > 
       </h:input_text></font></td>
                               </tr>
                               <tr> 
@@ -88,7 +90,7 @@
       <h:output_text value="#{carDemoBundle.middleLabel}" /></font></td>
                                 <td valign="top"> <font face="Arial, Helvetica">
         <h:input_text id="middleInitial" size="1" maxlength="1" 
-            valueRef="CustomerBean.middleInitial" > 
+            value="#{CustomerBean.middleInitial}" > 
         </h:input_text>
         <h:messages  for="middleInitial"/> 
         </font></td>
@@ -97,26 +99,26 @@
                                 <td valign="top" align="right"><font face="Arial, Helvetica"> 
       <h:output_text value="#{carDemoBundle.lastLabel}" /></font></td>
                                 <td valign="top"> <font face="Arial, Helvetica">
-      <h:input_text  valueRef="CustomerBean.lastName" >
+      <h:input_text  value="#{CustomerBean.lastName}" >
       </h:input_text></font></td>
                               </tr>
                               <tr> 
                                 <td valign="top" align="right"><font face="Arial, Helvetica"> 
       <h:output_text value="#{carDemoBundle.mailingLabel}"/></font></td>
                                 <td valign="top"> <font face="Arial, Helvetica">
-      <h:input_text  valueRef="CustomerBean.mailingAddress" /></font></td>
+      <h:input_text  value="#{CustomerBean.mailingAddress}" /></font></td>
                               </tr>
                               <tr> 
                                 <td valign="top" align="right"><font face="Arial, Helvetica">
       <h:output_text value="#{carDemoBundle.cityLabel}" /></font></td>
                                 <td valign="top"> <font face="Arial, Helvetica">
-      <h:input_text  valueRef="CustomerBean.city" /></font></td>
+      <h:input_text  value="#{CustomerBean.city}" /></font></td>
                               </tr>
                               <tr> 
                                 <td valign="top" align="right"><font face="Arial, Helvetica">
       <h:output_text value="#{carDemoBundle.stateLabel}" /></font></td>
                                 <td valign="top"> <font face="Arial, Helvetica">
-      <h:selectone_menu  valueRef="CustomerBean.state" value="CA">
+      <h:selectone_menu  value="#{CustomerBean.state}" >
 
 		<f:selectitem  itemValue="AL" itemLabel="AL" />
 		<f:selectitem  itemValue="AK" itemLabel="AK"/>
@@ -179,7 +181,7 @@
       <h:output_text  value="#{carDemoBundle.zipLabel}" /></font></td>
                                 <td valign="top"> <font face="Arial, Helvetica">
       <h:input_text id="zip"  
-			valueRef="CustomerBean.zip"
+			value="#{CustomerBean.zip}"
                         size="10" required="true">
           <cd:format_validator formatPatterns="99999|99999-9999|### ###"/> 
        </h:input_text>
@@ -195,7 +197,7 @@
       </font></td>
                                 <td valign="top"> <font face="Arial, Helvetica">
       <h:input_text id="ccno" size="16"
-           converter="<%= creditCardConverter %>" required="true">
+           converter="#{creditCardConverter}" required="true">
           <cd:format_validator 
           formatPatterns="9999999999999999|9999 9999 9999 9999|9999-9999-9999-9999"/>
       </h:input_text>
@@ -205,7 +207,7 @@
                                 <td valign="top" align="right"><font face="Arial, Helvetica"> 
       <h:output_text  value="#{carDemoBundle.monthLabel}" /></font></td>
                                 <td valign="top"> <font face="Arial, Helvetica">
-    <h:selectone_menu  valueRef="CustomerBean.month">
+    <h:selectone_menu  value="#{CustomerBean.month}">
         <f:selectitem itemValue="01" itemLabel="01"/>
         <f:selectitem itemValue="02" itemLabel="02"/>
         <f:selectitem itemValue="03" itemLabel="03"/>
@@ -220,7 +222,7 @@
         <f:selectitem itemValue="12" itemLabel="12"/>
     </h:selectone_menu>
 
-<h:selectone_menu  valueRef="CustomerBean.year" >
+<h:selectone_menu  value="#{CustomerBean.year}" >
         <f:selectitem itemValue="2002" itemLabel="2002"/>
         <f:selectitem itemValue="2003" itemLabel="2003"/>
         <f:selectitem itemValue="2004" itemLabel="2004"/>
