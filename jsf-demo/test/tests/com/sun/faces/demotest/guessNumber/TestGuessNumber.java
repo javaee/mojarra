@@ -1,5 +1,5 @@
 /*
- * $Id: TestGuessNumber.java,v 1.14 2005/12/14 22:27:51 rlubke Exp $
+ * $Id: TestGuessNumber.java,v 1.15 2006/03/07 08:26:20 srinivas635 Exp $
  */
 
 /*
@@ -57,21 +57,25 @@ public class TestGuessNumber extends HtmlUnitTestCase {
         for (int i = 1; i < 11; i++) {
 
             assertTrue(greetingPage.getTitleText().equals("Hello"));
+            boolean foundImage = false;
             for (Iterator iter = greetingPage.getAllHtmlChildElements();
                  iter.hasNext();) {
                 HtmlElement element = (HtmlElement) iter.next();
                 if (element.getTagName().equalsIgnoreCase("img")) {
-                    assertTrue(element.getAttributeValue("id").equals(
+                    if (element.getAttributeValue("id").equals(
                           "helloForm" +
                           NamingContainer.SEPARATOR_CHAR +
-                          "waveImg"));
-                    assertTrue(stripJsessionInfo(
-                          element.getAttributeValue("src"))
-                          .equals("/jsf-guessNumber/wave.med.gif"));
+                          "waveImg")) {
+                        foundImage = true;
+                        assertTrue(stripJsessionInfo(
+                            element.getAttributeValue("src"))
+                            .equals("/jsf-guessNumber/wave.med.gif"));
+                    }
                 }
             }
+            assertTrue(foundImage);
 
-            List forms = greetingPage.getAllForms();
+            List forms = greetingPage.getForms();
             assertTrue(forms != null);
             assertTrue(forms.size() == 1);
 
@@ -94,6 +98,7 @@ public class TestGuessNumber extends HtmlUnitTestCase {
 
             assertTrue(resultPage.getTitleText().equals("Guess The Number"));
 
+            foundImage = false;
             for (Iterator iter = resultPage.getAllHtmlChildElements();
                  iter.hasNext();) {
                 HtmlElement element = (HtmlElement) iter.next();
@@ -111,18 +116,21 @@ public class TestGuessNumber extends HtmlUnitTestCase {
                         break;
                     }
                 } else if (element.getTagName().equalsIgnoreCase("img")) {
-                    assertTrue(element.getAttributeValue("id").equals(
-                          "responseForm" +
-                          NamingContainer.SEPARATOR_CHAR +
-                          "waveImg"));
-                    assertTrue(stripJsessionInfo(
-                          element.getAttributeValue("src"))
-                          .equals("/jsf-guessNumber/wave.med.gif"));
+                    if (element.getAttributeValue("id").equals(
+                        "responseForm" +
+                        NamingContainer.SEPARATOR_CHAR +
+                        "waveImg")) {
+                        foundImage = true;
+                        assertTrue(stripJsessionInfo(
+                            element.getAttributeValue("src"))
+                            .equals("/jsf-guessNumber/wave.med.gif"));
+                    }
                 }
             }
+            assertTrue(foundImage);
 
             // "click" the back button and submit a new guess
-            List forms1 = resultPage.getAllForms();
+            List forms1 = resultPage.getForms();
             assertTrue(forms1 != null);
             assertTrue(forms1.size() == 1);
 
@@ -153,7 +161,7 @@ public class TestGuessNumber extends HtmlUnitTestCase {
     public void testGuessNumberNullInput() throws Exception {
         int numberFound = 0;
         HtmlPage greetingPage = accessAppAndGetGreetingJSP();
-        HtmlForm guessForm = (HtmlForm) greetingPage.getAllForms().get(0);
+        HtmlForm guessForm = (HtmlForm) greetingPage.getForms().get(0);
         assertTrue(guessForm != null);
 
         HtmlPage resultPage = (HtmlPage) guessForm.submit(
@@ -164,7 +172,7 @@ public class TestGuessNumber extends HtmlUnitTestCase {
              iter.hasNext();) {
             HtmlElement element = (HtmlElement) iter.next();
             if (element.asText().trim()
-                  .equals("Sorry, 0 is incorrect. Try a larger number.")) {
+                  .equals("Sorry, null is incorrect. Try a larger number.")) {
                 numberFound++;
                 System.out.println("Incorrect guess 'null'.");
                 break;
@@ -182,7 +190,7 @@ public class TestGuessNumber extends HtmlUnitTestCase {
     public void testGuessNumberInvalidInputRange() throws Exception {
         boolean testFailed = false;
         HtmlPage greetingPage = accessAppAndGetGreetingJSP();
-        HtmlForm guessForm = (HtmlForm) greetingPage.getAllForms().get(0);
+        HtmlForm guessForm = (HtmlForm) greetingPage.getForms().get(0);
         assertTrue(guessForm != null);
 
         HtmlTextInput input = (HtmlTextInput) guessForm.getInputByName(
@@ -199,18 +207,21 @@ public class TestGuessNumber extends HtmlUnitTestCase {
         {
             HtmlElement element = (HtmlElement) iter.next();
             if (element.getTagName().equalsIgnoreCase("span")) {
-                testFailed = true;
-                assertTrue(element.getAttributeValue("style").startsWith(
+                if (element.getAttributeValue("id").equals("helloForm" +
+                    NamingContainer.SEPARATOR_CHAR + "errors1")) {
+                    testFailed = true;
+                    assertTrue(element.getAttributeValue("style").startsWith(
                       "color: red;"));
-                assertTrue(
-                      element.asText().trim().startsWith("Validation Error"));
+                    assertTrue(
+                      element.asText().trim().contains("Validation Error"));
+                }
             }
         }
         // make sure validation error occurred
         assertTrue(testFailed == true);
         testFailed = false;
 
-        guessForm = (HtmlForm) failed.getAllForms().get(0);
+        guessForm = (HtmlForm) failed.getForms().get(0);
         assertTrue(guessForm != null);
 
         input =
@@ -229,11 +240,14 @@ public class TestGuessNumber extends HtmlUnitTestCase {
         {
             HtmlElement element = (HtmlElement) iter.next();
             if (element.getTagName().equalsIgnoreCase("span")) {
-                testFailed = true;
-                assertTrue(element.getAttributeValue("style").startsWith(
+                if (element.getAttributeValue("id").equals("helloForm" +
+                    NamingContainer.SEPARATOR_CHAR + "errors1")) {
+                    testFailed = true;
+                    assertTrue(element.getAttributeValue("style").startsWith(
                       "color: red;"));
-                assertTrue(
-                      element.asText().trim().startsWith("Validation Error"));
+                    assertTrue(
+                      element.asText().trim().contains("Validation Error"));
+                }
             }
         }
         // make sure validation error occurred
@@ -243,7 +257,6 @@ public class TestGuessNumber extends HtmlUnitTestCase {
 
 
     private HtmlPage accessAppAndGetGreetingJSP() throws Exception {
-
         HtmlPage page = (HtmlPage) getInitialPage();
         return page;
     }

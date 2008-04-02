@@ -1,5 +1,5 @@
 /*
- * $Id: AbstractTestCase.java,v 1.12 2005/08/22 22:10:32 ofung Exp $
+ * $Id: AbstractTestCase.java,v 1.13 2006/03/07 08:28:35 srinivas635 Exp $
  */
 
 /*
@@ -31,6 +31,8 @@ package com.sun.faces.htmlunit;
 
 
 import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.WebRequestSettings;
+import com.gargoylesoftware.htmlunit.WebResponse;
 import com.gargoylesoftware.htmlunit.html.HtmlBody;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlInput;
@@ -105,7 +107,10 @@ public abstract class AbstractTestCase extends TestCase {
 
         client = new WebClient();
         domainURL = getURL("/");
-        state = client.getWebConnection().getStateForUrl(domainURL);
+        WebRequestSettings settings = new WebRequestSettings(domainURL);
+        WebResponse response = client.getWebConnection().getResponse(settings);
+        
+        state = client.getWebConnection().getState();
 
     }
 
@@ -233,7 +238,7 @@ public abstract class AbstractTestCase extends TestCase {
 
     protected boolean clearAllCookies() {
         if (null == state) {
-            state = client.getWebConnection().getStateForUrl(domainURL);
+            state = client.getWebConnection().getState();
             if (null == state) {
                 return false;
             }
@@ -303,7 +308,7 @@ public abstract class AbstractTestCase extends TestCase {
     // (HtmlPage.getFormByName() looks at "name" instead)
     protected HtmlForm getFormById(HtmlPage page, String id) {
 
-        Iterator forms = page.getAllForms().iterator();
+        Iterator forms = page.getForms().iterator();
         while (forms.hasNext()) {
             HtmlForm form = (HtmlForm) forms.next();
             if (id.equals(form.getAttributeValue("id"))) {

@@ -1,5 +1,5 @@
 /*
- * $Id: CommandLinkMultiFormTestCase.java,v 1.3 2005/08/22 22:10:32 ofung Exp $
+ * $Id: CommandLinkMultiFormTestCase.java,v 1.4 2006/03/07 08:29:25 srinivas635 Exp $
  */
 
 /*
@@ -110,7 +110,7 @@ public class CommandLinkMultiFormTestCase extends AbstractTestCase {
 
         page = getPage("/faces/taglib/commandLink_multiform_test.jsp");
         // press all command links..
-        List forms = page.getAllForms();
+        List forms = page.getForms();
         form1 = (HtmlForm)forms.get(0);
         form2 = (HtmlForm)forms.get(1);
         

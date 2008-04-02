@@ -1,5 +1,5 @@
 /*
- * $Id: TestMapping.java,v 1.8 2005/12/14 22:27:52 rlubke Exp $
+ * $Id: TestMapping.java,v 1.9 2006/03/07 08:27:25 srinivas635 Exp $
  */
 
 /*
@@ -75,7 +75,7 @@ public class TestMapping extends HtmlUnitTestCase {
                 }
             }
 
-            List forms = greetingPage.getAllForms();
+            List forms = greetingPage.getForms();
             assertTrue(forms != null);
             assertTrue(forms.size() == 1);
 
@@ -131,7 +131,7 @@ public class TestMapping extends HtmlUnitTestCase {
             }
 
             // "click" the back button and submit a new guess
-            List forms1 = resultPage.getAllForms();
+            List forms1 = resultPage.getForms();
             assertTrue(forms1 != null);
             assertTrue(forms1.size() == 1);
 
@@ -167,7 +167,7 @@ public class TestMapping extends HtmlUnitTestCase {
     public void testGuessNumberNullInput() throws Exception {
         int numberFound = 0;
         HtmlPage greetingPage = accessAppAndGetGreetingJSP();
-        HtmlForm guessForm = (HtmlForm) greetingPage.getAllForms().get(0);
+        HtmlForm guessForm = (HtmlForm) greetingPage.getForms().get(0);
         assertTrue(guessForm != null);
 
         HtmlPage resultPage = (HtmlPage) guessForm.submit(
@@ -194,7 +194,7 @@ public class TestMapping extends HtmlUnitTestCase {
     public void testGuessNumberInvalidInputRange() throws Exception {
         boolean testFailed = false;
         HtmlPage greetingPage = accessAppAndGetGreetingJSP();
-        HtmlForm guessForm = (HtmlForm) greetingPage.getAllForms().get(0);
+        HtmlForm guessForm = (HtmlForm) greetingPage.getForms().get(0);
         assertTrue(guessForm != null);
 
         HtmlTextInput input = (HtmlTextInput) guessForm.getInputByName(
@@ -222,7 +222,7 @@ public class TestMapping extends HtmlUnitTestCase {
         assertTrue(testFailed == true);
         testFailed = false;
 
-        guessForm = (HtmlForm) failed.getAllForms().get(0);
+        guessForm = (HtmlForm) failed.getForms().get(0);
         assertTrue(guessForm != null);
 
         input =
