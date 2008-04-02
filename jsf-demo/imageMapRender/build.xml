@@ -45,6 +45,7 @@
 
   <!-- Configure the context path for this application -->
   <property file="build.properties"/>
+  <property file="../build.properties"/>            
   <property name="context.path" value="/imageMapRender"/>
   <property name="example" value="imageMapRender" />
   <property name="build"   value="${basedir}/build" />
