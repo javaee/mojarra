@@ -338,7 +338,7 @@
                       name="com.sun.faces.util.TestUtil_messages"/>
                 <test todir="${impl.test.results.dir}"
                       name="com.sun.faces.taglib.jsf_core.TestCoreTagsVBEnabled"/>
-                <!-- To run the following tests, uncomment
+            	<!-- To run the following tests, uncomment
                  following tests and set javax.faces.STATE_SAVING_METHOD 
                  property in conf/test/web.xml to client. Tests that 
                  excercise save state in server code have to be commented as 
@@ -361,6 +361,9 @@
                       name="com.sun.faces.util.TestUtil_local"/>  
                  <test todir="${impl.test.results.dir}"
                       name="com.sun.faces.util.TestLRUMap_local"/>
+                 <test todir="${impl.test.results.dir}"
+                      name="com.sun.faces.util.TestHtmlUtils"/>
+
             </suite>    
         </jsf.junit>
         <antcall target="test.config"/>

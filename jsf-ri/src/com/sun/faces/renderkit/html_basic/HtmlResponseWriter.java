@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlResponseWriter.java,v 1.28 2006/05/17 19:00:48 rlubke Exp $
+ * $Id: HtmlResponseWriter.java,v 1.29 2006/08/03 21:09:36 youngm Exp $
  */
 
 /*
@@ -357,7 +357,7 @@ public class HtmlResponseWriter extends ResponseWriter {
         if (stringValue.startsWith("javascript:")) {
             HtmlUtils.writeAttribute(writer, buffer, stringValue);
         } else {
-            HtmlUtils.writeURL(writer, stringValue, encoding);
+            HtmlUtils.writeURL(writer, buffer, stringValue, encoding, getContentType());
         }
                 
         writer.write('"');

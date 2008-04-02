@@ -1,5 +1,8 @@
 /*
- * $Id: HtmlUtils.java,v 1.9 2006/03/29 23:03:53 rlubke Exp $
+ * $Id: HtmlUtils.java,v 1.10 2006/08/03 21:09:37 youngm Exp $
+ */
+/*
+ * $Id: HtmlUtils.java,v 1.10 2006/08/03 21:09:37 youngm Exp $
  */
 
 /*
@@ -32,9 +35,12 @@ package com.sun.faces.util;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.util.BitSet;
+
+import com.sun.faces.RIConstants;
 
 /**
  * Utility class for HTML.
@@ -479,10 +485,12 @@ public class HtmlUtils {
      *                      question mark
      */
     static public void writeURL(Writer out,
+    							char[] buff,
                                 String text,
-                                String queryEncoding)
+                                String queryEncoding,
+                                String contentType)
         throws IOException, UnsupportedEncodingException {
-        int length = text.length();
+    	int length = text.length();
 
         for (int i = 0; i < length; i++) {
             char ch = text.charAt(i);
@@ -513,8 +521,27 @@ public class HtmlUtils {
             // as if it were in the request's character set.  So use
             // the real encoding for those!
             else if (ch == '?') {
-                out.write('?');
-                encodeURIString(out, text, queryEncoding, i + 1);
+            	out.write('?');
+            	//If the content type is an XML file use standard attribute rules.
+            	if (RIConstants.XHTML_CONTENT_TYPE.equals(contentType) ||
+            			RIConstants.APPLICATION_XML_CONTENT_TYPE.equals(contentType) ||
+            			RIConstants.TEXT_XML_CONTENT_TYPE.equals(contentType)) {
+            		String encodedURL = encodeURIString(text, queryEncoding, i + 1);
+            		//Convert all & to &amp; and all &amp%3B to &amp;
+            		char[] encodedURLArray = encodedURL.toCharArray();
+            		for(int loop = 0;loop < encodedURLArray.length;loop++) {
+            			if(encodedURLArray[loop] != '&') {
+            				out.write(encodedURLArray[loop]);
+            			} else if(loop+7 <= encodedURLArray.length && encodedURL.substring(loop, loop+7).equals("&amp%3B")) {
+            				out.write("&amp;");
+           					loop += 6;
+            			} else {
+            				out.write("&amp;");
+            			}
+            		}
+            	} else {
+            		out.write(encodeURIString(text, queryEncoding, i + 1));
+            	}
                 return;
             } else {
                 out.write(ch);
@@ -525,11 +552,11 @@ public class HtmlUtils {
 
     // Encode a String into URI-encoded form.  This code will
     // appear rather (ahem) similar to java.net.URLEncoder
-    static private void encodeURIString(Writer out,
-                                        String text,
+    static private String encodeURIString(String text,
                                         String encoding,
                                         int start)
         throws IOException, UnsupportedEncodingException {
+    	Writer out = new StringWriter(text.length());
         ByteArrayOutputStream buf = null;
         OutputStreamWriter writer = null;
         char[] charArray = null;
@@ -571,6 +598,7 @@ public class HtmlUtils {
                 buf.reset();
             }
         }
+        return out.toString();
     }
 
 
