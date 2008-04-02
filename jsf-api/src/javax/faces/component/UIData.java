@@ -653,8 +653,10 @@ public class UIData extends UIComponentBase
      *     is <code>false</code>, skip further processing.</li>
      * <li>Set the current <code>rowIndex</code> to -1.</li>
      * <li>Call the <code>processDecodes()</code> method of all facets
-     *     of this {@link UIComponent}, in the order determined
+     *     of this {@link UIData}, in the order determined
      *     by a call to <code>getFacets().keySet().iterator()</code>.</li>
+     * <li>Call the <code>processDecodes()</code> method of all facets
+     *     of the {@link UIColumn} children of this {@link UIData}.</li>
      * <li>Iterate over the set of rows that were included when this
      *     component was rendered (i.e. those defined by the <code>first</code>
      *     and <code>rows</code> properties), performing the following
@@ -663,9 +665,9 @@ public class UIData extends UIComponentBase
      *     <li>Set the current <code>rowIndex</code> to the appropriate
      *         value for this row.</li>
      *     <li>If <code>isRowAvailable()</code> returns <code>true</code>,
-     *         iterate over the child components of this component,
-     *         calling the <code>processDecodes()</code> method for each
-     *         child that is a {@link UIColumn}.</li>
+     *         iterate over the children components of each {@link UIColumn}
+     *         child of this {@link UIData} component, calling the
+     *         <code>processDecodes()</code> method for each such child.</li>
      *     </ul></li>
      * <li>Set the current <code>rowIndex</code> to -1.</li>
      * <li>Call the <code>decode()</code> method of this component.</li>
@@ -705,8 +707,10 @@ public class UIData extends UIComponentBase
      *     is <code>false</code>, skip further processing.</li>
      * <li>Set the current <code>rowIndex</code> to -1.</li>
      * <li>Call the <code>processValidators()</code> method of all facets
-     *     of this {@link UIComponent}, in the order determined
+     *     of this {@link UIData}, in the order determined
      *     by a call to <code>getFacets().keySet().iterator()</code>.</li>
+     * <li>Call the <code>processValidators()</code> method of all facets
+     *     of the {@link UIColumn} children of this {@link UIData}.</li>
      * <li>Iterate over the set of rows that were included when this
      *     component was rendered (i.e. those defined by the <code>first</code>
      *     and <code>rows</code> properties), performing the following
@@ -715,9 +719,9 @@ public class UIData extends UIComponentBase
      *     <li>Set the current <code>rowIndex</code> to the appropriate
      *         value for this row.</li>
      *     <li>If <code>isRowAvailable()</code> returns <code>true</code>,
-     *         iterate over the child components of this component,
-     *         calling the <code>processValidators()</code> method for each
-     *         child that is a {@link UIColumn}.</li>
+     *         iterate over the children components of each {@link UIColumn}
+     *         child of this {@link UIData} component, calling the
+     *         <code>processValidators()</code> method for each such child.</li>
      *     </ul></li>
      * <li>Set the current <code>rowIndex</code> to -1.</li>
      * </ul>
@@ -749,8 +753,10 @@ public class UIData extends UIComponentBase
      *     is <code>false</code>, skip further processing.</li>
      * <li>Set the current <code>rowIndex</code> to -1.</li>
      * <li>Call the <code>processUpdates()</code> method of all facets
-     *     of this {@link UIComponent}, in the order determined
+     *     of this {@link UIData}, in the order determined
      *     by a call to <code>getFacets().keySet().iterator()</code>.</li>
+     * <li>Call the <code>processUpdates()</code> method of all facets
+     *     of the {@link UIColumn} children of this {@link UIData}.</li>
      * <li>Iterate over the set of rows that were included when this
      *     component was rendered (i.e. those defined by the <code>first</code>
      *     and <code>rows</code> properties), performing the following
@@ -759,9 +765,9 @@ public class UIData extends UIComponentBase
      *     <li>Set the current <code>rowIndex</code> to the appropriate
      *         value for this row.</li>
      *     <li>If <code>isRowAvailable()</code> returns <code>true</code>,
-     *         iterate over the child components of this component,
-     *         calling the <code>processUpdates()</code> method for each
-     *         child that is a {@link UIColumn}.</li>
+     *         iterate over the children components of each {@link UIColumn}
+     *         child of this {@link UIData} component, calling the
+     *         <code>processUpdates()</code> method for each such child.</li>
      *     </ul></li>
      * <li>Set the current <code>rowIndex</code> to -1.</li>
      * </ul>
@@ -840,10 +846,19 @@ public class UIData extends UIComponentBase
 
 
     /**
-     * <p>Iterate over our facets and children as appropriate.  In the current
-     * design, facets are only used for per-column headers and footers, so they
-     * do not need to be iterated over.  Therefore, we will deal with the
-     * facets once, and iterate only over the children.</p>
+     * <p>Perform the appropriate phase-specific processing and per-row
+     * iteration for the specified phase, as follows:
+     * <ul>
+     * <li>Set the <code>rowIndex</code> property to -1, and process the facets
+     *     of this {@link UIData} component exactly once.</li>
+     * <li>Set the <code>rowIndex</code> property to -1, and process the facets
+     *     of the {@link UIColumn} children of this {@link UIData} component
+     *     exactly once.</li>
+     * <li>Iterate over the relevant rows, based on the <code>first</code>
+     *     and <code>row</code> properties, and process the children
+     *     of the {@link UIColumn} children of this {@link UIData} component
+     *     once per row.</li>
+     * </ul>
      *
      * @param context {@link FacesContext} for the current request
      * @param phaseId {@link PhaseId} of the phase we are currently running     
