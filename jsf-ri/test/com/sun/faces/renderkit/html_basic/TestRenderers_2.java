@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_2.java,v 1.45 2003/06/27 01:09:59 jvisvanathan Exp $
+ * $Id: TestRenderers_2.java,v 1.46 2003/07/08 15:38:52 eburns Exp $
  */
 
 /*
@@ -13,7 +13,6 @@ package com.sun.faces.renderkit.html_basic;
 
 import com.sun.faces.renderkit.html_basic.CheckboxRenderer;
 import com.sun.faces.renderkit.html_basic.NumberRenderer;
-import com.sun.faces.renderkit.html_basic.HtmlBasicRenderKit;
 import com.sun.faces.tree.SimpleTreeImpl;
 import com.sun.faces.util.Util;
 
@@ -54,7 +53,7 @@ import com.sun.faces.TestBean;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_2.java,v 1.45 2003/06/27 01:09:59 jvisvanathan Exp $
+ * @version $Id: TestRenderers_2.java,v 1.46 2003/07/08 15:38:52 eburns Exp $
  * 
  *
  */

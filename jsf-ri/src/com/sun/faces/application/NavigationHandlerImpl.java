@@ -1,5 +1,5 @@
 /*
- * $Id: NavigationHandlerImpl.java,v 1.7 2003/05/10 00:54:26 rkitain Exp $
+ * $Id: NavigationHandlerImpl.java,v 1.8 2003/07/08 15:38:27 eburns Exp $
  */
 
 /*
@@ -17,8 +17,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeSet;
 
 import javax.faces.FactoryFinder;
 import javax.faces.application.NavigationHandler;
@@ -61,7 +63,7 @@ public class NavigationHandlerImpl extends NavigationHandler {
      * signifying wild card, and some may be specified as an asterisk "*".
      */ 
 
-    private Map caseListMap = null;
+    protected Map caseListMap = null;
 
     /**
      * The List that contains the <code>ConfigNavigationCase</code> objects for a
@@ -75,7 +77,7 @@ public class NavigationHandlerImpl extends NavigationHandler {
      * The entries are stored without the trailing asterisk. 
      */
 
-    private List wildcardMatchList= null;
+    private TreeSet wildcardMatchList= null;
 
 
     /**
@@ -84,23 +86,12 @@ public class NavigationHandlerImpl extends NavigationHandler {
 
     public NavigationHandlerImpl() {
         super();
-    }
-
-    /**
-     * This method gets all the navigation cases from the <code>ConfigBase</code>
-     * object, and builds the needed data structures used to facilitate the 
-     * search process.
-     *
-     * @param configBase The base configuration object after parsing the 
-     *        configuration file.
-     */
- 
-    public void initialize(ConfigBase configBase) {
-        if (null == configBase) {
-            throw new RuntimeException(Util.getExceptionMessage(Util.NULL_CONFIGURATION_ERROR_MESSAGE_ID));
-        }        
-        navigationCases = configBase.getNavigationCases();
-        buildSearchLists();
+	if (caseListMap == null) {
+	   caseListMap = new HashMap();
+	}
+	if (wildcardMatchList == null) {
+           wildcardMatchList = new TreeSet(new SortIt());
+	}
     }
 
     /**
@@ -126,6 +117,28 @@ public class NavigationHandlerImpl extends NavigationHandler {
         }
     }
 
+    public void addNavigationCase(ConfigNavigationCase navigationCase) {
+
+        String fromTreeId = navigationCase.getFromTreeId();
+        if (fromTreeId == null) {
+            fromTreeId = "*";
+        }
+        if (fromTreeId != null) {
+            caseList = (List)caseListMap.get(fromTreeId);
+            if (caseList == null) {
+                caseList = new ArrayList();
+                caseList.add(navigationCase);
+                caseListMap.put(fromTreeId, caseList);
+            } else {
+                caseList.add(navigationCase);
+            }
+            if (fromTreeId.endsWith("*")) {
+                fromTreeId = fromTreeId.substring(0,fromTreeId.lastIndexOf("*"));
+                wildcardMatchList.add(fromTreeId);
+            }
+        }
+    }
+    
     /**
      * This method uses helper methods to determine the new <code>tree</code> identifier.
      * Refer to section 7.4.2 of the specification for more details.
@@ -208,9 +221,10 @@ public class NavigationHandlerImpl extends NavigationHandler {
 
         Assert.assert_it(null != wildcardMatchList);
 
-        for (int i=0; i<wildcardMatchList.size(); i++) {
-            String fromTreeId = (String)wildcardMatchList.get(i);
-
+	Iterator iter = wildcardMatchList.iterator();
+	while (iter.hasNext()) {
+	    String fromTreeId = (String)iter.next();  
+	    
             // See if the entire wildcard string (without the trailing "*" is
             // contained in the incoming treeId.  Ex: /foobar is contained with /foobarbaz
             // If so, then we have found our largest pattern match..
@@ -293,7 +307,6 @@ public class NavigationHandlerImpl extends NavigationHandler {
         String fromActionRef = null;
         String fromOutcome = null;
         String toTreeId = null;
-
         for (int i = 0; i < caseList.size(); i++) {
             ConfigNavigationCase cnc = (ConfigNavigationCase) caseList.get(i);
             fromActionRef = cnc.getFromActionRef();
@@ -341,52 +354,6 @@ public class NavigationHandlerImpl extends NavigationHandler {
         }
 
         return returnTreeId;
-    }
-
-    /**
-     * This method builds two search structures:
-     *     o case list Map - A Map containing all the <code>from-tree-id</code> values as
-     *       the key, and a List of <code>ConfigNavigationCase</code> objects for that key.
-     *     o wild card match list - A List of <code>from-tree-id</code> strings whose 
-     *       trailing character is an asterisk "*".  The trailing asterisk is removed just 
-     *       before it is added to the List, and the List is sorted in descending order
-     *       (longest -> shortest).
-     * The sorting facilitates the wild card pattern search.
-     * Refer to section 7.4.2 of the specification for more details. 
-     */
-
-    private void buildSearchLists() {
-        caseListMap = new HashMap();
-        wildcardMatchList = new ArrayList();
-
-        for (int i=0; i<navigationCases.size(); i++) {
-            ConfigNavigationCase cnc = (ConfigNavigationCase)navigationCases.get(i);
-            String fromTreeId = cnc.getFromTreeId();
-            if (fromTreeId == null) {
-                fromTreeId = "*";
-            }
-            if (fromTreeId != null) {
-                caseList = (List)caseListMap.get(fromTreeId);
-                if (caseList == null) {
-                    caseList = new ArrayList();
-                    caseList.add(cnc);
-                    caseListMap.put(fromTreeId, caseList);
-                } else {
-                    caseList.add(cnc);
-                }
-                if (fromTreeId.endsWith("*")) {
-                    fromTreeId = fromTreeId.substring(0,fromTreeId.lastIndexOf("*"));
-                    wildcardMatchList.add(fromTreeId);
-                }
-            }
-        }
-
-        // Sort the wildcard list in descending order
-        // ex: /foobar.jsp*
-        //     /foobar*
-        //     /foob*
-
-        Collections.sort(wildcardMatchList, new SortIt());
     }
 
     /**

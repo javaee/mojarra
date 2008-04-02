@@ -1,5 +1,5 @@
 /*
- * $Id: TestNavigationHandler.java,v 1.3 2003/05/20 16:35:31 eburns Exp $
+ * $Id: TestNavigationHandler.java,v 1.4 2003/07/08 15:38:42 eburns Exp $
  */
 
 /*
@@ -21,8 +21,13 @@ import com.sun.faces.util.DebugUtil;
 
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
+import javax.faces.application.Application;
+import javax.faces.application.ApplicationFactory;
+import javax.faces.application.NavigationHandler;
 import javax.faces.context.FacesContext;
 import javax.faces.FactoryFinder;
 
@@ -50,7 +55,7 @@ import com.sun.faces.ServletFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestNavigationHandler.java,v 1.3 2003/05/20 16:35:31 eburns Exp $
+ * @version $Id: TestNavigationHandler.java,v 1.4 2003/07/08 15:38:42 eburns Exp $
  * 
  */
 
@@ -69,7 +74,8 @@ public class TestNavigationHandler extends ServletFacesTestCase
 //
     private List testResultList= null;
     protected Digester digester = null;
-
+    private ApplicationImpl application = null;
+    private NavigationHandlerTestImpl navHandler = null;
 
 // Attribute Instance Variables
 
@@ -92,22 +98,8 @@ public class TestNavigationHandler extends ServletFacesTestCase
 //
 // General Methods
 //
-    protected void configureRules(Digester digester) {
-
-    }
-
     private void loadConfigFile() {
 	ConfigBase cbase = loadFromInitParam("WEB-INF/faces-navigation.xml");
-        System.out.println("NAV CASES LOADED:");
-        List navs = cbase.getNavigationCases();
-        for (int i=0; i<navs.size(); i++) {
-            ConfigNavigationCase nc = (ConfigNavigationCase)navs.get(i);
-            System.out.println("<from-tree-id>:"+nc.getFromTreeId());
-            System.out.println(" : <from-action-ref>:"+nc.getFromActionRef());
-            System.out.println(" : <from-outcome>:"+nc.getFromOutcome());
-            System.out.println(" : <to-tree-id>:"+nc.getToTreeId());
-            System.out.println("----------------------------------------------");
-        }
     }
 
     private void loadTestResultList() {
@@ -160,22 +152,23 @@ public class TestNavigationHandler extends ServletFacesTestCase
     }
 
     public void testNavigationHandler() {
+        ApplicationFactory aFactory = 
+	    (ApplicationFactory)FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
+        Application application = (ApplicationImpl) aFactory.getApplication();
         loadTestResultList();
-        loadConfigFile();
+        NavigationHandlerImpl navHandler = (NavigationHandlerImpl)application.getNavigationHandler();
+	((com.sun.faces.TestNavigationHandler)navHandler).getCaseListMap().size();
         FacesContext context = getFacesContext();
-        NavigationHandlerImpl navHandler = new NavigationHandlerImpl();
-        ConfigBase cbase = (ConfigBase)config.getServletContext().getAttribute(RIConstants.CONFIG_ATTR);
-        navHandler.initialize(cbase);
 
-        TestResult testResult = null;
         String newTreeId = null;
         for (int i=0; i<testResultList.size(); i++) {
-            testResult = (TestResult)testResultList.get(i);
+            TestResult testResult = (TestResult)testResultList.get(i);
             System.out.println("Testing from-tree-id="+testResult.fromTreeId+
                 " from-action-ref="+testResult.fromActionRef+
                 " from-outcome="+testResult.fromOutcome);
             context.setTree(new SimpleTreeImpl(context, testResult.fromTreeId));
-            navHandler.handleNavigation(context, testResult.fromActionRef, testResult.fromOutcome);
+            navHandler.handleNavigation(
+	        context, testResult.fromActionRef, testResult.fromOutcome);
             newTreeId = context.getTree().getTreeId();
             System.out.println("assertTrue("+newTreeId+".equals("+testResult.toTreeId+"))");
             assertTrue(newTreeId.equals(testResult.toTreeId));
@@ -189,15 +182,26 @@ public class TestNavigationHandler extends ServletFacesTestCase
  
     public void testSeperateRule() {
         int cnt = 0;
-        ConfigBase cbase = (ConfigBase)config.getServletContext().getAttribute(RIConstants.CONFIG_ATTR);
-        List navs = cbase.getNavigationCases();
-        for (int i=0; i<navs.size(); i++) {
-            ConfigNavigationCase nc = (ConfigNavigationCase)navs.get(i);
-            if (nc.getFromTreeId().equals("/login.jsp")) {
-                cnt++;
-            }
-        }
-        assertTrue(cnt == 4);
+        ApplicationFactory aFactory = 
+	    (ApplicationFactory)FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
+        Application application = (ApplicationImpl) aFactory.getApplication();
+        NavigationHandlerImpl navHandler = (NavigationHandlerImpl)application.
+            getNavigationHandler();
+	Map caseListMap = ((com.sun.faces.TestNavigationHandler)navHandler).getCaseListMap();
+	Iterator iter = caseListMap.keySet().iterator();
+	while (iter.hasNext()) {
+	    String fromTreeId = (String)iter.next();
+	    if (fromTreeId.equals("/login.jsp")) {
+                List caseList = (List)caseListMap.get(fromTreeId);
+		for (int i=0; i<caseList.size();i++) {
+		    ConfigNavigationCase cnc = (ConfigNavigationCase)caseList.get(i);
+		    if (cnc.getFromTreeId().equals("/login.jsp")) {
+	                cnt++;
+		    }
+		}
+	    }
+	}
+        assertTrue(cnt == 6);
     }
 
     class TestResult extends Object {

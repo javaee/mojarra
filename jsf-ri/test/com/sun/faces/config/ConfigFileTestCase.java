@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigFileTestCase.java,v 1.18 2003/07/07 20:53:18 eburns Exp $
+ * $Id: ConfigFileTestCase.java,v 1.19 2003/07/08 15:38:43 eburns Exp $
  */
 
 /*
@@ -10,12 +10,14 @@
 package com.sun.faces.config;
 
 import com.sun.faces.application.ApplicationImpl;
+import com.sun.faces.tree.SimpleTreeImpl;
 import com.sun.faces.el.ValueBindingImpl;
 import com.sun.faces.RIConstants;
 
 import java.io.File;
 import java.io.InputStream;
 import java.io.IOException;
+import java.lang.reflect.*;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -25,16 +27,19 @@ import java.util.Map;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContext;
-import javax.faces.component.UIComponent;
-import javax.faces.convert.Converter;
-import javax.faces.validator.Validator;
 import javax.faces.FactoryFinder;
 import javax.faces.application.ApplicationFactory;
+import javax.faces.application.NavigationHandler;
+import javax.faces.component.UIComponent;
 import javax.faces.context.MessageResources;
+import javax.faces.convert.Converter;
+import javax.faces.validator.Validator;
+import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
 
 import org.apache.cactus.ServletTestCase;
 import org.apache.cactus.WebRequest;
+import org.mozilla.util.Assert;
 import com.sun.faces.ServletFacesTestCase;
 
 /**
@@ -45,9 +50,6 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
 
 
     // ----------------------------------------------------- Instance Variables
-
-
-    protected ConfigBase base = null;
 
 
     // ----------------------------------------------------------- Constructors
@@ -99,7 +101,7 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
 	    "javax.faces.validator.StringRangeValidator.LIMIT",
 	    "javax.faces.validator.StringRangeValidator.MAXIMUM",
 	    "javax.faces.validator.StringRangeValidator.MINIMUM",
-	    "javax.faces.validator.StringRangeValidator.TYPE"
+	    "javax.faces.validator.StringRangeValidator.TYPE",
 	};
 	Iterator messageIter = null;
 
@@ -133,24 +135,20 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
     // Test parsing a full configuration file
     public void testFull() throws Exception {
         ConfigParser cp = new ConfigParser(config.getServletContext());
-        base = parseConfig(cp, "/WEB-INF/faces-config.xml",
-                           config.getServletContext());
-
-        // <application>
-        assertEquals("com.sun.faces.TestActionListener",
-                     base.getActionListener());
-        assertEquals("com.sun.faces.TestNavigationHandler",
-                     base.getNavigationHandler());
-        assertEquals("com.sun.faces.TestPropertyResolver",
-                     base.getPropertyResolver());
-        assertEquals("com.sun.faces.TestVariableResolver",
-                     base.getVariableResolver());
-
-        // <component>
-
         ApplicationFactory aFactory = (ApplicationFactory)FactoryFinder.getFactory(
         FactoryFinder.APPLICATION_FACTORY);
         ApplicationImpl application = (ApplicationImpl)aFactory.getApplication();
+        ConfigBase base = parseConfig(cp, "/WEB-INF/faces-config.xml",
+                           config.getServletContext());
+
+        // <application>
+        assertTrue(application.getActionListener() instanceof com.sun.faces.TestActionListener);
+        assertTrue(application.getNavigationHandler() instanceof com.sun.faces.TestNavigationHandler);
+        assertTrue(application.getPropertyResolver() instanceof com.sun.faces.TestPropertyResolver);
+        assertTrue(application.getVariableResolver() instanceof com.sun.faces.TestVariableResolver);
+
+        // <component>
+
         Iterator iter = application.getComponentTypes();
         assertTrue(iter.hasNext());
         String cType = null;
@@ -202,73 +200,11 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
         application.addValidator("fooId", "javax.faces.validator.DoubleRangeValidator");
         val = application.getValidator("fooId");
         assertNotNull(val);
-
-        // <managed-beans>
-
-        Map managedBeans = base.getManagedBeans();
-        assertNotNull(managedBeans);
-        ConfigManagedBean managedBean = 
-            (ConfigManagedBean)managedBeans.get("NewCustomerFormHandler");
-        assertNotNull(managedBean);
-        assertEquals("NewCustomerFormHandler", managedBean.getManagedBeanId());
-        assertEquals("com.sun.faces.config.NewCustomerFormHandler", managedBean.getManagedBeanClass());
-        assertEquals("session", managedBean.getManagedBeanScope());
-        System.out.println("MANAGEDBEAN:"+managedBean.toString());
-
-        Map props = managedBean.getProperties();
-        assertTrue(!(props == Collections.EMPTY_MAP));
-
-        // Test Property Value , Values Array , Map Entries
-
-        iter = props.keySet().iterator();
-        ConfigManagedBeanProperty cmp = null;
-        ConfigManagedBeanPropertyValue cmpv = null;
-        ConfigManagedPropertyMap cmpm = null;
-        while (iter.hasNext()) {
-            cmp = (ConfigManagedBeanProperty)props.get((String)iter.next());
-            if (cmp.hasValuesArray()) {
-                List list = cmp.getValues();
-                for (int i=0;i<list.size();i++) {
-                    cmpv = (ConfigManagedBeanPropertyValue)list.get(i);
-                    assertTrue(cmpv.getValueCategory()==ConfigManagedBeanPropertyValue.VALUE ||
-                        cmpv.getValueCategory()==ConfigManagedBeanPropertyValue.VALUE_REF ||
-                        cmpv.getValueCategory()==ConfigManagedBeanPropertyValue.VALUE_CLASS ||
-                        cmpv.getValueCategory()==ConfigManagedBeanPropertyValue.NULL_VALUE);
-                }
-                
-            } else if (cmp.hasMapEntries()) {
-                List list = cmp.getMapEntries();
-                for (int i=0;i<list.size();i++) {
-                    cmpm = (ConfigManagedPropertyMap)list.get(i);
-                    assertTrue(cmpm.getValueCategory()==ConfigManagedPropertyMap.VALUE ||
-                        cmpm.getValueCategory()==ConfigManagedPropertyMap.VALUE_REF ||
-                        cmpm.getValueCategory()==ConfigManagedPropertyMap.NULL_VALUE);
-                }
-            } else {
-                cmpv = (ConfigManagedBeanPropertyValue)cmp.getValue();
-                assertTrue(cmpv.getValueCategory()==ConfigManagedBeanPropertyValue.VALUE ||
-                    cmpv.getValueCategory()==ConfigManagedBeanPropertyValue.VALUE_REF ||
-                    cmpv.getValueCategory()==ConfigManagedBeanPropertyValue.VALUE_CLASS ||
-                    cmpv.getValueCategory()==ConfigManagedBeanPropertyValue.NULL_VALUE);
-            }
-        }
-
-        // Test Clone
-
-        ConfigManagedBean managedBean1 = (ConfigManagedBean)managedBeans.get("NewCustomerFormHandler");
-        ConfigManagedBean managedBean2 = (ConfigManagedBean)managedBeans.get("NewCustomerFormHandler");
-        assertTrue(managedBean1 == managedBean2);
-
-        ConfigManagedBean managedBean3 = (ConfigManagedBean)managedBean2.clone();
-        assertTrue(managedBean2 != managedBean3);
-
-        //PENDING include testing of contained objects (cloning)
-        
     }
 
     public void testEmpty() throws Exception {
         ConfigParser cp = new ConfigParser(config.getServletContext());
-        base = parseConfig(cp, "/WEB-INF/faces-config-empty.xml",
+        ConfigBase base = parseConfig(cp, "/WEB-INF/faces-config-empty.xml",
                            config.getServletContext());
 	assertTrue(null != base);
     }
@@ -279,54 +215,51 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
     public void testConfigManagedBeanFactory() throws Exception {
 
         ConfigParser cp = new ConfigParser(config.getServletContext());
-        base = parseConfig(cp, "/WEB-INF/faces-config.xml",
+        ConfigBase base = parseConfig(cp, "/WEB-INF/faces-config.xml",
                            config.getServletContext());
 
         ApplicationFactory aFactory = (ApplicationFactory)FactoryFinder.getFactory(
         FactoryFinder.APPLICATION_FACTORY);
         ApplicationImpl application = (ApplicationImpl)aFactory.getApplication();
 
-        Object bean = application.getAppConfig().createAndMaybeStoreManagedBeans(getFacesContext(),
+        Object bean = application.createAndMaybeStoreManagedBeans(getFacesContext(),
             "SimpleBean");
 
-        Map managedBeans = base.getManagedBeans();
-        ConfigManagedBean managedBean = (ConfigManagedBean)managedBeans.get("SimpleBean");
-        String className = managedBean.getManagedBeanClass();
-
-        Class clazz = null;
-        Object obj = null;
-        try {
-            clazz = Class.forName(className);
-            obj = clazz.newInstance();
-        } catch (Throwable t) {
-            assertTrue(false);
-        }
-
-        assertTrue (clazz.isInstance(obj));
+	// Assert the correct methods have been created in the bean
+	// Also assert the value returned from the "get" method matches
+	// the one specified in the config file.
+	//
+	try {
+	    Class c = bean.getClass();
+	    Method m[] = c.getDeclaredMethods();
+	    for (int i=0; i<m.length; i++) {
+                Assert.assert_it(m[i].getName().equals("setSimpleProperty") ||
+		    m[i].getName().equals("getSimpleProperty"));
+		if (m[i].getName().equals("getSimpleProperty")) {
+		    Object args[] = null;
+	            Object value = m[i].invoke(bean, args);
+		    Assert.assert_it(((String)value).equals("Bobby Orr"));
+		}
+	    }
+	} catch (Throwable t) {
+	    assertTrue(false);
+	}
     }
 
-    public void testInitParams() {
-	final String paramVal = "config1.xml,config2.xml,/WEB-INF/faces-config.xml";
-	ConfigBase configBase = loadFromInitParam(paramVal);
-	assertTrue(null != configBase);
-	// make sure we have the managed beans from all three config
-	// files: 1. the stock RI 2. config1.xml 3. config2.xml
-	assertTrue(null != configBase.getManagedBeans().get("NewCustomerFormHandler"));
-	assertTrue(null != configBase.getManagedBeans().get("TestBean1"));
-	assertTrue(null != configBase.getManagedBeans().get("TestBean2"));
-    }
-
-     public void testNavigationCase() throws Exception {
-         ConfigParser cp = new ConfigParser(config.getServletContext());
-         base = parseConfig(cp, "/WEB-INF/faces-config.xml",
+    public void testNavigationCase() throws Exception {
+        ConfigParser cp = new ConfigParser(config.getServletContext());
+        ConfigBase base = parseConfig(cp, "/WEB-INF/faces-config.xml",
                             config.getServletContext());
-         List navCases = base.getNavigationCases();
-         assertTrue(!(navCases == Collections.EMPTY_LIST));
-         for (int i=0; i< navCases.size(); i++) {
-             ConfigNavigationCase cnc = (ConfigNavigationCase)navCases.get(i);
-             System.out.println("NAVIGATION CASE:");
-             System.out.println(cnc.toString());
-         }
+        ApplicationFactory aFactory = 
+            (ApplicationFactory)FactoryFinder.getFactory(
+                 FactoryFinder.APPLICATION_FACTORY);
+        ApplicationImpl application = (ApplicationImpl)aFactory.getApplication(); 
+	NavigationHandler navHandler = application.getNavigationHandler();
+	getFacesContext().setTree(new SimpleTreeImpl(getFacesContext(), "/login.jsp"));
+        navHandler.handleNavigation(getFacesContext(), "UserBean.login",
+	    "success");
+        String newTreeId = getFacesContext().getTree().getTreeId();
+        assertTrue(newTreeId.equals("/home.jsp"));	
      }
 
     public void testRenderKit() {
@@ -334,9 +267,8 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
         ApplicationFactory aFactory = (ApplicationFactory)FactoryFinder.getFactory(
 										   FactoryFinder.APPLICATION_FACTORY);
         ApplicationImpl application = (ApplicationImpl)aFactory.getApplication();
-	ConfigBase yourBase = application.getAppConfig().getConfigBase();
-	ConfigRenderKit renderKit = null;
-	ConfigRenderer renderer = null;
+        RenderKitFactory renderKitFactory = (RenderKitFactory)
+            FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
 	Map 
 	    renderKitsMap = null,
 	    renderersMap = null;
@@ -368,12 +300,12 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
 	};
 	Iterator rendererIter = null;
 
-	assertTrue(null != (renderKitsMap = yourBase.getRenderKits()));
-	assertTrue(null != (renderKit = (ConfigRenderKit)
-			    renderKitsMap.get(RenderKitFactory.DEFAULT_RENDER_KIT)));
-	assertTrue(null != (renderersMap = renderKit.getRenderers()));
-	assertTrue(null != (rendererIter = renderersMap.keySet().iterator()));
-	assertTrue(isSubset(defaultRenderers, rendererIter));
-	
+        Iterator iter = renderKitFactory.getRenderKitIds();
+	assertTrue(iter.hasNext());
+	RenderKit renderKit = renderKitFactory.getRenderKit("DEFAULT");
+	assertTrue(renderKit != null);
+	for (int i=0; i<defaultRenderers.length; i++) {
+	    assertTrue(null != (renderKit.getRenderer(defaultRenderers[i])));
+	}
     }
 }

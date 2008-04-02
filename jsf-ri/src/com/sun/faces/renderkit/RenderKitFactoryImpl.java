@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKitFactoryImpl.java,v 1.10 2003/03/13 01:06:30 eburns Exp $
+ * $Id: RenderKitFactoryImpl.java,v 1.11 2003/07/08 15:38:33 eburns Exp $
  */
 
 /*
@@ -22,9 +22,6 @@ import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
 import javax.faces.context.FacesContext;
 
-import org.apache.commons.digester.Digester;
-import org.apache.commons.digester.Rule;
-
 import org.mozilla.util.Assert;
 import org.mozilla.util.ParameterCheck;
 
@@ -36,7 +33,6 @@ public class RenderKitFactoryImpl extends RenderKitFactory {
     protected String renderKitId = null;
     protected String className = null;
     protected HashMap renderKits = null;
-    protected Digester digester = null;
 
 //
 // Class Variables
@@ -54,11 +50,7 @@ public class RenderKitFactoryImpl extends RenderKitFactory {
      */
     public RenderKitFactoryImpl() {
         super();
-        digester = initConfig();
         renderKits = new HashMap();
-        RenderKit renderKit = getRenderKit(
-            RenderKitFactory.DEFAULT_RENDER_KIT);
-        renderKits.put(RenderKitFactory.DEFAULT_RENDER_KIT, renderKit);
     }
     
     /**
@@ -76,9 +68,7 @@ public class RenderKitFactoryImpl extends RenderKitFactory {
             throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
 
-        if (RenderKitFactory.DEFAULT_RENDER_KIT.equals(renderKitId)) {
-            throw new IllegalArgumentException(renderKitId);
-        } else if (renderKits.containsKey(renderKitId)) {
+        if (renderKits.containsKey(renderKitId)) {
             throw new IllegalArgumentException(renderKitId);
         }
         synchronized(renderKits) {
@@ -103,7 +93,7 @@ public class RenderKitFactoryImpl extends RenderKitFactory {
             throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
 
-        RenderKit renderKit = null;
+        RenderKitImpl renderKit = null;
         this.renderKitId = renderKitId;
 
         // If an instance already exists, return it.
@@ -114,42 +104,9 @@ public class RenderKitFactoryImpl extends RenderKitFactory {
             }
         }
 
-        String fileName = "com/sun/faces/renderkit/RenderKitConfig.xml";
-        InputStream in;
-	Object [] params;
-        try {
-            in = this.getClass().getClassLoader().getResourceAsStream(
-                fileName);
-        } catch (Throwable t) {
-	    params = new Object [] { fileName };
-            throw new RuntimeException(Util.getExceptionMessage(Util.FILE_NOT_FOUND_ERROR_MESSAGE_ID, params));
-        }
-        
-        try {
-            digester.push(this);
-            digester.parse(in);
-            in.close();
-        } catch (Throwable t) {
-	    params = new Object [] { t.getMessage() };
-            throw new IllegalStateException(Util.getExceptionMessage(Util.CANT_PARSE_FILE_ERROR_MESSAGE_ID, params));
-        }
-
-        Assert.assert_it(className != null);
-
-        // Create an instance of the render kit.
+        // Not found, so create an instance of RenderKitImpl.
         //
-        try {
-            Class kitClass = Util.loadClass(className, this);
-            renderKit = (RenderKit)kitClass.newInstance();
-        } catch (ClassNotFoundException cnf) {
-	    params = new Object [] { cnf.getMessage() };
-            throw new RuntimeException(Util.getExceptionMessage(Util.MISSING_CLASS_ERROR_MESSAGE_ID, params));
-        } catch (InstantiationException ie) {
-	    params = new Object [] { ie.getMessage() };
-            throw new RuntimeException(Util.getExceptionMessage(Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, params));
-        } catch (IllegalAccessException ia) {
-            throw new RuntimeException(ia.getMessage());
-        }
+        renderKit = new RenderKitImpl();
 
         // Add the newly created renderkit to the table.
         //
@@ -170,18 +127,6 @@ public class RenderKitFactoryImpl extends RenderKitFactory {
         return getRenderKit(renderKitId);
     }
 
-    /** 
-     * Method is invoked through Digester when an Xml pattern is
-     * recognized from Xml configuration file.
-     * 
-     * @param renderKitId The Render Kit Identifier
-     * @param className The fully qualified class name.
-     */ 
-    public void setRenderKitClass(String renderKitId, String className) {
-        if (renderKitId.equalsIgnoreCase(this.renderKitId)) {
-            this.className = className;
-        }
-    }
 
     /**
      * Return an iteration of render kit identifiers maintained
@@ -193,16 +138,4 @@ public class RenderKitFactoryImpl extends RenderKitFactory {
         return (renderKits.keySet().iterator());
     }
 
-    private Digester initConfig() {
-        Digester digester = new Digester();
-        digester.setNamespaceAware(true);
-        digester.setValidating(false);
-        digester.setUseContextClassLoader(true);
-        digester.addCallMethod("renderkit-config/renderkit",
-            "setRenderKitClass", 2);
-        digester.addCallParam("renderkit-config/renderkit/renderkit-id", 0);
-        digester.addCallParam("renderkit-config/renderkit/class", 1);    
-
-        return digester;
-    }
 }

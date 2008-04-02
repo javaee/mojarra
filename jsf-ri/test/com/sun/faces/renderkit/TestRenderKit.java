@@ -1,0 +1,140 @@
+/*
+ * $Id: TestRenderKit.java,v 1.2 2003/07/08 15:38:47 eburns Exp $
+ */
+
+/*
+ * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+ */
+
+// TestRenderKit.java
+
+package com.sun.faces.renderkit;
+
+import com.sun.faces.renderkit.html_basic.FormRenderer;
+
+import java.util.Iterator;
+
+import javax.faces.component.UIOutput;
+import javax.faces.component.UIComponentBase;
+import javax.faces.render.RenderKit;
+import javax.faces.render.RenderKitFactory;
+import javax.faces.render.Renderer;
+import javax.faces.FacesException;
+import javax.faces.FactoryFinder;
+
+import org.mozilla.util.Assert;
+import org.mozilla.util.Debug;
+import org.mozilla.util.ParameterCheck;
+import org.apache.cactus.ServletTestCase;
+
+import com.sun.faces.CompareFiles;
+import com.sun.faces.FileOutputResponseWrapper;
+import com.sun.faces.FileOutputResponseWriter;
+import com.sun.faces.ServletFacesTestCase;
+
+import java.io.PrintStream;
+import java.io.FileOutputStream;
+import java.io.File;
+import java.io.IOException;
+
+/**
+ *
+ *  <B>TestRenderKit</B> is a class ...
+ *
+ * <B>Lifetime And Scope</B> <P>
+ *
+ * @version $Id: TestRenderKit.java,v 1.2 2003/07/08 15:38:47 eburns Exp $
+ * 
+ * @see	Blah
+ * @see	Bloo
+ *
+ */
+
+public class TestRenderKit extends ServletFacesTestCase {
+//
+// Protected Constants
+//
+
+public static final String OUTPUT_FILENAME = 
+    FileOutputResponseWriter.FACES_RESPONSE_ROOT + "TestRenderKit_out";
+
+public static final String CORRECT_OUTPUT_FILENAME = 
+    FileOutputResponseWriter.FACES_RESPONSE_ROOT + "TestRenderKit_correct";
+
+
+
+//
+// Class Variables
+//
+
+//
+// Instance Variables
+//
+    private RenderKit renderKit = null;
+
+// Attribute Instance Variables
+
+// Relationship Instance Variables
+
+//
+// Constructors and Initializers    
+//
+
+    public TestRenderKit() {super("TestRenderKit");}
+    public TestRenderKit(String name) {super(name);}
+//
+// Class methods
+//
+
+//
+// General Methods
+//
+
+    public void testGetRenderer() {
+        RenderKitFactory renderKitFactory = (RenderKitFactory)
+            FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
+        renderKit = renderKitFactory.getRenderKit("DEFAULT");
+
+        // 1. Verify "getRenderer()" returns a Renderer instance
+        //  
+        Renderer renderer = renderKit.getRenderer("Form");
+        assertTrue(renderer instanceof FormRenderer);
+    }
+
+    public void testAddRenderer() {
+	boolean bool = false;
+	FormRenderer formRenderer = new FormRenderer();
+
+        RenderKitFactory renderKitFactory = (RenderKitFactory)
+            FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
+        renderKit = renderKitFactory.getRenderKit("DEFAULT");
+	try {
+	    renderKit.addRenderer("Form", formRenderer);
+	}
+	catch (IllegalArgumentException e) {
+	    bool = true;
+	}
+	assertTrue(bool);
+
+	bool = false;
+	try {
+	    renderKit.addRenderer(null, formRenderer);
+	}
+	catch (NullPointerException e) {
+	    bool = true;
+	}
+	assertTrue(bool);
+
+	bool = false;
+	try {
+	    renderKit.addRenderer("BlahRenderer", null);
+	}
+	catch (NullPointerException e) {
+	    bool = true;
+	}
+	assertTrue(bool);
+	
+    }
+
+} // end of class TestRenderKit

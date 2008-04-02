@@ -1,5 +1,5 @@
 /*
- * $Id: TestVariableResolverImpl.java,v 1.3 2003/05/06 19:21:52 horwat Exp $
+ * $Id: TestVariableResolverImpl.java,v 1.4 2003/07/08 15:38:46 eburns Exp $
  */
 
 /*
@@ -38,7 +38,7 @@ import javax.faces.FactoryFinder;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestVariableResolverImpl.java,v 1.3 2003/05/06 19:21:52 horwat Exp $
+ * @version $Id: TestVariableResolverImpl.java,v 1.4 2003/07/08 15:38:46 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -250,7 +250,7 @@ public class TestVariableResolverImpl extends ServletFacesTestCase
 
         ApplicationFactory aFactory = (ApplicationFactory)FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
         ApplicationImpl application = (ApplicationImpl)aFactory.getApplication();
-        application.getAppConfig().addManagedBeanFactory(beanName, mbf);
+        application.addManagedBeanFactory(beanName, mbf);
 
         VariableResolver variableResolver = application.getVariableResolver();
 

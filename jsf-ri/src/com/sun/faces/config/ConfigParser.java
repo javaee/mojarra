@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigParser.java,v 1.18 2003/06/25 06:29:51 rkitain Exp $
+ * $Id: ConfigParser.java,v 1.19 2003/07/08 15:38:30 eburns Exp $
  */
 
 /*
@@ -11,6 +11,7 @@ package com.sun.faces.config;
 
 import com.sun.faces.RIConstants;
 import com.sun.faces.application.ApplicationImpl;
+import com.sun.faces.application.NavigationHandlerImpl;
 import com.sun.faces.util.Util;
 
 import java.io.File;
@@ -23,8 +24,17 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.application.ApplicationFactory;
+import javax.faces.application.NavigationHandler;
+import javax.faces.el.PropertyResolver;
+import javax.faces.el.VariableResolver;
+import javax.faces.event.ActionListener;
+import javax.faces.render.Renderer;
+import javax.faces.render.RenderKit;
+import javax.faces.render.RenderKitFactory;
+
 
 import javax.servlet.ServletContext;
 
@@ -217,15 +227,22 @@ public class ConfigParser {
     // Configure the rules for an <application> element
     protected void configureRulesApplication(Digester digester) {
 
-        digester.addCallMethod("faces-config/application/action-listener",
-                               "setActionListener", 0);
-        digester.addCallMethod("faces-config/application/navigation-handler",
-                               "setNavigationHandler", 0);
-        digester.addCallMethod("faces-config/application/property-resolver",
-                               "setPropertyResolver", 0);
-        digester.addCallMethod("faces-config/application/variable-resolver",
-                               "setVariableResolver", 0);
+	String prefix = "faces-config/application";
 
+        digester.addObjectCreate(prefix, "com.sun.faces.config.ConfigApplication");
+        digester.addCallMethod(prefix+"/action-listener",
+                               "setActionListener", 0);
+        digester.addCallMethod(prefix+"/navigation-handler",
+                               "setNavigationHandler", 0);
+        digester.addCallMethod(prefix+"/property-resolver",
+                               "setPropertyResolver", 0);
+        digester.addCallMethod(prefix+"/variable-resolver",
+                               "setVariableResolver", 0);
+	//
+        // This custom rule will add application info to the Application instance;
+        //
+	ApplicationRule aRule = new ApplicationRule();
+        digester.addRule(prefix, aRule);
     }
 
 
@@ -321,12 +338,19 @@ public class ConfigParser {
         String prefix = "faces-config/managed-bean";
 
         digester.addObjectCreate(prefix, "com.sun.faces.config.ConfigManagedBean");
-        digester.addSetNext(prefix, "addManagedBean", "com.sun.faces.config.ConfigManagedBean");
         digester.addCallMethod(prefix + "/managed-bean-name", "setManagedBeanId", 0);
         digester.addCallMethod(prefix + "/managed-bean-class", "setManagedBeanClass", 0);
         digester.addCallMethod(prefix + "/managed-bean-scope", "setManagedBeanScope", 0);
         digester.addCallMethod(prefix + "/managed-bean-create", "setManagedBeanCreate", 0);
         configureRulesManagedBeanProperty(digester, prefix + "/managed-property");
+
+        // This custom rule will:
+        //     o create managed bean factory using ConfigManagedBean;
+        //     o add managed bean info to Application instance.
+        //
+        ManagedBeansRule mbRule = new ManagedBeansRule();
+        digester.addRule(prefix, mbRule);
+
     }
 
     // Configure the rules for a <managed-bean><managed-property> element
@@ -432,25 +456,37 @@ public class ConfigParser {
 
     // Configure the rules for a <navigation-rule><navigation-case> element
     protected void configureRulesNavigationCase(Digester digester) {
+	String prefix = "faces-config/navigation-rule";
+        digester.addObjectCreate(prefix, "com.sun.faces.config.ConfigNavigationRule");
         digester.addCallMethod("faces-config/navigation-rule/from-tree-id", "setFromTreeId", 0);
-        String prefix = "faces-config/navigation-rule/navigation-case";
+        prefix = "faces-config/navigation-rule/navigation-case";
         digester.addObjectCreate(prefix, "com.sun.faces.config.ConfigNavigationCase");
-        digester.addSetNext(prefix, "addNavigationCase", "com.sun.faces.config.ConfigNavigationCase");
         digester.addCallMethod(prefix + "/from-action-ref", "setFromActionRef", 0);
         digester.addCallMethod(prefix + "/from-outcome", "setFromOutcome", 0);
         digester.addCallMethod(prefix + "/to-tree-id", "setToTreeId", 0);
+
+        // This custom rule will....
+        //
+        NavigationCaseRule ncRule = new NavigationCaseRule();
+        digester.addRule(prefix, ncRule);
+
     }
 
     protected void configureRulesRenderKit(Digester digester) {
         String prefix = "faces-config/render-kit";
 
         digester.addObjectCreate(prefix, "com.sun.faces.config.ConfigRenderKit");
-        digester.addSetNext(prefix, "addRenderKit", "com.sun.faces.config.ConfigRenderKit");
         digester.addCallMethod(prefix + "/render-kit-id",
                                "setRenderKitId", 0);
         digester.addCallMethod(prefix + "/render-kit-class",
                                "setRenderKitClass", 0);
 	configureRulesRenderer(digester);
+
+	// This custom rule will use RenderKitFactory to create RenderKit
+	// instance;
+	//
+	RenderKitRule rRule = new RenderKitRule();
+	digester.addRule(prefix, rRule);
     }
 
     protected void configureRulesRenderer(Digester digester) {
@@ -604,5 +640,149 @@ final class ValidatorsRule extends Rule {
         ApplicationImpl application =
            (ApplicationImpl)aFactory.getApplication();
        application.addValidator(cc.getValidatorId(), cc.getValidatorClass());
+    }
+}
+
+final class ManagedBeansRule extends Rule {
+    public ManagedBeansRule() {
+        super();
+    }
+    public void end() throws Exception {
+        ConfigManagedBean cmb = (ConfigManagedBean)digester.peek();
+        ApplicationFactory aFactory =
+            (ApplicationFactory)FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
+        ApplicationImpl application =
+            (ApplicationImpl)aFactory.getApplication();
+        ManagedBeanFactory mbf = new ManagedBeanFactory(cmb);
+        application.addManagedBeanFactory(cmb.getManagedBeanId(), mbf);
+    }
+}
+
+// This rule sets the Application's Action Listener / Navigation Handler /
+// PropertyResolver / VariableResolver instances;
+//
+final class ApplicationRule extends Rule {
+
+    protected static Log log = LogFactory.getLog(ConfigParser.class);
+
+    public ApplicationRule() {
+        super();
+    }
+    public void end() throws Exception {
+        ConfigApplication ca = (ConfigApplication)digester.peek();
+        ApplicationFactory aFactory =
+            (ApplicationFactory)FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
+        ApplicationImpl application =
+            (ApplicationImpl)aFactory.getApplication();
+	Assert.assert_it(null != application);
+	
+	Object returnObject = createInstance(ca.getActionListener());
+	if (returnObject != null) {
+	    application.setActionListener((ActionListener)returnObject);
+	}
+
+	returnObject = createInstance(ca.getNavigationHandler());
+	if (returnObject != null) {
+	    application.setNavigationHandler((NavigationHandler)returnObject);
+	}
+
+	returnObject = createInstance(ca.getPropertyResolver());
+	if (returnObject != null) {
+	    application.setPropertyResolver((PropertyResolver)returnObject);
+	}
+
+	returnObject = createInstance(ca.getVariableResolver());
+	if (returnObject != null) {
+	    application.setVariableResolver((VariableResolver)returnObject);
+	}
+    }
+
+    protected Object createInstance(String className) {
+	Class clazz = null;
+	Object returnObject = null;
+	if (className != null) {
+            try {
+	        clazz = Util.loadClass(className, this);
+	        if (clazz != null) {
+	            returnObject = clazz.newInstance();
+	        }
+	    } catch (Throwable t) {
+	        Object[] params = new Object[1];
+	        params[0] = className;
+	        String msg = Util.getExceptionMessage(
+		    Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, params);
+	        if (log.isErrorEnabled()) {
+	            log.error(msg + ":" + className + ":exception:"+
+		        t.getMessage());
+                }
+	    }
+        }
+	return returnObject;
+    }
+	        
+	    
+}
+
+// This rule gets the Navigation Handler instance from the Application instance.
+// Then it sets Navigation Case info in the Navigation Handler instance...
+//
+final class NavigationCaseRule extends Rule {
+
+    protected static Log log = LogFactory.getLog(ConfigParser.class);
+
+    public NavigationCaseRule() {
+        super();
+    }
+    public void end() throws Exception {
+        ConfigNavigationCase cnc = (ConfigNavigationCase)digester.pop();
+        ConfigNavigationRule cnr = (ConfigNavigationRule)digester.peek();
+        cnc.setFromTreeId(cnr.getFromTreeId());
+        digester.push(cnc);
+        ApplicationFactory aFactory =
+            (ApplicationFactory)FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
+        ApplicationImpl application =
+            (ApplicationImpl)aFactory.getApplication();
+        Assert.assert_it(null != application);
+        NavigationHandlerImpl navHandler = (NavigationHandlerImpl)application.
+            getNavigationHandler();
+        Assert.assert_it(null != navHandler);
+        navHandler.addNavigationCase(cnc);
+    }
+}
+
+final class RenderKitRule extends Rule {
+
+    protected static Log log = LogFactory.getLog(ConfigParser.class);
+
+    public RenderKitRule() {
+        super();
+    }
+    public void end() throws Exception {
+        ConfigRenderKit cr = (ConfigRenderKit)digester.peek();
+        RenderKitFactory renderKitFactory = (RenderKitFactory)
+            FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
+	String renderKitId = cr.getRenderKitId();
+        RenderKit renderKit =
+            renderKitFactory.getRenderKit(renderKitId);
+        Map renderersMap = cr.getRenderers();
+        Iterator rendererIds = renderersMap.keySet().iterator();
+        while (rendererIds.hasNext()) {
+            String rendererId = (String)rendererIds.next();
+            if (log.isTraceEnabled()) {
+                log.trace("  Adding Renderer " + rendererId);
+            }
+            ConfigRenderer configRenderer = (ConfigRenderer)
+                renderersMap.get(rendererId);
+            String rendererClass = configRenderer.getRendererClass();
+            try {
+                Class rendererClazz = Util.loadClass(rendererClass, this);
+                Renderer renderer = (Renderer)rendererClazz.newInstance();
+                renderKit.addRenderer(rendererId, renderer);
+            } catch (Exception e) {
+                throw new FacesException(e);
+            }
+        }
+	RenderKit myRenderKit = renderKitFactory.getRenderKit("DEFAULT");
+	Renderer myRenderer = myRenderKit.getRenderer("Form");
     }
 }

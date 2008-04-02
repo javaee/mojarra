@@ -1,5 +1,5 @@
 /*
- * $Id: AppConfig.java,v 1.10 2003/06/25 06:29:50 rkitain Exp $
+ * $Id: AppConfig.java,v 1.11 2003/07/08 15:38:26 eburns Exp $
  */
 
 /*
@@ -34,7 +34,7 @@ import com.sun.faces.RIConstants;
  *  <p>AppConfig is a helper class to the ApplicationImpl that serves as
  *  a shim between it and the config system.</p>
  *
- * @version $Id: AppConfig.java,v 1.10 2003/06/25 06:29:50 rkitain Exp $
+ * @version $Id: AppConfig.java,v 1.11 2003/07/08 15:38:26 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -90,67 +90,10 @@ public AppConfig(Application application)
     public void setConfigBase(ConfigBase newBase) {
 	ParameterCheck.nonNull(newBase);
 	yourBase = newBase;
-        NavigationHandlerImpl navHandler = (NavigationHandlerImpl)application.getNavigationHandler();
-        if (navHandler instanceof NavigationHandlerImpl) {
-            ((NavigationHandlerImpl)navHandler).initialize(newBase);
-        }
     }
 
     public ConfigBase getConfigBase() {
 	return yourBase;
-    }
-
-
-    /**
-     * The ConfigFile managed has populated the managedBeanFactories
-     * HashMap with ManagedBeanFactory object keyed by the bean name.
-     * Find the ManagedBeanFactory object and if it exists instantiate
-     * the bean and store it in the appropriate scope, if any.
-     */
-    public Object createAndMaybeStoreManagedBeans(FacesContext context,
-        String managedBeanName) throws PropertyNotFoundException {
-
-        ManagedBeanFactory managedBean = (ManagedBeanFactory) 
-            managedBeanFactories.get(managedBeanName);
-        if ( managedBean == null ) {
-            return null;
-        }
-    
-        Object bean;
-        try {
-            bean = managedBean.newInstance();
-        } catch (Exception ex) {
-            //FIX_ME: I18N error message
-            throw new PropertyNotFoundException("Error instantiating bean", ex);
-        }
-        //add bean to appropriate scope
-        String scope = managedBean.getScope();
-        //scope cannot be null
-        Assert.assert_it(null != scope);
-
-        if (scope.equalsIgnoreCase(RIConstants.APPLICATION)) {
-            context.getExternalContext().
-                getApplicationMap().put(managedBeanName, bean);
-        }
-        else if (scope.equalsIgnoreCase(RIConstants.SESSION)) {
-	    Util.getSessionMap(context).put(managedBeanName, bean);
-        }
-        else if (scope.equalsIgnoreCase(RIConstants.REQUEST)) {
-            context.getExternalContext().
-                getRequestMap().put(managedBeanName, bean);
-        }
-
-        return bean;
-    }
-
-    /**
-     * ConfigFiles manager populates the managedBeanFactories
-     * HashMap with ManagedBeanFactory Objects.
-     */
-    public void addManagedBeanFactory(String managedBeanName,
-                                      ManagedBeanFactory factory) {
-
-        managedBeanFactories.put(managedBeanName, factory);
     }
 
     /**

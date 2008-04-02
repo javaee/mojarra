@@ -1,5 +1,5 @@
 /*
- * $Id: TestNavigationHandler.java,v 1.1 2003/06/13 22:16:52 eburns Exp $
+ * $Id: TestNavigationHandler.java,v 1.2 2003/07/08 15:38:41 eburns Exp $
  */
 
 /*
@@ -13,5 +13,11 @@ package com.sun.faces;
 
 import com.sun.faces.application.NavigationHandlerImpl;
 
+import java.util.Map;
+
 public class TestNavigationHandler extends NavigationHandlerImpl {
+
+    public Map getCaseListMap() {
+        return caseListMap;
+    }
 }

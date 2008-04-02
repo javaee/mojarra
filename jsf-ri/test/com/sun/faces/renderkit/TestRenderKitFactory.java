@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderKitFactory.java,v 1.5 2003/05/03 05:53:08 eburns Exp $
+ * $Id: TestRenderKitFactory.java,v 1.6 2003/07/08 15:38:48 eburns Exp $
  */
 
 /*
@@ -19,6 +19,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
 import javax.faces.FacesException;
+import javax.faces.FactoryFinder;
 
 import org.mozilla.util.Assert;
 import org.mozilla.util.Debug;
@@ -32,7 +33,7 @@ import com.sun.faces.ServletFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderKitFactory.java,v 1.5 2003/05/03 05:53:08 eburns Exp $
+ * @version $Id: TestRenderKitFactory.java,v 1.6 2003/07/08 15:38:48 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -72,7 +73,8 @@ public class TestRenderKitFactory extends ServletFacesTestCase {
 //
 
     public void testFactory() {
-        renderKitFactory = new RenderKitFactoryImpl();
+        RenderKitFactory renderKitFactory = (RenderKitFactory)
+            FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
 
         // 1. Verify "getRenderKit" returns the same RenderKit instance
         //    if called multiple times with the same identifier.
@@ -82,44 +84,49 @@ public class TestRenderKitFactory extends ServletFacesTestCase {
         assertTrue(renderKit1 == renderKit2);
 
         // 2. Verify "addRenderKit" adds instances.. /
-        //      "getRenderKitIds returns iteration..
-        //    Should be iteration of "3" because default was added
-        //    via RenderKitFactoryImpl constructor call (above).
         //
         renderKitFactory.addRenderKit("Foo", renderKit1);
         renderKitFactory.addRenderKit("Bar", renderKit2);
-        Iterator iter = renderKitFactory.getRenderKitIds();
-        int i = 0;
-        while (iter.hasNext()) {
-            iter.next();
-            i++;
-        }
-        assertTrue(i == 3);
 
         // 3. Verify null parameter exception for "getRenderKit"
         FacesContext context = null;
         boolean except = false;
         try {
-            RenderKit renderKit3 = renderKitFactory.getRenderKit("DEFAULT",
-                context);
+            RenderKit renderKit3 = renderKitFactory.getRenderKit("DEFAULT", null);
         } catch(NullPointerException npe) {
             except = true;
         }
         assertTrue(except);
+
+        // 4. Verify "getRenderKit" returns RenderKitImpl if
+        //    RenderKit not found for renderkitid...
+        //
+        RenderKit renderKit4 = renderKitFactory.getRenderKit("Gamma");
+        Assert.assert_it(renderKit4 instanceof RenderKitImpl);
+
+        
+
+        
     }
 
     public void testDefaultExists() {
-        renderKitFactory = new RenderKitFactoryImpl();
+        RenderKitFactory renderKitFactory = (RenderKitFactory)
+            FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
     
-        // 1. Verify constructor created "default" renderkit..
+        // 1. Verify "default" renderkit..
         //
         RenderKit renderKit;
         String id = null;
         Iterator iter = renderKitFactory.getRenderKitIds();
+        boolean exists = false; 
         while (iter.hasNext()) {
             id = (String)iter.next();
+            if (id.equals(RenderKitFactory.DEFAULT_RENDER_KIT)) {
+                exists=true;
+                break;
+            }
         }
-        assertTrue(id.equals(RenderKitFactory.DEFAULT_RENDER_KIT));
+        assertTrue(exists);
     }
             
     public void testExceptions() {

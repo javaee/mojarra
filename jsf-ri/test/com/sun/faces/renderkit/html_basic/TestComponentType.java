@@ -1,5 +1,5 @@
 /*
- * $Id: TestComponentType.java,v 1.3 2003/04/29 20:52:35 eburns Exp $
+ * $Id: TestComponentType.java,v 1.4 2003/07/08 15:38:49 eburns Exp $
  */
 
 /*
@@ -21,7 +21,6 @@ import javax.faces.component.UISelectMany;
 
 import java.util.Iterator;
 
-import com.sun.faces.renderkit.html_basic.HtmlBasicRenderKit;
 
 import java.io.IOException;
 
@@ -34,7 +33,7 @@ import junit.framework.TestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestComponentType.java,v 1.3 2003/04/29 20:52:35 eburns Exp $
+ * @version $Id: TestComponentType.java,v 1.4 2003/07/08 15:38:49 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo

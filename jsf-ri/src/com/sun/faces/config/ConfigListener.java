@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigListener.java,v 1.13 2003/05/20 20:57:10 eburns Exp $
+ * $Id: ConfigListener.java,v 1.14 2003/07/08 15:38:30 eburns Exp $
  */
 /*
  * Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
@@ -191,16 +191,13 @@ public class ConfigListener implements ServletContextListener
 	    (ApplicationFactory)FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
         ApplicationImpl application = 
 	    (ApplicationImpl)aFactory.getApplication();
-	application.getAppConfig().setConfigBase(configBase);
+        application.getAppConfig().setConfigBase(configBase);
 
         servletContext.setAttribute(RIConstants.CONFIG_ATTR, 
 					   configBase);
         if (log.isTraceEnabled()) {
             log.trace("CONFIG BASE SET IN CONTEXT...");
         }
-
-        configBase.updateRuntimeComponents();
-
     }
 
     public void contextDestroyed(ServletContextEvent e) {  

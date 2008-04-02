@@ -1,5 +1,5 @@
 /*
- * $Id: TestFacesContextImpl.java,v 1.25 2003/07/07 20:53:19 eburns Exp $
+ * $Id: TestFacesContextImpl.java,v 1.26 2003/07/08 15:38:45 eburns Exp $
  */
 
 /*
@@ -17,8 +17,6 @@ import org.mozilla.util.ParameterCheck;
 
 import javax.faces.context.FacesContext;
 import javax.faces.application.Message;
-import javax.faces.application.Application;
-import javax.faces.context.MessageResources;
 import javax.faces.application.MessageImpl;
 import javax.servlet.http.HttpSession;
 import javax.servlet.ServletException;
@@ -39,7 +37,6 @@ import javax.faces.context.ResponseWriter;
 import javax.faces.webapp.ServletResponseWriter;
 import java.io.PrintWriter;
 import javax.faces.context.ResponseStream;
-import com.sun.faces.renderkit.html_basic.HtmlBasicRenderKit;
 import com.sun.faces.RIConstants;
 import javax.faces.render.RenderKit;
 import java.util.Collections;
@@ -54,7 +51,7 @@ import com.sun.faces.ServletFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestFacesContextImpl.java,v 1.25 2003/07/07 20:53:19 eburns Exp $
+ * @version $Id: TestFacesContextImpl.java,v 1.26 2003/07/08 15:38:45 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -296,47 +293,6 @@ public void testGetApplication() {
 
     assertTrue(null != fc.getApplication());
 }    
-
-public void testGetComponentsWithMessagesPositive() {
-    Application app = null;
-    FacesContext fc = getFacesContext();
-    MessageResources messageResources = null;
-    assertTrue( fc != null);
-    assertTrue(null != (app = fc.getApplication()));
-    assertTrue(null != (messageResources = 
-			app.getMessageResources(MessageResources.FACES_API_MESSAGES)));
-
-    UICommand command = new UICommand();
-    UIForm form = new UIForm();
-    UIInput input = new UIInput();
-    Iterator components = null;
-    int i = 0;
-
-    fc.addMessage(command,
-		  messageResources.getMessage(fc,
-					      "javax.faces.validator.DoubleRangeValidator.LIMIT"));
-    fc.addMessage(form,
-		  messageResources.getMessage(fc,
-					      "javax.faces.validator.DoubleRangeValidator.MAXIMUM"));
-    fc.addMessage(input,
-		  messageResources.getMessage(fc,
-					      "javax.faces.validator.DoubleRangeValidator.MINIMUM"));
-    assertTrue(null != (components = fc.getComponentsWithMessages()));
-    while (components.hasNext()) {
-	i++;
-	components.next();
-    }
-    assertTrue(3 == i);
-
-}
-
-public void testGetComponentsWithMessagesNegative() {
-    FacesContext fc = getFacesContext();
-    assertTrue(null != fc);
-    Iterator components = fc.getComponentsWithMessages();
-    assertTrue(!components.hasNext());
-}
-    
 
 public void testRelease() {
     System.out.println("Testing release method");

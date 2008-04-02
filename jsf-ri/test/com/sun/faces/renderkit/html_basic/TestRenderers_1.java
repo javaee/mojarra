@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_1.java,v 1.28 2003/06/27 01:09:58 jvisvanathan Exp $
+ * $Id: TestRenderers_1.java,v 1.29 2003/07/08 15:38:51 eburns Exp $
  */
 
 /*
@@ -28,7 +28,6 @@ import javax.faces.component.UINamingContainer;
 import javax.faces.component.UIComponent;
 import javax.faces.event.FacesEvent;
 import com.sun.faces.RIConstants;
-import com.sun.faces.renderkit.html_basic.HtmlBasicRenderKit;
 import com.sun.faces.tree.SimpleTreeImpl;
 
 import com.sun.faces.renderkit.html_basic.FormRenderer;
@@ -41,7 +40,7 @@ import com.sun.faces.renderkit.html_basic.RadioRenderer;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_1.java,v 1.28 2003/06/27 01:09:58 jvisvanathan Exp $
+ * @version $Id: TestRenderers_1.java,v 1.29 2003/07/08 15:38:51 eburns Exp $
  * 
  *
  */

@@ -1,5 +1,5 @@
 /*
- * $Id: TestExternalContextImpl.java,v 1.6 2003/06/13 16:55:45 eburns Exp $
+ * $Id: TestExternalContextImpl.java,v 1.7 2003/07/08 15:38:44 eburns Exp $
  */
 
 /*
@@ -41,7 +41,6 @@ import javax.faces.context.ResponseWriter;
 import javax.faces.webapp.ServletResponseWriter;
 import java.io.PrintWriter;
 import javax.faces.context.ResponseStream;
-import com.sun.faces.renderkit.html_basic.HtmlBasicRenderKit;
 import com.sun.faces.RIConstants;
 import javax.faces.render.RenderKit;
 import java.io.InputStream;
@@ -62,7 +61,7 @@ import com.sun.faces.ServletFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestExternalContextImpl.java,v 1.6 2003/06/13 16:55:45 eburns Exp $
+ * @version $Id: TestExternalContextImpl.java,v 1.7 2003/07/08 15:38:44 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo

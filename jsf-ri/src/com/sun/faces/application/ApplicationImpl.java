@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationImpl.java,v 1.15 2003/07/07 20:52:50 eburns Exp $
+ * $Id: ApplicationImpl.java,v 1.16 2003/07/08 15:38:27 eburns Exp $
  */
 
 /*
@@ -90,7 +90,6 @@ public class ApplicationImpl extends Application {
 	managedBeanFactoriesMap = new HashMap();
 
         actionListener = new ActionListenerImpl();
-        navigationHandler = new NavigationHandlerImpl();
 
 	appConfig = new AppConfig(this);
     }
@@ -551,6 +550,57 @@ public class ApplicationImpl extends Application {
             throw new FacesException(Util.getExceptionMessage(Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, params));
         }
         return result;
+    }
+
+    /**
+     * The managedBeanFactories HashMap has been populated
+     * with ManagedBeanFactory object keyed by the bean name.
+     * Find the ManagedBeanFactory object and if it exists instantiate
+     * the bean and store it in the appropriate scope, if any.
+     *
+     * @param context The Faces context.
+     * @param managedBeanName The name identifying the managed bean.
+     *
+     * @return The managed bean.
+     *
+     * @exception PropertyNotFoundException if the managed bean
+     *  could not be created.
+     */
+    public Object createAndMaybeStoreManagedBeans(FacesContext context,
+        String managedBeanName) throws PropertyNotFoundException {
+
+        ManagedBeanFactory managedBean = (ManagedBeanFactory)
+            managedBeanFactoriesMap.get(managedBeanName);
+        if ( managedBean == null ) {
+            return null;
+        }
+
+        Object bean;
+        try {
+            bean = managedBean.newInstance();
+        } catch (Exception ex) {
+            Object []params = {ex.getMessage()};
+            throw new PropertyNotFoundException(Util.getExceptionMessage(
+                Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, params));
+        }
+        //add bean to appropriate scope
+        String scope = managedBean.getScope();
+        //scope cannot be null
+        Assert.assert_it(null != scope);
+
+        if (scope.equalsIgnoreCase(RIConstants.APPLICATION)) {
+            context.getExternalContext().
+                getApplicationMap().put(managedBeanName, bean);
+        }
+        else if (scope.equalsIgnoreCase(RIConstants.SESSION)) {
+            Util.getSessionMap(context).put(managedBeanName, bean);
+        }
+        else if (scope.equalsIgnoreCase(RIConstants.REQUEST)) {
+            context.getExternalContext().
+                getRequestMap().put(managedBeanName, bean);
+        }
+
+        return bean;
     }
 
     public AppConfig getAppConfig() {

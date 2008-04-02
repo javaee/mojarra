@@ -1,5 +1,5 @@
 /*
- * $Id: VariableResolverImpl.java,v 1.8 2003/05/15 22:25:46 rkitain Exp $
+ * $Id: VariableResolverImpl.java,v 1.9 2003/07/08 15:38:32 eburns Exp $
  */
 
 /*
@@ -72,7 +72,9 @@ public class VariableResolverImpl extends VariableResolver {
                          // if it's a managed bean try and create it
                          ApplicationFactory aFactory = (ApplicationFactory) FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
                          ApplicationImpl application = (ApplicationImpl)aFactory.getApplication();
-                         value = application.getAppConfig().createAndMaybeStoreManagedBeans(context, name);
+			 if (application instanceof ApplicationImpl) {
+                             value = application.createAndMaybeStoreManagedBeans(context, name);
+			 } 
                     }
 		}
 	    }
