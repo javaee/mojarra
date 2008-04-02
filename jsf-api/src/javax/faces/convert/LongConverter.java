@@ -1,5 +1,5 @@
 /*
- * $Id: LongConverter.java,v 1.17 2006/12/15 18:12:13 rlubke Exp $
+ * $Id: LongConverter.java,v 1.18 2007/01/29 06:59:55 rlubke Exp $
  */
 
 /*
@@ -105,8 +105,8 @@ public class LongConverter implements Converter {
             return (Long.valueOf(value));
         } catch (NumberFormatException nfe) {
             throw new ConverterException(MessageFactory.getMessage(
-                 context, LONG_ID, new Object[]{value, "98765432",
-                 MessageFactory.getLabel(context, component)}));
+                 context, LONG_ID, value, "98765432",
+                 MessageFactory.getLabel(context, component)));
         } catch (Exception e) {
             throw new ConverterException(e);
         }
@@ -138,8 +138,8 @@ public class LongConverter implements Converter {
             return (Long.toString(((Long) value).longValue()));
         } catch (Exception e) {
             throw new ConverterException(MessageFactory.getMessage(
-                 context, STRING_ID, new Object[]{value,
-                 MessageFactory.getLabel(context, component)}), e);
+                 context, STRING_ID, value,
+                 MessageFactory.getLabel(context, component)), e);
         }
     }
 }

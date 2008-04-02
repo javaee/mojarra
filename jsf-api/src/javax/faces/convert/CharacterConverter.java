@@ -1,5 +1,5 @@
 /*
- * $Id: CharacterConverter.java,v 1.16 2006/12/15 18:12:14 rlubke Exp $
+ * $Id: CharacterConverter.java,v 1.17 2007/01/29 06:59:56 rlubke Exp $
  */
 
 /*
@@ -102,9 +102,13 @@ public class CharacterConverter implements Converter {
         try {
             return (new Character(value.charAt(0)));
         } catch (Exception e) {
-            throw new ConverterException(MessageFactory.getMessage(
-                 context, CHARACTER_ID, new Object[]{value,
-                 MessageFactory.getLabel(context, component)}), e);
+            throw new ConverterException(
+                 MessageFactory.getMessage(context,
+                                           CHARACTER_ID,
+                                           value,
+                                           MessageFactory.getLabel(context,
+                                                                   component)),
+                                           e);
         }
     }
 

@@ -1,5 +1,5 @@
 /*
- * $Id: DateTimeConverter.java,v 1.32 2006/12/15 18:12:14 rlubke Exp $
+ * $Id: DateTimeConverter.java,v 1.33 2007/01/29 06:59:56 rlubke Exp $
  */
 
 /*
@@ -386,21 +386,21 @@ public class DateTimeConverter implements Converter, StateHolder {
             // Perform the requested parsing
             returnValue = parser.parse(value);
         } catch (ParseException e) {
-            if (type.equals("date")) {
+            if ("date".equals(type)) {
                 throw new ConverterException(MessageFactory.getMessage(
-                     context, DATE_ID, new Object[]{value,
+                     context, DATE_ID, value,
                      parser.format(new Date(System.currentTimeMillis())),
-                     MessageFactory.getLabel(context, component)}));
-            } else if (type.equals("time")) {
+                     MessageFactory.getLabel(context, component)));
+            } else if ("time".equals(type)) {
                 throw new ConverterException(MessageFactory.getMessage(
-                     context, TIME_ID, new Object[]{value,
+                     context, TIME_ID, value,
                      parser.format(new Date(System.currentTimeMillis())),
-                     MessageFactory.getLabel(context, component)}));
-            } else if (type.equals("both")) {
+                     MessageFactory.getLabel(context, component)));
+            } else if ("both".equals(type)) {
                 throw new ConverterException(MessageFactory.getMessage(
-                     context, DATETIME_ID, new Object[]{value,
+                     context, DATETIME_ID, value,
                      parser.format(new Date(System.currentTimeMillis())),
-                     MessageFactory.getLabel(context, component)}));
+                     MessageFactory.getLabel(context, component)));
             }
         } catch (ConverterException e) {
             throw e;
@@ -449,12 +449,12 @@ public class DateTimeConverter implements Converter, StateHolder {
 
         } catch (ConverterException e) {
             throw new ConverterException(MessageFactory.getMessage(
-                 context, STRING_ID, new Object[]{value,
-                 MessageFactory.getLabel(context, component)}), e);
+                 context, STRING_ID, value,
+                 MessageFactory.getLabel(context, component)), e);
         } catch (Exception e) {
             throw new ConverterException(MessageFactory.getMessage(
-                 context, STRING_ID, new Object[]{value,
-                 MessageFactory.getLabel(context, component)}), e);
+                 context, STRING_ID, value,
+                 MessageFactory.getLabel(context, component)), e);
         }
     }
 
@@ -479,7 +479,7 @@ public class DateTimeConverter implements Converter, StateHolder {
                  " be specified.");
         }
 
-        DateFormat df = null;
+        DateFormat df;
         if (pattern != null) {
             df = new SimpleDateFormat(pattern, locale);
         } else if (type.equals("both")) {
@@ -523,21 +523,21 @@ public class DateTimeConverter implements Converter, StateHolder {
      * @param name Name of the style for which to return a constant
      * @throws ConverterException if the style name is not valid
      */
-    private int getStyle(String name) {
+    private static int getStyle(String name) {
 
-        if (name.equals("default")) {
+        if ("default".equals(name)) {
             return (DateFormat.DEFAULT);
-        } else if (name.equals("short")) {
+        } else if ("short".equals(name)) {
             return (DateFormat.SHORT);
-        } else if (name.equals("medium")) {
+        } else if ("medium".equals(name)) {
             return (DateFormat.MEDIUM);
-        } else if (name.equals("long")) {
+        } else if ("long".equals(name)) {
             return (DateFormat.LONG);
-        } else if (name.equals("full")) {
+        } else if ("full".equals(name)) {
             return (DateFormat.FULL);
         } else {
             // PENDING(craigmcc) - i18n
-            throw new ConverterException("Invalid style '" + name + "'");
+            throw new ConverterException("Invalid style '" + name + '\'');
         }
 
     }

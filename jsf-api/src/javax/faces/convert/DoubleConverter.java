@@ -1,5 +1,5 @@
 /*
- * $Id: DoubleConverter.java,v 1.20 2006/12/15 18:12:15 rlubke Exp $
+ * $Id: DoubleConverter.java,v 1.21 2007/01/29 06:59:55 rlubke Exp $
  */
 
 /*
@@ -105,8 +105,8 @@ public class DoubleConverter implements Converter {
             return (Double.valueOf(value));
         } catch (NumberFormatException nfe) {
             throw new ConverterException(MessageFactory.getMessage(
-                 context, DOUBLE_ID, new Object[]{value, "1999999",
-                 MessageFactory.getLabel(context, component)}));
+                 context, DOUBLE_ID, value, "1999999",
+                 MessageFactory.getLabel(context, component)));
         } catch (Exception e) {
             throw new ConverterException(e);
         }
@@ -138,8 +138,8 @@ public class DoubleConverter implements Converter {
             return (Double.toString(((Double) value).doubleValue()));
         } catch (Exception e) {
             throw new ConverterException(MessageFactory.getMessage(
-                 context, STRING_ID, new Object[]{value,
-                 MessageFactory.getLabel(context, component)}), e);
+                 context, STRING_ID, value,
+                 MessageFactory.getLabel(context, component)), e);
         }
     }
 }

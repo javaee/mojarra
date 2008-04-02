@@ -1,5 +1,5 @@
 /*
- * $Id: ByteConverter.java,v 1.17 2006/12/15 18:12:14 rlubke Exp $
+ * $Id: ByteConverter.java,v 1.18 2007/01/29 06:59:56 rlubke Exp $
  */
 
 /*
@@ -103,9 +103,13 @@ public class ByteConverter implements Converter {
         try {
             return (Byte.valueOf(value));
         } catch (NumberFormatException nfe) {
-            throw new ConverterException(MessageFactory.getMessage(
-                 context, BYTE_ID, new Object[]{value, "254",
-                 MessageFactory.getLabel(context, component)}));
+            throw new ConverterException(
+                 MessageFactory.getMessage(context,
+                                           BYTE_ID,
+                                           value,
+                                           "254",
+                                           MessageFactory.getLabel(context,
+                                                                   component)));
         } catch (Exception e) {
             throw new ConverterException(e);
         }
@@ -136,9 +140,13 @@ public class ByteConverter implements Converter {
         try {
             return (Byte.toString(((Byte) value).byteValue()));
         } catch (Exception e) {
-            throw new ConverterException(MessageFactory.getMessage(
-                 context, STRING_ID, new Object[]{value,
-                 MessageFactory.getLabel(context, component)}), e);
+            throw new ConverterException(
+                 MessageFactory.getMessage(context,
+                                           STRING_ID,
+                                           value,
+                                           MessageFactory.getLabel(context,
+                                                                   component)),
+                                           e);
         }
     }
 }

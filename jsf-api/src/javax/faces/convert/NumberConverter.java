@@ -1,5 +1,5 @@
 /*
- * $Id: NumberConverter.java,v 1.25 2006/12/15 18:12:14 rlubke Exp $
+ * $Id: NumberConverter.java,v 1.26 2007/01/29 06:59:56 rlubke Exp $
  */
 
 /*
@@ -545,7 +545,7 @@ public class NumberConverter implements Converter, StateHolder {
 
             // Create and configure the parser to be used
             parser = getNumberFormat(locale);
-            if (((pattern != null) && !pattern.equals(""))
+            if (((pattern != null) && pattern.length() != 0)
                  || "currency".equals(type)) {
                 configureCurrency(parser);
             }
@@ -556,23 +556,23 @@ public class NumberConverter implements Converter, StateHolder {
         } catch (ParseException e) {
             if (pattern != null) {
                 throw new ConverterException(MessageFactory.getMessage(
-                     context, PATTERN_ID, new Object[]{value, "#,##0.0#",
-                     MessageFactory.getLabel(context, component)}));
+                     context, PATTERN_ID, value, "#,##0.0#",
+                     MessageFactory.getLabel(context, component)));
             } else if (type.equals("currency")) {
                 throw new ConverterException(MessageFactory.getMessage(
-                     context, CURRENCY_ID, new Object[]{value,
+                     context, CURRENCY_ID, value,
                      parser.format(99.99),
-                     MessageFactory.getLabel(context, component)}));
+                     MessageFactory.getLabel(context, component)));
             } else if (type.equals("number")) {
                 throw new ConverterException(MessageFactory.getMessage(
-                     context, NUMBER_ID, new Object[]{value,
+                     context, NUMBER_ID, value,
                      parser.format(99),
-                     MessageFactory.getLabel(context, component)}));
+                     MessageFactory.getLabel(context, component)));
             } else if (type.equals("percent")) {
                 throw new ConverterException(MessageFactory.getMessage(
-                     context, PERCENT_ID, new Object[]{value,
+                     context, PERCENT_ID, value,
                      parser.format(.75),
-                     MessageFactory.getLabel(context, component)}));
+                     MessageFactory.getLabel(context, component)));
             }
         } catch (ConverterException ce) {
             throw ce;
@@ -612,7 +612,7 @@ public class NumberConverter implements Converter, StateHolder {
             // Create and configure the formatter to be used
             NumberFormat formatter =
                  getNumberFormat(locale);
-            if (((pattern != null) && !pattern.equals(""))
+            if (((pattern != null) && pattern.length() != 0)
                  || "currency".equals(type)) {
                 configureCurrency(formatter);
             }
@@ -623,12 +623,12 @@ public class NumberConverter implements Converter, StateHolder {
 
         } catch (ConverterException e) {
             throw new ConverterException(MessageFactory.getMessage(
-                 context, STRING_ID, new Object[]{value,
-                 MessageFactory.getLabel(context, component)}), e);
+                 context, STRING_ID, value,
+                 MessageFactory.getLabel(context, component)), e);
         } catch (Exception e) {
             throw new ConverterException(MessageFactory.getMessage(
-                 context, STRING_ID, new Object[]{value,
-                 MessageFactory.getLabel(context, component)}), e);
+                 context, STRING_ID, value,
+                 MessageFactory.getLabel(context, component)), e);
         }
     }
 

@@ -1,5 +1,5 @@
 /*
- * $Id: BigIntegerConverter.java,v 1.12 2006/12/15 18:12:14 rlubke Exp $
+ * $Id: BigIntegerConverter.java,v 1.13 2007/01/29 06:59:56 rlubke Exp $
  */
 
 /*
@@ -104,9 +104,13 @@ public class BigIntegerConverter implements Converter {
         try {
             return (new BigInteger(value));
         } catch (NumberFormatException nfe) {
-            throw new ConverterException(MessageFactory.getMessage(
-                 context, BIGINTEGER_ID, new Object[]{value, "9876",
-                 MessageFactory.getLabel(context, component)}));
+            throw new ConverterException(
+                 MessageFactory.getMessage(context,
+                                           BIGINTEGER_ID,
+                                           value,
+                                           "9876",
+                                           MessageFactory.getLabel(context,
+                                                                   component)));
         } catch (Exception e) {
             throw new ConverterException(e);
         }
@@ -135,11 +139,15 @@ public class BigIntegerConverter implements Converter {
         }
 
         try {
-            return (((BigInteger) value).toString());
+            return (value.toString());
         } catch (Exception e) {
-            throw new ConverterException(MessageFactory.getMessage(
-                 context, STRING_ID, new Object[]{value,
-                 MessageFactory.getLabel(context, component)}), e);
+            throw new ConverterException(
+                 MessageFactory.getMessage(context,
+                                           STRING_ID,
+                                           value,
+                                           MessageFactory.getLabel(context,
+                                                                   component)),
+                                           e);
         }
     }
 }

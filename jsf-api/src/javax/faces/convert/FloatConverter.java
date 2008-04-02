@@ -1,5 +1,5 @@
 /*
- * $Id: FloatConverter.java,v 1.17 2006/12/15 18:12:14 rlubke Exp $
+ * $Id: FloatConverter.java,v 1.18 2007/01/29 06:59:56 rlubke Exp $
  */
 
 /*
@@ -105,8 +105,8 @@ public class FloatConverter implements Converter {
             return (Float.valueOf(value));
         } catch (NumberFormatException nfe) {
             throw new ConverterException(MessageFactory.getMessage(
-                 context, FLOAT_ID, new Object[]{value, "2000000000",
-                 MessageFactory.getLabel(context, component)}));
+                 context, FLOAT_ID, value, "2000000000",
+                 MessageFactory.getLabel(context, component)));
         } catch (Exception e) {
             throw new ConverterException(e);
         }
@@ -138,8 +138,8 @@ public class FloatConverter implements Converter {
             return (Float.toString(((Float) value).floatValue()));
         } catch (Exception e) {
             throw new ConverterException(MessageFactory.getMessage(
-                 context, STRING_ID, new Object[]{value,
-                 MessageFactory.getLabel(context, component)}), e);
+                 context, STRING_ID, value,
+                 MessageFactory.getLabel(context, component)), e);
         }
     }
 }

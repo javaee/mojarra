@@ -1,5 +1,5 @@
 /*
- * $Id: BooleanConverter.java,v 1.18 2006/12/15 18:12:13 rlubke Exp $
+ * $Id: BooleanConverter.java,v 1.19 2007/01/29 06:59:57 rlubke Exp $
  */
 
 /*
@@ -104,9 +104,13 @@ public class BooleanConverter implements Converter {
         try {
             return (Boolean.valueOf(value));
         } catch (Exception e) {
-            throw new ConverterException(MessageFactory.getMessage(
-                 context, BOOLEAN_ID, new Object[]{value,
-                 MessageFactory.getLabel(context, component)}), e);
+            throw new ConverterException(
+                 MessageFactory.getMessage(context,
+                                           BOOLEAN_ID,
+                                           value,
+                                           MessageFactory.getLabel(context,
+                                                                   component)),
+                                           e);
         }
     }
 
@@ -129,9 +133,13 @@ public class BooleanConverter implements Converter {
         try {
             return value.toString();
         } catch (Exception e) {
-            throw new ConverterException(MessageFactory.getMessage(
-                 context, STRING_ID, new Object[]{value,
-                 MessageFactory.getLabel(context, component)}), e);
+            throw new ConverterException(
+                 MessageFactory.getMessage(context,
+                                           STRING_ID,
+                                           value,
+                                           MessageFactory.getLabel(context,
+                                                                   component)),
+                                           e);
         }
     }
 }

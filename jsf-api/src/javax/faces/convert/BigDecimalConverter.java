@@ -1,5 +1,5 @@
 /*
- * $Id: BigDecimalConverter.java,v 1.12 2006/12/15 18:12:15 rlubke Exp $
+ * $Id: BigDecimalConverter.java,v 1.13 2007/01/29 06:59:56 rlubke Exp $
  */
 
 /*
@@ -104,9 +104,13 @@ public class BigDecimalConverter implements Converter {
         try {
             return (new BigDecimal(value));
         } catch (NumberFormatException nfe) {
-            throw new ConverterException(MessageFactory.getMessage(
-                 context, DECIMAL_ID, new Object[]{value, "198.23",
-                 MessageFactory.getLabel(context, component)}));
+            throw new ConverterException(
+                 MessageFactory.getMessage(context,
+                                           DECIMAL_ID,
+                                           value,
+                                           "198.23",
+                                           MessageFactory.getLabel(context,
+                                                                   component)));
         } catch (Exception e) {
             throw new ConverterException(e);
         }
@@ -137,11 +141,15 @@ public class BigDecimalConverter implements Converter {
         }
 
         try {
-            return (((BigDecimal) value).toString());
+            return (value.toString());
         } catch (Exception e) {
-            throw new ConverterException(MessageFactory.getMessage(
-                 context, STRING_ID, new Object[]{value,
-                 MessageFactory.getLabel(context, component)}), e);
+            throw new ConverterException(
+                 MessageFactory.getMessage(context,
+                                           STRING_ID,
+                                           value,
+                                           MessageFactory.getLabel(context,
+                                                                   component)),
+                                           e);
         }
     }
 }

@@ -1,5 +1,5 @@
 /*
- * $Id: IntegerConverter.java,v 1.17 2006/12/15 18:12:14 rlubke Exp $
+ * $Id: IntegerConverter.java,v 1.18 2007/01/29 06:59:55 rlubke Exp $
  */
 
 /*
@@ -105,8 +105,8 @@ public class IntegerConverter implements Converter {
             return (Integer.valueOf(value));
         } catch (NumberFormatException nfe) {
             throw new ConverterException(MessageFactory.getMessage(
-                 context, INTEGER_ID, new Object[]{value, "9346",
-                 MessageFactory.getLabel(context, component)}));
+                 context, INTEGER_ID, value, "9346",
+                 MessageFactory.getLabel(context, component)));
         } catch (Exception e) {
             throw new ConverterException(e);
         }
@@ -138,8 +138,8 @@ public class IntegerConverter implements Converter {
             return (Integer.toString(((Integer) value).intValue()));
         } catch (Exception e) {
             throw new ConverterException(MessageFactory.getMessage(
-                 context, STRING_ID, new Object[]{value,
-                 MessageFactory.getLabel(context, component)}), e);
+                 context, STRING_ID, value,
+                 MessageFactory.getLabel(context, component)), e);
         }
     }
 }

@@ -1,5 +1,5 @@
 /*
- * $Id: EnumConverter.java,v 1.7 2006/12/15 18:12:15 rlubke Exp $
+ * $Id: EnumConverter.java,v 1.8 2007/01/29 06:59:55 rlubke Exp $
  */
 
 /*
@@ -217,7 +217,7 @@ public class EnumConverter implements Converter, StateHolder {
         return this.targetClass;
     }
 
-    private transient boolean isTransient = false;
+    private boolean isTransient = false;
 
     public void setTransient(boolean b) {
         isTransient = b;
