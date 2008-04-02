@@ -2,7 +2,7 @@
  * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  *
- * $Id: ViewHandlerWrapper.java,v 1.1 2004/10/18 15:33:38 edburns Exp $
+ * $Id: ViewHandlerWrapper.java,v 1.2 2004/10/18 21:22:30 edburns Exp $
  */
 
 package javax.faces.application;
@@ -34,12 +34,6 @@ public abstract class ViewHandlerWrapper extends ViewHandler {
      */ 
 
     abstract protected ViewHandlerWrapper getWrapped();
-
-
-    // ------------------------------------------------------------ Constructors
-
-    public ViewHandlerWrapper() { }
-
 
 
     // ------------------------ Methods from javax.faces.application.ViewHandler
