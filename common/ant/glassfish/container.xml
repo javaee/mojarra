@@ -141,6 +141,14 @@ grant {
 
     <target name="container.deploy"
               description="Deploy the JSF Implementation artifacts to the target container.">
+      <mkdir dir="${dist.dir}" />
+      <mkdir dir="${dist.dir}/tmp" />
+      <unjar src="${impl.dir}/build/lib/jsf-impl.jar"
+             dest="${dist.dir}/tmp" />
+      <delete dir="${dist.dir}/tmp/com/sun/org/apache" />
+      <jar destfile="${dist.dir}/tmp/jsf-impl.jar" 
+           basedir="${dist.dir}/tmp" />
+
             <delete>
                 <fileset dir="${container.home}/lib" includes="jsf-*.jar"/>
             </delete>
@@ -148,7 +156,8 @@ grant {
                 <zipfileset src="${api.dir}/build/lib/jsf-api.jar"/>
             </jar>
             <copy todir="${container.home}/lib"
-                  file="${impl.dir}/build/lib/jsf-impl.jar"/>
+                  file="${dist.dir}/tmp/jsf-impl.jar"/>
+            <delete dir="${dist.dir}/tmp" />
     </target>
     
     <macrodef name="container.start"
