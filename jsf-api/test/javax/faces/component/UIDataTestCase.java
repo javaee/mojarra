@@ -1,5 +1,5 @@
 /*
- * $Id: UIDataTestCase.java,v 1.30 2004/01/08 21:21:19 eburns Exp $
+ * $Id: UIDataTestCase.java,v 1.31 2004/01/12 05:13:29 craigmcc Exp $
  */
 
 /*
@@ -456,6 +456,105 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
         checkResponse("/javax/faces/component/UIDataTestCase_3.xml");
         renderResponse();
         checkResponse("/javax/faces/component/UIDataTestCase_3.xml");
+
+    }
+
+
+    // Test request processing lifecycle (modify model in Invoke Application)
+    public void testTreeModify1() throws Exception {
+
+        ValueBinding vbCommand = application.createValueBinding("foo.command");
+        ValueBinding vbInput = application.createValueBinding("foo.input");
+        ValueBinding vbOutput = application.createValueBinding("foo.output");
+        String before[] =
+            { "input3", "input4", "input5", "input6", "input7" };
+        String after[] =
+            { "input3", "input4A", "input5", "input6B", "input7" };
+        String nulls[] =
+            { null, null, null, null, null };
+
+        // Set up for this test
+        setupModel();
+        setupRenderers();
+        UICommand command = setupTree();
+        UIData data = (UIData) component;
+        checkLocalValues(nulls);
+
+        // Set up our fake request parameters (two command invocations)
+        Map params = new HashMap();
+        params.put("data:5:command", "");
+        params.put("data:7:command", "");
+        params.put("data:3:input", "input3");
+        params.put("data:4:input", "input4A");
+        params.put("data:5:input", "input5");
+        params.put("data:6:input", "input6B");
+        params.put("data:7:input", "input7");
+        MockExternalContext econtext =
+          (MockExternalContext) facesContext.getExternalContext();
+        econtext.setRequestParameterMap(params);
+        checkMessages(0);
+
+        // Simulate the Request Processing Lifecycle
+        TestDataActionListener.trace(null);
+        TestDataValidator.trace(null);
+        TestDataValueChangeListener.trace(null);
+        UIViewRoot root = (UIViewRoot) data.getParent();
+
+        //   APPLY REQUEST VALUES
+	command.setImmediate(true);
+        root.processDecodes(facesContext);
+        assertEquals("/data:5:command" +
+                     "/data:7:command",
+                     TestDataActionListener.trace());
+        assertEquals("", TestDataValidator.trace());
+        assertEquals("", TestDataValueChangeListener.trace());
+        checkMessages(0);
+        checkSubmittedValues(after);
+
+        //   PERFORM VALIDATIONS
+        root.processValidators(facesContext);
+        assertEquals("/data:5:command" +
+                     "/data:7:command",
+                     TestDataActionListener.trace());
+        assertEquals("/data:3:input/input3" +
+                     "/data:4:input/input4A" +
+                     "/data:5:input/input5" +
+                     "/data:6:input/input6B" +
+                     "/data:7:input/input7",
+                     TestDataValidator.trace());
+        assertEquals("/data:4:input/input4/input4A" +
+                     "/data:6:input/input6/input6B",
+                     TestDataValueChangeListener.trace());
+        checkLocalValues(after);
+        checkModelInputs(before);
+        checkMessages(0);
+
+        //   UPDATE MODEL VALUES
+        root.processUpdates(facesContext);
+        assertEquals("/data:5:command" +
+                     "/data:7:command",
+                     TestDataActionListener.trace());
+        assertEquals("/data:3:input/input3" +
+                     "/data:4:input/input4A" +
+                     "/data:5:input/input5" +
+                     "/data:6:input/input6B" +
+                     "/data:7:input/input7",
+                     TestDataValidator.trace());
+        assertEquals("/data:4:input/input4/input4A" +
+                     "/data:6:input/input6/input6B",
+                     TestDataValueChangeListener.trace());
+        checkModelInputs(after);
+        checkMessages(0);
+        checkLocalValues(nulls);
+
+        // INVOKE APPLICATION
+        beans.remove(5);
+
+        //   RENDER RESPONSE
+        renderResponse();
+        checkResponse("/javax/faces/component/UIDataTestCase_6.xml");
+        renderResponse();
+        checkResponse("/javax/faces/component/UIDataTestCase_6.xml");
 
     }
 
