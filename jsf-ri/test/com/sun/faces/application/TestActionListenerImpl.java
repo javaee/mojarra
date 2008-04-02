@@ -1,5 +1,5 @@
 /*
- * $Id: TestActionListenerImpl.java,v 1.13 2003/10/02 00:40:04 jvisvanathan Exp $
+ * $Id: TestActionListenerImpl.java,v 1.14 2003/10/02 06:50:07 jvisvanathan Exp $
  */
 
 /*
@@ -42,7 +42,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestActionListenerImpl.java,v 1.13 2003/10/02 00:40:04 jvisvanathan Exp $
+ * @version $Id: TestActionListenerImpl.java,v 1.14 2003/10/02 06:50:07 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -112,7 +112,7 @@ public class TestActionListenerImpl extends ServletFacesTestCase
 
         System.out.println("Testing With ActionRef Set...");
 
-        command = new UICommandBase();
+        command = new UICommand();
         command.setActionRef("userBean.login");
 
         UserBean user = new UserBean();
@@ -121,7 +121,7 @@ public class TestActionListenerImpl extends ServletFacesTestCase
         context.getExternalContext().getSessionMap().put("userBean", user);
         assertTrue(user == context.getExternalContext().getSessionMap().get("userBean"));
 
-        page = new UIViewRootBase();
+        page = new UIViewRoot();
         page.setViewId("/login.jsp");
         context.setViewRoot(page);
 

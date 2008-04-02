@@ -1,5 +1,5 @@
 /*
- * $Id: TestFacesContextImpl.java,v 1.35 2003/10/02 00:40:08 jvisvanathan Exp $
+ * $Id: TestFacesContextImpl.java,v 1.36 2003/10/02 06:50:11 jvisvanathan Exp $
  */
 
 /*
@@ -59,7 +59,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestFacesContextImpl.java,v 1.35 2003/10/02 00:40:08 jvisvanathan Exp $
+ * @version $Id: TestFacesContextImpl.java,v 1.36 2003/10/02 06:50:11 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -215,54 +215,6 @@ public void testFacesEventsNull()
     boolean exceptionThrown = false;
     int count = 0;
     Iterator iter = null;
-
-    exceptionThrown = false;
-    System.out.println("Testing addFacesEvent(null) throws NullPointerException");
-    try {
-	getFacesContext().addFacesEvent(null);
-    }
-    catch (NullPointerException e) {
-	exceptionThrown = true;
-    }
-    assertTrue(exceptionThrown);
-}
-
-public void testFacesEvents()
-{
-    int count = 0;
-    Iterator iter = null;
-    UIInput source1 = new UIInput();
-    UICommand source2 = new UICommand();
-    FacesEvent event1 = new FacesEvent(source1) {        
-        public boolean isAppropriateListener(FacesListener listener) {
-            return false;  
-        }
-       
-        public void processListener(FacesListener listener) {            
-        }
-    };
-    
-	FacesEvent event2 = new FacesEvent(source2) {
-        public boolean isAppropriateListener(FacesListener listener) {
-            return false;
-        }
-
-        public void processListener(FacesListener listener) {
-        }
-    };
-
-    System.out.println("Testing addFacesEvent(event1)");
-    getFacesContext().addFacesEvent(event1);
-    assertTrue((count = getCount()) == 1);
-
-    System.out.println("Testing addFacesEvent(event2)");
-    getFacesContext().addFacesEvent(event2);
-    assertTrue((count = getCount()) == 2);
-
-    System.out.println("Testing getFacesEvents()");
-    iter = getFacesContext().getFacesEvents();
-    assertTrue(iter.hasNext());
-
 }
 
 public void testRenderingControls() {
@@ -280,15 +232,6 @@ public void testCurrentInstance() {
     assertTrue(context == context.getCurrentInstance());
 }
 
-private int getCount() {
-    Iterator iter = getFacesContext().getFacesEvents();
-    int count = 0;
-    while (iter.hasNext()) {
-        iter.next();
-        count++;
-    }
-    return count;
-} 
 
 public void testMessageMethodsNull() {
     boolean gotException = false;
@@ -325,7 +268,7 @@ public void testMessageMethods() {
     Message msg2 = new MessageImpl (3, "summary2", "detail2");
     fc.addMessage(null, msg2);
     
-    UICommand command = new UICommandBase();
+    UICommand command = new UICommand();
     Message msg3 = new MessageImpl (4, "summary3", "detail3");
     fc.addMessage(command, msg3);
     

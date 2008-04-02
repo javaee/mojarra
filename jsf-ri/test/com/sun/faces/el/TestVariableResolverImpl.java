@@ -1,5 +1,5 @@
 /*
- * $Id: TestVariableResolverImpl.java,v 1.9 2003/10/02 00:40:10 jvisvanathan Exp $
+ * $Id: TestVariableResolverImpl.java,v 1.10 2003/10/02 06:50:14 jvisvanathan Exp $
  */
 
 /*
@@ -38,7 +38,7 @@ import javax.faces.component.UIViewRoot;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestVariableResolverImpl.java,v 1.9 2003/10/02 00:40:10 jvisvanathan Exp $
+ * @version $Id: TestVariableResolverImpl.java,v 1.10 2003/10/02 06:50:14 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -188,7 +188,7 @@ public class TestVariableResolverImpl extends ServletFacesTestCase
 
 	// tree
 	// create a dummy root for the tree.
-	UIViewRoot page = new UIViewRootBase();
+	UIViewRoot page = new UIViewRoot();
     page.setId("root");
     page.setViewId("newTree");
 	getFacesContext().setViewRoot(page);

@@ -4,7 +4,7 @@
  */
 
 /**
- * $Id: TestRenderers_4.java,v 1.8 2003/08/22 17:27:44 rlubke Exp $
+ * $Id: TestRenderers_4.java,v 1.9 2003/10/02 06:50:22 jvisvanathan Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -24,11 +24,6 @@ import javax.faces.component.UIOutput;
 import javax.faces.component.UIComponent;
 import javax.faces.component.NamingContainer;
 import javax.faces.component.UIViewRoot;
-import javax.faces.component.base.UICommandBase;
-import javax.faces.component.base.UINamingContainerBase;
-import javax.faces.component.base.UIPanelBase;
-import javax.faces.component.base.UIOutputBase;
-import javax.faces.component.base.UIViewRootBase;
 import javax.faces.context.FacesContextFactory;
 
 import org.apache.cactus.WebRequest;
@@ -43,7 +38,7 @@ import java.util.ArrayList;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_4.java,v 1.8 2003/08/22 17:27:44 rlubke Exp $
+ * @version $Id: TestRenderers_4.java,v 1.9 2003/10/02 06:50:22 jvisvanathan Exp $
  * 
  *
  */
@@ -92,7 +87,7 @@ public class TestRenderers_4 extends JspFacesTestCase {
     //
     public void setUp() {
         super.setUp();
-        UIViewRoot page = new UIViewRootBase();
+        UIViewRoot page = new UIViewRoot();
         page.setViewId("viewId");       
         getFacesContext().setViewRoot(page);
         assertTrue(null != getFacesContext().getResponseWriter());
@@ -106,11 +101,7 @@ public class TestRenderers_4 extends JspFacesTestCase {
 
         try {
             // create a dummy root for the tree.
-            UINamingContainerBase root = new UINamingContainerBase() {
-                public String getComponentType() {
-                    return "root";
-                }
-            };
+            UIViewRoot root = new UIViewRoot();
             root.setId("root");
 
             testListRenderer(root);
@@ -146,38 +137,38 @@ public class TestRenderers_4 extends JspFacesTestCase {
 	bodyList.add("row2");
 	bodyList.add("row3");
 
-	panel = new UIPanelBase();
+	panel = new UIPanel();
 	root.getChildren().add(panel);
 	
-	headerGroup = new UIPanelBase();
+	headerGroup = new UIPanel();
 	headerGroup.setId("header");
-	header1 = new UIOutputBase();
+	header1 = new UIOutput();
 	header1.setValue("header1");
 	headerGroup.getChildren().add(header1);
-	header2 = new UIOutputBase();
+	header2 = new UIOutput();
 	header2.setValue("header2");
 	headerGroup.getChildren().add(header2);
 	panel.getFacets().put("header", headerGroup);
 	
-	footerGroup = new UIPanelBase();
+	footerGroup = new UIPanel();
 	footerGroup.setId("footer");
-	footer1 = new UIOutputBase();
+	footer1 = new UIOutput();
 	footer1.setValue("footer1");
 	footerGroup.getChildren().add(footer1);
-	footer2 = new UIOutputBase();
+	footer2 = new UIOutput();
 	footer2.setValue("footer2");
 	footerGroup.getChildren().add(footer2);
 	panel.getFacets().put("footer", footerGroup);
 
-	bodyGroup = new UIPanelBase();
+	bodyGroup = new UIPanel();
 	bodyGroup.setValue(bodyList);
 	panel.getChildren().add(bodyGroup);
 
-	body1 = new UIOutputBase();
+	body1 = new UIOutput();
 	body1.setValue("body1");
 	bodyGroup.getChildren().add(body1);
 
-	body2 = new UIOutputBase();
+	body2 = new UIOutput();
 	body2.setValue("body2");
 	bodyGroup.getChildren().add(body2);
 
@@ -206,36 +197,36 @@ public class TestRenderers_4 extends JspFacesTestCase {
 	    body1 = null,
 	    body2 = null;
 
-	panel = new UIPanelBase();
+	panel = new UIPanel();
 	root.getChildren().add(panel);
 	
-	headerGroup = new UIPanelBase();
+	headerGroup = new UIPanel();
 	headerGroup.setId("header");
 	headerGroup.setRendererType("Group");
-	header1 = new UIOutputBase();
+	header1 = new UIOutput();
 	header1.setValue("header1 ");
 	headerGroup.getChildren().add(header1);
-	header2 = new UIOutputBase();
+	header2 = new UIOutput();
 	header2.setValue("header2 ");
 	headerGroup.getChildren().add(header2);
 	panel.getFacets().put("header", headerGroup);
 	
-	footerGroup = new UIPanelBase();
+	footerGroup = new UIPanel();
 	footerGroup.setId("footer");
 	footerGroup.setRendererType("Group");
-	footer1 = new UIOutputBase();
+	footer1 = new UIOutput();
 	footer1.setValue("footer1 ");
 	footerGroup.getChildren().add(footer1);
-	footer2 = new UIOutputBase();
+	footer2 = new UIOutput();
 	footer2.setValue("footer2 ");
 	footerGroup.getChildren().add(footer2);
 	panel.getFacets().put("footer", footerGroup);
 
-	body1 = new UIOutputBase();
+	body1 = new UIOutput();
 	body1.setValue("body1");
 	panel.getChildren().add(body1);
 
-	body2 = new UIOutputBase();
+	body2 = new UIOutput();
 	body2.setValue("body2");
 	panel.getChildren().add(body2);
 

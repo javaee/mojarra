@@ -1,5 +1,5 @@
 /*
- * $Id: TestConverters.java,v 1.17 2003/10/02 00:40:09 jvisvanathan Exp $
+ * $Id: TestConverters.java,v 1.18 2003/10/02 06:50:12 jvisvanathan Exp $
  */
 
 /*
@@ -44,7 +44,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestConverters.java,v 1.17 2003/10/02 00:40:09 jvisvanathan Exp $
+ * @version $Id: TestConverters.java,v 1.18 2003/10/02 06:50:12 jvisvanathan Exp $
  * 
  *
  */
@@ -97,7 +97,7 @@ public class TestConverters extends JspFacesTestCase
 
         try {
             // create a dummy root for the tree.
-            UIViewRoot root = new UIViewRootBase();
+            UIViewRoot root = new UIViewRoot();
             root.setId("root");
 
             testDateConverter(root);
@@ -287,7 +287,7 @@ public class TestConverters extends JspFacesTestCase
 	getFacesContext().setViewRoot(root);
 
 	// test model type of boolean []
-	UISelectManyBase booleanv = new UISelectMany();
+	UISelectMany booleanv = new UISelectMany();
 	booleanv.setId("bool");
 	booleanv.setRendererType("CheckboxList");
 	booleanv.setValueRef("bean.booleans");
@@ -312,7 +312,7 @@ public class TestConverters extends JspFacesTestCase
 	assertTrue(bean.getBooleans().length == 1);
 
 	// test model type of byte []
-	UISelectManyBase bytev = new UISelectMany();
+	UISelectMany bytev = new UISelectMany();
 	bytev.setId("byte");
 	bytev.setRendererType("CheckboxList");
 	bytev.setValueRef("bean.bytes");
@@ -325,7 +325,7 @@ public class TestConverters extends JspFacesTestCase
 	assertTrue(bean.getBytes()[2] == 1);
 
 	// test model type of char []
-	UISelectManyBase charv = new UISelectMany();
+	UISelectMany charv = new UISelectMany();
 	charv.setId("char");
 	charv.setRendererType("CheckboxList");
 	charv.setValueRef("bean.chars");
@@ -338,7 +338,7 @@ public class TestConverters extends JspFacesTestCase
 	assertTrue(bean.getChars()[2] == 'z');
 
 	// test model type of short []
-	UISelectManyBase shortv = new UISelectMany();
+	UISelectMany shortv = new UISelectMany();
 	shortv.setId("short");
 	shortv.setRendererType("CheckboxList");
 	shortv.setValueRef("bean.shorts");
@@ -351,7 +351,7 @@ public class TestConverters extends JspFacesTestCase
 	assertTrue(bean.getShorts()[2] == Byte.MAX_VALUE + 1);
 
 	// test model type of int []
-	UISelectManyBase intv = new UISelectMany();
+	UISelectMany intv = new UISelectMany();
 	intv.setId("int");
 	intv.setRendererType("CheckboxList");
 	intv.setValueRef("bean.ints");
@@ -364,7 +364,7 @@ public class TestConverters extends JspFacesTestCase
 	assertTrue(bean.getInts()[2] == Short.MAX_VALUE + 1);
 
 	// test model type of float []
-	UISelectManyBase floatv = new UISelectMany();
+	UISelectMany floatv = new UISelectMany();
 	floatv.setId("float");
 	floatv.setRendererType("CheckboxList");
 	floatv.setValueRef("bean.floats");
@@ -377,7 +377,7 @@ public class TestConverters extends JspFacesTestCase
 	assertTrue(bean.getFloats()[2] == Integer.MAX_VALUE + 1);
 
 	// test model type of long []
-	UISelectManyBase longv = new UISelectMany();
+	UISelectMany longv = new UISelectMany();
 	longv.setId("long");
 	longv.setRendererType("CheckboxList");
 	longv.setValueRef("bean.longs");
@@ -390,7 +390,7 @@ public class TestConverters extends JspFacesTestCase
 	assertTrue(bean.getLongs()[2] == Integer.MAX_VALUE + 1);
 
 	// test model type of double []
-	UISelectManyBase doublev = new UISelectMany();
+	UISelectMany doublev = new UISelectMany();
 	doublev.setId("double");
 	doublev.setRendererType("CheckboxList");
 	doublev.setValueRef("bean.doubles");
@@ -403,7 +403,7 @@ public class TestConverters extends JspFacesTestCase
 	assertTrue(bean.getDoubles()[2] == Long.MAX_VALUE + 1);
 
 	// test model type of String []
-	UISelectManyBase str = new UISelectMany();
+	UISelectMany str = new UISelectMany();
 	str.setId("str");
 	str.setRendererType("CheckboxList");
 	str.setValueRef("bean.strings");
@@ -414,7 +414,7 @@ public class TestConverters extends JspFacesTestCase
 	assertTrue("value1".equals(bean.getStrings()[0]));
 
 	// test model type of Date []
-	UISelectManyBase date = new UISelectMany();
+	UISelectMany date = new UISelectMany();
 	Converter dateConv = Util.getConverterForIdentifer("DateTime");
 	assertNotNull(dateConv);
 	date.setConverter(dateConv);
@@ -436,7 +436,7 @@ public class TestConverters extends JspFacesTestCase
 	assertTrue(expected.equals(bean.getDates()[2]));
 
 	// test model type of Number []
-	UISelectManyBase number = new UISelectMany();
+	UISelectMany number = new UISelectMany();
 	Converter numberConv = Util.getConverterForIdentifer("Number");
 	assertNotNull(numberConv);
 	number.setConverter(numberConv);
@@ -457,7 +457,7 @@ public class TestConverters extends JspFacesTestCase
 	assertTrue(expected.equals(bean.getNumbers()[2]));
 
 	// test model type of List of Strings
-	UISelectManyBase stringList = new UISelectMany();
+	UISelectMany stringList = new UISelectMany();
 	stringList.setId("stringList");
 	stringList.setRendererType("CheckboxList");
 	stringList.setValueRef("bean.stringList");
@@ -478,7 +478,7 @@ public class TestConverters extends JspFacesTestCase
     public void testDateConverter(UIViewRoot root) throws ConverterException,
         InstantiationException, IllegalAccessException, ClassNotFoundException {
         System.out.println("Testing DateConverter");
-        UIInput text = new UIInputBase();
+        UIInput text = new UIInput();
         text.setId("my_input_date");
         root.getChildren().add(text);
 
@@ -497,7 +497,7 @@ public class TestConverters extends JspFacesTestCase
         // time
         converter = application.createConverter("DateTime");
         ((DateTimeConverter)converter).setType("time");
-        text = new UIInputBase();
+        text = new UIInput();
         text.setId("my_input_time");
         stringToConvert = "10:10:10 AM";
         obj = converter.getAsObject(getFacesContext(), text, stringToConvert);
@@ -509,7 +509,7 @@ public class TestConverters extends JspFacesTestCase
         // datetime
         converter = application.createConverter("DateTime");
         ((DateTimeConverter)converter).setType("both");
-        text = new UIInputBase();
+        text = new UIInput();
         text.setId("my_input_datetime");
         stringToConvert = "Jan 1, 1967 10:10:10 AM";
         obj = converter.getAsObject(getFacesContext(), text, stringToConvert);
@@ -522,7 +522,7 @@ public class TestConverters extends JspFacesTestCase
     public void testNumberConverter(UIViewRoot root) throws ConverterException,
         InstantiationException, IllegalAccessException, ClassNotFoundException {
         System.out.println("Tesing NumberConverter");
-        UIInput text = new UIInputBase();
+        UIInput text = new UIInput();
         text.setId("my_input_number");
         root.getChildren().add(text);
 

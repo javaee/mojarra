@@ -1,5 +1,5 @@
 /*
- * $Id: TestNavigationHandler.java,v 1.11 2003/10/02 00:40:05 jvisvanathan Exp $
+ * $Id: TestNavigationHandler.java,v 1.12 2003/10/02 06:50:08 jvisvanathan Exp $
  */
 
 /*
@@ -54,7 +54,7 @@ import com.sun.faces.ServletFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestNavigationHandler.java,v 1.11 2003/10/02 00:40:05 jvisvanathan Exp $
+ * @version $Id: TestNavigationHandler.java,v 1.12 2003/10/02 06:50:08 jvisvanathan Exp $
  * 
  */
 
@@ -168,7 +168,7 @@ public class TestNavigationHandler extends ServletFacesTestCase
             System.out.println("Testing from-view-id="+testResult.fromViewId+
                 " from-action-ref="+testResult.fromActionRef+
                 " from-outcome="+testResult.fromOutcome);
-            page = new UIViewRootBase();
+            page = new UIViewRoot();
             page.setViewId(testResult.fromViewId);
             context.setViewRoot(page);
             try {

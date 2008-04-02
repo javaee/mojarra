@@ -1,5 +1,5 @@
 /*
- * $Id: TestPropertyResolverImpl.java,v 1.5 2003/10/02 00:40:10 jvisvanathan Exp $
+ * $Id: TestPropertyResolverImpl.java,v 1.6 2003/10/02 06:50:13 jvisvanathan Exp $
  */
 
 /*
@@ -23,7 +23,6 @@ import org.apache.cactus.WebRequest;
 import javax.faces.el.PropertyResolver;
 import javax.faces.component.UIOutput;
 import javax.faces.component.UIViewRoot;
-import javax.faces.component.NamingContainer;
 import javax.faces.component.UIOutput;
 import javax.faces.context.ExternalContext;
 
@@ -37,7 +36,7 @@ import java.util.List;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestPropertyResolverImpl.java,v 1.5 2003/10/02 00:40:10 jvisvanathan Exp $
+ * @version $Id: TestPropertyResolverImpl.java,v 1.6 2003/10/02 06:50:13 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -357,11 +356,9 @@ public class TestPropertyResolverImpl extends ServletFacesTestCase
     // Positive getValue() tests on a UIComponent base object
     public void testStringGetUIComponent() throws Exception {
 
-	UINamingContainerBase root = new UINamingContainerBase() {
-                public String getComponentType() { return "root"; }
-            };
+	UIViewRoot root = new UIViewRoot();
 	root.setId("root");
-	UIOutput out = new UIOutputBase();
+	UIOutput out = new UIOutput();
 	out.setId("out");
 	root.getChildren().add(out);
 	assertTrue(out == resolver.getValue(root, "out"));

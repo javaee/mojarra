@@ -1,5 +1,5 @@
 /*
- * $Id: TestValidatorTags.java,v 1.18 2003/09/24 19:50:53 rkitain Exp $
+ * $Id: TestValidatorTags.java,v 1.19 2003/10/02 06:50:24 jvisvanathan Exp $
  */
 
 /*
@@ -20,8 +20,8 @@ import javax.faces.application.Application;
 import javax.faces.context.FacesContext;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.component.UIComponent;
+import javax.faces.component.NamingContainer;
 import javax.faces.component.UIViewRoot;
-import javax.faces.component.base.UIViewRootBase;
 
 import com.sun.faces.JspFacesTestCase;
 import com.sun.faces.RIConstants;
@@ -40,7 +40,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestValidatorTags.java,v 1.18 2003/09/24 19:50:53 rkitain Exp $
+ * @version $Id: TestValidatorTags.java,v 1.19 2003/10/02 06:50:24 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -54,25 +54,25 @@ public class TestValidatorTags extends JspFacesTestCase
 //
 
 public static final String TEST_URI = "/TestValidatorTags.jsp";
-public static final String OUTOFBOUNDS1_ID = "validatorForm" + UIComponent.SEPARATOR_CHAR + "outOfBounds1";
+public static final String OUTOFBOUNDS1_ID = "validatorForm" + NamingContainer.SEPARATOR_CHAR + "outOfBounds1";
 public static final String OUTOFBOUNDS1_VALUE = "3.1415";
-public static final String INBOUNDS1_ID = "validatorForm" + UIComponent.SEPARATOR_CHAR + "inBounds1";
+public static final String INBOUNDS1_ID = "validatorForm" + NamingContainer.SEPARATOR_CHAR + "inBounds1";
 public static final String INBOUNDS1_VALUE = "10.25";
-public static final String OUTOFBOUNDS2_ID = "validatorForm" + UIComponent.SEPARATOR_CHAR + "outOfBounds2";
+public static final String OUTOFBOUNDS2_ID = "validatorForm" + NamingContainer.SEPARATOR_CHAR + "outOfBounds2";
 public static final String OUTOFBOUNDS2_VALUE = "fox";
-public static final String INBOUNDS2_ID = "validatorForm" + UIComponent.SEPARATOR_CHAR + "inBounds2";
+public static final String INBOUNDS2_ID = "validatorForm" + NamingContainer.SEPARATOR_CHAR + "inBounds2";
 public static final String INBOUNDS2_VALUE = "alligator22";
-public static final String OUTOFBOUNDS3_ID = "validatorForm" + UIComponent.SEPARATOR_CHAR + "outOfBounds3";
+public static final String OUTOFBOUNDS3_ID = "validatorForm" + NamingContainer.SEPARATOR_CHAR + "outOfBounds3";
 public static final String OUTOFBOUNDS3_VALUE = "30000";
-public static final String INBOUNDS3_ID = "validatorForm" + UIComponent.SEPARATOR_CHAR + "inBounds3";
+public static final String INBOUNDS3_ID = "validatorForm" + NamingContainer.SEPARATOR_CHAR + "inBounds3";
 public static final String INBOUNDS3_VALUE = "1100";
-public static final String REQUIRED1_ID = "validatorForm" + UIComponent.SEPARATOR_CHAR + "required1";
+public static final String REQUIRED1_ID = "validatorForm" + NamingContainer.SEPARATOR_CHAR + "required1";
 public static final String REQUIRED1_VALUE = "required";
-public static final String OUTOFBOUNDS4_ID = "validatorForm" + UIComponent.SEPARATOR_CHAR + "outOfBounds4";
+public static final String OUTOFBOUNDS4_ID = "validatorForm" + NamingContainer.SEPARATOR_CHAR + "outOfBounds4";
 public static final String OUTOFBOUNDS4_VALUE = "aaa";
-public static final String INBOUNDS4_ID = "validatorForm" + UIComponent.SEPARATOR_CHAR + "inBounds4";
+public static final String INBOUNDS4_ID = "validatorForm" + NamingContainer.SEPARATOR_CHAR + "inBounds4";
 public static final String INBOUNDS4_VALUE = "ccc";
-public static final String REQUIRED2_ID = "validatorForm" + UIComponent.SEPARATOR_CHAR + "required2";
+public static final String REQUIRED2_ID = "validatorForm" + NamingContainer.SEPARATOR_CHAR + "required2";
 public static final String REQUIRED2_VALUE = "required";
 
 public boolean sendResponseToFile() 
@@ -149,7 +149,7 @@ public void testValidators()
 	processValidations = new ProcessValidationsPhase(),
 	applyRequestValues = new ApplyRequestValuesPhase();
    
-    UIViewRoot page = new UIViewRootBase();
+    UIViewRoot page = new UIViewRoot();
     page.setViewId(TEST_URI);
     getFacesContext().setViewRoot(page);
 

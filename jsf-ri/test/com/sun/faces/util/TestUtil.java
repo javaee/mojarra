@@ -1,5 +1,5 @@
 /*
- * $Id: TestUtil.java,v 1.12 2003/09/25 16:36:44 rlubke Exp $
+ * $Id: TestUtil.java,v 1.13 2003/10/02 06:50:25 jvisvanathan Exp $
  */
 
 /*
@@ -25,7 +25,6 @@ import javax.faces.FactoryFinder;
 import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
-import javax.faces.component.base.UIInputBase;
 import javax.faces.context.ResponseWriter;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
@@ -38,7 +37,7 @@ import javax.servlet.ServletContext;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestUtil.java,v 1.12 2003/09/25 16:36:44 rlubke Exp $
+ * @version $Id: TestUtil.java,v 1.13 2003/10/02 06:50:25 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -87,7 +86,7 @@ public class TestUtil extends ServletFacesTestCase
 	    ResponseWriter writer = renderKit.createResponseWriter(sw, "text/html", "ISO-8859-1");
 	    getFacesContext().setResponseWriter(writer);
 
-	    UIInput input = new UIInputBase();
+	    UIInput input = new UIInput();
 	    input.setId("testRenderPassthruAttributes");
 	    input.getAttributes().put("notPresent", "notPresent");
 	    input.getAttributes().put("onblur", "javascript:f.blur()");
@@ -118,7 +117,7 @@ public class TestUtil extends ServletFacesTestCase
 	    ResponseWriter writer = renderKit.createResponseWriter(sw, "text/html", "ISO-8859-1");
 	    getFacesContext().setResponseWriter(writer);
 
-	    UIInput input = new UIInputBase();
+	    UIInput input = new UIInput();
 	    input.setId("testBooleanRenderPassthruAttributes");
 	    input.getAttributes().put("disabled", "true");
 	    input.getAttributes().put("readonly", "false");

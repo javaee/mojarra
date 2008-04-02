@@ -1,5 +1,5 @@
 /*
- * $Id: TestProcessEvents.java,v 1.8 2003/10/02 00:40:13 jvisvanathan Exp $
+ * $Id: TestProcessEvents.java,v 1.9 2003/10/02 06:50:16 jvisvanathan Exp $
  */
 
 /*
@@ -44,7 +44,7 @@ import java.util.List;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestProcessEvents.java,v 1.8 2003/10/02 00:40:13 jvisvanathan Exp $
+ * @version $Id: TestProcessEvents.java,v 1.9 2003/10/02 06:50:16 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -101,6 +101,9 @@ public int eventLimit = 100; // some default;
 
 // tests one component - one value changed listener
 
+// PENDING FIX are these tests required now that this is done in
+// UIViewRoot
+/*
 public void testSingleValueChanged()
 {
     // for keeping track of events processed limit..
@@ -119,7 +122,7 @@ public void testSingleValueChanged()
 
     // add value changed event (containing the component) to the queue
 
-    getFacesContext().addFacesEvent(new ValueChangedEvent( 
+    userName.queueEvent(new ValueChangedEvent( 
         userName, "foo", "bar"));
 
     PhaseId phaseId = PhaseId.PROCESS_VALIDATIONS;
@@ -151,7 +154,7 @@ public void testMultipleValueChanged()
 
     // add value changed event (containing the component) to the queue
 
-    getFacesContext().addFacesEvent(new ValueChangedEvent(
+    userName.queueEvent(new ValueChangedEvent(
         userName, "foo", "bar"));
 
     PhaseId phaseId = PhaseId.PROCESS_VALIDATIONS;
@@ -179,7 +182,7 @@ public void testValueChangedRecursion()
 
     // add value changed event (containing the component) to the queue
 
-    getFacesContext().addFacesEvent(new ValueChangedEvent(
+    userName.queueEvent(new ValueChangedEvent(
         userName, "foo", "bar"));
 
     PhaseId phaseId = PhaseId.PROCESS_VALIDATIONS;
@@ -214,7 +217,7 @@ public void testSingleAction()
 
     // add action event (containing the component) to the queue
 
-    getFacesContext().addFacesEvent(new ActionEvent(button));
+    button.queueEvent(new ActionEvent(button));
 
     PhaseId phaseId = PhaseId.APPLY_REQUEST_VALUES;
     processEvents(getFacesContext(), phaseId);
@@ -246,7 +249,7 @@ public void testActionRecursion()
 
     // add action event (containing the component) to the queue
 
-    getFacesContext().addFacesEvent(new ActionEvent(button));
+    button.queueEvent(new ActionEvent(button));
 
     PhaseId phaseId = PhaseId.APPLY_REQUEST_VALUES;
     boolean exceptionthrown = false;
@@ -275,7 +278,7 @@ private void processEvents(FacesContext context, PhaseId phaseId) {
             }
         }
     }
-}
+} 
 
 private boolean limitReached(UIComponent source, HashMap eventsProcessed) {
     if (!eventsProcessed.containsKey(source)) {
@@ -354,6 +357,6 @@ public static class UICommandSub extends UICommand {
     public List[] getListeners() { 
 	return listeners;
     }
-}
+} */
 
 } // end of class TestProcessEvents

@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_1.java,v 1.43 2003/10/02 00:40:19 jvisvanathan Exp $
+ * $Id: TestRenderers_1.java,v 1.44 2003/10/02 06:50:20 jvisvanathan Exp $
  */
 
 /*
@@ -45,7 +45,7 @@ import com.sun.faces.renderkit.html_basic.RadioRenderer;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_1.java,v 1.43 2003/10/02 00:40:19 jvisvanathan Exp $
+ * @version $Id: TestRenderers_1.java,v 1.44 2003/10/02 06:50:20 jvisvanathan Exp $
  * 
  *
  */
@@ -91,7 +91,7 @@ public class TestRenderers_1 extends JspFacesTestCase
     public void setUp() {
         super.setUp();
 
-	UIViewRootBase xmlView = new UIViewRoot();
+	UIViewRoot xmlView = new UIViewRoot();
 	xmlView.setViewId("viewId");
 	getFacesContext().setViewRoot(xmlView);
         assertTrue(getFacesContext().getResponseWriter() != null);
@@ -304,7 +304,7 @@ public class TestRenderers_1 extends JspFacesTestCase
         ButtonRenderer buttonRenderer = new ButtonRenderer();
 
         // Test <Button> element rendering
-        uiCommand = new UICommandBase();
+        uiCommand = new UICommand();
         uiCommand.setId("imageButton");
         uiCommand.getAttributes().put("image", "duke.gif");
         uiCommand.getAttributes().put("type", "submit");

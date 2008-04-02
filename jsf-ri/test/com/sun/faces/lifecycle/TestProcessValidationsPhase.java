@@ -1,5 +1,5 @@
 /*
- * $Id: TestProcessValidationsPhase.java,v 1.24 2003/10/02 00:40:13 jvisvanathan Exp $
+ * $Id: TestProcessValidationsPhase.java,v 1.25 2003/10/02 06:50:16 jvisvanathan Exp $
  */
 
 /*
@@ -21,6 +21,7 @@ import javax.faces.FactoryFinder;
 import javax.faces.context.FacesContext;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.component.UIComponent;
+import javax.faces.component.NamingContainer;
 import javax.faces.component.UIForm;
 import javax.faces.component.UIInput;
 import javax.faces.validator.Validator;
@@ -37,7 +38,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestProcessValidationsPhase.java,v 1.24 2003/10/02 00:40:13 jvisvanathan Exp $
+ * @version $Id: TestProcessValidationsPhase.java,v 1.25 2003/10/02 06:50:16 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -90,7 +91,7 @@ public static UIInput userName = null;
 public void beginCallback(WebRequest theRequest)
 {
     theRequest.setURL("localhost:8080", null, null, TEST_URI, null);
-    theRequest.addParameter("basicForm" + UIComponent.SEPARATOR_CHAR + "userName", "jerry");
+    theRequest.addParameter("basicForm" + NamingContainer.SEPARATOR_CHAR + "userName", "jerry");
     theRequest.addParameter("basicForm", "basicForm");
 }
 
@@ -127,7 +128,7 @@ public void testCallback()
     System.setProperty(DID_VALIDATE, EMPTY);
 
     try {
-	userName = (UIInput) root.findComponent("basicForm" + UIComponent.SEPARATOR_CHAR + "userName");
+	userName = (UIInput) root.findComponent("basicForm" + NamingContainer.SEPARATOR_CHAR + "userName");
     }
     catch (Throwable e) {
 	System.out.println(e.getMessage());

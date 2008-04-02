@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderKit.java,v 1.5 2003/09/11 21:21:45 rkitain Exp $
+ * $Id: TestRenderKit.java,v 1.6 2003/10/02 06:50:20 jvisvanathan Exp $
  */
 
 /*
@@ -46,7 +46,7 @@ import java.io.ByteArrayOutputStream;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderKit.java,v 1.5 2003/09/11 21:21:45 rkitain Exp $
+ * @version $Id: TestRenderKit.java,v 1.6 2003/10/02 06:50:20 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -146,7 +146,7 @@ public static final String CORRECT_OUTPUT_FILENAME =
         renderKit = renderKitFactory.getRenderKit("DEFAULT");
         
         ByteArrayOutputStream out = new ByteArrayOutputStream();
-        ResponseStream stream = renderKit.getResponseStream(out);
+        ResponseStream stream = renderKit.createResponseStream(out);
         stream.write('a');
         stream.write((byte) 'b');
         stream.write(new byte[] { (byte) 'c', (byte) 'd', (byte) 'e' }, 1, 2);

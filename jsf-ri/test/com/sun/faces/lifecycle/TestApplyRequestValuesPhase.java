@@ -1,5 +1,5 @@
 /*
- * $Id: TestApplyRequestValuesPhase.java,v 1.18 2003/10/02 00:40:12 jvisvanathan Exp $
+ * $Id: TestApplyRequestValuesPhase.java,v 1.19 2003/10/02 06:50:15 jvisvanathan Exp $
  */
 
 /*
@@ -19,9 +19,9 @@ import org.mozilla.util.ParameterCheck;
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.context.FacesContext;
-//import javax.faces.lifecycle.Phase;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.component.UIComponent;
+import javax.faces.component.NamingContainer;
 import javax.faces.component.UIForm;
 import javax.faces.component.UIInput;
 
@@ -34,7 +34,7 @@ import com.sun.faces.ServletFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestApplyRequestValuesPhase.java,v 1.18 2003/10/02 00:40:12 jvisvanathan Exp $
+ * @version $Id: TestApplyRequestValuesPhase.java,v 1.19 2003/10/02 06:50:15 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -84,7 +84,7 @@ public static final String TEST_URI = "/components.jsp";
 public void beginCallback(WebRequest theRequest)
 {
     theRequest.setURL("localhost:8080", null, null, TEST_URI, null);
-    theRequest.addParameter("basicForm" + UIComponent.SEPARATOR_CHAR + "userName", "jerry");
+    theRequest.addParameter("basicForm" + NamingContainer.SEPARATOR_CHAR + "userName", "jerry");
 }
 
 public void testCallback()

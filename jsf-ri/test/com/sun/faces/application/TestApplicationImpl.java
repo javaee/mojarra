@@ -1,5 +1,5 @@
 /*
- * $Id: TestApplicationImpl.java,v 1.10 2003/10/02 00:40:04 jvisvanathan Exp $
+ * $Id: TestApplicationImpl.java,v 1.11 2003/10/02 06:50:08 jvisvanathan Exp $
  */
 
 /*
@@ -38,7 +38,7 @@ import com.sun.faces.TestComponent;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestApplicationImpl.java,v 1.10 2003/10/02 00:40:04 jvisvanathan Exp $
+ * @version $Id: TestApplicationImpl.java,v 1.11 2003/10/02 06:50:08 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -349,7 +349,7 @@ public class TestApplicationImpl extends JspFacesTestCase {
     
     public void testSetViewHandlerException() throws Exception {       
         ViewHandler handler = new ViewHandlerImpl();
-        UIViewRoot root = new UIViewRootBase();
+        UIViewRoot root = new UIViewRoot();
         root.setViewId("/view");
         root.setId("id");
         getFacesContext().setViewRoot(root);

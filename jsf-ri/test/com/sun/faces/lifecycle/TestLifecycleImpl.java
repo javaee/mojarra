@@ -1,5 +1,5 @@
 /*
- * $Id: TestLifecycleImpl.java,v 1.20 2003/10/02 00:40:13 jvisvanathan Exp $
+ * $Id: TestLifecycleImpl.java,v 1.21 2003/10/02 06:50:16 jvisvanathan Exp $
  */
 
 /*
@@ -41,7 +41,7 @@ import com.sun.faces.JspFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestLifecycleImpl.java,v 1.20 2003/10/02 00:40:13 jvisvanathan Exp $
+ * @version $Id: TestLifecycleImpl.java,v 1.21 2003/10/02 06:50:16 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -109,9 +109,9 @@ public void setUp() {
     UIViewRoot root = new UIViewRoot();
     root.setViewId(TEST_URI);
     
-    UIFormBase basicForm = new UIForm();
+    UIForm basicForm = new UIForm();
     basicForm.setId("basicForm");
-    UIInputBase userName = new UIInput();
+    UIInput userName = new UIInput();
     
     userName.setId("userName");
     root.getChildren().add(basicForm);

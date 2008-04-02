@@ -1,5 +1,5 @@
 /*
- * $Id: TestPhase.java,v 1.9 2003/10/02 00:40:13 jvisvanathan Exp $
+ * $Id: TestPhase.java,v 1.10 2003/10/02 06:50:16 jvisvanathan Exp $
  */
 
 /*
@@ -21,6 +21,7 @@ import javax.faces.lifecycle.Lifecycle;
 import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
+import javax.faces.component.NamingContainer;
 import javax.faces.component.UIForm;
 import javax.faces.component.UIInput;
 import javax.faces.component.UIViewRoot;
@@ -43,7 +44,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestPhase.java,v 1.9 2003/10/02 00:40:13 jvisvanathan Exp $
+ * @version $Id: TestPhase.java,v 1.10 2003/10/02 06:50:16 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -88,7 +89,7 @@ public static final String TEST_URI = "/components.jsp";
 public void beginExecute(WebRequest theRequest)
 {
     theRequest.setURL("localhost:8080", null, null, TEST_URI, null);
-    theRequest.addParameter("basicForm" + UIComponent.SEPARATOR_CHAR + "userName", "jerry");
+    theRequest.addParameter("basicForm" + NamingContainer.SEPARATOR_CHAR + "userName", "jerry");
 }
 
 public void testExecute()

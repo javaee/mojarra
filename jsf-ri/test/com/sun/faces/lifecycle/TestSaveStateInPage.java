@@ -1,5 +1,5 @@
 /*
- * $Id: TestSaveStateInPage.java,v 1.19 2003/10/02 00:40:14 jvisvanathan Exp $
+ * $Id: TestSaveStateInPage.java,v 1.20 2003/10/02 06:50:17 jvisvanathan Exp $
  */
 
 /*
@@ -41,7 +41,7 @@ import com.sun.faces.RIConstants;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestSaveStateInPage.java,v 1.19 2003/10/02 00:40:14 jvisvanathan Exp $
+ * @version $Id: TestSaveStateInPage.java,v 1.20 2003/10/02 06:50:17 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -140,33 +140,33 @@ public void testSaveStateInClient()
     UIViewRoot root = new UIViewRoot();
     root.setViewId(TEST_URI);
     
-    UIFormBase basicForm = new UIForm();
+    UIForm basicForm = new UIForm();
     basicForm.setId("basicForm");
-    UIInputBase userName = new UIInput();
+    UIInput userName = new UIInput();
     
     userName.setId("userName");
     userName.setTransient(true);
     root.getChildren().add(basicForm);
     basicForm.getChildren().add(userName);
     
-    UIPanelBase panel1 = new UIPanel();
+    UIPanel panel1 = new UIPanel();
     panel1.setId("panel1");
     basicForm.getChildren().add(panel1);
     
-    UIInputBase userName1 = new UIInputBase();
+    UIInput userName1 = new UIInput();
     userName1.setId("userName1");
     userName1.setTransient(true);
     panel1.getChildren().add(userName1);
     
-    UIInputBase userName2 = new UIInput();
+    UIInput userName2 = new UIInput();
     userName2.setId("userName2");
     panel1.getChildren().add(userName2);
     
-    UIInputBase userName3 = new UIInput();
+    UIInput userName3 = new UIInput();
     userName3.setTransient(true);
     panel1.getFacets().put("userName3", userName3);
     
-    UIInputBase userName4 = new UIInput();
+    UIInput userName4 = new UIInput();
     panel1.getFacets().put("userName4",userName4);
     
     getFacesContext().setViewRoot(root);
@@ -180,39 +180,39 @@ public void testSaveStateInClient()
 					  structRoot);
    
    // make sure restored tree structure is correct
-   UIViewRootBase viewRoot = (UIViewRootBase)structRoot.createComponent();
+   UIViewRoot viewRoot = (UIViewRoot)structRoot.createComponent();
    assertTrue(null != viewRoot);
    stateManager.restoreComponentTreeStructure(structRoot, ((UIComponent)viewRoot));
    
    UIComponent component = (UIComponent)viewRoot.getChildren().get(0);
-   assertTrue(component instanceof UIFormBase);
+   assertTrue(component instanceof UIForm);
    assertTrue(component.getId().equals("basicForm"));
    
-   UIFormBase uiform = (UIFormBase) component;
+   UIForm uiform = (UIForm) component;
    component = (UIComponent)uiform.getChildren().get(0);
-   assertTrue(component instanceof UIPanelBase);
+   assertTrue(component instanceof UIPanel);
    assertTrue(component.getId().equals("panel1"));
    
-   UIPanelBase uipanel = (UIPanelBase) component;
+   UIPanel uipanel = (UIPanel) component;
    component = (UIComponent)uipanel.getChildren().get(0);
-   assertTrue(component instanceof UIInputBase);
+   assertTrue(component instanceof UIInput);
    assertTrue(component.getId().equals("userName2"));
    
     // make sure that the transient property is not persisted as well as the
     // namespace is preserved.
-    basicForm = (UIFormBase)viewRoot.findComponent("basicForm");
+    basicForm = (UIForm)viewRoot.findComponent("basicForm");
     assertTrue(basicForm != null);
     
-    userName = (UIInputBase)basicForm.findComponent("userName");
+    userName = (UIInput)basicForm.findComponent("userName");
     assertTrue(userName == null);
     
-    panel1 = (UIPanelBase)basicForm.findComponent("panel1");
+    panel1 = (UIPanel)basicForm.findComponent("panel1");
     assertTrue(panel1 != null);
     
-    userName1 = (UIInputBase)panel1.findComponent("userName1");
+    userName1 = (UIInput)panel1.findComponent("userName1");
     assertTrue(userName1 == null);
     
-    userName2 = (UIInputBase)panel1.findComponent("userName2");
+    userName2 = (UIInput)panel1.findComponent("userName2");
     assertTrue(userName2 != null);
     
     // make sure facets work correctly when marked transient.

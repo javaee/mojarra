@@ -1,5 +1,5 @@
 /* 
- * $Id: TestViewHandlerImpl.java,v 1.2 2003/10/02 00:40:05 jvisvanathan Exp $ 
+ * $Id: TestViewHandlerImpl.java,v 1.3 2003/10/02 06:50:08 jvisvanathan Exp $ 
  */ 
 
 
@@ -61,7 +61,7 @@ import javax.servlet.jsp.PageContext;
  * 
  * <B>Lifetime And Scope</B> <P> 
  * 
- * @version $Id: TestViewHandlerImpl.java,v 1.2 2003/10/02 00:40:05 jvisvanathan Exp $ 
+ * @version $Id: TestViewHandlerImpl.java,v 1.3 2003/10/02 06:50:08 jvisvanathan Exp $ 
  * 
  * @see Blah 
  * @see Bloo 
@@ -151,7 +151,7 @@ public void testRender()
     boolean result = false; 
     UIComponentBase root = null; 
     String value = null; 
-    UIViewRootBase newView = new UIViewRoot();
+    UIViewRoot newView = new UIViewRoot();
     newView.setViewId(TEST_URI);
     getFacesContext().setViewRoot(newView);
 
@@ -180,33 +180,33 @@ public void testTransient()
     UIViewRoot root = new UIViewRoot();
     root.setViewId(TEST_URI);
     
-    UIFormBase basicForm = new UIForm();
+    UIForm basicForm = new UIForm();
     basicForm.setId("basicForm");
-    UIInputBase userName = new UIInput();
+    UIInput userName = new UIInput();
     
     userName.setId("userName");
     userName.setTransient(true);
     root.getChildren().add(basicForm);
     basicForm.getChildren().add(userName);
     
-    UIPanelBase panel1 = new UIPanel();
+    UIPanel panel1 = new UIPanel();
     panel1.setId("panel1");
     basicForm.getChildren().add(panel1);
     
-    UIInputBase userName1 = new UIInput();
+    UIInput userName1 = new UIInput();
     userName1.setId("userName1");
     userName1.setTransient(true);
     panel1.getChildren().add(userName1);
     
-    UIInputBase userName2 = new UIInput();
+    UIInput userName2 = new UIInput();
     userName2.setId("userName2");
     panel1.getChildren().add(userName2);
     
-    UIInputBase userName3 = new UIInput();
+    UIInput userName3 = new UIInput();
     userName3.setTransient(true);
     panel1.getFacets().put("userName3", userName3);
     
-    UIInputBase userName4 = new UIInput();
+    UIInput userName4 = new UIInput();
     panel1.getFacets().put("userName4",userName4);
     
     HttpSession session = (HttpSession) 
@@ -219,19 +219,19 @@ public void testTransient()
     viewHandler.getStateManager().saveSerializedView(getFacesContext());
    
     // make sure that the transient property is not persisted.
-    basicForm = (UIFormBase)(getFacesContext().getViewRoot()).findComponent("basicForm");
+    basicForm = (UIForm)(getFacesContext().getViewRoot()).findComponent("basicForm");
     assertTrue(basicForm != null);
     
-    userName = (UIInputBase)basicForm.findComponent("userName");
+    userName = (UIInput)basicForm.findComponent("userName");
     assertTrue(userName == null);
     
-    panel1 = (UIPanelBase)basicForm.findComponent("panel1");
+    panel1 = (UIPanel)basicForm.findComponent("panel1");
     assertTrue(panel1 != null);
     
-    userName1 = (UIInputBase)panel1.findComponent("userName1");
+    userName1 = (UIInput)panel1.findComponent("userName1");
     assertTrue(userName1 == null);
     
-    userName2 = (UIInputBase)panel1.findComponent("userName2");
+    userName2 = (UIInput)panel1.findComponent("userName2");
     assertTrue(userName2 != null);
     
     // make sure facets work correctly when marked transient.

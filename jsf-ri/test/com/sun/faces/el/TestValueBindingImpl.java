@@ -1,5 +1,5 @@
 /*
- * $Id: TestValueBindingImpl.java,v 1.19 2003/10/02 00:40:10 jvisvanathan Exp $
+ * $Id: TestValueBindingImpl.java,v 1.20 2003/10/02 06:50:13 jvisvanathan Exp $
  */
 
 /*
@@ -41,7 +41,7 @@ import java.util.HashMap;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestValueBindingImpl.java,v 1.19 2003/10/02 00:40:10 jvisvanathan Exp $
+ * @version $Id: TestValueBindingImpl.java,v 1.20 2003/10/02 06:50:13 jvisvanathan Exp $
  */
 
 public class TestValueBindingImpl extends ServletFacesTestCase
@@ -443,7 +443,7 @@ public class TestValueBindingImpl extends ServletFacesTestCase
 
 	// tree
 	// create a dummy root for the tree.	
-    UIViewRoot page = new UIViewRootBase();
+    UIViewRoot page = new UIViewRoot();
     page.setId("root");
     page.setViewId("newTree");
 	getFacesContext().setViewRoot(page);
@@ -538,7 +538,7 @@ public class TestValueBindingImpl extends ServletFacesTestCase
 
 	// tree
 	// create a dummy root for the tree.
-	UIViewRoot page = new UIViewRootBase();
+	UIViewRoot page = new UIViewRoot();
         page.setId("root");
         page.setViewId("newTree");
 	getFacesContext().setViewRoot(page);

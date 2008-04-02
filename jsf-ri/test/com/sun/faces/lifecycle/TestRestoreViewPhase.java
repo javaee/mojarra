@@ -1,5 +1,5 @@
 /*
- * $Id: TestRestoreViewPhase.java,v 1.6 2003/10/02 00:40:14 jvisvanathan Exp $
+ * $Id: TestRestoreViewPhase.java,v 1.7 2003/10/02 06:50:16 jvisvanathan Exp $
  */
 
 /*
@@ -42,7 +42,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRestoreViewPhase.java,v 1.6 2003/10/02 00:40:14 jvisvanathan Exp $
+ * @version $Id: TestRestoreViewPhase.java,v 1.7 2003/10/02 06:50:16 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -141,9 +141,9 @@ public void testReconstituteRequestSubmit()
     UIViewRoot root = new UIViewRoot();
     root.setViewId(TEST_URI);
     
-    UIFormBase basicForm = new UIForm();
+    UIForm basicForm = new UIForm();
     basicForm.setId("basicForm");
-    UIInputBase userName = new UIInput();
+    UIInput userName = new UIInput();
     
     userName.setId("userName");
     root.getChildren().add(basicForm);
@@ -198,12 +198,12 @@ public void testRegisterListeners() {
     UIViewRoot root = new UIViewRoot();
     root.setViewId(TEST_URI);
     
-    UIFormBase basicForm = new UIForm();
+    UIForm basicForm = new UIForm();
     basicForm.setId("basicForm");
     root.getChildren().add(basicForm);
-    UIPanelBase panel = new UIPanel();
+    UIPanel panel = new UIPanel();
     basicForm.getChildren().add(panel);
-    UIPanelBase commandPanel = new UIPanel();
+    UIPanel commandPanel = new UIPanel();
     commandPanel.setId("commandPanel");
     TestCommand command1 = new TestCommand();
     TestCommand command2 = new TestCommand();
