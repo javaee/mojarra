@@ -1,5 +1,5 @@
 /*
- * $Id: UIInput.java,v 1.38 2003/10/27 04:09:59 craigmcc Exp $
+ * $Id: UIInput.java,v 1.39 2003/10/27 20:08:25 craigmcc Exp $
  */
 
 /*
@@ -19,6 +19,9 @@ import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.el.MethodBinding;
 import javax.faces.el.ValueBinding;
+import javax.faces.event.AbortProcessingException;
+import javax.faces.event.FacesEvent;
+import javax.faces.event.PhaseId;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.event.ValueChangeListener;
 import javax.faces.render.Renderer;
@@ -258,6 +261,56 @@ public class UIInput extends UIOutput {
 
 
     // ----------------------------------------------------- UIComponent Methods
+
+
+    // Parameter signature for "valueListenerRef" method
+    private static Class signature[] = { ValueChangeEvent.class };
+
+
+    /**
+     * <p>In addition to to the default {@link UIComponent#broadcast}
+     * processing, pass the {@link ValueChangeEvent} being broadcast to the
+     * method referenced by <code>valueChangeListenerRef</code> (if any).</p>
+     *
+     * @param event {@link FacesEvent} to be broadcast
+     * @param phaseId {@link PhaseId} of the current phase of the
+     *  request processing lifecycle
+     *
+     * @exception AbortProcessingException Signal the JavaServer Faces
+     *  implementation that no further processing on the current event
+     *  should be performed
+     * @exception IllegalArgumentException if the implementation class
+     *  of this {@link FacesEvent} is not supported by this component
+     * @exception IllegalStateException if PhaseId.ANY_PHASE is passed
+     *  for the phase identifier
+     * @exception NullPointerException if <code>event</code> or
+     *  <code>phaseId</code> is <code>null</code>
+     */
+    public boolean broadcast(FacesEvent event, PhaseId phaseId)
+        throws AbortProcessingException {
+
+        // Perform standard superclass processing
+        boolean returnValue = super.broadcast(event, phaseId);
+
+        // Notify the specified value change listener method (if any)
+        String valueChangeListenerRef = getValueChangeListenerRef();
+        if ((valueChangeListenerRef != null) &&
+            phaseId.equals(PhaseId.PROCESS_VALIDATIONS)) {
+            FacesContext context = FacesContext.getCurrentInstance();
+            MethodBinding mb =
+                context.getApplication().getMethodBinding
+                (valueChangeListenerRef, signature);
+            try {
+                mb.invoke(context, new Object[] { event });
+            } catch (InvocationTargetException e) {
+                throw new FacesException(e.getTargetException());
+            }
+        }
+
+        // Return the flag indicating future interest
+        return (returnValue);
+
+    }
 
 
     /**

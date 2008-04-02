@@ -1,5 +1,5 @@
 /*
- * $Id: UICommand.java,v 1.48 2003/10/27 04:09:58 craigmcc Exp $
+ * $Id: UICommand.java,v 1.49 2003/10/27 20:08:24 craigmcc Exp $
  */
 
 /*
@@ -10,11 +10,16 @@
 package javax.faces.component;
 
 
+import java.lang.reflect.InvocationTargetException;
+import javax.faces.FacesException;
 import javax.faces.application.Application;
 import javax.faces.context.FacesContext;
+import javax.faces.el.MethodBinding;
 import javax.faces.el.ValueBinding;
+import javax.faces.event.AbortProcessingException;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.ActionListener;
+import javax.faces.event.FacesEvent;
 import javax.faces.event.PhaseId;
 import javax.faces.render.Renderer;
 
@@ -271,6 +276,63 @@ public class UICommand extends UIComponentBase
         valueRef = (String) values[6];
 
         addDefaultActionListener(context);
+
+    }
+
+
+    // ----------------------------------------------------- UIComponent Methods
+
+
+    // Parameter signature for "actionListenerRef" method
+    private static Class signature[] = { ActionEvent.class };
+
+
+    /**
+     * <p>In addition to to the default {@link UIComponent#broadcast}
+     * processing, pass the {@link ActionEvent} being broadcast to the
+     * method referenced by <code>actionListenerRef</code> (if any).</p>
+     *
+     * @param event {@link FacesEvent} to be broadcast
+     * @param phaseId {@link PhaseId} of the current phase of the
+     *  request processing lifecycle
+     *
+     * @exception AbortProcessingException Signal the JavaServer Faces
+     *  implementation that no further processing on the current event
+     *  should be performed
+     * @exception IllegalArgumentException if the implementation class
+     *  of this {@link FacesEvent} is not supported by this component
+     * @exception IllegalStateException if PhaseId.ANY_PHASE is passed
+     *  for the phase identifier
+     * @exception NullPointerException if <code>event</code> or
+     *  <code>phaseId</code> is <code>null</code>
+     */
+    public boolean broadcast(FacesEvent event, PhaseId phaseId)
+        throws AbortProcessingException {
+
+        // Perform standard superclass processing
+        boolean returnValue = super.broadcast(event, phaseId);
+
+        // Notify the specified action listener method (if any)
+        String actionListenerRef = getActionListenerRef();
+        if (actionListenerRef != null) {
+            if ((isImmediate() &&
+                 phaseId.equals(PhaseId.APPLY_REQUEST_VALUES)) ||
+                (!isImmediate() &&
+                 phaseId.equals(PhaseId.INVOKE_APPLICATION))) {
+                FacesContext context = FacesContext.getCurrentInstance();
+                MethodBinding mb =
+                    context.getApplication().getMethodBinding
+                    (actionListenerRef, signature);
+                try {
+                    mb.invoke(context, new Object[] { event });
+                } catch (InvocationTargetException e) {
+                    throw new FacesException(e.getTargetException());
+                }
+            }
+        }
+
+        // Return the flag indicating future interest
+        return (returnValue);
 
     }
 

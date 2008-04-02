@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.73 2003/10/27 19:14:08 craigmcc Exp $
+ * $Id: UIComponentBase.java,v 1.74 2003/10/27 20:08:25 craigmcc Exp $
  */
 
 /*
@@ -29,13 +29,10 @@ import java.util.WeakHashMap;
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.context.FacesContext;
-import javax.faces.el.MethodBinding;
 import javax.faces.event.AbortProcessingException;
-import javax.faces.event.ActionEvent;
 import javax.faces.event.FacesEvent;
 import javax.faces.event.FacesListener;
 import javax.faces.event.PhaseId;
-import javax.faces.event.ValueChangeEvent;
 import javax.faces.render.Renderer;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
@@ -872,13 +869,6 @@ public abstract class UIComponentBase extends UIComponent {
     private transient List anyPhaseEvents = null;
 
 
-    private Class alParams[] =
-    { ActionEvent.class };
-
-    private Class vclParams[] =
-    { ValueChangeEvent.class };
-
-
     /**
      * @exception IllegalArgumentException {@inheritDoc}
      * @exception IllegalStateException {@inheritDoc}
@@ -907,45 +897,6 @@ public abstract class UIComponentBase extends UIComponent {
             anyPhaseEvents.add(event);
         }
         broadcast(event, listeners[phaseId.getOrdinal()]);
-
-        // Special handling for actionListenerRef/valueChangeListenerRef
-        // PENDING(craigmcc) - This logic does not belong in UIComponentBase!
-        // It is here today because it must occur after unwrapping
-        if (event instanceof ActionEvent) {
-            ActionSource asource = (ActionSource) event.getComponent();
-            String actionListenerRef = asource.getActionListenerRef();
-            if (actionListenerRef != null) {
-                if ((asource.isImmediate() &&
-                     phaseId.equals(PhaseId.APPLY_REQUEST_VALUES)) ||
-                    (!asource.isImmediate() &&
-                     phaseId.equals(PhaseId.INVOKE_APPLICATION))) {
-                    MethodBinding mb =
-                        FacesContext.getCurrentInstance().getApplication().
-                        getMethodBinding(actionListenerRef, alParams);
-                    try {
-                        mb.invoke(FacesContext.getCurrentInstance(),
-                                  new Object[] { event });
-                    } catch (InvocationTargetException e) {
-                        throw new FacesException(e.getTargetException());
-                    }
-                }
-            }
-        } else if ((event instanceof ValueChangeEvent) &&
-                   (phaseId.equals(PhaseId.PROCESS_VALIDATIONS))) {
-            UIInput input = (UIInput) event.getComponent();
-            String valueChangeListenerRef = input.getValueChangeListenerRef();
-            if (valueChangeListenerRef != null) {
-                MethodBinding mb =
-                    FacesContext.getCurrentInstance().getApplication().
-                    getMethodBinding(valueChangeListenerRef, vclParams);
-                try {
-                    mb.invoke(FacesContext.getCurrentInstance(),
-                              new Object[] { event });
-                } catch (InvocationTargetException e) {
-                    throw new FacesException(e.getTargetException());
-                }
-            }
-        }
 
         // Determine whether there are any registered listeners for later phases
         // that are interested in this event
