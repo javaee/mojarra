@@ -95,6 +95,17 @@ public class ExpressionInfo {
      * @param expressionString
      */
     public void setExpressionString(String expressionString) {
+        int index;
+        //ExpressionString may contain more than one expression.
+        //If it does, change delimeters to ones recognized by the
+        //JSP parser.
+        while ((index = expressionString.indexOf("#{")) != -1) {
+            StringBuffer buf = new StringBuffer();
+            buf.append(expressionString.substring(0, index));
+            buf.append("$");
+            buf.append(expressionString.substring(index + 1));
+            expressionString = buf.toString();
+        }
         this.expressionString = expressionString;
     }
 

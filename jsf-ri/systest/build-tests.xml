@@ -4,7 +4,7 @@
  Copyright 2003 Sun Microsystems, Inc. All rights reserved.
  SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 
- $Id: build-tests.xml,v 1.40 2004/01/25 23:19:13 craigmcc Exp $
+ $Id: build-tests.xml,v 1.41 2004/01/26 06:28:55 horwat Exp $
 -->
 
 
@@ -90,11 +90,9 @@
                 test.subview,
                 test.jsp,
                 test.path,
-                test.methodRef
+                test.methodRef,
+                test.valueBindingGet
                "/>
-<!-- PENDING - add when bug 4983325 is fixed
-                test.valueBindingGet,
--->
 
     <target name="test.duplicateIds"
         description="Test duplicate ID detection">

@@ -114,7 +114,7 @@ import java.util.Map;
  * 
  * @author Nathan Abramson - Art Technology Group
  * @author Shawn Bayern
- * @version $Change: 181177 $$DateTime: 2001/06/26 08:45:09 $$Author: eburns $
+ * @version $Change: 181177 $$DateTime: 2001/06/26 08:45:09 $$Author: horwat $
  **/
 
 public class ExpressionEvaluatorImpl implements ExpressionEvaluator {
@@ -194,7 +194,8 @@ public class ExpressionEvaluatorImpl implements ExpressionEvaluator {
 	// String parse results, e.g., letting the parser return
 	// an Expression subclass that just returns its value. Or
 	// maybe this method should return a ValueBinding instead?
-        if (parsedValue instanceof String) {
+        if ((parsedValue instanceof String) || 
+            (parsedValue instanceof ExpressionString)) {
 	    // Create an Expression object that knows how to evaluate this.
 	    return new ELExpression(this);
 	}
