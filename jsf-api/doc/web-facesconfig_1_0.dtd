@@ -13,7 +13,7 @@
      "-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.0//EN"
      "http://java.sun.com/dtd/web-facesconfig_1_0.dtd">
 
-    $Id: web-facesconfig_1_0.dtd,v 1.9 2003/09/02 03:12:53 eburns Exp $
+    $Id: web-facesconfig_1_0.dtd,v 1.10 2003/09/04 23:37:08 eburns Exp $
 
 -->
 
@@ -362,6 +362,13 @@
 -->
 <!ELEMENT action-listener (#PCDATA)>
 
+<!--
+    The "application-factory" element contains the fully qualified class
+    name of the concrete ApplicationFactory implementation class that
+    will be called when FactoryFinder.getFactory(APPLICATION_FACTORY) is
+    called. It must be of type "ClassName".
+-->
+<!ELEMENT application-factory (#PCDATA)>
 
 <!--
     The "attribute-class" element represents the Java type of the value
@@ -443,6 +450,14 @@
 <!ELEMENT display-name    (#PCDATA)>
 <!ATTLIST display-name    xml:lang        %Language;      #IMPLIED>
 
+<!--
+    The "faces-context-factory" element contains the fully qualified
+    class name of the concrete FacesContextFactory implementation class
+    that will be called when
+    FactoryFinder.getFactory(FACES_CONTEXT_FACTORY) is called. It must
+    be of type "ClassName".
+-->
+<!ELEMENT faces-context-factory (#PCDATA)>
 
 <!--
     The "from-action-ref" element contains an action reference expression
@@ -504,6 +519,13 @@
 -->
 <!ELEMENT large-icon      (#PCDATA)>
 
+<!--
+    The "lifecycle-factory" element contains the fully qualified class name
+    of the concrete LifecycleFactory implementation class that will be called
+    when FactoryFinder.getFactory(LIFECYCLE_FACTORY) is called. It must be 
+    of type "ClassName".
+-->
+<!ELEMENT lifecycle-factory (#PCDATA)>
 
 <!--
     The "managed-bean-class" element represents the fully qualified class
@@ -663,6 +685,13 @@
 -->
 <!ELEMENT renderer-class  (#PCDATA)>
 
+<!--
+    The "render-kit-factory" element contains the fully qualified class name
+    of the concrete RenderKitFactory implementation class that will be called
+    when FactoryFinder.getFactory(RENDER_KIT_FACTORY) is called. It must be 
+    of type "ClassName".
+-->
+<!ELEMENT render-kit-factory (#PCDATA)>
 
 <!--
     The "renderer-type" element represents an identifier for the

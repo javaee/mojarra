@@ -1,5 +1,5 @@
 /*
- * $Id: FactoryFinder.java,v 1.18 2003/09/02 03:12:55 eburns Exp $
+ * $Id: FactoryFinder.java,v 1.19 2003/09/04 23:37:08 eburns Exp $
  */
 
 /*
@@ -278,11 +278,11 @@ public final class FactoryFinder {
 		// List
 	    }
 	    else {
-		// No.  Create an Stack for this FactoryName.
+		// No.  Create a List for this FactoryName.
 		previouslySetFactories = new ArrayList();
 		appMap.put(factoryName, previouslySetFactories);
 	    }
-	    // Put this at the end of the list.
+	    // Put this at the beginning of the list.
 	    ((List)previouslySetFactories).add(0, implName);
 	}
     }
@@ -402,7 +402,8 @@ public final class FactoryFinder {
 	int len = 0, i = 0;
 
 	// step 1.
-	if ((1 < (len = implementations.size()) || 1 == len)) {
+	if (null != implementations &&
+	    (1 < (len = implementations.size()) || 1 == len)) {
 	    curImplClass = (String) implementations.remove(len - 1);
 	    // since this is the hard coded implementation default,
 	    // there is no preceding implementation, so don't bother
@@ -419,10 +420,12 @@ public final class FactoryFinder {
 	}
 	
 	// step 3.
-	for (len = (implementations.size() - 1); 0 <= len; len--) {
-	    curImplClass = (String) implementations.remove(len);
-	    result = getImplGivenPreviousImpl(classLoader, factoryName,
-					      curImplClass, result);
+	if (null != implementations) {
+	    for (len = (implementations.size() - 1); 0 <= len; len--) {
+		curImplClass = (String) implementations.remove(len);
+		result = getImplGivenPreviousImpl(classLoader, factoryName,
+						  curImplClass, result);
+	    }
 	}
 	
 	return result;
