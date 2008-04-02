@@ -1,5 +1,5 @@
 /*
- * $Id: MessageFactory.java,v 1.1 2003/10/30 16:14:41 eburns Exp $
+ * $Id: MessageFactory.java,v 1.2 2003/10/30 21:21:27 eburns Exp $
  */
 
 /*
@@ -21,8 +21,7 @@ import java.util.ResourceBundle;
 import java.util.MissingResourceException;
 import javax.faces.FacesException;
 import javax.faces.application.Application;
-import javax.faces.application.MessageImpl;
-import javax.faces.application.Message;
+import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.FacesException;
 import java.text.MessageFormat;
@@ -93,7 +92,7 @@ import java.io.IOException;
 
     */
 
-    @protection@ static Message getMessage(String messageId, Object params[]) {
+    @protection@ static FacesMessage getMessage(String messageId, Object params[]) {
         Locale locale = null;
         FacesContext context = FacesContext.getCurrentInstance();
         // context.getViewRoot() may not have been initialized at this point.
@@ -109,14 +108,15 @@ import java.io.IOException;
 	return getMessage(locale, messageId, params);
     }
 
-    @protection@ static Message getMessage(Locale locale, String messageId, 
+    @protection@ static FacesMessage getMessage(Locale locale, String messageId, 
 					   Object params[]) {
-	Message result = null;
+	FacesMessage result = null;
 	String 
+	    severityStr = null,
 	    summary = null,
 	    detail = null,
 	    bundleName = null;
-	int severity = Message.SEVERITY_INFO;
+	FacesMessage.Severity severity = null;
 	ResourceBundle bundle = null;
 
 	// see if we have a user-provided bundle
@@ -137,7 +137,7 @@ import java.io.IOException;
 	// we couldn't find a summary in the user-provided bundle
 	if (null == summary) {
 	    // see if we have a summary in the app provided bundle
-	    bundle = ResourceBundle.getBundle(Message.FACES_MESSAGES, 
+	    bundle = ResourceBundle.getBundle(FacesMessage.FACES_MESSAGES, 
 					      locale,
 					      getCurrentLoader(bundleName));
 	    if (null == bundle) {
@@ -171,38 +171,29 @@ import java.io.IOException;
 	}
 
 	try {
-	    severity = Integer.valueOf(bundle.getString(messageId + "_severity")).intValue();
+	    if (null != (severityStr = bundle.getString(messageId + "_severity"))){
+		severity = (FacesMessage.Severity)
+		    FacesMessage.VALUES_MAP.get(severityStr);
+	    }
 	}
-	catch (Exception e) {
-	    // stick with the default severity.
+	catch (MissingResourceException e) {
+	}
+	if (null == severity) {
+	    severity = FacesMessage.SEVERITY_INFO;
 	}
 	
-        return (new MessageImpl(severity, summary, detail));
-
-	
-	/**************	
-        MessageCatalog catalog = findCatalog(locale);
-        if (catalog == null) {
-	    return null;
-        }
-        MessageTemplate template = (MessageTemplate) catalog.get(messageId);
-        if (template == null) {
-	    return null;
-        }
-        
-	*******************/
-
+        return (new FacesMessage(severity, summary, detail));
     }
 
 
     //
     // Methods from MessageFactory
     // 
-    @protection@ static Message getMessage(FacesContext context, String messageId) {
+    @protection@ static FacesMessage getMessage(FacesContext context, String messageId) {
         return getMessage(context, messageId, null);
     }    
     
-    @protection@ static Message getMessage(FacesContext context, String messageId,
+    @protection@ static FacesMessage getMessage(FacesContext context, String messageId,
 					   Object params[]) {
         if (context == null || messageId == null ) {
             throw new NullPointerException("One or more parameters could be null");
@@ -217,7 +208,7 @@ import java.io.IOException;
 	if (null == locale) {
 	    throw new NullPointerException();
 	}
-        Message message = getMessage(locale, messageId, params);
+        FacesMessage message = getMessage(locale, messageId, params);
         if (message != null) {
             return message;
         }
@@ -225,24 +216,24 @@ import java.io.IOException;
         return (getMessage(locale, messageId, params));
     }  
     
-    @protection@ static Message getMessage(FacesContext context, String messageId,
+    @protection@ static FacesMessage getMessage(FacesContext context, String messageId,
                                        Object param0) {
         return getMessage(context, messageId, new Object[]{param0});                                       
     }                                       
     
-    @protection@ static Message getMessage(FacesContext context, String messageId,
+    @protection@ static FacesMessage getMessage(FacesContext context, String messageId,
                                        Object param0, Object param1) {
          return getMessage(context, messageId, new Object[]{param0, param1});                                        
     }                                       
 
-    @protection@ static Message getMessage(FacesContext context, String messageId,
+    @protection@ static FacesMessage getMessage(FacesContext context, String messageId,
                                        Object param0, Object param1,
                                        Object param2) {
          return getMessage(context, messageId, 
              new Object[]{param0, param1, param2});                                        
     }                                       
 
-    @protection@ static Message getMessage(FacesContext context, String messageId,
+    @protection@ static FacesMessage getMessage(FacesContext context, String messageId,
                                        Object param0, Object param1,
                                        Object param2, Object param3) {
          return getMessage(context, messageId, 
