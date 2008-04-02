@@ -1,5 +1,5 @@
 /*
- * $Id: Validator.java,v 1.15 2003/10/30 20:30:18 eburns Exp $
+ * $Id: Validator.java,v 1.16 2003/11/05 02:22:51 craigmcc Exp $
  */
 
 /*
@@ -10,6 +10,7 @@
 package javax.faces.validator;
 
 
+import java.util.EventListener;
 import java.util.Iterator;
 import javax.faces.component.StateHolder;
 import javax.faces.component.UIInput;
@@ -45,7 +46,7 @@ import javax.faces.application.FacesMessage;
  * StateHolder}.</p>
  */
 
-public interface Validator {
+public interface Validator extends EventListener {
 
     /**
      * <p>The message identifier of the {@link FacesMessage} to be created if

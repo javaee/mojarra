@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTag.java,v 1.26 2003/10/27 15:42:54 eburns Exp $
+ * $Id: UIComponentTag.java,v 1.27 2003/11/05 02:22:52 craigmcc Exp $
  */
 
 /*
@@ -247,7 +247,7 @@ public abstract class UIComponentTag implements Tag {
      * the {@link UIComponent} instance for this tag.  Subclasses must
      * override this method to return the appropriate value.</p>
      */
-    protected abstract String getComponentType();
+    public abstract String getComponentType();
 
 
     /**
