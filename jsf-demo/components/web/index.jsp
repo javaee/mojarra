@@ -17,7 +17,15 @@ Faces technology.</p>
 
 <table border="1">
 
-<tr><th>Component Content</th> <th>View JSP Source</th> <th>Execute JSP</th></tr>
+<tr>
+
+<th>Component Content</th> 
+
+<th>View JSP Source</th> 
+
+<th>View Java Source</th> 
+
+<th>Execute JSP</th></tr>
 
 <tr>
 
@@ -25,6 +33,9 @@ Faces technology.</p>
 </td>
 
 <td><a href="ShowSource.jsp?filename=/menu.jsp"><img src="images/code.gif" width="24" height="24" border="0"></a></td>
+
+<td><a href="ShowSource.jsp?filename=/src/"><img src="images/code.gif" width="24" height="24" border="0"></a>
+</td>
 
 <td><a href="faces/menu.jsp"><img src="images/execute.gif" width="24" height="24" border="0"></a>
 </td>
@@ -39,6 +50,9 @@ Faces technology.</p>
 <td><a href="ShowSource.jsp?filename=/result-set.jsp"><img src="images/code.gif" width="24" height="24" border="0"></a>
 </td>
 
+<td><a href="ShowSource.jsp?filename=/src/"><img src="images/code.gif" width="24" height="24" border="0"></a>
+</td>
+
 <td><a href="faces/result-set.jsp"><img src="images/execute.gif" width="24" height="24" border="0"></a>
 </td>
 
@@ -50,6 +64,9 @@ Faces technology.</p>
 </td>
 
 <td><a href="ShowSource.jsp?filename=/tabbedpanes.jsp"><img src="images/code.gif" width="24" height="24" border="0"></a>
+</td>
+
+<td><a href="ShowSource.jsp?filename=/src/"><img src="images/code.gif" width="24" height="24" border="0"></a>
 </td>
 
 <td><a href="faces/tabbedpanes.jsp"><img src="images/execute.gif" width="24" height="24" border="0"></a>

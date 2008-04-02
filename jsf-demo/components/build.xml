@@ -78,7 +78,8 @@
             value="web/WEB-INF/lib/standard.jar"/>
 
   <path id="classpath">
-    <fileset dir="${build}/${webapp}/WEB-INF/lib" includes="*.jar" />
+    <fileset dir="${build}/${webapp}/WEB-INF/lib" includes="*.jar" 
+             excludes="**/jsf-ri.jar"/>
     <pathelement location="${build}/classes"/>
     <pathelement location="${servlet23.jar}"/>
     <pathelement location="${standard.jar}"/>
@@ -153,6 +154,7 @@
     <mkdir dir="${build}/classes/${example}" />
     <mkdir dir="${build}/classes/${example}/META-INF" />
     <mkdir dir="${build}/${webapp}/WEB-INF/lib" />
+    <mkdir dir="${build}/${webapp}/src/components" />
     <mkdir dir="${build}/${webapp}/WEB-INF/classes" />
     <copy todir="${build}/${webapp}/WEB-INF/lib" >
       <fileset dir="${basedir}/web/WEB-INF/lib">
@@ -206,6 +208,10 @@
       <fileset dir="web/WEB-INF"    >
         <include name="web.xml" />
       </fileset>
+    </copy>
+    <!-- copy the java source to the webapp for viewing by the user -->
+    <copy todir="${build}/${webapp}/src/components">
+      <fileset dir="src/components" />
     </copy>
     <copy todir="${build}/${webapp}/WEB-INF" file="src/demo/taglib/demo.tld"/>
 

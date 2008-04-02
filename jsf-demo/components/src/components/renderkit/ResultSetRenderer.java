@@ -1,5 +1,5 @@
 /*
- * $Id: ResultSetRenderer.java,v 1.1 2003/02/14 20:36:18 eburns Exp $
+ * $Id: ResultSetRenderer.java,v 1.2 2003/02/15 01:34:26 eburns Exp $
  */
 
 /*
@@ -44,7 +44,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ResultSetRenderer.java,v 1.1 2003/02/14 20:36:18 eburns Exp $
+ * @version $Id: ResultSetRenderer.java,v 1.2 2003/02/15 01:34:26 eburns Exp $
  *  
  */
 
@@ -129,7 +129,7 @@ public class ResultSetRenderer extends BaseRenderer {
             writer.write(panelClass);
             writer.write("\"");
         }
-        writer.write(com.sun.faces.util.Util.renderPassthruAttributes(context, component));
+        writer.write(Util.renderPassthruAttributes(context, component));
         writer.write(">\n");
     }
 

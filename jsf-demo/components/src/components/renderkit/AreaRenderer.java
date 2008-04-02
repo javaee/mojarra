@@ -42,14 +42,10 @@
 
 package components.renderkit;
 
-import com.sun.faces.util.Util;
-
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.render.Renderer;
 import javax.faces.component.UIComponent;
-
-import com.sun.faces.renderkit.html_basic.HtmlBasicRenderer;
 
 import java.io.IOException;
 import components.components.UIArea;
@@ -62,7 +58,7 @@ import components.model.ImageArea;
  *
  */
 
-public class AreaRenderer extends HtmlBasicRenderer {
+public class AreaRenderer extends BaseRenderer {
 
        public AreaRenderer() {
         super();
@@ -74,8 +70,7 @@ public class AreaRenderer extends HtmlBasicRenderer {
  // <code>UIArea.TYPE</code> 
        public boolean supportsComponentType(String componentType) {
         if ( componentType == null ) {
-            throw new NullPointerException(Util.getExceptionMessage(
-                    Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+            throw new NullPointerException();
         }    
         return (componentType.equals(UIArea.TYPE));
     }
@@ -84,16 +79,14 @@ public class AreaRenderer extends HtmlBasicRenderer {
      public void encodeBegin(FacesContext context, UIComponent component) 
              throws IOException  {
         if (context == null || component == null) {
-            throw new NullPointerException(Util.getExceptionMessage(
-                    Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+            throw new NullPointerException();
         }
      }
 // Overrides the default behavior and takes no action.     
     public void encodeChildren(FacesContext context, UIComponent component)
             throws IOException {
         if (context == null || component == null) {
-            throw new NullPointerException(Util.getExceptionMessage(
-                    Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+            throw new NullPointerException();
         }
     }
 
