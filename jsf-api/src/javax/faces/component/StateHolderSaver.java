@@ -1,5 +1,5 @@
 /*
- * $Id: StateHolderSaver.java,v 1.5 2004/01/19 20:06:41 eburns Exp $
+ * $Id: StateHolderSaver.java,v 1.6 2004/01/19 20:50:31 eburns Exp $
  */
 
 /*
@@ -26,10 +26,9 @@ class StateHolderSaver extends Object implements Serializable {
     protected Object savedState = null;
 
     public StateHolderSaver(FacesContext context, Object toSave) {
+        className = toSave.getClass().getName();
 
         if (toSave instanceof StateHolder) {
-	    className = toSave.getClass().getName();
-
             // do not save an attached object that is marked transient.
             if (!((StateHolder)toSave).isTransient()) {
                 savedState = ((StateHolder)toSave).saveState(context);
@@ -37,10 +36,6 @@ class StateHolderSaver extends Object implements Serializable {
                 className = null;
             }
         }
-	else if (toSave instanceof Serializable) {
-	    savedState = toSave;
-	}
-	// else, don't save anything, treat as transient
     }
 
     /**
@@ -51,20 +46,9 @@ class StateHolderSaver extends Object implements Serializable {
     public Object restore(FacesContext context) throws IllegalStateException {
         Object result = null;
         Class toRestoreClass = null;
-
-	// if the Object to save implemented Serializable but not
-	// StateHolder
-	if (null == className && null != savedState) {
-	    return savedState;
-	}
-
-	// if the Object to save did not implement Serializable or
-	// StateHolder
         if ( className == null) {
             return null;
         }
-
-	// else the object to save did implement StateHolder
         
         try {
             toRestoreClass = loadClass(className, this);
