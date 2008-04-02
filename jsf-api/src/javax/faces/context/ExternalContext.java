@@ -24,7 +24,7 @@
  */
 
 /*
- * $Id: ExternalContext.java,v 1.23 2005/09/30 03:57:18 edburns Exp $
+ * $Id: ExternalContext.java,v 1.24 2005/10/05 21:39:09 edburns Exp $
  */
  
 /*
@@ -201,8 +201,8 @@ public abstract class ExternalContext {
      * <code>Map</code> must cause the corresponding changes in the set
      * of application scope attributes.  Particularly the
      * <code>clear()</code>, <code>remove()</code>, <code>put()</code>,
-     * and <code>get()</code> operations must take the appropriate
-     * action on the underlying data structure.</p>
+     * <code>putAll()</code>, and <code>get()</code> operations must
+     * take the appropriate action on the underlying data structure.</p>
      *
      * <p>For any of the <code>Map</code> methods that cause an element
      * to be removed from the underlying data structure, the following
@@ -492,8 +492,8 @@ public abstract class ExternalContext {
      * <code>Map</code> must cause the corresponding changes in the set
      * of request scope attributes.  Particularly the
      * <code>clear()</code>, <code>remove()</code>, <code>put()</code>,
-     * and <code>get()</code> operations must take the appropriate
-     * action on the underlying data structure.</p>
+     * <code>putAll()</code>, and <code>get()</code> operations must
+     * take the appropriate action on the underlying data structure.</p>
      *
      * <p>For any of the <code>Map</code> methods that cause an element
      * to be removed from the underlying data structure, the following

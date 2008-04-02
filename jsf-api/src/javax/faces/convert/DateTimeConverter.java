@@ -1,5 +1,5 @@
 /*
- * $Id: DateTimeConverter.java,v 1.29 2005/08/22 22:08:01 ofung Exp $
+ * $Id: DateTimeConverter.java,v 1.30 2005/10/05 21:39:10 edburns Exp $
  */
 
 /*
@@ -66,6 +66,9 @@ import javax.faces.context.FacesContext;
  *     value, or both.  Any date and time values included will be parsed in
  *     accordance to the styles specified by <code>dateStyle</code> and
  *     <code>timeStyle</code>, respectively.</li>
+ * <li>If a <code>timezone</code> has been specified, it must be passed
+ *     to the underlying <code>DateFormat</code> instance.  Otherwise
+ *     the "GMT" timezone is used.</li>
  * <li>In all cases, parsing must be non-lenient; the given string must
  *     strictly adhere to the parsing format.</li>
  * </ul>
@@ -79,6 +82,9 @@ import javax.faces.context.FacesContext;
  * <li>If the <code>locale</code> property is not null,
  *     use that <code>Locale</code> for managing formatting.  Otherwise, use the
  *     <code>Locale</code> from the <code>UIViewRoot</code>.</li>
+ * <li>If a <code>timezone</code> has been specified, it must be passed
+ *     to the underlying <code>DateFormat</code> instance.  Otherwise
+ *     the "GMT" timezone is used.</li>
  * <li>If a <code>pattern</code> has been specified, its syntax must conform
  *     the rules specified by <code>java.text.SimpleDateFormat</code>.  Such
  *     a pattern will be used to format, and the <code>type</code>,

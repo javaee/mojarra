@@ -983,12 +983,13 @@
 
        <p>Compliant implementations must only generate JavaScript in the
        <a href="javax.faces.Commandjavax.faces.Link.html">
-       <code>javax.faces.Link</code> renderer for the
-       <code>javax.faces.Command</code></a> component.  The generation
-       of JavaScript in any other Renderer in the HTML_BASIC renderkit
-       is not permitted.  However, any JavaScript code provided by the
-       user as the value of a passthru attribute, such as "onmouseover",
-       is excluded from this restriction.</p>
+       <code>javax.faces.Link</code></a> and <a
+       href="javax.faces.Commandjavax.faces.Button.html"><code>javax.faces.Button</code></a>
+       Renderers for the <code>javax.faces.Command</code></a> component.
+       The generation of JavaScript in any other Renderer in the
+       HTML_BASIC renderkit is not permitted.  However, any JavaScript
+       code provided by the user as the value of a passthru attribute,
+       such as "onmouseover", is excluded from this restriction.</p>
 
      </ul>
 
@@ -1135,8 +1136,8 @@
       respectively, of any nested UIParameter children.  The name and
       the value must be URLEncoded.  If the "styleClass" attribute is
       specified, render its value as the value of the "class" attribute.
-      Render any non-UIParameter children as normal inside of the "a"
-      element.  These will appear as the link text.  Allow the form
+      Render any non-UIParameter output children as normal inside of the
+      "a" element.  These will appear as the link text.  Allow the form
       renderer to output a single "input" element (for the entire page,
       regardless of how many command link components are in the page) of
       "type" "hidden" whose "name" is the value of hiddenFieldName, and
@@ -1145,11 +1146,13 @@
       hiddenFieldName hidden fields.  Allow the form renderer to output
       an "input" element of "type" "hidden" for each of the nested
       UIParameter children, taking the name property (but not the value)
-      from each one in turn.  If the "disabled" attribute is specified, 
-      do not render the HTML "a" anchor element or the "href" element.  
-      Instead, render a "span" element.  If the "styleClass" attribute 
-      is specified, render its value as the value of the "class" attribute 
-      on the "span".  Render any pass-through attributes on the "span".</p>
+      from each one in turn.  If the "disabled" attribute is specified,
+      do not render the HTML "a" anchor element or its "href" attribute.
+      Instead, render a "span" element.  If the "styleClass" attribute
+      is specified, render its value as the value of the "class"
+      attribute on the "span".  Render any pass-through attributes on
+      the "span".  The content of the span element comes from the value
+      of the component or its children as specified above.</p>
 
       </ul>]]>
             </description>
@@ -1216,7 +1219,7 @@
       component is not present, output the value of the "headerClass" 
       attribute of the <code>UIData</code> component, if present, as 
       the value of the "class" attribute on the "th".  Output "col" as 
-      the value of the "colgroup" attribute on the "th" element.
+      the value of the "scope" attribute on the "th" element.
       </p>
 
       <p>Close out the "thead" element.</p>
@@ -1359,8 +1362,7 @@
             <code>ExternalContext</code>.  When handling the "src"
             attribute, the value must not be escaped.  For example,
             <code>&</code> must not be turned into <code>&amp;amp;</code>.
-            If present, render the value of the alt attribute as the
-            value of the "alt" attribute.  If the "styleClass" attribute
+            If the "styleClass" attribute
             is specified, render its value as the value of the "class"
             attribute.]]></description>
             <component-family>javax.faces.Graphic</component-family>
