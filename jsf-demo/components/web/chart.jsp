@@ -36,7 +36,7 @@
  maintenance of any nuclear facility.
 -->
 
-<%-- $Id: chart.jsp,v 1.1 2004/03/06 01:58:13 jvisvanathan Exp $ --%>
+<%-- $Id: chart.jsp,v 1.2 2004/03/08 17:55:37 rkitain Exp $ --%>
 
 
 
@@ -56,7 +56,7 @@
      <h:outputText value="Bar Chart with data specifed via JSP" />  
      <hr>
      <d:chart width="300" height="300" type="Bar" orientation="vertical">
-         <d:chartItem itemLabel="Engg" itemValue="200" itemColor="red" />
+         <d:chartItem itemLabel="Eng" itemValue="200" itemColor="red" />
          <d:chartItem itemLabel="Mktg" itemValue="400" itemColor="green" />
          <d:chartItem itemLabel="Sales" itemValue="600" itemColor="blue" />
          <d:chartItem itemLabel="R&D" itemValue="700" itemColor="orange" />
