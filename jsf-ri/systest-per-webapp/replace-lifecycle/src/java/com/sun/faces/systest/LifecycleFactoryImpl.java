@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleFactoryImpl.java,v 1.1 2005/01/13 19:57:49 edburns Exp $
+ * $Id: LifecycleFactoryImpl.java,v 1.2 2005/07/25 21:07:56 edburns Exp $
  */
 
 /*
@@ -30,8 +30,11 @@ public class LifecycleFactoryImpl extends LifecycleFactory {
     public LifecycleFactoryImpl(LifecycleFactory previous) {
 	this.previous = previous;
 	try {
-	    newLifecycle = new NewLifecycle();
+	    newLifecycle = new NewLifecycle("com.sun.faces.systest.NewLifecycle");
 	    this.previous.addLifecycle("com.sun.faces.systest.NewLifecycle",
+				       newLifecycle);
+            newLifecycle = new NewLifecycle("com.sun.faces.systest.AlternateLifecycle");
+            this.previous.addLifecycle("com.sun.faces.systest.AlternateLifecycle",
 				       newLifecycle);
 	}
 	catch (Throwable e) {

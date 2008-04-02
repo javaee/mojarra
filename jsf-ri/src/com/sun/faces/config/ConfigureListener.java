@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListener.java,v 1.43 2005/07/20 17:03:53 edburns Exp $
+ * $Id: ConfigureListener.java,v 1.44 2005/07/25 21:07:56 edburns Exp $
  */
 /*
  * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
@@ -781,21 +781,23 @@ public class ConfigureListener implements ServletContextListener {
         String[] listeners = config.getPhaseListeners();
         LifecycleFactory factory = (LifecycleFactory)
             FactoryFinder.getFactory(FactoryFinder.LIFECYCLE_FACTORY);
-	String lifecycleId = 
-	    context.getInitParameter(FacesServlet.LIFECYCLE_ID_ATTR);
-        if (lifecycleId == null) {
-            lifecycleId = LifecycleFactory.DEFAULT_LIFECYCLE;
-        }
-        Lifecycle lifecycle =
-            factory.getLifecycle(lifecycleId);
-        for (int i = 0; i < listeners.length; i++) {
-            if (logger.isLoggable(Level.FINER)) {
-                logger.finer("addPhaseListener(" + listeners[i] + ')');
+        Iterator iter = factory.getLifecycleIds();
+	String lifecycleId = null;
+        while (iter.hasNext()) {
+            lifecycleId = (String) iter.next();
+            if (lifecycleId == null) {
+                lifecycleId = LifecycleFactory.DEFAULT_LIFECYCLE;
             }
-            Class clazz = Util.loadClass(listeners[i], this);
-            lifecycle.addPhaseListener((PhaseListener) clazz.newInstance());
+            Lifecycle lifecycle =
+                    factory.getLifecycle(lifecycleId);
+            for (int i = 0; i < listeners.length; i++) {
+                if (logger.isLoggable(Level.FINER)) {
+                    logger.finer("addPhaseListener(" + listeners[i] + ')');
+                }
+                Class clazz = Util.loadClass(listeners[i], this);
+                lifecycle.addPhaseListener((PhaseListener) clazz.newInstance());
+            }
         }
-
     }
 
 

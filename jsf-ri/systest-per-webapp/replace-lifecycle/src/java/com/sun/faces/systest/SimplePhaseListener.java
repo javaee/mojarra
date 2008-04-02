@@ -25,6 +25,8 @@ public class SimplePhaseListener implements PhaseListener {
     public void beforePhase(PhaseEvent event) {
 	event.getFacesContext().getExternalContext().getRequestMap().put("beforePhase",
 									 "beforePhase");
+	event.getFacesContext().getExternalContext().getRequestMap().put("lifecycleImpl",
+									 event.getSource());
     }
 
 

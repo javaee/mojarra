@@ -1,5 +1,5 @@
 /*
- * $Id: ReplaceLifecycleTestCase.java,v 1.1 2005/01/13 19:57:50 edburns Exp $
+ * $Id: ReplaceLifecycleTestCase.java,v 1.2 2005/07/25 21:07:57 edburns Exp $
  */
 
 /*
@@ -99,6 +99,15 @@ public class ReplaceLifecycleTestCase extends AbstractTestCase {
 	HtmlPage page = getPage("/faces/test.jsp");
 	assertTrue(-1 != page.asText().indexOf("beforePhase"));
 	
+    }
+
+    public void testAlternateLifecycle() throws Exception {
+	HtmlPage page = getPage("/alternate/test2.jsp");
+	assertTrue(-1 != page.asText().indexOf("beforePhase"));
+	assertTrue(-1 != page.asText().indexOf("AlternateLifecycle"));	
+	page = getPage("/faces/test2.jsp");
+	assertTrue(-1 != page.asText().indexOf("beforePhase"));
+	assertTrue(-1 != page.asText().indexOf("NewLifecycle"));	
     }
 
 }
