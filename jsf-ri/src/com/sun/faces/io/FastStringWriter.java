@@ -1,5 +1,5 @@
 /*
- * $Id: FastStringWriter.java,v 1.4 2006/05/22 17:16:04 rlubke Exp $
+ * $Id: FastStringWriter.java,v 1.5 2006/10/31 19:21:40 rlubke Exp $
  */
 
 /*
@@ -112,7 +112,7 @@ public class FastStringWriter extends Writer {
      * @param str String to be written
      */
     public void write(String str) {
-        write(str, 0, str.length());
+        builder.append(str);
     }
 
     /**

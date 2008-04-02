@@ -455,41 +455,54 @@ public class RenderKitUtils {
                         MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "excludes"));
         }
 
-        if (hasPassThruAttributes(component)) {
+        Map<String, Object> attrMap = component.getAttributes();
 
-            Map<String, Object> attrMap = component.getAttributes();
-           
-            if (excludes.length > 0) {
-                Arrays.sort(excludes);
-            }
-            for (String attrName : PASSTHROUGH_ATTRIBUTES) {                
-                if (excludes.length > 0
-                    && Arrays.binarySearch(excludes, attrName) > -1) {
-                    continue;
-                }
-                Object value =
-                      attrMap.get(attrName);
-                if (value != null && shouldRenderAttribute(value)) {
-                    if (context == null) {
-                        context = FacesContext.getCurrentInstance();
-                    }
-
-                    boolean isXhtml = writer.getContentType().equals(RIConstants.XHTML_CONTENT_TYPE);
-                    if (isXhtml) {
-                        String prefixName = attrName;
-                        if (Arrays.binarySearch(XHTML_PREFIX_ATTRIBUTES,
-                                                attrName) > -1) {
-                            prefixName = XHTML_ATTR_PREFIX + attrName;
-                        }
-                        writer.writeAttribute(prefixName, value, attrName);
-                    } else {
-                        writer.writeAttribute(attrName, value, attrName);
-                    }
-                }
-
-            }
+        if (excludes.length > 0) {
+            Arrays.sort(excludes);
         }
+        boolean isXhtml = writer.getContentType().equals(RIConstants.XHTML_CONTENT_TYPE);
+        for (String attrName : PASSTHROUGH_ATTRIBUTES) {
+            if (excludes.length > 0
+                 && Arrays.binarySearch(excludes, attrName) > -1) {
+                continue;
+            }
+            Object value =
+                 attrMap.get(attrName);
+            if (value != null && shouldRenderAttribute(value)) {
+                if (context == null) {
+                    context = FacesContext.getCurrentInstance();
+                }
 
+                writer.writeAttribute(prefixAttribute(attrName, isXhtml),
+                                      value,
+                                      attrName);               
+            }
+
+        }
+    }
+
+
+    public static String prefixAttribute(final String attrName,
+                                         final ResponseWriter writer) {
+
+        return (prefixAttribute(attrName,
+             RIConstants.XHTML_CONTENT_TYPE.equals(writer.getContentType())));
+
+    }
+
+
+    public static String prefixAttribute(final String attrName,
+                                         boolean isXhtml) {
+        if (isXhtml) {
+            if (Arrays.binarySearch(XHTML_PREFIX_ATTRIBUTES, attrName) > -1) {
+                return XHTML_ATTR_PREFIX + attrName;
+            } else {
+                return attrName;
+            }
+        } else {
+            return attrName;
+        }
+        
     }
 
 

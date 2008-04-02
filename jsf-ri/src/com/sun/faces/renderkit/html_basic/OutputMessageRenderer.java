@@ -1,5 +1,5 @@
 /*
- * $Id: OutputMessageRenderer.java,v 1.28 2006/09/01 17:30:54 rlubke Exp $
+ * $Id: OutputMessageRenderer.java,v 1.29 2006/10/31 19:21:40 rlubke Exp $
  */
 
 /*
@@ -89,10 +89,12 @@ public class OutputMessageRenderer extends HtmlBasicRenderer {
                        "Begin encoding component " + component.getId());
         }
 
-        String
-              currentValue = null,
-              style = (String) component.getAttributes().get("style"),
-              styleClass = (String) component.getAttributes().get("styleClass");
+        String currentValue = null;
+        String style = (String) component.getAttributes().get("style");
+        String styleClass = (String) component.getAttributes().get("styleClass");
+        String lang = (String) component.getAttributes().get("lang");
+        String dir = (String) component.getAttributes().get("dir");
+        String title = (String) component.getAttributes().get("title");
 
         ResponseWriter writer = context.getResponseWriter();
         assert(writer != null);
@@ -147,18 +149,33 @@ public class OutputMessageRenderer extends HtmlBasicRenderer {
         }
 
         boolean wroteSpan = false;
-        if (null != styleClass || null != style ||
-            RenderKitUtils.hasPassThruAttributes(component) ||
-            shouldWriteIdAttribute(component)) {
+        if (styleClass != null
+             || style != null
+             || dir != null
+             || lang != null
+             || title != null
+             || shouldWriteIdAttribute(component)) {
             writer.startElement("span", component);
             writeIdAttributeIfNecessary(context, writer, component);
             wroteSpan = true;
 
+            if (style != null) {
+                writer.writeAttribute("style", style, "style");
+            }
             if (null != styleClass) {
                 writer.writeAttribute("class", styleClass, "styleClass");
             }
-            // style is rendered as a passthru attribute
-            RenderKitUtils.renderPassThruAttributes(context, writer, component);
+            if (dir != null) {
+                writer.writeAttribute("dir", dir, "dir");
+            }
+            if (lang != null) {
+                writer.writeAttribute(RenderKitUtils.prefixAttribute(lang, writer),
+                                      lang,
+                                      "lang");
+            }
+            if (title != null) {
+                writer.writeAttribute("title", title, "title");
+            }
         }
         Boolean escape = Boolean.TRUE;
         Object val = component.getAttributes().get("escape");

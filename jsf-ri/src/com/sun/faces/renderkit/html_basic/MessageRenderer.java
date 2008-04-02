@@ -1,5 +1,5 @@
 /*
- * $Id: MessageRenderer.java,v 1.65 2006/10/09 17:28:30 rlubke Exp $
+ * $Id: MessageRenderer.java,v 1.66 2006/10/31 19:21:39 rlubke Exp $
  */
 
 /*
@@ -209,9 +209,11 @@ public class MessageRenderer extends HtmlBasicRenderer {
                   component.getAttributes().get("fatalClass");
         }
 
-        String
-              style = (String) component.getAttributes().get("style"),
-              styleClass = (String) component.getAttributes().get("styleClass");
+        String style = (String) component.getAttributes().get("style");
+        String styleClass = (String) component.getAttributes().get("styleClass");
+        String dir = (String) component.getAttributes().get("dir");
+        String lang = (String) component.getAttributes().get("lang");
+        String title = (String) component.getAttributes().get("title");
 
         // if we have style and severityStyle
         if ((style != null) && (severityStyle != null)) {
@@ -238,9 +240,12 @@ public class MessageRenderer extends HtmlBasicRenderer {
         //Done intializing local variables. Move on to rendering.
 
         boolean wroteSpan = false;
-        if (styleClass != null || style != null ||
-            shouldWriteIdAttribute(component) ||
-            RenderKitUtils.hasPassThruAttributes(component)) {
+        if (styleClass != null
+             || style != null
+             || dir != null
+             || lang != null
+             || title != null
+             || shouldWriteIdAttribute(component)) {
             writer.startElement("span", component);
             writeIdAttributeIfNecessary(context, writer, component);
 
@@ -251,11 +256,15 @@ public class MessageRenderer extends HtmlBasicRenderer {
             if (styleClass != null) {
                 writer.writeAttribute("class", styleClass, "styleClass");
             }
-            // style is rendered as a passthru attribute
-            RenderKitUtils.renderPassThruAttributes(context, 
-                                                    writer, 
-                                                    component,
-                                                    new String[] {"style"});
+            if (dir != null) {
+                writer.writeAttribute("dir", dir, "dir");
+            }
+            if (lang != null) {
+                writer.writeAttribute(RenderKitUtils.prefixAttribute(lang, writer),
+                     lang,
+                     "lang");
+            }
+
         }
 
         Object tooltip = component.getAttributes().get("tooltip");
@@ -270,8 +279,7 @@ public class MessageRenderer extends HtmlBasicRenderer {
 
             if (!wroteSpan) {
                 writer.startElement("span", component);
-            }
-            String title = (String) component.getAttributes().get("title");
+            }            
             if (title == null || title.length() == 0) {
                 writer.writeAttribute("title", summary, "title");
             }
