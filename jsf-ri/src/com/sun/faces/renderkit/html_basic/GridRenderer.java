@@ -1,5 +1,5 @@
 /*
- * $Id: GridRenderer.java,v 1.6 2003/01/21 20:40:08 eburns Exp $
+ * $Id: GridRenderer.java,v 1.7 2003/02/11 02:07:57 eburns Exp $
  */
 
 /*
@@ -28,7 +28,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: GridRenderer.java,v 1.6 2003/01/21 20:40:08 eburns Exp $
+ * @version $Id: GridRenderer.java,v 1.7 2003/02/11 02:07:57 eburns Exp $
  *  
  */
 
@@ -144,13 +144,14 @@ public class GridRenderer extends HtmlBasicRenderer {
 	    if (headerClass != null) {
 		writer.write("<tr><th class=\"");
 		writer.write(headerClass);
-		writer.write("\" colspan=\"");
-		writer.write("" + columns);
-		writer.write("\">");
+		writer.write("\" ");
+	    } else {
+		writer.write("<tr><th ");
 	    }
-	    else {
-		writer.write("<tr><th>");
-	    }
+	    writer.write("colspan=\"");
+	    writer.write("" + columns);
+	    writer.write("\">");
+	    
 	    encodeRecursive(context, facet);
 	    writer.write("</th></tr>\n");
 	}
@@ -201,13 +202,15 @@ public class GridRenderer extends HtmlBasicRenderer {
 	    if (footerClass != null) {
 		writer.write("<tr><th class=\"");
 		writer.write(footerClass);
-		writer.write("\" colspan=\"");
-		writer.write("" + columns);
-		writer.write("\">");
+		writer.write("\" ");
+	    } else {
+		writer.write("<tr><th ");
 	    }
-	    else {
-		writer.write("<tr><th>");
-	    }
+	    
+	    writer.write("colspan=\"");
+	    writer.write("" + columns);
+	    writer.write("\">");
+
             encodeRecursive(context, facet);
             writer.write("</th></tr>\n");
         }

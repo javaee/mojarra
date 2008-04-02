@@ -25,10 +25,10 @@ footer2</th>
 </tr>
 </table>
 <table>
-<tr><th>header1 header2 </th></tr>
+<tr><th colspan="2">header1 header2 </th></tr>
 <tr>
 <td>body1</td>
 <td>body2</td>
 </tr>
-<tr><th>footer1 footer2 </th></tr>
+<tr><th colspan="2">footer1 footer2 </th></tr>
 </table>
