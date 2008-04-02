@@ -1,5 +1,5 @@
 /*
- * $Id: TestProcessEvents.java,v 1.5 2003/06/27 01:09:56 jvisvanathan Exp $
+ * $Id: TestProcessEvents.java,v 1.6 2003/08/21 14:18:16 rlubke Exp $
  */
 
 /*
@@ -29,6 +29,8 @@ import javax.faces.lifecycle.Lifecycle;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UICommand;
 import javax.faces.component.UIInput;
+import javax.faces.component.base.UIInputBase;
+import javax.faces.component.base.UICommandBase;
 
 import com.sun.faces.ServletFacesTestCase;
 import com.sun.faces.RIConstants;
@@ -43,7 +45,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestProcessEvents.java,v 1.5 2003/06/27 01:09:56 jvisvanathan Exp $
+ * @version $Id: TestProcessEvents.java,v 1.6 2003/08/21 14:18:16 rlubke Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -106,7 +108,7 @@ public void testSingleValueChanged()
     //
     eventsProcessed = new HashMap();
 
-    UIInput userName = new UIInput();
+    UIInput userName = new UIInputBase();
 
     // clear the property
     System.setProperty(HANDLED_VALUEEVENT1, EMPTY);
@@ -135,7 +137,7 @@ public void testMultipleValueChanged()
     //
     eventsProcessed = new HashMap();
 
-    UIInput userName = new UIInput();
+    UIInput userName = new UIInputBase();
 
     // clear the property
     System.setProperty(HANDLED_VALUEEVENT1, EMPTY);
@@ -169,7 +171,7 @@ public void testValueChangedRecursion()
     //
     eventsProcessed = new HashMap();
 
-    UIInput userName = new UIInput();
+    UIInput userName = new UIInputBase();
 
     // add valueChangedListener to the component
 
@@ -202,7 +204,7 @@ public void testSingleAction()
     //
     eventsProcessed = new HashMap();
 
-    UICommand button = new UICommand();
+    UICommand button = new UICommandBase();
     // clear the property
     System.setProperty(HANDLED_ACTIONEVENT1, EMPTY);
 
@@ -230,7 +232,7 @@ public void testActionRecursion()
     //
     eventsProcessed = new HashMap();
 
-    UICommand button = new UICommand();
+    UICommand button = new UICommandBase();
     // add actionListener to the component
     ActionRecursion action = new ActionRecursion();
     button.addActionListener(action);

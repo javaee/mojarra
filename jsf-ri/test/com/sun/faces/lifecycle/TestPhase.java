@@ -1,5 +1,5 @@
 /*
- * $Id: TestPhase.java,v 1.3 2003/08/13 21:06:42 rkitain Exp $
+ * $Id: TestPhase.java,v 1.4 2003/08/21 14:18:16 rlubke Exp $
  */
 
 /*
@@ -23,6 +23,10 @@ import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIForm;
 import javax.faces.component.UIInput;
+import javax.faces.component.UIPage;
+import javax.faces.component.base.UIFormBase;
+import javax.faces.component.base.UIInputBase;
+import javax.faces.component.base.UIPageBase;
 
 import java.util.Iterator;
 
@@ -30,7 +34,6 @@ import com.sun.faces.ServletFacesTestCase;
 import com.sun.faces.CompareFiles;
 import com.sun.faces.FileOutputResponseWrapper;
 import com.sun.faces.lifecycle.Phase;
-import com.sun.faces.tree.SimpleTreeImpl;
 import java.io.PrintStream;
 import java.io.FileOutputStream;
 import java.io.File;
@@ -43,7 +46,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestPhase.java,v 1.3 2003/08/13 21:06:42 rkitain Exp $
+ * @version $Id: TestPhase.java,v 1.4 2003/08/21 14:18:16 rlubke Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -94,7 +97,7 @@ public void beginExecute(WebRequest theRequest)
 public void testExecute()
 {
 
-    Phase reconstituteTree = new ReconstituteComponentTreePhase();
+    Phase reconstituteTree = new RestoreComponentTreePhase();
     try {
         reconstituteTree.execute(getFacesContext());
     }
@@ -105,20 +108,20 @@ public void testExecute()
 
     assertTrue(!(getFacesContext().getRenderResponse()) &&
         !(getFacesContext().getResponseComplete()));
-    assertTrue(null != getFacesContext().getTree());
+    assertTrue(null != getFacesContext().getRoot());
 
     // 2. Add components to tree
     //
-    UIComponent root = getFacesContext().getTree().getRoot();
-    UIForm basicForm = new UIForm();
-    basicForm.setComponentId("basicForm");
-    UIInput userName = new UIInput();
-    userName.setComponentId("userName");
-    root.addChild(basicForm);
-    basicForm.addChild(userName);
-    SimpleTreeImpl tree = new SimpleTreeImpl(getFacesContext(), root,
-                           "root");
-    getFacesContext().setTree(tree);
+    UIComponent root = getFacesContext().getRoot();
+    UIForm basicForm = new UIFormBase();
+    basicForm.setId("basicForm");
+    UIInput userName = new UIInputBase();
+    userName.setId("userName");
+    root.getChildren().add(basicForm);
+    basicForm.getChildren().add(userName);
+    UIPage page = new UIPageBase();
+    page.setTreeId("root");    
+    getFacesContext().setRoot(page);
 
     Phase applyValues = new ApplyRequestValuesPhase();
 

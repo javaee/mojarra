@@ -1,5 +1,5 @@
 /*
- * $Id: TestRestoreTreeFromPage.java,v 1.10 2003/08/13 21:06:42 rkitain Exp $
+ * $Id: TestRestoreTreeFromPage.java,v 1.11 2003/08/21 14:18:17 rlubke Exp $
  */
 
 /*
@@ -19,8 +19,6 @@ import javax.faces.context.FacesContext;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.component.UIComponent;
 
-import javax.faces.tree.TreeFactory;
-import javax.faces.tree.Tree;
 import com.sun.faces.RIConstants;
 
 import com.sun.faces.ServletFacesTestCase;
@@ -42,7 +40,7 @@ import com.sun.faces.lifecycle.Phase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRestoreTreeFromPage.java,v 1.10 2003/08/13 21:06:42 rkitain Exp $
+ * @version $Id: TestRestoreTreeFromPage.java,v 1.11 2003/08/21 14:18:17 rlubke Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -105,7 +103,7 @@ public void beginRestoreTreeFromPage(WebRequest theRequest)
 
 public void testRestoreTreeFromPage()
 {
-    Phase reconstituteTree = new ReconstituteComponentTreePhase();
+    Phase reconstituteTree = new RestoreComponentTreePhase();
 
     try {
 	reconstituteTree.execute(getFacesContext());
@@ -117,17 +115,16 @@ public void testRestoreTreeFromPage()
     assertTrue(!(getFacesContext().getRenderResponse()) &&
         !(getFacesContext().getResponseComplete()));
 
-    assertTrue(null != getFacesContext().getTree());
-    assertTrue(null != getFacesContext().getTree().getRoot());
+    assertTrue(null != getFacesContext().getRoot());    
     assertTrue(RenderKitFactory.DEFAULT_RENDER_KIT.equals(
-           getFacesContext().getTree().getRenderKitId()));
+           getFacesContext().getRoot().getRenderKitId()));
       
     assertTrue(getFacesContext().getLocale().equals(Locale.ENGLISH));
     CompareFiles cf = new CompareFiles();
     try {
         FileOutputStream os = new FileOutputStream(RESTORE_TREE_OUTPUT_FILE);
         PrintStream ps = new PrintStream(os);
-        com.sun.faces.util.DebugUtil.printTree((getFacesContext().getTree()).getRoot(), ps );
+        com.sun.faces.util.DebugUtil.printTree(getFacesContext().getRoot(), ps );
         
         List ignoreList = new ArrayList();
 	for (int i = 0; i < ignore.length; i++) {

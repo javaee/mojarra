@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_2.java,v 1.49 2003/08/08 16:20:39 rkitain Exp $
+ * $Id: TestRenderers_2.java,v 1.50 2003/08/21 14:18:24 rlubke Exp $
  */
 
 /*
@@ -13,7 +13,6 @@ package com.sun.faces.renderkit.html_basic;
 
 import com.sun.faces.renderkit.html_basic.CheckboxRenderer;
 import com.sun.faces.renderkit.html_basic.NumberRenderer;
-import com.sun.faces.tree.SimpleTreeImpl;
 import com.sun.faces.util.Util;
 
 import java.io.IOException;
@@ -24,10 +23,8 @@ import java.text.SimpleDateFormat;
 import java.text.NumberFormat;
 import java.text.DecimalFormat;
 
-import javax.faces.component.SelectItem;
 import javax.faces.component.UISelectItems;
 import javax.faces.component.UICommand;
-import javax.faces.component.UINamingContainer;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIOutput;
 import javax.faces.component.UIParameter;
@@ -35,12 +32,22 @@ import javax.faces.component.UISelectBoolean;
 import javax.faces.component.UISelectOne;
 import javax.faces.component.UIGraphic;
 import javax.faces.component.UIInput;
+import javax.faces.component.UIPage;
+import javax.faces.component.base.UISelectBooleanBase;
+import javax.faces.component.base.UICommandBase;
+import javax.faces.component.base.UISelectItemsBase;
+import javax.faces.component.base.UISelectOneBase;
+import javax.faces.component.base.UIInputBase;
+import javax.faces.component.base.UIOutputBase;
+import javax.faces.component.base.UIGraphicBase;
+import javax.faces.component.base.UIParameterBase;
+import javax.faces.component.base.UINamingContainerBase;
+import javax.faces.component.base.UIPageBase;
 import javax.faces.FactoryFinder;
+import javax.faces.model.SelectItem;
 import javax.faces.context.FacesContext;
 import javax.faces.context.FacesContextFactory;
 import javax.faces.application.MessageImpl;
-import javax.faces.tree.Tree;
-import javax.faces.tree.TreeFactory;
 
 import org.apache.cactus.WebRequest;
 
@@ -53,7 +60,7 @@ import com.sun.faces.TestBean;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_2.java,v 1.49 2003/08/08 16:20:39 rkitain Exp $
+ * @version $Id: TestRenderers_2.java,v 1.50 2003/08/21 14:18:24 rlubke Exp $
  * 
  *
  */
@@ -113,11 +120,9 @@ public class TestRenderers_2 extends JspFacesTestCase
     //
     public void setUp() {
 	super.setUp();
-
-        SimpleTreeImpl xmlTree = 
-	    new SimpleTreeImpl(getFacesContext(), 
-			    new UICommand(), "treeId");
-        getFacesContext().setTree(xmlTree);
+        UIPage page = new UIPageBase();
+        page.setTreeId("treeId");       
+        getFacesContext().setRoot(page);
 	assertTrue(null != getFacesContext().getResponseWriter());
     }     
 
@@ -162,10 +167,10 @@ public class TestRenderers_2 extends JspFacesTestCase
 
         try {
             // create a dummy root for the tree.
-            UINamingContainer root = new UINamingContainer() {
+            UINamingContainerBase root = new UINamingContainerBase() {
                 public String getComponentType() { return "root"; }
             };
-            root.setComponentId("root");
+            root.setId("root");
 
             testCheckboxRenderer(root);
             // PENDING (visvan) revisit this test case once HyperLinkRenderer
@@ -208,10 +213,10 @@ public class TestRenderers_2 extends JspFacesTestCase
     //
     public void testCheckboxRenderer(UIComponent root) throws IOException {
         System.out.println("Testing CheckboxRenderer");
-        UISelectBoolean selectBoolean = new UISelectBoolean();
+        UISelectBoolean selectBoolean = new UISelectBooleanBase();
         selectBoolean.setValue(null);
-        selectBoolean.setComponentId("my_checkbox");
-        root.addChild(selectBoolean);
+        selectBoolean.setId("my_checkbox");
+        root.getChildren().add(selectBoolean);
              
         CheckboxRenderer checkboxRenderer = new CheckboxRenderer();
 
@@ -230,7 +235,7 @@ public class TestRenderers_2 extends JspFacesTestCase
         // test decode method
 
         System.out.println("    Testing decode method - parameter (on)");
-        selectBoolean.setComponentId("my_checkbox_on");
+        selectBoolean.setId("my_checkbox_on");
         selectBoolean.setValue(null);
         checkboxRenderer.decode(getFacesContext(), selectBoolean); 
         val = (Boolean)selectBoolean.getValue();
@@ -240,7 +245,7 @@ public class TestRenderers_2 extends JspFacesTestCase
         // test decode method
 
         System.out.println("    Testing decode method - parameter (yes)");
-        selectBoolean.setComponentId("my_checkbox_yes");
+        selectBoolean.setId("my_checkbox_yes");
         selectBoolean.setValue(null);
         checkboxRenderer.decode(getFacesContext(), selectBoolean);
         val = (Boolean)selectBoolean.getValue();
@@ -249,7 +254,7 @@ public class TestRenderers_2 extends JspFacesTestCase
         // test decode method
 
         System.out.println("    Testing decode method - parameter (true)");
-        selectBoolean.setComponentId("my_checkbox_true");
+        selectBoolean.setId("my_checkbox_true");
         selectBoolean.setValue(null);
         checkboxRenderer.decode(getFacesContext(), selectBoolean);
         val = (Boolean)selectBoolean.getValue();
@@ -258,7 +263,7 @@ public class TestRenderers_2 extends JspFacesTestCase
         // test decode method
         
         System.out.println("    Testing decode method - parameter (true)");
-        selectBoolean.setComponentId("my_checkbox_true");
+        selectBoolean.setId("my_checkbox_true");
         selectBoolean.setValue(null);
         checkboxRenderer.decode(getFacesContext(), selectBoolean);
         val = (Boolean)selectBoolean.getValue();
@@ -267,7 +272,7 @@ public class TestRenderers_2 extends JspFacesTestCase
          
         // test decode method with checkbox disabled.
         System.out.println("    Testing decode method - parameter (yes)");
-        selectBoolean.setComponentId("mycheckbox_disabled");
+        selectBoolean.setId("mycheckbox_disabled");
         selectBoolean.setAttribute("disabled", "true");
         selectBoolean.setValue(Boolean.TRUE);
         checkboxRenderer.decode(getFacesContext(), selectBoolean);
@@ -278,7 +283,7 @@ public class TestRenderers_2 extends JspFacesTestCase
         
         // test encode method
         System.out.println("    Testing encode method - rendering checked");
-        selectBoolean.setComponentId("my_checkbox");
+        selectBoolean.setId("my_checkbox");
         selectBoolean.setSelected(true);
         checkboxRenderer.encodeBegin(getFacesContext(), selectBoolean);
         checkboxRenderer.encodeEnd(getFacesContext(), selectBoolean);
@@ -298,10 +303,10 @@ public class TestRenderers_2 extends JspFacesTestCase
 
     public void testHyperlinkRenderer(UIComponent root) throws IOException {
         System.out.println("Testing HyperlinkRenderer");
-        UICommand command = new UICommand();
-        command.setComponentId("my_command");
+        UICommand command = new UICommandBase();
+        command.setId("my_command");
         command.setRendererType("Hyperlink");
-        root.addChild(command);
+        root.getChildren().add(command);
 
         HyperlinkRenderer hyperlinkRenderer = new HyperlinkRenderer();
 
@@ -323,20 +328,20 @@ public class TestRenderers_2 extends JspFacesTestCase
 
     public void testListboxRenderer(UIComponent root) throws IOException {
         System.out.println("Testing ListboxRenderer");
-        UISelectOne selectOne = new UISelectOne();
-	UISelectItems uiSelectItems = new UISelectItems();
+        UISelectOne selectOne = new UISelectOneBase();
+	UISelectItems uiSelectItems = new UISelectItemsBase();
         selectOne.setValue(null);
-        selectOne.setComponentId("my_listbox");
+        selectOne.setId("my_listbox");
         SelectItem item1 = new SelectItem(new Long(100), "Long1", null);
         SelectItem item2 = new SelectItem(new Long(101), "Long2", null);
         SelectItem item3 = new SelectItem(new Long(102), "Long3", null);
         SelectItem item4 = new SelectItem(new Long(103), "Long4", null);
         SelectItem[] selectItems = {item1, item2, item3, item4};
         uiSelectItems.setValue(selectItems);
-	uiSelectItems.setComponentId("items");
+	uiSelectItems.setId("items");
         selectOne.setConverter("Number");
-        selectOne.addChild(uiSelectItems);
-        root.addChild(selectOne);
+        selectOne.getChildren().add(uiSelectItems);
+        root.getChildren().add(selectOne);
 
         ListboxRenderer listboxRenderer = new ListboxRenderer();
 
@@ -348,7 +353,7 @@ public class TestRenderers_2 extends JspFacesTestCase
 
         // test encode method
         System.out.println("    Testing encode method... ");
-        //selectOne.setComponentId("my_listbox");
+        //selectOne.setId("my_listbox");
         listboxRenderer.encodeBegin(getFacesContext(), selectOne);
         listboxRenderer.encodeEnd(getFacesContext(), selectOne);
         getFacesContext().getResponseWriter().writeText("\n");
@@ -356,10 +361,10 @@ public class TestRenderers_2 extends JspFacesTestCase
 
     public void testSecretRenderer(UIComponent root) throws IOException {
         System.out.println("Testing SecretRenderer");
-        UIInput textEntry = new UIInput();
+        UIInput textEntry = new UIInputBase();
         textEntry.setValue(null);
-        textEntry.setComponentId("my_secret");
-        root.addChild(textEntry);
+        textEntry.setId("my_secret");
+        root.getChildren().add(textEntry);
 
         SecretRenderer secretRenderer = new SecretRenderer();
 
@@ -379,10 +384,10 @@ public class TestRenderers_2 extends JspFacesTestCase
 
     public void testInputTextRenderer(UIComponent root) throws IOException {
         System.out.println("Testing InputTextRenderer");
-        UIInput text = new UIInput();
+        UIInput text = new UIInputBase();
         text.setValue(null);
-        text.setComponentId("my_input_text");
-        root.addChild(text);
+        text.setId("my_input_text");
+        root.getChildren().add(text);
 
         TextRenderer textRenderer = new TextRenderer();
 
@@ -401,10 +406,10 @@ public class TestRenderers_2 extends JspFacesTestCase
 
     public void testOutputTextRenderer(UIComponent root) throws IOException {
         System.out.println("Testing OutputTextRenderer");
-        UIOutput text = new UIOutput();
+        UIOutput text = new UIOutputBase();
         text.setValue(null);
-        text.setComponentId("my_output_text");
-        root.addChild(text);
+        text.setId("my_output_text");
+        root.getChildren().add(text);
 
         TextRenderer textRenderer = new TextRenderer();
 
@@ -422,10 +427,10 @@ public class TestRenderers_2 extends JspFacesTestCase
 
     public void testGraphicImageRenderer(UIComponent root) throws IOException {
         System.out.println("Testing GraphicImageRenderer");
-        UIGraphic img = new UIGraphic();
+        UIGraphic img = new UIGraphicBase();
         img.setURL("/nonModelReferenceImage.gif");
-        img.setComponentId("my_graphic_image");
-        root.addChild(img);
+        img.setId("my_graphic_image");
+        root.getChildren().add(img);
 
         ImageRenderer imageRenderer = new ImageRenderer();
 
@@ -441,9 +446,9 @@ public class TestRenderers_2 extends JspFacesTestCase
         imageRenderer.encodeEnd(getFacesContext(), img);
 
         System.out.println("    Testing graphic support of modelReference...");
-	root.removeChild(img);
-	img = new UIGraphic();
-	root.addChild(img);
+	root.getChildren().remove(img);
+	img = new UIGraphicBase();
+	root.getChildren().add(img);
 	TestBean testBean = (TestBean) 
 	    (Util.getValueBinding("TestBean")).getValue(getFacesContext());
 	assertTrue(null != testBean); // set in FacesTestCaseService
@@ -456,9 +461,9 @@ public class TestRenderers_2 extends JspFacesTestCase
 
     public void testOutputErrorsRenderer(UIComponent root) throws IOException {
         System.out.println("Testing OutputErrorsRenderer");
-        UIOutput output = new UIOutput();
-        output.setComponentId("my_output_errors");
-        root.addChild(output);
+        UIOutput output = new UIOutputBase();
+        output.setId("my_output_errors");
+        root.getChildren().add(output);
 
         ErrorsRenderer errorsRenderer = new ErrorsRenderer();
 
@@ -480,19 +485,19 @@ public class TestRenderers_2 extends JspFacesTestCase
 
     public void testOutputMessageRenderer(UIComponent root) throws IOException {
         System.out.println("Testing OutputMessageRenderer");
-        UIOutput output = new UIOutput();
-        output.setComponentId("my_output_message");
+        UIOutput output = new UIOutputBase();
+        output.setId("my_output_message");
         output.setValue("My name is {0} {1}");
         UIParameter param1, param2 = null;
-        param1 = new UIParameter();
-        param1.setComponentId("p1");
-        param2 = new UIParameter();
-        param2.setComponentId("p2");
+        param1 = new UIParameterBase();
+        param1.setId("p1");
+        param2 = new UIParameterBase();
+        param2.setId("p2");
         param1.setValue("Bobby");
         param2.setValue("Orr");
-        output.addChild(param1);
-        output.addChild(param2);
-        root.addChild(output);
+        output.getChildren().add(param1);
+        output.getChildren().add(param2);
+        root.getChildren().add(output);
 
         MessageRenderer messageRenderer = new MessageRenderer();
 
@@ -507,11 +512,11 @@ public class TestRenderers_2 extends JspFacesTestCase
 
     public void testInputDateRenderer(UIComponent root) throws IOException {
         System.out.println("Testing Input_DateRenderer");
-        UIInput input = new UIInput();
+        UIInput input = new UIInputBase();
         input.setValue(null);
-        input.setComponentId("my_input_date");
+        input.setId("my_input_date");
 	input.setAttribute("dateStyle", "medium");
-        root.addChild(input);
+        root.getChildren().add(input);
 
         DateRenderer dateRenderer = new DateRenderer();
 	Date date = null;
@@ -537,11 +542,11 @@ public class TestRenderers_2 extends JspFacesTestCase
 
     public void testInputTimeRenderer(UIComponent root) throws IOException {
         System.out.println("Testing Input_TimeRenderer");
-        UIInput input = new UIInput();
+        UIInput input = new UIInputBase();
         input.setValue(null);
-        input.setComponentId("my_input_time");
+        input.setId("my_input_time");
 	input.setAttribute("timeStyle", "medium");
-        root.addChild(input);
+        root.getChildren().add(input);
 
         TimeRenderer timeRenderer = new TimeRenderer();
 	Date date = null;
@@ -569,11 +574,11 @@ public class TestRenderers_2 extends JspFacesTestCase
     public void testInputDateTimeRendererWithPattern(UIComponent root) throws IOException {
         System.out.println("Testing Input_DateRenderer With Pattern");
 	String formatPattern = "EEE, MMM d, yyyy G 'at' hh:mm:ss a";
-        UIInput input = new UIInput();
+        UIInput input = new UIInputBase();
         input.setValue(null);
-        input.setComponentId("my_input_date2");
+        input.setId("my_input_date2");
 	input.setAttribute("formatPattern", formatPattern);
-        root.addChild(input);
+        root.getChildren().add(input);
 
         DateTimeRenderer dateTimeRenderer = new DateTimeRenderer();
 	Date date = null;
@@ -597,10 +602,10 @@ public class TestRenderers_2 extends JspFacesTestCase
 
     public void testTextAreaRenderer(UIComponent root) throws IOException {
         System.out.println("Testing TextAreaRenderer");
-        UIInput textEntry = new UIInput();
+        UIInput textEntry = new UIInputBase();
         textEntry.setValue(null);
-        textEntry.setComponentId("my_textarea");
-        root.addChild(textEntry);
+        textEntry.setId("my_textarea");
+        root.getChildren().add(textEntry);
 
         TextAreaRenderer textAreaRenderer = new TextAreaRenderer();
 
@@ -620,11 +625,11 @@ public class TestRenderers_2 extends JspFacesTestCase
     
     public void testInputNumberRenderer(UIComponent root) throws IOException {
         System.out.println("Testing NumberRenderer for UIInput ");
-        UIInput input = new UIInput();
+        UIInput input = new UIInputBase();
         input.setValue(null);
-        input.setComponentId("my_number");
+        input.setId("my_number");
 	input.setAttribute("numberStyle", "percent");
-        root.addChild(input);
+        root.getChildren().add(input);
 
         NumberRenderer numberRenderer = new NumberRenderer();
 	Number number = null;
@@ -651,11 +656,11 @@ public class TestRenderers_2 extends JspFacesTestCase
             throws IOException {
         System.out.println("Testing NumberRenderer With Pattern for UIInput ");
 	String formatPattern = "####.000";
-        UIInput input = new UIInput();
+        UIInput input = new UIInputBase();
         input.setValue(null);
-        input.setComponentId("my_number2");
+        input.setId("my_number2");
 	input.setAttribute("formatPattern", formatPattern);
-        root.addChild(input);
+        root.getChildren().add(input);
 
         NumberRenderer numberRenderer = new NumberRenderer();
 	Number number = null;
@@ -680,11 +685,11 @@ public class TestRenderers_2 extends JspFacesTestCase
 
     public void testOutputNumberRenderer(UIComponent root) throws IOException {
         System.out.println("Testing NumberRenderer for UIOutput");
-        UIOutput output = new UIOutput();
+        UIOutput output = new UIOutputBase();
         output.setValue(new Double(.99));
-        output.setComponentId("my_number3");
+        output.setId("my_number3");
 	output.setAttribute("numberStyle", "percent");
-        root.addChild(output);
+        root.getChildren().add(output);
 
         NumberRenderer numberRenderer = new NumberRenderer();
 	Number number = null;
@@ -701,11 +706,11 @@ public class TestRenderers_2 extends JspFacesTestCase
     public void testOutputNumberRendererWithPattern(UIComponent root) throws IOException {
         System.out.println("Testing NumberRenderer With Pattern for UIOutput");
 	String formatPattern = "####.000";
-        UIOutput output = new UIOutput();
+        UIOutput output = new UIOutputBase();
         output.setValue(new Double(999));
-        output.setComponentId("my_number4");
+        output.setId("my_number4");
 	output.setAttribute("formatPattern", formatPattern);
-        root.addChild(output);
+        root.getChildren().add(output);
 
         NumberRenderer numberRenderer = new NumberRenderer();
 	Number number = null;
@@ -721,11 +726,11 @@ public class TestRenderers_2 extends JspFacesTestCase
 
     public void testOutputDateRenderer(UIComponent root) throws IOException {
         System.out.println("Testing Output_DateRenderer");
-        UIOutput output = new UIOutput();
-        output.setComponentId("my_output_date");
+        UIOutput output = new UIOutputBase();
+        output.setId("my_output_date");
 	output.setAttribute("dateStyle", "medium");
 	output.setValue(DATE_STR);
-        root.addChild(output);
+        root.getChildren().add(output);
 
         DateRenderer dateRenderer = new DateRenderer();
 	Date date = null;
@@ -748,11 +753,11 @@ public class TestRenderers_2 extends JspFacesTestCase
 
     public void testOutputTimeRenderer(UIComponent root) throws IOException {
         System.out.println("Testing Output_TimeRenderer");
-        UIOutput output = new UIOutput();
-        output.setComponentId("my_output_time");
+        UIOutput output = new UIOutputBase();
+        output.setId("my_output_time");
 	output.setAttribute("timeStyle", "medium");
 	output.setValue(TIME_STR);
-        root.addChild(output);
+        root.getChildren().add(output);
 
         TimeRenderer timeRenderer = new TimeRenderer();
 	Date date = null;
@@ -776,11 +781,11 @@ public class TestRenderers_2 extends JspFacesTestCase
     public void testOutputDateTimeRendererWithPattern(UIComponent root) throws IOException {
         System.out.println("Testing DateRenderer With Pattern");
 	String formatPattern = "EEE, MMM d, yyyy G 'at' hh:mm:ss a";
-        UIOutput output = new UIOutput();
+        UIOutput output = new UIOutputBase();
         output.setValue(DATE_STR_LONG);
-        output.setComponentId("my_output_date2");
+        output.setId("my_output_date2");
 	output.setAttribute("formatPattern", formatPattern);
-        root.addChild(output);
+        root.getChildren().add(output);
 
         DateTimeRenderer dateRenderer = new DateTimeRenderer();
 	Date date = null;
@@ -805,17 +810,16 @@ public class TestRenderers_2 extends JspFacesTestCase
         dateRenderer.encodeEnd(getFacesContext(), output);
         getFacesContext().getResponseWriter().writeText("\n");
         // decode() simply sets valid to true for UIOutput components. 
-        // So valid will never be false.
-	assertTrue(output.isValid());
+        // So valid will never be false.	
     }
     
     public void testInputNumberRendererWithCharacter(UIComponent root) 
             throws IOException {
         System.out.println("Testing NumberRenderer With Character input ");
-	UIInput input = new UIInput();
+	UIInput input = new UIInputBase();
         char testchar='9';
         input.setValue(new Character(testchar));
-        input.setComponentId("my_character");
+        input.setId("my_character");
 	
         NumberRenderer numberRenderer = new NumberRenderer();
 	String expectedStr = numberRenderer.getCurrentValue(getFacesContext(),input);

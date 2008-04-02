@@ -1,5 +1,5 @@
 /*
- * $Id: TestActionListenerImpl.java,v 1.9 2003/07/22 19:50:48 rkitain Exp $
+ * $Id: TestActionListenerImpl.java,v 1.10 2003/08/21 14:18:08 rlubke Exp $
  */
 
 /*
@@ -16,7 +16,6 @@ import com.sun.faces.ServletFacesTestCase;
 import com.sun.faces.config.ConfigListener;
 import com.sun.faces.config.ConfigNavigationCase;
 import com.sun.faces.context.FacesContextImpl;
-import com.sun.faces.tree.SimpleTreeImpl;
 
 import com.sun.faces.util.DebugUtil;
 
@@ -24,6 +23,9 @@ import java.util.List;
 
 import javax.faces.application.Action;
 import javax.faces.component.UICommand;
+import javax.faces.component.UIPage;
+import javax.faces.component.base.UICommandBase;
+import javax.faces.component.base.UIPageBase;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.FactoryFinder;
@@ -42,7 +44,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestActionListenerImpl.java,v 1.9 2003/07/22 19:50:48 rkitain Exp $
+ * @version $Id: TestActionListenerImpl.java,v 1.10 2003/08/21 14:18:08 rlubke Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -96,21 +98,23 @@ public class TestActionListenerImpl extends ServletFacesTestCase
 
         System.out.println("Testing With Action Literal Set...");
 
-        UICommand command = new UICommand();
+        UICommand command = new UICommandBase();
         command.setAction("loginRequired");
-        context.setTree(new SimpleTreeImpl(context, "/login.jsp"));
+        UIPage page = new UIPageBase();
+        page.setTreeId("/login.jsp");
+        context.setRoot(page);
 
         ActionListenerImpl actionListener = new ActionListenerImpl();
         ActionEvent actionEvent = new ActionEvent(command);
 
         actionListener.processAction(actionEvent);
 
-        String newTreeId = context.getTree().getTreeId();
+        String newTreeId = context.getRoot().getTreeId();
         assertTrue(newTreeId.equals("/must-login-first.jsp"));
 
         System.out.println("Testing With ActionRef Set...");
 
-        command = new UICommand();
+        command = new UICommandBase();
         command.setActionRef("userBean.login");
 
         UserBean user = new UserBean();
@@ -119,12 +123,14 @@ public class TestActionListenerImpl extends ServletFacesTestCase
         context.getExternalContext().getSessionMap().put("userBean", user);
         assertTrue(user == context.getExternalContext().getSessionMap().get("userBean"));
 
-        context.setTree(new SimpleTreeImpl(context, "/login.jsp"));
+        page = new UIPageBase();
+        page.setTreeId("/login.jsp");
+        context.setRoot(page);
 
         actionEvent = new ActionEvent(command);
         actionListener.processAction(actionEvent);
 
-        newTreeId = context.getTree().getTreeId();
+        newTreeId = context.getRoot().getTreeId();
         // expected outcome should be tree id corresponding to "page/outcome" search..
 
         assertTrue(newTreeId.equals("/home.jsp"));
@@ -134,13 +140,15 @@ public class TestActionListenerImpl extends ServletFacesTestCase
         boolean exceptionThrown = false;
 
         FacesContext context = FacesContext.getCurrentInstance();
-        context.setTree(new SimpleTreeImpl(context, "/login.jsp"));
+        UIPage page = new UIPageBase();
+        page.setTreeId("/login.jsp");
+        context.setRoot(page);
         UserBean user = new UserBean();
         context.getExternalContext().getApplicationMap().put("UserBean", user);
 
         assertTrue(user == context.getExternalContext().getApplicationMap().get("UserBean"));
 
-        UICommand command = new UICommand();
+        UICommand command = new UICommandBase();
         command.setActionRef("Foo");
         ActionEvent actionEvent = new ActionEvent(command);
 

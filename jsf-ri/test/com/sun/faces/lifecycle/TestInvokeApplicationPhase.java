@@ -1,5 +1,5 @@
 /*
- * $Id: TestInvokeApplicationPhase.java,v 1.14 2003/08/13 21:06:42 rkitain Exp $
+ * $Id: TestInvokeApplicationPhase.java,v 1.15 2003/08/21 14:18:16 rlubke Exp $
  */
 
 /*
@@ -21,12 +21,13 @@ import javax.faces.FactoryFinder;
 import javax.faces.context.FacesContext;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.component.UIInput;
-import javax.faces.tree.Tree;
+import javax.faces.component.UIPage;
+import javax.faces.component.base.UIInputBase;
+import javax.faces.component.base.UIPageBase;
 import javax.faces.event.FacesEvent;
 import com.sun.faces.ServletFacesTestCase;
 import com.sun.faces.lifecycle.LifecycleImpl;
 import com.sun.faces.lifecycle.Phase;
-import com.sun.faces.tree.SimpleTreeImpl;
 import com.sun.faces.RIConstants;
 import java.io.IOException;
 
@@ -38,7 +39,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestInvokeApplicationPhase.java,v 1.14 2003/08/13 21:06:42 rkitain Exp $
+ * @version $Id: TestInvokeApplicationPhase.java,v 1.15 2003/08/21 14:18:16 rlubke Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -92,12 +93,12 @@ public void testInvokeNormal()
 
 public void testInvokeNoOp()
 {
-    UIInput root = new UIInput();
+    UIInput root = new UIInputBase();
     Lifecycle life = new LifecycleImpl();
-    Tree tree = new SimpleTreeImpl(getFacesContext(),
-				root, "default.xul");
+    UIPage page = new UIPageBase();
+    page.setTreeId("default.xul");   
     Phase invokeApplicationPhase = new InvokeApplicationPhase(life);
-    getFacesContext().setTree(tree);
+    getFacesContext().setRoot(page);
 
     invokeApplicationPhase.execute(getFacesContext());
     assertTrue(!(getFacesContext().getRenderResponse()) &&

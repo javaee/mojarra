@@ -1,5 +1,5 @@
 /*
- * $Id: TestPropertyResolverImpl.java,v 1.3 2003/04/01 15:26:56 eburns Exp $
+ * $Id: TestPropertyResolverImpl.java,v 1.4 2003/08/21 14:18:13 rlubke Exp $
  */
 
 /*
@@ -21,8 +21,10 @@ import com.sun.faces.TestBean;
 import org.apache.cactus.WebRequest;
 
 import javax.faces.el.PropertyResolver;
-import javax.faces.component.UINamingContainer;
 import javax.faces.component.UIOutput;
+import javax.faces.component.NamingContainer;
+import javax.faces.component.base.UINamingContainerBase;
+import javax.faces.component.base.UIOutputBase;
 import javax.faces.context.ExternalContext;
 
 import java.util.ArrayList;
@@ -35,7 +37,7 @@ import java.util.List;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestPropertyResolverImpl.java,v 1.3 2003/04/01 15:26:56 eburns Exp $
+ * @version $Id: TestPropertyResolverImpl.java,v 1.4 2003/08/21 14:18:13 rlubke Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -355,13 +357,13 @@ public class TestPropertyResolverImpl extends ServletFacesTestCase
     // Positive getValue() tests on a UIComponent base object
     public void testStringGetUIComponent() throws Exception {
 
-	UINamingContainer root = new UINamingContainer() {
+	UINamingContainerBase root = new UINamingContainerBase() {
                 public String getComponentType() { return "root"; }
             };
-	root.setComponentId("root");
-	UIOutput out = new UIOutput();
-	out.setComponentId("out");
-	root.addChild(out);
+	root.setId("root");
+	UIOutput out = new UIOutputBase();
+	out.setId("out");
+	root.getChildren().add(out);
 	assertTrue(out == resolver.getValue(root, "out"));
 
     }
@@ -521,7 +523,7 @@ public class TestPropertyResolverImpl extends ServletFacesTestCase
 	assertTrue(resolver.isReadOnly(ec.getRequestCookieMap(), "hello"));
 	assertTrue(resolver.isReadOnly(ec.getInitParameterMap(), "hello"));
 
-	UINamingContainer root = new UINamingContainer() {
+	NamingContainer root = new UINamingContainerBase() {
                 public String getComponentType() { return "root"; }
             };
 	assertTrue(resolver.isReadOnly(root, "hello"));

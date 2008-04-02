@@ -4,7 +4,7 @@
  */
 
 /**
- * $Id: TestRenderers_3.java,v 1.16 2003/08/08 16:20:39 rkitain Exp $
+ * $Id: TestRenderers_3.java,v 1.17 2003/08/21 14:18:25 rlubke Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -17,15 +17,21 @@
 package com.sun.faces.renderkit.html_basic;
 import java.io.IOException;
 
-import javax.faces.component.SelectItem;
 import javax.faces.component.UICommand;
 import javax.faces.component.UIComponent;
-import javax.faces.component.UINamingContainer;
 import javax.faces.component.UISelectItems;
 import javax.faces.component.UISelectMany;
 import javax.faces.component.UISelectOne;
 import javax.faces.component.UIInput;
+import javax.faces.component.NamingContainer;
+import javax.faces.component.base.UICommandBase;
+import javax.faces.component.base.UISelectManyBase;
+import javax.faces.component.base.UISelectItemsBase;
+import javax.faces.component.base.UINamingContainerBase;
+import javax.faces.component.base.UISelectOneBase;
+import javax.faces.component.base.UIInputBase;
 import javax.faces.context.FacesContextFactory;
+import javax.faces.model.SelectItem;
 
 import java.text.DateFormat;
 import java.text.NumberFormat;
@@ -43,7 +49,7 @@ import com.sun.faces.tree.SimpleTreeImpl;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_3.java,v 1.16 2003/08/08 16:20:39 rkitain Exp $
+ * @version $Id: TestRenderers_3.java,v 1.17 2003/08/21 14:18:25 rlubke Exp $
  * 
  *
  */
@@ -99,7 +105,7 @@ public class TestRenderers_3 extends JspFacesTestCase {
         SimpleTreeImpl xmlTree =
             new SimpleTreeImpl(
                 getFacesContext(),
-                new UICommand(),
+                new UICommandBase(),
                 "treeId");
         getFacesContext().setTree(xmlTree);
         assertTrue(null != getFacesContext().getResponseWriter());
@@ -120,12 +126,12 @@ public class TestRenderers_3 extends JspFacesTestCase {
 
         try {
             // create a dummy root for the tree.
-            UINamingContainer root = new UINamingContainer() {
+            UINamingContainerBase root = new UINamingContainerBase() {
                 public String getComponentType() {
                     return "root";
                 }
             };
-            root.setComponentId("root");
+            root.setId("root");
 
             testSelectManyMenuRenderer(root);
             testSelectManyListboxRenderer(root);
@@ -144,10 +150,10 @@ public class TestRenderers_3 extends JspFacesTestCase {
     public void testSelectManyListboxRenderer(UIComponent root)
         throws IOException {
         System.out.println("Testing SelectManyListboxRenderer");
-        UISelectMany selectMany = new UISelectMany();
-        UISelectItems uiSelectItems = new UISelectItems();
+        UISelectMany selectMany = new UISelectManyBase();
+        UISelectItems uiSelectItems = new UISelectItemsBase();
         selectMany.setValue(null);
-        selectMany.setComponentId("my_listbox");
+        selectMany.setId("my_listbox");
         SelectItem item1 = new SelectItem("Red", "Red", null);
         SelectItem item2 = new SelectItem("Blue", "Blue", null);
         SelectItem item3 = new SelectItem("Green", "Green", null);
@@ -155,9 +161,9 @@ public class TestRenderers_3 extends JspFacesTestCase {
         SelectItem[] selectItems = { item1, item2, item3, item4 };
 	Object selectedValues[] = null;
         uiSelectItems.setValue(selectItems);
-        uiSelectItems.setComponentId("manyitems");
-        selectMany.addChild(uiSelectItems);
-        root.addChild(selectMany);
+        uiSelectItems.setId("manyitems");
+        selectMany.getChildren().add(uiSelectItems);
+        root.getChildren().add(selectMany);
 
         ListboxRenderer selectManyListboxRenderer =
             new ListboxRenderer();
@@ -182,10 +188,10 @@ public class TestRenderers_3 extends JspFacesTestCase {
     public void testSelectManyCheckboxListRenderer(UIComponent root)
         throws IOException {
         System.out.println("Testing SelectManyCheckboxListRenderer");
-        UISelectMany selectMany = new UISelectMany();
-        UISelectItems uiSelectItems = new UISelectItems();
+        UISelectMany selectMany = new UISelectManyBase();
+        UISelectItems uiSelectItems = new UISelectItemsBase();
         selectMany.setValue(null);
-        selectMany.setComponentId("my_checkboxlist");
+        selectMany.setId("my_checkboxlist");
         SelectItem item1 = new SelectItem("Red", "Red", null);
         SelectItem item2 = new SelectItem("Blue", "Blue", null);
         SelectItem item3 = new SelectItem("Green", "Green", null);
@@ -193,9 +199,9 @@ public class TestRenderers_3 extends JspFacesTestCase {
         SelectItem[] selectItems = { item1, item2, item3, item4 };
 	Object selectedValues[] = null;
         uiSelectItems.setValue(selectItems);
-        uiSelectItems.setComponentId("manyitems");
-        selectMany.addChild(uiSelectItems);
-        root.addChild(selectMany);
+        uiSelectItems.setId("manyitems");
+        selectMany.getChildren().add(uiSelectItems);
+        root.getChildren().add(selectMany);
 
         SelectManyCheckboxListRenderer selectManyCheckboxListRenderer =
             new SelectManyCheckboxListRenderer();
@@ -224,10 +230,10 @@ public class TestRenderers_3 extends JspFacesTestCase {
     public void testSelectManyMenuRenderer(UIComponent root)
         throws IOException {
         System.out.println("Testing SelectManyMenuRenderer");
-        UISelectMany selectMany = new UISelectMany();
-        UISelectItems uiSelectItems = new UISelectItems();
+        UISelectMany selectMany = new UISelectManyBase();
+        UISelectItems uiSelectItems = new UISelectItemsBase();
         selectMany.setValue(null);
-        selectMany.setComponentId("my_menu");
+        selectMany.setId("my_menu");
         SelectItem item1 = new SelectItem("Red", "Red", null);
         SelectItem item2 = new SelectItem("Blue", "Blue", null);
         SelectItem item3 = new SelectItem("Green", "Green", null);
@@ -235,9 +241,9 @@ public class TestRenderers_3 extends JspFacesTestCase {
         SelectItem[] selectItems = { item1, item2, item3, item4 };
 	Object selectedValues[] = null;
         uiSelectItems.setValue(selectItems);
-        uiSelectItems.setComponentId("manyitems");
-        selectMany.addChild(uiSelectItems);
-        root.addChild(selectMany);
+        uiSelectItems.setId("manyitems");
+        selectMany.getChildren().add(uiSelectItems);
+        root.getChildren().add(selectMany);
 
         MenuRenderer selectManyMenuRenderer =
             new MenuRenderer();
@@ -261,10 +267,10 @@ public class TestRenderers_3 extends JspFacesTestCase {
     public void testSelectOneMenuRenderer(UIComponent root)
         throws IOException {
         System.out.println("Testing SelectOneMenuRenderer");
-        UISelectOne selectOne = new UISelectOne();
-        UISelectItems uiSelectItems = new UISelectItems();
+        UISelectOne selectOne = new UISelectOneBase();
+        UISelectItems uiSelectItems = new UISelectItemsBase();
         selectOne.setValue(null);
-        selectOne.setComponentId("my_onemenu");
+        selectOne.setId("my_onemenu");
         SelectItem item1 = new SelectItem("Red", "Red", null);
         SelectItem item2 = new SelectItem("Blue", "Blue", null);
         SelectItem item3 = new SelectItem("Green", "Green", null);
@@ -272,9 +278,9 @@ public class TestRenderers_3 extends JspFacesTestCase {
         SelectItem[] selectItems = { item1, item2, item3, item4 };
         String selectedValue = null;
         uiSelectItems.setValue(selectItems);
-        uiSelectItems.setComponentId("manyitems");
-        selectOne.addChild(uiSelectItems);
-        root.addChild(selectOne);
+        uiSelectItems.setId("manyitems");
+        selectOne.getChildren().add(uiSelectItems);
+        root.getChildren().add(selectOne);
 
         MenuRenderer selectOneMenuRenderer =
             new MenuRenderer();
@@ -296,12 +302,12 @@ public class TestRenderers_3 extends JspFacesTestCase {
     
     public void testHiddenRenderer(UIComponent root) throws IOException {
         System.out.println("Testing Input_DateRenderer");
-        UIInput input1 = new UIInput();
+        UIInput input1 = new UIInputBase();
         input1.setValue(null);
-        input1.setComponentId("my_input_date_hidden");
+        input1.setId("my_input_date_hidden");
         input1.setConverter("Date");
 	input1.setAttribute("dateStyle", "medium");
-        root.addChild(input1);
+        root.getChildren().add(input1);
         HiddenRenderer hiddenRenderer = new HiddenRenderer();
         
         DateFormat dateformatter = 
@@ -323,12 +329,12 @@ public class TestRenderers_3 extends JspFacesTestCase {
         getFacesContext().getResponseWriter().flush();
         
         // test hidden renderer with converter set to number
-        UIInput input2 = new UIInput();
+        UIInput input2 = new UIInputBase();
         input2.setValue(null);
-        input2.setComponentId("my_number_hidden");
+        input2.setId("my_number_hidden");
         input2.setConverter("Number");
 	input2.setAttribute("numberStyle", "percent");
-        root.addChild(input2);
+        root.getChildren().add(input2);
 
 	NumberFormat numberformatter = 
 	    NumberFormat.getPercentInstance(getFacesContext().getLocale());

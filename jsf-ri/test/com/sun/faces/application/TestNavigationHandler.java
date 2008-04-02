@@ -1,5 +1,5 @@
 /*
- * $Id: TestNavigationHandler.java,v 1.5 2003/07/22 19:50:49 rkitain Exp $
+ * $Id: TestNavigationHandler.java,v 1.6 2003/08/21 14:18:08 rlubke Exp $
  */
 
 /*
@@ -14,7 +14,6 @@ package com.sun.faces.application;
 import com.sun.faces.RIConstants;
 import com.sun.faces.config.ConfigListener;
 import com.sun.faces.config.ConfigNavigationCase;
-import com.sun.faces.tree.SimpleTreeImpl;
 
 import com.sun.faces.util.DebugUtil;
 
@@ -29,6 +28,8 @@ import javax.faces.application.ApplicationFactory;
 import javax.faces.application.NavigationHandler;
 import javax.faces.context.FacesContext;
 import javax.faces.FactoryFinder;
+import javax.faces.component.UIPage;
+import javax.faces.component.base.UIPageBase;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContext;
@@ -54,7 +55,7 @@ import com.sun.faces.ServletFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestNavigationHandler.java,v 1.5 2003/07/22 19:50:49 rkitain Exp $
+ * @version $Id: TestNavigationHandler.java,v 1.6 2003/08/21 14:18:08 rlubke Exp $
  * 
  */
 
@@ -160,15 +161,18 @@ public class TestNavigationHandler extends ServletFacesTestCase
         FacesContext context = getFacesContext();
 
         String newTreeId = null;
+        UIPage page = null;
         for (int i=0; i<testResultList.size(); i++) {
             TestResult testResult = (TestResult)testResultList.get(i);
             System.out.println("Testing from-tree-id="+testResult.fromTreeId+
                 " from-action-ref="+testResult.fromActionRef+
                 " from-outcome="+testResult.fromOutcome);
-            context.setTree(new SimpleTreeImpl(context, testResult.fromTreeId));
+            page = new UIPageBase();
+            page.setTreeId(testResult.fromTreeId);
+            context.setRoot(page);
             navHandler.handleNavigation(
 	        context, testResult.fromActionRef, testResult.fromOutcome);
-            newTreeId = context.getTree().getTreeId();
+            newTreeId = context.getRoot().getTreeId();
             System.out.println("assertTrue("+newTreeId+".equals("+testResult.toTreeId+"))");
             assertTrue(newTreeId.equals(testResult.toTreeId));
         }

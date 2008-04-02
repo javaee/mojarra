@@ -1,5 +1,5 @@
 /*
- * $Id: TestValidatorTags.java,v 1.12 2003/08/15 19:15:43 rlubke Exp $
+ * $Id: TestValidatorTags.java,v 1.13 2003/08/21 14:18:28 rlubke Exp $
  */
 
 /*
@@ -16,9 +16,12 @@ import org.apache.cactus.WebRequest;
 import org.mozilla.util.Assert;
 
 import javax.faces.FactoryFinder;
+import javax.faces.application.Application;
 import javax.faces.context.FacesContext;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.component.UIComponent;
+import javax.faces.component.UIPage;
+import javax.faces.component.base.UIPageBase;
 
 import com.sun.faces.JspFacesTestCase;
 import com.sun.faces.RIConstants;
@@ -29,9 +32,6 @@ import com.sun.faces.lifecycle.ProcessValidationsPhase;
 import com.sun.faces.lifecycle.RenderResponsePhase;
 
 
-import javax.faces.tree.Tree;
-import javax.faces.tree.TreeFactory;
-
 import java.util.Iterator;
 
 /**
@@ -40,7 +40,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestValidatorTags.java,v 1.12 2003/08/15 19:15:43 rlubke Exp $
+ * @version $Id: TestValidatorTags.java,v 1.13 2003/08/21 14:18:28 rlubke Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -142,19 +142,15 @@ public void testValidators()
 //    assertTrue(OUTOFBOUNDS1_VALUE.equals(getFacesContext().getServletRequest().getParameter(OUTOFBOUNDS1_ID)));
 
     boolean result = false;
-    String value = null;
-    LifecycleImpl lifecycle = new LifecycleImpl();
+    String value = null;    
     Phase 
-	renderResponse = new RenderResponsePhase(lifecycle),
+	renderResponse = new RenderResponsePhase(Application.getCurrentInstance()),
 	processValidations = new ProcessValidationsPhase(),
 	applyRequestValues = new ApplyRequestValuesPhase();
-
-    TreeFactory treeFactory = (TreeFactory)
-         FactoryFinder.getFactory(FactoryFinder.TREE_FACTORY);
-    Assert.assert_it(treeFactory != null);
-    Tree requestTree = treeFactory.getTree(getFacesContext(),
-            TEST_URI );
-    getFacesContext().setTree(requestTree);
+   
+    UIPage page = new UIPageBase();
+    page.setTreeId(TEST_URI);
+    getFacesContext().setRoot(page);
 
     // This builds the tree, and usefaces saves it in the session
     renderResponse.execute(getFacesContext());
@@ -181,61 +177,61 @@ public void testValidators()
     // check the messages for each component in the page
     assertTrue(null != 
 	       (comp = 
-		requestTree.getRoot().findComponent(OUTOFBOUNDS1_ID)));
+		getFacesContext().getRoot().findComponent(OUTOFBOUNDS1_ID)));
     assertTrue(null != (messages = getFacesContext().getMessages(comp)));
     assertTrue(messages.hasNext());
 
     assertTrue(null != 
 	       (comp = 
-		requestTree.getRoot().findComponent(INBOUNDS1_ID)));
+		getFacesContext().getRoot().findComponent(INBOUNDS1_ID)));
     assertTrue(null != (messages = getFacesContext().getMessages(comp)));
     assertTrue(!messages.hasNext());
 
     assertTrue(null != 
 	       (comp = 
-		requestTree.getRoot().findComponent(OUTOFBOUNDS2_ID)));
+		getFacesContext().getRoot().findComponent(OUTOFBOUNDS2_ID)));
     assertTrue(null != (messages = getFacesContext().getMessages(comp)));
     assertTrue(messages.hasNext());
 
     assertTrue(null != 
 	       (comp = 
-		requestTree.getRoot().findComponent(INBOUNDS2_ID)));
+		getFacesContext().getRoot().findComponent(INBOUNDS2_ID)));
     assertTrue(null != (messages = getFacesContext().getMessages(comp)));
     assertTrue(!messages.hasNext());
 
     assertTrue(null != 
 	       (comp = 
-		requestTree.getRoot().findComponent(OUTOFBOUNDS3_ID)));
+		getFacesContext().getRoot().findComponent(OUTOFBOUNDS3_ID)));
     assertTrue(null != (messages = getFacesContext().getMessages(comp)));
     assertTrue(messages.hasNext());
 
     assertTrue(null != 
 	       (comp = 
-		requestTree.getRoot().findComponent(INBOUNDS3_ID)));
+		getFacesContext().getRoot().findComponent(INBOUNDS3_ID)));
     assertTrue(null != (messages = getFacesContext().getMessages(comp)));
     assertTrue(!messages.hasNext());
 
     assertTrue(null != 
 	       (comp = 
-		requestTree.getRoot().findComponent(REQUIRED1_ID)));
+		getFacesContext().getRoot().findComponent(REQUIRED1_ID)));
     assertTrue(null != (messages = getFacesContext().getMessages(comp)));
     assertTrue(messages.hasNext());
 
     assertTrue(null != 
 	       (comp = 
-		requestTree.getRoot().findComponent(OUTOFBOUNDS4_ID)));
+		getFacesContext().getRoot().findComponent(OUTOFBOUNDS4_ID)));
     assertTrue(null != (messages = getFacesContext().getMessages(comp)));
     assertTrue(messages.hasNext());
 
     assertTrue(null != 
 	       (comp = 
-		requestTree.getRoot().findComponent(INBOUNDS4_ID)));
+		getFacesContext().getRoot().findComponent(INBOUNDS4_ID)));
     assertTrue(null != (messages = getFacesContext().getMessages(comp)));
     assertTrue(!messages.hasNext());
 
     assertTrue(null != 
 	       (comp = 
-		requestTree.getRoot().findComponent(REQUIRED2_ID)));
+		getFacesContext().getRoot().findComponent(REQUIRED2_ID)));
     assertTrue(null != (messages = getFacesContext().getMessages(comp)));
     assertTrue(messages.hasNext());
 

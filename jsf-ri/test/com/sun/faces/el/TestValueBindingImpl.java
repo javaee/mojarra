@@ -1,5 +1,5 @@
 /*
- * $Id: TestValueBindingImpl.java,v 1.12 2003/08/13 18:21:47 rlubke Exp $
+ * $Id: TestValueBindingImpl.java,v 1.13 2003/08/21 14:18:13 rlubke Exp $
  */
 
 /*
@@ -27,8 +27,10 @@ import javax.servlet.http.Cookie;
 
 import javax.faces.el.PropertyNotFoundException;
 import javax.faces.el.ReferenceSyntaxException;
-import javax.faces.component.UINamingContainer;
 import javax.faces.context.ExternalContext;
+import javax.faces.component.base.UINamingContainerBase;
+import javax.faces.component.base.UIPageBase;
+import javax.faces.component.UIPage;
 import javax.servlet.http.HttpServletRequest;
 
 import java.util.Enumeration;
@@ -41,7 +43,7 @@ import java.util.HashMap;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestValueBindingImpl.java,v 1.12 2003/08/13 18:21:47 rlubke Exp $
+ * @version $Id: TestValueBindingImpl.java,v 1.13 2003/08/21 14:18:13 rlubke Exp $
  */
 
 public class TestValueBindingImpl extends ServletFacesTestCase
@@ -442,12 +444,12 @@ public class TestValueBindingImpl extends ServletFacesTestCase
 	assertTrue(valueBinding.isReadOnly(getFacesContext()));
 
 	// tree
-	// create a dummy root for the tree.
-	UINamingContainer root = new UINamingContainer() {
-                public String getComponentType() { return "root"; }
-            };
-	root.setComponentId("root");
-	getFacesContext().setTree(new com.sun.faces.tree.SimpleTreeImpl(getFacesContext(), root, "newTree"));
+	// create a dummy root for the tree.	
+    UIPage page = new UIPageBase();
+    page.setId("root");
+    page.setTreeId("newTree");
+	getFacesContext().setRoot(page);
+    // PENDING (rlubke) is the TREE implicit variable still valid?
 	valueBinding.setRef("tree.root");
 	assertTrue(valueBinding.isReadOnly(getFacesContext()));
 	
@@ -538,11 +540,10 @@ public class TestValueBindingImpl extends ServletFacesTestCase
 
 	// tree
 	// create a dummy root for the tree.
-	UINamingContainer root = new UINamingContainer() {
-                public String getComponentType() { return "root"; }
-            };
-	root.setComponentId("root");
-	getFacesContext().setTree(new com.sun.faces.tree.SimpleTreeImpl(getFacesContext(), root, "newTree"));
+	UIPage page = new UIPageBase();
+    page.setId("root");
+    page.setTreeId("newTree");
+	getFacesContext().setRoot(page);
 	valueBinding.setRef("tree.root");
 	assertTrue(valueBinding.getType(getFacesContext()).getName().equals("javax.faces.component.UIComponent"));
 	

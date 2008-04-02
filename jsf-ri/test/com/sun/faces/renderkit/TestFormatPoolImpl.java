@@ -1,5 +1,5 @@
 /*
- * $Id: TestFormatPoolImpl.java,v 1.9 2003/04/01 19:25:43 jvisvanathan Exp $
+ * $Id: TestFormatPoolImpl.java,v 1.10 2003/08/21 14:18:21 rlubke Exp $
  */
 
 /*
@@ -27,6 +27,7 @@ import java.text.ParseException;
 import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
+import javax.faces.component.base.UIInputBase;
 
 import javax.servlet.jsp.jstl.fmt.LocalizationContext;
 
@@ -39,7 +40,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestFormatPoolImpl.java,v 1.9 2003/04/01 19:25:43 jvisvanathan Exp $
+ * @version $Id: TestFormatPoolImpl.java,v 1.10 2003/08/21 14:18:21 rlubke Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -83,8 +84,8 @@ public class TestFormatPoolImpl extends ServletFacesTestCase
 
 	String result = null;
 	FormatPool formatPool = new FormatPoolImpl();
-	UIInput input = new UIInput();
-	input.setComponentId("input");
+	UIInput input = new UIInputBase();
+	input.setId("input");
 	Date date = null;
 	
 	// dateStyle == short, timezone == null, get Locale from FacesContext
@@ -164,8 +165,8 @@ public class TestFormatPoolImpl extends ServletFacesTestCase
 
 	Date expectedResult = null, result = null;
 	FormatPool formatPool = new FormatPoolImpl();
-	UIInput input = new UIInput();
-	input.setComponentId("input");
+	UIInput input = new UIInputBase();
+	input.setId("input");
 	String date = null;
 	
 	// dateStyle == short, timezone == null, get Locale from FacesContext
@@ -236,8 +237,8 @@ public class TestFormatPoolImpl extends ServletFacesTestCase
 
 	String result = null;
 	FormatPool formatPool = new FormatPoolImpl();
-	UIInput input = new UIInput();
-	input.setComponentId("input");
+	UIInput input = new UIInputBase();
+	input.setId("input");
 	Date date = null;
 	SimpleDateFormat simpleDateFormat = new SimpleDateFormat(formatPattern,
 								 Locale.US);
@@ -263,8 +264,8 @@ public class TestFormatPoolImpl extends ServletFacesTestCase
 
 	Date expectedResult = null, result = null;
 	FormatPool formatPool = new FormatPoolImpl();
-	UIInput input = new UIInput();
-	input.setComponentId("input");
+	UIInput input = new UIInputBase();
+	input.setId("input");
 	SimpleDateFormat simpleDateFormat = new SimpleDateFormat(formatPattern,
 								 Locale.US);
 	
@@ -297,10 +298,10 @@ public class TestFormatPoolImpl extends ServletFacesTestCase
 	FormatPoolImpl formatPool = new FormatPoolImpl();
 
 
-	input1 = new UIInput();
-	input1.setComponentId("input1");
-	input2 = new UIInput();
-	input2.setComponentId("input2");
+	input1 = new UIInputBase();
+	input1.setId("input1");
+	input2 = new UIInputBase();
+	input2.setId("input2");
 
 	// dateStyle == short, timezone == null, get Locale from FacesContext
 	getFacesContext().setLocale(Locale.US);
@@ -350,8 +351,8 @@ public class TestFormatPoolImpl extends ServletFacesTestCase
 
 	String result = null;
 	FormatPool formatPool = new FormatPoolImpl();
-	UIInput input = new UIInput();
-	input.setComponentId("input");
+	UIInput input = new UIInputBase();
+	input.setId("input");
 	Number testNum = new Double(1239989.60);
         Number resultNum = null;
 	String formatStr = null;
@@ -425,10 +426,10 @@ public class TestFormatPoolImpl extends ServletFacesTestCase
 	FormatPoolImpl formatPool = new FormatPoolImpl();
 
 
-	input1 = new UIInput();
-	input1.setComponentId("input1");
-	input2 = new UIInput();
-	input2.setComponentId("input2");
+	input1 = new UIInputBase();
+	input1.setId("input1");
+	input2 = new UIInputBase();
+	input2.setId("input2");
 
 	// style == percent, get Locale from FacesContext
 	getFacesContext().setLocale(Locale.US);

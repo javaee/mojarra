@@ -1,5 +1,5 @@
 /*
- * $Id: TestRendererConversions.java,v 1.3 2003/04/01 19:25:44 jvisvanathan Exp $
+ * $Id: TestRendererConversions.java,v 1.4 2003/08/21 14:18:23 rlubke Exp $
  */
 
 /*
@@ -20,13 +20,15 @@ import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
-import javax.faces.component.UINamingContainer;
 import javax.faces.component.UIInput;
+import javax.faces.component.UIPage;
+import javax.faces.component.base.UIInputBase;
+import javax.faces.component.base.UINamingContainerBase;
+import javax.faces.component.base.UIPageBase;
 
 import com.sun.faces.RIConstants;
 import com.sun.faces.ServletFacesTestCase;
 
-import com.sun.faces.tree.SimpleTreeImpl;
 
 /**
  *
@@ -34,7 +36,7 @@ import com.sun.faces.tree.SimpleTreeImpl;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRendererConversions.java,v 1.3 2003/04/01 19:25:44 jvisvanathan Exp $
+ * @version $Id: TestRendererConversions.java,v 1.4 2003/08/21 14:18:23 rlubke Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -92,13 +94,9 @@ public void beginEmptyStrings(WebRequest theRequest)
 
 public void setUp() {
     super.setUp();
-
-    SimpleTreeImpl xmlTree =
-        new SimpleTreeImpl(
-            getFacesContext(),
-            new UIInput(),
-            "treeId");
-    getFacesContext().setTree(xmlTree);
+    UIPage page = new UIPageBase();
+    page.setTreeId("treeId");    
+    getFacesContext().setRoot(page);
  }
     /**
 
@@ -108,21 +106,21 @@ public void setUp() {
 
 public void testEmptyStrings()
 {
-    UIComponent root = new UINamingContainer() {
+    UIComponent root = new UINamingContainerBase() {
 	    public String getComponentType() { return "root"; }
         };
     UIInput 
-	number = new UIInput(),
-	date = new UIInput(),
-	text = new UIInput(),
-	hidden = new UIInput(),
-	secret = new UIInput();
+	number = new UIInputBase(),
+	date = new UIInputBase(),
+	text = new UIInputBase(),
+	hidden = new UIInputBase(),
+	secret = new UIInputBase();
     
-    number.setComponentId("number");
-    date.setComponentId("date");
-    text.setComponentId("text");
-    hidden.setComponentId("hidden");
-    secret.setComponentId("secret");
+    number.setId("number");
+    date.setId("date");
+    text.setId("text");
+    hidden.setId("hidden");
+    secret.setId("secret");
     
     number.setRendererType("Number");
     date.setRendererType("Date");
@@ -130,11 +128,11 @@ public void testEmptyStrings()
     hidden.setRendererType("Hidden");
     secret.setRendererType("Secret"); 
     
-    root.addChild(number);
-    root.addChild(date);
-    root.addChild(text);
-    root.addChild(hidden);
-    root.addChild(secret);
+    root.getChildren().add(number);
+    root.getChildren().add(date);
+    root.getChildren().add(text);
+    root.getChildren().add(hidden);
+    root.getChildren().add(secret);
     NumberRenderer numberRenderer = new NumberRenderer();
     DateRenderer dateRenderer = new DateRenderer();
     TextRenderer textRenderer = new TextRenderer();
@@ -184,19 +182,19 @@ public void beginBadConversion(WebRequest theRequest)
 
 public void testBadConversion()
 {
-    UIComponent root = new UINamingContainer() {
+    UIComponent root = new UINamingContainerBase() {
 	    public String getComponentType() { return "root"; }
         };
     UIInput 
-	number = new UIInput(),
-	date = new UIInput();
-    root.addChild(number);
-    root.addChild(date);
+	number = new UIInputBase(),
+	date = new UIInputBase();
+    root.getChildren().add(number);
+    root.getChildren().add(date);
     NumberRenderer numberRenderer = new NumberRenderer();
     DateRenderer dateRenderer = new DateRenderer();
 
-    number.setComponentId("number");
-    date.setComponentId("date");
+    number.setId("number");
+    date.setId("date");
     try {
 	numberRenderer.decode(getFacesContext(), number);
 	dateRenderer.decode(getFacesContext(), date);

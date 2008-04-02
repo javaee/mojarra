@@ -1,5 +1,5 @@
 /*
- * $Id: TestProcessValidationsPhase.java,v 1.18 2003/08/13 21:06:42 rkitain Exp $
+ * $Id: TestProcessValidationsPhase.java,v 1.19 2003/08/21 14:18:16 rlubke Exp $
  */
 
 /*
@@ -23,6 +23,8 @@ import javax.faces.lifecycle.Lifecycle;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIForm;
 import javax.faces.component.UIInput;
+import javax.faces.component.base.UIFormBase;
+import javax.faces.component.base.UIInputBase;
 import javax.faces.validator.Validator;
 
 import com.sun.faces.ServletFacesTestCase;
@@ -37,7 +39,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestProcessValidationsPhase.java,v 1.18 2003/08/13 21:06:42 rkitain Exp $
+ * @version $Id: TestProcessValidationsPhase.java,v 1.19 2003/08/21 14:18:16 rlubke Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -99,7 +101,7 @@ public void testCallback()
     userName = null;
     String value = null;
     Phase 
-        reconstituteTree = new ReconstituteComponentTreePhase(),
+        reconstituteTree = new RestoreComponentTreePhase(),
 	applyValues = new ApplyRequestValuesPhase(), 
 	processValidations = new ProcessValidationsPhase();
 
@@ -112,15 +114,15 @@ public void testCallback()
     }
     assertTrue(!(getFacesContext().getRenderResponse()) &&
         !(getFacesContext().getResponseComplete()));
-    assertTrue(null != getFacesContext().getTree());
+    assertTrue(null != getFacesContext().getRoot());
 
-    root = getFacesContext().getTree().getRoot();
-    UIForm basicForm = new UIForm();
-    basicForm.setComponentId("basicForm");
-    UIInput userName1 = new UIInput();
-    userName1.setComponentId("userName");
-    root.addChild(basicForm);
-    basicForm.addChild(userName1);
+    root = getFacesContext().getRoot();
+    UIForm basicForm = new UIFormBase();
+    basicForm.setId("basicForm");
+    UIInput userName1 = new UIInputBase();
+    userName1.setId("userName");
+    root.getChildren().add(basicForm);
+    basicForm.getChildren().add(userName1);
 
     // clear the property
     System.setProperty(DID_VALIDATE, EMPTY);

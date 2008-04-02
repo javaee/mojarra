@@ -1,5 +1,5 @@
 /*
- * $Id: TestFacesContextImpl.java,v 1.29 2003/08/13 21:15:10 rkitain Exp $
+ * $Id: TestFacesContextImpl.java,v 1.30 2003/08/21 14:18:11 rlubke Exp $
  */
 
 /*
@@ -24,18 +24,24 @@ import javax.servlet.ServletResponse;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletContext;
 import com.sun.faces.context.FacesContextImpl;
-import com.sun.faces.tree.SimpleTreeImpl;
 
 import javax.faces.component.UICommand;
 import javax.faces.component.UIForm;
 import javax.faces.component.UIInput;
+import javax.faces.component.UIPage;
+import javax.faces.component.UIComponent;
+import javax.faces.component.base.UIFormBase;
+import javax.faces.component.base.UIInputBase;
+import javax.faces.component.base.UICommandBase;
+import javax.faces.component.base.UIPageBase;
 
 import javax.faces.event.FacesEvent;
-import javax.faces.tree.Tree;
+import javax.faces.event.FacesListener;
 import javax.faces.FacesException;
 import javax.faces.context.ResponseWriter;
 import java.io.PrintWriter;
 import java.io.Writer;
+import java.io.IOException;
 import javax.faces.context.ResponseStream;
 import com.sun.faces.RIConstants;
 import javax.faces.render.RenderKit;
@@ -51,7 +57,7 @@ import com.sun.faces.ServletFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestFacesContextImpl.java,v 1.29 2003/08/13 21:15:10 rkitain Exp $
+ * @version $Id: TestFacesContextImpl.java,v 1.30 2003/08/21 14:18:11 rlubke Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -108,11 +114,11 @@ public void testAccessors()
     result = null != locale;
     System.out.println("Testing getLocale: " + result);
     assertTrue(result);
-
-    getFacesContext().setTree( new SimpleTreeImpl(getFacesContext(),
-                new UIForm(),"treeId"));
-    Tree tree = getFacesContext().getTree();
-    result = null != tree;
+    UIPage page = new UIPageBase();
+    page.setTreeId("treeId");
+    getFacesContext().setRoot(page);
+    UIPage root = getFacesContext().getRoot();
+    result = null != root;
     System.out.println("Testing getTree: " + result);
     assertTrue(result);
 
@@ -142,8 +148,12 @@ public void testAccessors()
             public void startElement(String name) {}
             public void endDocument() {}
             public void startDocument() {}
-            public String getCharacterEncoding() {return null;}
-          
+            public String getCharacterEncoding() {return null;}       
+            public String getContentType() { return null; }
+            public void startElement(String name, UIComponent componentForElement) throws IOException {}
+            public void writeAttribute(String name, Object value, String componentPropertyName) throws IOException {}
+            public void writeURIAttribute(String name, Object value, String componentPropertyName) throws IOException {}
+            public void writeText(Object text, String componentPropertyName) throws IOException {}
 	};
 /*    ResponseWriter responseWriter = null;
     try {
@@ -188,11 +198,25 @@ public void testFacesEvents()
 {
     int count = 0;
     Iterator iter = null;
-    UIInput source1 = new UIInput();
-    UICommand source2 = new UICommand();
-    FacesEvent 
-	event1 = new FacesEvent(source1),
-	event2 = new FacesEvent(source2);
+    UIInput source1 = new UIInputBase();
+    UICommand source2 = new UICommandBase();
+    FacesEvent event1 = new FacesEvent(source1) {        
+        public boolean isAppropriateListener(FacesListener listener) {
+            return false;  
+        }
+       
+        public void processListener(FacesListener listener) {            
+        }
+    };
+    
+	FacesEvent event2 = new FacesEvent(source2) {
+        public boolean isAppropriateListener(FacesListener listener) {
+            return false;
+        }
+
+        public void processListener(FacesListener listener) {
+        }
+    };
 
     System.out.println("Testing addFacesEvent(event1)");
     getFacesContext().addFacesEvent(event1);
@@ -268,7 +292,7 @@ public void testMessageMethods() {
     Message msg2 = new MessageImpl (3, "summary2", "detail2");
     fc.addMessage(null, msg2);
     
-    UICommand command = new UICommand();
+    UICommand command = new UICommandBase();
     Message msg3 = new MessageImpl (4, "summary3", "detail3");
     fc.addMessage(command, msg3);
     
@@ -312,7 +336,7 @@ public void testRelease() {
     System.out.println("Testing release method");
     getFacesContext().release();
     assertTrue(getFacesContext().getLocale() == null);
-    assertTrue(getFacesContext().getTree() == null);
+    assertTrue(getFacesContext().getRoot() == null);
     assertTrue(getFacesContext().getResponseStream() == null);
     assertTrue(getFacesContext().getResponseWriter() == null);
     assertTrue(((FacesContextImpl)getFacesContext()).getViewHandler() == null);

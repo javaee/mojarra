@@ -1,5 +1,5 @@
 /* 
- * $Id: TestViewHandlerImpl.java,v 1.18 2003/08/13 21:06:43 rkitain Exp $ 
+ * $Id: TestViewHandlerImpl.java,v 1.19 2003/08/21 14:18:17 rlubke Exp $ 
  */ 
 
 
@@ -28,7 +28,8 @@ import javax.faces.FactoryFinder;
 import javax.faces.context.FacesContext; 
 import javax.faces.context.FacesContextFactory; 
 import javax.faces.lifecycle.Lifecycle; 
-import javax.faces.component.UIComponentBase; 
+import javax.faces.component.UIComponentBase;
+import javax.faces.component.base.UIComponentBase;
 import javax.faces.validator.Validator; 
 import javax.servlet.ServletException;
 
@@ -41,7 +42,8 @@ import com.sun.faces.CompareFiles;
 import com.sun.faces.tree.SimpleTreeImpl; 
 
 
-import com.sun.faces.TestBean; 
+import com.sun.faces.TestBean;
+import com.sun.faces.application.ViewHandlerImpl;
 
 
 import java.io.IOException; 
@@ -60,7 +62,7 @@ import javax.servlet.jsp.PageContext;
  * 
  * <B>Lifetime And Scope</B> <P> 
  * 
- * @version $Id: TestViewHandlerImpl.java,v 1.18 2003/08/13 21:06:43 rkitain Exp $ 
+ * @version $Id: TestViewHandlerImpl.java,v 1.19 2003/08/21 14:18:17 rlubke Exp $ 
  * 
  * @see Blah 
  * @see Bloo 

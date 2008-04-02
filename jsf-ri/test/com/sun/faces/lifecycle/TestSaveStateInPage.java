@@ -1,5 +1,5 @@
 /*
- * $Id: TestSaveStateInPage.java,v 1.12 2003/08/15 19:15:41 rlubke Exp $
+ * $Id: TestSaveStateInPage.java,v 1.13 2003/08/21 14:18:17 rlubke Exp $
  */
 
 /*
@@ -15,15 +15,16 @@ import org.apache.cactus.WebRequest;
 
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
+import javax.faces.application.Application;
 import javax.faces.context.FacesContext;
 import javax.faces.lifecycle.Lifecycle;
-import javax.faces.component.UIComponentBase;
+import javax.faces.component.base.UIComponentBase;
+import javax.faces.component.base.UIPageBase;
+import javax.faces.component.UIPage;
 
 import com.sun.faces.lifecycle.Phase;
 import com.sun.faces.JspFacesTestCase;
 import com.sun.faces.RIConstants;
-import javax.faces.tree.Tree;
-import javax.faces.tree.TreeFactory;
 
 
 /**
@@ -32,7 +33,7 @@ import javax.faces.tree.TreeFactory;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestSaveStateInPage.java,v 1.12 2003/08/15 19:15:41 rlubke Exp $
+ * @version $Id: TestSaveStateInPage.java,v 1.13 2003/08/21 14:18:17 rlubke Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -107,20 +108,12 @@ public void testSaveStateInPage()
 
     boolean result = false;
     UIComponentBase root = null;
-    String value = null;
-    LifecycleImpl lifecycle = new LifecycleImpl();
-    Phase renderResponse = new RenderResponsePhase(lifecycle);
-    root = new UIComponentBase() {
-	    public String getComponentType() { return "Root"; }
-	};
-    root.setComponentId("root");
- 
-    TreeFactory treeFactory = (TreeFactory)
-         FactoryFinder.getFactory(FactoryFinder.TREE_FACTORY);
-    assertTrue(treeFactory != null);
-    Tree requestTree = treeFactory.getTree(getFacesContext(),
-            TEST_URI );
-    getFacesContext().setTree(requestTree);
+    String value = null;    
+    Phase renderResponse = new RenderResponsePhase(Application.getCurrentInstance());   
+    UIPage page = new UIPageBase();
+    page.setId("root");
+    page.setTreeId(TEST_URI);
+    getFacesContext().setRoot(page);
 
     renderResponse.execute(getFacesContext());
     assertTrue(!(getFacesContext().getRenderResponse()) &&

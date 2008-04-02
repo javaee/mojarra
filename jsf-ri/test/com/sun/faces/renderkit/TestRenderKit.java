@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderKit.java,v 1.2 2003/07/08 15:38:47 eburns Exp $
+ * $Id: TestRenderKit.java,v 1.3 2003/08/21 14:18:21 rlubke Exp $
  */
 
 /*
@@ -16,7 +16,6 @@ import com.sun.faces.renderkit.html_basic.FormRenderer;
 import java.util.Iterator;
 
 import javax.faces.component.UIOutput;
-import javax.faces.component.UIComponentBase;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
 import javax.faces.render.Renderer;
@@ -44,7 +43,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderKit.java,v 1.2 2003/07/08 15:38:47 eburns Exp $
+ * @version $Id: TestRenderKit.java,v 1.3 2003/08/21 14:18:21 rlubke Exp $
  * 
  * @see	Blah
  * @see	Bloo

@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigFileTestCase.java,v 1.26 2003/08/19 14:50:54 rlubke Exp $
+ * $Id: ConfigFileTestCase.java,v 1.27 2003/08/21 14:18:10 rlubke Exp $
  */
 
 /*
@@ -11,7 +11,6 @@ package com.sun.faces.config;
 
 import com.sun.faces.application.ApplicationImpl;
 import com.sun.faces.application.MessageResourcesImpl;
-import com.sun.faces.tree.SimpleTreeImpl;
 import com.sun.faces.el.ValueBindingImpl;
 import com.sun.faces.RIConstants;
 
@@ -32,6 +31,8 @@ import javax.faces.FactoryFinder;
 import javax.faces.application.ApplicationFactory;
 import javax.faces.application.NavigationHandler;
 import javax.faces.component.UIComponent;
+import javax.faces.component.UIPage;
+import javax.faces.component.base.UIPageBase;
 import javax.faces.application.MessageResources;
 import javax.faces.convert.Converter;
 import javax.faces.validator.Validator;
@@ -250,10 +251,12 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
                  FactoryFinder.APPLICATION_FACTORY);
         ApplicationImpl application = (ApplicationImpl)aFactory.getApplication(); 
 	NavigationHandler navHandler = application.getNavigationHandler();
-	getFacesContext().setTree(new SimpleTreeImpl(getFacesContext(), "/login.jsp"));
+        UIPage page = new UIPageBase();
+        page.setTreeId("/login.jsp");
+	getFacesContext().setRoot(page);
         navHandler.handleNavigation(getFacesContext(), "UserBean.login",
 	    "success");
-        String newTreeId = getFacesContext().getTree().getTreeId();
+        String newTreeId = getFacesContext().getRoot().getTreeId();
         assertTrue(newTreeId.equals("/home.jsp"));	
      }
 

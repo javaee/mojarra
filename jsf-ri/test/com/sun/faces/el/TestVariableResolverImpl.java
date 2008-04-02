@@ -1,5 +1,5 @@
 /*
- * $Id: TestVariableResolverImpl.java,v 1.4 2003/07/08 15:38:46 eburns Exp $
+ * $Id: TestVariableResolverImpl.java,v 1.5 2003/08/21 14:18:14 rlubke Exp $
  */
 
 /*
@@ -27,8 +27,10 @@ import org.apache.cactus.WebRequest;
 
 import javax.faces.application.ApplicationFactory;
 import javax.faces.el.VariableResolver;
-import javax.faces.component.UINamingContainer;
 import javax.faces.FactoryFinder;
+import javax.faces.component.base.UINamingContainerBase;
+import javax.faces.component.base.UIPageBase;
+import javax.faces.component.UIPage;
 
 
 
@@ -38,7 +40,7 @@ import javax.faces.FactoryFinder;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestVariableResolverImpl.java,v 1.4 2003/07/08 15:38:46 eburns Exp $
+ * @version $Id: TestVariableResolverImpl.java,v 1.5 2003/08/21 14:18:14 rlubke Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -188,15 +190,14 @@ public class TestVariableResolverImpl extends ServletFacesTestCase
 
 	// tree
 	// create a dummy root for the tree.
-	UINamingContainer root = new UINamingContainer() {
-                public String getComponentType() { return "root"; }
-            };
-	root.setComponentId("root");
-	getFacesContext().setTree(new com.sun.faces.tree.SimpleTreeImpl(getFacesContext(), root, "newTree"));
+	UIPage page = new UIPageBase();
+    page.setId("root");
+    page.setTreeId("newTree");
+	getFacesContext().setRoot(page);
 	
 	assertTrue(variableResolver.resolveVariable(getFacesContext(),
 						    "tree") ==
-		   getFacesContext().getTree().getRoot());
+		   getFacesContext().getRoot());
 
 	
     }

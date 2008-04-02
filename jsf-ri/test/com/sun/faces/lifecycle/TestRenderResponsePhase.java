@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderResponsePhase.java,v 1.54 2003/08/15 19:15:39 rlubke Exp $
+ * $Id: TestRenderResponsePhase.java,v 1.55 2003/08/21 14:18:16 rlubke Exp $
  */
 
 /*
@@ -19,10 +19,13 @@ import org.mozilla.util.ParameterCheck;
 
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
+import javax.faces.application.Application;
 import javax.faces.context.FacesContext;
 import javax.faces.context.FacesContextFactory;
 import javax.faces.lifecycle.Lifecycle;
-import javax.faces.component.UINamingContainer;
+import javax.faces.component.base.UINamingContainerBase;
+import javax.faces.component.base.UIPageBase;
+import javax.faces.component.UIPage;
 import javax.faces.validator.Validator;
 
 import com.sun.faces.lifecycle.Phase;
@@ -39,8 +42,6 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.ArrayList;
 
-import javax.faces.tree.Tree;
-import javax.faces.tree.TreeFactory;
 
 import javax.servlet.jsp.PageContext;
 
@@ -50,7 +51,7 @@ import javax.servlet.jsp.PageContext;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderResponsePhase.java,v 1.54 2003/08/15 19:15:39 rlubke Exp $
+ * @version $Id: TestRenderResponsePhase.java,v 1.55 2003/08/21 14:18:16 rlubke Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -126,22 +127,14 @@ public void testHtmlBasicRenderKit()
 {    
     
     
-    boolean result = false;
-    UINamingContainer root = null;
+    boolean result = false;    
     String value = null;
     LifecycleImpl lifecycle = new LifecycleImpl();
-    Phase renderResponse = new RenderResponsePhase(lifecycle);
-    root = new UINamingContainer() {
-        public String getComponentType() { return "root"; }
-    };
-    root.setComponentId("root");
- 
-    TreeFactory treeFactory = (TreeFactory)
-         FactoryFinder.getFactory(FactoryFinder.TREE_FACTORY);
-    Assert.assert_it(treeFactory != null);
-    Tree requestTree = treeFactory.getTree(getFacesContext(),
-            TEST_URI );
-    getFacesContext().setTree(requestTree);
+    Phase renderResponse = new RenderResponsePhase(Application.getCurrentInstance());    
+    UIPage page = new UIPageBase();
+    page.setId("root");
+    page.setTreeId(TEST_URI)
+    getFacesContext().setRoot(page);
 
     renderResponse.execute(getFacesContext());
     assertTrue(!(getFacesContext().getRenderResponse()) &&

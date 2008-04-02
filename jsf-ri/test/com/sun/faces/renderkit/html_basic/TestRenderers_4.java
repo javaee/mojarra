@@ -4,7 +4,7 @@
  */
 
 /**
- * $Id: TestRenderers_4.java,v 1.5 2003/04/01 19:25:45 jvisvanathan Exp $
+ * $Id: TestRenderers_4.java,v 1.6 2003/08/21 14:18:25 rlubke Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -15,19 +15,25 @@
 // TestRenderers_4.java
 
 package com.sun.faces.renderkit.html_basic;
+
 import java.io.IOException;
 
 import javax.faces.component.UIPanel;
 import javax.faces.component.UICommand;
 import javax.faces.component.UIOutput;
 import javax.faces.component.UIComponent;
-import javax.faces.component.UINamingContainer;
+import javax.faces.component.NamingContainer;
+import javax.faces.component.UIPage;
+import javax.faces.component.base.UICommandBase;
+import javax.faces.component.base.UINamingContainerBase;
+import javax.faces.component.base.UIPanelBase;
+import javax.faces.component.base.UIOutputBase;
+import javax.faces.component.base.UIPageBase;
 import javax.faces.context.FacesContextFactory;
 
 import org.apache.cactus.WebRequest;
 
 import com.sun.faces.JspFacesTestCase;
-import com.sun.faces.tree.SimpleTreeImpl;
 
 import java.util.ArrayList;
 
@@ -37,7 +43,7 @@ import java.util.ArrayList;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_4.java,v 1.5 2003/04/01 19:25:45 jvisvanathan Exp $
+ * @version $Id: TestRenderers_4.java,v 1.6 2003/08/21 14:18:25 rlubke Exp $
  * 
  *
  */
@@ -86,13 +92,9 @@ public class TestRenderers_4 extends JspFacesTestCase {
     //
     public void setUp() {
         super.setUp();
-
-        SimpleTreeImpl xmlTree =
-            new SimpleTreeImpl(
-                getFacesContext(),
-                new UICommand(),
-                "treeId");
-        getFacesContext().setTree(xmlTree);
+        UIPage page = new UIPageBase();
+        page.setTreeId("treeId");       
+        getFacesContext().setRoot(page);
         assertTrue(null != getFacesContext().getResponseWriter());
     }
 
@@ -104,12 +106,12 @@ public class TestRenderers_4 extends JspFacesTestCase {
 
         try {
             // create a dummy root for the tree.
-            UINamingContainer root = new UINamingContainer() {
+            UINamingContainerBase root = new UINamingContainerBase() {
                 public String getComponentType() {
                     return "root";
                 }
             };
-            root.setComponentId("root");
+            root.setId("root");
 
             testListRenderer(root);
             testGridRenderer(root);
@@ -144,40 +146,40 @@ public class TestRenderers_4 extends JspFacesTestCase {
 	bodyList.add("row2");
 	bodyList.add("row3");
 
-	panel = new UIPanel();
-	root.addChild(panel);
+	panel = new UIPanelBase();
+	root.getChildren().add(panel);
 	
-	headerGroup = new UIPanel();
-	headerGroup.setComponentId("header");
-	header1 = new UIOutput();
+	headerGroup = new UIPanelBase();
+	headerGroup.setId("header");
+	header1 = new UIOutputBase();
 	header1.setValue("header1");
-	headerGroup.addChild(header1);
-	header2 = new UIOutput();
+	headerGroup.getChildren().add(header1);
+	header2 = new UIOutputBase();
 	header2.setValue("header2");
-	headerGroup.addChild(header2);
-	panel.addFacet("header", headerGroup);
+	headerGroup.getChildren().add(header2);
+	panel.getFacets().put("header", headerGroup);
 	
-	footerGroup = new UIPanel();
-	footerGroup.setComponentId("footer");
-	footer1 = new UIOutput();
+	footerGroup = new UIPanelBase();
+	footerGroup.setId("footer");
+	footer1 = new UIOutputBase();
 	footer1.setValue("footer1");
-	footerGroup.addChild(footer1);
-	footer2 = new UIOutput();
+	footerGroup.getChildren().add(footer1);
+	footer2 = new UIOutputBase();
 	footer2.setValue("footer2");
-	footerGroup.addChild(footer2);
-	panel.addFacet("footer", footerGroup);
+	footerGroup.getChildren().add(footer2);
+	panel.getFacets().put("footer", footerGroup);
 
-	bodyGroup = new UIPanel();
+	bodyGroup = new UIPanelBase();
 	bodyGroup.setValue(bodyList);
-	panel.addChild(bodyGroup);
+	panel.getChildren().add(bodyGroup);
 
-	body1 = new UIOutput();
+	body1 = new UIOutputBase();
 	body1.setValue("body1");
-	bodyGroup.addChild(body1);
+	bodyGroup.getChildren().add(body1);
 
-	body2 = new UIOutput();
+	body2 = new UIOutputBase();
 	body2.setValue("body2");
-	bodyGroup.addChild(body2);
+	bodyGroup.getChildren().add(body2);
 
 	listRenderer = new ListRenderer();
 
@@ -204,38 +206,38 @@ public class TestRenderers_4 extends JspFacesTestCase {
 	    body1 = null,
 	    body2 = null;
 
-	panel = new UIPanel();
-	root.addChild(panel);
+	panel = new UIPanelBase();
+	root.getChildren().add(panel);
 	
-	headerGroup = new UIPanel();
-	headerGroup.setComponentId("header");
+	headerGroup = new UIPanelBase();
+	headerGroup.setId("header");
 	headerGroup.setRendererType("Group");
-	header1 = new UIOutput();
+	header1 = new UIOutputBase();
 	header1.setValue("header1 ");
-	headerGroup.addChild(header1);
-	header2 = new UIOutput();
+	headerGroup.getChildren().add(header1);
+	header2 = new UIOutputBase();
 	header2.setValue("header2 ");
-	headerGroup.addChild(header2);
-	panel.addFacet("header", headerGroup);
+	headerGroup.getChildren().add(header2);
+	panel.getFacets().put("header", headerGroup);
 	
-	footerGroup = new UIPanel();
-	footerGroup.setComponentId("footer");
+	footerGroup = new UIPanelBase();
+	footerGroup.setId("footer");
 	footerGroup.setRendererType("Group");
-	footer1 = new UIOutput();
+	footer1 = new UIOutputBase();
 	footer1.setValue("footer1 ");
-	footerGroup.addChild(footer1);
-	footer2 = new UIOutput();
+	footerGroup.getChildren().add(footer1);
+	footer2 = new UIOutputBase();
 	footer2.setValue("footer2 ");
-	footerGroup.addChild(footer2);
-	panel.addFacet("footer", footerGroup);
+	footerGroup.getChildren().add(footer2);
+	panel.getFacets().put("footer", footerGroup);
 
-	body1 = new UIOutput();
+	body1 = new UIOutputBase();
 	body1.setValue("body1");
-	panel.addChild(body1);
+	panel.getChildren().add(body1);
 
-	body2 = new UIOutput();
+	body2 = new UIOutputBase();
 	body2.setValue("body2");
-	panel.addChild(body2);
+	panel.getChildren().add(body2);
 
 	gridRenderer = new GridRenderer();
 

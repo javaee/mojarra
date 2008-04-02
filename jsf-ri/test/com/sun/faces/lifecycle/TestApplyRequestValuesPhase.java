@@ -1,5 +1,5 @@
 /*
- * $Id: TestApplyRequestValuesPhase.java,v 1.13 2003/08/13 21:06:41 rkitain Exp $
+ * $Id: TestApplyRequestValuesPhase.java,v 1.14 2003/08/21 14:18:16 rlubke Exp $
  */
 
 /*
@@ -24,6 +24,8 @@ import javax.faces.lifecycle.Lifecycle;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIForm;
 import javax.faces.component.UIInput;
+import javax.faces.component.base.UIFormBase;
+import javax.faces.component.base.UIInputBase;
 
 import com.sun.faces.lifecycle.Phase;
 import com.sun.faces.ServletFacesTestCase;
@@ -34,7 +36,7 @@ import com.sun.faces.ServletFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestApplyRequestValuesPhase.java,v 1.13 2003/08/13 21:06:41 rkitain Exp $
+ * @version $Id: TestApplyRequestValuesPhase.java,v 1.14 2003/08/21 14:18:16 rlubke Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -92,7 +94,7 @@ public void testCallback()
     UIComponent root = null;
     String value = null;
     Phase 
-        reconstituteTree = new ReconstituteComponentTreePhase(),
+        reconstituteTree = new RestoreComponentTreePhase(),
 	applyValues = new ApplyRequestValuesPhase();
 
     // 1. Set the root of the tree ...
@@ -106,17 +108,17 @@ public void testCallback()
     }
     assertTrue(!(getFacesContext().getRenderResponse()) &&
         !(getFacesContext().getResponseComplete()));
-    assertTrue(null != getFacesContext().getTree());
+    assertTrue(null != getFacesContext().getRoot());
 
     // 2. Add components to tree
     //
-    root = getFacesContext().getTree().getRoot();
-    UIForm basicForm = new UIForm();
-    basicForm.setComponentId("basicForm");
-    UIInput userName = new UIInput();
-    userName.setComponentId("userName");
-    root.addChild(basicForm);
-    basicForm.addChild(userName);
+    root = getFacesContext().getRoot();
+    UIForm basicForm = new UIFormBase();
+    basicForm.setId("basicForm");
+    UIInput userName = new UIInputBase();
+    userName.setId("userName");
+    root.getChildren().add(basicForm);
+    basicForm.getChildren().add(userName);
 
     // 3. Apply values
     //
@@ -124,7 +126,7 @@ public void testCallback()
     assertTrue(!(getFacesContext().getRenderResponse()) &&
         !(getFacesContext().getResponseComplete()));
     
-    root = getFacesContext().getTree().getRoot();
+    root = getFacesContext().getRoot();
     try {
 	userName = (UIInput) root.findComponent("userName");
     }
