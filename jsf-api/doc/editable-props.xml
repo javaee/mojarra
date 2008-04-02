@@ -85,7 +85,7 @@
         <display-name>Value Change Listener</display-name>
         <icon></icon>
         <property-name>valueChangeListener</property-name>
-        <property-class>javax.faces.e.MethodBinding</property-class>
+        <property-class>javax.faces.el.MethodBinding</property-class>
       </property>
 
       <property>
