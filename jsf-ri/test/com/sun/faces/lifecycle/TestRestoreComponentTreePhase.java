@@ -1,5 +1,5 @@
 /*
- * $Id: TestReconstituteComponentTreePhase.java,v 1.6 2003/08/13 21:06:42 rkitain Exp $
+ * $Id: TestRestoreComponentTreePhase.java,v 1.1 2003/08/21 14:19:45 rlubke Exp $
  */
 
 /*
@@ -14,7 +14,6 @@ package com.sun.faces.lifecycle;
 import com.sun.faces.RIConstants;
 import com.sun.faces.lifecycle.Phase;
 import com.sun.faces.ServletFacesTestCase;
-import com.sun.faces.tree.SimpleTreeImpl;
 
 import java.util.List;
 import java.util.Locale;
@@ -27,11 +26,15 @@ import javax.faces.component.UICommand;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIForm;
 import javax.faces.component.UIInput;
-import javax.faces.component.UINamingContainer;
 import javax.faces.component.UIPanel;
+import javax.faces.component.UIPage;
+import javax.faces.component.base.UINamingContainerBase;
+import javax.faces.component.base.UIFormBase;
+import javax.faces.component.base.UIInputBase;
+import javax.faces.component.base.UIPanelBase;
+import javax.faces.component.base.UIPageBase;
+import javax.faces.component.base.UICommandBase;
 import javax.faces.event.PhaseId;
-import javax.faces.tree.TreeFactory;
-import javax.faces.tree.Tree;
 import javax.servlet.http.HttpSession;
 import javax.faces.render.RenderKitFactory;
 
@@ -46,14 +49,14 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestReconstituteComponentTreePhase.java,v 1.6 2003/08/13 21:06:42 rkitain Exp $
+ * @version $Id: TestRestoreComponentTreePhase.java,v 1.1 2003/08/21 14:19:45 rlubke Exp $
  * 
  * @see	Blah
  * @see	Bloo
  *
  */
 
-public class TestReconstituteComponentTreePhase extends ServletFacesTestCase
+public class TestRestoreComponentTreePhase extends ServletFacesTestCase
 {
 //
 // Protected Constants
@@ -77,11 +80,11 @@ public static final String TEST_URI = "/components.jsp";
 // Constructors and Initializers    
 //
 
-    public TestReconstituteComponentTreePhase() {
+    public TestRestoreComponentTreePhase() {
 	super("TestReconstituteComponentTreePhase");
     }
 
-    public TestReconstituteComponentTreePhase(String name) {
+    public TestRestoreComponentTreePhase(String name) {
 	super(name);
     }
 
@@ -105,7 +108,7 @@ public void beginReconstituteRequestSubmit(WebRequest theRequest)
 
 public void testReconstituteRequestInitial()
 {
-    Phase reconstituteTree = new ReconstituteComponentTreePhase();
+    Phase reconstituteTree = new RestoreComponentTreePhase();
 
     try {
         reconstituteTree.execute(getFacesContext());
@@ -117,50 +120,45 @@ public void testReconstituteRequestInitial()
     assertTrue(!(getFacesContext().getRenderResponse()) &&
         !(getFacesContext().getResponseComplete()));
 
-    assertTrue(null != getFacesContext().getTree());
+    assertTrue(null != getFacesContext().getRoot());
     assertTrue(RenderKitFactory.DEFAULT_RENDER_KIT == 
-            getFacesContext().getTree().getRenderKitId());
+            getFacesContext().getRoot().getRenderKitId());
 
-    assertTrue(null != getFacesContext().getTree().getRoot());
+    assertTrue(null != getFacesContext().getRoot());
     assertTrue(null != getFacesContext().getLocale());
     
     UIComponent root = null;
 
-    assertTrue(getFacesContext().getTree().getTreeId().equals(TEST_URI));
-    root = getFacesContext().getTree().getRoot();
-    assertTrue(root.getChildCount() == 0);
+    assertTrue(getFacesContext().getRoot().getTreeId().equals(TEST_URI));
+    root = getFacesContext().getRoot();
+    assertTrue(root.getChildren().size() == 0);
 }
 
 public void testReconstituteRequestSubmit()
-{
-    Tree requestTree = null;
+{    
     // precreate tree and set it in session and make sure the tree is
-    // restored from session.
-   
-    UIComponent root = new UINamingContainer() {
-        public String getComponentType() { return "root"; }
-    };
+    // restored from session.      
+    UIPage root = new UIPageBase();
+    root.setTreeId(TEST_URI);
     
-    UIForm basicForm = new UIForm();
-    basicForm.setComponentId("basicForm");
-    UIInput userName = new UIInput();
+    UIForm basicForm = new UIFormBase();
+    basicForm.setId("basicForm");
+    UIInput userName = new UIInputBase();
     
-    userName.setComponentId("userName");
-    root.addChild(basicForm);
-    basicForm.addChild(userName);
-    
-    requestTree = new SimpleTreeImpl(getFacesContext(), root, 
-            TEST_URI);
-    assertTrue(requestTree != null);
-    
+    userName.setId("userName");
+    root.getChildren().add(basicForm);
+    basicForm.getChildren().add(userName);
+        
     HttpSession session = (HttpSession) 
         getFacesContext().getExternalContext().getSession(false);
-    session.setAttribute(RIConstants.FACES_TREE, requestTree);
+    
+    // PENDING (rlubke) Is FACES_TREE still valid
+    session.setAttribute(RIConstants.FACES_TREE, root);
     // set a locale
     Locale locale = new Locale("France", "french");
     session.setAttribute(RIConstants.REQUEST_LOCALE, locale);
     
-    Phase reconstituteTree = new ReconstituteComponentTreePhase();
+    Phase reconstituteTree = new RestoreComponentTreePhase();
 
     try {
 	reconstituteTree.execute(getFacesContext());
@@ -171,17 +169,17 @@ public void testReconstituteRequestSubmit()
     assertTrue(!(getFacesContext().getRenderResponse()) &&
         !(getFacesContext().getResponseComplete()));
 
-    assertTrue(null != getFacesContext().getTree());
+    assertTrue(null != getFacesContext().getRoot());
     assertTrue(RenderKitFactory.DEFAULT_RENDER_KIT == 
-            getFacesContext().getTree().getRenderKitId());
+            getFacesContext().getRoot().getRenderKitId());
 
-    assertTrue(null != getFacesContext().getTree().getRoot());
+    assertTrue(null != getFacesContext().getRoot());
     assertTrue(locale == getFacesContext().getLocale());
     
-    assertTrue(getFacesContext().getTree().getTreeId().equals(TEST_URI));
-    root = getFacesContext().getTree().getRoot();
+    assertTrue(getFacesContext().getRoot().getTreeId().equals(TEST_URI));
+    root = getFacesContext().getRoot();
     // components should exist.
-    assertTrue(root.getChildCount() == 1);
+    assertTrue(root.getChildren().size() == 1);
     assertTrue(userName == root.findComponent("userName"));
     assertTrue(basicForm == root.findComponent("basicForm")); 
 }
@@ -194,38 +192,34 @@ public void testReconstituteRequestSubmit()
  * listeners have been registered on the <code>UICommand</code> components;
  */
 public void testRegisterListeners() { 
-    Tree requestTree = null;
+    
     // precreate tree and set it in session and make sure the tree is
     // restored from session.
    
-    UIComponent root = new UINamingContainer() {
-        public String getComponentType() { return "root"; }
-    };
+    UIPage root = new UIPageBase();
+    root.setTreeId(TEST_URI);
     
-    UIForm basicForm = new UIForm();
-    basicForm.setComponentId("basicForm");
-    root.addChild(basicForm);
-    UIPanel panel = new UIPanel();
-    basicForm.addChild(panel);
-    UIPanel commandPanel = new UIPanel();
-    commandPanel.setComponentId("commandPanel");
+    UIForm basicForm = new UIFormBase();
+    basicForm.setId("basicForm");
+    root.getChildren().add(basicForm);
+    UIPanel panel = new UIPanelBase();
+    basicForm.getChildren().add(panel);
+    UIPanel commandPanel = new UIPanelBase();
+    commandPanel.setId("commandPanel");
     TestCommand command1 = new TestCommand();
     TestCommand command2 = new TestCommand();
-    commandPanel.addChild(command1);
-    commandPanel.addChild(command2);
-    panel.addFacet("commandPanel", commandPanel);
-
-    requestTree = new SimpleTreeImpl(getFacesContext(), root, 
-            TEST_URI);
-    assertTrue(requestTree != null);
-
-    getFacesContext().setTree(requestTree);
+    commandPanel.getChildren().add(command1);
+    commandPanel.getChildren().add(command2);
+    panel.getFacets().put("commandPanel", commandPanel);
+    
+    getFacesContext().setRoot(root);
 
     HttpSession session = (HttpSession) 
         getFacesContext().getExternalContext().getSession(false);
-    session.setAttribute(RIConstants.FACES_TREE, requestTree);
+    // PENDING (rlubke) Is FACES_TREE still valid
+    session.setAttribute(RIConstants.FACES_TREE, root);
 
-    Phase reconstituteTree = new ReconstituteComponentTreePhase();
+    Phase reconstituteTree = new RestoreComponentTreePhase();
 
     try {
 	reconstituteTree.execute(getFacesContext());
@@ -242,28 +236,25 @@ public void testRegisterListeners() {
     // Now test with no facets... Listeners should still be registered on UICommand
     // components....
     // 
-    root = new UINamingContainer() {
-        public String getComponentType() { return "root"; }
-    };
-    basicForm = new UIForm();
-    basicForm.setComponentId("basicForm");
-    root.addChild(basicForm);
+    root = new UIPageBase();
+    root.setTreeId(TEST_URI);
+    basicForm = new UIFormBase();
+    basicForm.setId("basicForm");
+    root.getChildren().add(basicForm);
     command1 = new TestCommand();
     command2 = new TestCommand();
-    basicForm.addChild(command1);
-    basicForm.addChild(command2);
-    requestTree = new SimpleTreeImpl(getFacesContext(), root, 
-            TEST_URI);
-    assertTrue(requestTree != null);
-
-    getFacesContext().setTree(requestTree);
+    basicForm.getChildren().add(command1);
+    basicForm.getChildren().add(command2);
+    
+    getFacesContext().setRoot(root);
 
     session = (HttpSession) 
         getFacesContext().getExternalContext().getSession(false);
-    session.setAttribute(RIConstants.FACES_TREE, requestTree);
+    // PENDING (rlubke) Is FACES_TREE still valid
+    session.setAttribute(RIConstants.FACES_TREE, root);
 
-    reconstituteTree = new ReconstituteComponentTreePhase();
-
+    reconstituteTree = new RestoreComponentTreePhase();
+    
     try {
 	reconstituteTree.execute(getFacesContext());
     }
@@ -277,7 +268,7 @@ public void testRegisterListeners() {
     assertTrue(command2.getDefaultListenerCount() > 0); 
 }
 
-public static class TestCommand extends UICommand {
+public static class TestCommand extends UICommandBase {
     public int getDefaultListenerCount() {
 	List list = null;
 	int ordinal = PhaseId.INVOKE_APPLICATION.getOrdinal();
