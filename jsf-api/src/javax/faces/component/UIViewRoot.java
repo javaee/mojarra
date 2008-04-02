@@ -1,5 +1,5 @@
 /*
- * $Id: UIViewRoot.java,v 1.45 2006/07/25 20:36:32 edburns Exp $
+ * $Id: UIViewRoot.java,v 1.46 2006/07/31 22:15:26 rlubke Exp $
  */
 
 /*
@@ -60,84 +60,79 @@ import java.util.logging.Logger;
  * root of the UIComponent tree.  This component has no rendering, it
  * just serves as the root of the component tree, and as a place to hang
  * per-view {@link PhaseListener}s.</p>
- *
+ * <p/>
  * <p>For each of the following lifecycle phase methods:</p>
- *
- * 	<ul>
- *
- *	  <li><p>{@link #processDecodes} </p></li>
- *
- *	  <li><p>{@link #processValidators} </p></li>
- *
- *	  <li><p>{@link #processUpdates} </p></li>
- *
- *	  <li><p>{@link #processApplication} </p></li>
- *
- *	  <li><p>RenderResponse, via {@link #encodeBegin} and {@link
- *	  #encodeEnd} </p></li>
- *
- *	</ul>
- *
+ * <p/>
+ * <ul>
+ * <p/>
+ * <li><p>{@link #processDecodes} </p></li>
+ * <p/>
+ * <li><p>{@link #processValidators} </p></li>
+ * <p/>
+ * <li><p>{@link #processUpdates} </p></li>
+ * <p/>
+ * <li><p>{@link #processApplication} </p></li>
+ * <p/>
+ * <li><p>RenderResponse, via {@link #encodeBegin} and {@link
+ * #encodeEnd} </p></li>
+ * <p/>
+ * </ul>
+ * <p/>
  * <p>Take the following action regarding
  * <code>PhaseListener</code>s.</p>
- *
+ * <p/>
  * <ul>
- *
+ * <p/>
  * <p>Initialize a state flag to <code>false</code>.</p>
- *
+ * <p/>
  * <p>If {@link #getBeforePhaseListener} returns non-<code>null</code>,
  * invoke the listener, passing in the correct corresponding {@link
  * PhaseId} for this phase.</p>
- *
+ * <p/>
  * <p>Upon return from the listener, call {@link
  * FacesContext#getResponseComplete} and {@link
  * FacesContext#getRenderResponse}.  If either return <code>true</code>
  * set the internal state flag to <code>true</code>. </p>
- *
+ * <p/>
  * <p>If or one or more listeners have been added by a call to {@link
  * #addPhaseListener}, invoke the <code>beforePhase</code> method on
  * each one whose {@link PhaseListener#getPhaseId} matches the current
  * phaseId, passing in the same <code>PhaseId</code> as in the previous
  * step.</p>
- *
+ * <p/>
  * <p>Upon return from each listener, call {@link
  * FacesContext#getResponseComplete} and {@link
  * FacesContext#getRenderResponse}.  If either return <code>true</code>
  * set the internal state flag to <code>true</code>. </p>
- *
- *
+ * <p/>
+ * <p/>
  * <p>Execute any processing for this phase if the internal state flag
  * was not set.</p>
- *
+ * <p/>
  * <p>If {@link #getAfterPhaseListener} returns non-<code>null</code>,
  * invoke the listener, passing in the correct corresponding {@link
  * PhaseId} for this phase.</p>
- *
+ * <p/>
  * <p>If or one or more listeners have been added by a call to {@link
  * #addPhaseListener}, invoke the <code>afterPhase</code> method on each
  * one whose {@link PhaseListener#getPhaseId} matches the current
  * phaseId, passing in the same <code>PhaseId</code> as in the previous
  * step.</p>
- *
- *
+ * <p/>
+ * <p/>
  * </ul>
  */
 
 public class UIViewRoot extends UIComponentBase {
 
-
     // ------------------------------------------------------ Manifest Constants
-    
 
-    /**
-     * <p>The standard component type for this component.</p>
-     */
+
+    /** <p>The standard component type for this component.</p> */
     public static final String COMPONENT_TYPE = "javax.faces.ViewRoot";
 
 
-    /**
-     * <p>The standard component family for this component.</p>
-     */
+    /** <p>The standard component family for this component.</p> */
     public static final String COMPONENT_FAMILY = "javax.faces.ViewRoot";
 
 
@@ -146,12 +141,11 @@ public class UIViewRoot extends UIComponentBase {
      * by the <code>createUniqueId()</code> method.
      */
     static public final String UNIQUE_ID_PREFIX = "j_id";
-    
+
     private static Lifecycle lifecycle;
-    
+
     private static final Logger LOGGER =
-        Logger.getLogger("javax.faces", "javax.faces.LogStrings");
-    
+          Logger.getLogger("javax.faces", "javax.faces.LogStrings");
 
     // ------------------------------------------------------------ Constructors
 
@@ -167,7 +161,6 @@ public class UIViewRoot extends UIComponentBase {
 
     }
 
-
     // ------------------------------------------------------ Instance Variables
 
     private int lastId = 0;
@@ -180,9 +173,7 @@ public class UIViewRoot extends UIComponentBase {
 
     private boolean skipPhase;
 
-
     // -------------------------------------------------------------- Properties
-
 
     // -------------------------------------------------------------- Properties
 
@@ -209,27 +200,25 @@ public class UIViewRoot extends UIComponentBase {
      */
     public String getRenderKitId() {
 
-	String result = null;
-	if (null != renderKitId) {
-	    result = this.renderKitId;
-	}
-	else {
-	    ValueExpression vb = getValueExpression("renderKitId");
-	    FacesContext context = getFacesContext();
-	    if (vb != null) {
-		try {
-		    result = (String) vb.getValue(context.getELContext());
-		}
-		catch (ELException e) {
-		    // PENDING(edburns): log this
-		    result = null;
-		}
-	    } 
-	    else {
-	        result = null;
-	    }
-	}
-	return result;
+        String result = null;
+        if (null != renderKitId) {
+            result = this.renderKitId;
+        } else {
+            ValueExpression vb = getValueExpression("renderKitId");
+            FacesContext context = getFacesContext();
+            if (vb != null) {
+                try {
+                    result = (String) vb.getValue(context.getELContext());
+                }
+                catch (ELException e) {
+                    // PENDING(edburns): log this
+                    result = null;
+                }
+            } else {
+                result = null;
+            }
+        }
+        return result;
     }
 
 
@@ -241,8 +230,8 @@ public class UIViewRoot extends UIComponentBase {
      * and the beginning of the <em>Render Response</em> phase.</p>
      *
      * @param renderKitId The new {@link RenderKit} identifier,
-     *  or <code>null</code> to disassociate this view with any
-     *  specific {@link RenderKit} instance
+     *                    or <code>null</code> to disassociate this view with any
+     *                    specific {@link RenderKit} instance
      */
     public void setRenderKitId(String renderKitId) {
 
@@ -251,15 +240,11 @@ public class UIViewRoot extends UIComponentBase {
     }
 
 
-    /**
-     * <p>The view identifier of this view.</p>
-     */
+    /** <p>The view identifier of this view.</p> */
     private String viewId = null;
 
 
-    /**
-     * <p>Return the view identifier for this view.</p>
-     */
+    /** <p>Return the view identifier for this view.</p> */
     public String getViewId() {
 
         return (this.viewId);
@@ -268,7 +253,6 @@ public class UIViewRoot extends UIComponentBase {
 
 
     /**
-     *
      * <p>Set the view identifier for this view.</p>
      *
      * @param viewId The new view identifier
@@ -279,7 +263,6 @@ public class UIViewRoot extends UIComponentBase {
 
     }
 
-
     // ------------------------------------------------ Event Management Methods
 
     private MethodExpression beforePhase = null;
@@ -287,12 +270,11 @@ public class UIViewRoot extends UIComponentBase {
 
     /**
      * @return the {@link MethodExpression} that will be invoked before
-     * this view is rendered.
-     *
+     *         this view is rendered.
      */
 
     public MethodExpression getBeforePhaseListener() {
-	return beforePhase;
+        return beforePhase;
     }
 
     /**
@@ -302,27 +284,25 @@ public class UIViewRoot extends UIComponentBase {
      * PhaseId#RESTORE_VIEW}.  Unlike a true {@link PhaseListener},
      * this approach doesn't allow for only receiving {@link
      * PhaseEvent}s for a given phase.</p>
-     *
+     * <p/>
      * <p>The method must conform to the signature of {@link
      * PhaseListener#beforePhase}.</p>
      *
      * @param newBeforePhase the {@link MethodExpression} that will be
-     * invoked before this view is rendered.
-     *
+     *                       invoked before this view is rendered.
      */
 
     public void setBeforePhaseListener(MethodExpression newBeforePhase) {
-	beforePhase = newBeforePhase;
+        beforePhase = newBeforePhase;
     }
 
     /**
      * @return the {@link MethodExpression} that will be invoked after
-     * this view is rendered.
-     *
+     *         this view is rendered.
      */
 
     public MethodExpression getAfterPhaseListener() {
-	return afterPhase;
+        return afterPhase;
     }
 
     /**
@@ -332,32 +312,31 @@ public class UIViewRoot extends UIComponentBase {
      * PhaseId#RESTORE_VIEW}.  Unlike a true {@link PhaseListener},
      * this approach doesn't allow for only receiving {@link
      * PhaseEvent}s for a given phase.</p>
-     *
+     * <p/>
      * <p>The method must conform to the signature of {@link
      * PhaseListener#afterPhase}.</p>
      *
      * @param newAfterPhase the {@link MethodExpression} that will be
-     * invoked after this view is rendered.  
-     *
+     *                      invoked after this view is rendered.
      */
 
     public void setAfterPhaseListener(MethodExpression newAfterPhase) {
-	afterPhase = newAfterPhase;
+        afterPhase = newAfterPhase;
     }
 
     private List<PhaseListener> phaseListeners = null;
 
     public void removePhaseListener(PhaseListener toRemove) {
-	if (null != phaseListeners) {
-	    phaseListeners.remove(toRemove);
-	}
+        if (null != phaseListeners) {
+            phaseListeners.remove(toRemove);
+        }
     }
 
     public void addPhaseListener(PhaseListener newPhaseListener) {
-	if (null == phaseListeners) {
-	    phaseListeners = new ArrayList<PhaseListener>();
-	}
-	phaseListeners.add(newPhaseListener);
+        if (null == phaseListeners) {
+            phaseListeners = new ArrayList<PhaseListener>();
+        }
+        phaseListeners.add(newPhaseListener);
     }
 
     /**
@@ -378,24 +357,24 @@ public class UIViewRoot extends UIComponentBase {
      * @param event {@link FacesEvent} to be queued
      *
      * @throws IllegalStateException if this component is not a
-     *  descendant of a {@link UIViewRoot}
-     * @throws NullPointerException if <code>event</code>
-     *  is <code>null</code>
+     *                               descendant of a {@link UIViewRoot}
+     * @throws NullPointerException  if <code>event</code>
+     *                               is <code>null</code>
      */
     public void queueEvent(FacesEvent event) {
-	
+
         if (event == null) {
             throw new NullPointerException();
         }
-	int
-	    i = 0,
-	    len = 0;
+        int
+              i = 0,
+              len = 0;
         // We are a UIViewRoot, so no need to check for the ISE
         if (events == null) {
-	    events = new List[len = PhaseId.VALUES.size()];
-	    for (i = 0; i < len; i++) {
-		events[i] = new ArrayList<FacesEvent>(5);
-	    }
+            events = new List[len = PhaseId.VALUES.size()];
+            for (i = 0; i < len; i++) {
+                events[i] = new ArrayList<FacesEvent>(5);
+            }
         }
         events[event.getPhaseId().getOrdinal()].add(event);
     }
@@ -408,32 +387,32 @@ public class UIViewRoot extends UIComponentBase {
      * @param phaseId {@link PhaseId} of the current phase
      */
     private void broadcastEvents(FacesContext context, PhaseId phaseId) {
-	List<FacesEvent> eventsForPhaseId = null;
+        List<FacesEvent> eventsForPhaseId = null;
 
-	if (null == events) {
-	    // no events have been queued
-	    return;
-	}
-	boolean 
-	    hasMoreAnyPhaseEvents = true,
-	    hasMoreCurrentPhaseEvents = true;
+        if (null == events) {
+            // no events have been queued
+            return;
+        }
+        boolean
+              hasMoreAnyPhaseEvents = true,
+              hasMoreCurrentPhaseEvents = true;
 
-	eventsForPhaseId = events[PhaseId.ANY_PHASE.getOrdinal()];
-	
-	// keep iterating till we have no more events to broadcast.
-	// This is necessary for events that cause other events to be
-	// queued.  PENDING(edburns): here's where we'd put in a check
-	// to prevent infinite event queueing.
-	do {
-	    // broadcast the ANY_PHASE events first
-	    if (null != eventsForPhaseId) {
-		// We cannot use an Iterator because we will get
-		// ConcurrentModificationException errors, so fake it
-		int cursor = 0;
-		while (cursor < eventsForPhaseId.size()) {
-		    FacesEvent event =
-			eventsForPhaseId.get(cursor);
-		    UIComponent source = event.getComponent();
+        eventsForPhaseId = events[PhaseId.ANY_PHASE.getOrdinal()];
+
+        // keep iterating till we have no more events to broadcast.
+        // This is necessary for events that cause other events to be
+        // queued.  PENDING(edburns): here's where we'd put in a check
+        // to prevent infinite event queueing.
+        do {
+            // broadcast the ANY_PHASE events first
+            if (null != eventsForPhaseId) {
+                // We cannot use an Iterator because we will get
+                // ConcurrentModificationException errors, so fake it
+                int cursor = 0;
+                while (cursor < eventsForPhaseId.size()) {
+                    FacesEvent event =
+                          eventsForPhaseId.get(cursor);
+                    UIComponent source = event.getComponent();
                     try {
                         source.broadcast(event);
                     } catch (AbortProcessingException e) {
@@ -448,48 +427,49 @@ public class UIViewRoot extends UIComponentBase {
                             }
                             LOGGER.log(Level.SEVERE,
                                        "error.component.abortprocessing_thrown",
-                                       new Object[] {event.getClass().getName(),
-                                                     phaseId.toString(),
-                                                     id});
+                                       new Object[]{event.getClass().getName(),
+                                                    phaseId.toString(),
+                                                    id});
                             LOGGER.log(Level.SEVERE, e.toString(), e);
                         }
                     }
-		    eventsForPhaseId.remove(cursor); // Stay at current position
-		}
-	    }
-	    
-	    // then broadcast the events for this phase.
-	    if (null != (eventsForPhaseId = events[phaseId.getOrdinal()])) {
-		// We cannot use an Iterator because we will get
-		// ConcurrentModificationException errors, so fake it
-		int cursor = 0;
-		while (cursor < eventsForPhaseId.size()) {
-		    FacesEvent event = 
-			eventsForPhaseId.get(cursor);
-		    UIComponent source = event.getComponent();
+                    eventsForPhaseId.remove(cursor); // Stay at current position
+                }
+            }
+
+            // then broadcast the events for this phase.
+            if (null != (eventsForPhaseId = events[phaseId.getOrdinal()])) {
+                // We cannot use an Iterator because we will get
+                // ConcurrentModificationException errors, so fake it
+                int cursor = 0;
+                while (cursor < eventsForPhaseId.size()) {
+                    FacesEvent event =
+                          eventsForPhaseId.get(cursor);
+                    UIComponent source = event.getComponent();
                     try {
                         source.broadcast(event);
                     } catch (AbortProcessingException e) {
                         ; // A "return" here would abort remaining events too
                     }
-		    eventsForPhaseId.remove(cursor); // Stay at current position
-		}
-	    }
+                    eventsForPhaseId.remove(cursor); // Stay at current position
+                }
+            }
 
-	    // true if we have any more ANY_PHASE events
-	    hasMoreAnyPhaseEvents = 
-		(null != (eventsForPhaseId = 
-			  events[PhaseId.ANY_PHASE.getOrdinal()])) &&
-		eventsForPhaseId.size() > 0;
-	    // true if we have any more events for the argument phaseId
-	    hasMoreCurrentPhaseEvents = 
-		(null != events[phaseId.getOrdinal()]) &&
-		events[phaseId.getOrdinal()].size() > 0;
+            // true if we have any more ANY_PHASE events
+            hasMoreAnyPhaseEvents =
+                  (null != (eventsForPhaseId =
+                        events[PhaseId.ANY_PHASE.getOrdinal()])) &&
+                                                                 eventsForPhaseId
+                                                                       .size()
+                                                                 > 0;
+            // true if we have any more events for the argument phaseId
+            hasMoreCurrentPhaseEvents =
+                  (null != events[phaseId.getOrdinal()]) &&
+                  events[phaseId.getOrdinal()].size() > 0;
 
-	} while (hasMoreAnyPhaseEvents || hasMoreCurrentPhaseEvents);
+        } while (hasMoreAnyPhaseEvents || hasMoreCurrentPhaseEvents);
 
     }
-
 
     // ------------------------------------------------ Lifecycle Phase Handlers
 
@@ -505,24 +485,24 @@ public class UIViewRoot extends UIComponentBase {
      * @param context {@link FacesContext} for the request we are processing
      *
      * @throws NullPointerException if <code>context</code>
-     *  is <code>null</code>
+     *                              is <code>null</code>
      */
     public void processDecodes(FacesContext context) {
-	skipPhase = false;
-	// avoid creating the PhaseEvent if possible by doing redundant
-	// null checks.
-	if (null != beforePhase || null != phaseListeners) {
-	    notifyPhaseListeners(context, PhaseId.APPLY_REQUEST_VALUES, true);
-	}
-	if (!skipPhase) {
-	    super.processDecodes(context);
-	    broadcastEvents(context, PhaseId.APPLY_REQUEST_VALUES);
-	}
-	// clear out the events if we're skipping to render-response
+        skipPhase = false;
+        // avoid creating the PhaseEvent if possible by doing redundant
+        // null checks.
+        if (null != beforePhase || null != phaseListeners) {
+            notifyPhaseListeners(context, PhaseId.APPLY_REQUEST_VALUES, true);
+        }
+        if (!skipPhase) {
+            super.processDecodes(context);
+            broadcastEvents(context, PhaseId.APPLY_REQUEST_VALUES);
+        }
+        // clear out the events if we're skipping to render-response
         // or if there is a response complete signal.
-	if (context.getRenderResponse() || context.getResponseComplete()) {
+        if (context.getRenderResponse() || context.getResponseComplete()) {
             if (events != null) {
-                for (int i=0; i<PhaseId.VALUES.size(); i++) {
+                for (int i = 0; i < PhaseId.VALUES.size(); i++) {
                     List<FacesEvent> eventList = events[i];
                     if (eventList != null) {
                         eventList.clear();
@@ -530,13 +510,13 @@ public class UIViewRoot extends UIComponentBase {
                 }
                 events = null;
             }
-	}
-        
-	// avoid creating the PhaseEvent if possible by doing redundant
-	// null checks.
-	if (null != beforePhase || null != phaseListeners) {
-	    notifyPhaseListeners(context, PhaseId.APPLY_REQUEST_VALUES, false);
-	}
+        }
+
+        // avoid creating the PhaseEvent if possible by doing redundant
+        // null checks.
+        if (null != beforePhase || null != phaseListeners) {
+            notifyPhaseListeners(context, PhaseId.APPLY_REQUEST_VALUES, false);
+        }
 
     }
 
@@ -552,21 +532,20 @@ public class UIViewRoot extends UIComponentBase {
      * that occur during invocation of any of the the beforePhase
      * listeners must be logged and swallowed.  After listeners are invoked
      * call superclass processing.</p>
-     *
-    */
+     */
 
     public void encodeBegin(FacesContext context) throws IOException {
 
-	skipPhase = false;
-	// avoid creating the PhaseEvent if possible by doing redundant
-	// null checks.
-	if (null != beforePhase || null != phaseListeners) {
-	    notifyPhaseListeners(context, PhaseId.RENDER_RESPONSE, true);
-	}
-	
-	if (!skipPhase) {
-	    super.encodeBegin(context);
-	}
+        skipPhase = false;
+        // avoid creating the PhaseEvent if possible by doing redundant
+        // null checks.
+        if (null != beforePhase || null != phaseListeners) {
+            notifyPhaseListeners(context, PhaseId.RENDER_RESPONSE, true);
+        }
+
+        if (!skipPhase) {
+            super.encodeBegin(context);
+        }
     }
 
     /**
@@ -579,14 +558,14 @@ public class UIViewRoot extends UIComponentBase {
      */
 
     public void encodeEnd(FacesContext context) throws IOException {
-	super.encodeEnd(context);
+        super.encodeEnd(context);
 
-	// avoid creating the PhaseEvent if possible by doing redundant
-	// null checks.
-	if (null != afterPhase || null != phaseListeners) {
-	    notifyPhaseListeners(context, PhaseId.RENDER_RESPONSE, false);
-	}
-	
+        // avoid creating the PhaseEvent if possible by doing redundant
+        // null checks.
+        if (null != afterPhase || null != phaseListeners) {
+            notifyPhaseListeners(context, PhaseId.RENDER_RESPONSE, false);
+        }
+
     }
 
     /**
@@ -594,57 +573,54 @@ public class UIViewRoot extends UIComponentBase {
      * phaseId.  Assumes that either or both the MethodExpression or
      * phaseListeners data structure are non-null.</p>
      *
-     * @param context the context for this request
-     *
-     * @param phaseId the {@link PhaseId} of the current phase
-     *
+     * @param context   the context for this request
+     * @param phaseId   the {@link PhaseId} of the current phase
      * @param isBefore, if true, notify beforePhase listeners.  Notify
-     * afterPhase listeners otherwise.
+     *                  afterPhase listeners otherwise.
      */
 
     private void notifyPhaseListeners(FacesContext context,
-				      PhaseId phaseId,
-				      boolean isBefore) {
-	PhaseEvent event = createPhaseEvent(context, phaseId);
-	
-	boolean hasPhaseMethodExpression = 
-	    (isBefore && (null != beforePhase)) ||
-	    (!isBefore && (null != afterPhase));
-	MethodExpression expression = isBefore ? beforePhase : afterPhase;
+                                      PhaseId phaseId,
+                                      boolean isBefore) {
+        PhaseEvent event = createPhaseEvent(context, phaseId);
 
-	if (hasPhaseMethodExpression) {
-	    try {
-		expression.invoke(context.getELContext(), new Object [] { event });
-		skipPhase = context.getResponseComplete() ||
-		    context.getRenderResponse();
-	    }
-	    catch (Exception e) {
-		// PENDING(edburns): log this
-	    }
-	}
-	if (null != phaseListeners) {
-	    Iterator<PhaseListener> iter = phaseListeners.iterator();
-	    PhaseListener curListener = null;
-	    while (iter.hasNext()) {
-		curListener = iter.next();
-		if (phaseId == curListener.getPhaseId() ||
-		    PhaseId.ANY_PHASE == curListener.getPhaseId()) {
-		    try {
-			if (isBefore) {
-			    curListener.beforePhase(event);
-			}
-			else {
-			    curListener.afterPhase(event);
-			}
-			skipPhase = context.getResponseComplete() ||
-			    context.getRenderResponse();
-		    }
-		    catch (Exception e) {
-			// PENDING(edburns): log this
-		    }
-		}
-	    }
-	}
+        boolean hasPhaseMethodExpression =
+              (isBefore && (null != beforePhase)) ||
+              (!isBefore && (null != afterPhase));
+        MethodExpression expression = isBefore ? beforePhase : afterPhase;
+
+        if (hasPhaseMethodExpression) {
+            try {
+                expression.invoke(context.getELContext(), new Object[]{event});
+                skipPhase = context.getResponseComplete() ||
+                            context.getRenderResponse();
+            }
+            catch (Exception e) {
+                // PENDING(edburns): log this
+            }
+        }
+        if (null != phaseListeners) {
+            Iterator<PhaseListener> iter = phaseListeners.iterator();
+            PhaseListener curListener = null;
+            while (iter.hasNext()) {
+                curListener = iter.next();
+                if (phaseId == curListener.getPhaseId() ||
+                    PhaseId.ANY_PHASE == curListener.getPhaseId()) {
+                    try {
+                        if (isBefore) {
+                            curListener.beforePhase(event);
+                        } else {
+                            curListener.afterPhase(event);
+                        }
+                        skipPhase = context.getResponseComplete() ||
+                                    context.getRenderResponse();
+                    }
+                    catch (Exception e) {
+                        // PENDING(edburns): log this
+                    }
+                }
+            }
+        }
     }
 
     private PhaseEvent createPhaseEvent(FacesContext context,
@@ -661,9 +637,9 @@ public class UIViewRoot extends UIComponentBase {
             }
             lifecycle = lifecycleFactory.getLifecycle(lifecycleId);
         }
-        
+
         return (new PhaseEvent(context, phaseId, lifecycle));
-        
+
     }
 
 
@@ -678,24 +654,24 @@ public class UIViewRoot extends UIComponentBase {
      * @param context {@link FacesContext} for the request we are processing
      *
      * @throws NullPointerException if <code>context</code>
-     *  is <code>null</code>
+     *                              is <code>null</code>
      */
     public void processValidators(FacesContext context) {
-	skipPhase = false;
-	// avoid creating the PhaseEvent if possible by doing redundant
-	// null checks.
-	if (null != beforePhase || null != phaseListeners) {
-	    notifyPhaseListeners(context, PhaseId.PROCESS_VALIDATIONS, true);
-	}
-	if (!skipPhase) {
-	    super.processValidators(context);
-	    broadcastEvents(context, PhaseId.PROCESS_VALIDATIONS);
-	}
+        skipPhase = false;
+        // avoid creating the PhaseEvent if possible by doing redundant
+        // null checks.
+        if (null != beforePhase || null != phaseListeners) {
+            notifyPhaseListeners(context, PhaseId.PROCESS_VALIDATIONS, true);
+        }
+        if (!skipPhase) {
+            super.processValidators(context);
+            broadcastEvents(context, PhaseId.PROCESS_VALIDATIONS);
+        }
         // clear out the events if we're skipping to render-response
         // or if there is a response complete signal.
-	if (context.getRenderResponse() || context.getResponseComplete()) {
+        if (context.getRenderResponse() || context.getResponseComplete()) {
             if (events != null) {
-                for (int i=0; i<PhaseId.VALUES.size(); i++) {
+                for (int i = 0; i < PhaseId.VALUES.size(); i++) {
                     List<FacesEvent> eventList = events[i];
                     if (eventList != null) {
                         eventList.clear();
@@ -703,44 +679,44 @@ public class UIViewRoot extends UIComponentBase {
                 }
                 events = null;
             }
-	}
+        }
 
-	// avoid creating the PhaseEvent if possible by doing redundant
-	// null checks.
-	if (null != beforePhase || null != phaseListeners) {
-	    notifyPhaseListeners(context, PhaseId.PROCESS_VALIDATIONS, false);
-	}
+        // avoid creating the PhaseEvent if possible by doing redundant
+        // null checks.
+        if (null != beforePhase || null != phaseListeners) {
+            notifyPhaseListeners(context, PhaseId.PROCESS_VALIDATIONS, false);
+        }
     }
 
 
     /**
      * <p>Override the default {@link UIComponentBase} behavior to broadcast
      * any queued events after the default processing has been completed
-     * and to clear out any events for later phases if the event processing 
-     * for this phase caused {@link FacesContext#renderResponse} or 
+     * and to clear out any events for later phases if the event processing
+     * for this phase caused {@link FacesContext#renderResponse} or
      * {@link FacesContext#responseComplete} to be called.</p>
      *
      * @param context {@link FacesContext} for the request we are processing
      *
      * @throws NullPointerException if <code>context</code>
-     *  is <code>null</code>
+     *                              is <code>null</code>
      */
     public void processUpdates(FacesContext context) {
-	skipPhase = false;
-	// avoid creating the PhaseEvent if possible by doing redundant
-	// null checks.
-	if (null != beforePhase || null != phaseListeners) {
-	    notifyPhaseListeners(context, PhaseId.UPDATE_MODEL_VALUES, true);
-	}
-	if (!skipPhase) {
-	    super.processUpdates(context);
-	    broadcastEvents(context, PhaseId.UPDATE_MODEL_VALUES);
-	}
+        skipPhase = false;
+        // avoid creating the PhaseEvent if possible by doing redundant
+        // null checks.
+        if (null != beforePhase || null != phaseListeners) {
+            notifyPhaseListeners(context, PhaseId.UPDATE_MODEL_VALUES, true);
+        }
+        if (!skipPhase) {
+            super.processUpdates(context);
+            broadcastEvents(context, PhaseId.UPDATE_MODEL_VALUES);
+        }
         // clear out the events if we're skipping to render-response
         // or if there is a response complete signal.
         if (context.getRenderResponse() || context.getResponseComplete()) {
             if (events != null) {
-                for (int i=0; i<PhaseId.VALUES.size(); i++) {
+                for (int i = 0; i < PhaseId.VALUES.size(); i++) {
                     List eventList = events[i];
                     if (eventList != null) {
                         eventList.clear();
@@ -748,45 +724,45 @@ public class UIViewRoot extends UIComponentBase {
                 }
                 events = null;
             }
-	}
-      
-	// avoid creating the PhaseEvent if possible by doing redundant
-	// null checks.
-	if (null != beforePhase || null != phaseListeners) {
-	    notifyPhaseListeners(context, PhaseId.UPDATE_MODEL_VALUES, false);
-	}
+        }
+
+        // avoid creating the PhaseEvent if possible by doing redundant
+        // null checks.
+        if (null != beforePhase || null != phaseListeners) {
+            notifyPhaseListeners(context, PhaseId.UPDATE_MODEL_VALUES, false);
+        }
     }
 
 
     /**
      * <p>Broadcast any events that have been queued for the <em>Invoke
      * Application</em> phase of the request processing lifecycle
-     * and to clear out any events for later phases if the event processing 
-     * for this phase caused {@link FacesContext#renderResponse} or 
+     * and to clear out any events for later phases if the event processing
+     * for this phase caused {@link FacesContext#renderResponse} or
      * {@link FacesContext#responseComplete} to be called.</p>
      *
      * @param context {@link FacesContext} for the request we are processing
      *
      * @throws NullPointerException if <code>context</code>
-     *  is <code>null</code>
+     *                              is <code>null</code>
      */
     public void processApplication(FacesContext context) {
-	skipPhase = false;
-	// avoid creating the PhaseEvent if possible by doing redundant
-	// null checks.
-	if (null != beforePhase || null != phaseListeners) {
-	    notifyPhaseListeners(context, PhaseId.INVOKE_APPLICATION, true);
-	}
+        skipPhase = false;
+        // avoid creating the PhaseEvent if possible by doing redundant
+        // null checks.
+        if (null != beforePhase || null != phaseListeners) {
+            notifyPhaseListeners(context, PhaseId.INVOKE_APPLICATION, true);
+        }
 
-	if (!skipPhase) {
-	    // NOTE - no tree walk is performed; this is a UIViewRoot-only operation
-	    broadcastEvents(context, PhaseId.INVOKE_APPLICATION);
-	}
+        if (!skipPhase) {
+            // NOTE - no tree walk is performed; this is a UIViewRoot-only operation
+            broadcastEvents(context, PhaseId.INVOKE_APPLICATION);
+        }
         // clear out the events if we're skipping to render-response
         // or if there is a response complete signal.
         if (context.getRenderResponse() || context.getResponseComplete()) {
             if (events != null) {
-                for (int i=0; i<PhaseId.VALUES.size(); i++) {
+                for (int i = 0; i < PhaseId.VALUES.size(); i++) {
                     List eventList = events[i];
                     if (eventList != null) {
                         eventList.clear();
@@ -794,13 +770,13 @@ public class UIViewRoot extends UIComponentBase {
                 }
                 events = null;
             }
-	}
+        }
 
-	// avoid creating the PhaseEvent if possible by doing redundant
-	// null checks.
-	if (null != beforePhase || null != phaseListeners) {
-	    notifyPhaseListeners(context, PhaseId.INVOKE_APPLICATION, false);
-	}
+        // avoid creating the PhaseEvent if possible by doing redundant
+        // null checks.
+        if (null != beforePhase || null != phaseListeners) {
+            notifyPhaseListeners(context, PhaseId.INVOKE_APPLICATION, false);
+        }
     }
 
     /**
@@ -809,20 +785,20 @@ public class UIViewRoot extends UIComponentBase {
      * this UIViewRoot.</p>
      */
     public String createUniqueId() {
-	return UNIQUE_ID_PREFIX + lastId++;
+        return UNIQUE_ID_PREFIX + lastId++;
     }
-    
+
     /*
-     * <p>The locale for this view.</p>
-     */
+    * <p>The locale for this view.</p>
+    */
     private Locale locale = null;
-    
+
     /**
      * <p>Return the <code>Locale</code> to be used in localizing the
      * response being created for this view.</p>
-     *
+     * <p/>
      * <p>Algorithm:</p>
-     *
+     * <p/>
      * <p>If we have a <code>locale</code> ivar, return it.  If we have
      * a value expression for "locale", get its value.  If the value is
      * <code>null</code>, return the result of calling {@link
@@ -834,61 +810,62 @@ public class UIViewRoot extends UIComponentBase {
      * javax.faces.application.ViewHandler#calculateLocale}.</p>
      *
      * @return The current <code>Locale</code> obtained by executing the
-     * above algorithm.
+     *         above algorithm.
      */
     public Locale getLocale() {
-	Locale result = null;
-	if (null != locale) {
-	    result = this.locale;
-	}
-	else {
-	    ValueExpression vb = getValueExpression("locale");
-	    FacesContext context = getFacesContext();
-	    if (vb != null) {
+        Locale result = null;
+        if (null != locale) {
+            result = this.locale;
+        } else {
+            ValueExpression vb = getValueExpression("locale");
+            FacesContext context = getFacesContext();
+            if (vb != null) {
                 Object resultLocale = null;
 
-		try {
-		    resultLocale = vb.getValue(context.getELContext());
-		}
-		catch (ELException e) {
-		    // PENDING(edburns): log this
-		}
-
-		if (null == resultLocale) {
-		    result = 
-			context.getApplication().getViewHandler().calculateLocale(context);
-		}
-		else if ( resultLocale instanceof Locale) {
-                    result = (Locale)resultLocale;
-                } else if ( resultLocale instanceof String) {
-                    result = getLocaleFromString((String)resultLocale);
+                try {
+                    resultLocale = vb.getValue(context.getELContext());
                 }
-	    } 
-	    else {
-		result = 
-		    context.getApplication().getViewHandler().calculateLocale(context);
-	    }
-	}
-	return result;
+                catch (ELException e) {
+                    // PENDING(edburns): log this
+                }
+
+                if (null == resultLocale) {
+                    result =
+                          context.getApplication().getViewHandler()
+                                .calculateLocale(context);
+                } else if (resultLocale instanceof Locale) {
+                    result = (Locale) resultLocale;
+                } else if (resultLocale instanceof String) {
+                    result = getLocaleFromString((String) resultLocale);
+                }
+            } else {
+                result =
+                      context.getApplication().getViewHandler()
+                            .calculateLocale(context);
+            }
+        }
+        return result;
     }
 
 
     /**
      * Returns the locale represented by the expression.
+     *
      * @param localeExpr a String in the format specified by JSTL Specification
      *                   as follows:
-     *                   "A String value is interpreted as the printable 
-     *                    representation of a locale, which must contain a 
-     *                    two-letter (lower-case) language code (as defined by 
-     *                    ISO-639), and may contain a two-letter (upper-case)
-     *                    country code (as defined by ISO-3166). Language and 
-     *                    country codes must be separated by hyphen (???-???) or 
-     *                    underscore (???_???)."
+     *                   "A String value is interpreted as the printable
+     *                   representation of a locale, which must contain a
+     *                   two-letter (lower-case) language code (as defined by
+     *                   ISO-639), and may contain a two-letter (upper-case)
+     *                   country code (as defined by ISO-3166). Language and
+     *                   country codes must be separated by hyphen (???-???) or
+     *                   underscore (???_???)."
+     *
      * @return Locale instance cosntructed from the expression.
      */
     private Locale getLocaleFromString(String localeExpr) {
         Locale result = Locale.getDefault();
-        if (localeExpr.indexOf("_") == -1 || localeExpr.indexOf("-") == -1)  {
+        if (localeExpr.indexOf("_") == -1 || localeExpr.indexOf("-") == -1) {
             // expression has just language code in it. make sure the 
             // expression contains exactly 2 characters.
             if (localeExpr.length() == 2) {
@@ -899,14 +876,14 @@ public class UIViewRoot extends UIComponentBase {
             // contains exactly 5 characters.
             if (localeExpr.length() == 5) {
                 // get the language and country to construct the locale.
-                String language = localeExpr.substring(0,1);
-                String country = localeExpr.substring(3,4);
-                result = new Locale(language,country);
+                String language = localeExpr.substring(0, 1);
+                String country = localeExpr.substring(3, 4);
+                result = new Locale(language, country);
             }
         }
         return result;
     }
-    
+
     /**
      * <p>Set the <code>Locale</code> to be used in localizing the
      * response being created for this view. </p>
@@ -918,7 +895,7 @@ public class UIViewRoot extends UIComponentBase {
         // Make sure to appraise the EL of this switch in Locale.
         FacesContext.getCurrentInstance().getELContext().setLocale(locale);
     }
-    
+
     // ----------------------------------------------------- StateHolder Methods
 
 
@@ -927,9 +904,9 @@ public class UIViewRoot extends UIComponentBase {
     public Object saveState(FacesContext context) {
 
         if (values == null) {
-             values = new Object[8];
+            values = new Object[8];
         }
-        
+
         values[0] = super.saveState(context);
         values[1] = renderKitId;
         values[2] = viewId;
@@ -949,11 +926,13 @@ public class UIViewRoot extends UIComponentBase {
         super.restoreState(context, values[0]);
         renderKitId = (String) values[1];
         viewId = (String) values[2];
-        locale = (Locale)values[3];
-        lastId = ((Integer)values[4]).intValue();
-	beforePhase = (MethodExpression) restoreAttachedState(context, values[5]);
-	afterPhase = (MethodExpression) restoreAttachedState(context, values[6]);
-	phaseListeners = (List) restoreAttachedState(context, values[7]);
+        locale = (Locale) values[3];
+        lastId = ((Integer) values[4]).intValue();
+        beforePhase =
+              (MethodExpression) restoreAttachedState(context, values[5]);
+        afterPhase =
+              (MethodExpression) restoreAttachedState(context, values[6]);
+        phaseListeners = (List) restoreAttachedState(context, values[7]);
 
     }
 
