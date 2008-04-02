@@ -1,5 +1,5 @@
 /*
- * $Id: RestoreViewPhase.java,v 1.43 2006/12/21 23:03:39 rlubke Exp $
+ * $Id: RestoreViewPhase.java,v 1.44 2007/03/06 23:59:16 rlubke Exp $
  */
 
 /*
@@ -53,12 +53,13 @@ import com.sun.faces.config.JSFVersionTracker.Version;
 import com.sun.faces.renderkit.RenderKitUtils;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
+import com.sun.faces.util.DebugUtil;
 
 /**
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: RestoreViewPhase.java,v 1.43 2006/12/21 23:03:39 rlubke Exp $
+ * @version $Id: RestoreViewPhase.java,v 1.44 2007/03/06 23:59:16 rlubke Exp $
  */
 
 public class RestoreViewPhase extends Phase {
@@ -131,7 +132,8 @@ public class RestoreViewPhase extends Phase {
                   MessageUtils.NULL_REQUEST_VIEW_ERROR_MESSAGE_ID));
         }
 
-        if (isPostback(facesContext)) {
+        boolean isPostBack = isPostback(facesContext);
+        if (isPostBack) {
             // try to restore the view
             ViewHandler viewHandler = Util.getViewHandler(facesContext);
             if (null == (viewRoot =
@@ -205,6 +207,11 @@ public class RestoreViewPhase extends Phase {
         assert(null != viewRoot);
 
         facesContext.setViewRoot(viewRoot);
+
+        if (isPostBack && logger.isLoggable(Level.FINEST)) {
+            logger.log(Level.FINEST, "+=+=+=+=+=+= Restored View Printout for " + viewId);
+            DebugUtil.printTree(viewRoot, logger, Level.FINEST);
+        }
 
         if (logger.isLoggable(Level.FINE)) {
             logger.fine("Exiting RestoreViewPhase");
