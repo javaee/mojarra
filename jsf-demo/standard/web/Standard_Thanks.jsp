@@ -23,7 +23,7 @@
             <tr> 
               <td>The actuated component 
                   was <h:output_text id="actuated"
-                               value="model.whichComponent"/>. </td>
+                               value="#{model.whichComponent}"/>. </td>
             </tr>
 
         </c:if>
