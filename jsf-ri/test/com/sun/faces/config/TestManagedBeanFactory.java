@@ -1,5 +1,5 @@
 /*
- * $Id: TestManagedBeanFactory.java,v 1.12 2004/01/27 21:05:56 eburns Exp $
+ * $Id: TestManagedBeanFactory.java,v 1.13 2004/01/30 22:35:38 eburns Exp $
  */
 
 /*
@@ -14,6 +14,7 @@ import java.util.HashMap;
 
 import javax.faces.context.FacesContext;
 import javax.faces.FacesException;
+import javax.faces.el.ValueBinding;
 
 import com.sun.faces.TestBean;
 import com.sun.faces.application.ApplicationImpl;
@@ -449,7 +450,17 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
         //make sure scope is stored properly
         assertTrue(mbf.getScope() == null);
     }
-    
+
+    public void testMixedBean() throws Exception {
+	ValueBinding vb = 
+	    getFacesContext().getApplication().createValueBinding("#{mixedBean}");
+	TestBean bean = (TestBean) vb.getValue(getFacesContext());
+	assertEquals("mixed value Bobby Orr", bean.getProp());
+
+	vb = getFacesContext().getApplication().createValueBinding("#{mixedBean.prop}");
+	assertEquals(bean.getProp(), (String) vb.getValue(getFacesContext()));
+    }
+	
     /************* PENDING(edburns): rewrite to exercise new edge case
      * detection.
     

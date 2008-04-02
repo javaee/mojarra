@@ -808,7 +808,7 @@ With type: class java.lang.String
 
 Expression: #{and}
 ExpectedType: class java.lang.Object
-Causes an error: javax.faces.el.EvaluationException: com.sun.faces.el.impl.parser.ParseException: Encountered "and" at line 1, column 3.
+Causes an error: javax.faces.el.ReferenceSyntaxException: Encountered "and" at line 1, column 3.
 Was expecting one of:
     <INTEGER_LITERAL> ...
     <FLOATING_POINT_LITERAL> ...
@@ -825,7 +825,7 @@ Was expecting one of:
     
 Expression: #{or}
 ExpectedType: class java.lang.Object
-Causes an error: javax.faces.el.EvaluationException: com.sun.faces.el.impl.parser.ParseException: Encountered "or" at line 1, column 3.
+Causes an error: javax.faces.el.ReferenceSyntaxException: Encountered "or" at line 1, column 3.
 Was expecting one of:
     <INTEGER_LITERAL> ...
     <FLOATING_POINT_LITERAL> ...
@@ -842,7 +842,7 @@ Was expecting one of:
     
 Expression: #{not}
 ExpectedType: class java.lang.Object
-Causes an error: javax.faces.el.EvaluationException: com.sun.faces.el.impl.parser.ParseException: Encountered "}" at line 1, column 6.
+Causes an error: javax.faces.el.ReferenceSyntaxException: Encountered "}" at line 1, column 6.
 Was expecting one of:
     <INTEGER_LITERAL> ...
     <FLOATING_POINT_LITERAL> ...
@@ -859,7 +859,7 @@ Was expecting one of:
     
 Expression: #{eq}
 ExpectedType: class java.lang.Object
-Causes an error: javax.faces.el.EvaluationException: com.sun.faces.el.impl.parser.ParseException: Encountered "eq" at line 1, column 3.
+Causes an error: javax.faces.el.ReferenceSyntaxException: Encountered "eq" at line 1, column 3.
 Was expecting one of:
     <INTEGER_LITERAL> ...
     <FLOATING_POINT_LITERAL> ...
@@ -876,7 +876,7 @@ Was expecting one of:
     
 Expression: #{ne}
 ExpectedType: class java.lang.Object
-Causes an error: javax.faces.el.EvaluationException: com.sun.faces.el.impl.parser.ParseException: Encountered "ne" at line 1, column 3.
+Causes an error: javax.faces.el.ReferenceSyntaxException: Encountered "ne" at line 1, column 3.
 Was expecting one of:
     <INTEGER_LITERAL> ...
     <FLOATING_POINT_LITERAL> ...
@@ -893,7 +893,7 @@ Was expecting one of:
     
 Expression: #{lt}
 ExpectedType: class java.lang.Object
-Causes an error: javax.faces.el.EvaluationException: com.sun.faces.el.impl.parser.ParseException: Encountered "lt" at line 1, column 3.
+Causes an error: javax.faces.el.ReferenceSyntaxException: Encountered "lt" at line 1, column 3.
 Was expecting one of:
     <INTEGER_LITERAL> ...
     <FLOATING_POINT_LITERAL> ...
@@ -910,7 +910,7 @@ Was expecting one of:
     
 Expression: #{gt}
 ExpectedType: class java.lang.Object
-Causes an error: javax.faces.el.EvaluationException: com.sun.faces.el.impl.parser.ParseException: Encountered "gt" at line 1, column 3.
+Causes an error: javax.faces.el.ReferenceSyntaxException: Encountered "gt" at line 1, column 3.
 Was expecting one of:
     <INTEGER_LITERAL> ...
     <FLOATING_POINT_LITERAL> ...
@@ -927,7 +927,7 @@ Was expecting one of:
     
 Expression: #{le}
 ExpectedType: class java.lang.Object
-Causes an error: javax.faces.el.EvaluationException: com.sun.faces.el.impl.parser.ParseException: Encountered "le" at line 1, column 3.
+Causes an error: javax.faces.el.ReferenceSyntaxException: Encountered "le" at line 1, column 3.
 Was expecting one of:
     <INTEGER_LITERAL> ...
     <FLOATING_POINT_LITERAL> ...
@@ -944,7 +944,7 @@ Was expecting one of:
     
 Expression: #{ge}
 ExpectedType: class java.lang.Object
-Causes an error: javax.faces.el.EvaluationException: com.sun.faces.el.impl.parser.ParseException: Encountered "ge" at line 1, column 3.
+Causes an error: javax.faces.el.ReferenceSyntaxException: Encountered "ge" at line 1, column 3.
 Was expecting one of:
     <INTEGER_LITERAL> ...
     <FLOATING_POINT_LITERAL> ...
@@ -984,55 +984,55 @@ Evaluates to: null
 
 Expression: #{bean1a.and}
 ExpectedType: class java.lang.Object
-Causes an error: javax.faces.el.EvaluationException: com.sun.faces.el.impl.parser.ParseException: Encountered "and" at line 1, column 10.
+Causes an error: javax.faces.el.ReferenceSyntaxException: Encountered "and" at line 1, column 10.
 Was expecting:
     <IDENTIFIER> ...
     
 Expression: #{bean1a.or}
 ExpectedType: class java.lang.Object
-Causes an error: javax.faces.el.EvaluationException: com.sun.faces.el.impl.parser.ParseException: Encountered "or" at line 1, column 10.
+Causes an error: javax.faces.el.ReferenceSyntaxException: Encountered "or" at line 1, column 10.
 Was expecting:
     <IDENTIFIER> ...
     
 Expression: #{bean1a.not}
 ExpectedType: class java.lang.Object
-Causes an error: javax.faces.el.EvaluationException: com.sun.faces.el.impl.parser.ParseException: Encountered "not" at line 1, column 10.
+Causes an error: javax.faces.el.ReferenceSyntaxException: Encountered "not" at line 1, column 10.
 Was expecting:
     <IDENTIFIER> ...
     
 Expression: #{bean1a.eq}
 ExpectedType: class java.lang.Object
-Causes an error: javax.faces.el.EvaluationException: com.sun.faces.el.impl.parser.ParseException: Encountered "eq" at line 1, column 10.
+Causes an error: javax.faces.el.ReferenceSyntaxException: Encountered "eq" at line 1, column 10.
 Was expecting:
     <IDENTIFIER> ...
     
 Expression: #{bean1a.ne}
 ExpectedType: class java.lang.Object
-Causes an error: javax.faces.el.EvaluationException: com.sun.faces.el.impl.parser.ParseException: Encountered "ne" at line 1, column 10.
+Causes an error: javax.faces.el.ReferenceSyntaxException: Encountered "ne" at line 1, column 10.
 Was expecting:
     <IDENTIFIER> ...
     
 Expression: #{bean1a.lt}
 ExpectedType: class java.lang.Object
-Causes an error: javax.faces.el.EvaluationException: com.sun.faces.el.impl.parser.ParseException: Encountered "lt" at line 1, column 10.
+Causes an error: javax.faces.el.ReferenceSyntaxException: Encountered "lt" at line 1, column 10.
 Was expecting:
     <IDENTIFIER> ...
     
 Expression: #{bean1a.gt}
 ExpectedType: class java.lang.Object
-Causes an error: javax.faces.el.EvaluationException: com.sun.faces.el.impl.parser.ParseException: Encountered "gt" at line 1, column 10.
+Causes an error: javax.faces.el.ReferenceSyntaxException: Encountered "gt" at line 1, column 10.
 Was expecting:
     <IDENTIFIER> ...
     
 Expression: #{bean1a.le}
 ExpectedType: class java.lang.Object
-Causes an error: javax.faces.el.EvaluationException: com.sun.faces.el.impl.parser.ParseException: Encountered "le" at line 1, column 10.
+Causes an error: javax.faces.el.ReferenceSyntaxException: Encountered "le" at line 1, column 10.
 Was expecting:
     <IDENTIFIER> ...
     
 Expression: #{bean1a.ge}
 ExpectedType: class java.lang.Object
-Causes an error: javax.faces.el.EvaluationException: com.sun.faces.el.impl.parser.ParseException: Encountered "ge" at line 1, column 10.
+Causes an error: javax.faces.el.ReferenceSyntaxException: Encountered "ge" at line 1, column 10.
 Was expecting:
     <IDENTIFIER> ...
     
@@ -1053,19 +1053,19 @@ ExpectedType: class java.lang.Object
 Causes an error: javax.faces.el.PropertyNotFoundException: Error getting property 'application' from bean of type com.sun.faces.el.impl.Bean1
 Expression: #{bean1a.true}
 ExpectedType: class java.lang.Object
-Causes an error: javax.faces.el.EvaluationException: com.sun.faces.el.impl.parser.ParseException: Encountered "true" at line 1, column 10.
+Causes an error: javax.faces.el.ReferenceSyntaxException: Encountered "true" at line 1, column 10.
 Was expecting:
     <IDENTIFIER> ...
     
 Expression: #{bean1a.false}
 ExpectedType: class java.lang.Object
-Causes an error: javax.faces.el.EvaluationException: com.sun.faces.el.impl.parser.ParseException: Encountered "false" at line 1, column 10.
+Causes an error: javax.faces.el.ReferenceSyntaxException: Encountered "false" at line 1, column 10.
 Was expecting:
     <IDENTIFIER> ...
     
 Expression: #{bean1a.null}
 ExpectedType: class java.lang.Object
-Causes an error: javax.faces.el.EvaluationException: com.sun.faces.el.impl.parser.ParseException: Encountered "null" at line 1, column 10.
+Causes an error: javax.faces.el.ReferenceSyntaxException: Encountered "null" at line 1, column 10.
 Was expecting:
     <IDENTIFIER> ...
     

@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationImpl.java,v 1.40 2004/01/27 21:04:01 eburns Exp $
+ * $Id: ApplicationImpl.java,v 1.41 2004/01/30 22:35:34 eburns Exp $
  */
 
 /*
@@ -45,6 +45,7 @@ import com.sun.faces.config.ManagedBeanFactory;
 import com.sun.faces.el.MethodBindingImpl;
 import com.sun.faces.el.PropertyResolverImpl;
 import com.sun.faces.el.ValueBindingImpl;
+import com.sun.faces.el.MixedELValueBinding;
 import com.sun.faces.el.VariableResolverImpl;
 import com.sun.faces.el.impl.ElException;
 import com.sun.faces.el.impl.ExpressionEvaluator;
@@ -374,18 +375,25 @@ public class ApplicationImpl extends Application {
             throw new NullPointerException(Util.getExceptionMessage(
 		Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         } else {
-            if (!(ref.startsWith("#{") && ref.endsWith("}"))) {
+            if (!Util.isVBExpression(ref)) {
                 if (log.isErrorEnabled()) {
                     log.error(" Expression " + ref + 
-                        " does not follow the syntax #{...}");
+			      " does not follow the JSF EL syntax ");
                 }
 	        throw new ReferenceSyntaxException(ref);
 	    }
-            // PENDING: Need to impelement the performance enhancement suggested
-            // by Hans in the EG on 17 November 2003.
-            ref = Util.stripBracketsIfNecessary(ref);
-            checkSyntax(ref);
-            valueBinding = new ValueBindingImpl (this);
+
+	    // is this a Mixed expression?
+	    if (Util.isMixedVBExpression(ref)) {
+		valueBinding = new MixedELValueBinding();
+	    }
+	    else {
+		// PENDING: Need to impelement the performance enhancement
+		// suggested by Hans in the EG on 17 November 2003.
+		ref = Util.stripBracketsIfNecessary(ref);
+		checkSyntax(ref);
+		valueBinding = new ValueBindingImpl (this);
+	    }
             ((ValueBindingImpl) valueBinding).setRef(ref); 
         }
         return valueBinding;

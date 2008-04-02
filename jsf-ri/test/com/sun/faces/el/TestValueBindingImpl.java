@@ -1,5 +1,5 @@
 /*
- * $Id: TestValueBindingImpl.java,v 1.25 2004/01/27 21:06:00 eburns Exp $
+ * $Id: TestValueBindingImpl.java,v 1.26 2004/01/30 22:35:39 eburns Exp $
  */
 
 /*
@@ -876,6 +876,21 @@ public class TestValueBindingImpl extends ServletFacesTestCase
 	assertEquals("ValueBinding not expected value", "Justyna", 
 		     (String) input.getValueBinding("buckaroo").getValue(getFacesContext()));
 	
+    }
+
+    public void testGetExpressionString() throws Exception {
+	ApplicationImpl app = 
+	    (ApplicationImpl) getFacesContext().getApplication();
+	String ref = null;
+	ValueBinding vb = null;
+
+	ref = "#{NewCustomerFormHandler.minimumAge}";
+	vb = app.createValueBinding(ref);
+	assertEquals(ref, vb.getExpressionString());
+
+	ref = "minimum age is #{NewCustomerFormHandler.minimumAge}";
+	vb = app.createValueBinding(ref);
+	assertEquals(ref, vb.getExpressionString());
     }
 
     public void testMixedELValueParser() throws Exception {

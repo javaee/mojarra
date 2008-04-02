@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.124 2004/01/27 21:04:50 eburns Exp $
+ * $Id: Util.java,v 1.125 2004/01/30 22:35:37 eburns Exp $
  */
 
 /*
@@ -70,7 +70,7 @@ import com.sun.faces.el.impl.JspVariableResolver;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.124 2004/01/27 21:04:50 eburns Exp $ 
+ * @version $Id: Util.java,v 1.125 2004/01/30 22:35:37 eburns Exp $ 
  */
 
 public class Util extends Object
@@ -858,21 +858,7 @@ private Util()
 	// Must parse the value to see if it contains more than
 	// one expression
 	FacesContext context = FacesContext.getCurrentInstance();
-	MixedELValueParser parser = new MixedELValueParser();
-	List l = null;
-	try {
-	    l = parser.parse(context, valueRef);
-	}
-	catch (Exception e) {
-	    // Ignore it here and deal with it in MixedELValueBinding
-	}
-	if (l != null && l.size() == 1 && !(l.get(0) instanceof String)) {
-	    vb = context.getApplication().createValueBinding(valueRef);
-	}
-	else {
-	    vb = new MixedELValueBinding();
-	    ((MixedELValueBinding) vb).setRef(valueRef);
-	}
+	vb = context.getApplication().createValueBinding(valueRef);
 	return vb;
     }         
 
@@ -950,13 +936,31 @@ private Util()
 	if (null == expression) {
 	    return false;
 	}
+	int start = 0;
         //check to see if attribute has an expression
-        if ((expression.indexOf("#{") != -1) &&
-            (expression.indexOf("#{") < expression.indexOf('}'))) {
+        if (((start = expression.indexOf("#{")) != -1) &&
+            (start < expression.indexOf('}'))) {
             return true;
         }
         return false;
     }
+
+    /*
+     * Determine whether String is a mixed value binding expression or not.
+     */
+    public static boolean isMixedVBExpression(String expression) {
+	if (null == expression) {
+	    return false;
+	}
+	int start = 0;
+	// if it doesn't start and end with delimiters
+        if (!(expression.startsWith("#{") && expression.endsWith("}"))) {
+	    // see if it has some inside.
+            return isVBExpression(expression);
+        }
+	return false;
+    }
+
     
     public static StateManager getStateManager(FacesContext context) 
             throws FacesException {

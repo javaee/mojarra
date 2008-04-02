@@ -265,6 +265,17 @@
       </map-entries>
     </managed-property>
   </managed-bean>
+
+  <managed-bean>
+    <managed-bean-name>mixedBean</managed-bean-name>
+    <managed-bean-class>com.sun.faces.TestBean</managed-bean-class>
+    <managed-bean-scope>session</managed-bean-scope>
+    <managed-property>
+      <property-name>prop</property-name>
+      <value>mixed value #{SimpleBean.simpleProperty}</value>
+    </managed-property>
+  </managed-bean>
+   
     
   <managed-bean>
     <managed-bean-name>SimpleBean</managed-bean-name>

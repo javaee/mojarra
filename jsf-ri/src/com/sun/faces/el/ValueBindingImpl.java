@@ -1,5 +1,5 @@
 /*
- * $Id: ValueBindingImpl.java,v 1.26 2004/01/27 21:04:13 eburns Exp $
+ * $Id: ValueBindingImpl.java,v 1.27 2004/01/30 22:35:36 eburns Exp $
  */
 
 /*
@@ -335,11 +335,8 @@ public class ValueBindingImpl extends ValueBinding implements StateHolder
         }
     }
 
-    /**
-     * <p>Returns the expression string, without delimiters.</p>
-     */
     public String getExpressionString() {
-	return ref;
+	return "#{" + ref + "}";
     }
 
 
