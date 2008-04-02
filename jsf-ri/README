@@ -36,7 +36,9 @@ Major changes/features in this release:
 Known Issues With This Release
 ==============================
 
-* The StandardRenderKit.jsp page in the basic webapp crashes tomcat.
+* Be aware of bug
+  <http://nagoya.apache.org/bugzilla/show_bug.cgi?id=12492>.
+  JSP with lots of custom tags crashes tomcat VM
 
 * Due to a bug in JSTL 1.0, you must have the jstl.jar and standard.jar in
   your WEB-INF/lib directory of each webapp.  It is not sufficient to

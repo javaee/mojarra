@@ -33,7 +33,7 @@
                                 tabindex="50"
                                 accesskey="B"
                                 title="click to submit form"
-                                commandName="login">
+                                commandName="standardRenderKitSubmit">
 
                       <faces:output_text id="button2_label"
                      key="loginButton" bundle="${basicBundle}" />

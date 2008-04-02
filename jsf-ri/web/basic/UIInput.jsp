@@ -1,28 +1,22 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
   <head>
-    <title>JavaServer Faces 1.0 Standard RenderKit</title>
-    <link rel="stylesheet" type="text/css"
-       href='<%= request.getContextPath() + "/stylesheet.css" %>'>
+    <title>UIInput</title>
   </head>
 
   <body>
 
+    <h1>UIInput</h1>
+
+    <h3>$Id: UIInput.jsp,v 1.1 2002/09/10 20:18:40 edburns Exp $</h3>
+
     <%@ taglib uri="http://java.sun.com/jstl/fmt" prefix="fmt" %>
     <%@ taglib uri="http://java.sun.com/j2ee/html_basic/" prefix="faces" %>
-
-    <h1>JavaServer Faces 1.0 Standard RenderKit</h1>
-    <h3>$Id: StandardRenderKit.jsp,v 1.13 2002/09/09 23:52:27 visvan Exp $</h3>
-
-    <p>The elements in this page should follow the
-    StandardRenderKit.html page in the jsf-api.</p>
-
 
      <fmt:setBundle basename="basic.Resources" scope="session" 
                     var="basicBundle"/>
 
      <jsp:useBean id="LoginBean" class="basic.LoginBean" scope="session" />
-     <jsp:useBean id="ListBean" class="basic.ListBean" scope="session" />
 
      <faces:usefaces>  
 
@@ -43,12 +37,6 @@
 
            <%@ include file="table_header.jsp" %>
 
-           <%@ include file="command_button_row.jsp" %>
-
-           <%@ include file="command_hyperlink_row.jsp" %>
-
-           <%@ include file="graphic_image_row.jsp" %>
-
            <%@ include file="input_date_row.jsp" %>
 
            <%@ include file="input_text_row.jsp" %>
@@ -63,23 +51,16 @@
   
            <%@ include file="input_number_row.jsp" %>
 
-           <%@ include file="selectboolean_checkbox_row.jsp" %>
+<tr>
+<td><b>Errors:</b>
+</td>
 
-           <%@ include file="selectone_listbox_row.jsp" %>
+<td>
+		<faces:output_errors id="globalErrors" 
+			  compoundId="" />
+</td>
 
-<!--           selectone_menu_row.jsp -->
-
-           <%@ include file="selectone_radio_row.jsp" %>
-
-           <%@ include file="selectmany_menu_row.jsp" %>
-
-           <%@ include file="selectmany_listbox_row.jsp" %>
-
-           <%@ include file="selectmany_checkbox_row.jsp" %>
-
-           <%@ include file="panel_list_row.jsp" %>
-
-<!--           panel_grid_row.jsp -->
+</tr>
 
          </table>
 
@@ -92,6 +73,7 @@
        </faces:form>
 
      </faces:usefaces>   
+
 
   </body>
 </html>
