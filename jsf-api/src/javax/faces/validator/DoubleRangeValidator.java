@@ -1,5 +1,5 @@
 /*
- * $Id: DoubleRangeValidator.java,v 1.27 2003/10/20 03:04:00 eburns Exp $
+ * $Id: DoubleRangeValidator.java,v 1.28 2003/10/20 15:02:40 eburns Exp $
  */
 
 /*
@@ -54,7 +54,6 @@ public class DoubleRangeValidator implements Validator, StateHolder {
      */
     public static final String MAXIMUM_MESSAGE_ID =
         "javax.faces.validator.DoubleRangeValidator.MAXIMUM";
-
 
     /**
      * <p>The message identifier of the {@link Message} to be created if
@@ -209,22 +208,46 @@ public class DoubleRangeValidator implements Validator, StateHolder {
                 double converted = doubleValue(value);
                 if (maximumSet &&
                     (converted > maximum)) {
-                    context.addMessage(component.getClientId(context),
-                                       ValidatorMessages.getMessage
-                                       (context,
-                                        MAXIMUM_MESSAGE_ID,
-                                        new Object[] {
-                                            new Double(maximum) }));
+		    if (minimumSet) {
+			context.addMessage(component.getClientId(context),
+					   ValidatorMessages.getMessage
+					   (context,
+					    ValidatorMessages.NOT_IN_RANGE_MESSAGE_ID,
+					    new Object[] {
+						new Double(minimum),
+						new Double(maximum) }));
+			
+		    }
+		    else {
+			context.addMessage(component.getClientId(context),
+					   ValidatorMessages.getMessage
+					   (context,
+					    MAXIMUM_MESSAGE_ID,
+					    new Object[] {
+						new Double(maximum) }));
+		    }
                     component.setValid(false);
                 }
                 if (minimumSet &&
                     (converted < minimum)) {
-                    context.addMessage(component.getClientId(context),
-                                       ValidatorMessages.getMessage
-                                       (context,
-                                        MINIMUM_MESSAGE_ID,
-                                        new Object[] {
-                                            new Double(minimum) }));
+		    if (maximumSet) {
+			context.addMessage(component.getClientId(context),
+					   ValidatorMessages.getMessage
+					   (context,
+					    ValidatorMessages.NOT_IN_RANGE_MESSAGE_ID,
+					    new Object[] {
+						new Double(minimum),
+						new Double(maximum) }));
+			
+		    }
+		    else {
+			context.addMessage(component.getClientId(context),
+					   ValidatorMessages.getMessage
+					   (context,
+					    MINIMUM_MESSAGE_ID,
+					    new Object[] {
+						new Double(minimum) }));
+		    }
                     component.setValid(false);
                 }
             } catch (NumberFormatException e) {

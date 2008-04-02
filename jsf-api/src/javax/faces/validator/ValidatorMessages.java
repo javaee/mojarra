@@ -1,5 +1,5 @@
 /*
- * $Id: ValidatorMessages.java,v 1.1 2003/08/13 22:29:52 craigmcc Exp $
+ * $Id: ValidatorMessages.java,v 1.2 2003/10/20 15:02:41 eburns Exp $
  */
 
 /*
@@ -22,6 +22,17 @@ import javax.faces.context.FacesContext;
 
 final class ValidatorMessages {
 
+    /**
+     * <p>The message identifier of the {@link Message} to be created if
+     * the maximum or minimum value check fails, and both the maximum
+     * and minim values for this validator have been set.  The message
+     * format string for this message may optionally include a
+     * <code>{0}</code> placeholder, which will be replaced by the
+     * configured minimum value, and a <code>{1}</code> placeholder,
+     * which will be replaced by the configured maximum value.</p>
+     */
+    public static final String NOT_IN_RANGE_MESSAGE_ID =
+        "javax.faces.validator.NOT_IN_RANGE";
 
     /**
      * <p>Return a {@link Message} for the specified parameters.</p>
