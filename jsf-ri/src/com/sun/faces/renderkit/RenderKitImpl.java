@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKitImpl.java,v 1.18 2004/02/26 20:32:52 eburns Exp $
+ * $Id: RenderKitImpl.java,v 1.19 2004/03/31 18:48:32 eburns Exp $
  */
 
 /*
@@ -30,7 +30,7 @@ import java.util.HashMap;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: RenderKitImpl.java,v 1.18 2004/02/26 20:32:52 eburns Exp $
+ * @version $Id: RenderKitImpl.java,v 1.19 2004/03/31 18:48:32 eburns Exp $
  */
 
 public class RenderKitImpl extends RenderKit {
@@ -87,7 +87,7 @@ public class RenderKitImpl extends RenderKit {
                             Renderer renderer) {
         if (family == null || rendererType == null || renderer == null) {
             throw new NullPointerException(
-                Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                Util.getExceptionMessageString(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
 
         synchronized (renderers) {
@@ -100,7 +100,7 @@ public class RenderKitImpl extends RenderKit {
 
         if (rendererType == null) {
             throw new NullPointerException(
-                Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                Util.getExceptionMessageString(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
 
         Util.doAssert(renderers != null);
@@ -140,7 +140,7 @@ public class RenderKitImpl extends RenderKit {
         String contentType = HTML_CONTENT_TYPE;
         if (contentTypeList != null) {
             if (contentTypeList.indexOf(contentType) < 0) {
-                throw new IllegalArgumentException(Util.getExceptionMessage(
+                throw new IllegalArgumentException(Util.getExceptionMessageString(
                     Util.CONTENT_TYPE_ERROR_MESSAGE_ID));
             }
         }

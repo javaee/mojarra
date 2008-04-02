@@ -1,5 +1,5 @@
 /*
- * $Id: RestoreViewPhase.java,v 1.15 2004/02/26 20:32:48 eburns Exp $
+ * $Id: RestoreViewPhase.java,v 1.16 2004/03/31 18:48:31 eburns Exp $
  */
 
 /*
@@ -35,7 +35,7 @@ import java.util.Map;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: RestoreViewPhase.java,v 1.15 2004/02/26 20:32:48 eburns Exp $
+ * @version $Id: RestoreViewPhase.java,v 1.16 2004/03/31 18:48:31 eburns Exp $
  */
 
 public class RestoreViewPhase extends Phase {
@@ -103,7 +103,7 @@ public class RestoreViewPhase extends Phase {
             log.debug("Entering RestoreViewPhase");
         }
         if (null == facesContext) {
-            throw new FacesException(Util.getExceptionMessage(
+            throw new FacesException(Util.getExceptionMessageString(
                 Util.NULL_CONTEXT_ERROR_MESSAGE_ID));
         }
 
@@ -148,7 +148,7 @@ public class RestoreViewPhase extends Phase {
             if (log.isDebugEnabled()) {
                 log.debug("viewId is null");
             }
-            throw new FacesException(Util.getExceptionMessage(
+            throw new FacesException(Util.getExceptionMessageString(
                 Util.NULL_REQUEST_VIEW_ERROR_MESSAGE_ID));
         }
 

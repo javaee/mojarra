@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlResponseWriter.java,v 1.15 2004/02/26 20:32:57 eburns Exp $
+ * $Id: HtmlResponseWriter.java,v 1.16 2004/03/31 18:48:36 eburns Exp $
  */
 
 /*
@@ -78,7 +78,7 @@ public class HtmlResponseWriter extends ResponseWriter {
         try {
             HtmlUtils.validateEncoding(encoding);
         } catch (UnsupportedEncodingException e) {
-            throw new IllegalArgumentException(Util.getExceptionMessage(
+            throw new IllegalArgumentException(Util.getExceptionMessageString(
                 Util.ENCODING_ERROR_MESSAGE_ID));
         }
     }
@@ -154,7 +154,7 @@ public class HtmlResponseWriter extends ResponseWriter {
     public void startElement(String name, UIComponent componentForElement)
         throws IOException {
         if (name == null) {
-            throw new NullPointerException(Util.getExceptionMessage(
+            throw new NullPointerException(Util.getExceptionMessageString(
                 Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
         closeStartIfNecessary();
@@ -188,7 +188,7 @@ public class HtmlResponseWriter extends ResponseWriter {
      */
     public void endElement(String name) throws IOException {
         if (name == null) {
-            throw new NullPointerException(Util.getExceptionMessage(
+            throw new NullPointerException(Util.getExceptionMessageString(
                 Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
 
@@ -237,7 +237,7 @@ public class HtmlResponseWriter extends ResponseWriter {
     public void writeAttribute(String name, Object value, String componentPropertyName)
         throws IOException {
         if (name == null || value == null) {
-            throw new NullPointerException(Util.getExceptionMessage(
+            throw new NullPointerException(Util.getExceptionMessageString(
                 Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
 
@@ -289,7 +289,7 @@ public class HtmlResponseWriter extends ResponseWriter {
                                   String componentPropertyName)
         throws IOException {
         if (name == null || value == null) {
-            throw new NullPointerException(Util.getExceptionMessage(
+            throw new NullPointerException(Util.getExceptionMessageString(
                 Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
 
@@ -328,7 +328,7 @@ public class HtmlResponseWriter extends ResponseWriter {
      */
     public void writeComment(Object comment) throws IOException {
         if (comment == null) {
-            throw new NullPointerException(Util.getExceptionMessage(
+            throw new NullPointerException(Util.getExceptionMessageString(
                 Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
         closeStartIfNecessary();
@@ -354,7 +354,7 @@ public class HtmlResponseWriter extends ResponseWriter {
     public void writeText(Object text, String componentPropertyName)
         throws IOException {
         if (text == null) {
-            throw new NullPointerException(Util.getExceptionMessage(
+            throw new NullPointerException(Util.getExceptionMessageString(
                 Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
         closeStartIfNecessary();
@@ -406,7 +406,7 @@ public class HtmlResponseWriter extends ResponseWriter {
      */
     public void writeText(char text[]) throws IOException {
         if (text == null) {
-            throw new NullPointerException(Util.getExceptionMessage(
+            throw new NullPointerException(Util.getExceptionMessageString(
                 Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
         closeStartIfNecessary();
@@ -439,7 +439,7 @@ public class HtmlResponseWriter extends ResponseWriter {
     public void writeText(char text[], int off, int len)
         throws IOException {
         if (text == null) {
-            throw new NullPointerException(Util.getExceptionMessage(
+            throw new NullPointerException(Util.getExceptionMessageString(
                 Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
         if (off < 0 || off > text.length || len < 0 || len > text.length) {

@@ -5,7 +5,7 @@
 
 
 /**
- * $Id: SelectManyCheckboxListRenderer.java,v 1.34 2004/03/25 23:18:49 jvisvanathan Exp $
+ * $Id: SelectManyCheckboxListRenderer.java,v 1.35 2004/03/31 18:48:39 eburns Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -75,7 +75,7 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
         throws IOException {
 
         if (context == null || component == null) {
-            throw new NullPointerException(Util.getExceptionMessage(
+            throw new NullPointerException(Util.getExceptionMessageString(
                 Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
         

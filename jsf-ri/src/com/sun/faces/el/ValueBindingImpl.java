@@ -1,5 +1,5 @@
 /*
- * $Id: ValueBindingImpl.java,v 1.30 2004/02/26 20:32:40 eburns Exp $
+ * $Id: ValueBindingImpl.java,v 1.31 2004/03/31 18:48:29 eburns Exp $
  */
 
 /*
@@ -126,7 +126,7 @@ public class ValueBindingImpl extends ValueBinding implements StateHolder {
         throws EvaluationException, PropertyNotFoundException {
         if (context == null) {
             throw new NullPointerException(
-                Util.getExceptionMessage(Util.NULL_CONTEXT_ERROR_MESSAGE_ID));
+                Util.getExceptionMessageString(Util.NULL_CONTEXT_ERROR_MESSAGE_ID));
         }
         Object result = null;
 
@@ -193,11 +193,11 @@ public class ValueBindingImpl extends ValueBinding implements StateHolder {
         throws EvaluationException, PropertyNotFoundException {
         if (context == null) {
             throw new NullPointerException(
-                Util.getExceptionMessage(Util.NULL_CONTEXT_ERROR_MESSAGE_ID));
+                Util.getExceptionMessageString(Util.NULL_CONTEXT_ERROR_MESSAGE_ID));
         }
         if (isReservedIdentifier(ref)) {
             throw new ReferenceSyntaxException(
-                Util.getExceptionMessage(
+                Util.getExceptionMessageString(
                     Util.ILLEGAL_IDENTIFIER_LVALUE_MODE_ID, new Object[]{ref}));
         }
         // PENDING(edburns): check for readOnly-ness        
@@ -247,7 +247,7 @@ public class ValueBindingImpl extends ValueBinding implements StateHolder {
         throws PropertyNotFoundException {
         if (context == null) {
             throw new NullPointerException(
-                Util.getExceptionMessage(Util.NULL_CONTEXT_ERROR_MESSAGE_ID));
+                Util.getExceptionMessageString(Util.NULL_CONTEXT_ERROR_MESSAGE_ID));
         }
         try {
             ExpressionInfo info = new ExpressionInfo();
@@ -294,7 +294,7 @@ public class ValueBindingImpl extends ValueBinding implements StateHolder {
         throws PropertyNotFoundException {
         if (context == null) {
             throw new NullPointerException(
-                Util.getExceptionMessage(Util.NULL_CONTEXT_ERROR_MESSAGE_ID));
+                Util.getExceptionMessageString(Util.NULL_CONTEXT_ERROR_MESSAGE_ID));
         }
         try {
             ExpressionInfo info = new ExpressionInfo();

@@ -1,5 +1,5 @@
 /*
- * $Id: ViewTag.java,v 1.22 2004/02/26 20:33:20 eburns Exp $
+ * $Id: ViewTag.java,v 1.23 2004/03/31 18:48:50 eburns Exp $
  */
 
 /*
@@ -40,7 +40,7 @@ import java.util.Locale;
  * any renderers or attributes. It exists mainly to save the state of
  * the response tree once all tags have been rendered.
  *
- * @version $Id: ViewTag.java,v 1.22 2004/02/26 20:33:20 eburns Exp $
+ * @version $Id: ViewTag.java,v 1.23 2004/03/31 18:48:50 eburns Exp $
  */
 
 public class ViewTag extends UIComponentBodyTag {
@@ -153,7 +153,7 @@ public class ViewTag extends UIComponentBodyTag {
         responseWriter = responseWriter.cloneWithWriter(getPreviousOut());
 
         if (context == null) {
-            throw new JspException(Util.getExceptionMessage(
+            throw new JspException(Util.getExceptionMessageString(
                 Util.NULL_CONTEXT_ERROR_MESSAGE_ID));
         }
         context.setResponseWriter(responseWriter);
@@ -161,7 +161,7 @@ public class ViewTag extends UIComponentBodyTag {
         try {
             if (null == (bodyContent = getBodyContent())) {
                 Object params [] = {this.getClass().getName()};
-                throw new JspException(Util.getExceptionMessage(
+                throw new JspException(Util.getExceptionMessageString(
                     Util.NULL_BODY_CONTENT_ERROR_MESSAGE_ID, params));
             }
             content = bodyContent.getString();
@@ -194,7 +194,7 @@ public class ViewTag extends UIComponentBodyTag {
             }
         } catch (IOException iox) {
             Object[] params = {"session", iox.getMessage()};
-            throw new JspException(Util.getExceptionMessage(
+            throw new JspException(Util.getExceptionMessageString(
                 Util.SAVING_STATE_ERROR_MESSAGE_ID, params));
         }
         return EVAL_PAGE;

@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleFactoryImpl.java,v 1.20 2004/02/26 20:32:47 eburns Exp $
+ * $Id: LifecycleFactoryImpl.java,v 1.21 2004/03/31 18:48:30 eburns Exp $
  */
 
 /*
@@ -27,7 +27,7 @@ import java.util.Iterator;
  * <B>LifecycleFactoryImpl</B> is the stock implementation of Lifecycle
  * in the JSF RI. <P>
  *
- * @version $Id: LifecycleFactoryImpl.java,v 1.20 2004/02/26 20:32:47 eburns Exp $
+ * @version $Id: LifecycleFactoryImpl.java,v 1.21 2004/03/31 18:48:30 eburns Exp $
  * @see	javax.faces.lifecycle.LifecycleFactory
  */
 
@@ -107,12 +107,12 @@ public class LifecycleFactoryImpl extends LifecycleFactory {
         Object[] params = {lifecycleId};
         if (null == lifecycleId || null == phase) {
             throw new NullPointerException(
-                Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                Util.getExceptionMessageString(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
 
         if (null ==
             (wrapper = (LifecycleWrapper) lifecycleMap.get(lifecycleId))) {
-            message = Util.getExceptionMessage(
+            message = Util.getExceptionMessageString(
                 Util.LIFECYCLE_ID_NOT_FOUND_ERROR_MESSAGE_ID,
                 params);
             if (log.isErrorEnabled()) {
@@ -124,7 +124,7 @@ public class LifecycleFactoryImpl extends LifecycleFactory {
         Util.doAssert(null != result);
 
         if (alreadyCreated(lifecycleId)) {
-            message = Util.getExceptionMessage(
+            message = Util.getExceptionMessageString(
                 Util.LIFECYCLE_ID_ALREADY_ADDED_ID,
                 params);
             if (log.isErrorEnabled()) {
@@ -136,7 +136,7 @@ public class LifecycleFactoryImpl extends LifecycleFactory {
         if (!((FIRST_PHASE <= phaseId) &&
             (phaseId <= LAST_PHASE))) {
             params = new Object[]{Integer.toString(phaseId)};
-            message = Util.getExceptionMessage(
+            message = Util.getExceptionMessageString(
                 Util.PHASE_ID_OUT_OF_BOUNDS_ERROR_MESSAGE_ID,
                 params);
             if (log.isErrorEnabled()) {
@@ -154,12 +154,12 @@ public class LifecycleFactoryImpl extends LifecycleFactory {
     public void addLifecycle(String lifecycleId, Lifecycle lifecycle) {
         if (lifecycleId == null || lifecycle == null) {
             throw new NullPointerException(
-                Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                Util.getExceptionMessageString(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
         if (null != lifecycleMap.get(lifecycleId)) {
             Object params[] = {lifecycleId};
             String message =
-                Util.getExceptionMessage(Util.LIFECYCLE_ID_ALREADY_ADDED_ID,
+                Util.getExceptionMessageString(Util.LIFECYCLE_ID_ALREADY_ADDED_ID,
                                          params);
             if (log.isErrorEnabled()) {
                 log.error("addLifecycle: " + message);
@@ -179,13 +179,13 @@ public class LifecycleFactoryImpl extends LifecycleFactory {
 
         if (null == lifecycleId) {
             throw new NullPointerException(
-                Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                Util.getExceptionMessageString(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
 
         if (null == lifecycleMap.get(lifecycleId)) {
             Object[] params = {lifecycleId};
             String message =
-                Util.getExceptionMessage(
+                Util.getExceptionMessageString(
                     Util.CANT_CREATE_LIFECYCLE_ERROR_MESSAGE_ID,
                     params);
             if (log.isErrorEnabled()) {

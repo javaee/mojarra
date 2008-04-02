@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListener.java,v 1.8 2004/02/26 20:32:33 eburns Exp $
+ * $Id: ConfigureListener.java,v 1.9 2004/03/31 18:48:25 eburns Exp $
  */
 /*
  * Copyright 2004 Sun Microsystems, Inc. All Rights Reserved.
@@ -169,7 +169,7 @@ public final class ConfigureListener implements ServletContextListener {
         } catch (Exception e) {
             String message = null;
             try {
-                message = Util.getExceptionMessage
+                message = Util.getExceptionMessageString
                     (Util.CANT_PARSE_FILE_ERROR_MESSAGE_ID,
                      new Object[]{url.toExternalForm()});
             } catch (Exception ee) {
@@ -188,7 +188,7 @@ public final class ConfigureListener implements ServletContextListener {
         } catch (Exception e) {
             String message = null;
             try {
-                message = Util.getExceptionMessage
+                message = Util.getExceptionMessageString
                     (Util.CANT_PARSE_FILE_ERROR_MESSAGE_ID,
                      new Object[]{url.toExternalForm()});
             } catch (Exception ee) {
@@ -212,7 +212,7 @@ public final class ConfigureListener implements ServletContextListener {
         } catch (IOException e) {
             String message = null;
             try {
-                message = Util.getExceptionMessage
+                message = Util.getExceptionMessageString
                     (Util.CANT_PARSE_FILE_ERROR_MESSAGE_ID,
                      new Object[]{"/META-INF/faces-config.xml"});
             } catch (Exception ee) {
@@ -229,7 +229,7 @@ public final class ConfigureListener implements ServletContextListener {
             } catch (Exception e) {
                 String message = null;
                 try {
-                    message = Util.getExceptionMessage
+                    message = Util.getExceptionMessageString
                         (Util.CANT_PARSE_FILE_ERROR_MESSAGE_ID,
                          new Object[]{url.toExternalForm()});
                 } catch (Exception ee) {
@@ -269,7 +269,7 @@ public final class ConfigureListener implements ServletContextListener {
                 } catch (Exception e) {
                     String message = null;
                     try {
-                        message = Util.getExceptionMessage
+                        message = Util.getExceptionMessageString
                             (Util.CANT_PARSE_FILE_ERROR_MESSAGE_ID,
                              new Object[]{path});
                     } catch (Exception ee) {
@@ -290,7 +290,7 @@ public final class ConfigureListener implements ServletContextListener {
         } catch (Exception e) {
             String message = null;
             try {
-                message = Util.getExceptionMessage
+                message = Util.getExceptionMessageString
                     (Util.CANT_PARSE_FILE_ERROR_MESSAGE_ID,
                      new Object[]{url.toExternalForm()});
             } catch (Exception ee) {
@@ -1131,7 +1131,7 @@ public final class ConfigureListener implements ServletContextListener {
         if (!success) {
             String message;
             try {
-                message = Util.getExceptionMessage
+                message = Util.getExceptionMessageString
                     (Util.OBJECT_CREATION_ERROR_ID,
                      new Object[]{});
             } catch (Exception ee) {
@@ -1208,7 +1208,7 @@ public final class ConfigureListener implements ServletContextListener {
                 !(validateXml.equals("false"))) {
                 Object[] obj = new Object[1];
                 obj[0] = "validateXml";
-                throw new FacesException(Util.getExceptionMessage(
+                throw new FacesException(Util.getExceptionMessageString(
                     Util.INVALID_INIT_PARAM_ERROR_MESSAGE_ID, obj));
             }
         } else {
@@ -1230,7 +1230,7 @@ public final class ConfigureListener implements ServletContextListener {
                 !(validateXml.equals("false"))) {
                 Object[] obj = new Object[1];
                 obj[0] = "validateXml";
-                throw new FacesException(Util.getExceptionMessage(
+                throw new FacesException(Util.getExceptionMessageString(
                     Util.INVALID_INIT_PARAM_ERROR_MESSAGE_ID, obj));
             }
         } else {

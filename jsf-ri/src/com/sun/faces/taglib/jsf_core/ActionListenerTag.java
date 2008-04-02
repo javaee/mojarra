@@ -1,5 +1,5 @@
 /*
- * $Id: ActionListenerTag.java,v 1.14 2004/02/26 20:33:16 eburns Exp $
+ * $Id: ActionListenerTag.java,v 1.15 2004/03/31 18:48:49 eburns Exp $
  */
 
 /*
@@ -91,7 +91,7 @@ public class ActionListenerTag extends TagSupport {
         if (tag == null) {
             Object params [] = {this.getClass().getName()};
             throw new JspException(
-                Util.getExceptionMessage(
+                Util.getExceptionMessageString(
                     Util.NOT_NESTED_IN_FACES_TAG_ERROR_MESSAGE_ID, params));
         }
 
@@ -109,7 +109,7 @@ public class ActionListenerTag extends TagSupport {
         UIComponent component = tag.getComponentInstance();
         if (component == null) {
             throw new JspException(
-                Util.getExceptionMessage(Util.NULL_COMPONENT_ERROR_MESSAGE_ID));
+                Util.getExceptionMessageString(Util.NULL_COMPONENT_ERROR_MESSAGE_ID));
         }
 
         //only apply to ActionSource components

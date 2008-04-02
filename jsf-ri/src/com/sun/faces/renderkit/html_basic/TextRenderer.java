@@ -1,5 +1,5 @@
 /*
- * $Id: TextRenderer.java,v 1.65 2004/02/26 20:33:01 eburns Exp $
+ * $Id: TextRenderer.java,v 1.66 2004/03/31 18:48:39 eburns Exp $
  */
 
 /*
@@ -68,7 +68,7 @@ public class TextRenderer extends HtmlBasicInputRenderer {
     public void encodeBegin(FacesContext context, UIComponent component)
         throws IOException {
         if (context == null || component == null) {
-            throw new NullPointerException(Util.getExceptionMessage(
+            throw new NullPointerException(Util.getExceptionMessageString(
                 Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
     }
@@ -76,7 +76,7 @@ public class TextRenderer extends HtmlBasicInputRenderer {
 
     public void encodeChildren(FacesContext context, UIComponent component) {
         if (context == null || component == null) {
-            throw new NullPointerException(Util.getExceptionMessage(
+            throw new NullPointerException(Util.getExceptionMessageString(
                 Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
     }

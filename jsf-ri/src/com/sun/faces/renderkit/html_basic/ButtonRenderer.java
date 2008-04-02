@@ -1,5 +1,5 @@
 /*
- * $Id: ButtonRenderer.java,v 1.75 2004/02/26 20:32:53 eburns Exp $
+ * $Id: ButtonRenderer.java,v 1.76 2004/03/31 18:48:33 eburns Exp $
  */
 
 /*
@@ -82,7 +82,7 @@ public class ButtonRenderer extends HtmlBasicRenderer {
 
     public void decode(FacesContext context, UIComponent component) {
         if (context == null || component == null) {
-            throw new NullPointerException(Util.getExceptionMessage(
+            throw new NullPointerException(Util.getExceptionMessageString(
                 Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
         if (log.isTraceEnabled()) {
@@ -137,7 +137,7 @@ public class ButtonRenderer extends HtmlBasicRenderer {
     public void encodeBegin(FacesContext context, UIComponent component)
         throws IOException {
         if (context == null || component == null) {
-            throw new NullPointerException(Util.getExceptionMessage(
+            throw new NullPointerException(Util.getExceptionMessageString(
                 Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
         if (log.isTraceEnabled()) {
@@ -202,7 +202,7 @@ public class ButtonRenderer extends HtmlBasicRenderer {
     public void encodeChildren(FacesContext context, UIComponent component)
         throws IOException {
         if (context == null || component == null) {
-            throw new NullPointerException(Util.getExceptionMessage(
+            throw new NullPointerException(Util.getExceptionMessageString(
                 Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
     }
@@ -211,7 +211,7 @@ public class ButtonRenderer extends HtmlBasicRenderer {
     public void encodeEnd(FacesContext context, UIComponent component)
         throws IOException {
         if (context == null || component == null) {
-            throw new NullPointerException(Util.getExceptionMessage(
+            throw new NullPointerException(Util.getExceptionMessageString(
                 Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
     }

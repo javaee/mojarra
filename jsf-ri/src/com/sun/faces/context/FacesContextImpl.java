@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContextImpl.java,v 1.65 2004/02/26 20:32:37 eburns Exp $
+ * $Id: FacesContextImpl.java,v 1.66 2004/03/31 18:48:27 eburns Exp $
  */
 
 /*
@@ -87,7 +87,7 @@ public class FacesContextImpl extends FacesContext {
         if (null == ec || null == lifecycle) {
             throw new NullPointerException
                 (
-                    Util.getExceptionMessage(
+                    Util.getExceptionMessageString(
                         Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
         this.externalContext = ec;
@@ -235,7 +235,7 @@ public class FacesContextImpl extends FacesContext {
         assertNotReleased();
         if (newResponseStream == null) {
             throw new NullPointerException(
-                Util.getExceptionMessage(
+                Util.getExceptionMessageString(
                     Util.NULL_RESPONSE_STREAM_ERROR_MESSAGE_ID));
         }
         responseStream = newResponseStream;
@@ -267,7 +267,7 @@ public class FacesContextImpl extends FacesContext {
         assertNotReleased();
         if (newResponseWriter == null) {
             throw new NullPointerException(
-                Util.getExceptionMessage(
+                Util.getExceptionMessageString(
                     Util.NULL_RESPONSE_WRITER_ERROR_MESSAGE_ID));
         }
         responseWriter = newResponseWriter;
@@ -279,7 +279,7 @@ public class FacesContextImpl extends FacesContext {
         // Validate our preconditions
         if (event == null) {
             throw new NullPointerException
-                (Util.getExceptionMessage(Util.NULL_EVENT_ERROR_MESSAGE_ID));
+                (Util.getExceptionMessageString(Util.NULL_EVENT_ERROR_MESSAGE_ID));
         }
 
         // Add this event to our internal queue
@@ -305,7 +305,7 @@ public class FacesContextImpl extends FacesContext {
         if (null == message) {
             throw new NullPointerException
                 (
-                    Util.getExceptionMessage(
+                    Util.getExceptionMessageString(
                         Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
 

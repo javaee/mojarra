@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleImpl.java,v 1.44 2004/02/26 20:32:47 eburns Exp $
+ * $Id: LifecycleImpl.java,v 1.45 2004/03/31 18:48:30 eburns Exp $
  */
 
 /*
@@ -72,7 +72,7 @@ public class LifecycleImpl extends Lifecycle {
 
         if (context == null) {
             throw new NullPointerException
-                (Util.getExceptionMessage
+                (Util.getExceptionMessageString
                  (Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
 
@@ -105,7 +105,7 @@ public class LifecycleImpl extends Lifecycle {
 
         if (context == null) {
             throw new NullPointerException
-                (Util.getExceptionMessage
+                (Util.getExceptionMessageString
                  (Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
 
@@ -125,7 +125,7 @@ public class LifecycleImpl extends Lifecycle {
 
         if (listener == null) {
             throw new NullPointerException
-                (Util.getExceptionMessage
+                (Util.getExceptionMessageString
                  (Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
         if (log.isDebugEnabled()) {
@@ -155,7 +155,7 @@ public class LifecycleImpl extends Lifecycle {
 
         if (listener == null) {
             throw new NullPointerException
-                (Util.getExceptionMessage
+                (Util.getExceptionMessageString
                  (Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
         if (log.isDebugEnabled()) {

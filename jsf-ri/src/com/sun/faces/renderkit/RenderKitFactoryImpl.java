@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKitFactoryImpl.java,v 1.18 2004/02/26 20:32:51 eburns Exp $
+ * $Id: RenderKitFactoryImpl.java,v 1.19 2004/03/31 18:48:32 eburns Exp $
  */
 
 /*
@@ -53,7 +53,7 @@ public class RenderKitFactoryImpl extends RenderKitFactory {
 
         if (renderKitId == null || renderKit == null) {
             throw new NullPointerException(
-                Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                Util.getExceptionMessageString(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
 
         synchronized (renderKits) {
@@ -66,7 +66,7 @@ public class RenderKitFactoryImpl extends RenderKitFactory {
 
         if (renderKitId == null) {
             throw new NullPointerException(
-                Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                Util.getExceptionMessageString(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
         //PENDING (rogerk) do something with FacesContext ...
         //

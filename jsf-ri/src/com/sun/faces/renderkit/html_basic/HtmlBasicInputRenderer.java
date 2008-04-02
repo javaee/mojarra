@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicInputRenderer.java,v 1.22 2004/02/26 20:32:56 eburns Exp $
+ * $Id: HtmlBasicInputRenderer.java,v 1.23 2004/03/31 18:48:36 eburns Exp $
  */
 
 /*
@@ -164,7 +164,7 @@ public abstract class HtmlBasicInputRenderer extends HtmlBasicRenderer {
                           " while decoding component " + component.getId());
             }
             // throw converter exception.
-            throw new ConverterException(Util.getExceptionMessage(
+            throw new ConverterException(Util.getExceptionMessageString(
                 Util.CONVERSION_ERROR_MESSAGE_ID));
         }
     }

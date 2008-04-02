@@ -1,5 +1,5 @@
 /*
- * $Id: TextRenderer.java,v 1.8 2004/02/26 20:33:49 eburns Exp $
+ * $Id: TextRenderer.java,v 1.9 2004/03/31 18:48:54 eburns Exp $
  */
 
 /*
@@ -25,7 +25,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TextRenderer.java,v 1.8 2004/02/26 20:33:49 eburns Exp $
+ * @version $Id: TextRenderer.java,v 1.9 2004/03/31 18:48:54 eburns Exp $
  * @see	Blah
  * @see	Bloo
  */
@@ -71,7 +71,7 @@ public class TextRenderer extends Renderer {
 
     public void decode(FacesContext context, UIComponent component) {
         if (context == null || component == null) {
-            throw new NullPointerException(Util.getExceptionMessage(
+            throw new NullPointerException(Util.getExceptionMessageString(
                 Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
     }
@@ -80,7 +80,7 @@ public class TextRenderer extends Renderer {
     public void encodeBegin(FacesContext context, UIComponent component)
         throws IOException {
         if (context == null || component == null) {
-            throw new NullPointerException(Util.getExceptionMessage(
+            throw new NullPointerException(Util.getExceptionMessageString(
                 Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
     }
@@ -88,7 +88,7 @@ public class TextRenderer extends Renderer {
 
     public void encodeChildren(FacesContext context, UIComponent component) {
         if (context == null || component == null) {
-            throw new NullPointerException(Util.getExceptionMessage(
+            throw new NullPointerException(Util.getExceptionMessageString(
                 Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
     }
@@ -102,7 +102,7 @@ public class TextRenderer extends Renderer {
         String styleClass = null;
 
         if (context == null || component == null) {
-            throw new NullPointerException(Util.getExceptionMessage(
+            throw new NullPointerException(Util.getExceptionMessageString(
                 Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
         

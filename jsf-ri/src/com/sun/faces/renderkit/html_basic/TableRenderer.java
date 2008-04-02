@@ -1,5 +1,5 @@
 /*
- * $Id: TableRenderer.java,v 1.21 2004/02/26 20:33:01 eburns Exp $
+ * $Id: TableRenderer.java,v 1.22 2004/03/31 18:48:39 eburns Exp $
  */
 
 /*
@@ -77,7 +77,7 @@ public class TableRenderer extends HtmlBasicRenderer {
         throws IOException {
 
         if ((context == null) || (component == null)) {
-            throw new NullPointerException(Util.getExceptionMessage(
+            throw new NullPointerException(Util.getExceptionMessageString(
                 Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
         if (log.isTraceEnabled()) {
@@ -208,7 +208,7 @@ public class TableRenderer extends HtmlBasicRenderer {
         throws IOException {
 
         if ((context == null) || (component == null)) {
-            throw new NullPointerException(Util.getExceptionMessage(
+            throw new NullPointerException(Util.getExceptionMessageString(
                 Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
         if (log.isTraceEnabled()) {
@@ -317,7 +317,7 @@ public class TableRenderer extends HtmlBasicRenderer {
         throws IOException {
 
         if ((context == null) || (component == null)) {
-            throw new NullPointerException(Util.getExceptionMessage(
+            throw new NullPointerException(Util.getExceptionMessageString(
                 Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
         if (!component.isRendered()) {

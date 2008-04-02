@@ -1,5 +1,5 @@
 /*
- * $Id: ValueChangeListenerTag.java,v 1.7 2004/02/26 20:33:19 eburns Exp $
+ * $Id: ValueChangeListenerTag.java,v 1.8 2004/03/31 18:48:50 eburns Exp $
  */
 
 /*
@@ -91,7 +91,7 @@ public class ValueChangeListenerTag extends TagSupport {
             UIComponentTag.getParentUIComponentTag(pageContext);
         if (tag == null) {
             throw new JspException(
-                Util.getExceptionMessage(
+                Util.getExceptionMessageString(
                     Util.NOT_NESTED_IN_FACES_TAG_ERROR_MESSAGE_ID));
         }
 
@@ -109,7 +109,7 @@ public class ValueChangeListenerTag extends TagSupport {
         UIComponent component = tag.getComponentInstance();
         if (component == null) {
             throw new JspException(
-                Util.getExceptionMessage(Util.NULL_COMPONENT_ERROR_MESSAGE_ID));
+                Util.getExceptionMessageString(Util.NULL_COMPONENT_ERROR_MESSAGE_ID));
         }
         // We need to cast here because addValueChangeListener
         // method does not apply to al components (it is not a method on

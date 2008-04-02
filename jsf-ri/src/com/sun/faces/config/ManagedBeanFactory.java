@@ -1,5 +1,5 @@
 /*
- * $Id: ManagedBeanFactory.java,v 1.15 2004/02/26 20:32:34 eburns Exp $
+ * $Id: ManagedBeanFactory.java,v 1.16 2004/03/31 18:48:25 eburns Exp $
  */
 
 /*
@@ -138,7 +138,7 @@ public class ManagedBeanFactory extends Object {
             Object[] obj = new Object[1];
             obj[0] = managedBean.getManagedBeanClass();
             throw new FacesException(
-                Util.getExceptionMessage(
+                Util.getExceptionMessageString(
                     Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, obj),
                 ex);
         }
@@ -172,7 +172,7 @@ public class ManagedBeanFactory extends Object {
             Object[] obj = new Object[1];
             obj[0] = managedBean.getManagedBeanClass();
             throw new FacesException(
-                Util.getExceptionMessage(
+                Util.getExceptionMessageString(
                     Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, obj),
                 cnfe);
         }
@@ -203,7 +203,7 @@ public class ManagedBeanFactory extends Object {
                 Object[] obj = new Object[1];
                 obj[0] = managedBean.getManagedBeanClass();
                 throw new FacesException(
-                    Util.getExceptionMessage(
+                    Util.getExceptionMessageString(
                         Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, obj));
             }
             result = TYPE_IS_LIST;
@@ -222,7 +222,7 @@ public class ManagedBeanFactory extends Object {
                 Object[] obj = new Object[1];
                 obj[0] = managedBean.getManagedBeanClass();
                 throw new FacesException(
-                    Util.getExceptionMessage(
+                    Util.getExceptionMessageString(
                         Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, obj));
             }
             result = TYPE_IS_MAP;
@@ -265,7 +265,7 @@ public class ManagedBeanFactory extends Object {
                 Object[] obj = new Object[1];
                 obj[0] = bean.getPropertyName();
                 throw new FacesException(
-                    Util.getExceptionMessage(
+                    Util.getExceptionMessageString(
                         Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, obj));
             }
             result = TYPE_IS_LIST;
@@ -283,7 +283,7 @@ public class ManagedBeanFactory extends Object {
                 Object[] obj = new Object[1];
                 obj[0] = bean.getPropertyName();
                 throw new FacesException(
-                    Util.getExceptionMessage(
+                    Util.getExceptionMessageString(
                         Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, obj));
             }
             result = TYPE_IS_MAP;
@@ -304,7 +304,7 @@ public class ManagedBeanFactory extends Object {
             Object[] obj = new Object[1];
             obj[0] = bean.getPropertyName();
             throw new FacesException(
-                Util.getExceptionMessage(
+                Util.getExceptionMessageString(
                     Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, obj));
         }
         return result;
@@ -508,7 +508,7 @@ public class ManagedBeanFactory extends Object {
                     Object[] obj = new Object[1];
                     obj[0] = propertyName;
                     throw new FacesException(
-                        Util.getExceptionMessage(
+                        Util.getExceptionMessageString(
                             Util.ERROR_SETTING_BEAN_PROPERTY_ERROR_MESSAGE_ID,
                             obj),
                         ex);
@@ -586,7 +586,7 @@ public class ManagedBeanFactory extends Object {
                 !java.util.List.class.isAssignableFrom(propertyType)) {
                 Object[] obj = new Object[1];
                 obj[0] = propertyName;
-                throw new FacesException(Util.getExceptionMessage(
+                throw new FacesException(Util.getExceptionMessageString(
                     Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID,
                     obj));
             }
@@ -613,7 +613,7 @@ public class ManagedBeanFactory extends Object {
                     Object[] obj = new Object[1];
                     obj[0] = propertyName;
                     throw new FacesException(
-                        Util.getExceptionMessage(
+                        Util.getExceptionMessageString(
                             Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, obj));
                 }
                 valuesForBean = (List) result;
@@ -718,7 +718,7 @@ public class ManagedBeanFactory extends Object {
             !java.util.Map.class.isAssignableFrom(propertyType)) {
             Object[] obj = new Object[1];
             obj[0] = propertyName;
-            throw new FacesException(Util.getExceptionMessage(
+            throw new FacesException(Util.getExceptionMessageString(
                 Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID,
                 obj));
         }
@@ -798,7 +798,7 @@ public class ManagedBeanFactory extends Object {
             } else if (!valueType.isAssignableFrom(value.getClass())) {
                 Object[] obj = new Object[1];
                 obj[0] = value.toString();
-                throw new FacesException(Util.getExceptionMessage(
+                throw new FacesException(Util.getExceptionMessageString(
                     Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID,
                     obj));
 
@@ -820,7 +820,7 @@ public class ManagedBeanFactory extends Object {
             Object[] obj = new Object[1];
             obj[0] = value;
             throw new FacesException(
-                Util.getExceptionMessage(
+                Util.getExceptionMessageString(
                     Util.INVALID_SCOPE_LIFESPAN_ERROR_MESSAGE_ID, obj));
         }
 
@@ -833,7 +833,7 @@ public class ManagedBeanFactory extends Object {
                 Object[] obj = new Object[1];
                 obj[0] = value;
                 throw new FacesException(
-                    Util.getExceptionMessage(
+                    Util.getExceptionMessageString(
                         Util.ERROR_GETTING_VALUEREF_VALUE_ERROR_MESSAGE_ID,
                         obj));
             }
@@ -841,7 +841,7 @@ public class ManagedBeanFactory extends Object {
             Object[] obj = new Object[1];
             obj[0] = value;
             throw new FacesException(
-                Util.getExceptionMessage(
+                Util.getExceptionMessageString(
                     Util.ERROR_GETTING_VALUE_BINDING_ERROR_MESSAGE_ID, obj));
         }
         return valueBinding;

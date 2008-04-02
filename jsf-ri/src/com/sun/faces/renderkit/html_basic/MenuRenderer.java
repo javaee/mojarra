@@ -4,7 +4,7 @@
  */
 
 /*
- * $Id: MenuRenderer.java,v 1.47 2004/03/30 03:51:10 eburns Exp $
+ * $Id: MenuRenderer.java,v 1.48 2004/03/31 18:48:37 eburns Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -87,7 +87,7 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
 
     public void decode(FacesContext context, UIComponent component) {
         if (context == null || component == null) {
-            throw new NullPointerException(Util.getExceptionMessage(
+            throw new NullPointerException(Util.getExceptionMessageString(
                 Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
         if (log.isTraceEnabled()) {
@@ -201,6 +201,7 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
 
         Object result = newValues; // default case, set local value
         Class modelType = null;
+	boolean throwException = false;
 
         // If we have a ValueBinding
         if (null != valueBinding) {
@@ -214,13 +215,10 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
                 } else if (List.class.isAssignableFrom(modelType)) {
                     result = handleListCase(context, newValues);
                 } else {
-                    throw new ConverterException(
-                        Util.getExceptionMessage(
-                            Util.CONVERSION_ERROR_MESSAGE_ID));
+		    throwException = true;
                 }
             } else {
-                throw new ConverterException(
-                    Util.getExceptionMessage(Util.CONVERSION_ERROR_MESSAGE_ID));
+		throwException = true;
             }
         } else {
             // No ValueBinding, just use Object array.
@@ -229,6 +227,22 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
                                      convertedValues.getClass(),
                                      newValues);
         }
+	if (throwException) {
+	    String values = "";
+	    if (null != newValues) {
+		for (int i = 0; i < newValues.length; i++) {
+		    values = values + " " + newValues[i];
+		}
+	    }
+	    Object [] params = {
+		values,
+		valueBinding.getExpressionString()
+	    };
+	    throw new ConverterException
+		(Util.getExceptionMessage(Util.CONVERSION_ERROR_MESSAGE_ID,
+					  params));
+	}
+
 
         // At this point, result is ready to be set as the value
         if (log.isTraceEnabled()) {
@@ -367,7 +381,7 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
     public void encodeBegin(FacesContext context, UIComponent component)
         throws IOException {
         if (context == null || component == null) {
-            throw new NullPointerException(Util.getExceptionMessage(
+            throw new NullPointerException(Util.getExceptionMessageString(
                 Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
     }
@@ -376,7 +390,7 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
     public void encodeChildren(FacesContext context, UIComponent component)
         throws IOException {
         if (context == null || component == null) {
-            throw new NullPointerException(Util.getExceptionMessage(
+            throw new NullPointerException(Util.getExceptionMessageString(
                 Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
     }
@@ -386,7 +400,7 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
         throws IOException {
 
         if (context == null || component == null) {
-            throw new NullPointerException(Util.getExceptionMessage(
+            throw new NullPointerException(Util.getExceptionMessageString(
                 Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
 

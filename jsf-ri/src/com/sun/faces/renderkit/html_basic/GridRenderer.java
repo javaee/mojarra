@@ -1,5 +1,5 @@
 /*
- * $Id: GridRenderer.java,v 1.32 2004/02/26 20:32:55 eburns Exp $
+ * $Id: GridRenderer.java,v 1.33 2004/03/31 18:48:35 eburns Exp $
  */
 
 /*
@@ -77,7 +77,7 @@ public class GridRenderer extends HtmlBasicRenderer {
         throws IOException {
 
         if (context == null || component == null) {
-            throw new NullPointerException(Util.getExceptionMessage(
+            throw new NullPointerException(Util.getExceptionMessageString(
                 Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
 
@@ -161,7 +161,7 @@ public class GridRenderer extends HtmlBasicRenderer {
         throws IOException {
 
         if (context == null || component == null) {
-            throw new NullPointerException(Util.getExceptionMessage(
+            throw new NullPointerException(Util.getExceptionMessageString(
                 Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
         if (log.isTraceEnabled()) {
@@ -252,7 +252,7 @@ public class GridRenderer extends HtmlBasicRenderer {
         throws IOException {
 
         if (context == null || component == null) {
-            throw new NullPointerException(Util.getExceptionMessage(
+            throw new NullPointerException(Util.getExceptionMessageString(
                 Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
         // suppress rendering if "rendered" property on the component is

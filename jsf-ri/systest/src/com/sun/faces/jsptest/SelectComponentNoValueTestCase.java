@@ -1,5 +1,5 @@
 /*
- * $Id: SelectComponentNoValueTestCase.java,v 1.1 2004/03/30 03:51:12 eburns Exp $
+ * $Id: SelectComponentNoValueTestCase.java,v 1.2 2004/03/31 18:48:53 eburns Exp $
  */
 
 /*
@@ -16,6 +16,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlForm;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
+import com.gargoylesoftware.htmlunit.html.HtmlSelect;
 import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
 import com.sun.faces.htmlunit.AbstractTestCase;
 import junit.framework.Test;
@@ -103,6 +104,22 @@ public class SelectComponentNoValueTestCase extends AbstractTestCase {
 	assertTrue(-1 != page.asText().indexOf("equired"));
 	
     }
+
+    public void testSelectManyMismatchValue() throws Exception {
+	HtmlPage page = getPage("/faces/jsp/selectManyMismatchValue.jsp");
+	List list = getAllElementsOfGivenClass(page, null, 
+					       HtmlSubmitInput.class); 
+	HtmlSubmitInput button = (HtmlSubmitInput) list.get(0);
+	list = getAllElementsOfGivenClass(page, null, HtmlSelect.class);
+	HtmlSelect options = (HtmlSelect) list.get(0);
+	String chosen [] = {"one", "three"};
+	options.fakeSelectedAttribute(chosen);
+	page = (HtmlPage) button.click();
+	assertTrue(-1 != page.asText().indexOf("one three"));
+	assertTrue(-1 != page.asText().indexOf("#{test3.selection}"));
+	
+    }
+
 
 
 

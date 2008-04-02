@@ -1,5 +1,5 @@
 /* 
- * $Id: StateManagerImpl.java,v 1.18 2004/02/26 20:32:30 eburns Exp $ 
+ * $Id: StateManagerImpl.java,v 1.19 2004/03/31 18:48:22 eburns Exp $ 
  */ 
 
 
@@ -35,7 +35,7 @@ import java.util.Set;
  * <B>StateManagerImpl</B> is the default implementation class for
  * StateManager.
  *
- * @version $Id: StateManagerImpl.java,v 1.18 2004/02/26 20:32:30 eburns Exp $
+ * @version $Id: StateManagerImpl.java,v 1.19 2004/03/31 18:48:22 eburns Exp $
  * @see javax.faces.application.ViewHandler
  */
 public class StateManagerImpl extends StateManager {
@@ -116,7 +116,7 @@ public class StateManagerImpl extends StateManager {
                 // check for id uniqueness
                 id = kid.getClientId(context);
                 if (id != null && !componentIds.add(id)) {
-                    throw new IllegalStateException(Util.getExceptionMessage(
+                    throw new IllegalStateException(Util.getExceptionMessageString(
                         Util.DUPLICATE_COMPONENT_ID_ERROR_ID,
                         new Object[]{id}));
                 }
@@ -136,7 +136,7 @@ public class StateManagerImpl extends StateManager {
                 // check for id uniqueness
                 id = kid.getClientId(context);
                 if (id != null && !componentIds.add(id)) {
-                    throw new IllegalStateException(Util.getExceptionMessage(
+                    throw new IllegalStateException(Util.getExceptionMessageString(
                         Util.DUPLICATE_COMPONENT_ID_ERROR_ID,
                         new Object[]{id}));
                 }
@@ -332,7 +332,7 @@ public class StateManagerImpl extends StateManager {
                 // check for id uniqueness
                 id = kid.getClientId(context);
                 if (id != null && !componentIds.add(id)) {
-                    throw new IllegalStateException(Util.getExceptionMessage(
+                    throw new IllegalStateException(Util.getExceptionMessageString(
                         Util.DUPLICATE_COMPONENT_ID_ERROR_ID,
                         new Object[]{id}));
                 }
@@ -360,7 +360,7 @@ public class StateManagerImpl extends StateManager {
                 // check for id uniqueness
                 id = facetComponent.getClientId(context);
                 if (id != null && !componentIds.add(id)) {
-                    throw new IllegalStateException(Util.getExceptionMessage(
+                    throw new IllegalStateException(Util.getExceptionMessageString(
                         Util.DUPLICATE_COMPONENT_ID_ERROR_ID,
                         new Object[]{id}));
                 }

@@ -1,5 +1,5 @@
 /*
- * $Id: CheckboxRenderer.java,v 1.66 2004/02/26 20:32:54 eburns Exp $
+ * $Id: CheckboxRenderer.java,v 1.67 2004/03/31 18:48:34 eburns Exp $
  *
  */
 
@@ -76,7 +76,7 @@ public class CheckboxRenderer extends HtmlBasicInputRenderer {
         Object convertedValue = null;
 
         if (context == null || component == null) {
-            throw new NullPointerException(Util.getExceptionMessage(
+            throw new NullPointerException(Util.getExceptionMessageString(
                 Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
         if (log.isTraceEnabled()) {
@@ -138,7 +138,7 @@ public class CheckboxRenderer extends HtmlBasicInputRenderer {
         throws IOException {
         if (context == null || component == null) {
             throw new NullPointerException(
-                Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                Util.getExceptionMessageString(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
     }
 
@@ -147,7 +147,7 @@ public class CheckboxRenderer extends HtmlBasicInputRenderer {
         throws IOException {
         if (context == null || component == null) {
             throw new NullPointerException(
-                Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                Util.getExceptionMessageString(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
 
     }

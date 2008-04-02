@@ -1,5 +1,5 @@
 /*
- * $Id: MessageRenderer.java,v 1.46 2004/02/26 20:32:59 eburns Exp $
+ * $Id: MessageRenderer.java,v 1.47 2004/03/31 18:48:38 eburns Exp $
  */
 
 /*
@@ -60,7 +60,7 @@ public class MessageRenderer extends HtmlBasicRenderer {
         throws IOException {
         if (context == null || component == null) {
             throw new NullPointerException(
-                Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                Util.getExceptionMessageString(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
         if (component instanceof UIOutput) {
             omRenderer.encodeBegin(context, component);
@@ -72,7 +72,7 @@ public class MessageRenderer extends HtmlBasicRenderer {
     public void encodeChildren(FacesContext context, UIComponent component) {
         if (context == null || component == null) {
             throw new NullPointerException(
-                Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                Util.getExceptionMessageString(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
         if (component instanceof UIOutput) {
             omRenderer.encodeChildren(context, component);
@@ -89,7 +89,7 @@ public class MessageRenderer extends HtmlBasicRenderer {
         ResponseWriter writer = null;
 
         if (context == null || component == null) {
-            throw new NullPointerException(Util.getExceptionMessage(
+            throw new NullPointerException(Util.getExceptionMessageString(
                 Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
 
@@ -118,7 +118,7 @@ public class MessageRenderer extends HtmlBasicRenderer {
         //by TLD in JSP case, but need to cover non-JSP case.
         if (clientId == null) {
             if (log.isInfoEnabled()) {
-                log.info(Util.getExceptionMessage(
+                log.info(Util.getExceptionMessageString(
                     Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
             }
             return;

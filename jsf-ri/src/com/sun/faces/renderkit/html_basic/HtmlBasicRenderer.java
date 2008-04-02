@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderer.java,v 1.81 2004/02/26 20:32:56 eburns Exp $
+ * $Id: HtmlBasicRenderer.java,v 1.82 2004/03/31 18:48:36 eburns Exp $
  */
 
 /*
@@ -89,7 +89,7 @@ public abstract class HtmlBasicRenderer extends Renderer {
     public void decode(FacesContext context, UIComponent component) {
 
         if (context == null || component == null) {
-            throw new NullPointerException(Util.getExceptionMessage(
+            throw new NullPointerException(Util.getExceptionMessageString(
                 Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
 
@@ -145,7 +145,7 @@ public abstract class HtmlBasicRenderer extends Renderer {
         String styleClass = null;
 
         if (context == null || component == null) {
-            throw new NullPointerException(Util.getExceptionMessage(
+            throw new NullPointerException(Util.getExceptionMessageString(
                 Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
 
@@ -282,7 +282,7 @@ public abstract class HtmlBasicRenderer extends Renderer {
         } else {
             // throw converter exception if no converter can be
             // identified
-            throw new ConverterException(Util.getExceptionMessage(
+            throw new ConverterException(Util.getExceptionMessageString(
                 Util.CONVERSION_ERROR_MESSAGE_ID));
         }
     }
@@ -362,14 +362,14 @@ public abstract class HtmlBasicRenderer extends Renderer {
             }
         } catch (Throwable t) {
             Object[] params = {forComponent};
-            throw new RuntimeException(Util.getExceptionMessage(
+            throw new RuntimeException(Util.getExceptionMessageString(
                 Util.COMPONENT_NOT_FOUND_ERROR_MESSAGE_ID, params));
         }
         // log a message if we were unable to find the specified
         // component (probably a misconfigured 'for' attribute
         if (result == null) {
             if (log.isWarnEnabled()) {
-                log.warn(Util.getExceptionMessage(
+                log.warn(Util.getExceptionMessageString(
                     Util.COMPONENT_NOT_FOUND_IN_VIEW_WARNING_ID,
                     new Object[]{forComponent}));
             }

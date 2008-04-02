@@ -1,5 +1,5 @@
 /*
- * $Id: LabelRenderer.java,v 1.28 2004/03/11 22:29:23 jvisvanathan Exp $
+ * $Id: LabelRenderer.java,v 1.29 2004/03/31 18:48:37 eburns Exp $
  */
 
 /*
@@ -68,7 +68,7 @@ public class LabelRenderer extends HtmlBasicRenderer {
 
         if (context == null || component == null) {
             throw new NullPointerException(
-                Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                Util.getExceptionMessageString(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
 
         if (log.isTraceEnabled()) {
@@ -99,7 +99,7 @@ public class LabelRenderer extends HtmlBasicRenderer {
             forComponent = getForComponent(context, forValue, component);
             if (forComponent == null ) {
                 if (log.isErrorEnabled()) {
-                    log.error(Util.getExceptionMessage(
+                    log.error(Util.getExceptionMessageString(
                         Util.COMPONENT_NOT_FOUND_ERROR_MESSAGE_ID,
                         new Object[]{forValue}));
                 }
@@ -129,7 +129,7 @@ public class LabelRenderer extends HtmlBasicRenderer {
     public void encodeChildren(FacesContext context, UIComponent component) {
         if (context == null || component == null) {
             throw new NullPointerException(
-                Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                Util.getExceptionMessageString(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
     }
 
@@ -139,7 +139,7 @@ public class LabelRenderer extends HtmlBasicRenderer {
 
         if (context == null || component == null) {
             throw new NullPointerException(
-                Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                Util.getExceptionMessageString(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
         // render label end element if RENDER_END_ELEMENT is set.
         String render = (String) component.getAttributes().get(

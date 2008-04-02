@@ -46,7 +46,7 @@ public class MixedELValueBinding extends ValueBindingImpl {
         throws EvaluationException, PropertyNotFoundException {
         if (context == null) {
             throw new NullPointerException(
-                Util.getExceptionMessage(Util.NULL_CONTEXT_ERROR_MESSAGE_ID));
+                Util.getExceptionMessageString(Util.NULL_CONTEXT_ERROR_MESSAGE_ID));
         }
         if (expressions == null) {
             MixedELValueParser parser = new MixedELValueParser();
@@ -103,7 +103,7 @@ public class MixedELValueBinding extends ValueBindingImpl {
     public void setValue(FacesContext context, Object value)
         throws EvaluationException, PropertyNotFoundException {
         Object[] params = {ref};
-        throw new PropertyNotFoundException(Util.getExceptionMessage(
+        throw new PropertyNotFoundException(Util.getExceptionMessageString(
             Util.ILLEGAL_MODEL_REFERENCE_ID, params));
     }
 

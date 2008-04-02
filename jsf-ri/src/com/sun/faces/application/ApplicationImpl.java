@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationImpl.java,v 1.44 2004/02/26 20:32:29 eburns Exp $
+ * $Id: ApplicationImpl.java,v 1.45 2004/03/31 18:48:21 eburns Exp $
  */
 
 /*
@@ -159,7 +159,7 @@ public class ApplicationImpl extends Application {
 
     public void setViewHandler(ViewHandler handler) {
         if (handler == null) {
-            throw new NullPointerException(Util.getExceptionMessage(
+            throw new NullPointerException(Util.getExceptionMessageString(
                 Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
         synchronized (this) {
@@ -169,7 +169,7 @@ public class ApplicationImpl extends Application {
                     log.error(
                         "Response for this request has been rendered already ");
                 }
-                throw new IllegalStateException(Util.getExceptionMessage(
+                throw new IllegalStateException(Util.getExceptionMessageString(
                     Util.ILLEGAL_ATTEMPT_SETTING_VIEWHANDLER_ID));
             }
             viewHandler = handler;
@@ -187,7 +187,7 @@ public class ApplicationImpl extends Application {
 
     public void setStateManager(StateManager manager) {
         if (manager == null) {
-            throw new NullPointerException(Util.getExceptionMessage(
+            throw new NullPointerException(Util.getExceptionMessageString(
                 Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
         synchronized (this) {
@@ -197,7 +197,7 @@ public class ApplicationImpl extends Application {
                     log.error(
                         "Response for this request has been rendered already ");
                 }
-                throw new IllegalStateException(Util.getExceptionMessage(
+                throw new IllegalStateException(Util.getExceptionMessageString(
                     Util.ILLEGAL_ATTEMPT_SETTING_STATEMANAGER_ID));
             }
             stateManager = manager;
@@ -210,7 +210,7 @@ public class ApplicationImpl extends Application {
 
     public void setActionListener(ActionListener listener) {
         if (listener == null) {
-            throw new NullPointerException(Util.getExceptionMessage(
+            throw new NullPointerException(Util.getExceptionMessageString(
                 Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
         synchronized (this) {
@@ -245,7 +245,7 @@ public class ApplicationImpl extends Application {
      */
     public void setNavigationHandler(NavigationHandler handler) {
         if (handler == null) {
-            throw new NullPointerException(Util.getExceptionMessage(
+            throw new NullPointerException(Util.getExceptionMessageString(
                 Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
         synchronized (this) {
@@ -348,7 +348,7 @@ public class ApplicationImpl extends Application {
 
     public void setPropertyResolver(PropertyResolver resolver) {
         if (resolver == null) {
-            throw new NullPointerException(Util.getExceptionMessage(
+            throw new NullPointerException(Util.getExceptionMessageString(
                 Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
         synchronized (this) {
@@ -364,7 +364,7 @@ public class ApplicationImpl extends Application {
 
         if (ref == null) {
             throw new NullPointerException
-                (Util.getExceptionMessage
+                (Util.getExceptionMessageString
                  (Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
 
         } else {
@@ -378,7 +378,7 @@ public class ApplicationImpl extends Application {
         throws ReferenceSyntaxException {
         ValueBinding valueBinding = null;
         if (ref == null) {
-            throw new NullPointerException(Util.getExceptionMessage(
+            throw new NullPointerException(Util.getExceptionMessageString(
                 Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         } else {
             if (!Util.isVBExpression(ref)) {
@@ -417,7 +417,7 @@ public class ApplicationImpl extends Application {
 
     public void setVariableResolver(VariableResolver resolver) {
         if (resolver == null) {
-            throw new NullPointerException(Util.getExceptionMessage(
+            throw new NullPointerException(Util.getExceptionMessageString(
                 Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
         synchronized (this) {
@@ -431,7 +431,7 @@ public class ApplicationImpl extends Application {
 
     public void addComponent(String componentType, String componentClass) {
         if (componentType == null || componentClass == null) {
-            throw new NullPointerException(Util.getExceptionMessage(
+            throw new NullPointerException(Util.getExceptionMessageString(
                 Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
         synchronized (this) {
@@ -447,7 +447,7 @@ public class ApplicationImpl extends Application {
     public UIComponent createComponent(String componentType)
         throws FacesException {
         if (componentType == null) {
-            throw new NullPointerException(Util.getExceptionMessage(
+            throw new NullPointerException(Util.getExceptionMessageString(
                 Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
         UIComponent returnVal = (UIComponent) newThing(componentType,
@@ -458,7 +458,7 @@ public class ApplicationImpl extends Application {
                     "Could not instantiate component of type " + componentType);
             }
             Object[] params = {componentType};
-            throw new FacesException(Util.getExceptionMessage(
+            throw new FacesException(Util.getExceptionMessageString(
                 Util.NAMED_OBJECT_NOT_FOUND_ERROR_MESSAGE_ID, params));
         }
         if (log.isTraceEnabled()) {
@@ -474,7 +474,7 @@ public class ApplicationImpl extends Application {
         throws FacesException {
         if (null == componentBinding || null == context ||
             null == componentType) {
-            throw new NullPointerException(Util.getExceptionMessage(
+            throw new NullPointerException(Util.getExceptionMessageString(
                 Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
 
@@ -507,7 +507,7 @@ public class ApplicationImpl extends Application {
 
     public void addConverter(String converterId, String converterClass) {
         if (converterId == null || converterClass == null) {
-            throw new NullPointerException(Util.getExceptionMessage(
+            throw new NullPointerException(Util.getExceptionMessageString(
                 Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
         synchronized (this) {
@@ -522,7 +522,7 @@ public class ApplicationImpl extends Application {
 
     public void addConverter(Class targetClass, String converterClass) {
         if (targetClass == null || converterClass == null) {
-            throw new NullPointerException(Util.getExceptionMessage(
+            throw new NullPointerException(Util.getExceptionMessageString(
                 Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
         synchronized (this) {
@@ -536,7 +536,7 @@ public class ApplicationImpl extends Application {
 
     public Converter createConverter(String converterId) {
         if (converterId == null) {
-            throw new NullPointerException(Util.getExceptionMessage(
+            throw new NullPointerException(Util.getExceptionMessageString(
                 Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
         Converter returnVal = (Converter) newThing(converterId, converterIdMap);
@@ -546,7 +546,7 @@ public class ApplicationImpl extends Application {
                           converterId);
             }
             Object[] params = {converterId};
-            throw new FacesException(Util.getExceptionMessage(
+            throw new FacesException(Util.getExceptionMessageString(
                 Util.NAMED_OBJECT_NOT_FOUND_ERROR_MESSAGE_ID, params));
         }
         if (log.isTraceEnabled()) {
@@ -558,7 +558,7 @@ public class ApplicationImpl extends Application {
 
     public Converter createConverter(Class targetClass) {
         if (targetClass == null) {
-            throw new NullPointerException(Util.getExceptionMessage(
+            throw new NullPointerException(Util.getExceptionMessageString(
                 Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
         Converter returnVal = (Converter) newThing(targetClass,
@@ -694,7 +694,7 @@ public class ApplicationImpl extends Application {
 
     public void addValidator(String validatorId, String validatorClass) {
         if (validatorId == null || validatorClass == null) {
-            throw new NullPointerException(Util.getExceptionMessage(
+            throw new NullPointerException(Util.getExceptionMessageString(
                 Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
         synchronized (this) {
@@ -709,7 +709,7 @@ public class ApplicationImpl extends Application {
 
     public Validator createValidator(String validatorId) throws FacesException {
         if (validatorId == null) {
-            throw new NullPointerException(Util.getExceptionMessage(
+            throw new NullPointerException(Util.getExceptionMessageString(
                 Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
         Validator returnVal = (Validator) newThing(validatorId, validatorMap);
@@ -719,7 +719,7 @@ public class ApplicationImpl extends Application {
                           validatorId);
             }
             Object[] params = {validatorId};
-            throw new FacesException(Util.getExceptionMessage(
+            throw new FacesException(Util.getExceptionMessageString(
                 Util.NAMED_OBJECT_NOT_FOUND_ERROR_MESSAGE_ID, params));
         }
         if (log.isTraceEnabled()) {
@@ -815,7 +815,7 @@ public class ApplicationImpl extends Application {
                     map.put(key, clazz);
                 } catch (Throwable t) {
                     Object[] params = {t.getMessage()};
-                    throw new FacesException(Util.getExceptionMessage(
+                    throw new FacesException(Util.getExceptionMessageString(
                         Util.CANT_LOAD_CLASS_ERROR_MESSAGE_ID, params));
                 }
             } else {
@@ -827,7 +827,7 @@ public class ApplicationImpl extends Application {
             result = clazz.newInstance();
         } catch (Throwable t) {
             Object[] params = {clazz.getName()};
-            throw new FacesException(Util.getExceptionMessage(
+            throw new FacesException(Util.getExceptionMessageString(
                 Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, params));
         }
         return result;
@@ -869,7 +869,7 @@ public class ApplicationImpl extends Application {
             if (log.isErrorEnabled()) {
                 log.error(ex.getMessage(), ex);
             }
-            throw new PropertyNotFoundException(Util.getExceptionMessage(
+            throw new PropertyNotFoundException(Util.getExceptionMessageString(
                 Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, params));
         }
         //add bean to appropriate scope

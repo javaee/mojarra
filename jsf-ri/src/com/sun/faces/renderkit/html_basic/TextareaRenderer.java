@@ -1,5 +1,5 @@
 /*
- * $Id: TextareaRenderer.java,v 1.10 2004/02/26 20:33:01 eburns Exp $
+ * $Id: TextareaRenderer.java,v 1.11 2004/03/31 18:48:40 eburns Exp $
  */
 
 /*
@@ -68,7 +68,7 @@ public class TextareaRenderer extends HtmlBasicInputRenderer {
 
         if (context == null || component == null) {
             throw new NullPointerException(
-                Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                Util.getExceptionMessageString(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
     }
 
@@ -76,7 +76,7 @@ public class TextareaRenderer extends HtmlBasicInputRenderer {
     public void encodeChildren(FacesContext context, UIComponent component) {
         if (context == null || component == null) {
             throw new NullPointerException(
-                Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                Util.getExceptionMessageString(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
     }
 

@@ -806,7 +806,7 @@ public class HtmlTaglibGenerator extends AbstractGenerator {
                     writer.write(".set" + capitalize(ivar) + "(vb);\n");
                     writer.write("            } else {\n");
                     writer.write("              Object params [] = {" + ivar + "};\n");
-                    writer.write("              throw new javax.faces.FacesException(Util.getExceptionMessage(Util.INVALID_EXPRESSION_ID, params));\n");
+                    writer.write("              throw new javax.faces.FacesException(Util.getExceptionMessageString(Util.INVALID_EXPRESSION_ID, params));\n");
                     writer.write("            }\n");
                     writer.write("            }\n");
                 } 
@@ -951,14 +951,14 @@ public class HtmlTaglibGenerator extends AbstractGenerator {
         writer.write("        try {\n");
         writer.write("            if (null == (bodyContent = getBodyContent())) {\n");
         writer.write("                Object params [] = { this.getClass().getName() };\n");
-        writer.write("                throw new JspException(Util.getExceptionMessage(\n");
+        writer.write("                throw new JspException(Util.getExceptionMessageString(\n");
         writer.write("                Util.NULL_BODY_CONTENT_ERROR_MESSAGE_ID, params));\n");
         writer.write("            }\n");
         writer.write("            content = bodyContent.getString();\n");
         writer.write("            getPreviousOut().write(content);\n");
         writer.write("        } catch (IOException iox) {\n");
         writer.write("            Object [] params = { \"session\", iox.getMessage() };\n");
-        writer.write("            throw new JspException(Util.getExceptionMessage(\n");
+        writer.write("            throw new JspException(Util.getExceptionMessageString(\n");
         writer.write("                Util.SAVING_STATE_ERROR_MESSAGE_ID, params));\n");
         writer.write("        }\n"); 
         writer.write("        int rc = super.doEndTag();\n"); 

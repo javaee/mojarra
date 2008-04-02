@@ -1,5 +1,5 @@
 /*
- * $Id: TreeStructure.java,v 1.6 2004/02/26 20:33:27 eburns Exp $
+ * $Id: TreeStructure.java,v 1.7 2004/03/31 18:48:51 eburns Exp $
  */
 
 /*
@@ -127,7 +127,7 @@ public class TreeStructure implements java.io.Serializable {
             component = ((UIComponent) clazz.newInstance());
         } catch (Exception e) {
             Object params[] = {className};
-            throw new FacesException(Util.getExceptionMessage(
+            throw new FacesException(Util.getExceptionMessageString(
                 Util.MISSING_CLASS_ERROR_MESSAGE_ID,
                 params));
         }

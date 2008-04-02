@@ -1,5 +1,5 @@
 /*
- * $Id: ExternalContextImpl.java,v 1.25 2004/02/26 20:32:37 eburns Exp $
+ * $Id: ExternalContextImpl.java,v 1.26 2004/03/31 18:48:27 eburns Exp $
  */
 
 /*
@@ -44,7 +44,7 @@ import java.util.Set;
  * servlet implementation.
  *
  * @author Brendan Murray
- * @version $Id: ExternalContextImpl.java,v 1.25 2004/02/26 20:32:37 eburns Exp $
+ * @version $Id: ExternalContextImpl.java,v 1.26 2004/03/31 18:48:27 eburns Exp $
  */
 public class ExternalContextImpl extends ExternalContext {
 
@@ -73,7 +73,7 @@ public class ExternalContextImpl extends ExternalContext {
             Util.parameterNonNull(response);
         } catch (Exception e) {
             throw new FacesException(
-                Util.getExceptionMessage(
+                Util.getExceptionMessageString(
                     Util.FACES_CONTEXT_CONSTRUCTION_ERROR_MESSAGE_ID));
         }
 

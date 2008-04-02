@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationFactoryImpl.java,v 1.5 2004/02/26 20:32:28 eburns Exp $
+ * $Id: ApplicationFactoryImpl.java,v 1.6 2004/03/31 18:48:21 eburns Exp $
  */
 
 /*
@@ -89,7 +89,7 @@ public class ApplicationFactoryImpl extends ApplicationFactory {
     public void setApplication(Application application) {
         if (application == null) {
             throw new NullPointerException(
-                Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                Util.getExceptionMessageString(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
 
         this.application = application;

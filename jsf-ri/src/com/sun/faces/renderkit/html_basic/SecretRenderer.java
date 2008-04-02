@@ -1,5 +1,5 @@
 /*
- * $Id: SecretRenderer.java,v 1.54 2004/02/26 20:33:00 eburns Exp $
+ * $Id: SecretRenderer.java,v 1.55 2004/03/31 18:48:38 eburns Exp $
  */
 
 /*
@@ -67,7 +67,7 @@ public class SecretRenderer extends HtmlBasicInputRenderer {
         throws IOException {
         if (context == null || component == null) {
             throw new NullPointerException(
-                Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                Util.getExceptionMessageString(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
     }
 
@@ -76,7 +76,7 @@ public class SecretRenderer extends HtmlBasicInputRenderer {
         throws IOException {
         if (context == null || component == null) {
             throw new NullPointerException(
-                Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                Util.getExceptionMessageString(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
     }
 

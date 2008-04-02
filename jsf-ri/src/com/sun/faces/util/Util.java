@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.133 2004/02/26 20:33:27 eburns Exp $
+ * $Id: Util.java,v 1.134 2004/03/31 18:48:52 eburns Exp $
  */
 
 /*
@@ -56,7 +56,7 @@ import java.util.StringTokenizer;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.133 2004/02/26 20:33:27 eburns Exp $
+ * @version $Id: Util.java,v 1.134 2004/03/31 18:48:52 eburns Exp $
  */
 
 public class Util extends Object {
@@ -413,7 +413,7 @@ public class Util extends Object {
      * instance and get a message on it.
      */
 
-    public static synchronized String getExceptionMessage(String messageId,
+    public static synchronized String getExceptionMessageString(String messageId,
                                                           Object params[]) {
         String result = null;
 
@@ -430,10 +430,19 @@ public class Util extends Object {
     }
 
 
-    public static synchronized String getExceptionMessage(String messageId) {
-        return Util.getExceptionMessage(messageId, null);
+    public static synchronized String getExceptionMessageString(String messageId) {
+        return Util.getExceptionMessageString(messageId, null);
     }
 
+    public static synchronized FacesMessage getExceptionMessage(String messageId,
+								      Object params[]) {
+        return MessageFactory.getMessage(messageId, params);
+    }
+
+
+    public static synchronized FacesMessage getExceptionMessage(String messageId) {
+        return Util.getExceptionMessage(messageId, null);
+    }
 
     /**
      * Verify the existence of all the factories needed by faces.  Create
@@ -519,7 +528,7 @@ public class Util extends Object {
             if (Boolean.FALSE == result) {
                 throw new
                     FacesException(
-                        Util.getExceptionMessage(
+                        Util.getExceptionMessageString(
                             Util.MISSING_CLASS_ERROR_MESSAGE_ID, params));
             } else {
                 // yes, and the check passed.
@@ -537,7 +546,7 @@ public class Util extends Object {
             applicationMap.put(RIConstants.HAS_REQUIRED_CLASSES_ATTR,
                                Boolean.FALSE);
             throw new FacesException(
-                Util.getExceptionMessage(Util.MISSING_CLASS_ERROR_MESSAGE_ID,
+                Util.getExceptionMessageString(Util.MISSING_CLASS_ERROR_MESSAGE_ID,
                                          params),
                 e);
         }
@@ -591,7 +600,7 @@ public class Util extends Object {
                 } else if (value instanceof SelectItem) {
                     list.add(value);
                 } else {
-                    throw new IllegalArgumentException(Util.getExceptionMessage(
+                    throw new IllegalArgumentException(Util.getExceptionMessageString(
                         Util.CONVERSION_ERROR_MESSAGE_ID));
                 }
             } else if (kid instanceof UISelectItems && null != context) {
@@ -623,7 +632,7 @@ public class Util extends Object {
                                                 null));
                     }
                 } else {
-                    throw new IllegalArgumentException(Util.getExceptionMessage(
+                    throw new IllegalArgumentException(Util.getExceptionMessageString(
                         Util.CONVERSION_ERROR_MESSAGE_ID));
                 }
             }
@@ -1154,7 +1163,7 @@ public class Util extends Object {
             } catch (Exception e) {
                 Object[] params = new Object[1];
                 params[0] = className;
-                String msg = Util.getExceptionMessage(
+                String msg = Util.getExceptionMessageString(
                     Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, params);
                 if (log.isErrorEnabled()) {
                     log.error(msg + ":" + className + ":exception:" +
@@ -1274,12 +1283,12 @@ public class Util extends Object {
         // look for invalid expressions
         if ('#' == expression.charAt(0)) {
             if ('{' != expression.charAt(1)) {
-                throw new ReferenceSyntaxException(Util.getExceptionMessage(
+                throw new ReferenceSyntaxException(Util.getExceptionMessageString(
                     Util.INVALID_EXPRESSION_ID,
                     new Object[]{expression}));
             }
             if ('}' != expression.charAt((len = expression.length()) - 1)) {
-                throw new ReferenceSyntaxException(Util.getExceptionMessage(
+                throw new ReferenceSyntaxException(Util.getExceptionMessageString(
                     Util.INVALID_EXPRESSION_ID,
                     new Object[]{expression}));
             }
@@ -1297,7 +1306,7 @@ public class Util extends Object {
 
     public static void doAssert(boolean cond) throws FacesException {
         if (assertEnabled && !cond) {
-            throw new FacesException(getExceptionMessage(ASSERTION_FAILED_ID));
+            throw new FacesException(getExceptionMessageString(ASSERTION_FAILED_ID));
         }
     }
 
@@ -1305,14 +1314,14 @@ public class Util extends Object {
     public static void parameterNonNull(Object param) throws FacesException {
         if (null == param) {
             throw new FacesException(
-                getExceptionMessage(NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                getExceptionMessageString(NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
     }
 
 
     public static void parameterNonEmpty(String param) throws FacesException {
         if (null == param || 0 == param.length()) {
-            throw new FacesException(getExceptionMessage(EMPTY_PARAMETER_ID));
+            throw new FacesException(getExceptionMessageString(EMPTY_PARAMETER_ID));
         }
     }
 

@@ -1,5 +1,5 @@
 /*
- * $Id: LinkRenderer.java,v 1.9 2004/02/26 20:32:58 eburns Exp $
+ * $Id: LinkRenderer.java,v 1.10 2004/03/31 18:48:37 eburns Exp $
  */
 
 /*
@@ -80,7 +80,7 @@ public class LinkRenderer extends HtmlBasicRenderer {
 
     public void decode(FacesContext context, UIComponent component) {
         if (context == null || component == null) {
-            throw new NullPointerException(Util.getExceptionMessage(
+            throw new NullPointerException(Util.getExceptionMessageString(
                 Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
 
@@ -97,7 +97,7 @@ public class LinkRenderer extends HtmlBasicRenderer {
         throws IOException {
         if (context == null || component == null) {
             throw new NullPointerException(
-                Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                Util.getExceptionMessageString(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
 
         if (component instanceof UICommand) {
@@ -113,7 +113,7 @@ public class LinkRenderer extends HtmlBasicRenderer {
         throws IOException {
         if (context == null || component == null) {
             throw new NullPointerException(
-                Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                Util.getExceptionMessageString(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
 
         if (component instanceof UICommand) {

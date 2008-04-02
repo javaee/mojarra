@@ -1,5 +1,5 @@
 /*
- * $Id: OutputLinkRenderer.java,v 1.14 2004/03/11 22:29:23 jvisvanathan Exp $
+ * $Id: OutputLinkRenderer.java,v 1.15 2004/03/31 18:48:38 eburns Exp $
  */
 
 /*
@@ -29,7 +29,7 @@ import java.util.Iterator;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: OutputLinkRenderer.java,v 1.14 2004/03/11 22:29:23 jvisvanathan Exp $
+ * @version $Id: OutputLinkRenderer.java,v 1.15 2004/03/31 18:48:38 eburns Exp $
  */
 
 public class OutputLinkRenderer extends HtmlBasicRenderer {
@@ -73,7 +73,7 @@ public class OutputLinkRenderer extends HtmlBasicRenderer {
 
     public void decode(FacesContext context, UIComponent component) {
         if (context == null || component == null) {
-            throw new NullPointerException(Util.getExceptionMessage(
+            throw new NullPointerException(Util.getExceptionMessageString(
                 Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
 
@@ -104,7 +104,7 @@ public class OutputLinkRenderer extends HtmlBasicRenderer {
         throws IOException {
         if (context == null || component == null) {
             throw new NullPointerException(
-                Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                Util.getExceptionMessageString(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
         if (log.isTraceEnabled()) {
             log.trace("Begin encoding component " + component.getId());
@@ -180,7 +180,7 @@ public class OutputLinkRenderer extends HtmlBasicRenderer {
         throws IOException {
         if (context == null || component == null) {
             throw new NullPointerException(
-                Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                Util.getExceptionMessageString(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
         if (log.isTraceEnabled()) {
             log.trace("Begin encoding children " + component.getId());
@@ -211,7 +211,7 @@ public class OutputLinkRenderer extends HtmlBasicRenderer {
         throws IOException {
         if (context == null || component == null) {
             throw new NullPointerException(
-                Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                Util.getExceptionMessageString(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
 
         if (log.isTraceEnabled()) {

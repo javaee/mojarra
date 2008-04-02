@@ -1,5 +1,5 @@
 /*
- * $Id: ImageRenderer.java,v 1.32 2004/02/26 20:32:57 eburns Exp $
+ * $Id: ImageRenderer.java,v 1.33 2004/03/31 18:48:37 eburns Exp $
  */
 
 /*
@@ -26,7 +26,7 @@ import java.io.IOException;
  * <B>ImageRenderer</B> is a class that handles the rendering of the graphic
  * ImageTag
  *
- * @version $Id: ImageRenderer.java,v 1.32 2004/02/26 20:32:57 eburns Exp $
+ * @version $Id: ImageRenderer.java,v 1.33 2004/03/31 18:48:37 eburns Exp $
  */
 
 public class ImageRenderer extends HtmlBasicRenderer {
@@ -74,7 +74,7 @@ public class ImageRenderer extends HtmlBasicRenderer {
         throws IOException {
         if (context == null || component == null) {
             throw new NullPointerException(
-                Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                Util.getExceptionMessageString(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
     }
 
@@ -82,7 +82,7 @@ public class ImageRenderer extends HtmlBasicRenderer {
     public void encodeChildren(FacesContext context, UIComponent component) {
         if (context == null || component == null) {
             throw new NullPointerException(
-                Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                Util.getExceptionMessageString(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
     }
 
@@ -94,7 +94,7 @@ public class ImageRenderer extends HtmlBasicRenderer {
 
         if (context == null || component == null) {
             throw new NullPointerException(
-                Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                Util.getExceptionMessageString(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
 
         if (log.isTraceEnabled()) {

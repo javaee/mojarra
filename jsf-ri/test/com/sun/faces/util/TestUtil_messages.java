@@ -1,5 +1,5 @@
 /*
- * $Id: TestUtil_messages.java,v 1.31 2004/02/26 20:34:47 eburns Exp $
+ * $Id: TestUtil_messages.java,v 1.32 2004/03/31 18:48:56 eburns Exp $
  */
 
 /*
@@ -23,7 +23,7 @@ import java.util.Locale;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestUtil_messages.java,v 1.31 2004/02/26 20:34:47 eburns Exp $
+ * @version $Id: TestUtil_messages.java,v 1.32 2004/03/31 18:48:56 eburns Exp $
  */
 
 public class TestUtil_messages extends ServletFacesTestCase {
@@ -188,11 +188,11 @@ public class TestUtil_messages extends ServletFacesTestCase {
                 assertTrue(false);
             }
             if (numParams == 0) {
-                String message = Util.getExceptionMessage(messageInfo[i][0]);
+                String message = Util.getExceptionMessageString(messageInfo[i][0]);
                 assertTrue(message != null);
             } else if (numParams > 0) {
                 Object[] params = generateParams(numParams);
-                String message = Util.getExceptionMessage(messageInfo[i][0],
+                String message = Util.getExceptionMessageString(messageInfo[i][0],
                                                           params);
                 assertTrue(message != null);
                 for (int j = 0; j < params.length; j++) {
