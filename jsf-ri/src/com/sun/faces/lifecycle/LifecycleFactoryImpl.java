@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleFactoryImpl.java,v 1.22 2004/10/12 14:39:50 rlubke Exp $
+ * $Id: LifecycleFactoryImpl.java,v 1.23 2005/05/16 20:16:20 rlubke Exp $
  */
 
 /*
@@ -11,23 +11,24 @@
 
 package com.sun.faces.lifecycle;
 
-import com.sun.faces.util.Util;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.util.HashMap;
+import java.util.Iterator;
 
 import javax.faces.FacesException;
 import javax.faces.event.PhaseId;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.lifecycle.LifecycleFactory;
 
-import java.util.HashMap;
-import java.util.Iterator;
+import com.sun.faces.util.Util;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  * <B>LifecycleFactoryImpl</B> is the stock implementation of Lifecycle
  * in the JSF RI. <P>
  *
- * @version $Id: LifecycleFactoryImpl.java,v 1.22 2004/10/12 14:39:50 rlubke Exp $
+ * @version $Id: LifecycleFactoryImpl.java,v 1.23 2005/05/16 20:16:20 rlubke Exp $
  * @see	javax.faces.lifecycle.LifecycleFactory
  */
 
@@ -40,7 +41,8 @@ public class LifecycleFactoryImpl extends LifecycleFactory {
     static final int LAST_PHASE = PhaseId.RENDER_RESPONSE.getOrdinal();
 
 // Log instance for this class
-    protected static Log log = LogFactory.getLog(LifecycleFactoryImpl.class);
+    private static final Log log =
+        LogFactory.getLog(LifecycleFactoryImpl.class);
 
 //
 // Class Variables

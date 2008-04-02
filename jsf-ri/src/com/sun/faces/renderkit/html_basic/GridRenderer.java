@@ -1,5 +1,5 @@
 /*
- * $Id: GridRenderer.java,v 1.34 2004/12/16 17:56:37 edburns Exp $
+ * $Id: GridRenderer.java,v 1.35 2005/05/16 20:16:26 rlubke Exp $
  */
 
 /*
@@ -10,17 +10,18 @@
 package com.sun.faces.renderkit.html_basic;
 
 
-import com.sun.faces.util.Util;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
+import com.sun.faces.util.Util;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  * <B>GridRenderer</B> is a class that renders <code>UIPanel</code> component
@@ -33,7 +34,7 @@ public class GridRenderer extends HtmlBasicRenderer {
     // Protected Constants
     //
     // Log instance for this class
-    protected static Log log = LogFactory.getLog(GridRenderer.class);
+    private static final Log log = LogFactory.getLog(GridRenderer.class);
     
     //
     // Class Variables

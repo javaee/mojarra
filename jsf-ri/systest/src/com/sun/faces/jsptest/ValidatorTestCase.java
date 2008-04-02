@@ -1,5 +1,5 @@
 /*
- * $Id: ValidatorTestCase.java,v 1.4 2005/04/26 16:41:39 jayashri Exp $
+ * $Id: ValidatorTestCase.java,v 1.5 2005/05/16 20:16:35 rlubke Exp $
  */
 
 /*
@@ -9,22 +9,15 @@
 
 package com.sun.faces.jsptest;
 
-import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlBody;
-import com.gargoylesoftware.htmlunit.html.HtmlElement;
-import com.gargoylesoftware.htmlunit.html.HtmlForm;
+import java.util.List;
+
+import com.sun.faces.htmlunit.AbstractTestCase;
+
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
-import com.sun.faces.htmlunit.AbstractTestCase;
 import junit.framework.Test;
-import junit.framework.TestCase;
 import junit.framework.TestSuite;
-
-import java.util.List;
-
-import javax.faces.component.NamingContainer;
 
 /**
  * <p>Test that invalid values don't cause valueChangeEvents to occur.</p>
@@ -104,13 +97,12 @@ public class ValidatorTestCase extends AbstractTestCase {
         list = getAllElementsOfGivenClass(page, null,
                                           HtmlSubmitInput.class);
         HtmlSubmitInput button = (HtmlSubmitInput) list.get(0);
-        page = (HtmlPage) button.click();
-
-        assertTrue(-1 != page.asText().indexOf("_id1:dr1: Validation Error: Specified attribute is not between the expected values of 2 and 5."));
+        page = (HtmlPage) button.click();      
+        assertTrue(-1 != page.asText().indexOf("_id_id17:dr1: Validation Error: Specified attribute is not between the expected values of 2 and 5."));
         assertTrue(-1 != page.asText().indexOf("DoubleRange2: Validation Error: Specified attribute is not between the expected values of 2 and 5."));
-        assertTrue(-1 != page.asText().indexOf("_id1:l1: Validation Error: Value is less than allowable minimum of '2'"));
+        assertTrue(-1 != page.asText().indexOf("_id_id17:l1: Validation Error: Value is less than allowable minimum of '2'"));
         assertTrue(-1 != page.asText().indexOf("Length2: Validation Error: Value is less than allowable minimum of '2'"));
-        assertTrue(-1 != page.asText().indexOf("id1:lr1: Validation Error: Specified attribute is not between the expected values of 2 and 5."));
+        assertTrue(-1 != page.asText().indexOf("_id_id17:lr1: Validation Error: Specified attribute is not between the expected values of 2 and 5."));
         assertTrue(-1 != page.asText().indexOf("LongRange2: Validation Error: Specified attribute is not between the expected values of 2 and 5."));
     }
 

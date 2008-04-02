@@ -1,5 +1,5 @@
 /*
- * $Id: OutputLinkRenderer.java,v 1.17 2004/12/16 17:56:38 edburns Exp $
+ * $Id: OutputLinkRenderer.java,v 1.18 2005/05/16 20:16:29 rlubke Exp $
  */
 
 /*
@@ -11,17 +11,18 @@
 
 package com.sun.faces.renderkit.html_basic;
 
-import com.sun.faces.util.Util;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.io.IOException;
+import java.util.Iterator;
 
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIOutput;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 
-import java.io.IOException;
-import java.util.Iterator;
+import com.sun.faces.util.Util;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 
 /**
@@ -29,7 +30,7 @@ import java.util.Iterator;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: OutputLinkRenderer.java,v 1.17 2004/12/16 17:56:38 edburns Exp $
+ * @version $Id: OutputLinkRenderer.java,v 1.18 2005/05/16 20:16:29 rlubke Exp $
  */
 
 public class OutputLinkRenderer extends HtmlBasicRenderer {
@@ -38,7 +39,7 @@ public class OutputLinkRenderer extends HtmlBasicRenderer {
     // Protected Constants
     //
     // Log instance for this class
-    protected static Log log = LogFactory.getLog(OutputLinkRenderer.class);
+    private static final Log log = LogFactory.getLog(OutputLinkRenderer.class);
 
     // Separator character
 
@@ -97,9 +98,6 @@ public class OutputLinkRenderer extends HtmlBasicRenderer {
     }
 
 
-    private String clientId = null;
-
-
     public void encodeBegin(FacesContext context, UIComponent component)
         throws IOException {
         if (context == null || component == null) {
@@ -136,16 +134,13 @@ public class OutputLinkRenderer extends HtmlBasicRenderer {
             hrefVal = "";
         }
 
-        clientId = output.getClientId(context);
-
         //Write Anchor attributes
 
         LinkRenderer.Param paramList[] = getParamList(context, component);
-        StringBuffer sb = new StringBuffer();
         int
             i = 0,
             len = paramList.length;
-        sb = new StringBuffer();
+        StringBuffer sb = new StringBuffer();
         sb.append(hrefVal);
         if (0 < len) {
             sb.append("?");

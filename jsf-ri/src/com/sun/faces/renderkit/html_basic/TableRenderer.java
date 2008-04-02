@@ -1,5 +1,5 @@
 /*
- * $Id: TableRenderer.java,v 1.25 2005/02/22 15:56:17 rogerk Exp $
+ * $Id: TableRenderer.java,v 1.26 2005/05/16 20:16:29 rlubke Exp $
  */
 
 /*
@@ -32,7 +32,7 @@ import java.util.List;
 public class TableRenderer extends HtmlBasicRenderer {
 
     // Log instance for this class
-    protected static Log log = LogFactory.getLog(ButtonRenderer.class);
+    private static final Log log = LogFactory.getLog(ButtonRenderer.class);
 
 
     public boolean getRendersChildren() {

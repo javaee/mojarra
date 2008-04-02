@@ -1,5 +1,5 @@
 /*
- * $Id: ApplyRequestValuesPhase.java,v 1.18 2004/10/12 14:39:50 rlubke Exp $
+ * $Id: ApplyRequestValuesPhase.java,v 1.19 2005/05/16 20:16:19 rlubke Exp $
  */
 
 /*
@@ -9,14 +9,13 @@
 
 package com.sun.faces.lifecycle;
 
-import com.sun.faces.util.Util;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseId;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  * ApplyRequestValuesPhase executes <code>processDecodes</code> on each
@@ -38,7 +37,8 @@ public class ApplyRequestValuesPhase extends Phase {
     // Instance Variables
     //
     // Log instance for this class
-    protected static Log log = LogFactory.getLog(ApplyRequestValuesPhase.class);
+    private static final Log log =
+        LogFactory.getLog(ApplyRequestValuesPhase.class);
 
     // Relationship Instance Variables
 

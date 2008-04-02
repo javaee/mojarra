@@ -1,5 +1,5 @@
 /*
- * $Id: LabelRenderer.java,v 1.36 2005/04/21 18:55:36 edburns Exp $
+ * $Id: LabelRenderer.java,v 1.37 2005/05/16 20:16:27 rlubke Exp $
  */
 
 /*
@@ -11,16 +11,17 @@
 
 package com.sun.faces.renderkit.html_basic;
 
-import com.sun.faces.util.Util;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.io.IOException;
 
-import javax.faces.component.UIComponent;
 import javax.faces.component.NamingContainer;
+import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 
-import java.io.IOException;
+import com.sun.faces.util.Util;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  * <p><B>LabelRenderer</B> renders Label element.<p>.
@@ -76,11 +77,10 @@ public class LabelRenderer extends HtmlBasicInputRenderer {
             log.trace("Begin decoding component " + component.getId());
         }
         ResponseWriter writer = null;
-        String
-            forValue = null,
-            style = (String) component.getAttributes().get("style"),
-            styleClass = (String) component.getAttributes().get("styleClass");
-	
+        String forValue = null;
+        String styleClass = (String)
+            component.getAttributes().get("styleClass");
+
         // suppress rendering if "rendered" property on the component is
         // false.
         if (!component.isRendered()) {
@@ -165,7 +165,7 @@ public class LabelRenderer extends HtmlBasicInputRenderer {
         // render label end element if RENDER_END_ELEMENT is set.
         String render = (String) component.getAttributes().get(
             RENDER_END_ELEMENT);
-        if (render != null && render.equals("yes")) {
+        if ("yes".equals(render)) {
             component.getAttributes().remove(RENDER_END_ELEMENT);
             ResponseWriter writer = context.getResponseWriter();
             assert (writer != null);

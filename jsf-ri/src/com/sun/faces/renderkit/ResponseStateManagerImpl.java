@@ -1,5 +1,5 @@
 /*
- * $Id: ResponseStateManagerImpl.java,v 1.19 2005/05/02 19:27:09 edburns Exp $
+ * $Id: ResponseStateManagerImpl.java,v 1.20 2005/05/16 20:16:23 rlubke Exp $
  */
 
 /*
@@ -10,28 +10,27 @@
 
 package com.sun.faces.renderkit;
 
-import com.sun.faces.RIConstants;
-import com.sun.faces.util.Base64;
-import com.sun.faces.util.Util;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
-import javax.faces.application.StateManager.SerializedView;
-import javax.faces.application.StateManager;
-import javax.faces.context.FacesContext;
-import javax.faces.render.RenderKitFactory;
-import javax.faces.render.ResponseStateManager;
-import javax.faces.context.ResponseWriter;
-
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-
+import java.util.Map;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
-import java.util.Map;
+
+import javax.faces.application.StateManager;
+import javax.faces.application.StateManager.SerializedView;
+import javax.faces.context.FacesContext;
+import javax.faces.context.ResponseWriter;
+import javax.faces.render.RenderKitFactory;
+import javax.faces.render.ResponseStateManager;
+
+import com.sun.faces.util.Base64;
+import com.sun.faces.util.Util;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 
 /**
@@ -43,7 +42,7 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
     //
     // Protected Constants
     //
-    protected static Log log =
+    private static final Log log =
         LogFactory.getLog(ResponseStateManagerImpl.class);
     private static final String FACES_VIEW_STATE =
         "com.sun.faces.FACES_VIEW_STATE";

@@ -1,5 +1,5 @@
 /*
- * $Id: CommandLinkRenderer.java,v 1.30 2005/05/13 01:03:29 rogerk Exp $
+ * $Id: CommandLinkRenderer.java,v 1.31 2005/05/16 20:16:25 rlubke Exp $
  */
 
 /*
@@ -11,25 +11,24 @@
 
 package com.sun.faces.renderkit.html_basic;
 
-import com.sun.faces.util.Util;
-import com.sun.faces.RIConstants;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.io.IOException;
+import java.util.Iterator;
+import java.util.Map;
 
+import javax.faces.component.NamingContainer;
 import javax.faces.component.UICommand;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIForm;
 import javax.faces.component.UIViewRoot;
-import javax.faces.component.NamingContainer;
-import javax.faces.component.html.HtmlCommandLink;
 import javax.faces.context.FacesContext;
-import javax.faces.context.ExternalContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.event.ActionEvent;
 
-import java.io.IOException;
-import java.util.Iterator;
-import java.util.Map;
+import com.sun.faces.RIConstants;
+import com.sun.faces.util.Util;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  * <B>CommandLinkRenderer</B> is a class that renders the current value of
@@ -42,7 +41,7 @@ public class CommandLinkRenderer extends HtmlBasicRenderer {
     // Protected Constants
     //
     // Log instance for this class
-    protected static Log log = LogFactory.getLog(CommandLinkRenderer.class);
+    private static final Log log = LogFactory.getLog(CommandLinkRenderer.class);
      
     // Separator character
 

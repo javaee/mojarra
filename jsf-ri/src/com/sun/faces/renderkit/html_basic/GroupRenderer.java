@@ -1,5 +1,5 @@
 /*
- * $Id: GroupRenderer.java,v 1.23 2005/01/12 21:37:35 rogerk Exp $
+ * $Id: GroupRenderer.java,v 1.24 2005/05/16 20:16:26 rlubke Exp $
  */
 
 /*
@@ -24,7 +24,7 @@ import java.util.Iterator;
  * Arbitrary grouping "renderer" that simply renders its children
  * recursively in the <code>encodeEnd()</code> method.
  *
- * @version $Id: GroupRenderer.java,v 1.23 2005/01/12 21:37:35 rogerk Exp $
+ * @version $Id: GroupRenderer.java,v 1.24 2005/05/16 20:16:26 rlubke Exp $
  */
 public class GroupRenderer extends HtmlBasicRenderer {
 
@@ -32,7 +32,7 @@ public class GroupRenderer extends HtmlBasicRenderer {
     // Protected Constants
     //
     // Log instance for this class
-    protected static Log log = LogFactory.getLog(GroupRenderer.class);
+    private static final Log log = LogFactory.getLog(GroupRenderer.class);
 
     //
     // Class Variables

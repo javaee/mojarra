@@ -1,5 +1,5 @@
 /*
- * $Id: ImageRenderer.java,v 1.37 2005/04/21 18:55:36 edburns Exp $
+ * $Id: ImageRenderer.java,v 1.38 2005/05/16 20:16:27 rlubke Exp $
  */
 
 /*
@@ -27,7 +27,7 @@ import java.io.IOException;
  * <B>ImageRenderer</B> is a class that handles the rendering of the graphic
  * ImageTag
  *
- * @version $Id: ImageRenderer.java,v 1.37 2005/04/21 18:55:36 edburns Exp $
+ * @version $Id: ImageRenderer.java,v 1.38 2005/05/16 20:16:27 rlubke Exp $
  */
 
 public class ImageRenderer extends HtmlBasicRenderer {
@@ -36,7 +36,7 @@ public class ImageRenderer extends HtmlBasicRenderer {
     // Protected Constants
     //
     // Log instance for this class
-    protected static Log log = LogFactory.getLog(ImageRenderer.class);
+    private static final Log log = LogFactory.getLog(ImageRenderer.class);
     
     //
     // Class Variables

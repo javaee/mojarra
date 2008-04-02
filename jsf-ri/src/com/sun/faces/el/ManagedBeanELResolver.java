@@ -1,5 +1,5 @@
 /*
- * $Id: ManagedBeanELResolver.java,v 1.1 2005/05/05 20:51:23 edburns Exp $
+ * $Id: ManagedBeanELResolver.java,v 1.2 2005/05/16 20:16:19 rlubke Exp $
  */
 /*
  * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
@@ -8,26 +8,22 @@
 
 package com.sun.faces.el;
 
+import java.beans.BeanInfo;
+import java.beans.FeatureDescriptor;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.HashMap;
-import java.beans.FeatureDescriptor;
-import java.beans.BeanInfo;
-import java.beans.PropertyDescriptor;
-import java.beans.Introspector;
+import java.util.Map;
 
+import javax.el.ELContext;
+import javax.el.ELException;
+import javax.el.ELResolver;
+import javax.el.PropertyNotFoundException;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 
-import javax.el.ELException;
-import javax.el.PropertyNotWritableException;
-import javax.el.PropertyNotFoundException;
-import javax.el.ELContext;
-import javax.el.ELResolver;
-
 import com.sun.faces.application.ApplicationAssociate;
-import com.sun.faces.util.Util;
 import com.sun.faces.config.ManagedBeanFactory;
+import com.sun.faces.util.Util;
 
 public class ManagedBeanELResolver extends ELResolver {
 
@@ -157,16 +153,16 @@ public class ManagedBeanELResolver extends ELResolver {
             (FacesContext) context.getContext(FacesContext.class);
         ApplicationAssociate associate = 
             ApplicationAssociate.getInstance(facesContext.getExternalContext());
-        HashMap mbMap = (HashMap) associate.getManagedBeanFactoriesMap();
+        Map mbMap = associate.getManagedBeanFactoriesMap();
         if (mbMap == null) {
             return list.iterator();
         }
         // iterate over the list of managed beans
-        Iterator it = mbMap.keySet().iterator();
-        while (it.hasNext()) {
-            String managedBeanName = (String) it.next();
+        for (Iterator i = mbMap.entrySet().iterator(); i.hasNext(); ) {
+            Map.Entry entry = (Map.Entry) i.next();
+            String managedBeanName = (String) entry.getKey();
             ManagedBeanFactory managedBean = (ManagedBeanFactory)
-                mbMap.get(managedBeanName);
+                entry.getValue();
             if ( managedBean != null) {
                 String desc = 
                 managedBean.getBeanDescription((

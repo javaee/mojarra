@@ -1,5 +1,5 @@
 /*
- * $Id: NavigationHandlerImpl.java,v 1.36 2005/04/05 20:25:13 jayashri Exp $
+ * $Id: NavigationHandlerImpl.java,v 1.37 2005/05/16 20:16:15 rlubke Exp $
  */
 
 /*
@@ -9,8 +9,12 @@
 
 package com.sun.faces.application;
 
-import com.sun.faces.util.Util;
-import com.sun.faces.config.ConfigureListener;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeSet;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
@@ -21,12 +25,8 @@ import javax.faces.component.UIViewRoot;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeSet;
-import java.util.logging.Logger;
-import java.util.logging.Level;
+import com.sun.faces.config.ConfigureListener;
+import com.sun.faces.util.Util;
 
 /**
  * <p><strong>NavigationHandlerImpl</strong> is the class that implements
@@ -407,7 +407,7 @@ public class NavigationHandlerImpl extends NavigationHandler {
     }
 
 
-    class CaseStruct {
+    static class CaseStruct {
 
         String viewId;
         ConfigNavigationCase navCase;

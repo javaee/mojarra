@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationAssociate.java,v 1.10 2005/05/05 20:51:19 edburns Exp $
+ * $Id: ApplicationAssociate.java,v 1.11 2005/05/16 20:16:14 rlubke Exp $
  */
 
 /*
@@ -9,24 +9,6 @@
 
 package com.sun.faces.application;
 
-import java.util.logging.Logger;
-import java.util.logging.Level;
-
-import com.sun.faces.RIConstants;
-import com.sun.faces.config.ConfigureListener;
-import com.sun.faces.config.ManagedBeanFactory;
-import com.sun.faces.util.Util;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
-import javax.faces.FacesException;
-import javax.faces.context.ExternalContext;
-import javax.faces.context.FacesContext;
-
-import javax.faces.el.VariableResolver;
-import javax.faces.el.PropertyResolver;
-import javax.el.ExpressionFactory;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -34,6 +16,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeSet;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import javax.el.ExpressionFactory;
+import javax.faces.FacesException;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
+import javax.faces.el.PropertyResolver;
+import javax.faces.el.VariableResolver;
+
+import com.sun.faces.RIConstants;
+import com.sun.faces.config.ConfigureListener;
+import com.sun.faces.config.ManagedBeanFactory;
+import com.sun.faces.util.Util;
 
 /**
  * <p>Break out the things that are associated with the Application, but
@@ -410,19 +406,13 @@ public class ApplicationAssociate extends Object {
      * based on their <code>fromViewId</code> properties in descending order -
      * largest string to smallest string.
      */
-    class SortIt implements Comparator {
+    static class SortIt implements Comparator {
 
         public int compare(Object o1, Object o2) {
             String fromViewId1 = (String) o1;
             String fromViewId2 = (String) o2;
             return -(fromViewId1.compareTo(fromViewId2));
         }
-    }
-
-    class CaseStruct {
-
-        String viewId;
-        ConfigNavigationCase navCase;
     }
 
 }

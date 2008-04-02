@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicInputRenderer.java,v 1.27 2005/05/05 20:51:25 edburns Exp $
+ * $Id: HtmlBasicInputRenderer.java,v 1.28 2005/05/16 20:16:26 rlubke Exp $
  */
 
 /*
@@ -11,11 +11,7 @@
 
 package com.sun.faces.renderkit.html_basic;
 
-import com.sun.faces.util.Util;
-import com.sun.faces.util.MessageFactory;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
+import javax.el.ValueExpression;
 import javax.faces.application.Application;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
@@ -23,7 +19,12 @@ import javax.faces.component.ValueHolder;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.ConverterException;
-import javax.el.ValueExpression;
+
+import com.sun.faces.util.MessageFactory;
+import com.sun.faces.util.Util;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  * <B>HtmlBasicInputRenderer</B> is a base class for implementing renderers
@@ -36,7 +37,7 @@ public abstract class HtmlBasicInputRenderer extends HtmlBasicRenderer {
     // Protected Constants
     //
     // Log instance for this class
-    protected static Log log = LogFactory.getLog(HtmlBasicInputRenderer.class);
+    private static final Log log = LogFactory.getLog(HtmlBasicInputRenderer.class);
     
     //
     // Class Variables

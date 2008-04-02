@@ -1,5 +1,5 @@
 /*
- * $Id: RestoreViewPhase.java,v 1.22 2005/05/05 20:51:24 edburns Exp $
+ * $Id: RestoreViewPhase.java,v 1.23 2005/05/16 20:16:22 rlubke Exp $
  */
 
 /*
@@ -11,32 +11,30 @@
 
 package com.sun.faces.lifecycle;
 
-import com.sun.faces.util.Util;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.util.Iterator;
+import java.util.Locale;
+import java.util.Map;
 
+import javax.el.ValueExpression;
 import javax.faces.FacesException;
-import javax.faces.FactoryFinder;
-import javax.faces.application.ApplicationFactory;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
-import javax.el.ValueExpression;
-import javax.faces.event.ActionListener;
 import javax.faces.event.PhaseId;
 import javax.faces.render.ResponseStateManager;
 import javax.servlet.http.HttpServletRequest;
 
-import java.util.Iterator;
-import java.util.Locale;
-import java.util.Map;
+import com.sun.faces.util.Util;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 
 /**
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: RestoreViewPhase.java,v 1.22 2005/05/05 20:51:24 edburns Exp $
+ * @version $Id: RestoreViewPhase.java,v 1.23 2005/05/16 20:16:22 rlubke Exp $
  */
 
 public class RestoreViewPhase extends Phase {
@@ -45,7 +43,7 @@ public class RestoreViewPhase extends Phase {
     // Protected Constants
     //
     // Log instance for this class
-    protected static Log log = LogFactory.getLog(RestoreViewPhase.class);
+    private static final Log log = LogFactory.getLog(RestoreViewPhase.class);
 
     //
     // Class Variables
@@ -53,9 +51,7 @@ public class RestoreViewPhase extends Phase {
 
     //
     // Instance Variables
-    //
-
-    private ActionListener actionListener = null;
+    //    
 
     // Attribute Instance Variables
 
@@ -64,15 +60,6 @@ public class RestoreViewPhase extends Phase {
     //
     // Constructors and Genericializers    
     //
-
-    public RestoreViewPhase() {
-
-        ApplicationFactory aFactory = (ApplicationFactory)
-            FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
-        if (aFactory != null) {
-            actionListener = aFactory.getApplication().getActionListener();
-        }
-    }
 
     //
     // Class methods

@@ -1,5 +1,5 @@
 /*
- * $Id: CheckboxRenderer.java,v 1.71 2005/04/21 18:55:35 edburns Exp $
+ * $Id: CheckboxRenderer.java,v 1.72 2005/05/16 20:16:25 rlubke Exp $
  *
  */
 
@@ -12,18 +12,18 @@
 
 package com.sun.faces.renderkit.html_basic;
 
-import com.sun.faces.util.Util;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.io.IOException;
+import java.util.Map;
 
 import javax.faces.component.UIComponent;
-import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.convert.ConverterException;
 
-import java.io.IOException;
-import java.util.Map;
+import com.sun.faces.util.Util;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  * <B>CheckboxRenderer</B> is a class that renders the current value of
@@ -36,7 +36,7 @@ public class CheckboxRenderer extends HtmlBasicInputRenderer {
     // Protected Constants
     //
     // Log instance for this class
-    protected static Log log = LogFactory.getLog(CheckboxRenderer.class);
+    private static final Log log = LogFactory.getLog(CheckboxRenderer.class);
 
     //
     // Class Variables
@@ -98,7 +98,7 @@ public class CheckboxRenderer extends HtmlBasicInputRenderer {
         String clientId = component.getClientId(context);
         assert (clientId != null);
         // Convert the new value
-        UIInput uiInput = (UIInput) component;
+
         Map requestParameterMap = context.getExternalContext()
             .getRequestParameterMap();
         String newValue = (String) requestParameterMap.get(clientId);
@@ -156,7 +156,7 @@ public class CheckboxRenderer extends HtmlBasicInputRenderer {
         writer.writeAttribute("name", component.getClientId(context),
                               "clientId");
 
-        if (currentValue != null && currentValue.equals("true")) {
+        if ("true".equals(currentValue)) {
             writer.writeAttribute("checked", Boolean.TRUE, "value");
         }
         if (null != (styleClass = (String)

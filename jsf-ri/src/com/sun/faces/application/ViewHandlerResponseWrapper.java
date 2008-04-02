@@ -1,5 +1,5 @@
 /* 
- * $Id: ViewHandlerResponseWrapper.java,v 1.1 2005/04/21 18:55:35 edburns Exp $ 
+ * $Id: ViewHandlerResponseWrapper.java,v 1.2 2005/05/16 20:16:15 rlubke Exp $ 
  */ 
 
 
@@ -13,20 +13,19 @@
 
 package com.sun.faces.application;
 
-import javax.servlet.http.HttpServletResponseWrapper;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.ServletResponse;
-import javax.servlet.ServletOutputStream;
-
-import java.io.PrintWriter;
-import java.io.IOException;
-import java.io.OutputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.UnsupportedEncodingException;
 import java.io.CharArrayWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+
+import javax.servlet.ServletOutputStream;
+import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletResponseWrapper;
 
 /**
- * <p>This class is used by {@link ViewHandler#createView} to obtain the
+ * <p>This class is used by {@link javax.faces.application.ViewHandler#createView} to obtain the
  * text that exists after the &lt;f:view&gt; tag.</p>
  */
 
@@ -146,7 +145,7 @@ public class ViewHandlerResponseWrapper extends HttpServletResponseWrapper
     // Inner clases
     // 
 
-    class ByteArrayServletOutputStream extends ServletOutputStream {
+    static class ByteArrayServletOutputStream extends ServletOutputStream {
 	private ByteArrayOutputStream baos = null;
 
 	public ByteArrayServletOutputStream() {

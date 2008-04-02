@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderer.java,v 1.91 2005/05/02 12:49:57 edburns Exp $
+ * $Id: HtmlBasicRenderer.java,v 1.92 2005/05/16 20:16:27 rlubke Exp $
  */
 
 /*
@@ -104,10 +104,8 @@ public abstract class HtmlBasicRenderer extends Renderer {
         if (log.isTraceEnabled()) {
             log.trace("Begin decoding component " + component.getId());
         }
-        UIInput uiInput = null;
-        if (component instanceof UIInput) {
-            uiInput = (UIInput) component;
-        } else {
+
+        if (!(component instanceof UIInput)) {
             // decode needs to be invoked only for components that are
             // instances or subclasses of UIInput.
             if (log.isTraceEnabled()) {
@@ -307,10 +305,8 @@ public abstract class HtmlBasicRenderer extends Renderer {
 
         // If there is a converter attribute, use it to to ask application
         // instance for a converter with this identifer.
+        converter = ((ValueHolder) component).getConverter();
 
-        if (component instanceof ValueHolder) {
-            converter = ((ValueHolder) component).getConverter();
-        }
 
         // if value is null and no converter attribute is specified, then
         // return a zero length String.
@@ -332,27 +328,14 @@ public abstract class HtmlBasicRenderer extends Renderer {
 
             // if there is no default converter available for this identifier,
             // assume the model type to be String.
-            if (converter == null && currentValue != null) {
+            if (converter == null) {
                 result = currentValue.toString();
                 return result;
             }
         }
 
-        if (converter != null) {
-            result = converter.getAsString(context, component, currentValue);
+        return converter.getAsString(context, component, currentValue);
 
-            return result;
-        } else {
-            // throw converter exception if no converter can be
-            // identified
-	    Object [] params = {
-		currentValue,
-		"null Converter"
-	    };
-	    
-            throw new ConverterException(MessageFactory.getMessage(
-                context, Util.CONVERSION_ERROR_MESSAGE_ID, params));
-        }
     }
 
 
@@ -547,7 +530,7 @@ public abstract class HtmlBasicRenderer extends Renderer {
 
 
     //inner class to store parameter name and value pairs
-    protected class Param {
+    protected static class Param {
 
         public Param(String name, String value) {
             set(name, value);

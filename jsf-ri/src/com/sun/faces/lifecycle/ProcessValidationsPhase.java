@@ -1,5 +1,5 @@
 /*
- * $Id: ProcessValidationsPhase.java,v 1.22 2004/10/12 14:39:51 rlubke Exp $
+ * $Id: ProcessValidationsPhase.java,v 1.23 2005/05/16 20:16:21 rlubke Exp $
  */
 
 /*
@@ -9,14 +9,13 @@
 
 package com.sun.faces.lifecycle;
 
-import com.sun.faces.util.Util;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseId;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  * ProcessValidationsPhase executes <code>processValidators</code> on each
@@ -29,7 +28,8 @@ public class ProcessValidationsPhase extends Phase {
 //
     
 // Log instance for this class
-    protected static Log log = LogFactory.getLog(ProcessValidationsPhase.class);
+    private static final Log log =
+        LogFactory.getLog(ProcessValidationsPhase.class);
 
 //
 // Class Variables

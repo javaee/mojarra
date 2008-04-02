@@ -1,5 +1,5 @@
 /*
- * $Id: ActionListenerTag.java,v 1.19 2005/05/05 20:51:25 edburns Exp $
+ * $Id: ActionListenerTag.java,v 1.20 2005/05/16 20:16:32 rlubke Exp $
  */
 
 /*
@@ -58,7 +58,7 @@ public class ActionListenerTag extends TagSupport {
     // ------------------------------------------------------------- Attributes
 
 
-    protected static Log log = LogFactory.getLog(ActionListenerTag.class);
+    private static final Log log = LogFactory.getLog(ActionListenerTag.class);
 
     /**
      * <p>The fully qualified class name of the {@link ActionListener}

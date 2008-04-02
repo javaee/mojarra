@@ -1,5 +1,5 @@
 /*
- * $Id: LinkRenderer.java,v 1.10 2004/03/31 18:48:37 eburns Exp $
+ * $Id: LinkRenderer.java,v 1.11 2005/05/16 20:16:28 rlubke Exp $
  */
 
 /*
@@ -11,14 +11,14 @@
 
 package com.sun.faces.renderkit.html_basic;
 
-import com.sun.faces.util.Util;
+import java.io.IOException;
 
 import javax.faces.component.UICommand;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIOutput;
 import javax.faces.context.FacesContext;
 
-import java.io.IOException;
+import com.sun.faces.util.Util;
 
 
 /**
@@ -31,8 +31,7 @@ public class LinkRenderer extends HtmlBasicRenderer {
     //
     // Protected Constants
     //
-    // Separator character
-    private final char QUOTE = '\"';
+    // Separator character    
 
 
     //

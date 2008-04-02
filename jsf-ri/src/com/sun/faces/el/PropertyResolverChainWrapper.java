@@ -1,5 +1,5 @@
 /*
- * $Id: PropertyResolverChainWrapper.java,v 1.1 2005/05/05 20:51:23 edburns Exp $
+ * $Id: PropertyResolverChainWrapper.java,v 1.2 2005/05/16 20:16:19 rlubke Exp $
  */
 /*
  * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
@@ -8,22 +8,14 @@
 
 package com.sun.faces.el;
 
-import java.util.List;
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.beans.FeatureDescriptor;
+import java.util.List;
 
-import javax.faces.context.ExternalContext;
-import javax.faces.context.FacesContext;
-import javax.faces.el.PropertyResolver;
-import javax.faces.el.EvaluationException;
-
-import javax.el.ELException;
-import javax.el.PropertyNotWritableException;
 import javax.el.ELContext;
+import javax.el.ELException;
 import javax.el.ELResolver;
-
-import com.sun.faces.el.ELConstants;
+import javax.faces.el.EvaluationException;
+import javax.faces.el.PropertyResolver;
 
 public class PropertyResolverChainWrapper extends ELResolver {
 
@@ -40,9 +32,7 @@ public class PropertyResolverChainWrapper extends ELResolver {
         }
         context.setPropertyResolved(true);
         Object result = null;
-        
-        FacesContext facesContext = 
-            (FacesContext) context.getContext(FacesContext.class);
+
         if (base instanceof List || base.getClass().isArray()) {
             int index = 
                 ELSupport.coerceToNumber(property, Integer.class).intValue();
@@ -78,8 +68,6 @@ public class PropertyResolverChainWrapper extends ELResolver {
         context.setPropertyResolved(true);
         Class result = null;
 
-        FacesContext facesContext = (FacesContext) 
-            context.getContext(FacesContext.class);
         if (base instanceof List || base.getClass().isArray()) {
             int index = 
                 ELSupport.coerceToNumber(property, Integer.class).intValue();
@@ -112,9 +100,7 @@ public class PropertyResolverChainWrapper extends ELResolver {
 	}
 
         context.setPropertyResolved(true);
-        
-        FacesContext facesContext = 
-            (FacesContext) context.getContext(FacesContext.class);
+
         if (base instanceof List || base.getClass().isArray()) {
             int index = 
                 ELSupport.coerceToNumber(property, Integer.class).intValue();            
@@ -141,9 +127,7 @@ public class PropertyResolverChainWrapper extends ELResolver {
         }
         context.setPropertyResolved(true);
         boolean result = false;
-        
-        FacesContext facesContext = (FacesContext)
-            context.getContext(FacesContext.class);
+
         if (base instanceof List || base.getClass().isArray()) {
             int index = 
                 ELSupport.coerceToNumber(property, Integer.class).intValue();

@@ -1,5 +1,5 @@
 /*
- * $Id: ValueChangeListenerTag.java,v 1.12 2005/05/05 20:51:27 edburns Exp $
+ * $Id: ValueChangeListenerTag.java,v 1.13 2005/05/16 20:16:32 rlubke Exp $
  */
 
 /*
@@ -10,22 +10,22 @@
 package com.sun.faces.taglib.jsf_core;
 
 
-import javax.el.ValueExpression;
 import javax.el.ELException;
+import javax.el.ValueExpression;
 import javax.faces.component.EditableValueHolder;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeListener;
-import javax.faces.webapp.UIComponentTag;
 import javax.faces.webapp.UIComponentClassicTagBase;
 import javax.faces.webapp.UIComponentELTag;
+import javax.faces.webapp.UIComponentTag;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.TagSupport;
 
+import com.sun.faces.util.Util;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
-import com.sun.faces.util.Util;
 
 /**
  * <p>Tag implementation that creates a {@link ValueChangeListener} instance
@@ -57,7 +57,8 @@ public class ValueChangeListenerTag extends TagSupport {
 
     // ------------------------------------------------------------- Attributes
 
-    protected static Log log = LogFactory.getLog(ValueChangeListenerTag.class);
+    private static final Log log =
+        LogFactory.getLog(ValueChangeListenerTag.class);
 
 
     /**

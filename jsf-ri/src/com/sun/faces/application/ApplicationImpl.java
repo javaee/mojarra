@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationImpl.java,v 1.60 2005/05/05 20:51:19 edburns Exp $
+ * $Id: ApplicationImpl.java,v 1.61 2005/05/16 20:16:15 rlubke Exp $
  */
 
 /*
@@ -101,7 +101,6 @@ public class ApplicationImpl extends Application {
     private String messageBundle = null;
 
     private ArrayList elContextListeners = null;
-    private ExpressionFactory expressionFactory = null;
     private ArrayList elResolvers = null;
     private CompositeELResolver compositeELResolver = null;
 

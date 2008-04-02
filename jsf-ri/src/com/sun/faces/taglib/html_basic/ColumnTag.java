@@ -1,5 +1,5 @@
 /*
- * $Id: ColumnTag.java,v 1.9 2005/02/22 15:56:17 rogerk Exp $
+ * $Id: ColumnTag.java,v 1.10 2005/05/16 20:16:31 rlubke Exp $
  */
 
 /*
@@ -10,21 +10,21 @@
 
 package com.sun.faces.taglib.html_basic;
 
-import com.sun.faces.util.Util;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 import javax.faces.component.UIColumn;
 import javax.faces.component.UIComponent;
 import javax.faces.el.ValueBinding;
 import javax.faces.webapp.UIComponentTag;
 import javax.servlet.jsp.JspException;
 
+import com.sun.faces.util.Util;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 
 public class ColumnTag extends UIComponentTag {
 
-    public static Log log = LogFactory.getLog(ColumnTag.class);
+    private static final Log log = LogFactory.getLog(ColumnTag.class);
 
 
 

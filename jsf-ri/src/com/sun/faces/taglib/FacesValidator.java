@@ -1,5 +1,5 @@
 /*
- * $Id: FacesValidator.java,v 1.13 2004/12/02 18:42:23 rogerk Exp $
+ * $Id: FacesValidator.java,v 1.14 2005/05/16 20:16:30 rlubke Exp $
  */
 
 /*
@@ -9,9 +9,7 @@
 
 package com.sun.faces.taglib;
 
-import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
-import org.xml.sax.helpers.DefaultHandler;
+import java.io.IOException;
 
 import javax.servlet.jsp.tagext.PageData;
 import javax.servlet.jsp.tagext.TagLibraryValidator;
@@ -20,7 +18,9 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
-import java.io.IOException;
+import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.DefaultHandler;
 
 /**
  * <p>Base class for all faces TLVs</p>
@@ -42,13 +42,15 @@ public abstract class FacesValidator extends TagLibraryValidator {
     //*********************************************************************
     // Constants
 
-    final String JSF_CORE_URI = "http://java.sun.com/jsf/core";
+    private static final String JSF_CORE_URI = "http://java.sun.com/jsf/core";
 
-    final String JSF_HTML_URI = "http://java.sun.com/jsf/html";
+    private static final String JSF_HTML_URI = "http://java.sun.com/jsf/html";
 
-    final String JSTL_OLD_CORE_URI = "http://java.sun.com/jstl/core";
+    private static final String JSTL_OLD_CORE_URI =
+        "http://java.sun.com/jstl/core";
 
-    final String JSTL_NEW_CORE_URI = "http://java.sun.com/jsp/jstl/core";
+    private static final String JSTL_NEW_CORE_URI =
+        "http://java.sun.com/jsp/jstl/core";
 
     // Prefix for JSF HTML tags
     protected String JSF_HTML_PRE = null;
@@ -217,7 +219,7 @@ public abstract class FacesValidator extends TagLibraryValidator {
      * @param prefix Value of directive prefix argument.
      * @param uri    Value of directive uri argument.
      * @param page   JspData page object.
-     * @returns ValidationMessage[] An array of Validation messages.
+     * @return ValidationMessage[] An array of Validation messages.
      */
     public synchronized ValidationMessage[] validate(String prefix, String uri, PageData page) {
         ValidationMessage[] result = null;
@@ -267,7 +269,7 @@ public abstract class FacesValidator extends TagLibraryValidator {
      * Construct a ValidationMessage[] from a single String and no ID.
      *
      * @param message Message string.
-     * @returns ValidationMessage[] An array of Validation Messages.
+     * @return ValidationMessage[] An array of Validation Messages.
      */
     private ValidationMessage[] vmFromString(String message) {
         return new ValidationMessage[]{

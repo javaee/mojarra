@@ -4,7 +4,7 @@
  */
 
 /*
- * $Id: MenuRenderer.java,v 1.57 2005/05/05 20:51:25 edburns Exp $
+ * $Id: MenuRenderer.java,v 1.58 2005/05/16 20:16:28 rlubke Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -229,14 +229,18 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
                                      newValues);
         }
 	if (throwException) {
-	    String values = "";
+	    StringBuffer values = new StringBuffer();
 	    if (null != newValues) {
 		for (int i = 0; i < newValues.length; i++) {
-		    values = values + " " + newValues[i];
+            if (i == 0) {
+                values.append(newValues[i]);
+            } else {
+                values.append(' ').append(newValues[i]);
+            }
 		}
 	    }
 	    Object [] params = {
-		values,
+		values.toString(),
 		valueExpression.getExpressionString()
 	    };
 	    throw new ConverterException
@@ -262,9 +266,7 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
         Object result = null;
         Class elementType = null;
         Converter converter = null;
-        int
-            i = 0,
-            len = (null != newValues ? newValues.length : 0);
+        int len = (null != newValues ? newValues.length : 0);
 
         elementType = arrayClass.getComponentType();
 
@@ -297,12 +299,16 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
                 if (elementType.equals(Object.class)) {
                     return newValues;
                 }
-		String valueStr = "";
-		for (i = 0; i < newValues.length; i++) {
-		    valueStr = valueStr + " " + newValues[i];
+		StringBuffer valueStr = new StringBuffer();
+		for (int i = 0; i < len; i++) {
+            if (i == 0) {
+                valueStr.append(newValues[i]);
+            } else {
+                valueStr.append(' ').append(newValues[i]);
+            }
 		}
 		Object [] params = {
-		    valueStr,
+		    valueStr.toString(),
 		    "null Converter"
 		};
 
@@ -313,7 +319,7 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
 
         assert (null != result);
         if (elementType.isPrimitive()) {
-            for (i = 0; i < len; i++) {
+            for (int i = 0; i < len; i++) {
                 if (elementType.equals(Boolean.TYPE)) {
                     Array.setBoolean(result, i,
                                      ((Boolean) converter.getAsObject(context,
@@ -357,7 +363,7 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
                 }
             }
         } else {
-            for (i = 0; i < len; i++) {
+            for (int i = 0; i < len; i++) {
                 if (log.isDebugEnabled()) {
                     Object converted = converter.getAsObject(context,
                                                              uiSelectMany,

@@ -1,5 +1,5 @@
 /*
- * $Id: ButtonRenderer.java,v 1.85 2005/05/02 12:49:57 edburns Exp $
+ * $Id: ButtonRenderer.java,v 1.86 2005/05/16 20:16:25 rlubke Exp $
  */
 
 /*
@@ -11,19 +11,20 @@
 
 package com.sun.faces.renderkit.html_basic;
 
-import com.sun.faces.util.Util;
+import java.io.IOException;
+import java.util.Map;
 
+import javax.faces.FacesException;
 import javax.faces.component.NamingContainer;
 import javax.faces.component.UICommand;
 import javax.faces.component.UIComponent;
+import javax.faces.component.UIForm;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.event.ActionEvent;
 
-import java.io.IOException;
-import java.util.Map;
-import javax.faces.FacesException;
-import javax.faces.component.UIForm;
+import com.sun.faces.util.Util;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -38,7 +39,7 @@ public class ButtonRenderer extends HtmlBasicRenderer {
     // Protected Constants
     //
     // Log instance for this class
-    protected static Log log = LogFactory.getLog(ButtonRenderer.class);
+    private static final Log log = LogFactory.getLog(ButtonRenderer.class);
 
     //
     // Class Variables

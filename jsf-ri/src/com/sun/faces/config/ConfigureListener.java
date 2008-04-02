@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListener.java,v 1.32 2005/05/05 20:51:20 edburns Exp $
+ * $Id: ConfigureListener.java,v 1.33 2005/05/16 20:16:16 rlubke Exp $
  */
 /*
  * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
@@ -101,7 +101,7 @@ public class ConfigureListener implements ServletContextListener {
     /**
      * <p><code>ServletContext</code> attribute key.</p>
      */
-    protected static String FACES_CONFIG_BEAN_KEY =
+    protected static final String FACES_CONFIG_BEAN_KEY =
         RIConstants.FACES_PREFIX + "FACES_CONFIG_BEAN";
 
     /**
@@ -1407,7 +1407,7 @@ public class ConfigureListener implements ServletContextListener {
     }
 
 
-    public class ServletContextAdapter extends ExternalContext {
+    public static class ServletContextAdapter extends ExternalContext {
         
         private ServletContext servletContext = null;
         private ApplicationMap applicationMap = null;
@@ -1580,7 +1580,7 @@ public class ConfigureListener implements ServletContextListener {
 
     }
     
-    class ApplicationMap extends java.util.AbstractMap {
+    static class ApplicationMap extends java.util.AbstractMap {
 
         private ServletContext servletContext = null;
 
@@ -1732,8 +1732,8 @@ public class ConfigureListener implements ServletContextListener {
          */
         private class WebXmlHandler extends DefaultHandler {
 
-            private final String SERVLET_CLASS = "servlet-class";
-            private final String FACES_SERVLET =
+            private static final String SERVLET_CLASS = "servlet-class";
+            private static final String FACES_SERVLET =
                 "javax.faces.webapp.FacesServlet";
 
             private boolean servletClassFound;

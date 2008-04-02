@@ -1,5 +1,5 @@
 /*
- * $Id: ManagedBeanFactory.java,v 1.28 2005/05/05 20:51:20 edburns Exp $
+ * $Id: ManagedBeanFactory.java,v 1.29 2005/05/16 20:16:16 rlubke Exp $
  */
 
 /*
@@ -9,32 +9,33 @@
 
 package com.sun.faces.config;
 
-import com.sun.faces.RIConstants;
-import com.sun.faces.config.beans.ListEntriesBean;
-import com.sun.faces.config.beans.ManagedBeanBean;
-import com.sun.faces.config.beans.ManagedPropertyBean;
-import com.sun.faces.config.beans.MapEntriesBean;
-import com.sun.faces.config.beans.MapEntryBean;
-import com.sun.faces.config.beans.DescriptionBean;
-import com.sun.faces.util.Util;
-import org.apache.commons.beanutils.PropertyUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
-import javax.faces.FacesException;
-import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
-import javax.faces.el.EvaluationException;
-import javax.faces.el.PropertyNotFoundException;
-import javax.faces.el.ReferenceSyntaxException;
-import javax.el.ValueExpression;
-
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import javax.el.ValueExpression;
+import javax.faces.FacesException;
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+import javax.faces.el.EvaluationException;
+import javax.faces.el.PropertyNotFoundException;
+import javax.faces.el.ReferenceSyntaxException;
+
+import com.sun.faces.RIConstants;
+import com.sun.faces.config.beans.DescriptionBean;
+import com.sun.faces.config.beans.ListEntriesBean;
+import com.sun.faces.config.beans.ManagedBeanBean;
+import com.sun.faces.config.beans.ManagedPropertyBean;
+import com.sun.faces.config.beans.MapEntriesBean;
+import com.sun.faces.config.beans.MapEntryBean;
+import com.sun.faces.util.Util;
+
+import org.apache.commons.beanutils.PropertyUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  * <p>This class creates a managed bean instance. It has a contract with
@@ -61,6 +62,10 @@ public class ManagedBeanFactory extends Object {
     //
     // Protected Constants
     //
+    /**
+     * Managed bean type is unknown
+     */
+    private static final byte TYPE_IS_UNKNOWN = -1;
     
     /**
      * This managed-bean or managed-property is a List
@@ -187,7 +192,7 @@ public class ManagedBeanFactory extends Object {
         Object
             bean = null;
         int
-            beanType = -1;
+            beanType = TYPE_IS_UNKNOWN;
 
         // before instantiating the bean, make sure there is no cyclic 
         // references.
@@ -278,18 +283,19 @@ public class ManagedBeanFactory extends Object {
      */
 
     protected int getBeanType(Object bean) {
-        int result = -1;
-        ListEntriesBean listEntries = null;
-        MapEntriesBean mapEntries = null;
+        int result = TYPE_IS_UNKNOWN;
+        ListEntriesBean listEntries = managedBean.getListEntries();
+        MapEntriesBean mapEntries = managedBean.getMapEntries();
+        ManagedPropertyBean[] managedProperties =
+            managedBean.getManagedProperties();
 
         // is it a List?
-        if (null != (listEntries = managedBean.getListEntries())) {
+        if (listEntries != null) {
             // managed-bean instances that are Lists, must not have
             // properties or map-entries.  It is a configuration error
             // if they do.
-            if (null != managedBean.getMapEntries() ||
-                (null != managedBean.getManagedProperties() &&
-                (managedBean.getManagedProperties().length > 0))) {
+            if (mapEntries != null ||
+                (managedProperties.length > 0)) {
                 Object[] obj = new Object[1];
                 obj[0] = managedBean.getManagedBeanClass();
                 throw new FacesException(
@@ -300,15 +306,13 @@ public class ManagedBeanFactory extends Object {
         }
 
         // is it a Map?
-        if (null != (mapEntries = managedBean.getMapEntries())) {
-            assert (-1 == result);
+        if (mapEntries != null) {
+            assert (TYPE_IS_UNKNOWN == result);
 
             // managed-bean instances that are Maps, must not have
             // properties or list-entries.  It is a configuration error
             // if they do.
-            if (null != managedBean.getListEntries() ||
-                (null != managedBean.getManagedProperties() &&
-                (managedBean.getManagedProperties().length > 0))) {
+            if (managedBean.getManagedProperties().length > 0) {
                 Object[] obj = new Object[1];
                 obj[0] = managedBean.getManagedBeanClass();
                 throw new FacesException(
@@ -319,7 +323,7 @@ public class ManagedBeanFactory extends Object {
         }
 
         if (TYPE_IS_LIST != result && TYPE_IS_MAP != result) {
-            assert (-1 == result);
+            assert (TYPE_IS_UNKNOWN == result);
 
             // if it's not a List or a Map, it must be a Bean
             if (bean instanceof UIComponent) {
@@ -329,7 +333,7 @@ public class ManagedBeanFactory extends Object {
             }
         }
 
-        assert (-1 != result);
+        assert (TYPE_IS_UNKNOWN != result);
         return result;
     }
 
@@ -341,16 +345,16 @@ public class ManagedBeanFactory extends Object {
      */
 
     protected int getPropertyType(ManagedPropertyBean bean) {
-        int result = -1;
-        ListEntriesBean listEntries = null;
-        MapEntriesBean mapEntries = null;
+        int result = TYPE_IS_UNKNOWN;
+        ListEntriesBean listEntries = bean.getListEntries();
+        MapEntriesBean mapEntries = bean.getMapEntries();
 
         // is it a List?
-        if (null != (listEntries = bean.getListEntries())) {
+        if (listEntries != null) {
             // managed-property instances that have list-entries must
             // not have value or map-entries.  It is a configuration
             // error if they do.
-            if (null != bean.getMapEntries() ||
+            if (mapEntries != null ||
                 null != bean.getValue() || bean.isNullValue()) {
                 Object[] obj = new Object[1];
                 obj[0] = bean.getPropertyName();
@@ -362,14 +366,13 @@ public class ManagedBeanFactory extends Object {
         }
 
         // is it a Map?
-        if (null != (mapEntries = bean.getMapEntries())) {
-            assert (-1 == result);
+        if (mapEntries != null) {
+            assert (TYPE_IS_UNKNOWN == result);
 
             // managed-property instances that have map-entries, must
             // not have value or list-entries.  It is a configuration
             // error if they do.
-            if (null != bean.getListEntries() ||
-                null != bean.getValue() || bean.isNullValue()) {
+            if (null != bean.getValue() || bean.isNullValue()) {
                 Object[] obj = new Object[1];
                 obj[0] = bean.getPropertyName();
                 throw new FacesException(
@@ -380,7 +383,7 @@ public class ManagedBeanFactory extends Object {
         }
 
         if (TYPE_IS_LIST != result && TYPE_IS_MAP != result) {
-            assert (-1 == result);
+            assert (TYPE_IS_UNKNOWN == result);
 
             if (null != bean.getValue() || bean.isNullValue()) {
                 result = TYPE_IS_SIMPLE;
@@ -390,7 +393,7 @@ public class ManagedBeanFactory extends Object {
         // if the managed-property doesn't have list-entries,
         // map-entries, value, or null-value contents, this is a
         // configuration error.  The DTD doesn't allow this anyway.
-        if (-1 == result && !bean.isNullValue()) {
+        if (TYPE_IS_UNKNOWN == result && !bean.isNullValue()) {
             Object[] obj = new Object[1];
             obj[0] = bean.getPropertyName();
             throw new FacesException(

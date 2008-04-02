@@ -1,5 +1,5 @@
 /*
- * $Id: FormRenderer.java,v 1.86 2005/05/02 12:49:57 edburns Exp $
+ * $Id: FormRenderer.java,v 1.87 2005/05/16 20:16:26 rlubke Exp $
  */
 
 /*
@@ -11,21 +11,18 @@
 
 package com.sun.faces.renderkit.html_basic;
 
-import com.sun.faces.RIConstants;
-import com.sun.faces.util.Util;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.io.IOException;
+import java.util.Map;
 
-import javax.faces.component.NamingContainer;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIForm;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import com.sun.faces.util.Util;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  * <B>FormRenderer</B> is a class that renders a <code>UIForm<code> as a Form.
@@ -37,7 +34,7 @@ public class FormRenderer extends HtmlBasicRenderer {
     // Protected Constants
     //
     // Log instance for this class
-    protected static Log log = LogFactory.getLog(FormRenderer.class);
+    private static final Log log = LogFactory.getLog(FormRenderer.class);
     //
     // Class Variables
     //

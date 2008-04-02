@@ -1,5 +1,5 @@
 /*
- * $Id: UpdateModelValuesPhase.java,v 1.37 2004/10/12 14:39:51 rlubke Exp $
+ * $Id: UpdateModelValuesPhase.java,v 1.38 2005/05/16 20:16:22 rlubke Exp $
  */
 
 /*
@@ -38,7 +38,8 @@ public class UpdateModelValuesPhase extends Phase {
 // Instance Variables
 //
 // Log instance for this class
-    protected static Log log = LogFactory.getLog(UpdateModelValuesPhase.class);
+    private static final Log log =
+        LogFactory.getLog(UpdateModelValuesPhase.class);
 
 // Attribute Instance Variables
 

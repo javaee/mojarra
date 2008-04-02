@@ -1,5 +1,5 @@
 /*
- * $Id: RenderResponsePhase.java,v 1.14 2004/02/26 20:32:48 eburns Exp $
+ * $Id: RenderResponsePhase.java,v 1.15 2005/05/16 20:16:21 rlubke Exp $
  */
 
 /*
@@ -12,21 +12,21 @@
 package com.sun.faces.lifecycle;
 
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.io.IOException;
 
 import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseId;
 
-import java.io.IOException;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 
 /**
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: RenderResponsePhase.java,v 1.14 2004/02/26 20:32:48 eburns Exp $
+ * @version $Id: RenderResponsePhase.java,v 1.15 2005/05/16 20:16:21 rlubke Exp $
  */
 
 public class RenderResponsePhase extends Phase {
@@ -35,7 +35,7 @@ public class RenderResponsePhase extends Phase {
 // Protected Constants
 //
 // Log instance for this class
-    protected static Log log = LogFactory.getLog(RenderResponsePhase.class);
+    private static final Log log = LogFactory.getLog(RenderResponsePhase.class);
 
 //
 // Class Variables

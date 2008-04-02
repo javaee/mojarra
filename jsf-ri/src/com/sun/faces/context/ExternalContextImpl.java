@@ -1,5 +1,5 @@
 /*
- * $Id: ExternalContextImpl.java,v 1.29 2005/05/02 12:49:55 edburns Exp $
+ * $Id: ExternalContextImpl.java,v 1.30 2005/05/16 20:16:17 rlubke Exp $
  */
 
 /*
@@ -9,8 +9,19 @@
 
 package com.sun.faces.context;
 
-import com.sun.faces.RIConstants;
-import com.sun.faces.util.Util;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.AbstractMap;
+import java.util.Collections;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
 
 import javax.faces.FacesException;
 import javax.faces.context.ExternalContext;
@@ -27,26 +38,15 @@ import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.AbstractMap;
-import java.util.Enumeration;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
-import java.util.Collections;
-import java.util.HashMap;
+import com.sun.faces.RIConstants;
+import com.sun.faces.util.Util;
 
 /**
  * <p>This implementation of {@link ExternalContext} is specific to the
  * servlet implementation.
  *
  * @author Brendan Murray
- * @version $Id: ExternalContextImpl.java,v 1.29 2005/05/02 12:49:55 edburns Exp $
+ * @version $Id: ExternalContextImpl.java,v 1.30 2005/05/16 20:16:17 rlubke Exp $
  */
 public class ExternalContextImpl extends ExternalContext {
 
@@ -391,7 +391,7 @@ public class ExternalContextImpl extends ExternalContext {
     }
 
 
-    private class LocalesIterator implements Iterator {
+    private static class LocalesIterator implements Iterator {
 
         public LocalesIterator(Enumeration locales) {
             this.locales = locales;
