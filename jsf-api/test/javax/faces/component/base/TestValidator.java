@@ -1,5 +1,5 @@
 /*
- * $Id: TestValidator.java,v 1.4 2003/09/15 20:17:36 eburns Exp $
+ * $Id: TestValidator.java,v 1.5 2003/09/22 19:03:45 eburns Exp $
  */
 
 /*
@@ -13,6 +13,7 @@ package javax.faces.component.base;
 import java.util.Collections;
 import java.util.Iterator;
 import javax.faces.component.UIInput;
+import javax.faces.component.UIComponent;
 import javax.faces.component.StateHolder;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.Validator;
@@ -69,6 +70,11 @@ public class TestValidator implements Validator, StateHolder {
     }
 
     public void setTransient(boolean newT) {}
+
+    public void setComponent(UIComponent yourComponent) {
+	// we don't keep a back reference to our component, but if we
+	// did, here is where we'd restore it.
+    }
 
 
 

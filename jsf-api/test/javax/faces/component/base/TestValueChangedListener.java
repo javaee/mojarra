@@ -1,5 +1,5 @@
 /*
- * $Id: TestValueChangedListener.java,v 1.6 2003/09/18 01:21:15 eburns Exp $
+ * $Id: TestValueChangedListener.java,v 1.7 2003/09/22 19:03:45 eburns Exp $
  */
 
 /*
@@ -15,6 +15,7 @@ import javax.faces.event.ValueChangedListener;
 import javax.faces.event.PhaseId;
 import javax.faces.context.FacesContext;
 import javax.faces.component.StateHolder;
+import javax.faces.component.UIComponent;
 
 /**
  * <p>Test {@link ValueChangedListener} implementation.</p>
@@ -128,6 +129,11 @@ public class TestValueChangedListener implements ValueChangedListener, StateHold
     }
 
     public void setTransient(boolean newT) {}
+
+    public void setComponent(UIComponent yourComponent) {
+	// we don't keep a back reference to our component, but if we
+	// did, here is where we'd restore it.
+    }
 
 
 

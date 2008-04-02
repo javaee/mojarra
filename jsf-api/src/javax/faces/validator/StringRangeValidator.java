@@ -1,5 +1,5 @@
 /*
- * $Id: StringRangeValidator.java,v 1.19 2003/09/15 20:17:32 eburns Exp $
+ * $Id: StringRangeValidator.java,v 1.20 2003/09/22 19:03:40 eburns Exp $
  */
 
 /*
@@ -13,6 +13,7 @@ package javax.faces.validator;
 import javax.faces.application.Message;
 import javax.faces.component.StateHolder;
 import javax.faces.component.UIInput;
+import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
 
@@ -308,12 +309,15 @@ public class StringRangeValidator implements Validator, StateHolder {
 
     }
 
-
     public void setTransient(boolean transientValue) {
 
         this.transientValue = transientValue;
 
     }
 
+    public void setComponent(UIComponent yourComponent) {
+	// we don't keep a back reference to our component, but if we
+	// did, here is where we'd restore it.
+    }
 
 }

@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.21 2003/09/20 00:48:11 craigmcc Exp $
+ * $Id: UIComponentBase.java,v 1.22 2003/09/22 19:03:35 eburns Exp $
  */
 
 /*
@@ -1425,6 +1425,14 @@ public abstract class UIComponentBase implements UIComponent {
 
         this.transientFlag = transientFlag;
 
+    }
+
+    public void setComponent(UIComponent yourComponent) {
+	// components should not have attach components, so this should
+	// always be null for UIComponent instances.
+	if (null != yourComponent) {
+	    throw new IllegalStateException();
+	}
     }
 
 

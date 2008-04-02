@@ -1,5 +1,5 @@
 /*
- * $Id: TestValueChangedListenerWithBackReference.java,v 1.1 2003/09/18 01:21:15 eburns Exp $
+ * $Id: TestValueChangedListenerWithBackReference.java,v 1.2 2003/09/22 19:03:46 eburns Exp $
  */
 
 /*
@@ -12,7 +12,7 @@ package javax.faces.component.base;
 
 import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseId;
-import javax.faces.component.StateHolderWithBackReference;
+import javax.faces.component.StateHolder;
 import javax.faces.component.UIComponent;
 import javax.faces.TestUtil;
 
@@ -20,7 +20,7 @@ import javax.faces.TestUtil;
  * <p>Test {@link ValueChangedListener} implementation.</p>
  */
 
-public class TestValueChangedListenerWithBackReference extends TestValueChangedListener implements StateHolderWithBackReference {
+public class TestValueChangedListenerWithBackReference extends TestValueChangedListener implements StateHolder {
 
     // ------------------------------------------------------------ Constructors
 
@@ -76,12 +76,10 @@ public class TestValueChangedListenerWithBackReference extends TestValueChangedL
     // methods from StateHolder
     //
 
-    public void restoreState(FacesContext context, Object state, 
-			     UIComponent toAttachTo) {
-	restoreState(context, state);
-	
-	if (null != toAttachTo) {
-	    yourComponent = (UIComponent) toAttachTo;
-	}
+    public void setComponent(UIComponent yourComponent) {
+	this.yourComponent = yourComponent;
     }
+
+
+
 }

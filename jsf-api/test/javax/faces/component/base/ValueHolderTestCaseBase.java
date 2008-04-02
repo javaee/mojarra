@@ -1,5 +1,5 @@
 /*
- * $Id: ValueHolderTestCaseBase.java,v 1.6 2003/09/20 00:48:19 craigmcc Exp $
+ * $Id: ValueHolderTestCaseBase.java,v 1.7 2003/09/22 19:03:46 eburns Exp $
  */
 
 /*
@@ -443,6 +443,11 @@ public static class StateSavingConverter extends Object
 	public boolean isTransient() { return false; }
 
 	public void setTransient(boolean newTransientValue) {}
+    
+        public void setComponent(UIComponent yourComponent) {
+	    // we don't keep a back reference to our component, but if we
+	    // did, here is where we'd restore it.
+	}
 
 	public boolean equals(Object otherObj) {
 	    if (!(otherObj instanceof StateSavingConverter)) {

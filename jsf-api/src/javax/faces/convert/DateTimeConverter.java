@@ -1,5 +1,5 @@
 /*
- * $Id: DateTimeConverter.java,v 1.4 2003/09/20 02:43:03 craigmcc Exp $
+ * $Id: DateTimeConverter.java,v 1.5 2003/09/22 19:03:37 eburns Exp $
  */
 
 /*
@@ -476,6 +476,12 @@ public class DateTimeConverter implements Converter, StateHolder {
     public void setTransient(boolean transientFlag) {
         this.transientFlag = transientFlag;
     }
+
+    public void setComponent(UIComponent yourComponent) {
+	// we don't keep a back reference to our component, but if we
+	// did, here is where we'd restore it.
+    }
+
 
 
 }

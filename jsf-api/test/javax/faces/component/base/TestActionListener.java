@@ -1,5 +1,5 @@
 /*
- * $Id: TestActionListener.java,v 1.4 2003/09/15 20:17:36 eburns Exp $
+ * $Id: TestActionListener.java,v 1.5 2003/09/22 19:03:44 eburns Exp $
  */
 
 /*
@@ -123,4 +123,9 @@ public class TestActionListener implements ActionListener, StateHolder {
 
     public void setTransient(boolean newT) {}
 
+    public void setComponent(UIComponent yourComponent) {
+	// we don't keep a back reference to our component, but if we
+	// did, here is where we'd restore it.
+    }
+    
 }

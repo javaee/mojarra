@@ -1,5 +1,5 @@
 /*
- * $Id: LongRangeValidator.java,v 1.16 2003/09/15 20:17:32 eburns Exp $
+ * $Id: LongRangeValidator.java,v 1.17 2003/09/22 19:03:40 eburns Exp $
  */
 
 /*
@@ -13,6 +13,7 @@ package javax.faces.validator;
 import javax.faces.application.Message;
 import javax.faces.component.StateHolder;
 import javax.faces.component.UIInput;
+import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
 
@@ -311,5 +312,9 @@ public class LongRangeValidator implements Validator, StateHolder {
 
     }
 
+    public void setComponent(UIComponent yourComponent) {
+	// we don't keep a back reference to our component, but if we
+	// did, here is where we'd restore it.
+    }
 
 }

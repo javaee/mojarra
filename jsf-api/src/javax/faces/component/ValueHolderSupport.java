@@ -1,5 +1,5 @@
 /*
- * $Id: ValueHolderSupport.java,v 1.2 2003/09/19 00:57:06 craigmcc Exp $
+ * $Id: ValueHolderSupport.java,v 1.3 2003/09/22 19:03:34 eburns Exp $
  */
 
 /*
@@ -49,7 +49,7 @@ import javax.faces.el.ValueBinding;
  */
 
 public class ValueHolderSupport
-    implements StateHolderWithBackReference, ValueHolder {
+    implements StateHolder, ValueHolder {
 
 
     // ------------------------------------------------------------ Constructors
@@ -218,19 +218,6 @@ public class ValueHolderSupport
 
     public void restoreState(FacesContext context, Object state)
         throws IOException {
-
-        throw new UnsupportedOperationException();
-
-    }
-
-
-    public void restoreState(FacesContext context, Object state,
-                             UIComponent component)
-        throws IOException {
-
-        // Restore component reference from parameter
-        this.component = component;
-
         // Restore other state information from saved state
         Object values[] = (Object[]) state;
         List[] converterList = (List[])
@@ -247,6 +234,12 @@ public class ValueHolderSupport
         valueRef = (String) values[2];
 
     }
+
+    public void setComponent(UIComponent yourComponent) {
+        // Restore component reference from parameter
+        this.component = yourComponent;
+    }
+
 
 
 
