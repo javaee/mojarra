@@ -204,7 +204,7 @@
 
 	<TD>
 
-            <input type="checkbox" name="basicForm:JSPid2" class="selectbooleanClass" />
+            <input type="checkbox" name="basicForm:_id1" class="selectbooleanClass" />
 	</TD>
 
       </TR>
@@ -226,7 +226,7 @@
                 
                 
 
-              <span class="selectoneClass"><select name="basicForm:JSPid3" accesskey="N" size="10" tabindex="20" title="Select Quantity">	<option value="0" disabled="disabled">0</option>
+              <span class="selectoneClass"><select name="basicForm:_id2" accesskey="N" size="10" tabindex="20" title="Select Quantity">	<option value="0" disabled="disabled">0</option>
 	<option value="1" title="One">1</option>
 	<option value="2" title="Two">2</option>
 	<option value="3" title="Three">3</option>
@@ -296,7 +296,7 @@
 
 	<TD>
                 
-            <span class="inputClass"><input type="text" name="basicForm:JSPid20" value="Wed, Jul 10, 1996" /></span>
+            <span class="inputClass"><input type="text" name="basicForm:_id19" value="Wed, Jul 10, 1996" /></span>
 	</TD>
 
       </TR>
@@ -484,7 +484,7 @@
 						
 						
 						
-					<select name="basicForm:JSPid31" multiple size="10">	<option value="0">zero</option>
+					<select name="basicForm:_id30" multiple size="10">	<option value="0">zero</option>
 	<option value="1">one</option>
 	<option value="2">two</option>
 	<option value="3">three</option>
@@ -510,21 +510,21 @@
 						
 						
 					<span class="selectmanyClass">
-<label for="basicForm:JSPid42"><input name="basicForm:ManyApples3" id="basicForm:JSPid42" value="0" type="checkbox">zero</label>
-<label for="basicForm:JSPid43"><input name="basicForm:ManyApples3" id="basicForm:JSPid43" value="1" type="checkbox">one</label>
-<label for="basicForm:JSPid44"><input name="basicForm:ManyApples3" id="basicForm:JSPid44" value="2" type="checkbox">two</label>
-<label for="basicForm:JSPid45"><input name="basicForm:ManyApples3" id="basicForm:JSPid45" value="3" type="checkbox">three</label>
-<label for="basicForm:JSPid46"><input name="basicForm:ManyApples3" id="basicForm:JSPid46" value="4" type="checkbox">four</label>
-<label for="basicForm:JSPid47"><input name="basicForm:ManyApples3" id="basicForm:JSPid47" value="5" type="checkbox">five</label>
-<label for="basicForm:JSPid48"><input name="basicForm:ManyApples3" id="basicForm:JSPid48" value="6" type="checkbox">six</label>
-<label for="basicForm:JSPid49"><input name="basicForm:ManyApples3" id="basicForm:JSPid49" value="7" type="checkbox">seven</label>
-<label for="basicForm:JSPid50"><input name="basicForm:ManyApples3" id="basicForm:JSPid50" value="8" type="checkbox">eight</label>
-<label for="basicForm:JSPid51"><input name="basicForm:ManyApples3" id="basicForm:JSPid51" value="9" type="checkbox">nine</label></TD>
+<label for="basicForm:_id41"><input name="basicForm:ManyApples3" id="basicForm:_id41" value="0" type="checkbox">zero</label>
+<label for="basicForm:_id42"><input name="basicForm:ManyApples3" id="basicForm:_id42" value="1" type="checkbox">one</label>
+<label for="basicForm:_id43"><input name="basicForm:ManyApples3" id="basicForm:_id43" value="2" type="checkbox">two</label>
+<label for="basicForm:_id44"><input name="basicForm:ManyApples3" id="basicForm:_id44" value="3" type="checkbox">three</label>
+<label for="basicForm:_id45"><input name="basicForm:ManyApples3" id="basicForm:_id45" value="4" type="checkbox">four</label>
+<label for="basicForm:_id46"><input name="basicForm:ManyApples3" id="basicForm:_id46" value="5" type="checkbox">five</label>
+<label for="basicForm:_id47"><input name="basicForm:ManyApples3" id="basicForm:_id47" value="6" type="checkbox">six</label>
+<label for="basicForm:_id48"><input name="basicForm:ManyApples3" id="basicForm:_id48" value="7" type="checkbox">seven</label>
+<label for="basicForm:_id49"><input name="basicForm:ManyApples3" id="basicForm:_id49" value="8" type="checkbox">eight</label>
+<label for="basicForm:_id50"><input name="basicForm:ManyApples3" id="basicForm:_id50" value="9" type="checkbox">nine</label></TD>
 </tr>
 
 
     
-<input type="hidden" name="basicForm:JSPid52" value="48%" />
+<input type="hidden" name="basicForm:_id51" value="48%" />
 
   <TABLE>
 

@@ -3,7 +3,7 @@
 
 <%-- <f:view> --%>
 <f:subview id="naming2c">
- <s:output_text value="[2c]"/>
- <s:output_text value="[2x]"/>
+ <h:output_text value="[2c]"/>
+ <h:output_text value="[2x]"/>
 </f:subview>
 <%-- </f:view> --%>

@@ -4,7 +4,7 @@
  Copyright 2003 Sun Microsystems, Inc. All rights reserved.
  SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 
- $Id: build-tests.xml,v 1.28 2003/10/07 22:02:06 rlubke Exp $
+ $Id: build-tests.xml,v 1.29 2003/10/08 11:42:28 eburns Exp $
 -->
 
 
@@ -31,6 +31,7 @@
   <property name="golden.path"  value="${context.path}/golden"/>
   <property name="ignore.path"  value="${context.path}/ignore"/>
   <property name="local.golden.path" value="${basedir}/web/golden"/>
+  <property name="htmlunit.home" value="${tomcat.home}/../htmlunit-1.2.3"/>
 
 
   <!-- SystestClient taskdef classpath -->
@@ -80,12 +81,9 @@
                 test.html.taglib,
                 test.verbatim,
                 test.phases,
-                test.subview
+                test.subview,
+                test.jsp
                "/>
-
-<!-- non running tests 
-                test.jsp,
--->
 
     <target name="test.duplicateIds"
         description="Test duplicate ID detection">

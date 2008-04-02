@@ -3,13 +3,6 @@
 <%@ taglib prefix="f" uri="http://java.sun.com/jsf/core" %>
 <%@ taglib prefix="h" uri="http://java.sun.com/jsf/html" %>
 
-<%--
-      NOTE: The included "output_text" component tags are from
-      the systest tag library, not the standard html tag library,
-      in order to bypass the normal requirement for an "id"
---%>
-
-
 <f:view>
 <html>
 <head>
