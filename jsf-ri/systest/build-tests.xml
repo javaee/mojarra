@@ -22,6 +22,7 @@
   <!-- Set 'protocol' to a zero length string to use HttpURLConnection -->
   <property name="protocol"     value="HTTP/1.0"/>
   <property name="golden.path"  value="${context.path}/golden"/>
+  <property name="ignore.path"  value="${context.path}/ignore"/>
 
 
   <!-- SystestClient taskdef classpath -->
@@ -89,6 +90,17 @@
     <tester host="${host}" port="${port}" protocol="${protocol}"
          request="${context.path}/faces/hello.jsp"
       outContent="/hello.jsp PASSED"/>
+
+    <!-- Simple Golden File Test -->
+    <tester host="${host}" port="${port}" protocol="${protocol}"
+         request="${context.path}/hello.jsp"
+          golden="${golden.path}/hello.txt"/>
+
+    <!-- Simple Golden File Plus Ignore File Test -->
+    <tester host="${host}" port="${port}" protocol="${protocol}"
+         request="${context.path}/hello.jsp"
+          golden="${golden.path}/hello-mismatch.txt"
+          ignore="${ignore.path}/hello-mismatch.txt"/>
 
   </target>
 

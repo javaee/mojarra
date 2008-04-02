@@ -70,6 +70,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.tools.ant.BuildException;
@@ -93,6 +95,11 @@ import org.apache.tools.ant.Task;
  *     resource containing the golden file for this request.</li>
  * <li><strong>host</strong> - The server name to which this request will be
  *     sent.  Defaults to <code>localhost</code> if not specified.</li>
+ * <li><strong>ignore</strong> - The server-relative path of the static
+ *     resource containing lines from the specified golden file that should
+ *     not be matched against the actual response.  If a golden file is
+ *     specified but not an ignore file, then the contents must match
+ *     exactly.</li>
  * <li><strong>inContent</strong> - The data content that will be submitted
  *     with this request.  The test client will transparently add a carriage
  *     return and line feed, and set the content length header, if this is
@@ -130,7 +137,7 @@ import org.apache.tools.ant.Task;
  * </ul>
  *
  * @author Craig R. McClanahan
- * @version $Revision: 1.1 $ $Date: 2003/05/10 00:48:05 $
+ * @version $Revision: 1.2 $ $Date: 2003/05/13 00:18:57 $
  */
 
 public class SystestClient extends Task {
@@ -149,7 +156,7 @@ public class SystestClient extends Task {
      * The saved golden file we will compare to the response.  Each element
      * contains a line of text without any line delimiters.
      */
-    protected ArrayList saveGolden = new ArrayList();
+    protected List saveGolden = new ArrayList();
 
 
     /**
@@ -157,14 +164,22 @@ public class SystestClient extends Task {
      * name (converted to lower case), and the value is an ArrayList of the
      * string value(s) received for that header.
      */
-    protected HashMap saveHeaders = new HashMap();
+    protected Map saveHeaders = new HashMap();
+
+
+    /**
+     * The saved ignore lines for modifying our golden file comparison to the
+     * response.  Each element contains a line of text without any line
+     * delimiters.
+     */
+    protected List saveIgnore = new ArrayList();
 
 
     /**
      * The response file to be compared to the golden file.  Each element
      * contains a line of text without any line delimiters.
      */
-    protected ArrayList saveResponse = new ArrayList();
+    protected List saveResponse = new ArrayList();
 
 
     // ------------------------------------------------------------- Properties
@@ -195,6 +210,20 @@ public class SystestClient extends Task {
 
     public void setHost(String host) {
         this.host = host;
+    }
+
+
+    /**
+     * The server-relative request URI of the ignore file for this request.
+     */
+    protected String ignore = null;
+
+    public String getIgnore() {
+        return (this.ignore);
+    }
+
+    public void setIgnore(String ignore) {
+        this.ignore = ignore;
     }
 
 
@@ -400,6 +429,12 @@ public class SystestClient extends Task {
             System.out.println("FAIL:  readGolden(" + golden + ")");
             e.printStackTrace(System.out);
         }
+        try {
+            readIgnore();
+        } catch (IOException e) {
+            System.out.println("FAIL:  readIgnore(" + ignore + ")");
+            e.printStackTrace(System.out);
+        }
         if ((protocol == null) || (protocol.length() == 0)) {
             executeHttp();
         } else {
@@ -507,7 +542,7 @@ public class SystestClient extends Task {
             while (true) {
                 String line = read(is);
                 if (line == null)
-                    break;                
+                    break;
                 if (lines == 0)
                     outData = line;
                 else
@@ -950,6 +985,46 @@ public class SystestClient extends Task {
 
 
     /**
+     * Read and save the contents of the ignore file for this test, if any.
+     * Otherwise, the <code>saveIgnore</code> list will be empty.
+     *
+     * @exception IOException if an input/output error occurs
+     */
+    protected void readIgnore() throws IOException {
+
+        // Was an ignore file specified?
+        saveIgnore.clear();
+        if (ignore == null) {
+            return;
+        }
+
+        // Create a connection to receive the ignore file contents
+        URL url = new URL("http", host, port, ignore);
+        HttpURLConnection conn =
+            (HttpURLConnection) url.openConnection();
+        conn.setAllowUserInteraction(false);
+        conn.setDoInput(true);
+        conn.setDoOutput(false);
+        conn.setFollowRedirects(true);
+        conn.setRequestMethod("GET");
+
+        // Connect to the server and retrieve the ignore file
+        conn.connect();
+        InputStream is = conn.getInputStream();
+        while (true) {
+            String line = read(is);
+            if (line == null) {
+                break;
+            }
+            saveIgnore.add(line);
+        }
+        is.close();
+        conn.disconnect();
+
+    }
+
+
+    /**
      * Save the specified header name and value in our collection.
      *
      * @param name Header name to save
@@ -989,8 +1064,10 @@ public class SystestClient extends Task {
 
 
     /**
-     * Validate the response against the golden file (if any).  Return
-     * <code>null</code> for no problems, or an error message.
+     * Validate the response against the golden file (if any), skipping the
+     * comparison on any golden file line that is also in the ignore file
+     * (if any).  Return <code>null</code> for no problems, or an error
+     * message.
      */
     protected String validateGolden() {
 
@@ -1005,7 +1082,7 @@ public class SystestClient extends Task {
             for (int i = 0; i < saveGolden.size(); i++) {
                 String golden = (String) saveGolden.get(i);
                 String response = (String) saveResponse.get(i);
-                if (!golden.equals(response)) {
+                if (!validateIgnore(golden) && !golden.equals(response)) {
                     ok = false;
                     break;
                 }
@@ -1019,6 +1096,13 @@ public class SystestClient extends Task {
             System.out.println((String) saveGolden.get(i));
         }
         System.out.println("================================================");
+        if (saveIgnore.size() >= 1) {
+            System.out.println("IGNORED: =======================================");
+            for (int i = 0; i < saveIgnore.size(); i++) {
+                System.out.println((String) saveIgnore.get(i));
+            }
+            System.out.println("================================================");
+        }
         System.out.println("RECEIVED: ======================================");
         for (int i = 0; i < saveResponse.size(); i++) {
             System.out.println((String) saveResponse.get(i));
@@ -1077,6 +1161,25 @@ public class SystestClient extends Task {
 
         // Everything was found successfully
         return (null);
+
+    }
+
+
+    /**
+     * Return <code>true</code> if we should ignore this golden file line
+     * because it is also in the ignore file.
+     *
+     * @param line Line from the golden file to be checked
+     */
+    protected boolean validateIgnore(String line) {
+
+        for (int i = 0; i < saveIgnore.size(); i++) {
+            String ignore = (String) saveIgnore.get(i);
+            if (ignore.equals(line)) {
+                return (true);
+            }
+        }
+        return (false);
 
     }
 
