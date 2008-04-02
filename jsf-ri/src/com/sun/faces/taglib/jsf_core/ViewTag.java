@@ -1,5 +1,5 @@
 /*
- * $Id: ViewTag.java,v 1.23 2004/03/31 18:48:50 eburns Exp $
+ * $Id: ViewTag.java,v 1.24 2004/04/19 23:48:49 jvisvanathan Exp $
  */
 
 /*
@@ -40,7 +40,7 @@ import java.util.Locale;
  * any renderers or attributes. It exists mainly to save the state of
  * the response tree once all tags have been rendered.
  *
- * @version $Id: ViewTag.java,v 1.23 2004/03/31 18:48:50 eburns Exp $
+ * @version $Id: ViewTag.java,v 1.24 2004/04/19 23:48:49 jvisvanathan Exp $
  */
 
 public class ViewTag extends UIComponentBodyTag {
@@ -121,9 +121,8 @@ public class ViewTag extends UIComponentBodyTag {
         Util.doAssert(facesContext != null);
 
         // this must happen after our overriderProperties executes.
-        ((ServletResponse) facesContext.getExternalContext().getResponse()).
-            setLocale(facesContext.getViewRoot().getLocale());
-
+        pageContext.getResponse().setLocale(facesContext.getViewRoot().getLocale());
+    
         ResponseWriter writer = facesContext.getResponseWriter();
         Util.doAssert(writer != null);
 
@@ -217,13 +216,9 @@ public class ViewTag extends UIComponentBodyTag {
         // store the response character encoding
         HttpSession session = null;
 
-        if (null !=
-            (session =
-            (HttpSession) context.getExternalContext().getSession(false))) {
-            ServletResponse response = (ServletResponse)
-                context.getExternalContext().getResponse();
+        if (null != (session = pageContext.getSession())) {
             session.setAttribute(ViewHandler.CHARACTER_ENCODING_KEY,
-                                 response.getCharacterEncoding());
+                pageContext.getResponse().getCharacterEncoding());
         }
         return rc;
     }
@@ -274,10 +269,7 @@ public class ViewTag extends UIComponentBodyTag {
             // must be updated before the JSTL setBundle tag is called
             // because that is when the new LocalizationContext object
             // is created based on the locale.
-            Config.set(
-                (ServletRequest) getFacesContext().getExternalContext()
-                                 .getRequest(),
-                Config.FMT_LOCALE, viewLocale);
+            Config.set(pageContext.getRequest(),Config.FMT_LOCALE, viewLocale);
         }
 
     }
