@@ -1,5 +1,5 @@
 /*
- * $Id: CarDemoApplicationHandler.java,v 1.7 2003/02/21 23:44:20 ofung Exp $
+ * $Id: CarDemoApplicationHandler.java,v 1.8 2003/03/27 19:43:27 jvisvanathan Exp $
  */
 /*
  * Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
@@ -70,6 +70,7 @@ import org.mozilla.util.Debug;
 import org.mozilla.util.ParameterCheck;
 
 import com.sun.faces.RIConstants;
+import com.sun.faces.util.Util;
 
 public class CarDemoApplicationHandler implements ApplicationHandler{
     
@@ -85,9 +86,10 @@ public class CarDemoApplicationHandler implements ApplicationHandler{
         String treeId = null;
         
         // get CurrentOptionServer
-        CurrentOptionServer optServer = (CurrentOptionServer)(context.getHttpSession().getAttribute("CurrentOptionServer"));
-        
-        if (facesEvent instanceof FormEvent) {
+        CurrentOptionServer optServer = (CurrentOptionServer)
+        (Util.getValueBinding("CurrentOptionServer")).getValue(context);
+       
+         if (facesEvent instanceof FormEvent) {
             
             FormEvent formEvent = (FormEvent) facesEvent;
             

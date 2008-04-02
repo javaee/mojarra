@@ -1,5 +1,5 @@
 /*
- * $Id: ResultSetRenderer.java,v 1.3 2003/02/21 23:44:55 ofung Exp $
+ * $Id: ResultSetRenderer.java,v 1.4 2003/03/27 19:43:35 jvisvanathan Exp $
  */
 
 /*
@@ -49,7 +49,7 @@ import javax.faces.FacesException;
 
 
 import javax.faces.component.UIComponent;
-import javax.faces.component.UIInput;
+import javax.faces.component.UIOutput;
 import javax.faces.component.UIPanel;
 import javax.faces.component.UIForm;
 import javax.faces.context.FacesContext;
@@ -77,7 +77,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ResultSetRenderer.java,v 1.3 2003/02/21 23:44:55 ofung Exp $
+ * @version $Id: ResultSetRenderer.java,v 1.4 2003/03/27 19:43:35 jvisvanathan Exp $
  *  
  */
 
@@ -264,7 +264,9 @@ public class ResultSetRenderer extends BaseRenderer {
 	    if (var != null) {
 		// set model bean in request scope. nested components
 		// will use this to get their values.
-		context.getServletRequest().setAttribute(var, row);
+                Map requestMap = (Map) context.getExternalContext().
+                getRequestMap();
+		requestMap.put(var, row);
 	    }
 	    writer.write("<tr");
 	    if (rowStyles > 0) {
@@ -302,7 +304,9 @@ public class ResultSetRenderer extends BaseRenderer {
 	    // Finish the row that was just rendered
 	    writer.write("</tr>\n");
 	    if (var != null) {
-		context.getServletRequest().removeAttribute(var);
+                 Map requestMap = (Map) context.getExternalContext().
+                getRequestMap();
+		requestMap.remove(var);
 	    }
 	}
 
@@ -418,8 +422,9 @@ public class ResultSetRenderer extends BaseRenderer {
     private Iterator getIterator(FacesContext context, 
 				 ResultSetControls scroller,
 				 UIComponent group) {
-
-        Object value = group.currentValue(context);
+        // currentValue method can be invoked only on components that are 
+        // instances of UIOutput or a sublcass of UIOutput.
+        Object value = ((UIOutput)group).currentValue(context);
         if (value == null || (!(value instanceof List))) {
             return (Collections.EMPTY_LIST.iterator());
         } 

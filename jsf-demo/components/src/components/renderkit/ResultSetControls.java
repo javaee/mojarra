@@ -1,5 +1,5 @@
 /*
- * $Id: ResultSetControls.java,v 1.4 2003/02/21 23:44:55 ofung Exp $
+ * $Id: ResultSetControls.java,v 1.5 2003/03/27 19:43:34 jvisvanathan Exp $
  */
 
 /*
@@ -47,6 +47,7 @@ package components.renderkit;
 import java.io.IOException;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.faces.component.UIInput;
 import javax.faces.component.UIForm;
@@ -62,7 +63,7 @@ import java.util.MissingResourceException;
  *
  * 
  *
- * @version $Id: ResultSetControls.java,v 1.4 2003/02/21 23:44:55 ofung Exp $
+ * @version $Id: ResultSetControls.java,v 1.5 2003/03/27 19:43:34 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -159,15 +160,14 @@ public ResultSetControls(UIComponent newPanel, UIComponent newData,
 	int 
 	    actionInt = 0,
 	    currentPage = 0;
-
-	if (null != (action = 
-		     context.getServletRequest().getParameter(clientId + 
-							      "_action"))) {
+         Map requestParameterMap = (Map) context.getExternalContext().
+                getRequestParameterMap();
+         action = (String) requestParameterMap.get(clientId + "_action");
+	if (null != action) {
 	    // Assert that we have a currentPage.
-	    curPage = context.getServletRequest().getParameter(clientId + 
-							       "_curPage");
-
-	    currentPage = Integer.valueOf(curPage).intValue();
+	    curPage = (String) requestParameterMap.get(clientId + "_curPage");
+            currentPage = Integer.valueOf(curPage).intValue();
+            
 	    // Assert that action's length is 1.
 
 	    switch (actionInt = Integer.valueOf(action).intValue()) {
@@ -448,7 +448,7 @@ public ResultSetControls(UIComponent newPanel, UIComponent newData,
 	    rowsPerPage = getRowsPerPage(),
 	    totalRows = 0,
 	    result = 0;
-        Object value = yourData.currentValue(context);
+        Object value = ((UIInput)yourData).currentValue(context);
         if (value instanceof List) {
 	    totalRows = ((List)value).size();
 	}

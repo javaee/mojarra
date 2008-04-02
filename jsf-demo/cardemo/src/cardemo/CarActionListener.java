@@ -1,5 +1,5 @@
 /*
- * $Id: CarActionListener.java,v 1.3 2003/03/12 19:55:36 rkitain Exp $
+ * $Id: CarActionListener.java,v 1.4 2003/03/27 19:43:27 jvisvanathan Exp $
  */
 
 /*
@@ -47,11 +47,13 @@ package cardemo;
 import com.sun.faces.util.Util;
 import javax.faces.component.SelectItem;
 import javax.faces.component.UIComponent;
+import javax.faces.component.UIOutput;
 import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseId;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.ActionListener;
 import javax.faces.event.ValueChangedEvent;
+import javax.faces.el.ValueBinding;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -67,7 +69,7 @@ import org.apache.commons.logging.LogFactory;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: CarActionListener.java,v 1.3 2003/03/12 19:55:36 rkitain Exp $
+ * @version $Id: CarActionListener.java,v 1.4 2003/03/27 19:43:27 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -134,8 +136,8 @@ public class CarActionListener implements ActionListener {
         } 
         else if (actionCommand.equals("recalculate")) {
             FacesContext context = FacesContext.getCurrentInstance();
-            String currentPackage = (String)context.getModelValue(
-                "CurrentOptionServer.currentPackage");
+            String currentPackage = (String)(Util.getValueBinding(
+                "CurrentOptionServer.currentPackage")).getValue(context);
             if (currentPackage.equals("custom")) {
                  processCustom(event, rb);
             } else if (currentPackage.equals("standard")) {
@@ -147,8 +149,11 @@ public class CarActionListener implements ActionListener {
             }
         } else if (actionCommand.equals("buy")) {
             FacesContext context = FacesContext.getCurrentInstance();
-            context.setModelValue("CurrentOptionServer.packagePrice",
-                context.getModelValue("CurrentOptionServer.carCurrentPrice"));
+            String carPrice = (String)
+            (Util.getValueBinding("CurrentOptionServer.carCurrentPrice")).
+                getValue(context);
+            (Util.getValueBinding("CurrentOptionServer.packagePrice")).
+                setValue(context, carPrice);
         }
             
             
@@ -160,7 +165,7 @@ public class CarActionListener implements ActionListener {
         UIComponent component = event.getComponent();
         int i = 0;
         UIComponent foundComponent = null;
-
+        UIOutput uiOutput = null;
 //PENDING(rogerk) application data should be read from config file..
 
         FacesContext context = FacesContext.getCurrentInstance();
@@ -171,22 +176,22 @@ public class CarActionListener implements ActionListener {
             engineOption.add(new SelectItem(
                 engines[i], engines[i], engines[i]));
         }
-        context.setModelValue("CurrentOptionServer.engineOption", engineOption);
-
+        Util.getValueBinding("CurrentOptionServer.engineOption").
+                setValue(context,engineOption);
         foundComponent = component.findComponent("currentEngine");
+        uiOutput = (UIOutput) component;
         String value = null;
         boolean packageChange = false;
-        if (!context.getModelValue("CurrentOptionServer.currentPackage")
-            .equals("custom")) {
+        if (!((Util.getValueBinding("CurrentOptionServer.currentPackage"))
+                .getValue(context)).equals("custom")) {
             value = engines[0];
             packageChange = true;
         } else {
-            value = (String)foundComponent.getValue();
+            value = (String)uiOutput.getValue();
         }
-        foundComponent.setValue(value);
-        context.setModelValue("CurrentOptionServer.currentEngineOption", 
-            value);
-
+        uiOutput.setValue(value);
+        (Util.getValueBinding("CurrentOptionServer.currentEngineOption")).
+                setValue(context,value);
         String[] suspensions = new String[2];
         suspensions[0] = (String)rb.getObject("Regular");
         suspensions[1] = (String)rb.getObject("Performance");
@@ -195,54 +200,64 @@ public class CarActionListener implements ActionListener {
             suspensionOption.add(new SelectItem(suspensions[i],
                 suspensions[i], suspensions[i]));
         }
-        context.setModelValue("CurrentOptionServer.suspensionOption",
-            suspensionOption);
+        (Util.getValueBinding("CurrentOptionServer.suspensionOption")).
+                setValue(context, suspensionOption);
+        
         foundComponent = component.findComponent("currentSuspension");
+        uiOutput = (UIOutput) component;
         if (packageChange) {
             value = suspensions[0];
         } else {
-            value = (String)foundComponent.getValue();
+            value = (String)uiOutput.getValue();
         }
-        foundComponent.setValue(value);
-        context.setModelValue("CurrentOptionServer.currentSuspensionOption",
-            value);
+        uiOutput.setValue(value);
+        (Util.getValueBinding("CurrentOptionServer.currentSuspensionOption")).
+            setValue(context, value);
 
-        context.setModelValue("CurrentOptionServer.currentPackage", "custom");
+        (Util.getValueBinding("CurrentOptionServer.currentPackage")).
+                setValue(context,"custom");
 
         foundComponent = component.findComponent("sunroof");
         foundComponent.setAttribute("disabled", "false");
         foundComponent.setAttribute("selectbooleanClass", "option-unselected");
-        context.setModelValue("CurrentOptionServer.sunRoof", Boolean.FALSE);
+        (Util.getValueBinding("CurrentOptionServer.sunRoof")).
+        setValue(context,Boolean.FALSE);
 
         foundComponent = component.findComponent("securitySystem");
         foundComponent.setAttribute("disabled", "false");
         foundComponent.setAttribute("selectbooleanClass", "option-unselected");
-        context.setModelValue("CurrentOptionServer.securitySystem", Boolean.FALSE);
+        (Util.getValueBinding("CurrentOptionServer.securitySystem")).
+            setValue(context, Boolean.FALSE);
 
         foundComponent = component.findComponent("gps");
         foundComponent.setAttribute("disabled", "false");
         foundComponent.setAttribute("selectbooleanClass", "option-unselected");
-        context.setModelValue("CurrentOptionServer.gps", Boolean.FALSE);
+        (Util.getValueBinding("CurrentOptionServer.gps")).
+            setValue(context,Boolean.FALSE);
 
         foundComponent = component.findComponent("cruisecontrol");
         foundComponent.setAttribute("disabled", "false");
         foundComponent.setAttribute("selectbooleanClass", "option-unselected");
-        context.setModelValue("CurrentOptionServer.cruiseControl", Boolean.FALSE);
+        (Util.getValueBinding("CurrentOptionServer.cruiseControl")).
+            setValue(context, Boolean.FALSE);
 
         foundComponent = component.findComponent("skirack");
         foundComponent.setAttribute("disabled", "false");
         foundComponent.setAttribute("selectbooleanClass", "option-unselected");
-        context.setModelValue("CurrentOptionServer.skiRack", Boolean.FALSE);
+        (Util.getValueBinding("CurrentOptionServer.skiRack")).
+            setValue(context,Boolean.FALSE);
 
         foundComponent = component.findComponent("keylessentry");
         foundComponent.setAttribute("disabled", "false");
         foundComponent.setAttribute("selectbooleanClass", "option-unselected");
-        context.setModelValue("CurrentOptionServer.keylessEntry", Boolean.FALSE);
+        (Util.getValueBinding("CurrentOptionServer.keylessEntry")).
+            setValue(context, Boolean.FALSE);
 
         foundComponent = component.findComponent("towPackage");
         foundComponent.setAttribute("disabled", "false");
         foundComponent.setAttribute("selectbooleanClass", "option-unselected");
-        context.setModelValue("CurrentOptionServer.towPackage", Boolean.FALSE);
+        (Util.getValueBinding("CurrentOptionServer.towPackage")).
+        setValue(context,Boolean.FALSE);
 
         // Display locale specific button labels..
 
@@ -267,7 +282,7 @@ public class CarActionListener implements ActionListener {
         UIComponent component = event.getComponent();
         int i = 0;
         UIComponent foundComponent = null;
-
+        UIOutput uiOutput = null;
 //PENDING(rogerk) application data should be read from config file..
  
         FacesContext context = FacesContext.getCurrentInstance();
@@ -278,82 +293,93 @@ public class CarActionListener implements ActionListener {
             engineOption.add(new SelectItem(
                 engines[i], engines[i], engines[i]));
         }
-        context.setModelValue("CurrentOptionServer.engineOption", engineOption);
+        (Util.getValueBinding("CurrentOptionServer.engineOption")).
+        setValue(context,engineOption);
 
         foundComponent = component.findComponent("currentEngine");
+        uiOutput = (UIOutput) component;
         String value = null;
         boolean packageChange = false;
-        if (!context.getModelValue("CurrentOptionServer.currentPackage")
-            .equals("standard")) {
+        if (!((Util.getValueBinding("CurrentOptionServer.currentPackage"))
+            .getValue(context)).equals("standard")) {
             value = engines[0];
             packageChange = true;
         } else {
-            value = (String)foundComponent.getValue();
+            value = (String)uiOutput.getValue();
         }
-        foundComponent.setValue(value);
-        context.setModelValue("CurrentOptionServer.currentEngineOption",
-            value);
+        uiOutput.setValue(value);
+        (Util.getValueBinding("CurrentOptionServer.currentEngineOption")).
+        setValue(context,value);
 
         String[] suspensions = new String[1];
         suspensions[0] = (String)rb.getObject("Regular");
         ArrayList suspensionOption = new ArrayList();
         suspensionOption.add(new SelectItem(suspensions[0],
             suspensions[0], suspensions[0]));
-        context.setModelValue("CurrentOptionServer.suspensionOption",
-            suspensionOption);
+        (Util.getValueBinding("CurrentOptionServer.suspensionOption")).
+        setValue(context,suspensionOption);
         foundComponent = component.findComponent("currentSuspension");
+        uiOutput = (UIOutput) component;
         if (packageChange) {
             value = suspensions[0];
         } else {
-            value = (String)foundComponent.getValue();
+            value = (String)uiOutput.getValue();
         } 
-        foundComponent.setValue(value);
-        context.setModelValue("CurrentOptionServer.currentSuspensionOption",
-            value);
+        uiOutput.setValue(value);
+        (Util.getValueBinding("CurrentOptionServer.currentSuspensionOption")).
+        setValue(context, value);
 
-        context.setModelValue("CurrentOptionServer.currentPackage", "standard");
+       (Util.getValueBinding("CurrentOptionServer.currentPackage")).
+       setValue(context, "standard");
 
         foundComponent = component.findComponent("sunroof");
         foundComponent.setAttribute("disabled", "true");
         foundComponent.setAttribute("value", Boolean.TRUE);
         foundComponent.setAttribute("selectbooleanClass", "package-selected");
-        context.setModelValue("CurrentOptionServer.sunRoof", Boolean.TRUE);
+        (Util.getValueBinding("CurrentOptionServer.sunRoof")).
+        setValue(context,Boolean.TRUE);
 
         foundComponent = component.findComponent("securitySystem");
         foundComponent.setAttribute("disabled", "true");
         foundComponent.setAttribute("value", Boolean.FALSE);
         foundComponent.setAttribute("selectbooleanClass", "option-unselected");
-        context.setModelValue("CurrentOptionServer.securitySystem", Boolean.FALSE);
+        (Util.getValueBinding("CurrentOptionServer.securitySystem")).
+        setValue(context,Boolean.FALSE);
 
         foundComponent = component.findComponent("gps");
         foundComponent.setAttribute("disabled", "true");
         foundComponent.setAttribute("value", Boolean.FALSE);
         foundComponent.setAttribute("selectbooleanClass", "option-unselected");
-        context.setModelValue("CurrentOptionServer.gps", Boolean.FALSE);
+        (Util.getValueBinding("CurrentOptionServer.gps")).
+        setValue(context,Boolean.FALSE);
 
         foundComponent = component.findComponent("cruisecontrol");
         foundComponent.setAttribute("disabled", "true");
         foundComponent.setAttribute("value", Boolean.TRUE);
         foundComponent.setAttribute("selectbooleanClass", "package-selected");
-        context.setModelValue("CurrentOptionServer.cruiseControl", Boolean.TRUE);
+        (Util.getValueBinding("CurrentOptionServer.cruiseControl")).
+        setValue(context, Boolean.TRUE);
 
         foundComponent = component.findComponent("skirack");
         foundComponent.setAttribute("disabled", "true");
         foundComponent.setAttribute("value", Boolean.TRUE);
         foundComponent.setAttribute("selectbooleanClass", "package-selected");
-        context.setModelValue("CurrentOptionServer.skiRack", Boolean.TRUE);
+        (Util.getValueBinding("CurrentOptionServer.skiRack")).
+        setValue(context,Boolean.TRUE);
 
         foundComponent = component.findComponent("keylessentry");
         foundComponent.setAttribute("disabled", "true");
         foundComponent.setAttribute("value", Boolean.TRUE);
         foundComponent.setAttribute("selectbooleanClass", "package-selected");
-        context.setModelValue("CurrentOptionServer.keylessEntry", Boolean.TRUE);
+        (Util.getValueBinding("CurrentOptionServer.keylessEntry")).
+        setValue(context,Boolean.TRUE);
 
         foundComponent = component.findComponent("towPackage");
         foundComponent.setAttribute("disabled", "true");
         foundComponent.setAttribute("value", Boolean.FALSE);
         foundComponent.setAttribute("selectbooleanClass", "option-unselected");
-        context.setModelValue("CurrentOptionServer.towPackage", Boolean.FALSE);
+        (Util.getValueBinding("CurrentOptionServer.towPackage")).
+        setValue(context,Boolean.FALSE);
 
         // Display locale specific button labels..
 
@@ -376,8 +402,11 @@ public class CarActionListener implements ActionListener {
 
     private void processPerformance(ActionEvent event, ResourceBundle rb) {
         UIComponent component = event.getComponent();
+        // "value" is an attibute on UIOutput and subclasses of UIOutput
+        // only. since we are dealing with ValueChangedEvent here, it is safe
+        // to cast the component to UIOutput.
         UIComponent foundComponent = null;
-
+        UIOutput uiOutput = null;
 //PENDING(rogerk) application data should be read from config file..
 
         FacesContext context = FacesContext.getCurrentInstance();
@@ -385,82 +414,92 @@ public class CarActionListener implements ActionListener {
         String[] engines = {"V8"};
         ArrayList engineOption = new ArrayList();
         engineOption.add(new SelectItem(engines[0], engines[0], engines[0]));
-        context.setModelValue("CurrentOptionServer.engineOption", engineOption);
+        (Util.getValueBinding("CurrentOptionServer.engineOption")).
+        setValue(context,engineOption);
 
         foundComponent = component.findComponent("currentEngine");
+        uiOutput = (UIOutput) component;
         String value = null;
         boolean packageChange = false;
-        if (!context.getModelValue("CurrentOptionServer.currentPackage")
-            .equals("performance")) {
+        if (!((Util.getValueBinding("CurrentOptionServer.currentPackage")).
+            getValue(context)).equals("performance")) {
             value = engines[0];
             packageChange = true;
         } else {
-            value = (String)foundComponent.getValue();
+            value = (String)uiOutput.getValue();
         }
-        foundComponent.setValue(value);
-        context.setModelValue("CurrentOptionServer.currentEngineOption",
-            value);
+        uiOutput.setValue(value);
+        (Util.getValueBinding("CurrentOptionServer.currentEngineOption")).
+         setValue(context,value);
 
         String[] suspensions = new String[1];
         suspensions[0] = (String)rb.getObject("Performance");
         ArrayList suspensionOption = new ArrayList();
         suspensionOption.add(new SelectItem(suspensions[0],
             suspensions[0], suspensions[0]));
-        context.setModelValue("CurrentOptionServer.suspensionOption",
-            suspensionOption);
+        (Util.getValueBinding("CurrentOptionServer.suspensionOption")).
+            setValue(context,suspensionOption);
         foundComponent = component.findComponent("currentSuspension");
         if (packageChange) {
             value = suspensions[0];
         } else {
-            value = (String)foundComponent.getValue();
+            value = (String)uiOutput.getValue();
         }
-        foundComponent.setValue(value);
-        context.setModelValue("CurrentOptionServer.currentSuspensionOption",
-            value);
+        uiOutput.setValue(value);
+        (Util.getValueBinding("CurrentOptionServer.currentSuspensionOption")).
+            setValue(context,value);
 
-        context.setModelValue("CurrentOptionServer.currentPackage", "performance");
+        (Util.getValueBinding("CurrentOptionServer.currentPackage")).
+        setValue(context,"performance");
 
         foundComponent = component.findComponent("sunroof");
         foundComponent.setAttribute("disabled", "true");
         foundComponent.setAttribute("value", Boolean.TRUE);
         foundComponent.setAttribute("selectbooleanClass", "package-selected");
-        context.setModelValue("CurrentOptionServer.sunRoof", Boolean.TRUE);
+        (Util.getValueBinding("CurrentOptionServer.sunRoof")).
+        setValue(context,Boolean.TRUE);
 
         foundComponent = component.findComponent("securitySystem");
         foundComponent.setAttribute("disabled", "true");
         foundComponent.setAttribute("value", Boolean.FALSE);
         foundComponent.setAttribute("selectbooleanClass", "option-unselected");
-        context.setModelValue("CurrentOptionServer.securitySystem", Boolean.FALSE);
+        (Util.getValueBinding("CurrentOptionServer.securitySystem")).
+        setValue(context,Boolean.FALSE);
 
         foundComponent = component.findComponent("gps");
         foundComponent.setAttribute("disabled", "true");
         foundComponent.setAttribute("value", Boolean.FALSE);
         foundComponent.setAttribute("selectbooleanClass", "option-unselected");
-        context.setModelValue("CurrentOptionServer.gps", Boolean.FALSE);
+        (Util.getValueBinding("CurrentOptionServer.gps")).
+        setValue(context,Boolean.FALSE);
 
         foundComponent = component.findComponent("cruisecontrol");
         foundComponent.setAttribute("disabled", "true");
         foundComponent.setAttribute("value", Boolean.TRUE);
         foundComponent.setAttribute("selectbooleanClass", "package-selected");
-        context.setModelValue("CurrentOptionServer.cruiseControl", Boolean.TRUE);
+        (Util.getValueBinding("CurrentOptionServer.cruiseControl")).
+        setValue(context,Boolean.TRUE);
 
         foundComponent = component.findComponent("skirack");
         foundComponent.setAttribute("disabled", "true");
         foundComponent.setAttribute("value", Boolean.TRUE);
         foundComponent.setAttribute("selectbooleanClass", "package-selected");
-        context.setModelValue("CurrentOptionServer.skiRack", Boolean.TRUE);
+        (Util.getValueBinding("CurrentOptionServer.skiRack")).
+        setValue(context,Boolean.TRUE);
 
         foundComponent = component.findComponent("keylessentry");
         foundComponent.setAttribute("disabled", "true");
         foundComponent.setAttribute("value", Boolean.TRUE);
         foundComponent.setAttribute("selectbooleanClass", "package-selected");
-        context.setModelValue("CurrentOptionServer.keylessEntry", Boolean.TRUE);
+        (Util.getValueBinding("CurrentOptionServer.keylessEntry")).
+        setValue(context,Boolean.TRUE);
 
         foundComponent = component.findComponent("towPackage");
         foundComponent.setAttribute("disabled", "true");
         foundComponent.setAttribute("value", Boolean.TRUE);
         foundComponent.setAttribute("selectbooleanClass", "package-selected");
-        context.setModelValue("CurrentOptionServer.towPackage", Boolean.TRUE);
+        (Util.getValueBinding("CurrentOptionServer.towPackage")).
+        setValue(context,Boolean.TRUE);
 
         // Display locale specific button labels..
 
@@ -484,6 +523,8 @@ public class CarActionListener implements ActionListener {
     private void processDeluxe(ActionEvent event, ResourceBundle rb) {
         UIComponent component = event.getComponent();
         UIComponent foundComponent = null;
+        UIOutput uiOutput = null;   
+     
         int i = 0;
 
         FacesContext context = FacesContext.getCurrentInstance();
@@ -496,83 +537,94 @@ public class CarActionListener implements ActionListener {
             engineOption.add(new SelectItem(
                 engines[i], engines[i], engines[i]));
         }
-        context.setModelValue("CurrentOptionServer.engineOption", engineOption);
+        (Util.getValueBinding("CurrentOptionServer.engineOption")).
+        setValue(context, engineOption);
 
         foundComponent = component.findComponent("currentEngine");
+        uiOutput = (UIOutput) component;
         String value = null;
         boolean packageChange = false;
-        if (!context.getModelValue("CurrentOptionServer.currentPackage")
-            .equals("deluxe")) {
+        if (!((Util.getValueBinding("CurrentOptionServer.currentPackage")).
+            getValue(context)).equals("deluxe")) {
             value = engines[0];
             packageChange = true;
         } else {
-            value = (String)foundComponent.getValue();
+            value = (String)uiOutput.getValue();
         }
-        foundComponent.setValue(value);
-        context.setModelValue("CurrentOptionServer.currentEngineOption",
-            value);
+        uiOutput.setValue(value);
+        (Util.getValueBinding("CurrentOptionServer.currentEngineOption")).
+            setValue(context, value);
 
         String[] suspensions = new String[1];
         suspensions[0] = (String)rb.getObject("Performance");
         ArrayList suspensionOption = new ArrayList();
         suspensionOption.add(new SelectItem(suspensions[0],
             suspensions[0], suspensions[0]));
-        context.setModelValue("CurrentOptionServer.suspensionOption",
-            suspensionOption);
+        (Util.getValueBinding("CurrentOptionServer.suspensionOption")).
+            setValue(context, suspensionOption);
 
         foundComponent = component.findComponent("currentSuspension");
+        uiOutput = (UIOutput) component;
         if (packageChange) {
             value = suspensions[0];
         } else {
-            value = (String)foundComponent.getValue();
+            value = (String)uiOutput.getValue();
         } 
-        foundComponent.setValue(value);
-        context.setModelValue("CurrentOptionServer.currentSuspensionOption",
-            value);
+        uiOutput.setValue(value);
+        (Util.getValueBinding("CurrentOptionServer.currentSuspensionOption")).
+            setValue(context,value);
 
-        context.setModelValue("CurrentOptionServer.currentPackage", "deluxe");
+        (Util.getValueBinding("CurrentOptionServer.currentPackage")).
+        setValue(context,"deluxe");
 
         foundComponent = component.findComponent("sunroof");
         foundComponent.setAttribute("disabled", "true");
         foundComponent.setAttribute("value", Boolean.TRUE);
         foundComponent.setAttribute("selectbooleanClass", "package-selected");
-        context.setModelValue("CurrentOptionServer.sunRoof", Boolean.TRUE);
+        (Util.getValueBinding("CurrentOptionServer.sunRoof")).
+        setValue(context, Boolean.TRUE);
 
         foundComponent = component.findComponent("securitySystem");
         foundComponent.setAttribute("disabled", "true");
         foundComponent.setAttribute("value", Boolean.TRUE);
         foundComponent.setAttribute("selectbooleanClass", "package-selected");
-        context.setModelValue("CurrentOptionServer.securitySystem", Boolean.TRUE);
+        (Util.getValueBinding("CurrentOptionServer.securitySystem")).
+        setValue(context, Boolean.TRUE);
 
         foundComponent = component.findComponent("gps");
         foundComponent.setAttribute("disabled", "true");
         foundComponent.setAttribute("value", Boolean.TRUE);
         foundComponent.setAttribute("selectbooleanClass", "package-selected");
-        context.setModelValue("CurrentOptionServer.gps", Boolean.TRUE);
+        (Util.getValueBinding("CurrentOptionServer.gps")).
+        setValue(context,Boolean.TRUE);
 
         foundComponent = component.findComponent("cruisecontrol");
         foundComponent.setAttribute("disabled", "true");
         foundComponent.setAttribute("value", Boolean.TRUE);
         foundComponent.setAttribute("selectbooleanClass", "package-selected");
-        context.setModelValue("CurrentOptionServer.cruiseControl", Boolean.TRUE);
+        (Util.getValueBinding("CurrentOptionServer.cruiseControl")).
+        setValue(context,Boolean.TRUE);
 
         foundComponent = component.findComponent("skirack");
         foundComponent.setAttribute("disabled", "true");
         foundComponent.setAttribute("value", Boolean.TRUE);
         foundComponent.setAttribute("selectbooleanClass", "package-selected");
-        context.setModelValue("CurrentOptionServer.skiRack", Boolean.TRUE);
+        (Util.getValueBinding("CurrentOptionServer.skiRack")).
+        setValue(context,Boolean.TRUE);
 
         foundComponent = component.findComponent("keylessentry");
         foundComponent.setAttribute("disabled", "true");
         foundComponent.setAttribute("value", Boolean.TRUE);
         foundComponent.setAttribute("selectbooleanClass", "package-selected");
-        context.setModelValue("CurrentOptionServer.keylessEntry", Boolean.TRUE);
+        (Util.getValueBinding("CurrentOptionServer.keylessEntry")).
+        setValue(context,Boolean.TRUE);
 
         foundComponent = component.findComponent("towPackage");
         foundComponent.setAttribute("disabled", "true");
         foundComponent.setAttribute("value", Boolean.TRUE);
         foundComponent.setAttribute("selectbooleanClass", "package-selected");
-        context.setModelValue("CurrentOptionServer.towPackage", Boolean.TRUE);
+        (Util.getValueBinding("CurrentOptionServer.towPackage")).
+        setValue(context,Boolean.TRUE);
 
         // Display locale specific button labels..
 

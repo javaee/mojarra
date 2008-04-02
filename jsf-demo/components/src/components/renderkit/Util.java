@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.3 2003/02/21 23:44:56 ofung Exp $
+ * $Id: Util.java,v 1.4 2003/03/27 19:43:35 jvisvanathan Exp $
  */
 
 /*
@@ -65,6 +65,9 @@ import javax.faces.component.UISelectItems;
 import javax.faces.component.SelectItem;
 
 import javax.faces.context.FacesContext;
+import javax.faces.application.Application;
+import javax.faces.application.ApplicationFactory;
+import javax.faces.el.ValueBinding;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -77,7 +80,7 @@ import java.util.Locale;
  *  <B>Util</B> is a class which houses common functionality used by
  *     other classes.
  *
- * @version $Id: Util.java,v 1.3 2003/02/21 23:44:56 ofung Exp $
+ * @version $Id: Util.java,v 1.4 2003/03/27 19:43:35 jvisvanathan Exp $
  * 
  */
 
@@ -260,8 +263,8 @@ private Util()
 	    javax.servlet.jsp.jstl.fmt.LocalizationContext locCtx = null;
 	    if (null != (locCtx = 
 			 (javax.servlet.jsp.jstl.fmt.LocalizationContext) 
-			 context.getModelValue(bundleName))) {
-		result = locCtx.getLocale();
+                         (Util.getValueBinding(bundleName)).getValue(context))) {
+                result = locCtx.getLocale();
 //		Assert.assert_it(null != result);
 	    }
 	}
@@ -342,6 +345,15 @@ private Util()
 	}
 	
 	return renderedText.toString();
+    }
+    
+     
+    public static ValueBinding getValueBinding(String valueRef) {
+        ApplicationFactory factory = (ApplicationFactory)
+                FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
+        Application application = factory.getApplication();
+        ValueBinding binding = application.getValueBinding(valueRef);
+        return binding;
     }
 
 //

@@ -1,5 +1,5 @@
 /*
- * $Id: StylesheetRenderer.java,v 1.2 2003/02/21 23:44:55 ofung Exp $
+ * $Id: StylesheetRenderer.java,v 1.3 2003/03/27 19:43:35 jvisvanathan Exp $
  */
 
 /*
@@ -110,10 +110,10 @@ public class StylesheetRenderer extends BaseRenderer {
         }
 
         ResponseWriter writer = context.getResponseWriter();
-        HttpServletRequest request = (HttpServletRequest)
-            context.getServletRequest();
+        String contextPath = context.getExternalContext().getRequestContextPath();
         writer.write("<link rel=\"stylesheet\" type=\"text/css\" href=\"");
-        writer.write(request.getContextPath());
+        
+        writer.write(contextPath);
         writer.write((String) component.getAttribute("path"));
         writer.write("\">");
 

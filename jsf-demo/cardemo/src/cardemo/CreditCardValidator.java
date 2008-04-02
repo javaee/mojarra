@@ -1,5 +1,5 @@
 /*
- * $Id: CreditCardValidator.java,v 1.2 2003/02/21 23:44:26 ofung Exp $
+ * $Id: CreditCardValidator.java,v 1.3 2003/03/27 19:43:28 jvisvanathan Exp $
  */
 
 /*
@@ -45,6 +45,7 @@ package cardemo;
 import javax.faces.FactoryFinder;
 import javax.faces.component.AttributeDescriptor;
 import javax.faces.component.UIComponent;
+import javax.faces.component.UIOutput;
 import javax.faces.context.FacesContext;
 import javax.faces.context.Message;
 import javax.faces.context.MessageResourcesFactory;
@@ -176,7 +177,10 @@ public class CreditCardValidator implements Validator {
         if ((context == null) || (component == null)) {
             throw new NullPointerException();
         }
-        Object value = component.getValue();
+        if (!(component instanceof UIOutput)) {
+            return;
+        }    
+        Object value = ((UIOutput)component).getValue();
         if (value != null) {
             String converted = value.toString();
             char[] input = converted.toCharArray();

@@ -1,5 +1,5 @@
 /*
- * $Id: GraphComponent.java,v 1.2 2003/02/21 23:44:49 ofung Exp $
+ * $Id: GraphComponent.java,v 1.3 2003/03/27 19:43:30 jvisvanathan Exp $
  */
 
 /*
@@ -45,17 +45,21 @@ package components.components;
 
 import java.io.IOException;
 import java.util.Iterator;
-import javax.faces.FacesException;
-import javax.faces.component.UIComponentBase;
-import javax.faces.context.FacesContext;
-import javax.faces.event.ActionEvent;
-import javax.faces.event.ActionListener;
+import java.util.List;
+import java.util.ArrayList;
+
 import components.model.Graph;
 import components.model.Node;
+import components.renderkit.Util;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import javax.faces.component.UICommand;
-import java.util.Iterator;
+import javax.faces.FacesException;
+import javax.faces.context.FacesContext;
+import javax.faces.component.UIOutput;
+import javax.faces.event.AbortProcessingException;
+import javax.faces.event.FacesEvent;
+import javax.faces.event.FacesListener;
 import javax.faces.event.PhaseId;
 import javax.faces.context.FacesContext;
 import javax.faces.FacesException;
@@ -68,7 +72,7 @@ import javax.faces.FacesException;
  * state of the specified {@link Node} in the {@link Graph}.
  */
 
-public class GraphComponent extends UICommand {
+public class GraphComponent extends UIOutput {
 
 
     private static Log log = LogFactory.getLog(GraphComponent.class);
@@ -76,51 +80,71 @@ public class GraphComponent extends UICommand {
     // Component type for this component
     public static final String TYPE = "GraphComponent";
 
+    protected List listeners[] = null;
     public GraphComponent() {
-        addActionListener(new ActionListener() {
-            // Processes the event queued on the graph component.
-            public void processAction(ActionEvent event) {
-
-                Graph graph = null;
-                GraphComponent component = (GraphComponent)event.getSource();
-                String path= (String) event.getActionCommand();
-
-                // Acquire the root node of the graph representing the menu
-                FacesContext context = FacesContext.getCurrentInstance();
-                graph = (Graph) component.currentValue(context);
-                if (graph == null) {
-                    throw new FacesException("Graph could not be located");
-                }
-                // Toggle the expanded state of this node
-                Node node =  graph.findNode(path);
-                if ( node == null ) {
-                    // PENDING (visvan) log error.
-                    return;
-                }    
-                boolean current = node.isExpanded();
-                node.setExpanded(!current);
-                if (!current) {
-                    Node parent = node.getParent();
-                    if (parent != null) {
-                        Iterator kids = parent.getChildren();
-                        while (kids.hasNext()) {
-                            Node kid = (Node) kids.next();
-                            if (kid != node) {
-                                kid.setExpanded(false);
-                            }
-                        }
-                    }
-                }
-            }
-        
-            // This listener will handle events after the phase specified
-            // as the return value;
-            public PhaseId getPhaseId() {
-                return PhaseId.ANY_PHASE;
-            }
-        });    
-    }    
+        GraphListener listener = new GraphListener();
+        addGraphListener(listener);    
+    }   
     
+
+    // adds a listener
+    public void addGraphListener(GraphListener listener) {
+
+        if (listener == null) {
+            throw new NullPointerException();
+        }
+        if (listeners == null) {
+            listeners = new List[PhaseId.VALUES.size()];
+        }
+        int ordinal = listener.getPhaseId().getOrdinal();
+        if (listeners[ordinal] == null) {
+            listeners[ordinal] = new ArrayList();
+        }
+        listeners[ordinal].add(listener);
+    }
+
+   // invokes listener method passing event as argument 
+    public boolean broadcast(FacesEvent event, PhaseId phaseId)
+        throws AbortProcessingException {
+
+        if ((event == null) || (phaseId == null)) {
+            throw new NullPointerException();
+        }
+        if (phaseId.equals(PhaseId.ANY_PHASE)) {
+            throw new IllegalStateException();
+        }
+        if (event instanceof GraphEvent) {
+            if (listeners == null) {
+                return (false);
+            }
+            GraphEvent aevent = (GraphEvent) event;
+            int ordinal = phaseId.getOrdinal();
+            broadcast(aevent, listeners[PhaseId.ANY_PHASE.getOrdinal()]);
+            broadcast(aevent, listeners[ordinal]);
+            for (int i = ordinal + 1; i < listeners.length; i++) {
+                if ((listeners[i] != null) && (listeners[i].size() > 0)) {
+                    return (true);
+                }
+            }
+            return (false);
+        } else {
+            throw new IllegalArgumentException();
+        }
+    }
+
+    protected void broadcast(GraphEvent event, List list) {
+
+        if (list == null) {
+            return;
+        }
+        Iterator listeners = list.iterator();
+        while (listeners.hasNext()) {
+            GraphListener listener = 
+                (GraphListener) listeners.next();
+            listener.processGraphEvent(event);
+        }
+    }
+
     // Return our component type
     public String getComponentType() {
         return (TYPE);
@@ -129,6 +153,54 @@ public class GraphComponent extends UICommand {
     // Ignore update model requests
     public void updateModel(FacesContext context) {
     }
+    
+    /**
+     * <p>Faces Listener implementation which toggles the selected Node
+     * in the GraphComponent;</p>
+     */
+    public class GraphListener implements FacesListener {
 
+        public GraphListener() {
+        }
+        
+        // Processes the event queued on the graph component.
+        public void processGraphEvent(GraphEvent event) {
+            Graph graph = null;
+            GraphComponent component = (GraphComponent)event.getSource();
+            String path= (String) event.getPath();
 
+            // Acquire the root node of the graph representing the menu
+            FacesContext context = FacesContext.getCurrentInstance();
+            graph = (Graph) component.currentValue(context);
+            if (graph == null) {
+                throw new FacesException("Graph could not be located");
+            }
+            // Toggle the expanded state of this node
+            Node node =  graph.findNode(path);
+            if ( node == null ) {
+                // PENDING (visvan) log error.
+                return;
+            }    
+            boolean current = node.isExpanded();
+            node.setExpanded(!current);
+            if (!current) {
+                Node parent = node.getParent();
+                if (parent != null) {
+                    Iterator kids = parent.getChildren();
+                    while (kids.hasNext()) {
+                        Node kid = (Node) kids.next();
+                        if (kid != node) {
+                            kid.setExpanded(false);
+                        }
+                    }
+                }
+            }
+        }
+
+        // This listener will handle events after the phase specified
+        // as the return value;
+        public PhaseId getPhaseId() {
+            return PhaseId.ANY_PHASE;
+        }  
+    }    
 }

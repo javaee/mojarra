@@ -1,5 +1,5 @@
 /*
- * $Id: GraphTreeNodeTag.java,v 1.2 2003/02/21 23:45:01 ofung Exp $
+ * $Id: GraphTreeNodeTag.java,v 1.3 2003/03/27 19:43:39 jvisvanathan Exp $
  */
 
 /*
@@ -49,9 +49,11 @@ import javax.servlet.jsp.tagext.TagSupport;
 
 import components.model.Graph;
 import components.model.Node;
+import components.renderkit.Util;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.webapp.FacesBodyTag;
+import javax.servlet.jsp.tagext.TagSupport;
 import javax.servlet.jsp.tagext.BodyTag;
 
 /**
@@ -167,8 +169,9 @@ public class GraphTreeNodeTag extends FacesBodyTag {
     public int doStartTag() throws JspException {
         
         FacesContext context = FacesContext.getCurrentInstance();
-        Graph graph =(Graph) context.getModelValue("sessionScope.graph_tree");
-        
+     
+        Graph graph = (Graph)
+            ((Util.getValueBinding("sessionScope.graph_tree").getValue(context)));
         // In the postback case, graph and the node exist already.So make sure
         // it doesn't created again.
         if ( graph.findNodeByName(getName()) != null) {
@@ -180,7 +183,7 @@ public class GraphTreeNodeTag extends FacesBodyTag {
         // get the immediate ancestor/parent tag of this tag.
         GraphTreeNodeTag parentNode = null;
         try {
-            parentNode = (GraphTreeNodeTag) findAncestorWithClass(this,
+            parentNode = (GraphTreeNodeTag) TagSupport.findAncestorWithClass(this,
                 GraphTreeNodeTag.class);
         } catch ( Exception e ) {
             System.out.println("Exception while locating GraphTreeNodeTag.class");

@@ -56,7 +56,7 @@ import javax.faces.lifecycle.ApplicationHandler;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: BasicServletContextListener.java,v 1.2 2003/02/21 23:45:21 ofung Exp $
+ * @version $Id: BasicServletContextListener.java,v 1.3 2003/03/27 19:43:42 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -109,7 +109,9 @@ public class BasicServletContextListener implements ServletContextListener
             FactoryFinder.getFactory(FactoryFinder.LIFECYCLE_FACTORY);
         Lifecycle lifecycle =
             factory.getLifecycle(LifecycleFactory.DEFAULT_LIFECYCLE);
-        lifecycle.setApplicationHandler(handler); 
+        // PENDING will be fixed when required RI changes for ApplicationImpl
+        // is done.
+       // lifecycle.setApplicationHandler(handler); 
     }
 
     public void contextDestroyed(ServletContextEvent e)

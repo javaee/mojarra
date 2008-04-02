@@ -49,6 +49,7 @@ import java.util.ResourceBundle;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import com.sun.faces.util.Util;
 /**
  * PackageValueChanged gets called when any of the package options for a
  * car in the more.jsp page changes
@@ -75,7 +76,9 @@ public class PackageValueChanged implements ValueChangedListener {
             FacesContext context = FacesContext.getCurrentInstance();
             String currentPrice;
             int cPrice = 0;
-            currentPrice = (String)context.getModelValue("CurrentOptionServer.carCurrentPrice");
+            currentPrice = (String)
+            (Util.getValueBinding("CurrentOptionServer.carCurrentPrice"))
+            .getValue(context);
             cPrice = Integer.parseInt(currentPrice);
             log.debug("Component Id: "+componentId);
             log.debug("vEvent.getOldValue: "+vEvent.getOldValue());
@@ -103,7 +106,8 @@ public class PackageValueChanged implements ValueChangedListener {
             
             // update model value
             currentPrice = Integer.toString(cPrice);
-            context.setModelValue("CurrentOptionServer.carCurrentPrice", currentPrice);
+            (Util.getValueBinding("CurrentOptionServer.carCurrentPrice")).
+            setValue(context,currentPrice);
         } catch (NumberFormatException ignored) {}
         
     }

@@ -40,6 +40,8 @@ package components.components;
 
 
 import java.io.IOException;
+import java.util.Map;
+
 import javax.faces.FacesException;
 import javax.faces.component.UIComponentBase;
 import javax.faces.context.FacesContext;
@@ -132,9 +134,9 @@ public class UIMap extends UICommand {
             throw new NullPointerException();
         }
 
-        String value =
-            context.getServletRequest().getParameter("selectedArea");
-	if (value != null) {
+        Map requestParameterMap = context.getExternalContext().getRequestParameterMap();
+        String value = (String)requestParameterMap.get("selectedArea");
+        if (value != null) {
 	    setAttribute("currentArea", value);
             context.addFacesEvent(new ActionEvent(this, value));
         }

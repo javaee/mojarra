@@ -1,5 +1,5 @@
 /*
- * $Id: XmlTreeFactoryImpl.java,v 1.2 2003/02/21 23:45:59 ofung Exp $
+ * $Id: XmlTreeFactoryImpl.java,v 1.3 2003/03/27 19:44:08 jvisvanathan Exp $
  */
 
 /*
@@ -76,7 +76,7 @@ import org.apache.commons.logging.LogFactory;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: XmlTreeFactoryImpl.java,v 1.2 2003/02/21 23:45:59 ofung Exp $
+ * @version $Id: XmlTreeFactoryImpl.java,v 1.3 2003/03/27 19:44:08 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -168,8 +168,7 @@ protected Iterator getTreeIdsFromSuffix(FacesContext facesContext,
     Set resourceSet = null;
     String curResource = null;
     ArrayList resources = new ArrayList();
-    ServletContext servletContext = facesContext.getServletContext();
-    resourceSet = servletContext.getResourcePaths("/");
+    resourceSet = facesContext.getExternalContext().getResourcePaths("/");
     resourcePaths = resourceSet.iterator();
     while (resourcePaths.hasNext()) {
 	curResource = (String) resourcePaths.next();
@@ -215,9 +214,7 @@ public Tree getTree(FacesContext facesContext,
     }
 
     try {
-        ServletContext servletContext = facesContext.getServletContext();
-	treeInput = 
-	    servletContext.getResourceAsStream(treeId);
+       treeInput = facesContext.getExternalContext().getResourceAsStream(treeId);
 	if (null == treeInput) {
 	    throw new NullPointerException();
 	}

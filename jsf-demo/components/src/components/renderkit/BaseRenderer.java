@@ -1,5 +1,5 @@
 /*
- * $Id: BaseRenderer.java,v 1.3 2003/02/21 23:44:54 ofung Exp $
+ * $Id: BaseRenderer.java,v 1.4 2003/03/27 19:43:33 jvisvanathan Exp $
  */
 
 /*
@@ -51,9 +51,6 @@ import javax.faces.render.Renderer;
 
 import java.util.ResourceBundle;
 import java.util.MissingResourceException;
-
-
-
 import java.util.Iterator;
 
 /**
@@ -113,74 +110,50 @@ public abstract class BaseRenderer extends Renderer {
      *
      * <p>This method must not return null.</p>
      */ 
-    public String getClientId(FacesContext context, UIComponent component) {
-
-        // Has a client identifier been generated for this component already?
-	String result = null;
-	if (null != (result = (String) component.getAttribute("clientId"))) {
-	    return result;
-	}
-        Object facetParent = null;
-
+    public String getClientId(FacesContext context, UIComponent component){
+	String clientId = null;
 	NamingContainer closestContainer = null;
 	UIComponent containerComponent = component;
 
-        // check if its a facet (facets are not containers)
-        // this also checks if we start off with nested facets
-        facetParent = containerComponent.getAttribute(
-            UIComponent.FACET_PARENT_ATTR);
-        while (facetParent != null) {
-            containerComponent = (UIComponent) facetParent;
-            facetParent = containerComponent.getAttribute(
-                UIComponent.FACET_PARENT_ATTR);
-        }
-	
         // Search for an ancestor that is a naming container
-        while (null != (containerComponent =
+        while (null != (containerComponent = 
                         containerComponent.getParent())) {
-            facetParent = containerComponent.getAttribute(
-                UIComponent.FACET_PARENT_ATTR);
-            if (facetParent != null) {
-                containerComponent = (UIComponent) facetParent;
-            }
             if (containerComponent instanceof NamingContainer) {
                 closestContainer = (NamingContainer) containerComponent;
                 break;
             }
         }
-	
-	// If none is found, see if this is a naming container
-	if (null == closestContainer && component instanceof NamingContainer) {
-	    closestContainer = (NamingContainer) component;
-	}
-	
-	if (null != closestContainer) {
 
-	    // If there is no componentId, generate one and store it
-	    if (null == (result = component.getComponentId())) {
-		// Don't call setComponentId() because it checks for
-		// uniqueness.  No need.
-		component.setAttribute("componentId",
-				       result = closestContainer.generateClientId());
-	    }
+        // If none is found, see if this is a naming container
+        if (null == closestContainer && component instanceof NamingContainer) {
+            closestContainer = (NamingContainer) component;
+        }
 
-	    // build the client side id
-	    containerComponent = (UIComponent) closestContainer;
-	    // If this is the root naming container, break
-	    if (null != containerComponent.getParent()) {
-		result = containerComponent.getClientId(context) +
-		    UIComponent.SEPARATOR_CHAR + result;
-	    }
+        if (null != closestContainer) {
 
-	}
-	
-        // Store the client identifier for future use
-	if (null == result) {
+            // If there is no componentId, generate one and store it
+            if (component.getComponentId() == null) {
+                // Don't call setComponentId() because it checks for
+                // uniqueness.  No need.
+                clientId = closestContainer.generateClientId();
+            } else {
+                clientId = component.getComponentId();
+            }
+
+            // build the client side id
+            containerComponent = (UIComponent) closestContainer;
+
+            // If this is the root naming container, break
+            if (null != containerComponent.getParent()) {
+                clientId = containerComponent.getClientId(context) +
+                    UIComponent.SEPARATOR_CHAR + clientId;
+            }
+        }
+
+        if (null == clientId) {
 	    throw new NullPointerException();
 	}
-	component.setAttribute("clientId", result);
-	return (result);
-
+	return (clientId);
     }
 
     protected String getKeyAndLookupInBundle(FacesContext context,
@@ -214,18 +187,15 @@ public abstract class BaseRenderer extends Renderer {
 					       bundleName, key);
 	}
 	
-	// verify there is a ResourceBundle for this modelReference
+	// verify there is a ResourceBundle in scoped namescape.
 	javax.servlet.jsp.jstl.fmt.LocalizationContext locCtx = null;
 	if (null == (locCtx = (javax.servlet.jsp.jstl.fmt.LocalizationContext) 
-		     context.getModelValue(bundleName)) ||
+            (Util.getValueBinding(bundleName)).getValue(context)) ||
 	    null == (bundle = locCtx.getResourceBundle())) {
-	    throw new MissingResourceException("Can't load JSTL classes", 
-					       bundleName, key);
+	    throw new MissingResourceException("Can't load ResourceBundle ", 
+                    bundleName, key);
 	}
 	
 	return bundle.getString(key);
     }
-
-
-
 }

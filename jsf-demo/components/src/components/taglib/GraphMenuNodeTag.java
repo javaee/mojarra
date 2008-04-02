@@ -1,5 +1,5 @@
 /*
- * $Id: GraphMenuNodeTag.java,v 1.2 2003/02/21 23:45:01 ofung Exp $
+ * $Id: GraphMenuNodeTag.java,v 1.3 2003/03/27 19:43:39 jvisvanathan Exp $
  */
 
 /*
@@ -49,9 +49,11 @@ import javax.servlet.jsp.tagext.TagSupport;
 
 import components.model.Graph;
 import components.model.Node;
+import components.renderkit.Util;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.webapp.FacesBodyTag;
+import javax.servlet.jsp.tagext.TagSupport;
 import javax.servlet.jsp.tagext.BodyTag;
 
 /**
@@ -167,7 +169,8 @@ public class GraphMenuNodeTag extends FacesBodyTag {
     public int doStartTag() throws JspException {
    
         FacesContext context = FacesContext.getCurrentInstance();
-        Graph graph = (Graph)context.getModelValue("sessionScope.graph_menu");
+        Graph graph = (Graph)
+            ((Util.getValueBinding("sessionScope.graph_menu").getValue(context)));
         // In the postback case, graph and the node exist already.So make sure
         // it doesn't created again.
         if ( graph.findNodeByName(getName()) != null) {
@@ -179,7 +182,7 @@ public class GraphMenuNodeTag extends FacesBodyTag {
         // get the immediate ancestor/parent of this node.
         GraphMenuNodeTag parentNode = null;
         try {
-            parentNode = (GraphMenuNodeTag) findAncestorWithClass(this,
+            parentNode = (GraphMenuNodeTag)TagSupport.findAncestorWithClass(this,
                 GraphMenuNodeTag.class);
         } catch ( Exception e ) {
             System.out.println("Exception while locating GraphMenuNodeTag.class");

@@ -1,5 +1,5 @@
 /*
- * $Id: MenuTreeRenderer.java,v 1.2 2003/02/21 23:44:55 ofung Exp $
+ * $Id: MenuTreeRenderer.java,v 1.3 2003/03/27 19:43:34 jvisvanathan Exp $
  */
 
 /*
@@ -44,11 +44,13 @@ package components.renderkit;
 
 
 import components.components.GraphComponent;
+import components.components.GraphEvent;
 import components.model.Graph;
 import components.model.Node;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Map;
 import javax.faces.FacesException;
 import javax.faces.component.AttributeDescriptor;
 import javax.faces.component.UIComponent;
@@ -57,7 +59,6 @@ import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.render.Renderer;
 import javax.servlet.http.HttpServletRequest;
-import javax.faces.event.ActionEvent;
 
 /**
  * <p>Render our current value (which must be a <code>Graph</code>)
@@ -84,7 +85,7 @@ public class MenuTreeRenderer extends MenuBarRenderer {
         throws IOException {
         Graph graph = null;
         // Acquire the root node of the graph representing the menu
-        graph = (Graph) component.currentValue(context);
+        graph = (Graph) ((GraphComponent)component).currentValue(context);
         if (graph == null) {
             throw new FacesException("Graph could not be located");
         }
@@ -99,11 +100,7 @@ public class MenuTreeRenderer extends MenuBarRenderer {
         this.context = context;
         clientId = component.getClientId(context);
         imageLocation = getImagesLocation(context);
-        
-        // Calculate the base URL for this component
-        HttpServletRequest request = (HttpServletRequest)
-            context.getServletRequest();
-        
+      
         treeClass = (String)component.getAttribute("graphClass");
         selectedClass = (String)component.getAttribute("selectedClass");
         unselectedClass = (String)component.getAttribute("unselectedClass");
@@ -129,9 +126,9 @@ public class MenuTreeRenderer extends MenuBarRenderer {
     /**
      * Creates and returns an <code>ActionEvent</code>
      */
-    protected ActionEvent createEvent(UIComponent component, String path) {
+    protected GraphEvent createEvent(GraphComponent component, String path) {
 
-        return (new ActionEvent(component, path));
+        return (new GraphEvent(component, path,false));
 
     }
 
@@ -289,13 +286,12 @@ public class MenuTreeRenderer extends MenuBarRenderer {
         StringBuffer sb = new StringBuffer();
 
        // First, add the context path
-       HttpServletRequest request = (HttpServletRequest)
-           context.getServletRequest();
-       sb.append(request.getContextPath());
+       String contextPath = context.getExternalContext().getRequestContextPath();
+       sb.append(contextPath);
 
        // Next, add the images directory path
-       String images = context.getServletContext().
-               getInitParameter("tree.control.images");
+       Map initParameterMap = context.getExternalContext().getInitParameterMap();
+       String images = (String) initParameterMap.get("tree.control.images");
        if (images == null) {
            images = "/images";
        }

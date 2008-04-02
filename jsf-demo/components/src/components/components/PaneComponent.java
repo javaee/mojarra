@@ -1,5 +1,5 @@
 /*
- * $Id: PaneComponent.java,v 1.2 2003/02/21 23:44:49 ofung Exp $
+ * $Id: PaneComponent.java,v 1.3 2003/03/27 19:43:31 jvisvanathan Exp $
  */
 
 /*
@@ -220,11 +220,9 @@ public class PaneComponent extends UIComponentBase {
         UIComponent component, String rendererType) {
         Object facetParent = null;
         UIComponent currentComponent = component;
-
-        // check if its a facet (facets are not containers)
-        // this also checks if we start off with nested facets
-
-        facetParent = currentComponent.getAttribute(
+        // PENDING (visvan) remove commented out code once the app has been
+        // tested.
+     /*   facetParent = currentComponent.getAttribute(
             UIComponent.FACET_PARENT_ATTR);
         while (facetParent != null) {
             currentComponent = (UIComponent) facetParent;
@@ -233,14 +231,15 @@ public class PaneComponent extends UIComponentBase {
             if (currentComponent.getRendererType().equals(rendererType)) {
                 return currentComponent;
             }
-        }
+        } */
         // Search for an ancestor that is the specified renderer type;
+        // search includes the facets.
         while (null != (currentComponent = currentComponent.getParent())) {
-            facetParent = currentComponent.getAttribute(
+          /*  facetParent = currentComponent.getAttribute(
                 UIComponent.FACET_PARENT_ATTR);
             if (facetParent != null) {
                 currentComponent = (UIComponent) facetParent;
-            }
+            } */
             if (currentComponent.getRendererType().equals(rendererType)) {
                 break;
             }

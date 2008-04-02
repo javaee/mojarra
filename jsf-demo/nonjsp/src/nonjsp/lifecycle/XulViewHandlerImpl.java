@@ -1,5 +1,5 @@
 /* 
- * $Id: XulViewHandlerImpl.java,v 1.2 2003/02/21 23:45:56 ofung Exp $ 
+ * $Id: XulViewHandlerImpl.java,v 1.3 2003/03/27 19:44:06 jvisvanathan Exp $ 
  */ 
 
 
@@ -48,12 +48,14 @@ package nonjsp.lifecycle;
 
 import java.io.IOException; 
 import java.util.Iterator;
+import java.util.Map;
 
 import nonjsp.util.RIConstants;
 import nonjsp.util.Util;
 
 import nonjsp.tree.XmlTreeFactoryImpl;
 
+import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIOutput;
 import javax.faces.context.FacesContext; 
@@ -74,7 +76,7 @@ import org.apache.commons.logging.LogFactory;
 /** 
  * <B>XulViewHandlerImpl</B> is the Xul non-JSP ViewHandler implementation
  *
- * @version $Id: XulViewHandlerImpl.java,v 1.2 2003/02/21 23:45:56 ofung Exp $ 
+ * @version $Id: XulViewHandlerImpl.java,v 1.3 2003/03/27 19:44:06 jvisvanathan Exp $ 
  * 
  * @see javax.faces.lifecycle.ViewHandler 
  * 
@@ -86,31 +88,28 @@ public class XulViewHandlerImpl implements ViewHandler {
 
     // Render the components
     public void renderView(FacesContext context) throws IOException, 
-             ServletException { 
+             FacesException { 
 
         if (context == null) { 
             throw new NullPointerException("RenderView: FacesContext is null");
         } 
 
-        HttpServletRequest request = (HttpServletRequest) 
-            context.getServletRequest(); 
-        HttpServletResponse response = (HttpServletResponse) 
-            context.getServletResponse(); 
-        HttpSession session = context.getHttpSession();
-
         RequestDispatcher requestDispatcher = null; 
 
         log.trace("Step 1: Parse XmlRuleSet");
+        Map requestMap = context.getExternalContext().getRequestMap();
         String treeId = (String)
-                   request.getAttribute("javax.servlet.include.path_info");
+                   requestMap.get("javax.servlet.include.path_info");
         if (treeId == null) {
-	    treeId = request.getPathInfo();
+	    treeId = context.getExternalContext().getRequestPathInfo();
         }
 
 	log.trace("Step 2: Set Tree in FacesContext");
         XmlTreeFactoryImpl xmlTree = new XmlTreeFactoryImpl();
         context.setTree(xmlTree.getTree(context, treeId));
 
+        HttpServletResponse response = (HttpServletResponse)
+        (context.getExternalContext().getResponse());
 	log.trace("Step 3: Set ResponseWriter in FacesContext");
         context.setResponseWriter
             (new ServletResponseWriter(response.getWriter()));
@@ -122,8 +121,9 @@ public class XulViewHandlerImpl implements ViewHandler {
         createFooter(context);
 
         log.trace("Step 5: Save the tree and locale in the session");
-        session.setAttribute(RIConstants.REQUEST_LOCALE, context.getLocale());
-        session.setAttribute(RIConstants.FACES_TREE, context.getTree());
+        Map sessionMap = context.getExternalContext().getSessionMap();
+        sessionMap.put(RIConstants.REQUEST_LOCALE, context.getLocale());
+        sessionMap.put(RIConstants.FACES_TREE, context.getTree());
 
     } 
 
@@ -135,8 +135,7 @@ public class XulViewHandlerImpl implements ViewHandler {
         StringBuffer sb = new StringBuffer("<html>\n");
         sb.append("<head>\n");
         sb.append("<title>");
-        sb.append(
-            ((HttpServletRequest)context.getServletRequest()).getPathInfo());
+        sb.append(context.getExternalContext().getRequestContextPath());
         sb.append("</title>\n");
         sb.append("</head>\n");
         sb.append("<body>\n");

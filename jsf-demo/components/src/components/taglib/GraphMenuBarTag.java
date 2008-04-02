@@ -1,5 +1,5 @@
 /*
- * $Id: GraphMenuBarTag.java,v 1.3 2003/03/27 18:21:16 horwat Exp $
+ * $Id: GraphMenuBarTag.java,v 1.4 2003/03/27 19:43:38 jvisvanathan Exp $
  */
 
 /*
@@ -50,6 +50,7 @@ import javax.servlet.jsp.JspException;
 import components.components.GraphComponent;
 import components.model.Graph;
 import javax.faces.context.FacesContext;
+import components.renderkit.Util;
 
 /**
  * This class creates a <code>Graph</code> instance if there is no modelReference
@@ -62,14 +63,25 @@ public class GraphMenuBarTag extends FacesTag {
     protected String graphClass = null;
     protected String selectedClass = null;
     protected String unselectedClass = null;
+    protected String valueRef = null;
     
     public UIComponent createComponent() {
         return (new GraphComponent());
     }
 
-
+  
     public String getRendererType() {
         return ("MenuBar");
+    }
+  
+    public String getValueRef()
+    {
+	return valueRef;
+    }
+    
+    public void setValueRef(String newValueRef)
+    {
+	valueRef = newValueRef;
     }
     
     /**
@@ -121,10 +133,13 @@ public class GraphMenuBarTag extends FacesTag {
     
     protected void overrideProperties(UIComponent component) {
         super.overrideProperties(component);
+
+        GraphComponent graphComponent = (GraphComponent)component;
         if ((action_listener != null) &&
             (component.getAttribute("action_listener") == null)) {
             component.setAttribute("action_listener", action_listener);
         }
+
         if ((graphClass != null) &&
             (component.getAttribute("graphClass") == null)) {
             component.setAttribute("graphClass", graphClass);
@@ -137,18 +152,23 @@ public class GraphMenuBarTag extends FacesTag {
             (component.getAttribute("unselectedClass") == null)) {
             component.setAttribute("unselectedClass", unselectedClass);
         }
+        if(graphComponent.getValueRef() == null && valueRef != null ) {
+            graphComponent.setValueRef(valueRef);
+        } 
         
-        // if there is no modelReference attribute set on this tag, then
+        // if there is no valueRef attribute set on this tag, then
         // we need to build the graph.
         FacesContext context = FacesContext.getCurrentInstance();
-        if ( getModelReference() == null ) {
-            component.setModelReference("sessionScope.graph_menu");
-            Graph graph = (Graph) context.getModelValue(component.getModelReference());
+        if ( valueRef == null ) {
+            graphComponent.setValueRef("sessionScope.graph_menu");
+            Graph graph = (Graph)
+            ((Util.getValueBinding(graphComponent.getValueRef())).getValue(context));
             // In the postback case, graph exists already. So make sure
             // it doesn't created again.
             if ( graph == null ) {
                 graph = new Graph();
-                context.setModelValue(component.getModelReference(), graph);
+                (Util.getValueBinding(graphComponent.getValueRef())).
+                    setValue(context, graph);
             }     
         } 
     }

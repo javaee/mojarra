@@ -1,5 +1,5 @@
 /*
- * $Id: XmlXulRuleSet.java,v 1.2 2003/02/21 23:45:59 ofung Exp $
+ * $Id: XmlXulRuleSet.java,v 1.3 2003/03/27 19:44:08 jvisvanathan Exp $
  */
 
 /*
@@ -50,6 +50,7 @@ import javax.faces.FacesException;
 import javax.faces.event.ActionListener;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UICommand;
+import javax.faces.component.UIOutput;
 import javax.faces.component.UISelectOne;
 
 
@@ -184,8 +185,9 @@ final class UIComponentFactory extends AbstractObjectCreationFactory {
         }
 
         c.setComponentId(id);
-        c.setValue(value);
-
+        if ( c instanceof UIOutput) {
+            ((UIOutput)c).setValue(value);
+        }    
         return c;
     }
 }

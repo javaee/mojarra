@@ -50,9 +50,7 @@ import components.components.UIArea;
 import components.model.ImageArea;
 
 import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import javax.faces.el.ValueBinding;
 
 /**
  * This class converts the internal representation of a <code>UIArea</code>
@@ -100,17 +98,13 @@ public class AreaRenderer extends BaseRenderer {
             throw new NullPointerException();
         }
      
-	// ImageArea ia = (ImageArea) context.getServletContext().getAttribute(component.getModelReference());
-        ImageArea ia = (ImageArea) context.getModelValue(component.getModelReference());
+        UIArea uiArea = (UIArea)component;
+        ImageArea ia = (ImageArea)
+        ((Util.getValueBinding(uiArea.getValueRef())).getValue(context));
         if ( ia == null) {
             return;
-        }
-
-        HttpServletRequest request =
-            (HttpServletRequest) context.getServletRequest();
-        HttpServletResponse response =
-            (HttpServletResponse) context.getServletResponse();
-        String contextPath = request.getContextPath();
+        } 
+        String contextPath = context.getExternalContext().getRequestContextPath();
 	String imagePath = null;
         if ( !contextPath.endsWith("/")) {
             contextPath = contextPath + "/";

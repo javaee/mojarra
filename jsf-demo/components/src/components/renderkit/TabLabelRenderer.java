@@ -1,5 +1,5 @@
 /*
- * $Id: TabLabelRenderer.java,v 1.4 2003/02/21 23:44:55 ofung Exp $
+ * $Id: TabLabelRenderer.java,v 1.5 2003/03/27 19:43:35 jvisvanathan Exp $
  */
 
 /*
@@ -46,9 +46,9 @@ package components.renderkit;
 
 
 import components.components.PaneComponent;
-import components.components.PaneSelectedEvent
-;
+import components.components.PaneSelectedEvent;
 import java.io.IOException;
+import java.util.Map;
 import java.util.MissingResourceException;
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
@@ -60,9 +60,6 @@ import javax.faces.event.FormEvent;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.commons.beanutils.ConversionException;
@@ -76,7 +73,7 @@ import org.apache.commons.beanutils.ConversionException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TabLabelRenderer.java,v 1.4 2003/02/21 23:44:55 ofung Exp $
+ * @version $Id: TabLabelRenderer.java,v 1.5 2003/03/27 19:43:35 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -160,17 +157,13 @@ public class TabLabelRenderer extends BaseRenderer {
         if (result == null) {
             return result;
         }
-
-        HttpServletRequest request =
-            (HttpServletRequest) context.getServletRequest();
-        HttpServletResponse response =
-            (HttpServletResponse) context.getServletResponse();
+        String contextPath = context.getExternalContext().getRequestContextPath();
         StringBuffer sb = new StringBuffer();
         if (result.startsWith("/")) {
-            sb.append(request.getContextPath());
+            sb.append(contextPath);
         }
         sb.append(result);
-        return (response.encodeURL(sb.toString()));
+        return (context.getExternalContext().encodeURL(sb.toString()));
     }
 
     protected String getLabel(FacesContext context,
@@ -215,21 +208,26 @@ System.out.println("TABLABELRENDERER:DECODE:");
         // can get the command name by calling currentValue. This way we can 
         // get around the IE bug.
         String clientId = component.getClientId(context);
-        String value = context.getServletRequest().getParameter(clientId);
+        Map requestParameterMap = (Map) context.getExternalContext().
+                getRequestParameterMap();
+        String value = (String)requestParameterMap.get(clientId);
         if (value == null) {
-            if (context.getServletRequest().getParameter(clientId+".x") == null &&
-                context.getServletRequest().getParameter(clientId+".y") == null) {
+            if (requestParameterMap.get(clientId+".x") == null &&
+                requestParameterMap.get(clientId+".y") == null) {
                 component.setValid(true);
                 return;
             }
         }
 
+        // PENDING (visvan) remove commented out code once the app has been
+        // tested. This renderer does not need to queue a FormEvent.
+        /*
         // Construct and enqueue a FormEvent for the application
         String commandName = (String) component.getAttribute("commandName");
         String formName = null;
         UIComponent form = findParentForRendererType(component, "Form");
         if (form != null) {
-            formName = (String) form.currentValue(context);
+            formName = (String) ((UIForm)form).getFormName();
         }
         if (formName == null) {
             // PENDING (visvan) log error
@@ -240,7 +238,7 @@ System.out.println("TABLABELRENDERER:DECODE:");
         }
         FormEvent formEvent =
             new FormEvent(component, formName, commandName);
-        context.addApplicationEvent(formEvent);
+        context.addApplicationEvent(formEvent); */
 
         // Search for this component's parent "tab" component..
         UIComponent tabComponent = findParentForRendererType(component, "Tab");
@@ -325,11 +323,12 @@ System.out.println("TABLABELRENDERER:EVENT QUEUED:"+tabComponent.getClientId(con
         UIComponent component, String rendererType) {
         Object facetParent = null;
         UIComponent currentComponent = component;
-
+        // PENDING (visvan) remove commented out code once the app has been
+        // tested.
         // check if its a facet (facets are not containers)
         // this also checks if we start off with nested facets
 
-        facetParent = currentComponent.getAttribute(
+        /*facetParent = currentComponent.getAttribute(
             UIComponent.FACET_PARENT_ATTR);
         while (facetParent != null) {
             currentComponent = (UIComponent) facetParent;
@@ -338,14 +337,14 @@ System.out.println("TABLABELRENDERER:EVENT QUEUED:"+tabComponent.getClientId(con
             if (currentComponent.getRendererType().equals(rendererType)) {
                 return currentComponent;
             }
-        }
+        } */
         // Search for an ancestor that is the specified renderer type; 
         while (null != (currentComponent = currentComponent.getParent())) {
-            facetParent = currentComponent.getAttribute(
+          /*  facetParent = currentComponent.getAttribute(
                 UIComponent.FACET_PARENT_ATTR);
             if (facetParent != null) {
                 currentComponent = (UIComponent) facetParent;
-            }
+            } */
             if (currentComponent.getRendererType().equals(rendererType)) {
                 break;
             }

@@ -1,5 +1,5 @@
 /*
- * $Id: ButtonAction.java,v 1.2 2003/02/21 23:45:55 ofung Exp $
+ * $Id: ButtonAction.java,v 1.3 2003/03/27 19:44:06 jvisvanathan Exp $
  */
 
 /*
@@ -52,6 +52,7 @@ import javax.faces.tree.TreeFactory;
 import javax.faces.FactoryFinder;
 
 import java.io.IOException;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -70,7 +71,7 @@ import org.apache.commons.logging.LogFactory;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ButtonAction.java,v 1.2 2003/02/21 23:45:55 ofung Exp $
+ * @version $Id: ButtonAction.java,v 1.3 2003/03/27 19:44:06 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -138,9 +139,8 @@ public class ButtonAction implements ActionListener {
             Assert.assert_it(null != treeFactory);
             context.setTree(treeFactory.getTree(context,treeId));
 
-            HttpServletRequest request = (HttpServletRequest)
-                context.getServletRequest();
-            request.setAttribute("javax.servlet.include.path_info", treeId);
+            Map requestMap = context.getExternalContext().getRequestMap();
+            requestMap.put("javax.servlet.include.path_info", treeId);
 
 	    context.renderResponse();
         }

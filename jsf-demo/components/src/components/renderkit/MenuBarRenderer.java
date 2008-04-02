@@ -1,5 +1,5 @@
 /*
- * $Id: MenuBarRenderer.java,v 1.2 2003/02/21 23:44:54 ofung Exp $
+ * $Id: MenuBarRenderer.java,v 1.3 2003/03/27 19:43:34 jvisvanathan Exp $
  */
 
 /*
@@ -44,9 +44,11 @@ package components.renderkit;
 
 
 import components.components.GraphComponent;
-import javax.faces.event.ActionEvent;
+import components.components.GraphEvent;
 import components.model.Graph;
 import components.model.Node;
+
+import java.util.Map;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -99,13 +101,14 @@ public class MenuBarRenderer extends BaseRenderer {
         throws IOException {
             
         Graph graph = null;
-        HttpServletRequest request = (HttpServletRequest)
-            context.getServletRequest();
-
-        // if a node was clicked queue an ActionEvent.
-        String path = request.getParameter(component.getClientId(context));
+  
+        // if a node was clicked queue an GraphEvent.
+        Map requestParameterMap = (Map) context.getExternalContext().
+                getRequestParameterMap();
+        String path = (String) requestParameterMap.
+                get(component.getClientId(context));
         if (path != null && path.length() != 0) {
-            ActionEvent event = createEvent(component, path);
+            GraphEvent event = createEvent(((GraphComponent)component), path);
             if (log.isTraceEnabled()) {
                 log.trace("Adding event " + event);
             }
@@ -131,7 +134,7 @@ public class MenuBarRenderer extends BaseRenderer {
         throws IOException {
         Graph graph = null;
         // Acquire the root node of the graph representing the menu
-        graph = (Graph) component.currentValue(context);
+        graph = (Graph) ((GraphComponent)component).currentValue(context);
         if (graph == null) {
             throw new FacesException("Graph could not be located");
         }
@@ -147,10 +150,7 @@ public class MenuBarRenderer extends BaseRenderer {
         this.component = component;
         this.context = context;
         clientId = component.getClientId(context);
-        
-        HttpServletRequest request = (HttpServletRequest)
-            context.getServletRequest();
-       
+     
         treeClass = (String)component.getAttribute("menuClass");
         selectedClass = (String)component.getAttribute("selectedClass");
         unselectedClass = (String)component.getAttribute("unselectedClass");
@@ -253,8 +253,8 @@ public class MenuBarRenderer extends BaseRenderer {
     /**
      * Creates and returns an <code>ActionEvent</code>
      */
-    protected ActionEvent createEvent(UIComponent component, String path) {
-        return (new ActionEvent(component, path));
+    protected GraphEvent createEvent(GraphComponent component, String path) {
+        return (new GraphEvent(component, path, false));
     }
     
     /**
@@ -311,19 +311,15 @@ public class MenuBarRenderer extends BaseRenderer {
             if (!(action.startsWith(URL_PREFIX))) {
                return action;
             }
-        }  
-        HttpServletRequest request =
-            (HttpServletRequest) context.getServletRequest();
-        HttpServletResponse response =
-            (HttpServletResponse) context.getServletResponse();
-        
-        StringBuffer sb = new StringBuffer(request.getContextPath());
+        }
+        String contextPath = context.getExternalContext().getRequestContextPath();
+        StringBuffer sb = new StringBuffer(contextPath);
         sb.append(URL_PREFIX);
         // need to make sure the rendered string contains where we
         // want to go next (target).
         action = action.substring(URL_PREFIX.length());
         sb.append(action);
-        return (response.encodeURL(sb.toString()));
+        return (context.getExternalContext().encodeURL(sb.toString()));
     }
 
 
