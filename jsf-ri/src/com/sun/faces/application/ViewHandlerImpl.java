@@ -1,5 +1,5 @@
 /* 
- * $Id: ViewHandlerImpl.java,v 1.1 2003/08/19 19:31:03 rlubke Exp $ 
+ * $Id: ViewHandlerImpl.java,v 1.2 2003/08/21 14:16:27 rlubke Exp $ 
  */ 
 
 
@@ -26,12 +26,12 @@ import javax.faces.context.FacesContext;
 
 /** 
  * <B>ViewHandlerImpl</B> is the default implementation class for ViewHandler. 
- * @version $Id: ViewHandlerImpl.java,v 1.1 2003/08/19 19:31:03 rlubke Exp $ 
+ * @version $Id: ViewHandlerImpl.java,v 1.2 2003/08/21 14:16:27 rlubke Exp $ 
  * 
  * @see javax.faces.application.ViewHandler 
  * 
  */ 
-public abstract class ViewHandlerImpl implements ViewHandler { 
+public class ViewHandlerImpl implements ViewHandler { 
 
     public void renderView(FacesContext context) throws IOException, 
              FacesException { 
