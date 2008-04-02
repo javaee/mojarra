@@ -1,5 +1,5 @@
 /*
- * $Id: GenerateConcreteClasses.java,v 1.3 2003/09/26 23:07:43 eburns Exp $
+ * $Id: GenerateConcreteClasses.java,v 1.4 2003/09/29 14:57:45 eburns Exp $
  */
 
 /*
@@ -112,7 +112,15 @@ public class GenerateConcreteClasses extends GenerateBase {
 	    // 
 	    for (int j = 0, jLen = rendererTypes.size(); j < jLen; j++){
 		rendererType = (String) rendererTypes.get(j);
-		destClass = destRoot + rendererType;
+		// special case, if the renderer type and the component
+		// type are the same, 
+		if (rendererType.equals(componentType)) {
+		    // omit the renderer type from the class name.
+		    destClass = destRoot;
+		}
+		else {
+		    destClass = destRoot + rendererType;
+		}
 		generatedClass = generateClass(destClass, rendererType,
 					       sourceClass);
 		// 
