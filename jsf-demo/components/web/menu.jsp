@@ -110,7 +110,7 @@
 <d:stylesheet path="/tree-control-test.css"/>
 
 Render graph as a menu bar (graph retrieved from model):<br>
-<d:graph_menubar id="menu2" valueRef="sessionScope.graph2" 
+<d:graph_menubar id="menu2" valueRef="#{sessionScope.graph2}" 
     selectedClass="tree-control-selected"
     unselectedClass="tree-control-unselected" />
 
@@ -136,7 +136,7 @@ Render graph as a menu bar (graph specified via JSP):<br>
 
 <hr>
 Render graph as a tree control (graph retrieved from model):<br>
-<d:graph_menutree id="menu4" valueRef="graph4" graphClass="tree-control"
+<d:graph_menutree id="menu4" valueRef="#{sessionScope.graph4}" graphClass="tree-control"
      selectedClass="tree-control-selected" 
      unselectedClass="tree-control-unselected" />
 <hr>

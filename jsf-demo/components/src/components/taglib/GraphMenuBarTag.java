@@ -1,5 +1,5 @@
 /*
- * $Id: GraphMenuBarTag.java,v 1.8 2003/11/09 22:45:56 jvisvanathan Exp $
+ * $Id: GraphMenuBarTag.java,v 1.9 2003/11/11 02:40:58 jvisvanathan Exp $
  */
 
 /*
@@ -169,7 +169,7 @@ public class GraphMenuBarTag extends UIComponentTag {
         // if there is no valueRef attribute set on this tag, then
         // we need to build the graph.
         if ( valueRef == null ) {
-            vb = context.getApplication().getValueBinding("sessionScope.graph_menu");
+            vb = context.getApplication().getValueBinding("#{sessionScope.graph_menu}");
             component.setValueBinding("value", vb); 
            
             // In the postback case, graph exists already. So make sure

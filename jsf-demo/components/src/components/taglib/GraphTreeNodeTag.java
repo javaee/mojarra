@@ -1,5 +1,5 @@
 /*
- * $Id: GraphTreeNodeTag.java,v 1.5 2003/09/25 17:48:11 horwat Exp $
+ * $Id: GraphTreeNodeTag.java,v 1.6 2003/11/11 02:40:58 jvisvanathan Exp $
  */
 
 /*
@@ -171,7 +171,7 @@ public class GraphTreeNodeTag extends UIComponentBodyTag {
         FacesContext context = FacesContext.getCurrentInstance();
      
         Graph graph = (Graph)
-            ((Util.getValueBinding("sessionScope.graph_tree").getValue(context)));
+            ((Util.getValueBinding("#{sessionScope.graph_tree}").getValue(context)));
         // In the postback case, graph and the node exist already.So make sure
         // it doesn't created again.
         if ( graph.findNodeByName(getName()) != null) {
