@@ -1,5 +1,5 @@
 /*
- * $Id: PropertyResolverChainWrapper.java,v 1.5 2006/02/16 22:07:25 rlubke Exp $
+ * $Id: PropertyResolverChainWrapper.java,v 1.6 2006/03/14 16:57:31 rlubke Exp $
  */
 /*
  * The contents of this file are subject to the terms
@@ -87,10 +87,6 @@ public class PropertyResolverChainWrapper extends ELResolver {
         if (base == null || property == null) {
             return null;
         }
-
-	if (base != null || property != null) {
-	    return null;
-	}
         
         Class result = null;
         
@@ -125,11 +121,7 @@ public class PropertyResolverChainWrapper extends ELResolver {
         Object val) throws ELException {
         if (base == null || property == null) {
             return;
-        }
-        
-	if (base != null || property != null) {
-	    return;
-	}
+        }       
 
         context.setPropertyResolved(true);
 
