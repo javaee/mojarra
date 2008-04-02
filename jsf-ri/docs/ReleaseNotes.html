@@ -173,6 +173,46 @@ in README.</li>
 
 	<ul>
 
+	  <li><p>If your page includes
+	  <code>&lt;h:outputLabel&gt;</code> components that occur
+	  before the components they label, both the label and the form
+	  must reside within the same <code>&lt;h:form&gt;</code>. </p></li>
+
+	  <li><p>Content is not ordered as expected when mixing template
+	  text with JSF tags.  For example this jsp code:  </p>
+
+	  <ul><code>
+
+	    &lt;h:commandLink action="foo"&gt;
+	      Not the link text.   
+	    &lt;/h:commandLink&gt;
+
+	  </ul></code>
+
+          <p>outputs the string <code>Not the link text.</code> before
+          the link.  The workaround for this is to enclose the nested
+          text in an <code>&lt;f:verbatim&gt;</code> tag, like this:</p>
+
+	  <ul><code>
+
+	    &lt;h:commandLink action="foo"&gt;
+	      &lt;f:verbatim&gt;Not the link text.&lt;/f:verbatim&gt;
+	    &lt;/h:commandLink&gt;
+
+	  </ul></code>
+
+          </li>
+
+	  <li><p>Do not enclose JavaServer Faces component tags inside
+	  of iterating JSP tags, such as JSTL's
+	  <code>&lt;c:forEach&gt;</code> tag.  The primary reason for
+	  this restriction is that Faces cannot know how many times the
+	  loop will execute and therefore the number of components
+	  placed in the tree by this tag is undetermined.  This breaks
+	  the entire id to component matching scheme required by
+	  <code>UIComponentTag</code> to match tags to
+	  <code>UIComponent</code> instances.</p></li>
+
           <li><p>The Map returned by the UIComponent.getAttributes() 
           method implements get() so that if you ask for a key that 
           is implemented as a property, you get the property value. 
