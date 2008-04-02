@@ -16,9 +16,9 @@
 
 <!-- ************ Per user local properties ******************************* -->
 
-  <property file="${user.home}/build.properties"/>   <!-- User local        -->
   <property file="build.properties"/>                <!-- Component local   -->
   <property file="../build.properties"/>             <!-- Commons local     -->
+  <property file="${user.home}/build.properties"/>   <!-- User local        -->
   <property environment="myenv" />
 
 
