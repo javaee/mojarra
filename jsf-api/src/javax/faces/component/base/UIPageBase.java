@@ -1,5 +1,5 @@
 /*
- * $Id: UIPageBase.java,v 1.1 2003/07/28 22:18:46 eburns Exp $
+ * $Id: UIPageBase.java,v 1.2 2003/07/29 14:55:24 eburns Exp $
  */
 
 /*
@@ -11,13 +11,24 @@ package javax.faces.component.base;
 
 import javax.faces.component.UIPage;
 import javax.faces.context.FacesContext;
+import javax.faces.render.RenderKitFactory;
 import java.io.IOException;
 
 public class UIPageBase extends UINamingContainerBase implements UIPage {
 
+    // -------------------------------------------------------- Constructors
+
+    public UIPageBase(String newTreeId) {
+	treeId = newTreeId;
+        setRendererType(null);
+
+    }
+
+    public UIPageBase() { }
+
     // ------------------------------------------------------------- Properties
 
-    private String renderKitId;
+    private String renderKitId = RenderKitFactory.DEFAULT_RENDER_KIT;
 
     public String getRenderKitId() {
 	return renderKitId;
@@ -31,6 +42,10 @@ public class UIPageBase extends UINamingContainerBase implements UIPage {
 
     public String getTreeId() {
 	return treeId;
+    }
+
+    public void setTreeId(String newTreeId) {
+	treeId = newTreeId;
     }
 
     // --------------------------------------------- methods from StateHolder
@@ -61,13 +76,6 @@ public class UIPageBase extends UINamingContainerBase implements UIPage {
     }
     
 
-    // -------------------------------------------------------- Constructors
-
-    public UIPageBase(String newTreeId) {
-	treeId = newTreeId;
-        setRendererType(null);
-
-    }
 
 }
 

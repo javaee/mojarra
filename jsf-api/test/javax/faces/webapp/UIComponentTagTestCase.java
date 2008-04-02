@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTagTestCase.java,v 1.6 2003/07/29 00:42:35 craigmcc Exp $
+ * $Id: UIComponentTagTestCase.java,v 1.7 2003/07/29 14:55:25 eburns Exp $
  */
 
 /*
@@ -118,9 +118,6 @@ public class UIComponentTagTestCase extends TestCase {
         lifecycle = new MockLifecycle();
         facesContext = new MockFacesContext(externalContext, lifecycle);
         facesContext.setRoot(new UIPageBase("/root"));
-        // PENDING(craigmcc) - shouldn't UIPageBase default the render kit id?
-        facesContext.getRoot().setRenderKitId
-            (RenderKitFactory.DEFAULT_RENDER_KIT);
         ApplicationFactory applicationFactory = (ApplicationFactory)
             FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
         application = (MockApplication) applicationFactory.getApplication();
