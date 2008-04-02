@@ -1,5 +1,5 @@
 /*
- * $Id: TestFacesContextImpl.java,v 1.33 2003/09/18 19:10:31 rkitain Exp $
+ * $Id: TestFacesContextImpl.java,v 1.34 2003/09/22 19:39:08 rlubke Exp $
  */
 
 /*
@@ -63,7 +63,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestFacesContextImpl.java,v 1.33 2003/09/18 19:10:31 rkitain Exp $
+ * @version $Id: TestFacesContextImpl.java,v 1.34 2003/09/22 19:39:08 rlubke Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -371,12 +371,48 @@ public void testGetApplication() {
 
 public void testRelease() {
     System.out.println("Testing release method");
-    getFacesContext().release();
-    assertTrue(getFacesContext().getLocale() == null);
-    assertTrue(getFacesContext().getViewRoot() == null);
-    assertTrue(getFacesContext().getResponseStream() == null);
-    assertTrue(getFacesContext().getResponseWriter() == null);
-    assertTrue(((FacesContextImpl)getFacesContext()).getViewHandler() == null);
+    FacesContext context = getFacesContext();
+    context.release();
+    boolean exceptionThrown = false;
+    try {
+        context.getLocale();
+    } catch (IllegalStateException ise) {
+        exceptionThrown = true;
+    }
+    assertTrue(exceptionThrown);
+    
+    exceptionThrown = false;
+    try {
+        context.getViewRoot();
+    } catch (IllegalStateException ise) {
+        exceptionThrown = true;
+    }
+    assertTrue(exceptionThrown);
+    
+    exceptionThrown = false;
+    try {
+        context.getResponseStream();
+    } catch (IllegalStateException ise) {
+        exceptionThrown = true;
+    }
+    
+    exceptionThrown = false;
+    try {
+        context.getResponseWriter();
+    } catch (IllegalStateException ise) {
+        exceptionThrown = true;
+    }
+    assertTrue(exceptionThrown);
+    
+    exceptionThrown = false;
+    try {
+        ((FacesContextImpl) context).getViewHandler();
+    } catch (IllegalStateException ise) {
+        exceptionThrown = true;
+    }
+    assertTrue(exceptionThrown);
+    
+    // remainder of FacesContext methods are tested in TCK       
 }
 
 

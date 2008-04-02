@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContextImpl.java,v 1.49 2003/09/18 19:10:30 rkitain Exp $
+ * $Id: FacesContextImpl.java,v 1.50 2003/09/22 19:39:07 rlubke Exp $
  */
 
 /*
@@ -59,6 +59,7 @@ public class FacesContextImpl extends FacesContext
     //
     // Instance Variables
     //
+    private boolean released;
 
     // Relationship Instance Variables
     private Locale locale = null;    
@@ -120,6 +121,7 @@ public class FacesContextImpl extends FacesContext
     //
 
     public ExternalContext getExternalContext() {
+        assertNotReleased();
         return externalContext;
     }
 
@@ -128,6 +130,7 @@ public class FacesContextImpl extends FacesContext
      * web application.</p>
      */
     public Application getApplication() {
+        assertNotReleased();
 	if (null != application) {
 	    return application;
 	}
@@ -139,6 +142,7 @@ public class FacesContextImpl extends FacesContext
     }
 
     public Iterator getComponentsWithMessages() {
+        assertNotReleased();
 	Iterator result = null;
 
 	if (null == messageLists) {
@@ -153,6 +157,7 @@ public class FacesContextImpl extends FacesContext
 
 
     public Iterator getFacesEvents() {
+        assertNotReleased();
         if (facesEvents != null) {
             return (facesEvents.cursor());
         } else {
@@ -161,11 +166,13 @@ public class FacesContextImpl extends FacesContext
     }
 
     public Locale getLocale() {
+        assertNotReleased();
         return (this.locale);
     }
 
 
     public void setLocale(Locale locale) {
+        assertNotReleased();
         this.locale = locale;
         // update the JSTL configuration parameter with the new locale instance,
         // so that the new LocalizationContext that gets created when the setBundle
@@ -175,6 +182,7 @@ public class FacesContextImpl extends FacesContext
     }
 
     public int getMaximumSeverity() {
+        assertNotReleased();
         Iterator outerIter = null, innerIter = null;
         int max = 0;
         ArrayList list = new ArrayList();
@@ -200,6 +208,7 @@ public class FacesContextImpl extends FacesContext
     }    
 
     public Iterator getMessages() {
+        assertNotReleased();
         Iterator listsIter = null, result = null;
         ArrayList list = new ArrayList();
         
@@ -222,7 +231,7 @@ public class FacesContextImpl extends FacesContext
     }
 
     public Iterator getMessages(UIComponent component) {
-
+        assertNotReleased();
         // If no messages have been enqueued at all,
         // return an empty List Iterator
         if (null == messageLists) {
@@ -265,10 +274,12 @@ public class FacesContextImpl extends FacesContext
     }    
 
     public ResponseStream getResponseStream() {
-	return responseStream;
+        assertNotReleased();
+	    return responseStream;
     }
 
     public void setResponseStream(ResponseStream newResponseStream) {
+        assertNotReleased();
         if (newResponseStream == null) {
             throw new NullPointerException(Util.getExceptionMessage(Util.NULL_RESPONSE_STREAM_ERROR_MESSAGE_ID));
         }
@@ -276,30 +287,34 @@ public class FacesContextImpl extends FacesContext
     }
 
     public UIViewRoot getViewRoot() {
-	return viewRoot;
+        assertNotReleased();
+	    return viewRoot;
     }
    
     public void setViewRoot(UIViewRoot root) {
+        assertNotReleased();
         if (viewRoot != root) {
             facesEvents = null;
         }
-	viewRoot = root;
+	    viewRoot = root;
     }
     
 
     public ResponseWriter getResponseWriter() {
-	return responseWriter;
+        assertNotReleased();
+	    return responseWriter;
     }
 
     public void setResponseWriter(ResponseWriter newResponseWriter) {
+        assertNotReleased();
         if (newResponseWriter == null) {
             throw new NullPointerException(Util.getExceptionMessage(Util.NULL_RESPONSE_WRITER_ERROR_MESSAGE_ID));
         }
-	responseWriter = newResponseWriter;
+	    responseWriter = newResponseWriter;
     }
 
     public void addFacesEvent(FacesEvent event) {
-
+        assertNotReleased();
         // Validate our preconditions
         if (event == null) {
             throw new NullPointerException
@@ -345,7 +360,7 @@ public class FacesContextImpl extends FacesContext
     }
 
     public void addMessage(UIComponent component, Message message) {
-
+        assertNotReleased();
         // Validate our preconditions
         if ( null == message ) {
             throw new NullPointerException
@@ -389,6 +404,7 @@ public class FacesContextImpl extends FacesContext
     }
 
     public void release() {
+        released = true;
         externalContext = null;
         locale = null;        
         responseStream = null;
@@ -398,7 +414,7 @@ public class FacesContextImpl extends FacesContext
         viewHandler = null;
         renderResponse = false;
         responseComplete = false;
-	viewRoot = null;
+	    viewRoot = null;
 
 	// PENDING(edburns): write testcase that verifies that release
 	// actually works.  This will be important to keep working as
@@ -409,23 +425,37 @@ public class FacesContextImpl extends FacesContext
     }
 
     public void renderResponse() {
+        assertNotReleased();
         renderResponse = true;
     }
 
     public void responseComplete() {
+        assertNotReleased();
         responseComplete = true;
     }
 
     public boolean getRenderResponse() {
+        assertNotReleased();
         return renderResponse;
     }
 
     public boolean getResponseComplete() {
+        assertNotReleased();
         return responseComplete;
     }
 
     public ViewHandler getViewHandler() {
+        assertNotReleased();
         return this.viewHandler;
+    }
+    
+    //
+    // Private methods
+    //
+    private void assertNotReleased() {
+        if (released) {
+            throw new IllegalStateException();                   
+        }    
     }
    
     // The testcase for this class is TestFacesContextImpl.java 
