@@ -175,12 +175,12 @@
       <detail>Can''t open configuration file: ''{0}'' .</detail>
   </message>
 
-  <message messageId="com.sun.faces.ERROR_PARSING_FILE" severity="3" summary="Can''t parse configuration file">
-      <detail>Can''t parse configuration file: ''{0}'' .</detail>
-  </message>
-
   <message messageId="com.sun.faces.ERROR_REGISTERING_DTD" severity="3" summary="Can''t register DTD">
       <detail>Can''t register DTD: ''{0}'' .</detail>
+  </message>
+
+  <message messageId="com.sun.faces.INVALID_INIT_PARAM" severity="3" summary="Invalid initialization parameter.">
+      <detail>''{0}'' inititialization parameter is not specified correctly.</detail> 
   </message>
 </messages>
 
