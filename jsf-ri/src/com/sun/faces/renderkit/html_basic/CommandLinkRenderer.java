@@ -1,5 +1,5 @@
 /*
- * $Id: CommandLinkRenderer.java,v 1.57 2006/11/04 00:17:52 rlubke Exp $
+ * $Id: CommandLinkRenderer.java,v 1.58 2006/11/06 16:50:16 rlubke Exp $
  */
 
 /*
@@ -34,7 +34,6 @@ package com.sun.faces.renderkit.html_basic;
 import javax.faces.component.UICommand;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIForm;
-import javax.faces.component.UIOutput;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.event.ActionEvent;
@@ -288,6 +287,19 @@ public class CommandLinkRenderer extends LinkRenderer {
     }
 
 
+    protected String getOnClickScript(String formClientId,
+                                      String commandClientId,
+                                      String target,
+                                      Param[] params) {
+
+        return RenderKitUtils.getCommandLinkOnClickScript(formClientId,
+                                                          commandClientId,
+                                                          target,
+                                                          params);
+
+    }
+
+
     protected void renderAsActive(FacesContext context, UIComponent command)
           throws IOException {
 
@@ -343,10 +355,10 @@ public class CommandLinkRenderer extends LinkRenderer {
         }
 
         sb.append(
-              RenderKitUtils.getCommandLinkOnClickScript(formClientId,
-                                                         commandClientId,
-                                                         target,
-                                                         params));
+              getOnClickScript(formClientId,
+                               commandClientId,
+                               target,
+                               params));
 
         // we need to finish wrapping the injected js then
         if (userSpecifiedOnclick) {
