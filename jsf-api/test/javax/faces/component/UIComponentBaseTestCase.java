@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBaseTestCase.java,v 1.18 2003/11/07 02:58:25 craigmcc Exp $
+ * $Id: UIComponentBaseTestCase.java,v 1.19 2003/11/07 18:55:37 craigmcc Exp $
  */
 
 /*
@@ -343,27 +343,62 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
 
 	UIComponentBase test = (UIComponentBase) component;
 
+	// generic attributes
+	request.setAttribute("foo", "bar");
+	test.getAttributes().clear();
+	assertNull(test.getAttributes().get("baz"));
+	test.setValueBinding("baz", application.getValueBinding("#{foo}"));
+	assertEquals("bar", test.getAttributes().get("baz"));
+	test.getAttributes().put("baz", "bop");
+	assertEquals("bop", test.getAttributes().get("baz"));
+	test.getAttributes().remove("baz");
+	assertEquals("bar", test.getAttributes().get("baz"));
+	test.setValueBinding("baz", null);
+	assertNull(test.getAttributes().get("baz"));
+
+	// "id" property
 	request.setAttribute("foo", "bar");
 	test.setId(null);
 	assertNull(test.getId());
+	test.setValueBinding("id", application.getValueBinding("#{foo}"));
+	assertNotNull(test.getValueBinding("id"));
+	assertEquals("bar", test.getId());
 	test.setId("baz");
 	assertEquals("baz", test.getId());
-	test.setValueBinding("id", application.getValueBinding("#{foo}"));
+	test.setId(null);
 	assertEquals("bar", test.getId());
-	assertNotNull(test.getValueBinding("id"));
-	test.setId("bop");
-	assertEquals("bop", test.getId());
+	test.setValueBinding("id", null);
 	assertNull(test.getValueBinding("id"));
+	assertNull(test.getId());
 
+	// "rendered" property
 	request.setAttribute("foo", Boolean.FALSE);
-	test.setRendered(true);
-	assertTrue(test.isRendered());
+	boolean initial = test.isRendered();
+	if (initial) {
+	    request.setAttribute("foo", Boolean.FALSE);
+	} else {
+	    request.setAttribute("foo", Boolean.TRUE);
+	}
 	test.setValueBinding("rendered", application.getValueBinding("#{foo}"));
-	assertTrue(!test.isRendered());
+	assertEquals(!initial, test.isRendered());
+	test.setRendered(initial);
+	assertEquals(initial, test.isRendered());
 	assertNotNull(test.getValueBinding("rendered"));
-	test.setRendered(false);
-	assertTrue(!test.isRendered());
-	assertNull(test.getValueBinding("rendered"));
+
+	// "rendererType" property
+	request.setAttribute("foo", "bar");
+	test.setRendererType(null);
+	assertNull(test.getRendererType());
+	test.setValueBinding("rendererType", application.getValueBinding("#{foo}"));
+	assertNotNull(test.getValueBinding("rendererType"));
+	assertEquals("bar", test.getRendererType());
+	test.setRendererType("baz");
+	assertEquals("baz", test.getRendererType());
+	test.setRendererType(null);
+	assertEquals("bar", test.getRendererType());
+	test.setValueBinding("rendererType", null);
+	assertNull(test.getValueBinding("rendererType"));
+	assertNull(test.getRendererType());
 
     }
 

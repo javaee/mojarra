@@ -1,5 +1,5 @@
 /*
- * $Id: UICommandTestCase.java,v 1.17 2003/11/07 01:23:55 craigmcc Exp $
+ * $Id: UICommandTestCase.java,v 1.18 2003/11/07 18:55:36 craigmcc Exp $
  */
 
 /*
@@ -341,27 +341,34 @@ public class UICommandTestCase extends ValueHolderTestCaseBase {
 	super.testValueBindings();
 	UICommand test = (UICommand) component;
 
+	// "action" property
 	request.setAttribute("foo", "bar");
 	test.setAction(null);
 	assertNull(test.getAction());
+	test.setValueBinding("action", application.getValueBinding("#{foo}"));
+	assertNotNull(test.getValueBinding("action"));
+	assertEquals("bar", test.getAction());
 	test.setAction("baz");
 	assertEquals("baz", test.getAction());
-	test.setValueBinding("action", application.getValueBinding("#{foo}"));
+	test.setAction(null);
 	assertEquals("bar", test.getAction());
-	assertNotNull(test.getValueBinding("action"));
-	test.setAction("bop");
-	assertEquals("bop", test.getAction());
+	test.setValueBinding("action", null);
 	assertNull(test.getValueBinding("action"));
+	assertNull(test.getAction());
 
+	// "immediate" property
 	request.setAttribute("foo", Boolean.FALSE);
-	test.setImmediate(true);
-	assertTrue(test.isImmediate());
+	boolean initial = test.isImmediate();
+	if (initial) {
+	    request.setAttribute("foo", Boolean.FALSE);
+	} else {
+	    request.setAttribute("foo", Boolean.TRUE);
+	}
 	test.setValueBinding("immediate", application.getValueBinding("#{foo}"));
-	assertTrue(!test.isImmediate());
+	assertEquals(!initial, test.isImmediate());
+	test.setImmediate(initial);
+	assertEquals(initial, test.isImmediate());
 	assertNotNull(test.getValueBinding("immediate"));
-	test.setImmediate(false);
-	assertTrue(!test.isImmediate());
-	assertNull(test.getValueBinding("immediate"));
 
     }
 

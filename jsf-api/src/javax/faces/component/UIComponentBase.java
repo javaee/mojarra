@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.82 2003/11/07 15:09:47 eburns Exp $
+ * $Id: UIComponentBase.java,v 1.83 2003/11/07 18:55:29 craigmcc Exp $
  */
 
 /*
@@ -154,10 +154,6 @@ public abstract class UIComponentBase extends UIComponent {
                             throw new NullPointerException();
                         }
                         String name = (String) key;
-			ValueBinding vb = getValueBinding(name);
-			if (vb != null) {
-			    return (vb.getValue(getFacesContext()));
-			}
                         PropertyDescriptor pd =
                             getPropertyDescriptor(name);
                         if (pd != null) {
@@ -175,9 +171,14 @@ public abstract class UIComponentBase extends UIComponent {
                                 throw new FacesException
                                     (e.getTargetException());
                             }
-                        } else {
+			} else if (super.containsKey(name)) {
                             return (super.get(key));
+			}
+			ValueBinding vb = getValueBinding(name);
+			if (vb != null) {
+			    return (vb.getValue(getFacesContext()));
                         }
+			return (null);
                     }
 
                     public Object put(Object key, Object value) {
@@ -203,7 +204,6 @@ public abstract class UIComponentBase extends UIComponent {
                                 } else {
                                     throw new IllegalArgumentException(null);
                                 }
-				setValueBinding(name, null);
                                 return (result);
                             } catch (IllegalAccessException e) {
                                 throw new FacesException(e);
@@ -215,7 +215,6 @@ public abstract class UIComponentBase extends UIComponent {
                             if (value == null) {
                                 throw new NullPointerException();
                             }
-			    setValueBinding(name, null);
                             return (super.put(key, value));
                         }
                     }
@@ -373,11 +372,14 @@ public abstract class UIComponentBase extends UIComponent {
 
     public String getId() {
 
+	if (id != null) {
+	    return (id);
+	}
 	ValueBinding vb = getValueBinding("id");
 	if (vb != null) {
 	    return ((String) vb.getValue(getFacesContext()));
 	} else {
-	    return (id);
+	    return (null);
 	}
 
     }
@@ -389,10 +391,7 @@ public abstract class UIComponentBase extends UIComponent {
     public void setId(String id) {
         
         validateId(id);
-
-	// Save the newly assigned component identifier
         this.id = id;
-	setValueBinding("id", null);
 
     }
 
@@ -417,10 +416,13 @@ public abstract class UIComponentBase extends UIComponent {
      * <p>The "should this component be rendered" flag.</p>
      */
     private boolean rendered = true;
-
+    private boolean renderedSet = false;
 
     public boolean isRendered() {
 
+	if (renderedSet) {
+	    return (rendered);
+	}
 	ValueBinding vb = getValueBinding("rendered");
 	if (vb != null) {
 	    Boolean value = (Boolean) vb.getValue(getFacesContext());
@@ -435,7 +437,7 @@ public abstract class UIComponentBase extends UIComponent {
     public void setRendered(boolean rendered) {
 
         this.rendered = rendered;
-	setValueBinding("rendered", null);
+	this.renderedSet = true;
 
     }
 
@@ -448,11 +450,14 @@ public abstract class UIComponentBase extends UIComponent {
 
     public String getRendererType() {
 
+	if (this.rendererType != null) {
+	    return (this.rendererType);
+	}
 	ValueBinding vb = getValueBinding("rendererType");
 	if (vb != null) {
 	    return ((String) vb.getValue(getFacesContext()));
 	} else {
-	    return (this.rendererType);
+	    return (null);
 	}
 
     }
@@ -461,7 +466,6 @@ public abstract class UIComponentBase extends UIComponent {
     public void setRendererType(String rendererType) {
 
         this.rendererType = rendererType;
-	setValueBinding("rendererType", null);
 
     }
 
@@ -1540,7 +1544,7 @@ public abstract class UIComponentBase extends UIComponent {
 
     public Object saveState(FacesContext context) {
 
-        Object values[] = new Object[8];
+        Object values[] = new Object[9];
         // copy over "attributes" to a temporary map, so that
         // any references maintained due to "attributes" being an inner class
         // is not saved.
@@ -1553,8 +1557,9 @@ public abstract class UIComponentBase extends UIComponent {
         values[3] = componentRef;
         values[4] = id;
         values[5] = rendered ? Boolean.TRUE : Boolean.FALSE;
-        values[6] = rendererType;
-        values[7] = saveAttachedState(context, listeners);
+	values[6] = renderedSet ? Boolean.TRUE : Boolean.FALSE;
+        values[7] = rendererType;
+        values[8] = saveAttachedState(context, listeners);
         // Don't save the transient flag.  Asssert that it is false
         // here.
                     
@@ -1582,10 +1587,11 @@ public abstract class UIComponentBase extends UIComponent {
         componentRef = (String) values[3];
         id = (String) values[4];
         rendered = ((Boolean) values[5]).booleanValue();
-        rendererType = (String) values[6];
+        renderedSet = ((Boolean) values[6]).booleanValue();
+        rendererType = (String) values[7];
         List [] restoredListeners = null;
         if (null != (restoredListeners = (List [])
-                     restoreAttachedState(context, values[7]))) {
+                     restoreAttachedState(context, values[8]))) {
             // if there were some listeners registered prior to this
             // method being invoked, merge them with the list to be
             // restored.

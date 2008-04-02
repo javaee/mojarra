@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectItemTestCase.java,v 1.5 2003/11/07 01:23:57 craigmcc Exp $
+ * $Id: UISelectItemTestCase.java,v 1.6 2003/11/07 18:55:38 craigmcc Exp $
  */
 
 /*
@@ -162,41 +162,50 @@ public class UISelectItemTestCase extends ValueHolderTestCaseBase {
 	super.testValueBindings();
 	UISelectItem test = (UISelectItem) component;
 
+	// "itemDescription" property
 	request.setAttribute("foo", "bar");
 	test.setItemDescription(null);
 	assertNull(test.getItemDescription());
+	test.setValueBinding("itemDescription", application.getValueBinding("#{foo}"));
+	assertNotNull(test.getValueBinding("itemDescription"));
+	assertEquals("bar", test.getItemDescription());
 	test.setItemDescription("baz");
 	assertEquals("baz", test.getItemDescription());
-	test.setValueBinding("itemDescription", application.getValueBinding("#{foo}"));
+	test.setItemDescription(null);
 	assertEquals("bar", test.getItemDescription());
-	assertNotNull(test.getValueBinding("itemDescription"));
-	test.setItemDescription("bop");
-	assertEquals("bop", test.getItemDescription());
+	test.setValueBinding("itemDescription", null);
 	assertNull(test.getValueBinding("itemDescription"));
+	assertNull(test.getItemDescription());
 
+	// "itemLabel" property
 	request.setAttribute("foo", "bar");
 	test.setItemLabel(null);
 	assertNull(test.getItemLabel());
+	test.setValueBinding("itemLabel", application.getValueBinding("#{foo}"));
+	assertNotNull(test.getValueBinding("itemLabel"));
+	assertEquals("bar", test.getItemLabel());
 	test.setItemLabel("baz");
 	assertEquals("baz", test.getItemLabel());
-	test.setValueBinding("itemLabel", application.getValueBinding("#{foo}"));
+	test.setItemLabel(null);
 	assertEquals("bar", test.getItemLabel());
-	assertNotNull(test.getValueBinding("itemLabel"));
-	test.setItemLabel("bop");
-	assertEquals("bop", test.getItemLabel());
+	test.setValueBinding("itemLabel", null);
 	assertNull(test.getValueBinding("itemLabel"));
+	assertNull(test.getItemLabel());
 
+	// "itemValue" property
 	request.setAttribute("foo", "bar");
 	test.setItemValue(null);
 	assertNull(test.getItemValue());
+	test.setValueBinding("itemValue", application.getValueBinding("#{foo}"));
+	assertNotNull(test.getValueBinding("itemValue"));
+	assertEquals("bar", test.getItemValue());
 	test.setItemValue("baz");
 	assertEquals("baz", test.getItemValue());
-	test.setValueBinding("itemValue", application.getValueBinding("#{foo}"));
+	test.setItemValue(null);
 	assertEquals("bar", test.getItemValue());
-	assertNotNull(test.getValueBinding("itemValue"));
-	test.setItemValue("bop");
-	assertEquals("bop", test.getItemValue());
+	test.setValueBinding("itemValue", null);
 	assertNull(test.getValueBinding("itemValue"));
+	assertNull(test.getItemValue());
 
     }
 

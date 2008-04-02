@@ -1,5 +1,5 @@
 /*
- * $Id: UIOutput.java,v 1.38 2003/11/07 01:23:49 craigmcc Exp $
+ * $Id: UIOutput.java,v 1.39 2003/11/07 18:55:31 craigmcc Exp $
  */
 
 /*
@@ -86,11 +86,14 @@ public class UIOutput extends UIComponentBase
 
     public Converter getConverter() {
 
+	if (this.converter != null) {
+	    return (this.converter);
+	}
 	ValueBinding vb = getValueBinding("converter");
 	if (vb != null) {
 	    return ((Converter) vb.getValue(getFacesContext()));
 	} else {
-	    return (this.converter);
+	    return (null);
 	}
 
     }
@@ -99,7 +102,6 @@ public class UIOutput extends UIComponentBase
     public void setConverter(Converter converter) {
 
         this.converter = converter;
-	setValueBinding("converter", null);
 
     }
 

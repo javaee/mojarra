@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTagTestCase.java,v 1.17 2003/11/07 01:24:00 craigmcc Exp $
+ * $Id: UIComponentTagTestCase.java,v 1.18 2003/11/07 18:55:41 craigmcc Exp $
  */
 
 /*
@@ -287,7 +287,7 @@ public class UIComponentTagTestCase extends TagTestCaseBase {
 	UIComponent component = (UIComponent) vr.getChildren().get(0);
 	assertEquals("bap", component.getId());
 	assertTrue(!component.isRendered());
-	assertNull(component.getValueBinding("id")); // Evaluated by the tag
+	assertNotNull(component.getValueBinding("id"));
 	assertNotNull(component.getValueBinding("rendered"));
 
     }

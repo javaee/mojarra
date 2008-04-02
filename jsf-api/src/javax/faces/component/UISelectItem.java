@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectItem.java,v 1.24 2003/11/07 01:23:49 craigmcc Exp $
+ * $Id: UISelectItem.java,v 1.25 2003/11/07 18:55:31 craigmcc Exp $
  */
 
 /*
@@ -70,11 +70,14 @@ public class UISelectItem extends UIComponentBase implements ValueHolder {
      */
     public String getItemDescription() {
 
+	if (this.itemDescription != null) {
+	    return (this.itemDescription);
+	}
 	ValueBinding vb = getValueBinding("itemDescription");
 	if (vb != null) {
 	    return ((String) vb.getValue(getFacesContext()));
 	} else {
-	    return (this.itemDescription);
+	    return (null);
 	}
 
     }
@@ -88,7 +91,6 @@ public class UISelectItem extends UIComponentBase implements ValueHolder {
     public void setItemDescription(String itemDescription) {
 
         this.itemDescription = itemDescription;
-	setValueBinding("itemDescription", null);
 
     }
 
@@ -98,11 +100,14 @@ public class UISelectItem extends UIComponentBase implements ValueHolder {
      */
     public String getItemLabel() {
 
+	if (this.itemLabel != null) {
+	    return (this.itemLabel);
+	}
 	ValueBinding vb = getValueBinding("itemLabel");
 	if (vb != null) {
 	    return ((String) vb.getValue(getFacesContext()));
 	} else {
-	    return (this.itemLabel);
+	    return (null);
 	}
 
     }
@@ -116,7 +121,6 @@ public class UISelectItem extends UIComponentBase implements ValueHolder {
     public void setItemLabel(String itemLabel) {
 
         this.itemLabel = itemLabel;
-	setValueBinding("itemLabel", null);
 
     }
 
@@ -126,11 +130,14 @@ public class UISelectItem extends UIComponentBase implements ValueHolder {
      */
     public String getItemValue() {
 
+	if (this.itemValue != null) {
+	    return (this.itemValue);
+	}
 	ValueBinding vb = getValueBinding("itemValue");
 	if (vb != null) {
 	    return ((String) vb.getValue(getFacesContext()));
 	} else {
-	    return (this.itemValue);
+	    return (null);
 	}
 
     }
@@ -144,7 +151,6 @@ public class UISelectItem extends UIComponentBase implements ValueHolder {
     public void setItemValue(String itemValue) {
 
         this.itemValue = itemValue;
-	setValueBinding("itemValue", null);
 
     }
 

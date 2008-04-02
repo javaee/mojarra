@@ -1,5 +1,5 @@
 /*
- * $Id: UIInput.java,v 1.45 2003/11/07 01:23:49 craigmcc Exp $
+ * $Id: UIInput.java,v 1.46 2003/11/07 18:55:30 craigmcc Exp $
  */
 
 /*
@@ -165,6 +165,7 @@ public class UIInput extends UIOutput {
      * <p>The "required field" state for this component.</p>
      */
     private boolean required = false;
+    private boolean requiredSet = false;
 
 
     /**
@@ -172,6 +173,9 @@ public class UIInput extends UIOutput {
      */
     public boolean isRequired() {
 
+	if (this.requiredSet) {
+	    return (this.required);
+	}
 	ValueBinding vb = getValueBinding("required");
 	if (vb != null) {
 	    Boolean value = (Boolean) vb.getValue(getFacesContext());
@@ -191,7 +195,7 @@ public class UIInput extends UIOutput {
     public void setRequired(boolean required) {
 
         this.required = required;
-	setValueBinding("required", null);
+	this.requiredSet = true;
 
     }
 
@@ -643,13 +647,14 @@ public class UIInput extends UIOutput {
 
     public Object saveState(FacesContext context) {
 
-        Object values[] = new Object[6];
+        Object values[] = new Object[7];
         values[0] = super.saveState(context);
-        values[1] = required ? Boolean.TRUE : Boolean.FALSE;
-        values[2] = previous;
-        values[3] = saveAttachedState(context, validators);
-        values[4] = validateRef;
-        values[5] = valueChangeListenerRef;
+        values[1] = previous;
+        values[2] = required ? Boolean.TRUE : Boolean.FALSE;
+	values[3] = requiredSet ? Boolean.TRUE : Boolean.FALSE;
+        values[4] = saveAttachedState(context, validators);
+        values[5] = validateRef;
+        values[6] = valueChangeListenerRef;
         return (values);
 
     }
@@ -659,13 +664,14 @@ public class UIInput extends UIOutput {
 
         Object values[] = (Object[]) state;
         super.restoreState(context, values[0]);
-        required = ((Boolean) values[1]).booleanValue();
-        previous = values[2];
+        previous = values[1];
+        required = ((Boolean) values[2]).booleanValue();
+        requiredSet = ((Boolean) values[3]).booleanValue();
 	List restoredValidators = null;
 	Iterator iter = null;
 
 	if (null != (restoredValidators = (List) 
-		     restoreAttachedState(context, values[3]))) {
+		     restoreAttachedState(context, values[4]))) {
 	    // if there were some validators registered prior to this
 	    // method being invoked, merge them with the list to be
 	    // restored.
@@ -680,8 +686,8 @@ public class UIInput extends UIOutput {
 	    }
 	}
 
-        validateRef = (String) values[4];
-        valueChangeListenerRef = (String) values[5];
+        validateRef = (String) values[5];
+        valueChangeListenerRef = (String) values[6];
 
     }
 

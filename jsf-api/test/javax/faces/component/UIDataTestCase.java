@@ -1,5 +1,5 @@
 /*
- * $Id: UIDataTestCase.java,v 1.19 2003/11/07 01:23:56 craigmcc Exp $
+ * $Id: UIDataTestCase.java,v 1.20 2003/11/07 18:55:37 craigmcc Exp $
  */
 
 /*
@@ -573,37 +573,44 @@ public class UIDataTestCase extends ValueHolderTestCaseBase {
 	super.testValueBindings();
 	UIData test = (UIData) component;
 
+	// "first" property
 	request.setAttribute("foo", new Integer(5));
-	test.setFirst(10);
-	assertEquals(10, test.getFirst());
 	test.setValueBinding("first", application.getValueBinding("#{foo}"));
 	assertEquals(5, test.getFirst());
+	test.setFirst(10);
+	assertEquals(10, test.getFirst());
 	assertNotNull(test.getValueBinding("first"));
-	test.setFirst(15);
-	assertEquals(15, test.getFirst());
-	assertNull(test.getValueBinding("first"));
- 
+
+	// "rowIndex" property
 	request.setAttribute("foo", new Integer(5));
-	test.setRows(10);
-	assertEquals(10, test.getRows());
+	test.setValueBinding("rowIndex", application.getValueBinding("#{foo}"));
+	assertEquals(5, test.getRowIndex());
+	test.setRowIndex(10);
+	assertEquals(10, test.getRowIndex());
+	assertNotNull(test.getValueBinding("rowIndex"));
+
+	// "rows" property
+	request.setAttribute("foo", new Integer(5));
 	test.setValueBinding("rows", application.getValueBinding("#{foo}"));
 	assertEquals(5, test.getRows());
+	test.setRows(10);
+	assertEquals(10, test.getRows());
 	assertNotNull(test.getValueBinding("rows"));
-	test.setRows(15);
-	assertEquals(15, test.getRows());
-	assertNull(test.getValueBinding("rows"));
- 
+
+	// "var" property
 	request.setAttribute("foo", "bar");
 	test.setVar(null);
 	assertNull(test.getVar());
+	test.setValueBinding("var", application.getValueBinding("#{foo}"));
+	assertNotNull(test.getValueBinding("var"));
+	assertEquals("bar", test.getVar());
 	test.setVar("baz");
 	assertEquals("baz", test.getVar());
-	test.setValueBinding("var", application.getValueBinding("#{foo}"));
+	test.setVar(null);
 	assertEquals("bar", test.getVar());
-	assertNotNull(test.getValueBinding("var"));
-	test.setVar("bop");
-	assertEquals("bop", test.getVar());
+	test.setValueBinding("var", null);
 	assertNull(test.getValueBinding("var"));
+	assertNull(test.getVar());
 
    }
 

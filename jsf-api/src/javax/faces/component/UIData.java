@@ -104,6 +104,7 @@ public class UIData extends UIComponentBase
      * <p>The first row number (zero-relative) to be displayed.</p>
      */
     private int first = 0;
+    private boolean firstSet = false;
 
 
     /**
@@ -119,6 +120,7 @@ public class UIData extends UIComponentBase
      * no current row association.</p>
      */
     private int rowIndex = 0;
+    private boolean rowIndexSet = false;
 
 
     /**
@@ -126,6 +128,7 @@ public class UIData extends UIComponentBase
      * rows in the table.</p>
      */
     private int rows = 0;
+    private boolean rowsSet = false;
 
 
     /**
@@ -168,6 +171,9 @@ public class UIData extends UIComponentBase
      */
     public int getFirst() {
 
+	if (this.firstSet) {
+	    return (this.first);
+	}
 	ValueBinding vb = getValueBinding("first");
 	if (vb != null) {
 	    Integer value = (Integer) vb.getValue(getFacesContext());
@@ -194,7 +200,7 @@ public class UIData extends UIComponentBase
 	    throw new IllegalArgumentException("" + first);
 	}
         this.first = first;
-	setValueBinding("first", null);
+	this.firstSet = true;
 
     }
 
@@ -260,6 +266,9 @@ public class UIData extends UIComponentBase
      */
     public int getRowIndex() {
 
+	if (this.rowIndexSet) {
+	    return (this.rowIndex);
+	}
 	ValueBinding vb = getValueBinding("rowIndex");
 	if (vb != null) {
 	    Integer value = (Integer) vb.getValue(getFacesContext());
@@ -363,7 +372,7 @@ public class UIData extends UIComponentBase
         // Reset current state information for the new row index
         restoreDescendantState();
 
-	setValueBinding("rowIndex", null);
+	this.rowIndexSet = true;
 
     }
 
@@ -374,6 +383,9 @@ public class UIData extends UIComponentBase
      */
     public int getRows() {
 
+	if (this.rowsSet) {
+	    return (this.rows);
+	}
 	ValueBinding vb = getValueBinding("rows");
 	if (vb != null) {
 	    Integer value = (Integer) vb.getValue(getFacesContext());
@@ -400,7 +412,7 @@ public class UIData extends UIComponentBase
 	    throw new IllegalArgumentException("" + rows);
 	}
         this.rows = rows;
-	setValueBinding("rows", null);
+	this.rowsSet = true;
 
     }
 
@@ -411,11 +423,14 @@ public class UIData extends UIComponentBase
      */
     public String getVar() {
 
+	if (this.var != null) {
+	    return (this.var);
+	}
 	ValueBinding vb = getValueBinding("var");
 	if (vb != null) {
 	    return ((String) vb.getValue(getFacesContext()));
 	} else {
-	    return (this.var);
+	    return (null);
 	}
 
     }
@@ -430,7 +445,6 @@ public class UIData extends UIComponentBase
     public void setVar(String var) {
 
         this.var = var;
-	setValueBinding("var", null);
 
     }
 
@@ -440,15 +454,18 @@ public class UIData extends UIComponentBase
 
     public Object saveState(FacesContext context) {
 
-        Object values[] = new Object[8];
+        Object values[] = new Object[11];
         values[0] = super.saveState(context);
         values[1] = new Integer(first);
-        values[2] = new Integer(rowIndex);
-        values[3] = new Integer(rows);
-        values[4] = saved;
-        values[5] = value;
-        values[6] = valueRef;
-        values[7] = var;
+	values[2] = firstSet ? Boolean.TRUE : Boolean.FALSE;
+        values[3] = new Integer(rowIndex);
+	values[4] = rowIndexSet ? Boolean.TRUE : Boolean.FALSE;
+        values[5] = new Integer(rows);
+	values[6] = rowsSet ? Boolean.TRUE : Boolean.FALSE;
+        values[7] = saved;
+        values[8] = value;
+        values[9] = valueRef;
+        values[10] = var;
         return (values);
 
     }
@@ -459,12 +476,15 @@ public class UIData extends UIComponentBase
         Object values[] = (Object[]) state;
         super.restoreState(context, values[0]);
         first = ((Integer) values[1]).intValue();
-        rowIndex = ((Integer) values[2]).intValue();
-        rows = ((Integer) values[3]).intValue();
-        saved = (Map) values[4];
-        value = values[5];
-        valueRef = (String) values[6];
-        var = (String) values[7];
+	firstSet = ((Boolean) values[2]).booleanValue();
+        rowIndex = ((Integer) values[3]).intValue();
+	rowIndexSet = ((Boolean) values[4]).booleanValue();
+        rows = ((Integer) values[5]).intValue();
+	rowsSet = ((Boolean) values[6]).booleanValue();
+        saved = (Map) values[7];
+        value = values[8];
+        valueRef = (String) values[9];
+        var = (String) values[10];
 
     }
 

@@ -1,5 +1,5 @@
 /*
- * $Id: UIParameter.java,v 1.16 2003/11/07 01:23:49 craigmcc Exp $
+ * $Id: UIParameter.java,v 1.17 2003/11/07 18:55:31 craigmcc Exp $
  */
 
 /*
@@ -67,11 +67,14 @@ public class UIParameter extends UIComponentBase implements ValueHolder {
      */
     public String getName() {
 
+	if (this.name != null) {
+	    return (this.name);
+	}
 	ValueBinding vb = getValueBinding("name");
 	if (vb != null) {
 	    return ((String) vb.getValue(getFacesContext()));
 	} else {
-	    return (this.name);
+	    return (null);
 	}
 
     }
@@ -86,7 +89,6 @@ public class UIParameter extends UIComponentBase implements ValueHolder {
     public void setName(String name) {
 
         this.name = name;
-	setValueBinding("name", null);
 
     }
 

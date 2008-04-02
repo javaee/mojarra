@@ -1,5 +1,5 @@
 /*
- * $Id: UICommand.java,v 1.52 2003/11/07 01:23:47 craigmcc Exp $
+ * $Id: UICommand.java,v 1.53 2003/11/07 18:55:28 craigmcc Exp $
  */
 
 /*
@@ -85,11 +85,14 @@ public class UICommand extends UIComponentBase
 
     public String getAction() {
 
+	if (this.action != null) {
+	    return (this.action);
+	}
 	ValueBinding vb = getValueBinding("action");
 	if (vb != null) {
 	    return ((String) vb.getValue(getFacesContext()));
 	} else {
-	    return (this.action);
+	    return (null);
 	}
 
     }
@@ -98,7 +101,6 @@ public class UICommand extends UIComponentBase
     public void setAction(String action) {
 
         this.action = action;
-	setValueBinding("action", null);
 
     }
 
@@ -147,10 +149,14 @@ public class UICommand extends UIComponentBase
      * <p>The immediate flag.</p>
      */
     private boolean immediate = false;
+    private boolean immediateSet = false;
 
 
     public boolean isImmediate() {
 
+	if (this.immediateSet) {
+	    return (this.immediate);
+	}
 	ValueBinding vb = getValueBinding("immediate");
 	if (vb != null) {
 	    Boolean value = (Boolean) vb.getValue(getFacesContext());
@@ -172,7 +178,7 @@ public class UICommand extends UIComponentBase
 	    this.immediate = immediate;
 	    addDefaultActionListener(context);
 	}
-	setValueBinding("immediate", null);
+	this.immediateSet = true;
 
     }
 
@@ -277,14 +283,15 @@ public class UICommand extends UIComponentBase
 
         removeDefaultActionListener(context);
 
-        Object values[] = new Object[7];
+        Object values[] = new Object[8];
         values[0] = super.saveState(context);
         values[1] = action;
         values[2] = actionListenerRef;
         values[3] = actionRef;
         values[4] = immediate ? Boolean.TRUE : Boolean.FALSE;
-        values[5] = value;
-        values[6] = valueRef;
+        values[5] = immediateSet ? Boolean.TRUE : Boolean.FALSE;
+        values[6] = value;
+        values[7] = valueRef;
 
         addDefaultActionListener(context);
         return (values);
@@ -301,8 +308,9 @@ public class UICommand extends UIComponentBase
         actionListenerRef = (String) values[2];
         actionRef = (String) values[3];
         immediate = ((Boolean) values[4]).booleanValue();
-        value = values[5];
-        valueRef = (String) values[6];
+        immediateSet = ((Boolean) values[5]).booleanValue();
+        value = values[6];
+        valueRef = (String) values[7];
 
         addDefaultActionListener(context);
 

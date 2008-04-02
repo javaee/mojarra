@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.115 2003/11/07 01:23:47 craigmcc Exp $
+ * $Id: UIComponent.java,v 1.116 2003/11/07 18:55:29 craigmcc Exp $
  */
 
 /*
@@ -88,9 +88,9 @@ public abstract class UIComponent implements StateHolder {
 
     /**
      * <p>Return the {@link ValueBinding} used to calculate the value for the
-     * specified property name, if any.</p>
+     * specified attribute or property name, if any.</p>
      *
-     * @param name Name of the property for which to retrieve a
+     * @param name Name of the attribute or property for which to retrieve a
      *  {@link ValueBinding}
      *
      * @exception NullPointerException if <code>name</code>
@@ -101,9 +101,9 @@ public abstract class UIComponent implements StateHolder {
 
     /**
      * <p>Set the {@link ValueBinding} used to calculate the value for the
-     * specified property name, if any.</p>
+     * specified attribute or property name, if any.</p>
      *
-     * @param name Name of the property for which to set a
+     * @param name Name of the attribute or property for which to set a
      *  {@link ValueBinding}
      * @param binding The {@link ValueBinding} to set, or <code>null</code>
      *  to remove any currently set {@link ValueBinding}

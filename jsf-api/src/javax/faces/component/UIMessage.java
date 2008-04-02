@@ -1,5 +1,5 @@
 /*
- * $Id: UIMessage.java,v 1.2 2003/11/07 01:46:55 craigmcc Exp $
+ * $Id: UIMessage.java,v 1.3 2003/11/07 18:55:31 craigmcc Exp $
  */
 
 /*
@@ -44,7 +44,9 @@ public class UIMessage extends UIComponentBase {
 
     private String forVal = null;
     private boolean showDetail = false;
+    private boolean showDetailSet = false;
     private boolean showSummary = true;
+    private boolean showSummarySet = false;
 
 
     // -------------------------------------------------------------- Properties
@@ -56,11 +58,14 @@ public class UIMessage extends UIComponentBase {
      */
     public String getFor() {
 
+	if (this.forVal != null) {
+	    return (this.forVal);
+	}
 	ValueBinding vb = getValueBinding("for");
 	if (vb != null) {
 	    return ((String) vb.getValue(getFacesContext()));
 	} else {
-	    return (this.forVal);
+	    return (null);
 	}
 
     }
@@ -75,7 +80,6 @@ public class UIMessage extends UIComponentBase {
     public void setFor(String newFor) {
 
 	forVal = newFor;
-	setValueBinding("for", null);
 
     }
 
@@ -86,6 +90,9 @@ public class UIMessage extends UIComponentBase {
      */
     public boolean isShowDetail() {
 
+	if (this.showDetailSet){
+	    return (this.showDetail);
+	}
 	ValueBinding vb = getValueBinding("showDetail");
 	if (vb != null) {
 	    Boolean value = (Boolean) vb.getValue(getFacesContext());
@@ -106,7 +113,7 @@ public class UIMessage extends UIComponentBase {
     public void setShowDetail(boolean showDetail) {
 
 	this.showDetail = showDetail;
-	setValueBinding("showDetail", null);
+	this.showDetailSet = true;
 
     }
 
@@ -117,6 +124,9 @@ public class UIMessage extends UIComponentBase {
      */
     public boolean isShowSummary() {
 
+	if (this.showSummarySet) {
+	    return (this.showSummary);
+	}
 	ValueBinding vb = getValueBinding("showSummary");
 	if (vb != null) {
 	    Boolean value = (Boolean) vb.getValue(getFacesContext());
@@ -137,7 +147,7 @@ public class UIMessage extends UIComponentBase {
     public void setShowSummary(boolean showSummary) {
 
 	this.showSummary = showSummary;
-	setValueBinding("showSummary", null);
+	this.showSummarySet = true;
 
     }
 
@@ -147,11 +157,13 @@ public class UIMessage extends UIComponentBase {
 
     public Object saveState(FacesContext context) {
 
-        Object values[] = new Object[4];
+        Object values[] = new Object[6];
         values[0] = super.saveState(context);
-        values[1] = this.showSummary ? Boolean.TRUE : Boolean.FALSE;
+        values[1] = this.forVal;
         values[2] = this.showDetail ? Boolean.TRUE : Boolean.FALSE;
-        values[3] = this.forVal;
+        values[3] = this.showDetailSet ? Boolean.TRUE : Boolean.FALSE;
+        values[4] = this.showSummary ? Boolean.TRUE : Boolean.FALSE;
+        values[5] = this.showSummarySet ? Boolean.TRUE : Boolean.FALSE;
         return (values);
 
     }
@@ -161,9 +173,12 @@ public class UIMessage extends UIComponentBase {
 
         Object values[] = (Object[]) state;
         super.restoreState(context, values[0]);
-        showSummary = ((Boolean) values[1]).booleanValue();
+	forVal = (String) values[1];
         showDetail = ((Boolean) values[2]).booleanValue();
-	forVal = (String) values[3];
+        showDetailSet = ((Boolean) values[3]).booleanValue();
+        showSummary = ((Boolean) values[4]).booleanValue();
+        showSummarySet = ((Boolean) values[5]).booleanValue();
+
     }
 
 

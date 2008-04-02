@@ -1,5 +1,5 @@
 /*
- * $Id: UIMessages.java,v 1.2 2003/11/07 01:46:55 craigmcc Exp $
+ * $Id: UIMessages.java,v 1.3 2003/11/07 18:55:31 craigmcc Exp $
  */
 
 /*
@@ -43,6 +43,7 @@ public class UIMessages extends UIComponentBase {
 
 
     private boolean globalOnly = true;
+    private boolean globalOnlySet = false;
 
 
     // -------------------------------------------------------------- Properties
@@ -54,6 +55,9 @@ public class UIMessages extends UIComponentBase {
      */
     public boolean isGlobalOnly() {
 
+	if (this.globalOnlySet) {
+	    return (this.globalOnly);
+	}
 	ValueBinding vb = getValueBinding("globalOnly");
 	if (vb != null) {
 	    Boolean value = (Boolean) vb.getValue(getFacesContext());
@@ -74,7 +78,8 @@ public class UIMessages extends UIComponentBase {
     public void setGlobalOnly(boolean globalOnly) {
 
 	this.globalOnly = globalOnly;
-	setValueBinding("globalOnly", null);
+	this.globalOnlySet = true;
+
     }
 
 
