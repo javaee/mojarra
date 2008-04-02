@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationImpl.java,v 1.63 2005/06/15 20:42:25 jayashri Exp $
+ * $Id: ApplicationImpl.java,v 1.64 2005/07/19 19:33:17 edburns Exp $
  */
 
 /*
@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 import javax.el.ArrayELResolver;
 import javax.el.BeanELResolver;
@@ -388,7 +389,13 @@ public class ApplicationImpl extends Application {
         }
         return propertyResolver;
     }
-
+    
+    public ResourceBundle getResourceBundle(FacesContext context, String var) {
+        if (null == context || null == var) {
+            throw new FacesException("context or var is null.");
+        }
+        return associate.getResourceBundle(context, var);
+    }
 
     public void setPropertyResolver(PropertyResolver resolver) {
         // Throw Illegal State Exception if  a PropertyResolver is set after 
@@ -946,6 +953,10 @@ public class ApplicationImpl extends Application {
                 Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, params));
         }
         return result;
+    }
+    
+    ApplicationAssociate getAssociate() {
+        return associate;
     }
 
 

@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListener.java,v 1.41 2005/07/14 13:31:40 edburns Exp $
+ * $Id: ConfigureListener.java,v 1.42 2005/07/19 19:33:17 edburns Exp $
  */
 /*
  * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
@@ -25,7 +25,6 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.el.CompositeELResolver;
-import javax.el.ELResolver;
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.application.Application;
@@ -68,6 +67,7 @@ import com.sun.faces.config.beans.NavigationCaseBean;
 import com.sun.faces.config.beans.NavigationRuleBean;
 import com.sun.faces.config.beans.RenderKitBean;
 import com.sun.faces.config.beans.RendererBean;
+import com.sun.faces.config.beans.ResourceBundleBean;
 import com.sun.faces.config.beans.ValidatorBean;
 import com.sun.faces.config.rules.FacesConfigRuleSet;
 import com.sun.faces.el.FacesCompositeELResolver;
@@ -478,6 +478,7 @@ public class ConfigureListener implements ServletContextListener {
         // Configure scalar properties
 
         configure(config.getLocaleConfig());
+        configure(config.getResourceBundles());
 
         value = config.getMessageBundle();
         if (value != null) {
@@ -1009,6 +1010,40 @@ public class ConfigureListener implements ServletContextListener {
             configure(config[i].getRenderers(), rk);
         }
 
+    }
+
+    /**
+     * <p>Configure all registered ResourceBundles.</p>
+     *
+     * @param config Array of <code>ResourceBundleBean</code> that contains
+     *               our configuration information
+     */
+    private void configure(ResourceBundleBean[] config) throws Exception {
+
+        if (config == null) {
+            return;
+        }
+
+        Application application = application();
+        ApplicationAssociate associate =
+                ApplicationAssociate.getInstance(getExternalContextDuringInitialize());
+        String baseName, var;
+        
+        for (int i = 0; i < config.length; i++) {
+            if ((null == (baseName = config[i].getBasename())) ||
+                (null == (var = config[i].getVar()))) {
+                String message = "Application ResourceBundle: null base-name or var." +
+                              "base-name:" + config[i].getBasename() + 
+                              "var:" + config[i].getVar();
+                // PENDING(edburns): I18N all levels above info
+                if (logger.isLoggable(Level.WARNING)) {
+                    logger.finer(message);
+                }
+                throw new IllegalArgumentException(message);
+            }
+            associate.addResourceBundle(baseName, var);
+        }
+        
     }
 
 

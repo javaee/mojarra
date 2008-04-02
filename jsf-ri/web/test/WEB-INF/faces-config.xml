@@ -16,6 +16,18 @@
     <message-bundle>com.sun.faces.TestMessages</message-bundle>
     <variable-resolver>com.sun.faces.TestOldVariableResolver</variable-resolver>
     <el-resolver>com.sun.faces.TestELResolver</el-resolver>
+    <resource-bundle>
+      <description>test ResourceBundle</description>
+      <display-name>Testo Pesto</display-name>
+      <base-name>com.sun.faces.TestResourceBundle</base-name>
+      <var>testResourceBundle</var>
+    </resource-bundle>
+    <resource-bundle>
+      <description>test ResourceBundle2</description>
+      <display-name>Second ResourceBundle</display-name>
+      <base-name>com.sun.faces.TestResourceBundle2</base-name>
+      <var>testResourceBundle2</var>
+    </resource-bundle>
   </application>
 
 

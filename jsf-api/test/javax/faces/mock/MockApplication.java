@@ -1,5 +1,5 @@
 /*
- * $Id: MockApplication.java,v 1.24 2005/07/14 15:21:19 edburns Exp $
+ * $Id: MockApplication.java,v 1.25 2005/07/19 19:33:16 edburns Exp $
  */
 
 /*
@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Locale;
+import java.util.ResourceBundle;
 
 import javax.faces.FacesException;
 import javax.faces.application.Application;
@@ -22,32 +23,25 @@ import javax.faces.application.NavigationHandler;
 import javax.faces.application.StateManager;
 import javax.faces.application.ViewHandler;
 import javax.faces.component.UIComponent;
-import javax.faces.component.UISelectMany;
-import javax.faces.component.UISelectOne;
 import javax.faces.convert.Converter;
-import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.el.MethodBinding;
-import javax.faces.el.PropertyNotFoundException;
 import javax.faces.el.PropertyResolver;
 import javax.faces.el.ValueBinding;
 import javax.faces.el.VariableResolver;
 import javax.faces.event.ActionListener;
 import javax.faces.event.ActionEvent;
-import javax.faces.event.PhaseId;
 import javax.faces.validator.Validator;
-
-import javax.servlet.jsp.JspFactory;
 import javax.servlet.ServletContext;
 
 import javax.el.ELResolver;
 import javax.el.ExpressionFactory;
 import javax.el.ValueExpression;
-import javax.el.MethodExpression;
 import javax.el.ELException;
 import javax.el.ELContextListener;
 
 import com.sun.el.ExpressionFactoryImpl;
+
 
 public class MockApplication extends Application {
 
@@ -318,6 +312,10 @@ public class MockApplication extends Application {
     }
 
     public void setDefaultRenderKitId(String renderKitId) {
+    }
+    
+    public ResourceBundle getResourceBundle(FacesContext ctx, String name) {
+        return null;
     }
 
 }

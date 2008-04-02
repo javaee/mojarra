@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigFileTestCase.java,v 1.67 2005/06/21 00:55:22 jayashri Exp $
+ * $Id: ConfigFileTestCase.java,v 1.68 2005/07/19 19:33:19 edburns Exp $
  */
 
 /*
@@ -55,6 +55,7 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
 	    URL url = null;
 	    FacesConfigBean fcb = 
 		(FacesConfigBean) context.getAttribute(FACES_CONFIG_BEAN_KEY);
+            fcb.getApplication().clearResourceBundles();
 	    
 	    // Step 1, configure a Digester instance we can use
 	    digester = digester(isFeatureEnabled(context, VALIDATE_XML));
@@ -101,6 +102,10 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
                                ServletContext context)
         throws Exception {
         String testRootDir = getTestRootDir();
+        ApplicationFactory aFactory = (ApplicationFactory) FactoryFinder.getFactory(
+            FactoryFinder.APPLICATION_FACTORY);
+        ApplicationImpl application = (ApplicationImpl) aFactory.getApplication();
+        com.sun.faces.application.TestApplicationImpl.clearResourceBundlesFromAssociate(application);
 	parser.parseFromStr(context, resource, testRootDir);
     }
 
@@ -110,6 +115,7 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
         ApplicationFactory aFactory = (ApplicationFactory) FactoryFinder.getFactory(
             FactoryFinder.APPLICATION_FACTORY);
         ApplicationImpl application = (ApplicationImpl) aFactory.getApplication();
+        com.sun.faces.application.TestApplicationImpl.clearResourceBundlesFromAssociate(application);
         parseConfig("WEB-INF/faces-config.xml",
                     config.getServletContext());
 
@@ -188,6 +194,7 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
         ApplicationFactory aFactory = (ApplicationFactory) FactoryFinder.getFactory(
             FactoryFinder.APPLICATION_FACTORY);
         ApplicationImpl application = (ApplicationImpl) aFactory.getApplication();
+        com.sun.faces.application.TestApplicationImpl.clearResourceBundlesFromAssociate(application);
         parseConfig("WEB-INF/faces-config-1.0.xml",
                     config.getServletContext());
 
@@ -268,6 +275,10 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
 
 
     public void testEmpty() throws Exception {
+        ApplicationFactory aFactory = (ApplicationFactory) FactoryFinder.getFactory(
+            FactoryFinder.APPLICATION_FACTORY);
+        ApplicationImpl application = (ApplicationImpl) aFactory.getApplication();
+        com.sun.faces.application.TestApplicationImpl.clearResourceBundlesFromAssociate(application);
         parseConfig("WEB-INF/faces-config-empty.xml",
                     config.getServletContext());
     }
@@ -276,13 +287,13 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
     // config file.
  
     public void testConfigManagedBeanFactory() throws Exception {
-
-        parseConfig("WEB-INF/faces-config.xml",
-                    config.getServletContext());
-
         ApplicationFactory aFactory = (ApplicationFactory) FactoryFinder.getFactory(
             FactoryFinder.APPLICATION_FACTORY);
         ApplicationImpl application = (ApplicationImpl) aFactory.getApplication();
+        com.sun.faces.application.TestApplicationImpl.clearResourceBundlesFromAssociate(application);
+
+        parseConfig("WEB-INF/faces-config.xml",
+                    config.getServletContext());
 
 	ApplicationAssociate associate = ApplicationAssociate.getInstance(getFacesContext().getExternalContext());
         Object bean = 
@@ -480,12 +491,12 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
 
 
     public void testNavigationCase() throws Exception {
+        ApplicationFactory aFactory = (ApplicationFactory) FactoryFinder.getFactory(
+            FactoryFinder.APPLICATION_FACTORY);
+        ApplicationImpl application = (ApplicationImpl) aFactory.getApplication();
+        com.sun.faces.application.TestApplicationImpl.clearResourceBundlesFromAssociate(application);
         parseConfig("WEB-INF/faces-config.xml",
                     config.getServletContext());
-        ApplicationFactory aFactory =
-            (ApplicationFactory) FactoryFinder.getFactory(
-                FactoryFinder.APPLICATION_FACTORY);
-        ApplicationImpl application = (ApplicationImpl) aFactory.getApplication();
         NavigationHandler navHandler = application.getNavigationHandler();
         UIViewRoot page = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
         page.setViewId("/login.jsp");
@@ -632,10 +643,11 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
     ********************/
 
     public void testNoneScopedBeans() throws Exception {
-	parseConfig("WEB-INF/none-scoped-beans.xml", config.getServletContext());
         ApplicationFactory aFactory = (ApplicationFactory) FactoryFinder.getFactory(
             FactoryFinder.APPLICATION_FACTORY);
         ApplicationImpl application = (ApplicationImpl) aFactory.getApplication();
+        com.sun.faces.application.TestApplicationImpl.clearResourceBundlesFromAssociate(application);
+	parseConfig("WEB-INF/none-scoped-beans.xml", config.getServletContext());
 	ApplicationAssociate associate = ApplicationAssociate.getInstance(getFacesContext().getExternalContext());
 
 	com.sun.faces.TestBean bean = (com.sun.faces.TestBean)
@@ -647,12 +659,12 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
     }
 
     public void testNonManagedBeans() throws Exception {
-        parseConfig("WEB-INF/faces-config.xml",
-                    config.getServletContext());
-                                                                                        
         ApplicationFactory aFactory = (ApplicationFactory) FactoryFinder.getFactory(
             FactoryFinder.APPLICATION_FACTORY);
         ApplicationImpl application = (ApplicationImpl) aFactory.getApplication();
+        com.sun.faces.application.TestApplicationImpl.clearResourceBundlesFromAssociate(application);
+        parseConfig("WEB-INF/faces-config.xml",
+                    config.getServletContext());
                                                                                         
         ApplicationAssociate associate = ApplicationAssociate.getInstance(getFacesContext().getExternalContext());
         Object bean =

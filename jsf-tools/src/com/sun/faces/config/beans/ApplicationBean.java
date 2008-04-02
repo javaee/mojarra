@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationBean.java,v 1.4 2005/02/09 17:53:01 jayashri Exp $
+ * $Id: ApplicationBean.java,v 1.5 2005/07/19 19:33:20 edburns Exp $
  */
 
 /*
@@ -12,6 +12,8 @@ package com.sun.faces.config.beans;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 
 /**
@@ -115,6 +117,33 @@ public class ApplicationBean {
         propertyResolvers.remove(propertyResolver);
     }
 
+    // ---------------------------------------------- StateManagerHolder Methods
+
+    private Map resourceBundles = new TreeMap();
+
+
+    public void addResourceBundle(ResourceBundleBean descriptor) {
+        resourceBundles.put(descriptor.getVar(), descriptor);
+    }
+
+    public ResourceBundleBean getResourceBundle(String name) {
+        return ((ResourceBundleBean) resourceBundles.get(name));
+    }
+
+
+    public ResourceBundleBean[] getResourceBundles() {
+        ResourceBundleBean results[] =
+            new ResourceBundleBean[resourceBundles.size()];
+        return ((ResourceBundleBean[]) resourceBundles.values().toArray(results));
+    }
+    
+    public void clearResourceBundles() {
+        resourceBundles.clear();
+    }
+    
+    public void removeResourceBundle(ResourceBundleBean descriptor) {
+        resourceBundles.remove(descriptor.getVar());
+    }
 
     // ---------------------------------------------- StateManagerHolder Methods
 

@@ -1,5 +1,5 @@
 /*
- * $Id: FacesConfigRuleSet.java,v 1.7 2005/05/05 20:51:36 edburns Exp $
+ * $Id: FacesConfigRuleSet.java,v 1.8 2005/07/19 19:33:20 edburns Exp $
  */
 
 /*
@@ -112,9 +112,19 @@ public class FacesConfigRuleSet extends RuleSetBase {
                 ("faces-config/application/default-render-kit-id",
                  "setDefaultRenderKitId", 0);
             digester.addCallMethod
-                ("faces-config/application/el-resolver",
-                 "addELResolver", 0);
-        }
+                    ("faces-config/application/el-resolver",
+                    "addELResolver", 0);
+            // faces-config/application/resource-bundle
+            digester.addRule
+                    ("faces-config/application/resource-bundle", new ResourceBundleRule());
+            digester.addCallMethod
+                    ("faces-config/application/resource-bundle/base-name",
+                    "setBasename", 0);
+            digester.addCallMethod
+                    ("faces-config/application/resource-bundle/var",
+                    "setVar", 0);
+            addFeatureRules("faces-config/application/resource-bundle", digester);
+       }
 
         // faces-config/component
         digester.addRule

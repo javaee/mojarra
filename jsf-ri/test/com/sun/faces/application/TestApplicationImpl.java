@@ -1,5 +1,5 @@
 /*
- * $Id: TestApplicationImpl.java,v 1.24 2005/06/09 22:38:34 jayashri Exp $
+ * $Id: TestApplicationImpl.java,v 1.25 2005/07/19 19:33:18 edburns Exp $
  */
 
 /*
@@ -13,9 +13,9 @@ package com.sun.faces.application;
 
 import com.sun.faces.JspFacesTestCase;
 import com.sun.faces.TestComponent;
-import com.sun.faces.el.PropertyResolverImpl;
-import com.sun.faces.el.VariableResolverImpl;
 import com.sun.faces.util.Util;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
@@ -40,7 +40,7 @@ import javax.el.ValueExpression;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestApplicationImpl.java,v 1.24 2005/06/09 22:38:34 jayashri Exp $
+ * @version $Id: TestApplicationImpl.java,v 1.25 2005/07/19 19:33:18 edburns Exp $
  */
 
 public class TestApplicationImpl extends JspFacesTestCase {
@@ -470,6 +470,52 @@ public class TestApplicationImpl extends JspFacesTestCase {
             assertTrue(false);
         } catch (NullPointerException npe) {
             ; // we're ok
+        }
+    }
+    
+    public void testResourceBundle() throws Exception {
+        ResourceBundle rb = null;
+        UIViewRoot root = new UIViewRoot();
+        root.setLocale(Locale.ENGLISH);
+        getFacesContext().setViewRoot(root);
+       
+        // negative test, non-existant rb
+        rb = application.getResourceBundle(getFacesContext(), "bogusName");
+        
+        assertNull(rb);
+        
+        // basic test, existing rb
+        rb = application.getResourceBundle(getFacesContext(), "testResourceBundle");
+        
+        assertNotNull(rb);
+        
+        String value = rb.getString("value1");
+        assertEquals("Jerry", value);
+        
+        // switch locale to German
+        getFacesContext().getViewRoot().setLocale(Locale.GERMAN);
+        rb = application.getResourceBundle(getFacesContext(), "testResourceBundle");
+        
+        assertNotNull(rb);
+        
+        value = rb.getString("value1");
+        assertEquals("Bernhard", value);
+        
+        // switch to a different rb
+        rb = application.getResourceBundle(getFacesContext(), "testResourceBundle2");
+        
+        assertNotNull(rb);
+        value = rb.getString("label");
+        assertEquals("Abflug", value);
+        
+    }
+    
+    public static void clearResourceBundlesFromAssociate(ApplicationImpl application) {
+        ApplicationAssociate associate = application.getAssociate();
+        if (null != associate) {
+            if (null != associate.resourceBundles) {
+                associate.resourceBundles.clear();
+            }
         }
     }
 

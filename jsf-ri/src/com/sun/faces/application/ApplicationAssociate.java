@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationAssociate.java,v 1.13 2005/06/15 20:42:24 jayashri Exp $
+ * $Id: ApplicationAssociate.java,v 1.14 2005/07/19 19:33:17 edburns Exp $
  */
 
 /*
@@ -31,6 +31,8 @@ import com.sun.faces.RIConstants;
 import com.sun.faces.config.ConfigureListener;
 import com.sun.faces.config.ManagedBeanFactory;
 import com.sun.faces.util.Util;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 /**
  * <p>Break out the things that are associated with the Application, but
@@ -131,6 +133,12 @@ public class ApplicationAssociate extends Object {
     public static void clearInstance(ExternalContext 
         externalContext) {
         Map applicationMap = externalContext.getApplicationMap();
+        ApplicationAssociate me = (ApplicationAssociate) applicationMap.get(ASSOCIATE_KEY);
+        if (null != me) {
+            if (null != me.resourceBundles) {
+                me.resourceBundles.clear();
+            }
+        }
 	applicationMap.remove(ASSOCIATE_KEY);
     }
 
@@ -303,6 +311,24 @@ public class ApplicationAssociate extends Object {
      */
     public TreeSet getNavigationWildCardList() {
         return wildcardMatchList;
+    }
+    
+    public ResourceBundle getResourceBundle(FacesContext context,
+            String var) {
+        Locale locale = context.getViewRoot().getLocale();
+        String baseName = (String) resourceBundles.get(var);
+        ResourceBundle result = null;
+        if (null != baseName) {
+            result = ResourceBundle.getBundle(baseName, locale);
+        }
+        // PENDING(edburns): should cache these based on var/Locale pair for performance
+        return result;
+    }
+    
+    Map resourceBundles = new HashMap();
+    
+    public void addResourceBundle(String baseName, String var) {
+        resourceBundles.put(var, baseName);
     }
 
     /**

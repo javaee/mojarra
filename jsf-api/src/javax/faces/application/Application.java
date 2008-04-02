@@ -1,5 +1,5 @@
 /*
- * $Id: Application.java,v 1.35 2005/06/22 18:57:04 rlubke Exp $
+ * $Id: Application.java,v 1.36 2005/07/19 19:33:16 edburns Exp $
  */
 
 /*
@@ -13,6 +13,7 @@ package javax.faces.application;
 import java.util.Iterator;
 import java.util.Collection;
 import java.util.Locale;
+import java.util.ResourceBundle;
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -260,6 +261,23 @@ public abstract class Application {
      * {@link #addELResolver}.
      */
     public abstract void setPropertyResolver(PropertyResolver resolver);
+    
+    /**
+     * <p>Find a <code>ResourceBundle</code> as defined in the application
+     * configuration resources under the specified name.  If a
+     * <code>ResourceBundle</code> was defined for the name, return an
+     * instance that uses the locale of the current {@link UIViewRoot}.</p>
+     *
+     * @returns <code>ResourceBundle</code> for the current UIViewRoot,
+     * otherwise null
+     *
+     * @throws FacesException if a bundle was defined, but not resolvable
+     *
+     * @throws NullPointerException if ctx == null || name == null
+     */
+    
+    public abstract ResourceBundle getResourceBundle(FacesContext ctx, String name);
+    
 
 
     /**
@@ -302,6 +320,7 @@ public abstract class Application {
      *
      * @deprecated The recommended way to affect the execution of the EL
      * is to provide an <code>&lt;el-resolver&gt;</code> element at the
+     *
      * right place in the application configuration resources which will
      * be considered in the normal course of expression evaluation.
      * This method now will cause the argument <code>resolver</code> to

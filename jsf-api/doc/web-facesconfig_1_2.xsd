@@ -10,7 +10,7 @@
 
     <xsd:annotation>
         <xsd:documentation>
-            $Id: web-facesconfig_1_2.xsd,v 1.6 2005/06/17 14:14:40 edburns Exp $
+            $Id: web-facesconfig_1_2.xsd,v 1.7 2005/07/19 19:33:16 edburns Exp $
         </xsd:documentation>
     </xsd:annotation>
 
@@ -362,12 +362,58 @@
             </xsd:element>
             <xsd:element name="locale-config"
                          type="j2ee:faces-config-locale-configType"/>
+            <xsd:element name="resource-bundle"
+                         type="j2ee:faces-config-application-resource-bundleType"/>
             <xsd:element name="application-extension"
                          type="j2ee:faces-config-application-extensionType"
                          minOccurs="0"
                          maxOccurs="unbounded"/>
             </xsd:choice>
         <xsd:attribute name = "id" type = "xsd:ID"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="faces-config-application-resource-bundleType">
+        <xsd:annotation>
+            <xsd:documentation>
+
+              The resource-bundle element inside the application element
+              references a java.util.ResourceBundle instance by name
+              using the var element.  ResourceBundles referenced in this
+              manner may be returned by a call to
+              Application.getResourceBundle() passing the current
+              FacesContext for this request and the value of the var
+              element below.
+
+            </xsd:documentation>
+        </xsd:annotation>
+
+        <xsd:sequence>
+            <xsd:group ref="j2ee:descriptionGroup"/>
+            <xsd:element name="base-name"
+                         type="j2ee:fully-qualified-classType">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        
+                        The fully qualified class name of the
+                        java.util.ResourceBundle instance.
+                        
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="var"
+                         type="j2ee:string">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        
+                        The name by which this ResourceBundle instance
+                        is retrieved by a call to
+                        Application.getResourceBundle().
+                        
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+        </xsd:sequence>
+        <xsd:attribute name="id" type="xsd:ID"/>
     </xsd:complexType>
 
     <!-- **************************************************** -->
