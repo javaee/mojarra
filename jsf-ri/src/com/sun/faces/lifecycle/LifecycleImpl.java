@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleImpl.java,v 1.21 2003/03/13 01:06:28 eburns Exp $
+ * $Id: LifecycleImpl.java,v 1.22 2003/03/18 17:18:46 rkitain Exp $
  */
 
 /*
@@ -37,7 +37,7 @@ import java.util.HashMap;
  *  Lifecycle in the JSF RI. <P>
  *
  *
- * @version $Id: LifecycleImpl.java,v 1.21 2003/03/13 01:06:28 eburns Exp $
+ * @version $Id: LifecycleImpl.java,v 1.22 2003/03/18 17:18:46 rkitain Exp $
  * 
  * @see	javax.faces.lifecycle.Lifecycle
  *
@@ -263,17 +263,6 @@ private boolean limitReached(UIComponent source, HashMap eventsProcessed) {
     eventsProcessed.put(source, new Integer(count));
     return false;
 }
-
-//PENDING(rogerk) remove this method when Phase is offically removed from API;
-public int executePhase(FacesContext context, javax.faces.lifecycle.Phase phase) throws FacesException
-{
-    if (null == context || null == phase) { 
-            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
-    } 
-    
-    return phase.execute(context); 
-}
-
 
 //
 // Helper classes
