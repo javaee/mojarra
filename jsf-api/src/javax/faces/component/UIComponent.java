@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.127 2004/02/26 20:30:31 eburns Exp $
+ * $Id: UIComponent.java,v 1.128 2005/04/04 17:23:34 edburns Exp $
  */
 
 /*
@@ -123,13 +123,29 @@ public abstract class UIComponent implements StateHolder {
      * one if necessary.  The associated {@link Renderer}, if any,
      * will be asked to convert the clientId to a form suitable for
      * transmission to the client.</p>
-     *
+     * 
      * <p>The return from this method must be the same value throughout
      * the lifetime of the instance, unless the <code>id</code> property
      * of the component is changed, or the component is placed in
      * a {@link NamingContainer} whose client ID changes (for example,
      * {@link UIData}).  However, even in these cases, consecutive
-     * calls to this method must always return the same value.</p>
+     * calls to this method must always return the same value.  The
+     * implementation must follow these steps in determining the
+     * clientId:</p>
+     * 
+     * <p>Find the closest ancestor to <b>this</b> component in the view
+     * hierarchy that implements <code>NamingContainer</code>.  Call
+     * <code>getContainerClientId()</code> on it and save the result as
+     * the <code>parentId</code> local variable.  Call {@link #getId} on
+     * <b>this</b> component and save the result as the
+     * <code>myId</code> local variable.  If <code>myId</code> is
+     * <code>null</code>, call
+     * <code>context.getViewRoot().createUniqueId()</code> and assign
+     * the result to myId.  If <code>parentId</code> is
+     * non-<code>null</code>, let <code>myId</code> equal <code>parentId
+     * + NamingContainer.SEPARATOR_CHAR + myId</code>.  Call {@link
+     * Renderer#convertClientId}, passing <code>myId</code>, and return
+     * the result.</p>
      *
      * @param context The {@link FacesContext} for the current request
      *
@@ -137,6 +153,20 @@ public abstract class UIComponent implements StateHolder {
      *  is <code>null</code>
      */
     public abstract String getClientId(FacesContext context);
+    
+    /**
+     * <p>Allow components that implement {@link NamingContainer} to
+     * selectively disable prepending their clientId to their
+     * descendent's clientIds by breaking the prepending logic into a
+     * seperately callable method.  See {@link #getClientId} for usage.</p>
+     * 
+     * <p>By default, this method will call through to {@link
+     * #getClientId} and return the result.
+     * 
+     *  @exception NullPointerException if <code>context</code> is
+     *  <code>null</code>
+     */
+    protected abstract String getContainerClientId(FacesContext context);
 
 
     /**

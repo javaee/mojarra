@@ -746,6 +746,20 @@
         <tag-attribute>false</tag-attribute>
       </property-extension>
     </property>
+    <property>
+      <description>
+          Flag indicating whether or not this form should prepend its id
+          to its descendent's id during the clientId generation process.
+          If this flag is not set, the default value is true.
+        </description>
+      <display-name>Prepend Id During getClientId()</display-name>
+      <icon/>
+      <property-name>prependId</property-name>
+      <property-class>boolean</property-class>
+      <property-extension>
+        <default-value>true</default-value>
+      </property-extension>
+    </property>
 
     <component-extension>
       <component-family>javax.faces.Form</component-family>
@@ -5614,6 +5628,20 @@
       <property-class>boolean</property-class>
       <property-extension>
         <tag-attribute>false</tag-attribute>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Flag indicating whether or not this form should prepend its id
+          to its descendent's id during the clientId generation process.
+          If this flag is not set, the default value is true.
+        </description>
+      <display-name>Prepend Id During getClientId()</display-name>
+      <icon/>
+      <property-name>prependId</property-name>
+      <property-class>boolean</property-class>
+      <property-extension>
+        <default-value>true</default-value>
       </property-extension>
     </property>
 

@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.103 2005/01/21 16:57:28 edburns Exp $
+ * $Id: UIComponentBase.java,v 1.104 2005/04/04 17:23:34 edburns Exp $
  */
 
 /*
@@ -230,36 +230,64 @@ public abstract class UIComponentBase extends UIComponent {
             throw new NullPointerException();
         }
 
-        // Return any previously cached client identifier
-        if (clientId != null) {
-            return (clientId);
-        }
-
-        // Search for an ancestor that is a naming container
-        UIComponent containerComponent = this;
-        Renderer renderer = null;
-        String parentIds = "";
-        while (null != (containerComponent = containerComponent.getParent())) {
-            if (containerComponent instanceof NamingContainer) {
-                break;
+        // if the clientId is not yet set
+        if (this.clientId == null) {
+            UIComponent parent = this.getNamingContainer();
+            String parentId = null;
+            
+            // give the parent the opportunity to first
+            // grab a unique clientId
+            if (parent != null) {
+                parentId = parent.getContainerClientId(context);
+            }
+            
+            // now resolve our own client id
+            this.clientId = this.id;
+            if (this.clientId == null) {
+                this.clientId = context.getViewRoot().createUniqueId();
+            }
+            if (parentId != null) {
+                this.clientId = parentId + NamingContainer.SEPARATOR_CHAR + this.clientId;
+            }
+            
+            // allow the renderer to convert the clientId
+            Renderer renderer = this.getRenderer(context);
+            if (renderer != null) {
+                this.clientId = renderer.convertClientId(context, this.clientId);
             }
         }
-        if (null != containerComponent) {
-            parentIds = containerComponent.getClientId(context) + 
-                NamingContainer.SEPARATOR_CHAR;
-        }
-        if (null != id) {
-            clientId = parentIds + id;
-        }
-        else {
-            clientId = parentIds + context.getViewRoot().createUniqueId();
-        }
-        if (null != (renderer = getRenderer(context))) {
-            clientId = renderer.convertClientId(context, clientId);
-        }
-        return (clientId);
-
+        return this.clientId;
     }
+    
+    /**
+     * @exception NullPointerException {@inheritDoc}
+     */
+    protected String getContainerClientId(FacesContext context) {
+        if (context == null) {
+            throw new NullPointerException();
+        }
+        return this.getClientId(context);
+    }
+    
+    /**
+     * <p>Private utilitity method for finding this
+     * <code>UIComponent</code>'s parent <code>NamingContainer</code>.
+     * This method may return <code>null</code> if there is not a
+     * parent <code>NamingContainer</code></p>
+     * 
+     * @return the parent <code>NamingContainer</code>
+     */
+    private UIComponent getNamingContainer() {
+        UIComponent namingContainer = this.getParent();
+        while (namingContainer != null) {
+            if (namingContainer instanceof NamingContainer) {
+                return namingContainer;
+            }
+            namingContainer = namingContainer.getParent();
+        }
+        return null;
+    }
+
 
 
     /**
@@ -2177,5 +2205,7 @@ public abstract class UIComponentBase extends UIComponent {
 
     }
 
+
+   
 
 }

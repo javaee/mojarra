@@ -1,5 +1,5 @@
 /*
- * $Id: UIForm.java,v 1.45 2004/04/06 18:12:53 eburns Exp $
+ * $Id: UIForm.java,v 1.46 2005/04/04 17:23:34 edburns Exp $
  */
 
 /*
@@ -110,6 +110,26 @@ public class UIForm extends UIComponentBase implements NamingContainer {
         this.submitted = submitted;
 
     }
+    
+    private boolean prependId = true;
+    
+    /**
+     * <p>If true, this <code>UIForm</code> instance does allow its id
+     * to be pre-pended to its descendent's id during the generation of
+     * clientIds for the descendents.  The default value of this
+     * property is <code>true</code>.</p>
+     */
+    public boolean isPrependId() {
+        return this.prependId;
+    }
+    
+    /**
+     * <p>Set the value of the <code>prependId</code> property.  See
+     * {@link #isPrependId}.</p>
+     */
+    public void setPrependId(boolean prependId) {
+        this.prependId = prependId;
+    }
 
 
     // ----------------------------------------------------- UIComponent Methods
@@ -196,6 +216,28 @@ public class UIForm extends UIComponentBase implements NamingContainer {
             kid.processUpdates(context);
         }
 
+    }
+
+    
+    /**
+     * <p>Override the {@link UIComponent#getContainerClientId} to allow
+     * users to disable this form from prepending its <code>id</code> to
+     * its descendent's <code>clientIds</code> depending on the value of
+     * this form's {@link #isPrependId} property.</p>
+     */
+    protected String getContainerClientId(FacesContext context) {
+        if (this.isPrependId()) {
+            return super.getContainerClientId(context);
+        } else {
+            UIComponent parent = this.getParent();
+            while (parent != null) {
+                if (parent instanceof NamingContainer) {
+                    return parent.getContainerClientId(context);
+                }
+                parent = parent.getParent();
+            }
+        }
+        return null;
     }
 
 }

@@ -580,33 +580,6 @@ public class UIData extends UIComponentBase
 
 
     /**
-     * <p>Return a client identifier for this component that includes the
-     * current value of the <code>rowIndex</code> property, if it is not
-     * set to -1.  This implies that multiple calls to
-     * <code>getClientId()</code> may return different results,
-     * but ensures that child components can themselves generate
-     * row-specific client identifiers (since {@link UIData} is a
-     * {@link NamingContainer}).</p>
-     *
-     * @exception NullPointerException if <code>context</code>
-     *  is <code>null</code>
-     */
-    public String getClientId(FacesContext context) {
-
-        if (context == null) {
-            throw new NullPointerException();
-        }
-	String baseClientId = super.getClientId(context);
-        if (rowIndex >= 0) {
-            return (baseClientId + NamingContainer.SEPARATOR_CHAR + rowIndex);
-        } else {
-            return (baseClientId);
-        }
-
-    }
-
-
-    /**
      * <p>Override the default {@link UIComponentBase#queueEvent} processing
      * to wrap any queued events in a wrapper so that we can reset the current
      * row index in <code>broadcast()</code>.</p>
@@ -1178,6 +1151,28 @@ public class UIData extends UIComponentBase
             saveDescendantState((UIComponent) kids.next(), context);
         }
 
+    }
+
+
+    /**
+     * <p>Return a client identifier for this component that includes the
+     * current value of the <code>rowIndex</code> property, if it is not
+     * set to -1.  This implies that multiple calls to
+     * <code>getClientId()</code> may return different results,
+     * but ensures that child components can themselves generate
+     * row-specific client identifiers (since {@link UIData} is a
+     * {@link NamingContainer}).</p>
+     *
+     * @exception NullPointerException if <code>context</code>
+     *  is <code>null</code>
+     */
+    protected String getContainerClientId(FacesContext context) {
+        String baseClientId = super.getContainerClientId(context);
+        if (rowIndex >= 0) {
+            return (baseClientId + NamingContainer.SEPARATOR_CHAR + rowIndex);
+        } else {
+            return (baseClientId);
+        }
     }
 
 
