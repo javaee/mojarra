@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigFileTestCase.java,v 1.24 2003/08/06 19:42:13 eburns Exp $
+ * $Id: ConfigFileTestCase.java,v 1.25 2003/08/07 16:02:18 eburns Exp $
  */
 
 /*
@@ -227,7 +227,9 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
 	    Method m[] = c.getDeclaredMethods();
 	    for (int i=0; i<m.length; i++) {
                 Assert.assert_it(m[i].getName().equals("setSimpleProperty") ||
-		    m[i].getName().equals("getSimpleProperty"));
+				 m[i].getName().equals("getSimpleProperty") ||
+				 m[i].getName().equals("setIntProperty") ||
+				 m[i].getName().equals("getIntProperty"));
 		if (m[i].getName().equals("getSimpleProperty")) {
 		    Object args[] = null;
 	            Object value = m[i].invoke(bean, args);
@@ -323,6 +325,19 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
      */ 
 
     public void testConversionErrorDuringParse() throws Exception {
+	// PENDING(edburns): need to make this behavior the default for
+	// the RI, not something we just do for this testcase.
+
+	//  Cause an exception to be thrown on Integer
+	// conversion errors No-args constructor gets the version that
+	// throws exceptions
+	org.apache.commons.beanutils.Converter myConverter =
+	    new org.apache.commons.beanutils.converters.IntegerConverter();
+	org.apache.commons.beanutils.ConvertUtils.register(myConverter, Integer.TYPE);    // Native type
+	org.apache.commons.beanutils.ConvertUtils.register(myConverter, Integer.class);   // Wrapper class
+
+
+
         ConfigParser cp = new ConfigParser(config.getServletContext());
         ApplicationFactory aFactory = (ApplicationFactory)FactoryFinder.getFactory(
         FactoryFinder.APPLICATION_FACTORY);
@@ -333,8 +348,13 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
 	}
 	catch (RuntimeException re) {
 	    exceptionThrown = true;
+	    assertTrue(-1 != re.getMessage().indexOf("convert"));
 	}
 	assertTrue(exceptionThrown);
+
+	// PENDING(edburns): Don't deregister once we've made the
+	// exception throwing the default.
+	org.apache.commons.beanutils.ConvertUtils.deregister();   // Wrapper class
     }
 
 
