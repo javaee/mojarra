@@ -1,5 +1,5 @@
 /* 
- * $Id: ViewHandlerImpl.java,v 1.92 2006/10/24 21:29:09 rlubke Exp $
+ * $Id: ViewHandlerImpl.java,v 1.93 2006/11/10 23:20:31 rlubke Exp $
  */
 
 
@@ -68,7 +68,7 @@ import com.sun.faces.util.Util;
 /**
  * <B>ViewHandlerImpl</B> is the default implementation class for ViewHandler.
  *
- * @version $Id: ViewHandlerImpl.java,v 1.92 2006/10/24 21:29:09 rlubke Exp $
+ * @version $Id: ViewHandlerImpl.java,v 1.93 2006/11/10 23:20:31 rlubke Exp $
  * @see javax.faces.application.ViewHandler
  */
 public class ViewHandlerImpl extends ViewHandler {
@@ -262,6 +262,8 @@ public class ViewHandlerImpl extends ViewHandler {
 
         if (mapping != null && !Util.isPrefixMapped(mapping)) {
             viewId = convertViewId(context, viewId);
+        } else {
+            viewId = normalizeRequestURI(viewId, mapping);
         }
 
         // maping could be null if a non-faces request triggered
@@ -306,6 +308,28 @@ public class ViewHandlerImpl extends ViewHandler {
             throw new NullPointerException(message);
         }
 
+        UIViewRoot result = (UIViewRoot)
+                context.getApplication().createComponent(UIViewRoot.COMPONENT_TYPE);
+        
+        if (viewId != null) {
+            String mapping = Util.getFacesMapping(context);
+
+            if (mapping != null && !Util.isPrefixMapped(mapping)) {
+                viewId = convertViewId(context, viewId);
+            } else {
+                viewId = normalizeRequestURI(viewId, mapping);
+                if (viewId.equals(mapping)) {
+                    // The request was to the FacesServlet only - no path info
+                    // on some containers this causes a recursion in the
+                    // RequestDispatcher and the request appears to hang.
+                    // If this is detected, return status 404
+                    send404Error(context);
+                }
+            }
+
+            result.setViewId(viewId);
+        } 
+
         Locale locale = null;
         String renderKitId = null;
 
@@ -316,9 +340,6 @@ public class ViewHandlerImpl extends ViewHandler {
             locale = context.getViewRoot().getLocale();
             renderKitId = context.getViewRoot().getRenderKitId();
         }
-        UIViewRoot result = (UIViewRoot)
-                context.getApplication().createComponent(UIViewRoot.COMPONENT_TYPE);
-        result.setViewId(viewId);
 
         if (logger.isLoggable(Level.FINE)) {
             logger.log(Level.FINE, "Created new view for " + viewId);
@@ -391,40 +412,12 @@ public class ViewHandlerImpl extends ViewHandler {
             throw new NullPointerException(message);
         }
 
-        String mapping = Util.getFacesMapping(context);
-        String requestURI = 
-              updateRequestURI(viewToExecute.getViewId(), mapping);
-        
-        if (mapping.equals(requestURI)) {
-            // The request was to the FacesServlet only - no path info
-            // on some containers this causes a recursion in the 
-            // RequestDispatcher and the request appears to hang.
-            // If this is detected, return status 404
-            HttpServletResponse response = (HttpServletResponse) 
-                  context.getExternalContext().getResponse();
-            response.sendError(HttpServletResponse.SC_NOT_FOUND);
-            return true;
-        }
+        String requestURI = viewToExecute.getViewId();             
+
         if (logger.isLoggable(Level.FINE)) {
             logger.fine("About to execute view " + requestURI);
         }
-        
-        String newViewId = requestURI;
-        // If we have a valid mapping (meaning we were invoked via the
-        // FacesServlet) and we're extension mapped, do the replacement.
-        if (!Util.isPrefixMapped(mapping)) {
-            if (logger.isLoggable(Level.FINE)) {
-                logger.fine( "Found URL pattern mapping to FacesServlet "
-                             + mapping);
-            }
-            newViewId = convertViewId(context, requestURI);
-        } else {
-            if (logger.isLoggable(Level.FINE)) {
-                logger.fine("Found no URL patterns mapping to FacesServlet ");
-            }
-        }
-
-        viewToExecute.setViewId(newViewId);
+                
         ExternalContext extContext = context.getExternalContext();
 
         // update the JSTL locale attribute in request scope so that JSTL
@@ -438,7 +431,7 @@ public class ViewHandlerImpl extends ViewHandler {
                        Config.FMT_LOCALE, context.getViewRoot().getLocale());
         }
         if (logger.isLoggable(Level.FINE)) {
-            logger.fine("Before dispacthMessage to newViewId " + newViewId);
+            logger.fine("Before dispacthMessage to viewId " + requestURI);
         }
 
         // save the original response
@@ -451,10 +444,10 @@ public class ViewHandlerImpl extends ViewHandler {
         extContext.setResponse(wrapped);
 
         // build the view by executing the page
-        extContext.dispatch(newViewId);        
+        extContext.dispatch(requestURI);
         
         if (logger.isLoggable(Level.FINE)) {
-            logger.fine("After dispacthMessage to newViewId " + newViewId);
+            logger.fine("After dispacthMessage to viewId " + requestURI);
         }
         
         // replace the original response
@@ -690,7 +683,7 @@ public class ViewHandlerImpl extends ViewHandler {
      * @return the URI without additional FacesServlet mappings
      * @since 1.2
      */
-    private String updateRequestURI(String uri, String mapping) {
+    private String normalizeRequestURI(String uri, String mapping) {
         
         if (!Util.isPrefixMapped(mapping)) {
             return uri;
@@ -711,7 +704,18 @@ public class ViewHandlerImpl extends ViewHandler {
             }
             return uri;
         }
-    }    
+    }
+
+    private void send404Error(FacesContext context) {
+        HttpServletResponse response = (HttpServletResponse)
+             context.getExternalContext().getResponse();
+        try {
+            context.responseComplete();
+            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+        } catch (IOException ioe) {
+            throw new FacesException(ioe);
+        }
+    }
 
 
     /**
@@ -741,7 +745,7 @@ public class ViewHandlerImpl extends ViewHandler {
         // if the viewId doesn't already use the above suffix,
         // replace or append.
         if (!convertedViewId.endsWith(contextDefaultSuffix)) {
-            StringBuffer buffer = new StringBuffer(convertedViewId);
+            StringBuilder buffer = new StringBuilder(convertedViewId);
             int extIdx = convertedViewId.lastIndexOf('.');
             if (extIdx != -1) {
                 buffer.replace(extIdx, convertedViewId.length(),
