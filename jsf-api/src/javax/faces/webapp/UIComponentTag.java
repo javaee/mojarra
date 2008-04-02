@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTag.java,v 1.47 2004/04/06 18:38:49 eburns Exp $
+ * $Id: UIComponentTag.java,v 1.48 2004/05/06 16:12:24 rlubke Exp $
  */
 
 /*
@@ -422,34 +422,46 @@ public abstract class UIComponentTag implements Tag {
         // creating one if necessary
         component = findComponent(context);
 
-	// only check for id uniqueness if the author has manually given
-	// us an id.
-	if (null != this.id) {
-	    String clientId = component.getClientId(context);
-	    
-	    // assert component ID uniqueness
-	    if (clientId != null) {
-		if (componentIds.containsKey(clientId)) {
-		    // PENDING i18n                        
-		    throw new JspException(
-		      new IllegalStateException("Duplicate component id: '" +
-						clientId + 
-						"', first used in tag: '" +
-						componentIds.get(clientId) + 
-						"'"));
-		} else {
-		    componentIds.put(clientId, this.getClass().getName());
-		}
-	    }
-	}
+        Object tagInstance = null;
+        String clientId = null;
+        if (this.id != null) {
+            clientId = component.getClientId(context);
+            tagInstance = (componentIds.get(clientId) == this ? this : null);
+        }
 
-        // Add to parent's list of created components or facets if needed
-        
-        if (parentTag != null) {
-            if (getFacetName() == null) {
-                parentTag.addChild(component);                
-            } else {
-                parentTag.addFacet(getFacetName());
+        // If we have a tag instance, then, most likely, a tag handler
+        // returned EVAL_BODY_AGAIN somewhere.  Make sure the instance
+        // returned is the same as the current instance and if this is the case,
+        // do not perform ID validation as it has already been done.
+        if (tagInstance == null) {
+
+            // only check for id uniqueness if the author has manually given
+            // us an id.
+            if (null != this.id) {
+
+                // assert component ID uniqueness
+                if (clientId != null) {
+                    if (componentIds.containsKey(clientId)) {
+                        // PENDING i18n
+                        throw new JspException(new IllegalStateException("Duplicate component id: '" +
+                            clientId +
+                            "', first used in tag: '" +
+                            componentIds.get(clientId).getClass().getName() +
+                            "'"));
+                    } else {                        
+                        componentIds.put(clientId, this);
+                    }
+                }
+            }
+
+            // Add to parent's list of created components or facets if needed
+
+            if (parentTag != null) {
+                if (getFacetName() == null) {
+                    parentTag.addChild(component);
+                } else {
+                    parentTag.addFacet(getFacetName());
+                }
             }
         }
 

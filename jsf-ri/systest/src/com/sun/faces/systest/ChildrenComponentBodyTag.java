@@ -1,5 +1,5 @@
 /*
- * $Id: ChildrenComponentBodyTag.java,v 1.5 2004/02/26 20:33:38 eburns Exp $
+ * $Id: ChildrenComponentBodyTag.java,v 1.6 2004/05/06 16:13:09 rlubke Exp $
  */
 
 /*
@@ -11,6 +11,8 @@ package com.sun.faces.systest;
 
 
 import javax.faces.webapp.UIComponentBodyTag;
+import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.tagext.BodyContent;
 
 
 /**
@@ -19,6 +21,7 @@ import javax.faces.webapp.UIComponentBodyTag;
 
 public class ChildrenComponentBodyTag extends UIComponentBodyTag {
 
+    private boolean firstPass = true;
 
     // -------------------------------------------------------------- Attributes
 
@@ -33,6 +36,27 @@ public class ChildrenComponentBodyTag extends UIComponentBodyTag {
 
     public String getRendererType() {
         return (null);
+    }
+
+
+    /**
+     * <p>Handle the ending of the nested body content for this tag.  The
+     * default implementation simply calls <code>getDoAfterBodyValue()</code> to
+     * retrieve the flag value to be returned.</p>
+     *
+     * @throws javax.servlet.jsp.JspException if an error is encountered
+     */
+    public int doAfterBody() throws JspException {
+        if (firstPass) {
+            System.out.println("Evaluating body again...");
+            BodyContent cont = getBodyContent();
+            cont.clearBody();
+            firstPass = false;
+            return EVAL_BODY_AGAIN;
+        }
+        else {
+            return super.doAfterBody();
+        }
     }
 
 

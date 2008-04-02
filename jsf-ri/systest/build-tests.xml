@@ -4,7 +4,7 @@
  Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 
- $Id: build-tests.xml,v 1.55 2004/05/04 19:19:20 eburns Exp $
+ $Id: build-tests.xml,v 1.56 2004/05/06 16:13:08 rlubke Exp $
 -->
 
 
@@ -109,6 +109,10 @@
         <tester host="${host}" port="${port}" protocol="${protocol}"
             request="${context.path}/faces/duplicateIds03.jsp"
              status="200" failonerror="${failonerror}"/>
+
+        <tester host="${host}" port="${port}" protocol="${protocol}"
+            request="${context.path}/faces/duplicateIds05.jsp"
+            status="200" failonerror="${failonerror}" />
 
     <junit printsummary="yes" fork="yes"
           haltonfailure="yes" haltonerror="yes">

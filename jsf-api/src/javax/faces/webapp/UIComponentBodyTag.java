@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBodyTag.java,v 1.3 2004/02/26 20:31:20 eburns Exp $
+ * $Id: UIComponentBodyTag.java,v 1.4 2004/05/06 16:12:24 rlubke Exp $
  */
 
 /*
@@ -43,6 +43,10 @@ public abstract class UIComponentBodyTag extends UIComponentTag
      * <p>Handle the ending of the nested body content for this tag.  The
      * default implementation simply calls <code>getDoAfterBodyValue()</code>
      * to retrieve the flag value to be returned.</p>
+     *
+     * <p>It should be noted that if this method returns
+     * <code>IterationTag.EVAL_BODY_AGAIN</code>, any nested
+     * {@link UIComponentTag} <em>must</em> have an explicit ID set.</p>
      *
      * @exception JspException if an error is encountered
      */
