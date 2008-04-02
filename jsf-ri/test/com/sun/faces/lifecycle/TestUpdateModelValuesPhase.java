@@ -1,5 +1,5 @@
 /*
- * $Id: TestUpdateModelValuesPhase.java,v 1.34 2004/02/06 18:56:59 rlubke Exp $
+ * $Id: TestUpdateModelValuesPhase.java,v 1.35 2004/02/26 20:34:31 eburns Exp $
  */
 
 /*
@@ -25,9 +25,7 @@ import javax.faces.component.UIViewRoot;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestUpdateModelValuesPhase.java,v 1.34 2004/02/06 18:56:59 rlubke Exp $
- * @see	Blah
- * @see	Bloo
+ * @version $Id: TestUpdateModelValuesPhase.java,v 1.35 2004/02/26 20:34:31 eburns Exp $
  */
 
 public class TestUpdateModelValuesPhase extends ServletFacesTestCase {

@@ -1,5 +1,5 @@
 /*
- * $Id: IdTagParserImpl.java,v 1.7 2004/02/06 18:55:41 rlubke Exp $
+ * $Id: IdTagParserImpl.java,v 1.8 2004/02/26 20:33:17 eburns Exp $
  */
 
 /*
@@ -156,7 +156,6 @@ public class IdTagParserImpl implements TagParser {
      * present.</p>
      *
      * @param a Attribute list
-     *
      * @return boolean True if id attribute found."id"
      */
     private boolean hasIdAttribute(Attributes a) {
@@ -175,7 +174,6 @@ public class IdTagParserImpl implements TagParser {
      *
      * @param validator Parent validator
      * @param qn        Element to be checked.
-     *
      * @return boolean True if JSTL tag is iterator or conditional
      */
     private boolean isJstlTag(FacesValidator validator, String qn) {
@@ -195,7 +193,6 @@ public class IdTagParserImpl implements TagParser {
      *
      * @param validator Parent validator
      * @param qn        Element to be checked.
-     *
      * @return boolean True if JSF tag is form or subview
      */
     private boolean isNamingContainerTag(FacesValidator validator, String qn) {

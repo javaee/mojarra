@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigFileTestCase.java,v 1.5 2004/02/04 23:39:34 ofung Exp $
+ * $Id: ConfigFileTestCase.java,v 1.6 2004/02/26 20:32:13 eburns Exp $
  */
 
 /*

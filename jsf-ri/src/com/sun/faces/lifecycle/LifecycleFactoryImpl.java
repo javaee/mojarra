@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleFactoryImpl.java,v 1.19 2004/02/06 18:55:08 rlubke Exp $
+ * $Id: LifecycleFactoryImpl.java,v 1.20 2004/02/26 20:32:47 eburns Exp $
  */
 
 /*
@@ -27,7 +27,7 @@ import java.util.Iterator;
  * <B>LifecycleFactoryImpl</B> is the stock implementation of Lifecycle
  * in the JSF RI. <P>
  *
- * @version $Id: LifecycleFactoryImpl.java,v 1.19 2004/02/06 18:55:08 rlubke Exp $
+ * @version $Id: LifecycleFactoryImpl.java,v 1.20 2004/02/26 20:32:47 eburns Exp $
  * @see	javax.faces.lifecycle.LifecycleFactory
  */
 

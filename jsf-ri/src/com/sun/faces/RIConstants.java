@@ -1,5 +1,5 @@
 /*
- * $Id: RIConstants.java,v 1.57 2004/02/06 18:54:12 rlubke Exp $
+ * $Id: RIConstants.java,v 1.58 2004/02/26 20:32:27 eburns Exp $
  */
 
 /*

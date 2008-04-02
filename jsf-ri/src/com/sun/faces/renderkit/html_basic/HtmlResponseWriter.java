@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlResponseWriter.java,v 1.14 2004/02/06 18:55:19 rlubke Exp $
+ * $Id: HtmlResponseWriter.java,v 1.15 2004/02/26 20:32:57 eburns Exp $
  */
 
 /*
@@ -64,7 +64,6 @@ public class HtmlResponseWriter extends ResponseWriter {
      * @param writer      the <code>ResponseWriter</code>
      * @param contentType the content type.
      * @param encoding    the character encoding.
-     *
      * @throws if the encoding is not recognized.
      */
     public HtmlResponseWriter(Writer writer, String contentType, String encoding)
@@ -148,7 +147,6 @@ public class HtmlResponseWriter extends ResponseWriter {
      * @param name                Name of the starting element
      * @param componentForElement The UIComponent instance that applies to this
      *                            element.  This argument may be <code>null</code>.
-     *
      * @throws IOException          if an input/output error occurs
      * @throws NullPointerException if <code>name</code>
      *                              is <code>null</code>
@@ -184,7 +182,6 @@ public class HtmlResponseWriter extends ResponseWriter {
      * <code>startElement()</code>.
      *
      * @param name Name of the element to be ended
-     *
      * @throws IOException          if an input/output error occurs
      * @throws NullPointerException if <code>name</code>
      *                              is <code>null</code>
@@ -231,7 +228,6 @@ public class HtmlResponseWriter extends ResponseWriter {
      * @param componentPropertyName The name of the component property to
      *                              which this attribute argument applies.  This argument may be
      *                              <code>null</code>.
-     *
      * @throws IllegalStateException if this method is called when there
      *                               is no currently open element
      * @throws IOException           if an input/output error occurs
@@ -283,7 +279,6 @@ public class HtmlResponseWriter extends ResponseWriter {
      * @param componentPropertyName The name of the component property to
      *                              which this attribute argument applies.  This argument may be
      *                              <code>null</code>.
-     *
      * @throws IllegalStateException if this method is called when there
      *                               is no currently open element
      * @throws IOException           if an input/output error occurs
@@ -327,7 +322,6 @@ public class HtmlResponseWriter extends ResponseWriter {
      * first.</p>
      *
      * @param comment Text content of the comment
-     *
      * @throws IOException          if an input/output error occurs
      * @throws NullPointerException if <code>comment</code>
      *                              is <code>null</code>
@@ -353,7 +347,6 @@ public class HtmlResponseWriter extends ResponseWriter {
      * @param text                  Text to be written
      * @param componentPropertyName The name of the component property to
      *                              which this text argument applies.  This argument may be <code>null</code>.
-     *
      * @throws IOException          if an input/output error occurs
      * @throws NullPointerException if <code>text</code>
      *                              is <code>null</code>
@@ -382,7 +375,6 @@ public class HtmlResponseWriter extends ResponseWriter {
      * using the &amp;gt; &amp;lt; syntax.</p>
      *
      * @param text Text to be written
-     *
      * @throws IOException if an input/output error occurs
      */
     public void writeText(char text) throws IOException {
@@ -408,7 +400,6 @@ public class HtmlResponseWriter extends ResponseWriter {
      * using the &amp;gt; &amp;lt; syntax.</p>
      *
      * @param text Text to be written
-     *
      * @throws IOException          if an input/output error occurs
      * @throws NullPointerException if <code>text</code>
      *                              is <code>null</code>
@@ -439,7 +430,6 @@ public class HtmlResponseWriter extends ResponseWriter {
      * @param text Text to be written
      * @param off  Starting offset (zero-relative)
      * @param len  Number of characters to be written
-     *
      * @throws IndexOutOfBoundsException if the calculated starting or
      *                                   ending position is outside the bounds of the character array
      * @throws IOException               if an input/output error occurs

@@ -1,5 +1,5 @@
 /*
- * $Id: UIPanel.java,v 1.28 2004/02/04 23:37:47 ofung Exp $
+ * $Id: UIPanel.java,v 1.29 2004/02/26 20:30:34 eburns Exp $
  */
 
 /*

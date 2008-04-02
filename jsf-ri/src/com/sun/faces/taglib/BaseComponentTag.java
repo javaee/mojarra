@@ -1,5 +1,5 @@
 /*
- * $Id: BaseComponentTag.java,v 1.21 2004/02/06 18:55:33 rlubke Exp $
+ * $Id: BaseComponentTag.java,v 1.22 2004/02/26 20:33:11 eburns Exp $
  */
 
 /*

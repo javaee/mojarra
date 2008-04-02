@@ -1,5 +1,5 @@
 /*
- * $Id: ImageRenderer.java,v 1.31 2004/02/06 18:55:19 rlubke Exp $
+ * $Id: ImageRenderer.java,v 1.32 2004/02/26 20:32:57 eburns Exp $
  */
 
 /*
@@ -26,7 +26,7 @@ import java.io.IOException;
  * <B>ImageRenderer</B> is a class that handles the rendering of the graphic
  * ImageTag
  *
- * @version $Id: ImageRenderer.java,v 1.31 2004/02/06 18:55:19 rlubke Exp $
+ * @version $Id: ImageRenderer.java,v 1.32 2004/02/26 20:32:57 eburns Exp $
  */
 
 public class ImageRenderer extends HtmlBasicRenderer {

@@ -1,5 +1,5 @@
 /*
- * $Id: TestSaveStateInPage.java,v 1.26 2004/02/06 18:56:59 rlubke Exp $
+ * $Id: TestSaveStateInPage.java,v 1.27 2004/02/26 20:34:30 eburns Exp $
  */
 
 /*
@@ -32,9 +32,7 @@ import java.util.Map;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestSaveStateInPage.java,v 1.26 2004/02/06 18:56:59 rlubke Exp $
- * @see	Blah
- * @see	Bloo
+ * @version $Id: TestSaveStateInPage.java,v 1.27 2004/02/26 20:34:30 eburns Exp $
  */
 
 public class TestSaveStateInPage extends JspFacesTestCase {

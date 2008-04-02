@@ -1,5 +1,5 @@
 /*
- * $Id: DebugUtil.java,v 1.22 2004/02/06 18:55:50 rlubke Exp $
+ * $Id: DebugUtil.java,v 1.23 2004/02/26 20:33:27 eburns Exp $
  */
 
 /*
@@ -12,6 +12,7 @@ package com.sun.faces.util;
 // DebugUtil.java
 
 import javax.faces.component.UIComponent;
+import javax.faces.component.ValueHolder;
 import javax.faces.model.SelectItem;
 
 import java.io.PrintStream;
@@ -21,9 +22,6 @@ import java.util.Iterator;
  * <B>DebugUtil</B> is a class ...
  * <p/>
  * <B>Lifetime And Scope</B> <P>
- *
- * @see	Blah
- * @see	Bloo
  */
 
 public class DebugUtil extends Object {
@@ -128,6 +126,9 @@ public class DebugUtil extends Object {
             }
             indentPrintln(out, " }");
         } else {
+	    if (root instanceof ValueHolder) {
+		value = ((ValueHolder)root).getValue();
+	    }
             indentPrintln(out, "value= " + value);
 
             Iterator it = root.getAttributes().keySet().iterator();
@@ -166,6 +167,12 @@ public class DebugUtil extends Object {
 
         curDepth++;
         Iterator it = root.getChildren().iterator();
+	Iterator facets = root.getFacets().values().iterator();
+	// print all the facets of this component
+	while(facets.hasNext()) {
+	    printTree((UIComponent) facets.next(), out);
+	}
+	// print all the children of this component
         while (it.hasNext()) {
             printTree((UIComponent) it.next(), out);
         }

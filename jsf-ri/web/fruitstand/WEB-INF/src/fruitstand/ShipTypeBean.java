@@ -1,5 +1,5 @@
 /*
- * $Id: ShipTypeBean.java,v 1.4 2004/02/04 23:45:05 ofung Exp $
+ * $Id: ShipTypeBean.java,v 1.5 2004/02/26 20:34:50 eburns Exp $
  */
 
 /*
@@ -24,7 +24,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ShipTypeBean.java,v 1.4 2004/02/04 23:45:05 ofung Exp $
+ * @version $Id: ShipTypeBean.java,v 1.5 2004/02/26 20:34:50 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo

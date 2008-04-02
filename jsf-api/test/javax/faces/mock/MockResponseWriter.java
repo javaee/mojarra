@@ -1,5 +1,5 @@
 /*
- * $Id: MockResponseWriter.java,v 1.7 2004/02/04 23:39:14 ofung Exp $
+ * $Id: MockResponseWriter.java,v 1.8 2004/02/26 20:31:54 eburns Exp $
  */
 
 /*

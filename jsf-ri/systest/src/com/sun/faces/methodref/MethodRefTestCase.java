@@ -1,5 +1,5 @@
 /*
- * $Id: MethodRefTestCase.java,v 1.7 2004/02/06 18:56:01 rlubke Exp $
+ * $Id: MethodRefTestCase.java,v 1.8 2004/02/26 20:33:36 eburns Exp $
  */
 
 /*

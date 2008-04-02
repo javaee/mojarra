@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_2.java,v 1.80 2004/02/06 18:57:09 rlubke Exp $
+ * $Id: TestRenderers_2.java,v 1.81 2004/02/26 20:34:39 eburns Exp $
  */
 
 /*
@@ -45,7 +45,7 @@ import java.io.StringWriter;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_2.java,v 1.80 2004/02/06 18:57:09 rlubke Exp $
+ * @version $Id: TestRenderers_2.java,v 1.81 2004/02/26 20:34:39 eburns Exp $
  */
 
 public class TestRenderers_2 extends JspFacesTestCase {

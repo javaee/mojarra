@@ -4,7 +4,7 @@
  */
 
 /*
- * $Id: TestELImpl.java,v 1.6 2004/02/06 18:56:49 rlubke Exp $
+ * $Id: TestELImpl.java,v 1.7 2004/02/26 20:34:27 eburns Exp $
  */
 
 // TestELImpl

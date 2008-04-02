@@ -1,5 +1,5 @@
 /*
- * $Id: TestLifecycleFactoryImpl.java,v 1.10 2004/02/06 18:56:57 rlubke Exp $
+ * $Id: TestLifecycleFactoryImpl.java,v 1.11 2004/02/26 20:34:29 eburns Exp $
  */
 
 /*
@@ -24,9 +24,7 @@ import java.util.Iterator;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestLifecycleFactoryImpl.java,v 1.10 2004/02/06 18:56:57 rlubke Exp $
- * @see	Blah
- * @see	Bloo
+ * @version $Id: TestLifecycleFactoryImpl.java,v 1.11 2004/02/26 20:34:29 eburns Exp $
  */
 
 public class TestLifecycleFactoryImpl extends ServletFacesTestCase {

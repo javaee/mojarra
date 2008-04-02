@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderKit.java,v 1.15 2004/02/06 18:57:05 rlubke Exp $
+ * $Id: TestRenderKit.java,v 1.16 2004/02/26 20:34:36 eburns Exp $
  */
 
 /*
@@ -32,9 +32,7 @@ import java.io.Writer;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderKit.java,v 1.15 2004/02/06 18:57:05 rlubke Exp $
- * @see	Blah
- * @see	Bloo
+ * @version $Id: TestRenderKit.java,v 1.16 2004/02/26 20:34:36 eburns Exp $
  */
 
 public class TestRenderKit extends ServletFacesTestCase {

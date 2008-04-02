@@ -1,5 +1,5 @@
 /*
- * $Id: MethodNotFoundException.java,v 1.2 2004/02/04 23:38:11 ofung Exp $
+ * $Id: MethodNotFoundException.java,v 1.3 2004/02/26 20:30:56 eburns Exp $
  */
 
 /*

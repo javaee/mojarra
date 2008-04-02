@@ -1,7 +1,3 @@
-/*
- * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
- * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
- */
 
 package com.sun.faces.el.impl;
 
@@ -22,10 +18,8 @@ public abstract class VariableResolver {
      * if the variable is not found</p>
      *
      * @param variableName the name of the variable to resolve
-     *
      * @return the result of the variable resolution, or null
      *         if the variable cannot be found.
-     *
      * @throws ElException if a failure occurred during variable
      *                     resolution
      */

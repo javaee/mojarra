@@ -1,5 +1,5 @@
 /*
- * $Id: UIParameter.java,v 1.25 2004/02/04 23:37:47 ofung Exp $
+ * $Id: UIParameter.java,v 1.26 2004/02/26 20:30:34 eburns Exp $
  */
 
 /*

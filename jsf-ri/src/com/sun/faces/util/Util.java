@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.132 2004/02/06 18:55:51 rlubke Exp $
+ * $Id: Util.java,v 1.133 2004/02/26 20:33:27 eburns Exp $
  */
 
 /*
@@ -56,7 +56,7 @@ import java.util.StringTokenizer;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.132 2004/02/06 18:55:51 rlubke Exp $
+ * @version $Id: Util.java,v 1.133 2004/02/26 20:33:27 eburns Exp $
  */
 
 public class Util extends Object {
@@ -570,7 +570,6 @@ public class Util extends Object {
      *
      * @param context The {@link FacesContext} for the current request.
      *                If null, the UISelectItems behavior will not work.
-     *
      * @throws NullPointerException if <code>context</code>
      *                              is <code>null</code>
      */
@@ -969,7 +968,6 @@ public class Util extends Object {
      * The <code>SessionMap</code> will be created if it is null.
      *
      * @param context the FacesContext
-     *
      * @return Map The <code>SessionMap</code>
      */
     public static Map getSessionMap(FacesContext context) {

@@ -1,5 +1,5 @@
 /*
- * $Id: ActionSource.java,v 1.10 2004/02/04 23:37:41 ofung Exp $
+ * $Id: ActionSource.java,v 1.11 2004/02/26 20:30:28 eburns Exp $
  */
 
 /*
@@ -21,7 +21,7 @@ import javax.faces.el.MethodBinding;
  * <p><strong>ActionSource</strong> is an interface that may be implemented
  * by any concrete {@link UIComponent} that wishes to be a source of
  * {@link ActionEvent}s, including the ability to invoke application
- * actions via the default {@link ActionListener} mechanim.</p>
+ * actions via the default {@link ActionListener} mechanism.</p>
  */
 
 public interface ActionSource {

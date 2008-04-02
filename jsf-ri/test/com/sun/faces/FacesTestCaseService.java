@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTestCaseService.java,v 1.36 2004/02/06 18:56:17 rlubke Exp $
+ * $Id: FacesTestCaseService.java,v 1.37 2004/02/26 20:33:59 eburns Exp $
  */
 
 /*
@@ -45,7 +45,7 @@ import java.util.Iterator;
  * <B>Lifetime And Scope</B> <P> Same as the JspTestCase or
  * ServletTestCase instance that uses it.
  *
- * @version $Id: FacesTestCaseService.java,v 1.36 2004/02/06 18:56:17 rlubke Exp $
+ * @version $Id: FacesTestCaseService.java,v 1.37 2004/02/26 20:33:59 eburns Exp $
  * @see	com.sun.faces.context.FacesContextFactoryImpl
  * @see	com.sun.faces.context.FacesContextImpl
  */

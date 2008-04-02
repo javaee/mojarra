@@ -1,5 +1,5 @@
 /*
- * $Id: DynamicComponent.java,v 1.6 2004/02/06 18:56:03 rlubke Exp $
+ * $Id: DynamicComponent.java,v 1.7 2004/02/26 20:33:39 eburns Exp $
  */
 
 /*
@@ -35,7 +35,7 @@ import java.util.Map;
  * <li><code>?mode=delete&id=foo</code> - Remove any child with a
  * component identifier of <code>foo</code>.</li>
  * </ul>
- * <p/>
+ *
  * <p>In accordance with our current restrictions, this component sets
  * <code>rendersChildren</code> to <code>true</code>, and recursively
  * renders its children in <code>encodeChildren</code>.  This component

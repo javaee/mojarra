@@ -1,5 +1,5 @@
 /*
- * $Id: TestVariableResolverImpl.java,v 1.14 2004/02/06 18:56:46 rlubke Exp $
+ * $Id: TestVariableResolverImpl.java,v 1.15 2004/02/26 20:34:25 eburns Exp $
  */
 
 /*
@@ -30,9 +30,7 @@ import javax.faces.el.VariableResolver;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestVariableResolverImpl.java,v 1.14 2004/02/06 18:56:46 rlubke Exp $
- * @see	Blah
- * @see	Bloo
+ * @version $Id: TestVariableResolverImpl.java,v 1.15 2004/02/26 20:34:25 eburns Exp $
  */
 
 public class TestVariableResolverImpl extends ServletFacesTestCase {

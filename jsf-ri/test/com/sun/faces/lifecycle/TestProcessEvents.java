@@ -1,5 +1,5 @@
 /*
- * $Id: TestProcessEvents.java,v 1.16 2004/02/06 18:56:58 rlubke Exp $
+ * $Id: TestProcessEvents.java,v 1.17 2004/02/26 20:34:29 eburns Exp $
  */
 
 /*
@@ -29,9 +29,7 @@ import java.util.HashMap;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestProcessEvents.java,v 1.16 2004/02/06 18:56:58 rlubke Exp $
- * @see	Blah
- * @see	Bloo
+ * @version $Id: TestProcessEvents.java,v 1.17 2004/02/26 20:34:29 eburns Exp $
  */
 
 public class TestProcessEvents extends ServletFacesTestCase {

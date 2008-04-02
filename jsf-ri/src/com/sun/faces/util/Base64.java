@@ -4,9 +4,9 @@
  */
 
 /*
- * $Header: /cvs/javaserverfaces-sources/jsf-ri/src/com/sun/faces/util/Attic/Base64.java,v 1.4 2004/02/06 18:55:50 rlubke Exp $
- * $Revision: 1.4 $
- * $Date: 2004/02/06 18:55:50 $
+ * $Header: /cvs/javaserverfaces-sources/jsf-ri/src/com/sun/faces/util/Attic/Base64.java,v 1.5 2004/02/26 20:33:26 eburns Exp $
+ * $Revision: 1.5 $
+ * $Date: 2004/02/26 20:33:26 $
  * ====================================================================
  *
  * The Apache Software License, Version 1.1
@@ -82,7 +82,7 @@ import java.io.UnsupportedEncodingException;
  * </p>
  *
  * @@author Jeffrey Rodriguez
- * @@version $Revision: 1.4 $ $Date: 2004/02/06 18:55:50 $
+ * @@version $Revision: 1.5 $ $Date: 2004/02/26 20:33:26 $
  */
 public final class Base64 {
 

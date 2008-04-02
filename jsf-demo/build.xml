@@ -78,7 +78,7 @@
   
   <property name="Name" value="JavaServer Faces"/>
   <property name="name" value="jsf-demo"/>
-  <property name="version" value="1.0"/>
+  <property name="version" value="1_0"/>
   
   <property name="build.home" value="${basedir}/build"/>
 

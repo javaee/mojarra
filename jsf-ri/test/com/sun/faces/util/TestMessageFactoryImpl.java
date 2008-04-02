@@ -1,5 +1,5 @@
 /*
- * $Id: TestMessageFactoryImpl.java,v 1.5 2004/02/06 18:57:15 rlubke Exp $
+ * $Id: TestMessageFactoryImpl.java,v 1.6 2004/02/26 20:34:46 eburns Exp $
  */
 
 /*
@@ -25,9 +25,7 @@ import java.util.Locale;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestMessageFactoryImpl.java,v 1.5 2004/02/06 18:57:15 rlubke Exp $
- * @see	Blah
- * @see	Bloo
+ * @version $Id: TestMessageFactoryImpl.java,v 1.6 2004/02/26 20:34:46 eburns Exp $
  */
 
 public class TestMessageFactoryImpl extends ServletFacesTestCase {

@@ -1,5 +1,5 @@
 /*
- * $Id: TestHtmlResponseWriter.java,v 1.12 2004/02/06 18:57:07 rlubke Exp $
+ * $Id: TestHtmlResponseWriter.java,v 1.13 2004/02/26 20:34:38 eburns Exp $
  */
 
 /*
@@ -29,9 +29,7 @@ import java.io.StringWriter;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestHtmlResponseWriter.java,v 1.12 2004/02/06 18:57:07 rlubke Exp $
- * @see	Blah
- * @see	Bloo
+ * @version $Id: TestHtmlResponseWriter.java,v 1.13 2004/02/26 20:34:38 eburns Exp $
  */
 
 public class TestHtmlResponseWriter extends ServletFacesTestCase // ServletTestCase

@@ -1,5 +1,5 @@
 /*
- * $Id: GridRenderer.java,v 1.31 2004/02/06 18:55:18 rlubke Exp $
+ * $Id: GridRenderer.java,v 1.32 2004/02/26 20:32:55 eburns Exp $
  */
 
 /*

@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationImpl.java,v 1.43 2004/02/06 18:54:14 rlubke Exp $
+ * $Id: ApplicationImpl.java,v 1.44 2004/02/26 20:32:29 eburns Exp $
  */
 
 /*
@@ -790,7 +790,6 @@ public class ApplicationImpl extends Application {
      *
      * @param key Used to look up the value in the <code>Map</code>.
      * @param map The <code>Map</code> that will be searched.
-     *
      * @return The new object instance.
      */
     protected Object newThing(Object key, Map map) {
@@ -843,9 +842,7 @@ public class ApplicationImpl extends Application {
      *
      * @param context         The Faces context.
      * @param managedBeanName The name identifying the managed bean.
-     *
      * @return The managed bean.
-     *
      * @throws PropertyNotFoundException if the managed bean
      *                                   could not be created.
      */

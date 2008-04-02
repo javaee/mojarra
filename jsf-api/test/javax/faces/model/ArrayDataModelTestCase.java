@@ -1,5 +1,5 @@
 /*
- * $Id: ArrayDataModelTestCase.java,v 1.2 2004/02/04 23:39:28 ofung Exp $
+ * $Id: ArrayDataModelTestCase.java,v 1.3 2004/02/26 20:32:07 eburns Exp $
  */
 
 /*

@@ -1,5 +1,5 @@
 /*
- * $Id: LinkRenderer.java,v 1.8 2004/02/06 18:55:20 rlubke Exp $
+ * $Id: LinkRenderer.java,v 1.9 2004/02/26 20:32:58 eburns Exp $
  */
 
 /*

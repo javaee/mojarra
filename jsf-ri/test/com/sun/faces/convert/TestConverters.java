@@ -1,5 +1,5 @@
 /*
- * $Id: TestConverters.java,v 1.27 2004/02/06 18:56:43 rlubke Exp $
+ * $Id: TestConverters.java,v 1.28 2004/02/26 20:34:22 eburns Exp $
  */
 
 /*
@@ -39,7 +39,7 @@ import java.util.TimeZone;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestConverters.java,v 1.27 2004/02/06 18:56:43 rlubke Exp $
+ * @version $Id: TestConverters.java,v 1.28 2004/02/26 20:34:22 eburns Exp $
  */
 
 public class TestConverters extends JspFacesTestCase {

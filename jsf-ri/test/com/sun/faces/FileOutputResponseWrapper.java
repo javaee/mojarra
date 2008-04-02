@@ -1,5 +1,5 @@
 /*
- * $Id: FileOutputResponseWrapper.java,v 1.7 2004/02/06 18:56:17 rlubke Exp $
+ * $Id: FileOutputResponseWrapper.java,v 1.8 2004/02/26 20:33:59 eburns Exp $
  */
 
 /*
@@ -26,7 +26,7 @@ import java.io.PrintWriter;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: FileOutputResponseWrapper.java,v 1.7 2004/02/06 18:56:17 rlubke Exp $
+ * @version $Id: FileOutputResponseWrapper.java,v 1.8 2004/02/26 20:33:59 eburns Exp $
  */
 
 public class FileOutputResponseWrapper extends HttpServletResponseWrapper {

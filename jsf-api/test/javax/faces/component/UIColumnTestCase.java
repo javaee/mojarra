@@ -1,5 +1,5 @@
 /*
- * $Id: UIColumnTestCase.java,v 1.9 2004/02/04 23:38:45 ofung Exp $
+ * $Id: UIColumnTestCase.java,v 1.10 2004/02/26 20:31:29 eburns Exp $
  */
 
 /*

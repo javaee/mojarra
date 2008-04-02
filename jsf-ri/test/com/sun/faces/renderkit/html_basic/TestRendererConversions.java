@@ -1,5 +1,5 @@
 /*
- * $Id: TestRendererConversions.java,v 1.11 2004/02/06 18:57:08 rlubke Exp $
+ * $Id: TestRendererConversions.java,v 1.12 2004/02/26 20:34:38 eburns Exp $
  */
 
 /*
@@ -24,9 +24,7 @@ import javax.faces.component.UIViewRoot;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRendererConversions.java,v 1.11 2004/02/06 18:57:08 rlubke Exp $
- * @see	Blah
- * @see	Bloo
+ * @version $Id: TestRendererConversions.java,v 1.12 2004/02/26 20:34:38 eburns Exp $
  */
 
 public class TestRendererConversions extends ServletFacesTestCase {

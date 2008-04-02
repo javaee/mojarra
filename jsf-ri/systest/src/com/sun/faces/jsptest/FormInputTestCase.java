@@ -1,5 +1,5 @@
 /*
- * $Id: FormInputTestCase.java,v 1.5 2004/02/06 18:55:56 rlubke Exp $
+ * $Id: FormInputTestCase.java,v 1.6 2004/02/26 20:33:32 eburns Exp $
  */
 
 /*

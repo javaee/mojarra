@@ -1,5 +1,5 @@
 /*
- * $Id: TestInvokeApplicationPhase.java,v 1.22 2004/02/06 18:56:57 rlubke Exp $
+ * $Id: TestInvokeApplicationPhase.java,v 1.23 2004/02/26 20:34:28 eburns Exp $
  */
 
 /*
@@ -22,9 +22,7 @@ import javax.faces.component.UIViewRoot;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestInvokeApplicationPhase.java,v 1.22 2004/02/06 18:56:57 rlubke Exp $
- * @see	Blah
- * @see	Bloo
+ * @version $Id: TestInvokeApplicationPhase.java,v 1.23 2004/02/26 20:34:28 eburns Exp $
  */
 
 public class TestInvokeApplicationPhase extends ServletFacesTestCase {

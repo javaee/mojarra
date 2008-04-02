@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_1.java,v 1.58 2004/02/06 18:57:08 rlubke Exp $
+ * $Id: TestRenderers_1.java,v 1.59 2004/02/26 20:34:39 eburns Exp $
  */
 
 /*
@@ -45,7 +45,7 @@ import java.util.ResourceBundle;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_1.java,v 1.58 2004/02/06 18:57:08 rlubke Exp $
+ * @version $Id: TestRenderers_1.java,v 1.59 2004/02/26 20:34:39 eburns Exp $
  */
 
 public class TestRenderers_1 extends JspFacesTestCase {

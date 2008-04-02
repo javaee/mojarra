@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderResponsePhase.java,v 1.76 2004/02/06 18:56:58 rlubke Exp $
+ * $Id: TestRenderResponsePhase.java,v 1.77 2004/02/26 20:34:30 eburns Exp $
  */
 
 /*
@@ -23,9 +23,7 @@ import javax.faces.component.UIViewRoot;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderResponsePhase.java,v 1.76 2004/02/06 18:56:58 rlubke Exp $
- * @see	Blah
- * @see	Bloo
+ * @version $Id: TestRenderResponsePhase.java,v 1.77 2004/02/26 20:34:30 eburns Exp $
  */
 
 public class TestRenderResponsePhase extends JspFacesTestCase {

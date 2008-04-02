@@ -1,5 +1,5 @@
 /*
- * $Id: TestUtil_local.java,v 1.6 2004/02/06 18:57:16 rlubke Exp $
+ * $Id: TestUtil_local.java,v 1.7 2004/02/26 20:34:46 eburns Exp $
  */
 
 /*
@@ -20,9 +20,7 @@ import java.util.Locale;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestUtil_local.java,v 1.6 2004/02/06 18:57:16 rlubke Exp $
- * @see	Blah
- * @see	Bloo
+ * @version $Id: TestUtil_local.java,v 1.7 2004/02/26 20:34:46 eburns Exp $
  */
 
 public class TestUtil_local extends TestCase {

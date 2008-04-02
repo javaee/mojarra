@@ -1,5 +1,5 @@
 /*
- * $Id: TestActionListenerImpl.java,v 1.20 2004/02/06 18:56:28 rlubke Exp $
+ * $Id: TestActionListenerImpl.java,v 1.21 2004/02/26 20:34:08 eburns Exp $
  */
 
 /*
@@ -29,11 +29,7 @@ import javax.faces.event.ActionEvent;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestActionListenerImpl.java,v 1.20 2004/02/06 18:56:28 rlubke Exp $
- * 
- * @see	Blah
- * @see	Bloo
- *
+ * @version $Id: TestActionListenerImpl.java,v 1.21 2004/02/26 20:34:08 eburns Exp $
  */
 
 /**

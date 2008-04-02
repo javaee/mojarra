@@ -1,5 +1,5 @@
 /*
- * $Id: MockEnumeration.java,v 1.2 2004/02/04 23:39:11 ofung Exp $
+ * $Id: MockEnumeration.java,v 1.3 2004/02/26 20:31:51 eburns Exp $
  */
 
 /*

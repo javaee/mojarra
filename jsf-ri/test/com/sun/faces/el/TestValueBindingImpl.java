@@ -1,5 +1,5 @@
 /*
- * $Id: TestValueBindingImpl.java,v 1.28 2004/02/06 18:56:45 rlubke Exp $
+ * $Id: TestValueBindingImpl.java,v 1.29 2004/02/26 20:34:24 eburns Exp $
  */
 
 /*

@@ -134,7 +134,8 @@ public class CarCustomizer extends Object {
             // handle the disabled setting, if necessary
             disabled = null;
             try {
-                if (null != (disabledStr = bundle.getString(key + "_disabled"))) {
+                if (null !=
+                    (disabledStr = bundle.getString(key + "_disabled"))) {
                     disabled = Boolean.valueOf(disabledStr);
                 }
             } catch (Throwable e) {

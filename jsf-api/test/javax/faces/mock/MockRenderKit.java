@@ -1,5 +1,5 @@
 /*
- * $Id: MockRenderKit.java,v 1.13 2004/02/04 23:39:13 ofung Exp $
+ * $Id: MockRenderKit.java,v 1.14 2004/02/26 20:31:53 eburns Exp $
  */
 
 /*

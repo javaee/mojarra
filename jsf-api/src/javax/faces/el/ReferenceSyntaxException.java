@@ -1,5 +1,5 @@
 /*
- * $Id: ReferenceSyntaxException.java,v 1.6 2004/02/04 23:38:12 ofung Exp $
+ * $Id: ReferenceSyntaxException.java,v 1.7 2004/02/26 20:30:56 eburns Exp $
  */
 
 /*

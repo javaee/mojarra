@@ -4,7 +4,7 @@
  */
 
 /**
- * $Id: TestRenderers_4.java,v 1.14 2004/02/06 18:57:09 rlubke Exp $
+ * $Id: TestRenderers_4.java,v 1.15 2004/02/26 20:34:40 eburns Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -32,7 +32,7 @@ import java.io.IOException;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_4.java,v 1.14 2004/02/06 18:57:09 rlubke Exp $
+ * @version $Id: TestRenderers_4.java,v 1.15 2004/02/26 20:34:40 eburns Exp $
  */
 
 public class TestRenderers_4 extends JspFacesTestCase {

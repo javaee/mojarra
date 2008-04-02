@@ -1,5 +1,5 @@
 /*
- * $Id: TestRestoreViewPhase.java,v 1.16 2004/02/06 18:56:59 rlubke Exp $
+ * $Id: TestRestoreViewPhase.java,v 1.17 2004/02/26 20:34:30 eburns Exp $
  */
 
 /*
@@ -28,9 +28,7 @@ import java.util.Locale;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRestoreViewPhase.java,v 1.16 2004/02/06 18:56:59 rlubke Exp $
- * @see	Blah
- * @see	Bloo
+ * @version $Id: TestRestoreViewPhase.java,v 1.17 2004/02/26 20:34:30 eburns Exp $
  */
 
 public class TestRestoreViewPhase extends ServletFacesTestCase {

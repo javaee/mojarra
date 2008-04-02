@@ -1,5 +1,5 @@
 /*
- * $Id: FacesValidator.java,v 1.10 2004/02/06 18:55:35 rlubke Exp $
+ * $Id: FacesValidator.java,v 1.11 2004/02/26 20:33:11 eburns Exp $
  */
 
 /*
@@ -170,7 +170,6 @@ public abstract class FacesValidator extends TagLibraryValidator {
      * @param prefix Value of directive prefix argument.
      * @param uri    Value of directive uri argument.
      * @param page   JspData page object.
-     *
      * @returns ValidationMessage[] An array of Validation messages.
      */
     public synchronized ValidationMessage[] validate(String prefix, String uri, PageData page) {
@@ -214,7 +213,6 @@ public abstract class FacesValidator extends TagLibraryValidator {
      * Construct a ValidationMessage[] from a single String and no ID.
      *
      * @param message Message string.
-     *
      * @returns ValidationMessage[] An array of Validation Messages.
      */
     private ValidationMessage[] vmFromString(String message) {

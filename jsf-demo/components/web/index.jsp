@@ -72,9 +72,9 @@ Faces technology.</p>
 </td>
 
 <td>
-<a href="ShowSource.jsp?filename=/calendar.jsp"><img src="images/code.gif" width="24" height="24" border="0"></a>
-<a href="ShowSource.jsp?filename=/images/calendar.css"><img src="images/code.gif" width="24" height="24" border="0"></a>
-<a href="ShowSource.jsp?filename=/images/simplecalendar.js"><img src="images/code.gif" width="24" height="24" border="0"></a>
+<a href="ShowSource.jsp?filename=/calendar.jsp">JSP <img src="images/code.gif" width="24" height="24" border="0"></a><BR />
+<a href="ShowSource.jsp?filename=/images/calendar.css">CSS <img src="images/code.gif" width="24" height="24" border="0"></a><BR />
+<a href="ShowSource.jsp?filename=/images/simplecalendar.js">JavaScript <img src="images/code.gif" width="24" height="24" border="0"></a><BR />
 </td>
 
 <td>

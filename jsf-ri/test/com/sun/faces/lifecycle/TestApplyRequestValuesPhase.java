@@ -1,5 +1,5 @@
 /*
- * $Id: TestApplyRequestValuesPhase.java,v 1.25 2004/02/06 18:56:56 rlubke Exp $
+ * $Id: TestApplyRequestValuesPhase.java,v 1.26 2004/02/26 20:34:28 eburns Exp $
  */
 
 /*
@@ -24,9 +24,7 @@ import javax.faces.component.UIInput;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestApplyRequestValuesPhase.java,v 1.25 2004/02/06 18:56:56 rlubke Exp $
- * @see	Blah
- * @see	Bloo
+ * @version $Id: TestApplyRequestValuesPhase.java,v 1.26 2004/02/26 20:34:28 eburns Exp $
  */
 
 public class TestApplyRequestValuesPhase extends ServletFacesTestCase {

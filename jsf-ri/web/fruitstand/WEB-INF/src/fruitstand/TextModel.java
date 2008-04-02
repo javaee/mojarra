@@ -1,5 +1,5 @@
 /*
- * $Id: TextModel.java,v 1.5 2004/02/04 23:45:05 ofung Exp $
+ * $Id: TextModel.java,v 1.6 2004/02/26 20:34:50 eburns Exp $
  */
 
 /*
@@ -21,7 +21,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TextModel.java,v 1.5 2004/02/04 23:45:05 ofung Exp $
+ * @version $Id: TextModel.java,v 1.6 2004/02/26 20:34:50 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo

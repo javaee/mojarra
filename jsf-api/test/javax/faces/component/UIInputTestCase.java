@@ -1,5 +1,5 @@
 /*
- * $Id: UIInputTestCase.java,v 1.32 2004/02/04 23:38:48 ofung Exp $
+ * $Id: UIInputTestCase.java,v 1.33 2004/02/26 20:31:31 eburns Exp $
  */
 
 /*

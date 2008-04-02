@@ -104,9 +104,7 @@ public class MixedELValueParser {
      *
      * @param exprString A String with literal text and one or
      *                   more JSF EL expression
-     *
      * @return A List with String and Expression instances
-     *
      * @throws ElException Thrown if parsing errors were found
      */
     public List parse(FacesContext context, String exprString)

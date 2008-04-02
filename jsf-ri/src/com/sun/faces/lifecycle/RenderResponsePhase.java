@@ -1,5 +1,5 @@
 /*
- * $Id: RenderResponsePhase.java,v 1.13 2004/02/06 18:55:09 rlubke Exp $
+ * $Id: RenderResponsePhase.java,v 1.14 2004/02/26 20:32:48 eburns Exp $
  */
 
 /*
@@ -26,7 +26,7 @@ import java.io.IOException;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: RenderResponsePhase.java,v 1.13 2004/02/06 18:55:09 rlubke Exp $
+ * @version $Id: RenderResponsePhase.java,v 1.14 2004/02/26 20:32:48 eburns Exp $
  */
 
 public class RenderResponsePhase extends Phase {

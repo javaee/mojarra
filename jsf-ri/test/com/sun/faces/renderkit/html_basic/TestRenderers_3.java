@@ -4,7 +4,7 @@
  */
 
 /**
- * $Id: TestRenderers_3.java,v 1.33 2004/02/06 18:57:09 rlubke Exp $
+ * $Id: TestRenderers_3.java,v 1.34 2004/02/26 20:34:40 eburns Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -46,7 +46,7 @@ import java.util.TimeZone;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_3.java,v 1.33 2004/02/06 18:57:09 rlubke Exp $
+ * @version $Id: TestRenderers_3.java,v 1.34 2004/02/26 20:34:40 eburns Exp $
  */
 
 public class TestRenderers_3 extends JspFacesTestCase {

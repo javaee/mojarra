@@ -1,5 +1,5 @@
 /*
- * $Id: ValidatorInfo.java,v 1.3 2004/02/06 18:55:35 rlubke Exp $
+ * $Id: ValidatorInfo.java,v 1.4 2004/02/26 20:33:12 eburns Exp $
  */
 
 /*

@@ -1,5 +1,5 @@
 /*
- * $Id: ServletBean.java,v 1.3 2004/02/06 18:54:20 rlubke Exp $
+ * $Id: ServletBean.java,v 1.4 2004/02/26 20:32:34 eburns Exp $
  */
 
 /*

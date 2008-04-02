@@ -1,5 +1,5 @@
 /*
- * $Id: UIGraphic.java,v 1.37 2004/02/04 23:37:45 ofung Exp $
+ * $Id: UIGraphic.java,v 1.38 2004/02/26 20:30:32 eburns Exp $
  */
 
 /*

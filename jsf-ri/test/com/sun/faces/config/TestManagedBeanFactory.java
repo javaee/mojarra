@@ -1,5 +1,5 @@
 /*
- * $Id: TestManagedBeanFactory.java,v 1.15 2004/02/06 18:56:35 rlubke Exp $
+ * $Id: TestManagedBeanFactory.java,v 1.16 2004/02/26 20:34:16 eburns Exp $
  */
 
 /*

@@ -1,5 +1,5 @@
 /*
- * $Id: NavigationHandlerImpl.java,v 1.27 2004/02/06 18:54:15 rlubke Exp $
+ * $Id: NavigationHandlerImpl.java,v 1.28 2004/02/26 20:32:30 eburns Exp $
  */
 
 /*
@@ -143,7 +143,6 @@ public class NavigationHandlerImpl extends NavigationHandler {
      * @param context    The Faces Context
      * @param fromAction The action reference string
      * @param outcome    The outcome string
-     *
      * @return The <code>view</code> identifier.
      */
     private CaseStruct getViewId(FacesContext context, String fromAction,
@@ -176,7 +175,6 @@ public class NavigationHandlerImpl extends NavigationHandler {
      * @param viewId     The current <code>view</code> identifier.
      * @param fromAction The action reference string.
      * @param outcome    The outcome string.
-     *
      * @return The <code>view</code> identifier.
      */
 
@@ -214,7 +212,6 @@ public class NavigationHandlerImpl extends NavigationHandler {
      * @param viewId     The current <code>view</code> identifier.
      * @param fromAction The action reference string.
      * @param outcome    The outcome string.
-     *
      * @return The <code>view</code> identifier.
      */
 
@@ -274,7 +271,6 @@ public class NavigationHandlerImpl extends NavigationHandler {
      *
      * @param fromAction The action reference string.
      * @param outcome    The outcome string.
-     *
      * @return The <code>view</code> identifier.
      */
 
@@ -308,7 +304,6 @@ public class NavigationHandlerImpl extends NavigationHandler {
      * @param caseList   The list of navigation cases.
      * @param fromAction The action reference string.
      * @param outcome    The outcome string.
-     *
      * @return The <code>view</code> identifier.
      */
 

@@ -1,5 +1,5 @@
 /*
- * $Id: VariableResolverTestImpl.java,v 1.2 2004/02/04 23:44:05 ofung Exp $
+ * $Id: VariableResolverTestImpl.java,v 1.3 2004/02/26 20:34:10 eburns Exp $
  */
 
 /*

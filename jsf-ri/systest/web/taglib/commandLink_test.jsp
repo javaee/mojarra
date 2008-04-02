@@ -3,7 +3,7 @@
    SUN PROPRIETARY/CONFIDENTIAL.  Use is subject license terms.
 --%>
 
-<%-- $Id: commandLink_test.jsp,v 1.4 2004/02/05 05:05:28 horwat Exp $ --%>
+<%-- $Id: commandLink_test.jsp,v 1.5 2004/02/26 20:33:54 eburns Exp $ --%>
 
 <html>
 <head>

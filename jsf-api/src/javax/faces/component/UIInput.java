@@ -1,5 +1,5 @@
 /*
- * $Id: UIInput.java,v 1.68 2004/02/04 23:37:45 ofung Exp $
+ * $Id: UIInput.java,v 1.69 2004/02/26 20:30:32 eburns Exp $
  */
 
 /*

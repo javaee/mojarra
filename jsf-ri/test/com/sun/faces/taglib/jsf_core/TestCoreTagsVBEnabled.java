@@ -1,5 +1,5 @@
 /*
- * $Id: TestCoreTagsVBEnabled.java,v 1.4 2004/02/06 18:57:13 rlubke Exp $
+ * $Id: TestCoreTagsVBEnabled.java,v 1.5 2004/02/26 20:34:43 eburns Exp $
  */
 
 /*
@@ -28,7 +28,7 @@ import java.util.Iterator;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestCoreTagsVBEnabled.java,v 1.4 2004/02/06 18:57:13 rlubke Exp $
+ * @version $Id: TestCoreTagsVBEnabled.java,v 1.5 2004/02/26 20:34:43 eburns Exp $
  */
 
 public class TestCoreTagsVBEnabled extends JspFacesTestCase {

@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectMany.java,v 1.49 2004/02/06 07:48:59 craigmcc Exp $
+ * $Id: UISelectMany.java,v 1.50 2004/02/26 20:30:35 eburns Exp $
  */
 
 /*
@@ -16,7 +16,6 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-import javax.faces.convert.Converter;
 import javax.faces.el.ValueBinding;
 import javax.faces.model.SelectItem;
 import javax.faces.model.SelectItemGroup;
@@ -42,20 +41,20 @@ import javax.faces.model.SelectItemGroup;
  *
  * <ul>
  *
- * <p>Obtain the {@link Converter} using the following algorithm:</p>
+ * <p>Obtain the {@link javax.faces.convert.Converter} using the following algorithm:</p>
  *
  * <ul> 
  *
- * <p>If the component has an attached {@link Converter}, use it.</p>
+ * <p>If the component has an attached {@link javax.faces.convert.Converter}, use it.</p>
  *
  * <p>If not, look for a {@link ValueBinding} for <code>value</code> (if any).
  * The {@link ValueBinding} must point to something that is:</p>
  * <ul>
  * <li>An array of primitives (such as <code>int[]</code>).  Look up the
- *     registered by-class {@link Converter} for this primitive type.</li>
+ *     registered by-class {@link javax.faces.convert.Converter} for this primitive type.</li>
  * <li>An array of objects (such as <code>Integer[]</code> or
  *     <code>String[]</code>).  Look up the registered by-class
- *     {@link Converter} for the underlying element type.</li>
+ *     {@link javax.faces.convert.Converter} for the underlying element type.</li>
  * <li>A <code>java.util.List</code>.  Assume that the element type is
  *     <code>java.lang.String</code>, so no conversion is required.</li>
  * </ul>
@@ -65,7 +64,7 @@ import javax.faces.model.SelectItemGroup;
  *
  * </ul>
  *
- * <p>Use the selected {@link Converter} (if any) to convert each element in the
+ * <p>Use the selected {@link javax.faces.convert.Converter} (if any) to convert each element in the
  * values array or list from the request to the proper type.  If the component
  * has a {@link ValueBinding} for <code>value</code>, create an array
  * of the expected type to hold the converted values.  If the component

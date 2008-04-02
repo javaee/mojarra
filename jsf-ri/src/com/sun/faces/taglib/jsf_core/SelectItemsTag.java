@@ -1,5 +1,5 @@
 /*
- * $Id: SelectItemsTag.java,v 1.6 2004/02/06 18:55:42 rlubke Exp $
+ * $Id: SelectItemsTag.java,v 1.7 2004/02/26 20:33:18 eburns Exp $
  */
 
 /*

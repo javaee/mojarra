@@ -1,5 +1,5 @@
 /*
- * $Id: ValueBinding.java,v 1.10 2004/02/06 04:20:35 craigmcc Exp $
+ * $Id: ValueBinding.java,v 1.11 2004/02/26 20:30:57 eburns Exp $
  */
 
 /*

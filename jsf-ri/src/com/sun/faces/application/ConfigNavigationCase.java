@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigNavigationCase.java,v 1.4 2004/02/06 18:54:15 rlubke Exp $
+ * $Id: ConfigNavigationCase.java,v 1.5 2004/02/26 20:32:30 eburns Exp $
  */
 
 /*
@@ -8,8 +8,6 @@
  */
 
 package com.sun.faces.application;
-
-
 
 
 /**

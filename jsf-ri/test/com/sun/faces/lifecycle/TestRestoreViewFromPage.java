@@ -1,5 +1,5 @@
 /*
- * $Id: TestRestoreViewFromPage.java,v 1.9 2004/02/06 18:56:59 rlubke Exp $
+ * $Id: TestRestoreViewFromPage.java,v 1.10 2004/02/26 20:34:30 eburns Exp $
  */
 
 /*
@@ -30,9 +30,7 @@ import java.util.Locale;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRestoreViewFromPage.java,v 1.9 2004/02/06 18:56:59 rlubke Exp $
- * @see	Blah
- * @see	Bloo
+ * @version $Id: TestRestoreViewFromPage.java,v 1.10 2004/02/26 20:34:30 eburns Exp $
  */
 
 public class TestRestoreViewFromPage extends ServletFacesTestCase {

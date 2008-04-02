@@ -6,7 +6,7 @@
 -->
 
 <!-- Content Stylesheet for Outstanding Issues Detail List -->
-<!-- $Id: ri-issues-detail.xsl,v 1.3 2004/02/04 23:40:43 ofung Exp $ -->
+<!-- $Id: ri-issues-detail.xsl,v 1.4 2004/02/26 20:32:26 eburns Exp $ -->
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 version="1.0">

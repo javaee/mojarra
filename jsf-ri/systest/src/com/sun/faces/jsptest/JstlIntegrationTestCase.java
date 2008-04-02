@@ -1,5 +1,5 @@
 /*
- * $Id: JstlIntegrationTestCase.java,v 1.10 2004/02/06 18:55:57 rlubke Exp $
+ * $Id: JstlIntegrationTestCase.java,v 1.11 2004/02/26 20:33:33 eburns Exp $
  */
 
 /*
@@ -104,10 +104,10 @@ public class JstlIntegrationTestCase extends AbstractTestCase {
     /**
      * ******************* PENDING(): re-enable these when we figure
      * out how to do c:forEach.
-     * <p/>
+     *
      * // Components Inside Choose (Explicit Identifiers)
      * public void testJstlChoose01() throws Exception {
-     * <p/>
+     *
      * // Check each individual case multiple times
      * checkJstlChoose00();
      * checkJstlChoose01a();
@@ -121,31 +121,31 @@ public class JstlIntegrationTestCase extends AbstractTestCase {
      * checkJstlChoose01c();
      * checkJstlChoose01c();
      * checkJstlChoose01c();
-     * <p/>
+     *
      * // Check cases in ascending order
      * checkJstlChoose00();
      * checkJstlChoose01a();
      * checkJstlChoose01b();
      * checkJstlChoose01c();
-     * <p/>
+     *
      * // Check cases in descending order
      * checkJstlChoose00();
      * checkJstlChoose01c();
      * checkJstlChoose01b();
      * checkJstlChoose01a();
-     * <p/>
+     *
      * // Check cases in random order
      * checkJstlChoose00();
      * checkJstlChoose01b();
      * checkJstlChoose01a();
      * checkJstlChoose01c();
-     * <p/>
+     *
      * }
-     * <p/>
-     * <p/>
+     *
+     *
      * // Components Inside Choose (In Naming Container)
      * public void testJstlChoose02() throws Exception {
-     * <p/>
+     *
      * // Check each individual case multiple times
      * checkJstlChoose00();
      * checkJstlChoose02a();
@@ -159,43 +159,43 @@ public class JstlIntegrationTestCase extends AbstractTestCase {
      * checkJstlChoose02c();
      * checkJstlChoose02c();
      * checkJstlChoose02c();
-     * <p/>
+     *
      * // Check cases in ascending order
      * checkJstlChoose00();
      * checkJstlChoose02a();
      * checkJstlChoose02b();
      * checkJstlChoose02c();
-     * <p/>
+     *
      * // Check cases in descending order
      * checkJstlChoose00();
      * checkJstlChoose02c();
      * checkJstlChoose02b();
      * checkJstlChoose02a();
-     * <p/>
+     *
      * // Check cases in random order
      * checkJstlChoose00();
      * checkJstlChoose02b();
      * checkJstlChoose02a();
      * checkJstlChoose02c();
-     * <p/>
+     *
      * }
-     * <p/>
-     * <p/>
+     *
+     *
      * // Form with fields rendered inside a <c:forEach> - pristine
      * public void testJstForEach01_pristine() throws Exception {
-     * <p/>
+     *
      * checkJstlForEach00();
      * checkJstlForEach01(getJstlForEach01(), jstlForEach01_pristine);
      * checkJstlForEach00();
      * checkJstlForEach01(getJstlForEach01(), jstlForEach01_pristine);
      * checkJstlForEach00();
-     * <p/>
+     *
      * }
-     * <p/>
-     * <p/>
+     *
+     *
      * // Form with fields rendered inside a <c:forEach> - submit unchanged
      * public void testJstForEach01_submit01() throws Exception {
-     * <p/>
+     *
      * checkJstlForEach00();
      * HtmlPage page = getJstlForEach01();
      * checkJstlForEach01(page, jstlForEach01_pristine);
@@ -208,13 +208,13 @@ public class JstlIntegrationTestCase extends AbstractTestCase {
      * page = (HtmlPage) submit.click();
      * checkJstlForEach01(page, jstlForEach01_pristine);
      * checkJstlForEach00();
-     * <p/>
+     *
      * }
-     * <p/>
-     * <p/>
+     *
+     *
      * // Form with fields rendered inside a <c:forEach> - submit modified
      * public void testJstForEach01_submit02() throws Exception {
-     * <p/>
+     *
      * checkJstlForEach00();
      * HtmlPage page = getJstlForEach01();
      * checkJstlForEach01(page, jstlForEach01_pristine);
@@ -234,47 +234,47 @@ public class JstlIntegrationTestCase extends AbstractTestCase {
      * page = (HtmlPage) submit.click();
      * checkJstlForEach01(page, jstlForEach01_updated);
      * checkJstlForEach00();
-     * <p/>
+     *
      * }
-     * <p/>
-     * <p/>
+     *
+     *
      * // Components Inside Conditional
      * public void testJstlIf01() throws Exception {
-     * <p/>
+     *
      * // Check the "true" case multiple times in a row
      * checkJstlIf00();
      * checkJstlIf01a();
      * checkJstlIf01a();
      * checkJstlIf01a();
      * checkJstlIf01a();
-     * <p/>
+     *
      * // Check the "false case multiple times in a row
      * checkJstlIf00();
      * checkJstlIf01b();
      * checkJstlIf01b();
      * checkJstlIf01b();
      * checkJstlIf01b();
-     * <p/>
+     *
      * // Check alternating access to the same page (first pattern)
      * checkJstlIf00();
      * checkJstlIf01a();
      * checkJstlIf01b();
      * checkJstlIf01a();
      * checkJstlIf01b();
-     * <p/>
+     *
      * // Check alternating access to the same page (second pattern)
      * checkJstlIf00();
      * checkJstlIf01b();
      * checkJstlIf01a();
      * checkJstlIf01b();
      * checkJstlIf01a();
-     * <p/>
+     *
      * }
-     * <p/>
-     * <p/>
+     *
+     *
      * // Components and facets inside conditional
      * public void testJstlIf02() throws Exception {
-     * <p/>
+     *
      * // Check each style sequentially
      * checkJstlIf00();
      * checkJstlIf02a();
@@ -296,7 +296,7 @@ public class JstlIntegrationTestCase extends AbstractTestCase {
      * checkJstlIf02e();
      * checkJstlIf02e();
      * checkJstlIf02e();
-     * <p/>
+     *
      * // Check each style in ascending order
      * checkJstlIf00();
      * checkJstlIf02a();
@@ -304,7 +304,7 @@ public class JstlIntegrationTestCase extends AbstractTestCase {
      * checkJstlIf02c();
      * checkJstlIf02d();
      * checkJstlIf02e();
-     * <p/>
+     *
      * // Check each style in descending order
      * checkJstlIf00();
      * checkJstlIf02e();
@@ -312,7 +312,7 @@ public class JstlIntegrationTestCase extends AbstractTestCase {
      * checkJstlIf02c();
      * checkJstlIf02b();
      * checkJstlIf02a();
-     * <p/>
+     *
      * // Check each style in a more random order
      * checkJstlIf00();
      * checkJstlIf02c();
@@ -320,109 +320,109 @@ public class JstlIntegrationTestCase extends AbstractTestCase {
      * checkJstlIf02a();
      * checkJstlIf02d();
      * checkJstlIf02b();
-     * <p/>
+     *
      * }
-     * <p/>
-     * <p/>
+     *
+     *
      * // Component and Template Text Inside Conditional
      * public void testJstlIf03() throws Exception {
-     * <p/>
+     *
      * // Check the "true" case multiple times in a row
      * checkJstlIf00();
      * checkJstlIf03a();
      * checkJstlIf03a();
      * checkJstlIf03a();
      * checkJstlIf03a();
-     * <p/>
+     *
      * // Check the "false case multiple times in a row
      * checkJstlIf00();
      * checkJstlIf03b();
      * checkJstlIf03b();
      * checkJstlIf03b();
      * checkJstlIf03b();
-     * <p/>
+     *
      * // Check alternating access to the same page (first pattern)
      * checkJstlIf00();
      * checkJstlIf03a();
      * checkJstlIf03b();
      * checkJstlIf03a();
      * checkJstlIf03b();
-     * <p/>
+     *
      * // Check alternating access to the same page (second pattern)
      * checkJstlIf00();
      * checkJstlIf03b();
      * checkJstlIf03a();
      * checkJstlIf03b();
      * checkJstlIf03a();
-     * <p/>
+     *
      * }
-     * <p/>
-     * <p/>
+     *
+     *
      * // Renders-Child Component Inside Conditional (no nested template text) (
      * public void testJstlIf04() throws Exception {
-     * <p/>
+     *
      * // Check the "true" case multiple times in a row
      * checkJstlIf00();
      * checkJstlIf04a();
      * checkJstlIf04a();
      * checkJstlIf04a();
      * checkJstlIf04a();
-     * <p/>
+     *
      * // Check the "false case multiple times in a row
      * checkJstlIf00();
      * checkJstlIf04b();
      * checkJstlIf04b();
      * checkJstlIf04b();
      * checkJstlIf04b();
-     * <p/>
+     *
      * // Check alternating access to the same page (first pattern)
      * checkJstlIf00();
      * checkJstlIf04a();
      * checkJstlIf04b();
      * checkJstlIf04a();
      * checkJstlIf04b();
-     * <p/>
+     *
      * // Check alternating access to the same page (second pattern)
      * checkJstlIf00();
      * checkJstlIf04b();
      * checkJstlIf04a();
      * checkJstlIf04b();
      * checkJstlIf04a();
-     * <p/>
+     *
      * }
-     * <p/>
-     * <p/>
+     *
+     *
      * // Test importing JSPs with literal text
      * public void testJstlImport01() throws Exception {
-     * <p/>
+     *
      * checkJstlImport00();
      * checkJstlImport01();
      * checkJstlImport01();
-     * <p/>
+     *
      * checkJstlImport00();
      * checkJstlImport01();
      * checkJstlImport01();
-     * <p/>
+     *
      * }
-     * <p/>
-     * <p/>
+     *
+     *
      * // Test importing JSPs with simple components
      * public void testJstlImport02() throws Exception {
-     * <p/>
+     *
      * checkJstlImport00();
      * checkJstlImport02();
      * checkJstlImport02();
-     * <p/>
+     *
      * checkJstlImport00();
      * checkJstlImport02();
      * checkJstlImport02();
-     * <p/>
+     *
      * }
-     * <p/>
-     * <p/>
+     *
+     *
      * // Test selectively importing JSPs with simple components (explicit ids)
      * public void testJstlImport03() throws Exception {
-     * <p/>
+     *
      * // Check each individual case multiple times
      * checkJstlImport00();
      * checkJstlImport03a();
@@ -436,31 +436,31 @@ public class JstlIntegrationTestCase extends AbstractTestCase {
      * checkJstlImport03c();
      * checkJstlImport03c();
      * checkJstlImport03c();
-     * <p/>
+     *
      * // Check cases in ascending order
      * checkJstlImport00();
      * checkJstlImport03a();
      * checkJstlImport03b();
      * checkJstlImport03c();
-     * <p/>
+     *
      * // Check cases in descending order
      * checkJstlImport00();
      * checkJstlImport03c();
      * checkJstlImport03b();
      * checkJstlImport03a();
-     * <p/>
+     *
      * // Check cases in random order
      * checkJstlImport00();
      * checkJstlImport03b();
      * checkJstlImport03a();
      * checkJstlImport03c();
-     * <p/>
+     *
      * }
-     * <p/>
-     * <p/>
+     *
+     *
      * // Test selectively importing JSPs with simple components (naming container)
      * public void testJstlImport04() throws Exception {
-     * <p/>
+     *
      * // Check each individual case multiple times
      * checkJstlImport00();
      * checkJstlImport04a();
@@ -474,28 +474,28 @@ public class JstlIntegrationTestCase extends AbstractTestCase {
      * checkJstlImport04c();
      * checkJstlImport04c();
      * checkJstlImport04c();
-     * <p/>
+     *
      * // Check cases in ascending order
      * checkJstlImport00();
      * checkJstlImport04a();
      * checkJstlImport04b();
      * checkJstlImport04c();
-     * <p/>
+     *
      * // Check cases in descending order
      * checkJstlImport00();
      * checkJstlImport04c();
      * checkJstlImport04b();
      * checkJstlImport04a();
-     * <p/>
+     *
      * // Check cases in random order
      * checkJstlImport00();
      * checkJstlImport04b();
      * checkJstlImport04a();
      * checkJstlImport04c();
-     * <p/>
+     *
      * }
-     * <p/>
-     * <p/>
+     *
+     *
      * **************************************
      */
 

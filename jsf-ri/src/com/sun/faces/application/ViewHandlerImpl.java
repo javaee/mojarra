@@ -1,5 +1,5 @@
 /* 
- * $Id: ViewHandlerImpl.java,v 1.37 2004/02/09 19:50:11 eburns Exp $ 
+ * $Id: ViewHandlerImpl.java,v 1.38 2004/02/26 20:32:30 eburns Exp $ 
  */ 
 
 
@@ -41,7 +41,7 @@ import java.util.Map;
 /**
  * <B>ViewHandlerImpl</B> is the default implementation class for ViewHandler.
  *
- * @version $Id: ViewHandlerImpl.java,v 1.37 2004/02/09 19:50:11 eburns Exp $
+ * @version $Id: ViewHandlerImpl.java,v 1.38 2004/02/26 20:32:30 eburns Exp $
  * @see javax.faces.application.ViewHandler
  */
 public class ViewHandlerImpl extends ViewHandler {
@@ -492,7 +492,6 @@ public class ViewHandlerImpl extends ViewHandler {
      *
      * @param mappings the URL patterns of the
      *                 defined {@link javax.faces.webapp.FacesServlet}
-     *
      * @throws NullPointerException if <code>mappings</code> is null
      */
     public void setFacesMapping(List mappings) {
@@ -536,10 +535,8 @@ public class ViewHandlerImpl extends ViewHandler {
      * the {@link javax.faces.webapp.FacesServlet}.
      *
      * @param context the {@link FacesContext} of the current request
-     *
      * @return the URL pattern of the {@link javax.faces.webapp.FacesServlet}
      *         or <code>null</code> if no mapping can be determined
-     *
      * @throws NullPointerException if <code>context</code> is null
      */
     private String getFacesMapping(FacesContext context) {
@@ -601,7 +598,6 @@ public class ViewHandlerImpl extends ViewHandler {
      *
      * @param servletPath the servlet path of the request
      * @param pathInfo    the path info of the request
-     *
      * @see HttpServletRequest#getServletPath()
      */
     private String getMappingForRequest(String servletPath, String pathInfo) {
@@ -684,7 +680,6 @@ public class ViewHandlerImpl extends ViewHandler {
      * a prefix path mapping (starts with <code>/</code>).</p>
      *
      * @param mapping a <code>url-pattern</code>
-     *
      * @return true if the mapping starts with <code>/</code>
      */
     private static boolean isPrefixMapped(String mapping) {
@@ -697,7 +692,6 @@ public class ViewHandlerImpl extends ViewHandler {
      *
      * @param context current {@link FacesContext}
      * @param viewId  incoming view ID
-     *
      * @return the view ID with an altered suffix mapping (if necessary)
      */
     private String convertViewId(FacesContext context, String viewId) {

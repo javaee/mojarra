@@ -1,5 +1,5 @@
 /*
- * $Id: UIMessages.java,v 1.13 2004/02/04 23:37:46 ofung Exp $
+ * $Id: UIMessages.java,v 1.14 2004/02/26 20:30:33 eburns Exp $
  */
 
 /*

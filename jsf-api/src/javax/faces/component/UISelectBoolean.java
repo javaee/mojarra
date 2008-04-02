@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectBoolean.java,v 1.35 2004/02/04 23:37:47 ofung Exp $
+ * $Id: UISelectBoolean.java,v 1.36 2004/02/26 20:30:34 eburns Exp $
  */
 
 /*

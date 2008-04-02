@@ -1,5 +1,5 @@
 /*
- * $Id: AttributeTag.java,v 1.10 2004/02/04 23:38:34 ofung Exp $
+ * $Id: AttributeTag.java,v 1.11 2004/02/26 20:31:18 eburns Exp $
  */
 
 /*

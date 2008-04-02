@@ -19,7 +19,7 @@
 
   <property name="Name"             value="JavaServer Faces API"/>
   <property name="name"             value="jsf-api"/>
-  <property name="version"          value="20040203"/>
+  <property name="version"          value="1_0"/>
 
   <property name="debug"            value="true" />
   <property name="deprecation"      value="false" />
@@ -55,6 +55,7 @@
   <property name="build.test"       value="${build.dir}/test"/>
   <property name="build.generate"   value="${build.dir}/generate"/>
   <property name="build.javadocs"   value="${build.dir}/javadocs"/>
+  <property name="build.renderkitdocs"   value="${build.dir}/renderkitdocs"/>
   <property name="build.mifdocs"    value="${build.dir}/mifdocs"/>
   <property name="javadoc.private"  value="false"/>
   <property name="javadoc.protected"  value="true"/>
@@ -218,9 +219,28 @@ jsf-api.jar.
       </fileset>
     </copy>
 
+    <copy todir="${build.generate}/javax/faces/component/html"
+          file="${src.dir}/javax/faces/component/html/package.html" />
+
     <touch file="${build.generate}/last-generation"/>
 
   </target>
+
+  <target name="facesdoc" if="jsf-tools" unless="skip.generation">
+    <ant dir="${jsf-tools.dir}" inheritall="false" target="docs"/>
+
+    <mkdir dir="${build.renderkitdocs}"/>
+    <copy todir="${build.renderkitdocs}">
+
+      <fileset dir="${jsf-tools.dir}/build/generate/facesdoc">
+        <include name="**/*.*"/>
+      </fileset>
+    </copy>
+
+    <touch file="${build.generate}/last-generation"/>
+
+  </target>
+
 
   <target name="copy.template.sources" depends="prepare.generate"
      description="Copy template sources from ${jsf-tools.dir}/template-source">
@@ -698,12 +718,13 @@ jsf-api.jar.
     </uptodate>
   </target>
 
-  <target name="javadocs" depends="prepare, javadoc_check, generate"
+  <target name="javadocs" depends="prepare, javadoc_check, generate, facesdoc"
           unless="javadoc.notrequired"
           description="Create the JavaDoc API documentation">
     <mkdir dir="${build.javadocs}"/>
     <javadoc packagenames="javax.*"
              destdir="${build.javadocs}"
+             Overview="${src.dir}/overview.html"
              private="${javadoc.private}"
              protected="${javadoc.protected}"
              windowtitle="${Name} (${version})"
@@ -780,7 +801,7 @@ jsf-api.jar.
     <!-- Create the javadocs distribution -->
     <zip     destfile="${dist.dir}/jsf-api-javadocs-${version}.zip">
       <zipfileset dir="${build.dir}"
-             includes="javadocs/**"
+             includes="javadocs/** renderkitdocs/**"
                prefix="jsf-api-${version}"/>
     </zip>
 

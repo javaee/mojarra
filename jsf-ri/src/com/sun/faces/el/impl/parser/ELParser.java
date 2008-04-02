@@ -1,9 +1,4 @@
 /*
- * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
- * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
- */
-
-/*
  * The Apache Software License, Version 1.1
  *
  * Copyright (c) 1999 The Apache Software Foundation.  All rights 
@@ -71,7 +66,6 @@ public interface ELParser {
      * @return returns a String if the expression string is a single String,
      *         an Expression if the expression string is a single Expression,
      *         an ExpressionString if it's a mixture of both.
-     *
      * @throws ElParseException      if the expression cannot be parsed
      * @throws IllegalStateException if the parser has not be initialized
      */

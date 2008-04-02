@@ -238,7 +238,7 @@
                      tabindex="20" >
 
                 <f:selectItem  itemDisabled="true" itemValue="0" itemLabel="0"/>
-                <f:selectItem  itemValue="1" itemLabel="1" itemDescription="Item 1" />
+                <f:selectItem  itemValue="1" itemLabel="1" itemDescription="First Item" />
                 <f:selectItem  itemValue="2" itemLabel="2" />
                 <f:selectItem  itemValue="3" itemLabel="3" />
                 <f:selectItem  itemValue="4" itemLabel="4" />

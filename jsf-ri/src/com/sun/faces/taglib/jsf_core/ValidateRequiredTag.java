@@ -1,5 +1,5 @@
 /*
- * $Id: ValidateRequiredTag.java,v 1.9 2004/02/07 02:33:04 craigmcc Exp $
+ * $Id: ValidateRequiredTag.java,v 1.10 2004/02/26 20:33:19 eburns Exp $
  */
 
 /*
@@ -18,7 +18,7 @@ import javax.faces.webapp.ValidatorTag;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ValidateRequiredTag.java,v 1.9 2004/02/07 02:33:04 craigmcc Exp $
+ * @version $Id: ValidateRequiredTag.java,v 1.10 2004/02/26 20:33:19 eburns Exp $
  */
 
 public class ValidateRequiredTag extends ValidatorTag {

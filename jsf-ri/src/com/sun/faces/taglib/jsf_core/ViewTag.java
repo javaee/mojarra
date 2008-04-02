@@ -1,5 +1,5 @@
 /*
- * $Id: ViewTag.java,v 1.21 2004/02/06 18:55:43 rlubke Exp $
+ * $Id: ViewTag.java,v 1.22 2004/02/26 20:33:20 eburns Exp $
  */
 
 /*
@@ -40,7 +40,7 @@ import java.util.Locale;
  * any renderers or attributes. It exists mainly to save the state of
  * the response tree once all tags have been rendered.
  *
- * @version $Id: ViewTag.java,v 1.21 2004/02/06 18:55:43 rlubke Exp $
+ * @version $Id: ViewTag.java,v 1.22 2004/02/26 20:33:20 eburns Exp $
  */
 
 public class ViewTag extends UIComponentBodyTag {
@@ -237,12 +237,6 @@ public class ViewTag extends UIComponentBodyTag {
         throw new IllegalStateException();
     }
 
-
-    protected boolean isSuppressed() {
-        return true;
-    }
-
-
     public String getRendererType() {
         return null;
     }
@@ -301,7 +295,6 @@ public class ViewTag extends UIComponentBodyTag {
      *                   country code (as defined by ISO-3166). Language and
      *                   country codes must be separated by hyphen (�-�) or
      *                   underscore (�_�)."
-     *
      * @return Locale instance cosntructed from the expression.
      */
     protected Locale getLocaleFromString(String localeExpr) {

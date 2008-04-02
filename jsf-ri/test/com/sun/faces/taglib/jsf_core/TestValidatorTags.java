@@ -1,5 +1,5 @@
 /*
- * $Id: TestValidatorTags.java,v 1.25 2004/02/06 18:57:13 rlubke Exp $
+ * $Id: TestValidatorTags.java,v 1.26 2004/02/26 20:34:44 eburns Exp $
  */
 
 /*
@@ -30,7 +30,7 @@ import java.util.Iterator;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestValidatorTags.java,v 1.25 2004/02/06 18:57:13 rlubke Exp $
+ * @version $Id: TestValidatorTags.java,v 1.26 2004/02/26 20:34:44 eburns Exp $
  */
 
 public class TestValidatorTags extends JspFacesTestCase {

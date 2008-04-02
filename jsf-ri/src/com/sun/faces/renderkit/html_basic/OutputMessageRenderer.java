@@ -1,5 +1,5 @@
 /*
- * $Id: OutputMessageRenderer.java,v 1.12 2004/02/06 18:55:21 rlubke Exp $
+ * $Id: OutputMessageRenderer.java,v 1.13 2004/02/26 20:33:00 eburns Exp $
  */
 
 /*

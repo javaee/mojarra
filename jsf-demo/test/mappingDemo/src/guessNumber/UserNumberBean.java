@@ -137,23 +137,21 @@ public class UserNumberBean {
                 if (maximumSet &&
                     (converted > maximum)) {
                     if (minimumSet) {
-                        throw new ValidatorException(
-                            MessageFactory.getMessage
-                            (context,
-                             Validator.NOT_IN_RANGE_MESSAGE_ID,
-                             new Object[]{
-                                 new Integer(minimum),
-                                 new Integer(maximum)
-                             }));
+                        throw new ValidatorException(MessageFactory.getMessage
+                                                     (context,
+                                                      Validator.NOT_IN_RANGE_MESSAGE_ID,
+                                                      new Object[]{
+                                                          new Integer(minimum),
+                                                          new Integer(maximum)
+                                                      }));
 
                     } else {
-                        throw new ValidatorException(
-                            MessageFactory.getMessage
-                            (context,
-                             LongRangeValidator.MAXIMUM_MESSAGE_ID,
-                             new Object[]{
-                                 new Integer(maximum)
-                             }));
+                        throw new ValidatorException(MessageFactory.getMessage
+                                                     (context,
+                                                      LongRangeValidator.MAXIMUM_MESSAGE_ID,
+                                                      new Object[]{
+                                                          new Integer(maximum)
+                                                      }));
                     }
                 }
                 if (minimumSet &&
@@ -168,19 +166,18 @@ public class UserNumberBean {
                                                       }));
 
                     } else {
-                        throw new ValidatorException(
-                            MessageFactory.getMessage
-                            (context,
-                             LongRangeValidator.MINIMUM_MESSAGE_ID,
-                             new Object[]{
-                                 new Integer(minimum)
-                             }));
+                        throw new ValidatorException(MessageFactory.getMessage
+                                                     (context,
+                                                      LongRangeValidator.MINIMUM_MESSAGE_ID,
+                                                      new Object[]{
+                                                          new Integer(minimum)
+                                                      }));
                     }
                 }
             } catch (NumberFormatException e) {
-                throw new ValidatorException(
-                    MessageFactory.getMessage
-                    (context, LongRangeValidator.TYPE_MESSAGE_ID));
+                throw new ValidatorException(MessageFactory.getMessage
+                                             (context,
+                                              LongRangeValidator.TYPE_MESSAGE_ID));
             }
         }
 

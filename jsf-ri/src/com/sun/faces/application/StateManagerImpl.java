@@ -1,5 +1,5 @@
 /* 
- * $Id: StateManagerImpl.java,v 1.17 2004/02/06 18:54:15 rlubke Exp $ 
+ * $Id: StateManagerImpl.java,v 1.18 2004/02/26 20:32:30 eburns Exp $ 
  */ 
 
 
@@ -35,7 +35,7 @@ import java.util.Set;
  * <B>StateManagerImpl</B> is the default implementation class for
  * StateManager.
  *
- * @version $Id: StateManagerImpl.java,v 1.17 2004/02/06 18:54:15 rlubke Exp $
+ * @version $Id: StateManagerImpl.java,v 1.18 2004/02/26 20:32:30 eburns Exp $
  * @see javax.faces.application.ViewHandler
  */
 public class StateManagerImpl extends StateManager {

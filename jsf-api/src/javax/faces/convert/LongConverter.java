@@ -1,5 +1,5 @@
 /*
- * $Id: LongConverter.java,v 1.11 2004/02/04 23:38:05 ofung Exp $
+ * $Id: LongConverter.java,v 1.12 2004/02/26 20:30:50 eburns Exp $
  */
 
 /*

@@ -1,5 +1,5 @@
 /*
- * $Id: MethodBinding.java,v 1.7 2004/02/06 04:20:33 craigmcc Exp $
+ * $Id: MethodBinding.java,v 1.8 2004/02/26 20:30:55 eburns Exp $
  */
 
 /*

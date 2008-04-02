@@ -1,5 +1,5 @@
 /*
- * $Id: TestUtil.java,v 1.21 2004/02/06 18:57:16 rlubke Exp $
+ * $Id: TestUtil.java,v 1.22 2004/02/26 20:34:46 eburns Exp $
  */
 
 /*
@@ -31,9 +31,7 @@ import java.util.Map;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestUtil.java,v 1.21 2004/02/06 18:57:16 rlubke Exp $
- * @see	Blah
- * @see	Bloo
+ * @version $Id: TestUtil.java,v 1.22 2004/02/26 20:34:46 eburns Exp $
  */
 
 public class TestUtil extends ServletFacesTestCase {

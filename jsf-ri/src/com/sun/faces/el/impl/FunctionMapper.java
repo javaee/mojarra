@@ -1,7 +1,3 @@
-/*
- * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
- * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
- */
 
 package com.sun.faces.el.impl;
 
@@ -22,7 +18,6 @@ public interface FunctionMapper {
      *
      * @param prefix    the prefix of the function, or "" if no prefix
      * @param localName the short name of the function
-     *
      * @return the result of the method mapping.  Null means no entry found.
      */
     public Method resolve(String prefix, String localName);

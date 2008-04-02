@@ -1,5 +1,5 @@
 /*
- * $Id: TestPropertyResolverImpl.java,v 1.11 2004/02/06 18:56:45 rlubke Exp $
+ * $Id: TestPropertyResolverImpl.java,v 1.12 2004/02/26 20:34:24 eburns Exp $
  */
 
 /*
@@ -28,9 +28,7 @@ import java.util.List;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestPropertyResolverImpl.java,v 1.11 2004/02/06 18:56:45 rlubke Exp $
- * @see	Blah
- * @see	Bloo
+ * @version $Id: TestPropertyResolverImpl.java,v 1.12 2004/02/26 20:34:24 eburns Exp $
  */
 
 public class TestPropertyResolverImpl extends ServletFacesTestCase {

@@ -1,5 +1,5 @@
 /*
- * $Id: TestComponentType.java,v 1.8 2004/02/06 18:57:07 rlubke Exp $
+ * $Id: TestComponentType.java,v 1.9 2004/02/26 20:34:38 eburns Exp $
  */
 
 /*
@@ -22,9 +22,7 @@ import javax.faces.component.UISelectMany;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestComponentType.java,v 1.8 2004/02/06 18:57:07 rlubke Exp $
- * @see	Blah
- * @see	Bloo
+ * @version $Id: TestComponentType.java,v 1.9 2004/02/26 20:34:38 eburns Exp $
  */
 
 public class TestComponentType extends TestCase // ServletTestCase

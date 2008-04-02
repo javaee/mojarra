@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.126 2004/02/04 23:37:43 ofung Exp $
+ * $Id: UIComponent.java,v 1.127 2004/02/26 20:30:31 eburns Exp $
  */
 
 /*

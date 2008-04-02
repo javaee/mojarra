@@ -1,9 +1,4 @@
 /*
- * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
- * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
- */
-
-/*
  * The Apache Software License, Version 1.1
  *
  * Copyright (c) 1999 The Apache Software Foundation.  All rights 
@@ -118,7 +113,7 @@ import java.util.Map;
  *
  * @author Nathan Abramson - Art Technology Group
  * @author Shawn Bayern
- * @version $Change: 181177 $$DateTime: 2001/06/26 08:45:09 $$Author: rlubke $
+ * @version $Change: 181177 $$DateTime: 2001/06/26 08:45:09 $$Author: eburns $
  */
 
 public class ExpressionEvaluatorImpl implements ExpressionEvaluator {
@@ -190,9 +185,7 @@ public class ExpressionEvaluatorImpl implements ExpressionEvaluator {
      * errors, it should raise an ELParseException.
      *
      * @param exprInfo ExpressionInfo
-     *
      * @return The Expression object encapsulating the arguments.
-     *
      * @throws ElException Thrown if parsing errors were found.
      */
     public Expression parseExpression(ExpressionInfo exprInfo)
@@ -219,7 +212,6 @@ public class ExpressionEvaluatorImpl implements ExpressionEvaluator {
      * Evaluates the given expression String
      *
      * @param exprInfo ExpressionInfo
-     *
      * @return the expression String evaluated to the given expected
      *         type
      */

@@ -1,5 +1,5 @@
 /*
- * $Id: FacesException.java,v 1.12 2004/02/04 23:37:35 ofung Exp $
+ * $Id: FacesException.java,v 1.13 2004/02/26 20:30:19 eburns Exp $
  */
 
 /*

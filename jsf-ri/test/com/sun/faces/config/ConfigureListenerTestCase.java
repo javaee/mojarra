@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListenerTestCase.java,v 1.5 2004/02/06 18:56:34 rlubke Exp $
+ * $Id: ConfigureListenerTestCase.java,v 1.6 2004/02/26 20:34:15 eburns Exp $
  */
 
 /*

@@ -308,6 +308,9 @@ Known Issues With This Release
 
   com.sun.faces.config.ConfigureListener
 
+* "disabledClass" property specified on SelectOneRadio tag is not applied
+  to the individual select item  (options). 
+
 Legal Notice
 ============
 

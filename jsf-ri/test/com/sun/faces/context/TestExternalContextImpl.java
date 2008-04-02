@@ -1,5 +1,5 @@
 /*
- * $Id: TestExternalContextImpl.java,v 1.12 2004/02/23 20:38:04 rlubke Exp $
+ * $Id: TestExternalContextImpl.java,v 1.13 2004/02/26 20:34:20 eburns Exp $
  */
 
 /*
@@ -35,7 +35,7 @@ import java.util.Set;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestExternalContextImpl.java,v 1.12 2004/02/23 20:38:04 rlubke Exp $
+ * @version $Id: TestExternalContextImpl.java,v 1.13 2004/02/26 20:34:20 eburns Exp $
  */
 
 public class TestExternalContextImpl extends ServletFacesTestCase {
@@ -620,10 +620,10 @@ public class TestExternalContextImpl extends ServletFacesTestCase {
         System.out.println(
             "    Testing supported methods of RequesHeaderValuesMap...");
         assertTrue(requestHeaderValuesMap.get("One") instanceof Enumeration);
-        Enumeration e = (Enumeration) requestHeaderValuesMap.get("foo");
+        Enumeration iter = (Enumeration) requestHeaderValuesMap.get("foo");
         String returnValues = null;
-        while (e.hasMoreElements()) {
-            returnValues = (String) e.nextElement();
+        while (iter.hasMoreElements()) {
+            returnValues = (String) iter.nextElement();
         }
 
         String value = "one,two,three";

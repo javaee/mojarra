@@ -1,5 +1,5 @@
 /*
- * $Id: MaxMinValidatorTag.java,v 1.4 2004/02/06 18:55:41 rlubke Exp $
+ * $Id: MaxMinValidatorTag.java,v 1.5 2004/02/26 20:33:18 eburns Exp $
  */
 
 /*
@@ -18,9 +18,7 @@ import javax.faces.webapp.ValidatorTag;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: MaxMinValidatorTag.java,v 1.4 2004/02/06 18:55:41 rlubke Exp $
- * @see	Blah
- * @see	Bloo
+ * @version $Id: MaxMinValidatorTag.java,v 1.5 2004/02/26 20:33:18 eburns Exp $
  */
 
 public abstract class MaxMinValidatorTag extends ValidatorTag {

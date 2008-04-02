@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderKitFactory.java,v 1.13 2004/02/06 18:57:06 rlubke Exp $
+ * $Id: TestRenderKitFactory.java,v 1.14 2004/02/26 20:34:36 eburns Exp $
  */
 
 /*
@@ -24,9 +24,7 @@ import java.util.Iterator;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderKitFactory.java,v 1.13 2004/02/06 18:57:06 rlubke Exp $
- * @see	Blah
- * @see	Bloo
+ * @version $Id: TestRenderKitFactory.java,v 1.14 2004/02/26 20:34:36 eburns Exp $
  */
 
 public class TestRenderKitFactory extends ServletFacesTestCase {

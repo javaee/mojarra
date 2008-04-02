@@ -1,5 +1,5 @@
 /*
- * $Id: TestApplicationFactoryImpl.java,v 1.4 2004/02/06 18:56:29 rlubke Exp $
+ * $Id: TestApplicationFactoryImpl.java,v 1.5 2004/02/26 20:34:08 eburns Exp $
  */
 
 /*
@@ -20,9 +20,7 @@ import javax.faces.application.Application;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestApplicationFactoryImpl.java,v 1.4 2004/02/06 18:56:29 rlubke Exp $
- * @see	Blah
- * @see	Bloo
+ * @version $Id: TestApplicationFactoryImpl.java,v 1.5 2004/02/26 20:34:08 eburns Exp $
  */
 
 public class TestApplicationFactoryImpl extends JspFacesTestCase {

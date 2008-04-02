@@ -1,5 +1,5 @@
 /*
- * $Id: TestUtil_messages.java,v 1.30 2004/02/06 18:57:17 rlubke Exp $
+ * $Id: TestUtil_messages.java,v 1.31 2004/02/26 20:34:47 eburns Exp $
  */
 
 /*
@@ -23,7 +23,7 @@ import java.util.Locale;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestUtil_messages.java,v 1.30 2004/02/06 18:57:17 rlubke Exp $
+ * @version $Id: TestUtil_messages.java,v 1.31 2004/02/26 20:34:47 eburns Exp $
  */
 
 public class TestUtil_messages extends ServletFacesTestCase {

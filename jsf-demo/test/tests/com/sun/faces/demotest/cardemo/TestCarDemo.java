@@ -1,5 +1,5 @@
 /*
- * $Id: TestCarDemo.java,v 1.7 2004/02/05 16:26:41 rlubke Exp $
+ * $Id: TestCarDemo.java,v 1.8 2004/02/26 20:34:59 eburns Exp $
  */
 
 /*
@@ -98,13 +98,13 @@ public class TestCarDemo extends HtmlUnitTestCase {
     /**
      * <p>Assumptions: there are exactly four buttons on this page, one
      * for each car model.</p>
-     *
+     * <p/>
      * <p>Verify that all of the expected cars have their descriptions
      * on the page.</p>
-     *
+     * <p/>
      * <p>Verify that the text of the "more" button is properly
      * localized.</p>
-     *
+     * <p/>
      * <p>Press the button for each model and execute doCarDetail() on
      * the result.</p>
      */
@@ -227,8 +227,9 @@ public class TestCarDemo extends HtmlUnitTestCase {
             if (-1 != (button.asText().indexOf(label))) {
                 // press it
                 carDetail = (HtmlPage) button.click();
-                checkboxes = getAllElementsOfGivenClass(carDetail, null,
-                                                        HtmlCheckBoxInput.class);
+                checkboxes =
+                    getAllElementsOfGivenClass(carDetail, null,
+                                               HtmlCheckBoxInput.class);
                 // verify that at least one of the checkboxes are
                 // disabled.
                 checkboxIter = checkboxes.iterator();

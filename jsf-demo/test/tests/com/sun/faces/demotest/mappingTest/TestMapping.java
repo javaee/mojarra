@@ -1,5 +1,5 @@
 /*
- * $Id: TestMapping.java,v 1.4 2004/02/05 16:26:47 rlubke Exp $
+ * $Id: TestMapping.java,v 1.5 2004/02/26 20:35:01 eburns Exp $
  */
 
 /*
@@ -45,13 +45,12 @@ public class TestMapping extends HtmlUnitTestCase {
             for (Iterator iter = greetingPage.getAllHtmlChildElements(); iter.hasNext();) {
                 HtmlElement element = (HtmlElement) iter.next();
                 if (element.getTagName().equalsIgnoreCase("img")) {
-                    assertTrue(
-                        element.getAttributeValue("id").equals(
-                            "helloForm" + NamingContainer.SEPARATOR_CHAR +
-                            "waveImg"));
-                    assertTrue(
-                        stripJsessionInfo(element.getAttributeValue("src"))
-                        .equals(context + "/wave.med.gif"));
+                    assertTrue(element.getAttributeValue("id").equals("helloForm" +
+                                                                      NamingContainer.SEPARATOR_CHAR +
+                                                                      "waveImg"));
+                    assertTrue(stripJsessionInfo(
+                        element.getAttributeValue("src"))
+                               .equals(context + "/wave.med.gif"));
                 }
             }
 
@@ -63,13 +62,11 @@ public class TestMapping extends HtmlUnitTestCase {
             assertTrue(form != null);
             assertTrue(form.getIdAttribute().equals("helloForm"));
             if (isPrefix) {
-                assertTrue(
-                    stripJsessionInfo(form.getActionAttribute()).equals(
-                        context + "/guess/greeting.jsp"));
+                assertTrue(stripJsessionInfo(form.getActionAttribute()).equals(
+                    context + "/guess/greeting.jsp"));
             } else {
-                assertTrue(
-                    stripJsessionInfo(form.getActionAttribute()).equals(
-                        context + "/greeting.faces"));
+                assertTrue(stripJsessionInfo(form.getActionAttribute()).equals(
+                    context + "/greeting.faces"));
             }
 
             HtmlTextInput input = (HtmlTextInput) form.getInputByName(
@@ -96,19 +93,17 @@ public class TestMapping extends HtmlUnitTestCase {
                         break;
                     } else if (element.asText().trim().equals(
                         "Sorry, " + i + " is incorrect.")) {
-                        System.out.println(
-                            "Incorrect guess for '" + i +
-                            "', going back to guess again.");
+                        System.out.println("Incorrect guess for '" + i +
+                                           "', going back to guess again.");
                         break;
                     }
                 } else if (element.getTagName().equalsIgnoreCase("img")) {
-                    assertTrue(
-                        element.getAttributeValue("id").equals(
-                            "responseForm" + NamingContainer.SEPARATOR_CHAR +
-                            "waveImg"));
-                    assertTrue(
-                        stripJsessionInfo(element.getAttributeValue("src"))
-                        .equals(context + "/wave.med.gif"));
+                    assertTrue(element.getAttributeValue("id").equals("responseForm" +
+                                                                      NamingContainer.SEPARATOR_CHAR +
+                                                                      "waveImg"));
+                    assertTrue(stripJsessionInfo(
+                        element.getAttributeValue("src"))
+                               .equals(context + "/wave.med.gif"));
                 }
             }
 
@@ -122,13 +117,11 @@ public class TestMapping extends HtmlUnitTestCase {
             assertTrue(back != null);
             assertTrue(back.getIdAttribute().equals("responseForm"));
             if (isPrefix) {
-                assertTrue(
-                    stripJsessionInfo(back.getActionAttribute()).equals(
-                        context + "/guess/response.jsp"));
+                assertTrue(stripJsessionInfo(back.getActionAttribute()).equals(
+                    context + "/guess/response.jsp"));
             } else {
-                assertTrue(
-                    stripJsessionInfo(back.getActionAttribute()).equals(
-                        context + "/response.faces"));
+                assertTrue(stripJsessionInfo(back.getActionAttribute()).equals(
+                    context + "/response.faces"));
             }
 
             greetingPage =
@@ -192,9 +185,8 @@ public class TestMapping extends HtmlUnitTestCase {
             HtmlElement element = (HtmlElement) iter.next();
             if (element.getTagName().equalsIgnoreCase("span")) {
                 testFailed = true;
-                assertTrue(
-                    element.getAttributeValue("style").startsWith(
-                        "color: red;"));
+                assertTrue(element.getAttributeValue("style").startsWith(
+                    "color: red;"));
                 assertTrue(
                     element.asText().trim().startsWith("Validation Error"));
             }
@@ -222,9 +214,8 @@ public class TestMapping extends HtmlUnitTestCase {
             HtmlElement element = (HtmlElement) iter.next();
             if (element.getTagName().equalsIgnoreCase("span")) {
                 testFailed = true;
-                assertTrue(
-                    element.getAttributeValue("style").startsWith(
-                        "color: red;"));
+                assertTrue(element.getAttributeValue("style").startsWith(
+                    "color: red;"));
                 assertTrue(
                     element.asText().trim().startsWith("Validation Error"));
             }

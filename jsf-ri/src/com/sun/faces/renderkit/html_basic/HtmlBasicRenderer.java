@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderer.java,v 1.80 2004/02/06 18:55:19 rlubke Exp $
+ * $Id: HtmlBasicRenderer.java,v 1.81 2004/02/26 20:32:56 eburns Exp $
  */
 
 /*
@@ -329,7 +329,6 @@ public abstract class HtmlBasicRenderer extends Renderer {
      *
      * @param forComponent - the component to search for
      * @param component    - the starting point in which to begin the search
-     *
      * @return the component with the the <code>id</code that matches
      *         <code>forComponent</code> otheriwse null if no match is found.
      */
@@ -386,7 +385,6 @@ public abstract class HtmlBasicRenderer extends Renderer {
      *
      * @param startPoint   - the starting point in which to begin the search
      * @param forComponent - the component to search for
-     *
      * @return the component with the the <code>id</code that matches
      *         <code>forComponent</code> otheriwse null if no match is found.
      */

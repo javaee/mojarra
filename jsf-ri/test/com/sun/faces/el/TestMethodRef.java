@@ -1,5 +1,5 @@
 /*
- * $Id: TestMethodRef.java,v 1.4 2004/02/06 18:56:44 rlubke Exp $
+ * $Id: TestMethodRef.java,v 1.5 2004/02/26 20:34:24 eburns Exp $
  */
 
 /*
@@ -20,9 +20,7 @@ import javax.faces.el.MethodNotFoundException;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestMethodRef.java,v 1.4 2004/02/06 18:56:44 rlubke Exp $
- * @see	Blah
- * @see	Bloo
+ * @version $Id: TestMethodRef.java,v 1.5 2004/02/26 20:34:24 eburns Exp $
  */
 
 public class TestMethodRef extends ServletFacesTestCase {

@@ -1,5 +1,5 @@
 /*
- * $Id: FacetComponent.java,v 1.6 2004/02/06 18:56:04 rlubke Exp $
+ * $Id: FacetComponent.java,v 1.7 2004/02/26 20:33:39 eburns Exp $
  */
 
 /*

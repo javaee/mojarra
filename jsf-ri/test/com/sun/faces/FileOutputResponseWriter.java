@@ -1,5 +1,5 @@
 /*
- * $Id: FileOutputResponseWriter.java,v 1.12 2004/02/06 18:56:17 rlubke Exp $
+ * $Id: FileOutputResponseWriter.java,v 1.13 2004/02/26 20:33:59 eburns Exp $
  */
 
 /*
@@ -30,7 +30,7 @@ import java.io.Writer;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: FileOutputResponseWriter.java,v 1.12 2004/02/06 18:56:17 rlubke Exp $
+ * @version $Id: FileOutputResponseWriter.java,v 1.13 2004/02/26 20:33:59 eburns Exp $
  */
 
 public class FileOutputResponseWriter extends ResponseWriter {

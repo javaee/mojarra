@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKitImpl.java,v 1.17 2004/02/06 18:55:13 rlubke Exp $
+ * $Id: RenderKitImpl.java,v 1.18 2004/02/26 20:32:52 eburns Exp $
  */
 
 /*
@@ -30,9 +30,7 @@ import java.util.HashMap;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: RenderKitImpl.java,v 1.17 2004/02/06 18:55:13 rlubke Exp $
- * @see	Blah
- * @see	Bloo
+ * @version $Id: RenderKitImpl.java,v 1.18 2004/02/26 20:32:52 eburns Exp $
  */
 
 public class RenderKitImpl extends RenderKit {

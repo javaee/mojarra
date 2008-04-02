@@ -1,5 +1,5 @@
 /*
- * $Id: TestLoadBundleTag.java,v 1.7 2004/02/06 18:57:13 rlubke Exp $
+ * $Id: TestLoadBundleTag.java,v 1.8 2004/02/26 20:34:43 eburns Exp $
  */
 
 /*
@@ -19,7 +19,7 @@ import java.util.Map;
 
 
 /**
- * @version $Id: TestLoadBundleTag.java,v 1.7 2004/02/06 18:57:13 rlubke Exp $
+ * @version $Id: TestLoadBundleTag.java,v 1.8 2004/02/26 20:34:43 eburns Exp $
  */
 
 public class TestLoadBundleTag extends ServletFacesTestCase {

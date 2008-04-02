@@ -1,5 +1,5 @@
 /*
- * $Id: MockPropertyResolver.java,v 1.6 2004/02/04 23:39:13 ofung Exp $
+ * $Id: MockPropertyResolver.java,v 1.7 2004/02/26 20:31:53 eburns Exp $
  */
 
 /*

@@ -1,5 +1,5 @@
 /*
- * $Id: TestNavigationHandler.java,v 1.17 2004/02/06 18:56:29 rlubke Exp $
+ * $Id: TestNavigationHandler.java,v 1.18 2004/02/26 20:34:09 eburns Exp $
  */
 
 /*
@@ -38,7 +38,7 @@ import java.util.Map;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestNavigationHandler.java,v 1.17 2004/02/06 18:56:29 rlubke Exp $
+ * @version $Id: TestNavigationHandler.java,v 1.18 2004/02/26 20:34:09 eburns Exp $
  */
 
 public class TestNavigationHandler extends ServletFacesTestCase {

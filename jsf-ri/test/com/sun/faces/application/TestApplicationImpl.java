@@ -1,5 +1,5 @@
 /*
- * $Id: TestApplicationImpl.java,v 1.17 2004/02/06 18:56:29 rlubke Exp $
+ * $Id: TestApplicationImpl.java,v 1.18 2004/02/26 20:34:08 eburns Exp $
  */
 
 /*
@@ -39,7 +39,7 @@ import java.util.List;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestApplicationImpl.java,v 1.17 2004/02/06 18:56:29 rlubke Exp $
+ * @version $Id: TestApplicationImpl.java,v 1.18 2004/02/26 20:34:08 eburns Exp $
  */
 
 public class TestApplicationImpl extends JspFacesTestCase {

@@ -1,5 +1,5 @@
 /*
- * $Id: EditableValueHolder.java,v 1.7 2004/02/04 23:37:41 ofung Exp $
+ * $Id: EditableValueHolder.java,v 1.8 2004/02/26 20:30:29 eburns Exp $
  */
 
 /*

@@ -1,5 +1,5 @@
 /*
- * $Id: ActionListenerImpl.java,v 1.9 2004/02/06 18:54:13 rlubke Exp $
+ * $Id: ActionListenerImpl.java,v 1.10 2004/02/26 20:32:28 eburns Exp $
  */
 
 /*
@@ -66,16 +66,19 @@ public class ActionListenerImpl implements ActionListener {
         String outcome = null;
         MethodBinding binding = null;
 
-        binding = actionSource.getAction();
-        if (binding != null) {
-            try {
-                outcome = (String) binding.invoke(context, null);
-            } catch (MethodNotFoundException e) {
-                throw new FacesException(e);
-            } catch (EvaluationException e) {
-                throw new FacesException(e);
-            }
-        }
+	binding = actionSource.getAction();
+	if (binding != null) {
+	    try {
+		outcome = (String) binding.invoke(context, null);
+	    } catch (MethodNotFoundException e) {
+		throw new FacesException
+                    (binding.getExpressionString() + ": " + e, e);
+	    }
+	    catch (EvaluationException e) {
+		throw new FacesException
+                    (binding.getExpressionString() + ": " + e, e);
+	    }
+	}
 
         // Retrieve the NavigationHandler instance..
 

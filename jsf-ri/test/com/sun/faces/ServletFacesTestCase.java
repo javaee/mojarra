@@ -1,5 +1,5 @@
 /*
- * $Id: ServletFacesTestCase.java,v 1.10 2004/02/06 18:56:18 rlubke Exp $
+ * $Id: ServletFacesTestCase.java,v 1.11 2004/02/26 20:33:59 eburns Exp $
  */
 
 /*
@@ -27,7 +27,7 @@ import java.util.Iterator;
  * by cactus.  This class just delegates all method calls to
  * facesService.
  *
- * @version $Id: ServletFacesTestCase.java,v 1.10 2004/02/06 18:56:18 rlubke Exp $
+ * @version $Id: ServletFacesTestCase.java,v 1.11 2004/02/26 20:33:59 eburns Exp $
  * @see	#facesService
  */
 

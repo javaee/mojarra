@@ -62,7 +62,6 @@ import java.util.ResourceBundle;
 import java.util.StringTokenizer;
 
 /**
- *
  * <p>This bean encapsulates a car model, including pricing and package
  * choices.  The system allows the user to customize the properties of
  * this bean with the help of the {@link CarCustomizer}.</p>
@@ -72,7 +71,7 @@ import java.util.StringTokenizer;
  * <p>This is the only bean in the system that has complicated access to
  * the persistent store of data.  In the present implementation, this
  * persistent store is in <code>ResourceBundle</code> instances.</p>
- * 
+ *
  * <p>There are three data source <code>ResourceBundle</code> files
  * used:</p>
  *
@@ -110,7 +109,7 @@ import java.util.StringTokenizer;
  * key
  * key_componentType
  * key_valueType
- *</pre></code>
+ * </pre></code>
  *
  * <p>Where <code>key</code> is the name of an attribute of this car.
  * For example, <code>basePrice</code>, or <code>description</code>.
@@ -133,8 +132,6 @@ import java.util.StringTokenizer;
  * instance for that class.  If found, we use it to convert the value
  * for the <code>key</code> to the appropriate type and store that as
  * the <code>value</code> of the <code>UIComponent</code> instance.</p>
- *
- *
  */
 
 public class CarBean extends Object {
@@ -210,9 +207,10 @@ public class CarBean extends Object {
         components = new HashMap();
 
         // load the labels
-        resources = ResourceBundle.getBundle(CarStore.CARSTORE_PREFIX +
-                                             ".bundles.Resources",
-                                             context.getViewRoot().getLocale());
+        resources =
+            ResourceBundle.getBundle(CarStore.CARSTORE_PREFIX +
+                                     ".bundles.Resources",
+                                     context.getViewRoot().getLocale());
 
         // load the prices
         priceData = ResourceBundle.getBundle(CarStore.CARSTORE_PREFIX +
@@ -438,10 +436,9 @@ public class CarBean extends Object {
                     application.createConverter(CarStore.loadClass(valueType,
                                                                    this));
             } catch (ClassNotFoundException cne) {
-                FacesMessage errMsg = MessageFactory.getMessage(CONVERTER_ERROR_MESSAGE_ID,
-                                                                (new Object[]{
-                                                                    valueType
-                                                                }));
+                FacesMessage errMsg = MessageFactory.getMessage(
+                    CONVERTER_ERROR_MESSAGE_ID,
+                    (new Object[]{valueType}));
                 throw new IllegalStateException(errMsg.getSummary());
             }
             // add it to our component,

@@ -1,5 +1,5 @@
 /*
- * $Id: TestComponent.java,v 1.14 2004/02/04 23:38:43 ofung Exp $
+ * $Id: TestComponent.java,v 1.15 2004/02/26 20:31:27 eburns Exp $
  */
 
 /*

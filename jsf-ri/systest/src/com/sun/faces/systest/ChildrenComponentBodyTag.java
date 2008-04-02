@@ -1,5 +1,5 @@
 /*
- * $Id: ChildrenComponentBodyTag.java,v 1.4 2004/02/06 18:56:03 rlubke Exp $
+ * $Id: ChildrenComponentBodyTag.java,v 1.5 2004/02/26 20:33:38 eburns Exp $
  */
 
 /*

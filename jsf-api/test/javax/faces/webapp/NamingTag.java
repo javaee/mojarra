@@ -1,5 +1,5 @@
 /*
- * $Id: NamingTag.java,v 1.4 2004/02/04 23:39:35 ofung Exp $
+ * $Id: NamingTag.java,v 1.5 2004/02/26 20:32:14 eburns Exp $
  */
 
 /*

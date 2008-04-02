@@ -1,5 +1,5 @@
 /*
- * $Id: Phase.java,v 1.4 2004/02/06 18:55:08 rlubke Exp $
+ * $Id: Phase.java,v 1.5 2004/02/26 20:32:48 eburns Exp $
  */
 
 /*
@@ -34,7 +34,6 @@ public abstract class Phase {
      * the request processing lifecycle should do next.<?p>
      *
      * @param context FacesContext for the current request being processed
-     *
      * @throws FacesException if a processing error occurred while
      *                        executing this phase
      */

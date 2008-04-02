@@ -1,5 +1,5 @@
 /*
- * $Id: TestGuessNumber.java,v 1.9 2004/02/05 16:26:45 rlubke Exp $
+ * $Id: TestGuessNumber.java,v 1.10 2004/02/26 20:35:00 eburns Exp $
  */
 
 /*
@@ -41,13 +41,12 @@ public class TestGuessNumber extends HtmlUnitTestCase {
             for (Iterator iter = greetingPage.getAllHtmlChildElements(); iter.hasNext();) {
                 HtmlElement element = (HtmlElement) iter.next();
                 if (element.getTagName().equalsIgnoreCase("img")) {
-                    assertTrue(
-                        element.getAttributeValue("id").equals(
-                            "helloForm" + NamingContainer.SEPARATOR_CHAR +
-                            "waveImg"));
-                    assertTrue(
-                        stripJsessionInfo(element.getAttributeValue("src"))
-                        .equals("/jsf-guessNumber/wave.med.gif"));
+                    assertTrue(element.getAttributeValue("id").equals("helloForm" +
+                                                                      NamingContainer.SEPARATOR_CHAR +
+                                                                      "waveImg"));
+                    assertTrue(stripJsessionInfo(
+                        element.getAttributeValue("src"))
+                               .equals("/jsf-guessNumber/wave.med.gif"));
                 }
             }
 
@@ -58,9 +57,8 @@ public class TestGuessNumber extends HtmlUnitTestCase {
             HtmlForm form = (HtmlForm) forms.get(0);
             assertTrue(form != null);
             assertTrue(form.getIdAttribute().equals("helloForm"));
-            assertTrue(
-                stripJsessionInfo(form.getActionAttribute()).equals(
-                    "/jsf-guessNumber/guess/greeting.jsp"));
+            assertTrue(stripJsessionInfo(form.getActionAttribute()).equals(
+                "/jsf-guessNumber/guess/greeting.jsp"));
 
             HtmlTextInput input = (HtmlTextInput) form.getInputByName(
                 "helloForm" + NamingContainer.SEPARATOR_CHAR + "userNo");
@@ -86,19 +84,17 @@ public class TestGuessNumber extends HtmlUnitTestCase {
                         break;
                     } else if (element.asText().trim().equals(
                         "Sorry, " + i + " is incorrect.")) {
-                        System.out.println(
-                            "Incorrect guess for '" + i +
-                            "', going back to guess again.");
+                        System.out.println("Incorrect guess for '" + i +
+                                           "', going back to guess again.");
                         break;
                     }
                 } else if (element.getTagName().equalsIgnoreCase("img")) {
-                    assertTrue(
-                        element.getAttributeValue("id").equals(
-                            "responseForm" + NamingContainer.SEPARATOR_CHAR +
-                            "waveImg"));
-                    assertTrue(
-                        stripJsessionInfo(element.getAttributeValue("src"))
-                        .equals("/jsf-guessNumber/wave.med.gif"));
+                    assertTrue(element.getAttributeValue("id").equals("responseForm" +
+                                                                      NamingContainer.SEPARATOR_CHAR +
+                                                                      "waveImg"));
+                    assertTrue(stripJsessionInfo(
+                        element.getAttributeValue("src"))
+                               .equals("/jsf-guessNumber/wave.med.gif"));
                 }
             }
 
@@ -111,9 +107,8 @@ public class TestGuessNumber extends HtmlUnitTestCase {
             HtmlForm back = (HtmlForm) forms1.get(0);
             assertTrue(back != null);
             assertTrue(back.getIdAttribute().equals("responseForm"));
-            assertTrue(
-                stripJsessionInfo(back.getActionAttribute()).equals(
-                    "/jsf-guessNumber/guess/response.jsp"));
+            assertTrue(stripJsessionInfo(back.getActionAttribute()).equals(
+                "/jsf-guessNumber/guess/response.jsp"));
 
             greetingPage =
                 (HtmlPage) back.submit(
@@ -177,9 +172,8 @@ public class TestGuessNumber extends HtmlUnitTestCase {
             HtmlElement element = (HtmlElement) iter.next();
             if (element.getTagName().equalsIgnoreCase("span")) {
                 testFailed = true;
-                assertTrue(
-                    element.getAttributeValue("style").startsWith(
-                        "color: red;"));
+                assertTrue(element.getAttributeValue("style").startsWith(
+                    "color: red;"));
                 assertTrue(
                     element.asText().trim().startsWith("Validation Error"));
             }
@@ -207,9 +201,8 @@ public class TestGuessNumber extends HtmlUnitTestCase {
             HtmlElement element = (HtmlElement) iter.next();
             if (element.getTagName().equalsIgnoreCase("span")) {
                 testFailed = true;
-                assertTrue(
-                    element.getAttributeValue("style").startsWith(
-                        "color: red;"));
+                assertTrue(element.getAttributeValue("style").startsWith(
+                    "color: red;"));
                 assertTrue(
                     element.asText().trim().startsWith("Validation Error"));
             }

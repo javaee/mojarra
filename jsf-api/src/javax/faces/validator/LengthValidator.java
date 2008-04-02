@@ -1,5 +1,5 @@
 /*
- * $Id: LengthValidator.java,v 1.37 2004/02/04 23:38:31 ofung Exp $
+ * $Id: LengthValidator.java,v 1.38 2004/02/26 20:31:15 eburns Exp $
  */
 
 /*

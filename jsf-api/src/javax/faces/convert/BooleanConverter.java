@@ -1,5 +1,5 @@
 /*
- * $Id: BooleanConverter.java,v 1.12 2004/02/04 23:38:03 ofung Exp $
+ * $Id: BooleanConverter.java,v 1.13 2004/02/26 20:30:48 eburns Exp $
  */
 
 /*

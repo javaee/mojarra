@@ -1,5 +1,5 @@
 /*
- * $Id: OutputLinkRenderer.java,v 1.12 2004/02/06 18:55:21 rlubke Exp $
+ * $Id: OutputLinkRenderer.java,v 1.13 2004/02/26 20:32:59 eburns Exp $
  */
 
 /*
@@ -29,7 +29,7 @@ import java.util.Iterator;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: OutputLinkRenderer.java,v 1.12 2004/02/06 18:55:21 rlubke Exp $
+ * @version $Id: OutputLinkRenderer.java,v 1.13 2004/02/26 20:32:59 eburns Exp $
  */
 
 public class OutputLinkRenderer extends HtmlBasicRenderer {

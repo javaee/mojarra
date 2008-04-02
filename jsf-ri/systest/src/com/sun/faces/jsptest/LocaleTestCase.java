@@ -1,5 +1,5 @@
 /*
- * $Id: LocaleTestCase.java,v 1.4 2004/02/06 18:55:58 rlubke Exp $
+ * $Id: LocaleTestCase.java,v 1.5 2004/02/26 20:33:34 eburns Exp $
  */
 
 /*

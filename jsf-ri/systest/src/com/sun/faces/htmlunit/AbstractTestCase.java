@@ -1,5 +1,5 @@
 /*
- * $Id: AbstractTestCase.java,v 1.6 2004/02/06 18:55:55 rlubke Exp $
+ * $Id: AbstractTestCase.java,v 1.7 2004/02/26 20:33:31 eburns Exp $
  */
 
 /*

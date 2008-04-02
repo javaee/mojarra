@@ -1,5 +1,5 @@
 /*
- * $Id: ColumnTag.java,v 1.7 2004/02/06 18:55:38 rlubke Exp $
+ * $Id: ColumnTag.java,v 1.8 2004/02/26 20:33:14 eburns Exp $
  */
 
 /*

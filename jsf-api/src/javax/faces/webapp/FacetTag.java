@@ -1,5 +1,5 @@
 /*
- * $Id: FacetTag.java,v 1.13 2004/02/04 23:38:35 ofung Exp $
+ * $Id: FacetTag.java,v 1.14 2004/02/26 20:31:20 eburns Exp $
  */
 
 /*

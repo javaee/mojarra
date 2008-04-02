@@ -1,5 +1,5 @@
 /*
- * $Id: ConvertNumberTag.java,v 1.8 2004/02/06 18:55:41 rlubke Exp $
+ * $Id: ConvertNumberTag.java,v 1.9 2004/02/26 20:33:17 eburns Exp $
  */
 
 /*
@@ -22,7 +22,7 @@ import java.util.Locale;
  * <p>ConvertNumberTag is a ConverterTag implementation for
  * javax.faces.convert.NumberConverter</p>
  *
- * @version $Id: ConvertNumberTag.java,v 1.8 2004/02/06 18:55:41 rlubke Exp $
+ * @version $Id: ConvertNumberTag.java,v 1.9 2004/02/26 20:33:17 eburns Exp $
  */
 
 public class ConvertNumberTag extends ConverterTag {

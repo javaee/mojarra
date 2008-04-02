@@ -1,5 +1,5 @@
 /*
- * $Id: LongRangeValidator.java,v 1.32 2004/02/04 23:38:32 ofung Exp $
+ * $Id: LongRangeValidator.java,v 1.33 2004/02/26 20:31:16 eburns Exp $
  */
 
 /*

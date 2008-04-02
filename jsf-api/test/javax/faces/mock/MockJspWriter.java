@@ -1,5 +1,5 @@
 /*
- * $Id: MockJspWriter.java,v 1.4 2004/02/04 23:39:12 ofung Exp $
+ * $Id: MockJspWriter.java,v 1.5 2004/02/26 20:31:52 eburns Exp $
  */
 
 /*

@@ -4,7 +4,7 @@
  */
 
 /*
- * $Id: ListboxRenderer.java,v 1.19 2004/02/06 18:55:20 rlubke Exp $
+ * $Id: ListboxRenderer.java,v 1.20 2004/02/26 20:32:58 eburns Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise

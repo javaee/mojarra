@@ -1,5 +1,5 @@
 /*
- * $Id: ForEachBean.java,v 1.3 2004/02/06 18:56:11 rlubke Exp $
+ * $Id: ForEachBean.java,v 1.4 2004/02/26 20:33:46 eburns Exp $
  */
 
 /*

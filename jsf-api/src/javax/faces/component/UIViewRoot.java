@@ -1,5 +1,5 @@
 /*
- * $Id: UIViewRoot.java,v 1.25 2004/02/04 23:37:48 ofung Exp $
+ * $Id: UIViewRoot.java,v 1.26 2004/02/26 20:30:35 eburns Exp $
  */
 
 /*
@@ -302,7 +302,6 @@ public class UIViewRoot extends UIComponentBase {
      *  is <code>null</code>
      */
     public void processDecodes(FacesContext context) {
-	lastId = 0; // PENDING(edburns): shouldn't have to do this.
         super.processDecodes(context);
         broadcastEvents(context, PhaseId.APPLY_REQUEST_VALUES);
 	// clear out the events if we're skipping to render-response
@@ -310,6 +309,18 @@ public class UIViewRoot extends UIComponentBase {
 	    events = null;
 	}
 
+    }
+
+    /**
+     * <p>Override the default {@link UIComponentBase#encodeBegin}
+     * behavior to reset the mechanism used in {@link #createUniqueId}
+     * before falling through to the standard superclass processing.</p>
+     *
+     */
+
+    public void encodeBegin(FacesContext context) throws IOException {
+	lastId = 0;
+	super.encodeBegin(context);
     }
 
 
@@ -441,8 +452,8 @@ public class UIViewRoot extends UIComponentBase {
      *                    two-letter (lower-case) language code (as defined by 
      *                    ISO-639), and may contain a two-letter (upper-case)
      *                    country code (as defined by ISO-3166). Language and 
-     *                    country codes must be separated by hyphen (’-’) or 
-     *                    underscore (’_’)."
+     *                    country codes must be separated by hyphen (ï¿½-ï¿½) or 
+     *                    underscore (ï¿½_ï¿½)."
      * @return Locale instance cosntructed from the expression.
      */
     private Locale getLocaleFromString(String localeExpr) {

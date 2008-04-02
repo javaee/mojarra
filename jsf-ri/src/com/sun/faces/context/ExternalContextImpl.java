@@ -1,5 +1,5 @@
 /*
- * $Id: ExternalContextImpl.java,v 1.24 2004/02/06 18:54:23 rlubke Exp $
+ * $Id: ExternalContextImpl.java,v 1.25 2004/02/26 20:32:37 eburns Exp $
  */
 
 /*
@@ -44,7 +44,7 @@ import java.util.Set;
  * servlet implementation.
  *
  * @author Brendan Murray
- * @version $Id: ExternalContextImpl.java,v 1.24 2004/02/06 18:54:23 rlubke Exp $
+ * @version $Id: ExternalContextImpl.java,v 1.25 2004/02/26 20:32:37 eburns Exp $
  */
 public class ExternalContextImpl extends ExternalContext {
 

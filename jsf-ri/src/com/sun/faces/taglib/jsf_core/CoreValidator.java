@@ -1,5 +1,5 @@
 /*
- * $Id: CoreValidator.java,v 1.10 2004/02/06 18:55:41 rlubke Exp $
+ * $Id: CoreValidator.java,v 1.11 2004/02/26 20:33:17 eburns Exp $
  */
 
 /*

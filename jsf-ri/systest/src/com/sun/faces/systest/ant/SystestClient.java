@@ -1,8 +1,3 @@
-/*
- * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
- * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
- */
-
 /* ========================================================================= *
  *                                                                           *
  *                 The Apache Software License,  Version 1.1                 *
@@ -91,7 +86,7 @@ import java.util.Map;
  * send HTTP requests to a servlet container, and examine the responses.
  * It is similar in purpose to the <code>GTest</code> task in Watchdog,
  * but uses the JDK's HttpURLConnection for underlying connectivity.</p>
- * <p/>
+ *
  * <p>The task is registered with Ant using a <code>taskdef</code> directive:
  * <pre>
  *   &lt;taskdef name="systest"
@@ -148,7 +143,7 @@ import java.util.Map;
  * </ul>
  *
  * @author Craig R. McClanahan
- * @version $Revision: 1.8 $ $Date: 2004/02/06 18:56:09 $
+ * @version $Revision: 1.9 $ $Date: 2004/02/26 20:33:44 $
  */
 
 public class SystestClient extends Task {

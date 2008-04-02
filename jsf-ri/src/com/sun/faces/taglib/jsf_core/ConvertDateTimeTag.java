@@ -1,5 +1,5 @@
 /*
- * $Id: ConvertDateTimeTag.java,v 1.10 2004/02/06 18:55:40 rlubke Exp $
+ * $Id: ConvertDateTimeTag.java,v 1.11 2004/02/26 20:33:16 eburns Exp $
  */
 
 /*
@@ -24,7 +24,7 @@ import java.util.TimeZone;
  * <p>ConvertDateTimeTag is a ConverterTag implementation for
  * javax.faces.convert.DateTimeConverter</p>
  *
- * @version $Id: ConvertDateTimeTag.java,v 1.10 2004/02/06 18:55:40 rlubke Exp $
+ * @version $Id: ConvertDateTimeTag.java,v 1.11 2004/02/26 20:33:16 eburns Exp $
  */
 
 public class ConvertDateTimeTag extends ConverterTag {

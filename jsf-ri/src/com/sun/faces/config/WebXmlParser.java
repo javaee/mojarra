@@ -1,5 +1,5 @@
 /*
- * $Id: WebXmlParser.java,v 1.6 2004/02/06 18:54:21 rlubke Exp $
+ * $Id: WebXmlParser.java,v 1.7 2004/02/26 20:32:35 eburns Exp $
  */
 
 /*
@@ -166,7 +166,6 @@ public class WebXmlParser extends Object {
      * <p>Replace occurances of a ' ' with another '%20'.</p>
      *
      * @param src input value
-     *
      * @return the replacement result.
      */
     public static String escapeSpaces(String src) {

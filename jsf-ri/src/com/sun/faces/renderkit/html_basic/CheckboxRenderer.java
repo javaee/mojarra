@@ -1,5 +1,5 @@
 /*
- * $Id: CheckboxRenderer.java,v 1.65 2004/02/06 18:55:16 rlubke Exp $
+ * $Id: CheckboxRenderer.java,v 1.66 2004/02/26 20:32:54 eburns Exp $
  *
  */
 

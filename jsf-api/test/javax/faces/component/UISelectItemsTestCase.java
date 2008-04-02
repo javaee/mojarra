@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectItemsTestCase.java,v 1.9 2004/02/04 23:38:49 ofung Exp $
+ * $Id: UISelectItemsTestCase.java,v 1.10 2004/02/26 20:31:33 eburns Exp $
  */
 
 /*

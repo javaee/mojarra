@@ -1,9 +1,4 @@
 /*
- * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
- * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
- */
-
-/*
  * The Apache Software License, Version 1.1
  *
  * Copyright (c) 1999 The Apache Software Foundation.  All rights 
@@ -65,7 +60,7 @@ import java.text.MessageFormat;
 /**
  * <p>Utility class for generating parameterized messages.</p>
  *
- * @version $Id: MessageUtil.java,v 1.3 2004/02/06 18:54:37 rlubke Exp $
+ * @version $Id: MessageUtil.java,v 1.4 2004/02/26 20:32:43 eburns Exp $
  */
 
 public class MessageUtil {
@@ -76,7 +71,6 @@ public class MessageUtil {
      *
      * @param pTemplate the base message
      * @param pArg0     parameter
-     *
      * @return Returns a formatted message based on the provided template and
      *         a single parameter.
      */
@@ -92,7 +86,6 @@ public class MessageUtil {
      * @param pTemplate the base message
      * @param pArg0     parameter 1
      * @param pArg1     parameter 2
-     *
      * @return Returns a formatted message based on the provided template and
      *         provided parameter
      */
@@ -112,7 +105,6 @@ public class MessageUtil {
      * @param pArg0     parameter 1
      * @param pArg1     parameter 2
      * @param pArg2     parameter 3
-     *
      * @return Returns a formatted message based on the provided template and
      *         provided parameter
      */
@@ -134,7 +126,6 @@ public class MessageUtil {
      * @param pArg1     parameter 2
      * @param pArg2     parameter 3
      * @param pArg3     parameter 4
-     *
      * @return Returns a formatted message based on the provided template and
      *         provided parameter
      */
@@ -158,7 +149,6 @@ public class MessageUtil {
      * @param pArg2     parameter 3
      * @param pArg3     parameter 4
      * @param pArg4     parameter 5
-     *
      * @return Returns a formatted message based on the provided template and
      *         provided parameter
      */
@@ -185,7 +175,6 @@ public class MessageUtil {
      * @param pArg3     parameter 4
      * @param pArg4     parameter 5
      * @param pArg5     parameter 6
-     *
      * @return Returns a formatted message based on the provided template and
      *         provided parameter
      */

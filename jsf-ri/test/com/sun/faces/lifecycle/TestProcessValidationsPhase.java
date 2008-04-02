@@ -1,5 +1,5 @@
 /*
- * $Id: TestProcessValidationsPhase.java,v 1.31 2004/02/06 18:56:58 rlubke Exp $
+ * $Id: TestProcessValidationsPhase.java,v 1.32 2004/02/26 20:34:30 eburns Exp $
  */
 
 /*
@@ -28,9 +28,7 @@ import java.util.Iterator;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestProcessValidationsPhase.java,v 1.31 2004/02/06 18:56:58 rlubke Exp $
- * @see	Blah
- * @see	Bloo
+ * @version $Id: TestProcessValidationsPhase.java,v 1.32 2004/02/26 20:34:30 eburns Exp $
  */
 
 public class TestProcessValidationsPhase extends ServletFacesTestCase {

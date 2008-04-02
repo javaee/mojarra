@@ -1,5 +1,5 @@
 /*
- * $Id: MockHttpServletResponse.java,v 1.5 2004/02/04 23:39:12 ofung Exp $
+ * $Id: MockHttpServletResponse.java,v 1.6 2004/02/26 20:31:52 eburns Exp $
  */
 
 /*

@@ -1,5 +1,5 @@
 /*
- * $Id: ValueBindingImpl.java,v 1.29 2004/02/06 18:54:29 rlubke Exp $
+ * $Id: ValueBindingImpl.java,v 1.30 2004/02/26 20:32:40 eburns Exp $
  */
 
 /*
@@ -470,7 +470,6 @@ public class ValueBindingImpl extends ValueBinding implements StateHolder {
      * otherwise false.</p>
      *
      * @param identifier the identifier to check
-     *
      * @return returns true if the profivided identifier is a
      *         reserved identifier, otherwisefalse
      */

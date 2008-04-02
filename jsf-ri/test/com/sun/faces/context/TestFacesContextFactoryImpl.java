@@ -1,5 +1,5 @@
 /*
- * $Id: TestFacesContextFactoryImpl.java,v 1.10 2004/02/06 18:56:40 rlubke Exp $
+ * $Id: TestFacesContextFactoryImpl.java,v 1.11 2004/02/26 20:34:20 eburns Exp $
  */
 
 /*
@@ -24,9 +24,7 @@ import javax.faces.lifecycle.LifecycleFactory;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestFacesContextFactoryImpl.java,v 1.10 2004/02/06 18:56:40 rlubke Exp $
- * @see	Blah
- * @see	Bloo
+ * @version $Id: TestFacesContextFactoryImpl.java,v 1.11 2004/02/26 20:34:20 eburns Exp $
  */
 
 public class TestFacesContextFactoryImpl extends ServletFacesTestCase {

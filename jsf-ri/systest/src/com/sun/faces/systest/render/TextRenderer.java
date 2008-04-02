@@ -1,5 +1,5 @@
 /*
- * $Id: TextRenderer.java,v 1.7 2004/02/06 18:56:14 rlubke Exp $
+ * $Id: TextRenderer.java,v 1.8 2004/02/26 20:33:49 eburns Exp $
  */
 
 /*
@@ -22,10 +22,10 @@ import java.io.IOException;
 
 /**
  * <B>TextRenderer</B> is a class ...
- * <p/>
+ *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TextRenderer.java,v 1.7 2004/02/06 18:56:14 rlubke Exp $
+ * @version $Id: TextRenderer.java,v 1.8 2004/02/26 20:33:49 eburns Exp $
  * @see	Blah
  * @see	Bloo
  */

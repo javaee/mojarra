@@ -1,5 +1,5 @@
 /*
- * $Id: PropertyResolverImpl.java,v 1.13 2004/02/06 18:54:28 rlubke Exp $
+ * $Id: PropertyResolverImpl.java,v 1.14 2004/02/26 20:32:40 eburns Exp $
  */
 
 /*
