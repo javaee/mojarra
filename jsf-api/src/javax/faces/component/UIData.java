@@ -48,7 +48,6 @@ import javax.faces.event.RepeaterEvent;
 import javax.faces.model.DataModel;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -433,21 +432,9 @@ public class UIData extends UIComponentBase
 
         Object values[] = new Object[6];
         values[0] = super.saveState(context);
-        List[] supportList = new List[1];
-        List theSupport = new ArrayList(1);
-        theSupport.add(support);
-        supportList[0] = theSupport;
-        values[1] =
-            context.getApplication().getViewHandler().getStateManager().
-            getAttachedObjectState(context, this, "support", supportList);
+        values[1] = saveAttachedState(context, support);
         values[2] = new Integer(first);
-        List[] repeaterList = new List[1];
-        List theRepeater = new ArrayList(1);
-        theRepeater.add(repeater);
-        repeaterList[0] = theRepeater;
-        values[3] =
-            context.getApplication().getViewHandler().getStateManager().
-            getAttachedObjectState(context, this, "repeater", repeaterList);
+        values[3] = saveAttachedState(context, repeater);
         values[4] = new Integer(rows);
         values[5] = var;
         return (values);
@@ -460,26 +447,10 @@ public class UIData extends UIComponentBase
 
         Object values[] = (Object[]) state;
         super.restoreState(context, values[0]);
-        List[] supportList = 
-            context.getApplication().getViewHandler().getStateManager().
-            restoreAttachedObjectState(context, values[1], null, this);
-	if (supportList != null) {
-            List theSupport = supportList[0];
-            if ((theSupport != null) && (theSupport.size() > 0)) {
-                support = (ValueHolderSupport) theSupport.get(0);
-		support.setComponent(this);
-            }
-	}
+        support = (ValueHolderSupport) restoreAttachedState(context, values[1]);
+	support.setComponent(this);
         first = ((Integer) values[2]).intValue();
-        List[] repeaterList = 
-            context.getApplication().getViewHandler().getStateManager().
-            restoreAttachedObjectState(context, values[3], null, this);
-	if (repeaterList != null) {
-            List theRepeater = repeaterList[0];
-            if ((theRepeater != null) && (theRepeater.size() > 0)) {
-                repeater = (RepeaterSupport) theRepeater.get(0);
-            }
-	}
+        repeater = (RepeaterSupport) restoreAttachedState(context, values[3]);
         rows = ((Integer) values[4]).intValue();
         var = (String) values[5];
 

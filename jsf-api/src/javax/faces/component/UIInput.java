@@ -1,5 +1,5 @@
 /*
- * $Id: UIInput.java,v 1.32 2003/09/30 14:35:00 rlubke Exp $
+ * $Id: UIInput.java,v 1.33 2003/10/06 18:34:20 eburns Exp $
  */
 
 /*
@@ -548,11 +548,7 @@ public class UIInput extends UIOutput {
             values[3] = valid ? Boolean.TRUE : Boolean.FALSE;
         }
         
-        List validatorsList[] = new List[1];
-        validatorsList[0] = validators;
-        values[4] =
-            context.getApplication().getViewHandler().getStateManager().
-            getAttachedObjectState(context, this, null, validatorsList);
+        values[4] = saveAttachedState(context, validators);
         return (values);
 
     }
@@ -584,18 +580,25 @@ public class UIInput extends UIOutput {
             previous = values[2];
             valid = ((Boolean) values[3]).booleanValue();
         }
-        // if there were some validators registered prior to this method being 
-        // invoked, merge them with the list to be restored.
-        List validatorsList[] = new List[1];
-        validatorsList[0] = validators;
-        validatorsList = 
-            context.getApplication().getViewHandler().getStateManager().
-            restoreAttachedObjectState(context, values[4], validatorsList,
-				       this);
-        if (validatorsList != null) {
-            validators = validatorsList[0];
-        }
 
+	List restoredValidators = null;
+	Iterator iter = null;
+
+	if (null != (restoredValidators = (List) 
+		     restoreAttachedState(context, values[4]))) {
+	    // if there were some validators registered prior to this
+	    // method being invoked, merge them with the list to be
+	    // restored.
+	    if (null != validators) {
+		iter = restoredValidators.iterator();
+		while (iter.hasNext()) {
+		    validators.add(iter.next());
+		}
+	    }
+	    else {
+		validators = restoredValidators;
+	    }
+	}
     }
 
 

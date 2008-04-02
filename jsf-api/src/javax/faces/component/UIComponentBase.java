@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.66 2003/09/30 22:04:39 eburns Exp $
+ * $Id: UIComponentBase.java,v 1.67 2003/10/06 18:34:19 eburns Exp $
  */
 
 /*
@@ -721,14 +721,18 @@ public abstract class UIComponentBase extends UIComponent {
 	
 	Iterator kids = from.getFacetsAndChildren();
 	while (kids.hasNext()) {
-	    UIComponent kid = (UIComponent) kids.next();
-	    // Stop at NamingContainers
-	    if (!(kid instanceof NamingContainer)) {
-		UIComponent returned = _findInsideOf(kid, id);
-		if (returned != null)
-		    return returned;
-	    }
-	}
+        UIComponent kid = (UIComponent) kids.next();
+        // Stop at NamingContainers
+        if (!(kid instanceof NamingContainer)) {
+            UIComponent returned = _findInsideOf(kid, id);
+            if (returned != null) {
+                return returned;
+            }            
+        // the NamingContainer component could be what is being searched for. 
+        } else if (id.equals(kid.getId())) {
+            return kid;
+        }
+    }
 	
 	return null;
     }
@@ -1390,9 +1394,7 @@ public abstract class UIComponentBase extends UIComponent {
         values[3] = id;
         values[4] = rendered ? Boolean.TRUE : Boolean.FALSE;
         values[5] = rendererType;
-        values[6] =
-            context.getApplication().getViewHandler().getStateManager().
-            getAttachedObjectState(context, this, null, listeners);
+        values[6] = saveAttachedState(context, listeners);
 	// Don't save the transient flag.  Asssert that it is false
 	// here.
 		    
@@ -1421,11 +1423,34 @@ public abstract class UIComponentBase extends UIComponent {
         id = (String) values[3];
         rendered = ((Boolean) values[4]).booleanValue();
         rendererType = (String) values[5];
-        // if there were some listeners registered prior to this method being 
-        // invoked, merge them with the list to be restored.
-        listeners =
-            context.getApplication().getViewHandler().getStateManager().
-            restoreAttachedObjectState(context, values[6], listeners, this);
+	List [] restoredListeners = null;
+	if (null != (restoredListeners = (List [])
+		     restoreAttachedState(context, values[6]))) {
+	    // if there were some listeners registered prior to this
+	    // method being invoked, merge them with the list to be
+	    // restored.
+	    if (null != listeners) {
+		for (int i = 0, len = restoredListeners.length; i < len; i++) {
+		    // if the current restoredListener List has elements
+		    if (null != restoredListeners[i] && 
+			!restoredListeners[i].isEmpty()) {
+			// if the current existing listener List is
+			// non-null
+			if (null != listeners[i]) {
+			    listeners[i].addAll(restoredListeners[i]);
+			}
+			else {
+			    listeners[i] = restoredListeners[i];
+			}
+			restoredListeners[i] = null;
+		    }
+		    // else we don't need to do anything.
+		}
+	    }
+	    else {
+		listeners = restoredListeners;
+	    }
+	}
     }
 
 
@@ -1447,5 +1472,339 @@ public abstract class UIComponentBase extends UIComponent {
         this.transientFlag = transientFlag;
 
     }
+
+    // -------------------------------------- Helper methods for state saving
+
+    // --------- methods used by UIComponents to save their attached Objects.
+
+    /**
+     *
+     * <p>This method is called by {@link UIComponent} subclasses that
+     * want to save one or more attached objects.  It is a convenience
+     * method that does the work of saving attached objects that may or
+     * may not implement the {@link StateHolder} interface.  Using this
+     * method implies the use of {@link #restoreAttachedState} to restore
+     * the attached objects.</p>
+     *
+     * <p>This method supports saving attached objects of the following
+     * type: <code>Object</code>, <code>List</code> of
+     * <code>Object</code> and array of <code>List</code> of
+     * <code>Object</code>.</p>
+     *
+     * <p>Algorithm:</p>
+     *
+     * <ul>
+     *
+     * <p>If argument <code>attachedObject</code> is <code>null</code>
+     * return.</p>
+     *
+     * <p>If the argument <code>attachedObject</code> is an array of
+     * <code>List</code> call a private helper method to handle this
+     * case.  Return the result.</p>
+     *
+     * <p>If the argument <code>attachedObject</code> is itself a
+     * <code>List</code>, create a new <code>List</code> and fill it
+     * with one <code>StateHolderSaver</code> for each element in the
+     * argument <code>attachedObject</code> list.  Return the new
+     * <code>List</code>.</p>
+     *
+     * <p>Otherwise, create a <code>StateHolderSaver</code> instance
+     * around the argument <code>attachedObject</code> and return
+     * it.</p>
+     *
+     * </ul>
+     *
+     * @param context the {@link FacesContext} for this request.
+     *
+     * @param attachedObject the object, which may be an array of
+     * <code>List</code> instances, a <code>List</code> instance, or an
+     * Object.  The <code>attachedObject</code> (or the elements that
+     * comprise <code>attachedObject</code> may implement {@link
+     * StateHolder}.
+     *
+     * @exception NullPointerException if the context argument is null.
+     *
+     */
+
+    public static Object saveAttachedState(FacesContext context,
+					   Object attachedObject) {
+	if (null == context) {
+	    throw new NullPointerException();
+	}
+	if (null == attachedObject) {
+	    return null;
+	}
+	Object result = null;
+	List
+	    attachedList = null,
+	    resultList = null;
+	Iterator listIter = null;
+
+	if (attachedObject instanceof List[]) {
+	    result = saveAttachedListState(context, 
+					   (List []) attachedObject);
+	}
+	else if (attachedObject instanceof List) {
+	    attachedList = (List) attachedObject;
+	    resultList = new ArrayList(attachedList.size());
+	    listIter = attachedList.iterator();
+	    while (listIter.hasNext()) {
+		resultList.add(new StateHolderSaver(context, listIter.next()));
+	    }
+	    result = resultList;
+	}
+	else {
+	    result = new StateHolderSaver(context, attachedObject);
+	}
+
+	return result;
+    }
+    
+    /**
+     *
+     * <p>This method is called by {@link UIComponent} subclasses that
+     * need to restore the objects they saved using {@link
+     * #saveAttachedState}.  This method is tightly coupled with {@link
+     * #saveAttachedState}.</p>
+     *
+     * <p>This method supports restoring all attached objects types
+     * supported by {@link #saveAttachedState}.</p>
+     *
+     * <p>Algorithm:</p>
+     *
+     * <p>If the argument <code>stateObj</code> is an array of
+     * <code>Object</code> instances, call a private helper method and
+     * return the result.</p>
+     *
+     * <p>If the argument <code>stateObj</code> is a <code>List</code>,
+     * create a new <code>List</code> to hold the result.  Treat each
+     * element of <code>stateObj</code> as a
+     * <code>StateHolderSaver</code> instance and call
+     * <code>restore</code> on it, saving the result to the result
+     * <code>List</code>, which is returned.</p>
+     *
+     * <p>If the argument <code>stateObj</code> is an instance of
+     * <code>StateHolderSaver</code> call <code>restore</code> on it and
+     * return the result.</p>
+     *
+     * @param context the {@link FacesContext} for this request
+     *
+     * @param stateObj the opaque object returned from {@link
+     * #saveAttachedState}
+     *
+     * @exception NullPointerException if context is null.
+     *
+     * @exception IllegalStateException if we don't have a
+     * <code>StateHolderSaver</code> instance where we expect one.
+     *
+     */
+    
+    public static Object restoreAttachedState(FacesContext context,
+					      Object stateObj) throws IllegalStateException {
+	if (null == context) {
+	    throw new NullPointerException();
+	}
+	if (null == stateObj) {
+	    return null;
+	}
+	Object result = null;
+	List 
+	    stateList = null,
+	    resultList = null;
+	Iterator iter = null;
+	StateHolderSaver saver = null;
+
+	if (stateObj instanceof Object[]) {
+	    result = restoreAttachedListState(context, stateObj);
+	}
+	else if (stateObj instanceof List) {
+	    stateList = (List) stateObj;
+	    resultList = new ArrayList(stateList.size());
+	    iter = stateList.iterator();
+	    while (iter.hasNext()) {
+		try {
+		    saver = (StateHolderSaver) iter.next();
+		}
+		catch (ClassCastException cce) {
+		    throw new IllegalStateException("Unknown object type");
+		}
+		resultList.add(saver.restore(context));
+	    }
+	    result = resultList;
+	}
+	else if (stateObj instanceof StateHolderSaver) {
+	    saver = (StateHolderSaver) stateObj;
+	    result = saver.restore(context);
+	}
+	else {
+	    throw new IllegalStateException("Unknown object type");
+	}
+	return result;
+    }
+
+    /**
+     *
+     * <p>This method is called by {@link
+     * UIComponent} subclasses that have attached
+     * Objects.  It is a convenience method that does the work of saving
+     * attached objects that may or may not implement the {@link
+     * StateHolder} interface.</p>
+     *
+     * <p>Algorithm:</p>
+     *
+     * <p>If argument attachedObjects is null return.</p>
+     *
+     * <p>Store the state of the attachedObjects as an opaque Object array,
+     * interpreted only by our corresponding {@link
+     * #restoreAttachedState} method.  Each element in the Object array
+     * is either null, or is itself an array of <code>StateHolderSaver</code>
+     * instances.</p>
+     *
+     * <p>For each element in the argument attachedObjects array:</p>
+     *
+     * <p>If the current element is null, assign the corresponding
+     * element in the Object array to null.</p>
+     *
+     * <p>If the current element is non-null, create an inner
+     * <code>StateHolderSaver</code> array and iterate over the elements
+     * in the <code>List</code> contained in the current element in the
+     * argument attachedObjects array.  For each element, save the
+     * attached object using the <code>StateHolderSaver</code> helper
+     * class</p>.
+     *
+     * <p>Save the inner <code>StateHolderSaver</code> array to the
+     * corresponding element in the result Object array</p>
+     *
+     * @param context the {@link FacesContext} for this request.
+     *
+     * @param attachedObjects the objects, which may implement {@link
+     * StateHolder}, that are attached to argument attachee.
+     *
+     * @exception NullPointerException if the context or attachee
+     * arguments are null.
+     *
+     */
+
+    private static Object saveAttachedListState(FacesContext context,
+						List attachedObjects[]) {
+	if (null == attachedObjects) {
+	    return null;
+	}
+	if (null == context) {
+	    throw new NullPointerException();
+	}
+	
+	int 
+	    i, attachedObjectsLength = attachedObjects.length,
+	    j, innerListLength;
+	Object [] result = new Object[attachedObjectsLength];
+	StateHolderSaver [] innerList = null;
+	Object curAttachedObject = null;
+	Iterator iter = null;
+	
+	// For each List in the List array.
+	for (i = 0; i < attachedObjectsLength; i++) {
+	    // if there is no List
+	    if (null == attachedObjects[i]) {
+		result[i] = null;
+	    }
+	    else {
+		// There is a List, therefore we have some attachedObjects
+		innerListLength = attachedObjects[i].size();
+		innerList = new StateHolderSaver[innerListLength];
+		iter = attachedObjects[i].iterator();
+		j = 0;
+		// Iteratate over the attachedObjects
+		while (iter.hasNext()) {
+		    curAttachedObject = iter.next();
+		    if (null != curAttachedObject) {
+			innerList[j] = 
+			    new StateHolderSaver(context, curAttachedObject);
+		    }
+		    j++;
+		}
+		// at this point, innerList has the state of all the
+		// attachedObjects for this element in the argument attachedObjects
+		// array.
+		result[i] = innerList;
+	    }
+	}
+	return result;
+    }
+    
+    /**
+     *
+     * <p>This method is tightly coupled with {@link #saveAttachedListState}.</p>
+     *
+     * <p>Algorithm:</p>
+     *
+     * <p>Interpret the argument Object as an Object array, which it
+     * must be because that's what {@link #getAttachedObjectState} has
+     * produced.  This method creates a new <code>List []</code> to
+     * store the restored attachedObjects.  For each element in the Object
+     * array:</p>
+     *
+     * <p>If the current element is non-null, it must be of type
+     * <code>StateHolderSaver</code> array.  Create an ArrayList to
+     * store the contents of the inner <code>StateHolderSaver</code> array.
+     * For each element in the inner <code>StateHolderSaver</code>
+     * array:</p>
+     *
+     * <ul>
+     *
+     * <p>Interpret the element as the fully qualified Java class name
+     * and create an instance of that class, storing it in the
+     * ArrayList.</p>
+     *
+     * </ul>
+     *
+     * @param context the {@link FacesContext} for this request
+     *
+     * @param stateObj the opaque object returned from {@link
+     * #getAttachedObjectState}
+     *
+     * @exception NullPointerException if context is null.
+     *
+     */
+    
+    private static List [] restoreAttachedListState(FacesContext context,
+						    Object stateObj) {
+	if (null == stateObj) {
+	    return null;
+	}
+	if (null == context) {
+	    throw new NullPointerException();
+	}
+	
+	Object [] state = (Object []) stateObj;
+	StateHolderSaver [] innerArray = null;
+	int 
+	    i, j, innerLen, outerLen = state.length;
+	List [] result = null;
+	ArrayList curList = null;
+	Object curAttachedObject = null;
+	
+	for (i = 0; i < outerLen; i++) {
+            if (null != state[i]) {
+                if (null == result) {
+                    result = new List[outerLen];
+                }
+                innerArray = (StateHolderSaver []) state[i];
+                innerLen = innerArray.length;
+		result[i] = curList = new ArrayList();
+                // create the attachedObjects for this List
+                for (j = 0; j < innerLen; j++) {
+                    if (null != innerArray[j]) {
+                        curAttachedObject = innerArray[j].restore(context);
+                        if (null != curAttachedObject) {
+                            curList.add(curAttachedObject);
+                        }
+                    }
+                }
+            }
+        }
+	return result;
+    }
+
 
 }

@@ -1,5 +1,5 @@
 /*
- * $Id: ValueHolderSupport.java,v 1.7 2003/09/30 17:37:39 rlubke Exp $
+ * $Id: ValueHolderSupport.java,v 1.8 2003/10/06 18:34:21 eburns Exp $
  */
 
 /*
@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.faces.application.Application;
+import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.el.ValueBinding;
@@ -204,14 +205,7 @@ public class ValueHolderSupport
         // because it will be a different object instance on restoration
 
         Object values[] = new Object[3];
-        List[] converterList = new List[1];
-        List theConverter = new ArrayList(1);
-        theConverter.add(converter);
-        converterList[0] = theConverter;
-        values[0] =
-            context.getApplication().getViewHandler().getStateManager().
-            getAttachedObjectState(context, component,
-                                   "converter", converterList);
+        values[0] = UIComponentBase.saveAttachedState(context, converter);
         int rowCount = 0;
         Repeater repeater = RepeaterSupport.findParentRepeater(component);
         if (repeater != null && repeater.getRowIndex() > 0) {
@@ -233,56 +227,44 @@ public class ValueHolderSupport
 
     /**
      * <p>This ivar is used to allow the actual restoring of state to
-     * happen in {@link #restoreState} and {@link #setComponent}.  This
-     * is necessary because we need to know the component to which we
-     * are attached to fully have our state restored, and we don't know
-     * the component until {@link #setComponent} is called.</p>
+     * happen in {@link #setComponent}.  This is necessary because we
+     * need to know the component to which we are attached to fully have
+     * our state restored, and we don't know the component until {@link
+     * #setComponent} is called.</p>
      *
      */
-    private Object valueFromState = null;
+    private Object stateToRestore = null;
 
     public void restoreState(FacesContext context, Object state)
         throws IOException {
-        // Restore other state information from saved state
-        Object values[] = (Object[]) state;
-        List[] converterList = 
-            context.getApplication().getViewHandler().getStateManager().
-            restoreAttachedObjectState(context, values[0], null, component);
-        // PENDING(craigmcc) - it shouldn't be this hard to restore converters
-	if (converterList != null) {
-            List theConverter = converterList[0];
-            if ((theConverter != null) && (theConverter.size() > 0)) {
-                converter = (Converter) theConverter.get(0);
-            }
-	}
-
-	valueFromState = values[1];
-    
-        valueRef = (String) values[2];
-
+	stateToRestore = state;
     }
 
-    /**
-     * <p>Allows attached objects to maintain a reference to the {@link
-     * UIComponent} to which they are attached.  This method is called
-     * after {@link #restoreState}.</p>
-     *
-     * @param yourComponent the <code>UIComponent</code> to which this
-     * instance is attached, or <code>null</code> if there is no
-     * <code>UIComponent</code> for this instance.
-     */
-    
     public void setComponent(UIComponent yourComponent) {
+        component = yourComponent;
+	
         // Restore component reference from parameter
-        this.component = yourComponent;
-
-	if (null == this.component) {
+	if (null == stateToRestore || null == component) {
 	    return;
+	}
+
+        // Restore other state information from saved state
+        Object values[] = (Object[]) stateToRestore;
+
+	try {
+	    converter = (Converter) 
+		UIComponentBase.restoreAttachedState(FacesContext.getCurrentInstance(),
+						     values[0]);
+	}
+	catch (IllegalStateException ioe) {
+	    String message = "restoreAttachedState failed";
+	    FacesContext.getCurrentInstance().getExternalContext().log(message);
+	    throw new FacesException(message, ioe);
 	}
 
         Repeater repeater = RepeaterSupport.findParentRepeater(component);
         if (repeater != null && repeater.getRowIndex() > 0) {
-            Object[] currentValues = (Object[])valueFromState;
+            Object[] currentValues = (Object[])values[1];
             if ( currentValues != null ) {
                 for (int i = 0; i < currentValues.length; ++i ) {
                     repeater.setRowIndex(i+1);
@@ -290,9 +272,10 @@ public class ValueHolderSupport
                 }
             }
         } else {
-            value = valueFromState;
+            value = values[1];
         }
-	valueFromState = null;
+        valueRef = (String) values[2];
+	stateToRestore = null;
     }
 
 

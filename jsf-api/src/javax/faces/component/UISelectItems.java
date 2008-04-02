@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectItems.java,v 1.15 2003/09/30 17:05:00 craigmcc Exp $
+ * $Id: UISelectItems.java,v 1.16 2003/10/06 18:34:21 eburns Exp $
  */
 
 /*
@@ -11,8 +11,6 @@ package javax.faces.component;
 
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.model.SelectItem;
@@ -139,13 +137,7 @@ public class UISelectItems extends UIComponentBase implements ValueHolder {
 
         Object values[] = new Object[2];
         values[0] = super.saveState(context);
-        List[] supportList = new List[1];
-        List theSupport = new ArrayList(1);
-        theSupport.add(support);
-        supportList[0] = theSupport;
-        values[1] =
-            context.getApplication().getViewHandler().getStateManager().
-            getAttachedObjectState(context, this, "support", supportList);
+        values[1] = saveAttachedState(context, support);
         return (values);
 
     }
@@ -156,16 +148,8 @@ public class UISelectItems extends UIComponentBase implements ValueHolder {
 
         Object values[] = (Object[]) state;
         super.restoreState(context, values[0]);
-        List[] supportList = 
-            context.getApplication().getViewHandler().getStateManager().
-            restoreAttachedObjectState(context, values[1], null, this);
-	if (supportList != null) {
-            List theSupport = supportList[0];
-            if ((theSupport != null) && (theSupport.size() > 0)) {
-                support = (ValueHolderSupport) theSupport.get(0);
-		support.setComponent(this);
-            }
-	}
+	support = (ValueHolderSupport) restoreAttachedState(context, values[1]);
+	support.setComponent(this);
 
     }
 

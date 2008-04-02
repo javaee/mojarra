@@ -1,5 +1,5 @@
 /*
- * $Id: UICommand.java,v 1.44 2003/09/30 17:04:58 craigmcc Exp $
+ * $Id: UICommand.java,v 1.45 2003/10/06 18:34:18 eburns Exp $
  */
 
 /*
@@ -19,7 +19,6 @@ import javax.faces.event.PhaseId;
 import javax.faces.render.Renderer;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -229,13 +228,7 @@ public class UICommand extends UIComponentBase
 
         Object values[] = new Object[5];
         values[0] = super.saveState(context);
-        List[] supportList = new List[1];
-        List theSupport = new ArrayList(1);
-        theSupport.add(support);
-        supportList[0] = theSupport;
-        values[1] =
-            context.getApplication().getViewHandler().getStateManager().
-            getAttachedObjectState(context, this, "support", supportList);
+        values[1] = saveAttachedState(context, support);
         values[2] = action;
         values[3] = actionRef;
         values[4] = immediate ? Boolean.TRUE : Boolean.FALSE;
@@ -252,16 +245,8 @@ public class UICommand extends UIComponentBase
 
         Object values[] = (Object[]) state;
         super.restoreState(context, values[0]);
-        List[] supportList = (List[])
-            context.getApplication().getViewHandler().getStateManager().
-            restoreAttachedObjectState(context, values[1], null, this);
-	if (supportList != null) {
-            List theSupport = supportList[0];
-            if ((theSupport != null) && (theSupport.size() > 0)) {
-                support = (ValueHolderSupport) theSupport.get(0);
-		support.setComponent(this);
-            }
-	}
+        support = (ValueHolderSupport) restoreAttachedState(context,values[1]);
+	support.setComponent(this);
         action = (String) values[2];
         actionRef = (String) values[3];
         immediate = ((Boolean) values[4]).booleanValue();

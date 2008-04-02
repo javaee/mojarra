@@ -1,5 +1,5 @@
 /*
- * $Id: StateHolderSaver.java,v 1.9 2003/09/24 22:24:48 eburns Exp $
+ * $Id: StateHolderSaver.java,v 1.2 2003/10/06 18:34:17 eburns Exp $
  */
 
 /*
@@ -7,7 +7,7 @@
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
-package javax.faces.application;
+package javax.faces.component;
 
 import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
@@ -22,7 +22,7 @@ import java.io.Serializable;
  * <p>Helper class for saving and restoring attached objects.</p>
  *
  * <p>PENDING(edburns): move this to the component.base package, along
- * with the {get,restore}AttachedObjectState() machinery.  Make it
+ * with the {get,restore}AttachedState() machinery.  Make it
  * package private again.</p>
  *
  */
@@ -48,8 +48,7 @@ public class StateHolderSaver extends Object implements Serializable {
      * @return the restored {@link StateHolder} instance.
      */
 
-    public Object restore(FacesContext context, 
-			  UIComponent toAttachTo) throws IOException {
+    public Object restore(FacesContext context) throws IllegalStateException {
         Object result = null;
         Class toRestoreClass = null;
         if ( className == null) {
@@ -60,7 +59,7 @@ public class StateHolderSaver extends Object implements Serializable {
             toRestoreClass = loadClass(className, this);
         }
         catch (ClassNotFoundException e) {
-            toRestoreClass = null;
+	    throw new IllegalStateException(e.getMessage());
         }
 
         if (null != toRestoreClass) {
@@ -68,18 +67,23 @@ public class StateHolderSaver extends Object implements Serializable {
                 result = toRestoreClass.newInstance();
             }
             catch (InstantiationException e) {
-                throw new IOException(e.getMessage());
+                throw new IllegalStateException(e.getMessage());
             }
             catch (IllegalAccessException a) {
-                throw new IOException(a.getMessage());
+                throw new IllegalStateException(a.getMessage());
             }
         }
 
         if (null != result && null != savedState &&
 	    result instanceof StateHolder) {
-	    // don't need to check transient, since that was done on
-	    // the saving side.
-	    ((StateHolder)result).restoreState(context, savedState);
+	    try {
+		// don't need to check transient, since that was done on
+		// the saving side.
+		((StateHolder)result).restoreState(context, savedState);
+	    }
+	    catch (IOException ioe) {
+		throw new IllegalStateException(ioe.getMessage());
+	    }
         }
         return result;
     }
