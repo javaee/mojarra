@@ -364,6 +364,7 @@
     <copy file="${jsf-api.dtd}" todir="${dist.home}/lib"/>
 
     <antcall target="api.javadocs"/>
+    <antcall target="ri.tlddocs"/>
     <antcall target="copydocs"/>
    </target>
 
@@ -378,6 +379,19 @@
     </copy>
 
   </target>
+
+  <target name="ri.tlddocs" >
+
+    <echo> Build the RI TLDDocs </echo>
+    <ant dir="${jsf-ri.home}" 
+         antfile="${jsf-ri.home}/build.xml" target="tlddocs"/>
+    <echo> Copy the RI Javadocs to the dist </echo>
+    <copy todir="${dist.home}/tlddocs">
+      <fileset dir="${jsf-ri.home}/build/tlddocs"/>
+    </copy>
+
+  </target>
+
 
   <target name="copydocs" 
           description="Copy necessary files from docs directory to dist.home">
