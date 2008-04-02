@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBaseTestCase.java,v 1.26 2005/05/05 20:51:14 edburns Exp $
+ * $Id: UIComponentBaseTestCase.java,v 1.27 2005/06/02 00:00:34 edburns Exp $
  */
 
 /*
@@ -514,12 +514,6 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
 	    new MethodBindingValueChangeListener();
 	Throwable expected = 
 	    mbvcl.getExpectedCause(AbortProcessingException.class, ite3);
-	assertEquals(expected, ape);
-
-	MethodBindingActionListener mbal = 
-	    new MethodBindingActionListener();
-	expected = 
-	    mbal.getExpectedCause(AbortProcessingException.class, ite3);
 	assertEquals(expected, ape);
 
 	ValidatorException ve = new ValidatorException(new FacesMessage(), 

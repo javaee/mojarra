@@ -1,5 +1,5 @@
 /*
- * $Id: MockELContext.java,v 1.3 2005/06/01 20:08:51 edburns Exp $
+ * $Id: MockELContext.java,v 1.4 2005/06/02 00:00:35 edburns Exp $
  */
 
 /*
@@ -22,7 +22,6 @@ public class MockELContext extends ELContext {
     private ELResolver resolver;
 
     protected MockELContext(ELResolver resolver) {
-        super(resolver);
         this.resolver = resolver;
     }
 

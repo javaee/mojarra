@@ -1,5 +1,5 @@
 /*
- * $Id: UICommand.java,v 1.72 2005/05/05 20:51:02 edburns Exp $
+ * $Id: UICommand.java,v 1.73 2005/06/02 00:00:33 edburns Exp $
  */
 
 /*
@@ -15,6 +15,7 @@ import javax.el.ELException;
 import javax.faces.FacesException;
 import javax.faces.application.Application;
 import javax.faces.context.FacesContext;
+import javax.faces.el.EvaluationException;
 import javax.faces.el.MethodBinding;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.ActionEvent;
@@ -153,24 +154,7 @@ public class UICommand extends UIComponentBase
      * @deprecated Use {@link #getActionListeners} instead.
      */
     public MethodBinding getActionListener() {
-	MethodBinding result = null;
-
-	ActionListener [] curListeners = getActionListeners();
-	// go through our lisetners list and find the one and only
-	// MethodBindingActionListener instance, if present.
-	if (null != curListeners) {
-	    for (int i = 0; i < curListeners.length; i++) {
-		// We are guaranteed to have at most one instance of
-		// MethodBindingActionListener in the curListeners list.
-		if (MethodBindingActionListener.class ==
-		    curListeners[i].getClass()) {
-		    result = ((MethodBindingActionListener)curListeners[i]).
-			getWrapped();
-		    break;
-		}
-	    }
-	}
-	return result;
+        return this.methodBindingActionListener;
     }
 
     /**
@@ -178,31 +162,8 @@ public class UICommand extends UIComponentBase
      * @deprecated This has been replaced by {@link #addActionListener(javax.faces.event.ActionListener)}.
      */
     public void setActionListener(MethodBinding actionListener) {
-
-	ActionListener [] curListeners = getActionListeners();
-	// see if we need to null-out, or replace an existing listener
-	if (null != curListeners) {
-	    for (int i = 0; i < curListeners.length; i++) {
-		// if we want to remove the actionListener
-		if (null == actionListener) {
-		    // We are guaranteed to have at most one instance of
-		    // MethodBindingActionListener in the curListeners
-		    // list.
-		    if (MethodBindingActionListener.class ==
-			curListeners[i].getClass()) {
-			removeFacesListener(curListeners[i]);
-			return;
-		    }
-		}
-		// if we want to replace the actionListener
-		else if (actionListener == curListeners[i]) {
-		    removeFacesListener(curListeners[i]);
-		    break;
-		}
-	    }
-	}
-	addActionListener(new MethodBindingActionListener(actionListener));
-    }
+        this.methodBindingActionListener = actionListener;
+    } 
 
     /**
      * <p>The immediate flag.</p>
@@ -279,6 +240,8 @@ public class UICommand extends UIComponentBase
         this.value = value;
 
     }
+    
+    private MethodBinding methodBindingActionListener = null;
 
 
     // ---------------------------------------------------- ActionSource / ActionSource2 Methods
@@ -332,12 +295,13 @@ public class UICommand extends UIComponentBase
 
     public Object saveState(FacesContext context) {
 
-        Object values[] = new Object[5];
+        Object values[] = new Object[6];
         values[0] = super.saveState(context);
-        values[1] = saveAttachedState(context, actionExpression);
-        values[2] = immediate ? Boolean.TRUE : Boolean.FALSE;
-        values[3] = immediateSet ? Boolean.TRUE : Boolean.FALSE;
-        values[4] = value;
+        values[1] = saveAttachedState(context, methodBindingActionListener);
+        values[2] = saveAttachedState(context, actionExpression);
+        values[3] = immediate ? Boolean.TRUE : Boolean.FALSE;
+        values[4] = immediateSet ? Boolean.TRUE : Boolean.FALSE;
+        values[5] = value;
         
         return (values);
 
@@ -347,13 +311,14 @@ public class UICommand extends UIComponentBase
     public void restoreState(FacesContext context, Object state) {
         Object values[] = (Object[]) state;
         super.restoreState(context, values[0]);
+        methodBindingActionListener = (MethodBinding)
+            restoreAttachedState(context, values[1]);
         actionExpression = 
-	    (MethodExpression) restoreAttachedState(context, values[1]);
-        immediate = ((Boolean) values[2]).booleanValue();
-        immediateSet = ((Boolean) values[3]).booleanValue();
-        value = values[4];
+	    (MethodExpression) restoreAttachedState(context, values[2]);
+        immediate = ((Boolean) values[3]).booleanValue();
+        immediateSet = ((Boolean) values[4]).booleanValue();
+        value = values[5];
         
-        //PENDING add restoring of "ActionExpression" MethodExpression
     }
 
 
@@ -385,9 +350,12 @@ public class UICommand extends UIComponentBase
 
         if (event instanceof ActionEvent) {
             FacesContext context = getFacesContext();
-
-	    // no need to call our method based ActionListener, since it
-	    // is handled by the superclass processing.
+            
+            // Notify the specified action listener method (if any)
+            MethodBinding mb = getActionListener();
+            if (mb != null) {
+                mb.invoke(context, new Object[] { event });
+            }
 
             // Invoke the default ActionListener
             ActionListener listener =

@@ -43,7 +43,6 @@ public class TestBean extends Object {
 
     public void setOne(String newOne) {
         one = newOne;
-        assert (newOne.equals("one"));
         System.setProperty(PROP, TRUE);
     }
 

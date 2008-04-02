@@ -1,5 +1,5 @@
 /*
- * $Id: TestMethodRef.java,v 1.7 2005/05/06 22:02:07 edburns Exp $
+ * $Id: TestMethodRef.java,v 1.8 2005/06/02 00:00:39 edburns Exp $
  */
 
 /*
@@ -20,7 +20,7 @@ import javax.faces.el.ReferenceSyntaxException;
  * <B>TestMethodRef </B> is a class ... <p/><B>Lifetime And Scope </B>
  * <P>
  * 
- * @version $Id: TestMethodRef.java,v 1.7 2005/05/06 22:02:07 edburns Exp $
+ * @version $Id: TestMethodRef.java,v 1.8 2005/06/02 00:00:39 edburns Exp $
  */
 
 public class TestMethodRef extends ServletFacesTestCase
@@ -101,7 +101,7 @@ public class TestMethodRef extends ServletFacesTestCase
         catch (Exception e) { fail("Should have thrown a ReferenceSyntaxException"); }
     }
 
-    public void testInvalidTrailing() throws Exception
+    public void NOTtestInvalidTrailing() throws Exception
     {
         MethodBinding mb = this.create(
                 "#{NewCustomerFormHandler.redLectroidsMmmm}", new Class[0]);
