@@ -125,7 +125,9 @@
         <pathelement location="${jstl.jar}"/>
         <pathelement location="${annotation.jar}"/>
         <pathelement location="${glassfish.jar}"/>
-        <pathelement location="${tomcat6.jar}"/>        
+        <pathelement location="${tomcat6.jar}"/>
+        <pathelement location="${jetty.annotations.jar}"/>
+        <pathelement location="${jetty.plus.jar}"/>
     </path>
     
     <path id="sun.commons.classpath">

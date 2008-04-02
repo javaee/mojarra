@@ -74,10 +74,10 @@
     <property name="sun-commons-beanutils.jar"     value="${dependency.jar.dir}/com-sun-commons-beanutils.jar"/>
     <property name="sun-commons-digester.jar"      value="${dependency.jar.dir}/com-sun-commons-digester.jar"/>
     <property name="sun-commons-collections.jar"   value="${dependency.jar.dir}/com-sun-commons-collections.jar"/>
-    <property name="sun-commons-logging.jar"       value="${dependency.jar.dir}/com-sun-commons-logging.jar"/>
+    <property name="sun-commons-logging.jar"       value="${dependency.jar.dir}/com-sun-commons-logging-api.jar"/>
 
     <property name="glassfish.download.url"        value="http://java.net/download/javaee5/fcs_branch/promoted" />
-    <property name="glassfish.installer.jar"       value="glassfish-installer-v1_ur1-p01-b02.jar"/>
+    <property name="glassfish.installer.jar"       value="glassfish-installer-v1_ur1-p01-b02.jar"/>    
 
     <target name="update" description="Download project dependencies">
         <mkdir dir="${dependency.base.dir}/downloads"/>
@@ -287,6 +287,13 @@
               value="${glassfish.home}/lib/appserv-rt.jar"/>
     <property name="tomcat6.jar"
               value="${tomcat6.home}/lib/catalina.jar"/>
+    <property name="jetty.version" value="6.1.2rc0"/>
+    <property name="jetty.home"
+              value="${dependency.base.dir}/jetty-${jetty.version}"/>
+    <property name="jetty.annotations.jar"
+              value="${jetty.home}/lib/annotations/jetty-annotations-${jetty.version}.jar"/>
+    <property name="jetty.plus.jar"
+              value="${jetty.home}/lib/plus/jetty-plus-${jetty.version}.jar"/>
     <target name="update.containers"
             description="Downloads containers necessary for building implementation specific additions"
             depends="detect.os">
@@ -343,6 +350,19 @@ java -Xmx256m -jar ${dependency.base.dir}/${glassfish.installer.jar} -console < 
                 <unzip
                       src="${dependency.base.dir}/apache-tomcat-6.0.2.zip"
                       dest="${dependency.base.dir}"/>
+            </then>
+        </if>
+        <if>
+            <not>
+                <available file="${dependency.base.dir}/jetty=${jetty.version}.zip" property="ignored"/>
+            </not>
+            <then>
+                <get src="http://dist.codehaus.org/jetty/jetty-${jetty.version}.zip"
+                     dest="${dependency.base.dir}/jetty-${jetty.version}.zip"
+                     usetimestamp="true"/>
+                <unzip
+                    src="${dependency.base.dir}/jetty-${jetty.version}.zip"
+                    dest="${dependency.base.dir}"/>
             </then>
         </if>
     </target>
