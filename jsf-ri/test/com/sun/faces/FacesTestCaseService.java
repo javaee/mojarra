@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTestCaseService.java,v 1.22 2003/07/22 19:49:44 rkitain Exp $
+ * $Id: FacesTestCaseService.java,v 1.23 2003/07/23 16:32:19 rkitain Exp $
  */
 
 /*
@@ -54,7 +54,7 @@ import org.apache.cactus.server.ServletContextWrapper;
  * <B>Lifetime And Scope</B> <P> Same as the JspTestCase or
  * ServletTestCase instance that uses it.
  *
- * @version $Id: FacesTestCaseService.java,v 1.22 2003/07/22 19:49:44 rkitain Exp $
+ * @version $Id: FacesTestCaseService.java,v 1.23 2003/07/23 16:32:19 rkitain Exp $
  * 
  * @see	com.sun.faces.context.FacesContextFactoryImpl
  * @see	com.sun.faces.context.FacesContextImpl
@@ -262,6 +262,47 @@ public boolean verifyExpectedOutput()
     }
     System.out.println("VERIFY:"+result); 
     return result;
+}
+
+/**
+ * This utiity method searches the specified file (line by line) for the occurence
+ * of the specified string.
+ */
+public boolean verifyExpectedStringInOutput(String str) {
+    boolean exists = false;
+    String outputFileName = null;
+
+    // If this testcase doesn't deal with output file(s) 
+    if (!facesTestCase.sendResponseToFile() && 
+	(!facesTestCase.sendWriterToFile()) && 
+	(null == facesTestCase.getExpectedOutputFilename())) {
+	return true;
+    }
+
+    if (facesTestCase.sendResponseToFile() ) {
+        outputFileName = FileOutputResponseWrapper.FACES_RESPONSE_FILENAME;
+    } else {
+        outputFileName = FileOutputResponseWriter.RESPONSE_WRITER_FILENAME;
+    }
+
+    try {
+        File fileToCheck = new File(outputFileName);
+        FileReader fileReader = new FileReader(fileToCheck);
+	LineNumberReader lineReader = new LineNumberReader(fileReader);
+        String line = lineReader.readLine().trim();
+
+        while (null != line) {
+            if (line.indexOf(str) >= 0) {
+                exists = true;
+                break;
+            }
+	    line = lineReader.readLine();
+        }
+    } catch (IOException e) {
+	System.out.println(e.getMessage());
+	e.printStackTrace();
+    }
+    return exists;
 }
 
 public boolean isMember(String toTest, String [] set) {

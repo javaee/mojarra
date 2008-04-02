@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_1.java,v 1.29 2003/07/08 15:38:51 eburns Exp $
+ * $Id: TestRenderers_1.java,v 1.30 2003/07/23 16:32:21 rkitain Exp $
  */
 
 /*
@@ -40,7 +40,7 @@ import com.sun.faces.renderkit.html_basic.RadioRenderer;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_1.java,v 1.29 2003/07/08 15:38:51 eburns Exp $
+ * @version $Id: TestRenderers_1.java,v 1.30 2003/07/23 16:32:21 rkitain Exp $
  * 
  *
  */
@@ -137,6 +137,9 @@ public class TestRenderers_1 extends JspFacesTestCase
             verifyButtonRenderer(root);
 
             assertTrue(verifyExpectedOutput());
+
+	    String stringToCheck = "id="+"\""+"formRenderer0"+"\"";
+	    assertTrue(verifyExpectedStringInOutput(stringToCheck));
         }
         catch (Throwable e) {
             e.printStackTrace();

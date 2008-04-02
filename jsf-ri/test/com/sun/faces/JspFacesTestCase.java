@@ -1,5 +1,5 @@
 /*
- * $Id: JspFacesTestCase.java,v 1.8 2003/07/22 19:49:44 rkitain Exp $
+ * $Id: JspFacesTestCase.java,v 1.9 2003/07/23 16:32:20 rkitain Exp $
  */
 
 /*
@@ -31,7 +31,7 @@ import java.util.Iterator;
  *  by cactus.  This class just delegates all method calls to
  *  facesService.
  *
- * @version $Id: JspFacesTestCase.java,v 1.8 2003/07/22 19:49:44 rkitain Exp $
+ * @version $Id: JspFacesTestCase.java,v 1.9 2003/07/23 16:32:20 rkitain Exp $
  * 
  * @see	#facesService
  *
@@ -153,6 +153,11 @@ public FacesContext getFacesContext()
 public boolean verifyExpectedOutput()
 {
     return facesService.verifyExpectedOutput();
+}
+
+public boolean verifyExpectedStringInOutput(String str)
+{
+    return facesService.verifyExpectedStringInOutput(str);
 }
 
 public boolean sendWriterToFile() {

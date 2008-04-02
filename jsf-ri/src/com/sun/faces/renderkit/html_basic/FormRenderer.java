@@ -1,5 +1,5 @@
 /*
- * $Id: FormRenderer.java,v 1.47 2003/05/27 22:56:04 rkitain Exp $
+ * $Id: FormRenderer.java,v 1.48 2003/07/23 16:32:18 rkitain Exp $
  */
 
 /*
@@ -41,7 +41,7 @@ import javax.servlet.ServletRequest;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: FormRenderer.java,v 1.47 2003/05/27 22:56:04 rkitain Exp $
+ * @version $Id: FormRenderer.java,v 1.48 2003/07/23 16:32:18 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -103,7 +103,10 @@ public class FormRenderer extends HtmlBasicRenderer {
         Assert.assert_it( writer != null );
         // since method and action are rendered here they are not added
         // to the pass through attributes in Util class.
-        writer.write("<form method=\"post\" action=\"");
+        writer.write("<form id=\"");
+        writer.write(component.getClientId(context));
+        writer.write("\"");
+        writer.write(" method=\"post\" action=\"");
         writer.write(getActionStr(context, component));
         writer.write("\"");
         if (null != (formClass = (String) 
