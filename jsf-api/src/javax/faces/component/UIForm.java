@@ -1,5 +1,5 @@
 /*
- * $Id: UIForm.java,v 1.44 2004/02/26 20:30:32 eburns Exp $
+ * $Id: UIForm.java,v 1.45 2004/04/06 18:12:53 eburns Exp $
  */
 
 /*
@@ -94,8 +94,13 @@ public class UIForm extends UIComponentBase implements NamingContainer {
      * <p>If <strong>this<strong> <code>UIForm</code> instance (as
      * opposed to other forms in the page) is experiencing a submit
      * during this request processing lifecycle, this method must be
-     * called, passing <code>true</code>, during the {@link
-     * UIComponent#decode} for this <code>UIForm</code> instance.</p>
+     * called, with <code>true</code> as the argument, during the {@link
+     * UIComponent#decode} for this <code>UIForm</code> instance.  If
+     * <strong>this</strong> <code>UIForm</code> instance is
+     * <strong>not</strong> experiencing a submit, this method must be
+     * called, with <code>false</code> as the argument, during the
+     * {@link UIComponent#decode} for this <code>UIForm</code>
+     * instance.</p>
      *
      * <p>The value of a <code>UIForm</code>'s submitted property must
      * not be saved as part of its state.</p>
@@ -192,20 +197,5 @@ public class UIForm extends UIComponentBase implements NamingContainer {
         }
 
     }
-
-    // ----------------------------------------------------- StateHolder Methods
-
-
-    /**
-     * <p>Override <code>saveState()</code> to call
-     * <code>setSubmitted(false)</code>.</p>
-     */
-    public Object saveState(FacesContext context) {
-
-	setSubmitted(false);
-	return super.saveState(context);
-
-    }
-
 
 }
