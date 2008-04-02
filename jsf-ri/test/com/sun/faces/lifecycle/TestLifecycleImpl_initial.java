@@ -1,5 +1,5 @@
 /*
- * $Id: TestLifecycleImpl_initial.java,v 1.17 2003/09/09 20:45:55 rkitain Exp $
+ * $Id: TestLifecycleImpl_initial.java,v 1.18 2003/10/06 22:48:09 eburns Exp $
  */
 
 /*
@@ -16,6 +16,7 @@ import org.apache.cactus.WebRequest;
 
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.context.FacesContext;
+import javax.faces.FacesException;
 
 import com.sun.faces.RIConstants;
 
@@ -27,7 +28,7 @@ import com.sun.faces.JspFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestLifecycleImpl_initial.java,v 1.17 2003/09/09 20:45:55 rkitain Exp $
+ * @version $Id: TestLifecycleImpl_initial.java,v 1.18 2003/10/06 22:48:09 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -105,8 +106,15 @@ public void testExecuteInitial()
     try {
 	life.execute(getFacesContext());
     }
-    catch (Throwable e) {
-	e.printStackTrace();
+    catch (FacesException e) {
+	System.err.println("Root Cause: " + e.getCause());
+	if (null != e.getCause()) {
+	    e.getCause().printStackTrace();
+	}
+	else {
+	    e.printStackTrace();
+	}
+	
 	assertTrue(e.getMessage(), false);
     }
     

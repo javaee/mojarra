@@ -1,5 +1,5 @@
 /*
- * $Id: TestUtil.java,v 1.13 2003/10/02 06:50:25 jvisvanathan Exp $
+ * $Id: TestUtil.java,v 1.14 2003/10/06 22:48:11 eburns Exp $
  */
 
 /*
@@ -37,7 +37,7 @@ import javax.servlet.ServletContext;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestUtil.java,v 1.13 2003/10/02 06:50:25 jvisvanathan Exp $
+ * @version $Id: TestUtil.java,v 1.14 2003/10/06 22:48:11 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -93,7 +93,7 @@ public class TestUtil extends ServletFacesTestCase
 	    input.getAttributes().put("onchange", "javascript:h.change()");
 	    Util.renderPassThruAttributes(writer,input);
 	    String expectedResult = " onblur=\"javascript:f.blur()\" onchange=\"javascript:h.change()\"";
-	    assertTrue(sw.toString().equals(expectedResult));
+	    assertEquals(expectedResult, sw.toString());
 
 	    // verify no passthru attributes returns empty string
 	    sw = new StringWriter();
@@ -122,8 +122,8 @@ public class TestUtil extends ServletFacesTestCase
 	    input.getAttributes().put("disabled", "true");
 	    input.getAttributes().put("readonly", "false");
 	    Util.renderBooleanPassThruAttributes(writer, input);
-	    String expectedResult = " disabled";
-	    assertTrue(sw.toString().equals(expectedResult));
+	    String expectedResult = " disabled=\"disabled\"";
+	    assertEquals(expectedResult, sw.toString());
 
 	// verify no passthru attributes returns empty string
 	    sw = new StringWriter();

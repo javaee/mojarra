@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.96 2003/10/06 19:28:58 rkitain Exp $
+ * $Id: Util.java,v 1.97 2003/10/06 22:48:08 eburns Exp $
  */
 
 /*
@@ -64,7 +64,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.96 2003/10/06 19:28:58 rkitain Exp $
+ * @version $Id: Util.java,v 1.97 2003/10/06 22:48:08 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -719,13 +719,28 @@ private Util()
 	Assert.assert_it(null != component);
 
         int i = 0, len = booleanPassthruAttributes.length;
-	String value = null;
+        Object value = null;
+        boolean result;
         for (i = 0; i < len; i++) {
-            value = (String)component.getAttributes().get(booleanPassthruAttributes[i]);
-	    if (value != null && Boolean.valueOf(value).booleanValue()) {
+            value = component.getAttributes().get(booleanPassthruAttributes[i]);
+            if (value != null) {
+                if (value instanceof Boolean) {
+                    result = ((Boolean) value).booleanValue();
+                } else {
+                    if (!(value instanceof String)) {
+                        value = value.toString();
+                    }
+                    result = (new Boolean((String) value)).booleanValue();
+                }
 		//PENDING(rogerk) will revisit "null" param soon..
-		writer.writeAttribute(booleanPassthruAttributes[i], new Boolean("true"), null);
-	    }
+                if (result) {
+                    // NOTE:  render things like readonly="readonly" here
+                    writer.writeAttribute(booleanPassthruAttributes[i],
+                                          booleanPassthruAttributes[i],
+                                          booleanPassthruAttributes[i]);
+                    // NOTE:  otherwise render nothing
+                }
+            }
 	}
     }
 
@@ -742,12 +757,16 @@ private Util()
 	Assert.assert_it(null != component);
 
         int i = 0, len = passthruAttributes.length;
-	String value = null;
+	Object value = null;
 	for (i = 0; i < len; i++) {
-            value = (String)component.getAttributes().get(passthruAttributes[i]);
+            value = component.getAttributes().get(passthruAttributes[i]);
 	    if (value != null) {
+                if (!(value instanceof String)) {
+                    value = value.toString();
+                }
 		//PENDING(rogerk) will revisit "null" param soon..
-		writer.writeAttribute(passthruAttributes[i], value, null);
+		writer.writeAttribute(passthruAttributes[i], (String) value,
+                                      passthruAttributes[i]);
 	    }
 	}
     }
