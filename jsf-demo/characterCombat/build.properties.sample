@@ -3,30 +3,28 @@
 #
 # This is an example "build.properties" file, used to customize building the
 # sample app for your local environment.  It defines the location of all 
-# external modules that the sample app depends on.  Copy this file to 
-# "build.properties" in the top-level source directory, and customize it 
-# as needed.
+# external modules that the sample app depends on.  
+#
+# Copy this file to "build.properties" in the top-level source directory, 
+# and customize it as needed.
+#
+# After you are done editing the file, run "ant" in the same directory as
+# the build.xml file to build the Character Demo.
 #
 # Do display current property setting run the ant command: "ant props"
 #
-# $Id: build.properties.sample,v 1.1 2004/03/19 22:02:02 horwat Exp $
+# $Id: build.properties.sample,v 1.2 2004/04/19 22:08:44 horwat Exp $
 # -----------------------------------------------------------------------------
-
-# Uncomment this property if you want to bundle all dependent jars into the
-# webapp. If you are running in the Sun Java Systems Application Server 8.0 PE
-# environment or any other environment where JSF 1.0 and dependencies are
-# is already bundled, you do not need to bundle any of the run-time jar files
-# in your web application archive file.
-
-# build.standalone=true
-
 
 # ----- Default Paths for Dependent Packages -----
 
 # These path values are based on a SJSAS 8.0 PE install. 
 
-# If you are not running SJSAS 8.0 PE you will need uncomment and 
-# customize the paths to your specific installation.
+# If you are running SJSAS 8.0 PE you will only need to modify the "base.path"
+# property to point to your SJSAS 8.0 PE installation.
+
+# If you are not running SJSAS 8.0 PE you will need to customize all runtime
+# dependency jar file paths to your specific installation.
 
 base.path=<SJSAS_HOME>
 
@@ -39,3 +37,15 @@ jsf-impl.jar=${base.path}/lib/jsf-impl.jar
 jstl.jar=${base.path}/lib/appserv-jstl.jar
 servlet.jar=${base.path}/lib/j2ee.jar
 standard.jar=${base.path}/lib/appserv-jstl.jar
+
+# ----- Web Application Jar Bundling -----
+
+# Uncomment the following property if you want to bundle all dependent 
+# jars into the web application. 
+
+# If you are running in the Sun Java Systems Application Server 8.0 PE
+# environment or any other environment where JSF 1.0 and dependencies are
+# is already bundled, you do not need to bundle any of the run-time jar files
+# in your web application.
+
+# build.standalone=true
