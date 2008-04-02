@@ -1,5 +1,5 @@
 /*
- * $Id: NumberConverter.java,v 1.19 2004/02/26 20:30:50 eburns Exp $
+ * $Id: NumberConverter.java,v 1.20 2005/02/24 15:18:52 rogerk Exp $
  */
 
 /*
@@ -108,6 +108,80 @@ public class NumberConverter implements Converter, StateHolder {
      * <p>The standard converter id for this converter.</p>
      */
     public static final String CONVERTER_ID = "javax.faces.Number";
+
+    /**
+     * <p>The message identifier of the {@link FacesMessage} to be created if
+     * the conversion to <code>Number</code> fails.  The message format
+     * string for this message may optionally include the following
+     * placeholders:
+     * <ul>
+     * <li><code>{0}</code> replaced by the unconverted value.</li>
+     * <li><code>{1}</code> replaced by an example value.</li>
+     * <li><code>{2}</code> replaced by a <code>String</code> whose value
+     *   is the label of the input component that produced this message.</li>
+     * </ul></p>
+     */
+    public static final String CURRENCY_ID =
+        "javax.faces.converter.NumberConverter.CURRENCY";
+
+    /**
+     * <p>The message identifier of the {@link FacesMessage} to be created if
+     * the conversion to <code>Number</code> fails.  The message format
+     * string for this message may optionally include the following
+     * placeholders:
+     * <ul>
+     * <li><code>{0}</code> replaced by the unconverted value.</li>
+     * <li><code>{1}</code> replaced by an example value.</li>
+     * <li><code>{2}</code> replaced by a <code>String</code> whose value
+     *   is the label of the input component that produced this message.</li>
+     * </ul></p>
+     */
+    public static final String NUMBER_ID =
+        "javax.faces.converter.NumberConverter.NUMBER";
+                                                                                
+    /**
+     * <p>The message identifier of the {@link FacesMessage} to be created if
+     * the conversion to <code>Number</code> fails.  The message format
+     * string for this message may optionally include the following
+     * placeholders:
+     * <ul>
+     * <li><code>{0}</code> replaced by the unconverted value.</li>
+     * <li><code>{1}</code> replaced by an example value.</li>
+     * <li><code>{2}</code> replaced by a <code>String</code> whose value
+     *   is the label of the input component that produced this message.</li>
+     * </ul></p>
+     */
+    public static final String PATTERN_ID =
+        "javax.faces.converter.NumberConverter.PATTERN";
+
+    /**
+     * <p>The message identifier of the {@link FacesMessage} to be created if
+     * the conversion to <code>Number</code> fails.  The message format
+     * string for this message may optionally include the following
+     * placeholders:
+     * <ul>
+     * <li><code>{0}</code> replaced by the unconverted value.</li>
+     * <li><code>{1}</code> replaced by an example value.</li>
+     * <li><code>{2}</code> replaced by a <code>String</code> whose value
+     *   is the label of the input component that produced this message.</li>
+     * </ul></p>
+     */
+    public static final String PERCENT_ID =
+        "javax.faces.converter.NumberConverter.PERCENT";
+
+    /**
+     * <p>The message identifier of the {@link FacesMessage} to be created if
+     *  the conversion of the <code>Number</code> value to
+     *  <code>String</code> fails.   The message format string for this message
+     *  may optionally include the following placeholders:
+     * <ul>
+     * <li><code>{0}</code> relaced by the unconverted value.</li>
+     * <li><code>{1}</code> replaced by a <code>String</code> whose value
+     *   is the label of the input component that produced this message.</li>
+     * </ul></p>
+     */
+    public static final String STRING_ID =
+        "javax.faces.converter.STRING";
 
 
     // ------------------------------------------------------ Instance Variables
@@ -436,6 +510,9 @@ public class NumberConverter implements Converter, StateHolder {
             throw new NullPointerException();
         }
 
+        Object returnValue = null;
+        NumberFormat parser = null;
+
         try {
 
             // If the specified value is null or zero-length, return null
@@ -451,20 +528,36 @@ public class NumberConverter implements Converter, StateHolder {
             Locale locale = getLocale(context);
 
             // Create and configure the parser to be used
-            NumberFormat parser = getNumberFormat(locale);
+            parser = getNumberFormat(locale);
             parser.setParseIntegerOnly(isIntegerOnly());
 
             // Perform the requested parsing
-            return (parser.parse(value));
-
+            returnValue = parser.parse(value);
+        } catch (ParseException e) {
+            if (pattern != null) {
+                throw new ConverterException(MessageFactory.getMessage(
+                    context, PATTERN_ID, new Object[] {value, "#,##0.0#",  
+                        MessageFactory.getLabel(context, component)}));
+            } else if (type.equals("currency")) {
+                throw new ConverterException(MessageFactory.getMessage(
+                    context, CURRENCY_ID, new Object[] {value,
+                        parser.format(99.99),  
+                            MessageFactory.getLabel(context, component)}));
+            } else if (type.equals("number")) {
+                throw new ConverterException(MessageFactory.getMessage(
+                    context, NUMBER_ID, new Object[] {value,
+                        parser.format(99), 
+                            MessageFactory.getLabel(context, component)}));
+            } else if (type.equals("percent")) {
+                throw new ConverterException(MessageFactory.getMessage(
+                    context, PERCENT_ID, new Object[] {value,
+                        parser.format(.75),  
+                            MessageFactory.getLabel(context, component)}));
+            }
         } catch (ConverterException e) {
             throw e;
-        } catch (ParseException e) {
-            // PENDING(craigmcc) - i18n
-            throw new ConverterException("Error parsing '" + value + "'");
         }
-
-
+        return returnValue;
     }
 
     /**
@@ -507,11 +600,14 @@ public class NumberConverter implements Converter, StateHolder {
             return (formatter.format(value));
 
         } catch (ConverterException e) {
-            throw e;
+            throw new ConverterException(MessageFactory.getMessage(
+                context, STRING_ID, new Object[] {value, 
+                     MessageFactory.getLabel(context, component)}), e);
         } catch (Exception e) {
-            throw new ConverterException(e);
+            throw new ConverterException(MessageFactory.getMessage(
+                context, STRING_ID, new Object[] {value, 
+                     MessageFactory.getLabel(context, component)}), e);
         }
-
     }
 
 
@@ -705,7 +801,6 @@ public class NumberConverter implements Converter, StateHolder {
 
 
     }
-
 
     // ----------------------------------------------------- StateHolder Methods
 

@@ -1,5 +1,5 @@
 /*
- * $Id: LengthValidator.java,v 1.42 2004/06/11 14:56:15 rogerk Exp $
+ * $Id: LengthValidator.java,v 1.43 2005/02/24 15:18:53 rogerk Exp $
  */
 
 /*
@@ -52,16 +52,20 @@ public class LengthValidator implements Validator, StateHolder {
 
 
     /**
-     * <p>The standard converter id for this converter.</p>
+     * <p>The standard validator id for this validator.</p>
      */
     public static final String VALIDATOR_ID = "javax.faces.Length";
 
 
     /**
      * <p>The message identifier of the {@link FacesMessage} to be created if
-     * the maximum length check fails.  The message format string for this
-     * message may optionally include a <code>{0}</code> placeholder, which
-     * will be replaced by the configured maximum length.</p>
+     * the maximum length check fails.   The message format string for 
+     * this message may optionally include the following placeholders:
+     * <ul>
+     * <li><code>{0}</code> replaced by the configured maximum length.</li>
+     * <li><code>{1}</code> replaced by a <code>String</code> whose value
+     *   is the label of the input component that produced this message.</li>
+     * </ul></p>
      */
     public static final String MAXIMUM_MESSAGE_ID =
         "javax.faces.validator.LengthValidator.MAXIMUM";
@@ -69,9 +73,13 @@ public class LengthValidator implements Validator, StateHolder {
 
     /**
      * <p>The message identifier of the {@link FacesMessage} to be created if
-     * the minimum length check fails.  The message format string for this
-     * message may optionally include a <code>{0}</code> placeholder, which
-     * will be replaced by the configured minimum length.</p>
+     * the minimum length check fails.   The message format string for
+     * this message may optionally include the following placeholders:
+     * <ul>
+     * <li><code>{0}</code> replaced by the configured minimum length.</li>
+     * <li><code>{1}</code> replaced by a <code>String</code> whose value
+     *   is the label of the input component that produced this message.</li>
+     * </ul></p>
      */
     public static final String MINIMUM_MESSAGE_ID =
         "javax.faces.validator.LengthValidator.MINIMUM";
@@ -205,7 +213,8 @@ public class LengthValidator implements Validator, StateHolder {
                                     MAXIMUM_MESSAGE_ID,
                                     new Object[] {
                                     integerToString(component, 
-						    new Integer(maximum)) } ));
+						    new Integer(maximum)),
+                                     MessageFactory.getLabel(context, component)} ));
             }
             if (minimumSet &&
                 (converted.length() < minimum)) {
@@ -214,7 +223,8 @@ public class LengthValidator implements Validator, StateHolder {
                                     MINIMUM_MESSAGE_ID,
                                     new Object[] {
                                     integerToString(component,
-						    new Integer(minimum)) }));
+						    new Integer(minimum)),
+                                     MessageFactory.getLabel(context, component)}));
             }
         }
 
@@ -266,8 +276,6 @@ public class LengthValidator implements Validator, StateHolder {
 	result = converter.getAsString(context, component, toConvert);
 	return result;
     }
-
-
 
     // ----------------------------------------------------- StateHolder Methods
     

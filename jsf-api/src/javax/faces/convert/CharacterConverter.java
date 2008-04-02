@@ -1,5 +1,5 @@
 /*
- * $Id: CharacterConverter.java,v 1.11 2004/02/26 20:30:48 eburns Exp $
+ * $Id: CharacterConverter.java,v 1.12 2005/02/24 15:18:50 rogerk Exp $
  */
 
 /*
@@ -30,6 +30,34 @@ public class CharacterConverter implements Converter {
      */
     public static final String CONVERTER_ID = "javax.faces.Character";
 
+    /**
+     * <p>The message identifier of the {@link FacesMessage} to be created if
+     * the conversion to <code>Character</code> fails.  The message format
+     * string for this message may optionally include the following
+     * placeholders:
+     * <ul>
+     * <li><code>{0}</code> replaced by the unconverted value.</li>
+     * <li><code>{1}</code> replaced by a <code>String</code> whose value
+     *   is the label of the input component that produced this message.</li>
+     * </ul></p>
+     */
+    public static final String CHARACTER_ID =
+        "javax.faces.converter.CharacterConverter.CHARACTER";
+                                                                                
+    /**
+     * <p>The message identifier of the {@link FacesMessage} to be created if
+     *  the conversion of the <code>Character</code> value to
+     *  <code>String</code> fails.   The message format string for this message
+     *  may optionally include the following placeholders:
+     * <ul>
+     * <li><code>{0}</code> relaced by the unconverted value.</li>
+     * <li><code>{1}</code> replaced by a <code>String</code> whose value
+     *   is the label of the input component that produced this message.</li>
+     * </ul></p>
+     */
+    public static final String STRING_ID =
+        "javax.faces.converter.STRING";
+
 
     // ------------------------------------------------------- Converter Methods
 
@@ -52,13 +80,14 @@ public class CharacterConverter implements Converter {
         if (value.length() < 1) {
             return (null);
         }
-        
+
         try {
             return (new Character(value.charAt(0)));
         } catch (Exception e) {
-            throw new ConverterException(e);
+            throw new ConverterException(MessageFactory.getMessage(
+                context, CHARACTER_ID, new Object[] {value, 
+                     MessageFactory.getLabel(context, component)}), e);
         }
-
     }
 
     /**
@@ -84,6 +113,4 @@ public class CharacterConverter implements Converter {
         }
 
     }
-
-
 }

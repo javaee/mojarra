@@ -1,5 +1,5 @@
 /*
- * $Id: Validator.java,v 1.23 2004/02/26 20:31:16 eburns Exp $
+ * $Id: Validator.java,v 1.24 2005/02/24 15:18:53 rogerk Exp $
  */
 
 /*
@@ -51,8 +51,11 @@ public interface Validator extends EventListener {
      * and minimum values for this validator have been set.  The message
      * format string for this message may optionally include a
      * <code>{0}</code> placeholder, which will be replaced by the
-     * configured minimum value, and a <code>{1}</code> placeholder,
-     * which will be replaced by the configured maximum value.</p>
+     * configured minimum value, a <code>{1}</code> placeholder,
+     * which will be replaced by the configured maximum value, and
+     * a <code>{2}</code> placeholder, which will be replaced by a 
+     * <code>String</code> whose value is the label of the input component 
+     * that produced this message.</p>
      */
     public static final String NOT_IN_RANGE_MESSAGE_ID =
         "javax.faces.validator.NOT_IN_RANGE";

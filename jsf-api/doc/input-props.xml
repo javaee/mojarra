@@ -79,4 +79,14 @@
             <pass-through>true</pass-through>
         </property-extension>
     </property>
+
+    <property>
+        <description>
+          A localized user presentable name for this component.
+        </description>
+        <display-name>Label</display-name>
+        <icon></icon>
+        <property-name>label</property-name>
+        <property-class>java.lang.String</property-class>
+    </property>
 </root>

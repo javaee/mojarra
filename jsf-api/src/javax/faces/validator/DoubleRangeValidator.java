@@ -1,5 +1,5 @@
 /*
- * $Id: DoubleRangeValidator.java,v 1.42 2004/06/11 14:56:15 rogerk Exp $
+ * $Id: DoubleRangeValidator.java,v 1.43 2005/02/24 15:18:53 rogerk Exp $
  */
 
 /*
@@ -69,8 +69,13 @@ public class DoubleRangeValidator implements Validator, StateHolder {
     /**
      * <p>The message identifier of the {@link FacesMessage}
      * to be created if the maximum value check fails.  The message format
-     * string for this message may optionally include a <code>{0}</code>
-     * placeholder, which will be replaced by the configured maximum value.</p>
+     * string for this message may optionally include the following
+     * placeholders:
+     * <ul>
+     * <li><code>{0}</code> replaced by the configured maximum value.</li>
+     * <li><code>{1}</code> replaced by a <code>String</code> whose value
+     *   is the label of the input component that produced this message.</li>
+     * </ul></p>
      */
     public static final String MAXIMUM_MESSAGE_ID =
         "javax.faces.validator.DoubleRangeValidator.MAXIMUM";
@@ -78,17 +83,24 @@ public class DoubleRangeValidator implements Validator, StateHolder {
     /**
      * <p>The message identifier of the {@link FacesMessage}
      * to be created if the minimum value check fails.  The message format
-     * string for this message may optionally include a <code>{0}</code>
-     * placeholder, which will be replaced by the configured minimum value.</p>
+     * string for this message may optionally include the following
+     * placeholders:
+     * <ul>
+     * <li><code>{0}</code> replaced by the configured minimum value.</li>
+     * <li><code>{1}</code> replaced by a <code>String</code> whose value
+     *   is the label of the input component that produced this message.</li>
+     * </ul></p>
      */
     public static final String MINIMUM_MESSAGE_ID =
         "javax.faces.validator.DoubleRangeValidator.MINIMUM";
 
-
     /**
      * <p>The message identifier of the {@link FacesMessage}
      * to be created if the current value of this component is not of the
-     * correct type.</p>
+     * correct type.   The message format string for this message may 
+     * optionally include a <code>{0}</code> placeholder that will be
+     * replaced by a <code>String</code> whose value is the label of
+     * the input component that produced this message.</p>
      */
     public static final String TYPE_MESSAGE_ID =
         "javax.faces.validator.DoubleRangeValidator.TYPE";
@@ -222,7 +234,8 @@ public class DoubleRangeValidator implements Validator, StateHolder {
 					    Validator.NOT_IN_RANGE_MESSAGE_ID,
 					    new Object[] {
 						stringValue(component, new Double(minimum)),
-						stringValue(component, new Double(maximum)) }));
+						stringValue(component, new Double(maximum)),
+                                                 MessageFactory.getLabel(context, component)}));
 			
 		    }
 		    else {
@@ -230,7 +243,8 @@ public class DoubleRangeValidator implements Validator, StateHolder {
 					   (context,
 					    MAXIMUM_MESSAGE_ID,
 					    new Object[] {
-				            stringValue(component, new Double(maximum)) }));
+				            stringValue(component, new Double(maximum)),
+                                             MessageFactory.getLabel(context, component)}));
 		    }
                 }
                 if (minimumSet &&
@@ -241,7 +255,8 @@ public class DoubleRangeValidator implements Validator, StateHolder {
 					    Validator.NOT_IN_RANGE_MESSAGE_ID,
 					    new Object[] {
 				            stringValue(component, new Double(minimum)),
-				            stringValue(component, new Double(maximum)) }));
+				            stringValue(component, new Double(maximum)),
+                                             MessageFactory.getLabel(context, component)}));
 			
 		    }
 		    else {
@@ -249,12 +264,14 @@ public class DoubleRangeValidator implements Validator, StateHolder {
 					   (context,
 					    MINIMUM_MESSAGE_ID,
 					    new Object[] {
-					    stringValue(component, new Double(minimum)) }));
+					    stringValue(component, new Double(minimum)),
+                                             MessageFactory.getLabel(context, component)}));
 		    }
                 }
             } catch (NumberFormatException e) {
                 throw new ValidatorException(MessageFactory.getMessage
-                                   (context, TYPE_MESSAGE_ID));
+                                   (context, TYPE_MESSAGE_ID,
+                                    new Object[] {MessageFactory.getLabel(context, component)}));
             }
         }
 
@@ -307,7 +324,6 @@ public class DoubleRangeValidator implements Validator, StateHolder {
 	result = converter.getAsString(context, component, toConvert);
 	return result;
     }
-
 
     // ----------------------------------------------------- StateHolder Methods
     

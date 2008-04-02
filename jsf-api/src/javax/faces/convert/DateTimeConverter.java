@@ -1,5 +1,5 @@
 /*
- * $Id: DateTimeConverter.java,v 1.26 2005/01/03 18:15:35 rogerk Exp $
+ * $Id: DateTimeConverter.java,v 1.27 2005/02/24 15:18:50 rogerk Exp $
  */
 
 /*
@@ -13,6 +13,7 @@ package javax.faces.convert;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
 import javax.faces.component.StateHolder;
@@ -81,6 +82,65 @@ public class DateTimeConverter implements Converter, StateHolder {
      * <p>The standard converter id for this converter.</p>
      */
     public static final String CONVERTER_ID = "javax.faces.DateTime";
+
+    /**
+     * <p>The message identifier of the {@link FacesMessage} to be created if
+     * the conversion to <code>Date</code> fails.  The message format
+     * string for this message may optionally include the following
+     * placeholders:
+     * <ul>
+     * <li><code>{0}</code> replaced by the unconverted value.</li>
+     * <li><code>{1}</code> replaced by an example value.</li>
+     * <li><code>{2}</code> replaced by a <code>String</code> whose value
+     *   is the label of the input component that produced this message.</li>
+     * </ul></p>
+     */
+    public static final String DATE_ID =
+        "javax.faces.converter.DateTimeConverter.DATE";
+                                                                                
+    /**
+     * <p>The message identifier of the {@link FacesMessage} to be created if
+     * the conversion to <code>Time</code> fails.  The message format
+     * string for this message may optionally include the following
+     * placeholders:
+     * <ul>
+     * <li><code>{0}</code> replaced by the unconverted value.</li>
+     * <li><code>{1}</code> replaced by an example value.</li>
+     * <li><code>{2}</code> replaced by a <code>String</code> whose value
+     *   is the label of the input component that produced this message.</li>
+     * </ul></p>
+     */
+    public static final String TIME_ID =
+        "javax.faces.converter.DateTimeConverter.TIME";
+
+    /**
+     * <p>The message identifier of the {@link FacesMessage} to be created if
+     * the conversion to <code>DateTime</code> fails.  The message format
+     * string for this message may optionally include the following
+     * placeholders:
+     * <ul>
+     * <li><code>{0}</code> replaced by the unconverted value.</li>
+     * <li><code>{1}</code> replaced by an example value.</li>
+     * <li><code>{2}</code> replaced by a <code>String</code> whose value
+     *   is the label of the input component that produced this message.</li>
+     * </ul></p>
+     */
+    public static final String DATETIME_ID =
+        "javax.faces.converter.DateTimeConverter.DATETIME";
+
+    /**
+     * <p>The message identifier of the {@link FacesMessage} to be created if
+     *  the conversion of the <code>DateTime</code> value to
+     *  <code>String</code> fails.   The message format string for this message
+     *  may optionally include the following placeholders:
+     * <ul>
+     * <li><code>{0}</code> relaced by the unconverted value.</li>
+     * <li><code>{1}</code> replaced by a <code>String</code> whose value
+     *   is the label of the input component that produced this message.</li>
+     * </ul></p>
+     */
+    public static final String STRING_ID =
+        "javax.faces.converter.STRING";
 
 
     private static final TimeZone DEFAULT_TIME_ZONE = TimeZone.getTimeZone("GMT");
@@ -278,6 +338,9 @@ public class DateTimeConverter implements Converter, StateHolder {
             throw new NullPointerException();
         }
 
+        Object returnValue = null;
+        DateFormat parser = null;
+        
         try {
 
             // If the specified value is null or zero-length, return null
@@ -293,25 +356,36 @@ public class DateTimeConverter implements Converter, StateHolder {
             Locale locale = getLocale(context);
 
             // Create and configure the parser to be used
-            DateFormat parser =
-                getDateFormat(context, locale);         
+            parser = getDateFormat(context, locale);         
 	    if (null != timeZone) {
 		parser.setTimeZone(timeZone);            
 	    }
 
             // Perform the requested parsing
-            return (parser.parse(value));
-
+            returnValue = parser.parse(value);
+        } catch (ParseException e) {
+            if (type.equals("date")) {
+                throw new ConverterException(MessageFactory.getMessage(
+                    context, DATE_ID, new Object[] {value, 
+                        parser.format(new Date(System.currentTimeMillis())),
+                         MessageFactory.getLabel(context, component)}));
+            } else if (type.equals("time")) {
+                throw new ConverterException(MessageFactory.getMessage(
+                    context, TIME_ID, new Object[] {value, 
+                        parser.format(new Date(System.currentTimeMillis())),
+                         MessageFactory.getLabel(context, component)}));
+            } else if (type.equals("both")) {
+                throw new ConverterException(MessageFactory.getMessage(
+                    context, DATETIME_ID, new Object[] {value,
+                        parser.format(new Date(System.currentTimeMillis())),
+                         MessageFactory.getLabel(context, component)}));
+            }
         } catch (ConverterException e) {
             throw e;
-        } catch (ParseException e) {
-            // PENDING(craigmcc) - i18n
-            throw new ConverterException("Error parsing '" + value + "'");
         } catch (Exception e) {
             throw new ConverterException(e);
         }
-
-
+        return returnValue;
     }
 
     /**
@@ -352,11 +426,14 @@ public class DateTimeConverter implements Converter, StateHolder {
             return (formatter.format(value));
 
         } catch (ConverterException e) {
-            throw e;
+            throw new ConverterException(MessageFactory.getMessage(
+                context, STRING_ID, new Object[] {value, 
+                     MessageFactory.getLabel(context, component)}), e);
         } catch (Exception e) {
-            throw new ConverterException(e);
+            throw new ConverterException(MessageFactory.getMessage(
+                context, STRING_ID, new Object[] {value, 
+                     MessageFactory.getLabel(context, component)}), e);
         }
-
     }
 
 
@@ -445,7 +522,6 @@ public class DateTimeConverter implements Converter, StateHolder {
         }
 
     }
-
 
     // ----------------------------------------------------- StateHolder Methods
 

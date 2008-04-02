@@ -4199,6 +4199,15 @@
         <pass-through>true</pass-through>
       </property-extension>
     </property>
+    <property>
+      <description>
+          A localized user presentable name for this component.
+        </description>
+      <display-name>Label</display-name>
+      <icon/>
+      <property-name>label</property-name>
+      <property-class>java.lang.String</property-class>
+    </property>
 
 
     <property>
@@ -7189,6 +7198,15 @@
         <pass-through>true</pass-through>
       </property-extension>
     </property>
+    <property>
+      <description>
+          A localized user presentable name for this component.
+        </description>
+      <display-name>Label</display-name>
+      <icon/>
+      <property-name>label</property-name>
+      <property-class>java.lang.String</property-class>
+    </property>
 
 
     <property>
@@ -7824,6 +7842,15 @@
         <pass-through>true</pass-through>
       </property-extension>
     </property>
+    <property>
+      <description>
+          A localized user presentable name for this component.
+        </description>
+      <display-name>Label</display-name>
+      <icon/>
+      <property-name>label</property-name>
+      <property-class>java.lang.String</property-class>
+    </property>
 
 
     <property>
@@ -8442,6 +8469,15 @@
       <property-extension>
         <pass-through>true</pass-through>
       </property-extension>
+    </property>
+    <property>
+      <description>
+          A localized user presentable name for this component.
+        </description>
+      <display-name>Label</display-name>
+      <icon/>
+      <property-name>label</property-name>
+      <property-class>java.lang.String</property-class>
     </property>
 
 
@@ -12069,6 +12105,15 @@
         <pass-through>true</pass-through>
       </property-extension>
     </property>
+    <property>
+      <description>
+          A localized user presentable name for this component.
+        </description>
+      <display-name>Label</display-name>
+      <icon/>
+      <property-name>label</property-name>
+      <property-class>java.lang.String</property-class>
+    </property>
 
     <component-extension>
       <base-component-type>javax.faces.SelectBoolean</base-component-type>
@@ -12661,6 +12706,15 @@
       <property-extension>
         <pass-through>true</pass-through>
       </property-extension>
+    </property>
+    <property>
+      <description>
+          A localized user presentable name for this component.
+        </description>
+      <display-name>Label</display-name>
+      <icon/>
+      <property-name>label</property-name>
+      <property-class>java.lang.String</property-class>
     </property>
 
 
@@ -13303,6 +13357,15 @@
         <pass-through>true</pass-through>
       </property-extension>
     </property>
+    <property>
+      <description>
+          A localized user presentable name for this component.
+        </description>
+      <display-name>Label</display-name>
+      <icon/>
+      <property-name>label</property-name>
+      <property-class>java.lang.String</property-class>
+    </property>
 
 
     <property>
@@ -13928,6 +13991,15 @@
         <pass-through>true</pass-through>
       </property-extension>
     </property>
+    <property>
+      <description>
+          A localized user presentable name for this component.
+        </description>
+      <display-name>Label</display-name>
+      <icon/>
+      <property-name>label</property-name>
+      <property-class>java.lang.String</property-class>
+    </property>
 
 
     <property>
@@ -14529,6 +14601,15 @@
       <property-extension>
         <pass-through>true</pass-through>
       </property-extension>
+    </property>
+    <property>
+      <description>
+          A localized user presentable name for this component.
+        </description>
+      <display-name>Label</display-name>
+      <icon/>
+      <property-name>label</property-name>
+      <property-class>java.lang.String</property-class>
     </property>
 
 
@@ -15142,6 +15223,15 @@
         <pass-through>true</pass-through>
       </property-extension>
     </property>
+    <property>
+      <description>
+          A localized user presentable name for this component.
+        </description>
+      <display-name>Label</display-name>
+      <icon/>
+      <property-name>label</property-name>
+      <property-class>java.lang.String</property-class>
+    </property>
 
 
     <property>
@@ -15744,6 +15834,15 @@
         <pass-through>true</pass-through>
       </property-extension>
     </property>
+    <property>
+      <description>
+          A localized user presentable name for this component.
+        </description>
+      <display-name>Label</display-name>
+      <icon/>
+      <property-name>label</property-name>
+      <property-class>java.lang.String</property-class>
+    </property>
 
 
     <property>
@@ -16227,6 +16326,15 @@
         <attribute-extension>
           <pass-through>true</pass-through>
         </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          A localized user presentable name for this component.
+        </description>
+        <display-name>Label</display-name>
+        <icon/>
+        <attribute-name>label</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
       </attribute>
 
 
@@ -18219,6 +18327,15 @@
           <pass-through>true</pass-through>
         </attribute-extension>
       </attribute>
+      <attribute>
+        <description>
+          A localized user presentable name for this component.
+        </description>
+        <display-name>Label</display-name>
+        <icon/>
+        <attribute-name>label</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
 
 
       <attribute>
@@ -18315,6 +18432,15 @@
         <attribute-extension>
           <pass-through>true</pass-through>
         </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          A localized user presentable name for this component.
+        </description>
+        <display-name>Label</display-name>
+        <icon/>
+        <attribute-name>label</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
       </attribute>
 
     </renderer>
@@ -18660,6 +18786,15 @@
         <attribute-extension>
           <pass-through>true</pass-through>
         </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          A localized user presentable name for this component.
+        </description>
+        <display-name>Label</display-name>
+        <icon/>
+        <attribute-name>label</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
       </attribute>
 
 
@@ -19038,6 +19173,15 @@
         <attribute-extension>
           <pass-through>true</pass-through>
         </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          A localized user presentable name for this component.
+        </description>
+        <display-name>Label</display-name>
+        <icon/>
+        <attribute-name>label</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
       </attribute>
 
 
@@ -21227,6 +21371,15 @@
           <pass-through>true</pass-through>
         </attribute-extension>
       </attribute>
+      <attribute>
+        <description>
+          A localized user presentable name for this component.
+        </description>
+        <display-name>Label</display-name>
+        <icon/>
+        <attribute-name>label</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
 
     </renderer>
     <renderer>
@@ -21586,6 +21739,15 @@
         <attribute-extension>
           <pass-through>true</pass-through>
         </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          A localized user presentable name for this component.
+        </description>
+        <display-name>Label</display-name>
+        <icon/>
+        <attribute-name>label</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
       </attribute>
 
 
@@ -22067,6 +22229,15 @@
           <pass-through>true</pass-through>
         </attribute-extension>
       </attribute>
+      <attribute>
+        <description>
+          A localized user presentable name for this component.
+        </description>
+        <display-name>Label</display-name>
+        <icon/>
+        <attribute-name>label</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
 
 
       <attribute>
@@ -22445,6 +22616,15 @@
           <pass-through>true</pass-through>
         </attribute-extension>
       </attribute>
+      <attribute>
+        <description>
+          A localized user presentable name for this component.
+        </description>
+        <display-name>Label</display-name>
+        <icon/>
+        <attribute-name>label</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
 
 
       <attribute>
@@ -22812,6 +22992,15 @@
         <attribute-extension>
           <pass-through>true</pass-through>
         </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          A localized user presentable name for this component.
+        </description>
+        <display-name>Label</display-name>
+        <icon/>
+        <attribute-name>label</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
       </attribute>
 
 
@@ -23190,6 +23379,15 @@
         <attribute-extension>
           <pass-through>true</pass-through>
         </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          A localized user presentable name for this component.
+        </description>
+        <display-name>Label</display-name>
+        <icon/>
+        <attribute-name>label</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
       </attribute>
 
 
@@ -23573,6 +23771,15 @@
           <pass-through>true</pass-through>
         </attribute-extension>
       </attribute>
+      <attribute>
+        <description>
+          A localized user presentable name for this component.
+        </description>
+        <display-name>Label</display-name>
+        <icon/>
+        <attribute-name>label</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
 
 
       <attribute>
@@ -23628,6 +23835,15 @@
         <attribute-extension>
           <pass-through>true</pass-through>
         </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          A localized user presentable name for this component.
+        </description>
+        <display-name>Label</display-name>
+        <icon/>
+        <attribute-name>label</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
       </attribute>
 
 
