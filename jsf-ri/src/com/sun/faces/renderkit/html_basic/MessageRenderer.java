@@ -1,5 +1,5 @@
 /*
- * $Id: MessageRenderer.java,v 1.38 2003/11/13 05:20:37 eburns Exp $
+ * $Id: MessageRenderer.java,v 1.39 2003/11/13 18:50:33 eburns Exp $
  */
 
 /*
@@ -106,8 +106,11 @@ public class MessageRenderer extends HtmlBasicRenderer {
         //"for" attribute required for Message. Should be taken care of
         //by TLD in JSP case, but need to cover non-JSP case.
         if (clientId == null) {
-            throw new NullPointerException(Util.getExceptionMessage(
-                    Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+	    if (log.isInfoEnabled()) {
+		log.info(Util.getExceptionMessage(
+						  Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+	    }
+	    return;
         }
 
 	messageIter = getMessageIter(context, clientId, component);
