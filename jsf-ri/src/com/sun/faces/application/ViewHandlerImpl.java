@@ -1,5 +1,5 @@
 /* 
- * $Id: ViewHandlerImpl.java,v 1.54 2005/06/09 22:37:45 jayashri Exp $ 
+ * $Id: ViewHandlerImpl.java,v 1.55 2005/07/22 16:58:20 jayashri Exp $ 
  */ 
 
 
@@ -50,7 +50,7 @@ import java.io.StringWriter;
 /**
  * <B>ViewHandlerImpl</B> is the default implementation class for ViewHandler.
  *
- * @version $Id: ViewHandlerImpl.java,v 1.54 2005/06/09 22:37:45 jayashri Exp $
+ * @version $Id: ViewHandlerImpl.java,v 1.55 2005/07/22 16:58:20 jayashri Exp $
  * @see javax.faces.application.ViewHandler
  */
 public class ViewHandlerImpl extends ViewHandler {
@@ -105,10 +105,8 @@ public class ViewHandlerImpl extends ViewHandler {
         }
 
         if (logger.isLoggable(Level.FINE)) {
-	    String treePrintout = 
-		com.sun.faces.util.DebugUtil.printTree(viewToRender);
-            logger.log(Level.FINE, "View after executing page: \n" +
-		       treePrintout);
+            logger.log(Level.FINE, "Completed building view for : \n" +
+		      viewToRender.getViewId());
         }
 
 	// set up the ResponseWriter

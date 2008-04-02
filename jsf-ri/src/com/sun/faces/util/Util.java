@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.166 2005/07/20 17:03:54 edburns Exp $
+ * $Id: Util.java,v 1.167 2005/07/22 16:58:21 jayashri Exp $
  */
 
 /*
@@ -66,7 +66,7 @@ import javax.faces.component.UIViewRoot;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.166 2005/07/20 17:03:54 edburns Exp $
+ * @version $Id: Util.java,v 1.167 2005/07/22 16:58:21 jayashri Exp $
  */
 
 public class Util extends Object {
@@ -74,7 +74,7 @@ public class Util extends Object {
     //
     // Private/Protected Constants
     //
-    public static final String FACES_LOGGER = "javax.enterprise.resource.jsf";
+    public static final String FACES_LOGGER = "javax.enterprise.resource.webcontainer.jsf";
     
     public static final String FACES_LOG_STRINGS = 
             "com.sun.faces.LogStrings";

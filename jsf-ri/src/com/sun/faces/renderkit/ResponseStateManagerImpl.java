@@ -1,5 +1,5 @@
 /*
- * $Id: ResponseStateManagerImpl.java,v 1.23 2005/07/18 22:49:03 jayashri Exp $
+ * $Id: ResponseStateManagerImpl.java,v 1.24 2005/07/22 16:58:21 jayashri Exp $
  */
 
 /*
@@ -126,7 +126,7 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
 	    GZIPInputStream gis = null;
 	    ObjectInputStream ois = null;
 	    boolean compress = isCompressStateSet(context);
-	   
+           
 	    try {
                  byte[] bytes = byteArrayGuard.decrypt(context,
                     (Base64.decode(viewString.getBytes())));
@@ -136,9 +136,9 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
                         logger.fine("Deflating state before restoring..");
 		    }
 		    gis = new GZIPInputStream(bis);
-		    ois = new ObjectInputStream(gis);
+		    ois = new ApplicationObjectInputStream(gis);
 		} else {
-		    ois = new ObjectInputStream(bis);
+		    ois = new ApplicationObjectInputStream(bis);
 		}
 		structure = ois.readObject();
 		state = ois.readObject();
