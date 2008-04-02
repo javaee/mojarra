@@ -1,5 +1,5 @@
 /*
- * $Id: LoginBean.java,v 1.14 2005/09/13 17:45:24 rogerk Exp $
+ * $Id: LoginBean.java,v 1.15 2005/09/22 23:26:07 jayashri Exp $
  */
 
 /*
@@ -87,7 +87,7 @@ public class LoginBean {
     private int intVal;
     private float floatVal;
     private short shortVal;
-    private long longVal;
+    private long longVal = 2000;
     private byte byteVal;
     private String stringVal;
     private Date time;

@@ -67,11 +67,9 @@
 
              <td>
 
-               <h:inputText id="inputNumber2" 
-                                 value="$1,234,789.60" 
-                                 alt="input_number currency"
-                                  title="input_number currency">
-                   <f:convertNumber type="currency"/>
+               <h:inputText id="inputTest2" value="#{LoginBean.long}">
+                   <f:convertNumber type="currency" currencySymbol="EUR"/>
+                  
                </h:inputText>
              </td>
 
