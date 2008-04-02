@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 
 <!--
- $Id: build-tests.xml,v 1.61 2004/07/29 21:18:05 edburns Exp $
+ $Id: build-tests.xml,v 1.62 2004/09/08 18:28:00 rlubke Exp $
 -->
 
 <!--
@@ -19,9 +19,10 @@
 
 
   <!-- Load properties in case this script executed directly -->
+  <property file="${user.home}/build.properties"/>
   <property file="build.properties"/>
   <property file="../build.properties"/>
-  <property file="${user.home}/build.properties"/>
+  <property file="../../build.properties"/>
 
   <!-- SystestClient connection properties -->
   <property name="context.path" value="/jsf-systest"/>
