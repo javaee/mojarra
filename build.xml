@@ -89,12 +89,14 @@
 
 
     <!-- Create the source distribution -->
-    <target name="jsf.source">
+    <target name="jsf.source">                
         <zip destfile="${dist.dir}/javaserverfaces_source.zip">
 
             <zipfileset dir="${basedir}"
-                        excludes="**/build.properties/**, **/CVS/**, **/build/**, **/dist/**, **/www/**,
-          **/jsf-demo/**, **/test-sqe/**" prefix="javaserverfaces_sources"/>
+                        excludes="**/*.class, **/build.properties/**, **/CVS/**, **/build/**, **/dist/**, **/www/**,
+          **/jsf-demo/**, **/dependencies/**, **/test-sqe/**, **/contrib/**" prefix="javaserverfaces_sources"/>
+             <zipfileset dir="${basedir}"
+                        includes="${basedir}/build.xml" prefix="javaserverfaces_sources"/>
 
         </zip>
         
