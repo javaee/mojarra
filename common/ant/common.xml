@@ -70,7 +70,7 @@
     <property name="impl.name" value="Sun Microsystems JavaServer Faces Implementation"/>
     <property name="build.number" value="${DSTAMP}"/>
     <property name="build.type" value="NIGHTLY"/>
-    <property name="impl.version.number" value="1.2_04" />
+    <property name="impl.version.number" value="1.2_04P1" />
     <property name="impl.version" value="${impl.version.number}-${build.number}-${build.type}"/>
     <property name="snapshot.version" value="${impl.version.number}-SNAPSHOT"/>
 
