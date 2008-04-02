@@ -32,6 +32,8 @@
 
         httpclient.jar                The Cactus httpclient jar
 
+        aspectjrt.jar                 The Cactus AspectJ Language Support jar
+
         junit.jar                     The JUnit jar
 
         tomcat.home                   The home directory of where Tomcat 4.0
@@ -81,6 +83,7 @@
       <pathelement location="${junit.jar}"/>
       <pathelement location="${cactus.jar}"/>
       <pathelement location="${httpclient.jar}"/>
+      <pathelement location="${aspectjrt.jar}"/>
       <pathelement location="${jsf-api.jar}"/>
       <pathelement location="${commons.beanutils.jar}"/>
       <pathelement location="${commons.collections.jar}"/>
@@ -158,6 +161,7 @@
         <!-- Copy needed libs in /lib -->
         <copy file="${junit.jar}" todir="${out.test.dir}/lib"/>
         <copy file="${cactus.jar}" todir="${out.test.dir}/lib"/>
+        <copy file="${aspectjrt.jar}" todir="${out.test.dir}/lib"/>
         <copy file="${commons.beanutils.jar}" todir="${out.test.dir}/lib"/>
         <copy file="${commons.collections.jar}" todir="${out.test.dir}/lib"/>
         <copy file="${commons.digester.jar}" todir="${out.test.dir}/lib"/>
@@ -201,7 +205,7 @@
             todir="${out.tomcat.40.dir}/conf" filtering="on"/>
 
         <!-- Copy JspRedirector (jsp) file needed for JSP cactus tests. -->
-        <copy file="${cactus.home}/sample/web/test/jspRedirector.jsp"
+        <copy file="${cactus.home}/web/jspRedirector.jsp"
             todir="${out.tomcat.40.dir}/webapps/test"/>
 
     </target>
