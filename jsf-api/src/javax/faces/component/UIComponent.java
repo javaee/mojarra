@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.104 2003/09/30 22:04:39 eburns Exp $
+ * $Id: UIComponent.java,v 1.105 2003/10/12 19:51:29 craigmcc Exp $
  */
 
 /*
@@ -129,8 +129,7 @@ public abstract class UIComponent implements StateHolder {
      *
      * @exception IllegalArgumentException if <code>id</code> is zero
      * length, begins with {@link NamingContainer#SEPARATOR_CHAR}, or
-     * {@link UIViewRoot#UNIQUE_ID_PREFIX}, or contains invalid
-     * characters
+     * contains invalid characters
      */
     public abstract void setId(String id);
 
