@@ -26,230 +26,79 @@ Here are the changes since the 1.1 release
   Init Paramter "com.sun.faces.COMPRESS_STATE" to true in your web deployment
   descriptor (web.xml) file.
 
-Here are the changes since the 1.0 release
+Sun RI changes
 
-Sun RI Changes
+* Removed explicit casts and dependencies to ServletContext.  Important
+  for Portlet environments.
 
-* Tag Library Validation in the html_basic taglib is disabled by
-  default.  To enable it set the
-  "com.sun.faces.enableHtmlTagLibValidator" ServletContext init param to
-  true in your web.xml, like this:
+* Configuration system correctly recognizes application default locale.
 
-    <context-param>
-        <param-name>com.sun.faces.enableHtmlTagLibValidator</param-name>
-        <param-value>true</param-value>
-    </context-param>
+* Fixed client state saving bug where components were not rendered on postback
+  for jsp pages containing verbatim tags.  This was due to an "allignment"
+  problem between state saving and restoration (client mode).
 
-* Correctly handle how none scoped beans can not refer to other none
-  scoped beans.
+* Fixed bug where SelectManyCheckboxListRenderer was rendering a "border"
+  attribute as part of the HTML "input" element.  "border" is not a valid
+  HTML attribute of "input" element.
 
-* Remove compile time dependencies on servlet API classes in our custom
-  tags.
+* Fixed bug where OutputMessageRenderer was not rendering the "id" attribute
+  as part of the HTML "span" element.
 
-* Correctly implement scope protection rules in section 5.3.1.3 of the
-  spec.  
+* Fixed bug where RadioRenderer was rendering a "border"
+  attribute as part of the HTML "input" element.  "border" is not a valid
+  HTML attribute of "input" element.
 
-* Correctly implement the cyclical bean reference prohibition.
+* Performance Enhancements
+  -  Improved the rendering performance of large DataTable(s) by replacing
+     String concatenation mechanism with a nested HashMap data structure
+     in RenderKitImpl.  
 
-* Error message enhancements.
+  -  Avoid synchronization issues by loading UComponentBase property 
+     descriptor information in the constructor which guarantees readonly
+     access.  To further optimize look up, the saved map of descriptors is 
+     keyed by "name" instead of array of property descriptors.
 
-   - Provide in the error message the component id, if present, of the
-     component that caused the error.
+* Fixed bug where an exception would be thrown if you had a managed bean
+  property referencing a non managed bean.  ManageBeanFactory threw an 
+  exception because it didn't know the scope of the referenced non
+  managed bean.
 
-   - if you happen to leave out your <h:form> tag, you'll see a more
-     sensible error message.  
+* Fixed bug where managed bean Map (and List) properties (that were
+  were not created, but retrieved) were being set. 
 
-   - if the ctor of a managed-bean throws an exception, the exception is
-     no longer swallowed.
+* Fixed bug where MenuRenderer generated non-compliant XHTML.
 
-* Fixed bug where a user providing their own ApplicationFactory would
-  not be able to leverage any of the default Application instance
-  functionality.  It is now possible to provide a decorator
-  ApplicationFactory that provides a decorated Application instance that
-  can call through to as many or as few methods on the default
-  Application instance as it likes.  Here's how you'd do this.
+* Fixed bug where HtmlSelectManyCheckbox and HtmlSelectOneRadio handled
+  the "style" attribute incorrectly.
 
-  1. Declare your ApplicationFactory in your faces-config.xml file:
+* Fixed the server side state saving to support failover. Since the
+  UIComponent instances are not serializable, instead of saving
+  the view in session, the SerializedView (result of calling 
+  getTreeStructureToSave() and getTreeStateToSave()) is saved  in the 
+  session.  This can be enabled by using the ServletContext Init Parameter 
+  "com.sun.faces.enableHigh Availability"  
+ 
+* Removed component id from error messages.
 
-  <factory>
-    <application-factory>org.NewApplicationFactory</application-factory>
-  </factory>
+* Fixed bug where command link components across multiple forms was not 
+  working.
 
-  2. Give the NewApplicationFactory a ctor that takes ApplicationFactory:
+* Removed erroneous "back slash" characters from messages files.
 
-    public NewApplicationFactory(ApplicationFactory yourOldFactory) {
-	oldFactory = yourOldFactory;
-    }
+* Fixed bug where "required=true" was not working for UISelectOne component.
 
-  3. Give the NewApplicationFactory a getApplication() method that
-     returns a wrapped application.
+* Fixed bug where DateTimeConverter was not properly throwing an
+  "IllegalArgumentException".
 
-    public Application getApplication() {
-	if (null == newApp) {
-	    newApp = new NewApplication(oldFactory.getApplication());
-	}
-	return newApp;
-    }
-
-  4. Author your NewApplication instance so that it can leverage the old
-     Application.
-
-     // ... other methods
-
-    public VariableResolver getVariableResolver() {
-        if (someSpecialConditionIsTrue) {
-          return yourCustomVariableResolver;
-        }
-	return oldApp.getVariableResolver();
-    }
-
-* Fixed bug where providing your own factory classes in a <factory>
-  element in your faces-config.xml file didn't work.
-
-* Fixed bug where managed bean properties were not getting set in the
-  order in which they appeared in the config file.
-
-* Be more strict about enforcing the component id uniqueness constraint.
-  With this constraint being more strict, it's a good idea if you're
-  programmatically adding components into the tree that you give them an
-  id explicitly before adding them.
-
-* Allow a UIComponentTag that are nested inside of UIComponentBodyTag to
-  have doAfterBody() methods that return EVAL_BODY_AGAIN if the
-  UIComponentTag has an explicitly defined id.
-
-* Expression Language engine performance enhancements:
-
-  - reduce String creation
-
-  - reduce temporary Object instance creation 
 
 General Spec changes
-
-  New 1.1 version of the DTD, backwards compatible with the 1.0
-  version. The only difference is that components and renderers can
-  declare what facets they support. Please See Section 10.3.3
-  "Application Configuration Resource Format".
-
-  Introduce the concept of "no value" for SelectOne and
-  SelectMany. class com.sun.faces.component.UIInput:
-
-    modify isEmpty() method to consider values that are zero length array
-    or List instances to be empty.
-
-  Refactor validation implementation in class
-  com.sun.faces.component.UIInput to prevent spurious ValueChangeEvent
-  instances from being fired from UISelectOne and UISelectMany
-  classes. See the javadocs for UIInput.validate().
-
-  Method com.sun.faces.component.UIViewRoot.getRenderKitId() now returns
-  null unless the setter has been explicitly called. See the javadocs
-  for that method.  DoubleRangeValidator, Lengthvalidator, and
-  LongRangeValidator now require that any validation parameters passed
-  to the validation error message be converted by the javax.faces.Number
-  converter.
-
-  The JavaDocs description ResultSetDataModel.getRowData() specifies
-  that the returned Map must use a case-insensitive Comparator.
-  DataModelEvent.getRowIndex() now returns -1 to indicate that no row is
-  selected.
-
-  Fix the JavaDoc description of the defaults for showDetail and
-  showSummary for UIMessage to match the code.
-
-  Fix JavaDoc description of EditableValueHoldergetSubmittedValue() to
-  correctly say when this method is called.
-
-  Fix JavaDoc for UIComponentTag.setProperties() to correctly describe
-  which parameters are set.
-
-  The implementation now allows nesting <h:dataTable> tags. Previously
-  this didn't work.
-
-  Fix bug where multiple action events could be generated in the case of
-  multiple <h:commandLink> tags on page that is visited as a result of
-  going "back" in the browser history.
+-- There were no spec changes for this release.
  
 Standard HTML RenderKit changes
-
-  Made the "for" attribute no longer required for the outputLabel
-  tag. This is necessary when tools want to allow the user to stick the
-  label on the page before associating the component with it.  RenderKit
-  changes for SelectManyMenu, SelectManyList, SelectOneRadio,
-  SelectManyCheckboxlist
-
-  Remove span around "select" tags in SelectManyMenu, SelectManyList,
-  SelectOneMenu and SelectOneList.  Remove span around SelectOne radio
-  buttons and SelectMany checkboxes. Render "id", "style", "styleclass"
-  as part of outer table.
-
-  The SelectManyCheckbox and SelectOneRadio renderers now do not render
-  a "for" attribute on their nested <label> elements.  The
-  SelectOneRadio renderer description is more explicit about the use of
-  the <label> element.
-
-  The description of the "size" attribute in the SelectMany renderers is
-  more correct with respect to the actual attributes exposed.  The
-  OutputLabel renderer is now able to handle the case where the compnent
-  to which this label points hasn’t been created yet, as long as the
-  component and the label are both in the same form.
-
-  The enabledClass and disabledClass attributes are now specified for
-  all select* renderers.
+-- There were no Standard HTML RenderKit changes for this release.
 
 Spec document changes
-
-  2.5.2.4 LIMIT messages not used, remove LIMIT messages.
-
-  5.2 Table 5.1, modify action method signature to return String, not
-  void.
-
-  5.3.1.3
-
-  In the section describing how to set a list-entries property, added a
-  step describing what to do if the property is an array, yet the
-  property getter had returned null.
-
-  Assign scopes to the implicit variables, so we can determine if a bean
-  is able to refer to an implicit variable, dependeng on its scope.  For
-  example, a session scoped bean cannot refer to something in request
-  scope.  Add a rule dealing with the net scope of mixed expressions:
-  The net scope of mixed expressions is considered to be the scope of
-  the narrowest expression in the mixed expression, excluding
-  expressions with the none scope.
-
-  5.3.1.13
-
-  clarify that errors described in this section occurr at runtime, not
-  deploytime.
-
-  9.4.3 Data type for "timeZone".
-
-  The "timeZone" attribute for <f:convertDateTime> in 9.4.3 is described
-  to only accept a TimeZone instance, but must also accepts a String.
-  The "locale" attribute for <f:convertDateTime> and <f:convertNumber>
-  in 9.4.3 and 9.4.4 is described to only accept a Locale instance, but
-  must also accepts a String.
-
-  9.4.12 - 9.4.14 Correct validator and converter IDs
-
-  9.4.9 Incorrect data type for "itemValue"
-
-  The attributes table for <f:selectItem> in 9.4.9 states that the
-  "itemValue" attribute takes a String but it should be Object to match
-  the type of the UISelectItem property.  The syntax section in 9.4.9
-  for <f:selectItem> is missing a couple of right square brackets to
-  mark the end for optional attributes.
-
-  9.4.10 contains a number of errors: The description of the
-  getComponentType() return value omits the "javax.faces" prefix. The
-  list of acceptable data types for the "value" attribute doesn't match
-  the data type for UISelectItems.
-
-  9.4.8 <f:param> syntax section missing "binding"
-
-  10.2.6.1 Correct classnames for LifecycleFactory and RenderKitFactory.
-
+-- There were no specification document changes for this release.
 
 Logging support and configuration steps
 =======================================
@@ -356,8 +205,6 @@ well as logging for rest of the RI will be done in a future release.
 Known Issues With This Release
 ==============================
 
-<!-- Do not remove - for 1.1_01 release  ------------------------------>
-
 * You can add a "title" attribute to <h:message*> but it won't appear. 
   "title" gets rendered with the value of the "summary" attribute. 
   Refer to the standard renderer docs for more information.
@@ -375,23 +222,11 @@ Known Issues With This Release
   from the "select" family of components in the next release.
    
 
-<!---------------------------------------------------------------------->
-
 * The Map returned by the UIComponent.getAttributes() method implements 
   get() so that if you ask for a key that is implemented as a property, 
   you get the property value. However, if you call iterator() on the Map, 
   you will get an Iterator that iterates over the "real" attributes only, 
   not the properties.
-
-* Standard error messages associated with conversion/validation errros 
-  have been updated to include componentId in the error message only for the 
-  English locale. For other locales, the workaround is to override the 
-  standard error messages to include the componentId parameter. The last 
-  parameter in the error message corresponds to componentId. The messages 
-  have been formulated in such a way that if "id" is not specified  an empty 
-  string is displayed in its place. Thats why we have the last parameter 
-  at the front, and the parameter doesn't have any extra characters on 
-  either side of it.
 
 * the value of javax.faces.component.NamingContainer.SEPARATOR_CHAR is
   ':'.  This means that the client id for components will be something
