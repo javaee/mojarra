@@ -309,6 +309,8 @@
 
             <formatter type="plain" usefile="false"/>
             <!-- Suite of tests -->
+            <test name="com.sun.faces.renderkit.html_basic.TestRendererAttributes"/>
+            <test name="com.sun.faces.util.TestUtil_messages"/>
             <test name="com.sun.faces.util.TestUtil"/>
             <test name="com.sun.faces.context.TestFacesContextFactoryImpl"/>
             <test name="com.sun.faces.context.TestFacesContextImpl"/>
@@ -341,6 +343,7 @@
             <test name="javax.faces.validator.RequiredValidatorTestCase"/>
             <test name="com.sun.faces.taglib.html_basic.TestHtmlBasicValidator"/>
             <test name="com.sun.faces.taglib.jsf_core.TestCoreValidator"/>
+
             <!-- To run the following tests, comment last 3 tests, uncomment
                  following tests and set saveStateInClient property in 
                  conf/test/web.xml to true 
@@ -378,7 +381,6 @@
             <formatter type="plain" usefile="false"/>
 
             <test name="com.sun.faces.util.TestUtil_local"/>
-            <test name="com.sun.faces.renderkit.html_basic.TestRendererAttributes"/>
         </junit>
 
     </target>
