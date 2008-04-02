@@ -76,19 +76,20 @@
 <html>
 <head>
 <title>Demonstration Components - Menu</title>
-<d:stylesheet path="/tree-control-test.css"/>
 </head>
 <body bgcolor="white">
 
 <h:form formName="menuForm" >
 
-Render graph as a menu bar(graph retreived from model):<br>
+<d:stylesheet path="/tree-control-test.css"/>
+
+Render graph as a menu bar (graph retrieved from model):<br>
 <d:graph_menubar id="menu2" valueRef="sessionScope.graph" 
     selectedClass="tree-control-selected"
     unselectedClass="tree-control-unselected" />
 
 <hr>
-Render graph as a menu bar(graph specified via JSP):<br>
+Render graph as a menu bar (graph specified via JSP):<br>
 <d:graph_menubar id="menu3" selectedClass="tree-control-selected"
       unselectedClass="tree-control-unselected">
     <d:graph_menunode  name="Menu" label="Menu" >
@@ -108,7 +109,7 @@ Render graph as a menu bar(graph specified via JSP):<br>
 </d:graph_menubar>
 
 <hr>
-Render graph as a tree control (graph retreived from model):<br>
+Render graph as a tree control (graph retrieved from model):<br>
 <d:graph_menutree id="menu4" valueRef="graph" graphClass="tree-control"
      selectedClass="tree-control-selected" 
      unselectedClass="tree-control-unselected" />
