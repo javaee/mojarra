@@ -306,7 +306,8 @@
     </copy>
 
     <copy todir="${dist.home}/samples/cardemo" includeEmptyDirs="false">
-      <fileset dir="${jsf.demo.home}/cardemo"/>
+      <fileset dir="${jsf.demo.home}/cardemo"
+               excludes="**/build.properties.crashtest,**/crashtest.xml,**/testdriver.jar"/>
     </copy>
 
     <copy todir="${dist.home}/samples/nonjsp" includeEmptyDirs="false">
