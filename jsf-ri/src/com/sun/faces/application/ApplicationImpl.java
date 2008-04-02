@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationImpl.java,v 1.3 2003/03/28 21:02:04 horwat Exp $
+ * $Id: ApplicationImpl.java,v 1.4 2003/03/31 21:12:23 rkitain Exp $
  */
 
 /*
@@ -21,6 +21,7 @@ import javax.faces.application.NavigationHandler;
 import javax.faces.event.PhaseId;
 
 import com.sun.faces.el.ValueBindingImpl;
+import com.sun.faces.el.PropertyResolverImpl;
 import com.sun.faces.el.VariableResolverImpl;
 
 import java.util.HashMap;
@@ -47,10 +48,10 @@ public class ApplicationImpl extends Application {
 
 // Attribute Instance Variables
 
-    private ActionListener actionListener;
-    private NavigationHandler navigationHandler;
-    private PropertyResolver propertyResolver;
-    private VariableResolver variableResolver;
+    private ActionListener actionListener = null;
+    private NavigationHandler navigationHandler = null;
+    private PropertyResolver propertyResolver = null;
+    private VariableResolver variableResolver = null;
     private HashMap valueBindingMap;
 
 // Relationship Instance Variables
@@ -67,9 +68,6 @@ public class ApplicationImpl extends Application {
         valueBindingMap = new HashMap();
 
         actionListener = null;
-        navigationHandler = null;
-        propertyResolver = null;
-        variableResolver = null;
     }
 
     /**
@@ -116,6 +114,9 @@ public class ApplicationImpl extends Application {
      * described in the {@link NavigationHandler} class description.</p>
      */
     public NavigationHandler getNavigationHandler() {
+        if (null == navigationHandler) {
+            navigationHandler = new NavigationHandlerImpl();
+        }
         return navigationHandler;
     }
 
@@ -144,6 +145,9 @@ public class ApplicationImpl extends Application {
      * {@link PropertyResolver} class description.</p>
      */
     public PropertyResolver getPropertyResolver() {
+        if (null == propertyResolver) {
+            propertyResolver = new PropertyResolverImpl();
+        }
         return propertyResolver;
     }
 
@@ -202,10 +206,9 @@ public class ApplicationImpl extends Application {
         ValueBinding valueBinding;
         if (null == (valueBinding = (ValueBinding) valueBindingMap.get(ref))) {
 
-            FacesContext facesContext = FacesContext.getCurrentInstance();
-            valueBinding = new ValueBindingImpl
-                (facesContext, (VariableResolverImpl) variableResolver, 
-                 propertyResolver);
+            valueBinding = new ValueBindingImpl ((VariableResolverImpl)getVariableResolver(), 
+                (PropertyResolverImpl)getPropertyResolver());
+            ((ValueBindingImpl)valueBinding).setRef(ref);
             valueBindingMap.put(ref, valueBinding);
         }
 
@@ -219,6 +222,9 @@ public class ApplicationImpl extends Application {
      * {@link VariableResolver} class description.</p>
      */
     public VariableResolver getVariableResolver() {
+        if (null == variableResolver) {
+            variableResolver = new VariableResolverImpl();
+        }
         return variableResolver;
     }
 
