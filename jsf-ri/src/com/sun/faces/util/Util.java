@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.104 2003/10/15 16:59:12 jvisvanathan Exp $
+ * $Id: Util.java,v 1.105 2003/10/16 15:57:27 rlubke Exp $
  */
 
 /*
@@ -67,7 +67,7 @@ import com.sun.faces.el.impl.JspVariableResolver;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.104 2003/10/15 16:59:12 jvisvanathan Exp $ 
+ * @version $Id: Util.java,v 1.105 2003/10/16 15:57:27 rlubke Exp $ 
  */
 
 public class Util extends Object
@@ -1131,7 +1131,7 @@ private Util()
 	    result = new Locale(lang, country);
 	}
 	else if (null != lang) {
-	    result = new Locale(lang);
+	    result = new Locale(lang, "");
 	}
 	return result;
     }
