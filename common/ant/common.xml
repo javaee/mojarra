@@ -79,6 +79,9 @@
     <property name="http.proxy.host" value=""/>
     <property name="http.proxy.port" value=""/>
 
+    <!-- Change bundle -->
+    <property name="change.bundle.dir" value="${jsf.build.home}/common/ant/bin/" />
+
     <!-- Debug args (OVERRIDE IN BUILD.PROPERTIES) -->
     <property name="debug.jvm.args" value=""/>
 
@@ -293,4 +296,24 @@
             </generateComponents>
         </sequential>
     </macrodef>
+
+    <!-- Change bundle target(s) -->
+
+    <target name="cb" description="Create a change bundle for review">
+            <if>
+                <os family="unix"/>
+                <then>
+                    <exec executable="${change.bundle.dir}/cb.sh" failonerror="true"/>
+                </then>
+                <elseif>
+                    <os family="windows"/>
+                    <then>
+                        <exec executable="${change.bundle.dir}/cb.bat" failonerror="true"/>
+                    </then>
+                </elseif>
+                <else>
+                    <echo message="Your platform is not currently supported." />
+                </else>
+            </if>
+    </target>
 </project>
