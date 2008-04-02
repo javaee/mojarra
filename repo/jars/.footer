@@ -3,14 +3,26 @@
   <tbody>
     <tr>
 
-      <td scope="col">This binary code is released under the <b><a
-      href="https://javaserverfaces.dev.java.net/nonav/BINARY_LICENSE.txt">Sun
-      Binary Code License</a></b>.  The source code from which this
-      binary code is generated is released under the <b><a
+      <td scope="col">These binaries, and source code from which these
+      binaries have been generated, are released under the <b><a
       href="https://glassfish.dev.java.net/public/CDDLv1.0.html">Common
       Development and Distribution License (CDDL) v1.0</a></b>.  You
-      must agree to these licenses as part of installation before
-      viewing and/or using the code.</td>
+      must agree to this license as part of installation before viewing
+      and/or using the code.  These binaries have dependencies on the
+      following open source technologies.
+
+    	<ul>
+
+	  <li><p><a href="http://jakarta.apache.org/commons/digester/">Commons Digester</a>
+	  </p></li>
+
+	  <li><p><a href="http://jakarta.apache.org/commons/beanutils/">Commons Beanutils</a>
+	  </p></li>
+
+	</ul>
+
+
+      </td>
 
     </tr>
   </tbody>
