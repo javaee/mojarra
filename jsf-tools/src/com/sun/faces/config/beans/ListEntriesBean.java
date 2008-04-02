@@ -1,5 +1,5 @@
 /*
- * $Id: ListEntriesBean.java,v 1.4 2005/08/22 22:12:16 ofung Exp $
+ * $Id: ListEntriesBean.java,v 1.5 2005/08/25 17:11:01 rlubke Exp $
  */
 
 /*
@@ -51,10 +51,10 @@ public class ListEntriesBean {
 
 
     // Set of unconverted String and/or null entries for the list
-    private List values = new ArrayList();
+    private List<String> values = new ArrayList<String>();
     public String[] getValues() {
         String results[] = new String[values.size()];
-        return ((String[]) values.toArray(results));
+        return (values.toArray(results));
     }
 
 
@@ -65,7 +65,7 @@ public class ListEntriesBean {
 
 
     public void addNullValue() {
-        values.add((String) null);
+        values.add(null);
     }
 
 

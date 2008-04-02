@@ -1,5 +1,5 @@
 /*
- * $Id: FacesConfigBean.java,v 1.5 2005/08/22 22:12:16 ofung Exp $
+ * $Id: FacesConfigBean.java,v 1.6 2005/08/25 17:11:00 rlubke Exp $
  */
 
 /*
@@ -71,7 +71,7 @@ public class FacesConfigBean {
     // ------------------------------------------------- ComponentHolder Methods
 
 
-    private Map components = new TreeMap();
+    private Map<String,ComponentBean> components = new TreeMap<String, ComponentBean>();
 
 
     public void addComponent(ComponentBean descriptor) {
@@ -83,13 +83,13 @@ public class FacesConfigBean {
 
 
     public ComponentBean getComponent(String componentType) {
-        return ((ComponentBean) components.get(componentType));
+        return (components.get(componentType));
     }
 
 
     public ComponentBean[] getComponents() {
         ComponentBean results[] = new ComponentBean[components.size()];
-        return ((ComponentBean[]) components.values().toArray(results));
+        return (components.values().toArray(results));
     }
 
 
@@ -101,8 +101,8 @@ public class FacesConfigBean {
     // ------------------------------------------------- ConverterHolder Methods
 
 
-    private Map convertersByClass = new TreeMap();
-    private Map convertersById = new TreeMap();
+    private Map<String,ConverterBean> convertersByClass = new TreeMap<String, ConverterBean>();
+    private Map<String,ConverterBean> convertersById = new TreeMap<String, ConverterBean>();
 
 
     public void addConverter(ConverterBean descriptor) {
@@ -124,24 +124,24 @@ public class FacesConfigBean {
 
 
     public ConverterBean getConverterByClass(String converterForClass) {
-        return ((ConverterBean) convertersByClass.get(converterForClass));
+        return (convertersByClass.get(converterForClass));
     }
 
 
     public ConverterBean getConverterById(String converterId) {
-        return ((ConverterBean) convertersById.get(converterId));
+        return (convertersById.get(converterId));
     }
 
 
     public ConverterBean[] getConvertersByClass() {
         ConverterBean results[] = new ConverterBean[convertersByClass.size()];
-        return ((ConverterBean[]) convertersByClass.values().toArray(results));
+        return (convertersByClass.values().toArray(results));
     }
 
 
     public ConverterBean[] getConvertersById() {
         ConverterBean results[] = new ConverterBean[convertersById.size()];
-        return ((ConverterBean[]) convertersById.values().toArray(results));
+        return (convertersById.values().toArray(results));
     }
 
 
@@ -157,7 +157,7 @@ public class FacesConfigBean {
     // ----------------------------------------------- ManagedBeanHolder Methods
 
 
-    private Map managedBeans = new TreeMap();
+    private Map<String,ManagedBeanBean> managedBeans = new TreeMap<String, ManagedBeanBean>();
 
 
     public void addManagedBean(ManagedBeanBean descriptor) {
@@ -169,14 +169,14 @@ public class FacesConfigBean {
     }
 
     public ManagedBeanBean getManagedBean(String name) {
-        return ((ManagedBeanBean) managedBeans.get(name));
+        return (managedBeans.get(name));
     }
 
 
     public ManagedBeanBean[] getManagedBeans() {
         ManagedBeanBean results[] =
             new ManagedBeanBean[managedBeans.size()];
-        return ((ManagedBeanBean[]) managedBeans.values().toArray(results));
+        return (managedBeans.values().toArray(results));
     }
 
 
@@ -188,7 +188,7 @@ public class FacesConfigBean {
     // -------------------------------------------- NavigationRuleHolder Methods
 
 
-    private Map navigationRules = new TreeMap();
+    private Map<String,NavigationRuleBean> navigationRules = new TreeMap<String, NavigationRuleBean>();
 
 
     public void addNavigationRule(NavigationRuleBean descriptor) {
@@ -200,7 +200,7 @@ public class FacesConfigBean {
 
 
     public NavigationRuleBean getNavigationRule(String fromViewId) {
-        return ((NavigationRuleBean) navigationRules.get(fromViewId));
+        return (navigationRules.get(fromViewId));
     }
 
 
@@ -208,7 +208,7 @@ public class FacesConfigBean {
         NavigationRuleBean results[] =
             new NavigationRuleBean[navigationRules.size()];
         return
-            ((NavigationRuleBean[]) navigationRules.values().toArray(results));
+            (navigationRules.values().toArray(results));
     }
 
 
@@ -220,7 +220,7 @@ public class FacesConfigBean {
     // -------------------------------------------- ReferencedBeanHolder Methods
 
 
-    private Map referencedBeans = new TreeMap();
+    private Map<String,ReferencedBeanBean> referencedBeans = new TreeMap<String, ReferencedBeanBean>();
 
 
     public void addReferencedBean(ReferencedBeanBean descriptor) {
@@ -232,14 +232,14 @@ public class FacesConfigBean {
     }
 
     public ReferencedBeanBean getReferencedBean(String name) {
-        return ((ReferencedBeanBean) referencedBeans.get(name));
+        return (referencedBeans.get(name));
     }
 
 
     public ReferencedBeanBean[] getReferencedBeans() {
         ReferencedBeanBean results[] =
             new ReferencedBeanBean[referencedBeans.size()];
-        return ((ReferencedBeanBean[]) referencedBeans.values().toArray(results));
+        return (referencedBeans.values().toArray(results));
     }
 
 
@@ -251,7 +251,7 @@ public class FacesConfigBean {
     // ------------------------------------------------- RenderKitHolder Methods
 
 
-    private Map renderKits = new TreeMap();
+    private Map<String,RenderKitBean> renderKits = new TreeMap<String, RenderKitBean>();
 
 
     public void addRenderKit(RenderKitBean descriptor) {
@@ -262,14 +262,14 @@ public class FacesConfigBean {
     }
 
     public RenderKitBean getRenderKit(String id) {
-        return ((RenderKitBean) renderKits.get(id));
+        return (renderKits.get(id));
     }
 
 
     public RenderKitBean[] getRenderKits() {
         RenderKitBean results[] =
             new RenderKitBean[renderKits.size()];
-        return ((RenderKitBean[]) renderKits.values().toArray(results));
+        return (renderKits.values().toArray(results));
     }
 
 
@@ -281,7 +281,7 @@ public class FacesConfigBean {
     // ------------------------------------------------- ValidatorHolder Methods
 
 
-    private Map validators = new TreeMap();
+    private Map<String,ValidatorBean> validators = new TreeMap<String, ValidatorBean>();
 
 
     public void addValidator(ValidatorBean descriptor) {
@@ -293,13 +293,13 @@ public class FacesConfigBean {
 
 
     public ValidatorBean getValidator(String id) {
-        return ((ValidatorBean) validators.get(id));
+        return (validators.get(id));
     }
 
 
     public ValidatorBean[] getValidators() {
         ValidatorBean results[] = new ValidatorBean[validators.size()];
-        return ((ValidatorBean[]) validators.values().toArray(results));
+        return (validators.values().toArray(results));
     }
 
 

@@ -1,5 +1,5 @@
 /*
- * $Id: RendererBean.java,v 1.6 2005/08/22 22:12:18 ofung Exp $
+ * $Id: RendererBean.java,v 1.7 2005/08/25 17:11:02 rlubke Exp $
  */
 
 /*
@@ -94,7 +94,7 @@ public class RendererBean extends FeatureBean implements AttributeHolder {
     // ------------------------------------------------- AttributeHolder Methods
 
 
-    private Map attributes = new TreeMap();
+    private Map<String,AttributeBean> attributes = new TreeMap<String, AttributeBean>();
 
 
     public void addAttribute(AttributeBean descriptor) {
@@ -103,13 +103,13 @@ public class RendererBean extends FeatureBean implements AttributeHolder {
 
 
     public AttributeBean getAttribute(String name) {
-        return ((AttributeBean) attributes.get(name));
+        return (attributes.get(name));
     }
 
 
     public AttributeBean[] getAttributes() {
         AttributeBean results[] = new AttributeBean[attributes.size()];
-        return ((AttributeBean[]) attributes.values().toArray(results));
+        return (attributes.values().toArray(results));
     }
 
 

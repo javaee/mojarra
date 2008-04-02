@@ -1,5 +1,5 @@
 /*
- * $Id: NavigationRuleBean.java,v 1.4 2005/08/22 22:12:17 ofung Exp $
+ * $Id: NavigationRuleBean.java,v 1.5 2005/08/25 17:11:01 rlubke Exp $
  */
 
 /*
@@ -50,11 +50,11 @@ public class NavigationRuleBean extends FeatureBean {
     { this.fromViewId = fromViewId; }
 
 
-    private List navigationCases = new ArrayList();
+    private List<NavigationCaseBean> navigationCases = new ArrayList<NavigationCaseBean>();
     public NavigationCaseBean[] getNavigationCases() {
         NavigationCaseBean results[] =
             new NavigationCaseBean[navigationCases.size()];
-        return ((NavigationCaseBean[]) navigationCases.toArray(results));
+        return (navigationCases.toArray(results));
     }
 
 

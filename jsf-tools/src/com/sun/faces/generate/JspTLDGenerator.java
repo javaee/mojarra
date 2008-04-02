@@ -1,5 +1,5 @@
 /*
- * $Id: JspTLDGenerator.java,v 1.3 2005/08/22 22:12:26 ofung Exp $
+ * $Id: JspTLDGenerator.java,v 1.4 2005/08/25 17:11:04 rlubke Exp $
  */
 
 /*
@@ -237,12 +237,12 @@ public abstract class JspTLDGenerator implements Generator {
                 // absolute path
                 if (path.charAt(1) == ':') {
                     // win32
-                    path.replace('/', File.separatorChar);
+                    path = path.replace('/', File.separatorChar);
                 }
             } else {
                 path = System.getProperty("user.dir") + File.separatorChar +
                     path;
-                path.replace('/', File.separatorChar);
+                path = path.replace('/', File.separatorChar);
             }
 
             StringBuffer sb = new StringBuffer();
@@ -289,7 +289,7 @@ public abstract class JspTLDGenerator implements Generator {
 
         private static final Charset UTF8 = Charset.forName("UTF-8");
 
-        private Stack elementStack = new Stack();
+        private Stack<String> elementStack = new Stack<String>();
 
 
 
@@ -336,7 +336,7 @@ public abstract class JspTLDGenerator implements Generator {
 
 
         public void startElement(String name,
-                          Map attributes) throws IOException {
+                          Map<String,String> attributes) throws IOException {
 
             if (name == null) {
                 throw new IllegalArgumentException("Null element name");
@@ -383,7 +383,7 @@ public abstract class JspTLDGenerator implements Generator {
 
             StringBuffer sb = new StringBuffer();
             for (int count = 0; count < elementCount; count++) {
-                String elementName = (String) elementStack.pop();
+                String elementName = elementStack.pop();
 
                 for (int i = 0, size = elementStack.size(); i < size; i++) {
                     sb.append(TAB);
@@ -425,15 +425,15 @@ public abstract class JspTLDGenerator implements Generator {
         // ----------------------------------------------------- Private Methods
 
 
-        private String createAttributesString(Map attributes) {
+        private String createAttributesString(Map<String,String> attributes) {
 
             if (attributes == null) {
                 throw new IllegalArgumentException("Null attributes map");
             }
 
             StringBuffer sb = new StringBuffer();
-            for (Iterator i = attributes.keySet().iterator(); i.hasNext(); ) {
-                String name = (String) i.next();
+            for (Iterator<String> i = attributes.keySet().iterator(); i.hasNext(); ) {
+                String name = i.next();
                 sb.append(' ').append(name).append('=');
                 sb.append('"').append(attributes.get(name)).append('"');
             }

@@ -1,5 +1,5 @@
 /*
- * $Id: JspTLD21Generator.java,v 1.5 2005/08/22 22:12:25 ofung Exp $
+ * $Id: JspTLD21Generator.java,v 1.6 2005/08/25 17:11:03 rlubke Exp $
  */
 
 /*
@@ -34,6 +34,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.ArrayList;
 
 import com.sun.faces.config.beans.AttributeBean;
 import com.sun.faces.config.beans.ComponentBean;
@@ -52,7 +53,7 @@ public class JspTLD21Generator extends JspTLDGenerator {
     /**
      * <p>Schema related attributes.</p>
      */
-    private static Map TAG_LIB_SCHEMA_ATTRIBUTES = new HashMap();
+    private static Map<String,String> TAG_LIB_SCHEMA_ATTRIBUTES = new HashMap<String, String>();
     static {
         TAG_LIB_SCHEMA_ATTRIBUTES.put("xmlns",
             "http://java.sun.com/xml/ns/javaee");
@@ -123,24 +124,24 @@ public class JspTLD21Generator extends JspTLDGenerator {
         writer.writeComment(
             "===================== HTML 4.0 basic tags ======================");
 
-        Map componentsByComponentFamily =
+        Map<String,ComponentBean> componentsByComponentFamily =
             GeneratorUtil.getComponentFamilyComponentMap(configBean);
-        Map renderersByComponentFamily =
+        Map<String, ArrayList<RendererBean>> renderersByComponentFamily =
             GeneratorUtil.getComponentFamilyRendererMap(configBean,
                 propManager.getProperty(PropertyManager.RENDERKIT_ID));
         String targetPackage =
             propManager.getProperty(PropertyManager.TARGET_PACKAGE);
 
-        for (Iterator keyIter = renderersByComponentFamily.keySet().iterator();
+        for (Iterator<String> keyIter = renderersByComponentFamily.keySet().iterator();
              keyIter.hasNext();) {
 
-            String componentFamily = (String) keyIter.next();
-            List renderers =
-            (List) renderersByComponentFamily.get(componentFamily);
-            for (Iterator rendererIter = renderers.iterator();
+            String componentFamily = keyIter.next();
+            List<RendererBean> renderers =
+            (List<RendererBean>) renderersByComponentFamily.get(componentFamily);
+            for (Iterator<RendererBean> rendererIter = renderers.iterator();
                  rendererIter.hasNext();) {
 
-                RendererBean renderer = (RendererBean) rendererIter.next();
+                RendererBean renderer = rendererIter.next();
                 String rendererType = renderer.getRendererType();
                 writer.startElement("tag");
 
@@ -201,8 +202,7 @@ public class JspTLD21Generator extends JspTLDGenerator {
 
                 // Component Properties first...
                 //
-                ComponentBean component = (ComponentBean)
-                    componentsByComponentFamily.get(componentFamily);
+                ComponentBean component = componentsByComponentFamily.get(componentFamily);
 
                 PropertyBean[] properties = component.getProperties();
                 PropertyBean property;

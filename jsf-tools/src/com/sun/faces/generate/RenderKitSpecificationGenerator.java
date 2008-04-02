@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKitSpecificationGenerator.java,v 1.8 2005/08/22 22:12:26 ofung Exp $
+ * $Id: RenderKitSpecificationGenerator.java,v 1.9 2005/08/25 17:11:04 rlubke Exp $
  */
 
 /*
@@ -39,6 +39,7 @@ import java.net.URLConnection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.ArrayList;
 
 import com.sun.faces.config.beans.AttributeBean;
 import com.sun.faces.config.beans.DescriptionBean;
@@ -196,20 +197,20 @@ public class RenderKitSpecificationGenerator implements Generator {
         sb.append("<BR>\n\n");
         sb.append("<DL CLASS=\"FrameItemFont\">\n\n");
 
-        Map renderersByComponentFamily =
+        Map<String, ArrayList<RendererBean>> renderersByComponentFamily =
             GeneratorUtil.getComponentFamilyRendererMap(configBean, renderKitId);
 
-        for (Iterator keyIter = renderersByComponentFamily.keySet().iterator();
+        for (Iterator<String> keyIter = renderersByComponentFamily.keySet().iterator();
              keyIter.hasNext(); ) {
 
-            String curFamily = (String) keyIter.next();
+            String curFamily = keyIter.next();
             sb.append("  <DT>" + curFamily + "</DT>\n");
-            List renderers = (List) renderersByComponentFamily.get(curFamily);
+            List<RendererBean> renderers = renderersByComponentFamily.get(curFamily);
 
-            for (Iterator rendererIter = renderers.iterator();
+            for (Iterator<RendererBean> rendererIter = renderers.iterator();
                  rendererIter.hasNext(); ) {
 
-                RendererBean renderer = (RendererBean) rendererIter.next();
+                RendererBean renderer = rendererIter.next();
                 String curType = renderer.getRendererType();
                 sb.append("  <DD><A HREF=\"" + renderKitId + "/" +
                     curFamily + curType +
@@ -269,21 +270,21 @@ public class RenderKitSpecificationGenerator implements Generator {
         sb.append("<TH>description</TH>\n");
         sb.append("</TR>\n");
 
-        Map renderersByComponentFamily =
+        Map<String,ArrayList<RendererBean>> renderersByComponentFamily =
             GeneratorUtil.getComponentFamilyRendererMap(configBean, renderKitId);
 
-        for (Iterator keyIter = renderersByComponentFamily.keySet().iterator();
+        for (Iterator<String> keyIter = renderersByComponentFamily.keySet().iterator();
              keyIter.hasNext(); ) {
-            String curFamily = (String) keyIter.next();
-            List renderers = (List) renderersByComponentFamily.get(curFamily);
+            String curFamily = keyIter.next();
+            List<RendererBean> renderers = renderersByComponentFamily.get(curFamily);
 
             sb.append("  <TR>\n");
             sb.append("    <TD rowspan=\"" + renderers.size() + "\">" +
                 curFamily + "</TD>\n");
-            for (Iterator rendererIter = renderers.iterator();
+            for (Iterator<RendererBean> rendererIter = renderers.iterator();
                  rendererIter.hasNext(); ) {
 
-                RendererBean renderer = (RendererBean) rendererIter.next();
+                RendererBean renderer = rendererIter.next();
                 String curType = renderer.getRendererType();
                 sb.append("    <TD><A HREF=\"" + curFamily + curType +
                     ".html\" TARGET=\"rendererFrame\">" + curType +

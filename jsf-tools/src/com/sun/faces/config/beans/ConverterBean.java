@@ -1,5 +1,5 @@
 /*
- * $Id: ConverterBean.java,v 1.4 2005/08/22 22:12:16 ofung Exp $
+ * $Id: ConverterBean.java,v 1.5 2005/08/25 17:11:00 rlubke Exp $
  */
 
 /*
@@ -69,7 +69,7 @@ public class ConverterBean extends FeatureBean
     // ------------------------------------------------- AttributeHolder Methods
 
 
-    private Map attributes = new TreeMap();
+    private Map<String,AttributeBean> attributes = new TreeMap<String, AttributeBean>();
 
 
     public void addAttribute(AttributeBean descriptor) {
@@ -78,13 +78,13 @@ public class ConverterBean extends FeatureBean
 
 
     public AttributeBean getAttribute(String name) {
-        return ((AttributeBean) attributes.get(name));
+        return (attributes.get(name));
     }
 
 
     public AttributeBean[] getAttributes() {
         AttributeBean results[] = new AttributeBean[attributes.size()];
-        return ((AttributeBean[]) attributes.values().toArray(results));
+        return (attributes.values().toArray(results));
     }
 
 
@@ -96,7 +96,7 @@ public class ConverterBean extends FeatureBean
     // ------------------------------------------------- PropertyHolder Methods
 
 
-    private Map properties = new TreeMap();
+    private Map<String,PropertyBean> properties = new TreeMap<String, PropertyBean>();
 
 
     public void addProperty(PropertyBean descriptor) {
@@ -105,13 +105,13 @@ public class ConverterBean extends FeatureBean
 
 
     public PropertyBean getProperty(String name) {
-        return ((PropertyBean) properties.get(name));
+        return (properties.get(name));
     }
 
 
     public PropertyBean[] getProperties() {
         PropertyBean results[] = new PropertyBean[properties.size()];
-        return ((PropertyBean[]) properties.values().toArray(results));
+        return (properties.values().toArray(results));
     }
 
 

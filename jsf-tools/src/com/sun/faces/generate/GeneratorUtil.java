@@ -1,5 +1,5 @@
 /*
- * $Id: GeneratorUtil.java,v 1.3 2005/08/22 22:12:24 ofung Exp $
+ * $Id: GeneratorUtil.java,v 1.4 2005/08/25 17:11:02 rlubke Exp $
  */
 
 /*
@@ -57,7 +57,7 @@ public class GeneratorUtil {
 
 
      // The set of unwrapper methods for primitives, keyed by the primitive type
-    private static Map UNWRAPPERS = new HashMap();
+    private static Map<String,String> UNWRAPPERS = new HashMap<String, String>();
     static {
         UNWRAPPERS.put("boolean", "booleanValue");
         UNWRAPPERS.put("byte", "byteValue");
@@ -71,7 +71,7 @@ public class GeneratorUtil {
 
 
     // The set of wrapper classes for primitives, keyed by the primitive type
-    private static Map WRAPPERS = new HashMap();
+    private static Map<String,String> WRAPPERS = new HashMap<String, String>();
     static {
         WRAPPERS.put("boolean", "java.lang.Boolean");
         WRAPPERS.put("byte", "java.lang.Byte");
@@ -88,14 +88,14 @@ public class GeneratorUtil {
 
     public static String convertToPrimitive(String objectType) {
 
-        return (String) UNWRAPPERS.get(objectType);
+        return UNWRAPPERS.get(objectType);
 
     }
 
 
     public static String convertToObject(String primitiveType) {
 
-        return (String) WRAPPERS.get(primitiveType);
+        return WRAPPERS.get(primitiveType);
 
     }
 
@@ -163,10 +163,10 @@ public class GeneratorUtil {
      *         instances Only include components that do not have a base
      *         component type.
      */
-    public static Map getComponentFamilyComponentMap(
+    public static Map<String,ComponentBean> getComponentFamilyComponentMap(
         FacesConfigBean configBean) {
 
-        TreeMap result = new TreeMap();
+        TreeMap<String,ComponentBean> result = new TreeMap<String, ComponentBean>();
         ComponentBean component;
         ComponentBean[] components = configBean.getComponents();
         for (int i = 0, len = components.length; i < len; i++) {
@@ -187,7 +187,7 @@ public class GeneratorUtil {
     } // END getComponentFamilyComponentMap
 
 
-    public static Map getComponentFamilyRendererMap(FacesConfigBean configBean,
+    public static Map<String,ArrayList<RendererBean>> getComponentFamilyRendererMap(FacesConfigBean configBean,
                                                     String renderKitId) {
 
         RenderKitBean renderKit = configBean.getRenderKit(renderKitId);
@@ -202,7 +202,7 @@ public class GeneratorUtil {
                 '"' + renderKitId + '"');
         }
 
-        TreeMap result = new TreeMap();
+        TreeMap<String,ArrayList<RendererBean>> result = new TreeMap<String, ArrayList<RendererBean>>();
 
         for (int i = 0, len = renderers.length; i < len; i++) {
             RendererBean renderer = renderers[i];
@@ -214,11 +214,10 @@ public class GeneratorUtil {
             // if this is the first time we've encountered this
             // componentFamily
             String componentFamily = renderer.getComponentFamily();
-            ArrayList list = (ArrayList)
-                result.get(componentFamily);
+            ArrayList<RendererBean> list = result.get(componentFamily);
             if (list == null) {
                 // create a list for it
-                list = new ArrayList();
+                list = new ArrayList<RendererBean>();
                 list.add(renderer);
                 result.put(componentFamily, list);
             } else {

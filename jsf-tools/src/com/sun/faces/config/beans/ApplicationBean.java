@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationBean.java,v 1.6 2005/08/22 22:12:15 ofung Exp $
+ * $Id: ApplicationBean.java,v 1.7 2005/08/25 17:11:00 rlubke Exp $
  */
 
 /*
@@ -69,7 +69,7 @@ public class ApplicationBean {
     // -------------------------------------------- ActionListenerHolder Methods
 
 
-    private List actionListeners = new ArrayList();
+    private List<String> actionListeners = new ArrayList<String>();
 
 
     public void addActionListener(String actionListener) {
@@ -93,7 +93,7 @@ public class ApplicationBean {
     // ----------------------------------------- NavigationHandlerHolder Methods
 
 
-    private List navigationHandlers = new ArrayList();
+    private List<String> navigationHandlers = new ArrayList<String>();
 
 
     public void addNavigationHandler(String navigationHandler) {
@@ -117,7 +117,7 @@ public class ApplicationBean {
     // ------------------------------------------ PropertyResolverHolder Methods
 
 
-    private List propertyResolvers = new ArrayList();
+    private List<String> propertyResolvers = new ArrayList<String>();
 
 
     public void addPropertyResolver(String propertyResolver) {
@@ -139,7 +139,7 @@ public class ApplicationBean {
 
     // ---------------------------------------------- StateManagerHolder Methods
 
-    private Map resourceBundles = new TreeMap();
+    private Map<String,ResourceBundleBean> resourceBundles = new TreeMap<String, ResourceBundleBean>();
 
 
     public void addResourceBundle(ResourceBundleBean descriptor) {
@@ -147,7 +147,7 @@ public class ApplicationBean {
     }
 
     public ResourceBundleBean getResourceBundle(String name) {
-        return ((ResourceBundleBean) resourceBundles.get(name));
+        return (resourceBundles.get(name));
     }
 
 
@@ -168,7 +168,7 @@ public class ApplicationBean {
     // ---------------------------------------------- StateManagerHolder Methods
 
 
-    private List stateManagers = new ArrayList();
+    private List<String> stateManagers = new ArrayList<String>();
 
 
     public void addStateManager(String stateManager) {
@@ -192,7 +192,7 @@ public class ApplicationBean {
     // ------------------------------------------ VariableResolverHolder Methods
 
 
-    private List variableResolvers = new ArrayList();
+    private List<String> variableResolvers = new ArrayList<String>();
 
 
     public void addVariableResolver(String variableResolver) {
@@ -215,7 +215,7 @@ public class ApplicationBean {
     // ------------------------------------------ ELResolver Holder Methods
 
 
-    private List elResolvers = new ArrayList();
+    private List<String> elResolvers = new ArrayList<String>();
 
 
     public void addELResolver(String elResolver) {
@@ -239,7 +239,7 @@ public class ApplicationBean {
     // ------------------------------------------ ViewHandlerHolder Methods
 
 
-    private List viewHandlers = new ArrayList();
+    private List<String> viewHandlers = new ArrayList<String>();
 
 
     public void addViewHandler(String viewHandler) {

@@ -1,5 +1,5 @@
 /*
- * $Id: MapEntriesBean.java,v 1.4 2005/08/22 22:12:17 ofung Exp $
+ * $Id: MapEntriesBean.java,v 1.5 2005/08/25 17:11:01 rlubke Exp $
  */
 
 /*
@@ -50,11 +50,11 @@ public class MapEntriesBean {
     { this.keyClass = keyClass; }
 
 
-    private List mapEntries = new ArrayList();
+    private List<MapEntryBean> mapEntries = new ArrayList<MapEntryBean>();
     public MapEntryBean[] getMapEntries() {
         MapEntryBean results[] =
             new MapEntryBean[mapEntries.size()];
-        return ((MapEntryBean[]) mapEntries.toArray(results));
+        return (mapEntries.toArray(results));
     }
 
 

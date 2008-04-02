@@ -1,5 +1,5 @@
 /*
- * $Id: FeatureBean.java,v 1.4 2005/08/22 22:12:16 ofung Exp $
+ * $Id: FeatureBean.java,v 1.5 2005/08/25 17:11:00 rlubke Exp $
  */
 
 /*
@@ -49,7 +49,7 @@ public abstract class FeatureBean {
     // ----------------------------------------------- DescriptionHolder Methods
 
 
-    private Map descriptions = new TreeMap();
+    private Map<String,DescriptionBean> descriptions = new TreeMap<String, DescriptionBean>();
 
 
     public void addDescription(DescriptionBean descriptor) {
@@ -58,13 +58,13 @@ public abstract class FeatureBean {
 
 
     public DescriptionBean getDescription(String lang) {
-        return ((DescriptionBean) descriptions.get(lang));
+        return (descriptions.get(lang));
     }
 
 
     public DescriptionBean[] getDescriptions() {
         DescriptionBean results[] = new DescriptionBean[descriptions.size()];
-        return ((DescriptionBean[]) descriptions.values().toArray(results));
+        return (descriptions.values().toArray(results));
     }
 
 
@@ -76,7 +76,7 @@ public abstract class FeatureBean {
     // ----------------------------------------------- DisplayNameHolder Methods
 
 
-    private Map displayNames = new TreeMap();
+    private Map<String,DisplayNameBean> displayNames = new TreeMap<String, DisplayNameBean>();
 
 
     public void addDisplayName(DisplayNameBean descriptor) {
@@ -85,13 +85,13 @@ public abstract class FeatureBean {
 
 
     public DisplayNameBean getDisplayName(String lang) {
-        return ((DisplayNameBean) displayNames.get(lang));
+        return (displayNames.get(lang));
     }
 
 
     public DisplayNameBean[] getDisplayNames() {
         DisplayNameBean results[] = new DisplayNameBean[displayNames.size()];
-        return ((DisplayNameBean[]) displayNames.values().toArray(results));
+        return (displayNames.values().toArray(results));
     }
 
 
@@ -103,7 +103,7 @@ public abstract class FeatureBean {
     // ------------------------------------------------------ IconHolder Methods
 
 
-    private Map icons = new TreeMap();
+    private Map<String,IconBean> icons = new TreeMap<String, IconBean>();
 
 
     public void addIcon(IconBean descriptor) {
@@ -112,13 +112,13 @@ public abstract class FeatureBean {
 
 
     public IconBean getIcon(String lang) {
-        return ((IconBean) icons.get(lang));
+        return (icons.get(lang));
     }
 
 
     public IconBean[] getIcons() {
         IconBean results[] = new IconBean[icons.size()];
-        return ((IconBean[]) icons.values().toArray(results));
+        return (icons.values().toArray(results));
     }
 
 

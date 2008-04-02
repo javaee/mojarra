@@ -1,5 +1,5 @@
 /*
- * $Id: LocaleConfigBean.java,v 1.4 2005/08/22 22:12:17 ofung Exp $
+ * $Id: LocaleConfigBean.java,v 1.5 2005/08/25 17:11:01 rlubke Exp $
  */
 
 /*
@@ -53,7 +53,7 @@ public class LocaleConfigBean {
     // ------------------------------------------- SupportedLocaleHolder Methods
 
 
-    private Set supportedLocales = new TreeSet();
+    private Set<String> supportedLocales = new TreeSet<String>();
 
 
     public void addSupportedLocale(String supportedLocale) {
@@ -65,7 +65,7 @@ public class LocaleConfigBean {
 
     public String[] getSupportedLocales() {
         String results[] = new String[supportedLocales.size()];
-        return ((String[]) supportedLocales.toArray(results));
+        return (supportedLocales.toArray(results));
     }
 
 

@@ -1,5 +1,5 @@
 /*
- * $Id: ManagedBeanBean.java,v 1.5 2005/08/22 22:12:17 ofung Exp $
+ * $Id: ManagedBeanBean.java,v 1.6 2005/08/25 17:11:01 rlubke Exp $
  */
 
 /*
@@ -78,7 +78,7 @@ public class ManagedBeanBean extends FeatureBean
     // ------------------------------------------- ManagedPropertyHolder Methods
 
 
-    private List managedProperties = new ArrayList();
+    private List<ManagedPropertyBean> managedProperties = new ArrayList<ManagedPropertyBean>();
 
 
     public void addManagedProperty(ManagedPropertyBean descriptor) {
@@ -87,11 +87,11 @@ public class ManagedBeanBean extends FeatureBean
 
 
     public ManagedPropertyBean getManagedProperty(String name) {
-	Iterator iter = managedProperties.iterator();
+	Iterator<ManagedPropertyBean> iter = managedProperties.iterator();
 	ManagedPropertyBean cur = null;
 	String  curName = null;
 	while (iter.hasNext()) {
-	    cur = (ManagedPropertyBean) iter.next();
+	    cur = iter.next();
 	    if (null == cur) {
 		continue;
 	    }
@@ -117,7 +117,7 @@ public class ManagedBeanBean extends FeatureBean
     public ManagedPropertyBean[] getManagedProperties() {
         ManagedPropertyBean results[] =
             new ManagedPropertyBean[managedProperties.size()];
-        return ((ManagedPropertyBean[]) managedProperties.toArray(results));
+        return (managedProperties.toArray(results));
     }
 
 

@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlComponentGenerator.java,v 1.16 2005/08/22 22:12:24 ofung Exp $
+ * $Id: HtmlComponentGenerator.java,v 1.17 2005/08/25 17:11:02 rlubke Exp $
  */
 
 /*
@@ -39,7 +39,6 @@ import com.sun.faces.config.beans.ComponentBean;
 import com.sun.faces.config.beans.DescriptionBean;
 import com.sun.faces.config.beans.FacesConfigBean;
 import com.sun.faces.config.beans.PropertyBean;
-import com.sun.faces.generate.AbstractGenerator.CodeWriter;
 import com.sun.faces.util.ToolsUtil;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -80,7 +79,7 @@ public class HtmlComponentGenerator extends AbstractGenerator {
     private FacesConfigBean configBean;
 
     // List of relevant properties for the component class to be generated
-    private List properties;
+    private List<PropertyBean> properties;
 
     // The Writer for each component class to be generated
     private CodeWriter writer;
@@ -143,7 +142,7 @@ public class HtmlComponentGenerator extends AbstractGenerator {
                  }
 
                 // Initialize all per-class static variables
-                properties = new ArrayList();
+                properties = new ArrayList<PropertyBean>();
 
                 if (!dir.exists()) {
                     dir.mkdirs();
@@ -294,7 +293,7 @@ public class HtmlComponentGenerator extends AbstractGenerator {
                 writer.write(pb.getDefaultValue());
             } else if (primitive(type)) {
                 writer.write(" = ");
-                writer.write((String) TYPE_DEFAULTS.get(type));
+                writer.write(TYPE_DEFAULTS.get(type));
             }
             writer.write(";\n");
             if (primitive(type)) {
@@ -355,7 +354,7 @@ public class HtmlComponentGenerator extends AbstractGenerator {
                 writer.fwrite("if (_result == null) {\n");
                 writer.indent();
                 writer.fwrite("return ");
-                writer.write((String) TYPE_DEFAULTS.get(type));
+                writer.write(TYPE_DEFAULTS.get(type));
                 writer.write(";\n");
                 writer.outdent();
                 writer.fwrite("} else {\n");
@@ -427,7 +426,7 @@ public class HtmlComponentGenerator extends AbstractGenerator {
 
         int p = 0; // Number of primitive properties
         for (int i = 0, size = properties.size(); i < size; i++) {
-            PropertyBean pb = (PropertyBean) properties.get(i);
+            PropertyBean pb = properties.get(i);
             if (primitive(pb.getPropertyClass())) {
                 p++;
             }
@@ -443,7 +442,7 @@ public class HtmlComponentGenerator extends AbstractGenerator {
 
         int n = 1; // Index into values array
         for (int i = 0; i < properties.size(); i++) {
-            PropertyBean pb = (PropertyBean) properties.get(i);
+            PropertyBean pb = properties.get(i);
             String name = mangle(pb.getPropertyName());
             String type = pb.getPropertyClass();
             writer.fwrite("_values[");
@@ -483,7 +482,7 @@ public class HtmlComponentGenerator extends AbstractGenerator {
         writer.fwrite("super.restoreState(_context, _values[0]);\n");
         n = 1;
         for (int i = 0, size = properties.size(); i < size; i++) {
-            PropertyBean pb = (PropertyBean) properties.get(i);
+            PropertyBean pb = properties.get(i);
             String name = mangle(pb.getPropertyName());
             String type = pb.getPropertyClass();
             writer.fwrite("this.");

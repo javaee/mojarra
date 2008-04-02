@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleBean.java,v 1.4 2005/08/22 22:12:16 ofung Exp $
+ * $Id: LifecycleBean.java,v 1.5 2005/08/25 17:11:00 rlubke Exp $
  */
 
 /*
@@ -47,7 +47,7 @@ public class LifecycleBean {
     // --------------------------------------------- PhaseListenerHolder Methods
 
 
-    private List phaseListeners = new ArrayList();
+    private List<String> phaseListeners = new ArrayList<String>();
 
 
     public void addPhaseListener(String phaseListener) {
@@ -59,7 +59,7 @@ public class LifecycleBean {
 
     public String[] getPhaseListeners() {
         String results[] = new String[phaseListeners.size()];
-        return ((String[]) phaseListeners.toArray(results));
+        return (phaseListeners.toArray(results));
     }
 
 

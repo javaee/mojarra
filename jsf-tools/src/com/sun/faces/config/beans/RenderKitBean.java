@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKitBean.java,v 1.5 2005/08/22 22:12:18 ofung Exp $
+ * $Id: RenderKitBean.java,v 1.6 2005/08/25 17:11:01 rlubke Exp $
  */
 
 /*
@@ -68,7 +68,7 @@ public class RenderKitBean extends FeatureBean {
 
 
     // Key is family + rendererType
-    private Map renderers = new TreeMap();
+    private Map<String,RendererBean> renderers = new TreeMap<String, RendererBean>();
 
 
     public void addRenderer(RendererBean descriptor) {
@@ -84,14 +84,14 @@ public class RenderKitBean extends FeatureBean {
 
     public RendererBean getRenderer(String componentFamily,
                                     String rendererType) {
-        return ((RendererBean) renderers.get
+        return (renderers.get
                 (componentFamily + "|" + rendererType));
     }
 
 
     public RendererBean[] getRenderers() {
         RendererBean results[] = new RendererBean[renderers.size()];
-        return ((RendererBean[]) renderers.values().toArray(results));
+        return (renderers.values().toArray(results));
     }
 
 

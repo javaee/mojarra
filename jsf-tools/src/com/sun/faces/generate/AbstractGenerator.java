@@ -1,5 +1,5 @@
 /*
- * $Id: AbstractGenerator.java,v 1.11 2005/08/22 22:12:23 ofung Exp $
+ * $Id: AbstractGenerator.java,v 1.12 2005/08/25 17:11:02 rlubke Exp $
  */
 
 /*
@@ -56,7 +56,7 @@ public abstract class AbstractGenerator implements Generator {
 
 
     // The set of default values for primitives, keyed by the primitive type
-    protected static final Map TYPE_DEFAULTS = new HashMap();
+    protected static final Map<String,String> TYPE_DEFAULTS = new HashMap<String, String>();
     static {
         TYPE_DEFAULTS.put("boolean", "false");
         TYPE_DEFAULTS.put("byte", "Byte.MIN_VALUE");
@@ -70,7 +70,7 @@ public abstract class AbstractGenerator implements Generator {
 
 
     // The set of reserved keywords in the Java language
-    protected static final Set JAVA_KEYWORDS = new HashSet();
+    protected static final Set<String> JAVA_KEYWORDS = new HashSet<String>();
     static {
         JAVA_KEYWORDS.add("abstract");
         JAVA_KEYWORDS.add("boolean");
@@ -173,9 +173,9 @@ public abstract class AbstractGenerator implements Generator {
      * @exception IllegalArgumentException if an option flag does not start
      *  with a '-' or is missing a corresponding value
      */
-    protected static Map options(String[] args) {
+    protected static Map<String,String> options(String[] args) {
 
-        Map options = new HashMap();
+        Map<String,String> options = new HashMap<String, String>();
         int i = 0;
         while (i < args.length) {
             if (!args[i].startsWith("-")) {
@@ -200,7 +200,7 @@ public abstract class AbstractGenerator implements Generator {
      */
     protected static boolean primitive(String type) {
 
-        return ((GeneratorUtil.convertToPrimitive(type) != null) ? true : false);
+        return ((GeneratorUtil.convertToPrimitive(type) != null));
 
     }
 
@@ -232,7 +232,7 @@ public abstract class AbstractGenerator implements Generator {
         private final String TAB = "    ";
         private final int TAB_LENGTH = TAB.length();
 
-        private Stack depth;
+        private Stack<String> depth;
         private String formatString = "";
 
 
@@ -241,7 +241,7 @@ public abstract class AbstractGenerator implements Generator {
         public CodeWriter(Writer writer) {
 
             super(writer);
-            depth = new Stack();
+            depth = new Stack<String>();
 
         } // END CodeWriter
 

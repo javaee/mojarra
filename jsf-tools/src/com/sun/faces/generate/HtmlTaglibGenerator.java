@@ -41,7 +41,6 @@ import com.sun.faces.config.beans.DescriptionBean;
 import com.sun.faces.config.beans.FacesConfigBean;
 import com.sun.faces.config.beans.PropertyBean;
 import com.sun.faces.config.beans.RendererBean;
-import com.sun.faces.generate.AbstractGenerator.CodeWriter;
 import com.sun.faces.util.ToolsUtil;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -73,7 +72,7 @@ public class HtmlTaglibGenerator extends AbstractGenerator {
 
     private Generator tldGenerator;
     private File outputDir;
-    private List imports;
+    private List<String> imports;
 
 
 
@@ -147,7 +146,7 @@ public class HtmlTaglibGenerator extends AbstractGenerator {
     protected void addImport(String fullyQualClassName) {
 
         if (imports == null) {
-            imports = new ArrayList();
+            imports = new ArrayList<String>();
         }
         imports.add(fullyQualClassName);
 
@@ -283,7 +282,7 @@ public class HtmlTaglibGenerator extends AbstractGenerator {
             writer.fwrite("this." + ivar + " = ");
             if (primitive(propertyType) && !(property.isValueExpressionEnabled()
                 || property.isMethodExpressionEnabled())) {
-                writer.write((String) TYPE_DEFAULTS.get(propertyType));
+                writer.write(TYPE_DEFAULTS.get(propertyType));
             } else {
                 writer.write("null");
             }
@@ -499,7 +498,7 @@ public class HtmlTaglibGenerator extends AbstractGenerator {
                     writer.outdent();
                     writer.fwrite("}\n");
                 } else {
-                    HashMap signatureMap = new HashMap(3);
+                    HashMap<String,String> signatureMap = new HashMap<String, String>(3);
                     signatureMap.put("actionListener",
                         "Class args[] = { ActionEvent.class };");
                     signatureMap.put("validator",
@@ -640,8 +639,8 @@ public class HtmlTaglibGenerator extends AbstractGenerator {
      protected static boolean isValueHolder(String componentClass) {
 
         try {
-            Class clazz = Class.forName(componentClass);
-            Class valueHolderClass =
+            Class<?> clazz = Class.forName(componentClass);
+            Class<?> valueHolderClass =
                 Class.forName("javax.faces.component.ValueHolder");
             return valueHolderClass.isAssignableFrom(clazz);
         } catch (ClassNotFoundException cnfe) {
@@ -734,25 +733,24 @@ public class HtmlTaglibGenerator extends AbstractGenerator {
      */
     private void generateTagClasses() throws Exception {
 
-        Map renderersByComponentFamily =
+        Map<String,ArrayList<RendererBean>> renderersByComponentFamily =
             GeneratorUtil.getComponentFamilyRendererMap(configBean,
                 propManager.getProperty(PropertyManager.RENDERKIT_ID));
-        Map componentsByComponentFamily =
+        Map<String,ComponentBean> componentsByComponentFamily =
             GeneratorUtil.getComponentFamilyComponentMap(configBean);
 
-        for (Iterator keyIter = renderersByComponentFamily.keySet().iterator();
+        for (Iterator<String> keyIter = renderersByComponentFamily.keySet().iterator();
              keyIter.hasNext(); ) {
 
-            String componentFamily = (String) keyIter.next();
-            List renderers = (List) renderersByComponentFamily.get(componentFamily);
+            String componentFamily = keyIter.next();
+            List<RendererBean> renderers = renderersByComponentFamily.get(componentFamily);
 
-            component = (ComponentBean)
-                componentsByComponentFamily.get(componentFamily);
+            component = componentsByComponentFamily.get(componentFamily);
 
-            for (Iterator rendererIter = renderers.iterator();
+            for (Iterator<RendererBean> rendererIter = renderers.iterator();
                  rendererIter.hasNext(); ) {
 
-                renderer = (RendererBean) rendererIter.next();
+                renderer = rendererIter.next();
                 String rendererType = renderer.getRendererType();
 
                 tagClassName = GeneratorUtil.makeTagClassName(

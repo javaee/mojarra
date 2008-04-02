@@ -1,5 +1,5 @@
 /*
- * $Id: FactoryBean.java,v 1.5 2005/08/22 22:12:16 ofung Exp $
+ * $Id: FactoryBean.java,v 1.6 2005/08/25 17:11:00 rlubke Exp $
  */
 
 /*
@@ -43,26 +43,26 @@ public class FactoryBean {
     // -------------------------------------------------------------- Properties
 
 
-    private List applicationFactories = new ArrayList();
-    public List getApplicationFactories() { return applicationFactories; }
+    private List<String> applicationFactories = new ArrayList<String>();
+    public List<String> getApplicationFactories() { return applicationFactories; }
     public void addApplicationFactory(String applicationFactory)
     { applicationFactories.add(applicationFactory); }
 
 
-    private List facesContextFactories = new ArrayList();
-    public List getFacesContextFactories() { return facesContextFactories; }
+    private List<String> facesContextFactories = new ArrayList<String>();
+    public List<String> getFacesContextFactories() { return facesContextFactories; }
     public void addFacesContextFactory(String facesContextFactory)
     { facesContextFactories.add(facesContextFactory); }
 
 
-    private List lifecycleFactories = new ArrayList();
-    public List getLifecycleFactories() { return lifecycleFactories; }
+    private List<String> lifecycleFactories = new ArrayList<String>();
+    public List<String> getLifecycleFactories() { return lifecycleFactories; }
     public void addLifecycleFactory(String lifecycleFactory)
     { lifecycleFactories.add(lifecycleFactory); }
 
 
-    private List renderKitFactories = new ArrayList();
-    public List getRenderKitFactories() { return renderKitFactories; }
+    private List<String> renderKitFactories = new ArrayList<String>();
+    public List<String> getRenderKitFactories() { return renderKitFactories; }
     public void addRenderKitFactory(String renderKitFactory)
     { renderKitFactories.add(renderKitFactory); }
 
