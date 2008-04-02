@@ -1,5 +1,5 @@
 /*
- * $Id: RIConstants.java,v 1.43 2003/08/26 18:37:00 horwat Exp $
+ * $Id: RIConstants.java,v 1.44 2003/08/28 15:56:23 rlubke Exp $
  */
 
 /*
@@ -36,8 +36,7 @@ public class RIConstants {
 
     public final static String INITIAL_REQUEST_NAME = "initialRequest";
     public final static String INITIAL_REQUEST_VALUE = "true";
-    
-    // PENDING (rlubke) Is this still needed?
+       
     public final static String FACES_VIEW = FACES_PREFIX + "VIEW";
     public final static String REQUEST_LOCALE = FACES_PREFIX + "LOCALE";
    
