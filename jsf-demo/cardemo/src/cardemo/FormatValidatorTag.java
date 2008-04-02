@@ -1,5 +1,5 @@
 /*
- * $Id: FormatValidatorTag.java,v 1.1 2003/05/08 18:55:01 jvisvanathan Exp $
+ * $Id: FormatValidatorTag.java,v 1.2 2003/05/20 23:08:49 jvisvanathan Exp $
  */
 
 /*
@@ -80,7 +80,7 @@ public class FormatValidatorTag extends ValidatorTag {
 
     public FormatValidatorTag() {
         super();
-        super.setType("cardemo.FormatValidator");
+        super.setId("FormatValidator");
     }
 
     //
