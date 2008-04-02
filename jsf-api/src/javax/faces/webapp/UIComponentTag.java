@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTag.java,v 1.12 2003/08/15 17:23:49 craigmcc Exp $
+ * $Id: UIComponentTag.java,v 1.13 2003/08/18 22:45:26 eburns Exp $
  */
 
 /*
@@ -728,7 +728,7 @@ public abstract class UIComponentTag implements Tag {
 	    ServletResponse response = (ServletResponse)
 		context.getExternalContext().getResponse();
             writer = 
-		renderKit.getResponseWriter(new Writer() {
+		renderKit.createResponseWriter(new Writer() {
 		    public void close() throws IOException {
 			pageContext.getOut().close();
 		    }

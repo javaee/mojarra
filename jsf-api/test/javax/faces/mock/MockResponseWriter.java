@@ -1,5 +1,5 @@
 /*
- * $Id: MockResponseWriter.java,v 1.2 2003/08/18 16:38:28 eburns Exp $
+ * $Id: MockResponseWriter.java,v 1.3 2003/08/18 22:45:27 eburns Exp $
  */
 
 /*
@@ -69,6 +69,9 @@ public class MockResponseWriter extends ResponseWriter {
 
     // --------------------------------------------------- ResponseWrter Methods
 
+    public String getContentType() {
+        throw new UnsupportedOperationException();
+    }
 
     public String getCharacterEncoding() {
         return (this.encoding);
@@ -112,20 +115,9 @@ public class MockResponseWriter extends ResponseWriter {
     }
 
 
-    public void writeText(Object text) throws IOException {
+    public void writeText(Object text, String componentProperty) throws IOException {
         throw new UnsupportedOperationException();
     }
-
-
-    public void writeText(char text) throws IOException {
-        throw new UnsupportedOperationException();
-    }
-
-
-    public void writeText(char text[]) throws IOException {
-        throw new UnsupportedOperationException();
-    }
-
 
     public void writeText(char text[], int off, int len) throws IOException {
         throw new UnsupportedOperationException();

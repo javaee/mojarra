@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKit.java,v 1.19 2003/08/07 18:03:20 eburns Exp $
+ * $Id: RenderKit.java,v 1.20 2003/08/18 22:45:25 eburns Exp $
  */
 
 /*
@@ -119,9 +119,9 @@ public abstract class RenderKit {
      * @return a new {@link ResponseWriter}.
      */
 
-    public abstract ResponseWriter getResponseWriter(Writer writer,
-						     String contentTypeList,
-						     String characterEncoding);
+    public abstract ResponseWriter createResponseWriter(Writer writer,
+							String contentTypeList,
+							String characterEncoding);
 
     /** 
      * <p>Use the provided <code>OutputStream</code> to create a new

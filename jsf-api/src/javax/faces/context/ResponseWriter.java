@@ -1,5 +1,5 @@
 /*
- * $Id: ResponseWriter.java,v 1.8 2003/08/18 16:38:24 eburns Exp $
+ * $Id: ResponseWriter.java,v 1.9 2003/08/18 22:45:24 eburns Exp $
  */
 
 /*
@@ -28,6 +28,14 @@ import javax.faces.component.UIComponent;
  */
 
 public abstract class ResponseWriter extends Writer {
+
+    /**
+     * @return the content type, such as "text/html" for this
+     * ResponseWriter.  
+     *
+     */
+
+    public abstract String getContentType();
 
     /**
      * @return the character encoding, such as "ISO-8859-1" for this
@@ -121,8 +129,8 @@ public abstract class ResponseWriter extends Writer {
      * @exception IllegalStateException if this method is called when there
      *  is no currently open element
      * @exception IOException if an input/output error occurs
-     * @exception NullPointerException if <code>name</code> or
-     *  <code>value</code> is <code>null</code>
+     * @exception NullPointerException if <code>name</code> is
+     * <code>null</code>
      */
     public abstract void writeAttribute(String name, Object value, 
 					String componentPropertyName)
@@ -149,8 +157,8 @@ public abstract class ResponseWriter extends Writer {
      * @exception IllegalStateException if this method is called when there
      *  is no currently open element
      * @exception IOException if an input/output error occurs
-     * @exception NullPointerException if <code>name</code> or
-     *  <code>value</code> is <code>null</code>
+     * @exception NullPointerException if <code>name</code> is
+     * <code>null</code>
      */
     public abstract void writeURIAttribute(String name, Object value, 
 					   String componentPropertyName)
@@ -185,46 +193,17 @@ public abstract class ResponseWriter extends Writer {
      * using the &amp;gt; &amp;lt; syntax.</p>
      *
      * @param text Text to be written
+     * 
+     * @param componentPropertyName May be <code>null</code>.  If
+     * non-<code>null</code>, this is the name of the property in the
+     * associated component to which this piece of text applies.
      *
      * @exception IOException if an input/output error occurs
      * @exception NullPointerException if <code>text</code>
      *  is <code>null</code>
      */
-    public abstract void writeText(Object text) throws IOException;
-
-
-    /**
-     * <p>Write a single character, after escaping it properly.  If there
-     * is an open element that has been created by a call to
-     * <code>startElement()</code>, that element will be closed first.</p>
-     *
-     * <p>All angle bracket occurrences in the argument must be escaped
-     * using the &amp;gt; &amp;lt; syntax.</p>
-     *
-     * @param text Text to be written
-     *
-     * @exception IOException if an input/output error occurs
-     */
-    public abstract void writeText(char text) throws IOException;
-
-
-    /**
-     * <p>Write text from a character array, after escaping it properly.
-     * This is equivalent to calling <code>writeText(c, 0, c.length)</code>.
-     * If there is an open element that has been created by a call to
-     * <code>startElement()</code>, that element will be closed first.</p>
-     * </p>
-     *
-     * <p>All angle bracket occurrences in the argument must be escaped
-     * using the &amp;gt; &amp;lt; syntax.</p>
-     *
-     * @param text Text to be written
-     *
-     * @exception IOException if an input/output error occurs
-     * @exception NullPointerException if <code>text</code>
-     *  is <code>null</code>
-     */
-    public abstract void writeText(char text[]) throws IOException;
+    public abstract void writeText(Object text, 
+				   String componentPropertyName) throws IOException;
 
 
     /**
