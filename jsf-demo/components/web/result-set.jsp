@@ -36,7 +36,7 @@
  maintenance of any nuclear facility.
 -->
 
-<%-- $Id: result-set.jsp,v 1.11 2003/10/28 20:11:09 jvisvanathan Exp $ --%>
+<%-- $Id: result-set.jsp,v 1.12 2003/11/11 02:53:01 jvisvanathan Exp $ --%>
 
 <%@ page import="demo.model.CustomerBean" %>
 <%@ page import="java.util.ArrayList" %>
@@ -88,7 +88,7 @@ Rendered via Faces components:
                  id="table"
                  rows="20"
                  componentRef="ResultSetBean.data"
-                 valueRef="list"
+                 value="#{list}"
                  var="customer">
 
     <h:column>
@@ -96,14 +96,14 @@ Rendered via Faces components:
         <h:output_text  value="Account Id"/>
       </f:facet>
       <h:output_text        id="accountId"
-                     valueRef="customer.accountId"/>
+                     value="#{customer.accountId}"/>
     </h:column>
 
     <h:column>
       <f:facet           name="header">
         <h:output_text  value="Customer Name"/>
       </f:facet>
-      <h:output_text        id="name" valueRef="customer.name"/>
+      <h:output_text        id="name" value="#{customer.name}"/>
     </h:column>
 
     <h:column>
@@ -111,7 +111,7 @@ Rendered via Faces components:
         <h:output_text  value="Symbol"/>
       </f:facet>
       <h:output_text        id="symbol"
-                     valueRef="customer.symbol"/>
+                     value="#{customer.symbol}"/>
     </h:column>
 
     <h:column>
@@ -119,7 +119,7 @@ Rendered via Faces components:
         <h:output_text  value="Total Sales"/>
       </f:facet>
       <h:output_text       id="totalSales"
-                     valueRef="customer.totalSales"/>
+                     value="#{customer.totalSales}"/>
     </h:column>
 
   </h:data_table>

@@ -41,7 +41,7 @@
 
     <h:panel_group>
       <h:output_text value="This is the third pane with the date set to: "/>
-      <h:output_text valueRef="sessionScope.date">
+      <h:output_text value="#{sessionScope.date}">
           <f:convert_datetime dateStyle="full"/>
       </h:output_text>
     </h:panel_group>
