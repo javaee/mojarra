@@ -1,5 +1,5 @@
 /*
- * $Id: ReconstituteComponentTreePhase.java,v 1.6 2003/04/08 17:46:12 jvisvanathan Exp $
+ * $Id: ReconstituteComponentTreePhase.java,v 1.7 2003/05/14 19:59:13 rkitain Exp $
  */
 
 /*
@@ -48,7 +48,7 @@ import org.apache.commons.logging.LogFactory;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: ReconstituteComponentTreePhase.java,v 1.6 2003/04/08 17:46:12 jvisvanathan Exp $
+ * @version $Id: ReconstituteComponentTreePhase.java,v 1.7 2003/05/14 19:59:13 rkitain Exp $
  * 
  */
 
@@ -245,7 +245,7 @@ protected void processTree(FacesContext facesContext) {
 }
 
 protected void registerActionListeners(UIComponent uic) {
-    Iterator kids = uic.getChildren();
+    Iterator kids = uic.getFacetsAndChildren();
     while (kids.hasNext()) {
         registerActionListeners((UIComponent) kids.next());
     }
