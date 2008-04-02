@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBaseTestCase.java,v 1.13 2003/10/09 22:58:12 craigmcc Exp $
+ * $Id: UIComponentBaseTestCase.java,v 1.14 2003/10/18 02:10:40 craigmcc Exp $
  */
 
 /*
@@ -154,62 +154,11 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
     // Test lifecycle management methods
     public void testLifecycleManagement() {
 
-        // Put our component under test in a tree under a UIViewRoot
-        UIViewRoot root = new UIViewRoot();
-        root.getChildren().add(component);
+        checkLifecycleParentRendered();
+        checkLifecycleParentUnrendered();
+        checkLifecycleSelfRendered();
+        checkLifecycleSelfUnrendered();
 
-        // Establish a view with multiple facets and children
-        UIComponent facet1 = new TestComponent("f1");
-        UIComponent facet2 = new TestComponent("f2");
-        UIComponent facet3 = new TestComponent("f3");
-        component.getFacets().put("f1", facet1);
-        component.getFacets().put("f2", facet2);
-        component.getFacets().put("f3", facet3);
-        checkFacetCount(component, 3);
-        UIComponent child1 = new TestComponent("c1");
-        UIComponent child2 = new TestComponent("c2");
-        UIComponent child3 = new TestComponent("c3");
-        component.getChildren().add(child1);
-        component.getChildren().add(child2);
-        component.getChildren().add(child3);
-        checkChildCount(component, 3);
-        UIComponent child2a = new TestComponent("c2a");
-        UIComponent child2b = new TestComponent("c2b");
-        child2.getChildren().add(child2a);
-        child2.getChildren().add(child2b);
-        checkChildCount(child2, 2);
-
-        // Enqueue a single FacesEvent for each component
-        component.queueEvent(new TestEvent(component));
-        component.queueEvent(new TestEvent(facet1));
-        component.queueEvent(new TestEvent(facet2));
-        component.queueEvent(new TestEvent(facet3));
-        component.queueEvent(new TestEvent(child1));
-        component.queueEvent(new TestEvent(child2));
-        component.queueEvent(new TestEvent(child3));
-        component.queueEvent(new TestEvent(child2a));
-        component.queueEvent(new TestEvent(child2b));
-
-        // Test processDecodes()
-        TestComponent.trace(null);
-	component.processDecodes(facesContext);
-        assertEquals("processDecodes",
-                     lifecycleTrace("pD", "d"),
-                     TestComponent.trace());
-
-        // Test processValidators()
-        TestComponent.trace(null);
-        component.processValidators(facesContext);
-        assertEquals("processValidators",
-                     lifecycleTrace("pV", null),
-                     TestComponent.trace());
-
-        // Test processUpdates()
-        TestComponent.trace(null);
-        component.processUpdates(facesContext);
-        assertEquals("processUpdates",
-                     lifecycleTrace("pU", null),
-                     TestComponent.trace());
 
     }
 
@@ -404,6 +353,280 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
     }
 
 
+    // Check lifecycle processing when parent "rendered" property is "true"
+    private void checkLifecycleParentRendered() {
+
+        // Put our component under test in a tree under a UIViewRoot
+        component.getAttributes().clear();
+        component.getChildren().clear();
+        component.getFacets().clear();
+        component.setRendered(true);
+        UIViewRoot root = new UIViewRoot();
+        UIPanel panel = new UIPanel();
+        panel.setRendered(true);
+        root.getChildren().add(panel);
+        panel.getChildren().add(component);
+
+        // Establish a view with multiple facets and children
+        UIComponent facet1 = new TestComponent("f1");
+        UIComponent facet2 = new TestComponent("f2");
+        UIComponent facet3 = new TestComponent("f3");
+        component.getFacets().put("f1", facet1);
+        component.getFacets().put("f2", facet2);
+        component.getFacets().put("f3", facet3);
+        checkFacetCount(component, 3);
+        UIComponent child1 = new TestComponent("c1");
+        UIComponent child2 = new TestComponent("c2");
+        UIComponent child3 = new TestComponent("c3");
+        component.getChildren().add(child1);
+        component.getChildren().add(child2);
+        component.getChildren().add(child3);
+        checkChildCount(component, 3);
+        UIComponent child2a = new TestComponent("c2a");
+        UIComponent child2b = new TestComponent("c2b");
+        child2.getChildren().add(child2a);
+        child2.getChildren().add(child2b);
+        checkChildCount(child2, 2);
+
+        // Enqueue a single FacesEvent for each component
+        component.queueEvent(new TestEvent(component));
+        component.queueEvent(new TestEvent(facet1));
+        component.queueEvent(new TestEvent(facet2));
+        component.queueEvent(new TestEvent(facet3));
+        component.queueEvent(new TestEvent(child1));
+        component.queueEvent(new TestEvent(child2));
+        component.queueEvent(new TestEvent(child3));
+        component.queueEvent(new TestEvent(child2a));
+        component.queueEvent(new TestEvent(child2b));
+
+        // Test processDecodes()
+        TestComponent.trace(null);
+	component.processDecodes(facesContext);
+        assertEquals("processDecodes",
+                     lifecycleTrace("pD", "d"),
+                     TestComponent.trace());
+
+        // Test processValidators()
+        TestComponent.trace(null);
+        component.processValidators(facesContext);
+        assertEquals("processValidators",
+                     lifecycleTrace("pV", null),
+                     TestComponent.trace());
+
+        // Test processUpdates()
+        TestComponent.trace(null);
+        component.processUpdates(facesContext);
+        assertEquals("processUpdates",
+                     lifecycleTrace("pU", null),
+                     TestComponent.trace());
+
+    }
+
+
+    // Check lifecycle processing when parent "rendered" property is "false"
+    private void checkLifecycleParentUnrendered() {
+
+        // Put our component under test in a tree under a UIViewRoot
+        component.getAttributes().clear();
+        component.getChildren().clear();
+        component.getFacets().clear();
+        component.setRendered(true);
+        UIViewRoot root = new UIViewRoot();
+        UIPanel panel = new UIPanel();
+        panel.setRendered(false);
+        root.getChildren().add(panel);
+        panel.getChildren().add(component);
+
+        // Establish a view with multiple facets and children
+        UIComponent facet1 = new TestComponent("f1");
+        UIComponent facet2 = new TestComponent("f2");
+        UIComponent facet3 = new TestComponent("f3");
+        component.getFacets().put("f1", facet1);
+        component.getFacets().put("f2", facet2);
+        component.getFacets().put("f3", facet3);
+        checkFacetCount(component, 3);
+        UIComponent child1 = new TestComponent("c1");
+        UIComponent child2 = new TestComponent("c2");
+        UIComponent child3 = new TestComponent("c3");
+        component.getChildren().add(child1);
+        component.getChildren().add(child2);
+        component.getChildren().add(child3);
+        checkChildCount(component, 3);
+        UIComponent child2a = new TestComponent("c2a");
+        UIComponent child2b = new TestComponent("c2b");
+        child2.getChildren().add(child2a);
+        child2.getChildren().add(child2b);
+        checkChildCount(child2, 2);
+
+        // Enqueue a single FacesEvent for each component
+        component.queueEvent(new TestEvent(component));
+        component.queueEvent(new TestEvent(facet1));
+        component.queueEvent(new TestEvent(facet2));
+        component.queueEvent(new TestEvent(facet3));
+        component.queueEvent(new TestEvent(child1));
+        component.queueEvent(new TestEvent(child2));
+        component.queueEvent(new TestEvent(child3));
+        component.queueEvent(new TestEvent(child2a));
+        component.queueEvent(new TestEvent(child2b));
+
+        // Test processDecodes()
+        TestComponent.trace(null);
+	component.processDecodes(facesContext);
+        assertEquals("processDecodes",
+                     lifecycleTrace("pD", "d"),
+                     TestComponent.trace());
+
+        // Test processValidators()
+        TestComponent.trace(null);
+        component.processValidators(facesContext);
+        assertEquals("processValidators",
+                     lifecycleTrace("pV", null),
+                     TestComponent.trace());
+
+        // Test processUpdates()
+        TestComponent.trace(null);
+        component.processUpdates(facesContext);
+        assertEquals("processUpdates",
+                     lifecycleTrace("pU", null),
+                     TestComponent.trace());
+
+    }
+
+
+    // Check lifecycle processing when our "rendered" property is "true"
+    private void checkLifecycleSelfRendered() {
+
+        // Put our component under test in a tree under a UIViewRoot
+        component.getAttributes().clear();
+        component.getChildren().clear();
+        component.getFacets().clear();
+        component.setRendered(true);
+        UIViewRoot root = new UIViewRoot();
+        root.getChildren().add(component);
+
+        // Establish a view with multiple facets and children
+        UIComponent facet1 = new TestComponent("f1");
+        UIComponent facet2 = new TestComponent("f2");
+        UIComponent facet3 = new TestComponent("f3");
+        component.getFacets().put("f1", facet1);
+        component.getFacets().put("f2", facet2);
+        component.getFacets().put("f3", facet3);
+        checkFacetCount(component, 3);
+        UIComponent child1 = new TestComponent("c1");
+        UIComponent child2 = new TestComponent("c2");
+        UIComponent child3 = new TestComponent("c3");
+        component.getChildren().add(child1);
+        component.getChildren().add(child2);
+        component.getChildren().add(child3);
+        checkChildCount(component, 3);
+        UIComponent child2a = new TestComponent("c2a");
+        UIComponent child2b = new TestComponent("c2b");
+        child2.getChildren().add(child2a);
+        child2.getChildren().add(child2b);
+        checkChildCount(child2, 2);
+
+        // Enqueue a single FacesEvent for each component
+        component.queueEvent(new TestEvent(component));
+        component.queueEvent(new TestEvent(facet1));
+        component.queueEvent(new TestEvent(facet2));
+        component.queueEvent(new TestEvent(facet3));
+        component.queueEvent(new TestEvent(child1));
+        component.queueEvent(new TestEvent(child2));
+        component.queueEvent(new TestEvent(child3));
+        component.queueEvent(new TestEvent(child2a));
+        component.queueEvent(new TestEvent(child2b));
+
+        // Test processDecodes()
+        TestComponent.trace(null);
+	component.processDecodes(facesContext);
+        assertEquals("processDecodes",
+                     lifecycleTrace("pD", "d"),
+                     TestComponent.trace());
+
+        // Test processValidators()
+        TestComponent.trace(null);
+        component.processValidators(facesContext);
+        assertEquals("processValidators",
+                     lifecycleTrace("pV", null),
+                     TestComponent.trace());
+
+        // Test processUpdates()
+        TestComponent.trace(null);
+        component.processUpdates(facesContext);
+        assertEquals("processUpdates",
+                     lifecycleTrace("pU", null),
+                     TestComponent.trace());
+
+    }
+
+
+    // Check lifecycle processing when our "rendered" property is "false"
+    private void checkLifecycleSelfUnrendered() {
+
+        // Put our component under test in a tree under a UIViewRoot
+        component.getAttributes().clear();
+        component.getChildren().clear();
+        component.getFacets().clear();
+        component.setRendered(false);
+        UIViewRoot root = new UIViewRoot();
+        root.getChildren().add(component);
+
+        // Establish a view with multiple facets and children
+        UIComponent facet1 = new TestComponent("f1");
+        UIComponent facet2 = new TestComponent("f2");
+        UIComponent facet3 = new TestComponent("f3");
+        component.getFacets().put("f1", facet1);
+        component.getFacets().put("f2", facet2);
+        component.getFacets().put("f3", facet3);
+        checkFacetCount(component, 3);
+        UIComponent child1 = new TestComponent("c1");
+        UIComponent child2 = new TestComponent("c2");
+        UIComponent child3 = new TestComponent("c3");
+        component.getChildren().add(child1);
+        component.getChildren().add(child2);
+        component.getChildren().add(child3);
+        checkChildCount(component, 3);
+        UIComponent child2a = new TestComponent("c2a");
+        UIComponent child2b = new TestComponent("c2b");
+        child2.getChildren().add(child2a);
+        child2.getChildren().add(child2b);
+        checkChildCount(child2, 2);
+
+        // Enqueue a single FacesEvent for each component
+        component.queueEvent(new TestEvent(component));
+        component.queueEvent(new TestEvent(facet1));
+        component.queueEvent(new TestEvent(facet2));
+        component.queueEvent(new TestEvent(facet3));
+        component.queueEvent(new TestEvent(child1));
+        component.queueEvent(new TestEvent(child2));
+        component.queueEvent(new TestEvent(child3));
+        component.queueEvent(new TestEvent(child2a));
+        component.queueEvent(new TestEvent(child2b));
+
+        // Test processDecodes()
+        TestComponent.trace(null);
+	component.processDecodes(facesContext);
+        assertEquals("processDecodes",
+                     lifecycleTrace("pD", "d"),
+                     TestComponent.trace());
+
+        // Test processValidators()
+        TestComponent.trace(null);
+        component.processValidators(facesContext);
+        assertEquals("processValidators",
+                     lifecycleTrace("pV", null),
+                     TestComponent.trace());
+
+        // Test processUpdates()
+        TestComponent.trace(null);
+        component.processUpdates(facesContext);
+        assertEquals("processUpdates",
+                     lifecycleTrace("pU", null),
+                     TestComponent.trace());
+
+    }
+
+
     // Check that the properties on the specified components are equal
     protected void checkProperties(UIComponent comp1, UIComponent comp2) {
         assertEquals(comp1.getComponentRef(), comp2.getComponentRef());
@@ -461,7 +684,8 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
         while (names.hasNext()) {
             String name = (String) names.next();
             sb.append("/" + lmethod + "-" + name);
-	    if (cmethod != null) {
+	    if ((cmethod != null) &&
+                UIComponentBase.isRendered((UIComponent) component.getFacets().get(name))) {
 		sb.append("/" + cmethod + "-" + name);
 	    }
         }
@@ -474,7 +698,7 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
         }
 
         // Append the call for this component's component method
-	if (cmethod != null) {
+	if ((cmethod != null) && UIComponentBase.isRendered(component)) {
 	    sb.append("/" + cmethod + "-" + id);
 	}
 

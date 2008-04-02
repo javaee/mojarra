@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.68 2003/10/08 02:24:54 eburns Exp $
+ * $Id: UIComponentBase.java,v 1.69 2003/10/18 02:10:39 craigmcc Exp $
  */
 
 /*
@@ -1149,6 +1149,7 @@ public abstract class UIComponentBase extends UIComponent {
 
     // ------------------------------------------------ Lifecycle Phase Handlers
 
+
     /**
      * @exception NullPointerException {@inheritDoc}     
      */ 
@@ -1167,14 +1168,16 @@ public abstract class UIComponentBase extends UIComponent {
 
         // Process this component itself
 	try {
-	    decode(context);
-	}
-	catch (RuntimeException e) {
+            if (isRendered(this)) {
+                decode(context);
+            }
+	} catch (RuntimeException e) {
 	    context.renderResponse();
 	    throw e;
 	}
 
     }
+
 
     /**
      * @exception NullPointerException {@inheritDoc}    
@@ -1196,9 +1199,10 @@ public abstract class UIComponentBase extends UIComponent {
 	if (this instanceof UIInput) {
 	    try {
 		// PENDING(craigmcc): shouldn't this be in UIInputBase
-		((UIInput) this).validate(context);
-	    }
-	    catch (RuntimeException e) {
+                if (isRendered(this)) {
+                    ((UIInput) this).validate(context);
+                }
+	    } catch (RuntimeException e) {
 		context.renderResponse();
 		throw e;
 	    }
@@ -1207,7 +1211,7 @@ public abstract class UIComponentBase extends UIComponent {
 	// Advance to Render Response if this component is not valid
         if ((this instanceof UIInput) &&
             !((UIInput) this).isValid()) {
-	    // PENDING(craigmcc): shouldn't this be in UIInputBase
+	    // PENDING(craigmcc): shouldn't this be in UIInput?
             context.renderResponse();
         }
 
@@ -1233,10 +1237,11 @@ public abstract class UIComponentBase extends UIComponent {
         // Process this component itself
         if (this instanceof UIInput) {
 	    try {
-		// PENDING(craigmcc): shouldn't this be in UIInputBase
-		((UIInput) this).updateModel(context);
-	    }
-	    catch (RuntimeException e) {
+		// PENDING(craigmcc): shouldn't this be in UIInput?
+                if (isRendered(this)) {
+                    ((UIInput) this).updateModel(context);
+                }
+	    } catch (RuntimeException e) {
 		context.renderResponse();
 		throw e;
 	    }
@@ -1351,6 +1356,38 @@ public abstract class UIComponentBase extends UIComponent {
     }
     
     // ------------------------------------------------------- Protected Methods
+
+
+    /**
+     * <p>Return <code>false</code> if the specified {@link UIComponent}'s
+     * <code>rendered</code> property is <code>false</code>, or this component
+     * is a child (or facet) of a parent {@link UIComponent} whose
+     * <code>rendersChildren</code> property is <code>true</code> and whose
+     * <code>rendered</code> property is false.</p>
+     *
+     * @param component {@link UIComponent} to be tested
+     *
+     * @exception NullPointerException if <code>component</code>
+     *  is <code>false</code>
+     */
+    protected static boolean isRendered(UIComponent component) {
+
+        if (component == null) {
+            throw new NullPointerException();
+        }
+        if (!component.isRendered()) {
+            return (false);
+        }
+        UIComponent parent = component.getParent();
+        while (parent != null) {
+            if (parent.getRendersChildren() && !parent.isRendered()) {
+                return (false);
+            }
+            parent = parent.getParent();
+        }
+        return (true);
+
+    }
 
 
     /**
