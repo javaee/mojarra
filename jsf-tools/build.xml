@@ -1,0 +1,295 @@
+<?xml version="1.0"?>
+
+<!--
+ Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+-->
+
+
+<!--
+  =======================================================================
+    JSF-API build file
+  =======================================================================
+-->
+<project name="JSF-API" default="main" basedir=".">
+
+  <property file="build.properties"/>                <!-- Component local   -->
+  <property file="${user.home}/build.properties"/>   <!-- User local        -->
+
+  <property name="Name"             value="JavaServer Faces Tools"/>
+  <property name="name"             value="jsf-tools"/>
+  <property name="version"          value="20031009"/>
+
+  <property name="debug"            value="true" />
+  <property name="deprecation"      value="false" />
+  <property name="optimize"         value="false" />
+
+  <property name="src.dir"          value="${basedir}/src"/>
+  <property name="dist.dir"         value="${basedir}/dist"/>
+  <property name="jsf-api.dir"      value="${basedir}/../jsf-api"/>
+  <property name="jsf-ri.dir"         value="${basedir}/../jsf-ri"/>
+
+  <!-- The locations of necessary jar files -->
+  <property name="junit.jar" 
+            value="${tomcat.home}/../junit3.8.1/junit.jar"/>
+  <property name="servlet.jar" value="${tomcat.home}/common/lib/servlet-api.jar"/>
+  <property name="jsp.jar" value="${tomcat.home}/common/lib/jsp-api.jar"/>
+  <property name="commons-logging.jar" 
+            value="${tomcat.home}/jwsdp-shared/lib/commons-logging.jar"/>
+  <property name="commons-digester.jar" 
+            value="${tomcat.home}/jwsdp-shared/lib/commons-digester.jar"/>
+  <property name="commons-collections.jar" 
+            value="${tomcat.home}/jwsdp-shared/lib/commons-collections.jar"/>
+  <property name="commons-beanutils.jar" 
+            value="${tomcat.home}/jwsdp-shared/lib/commons-beanutils.jar"/>
+  <property name="xerces.jar" value="${tomcat.home}/jaxp/lib/endorsed/xercesImpl.jar"/>
+  <property name="sax.jar" value="${tomcat.home}/jaxp/lib/endorsed/sax.jar"/>
+  <property name="sax.jar" value="${tomcat.home}/jaxp/lib/jaxp-api.jar"/>
+
+  <property name="build.dir"        value="build"/>
+  <property name="build.classes"    value="${build.dir}/classes"/>
+  <property name="build.lib"        value="${build.dir}/lib"/>
+  <property name="build.test"       value="${build.dir}/test"/>
+  <property name="build.generate"   value="${build.dir}/generate"/>
+  <property name="build.javadocs"   value="${build.dir}/javadocs"/>
+  <property name="build.mifdocs"    value="${build.dir}/mifdocs"/>
+  <property name="javadoc.private"  value="false"/>
+  <property name="javadoc.protected"  value="true"/>
+
+
+  <!-- Default value for debugging arguments is no.  Override in
+       build.properties -->
+  <property name="debug.jvm.args" value=""/>
+
+  <path id="compile.classpath">
+    <pathelement location="${build.classes}"/>
+    <pathelement location="${servlet.jar}"/>
+    <pathelement location="${jsp.jar}"/>
+  </path>
+
+  <path id="run.classpath">
+    <pathelement location="${build.classes}"/>
+    <pathelement location="${build.test}"/>
+    <pathelement location="${junit.jar}"/>
+    <pathelement location="${servlet.jar}"/>
+    <pathelement location="${jsp.jar}"/>
+    <pathelement location="${commons-logging.jar}"/>
+    <pathelement location="${commons-digester.jar}"/>
+    <pathelement location="${commons-collections.jar}"/>
+    <pathelement location="${commons-beanutils.jar}"/>
+    <pathelement location="${xerces.jar}"/>
+    <pathelement location="${sax.jar}"/>
+    <pathelement location="${jaxp-api.jar}"/>
+  </path>
+
+  <!--
+       ===================================================================
+         Prepare the build
+       ===================================================================
+  -->
+  <target name="prepare.generate" 
+          depends="set.required-properties,verify.standard-html-renderkit-impl,verify.standard-html-renderkit">
+    <tstamp />
+    <mkdir dir="${build.dir}"/>
+    <mkdir dir="${build.classes}"/>
+    <mkdir dir="${build.lib}"/>
+    <mkdir dir="${build.generate}"/>
+  </target>
+
+  <target name="set.required-properties" 
+          unless="standard-html-renderkit-impl">
+    <available property="standard-html-renderkit-impl" 
+          value="${jsf-ri.dir}/src/com/sun/faces/standard-html-renderkit-impl.xml"
+          file="${jsf-ri.dir}/src/com/sun/faces/standard-html-renderkit-impl.xml"/>
+    <available property="standard-html-renderkit" 
+          value="${jsf-api.dir}/doc/standard-html-renderkit.xml"
+          file="${jsf-api.dir}/doc/standard-html-renderkit.xml"/>
+  </target>
+
+  <target name="verify.standard-html-renderkit-impl" 
+          unless="standard-html-renderkit-impl">
+
+<fail>
+You must have the property standard-html-renderkit-impl defined, or the
+path ../jsf-ri/src/com/sun/faces/standard-html-renderkit-impl.xml must
+exist.  This is necessary to generate required classes.
+</fail>
+  </target>
+
+  <target name="verify.standard-html-renderkit" 
+          unless="standard-html-renderkit">
+
+<fail>
+You must have the property standard-html-renderkit defined, or the path
+../jsf-api/doc/standard-html-renderkit.xml must exist.  This is
+necessary to generate required classes.
+</fail>
+  </target>
+
+  <!--
+       ===================================================================
+         Build the API code
+       ===================================================================
+  -->
+  <target name="build" depends="generate">
+  </target>
+
+  <target name="generate" depends="tools,check.generation.necessity" 
+          if="standard-html-renderkit-impl" unless="skip.generation">
+
+    <copy todir="${build.classes}" 
+          file="${jsf-api.dir}/doc/web-facesconfig_1_0.dtd"/>
+
+    <java fork="yes" 
+	  classname="com.sun.faces.generate.GenerateConcreteClasses">
+      <!-- <jvmarg line="${debug.jvm.args}"/> -->
+      <classpath refid="compile.classpath" />
+      <classpath refid="run.classpath" />
+      <arg line="-f ${standard-html-renderkit}"/>
+      <arg line="-e ${standard-html-renderkit-impl}"/>
+      <arg line="-d ${build.generate}"/>
+      <arg line="-c ${basedir}/COPYRIGHT"/>
+    </java>
+
+    <touch file="${build.generate}/last-generation"/>
+
+  </target>
+
+  <target name="tools" depends="prepare.generate" 
+                       if="standard-html-renderkit-impl">
+
+    <javac srcdir="${src.dir}"
+           destdir="${build.classes}"
+           debug="${debug}"
+           deprecation="${deprecation}"
+           optimize="${optimize}" >
+      <classpath refid="compile.classpath" />
+      <classpath refid="run.classpath" />
+    </javac>
+
+    <copy todir="${build.classes}">
+      <fileset dir="${src.dir}">
+        <exclude name="**/*.java" />
+      </fileset>
+    </copy>
+
+  </target>
+
+  <target name="check.generation.necessity" if="standard-html-renderkit-impl">
+    <uptodate property="skip.generation"
+              targetfile="${build.generate}/last-generation">
+       <srcfiles dir="${basedir}/doc">
+         <include name="*.xml"/>               
+       </srcfiles>
+    </uptodate>
+  </target>
+
+  <!--
+       ===================================================================
+         Clean up build and distribution directories
+       ===================================================================
+  -->
+  <target name="clean" description="Clean build directory">
+    <delete dir="${build.dir}" />
+    <delete>
+      <fileset dir="." includes="**/.nbattrs" defaultexcludes="no"/>
+      <fileset dir="." includes="**/*~" defaultexcludes="no"/>
+    </delete>
+    <!-- delete this file since it's copied from another file based on JSP level -->
+    <delete file="${basedir}/test/javax/faces/mock/MockPageContext.java"/>
+    <delete dir="${dist.dir}"/>
+  </target>
+
+
+  <!--
+       ===================================================================
+         Clean everything
+       ===================================================================
+  -->
+  <target name="allclean" depends="clean">
+  </target>
+
+
+  <!--
+       ===================================================================
+         Create the API documentation
+       ===================================================================
+  -->
+
+  <target name="javadoc_check">
+    <uptodate property="javadoc.notrequired" targetfile="${build.javadocs}/packages.html" >
+        <srcfiles dir= "${src.dir}" includes="**/*.java"/>
+        <srcfiles dir= "${build.generate}" includes="**/*.java"/>
+    </uptodate>
+  </target>
+
+  <target name="javadocs" depends="javadoc_check, generate"
+          unless="javadoc.notrequired"
+          description="Create the JavaDoc API documentation">
+    <mkdir dir="${build.javadocs}"/>
+    <javadoc packagenames="javax.*"
+             destdir="${build.javadocs}"
+             private="${javadoc.private}"
+             protected="${javadoc.protected}"
+             windowtitle="${Name} (${version})"
+             doctitle="${Name} (${version})"
+             bottom="Copyright &#169; 2002-2003 Sun Microsystems, Inc. All Rights Reserved.">
+       <fileset dir="${src.dir}">
+         <include name="**/*.java"/>
+       </fileset>
+       <fileset dir="${build.generate}">
+         <include name="**/*.java"/>
+       </fileset>
+      <classpath refid="compile.classpath"/>
+    </javadoc>
+  </target>
+
+  <!--
+       ===================================================================
+         Main target
+       ===================================================================
+  -->
+  <target name="main" depends="build"
+   description="Generate classes"/>
+
+
+  <!--
+       ===================================================================
+         Distributions target
+       ===================================================================
+  -->
+  <target name="dist" depends="main,javadocs"
+   description="Build distribution files">
+
+    <!-- Create the distributions directory -->
+    <mkdir        dir="${dist.dir}"/>
+
+    <!-- Create the binary distribution -->
+    <zip     destfile="${dist.dir}/jsf-tools-${version}.zip">
+      <zipfileset dir="${build.dir}"
+             includes="lib/** javadocs/**"
+               prefix="jsf-tools-${version}"/>
+    </zip>
+
+    <!-- Create the javadocs distribution -->
+    <zip     destfile="${dist.dir}/jsf-tools-javadocs-${version}.zip">
+      <zipfileset dir="${build.dir}"
+             includes="javadocs/**"
+               prefix="jsf-tools-${version}"/>
+    </zip>
+
+
+    <!-- Create the source distribution -->
+    <zip     destfile="${dist.dir}/jsf-tools-src-${version}.zip">
+      <zipfileset dir="${basedir}"
+             includes="build.xml COPYRIGHT LICENSE.html"
+               prefix="jsf-api"/> 
+
+      <zipfileset dir="${src.dir}"
+             excludes="**/CVS/**"
+               prefix="jsf-api/src"/>
+    </zip>
+
+  </target>
+
+</project>
