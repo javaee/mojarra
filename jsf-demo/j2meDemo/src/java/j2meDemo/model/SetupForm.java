@@ -42,16 +42,13 @@ public class SetupForm {
         if (!gameBoard.move()) {
             return "play"; 
         }
-System.out.println("GAMEOVER:"+gameBoard.gameComplete());
         if (gameBoard.gameComplete() == gameBoard.CLIENT_PLAYER) {
-System.out.println("RETURNING'won'");
             return "won";
         } else if (gameBoard.gameComplete() == gameBoard.DRAW) {
             return "draw";
         } 
         // server moves
         gameBoard.randomMove();
-System.out.println("GAMEOVER:"+gameBoard.gameComplete());
         if (gameBoard.gameComplete() == gameBoard.SERVER_PLAYER) {
             return "lost";
         } else if (gameBoard.gameComplete() == gameBoard.DRAW) {
