@@ -616,7 +616,7 @@
 					</h:selectManyMenu></TD>
 
 </tr>
-
+<td><h:inputText id="iescape" value="& a &amp;&"/></td>
 <tr>
 					<TD>Multi-select listbox:</TD>
 					<TD><h:selectManyListbox style="someStyle" enabledClass="eclass"
