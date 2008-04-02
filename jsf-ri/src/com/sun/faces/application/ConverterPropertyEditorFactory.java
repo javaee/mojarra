@@ -278,10 +278,10 @@ public class ConverterPropertyEditorFactory {
                     // The bytes should start with the CAFEBABE "magic" header
                     // for class files.
                     assert templateBytes.length > 9;
-                    assert templateBytes[0] == 0xCA;
-                    assert templateBytes[1] == 0xFE;
-                    assert templateBytes[2] == 0xBA;
-                    assert templateBytes[3] == 0xBE;
+                    assert templateBytes[0] == (byte) 0xCA;
+                    assert templateBytes[1] == (byte) 0xFE;
+                    assert templateBytes[2] == (byte) 0xBA;
+                    assert templateBytes[3] == (byte) 0xBE;
                     constant_pool_count = ((templateBytes[8] & 0xff) << 8)
                         + (templateBytes[9] & 0xff);
                 } finally {
