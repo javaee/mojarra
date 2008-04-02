@@ -77,6 +77,10 @@
             <TD WIDTH="100%" BGCOLOR="white"><B><FONT SIZE="3" COLOR="#330066" FACE="Arial, Helvetica">
             <h:output_text value="Package:" />
             </FONT></B>
+            <h:command_button id="custom" commandName="custom"
+                label="Custom *" >
+                <f:action_listener type="cardemo.PackageAction" />
+            </h:command_button>
             <h:command_button id="standard" commandName="standard"
                 label="Standard" >
                 <f:action_listener type="cardemo.PackageAction" />
@@ -195,7 +199,7 @@
             <TABLE width="100%"> <P><FONT FACE="Arial, Helvetica">
             <TR>
                 <TD> 
-                <h:selectboolean_checkbox  title="Sunroof" 
+                <h:selectboolean_checkbox id="sunroof" title="Sunroof" 
                     alt="Sunroof" modelReference="CurrentOptionServer.sunRoof"
                     key="sunroofLabel" />
                 </TD>																		
@@ -203,7 +207,7 @@
                 <h:output_label  for="sunRoof" > Sun Roof</h:output_label> 
                 </TD> 
                 <TD>
-                <h:selectboolean_checkbox  
+                <h:selectboolean_checkbox id="cruisecontrol" 
                     title="Cruise Control"  
                     modelReference="CurrentOptionServer.cruiseControl"
                     key="cruiseLabel" />
@@ -212,7 +216,7 @@
                 <h:output_label  for="cruiseControl" > Cruise Control</h:output_label> 
                 </TD>
                 <TD>
-                <h:selectboolean_checkbox  
+                <h:selectboolean_checkbox id="keylessentry" 
                     title="Keyless Entry"  alt="Keyless Entry"
                     modelReference="CurrentOptionServer.keylessEntry"
                     key="keylessLabel" />
@@ -232,7 +236,7 @@
                 <h:output_label  for="securitySystem" > Security System</h:output_label> 
                 </TD>
                 <TD>
-                <h:selectboolean_checkbox  title="Ski Rack"  
+                <h:selectboolean_checkbox id="skirack" title="Ski Rack"  
                     alt="Ski Rack" modelReference="CurrentOptionServer.skiRack"
                     key="skiRackLabel" />
                 </TD>

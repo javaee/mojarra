@@ -1,5 +1,5 @@
 /*
- * $Id: PackageAction.java,v 1.1 2003/01/31 01:14:03 rkitain Exp $
+ * $Id: PackageAction.java,v 1.2 2003/02/04 00:10:41 rogerk Exp $
  */
 
 /*
@@ -29,7 +29,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: PackageAction.java,v 1.1 2003/01/31 01:14:03 rkitain Exp $
+ * @version $Id: PackageAction.java,v 1.2 2003/02/04 00:10:41 rogerk Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -80,13 +80,78 @@ public class PackageAction implements ActionListener {
             event.getActionCommand());
         String actionCommand = event.getActionCommand();
 
-        if (actionCommand.equals("standard")) {
+        if (actionCommand.equals("custom")) {
+            processCustom(event);
+        } else if (actionCommand.equals("standard")) {
             processStandard(event);
         } else if (actionCommand.equals("performance")) {
             processPerformance(event);
         } else if (actionCommand.equals("deluxe")) {
             processDeluxe(event);
         }
+    }
+
+    // helper method to set UI values for "custom" package selection
+
+    private void processCustom(ActionEvent event) {
+        UIComponent component = event.getComponent();
+        int i = 0;
+        UIComponent foundComponent = null;
+
+//PENDING(rogerk) application data should be read from config file..
+
+        FacesContext context = FacesContext.getCurrentInstance();
+        String[] engines = {"V4", "V6", "V8"};
+        ArrayList engineOption = new ArrayList(engines.length);
+        for (i=0; i<engines.length; i++) {
+            engineOption.add(new SelectItem(
+                engines[i], engines[i], engines[i]));
+        }
+        context.setModelValue("CurrentOptionServer.engineOption", engineOption);
+
+        String[] suspensions = {"regular", "performance"};
+        ArrayList suspensionOption = new ArrayList(suspensions.length);
+        for (i=0; i<suspensions.length; i++) {
+            suspensionOption.add(new SelectItem(suspensions[i],
+                suspensions[i], suspensions[i]));
+        }
+        context.setModelValue("CurrentOptionServer.suspensionOption",
+            suspensionOption);
+
+        foundComponent = component.findComponent("sunroof");
+        foundComponent.setAttribute("disabled", "false");
+
+        foundComponent = component.findComponent("securitySystem");
+        foundComponent.setAttribute("disabled", "false");
+
+        foundComponent = component.findComponent("gps");
+        foundComponent.setAttribute("disabled", "false");
+
+        foundComponent = component.findComponent("cruisecontrol");
+        foundComponent.setAttribute("disabled", "false");
+
+        foundComponent = component.findComponent("skirack");
+        foundComponent.setAttribute("disabled", "false");
+
+        foundComponent = component.findComponent("keylessentry");
+        foundComponent.setAttribute("disabled", "false");
+
+        foundComponent = component.findComponent("towPackage");
+        foundComponent.setAttribute("disabled", "false");
+
+//PENDING(rogerk)get locale specific string for button labels
+
+        foundComponent = component.findComponent("custom");
+        foundComponent.setAttribute("label", "Custom *");
+
+        foundComponent = component.findComponent("standard");
+        foundComponent.setAttribute("label", "Standard");
+
+        foundComponent = component.findComponent("performance");
+        foundComponent.setAttribute("label", "Performance");
+
+        foundComponent = component.findComponent("deluxe");
+        foundComponent.setAttribute("label", "Deluxe");
     }
 
     // helper method to set UI values for "standard" package selection
@@ -116,16 +181,35 @@ public class PackageAction implements ActionListener {
         context.setModelValue("CurrentOptionServer.suspensionOption",
             suspensionOption);
 
+        foundComponent = component.findComponent("sunroof");
+        foundComponent.setAttribute("disabled", "true");
+        foundComponent.setAttribute("value", "true");
+
         foundComponent = component.findComponent("securitySystem");
         foundComponent.setAttribute("disabled", "true");
 
         foundComponent = component.findComponent("gps");
         foundComponent.setAttribute("disabled", "true");
 
+        foundComponent = component.findComponent("cruisecontrol");
+        foundComponent.setAttribute("disabled", "true");
+        foundComponent.setAttribute("value", "true");
+
+        foundComponent = component.findComponent("skirack");
+        foundComponent.setAttribute("disabled", "true");
+        foundComponent.setAttribute("value", "true");
+
+        foundComponent = component.findComponent("keylessentry");
+        foundComponent.setAttribute("disabled", "true");
+        foundComponent.setAttribute("value", "true");
+
         foundComponent = component.findComponent("towPackage");
         foundComponent.setAttribute("disabled", "true");
 
 //PENDING(rogerk)get locale specific string for button labels
+
+        foundComponent = component.findComponent("custom");
+        foundComponent.setAttribute("label", "Custom");
 
         foundComponent = component.findComponent("standard");
         foundComponent.setAttribute("label", "Standard *");
@@ -162,16 +246,36 @@ public class PackageAction implements ActionListener {
         context.setModelValue("CurrentOptionServer.suspensionOption",
             suspensionOption);
 
+        foundComponent = component.findComponent("sunroof");
+        foundComponent.setAttribute("disabled", "true");
+        foundComponent.setAttribute("value", "true");
+
         foundComponent = component.findComponent("securitySystem");
         foundComponent.setAttribute("disabled", "true");
 
         foundComponent = component.findComponent("gps");
         foundComponent.setAttribute("disabled", "true");
 
+        foundComponent = component.findComponent("cruisecontrol");
+        foundComponent.setAttribute("disabled", "true");
+        foundComponent.setAttribute("value", "true");
+
+        foundComponent = component.findComponent("skirack");
+        foundComponent.setAttribute("disabled", "true");
+        foundComponent.setAttribute("value", "true");
+
+        foundComponent = component.findComponent("keylessentry");
+        foundComponent.setAttribute("disabled", "true");
+        foundComponent.setAttribute("value", "true");
+
         foundComponent = component.findComponent("towPackage");
-        foundComponent.setAttribute("disabled", "false");
+        foundComponent.setAttribute("disabled", "true");
+        foundComponent.setAttribute("value", "true");
 
 //PENDING(rogerk)get locale specific string for button labels
+
+        foundComponent = component.findComponent("custom");
+        foundComponent.setAttribute("label", "Custom");
 
         foundComponent = component.findComponent("standard");
         foundComponent.setAttribute("label", "Standard");
@@ -213,16 +317,38 @@ public class PackageAction implements ActionListener {
         context.setModelValue("CurrentOptionServer.suspensionOption",
             suspensionOption);
 
+        foundComponent = component.findComponent("sunroof");
+        foundComponent.setAttribute("disabled", "true");
+        foundComponent.setAttribute("value", "true");
+
         foundComponent = component.findComponent("securitySystem");
-        foundComponent.setAttribute("disabled", "false");
+        foundComponent.setAttribute("disabled", "true");
+        foundComponent.setAttribute("value", "true");
 
         foundComponent = component.findComponent("gps");
-        foundComponent.setAttribute("disabled", "false");
+        foundComponent.setAttribute("disabled", "true");
+        foundComponent.setAttribute("value", "true");
+
+        foundComponent = component.findComponent("cruisecontrol");
+        foundComponent.setAttribute("disabled", "true");
+        foundComponent.setAttribute("value", "true");
+
+        foundComponent = component.findComponent("skirack");
+        foundComponent.setAttribute("disabled", "true");
+        foundComponent.setAttribute("value", "true");
+
+        foundComponent = component.findComponent("keylessentry");
+        foundComponent.setAttribute("disabled", "true");
+        foundComponent.setAttribute("value", "true");
 
         foundComponent = component.findComponent("towPackage");
-        foundComponent.setAttribute("disabled", "false");
+        foundComponent.setAttribute("disabled", "true");
+        foundComponent.setAttribute("value", "true");
 
 //PENDING(rogerk)get locale specific string for button labels
+
+        foundComponent = component.findComponent("custom");
+        foundComponent.setAttribute("label", "Custom");
 
         foundComponent = component.findComponent("standard");
         foundComponent.setAttribute("label", "Standard");
