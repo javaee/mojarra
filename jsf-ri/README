@@ -369,6 +369,12 @@ Known Issues With This Release
   rendered if any pass through attributes are present (not just
   "style" and "styleClass"). 
 
+* The standard renderer docs specify "accesskey" as an attribute
+  of the "select" family of components, which is not in accordance
+  with the HTML specification.  "accesskey" will be removed 
+  from the "select" family of components in the next release.
+   
+
 <!---------------------------------------------------------------------->
 
 * The Map returned by the UIComponent.getAttributes() method implements 
