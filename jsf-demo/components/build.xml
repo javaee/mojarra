@@ -210,16 +210,16 @@
      description="Compile Java files for components, not webapp." >
       <touch file="${build}/last-build"/>
 
-    <javac debug="on" srcdir="src" destdir="${build}/classes/components">
+    <javac debug="on" srcdir="src/java" destdir="${build}/classes/components">
 	
         <include name="components/**" />
         <classpath refid="classpath"/>
     </javac>
     
     <copy todir="${build}/classes/components/META-INF" 
-            file="src/components/taglib/components.tld"/>
+            file="src/java/components/taglib/components.tld"/>
 
-    <javac debug="on" srcdir="src" destdir="${build}/${webapp}/WEB-INF/classes">
+    <javac debug="on" srcdir="src/java" destdir="${build}/${webapp}/WEB-INF/classes">
          <include name="demo/**" />
          <classpath refid="classpath"/>
     </javac>
@@ -235,7 +235,7 @@
 
     <!-- copy over the properties -->
     <copy todir="${build}/${webapp}/WEB-INF/classes/">
-      <fileset dir="src"    >
+      <fileset dir="src/java"    >
         <include name="**/*.properties" />
       </fileset>
     </copy>
@@ -247,13 +247,13 @@
            file="conf/faces-config.xml"/>
 
     <!-- copy the java source to the webapp for viewing by the user -->
-    <copy todir="${build}/${webapp}/src/components">
-      <fileset dir="src/components"/>
+    <copy todir="${build}/${webapp}/src/java/components">
+      <fileset dir="src/java/components"/>
     </copy>
-    <copy todir="${build}/${webapp}/src/demo">
-      <fileset dir="src/demo"/>    
+    <copy todir="${build}/${webapp}/src/java/demo">
+      <fileset dir="src/java/demo"/>    
     </copy>
-    <copy todir="${build}/${webapp}/WEB-INF" file="src/demo/taglib/demo.tld"/>
+    <copy todir="${build}/${webapp}/WEB-INF" file="web/WEB-INF/tlds/demo.tld"/>
 
     <copy todir="${build}/${webapp}">
       <fileset dir="web"/> 

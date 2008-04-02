@@ -1,0 +1,57 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<html>
+<head>
+<!--
+
+  @(#)package.html	1.60 98/01/27
+
+  Copyright 2004 Sun Microsystems, Inc. 901 San Antonio Road, 
+  Palo Alto, California, 94303, U.S.A.  All Rights Reserved.
+
+  This software is the confidential and proprietary information of Sun
+  Microsystems, Inc. ("Confidential Information").  You shall not
+  disclose such Confidential Information and shall use it only in
+  accordance with the terms of the license agreement you entered into
+  with Sun.
+
+  CopyrightVersion 1.2
+
+-->
+</head>
+<body bgcolor="white">
+
+<p>CarStore is a moderately complex demonstration of JavaServer Faces
+technology.  Please consult the tutorial for more detailed information
+on the concepts required to build applications with JavaServer Faces
+technology.  Below we use whiteboard diagrams to illustrate the ease
+with which a web application can be designed, and how that design can be
+easily cast into a Faces application.</p>
+
+<h3>Page Flow</h3>
+
+<p>Here's a quick diagram of page flow through the application.</p>
+
+<p><img src="@context.path@/javadocs/flow.jpg" /></p>
+
+<p>Each box corresponds to a JSP page.  The arrows correspond to the
+<b>supported</b> flow from page to page, either with buttons in the
+page, or with the browser navigation buttons.</p>
+
+<h3>Supporting Beans</h3>
+
+<p>We then overlay the beans required to back the JSP pages.</p>
+
+<p><img src="@context.path@/javadocs/beans.jpg" /></p>
+
+<p>See the JavaDocs for each bean to see what it does.</p>
+
+<h3>Back End Data</h3>
+
+<p>Finally, we add the back end data.  In this simple application, the
+data is read from <code>java.util.ResourceBundle</code> instances, but
+it could just as well come from a database.</p>
+
+<p><img src="@context.path@/javadocs/data.jpg" /></p>
+
+</body>
+</html>

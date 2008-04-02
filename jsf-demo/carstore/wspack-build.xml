@@ -163,7 +163,7 @@
 
   <target name="javadoc_check">
     <uptodate property="javadoc.notrequired" targetfile="${build.javadocs}/packages.html" >
-        <srcfiles dir= "src" includes="**/*.java,**/*.html"/>
+        <srcfiles dir= "src/java" includes="**/*.java,**/*.html"/>
     </uptodate>
   </target>
   
@@ -175,7 +175,7 @@
     <mkdir dir="build/javadoc-src"/>
     <filter token="context.path" value="${context.path}"/>
     <copy todir="build/javadoc-src" filtering="true">
-      <fileset dir="src" includes="**/*.java,**/*.html" />
+      <fileset dir="src/java" includes="**/*.java,**/*.html" />
     </copy>
 
     <javadoc destdir="${build.javadocs}"
@@ -191,16 +191,20 @@
   
   <!-- Executable Targets -->
 
-  <target name="build" depends="copyJars,javadocs"
+  <target name="build" depends="copyJars,javadocs" 
      description="Compile Java files and copy static files." >
     <javac debug="on" 
-           srcdir="src" destdir="${build}/${example}/WEB-INF/classes">
+           srcdir="src/java" destdir="${build}/${example}/WEB-INF/classes">
     	<include name="**/*.java" />
      <classpath refid="classpath"/>
     </javac>
-    <copy todir="${build}/${example}/WEB-INF/">
+    <copy todir="${build}/${example}/WEB-INF">
       <fileset dir="web/WEB-INF"    >
         <include name="*.xml" />
+      </fileset>
+    </copy>
+    <copy todir="${build}/${example}/WEB-INF">
+      <fileset dir="web/WEB-INF/tlds"    >
         <include name="*.tld" />
       </fileset>
     </copy>
@@ -216,10 +220,10 @@
       </fileset>
     </copy>
     <copy todir="${build}/${example}/WEB-INF/classes/carstore" >
-      <fileset dir="src/carstore" >
+      <fileset dir="src/java/carstore" >
          <include name="**/*.properties"/>
       </fileset>
-      <fileset dir="src/carstore" >
+      <fileset dir="src/java/carstore" >
          <include name="**/*.xml"/>
       </fileset>
 
