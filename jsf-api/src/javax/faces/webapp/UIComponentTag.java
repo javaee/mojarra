@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTag.java,v 1.44 2004/02/26 20:31:20 eburns Exp $
+ * $Id: UIComponentTag.java,v 1.45 2004/02/26 23:34:38 rkitain Exp $
  */
 
 /*
@@ -52,7 +52,7 @@ public abstract class UIComponentTag implements Tag {
      * for the current request will be maintained.</p>
      */
     private static final String COMPONENT_TAG_STACK_ATTR =
-        "javax.faes.webapp.COMPONENT_TAG_STACK";
+        "javax.faces.webapp.COMPONENT_TAG_STACK";
 
 
     /**
