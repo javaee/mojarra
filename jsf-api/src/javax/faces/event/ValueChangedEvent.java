@@ -1,5 +1,5 @@
 /*
- * $Id: ValueChangedEvent.java,v 1.2 2003/01/16 20:24:21 craigmcc Exp $
+ * $Id: ValueChangedEvent.java,v 1.3 2003/02/03 22:04:12 craigmcc Exp $
  */
 
 /*
@@ -37,10 +37,10 @@ public class ValueChangedEvent extends FacesEvent {
      * @exception IllegalArgumentException if <code>component</code> is
      *  <code>null</code>
      */
-    public ValueChangedEvent(UIComponent source,
+    public ValueChangedEvent(UIComponent component,
                              Object oldValue, Object newValue) {
 
-        super(source);
+        super(component);
         this.oldValue = oldValue;
         this.newValue = newValue;
 
