@@ -112,10 +112,17 @@
         <display-name>Restrict access to JSP pages</display-name>
         <web-resource-collection>
             <web-resource-name>
-                Restrict access to JSP pages
+		Restrict access to JSP pages
             </web-resource-name>
-            <url-pattern>*.jsp</url-pattern>
-        </web-resource-collection>
+	    <url-pattern>/bottomMatter.jsp</url-pattern>
+	    <url-pattern>/carDetail.jsp</url-pattern>
+            <url-pattern>/chooseLocale.jsp</url-pattern>
+            <url-pattern>/confirmChoices.jsp</url-pattern>
+            <url-pattern>/customerInfo.jsp</url-pattern>
+            <url-pattern>/finish.jsp</url-pattern>
+            <url-pattern>/optionsPanel.jsp</url-pattern>
+            <url-pattern>/storeFront.jsp</url-pattern>
+	</web-resource-collection>
         <auth-constraint>
             <description>
                With no roles defined, no access granted
