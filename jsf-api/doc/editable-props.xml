@@ -100,3 +100,17 @@
         <property-name>immediate</property-name>
         <property-class>boolean</property-class>
       </property>
+      
+      <property>
+        <description>
+          Flag indicating whether or not any required conversion or validation
+          on this component value has been performed successfully.
+        </description>
+        <display-name>Valid Flag</display-name>
+        <icon></icon>
+        <property-name>valid</property-name>
+        <property-class>valid</property-class>
+        <property-extension>
+          <tag-attribute>false</tag-attribute>
+        </property-extension>
+      </property>
