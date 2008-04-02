@@ -1,5 +1,5 @@
 /*
- * $Id: UIViewRoot.java,v 1.27 2004/04/05 18:26:00 rkitain Exp $
+ * $Id: UIViewRoot.java,v 1.28 2004/04/07 17:36:58 rkitain Exp $
  */
 
 /*
@@ -97,9 +97,9 @@ public class UIViewRoot extends UIComponentBase {
 
     /**
      * <p>Return the render kit identifier of the {@link RenderKit}
-     * associated with this view.  Unless explicitly set, this will be the
-     * value defined by calling 
-     * {@link javax.faces.application.ViewHandler#calculateRenderKitId}.</p>
+     * associated with this view.  Unless explicitly set, as in {@link
+     * javax.faces.application.ViewHandler#createView}, the returned
+     * value will be <code>null.</code></p>
      */
     public String getRenderKitId() {
 
@@ -114,10 +114,9 @@ public class UIViewRoot extends UIComponentBase {
 		result = (String) vb.getValue(context);
 	    } 
 	    else {
-	        result = context.getApplication().getViewHandler().calculateRenderKitId(context);
+	        result = null;
 	    }
 	}
-
 	return result;
     }
 
