@@ -1,5 +1,5 @@
 /*
- * $Id: ExternalContextImpl.java,v 1.52 2006/09/06 20:44:04 rlubke Exp $
+ * $Id: ExternalContextImpl.java,v 1.53 2006/11/29 20:39:04 edburns Exp $
  */
 
 /*
@@ -78,7 +78,7 @@ import com.sun.faces.util.Util;
  * servlet implementation.
  *
  * @author Brendan Murray
- * @version $Id: ExternalContextImpl.java,v 1.52 2006/09/06 20:44:04 rlubke Exp $
+ * @version $Id: ExternalContextImpl.java,v 1.53 2006/11/29 20:39:04 edburns Exp $
  */
 public class ExternalContextImpl extends ExternalContext {
 
@@ -841,7 +841,7 @@ abstract class StringArrayValuesMap extends BaseContextMap<String[]> {
     }
 }
 
-class ApplicationMap extends BaseContextMap<Object> {
+class ApplicationMap extends BaseContextMap {
 
     private final ServletContext servletContext;
 
@@ -875,12 +875,12 @@ class ApplicationMap extends BaseContextMap<Object> {
     }
 
 
-    public Object put(String key, Object value) {
+    public Object put(Object key, Object value) {
         if (key == null) {
             throw new NullPointerException();
         }       
-        Object result = servletContext.getAttribute(key);
-        servletContext.setAttribute(key, value);
+        Object result = servletContext.getAttribute(key.toString());
+        servletContext.setAttribute(key.toString(), value);
         return (result);
     }
 
@@ -934,7 +934,7 @@ class ApplicationMap extends BaseContextMap<Object> {
 
 } // END ApplicationMap
 
-class SessionMap extends BaseContextMap<Object> {
+class SessionMap extends BaseContextMap {
 
     private final HttpServletRequest request;
 
@@ -970,13 +970,13 @@ class SessionMap extends BaseContextMap<Object> {
     }
 
 
-    public Object put(String key, Object value) {
+    public Object put(Object key, Object value) {
         if (key == null) {
             throw new NullPointerException();
         }        
         HttpSession session = getSession();
-        Object result = session.getAttribute(key);
-        session.setAttribute(key, value);
+        Object result = session.getAttribute(key.toString());
+        session.setAttribute(key.toString(), value);
         return (result);
     }
 
@@ -1033,7 +1033,7 @@ class SessionMap extends BaseContextMap<Object> {
 
 } // END SessionMap
 
-class RequestMap extends BaseContextMap<Object> {
+class RequestMap extends BaseContextMap {
 
     private final ServletRequest request;    
 
@@ -1068,12 +1068,12 @@ class RequestMap extends BaseContextMap<Object> {
     }
 
 
-    public Object put(String key, Object value) {
+    public Object put(Object key, Object value) {
         if (key == null) {
             throw new NullPointerException();
         }        
-        Object result = request.getAttribute(key);
-        request.setAttribute(key, value);
+        Object result = request.getAttribute(key.toString());
+        request.setAttribute(key.toString(), value);
         return (result);
     }
 
