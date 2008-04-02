@@ -1,5 +1,5 @@
 /*
- * $Id: ValueBindingImpl.java,v 1.18 2003/10/22 21:08:28 rlubke Exp $
+ * $Id: ValueBindingImpl.java,v 1.19 2003/10/23 01:32:57 rlubke Exp $
  */
 
 /*
@@ -317,6 +317,11 @@ public class ValueBindingImpl extends ValueBinding
 
     public boolean isReadOnly(FacesContext context)
         throws PropertyNotFoundException {
+        if (context == null) {
+            throw new NullPointerException(
+                Util.getExceptionMessage(Util.NULL_CONTEXT_ERROR_MESSAGE_ID)
+            );
+        }
 	boolean result = false;
 	Object toTest = null;
 	String 
