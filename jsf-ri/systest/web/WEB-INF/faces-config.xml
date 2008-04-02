@@ -14,6 +14,9 @@
 
   <application>
     <message-bundle>com.sun.faces.CustomMessages</message-bundle>
+    <locale-config>
+        <default-locale>en_US</default-locale>
+    </locale-config>
   </application>
   <factory>
     <application-factory>com.sun.faces.systest.lifecycle.ApplicationFactoryWrapper</application-factory>
