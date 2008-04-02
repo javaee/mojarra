@@ -1,0 +1,230 @@
+<!--
+ Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
+ 
+ Redistribution and use in source and binary forms, with or
+ without modification, are permitted provided that the following
+ conditions are met:
+ 
+ - Redistributions of source code must retain the above copyright
+   notice, this list of conditions and the following disclaimer.
+ 
+ - Redistribution in binary form must reproduce the above
+   copyright notice, this list of conditions and the following
+   disclaimer in the documentation and/or other materials
+   provided with the distribution.
+    
+ Neither the name of Sun Microsystems, Inc. or the names of
+ contributors may be used to endorse or promote products derived
+ from this software without specific prior written permission.
+  
+ This software is provided "AS IS," without a warranty of any
+ kind. ALL EXPRESS OR IMPLIED CONDITIONS, REPRESENTATIONS AND
+ WARRANTIES, INCLUDING ANY IMPLIED WARRANTY OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE OR NON-INFRINGEMENT, ARE HEREBY
+ EXCLUDED. SUN AND ITS LICENSORS SHALL NOT BE LIABLE FOR ANY
+ DAMAGES OR LIABILITIES SUFFERED BY LICENSEE AS A RESULT OF OR
+ RELATING TO USE, MODIFICATION OR DISTRIBUTION OF THIS SOFTWARE OR
+ ITS DERIVATIVES. IN NO EVENT WILL SUN OR ITS LICENSORS BE LIABLE
+ FOR ANY LOST REVENUE, PROFIT OR DATA, OR FOR DIRECT, INDIRECT,
+ SPECIAL, CONSEQUENTIAL, INCIDENTAL OR PUNITIVE DAMAGES, HOWEVER
+ CAUSED AND REGARDLESS OF THE THEORY OF LIABILITY, ARISING OUT OF
+ THE USE OF OR INABILITY TO USE THIS SOFTWARE, EVEN IF SUN HAS
+ BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
+  
+ You acknowledge that this software is not designed, licensed or
+ intended for use in the design, construction, operation or
+ maintenance of any nuclear facility.
+-->
+
+<project name="JSF Demo unit tests" default="build" basedir=".">
+    <target name="init" depends="verifyPreconditions">
+        <tstamp/>
+    </target>
+
+    <!-- Test Properties -->
+    <property file="build.properties"/>
+    <property file="default.properties"/>
+    <property name="build" value="${basedir}/test/build"/>
+    <property name="url" value="http://${host}:${port}/manager"/>
+    <property name="guessNumber.context.path" value="/jsf-guessNumber"/>
+
+    <path id="classpath">
+        <pathelement location="${htmlunit.jar}"/>
+        <pathelement location="${commons-httpclient.jar}"/>
+        <pathelement location="${js.jar}"/>
+        <pathelement location="${commons-logging.jar}"/>
+        <pathelement location="${nekohtml.jar}"/>
+        <pathelement location="${xercesImpl.jar}"/>
+        <pathelement location="${xmlapis.jar}"/>
+        <pathelement location="${build}/classes"/>
+    </path>
+
+    <path id="catalina-ant.classpath">
+        <pathelement location="${catalina-ant.jar}"/>
+    </path>    
+
+    <target name="verifyPreconditions">
+
+        <antcall target="checkRequiredFile">
+            <param name="file" value="${htmlunit.jar}"/>
+            <param name="fail.message" value="${htmlunit.jar} must exist."/>
+        </antcall>
+
+        <antcall target="checkRequiredFile">
+            <param name="file" value="${commons-httpclient.jar}"/>
+            <param name="fail.message" value="${commons-httpclient.jar} must exist."/>
+        </antcall>
+
+        <antcall target="checkRequiredFile">
+            <param name="file" value="${js.jar}"/>
+            <param name="fail.message" value="${js.jar} must exist."/>
+        </antcall>
+
+        <antcall target="checkRequiredFile">
+            <param name="file" value="${nekohtml.jar}"/>
+            <param name="fail.message" value="${nekohtml.jar} must exist."/>
+        </antcall>
+
+        <antcall target="checkRequiredFile">
+            <param name="file" value="${xercesImpl.jar}"/>
+            <param name="fail.message" value="${xercesImpl.jar} must exist."/>
+        </antcall>
+
+        <antcall target="checkRequiredFile">
+            <param name="file" value="${xmlapis.jar}"/>
+            <param name="fail.message" value="${xmlapis.jar} must exist."/>
+        </antcall>
+
+        <antcall target="checkRequiredFile">
+            <param name="file" value="${commons-logging.jar}"/>
+            <param name="fail.message" value="${commons-logging.jar} must exist."/>
+        </antcall>
+
+    </target>
+
+    <target name="prepare" depends="init"
+        description="Create build directories.">
+        <mkdir dir="${build}/classes"/>
+    </target>
+
+    <taskdef name="install" classname="org.apache.catalina.ant.InstallTask">
+        <classpath refid="catalina-ant.classpath"/>
+    </taskdef>
+    <taskdef name="list" classname="org.apache.catalina.ant.ListTask">
+        <classpath refid="catalina-ant.classpath"/>
+    </taskdef>
+    <taskdef name="reload" classname="org.apache.catalina.ant.ReloadTask">
+        <classpath refid="catalina-ant.classpath"/>
+    </taskdef>
+    <taskdef name="remove" classname="org.apache.catalina.ant.RemoveTask">
+        <classpath refid="catalina-ant.classpath"/>
+    </taskdef>
+
+    <!-- Executable Targets -->
+
+    <target name="list" description="List web applications">
+        <list url="${url}" username="${username}" password="${password}"/>
+    </target>
+
+    <target name="install" description="Install web application" depends="build">
+        <install url="${url}" username="${username}" password="${password}"
+            path="${context.path}" war="file://${demo.path}/"/>
+    </target>
+
+    <target name="reload" description="Reload web application" depends="build">
+        <reload url="${url}" username="${username}" password="${password}"
+            path="${context.path}"/>
+    </target>
+
+    <target name="remove" description="Remove web application">
+        <remove url="${url}" username="${username}" password="${password}"
+            path="${context.path}"/>
+    </target>
+    
+    <target name="safe.remove"
+        description="Remove demo webapp, don't fail on error">
+        <exec executable="ant.bat" os="Windows 2000" failonerror="false">
+            <arg line="-f build-tests.xml -Dusername=${username} -Dpassword=${password} -Dcontext.path=${context.path} remove"/>
+        </exec>
+        <exec executable="ant" os="SunOS,Linux" failonerror="false">
+            <arg line="-f build-tests.xml -Dusername=${username} -Dpassword=${password} -Dcontext.path=${context.path} remove"/>
+        </exec>
+    </target>
+
+    <target name="run.tests">
+        <junit printsummary="yes" haltonfailure="yes" haltonerror="yes">
+            <classpath refid="classpath"/>
+            <formatter type="plain" usefile="false"/>
+            <jvmarg value="-Dhost=${host}"/>
+            <jvmarg value="-Dport=${port}"/> 
+            <jvmarg value="-Dcontext.path=${context.path}"/>
+
+            <!-- Suite of tests -->
+            <batchtest fork="yes">
+                <fileset dir="test/tests">
+                    <include name="**/${demo.name}/**Test*.java"/>    
+                </fileset>    
+            </batchtest>
+        </junit>
+    </target>
+
+    <target name="build"
+        description="Compile Java files." depends="prepare">
+        <javac srcdir="test" destdir="${build}/classes"
+            debug="true">
+            <include name="**/*.java"/>
+            <classpath refid="classpath"/>
+        </javac>
+    </target>
+
+    <target name="checkRequiredFile">
+        <available file="${file}" property="requirement.satisfied"/>
+        <antcall target="checkRequired.fail"/>
+    </target>
+
+    <target name="checkRequired.fail" unless="requirement.satisfied">
+        <fail message="${fail.message}"/>
+    </target>
+
+    <!-- base target of sorts to avoid duplication --> 
+    <target name="test.invoker">
+        <!-- remove the application if it already exists -->
+        <antcall target="safe.remove">
+            <param name="context.path" value="${context.path}"/>
+        </antcall>
+        <!-- install the application -->
+        <antcall target="install">
+            <param name="context.path" value="${context.path}"/>
+            <param name="demo.path" value="${demo.path}"/>
+        </antcall>
+        
+        <!-- run the tests for the application -->
+        <antcall target="run.tests">
+            <param name="context.path" value="${context.path}"/>
+            <param name="demo.name" value="${demo.name}"/>
+        </antcall>
+        
+        <!-- remove the application -->
+        <antcall target="remove">
+            <param name="context.path" value="${context.path}"/>
+        </antcall>
+    </target>
+
+    <!-- ============== UNIT TESTS =============== -->
+    <!-- Global test target to run all unit tests -->
+    <target name="test" depends="build" 
+            description="Runs all of available demo unit tests">
+        <antcall target="run.guessNumber.tests"/>    
+    </target>
+
+    <!-- Unit test configuration for guessNumber -->
+    <target name="run.guessNumber.tests" depends="build">
+        <antcall target="test.invoker">
+            <param name="context.path" value="${guessNumber.context.path}"/>
+            <param name="demo.path" value="${basedir}/guessNumber/build/jsf-guessNumber"/>
+            <param name="demo.name" value="guessNumber"/>
+        </antcall>
+    </target>
+
+</project>
+

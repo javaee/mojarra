@@ -97,6 +97,7 @@
     <delete dir="${basedir}/lib"/> 
     <delete file="jsf-${version}.zip"/>
     <delete    dir="${dist.home}"/>
+    <delete dir="${basedir}/test/build"/>
 
     <ant target="clean" dir="templateDemo"/>
     <ant target="clean" dir="guessNumber"/>
@@ -194,18 +195,15 @@
   </target>
 
   <target name="test" depends="main">
-    <echo>
-Before running this target you must:
-
-  1. Stop tomcat.
-
-  2. run ant clean.wspack 
-
-  3. Start tomcat. 
-    </echo>
-
-    <ant target="test" antfile="cardemo/crashtest.xml" inheritAll="false"/>
-
+      <echo>
+          Before running this target you must:
+            
+             1. Stop Tomcat/JWSDP
+             2. Run 'ant clean.wspack'
+             3. Start Tomcat/JWSDP
+     </echo> 
+    <!--<ant target="test" antfile="cardemo/crashtest.xml" inheritAll="false"/>-->
+      <ant target="test" antfile="build-tests.xml"/>
   </target>
     
 
@@ -449,7 +447,6 @@ Before running this target you must:
   
   <target name="checkRequired.fail" unless="requirement.satisfied">
     <fail message="${fail.message}"/>
-  </target>
-
+  </target>      
 
 </project>

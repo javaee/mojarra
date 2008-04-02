@@ -43,3 +43,15 @@
 
 tomcat.home=/your/jwsdp-1.2
 
+
+# Base path for test dependent library JARs
+# Demo unit tests require:
+#  JUnit 3.8.1
+#  HtmlUnit 1.2.3
+
+# For simplicity of setup, install both JUnit
+# and HtmlUnit in the directory specified
+# by base.path.  The JARs will be configured
+# based on this value in default.properties. 
+base.path=/home/homedir
+
