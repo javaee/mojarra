@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigListener.java,v 1.6 2003/05/02 03:11:30 eburns Exp $
+ * $Id: ConfigListener.java,v 1.7 2003/05/02 06:03:59 eburns Exp $
  */
 /*
  * Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
@@ -109,29 +109,23 @@ public class ConfigListener implements ServletContextListener
 	String initParamFileList = null;
 	InputStream jarInputStream = null;
 	
-	// Step 1, load our own JSF_RI_CONFIG
+	// Step 0, load our own JSF_RI_CONFIG
 	jarInputStream = this.getClass().getClassLoader().
 	    getResourceAsStream(RIConstants.JSF_RI_CONFIG);
 	Assert.assert_it(null != jarInputStream);
 
         configBase = configParser.parseConfig(jarInputStream);
+	Assert.assert_it(null != configBase);
+	// It's an error if this doesn't load.
 
-	// Step 2, load the app's "/WEB-INF/faces-config.xml"
-	configBase = configParser.parseConfig("/WEB-INF/faces-config.xml",
-					      servletContext,
-					      configBase);
-
-	// plug the configBase into the application
+	// Store the ConfigBase in the Application's AppConfig.
         ApplicationFactory aFactory = 
 	    (ApplicationFactory)FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
         ApplicationImpl application = 
 	    (ApplicationImpl)aFactory.getApplication();
 	application.getAppConfig().setConfigBase(configBase);
 
-	Assert.assert_it(null != configBase);
-	
-	// Step 3, load any additional config files from the
-	// ServletContext init parameter.
+	// If the init parameter exists, load the config from there
 	if (null != (initParamFileList = 
 		     servletContext.getInitParameter(RIConstants.CONFIG_FILES_INITPARAM))) {
 	    StringTokenizer toker = new StringTokenizer(initParamFileList, 
@@ -153,7 +147,18 @@ public class ConfigListener implements ServletContextListener
 		}
 	    }
 	}
-	
+	else {
+	    // Step 2, load the app's "/WEB-INF/faces-config.xml"
+	    try {
+		configBase = configParser.parseConfig("/WEB-INF/faces-config.xml",
+						      servletContext,
+						      configBase);
+	    }
+	    catch (Exception toIgnore) {
+		// do nothing, apps are not required to have a faces-config file
+	    }
+	}	
+
         servletContext.setAttribute(RIConstants.CONFIG_ATTR, 
 					   configBase);
         if (log.isTraceEnabled()) {
