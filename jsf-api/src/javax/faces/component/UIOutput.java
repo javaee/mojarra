@@ -1,5 +1,5 @@
 /*
- * $Id: UIOutput.java,v 1.46 2004/01/27 20:29:19 craigmcc Exp $
+ * $Id: UIOutput.java,v 1.47 2004/01/29 01:08:20 rkitain Exp $
  */
 
 /*
@@ -62,7 +62,7 @@ public class UIOutput extends UIComponentBase
     /**
      * <p>The standard component type for this component.</p>
      */
-    public static final String COMPONENT_TYPE = "javax.face.Output";
+    public static final String COMPONENT_TYPE = "javax.faces.Output";
 
 
     /**
