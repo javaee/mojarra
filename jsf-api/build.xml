@@ -890,21 +890,22 @@ jsf-api.jar.
 
   <target name="javadocs.including.el-api" if="include.el-api.in.javadocs">
 
-    <!-- Generate the javadoc, including the el-api -->
+    <echo message="Generate the javadoc, including the el-api"/>
     <javadoc packagenames="javax.*"
              destdir="${build.javadocs}"
              Overview="${src.dir}/overview.html"
              private="${javadoc.private}"
              protected="${javadoc.protected}"
              windowtitle="${Name} (${version})"
-             source="1.4"
+             source="1.5"
              doctitle="${Name} (${version})"
              bottom="Copyright &#169; 2002-2004 Sun Microsystems, Inc. All Rights Reserved.">
        <fileset dir="${src.dir}">
          <include name="**/*.java"/>
        </fileset>
-       <fileset dir="${el-api.dir}/src">
+       <fileset dir="${el-api.dir}/src/share">
          <include name="**/*.java"/>
+         <exclude name="javax/servlet/**/*.java"/>
        </fileset>
        <fileset dir="${build.generate}">
          <include name="**/*.java"/>
@@ -917,33 +918,33 @@ jsf-api.jar.
     <property name="el-api.disclaimer" value="Unified EL API, NOT A PART OF JavaServerFaces Specification" />
     <echo file="${build.dir}/el-api-javadocs/el-api.css">body { color: #666666; background-image: url(not-jsf.gif)}</echo>
 
-    <!-- Generate the only the el-api javadoc, adding in disclaimer and
-         special stylesheet. -->
+    <echo message="Generate the only the el-api javadoc, adding in disclaimer and special stylesheet."/>
     <javadoc packagenames="javax.*"
              destdir="${build.dir}/el-api-javadocs"
              private="${javadoc.private}"
              protected="${javadoc.protected}"
              windowtitle="${el-api.disclaimer}"
-             source="1.4"
+             source="1.5"
              Footer="${el-api.disclaimer}"
              stylesheetfile="${build.dir}/el-api-javadocs/el-api.css"
              bottom="Copyright &#169; 2002-2004 Sun Microsystems, Inc. All Rights Reserved.">
        <header><![CDATA[<blink>]]>${el-api.disclaimer}<![CDATA[</blink>]]></header>
-       <fileset dir="${el-api.dir}/src">
-         <include name="**/*.java"/>
+       <fileset dir="${el-api.dir}/src/share">
+          <include name="**/*.java"/>
+          <exclude name="javax/servlet/**/*.java"/>
        </fileset>
       <classpath refid="compile.classpath"/>
 
     </javadoc>
 
-    <!-- delete the el-api javadoc from the jsf-api javadoc -->
+    <echo message="delete the el-api javadoc from the jsf-api javadoc" />
     <delete>
       <fileset dir="${build.javadocs}/javax/el">
          <include name="**/*.*" />
       </fileset>
     </delete>
 
-    <!-- copy the el-api javadoc with disclaimer and special stylesheet -->
+    <echo message="copy the el-api javadoc with disclaimer and special stylesheet" />
     <copy todir="${build.javadocs}/javax">
       <fileset dir="${build.dir}/el-api-javadocs/javax">
          <include name="**/*.*" />
@@ -951,9 +952,7 @@ jsf-api.jar.
     </copy>
     <copy file="${build.dir}/el-api-javadocs/el-api.css" 
           todir="${build.javadocs}"/>
-
-    <!-- overlay the jsf-api top level javadoc only, to obliterate the
-         top level content that includes references to el-api -->
+    <echo message="overlay the jsf-api top level javadoc only, to obliterate the top level content that includes references to el-api" />
     <mkdir dir="${build.dir}/jsf-api-javadocs-top-level" />
     <javadoc packagenames="javax.*"
              destdir="${build.dir}/jsf-api-javadocs-top-level"
@@ -961,7 +960,7 @@ jsf-api.jar.
              private="${javadoc.private}"
              protected="${javadoc.protected}"
              windowtitle="${Name} (${version})"
-             source="1.4"
+             source="1.5"
              doctitle="${Name} (${version})"
              bottom="Copyright &#169; 2002-2004 Sun Microsystems, Inc. All Rights Reserved.">
        <fileset dir="${src.dir}">
@@ -972,6 +971,7 @@ jsf-api.jar.
        </fileset>
       <classpath refid="compile.classpath"/>
     </javadoc>
+
     <copy todir="${build.javadocs}">
       <fileset dir="${build.dir}/jsf-api-javadocs-top-level">
          <include name="*.html" />
@@ -992,7 +992,7 @@ jsf-api.jar.
              private="${javadoc.private}"
              protected="${javadoc.protected}"
              windowtitle="${Name} (${version})"
-             source="1.4"
+             source="1.5"
              doctitle="${Name} (${version})"
              bottom="Copyright &#169; 2002-2004 Sun Microsystems, Inc. All Rights Reserved.">
        <fileset dir="${src.dir}">
@@ -1014,7 +1014,7 @@ jsf-api.jar.
     <javadoc packagenames="javax.*"
              destdir="${build.mifdocs}"
              private="false"
-             source="1.4"
+             source="1.5"
              protected="true">
        <fileset dir="${src.dir}">
          <include name="**/*.java"/>

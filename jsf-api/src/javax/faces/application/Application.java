@@ -1,5 +1,5 @@
 /*
- * $Id: Application.java,v 1.38 2005/08/15 15:59:16 edburns Exp $
+ * $Id: Application.java,v 1.39 2005/08/17 22:01:28 edburns Exp $
  */
 
 /*
@@ -269,7 +269,7 @@ public abstract class Application {
      * instance that uses the locale of the current {@link
      * javax.faces.component.UIViewRoot}.</p>
      *
-     * @returns <code>ResourceBundle</code> for the current UIViewRoot,
+     * @return <code>ResourceBundle</code> for the current UIViewRoot,
      * otherwise null
      *
      * @throws FacesException if a bundle was defined, but not resolvable
@@ -674,7 +674,7 @@ public abstract class Application {
      * instances for which {@link Converter} classes have been explicitly
      * registered.</p>
      */
-    public abstract Iterator<String> getConverterTypes();
+    public abstract Iterator<Class> getConverterTypes();
 
     /**
      * <p>Return the {@link ExpressionFactory} instance for this

@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentClassicTagBase.java,v 1.6 2005/08/17 18:32:45 rogerk Exp $
+ * $Id: UIComponentClassicTagBase.java,v 1.7 2005/08/17 22:01:28 edburns Exp $
  */
 
 /*
@@ -384,8 +384,8 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
     // 
 
     /**
-     * <p>Set up the {@link ResponseWriter} for the current response,
-     * if this has not been done already.</p>
+     * <p>Set up the {@link javax.faces.context.ResponseWriter} for the
+     * current response, if this has not been done already.</p>
      *
      * <p>@deprecated.  {@link
      * javax.faces.application.ViewHandler#renderView} is now
