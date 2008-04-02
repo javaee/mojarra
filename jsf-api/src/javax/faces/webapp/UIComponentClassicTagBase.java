@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentClassicTagBase.java,v 1.20 2006/05/17 19:00:43 rlubke Exp $
+ * $Id: UIComponentClassicTagBase.java,v 1.21 2006/06/05 21:14:26 rlubke Exp $
  */
 
 /*
@@ -680,7 +680,7 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
     protected void addChild(UIComponent child) {
 
         if (createdComponents == null) {
-            createdComponents = new ArrayList<String>();
+            createdComponents = new ArrayList<String>(32);
         }
         createdComponents.add(child.getId());
     }
@@ -745,7 +745,7 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
         // Remove old children that are no longer present
         List oldList =
             (List) component.getAttributes().get(JSP_CREATED_COMPONENT_IDS);
-        if (oldList != null) {
+        if (oldList != null && oldList.size() > 0) {
 
             if (createdComponents != null) {
 

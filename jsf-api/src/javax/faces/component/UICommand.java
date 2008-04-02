@@ -1,5 +1,5 @@
 /*
- * $Id: UICommand.java,v 1.75 2005/12/05 16:42:43 edburns Exp $
+ * $Id: UICommand.java,v 1.76 2006/06/05 21:14:25 rlubke Exp $
  */
 
 /*
@@ -29,25 +29,19 @@
 
 package javax.faces.component;
 
+import javax.el.ELException;
 import javax.el.MethodExpression;
 import javax.el.ValueExpression;
-import javax.el.ELException;
 import javax.faces.FacesException;
 import javax.faces.application.Application;
 import javax.faces.context.FacesContext;
-import javax.faces.el.EvaluationException;
 import javax.faces.el.MethodBinding;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.ActionListener;
 import javax.faces.event.FacesEvent;
-import javax.faces.event.FacesListener;
 import javax.faces.event.PhaseId;
 import javax.faces.render.Renderer;
-
-import java.io.IOException;
-import java.util.Iterator;
-import java.util.List;
 
 
 /**
@@ -313,9 +307,14 @@ public class UICommand extends UIComponentBase
     // ----------------------------------------------------- StateHolder Methods
 
 
+    private Object[] values;
+
     public Object saveState(FacesContext context) {
 
-        Object values[] = new Object[6];
+        if (values == null) {
+             values = new Object[6];
+        }
+      
         values[0] = super.saveState(context);
         values[1] = saveAttachedState(context, methodBindingActionListener);
         values[2] = saveAttachedState(context, actionExpression);
@@ -329,7 +328,7 @@ public class UICommand extends UIComponentBase
 
 
     public void restoreState(FacesContext context, Object state) {
-        Object values[] = (Object[]) state;
+        values = (Object[]) state;
         super.restoreState(context, values[0]);
         methodBindingActionListener = (MethodBinding)
             restoreAttachedState(context, values[1]);

@@ -25,15 +25,6 @@
 
 package javax.faces.component;
 
-import java.io.IOException;
-import java.io.Serializable;
-import java.sql.ResultSet;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
 import javax.el.ELException;
 import javax.el.ValueExpression;
 import javax.faces.FacesException;
@@ -51,6 +42,15 @@ import javax.faces.model.ResultDataModel;
 import javax.faces.model.ResultSetDataModel;
 import javax.faces.model.ScalarDataModel;
 import javax.servlet.jsp.jstl.sql.Result;
+
+import java.io.IOException;
+import java.io.Serializable;
+import java.sql.ResultSet;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -519,9 +519,14 @@ public class UIData extends UIComponentBase
     // ----------------------------------------------------- StateHolder Methods
 
 
+    private Object[] values;
+
     public Object saveState(FacesContext context) {
 
-        Object values[] = new Object[9];
+        if (values == null) {
+             values = new Object[9];
+        }
+       
         values[0] = super.saveState(context);
         values[1] = new Integer(first);
 	values[2] = firstSet ? Boolean.TRUE : Boolean.FALSE;
@@ -538,7 +543,7 @@ public class UIData extends UIComponentBase
 
     public void restoreState(FacesContext context, Object state) {
 
-        Object values[] = (Object[]) state;
+        values = (Object[]) state;
         super.restoreState(context, values[0]);
         first = ((Integer) values[1]).intValue();
 	firstSet = ((Boolean) values[2]).booleanValue();

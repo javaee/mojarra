@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlComponentGenerator.java,v 1.20 2006/05/22 14:58:11 rlubke Exp $
+ * $Id: HtmlComponentGenerator.java,v 1.21 2006/06/05 21:14:26 rlubke Exp $
  */
 
 /*
@@ -34,14 +34,14 @@ import java.io.File;
 import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import com.sun.faces.config.beans.ComponentBean;
 import com.sun.faces.config.beans.DescriptionBean;
 import com.sun.faces.config.beans.FacesConfigBean;
 import com.sun.faces.config.beans.PropertyBean;
 import com.sun.faces.util.ToolsUtil;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 
 /**
@@ -440,12 +440,17 @@ public class HtmlComponentGenerator extends AbstractGenerator {
             }
         }
 
+        writer.fwrite("private Object[] _values;\n\n");
         // Generate the saveState() method
         writer.fwrite("public Object saveState(FacesContext _context) {\n");
         writer.indent();
-        writer.fwrite("Object[] _values = new Object[");
+        writer.fwrite("if (_values == null) {\n");
+        writer.indent();
+        writer.fwrite("_values = new Object[");
         writer.write("" + (properties.size() + p + 1));
         writer.write("];\n");
+        writer.outdent();
+        writer.fwrite("}\n");
         writer.fwrite("_values[0] = super.saveState(_context);\n");
 
         int n = 1; // Index into values array
@@ -486,7 +491,7 @@ public class HtmlComponentGenerator extends AbstractGenerator {
         writer.fwrite(
             "public void restoreState(FacesContext _context, Object _state) {\n");
         writer.indent();
-        writer.fwrite("Object[] _values = (Object[]) _state;\n");
+        writer.fwrite("_values = (Object[]) _state;\n");
         writer.fwrite("super.restoreState(_context, _values[0]);\n");
         n = 1;
         for (int i = 0, size = properties.size(); i < size; i++) {

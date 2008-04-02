@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectItem.java,v 1.38 2006/03/13 21:21:46 edburns Exp $
+ * $Id: UISelectItem.java,v 1.39 2006/06/05 21:14:26 rlubke Exp $
  */
 
 /*
@@ -30,14 +30,11 @@
 package javax.faces.component;
 
 
-import java.io.IOException;
-import javax.el.ValueExpression;
-import javax.faces.application.Application;
-import javax.faces.context.FacesContext;
-import javax.faces.model.SelectItem;
-import javax.faces.FacesException;
 import javax.el.ELException;
 import javax.el.ValueExpression;
+import javax.faces.FacesException;
+import javax.faces.context.FacesContext;
+import javax.faces.model.SelectItem;
 
 
 
@@ -328,9 +325,14 @@ public class UISelectItem extends UIComponentBase {
     // ----------------------------------------------------- StateHolder Methods
 
 
+    private Object[] values;
+
     public Object saveState(FacesContext context) {
 
-        Object values[] = new Object[9];
+        if (values == null) {
+             values = new Object[9];
+        }
+       
         values[0] = super.saveState(context);
         values[1] = itemDescription;
         values[2] = itemDisabled ? Boolean.TRUE : Boolean.FALSE;
@@ -347,7 +349,7 @@ public class UISelectItem extends UIComponentBase {
 
     public void restoreState(FacesContext context, Object state) {
 
-        Object values[] = (Object[]) state;
+        values = (Object[]) state;
         super.restoreState(context, values[0]);
         itemDescription = (String) values[1];
         itemDisabled = ((Boolean) values[2]).booleanValue();

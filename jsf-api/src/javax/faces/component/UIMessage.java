@@ -1,5 +1,5 @@
 /*
- * $Id: UIMessage.java,v 1.17 2005/08/22 22:07:56 ofung Exp $
+ * $Id: UIMessage.java,v 1.18 2006/06/05 21:14:25 rlubke Exp $
  */
 
 /*
@@ -219,9 +219,14 @@ public class UIMessage extends UIComponentBase {
     // ----------------------------------------------------- StateHolder Methods
 
 
+    private Object[] values;
+
     public Object saveState(FacesContext context) {
 
-        Object values[] = new Object[6];
+        if (values == null) {
+             values = new Object[6];
+        }
+       
         values[0] = super.saveState(context);
         values[1] = this.forVal;
         values[2] = this.showDetail ? Boolean.TRUE : Boolean.FALSE;
@@ -235,7 +240,7 @@ public class UIMessage extends UIComponentBase {
 
     public void restoreState(FacesContext context, Object state) {
 
-        Object values[] = (Object[]) state;
+        values = (Object[]) state;
         super.restoreState(context, values[0]);
 	forVal = (String) values[1];
         showDetail = ((Boolean) values[2]).booleanValue();

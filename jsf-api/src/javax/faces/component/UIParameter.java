@@ -1,5 +1,5 @@
 /*
- * $Id: UIParameter.java,v 1.28 2005/08/22 22:07:57 ofung Exp $
+ * $Id: UIParameter.java,v 1.29 2006/06/05 21:14:25 rlubke Exp $
  */
 
 /*
@@ -30,12 +30,10 @@
 package javax.faces.component;
 
 
-import java.io.IOException;
-import javax.faces.application.Application;
-import javax.faces.context.FacesContext;
-import javax.faces.FacesException;
-import javax.el.ValueExpression;
 import javax.el.ELException;
+import javax.el.ValueExpression;
+import javax.faces.FacesException;
+import javax.faces.context.FacesContext;
 
 
 
@@ -183,9 +181,14 @@ public class UIParameter extends UIComponentBase {
     // ----------------------------------------------------- StateHolder Methods
 
 
+    private Object[] values;
+
     public Object saveState(FacesContext context) {
 
-        Object values[] = new Object[3];
+        if (values == null) {
+             values = new Object[3];
+        }
+     
         values[0] = super.saveState(context);
         values[1] = name;
         values[2] = value;
@@ -196,7 +199,7 @@ public class UIParameter extends UIComponentBase {
 
     public void restoreState(FacesContext context, Object state) {
 
-        Object values[] = (Object[]) state;
+        values = (Object[]) state;
         super.restoreState(context, values[0]);
         name = (String) values[1];
         value = values[2];

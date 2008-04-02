@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.132 2006/03/20 19:20:27 rlubke Exp $
+ * $Id: UIComponentBase.java,v 1.133 2006/06/05 21:14:25 rlubke Exp $
  */
 
 /*
@@ -1088,7 +1088,7 @@ public abstract class UIComponentBase extends UIComponent {
         if (count > 0) {
             
             // this arraylist will store state
-            List stateList = new ArrayList(count);
+            List<Object> stateList = new ArrayList<Object>(count);
             
             // if we have children, add them to the stateList
             if (this.getChildCount() > 0) {
@@ -1230,15 +1230,17 @@ public abstract class UIComponentBase extends UIComponent {
 
 
     // ----------------------------------------------------- StateHolder Methods
-
+    private Object[] values;
 
     public Object saveState(FacesContext context) {
 
-        Object values[] = new Object[8];
+        if (values == null) {
+             values = new Object[8];
+        }
         // copy over "attributes" to a temporary map, so that
         // any references maintained due to "attributes" being an inner class
         // is not saved.
-        if ( attributes != null ) {
+        if ( attributes != null && attributes.size() > 0) {
             HashMap<String, Object> attributesCopy = new HashMap<String, Object>(attributes);
             values[0] = attributesCopy;
         }
@@ -1257,16 +1259,13 @@ public abstract class UIComponentBase extends UIComponent {
 
     public void restoreState(FacesContext context, Object state) {
 
-        Object values[] = (Object[]) state;
+        values = (Object[]) state;
         // we need to get the map that knows how to handle attribute/property 
-        // transparency before we restore its values.
-        attributes = getAttributes();
+        // transparency before we restore its values.        
         if ( values[0] != null ) {
-            Map attributesCopy = (Map) values[0];
-            Iterator iter = attributesCopy.entrySet().iterator();
-            while (iter.hasNext()) {
-                Map.Entry entry = (Map.Entry) iter.next();
-                attributes.put((String) entry.getKey(), entry.getValue());
+            Map tempMap = (Map) values[0];
+            if (tempMap.size() > 0) { 
+                getAttributes().putAll(tempMap);            
             }
         }
 	bindings = restoreBindingsState(context, values[1]);
@@ -1397,42 +1396,32 @@ public abstract class UIComponentBase extends UIComponent {
      *   previously returned by {@link #saveAttachedState}.
      *
      */
-    
+
     public static Object restoreAttachedState(FacesContext context,
-                                              Object stateObj) throws IllegalStateException {
+                                              Object stateObj)
+    throws IllegalStateException {
         if (null == context) {
             throw new NullPointerException();
         }
         if (null == stateObj) {
             return null;
         }
-        Object result = null;
-        List 
-            stateList = null,
-            resultList = null;
-        Iterator iter = null;
-        StateHolderSaver saver = null;
+        Object result;
+        List stateList;
 
-	if (stateObj instanceof List) {
+
+        if (stateObj instanceof List) {
             stateList = (List) stateObj;
-            resultList = new ArrayList(stateList.size());
-            iter = stateList.iterator();
-            while (iter.hasNext()) {
-                try {
-                    saver = (StateHolderSaver) iter.next();
-                }
-                catch (ClassCastException cce) {
-                    throw new IllegalStateException("Unknown object type");
-                }
-                resultList.add(saver.restore(context));
+            for (int i = 0, size = stateList.size(); i < size; i++) {
+                stateList.set(i,
+                              ((StateHolderSaver) stateList.get(i)).restore(
+                                    context));
             }
-            result = resultList;
-        }
-        else if (stateObj instanceof StateHolderSaver) {
-            saver = (StateHolderSaver) stateObj;
+            result = stateList;
+        } else if (stateObj instanceof StateHolderSaver) {
+            StateHolderSaver saver = (StateHolderSaver) stateObj;
             result = saver.restore(context);
-        }
-        else {
+        } else {
             throw new IllegalStateException("Unknown object type");
         }
         return result;
@@ -1446,7 +1435,7 @@ public abstract class UIComponentBase extends UIComponent {
 	Object values[] = (Object[]) state;
 	String names[] = (String[]) values[0];
 	Object states[] = (Object[]) values[1];
-	Map bindings = new HashMap();
+	Map<String,Object> bindings = new HashMap<String,Object>(names.length);
 	for (int i = 0; i < names.length; i++) {
 	    bindings.put(names[i],
 			 restoreAttachedState(context, states[i]));
@@ -1457,23 +1446,22 @@ public abstract class UIComponentBase extends UIComponent {
 
 
     private Object saveBindingsState(FacesContext context) {
-
-	if (bindings == null) {
-	    return (null);
-	}
-	List names = new ArrayList();
-	List states = new ArrayList();
-	Iterator keys = bindings.keySet().iterator();
-	while (keys.hasNext()) {
-	    String key = (String) keys.next();
-	    ValueExpression binding = (ValueExpression) bindings.get(key);
-	    names.add(key);
-	    states.add(saveAttachedState(context, binding));
-	}
-	Object values[] = new Object[2];
-	values[0] = names.toArray(new String[names.size()]);
-	values[1] = states.toArray(new Object[states.size()]);
-	return (values);
+        
+        if (bindings == null) { 
+            return (null); 
+        } 
+         
+        Object values[] = new Object[2]; 
+        values[0] = bindings.keySet().toArray(new String[bindings.size()]); 
+         
+        Object[] bindingValues = bindings.values().toArray(); 
+        for (int i = 0; i < bindingValues.length; i++) { 
+            bindingValues[i] = saveAttachedState(context, bindingValues[i]); 
+        } 
+         
+        values[1] = bindingValues; 
+                
+        return (values); 
 
     }
 

@@ -1,5 +1,5 @@
 /*
- * $Id: UIViewRoot.java,v 1.43 2006/05/11 18:48:03 rlubke Exp $
+ * $Id: UIViewRoot.java,v 1.44 2006/06/05 21:14:25 rlubke Exp $
  */
 
 /*
@@ -30,31 +30,29 @@
 package javax.faces.component;
 
 
+import javax.el.ELException;
+import javax.el.MethodExpression;
+import javax.el.ValueExpression;
+import javax.faces.FacesException;
+import javax.faces.FactoryFinder;
+import javax.faces.context.FacesContext;
+import javax.faces.event.AbortProcessingException;
+import javax.faces.event.FacesEvent;
+import javax.faces.event.PhaseEvent;
+import javax.faces.event.PhaseId;
+import javax.faces.event.PhaseListener;
+import javax.faces.lifecycle.Lifecycle;
+import javax.faces.lifecycle.LifecycleFactory;
+import javax.faces.render.RenderKit;
+import javax.faces.webapp.FacesServlet;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
-import java.util.logging.Logger;
 import java.util.logging.Level;
-
-import javax.faces.FactoryFinder;
-import javax.faces.FacesException;
-import javax.faces.lifecycle.LifecycleFactory;
-import javax.faces.lifecycle.Lifecycle;
-import javax.faces.context.FacesContext;
-import javax.faces.event.AbortProcessingException;
-import javax.faces.event.FacesEvent;
-import javax.faces.event.PhaseId;
-import javax.faces.event.PhaseEvent;
-import javax.faces.event.PhaseListener;
-import javax.faces.render.RenderKit;
-import javax.faces.render.RenderKitFactory;
-import javax.faces.webapp.FacesServlet;
-
-import javax.el.ValueExpression;
-import javax.el.MethodExpression;
-import javax.el.ELException;
+import java.util.logging.Logger;
 
 
 /**
@@ -924,9 +922,14 @@ public class UIViewRoot extends UIComponentBase {
     // ----------------------------------------------------- StateHolder Methods
 
 
+    private Object[] values;
+
     public Object saveState(FacesContext context) {
 
-        Object values[] = new Object[8];
+        if (values == null) {
+             values = new Object[8];
+        }
+        
         values[0] = super.saveState(context);
         values[1] = renderKitId;
         values[2] = viewId;
@@ -942,7 +945,7 @@ public class UIViewRoot extends UIComponentBase {
 
     public void restoreState(FacesContext context, Object state) {
 
-        Object values[] = (Object[]) state;
+        values = (Object[]) state;
         super.restoreState(context, values[0]);
         renderKitId = (String) values[1];
         viewId = (String) values[2];

@@ -1,5 +1,5 @@
 /*
- * $Id: UIInput.java,v 1.85 2006/05/22 14:57:56 rlubke Exp $
+ * $Id: UIInput.java,v 1.86 2006/06/05 21:14:26 rlubke Exp $
  */
 
 /*
@@ -29,28 +29,21 @@
 
 package javax.faces.component;
 
-import javax.el.MethodExpression;
-import javax.el.ValueExpression;
 import javax.el.ELException;
+import javax.el.ValueExpression;
 import javax.faces.FacesException;
 import javax.faces.application.Application;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.ConverterException;
-import javax.faces.el.EvaluationException;
 import javax.faces.el.MethodBinding;
-import javax.faces.event.AbortProcessingException;
-import javax.faces.event.FacesEvent;
-import javax.faces.event.FacesListener;
-import javax.faces.event.PhaseId;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.event.ValueChangeListener;
 import javax.faces.render.Renderer;
 import javax.faces.validator.Validator;
 import javax.faces.validator.ValidatorException;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -1219,9 +1212,14 @@ public class UIInput extends UIOutput implements EditableValueHolder {
     // ----------------------------------------------------- StateHolder Methods
 
 
+    private Object[] values;
+
     public Object saveState(FacesContext context) {
 
-        Object values[] = new Object[14];
+        if (values == null) {
+             values = new Object[14];
+        }
+       
         values[0] = super.saveState(context);
         values[1] = localValueSet ? Boolean.TRUE : Boolean.FALSE;
         values[2] = required ? Boolean.TRUE : Boolean.FALSE;
@@ -1243,7 +1241,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
 
     public void restoreState(FacesContext context, Object state) {
 
-        Object values[] = (Object[]) state;
+        values = (Object[]) state;
         super.restoreState(context, values[0]);
         localValueSet = ((Boolean) values[1]).booleanValue();
         required = ((Boolean) values[2]).booleanValue();
