@@ -1,5 +1,5 @@
 /*
- * $Id: ValueChangeListenerTag.java,v 1.26 2006/12/14 23:18:47 rlubke Exp $
+ * $Id: ValueChangeListenerTag.java,v 1.27 2006/12/17 07:44:04 rlubke Exp $
  */
 
 /*
@@ -32,7 +32,6 @@ package com.sun.faces.taglib.jsf_core;
 
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
-import com.sun.faces.util.ReflectionUtils;
 
 import javax.el.ValueExpression;
 import javax.faces.component.EditableValueHolder;
@@ -213,25 +212,8 @@ public class ValueChangeListenerTag extends TagSupport {
         public void processValueChange(ValueChangeEvent event) throws AbortProcessingException {
 
             if (instance == null) {
-                FacesContext faces = FacesContext.getCurrentInstance();
-                if (faces == null)
-                    return;
-                if (binding != null) {
-                    instance = (ValueChangeListener) binding
-                         .getValue(faces.getELContext());
-                }
-                if (instance == null && type != null) {
-                    try {
-                        instance = (ValueChangeListener)
-                             ReflectionUtils.newInstance(((String) type.getValue(faces.getELContext())));
-
-                    } catch (Exception e) {
-                        throw new AbortProcessingException(e.getMessage(), e);
-                    }
-                    if (binding != null) {
-                        binding.setValue(faces.getELContext(), this.instance);
-                    }
-                }
+               instance = (ValueChangeListener)
+                    Util.createListenerInstance(type, binding);
             }
             if (instance != null) {
                 instance.processValueChange(event);

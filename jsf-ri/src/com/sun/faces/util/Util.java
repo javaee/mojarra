@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.200 2006/11/15 23:19:20 rlubke Exp $
+ * $Id: Util.java,v 1.201 2006/12/17 07:44:05 rlubke Exp $
  */
 
 /*
@@ -36,6 +36,8 @@ import javax.el.ELResolver;
 import javax.el.ValueExpression;
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
+import javax.faces.event.ActionListener;
+import javax.faces.event.AbortProcessingException;
 import javax.faces.application.Application;
 import javax.faces.application.ApplicationFactory;
 import javax.faces.application.StateManager;
@@ -77,7 +79,7 @@ import com.sun.faces.spi.ManagedBeanFactory.Scope;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.200 2006/11/15 23:19:20 rlubke Exp $
+ * @version $Id: Util.java,v 1.201 2006/12/17 07:44:05 rlubke Exp $
  */
 
 public class Util {
@@ -151,6 +153,48 @@ public class Util {
 //
 // Class methods
 //
+
+    /**
+     * <p>Factory method for creating the varius JSF listener
+     *  instances that may be referenced by <code>type</code>
+     *  or <code>binding</code>.</p>
+     * <p>If <code>binding</code> is not <code>null</code>
+     * and the evaluation result is not <code>null</code> return
+     * that instance.  Otherwise try to instantiate an instances
+     * based on <code>type</code>.</p>
+     * 
+     * @param type the <code>Listener</code> type
+     * @param binding a <code>ValueExpression</code> which resolves
+     *  to a <code>Listener</code> instance
+     * @return a <code>Listener</code> instance based off the provided
+     *  <code>type</code> and <binding>
+     */
+    public static Object createListenerInstance(ValueExpression type,
+                                                ValueExpression binding) {
+
+        FacesContext faces = FacesContext.getCurrentInstance();
+        Object instance = null;
+        if (faces == null) {
+            return null;
+        }
+        if (binding != null) {
+            instance = binding.getValue(faces.getELContext());
+        }
+        if (instance == null && type != null) {
+            try {
+                instance = ReflectionUtils.newInstance(((String) type.getValue(faces.getELContext())));
+            } catch (Exception e) {
+                throw new AbortProcessingException(e.getMessage(), e);
+            }
+
+            if (binding != null) {
+                binding.setValue(faces.getELContext(), instance);
+            }
+        }
+
+        return instance;
+
+    }
 
     public static void setUnitTestModeEnabled(boolean enabled) {
         unitTestModeEnabled = enabled;

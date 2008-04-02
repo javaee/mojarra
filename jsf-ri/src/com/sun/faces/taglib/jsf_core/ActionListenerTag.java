@@ -1,5 +1,5 @@
 /*
- * $Id: ActionListenerTag.java,v 1.33 2006/12/14 23:18:47 rlubke Exp $
+ * $Id: ActionListenerTag.java,v 1.34 2006/12/17 07:44:04 rlubke Exp $
  */
 
 /*
@@ -37,7 +37,6 @@ import javax.faces.event.ActionListener;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.webapp.UIComponentClassicTagBase;
-import javax.faces.webapp.UIComponentELTag;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.TagSupport;
 
@@ -47,7 +46,6 @@ import java.io.Serializable;
 
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
-import com.sun.faces.util.ReflectionUtils;
 
 
 /**
@@ -132,7 +130,7 @@ public class ActionListenerTag extends TagSupport {
 
         // Locate our parent UIComponentTag
         UIComponentClassicTagBase tag =
-             UIComponentELTag.getParentUIComponentClassicTagBase(pageContext);
+             UIComponentClassicTagBase.getParentUIComponentClassicTagBase(pageContext);
         if (tag == null) {
             Object params[] = {this.getClass().getName()};
             throw new JspException(
@@ -212,25 +210,8 @@ public class ActionListenerTag extends TagSupport {
         public void processAction(ActionEvent event) throws AbortProcessingException {           
 
             if (instance == null) {
-                FacesContext faces = FacesContext.getCurrentInstance();
-                if (faces == null)
-                    return;
-                if (binding != null) {
-                    instance = (ActionListener) binding
-                         .getValue(faces.getELContext());
-                }
-                if (instance == null && type != null) {
-                    try {
-                        instance = (ActionListener)
-                             ReflectionUtils.newInstance(((String)type.getValue(faces.getELContext())));
-                    } catch (Exception e) {
-                        throw new AbortProcessingException(e.getMessage(), e);
-                    }
-
-                    if (binding != null) {
-                        binding.setValue(faces.getELContext(), this.instance);
-                    }
-                }
+                instance = (ActionListener)
+                     Util.createListenerInstance(type, binding);
             }
             if (instance != null) {
                 instance.processAction(event);

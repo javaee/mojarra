@@ -1,5 +1,5 @@
 /*
- * $Id: PhaseListenerTag.java,v 1.11 2006/12/14 23:18:47 rlubke Exp $
+ * $Id: PhaseListenerTag.java,v 1.12 2006/12/17 07:44:04 rlubke Exp $
  */
 
 /*
@@ -29,23 +29,23 @@
 
 package com.sun.faces.taglib.jsf_core;
 
+import com.sun.faces.util.MessageUtils;
+import com.sun.faces.util.Util;
+
 import javax.el.ValueExpression;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
-import javax.faces.context.FacesContext;
-import javax.faces.event.*;
+import javax.faces.event.AbortProcessingException;
+import javax.faces.event.PhaseEvent;
+import javax.faces.event.PhaseId;
+import javax.faces.event.PhaseListener;
 import javax.faces.webapp.UIComponentELTag;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.Tag;
 import javax.servlet.jsp.tagext.TagSupport;
-
-import com.sun.faces.util.MessageUtils;
-import com.sun.faces.util.Util;
-import com.sun.faces.util.ReflectionUtils;
-
+import java.io.Serializable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.io.Serializable;
 
 /**
  * <p>Tag implementation that creates a {@link PhaseListener} instance
@@ -241,25 +241,8 @@ public class PhaseListenerTag extends TagSupport {
          */
         public PhaseListener getPhaseListener() throws AbortProcessingException {
             if (instance == null) {
-                FacesContext faces = FacesContext.getCurrentInstance();
-                if (faces == null)
-                    return null;
-                if (binding != null) {
-                    instance = (PhaseListener) binding
-                         .getValue(faces.getELContext());
-                }
-                if (instance == null && type != null) {
-                    try {
-                        instance = (PhaseListener)
-                             ReflectionUtils.newInstance(((String) type.getValue(faces.getELContext())));
-                    } catch (Exception e) {
-                        throw new AbortProcessingException(e.getMessage(), e);
-                    }
-
-                    if (binding != null) {
-                        binding.setValue(faces.getELContext(), this.instance);
-                    }
-                }
+                instance = (PhaseListener)
+                     Util.createListenerInstance(type, binding);
             }
             if (instance != null) {
                 return instance;
