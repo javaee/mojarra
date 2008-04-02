@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTag.java,v 1.28 2003/11/07 01:23:53 craigmcc Exp $
+ * $Id: UIComponentTag.java,v 1.29 2003/11/11 05:33:04 craigmcc Exp $
  */
 
 /*
@@ -857,15 +857,8 @@ public abstract class UIComponentTag implements Tag {
 	if (componentRef != null) {
 	    component.setComponentRef(componentRef);
 	}
-	if (id != null) {
-	    if (isValueReference(id)) {
-		ValueBinding vb =
-		    context.getApplication().getValueBinding(id);
-		component.setValueBinding("id", vb);
-	    } else {
-		component.setId(id);
-	    }
-	}
+        // The "id" property is explicitly set when components are created
+        // so it does not need to be set here
         if (rendered != null) {
 	    if (isValueReference(rendered)) {
 		ValueBinding vb =
