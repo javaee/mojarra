@@ -1,7 +1,7 @@
 <input type="checkbox"  name="my_checkbox" checked >
 <input type="checkbox"  name="my_checkbox">
 <input type="checkbox"  name="my_checkbox">
-<a href="#" onclick="document.forms[0].my_command.value='HyperlinkRenderer'; document.forms[0].submit()"></a><input type="hidden" name="my_command"/>
+<a href="#" onmousedown="document.forms[0].my_command.value='HyperlinkRenderer'; document.forms[0].submit()"></a><input type="hidden" name="my_command"/>
 <select name="my_listbox" size="4" >	<option value="Red">Red</option>
 	<option value="Blue" selected>Blue</option>
 	<option value="Green">Green</option>
@@ -13,5 +13,5 @@
 <input type="text" name="my_number" id="my_number" value="47%"><input type="text" name="my_number2" id="my_number2" value="1999.877">
 99%
 999.000
-<img id="my_graphic_image" src="/test/nonModelReferenceImage.gif;jsessionid=5F5887873AE76FDF5F7FCAA50AF369B1"><img id="id0" src="/test/foo/modelReferenceImage.gif;jsessionid=5F5887873AE76FDF5F7FCAA50AF369B1">
+<img id="my_graphic_image" src="/test/nonModelReferenceImage.gif;jsessionid=C7B98583D7A6D06766B59B75F512C6C4"><img id="id0" src="/test/foo/modelReferenceImage.gif;jsessionid=C7B98583D7A6D06766B59B75F512C6C4">
 <font color="RED">	component message summary<BR>	Severity: 1<BR>	component message detail	global message summary<BR>	Severity: 1<BR>	global message detail</font>My name is Bobby Orr

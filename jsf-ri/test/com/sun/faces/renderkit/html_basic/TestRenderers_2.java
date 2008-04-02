@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_2.java,v 1.37 2003/02/07 00:18:11 eburns Exp $
+ * $Id: TestRenderers_2.java,v 1.38 2003/02/11 00:25:49 eburns Exp $
  */
 
 /*
@@ -53,7 +53,7 @@ import com.sun.faces.TestBean;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_2.java,v 1.37 2003/02/07 00:18:11 eburns Exp $
+ * @version $Id: TestRenderers_2.java,v 1.38 2003/02/11 00:25:49 eburns Exp $
  * 
  *
  */
@@ -81,7 +81,7 @@ public class TestRenderers_2 extends JspFacesTestCase
 
     public String [] getLinesToIgnore() {
         String[] lines =  {
-	    "<img id=\"my_graphic_image\" src=\"/test/nonModelReferenceImage.gif;jsessionid=5F5887873AE76FDF5F7FCAA50AF369B1\"><img id=\"id0\" src=\"/test/foo/modelReferenceImage.gif;jsessionid=5F5887873AE76FDF5F7FCAA50AF369B1\">"
+	    "<img id=\"my_graphic_image\" src=\"/test/nonModelReferenceImage.gif;jsessionid=C7B98583D7A6D06766B59B75F512C6C4\"><img id=\"id0\" src=\"/test/foo/modelReferenceImage.gif;jsessionid=C7B98583D7A6D06766B59B75F512C6C4\">"
 };
         return lines;
     }   
