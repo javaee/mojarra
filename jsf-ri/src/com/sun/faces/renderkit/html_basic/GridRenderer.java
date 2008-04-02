@@ -1,5 +1,5 @@
 /*
- * $Id: GridRenderer.java,v 1.19 2003/09/26 20:00:38 horwat Exp $
+ * $Id: GridRenderer.java,v 1.20 2003/10/19 05:26:34 craigmcc Exp $
  */
 
 /*
@@ -28,7 +28,7 @@ import org.mozilla.util.Assert;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: GridRenderer.java,v 1.19 2003/09/26 20:00:38 horwat Exp $
+ * @version $Id: GridRenderer.java,v 1.20 2003/10/19 05:26:34 craigmcc Exp $
  *  
  */
 
@@ -131,6 +131,7 @@ public class GridRenderer extends HtmlBasicRenderer {
 
 	if (null != (facet = (UIComponent) component.getFacet("header"))) {
 	    
+	    writer.startElement("thead", facet);
 	    if (headerClass != null) {
 		writer.startElement("tr", facet);
 		writer.startElement("th", facet);
@@ -140,12 +141,12 @@ public class GridRenderer extends HtmlBasicRenderer {
                 writer.startElement("th", facet);
 	    }
 	    writer.writeAttribute("colspan", new Integer(columns), "columns");
-	    writer.startElement("thead", facet);
 
 	    encodeRecursive(context, facet);
-	    writer.endElement("thead");
+
             writer.endElement("th");
             writer.endElement("tr");
+	    writer.endElement("thead");
 	    writer.writeText("\n", null);
 	}
 
@@ -192,6 +193,7 @@ public class GridRenderer extends HtmlBasicRenderer {
 
 	if (null != (facet = (UIComponent) component.getFacet("footer"))) {
 
+	    writer.startElement("tfoot", facet);
 	    if (footerClass != null) {
 		writer.startElement("tr", facet);
 		writer.startElement("th", facet);
@@ -202,12 +204,12 @@ public class GridRenderer extends HtmlBasicRenderer {
 	    }
 	    
 	    writer.writeAttribute("colspan", new Integer(columns), "columns");
-	    writer.startElement("tfoot", facet);
 
             encodeRecursive(context, facet);
-	    writer.endElement("tfoot");
+
 	    writer.endElement("th");
 	    writer.endElement("tr");
+	    writer.endElement("tfoot");
 	    writer.writeText("\n", null);
         }
     }
