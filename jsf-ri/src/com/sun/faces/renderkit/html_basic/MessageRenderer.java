@@ -1,5 +1,5 @@
 /*
- * $Id: MessageRenderer.java,v 1.35 2003/11/11 05:29:07 eburns Exp $
+ * $Id: MessageRenderer.java,v 1.36 2003/11/11 06:13:31 horwat Exp $
  */
 
 /*
@@ -225,15 +225,16 @@ public class MessageRenderer extends HtmlBasicRenderer {
             writer.closeStartTag(component);
 
 	    writer.writeText("\t", null);
-	    writer.writeText(detail, null);
         } else if (wroteSpan) {
             writer.closeStartTag(component);
-
-	    writer.writeText("\t", null);
-	    writer.writeText(summary, null);
-	    writer.writeText(" ", null);
-	    writer.writeText(detail, null);
         }
+
+        if (!wroteTooltip) {
+            writer.writeText("\t", null);
+            writer.writeText(summary, null);
+            writer.writeText(" ", null);
+        }
+	writer.writeText(detail, null);
 
 	if (wroteSpan || wroteTooltip) {
             writer.endElement("span");
