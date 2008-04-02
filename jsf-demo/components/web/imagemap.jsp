@@ -70,31 +70,31 @@
                      type="demo.model.AreaSelectedHandler"/>
 
         <d:area        id="NAmericas"
-                 valueRef="NA"
+                 valueRef="#{NA}"
               onmouseover="/images/world_namer.gif"
                onmouseout="/images/world.gif"
                targetImage="mapImage"/>
 
         <d:area        id="SAmericas"
-                 valueRef="SA"
+                 valueRef="#{SA}"
               onmouseover="/images/world_samer.gif"
                onmouseout="/images/world.gif"
                targetImage="mapImage"/>
 
         <d:area        id="Finland"
-                 valueRef="finA"
+                 valueRef="#{finA}"
               onmouseover="/images/world_finland.gif"
                onmouseout="/images/world.gif"
                targetImage="mapImage"/>
 
         <d:area        id="Germany"
-                 valueRef="gerA"
+                 valueRef="#{gerA}"
               onmouseover="/images/world_germany.gif"
                onmouseout="/images/world.gif"
                targetImage="mapImage"/>
 
         <d:area        id="France"
-                 valueRef="fraA"
+                 valueRef="#{fraA}"
               onmouseover="/images/world_france.gif"
                onmouseout="/images/world.gif"
                targetImage="mapImage"/>
