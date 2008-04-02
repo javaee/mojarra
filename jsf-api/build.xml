@@ -19,7 +19,7 @@
 
   <property name="Name"             value="JavaServer Faces API"/>
   <property name="name"             value="jsf-api"/>
-  <property name="version"          value="1_0"/>
+  <property name="version"          value="1_1"/>
 
   <property name="debug"            value="true" />
   <property name="deprecation"      value="false" />
@@ -678,8 +678,8 @@ jsf-api.jar.
          basedir="${build.classes}" >
 	 <manifest>
 	  <attribute name="Specification-Title" value="JavaServer Faces"/>
-	  <attribute name="Specification-Version" value="1.0"/>
-	  <attribute name="Implementation-Title" value="'${name}': ${Name} Reference Implementation"/>
+	  <attribute name="Specification-Version" value="1.1"/>
+	  <attribute name="Implementation-Title" value="'${name}': ${Name} Reference Impl."/>
 	  <attribute name="Implementation-Version" value="${version}"/>
 	  <attribute name="Implementation-Vendor" value="Sun Microsystems, Inc."/>
   	  <attribute name="Implementation-Vendor-Id" value="com.sun"/>
