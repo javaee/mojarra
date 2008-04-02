@@ -1,5 +1,5 @@
 /*
- * $Id: FacesMessage.java,v 1.16 2007/01/26 20:33:43 rlubke Exp $
+ * $Id: FacesMessage.java,v 1.17 2007/01/27 18:15:43 rogerk Exp $
  */
 
 /*
@@ -30,6 +30,9 @@
 package javax.faces.application;
 
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
 import java.util.Arrays;
@@ -327,6 +330,35 @@ public class FacesMessage implements Serializable {
 
     }
 
+    /**
+     * <p>Persist {@link javax.faces.application.FacesMessage} artifacts,
+     * including the non serializable <code>Severity</code>.</p>
+     */
+    private void writeObject(ObjectOutputStream out) throws IOException {
+        out.writeInt(getSeverity().getOrdinal());
+        out.writeObject(getSummary());
+        out.writeObject(getDetail());
+    }
+
+    /**
+     * <p>Reconstruct {@link javax.faces.application.FacesMessage} from
+     * serialized artifacts.</p>
+     */
+    private void readObject(ObjectInputStream in)
+        throws IOException, ClassNotFoundException {
+        int ordinal = in.readInt();
+        if (ordinal == SEVERITY_INFO.getOrdinal()) {
+            setSeverity(FacesMessage.SEVERITY_INFO);
+        } else if (ordinal == SEVERITY_WARN.getOrdinal()) {
+            setSeverity(FacesMessage.SEVERITY_WARN);
+        } else if (ordinal == SEVERITY_ERROR.getOrdinal()) {
+            setSeverity(FacesMessage.SEVERITY_ERROR);
+        } else if (ordinal == SEVERITY_FATAL.getOrdinal()) {
+            setSeverity(FacesMessage.SEVERITY_FATAL);
+        }
+        setSummary((String)in.readObject());
+        setDetail((String)in.readObject());
+    }
 
     /**
      * <p>Class used to represent message severity levels in a typesafe
