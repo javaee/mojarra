@@ -245,7 +245,11 @@
     <antcall target="safe.remove.one">
       <param name="context.path" value="/jsf-core-tags"/>
     </antcall>
-    
+
+    <antcall target="safe.remove.one">
+      <param name="context.path" value="/jsf-replace-lifecycle"/>
+    </antcall>
+
     <antcall target="install.one">
       <param name="webapp.build.home" 
              value="${basedir}/replace-application/build" />
@@ -320,6 +324,17 @@
       <param name="source.home" 
              value="${basedir}/core-tags/src/java" />
       <param name="context.path" value="/jsf-core-tags"/>
+
+    </antcall>
+
+    <antcall target="install.one">
+      <param name="webapp.build.home" 
+             value="${basedir}/replace-lifecycle/build" />
+      <param name="webapp.web.home" 
+             value="${basedir}/replace-lifecycle/web" />
+      <param name="source.home" 
+             value="${basedir}/replace-lifecycle/src/java" />
+      <param name="context.path" value="/jsf-replace-lifecycle"/>
 
     </antcall>
 
@@ -403,6 +418,17 @@
       <param name="context.path" value="/jsf-core-tags"/>
 
     </antcall>
+
+    <antcall target="reload.one">
+      <param name="webapp.build.home" 
+             value="${basedir}/replace-lifecycle/build" />
+      <param name="webapp.web.home" 
+             value="${basedir}/replace-lifecycle/web" />
+      <param name="source.home" 
+             value="${basedir}/replace-lifecycle/src/java" />
+      <param name="context.path" value="/jsf-replace-lifecycle"/>
+
+    </antcall>
   </target>
 
   <target name="remove">
@@ -426,6 +452,9 @@
     </antcall>
     <antcall target="safe.remove.one">
       <param name="context.path" value="/jsf-core-tags"/>
+    </antcall>
+    <antcall target="safe.remove.one">
+      <param name="context.path" value="/jsf-replace-lifecycle"/>
     </antcall>
   </target>
 
@@ -461,6 +490,7 @@
     <delete    dir="${basedir}/unique-view-id/build"/>
     <delete    dir="${basedir}/nested-datatables/build"/>
     <delete    dir="${basedir}/core-tags/build"/>
+    <delete    dir="${basedir}/replace-lifecycle/build"/>
   </target>
    
 

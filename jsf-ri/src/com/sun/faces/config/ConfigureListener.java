@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListener.java,v 1.27 2004/11/02 19:38:09 rlubke Exp $
+ * $Id: ConfigureListener.java,v 1.28 2005/01/13 19:57:49 edburns Exp $
  */
 /*
  * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
@@ -385,7 +385,7 @@ public class ConfigureListener implements ServletContextListener {
     protected void configure(ServletContext context, FacesConfigBean config)
     throws Exception {
         configure(config.getFactory());
-        configure(config.getLifecycle());
+        configure(context, config.getLifecycle());
 
         configure(config.getApplication());
         configure(config.getComponents());
@@ -683,7 +683,8 @@ public class ConfigureListener implements ServletContextListener {
      * @param config <code>LifecycleBean</code> that contains our
      *               configuration information
      */
-    private void configure(LifecycleBean config) throws Exception {
+    private void configure(ServletContext context, 
+			   LifecycleBean config) throws Exception {
 
         if (config == null) {
             return;
@@ -691,8 +692,13 @@ public class ConfigureListener implements ServletContextListener {
         String listeners[] = config.getPhaseListeners();
         LifecycleFactory factory = (LifecycleFactory)
             FactoryFinder.getFactory(FactoryFinder.LIFECYCLE_FACTORY);
+	String lifecycleId = 
+	    context.getInitParameter(FacesServlet.LIFECYCLE_ID_ATTR);
+        if (lifecycleId == null) {
+            lifecycleId = LifecycleFactory.DEFAULT_LIFECYCLE;
+        }
         Lifecycle lifecycle =
-            factory.getLifecycle(LifecycleFactory.DEFAULT_LIFECYCLE);
+            factory.getLifecycle(lifecycleId);
         for (int i = 0; i < listeners.length; i++) {
             if (log.isTraceEnabled()) {
                 log.trace("addPhaseListener(" + listeners[i] + ')');

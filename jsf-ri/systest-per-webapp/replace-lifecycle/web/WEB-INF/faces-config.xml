@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<!--
+ Copyright 2004 Sun Microsystems, Inc. All rights reserved.
+ SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+-->
+
+
+<faces-config xmlns="http://java.sun.com/xml/ns/j2ee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-facesconfig_1_2.xsd"
+    version="1.2">
+
+   <factory>
+      <lifecycle-factory>com.sun.faces.systest.LifecycleFactoryImpl</lifecycle-factory>
+   </factory>
+
+   <lifecycle>
+     <phase-listener>com.sun.faces.systest.SimplePhaseListener</phase-listener>
+   </lifecycle>
+
+
+
+</faces-config>
