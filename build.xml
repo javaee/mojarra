@@ -138,4 +138,21 @@
     </zip>
       
   </target>
+  
+  <target name="nightly" description="update nightly build" >
+  <taskdef resource="org/kohsuke/javanettasks.properties">
+    <classpath>
+      <fileset dir="${installer.home}/javanettasks-1.0.2-SNAPSHOT/lib" includes="*.jar"/>
+    </classpath>
+  </taskdef>
+  
+  <javaNetUpload projectName="javaserverfaces" 
+      toFile="/nightly/javaserverfaces_binary.zip" fromFile="${basedir}/javaserverfaces_binary.zip" 
+      fileDescription="Use at own risk" overwrite="yes" />
+  
+     
+  <javaNetUpload projectName="javaserverfaces" 
+      toFile="/nightly/javaserverfaces_source.class" fromFile="${basedir}/javaserverfaces_source.class" 
+      fileDescription="Use at own risk" overwrite="yes" /> 
+  </target>
 </project>
