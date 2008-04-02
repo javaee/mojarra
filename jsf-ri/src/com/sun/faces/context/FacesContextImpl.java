@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContextImpl.java,v 1.69 2005/06/23 20:29:33 jayashri Exp $
+ * $Id: FacesContextImpl.java,v 1.70 2005/07/18 19:28:53 rlubke Exp $
  */
 
 /*
@@ -36,6 +36,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.LinkedHashMap;
 
 import javax.el.ELContext;
 import com.sun.faces.el.ELContextImpl;
@@ -326,7 +327,7 @@ public class FacesContextImpl extends FacesContext {
         }
 
         if (componentMessageLists == null) {
-            componentMessageLists = new HashMap();
+            componentMessageLists = new LinkedHashMap();
         }
 
         // Add this message to our internal queue

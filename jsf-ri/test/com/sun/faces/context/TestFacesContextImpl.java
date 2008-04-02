@@ -1,5 +1,5 @@
 /*
- * $Id: TestFacesContextImpl.java,v 1.47 2004/04/07 17:52:48 rkitain Exp $
+ * $Id: TestFacesContextImpl.java,v 1.48 2005/07/18 19:28:53 rlubke Exp $
  */
 
 /*
@@ -29,13 +29,15 @@ import javax.servlet.ServletResponse;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.Iterator;
+import java.util.List;
+import java.util.ArrayList;
 
 /**
  * <B>TestFacesContextImpl</B> is a class ...
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestFacesContextImpl.java,v 1.47 2004/04/07 17:52:48 rkitain Exp $
+ * @version $Id: TestFacesContextImpl.java,v 1.48 2005/07/18 19:28:53 rlubke Exp $
  */
 
 public class TestFacesContextImpl extends ServletFacesTestCase {
@@ -328,27 +330,32 @@ public class TestFacesContextImpl extends ServletFacesTestCase {
         System.out.println("Testing get methods");
         assertTrue(fc.getMaximumSeverity() == FacesMessage.SEVERITY_FATAL);
 
+        List controlList = new ArrayList();
+        controlList.add(msg1);
+        controlList.add(msg2);
+        controlList.add(msg3);
+        controlList.add(msg4);
         Iterator it = fc.getMessages();
-        while (it.hasNext()) {
-            FacesMessage result = (FacesMessage) it.next();
-            assertTrue(result.equals(msg1) || result.equals(msg2) ||
-                       result.equals(msg3) || result.equals(msg4));
+        for (int i = 0, size = controlList.size(); i < size; i++) {
+            assertTrue(controlList.get(i).equals(it.next()));
         }
 
-        it = null;
+        controlList.clear();
+        controlList.add(msg3);
+        controlList.add(msg4);
         it = fc.getMessages(command.getClientId(fc));
-        while (it.hasNext()) {
-            FacesMessage result = (FacesMessage) it.next();
-            assertTrue(result.equals(msg3) || result.equals(msg4));
+        for (int i = 0, size = controlList.size(); i < size; i++) {
+            assertTrue(controlList.get(i).equals(it.next()));
         }
 
-        it = null;
+        controlList.clear();
+        controlList.add(msg1);
+        controlList.add(msg2);
         it = fc.getMessages(null);
-        while (it.hasNext()) {
-            FacesMessage result = (FacesMessage) it.next();
-            //System.out.println("summary " + result.getSummary());
-            assertTrue(result.equals(msg1) || result.equals(msg2));
+        for (int i = 0, size = controlList.size(); i < size; i++) {
+            assertTrue(controlList.get(i).equals(it.next()));
         }
+        
     }
 
 
