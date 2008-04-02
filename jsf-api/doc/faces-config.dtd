@@ -1,0 +1,431 @@
+<!--
+    DTD for the JavaServer Faces Application Configuration File (Version 1.0)
+
+    To support validation of your configuration file(s), include the following
+    DOCTYPE element at the beginning (after the "xml" declaration):
+
+    <!DOCTYPE faces-config PUBLIC
+     "-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.0//EN"
+     "http://java.sun.com/dtd/web-facesconfig_1_0.dtd">
+
+-->
+
+
+<!-- ==================== Defined Types =================================== -->
+
+
+<!--
+    A "ClassName" is the fully qualified name of a Java class that is
+    instantiated to provide the functionality of the enclosing element.
+-->
+<!ENTITY % ClassName "CDATA">
+
+
+<!--
+    A "JavaType" is either the fully qualified name of a Java class that is
+    instantiated to provide the functionality of the enclosing element, or
+    the name of a Java primitive type (such as int or char).  The class name
+    or primitive type may optionally be followed by "[]" to indicate that
+    the underlying data must be an array, rather than a scalar variable.
+-->
+<!ENTITY % JavaType "CDATA">
+
+
+<!--
+    A "Language" is a lower case two-letter code for a language as defined
+    by ISL-639.
+-->
+<!ENTITY % Language "CDATA">
+
+
+<!--
+    A "ResourcePath" is the relative or absolute path to a resource file
+    (such as a logo image).
+-->
+<!ENTITY % ResourcePath "CDATA">
+
+
+<!--
+    A "Severity" is the message severity level associated with a parent
+    "message" element.
+-->
+<!ENTITY % SEVERITY "(FATAL|ERROR|WARN|INFO)">
+
+
+<!-- ==================== Top Level Elements ============================== -->
+
+
+<!--
+    The "faces-config" element is the root of the configuration information
+    hierarchy, and contains nested elements for all of the other configuration
+    settings.
+-->
+<!ELEMENT faces-config    ((application|component|converter|message-resources|render-kit|validator)*)>
+
+
+<!-- ==================== Definition Elements ============================= -->
+
+
+<!--
+    The "application" element provides a mechanism to define the various
+    per-application-singleton implementation classes for a particular web
+    application that is utilizing JavaServer Faces.  For nested elements
+    that are not specified, the JSF implementation must provide a suitable
+    default.
+-->
+<!ELEMENT application     ((action-listener|navigation-handler|property-resolver|variable-resolver)*>
+
+
+<!--
+    The "attribute" element represents a named, typed, value associated with
+    the parent UIComponent via the generic attributes mechanism.
+
+    Attribute names must be unique within the scope of the parent (or related)
+    component.
+-->
+<!ELEMENT attribute       (description*, display-name*, icon*, attribute-name, attribute-class, icon?)>
+
+
+<!--
+    The "component" element represents a concrete UIComponent implementation
+    class that should be registered under the specified type identifier,
+    along with its associated properties and attributes.  Component types must
+    be unique within the entire web application.
+
+    Nested "attribute" elements identify generic attributes that are recognized
+    by the implementation logic of this component.  Nested "property" elements
+    identify JavaBeans properties of the component class that may be exposed
+    for manipulation via tools.
+-->
+<!ELEMENT component       (description*, display-name*, icon*, component-type, component-class, attribute*, property*)>
+
+
+<!--
+    The "converter" element represents a concrete Converter implementation
+    class that should be registered under the specified converter identifier.
+    Converter identifiers must be unique within the entire web application.
+
+    Nested "attribute" elements identify generic attributes that may be
+    configured on the corresponding UIComponent in order to affect the
+    operation of the Converter.  Nested "property" elements identify JavaBeans
+    properties of the Converter implementation class that may be configured
+    to affect the operation of the Converter.
+-->
+<!ELEMENT converter       (description*, display-name*, icon*, converter-id, converter-class, attribute*, property*)>
+
+
+<!--
+    The "message" element represents an individual localizable message,
+    identified by a message identifier.  Message identifiers must be unique
+    within the scope of the parent message resources instance.
+
+    If no nested "message-class" element is specified, the JSF implementation
+    must provide a suitable default.
+-->
+<!ELEMENT message         (message-id, message-class?, summary*, detail*, severity?)>
+
+
+<!--
+    The "message-resources" element represents a set of "messages" elements
+    for localizable messages related to a particular message resources id.
+    Message resources identifiers must be unique within the entire web
+    application.
+
+    If no nested "message-resources-class" element is specified, the
+    JSF implementation must provide a suitable default.
+-->
+<!ELEMENT message-resources (description*, display-name*, icon*, message-resources-id, message-resources-class?)>
+
+
+<!--
+    The "property" element represents a JavaBean property of the Java class
+    represented by our parent element.
+
+    Property names must be unique within the scope of the Java class
+    that is represented by the parent element, and must correspond to
+    property names that will be recognized when performing introspection
+    against that class via java.beans.Introspector.
+-->
+<!ELEMENT property        (description*, display-name*, icon*, property-name, property-type)>
+
+
+<!--
+    The "render-kit" element represents a concrete RenderKit implementation
+    that should be registered under the specified render-kit-id.  If no
+    render-kit-id is specified, the identifier of the default RenderKit
+    (RenderKitFactory.DEFAULT_RENDER_KIT) is assumed.
+-->
+<!ELEMENT render-kit      (description*, display-name*, icon*, render-kit-id?, render-kit-class?, renderer*)>
+
+
+<!--
+    The "renderer" element represents a concrete Renderer implementation
+    class that should be registered under the specified type identifier,
+    in the RenderKit associated with the parent render-kit element.  Renderer
+    types must be unique within the RenderKit associated with the parent
+    "render-kit" element.
+
+    Nested "attribute" elements identify generic component attributes that
+    are recognized by this renderer.  Nested "component-type" and
+    "component-class" elements identify supported component classes, by
+    their type identifiers or the implementation class name, respectively,
+    that are supported by this Renderer.
+-->
+<!ELEMENT renderer        (description*, display-name*, icon*, renderer-type, renderer-class, attribute*, component-type*, component-class*)>
+
+
+<!--
+    The "validator" element represents a concrete Validator implementation
+    class that should be registered under the specified validator identifier.
+    Validator identifiers must be unique within the entire web application.
+
+    Nested "attribute" elements identify generic attributes that may be
+    configured on the corresponding UIComponent in order to affect the
+    operation of the Validator.  Nested "property" elements identify JavaBeans
+    properties of the Validator implementation class that may be configured
+    to affect the operation of the Validator.
+-->
+<!ELEMENT validator       (description*, display-name*, icon*, validator-id, validator-class, attribute*, property*)>
+
+
+<!-- ==================== Subordinate Elements ============================ -->
+
+
+<!--
+    The "action-listener" element contains the fully qualified class name
+    of the concrete ActionListener implementation class that will be called
+    during the Invoke Application phase of the request processing lifecycle.
+    It must be of type "ClassName".
+-->
+<!ELEMENT action-listener EMPTY>
+
+
+<!--
+    The "attribute-class" element represents the Java type of the value
+    associated with this attribute name.  It must be of type "ClassName".
+-->
+<!ELEMENT attribute-class EMPTY>
+
+
+<!--
+    The "attribute-name" element represents the name under which the
+    corresponding value will be stored, in the generic attributes of the
+    UIComponent we are related to.
+-->
+<!ELEMENT attribute-name  EMPTY>
+
+
+<!--
+    The "component-class" element represents the fully qualified class name
+    of a concrete UIComponent implementation class.  It must be of
+    type "ClassName".
+-->
+<!ELEMENT component-class EMPTY>
+
+
+<!--
+    The "component-type" element represents the name under which the
+    corresponding UIComponent class should be registered.
+-->
+<!ELEMENT component-type  EMPTY>
+
+
+<!--
+    The "converter-class" element represents the fully qualified class name
+    of a concrete Converter implementation class.  It must be of
+    type "ClassName".
+-->
+<!ELEMENT converter-class EMPTY>
+
+
+<!--
+    The "converter-id" element represents the identifier under which the
+    corresponding Converter class should be registered.
+-->
+<!ELEMENT converter-id    EMPTY>
+
+
+<!--
+    The "description" element contains a textual description of the element
+    it is nested in, optionally flagged with a language code using the
+    "xml:lang" attribute.
+-->
+<!ELEMENT description     EMPTY>
+<!ATTLIST description     xml:lang        %Language;      #IMPLIED>
+
+
+<!--
+    The "detail" element contains the detail error message text
+    for the parent "message" element, optionally flagged with a language
+    code using the "xml:lang" attribute.
+-->
+<!ELEMENT detail          EMPTY>
+<!ATTLIST detail          xml:lang        %Language;      #IMPLIED>
+
+
+<!--
+    The "display-name" element is a short descriptive name describing the
+    entity associated with the element it is nested in, intended to be
+    displayed by tools, and optionally flagged with a language code using
+    the "xml:lang" attribute.
+-->
+<!ELEMENT display-name    EMPTY>
+<!ATTLIST display-name    xml:lang        %Language;      #IMPLIED>
+
+
+<!--
+    The "icon" element contains "small-icon" and "large-icon" elements that
+    specify the resoruce paths for small and large GIF or JPG icon images
+    used to represent the parent element in a GUI tool.
+-->
+<!ELEMENT icon            (small-icon?, large-icon?)>
+<!ATTLIST icon            xml:lang        %Language;      #IMPLIED>
+
+
+<!--
+    The "large-icon" element contains the resource path to a large (32x32)
+    icon image.  The image may be in either GIF or JPG format.
+-->
+<!ELEMENT large-icon      EMPTY>
+
+
+<!--
+    The "message-class" element represents the fully qualified class name
+    of a concrete Message implementation class.  It must be of
+    type "ClassName".
+-->
+<!ELEMENT message-class   EMPTY>
+
+
+<!--
+    The "message-id" element represents the identifier under which the
+    corresponding "message" should be registered.
+-->
+<!ELEMENT message-id      EMPTY>
+
+
+<!--
+    The "message-resources-class" element represents the fully qualified class
+    name of a concrete MessageResources implementation class.  It must be of
+    type "ClassName".
+-->
+<!ELEMENT message-resources-class EMPTY>
+
+
+<!--
+    The "message-resources-id" element represents the identifier under which
+    the corresponding MessageResources class should be registered.
+-->
+<!ELEMENT message-resources-id    EMPTY>
+
+
+<!--
+    The "navigation-handler" element contains the fully qualified class name
+    of the concrete NavigationHandler implementation class that will be called
+    during the Invoke Application phase of the request processing lifecycle,
+    if the default ActionListener (provided by the JSF implementation) is used.
+    It must be of type "ClassName".
+-->
+<!ELEMENT navigation-handler EMPTY>
+
+
+<!--
+    The "property-name" element represents the JavaBeans property name
+    under which the corresponding value may be stored.
+-->
+<!ELEMENT property-name   EMPTY>
+
+
+<!--
+    The "property-resolver" element contains the fully qualified class name
+    of the concrete PropertyResolver implementation class that will be used
+    during the processing of value reference expressions.
+    It must be of type "ClassName".
+-->
+<!ELEMENT property-resolver EMPTY>
+
+
+<!--
+    The "property-type" element represents the Java type of the value
+    associated with this property name.  It must be of type "JavaType".
+-->
+<!ELEMENT property-type   EMPTY>
+
+
+<!--
+    The "render-kit-id" element represents an identifier for the
+    RenderKit represented by the parent "render-kit" element.
+-->
+<!ELEMENT render-kit-id   EMPTY>
+
+
+<!--
+    The "render-kit-class" element represents the fully qualified class name
+    of a concrete RenderKit implementation class.  It must be of
+    type "ClassName".
+-->
+<!ELEMENT render-kit-class EMPTY>
+
+
+<!--
+    The "renderer-class" element represents the fully qualified class name
+    of a concrete Renderer implementation class.  It must be of
+    type "ClassName".
+-->
+<!ELEMENT renderer-class  EMPTY>
+
+
+<!--
+    The "renderer-type" element represents an identifier for the
+    Renderer represented by the parent "renderer" element.
+-->
+<!ELEMENT renderer-type   EMPTY>
+
+
+<!--
+    The "severity" element contains the severity level of the parent
+    "message" element.  It must be of type "Severity".
+-->
+<!ELEMENT severity        EMPTY>
+
+
+<!--
+    The "small-icon" element contains the resource path to a large (16x16)
+    icon image.  The image may be in either GIF or JPG format.
+-->
+<!ELEMENT small-icon      EMPTY>
+
+
+<!--
+    The "summary" element contains the summary error message text
+    for the parent "message" element, optionally flagged with a language
+    code using the "xml:lang" attribute.
+-->
+<!ELEMENT summary         EMPTY>
+<!ATTLIST summary         xml:lang        %Language;      #IMPLIED>
+
+
+<!--
+    The "validator-class" element represents the fully qualified class name
+    of a concrete Validator implementation class.  It must be of
+    type "ClassName".
+-->
+<!ELEMENT validator-class EMPTY>
+
+
+<!--
+    The "validator-id" element represents the identifier under which the
+    corresponding Validator class should be registered.
+-->
+<!ELEMENT validator-id    EMPTY>
+
+
+<!--
+    The "variable-resolver" element contains the fully qualified class name
+    of the concrete VariableResolver implementation class that will be used
+    during the processing of value reference expressions.
+    It must be of type "ClassName".
+-->
+<!ELEMENT variable-resolver EMPTY>
+
+
