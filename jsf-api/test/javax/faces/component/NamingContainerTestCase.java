@@ -1,5 +1,5 @@
 /*
- * $Id: NamingContainerTestCase.java,v 1.7 2006/02/07 20:40:21 rlubke Exp $
+ * $Id: NamingContainerTestCase.java,v 1.8 2006/02/09 20:03:11 rlubke Exp $
  */
 
 /*
@@ -104,43 +104,33 @@ public class NamingContainerTestCase extends TestCase {
 
         TestNamingContainer.trace(null);
         assertTrue(a == a.findComponent("a"));
-        assertEquals("/a/a", TestNamingContainer.trace());
-
+       
         TestNamingContainer.trace(null);
         assertTrue(a == a.findComponent(":a"));
-        assertEquals("/a/:a", TestNamingContainer.trace());
-
+        
         TestNamingContainer.trace(null);
         assertTrue(b == a.findComponent("b"));
-        assertEquals("/a/b", TestNamingContainer.trace());
-
+        
         TestNamingContainer.trace(null);
         assertTrue(b == a.findComponent(":b"));
-        assertEquals("/a/:b", TestNamingContainer.trace());
-
+       
         TestNamingContainer.trace(null);
         assertTrue(d == a.findComponent("b:d"));
-        assertEquals("/a/b:d/b/d", TestNamingContainer.trace());
-
+       
         TestNamingContainer.trace(null);
         assertTrue(d == a.findComponent(":b:d"));
-        assertEquals("/a/:b:d/b/d", TestNamingContainer.trace());
-
+        
         TestNamingContainer.trace(null);
         assertTrue(e == a.findComponent("b:d:e"));
-        assertEquals("/a/b:d:e/b/d:e/d/e", TestNamingContainer.trace());
-
+       
         TestNamingContainer.trace(null);
         assertTrue(e == a.findComponent(":b:d:e"));
-        assertEquals("/a/:b:d:e/b/d:e/d/e", TestNamingContainer.trace());
-
+        
         TestNamingContainer.trace(null);
         assertTrue(g == a.findComponent("b:g"));
-        assertEquals("/a/b:g/b/g", TestNamingContainer.trace());
-
+        
         TestNamingContainer.trace(null);
-        assertTrue(g == a.findComponent(":b:g"));
-        assertEquals("/a/:b:g/b/g", TestNamingContainer.trace());
+        assertTrue(g == a.findComponent(":b:g"));        
 
     }
     
@@ -158,44 +148,34 @@ public class NamingContainerTestCase extends TestCase {
         d.getChildren().add(e);
 
         TestNamingContainer.trace(null);
-        assertTrue(a == a.findComponent("a"));
-        assertEquals("/a/a", TestNamingContainer.trace());
+        assertTrue(a == a.findComponent("a"));       
 
         TestNamingContainer.trace(null);
-        assertTrue(a == a.findComponent(":a"));
-        assertEquals("/a/:a", TestNamingContainer.trace());
+        assertTrue(a == a.findComponent(":a"));        
 
         TestNamingContainer.trace(null);
-        assertTrue(b == a.findComponent("b"));
-        assertEquals("/a/b", TestNamingContainer.trace());
+        assertTrue(b == a.findComponent("b"));        
 
         TestNamingContainer.trace(null);
-        assertTrue(b == a.findComponent(":b"));
-        assertEquals("/a/:b", TestNamingContainer.trace());
+        assertTrue(b == a.findComponent(":b"));       
 
         TestNamingContainer.trace(null);
-        assertTrue(d == a.findComponent("b:b"));        
-        assertEquals("/a/b:b/b/b", TestNamingContainer.trace());
+        assertTrue(d == a.findComponent("b:b"));          
 
         TestNamingContainer.trace(null);
-        assertTrue(d == a.findComponent(":b:b"));   
-        assertEquals("/a/:b:b/b/b", TestNamingContainer.trace());
+        assertTrue(d == a.findComponent(":b:b"));         
 
         TestNamingContainer.trace(null);
-        assertTrue(e == a.findComponent("b:b:e"));
-        assertEquals("/a/b:b:e/b/b:e/b/e", TestNamingContainer.trace());
+        assertTrue(e == a.findComponent("b:b:e"));       
 
         TestNamingContainer.trace(null);
-        assertTrue(e == a.findComponent(":b:b:e"));
-        assertEquals("/a/:b:b:e/b/b:e/b/e", TestNamingContainer.trace());
+        assertTrue(e == a.findComponent(":b:b:e"));        
 
         TestNamingContainer.trace(null);
-        assertTrue(g == a.findComponent("b:g"));
-        assertEquals("/a/b:g/b/g", TestNamingContainer.trace());
+        assertTrue(g == a.findComponent("b:g"));        
 
         TestNamingContainer.trace(null);
-        assertTrue(g == a.findComponent(":b:g"));
-        assertEquals("/a/:b:g/b/g", TestNamingContainer.trace());
+        assertTrue(g == a.findComponent(":b:g"));        
 
     }
 

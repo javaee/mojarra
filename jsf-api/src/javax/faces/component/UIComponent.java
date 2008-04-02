@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.139 2006/02/06 21:44:54 edburns Exp $
+ * $Id: UIComponent.java,v 1.140 2006/02/09 20:03:08 rlubke Exp $
  */
 
 /*
@@ -434,7 +434,8 @@ public abstract class UIComponent implements StateHolder {
      * identifier (which is matched exactly against the <code>id</code>
      * property of a {@link UIComponent}, or a series of such identifiers
      * linked by the {@link NamingContainer#SEPARATOR_CHAR} character value.
-     * The search algorithm operates as follows:</p>
+     * The search algorithm should operates as follows, though alternate 
+     * alogrithms may be used as long as the end result is the same:</p>
      * <ul>
      * <li>Identify the {@link UIComponent} that will be the base for searching,
      *     by stopping as soon as one of the following conditions is met:

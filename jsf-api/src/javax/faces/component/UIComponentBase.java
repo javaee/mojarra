@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.125 2006/02/07 20:40:20 rlubke Exp $
+ * $Id: UIComponentBase.java,v 1.126 2006/02/09 20:03:10 rlubke Exp $
  */
 
 /*
@@ -56,14 +56,11 @@ import javax.el.ELContext;
 import javax.el.ELException;
 import javax.el.ValueExpression;
 import javax.faces.FacesException;
-import javax.faces.FactoryFinder;
 import javax.faces.context.FacesContext;
 import javax.faces.el.ValueBinding;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.FacesEvent;
 import javax.faces.event.FacesListener;
-import javax.faces.render.RenderKit;
-import javax.faces.render.RenderKitFactory;
 import javax.faces.render.Renderer;
 
 /**
@@ -601,9 +598,8 @@ public abstract class UIComponentBase extends UIComponent {
     }
 
 
-    private static String separatorString =
+    private static final String SEPARATOR_STRING =
         "" + NamingContainer.SEPARATOR_CHAR;
-
 
     /**
      * @throws NullPointerException {@inheritDoc}
@@ -616,7 +612,7 @@ public abstract class UIComponentBase extends UIComponent {
 
         // Identify the base component from which we will perform our search
         UIComponent base = this;
-        if (expr.startsWith(separatorString)) {
+        if (expr.charAt(0) == NamingContainer.SEPARATOR_CHAR) {
             // Absolute searches start at the root of the tree
             while (base.getParent() != null) {
                 base = base.getParent();
@@ -633,28 +629,22 @@ public abstract class UIComponentBase extends UIComponent {
             }
         }
 
-        // Evaluate the search expression (now guaranteed to be relative)
-        String id = null;
+        // Evaluate the search expression (now guaranteed to be relative)        
         UIComponent result = null;
-        while (expr.length() > 0) {
-            int separator = expr.indexOf(NamingContainer.SEPARATOR_CHAR);
-            if (separator >= 0) {
-                id = expr.substring(0, separator);
-                expr = expr.substring(separator + 1);
-            } else {
-                id = expr;
-                expr = "";
+        String[] segments = expr.split(SEPARATOR_STRING);
+        for (int i = 0, length = (segments.length - 1);
+             i < segments.length;
+             i++, length--) {
+            result = findComponent(base, segments[i], (length == 0));
+            // the first element of the expression may match base.id 
+            // (vs. a child if of base)
+            if (i == 0 && result == null && segments[i].equals(base.getId())) {
+                result = base;
+            }          
+            if (result == null && length > 0) {
+                throw new IllegalArgumentException(segments[i]);
             }
-            result = findComponent(base, id);
-            if ((result == null) || (expr.length() == 0)) {
-                break; // Missing intermediate node or this is the last node
-            }
-            if (result instanceof NamingContainer) {
-                result = result.findComponent(expr);
-                break;
-            } else {
-                throw new IllegalArgumentException(id);
-            }
+            base = result;
         }
 
         // Return the final result of our search
@@ -674,18 +664,20 @@ public abstract class UIComponentBase extends UIComponent {
      * @param base Base {@link UIComponent} from which to search
      * @param id Component identifier to be matched
      */
-    private UIComponent findComponent(UIComponent base, String id) {
-
+    private UIComponent findComponent(UIComponent base,
+                                      String id, 
+                                      boolean checkId) {
         
-
-        // Search through our facets and children
-        UIComponent kid = null;
+        // Search through our facets and children       
         UIComponent result = null;
-        Iterator kids = base.getFacetsAndChildren();
-        while (kids.hasNext() && (result == null)) {
-            kid = (UIComponent) kids.next();
+        for (Iterator i = base.getFacetsAndChildren(); i.hasNext(); ) {
+            UIComponent kid = (UIComponent) i.next(); 
             if (!(kid instanceof NamingContainer)) {
-                result = findComponent(kid, id);
+                if (checkId && id.equals(kid.getId())) {
+                    result = kid;
+                    break;
+                }
+                result = findComponent(kid, id, checkId);
                 if (result != null) {
                     break;
                 }
@@ -693,12 +685,7 @@ public abstract class UIComponentBase extends UIComponent {
                 result = kid;
                 break;
             }
-        }
-        
-        // Is the "base" component itself the match we are looking for?
-        if (result == null && id.equals(base.getId())) {
-            return (base);
-        }
+        }                
         
         return (result);
 
