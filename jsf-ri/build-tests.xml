@@ -165,7 +165,7 @@
 
         <javac srcdir="${src.test.dir}"
             destdir="${out.test.dir}/WEB-INF/classes"
-            includes="com/sun/faces/config/*.java,com/sun/faces/*.java,com/sun/faces/application/*.java,**/ConfigFileTestCase.java,com/sun/faces/lifecycle/TestRestoreViewPhase.java"
+            includes="com/sun/faces/lifecycle/*.java,com/sun/faces/config/*.java,com/sun/faces/*.java,com/sun/faces/application/*.java,**/ConfigFileTestCase.java,com/sun/faces/lifecycle/TestRestoreViewPhase.java"
             debug="${compile.debug}"
             optimize="${compile.optimize}"
             deprecation="${compile.deprecation}">
@@ -263,6 +263,14 @@
             <test name="com.sun.faces.application.TestApplicationImpl_Config"/>
             <test name="com.sun.faces.config.ConfigFileTestCase"/>
             <test name="com.sun.faces.lifecycle.TestRestoreViewPhase"/>
+            <test name="com.sun.faces.lifecycle.TestApplyRequestValuesPhase"/>
+            <test name="com.sun.faces.lifecycle.TestInvokeApplicationPhase"/>
+            <test name="com.sun.faces.lifecycle.TestLifecycleFactoryImpl"/>
+            <test name="com.sun.faces.lifecycle.TestProcessEvents"/>
+            <test name="com.sun.faces.lifecycle.TestProcessValidationsPhase"/>
+            <test name="com.sun.faces.lifecycle.TestUpdateModelValuesPhase"/>
+            <test name="com.sun.faces.lifecycle.TestPhase"/>
+            
 <!--
             <test name="com.sun.faces.config.TestManagedBeanFactory"/>
             <test name="com.sun.faces.application.TestActionListenerImpl"/>
@@ -279,14 +287,7 @@
             <test name="com.sun.faces.el.TestValueBindingImpl"/>
             <test name="com.sun.faces.el.TestValueBindingImpl_Model"/>
             <test name="com.sun.faces.el.TestVariableResolverImpl"/>
-            <test name="com.sun.faces.lifecycle.TestApplyRequestValuesPhase"/>
-            <test name="com.sun.faces.lifecycle.TestInvokeApplicationPhase"/>
-            <test name="com.sun.faces.lifecycle.TestLifecycleFactoryImpl"/>
             <test name="com.sun.faces.lifecycle.TestLifecycleImpl"/>
-            <test name="com.sun.faces.lifecycle.TestProcessEvents"/>
-            <test name="com.sun.faces.lifecycle.TestProcessValidationsPhase"/>
-            <test name="com.sun.faces.lifecycle.TestRestoreViewPhase"/>
-            <test name="com.sun.faces.lifecycle.TestUpdateModelValuesPhase"/>
             <test name="com.sun.faces.renderkit.html_basic.TestHtmlResponseWriter"/>
             <test name="com.sun.faces.renderkit.html_basic.TestComponentType"/>
             <test name="com.sun.faces.renderkit.html_basic.TestRendererConversions"/>
@@ -300,7 +301,6 @@
             <test name="com.sun.faces.util.TestUtil"/>
             <test name="com.sun.faces.util.TestUtil_messages"/>
             <test name="com.sun.faces.taglib.jsf_core.TestValidatorTags"/>
-            <test name="com.sun.faces.lifecycle.TestPhase"/>
             <test name="com.sun.faces.lifecycle.TestRenderResponsePhase"/>
             <test name="com.sun.faces.lifecycle.TestLifecycleImpl_initial"/>
             <test name="com.sun.faces.lifecycle.TestViewHandlerImpl"/>
