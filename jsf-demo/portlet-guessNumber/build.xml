@@ -44,6 +44,7 @@
   <property file="../build.properties"/>             <!-- demos local     -->
   <property file="../../build.properties"/>          <!-- jsf local       -->
   <property file="${user.home}/build.properties"/>   <!-- user local      -->
+  <property file="../default.properties"/>
 
   <!-- Configure the context path for this application -->
   <property name="context.path" value="/portlet-guessNumber"/>
