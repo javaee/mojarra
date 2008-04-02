@@ -47,7 +47,7 @@
       <property-name>actionListener</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -56,7 +56,7 @@
       <property-name>immediate</property-name>
       <property-class>boolean</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -65,7 +65,7 @@
       <property-name>action</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -74,7 +74,7 @@
       <property-name>converter</property-name>
       <property-class>javax.faces.convert.Converter</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -83,7 +83,7 @@
       <property-name>value</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -92,7 +92,7 @@
       <property-name>onchange</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -101,7 +101,7 @@
       <property-name>accesskey</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -110,7 +110,7 @@
       <property-name>image</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -119,7 +119,7 @@
       <property-name>size</property-name>
       <property-class>int</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -128,7 +128,7 @@
       <property-name>onblur</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -137,7 +137,7 @@
       <property-name>tabindex</property-name>
       <property-class>int</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -146,7 +146,7 @@
       <property-name>type</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -155,7 +155,7 @@
       <property-name>disabled</property-name>
       <property-class>boolean</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -164,7 +164,7 @@
       <property-name>alt</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -173,7 +173,7 @@
       <property-name>onselect</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
   </component>
@@ -191,7 +191,7 @@
       <property-name>actionListener</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -200,7 +200,7 @@
       <property-name>immediate</property-name>
       <property-class>boolean</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -209,7 +209,7 @@
       <property-name>action</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -218,7 +218,7 @@
       <property-name>converter</property-name>
       <property-class>javax.faces.convert.Converter</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -227,7 +227,7 @@
       <property-name>value</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -236,7 +236,7 @@
       <property-name>shape</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -245,7 +245,7 @@
       <property-name>coords</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -254,7 +254,7 @@
       <property-name>rel</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -263,7 +263,7 @@
       <property-name>rev</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -272,7 +272,7 @@
       <property-name>hreflang</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -281,7 +281,7 @@
       <property-name>charset</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -290,7 +290,7 @@
       <property-name>accesskey</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -299,7 +299,7 @@
       <property-name>tabindex</property-name>
       <property-class>int</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -308,7 +308,7 @@
       <property-name>onfocus</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -317,7 +317,7 @@
       <property-name>onblur</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -326,7 +326,7 @@
       <property-name>type</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
   </component>
@@ -342,7 +342,7 @@
       <property-name>converter</property-name>
       <property-class>javax.faces.convert.Converter</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -351,7 +351,7 @@
       <property-name>first</property-name>
       <property-class>int</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -360,7 +360,7 @@
       <property-name>rowIndex</property-name>
       <property-class>int</property-class>
       <property-extension>
-      <tag-attribute>no</tag-attribute>
+        <tag-attribute>no</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -369,7 +369,7 @@
       <property-name>rows</property-name>
       <property-class>int</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -378,7 +378,7 @@
       <property-name>styleClass</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -387,7 +387,7 @@
       <property-name>style</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -396,7 +396,7 @@
       <property-name>value</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -405,7 +405,7 @@
       <property-name>var</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
   </component>
@@ -422,7 +422,7 @@
       <property-name>lang</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -431,7 +431,7 @@
       <property-name>action</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -440,7 +440,7 @@
       <property-name>method</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -449,7 +449,7 @@
       <property-name>enctype</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -458,7 +458,7 @@
       <property-name>dir</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -467,7 +467,7 @@
       <property-name>acceptcharset</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -476,7 +476,7 @@
       <property-name>onreset</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -485,7 +485,7 @@
       <property-name>onsubmit</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -494,7 +494,7 @@
       <property-name>accept</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -503,7 +503,7 @@
       <property-name>target</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
   </component>
@@ -521,7 +521,7 @@
       <property-name>value</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -530,7 +530,7 @@
       <property-name>URL</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -539,7 +539,7 @@
       <property-name>longdesc</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -548,7 +548,7 @@
       <property-name>alt</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -557,7 +557,7 @@
       <property-name>height</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -566,7 +566,7 @@
       <property-name>width</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -575,7 +575,7 @@
       <property-name>onblur</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -584,7 +584,7 @@
       <property-name>onchange</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -593,7 +593,7 @@
       <property-name>onfocus</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -602,7 +602,7 @@
       <property-name>usemap</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -611,7 +611,7 @@
       <property-name>ismap</property-name>
       <property-class>boolean</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
   </component>
@@ -626,7 +626,7 @@
       <property-name>value</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -635,7 +635,7 @@
       <property-name>validator</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -644,7 +644,7 @@
       <property-name>valueChangeListener</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -653,7 +653,7 @@
       <property-name>converter</property-name>
       <property-class>javax.faces.convert.Converter</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -662,7 +662,7 @@
       <property-name>required</property-name>
       <property-class>boolean</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
   </component>
@@ -679,7 +679,7 @@
       <property-name>validator</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -688,7 +688,7 @@
       <property-name>valueChangeListener</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -697,7 +697,7 @@
       <property-name>redisplay</property-name>
       <property-class>boolean</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -706,7 +706,7 @@
       <property-name>converter</property-name>
       <property-class>javax.faces.convert.Converter</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -715,7 +715,7 @@
       <property-name>value</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -724,7 +724,7 @@
       <property-name>disabled</property-name>
       <property-class>boolean</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -733,7 +733,7 @@
       <property-name>readonly</property-name>
       <property-class>boolean</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -742,7 +742,7 @@
       <property-name>size</property-name>
       <property-class>int</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -751,7 +751,7 @@
       <property-name>maxlength</property-name>
       <property-class>int</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -760,7 +760,7 @@
       <property-name>alt</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -769,7 +769,7 @@
       <property-name>lang</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -778,7 +778,7 @@
       <property-name>tabindex</property-name>
       <property-class>int</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -787,7 +787,7 @@
       <property-name>accesskey</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -796,7 +796,7 @@
       <property-name>onfocus</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -805,7 +805,7 @@
       <property-name>onblur</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -814,7 +814,7 @@
       <property-name>onselect</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -823,7 +823,7 @@
       <property-name>onchange</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -832,7 +832,7 @@
       <property-name>dir</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -841,7 +841,7 @@
       <property-name>required</property-name>
       <property-class>boolean</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
   </component>
@@ -858,7 +858,7 @@
       <property-name>converter</property-name>
       <property-class>javax.faces.convert.Converter</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -867,7 +867,7 @@
       <property-name>value</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -876,7 +876,7 @@
       <property-name>readonly</property-name>
       <property-class>boolean</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -894,7 +894,7 @@
       <property-name>size</property-name>
       <property-class>int</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -903,7 +903,7 @@
       <property-name>maxlength</property-name>
       <property-class>int</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -912,7 +912,7 @@
       <property-name>alt</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -921,7 +921,7 @@
       <property-name>lang</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -930,7 +930,7 @@
       <property-name>tabindex</property-name>
       <property-class>int</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -939,7 +939,7 @@
       <property-name>accesskey</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -948,7 +948,7 @@
       <property-name>onfocus</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -957,7 +957,7 @@
       <property-name>onblur</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -966,7 +966,7 @@
       <property-name>onselect</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -975,7 +975,7 @@
       <property-name>onchange</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -984,7 +984,7 @@
       <property-name>dir</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -993,7 +993,7 @@
       <property-name>required</property-name>
       <property-class>boolean</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -1002,7 +1002,7 @@
       <property-name>validator</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -1011,7 +1011,7 @@
       <property-name>valueChangeListener</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
   </component>
@@ -1028,7 +1028,7 @@
       <property-name>value</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -1037,7 +1037,7 @@
       <property-name>validator</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -1046,7 +1046,7 @@
       <property-name>valueChangeListener</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -1055,7 +1055,7 @@
       <property-name>disabled</property-name>
       <property-class>boolean</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -1064,7 +1064,7 @@
       <property-name>readonly</property-name>
       <property-class>boolean</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -1073,7 +1073,7 @@
       <property-name>cols</property-name>
       <property-class>int</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -1082,7 +1082,7 @@
       <property-name>rows</property-name>
       <property-class>int</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -1091,7 +1091,7 @@
       <property-name>alt</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -1100,7 +1100,7 @@
       <property-name>lang</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -1109,7 +1109,7 @@
       <property-name>tabindex</property-name>
       <property-class>int</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -1118,7 +1118,7 @@
       <property-name>accesskey</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -1127,7 +1127,7 @@
       <property-name>onfocus</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -1136,7 +1136,7 @@
       <property-name>onblur</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -1145,7 +1145,7 @@
       <property-name>onselect</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -1154,7 +1154,7 @@
       <property-name>onchange</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -1163,7 +1163,7 @@
       <property-name>dir</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -1172,7 +1172,7 @@
       <property-name>required</property-name>
       <property-class>boolean</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
   </component>
@@ -1188,7 +1188,7 @@
       <property-name>showSummary</property-name>
       <property-class>boolean</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -1198,7 +1198,7 @@
       <property-name>showDetail</property-name>
       <property-class>boolean</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -1208,7 +1208,7 @@
       <property-name>for</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>required</tag-attribute>
+        <tag-attribute>required</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -1242,7 +1242,7 @@
       <property-name>globalOnly</property-name>
       <property-class>boolean</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -1252,7 +1252,7 @@
       <property-name>for</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -1262,7 +1262,7 @@
       <property-name>showSummary</property-name>
       <property-class>boolean</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -1272,7 +1272,7 @@
       <property-name>showDetail</property-name>
       <property-class>boolean</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -1308,7 +1308,7 @@
       <property-name>for</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>required</tag-attribute>
+        <tag-attribute>required</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -1317,7 +1317,7 @@
       <property-name>lang</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -1326,7 +1326,7 @@
       <property-name>accesskey</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -1335,7 +1335,7 @@
       <property-name>onfocus</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -1344,7 +1344,7 @@
       <property-name>onblur</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -1353,7 +1353,7 @@
       <property-name>dir</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -1362,7 +1362,7 @@
       <property-name>value</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -1371,7 +1371,7 @@
       <property-name>converter</property-name>
       <property-class>javax.faces.convert.Converter</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
   </component>
@@ -1388,7 +1388,7 @@
       <property-name>tabindex</property-name>
       <property-class>int</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -1397,7 +1397,7 @@
       <property-name>type</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -1406,7 +1406,7 @@
       <property-name>title</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -1415,7 +1415,7 @@
       <property-name>charset</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -1424,7 +1424,7 @@
       <property-name>styleClass</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -1433,7 +1433,7 @@
       <property-name>accesskey</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -1442,7 +1442,7 @@
       <property-name>onfocus</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -1451,7 +1451,7 @@
       <property-name>onblur</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -1469,7 +1469,7 @@
       <property-name>target</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -1478,7 +1478,7 @@
       <property-name>converter</property-name>
       <property-class>javax.faces.convert.Converter</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
   </component>
@@ -1493,7 +1493,7 @@
       <property-name>value</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -1502,7 +1502,7 @@
       <property-name>converter</property-name>
       <property-class>javax.faces.convert.Converter</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -1511,7 +1511,7 @@
       <property-name>styleClass</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -1520,7 +1520,7 @@
       <property-name>style</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
   </component>
@@ -1535,7 +1535,7 @@
       <property-name>converter</property-name>
       <property-class>javax.faces.convert.Converter</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -1544,7 +1544,7 @@
       <property-name>value</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -1553,7 +1553,7 @@
       <property-name>styleClass</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -1562,7 +1562,7 @@
       <property-name>style</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
   </component>
@@ -1580,7 +1580,7 @@
       <property-name>value</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -1589,7 +1589,7 @@
       <property-name>columns</property-name>
       <property-class>int</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -1598,7 +1598,7 @@
       <property-name>lang</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -1607,7 +1607,7 @@
       <property-name>dir</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -1616,7 +1616,7 @@
       <property-name>summary</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -1625,7 +1625,7 @@
       <property-name>bgcolor</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -1634,7 +1634,7 @@
       <property-name>frame</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -1643,7 +1643,7 @@
       <property-name>rules</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -1652,7 +1652,7 @@
       <property-name>border</property-name>
       <property-class>int</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -1661,7 +1661,7 @@
       <property-name>cellspacing</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -1670,7 +1670,7 @@
       <property-name>cellpadding</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -1679,7 +1679,7 @@
       <property-name>width</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
   </component>
@@ -1694,7 +1694,7 @@
       <property-name>value</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
   </component>
@@ -1712,7 +1712,7 @@
       <property-name>value</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -1721,7 +1721,7 @@
       <property-name>checked</property-name>
       <property-class>boolean</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -1730,7 +1730,7 @@
       <property-name>disabled</property-name>
       <property-class>boolean</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -1739,7 +1739,7 @@
       <property-name>readonly</property-name>
       <property-class>boolean</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -1748,7 +1748,7 @@
       <property-name>size</property-name>
       <property-class>int</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -1757,7 +1757,7 @@
       <property-name>alt</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -1766,7 +1766,7 @@
       <property-name>tabindex</property-name>
       <property-class>int</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -1775,7 +1775,7 @@
       <property-name>accesskey</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -1784,7 +1784,7 @@
       <property-name>onfocus</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -1793,7 +1793,7 @@
       <property-name>onblur</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -1802,7 +1802,7 @@
       <property-name>onselect</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -1811,7 +1811,7 @@
       <property-name>onchange</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -1820,7 +1820,7 @@
       <property-name>required</property-name>
       <property-class>boolean</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -1829,7 +1829,7 @@
       <property-name>valueChangeListener</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -1838,7 +1838,7 @@
       <property-name>validator</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
   </component>
@@ -1855,7 +1855,7 @@
       <property-name>dir</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -1864,7 +1864,7 @@
       <property-name>disabled</property-name>
       <property-class>boolean</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -1873,7 +1873,7 @@
       <property-name>layout</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -1882,7 +1882,7 @@
       <property-name>lang</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -1891,7 +1891,7 @@
       <property-name>value</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -1900,7 +1900,7 @@
       <property-name>converter</property-name>
       <property-class>javax.faces.convert.Converter</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -1909,7 +1909,7 @@
       <property-name>name</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -1918,7 +1918,7 @@
       <property-name>onblur</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -1927,7 +1927,7 @@
       <property-name>onchange</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -1936,7 +1936,7 @@
       <property-name>onfocus</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -1945,7 +1945,7 @@
       <property-name>tabindex</property-name>
       <property-class>int</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -1954,7 +1954,7 @@
       <property-name>required</property-name>
       <property-class>boolean</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -1963,7 +1963,7 @@
       <property-name>valueChangeListener</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -1972,7 +1972,7 @@
       <property-name>validator</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
   </component>
@@ -1989,7 +1989,7 @@
       <property-name>dir</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -1998,7 +1998,7 @@
       <property-name>disabled</property-name>
       <property-class>boolean</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -2007,7 +2007,7 @@
       <property-name>lang</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -2016,7 +2016,7 @@
       <property-name>value</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -2025,7 +2025,7 @@
       <property-name>converter</property-name>
       <property-class>javax.faces.convert.Converter</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -2034,7 +2034,7 @@
       <property-name>name</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -2043,7 +2043,7 @@
       <property-name>onblur</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -2052,7 +2052,7 @@
       <property-name>onchange</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -2061,7 +2061,7 @@
       <property-name>onfocus</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -2070,7 +2070,16 @@
       <property-name>tabindex</property-name>
       <property-class>int</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
+      </property-extension>
+    </property>
+    <property>
+      <display-name></display-name>
+      <icon></icon>
+      <property-name>size</property-name>
+      <property-class>int</property-class>
+      <property-extension>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -2079,7 +2088,7 @@
       <property-name>required</property-name>
       <property-class>boolean</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -2088,7 +2097,7 @@
       <property-name>valueChangeListener</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -2097,7 +2106,7 @@
       <property-name>validator</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
   </component>
@@ -2115,7 +2124,7 @@
       <property-name>border</property-name>
       <property-class>int</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -2124,7 +2133,7 @@
       <property-name>dir</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -2133,7 +2142,7 @@
       <property-name>disabled</property-name>
       <property-class>boolean</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -2142,7 +2151,7 @@
       <property-name>lang</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -2151,7 +2160,7 @@
       <property-name>value</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -2160,7 +2169,7 @@
       <property-name>converter</property-name>
       <property-class>javax.faces.convert.Converter</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -2169,7 +2178,7 @@
       <property-name>name</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -2178,7 +2187,7 @@
       <property-name>onblur</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -2187,7 +2196,7 @@
       <property-name>onchange</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -2196,16 +2205,7 @@
       <property-name>onfocus</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
-      </property-extension>
-    </property>
-    <property>
-      <display-name></display-name>
-      <icon></icon>
-      <property-name>size</property-name>
-      <property-class>int</property-class>
-      <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -2214,7 +2214,7 @@
       <property-name>tabindex</property-name>
       <property-class>int</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -2223,7 +2223,7 @@
       <property-name>required</property-name>
       <property-class>boolean</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -2232,7 +2232,7 @@
       <property-name>valueChangeListener</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -2241,7 +2241,7 @@
       <property-name>validator</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
   </component>
@@ -2258,7 +2258,7 @@
       <property-name>required</property-name>
       <property-class>boolean</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -2267,7 +2267,7 @@
       <property-name>value</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -2276,7 +2276,7 @@
       <property-name>converter</property-name>
       <property-class>javax.faces.convert.Converter</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -2285,7 +2285,16 @@
       <property-name>disabled</property-name>
       <property-class>boolean</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
+      </property-extension>
+    </property>
+    <property>
+      <display-name></display-name>
+      <icon></icon>
+      <property-name>size</property-name>
+      <property-class>int</property-class>
+      <property-extension>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -2294,7 +2303,7 @@
       <property-name>lang</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -2303,7 +2312,7 @@
       <property-name>dir</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -2312,7 +2321,7 @@
       <property-name>tabindex</property-name>
       <property-class>int</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -2321,7 +2330,7 @@
       <property-name>onfocus</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -2330,7 +2339,7 @@
       <property-name>onblur</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>    
     <property>
@@ -2339,7 +2348,7 @@
       <property-name>onselect</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -2348,7 +2357,7 @@
       <property-name>onchange</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -2357,7 +2366,7 @@
       <property-name>valueChangeListener</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -2366,7 +2375,7 @@
       <property-name>validator</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
   </component>
@@ -2384,7 +2393,7 @@
       <property-name>required</property-name>
       <property-class>boolean</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -2393,7 +2402,7 @@
       <property-name>value</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -2402,7 +2411,7 @@
       <property-name>converter</property-name>
       <property-class>javax.faces.convert.Converter</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -2411,16 +2420,7 @@
       <property-name>disabled</property-name>
       <property-class>boolean</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
-      </property-extension>
-    </property>
-    <property>
-      <display-name></display-name>
-      <icon></icon>
-      <property-name>size</property-name>
-      <property-class>int</property-class>
-      <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -2429,7 +2429,7 @@
       <property-name>lang</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -2438,7 +2438,7 @@
       <property-name>tabindex</property-name>
       <property-class>int</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -2447,7 +2447,7 @@
       <property-name>onfocus</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -2456,7 +2456,7 @@
       <property-name>onblur</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -2465,7 +2465,7 @@
       <property-name>onselect</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -2474,7 +2474,7 @@
       <property-name>onchange</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -2483,7 +2483,7 @@
       <property-name>dir</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -2492,7 +2492,7 @@
       <property-name>valueChangeListener</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -2501,7 +2501,7 @@
       <property-name>validator</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
   </component>
@@ -2516,7 +2516,7 @@
       <property-name>value</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -2525,7 +2525,7 @@
       <property-name>converter</property-name>
       <property-class>javax.faces.convert.Converter</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -2534,7 +2534,7 @@
       <property-name>layout</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -2543,7 +2543,7 @@
       <property-name>border</property-name>
       <property-class>int</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -2566,7 +2566,7 @@
       <property-name>required</property-name>
       <property-class>boolean</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -2575,7 +2575,7 @@
       <property-name>valueChangeListener</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
     <property>
@@ -2584,7 +2584,7 @@
       <property-name>validator</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-      <tag-attribute>yes</tag-attribute>
+        <tag-attribute>yes</tag-attribute>
       </property-extension>
     </property>
   </component>
@@ -3364,13 +3364,6 @@
       &core-attrs;
       &events-attrs;
       &i18n-attrs;
-      <attribute>
-        <description>rows visible</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>size</attribute-name>
-        <attribute-class>int</attribute-class>
-      </attribute>
 
       <attribute>
         <description>unavailable in this context</description>

@@ -877,6 +877,14 @@
       &i18n-attrs;
       
       <attribute>
+        <description>rows visible</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>size</attribute-name>
+        <attribute-class>int</attribute-class>
+      </attribute>
+
+      <attribute>
         <description>CSS style class to apply if the item is disabled</description>
         <display-name></display-name>
         <icon></icon>
@@ -938,14 +946,6 @@
       &core-attrs;
       &events-attrs;
       &i18n-attrs;
-      <attribute>
-        <description>rows visible</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>size</attribute-name>
-        <attribute-class>int</attribute-class>
-      </attribute>
-
       <attribute>
         <description>CSS style class to apply if the item is disabled</description>
         <display-name></display-name>

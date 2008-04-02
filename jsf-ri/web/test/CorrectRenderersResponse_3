@@ -1,4 +1,4 @@
-<select name="myMenu" multiple size="4">	<option value="Red">Red</option>
+<select name="myMenu" multiple size="1">	<option value="Red">Red</option>
 	<option value="Blue"  selected>Blue</option>
 	<option value="Green">Green</option>
 	<option value="Yellow">Yellow</option>
@@ -23,7 +23,7 @@
 	</tr>
 </table>	</tr>
 </table></span>
-<select name="myOnemenu" size="4">	<option value="Red">Red</option>
+<select name="myOnemenu" size="1">	<option value="Red">Red</option>
 	<option value="Blue"  selected>Blue</option>
 	<option value="Green">Green</option>
 	<option value="Yellow">Yellow</option>

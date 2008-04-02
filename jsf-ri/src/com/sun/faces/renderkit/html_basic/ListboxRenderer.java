@@ -4,7 +4,7 @@
  */
 
 /*
- * $Id: ListboxRenderer.java,v 1.16 2003/11/01 02:52:49 jvisvanathan Exp $
+ * $Id: ListboxRenderer.java,v 1.17 2003/12/22 21:26:38 jvisvanathan Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -15,7 +15,10 @@
 
 package com.sun.faces.renderkit.html_basic;
 
+import java.io.IOException;
+
 import javax.faces.component.UIComponent;
+import javax.faces.context.ResponseWriter;
 
 /**
  * <B>ListRenderer</B> is a class that renders the current value of 
@@ -59,10 +62,9 @@ public class ListboxRenderer extends MenuRenderer {
     //
     // Methods From Renderer
     //
-    protected void getDisplaySize(int itemCount, UIComponent component) {
-        // Listbox will display all items in the list, so override  size
-        // attribute is specified.
-        component.getAttributes().put("size", new Integer(itemCount));
+    protected void writeDefaultSize(ResponseWriter writer, int itemCount) 
+          throws IOException {
+        // If size not specified, default to number of items
+        writer.writeAttribute("size", new Integer(itemCount), "size");
     }
-
 } // end of class ListboxRenderer

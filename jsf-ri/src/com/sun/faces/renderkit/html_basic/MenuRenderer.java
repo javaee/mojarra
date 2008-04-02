@@ -4,7 +4,7 @@
  */
 
 /*
- * $Id: MenuRenderer.java,v 1.35 2003/12/17 15:13:55 rkitain Exp $
+ * $Id: MenuRenderer.java,v 1.36 2003/12/22 21:26:38 jvisvanathan Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -379,14 +379,21 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
 	writer.startElement("select", component);
 	writer.writeAttribute("name", component.getClientId(context), "clientId");
 	if (!getMultipleText(component).equals("")) {
-	    writer.writeAttribute("multiple", new Boolean("true"), null);
+	    writer.writeAttribute("multiple", Boolean.TRUE, null);
 	}
 
 	// Determine how many option(s) we need to render, and update
 	// the component's "size" attribute accordingly;  The "size"
 	// attribute will be rendered as one of the "pass thru" attributes
 	int itemCount = getOptionNumber(context, component);
-        getDisplaySize(itemCount, component);
+
+        // If "size" is *not* set explicitly, we have to default it correctly
+        Object size = component.getAttributes().get("size");
+        if ((null == size) ||
+            ((size instanceof Integer) &&
+             ((Integer) size).intValue() == Integer.MIN_VALUE)) {
+            writeDefaultSize(writer, itemCount);
+        }
 
         Util.renderPassThruAttributes(writer, component);
         Util.renderBooleanPassThruAttributes(writer, component);
@@ -452,7 +459,7 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
         Object selectedValues[] = getCurrentSelectedValues(context, component);
         String selectText = getSelectedText(curItem, selectedValues);
         if (!selectText.equals("")) {
-            writer.writeAttribute(selectText, new Boolean("true"), null);
+            writer.writeAttribute(selectText, Boolean.TRUE, null);
         }
         if ( curItem.isDisabled()) {
             writer.writeAttribute("disabled", "disabled", "disabled");
@@ -476,14 +483,10 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
         return "";
     }
 
-    protected void getDisplaySize(int itemCount, UIComponent component) {
+    protected void writeDefaultSize(ResponseWriter writer, int itemCount)
+          throws IOException {
         // if size is not specified default to 1.
-        if (null != component.getAttributes().get("size")) {
-            Integer size = (Integer) component.getAttributes().get("size");
-            itemCount = size.intValue();
-        } else {
-	    component.getAttributes().put("size", new Integer(itemCount));
-        }  
+        writer.writeAttribute("size", "1", "size");
     }
     
     String getSelectedTextString() {

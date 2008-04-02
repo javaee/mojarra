@@ -39,11 +39,11 @@
                     
 
                     
-                    
 
                     
                     
 
+                    
                     
 
                 <table title="Grid with hardcoded data" border="1" cellspacing="3" cellpadding="3" summary="Grid with hardcoded data">
@@ -500,7 +500,7 @@
 						
 						
 						
-					<span class="selectmanyClass"><select name="basicForm:ManyApples" multiple>	<option value="0">zero</option>
+					<span class="selectmanyClass"><select name="basicForm:ManyApples" multiple size="1">	<option value="0">zero</option>
 	<option value="1">one</option>
 	<option value="2">two</option>
 	<option value="3">three</option>
