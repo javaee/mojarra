@@ -1,5 +1,5 @@
 /*
- * $Id: NavigationHandlerImpl.java,v 1.32 2004/05/10 19:56:00 jvisvanathan Exp $
+ * $Id: NavigationHandlerImpl.java,v 1.33 2004/05/11 21:10:05 rkitain Exp $
  */
 
 /*
@@ -271,7 +271,7 @@ public class NavigationHandlerImpl extends NavigationHandler {
 
 // If we've found a match, then we need to evaluate
 // from-action/outcome in the following order:
-            // 1) elements specifying both from-action and from-outcome
+// 1) elements specifying both from-action and from-outcome
 // 2) elements specifying only from-outcome
 // 3) elements specifying only from-action
 // 4) elements where both from-action and from-outcome are null
@@ -364,8 +364,7 @@ public class NavigationHandlerImpl extends NavigationHandler {
             cncFromAction = cnc.getFromAction();
             fromOutcome = cnc.getFromOutcome();
             toViewId = cnc.getToViewId();
-            if (((cncFromAction == null) || (cncFromAction.equals("*")))
-                && (fromOutcome != null)) {
+            if ((cncFromAction == null) && (fromOutcome != null)) {
                 if (fromOutcome.equals(outcome)) {
                     result.viewId = toViewId;
                     result.navCase = cnc;
@@ -379,7 +378,7 @@ public class NavigationHandlerImpl extends NavigationHandler {
             cncFromAction = cnc.getFromAction();
             fromOutcome = cnc.getFromOutcome();
             toViewId = cnc.getToViewId();
-            if ((cncFromAction != null) && (fromOutcome.equals("*"))) {
+            if ((cncFromAction != null) && (fromOutcome == null)) {
                 if (cncFromAction.equals(fromAction)) {
                     result.viewId = toViewId;
                     result.navCase = cnc;
@@ -393,7 +392,7 @@ public class NavigationHandlerImpl extends NavigationHandler {
             cncFromAction = cnc.getFromAction();
             fromOutcome = cnc.getFromOutcome();
             toViewId = cnc.getToViewId();
-            if ((cncFromAction.equals("*")) && (fromOutcome.equals("*"))) {
+            if ((cncFromAction == null) && (fromOutcome == null)) {
                 result.viewId = toViewId;
                 result.navCase = cnc;
                 return result;
