@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTag.java,v 1.35 2004/01/14 17:12:52 eburns Exp $
+ * $Id: UIComponentTag.java,v 1.36 2004/01/15 06:03:39 eburns Exp $
  */
 
 /*
@@ -379,7 +379,8 @@ public abstract class UIComponentTag implements Tag {
      *     one if necessary.</li>
      * <li>Call the <code>encodeBegin()</code> method of the component,
      *     unless rendering is suppressed or our component renders its
-     *     own children.</li>
+     *     own children;  if <code>encodeBegin()</code> is called,
+     *     <code>ResponseWriter.flush()</code> must also be called.</li>
      * </ul>
      *
      * <p>The flag value to be returned is acquired by calling the
@@ -458,6 +459,7 @@ public abstract class UIComponentTag implements Tag {
         try {
             if (!isSuppressed() && !component.getRendersChildren()) {
                 encodeBegin();
+                context.getResponseWriter().flush();
             }
         } catch (IOException e) {
             component = null;
@@ -609,11 +611,10 @@ public abstract class UIComponentTag implements Tag {
     /**
      * <p>Find and return the {@link UIComponent}, from the component
      * tree, that corresponds to this tag handler instance.  If there
-     * is no such {@link UIComponent}, create one by calling
-     * <code>createComponent()</code> or <code>createFacet()</code>,
+     * is no such {@link UIComponent}, create one 
      * and add it as a child or facet of the {@link UIComponent} associated
      * with our nearest enclosing {@link UIComponentTag}.  The process for
-     * locating or creating the component is:
+     * locating or creating the component is:</p>
      * <ol>
      * <li>If we have previously located this component, return it.</li>
      * <li>Locate the parent component by looking for a parent
@@ -639,6 +640,21 @@ public abstract class UIComponentTag implements Tag {
      *     with the new component as a parameter, and register it as a child
      *     with this identifier.  Return the found or created
      *     child {@link UIComponent}.</li>
+     * </ol>
+     * <p>When creating a component, the process is:</p>
+     * <ol>
+     * <li>Retrieve the component type by calling
+     * {@link UIComponentTag#getComponentType}</li>
+     * <li>If the component has a <code>binding</code> attribute,
+     * create a {@link ValueBinding} from it, and call
+     * {@link Application#createComponent} with that {@link ValueBinding},
+     * the {@link FacesContext}, and the component type.  Store the
+     * {@link ValueBinding} using the key <code>"binding"</code> and
+     * {@link UIComponent#setValueBinding}.</li>
+     * <li>Otherwise, call {@link Application#createComponent} with
+     * only the component type.
+     * <li>Call <code>setProperties()</code>.
+     * <li>Add the new component as a child or facet of its parent</li>
      * </ol>
      */
     protected UIComponent findComponent(FacesContext context)
@@ -777,8 +793,8 @@ public abstract class UIComponentTag implements Tag {
      *     to <code>false</code>.</li>
      * <li>The component is a child of a parent whose
      *     <code>rendersChildren</code> is <code>true</code>.</li>
-     * <li>The component is a child of a parent whose <code>rendered</code>
-     *     property is <code>false</code>.</li>
+     * <li>The component is a child of a parent whose rendering is itself
+     *     suppressed.</li>
      * </ul>
      */
     protected boolean isSuppressed() {
@@ -960,20 +976,18 @@ public abstract class UIComponentTag implements Tag {
     /**
      * <p>Create and return a new child component of the type returned by
      * calling <code>getComponentType()</code>.  If this {@link UIComponentTag}
-     * has a non-null <code>componentType</code> attribute, this is done by
-     * calling calling <code>getValue()</code> on a {@link ValueBinding} created
-     * for the <code>component</code> attribute's value.  If this returns
-     * <code>null</code>, or there is no <code>component</code> attribute
-     * value, a new component is created and returned.</p>
-     *
+     * has a non-null <code>binding</code> attribute, this is done by
+     * call {@link Application#createComponent} with the {@link ValueBinding}
+     * created for the <code>binding</code> attribute, and the
+     * {@link ValueBinding} will be stored on the component.  Otherwise,
+     * {@link Application#createComponent} is called with only 
+     * the component type.  Finally, initialize the components id
+     * and other properties.
+     * </p>
      * @param context {@link FacesContext} for the current request
-     * @param parent Parent {@link UIComponent} for the new child
-     * @param componentId Component identifier for the new child,
-     *  or <code>null</code> for no explicit identifier
+     * @param newId id of the component
      */
-    private UIComponent createChild(FacesContext context, UIComponent parent,
-                                    String componentId) {
-
+    private UIComponent createComponent(FacesContext context, String newId) {
         UIComponent component = null;
         Application application = context.getApplication();
         if (binding != null) {
@@ -984,8 +998,28 @@ public abstract class UIComponentTag implements Tag {
         } else {
             component = application.createComponent(getComponentType());
         }
+
+        component.setId(newId);
         setProperties(component);
-        component.setId(componentId);
+
+        return component;
+    }
+
+
+
+    /**
+     * <p>Create a new child component using <code>createComponent</code>, 
+     * initialize its properties, and add it to its parent as a child.
+     * </p>
+     * @param context {@link FacesContext} for the current request
+     * @param parent Parent {@link UIComponent} for the new child
+     * @param componentId Component identifier for the new child,
+     *  or <code>null</code> for no explicit identifier
+     */
+    private UIComponent createChild(FacesContext context, UIComponent parent,
+                                    String componentId) {
+
+        UIComponent component = createComponent(context, componentId);
         UIComponentTag parentTag = getParentUIComponentTag(pageContext);
         parent.getChildren().add(parentTag.getIndex(), component);
         created = true;
@@ -994,11 +1028,12 @@ public abstract class UIComponentTag implements Tag {
     }
 
 
+    
 
     /**
-     * <p>Create and return a new facet of the type returned by
-     * calling <code>getComponentType()</code>.</p>
-     *
+     * <p>Create a new child component using <code>createComponent</code>, 
+     * initialize its properties, and add it to its parent as a facet.
+     * </p>
      * @param context {@link FacesContext} for the current request
      * @param parent Parent {@link UIComponent} of the new facet
      * @param name Name of the new facet
@@ -1007,10 +1042,7 @@ public abstract class UIComponentTag implements Tag {
     private UIComponent createFacet(FacesContext context, UIComponent parent,
                                     String name, String newId) {
 
-        UIComponent component =
-            context.getApplication().createComponent(getComponentType());
-        setProperties(component);
-        component.setId(newId);
+        UIComponent component = createComponent(context, newId);
         parent.getFacets().put(name, component);
         created = true;
         return (component);

@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContext.java,v 1.56 2003/12/17 15:10:44 rkitain Exp $
+ * $Id: FacesContext.java,v 1.57 2004/01/15 06:03:32 eburns Exp $
  */
 
 /*
@@ -275,7 +275,7 @@ public abstract class FacesContext {
 
 
     /**
-     * <p>Signal the JavaSerer faces implementation that, as soon as the
+     * <p>Signal the JavaServer faces implementation that, as soon as the
      * current phase of the request processing lifecycle has been completed,
      * control should be passed to the <em>Render Response</em> phase,
      * bypassing any phases that have not been executed yet.</p>

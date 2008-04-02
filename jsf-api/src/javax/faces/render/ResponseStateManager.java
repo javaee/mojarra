@@ -1,5 +1,5 @@
 /*
- * $Id: ResponseStateManager.java,v 1.8 2003/12/17 15:11:01 rkitain Exp $
+ * $Id: ResponseStateManager.java,v 1.9 2004/01/15 06:03:37 eburns Exp $
  */
 
 /*
@@ -11,6 +11,7 @@ package javax.faces.render;
 
 import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
+import javax.faces.context.ResponseWriter;
 import javax.faces.application.StateManager.SerializedView;
 
 import java.io.IOException;
@@ -33,21 +34,17 @@ public abstract class ResponseStateManager {
 
     /**
      *       
-     * <p>Take the argument content buffer and replace the state markers
-     * that we've written using writeStateMarker() with the appropriate
-     * representation of the structure and state, writing the output to
-     * the output writer.</p>
+     * <p>Take the argument <code>state</code> and write it into
+     * the output using the current {@link ResponseWriter}, which
+     * must be correctly positioned already.</p>
      *
-     * <p>If the structure and state are to be written out to hidden
+     * <p>If the {@link SerializedView} is to be written out to hidden
      * fields, the implementation must take care to make all necessary
      * character replacements to make the Strings suitable for inclusion
      * as an HTTP request paramater.</p>
      *
      * @param context The {@link FacesContext} instance for the current request
-     * @param state The serialized state information previously buffered
-     *
-     * @return the written state.  In the case of JSP, this is a
-     * <code>String</code>.
+     * @param state The serialized state information previously saved
      *
      */
     public abstract void writeState(FacesContext context,

@@ -1,5 +1,5 @@
 /*
- * $Id: StateManager.java,v 1.26 2004/01/07 20:47:54 eburns Exp $
+ * $Id: StateManager.java,v 1.27 2004/01/15 06:03:15 eburns Exp $
  */
 
 /*
@@ -284,10 +284,6 @@ public abstract class StateManager {
      * <p>If the state was saved in the client, this method calls
      * through to {@link #restoreTreeStructure} and, if necessary {@link
      * #restoreComponentState}</p>
-     *
-     * <p>The implementation must obtain the <code>Locale</code> from
-     * the saved state and store it as the <code>Locale</code>
-     * in this {@link UIViewRoot}.</p>
      *
      * @return the {@link UIViewRoot} that matches this
      * <code>viewId</code>, if there was a view to restore,

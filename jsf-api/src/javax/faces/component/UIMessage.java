@@ -1,5 +1,5 @@
 /*
- * $Id: UIMessage.java,v 1.5 2004/01/06 23:02:41 eburns Exp $
+ * $Id: UIMessage.java,v 1.6 2004/01/15 06:03:22 eburns Exp $
  */
 
 /*
@@ -13,9 +13,9 @@ import javax.faces.context.FacesContext;
 import javax.faces.el.ValueBinding;
 
 /**
- * <p>This component is responsible for displaying messages for a given
- * <code>clientId</code>.  The component obtains the messages from the
- * {@link FacesContext}.</p>
+ * <p>This component is responsible for displaying messages for a specific
+ * {@link UIComponent}, identified by a <code>clientId</code>.  The component
+ * obtains the messages from the {@link FacesContext}.</p>
  *
  * <p>The renderer-type for this component is <code>Message</code>.</p>
  * 

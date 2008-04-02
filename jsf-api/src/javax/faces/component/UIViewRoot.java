@@ -1,5 +1,5 @@
 /*
- * $Id: UIViewRoot.java,v 1.16 2004/01/14 21:48:01 jvisvanathan Exp $
+ * $Id: UIViewRoot.java,v 1.17 2004/01/15 06:03:23 eburns Exp $
  */
 
 /*
@@ -34,6 +34,10 @@ public class UIViewRoot extends UIComponentBase {
 
     // ------------------------------------------------------ Constants
     
+    /**
+     * <p>The prefix that will be used for identifiers generated
+     * by the <code>createUniqueId()</code> method.
+     */
     static public final String UNIQUE_ID_PREFIX = "_id";
     
     // ------------------------------------------------------------ Constructors
@@ -239,8 +243,8 @@ public class UIViewRoot extends UIComponentBase {
     /**
      * <p>Override the default {@link UIComponentBase#processDecodes}
      * behavior to broadcast any queued events after the default
-     * processing has been completed and to clear out any remaining
-     * events if the prior event processing caused {@link
+     * processing has been completed and to clear out any events
+     * for later phases if the event processing for this phase caused {@link
      * FacesContext#renderResponse} to be called.</p>
      *
      * @param context {@link FacesContext} for the request we are processing
@@ -263,8 +267,8 @@ public class UIViewRoot extends UIComponentBase {
     /**
      * <p>Override the default {@link UIComponentBase#processValidators}
      * behavior to broadcast any queued events after the default
-     * processing has been completed and to clear out any remaining
-     * events if the prior event processing caused {@link
+     * processing has been completed and to clear out any events
+     * for later phases if the event processing for this phase caused {@link
      * FacesContext#renderResponse} to be called.</p>
      *
      * @param context {@link FacesContext} for the request we are processing

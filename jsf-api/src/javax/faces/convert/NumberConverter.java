@@ -1,5 +1,5 @@
 /*
- * $Id: NumberConverter.java,v 1.14 2004/01/10 03:16:32 eburns Exp $
+ * $Id: NumberConverter.java,v 1.15 2004/01/15 06:03:34 eburns Exp $
  */
 
 /*
@@ -29,9 +29,11 @@ import javax.faces.context.FacesContext;
  * <code>java.lang.Double</code> or <code>java.lang.Long</code>, according
  * to the following algorithm:</p>
  * <ul>
- * <li>If the specified String is null or zero length, return
+ * <li>If the specified String is null, return
  *     a <code>null</code>.  Otherwise, trim leading and trailing
- *     whitespace before proceedng.</li>
+ *     whitespace before proceeding.</li>
+ * <li>If the specified String - after trimming - has a zero length,
+ *     return <code>null</code>.</li>
  * <li>If the <code>locale</code> property is not null,
  *     use that <code>Locale</code> for managing parsing.  Otherwise, use the
  *     <code>Locale</code> from the <code>UIViewRoot</code>.</li>
@@ -47,9 +49,9 @@ import javax.faces.context.FacesContext;
  *     or <code>getPercentInstance()</code> method of the
  *     <code>java.text.NumberFormat</code> class, passing in the selected
  *     <code>Locale</code>.</li>
- * <li>If the <code>integerOnly</code> property has been set, only the integer
- *     portion of the String will be parsed.  See the JavaDocs for the
- *     <code>setParseIntegerOnly()</code> method of the
+ * <li>If the <code>integerOnly</code> property has been set to true, only
+ *     the integer portion of the String will be parsed.  See the JavaDocs
+ *     for the <code>setParseIntegerOnly()</code> method of the
  *     <code>java.text.NumberFormat</code> class for more information.</li>
  * </ul>
  *

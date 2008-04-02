@@ -1,5 +1,5 @@
 /*
- * $Id: UIInput.java,v 1.60 2004/01/10 03:16:28 eburns Exp $
+ * $Id: UIInput.java,v 1.61 2004/01/15 06:03:21 eburns Exp $
  */
 
 /*
@@ -120,12 +120,27 @@ public class UIInput extends UIOutput implements EditableValueHolder {
     private Object submittedValue = null;
 
 
+    /**
+     * <p>Return the submittedValue value of this {@link UIInput} component.
+     * This method should only be used by the <code>decode()</code> and
+     * <code>validate()</code> method of this component, or
+     *  its corresponding {@link Renderer}.</p>
+     */
     public Object getSubmittedValue() {
 
         return (this.submittedValue);
 
     }
 
+
+    /**
+     * <p>Set the submittedValue value of this {@link UIInput} component.
+     * This method should only be used by the <code>decode()</code> and
+     * <code>validate()</code> method of this component, or
+     *  its corresponding {@link Renderer}.</p>
+
+     * @param submittedValue The new submitted value
+     */
     public void setSubmittedValue(Object submittedValue) {
 
         this.submittedValue = submittedValue;
@@ -143,10 +158,18 @@ public class UIInput extends UIOutput implements EditableValueHolder {
      */
     private boolean localValueSet;
 
+    /**
+     * Return the "local value set" state for this component.
+     * Calls to <code>setValue()</code> automatically reset
+     * this property to <code>true</code>.
+     */
     public boolean isLocalValueSet() {
         return localValueSet;
     }
 
+    /**
+     * Sets the "local value set" state for this component.
+     */
     public void setLocalValueSet(boolean localValueSet) {
         this.localValueSet = localValueSet;
     }
@@ -159,6 +182,9 @@ public class UIInput extends UIOutput implements EditableValueHolder {
     private boolean requiredSet = false;
 
 
+    /**
+     * <p>Return the "required field" state for this component.</p>
+     */
     public boolean isRequired() {
 
 	if (this.requiredSet) {
@@ -173,7 +199,28 @@ public class UIInput extends UIOutput implements EditableValueHolder {
 
     }
 
+    private boolean valid = true;
 
+
+    public boolean isValid() {
+
+        return (this.valid);
+
+    }
+
+
+    public void setValid(boolean valid) {
+
+        this.valid = valid;
+
+    }
+
+
+    /**
+     * <p>Set the "required field" state for this component.</p>
+     *
+     * @param required The new "required field" state
+     */
     public void setRequired(boolean required) {
 
         this.required = required;
@@ -185,6 +232,12 @@ public class UIInput extends UIOutput implements EditableValueHolder {
     private MethodBinding validatorBinding = null;
 
 
+    /**
+     * <p>Return a <code>MethodBinding</code> pointing at a
+     * method that will be called during <em>Process Validations</em>
+     * phase of the request processing lifecycle, to validate the current
+     * value of this component.</p>
+     */
     public MethodBinding getValidator() {
 
         return (this.validatorBinding);
@@ -192,6 +245,18 @@ public class UIInput extends UIOutput implements EditableValueHolder {
     }
 
 
+    /**
+     * <p>Set a <code>MethodBinding</code> pointing at a
+     * method that will be called during <em>Process Validations</em>
+     * phase of the request processing lifecycle, to validate the current
+     * value of this component.</p>
+     *
+     * <p>Any method referenced by such an expression must be public, with
+     * a return type of <code>void</code>, and accept parameters of type
+     * {@link FacesContext}, {@link UIComponent}, and <code>Object</code>.</p>
+     *
+     * @param validatorBinding The new <code>MethodBinding</code> instance
+     */
     public void setValidator(MethodBinding validatorBinding) {
 
         this.validatorBinding = validatorBinding;
@@ -202,6 +267,12 @@ public class UIInput extends UIOutput implements EditableValueHolder {
    private MethodBinding valueChangeMethod = null;
 
 
+    /**
+     * <p>Return a <code>MethodBinding </code> instance 
+     * method that will be called during <em>Process Validations</em>
+     * phase of he request processing lifecycle, after any registered
+     * {@link ValueChangeListener}s have been notified of a value change.</p>
+     */
     public MethodBinding getValueChangeListener() {
 
         return (this.valueChangeMethod);
@@ -209,6 +280,14 @@ public class UIInput extends UIOutput implements EditableValueHolder {
     }
 
 
+    /**
+     * <p>Set a <code>MethodBinding</code> instance  a
+     * that will be called during <em>Process Validations</em>
+     * phase of he request processing lifecycle, after any registered
+     * {@link ValueChangeListener}s have been notified of a value change.</p>
+     *
+     * @param valueChangeMethod The new method binding instance 
+     */
     public void setValueChangeListener(MethodBinding valueChangeMethod) {
 
         this.valueChangeMethod = valueChangeMethod;
@@ -651,6 +730,15 @@ public class UIInput extends UIOutput implements EditableValueHolder {
     List validators = null;
 
 
+    /**
+     * <p>Add a {@link Validator} instance to the set associated with
+     * this {@link UIInput}.</p>
+     *
+     * @param validator The {@link Validator} to add
+     *
+     * @exception NullPointerException if <code>validator</code>
+     *  is null
+     */
     public void addValidator(Validator validator) {
 
         if (validator == null) {
@@ -664,6 +752,11 @@ public class UIInput extends UIOutput implements EditableValueHolder {
     }
 
 
+    /**
+     * <p>Return the set of registered {@link Validator}s for this
+     * {@link UIInput} instance.  If there are no registered validators,
+     * a zero-length array is returned.</p>
+     */
     public Validator[] getValidators() {
 
         if (validators == null) {
@@ -676,6 +769,13 @@ public class UIInput extends UIOutput implements EditableValueHolder {
     }
 
 
+    /**
+     * <p>Remove a {@link Validator} instance from the set associated with
+     * this {@link UIInput}, if it was previously associated.
+     * Otherwise, do nothing.</p>
+     *
+     * @param validator The {@link Validator} to remove
+     */
     public void removeValidator(Validator validator) {
 
         if (validators != null) {
@@ -688,6 +788,15 @@ public class UIInput extends UIOutput implements EditableValueHolder {
     // ------------------------------------------------ Event Processing Methods
 
 
+    /**
+     * <p>Add a new {@link ValueChangeListener} to the set of listeners
+     * interested in being notified when {@link ValueChangeEvent}s occur.</p>
+     *
+     * @param listener The {@link ValueChangeListener} to be added
+     *
+     * @exception NullPointerException if <code>listener</code>
+     *  is <code>null</code>
+     */
     public void addValueChangeListener(ValueChangeListener listener) {
 
         addFacesListener(listener);
@@ -695,6 +804,11 @@ public class UIInput extends UIOutput implements EditableValueHolder {
     }
 
 
+    /**
+     * <p>Return the set of registered {@link ValueChangeListener}s for this
+     * {@link UIInput} instance.  If there are no registered listeners,
+     * a zero-length array is returned.</p>
+     */
     public ValueChangeListener[] getValueChangeListeners() {
 
         ValueChangeListener vcl[] = (ValueChangeListener [])
@@ -704,6 +818,16 @@ public class UIInput extends UIOutput implements EditableValueHolder {
     }
 
 
+    /**
+     * <p>Remove an existing {@link ValueChangeListener} (if any) from the
+     * set of listeners interested in being notified when
+     * {@link ValueChangeEvent}s occur.</p>
+     *
+     * @param listener The {@link ValueChangeListener} to be removed
+     *
+     * @exception NullPointerException if <code>listener</code>
+     *  is <code>null</code>
+     */
     public void removeValueChangeListener(ValueChangeListener listener) {
 
         removeFacesListener(listener);
@@ -716,14 +840,15 @@ public class UIInput extends UIOutput implements EditableValueHolder {
 
     public Object saveState(FacesContext context) {
 
-        Object values[] = new Object[7];
+        Object values[] = new Object[8];
         values[0] = super.saveState(context);
         values[1] = localValueSet ? Boolean.TRUE : Boolean.FALSE;
         values[2] = required ? Boolean.TRUE : Boolean.FALSE;
 	values[3] = requiredSet ? Boolean.TRUE : Boolean.FALSE;
-        values[4] = saveAttachedState(context, validators);
-        values[5] = saveAttachedState(context, validatorBinding);
-        values[6] = saveAttachedState(context, valueChangeMethod);
+        values[4] = this.valid ? Boolean.TRUE : Boolean.FALSE;
+        values[5] = saveAttachedState(context, validators);
+        values[6] = saveAttachedState(context, validatorBinding);
+        values[7] = saveAttachedState(context, valueChangeMethod);
         return (values);
 
     }
@@ -736,11 +861,12 @@ public class UIInput extends UIOutput implements EditableValueHolder {
         localValueSet = ((Boolean) values[1]).booleanValue();
         required = ((Boolean) values[2]).booleanValue();
         requiredSet = ((Boolean) values[3]).booleanValue();
+        valid = ((Boolean) values[4]).booleanValue();
 	List restoredValidators = null;
 	Iterator iter = null;
 
 	if (null != (restoredValidators = (List) 
-		     restoreAttachedState(context, values[4]))) {
+		     restoreAttachedState(context, values[5]))) {
 	    // if there were some validators registered prior to this
 	    // method being invoked, merge them with the list to be
 	    // restored.
@@ -756,9 +882,9 @@ public class UIInput extends UIOutput implements EditableValueHolder {
 	}
 
         validatorBinding = (MethodBinding) restoreAttachedState(context,
-								values[5]);
+								values[6]);
         valueChangeMethod = (MethodBinding) restoreAttachedState(context,
-								 values[6]);
+								 values[7]);
 
 
     }

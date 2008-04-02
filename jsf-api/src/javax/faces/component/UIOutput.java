@@ -1,5 +1,5 @@
 /*
- * $Id: UIOutput.java,v 1.41 2004/01/08 21:21:10 eburns Exp $
+ * $Id: UIOutput.java,v 1.42 2004/01/15 06:03:22 eburns Exp $
  */
 
 /*
@@ -75,7 +75,6 @@ public class UIOutput extends UIComponentBase
 
 
     private Converter converter = null;
-    private boolean valid = true;
     private Object value = null;
 
 
@@ -104,19 +103,6 @@ public class UIOutput extends UIComponentBase
 
     }
 
-
-    public boolean isValid() {
-
-        return (this.valid);
-
-    }
-
-
-    public void setValid(boolean valid) {
-
-        this.valid = valid;
-
-    }
 
 
     public Object getLocalValue() {
@@ -153,11 +139,10 @@ public class UIOutput extends UIComponentBase
 
     public Object saveState(FacesContext context) {
 
-        Object values[] = new Object[4];
+        Object values[] = new Object[3];
         values[0] = super.saveState(context);
         values[1] = saveAttachedState(context, converter);
-        values[2] = this.valid ? Boolean.TRUE : Boolean.FALSE;
-        values[3] = value;
+        values[2] = value;
         return (values);
 
     }
@@ -168,8 +153,7 @@ public class UIOutput extends UIComponentBase
         Object values[] = (Object[]) state;
         super.restoreState(context, values[0]);
         converter = (Converter) restoreAttachedState(context, values[1]);
-        valid = ((Boolean) values[2]).booleanValue();
-        value = values[3];
+        value = values[2];
 
     }
 

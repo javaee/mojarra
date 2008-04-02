@@ -1,5 +1,5 @@
 /*
- * $Id: ValueHolder.java,v 1.10 2004/01/09 06:52:44 eburns Exp $
+ * $Id: ValueHolder.java,v 1.11 2004/01/15 06:03:25 eburns Exp $
  */
 
 /*
@@ -36,12 +36,12 @@ public interface ValueHolder {
 
 
     /**
-     * <p>First consult the local value property of this component.  If
-     * non-<code>null</code> return it.  If the local value property is
-     * <code>null</code>, see if we have a {@link
-     * javax.faces.el.ValueBinding} for the <code>value</code> property.
-     * If so, return the result of evaluating the property, otherwise
-     * return <code>null</code>a.</p>
+     * <p>Gets the value of this {@link UIComponent}.  First, consult
+     * the local value property of this component.  If
+     * non-<code>null</code> return it.  If non-null, see if we have a
+     * {@link javax.faces.el.ValueBinding} for the <code>value</code>
+     * property.  If so, return the result of evaluating the
+     * property, otherwise return null.</p>
      */
     public Object getValue();
 
@@ -69,23 +69,4 @@ public interface ValueHolder {
      * @param converter New {@link Converter} (or <code>null</code>)
      */
     public void setConverter(Converter converter);
-
-
-    /**
-     * <p>Return a flag indicating whether the local value of this component
-     * is valid (no conversion error has occurred).</p>
-     */
-    public boolean isValid();
-
-
-    /**
-     * <p>Set a flag indicating whether the local value of this component
-     * is valid (no conversion error has occurred).</p>
-     *
-     * @param valid The new valid flag
-     */
-    public void setValid(boolean valid);
-
-
-
 }

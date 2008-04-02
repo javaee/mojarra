@@ -1,5 +1,5 @@
 /*
- * $Id: SelectItem.java,v 1.3 2003/10/24 02:22:24 craigmcc Exp $
+ * $Id: SelectItem.java,v 1.4 2004/01/15 06:03:36 eburns Exp $
  */
 
 /*
@@ -45,7 +45,7 @@ public class SelectItem implements Serializable {
      * set to <code>null</code>, and the <code>disabled</code> property will
      * be set to <code>false</code>.</p>
      *
-     * @param value Value to be returned as a request parameter if this
+     * @param value Value to be delivered to the model if this
      *  item is selected by the user
      *
      * @exception NullPointerException if <code>value</code>
@@ -64,7 +64,7 @@ public class SelectItem implements Serializable {
      * <code>null</code>, and the <code>disabled</code> property will be
      * set to <code>false</code>.</p>
      *
-     * @param value Value to be returned as a request parameter if this
+     * @param value Value to be delivered to the model if this
      *  item is selected by the user
      * @param label Label to be rendered for this item in the response
      *
@@ -83,7 +83,7 @@ public class SelectItem implements Serializable {
      * value, label and description.  This <code>disabled</code> property
      * will be set to <code>false</code>.</p>
      *
-     * @param value Value to be returned as a request parameter if this
+     * @param value Value to be delivered to the model if this
      *  item is selected by the user
      * @param label Label to be rendered for this item in the response
      * @param description Description of this item, for use in tools
@@ -102,7 +102,7 @@ public class SelectItem implements Serializable {
      * <p>Construct a <code>SelectItem</code> instance with the specified
      * property values.</p>
      *
-     * @param value Value to be returned as a request parameter if this
+     * @param value Value to be delivered to the model if this
      *  item is selected by the user
      * @param label Label to be rendered for this item in the response
      * @param description Description of this item, for use in tools
@@ -209,7 +209,7 @@ public class SelectItem implements Serializable {
 
 
     /**
-     * <p>Return the value of this item, to be returned as a request parameter
+     * <p>Return the value of this item, to be delivered to the model
      * if this item is selected by the user.
      */
     public Object getValue() {
@@ -220,7 +220,7 @@ public class SelectItem implements Serializable {
 
 
     /**
-     * <p>Set the value of this item, to be returned as a request parameter
+     * <p>Set the value of this item, to be delivered to the model
      * if this item is selected by thie user.
      *
      * @param value The new value

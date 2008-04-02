@@ -1,5 +1,5 @@
 /*
- * $Id: ValueHolderTestCaseBase.java,v 1.6 2004/01/08 21:21:22 eburns Exp $
+ * $Id: ValueHolderTestCaseBase.java,v 1.7 2004/01/15 06:03:41 eburns Exp $
  */
 
 /*
@@ -104,19 +104,6 @@ public abstract class ValueHolderTestCaseBase extends UIComponentBaseTestCase {
         component.getAttributes().put("converter", null);
         assertNull(vh.getConverter());
 
-        assertEquals(vh.isValid(), true);
-        assertEquals(vh.isValid(),
-                     ((Boolean) component.getAttributes().get("valid")).
-                     booleanValue());
-        vh.setValid(false);
-        assertEquals(vh.isValid(),
-                     ((Boolean) component.getAttributes().get("valid")).
-                     booleanValue());
-        component.getAttributes().put("valid", Boolean.TRUE);
-        assertEquals(vh.isValid(),
-                     ((Boolean) component.getAttributes().get("valid")).
-                     booleanValue());
-
     }
 
 
@@ -134,7 +121,6 @@ public abstract class ValueHolderTestCaseBase extends UIComponentBaseTestCase {
         // Validate properties
         assertNull("no value", vh.getValue());
         assertNull("no converter", vh.getConverter());
-        assertTrue("is valid", vh.isValid());
 
     }
 
@@ -167,12 +153,6 @@ public abstract class ValueHolderTestCaseBase extends UIComponentBaseTestCase {
                    vh.getConverter() instanceof LongConverter);
         vh.setConverter(null);
         assertNull("erased converter", vh.getConverter());
-
-        vh.setValid(false);
-        assertTrue(!vh.isValid());
-        vh.setValid(true);
-        assertTrue(vh.isValid());
-
     }
 
 
@@ -207,8 +187,6 @@ public abstract class ValueHolderTestCaseBase extends UIComponentBaseTestCase {
         assertEquals(vh1.getValue(), vh2.getValue());
         checkNumberConverter((NumberConverter) vh1.getConverter(),
                              (NumberConverter) vh2.getConverter());
-        assertEquals(vh1.isValid(), vh2.isValid());
-
     }
 
 
@@ -219,7 +197,6 @@ public abstract class ValueHolderTestCaseBase extends UIComponentBaseTestCase {
         ValueHolder vh = (ValueHolder) component;
         vh.setValue("component value");
         vh.setConverter(createNumberConverter());
-        vh.setValid(false);
 
     }
 

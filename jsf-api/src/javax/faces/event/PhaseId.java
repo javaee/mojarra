@@ -1,5 +1,5 @@
 /*
- * $Id: PhaseId.java,v 1.13 2003/12/17 15:10:55 rkitain Exp $
+ * $Id: PhaseId.java,v 1.14 2004/01/15 06:03:35 eburns Exp $
  */
 
 /*
@@ -109,7 +109,7 @@ public class PhaseId implements Comparable {
 
     private static final String ANY_PHASE_NAME = "ANY";
     /**
-     * <p>Identifier that indicates an interest in events, on matter
+     * <p>Identifier that indicates an interest in events, no matter
      * which request processing phase is being performed.</p>
      */
     public static final PhaseId ANY_PHASE = new PhaseId(ANY_PHASE_NAME);

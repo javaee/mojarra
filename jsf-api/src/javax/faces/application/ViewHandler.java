@@ -1,5 +1,5 @@
 /*
- * $Id: ViewHandler.java,v 1.28 2003/12/24 17:23:39 eburns Exp $
+ * $Id: ViewHandler.java,v 1.29 2004/01/15 06:03:16 eburns Exp $
  */
 
 /*
@@ -80,7 +80,7 @@ public interface ViewHandler {
      * actions to save the state of the response between requests, using
      * the {@link StateManager}.  This method is responsible for
      * ensuring that the {@link FacesContext} has been provided with
-     * valid {@link javax.faces.context.ResponseWriter} and {@link
+     * valid {@link javax.faces.context.ResponseWriter} or {@link
      * javax.faces.context.ResponseStream} instances for the current
      * request.</p>
      *
@@ -173,7 +173,7 @@ public interface ViewHandler {
     public UIViewRoot restoreView(FacesContext context, String viewId);
 
     /**
-     * <p>Create an and return new {@link UIViewRoot} instance
+     * <p>Create and return a new {@link UIViewRoot} instance
      * initialized with information from the argument
      * <code>FacesContext</code> and <code>viewId</code>.</p>
      *

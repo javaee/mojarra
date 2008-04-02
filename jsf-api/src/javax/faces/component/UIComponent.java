@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.120 2004/01/10 03:16:27 eburns Exp $
+ * $Id: UIComponent.java,v 1.121 2004/01/15 06:03:20 eburns Exp $
  */
 
 /*
@@ -126,7 +126,11 @@ public abstract class UIComponent implements StateHolder {
      * client.</p>
      *
      * <p>The return from this method must be the same value throughout
-     * the lifetime of the instance.</p>
+     * the lifetime of the instance, unless the <code>id</code> property
+     * of the component is changed, or the component is placed in
+     * a {@link NamingContainer} whose client ID changes (for example,
+     * {@link UIData}).  However, even in these cases, consecutive
+     * calls to this method must always return the same value.</p>
      *
      * @param context The {@link FacesContext} for the current request
      *
@@ -182,8 +186,12 @@ public abstract class UIComponent implements StateHolder {
 
     /**
      * <p>Set the parent <code>UIComponent</code> of this
-     * <code>UIComponent</code>.</p>
-     *
+     * <code>UIComponent</code>.  <strong>This method must
+     * never be called by developers;  a UIComponent's internal
+     * implementation will call it as components are added to or
+     * removed from a parent's child <code>List</code> or 
+     * facet <code>Map</code>.</p>
+     * 
      * @param parent The new parent, or <code>null</code> for the root node
      *  of a component tree
      */
@@ -254,7 +262,10 @@ public abstract class UIComponent implements StateHolder {
      * <li>Any attempt to add an object that does not implement
      *     {@link UIComponent} must throw a ClassCastException.</li>
      * <li>Whenever a new child component is added, the <code>parent</code>
-     *     property of the child must be set to this component instance.</li>
+     *     property of the child must be set to this component instance.
+     *     If the <code>parent</code> property of the child was already
+     *     non-null, the child must first be removed from its previous
+     *     parent (where it may have been either a child or a facet).</li>
      * <li>Whenever an existing child component is removed, the
      *     <code>parent</code> property of the child must be set to
      *     <code>null</code>.</li>
@@ -365,6 +376,9 @@ public abstract class UIComponent implements StateHolder {
      *     <ul>
      *     <li>The <code>parent</code> property of the component must be set to
      *         this component instance.</li>
+     *     <li>If the <code>parent</code> property of the component was already
+     *     non-null, the component must first be removed from its previous
+     *     parent (where it may have been either a child or a facet).</li>
      *     </ul></li>
      * <li>Whenever an existing facet {@link UIComponent} is removed:
      *     <ul>
@@ -424,31 +438,9 @@ public abstract class UIComponent implements StateHolder {
 
 
     /**
-     * <p>Decode the current state of this {@link UIComponent} from the
-     * request contained in the specified {@link FacesContext}, and attempt
-     * to convert this state information into an object of the required type
-     * for this component (optionally using the registered
-     * {@link javax.faces.convert.Converter} for this component, if there
-     * is one.</p>
-     *
-     * <p>If conversion is successful:</p>
-     * <ul>
-     * <li>Save the new local value of this component by calling
-     *     <code>setValue()</code> and passing the new value.</li>
-     * <li>Set the <code>valid</code> property of this component
-     *     to <code>true</code>.</li>
-     * </ul>
-     *
-     * <p>If conversion is not successful:</p>
-     * <ul>
-     * <li>Save state information in such a way that encoding
-     *     can reproduce the previous input (even though it was syntactically
-     *     or semantically incorrect)</li>
-     * <li>Add an appropriate conversion failure error message by calling
-     *     <code>context.addMessage()</code>.</li>
-     * <li>Set the <code>valid</code> property of this comonent
-     *     to <code>false</code>.</li>
-     * </ul>
+     * <p>Decode any new state of this {@link UIComponent} from the
+     * request contained in the specified {@link FacesContext}, and store
+     * this state as needed.</p>
      *
      * <p>During decoding, events may be enqueued for later processing
      * (by event listeners who have registered an interest),  by calling
@@ -466,13 +458,7 @@ public abstract class UIComponent implements StateHolder {
      * <p>If our <code>rendered</code> property is <code>true</code>,
      * render the beginning of the current state of this
      * {@link UIComponent} to the response contained in the specified
-     * {@link FacesContext}.  If the conversion attempted in a previous call
-     * to <code>decode()</code> for this component failed, the state
-     * information saved during execution of <code>decode()</code> should be
-     * utilized to reproduce the incorrect input.  If the conversion was
-     * successful, or if there was no previous call to <code>decode()</code>,
-     * the value to be displayed should be acquired by calling
-     * <code>getValue()</code>, and rendering the value as appropriate.
+     * {@link FacesContext}.
      * </p>
      * 
      * <p>If a {@link Renderer} is associated with this {@link UIComponent}, 
@@ -490,9 +476,8 @@ public abstract class UIComponent implements StateHolder {
 
     /**
      * <p>If our <code>rendered</code> property is <code>true</code>,
-     * render the child {@link UIComponent}s of this {@link UIComponent},
-     * following the rules described for <code>encodeBegin()</code> to acquire
-     * the appropriate value to be rendered.  This method will only be called
+     * render the child {@link UIComponent}s of this {@link UIComponent}.
+     * This method will only be called
      * if the <code>rendersChildren</code> property is <code>true</code>.</p>
      * 
      * <p>If a {@link Renderer} is associated with this {@link UIComponent}, 
@@ -511,9 +496,7 @@ public abstract class UIComponent implements StateHolder {
     /**
      * <p>If our <code>rendered</code> property is <code>true</code>,
      * render the ending of the current state of this
-     * {@link UIComponent}, following the rules described for
-     * <code>encodeBegin()</code> to acquire the appropriate value
-     * to be rendered.</p>
+     * {@link UIComponent}.</p>
      * 
      * <p>If a {@link Renderer} is associated with this {@link UIComponent}, 
      * the actual encoding will be delegated to 
@@ -566,9 +549,11 @@ public abstract class UIComponent implements StateHolder {
 
 
     /**
-     * <p>Return the set of registered {@link FacesListener}s that are
+     * <p>Return an array of registered {@link FacesListener}s that are
      * instances of the specified class.  If there are no such registered
-     * listeners, a zero-length array is returned.</p>
+     * listeners, a zero-length array is returned.  The returned 
+     * array can be safely be cast to an array strongly typed to
+     * an element type of <code>clazz</code>.</p>
      *
      * @param clazz Class that must be implemented by a {@link FacesListener}
      *  for it to be returned
@@ -711,7 +696,7 @@ public abstract class UIComponent implements StateHolder {
      * follows.</p> <ul>
      *
      * <li>consult the <code>transient</code> property of this
-     * component.  If true, just return.</li>
+     * component.  If true, just return <code>null</code>.</li>
      *
      * <li>Call the <code>processSaveState()</code> method of all
      * facets and children of this {@link UIComponent} in the order

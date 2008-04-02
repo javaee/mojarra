@@ -1,5 +1,5 @@
 /*
- * $Id: FactoryFinder.java,v 1.19 2003/09/04 23:37:08 eburns Exp $
+ * $Id: FactoryFinder.java,v 1.20 2004/01/15 06:03:14 eburns Exp $
  */
 
 /*
@@ -42,7 +42,7 @@ import java.lang.reflect.Constructor;
  * factories are used, with the last one taking precedence.</li>
  *
  * <li>If there are any JavaServer Faces configuration files bundled
- * into the <code>WEB-INF/lib</code> directory of any jars on the
+ * into the <code>META-INF</code> directory of any jars on the
  * <code>ServletContext</code>'s resource paths, the
  * <code>factory</code> entries of the given factory class name in those
  * files are used, with the last one taking precedence.</li>

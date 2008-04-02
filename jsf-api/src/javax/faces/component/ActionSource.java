@@ -1,5 +1,5 @@
 /*
- * $Id: ActionSource.java,v 1.6 2003/12/17 15:10:35 rkitain Exp $
+ * $Id: ActionSource.java,v 1.7 2004/01/15 06:03:18 eburns Exp $
  */
 
 /*
@@ -76,7 +76,7 @@ public interface ActionSource {
      * property.</p>
      *
      * <p>Any method referenced by such an expression must be public, with
-     * a return type of <code>void</code>, and accept a singe parameter of
+     * a return type of <code>void</code>, and accept a single parameter of
      * type <code>ActionEvent</code>.</p>
      *
      * @param actionListener The new method reference expression
@@ -95,7 +95,7 @@ public interface ActionSource {
 
 
     /**
-     * <p>Set the "immediate execution" flag for this {@link UICommand}.</p>
+     * <p>Set the "immediate execution" flag for this {@link UIComponent}.</p>
      *
      * @param immediate The new immediate execution flag
      */

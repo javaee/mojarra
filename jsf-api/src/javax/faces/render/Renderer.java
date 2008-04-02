@@ -1,5 +1,5 @@
 /*
- * $Id: Renderer.java,v 1.29 2004/01/06 14:52:16 rkitain Exp $
+ * $Id: Renderer.java,v 1.30 2004/01/15 06:03:37 eburns Exp $
  */
 
 /*
@@ -44,32 +44,9 @@ public abstract class Renderer {
 
 
     /**
-     * <p>Decode the current state of the specified {@link UIComponent}
+     * <p>Decode any new state of the specified {@link UIComponent}
      * from the request contained in the specified {@link FacesContext},
-     * and attempt to convert this state information into an object of
-     * the type required for this component (optionally using the registered
-     * {@link javax.faces.convert.Converter} for this component,
-     * if there is one).</p>
-     *
-     * <p>If conversion is successful:</p>
-     * <ul>
-     * <li>Save the new local value of this component by calling
-     *     <code>setValue()</code> and passing the new value.</li>
-     * <li>Set the <code>value</code> property of this component
-     *     to <code>true</code>.</li>
-     * </ul>
-     *
-     * <p>If conversion is not successful:</p>
-     * <ul>
-     * <li>Save the state information (inside the component) in such a way
-     *     that encoding can reproduce the previous input
-     *     (even though it was syntactically or semantically incorrect).</li>
-     * <li>Add an appropriate conversion failure error message by calling
-     *     <code>addMessage()</code> on the specified {@link FacesContext}.
-     *     </li>
-     * <li>Set the <code>valid</code> property of this component
-     *     to <code>false</code>.</li>
-     * </ul>
+     * and store that state on the {@link UIComponent}.</p>
      *
      * <p>During decoding, events may be enqueued for later processing
      * (by event listeners that have registered an interest), by calling
@@ -92,13 +69,11 @@ public abstract class Renderer {
     /**
      * <p>Render the beginning specified {@link UIComponent} to the
      * output stream or writer associated with the response we are creating.
-     * If the conversion attempted in a previous call to <code>decode</code>
-     * for this component failed, the state information saved during execution
-     * of <code>decode()</code> should be utilized to reproduce the incorrect
-     * input.  If the conversion was successful, or if there was no previous
-     * call to <code>decode()</code>, the value to be displayed should be
-     * acquired by calling <code>component.currentValue()</code>, and
-     * rendering the value as appropriate.</p>
+     * If the conversion attempted in a previous call to
+     * <code>getConvertedValue()</code> for this component failed, the state
+     * information saved during execution
+     * of <code>decode()</code> should be used to reproduce the incorrect
+     * input.</p>
      *
      * @param context {@link FacesContext} for the request we are processing
      * @param component {@link UIComponent} to be rendered
@@ -203,6 +178,18 @@ public abstract class Renderer {
 
 
     /**
+     * <p>Attempt to convert previously stored state information into an
+     * object of the type required for this component (optionally using the
+     * registered {@link javax.faces.convert.Converter} for this component,
+     * if there is one).  If conversion is successful, the new value
+     * should be returned from this method;  if not, a
+     * {@link ConverterException} should be thrown.</p>
+     * 
+     * @param context {@link FacesContext} for the request we are processing
+     * @param component {@link UIComponent} to be decoded.
+     * @param submittedValue a value stored on the component during
+     *    <code>decode</code>.
+     * 
      * @exception ConverterException if the submitted value
      *   cannot be converted successfully.
      * @exception NullPointerException if <code>context</code>

@@ -1,5 +1,5 @@
 /*
- * $Id: ExternalContext.java,v 1.11 2003/12/17 15:10:44 rkitain Exp $
+ * $Id: ExternalContext.java,v 1.12 2004/01/15 06:03:32 eburns Exp $
  */
  
 /*
@@ -144,7 +144,7 @@ public abstract class ExternalContext {
 
 
     /**
-     * <p>If the <code>create</code> parameter is <code>, return the
+     * <p>If the <code>create</code> parameter is <code>true</code>, return the
      * session instance for the session associated with
      * the current request; if there is none, create and return
      * a new session instance.  If the <code>create</code> parameter is

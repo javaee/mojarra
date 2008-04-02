@@ -1,5 +1,5 @@
 /*
- * $Id: UIGraphic.java,v 1.30 2004/01/08 21:21:10 eburns Exp $
+ * $Id: UIGraphic.java,v 1.31 2004/01/15 06:03:21 eburns Exp $
  */
 
 /*
@@ -77,9 +77,12 @@ public class UIGraphic extends UIComponentBase {
     }
 
 
-    // -------------------------------------------------- ValueHolder Properties
 
 
+    /**
+     * <p>Returns the <code>value</code> property of the
+     * <code>UIGraphic</code>. This will typically be rendered as an URL.</p>
+     */
     public Object getValue() {
 
 	if (this.value != null) {
@@ -95,6 +98,12 @@ public class UIGraphic extends UIComponentBase {
     }
 
 
+    /**
+     * <p>Sets the <code>value</code> property of the <code>UIGraphic</code>.
+     * This will typically be rendered as an URL.</p>
+     * 
+     * @param value the new value
+     */
     public void setValue(Object value) {
 
         this.value = value;

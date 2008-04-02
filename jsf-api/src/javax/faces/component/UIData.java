@@ -68,7 +68,7 @@ import javax.servlet.jsp.jstl.sql.Result;
  * <p><strong>UIData</strong> is a {@link UIComponent} that supports
  * data binding to a collection of data objects represented by a
  * {@link DataModel} instance, which is the current value of this component
- * itself (typically established via a {@link ValueBinding}.
+ * itself (typically established via a {@link ValueBinding}).
  * During iterative processing over the rows of data in the data model,
  * the object for the current row is exposed as a request attribute
  * under the key specified by the <code>var</code> property.</p>
@@ -264,7 +264,7 @@ public class UIData extends UIComponentBase
      * It is possible to set the row index at a value for which the underlying
      * data collection does not contain any row data.  Therefore, callers may
      * use the <code>isRowAvailable()</code> method to detect whether row data
-     * will be available for use by the <code>getRowData()</code> methodl</p>
+     * will be available for use by the <code>getRowData()</code> method.</p>
      *</p>
      * <ul>
      * <li>Save current state information for all descendant components (as
@@ -356,7 +356,8 @@ public class UIData extends UIComponentBase
 
     /**
      * <p>Return the number of rows to be displayed, or zero for all
-     * remaining rows in the table.</p>
+     * remaining rows in the table.  The default value of this
+     * property is zero.</p>
      */
     public int getRows() {
 
@@ -458,9 +459,20 @@ public class UIData extends UIComponentBase
     }
 
 
-    // -------------------------------------------------- ValueHolder Properties
-
-
+    /**
+     * <p>Return the value of the UIData.  This value must either be 
+     * be of type {@link DataModel}, or a type that can be adapted
+     * into a {@link DataModel}.  <code>UIData</code> will automatically
+     * adapt the following types:</p>
+     * <ul>
+     * <li>Arrays</li>
+     * <li><code>java.util.List</code></li>
+     * <li><code>java.sql.ResultSet</code></li>
+     * <li><code>javax.servlet.jsp.jstl.sql.Result</code></li>
+     * </ul>
+     * <p>All other types will be adapted using the {@link ScalarDataModel}
+     * class, which will treat the object as a single row of data.</p>
+     */
     public Object getValue() {
 
 	if (this.value != null) {
@@ -476,6 +488,13 @@ public class UIData extends UIComponentBase
     }
 
 
+    /**
+     * <p>Set the value of the <code>UIData</code>.  This value must either be 
+     * be of type {@link DataModel}, or a type that can be adapted
+     * into a {@link DataModel}.</p>
+     * 
+     * @param value the new value
+     */
     public void setValue(Object value) {
         this.model = null;
         this.value = value;
@@ -524,7 +543,7 @@ public class UIData extends UIComponentBase
      * current value of the <code>rowIndex</code> property, if it is not
      * set to -1.  This implies that multiple calls to
      * <code>getClientId()</code> may return different results,
-     * but ensures that child components can themselves will generate
+     * but ensures that child components can themselves generate
      * row-specific client identifiers (since {@link UIData} is a
      * {@link NamingContainer}).</p>
      *

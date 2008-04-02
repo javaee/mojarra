@@ -1,5 +1,5 @@
 /*
- * $Id: Application.java,v 1.22 2003/12/22 23:25:41 eburns Exp $
+ * $Id: Application.java,v 1.23 2004/01/15 06:03:14 eburns Exp $
  */
 
 /*
@@ -70,11 +70,7 @@ public abstract class Application {
      *     the logical outcome of this event, as follows:
      *     <ul>
      *     <li>If the originating component has a non-<code>null</code>
-     *         <code>action</code> property, its value is used as the
-     *         logical outcome.</li>
-
-     *     <li>If the originating component has a non-<code>null</code>
-     *     <code>action</code> property retrieve the {@link
+     *     <code>action</code> property, retrieve the {@link
      *     MethodBinding} from the property, and call
      *     <code>invoke()</code> on it.  Convert the returned value (if
      *     any) to a String, and use it as the logical outcome.</li>
@@ -83,7 +79,7 @@ public abstract class Application {
      *     </ul></li>
 
      * <li>The <code>processAction()</code> method must finally retrieve
-     *     the <code>NavigationHandler()</code> instance for this
+     *     the <code>NavigationHandler</code> instance for this
      *     application and call {@link
      *     NavigationHandler#handleNavigation} passing: 
      *

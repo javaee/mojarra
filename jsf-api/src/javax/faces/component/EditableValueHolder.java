@@ -1,5 +1,5 @@
 /*
- * $Id: EditableValueHolder.java,v 1.2 2004/01/09 01:50:24 craigmcc Exp $
+ * $Id: EditableValueHolder.java,v 1.3 2004/01/15 06:03:18 eburns Exp $
  */
 
 /*
@@ -10,7 +10,6 @@
 package javax.faces.component;
 
 
-import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.event.ValueChangeListener;
 import javax.faces.validator.Validator;
@@ -55,6 +54,24 @@ public interface EditableValueHolder extends ValueHolder {
      * Sets the "local value set" state for this component.
      */
     public void setLocalValueSet(boolean localValueSet);
+
+
+
+    /**
+     * <p>Return a flag indicating whether the local value of this component
+     * is valid (no conversion error has occurred).</p>
+     */
+    public boolean isValid();
+
+
+    /**
+     * <p>Set a flag indicating whether the local value of this component
+     * is valid (no conversion error has occurred).</p>
+     *
+     * @param valid The new valid flag
+     */
+    public void setValid(boolean valid);
+
 
     /**
      * <p>Return the "required field" state for this component.</p>

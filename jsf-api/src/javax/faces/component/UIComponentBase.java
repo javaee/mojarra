@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.89 2004/01/10 03:16:27 eburns Exp $
+ * $Id: UIComponentBase.java,v 1.90 2004/01/15 06:03:20 eburns Exp $
  */
 
 /*
@@ -1511,11 +1511,11 @@ public abstract class UIComponentBase extends UIComponent {
      * <ul>
      *
      * <p>If argument <code>attachedObject</code> is <code>null</code>
-     * return.</p>
+     * return <code>null</code>.</p>
      *
      * <p>If the argument <code>attachedObject</code> is itself a
-     * <code>List</code>, create a new <code>List</code> and fill it
-     * with one <code>StateHolderSaver</code> for each element in the
+     * <code>List</code>, create a new <code>List</code> and recursively
+     * fill it with one <code>StateHolderSaver</code> for each element in the
      * argument <code>attachedObject</code> list.  Return the new
      * <code>List</code>.</p>
      *
@@ -1581,6 +1581,9 @@ public abstract class UIComponentBase extends UIComponent {
      *
      * <p>Algorithm:</p>
      *
+     * <p>If the argument <code>stateObj</code> is <code>null</code>,
+     * return <code>null</code>.</p>
+     * 
      * <p>If the argument <code>stateObj</code> is a <code>List</code>,
      * create a new <code>List</code> to hold the result.  Treat each
      * element of <code>stateObj</code> as a

@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectMany.java,v 1.40 2004/01/06 14:52:12 rkitain Exp $
+ * $Id: UISelectMany.java,v 1.41 2004/01/15 06:03:23 eburns Exp $
  */
 
 /*
@@ -35,11 +35,11 @@ import javax.faces.model.SelectItem;
  * <code>setRendererType()</code> method.</p>
  *
  * <p>The {@link javax.faces.render.Renderer} for this component must
- * perform the following logic on <code>decode()</code>:</p>
+ * perform the following logic on <code>getConvertedValue()</code>:</p>
  *
  * <ul>
  *
- * <p>Obtain the values array from the request.  Obtain the {@link
+ * <p>Obtain the {@link
  * javax.faces.convert.Converter} using the following algorithm:</p>
  *
  * <ul> 
@@ -57,11 +57,8 @@ import javax.faces.model.SelectItem;
  * array.  If the type is <code>java.util.List</code>, assume the
  * element type is <code>String</code>.</p>
  *
- * <p>If for any reason a <code>Converter</code> cannot be found, add a
- * conversion error message to the {@link
- * javax.faces.context.FacesContext}, set the local value to be the
- * values array from the request, set the component's <code>valid</code>
- * state to <code>false</code>, and return.</p>
+ * <p>If for any reason a <code>Converter</code> cannot be found, assume
+ * the type to be a String array.</p>
  *
  * </ul>
  *

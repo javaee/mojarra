@@ -1,5 +1,5 @@
 /*
- * $Id: UIInputTestCase.java,v 1.27 2004/01/06 14:52:18 rkitain Exp $
+ * $Id: UIInputTestCase.java,v 1.28 2004/01/15 06:03:40 eburns Exp $
  */
 
 /*
@@ -103,6 +103,20 @@ public class UIInputTestCase extends UIOutputTestCase {
         assertTrue(input.isRequired());
         input.getAttributes().put("required", Boolean.FALSE);
         assertTrue(!input.isRequired());
+
+        assertEquals(input.isValid(), true);
+        assertEquals(input.isValid(),
+                     ((Boolean) component.getAttributes().get("valid")).
+                     booleanValue());
+        input.setValid(false);
+        assertEquals(input.isValid(),
+                     ((Boolean) component.getAttributes().get("valid")).
+                     booleanValue());
+        component.getAttributes().put("valid", Boolean.TRUE);
+        assertEquals(input.isValid(),
+                     ((Boolean) component.getAttributes().get("valid")).
+                     booleanValue());
+
     }
 
 
@@ -224,6 +238,7 @@ public class UIInputTestCase extends UIOutputTestCase {
 
         assertNull("no submittedValue", input.getSubmittedValue());
         assertTrue("not required", !input.isRequired());
+        assertTrue("is valid", input.isValid());
         assertNull("no validatorBinding", input.getValidator());
         assertNull("no valueChangeListener", input.getValueChangeListener());
 
@@ -254,6 +269,11 @@ public class UIInputTestCase extends UIOutputTestCase {
         assertTrue(input.isRequired());
         input.setRequired(false);
         assertTrue(!input.isRequired());
+
+        input.setValid(false);
+        assertTrue(!input.isValid());
+        input.setValid(true);
+        assertTrue(input.isValid());
 
         Application app = facesContext.getApplication();
 	MethodBinding methodBinding = null;
@@ -499,6 +519,7 @@ public class UIInputTestCase extends UIOutputTestCase {
         // "submittedValue" is not preserved across state-saves
         //        assertEquals(i1.getSubmittedValue(), i2.getSubmittedValue());
         assertEquals(i1.isRequired(), i2.isRequired());
+        assertEquals(i1.isValid(), i2.isValid());
         assertEquals(i1.getValidator(), i2.getValidator());
         assertEquals(i1.getValueChangeListener(), i2.getValueChangeListener());
     }
@@ -517,6 +538,7 @@ public class UIInputTestCase extends UIOutputTestCase {
         super.populateComponent(component);
         UIInput i = (UIInput) component;
         i.setSubmittedValue("submittedValue");
+        i.setValid(false);
         i.setRequired(true);
         Application app = facesContext.getApplication();
 	MethodBinding methodBinding = null;

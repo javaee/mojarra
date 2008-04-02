@@ -1,5 +1,5 @@
 /*
- * $Id: DateTimeConverter.java,v 1.19 2004/01/10 03:16:32 eburns Exp $
+ * $Id: DateTimeConverter.java,v 1.20 2004/01/15 06:03:34 eburns Exp $
  */
 
 /*
@@ -27,9 +27,11 @@ import javax.faces.context.FacesContext;
  * <p>The <code>getAsObject()</code> method parses a String into a
  * <code>java.util.Date</code>, according to the following algorithm:</p>
  * <ul>
- * <li>If the specified String is null or zero length, return
+ * <li>If the specified String is null, return
  *     a <code>null</code>.  Otherwise, trim leading and trailing
  *     whitespace before proceeding.</li>
+ * <li>If the specified String - after trimming - has a zero length,
+ *     return <code>null</code>.</li>
  * <li>If the <code>locale</code> property is not null,
  *     use that <code>Locale</code> for managing parsing.  Otherwise, use the
  *     <code>Locale</code> from the <code>UIViewRoot</code>.</li>
@@ -164,7 +166,7 @@ public class DateTimeConverter implements Converter, StateHolder {
     /**
      * <p>Set the format pattern to be used when formatting and parsing
      * dates and times.  Valid values are those supported by
-     * <code>java.text.DateFormat</code>.
+     * <code>java.text.SimpleDateFormat</code>.
      * An invalid value will cause a {@link ConverterException} when
      * <code>getAsObject()</code> or <code>getAsString()</code> is called.</p>
      *
@@ -247,7 +249,7 @@ public class DateTimeConverter implements Converter, StateHolder {
      * An invalid value will cause a {@link ConverterException} when
      * <code>getAsObject()</code> or <code>getAsString()</code> is called.</p>
      *
-     * @param type The new number style
+     * @param type The new date style
      */
     public void setType(String type) {
 

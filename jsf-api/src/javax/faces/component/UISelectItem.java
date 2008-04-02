@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectItem.java,v 1.28 2004/01/08 21:21:11 eburns Exp $
+ * $Id: UISelectItem.java,v 1.29 2004/01/15 06:03:22 eburns Exp $
  */
 
 /*
@@ -154,9 +154,11 @@ public class UISelectItem extends UIComponentBase {
     }
 
 
-    // -------------------------------------------------- ValueHolder Properties
 
-
+    /**
+     * <p>Returns the <code>value</code> property of the
+     * <code>UISelectItem</code>.</p>
+     */
     public Object getValue() {
 
 	if (this.value != null) {
@@ -172,6 +174,12 @@ public class UISelectItem extends UIComponentBase {
     }
 
 
+    /**
+     * <p>Sets the <code>value</code> property of the
+     * <code>UISelectItem</code>.</p>
+     * 
+     * @param value the new value
+     */
     public void setValue(Object value) {
 
         this.value = value;

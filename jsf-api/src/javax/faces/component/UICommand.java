@@ -1,5 +1,5 @@
 /*
- * $Id: UICommand.java,v 1.62 2004/01/10 18:52:14 eburns Exp $
+ * $Id: UICommand.java,v 1.63 2004/01/15 06:03:19 eburns Exp $
  */
 
 /*
@@ -150,9 +150,11 @@ public class UICommand extends UIComponentBase
     }
 
 
-    // -------------------------------------------------- ValueHolder Properties
 
-
+    /**
+     * <p>Returns the <code>value</code> property of the
+     * <code>UICommand</code>. This is most often rendered as a label.</p>
+     */
     public Object getValue() {
 
 	if (this.value != null) {
@@ -168,6 +170,12 @@ public class UICommand extends UIComponentBase
     }
 
 
+    /**
+     * <p>Sets the <code>value</code> property of the <code>UICommand</code>.
+     * This is most often rendered as a label.</p>
+     *
+     * @param value the new value
+     */
     public void setValue(Object value) {
 
         this.value = value;
@@ -281,8 +289,9 @@ public class UICommand extends UIComponentBase
     }
 
     /**
-     * <p>Intercept <code>queueEvent</code> and mark the phaseId for the
-     * event to be <code>PhaseId.APPLY_REQUEST_VALUES</code> if the
+     * <p>Intercept <code>queueEvent</code> and, for {@link ActionEvent}s,
+     * mark the phaseId for the event to be
+     * <code>PhaseId.APPLY_REQUEST_VALUES</code> if the
      * <code>immediate</code> flag is true,
      * <code>PhaseId.INVOKE_APPLICATION</code> otherwise.</p>
      */
