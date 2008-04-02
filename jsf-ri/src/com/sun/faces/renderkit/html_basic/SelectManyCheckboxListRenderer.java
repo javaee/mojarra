@@ -5,7 +5,7 @@
 
 
 /**
- * $Id: SelectManyCheckboxListRenderer.java,v 1.36 2004/04/26 16:37:38 jvisvanathan Exp $
+ * $Id: SelectManyCheckboxListRenderer.java,v 1.37 2004/07/27 19:59:17 rogerk Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -227,7 +227,7 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
         // items in the list except styleClass and style which are rendered as
         // attributes of outer most table.
         Util.renderPassThruAttributes(writer, component,
-                                      new String[]{"style"});
+                                      new String[]{"style", "border"});
         Util.renderBooleanPassThruAttributes(writer, component);
        
         String itemLabel = curItem.getLabel();
