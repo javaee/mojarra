@@ -402,7 +402,7 @@
 
     <target name="jars" depends="compile">
         <unjar dest="${build.classes.dir}">
-            <fileset dir="${jsf.build.home}/common/lib"
+            <fileset dir="${dependency.jar.dir}"
                      includes="com-sun-commons*.jar"/>
         </unjar>
         <jsf.manifested.jar jarfile="${build.dir}/lib/${name}.jar"

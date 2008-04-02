@@ -48,8 +48,9 @@
     <property name="jstl.api.version" value="1.2"/>
     <property name="annotation.api.version" value="1.0"/>
 	
-	<property name="maven2.mirror" value="http://mirrors.ibiblio.org/pub/mirrors/maven2"/>
+    <property name="maven2.mirror" value="http://mirrors.ibiblio.org/pub/mirrors/maven2"/>
 	<property name="java.net.maven" value="https://maven-repository.dev.java.net/nonav/repository/"/>
+    <property name="download.java.net" value="http://download.java.net/javaee5/external/shared"/>
 
     <property name="maven.repository.importer.version" value="1.2"/>
 
@@ -71,6 +72,10 @@
     <property name="jsp.jar"                       value="${dependency.jar.dir}/jsp-api-${jsp.api.version}.jar"/>
     <property name="jstl.jar"                      value="${dependency.jar.dir}/jstl-${jstl.api.version}.jar"/>
     <property name="annotation.jar"                value="${dependency.jar.dir}/jsr250-api-${annotation.api.version}.jar"/>
+    <property name="sun-commons-beanutils.jar"     value="${dependency.jar.dir}/com-sun-commons-beanutils-1.6.1.jar"/>
+    <property name="sun-commons-digester.jar"      value="${dependency.jar.dir}/com-sun-commons-digester-1.5.jar"/>
+    <property name="sun-commons-collections.jar"   value="${dependency.jar.dir}/com-sun-commons-collections-2.1.jar"/>
+    <property name="sun-commons-logging.jar"       value="${dependency.jar.dir}/com-sun-commons-logging-1.0.4.jar"/>
 
     <target name="update" description="Download project dependencies">
         <mkdir dir="${dependency.base.dir}/downloads"/>
@@ -207,12 +212,63 @@
                 <available file="${annotation.jar}" property="ignored"/>
             </not>
             <then>
-                <get src="${java.net.maven}/javax.annotation/jars/jsr250-api-${annotation.api.version}.jar"
+                <get src="${download.java.net}/javax.annotation/jars/jsr250-api-${annotation.api.version}.jar"
                      dest="${annotation.jar}"
                      usetimestamp="true"/>
 
             </then>
         </if>
+
+        <!-- com-sun-commons -->
+        <if>
+            <not>
+                <available file="${sun-commons-collections.jar}" property="ignored"/>
+            </not>
+            <then>
+                <get src="${download.java.net}/com-sun-commons-collections/jars/com-sun-commons-collections-2.1.jar"
+                     dest="${sun-commons-collections.jar}"
+                     usetimestamp="true"/>
+
+            </then>
+        </if>
+
+        <if>
+            <not>
+                <available file="${sun-commons-digester.jar}" property="ignored"/>
+            </not>
+            <then>
+                <get src="${download.java.net}/com-sun-commons-digester/jars/com-sun-commons-digester-1.5.jar"
+                     dest="${sun-commons-digester.jar}"
+                     usetimestamp="true"/>
+
+            </then>
+        </if>
+
+        <if>
+            <not>
+                <available file="${sun-commons-beanutils.jar}" property="ignored"/>
+            </not>
+            <then>
+                <get src="${download.java.net}/com-sun-commons-beanutils/jars/com-sun-commons-beanutils-1.6.1.jar"
+                     dest="${sun-commons-beanutils.jar}"
+                     usetimestamp="true"/>
+
+            </then>
+        </if>
+
+        <if>
+            <not>
+                <available file="${sun-commons-logging.jar}" property="ignored"/>
+            </not>
+            <then>
+                <get src="${download.java.net}/com-sun-commons-logging/jars/com-sun-commons-logging-1.0.4.jar"
+                     dest="${sun-commons-logging.jar}"
+                     usetimestamp="true"/>
+
+            </then>
+        </if>
+
+
         <antcall target="update.containers"/>
     </target>
 
