@@ -6,13 +6,13 @@
   <meta
  content="Mozilla/4.79C-CCK-MCD  [en] (X11; U; SunOS 5.8 sun4u) [Netscape]"
  name="GENERATOR">
-  <title>JavaServer Faces 1.1 FCS Release Notes</title>
+  <title>JavaServer Faces 1.2 Release Notes</title>
   <link href="style/default.css" type="text/css" rel="stylesheet">
 </head>
-<body bgcolor="#ffffff">
+<body style="background-color: rgb(255, 255, 255);">
 <center>
-<h1>JavaServer<sup><font size="-1">TM</font></sup> Faces Technology, version 1.1_01
-FCS<br>
+<h1>JavaServer<sup><font size="-1">TM</font></sup> Faces Technology,
+version 1.2<br>
 Release Notes</h1>
 </center>
 <hr>
@@ -21,24 +21,21 @@ Release Notes</h1>
 notes, see <a
  href="http://java.sun.com/j2ee/javaserverfaces/docs/ReleaseNotes.html">
 Release Notes</a>
-<p>Revised: 20040817
+<p>Revised: 20050818
 </p>
 <p><a name="13552"></a>The purpose of this release is to provide a
-reference implementation of the JavaServer Faces framework.
+reference implementation of the JavaServer Faces technology framework.
 </p>
-<p>This FCS release of JavaServer Faces technology provides a final
-version of the JavaServer Faces technology which was developed under
+<p>This release of JavaServer Faces technology was developed under
 the Java Community Process(SM) ("JCP(SM)") as <a
- href="http://jcp.org/jsr/detail/127.jsp">JSR127</a>. </p>
+ href="http://jcp.org/jsr/detail/252.jsp">JSR252</a>. </p>
 <h1>&nbsp;Contents</h1>
 <ul>
   <li> <a href="#operating_systems">Supported Operating Systems</a></li>
   <li> <a href="#required_software">Required Software</a></li>
   <li> <a href="#release_includes">What This Release Includes</a></li>
   <li> <a href="#release_new">What's New in This Release</a></li>
-  <li> <a href="#migrating">Migrating from 1.0 to 1.1</a></li>
-  <li> <a href="#logging">Logging Support And Configuration Steps</a><br>
-  </li>
+  <li> <a href="#migrating">Migrating from 1.1_01 to 1.2</a></li>
   <li> <a href="#issues">Known Issues</a></li>
 </ul>
 <a name="operating_systems"></a>
@@ -69,15 +66,14 @@ supported.
       </th>
     </tr>
     <tr>
-      <td>Java Development Kit&nbsp;</td>
-      <td>version 1.3.1 or later&nbsp;</td>
+      <td>Java Development Kit (JDK)<br>
+      </td>
+      <td>version 5.0 or later&nbsp;</td>
     </tr>
     <tr>
-      <td>Java Web Services Developer Pack or<br>
-Sun Java System Application Server <br>
+      <td>Sun Java System Application Server <br>
       </td>
-      <td>version 1.3 or later<br>
-version 8.0 or later<br>
+      <td>version 9.0<br>
       </td>
     </tr>
     <tr>
@@ -120,430 +116,543 @@ for writing JavaServer Faces applications. </li>
 <p><a name="release_new"></a>
 </p>
 <h1>What's New in This Release</h1>
-<ul>
-  <li>In order to reduce the number of bytes sent to the client in the
-state saving client mode, state can be optionally compressed before it
-is encoded and written as a hidden field. This is turned <span
- style="font-weight: bold;">on</span> by default.&nbsp; You can turn
-off
-this feature by setting the <code>ServletContext</code> initialization parameter <code>com.sun.faces.COMPRESS_STATE</code>
-to false in your deployment descriptor (web.xml) file.</li>
-</ul>
-<ul>
-  <li>Removed explicit casts and dependencies to <code>ServletContext</code>.  This is important for portlet environments.</li>
-</ul>
-<ul>
-  <li>Configuration system correctly recognizes application default
-locale.</li>
-</ul>
-<ul>
-  <li>Fixed client state saving bug where components were not rendered
-on postback for JSP pages containing verbatim tags.&nbsp; This was due
-to an alignment problem between state saving and restoration (client mode).</li>
-</ul>
-<ul>
-  <li>Fixed bug where <code>SelectManyCheckboxListRenderer</code>&nbsp;
-was rendering a <code>border</code> attribute as part of the HTML <code>input</code>
-element.&nbsp; <code>border</code> is not a valid HTML attribute of the <code>input</code>
-element.</li>
-</ul>
-<ul>
-  <li>Fixed bug where <code>OutputMessageRenderer</code>&nbsp;
-was not rendering the <code>id</code> attribute as part of the HTML <code>span</code> element.</li>
-</ul>
-<ul>
-  <li>Fixed bug where <code>RadioRenderer</code>was rendering a <code>border</code> attribute as part of the HTML
-<code>input</code> element; <code>border</code> is not a valid HTML attribute of
-the <code>input</code> element.</li>
-</ul>
-<ul>
-  <li>Performance Enhancements:</li>
-  <ul>
-    <li>Improved the rendering performance of large data table(s) by
-replacing the String concatenation mechanism with a nested <code>HashMap</code> data
-structure in <code>RenderKitImpl</code>.</li>
-  </ul>
-</ul>
-<ul>
-  <ul>
-    <li>Avoid synchronization issues by loading <code>UIComponentBase</code> property
-descriptor information in the constructor which guarantees readonly
-access.&nbsp; To further optimize look up, the saved map of descriptors
-is keyed by name instead of the array of property descriptors.</li>
-  </ul>
-</ul>
-<ul>
-  <ul>
-    <li>Improved the performance of checking whether a component's
-rendering should be suppressed in <code>UIComponentTag</code>.</li>
-  </ul>
-</ul>
-<ul>
-  <ul>
-    <li>Improved the performance of configuration file processing by
-parsing one merged configuration file (merged from <span
- style="font-style: italic;">standard-html-renderkit.xml</span> and <span
- style="font-style: italic;">jsf-ri-config.xml</span>).<br>
-    </li>
-  </ul>
-</ul>
-<ul>
-  <li>Fixed bug where an exception would be thrown if you had a managed
-bean property referencing a non-managed bean.&nbsp; <code>ManageBeanFactory</code>&nbsp; threw an
-exception because it didn't know the scope of the referenced non-managed bean.</li>
-</ul>
-<ul>
-  <li>Fixed bug where managed bean <code>Map</code> and <code>List</code> properties that were
-were not created, but retrieved were being set.</li>
-</ul>
-<ul>
-  <li>Fixed bug where <code>MenuRenderer</code>&nbsp;
-generated non-compliant XHTML.</li>
-</ul>
-<ul>
-  <li>Fixed bug where <code>HtmlSelectManyCheckbox</code>&nbsp;
-and <code>HtmlSelectOneRadio</code>&nbsp;
-handled the <code>style</code> attribute incorrectly.</li>
-</ul>
-<ul>
-  <li>Fixed server-side state saving to support failover. Instead of
-saving the view in session (since the <code>UIComponent</code>
-instances are not serializable), the <code>SerializedView</code>
-(which is obtained by calling <code>getTreeStructureToSave</code> and <code>getTreeStateToSave</code>)
-is saved&nbsp; in the session.&nbsp; This can be enabled by using the <code>ServletContext</code> initialization
-parameter <code>com.sun.faces.enable.HighAvailability</code></li>
-</ul>
-<ul>
-  <li>Removed component ID from error messages.</li>
-</ul>
-<ul>
-  <li>Fixed bug where command link components across multiple forms was
-not working.</li>
-</ul>
-<ul>
-  <li>Removed erroneous "back slash" characters from messages files.</li>
-</ul>
-<ul>
-  <li>Fixed bug where setting the <code>required</code> attribute to <code>true</code> 
-was not working for the <code>UISelectOne</code> component.</li>
-</ul>
-<ul>
-  <li>Fixed bug where <code>DateTimeConverter</code>&nbsp;
-was not properly throwing an <code>IllegalArgumentException</code>. <br>
-  </li>
-</ul>
-<ul>
-  <li>JDK 1.3 compatability changes.<br>
-  </li>
-</ul>
-<h1><a name="migrating"></a>Migrating From 1.1 to 1.1_01</h1>
-<p>This implementation is 100% compatible with the 1.1 implementation,
+This snapshot of JavaServer Faces Reference implementation includes the
+bug fixes and implementation of issues listed under the General Changes
+section of the JavaServer Faces technology 1.2 PFD access draft plus
+the bug fixes listed in the following table.<br>
+<br>
+<table border="1" style="width: 100%;" cellpadding="2" cellspacing="2">
+  <caption>Table 2: List of Bugs Fixed in this Release<br>
+  </caption><tbody>
+    <tr>
+      <td style="vertical-align: top;"><span style="font-weight: bold;">Issue/Bug
+Number</span><br>
+      </td>
+      <td style="vertical-align: top;"><span style="font-weight: bold;">Summary</span><br>
+      </td>
+    </tr>
+    <tr>
+      <td><a
+ href="https://javaserverfaces.dev.java.net/issues/show_bug.cgi?id=10">Issue
+10</a><br>
+      </td>
+      <td>target property on commandLink does not work<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;"><a
+ href="https://javaserverfaces.dev.java.net/issues/show_bug.cgi?id=26">Issue
+26</a><br>
+      </td>
+      <td style="vertical-align: top;">Hidden Field - FormRenderer -
+Renderer Dependencies<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;"><a
+ href="https://javaserverfaces.dev.java.net/issues/show_bug.cgi?id=42">Issue
+42</a><br>
+      </td>
+      <td style="vertical-align: top;">Message list (HtmlMessages) does
+not correctly handle style attribute<br>
+      </td>
+    </tr>
+    <tr>
+      <td><a
+ href="https://javaserverfaces.dev.java.net/issues/show_bug.cgi?id=43">Issue
+43</a><br>
+      </td>
+      <td>MessagesRenderer Bug Fixes<br>
+      </td>
+    </tr>
+    <tr>
+      <td><a
+ href="https://javaserverfaces.dev.java.net/issues/show_bug.cgi?id=49">Issue
+49</a><br>
+      </td>
+      <td>attribute/property transparency: really slow<br>
+      </td>
+    </tr>
+    <tr>
+      <td><a
+ href="https://javaserverfaces.dev.java.net/issues/show_bug.cgi?id=53">Issue
+53</a><br>
+      </td>
+      <td>verbatim tag trims whitespace<br>
+      </td>
+    </tr>
+    <tr>
+      <td><a
+ href="https://javaserverfaces.dev.java.net/issues/show_bug.cgi?id=55">Issue
+55</a><br>
+      </td>
+      <td>commandButton image attr don't add context path<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;"><a
+ href="https://javaserverfaces.dev.java.net/issues/show_bug.cgi?id=56">Issue
+56</a><br>
+      </td>
+      <td style="vertical-align: top;">Fail to validate select one menu
+in a table, if its rendered is false<br>
+      </td>
+    </tr>
+    <tr>
+      <td><a
+ href="https://javaserverfaces.dev.java.net/issues/show_bug.cgi?id=63">Issue
+63</a><br>
+      </td>
+      <td>Use of Browser's back-button causes multiple ActionEvents to
+pile up<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;"><a
+ href="https://javaserverfaces.dev.java.net/issues/show_bug.cgi?id=64">Issue
+64</a><br>
+      </td>
+      <td style="vertical-align: top;">column component metadata
+missing facets<br>
+      </td>
+    </tr>
+    <tr>
+      <td><a
+ href="https://javaserverfaces.dev.java.net/issues/show_bug.cgi?id=66">Issue
+66</a><br>
+      </td>
+      <td>Possible optimization regarding execution of PhaseListeners<br>
+      </td>
+    </tr>
+    <tr>
+      <td><a
+ href="https://javaserverfaces.dev.java.net/issues/show_bug.cgi?id=67">Issue
+67</a><br>
+      </td>
+      <td>Usability of JSF RI Exceptions and Stack Traces<br>
+      </td>
+    </tr>
+    <tr>
+      <td><a
+ href="https://javaserverfaces.dev.java.net/issues/show_bug.cgi?id=68">Issue
+68</a><br>
+      </td>
+      <td>Concurrency issue with CommandLinkRenderer<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;"><a
+ href="https://javaserverfaces.dev.java.net/issues/show_bug.cgi?id=70">Issue
+70</a><br>
+      </td>
+      <td>HtmlTaglib Generates Release Methods<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;"><a
+ href="https://javaserverfaces.dev.java.net/issues/show_bug.cgi?id=71">Issue
+71</a><br>
+      </td>
+      <td><span class="moz-txt-link-freetext">Allow JavaScirpt User
+Event Support<br>
+      </span></td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;"><a
+ href="https://javaserverfaces.dev.java.net/issues/show_bug.cgi?id=80">Issue
+80</a><br>
+      </td>
+      <td style="vertical-align: top;">LifecycleImple.reload() not
+sufficient for all cases<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;"><a
+ href="https://javaserverfaces.dev.java.net/issues/show_bug.cgi?id=85">Issue
+85</a><br>
+      </td>
+      <td style="vertical-align: top;">ApplicationImpl.createConverter()
+does not throw FacesException<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;"><a
+ href="https://javaserverfaces.dev.java.net/issues/show_bug.cgi?id=87">Issue
+87</a><br>
+      </td>
+      <td style="vertical-align: top;">Unexpected behaviour with
+disabled selectOneMenu<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;"><a
+ href="https://javaserverfaces.dev.java.net/issues/show_bug.cgi?id=89">Issue
+89</a><br>
+      </td>
+      <td style="vertical-align: top;">HtmlResponseWriter.writeAttribute()
+throws NPE for null values<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;"><a
+ href="https://javaserverfaces.dev.java.net/issues/show_bug.cgi?id=91">Issue
+91</a><br>
+      </td>
+      <td style="vertical-align: top;">Don't swallow exceptions inside
+JspExceptions or FacesExceptions<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;"><a
+ href="https://javaserverfaces.dev.java.net/issues/show_bug.cgi?id=92">Issue
+92</a><br>
+      </td>
+      <td style="vertical-align: top;">MessagesRenderer Does Not Handle
+layout="list"<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;"><a
+ href="https://javaserverfaces.dev.java.net/issues/show_bug.cgi?id=95">Issue
+95</a><br>
+      </td>
+      <td><span class="moz-txt-link-freetext">RestoreViewPhase.isPostback()
+not good to determine restore view<br>
+      </span></td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;"><a
+ href="https://javaserverfaces.dev.java.net/issues/show_bug.cgi?id=116">Issue
+116</a><br>
+      </td>
+      <td>Colon's not allowed in javascript function name<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;"><a
+ href="https://javaserverfaces.dev.java.net/issues/show_bug.cgi?id=125">Issue
+125</a><br>
+      </td>
+      <td style="vertical-align: top;">Memory issues<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;"><a
+ href="https://javaserverfaces.dev.java.net/issues/show_bug.cgi?id=128">Issue
+128</a><br>
+      </td>
+      <td style="vertical-align: top;">UIData does not
+restoreDescendantState for descendant facets<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;"><a
+ href="https://javaserverfaces.dev.java.net/issues/show_bug.cgi?id=134">Issue
+134</a><br>
+      </td>
+      <td>Optimisations to managed bean creation facility<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;"><a
+ href="https://javaserverfaces.dev.java.net/issues/show_bug.cgi?id=135">Issue
+135</a> <br>
+      </td>
+      <td>RuntimeException thrown in decode() swallowed<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;"><a
+ href="https://javaserverfaces.dev.java.net/issues/show_bug.cgi?id=146">Issue
+146</a><br>
+      </td>
+      <td style="vertical-align: top;">NPE in
+ExternalContextImpl.dispatch() when file not present<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;"><a
+ href="https://javaserverfaces.dev.java.net/issues/show_bug.cgi?id=152">Issue
+152</a><br>
+      </td>
+      <td style="vertical-align: top;">UIData preserving request
+attributes<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;"><a
+ href="https://javaserverfaces.dev.java.net/issues/show_bug.cgi?id=159">Issue
+159</a><br>
+      </td>
+      <td>Nested DataTable expressions resolve wrong<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;"><br>
+      </td>
+      <td style="vertical-align: top;">Fix for ClassCastException that
+happens when two portlets are deployed<br>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<br>
+<br>
+<h1><a name="migrating"></a>Migrating From 1.1_01 to 1.2</h1>
+<p>This implementation is 100% compatible with the 1.1_01
+implementation,
 but many bugs have been fixed. If your application dependend on one of
 these bugs, it will need to be changed. Please see the <a
- href="#release_new">What's New In this Release</a> section. </p>
-<h1><a name="logging"></a>Logging Support And Configuration Steps</h1>
-JavaServer Faces Reference Implementation in this release leverages the
-Jakarta Commons logging API to provide logging functionality.&nbsp; We
-have followed the guidelines recommended by <a
- href="http://jakarta.apache.org/commons/logging/userguide.html">http://jakarta.apache.org/commons/logging/userguide.html</a>.&nbsp;
-JavaServer Faces Reference Implementation can be configured to provide
-logging information using the steps below.<br>
-<ol>
-  <li>If you are using Tomcat or the Java Web Services Developer Pack (Java WSDP) as your container, you can set
-the following property to tell the container what logging
-implementation you are using as well as the location of your logging
-configuration file.&nbsp; Set&nbsp;&nbsp; <span
- style="font-style: italic;">CATALINA_OPTS=-Dorg.apache.commons.logging.Log=org.apache.commons.logging.impl.Jdk14Logger
--Djava.util.logging.config.file=D:\Files_2k\j2sdk1.4.1_03\jre\lib\jsf-log.properties</span></li>
-  <li>&nbsp;We have shown a sample logging configuration file below
-that is configured to get logging output when you are running a
-JavaServer Faces application.&nbsp; The default JDK 1.4 logging
-configuration file is&nbsp; "<span style="font-style: italic;">$JAVA_HOME}/jre/lib/logging.properties</span>".
-You can either manipulate that as per directions below, in which case
-it's global to all Java apps that you run or you can create a jsf.log
-properties as illustrated below. You can change the "<span
- style="font-style: italic;">java.util.logging.FileHandler.pattern</span>"
-property to control where your logging information is written.<br>
-  </li>
-</ol>
-Here's the jsf-log.properties:<br>
+ href="#release_new">What's New In this Release</a> section.<br>
+</p>
+<p>One of the primary changes in this release is that JavaServer Faces
+technology utilizes the new unified expression language (unified EL) ,
+which is essentially an amalgamation of the JSP EL and the JavaServer
+Faces 1.1_01 EL.&nbsp; The rest of this section describes how to
+migrate
+your JavaServer Faces 1.1_01 applications to use the unified EL.<br>
+</p>
+<p><br>
+</p>
+<h2>Migrating to the Unified EL</h2>
+For those of you who already have applications that use the JavaServer
+Faces EL, you can be assured that your applications
+are completely backward compatible.&nbsp; You don't need to make any
+changes to run your applications with the latest version of JavaServer
+Faces technology.<br>
 <br>
-############################################################<br>
-#&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Default Logging Configuration File<br>
-#
-http://java.sun.com/j2se/1.4.2/docs/guide/util/logging/overview.html#1.2<br>
-# You can use a different file by specifying a filename<br>
-# with the java.util.logging.config.file system property.<br>
-# For example java -Djava.util.logging.config.file=myfile<br>
-############################################################<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+If you plan to modify your current applications to use the unified EL,
+however, there are some things you need to do, which this section
+explains.<br>
 <br>
-############################################################<br>
-#&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Global properties<br>
-############################################################<br>
+<h3>Using the Unified EL in Existing Applications</h3>
+For the page author and application developer, there is nothing that
+you need to do differently in JavaServer Faces technology 1.2
+applications vs.
+JavaServer Faces technology 1.1_01 or
+earlier applications.&nbsp; The component writer and the application
+architect do have some changes to make, which include:<br>
 <br>
-# "handlers" specifies a comma separated list of log Handler<br>
-# classes.&nbsp; These handlers will be installed during VM startup.<br>
-# Note that these classes must be on the system classpath.<br>
-# By default we only configure a ConsoleHandler, which will only<br>
-# show messages at the INFO and above levels.<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-<br>
-# To also add the FileHandler, use the following line instead.<br>
-handlers= java.util.logging.FileHandler,
-java.util.logging.ConsoleHandler<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-<br>
-# Default global logging level.<br>
-# This specifies which kinds of events are logged across<br>
-# all loggers.&nbsp; For any given facility this global level<br>
-# can be overriden by a facility specific level<br>
-# Note that the ConsoleHandler also has a separate level<br>
-# setting to limit messages printed to the console.<br>
-#.level= INFO<br>
-.level= INFO<br>
-<br>
-############################################################<br>
-# Handler specific properties.<br>
-# Describes specific configuration info for Handlers.<br>
-############################################################<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-<br>
-# default file output is in user's home directory.<br>
-java.util.logging.FileHandler.pattern = %h/java%u.log<br>
-java.util.logging.FileHandler.limit = 50000<br>
-java.util.logging.FileHandler.count = 1<br>
-java.util.logging.FileHandler.formatter = java.util.logging.XMLFormatter<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-<br>
-# Limit the message that are printed on the console to INFO and above.<br>
-java.util.logging.ConsoleHandler.level = INFO<br>
-java.util.logging.ConsoleHandler.formatter =
-java.util.logging.SimpleFormatter<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-<br>
-############################################################<br>
-# Facility specific properties.<br>
-# Provides extra control for each logger.<br>
-############################################################<br>
-<br>
-# For example, set the com.xyz.foo logger to only log SEVERE<br>
-# messages:<br>
-com.xyz.foo.level = SEVERE<br>
-com.sun.faces.level = ALL<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-<br>
-If you use the <code>ConsoleHandler</code> ( which would direct all the output to
-catalina.out in the case of standalone Tomcat or launcher.server.log in
-the case of Java WSDP ) please make sure that the detail level for
-<code>ConsoleHandler</code> can handle the level set for individual packages. For
-example say you have set the level for <code>com.sun.faces.el</code> package to
-"FINEST" as below.<br>
-&nbsp;&nbsp;&nbsp; <code>com.sun.faces.el.level
-= FINEST</code><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-<br>
-You won't see any trace or debug messages unless you also set
-<code>ConsoleHandler.level = FINEST</code>. <code>ConsoleHandler.level</code> caps the detail
-level to the console, no matter what the underlying loggers are set for.<br>
-<br>
-In this release, the Reference Implementation provides logging support
-for the following packages.<br>
 <ul>
-<li><code>com.sun.faces.application</code>
-<li><code>com.sun.faces.el</code>
-<li><code>com.sun.faces.lifecycle</code>
+  <li>Editing custom component classes to use the new APIs<br>
+  </li>
+  <li>Editing custom component tag handlers to use the new APIs</li>
+  <li>Updating the TLD defining the custom component tags with the new
+version number and the new <span style="font-family: monospace;">deferred-value</span>
+or <span style="font-family: monospace;">deferred-method</span>
+elements<br>
+  </li>
 </ul>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<h4>Making Changes to the Custom Component Classes</h4>
+JavaServer Faces technology 1.1_01 and earlier versions used the <span
+ style="font-family: monospace;">ValueBinding</span>
+and
+<span style="font-family: monospace;">MethodBinding</span> classes to
+represent value expressions and
+method
+expressions, respectively.&nbsp; These classes are still available in
+JavaServer Faces technology 1.2 for those who want to continue using
+them.&nbsp; If you want
+your components to use the unified EL, however, you need to change all
+instances of <code><span style="font-family: monospace;">ValueBinding</span>
+</code>to <span style="font-family: monospace;">ValueExpression </span>and
+all instances of
+<span style="font-family: monospace;">MethodBinding</span> to <span
+ style="font-family: monospace;">MethodExpression</span>.&nbsp; The <span
+ style="font-family: monospace;">ValueExpression</span> and
+<span style="font-family: monospace;">MethodExpression</span> APIs are
+part of the unified EL
+specification.&nbsp; The following component method shows the
+JavaServer Faces technology 1.1_01
+version of a value-binding enabled component property.<br>
 <br>
-The logging messages are not localized. Localization as well as logging
-for rest of the RI will be done in a future release.<br>
+<pre class="pPreformattedRelative">public boolean someProperty() {<br>&nbsp;&nbsp;if (this.someProperty) {<br>&nbsp;&nbsp;    return (this.someProperty);<br>&nbsp;&nbsp;}<br>&nbsp;&nbsp;ValueBinding vb = getValueBinding("someProperty");<br>&nbsp;&nbsp;if (vb != null) {<br>&nbsp;&nbsp;&nbsp;&nbsp;Boolean value = (Boolean) vb.getValue(getFacesContext());<br>&nbsp;&nbsp;&nbsp;&nbsp;return (value.booleanValue());<br>&nbsp;&nbsp;} else {<br>&nbsp;&nbsp;    return (this.someProperty);<br>&nbsp;&nbsp;}<br>}<br><br></pre>
+The following code shows this method converted to use the new APIs.<br>
+<br>
+<pre>public boolean someProperty() {&nbsp;<br>	if (this.someProperty) {<br>		return (this.someProperty);<br>	}<br>	ValueExpression ve = getValueExpression("someProperty");<br>	if (ve != null) {<br>		Boolean value = (Boolean)<br>		ve.getValue(getFacesContext().getELContext());<br>		return (value.booleanValue());<br>	} else {<br>		return (this.someProperty);<br>	}<br>}&nbsp; </pre>
+<br>
+<h4>Making Changes to the Custom Component Tag Handlers</h4>
+To migrate your tag handler class, you need to do the following:<br>
+<ul>
+  <li>Make the class extend <span style="font-family: monospace;">UIComponentELTag</span>
+instead of <span style="font-family: monospace;">UIComponentTag</span></li>
+  <li>Change <span style="font-family: monospace;">ValueBinding</span>
+to <span style="font-family: monospace;">ValueExpression</span> and <span
+ style="font-family: monospace;">MethodBinding</span> to <span
+ style="font-family: monospace;">MethodExpression</span></li>
+  <li>Simplify the <span style="font-family: monospace;">setProperties</span>
+method by removing the check for if the property is value-expression
+enabled<br>
+  </li>
+</ul>
+Here are the relevant pieces of a tag handler class using the version
+1.1_01 APIs:<br>
+<br>
+<p class="MsoNormal">
+</p>
+<pre>public class SimpleComponentTag extends UIComponentTag {<span
+ style="">&nbsp;&nbsp;&nbsp;  <br></span><br>	String someProperty;<span
+ style="">  <br></span>	String validator;<br><span
+ style="font-family: Lucidasans;"><span style="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  <br></span></span>	public void setSomeProperty(String someProperty) {<span
+ style="font-family: Lucidasans;"><o:p></o:p></span><br><span style="">	   </span>this.someProperty = someProperty;<span
+ style=""><br></span>	}<span style="font-family: Lucidasans;"><span
+ style="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  <br></span></span>	public void setValidator(String validator) {<span
+ style="font-family: Lucidasans;"></span><span style=""><br></span>	   this.validator = validator;<span
+ style=""><br></span>	}<span style="font-family: Lucidasans;"><span
+ style="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  <br>	...</span></span><span
+ style="font-family: Lucidasans;"><span style="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  <br></span></span>	protected void setProperties(UIComponent component) {<span
+ style="font-family: Lucidasans;"></span><span style=""><br></span>	   super.setProperties(component);<span
+ style=""><span style=""><br></span>		if (someProperty != null) {<br>		</span>   if (isValueReference(someProperty)) {<span
+ style="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br></span>		   	ValueBinding vb = FacesContext.getCurrentInstance().<span
+ style="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  <br></span>					getApplication().createValueBinding(someProperty);<br><span
+ style="">			</span>component.setValueBinding(&#8220;someProperty&#8221;, vb);<span
+ style=""><br></span>		   } else {<span style=""><br>		   </span>	component.getAttributes().put(&#8220;someProperty&#8221;, someProperty);<br><span
+ style="">		</span>   }<span style="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  <br></span>		}<br><span
+ style="">	   </span>	if(validator != null) {<br><span style="">		</span>   if (isValueReference(validator)) {<br><span
+ style="">			</span>Class args[] = { FacesContext.class, UIComponent.class,<br>				Object.class };<br><span
+ style="">			</span>MethodBinding vb = FacesContext.getCurrentInstance().<br><span
+ style="">			   </span>getApplication().createMethodBinding(validator, args);<br>			<span
+ style=""></span>input.setValidator(vb);<br><span style="">		</span>   } else {<br>			<span
+ style=""></span>throw new<span style="">&nbsp; </span>FacesException(&#8220;Invalid Expression&#8221;);<span
+ style="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br></span>		   }<span
+ style="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br></span>		}<span
+ style="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br></span>	}<br><br>}</pre>
+<br>
+And here is the same tag handler class converted to use the 1.2 APIs:<br>
+<br>
+<pre>public class SimpleComponentTag extends UIComponentELTag {<span
+ style="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br></span><br>	ValueExpression someProperty;<br>	MethodExpression validator;<span
+ style="font-family: Lucidasans;"><span style=""><br><br></span></span>	public void setSomeProperty(ValueExpression someProperty)<span
+ style="font-family: lucidasans,mon,mon;"> {</span><span
+ style="font-family: lucidasans,mon;"></span><br>	   this.someProperty = someProperty;<span
+ style=""><br>	</span>}<span style="font-family: Lucidasans;"><span
+ style=""><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br></span></span>	public void setValidator(MethodExpression validator) {<span
+ style="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br></span>	   this.validator = validator;<br>	}<span
+ style="font-family: Lucidasans;"><span style=""><br>	...</span></span><span
+ style="font-family: Lucidasans;"><span style=""></span></span><br><br>	protected void setProperties(UIComponent component) {<br>	   super.setProperties(component);<span
+ style=""></span><br>	   if (someProperty != null) {<span style="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br></span>		if (!someProperty.isLiteralText()) {<span
+ style=""></span><br>		   component.setValueExpression(&#8220;someProperty&#8221;, someProperty);<span
+ style="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br></span>		} else {<span
+ style=""></span><br>		   component.getAttributes().put(&#8220;someProperty&#8221;,<br>			someProperty.getExpressionString());<br>		}<span
+ style=""></span><br>	   }<span style=""></span><br>	   if(validator != null) {<br>		component.addValidator(new MethodExpressionValidator(validator));<span
+ style="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br></span>	   }<br>	}<br>}<span
+ style="font-family: Lucidasans;"><br><br></span></pre>
+Notice that the new
+<span style="font-family: monospace;">setProperties</span> method does
+not have to do the work
+of getting the expression from the <span
+ style="font-family: monospace;">Application</span> instance and
+converting
+a <span style="font-family: monospace;">String</span> to a value
+binding or method binding.&nbsp; Instead, the JSP
+container manages
+the <span style="font-family: monospace;">ValueExpression</span> and <span
+ style="font-family: monospace;">MethodExpression</span> objects and
+passes them to the
+tag handler.&nbsp;
+Also, <span style="font-family: monospace;">setProperties</span> does
+not have to check if the property is
+value-expression or method-expression enabled because this information
+is already in the TLD,
+which we show in the next section.<br>
+<h4>Making Changes to the Custom Tag TLD</h4>
+<p class="MsoNormal">To migrate your TLD files to use the new
+expression language, you need to do the following:<br>
+</p>
+<ul>
+  <li>Change the JSP version number to 2.1.<br>
+  </li>
+  <li>Remove the <span style="font-family: monospace;">rtexprvalue</span>
+element and replace it with either
+    <span style="font-family: monospace;">deferred-value</span> or <span
+ style="font-family: monospace;">deferred-method</span>, depending on
+whether the
+corresponding property accepts value expressions or method expressions.<br>
+  </li>
+</ul>
+<p class="MsoNormal">The following TLD defines a custom component tag
+based on version 1.1_01:<br>
+<br>
+</p>
+<p class="MsoNormal"><br>
+</p>
+<pre>&lt;taglib&gt;<br>   &lt;!-- ============== Tag Library Description Elements ============= --&gt;<br>   &lt;tlib-version&gt;1.0&lt;/tlib-version&gt;<br>   &lt;jsp-version&gt;1.2&lt;/jsp-version&gt;<span
+ style=""></span><br>   &lt;short-name&gt;Demo Taglib&lt;/short-name&gt;<br>   &lt;tag&gt;<span
+ style=""></span><br>	&lt;name&gt;simple&lt;/name&gt;<span style=""></span><br>	&lt;tag-class&gt;example.SimpleComponentTag&lt;/tag-class&gt;<span
+ style=""></span><br>	&lt;body-content&gt;JSP&lt;/body-content&gt;<span
+ style=""></span><br>	&lt;attribute&gt;<span style=""></span><br>		&lt;name&gt;someProperty&lt;/name&gt;<span
+ style=""></span><br>		&lt;required&gt;true&lt;/required&gt;<span
+ style=""></span><br>		&lt;rtexprvalue&gt;false&lt;/rtexprvalue&gt;<span
+ style=""></span><br>	&lt;/attribute&gt;<br>	&lt;attribute&gt;<br>		&lt;name&gt;validator&lt;/name&gt;<br>		&lt;required&gt;false&lt;/required&gt;<br>		&lt;rtexprvalue&gt;false&lt;/rtexprvalue&gt;<br>	&lt;/attribute&gt;<span
+ style=""></span><br>   &lt;/tag&gt;<br>&lt;/taglib&gt;<br><br></pre>
+<p class="MsoNormal"><o:p>The following TLD defines the same custom
+component tag for JavaServer Faces technology 1.2:<br>
+<br>
+</o:p></p>
+<p class="MsoNormal"><span style=""><br>
+&nbsp;
+<br>
+</span></p>
+<pre>&lt;taglib&gt;<span style=""></span><br>   &lt;!-- ============== Tag Library Description Elements ============= --&gt;<span
+ style=""></span><br>   &lt;tlib-version&gt;1.1&lt;/tlib-version&gt;<span
+ style=""></span><br>   &lt;jsp-version&gt;2.1&lt;/jsp-version&gt;<span
+ style=""></span><br>   &lt;short-name&gt;Demo Taglib&lt;/short-name&gt;<br>   &lt;tag&gt;<br>	&lt;name&gt;simple&lt;/name&gt;<br>	&lt;tag-class&gt;example.SimpleComponentTag&lt;/tag-class&gt;<span
+ style=""></span><br>	&lt;body-content&gt;JSP&lt;/body-content&gt;<span
+ style=""></span><br>	&lt;attribute&gt;<br>	   &lt;name&gt;someProperty&lt;/name&gt;<span
+ style=""></span><br>	   &lt;required&gt;true&lt;/required&gt;<br>	   &lt;deferred-value&gt;<span
+ style=""></span><br>	   	&lt;type&gt;java.lang.String&lt;/type&gt;<br>	   &lt;/deferred-value&gt;<span
+ style=""></span><br>	&lt;/attribute&gt;<br>	&lt;attribute&gt;<br>	   &lt;name&gt;validator&lt;/name&gt;<br>	   &lt;required&gt;false&lt;/required&gt;<br>	   &lt;deferred-method&gt;<span
+ style=""></span><br>		&lt;method-signature&gt;<br>		   void validate(javax.faces.context.FacesContext,<br>			javax.faces.component.UIComponent, java.lang.Object)<br>		&lt;/method-signature&gt;<br>	   &lt;/deferred-method&gt;<br>	&lt;/attribute&gt;<span
+ style=""></span><br>   &lt;/tag&gt;<br>&lt;/taglib&gt;</pre>
+&nbsp;Note that the <span style="font-family: monospace;">jsp-version</span>
+element is now 2.1.&nbsp; This
+indicates to the JSP 2.1 container whether or it should try to create a
+<span style="font-family: monospace;">ValueExpression</span> or <span
+ style="font-family: monospace;">MethodExpression</span> instance and
+pass it to the tag
+handler or pass an
+expression string as a literal value to the tag handler.&nbsp; If the
+version number is 2.1, it does the former.<br>
+<br>
+The other change is that <span style="font-family: monospace;">rtexprvalue</span>
+has been replaced with the
+<span style="font-family: monospace;">deferred-value</span> element for
+the <span style="font-family: monospace;">someProperty</span> property
+and with
+<span style="font-family: monospace;">deferred-method</span> for the <span
+ style="font-family: monospace;">validator</span> property.&nbsp; The <span
+ style="font-family: monospace;">deferred-value</span>
+element tells the JSP container that the property accepts deferred
+value expressions.&nbsp; The <span style="font-family: monospace;">deferred-method</span>
+element tells the JSP
+container that the <span style="font-family: monospace;">validator</span>
+property accepts method expressions.&nbsp;
+Therefore, the
+container creates a <span style="font-family: monospace;">ValueExpression</span>
+object for <span style="font-family: monospace;">someProperty</span>
+and a
+<span style="font-family: monospace;">MethodExpression</span> object
+for the <span style="font-family: monospace;">validator</span>
+property and
+passes these objects to the tag handler.&nbsp; The <span
+ style="font-family: monospace;">type</span> subelement
+of <span style="font-family: monospace;">deferred-value</span>
+indicates the type to which the expression must
+evaluate.&nbsp; The <span style="font-family: monospace;">method-signature</span>
+subelement of <span style="font-family: monospace;">deferred-method</span>
+specifies the signature required for the corresponding method.
+<p> </p>
+<br>
 <h1><a name="issues">Known</a> Issues With This Release</h1>
-<ul>
-  <li>You can add a <code>title</code> attribute to <code>&lt;h:message*&gt;</code> but it
-won't appear. The <code>title</code> gets rendered with the value of the <code>summary</code>
-attribute.&nbsp; Refer to the standard renderer docs for more
-information. The <code>title</code> attribute will be deprecated from the list of supported
-attributes for <code>&lt;h:message*&gt; </code>in
-the 1.2 release.</li>
-</ul>
-<ul>
-  <li>The standard renderer docs need to be clarified with regards to
-the rendering of the <code>span</code> element. The <code>span</code> element should be
-rendered if any pass through attributes are present (not just <code>style</code>
-and <code>styleClass</code>).</li>
-</ul>
-<ul>
-  <li>The standard renderer docs specify <code>accesskey</code> as an attribute of
-the <code>select</code> family of components, which is not in accordance with the
-HTML specification.&nbsp; The <code>accesskey</code> attribute will be deprecated from the
-<code>select</code> family of components in the next release.</li>
-</ul>
-<ul>
-  <li>
-    <p>If your page includes <code>&lt;h:outputLabel&gt;</code>
-components that occur before the components they label, both the label
-and the form must reside within the same <code>&lt;h:form&gt;</code>. </p>
-  </li>
-  <li>
-    <p>Content is not ordered as expected when mixing template text
-with JavaServer Faces technology tags. For example the following JSP page code outputs the string <code>Not the link text.</code> before the
-link. </p>
-    <ul>
-      <code> &lt;h:commandLink action="foo"&gt; Not the link text.
-&lt;/h:commandLink&gt; </code>
-    </ul>
-    <p>The workaround for this is to enclose the nested text in an <code>&lt;f:verbatim&gt;</code>
-tag, like this:</p>
-    <ul>
-      <code> &lt;h:commandLink action="foo"&gt; &lt;f:verbatim&gt;Not
-the link text.&lt;/f:verbatim&gt; &lt;/h:commandLink&gt; </code>
-    </ul>
-  </li>
-  <li>
-    <p>Do not enclose JavaServer Faces technology component tags inside of
-iterating JSP tags, such as JSTL's <code>&lt;c:forEach&gt;</code> tag.
-The primary reason for this restriction is that JavaServer Faces technology cannot know how
-many times the loop will execute and therefore the number of components
-placed in the tree by this tag is undetermined. This breaks the entire
-ID-to-component matching scheme required by <code>UIComponentTag</code>
-to match tags to <code>UIComponent</code> instances.</p>
-  </li>
-  <li>
-    <p>The <code>Map</code> object returned by the <code>UIComponent.getAttributes</code> method
-implements the <code>get</code> method so that if you ask for a key that is implemented as a
-property, you get the property value. However, if you call the <code>iterator</code> method
-on the <code>Map</code> object, you will get an <code>Iterator</code> object that iterates over the real
-attributes only, not the properties.</p>
-  </li>
-  <li>
-    <p>The value of <code>javax.faces.component.NamingContainer.SEPARATOR_CHAR</code>
-is '<code>:</code>'. This means that the client ID for components will
-be something like "<code>form:checkbox1</code>". The use of the '<code>:</code>'
-character in the ID causes problems for CSS stylesheets that try to
-apply style to components using their ID. The workaround is to use the
-CSS "<code>class</code>" concept to apply style to a component. </p>
-  </li>
-  <li>
-    <p> When saving state on the server, there is no way for the server
-to know that a view has expired. Thus, if the JSP page changes between
-requests, it's possible there will be inconsistencies between the
-restored tree and the JSP page. Therefore, if you change the JSP page,
-you need to re-start the browser so that the session is lost.</p>
-    <p> In related news, the number of views saved in the session when
-the
-application is configured to save state in the server is configurable
-by
-the RI init context parameter
-<code>com.sun.faces.NUMBER_OF_VIEWS_IN_SESSION</code>.
-This is a non-standard feature, so don't count on it.</p>
-    <p></p>
-  </li>
-  <li>
-    <p>Don't use the '.' character in <code>ResourceBundle</code> keys
-for use in JavaServer Faces technology. This character is a reserved character in the JavaServer Faces EL.
-    </p>
-  </li>
-  <li>
-    <p>When deploying on a non-Java WSDP container, you must include all
-the dependent JAR files in your webapp's WEB-INF/lib directory. It's
-possible it may work without doing this, but this is not a supported
-configuration. </p>
-  </li>
-  <li>
-    <p>If you're using a Sun<sup><font size=-2>TM</font></sup> ONE Application Server 7.x, Tomcat 4 series
-container, or any container that strictly conforms to JSP 1.2, Servlet
-2.3, you must use JSTL 1.0 instead of JSTL 1.1. </p>
-  </li>
-  <li>
-    <p>There is a known issue in Sun ONE Application Server 7.x, Tomcat 4.x, and Tomcat 5.x
-where security constraints are applied to welcome files. The bug number
-for this issue is #5004853.</p>
-    <p>This bug is problematic for the <code>jsf-cardemo</code>
-application since the security constraint is applied to the <code>index.jsp</code>
-welcome file. Since this container applies the security constraint to
-the welcome file, the container displays an error page when an attempt
-to access the application is made. On older versions of the Sun ONE Application Server 7.x, that
-error code is incorrectly reported as 500. This has since been fixed to
-be the correct number 403.</p>
-    <p>To get around this problem either: </p>
-    <ul>
-      <li>Access the initial CarDemo page directly:<br>
-        <code>http://&lt;SERVER&gt;:&lt;PORT&gt;/jsf-cardemo/chooseLocale.faces</code></li>
-      <li>Modify the security constraint in the <code>web.xml </code>
-welcome file to exclude the <code> index.jsp</code> page.</li>
-    </ul>
-    <p></p>
-    <p>The Sun Java System Application Server 8.0 and Java WSDP 1.3 do not
-have this problem and properly exclude welcome files from the security
-constraints.</p>
-  </li>
-  <li>
-    <p>The Non-JSP demo does not deploy under tomcat 4.1.29.<br>
-    </p>
-  </li>
-  <li>
-    <p>Some versions of some web containers, such as <a
- href="http://www.caucho.com/">Resin</a> and <a
- href="http://www.oracle.com/appserver/">Oracle App Server</a>, don't
-follow the Servlet 2.3 specification rule of calling <code>ServletContextListener</code> 
-listeners defined in TLD files in the META-INF directory of a jar.
-Running a JavaServer Faces technology Web application in such a container requires you to manually
-declare the <code>ServletContextListener</code> instance. The <code>listener-class</code>
-you need to specify is <code>com.sun.faces.config.ConfigureListener</code>
-    </p>
-  </li>
-  <li>
-    <p>If you're using component bindings pointing to beans stored in
-session scope with values initialized from the JSP page, you may run
-into some difficulties in the "edit-compile-debug" cycle.</p>
-    <p>Consider this JSP fragment:</p>
-    <p><code> &lt;h:commandButton binding="#{backingBean.button1}"
-value="press me" /&gt; </code></p>
-    <p>Let's say that <code>backingBean</code> is stored in session scope. The
-first time the browser views this page, <code>backingBean</code> gets instantiated,
-and initialized with the value "press me". Now, let's say the Web application
-is being authored in place, on the Web container. In other words, any
-changes made to the JSP page are seen "live" on the server. If you change
-the JSP page to alter the value of the button to be different, say like
-this: </p>
-    <p><code> &lt;h:commandButton binding="#{backingBean.button1}"
-value="click me" /&gt; </code></p>
-    <p>and save the page, then re-load the page in the browser, you'll
-see that the button still shows up with the old label, "press me". This
-is because the spec is designed to only initialize the backing bean
-with a value the first time the page is loaded, and the bean is still
-sitting in the session with the old value. There are several
-workarounds to this problem.</p>
-    <ul>
-      <li>
-        <p> Use <code>request</code> or <code>none</code> scope for your backing bean </p>
-      </li>
-      <li>
-        <p> Use Java code to push the value into the bean, rather than the
-JSP page</p>
-      </li>
-      <li>
-        <p>Ask the user to re-start their browser after modifying the
-JSP page. </p>
-      </li>
-      <li>
-        <p> Find a way to invalidate the session when the JSP page has
-changed. </p>
-      </li>
-    </ul>
-  </li>
-  <li>When installing newer versions of JavaServer Faces sample applications be sure
-to clear your client cache as well as your Web container's cached
-files. You may run into consistency problems if you do not clear out
-the cached files.<a name="changes"><br>
-    </a></li>
-</ul>
-<h1></h1>
-<p></p>
+As stated in section <a href="#migrating">Migrating from 1.1_01 to 1.2</a>,
+your JavaServer Faces technology, version 1.1_01 applications can run
+on JavaServer Faces technology 1.2.&nbsp; However, there are a few
+corner cases in which backwards-compatibility breaks.&nbsp; Please see
+the section Breakages in Backwards Compatibility in the JavaServer
+Faces technology 1.2 PFD specification.<br>
+<br>
 <hr>
-<p>Copyright &copy; 2004 Sun Microsystems, Inc., 4150 Network Circle,
+<p>Copyright &copy; 2005 Sun Microsystems, Inc., 4150 Network Circle,
 Santa
 <br>
 Clara, California 95054, U.S.A. All rights reserved.
@@ -585,9 +694,8 @@ to
 <br>
 Standard License Terms and Conditions.
 </p>
-<p></p>
 <hr width="100%">
-<p>Copyright &copy; 2004 Sun Microsystems, Inc., 4150 Network Circle,
+<p>Copyright &copy; 2005 Sun Microsystems, Inc., 4150 Network Circle,
 <br>
 Santa Clara, California 95054, Etats-Unis. Tous droits
 r&eacute;serv&eacute;s.
@@ -648,7 +756,7 @@ Microsystems, Inc. aux Etats-Unis et dans d'autres pays.
 <br>
 &nbsp;
 <br>
-<i><font size="-1"><a href="../.dt/tmp/Copyright.html"></a></font></i>&nbsp;
+&nbsp;
 </p>
 </body>
 </html>
