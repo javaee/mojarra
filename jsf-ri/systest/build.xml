@@ -12,7 +12,7 @@
 
   <property name="Name" value="JavaServer Faces RI System Test"/>
   <property name="name" value="jsf-ri-systest"/>
-  <property name="version" value="20031017"/>
+  <property name="version" value="20031023"/>
 
 <!-- ************ Per user local properties ******************************* -->
 

@@ -121,6 +121,7 @@ Faces technology.</p>
 
 </tr>
 
+<!-- PENDING(visvan): uncomment this when it works.
 <tr>
 
 <td>Result Set
@@ -141,6 +142,7 @@ Faces technology.</p>
 </tr>
 
 <tr>
+-->
 
 <td>Tabbed Pane
 </td>
