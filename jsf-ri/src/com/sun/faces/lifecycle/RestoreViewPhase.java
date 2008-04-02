@@ -1,5 +1,5 @@
 /*
- * $Id: RestoreViewPhase.java,v 1.42 2006/12/06 19:52:51 rlubke Exp $
+ * $Id: RestoreViewPhase.java,v 1.43 2006/12/21 23:03:39 rlubke Exp $
  */
 
 /*
@@ -58,7 +58,7 @@ import com.sun.faces.util.Util;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: RestoreViewPhase.java,v 1.42 2006/12/06 19:52:51 rlubke Exp $
+ * @version $Id: RestoreViewPhase.java,v 1.43 2006/12/21 23:03:39 rlubke Exp $
  */
 
 public class RestoreViewPhase extends Phase {
@@ -148,19 +148,29 @@ public class RestoreViewPhase extends Phase {
                     // StateManager.  If they are older than the current
                     // version of the implementation, fall back to the
                     // JSF 1.1 behavior.
+                    // NOTE: The ViewHandler or StateManager could
+                    //  be registered using something other than
+                    //  the faces-config.xml, if this is the case,
+                    //  the assume that we're using a 1.2 implementation.
+                    boolean viewHandlerIsOld;
+                    boolean stateManagerIsOld;
                     Version toTest = tracker.
                           getVersionForTrackedClassName(viewHandler
                                 .getClass().getName());
-                    Version currentVersion = tracker.getCurrentVersion();
-                    boolean viewHandlerIsOld;
-                    boolean stateManagerIsOld;
+                    if (toTest != null) {
+                        Version currentVersion = tracker.getCurrentVersion();
 
-                    viewHandlerIsOld = (toTest.compareTo(currentVersion) < 0);
-                    toTest = tracker.
-                          getVersionForTrackedClassName(facesContext
-                                .getApplication().getStateManager()
-                                .getClass().getName());
-                    stateManagerIsOld = (toTest.compareTo(currentVersion) < 0);
+
+                        viewHandlerIsOld = (toTest.compareTo(currentVersion) < 0);
+                        toTest = tracker.
+                             getVersionForTrackedClassName(facesContext
+                                  .getApplication().getStateManager()
+                                  .getClass().getName());
+                        stateManagerIsOld = (toTest.compareTo(currentVersion) < 0);
+                    } else {
+                        viewHandlerIsOld = false;
+                        stateManagerIsOld = false;
+                    }
 
                     if (viewHandlerIsOld || stateManagerIsOld) {
                         viewRoot = viewHandler.createView(facesContext, viewId);
