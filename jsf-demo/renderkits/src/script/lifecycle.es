@@ -17,11 +17,15 @@
     var toggle = "stop";
     var vertical = "false";
     var convalError = "false";
+    var initialRequest = "false";
+    var postback = "false";
 
     /**
      * 'Initial request' simulation
      */ 
     function initialMove() {
+        resetDemo();
+        initialRequest = "true";
         coordinates = new Array(155, 270, 25, 270);
         idx = 0;
         posX = 25;
@@ -33,13 +37,14 @@
         toY = 120;
         clearInterval(timer);
         timer = setInterval("moveControlPoints()", delay);
-        clearErrorPaths(); 
     }
 
     /**
      * 'Postback' simulation
      */
     function postbackMove() {
+        resetDemo();
+        postback = "true";
         coordinates = new Array(780, 275, 25, 270);
         idx = 0;
         posX = 25;
@@ -58,6 +63,8 @@
      * 'Validation error' simulation
      */
     function postbackConValMove() {
+        resetDemo();
+        postback = "true";
         coordinates = new Array(660, 200, 170, 200, 170, 270, 25, 270);
         idx = 0;
         posX = 25;
@@ -91,7 +98,87 @@
 
         if (posX == 660 && posY == 125 && convalError == "true") {
             showConValError();
+            var msg1 = window.document.getElementById("form:msg1");
+            msg1.firstChild.nodeValue = "Process Validations Phase:";
+            msg1.setAttribute("style", "stroke:red; fill:none; visibility:visible");
+            var msg2 = window.document.getElementById("form:msg2");
+            msg2.firstChild.nodeValue = "1. validation error transpired..  ";
+            msg2.setAttribute("style", "stroke:red; fill:none; visibility:visible");
+            var msg3 = window.document.getElementById("form:msg3");
+             msg3.firstChild.nodeValue = "2. render response signal set";
+            msg3.setAttribute("style", "stroke:red; fill:none; visibility:visible");
         }
+        if (posX == 105 && posY == 120) {
+            var msg1 = window.document.getElementById("form:msg1");
+            msg1.firstChild.nodeValue = "Restore View Phase:";
+            msg1.setAttribute("style", "stroke:red; fill:none; visibility:visible");
+            if (initialRequest == "true") {
+                var msg2 = window.document.getElementById("form:msg2");
+                msg2.firstChild.nodeValue = "1. new view root created";
+                msg2.setAttribute("style", "stroke:red; fill:none; visibility:visible");
+                var msg3 = window.document.getElementById("form:msg3");
+                msg3.firstChild.nodeValue = "2. render response signal set";
+                msg3.setAttribute("style", "stroke:red; fill:none; visibility:visible");
+                initialRequest == "false";
+            } else {
+                var msg2 = window.document.getElementById("form:msg2");
+                msg2.firstChild.nodeValue = "1. existing view restored";
+                msg2.setAttribute("style", "stroke:red; fill:none; visibility:visible");
+            }
+        } else if ((posX >= 100 && posX <= 200) && (posY >= 250 && posY <= 300)) {
+            clearMessages();
+            var msg1 = window.document.getElementById("form:msg1");
+            msg1.firstChild.nodeValue = "Render Response Phase:";
+            msg1.setAttribute("style", "stroke:red; fill:none; visibility:visible");
+            var msg2 = window.document.getElementById("form:msg2");
+            msg2.firstChild.nodeValue = "1. component view created";
+            msg2.setAttribute("style", "stroke:red; fill:none; visibility:visible");
+            var msg3 = window.document.getElementById("form:msg3");
+            msg3.firstChild.nodeValue = "2. renderers generate markup";
+            msg3.setAttribute("style", "stroke:red; fill:none; visibility:visible");
+        } else if (posX == 355 && posY == 120) {
+            clearMessages();
+            var msg1 = window.document.getElementById("form:msg1");
+            msg1.firstChild.nodeValue = "Apply Request Values Phase:";
+            msg1.setAttribute("style", "stroke:red; fill:none; visibility:visible");
+            var msg2 = window.document.getElementById("form:msg2");
+            msg2.firstChild.nodeValue = "1. request parameter values propogated to component local values..  ";
+            msg2.setAttribute("style", "stroke:red; fill:none; visibility:visible");
+            var msg3 = window.document.getElementById("form:msg3");
+            msg3.firstChild.nodeValue = "2. ActionEvent(s) queued for Command components.. ";
+            msg3.setAttribute("style", "stroke:red; fill:none; visibility:visible");
+        } else if (posX == 605 && posY == 120) {
+            clearMessages();
+            var msg1 = window.document.getElementById("form:msg1");
+            msg1.firstChild.nodeValue = "Process Validations Phase:";
+            msg1.setAttribute("style", "stroke:red; fill:none; visibility:visible");
+            var msg2 = window.document.getElementById("form:msg2");
+            msg2.firstChild.nodeValue = "1. validators are invoked..  ";
+            msg2.setAttribute("style", "stroke:red; fill:none; visibility:visible");
+            var msg3 = window.document.getElementById("form:msg3");
+            msg3.firstChild.nodeValue = "2. ValueChangeEvent(s) queued for valid values.. ";
+            msg3.setAttribute("style", "stroke:red; fill:none; visibility:visible");
+        } else if ((posX >= 600 && posX <= 720) && (posY >= 250 && posY <= 300)) {
+            clearMessages();
+            var msg1 = window.document.getElementById("form:msg1");
+            msg1.firstChild.nodeValue = "Update Model Values Phase:";
+            msg1.setAttribute("style", "stroke:red; fill:none; visibility:visible");
+            var msg2 = window.document.getElementById("form:msg2");
+            msg2.firstChild.nodeValue = "1. component values propogated to model objects..  ";
+            msg2.setAttribute("style", "stroke:red; fill:none; visibility:visible");
+        } else if ((posX >= 350 && posX <= 470) && (posY >= 250 && posY <= 300)) {
+            clearMessages();
+            var msg1 = window.document.getElementById("form:msg1");
+            msg1.firstChild.nodeValue = "Invoke Applications Phase:";
+            msg1.setAttribute("style", "stroke:red; fill:none; visibility:visible");
+            var msg2 = window.document.getElementById("form:msg2");
+            msg2.firstChild.nodeValue = "1. application events handled..  ";
+            msg2.setAttribute("style", "stroke:red; fill:none; visibility:visible");
+            var msg3 = window.document.getElementById("form:msg3");
+            msg3.firstChild.nodeValue = "2. next view is determined.. ";
+            msg3.setAttribute("style", "stroke:red; fill:none; visibility:visible");
+        }
+
     }
 
     /**
@@ -137,6 +224,21 @@
         }
     }
 
+    /**
+     * Reset Demo
+     */
+    function resetDemo() {
+        clearInterval(timer);
+        clearErrorPaths();
+        clearMessages();
+        var request = window.document.getElementById("form:request");
+        request.setAttribute("x", "25");
+        request.setAttribute("y", "125");
+        initialRequest = "false";
+        postback = "false";
+    }
+
+
     function showConValError() {
         var convalError1 = window.document.getElementById("form:convalError1");
         convalError1.setAttribute("style", "stroke:red; fill: none; stroke-dasharray:9,5; visibility:visible");
@@ -154,5 +256,15 @@
         var convalError3 = window.document.getElementById("form:convalError3");
         convalError3.setAttribute("style", "stroke:red; fill: none; stroke-dasharray:9,5; visibility:hidden");
     }
+
+    function clearMessages() {
+        var msg1 = window.document.getElementById("form:msg1");
+        msg1.setAttribute("style", "stroke:red; fill: none; visibility:hidden");
+        var msg2 = window.document.getElementById("form:msg2");
+        msg2.setAttribute("style", "stroke:red; fill: none; visibility:hidden");
+        var msg3 = window.document.getElementById("form:msg3");
+        msg3.setAttribute("style", "stroke:red; fill: none; visibility:hidden");
+    }
+
         
 

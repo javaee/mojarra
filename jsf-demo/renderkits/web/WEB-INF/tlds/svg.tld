@@ -481,6 +481,22 @@ xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSch
         </attribute>
         <attribute>
             <description>
+                <![CDATA[Space-separated list of CSS style class(es) to be applied whenthis element is rendered.  This value must be passed through as the "class" attribute on generated markup.]]>
+            </description>
+            <name>
+                styleClass
+            </name>
+            <required>
+                false
+            </required>
+            <deferred-value>
+                <type>
+                    java.lang.String
+                </type>
+            </deferred-value>
+        </attribute>
+        <attribute>
+            <description>
                 <![CDATA[Style(s) to be applied to this component's label.]]>
             </description>
             <name>

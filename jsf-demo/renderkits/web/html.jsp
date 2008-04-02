@@ -57,13 +57,13 @@
               </h:panelGrid>
               <h:panelGrid columns="1">
                  <h:outputText value="#{phaseBundle.background1}" escape="false" />
-                 <h:graphicImage url="lifecycle-pages.gif" />
+                 <h:graphicImage url="/lifecycle-pages.gif" />
                  <h:outputText value="#{phaseBundle.background2}" escape="false" />
               </h:panelGrid>
               <h:panelGrid columns="1">
                  <h:outputText styleClass="sectionClass" value="Design Detail" />
                  <h:outputText value="#{phaseBundle.detail1}" escape="false" />
-                 <h:graphicImage url="life-demo.gif" />
+                 <h:graphicImage url="/life-demo.gif" />
                  <h:commandButton type="submit" value="Next" action="success" />
               </h:panelGrid>
           </h:form>

@@ -127,21 +127,35 @@
 
            <g:rectangle id="request" x="25" y="120" rx="5" ry="5" width="15" height="10" style="fill: #8470ff;"/>
 
-           <g:commandButton id="initial" width="140" height="30" x="35" y="400" rx="5" ry="5" dx="68" dy="12"
+           <!-- Buttons -->
+
+           <g:rectangle id="controlPanel" x="25" y="340" width="310" height="170" style="stroke:black;fill:#778889;" />
+
+           <g:commandButton id="initial" width="140" height="30" x="35" y="350" rx="5" ry="5" dx="68" dy="12"
                      style="stroke:black; fill:silver;" value="Initial Request" onclick="initialMove()"/>
-                                                                                                                         
-           <g:commandButton id="postback" width="140" height="30" x="35" y="440" rx="5" ry="5" dx="70" dy="9"
+
+           <g:commandButton id="postback" width="140" height="30" x="35" y="390" rx="5" ry="5" dx="70" dy="9"
                      style="stroke:black; fill:silver;" value="Postback" onclick="postbackMove()"/>
 
-           <g:commandButton id="postbackVal" width="150" height="30" x="185" y="400" rx="5" ry="5" dx="70" dy="9"
+           <g:commandButton id="postbackVal" width="140" height="30" x="185" y="350" rx="5" ry="5" dx="70" dy="9"
                      style="stroke:black; fill:silver;" value="Validation Error" 
                      onclick="postbackConValMove()"/>
 
-           <g:commandButton id="postbackUpd" width="140" height="30" x="185" y="440" rx="5" ry="5" dx="70" dy="9"
+           <g:commandButton id="postbackUpd" width="140" height="30" x="185" y="390" rx="5" ry="5" dx="70" dy="9"
                      style="stroke:black; fill:silver;" value="Conversion Error" onclick="postbackConValMove()"/>
 
-           <g:commandButton id="stop" width="140" height="30" x="105" y="480" rx="5" ry="5" dx="68" dy="10"
+           <g:commandButton id="stop" width="140" height="30" x="35" y="430" rx="5" ry="5" dx="68" dy="10"
                      style="stroke:black; fill:#ff4500;" value="Stop/Resume" onclick="stopMovement()"/>
+
+           <g:commandButton id="reset" width="140" height="30" x="185" y="430" rx="5" ry="5" dx="68" dy="10"
+                     style="stroke:black; fill:#ff4500;" value="Reset Demo" onclick="resetDemo()"/>
+
+           <g:commandButton id="back" width="140" height="30" x="105" y="470" rx="5" ry="5" dx="68" dy="10"
+                     style="stroke:black; fill:silver;" value="Main" type="submit" action="success" />
+
+           <g:outputText id="msg1" x="400" y="350" value="marker" style="visibility:hidden" />
+           <g:outputText id="msg2" x="410" y="370" value="marker" style="visibility:hidden" />
+           <g:outputText id="msg3" x="410" y="390" value="marker" style="visibility:hidden" />
        </g:form>
     </f:view>
 </svg>

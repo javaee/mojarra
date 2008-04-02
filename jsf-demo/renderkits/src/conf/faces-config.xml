@@ -132,6 +132,25 @@
         determine which view must be displayed after the
         current view, html.jsp is processed.
     </description>
+    <from-view-id>*</from-view-id>
+    <navigation-case>
+        <description>
+            Indicates to the NavigationHandler that the svg.jsp
+            view must be displayed if the Action referenced by a
+            UICommand component on the html.jsp view returns
+            the outcome "success".
+        </description>
+      <from-outcome>xul-main</from-outcome>
+      <to-view-id>/html.jsp</to-view-id>
+    </navigation-case>
+  </navigation-rule>
+
+  <navigation-rule>
+    <description>
+        The decision rule used by the NavigationHandler to
+        determine which view must be displayed after the
+        current view, html.jsp is processed.
+    </description>
     <from-view-id>/html.jsp</from-view-id>
     <navigation-case>
         <description>

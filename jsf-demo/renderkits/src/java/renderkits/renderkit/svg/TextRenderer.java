@@ -39,6 +39,7 @@ public class TextRenderer extends BaseRenderer {
             UIOutput output = (UIOutput) component;
 
             writer.write("<text");
+            writeIdAttributeIfNecessary(context, writer, component);
             String x = (String)component.getAttributes().get("x");
             if (x != null) {
                 writer.writeAttribute("x", x, "x");
