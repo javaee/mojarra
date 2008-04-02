@@ -126,9 +126,10 @@
     <p><em>11 Sep 2002</em> - Adam submitted a proposal on this.</p>
     <p><em>24 Oct 2002</em> - Craig submitted analysis and recommendation
        to the EG mailing list.</p>
+    <p><em>24 December 2002</em> - Committed to spec and api and ri.</p>
   </resolution>
-  <status>OPEN</status>
-  <status-date>04 Sep 2002</status-date>
+  <status>CLOSED</status>
+  <status-date>7 January 2003</status-date>
   <priority>1</priority>
   <effort>Medium</effort>
 </issue>
@@ -779,9 +780,10 @@
   <resolution>
     <p><em>11 Sep 2002</em> - Jeff submitted an analysis and proposal message
     titled "Adding a 'visible' property to UIComponent".</p>
+    <p><em>20 December 2002</em> - Committed changes to api after significant EG discussion.</p>
   </resolution>
-  <status>OPEN</status>
-  <status-date>11 Sep 2002</status-date>
+  <status>CLOSED</status>
+  <status-date>7 January 2003</status-date>
   <priority>2</priority>
   <effort>Small</effort>
 </issue>
@@ -1151,8 +1153,8 @@
   </description>
   <resolution>
   </resolution>
-  <status>OPEN</status>
-  <status-date>12 Sep 2002</status-date>
+  <status>CLOSED</status>
+  <status-date>7 January 2003</status-date>
   <priority>2</priority>
   <effort>Small</effort>
 </issue>
@@ -1504,9 +1506,10 @@
     </ul>
   </description>
   <resolution>
+    <p><em>20 December 2002</em> - Marking closed after significant discussion.  May reopen later</p>
   </resolution>
-  <status>OPEN</status>
-  <status-date>20 Sep 2002</status-date>
+  <status>CLOSED</status>
+  <status-date>7 January 2003</status-date>
   <priority>1</priority>
   <effort>Medium</effort>
 </issue>
