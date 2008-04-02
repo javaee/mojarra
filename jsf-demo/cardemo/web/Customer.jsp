@@ -58,101 +58,70 @@
 <jsp:useBean id="CustomerBean" class="cardemo.CustomerBean" scope="session" />
 <f:use_faces>
 <h:form  formName="CustomerForm" modelReference="CustomerBean" >
-<TABLE BORDER="0" WIDTH="660" BGCOLOR="#4F4F72">
-<tr>
-<td VALIGN=TOP WIDTH="100%"><img SRC="/cardemo/cardemo.jpg" BORDER=0 height=60 width=660
-align=BOTTOM></td>
-</tr>
-</table>
-
-<p>
-
-<h:output_text 	id="customerTitle" key="customerTitle" bundle="carDemoBundle" /></FONT>
-<FONT FACE="Arial, Helvetica">     
-<table cellpadding="2" cellspacing="2" border="0">
-  <tbody>
-    <tr>
-      <td valign="top" align="right">
-      <h:output_text  key="titleLabel" bundle="carDemoBundle" /><br>
-
-
-
-      </td>
-      <td valign="top">
-      <h:selectone_menu id="title">
-		<h:selectitem  itemValue="mr" modelReference="CustomerBean.mr" selected="true"/>
-		<h:selectitem  itemValue="mrs" modelReference="CustomerBean.mrs" />
-		<h:selectitem  itemValue="ms" modelReference="CustomerBean.ms" />
-    </h:selectone_menu><br>
-      </td>
-    </tr>
-    <tr>
-      <td valign="top" align="right">
-      <h:output_text 	key="firstLabel" bundle="carDemoBundle" /><br>
-
-
-
-      </td>
-      <td valign="top">
+<table border="0" width="660" bgcolor="#4f4f72">
+    <tbody>
+      <tr> 
+        <td width="828"> <table border="0" cellpadding="0" cellspacing="0" width="100%">
+            <tbody>
+              <tr> 
+                <td width="820"><h:graphic_image  url="/cardemo.jpg" /><table border="0" cellpadding="0" cellspacing="6" width="660" bgcolor="white">
+                    <tbody>
+                      <tr> 
+                        <td width="50%" valign="top"><p>
+                        <h:output_text 	id="customerTitle" key="customerTitle" bundle="carDemoBundle" />
+                        <table cellpadding="2" cellspacing="2" border="0">
+                            <tbody>
+                              <tr> 
+                                <td valign="top" align="right">
+                                <h:output_text  key="titleLabel" bundle="carDemoBundle" /></font></td>
+                                <td valign="top"> <font face="Arial, Helvetica">
+                                    <h:selectone_menu id="title">
+                                        <h:selectitem  itemValue="mr" modelReference="CustomerBean.mr" selected="true"/>
+                        		<h:selectitem  itemValue="mrs" modelReference="CustomerBean.mrs" />
+                        		<h:selectitem  itemValue="ms" modelReference="CustomerBean.ms" />
+                                    </h:selectone_menu></font></td>
+                              </tr>
+                              <tr> 
+                                <td valign="top" align="right"><font face="Arial, Helvetica"> 
+                                <h:output_text key="firstLabel" bundle="carDemoBundle" /></font></td>
+                                <td valign="top"> <font face="Arial, Helvetica">
       <h:input_text  modelReference="CustomerBean.firstName" > 
-      </h:input_text><br>
-      </td>
-    </tr>
-    <tr>
-      <td valign="top" align="right">
-      <h:output_text 	key="middleLabel" bundle="carDemoBundle" /><br>
-
-
-
-      </td>
-      <td valign="top">
+      </h:input_text></font></td>
+                              </tr>
+                              <tr> 
+                                <td valign="top" align="right"><font face="Arial, Helvetica"> 
+      <h:output_text 	key="middleLabel" bundle="carDemoBundle" /></font></td>
+                                <td valign="top"> <font face="Arial, Helvetica">
         <h:input_text id="middleInitial" size="1" maxlength="1" 
             modelReference="CustomerBean.middleInitial" > 
             <f:validate_stringrange minimum="A" maximum="z"/> 
         </h:input_text>
         <h:output_errors  clientId="middleInitial"/> 
-        <br>
-      </td>
-    </tr>
-    <tr>
-      <td valign="top" align="right">
-      <h:output_text 	key="lastLabel" bundle="carDemoBundle" /><br>
-
-
-
-      </td>
-      <td valign="top">
+        </font></td>
+                              </tr>
+                              <tr> 
+                                <td valign="top" align="right"><font face="Arial, Helvetica"> 
+      <h:output_text 	key="lastLabel" bundle="carDemoBundle" /></font></td>
+                                <td valign="top"> <font face="Arial, Helvetica">
       <h:input_text  modelReference="CustomerBean.lastName" >
-      </h:input_text><br>
-      </td>
-    </tr>
-    <tr>
-      <td valign="top" align="right">
-      <h:output_text 	 key="mailingLabel" bundle="carDemoBundle"/><br>
-
-
-      </td>
-      <td valign="top">
-      <h:input_text  modelReference="CustomerBean.mailingAddress" /><br>
-      </td>
-    </tr>
-    <tr>
-      <td valign="top" align="right">
-      <h:output_text 	 key="cityLabel" bundle="carDemoBundle" /><br>
-
-
-      </td>
-      <td valign="top">
-      <h:input_text  modelReference="CustomerBean.city" /><br>
-      </td>
-    </tr>
-    <tr>
-      <td valign="top" align="right">
-      <h:output_text 	key="stateLabel" bundle="carDemoBundle" /><br>
-
-
-      </td>
-      <td valign="top">
+      </h:input_text></font></td>
+                              </tr>
+                              <tr> 
+                                <td valign="top" align="right"><font face="Arial, Helvetica"> 
+      <h:output_text 	 key="mailingLabel" bundle="carDemoBundle"/></font></td>
+                                <td valign="top"> <font face="Arial, Helvetica">
+      <h:input_text  modelReference="CustomerBean.mailingAddress" /></font></td>
+                              </tr>
+                              <tr> 
+                                <td valign="top" align="right"><font face="Arial, Helvetica">
+      <h:output_text 	 key="cityLabel" bundle="carDemoBundle" /></font></td>
+                                <td valign="top"> <font face="Arial, Helvetica">
+      <h:input_text  modelReference="CustomerBean.city" /></font></td>
+                              </tr>
+                              <tr> 
+                                <td valign="top" align="right"><font face="Arial, Helvetica">
+      <h:output_text 	key="stateLabel" bundle="carDemoBundle" /></font></td>
+                                <td valign="top"> <font face="Arial, Helvetica">
       <h:selectone_menu  modelReference="CustomerBean.state" >
 
 		<h:selectitem  itemValue="AL" itemLabel="AL" selected="true" />
@@ -209,33 +178,28 @@ align=BOTTOM></td>
 		<h:selectitem  itemValue="WI" itemLabel="WI"/>
 		<h:selectitem  itemValue="WY" itemLabel="WY"/>
 
-	      </h:selectone_menu><br>
-      </td>
-    </tr>
-    <tr>
-      <td valign="top" align="right">
-      <h:output_text  key="zipLabel" bundle="carDemoBundle" /><br>
-
-
-      </td>
-      <td valign="top">
+	      </h:selectone_menu></font></td>
+                              </tr>
+                              <tr> 
+                                <td valign="top" align="right"><font face="Arial, Helvetica">
+      <h:output_text  key="zipLabel" bundle="carDemoBundle" /></font></td>
+                                <td valign="top"> <font face="Arial, Helvetica">
       <h:input_number id="zip"  formatPattern="#####"
 			modelReference="CustomerBean.zip"
                         size="5">
         <f:validate_longrange minimum="10000" maximum="99999" /> 
       </h:input_number>
       <h:output_errors  clientId="zip" />    
-            <br>
-      </td>
-    </tr>
-    <tr>
-    <tr>
-      <td valign="top" align="right">
+            </font></td>
+                              </tr>
+                              <tr> </tr>
+                              <tr> 
+                                <td valign="top" align="right"><font face="Arial, Helvetica"> 
       <h:output_text  key="ccNumberLabel" bundle="carDemoBundle" /><br>
 
 
-      </td>
-      <td valign="top">
+      </font></td>
+                                <td valign="top"> <font face="Arial, Helvetica">
       <h:input_text id="ccno" modelReference="CustomerBean.month" size="16"
            converter="creditcard" >
           <f:validate_required/>
@@ -243,17 +207,13 @@ align=BOTTOM></td>
           <cd:creditcard_validator maximumChar="9" minimumChar="0" />
           
       </h:input_text>
-      <h:output_errors  clientId="ccno"/> <br>
-      </td>
-    </tr>
-    <tr>
-      <td valign="top" align="right">
-      <h:output_text  key="monthLabel" bundle="carDemoBundle" /><br>
-
-
-
-      </td>
-      <td valign="top"><h:selectone_menu  modelReference="CustomerBean.month">
+      <h:output_errors  clientId="ccno"/> </font></td>
+                              </tr>
+                              <tr> 
+                                <td valign="top" align="right"><font face="Arial, Helvetica"> 
+      <h:output_text  key="monthLabel" bundle="carDemoBundle" /></font></td>
+                                <td valign="top"> <font face="Arial, Helvetica">
+    <h:selectone_menu  modelReference="CustomerBean.month">
         <h:selectitem itemValue="01" itemLabel="01"/>
         <h:selectitem itemValue="02" itemLabel="02"/>
         <h:selectitem itemValue="03" itemLabel="03"/>
@@ -277,22 +237,30 @@ align=BOTTOM></td>
         <h:selectitem itemValue="2007" itemLabel="2007"/>
         <h:selectitem itemValue="2008" itemLabel="2008"/>
     </h:selectone_menu><br>
-      </td>
-    </tr>
-  </tbody>
-</table>
-</FONT>
+      </font></td>
+                              </tr>
+                            </tbody>
+                          </table>
     
 <h:command_button  key="finishButton" bundle="carDemoBundle" commandName="finish"/>
 
-
-
-<hr WIDTH="100%">
+<p></p>
 <p>
 <h:graphic_image id="duke" url="/duke.gif" /><br>
 <h:output_text  key="buyLabel" bundle="carDemoBundle" />
 <br>
+</p>
 </h:form>
+</td>
+                      </tr>
+                    </tbody>
+                  </table></td>
+              </tr>
+            </tbody>
+          </table></td>
+      </tr>
+    </tbody>
+  </table>
 </f:use_faces>
 </body>
 </html>

@@ -76,8 +76,12 @@
         <TABLE BORDER="0" CELLPADDING="0" CELLSPACING="6" WIDTH="660" BGCOLOR="white">
         <TR>
             <TD WIDTH="50%" VALIGN="TOP">
-            <h:graphic_image  graphicClass="alignLeft" url="/150x126_Jalopy.jpg" />
-            <BR>
+            <table border="0" align="left">
+            <tr>
+            <td>
+            <h:graphic_image  graphicClass="alignLeft" url="/150x126_Jalopy.jpg" /></tr>
+                          </table>
+                          <p><br>
             <B><FONT SIZE="4" COLOR="#330066" FACE="Arial, Helvetica">
             <h:output_text key="car1Title" bundle="carDemoBundle" /> 
 
@@ -88,8 +92,13 @@
                  bundle="carDemoBundle" commandName="more1"/>
             </TD>
             <TD WIDTH="50%" VALIGN="TOP" BGCOLOR="white">
+            <table border="0" align="left">
+            <tr>
+            <td>
             <h:graphic_image  url="/150x126_Roadster.jpg" />
-            <BR>
+            </tr>
+                          </table>
+                          <p><br>
             <B><FONT SIZE="4" COLOR="#330066" FACE="Arial, Helvetica">
             <h:output_text  key="car2Title" bundle="carDemoBundle" />
 
@@ -108,8 +117,13 @@
         </TR>
         <TR>
             <TD WIDTH="50%" VALIGN="TOP" BGCOLOR="white">
+            <table border="0" align="left">
+            <tr>
+            <td>
             <h:graphic_image  url="/150x126_Luxury.jpg" />
-            <BR>
+            </tr>
+                          </table>
+                          <p><br>
             <B> <FONT SIZE="4" COLOR="#330066"FACE="Arial, Helvetica">
             <h:output_text  key="car3Title" bundle="carDemoBundle"  />
 
@@ -122,8 +136,13 @@
                  bundle="carDemoBundle" commandName="more3"/>
             </TD>
             <TD WIDTH="50%" VALIGN="TOP" BGCOLOR="white">
+            <table border="0" align="left">
+            <tr>
+            <td>
             <h:graphic_image  url="/150x126_SUV.jpg" />
-            <BR>
+            </tr>
+                          </table>
+                          <p><br>
             <B> <FONT SIZE="4" COLOR="#330066" FACE="Arial, Helvetica">
             <h:output_text  key="car4Title" bundle="carDemoBundle"  />
 

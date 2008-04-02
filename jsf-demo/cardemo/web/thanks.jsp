@@ -58,50 +58,30 @@
 
 <body bgcolor="#FFFFFF">
 
-<table BORDER=0 WIDTH="660" BGCOLOR="#E2F7DD" NOSAVE >
-<tr NOSAVE>
-<td WIDTH="828" NOSAVE>
-<table BORDER=0 CELLSPACING=0 CELLPADDING=0 WIDTH="100%" >
-<tr>
-<td WIDTH="820">
-<TABLE BORDER="0" WIDTH="660" BGCOLOR="#4F4F72">
-<tr>
-<td VALIGN=TOP WIDTH="100%">
-<h:graphic_image  url="/cardemo.jpg" /></td>
-</tr>
-
-<tr>
-<td WIDTH="100%"><b><font face="Arial, Helvetica"><font color="#330066"><font size=+1></font></font></font></b>
-<p><font face="Arial, Helvetica"><b><font color="#93B629"></font></b></font>
-<p>&nbsp;</td>
-</tr>
-
-<tr>
-<td WIDTH="100%" BGCOLOR="#FFFFFF"><b><font face="Arial, Helvetica"><font color="#330066" align="center"><font size=+1>
-<h:output_text  key="thanksLabel" bundle="carDemoBundle"  />
-
-</font></font></font></b></td>
-</tr>
-
-<tr>
-<td WIDTH="100%">
-<blockquote>&nbsp;
-<table COLS=2 WIDTH="60%" NOSAVE >
-<tr>
-</tr>
-</table>
-
-<blockquote>&nbsp;</blockquote>
-</blockquote>
-</td>
-</tr>
-</table>
-</td>
-</tr>
-</table>
-</td>
-</tr>
-</table>
+<table border="0" width="660" bgcolor="#4f4f72">
+    <tbody>
+      <tr> 
+        <td width="828"> <table border="0" cellpadding="0" cellspacing="0" width="100%">
+            <tbody>
+              <tr> 
+                <td width="820"> <h:graphic_image  url="/cardemo.jpg" /></td>
+                    <table border="0" cellpadding="0" cellspacing="6" width="660" bgcolor="white">
+                    <tbody>
+                      <tr> 
+                        <td width="50%" align="center" valign="middle"> 
+                          <p><b><font face="Arial, Helvetica"><font color="#330066" align="center"><font size="+1"> 
+                            <h:output_text  key="thanksLabel" bundle="carDemoBundle"  />
+                            </font></font></font></b>
+                          </td>
+                      </tr>
+                    </tbody>
+                  </table></td>
+              </tr>
+            </tbody>
+          </table></td>
+      </tr>
+    </tbody>
+  </table>
 </body>
 </h:form>
 </f:use_faces>

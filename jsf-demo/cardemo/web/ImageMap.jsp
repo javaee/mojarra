@@ -41,6 +41,8 @@
 <head>
    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
    <title>CarDemo</title>
+   <link rel="stylesheet" type="text/css"
+        href='<%= request.getContextPath() + "/stylesheet.css" %>'>
 </head>
 
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
@@ -54,9 +56,23 @@
 
 <f:use_faces>
 <h:form  formName="imageMapForm" >
-    <p><font color="blue"><h:output_text id="chooseLocale" key="chooseLocale" bundle="carDemoBundle" /></font> </p>
-    <table>
-          <tr> <td> 
+    <table border="0" width="660" bgcolor="#4f4f72">
+    <tbody>
+      <tr> 
+        <td width="828"> <table border="0" cellpadding="0" cellspacing="0" width="100%">
+            <tbody>
+              <tr> 
+                <td width="820"> <h:graphic_image  url="/cardemo.jpg" /> 
+    <table border="0" cellpadding="0" cellspacing="6" width="660" bgcolor="white">
+                    <tbody>
+                      <tr> 
+                        <td width="50%" valign="top"><P align="center">
+                            <h:output_text id="chooseLocale" key="chooseLocale" bundle="carDemoBundle" /> </p>
+    </P>
+                          <TABLE>
+                            <TBODY>
+                              <TR> 
+                                <TD>
           <h:graphic_image id="mapImage" url="/world.jpg" usemap="#worldMap" />
                 <d:map id="worldMap" currentArea="NAmericas" >
                     <f:action_listener type="cardemo.ImageMapEventHandler"/> 
@@ -65,8 +81,10 @@
                         <d:area id="Germany" modelReference="gerA" onmouseover="/cardemo/world_germany.jpg" onmouseout="/cardemo/world.jpg" />
                         <d:area id="France" modelReference="fraA" onmouseover="/cardemo/world_france.jpg" onmouseout="/cardemo/world.jpg" />
                 </d:map>
-     </td> </tr>
-    </table>
+     </TD>
+                              </TR>
+                            </TBODY>
+                          </TABLE>
 
 </h:form>
 </f:use_faces>
