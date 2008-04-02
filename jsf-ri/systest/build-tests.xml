@@ -4,7 +4,7 @@
  Copyright 2003 Sun Microsystems, Inc. All rights reserved.
  SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 
- $Id: build-tests.xml,v 1.11 2003/08/05 18:23:15 jvisvanathan Exp $
+ $Id: build-tests.xml,v 1.12 2003/08/06 18:03:23 jvisvanathan Exp $
 -->
 
 
@@ -52,8 +52,11 @@
                 test.managed,
                 test.message,
                 test.converter,
+                test.converter01,
                 test.validator,
+                test.validator01,
                 test.component,
+                test.component01,
                 test.navigation,
                 test.tlvalidator,
                 test.standard,
@@ -199,6 +202,14 @@
       outContent="/converter.jsp PASSED"/>
   </target>
   
+  <target name="test.converter01"
+   description="Test standard Converter replacement">
+
+    <tester host="${host}" port="${port}" protocol="${protocol}"
+         request="${context.path}/faces/converter01.jsp"
+      outContent="/converter01.jsp PASSED"/>
+  </target>
+  
   <target name="test.validator"
    description="Test Validator creation facility">
 
@@ -208,6 +219,14 @@
       outContent="/validator.jsp PASSED"/>
   </target>
   
+  <target name="test.validator01"
+   description="Test standard Validator replacement">
+
+    <tester host="${host}" port="${port}" protocol="${protocol}"
+         request="${context.path}/faces/validator01.jsp"
+      outContent="/validator01.jsp PASSED"/>
+  </target>
+  
   <target name="test.component"
    description="Test Component creation facility">
 
@@ -215,6 +234,14 @@
     <tester host="${host}" port="${port}" protocol="${protocol}"
          request="${context.path}/faces/component.jsp"
       outContent="/component.jsp PASSED"/>
+  </target>
+  
+  <target name="test.component01"
+   description="Test standard Component replacement">
+
+   <tester host="${host}" port="${port}" protocol="${protocol}"
+         request="${context.path}/faces/component01.jsp"
+      outContent="/component01.jsp PASSED"/>
   </target>
 
   <target name="test.standard"
