@@ -1,110 +1,104 @@
 <!--
  Copyright 2002 Sun Microsystems, Inc. All rights reserved.
  SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+ German translation by Kai Toedter
 -->
 
 <messages>
-  <message messageId="MSG0001" severity="1" summary="{0} is not a valid number.">
-  	<detail>Bitte tret eines gultige Anzahl wieder ein.</detail>
+  <message messageId="MSG0001" severity="1" summary="{0} ist keine gültige Zahl.">
+  	<detail>Bitte geben Sie eine g&#252;ltige Zahl ein.</detail>
   </message>
-  <message messageId="MSG0002" severity="2" summary="{0} is not a valid date." >
-      <detail>Bitte tret eines Datum in mm/dd/jj Format weider ein.</detail>
+  <message messageId="MSG0002" severity="2" summary="{0} ist kein g&#252;ltiges Datum." >
+      <detail>Bitte geben Sie ein g&#252;ltiges Datum im TT.MM.JJJJ-Format ein.</detail>
   </message>
-  <message messageId="MSG0003" severity="3" summary="{0} field cannot be empty." />
-  <message messageId="MSG0004" severity="2" summary="{0} out of range." >
-      <detail>Wert muss zwischen {1} und {2} sein.</detail>
+  <message messageId="MSG0003" severity="3" summary="{0}-Feld darf nicht leer sein." />
+  <message messageId="MSG0004" severity="2" summary="{0} außerhalb des g&#252;ltigen Bereichs." >
+      <detail>Wert muss zwischen {1} und {2} liegen.</detail>
   </message>
-  <message messageId="MSG0005" severity="4" summary="Conversion Error." >
-      <detail>Konvertierungsfehler wahrend ansetzen {0} fuer Model {1} : Ausnahme: [2].</detail>
+  <message messageId="MSG0005" severity="4" summary="Konvertierungsfehler." >
+      <detail>Konvertierungsfehler: Wert {0} f&#252;r Modell {1} : Ausnahme: [2].</detail>
   </message>
-  <message messageId="com.sun.faces.TYPECONVERSION_ERROR" severity="4" summary="Conversion Error." >
-      <detail>Konvertierungsfehler wahrend ansetzen {0} fuer Model {1} : Ausnahme: [2].</detail>
+  <message messageId="com.sun.faces.TYPECONVERSION_ERROR" severity="4" summary="Konvertierungs-Fehler." >
+      <detail>Konvertierungs-Fehler: Wert {0} f&#252;r Modell {1} : Ausnahme: [2].</detail>
   </message>
-  <message messageId="com.sun.faces.MODELUPDATE_ERROR" severity="4" summary="Model Update failure." >
-      <detail>Fehler wahrend Update fuer {0} Messwert fuer Model {1} : Exception: [2].</detail>
-  </message>
-
-  <message messageId="com.sun.faces.FACES_CONTEXT_CONSTRUCTION_ERROR" severity="1" summary="Construction Error." >
-      <detail>FacesContext kann nicht anlegen.  Vielleicht ein paar Eckdaten sind null?</detail>
+  <message messageId="com.sun.faces.MODELUPDATE_ERROR" severity="4" summary="Modell-Aktualisierungsfehler." >
+      <detail>Fehler während der Aktualisierung der Wertes {0} f&#252;r Modell {1} : Ausnahme: [2].</detail>
   </message>
 
-  <message messageId="com.sun.faces.NULL_COMPONENT_ERROR" severity="1" summary="Construction Error." >
-      <detail>Component Argument ist null.</detail>
+  <message messageId="com.sun.faces.FACES_CONTEXT_CONSTRUCTION_ERROR" severity="1" summary="Fehler beim Erzeugen einer Struktur." >
+      <detail>FacesContext kann nicht erzeugt werden. Vielleicht sind ein paar Eingabe-Parameter Null?</detail>
   </message>
 
-  <message messageId="com.sun.faces.NULL_REQUEST_TREE_ERROR" severity="1" summary="Argument Error." >
-      <detail>requestTree Argument ist null.</detail>
+  <message messageId="com.sun.faces.NULL_COMPONENT_ERROR" severity="1" summary="Fehler beim Erzeugen einer Struktur." >
+      <detail>Component-Parameter ist Null.</detail>
   </message>
 
-  <message messageId="com.sun.faces.NULL_RESPONSE_TREE_ERROR" severity="1" summary="Argument Error." >
-      <detail>responseTree Argument ist null.</detail>
+  <message messageId="com.sun.faces.NULL_REQUEST_TREE_ERROR" severity="1" summary="Parameter-Fehler." >
+      <detail>requestTree-Parameter ist Null.</detail>
   </message>
 
-  <message messageId="com.sun.faces.REQUEST_TREE_ALREADY_SET_ERROR" severity="1" summary="State Error." >
-      <detail>requestTree ist schon fuer diesem request angesetzt.</detail>
+  <message messageId="com.sun.faces.NULL_RESPONSE_TREE_ERROR" severity="1" summary="Parameter-Fehler." >
+      <detail>responseTree-Parameter ist Null.</detail>
   </message>
 
-  <message messageId="com.sun.faces.NULL_MESSAGE_ERROR" severity="1" summary="Argument Error." >
-      <detail>Message Parameter muss nich null sein.</detail>
+  <message messageId="com.sun.faces.REQUEST_TREE_ALREADY_SET_ERROR" severity="1" summary="Status-Fehler" >
+      <detail>requestTree ist schon f&#252;r diesen Request angelegt.</detail>
   </message>
 
-  <message messageId="com.sun.faces.NULL_PARAMETERS_ERROR" severity="1" summary="Argument Error." >
-      <detail>Eins oder mehrere Parameters koennte null sein.</detail>
+  <message messageId="com.sun.faces.NULL_MESSAGE_ERROR" severity="1" summary="Parameter-Fehler." >
+      <detail>Message-Parameter darf nicht Null sein.</detail>
+  </message>
+
+  <message messageId="com.sun.faces.NULL_PARAMETERS_ERROR" severity="1" summary="Parameter-Fehler." >
+      <detail>Ein oder mehrere Parameter k&#xF6;nnten Null sein.</detail>
   </message>
 
   <message messageId="com.sun.faces.NAMED_OBJECT_NOT_FOUND_ERROR" severity="1" summary="Expression Error." >
-      <detail>Gennantes Object: '{0}' nicht gefunden.</detail>
+      <detail>Object: '{0}' wurde nicht gefunden.</detail>
   </message>
 
-  <message messageId="com.sun.faces.NULL_RESPONSE_STREAM_ERROR" severity="1" summary="Argument Error." >
-      <detail>ResponseStream Argument ist null.</detail>
+  <message messageId="com.sun.faces.NULL_RESPONSE_STREAM_ERROR" severity="1" summary="Parameter-Fehler." >
+      <detail>ResponseStream-Parameter ist Null.</detail>
   </message>
 
-  <message messageId="com.sun.faces.NULL_RESPONSE_WRITER_ERROR" severity="1" summary="Argument Error." >
-      <detail>ResponseWriter Argument ist null.</detail>
+  <message messageId="com.sun.faces.NULL_RESPONSE_WRITER_ERROR" severity="1" summary="Parameter-Fehler." >
+      <detail>ResponseWriter-Parameter ist Null.</detail>
   </message>
 
-  <message messageId="com.sun.faces.NULL_EVENT_ERROR" severity="1" summary="Argument Error." >
-      <detail>Event Argument ist null.</detail>
+  <message messageId="com.sun.faces.NULL_EVENT_ERROR" severity="1" summary="Parameter-Fehler." >
+      <detail>Event-Parameter ist Null.</detail>
   </message>
 
-  <message messageId="com.sun.faces.NULL_HANDLER_ERROR" severity="1" summary="Argument Error." >
-      <detail>Handler Argument ist null.</detail>
+  <message messageId="com.sun.faces.NULL_HANDLER_ERROR" severity="1" summary="Parameter-Fehler." >
+      <detail>Handler-Parameter ist Null.</detail>
   </message>
 
-  <message messageId="com.sun.faces.NULL_CONTEXT_ERROR" severity="1" summary="Argument Error." >
-      <detail>Context Argument ist null.</detail>
+  <message messageId="com.sun.faces.NULL_CONTEXT_ERROR" severity="1" summary="Parameter-Fehler." >
+      <detail>Context-Parameter ist Null.</detail>
   </message>
 
-  <message messageId="com.sun.faces.NULL_LOCALE_ERROR" severity="1" summary="Argument Error." >
-      <detail>Locale Argument ist null.</detail>
+  <message messageId="com.sun.faces.NULL_LOCALE_ERROR" severity="1" summary="Parameter-Fehler." >
+      <detail>Locale-Parameter ist Null.</detail>
   </message>
 
-  <message messageId="com.sun.faces.SUPPORTS_COMPONENT_ERROR" severity="1" summary="Argument Error." >
-      <detail>Component Typ: '{0}' is night gestuetzt fuer diesem Renderer.</detail>
+  <message messageId="com.sun.faces.SUPPORTS_COMPONENT_ERROR" severity="1" summary="Parameter-Fehler." >
+      <detail>Componenten-Typ: '{0}' wird f&#252;r diesen Renderer nicht unterst&#252;tzt.</detail>
   </message>
 
-  <message messageId="com.sun.faces.MISSING_RESOURCE_ERROR" severity="3" summary="Missing Resource." >
-      <detail>Kann nicht ResourceBundle abholen.</detail>
+  <message messageId="com.sun.faces.MISSING_RESOURCE_ERROR" severity="3" summary="Fehlende Ressource." >
+      <detail>Kann Resource-Bundle nicht finden.</detail>
   </message>
 
-  <message messageId="com.sun.faces.MISSING_CLASS_ERROR" severity="1" summary="Missing Class." >
-      <detail>Kann nicht Class '{0}' belasten.</detail>
+  <message messageId="com.sun.faces.MISSING_CLASS_ERROR" severity="1" summary="Fehlende Klasse." >
+      <detail>Kann Klasse '{0}' nicht laden.</detail>
   </message>
-  <message messageId="com.sun.faces.COMPONENT_NOT_FOUND_ERROR" severity="3" summary="Component Not Found.">
-      <detail>Component fuer Bezeichner: '{0}' is nicht gefunden.</detail>
-  </message>
-
-  <message messageId="com.sun.faces.LIFECYCLE_ID_ALREADY_ADDED" severity="3" summary="LifecycleId already added.">
-      <detail>Lifecylce id '{0}' ist schon addiert.</detail>
+  <message messageId="com.sun.faces.COMPONENT_NOT_FOUND_ERROR" severity="3" summary="Komponente wurde nicht gefunden.">
+      <detail>Komponente '{0}' wurde nicht gefunden.</detail>
   </message>
 
-  <message messageId="com.sun.faces.ILLEGAL_MODEL_REFERENCE" severity="3" summary="Illegal Model Reference.">
-      <detail>ModelReference Ausdruck '{0}' ist ungueltig.</detail>
+  <message messageId="com.sun.faces.LIFECYCLE_ID_ALREADY_ADDED" severity="3" summary="Lifecycle-Id wurde schon hinzugef&#252;gt.">
+      <detail>Lifecylce-Id '{0}' wurde schon hinzugef&#252;gt.</detail>
   </message>
 
-  <message messageId="com.sun.faces.ATTRIBUTE_NOT_SUPORTED" severity="3" summary="Attribut nicht gest?tzt">
-      <detail>Attribut '{0}' wird nicht f?r die Teilart gest?tzt '{1}'.</detail>
-  </message>
 </messages>
 

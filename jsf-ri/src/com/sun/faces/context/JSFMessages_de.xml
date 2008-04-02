@@ -1,81 +1,82 @@
 <!--
  Copyright 2002 Sun Microsystems, Inc. All rights reserved.
  SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
--->
+ German translation by Kai Toedter
+ -->
 
 <messages>
   <message messageId="javax.faces.validator.DoubleRangeValidator.LIMIT" 
-           severity="1" summary="Validation Error." >
-      <detail>Specified attribute cannot be converted to proper type.</detail>
+           severity="1" summary="Validierungs-Fehler." >
+      <detail>Spezifiziertes Attribut kann nicht in einen Double-Typ umgewandelt werden.</detail>
   </message>
   <message messageId="javax.faces.validator.DoubleRangeValidator.MAXIMUM" 
-           severity="1" summary="Validation Error." >
-      <detail>Wert ist gr&#xF6;&#xDF;er als rechtm&#xE4;&#xDF;ig Maximum {0}.</detail>
+           severity="1" summary="Validierungs-Fehler." >
+      <detail>Wert ist gr&#xF6;&#xDF;er als zul&#xE4;ssiges Maximum {0}.</detail>
   </message>
   <message messageId="javax.faces.validator.DoubleRangeValidator.MINIMUM" 
-           severity="1" summary="Validation Error." >
-      <detail>Wert is kleiner als rechtm&#xE4;&#xDF;ig Minimum {0}.</detail>
+           severity="1" summary="Validierungs-Fehler." >
+      <detail>Wert ist kleiner als zul&#xE4;ssiges Minimum {0}.</detail>
   </message>
   <message messageId="javax.faces.validator.DoubleRangeValidator.TYPE" 
-           severity="1" summary="Validation Error." >
-      <detail>Wert ist nicht von richtiges Datentyp.</detail>
+           severity="1" summary="Validierungs-Fehler." >
+      <detail>Wert ist nicht vom richtigen Datentyp.</detail>
   </message>
 
   <message messageId="javax.faces.validator.LengthValidator.LIMIT" 
-           severity="1" summary="Validation Error." >
-      <detail>Spezifiziertes Attribut kann nicht in korrekte Typ umgewandelt werden.</detail>
+           severity="1" summary="Validierungs-Fehler." >
+      <detail>Spezifiziertes Attribut kann nicht in korrekten Typ umgewandelt werden.</detail>
   </message>
   <message messageId="javax.faces.validator.LengthValidator.MAXIMUM" 
-           severity="1" summary="Validation Error." >
-      <detail>Wert ist gr&#xF6;&#xDF;er als rechtm&#xE4;&#xDF;ig Maximum {0}.</detail>
+           severity="1" summary="Validierungs-Fehler." >
+      <detail>Wert ist gr&#xF6;&#xDF;er als zul&#xE4;ssiges Maximum {0}.</detail>
   </message>
   <message messageId="javax.faces.validator.LengthValidator.MINIMUM" 
-           severity="1" summary="Validation Error." >
-      <detail>Wert is kleiner als rechtm&#xE4;&#xDF;ig Minimum {0}.</detail>
+           severity="1" summary="Validierungs-Fehler." >
+      <detail>Wert ist kleiner als zul&#xE4;ssiges Minimum {0}.</detail>
   </message>
 
   <message messageId="javax.faces.validator.RequiredValidator.FAILED" 
-           severity="1" summary="Validation Error." >
-      <detail>Wert wird angefordert.</detail>
+           severity="1" summary="Validierungs-Fehler." >
+      <detail>Wert wird ben&#xF6;tigt.</detail>
   </message>
 
   <message messageId="javax.faces.validator.LongRangeValidator.LIMIT" 
-           severity="1" summary="Validation Error." >
-      <detail>Spezifiziertes Attribut kann nicht in korrekte Typ umgewandelt werden.</detail>
+           severity="1" summary="Validierungs-Fehler." >
+      <detail>Spezifiziertes Attribut kann nicht in korrekten Typ umgewandelt werden.</detail>
   </message>
   <message messageId="javax.faces.validator.LongRangeValidator.MAXIMUM" 
-           severity="1" summary="Validation Error." >
-      <detail>Wert ist gr&#xF6;&#xDF;er als rechtm&#xE4;&#xDF;ig Maximum {0}.</detail>
+           severity="1" summary="Validierungs-Fehler." >
+      <detail>Wert ist gr&#xF6;&#xDF;er als zul&#xE4;ssiges Maximum {0}.</detail>
   </message>
   <message messageId="javax.faces.validator.LongRangeValidator.MINIMUM" 
-           severity="1" summary="Validation Error." >
-      <detail>Wert is kleiner als rechtm&#xE4;&#xDF;ig Minimum {0}.</detail>
+           severity="1" summary="Validierungs-Fehler." >
+      <detail>Wert ist kleiner als zul&#xE4;ssiges Minimum {0}.</detail>
   </message>
   <message messageId="javax.faces.validator.LongRangeValidator.TYPE" 
-           severity="1" summary="Validation Error." >
-      <detail>Wert ist nicht von der korrekten Typ.</detail>
+           severity="1" summary="Validierungs-Fehler." >
+      <detail>Wert ist nicht vom korrekten Typ.</detail>
   </message>
 
   <message messageId="javax.faces.validator.StringRangeValidator.LIMIT" 
-           severity="1" summary="Validation Error." >
-      <detail>Spezifiziertes Attribut kann nicht in korrekte Typ umgewandelt werden.</detail>
+           severity="1" summary="Validierungs-Fehler." >
+      <detail>Spezifiziertes Attribut kann nicht in korrekten Typ umgewandelt werden.</detail>
   </message>
   <message messageId="javax.faces.validator.StringRangeValidator.MAXIMUM" 
-           severity="1" summary="Validation Error." >
-      <detail>Wert ist gr&#xF6;&#xDF;er als rechtm&#xE4;&#xDF;ig Maximum {0}.</detail>
+           severity="1" summary="Validierungs-Fehler." >
+      <detail>Wert ist gr&#xF6;&#xDF;er als zul&#xE4;ssiges Maximum {0}.</detail>
   </message>
   <message messageId="javax.faces.validator.StringRangeValidator.MINIMUM" 
-           severity="1" summary="Validation Error." >
-      <detail>Wert is kleiner als rechtm&#xE4;&#xDF;ig Minimum {0}.</detail>
+           severity="1" summary="Validierungs-Fehler." >
+      <detail>Wert ist kleiner als zul&#xE4;ssiges Minimum {0}.</detail>
   </message>
   <message messageId="javax.faces.validator.StringRangeValidator.TYPE" 
-           severity="1" summary="Validation Error." >
-      <detail>Wert ist nicht von der korrekten Typ.</detail>
+           severity="1" summary="Validierungs-Fehler." >
+      <detail>Wert ist nicht vom korrekten Typ.</detail>
   </message>
 
   <message messageId="javax.faces.validator.RequiredValidator.FAILED" 
-           severity="1" summary="Validation Error." >
-      <detail>Wert wird angefordert.</detail>
+           severity="1" summary="Validierungs-Fehler." >
+      <detail>Wert wird ben&#xF6;tigt.</detail>
   </message>
 
 </messages>
