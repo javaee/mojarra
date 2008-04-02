@@ -44,16 +44,13 @@
    <link rel="stylesheet" type="text/css"
             href='<%= request.getContextPath() + "/stylesheet.css" %>'>
     
-    <%@ taglib uri="http://java.sun.com/jstl/fmt" prefix="fmt" %>
     <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
     <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
     <%@ taglib uri="/WEB-INF/cardemo.tld" prefix="cd" %>
 </head>
 <body>
 <jsp:useBean id="creditCardConverter" class="cardemo.CreditCardConverter" scope="session" />
-<fmt:setBundle
-	    basename="cardemo.Resources"
-	    scope="session" var="cardemoBundle"/>
+<f:loadBundle basename="cardemo.Resources" var="cardemoBundle"/>
 
 <f:view>
 <h:form >
@@ -67,12 +64,12 @@
                     <tbody>
                       <tr> 
                         <td width="50%" valign="top"><p>
-                        <h:output_text 	id="customerTitle" key="customerTitle" bundle="carDemoBundle" />
+                        <h:output_text 	id="customerTitle" value="#{carDemoBundle.customerTitle}" />
                         <table cellpadding="2" cellspacing="2" border="0">
                             <tbody>
                               <tr> 
                                 <td valign="top" align="right">
-                                <h:output_text  key="titleLabel" bundle="carDemoBundle" /></font></td>
+                                <h:output_text value="#{carDemoBundle.titleLabel}" /></font></td>
                                 <td valign="top"> <font face="Arial, Helvetica">
                                     <h:selectone_menu id="title" 
                                                        valueRef="CustomerBean.currentTitle">
@@ -81,14 +78,14 @@
                               </tr>
                               <tr> 
                                 <td valign="top" align="right"><font face="Arial, Helvetica"> 
-                                <h:output_text key="firstLabel" bundle="carDemoBundle" /></font></td>
+                                <h:output_text value="#{carDemoBundle.firstLabel}" /></font></td>
                                 <td valign="top"> <font face="Arial, Helvetica">
       <h:input_text  valueRef="CustomerBean.firstName" > 
       </h:input_text></font></td>
                               </tr>
                               <tr> 
                                 <td valign="top" align="right"><font face="Arial, Helvetica"> 
-      <h:output_text 	key="middleLabel" bundle="carDemoBundle" /></font></td>
+      <h:output_text value="#{carDemoBundle.middleLabel}" /></font></td>
                                 <td valign="top"> <font face="Arial, Helvetica">
         <h:input_text id="middleInitial" size="1" maxlength="1" 
             valueRef="CustomerBean.middleInitial" > 
@@ -98,26 +95,26 @@
                               </tr>
                               <tr> 
                                 <td valign="top" align="right"><font face="Arial, Helvetica"> 
-      <h:output_text 	key="lastLabel" bundle="carDemoBundle" /></font></td>
+      <h:output_text value="#{carDemoBundle.lastLabel}" /></font></td>
                                 <td valign="top"> <font face="Arial, Helvetica">
       <h:input_text  valueRef="CustomerBean.lastName" >
       </h:input_text></font></td>
                               </tr>
                               <tr> 
                                 <td valign="top" align="right"><font face="Arial, Helvetica"> 
-      <h:output_text 	 key="mailingLabel" bundle="carDemoBundle"/></font></td>
+      <h:output_text value="#{carDemoBundle.mailingLabel}"/></font></td>
                                 <td valign="top"> <font face="Arial, Helvetica">
       <h:input_text  valueRef="CustomerBean.mailingAddress" /></font></td>
                               </tr>
                               <tr> 
                                 <td valign="top" align="right"><font face="Arial, Helvetica">
-      <h:output_text 	 key="cityLabel" bundle="carDemoBundle" /></font></td>
+      <h:output_text value="#{carDemoBundle.cityLabel}" /></font></td>
                                 <td valign="top"> <font face="Arial, Helvetica">
       <h:input_text  valueRef="CustomerBean.city" /></font></td>
                               </tr>
                               <tr> 
                                 <td valign="top" align="right"><font face="Arial, Helvetica">
-      <h:output_text 	key="stateLabel" bundle="carDemoBundle" /></font></td>
+      <h:output_text value="#{carDemoBundle.stateLabel}" /></font></td>
                                 <td valign="top"> <font face="Arial, Helvetica">
       <h:selectone_menu  valueRef="CustomerBean.state" value="CA">
 
@@ -179,7 +176,7 @@
                               </tr>
                               <tr> 
                                 <td valign="top" align="right"><font face="Arial, Helvetica">
-      <h:output_text  key="zipLabel" bundle="carDemoBundle" /></font></td>
+      <h:output_text  value="#{carDemoBundle.zipLabel}" /></font></td>
                                 <td valign="top"> <font face="Arial, Helvetica">
       <h:input_text id="zip"  
 			valueRef="CustomerBean.zip"
@@ -192,7 +189,7 @@
                               <tr> </tr>
                               <tr> 
                                 <td valign="top" align="right"><font face="Arial, Helvetica"> 
-      <h:output_text  key="ccNumberLabel" bundle="carDemoBundle" /><br>
+      <h:output_text  value="#{carDemoBundle.ccNumberLabel}" /><br>
 
 
       </font></td>
@@ -206,7 +203,7 @@
                               </tr>
                               <tr> 
                                 <td valign="top" align="right"><font face="Arial, Helvetica"> 
-      <h:output_text  key="monthLabel" bundle="carDemoBundle" /></font></td>
+      <h:output_text  value="#{carDemoBundle.monthLabel}" /></font></td>
                                 <td valign="top"> <font face="Arial, Helvetica">
     <h:selectone_menu  valueRef="CustomerBean.month">
         <f:selectitem itemValue="01" itemLabel="01"/>
@@ -239,13 +236,13 @@
 
 <h:output_errors for=""/>
     
-<h:command_button  key="finishButton" bundle="carDemoBundle"
+<h:command_button  value="#{carDemoBundle.finishButton}"
         action="success" />
 
 <p></p>
 <p>
 <h:graphic_image id="duke" url="/duke.gif" /><br>
-<h:output_text  key="buyLabel" bundle="carDemoBundle" />
+<h:output_text  value="#{carDemoBundle.buyLabel}" />
 <br>
 </p>
 </h:form>

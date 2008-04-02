@@ -46,11 +46,9 @@
 
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
-<%@ taglib uri="http://java.sun.com/jstl/fmt" prefix="fmt" %>
 
-     <fmt:setBundle
-	    basename="cardemo.Resources"
-	    scope="session" var="carDemoBundle"/>
+     <f:loadBundle
+	    basename="cardemo.Resources" var="carDemoBundle"/>
 
 <f:view>
 <h:form  >
@@ -69,7 +67,7 @@
                       <tr> 
                         <td width="50%" align="center" valign="middle"> 
                           <p><b><font face="Arial, Helvetica"><font color="#330066" align="center"><font size="+1"> 
-                            <h:output_text  key="thanksLabel" bundle="carDemoBundle"  />
+                            <h:output_text  value="#{carDemoBundle.thanksLabel}"  />
                             </font></font></font></b>
                           </td>
                       </tr>

@@ -76,65 +76,65 @@
 
 <f:facet name="header">
     <h:panel_group>
-        <h:output_text  key="buyTitle" bundle="carDemoBundle"/>
+        <h:output_text  value="#{carDemoBundle.buyTitle}"/>
     </h:panel_group>
  </f:facet>
 
-    <h:output_text key="Engine" bundle="carDemoBundle" />
+    <h:output_text value="#{carDemoBundle.Engine}" />
 
     <h:output_text valueRef="CarServer.currentEngineOption"  />
 
-    <h:output_text key="Brakes" bundle="carDemoBundle" />
+    <h:output_text value="#{carDemoBundle.Brakes}" />
 
     <h:output_text  valueRef="CarServer.currentBrakeOption" />
 
-    <h:output_text  key="Suspension" bundle="carDemoBundle" />
+    <h:output_text  value="#{carDemoBundle.Suspension}" />
 
     <h:output_text  valueRef="CarServer.currentSuspensionOption" />
 
-    <h:output_text  key="Speakers" bundle="carDemoBundle" />
+    <h:output_text  value="#{carDemoBundle.Speakers}" />
 
     <h:output_text  valueRef="CarServer.currentSpeakerOption" />
 
-    <h:output_text  key="Audio" bundle="carDemoBundle" />
+    <h:output_text  value="#{carDemoBundle.Audio}" />
 
     <h:output_text  valueRef="CarServer.currentAudioOption" />
 
-    <h:output_text  key="Transmission" bundle="carDemoBundle" />
+    <h:output_text  value="#{carDemoBundle.Transmission}" />
 
     <h:output_text  valueRef="CarServer.currentTransmissionOption" />
 
-    <h:output_text  key="sunroofLabel" bundle="carDemoBundle"  />
+    <h:output_text  value="#{carDemoBundle.sunroofLabel}"  />
 
     <h:output_text  valueRef="CarServer.currentPackage.sunRoofSelected" />
 
-    <h:output_text  key="cruiseLabel" bundle="carDemoBundle"  />
+    <h:output_text  value="#{carDemoBundle.cruiseLabel}"  />
 
     <h:output_text  valueRef="CarServer.currentPackage.cruiseControlSelected" />
 
-    <h:output_text key="keylessLabel" bundle="carDemoBundle"  />
+    <h:output_text value="#{carDemoBundle.keylessLabel}"  />
 
     <h:output_text  valueRef="CarServer.currentPackage.keylessEntrySelected" />
 
-    <h:output_text  key="securityLabel" bundle="carDemoBundle"  />
+    <h:output_text  value="#{carDemoBundle.securityLabel}"  />
 
     <h:output_text  valueRef="CarServer.currentPackage.securitySystemSelected" />
 
-    <h:output_text  key="skiRackLabel" bundle="carDemoBundle"  />
+    <h:output_text  value="#{carDemoBundle.skiRackLabel}"  />
 
     <h:output_text  valueRef="CarServer.currentPackage.skiRackSelected" />
 
-    <h:output_text  key="towPkgLabel" bundle="carDemoBundle"  />
+    <h:output_text  value="#{carDemoBundle.towPkgLabel}"  />
 
     <h:output_text  valueRef="CarServer.currentPackage.towPackageSelected" />
 
-    <h:output_text  key="gpsLabel" bundle="carDemoBundle"  />
+    <h:output_text  value="#{carDemoBundle.gpsLabel}"  />
 
     <h:output_text  valueRef="CarServer.currentPackage.gpsSelected" />
     
   <f:facet name="footer">
      <h:panel_group>
-        <h:output_text  key="yourPriceLabel" bundle="carDemoBundle"  />
+        <h:output_text  value="#{carDemoBundle.yourPriceLabel}"  />
         &nbsp;
         <h:output_text  valueRef="CarServer.carCurrentPrice" />
      </h:panel_group>
@@ -146,7 +146,7 @@
 <TR>
 <TD>
 <P>
-<h:command_button key="buy" bundle="carDemoBundle"
+<h:command_button value="#{carDemoBundle.buy}"
                   action="success" />
 
 </TD></TR></TABLE>

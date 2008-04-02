@@ -46,12 +46,10 @@
 
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
-<%@ taglib uri="http://java.sun.com/jstl/fmt" prefix="fmt" %>
 <%@ taglib uri="http://java.sun.com/jsf/demo/components" prefix="d" %>
 
-     <fmt:setBundle
-	    basename="cardemo.Resources"
-	    scope="session" var="carDemoBundle"/>
+     <f:loadBundle
+	    basename="cardemo.Resources" var="carDemoBundle"/>
 
 <f:view>
     <h:form>
@@ -66,7 +64,7 @@
                     <tbody>
                       <tr> 
                         <td width="50%" valign="top"><P align="center">
-                            <h:output_text id="chooseLocale" key="chooseLocale" bundle="carDemoBundle" /> </p>
+                            <h:output_text id="chooseLocale" value="#{carDemoBundle.chooseLocale}" /> </p>
     </P>
                           <TABLE>
                             <TBODY>

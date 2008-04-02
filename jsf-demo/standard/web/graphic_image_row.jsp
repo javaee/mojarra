@@ -34,8 +34,8 @@
 
              <td>
 
-               <h:graphic_image id="outputGraphic2" key="imageurl"
-                                bundle="standardBundle"
+               <h:graphic_image id="outputGraphic2" 
+                                    url="#{standardBundle.imageurl}"
 	                            alt="output_graphic with localized image"
                                 title="output_graphic with localized image"
                />

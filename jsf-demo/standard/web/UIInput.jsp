@@ -3,7 +3,7 @@
  SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 -->
 
-<%-- $Id: UIInput.jsp,v 1.4 2003/10/19 14:54:06 eburns Exp $ --%>
+<%-- $Id: UIInput.jsp,v 1.5 2003/11/09 03:25:12 eburns Exp $ --%>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
@@ -16,23 +16,19 @@
     <h1>UIInput</h1>
 
     <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
-    <%@ taglib uri="http://java.sun.com/jstl/fmt" prefix="fmt" %>
     <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
 
-     <fmt:setBundle basename="standard.Resources" scope="session"
-                    var="standardBundle"/>
+     <f:loadBundle basename="standard.Resources" var="standardBundle"/>
 
      <f:view>  
 
        <p>Form is rendered after this.</p>
      
-       <h:form id="standardRenderKitForm" 
-                  >
+       <h:form id="standardRenderKitForm" >
 
          <h:command_button id="standardRenderKitSubmit" 
              actionRef="model.postbackAction"
-             key="standardRenderKitPostbackLabel"
-             bundle="standardBundle">
+             value="#{standardBundle.standardRenderKitPostbackLabel}">
          </h:command_button>
 
          <table width="100%" border="1" cellpadding="3" cellspacing="3">
@@ -71,8 +67,7 @@
 
          <h:command_button id="standardRenderKitSubmit1" 
              actionRef="model.postbackAction"
-             key="standardRenderKitPostbackLabel"
-             bundle="standardBundle">
+             value="#{standardBundle.standardRenderKitPostbackLabel}">
          </h:command_button>
 
        </h:form>

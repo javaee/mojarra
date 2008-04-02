@@ -31,22 +31,3 @@
         <property-name>dir</property-name>
         <property-class>java.lang.String</property-class>
       </property>
-
-      <!-- non-html renderer specific propertys -->
-
-      <property>
-        <description>the ResourceBundle key for localized text</description>
-        <display-name></display-name>
-        <icon></icon>
-        <property-name>key</property-name>
-        <property-class>java.lang.String</property-class>
-      </property>
-
-      <property>
-        <description>the name of the ResourceBundle</description>
-        <display-name></display-name>
-        <icon></icon>
-        <property-name>bundle</property-name>
-        <property-class>java.lang.String</property-class>
-      </property>
-

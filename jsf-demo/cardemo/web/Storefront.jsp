@@ -44,15 +44,13 @@
         <link rel="stylesheet" type="text/css"
             href='<%= request.getContextPath() + "/stylesheet.css" %>'>
 </HEAD>
-    <%@ taglib uri="http://java.sun.com/jstl/fmt" prefix="fmt" %>
     <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
     <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
 
 <BODY BGCOLOR="white">
 
-       <fmt:setBundle
-	    basename="cardemo.Resources"
-	    scope="session" var="carDemoBundle"/>
+       <f:loadBundle
+	    basename="cardemo.Resources" var="carDemoBundle"/>
 
 <f:view>  
 
@@ -77,13 +75,12 @@
                           </table>
                           <p><br>
             <B><FONT SIZE="4" COLOR="#330066" FACE="Arial, Helvetica">
-            <h:output_text key="car1Title" bundle="carDemoBundle" /> 
+            <h:output_text value="#{carDemoBundle.car1Title}" /> 
 
             </FONT></B><FONT FACE="Arial, Helvetica"><BR><BR>
-            <h:output_text  key="car1Desc" bundle="carDemoBundle"  /> 
+            <h:output_text  value="#{carDemoBundle.car1Desc}"  /> 
             <BR></FONT>
-            <h:command_button key="moreButton" action="more1"
-                 bundle="carDemoBundle" >
+            <h:command_button action="more1" value="#{carDemoBundle.moreButton}" >
                 <f:action_listener type="cardemo.CarActionListener"/>
             </h:command_button>
             </TD>
@@ -96,15 +93,15 @@
                           </table>
                           <p><br>
             <B><FONT SIZE="4" COLOR="#330066" FACE="Arial, Helvetica">
-            <h:output_text  key="car2Title" bundle="carDemoBundle" />
+            <h:output_text  value="#{carDemoBundle.car2Title}" />
 
             </FONT></B>
             <FONT FACE="Arial, Helvetica"><BR> <BR>
-            <h:output_text  key="car2Desc" bundle="carDemoBundle" />
+            <h:output_text  value="#{carDemoBundle.car2Desc}" />
 
             <BR>
-            <h:command_button  key="moreButton" action="more2"
-                 bundle="carDemoBundle" >
+            <h:command_button  action="more2" 
+                value="#{carDemoBundle.moreButton}" >
                 <f:action_listener type="cardemo.CarActionListener"/>
             </h:command_button>
             </TD>
@@ -123,15 +120,15 @@
                           </table>
                           <p><br>
             <B> <FONT SIZE="4" COLOR="#330066"FACE="Arial, Helvetica">
-            <h:output_text  key="car3Title" bundle="carDemoBundle"  />
+            <h:output_text  value="#{carDemoBundle.car3Title}"  />
 
             </FONT></B>
             <FONT FACE="Arial, Helvetica"><BR> <BR>
-            <h:output_text  key="car3Desc" bundle="carDemoBundle"  />
+            <h:output_text  value="#{carDemoBundle.car3Desc}"  />
 
             <BR>
-            <h:command_button key="moreButton" action="more3"
-                 bundle="carDemoBundle" >
+            <h:command_button action="more3"
+                 value="carDemoBundle.moreButton" >
                 <f:action_listener type="cardemo.CarActionListener"/>
             </h:command_button>
             </TD>
@@ -144,15 +141,15 @@
                           </table>
                           <p><br>
             <B> <FONT SIZE="4" COLOR="#330066" FACE="Arial, Helvetica">
-            <h:output_text  key="car4Title" bundle="carDemoBundle"  />
+            <h:output_text  value="#{carDemoBundle.car4Title}"  />
 
             </FONT></B>
             <FONT FACE="Arial, Helvetica"><BR> <BR>
-            <h:output_text key="car4Desc" bundle="carDemoBundle"  /> 
+            <h:output_text value="#{carDemoBundle.car4Desc}"  /> 
 
             <BR>
-            <h:command_button  key="moreButton" action="more4" 
-                 bundle="carDemoBundle" >
+            <h:command_button  action="more4" 
+                 value="carDemoBundle.moreButton" >
                <f:action_listener type="cardemo.CarActionListener"/>
             </h:command_button>
             </TD>

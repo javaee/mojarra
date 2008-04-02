@@ -41,16 +41,14 @@
     <%@ page extends="com.sun.faces.Page" %>
     <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
     <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
-    <%@ taglib uri="http://java.sun.com/jstl/fmt" prefix="fmt" %>
 
-     <fmt:setBundle
-	    basename="cardemo.Resources"
-	    scope="session" var="carDemoBundle"/>
+     <f:loadBundle
+	    basename="cardemo.Resources" var="carDemoBundle"/>
     <H3> JSF Basic Components Test Page </H3>
     <hr>
     <f:view>
     <h:form  >
-	<faces:output_text id="hello_label" key="errorLabel" bundle="carDemoBundle" />
+	<faces:output_text id="hello_label" value="#{carDemoBundle.errorLabel}" />
              <P></P>
     </h:Form>
     </f:view>

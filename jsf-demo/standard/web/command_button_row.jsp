@@ -57,7 +57,7 @@
                       tabindex="50" accesskey="B"
                       value="click to submit form"
                       action="success"
-                      imageKey="imageurl" bundle="standardBundle">
+                      image="#{standardBundle.imageurl}">
                  <f:action_listener type="standard.DefaultListener"/>
                </h:command_button>
 
@@ -76,7 +76,7 @@
 
              <td>
                  <h:command_button id="resetButton"  value="Click to reset form"                    action="success"
-                     type="reset" key="resetButton" bundle="standardBundle">
+                     type="reset" value="#{standardBundle.resetButton}">
                  <f:action_listener type="standard.DefaultListener"/>
                </h:command_button>
 

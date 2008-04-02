@@ -57,7 +57,7 @@
 
 	      <h:command_link id="resBundleLableLink" action="success">
                  <h:output_text 
-                  key="standardRenderKitSubmitLabel" bundle="standardBundle"/>
+                  value="#{standardBundle.standardRenderKitSubmitLabel}"/>
                  <f:action_listener type="standard.DefaultListener"/>
                </h:command_link>
 
@@ -99,7 +99,7 @@
 
 	      <h:command_link id="imageResourceBundleLink" action="success">
                  <h:graphic_image  
-                  key="imageurl" bundle="standardBundle" />
+                  url="#{standardBundle.imageurl}" />
                  <f:action_listener type="standard.DefaultListener"/>
                </h:command_link>
 

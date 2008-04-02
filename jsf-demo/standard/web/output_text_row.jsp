@@ -58,7 +58,7 @@
              <td>
 
                <h:output_text id="outputText2"
-                                  key="linkLabel" bundle="standardBundle"/>
+                                  value="#{standardBundle.linkLabel}"/>
 
 
              </td>

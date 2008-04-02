@@ -49,11 +49,9 @@
 
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
-<%@ taglib uri="http://java.sun.com/jstl/fmt" prefix="fmt" %>
 
-     <fmt:setBundle
-	    basename="cardemo.Resources"
-	    scope="session" var="carDemoBundle"/>
+     <f:loadBundle
+	    basename="cardemo.Resources" var="carDemoBundle"/>
 
 <BODY BGCOLOR="white">
 
@@ -88,7 +86,7 @@
                 valueRef="CarServer.carDesc" />
             <BR> <BR>
             </FONT><B><FONT COLOR="#93B629" FACE="Arial, Helvetica">
-            <h:output_text key="basePriceLabel" bundle="carDemoBundle" />
+            <h:output_text value="#{carDemoBundle.basePriceLabel}" />
 
             </FONT></B><FONT FACE="Arial, Helvetica"> 
             <h:output_text   
@@ -96,7 +94,7 @@
 
             <BR> </FONT><B>
             <FONT COLOR="#93B629" FACE="Arial, Helvetica">
-            <h:output_text key="yourPriceLabel" bundle="carDemoBundle" />
+            <h:output_text value="#{carDemoBundle.yourPriceLabel}" />
 
             </FONT></B>
             <FONT FACE="Arial, Helvetica">
@@ -104,8 +102,8 @@
                 valueRef="CarServer.carCurrentPrice" />
 
             <BR> <BR>
-            <h:command_button key="buy" 
-                bundle="carDemoBundle" actionRef="CarServer.carBuyAction" >
+            <h:command_button value="#{carDemoBundle.buy}" 
+                 actionRef="CarServer.carBuyAction" >
                 <f:action_listener type="cardemo.CarBuyListener"/>
             </h:command_button>
             <BR> <BR>
@@ -113,29 +111,29 @@
         </TR>
         <TR>
             <TD WIDTH="100%" BGCOLOR="white"><B><FONT SIZE="4" COLOR="#330066" FACE="Arial, Helvetica">
-            <h:output_text key="OptionsPackages" bundle="carDemoBundle" />
+            <h:output_text value="carDemoBundle.OptionsPackages" />
             </FONT></B></TD>
         </TR>
         <TR>
             <TD WIDTH="100%" BGCOLOR="white"><B><FONT SIZE="3" COLOR="#330066" FACE="Arial, Helvetica">
-            <h:output_text key="Package" bundle="carDemoBundle" />
+            <h:output_text value="#{carDemoBundle.Package}" />
             </FONT></B>
             <BR>
             <h:command_button id="custom" action="custom"
                 styleClass="package-selected"
-                key="Custom" bundle="carDemoBundle">
+                value="#{carDemoBundle.Custom}">
                 <f:action_listener type="cardemo.CarPackageListener" />
             </h:command_button>
             <h:command_button id="standard" action="standard" 
-                key="Standard" bundle="carDemoBundle">
+                value="#{carDemoBundle.Standard}">
                 <f:action_listener type="cardemo.CarPackageListener" />
             </h:command_button>
             <h:command_button id="performance" action="performance"
-                key="Performance" bundle="carDemoBundle">
+                value="#{carDemoBundle.Performance}">
                 <f:action_listener type="cardemo.CarPackageListener" />
             </h:command_button>
             <h:command_button id="deluxe" action="deluxe"
-                key="Deluxe" bundle="carDemoBundle">
+                value="#{carDemoBundle.Deluxe}">
                 <f:action_listener type="cardemo.CarPackageListener" />
             </h:command_button>
             <BR> <BR>
@@ -146,7 +144,7 @@
             <TABLE>
             <TR>
                 <TD><P><B><FONT COLOR="#93B629" FACE="Arial, Helvetica">
-                <h:output_text key="Engine" bundle="carDemoBundle" />
+                <h:output_text value="#{carDemoBundle.Engine}" />
                 </FONT></B></P>
                 <BLOCKQUOTE><P><FONT FACE="Arial, Helvetica">
                 <h:selectone_menu  id="currentEngine"
@@ -158,7 +156,7 @@
                 </FONT></P></BLOCKQUOTE>
                 </TD>
                 <TD><P><B><FONT COLOR="#93B629" FACE="Arial, Helvetica">
-                 <h:output_text key="Brakes" bundle="carDemoBundle"  />
+                 <h:output_text value="#{carDemoBundle.Brakes}"  />
                 </FONT></B>
                 <FONT FACE="Arial, Helvetica"></FONT></P>
                 <BLOCKQUOTE><P><FONT FACE="Arial, Helvetica">
@@ -174,7 +172,7 @@
             <TR>
                 <TD>
                 <P><B><FONT COLOR="#93B629" FACE="Arial, Helvetica">
-                <h:output_text key="Suspension" bundle="carDemoBundle" />
+                <h:output_text value="#{carDemoBundle.Suspension}" />
 
                 </FONT></B>
                 <FONT FACE="Arial, Helvetica"></FONT></P>
@@ -189,7 +187,7 @@
                 </TD>
                 <TD>
                 <P><B><FONT COLOR="#93B629" FACE="Arial, Helvetica">
-                <h:output_text key="Speakers" bundle="carDemoBundle" />
+                <h:output_text value="#{carDemoBundle.Speakers}" />
 
                 </FONT></B>
                 <FONT FACE="Arial, Helvetica"></FONT></P>
@@ -206,7 +204,7 @@
             <TR>
                 <TD>
                 <P><B><FONT COLOR="#93B629" FACE="Arial, Helvetica">
-                <h:output_text key="Audio" bundle="carDemoBundle" />
+                <h:output_text value="#{carDemoBundle.Audio}" />
                 </FONT></B>
                 <FONT FACE="Arial, Helvetica"></FONT></P>
                 <BLOCKQUOTE> <P><FONT FACE="Arial, Helvetica">
@@ -221,7 +219,7 @@
                 </TD>
                 <TD>
                 <P><B><FONT COLOR="#93B629" FACE="Arial, Helvetica">
-                <h:output_text key="Transmission" bundle="carDemoBundle" />
+                <h:output_text value="#{carDemoBundle.Transmission}" />
 
                 </FONT></B>
                 <FONT FACE="Arial, Helvetica"></FONT></P>
@@ -238,7 +236,7 @@
             <TR>
                 <TD>
                 <P><B><FONT COLOR="#93B629" FACE="Arial, Helvetica">
-                <h:output_text key="OtherOptions" bundle="carDemoBundle" />
+                <h:output_text value="#{carDemoBundle.OtherOptions}" />
 
                 </FONT></B>
                 <FONT FACE="Arial, Helvetica"></FONT></P>
@@ -257,7 +255,7 @@
                  </h:selectboolean_checkbox>    
                 </TD>																		
                 <TD>
-                <h:output_text key="sunroofLabel" bundle="carDemoBundle" /> 
+                <h:output_text value="#{carDemoBundle.sunroofLabel}" /> 
                 </TD> 
                 <TD>
                 <h:selectboolean_checkbox id="cruisecontrol" 
@@ -268,7 +266,7 @@
 
                 </TD>
                 <TD>
-                <h:output_text key="cruiseLabel" bundle="carDemoBundle" /> 
+                <h:output_text value="#{carDemoBundle.cruiseLabel}" /> 
                 </TD>
                 <TD>
                 <h:selectboolean_checkbox id="keylessentry" 
@@ -279,7 +277,7 @@
 
                 </TD>
                 <TD>
-                <h:output_text key="keylessLabel" bundle="carDemoBundle" /> 
+                <h:output_text value="#{carDemoBundle.keylessLabel}" /> 
                 </TD>
             </TR>
             <TR>
@@ -292,7 +290,7 @@
 
                 </TD>
                 <TD>
-                <h:output_text key="securityLabel" bundle="carDemoBundle" />  
+                <h:output_text value="{carDemoBundle.securityLabel}" />  
                 </TD>
                 <TD>
                 <h:selectboolean_checkbox id="skirack" title="Ski Rack"  
@@ -302,7 +300,7 @@
                  </h:selectboolean_checkbox>
                 </TD>
                 <TD>
-                <h:output_text key="skiRackLabel" bundle="carDemoBundle" /> 
+                <h:output_text value="#{carDemoBundle.skiRackLabel}" /> 
                 </TD>
                 <TD>
                 <h:selectboolean_checkbox id="towPackage" title="Tow Package"  
@@ -313,7 +311,7 @@
 
                 </TD>
                 <TD>
-                <h:output_text key="towPkgLabel" bundle="carDemoBundle" /> 
+                <h:output_text value="#{carDemoBundle.towPkgLabel}" /> 
                 </TD>
             </TR>
             <TR>
@@ -325,7 +323,7 @@
                 </FONT> 
                 </TD>
                 <TD>
-                <h:output_text key="gpsLabel" bundle="carDemoBundle" /> 
+                <h:output_text value="#{carDemoBundle.gpsLabel}" /> 
                 </TD>
             </TR>
             </TABLE>
@@ -336,11 +334,11 @@
                 </TD>
                 <TD>
                 <P>
-                <h:command_button id="recalculate" key="recalculate" 
-                bundle="carDemoBundle">
+                <h:command_button id="recalculate" 
+                    value="#{carDemoBundle.recalculate}">
                     <f:action_listener type="cardemo.CarBuyListener" />
                 </h:command_button>
-                <h:command_button key="buy" bundle="carDemoBundle" 
+                <h:command_button value="#{carDemoBundle.buy}" 
                 actionRef="CarServer.carBuyAction">
                     <f:action_listener type="cardemo.CarBuyListener"/>
                 </h:command_button>

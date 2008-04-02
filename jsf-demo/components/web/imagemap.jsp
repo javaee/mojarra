@@ -36,7 +36,6 @@
  maintenance of any nuclear facility.
 -->
 
-<%@ taglib uri="http://java.sun.com/jstl/fmt" prefix="fmt" %>
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
 <%@ taglib uri="http://java.sun.com/jsf/demo/components" prefix="d" %>
@@ -49,14 +48,13 @@
 </head>
 <body>
 
-  <fmt:setBundle basename="demo.model.Resources"
-	            scope="session" var="mapBundle"/>
+  <f:loadBundle basename="demo.model.Resources" var="mapBundle"/>
   <h:form>
   <table>
 
     <tr><td>
-      <h:output_text  id="welcomeLabel" key="welcomeLabel" 
-                                    bundle="mapBundle" />
+      <h:output_text  id="welcomeLabel" 
+                                    value="#{mapBundle.welcomeLabel}" />
     </td></tr>
 
     <tr><td>

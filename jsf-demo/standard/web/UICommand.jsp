@@ -3,7 +3,7 @@
  SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 -->
 
-<%-- $Id: UICommand.jsp,v 1.6 2003/10/23 05:20:08 eburns Exp $ --%>
+<%-- $Id: UICommand.jsp,v 1.7 2003/11/09 03:25:12 eburns Exp $ --%>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
@@ -16,11 +16,9 @@
     <h1>UICommand</h1>
 
     <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
-    <%@ taglib uri="http://java.sun.com/jstl/fmt" prefix="fmt" %>
     <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
 
-     <fmt:setBundle basename="standard.Resources" scope="session"
-                    var="standardBundle"/>
+     <f:loadBundle basename="standard.Resources" var="standardBundle"/>
 
      <f:view>  
 
@@ -31,7 +29,7 @@
 
          <h:command_button id="standardRenderKitSubmit" 
              actionRef="model.defaultAction"
-             key="standardRenderKitSubmitLabel" bundle="standardBundle">
+             value="#{standardBundle.standardRenderKitSubmitLabel}">
          </h:command_button>
 
          <table width="100%" border="1" cellpadding="3" cellspacing="3">
@@ -46,7 +44,7 @@
 
          <h:command_button id="standardRenderKitSubmit1"
              actionRef="model.defaultAction"
-             key="standardRenderKitSubmitLabel" bundle="standardBundle">
+             value="#{standardBundle.standardRenderKitSubmitLabel}">
          </h:command_button>
 
        </h:form>

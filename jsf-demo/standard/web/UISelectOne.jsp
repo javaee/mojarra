@@ -3,7 +3,7 @@
  SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 -->
 
-<%-- $Id: UISelectOne.jsp,v 1.3 2003/10/19 14:54:07 eburns Exp $ --%>
+<%-- $Id: UISelectOne.jsp,v 1.4 2003/11/09 03:25:13 eburns Exp $ --%>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
@@ -16,11 +16,9 @@
     <h1>UISelectOne</h1>
 
     <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
-    <%@ taglib uri="http://java.sun.com/jstl/fmt" prefix="fmt" %>
     <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
 
-     <fmt:setBundle basename="standard.Resources" scope="session"
-                    var="standardBundle"/>
+     <f:loadBundle basename="standard.Resources" var="standardBundle"/>
 
      <jsp:useBean id="LoginBean" class="standard.LoginBean" scope="session" />
      <f:view>  
@@ -32,8 +30,7 @@
 
          <h:command_button id="standardRenderKitSubmit" 
              action="success"
-             key="standardRenderKitSubmitLabel"
-             bundle="standardBundle">
+             value="#{standardBundle.standardRenderKitSubmitLabel}">
          </h:command_button>
 
          <table width="100%" border="1" cellpadding="3" cellspacing="3">
@@ -53,8 +50,7 @@
 
          <h:command_button id="standardRenderKitSubmit1" 
              action="success"
-             key="standardRenderKitSubmitLabel"
-             bundle="standardBundle">
+            value="#{standardBundle.standardRenderKitSubmitLabel}">
          </h:command_button>
 
        </h:form>

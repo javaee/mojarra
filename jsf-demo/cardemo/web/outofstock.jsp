@@ -40,20 +40,18 @@
     <HEAD> <TITLE> JSF Basic Components Test Page </TITLE> </HEAD>
     <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
     <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
-    <%@ taglib uri="http://java.sun.com/jstl/fmt" prefix="fmt" %>
-
-     <fmt:setBundle
-	    basename="cardemo.Resources"
-	    scope="session" var="carDemoBundle"/>
+   
+     <f:loadBundle
+	    basename="cardemo.Resources" var="carDemoBundle"/>
     <hr>
     <f:view>
     <h:form  >
-        <p> <h:output_text id="stockLabel" key="stockLabel" bundle="carDemoBundle"/>
+        <p> <h:output_text id="stockLabel" value="#{carDemoBundle.stockLabel}"/>
         </p> 
-        <p> <h:command_button id="reconfigure" key="configureButton" 
-                bundle="carDemoBundle" action="reconfigure"/> 
+        <p> <h:command_button id="reconfigure" 
+                value="#{carDemoBundle.configureButton}" action="reconfigure"/> 
        
-               <h:command_button id="buy" key="buy" bundle="carDemoBundle" 
+               <h:command_button id="buy" value="carDemoBundle.buy" 
                 action="buy"/> </P>
              
     </h:form>
