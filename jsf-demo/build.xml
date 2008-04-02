@@ -108,6 +108,7 @@
     <ant target="clean" dir="carstore"/>
     <ant target="clean" dir="nonjsp"/>
     <ant target="clean" dir="standard"/>
+    <ant target="clean" dir="webtier-sample"/>
     <ant target="clean" dir="test/mappingDemo"/>
 
   </target>
@@ -385,6 +386,7 @@
     </ant>  
     <ant dir="${basedir}/test/mappingDemo" inheritAll="false">
     </ant>  
+    <ant dir="${basedir}/webtier-sample" inheritAll="false"/>
   </target>
 
   <target name="checkRequiredFile">
