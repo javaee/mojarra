@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 
 <!--
- $Id: build-tests.xml,v 1.118 2006/07/28 15:35:13 rlubke Exp $
+ $Id: build-tests.xml,v 1.119 2006/07/31 20:28:06 rlubke Exp $
 -->
 
 <!--
@@ -86,6 +86,8 @@
                    default=""/>
         <attribute name="ignore"
                    default=""/>
+        <attribute name="joinSession"
+                   default="false"/>
         <sequential>
             <tester request="@{request}"
                     host="${container.host}"
@@ -97,7 +99,8 @@
                     recordGolden="@{recordGolden}"
                     status="@{status}"
                     ignoreIfContains="@{ignoreIfContains}"
-                    ignore="@{ignore}"/>
+                    ignore="@{ignore}"
+                    joinSession="@{joinSession}"/>
         </sequential>
     </macrodef>
 
@@ -942,45 +945,53 @@
         <jsf.tester
             ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
             request="${context.path}/faces/interweaving08.jsp"
-            golden="${golden.path}/interweaving08.txt"/>
+            golden="${golden.path}/interweaving08.txt"
+            joinSession="true"/>
         <jsf.tester
             ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
             request="${context.path}/faces/interweaving08.jsp"
-            golden="${golden.path}/interweaving08.txt"/>
+            golden="${golden.path}/interweaving08.txt"
+            joinSession="true"/>
         <jsf.tester
             ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
             request="${context.path}/faces/interweaving08.jsp"
-            golden="${golden.path}/interweaving08.txt"/>
-        
+            golden="${golden.path}/interweaving08.txt"
+            joinSession="true"/>
         <!-- Make multiple requests to the same page and ensure
              the response is 200 -->
         <jsf.tester
             ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
             request="${context.path}/faces/interweaving09.jsp"
-            golden="${golden.path}/interweaving09.txt"/>
+            golden="${golden.path}/interweaving09.txt"
+            joinSession="true"/>
         <jsf.tester
             ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
             request="${context.path}/faces/interweaving09.jsp"
-            golden="${golden.path}/interweaving09.txt"/>
+            golden="${golden.path}/interweaving09.txt"
+            joinSession="true"/>
         <jsf.tester
             ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
             request="${context.path}/faces/interweaving09.jsp"
-            golden="${golden.path}/interweaving09.txt"/>
+            golden="${golden.path}/interweaving09.txt"
+            joinSession="true"/>
         
         <!-- Make multiple requests to the same page and ensure
              the response is 200 -->
         <jsf.tester
             ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
             request="${context.path}/faces/interweaving10.jsp"
-            golden="${golden.path}/interweaving10.txt"/>
+            golden="${golden.path}/interweaving10.txt"
+            joinSession="true"/>
         <jsf.tester
             ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
             request="${context.path}/faces/interweaving10.jsp"              
-            golden="${golden.path}/interweaving10.txt"/>
+            golden="${golden.path}/interweaving10.txt"
+            joinSession="true"/>
         <jsf.tester
             ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
             request="${context.path}/faces/interweaving10.jsp"
-            golden="${golden.path}/interweaving10.txt"/>
+            golden="${golden.path}/interweaving10.txt"
+            joinSession="true"/>
         
         <jsf.tester
               ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
