@@ -1,5 +1,5 @@
 /*
- * $Id: MockExternalContext.java,v 1.4 2003/08/28 18:19:05 craigmcc Exp $
+ * $Id: MockExternalContext.java,v 1.5 2003/09/11 17:05:37 craigmcc Exp $
  */
 
 /*
@@ -197,6 +197,23 @@ public class MockExternalContext extends ExternalContext {
 
     public void log(String message, Throwable throwable) {
         context.log(message, throwable);
+    }
+
+
+    public String getAuthType() {
+        return (((HttpServletRequest) request).getAuthType());
+    }
+
+    public String getRemoteUser() {
+        return (((HttpServletRequest) request).getRemoteUser());
+    }
+
+    public java.security.Principal getUserPrincipal() {
+        return (((HttpServletRequest) request).getUserPrincipal());
+    }
+
+    public boolean isUserInRole(String role) {
+        return (((HttpServletRequest) request).isUserInRole(role));
     }
 
 
