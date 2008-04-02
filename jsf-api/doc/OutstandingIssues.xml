@@ -1799,5 +1799,23 @@
   <effort>Large</effort>
 </issue>
 
+<issue>
+  <id>Ease_of_Use-70</id>
+  <originator>Jennifer</originator>
+  <summary>Catch-all for ease of use.</summary>
+  <description>
+
+    <p>In implementing Jennifer's custom component, she found it
+    convenient to subclass HtmlBasicRenderer in the RI, and use the RI
+    Util class.  We need the ease of use afforded by such techniques,
+    but can't endorse depending on RI classes.</p>
+
+  </description>
+  <status>OPEN</status>
+  <status-date>7 January 2003</status-date>
+  <priority>1</priority>
+  <effort>Large</effort>
+</issue>
+
 
 </issues>
