@@ -1,5 +1,5 @@
 /*
- * $Id: TestUtil_messages.java,v 1.60 2007/03/01 15:51:37 rlubke Exp $
+ * $Id: TestUtil_messages.java,v 1.61 2007/03/01 20:59:02 rlubke Exp $
  */
 
 /*
@@ -43,7 +43,7 @@ import com.sun.faces.cactus.ServletFacesTestCase;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestUtil_messages.java,v 1.60 2007/03/01 15:51:37 rlubke Exp $
+ * @version $Id: TestUtil_messages.java,v 1.61 2007/03/01 20:59:02 rlubke Exp $
  */
 
 public class TestUtil_messages extends ServletFacesTestCase {
@@ -108,9 +108,7 @@ public class TestUtil_messages extends ServletFacesTestCase {
         {MessageUtils.ERROR_GETTING_VALUEREF_VALUE_ERROR_MESSAGE_ID, "1"},
         {MessageUtils.CANT_INTROSPECT_CLASS_ERROR_MESSAGE_ID, "1"},
         {MessageUtils.CANT_CONVERT_VALUE_ERROR_MESSAGE_ID, "2"},
-        {MessageUtils.INVALID_SCOPE_LIFESPAN_ERROR_MESSAGE_ID, "1"},
-        {MessageUtils.CONVERTER_NOT_FOUND_ERROR_MESSAGE_ID, "1"},
-        {MessageUtils.VALIDATOR_NOT_FOUND_ERROR_MESSAGE_ID, "1"},
+        {MessageUtils.INVALID_SCOPE_LIFESPAN_ERROR_MESSAGE_ID, "1"},       
         {MessageUtils.ENCODING_ERROR_MESSAGE_ID, "0"},
         {MessageUtils.ILLEGAL_IDENTIFIER_LVALUE_MODE_ID, "1"},
         {MessageUtils.VALIDATION_ID_ERROR_ID, "1"},
@@ -155,8 +153,8 @@ public class TestUtil_messages extends ServletFacesTestCase {
         {MessageUtils.NO_COMPONENT_ASSOCIATED_WITH_UICOMPONENT_TAG_MESSAGE_ID, "0"},
         {MessageUtils.FACES_SERVLET_MAPPING_INCORRECT_ID, "0"},
         {MessageUtils.JS_RESOURCE_WRITING_ERROR_ID, "0"},
-        {MessageUtils.CANNOT_CONVERT_ID, "0"},
-        {MessageUtils.CANNOT_VALIDATE_ID, "0"}
+        {MessageUtils.CANNOT_CONVERT_ID, "2"},
+        {MessageUtils.CANNOT_VALIDATE_ID, "2"}
     };
 
     private String[][] toolsMessageInfo = {

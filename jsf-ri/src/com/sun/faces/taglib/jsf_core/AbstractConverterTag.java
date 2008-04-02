@@ -1,6 +1,7 @@
 package com.sun.faces.taglib.jsf_core;
 
 import com.sun.faces.util.Util;
+import com.sun.faces.util.MessageUtils;
 
 import javax.faces.webapp.ConverterELTag;
 import javax.faces.convert.Converter;
@@ -38,7 +39,6 @@ public class AbstractConverterTag extends ConverterELTag {
      */
     protected ValueExpression converterId = null;
 
-
     // ---------------------------------------------------------- Public Methods
 
 
@@ -69,7 +69,6 @@ public class AbstractConverterTag extends ConverterELTag {
 
     }
 
-
     // --------------------------------------------- Methods from ConverterELTag
 
 
@@ -77,8 +76,8 @@ public class AbstractConverterTag extends ConverterELTag {
 
         try {
             return createConverter(converterId,
-                                   binding,
-                                   FacesContext.getCurrentInstance());
+                 binding,
+                 FacesContext.getCurrentInstance());
         } catch (FacesException fe) {
             throw new JspException(fe.getCause());
         }
@@ -126,14 +125,15 @@ public class AbstractConverterTag extends ConverterELTag {
         if (converter == null) {
             if (LOGGER.isLoggable(Level.WARNING)) {
                 LOGGER.log(Level.WARNING,
-                     "jsf.core.taglib.converter.binding.converter_not_resolved",
-                     new Object[]{converterId != null ? converterId.getExpressionString() : "",
-                          binding != null ? binding.getExpressionString() : ""});
+                     MessageUtils.getExceptionMessageString(
+                          MessageUtils.CANNOT_CONVERT_ID,
+                          converterId != null ? converterId.getExpressionString() : "",
+                          binding != null ? binding.getExpressionString() : ""));
             }
         }
 
         return converter;
-        
+
     }
 
 }

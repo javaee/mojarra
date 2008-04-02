@@ -1,5 +1,5 @@
 /*
- * $Id: ConverterTag.java,v 1.6 2007/03/01 15:51:36 rlubke Exp $
+ * $Id: ConverterTag.java,v 1.7 2007/03/01 20:59:02 rlubke Exp $
  */
 
 /*
@@ -90,7 +90,10 @@ public class ConverterTag extends AbstractConverterTag {
                 return delegate.getAsObject(context, component, value);
             } else {
                 throw new ConverterException(
-                     MessageUtils.getExceptionMessage(MessageUtils.CANNOT_CONVERT_ID));
+                     MessageUtils.getExceptionMessage(
+                          MessageUtils.CANNOT_CONVERT_ID,
+                          converterId != null ? converterId.getExpressionString() : "",
+                          binding != null ? binding.getExpressionString() : ""));
             }
         }
 
@@ -100,7 +103,10 @@ public class ConverterTag extends AbstractConverterTag {
                 return delegate.getAsString(context, component, value);
             } else {
                 throw new ConverterException(
-                     MessageUtils.getExceptionMessage(MessageUtils.CANNOT_CONVERT_ID)); 
+                     MessageUtils.getExceptionMessage(
+                          MessageUtils.CANNOT_CONVERT_ID,
+                          converterId != null ? converterId.getExpressionString() : "",
+                          binding != null ? binding.getExpressionString() : "")); 
             }
         }
 

@@ -81,8 +81,6 @@ public class MessageUtils {
           "com.sun.faces.CONTENT_TYPE_ERROR";
     public static final String CONVERSION_ERROR_MESSAGE_ID =
           "com.sun.faces.TYPECONVERSION_ERROR";
-    public static final String CONVERTER_NOT_FOUND_ERROR_MESSAGE_ID =
-          "com.sun.faces.CONVERTER_NOT_FOUND_ERROR";
     public static final String CYCLIC_REFERENCE_ERROR_ID =
           "com.sun.faces.CYCLIC_REFERENCE_ERROR";
     public static final String DUPLICATE_COMPONENT_ID_ERROR_ID =
@@ -222,9 +220,7 @@ public class MessageUtils {
     public static final String VALIDATION_EL_ERROR_ID =
           "com.sun.faces.VALIDATION_EL_ERROR";
     public static final String VALIDATION_ID_ERROR_ID =
-          "com.sun.faces.VALIDATION_ID_ERROR";
-    public static final String VALIDATOR_NOT_FOUND_ERROR_MESSAGE_ID =
-          "com.sun.faces.VALIDATOR_NOT_FOUND_ERROR";
+          "com.sun.faces.VALIDATION_ID_ERROR";   
     public static final String VALUE_NOT_SELECT_ITEM_ID =
           "com.sun.faces.OPTION_NOT_SELECT_ITEM";
     public static final String CANNOT_CONVERT_ID =

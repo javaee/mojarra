@@ -1,5 +1,5 @@
 /*
- * $Id: ValidatorTag.java,v 1.6 2007/03/01 15:51:36 rlubke Exp $
+ * $Id: ValidatorTag.java,v 1.7 2007/03/01 20:59:01 rlubke Exp $
  */
 
 /*
@@ -153,7 +153,9 @@ public class ValidatorTag extends AbstractValidatorTag {
             } else {
                 throw new ConverterException(
                      MessageUtils.getExceptionMessage(
-                          MessageUtils.CANNOT_CONVERT_ID));
+                          MessageUtils.CANNOT_VALIDATE_ID,
+                          validatorId != null ? validatorId.getExpressionString() : "",
+                          binding != null ? binding.getExpressionString() : ""));
             }
 
         }

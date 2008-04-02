@@ -1,5 +1,5 @@
 /*
- * $Id: AbstractValidatorTag.java,v 1.1 2007/03/01 15:51:37 rlubke Exp $
+ * $Id: AbstractValidatorTag.java,v 1.2 2007/03/01 20:59:02 rlubke Exp $
  */
 
 /*
@@ -30,6 +30,7 @@
 package com.sun.faces.taglib.jsf_core;
 
 import com.sun.faces.util.Util;
+import com.sun.faces.util.MessageUtils;
 
 import javax.faces.webapp.ValidatorELTag;
 import javax.faces.validator.Validator;
@@ -151,9 +152,10 @@ public class AbstractValidatorTag extends ValidatorELTag {
         if (validator == null) {
             if (LOGGER.isLoggable(Level.WARNING)) {
                 LOGGER.log(Level.WARNING,
-                     "jsf.core.taglib.validator.binding.validator_not_resolved",
-                     new Object[]{validatorId != null ? validatorId.getExpressionString() : "",
-                          binding != null ? binding.getExpressionString() : ""});
+                     MessageUtils.getExceptionMessageString(
+                          MessageUtils.CANNOT_VALIDATE_ID,
+                          validatorId != null ? validatorId.getExpressionString() : "",
+                          binding != null ? binding.getExpressionString() : ""));
             }
         }
 
