@@ -1,14 +1,4 @@
-<!--
- Copyright 2004 Sun Microsystems, Inc. All rights reserved.
- SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
--->
-
-<%--
-   Copyright 2003 Sun Microsystems, Inc.  All rights reserved.
-   SUN PROPRIETARY/CONFIDENTIAL.  Use is subject license terms.
---%>
-
-<%-- $Id: verbatim_test.jsp,v 1.7 2004/02/04 23:42:57 ofung Exp $ --%>
+<%-- $Id: verbatim_test.jsp,v 1.8 2004/02/05 05:05:10 horwat Exp $ --%>
 
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
 

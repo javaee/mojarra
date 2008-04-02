@@ -3,12 +3,7 @@
  SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 -->
 
-<%--
-   Copyright 2003 Sun Microsystems, Inc.  All rights reserved.
-   SUN PROPRIETARY/CONFIDENTIAL.  Use is subject license terms.
---%>
-
-<%-- $Id: command_button_test.jsp,v 1.7 2004/02/04 23:43:47 ofung Exp $ --%>
+<%-- $Id: command_button_test.jsp,v 1.8 2004/02/05 05:05:29 horwat Exp $ --%>
 <html>
 <head>
     <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>

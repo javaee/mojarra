@@ -1,5 +1,5 @@
 <!--
- Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 -->
 
@@ -16,7 +16,7 @@
 Begin test jsp:include with subview and iterator tag in included page
 <br>
 This component has no ID This component has no ID This component has no ID This component has no ID <!--
- Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 -->
 

@@ -1,5 +1,5 @@
 /* 
- * $Id: TestViewHandlerImpl.java,v 1.12 2004/02/04 23:44:05 ofung Exp $ 
+ * $Id: TestViewHandlerImpl.java,v 1.13 2004/02/05 05:05:31 horwat Exp $ 
  */ 
 
 
@@ -51,7 +51,7 @@ import java.util.Locale;
  * 
  * <B>Lifetime And Scope</B> <P> 
  * 
- * @version $Id: TestViewHandlerImpl.java,v 1.12 2004/02/04 23:44:05 ofung Exp $  
+ * @version $Id: TestViewHandlerImpl.java,v 1.13 2004/02/05 05:05:31 horwat Exp $  
  */ 
 
 
@@ -70,7 +70,8 @@ public String getExpectedOutputFilename() {
 
 
 public static final String ignore[] = {
-    "    <form id=\"helloForm\" method=\"post\" action=\"/test/greeting.jsf\">"
+    "    <form id=\"helloForm\" method=\"post\" action=\"/test/greeting.jsf\">",
+    "    <form id=\"helloForm\" method=\"post\" action=\"/test/faces/greeting.jsp\">"
 };
      
 public String [] getLinesToIgnore() { 
