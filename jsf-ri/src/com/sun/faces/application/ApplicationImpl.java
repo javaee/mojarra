@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationImpl.java,v 1.23 2003/08/22 19:25:09 rlubke Exp $
+ * $Id: ApplicationImpl.java,v 1.24 2003/08/22 20:19:32 horwat Exp $
  */
 
 /*
@@ -70,7 +70,8 @@ public class ApplicationImpl extends Application {
     // mappings.
     //
     private Map componentMap = null;
-    private Map converterMap = null;
+    private Map converterIdMap = null;
+    private Map converterTypeMap = null;
     private Map validatorMap = null;
     //
     // This map stores "managed bean name" | "managed bean factory"
@@ -97,7 +98,8 @@ public class ApplicationImpl extends Application {
         super();
         valueBindingMap = new HashMap();
 	componentMap = new HashMap();
-	converterMap = new HashMap();
+	converterIdMap = new HashMap();
+	converterTypeMap = new HashMap();
 	validatorMap = new HashMap();
 	managedBeanFactoriesMap = new HashMap();
 	messageResourcesMap = new HashMap();
@@ -113,11 +115,6 @@ public class ApplicationImpl extends Application {
         return actionListener;
     }
 
-    // PENDING (rlubke) PROVIDE IMPLEMENTATION
-    public Converter createConverter(String converterId) {
-        return null;  
-    }
-    
     public ViewHandler getViewHandler() {
         return viewHandler;
     }
@@ -134,20 +131,6 @@ public class ApplicationImpl extends Application {
         viewHandler = handler;    
     }   
 
-    // PENDING (rlubke) PROVIDE IMPLEMENTATION
-    public void addConverter(Class targetClass, String converterClass) {
-        
-    }
-    
-    // PENDING (rlubke) PROVIDE IMPLEMENTATION    
-    public Converter createConverter(Class targetClass) {
-        return null;  
-    }
-
-    // PENDING (rlubke) PROVIDE IMPLEMENTATION
-    public Iterator getConverterTypes() {
-        return null;  //To change body of implemented methods use Options | File Templates.
-    }
     
     /**
      * <p>Replace the default {@link ActionListener} that will be registered
@@ -421,7 +404,7 @@ public class ApplicationImpl extends Application {
     /**
      *<p>Register a new mapping of converter id to the name of the 
      * {@link Converter} class.  Subsequent calls to
-     * <code>getConverter()</code> will serve as a factory for {@link Converter}
+     * <code>createConverter()</code> will serve as a factory for {@link Converter}
      *  instances.
      *
      * @param converterId The converter identifier to be registered
@@ -436,35 +419,50 @@ public class ApplicationImpl extends Application {
 	    throw new NullPointerException(Util.getExceptionMessage(
 		Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
 	}
-	converterMap.put(converterId, converterClass);
+	converterIdMap.put(converterId, converterClass);
     }
 
-    /**
-     * <p>Instantiate and return a new instance of {@link Converter} instance of the 
-     * class specified by a previous call to <code>addConverter()</code> for the
-     * specified converter identifier.</p>
-     * 
-     * @param converterId The converterId that identifies the converter instance
-     *  that will be created and returned.
-     *  
-     * @return {@link Converter} instance.
-     *
-     * @exception FacesException if a {@link Converter} of the specified identifier
-     * cannot be created.
-     * @exception NullPointerException if <code>converterId</code> is <code>null</code>.
-     */
-    public Converter getConverter(String converterId) throws FacesException {
-	if (converterId == null) {
-	    throw new NullPointerException(Util.getExceptionMessage(
-		Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
-	}
-	Converter returnVal = (Converter)newThing(converterId, converterMap);
-	if (returnVal == null) {
+    public void addConverter(Class targetClass, String converterClass) {
+        if (targetClass == null || converterClass == null) {
+            throw new NullPointerException(Util.getExceptionMessage(
+                Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        }
+
+	converterTypeMap.put(targetClass, converterClass);
+    }
+    
+    public Converter createConverter(String converterId) {
+        if (converterId == null) {
+            throw new NullPointerException(Util.getExceptionMessage(
+                Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        }
+        Converter returnVal = (Converter)newThing(converterId, converterIdMap);	
+        if (returnVal == null) {
             Object[] params = {converterId};
-	    throw new FacesException(Util.getExceptionMessage(
+            throw new FacesException(Util.getExceptionMessage(
                 Util.NAMED_OBJECT_NOT_FOUND_ERROR_MESSAGE_ID,params));
-	}
-	return returnVal;
+        }
+        return returnVal;
+    }
+    
+    public Converter createConverter(Class targetClass) {
+        if (targetClass == null) {
+            throw new NullPointerException(Util.getExceptionMessage(
+                Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        }
+        Converter returnVal = (Converter)newThing
+            (targetClass, converterTypeMap);
+
+        //PENDING (horwat) need to implement converter search logic:
+        //  - converters registered for interfaces implemented by targetClass
+        //  - converters registered for superclasses of targetClass
+
+	if (returnVal == null) {
+            Object[] params = {targetClass};
+            throw new FacesException(Util.getExceptionMessage(
+                Util.NAMED_OBJECT_NOT_FOUND_ERROR_MESSAGE_ID,params));
+        }
+        return returnVal;
     }
 
     /**
@@ -474,7 +472,11 @@ public class ApplicationImpl extends Application {
      * @return Iteration of {@link Converter} identifiers.
      */
     public Iterator getConverterIds() {
-        return converterMap.keySet().iterator();
+        return converterIdMap.keySet().iterator();
+    }
+
+    public Iterator getConverterTypes() {
+	return converterTypeMap.keySet().iterator();
     }
 
     /**
@@ -653,13 +655,22 @@ public class ApplicationImpl extends Application {
      *
      * @return The new object instance.
      */
-    protected Object newThing(String key, Map map) {
+    protected Object newThing(Object key, Map map) {
         Assert.assert_it(key != null);
         Assert.assert_it(map != null);
+        Assert.assert_it(key instanceof String || key instanceof Class);
 
         Object result = null;
         Class clazz = null;
-        Object value = map.get(key);
+        Object value = null;
+
+        if (key instanceof String) {
+            value = map.get((String)key);
+        }
+        else if (key instanceof Class) {
+            value = map.get((Class)key);
+        }
+
         if (value == null) {
 	    return null;
         }
