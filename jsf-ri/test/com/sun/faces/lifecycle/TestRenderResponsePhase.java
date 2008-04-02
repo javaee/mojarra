@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderResponsePhase.java,v 1.42 2002/12/23 23:01:44 jvisvanathan Exp $
+ * $Id: TestRenderResponsePhase.java,v 1.43 2003/01/21 23:23:25 rkitain Exp $
  */
 
 /*
@@ -51,7 +51,7 @@ import javax.servlet.jsp.PageContext;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderResponsePhase.java,v 1.42 2002/12/23 23:01:44 jvisvanathan Exp $
+ * @version $Id: TestRenderResponsePhase.java,v 1.43 2003/01/21 23:23:25 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -71,10 +71,10 @@ public String getExpectedOutputFilename() {
 }
 
 public static final String ignore[] = {
-    "<form method=\"post\" action=\"/test/faces/TestRenderResponsePhase.jsp;jsessionid=54A77EC13B5C1A1DF5DFD2122A845883\" class=\"formClass\"  title=\"basicForm\" accept=\"html,wml\" >",
-    "            <input type=\"image\" src=\"duke.gif;jsessionid=54A77EC13B5C1A1DF5DFD2122A845883\" name=\"pushButton\" disabled >",
-    "            <input type=\"image\" src=\"duke.gif;jsessionid=54A77EC13B5C1A1DF5DFD2122A845883\" name=\"imageOnlyButton\"> ",
-    "            <img id=\"graphicImage\" src=\"/test/duke.gif;jsessionid=54A77EC13B5C1A1DF5DFD2122A845883\" usemap=\"#map1\"  ismap > "
+    "<form method=\"post\" action=\"/test/faces/TestRenderResponsePhase.jsp;jsessionid=E75A204842EAC19A648141B049333B08\" class=\"formClass\"  title=\"basicForm\" accept=\"html,wml\" >",
+    "            <input type=\"image\" src=\"duke.gif;jsessionid=E75A204842EAC19A648141B049333B08\" name=\"pushButton\" disabled >",
+    "            <input type=\"image\" src=\"duke.gif;jsessionid=E75A204842EAC19A648141B049333B08\" name=\"imageOnlyButton\"> ",
+    "            <img id=\"graphicImage\" src=\"/test/duke.gif;jsessionid=E75A204842EAC19A648141B049333B08\" usemap=\"#map1\"  ismap > "
 };
     
 public String [] getLinesToIgnore() {
@@ -147,7 +147,7 @@ public void testHtmlBasicRenderKit()
     Assert.assert_it(treeFactory != null);
     Tree requestTree = treeFactory.getTree(getFacesContext(),
             TEST_URI );
-    getFacesContext().setRequestTree(requestTree);
+    getFacesContext().setTree(requestTree);
 
     rc = renderResponse.execute(getFacesContext());
     assertTrue(Phase.GOTO_NEXT == rc);

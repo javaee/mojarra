@@ -1,5 +1,5 @@
 /**
- * $Id: TestRenderers_3.java,v 1.7 2002/12/18 20:55:10 eburns Exp $
+ * $Id: TestRenderers_3.java,v 1.8 2003/01/21 23:23:29 rkitain Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -38,7 +38,7 @@ import com.sun.faces.tree.XmlTreeImpl;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_3.java,v 1.7 2002/12/18 20:55:10 eburns Exp $
+ * @version $Id: TestRenderers_3.java,v 1.8 2003/01/21 23:23:29 rkitain Exp $
  * 
  *
  */
@@ -97,7 +97,7 @@ public class TestRenderers_3 extends JspFacesTestCase {
                 new UICommand(),
                 "treeId",
                 "");
-        getFacesContext().setResponseTree(xmlTree);
+        getFacesContext().setTree(xmlTree);
         assertTrue(null != getFacesContext().getResponseWriter());
     }
 

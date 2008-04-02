@@ -1,5 +1,5 @@
 /*
- * $Id: HyperlinkRenderer.java,v 1.33 2003/01/17 18:07:20 rkitain Exp $
+ * $Id: HyperlinkRenderer.java,v 1.34 2003/01/21 23:23:19 rkitain Exp $
  */
 
 /*
@@ -45,7 +45,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HyperlinkRenderer.java,v 1.33 2003/01/17 18:07:20 rkitain Exp $
+ * @version $Id: HyperlinkRenderer.java,v 1.34 2003/01/21 23:23:19 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -94,17 +94,6 @@ public class HyperlinkRenderer extends HtmlBasicRenderer {
             throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }    
         return (componentType.equals(UICommand.TYPE));
-    }
-
-    public void decode(FacesContext context, UIComponent component) 
-        throws IOException {
-
-        if (context == null || component == null) {
-            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
-        }
-
-	// NO-OP decode, since our encode, coupled with the logic in
-	// reconstituteRequestTree, causes this to never be called.
     }
 
     public void encodeBegin(FacesContext context, UIComponent component) 

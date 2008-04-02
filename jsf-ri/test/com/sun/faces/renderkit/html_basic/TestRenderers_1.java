@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_1.java,v 1.21 2002/12/18 20:55:10 eburns Exp $
+ * $Id: TestRenderers_1.java,v 1.22 2003/01/21 23:23:28 rkitain Exp $
  */
 
 /*
@@ -43,7 +43,7 @@ import com.sun.faces.renderkit.html_basic.RadioRenderer;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_1.java,v 1.21 2002/12/18 20:55:10 eburns Exp $
+ * @version $Id: TestRenderers_1.java,v 1.22 2003/01/21 23:23:28 rkitain Exp $
  * 
  *
  */
@@ -92,7 +92,7 @@ public class TestRenderers_1 extends JspFacesTestCase
 	XmlTreeImpl xmlTree = 
 	    new XmlTreeImpl(getFacesContext(),
 			    new UICommand(), "treeId", "");
-	getFacesContext().setRequestTree(xmlTree);
+	getFacesContext().setTree(xmlTree);
         assertTrue(getFacesContext().getResponseWriter() != null);
      }     
 

@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleImpl.java,v 1.15 2003/01/17 18:07:16 rkitain Exp $
+ * $Id: LifecycleImpl.java,v 1.16 2003/01/21 23:23:15 rkitain Exp $
  */
 
 /*
@@ -24,9 +24,12 @@ import javax.faces.lifecycle.ViewHandler;
 import javax.faces.context.FacesContext;
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
+import javax.faces.event.FacesEvent;
+import javax.faces.event.PhaseId;
 
-import java.util.Iterator;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.HashMap;
 
 /**
  *
@@ -34,7 +37,7 @@ import java.util.ArrayList;
  *  Lifecycle in the JSF RI. <P>
  *
  *
- * @version $Id: LifecycleImpl.java,v 1.15 2003/01/17 18:07:16 rkitain Exp $
+ * @version $Id: LifecycleImpl.java,v 1.16 2003/01/21 23:23:15 rkitain Exp $
  * 
  * @see	javax.faces.lifecycle.Lifecycle
  *
@@ -72,6 +75,13 @@ protected Object lock = null;
 
 protected ApplicationHandler applicationHandler = null;
 protected ViewHandler viewHandler = null;
+
+// keeps track of total number of events processed 
+// per event source component
+
+public HashMap eventsProcessed = null;
+public String limit= null;
+public int eventLimit = RIConstants.MAX_EVENTS; // some default;
 
 //
 // Constructors and Initializers    
@@ -184,20 +194,88 @@ public void execute(FacesContext context) throws FacesException
     int curPhaseId = 0, rc = 0;
     Assert.assert_it(null != phaseIter);
 
+    PhaseId phaseId = null;
+
+    // for keeping track of events processed limit..
+    //
+    limit = context.getServletContext().getInitParameter(
+        RIConstants.EVENT_LIMIT);
+    if (limit != null) {
+        eventLimit = new Integer(limit).intValue();
+    }
+    eventsProcessed = new HashMap();
+
     while (phaseIter.hasNext()) {
 	wrapper = (PhaseWrapper)phaseIter.next();
 	curPhase = wrapper.instance;
 
         // Execute the current phase
-	if (Phase.GOTO_EXIT == (rc = curPhase.execute(context))) {
-	    return;
-	}
-	else if (rc == Phase.GOTO_RENDER) {
+        rc = curPhase.execute(context);
+
+        // Process Events 
+
+        int phaseNumber = ((GenericPhaseImpl)curPhase).getId();
+
+        if (phaseNumber == RIConstants.APPLY_REQUEST_VALUES_PHASE) {
+            phaseId = PhaseId.APPLY_REQUEST_VALUES;
+            processEvents(context, phaseId);
+        } else if (phaseNumber == RIConstants.PROCESS_VALIDATIONS_PHASE) {
+            phaseId = PhaseId.PROCESS_VALIDATIONS;
+            processEvents(context, phaseId);
+        } else if (phaseNumber == RIConstants.UPDATE_MODEL_VALUES_PHASE) {
+            phaseId = PhaseId.UPDATE_MODEL_VALUES;
+            processEvents(context, phaseId);
+        }
+
+        if (rc == Phase.GOTO_EXIT) {
+            return;
+        } else if (rc == Phase.GOTO_RENDER) {
 	    executeRender(context);
 	    return;
 	}
+
         curPhaseId++;
     }
+}
+
+// This method processes the events in the queue;
+
+//We call iter.remove() to remove the event from the queue
+//after all listeners for the event have received the event; The "broadcast"
+//method returns "false" to indicate this.
+
+private void processEvents(FacesContext context, PhaseId phaseId) {
+    Iterator iter = context.getFacesEvents();
+    while (iter.hasNext()) {
+        FacesEvent event = (FacesEvent)iter.next();
+        UIComponent source = event.getComponent();
+        if (!source.broadcast(event, phaseId)) {
+            iter.remove();
+            if (limitReached(source, eventsProcessed)) {
+                throw new RuntimeException("Maximum number of events ("+
+                    eventLimit+") processed");
+            }
+
+        }
+    }
+}
+
+//PENDING(rogerk) maybe we can optimize this method a bit..
+
+private boolean limitReached(UIComponent source, HashMap eventsProcessed) {
+    if (!eventsProcessed.containsKey(source)) {
+        eventsProcessed.put(source, new Integer(1));
+        return false;
+    }
+    
+    int count = ((Integer)eventsProcessed.get(source)).intValue()+1;
+    if (count > eventLimit) {
+        return true;
+    }
+
+
+    eventsProcessed.put(source, new Integer(count));
+    return false;
 }
 
 public int executePhase(FacesContext context, Phase phase) throws FacesException

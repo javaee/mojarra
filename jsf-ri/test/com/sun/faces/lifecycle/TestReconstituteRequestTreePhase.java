@@ -1,5 +1,5 @@
 /*
- * $Id: TestReconstituteRequestTreePhase.java,v 1.6 2002/12/18 20:55:08 eburns Exp $
+ * $Id: TestReconstituteRequestTreePhase.java,v 1.7 2003/01/21 23:23:25 rkitain Exp $
  */
 
 /*
@@ -41,7 +41,7 @@ import java.util.Locale;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestReconstituteRequestTreePhase.java,v 1.6 2002/12/18 20:55:08 eburns Exp $
+ * @version $Id: TestReconstituteRequestTreePhase.java,v 1.7 2003/01/21 23:23:25 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -113,19 +113,17 @@ public void testReconstituteRequestInitial()
     }
     assertTrue(Phase.GOTO_NEXT == result);
 
-    assertTrue(null != getFacesContext().getRequestTree());
-    assertTrue(getFacesContext().getRequestTree() == 
-	       getFacesContext().getResponseTree());
+    assertTrue(null != getFacesContext().getTree());
     assertTrue(RenderKitFactory.DEFAULT_RENDER_KIT == 
-            getFacesContext().getRequestTree().getRenderKitId());
+            getFacesContext().getTree().getRenderKitId());
 
-    assertTrue(null != getFacesContext().getRequestTree().getRoot());
+    assertTrue(null != getFacesContext().getTree().getRoot());
     assertTrue(null != getFacesContext().getLocale());
     
     UIComponent root = null;
 
-    assertTrue(getFacesContext().getRequestTree().getTreeId().equals(TEST_URI));
-    root = getFacesContext().getRequestTree().getRoot();
+    assertTrue(getFacesContext().getTree().getTreeId().equals(TEST_URI));
+    root = getFacesContext().getTree().getRoot();
     assertTrue(root.getChildCount() == 0);
 }
 
@@ -169,17 +167,15 @@ public void testReconstituteRequestSubmit()
     }
     assertTrue(Phase.GOTO_NEXT == result);
 
-    assertTrue(null != getFacesContext().getRequestTree());
-    assertTrue(getFacesContext().getRequestTree() == 
-	       getFacesContext().getResponseTree());
+    assertTrue(null != getFacesContext().getTree());
     assertTrue(RenderKitFactory.DEFAULT_RENDER_KIT == 
-            getFacesContext().getRequestTree().getRenderKitId());
+            getFacesContext().getTree().getRenderKitId());
 
-    assertTrue(null != getFacesContext().getRequestTree().getRoot());
+    assertTrue(null != getFacesContext().getTree().getRoot());
     assertTrue(locale == getFacesContext().getLocale());
     
-    assertTrue(getFacesContext().getRequestTree().getTreeId().equals(TEST_URI));
-    root = getFacesContext().getRequestTree().getRoot();
+    assertTrue(getFacesContext().getTree().getTreeId().equals(TEST_URI));
+    root = getFacesContext().getTree().getRoot();
     // components should exist.
     assertTrue(root.getChildCount() == 1);
     assertTrue(userName == root.findComponent("userName"));

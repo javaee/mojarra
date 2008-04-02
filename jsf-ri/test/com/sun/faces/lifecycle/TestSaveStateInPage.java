@@ -1,5 +1,5 @@
 /*
- * $Id: TestSaveStateInPage.java,v 1.5 2002/11/25 19:56:42 jvisvanathan Exp $
+ * $Id: TestSaveStateInPage.java,v 1.6 2003/01/21 23:23:25 rkitain Exp $
  */
 
 /*
@@ -33,7 +33,7 @@ import javax.faces.tree.TreeFactory;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestSaveStateInPage.java,v 1.5 2002/11/25 19:56:42 jvisvanathan Exp $
+ * @version $Id: TestSaveStateInPage.java,v 1.6 2003/01/21 23:23:25 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -126,7 +126,7 @@ public void testSaveStateInPage()
     assertTrue(treeFactory != null);
     Tree requestTree = treeFactory.getTree(getFacesContext(),
             TEST_URI );
-    getFacesContext().setRequestTree(requestTree);
+    getFacesContext().setTree(requestTree);
 
     rc = renderResponse.execute(getFacesContext());
     assertTrue(Phase.GOTO_NEXT == rc);

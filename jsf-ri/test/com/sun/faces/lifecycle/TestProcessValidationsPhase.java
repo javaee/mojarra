@@ -1,5 +1,5 @@
 /*
- * $Id: TestProcessValidationsPhase.java,v 1.10 2002/12/18 20:55:08 eburns Exp $
+ * $Id: TestProcessValidationsPhase.java,v 1.11 2003/01/21 23:23:25 rkitain Exp $
  */
 
 /*
@@ -39,7 +39,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestProcessValidationsPhase.java,v 1.10 2002/12/18 20:55:08 eburns Exp $
+ * @version $Id: TestProcessValidationsPhase.java,v 1.11 2003/01/21 23:23:25 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -106,8 +106,6 @@ public void testCallback()
             RIConstants.RECONSTITUTE_REQUEST_TREE_PHASE),
 	applyValues = new ApplyRequestValuesPhase(null, 
             RIConstants.APPLY_REQUEST_VALUES_PHASE), 
-	handleEvents = new HandleRequestEventsPhase(null, 
-            RIConstants.HANDLE_REQUEST_EVENTS_PHASE),
 	processValidations = new ProcessValidationsPhase(null, 
             RIConstants.PROCESS_VALIDATIONS_PHASE);
 
@@ -120,9 +118,9 @@ public void testCallback()
         assertTrue(false);
     }
     assertTrue(Phase.GOTO_NEXT == result);
-    assertTrue(null != getFacesContext().getRequestTree());
+    assertTrue(null != getFacesContext().getTree());
 
-    root = getFacesContext().getRequestTree().getRoot();
+    root = getFacesContext().getTree().getRoot();
     UIForm basicForm = new UIForm();
     basicForm.setComponentId("basicForm");
     UIInput userName1 = new UIInput();
@@ -150,10 +148,10 @@ public void testCallback()
             return null;
         }
 
-        public boolean validate(FacesContext context, UIComponent component){
+        public void validate(FacesContext context, UIComponent component){
             assertTrue(component == userName);
             System.setProperty(DID_VALIDATE, DID_VALIDATE);
-	    return true;
+	    return;
         }
     };
     userName.addValidator(validator);
@@ -163,9 +161,6 @@ public void testCallback()
     rc = applyValues.execute(getFacesContext());
     assertTrue(Phase.GOTO_NEXT == rc);
     
-    rc = handleEvents.execute(getFacesContext());
-    assertTrue(Phase.GOTO_NEXT == rc);
-
     rc = processValidations.execute(getFacesContext());
     assertTrue(!System.getProperty(DID_VALIDATE).equals(EMPTY));
     assertTrue(userName.isValid());

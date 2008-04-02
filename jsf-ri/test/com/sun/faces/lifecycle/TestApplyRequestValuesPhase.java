@@ -1,5 +1,5 @@
 /*
- * $Id: TestApplyRequestValuesPhase.java,v 1.8 2002/12/18 20:55:07 eburns Exp $
+ * $Id: TestApplyRequestValuesPhase.java,v 1.9 2003/01/21 23:23:23 rkitain Exp $
  */
 
 /*
@@ -34,7 +34,7 @@ import com.sun.faces.ServletFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestApplyRequestValuesPhase.java,v 1.8 2002/12/18 20:55:07 eburns Exp $
+ * @version $Id: TestApplyRequestValuesPhase.java,v 1.9 2003/01/21 23:23:23 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -109,11 +109,11 @@ public void testCallback()
         assertTrue(false);
     }
     assertTrue(Phase.GOTO_NEXT == result);
-    assertTrue(null != getFacesContext().getRequestTree());
+    assertTrue(null != getFacesContext().getTree());
 
     // 2. Add components to tree
     //
-    root = getFacesContext().getRequestTree().getRoot();
+    root = getFacesContext().getTree().getRoot();
     UIForm basicForm = new UIForm();
     basicForm.setComponentId("basicForm");
     UIInput userName = new UIInput();
@@ -126,7 +126,7 @@ public void testCallback()
     rc = applyValues.execute(getFacesContext());
     assertTrue(Phase.GOTO_NEXT == rc);
     
-    root = getFacesContext().getRequestTree().getRoot();
+    root = getFacesContext().getTree().getRoot();
     try {
 	userName = (UIInput) root.findComponent("userName");
     }

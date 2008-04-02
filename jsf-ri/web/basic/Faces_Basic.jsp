@@ -42,13 +42,10 @@
 
              <td><FONT COLOR="RED">Custom</FONT></TD>
 
-             <td><basic:textentry_input_valuechange id="custom">
-
-                   <f:eventhandler type="basic.EventHandler"/>
-
-                 </basic:textentry_input_valuechange>
-                 
-
+             <td><h:input_text id="custom">
+                     <h:valueChangedListener type="basic.ValueChange"/>
+                 </h:input_text></td>
+               
             </tr>
 
             <tr> 
@@ -200,6 +197,8 @@
 		<h:selectitems id="listboxOptions"
                                    modelReference="LoginBean.options"/>
 
+                <h:valueChangedListener type="basic.ValueChange"/>
+
 	      </h:selectone_listbox>
                 <h:output_text id="optionLabel" 
                    value="Listbox with Kinds of Beans from Model Object" />
@@ -310,6 +309,7 @@
         <TD><h:output_text id="buttonlabel1" value="Button rendered with 'label' attribute:" />
             <h:command_button id="mybutton" label="Login"
                 commandName="login">
+                <h:actionListener type="basic.Action"/>
             </h:command_button>
         </TD>
       </TR>

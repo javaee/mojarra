@@ -1,5 +1,5 @@
 /*
- * $Id: BasicApplicationHandler.java,v 1.11 2002/10/10 17:27:45 jvisvanathan Exp $
+ * $Id: BasicApplicationHandler.java,v 1.12 2003/01/21 23:23:33 rkitain Exp $
  */
 
 /*
@@ -72,7 +72,7 @@ public class BasicApplicationHandler implements ApplicationHandler{
             TreeFactory treeFactory = (TreeFactory)
             FactoryFinder.getFactory(FactoryFinder.TREE_FACTORY);
             Assert.assert_it(null != treeFactory);
-            context.setResponseTree(treeFactory.getTree(context,treeId));
+            context.setTree(treeFactory.getTree(context,treeId));
         }
 
         return returnValue;

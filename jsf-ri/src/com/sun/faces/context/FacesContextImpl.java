@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContextImpl.java,v 1.28 2003/01/17 18:07:13 rkitain Exp $
+ * $Id: FacesContextImpl.java,v 1.29 2003/01/21 23:23:14 rkitain Exp $
  */
 
 /*
@@ -79,8 +79,6 @@ public class FacesContextImpl extends FacesContext
     private HttpSession session = null;
     private ArrayList applicationEvents = null;
     private CursorableLinkedList facesEvents = null;
-    private HashMap requestEvents = null;
-    private int requestEventsCount = 0;
     private EvaluationContext evaluationContext = null;
 
     /**
@@ -96,7 +94,7 @@ public class FacesContextImpl extends FacesContext
     private ApplicationHandler applicationHandler = null;
     
     private boolean renderResponse = false;
-    private boolean renderComplete = false;
+    private boolean responseComplete = false;
 
     // Attribute Instance Variables
 
@@ -141,6 +139,8 @@ public class FacesContextImpl extends FacesContext
 	    getServletContext().setAttribute(RIConstants.FORMAT_POOL,
 			         new com.sun.faces.renderkit.FormatPoolImpl());
 	}
+
+        setCurrentInstance(this);
         
     }
 
@@ -266,51 +266,6 @@ public class FacesContextImpl extends FacesContext
         return result;
     }
 
-    public Iterator getRequestEvents(UIComponent component) {
-	Iterator result = null;
-        ArrayList list = null;
-
-	if (null == component) {
-	    throw new NullPointerException(Util.getExceptionMessage(Util.NULL_COMPONENT_ERROR_MESSAGE_ID));
-	}
-
-        if (null == requestEvents) {
-            result = Collections.EMPTY_LIST.iterator();
-        }
-	else {
-	    list = (ArrayList) requestEvents.get(component);
-	    if (null != list) {
-		result = list.iterator();
-	    } else {
-		result = Collections.EMPTY_LIST.iterator();
-	    }
-        }
-
-	return result;
-    }
-
-    public int getRequestEventsCount() {
-	return requestEventsCount;
-    }
-
-    public int getRequestEventsCount(UIComponent component) {
-	int result = 0;
-        ArrayList list = null;
-
-	if (null == component) {
-	    throw new NullPointerException(Util.getExceptionMessage(Util.NULL_COMPONENT_ERROR_MESSAGE_ID));
-	}
-
-        if (null != requestEvents) {
-	    list = (ArrayList) requestEvents.get(component);
-	    if (null != list) {
-		result = list.size();
-	    } 
-        }
-	
-	return result;
-    }
-
     public Tree getTree() {
         return (this.tree);
     }
@@ -329,9 +284,6 @@ public class FacesContextImpl extends FacesContext
     public void setTree(Tree tree) {
         if (tree == null) {
             throw new NullPointerException(Util.getExceptionMessage(Util.NULL_REQUEST_TREE_ERROR_MESSAGE_ID));
-        }
-        if (this.tree != null) {
-            throw new IllegalStateException(Util.getExceptionMessage(Util.REQUEST_TREE_ALREADY_SET_ERROR_MESSAGE_ID));
         }
         this.tree = tree;
     }
@@ -496,10 +448,11 @@ public class FacesContextImpl extends FacesContext
         responseStream = null;
         responseWriter = null;
         applicationEvents = null;
-        requestEvents = null;
-        requestEventsCount = 0;
+        facesEvents = null;
         viewHandler = null;
         applicationHandler = null;
+        renderResponse = false;
+        responseComplete = false;
     }
 
     public void renderResponse() {
@@ -507,15 +460,15 @@ public class FacesContextImpl extends FacesContext
     }
 
     public void responseComplete() {
-        renderComplete = true;
+        responseComplete = true;
     }
 
     public boolean getRenderResponse() {
         return renderResponse;
     }
 
-    public boolean getRenderComplete() {
-        return renderComplete;
+    public boolean getResponseComplete() {
+        return responseComplete;
     }
 
     public ViewHandler getViewHandler() {

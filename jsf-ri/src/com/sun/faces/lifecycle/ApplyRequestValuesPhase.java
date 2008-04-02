@@ -1,5 +1,5 @@
 /*
- * $Id: ApplyRequestValuesPhase.java,v 1.5 2003/01/17 18:07:14 rkitain Exp $
+ * $Id: ApplyRequestValuesPhase.java,v 1.6 2003/01/21 23:23:15 rkitain Exp $
  */
 
 /*
@@ -32,7 +32,7 @@ import java.io.IOException;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: ApplyRequestValuesPhase.java,v 1.5 2003/01/17 18:07:14 rkitain Exp $
+ * @version $Id: ApplyRequestValuesPhase.java,v 1.6 2003/01/21 23:23:15 rkitain Exp $
  * 
  * @see	com.sun.faces.lifecycle.DefaultLifecycleImpl
  * @see	javax.faces.lifecycle.Lifecycle#APPLY_REQUEST_VALUES_PHASE
@@ -82,7 +82,9 @@ public class ApplyRequestValuesPhase extends GenericPhaseImpl {
 
         try {
             component.processDecodes(facesContext);
-            if (((FacesContextImpl)facesContext).getRenderResponse()) {
+            if (((FacesContextImpl)facesContext).getResponseComplete()) {
+                return Phase.GOTO_EXIT;
+            } else if (((FacesContextImpl)facesContext).getRenderResponse()) {
                 return Phase.GOTO_RENDER;
             }
         } catch (IOException e) {

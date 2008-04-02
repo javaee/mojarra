@@ -1,5 +1,5 @@
 /*
- * $Id: TestValidatorTags.java,v 1.3 2002/12/18 20:55:12 eburns Exp $
+ * $Id: TestValidatorTags.java,v 1.4 2003/01/21 23:23:30 rkitain Exp $
  */
 
 /*
@@ -21,6 +21,7 @@ import javax.faces.lifecycle.Phase;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.component.UIComponent;
 
+import com.sun.faces.context.FacesContextImpl;
 import com.sun.faces.JspFacesTestCase;
 import com.sun.faces.RIConstants;
 import com.sun.faces.lifecycle.LifecycleImpl;
@@ -40,7 +41,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestValidatorTags.java,v 1.3 2002/12/18 20:55:12 eburns Exp $
+ * @version $Id: TestValidatorTags.java,v 1.4 2003/01/21 23:23:30 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -151,7 +152,7 @@ public void testValidators()
     Assert.assert_it(treeFactory != null);
     Tree requestTree = treeFactory.getTree(getFacesContext(),
             TEST_URI );
-    getFacesContext().setRequestTree(requestTree);
+    getFacesContext().setTree(requestTree);
 
     // This builds the tree, and usefaces saves it in the session
     rc = renderResponse.execute(getFacesContext());

@@ -1,5 +1,5 @@
 /* 
- * $Id: TestViewHandlerImpl.java,v 1.10 2002/10/07 22:58:02 jvisvanathan Exp $ 
+ * $Id: TestViewHandlerImpl.java,v 1.11 2003/01/21 23:23:25 rkitain Exp $ 
  */ 
 
 
@@ -63,7 +63,7 @@ import javax.servlet.jsp.PageContext;
  * 
  * <B>Lifetime And Scope</B> <P> 
  * 
- * @version $Id: TestViewHandlerImpl.java,v 1.10 2002/10/07 22:58:02 jvisvanathan Exp $ 
+ * @version $Id: TestViewHandlerImpl.java,v 1.11 2003/01/21 23:23:25 rkitain Exp $ 
  * 
  * @see Blah 
  * @see Bloo 
@@ -158,7 +158,7 @@ public void testRender()
     String value = null; 
     SimpleTreeImpl newTree = new SimpleTreeImpl(getFacesContext(),
 						TEST_URI);
-    getFacesContext().setRequestTree(newTree);
+    getFacesContext().setTree(newTree);
 
     try { 
         ViewHandlerImpl viewHandler = new ViewHandlerImpl(); 

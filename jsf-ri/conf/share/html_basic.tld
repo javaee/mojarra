@@ -3625,4 +3625,27 @@
         <rtexprvalue>false</rtexprvalue>
       </attribute>
    </tag>
+
+  <tag>
+      <name>valueChangedListener</name>
+      <tag-class>com.sun.faces.taglib.html_basic.ValueChangedListenerTag</tag-class>
+      <body-content>JSP</body-content>
+      <attribute>
+          <name>type</name>
+          <required>true</required>
+          <rtexprvalue>false</rtexprvalue>
+      </attribute>
+  </tag>
+
+  <tag>
+      <name>actionListener</name>
+      <tag-class>com.sun.faces.taglib.html_basic.ActionListenerTag</tag-class>
+      <body-content>JSP</body-content>
+      <attribute>
+          <name>type</name>
+          <required>true</required>
+          <rtexprvalue>false</rtexprvalue>
+      </attribute>
+  </tag>
+
 </taglib>

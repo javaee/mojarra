@@ -1,5 +1,5 @@
 /*
- * $Id: TestFacesContextImpl.java,v 1.16 2002/10/07 22:57:59 jvisvanathan Exp $
+ * $Id: TestFacesContextImpl.java,v 1.17 2003/01/21 23:23:22 rkitain Exp $
  */
 
 /*
@@ -28,9 +28,9 @@ import com.sun.faces.tree.XmlTreeImpl;
 
 import javax.faces.component.UICommand;
 import javax.faces.component.UIForm;
+import javax.faces.component.UIInput;
 
 import javax.faces.event.FacesEvent;
-import javax.faces.event.RequestEvent;
 import javax.faces.event.CommandEvent;
 import javax.faces.event.FormEvent;
 import javax.faces.tree.Tree;
@@ -54,7 +54,7 @@ import com.sun.faces.ServletFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestFacesContextImpl.java,v 1.16 2002/10/07 22:57:59 jvisvanathan Exp $
+ * @version $Id: TestFacesContextImpl.java,v 1.17 2003/01/21 23:23:22 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -134,28 +134,13 @@ public void testAccessors()
     System.out.println("Testing getLocale: " + result);
     assertTrue(result);
 
-    getFacesContext().setRequestTree( new XmlTreeImpl(getFacesContext(),
+    getFacesContext().setTree( new XmlTreeImpl(getFacesContext(),
                 new UIForm(),"treeId", ""));
-    Tree requestTree = getFacesContext().getRequestTree();
-    result = null != requestTree;
-    System.out.println("Testing getRequestTree: " + result);
+    Tree tree = getFacesContext().getTree();
+    result = null != tree;
+    System.out.println("Testing getTree: " + result);
     assertTrue(result);
 
-    exceptionThrown = false; 
-    System.out.println("Testing setRequestTree IllegalStateException..."); 
-    try {
-        getFacesContext().setRequestTree( new XmlTreeImpl(getFacesContext(),
-            new UIForm(),"treeId", ""));
-    } catch (IllegalStateException e) {
-        exceptionThrown = true;
-    }
-    assertTrue(exceptionThrown);
-
-    Tree responseTree = getFacesContext().getResponseTree();
-    result = null != responseTree;
-    System.out.println("Testing getResponseTree: " + result);
-    assertTrue(result);
- 
     ResponseStream responseStream = new ResponseStream() {
 	    public void write(int b) {}
 	};
@@ -222,39 +207,16 @@ public void testApplicationEvents() {
     assertTrue(event instanceof FormEvent);
 }
 
-public void testRequestEventsNull()
+public void testFacesEventsNull()
 {
     boolean exceptionThrown = false;
     int count = 0;
     Iterator iter = null;
 
-    System.out.println("Testing getRequestEventsCount() == 0");
-    count =  getFacesContext().getRequestEventsCount();
-    assertTrue(0 == count);
-    
-    System.out.println("Testing getRequestEventsCount(null) throws NullPointerException");
-    try {
-	count = getFacesContext().getRequestEventsCount(null);
-    }
-    catch (NullPointerException e) {
-	exceptionThrown = true;
-    }
-    assertTrue(exceptionThrown);
-    
     exceptionThrown = false;
-    System.out.println("Testing getRequestEvents(null) throws NullPointerException");
+    System.out.println("Testing addFacesEvent(null) throws NullPointerException");
     try {
-	iter = getFacesContext().getRequestEvents(null);
-    }
-    catch (NullPointerException e) {
-	exceptionThrown = true;
-    }
-    assertTrue(exceptionThrown);
-
-    exceptionThrown = false;
-    System.out.println("Testing addRequestEvent(null, null) throws NullPointerException");
-    try {
-	getFacesContext().addRequestEvent(null, null);
+	getFacesContext().addFacesEvent(null);
     }
     catch (NullPointerException e) {
 	exceptionThrown = true;
@@ -262,59 +224,39 @@ public void testRequestEventsNull()
     assertTrue(exceptionThrown);
 }
 
-public void testRequestEvents()
+public void testFacesEvents()
 {
     int count = 0;
     Iterator iter = null;
-    UIForm 
-	source1 = new UIForm(),
-	source2 = new UIForm();
-    RequestEvent 
-	testEvent = null,
-	event1 = new RequestEvent(source1),
-	event2 = new RequestEvent(source2);
+    UIInput source1 = new UIInput();
+    UICommand source2 = new UICommand();
+    FacesEvent 
+	event1 = new FacesEvent(source1),
+	event2 = new FacesEvent(source2);
 
+    System.out.println("Testing addFacesEvent(event1)");
+    getFacesContext().addFacesEvent(event1);
+    assertTrue((count = getCount()) == 1);
 
-    System.out.println("Testing addRequestEvent(source1, event1)");
-    getFacesContext().addRequestEvent(source1, event1);
-    count = getFacesContext().getRequestEventsCount(source1);
-    assertTrue(1 == count);
+    System.out.println("Testing addFacesEvent(event2)");
+    getFacesContext().addFacesEvent(event2);
+    assertTrue((count = getCount()) == 2);
 
-    count = getFacesContext().getRequestEventsCount(source2);
-    assertTrue(0 == count);
-
-    System.out.println("Testing addRequestEvent(source2, event2)");
-    getFacesContext().addRequestEvent(source2, event2);
-    count = getFacesContext().getRequestEventsCount(source1);
-    assertTrue(1 == count);
-
-    count = getFacesContext().getRequestEventsCount(source2);
-    assertTrue(1 == count);
-
-    count = getFacesContext().getRequestEventsCount();
-    assertTrue(2 == count);
-
-    System.out.println("Testing getRequestEvents(source1)");
-    iter = getFacesContext().getRequestEvents(source1);
+    System.out.println("Testing getFacesEvents()");
+    iter = getFacesContext().getFacesEvents();
     assertTrue(iter.hasNext());
-
-    while (iter.hasNext()) {
-	testEvent = (RequestEvent) iter.next();
-	assertTrue(testEvent == event1);
-	assertTrue(testEvent.getComponent() == source1);
-    }
-
-    System.out.println("Testing getRequestEvents(source2)");
-    iter = getFacesContext().getRequestEvents(source2);
-    assertTrue(iter.hasNext());
-
-    while (iter.hasNext()) {
-	testEvent = (RequestEvent) iter.next();
-	assertTrue(testEvent == event2);
-	assertTrue(testEvent.getComponent() == source2);
-    }
 
 }
+
+private int getCount() {
+    Iterator iter = getFacesContext().getFacesEvents();
+    int count = 0;
+    while (iter.hasNext()) {
+        iter.next();
+        count++;
+    }
+    return count;
+} 
 
 public void testMessageMethodsNull() {
     boolean gotException = false;
@@ -393,13 +335,11 @@ public void testRelease() {
     assertTrue(getFacesContext().getServletResponse() == null);
     assertTrue(getFacesContext().getHttpSession() == null);
     assertTrue(getFacesContext().getLocale() == null);
-    assertTrue(getFacesContext().getRequestTree() == null);
-    assertTrue(getFacesContext().getResponseTree() == null);
+    assertTrue(getFacesContext().getTree() == null);
     assertTrue(getFacesContext().getResponseStream() == null);
     assertTrue(getFacesContext().getResponseWriter() == null);
     Iterator it = getFacesContext().getApplicationEvents();
     assertTrue( !it.hasNext());
-    assertTrue(getFacesContext().getRequestEventsCount() == 0);
     assertTrue(getFacesContext().getViewHandler() == null);
     assertTrue(getFacesContext().getApplicationHandler() == null);
 }

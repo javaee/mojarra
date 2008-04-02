@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_2.java,v 1.34 2002/12/18 20:55:10 eburns Exp $
+ * $Id: TestRenderers_2.java,v 1.35 2003/01/21 23:23:28 rkitain Exp $
  */
 
 /*
@@ -53,7 +53,7 @@ import com.sun.faces.TestBean;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_2.java,v 1.34 2002/12/18 20:55:10 eburns Exp $
+ * @version $Id: TestRenderers_2.java,v 1.35 2003/01/21 23:23:28 rkitain Exp $
  * 
  *
  */
@@ -121,7 +121,7 @@ public class TestRenderers_2 extends JspFacesTestCase
         XmlTreeImpl xmlTree = 
 	    new XmlTreeImpl(getFacesContext(), 
 			    new UICommand(), "treeId", "");
-        getFacesContext().setResponseTree(xmlTree);
+        getFacesContext().setTree(xmlTree);
 	assertTrue(null != getFacesContext().getResponseWriter());
     }     
 

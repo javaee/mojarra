@@ -1,5 +1,5 @@
 /*
- * $Id: ButtonRenderer.java,v 1.41 2003/01/17 18:07:18 rkitain Exp $
+ * $Id: ButtonRenderer.java,v 1.42 2003/01/21 23:23:17 rkitain Exp $
  */
 
 /*
@@ -52,7 +52,7 @@ import javax.servlet.http.HttpServletRequest;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ButtonRenderer.java,v 1.41 2003/01/17 18:07:18 rkitain Exp $
+ * @version $Id: ButtonRenderer.java,v 1.42 2003/01/21 23:23:17 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -189,12 +189,14 @@ public class ButtonRenderer extends HtmlBasicRenderer {
         if (value == null) {
             if (context.getServletRequest().getParameter(clientId+".x") == null &&
                 context.getServletRequest().getParameter(clientId+".y") == null) {
+                component.setValid(true);
                 return;
             }
         }
 
         String type = (String) component.getAttribute("type");
         if ((type == null) || (type.toLowerCase().equals("reset")) ) {
+            component.setValid(true);
             return;
         }
 
@@ -213,12 +215,18 @@ public class ButtonRenderer extends HtmlBasicRenderer {
             // PENDING (visvan) log error
             //log.error("Button[" + component.getClientId() +
             //          "] not nested in a form");
+            component.setValid(false);
             return;
         }
         FormEvent formEvent =
             new FormEvent(component, formName, commandName);
         context.addApplicationEvent(formEvent);
 
+        //PENDING(rogerk) fire action event
+        //
+        ((UICommand)component).fireActionEvent(context);
+
+        component.setValid(true);
 	return;
     }
     

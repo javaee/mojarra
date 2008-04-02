@@ -19,7 +19,7 @@
         <H3> JSF Basic Components Test Page </H3>
 
 
-<form method="post" action="/test/faces/TestRenderResponsePhase.jsp;jsessionid=54A77EC13B5C1A1DF5DFD2122A845883" class="formClass"  title="basicForm" accept="html,wml" >
+<form method="post" action="/test/faces/TestRenderResponsePhase.jsp;jsessionid=E75A204842EAC19A648141B049333B08" class="formClass"  title="basicForm" accept="html,wml" >
 
   <TABLE BORDER="1">
 
@@ -116,7 +116,7 @@
 
 	<TD>
 
-            <input type="image" src="duke.gif;jsessionid=54A77EC13B5C1A1DF5DFD2122A845883" name="pushButton" disabled >
+            <input type="image" src="duke.gif;jsessionid=E75A204842EAC19A648141B049333B08" name="pushButton" disabled >
             
 	</TD>
 
@@ -127,7 +127,7 @@
 
 	<TD>
 
-            <input type="image" src="duke.gif;jsessionid=54A77EC13B5C1A1DF5DFD2122A845883" name="imageOnlyButton"> 
+            <input type="image" src="duke.gif;jsessionid=E75A204842EAC19A648141B049333B08" name="imageOnlyButton"> 
              
 	</TD>
 
@@ -152,7 +152,7 @@
 	</TD>
 
         <TD> 
-            <img id="graphicImage" src="/test/duke.gif;jsessionid=54A77EC13B5C1A1DF5DFD2122A845883" usemap="#map1"  ismap > 
+            <img id="graphicImage" src="/test/duke.gif;jsessionid=E75A204842EAC19A648141B049333B08" usemap="#map1"  ismap > 
         </TD>
 
       </TR>
@@ -453,16 +453,16 @@
 						
 						
 					<span class="selectmanyClass">
-<label for="ManyApples3.0">zero<input name="ManyApples3.0" id="ManyApples3.0" value="0" type="checkbox"></label>
-<label for="ManyApples3.1">one<input name="ManyApples3.1" id="ManyApples3.1" value="1" type="checkbox"></label>
-<label for="ManyApples3.2">two<input name="ManyApples3.2" id="ManyApples3.2" value="2" type="checkbox"></label>
-<label for="ManyApples3.3">three<input name="ManyApples3.3" id="ManyApples3.3" value="3" type="checkbox"></label>
-<label for="ManyApples3.4">four<input name="ManyApples3.4" id="ManyApples3.4" value="4" type="checkbox" checked></label>
-<label for="ManyApples3.5">five<input name="ManyApples3.5" id="ManyApples3.5" value="5" type="checkbox"></label>
-<label for="ManyApples3.6">six<input name="ManyApples3.6" id="ManyApples3.6" value="6" type="checkbox"></label>
-<label for="ManyApples3.7">seven<input name="ManyApples3.7" id="ManyApples3.7" value="7" type="checkbox" checked></label>
-<label for="ManyApples3.8">eight<input name="ManyApples3.8" id="ManyApples3.8" value="8" type="checkbox"></label>
-<label for="ManyApples3.9">nine<input name="ManyApples3.9" id="ManyApples3.9" value="9" type="checkbox"></label></span></TD>
+<label for="ManyApples3.id0">zero<input name="ManyApples3.id0" id="ManyApples3.id0" value="0" type="checkbox"></label>
+<label for="ManyApples3.id1">one<input name="ManyApples3.id1" id="ManyApples3.id1" value="1" type="checkbox"></label>
+<label for="ManyApples3.id2">two<input name="ManyApples3.id2" id="ManyApples3.id2" value="2" type="checkbox"></label>
+<label for="ManyApples3.id3">three<input name="ManyApples3.id3" id="ManyApples3.id3" value="3" type="checkbox"></label>
+<label for="ManyApples3.id4">four<input name="ManyApples3.id4" id="ManyApples3.id4" value="4" type="checkbox" checked></label>
+<label for="ManyApples3.id5">five<input name="ManyApples3.id5" id="ManyApples3.id5" value="5" type="checkbox"></label>
+<label for="ManyApples3.id6">six<input name="ManyApples3.id6" id="ManyApples3.id6" value="6" type="checkbox"></label>
+<label for="ManyApples3.id7">seven<input name="ManyApples3.id7" id="ManyApples3.id7" value="7" type="checkbox" checked></label>
+<label for="ManyApples3.id8">eight<input name="ManyApples3.id8" id="ManyApples3.id8" value="8" type="checkbox"></label>
+<label for="ManyApples3.id9">nine<input name="ManyApples3.id9" id="ManyApples3.id9" value="9" type="checkbox"></label></span></TD>
 </tr>
 
 

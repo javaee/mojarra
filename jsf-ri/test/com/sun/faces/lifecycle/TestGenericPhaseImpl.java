@@ -1,5 +1,5 @@
 /*
- * $Id: TestGenericPhaseImpl.java,v 1.8 2002/12/18 20:55:07 eburns Exp $
+ * $Id: TestGenericPhaseImpl.java,v 1.9 2003/01/21 23:23:23 rkitain Exp $
  */
 
 /*
@@ -45,7 +45,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestGenericPhaseImpl.java,v 1.8 2002/12/18 20:55:07 eburns Exp $
+ * @version $Id: TestGenericPhaseImpl.java,v 1.9 2003/01/21 23:23:23 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -125,11 +125,11 @@ public void testExecute()
         assertTrue(false);
     }
     assertTrue(Phase.GOTO_NEXT == result);
-    assertTrue(null != getFacesContext().getRequestTree());
+    assertTrue(null != getFacesContext().getTree());
 
     // 2. Add components to tree
     //
-    UIComponent root = getFacesContext().getRequestTree().getRoot();
+    UIComponent root = getFacesContext().getTree().getRoot();
     UIForm basicForm = new UIForm();
     basicForm.setComponentId("basicForm");
     UIInput userName = new UIInput();

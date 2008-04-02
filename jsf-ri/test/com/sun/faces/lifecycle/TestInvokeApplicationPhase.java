@@ -1,5 +1,5 @@
 /*
- * $Id: TestInvokeApplicationPhase.java,v 1.8 2002/10/10 18:30:30 jvisvanathan Exp $
+ * $Id: TestInvokeApplicationPhase.java,v 1.9 2003/01/21 23:23:24 rkitain Exp $
  */
 
 /*
@@ -41,7 +41,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestInvokeApplicationPhase.java,v 1.8 2002/10/10 18:30:30 jvisvanathan Exp $
+ * @version $Id: TestInvokeApplicationPhase.java,v 1.9 2003/01/21 23:23:24 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -108,7 +108,7 @@ public void testInvokeNormal()
     Phase invokeApplicationPhase = new InvokeApplicationPhase(life, 
 				      RIConstants.INVOKE_APPLICATION_PHASE);
     int rc = Phase.GOTO_NEXT;
-    getFacesContext().setRequestTree(tree);
+    getFacesContext().setTree(tree);
 
     life.setApplicationHandler(appHandler);
     getFacesContext().addApplicationEvent(new CommandEvent(root, "command"));
@@ -129,7 +129,7 @@ public void testInvokeNoOp()
     Phase invokeApplicationPhase = new InvokeApplicationPhase(life, 
 				      RIConstants.INVOKE_APPLICATION_PHASE);
     int rc = Phase.GOTO_NEXT;
-    getFacesContext().setRequestTree(tree);
+    getFacesContext().setTree(tree);
 
     rc = invokeApplicationPhase.execute(getFacesContext());
     assertTrue(Phase.GOTO_NEXT == rc);

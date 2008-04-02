@@ -1,5 +1,5 @@
 /*
- * $Id: UpdateModelValuesPhase.java,v 1.15 2003/01/17 18:07:16 rkitain Exp $
+ * $Id: UpdateModelValuesPhase.java,v 1.16 2003/01/21 23:23:16 rkitain Exp $
  */
 
 /*
@@ -10,6 +10,8 @@
 // UpdateModelValuesPhase.java
 
 package com.sun.faces.lifecycle;
+
+import com.sun.faces.context.FacesContextImpl;
 
 import org.mozilla.util.Assert;
 import org.mozilla.util.ParameterCheck;
@@ -32,7 +34,7 @@ import java.util.Iterator;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: UpdateModelValuesPhase.java,v 1.15 2003/01/17 18:07:16 rkitain Exp $
+ * @version $Id: UpdateModelValuesPhase.java,v 1.16 2003/01/21 23:23:16 rkitain Exp $
  * 
  * @see	com.sun.faces.lifecycle.DefaultLifecycleImpl
  * @see	javax.faces.lifecycle.Lifecycle#UPDATE_MODEL_VALUES_PHASE
@@ -100,6 +102,12 @@ public int execute(FacesContext facesContext) throws FacesException
         Message msg = resources.getMessage(facesContext,
             Util.MODEL_UPDATE_ERROR_MESSAGE_ID,params);
         facesContext.addMessage(component, msg);
+    }
+
+    if (((FacesContextImpl)facesContext).getResponseComplete()) {
+        return Phase.GOTO_EXIT;
+    } else if (((FacesContextImpl)facesContext).getRenderResponse()) {
+        return Phase.GOTO_RENDER;
     }
 
     messageIter = facesContext.getMessages();

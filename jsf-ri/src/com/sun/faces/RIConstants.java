@@ -1,5 +1,5 @@
 /*
- * $Id: RIConstants.java,v 1.21 2003/01/17 18:07:12 rkitain Exp $
+ * $Id: RIConstants.java,v 1.22 2003/01/21 23:23:13 rkitain Exp $
  */
 
 /*
@@ -57,6 +57,12 @@ public class RIConstants {
 
     public static final String SAVESTATE_MARKER = FACES_PREFIX + "saveStateMarker";
     public static final String SAVESTATE_INITPARAM = "saveStateInClient";
+
+    // PENDING(rogerk) this needs to be mentioned in the spec, 
+    // under [ConfigFiles-26]
+    // EVENT_LIMIT is configured as servlet init param;
+    public static final String EVENT_LIMIT = "maxevents";
+    public static final int MAX_EVENTS = 100;
 
     public static final String FORMAT_POOL = "com.sun.faces.renderkit.FormatPool";
     public static final String FACES_LOCALE = "FacesLocale";

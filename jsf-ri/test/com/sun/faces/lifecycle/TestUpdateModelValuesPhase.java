@@ -1,5 +1,5 @@
 /*
- * $Id: TestUpdateModelValuesPhase.java,v 1.14 2002/10/07 22:58:02 jvisvanathan Exp $
+ * $Id: TestUpdateModelValuesPhase.java,v 1.15 2003/01/21 23:23:25 rkitain Exp $
  */
 
 /*
@@ -10,6 +10,8 @@
 // TestUpdateModelValuesPhase.java
 
 package com.sun.faces.lifecycle;
+
+import com.sun.faces.context.FacesContextImpl;
 
 import org.apache.cactus.WebRequest;
 
@@ -40,7 +42,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestUpdateModelValuesPhase.java,v 1.14 2002/10/07 22:58:02 jvisvanathan Exp $
+ * @version $Id: TestUpdateModelValuesPhase.java,v 1.15 2003/01/21 23:23:25 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -101,6 +103,7 @@ public void testUpdateNormal()
 				       RIConstants.UPDATE_MODEL_VALUES_PHASE);
     form = new UIForm();
     form.setComponentId("form");
+    form.setValid(true);
     userName = new TestUIInput();
     userName.setComponentId("userName");
     userName.setValue("one");
@@ -122,8 +125,7 @@ public void testUpdateNormal()
 
     tree = new XmlTreeImpl(getFacesContext(), form, 
 			   "updateModel.xul", "");
-    getFacesContext().setRequestTree(tree);
-
+    getFacesContext().setTree(tree);
     rc = updateModelValues.execute(getFacesContext());
     assertTrue(Phase.GOTO_NEXT == rc);    
 
@@ -168,7 +170,7 @@ public void testUpdateFailed()
 
     tree = new XmlTreeImpl(getFacesContext(), form,
                            "updateModel.xul", "");
-    getFacesContext().setRequestTree(tree);
+    getFacesContext().setTree(tree);
 
     // This stage will go to render, since there was at least one error
     // during component updates... 

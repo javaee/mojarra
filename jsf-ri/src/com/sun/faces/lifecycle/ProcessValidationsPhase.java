@@ -1,5 +1,5 @@
 /*
- * $Id: ProcessValidationsPhase.java,v 1.9 2003/01/17 18:07:16 rkitain Exp $
+ * $Id: ProcessValidationsPhase.java,v 1.10 2003/01/21 23:23:16 rkitain Exp $
  */
 
 /*
@@ -10,6 +10,8 @@
 // ProcessValidationsPhase.java
 
 package com.sun.faces.lifecycle;
+
+import com.sun.faces.context.FacesContextImpl;
 
 import org.mozilla.util.Assert;
 import org.mozilla.util.ParameterCheck;
@@ -29,7 +31,7 @@ import java.util.Iterator;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: ProcessValidationsPhase.java,v 1.9 2003/01/17 18:07:16 rkitain Exp $
+ * @version $Id: ProcessValidationsPhase.java,v 1.10 2003/01/21 23:23:16 rkitain Exp $
  * 
  * @see	com.sun.faces.lifecycle.DefaultLifecycleImpl
  * @see	javax.faces.lifecycle.Lifecycle#PROCESS_VALIDATIONS_PHASE
@@ -85,6 +87,12 @@ public int execute(FacesContext facesContext) throws FacesException
     Assert.assert_it(null != component);
 
     component.processValidators(facesContext);
+
+    if (((FacesContextImpl)facesContext).getResponseComplete()) {
+        return Phase.GOTO_EXIT;
+    } else if (((FacesContextImpl)facesContext).getRenderResponse()) {
+        return Phase.GOTO_RENDER;
+    }
     
     messageIter = facesContext.getMessages();
     Assert.assert_it(null != messageIter);
