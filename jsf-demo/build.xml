@@ -268,16 +268,12 @@
     <echo> copy the sample war files to the zip area </echo>
     <copy todir="${dist.home}/samples" 
           file="${basedir}/components/build/jsf-components.war"/>
-<!--
     <copy todir="${dist.home}/samples"
           file="${basedir}/cardemo/build/jsf-cardemo.war"/>
--->
     <copy todir="${dist.home}/samples" 
           file="${basedir}/guessNumber/build/jsf-guessNumber.war"/>
-<!--
     <copy todir="${dist.home}/samples" 
           file="${basedir}/nonjsp/dist/jsf-nonjsp.war"/> 
--->
     <copy todir="${dist.home}/samples" 
           file="${basedir}/standard/build/jsf-standard.war"/>
     <echo> copy the demo-components.jar </echo>
@@ -407,7 +403,6 @@
       <property name="jsf-ri.jar" 
                 value="../../jsf-ri/build/lib/jsf-ri.jar"/>
     </ant>
-<!--
     <copy todir="${basedir}/lib"
           file="components/build/${webapp}/WEB-INF/lib/demo-components.jar"/>
     <ant dir="${basedir}/cardemo">
@@ -416,7 +411,6 @@
       <property name="jsf-ri.jar" 
                 value="../../jsf-ri/build/lib/jsf-ri.jar"/>
     </ant>
--->
     <ant dir="${basedir}/helloDuke">
       <property name="jsf-api.jar" 
                 value="../../jsf-api/build/lib/jsf-api.jar"/>
@@ -429,14 +423,12 @@
       <property name="jsf-ri.jar" 
                 value="../../jsf-ri/build/lib/jsf-ri.jar"/>
     </ant>
-<!--
     <ant dir="${basedir}/nonjsp">
       <property name="jsf-api.jar" 
                 value="../../jsf-api/build/lib/jsf-api.jar"/>
       <property name="jsf-ri.jar" 
                 value="../../jsf-ri/build/lib/jsf-ri.jar"/>
     </ant>  
--->
     <ant dir="${basedir}/standard">
       <property name="jsf-api.jar" 
                 value="../../jsf-api/build/lib/jsf-api.jar"/>
