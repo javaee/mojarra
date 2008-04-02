@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationImpl.java,v 1.8 2003/05/01 06:20:38 eburns Exp $
+ * $Id: ApplicationImpl.java,v 1.9 2003/05/01 07:42:09 eburns Exp $
  */
 
 /*
@@ -263,18 +263,19 @@ public class ApplicationImpl extends Application {
     }
 
     public Iterator getComponentTypes() {
-        return null;
+        return appConfig.getComponentTypes();
     }
 
     public void addConverter(String converterId, String converterClass) {
+	appConfig.addConverter(converterId, converterClass);
     }
 
     public Converter getConverter(String converterId) throws FacesException {
-        return null;
+	return appConfig.getConverter(converterId);
     }
 
     public Iterator getConverterIds() {
-        return null;
+        return appConfig.getConverterIds();
     }
 
     public void addMessageResources(String messageResourcesId, String messageResourcesClass) {

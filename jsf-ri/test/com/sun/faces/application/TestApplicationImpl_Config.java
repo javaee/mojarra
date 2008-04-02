@@ -1,5 +1,5 @@
 /*
- * $Id: TestApplicationImpl_Config.java,v 1.1 2003/05/01 06:20:44 eburns Exp $
+ * $Id: TestApplicationImpl_Config.java,v 1.2 2003/05/01 07:42:12 eburns Exp $
  */
 
 /*
@@ -28,10 +28,17 @@ import javax.faces.event.PhaseId;
 import javax.faces.event.ActionEvent;
 import javax.faces.FactoryFinder;
 import javax.faces.component.*;
+import javax.faces.convert.Converter;
+import com.sun.faces.convert.*;
 
 import org.mozilla.util.Assert;
 import com.sun.faces.ServletFacesTestCase;
 import com.sun.faces.TestComponent;
+import com.sun.faces.TestConverter;
+import javax.faces.FacesException;
+
+import java.util.HashMap;
+import java.util.Iterator;
 
 /**
  *
@@ -39,7 +46,7 @@ import com.sun.faces.TestComponent;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestApplicationImpl_Config.java,v 1.1 2003/05/01 06:20:44 eburns Exp $
+ * @version $Id: TestApplicationImpl_Config.java,v 1.2 2003/05/01 07:42:12 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -89,7 +96,7 @@ public class TestApplicationImpl_Config extends ServletFacesTestCase {
     // Test Config related methods
     //
 
-    public void testAddComponentPositive() {
+    public void testComponentPositive() {
 	TestComponent 
 	    newTestComponent = null,
 	    testComponent = new TestComponent();
@@ -144,6 +151,152 @@ public class TestApplicationImpl_Config extends ServletFacesTestCase {
 	assertTrue(null != (uic = application.getComponent("SelectOne")));
 	assertTrue(uic instanceof UISelectOne);
 	
+    }
+	
+    public void testComponentNegative() {
+	boolean exceptionThrown = false;
+	
+	// componentType/componentClass with non-existent class
+	try {
+	    application.addComponent("William",
+				     "BillyBoy");
+	    application.getComponent("William");
+	}
+	catch (FacesException e) {
+	    exceptionThrown = true;
+	}
+	assertTrue(exceptionThrown);
+
+	// non-existent mapping
+	exceptionThrown = false;
+	try {
+	    application.getComponent("Joebob");
+	}
+	catch (FacesException e) {
+	    exceptionThrown = true;
+	}
+	assertTrue(exceptionThrown);
+	
+    }
+
+    public void testGetComponentTypes() {
+	Iterator iter = application.getComponentTypes();
+	assertTrue(null != iter);
+	String standardComponentTypes[] = {
+	    "Command",
+	    "Form",
+	    "Graphic",
+	    "Input",
+	    "NamingContainer",
+	    "Output",
+	    "Panel",
+	    "Parameter",
+	    "SelectBoolean",
+	    "SelectItem",
+	    "SelectItems",
+	    "SelectMany",
+	    "SelectOne"
+	};
+
+	while (iter.hasNext()) {
+	    assertTrue(isMember((String) iter.next(), 
+					 standardComponentTypes));
+	}
+    }
+
+    public void testConverterPositive() {
+	TestConverter 
+	    newTestConverter = null,
+	    testConverter = new TestConverter();
+	Converter conv = null;
+	
+	// runtime addition
+	
+	application.addConverter(testConverter.getConverterId(),
+				 "com.sun.faces.TestConverter");
+	assertTrue(null != (newTestConverter = (TestConverter)
+			    application.getConverter(testConverter.getConverterId())));
+	assertTrue(newTestConverter != testConverter);
+
+	// built-in components
+	assertTrue(null != (conv = application.getConverter("Date")));
+	assertTrue(conv instanceof DateConverter);
+
+	assertTrue(null != (conv = application.getConverter("DateFormat")));
+	assertTrue(conv instanceof DateConverter);
+
+	assertTrue(null != (conv = application.getConverter("DateTime")));
+	assertTrue(conv instanceof DateTimeConverter);
+
+	assertTrue(null != (conv = application.getConverter("Number")));
+	assertTrue(conv instanceof NumberConverter);
+
+	assertTrue(null != (conv = application.getConverter("NumberFormat")));
+	assertTrue(conv instanceof NumberConverter);
+
+	assertTrue(null != (conv = application.getConverter("Time")));
+	assertTrue(conv instanceof TimeConverter);
+
+	assertTrue(null != (conv = application.getConverter("Boolean")));
+	assertTrue(conv instanceof BooleanConverter);
+	
+    }
+	
+    public void testConverterNegative() {
+	boolean exceptionThrown = false;
+	
+	// componentType/componentClass with non-existent class
+	try {
+	    application.addConverter("William",
+				     "BillyBoy");
+	    application.getConverter("William");
+	}
+	catch (FacesException e) {
+	    exceptionThrown = true;
+	}
+	assertTrue(exceptionThrown);
+
+	// non-existent mapping
+	exceptionThrown = false;
+	try {
+	    application.getConverter("Joebob");
+	}
+	catch (FacesException e) {
+	    exceptionThrown = true;
+	}
+	assertTrue(exceptionThrown);
+	
+    }
+
+    public void testGetConverterIds() {
+	Iterator iter = application.getConverterIds();
+	assertTrue(null != iter);
+	String standardConverterIds[] = {
+	    "Date",
+	    "DateFormat",
+	    "DateTime",
+	    "Number",
+	    "NumberFormat",
+	    "Time",
+	    "Boolean"
+	};
+
+	while (iter.hasNext()) {
+	    assertTrue(isMember((String) iter.next(), 
+					 standardConverterIds));
+	}
+    }
+
+    protected boolean isMember(String toTest, String [] set) {
+	int 
+	    len = set.length,
+	    i = 0;
+	for (i = 0; i < len; i++) {
+	    if (set[i].equals(toTest)) {
+		return true;
+	    }
+	}
+	return false;
     }
 	
 

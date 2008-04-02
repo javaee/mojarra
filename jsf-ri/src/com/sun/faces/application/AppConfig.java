@@ -1,5 +1,5 @@
 /*
- * $Id: AppConfig.java,v 1.1 2003/05/01 06:20:37 eburns Exp $
+ * $Id: AppConfig.java,v 1.2 2003/05/01 07:42:08 eburns Exp $
  */
 
 /*
@@ -15,13 +15,16 @@ import org.mozilla.util.Assert;
 import org.mozilla.util.ParameterCheck;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import javax.faces.context.FacesContext;
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
+import javax.faces.convert.Converter;
 import javax.faces.el.PropertyNotFoundException;
 import com.sun.faces.config.ManagedBeanFactory;
 import com.sun.faces.config.ConfigBase;
 import com.sun.faces.config.ConfigComponent;
+import com.sun.faces.config.ConfigConverter;
 import com.sun.faces.util.Util;
 
 /**
@@ -29,7 +32,7 @@ import com.sun.faces.util.Util;
  *  <p>AppConfig is a helper class to the ApplicationImpl that serves as
  *  a shim between it and the config system.</p>
  *
- * @version $Id: AppConfig.java,v 1.1 2003/05/01 06:20:37 eburns Exp $
+ * @version $Id: AppConfig.java,v 1.2 2003/05/01 07:42:08 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -178,6 +181,33 @@ public AppConfig()
 	return result;
     }
 
+    void addConverter(String converterId, String converterClass) {
+	ParameterCheck.nonNull(converterId);
+	ParameterCheck.nonNull(converterClass);
+	Assert.assert_it(null != yourBase);
+
+	ConfigConverter configConverter = new ConfigConverter();
+	configConverter.setConverterId(converterId);
+	configConverter.setConverterClass(converterClass);
+	yourBase.addConverter(configConverter);
+    }
+
+    Converter getConverter(String converterId) throws FacesException {
+	ParameterCheck.nonNull(converterId);
+	Assert.assert_it(null != yourBase);
+	
+	Converter result = null;
+	ConfigConverter configConverter = null;
+	if (null == (configConverter = (ConfigConverter)
+		     yourBase.getConverters().get(converterId))) {
+	    //PENDING(edburns): i18n
+	    throw new FacesException();
+	}
+	result = (Converter) 
+	    this.newThing(configConverter.getConverterClass());
+	return result;
+    }
+    
     private Object newThing(String thingClassName) throws FacesException {
 	//PENDING(edburns): i18n
 	Class thingClass = null;
@@ -194,6 +224,17 @@ public AppConfig()
 	}
 	return result;
     }
+
+    public Iterator getComponentTypes() {
+	Assert.assert_it(null != yourBase);
+	return yourBase.getComponents().keySet().iterator();
+    }
+
+    public Iterator getConverterIds() {
+	Assert.assert_it(null != yourBase);
+	return yourBase.getConverters().keySet().iterator();
+    }
+
 
 // The testcase for this class is com.sun.faces.application.TestAppConfig.java 
 // The testcase for this class is com.sun.faces.application.TestApplicationImpl_Config.java 
