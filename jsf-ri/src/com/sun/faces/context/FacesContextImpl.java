@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContextImpl.java,v 1.73 2005/08/22 22:10:11 ofung Exp $
+ * $Id: FacesContextImpl.java,v 1.74 2005/09/13 17:15:58 rlubke Exp $
  */
 
 /*
@@ -291,6 +291,13 @@ public class FacesContextImpl extends FacesContext {
 
     public void setViewRoot(UIViewRoot root) {
         assertNotReleased();
+
+        if (root == null) {
+            throw new NullPointerException
+                (Util.getExceptionMessageString(
+                    Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        }
+        
         if (viewRoot != root) {
             facesEvents = null;
         }
