@@ -1,5 +1,5 @@
 /*
- * $Id: OutputLinkRenderer.java,v 1.6 2004/01/17 03:10:21 jvisvanathan Exp $
+ * $Id: OutputLinkRenderer.java,v 1.7 2004/01/20 15:19:50 eburns Exp $
  */
 
 /*
@@ -36,7 +36,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: OutputLinkRenderer.java,v 1.6 2004/01/17 03:10:21 jvisvanathan Exp $
+ * @version $Id: OutputLinkRenderer.java,v 1.7 2004/01/20 15:19:50 eburns Exp $
  */
 
 public class OutputLinkRenderer extends HtmlBasicRenderer {
@@ -139,7 +139,9 @@ public class OutputLinkRenderer extends HtmlBasicRenderer {
 	    sb.append("=");
 	    sb.append(paramList[i].getValue());
 	}	    
-	writer.writeURIAttribute("href", sb.toString(), "href");
+	writer.writeURIAttribute("href", 
+				 context.getExternalContext().encodeResourceURL(sb.toString()), 
+				 "href");
         Util.renderPassThruAttributes(writer, component);
         Util.renderBooleanPassThruAttributes(writer, component);
 

@@ -4,7 +4,7 @@
  Copyright 2003 Sun Microsystems, Inc. All rights reserved.
  SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 
- $Id: build-tests.xml,v 1.37 2003/12/17 15:14:28 rkitain Exp $
+ $Id: build-tests.xml,v 1.38 2004/01/20 15:19:51 eburns Exp $
 -->
 
 
@@ -464,12 +464,14 @@
       <echo message="Testing command_button..."/>
       <tester host="${host}" port="${port}" protocol="${protocol}"
               request="${context.path}/faces/taglib/command_button_test.jsp"
-              golden="${golden.path}/taglib/command_button_test.txt" failonerror="${failonerror}"/>
+              golden="${golden.path}/taglib/command_button_test.txt" failonerror="${failonerror}"
+              ignore="${ignore.path}/taglib/command_button_test.txt" />
 
       <echo message="Testing command_link..."/>
       <tester host="${host}" port="${port}" protocol="${protocol}"
               request="${context.path}/faces/taglib/command_link_test.jsp"
-              golden="${golden.path}/taglib/command_link_test.txt" failonerror="${failonerror}"/>
+              golden="${golden.path}/taglib/command_link_test.txt" failonerror="${failonerror}"
+              ignore="${ignore.path}/taglib/command_link_test.txt" />
   </target>
 
   <target name="test.verbatim"

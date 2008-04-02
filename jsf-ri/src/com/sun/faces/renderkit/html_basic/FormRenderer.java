@@ -1,5 +1,5 @@
 /*
- * $Id: FormRenderer.java,v 1.68 2004/01/17 01:21:38 jvisvanathan Exp $
+ * $Id: FormRenderer.java,v 1.69 2004/01/20 15:19:49 eburns Exp $
  */
 
 /*
@@ -32,7 +32,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: FormRenderer.java,v 1.68 2004/01/17 01:21:38 jvisvanathan Exp $ 
+ * @version $Id: FormRenderer.java,v 1.69 2004/01/20 15:19:49 eburns Exp $ 
  */
 
 public class FormRenderer extends HtmlBasicRenderer {
@@ -130,7 +130,7 @@ public class FormRenderer extends HtmlBasicRenderer {
         sb.append(context.getApplication().
                   getViewHandler().getViewIdPath(context, 
                                             context.getViewRoot().getViewId()));       
-        return (sb.toString());
+        return (context.getExternalContext().encodeActionURL(sb.toString()));
     }     
 
     public void encodeChildren(FacesContext context, UIComponent component) {

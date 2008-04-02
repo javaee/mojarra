@@ -11,7 +11,7 @@
 <body>
     
     
-      <form id="form01" method="post" action="/jsf-systest/faces/taglib/command_link_test.jsp">
+      <form id="form01" method="post" action="/jsf-systest/faces/taglib/command_link_test.jsp;jsessionid=66560F4ABCA57E8DA0E279515F1FC72B">
 
         <a id="form01:hyperlink01" href="#" onclick="document.forms['form01']['form01:hyperlink01'].value='form01:hyperlink01'; document.forms['form01'].submit()">My Link</a>
         <a id="form01:hyperlink02" href="#" onclick="document.forms['form01']['form01:hyperlink02'].value='form01:hyperlink02'; document.forms['form01'].submit()">This is a String property</a>
