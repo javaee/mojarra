@@ -11,6 +11,7 @@ RISANDBOX.Calendar = function(divId, trigger, daySelectId, monthSelectId, yearSe
     this.yearSelectId = yearSelectId;
     this.minDate = minDate;
     this.maxDate = maxDate;
+    this.startMonth = startMonth;
     this.showMenus = showMenus;
 
     var pos = YAHOO.util.Dom.getXY(trigger);
@@ -58,7 +59,7 @@ RISANDBOX.Calendar.prototype.monthChanged = function() {
     this.update();
 }
 RISANDBOX.Calendar.prototype.yearChanged = function() {
-    this.initMonthSelects();
+    this.initYearSelects();
     this.update();
 }
 RISANDBOX.Calendar.prototype.initDaySelects = function(d, m, y) {
@@ -77,12 +78,10 @@ RISANDBOX.Calendar.prototype.initDaySelects = function(d, m, y) {
         year = parseInt(yearSelect.options[yearSelect.selectedIndex].value);
     }
 
-    var option, i, len;
+    var option, i;
 
-    len = daySelect.options.length;
-    for (i=len-1; i > 0; i--) {
-        daySelect.options[i] = null;
-    }
+    daySelect.options.length=1;
+
     var maxDays = this.getMaxDays(month, year);
     var minDays = this.getMinDays(month, year);
     if (day > maxDays) {
@@ -114,14 +113,12 @@ RISANDBOX.Calendar.prototype.initMonthSelects = function(d, m, y) {
         year = parseInt(yearSelect.options[yearSelect.selectedIndex].value);
     }
 
-    var option, i, len;
+    var option, i;
 
     var monthNames = new Array("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December");
   
-    len = monthSelect.options.length;
-    for (i=len-1; i > 0; i--) {
-        monthSelect.options[i] = null;
-    }
+    monthSelect.options.length=1;
+
     var maxMonths = this.getMaxMonths(year);
     var minMonths = this.getMinMonths(year);
     if (month > maxMonths ) {
@@ -139,6 +136,8 @@ RISANDBOX.Calendar.prototype.initMonthSelects = function(d, m, y) {
 }
 
 RISANDBOX.Calendar.prototype.initYearSelects = function(d, m, y) {
+    var daySelect = YAHOO.util.Dom.get(this.daySelectId);
+    var monthSelect = YAHOO.util.Dom.get(this.monthSelectId);
     var yearSelect = YAHOO.util.Dom.get(this.yearSelectId);
 
     var day, month, year;
@@ -152,12 +151,112 @@ RISANDBOX.Calendar.prototype.initYearSelects = function(d, m, y) {
         year = parseInt(yearSelect.options[yearSelect.selectedIndex].value);
     }
 
-    for (var i=0; i < yearSelect.length; i++) { 
-        if (yearSelect.options[i].value == year) {
-            yearSelect.options[i].selected = true;
+    var option, i;
+
+    yearSelect.options.length=1;
+
+    var maxYears = this.getMaxYears(year);
+    var minYears = this.getMinYears(year);
+    if (year > maxYears ) {
+        year = maxYears;
+    } else if  (year < minYears ) {
+        year = minYears;
+    }
+
+    for (i=minYears; i < maxYears +1; i++) { 
+        yearSelect.options[yearSelect.length] = new Option(i,i);
+        if (i == year) {
+            yearSelect.options[yearSelect.length - 1].selected = true;
         }
     }  
     this.initMonthSelects(day, month, year);
+}
+
+RISANDBOX.Calendar.prototype.getMinDays = function(month, year) {
+        var defaultValue = 1;
+        if (isNaN(month)) {
+            return defaultValue;
+        }
+        if (year == this.minDate.substring(6) && month == this.minDate.substring(0,2)) {
+            var min = this.minDate.substring(3,5);
+            if (!isNaN(min) && min != "") {
+                return parseInt(min);
+            }
+        }	
+	return defaultValue;
+}
+RISANDBOX.Calendar.prototype.getMaxDays = function(month, year) {
+        var defaultValue = 31;
+        if (isNaN(month)) {
+            return defaultValue;
+        }
+        var max = defaultValue;
+        if (year == this.maxDate.substring(6) && month == this.maxDate.substring(0,2)) {
+            var maxDay = this.maxDate.substring(3,5);
+            if (!isNaN(maxDay) && maxDay != "") {
+                max = parseInt(maxDay);
+            }
+        }
+
+	var monthLength = new Array(31,28,31,30,31,30,31,31,30,31,30,31);	
+        monthLength[1] = ( year%4==0 && (year%100!=0 || year%400==0) ) ? 29 : 28;
+
+        if ( max < monthLength[month-1]) {
+            return max;
+        } 
+        return monthLength[month-1];
+}
+RISANDBOX.Calendar.prototype.getMinMonths = function(year) {
+        var defaultValue = 1;
+        if (isNaN(year)) {
+            return defaultValue;
+        }	
+        if (year == this.minDate.substring(6)) {
+            var min = this.minDate.substring(0,2);
+            if (!isNaN(min) && min != "") {
+                return parseInt(min);
+            }
+        }
+	return defaultValue;
+}
+RISANDBOX.Calendar.prototype.getMaxMonths = function(year) {
+        var defaultValue = 12;
+        if (isNaN(year)) {
+            return defaultValue;
+        }	
+        if (year == this.maxDate.substring(6)) {
+            var max = this.maxDate.substring(0,2);
+            if (!isNaN(max) && max != "") {
+                return parseInt(max);
+            }
+        }
+	return defaultValue;
+}
+
+RISANDBOX.Calendar.prototype.getMinYears = function(year) {
+        var defaultValue = parseInt(this.startMonth.substring(3,7)) - 50;
+        var min = this.minDate.substring(6,10);
+        if (!isNaN(min) && min != "") {
+            return parseInt(min);
+        }
+
+        if (isNaN(year)) {
+            return defaultValue;
+        }	
+	return parseInt(year) - 50;
+}
+
+RISANDBOX.Calendar.prototype.getMaxYears = function(year) {
+        var defaultValue = parseInt(this.startMonth.substring(3,7)) + 50;
+        var max = this.maxDate.substring(6,10);
+        if (!isNaN(max) && max != "") {
+            return parseInt(max);
+        } 
+
+        if (isNaN(year)) {
+            return defaultValue
+        }	
+	return parseInt(year) + 50;
 }
 
 RISANDBOX.Calendar.prototype.toggle = function() {
@@ -200,63 +299,6 @@ RISANDBOX.Calendar.prototype.update = function () {
     }
 }
 
-RISANDBOX.Calendar.prototype.getMinDays = function(month, year) {
-        if (isNaN(month)) {
-            return 1;
-        }
-        if (year == this.minDate.substring(6) && month == this.minDate.substring(0,2)) {
-            var minDay = this.minDate.substring(3,5);
-            if (!isNaN(minDay)) {
-                return parseInt(minDay);
-            }
-        }	
-	return 1;
-}
-RISANDBOX.Calendar.prototype.getMaxDays = function(month, year) {
-        if (isNaN(month)) {
-            return 31;
-        }
-        var max = 31;
-        if (year == this.maxDate.substring(6) && month == this.maxDate.substring(0,2)) {
-            var maxDay = this.maxDate.substring(3,5);
-            if (!isNaN(maxDay)) {
-                max = parseInt(maxDay);
-            }
-        }
-
-	var monthLength = new Array(31,28,31,30,31,30,31,31,30,31,30,31);	
-        monthLength[1] = ( year%4==0 && (year%100!=0 || year%400==0) ) ? 29 : 28;
-
-        if ( max < monthLength[month-1]) {
-            return max;
-        } 
-        return monthLength[month-1];
-}
-RISANDBOX.Calendar.prototype.getMinMonths = function(year) {
-        if (isNaN(year)) {
-            return 1;
-        }	
-        if (year == this.minDate.substring(6)) {
-            var minMon = this.minDate.substring(0,2);
-            if (!isNaN(minMon)) {
-                return parseInt(minMon);
-            }
-        }
-	return 1;
-}
-RISANDBOX.Calendar.prototype.getMaxMonths = function(year) {
-        if (isNaN(year)) {
-            return 12;
-        }	
-        if (year == this.maxDate.substring(6)) {
-            var maxMon = this.maxDate.substring(0,2);
-            if (!isNaN(maxMon)) {
-                return parseInt(maxMon);
-            }
-        }
-	return 12;
-}
-
 YAHOO.widget.Calendar.prototype.onSelect = function() {
         if (this.risandbox.showMenus == true) {
             var daySelect = YAHOO.util.Dom.get(this.risandbox.daySelectId);
@@ -268,53 +310,13 @@ YAHOO.widget.Calendar.prototype.onSelect = function() {
             var month = selDate.getMonth();
             var year = selDate.getFullYear();
 
-            var yearOrMonthChanged = false;
-            if (! isNaN(year)) {
-                for (var y=0;y<yearSelect.options.length;y++) {
-                    if (yearSelect.options[y].value == year) {
-                        if (yearSelect.options[y].selected != true) {                        
-                            yearSelect.options[y].selected = true;
-                            yearOrMonthChanged = true;
-                            if (yearSelect.onchange) {
-                                yearSelect.onchange();
-                            }                     
-                        }
-                        break;
-                    }
-                }
+            if (year != yearSelect.value) {
+                this.risandbox.initYearSelects(day, month+1, year);  
+            } else if (month != monthSelect.value) {
+                this.risandbox.initMonthSelects(day, month+1, year);  
+            } else  if (day != daySelect.value) {
+                this.risandbox.initDaySelects(day, month+1, year);  
             }
-            if (! isNaN(month)) {
-                for (var i=0;i<monthSelect.options.length;i++) {
-                    if (monthSelect.options[i].value == month) {
-                        if (monthSelect.options[i].selected != true) {                        
-                            monthSelect.options[i].selected = true;
-                            yearOrMonthChanged = true;
-                            if (monthSelect.onchange) {
-                                monthSelect.onchange();
-                            }                     
-                        }
-                        break;
-                    }
-                }
-            }
-            if (! isNaN(day)) {
-                for (var i=0;i<daySelect.options.length;i++) {
-                    if (daySelect.options[i].value == day) {
-                        if (daySelect.options[i].selected != true) {                        
-                            daySelect.options[i].selected = true;
-                            if (daySelect.onchange) {
-                                daySelect.onchange();
-                            }                     
-                        }
-                        break;
-                    }
-                }
-            }
-            // If the year or month changed, then we need to recreate the <select> menus.
-            if (yearOrMonthChanged == true) {        
-                this.risandbox.initMonthSelects();                                       
-            }
-
         } else {
             var inputField = YAHOO.util.Dom.get(this.risandbox.clientId);
             inputField.value = this.formatDate();

@@ -45,6 +45,10 @@ public class TestBean {
 
         tree.getChildren().add(node1);
         tree.getChildren().add(node2);
+
+        Calendar tempcal = Calendar.getInstance();
+        tempcal.set(1974, 11, 23);
+        date2 = tempcal.getTime();
     }
 
     public Date getDate() {
@@ -56,9 +60,6 @@ public class TestBean {
     }
 
     public Date getDate2() {
-        Calendar tempcal = Calendar.getInstance();
-        tempcal.set(1974, 11, 23);
-        date2 = tempcal.getTime();
         return date2;
     }
 

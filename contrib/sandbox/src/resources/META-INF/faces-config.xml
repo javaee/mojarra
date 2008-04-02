@@ -26,10 +26,15 @@
 -->
 
 <faces-config xmlns="http://java.sun.com/xml/ns/javaee" 
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-    xmlns:xi="http://www.w3.org/2001/XInclude" 
-    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_1_2.xsd" 
-    version="1.2">
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+              xmlns:xi="http://www.w3.org/2001/XInclude" 
+              xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_1_2.xsd" 
+              version="1.2">
+    
+    <application>
+        <message-bundle>com.sun.faces.sandbox.Messages</message-bundle>
+    </application>
+    
     <lifecycle>
         <phase-listener>com.sun.faces.sandbox.util.MultiFileUploadPhaseListener</phase-listener>
         <phase-listener>com.sun.faces.sandbox.util.DownloadPhaseListener</phase-listener>
@@ -86,14 +91,14 @@
             <renderer-class>com.sun.faces.sandbox.render.YuiTreeNodeRenderer</renderer-class>
         </renderer>
     </render-kit>
-
+    
     <!-- *************************** YUI Calendar *************************** -->
     <component>                                                                                
         <component-type>com.sun.faces.sandbox.YuiCalendar</component-type>
         <component-class>com.sun.faces.sandbox.component.YuiCalendar</component-class>
         <property>
             <description>
-              	 Determines whether to hide extra weeks that are completely outside the current month.
+                Determines whether to hide extra weeks that are completely outside the current month.
             </description>
             <display-name>Hide Blank Weeks</display-name>
             <icon />
@@ -105,7 +110,7 @@
         </property>
         <property>
             <description>
-                 Determines whether the Calendar should allow for the selection of multiple dates.
+                Determines whether the Calendar should allow for the selection of multiple dates.
             </description>
             <display-name>Multi-Select</display-name>
             <icon />
@@ -117,7 +122,7 @@
         </property>
         <property>
             <description>
-                 Allows the user to wire in a custom on change event handler.
+                Allows the user to wire in a custom on change event handler.
             </description>
             <display-name>On Change Event Handler</display-name>
             <icon />
@@ -129,7 +134,7 @@
         </property>
         <property>
             <description>
-                 Determines whether to display the weekday headers.
+                Determines whether to display the weekday headers.
             </description>
             <display-name>Show Weekdays</display-name>
             <icon />
@@ -141,7 +146,7 @@
         </property>
         <property>
             <description>
-                  Determines whether to display row footers.
+                Determines whether to display row footers.
             </description>
             <display-name>Show Week Footer</display-name>
             <icon />
@@ -153,7 +158,7 @@
         </property>
         <property>
             <description>
-                  Determines whether to display row headers.
+                Determines whether to display row headers.
             </description>
             <display-name>Show Week Header</display-name>
             <icon />
@@ -165,7 +170,7 @@
         </property>
         <property>
             <description>
-                  0-6, representing the day that a week begins on.
+                0-6, representing the day that a week begins on.
             </description>
             <display-name>Start Weekday</display-name>
             <icon />
@@ -175,7 +180,7 @@
                 <value-expression-enabled>true</value-expression-enabled>
             </property-extension>
         </property>
-
+        
         <component-extension>
             <renderer-type>com.sun.faces.sandbox.YuiCalendarRenderer</renderer-type>
         </component-extension>                                                                                
@@ -210,7 +215,7 @@
         <component-type>com.sun.faces.sandbox.YuiMenuItem</component-type>
         <component-class>com.sun.faces.sandbox.component.YuiMenuItem</component-class>
     </component>
-
+    
     <!-- *************************** YUI Context Menu *************************** -->
     <component>
         <component-type>com.sun.faces.sandbox.YuiContextMenu</component-type>
@@ -253,7 +258,7 @@
             <renderer-type>com.sun.faces.sandbox.FileDownloadRenderer</renderer-type>
         </component-extension>
     </component>
-
+    
     <render-kit>
         <description>Renderkit implementation for the Download component</description>
         <renderer>
@@ -272,7 +277,7 @@
             <renderer-type>com.sun.faces.sandbox.MultiFileUploadRenderer</renderer-type>
         </component-extension>
     </component>
-
+    
     <render-kit>
         <description>Renderkit implementation for the MultiFileUpload component</description>
         <renderer>
@@ -281,7 +286,7 @@
             <renderer-class>com.sun.faces.sandbox.render.MultiFileUploadRenderer</renderer-class>
         </renderer>
     </render-kit>
-
+    
     <component>
         <description></description>
         <display-name>TabView</display-name>
@@ -291,7 +296,7 @@
             <renderer-type>com.sun.faces.sandbox.YuiTabViewRenderer</renderer-type>
         </component-extension>
     </component>
-
+    
     <render-kit>
         <description>Renderkit implementation for the TabView component</description>
         <renderer>
@@ -300,7 +305,7 @@
             <renderer-class>com.sun.faces.sandbox.render.YuiTabViewRenderer</renderer-class>
         </renderer>
     </render-kit>
-
+    
     <component>
         <description></description>
         <display-name>Tab</display-name>
@@ -310,7 +315,7 @@
             <renderer-type>com.sun.faces.sandbox.YuiTabRenderer</renderer-type>
         </component-extension>
     </component>
-
+    
     <render-kit>
         <description>Renderkit implementation for the Tab component</description>
         <renderer>

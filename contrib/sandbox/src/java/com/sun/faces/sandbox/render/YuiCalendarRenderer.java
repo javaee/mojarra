@@ -7,8 +7,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
 import java.util.TimeZone;
-import javax.faces.application.FacesMessage;
 
+import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.component.ValueHolder;
 import javax.faces.context.FacesContext;
@@ -22,6 +22,7 @@ import org.apache.shale.remoting.Mechanism;
 import com.sun.faces.sandbox.component.YuiCalendar;
 import com.sun.faces.sandbox.util.Util;
 import com.sun.faces.sandbox.util.YuiConstants;
+import com.sun.faces.sandbox.util.MessageFactory;
 
 /**
  * @author Jason Lee
@@ -40,58 +41,27 @@ public class YuiCalendarRenderer extends HtmlBasicRenderer {//Renderer {
     private static final String DATE_FORMAT = "yyyy/MM/dd";
     private static final String DATE_FORMAT_YAHOO = "MM/dd/yyyy";
     
-    // Can't be final, but treat as if they were.
-    private int MIN_YEAR = 1900;
-    private int MAX_YEAR = 2100;
-    
-    private Date minDate;
-    private String minDateString;
-    private Date maxDate;
-    private String maxDateString;
-    
     public YuiCalendarRenderer() {
-        Calendar tempcal = Calendar.getInstance();
-        MIN_YEAR = tempcal.get(Calendar.YEAR) - 100;
-        MAX_YEAR = tempcal.get(Calendar.YEAR) + 100;
-        minDateString = "01/01/" + MIN_YEAR;
-        maxDateString = "12/31/" + MAX_YEAR;
     }
     
     public void encodeBegin(FacesContext context, UIComponent component)
     throws IOException {
-        
-        YuiCalendar cal = (YuiCalendar) component;
-
-        if (null != cal.getMinDate()) {
-            minDateString = cal.getMinDate();
-        }        
-        if (null != cal.getMaxDate()) {
-            maxDateString = cal.getMaxDate();
-        }
-        
         Calendar tempcal = Calendar.getInstance();
-        SimpleDateFormat format = new SimpleDateFormat(DATE_FORMAT_YAHOO);
-        try {
-            tempcal.setTime(format.parse(minDateString));
-            minDate = tempcal.getTime();
-            tempcal.setTime(format.parse(maxDateString));
-            maxDate = tempcal.getTime();
-        } catch(ParseException e) {
-            throw new IllegalArgumentException("Invalid mindate or maxdate", e);
-        }
+        YuiCalendar cal = (YuiCalendar) component;
         
-        if (null != cal.getValue()) {
-            Date date = (Date) cal.getValue();
-            if (date.before(minDate) || date.after(maxDate)) {
-                addErrorMessage(context, cal.getClientId(context));
-            }
-        }
+        SimpleDateFormat format = new SimpleDateFormat(DATE_FORMAT);
+        
+        if (null != cal.getValue() && cal.getValue() instanceof Date) {
+            Date oldDate = (Date) cal.getValue();
+            tempcal.setTime(oldDate);
+        }        
         
         for (int i = 0; i < scriptIds.length; i++) {
             Util.getXhtmlHelper().linkJavascript(context, component,
                     context.getResponseWriter(), Mechanism.CLASS_RESOURCE,
                     scriptIds[i]);
         }
+        
         for (int i = 0; i < cssIds.length; i++) {
             Util.getXhtmlHelper().linkStylesheet(context, component,
                     context.getResponseWriter(), Mechanism.CLASS_RESOURCE,
@@ -174,18 +144,6 @@ public class YuiCalendarRenderer extends HtmlBasicRenderer {//Renderer {
         writer.writeText("Year", null);
         writer.endElement("option");
         
-        Calendar tempcal = Calendar.getInstance();
-        tempcal.setTime(minDate);
-        int minYear = tempcal.get(Calendar.YEAR);
-        tempcal.setTime(maxDate);
-        int maxYear = tempcal.get(Calendar.YEAR);
-        
-        for (int i = minYear; i < maxYear+1; i++) {
-            writer.startElement("option", component);
-            writer.writeAttribute("value", i, null);
-            writer.writeText(i, null);
-            writer.endElement("option");
-        }
         writer.endElement("select");
     }
     
@@ -194,6 +152,8 @@ public class YuiCalendarRenderer extends HtmlBasicRenderer {//Renderer {
         String clientId = component.getClientId(context);
         YuiCalendar cal = (YuiCalendar) component;
         Date date = (Date) cal.getValue();
+        String minDateString = cal.getMinDate();
+        String maxDateString = cal.getMaxDate();
         
         String javaScript = String.format("new RISANDBOX.Calendar('%sContainer','%sTrigger', '%sDay', '%sMonth', '%sYear','%s','%s','%s',%s,%s,%s,%s,%s,%s,'%s','%s',%s);",
                 component.getId(), component.getId(), clientId, clientId, clientId, clientId,
@@ -258,8 +218,28 @@ public class YuiCalendarRenderer extends HtmlBasicRenderer {//Renderer {
         Map<String, String> requestMap = context.getExternalContext().getRequestParameterMap();
         
         Calendar tempcal = Calendar.getInstance();
-        SimpleDateFormat format = new SimpleDateFormat();
         Date newDate = null;
+        
+        SimpleDateFormat format = new SimpleDateFormat(DATE_FORMAT_YAHOO);
+        Date minDate = null;
+        if (null != cal.getMinDate()) {
+            try {
+                tempcal.setTime(format.parse(cal.getMinDate()));
+                minDate = tempcal.getTime();
+            } catch(ParseException e) {
+                throw new IllegalArgumentException("Invalid mindate", e);
+            }
+        }
+        Date maxDate = null;
+        if (null != cal.getMaxDate()) {
+            try {
+                tempcal.setTime(format.parse(cal.getMaxDate()));
+                maxDate = tempcal.getTime();
+            } catch(ParseException e) {
+                throw new IllegalArgumentException("Invalid maxdate", e);
+            }
+        }
+        format.applyPattern(DATE_FORMAT);
         
         if (Boolean.TRUE.equals(cal.getShowMenus()==true)) {
             String daySelectId = clientId + "Day";
@@ -275,22 +255,34 @@ public class YuiCalendarRenderer extends HtmlBasicRenderer {//Renderer {
                 String d = requestMap.get(daySelectId);
                 
                 if ("".equals(d) || "".equals(m) || "".equals(y)) {
-                    if ("".equals(d) && "".equals(m) && "".equals(y) && Boolean.FALSE.equals(cal.isRequired()==true)) {
-                        return;
+                    if ("".equals(d) && "".equals(m) && "".equals(y)) {
+                        if ( Boolean.TRUE.equals(cal.isRequired()==true)) {
+                            addRequiredMessage(context, cal);
+                        } else {
+                            cal.setSubmittedValue(null);
+                        }
+                    } else {
+                        addInvalidMessage(context, cal);
+                        cal.setSubmittedValue(null);
                     }
-                    // TODO use requiredMessage
-                    addErrorMessage(context, clientId);
                     return;
                 }
                 
                 tempcal.set((int) Integer.parseInt(y), (int) Integer.parseInt(m),(int) Integer.parseInt(d));
                 newDate = tempcal.getTime();
-                if (newDate.before(minDate) || newDate.after(maxDate)) {
-                    addErrorMessage(context, clientId);
-                    return;
+                if (null != minDate) {
+                    if (newDate.before(minDate)) {
+                        addInvalidMessage(context, cal);
+                        return;
+                    }
+                }
+                if (null != maxDate) {
+                    if (newDate.after(maxDate)) {
+                        addInvalidMessage(context, cal);
+                        return;
+                    }
                 }
                 
-                format.applyPattern(DATE_FORMAT);
                 String newValue = format.format(newDate);
                 cal.setSubmittedValue(newValue);
             }
@@ -298,7 +290,6 @@ public class YuiCalendarRenderer extends HtmlBasicRenderer {//Renderer {
             // Don't overwrite the value unless you have to!
             if (requestMap.containsKey(clientId)) {
                 String newValue = requestMap.get(clientId);
-                format.applyPattern(DATE_FORMAT);
                 
                 try {
                     newDate = format.parse(newValue);
@@ -306,11 +297,18 @@ public class YuiCalendarRenderer extends HtmlBasicRenderer {//Renderer {
                     throw new IllegalStateException("Could not parse submitted date value", pe);
                 }
                 
-                if (newDate.before(minDate) || newDate.after(maxDate)) {
-                    addErrorMessage(context, clientId);
-                    return;
+                if (null != minDate) {
+                    if (newDate.before(minDate)) {
+                        addInvalidMessage(context, cal);
+                        return;
+                    }
                 }
-                
+                if (null != maxDate) {
+                    if (newDate.after(maxDate)) {
+                        addInvalidMessage(context, cal);
+                        return;
+                    }
+                }
                 cal.setSubmittedValue(newValue);
             }
         }
@@ -338,9 +336,33 @@ public class YuiCalendarRenderer extends HtmlBasicRenderer {//Renderer {
         return getConverter(context, component).getAsString(context, component, ((YuiCalendar)component).getValue());
     }
     
-    private void addErrorMessage(FacesContext context, String clientId) {
-        // TODO Move to resource bundle
-        FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "invalid date", "invalid date");
-        context.addMessage(clientId, msg);
+    private void addUpdateMessage(FacesContext context, YuiCalendar cal) {
+        FacesMessage message = MessageFactory.getMessage(context, cal.UPDATE_MESSAGE_ID, MessageFactory.getLabel(context, cal));
+        context.addMessage(cal.getClientId(context), message);
+    }
+    
+    private void addRequiredMessage(FacesContext context, YuiCalendar cal) {
+        FacesMessage message;
+        if (null != cal.getRequiredMessage()) {
+            message = new FacesMessage(cal.getRequiredMessage());
+        } else {
+            message = MessageFactory.getMessage(context, cal.REQUIRED_MESSAGE_ID, MessageFactory.getLabel(context, cal));
+        }
+        context.addMessage(cal.getClientId(context), message);
+    }
+    
+    private void addConversionMessage(FacesContext context, YuiCalendar cal) {
+        FacesMessage message;
+        if (null != cal.getConverterMessage()) {
+            message = new FacesMessage(cal.getConverterMessage());
+        } else {
+            message = MessageFactory.getMessage(context, cal.CONVERSION_MESSAGE_ID, MessageFactory.getLabel(context, cal));
+        }
+        context.addMessage(cal.getClientId(context), message);
+    }
+    
+    private void addInvalidMessage(FacesContext context, YuiCalendar cal) {
+        FacesMessage message = MessageFactory.getMessage(context, cal.INVALID_MESSAGE_ID, MessageFactory.getLabel(context, cal));
+        context.addMessage(cal.getClientId(context), message);
     }
 }

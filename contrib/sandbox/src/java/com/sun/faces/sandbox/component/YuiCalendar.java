@@ -6,8 +6,44 @@ import javax.faces.context.FacesContext;
  * @author Jason Lee
  */
 public class YuiCalendar extends UIInput {
+    
+        /**
+     * <p>The standard component type for this component.</p>
+     */
     public static final String COMPONENT_TYPE = "com.sun.faces.sandbox.YuiCalendar";
+
+    /**
+     * <p>The standard component family for this component.</p>
+     */
     public static final String RENDERER_TYPE = "com.sun.faces.sandbox.YuiCalendarRenderer";
+
+    /**
+     * <p>The message identifier of the
+     * {@link javax.faces.application.FacesMessage} to be created if
+     * a conversion error occurs, and neither the page author nor
+     * the {@link ConverterException} provides a message.</p>
+     */
+    public static final String CONVERSION_MESSAGE_ID = "com.sun.faces.sandbox.YuiCalendar.CONVERSION";
+
+
+    /**
+     * <p>The message identifier of the
+     * {@link javax.faces.application.FacesMessage} to be created if
+     * a required check fails.</p>
+     */
+    public static final String REQUIRED_MESSAGE_ID = "com.sun.faces.sandbox.YuiCalendar.REQUIRED";
+
+    /**
+     * <p>The message identifier of the
+     * {@link javax.faces.application.FacesMessage} to be created if
+     * a model update error occurs, and the thrown exception has
+     * no message.</p>
+     */
+    public static final String UPDATE_MESSAGE_ID = "com.sun.faces.sandbox.YuiCalendar.UPDATE";    
+    
+    public static final String INVALID_MESSAGE_ID = "com.sun.faces.sandbox.YuiCalendar.INVALID";       
+    
+
     private Object[] _state = null;
     protected Boolean hideBlankWeeks = false;
     protected String language = null;
@@ -21,8 +57,14 @@ public class YuiCalendar extends UIInput {
     protected String minDate = null;
     protected String maxDate = null;
     
-    public YuiCalendar() { setRendererType(RENDERER_TYPE); }
-    public String getFamily() { return COMPONENT_TYPE; }
+    public YuiCalendar() { 
+        super();
+        setRendererType(RENDERER_TYPE); 
+    }
+    
+    public String getFamily() { 
+        return COMPONENT_TYPE; 
+    }
     
     public Boolean getHideBlankWeeks() { return ComponentHelper.getValue(this, "hideBlankWeeks", hideBlankWeeks); }
     public Boolean getMultiSelect()    { return ComponentHelper.getValue(this, "multiSelect", multiSelect); }
@@ -46,6 +88,8 @@ public class YuiCalendar extends UIInput {
     public void setMaxDate(String maxDate)                { this.maxDate = maxDate; }
     public void setShowMenus(Boolean showMenus)       { this.showMenus = showMenus; }
 
+
+    
     public void restoreState(FacesContext _context, Object _state) {
         this._state = (Object[]) _state;
         super.restoreState(_context, this._state[0]);
