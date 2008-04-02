@@ -1,5 +1,5 @@
 /*
- * $Id: BaseCommandRenderer.java,v 1.1 2003/07/29 16:25:21 rlubke Exp $
+ * $Id: BaseCommandRenderer.java,v 1.2 2003/08/27 22:52:56 eburns Exp $
  */
 
 /*
@@ -29,7 +29,8 @@ public abstract class BaseCommandRenderer extends HtmlBasicRenderer {
      * the key specified by the <code>imageKey</code> attribute.
      * @param context current FacesContext
      * @param component UIComponent
-     * @return the path for this image, or null if it cannot be determined
+     * @return a non-encoded the path for this image, or null if it
+     * cannot be determined
      */
     protected String getImageSrc(FacesContext context,
                                  UIComponent component) {
@@ -53,8 +54,6 @@ public abstract class BaseCommandRenderer extends HtmlBasicRenderer {
             sb.append(context.getExternalContext().getRequestContextPath());
         }
         sb.append(result);
-        // PENDING (rlubke) Do we need to encode a path to an image?
-        //return (context.getExternalContext().encodeURL(sb.toString()));
         return(sb.toString());
 
     }

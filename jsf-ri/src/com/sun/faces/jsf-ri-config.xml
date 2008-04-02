@@ -135,7 +135,6 @@
   </converter>
 
   <!-- standard message-resources --> 
-  <!-- PENDING(edburns): move the JSFMessages*.xml content into here -->
  
   <message-resources>
     <message-resources-id>javax.faces.context.FACES_API_MESSAGES</message-resources-id>
@@ -279,7 +278,6 @@
   </message-resources>
 
   <!-- RI messages -->
-  <!-- PENDING(edburns): move the JSFImplMessages*.xml content into here -->
 
   <message-resources>
     <message-resources-id>javax.faces.context.FACES_IMPL_MESSAGES</message-resources-id>

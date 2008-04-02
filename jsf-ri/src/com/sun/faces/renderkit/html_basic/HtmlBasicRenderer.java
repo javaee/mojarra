@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderer.java,v 1.51 2003/08/25 05:39:45 eburns Exp $
+ * $Id: HtmlBasicRenderer.java,v 1.52 2003/08/27 22:52:57 eburns Exp $
  */
 
 /*
@@ -108,34 +108,6 @@ public abstract class HtmlBasicRenderer extends Renderer {
 
     //
     // Methods From Renderer
-    // PENDING: what if named attriubte doesn't exist? should exception be thrown?
-    //
-    public Iterator getAttributeNames(UIComponent component) {
-
-        if (component == null) {
-            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_COMPONENT_ERROR_MESSAGE_ID));
-        }
-
-        return attributeTable != null? attributeTable.keySet().iterator() : emptyIterator();
-    }
-
-    public Iterator getAttributeNames(String componentType) {
-
-        if (componentType == null) {
-            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
-        }
-
-        return attributeTable != null? attributeTable.keySet().iterator() : emptyIterator();
-
-    }
-
-    private Iterator emptyIterator() {
-	return new Iterator() {
-	               public boolean hasNext() {return false;}
-                       public Object next() {throw new NoSuchElementException();}
-                       public void remove() {}
-	    };
-    }
 
     public void addConversionErrorMessage( FacesContext facesContext, 
             UIComponent comp, String errorMessage ) {
