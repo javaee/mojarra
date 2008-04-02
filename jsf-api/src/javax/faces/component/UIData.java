@@ -52,8 +52,8 @@ import javax.faces.context.FacesContext;
 import javax.faces.el.ValueBinding;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.FacesEvent;
+import javax.faces.event.FacesListener;
 import javax.faces.event.PhaseId;
-import javax.faces.event.RepeaterEvent;
 import javax.faces.model.ArrayDataModel;
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
@@ -79,7 +79,7 @@ import javax.faces.model.ScalarDataModel;
  */
 
 public class UIData extends UIComponentBase
-    implements NamingContainer, Repeater, ValueHolder {
+    implements NamingContainer, ValueHolder {
 
 
     // ------------------------------------------------------------ Constructors
@@ -511,8 +511,8 @@ public class UIData extends UIComponentBase
 
     /**
      * <p>Override the default {@link UIComponentBase#queueEvent} processing
-     * to wrap any queued events in a {@link RepeaterEvent} so that the current
-     * row index can be restored.
+     * to wrap any queued events in a wrapper so that we can reset the current
+     * row index in <code>broadcast()</code>.</p>
      *
      * @param event {@link FacesEvent} to be queued
      *
@@ -523,19 +523,16 @@ public class UIData extends UIComponentBase
      */
     public void queueEvent(FacesEvent event) {
 
-        super.queueEvent(new RepeaterEvent(this, event, getRowIndex()));
+        super.queueEvent(new WrapperEvent(this, event, getRowIndex()));
 
     }
 
 
     /**
      * <p>Override the default {@link UIComponentBase#broadcast} processing
-     * to unwrap any {@link RepeaterEvent} and reset the current row index,
-     * and optionally expose the data object for the current row as a
-     * request attribute under the key specified by the <code>var</code>
-     * property (if any), before the event is actually broadcast.  The default
-     * processing will be performed on non-{@link RepeaterEvent} events sent
-     * from this component.</p>
+     * to unwrap any wrapped {@link FacesEvent} and reset the current row index,
+     * before the event is actually broadcast.  For events that we did not wrap
+     * (in <code>queueEvent()</code>), default processing will occur.</p>
      *
      * @param event The {@link FacesEvent} to be broadcast
      * @param phaseId The {@link PhaseId} of the current phase of the
@@ -554,37 +551,22 @@ public class UIData extends UIComponentBase
     public boolean broadcast(FacesEvent event, PhaseId phaseId)
 	throws AbortProcessingException {
 
-	if (!(event instanceof RepeaterEvent)) {
+	if (!(event instanceof WrapperEvent)) {
 	    return (super.broadcast(event, phaseId));
 	}
 
 	// Set up the correct context and fire our wrapped event
-	RepeaterEvent revent = (RepeaterEvent) event;
-	Map requestMap =
-	    FacesContext.getCurrentInstance().getExternalContext().
-            getRequestMap();
-	String var = getVar();
-	Object old = null;
-	if (var != null) {
-	    old = requestMap.get(var);
-	}
+	WrapperEvent revent = (WrapperEvent) event;
+        int oldRowIndex = getRowIndex();
 	setRowIndex(revent.getRowIndex());
-	if (var != null) {
-	    requestMap.put(var, getRowData());
-	}
 	FacesEvent rowEvent = revent.getFacesEvent();
 	boolean returnValue =
             rowEvent.getComponent().broadcast(rowEvent, phaseId);
-	if (var != null) {
-	    if (old != null) {
-		requestMap.put(var, old);
-	    } else {
-		requestMap.remove(var);
-	    }
-	}
+        setRowIndex(oldRowIndex);
 	return (returnValue);
 
     }
+
 
     /**
      * @exception NullPointerException {@inheritDoc}     
@@ -765,7 +747,6 @@ public class UIData extends UIComponentBase
      */
     private void restoreDescendantState() {
 
-        // System.err.println("restoreDescendantState(" + rowIndex + ")");
         FacesContext context = FacesContext.getCurrentInstance();
         Iterator kids = getChildren().iterator();
         while (kids.hasNext()) {
@@ -774,7 +755,6 @@ public class UIData extends UIComponentBase
                 restoreDescendantState(kid, context);
             }
         }
-        // System.err.println("retoreDescendantState(COMPLETED)");
 
     }
 
@@ -792,19 +772,15 @@ public class UIData extends UIComponentBase
         // Restore state for this component
         if (component instanceof ValueHolder) {
             String clientId = component.getClientId(context);
-            // System.err.println("  clientId=" + clientId);
             SavedState state = (SavedState) saved.get(clientId);
             if (state == null) {
                 state = new SavedState();
             }
-            // System.err.println("     value=" + state.getValue());
             ((ValueHolder) component).setValue(state.getValue());
             if (component instanceof ConvertibleValueHolder) {
-                // System.err.println("     valid=" + state.isValid());
                 ((ConvertibleValueHolder) component).setValid(state.isValid());
             }
             if (component instanceof UIInput) {
-                // System.err.println("      prev=" + state.getPrevious());
                 ((UIInput) component).setPrevious(state.getPrevious());
             }
         }
@@ -825,7 +801,6 @@ public class UIData extends UIComponentBase
      */
     private void saveDescendantState() {
 
-        // System.err.println("saveDescendantState(" + rowIndex + ")");
         FacesContext context = FacesContext.getCurrentInstance();
         Iterator kids = getChildren().iterator();
         while (kids.hasNext()) {
@@ -834,7 +809,6 @@ public class UIData extends UIComponentBase
                 saveDescendantState(kid, context);
             }
         }
-        // System.err.println("saveDescendantState(COMPLETED)");
 
     }
 
@@ -857,15 +831,11 @@ public class UIData extends UIComponentBase
                 state = new SavedState();
                 saved.put(clientId, state);
             }
-            // System.err.println("  clientId=" + clientId);
-            // System.err.println("     value=" + (((ValueHolder) component).getValue()));
             state.setValue(((ValueHolder) component).getValue());
             if (component instanceof ConvertibleValueHolder) {
-                // System.err.println("     valid=" + (((ConvertibleValueHolder) component).isValid()));
                 state.setValid(((ConvertibleValueHolder) component).isValid());
             }
             if (component instanceof UIInput) {
-                // System.err.println("      prev=" + (((UIInput) component).getPrevious()));
                 state.setPrevious(((UIInput) component).getPrevious());
             }
         }
@@ -885,7 +855,7 @@ public class UIData extends UIComponentBase
 // ------------------------------------------------------------- Private Classes
 
 
-// Private Class To Represent Saved Information
+// Private class to represent saved state information
 class SavedState implements Serializable {
 
     private Object previous;
@@ -911,5 +881,38 @@ class SavedState implements Serializable {
     public void setValue(Object value) {
 	this.value = value;
     }
+
+}
+
+
+// Private class to wrap an event with a row index
+class WrapperEvent extends FacesEvent {
+
+
+    public WrapperEvent(UIComponent component, FacesEvent event, int rowIndex) {
+        super(component);
+        this.event = event;
+        this.rowIndex = rowIndex;
+    }
+
+    private FacesEvent event = null;
+    private int rowIndex = -1;
+
+    public FacesEvent getFacesEvent() {
+        return (this.event);
+    }
+
+    public int getRowIndex() {
+        return (this.rowIndex);
+    }
+
+    public boolean isAppropriateListener(FacesListener listener) {
+        return (false);
+    }
+
+    public void processListener(FacesListener listener) {
+        throw new IllegalStateException();
+    }
+
 
 }

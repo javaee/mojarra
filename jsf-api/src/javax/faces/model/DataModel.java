@@ -1,5 +1,5 @@
 /*
- * $Id: DataModel.java,v 1.6 2003/10/20 20:26:01 craigmcc Exp $
+ * $Id: DataModel.java,v 1.7 2003/10/27 19:14:11 craigmcc Exp $
  */
 
 /*
@@ -46,13 +46,14 @@ package javax.faces.model;
 import java.util.ArrayList;
 import java.util.List;
 import javax.faces.FacesException;
-import javax.faces.component.Repeater;
+import javax.faces.component.UIData;
 
 
 /**
  * <p><strong>DataModel</strong> is an abstraction around arbitrary data
  * binding technologies that can be used to adapt a variety of data sources
- * for use by JavaServer Faces components that implement {@link Repeater}.</p>
+ * for use by JavaServer Faces components that support per-row processing
+ * for their child components (such as {@link UIData}.</p>
  *
  * <p>The data collection underlying a {@link DataModel} instance is
  * modeled as a collection of row objects that can be accessed by

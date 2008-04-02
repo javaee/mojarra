@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.72 2003/10/27 04:09:59 craigmcc Exp $
+ * $Id: UIComponentBase.java,v 1.73 2003/10/27 19:14:08 craigmcc Exp $
  */
 
 /*
@@ -35,7 +35,6 @@ import javax.faces.event.ActionEvent;
 import javax.faces.event.FacesEvent;
 import javax.faces.event.FacesListener;
 import javax.faces.event.PhaseId;
-import javax.faces.event.RepeaterEvent;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.render.Renderer;
 import javax.faces.render.RenderKit;
@@ -895,16 +894,6 @@ public abstract class UIComponentBase extends UIComponent {
             return (false);
         }
 
-        // Unwrap a RepeaterEvent and set row index if necessary
-        Repeater repeater = null;
-        int rowIndex = -1;
-        if (event instanceof RepeaterEvent) {
-            repeater = (Repeater) event.getComponent();
-            rowIndex = repeater.getRowIndex();
-            repeater.setRowIndex(((RepeaterEvent) event).getRowIndex());
-            event = ((RepeaterEvent) event).getFacesEvent();
-        }
-
         // Broadcast the event to interested listeners
         List anyPhaseListeners = listeners[PhaseId.ANY_PHASE.getOrdinal()];
         if (anyPhaseListeners != null) {
@@ -973,12 +962,6 @@ public abstract class UIComponentBase extends UIComponent {
                 }
             }
         }
-
-        // Reposition Repeater (if necessary)
-        if (repeater != null) {
-            repeater.setRowIndex(rowIndex);
-        }
-
         return (result);
 
     }
