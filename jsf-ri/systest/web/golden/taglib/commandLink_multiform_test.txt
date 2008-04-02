@@ -7,7 +7,7 @@
 <html>
   <body>
      
-<form id="form01" name="form01" method="post" action="/jsf-systest/faces/taglib/commandLink_multiform_test.jsp;jsessionid=cb78c621b864de825c27661f629d" enctype="application/x-www-form-urlencoded">
+<form id="form01" name="form01" method="post" action="/jsf-systest/faces/taglib/commandLink_multiform_test.jsp;jsessionid=a6167ae19008b04833d9bbd166d3" enctype="application/x-www-form-urlencoded">
 <input type="hidden" name="form01" value="form01" />
 <input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="j_id235:j_id236" />
 
@@ -51,12 +51,12 @@ for (var f = 0; f < document.forms.length; f++) {
 }
 //-->
 </script>
-<a id="form01:Link1" href="#" onclick="document.forms['form01'].apf('form01:Link1,form01:Link1,param1,value1,param2,value2'); document.forms['form01'].submit(); return false;">Link1</a><a id="form01:Link2" href="#" onclick="document.forms['form01'].apf('form01:Link2,form01:Link2,param1,value1,param2,value2'); document.forms['form01'].submit(); return false;">Link2</a>
+<a id="form01:Link1" href="#" onclick="var f = document.forms['form01']; if(f.apf){f.apf('form01:Link1,form01:Link1,param1,value1,param2,value2')}; document.forms['form01'].submit(); return false;">Link1</a><a id="form01:Link2" href="#" onclick="var f = document.forms['form01']; if(f.apf){f.apf('form01:Link2,form01:Link2,param1,value1,param2,value2')}; document.forms['form01'].submit(); return false;">Link2</a>
 </form>
-<form id="form02" name="form02" method="post" action="/jsf-systest/faces/taglib/commandLink_multiform_test.jsp;jsessionid=cb78c621b864de825c27661f629d" enctype="application/x-www-form-urlencoded">
+<form id="form02" name="form02" method="post" action="/jsf-systest/faces/taglib/commandLink_multiform_test.jsp;jsessionid=a6167ae19008b04833d9bbd166d3" enctype="application/x-www-form-urlencoded">
 <input type="hidden" name="form02" value="form02" />
 <input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="j_id235:j_id236" />
-<a id="form02:Link3" href="#" onclick="document.forms['form02'].apf('form02:Link3,form02:Link3,param3,value3,param4,value4'); document.forms['form02'].submit(); return false;">Link3</a><a id="form02:Link4" href="#" onclick="document.forms['form02'].apf('form02:Link4,form02:Link4'); document.forms['form02'].submit(); return false;">Link4</a>
+<a id="form02:Link3" href="#" onclick="var f = document.forms['form02']; if(f.apf){f.apf('form02:Link3,form02:Link3,param3,value3,param4,value4')}; document.forms['form02'].submit(); return false;">Link3</a><a id="form02:Link4" href="#" onclick="var f = document.forms['form02']; if(f.apf){f.apf('form02:Link4,form02:Link4')}; document.forms['form02'].submit(); return false;">Link4</a>
 </form>
   </body>
 </html>
