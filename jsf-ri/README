@@ -21,17 +21,84 @@ distribution in your WEB-INF/lib directory in your webapp.
 Major changes/features in this release:
 =======================================
 
-* The URI for the html basic tld has changed to be spec compliant.  It
-  is now <http://java.sun.com/jsf/html>.
+* [EventTypes-19] [Listeners-3] [HandlersModifyTree-33]
+  [HandlersSelectTree-34] [StandardComponentEvents-38]
+  [EventProcessingPhases-39]
+
+  New Event model as in section JSF.3.3
+
+  This is the biggest change since the previous release.  This change is
+  too big to cover in detail in the README.  Please read the appropriate
+  spec section.
+
+  Related API classes and interfaces
+
+    javax.faces.event.AbortProcessingException
+    javax.faces.event.ActionEvent
+    javax.faces.event.ActionListener
+    javax.faces.event.ApplicationEvent
+    javax.faces.event.FacesListener
+    javax.faces.event.ValueChangedEvent
+    javax.faces.event.ValueChangedListener
+    javax.faces.event.PhaseId
+    javax.faces.context.FacesContext
+
+  Related RI classes and interfaces
+
+    All of the Lifecycle phase implementation classes and the
+    FacesContext implementation are impacted.  In addition, the class 
+
+    com.sun.faces.taglib.jsf_core.ActionListenerTag
+
+    is impacted.
+
+  Removed API classes and interfaces from previous release
+
+    javax.faces.event.RequestEventHandler
+    javax.faces.webapp.EventHandlerTag
+
+  Removed RI classes and interfaces from previous release
+
+    com.sun.faces.lifecycle.HandleRequestEventsPhase
+
 
 * [ComponentNamespace-10] Flat namespace changes.  Component identifiers
   are no longer required in all cases.  When using JSF from JSP,
   component identifiers are only required when interacting with JSTL.
-  See Section JSF 3.1.2 in the spec.
+  See Section JSF 3.1.2 in the spec.  We have a tag library validator to
+  enforce this rule.
 
   Every component can be named by a component identifier, which must be
   unique among the components that share a common naming container
   parent in a component tree. 
+
+  The root of the component tree must be a NamingContainer.
+
+  Related API classes and interfaces
+
+  javax.faces.component.NamingContainer
+
+    An interface defining what it means to be a NaminingContainer
+
+  javax.faces.component.NamingContainerSupport
+
+    The implementation of that interface
+
+  javax.faces.component.UINamingContainer
+
+    A UIComponent that implements NamingContainer, used as the root of
+    the tree
+
+  Related RI classes and interfaces
+
+  com.sun.faces.taglib.FacesValidator
+
+    Base class for Faces TLV
+
+  com.sun.faces.taglib.jsf_core.CoreValidator
+
+    Enforces the rule that components must have ids if they are
+    intermixed with certain JSTL tags.
 
 * [NamedChild-4] Support for component facets.  
 
@@ -48,12 +115,213 @@ Major changes/features in this release:
   to the current component by virtue of a unique facet name that
   represents the role that particular component plays.
 
+  Related API classes and interfaces
+
+    javax.faces.webapp.FacetTag
+
+      Used by the implementation to denote that a component should be
+      added as a facet to its parent, rather than as a child.
+
+    javax.faces.webapp.FacesTag
+
+      Contains some Facet specific logic.
+
+  Related RI classes and interfaces
+
+    com.sun.faces.renderkit.html_basic.HtmlBasicRenderer
+
+      Contains some Facet specific logic.
+
 * [TraversalOrder-43] Change the way components are processed so they
   honor the new Facet work.  In addition, add new UIComponent traversal
   methods.
 
+  Instead of using the TreeNavigator class to traverse the tree, this is
+  now handled by the UIComponent implementations.
+
+    com.sun.faces.lifecycle.ApplyRequestValuesPhase
+
+      Just call processDecodes() on the root of the tree.
+
+    com.sun.faces.lifecycle.ProcessValidationsPhase
+
+      Just call processValidators() on the root of the tree.
+
+    com.sun.faces.lifecycle.UpdateModelValuesPhase
+
+      Just call processUpdates() on the root of the tree.
+
+    javax.faces.component.UIComponent
+    javax.faces.component.UIComponentBase
+
+      Implementation of processDecodes(), processValidators(),
+      processUpdates().  These methods all call getFacetsAndChildren()
+      so that Facets are processed first, then children.
+
 * [VisibleProperty-27] Add support for the "rendered" property, which is
   leveraged during encode/decode.  See section JSF 3.1.12 of the spec.
+
+  All of the Renderers must check this property:
+
+    public void encode*() {
+      
+      [...]
+
+      // suppress rendering if "rendered" property on the component is
+      // false.
+      if (!component.isRendered()) {
+          return;
+      }    
+
+      [...]
+
+    }
+
+* [JspDependencies-7] New Tag Library 
+
+  The URI for the html basic tld has changed to be spec compliant.  It
+  is now <http://java.sun.com/jsf/html>.  The recommended prefix for
+  this tag lib is "h".
+
+  We have broken the non-component tags out into the jsf-core taglib.
+  The URI for this taglib is <http://java.sun.com/jsf/core>.  The
+  recommended prefix for this tag lib is "f".
+
+* [UsabilityRenames-59] Class javax.faces.component.UIInput replaces
+  javax.faces.component.UITextEntry.  UIInput is for anything
+  that can take input from the user.  This change impacts the tags as
+  well.  For example, input_secret takes the place of textentry_secret.
+
+  selectone_radio takes the place of selectone_radiogroup
+  selectone_listbox takes the place of selectone_optionlist
+  output_errors takes the place of validation_message
+
+* [UIParameter-20] Class javax.faces.component.UIParameter and
+  com.sun.faces.taglib.jsf_core.ParameterTag are used to specify
+  parameters to components.  For example, in the case of output_message:
+
+  <h:output_message id="userMsg" 
+    value="Welcome {0}.  Thanks for trying the {1} application." >
+
+    <f:parameter id="param1" modelReference="LoginBean.userName"/>
+
+    <f:parameter id="param2" value="Faces Basic"/>
+  
+  </h:output_message>
+
+* [Converters-29] Add support for type conversion as in section JSF.3.2.
+  Converters enable model data to be stored in a model specific type,
+  such as java.util.Date even though.  I addition, the complete set of
+  rich formatting offered by the java.text package is exposed through
+  Converters.
+
+  Related API classes and interfaces
+
+    javax.faces.convert.ConverterException
+    javax.faces.convert.Converter
+    javax.faces.convert.ConverterFactory
+
+  Related RI classes and interfaces
+
+    com.sun.faces.convert.BooleanConverter
+    com.sun.faces.convert.DateConverter
+    com.sun.faces.convert.DateTimeConverter
+    com.sun.faces.convert.TimeConverter
+    com.sun.faces.convert.ConverterFactoryImpl
+    com.sun.faces.convert.NumberConverter
+
+* [ELDependencies-8]
+
+  On a component, modelReference values can include any of the following
+  implicit objects as the first part of the expression, in addition to
+  the name of a model bean stored in the request, session, or
+  application scopes:
+
+  Read-only implicit objects
+
+	"facesContext"
+	"header"
+	"headerValues"
+
+  Read-write implicit objects
+
+	"param"
+	"paramValues"
+	"initParam"
+	"cookie"
+	"requestScope",
+	"sessionScope"
+	"applicationScope"
+
+  The leading "${" and trailing "}" characters for modelReference values
+  are optional.
+
+* [Standard-Renderkit] Several new Renderers, and accompanying tags,
+  have been added.  Please see Section JSF.7.4 for details.
+
+  Related RI classes and interfaces
+
+    com.sun.faces.renderkit.html_basic.DataRenderer
+    com.sun.faces.renderkit.html_basic.DateTimeRenderer
+    com.sun.faces.renderkit.html_basic.ErrorsRenderer
+    com.sun.faces.renderkit.html_basic.GridRenderer
+    com.sun.faces.renderkit.html_basic.GroupRenderer
+    com.sun.faces.renderkit.html_basic.ImageRenderer
+    com.sun.faces.renderkit.html_basic.LabelRenderer
+    com.sun.faces.renderkit.html_basic.ListRenderer
+    com.sun.faces.renderkit.html_basic.ListboxRenderer
+    com.sun.faces.renderkit.html_basic.SelectManyCheckboxListRenderer
+    com.sun.faces.renderkit.html_basic.TimeRenderer
+    com.sun.faces.renderkit.html_basic.DateRenderer
+    com.sun.faces.renderkit.html_basic.HiddenRenderer
+    com.sun.faces.renderkit.html_basic.HtmlBasicInputRenderer
+    com.sun.faces.renderkit.html_basic.MenuRenderer
+    com.sun.faces.renderkit.html_basic.NumberRenderer
+    com.sun.faces.taglib.html_basic.Graphic_ImageTag
+    com.sun.faces.taglib.html_basic.HtmlBasicValidator
+    com.sun.faces.taglib.html_basic.InputTag
+    com.sun.faces.taglib.html_basic.Input_DateTag
+    com.sun.faces.taglib.html_basic.Input_DateTimeTag
+    com.sun.faces.taglib.html_basic.Input_HiddenTag
+    com.sun.faces.taglib.html_basic.Input_NumberTag
+    com.sun.faces.taglib.html_basic.Input_SecretTag
+    com.sun.faces.taglib.html_basic.Input_TextAreaTag
+    com.sun.faces.taglib.html_basic.Input_TextTag
+    com.sun.faces.taglib.html_basic.Input_TimeTag
+    com.sun.faces.taglib.html_basic.Output_DateTag
+    com.sun.faces.taglib.html_basic.Output_DateTimeTag
+    com.sun.faces.taglib.html_basic.Output_ErrorsTag
+    com.sun.faces.taglib.html_basic.Output_LabelTag
+    com.sun.faces.taglib.html_basic.Output_MessageTag
+    com.sun.faces.taglib.html_basic.Output_NumberTag
+    com.sun.faces.taglib.html_basic.Output_TimeTag
+    com.sun.faces.taglib.html_basic.Panel_DataTag
+    com.sun.faces.taglib.html_basic.Panel_GridTag
+    com.sun.faces.taglib.html_basic.Panel_GroupTag
+    com.sun.faces.taglib.html_basic.Panel_ListTag
+    com.sun.faces.taglib.html_basic.SelectMany_CheckboxListTag
+    com.sun.faces.taglib.html_basic.SelectMany_ListboxTag
+    com.sun.faces.taglib.html_basic.SelectMany_MenuTag
+    com.sun.faces.taglib.html_basic.SelectOne_ListboxTag
+    com.sun.faces.taglib.html_basic.SelectOne_MenuTag
+    com.sun.faces.taglib.html_basic.SelectOne_RadioTag
+
+  The renderer
+  com.sun.faces.renderkit.html_basic.TextAndGraphicRenderer has
+  been removed.  It is replaced by using separete text and graphic
+  renderers.
+
+* [ValidatorsAPI-42] Please see section JSF.2.2.3 for more detail.
+  There are now tags for the commonly used validators.
+
+  Related RI classes and interfaces
+
+    com.sun.faces.taglib.jsf_core.ValidateDoubleRangeTag
+    com.sun.faces.taglib.jsf_core.ValidateLengthTag
+    com.sun.faces.taglib.jsf_core.ValidateLongRangeTag
+    com.sun.faces.taglib.jsf_core.ValidateRequiredTag
+    com.sun.faces.taglib.jsf_core.ValidateStringRangeTag
+    com.sun.faces.taglib.jsf_core.ValueChangedListenerTag
 
 Known Issues With This Release
 ==============================
@@ -76,10 +344,6 @@ Known Issues With This Release
 
 *  AttributeDescriptor support happens all the time, even though it's
    only used at design time.
-
-* HyperLink tags don't work as expected in sample "Basic" application. 
-  This is because once the response tree is set to target, we need to
-  jump to render response phase which we are unable to do at this time.
 
 Legal Notice
 ============
