@@ -97,6 +97,7 @@ public class YuiMenuRenderer extends Renderer {
     protected void renderMenu (ResponseWriter writer, YuiMenuBase component, Menu menu, int level) throws IOException {
         writer.startElement("div", component);
         writer.writeAttribute("id", component.getId() + "_" + level, "id");
+        writer.writeAttribute("style", "padding: 0px;", "style");
         writer.writeAttribute("class", "yuimenu", "class");
         
         writer.startElement("div", component);
@@ -157,6 +158,6 @@ public class YuiMenuRenderer extends Renderer {
      * @return the JavaScript associative array text (minus the curly braces) representing the desired arguments
      */
     protected String buildConstructorArgs(YuiMenuBase component) {
-        return "width: " + component.getWidth() + ", clicktohide: false, visible: false";
+        return "width: \"" + component.getWidth() + "\", clicktohide: false, visible: true";
     }
 }

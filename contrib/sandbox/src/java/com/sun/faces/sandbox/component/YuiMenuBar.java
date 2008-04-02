@@ -15,7 +15,7 @@ public class YuiMenuBar  extends YuiMenuBase {
     public static final String RENDERER_TYPE = "com.sun.faces.sandbox.YuiMenuBarRenderer";
     
     public String getFamily() {
-        return "YuiMenuBar";
+        return COMPONENT_TYPE;
     }
     
     public YuiMenuBar() {

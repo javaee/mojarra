@@ -16,4 +16,8 @@ public class YuiMenu extends YuiMenuBase {
     public YuiMenu() {
         setRendererType(RENDERER_TYPE);
     }
+    
+    public String getFamily() {
+        return COMPONENT_TYPE;
+    }
 }
