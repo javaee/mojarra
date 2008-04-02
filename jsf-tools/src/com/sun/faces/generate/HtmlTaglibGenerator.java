@@ -425,7 +425,7 @@ public class HtmlTaglibGenerator extends GenerateTagBase implements TaglibGenera
 	result.append("\n\n    //\n    // Setter Methods\n    //\n");
 	for (int i=0; i<attributeNames.size(); i++) {
 	    attributeName = (String)attributeNames.get(i);
-	    if (attributeName.equals("componentRef") ||
+	    if (attributeName.equals("componentRef") || attributeName.equals("id") ||
 		attributeName.equals("rendered")) {
 		continue;
 	    }
@@ -620,7 +620,7 @@ public class HtmlTaglibGenerator extends GenerateTagBase implements TaglibGenera
 	        vbKey = "value";
 	    }
 
-	    if (attributeName.equals("componentRef") ||
+	    if (attributeName.equals("componentRef") || attributeName.equals("id") ||
 	        attributeName.equals("rendered") || attributeName.equals("converter") ||
 		attributeName.equals("value") || attributeName.equals("valueRef")) {
 		continue;
