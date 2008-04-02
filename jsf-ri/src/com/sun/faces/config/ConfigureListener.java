@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListener.java,v 1.82 2006/08/24 21:41:09 rlubke Exp $
+ * $Id: ConfigureListener.java,v 1.83 2006/08/24 21:55:59 rlubke Exp $
  */
 /*
  * The contents of this file are subject to the terms
@@ -999,7 +999,7 @@ public class ConfigureListener implements ServletContextListener {
                           config[i].getFromViewId() + ')');
             }
             NavigationCaseBean[] ncb = config[i].getNavigationCases();
-            for (int j = 0, len = ncb.length; j < len; j++) {
+            for (int j = 0, len2 = ncb.length; j < len2; j++) {
                 if (LOGGER.isLoggable(Level.FINER)) {
                     LOGGER.finer("addNavigationCase(" +
                               ncb[j].getFromAction() + ',' +
