@@ -1,5 +1,5 @@
 /*
- * $Id: GraphComponent.java,v 1.5 2003/08/27 23:15:39 eburns Exp $
+ * $Id: GraphComponent.java,v 1.6 2003/08/27 23:38:12 eburns Exp $
  */
 
 /*
@@ -79,54 +79,7 @@ public class GraphComponent extends UIOutputBase {
         addFacesListener(listener);    
     }   
     
-    // PENDING(craigmcc) - reflect the "untangling broadcast" changes
-    // invokes listener method passing event as argument 
-    public boolean broadcast(FacesEvent event, PhaseId phaseId)
-        throws AbortProcessingException {
-
-        if ((event == null) || (phaseId == null)) {
-            throw new NullPointerException();
-        }
-        if (phaseId.equals(PhaseId.ANY_PHASE)) {
-            throw new IllegalStateException();
-        }
-        if (event instanceof GraphEvent) {
-            if (listeners == null) {
-                return (false);
-            }
-            GraphEvent aevent = (GraphEvent) event;
-            int ordinal = phaseId.getOrdinal();
-            broadcast(aevent, listeners[PhaseId.ANY_PHASE.getOrdinal()]);
-            broadcast(aevent, listeners[ordinal]);
-            for (int i = ordinal + 1; i < listeners.length; i++) {
-                if ((listeners[i] != null) && (listeners[i].size() > 0)) {
-                    return (true);
-                }
-            }
-            return (false);
-        } else {
-            throw new IllegalArgumentException();
-        }
-
-    }
-
-
-    // PENDING(craigmcc) - reflect the "untangling broadcast" changes
-    protected void broadcast(GraphEvent event, List list) {
-
-        if (list == null) {
-            return;
-        }
-        Iterator listeners = list.iterator();
-        while (listeners.hasNext()) {
-            GraphListener listener = 
-                (GraphListener) listeners.next();
-            listener.processGraphEvent(event);
-        }
-    }
-
-
-    /**
+   /**
      * <p>Faces Listener implementation which toggles the selected Node
      * in the GraphComponent;</p>
      */
