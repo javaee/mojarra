@@ -336,9 +336,7 @@
             <test name="com.sun.faces.renderkit.html_basic.TestComponentType"/>
             <test name="com.sun.faces.renderkit.html_basic.TestHtmlResponseWriter"/>
             <test name="com.sun.faces.renderkit.html_basic.TestRendererConversions"/>
-<!-- PENDING(craigmcc): not running
             <test name="com.sun.faces.renderkit.html_basic.TestRenderers_1"/>
--->
             <test name="com.sun.faces.renderkit.html_basic.TestRenderers_2"/>
             <test name="com.sun.faces.renderkit.html_basic.TestRenderers_3"/>
             <test name="com.sun.faces.renderkit.html_basic.TestRenderers_4"/>

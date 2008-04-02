@@ -1,5 +1,5 @@
 /*
- * $Id: CompareFiles.java,v 1.9 2004/01/20 22:00:31 eburns Exp $
+ * $Id: CompareFiles.java,v 1.10 2004/01/25 02:08:03 jvisvanathan Exp $
  */
 
 /*
@@ -94,6 +94,7 @@ public class CompareFiles {
 		}
 		else {
 		    newLine = stripJsessionidFromLine(newLine);
+                    oldLine = stripJsessionidFromLine(oldLine);
 		    if (!newLine.equals(oldLine)) {
 			same = false;
 			break;

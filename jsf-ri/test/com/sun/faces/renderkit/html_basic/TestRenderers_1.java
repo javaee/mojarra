@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_1.java,v 1.54 2003/12/17 15:15:38 rkitain Exp $
+ * $Id: TestRenderers_1.java,v 1.55 2004/01/25 02:08:03 jvisvanathan Exp $
  */
 
 /*
@@ -55,7 +55,7 @@ import com.sun.faces.renderkit.html_basic.RadioRenderer;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_1.java,v 1.54 2003/12/17 15:15:38 rkitain Exp $
+ * @version $Id: TestRenderers_1.java,v 1.55 2004/01/25 02:08:03 jvisvanathan Exp $
  * 
  *
  */
@@ -132,12 +132,11 @@ public class TestRenderers_1 extends JspFacesTestCase
         return "CorrectRenderersResponse";
     }    
 
+    public static final String ignore[] = {
+    };
+    
     public String [] getLinesToIgnore() {
-        String[] lines =  {
-	    "<form id=\"formRenderer0\" method=\"post\" action=\"/test/facesviewId;jsessionid=4DC027279CF0211363CCDC2807A21D05\">",
-	    "<form id=\"formRenderer1\" method=\"post\" action=\"/test/facesviewId;jsessionid=4DC027279CF0211363CCDC2807A21D05\">"
-	};
-        return lines;
+        return ignore;
     }    
     
     public void beginRenderers(WebRequest theRequest) {
@@ -318,11 +317,13 @@ public class TestRenderers_1 extends JspFacesTestCase
         LinkRenderer linkRenderer = new LinkRenderer();
         UICommand uiCommand = new UICommand();
 	UIOutput output = new UIOutput();
+        UIForm form = new UIForm();
         uiCommand.setId("labelLink1");
         output.setValue("PASSED");
         output.setValueBinding("value", Util.getValueBinding("#{TestBean.modelLabel}"));
 	uiCommand.getChildren().add(output);
-        root.getChildren().add(uiCommand);
+        form.getChildren().add(uiCommand);
+        root.getChildren().add(form);
         System.out.println("Testing label lookup from local value...");
         linkRenderer.encodeBegin(getFacesContext(), uiCommand);
         linkRenderer.encodeChildren(getFacesContext(), uiCommand);
@@ -336,7 +337,7 @@ public class TestRenderers_1 extends JspFacesTestCase
 	output = new UIOutput();
         output.setValueBinding("value", Util.getValueBinding("#{TestBean.modelLabel}"));
 	uiCommand.getChildren().add(output);
-        root.getChildren().add(uiCommand);
+        form.getChildren().add(uiCommand);
         System.out.println("Testing label lookup from model...");
         linkRenderer.encodeBegin(getFacesContext(), uiCommand);
         linkRenderer.encodeChildren(getFacesContext(), uiCommand);
@@ -351,7 +352,7 @@ public class TestRenderers_1 extends JspFacesTestCase
         ValueBinding vb = Util.getValueBinding("#{Messages.passedkey}");
         output.setValueBinding("value", vb);
 	uiCommand.getChildren().add(output);
-        root.getChildren().add(uiCommand);
+        form.getChildren().add(uiCommand);
         System.out.println("Testing label lookup from ResourceBundle...");
         linkRenderer.encodeBegin(getFacesContext(), uiCommand);
         linkRenderer.encodeChildren(getFacesContext(), uiCommand);
@@ -370,7 +371,7 @@ public class TestRenderers_1 extends JspFacesTestCase
         uiCommand.getAttributes().put("hreflang", "hreflang");
         output.setValueBinding("value", Util.getValueBinding("#{NonBean.label}"));
 	uiCommand.getChildren().add(output);
-        root.getChildren().add(uiCommand);
+        form.getChildren().add(uiCommand);
         System.out.println("Testing empty label...");
         linkRenderer.encodeBegin(getFacesContext(), uiCommand);
         linkRenderer.encodeChildren(getFacesContext(), uiCommand);
@@ -383,7 +384,7 @@ public class TestRenderers_1 extends JspFacesTestCase
         uiCommand.setId("linkImage");
         graphic.setValue("duke.gif");
 	uiCommand.getChildren().add(graphic);
-	root.getChildren().add(uiCommand);
+	form.getChildren().add(uiCommand);
         System.out.println("Testing link as image");
         linkRenderer.encodeBegin(getFacesContext(), uiCommand);
         linkRenderer.encodeChildren(getFacesContext(), uiCommand);
@@ -397,7 +398,7 @@ public class TestRenderers_1 extends JspFacesTestCase
         vb = Util.getValueBinding("#{Messages.imagekey}");
         graphic.setValueBinding("value", vb);
         uiCommand.getChildren().add(graphic);
-        root.getChildren().add(uiCommand);
+        form.getChildren().add(uiCommand);
         System.out.println("Testing link image via resource lookup");
         linkRenderer.encodeBegin(getFacesContext(), uiCommand);
         linkRenderer.encodeChildren(getFacesContext(), uiCommand);
@@ -408,7 +409,7 @@ public class TestRenderers_1 extends JspFacesTestCase
         uiCommand = new UICommand();
         uiCommand.setId("paramLink");
         uiCommand.setValue("link with parameters");
-        root.getChildren().add(uiCommand);
+        form.getChildren().add(uiCommand);
         UIParameter parameter1 = new UIParameter();
         UIParameter parameter2 = new UIParameter();
         parameter1.setId("param1");
@@ -455,12 +456,6 @@ public class TestRenderers_1 extends JspFacesTestCase
         System.out.println("Testing encodeEnd method");
         formRenderer.encodeEnd(getFacesContext(), uiForm);
         getFacesContext().getResponseWriter().writeText("\n", null);
-        
-	// test that our form number is correct.
-	Integer formNumber = (Integer)
-	    uiForm.getAttributes().get(RIConstants.FORM_NUMBER_ATTR);
-	assertTrue(null != formNumber);
-	assertTrue(formNumber.intValue() == expectedFormNumber);
     }
     
     public void verifyButtonRenderer(UIComponent root) throws IOException {
@@ -581,7 +576,7 @@ public class TestRenderers_1 extends JspFacesTestCase
         // test decode method
         System.out.println("Testing decode method");
         radioRenderer.decode(getFacesContext(), uiSelectOne);
-        assertTrue(((String)uiSelectOne.getValue()).equals("Two"));
+        assertTrue(((String)uiSelectOne.getSubmittedValue()).equals("Two"));
 
         // test encode method
         System.out.println("Testing encode method");

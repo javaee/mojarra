@@ -1,5 +1,5 @@
 /*
- * $Id: ImageRenderer.java,v 1.25 2004/01/20 22:00:29 eburns Exp $
+ * $Id: ImageRenderer.java,v 1.26 2004/01/25 02:08:01 jvisvanathan Exp $
  */
 
 /*
@@ -34,7 +34,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ImageRenderer.java,v 1.25 2004/01/20 22:00:29 eburns Exp $
+ * @version $Id: ImageRenderer.java,v 1.26 2004/01/25 02:08:01 jvisvanathan Exp $
  * 
  *
  */
@@ -108,7 +108,7 @@ public class ImageRenderer extends HtmlBasicRenderer {
         Util.doAssert(writer != null );
         
 	writer.startElement("img", component);
-	writer.writeAttribute("id", component.getClientId(context), "clientId");
+	writeIdAttributeIfNecessary(context, writer, component);
 	writer.writeAttribute("src", src(context,component), "value");
 
         Util.renderPassThruAttributes(writer, component);

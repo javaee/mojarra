@@ -5,7 +5,7 @@
 
 
 /**
- * $Id: SelectManyCheckboxListRenderer.java,v 1.23 2004/01/21 05:59:06 eburns Exp $
+ * $Id: SelectManyCheckboxListRenderer.java,v 1.24 2004/01/25 02:08:01 jvisvanathan Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -173,8 +173,6 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
         writer.startElement("input", component);
         writer.writeAttribute("name", component.getClientId(context), 
                "clientId");
-        writer.writeAttribute("id", component.getClientId(context), 
-                "clientId");
         String valueString = getFormattedValue(context, component,
                                                curItem.getValue());
         writer.writeAttribute("value", valueString, "value");

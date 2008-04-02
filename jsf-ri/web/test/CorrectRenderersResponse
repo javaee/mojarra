@@ -1,38 +1,43 @@
-<form id="formRenderer0" method="post" action="/test/root">
+<form id="formRenderer0" method="post" action="/test/root;jsessionid=C0C9DFD893CF36902442D229A6A7A39A">
 
 <input type="hidden" name="formRenderer0" value="formRenderer0" /></form>
-<form id="formRenderer1" method="post" action="/test/root">
+<form id="formRenderer1" method="post" action="/test/root;jsessionid=C0C9DFD893CF36902442D229A6A7A39A">
 
 <input type="hidden" name="formRenderer1" value="formRenderer1" /></form>
-<span class="styleClass"><table border="0">
+<table border="0" class="styleClass">
 	<tr>
-<td><input type="radio" name="radioRenderer" value="One" disabled="disabled" tabindex="5" title="title"> One</input><span class="disabledClass"></span></td>
-<td><input type="radio" checked name="radioRenderer" value="Two" tabindex="5" title="title"> Two</input><span class="enabledClass"></span></td>
-<td><input type="radio" name="radioRenderer" value="Three" tabindex="5" title="title"> Three</input><span class="enabledClass"></span></td>
-<table border="0">
+<td>
+<label for="radioRenderer" class="disabledClass"><input type="radio" name="radioRenderer" value="One" disabled="disabled" tabindex="5" title="title"> One</input></label></td>
+<td>
+<label for="radioRenderer" class="enabledClass"><input type="radio" checked name="radioRenderer" value="Two" tabindex="5" title="title"> Two</input></label></td>
+<td>
+<label for="radioRenderer" class="enabledClass"><input type="radio" name="radioRenderer" value="Three" tabindex="5" title="title"> Three</input></label></td>
+<table border="0" class="styleClass">
 	<tr>
-<td><input type="radio" name="radioRenderer" value="Four" tabindex="5" title="title"> Four</input><span class="enabledClass"></span></td>
-<td><input type="radio" name="radioRenderer" value="Five" tabindex="5" title="title"> Five</input><span class="enabledClass"></span></td>
+<td>
+<label for="radioRenderer" class="enabledClass"><input type="radio" name="radioRenderer" value="Four" tabindex="5" title="title"> Four</input></label></td>
+<td>
+<label for="radioRenderer" class="enabledClass"><input type="radio" name="radioRenderer" value="Five" tabindex="5" title="title"> Five</input></label></td>
 	</tr>
 </table>	</tr>
-</table></span>
-<input type="image" src="duke.gif" name="imageButton" />
-<input type="image" src="resduke.gif" name="imageButton2" />
-<input type="submit" name="labelButton1" value="PASSED" />
-<input type="reset" name="labelButton2" value="model label" />
-<input type="submit" name="labelButton3" value="RES-BUNDLE PASSED" />
-<input type="reset" name="labelButton4" value="" />
-<a href="hrefValue">PASSED</a>
-<a href="hrefValue">model label</a>
-<a href="hrefValue">RES-BUNDLE PASSED</a>
-<a href="hrefValue" rel="rel" rev="rev" shape="shape" coords="coords" hreflang="hreflang"></a>
-<a href="hrefValue"><img id="_id0" src="duke.gif" alt="" /></a>
-<a href="hrefValue"><img id="_id1" src="resduke.gif" alt="" /></a>
-<a href="hrefValue?parameter1=param_value1&parameter2=param_value2"><img id="_id2" src="resduke.gif" alt="" /></a>
-<a href="#" onmousedown="document.forms[0]['labelLink1'].value='labelLink1'; document.forms[0].submit()">PASSED</a><input type="hidden" name="labelLink1" />
-<a href="#" onmousedown="document.forms[0]['labelLink2'].value='labelLink2'; document.forms[0].submit()">model label</a><input type="hidden" name="labelLink2" />
-<a href="#" onmousedown="document.forms[0]['labelLink3'].value='labelLink3'; document.forms[0].submit()">RES-BUNDLE PASSED</a><input type="hidden" name="labelLink3" />
-<a href="#" rel="rel" rev="rev" shape="shape" coords="coords" hreflang="hreflang" onmousedown="document.forms[0]['labelLink4'].value='labelLink4'; document.forms[0].submit()"></a><input type="hidden" name="labelLink4" />
-<a href="#" onmousedown="document.forms[0]['linkImage'].value='linkImage'; document.forms[0].submit()"><img id="_id3" src="duke.gif" alt="" /></a><input type="hidden" name="linkImage" />
-<a href="#" onmousedown="document.forms[0]['linkImage2'].value='linkImage2'; document.forms[0].submit()"><img id="_id4" src="resduke.gif" alt="" /></a><input type="hidden" name="linkImage2" />
-<a href="#" onmousedown="document.forms[0]['paramLink'].value='paramLink';document.forms[0]['parameter1'].value='param_value1';document.forms[0]['parameter2'].value='param_value2'; document.forms[0].submit()"></a><input type="hidden" name="paramLink" /><input type="hidden" name="parameter1" value="param_value1" /><input type="hidden" name="parameter2" value="param_value2" />
+</table>
+<input id="imageButton" type="image" src="duke.gif" name="imageButton" />
+<input id="imageButton2" type="image" src="resduke.gif" name="imageButton2" />
+<input id="labelButton1" type="submit" name="labelButton1" value="PASSED" />
+<input id="labelButton2" type="reset" name="labelButton2" value="model label" />
+<input id="labelButton3" type="submit" name="labelButton3" value="RES-BUNDLE PASSED" />
+<input id="labelButton4" type="reset" name="labelButton4" value="" />
+<a id="labelLink1" href="hrefValue;jsessionid=C0C9DFD893CF36902442D229A6A7A39A">PASSED</a>
+<a id="labelLink2" href="hrefValue;jsessionid=C0C9DFD893CF36902442D229A6A7A39A">model label</a>
+<a id="labelLink3" href="hrefValue;jsessionid=C0C9DFD893CF36902442D229A6A7A39A">RES-BUNDLE PASSED</a>
+<a id="labelLink4" href="hrefValue;jsessionid=C0C9DFD893CF36902442D229A6A7A39A" rel="rel" rev="rev" shape="shape" coords="coords" hreflang="hreflang"></a>
+<a id="linkImage" href="hrefValue;jsessionid=C0C9DFD893CF36902442D229A6A7A39A"><img src="duke.gif;jsessionid=C0C9DFD893CF36902442D229A6A7A39A" alt="" /></a>
+<a id="linkImage2" href="hrefValue;jsessionid=C0C9DFD893CF36902442D229A6A7A39A"><img src="resduke.gif;jsessionid=C0C9DFD893CF36902442D229A6A7A39A" alt="" /></a>
+<a id="paramLink" href="hrefValue;jsessionid=C0C9DFD893CF36902442D229A6A7A39A?parameter1=param_value1&parameter2=param_value2"><img src="resduke.gif;jsessionid=C0C9DFD893CF36902442D229A6A7A39A" alt="" /></a>
+<a id="_id0:labelLink1" href="#" onclick="document.forms['_id0']['_id0:labelLink1'].value='_id0:labelLink1'; document.forms['_id0'].submit()">PASSED</a>
+<a id="_id0:labelLink2" href="#" onclick="document.forms['_id0']['_id0:labelLink2'].value='_id0:labelLink2'; document.forms['_id0'].submit()">model label</a>
+<a id="_id0:labelLink3" href="#" onclick="document.forms['_id0']['_id0:labelLink3'].value='_id0:labelLink3'; document.forms['_id0'].submit()">RES-BUNDLE PASSED</a>
+<a id="_id0:labelLink4" href="#" rel="rel" rev="rev" shape="shape" coords="coords" hreflang="hreflang" onclick="document.forms['_id0']['_id0:labelLink4'].value='_id0:labelLink4'; document.forms['_id0'].submit()"></a>
+<a id="_id0:linkImage" href="#" onclick="document.forms['_id0']['_id0:linkImage'].value='_id0:linkImage'; document.forms['_id0'].submit()"><img src="duke.gif;jsessionid=C0C9DFD893CF36902442D229A6A7A39A" alt="" /></a>
+<a id="_id0:linkImage2" href="#" onclick="document.forms['_id0']['_id0:linkImage2'].value='_id0:linkImage2'; document.forms['_id0'].submit()"><img src="resduke.gif;jsessionid=C0C9DFD893CF36902442D229A6A7A39A" alt="" /></a>
+<a id="_id0:paramLink" href="#" onclick="document.forms['_id0']['_id0:paramLink'].value='_id0:paramLink';document.forms['_id0']['parameter1'].value='param_value1';document.forms['_id0']['parameter2'].value='param_value2'; document.forms['_id0'].submit()"></a>
