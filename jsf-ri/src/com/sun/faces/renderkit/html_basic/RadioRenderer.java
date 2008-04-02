@@ -1,5 +1,5 @@
 /*
- * $Id: RadioRenderer.java,v 1.40 2003/04/29 20:51:55 eburns Exp $
+ * $Id: RadioRenderer.java,v 1.41 2003/05/02 17:37:48 eburns Exp $
  */
 
 /*
@@ -45,7 +45,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: RadioRenderer.java,v 1.40 2003/04/29 20:51:55 eburns Exp $
+ * @version $Id: RadioRenderer.java,v 1.41 2003/05/02 17:37:48 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -106,7 +106,7 @@ public class RadioRenderer extends HtmlBasicInputRenderer {
    protected void getEndTextToRender(FacesContext context, UIComponent component,
             String currentValue, StringBuffer buffer ) {
        
-        UISelectOne uiSelectOne = null;
+        UISelectOne uiSelectOne = (UISelectOne) component;
 	String alignStr = null;
 	String borderStr = null;
 	String selectoneClass = null;
@@ -114,11 +114,6 @@ public class RadioRenderer extends HtmlBasicInputRenderer {
 	int border = 0;
 
         // cast component to UISelectOne.
-/* FIXME
-        if ( supportsComponentType(component)) {
-            uiSelectOne = (UISelectOne) component;
-        }    
-*/
 
         Iterator items = Util.getSelectItemWrappers(context, uiSelectOne);
 	SelectItem curItem = null;

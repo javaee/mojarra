@@ -1,5 +1,5 @@
 /*
- * $Id: SelectOne_RadioTag.java,v 1.22 2003/02/20 22:49:20 ofung Exp $
+ * $Id: SelectOne_RadioTag.java,v 1.23 2003/05/02 17:37:49 eburns Exp $
  */
 
 /*
@@ -31,7 +31,7 @@ import com.sun.faces.taglib.FacesTag;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: SelectOne_RadioTag.java,v 1.22 2003/02/20 22:49:20 ofung Exp $
+ * @version $Id: SelectOne_RadioTag.java,v 1.23 2003/05/02 17:37:49 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -99,6 +99,7 @@ public class SelectOne_RadioTag extends SelectOne_ListboxTag
 //
 
     public String getLocalRendererType() { return "Radio"; }
+    public String getComponentType() { return "SelectOne"; }
     public UIComponent createComponent() {
         return (new UISelectOne());
     }
