@@ -958,11 +958,12 @@
 
     <p>In addition to any action already specified in the renderers, all
     renderers for <code>UIInput</code> components must take the
-    following action regarding the <code>id</code> attribute: Call
-    <code>component.getClientId()</code> and render the result as the
-    value of the <code>name</code> attribute.  This may cause some
-    renderers to have "id" and "name" attributes that have exactly the
-    same value.</p>
+    following action regarding the <code>id</code> attribute: Call 
+    Call <code>component.getClientId()</code> and render the result as the
+    value of the <code>id</code> attribute.  Call <code>component.getClientId()</code> 
+    and render the result as the value of the <code>name</code> attribute.  
+    This may cause some renderers to have "id" and "name" attributes that 
+    have exactly the same value.</p>
 
     </ul>
 
