@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigParser.java,v 1.38 2003/10/06 19:26:52 rkitain Exp $
+ * $Id: ConfigParser.java,v 1.39 2003/10/07 18:03:00 rkitain Exp $
  */
 
 /*
@@ -1010,15 +1010,22 @@ final class RenderKitRule extends Rule {
         RenderKitFactory renderKitFactory = (RenderKitFactory)
             FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
 	String renderKitId = cr.getRenderKitId();
-	RenderKit renderKit = null;
-        String renderKitClass = cr.getRenderKitClass();
-        try {
-            Class renderKitClazz = Util.loadClass(renderKitClass, this);
-            renderKit = (RenderKit)renderKitClazz.newInstance();
-            renderKitFactory.addRenderKit(renderKitId, renderKit);
-        } catch (Exception e) {
-            throw new FacesException(e);
-        }
+	//
+	// If the renderkit does not exist for this renderkitid,
+	// create the renderkit.. Otherwise, if the renderkit exists,
+	// the renderers will be added to it.
+	//
+	RenderKit renderKit = renderKitFactory.getRenderKit(renderKitId);
+	if (renderKit == null) {
+            String renderKitClass = cr.getRenderKitClass();
+            try {
+                Class renderKitClazz = Util.loadClass(renderKitClass, this);
+                renderKit = (RenderKit)renderKitClazz.newInstance();
+                renderKitFactory.addRenderKit(renderKitId, renderKit);
+            } catch (Exception e) {
+                throw new FacesException(e);
+            }
+	}
         Map renderersMap = cr.getRenderers();
         Iterator rendererIds = renderersMap.keySet().iterator();
         while (rendererIds.hasNext()) {
