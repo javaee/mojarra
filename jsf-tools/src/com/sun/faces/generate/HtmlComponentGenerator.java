@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlComponentGenerator.java,v 1.21 2006/06/05 21:14:26 rlubke Exp $
+ * $Id: HtmlComponentGenerator.java,v 1.22 2007/01/24 18:58:33 jdlee Exp $
  */
 
 /*
@@ -293,10 +293,7 @@ public class HtmlComponentGenerator extends AbstractGenerator {
             writer.write(type);
             writer.write(' ');
             writer.write(var);
-            if (pb.getDefaultValue() != null) {
-                writer.write(" = ");
-                writer.write(pb.getDefaultValue());
-            } else if (primitive(type)) {
+            if (primitive(type)) {
                 writer.write(" = ");
                 writer.write(TYPE_DEFAULTS.get(type));
             }
@@ -384,7 +381,13 @@ public class HtmlComponentGenerator extends AbstractGenerator {
                 writer.write(var);
                 writer.write(";\n");
             } else {
-                writer.fwrite("return null;\n");
+                writer.fwrite("return ");
+                if (pb.getDefaultValue() != null) {
+                    writer.write(pb.getDefaultValue());
+                } else  {
+                    writer.write("null");
+                }
+                writer.write(";\n");
             }
             writer.outdent();
             writer.fwrite("}\n");
