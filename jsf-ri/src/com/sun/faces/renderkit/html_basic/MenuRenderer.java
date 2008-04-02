@@ -3,33 +3,33 @@
  * of the Common Development and Distribution License
  * (the License). You may not use this file except in
  * compliance with the License.
- * 
+ *
  * You can obtain a copy of the License at
  * https://javaserverfaces.dev.java.net/CDDL.html or
- * legal/CDDLv1.0.txt. 
+ * legal/CDDLv1.0.txt.
  * See the License for the specific language governing
  * permission and limitations under the License.
- * 
+ *
  * When distributing Covered Code, include this CDDL
  * Header Notice in each file and include the License file
- * at legal/CDDLv1.0.txt.    
+ * at legal/CDDLv1.0.txt.
  * If applicable, add the following below the CDDL Header,
  * with the fields enclosed by brackets [] replaced by
  * your own identifying information:
  * "Portions Copyrighted [year] [name of copyright owner]"
- * 
+ *
  * [Name of File] [ver.__] [Date]
- * 
+ *
  * Copyright 2005 Sun Microsystems Inc. All Rights Reserved
  */
 
 /*
- * $Id: MenuRenderer.java,v 1.84 2006/11/17 23:19:16 rlubke Exp $
+ * $Id: MenuRenderer.java,v 1.85 2006/12/13 17:29:14 youngm Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
  * divested of its trade secrets, irrespective of what has been
- * deposited with the U. S. Copyright Office.   
+ * deposited with the U. S. Copyright Office.
  */
 
 // MenuRenderer.java
@@ -91,26 +91,29 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
             modelType = valueExpression.getType(context.getELContext());
             // Does the valueExpression resolve properly to something with
             // a type?
-            if (null != modelType) {
-                if (modelType.isArray()) {
-                    result = convertSelectManyValues(context,
-                                                     uiSelectMany,
-                                                     modelType,
-                                                     newValues);
-                } else if (List.class.isAssignableFrom(modelType)) {
-                    result = Arrays.asList((Object[]) convertSelectManyValues(
-                          context,
-                          uiSelectMany,
-                          Object[].class,
-                          newValues));
-                } else {
-                    throwException = true;
+            if(modelType != null) {
+                result = convertSelectManyValuesForModel(context,
+                                                         uiSelectMany,
+                                                         modelType,
+                                                         newValues);
+            }
+            // If it could not be converted, as a fall back try the type of
+            // the valueExpression's current value covering some edge cases such
+            // as where the current value came from a Map.
+            if(result == null) {
+                Object value = valueExpression.getValue(context.getELContext());
+                if(value != null) {
+                    result = convertSelectManyValuesForModel(context,
+                                                             uiSelectMany,
+                                                             value.getClass(),
+                                                             newValues);
                 }
-            } else {
+            }
+            if(result == null) {
                 throwException = true;
             }
         } else {
-            // No ValueExpression, just use Object array.           
+            // No ValueExpression, just use Object array.
             result = convertSelectManyValues(context, uiSelectMany,
                                              Object[].class,
                                              newValues);
@@ -142,6 +145,34 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
         }
         return result;
 
+    }
+
+    /**
+     * Converts the provided string array and places them into the correct provided model type.
+     * @param context
+     * @param uiSelectMany
+     * @param modelType
+     * @param newValues
+     * @return
+     */
+    private Object convertSelectManyValuesForModel(FacesContext context,
+                                                   UISelectMany uiSelectMany,
+                                                   Class modelType,
+                                                   String[] newValues) {
+        Object result = null;
+        if (modelType.isArray()) {
+            result = convertSelectManyValues(context,
+                                             uiSelectMany,
+                                             modelType,
+                                             newValues);
+        } else if (List.class.isAssignableFrom(modelType)) {
+            result = Arrays.asList((Object[]) convertSelectManyValues(
+                  context,
+                  uiSelectMany,
+                  Object[].class,
+                  newValues));
+        }
+        return result;
     }
 
 
@@ -202,8 +233,8 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
 
         String clientId = component.getClientId(context);
         assert(clientId != null);
-        // currently we assume the model type to be of type string or 
-        // convertible to string and localised by the application.
+        // currently we assume the model type to be of type string or
+        // convertible to string and localized by the application.
         if (component instanceof UISelectMany) {
             Map<String, String[]> requestParameterValuesMap =
                   context.getExternalContext().
@@ -319,7 +350,7 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
             // coerce-value call in the jsf-api UISelectMany.matchValue will work
             // (need a better way to determine the currently processing UIComponent ...)
             Map<String, Object> requestMap = context.getExternalContext().getRequestMap();
-            requestMap.put(ConverterPropertyEditorBase.TARGET_COMPONENT_ATTRIBUTE_NAME, 
+            requestMap.put(ConverterPropertyEditorBase.TARGET_COMPONENT_ATTRIBUTE_NAME,
                     component);
             return convertSelectManyValue(context,
                                           ((UISelectMany) component),
@@ -495,10 +526,10 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
         }
         if (valuesArray != null) {
             type = valuesArray.getClass().getComponentType();
-        } 
-        
+        }
+
         Map<String, Object> requestMap = context.getExternalContext().getRequestMap();
-        requestMap.put(ConverterPropertyEditorBase.TARGET_COMPONENT_ATTRIBUTE_NAME, 
+        requestMap.put(ConverterPropertyEditorBase.TARGET_COMPONENT_ATTRIBUTE_NAME,
                 component);
         Object newValue = null;
         try {
@@ -526,7 +557,7 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
             }
         }
 
-        // if the component is disabled, "disabled" attribute would be rendered 
+        // if the component is disabled, "disabled" attribute would be rendered
         // on "select" tag, so don't render "disabled" on every option.
         if ((!componentDisabled) && curItem.isDisabled()) {
             writer.writeAttribute("disabled", true, "disabled");
