@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_2.java,v 1.61 2003/10/06 19:06:58 horwat Exp $
+ * $Id: TestRenderers_2.java,v 1.62 2003/10/07 14:02:06 eburns Exp $
  */
 
 /*
@@ -48,7 +48,7 @@ import com.sun.faces.TestBean;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_2.java,v 1.61 2003/10/06 19:06:58 horwat Exp $
+ * @version $Id: TestRenderers_2.java,v 1.62 2003/10/07 14:02:06 eburns Exp $
  * 
  *
  */
@@ -205,6 +205,7 @@ public class TestRenderers_2 extends JspFacesTestCase
         // test decode method
 
         System.out.println("    Testing decode method - parameter (on)");
+	selectBoolean = new UISelectBoolean();
         selectBoolean.setId("myCheckboxOn");
         selectBoolean.setValue(null);
         checkboxRenderer.decode(getFacesContext(), selectBoolean); 
@@ -215,6 +216,7 @@ public class TestRenderers_2 extends JspFacesTestCase
         // test decode method
 
         System.out.println("    Testing decode method - parameter (yes)");
+	selectBoolean = new UISelectBoolean();
         selectBoolean.setId("myCheckboxYes");
         selectBoolean.setValue(null);
         checkboxRenderer.decode(getFacesContext(), selectBoolean);
@@ -224,6 +226,7 @@ public class TestRenderers_2 extends JspFacesTestCase
         // test decode method
 
         System.out.println("    Testing decode method - parameter (true)");
+	selectBoolean = new UISelectBoolean();
         selectBoolean.setId("myCheckboxTrue");
         selectBoolean.setValue(null);
         checkboxRenderer.decode(getFacesContext(), selectBoolean);
@@ -233,6 +236,7 @@ public class TestRenderers_2 extends JspFacesTestCase
         // test decode method
         
         System.out.println("    Testing decode method - parameter (true)");
+	selectBoolean = new UISelectBoolean();
         selectBoolean.setId("myCheckboxTrue");
         selectBoolean.setValue(null);
         checkboxRenderer.decode(getFacesContext(), selectBoolean);
@@ -242,6 +246,7 @@ public class TestRenderers_2 extends JspFacesTestCase
          
         // test decode method with checkbox disabled.
         System.out.println("    Testing decode method - parameter (yes)");
+	selectBoolean = new UISelectBoolean();
         selectBoolean.setId("mycheckboxDisabled");
         selectBoolean.getAttributes().put("disabled", "true");
         selectBoolean.setValue(Boolean.TRUE);
@@ -253,6 +258,7 @@ public class TestRenderers_2 extends JspFacesTestCase
         
         // test encode method
         System.out.println("    Testing encode method - rendering checked");
+	selectBoolean = new UISelectBoolean();
         selectBoolean.setId("myCheckbox");
         selectBoolean.setSelected(true);
         checkboxRenderer.encodeBegin(getFacesContext(), selectBoolean);
