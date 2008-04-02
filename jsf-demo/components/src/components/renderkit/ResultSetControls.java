@@ -1,5 +1,5 @@
 /*
- * $Id: ResultSetControls.java,v 1.12 2003/09/18 18:53:04 jvisvanathan Exp $
+ * $Id: ResultSetControls.java,v 1.13 2003/09/18 20:14:54 eburns Exp $
  */
 
 /*
@@ -49,7 +49,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-import javax.faces.component.UIOutput;
+import javax.faces.component.ValueHolder;
 import javax.faces.component.UIForm;
 import javax.faces.component.UIPanel;
 import javax.faces.component.UIComponent;
@@ -65,7 +65,7 @@ import java.util.MissingResourceException;
  *
  * 
  *
- * @version $Id: ResultSetControls.java,v 1.12 2003/09/18 18:53:04 jvisvanathan Exp $
+ * @version $Id: ResultSetControls.java,v 1.13 2003/09/18 20:14:54 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -448,7 +448,7 @@ public ResultSetControls() {
 	    rowsPerPage = getRowsPerPage(),
 	    totalRows = 0,
 	    result = 0;
-        Object value = ((UIOutput)getData()).currentValue(context);
+        Object value = ((ValueHolder)getData()).currentValue(context);
         if (value instanceof List) {
 	    totalRows = ((List)value).size();
 	}

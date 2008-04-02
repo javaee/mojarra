@@ -1,5 +1,5 @@
 /*
- * $Id: ResultSetRenderer.java,v 1.7 2003/09/17 19:04:20 eburns Exp $
+ * $Id: ResultSetRenderer.java,v 1.8 2003/09/18 20:14:54 eburns Exp $
  */
 
 /*
@@ -49,7 +49,7 @@ import javax.faces.FacesException;
 
 
 import javax.faces.component.UIComponent;
-import javax.faces.component.UIOutput;
+import javax.faces.component.ValueHolder;
 import javax.faces.component.UIPanel;
 import javax.faces.component.UIForm;
 import javax.faces.context.FacesContext;
@@ -77,7 +77,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ResultSetRenderer.java,v 1.7 2003/09/17 19:04:20 eburns Exp $
+ * @version $Id: ResultSetRenderer.java,v 1.8 2003/09/18 20:14:54 eburns Exp $
  *  
  */
 
@@ -416,8 +416,8 @@ public class ResultSetRenderer extends BaseRenderer {
 				 ResultSetControls scroller,
 				 UIComponent group) {
         // currentValue method can be invoked only on components that are 
-        // instances of UIOutput or a sublcass of UIOutput.
-        Object value = ((UIOutput)group).currentValue(context);
+        // instances of ValueHolder or a sublcass of ValueHolder.
+        Object value = ((ValueHolder)group).currentValue(context);
         if (value == null || (!(value instanceof List))) {
             return (Collections.EMPTY_LIST.iterator());
         } 
