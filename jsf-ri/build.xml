@@ -171,7 +171,6 @@
     <javac  srcdir="${source.home}"
            destdir="${build.home}/classes"
              debug="${compile.debug}"
-             excludes="com/sun/faces/el/impl/jstl/test/*.java"
        deprecation="${compile.deprecation}"
           optimize="${compile.optimize}">
       <classpath refid="compile.classpath"/>
