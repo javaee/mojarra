@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContextImpl.java,v 1.46 2003/09/11 15:27:26 craigmcc Exp $
+ * $Id: FacesContextImpl.java,v 1.47 2003/09/17 19:01:18 eburns Exp $
  */
 
 /*
@@ -37,6 +37,8 @@ import javax.faces.event.RepeaterEvent;
 import javax.faces.lifecycle.Lifecycle;
 
 import org.apache.commons.collections.CursorableLinkedList;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import org.mozilla.util.ParameterCheck;
 
@@ -55,6 +57,8 @@ public class FacesContextImpl extends FacesContext
     //
     // Class Variables
     //
+
+    private static final Log log = LogFactory.getLog(FacesContextImpl.class);
 
     //
     // Instance Variables
@@ -288,6 +292,7 @@ public class FacesContextImpl extends FacesContext
     public void setViewRoot(UIViewRoot root) {
         if (viewRoot != root) {
             facesEvents = null;
+            messageLists = null;
         }
 	viewRoot = root;
     }
@@ -326,6 +331,28 @@ public class FacesContextImpl extends FacesContext
             facesEvents = new CursorableLinkedList();
         }
         facesEvents.add(event);
+        if (log.isDebugEnabled()) {
+            if (event instanceof RepeaterEvent) {
+                FacesEvent actual = ((RepeaterEvent) event).getFacesEvent();
+                String id = actual.getComponent().getId();
+                if (id == null) {
+                    id = "<<NONE>>";
+                }
+                log.debug
+                    ("Adding RepeaterEvent[sourceId=" + id +
+                     ",type=" + actual.getClass().getName() +
+                     ",rowIndex=" + ((RepeaterEvent) event).getRowIndex() +
+                     "]");
+            } else {
+                String id = event.getComponent().getId();
+                if (id == null) {
+                    id = "<<NONE>>";
+                }
+                log.debug("Adding FacesEvent[sourceId=" + id +
+                          ",type=" + event.getClass().getName());
+            }
+        }
+
     }
 
     public void addMessage(UIComponent component, Message message) {
@@ -357,6 +384,19 @@ public class FacesContextImpl extends FacesContext
             messageLists.put(component, list);
         }
         list.add(message);
+        if (log.isDebugEnabled()) {
+            if (repeater != null) {
+                log.debug("Adding Message[sourceId=" + component.getId() +
+                          ",summary=" + message.getSummary() +
+                          ",rowIndex=" + repeater.getRowIndex() +
+                          ")");
+            } else {
+                log.debug("Adding Message[sourceId=" +
+                          (component != null ? component.getId() : "<<NONE>>") +
+                          ",summary=" + message.getSummary() + ")");
+            }
+        }
+
     }
 
     public void release() {

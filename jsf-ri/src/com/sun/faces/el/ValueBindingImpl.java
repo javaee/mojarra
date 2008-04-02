@@ -1,5 +1,5 @@
 /*
- * $Id: ValueBindingImpl.java,v 1.16 2003/08/28 15:52:29 rlubke Exp $
+ * $Id: ValueBindingImpl.java,v 1.17 2003/09/17 19:01:19 eburns Exp $
  */
 
 /*
@@ -18,6 +18,9 @@ import javax.faces.el.ReferenceSyntaxException;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ExternalContext;
 import javax.faces.application.Application;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import org.mozilla.util.ParameterCheck;
 import org.mozilla.util.Assert;
@@ -55,6 +58,8 @@ public class ValueBindingImpl extends ValueBinding
 //
 // Class Variables
 //
+
+    private static final Log log = LogFactory.getLog(ValueBindingImpl.class);
 
 //
 // Instance Variables
@@ -207,7 +212,13 @@ public class ValueBindingImpl extends ValueBinding
         throws PropertyNotFoundException {
 	Object result = null;
 
+        if (log.isDebugEnabled()) {
+            log.debug("getValue(ref=" + ref + ")");
+        }
 	result = getValue(context, ref);
+        if (log.isTraceEnabled()) {
+            log.trace("-->Returning " + result);
+        }
 	return result;
     }
 
@@ -224,6 +235,9 @@ public class ValueBindingImpl extends ValueBinding
         info.setPropertyResolver(context.getApplication().getPropertyResolver());
 	    result = Util.getExpressionEvaluator(RIConstants.FACES_RE_PARSER).evaluate(info);
     } catch (Throwable e) {        
+        if (log.isDebugEnabled()) {
+            log.debug("Evaluation threw exception", e);
+        }
 	    Object [] params = { toEvaluate };        
         if (e instanceof ElException) {
             Throwable t = ((ElException) e).getCause();
