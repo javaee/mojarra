@@ -1,5 +1,5 @@
 /*
- * $Id: ButtonRenderer.java,v 1.37 2002/10/03 18:10:41 rkitain Exp $
+ * $Id: ButtonRenderer.java,v 1.38 2002/10/14 19:25:39 rkitain Exp $
  */
 
 /*
@@ -26,6 +26,8 @@ import javax.faces.component.UICommand;
 import javax.faces.component.UIForm;
 import javax.faces.event.FormEvent;
 import javax.faces.component.UIForm;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.mozilla.util.Assert;
 import org.mozilla.util.Debug;
@@ -50,7 +52,7 @@ import javax.servlet.http.HttpServletRequest;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ButtonRenderer.java,v 1.37 2002/10/03 18:10:41 rkitain Exp $
+ * @version $Id: ButtonRenderer.java,v 1.38 2002/10/14 19:25:39 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -113,18 +115,31 @@ public class ButtonRenderer extends HtmlBasicRenderer {
 
     protected String getImageSrc(FacesContext context,
                                  UIComponent component) {
-        String result = null;
-        try {
-            result = getKeyAndLookupInBundle(context, component, "imageKey");
+        String result = (String) component.getAttribute("image");
+ 
+        if (result == null) {
+            try {
+                result = getKeyAndLookupInBundle(context, component, 
+                    "imageKey");
+            } catch (MissingResourceException e) {
+                // Do nothing since the absence of a resource is not an
+                // error.
+            }
         }
-        catch (MissingResourceException e) {
-            // Do nothing since the absence of a resource is not an
-            // error.
+        if (result == null) {
+            return result;
         }
-        if (null == result) {
-            result = (String) component.getAttribute("image");
+
+        HttpServletRequest request =
+            (HttpServletRequest) context.getServletRequest();
+        HttpServletResponse response =
+            (HttpServletResponse) context.getServletResponse();
+        StringBuffer sb = new StringBuffer();
+        if (result.startsWith("/")) {
+            sb.append(request.getContextPath());
         }
-        return result;
+        sb.append(result);
+        return (response.encodeURL(sb.toString()));
     }
 
     protected String getLabel(FacesContext context,
@@ -164,16 +179,19 @@ public class ButtonRenderer extends HtmlBasicRenderer {
 	    throw new NullPointerException(Util.getExceptionMessage(
 				    Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
-	
+
         // Was our command the one that caused this submission?
         // we don' have to worry about getting the value from request parameter
         // because we just need to know if this command caused the submission. We
         // can get the command name by calling currentValue. This way we can 
         // get around the IE bug.
-        String value = context.getServletRequest().
-                getParameter(component.getCompoundId());
+        String compoundId = component.getCompoundId();
+        String value = context.getServletRequest().getParameter(compoundId);
         if (value == null) {
-            return result;
+            if (context.getServletRequest().getParameter(compoundId+".x") == null &&
+                context.getServletRequest().getParameter(compoundId+".y") == null) {
+                return result;
+            }
         }
 
         String type = (String) component.getAttribute("type");
@@ -232,9 +250,6 @@ public class ButtonRenderer extends HtmlBasicRenderer {
                 writer.write("\"");
                 writer.write(" name=\"");
                 writer.write(component.getCompoundId());
-                writer.write("\"");
-                writer.write(" value=\"");
-                writer.write(imageSrc);
                 writer.write("\"");
             } else {
                 writer.write("\"");

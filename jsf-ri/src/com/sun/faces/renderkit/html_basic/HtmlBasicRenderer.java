@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderer.java,v 1.12 2002/09/23 20:33:33 rkitain Exp $
+ * $Id: HtmlBasicRenderer.java,v 1.13 2002/10/14 19:25:39 rkitain Exp $
  */
 
 /*
@@ -262,6 +262,15 @@ public abstract class HtmlBasicRenderer extends Renderer {
         Assert.assert_it(compoundId != null );
         
         String newValue = context.getServletRequest().getParameter(compoundId);
+        
+        //PENDING(rogerk) FIXME this will most likely be changed in the 
+        // API later, in which case we could remove this..
+        //
+        if (newValue != null && newValue.equals("")) {
+            newValue = null;
+            component.setValue(newValue);
+            return true;
+        }
         try {
             convertedValue = getConvertedValue(context, component, newValue);   
         } catch (IOException ioe) {
