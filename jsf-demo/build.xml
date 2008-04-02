@@ -271,6 +271,8 @@
           file="${basedir}/components/build/jsf-components.war"/>
     <copy todir="${dist.home}/samples"
           file="${basedir}/cardemo/build/jsf-cardemo.war"/>
+    <copy todir="${dist.home}/samples"
+          file="${basedir}/standard/build/jsf-standard.war"/>
     <copy todir="${dist.home}/samples" 
           file="${basedir}/guessNumber/build/jsf-guessNumber.war"/>
     <copy todir="${dist.home}/samples" 
@@ -287,6 +289,9 @@
 
     <copy todir="${dist.home}/samples/guessNumber" includeEmptyDirs="false">
       <fileset dir="${basedir}/guessNumber" excludes="build.xml,wspack-build.xml"/>
+    </copy>
+    <copy todir="${dist.home}/samples/standard" includeEmptyDirs="false">
+      <fileset dir="${basedir}/standard" excludes="build.xml,wspack-build.xml"/>
     </copy>
     <copy file="${basedir}/guessNumber/wspack-build.xml"
           tofile="${dist.home}/samples/guessNumber/build.xml" />
