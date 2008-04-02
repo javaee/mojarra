@@ -36,7 +36,7 @@
  maintenance of any nuclear facility.
 -->
 
-<%-- $Id: repeater.jsp,v 1.10 2004/05/12 18:46:49 ofung Exp $ --%>
+<%-- $Id: repeater.jsp,v 1.11 2005/01/08 02:05:40 edburns Exp $ --%>
 
 <%@ taglib uri="http://java.sun.com/jsf/core"  prefix="f" %>
 <%@ taglib uri="http://java.sun.com/jsf/html"  prefix="h" %>
@@ -136,8 +136,9 @@
                         value="#{RepeaterBean.pressLabel}"
                          type="SUBMIT"/>
       <h:commandLink id="click"
-                    action="#{RepeaterBean.click}"
+                    actionListener="#{RepeaterBean.clickAction}"
                     immediate="true">
+        <f:attribute name="key" value="#{customer.accountId}" />
         <h:outputText
                         value="Click"/>
       </h:commandLink>

@@ -1,5 +1,5 @@
 /*
- * $Id: RepeaterBean.java,v 1.1 2004/05/20 17:09:15 jvisvanathan Exp $
+ * $Id: RepeaterBean.java,v 1.2 2005/01/08 02:05:40 edburns Exp $
  */
 
 /*
@@ -46,8 +46,10 @@ package demo.model;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIData;
 import javax.faces.component.UIInput;
+import javax.faces.component.UIComponent;
 import javax.faces.component.UISelectBoolean;
 import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -186,6 +188,15 @@ public class RepeaterBean {
         clear();
         return (null);
 
+    }
+
+    public void clickAction(ActionEvent e) {
+	UIComponent link = e.getComponent();
+	String key = (String) link.getAttributes().get("key");
+        append("Link clicked for account " + accountId.getValue());
+	append("actionEvent occurred " + key);
+	clear();
+	
     }
 
 
