@@ -1,5 +1,5 @@
 /* 
- * $Id: ViewHandlerResponseWrapper.java,v 1.10 2006/10/05 20:56:36 rlubke Exp $ 
+ * $Id: ViewHandlerResponseWrapper.java,v 1.11 2007/02/15 02:46:29 rlubke Exp $ 
  */
 
 /*
@@ -40,6 +40,7 @@ import javax.servlet.http.HttpServletResponseWrapper;
 import java.io.ByteArrayOutputStream;
 import java.io.CharArrayWriter;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.Writer;
 import java.nio.ByteBuffer;
@@ -145,7 +146,12 @@ public class ViewHandlerResponseWrapper extends HttpServletResponseWrapper {
             caw.writeTo(wrapped.getWriter());
             caw.reset();
         } else if (null != basos) {
-            basos.writeTo(wrapped.getWriter(), wrapped.getCharacterEncoding());                       
+            try {
+                basos.writeTo(wrapped.getWriter(),
+                              wrapped.getCharacterEncoding());
+            } catch (IllegalStateException ise) {
+                basos.writeTo(wrapped.getOutputStream());
+            }           
             basos.resetByteArray();
         }
 
@@ -171,7 +177,7 @@ public class ViewHandlerResponseWrapper extends HttpServletResponseWrapper {
         }
     }
 
-    public ServletOutputStream getOutputStream() throws IOException {             
+    public ServletOutputStream getOutputStream() throws IOException {
         if (pw != null) {
             throw new IllegalStateException();
         }
@@ -239,6 +245,19 @@ public class ViewHandlerResponseWrapper extends HttpServletResponseWrapper {
                 writer.write(cBuff.array());
             } catch (CharacterCodingException cce) {
                 throw new FacesException(cce);
+            } catch (IOException ioe) {
+                throw new FacesException(ioe);
+            }
+        }
+
+        
+        /**
+         * <p>Write the buffered bytes to the provided OutputStream.</p>
+         * @param stream the stream to write to
+         */
+        public void writeTo(OutputStream stream) {
+            try {                
+                stream.write(baos.getByteBuffer().array());
             } catch (IOException ioe) {
                 throw new FacesException(ioe);
             }
