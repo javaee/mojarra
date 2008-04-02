@@ -1,5 +1,5 @@
 /*
- * $Id: Renderer.java,v 1.25 2003/10/24 18:55:44 eburns Exp $
+ * $Id: Renderer.java,v 1.26 2003/10/29 04:20:10 eburns Exp $
  */
 
 /*
@@ -121,9 +121,21 @@ public abstract class Renderer {
      * @exception NullPointerException if <code>context</code>
      *  or <code>component</code> is <code>null</code>
      */
-    public abstract void encodeChildren(FacesContext context,
-                                        UIComponent component)
-        throws IOException;
+    public void encodeChildren(FacesContext context, UIComponent component)
+        throws IOException {
+        if (context == null || component == null) {
+            throw new NullPointerException();
+        }
+	Iterator kids = component.getChildren().iterator();
+	while (kids.hasNext()) {
+	    UIComponent kid = (UIComponent) kids.next();
+	    kid.encodeBegin(context);
+	    if (kid.getRendersChildren()) {
+		kid.encodeChildren(context);
+	    }
+	    kid.encodeEnd(context);
+	}
+    }
 
 
     /**

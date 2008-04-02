@@ -1,5 +1,5 @@
 /*
- * $Id: LinkRenderer.java,v 1.3 2003/10/28 21:00:30 eburns Exp $
+ * $Id: LinkRenderer.java,v 1.4 2003/10/29 04:20:14 eburns Exp $
  */
 
 /*
@@ -37,7 +37,7 @@ import org.mozilla.util.Assert;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: LinkRenderer.java,v 1.3 2003/10/28 21:00:30 eburns Exp $
+ * @version $Id: LinkRenderer.java,v 1.4 2003/10/29 04:20:14 eburns Exp $
  */
 
 public class LinkRenderer extends HtmlBasicRenderer {
@@ -118,22 +118,6 @@ public class LinkRenderer extends HtmlBasicRenderer {
 	    outputLinkRenderer.encodeBegin(context, component);
 	}
 	return;
-    }
-
-    public void encodeChildren(FacesContext context, UIComponent component)
-        throws IOException {
-        if (context == null || component == null) {
-            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
-        }
-	Iterator kids = component.getChildren().iterator();
-	while (kids.hasNext()) {
-	    UIComponent kid = (UIComponent) kids.next();
-	    kid.encodeBegin(context);
-	    if (kid.getRendersChildren()) {
-		kid.encodeChildren(context);
-	    }
-	    kid.encodeEnd(context);
-	}
     }
 
     public void encodeEnd(FacesContext context, UIComponent component)
