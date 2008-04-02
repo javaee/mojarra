@@ -3,7 +3,7 @@
  SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 -->
 
-<%-- $Id: DataModel.jsp,v 1.4 2003/11/01 02:35:20 craigmcc Exp $ --%>
+<%-- $Id: DataModel.jsp,v 1.5 2003/11/10 05:08:18 craigmcc Exp $ --%>
 
 <%@ page import="standard.CustomerBean" %>
 <%@ page import="java.util.ArrayList" %>
@@ -32,7 +32,7 @@
 
       <h:selectone_menu        id="accountId"
                      componentRef="DataModelBean.accountId">
-        <f:selectitems   valueRef="DataModelBean.accountIds"/>
+           <f:selectitems   value="#{DataModelBean.accountIds}"/>
       </h:selectone_menu>
 
       <h:command_button actionRef="DataModelBean.select"
@@ -46,19 +46,19 @@
 
       <h:output_text        value="Account Id:"/>
 
-      <h:output_text     valueRef="DataModelBean.customers.rowData.accountId"/>
+      <h:output_text        value="#{DataModelBean.customers.rowData.accountId}"/>
 
       <h:output_text        value="Customer Name:"/>
 
-      <h:output_text     valueRef="DataModelBean.customers.rowData.name"/>
+      <h:output_text        value="#{DataModelBean.customers.rowData.name}"/>
 
       <h:output_text        value="Stock Symbol:"/>
 
-      <h:output_text     valueRef="DataModelBean.customers.rowData.symbol"/>
+      <h:output_text        value="#{DataModelBean.customers.rowData.symbol}"/>
 
       <h:output_text        value="Total Sales:"/>
 
-      <h:output_text     valueRef="DataModelBean.customers.rowData.totalSales"/>
+      <h:output_text        value="#{DataModelBean.customers.rowData.totalSales}"/>
 
     </h:panel_grid>
 

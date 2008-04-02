@@ -3,7 +3,7 @@
  SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 -->
 
-<%-- $Id: UIData.jsp,v 1.5 2003/10/27 04:16:02 craigmcc Exp $ --%>
+<%-- $Id: UIData.jsp,v 1.6 2003/11/10 05:08:18 craigmcc Exp $ --%>
 
 <%@ page import="standard.CustomerBean" %>
 <%@ page import="java.util.ArrayList" %>
@@ -65,7 +65,7 @@
 	                 rows="5"
                    rowClasses="list-row-even, list-row-odd"
                    styleClass="list-background"
-                     valueRef="list"
+                        value="#{list}"
                           var="customer">
 
     <h:column>
@@ -88,7 +88,7 @@
                  componentRef="UIDataBean.accountId"
                      required="true"
                          size="6"
-                     valueRef="customer.accountId">
+                        value="#{customer.accountId}">
         <f:valuechange_listener
                          type="standard.LogValueChangedListener"/>
       </h:input_text>
@@ -102,7 +102,7 @@
       <h:input_text        id="name"
                      required="true"
                          size="50"
-                     valueRef="customer.name">
+                        value="#{customer.name}">
         <f:valuechange_listener
                          type="standard.LogValueChangedListener"/>
       </h:input_text>
@@ -116,7 +116,7 @@
       <h:input_text        id="symbol"
                      required="true"
                          size="6"
-                     valueRef="customer.symbol">
+                        value="#{customer.symbol}">
         <f:validate_length
                       maximum="6"
                       minimum="2"/>
@@ -131,7 +131,7 @@
         <h:output_text  value="Total Sales"/>
       </f:facet>
       <h:output_text       id="totalSales"
-                     valueRef="customer.totalSales"/>
+                        value="#{customer.totalSales}"/>
     </h:column>
 
     <h:column>
@@ -141,13 +141,13 @@
       <h:command_button    id="press"
                     actionRef="UIDataBean.press"
                     immediate="true"
-                     valueRef="UIDataBean.pressLabel"
+                        value="#{UIDataBean.pressLabel}"
                          type="SUBMIT"/>
       <h:command_link id="click"
                     actionRef="UIDataBean.click"
                     immediate="true">
         <h:output_text
-                     valueRef="UIDataBean.clickLabel"/>
+                        value="#{UIDataBean.clickLabel}"/>
       </h:command_link>
     </h:column>
 
