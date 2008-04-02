@@ -37,7 +37,11 @@ public class MultiFileUploadRenderer extends Renderer {
         String template = readTemplateFile(MultiFileUpload.TEMPLATE_FILE);
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
         
-        String uploadUrl = generateUri(context, MultiFileUpload.UPLOAD_URI) +
+        // Just pass back /AppContext/foo.jsf (or /AppContext/faces/foo.xhtml, etc)
+        // The applet will construct the full URL based on
+        // documentBase
+        String uploadUrl = 
+            context.getApplication().getViewHandler().getActionURL(context, generateUri(context, MultiFileUpload.UPLOAD_URI)) +
             "?" + MultiFileUpload.REQUEST_PARAM + "=" + ul.getClientId(context);
         String appletClass = ("button".equalsIgnoreCase(ul.getType())) ?
                 "ButtonApplet" : "FullApplet"; // default to "full"
@@ -46,12 +50,11 @@ public class MultiFileUploadRenderer extends Renderer {
         String sep = "";
             
         for (String dep : MultiFileUpload.DEP_JARS) {
+            String depURI =
+                context.getApplication().getViewHandler().getActionURL(context, generateUri(context, MultiFileUpload.JARS_URI + dep));
             deps.append(sep)
-//                .append(Util.generateStaticUri(dep)
-                .append (Util.getAppBaseUrl(context))
-                .append(MultiFileUpload.JARS_URI)
-                .append(generateUri (context, dep)
-                        );
+//                .append(Util.generateStaticUri(dep))
+                .append(depURI);
             sep = ",";
         }
         
@@ -60,7 +63,7 @@ public class MultiFileUploadRenderer extends Renderer {
             .replaceAll("%%%WIDTH%%%", ul.getWidth())
             .replaceAll("%%%HEIGHT%%%", ul.getHeight())
             .replaceAll("%%%START_DIR%%%", ul.getStartDir())
-            .replaceAll("%%%UPLOAD_URL%%%", Util.getAppBaseUrl(context) + uploadUrl)
+            .replaceAll("%%%UPLOAD_URL%%%", uploadUrl)
             .replaceAll("%%%BUTTON_TEXT%%%", ul.getButtonText())
             .replaceAll("%%%FILE_FILTER%%%", ul.getFileFilter())
             .replaceAll("%%%SESSION_ID%%%", request.getSession().getId());
@@ -80,6 +83,7 @@ public class MultiFileUploadRenderer extends Renderer {
                     baos.write(buffer, 0, count);
                 }
             }
+            is.close();
         } catch (IOException e) {
             System.err.println(e.getMessage());
         }

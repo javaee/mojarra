@@ -6,6 +6,7 @@ package com.sun.faces.sandbox.util;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Enumeration;
 import java.util.List;
 
 import javax.faces.context.FacesContext;
@@ -124,8 +125,20 @@ public class MultiFileUploadPhaseListener implements PhaseListener {
                         // your Faces config.  This is due to the lack of a portable way of making
                         // that resolution.
                         // TODO:  Fix this
-                        destinationUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() +
-                            response.encodeURL(context.getApplication().getViewHandler().getActionURL(context, destinationUrl));
+                        Enumeration header = request.getHeaderNames();
+                        while (header.hasMoreElements()) {
+                            String headerName = (String)header.nextElement();
+                            System.err.println ("Header '"+ headerName +
+                                    "' = '" + request.getHeader(headerName) + "'");
+                        }
+                        System.err.println(request.getRequestURL());
+                        System.err.println(request.getServletPath());
+                        System.err.println(request.getContextPath());
+                            
+                        // Just pass back /AppContext/foo.jsf (or /AppContext/faces/foo.xhtml, etc)
+                        // The applet will construct the full URL based on
+                        // documentBase
+                        destinationUrl = response.encodeURL(context.getApplication().getViewHandler().getActionURL(context, destinationUrl));
                     }
                     response.setContentType("text/text");
                     response.getOutputStream().write(destinationUrl.getBytes());
