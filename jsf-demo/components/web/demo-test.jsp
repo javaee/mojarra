@@ -46,7 +46,7 @@
     <hr>
 
        <f:view>
-        <h:form id="demotestForm" formName="demotestForm" >
+        <h:form id="demotestForm" >
 
             <table> 
             <tr> 

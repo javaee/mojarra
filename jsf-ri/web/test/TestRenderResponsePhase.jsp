@@ -34,7 +34,7 @@
         <H3> JSF Basic Components Test Page </H3>
 
 <f:view>
-<h:form formName="basicForm" id="basicForm" title="basicForm" styleClass="formClass"
+<h:form id="basicForm" title="basicForm" styleClass="formClass"
       accept="html,wml" >
 
   <TABLE BORDER="1">

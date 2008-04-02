@@ -3,7 +3,7 @@
  SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 -->
 
-<%-- $Id: UICommand.jsp,v 1.4 2003/08/25 21:25:20 eburns Exp $ --%>
+<%-- $Id: UICommand.jsp,v 1.5 2003/10/19 14:54:06 eburns Exp $ --%>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
@@ -27,7 +27,7 @@
        <p>Form is rendered after this.</p>
      
        <h:form id="standardRenderKitForm" 
-                   formName="standardRenderKitForm">
+                  >
 
          <h:command_button id="standardRenderKitSubmit" 
              actionRef="model.defaultAction"

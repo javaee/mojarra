@@ -3,7 +3,7 @@
  SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 -->
 
-<%-- $Id: UIData.jsp,v 1.2 2003/09/11 21:40:00 craigmcc Exp $ --%>
+<%-- $Id: UIData.jsp,v 1.3 2003/10/19 14:54:06 eburns Exp $ --%>
 
 <%@ page import="standard.CustomerBean" %>
 <%@ page import="java.util.ArrayList" %>
@@ -52,7 +52,7 @@
     <hr>
   </c:if>
 
-  <h:form id="standardRenderKitForm" formName="standardRenderKitForm">
+  <h:form id="standardRenderKitForm">
 
   <h:data_table columnClasses="list-column-center,
                                list-column-center, list-column-left,

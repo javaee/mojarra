@@ -44,7 +44,7 @@
     <h2>Hi. My name is Duke.  I'm thinking of a number from 0 to 10.
     Can you guess it?</h2>
     <f:view>
-    <h:form id="helloForm" formName="helloForm" >
+    <h:form id="helloForm" >
   	<h:input_text id="userNo"  value="NUMBER" /> <BR>
 
 	 <h:command_button id="submit" value="Submit" />

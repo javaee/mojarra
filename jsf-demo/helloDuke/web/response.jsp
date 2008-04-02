@@ -41,7 +41,7 @@
     <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
     <body bgcolor="white">
     <f:view>
-    <h:form id="responseform" formName="responseform">
+    <h:form id="responseform">
     <h:graphic_image id="waveImg" url="/wave.med.gif" />
     <h2>Hi, <h:output_text id="userLabel"
 			   valueRef="UserNameBean.userName" /> </h2>

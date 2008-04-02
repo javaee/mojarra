@@ -49,7 +49,7 @@
     <H3> JSF Basic Components Test Page </H3>
     <hr>
     <f:view>
-    <h:form  formName="errorForm" >
+    <h:form  >
 	<faces:output_text id="hello_label" key="errorLabel" bundle="carDemoBundle" />
              <P></P>
     </h:Form>

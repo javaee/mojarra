@@ -58,7 +58,7 @@
 <BODY BGCOLOR="white">
 
 <f:view>
-<h:form  formName="carStoreForm" >
+<h:form  >
 
 <P>
 <TABLE BORDER="0" WIDTH="660" BGCOLOR="#4F4F72">

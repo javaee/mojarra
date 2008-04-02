@@ -53,7 +53,7 @@
 	    scope="session" var="carDemoBundle"/>
 
 <f:view>
-<h:form  formName="thanksForm" >
+<h:form  >
 
 <body bgcolor="#FFFFFF">
 

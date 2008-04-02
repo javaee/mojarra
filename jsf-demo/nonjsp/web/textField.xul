@@ -2,7 +2,7 @@
 
 <page>
 
-<window id="textFields" formName="TextFields">
+<window id="textFields">
 
 <label id="userLabel" value="UserName" />
 <textbox id="userName" value="default" />

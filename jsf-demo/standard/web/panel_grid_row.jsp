@@ -13,7 +13,7 @@
 
              <td>
 
-               <h:form id="form1" formName="form1">
+               <h:form id="form1">
 
                   <h:panel_grid  columns="3" 
                                   border="1"
@@ -81,7 +81,7 @@
 
              <td>
              
-               <h:form id="form2" formName="form2">
+               <h:form id="form2">
 
                   <h:panel_grid  columns="3"
                              footerClass="form-footer"

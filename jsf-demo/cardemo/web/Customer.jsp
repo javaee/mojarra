@@ -56,7 +56,7 @@
 	    scope="session" var="cardemoBundle"/>
 
 <f:view>
-<h:form  formName="CustomerForm">
+<h:form >
 <table border="0" width="660" bgcolor="#4f4f72">
     <tbody>
       <tr> 

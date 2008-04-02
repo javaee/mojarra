@@ -1,5 +1,5 @@
 /*
- * $Id: FormTag.java,v 1.50 2003/10/07 20:15:52 horwat Exp $
+ * $Id: FormTag.java,v 1.51 2003/10/19 14:54:46 eburns Exp $
  */
 
 /*
@@ -38,9 +38,6 @@ public class FormTag extends BaseComponentTag
 
     // Attribute Instance Variables
 
-    public String formName = null;
-    public String formName_ = null;
-
     // Relationship Instance Variables
 
     //
@@ -60,10 +57,6 @@ public class FormTag extends BaseComponentTag
     // Accessors
     //
 
-    public void setFormName(String newFormName) { 
-	formName_ = newFormName;
-    }
-
     //
     // General Methods
     //
@@ -77,24 +70,6 @@ public class FormTag extends BaseComponentTag
 
     protected void overrideProperties(UIComponent component) {
 	super.overrideProperties(component);
-
-        if (formName != null) {
-            // we set the bundle attribute on the root component here  
-            // so that we don't set it again during postback. 
-            // This cannot be done in BaseComponentTag since this is specific
-            // to FormTag. Since formName is a required attribute,
-            // we can be sure that these statements will be executed
-            // the first time the tags are processed.
-            if (bundle != null) {
-                // set it as an attribute on the root component so that
-                // it is available to children and doesn't have to be repeated
-                // in every tag.
-                FacesContext context = FacesContext.getCurrentInstance();
-                UIComponent root = context.getViewRoot();
-                root.getAttributes().put(RIConstants.BUNDLE_ATTR, bundle);    
-            }
-            component.getAttributes().put("name", formName);
-        }
         
         // action, method, enctype, acceptcharset, accept, target, onsubmit, 
         // onreset
@@ -124,21 +99,11 @@ public class FormTag extends BaseComponentTag
         }        
     }
 
-    /* Evaluates expressions as necessary */
-    private void evaluateExpressions() throws JspException {
-        if (formName_ != null) {
-            formName = Util.evaluateElExpression(formName_, pageContext);
-   	}
-    }
-
-
     //
     // Methods from TagSupport
     //
 
     public int doStartTag() throws JspException {
-        // evaluate any expressions that we were passed
-        evaluateExpressions();
 
         // chain to the parent implementation
         return super.doStartTag();

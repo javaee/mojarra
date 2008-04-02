@@ -76,7 +76,7 @@
 </head>
 <body bgcolor="white">
 
-<h:form formName="resultsForm" bundle="demoBundle">  
+<h:form>  
 
 Rendered via Faces components:
 

@@ -2,7 +2,7 @@
 
 <page>
 
-<window id="HelloDuke" formName="HelloDuke">
+<window id="HelloDuke">
 
 <label id="hiLabel" value="Duke says 'Hi!'" />
 

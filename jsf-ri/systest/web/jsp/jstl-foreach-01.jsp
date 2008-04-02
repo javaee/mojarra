@@ -10,7 +10,7 @@
 </head>
 <body>
 
-<h:form id="jstlForeach01_form" formName="formName">
+<h:form id="jstlForeach01_form">
 
   <table border="0" cellspacing="5" cellpadding="5">
 

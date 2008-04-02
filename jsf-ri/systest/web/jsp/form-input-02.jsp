@@ -9,7 +9,7 @@
 </head>
 <body>
 
-<h:form id="formInput02_form" formName="formName">
+<h:form id="formInput02_form">
 
   <h:panel_grid columns="3">
 

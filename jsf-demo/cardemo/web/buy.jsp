@@ -51,7 +51,7 @@
 <body bgcolor="#FFFFFF">
 <f:view>  
 
-<h:form  formName="carStoreForm" >
+<h:form  >
 
 <TABLE BORDER="0" WIDTH="660" BGCOLOR="#4F4F72">
 <tr NOSAVE>

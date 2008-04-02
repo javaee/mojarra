@@ -54,7 +54,7 @@
 	    scope="session" var="carDemoBundle"/>
 
 <f:view>
-    <h:form formName="helloForm">
+    <h:form>
     <table border="0" width="660" bgcolor="#4f4f72">
     <tbody>
       <tr> 

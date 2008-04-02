@@ -3,7 +3,7 @@
  SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 -->
 
-<%-- $Id: UISelectOne.jsp,v 1.2 2003/08/25 16:37:16 jvisvanathan Exp $ --%>
+<%-- $Id: UISelectOne.jsp,v 1.3 2003/10/19 14:54:07 eburns Exp $ --%>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
@@ -28,7 +28,7 @@
        <p>Form is rendered after this.</p>
      
        <h:form id="standardRenderKitForm" 
-                   formName="standardRenderKitForm">
+                  >
 
          <h:command_button id="standardRenderKitSubmit" 
              action="success"

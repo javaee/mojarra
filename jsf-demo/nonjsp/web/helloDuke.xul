@@ -2,7 +2,7 @@
 
 <page>
 
-<window id="HelloDuke" formName="HelloDuke">
+<window id="HelloDuke">
 
 <image id="duke" URL="/images/wave.med.gif" />
 

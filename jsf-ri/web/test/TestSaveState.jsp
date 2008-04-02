@@ -13,7 +13,7 @@
         <H3> JSF Basic Components Test Page </H3>
 
 <f:view>
-<h:form formName="basicForm" id="basicForm">
+<h:form id="basicForm">
 
   <TABLE BORDER="1">
 

@@ -227,7 +227,7 @@ that id is non-unique no more output will be generated.
 &lt;body&gt;
 &lt;h3&gt;Unique id requirement example&lt;/h3&gt;
 &lt;f:use_faces&gt;
-  &lt;h:form id="basicForm" formName="basicForm" &gt;
+  &lt;h:form id="basicForm"&gt;
 
     &lt;c:forEach begin="0" end="3" varStatus="status"&gt;
       JSF Index: &lt;c:out value="${status.index}"/&gt;
@@ -291,7 +291,7 @@ Here is an example that illustrates the workaround:
 
 
 &lt;f:use_faces&gt;
-  &lt;h:form id="basicForm" formName="basicForm" &gt;
+  &lt;h:form id="basicForm"&gt;
 
     &lt;c:forEach items="${ListBean}" varStatus="status"&gt;
       &lt;c:if test="${status.last}"&gt;

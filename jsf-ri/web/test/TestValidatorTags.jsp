@@ -15,7 +15,7 @@
     <h1>Test Validator Tags</h1>
 
 <f:view>
-<h:form formName="validatorForm" id="validatorForm">
+<h:form id="validatorForm">
 <table>
 
   <tr>

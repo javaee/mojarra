@@ -11,7 +11,7 @@
     <h1>TestViewTag</h1>
 
 <f:view locale="ps-PS_Traditional">
-<h:form formName="testViewTag" styleClass="formClass" accept="html">
+<h:form styleClass="formClass" accept="html">
 
 <table>
 
@@ -30,7 +30,7 @@
     <address><a href="mailto:Ed Burns <ed.burns@sun.com>"></a></address>
 <!-- Created: Wed Oct 15 17:31:05 Eastern Daylight Time 2003 -->
 <!-- hhmts start -->
-Last modified: Wed Oct 15 17:34:55 Eastern Daylight Time 2003
+Last modified: Sun Oct 19 10:33:56 EDT 2003
 <!-- hhmts end -->
   </body>
 </html>

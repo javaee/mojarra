@@ -43,7 +43,7 @@
     <H3> JSF Basic Components Test Page </H3>
     <hr>
       <f:view>
-        <h:form id="errorForm" formName="errorForm">
+        <h:form id="errorForm">
             <h:output_text id="helloLabel" text="Login Failed" />
              <P></P>
         </h:form>

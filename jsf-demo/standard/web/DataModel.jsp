@@ -3,7 +3,7 @@
  SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 -->
 
-<%-- $Id: DataModel.jsp,v 1.2 2003/10/17 03:53:48 eburns Exp $ --%>
+<%-- $Id: DataModel.jsp,v 1.3 2003/10/19 14:54:05 eburns Exp $ --%>
 
 <%@ page import="standard.CustomerBean" %>
 <%@ page import="java.util.ArrayList" %>
@@ -22,7 +22,7 @@
 </head>
 <body>
 
-  <h:form id="myform" formName="myform">
+  <h:form id="myform">
 
     <h:panel_grid   columnClasses="form-prompt,form-field"
                           columns="2"

@@ -105,7 +105,7 @@
 </head>
 <body bgcolor="white">
 
-<h:form formName="menuForm" >
+<h:form >
 
 <d:stylesheet path="/tree-control-test.css"/>
 

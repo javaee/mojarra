@@ -62,7 +62,7 @@
 </head>
 <body bgcolor="white">
 
-<h:form formName="tabbedForm" bundle="demoBundle">
+<h:form>
      <d:stylesheet path="/stylesheet.css"/>
 Powered by Faces components:
 

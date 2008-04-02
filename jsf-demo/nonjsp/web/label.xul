@@ -2,7 +2,7 @@
 
 <page>
 
-<window id="label" formName="Label">
+<window id="label">
 
 <label id="simpleLabel" value="A simple label" />
 

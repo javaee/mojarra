@@ -44,7 +44,7 @@
     <h2>My name is Duke.  What is yours?</h2>
     <jsp:useBean id="UserNameBean" class="helloDuke.UserNameBean" scope="session" />
     <f:view>
-    <h:form id="helloForm" formName="helloForm" >
+    <h:form id="helloForm" >
         <h:graphic_image id="waveImg" url="/wave.med.gif" />
   	<h:input_text id="username"
 			valueRef="UserNameBean.userName"/>

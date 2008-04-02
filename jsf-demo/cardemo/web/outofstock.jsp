@@ -47,7 +47,7 @@
 	    scope="session" var="carDemoBundle"/>
     <hr>
     <f:view>
-    <h:form  formName="outofstockForm" >
+    <h:form  >
         <p> <h:output_text id="stockLabel" key="stockLabel" bundle="carDemoBundle"/>
         </p> 
         <p> <h:command_button id="reconfigure" key="configureButton" 

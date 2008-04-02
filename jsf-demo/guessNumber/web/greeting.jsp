@@ -45,7 +45,7 @@
     Can you guess it?</h2>
     <jsp:useBean id="UserNumberBean" class="guessNumber.UserNumberBean" scope="session" />
     <f:view>
-    <h:form id="helloForm" formName="helloForm" >
+    <h:form id="helloForm" >
         <h:graphic_image id="waveImg" url="/wave.med.gif" />
   	<h:input_text id="userNo" valueRef="UserNumberBean.userNumber">                
 	        <f:validate_longrange minimum="0" maximum="10" />
