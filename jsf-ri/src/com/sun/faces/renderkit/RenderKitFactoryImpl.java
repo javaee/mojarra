@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKitFactoryImpl.java,v 1.22 2005/08/26 15:27:10 rlubke Exp $
+ * $Id: RenderKitFactoryImpl.java,v 1.23 2005/12/02 17:45:36 rlubke Exp $
  */
 
 /*
@@ -96,16 +96,9 @@ public class RenderKitFactoryImpl extends RenderKitFactory {
         //PENDING (rogerk) do something with FacesContext ...
         //
         // If an instance already exists, return it.
-        //
-        RenderKit renderKit = null;
+        //       
 
-        synchronized (renderKits) {
-            if (renderKits.containsKey(renderKitId)) {
-                renderKit = renderKits.get(renderKitId);
-            }
-        }
-
-        return renderKit;
+        return renderKits.get(renderKitId);
     }
 
 

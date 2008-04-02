@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.179 2005/11/29 16:20:15 rlubke Exp $
+ * $Id: Util.java,v 1.180 2005/12/02 17:45:37 rlubke Exp $
  */
 
 /*
@@ -89,7 +89,7 @@ import com.sun.faces.spi.ManagedBeanFactory.Scope;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.179 2005/11/29 16:20:15 rlubke Exp $
+ * @version $Id: Util.java,v 1.180 2005/12/02 17:45:37 rlubke Exp $
  */
 
 public class Util {
@@ -100,13 +100,13 @@ public class Util {
     public static final String FACES_LOGGER = "javax.enterprise.resource.webcontainer.jsf";
     
     public static final String FACES_LOG_STRINGS = 
-            "com.sun.faces.LogStrings";
-    
-    private static Map<String,RenderKit> renderKitMap = 
-          new HashMap<String,RenderKit>(4);
+            "com.sun.faces.LogStrings";        
     
     // Log instance for this class
     private static Logger logger = getLogger(FACES_LOGGER);
+    
+    private static final String RENDER_KIT_IMPL_REQ = 
+          RIConstants.FACES_PREFIX + "renderKitImplForRequest";
     
     // README - make sure to add the message identifier constant
     // (ex: Util.CONVERSION_ERROR_MESSAGE_ID) and the number of substitution
@@ -1265,35 +1265,25 @@ public class Util {
 
         RenderKit renderKit = context.getRenderKit();        
         if (renderKit == null) {
-            // check our map
-            renderKit = renderKitMap.get(renderKitId);
-            if (renderKit != null) {
-                return renderKit.getResponseStateManager();
-            } else {
-                RenderKitFactory factory = (RenderKitFactory)
-                      FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
-                assert (factory != null);
+            // check request scope for a RenderKitFactory implementation
+            Map<String,Object> requestMap = 
+                  context.getExternalContext().getRequestMap();
+            RenderKitFactory factory = (RenderKitFactory)
+                  requestMap.get(RENDER_KIT_IMPL_REQ);
+            if (factory != null) {
                 renderKit = factory.getRenderKit(context, renderKitId);
-                if (renderKit == null) {
-                    if (logger.isLoggable(Level.WARNING)) {
-                        logger.warning(
-                              "Renderkit could not loaded for renderKitId "
-                              + renderKitId);
-                    }
-                    throw new FacesException(
-                          "Renderkit could not loaded for renderKitId "
-                          + renderKitId);
+            } else {
+                factory = (RenderKitFactory) 
+                      FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);                
+                if (factory == null) {
+                    throw new IllegalStateException();
                 } else {
-                    renderKitMap.put(renderKitId, renderKit);
-                    return renderKit.getResponseStateManager();
+                    requestMap.put(RENDER_KIT_IMPL_REQ, factory);
                 }
+                renderKit = factory.getRenderKit(context, renderKitId);
             }
-        } else {
-            if (!renderKitMap.containsKey(renderKitId)) {
-                renderKitMap.put(renderKitId, renderKit);
-            }
-            return renderKit.getResponseStateManager();
-        }        
+        }
+        return renderKit.getResponseStateManager();
     }
 
     public static RenderKit getCurrentRenderKit(FacesContext context) {
