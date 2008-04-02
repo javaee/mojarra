@@ -191,6 +191,21 @@
     <delete    dir="${cardemo.home}"/>
   </target>
 
+  <target name="create.source.bundle" depends="clean">
+
+    <mkdir dir="${dist.home}"/>
+    <copy todir="${dist.home}/jsf-api">
+        <fileset dir="${jsf.api.home}"/>
+    </copy>
+    <copy todir="${dist.home}/jsf-ri">
+        <fileset dir="${basedir}"/>
+    </copy>
+
+    <!-- create the zip file -->
+    <zip zipfile="jsf-${version}_src.zip" basedir="${dist.home}" />
+
+  </target>
+
 
   <target name="compile.sample" 
 	  description="Compile java files in the sample app named app.name">
@@ -325,7 +340,17 @@
     </copy>
 
     <!-- create the zip file -->
-    <zip zipfile="jsf-${version}.zip" basedir="${dist.home}" />
+    <move todir="${basedir}/jsf-${version}">
+      <fileset dir="dist"/>
+    </move>
+    <zip zipfile="jsf-${version}.zip">
+      <fileset dir="${basedir}" 
+               includes="jsf-${version}/**"/>
+    </zip>
+    <move todir="dist">
+      <fileset dir="${basedir}/jsf-${version}"/>
+    </move>
+
 
   </target>
 
