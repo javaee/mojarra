@@ -345,6 +345,14 @@
 
       <TR>
 
+        <TD><faces:output_text id="buttonlabel1" value="Button renderered as
+ '<input type=..> :" /></TD>
+        <TD>
+            <faces:command_button id="mybutton" label="Login"
+                commandName="login">
+            </faces:command_button>
+        </TD>
+
         <TD>
 
              <faces:command_button id="pushButton" type="button" 
