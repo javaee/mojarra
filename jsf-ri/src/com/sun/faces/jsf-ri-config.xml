@@ -126,70 +126,138 @@
     <message>
       <message-id>javax.faces.validator.DoubleRangeValidator.LIMIT</message-id>
       <message-class>javax.faces.application.MessageImpl</message-class>
+      <summary xml:lang="en">Validation Error: Specified attribute cannot be converted to proper type.</summary>
+      <summary xml:lang="de">Validierungs-Fehler: Spezifiziertes Attribut kann nicht in einen Double-Typ umgewandelt werden.</summary>
+      <summary xml:lang="es">Error de Validaci&#243;n: No puede ser convertido specificado atributo al proprio tipo.</summary>
+      <summary xml:lang="fr">Erreur de validation: Attribut sp&#233;cifi&#233; ne peut etre converti &#224; un type appropri&#233;.</summary>
     </message>
     <message>
       <message-id>javax.faces.validator.DoubleRangeValidator.MAXIMUM</message-id>
       <message-class>javax.faces.application.MessageImpl</message-class>
+      <summary xml:lang="en">Validation Error: Value is greater than allowable maximum of ''{0}''.</summary>
+      <summary xml:lang="de">Validierungs-Fehler: Wert ist gr&#xF6;&#xDF;er als zul&#xE4;ssiges Maximum ''{0}''.</summary>
+      <summary xml:lang="es">Error de Validaci&#243;n: Valor es m&#225;s grande de valor de m&#225;ximo permitido: ''{0}''.</summary>
+      <summary xml:lang="fr">Erreur de validation: La valeur sp&#233;cifi&#233;e est sup&#233;rieure &#224; la valeur maximale permise ''{0}''.</summary>
     </message>
     <message>
       <message-id>javax.faces.validator.DoubleRangeValidator.MINIMUM</message-id>
       <message-class>javax.faces.application.MessageImpl</message-class>
+      <summary xml:lang="en">Validation Error: Value is less than allowable minimum of ''{0}''.</summary>
+      <summary xml:lang="de">Validierungs-Fehler: Wert ist kleiner als zul&#xE4;ssiges Minimum ''{0}''.</summary>
+      <summary xml:lang="es">Error de Validaci&#243;n: Valor is menos de valor de m&#237;nimo permitido: ''{0}''.</summary>
+      <summary xml:lang="fr">Erreur de validation: La valeur sp&#233;cifi&#233;e est inf&#233;rieure &#224; la valeur minimale permise ''{0}''.</summary>
     </message>
     <message>
       <message-id>javax.faces.validator.DoubleRangeValidator.TYPE</message-id>
       <message-class>javax.faces.application.MessageImpl</message-class>
+      <summary xml:lang="en">Validation Error: Value is not of the correct type.</summary>
+      <summary xml:lang="de">Validierungs-Fehler: Wert ist nicht vom richtigen Datentyp.</summary>
+      <summary xml:lang="es">Error de Validaci&#243;n: Valor no es correcto tipo.</summary>
+      <summary xml:lang="fr">Erreur de validation: La valeur sp&#233;cifi&#233;e n'est pas du bon type.</summary>
     </message>
     <message>
       <message-id>javax.faces.validator.LengthValidator.LIMIT</message-id>
       <message-class>javax.faces.application.MessageImpl</message-class>
+      <summary xml:lang="en">Validation Error: Specified attribute cannot be converted to proper type.</summary>
+      <summary xml:lang="de">Validierungs-Fehler: Spezifiziertes Attribut kann nicht in korrekten Typ umgewandelt werden.</summary>
+      <summary xml:lang="es">Error de Validaci&#243;n: No puede ser convertido specificado atributo al proprio tipo.</summary>
+      <summary xml:lang="fr">Erreur de validation: Attribut sp&#233;cifi&#233; ne peut etre converti &#224; un type appropri&#233;.</summary>
     </message>
     <message>
       <message-id>javax.faces.validator.LengthValidator.MAXIMUM</message-id>
       <message-class>javax.faces.application.MessageImpl</message-class>
+      <summary xml:lang="en">Validation Error: Value is greater than allowable maximum of ''{0}''.</summary>
+      <summary xml:lang="de">Validierungs-Fehler: Wert ist gr&#xF6;&#xDF;er als zul&#xE4;ssiges Maximum ''{0}''.</summary>
+      <summary xml:lang="es">Error de Validaci&#243;n: Valor es m&#225;s grande de valor de m&#225;ximo permitido: ''{0}''.</summary>
+      <summary xml:lang="fr">Erreur de validation: La valeur sp&#233;cifi&#233;e est sup&#233;rieure &#224; la valeur maximale permise ''{0}''.</summary>
     </message>
     <message>
       <message-id>javax.faces.validator.LengthValidator.MINIMUM</message-id>
       <message-class>javax.faces.application.MessageImpl</message-class>
+      <summary xml:lang="en">Validation Error: Value is less than allowable minimum of ''{0}''.</summary>
+      <summary xml:lang="de">Validierungs-Fehler: Wert ist kleiner als zul&#xE4;ssiges Minimum ''{0}''.</summary>
+      <summary xml:lang="es">Error de Validaci&#243;n: Valor is menos de valor de m&#237;nimo permitido: ''{0}''.</summary>
+      <summary xml:lang="fr">Erreur de validation: La valeur sp&#233;cifi&#233;e est inf&#233;rieure &#224; la valeur minimale permise ''{0}''.</summary>
     </message>
     <message>
       <message-id>javax.faces.component.UIInput.REQUIRED</message-id>
       <message-class>javax.faces.application.MessageImpl</message-class>
-    </message>
-    <message>
-      <message-id>javax.faces.validator.LongRangeValidator.LIMIT</message-id>
-      <message-class>javax.faces.application.MessageImpl</message-class>
-    </message>
-    <message>
-      <message-id>javax.faces.validator.LongRangeValidator.MAXIMUM</message-id>
-      <message-class>javax.faces.application.MessageImpl</message-class>
-    </message>
-    <message>
-      <message-id>javax.faces.validator.LongRangeValidator.MINIMUM</message-id>
-      <message-class>javax.faces.application.MessageImpl</message-class>
-    </message>
-    <message>
-      <message-id>javax.faces.validator.LongRangeValidator.TYPE</message-id>
-      <message-class>javax.faces.application.MessageImpl</message-class>
-    </message>
-    <message>
-      <message-id>javax.faces.validator.StringRangeValidator.LIMIT</message-id>
-      <message-class>javax.faces.application.MessageImpl</message-class>
-    </message>
-    <message>
-      <message-id>javax.faces.validator.StringRangeValidator.MAXIMUM</message-id>
-      <message-class>javax.faces.application.MessageImpl</message-class>
-    </message>
-    <message>
-      <message-id>javax.faces.validator.StringRangeValidator.MINIMUM</message-id>
-      <message-class>javax.faces.application.MessageImpl</message-class>
-    </message>
-    <message>
-      <message-id>javax.faces.validator.StringRangeValidator.TYPE</message-id>
-      <message-class>javax.faces.application.MessageImpl</message-class>
+      <summary xml:lang="en">Validation Error: Value is required.</summary>
+      <summary xml:lang="de">Validierungs-Fehler: Wert wird ben&#xF6;tigt.</summary>
+      <summary xml:lang="es">Error de Validaci&#243;n: Valor es necesario.</summary>
+      <summary xml:lang="fr">Erreur de validation: Valeur requise.</summary>
     </message>
     <message>
       <message-id>javax.faces.validator.RequiredValidator.FAILED</message-id>
       <message-class>javax.faces.application.MessageImpl</message-class>
+      <summary xml:lang="en">Validation Error: Value is required.</summary>
+      <summary xml:lang="de">Validierungs-Fehler: Wert wird ben&#xF6;tigt.</summary>
+      <summary xml:lang="es">Error de Validaci&#243;n: Valor es necesario.</summary>
+      <summary xml:lang="fr">Erreur de validation: Valeur requise.</summary>
+    </message>
+    <message>
+      <message-id>javax.faces.validator.LongRangeValidator.LIMIT</message-id>
+      <message-class>javax.faces.application.MessageImpl</message-class>
+      <summary xml:lang="en">Validation Error: Specified attribute cannot be converted to proper type.</summary>
+      <summary xml:lang="de">Validierungs-Fehler: Spezifiziertes Attribut kann nicht in korrekten Typ umgewandelt werden.</summary>
+      <summary xml:lang="es">Error de Validaci&#243;n: No puede ser convertido specificado atributo al proprio tipo.</summary>
+      <summary xml:lang="fr">Erreur de validation: Attribut sp&#233;cifi&#233; ne peut etre converti &#224; un type appropri&#233;</summary>
+    </message>
+    <message>
+      <message-id>javax.faces.validator.LongRangeValidator.MAXIMUM</message-id>
+      <message-class>javax.faces.application.MessageImpl</message-class>
+      <summary xml:lang="en">Validation Error: Value is greater than allowable maximum of ''{0}''.</summary>
+      <summary xml:lang="de">Validierungs-Fehler: Wert ist gr&#xF6;&#xDF;er als zul&#xE4;ssiges Maximum ''{0}''.</summary>
+      <summary xml:lang="es">Error de Validaci&#243;n: Valor es m&#225;s grande de valor de m&#225;ximo permitido: ''{0}''.</summary>
+      <summary xml:lang="fr">Erreur de validation: La valeur sp&#233;cifi&#233;e est sup&#233;rieure &#224; la valeur maximale permise ''{0}''.</summary>
+    </message>
+    <message>
+      <message-id>javax.faces.validator.LongRangeValidator.MINIMUM</message-id>
+      <message-class>javax.faces.application.MessageImpl</message-class>
+      <summary xml:lang="en">Validation Error: Value is less than allowable minimum of ''{0}''.</summary>
+      <summary xml:lang="de">Validierungs-Fehler: Wert ist kleiner als zul&#xE4;ssiges Minimum ''{0}''.</summary>
+      <summary xml:lang="es">Error de Validaci&#243;n: Valor is menos de valor de m&#237;nimo permitido: ''{0}''.</summary>
+      <summary xml:lang="fr">Erreur de validation: La valeur sp&#233;cifi&#233;e est inf&#233;rieure &#224; la valeur minimale permise ''{0}''.</summary>
+    </message>
+    <message>
+      <message-id>javax.faces.validator.LongRangeValidator.TYPE</message-id>
+      <message-class>javax.faces.application.MessageImpl</message-class>
+      <summary xml:lang="en">Validation Error: Value is not of the correct type.</summary>
+      <summary xml:lang="de">Validierungs-Fehler: Wert ist nicht vom richtigen Datentyp.</summary>
+      <summary xml:lang="es">Error de Validaci&#243;n: Valor no es correcto tipo.</summary>
+      <summary xml:lang="fr">Erreur de validation: La valeur sp&#233;cifi&#233;e n'est pas du bon type.</summary>
+    </message>
+    <message>
+      <message-id>javax.faces.validator.StringRangeValidator.LIMIT</message-id>
+      <message-class>javax.faces.application.MessageImpl</message-class>
+      <summary xml:lang="en">Validation Error: Specified attribute cannot be converted to proper type.</summary>
+      <summary xml:lang="de">Validierungs-Fehler: Spezifiziertes Attribut kann nicht in korrekten Typ umgewandelt werden.</summary>
+      <summary xml:lang="es">Error de Validaci&#243;n: No puede ser convertido specificado atributo al proprio tipo.</summary>
+      <summary xml:lang="fr">Erreur de validation: Attribut sp&#233;cifi&#233; ne peut etre converti &#224; un type appropri&#233;.</summary>
+    </message>
+    <message>
+      <message-id>javax.faces.validator.StringRangeValidator.MAXIMUM</message-id>
+      <message-class>javax.faces.application.MessageImpl</message-class>
+      <summary xml:lang="en">Validation Error: Value is greater than allowable maximum of ''{0}''.</summary>
+      <summary xml:lang="de">Validierungs-Fehler: Wert ist gr&#xF6;&#xDF;er als zul&#xE4;ssiges Maximum ''{0}''.</summary>
+      <summary xml:lang="es">Error de Validaci&#243;n: Valor es m&#225;s grande de valor de m&#225;ximo permitido: ''{0}''.</summary>
+      <summary xml:lang="fr">Erreur de validation: La valeur sp&#233;cifi&#233;e est sup&#233;rieure &#224; la valeur maximale permise ''{0}''.</summary>
+    </message>
+    <message>
+      <message-id>javax.faces.validator.StringRangeValidator.MINIMUM</message-id>
+      <message-class>javax.faces.application.MessageImpl</message-class>
+      <summary xml:lang="en">Validation Error: Value is less than allowable minimum of ''{0}''.</summary>
+      <summary xml:lang="de">Validierungs-Fehler: Wert ist kleiner als zul&#xE4;ssiges Minimum ''{0}''.</summary>
+      <summary xml:lang="es">Error de Validaci&#243;n: Valor is menos de valor de m&#237;nimo permitido: ''{0}''.</summary>
+      <summary xml:lang="fr">Erreur de validation: La valeur sp&#233;cifi&#233;e est inf&#233;rieure &#224; la valeur minimale permise ''{0}''.</summary>
+    </message>
+    <message>
+      <message-id>javax.faces.validator.StringRangeValidator.TYPE</message-id>
+      <message-class>javax.faces.application.MessageImpl</message-class>
+      <summary xml:lang="en">Validation Error: Value is not of the correct type.</summary>
+      <summary xml:lang="de">Validierungs-Fehler: Wert ist nicht vom richtigen Datentyp.</summary>
+      <summary xml:lang="es">Error de Validaci&#243;n: Valor no es correcto tipo.</summary>
+      <summary xml:lang="fr">Erreur de validation: La valeur sp&#233;cifi&#233;e n'est pas du bon type.</summary>
     </message>
   </message-resources>
 
@@ -202,223 +270,499 @@
     <message>
       <message-id>MSG0001</message-id>
       <message-class>javax.faces.application.MessageImpl</message-class>
+      <summary xml:lang="en">''{0}'' is not a valid number.</summary>
+      <summary xml:lang="de">''{0}'' ist keine gültige Zahl.</summary>
+      <summary xml:lang="es">''{0}'' no es v&#225;lido numero.</summary>
+      <summary xml:lang="fr">''{0}'' n'est pas un nombre valide.</summary>
+      <detail xml:lang="en">Please re-enter a valid number.</detail>
+      <detail xml:lang="de">Bitte geben Sie eine g&#252;ltige Zahl ein.</detail>
+      <detail xml:lang="es">Por favor entra un numero valible.</detail>
+      <detail xml:lang="fr">Veuillez entrer un nombre valide.</detail>
     </message>
     <message>
       <message-id>MSG0002</message-id>
       <message-class>javax.faces.application.MessageImpl</message-class>
+      <summary xml:lang="en">''{0}'' is not a valid date. Please re-enter date in mm/dd/yy format.</summary>
+      <summary xml:lang="de">''{0}'' ist kein g&#252;ltiges Datum. Bitte geben Sie ein g&#252;ltiges Datum im TT.MM.JJJJ-Format ein.</summary>
+      <summary xml:lang="es">''{0}'' no es una fecha valida. Por favor entra fecha en formato de mm/dd/aa.</summary>
+      <summary xml:lang="fr">''{0}'' n'est pas une date valide. Veuillez entrer la date avec le format mm/jj/aa.</summary>
     </message>
     <message>
       <message-id>MSG0003</message-id>
       <message-class>javax.faces.application.MessageImpl</message-class>
+      <summary xml:lang="en">''{0}'' field cannot be empty.</summary>
+      <summary xml:lang="de">''{0}''-Feld darf nicht leer sein.</summary>
+      <summary xml:lang="es">''{0}'' el espacio no puede esta el blanco.</summary>
+      <summary xml:lang="fr">Le champ ''{0}'' ne peut etre vide.</summary>
+    </message>
+    <message>
+      <message-id>MSG0004</message-id>
+      <message-class>javax.faces.application.MessageImpl</message-class>
+      <summary xml:lang="en">''{0}'' out of range. Value should be between ''{1}'' and ''{2}''.</summary>
+      <summary xml:lang="de">''{0}'' außerhalb des g&#252;ltigen Bereichs. Wert muss zwischen ''{1}'' und ''{2}'' liegen.</summary>
+      <summary xml:lang="es">''{0}'' es afuera del rango. El valor debe de ser en medio ''{1}'' y ''{2}''.</summary>
+      <summary xml:lang="fr">''{0}'' d&#233;passe les limites permises. La valeur sp&#233;cifi&#233;e doit &#234;tre entre  ''{1}'' et ''{2}''.</summary>
     </message>
     <message>
       <message-id>MSG0005</message-id>
       <message-class>javax.faces.application.MessageImpl</message-class>
+      <summary xml:lang="en">Conversion Error setting value ''{0}'' for ''{1}''.</summary>
+      <summary xml:lang="de">Konvertierungsfehler: Wert ''{0}'' f&#252;r Modell ''{1}''</summary>
+      <summary xml:lang="es">Error de conversion en el valor puesto ''{0}'' del modelo ''{1}''.</summary>
+      <summary xml:lang="fr">Erreur de conversion quand la valeur ''{0}'' for model ''{1}''.</summary>
+      <detail xml:lang="de">Konvertierungsfehler: Wert ''{0}'' f&#252;r Modell ''{1}'' : Ausnahme: [2].</detail>
+      <detail xml:lang="es">Error  de conversion en el valor puesto ''{0}'' del modelo ''{1}'': excepci&#243;n de: [2]</detail>
+      <detail xml:lang="fr">Erreur de conversion quand la valeur ''{0}'' for model ''{1}'' : Exception: [2].</detail>
     </message>
     <message>
       <message-id>com.sun.faces.TYPECONVERSION_ERROR</message-id>
       <message-class>javax.faces.application.MessageImpl</message-class>
+      <summary xml:lang="en">Conversion Error setting value ''{0}'' for ''{1}''.</summary>
+      <summary xml:lang="de">Konvertierungs-Fehler: Wert ''{0}'' f&#252;r Modell ''{1}''.</summary>
+      <summary xml:lang="es">Error de conversion en el valor puesto ''{0}'' del modelo ''{1}''.</summary>
+      <summary xml:lang="fr">Erreur de conversion quand la valeur ''{0}'' est commise pour le mod&#232;le ''{1}''.</summary>
+      <detail xml:lang="en">Conversion Error setting value ''{0}'' for model ''{1}'' : Exception: [2].</detail>
+      <detail xml:lang="de">Konvertierungs-Fehler: Wert ''{0}'' f&#252;r Modell ''{1}'' : Ausnahme: [2].</detail>
+      <detail xml:lang="es">Error  de conversion en el valor puesto ''{0}'' del modelo ''{1}'': excepci&#243;n de: [2]</detail>
+      <detail xml:lang="fr">Erreur de conversion quand la valeur ''{0}'' est commise pour le mod&#232;le ''{1}'' : Exception: [2].</detail>
     </message>
 
     <message>
       <message-id>com.sun.faces.MODELUPDATE_ERROR</message-id>
       <message-class>javax.faces.application.MessageImpl</message-class>
+      <summary xml:lang="en">Model Update failure for value ''{0}'' in model''{1}''.</summary>
+      <summary xml:lang="de">Modell-Aktualisierungsfehler: Fehler w\303\244hrend der Aktualisierung der Wertes ''{0}'' f&#252;r Modell ''{1}''.</summary>
+      <summary xml:lang="es">Fallo de poner al d&#237;da del modelo: da valor ''{0}'' para modelo ''{1}''</summary>
+      <summary xml:lang="fr">Erreur lors de la mise &#224; jour de la valeur ''{0}'' pour le mod&#232;le ''{1}''.</summary>
+      <detail xml:lang="en">Error updating value ''{0}'' for model ''{1}'' : Exception: [2].</detail>
+      <detail xml:lang="de">ertes ''{0}'' f&#252;r Modell ''{1}''.nahme: [2].</detail>
+      <detail xml:lang="es">Error de poner al d&#237;da valor ''{0}'' para modelo ''{1}'' : excepci&#243;n de: [2].</detail>
+      <detail xml:lang="fr">Erreur lors de la mise &#224; jour de la valeur ''{0}'' pour le mod&#232;le ''{1}'' : Exception: [2].</detail>
     </message>
 
     <message>
       <message-id>com.sun.faces.FACES_CONTEXT_CONSTRUCTION_ERROR</message-id>
       <message-class>javax.faces.application.MessageImpl</message-class>
+      <summary xml:lang="en">Construction Error: One or more input parameters may be null.</summary>
+      <summary xml:lang="de">Fehler beim Erzeugen einer Struktur. FacesContext kann nicht erzeugt werden. Vielleicht sind ein paar Eingabe-Parameter Null?</summary>
+      <summary xml:lang="es">Error de construcci&#243;n: No puede creer FacesContext.  Uno o mas de algunos parametros requerida esta nulo.</summary>
+      <summary xml:lang="fr">Erreur lors de la construction: Ne peut cr&#233;er le FacesContext. Un ou plusieurs param&#232;tres peuvent &#234;tre nuls.</summary>
     </message>
 
     <message>
       <message-id>com.sun.faces.NULL_COMPONENT_ERROR</message-id>
       <message-class>javax.faces.application.MessageImpl</message-class>
+      <summary xml:lang="en">Construction Error: Component argument is null.</summary>
+      <summary xml:lang="de">Fehler beim Erzeugen einer Struktur. Component-Parameter ist Null.</summary>
+      <summary xml:lang="es">Error de construcci&#243;n: Argumento componente es nulo.</summary>
+      <summary xml:lang="fr">Erreur lors de la construction: L''argument pour la composante est nul.</summary>
     </message>
 
     <message>
       <message-id>com.sun.faces.NULL_REQUEST_TREE_ERROR</message-id>
       <message-class>javax.faces.application.MessageImpl</message-class>
+      <summary xml:lang="en">Argument Error: RequestTree argument is null.</summary>
+      <summary xml:lang="de">Parameter-Fehler: requestTree-Parameter ist Null.</summary>
+      <summary xml:lang="es">Error de argumento: Argumento requestTree es nulo.</summary>
+      <summary xml:lang="fr">Erreur dans les arguments: L''argument requestTree est nul.</summary>
     </message>
 
     <message>
       <message-id>com.sun.faces.NULL_RESPONSE_TREE_ERROR</message-id>
       <message-class>javax.faces.application.MessageImpl</message-class>
+      <summary xml:lang="en">Argument Error: ResponseTree argument is null.</summary>
+      <summary xml:lang="de">Parameter-Fehler: responseTree-Parameter ist Null.</summary>
+      <summary xml:lang="es">Error de argumento: Argumento responseTree es nulo.</summary>
+      <summary xml:lang="fr">Erreur dans les arguments: L''argument responseTree est nul.</summary>
     </message>
 
     <message>
       <message-id>com.sun.faces.REQUEST_TREE_ALREADY_SET_ERROR</message-id>
       <message-class>javax.faces.application.MessageImpl</message-class>
+      <summary xml:lang="en">State Error: RequestTree has already been set for this request.</summary>
+      <summary xml:lang="de">Status-Fehler: requestTree ist schon f&#252;r diesen Request angelegt.</summary>
+      <summary xml:lang="es">Error de Estado: requestTree fue establacida para esta petici&#243;n.</summary>
+      <summary xml:lang="fr">Erreur d''&#233;tat: requestTree a d&#233;j&#224; &#233;t&#233; sp&#233;cifi&#233; pour cette requete.</summary>
     </message>
 
     <message>
       <message-id>com.sun.faces.NULL_MESSAGE_ERROR</message-id>
       <message-class>javax.faces.application.MessageImpl</message-class>
+      <summary xml:lang="en">Argument Error: Message parameter cannot be null</summary>
+      <summary xml:lang="de">Parameter-Fehler: Message-Parameter darf nicht Null sein.</summary>
+      <summary xml:lang="es">Error de argumento: Parametro de mesaje no puede esta nulo.</summary>
+      <summary xml:lang="fr">Erreur dans les arguments: Le param&#232;tre Message ne peut &#234;tre nul.</summary>
     </message>
 
     <message>
       <message-id>com.sun.faces.NULL_PARAMETERS_ERROR</message-id>
       <message-class>javax.faces.application.MessageImpl</message-class>
+      <summary xml:lang="en">Argument Error: One or more parameters are null.</summary>
+      <summary xml:lang="de">Parameter-Fehler: Ein oder mehrere Parameter k&#xF6;nnten Null sein.</summary>
+      <summary xml:lang="es">Error de argumento: Uno o m&#225;s par&#225;metros pueden estan nulos.</summary>
+      <summary xml:lang="fr">Erreur dans les arguments: Un ou plusieurs param&#232;tres peuvent &#234;tre nuls.</summary>
     </message>
 
     <message>
       <message-id>com.sun.faces.NAMED_OBJECT_NOT_FOUND_ERROR</message-id>
       <message-class>javax.faces.application.MessageImpl</message-class>
+      <summary xml:lang="en">Expression Error: Named Object: ''{0}'' not found.</summary>
+      <summary xml:lang="de">Expression Error: Object: ''{0}'' wurde nicht gefunden.</summary>
+      <summary xml:lang="es">Error de expresi&#243;n: Objeto Nombrado: ''{0}'' no encontrado.</summary>
+      <summary xml:lang="fr">Erreur dans l''expression: Object nomm&#233; ''{0}'' ne peut &#234;tre trouv&#233;.</summary>
     </message>
 
     <message>
       <message-id>com.sun.faces.NULL_RESPONSE_STREAM_ERROR</message-id>
       <message-class>javax.faces.application.MessageImpl</message-class>
+      <summary xml:lang="en">Argument Error: ResponseStream argument is null.</summary>
+      <summary xml:lang="de">Parameter-Fehler: ResponseStream-Parameter ist Null.</summary>
+      <summary xml:lang="es">Error de argumento: responseStream argumento es nulo.</summary>
+      <summary xml:lang="fr">Erreur dans les arguments: L''argument responseStream est nul.</summary>
     </message>
 
     <message>
       <message-id>com.sun.faces.NULL_RESPONSE_WRITER_ERROR</message-id>
       <message-class>javax.faces.application.MessageImpl</message-class>
+      <summary xml:lang="en">Argument Error: ResponseWriter argument is null.</summary>
+      <summary xml:lang="de">Parameter-Fehler: ResponseWriter-Parameter ist Null.</summary>
+      <summary xml:lang="es">Error de argumento: responseWriter argumento es nulo.</summary>
+      <summary xml:lang="fr">Erreur dans les arguments: L''argument responseWriter est nul.</summary>
     </message>
 
     <message>
       <message-id>com.sun.faces.NULL_EVENT_ERROR</message-id>
       <message-class>javax.faces.application.MessageImpl</message-class>
+      <summary xml:lang="en">Argument Error: Event argument is null.</summary>
+      <summary xml:lang="de">Parameter-Fehler: Event-Parameter ist Null.</summary>
+      <summary xml:lang="es">Error de argumento: argumento suceso es nulo.</summary>
+      <summary xml:lang="fr">Erreur dans les arguments: L''argument event est nul.</summary>
     </message>
 
     <message>
       <message-id>com.sun.faces.NULL_HANDLER_ERROR</message-id>
       <message-class>javax.faces.application.MessageImpl</message-class>
+      <summary xml:lang="en">Argument Error: Handler argument is null.</summary>
+      <summary xml:lang="de">Parameter-Fehler: Handler-Parameter ist Null.</summary>
+      <summary xml:lang="es">Error de argumento: argumento manipulador es nulo.</summary>
+      <summary xml:lang="fr">Erreur dans les arguments: L''argument handler est nul.</summary>
     </message>
 
     <message>
       <message-id>com.sun.faces.NULL_CONTEXT_ERROR</message-id>
       <message-class>javax.faces.application.MessageImpl</message-class>
+      <summary xml:lang="en">Argument Error: Context argument is null.</summary>
+      <summary xml:lang="de">Parameter-Fehler: Context-Parameter ist Null.</summary>
+      <summary xml:lang="es">Error de argumento: argumento contexto es nulo.</summary>
+      <summary xml:lang="fr">Erreur dans les arguments: L''argument context est nul.</summary>
     </message>
 
     <message>
       <message-id>com.sun.faces.NULL_LOCALE_ERROR</message-id>
       <message-class>javax.faces.application.MessageImpl</message-class>
+      <summary xml:lang="en">Argument Error: Locale argument is null.</summary>
+      <summary xml:lang="de">Parameter-Fehler: Locale-Parameter ist Null.</summary>
+      <summary xml:lang="es">Error de argumento: argumento sitio es nulo.</summary>
+      <summary xml:lang="fr">Erreur dans les arguments: L''argument locale est nul.</summary>
     </message>
 
     <message>
       <message-id>com.sun.faces.SUPPORTS_COMPONENT_ERROR</message-id>
       <message-class>javax.faces.application.MessageImpl</message-class>
+      <summary xml:lang="en">Argument Error: ''{0}'' is not supported for this renderer.</summary>
+      <summary xml:lang="de">Parameter-Fehler: Componenten-Typ: ''{0}'' wird f&#252;r diesen Renderer nicht unterst&#252;tzt.</summary>
+      <summary xml:lang="es">Error de argumento: Tipo de componente: ''{0}'' no es mantenida para esta renderer.</summary>
+      <summary xml:lang="fr">Erreur dans les arguments: Composantes de type ''{0}'' ne sont pas support&#233;es par ce renderer.</summary>
     </message>
 
      <message>
       <message-id>com.sun.faces.MISSING_RESOURCE_ERROR</message-id>
       <message-class>javax.faces.application.MessageImpl</message-class>
+      <summary xml:lang="en">Missing Resource: Can''t get ResourceBundle.</summary>
+      <summary xml:lang="de">Fehlende Ressource: Kann Resource-Bundle nicht finden.</summary>
+      <summary xml:lang="es">Recurso Perdido: No puede conseguir ResourceBundle.</summary>
+      <summary xml:lang="fr">La ressource ne peut &#234;tre trouv&#233;e.</summary>
     </message>
 
     <message>
       <message-id>com.sun.faces.MISSING_CLASS_ERROR</message-id>
       <message-class>javax.faces.application.MessageImpl</message-class>
+      <summary xml:lang="en">Missing Class: Can''t load class ''{0}''.</summary>
+      <summary xml:lang="de">Fehlende Klasse: Kann Klasse ''{0}'' nicht laden.</summary>
+      <summary xml:lang="es">Clase perdida: No puede cargar clase ''{0}''.</summary>
+      <summary xml:lang="fr">Ne peut charger la classe ''{0}''.</summary>
     </message>
 
     <message>
       <message-id>com.sun.faces.COMPONENT_NOT_FOUND_ERROR</message-id>
       <message-class>javax.faces.application.MessageImpl</message-class>
+      <summary xml:lang="en">Component Not Found for identifier: ''{0}''.</summary>
+      <summary xml:lang="de">Komponente ''{0}'' wurde nicht gefunden.</summary>
+      <summary xml:lang="es">Componente no encontrado: No puedo encontrar componente para identificador: ''{0}''.</summary>
+      <summary xml:lang="fr">Ne peut trouver une composante pour l''identificateur: ''{0}''.</summary>
     </message>
 
     <message>
       <message-id>com.sun.faces.LIFECYCLE_ID_ALREADY_ADDED</message-id>
       <message-class>javax.faces.application.MessageImpl</message-class>
+      <summary xml:lang="en">LifecycleId already added for id: ''{0}''.</summary>
+      <summary xml:lang="de">Lifecycle-Id ''{0}'' wurde schon hinzugef&#252;gt.</summary>
+      <summary xml:lang="es">LifecycleId ''{0}'' ya esta agregada.</summary>
+      <summary xml:lang="fr">LifecycleId ''{0}'' a d&#233;j&#224; &#233;t&#233; ajout&#233;.</summary>
     </message>
 
     <message>
       <message-id>com.sun.faces.LIFECYCLE_ID_NOT_FOUND</message-id>
       <message-class>javax.faces.application.MessageImpl</message-class>
+      <summary xml:lang="en">LifecycleId not found for id ''{0}''.</summary>
+      <summary xml:lang="de">LifecycleId id ''{0}'' not found.</summary>
+      <summary xml:lang="es">LifecycleId id ''{0}'' not found.</summary>
+      <summary xml:lang="fr">LifecycleId id ''{0}'' not found.</summary>
     </message>
 
     <message>
       <message-id>com.sun.faces.PHASE_ID_OUT_OF_BOUNDS</message-id>
       <message-class>javax.faces.application.MessageImpl</message-class>
+      <summary xml:lang="en">PhaseId out of bounds for id: ''{0}''.</summary>
+      <summary xml:lang="de">PhaseId ''{0}'' out of bounds.</summary>
+      <summary xml:lang="es">PhaseId ''{0}'' out of bounds.</summary>
+      <summary xml:lang="fr">PhaseId ''{0}'' out of bounds.</summary>
     </message>
 
     <message>
-      <message-id>com.sun.faces.CANT_CREATE_LIFECYCLE</message-id>
+      <message-id>com.sun.faces.CANT_CREATE_LIFECYCLE_ERROR</message-id>
       <message-class>javax.faces.application.MessageImpl</message-class>
+      <summary xml:lang="en">Can''t create Lifecycle for id: ''{0}''.</summary>
+      <summary xml:lang="de">Can''t create Lifecycle for id ''{0}''.</summary>
+      <summary xml:lang="es">Can''t create Lifecycle for id ''{0}''.</summary>
+      <summary xml:lang="fr">Can''t create Lifecycle for id ''{0}''.</summary>
     </message>
 
     <message>
       <message-id>com.sun.faces.ILLEGAL_MODEL_REFERENCE</message-id>
       <message-class>javax.faces.application.MessageImpl</message-class>
+      <summary xml:lang="en">Illegal Model Reference in this context for expression ''{0}''.</summary>
+      <summary xml:lang="de">Illegal Model Reference in this context for expression ''{0}''.</summary>
+      <summary xml:lang="es">Ilegal Referencia de Modelo: Expresi&#243;n de ModelReference ''{0}'' en esto contexto es ilegal.</summary>
+      <summary xml:lang="fr">L''expression ''{0}'' du mod&#232;le de r&#233;f&#233;rence est ill&#233;gale dans ce contexte.</summary>
     </message>
 
     <message>
       <message-id>com.sun.faces.ATTRIBUTE_NOT_SUPORTED</message-id>
       <message-class>javax.faces.application.MessageImpl</message-class>
+      <summary xml:lang="en">Attribute ''{0}'' not supported for component type ''{1}''.</summary>
+      <summary xml:lang="de">Attribute ''{0}'' not supported for component type ''{1}''.</summary>
+      <summary xml:lang="es">Atributo ''{0}'' no es apoyado para el tipo de componente ''{1}''.</summary>
+      <summary xml:lang="fr">L''attribut ''{0}'' n''est pas support&#233; pour la composante de type ''{1}''.</summary>
     </message>
 
     <message>
       <message-id>com.sun.faces.FILE_NOT_FOUND</message-id>
       <message-class>javax.faces.application.MessageImpl</message-class>
+      <summary xml:lang="en">File Not Found for file: ''{0}''.</summary>
+      <summary xml:lang="de">File ''{0}'' nicht gefunden</summary>
+      <summary xml:lang="es">File ''{0}'' no encontrado.</summary>
+      <summary xml:lang="fr">File ''{0}'' ne peut &#234;tre trouv&#233;e.</summary>
     </message>
 
     <message>
       <message-id>com.sun.faces.CANT_PARSE_FILE</message-id>
       <message-class>javax.faces.application.MessageImpl</message-class>
+      <summary xml:lang="en">Can''t parse file: ''{0}''.</summary>
+      <summary xml:lang="de">Can''t parse file: ''{0}''.</summary>
+      <summary xml:lang="es">Can''t parse file: ''{0}''.</summary>
+      <summary xml:lang="fr">Can''t parse file: ''{0}''.</summary>
     </message>
 
     <message>
       <message-id>com.sun.faces.CANT_INSTANTIATE_CLASS</message-id>
       <message-class>javax.faces.application.MessageImpl</message-class>
+      <summary xml:lang="en">Can''t instantiate class: ''{0}''.</summary>
+      <summary xml:lang="de">Can''t instantiate class: ''{0}''.</summary>
+      <summary xml:lang="es">Can''t instantiate class: ''{0}''.</summary>
+      <summary xml:lang="fr">Can''t instantiate class: ''{0}''.</summary>
     </message>
 
     <message>
       <message-id>com.sun.faces.ILLEGAL_CHARACTERS_ERROR</message-id>
       <message-class>javax.faces.application.MessageImpl</message-class>
+      <summary xml:lang="en">Characters not allowed.</summary>
+      <summary xml:lang="de">Characters not allowed.</summary>
+      <summary xml:lang="es">Characters not allowed.</summary>
+      <summary xml:lang="fr">Characters not allowed.</summary>
     </message>
 
     <message>
       <message-id>com.sun.faces.NOT_NESTED_IN_FACES_TAG_ERROR</message-id>
       <message-class>javax.faces.application.MessageImpl</message-class>
+      <summary xml:lang="en">Not nested in a FacesTag Error for tag with handler class: ''{0}''.</summary>
+      <summary xml:lang="de">Not nested in a FacesTag Error for tag with handler class: ''{0}''.</summary>
+      <summary xml:lang="es">Not nested in a FacesTag Error for tag with handler class: ''{0}''.</summary>
+      <summary xml:lang="fr">Not nested in a FacesTag Error for tag with handler class: ''{0}''.</summary>
     </message>
 
     <message>
       <message-id>com.sun.faces.NULL_BODY_CONTENT_ERROR</message-id>
       <message-class>javax.faces.application.MessageImpl</message-class>
+      <summary xml:lang="en">BodyContent is null for tag with handler class: ''{0}''.</summary>
+      <summary xml:lang="de">BodyContent is null for tag with handler class: ''{0}''.</summary>
+      <summary xml:lang="es">BodyContent is null for tag with handler class: ''{0}''.</summary>
+      <summary xml:lang="fr">BodyContent is null for tag with handler class: ''{0}''.</summary>
     </message>
 
     <message>
       <message-id>com.sun.faces.SAVING_STATE_ERROR</message-id>
       <message-class>javax.faces.application.MessageImpl</message-class>
+      <summary xml:lang="en">Error while saving state in ''{0}'': ''{1}''.</summary>
+      <summary xml:lang="de">Error while saving state in ''{0}'': ''{1}''.</summary>
+      <summary xml:lang="es">Error while saving state in ''{0}'': ''{1}''.</summary>
+      <summary xml:lang="fr">Error while saving state in ''{0}'': ''{1}''.</summary>
     </message>
 
     <message>
       <message-id>com.sun.faces.RENDERER_ALREADY_EXISTS</message-id>
       <message-class>javax.faces.application.MessageImpl</message-class>
+      <summary xml:lang="en">Renderer for type ''{0}'' already exists.</summary>
+      <summary xml:lang="de">Renderer for type ''{0}'' already exists.</summary>
+      <summary xml:lang="es">Renderer for type ''{0}'' already exists.</summary>
+      <summary xml:lang="fr">Renderer for type ''{0}'' already exists.</summary>
     </message>
 
     <message>
       <message-id>com.sun.faces.RENDERER_NOT_FOUND</message-id>
       <message-class>javax.faces.application.MessageImpl</message-class>
+      <summary xml:lang="en">Renderer not found for Renderer type: ''{0}''.</summary>
+      <summary xml:lang="de">Renderer not found for Renderer type: ''{0}''.</summary>
+      <summary xml:lang="es">Renderer not found for Renderer type: ''{0}''.</summary>
+      <summary xml:lang="fr">Renderer not found for Renderer type: ''{0}''.</summary>
     </message>
 
     <message>
       <message-id>com.sun.faces.MAXIMUM_EVENTS_REACHED</message-id>
       <message-class>javax.faces.application.MessageImpl</message-class>
+      <summary xml:lang="en">Maximum number of events ''{0}'' reached.</summary>
+      <summary xml:lang="de">Maximum number of events ''{0}'' reached.</summary>
+      <summary xml:lang="es">Maximum number of events ''{0}'' reached.</summary>
+      <summary xml:lang="fr">Maximum number of events ''{0}'' reached.</summary>
     </message>
 
     <message>
       <message-id>com.sun.faces.NO_ACTION_FROM_ACTIONREF</message-id>
       <message-class>javax.faces.application.MessageImpl</message-class>
+      <summary xml:lang="en">Can''t get Action from Action Reference: ''{0}''.</summary>
+      <summary xml:lang="de">Can''t get Action from Action Reference: ''{0}''.</summary>
+      <summary xml:lang="es">Can''t get Action from Action Reference: ''{0}''.</summary>
+      <summary xml:lang="fr">Can''t get Action from Action Reference: ''{0}''.</summary>
     </message>
 
     <message>
       <message-id>com.sun.faces.NULL_CONFIGURATION</message-id>
       <message-class>javax.faces.application.MessageImpl</message-class>
+      <summary xml:lang="en">No Configuration loaded for the application.</summary>
+      <summary xml:lang="de">No Configuration loaded for the application.</summary>
+      <summary xml:lang="es">No Configuration loaded for the application.</summary>
+      <summary xml:lang="fr">No Configuration loaded for the application.</summary>
     </message>
 
     <message>
       <message-id>com.sun.faces.ERROR_OPENING_FILE</message-id>
       <message-class>javax.faces.application.MessageImpl</message-class>
+      <summary xml:lang="en">Can''t open configuration file: ''{0}''.</summary>
+      <summary xml:lang="de">Can''t open configuration file: ''{0}''.</summary>
+      <summary xml:lang="es">Can''t open configuration file: ''{0}''.</summary>
+      <summary xml:lang="fr">Can''t open configuration file: ''{0}''.</summary>
     </message>
 
     <message>
       <message-id>com.sun.faces.ERROR_REGISTERING_DTD</message-id>
       <message-class>javax.faces.application.MessageImpl</message-class>
+      <summary xml:lang="en">Can''t register DTD: ''{0}''.</summary>
+      <summary xml:lang="de">Can''t register DTD: ''{0}''.</summary>
+      <summary xml:lang="es">Can''t register DTD: ''{0}''.</summary>
+      <summary xml:lang="fr">Can''t register DTD: ''{0}''.</summary>
     </message>
 
     <message>
       <message-id>com.sun.faces.INVALID_INIT_PARAM</message-id>
       <message-class>javax.faces.application.MessageImpl</message-class>
+      <summary xml:lang="en">Invalid initialization parameter: ''{0}''.</summary>
+      <summary xml:lang="de">Invalid initialization parameter: ''{0}''.</summary>
+      <summary xml:lang="es">Invalid initialization parameter: ''{0}''.</summary>
+      <summary xml:lang="fr">Invalid initialization parameter: ''{0}''.</summary>
     </message>
+
+    <message>
+      <message-id>com.sun.faces.ERROR_SETTING_BEAN_PROPERTY</message-id>
+      <message-class>javax.faces.application.MessageImpl</message-class>
+      <summary xml:lang="en">Can''t set managed bean property: ''{0}''.</summary>
+      <summary xml:lang="de">Can''t set managed bean property: ''{0}''.</summary>
+      <summary xml:lang="es">Can''t set managed bean property: ''{0}''.</summary>
+      <summary xml:lang="fr">Can''t set managed bean property: ''{0}''.</summary>
+    </message>
+
+    <message>
+      <message-id>com.sun.faces.ERROR_GETTING_VALUE_BINDING</message-id>
+      <message-class>javax.faces.application.MessageImpl</message-class>
+      <summary xml:lang="en">Can''t get ValueBinding for value: ''{0}''.</summary>
+      <summary xml:lang="de">Can''t get ValueBinding for value: ''{0}''.</summary>
+      <summary xml:lang="es">Can''t get ValueBinding for value: ''{0}''.</summary>
+      <summary xml:lang="fr">Can''t get ValueBinding for value: ''{0}''.</summary>
+    </message>
+
+    <message>
+      <message-id>com.sun.faces.ERROR_GETTING_VALUEREF_VALUE</message-id>
+      <message-class>javax.faces.application.MessageImpl</message-class>
+      <summary xml:lang="en">Can''t get value from value reference expression: ''{0}''.</summary>
+      <summary xml:lang="de">Can''t get value from value reference expression: ''{0}''.</summary>
+      <summary xml:lang="es">Can''t get value from value reference expression: ''{0}''.</summary>
+      <summary xml:lang="fr">Can''t get value from value reference expression: ''{0}''.</summary>
+    </message>
+
+    <message>
+      <message-id>com.sun.faces.CANT_INTROSPECT_CLASS</message-id>
+      <message-class>javax.faces.application.MessageImpl</message-class>
+      <summary xml:lang="en">Can''t instrospect class: ''{0}''</summary>
+      <summary xml:lang="de">Can''t instrospect class: ''{0}''</summary>
+      <summary xml:lang="es">Can''t instrospect class: ''{0}''</summary>
+      <summary xml:lang="fr">Can''t instrospect class: ''{0}''</summary>
+    </message>
+
+    <message>
+      <message-id>com.sun.faces.CANT_CONVERT_VALUE</message-id>
+      <message-class>javax.faces.application.MessageImpl</message-class>
+      <summary xml:lang="en">Can''t convert property: ''{0}'' to value type: ''{1}''.</summary>
+      <summary xml:lang="de">Can''t convert property: ''{0}'' to value type: ''{1}''.</summary>
+      <summary xml:lang="es">Can''t convert property: ''{0}'' to value type: ''{1}''.</summary>
+      <summary xml:lang="fr">Can''t convert property: ''{0}'' to value type: ''{1}''.</summary>
+    </message>
+
+    <message>
+      <message-id>com.sun.faces.INVALID_SCOPE_LIFESPAN</message-id>
+      <message-class>javax.faces.application.MessageImpl</message-class>
+      <summary xml:lang="en">The scope of the referenced object: ''{0}'' is shorter than the referring object</summary>
+      <summary xml:lang="de">The scope of the referenced object: ''{0}'' is shorter than the referring object</summary>
+      <summary xml:lang="es">The scope of the referenced object: ''{0}'' is shorter than the referring object</summary>
+      <summary xml:lang="fr">The scope of the referenced object: ''{0}'' is shorter than the referring object</summary>
+    </message>
+
+    <message>
+      <message-id>com.sun.faces.CONVERTER_NOT_FOUND_ERROR</message-id>
+      <message-class>javax.faces.application.MessageImpl</message-class>
+      <summary xml:lang="en">Converter Not Found for identifier: ''{0}''.</summary>
+      <summary xml:lang="de">Converter Not Found for identifier: ''{0}''.</summary>
+      <summary xml:lang="es">Converter Not Found for identifier: ''{0}''.</summary>
+      <summary xml:lang="fr">Converter Not Found for identifier: ''{0}''.</summary>
+    </message>
+
+    <message>
+      <message-id>com.sun.faces.VALIDATOR_NOT_FOUND_ERROR</message-id>
+      <message-class>javax.faces.application.MessageImpl</message-class>
+      <summary xml:lang="en">Validator Not Found for identifier: ''{0}''.</summary>
+      <summary xml:lang="de">Validator Not Found for identifier: ''{0}''.</summary>
+      <summary xml:lang="es">Validator Not Found for identifier: ''{0}''.</summary>
+      <summary xml:lang="fr">Validator Not Found for identifier: ''{0}''.</summary>
+    </message>
+
   </message-resources>
 
   <!-- Standard Validators -->
