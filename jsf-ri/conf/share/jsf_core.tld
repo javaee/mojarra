@@ -147,8 +147,12 @@
       <description>
         Locale whose predefined styles for dates and times are used
         during formatting or parsing.  If not specified, the Locale
-        returned by FacesContext.getViewRoot().getLocale() will be
-        used.  Expressions must evaluate to a java.util.Locale instance.
+        returned by FacesContext.getViewRoot().getLocale() will be used.
+        Value must be either a VB expression that evaluates to a
+        java.util.Locale instance, or a String that is valid to pass as
+        the first argument to the constructor java.util.Locale(String
+        language, String country).  The empty string is passed as the
+        second argument.
       </description>
     </attribute>
 
@@ -180,9 +184,11 @@
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
       <description>
-        Time zone in which to interprety any time information
-        in the date string.  Expressions must evaluate to a
-        java.util.TimeZone instance.
+        Time zone in which to interpret any time information in the date
+        String.  Value must be either a VB expression that evaluates to
+        a java.util.TimeVone instance, or a String that is a timezone ID
+        as described in the javadocs for
+        java.util.TimeZone.getTimeZone().
       </description>
     </attribute>
 
