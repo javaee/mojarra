@@ -7,49 +7,49 @@
 <html>
   <body>
      
-<form id="form01" name="form01" method="post" action="/jsf-systest/faces/taglib/commandLink_multiform_test.jsp;jsessionid=ad905a9155c4d1bbb3cc1a433c53" enctype="application/x-www-form-urlencoded">
+<form id="form01" name="form01" method="post" action="/jsf-systest/faces/taglib/commandLink_multiform_test.jsp;jsessionid=3226750c769a3ad964bf929f2175" enctype="application/x-www-form-urlencoded">
 <input type="hidden" name="form01" value="form01" />
-<input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="j_id235:j_id236" />
+<input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="j_id43:j_id44" />
 
 <script type="text/javascript" language="Javascript">
 <!--
-for (var f = 0; f < document.forms.length; f++) {
-    var fm = document.forms[f];
-    fm.dpf = function() {
-        var adp = this.adp;
-        if (adp != null) {
-            for (var i = 0; i < adp.length; i++) {
-                this.removeChild(adp[i]);
+function jsfcljs(f, pvp, t) {
+    if (f.sjsfinit == null) {
+        f.dpf = function() {
+            var adp = this.adp;
+            if (adp != null) {
+                for (var i = 0; i < adp.length; i++) {
+                    this.removeChild(adp[i]);
+                }
+            }
+            this.adp = null;
+        };
+        var mos = f.onsubmit;
+        if (mos == null) {
+            f.onsubmit = f.dpf;
+        } else {
+            f.onsubmit = function() {
+                f.dpf();
+                mos();
             }
         }
-        this.adp = null;
-    };
-    var mos = fm.onsubmit;
-    if (mos == null) {
-        fm.onsubmit = fm.dpf;
-    } else {
-        fm.onsubmit = function() {
-            fm.dpf();
-            mos();
-        }
+        f.apf = function(pvp) {
+            this.dpf();
+            var adp = new Array();
+            this.adp = adp;
+            var ps = pvp.split(',');
+            for (var i = 0, ii = 0; i < ps.length; i++, ii++) {
+                var p = document.createElement("input");
+                p.type = "hidden";
+                p.name = ps[i];
+                p.value = ps[i + 1];
+                this.appendChild(p);
+                adp[ii] = p;
+                i += 1;
+            }
+        };
+        sjsfinit = true;
     }
-    fm.apf = function(pvp) {
-        this.dpf();
-        var adp = new Array();
-        this.adp = adp;
-        var ps = pvp.split(',');
-        for (var i = 0, ii = 0; i < ps.length; i++, ii++) {
-            var p = document.createElement("input");
-            p.type = "hidden";
-            p.name = ps[i];
-            p.value = ps[i + 1];
-            this.appendChild(p);
-            adp[ii] = p;
-            i += 1;
-        }
-    };
-}
-function jsfcljs(f, pvp, t) {
     if (f.apf) {
         f.apf(pvp);
     }
@@ -63,9 +63,9 @@ function jsfcljs(f, pvp, t) {
 </script>
 <a id="form01:Link1" href="#" onclick="return jsfcljs(document.forms['form01'],'form01:Link1,form01:Link1,param1,value1,param2,value2','');">Link1</a><a id="form01:Link2" href="#" onclick="return jsfcljs(document.forms['form01'],'form01:Link2,form01:Link2,param1,value1,param2,value2','');">Link2</a>
 </form>
-<form id="form02" name="form02" method="post" action="/jsf-systest/faces/taglib/commandLink_multiform_test.jsp;jsessionid=ad905a9155c4d1bbb3cc1a433c53" enctype="application/x-www-form-urlencoded">
+<form id="form02" name="form02" method="post" action="/jsf-systest/faces/taglib/commandLink_multiform_test.jsp;jsessionid=3226750c769a3ad964bf929f2175" enctype="application/x-www-form-urlencoded">
 <input type="hidden" name="form02" value="form02" />
-<input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="j_id235:j_id236" />
+<input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="j_id43:j_id44" />
 <a id="form02:Link3" href="#" onclick="return jsfcljs(document.forms['form02'],'form02:Link3,form02:Link3,param3,value3,param4,value4','');">Link3</a><a id="form02:Link4" href="#" onclick="return jsfcljs(document.forms['form02'],'form02:Link4,form02:Link4','');">Link4</a>
 </form>
   </body>
