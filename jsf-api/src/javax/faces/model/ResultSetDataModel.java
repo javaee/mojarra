@@ -1,5 +1,5 @@
 /*
- * $Id: ResultSetDataModel.java,v 1.2 2003/10/12 00:13:24 craigmcc Exp $
+ * $Id: ResultSetDataModel.java,v 1.3 2003/10/12 05:07:21 craigmcc Exp $
  */
 
 /*
@@ -187,10 +187,9 @@ public class ResultSetDataModel implements DataModel {
             throw new IllegalStateException();
         }
         if (size == Integer.MIN_VALUE) {
-            size = 0;
             try {
-                resultSet.beforeFirst();
-                while (resultSet.next()) {
+                size = 0;
+                while (resultSet.absolute(size + 1)) {
                     size++;
                 }
             } catch (SQLException e) {
@@ -240,6 +239,11 @@ public class ResultSetDataModel implements DataModel {
         }
         int old = index;
         index = rowIndex;
+        try {
+            resultSet.absolute(rowIndex);
+        } catch (SQLException e) {
+            throw new IllegalArgumentException(e.getMessage());
+        }
         if ((old != index) && (listeners != null)) {
             DataModelEvent event =
                 event = new DataModelEvent(this, index, getRowData());
@@ -375,8 +379,14 @@ public class ResultSetDataModel implements DataModel {
         }
         try {
             ResultSetMetaData metadata = metadata();
-            return (mapping(metadata.getColumnType(column)));
-        } catch (SQLException e) {
+            String cname = metadata.getColumnClassName(column);
+            ClassLoader loader =
+                Thread.currentThread().getContextClassLoader();
+            if (loader == null) {
+                loader = this.getClass().getClassLoader();
+            }
+            return (loader.loadClass(cname));
+        } catch (Exception e) {
             throw new PropertyNotFoundException("" + column);
         }
 
@@ -409,8 +419,14 @@ public class ResultSetDataModel implements DataModel {
                     break;
                 }
             }
-            return (mapping(metadata.getColumnType(j)));
-        } catch (SQLException e) {
+            String cname = metadata.getColumnClassName(j);
+            ClassLoader loader =
+                Thread.currentThread().getContextClassLoader();
+            if (loader == null) {
+                loader = this.getClass().getClassLoader();
+            }
+            return (loader.loadClass(cname));
+        } catch (Exception e) {
             throw new PropertyNotFoundException(name);
         }
 
@@ -531,94 +547,6 @@ public class ResultSetDataModel implements DataModel {
 
 
     // --------------------------------------------------------- Private Methods
-
-
-    /**
-     * <p>Return the Java <code>Class</code> corresponding to the specified
-     * SQL data type.  The mappings are derived from Table 9.1 (in section
-     * 9.9.1) of the JDBC Getting Started Guide.</p>
-     *
-     * @param type SQL data type to be mapped
-     *
-     * @exception IllegalArgumentException if an unknown type is specified
-     */
-    private Class mapping(int type) {
-
-        switch (type) {
-
-        case Types.CHAR:
-        case Types.VARCHAR:
-        case Types.LONGVARCHAR:
-            return (String.class);
-
-        case Types.NUMERIC:
-        case Types.DECIMAL:
-            return (java.math.BigDecimal.class);
-
-        case Types.BIT:
-        case Types.BOOLEAN:
-            return (Boolean.class);
-
-        case Types.TINYINT:
-            return (Byte.class);
-
-        case Types.SMALLINT:
-            return (Short.class);
-
-        case Types.INTEGER:
-            return (Integer.class);
-
-        case Types.BIGINT:
-            return (Long.class);
-
-        case Types.REAL:
-            return (Float.class);
-
-        case Types.FLOAT:
-        case Types.DOUBLE:
-            return (Double.class);
-
-        case Types.BINARY:
-        case Types.VARBINARY:
-        case Types.LONGVARBINARY:
-            byte bytes[] = new byte[0];
-            return (bytes.getClass());
-
-        case Types.DATE:
-            return (java.sql.Date.class);
-
-        case Types.TIME:
-            return (java.sql.Time.class);
-
-        case Types.TIMESTAMP:
-            return (java.sql.Timestamp.class);
-
-        case Types.CLOB:
-            return (java.sql.Clob.class);
-
-        case Types.BLOB:
-            return (java.sql.Blob.class);
-
-        case Types.ARRAY:
-            return (java.sql.Array.class);
-
-        case Types.STRUCT:
-            return (java.sql.Struct.class);
-
-        case Types.REF:
-            return (java.sql.Ref.class);
-
-        case Types.DATALINK:
-            return (java.net.URL.class);
-
-        default:
-            throw new IllegalArgumentException("" + type);
-
-        }
-
-        // PENDING(craigmcc) Types.DISTINCT, Types.JAVA_OBJECT
-
-    }
 
 
     /**

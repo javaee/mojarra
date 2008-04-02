@@ -271,9 +271,9 @@ jsf-api.jar.
                 test.UISelectMany,
                 test.UISelectOne,
                 test.UIViewRoot,
-                test.ConfigFile,
                 test.PhaseId,
-                test.UIComponentTag">
+                test.model,
+                test.webapp">
   </target>
 
   <target name="test.FactoryFinder" depends="build.test">
@@ -487,16 +487,6 @@ jsf-api.jar.
     </java>
   </target>
 
-  <target name="test.UIComponentTag" depends="build.test">
-    <echo message="Running UIComponentTag tests ..."/>
-    <java classname="${test.runner}" fork="yes"
-        failonerror="${test.failonerror}">
-      <jvmarg line="${debug.jvm.args}"/>
-      <arg value="javax.faces.webapp.UIComponentTagTestCase"/>
-      <classpath refid="test.classpath"/>
-    </java>
-  </target>
-
   <target name="test.PhaseId" depends="build.test">
     <echo message="Running PhaseId tests ..."/>
     <java classname="${test.runner}" fork="yes"
@@ -505,6 +495,33 @@ jsf-api.jar.
       <arg value="javax.faces.event.PhaseIdTest"/>
       <classpath refid="test.classpath"/>
     </java>
+  </target>
+
+  <target name="test.model" depends="build.test">
+    <echo message="Running javax.faces.model tests ..."/>
+    <junit printSummary="no" fork="no"
+          haltonfailure="yes" haltonerror="yes">
+      <classpath  refid="test.classpath"/>
+      <formatter   type="plain"      usefile="false"/>
+      <batchtest>
+        <fileset    dir="${build.test}"
+               includes="javax/faces/model/*TestCase.class"/>
+      </batchtest>
+    </junit>
+  </target>
+
+
+  <target name="test.webapp" depends="build.test">
+    <echo message="Running javax.faces.webapp tests ..."/>
+    <junit printSummary="no" fork="no"
+          haltonfailure="yes" haltonerror="yes">
+      <classpath  refid="test.classpath"/>
+      <formatter   type="plain"      usefile="false"/>
+      <batchtest>
+        <fileset    dir="${build.test}"
+               includes="javax/faces/webapp/*TestCase.class"/>
+      </batchtest>
+    </junit>
   </target>
 
 
