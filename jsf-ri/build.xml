@@ -214,9 +214,20 @@
     
     <target name="compile" depends="prepare,generate,copy.template.sources"
             description="Just compile the classes">
+        <if>
+            <equals arg1="${container.name}" arg2="glassfish"/>
+            <then>
+                <property name="exclude.path" value=""/>
+            </then>
+            <else>
+                <property name="exclude.path" value="com/sun/faces/vendor/**"/>
+            </else>
+        </if>
+
         <!-- Run javac through everything -->
         <jsf.javac srcdir="${source.dir}:${build.generate.dir}"
-                   destdir="${build.classes.dir}">
+                   destdir="${build.classes.dir}"
+                   excludes="${exclude.path}">
             <classpath>
                 <path refid="impl.compile.classpath"/>
             </classpath>            

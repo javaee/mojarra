@@ -146,6 +146,8 @@
         <attribute name="destdir"/>
         <attribute name="includes"
                    default=""/>
+        <attribute name="excludes"
+                   default=""/>
         <element name="classpath"
                  implicit="true"
                  optional="yes"/>
@@ -155,7 +157,8 @@
                    debug="${compile.debug}"
                    deprecation="${compile.deprecation}"
                    source="1.5"
-                   includes="@{includes}">
+                   includes="@{includes}"
+                   excludes="@{excludes}">
                 <classpath/>
             </javac>
         </sequential>
