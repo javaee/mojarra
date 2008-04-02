@@ -59,6 +59,8 @@
       value="${tomcat.home}/../installer/"/>
   <property name="javanettasks.home"    
       value="${installer.home}/javanettasks-1.0.3-SNAPSHOT"/>
+      
+  <property name="LICENSEFILE"    value="${basedir}/legal/jsf-cddl/CDDLv1.0.txt"/>
 
 <!-- ************ Compiler Defaults *************************************** -->
 
@@ -72,8 +74,12 @@
     <delete file="${basedir}/javaserverfaces_source.zip" />
     <delete file="${basedir}/javaserverfaces_source.class" />
     <delete file="jsf-portlet.zip" />
-    <delete file="jsf-portlet.class"/>
+    <delete file="jsf-portlet_source.zip" />
+    <delete file="javaserverfaces_portlet.class"/>
+    <delete file="javaserverfaces_portlet_source.class"/>
     <delete dir="{jsf-portlet.home}/dist" />
+    <delete file="jsf-samples.zip"/>
+    <delete file="${basedir}/javaserverfaces_samples.class" />
     <ant dir="${jsf-api.home}" target="clean" inheritAll="false" />
     <ant dir="${jsf-ri.home}" target="clean" inheritAll="false" />
   </target>
@@ -84,7 +90,7 @@
     
       <zipfileset dir="${basedir}"  
           excludes="**/CVS/**, **/build/**, **/dist/**, **/www/**, **/jsf-portlet/**,
-          **/jsf-demo/**" prefix="javaserverfaces_sources"/>
+          **/jsf-demo/**, **/test-sqe/**" prefix="javaserverfaces_sources"/>
          
     </zip>
   </target>
@@ -108,12 +114,12 @@
   
   <installerBuilder
           classFile="javaserverfaces_binary.class"
-          licenseFile="${jsf-ri.home}/LICENSE.TXT"
+          licenseFile="${LICENSEFILE}"
           zipFile="${basedir}/javaserverfaces_binary.zip" />
           
   <installerBuilder
           classFile="javaserverfaces_source.class"
-          licenseFile="${basedir}/www/legal/jsf-cddl/CDDLv1.0.txt"
+          licenseFile="${LICENSEFILE}"
           zipFile="${basedir}/javaserverfaces_source.zip" />
   </target>
   
@@ -140,6 +146,7 @@
     <delete file="jsf-portlet.zip" />
     <delete file="jsf-portlet_source.zip" />
     <delete file="javaserverfaces_portlet.class"/>
+    <delete file="javaserverfaces_portlet_source.class"/>
     <delete dir="${jsf-portlet.home}/dist" />
     <delete dir="${jsf-portlet.home}/build" />
     
@@ -151,11 +158,11 @@
      
      <installerBuilder
           classFile="javaserverfaces_portlet_source.class"
-          licenseFile="${basedir}/jrl_1_3.txt"
+          licenseFile="${LICENSEFILE}"
           zipFile="${basedir}/jsf-portlet_source.zip" />
              
     <ant dir="${jsf-portlet.home}" inheritall="false" target="main"/>
-    <copy file="${jsf-portlet.home}/LICENSE.TXT"
+    <copy file="${LICENSEFILE}"
          todir="${jsf-portlet.home}/dist/jsf-portlet" />
     <copy file="${jsf-portlet.home}/portlet-lib/build/lib/jsf-portlet.jar"
          todir="${jsf-portlet.home}/dist/jsf-portlet/lib" />
@@ -177,7 +184,7 @@
     
     <installerBuilder
           classFile="javaserverfaces_portlet.class"
-          licenseFile="${jsf-portlet.home}/LICENSE.TXT"
+          licenseFile="${LICENSEFILE}"
           zipFile="${basedir}/jsf-portlet.zip" />
       
   </target>
@@ -192,7 +199,7 @@
   
   <javaNetUpload projectName="javaserverfaces" 
       toFile="/nightly/javaserverfaces_binary.class" fromFile="${basedir}/javaserverfaces_binary.class" 
-      fileDescription="Nightly snapshot. Run 'java -cp . javaserverfaces_binary' to install" overwrite="yes" />
+      fileDescription="Nightly snapshot.Requires Glassfish/JavaEE5. Run 'java -cp . javaserverfaces_binary' to install" overwrite="yes" />
   
      
   <javaNetUpload projectName="javaserverfaces" 
@@ -210,7 +217,7 @@
   
   <javaNetUpload projectName="javaserverfaces" 
       toFile="/weekly/javaserverfaces_binary.class" fromFile="${basedir}/javaserverfaces_binary.class" 
-      fileDescription="Weekly binary snapshot. Run 'java -cp . javaserverfaces_binary' to install" overwrite="yes" />
+      fileDescription="Weekly binary snapshot. Requires Glassfish/JavaEE5. Run 'java -cp . javaserverfaces_binary' to install" overwrite="yes" />
   
      
   <javaNetUpload projectName="javaserverfaces" 
@@ -241,5 +248,38 @@
     <delete>
       <fileset dir="${j2ee.home}/lib" includes="jsf-*.jar"/>
    </delete>
+  </target>
+  
+  <target name="build.samples.zip" depends="main" >
+      <taskdef name="installerBuilder" classname="com.sun.tools.xjc.installer.builder.BuilderTask">
+         <classpath>
+             <fileset dir="${installer.home}" includes="*.jar"/>
+         </classpath>
+     </taskdef>
+  
+      <ant dir="${jsf-demo.home}" target="main" inheritAll="false" />
+      <mkdir dir="samples" />
+      <mkdir dir="jsf-samples" />
+      <copy todir="${basedir}/samples/jsf-samples" 
+          file="${jsf-demo.home}/guessNumber/build/jsf-guessNumber.war" />
+      <copy todir="${basedir}/samples/jsf-samples" 
+          file="${jsf-demo.home}/carstore/build/jsf-cardemo.war" />
+      <copy todir="${basedir}/samples/jsf-samples" 
+          file="${jsf-demo.home}/components/build/jsf-components.war" />
+      <copy todir="${basedir}/samples/jsf-samples" 
+          file="${jsf-demo.home}/webtier-sample/build/webtier-sample.war" />
+          
+      <copy toFile="${basedir}/samples/jsf-samples/README.html" 
+          file="${jsf-ri.home}/docs/samples.html" />    
+          
+      <copy toFile="${basedir}/samples/jsf-samples/License.txt"
+          file="${LICENSEFILE}" />      
+      <zip destfile="${basedir}/jsf-samples.zip" basedir="${basedir}/samples" />
+      <delete dir="samples" />
+     
+       <installerBuilder
+          classFile="javaserverfaces_samples.class"
+          licenseFile="${LICENSEFILE}"
+          zipFile="${basedir}/jsf-samples.zip" />
   </target>
 </project>
