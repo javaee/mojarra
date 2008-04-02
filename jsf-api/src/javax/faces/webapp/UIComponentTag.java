@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTag.java,v 1.49 2004/08/13 20:05:19 rlubke Exp $
+ * $Id: UIComponentTag.java,v 1.50 2004/08/13 20:08:24 rlubke Exp $
  */
 
 /*
@@ -1274,7 +1274,7 @@ public abstract class UIComponentTag implements Tag {
             return (true);
         }
 
-        if (parentTag.isSuppressed()) {
+        if (parentTag != null && parentTag.isSuppressed()) {
             return (true);
         }
 
