@@ -1,5 +1,5 @@
 /*
- * $Id: TestUpdateModelValuesPhase.java,v 1.25 2003/08/22 17:27:40 rlubke Exp $
+ * $Id: TestUpdateModelValuesPhase.java,v 1.26 2003/08/23 19:56:14 jvisvanathan Exp $
  */
 
 /*
@@ -46,7 +46,7 @@ import com.sun.faces.util.DebugUtil;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestUpdateModelValuesPhase.java,v 1.25 2003/08/22 17:27:40 rlubke Exp $
+ * @version $Id: TestUpdateModelValuesPhase.java,v 1.26 2003/08/23 19:56:14 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -122,19 +122,17 @@ public void testUpdateNormal()
     userName2.setValueRef("TestBean.one");
     userName2.testSetValid(true);
     form.getChildren().add(userName2);
-
-    UIViewRoot page = new UIViewRootBase();
-    page.setViewId("updateModel.xul");
-    getFacesContext().setViewRoot(page);
+    
+    UIViewRoot viewRoot = new UIViewRootBase();
+    viewRoot.getChildren().add(form);
+    viewRoot.setViewId("updateModel.xul");
+    getFacesContext().setViewRoot(viewRoot);
     
     updateModelValues.execute(getFacesContext());
     assertTrue(!(getFacesContext().getRenderResponse()) &&
         !(getFacesContext().getResponseComplete()));
-
     assertTrue(null == userName.getValue());
-
-
-
+    
     assertTrue(testBean.getOne().equals("one"));
     assertTrue(false == (getFacesContext().getMessages().hasNext()));
 }
@@ -169,9 +167,10 @@ public void testUpdateFailed()
     userName2.testSetValid(true);
     form.getChildren().add(userName2);
 
-    UIViewRoot page = new UIViewRootBase();
-    page.setViewId("updateModel.xul");
-    getFacesContext().setViewRoot(page);
+    UIViewRoot viewRoot = new UIViewRootBase();
+    viewRoot.getChildren().add(form);
+    viewRoot.setViewId("updateModel.xul");
+    getFacesContext().setViewRoot(viewRoot);
 
     // This stage will go to render, since there was at least one error
     // during component updates... 

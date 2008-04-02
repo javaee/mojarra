@@ -1,5 +1,5 @@
 /*
- * $Id: TestProcessValidationsPhase.java,v 1.20 2003/08/22 16:51:46 eburns Exp $
+ * $Id: TestProcessValidationsPhase.java,v 1.21 2003/08/23 19:56:14 jvisvanathan Exp $
  */
 
 /*
@@ -39,7 +39,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestProcessValidationsPhase.java,v 1.20 2003/08/22 16:51:46 eburns Exp $
+ * @version $Id: TestProcessValidationsPhase.java,v 1.21 2003/08/23 19:56:14 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -92,7 +92,7 @@ public static UIInput userName = null;
 public void beginCallback(WebRequest theRequest)
 {
     theRequest.setURL("localhost:8080", null, null, TEST_URI, null);
-    theRequest.addParameter("userName", "jerry");
+    theRequest.addParameter("basicForm.userName", "jerry");
 }
 
 public void testCallback()
@@ -112,7 +112,7 @@ public void testCallback()
         e.printStackTrace();
         assertTrue(false);
     }
-    assertTrue(!(getFacesContext().getRenderResponse()) &&
+    assertTrue((getFacesContext().getRenderResponse()) &&
         !(getFacesContext().getResponseComplete()));
     assertTrue(null != getFacesContext().getViewRoot());
 
@@ -128,7 +128,7 @@ public void testCallback()
     System.setProperty(DID_VALIDATE, EMPTY);
 
     try {
-	userName = (UIInput) root.findComponent("userName");
+	userName = (UIInput) root.findComponent("basicForm.userName");
     }
     catch (Throwable e) {
 	System.out.println(e.getMessage());
@@ -152,7 +152,7 @@ public void testCallback()
     assertTrue(userName.isValid());
 
     applyValues.execute(getFacesContext());
-    assertTrue(!(getFacesContext().getRenderResponse()) &&
+    assertTrue((getFacesContext().getRenderResponse()) &&
         !(getFacesContext().getResponseComplete()));
     
     processValidations.execute(getFacesContext());

@@ -1,5 +1,5 @@
 /*
- * $Id: TestApplyRequestValuesPhase.java,v 1.15 2003/08/22 16:50:38 eburns Exp $
+ * $Id: TestApplyRequestValuesPhase.java,v 1.16 2003/08/23 19:56:14 jvisvanathan Exp $
  */
 
 /*
@@ -36,7 +36,7 @@ import com.sun.faces.ServletFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestApplyRequestValuesPhase.java,v 1.15 2003/08/22 16:50:38 eburns Exp $
+ * @version $Id: TestApplyRequestValuesPhase.java,v 1.16 2003/08/23 19:56:14 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -86,7 +86,7 @@ public static final String TEST_URI = "/components.jsp";
 public void beginCallback(WebRequest theRequest)
 {
     theRequest.setURL("localhost:8080", null, null, TEST_URI, null);
-    theRequest.addParameter("userName", "jerry");
+    theRequest.addParameter("basicForm.userName", "jerry");
 }
 
 public void testCallback()
@@ -94,19 +94,19 @@ public void testCallback()
     UIComponent root = null;
     String value = null;
     Phase 
-        reconstituteTree = new RestoreViewPhase(),
+        restoreView = new RestoreViewPhase(),
 	applyValues = new ApplyRequestValuesPhase();
 
     // 1. Set the root of the view ...
     //
     try {
-        reconstituteTree.execute(getFacesContext());
+        restoreView.execute(getFacesContext());
     }
     catch (Throwable e) {
         e.printStackTrace();
         assertTrue(false);
     }
-    assertTrue(!(getFacesContext().getRenderResponse()) &&
+    assertTrue((getFacesContext().getRenderResponse()) &&
         !(getFacesContext().getResponseComplete()));
     assertTrue(null != getFacesContext().getViewRoot());
 
@@ -123,12 +123,12 @@ public void testCallback()
     // 3. Apply values
     //
     applyValues.execute(getFacesContext());
-    assertTrue(!(getFacesContext().getRenderResponse()) &&
+    assertTrue((getFacesContext().getRenderResponse()) &&
         !(getFacesContext().getResponseComplete()));
     
     root = getFacesContext().getViewRoot();
     try {
-	userName = (UIInput) root.findComponent("userName");
+	userName = (UIInput) basicForm.findComponent("userName");
     }
     catch (Throwable e) {
 	System.out.println(e.getMessage());

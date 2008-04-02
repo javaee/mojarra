@@ -1,5 +1,5 @@
 /*
- * $Id: TestPhase.java,v 1.6 2003/08/22 17:27:39 rlubke Exp $
+ * $Id: TestPhase.java,v 1.7 2003/08/23 19:56:14 jvisvanathan Exp $
  */
 
 /*
@@ -46,7 +46,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestPhase.java,v 1.6 2003/08/22 17:27:39 rlubke Exp $
+ * @version $Id: TestPhase.java,v 1.7 2003/08/23 19:56:14 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -91,7 +91,7 @@ public static final String TEST_URI = "/components.jsp";
 public void beginExecute(WebRequest theRequest)
 {
     theRequest.setURL("localhost:8080", null, null, TEST_URI, null);
-    theRequest.addParameter("userName", "jerry");
+    theRequest.addParameter("basicForm.userName", "jerry");
 }
 
 public void testExecute()
@@ -106,7 +106,7 @@ public void testExecute()
         assertTrue(false);
     }
 
-    assertTrue(!(getFacesContext().getRenderResponse()) &&
+    assertTrue((getFacesContext().getRenderResponse()) &&
         !(getFacesContext().getResponseComplete()));
     assertTrue(null != getFacesContext().getViewRoot());
 
@@ -119,7 +119,9 @@ public void testExecute()
     userName.setId("userName");
     root.getChildren().add(basicForm);
     basicForm.getChildren().add(userName);
+    
     UIViewRoot page = new UIViewRootBase();
+    page.getChildren().add(basicForm);
     page.setViewId("root");    
     getFacesContext().setViewRoot(page);
 
@@ -133,7 +135,7 @@ public void testExecute()
 	e.printStackTrace();
 	assertTrue(false);
     }
-    assertTrue(!(getFacesContext().getRenderResponse()) &&
+    assertTrue((getFacesContext().getRenderResponse()) &&
         !(getFacesContext().getResponseComplete()));
 }
 
