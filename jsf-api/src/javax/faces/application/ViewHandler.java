@@ -1,5 +1,5 @@
 /*
- * $Id: ViewHandler.java,v 1.16 2003/10/08 18:16:58 rlubke Exp $
+ * $Id: ViewHandler.java,v 1.17 2003/10/17 00:16:10 jvisvanathan Exp $
  */
 
 /*
@@ -9,6 +9,7 @@
 
 package javax.faces.application;
 
+import java.util.Locale;
 import java.io.IOException;
 import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
@@ -211,5 +212,21 @@ public interface ViewHandler {
      */
 
     public String getViewIdPath(FacesContext context, String viewId);
+
+    /** 
+     * Returns a locale to use for the client. Attempts to find a
+     * match based on the HTTP header Accept-language as retrieved by
+     * ExternalContext.getLocales() and Application.getSupportedLocales(),
+     * using the matching algorithm as described in JSTL 8.3.2. If no
+     * match is found, returns Application.getDefaultLocale unless null,
+     * otherwise Locale.getDefault().
+     * 
+     * This method is invoked by the default view handler on the first
+     * incoming JSF request. On any subsequent requests, the default view
+     * handler uses the locale from the incoming UIViewRoot.
+     *
+     * @param context {@link FacesContext} for the current request
+     */
+     public Locale calculateLocale(FacesContext context);
 
 }

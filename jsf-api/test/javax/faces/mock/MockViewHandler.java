@@ -1,5 +1,5 @@
 /*
- * $Id: MockViewHandler.java,v 1.15 2003/09/29 21:09:04 eburns Exp $
+ * $Id: MockViewHandler.java,v 1.16 2003/10/17 00:16:10 jvisvanathan Exp $
  */
 
 /*
@@ -9,6 +9,7 @@
 
 package javax.faces.mock;
 
+import java.util.Locale;
 import java.io.IOException;
 import java.io.Reader;
 import javax.faces.FacesException;
@@ -67,6 +68,10 @@ public class MockViewHandler extends Object implements ViewHandler {
 
     public String getViewIdPath(FacesContext context, String viewId) {
 	return null;
+    }
+
+    public Locale calculateLocale(FacesContext context) {
+        return Locale.getDefault();
     }
 
 }
