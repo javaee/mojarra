@@ -1,5 +1,5 @@
 /*
- * $Id: ColumnTag.java,v 1.18 2006/09/15 21:48:13 edburns Exp $
+ * $Id: ColumnTag.java,v 1.19 2006/10/03 23:32:12 rlubke Exp $
  */
 
 /*
@@ -35,11 +35,10 @@ import javax.faces.component.UIComponent;
 import javax.faces.webapp.UIComponentELTag;
 import javax.servlet.jsp.JspException;
 
-import com.sun.faces.util.Util;
-
-import java.util.logging.Logger;
 import java.util.logging.Level;
-import javax.el.ValueExpression;
+import java.util.logging.Logger;
+
+import com.sun.faces.util.Util;
 
 public class ColumnTag extends UIComponentELTag {
 
@@ -56,14 +55,14 @@ public class ColumnTag extends UIComponentELTag {
     // Setter Methods
     //
     // PROPERTY: footerClass
-    private ValueExpression footerClass;
-    public void setFooterClass(ValueExpression footerClass) {
+    private javax.el.ValueExpression footerClass;
+    public void setFooterClass(javax.el.ValueExpression footerClass) {
         this.footerClass = footerClass;
     }
 
     // PROPERTY: headerClass
-    private ValueExpression headerClass;
-    public void setHeaderClass(ValueExpression headerClass) {
+    private javax.el.ValueExpression headerClass;
+    public void setHeaderClass(javax.el.ValueExpression headerClass) {
         this.headerClass = headerClass;
     }
 
@@ -100,16 +99,7 @@ public class ColumnTag extends UIComponentELTag {
             if (!headerClass.isLiteralText()) {
                 column.setValueExpression("headerClass", headerClass);
             } else {
-                column.getAttributes().put("headerClass", 
-                        Boolean.valueOf(headerClass.getExpressionString()));
-            }
-        }
-        if (rowHeader != null) {
-            if (!rowHeader.isLiteralText()) {
-                column.setValueExpression("rowHeader", rowHeader);
-            } else {
-                column.getAttributes().put("rowHeader", 
-                        Boolean.valueOf(rowHeader.getExpressionString()));
+                column.getAttributes().put("headerClass", headerClass.getExpressionString());
             }
         }
     }
@@ -160,26 +150,12 @@ public class ColumnTag extends UIComponentELTag {
         super.release();
         this.headerClass = null;
         this.footerClass = null;
-        this.rowHeader = null;
     }
 
     public String getDebugString() {
         String result = "id: " + this.getId() + " class: " +
             this.getClass().getName();
         return result;
-    }
-
-    /**
-     * Holds value of property rowHeader.
-     */
-    private ValueExpression rowHeader;
-
-    /**
-     * Setter for property rowHeader.
-     * @param rowHeader New value of property rowHeader.
-     */
-    public void setRowHeader(ValueExpression rowHeader) {
-        this.rowHeader = rowHeader;
     }
 
 }

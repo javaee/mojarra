@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.147 2006/08/07 14:28:56 rogerk Exp $
+ * $Id: UIComponent.java,v 1.148 2006/10/03 23:32:07 rlubke Exp $
  */
 
 /*
@@ -30,11 +30,6 @@
 package javax.faces.component;
 
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
 import javax.el.ELContext;
 import javax.el.ELException;
 import javax.el.ValueExpression;
@@ -45,6 +40,12 @@ import javax.faces.event.AbortProcessingException;
 import javax.faces.event.FacesEvent;
 import javax.faces.event.FacesListener;
 import javax.faces.render.Renderer;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 /**
  * <p><strong>UIComponent</strong> is the base class for all user interface
@@ -831,10 +832,7 @@ private void doFind(FacesContext context, String clientId) {
      * 
      * <p>If a {@link Renderer} is associated with this {@link UIComponent}, 
      * the actual encoding will be delegated to 
-     * {@link Renderer#encodeChildren(FacesContext, UIComponent)}.
-     * Otherwise, render the child components of this {@link UIComponent},
-     * following the rules described for <code>encodeBegin()</code> to
-     * acquire the appropriate value to be rendered.</p> 
+     * {@link Renderer#encodeChildren(FacesContext, UIComponent)}.</p> 
      *
      * @param context {@link FacesContext} for the response we are creating
      *

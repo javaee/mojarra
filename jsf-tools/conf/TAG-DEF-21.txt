@@ -95,20 +95,4 @@
                 </type>
             </deferred-value>
         </attribute>
-        <attribute>
-            <description>
-                <![CDATA[Flag indicating that this column is a row header column and therefore cells in this column should be rendered with "th" instead of "td" and must have the 'scope="row"' attribute.]]>
-            </description>
-            <name>
-                rowHeader
-            </name>
-            <required>
-                false
-            </required>
-            <deferred-value>
-                <type>
-                    boolean
-                </type>
-            </deferred-value>
-        </attribute>
     </tag>

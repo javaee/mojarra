@@ -1,5 +1,5 @@
 /*
- * $Id: ConverterTag.java,v 1.21 2006/08/25 19:36:24 rogerk Exp $
+ * $Id: ConverterTag.java,v 1.22 2006/10/03 23:32:09 rlubke Exp $
  */
 
 /*
@@ -29,19 +29,19 @@
 
 package javax.faces.webapp;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-                                                                                                                           
-import javax.faces.application.FacesMessage;
 import javax.el.ValueExpression;
 import javax.faces.component.UIComponent;
-import javax.faces.component.UIInput;
 import javax.faces.component.ValueHolder;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.ConverterException;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.TagSupport;
+
+
+
+
+
 
 /**
  * <p><strong>ConverterTag</strong> is a base class for all JSP custom actions
@@ -80,10 +80,9 @@ import javax.servlet.jsp.tagext.TagSupport;
 
 public class ConverterTag extends TagSupport {
 
+
     // ---------------------------------------------------------- Static Members
 
-    private static final Logger LOGGER =
-          Logger.getLogger("javax.faces.webapp", "javax.faces.LogStrings");
 
     private static final long serialVersionUID = -5909792518081427720L;
 
@@ -138,12 +137,7 @@ public class ConverterTag extends TagSupport {
      * class, and register it with the {@link UIComponent} instance associated
      * with our most immediately surrounding {@link UIComponentTag} instance, if
      * the {@link UIComponent} instance was created by this execution of the
-     * containing JSP page.  If the <code>localValue</code> of the 
-     * {@link UIComponent} is a String, attempt to convert it.</p>
-     * If the conversion fails and the component is an input component,
-     * enqueue an appropriate error message by calling the <code>addMessage()</code>
-     * method on the <code>FacesContext</code>.  In all cases, log an
-     * appropriate error message.</p>
+     * containing JSP page.</p>
      *
      * @throws JspException if a JSP error occurs
      */
@@ -210,15 +204,8 @@ public class ConverterTag extends TagSupport {
                 vh.setValue(localValue);
             }
             catch (ConverterException ce) {
-                if (component instanceof UIInput) {
-                    addConversionErrorMessage(context, component, ce);
-                }
-                if (LOGGER.isLoggable(Level.SEVERE)) {
-                    LOGGER.log(Level.SEVERE, "error.webapp.conversion_error_thrown",
-                        new Object[]{ce.getMessage(),
-                        (String) localValue,
-                        component.getId()});
-                }
+                // PENDING - Ignore?  Throw an exception?  Set the local
+                // value back to "null" and log a warning?
             }
         }        
   
@@ -292,27 +279,4 @@ public class ConverterTag extends TagSupport {
         }
         return converter;
     }
-
-    private void addConversionErrorMessage(FacesContext context,
-            UIComponent component, ConverterException ce) {
-        FacesMessage message = null;
-        String converterMessageString = null;
-        converterMessageString = ((UIInput)component).getConverterMessage();
-        if (null != converterMessageString) {
-            message = new FacesMessage(converterMessageString, converterMessageString);
-        }
-        if (message == null) {
-            message = ce.getFacesMessage();
-            if (message == null) {
-                message = MessageFactory.getMessage(context,
-                    UIInput.CONVERSION_MESSAGE_ID);
-                if (message.getDetail() == null) {
-                    message.setDetail(ce.getMessage());
-                }
-            }
-        }
-        message.setSeverity(FacesMessage.SEVERITY_ERROR);
-        context.addMessage(component.getClientId(context), message);
-    }
-
 }

@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 
 <!--
- $Id: build-tests.xml,v 1.123 2006/08/28 14:17:32 rogerk Exp $
+ $Id: build-tests.xml,v 1.124 2006/10/03 23:32:13 rlubke Exp $
 -->
 
 <!--
@@ -113,6 +113,7 @@
 
 
     <!-- ======================== Test Execution ============================== -->
+    <!-- converter06 impl logic deferred to 2.0 -->
     <target name="test"
             description="Execute all tests against installed application"
             depends="test.init,
@@ -133,7 +134,6 @@
                 test.converter03,
                 test.converter04,
                 test.converter05,
-                test.converter06,
                 test.enum-converter-1,
                 test.validator,
                 test.validator01,

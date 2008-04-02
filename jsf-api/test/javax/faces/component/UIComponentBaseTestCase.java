@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBaseTestCase.java,v 1.37 2006/08/07 14:28:57 rogerk Exp $
+ * $Id: UIComponentBaseTestCase.java,v 1.38 2006/10/03 23:32:06 rlubke Exp $
  */
 
 /*
@@ -560,21 +560,6 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
 	assertEquals(expected, ve);	
     }
 
-    public void testEncodeChildren() throws Exception {
-        TestComponent.trace(null);
-        UIComponent comp1 = new TestComponent("one");
-        UIComponent comp2 = new TestComponent("two");
-        UIComponent comp3 = new TestComponent("three");
-        UIComponent comp4 = new TestComponent("four");
-                                                                                                                            
-        comp1.getChildren().add(comp2);
-        comp1.getChildren().add(comp3);
-        comp1.getChildren().add(comp4);
-                                                                                                                            
-        comp1.encodeChildren(facesContext);
-        assertEquals("/eC-one/eB-two/eE-two/eB-three/eE-three/eB-four/eE-four", TestComponent.trace());
-                                                                                                                            
-    }
 
     // --------------------------------------------------------- support Methods
 

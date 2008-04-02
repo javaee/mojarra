@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 
 <!--
- $Id: build-tests.xml,v 1.31 2006/09/15 21:48:14 edburns Exp $
+ $Id: build-tests.xml,v 1.32 2006/10/03 23:32:10 rlubke Exp $
 -->
 
 <!--
@@ -54,8 +54,7 @@
                    replace-lifecycle,
                    string-converter,
                    replace-variableresolver,
-                   converter-property-editor,
-                   wcag-datatable"/>
+                   converter-property-editor"/>
 
     <!-- 
        EXCLUDED APPLICATIONS:
@@ -63,6 +62,7 @@
           core-tags
           el-performance
           command-link-redirect
+          wcag-datatable
     -->
     
     <!-- Property definitions to map the application to a JUnit test case -->
@@ -84,8 +84,7 @@
               value="com/sun/faces/systest/ReplaceVariableResolverTestCase.class"/>
     <property name="converter-property-editor" 
               value="com/sun/faces/systest/ConverterPropertyEditorTestCase.class"/>
-    <property name="wcag-datatable" 
-              value="com/sun/faces/systest/WcagDataTableTestCase.class"/>
+    
     
     <!--
         EXCLUDED APPLICATIONS:
@@ -94,6 +93,8 @@
                   value="com/sun/faces/systest/CoreTagsTestCase.class"/>
         <property name="view-expired"
                   value="com/sun/faces/systest/ViewExpiredExceptionTestCase.class"/>
+        <property name="wcag-datatable" 
+              value="com/sun/faces/systest/WcagDataTableTestCase.class"/>
     -->
 
 

@@ -267,7 +267,7 @@ escape&lt;p&gt;this markup&lt;/p&gt;<span id="basicForm:outputlabel8">andsometex
 
 	<TD>
 
-	     <select id="basicForm:j_id_id299" name="basicForm:j_id_id299" class="selectoneClass" size="10" style="someStyle" tabindex="20" title="Select Quantity">	<option value="0" disabled="disabled" class="dclass">0</option>
+	     <select name="basicForm:j_id_id299" class="selectoneClass" size="10" style="someStyle" tabindex="20" title="Select Quantity">	<option value="0" disabled="disabled" class="dclass">0</option>
 	<option value="1" class="eclass">1</option>
 	<option value="2" class="eclass">2</option>
 	<option value="3" class="eclass">3</option>
@@ -287,7 +287,7 @@ escape&lt;p&gt;this markup&lt;/p&gt;<span id="basicForm:outputlabel8">andsometex
 
         <TD>
 
-             <select id="basicForm:j_id_id326" name="basicForm:j_id_id326" class="selectoneClass" size="1" style="someStyle" tabindex="20" title="Select Quantity" disabled="disabled">	<option value="0" class="dclass">0</option>
+             <select name="basicForm:j_id_id326" class="selectoneClass" size="1" style="someStyle" tabindex="20" title="Select Quantity" disabled="disabled">	<option value="0" class="dclass">0</option>
 	<option value="1" class="dclass">1</option>
 	<option value="2" class="dclass">2</option>
 	<option value="3" class="dclass">3</option>
@@ -349,7 +349,7 @@ escape&lt;p&gt;this markup&lt;/p&gt;<span id="basicForm:outputlabel8">andsometex
         <TD>Float: 
         </TD>
 
-	<TD><input id="basicForm:j_id_id381" type="text" name="basicForm:j_id_id381" value="3.1415" style="someStyle" />
+	<TD><input type="text" name="basicForm:j_id_id381" value="3.1415" style="someStyle" />
 	</TD>
 
       </TR>
@@ -361,7 +361,7 @@ escape&lt;p&gt;this markup&lt;/p&gt;<span id="basicForm:outputlabel8">andsometex
         <TD>Date: 
         </TD>
 
-	<TD><input id="basicForm:j_id_id392" type="text" name="basicForm:j_id_id392" value="July 10, 1996" class="inputClass" />
+	<TD><input type="text" name="basicForm:j_id_id392" value="July 10, 1996" class="inputClass" />
 	</TD>
 
       </TR>
@@ -502,7 +502,7 @@ escape&lt;p&gt;this markup&lt;/p&gt;<span id="basicForm:outputlabel8">andsometex
 
 <tr>
 					<TD>Multi-select listbox:</TD>
-					<TD><select id="basicForm:j_id_id555" name="basicForm:j_id_id555" multiple="multiple" size="10" style="someStyle" disabled="disabled">	<option value="0" class="dclass">zero</option>
+					<TD><select name="basicForm:j_id_id555" multiple="multiple" size="10" style="someStyle" disabled="disabled">	<option value="0" class="dclass">zero</option>
 	<option value="1" class="dclass">one</option>
 	<option value="2" class="dclass">two</option>
 	<option value="3" class="dclass">three</option>
@@ -568,7 +568,7 @@ escape&lt;p&gt;this markup&lt;/p&gt;<span id="basicForm:outputlabel8">andsometex
 </td>
 </tr>
 
-<input id="basicForm:j_id_id637" type="hidden" name="basicForm:j_id_id637" value="48%" />
+<input type="hidden" name="basicForm:j_id_id637" value="48%" />
 
 <tr><td>
 

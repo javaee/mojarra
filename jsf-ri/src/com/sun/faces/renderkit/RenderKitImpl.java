@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKitImpl.java,v 1.47 2006/09/05 22:52:32 rlubke Exp $
+ * $Id: RenderKitImpl.java,v 1.48 2006/10/03 23:32:09 rlubke Exp $
  */
 
 /*
@@ -56,7 +56,7 @@ import com.sun.faces.util.Util;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: RenderKitImpl.java,v 1.47 2006/09/05 22:52:32 rlubke Exp $
+ * @version $Id: RenderKitImpl.java,v 1.48 2006/10/03 23:32:09 rlubke Exp $
  */
 
 public class RenderKitImpl extends RenderKit {
@@ -86,6 +86,7 @@ public class RenderKitImpl extends RenderKit {
 
     private ResponseStateManager responseStateManager;
     private Boolean preferXHTML;
+    private Boolean forceHtmlContentType;
 
 
     public RenderKitImpl() {
@@ -166,80 +167,97 @@ public class RenderKitImpl extends RenderKit {
         }
         String contentType = null;
         boolean contentTypeNullFromResponse = false;
-        FacesContext context = FacesContext.getCurrentInstance();        
-
-        // Step 0: Determine if we have a preference for XHTML   
-        if (preferXHTML == null) {
-            preferXHTML =
-              WebConfiguration.getInstance(context.getExternalContext())
-                    .getBooleanContextInitParameter(BooleanWebContextInitParameter.PreferXHTMLContentType);
+        FacesContext context = FacesContext.getCurrentInstance();
+        if (forceHtmlContentType == null) {
+            forceHtmlContentType =
+                  WebConfiguration.getInstance(context.getExternalContext())
+                        .getBooleanContextInitParameter(
+                              BooleanWebContextInitParameter.ForchHtmlContentType);
         }
+        if (!forceHtmlContentType) {
+            // Step 0: Determine if we have a preference for XHTML   
+            if (preferXHTML == null) {
+                preferXHTML =
+                      WebConfiguration.getInstance(context.getExternalContext())
+                            .getBooleanContextInitParameter(
+                                  BooleanWebContextInitParameter.PreferXHTMLContentType);
+            }
 
-        // Step 1: Check the content type passed into this method 
-        if (null != desiredContentTypeList) {
-            contentType = findMatch(
-                  desiredContentTypeList, 
-                                    SUPPORTED_CONTENT_TYPES_ARRAY);
-        }
-
-        // Step 2: Check the response content type
-    if (null == desiredContentTypeList) {
-        desiredContentTypeList =
-                    context.getExternalContext().getResponseContentType();
+            // Step 1: Check the content type passed into this method 
             if (null != desiredContentTypeList) {
                 contentType = findMatch(
-                      desiredContentTypeList, 
-                                        SUPPORTED_CONTENT_TYPES_ARRAY);
-                if (null == contentType) {
-                    contentTypeNullFromResponse = true;
-                }
-            }
-    }
-
-        // Step 3: Check the Accept Header content type
-        // Evaluate the accept header in accordance with HTTP specification - 
-        // Section 14.1
-        // Preconditions for this (1 or 2):
-        //  1. content type was not specified to begin with
-        //  2. an unsupported content type was retrieved from the response 
-        if (null == desiredContentTypeList || contentTypeNullFromResponse) {
-            String[] typeArray = 
-                context.getExternalContext().getRequestHeaderValuesMap().get("Accept");
-            if (typeArray.length > 0) {
-                StringBuffer buff = new StringBuffer();
-                buff.append(typeArray[0]);
-                for (int i = 1, len = typeArray.length ; i < len; i++) {
-                    buff.append(',');
-                    buff.append(typeArray[i]);
-                }
-                desiredContentTypeList = buff.toString();
+                      desiredContentTypeList,
+                      SUPPORTED_CONTENT_TYPES_ARRAY);
             }
 
-            if (null != desiredContentTypeList) {                
-                if (preferXHTML) {
-                    desiredContentTypeList = RenderKitUtils.determineContentType(
-                        desiredContentTypeList, SUPPORTED_CONTENT_TYPES, RIConstants.XHTML_CONTENT_TYPE);
-                } else {
-                    desiredContentTypeList = RenderKitUtils.determineContentType(
-                        desiredContentTypeList, SUPPORTED_CONTENT_TYPES, null);
-                }
+            // Step 2: Check the response content type
+            if (null == desiredContentTypeList) {
+                desiredContentTypeList =
+                      context.getExternalContext().getResponseContentType();
                 if (null != desiredContentTypeList) {
                     contentType = findMatch(
-                          desiredContentTypeList, 
-                                            SUPPORTED_CONTENT_TYPES_ARRAY);
+                          desiredContentTypeList,
+                          SUPPORTED_CONTENT_TYPES_ARRAY);
+                    if (null == contentType) {
+                        contentTypeNullFromResponse = true;
+                    }
                 }
             }
-        }
 
-        // Step 4: Default to text/html
-        if (null == desiredContentTypeList ||
-            RIConstants.ALL_MEDIA.equals(desiredContentTypeList)) {
+            // Step 3: Check the Accept Header content type
+            // Evaluate the accept header in accordance with HTTP specification - 
+            // Section 14.1
+            // Preconditions for this (1 or 2):
+            //  1. content type was not specified to begin with
+            //  2. an unsupported content type was retrieved from the response 
+            if (null == desiredContentTypeList || contentTypeNullFromResponse) {
+                String[] typeArray =
+                      context.getExternalContext().getRequestHeaderValuesMap()
+                            .get("Accept");
+                if (typeArray.length > 0) {
+                    StringBuffer buff = new StringBuffer();
+                    buff.append(typeArray[0]);
+                    for (int i = 1, len = typeArray.length; i < len; i++) {
+                        buff.append(',');
+                        buff.append(typeArray[i]);
+                    }
+                    desiredContentTypeList = buff.toString();
+                }
+
+                if (null != desiredContentTypeList) {
+                    if (preferXHTML) {
+                        desiredContentTypeList =
+                              RenderKitUtils.determineContentType(
+                                    desiredContentTypeList,
+                                    SUPPORTED_CONTENT_TYPES,
+                                    RIConstants.XHTML_CONTENT_TYPE);
+                    } else {
+                        desiredContentTypeList =
+                              RenderKitUtils.determineContentType(
+                                    desiredContentTypeList,
+                                    SUPPORTED_CONTENT_TYPES,
+                                    null);
+                    }
+                    if (null != desiredContentTypeList) {
+                        contentType = findMatch(
+                              desiredContentTypeList,
+                              SUPPORTED_CONTENT_TYPES_ARRAY);
+                    }
+                }
+            }
+
+            // Step 4: Default to text/html
+            if (null == desiredContentTypeList ||
+                RIConstants.ALL_MEDIA.equals(desiredContentTypeList)) {
+                contentType = RIConstants.HTML_CONTENT_TYPE;
+            }
+        } else {
             contentType = RIConstants.HTML_CONTENT_TYPE;
         }
 
         if (null == contentType) {
             throw new IllegalArgumentException(MessageUtils.getExceptionMessageString(
-                MessageUtils.CONTENT_TYPE_ERROR_MESSAGE_ID));
+                  MessageUtils.CONTENT_TYPE_ERROR_MESSAGE_ID));
         }
 
         if (characterEncoding == null) {

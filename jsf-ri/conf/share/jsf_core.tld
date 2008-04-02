@@ -769,53 +769,38 @@
         associated with the closest parent UIComponent custom action.
         This actionListener will cause the value given by the "value"
         attribute to be set into the ValueExpression given by the "target"
-        attribute.</p>
+        attribute.</p>]]>
 
-        <p>The implementation of this tag creates a special
-        <code>ActionListener</code> instance and registers it on the
-        <code>ActionSource</code> associated with our most immediate surrounding
-        instance of a tag whose implementation class is a subclass of
-        <code>UIComponentTag</code>.  This tag creates no output to the page
-        currently being created.</p>
+<![CDATA[ <p>The implementation of this tag creates a special
+<code>ActionListener</code> instance and registers it on the
+<code>ActionSource</code> associated with our most immediate surrounding
+instance of a tag whose implementation class is a subclass of
+<code>UIComponentTag</code>.  This tag creates no output to the page
+currently being created.</p>
 
-        <p>The <code>ActionListener</code> instance created and installed by
-        this tag has the following behavior and contract.</p>
+<p>The <code>ActionListener</code> instance created and installed by
+this tag has the following behavior and contract.</p>
 
-        <ul>
+<ul>
 
-        <li>Only create and register the <code>ActionListener</code> instance
-        the first time the component for this tag is created</li>
+<li>Only create and register the <code>ActionListener</code> instance
+the first time the component for this tag is created</li>
 
-        <li>The "target" and "value" tag attributes are ValueExpression
-        instances and are stored unevaluated as instance variables of the
-        listener.</li>
+<li>The "target" and "value" tag attributes are ValueExpression
+instances and are stored unevaluated as instance variables of the
+listener.</li>
 
-        <li>When the listener executes, perform the following:
-           <ul>
-                Call getValue() on the "value" ValueExpression.   
-           </ul>
-           <ul>
-                 If value of the "value" expression is null, call setValue() on 
-                 the "target" ValueExpression with the null value.
-           </ul>
-           <ul>
-                If the value of the "value" expression is not null, call getType()
-                on the "value" and "target" ValueExpressions to determine their 
-                property types.
-           </ul>
-           <ul>
-                Coerce the value of the "value" expression to the "target" 
-                expression value type following the Expression Language coercion
-                rules.  Call setValue() on the "target" ValueExpression with the 
-                resulting value.
-           </ul>
-           <ul>
-                If either coercion or the execution of setValue() fails throw an 
-                AbortProcessingException.
-           </ul>
-        </li>
+<li>When the listener executes, call <code>getValue()</code> on the
+"value" ValueExpression.  Pass the result to a call to
+<code>setValue()</code> on the "target" ValueExpression</li>
 
-        </ul>]]>
+</ul>
+
+<p>This tag creates no output to the page currently being created.  It
+is used solely for the side effect of <code>ActionListener</code>
+creation.</p>
+]]>
+
         </description>
         <name>setPropertyActionListener</name>
         <tag-class>com.sun.faces.taglib.jsf_core.SetPropertyActionListenerTag</tag-class>

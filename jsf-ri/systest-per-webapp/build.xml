@@ -63,8 +63,7 @@
                    replace-lifecycle,
                    string-converter,
                    replace-variableresolver,
-                   converter-property-editor,
-                   wcag-datatable"/>
+                   converter-property-editor"/>
 
     <!-- 
        EXCLUDED APPLICATIONS:
@@ -72,6 +71,7 @@
           core-tags
           el-performance
           command-link-redirect
+          wcag-datatable
     -->
 
     <!-- ************ Executable Targets ************************************** -->

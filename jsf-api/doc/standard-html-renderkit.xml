@@ -4094,17 +4094,6 @@
       <property-name>footerClass</property-name>
       <property-class>java.lang.String</property-class>
     </property>
-    <property>
-      <description>
-          Flag indicating that this column is a row header column and
-          therefore cells in this column should be rendered with "th"
-          instead of "td" and must have the 'scope="row"' attribute.
-        </description>
-      <display-name>Column is Row Header</display-name>
-      <icon/>
-      <property-name>rowHeader</property-name>
-      <property-class>boolean</property-class>
-    </property>
 
     <component-extension>
       <base-component-type>javax.faces.Column</base-component-type>
@@ -5932,17 +5921,6 @@
       <property-extension>
         <pass-through>true</pass-through>
       </property-extension>
-    </property>
-    <property>
-      <description>
-          Comma separated list of row indices for which a new
-          "tbody" element should be started (and any
-          previously opened one should be ended).
-        </description>
-      <display-name>Body Rows</display-name>
-      <icon/>
-      <property-name>bodyrows</property-name>
-      <property-class>java.lang.String</property-class>
     </property>
 
     <component-extension>
@@ -12335,17 +12313,6 @@
         <pass-through>true</pass-through>
       </property-extension>
     </property>
-    <property>
-      <description>
-          Comma separated list of row indices for which a new
-          "tbody" element should be started (and any
-          previously opened one should be ended).
-        </description>
-      <display-name>Body Rows</display-name>
-      <icon/>
-      <property-name>bodyrows</property-name>
-      <property-class>java.lang.String</property-class>
-    </property>
 
 
     <property>
@@ -17514,9 +17481,11 @@
 
     <p>In addition to any action already specified in the renderers, all
     renderers for <code>UIInput</code> components must take the
-    following action regarding the <code>id</code> attribute:  Call 
-    <code>component.getClientId()</code> and render the result as the 
-    value of the id and name attributes.</p>
+    following action regarding the <code>id</code> attribute: Call
+    <code>component.getClientId()</code> and render the result as the
+    value of the <code>name</code> attribute.  This may cause some
+    renderers to have "id" and "name" attributes that have exactly the
+    same value.</p>
 
     </ul>
 
@@ -17976,40 +17945,122 @@
       </renderer-extension>
     </renderer>
     <renderer>
-      <description><![CDATA[<p>Render an HTML "a" anchor element
-            that acts like a form submit button when clicked.</p>
+      <description><![CDATA[<p>Render an HTML "a" anchor element that acts like a
+      form submit button when clicked.</p>
+
+      <p>General Behaviour</p>
+
+      <p>Both the encode and decode behavior require the ability to get
+      the id/name for a hidden field whose value is set by the
+      JavaScript form submit.  This name must be constructed as
+      follows:</p>
+
+      <ul>
+
+      <li><p>Get the clientId for the form of which this component is a
+      child.</p></li>
+
+      <li><p>Append
+      <code>NamingContainer.SEPARATOR_CHAR</code>.</p></li>
+
+      <li><p>Append a constant string that is the same for all command
+      link components in the tree.</p></li>
+
+      </ul>
+
+      <p>In the following text, this String is called
+      hiddenFieldName.</p>
 
       <p>Decode Behavior</p>
 
       <ul>
 
-        <p>Obtain the <code>Map</code> from the "requestParameterMap"
-        property of the <code>ExternalContext</code>.  If the value in
-        the <code>Map</code> for the value of the "clientId" property of
-        the component is <code>non-null</code>, create a
-        <code>javax.faces.event.ActionEvent</code> around the component,
-        and pass it to the <code>queueEvent()</code> method of the
-        component, which must be an instance of
-        <code>UICommand.</code></p>
+      <p>Obtain the "clientId" property of the component.  Obtain the
+      <code>Map</code> from the "requestParameterMap" property of the
+      <code>ExternalContext</code>.  Derive hiddenFieldName as above.
+      Get the entry in the <code>Map</code> under the key that is the
+      hiddenFieldName.  If the there is no entry, or the entry is the
+      empty String, or the entry is not equal to the value of the
+      "clientId" property, return immediately.  If there is an entry,
+      and its value is equal to the value of the "clientId" property,
+      create a new <code>javax.faces.event.ActionEvent</code> instance
+      around the component and call <code>queueActionEvent()</code> on
+      the component, passing the event.</p>
 
       </ul>
 
- 
+
+      <p>Encode Behavior</p>
 
       <ul>
 
-        <p>This is the only component in the HTML_BASIC RenderKit that
-        requires the use of JavaScript.  JavaScript is the only way to
-        usurp the behavior of the anchor tag to submit the form via HTTP
-        POST rather than having the browser do the usual HTTP GET.  The
-        manner in which this is accomplished is an implementation
-        detail, but any JavaScript that fulfills the requirement of
-        causing a name=value pair to be submitted in the form data,
-        where the name is the "clientId" of the component, and the value
-        is non-empty is acceptable.  Any parameters nested within this
-        component must be submitted along with the POST data for this
-        request.</p>
+      <p>If the value of the <code>disabled</code> attribute is
+      <code>true</code>, render a span element.  Render all the passthru
+      attributes and the <code>target</code> attribute as pass-through
+      attributes on the span, even though the <code>target</code>
+      attribute will have no effect on a span.  Render the current value
+      of the component as the content of the span.  Return.</p>
 
+      <p>If the <code>disabled</code> attribute is not present, or its
+      value is <code>false</code>, render an HTML <code>a</code>
+      element.  Render "#" as the value of the "href" attribute. Render
+      the current value of the component as the link text if it is
+      specified. Render JavaScript that is functionally equivalent to
+      the following as the value of the "onclick" attribute:</p>
+
+      <p><code>document.forms['CLIENT_ID']['hiddenFieldName'].value='CLIENT_ID';
+      document.forms['CLIENT_ID']['PARAM1_NAME'].value='PARAM1_VALUE';
+      document.forms['CLIENT_ID']['PARAM2_NAME'].value='PARAM2_VALUE';
+      return false;</code></p>
+
+      <p>document.forms['CLIENT_ID'].submit()" where hiddenFieldName is
+      as described above, CLIENT_ID is the clientId of the UICommand
+      component, PARAM*_NAME and PARAM*_VALUE are the names and values,
+      respectively, of any nested UIParameter children.  The name and
+      the value must be URLEncoded.  If an "onclick" attribute was 
+      specified by the user, render this JavaScript in a function,
+      and render the user's JavaScript in a function.  Render both functions
+      in a choice function as follows:</p>
+
+      <p><code>var a=function(){#USER_FUNCTION#};
+      var b=function(){#JSF_FUNCTION#};
+      return (a()==false) ? false : b();</code></p>
+      
+      <p>where #USER_FUNCTION# is the user's JavaScript and
+      #JSF_FUNCTION# is the JavaScript rendered by JSF.  The choice
+      function should operate such that if the user's JavaScript returns
+      true, then the rendered JavaScript will also execute.</p>
+ 
+      <p>If the "styleClass" attribute is specified, render its value as
+      the value of the "class" attribute.  Render any non-UIParameter
+      output children as normal inside of the "a" element.  These will
+      appear as the link text.  Allow the form renderer to output a
+      single "input" element (for the entire page, regardless of how
+      many command link components are in the page) of "type" "hidden"
+      whose "name" is the value of hiddenFieldName, and which must not
+      have a "value" attribute.  Multiple occurrences of command link
+      components in the tree should not cause multiple hiddenFieldName
+      hidden fields.  Allow the form renderer to output an "input"
+      element of "type" "hidden" for each of the nested UIParameter
+      children, taking the name property (but not the value) from each
+      one in turn.  If the "disabled" attribute is specified, do not
+      render the HTML "a" anchor element or its "href" attribute.
+      Instead, render a "span" element.  If the "styleClass" attribute
+      is specified, render its value as the value of the "class"
+      attribute on the "span".  Render any pass-through attributes on
+      the "span".  The content of the span element comes from the value
+      of the component or its children as specified above.</p>
+
+      <p>If the user specified a <code>target</code> attribute, its
+      value must be set using javascript since the <code>onclick</code>
+      handler will prevent the target attribute from being generated.
+      This must be accomplished using JavaScript that is equivalent to
+      the following.</p>
+
+      <p><code>document.forms['CLIENT_ID'].target='TARGET';</p>
+
+      <p>Where TARGET is the value of the target attribute on the JSP
+      tag.</p>
 
       </ul>]]></description>
       <component-family>javax.faces.Command</component-family>
@@ -18404,34 +18455,18 @@
     </renderer>
     <renderer>
       <description><![CDATA[
-
       <p>Renders an HTML "table" element compliant with the HTML 401
-      specification.  Render the "caption" facet, if present, inside a
-      "caption" element immediately below the "table" element.  If the
-      "captionClass" attribute is specified, render its value as the
-      value of the "class" attribute on the "caption" element.  If the
-      "captionStyle" attribute is specified, render its value as the
-      value of the "style" attribute on the "caption" element.</p>
-      <p>Please consult the javadoc for <code>UIData</code> to
-      supplement this specification.  If the "styleClass" attribute is
-      specified, render its value as the value of the "class" attribute
-      on the "table" element.  Any pass-through attributes are also
-      rendered on the "table" element.  </p>
-
-     <p>Column Groups</p>
-
-     <ul>
-
-       <p>If the <code>UIData</code> component has a "colgroups" facet,
-       render its contents.  Consistent with the rules of facets in
-       general, this facet must have only one child.  In general, this
-       will be a <code>panel group</code> component that will contain
-       <code>colgroup</code> and <code>col</code> elements per the HTML
-       Table specification.  Use of column grouping can improve
-       accessibility.  This facet must be rendered before the table
-       header and footer.</p>
-
-     </ul>
+      specification.  Render the "caption" facet, if present, inside a "caption" 
+      element immediately below the "table" element.  If the "captionClass" 
+      attribute is specified, render its value as the value of the "class" 
+      attribute on the "caption" element.  If the "captionStyle" attribute
+      is specified, render its value as the value of the "style" attribute
+      on the "caption" element.</p> 
+      <p>Please consult the javadoc for <code>UIData</code>
+      to supplement this specification.  If the "styleClass" attribute
+      is specified, render its value as the value of the "class"
+      attribute on the "table" element.  Any pass-through attributes are
+      also rendered on the "table" element.  </p>
 
      <p>Rendering the header</p>
 
@@ -18453,15 +18488,14 @@
       "header" facet render a "tr" element.  For each
       <code>UIColumn</code> that actually has a "header" facet, render
       it inside of a "th" element.  Columns that don't have a "header"
-      facet cause an empty "th" element to be rendered.  Output the
+      facet cause an empty "th" element to be rendered.  Output the 
       value of the "headerClass" attribute of the <code>UIColumn</code>
       component, if present, as the value of the "class" attribute on
-      the "th".  If the "headerClass" attribute of the
-      <code>UIColumn</code> component is not present, output the value
-      of the "headerClass" attribute of the <code>UIData</code>
-      component, if present, as the value of the "class" attribute on
-      the "th".  Output "col" as the value of the "scope" attribute on
-      the "th" element.
+      the "th".  If the "headerClass" attribute of the <code>UIColumn</code>
+      component is not present, output the value of the "headerClass" 
+      attribute of the <code>UIData</code> component, if present, as 
+      the value of the "class" attribute on the "th".  Output "col" as 
+      the value of the "scope" attribute on the "th" element.
       </p>
 
       <p>Close out the "thead" element.</p>
@@ -18483,37 +18517,21 @@
 
       <ul>
 
-      <p>Look at the value of the "bodyrows" attribute.  If present,
-      this must be a comma separated list of integers.  Each entry in
-      this list is the row index of the row before which a "tbody"
-      element should be rendered.</p>
-
-      <p>If there was no "bodyrows" attribute, or it was empty, render a
-      "tbody" element.  Keep track of the result of the "rows" property
-      on the <code>UIData</code> component.  Keep track of the number of
-      rows we have rendered so far.  Iterate through the rows.  Set the
-      "rowIndex" property of the <code>UIData</code> component to be
-      correct as we iterate through the rows.  Stop rendering children
-      and close out the "tbody" element if the "rowAvailable" property
-      of the <code>UIData</code> returned false.  If the current row
-      index is contained in the "bodyrows" attribute, check if a "tbody"
-      start element was rendered that needs to be closed, and if so,
-      close the "tbody" element.  Then render a "tbody" element start.
-      Otherwise, do not render a "tbody" element.</p>
-
-      <p>Output a "tr" element.  Output the value of the "rowClasses"
-      per the attribute description below.  For each
-      <code>UIColumn</code> child, if the column component has a
-      "rowHeader" attribute with a value of "true", output a "th"
-      element with a "scope" attribute with the value of "row".
-      Otherwise, if the column component has no "rowHeader" attribute,
-      or its value is false, output a "td" element.  In either case
-      attach the value of the "columnClasses" attribute of the
-      <code>UIData</code> component per the attribute description below.
-      Recursively encode each child of each <code>UIColumn</code> child.
-      Close out the "td" or "th" element.  When done with the row, close
-      out the "tr" element.  When done with all the rows, close out the
-      "tbody" element.</p>
+      <p>Render a "tbody" element.  Keep track of the result of the
+      "rows" property on the <code>UIData</code> component.  Keep track
+      of the number of rows we have rendered so far.  Iterate through
+      the rows.  Set the "rowIndex" property of the <code>UIData</code>
+      component to be correct as we iterate through the rows.  Stop
+      rendering children and close out the "tbody" element if the
+      "rowAvailable" property of the <code>UIData</code> returned false.
+      Output a "tr" element.  Output the value of the "rowClasses" per
+      the attribute description below.  For each <code>UIColumn</code>
+      child, output a "td" element, attaching the value of the
+      "columnClasses" attribute of the <code>UIData</code> component per
+      the attribute description below.  Recursively encode each child of
+      each <code>UIColumn</code> child.  Close out the "td" element.
+      When done with the row, close out the "tr" element.  When done
+      with all the rows, close out the "tbody" element.</p>
 
       </ul>
 
@@ -18534,9 +18552,6 @@
       </facet>
       <facet>
         <facet-name>footer</facet-name>
-      </facet>
-      <facet>
-        <facet-name>colgroups</facet-name>
       </facet>
 
       <attribute>
@@ -18928,17 +18943,6 @@
         <attribute-extension>
           <pass-through>true</pass-through>
         </attribute-extension>
-      </attribute>
-      <attribute>
-        <description>
-          Comma separated list of row indices for which a new
-          "tbody" element should be started (and any
-          previously opened one should be ended).
-        </description>
-        <display-name>Body Rows</display-name>
-        <icon/>
-        <attribute-name>bodyrows</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
       </attribute>
 
       <renderer-extension>
@@ -22762,17 +22766,6 @@
         <attribute-extension>
           <pass-through>true</pass-through>
         </attribute-extension>
-      </attribute>
-      <attribute>
-        <description>
-          Comma separated list of row indices for which a new
-          "tbody" element should be started (and any
-          previously opened one should be ended).
-        </description>
-        <display-name>Body Rows</display-name>
-        <icon/>
-        <attribute-name>bodyrows</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
       </attribute>
 
 

@@ -1,5 +1,5 @@
 /*
- * $Id: TableRenderer.java,v 1.38 2006/09/15 21:48:13 edburns Exp $
+ * $Id: TableRenderer.java,v 1.39 2006/10/03 23:32:08 rlubke Exp $
  */
 
 /*
@@ -30,12 +30,9 @@
 package com.sun.faces.renderkit.html_basic;
 
 
-import com.sun.faces.RIConstants;
-import javax.faces.component.NamingContainer;
 import javax.faces.component.UIColumn;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIData;
-import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 
@@ -53,9 +50,7 @@ import com.sun.faces.util.MessageUtils;
 public class TableRenderer extends HtmlBasicRenderer {
 
     // ---------------------------------------------------------- Public Methods
-    
-    private static final String HEADER_ID_LIST_ATTR_NAME = 
-            RIConstants.FACES_PREFIX + "HeaderIds";
+
 
     public void encodeBegin(FacesContext context, UIComponent component)
           throws IOException {
@@ -118,23 +113,17 @@ public class TableRenderer extends HtmlBasicRenderer {
             encodeRecursive(context, caption);
             writer.endElement("caption");
         }
-        UIComponent colGroups = getFacet(data, "colgroups");
-        if (null != colGroups) {
-            encodeRecursive(context, colGroups);
-        }
 
         // Render the header facets (if any)
         UIComponent header = getFacet(data, "header");
         int headerFacets = getFacetCount(data, "header");
         String headerClass = (String) data.getAttributes().get("headerClass");
         if ((header != null) || (headerFacets > 0)) {
-            // WCAG 5.2
             writer.startElement("thead", data);
             writer.writeText("\n", component, null);
         }
         if (header != null) {
             writer.startElement("tr", header);
-            // WCAG 5.1
             writer.startElement("th", header);
             if (headerClass != null) {
                 writer.writeAttribute("class", headerClass, "headerClass");
@@ -154,7 +143,6 @@ public class TableRenderer extends HtmlBasicRenderer {
                 UIColumn column = columns.next();
                 String columnHeaderClass =
                       (String) column.getAttributes().get("headerClass");
-                // WCAG 5.1
                 writer.startElement("th", column);
                 if (columnHeaderClass != null) {
                     writer.writeAttribute("class", columnHeaderClass,
@@ -183,7 +171,6 @@ public class TableRenderer extends HtmlBasicRenderer {
         int footerFacets = getFacetCount(data, "footer");
         String footerClass = (String) data.getAttributes().get("footerClass");
         if ((footer != null) || (footerFacets > 0)) {
-            // WCAG 5.2
             writer.startElement("tfoot", data);
             writer.writeText("\n", component, null);
         }
@@ -274,16 +261,8 @@ public class TableRenderer extends HtmlBasicRenderer {
         int rowIndex = data.getFirst() - 1;
         int rows = data.getRows();
         int rowStyle = 0;
-        List<Integer> bodyRows = getBodyRows(context, data);
-        boolean wroteTbody = false;
 
-        // WCAG 5.2
-        // If there is no "bodyrows" attribute, or it is empty,
-        if (null == bodyRows || bodyRows.isEmpty()) {
-            // contain the entire body in a single tbody element.
-            wroteTbody = true;
-            writer.startElement("tbody", component);
-        }
+        writer.startElement("tbody", component);
         writer.writeText("\n", component, null);
         while (true) {
 
@@ -295,14 +274,6 @@ public class TableRenderer extends HtmlBasicRenderer {
             data.setRowIndex(++rowIndex);
             if (!data.isRowAvailable()) {
                 break; // Scrolled past the last row
-            }
-            if (null != bodyRows && bodyRows.contains(data.getRowIndex())) {
-                // close out the previous tbody.
-                if (wroteTbody) {
-                    writer.endElement("tbody");
-                }
-                writer.startElement("tbody", component);
-                wroteTbody = true;
             }
 
             // Render the beginning of this row
@@ -319,35 +290,13 @@ public class TableRenderer extends HtmlBasicRenderer {
             // Iterate over the child UIColumn components for each row
             columnStyle = 0;
             kids = getColumns(data);
-            int i = 0;
             while (kids.hasNext()) {
 
                 // Identify the next renderable column
                 UIColumn column = (UIColumn) kids.next();
-                Boolean isRowHeader = null;
 
                 // Render the beginning of this cell
-                
-                // If the rowHeader attribute was set to true on this column...
-                if (null != (isRowHeader = 
-                        (Boolean) column.getAttributes().get("rowHeader")) &&
-                    isRowHeader.booleanValue()) {
-                    // WCAG 5.2.  Generate th with scope=row.
-                    writer.startElement("th", column);
-                    writer.writeAttribute("scope", "row", null);
-                }
-                else {
-                    writer.startElement("td", column);
-                }
-                // WCAG 5.2 render the "headers" attribute with data
-                // from the headers facet, if present.
-                List<String> headerIds = (List<String>) context.
-                        getExternalContext().getRequestMap().
-                        get(HEADER_ID_LIST_ATTR_NAME);
-                if (null != headerIds) {
-                    writer.writeAttribute("headers", headerIds.get(i++), 
-                            "headers");
-                }
+                writer.startElement("td", column);
                 if (columnStyles > 0) {
                     writer.writeAttribute("class", columnClasses[columnStyle++],
                                           "columnClasses");
@@ -364,12 +313,7 @@ public class TableRenderer extends HtmlBasicRenderer {
                 }
 
                 // Render the ending of this cell
-                if (null != isRowHeader && isRowHeader.booleanValue()) {
-                    writer.endElement("th");
-                }
-                else {
-                    writer.endElement("td");
-                }
+                writer.endElement("td");
                 writer.writeText("\n", component, null);
 
             }
@@ -379,10 +323,7 @@ public class TableRenderer extends HtmlBasicRenderer {
             writer.writeText("\n", component, null);
 
         }
-        // If there was no bodyrows attribute, or it was empty.
-        if (wroteTbody) {
-            writer.endElement("tbody");
-        }
+        writer.endElement("tbody");
         writer.writeText("\n", component, null);
 
         // Clean up after ourselves
@@ -392,22 +333,6 @@ public class TableRenderer extends HtmlBasicRenderer {
                                     component.getId());
         }
 
-    }
-    
-    private List<Integer> getBodyRows(FacesContext context, UIData data) throws NumberFormatException {
-        List<Integer> result = null;
-        String bodyRows = (String) data.getAttributes().get("bodyrows");
-        if (null != bodyRows) {
-            String [] rows = bodyRows.split(",");
-            if (null != rows) {
-                result = new ArrayList<Integer>(rows.length);
-                for (String curRow : rows) {
-                    result.add(Integer.valueOf(curRow));
-                }
-            }
-        }
-        
-        return result;
     }
 
 

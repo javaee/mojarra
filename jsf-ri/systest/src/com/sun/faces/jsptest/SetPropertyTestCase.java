@@ -1,5 +1,5 @@
 /*
- * $Id: SetPropertyTestCase.java,v 1.5 2006/09/15 01:45:57 rlubke Exp $
+ * $Id: SetPropertyTestCase.java,v 1.6 2006/10/03 23:32:10 rlubke Exp $
  */
 
 /*
@@ -92,34 +92,31 @@ public class SetPropertyTestCase extends AbstractTestCase {
 
     public void testSetPropertyPositive() throws Exception {
         HtmlPage page = getPage("/faces/jsp/jsp-setProperty-01.jsp");
-       
-        
-        // press the button to increment the property
-        assertTrue(page.asText().contains("Integer Property is: 123."));
-        assertTrue(page.asText().contains("String Property is: This is a String property."));
+        assertTrue(-1 != page.asText().indexOf("default value"));
+        // press the button to submit the literal value
         List buttons = getAllElementsOfGivenClass(page, new ArrayList(), 
                 HtmlSubmitInput.class);
-        page = (HtmlPage) ((HtmlSubmitInput)buttons.get(0)).click();                
-        assertTrue(page.asText().contains("Integer Property is: 100."));
-        assertTrue(page.asText().contains("String Property is: This is a String property."));
+        page = (HtmlPage) ((HtmlSubmitInput)buttons.get(0)).click();
+        assertTrue(-1 != page.asText().indexOf("literal value"));
         
+        // press the button to submit the expression value
         buttons = getAllElementsOfGivenClass(page, new ArrayList(), 
                 HtmlSubmitInput.class);
-        page = (HtmlPage) ((HtmlSubmitInput) buttons.get(1)).click();       
-        assertTrue(page.asText().contains("Integer Property is: 100."));
-        assertTrue(page.asText().contains("String Property is: 100."));                
+        page = (HtmlPage) ((HtmlSubmitInput)buttons.get(1)).click();
+        assertTrue(-1 != page.asText().indexOf("This is a String property"));
         
+        // press the button to increment the property
         buttons = getAllElementsOfGivenClass(page, new ArrayList(), 
                 HtmlSubmitInput.class);
-        page = (HtmlPage) ((HtmlSubmitInput) buttons.get(2)).click();        
-        assertTrue(page.asText().contains("Integer Property is: 100."));
-        assertTrue(page.asText().contains("String Property is: String.")); 
+        page = (HtmlPage) ((HtmlSubmitInput)buttons.get(2)).click();
+        assertTrue(-1 != page.asText().indexOf("0"));
         
+        // press the button to increment the property
         buttons = getAllElementsOfGivenClass(page, new ArrayList(), 
                 HtmlSubmitInput.class);
-        page = (HtmlPage) ((HtmlSubmitInput) buttons.get(3)).click();        
-        assertTrue(page.asText().contains("Integer Property is: 100."));
-        assertTrue(page.asText().contains("String Property is: com.sun.faces.context.FacesContextImpl"));
+        page = (HtmlPage) ((HtmlSubmitInput)buttons.get(2)).click();
+        assertTrue(-1 != page.asText().indexOf("1"));
+
     }
 
 
