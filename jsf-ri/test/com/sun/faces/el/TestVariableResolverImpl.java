@@ -1,5 +1,5 @@
 /*
- * $Id: TestVariableResolverImpl.java,v 1.2 2003/03/24 19:45:38 eburns Exp $
+ * $Id: TestVariableResolverImpl.java,v 1.3 2003/05/06 19:21:52 horwat Exp $
  */
 
 /*
@@ -15,6 +15,9 @@ import org.mozilla.util.Assert;
 import org.mozilla.util.Debug;
 import org.mozilla.util.ParameterCheck;
 
+import com.sun.faces.application.ApplicationImpl;
+import com.sun.faces.config.ConfigManagedBean;
+import com.sun.faces.config.ManagedBeanFactory;
 import com.sun.faces.ServletFacesTestCase;
 import com.sun.faces.TestBean;
 import com.sun.faces.TestBean.InnerBean;
@@ -22,8 +25,11 @@ import com.sun.faces.TestBean.Inner2Bean;
 
 import org.apache.cactus.WebRequest;
 
+import javax.faces.application.ApplicationFactory;
 import javax.faces.el.VariableResolver;
 import javax.faces.component.UINamingContainer;
+import javax.faces.FactoryFinder;
+
 
 
 /**
@@ -32,7 +38,7 @@ import javax.faces.component.UINamingContainer;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestVariableResolverImpl.java,v 1.2 2003/03/24 19:45:38 eburns Exp $
+ * @version $Id: TestVariableResolverImpl.java,v 1.3 2003/05/06 19:21:52 horwat Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -227,5 +233,30 @@ public class TestVariableResolverImpl extends ServletFacesTestCase
 
     }
 
+    /**
+     * This test verifies that if the variable resolver does not find a
+     * managed bean it tries to instantiate it if it was added to the
+     * application's managed bean factory list.
+     */
+    public void testManagedBean() throws Exception {
+        String beanName = "com.sun.faces.TestBean";
+
+        ConfigManagedBean cmb = new ConfigManagedBean();
+
+        cmb.setManagedBeanClass(beanName);
+        cmb.setManagedBeanScope("session");
+
+        ManagedBeanFactory mbf = new ManagedBeanFactory(cmb);
+
+        ApplicationFactory aFactory = (ApplicationFactory)FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
+        ApplicationImpl application = (ApplicationImpl)aFactory.getApplication();
+        application.getAppConfig().addManagedBeanFactory(beanName, mbf);
+
+        VariableResolver variableResolver = application.getVariableResolver();
+
+        Object result = variableResolver.resolveVariable(getFacesContext(), beanName);
+
+        assertTrue(result instanceof TestBean);
+    }
 
 } // end of class TestVariableResolverImpl

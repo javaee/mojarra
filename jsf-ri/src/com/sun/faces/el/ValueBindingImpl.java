@@ -1,5 +1,5 @@
 /*
- * $Id: ValueBindingImpl.java,v 1.8 2003/05/01 06:20:41 eburns Exp $
+ * $Id: ValueBindingImpl.java,v 1.9 2003/05/06 19:21:50 horwat Exp $
  */
 
 /*
@@ -223,18 +223,7 @@ public class ValueBindingImpl extends ValueBinding
 	}
 	catch (Throwable e) {
 	    Object [] params = { toEvaluate };
-            //possible opportunity to create and install a managed bean
-            Object bean = 
-		application.getAppConfig().createAndMaybeStoreManagedBeans
-                (context, getBeanName());
-
-            if ( bean != null) {
-                //re-evaluate expression
-                getValue(context, toEvaluate);
-            }
-            else {
-	        throw new PropertyNotFoundException(Util.getExceptionMessage(Util.ILLEGAL_MODEL_REFERENCE_ID, params), e);
-            }
+	    throw new PropertyNotFoundException(Util.getExceptionMessage(Util.ILLEGAL_MODEL_REFERENCE_ID, params), e);
 	}
 	return result;
     }
@@ -251,18 +240,7 @@ public class ValueBindingImpl extends ValueBinding
 	catch (Throwable e) {
 	    Object [] params = { ref };
 
-            //possible opportunity to create and install a managed bean
-            Object bean = 
-		application.getAppConfig().createAndMaybeStoreManagedBeans
-                (context, getBeanName());
-
-            if ( bean != null) {
-                //re-evaluate expression
-                setValue(context, value);
-            }
-            else {
-	        throw new PropertyNotFoundException(Util.getExceptionMessage(Util.ILLEGAL_MODEL_REFERENCE_ID, params), e);
-            }
+	    throw new PropertyNotFoundException(Util.getExceptionMessage(Util.ILLEGAL_MODEL_REFERENCE_ID, params), e);
 	}
     }
 
@@ -403,40 +381,6 @@ public class ValueBindingImpl extends ValueBinding
 	}
 
 	return result;
-    }
-
-    //FIX_ME: REVIEW logic for getting Bean Name!
-    protected String getBeanName() {
-
-        if (!hasMultipleSegments()) {
-            return ref;
-        }
-
-        String first = null;
-        char [] str = ref.toCharArray();
-        int len = str.length;
-
-        for (int i = 0; i < str.length; i++) {
-            if ((str[i] == '[') || (str[i] == '.')) {
-                first = ref.substring(0, i);
-                break;
-            }
-        }
-
-        Object toTest = null;
-
-        if (null != (toTest = getValue(FacesContext.getCurrentInstance(), first))) {
-            // object is immutable so don't instantiate bean
-            if (application.getPropertyResolver().isReadOnly(toTest, first)) {
-                return null;
-            }
-            else {
-                //FIX_ME: need to fix logic to get BeanName
-                return first;
-            }
-        }
-
-        return null;
     }
 
 } // end of class ValueBindingImpl
