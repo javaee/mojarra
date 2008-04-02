@@ -266,6 +266,24 @@
     <managed-bean-scope>request</managed-bean-scope>
   </managed-bean>
 
+  <!-- Managed Bean for "jsp/prependId" tests -->
+  <managed-bean>
+    <managed-bean-name>prependIdBean</managed-bean-name>
+    <managed-bean-class>
+      com.sun.faces.systest.model.TestBean
+    </managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+    <managed-property>
+      <property-name>booleanProperty</property-name>
+      <value>true</value>
+    </managed-property>
+    <managed-property>
+      <property-name>booleanProperty2</property-name>
+      <value>false</value>
+    </managed-property>
+  </managed-bean>
+
+
   <!-- Managed Bean for "jsp/jstl-foreach-XX" tests -->
   <managed-bean>
     <managed-bean-name>forEachBean</managed-bean-name>
