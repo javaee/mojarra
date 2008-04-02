@@ -1,5 +1,5 @@
 /*
- * $Id: TableRenderer.java,v 1.10 2003/12/24 19:11:21 jvisvanathan Exp $
+ * $Id: TableRenderer.java,v 1.11 2004/01/06 19:41:51 eburns Exp $
  */
 
 /*
@@ -145,7 +145,7 @@ public class TableRenderer extends HtmlBasicRenderer {
 	data.setRowIndex(-1);
 	while (kids.hasNext()) {
 	    UIComponent kid = (UIComponent) kids.next();
-	    if (!(kid instanceof UIColumn)) {
+	    if (!(kid instanceof UIColumn) || !kid.isRendered()) {
 		continue;
 	    }
             writer.startElement("td", kid);
@@ -196,7 +196,7 @@ public class TableRenderer extends HtmlBasicRenderer {
 
 		// Identify the next relevant child component
 		UIComponent kid = (UIComponent) kids.next();
-		if (!(kid instanceof UIColumn)) {
+		if (!(kid instanceof UIColumn) || !kid.isRendered()) {
 		    continue;
 		}
 		UIColumn column = (UIColumn) kid;
@@ -245,7 +245,7 @@ public class TableRenderer extends HtmlBasicRenderer {
 	kids = data.getChildren().iterator();
 	while (kids.hasNext()) {
 	    UIComponent kid = (UIComponent) kids.next();
-	    if (!(kid instanceof UIColumn)) {
+	    if (!(kid instanceof UIColumn) || !kid.isRendered()) {
 		continue;
 	    }
             writer.startElement("td", kid);
