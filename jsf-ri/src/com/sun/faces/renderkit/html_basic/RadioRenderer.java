@@ -1,5 +1,5 @@
 /*
- * $Id: RadioRenderer.java,v 1.65 2004/03/11 22:29:23 jvisvanathan Exp $
+ * $Id: RadioRenderer.java,v 1.66 2004/04/26 16:37:37 jvisvanathan Exp $
  */
 
 /*
@@ -103,8 +103,6 @@ public class RadioRenderer extends SelectManyCheckboxListRenderer {
         writer.writeText("\n", null);
 
         writer.startElement("label", component);
-        writer.writeAttribute("for", component.getClientId(context),
-                              "clientId");
         // if enabledClass or disabledClass attributes are specified, apply
         // it on the label.
         if (labelClass != null) {

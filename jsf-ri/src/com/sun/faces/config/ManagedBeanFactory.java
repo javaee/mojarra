@@ -1,5 +1,5 @@
 /*
- * $Id: ManagedBeanFactory.java,v 1.17 2004/04/07 17:22:12 eburns Exp $
+ * $Id: ManagedBeanFactory.java,v 1.18 2004/04/26 16:37:36 jvisvanathan Exp $
  */
 
 /*
@@ -856,21 +856,14 @@ public class ManagedBeanFactory extends Object {
 
         //if the managed bean's scope is "none" but the scope of the
         //referenced object is not "none", scope is invalid
-        if (scope == null) {
-            if (valueScope != null) {
+        if (scope == null || scope.equalsIgnoreCase(RIConstants.NONE)) {
+            if (valueScope != null && 
+                !(valueScope.equalsIgnoreCase(RIConstants.NONE))) {
                 return false;
             }
             return true;
         }
-        if (scope.equalsIgnoreCase(RIConstants.NONE)) {
-	    if (valueScope == null) {
-		// we can't tell the scope until the bean has been
-		// instantiated.
-		return true;
-	    }
-	}
-
-
+       
         //if the managed bean's scope is "request" it is able to refer
         //to objects in any scope
         if (scope.equalsIgnoreCase(RIConstants.REQUEST)) {

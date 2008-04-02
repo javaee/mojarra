@@ -300,5 +300,32 @@
     <referenced-bean-class>javax.sql.DataSource</referenced-bean-class>
   </referenced-bean>
 
+  <managed-bean>
+  <managed-bean-name>testBean</managed-bean-name>
+  <managed-bean-class>
+    com.sun.faces.TestBean
+  </managed-bean-class>
+  <managed-bean-scope>none</managed-bean-scope>
+  <managed-property>
+    <property-name>customerBean</property-name>
+    <value>#{customerBean}</value>
+  </managed-property>
+</managed-bean>
+
+<managed-bean>
+  <managed-bean-name>customerBean</managed-bean-name>
+  <managed-bean-class>
+    com.sun.faces.CustomerBean
+  </managed-bean-class>
+  <managed-bean-scope>none</managed-bean-scope>
+  <managed-property>
+    <property-name>name</property-name>
+    <value>Bobby</value>
+  </managed-property>
+  <managed-property>
+    <property-name>symbol</property-name>
+    <value>GDP</value>
+  </managed-property>
+</managed-bean>
 
 </faces-config>

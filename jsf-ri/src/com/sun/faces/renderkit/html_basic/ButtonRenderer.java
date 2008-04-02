@@ -1,5 +1,5 @@
 /*
- * $Id: ButtonRenderer.java,v 1.76 2004/03/31 18:48:33 eburns Exp $
+ * $Id: ButtonRenderer.java,v 1.77 2004/04/26 16:37:37 jvisvanathan Exp $
  */
 
 /*
@@ -61,21 +61,7 @@ public class ButtonRenderer extends HtmlBasicRenderer {
     //
     // General Methods
     //
-
-    /**
-     * Follow the UE Spec for Button:
-     * http://javaweb.sfbay.sun.com/engineering/jsue/j2ee/WebServices/
-     * JavaServerFaces/uispecs/UICommand_Button.html
-     */
-    protected String padLabel(String label) {
-        if (label.length() == 3) {
-            label = "\u00a0\u00a0" + label + "\u00a0\u00a0";
-        } else if (label.length() == 2) {
-            label = "\u00a0\u00a0\u00a0" + label + "\u00a0\u00a0\u00a0";
-        }
-        return label;
-    }
-
+    
     //
     // Methods From Renderer
     //
@@ -182,7 +168,7 @@ public class ButtonRenderer extends HtmlBasicRenderer {
             writer.writeAttribute("type", type.toLowerCase(), "type");
             writer.writeAttribute("name", component.getClientId(context),
                                   "clientId");
-            writer.writeAttribute("value", padLabel(label), "value");
+            writer.writeAttribute("value", label, "value");
         }
 
         Util.renderPassThruAttributes(writer, component);

@@ -1,5 +1,5 @@
 /*
- * $Id: MethodRef.java,v 1.10 2004/02/26 20:33:47 eburns Exp $
+ * $Id: MethodRef.java,v 1.11 2004/04/26 16:37:41 jvisvanathan Exp $
  */
 
 /*
@@ -17,6 +17,10 @@ import javax.faces.event.ValueChangeEvent;
 import javax.faces.validator.ValidatorException;
 import javax.servlet.http.HttpSession;
 
+import javax.faces.component.UIInput;
+import javax.faces.el.MethodBinding;
+
+import com.sun.faces.systest.TestValueChangeListener;
 
 public class MethodRef extends Object {
 
@@ -106,8 +110,31 @@ public class MethodRef extends Object {
                                                vce.getNewValue().toString());
         setChangeOutcome(vce.getNewValue().toString());
     }
+    
+    public void inputFieldValueChange(ValueChangeEvent vce) {
+        vce.getComponent().getAttributes().put("onblur",
+                                               vce.getNewValue().toString());
+    }
+    
+    protected UIInput inputField = null;
+    public void setInputField(UIInput input){
+        this.inputField = input;
+    }
+    
+    public UIInput getInputField() {
+        if (inputField == null) {
+            inputField = new UIInput();
+            inputField.addValueChangeListener(new TestValueChangeListener());
+            Class args[] = { ValueChangeEvent.class };
+            MethodBinding mb = 
+            FacesContext.getCurrentInstance().getApplication().
+            createMethodBinding("#{methodRef.inputFieldValueChange}", args);
+            inputField.setValueChangeListener(mb);
+        }
+        return inputField;
+    }
 
 
 }
 
-;
+

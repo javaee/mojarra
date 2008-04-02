@@ -1,5 +1,5 @@
 /*
- * $Id: TestManagedBeanFactory.java,v 1.16 2004/02/26 20:34:16 eburns Exp $
+ * $Id: TestManagedBeanFactory.java,v 1.17 2004/04/26 16:37:43 jvisvanathan Exp $
  */
 
 /*
@@ -464,6 +464,66 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
         //make sure scope is stored properly
         assertTrue(mbf.getScope() == null);
     }
+    
+    public void testNoneScope() throws Exception {
+        //Testing value ref scope
+        TestBean testBean = new TestBean();
+        boolean exceptionThrown = false;
+
+        //  valueref in request scope
+        //  managed bean in none scope
+        // this should fail
+        getFacesContext().getExternalContext().getRequestMap().put(
+            "TestRefBean", testBean);
+
+        ValueBindingImpl valueBinding = 
+            new ValueBindingImpl(new ApplicationImpl());
+
+        valueBinding.setRef("TestRefBean.one");
+        valueBinding.setValue(getFacesContext(), "one");
+
+        bean = new ManagedBeanBean();
+        bean.setManagedBeanClass(beanName);
+        bean.setManagedBeanScope("none");
+
+        property = new ManagedPropertyBean();
+        property.setPropertyName("one");
+        property.setValue("#{TestRefBean.one}");
+
+        bean.addManagedProperty(property);
+
+        mbf = new ManagedBeanFactory(bean);
+
+        exceptionThrown = false;
+        try {
+            mbf.newInstance();
+            fail("Should have thrown FacesException");
+        } catch (FacesException ex) {
+            exceptionThrown = true;
+        }
+        assertTrue(exceptionThrown);
+
+        //make sure scope is stored properly
+        assertTrue(mbf.getScope().equals("none"));
+
+        //cleanup
+        getFacesContext().getExternalContext().getRequestMap().remove(
+            "TestRefBean");
+
+        //  valueref in none scope
+        //  managed bean in none scope
+        // this should pass
+        ValueBinding valueBinding1 = 
+        getFacesContext().getApplication().createValueBinding("#{testBean.customerBean.name}");
+        exceptionThrown = false;
+        try {
+            valueBinding1.getValue(getFacesContext());
+        } catch (FacesException ex) {
+            exceptionThrown = true;
+        }
+        assertFalse(exceptionThrown);
+      
+    }
 
 
     public void testMixedBean() throws Exception {
@@ -569,5 +629,6 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
      assertTrue(exceptionThrown);
      }
      ***********/
+    
 
 }

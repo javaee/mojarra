@@ -5,7 +5,7 @@
 
 
 /**
- * $Id: SelectManyCheckboxListRenderer.java,v 1.35 2004/03/31 18:48:39 eburns Exp $
+ * $Id: SelectManyCheckboxListRenderer.java,v 1.36 2004/04/26 16:37:38 jvisvanathan Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -192,8 +192,6 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
         writer.writeText("\n", null);
 
         writer.startElement("label", component);
-        writer.writeAttribute("for", component.getClientId(context),
-                              "clientId");
         // if enabledClass or disabledClass attributes are specified, apply
         // it on the label.
         if (labelClass != null) {

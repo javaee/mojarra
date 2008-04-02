@@ -1,5 +1,5 @@
 /*
- * $Id: MethodRefTestCase.java,v 1.8 2004/02/26 20:33:36 eburns Exp $
+ * $Id: MethodRefTestCase.java,v 1.9 2004/04/26 16:37:40 jvisvanathan Exp $
  */
 
 /*
@@ -77,8 +77,7 @@ public class MethodRefTestCase extends AbstractTestCase {
 
 
     // ------------------------------------------------- Individual Test Methods
-
-
+    
     public void testActionAndActionListener() throws Exception {
         HtmlForm form;
         HtmlSubmitInput submit;
@@ -116,7 +115,7 @@ public class MethodRefTestCase extends AbstractTestCase {
                    -1 != input.asText().indexOf("button2 was pressed"));
         submit = (HtmlSubmitInput)
             form.getInputByName("form" + NamingContainer.SEPARATOR_CHAR +
-                                "button3");
+                                "button3"); 
 
         // press button3
         page = (HtmlPage) submit.click();
@@ -128,7 +127,7 @@ public class MethodRefTestCase extends AbstractTestCase {
                    -1 != input.asText().indexOf("button3 was pressed"));
 
 
-    }
+    } 
 
 
     public void testValidatorReference() throws Exception {
@@ -214,5 +213,35 @@ public class MethodRefTestCase extends AbstractTestCase {
                                 "toChange");
         assertEquals("Input does not have expected value",
                      "batman", input.getOnBlurAttribute());
+    }
+    
+    /**
+     * Test case for bug 5030555
+     */
+    public void testValueChangeListenerWithBinding() throws Exception {
+        HtmlForm form;
+        HtmlSubmitInput submit;
+        HtmlAnchor link;
+        HtmlTextInput input;
+        HtmlPage page;
+
+        page = getPage("/faces/binding01.jsp");
+        form = getFormById(page, "form");
+        submit = (HtmlSubmitInput)
+            form.getInputByName("form" + NamingContainer.SEPARATOR_CHAR +
+                                "changeValue");
+
+        // fill in a value, see we have a value
+        input = (HtmlTextInput)
+            form.getInputByName("form" + NamingContainer.SEPARATOR_CHAR +
+                                "toChange");
+        input.setValueAttribute("binding works!!");
+        page = (HtmlPage) submit.click();
+        form = getFormById(page, "form");
+        input = (HtmlTextInput)
+            form.getInputByName("form" + NamingContainer.SEPARATOR_CHAR +
+                                "toChange");
+        assertEquals("Input does not have expected value",
+                     "binding works!!", input.getOnBlurAttribute());
     }
 }
