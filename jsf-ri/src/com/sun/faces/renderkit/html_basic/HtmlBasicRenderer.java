@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderer.java,v 1.13 2002/10/14 19:25:39 rkitain Exp $
+ * $Id: HtmlBasicRenderer.java,v 1.14 2002/11/12 22:16:59 jvisvanathan Exp $
  */
 
 /*
@@ -126,8 +126,7 @@ public abstract class HtmlBasicRenderer extends Renderer {
         if (component == null || name == null) {
             throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
-
-	return (AttributeDescriptor)(attributeTable != null? attributeTable.get(name) : null); 
+        return (getAttributeDescriptor(component.getComponentType(), name));
     }
 
     public AttributeDescriptor getAttributeDescriptor(
@@ -137,6 +136,16 @@ public abstract class HtmlBasicRenderer extends Renderer {
             throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
 
+        if (!supportsComponentType(componentType)) {
+            Object [] params = {componentType}; 
+            throw new IllegalArgumentException(Util.getExceptionMessage(
+                Util.SUPPORTS_COMPONENT_ERROR_MESSAGE_ID, params));
+        }
+        if (!hasAttributeWithName(name)) {
+            Object [] params = {name, componentType}; 
+            throw new IllegalArgumentException(Util.getExceptionMessage(
+                Util.ATTRIBUTE_NOT_SUPORTED_ERROR_MESSAGE_ID, params));
+        }
 	return (AttributeDescriptor)(attributeTable != null? attributeTable.get(name) : null); 
     }
 

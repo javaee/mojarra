@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleFactoryImpl.java,v 1.7 2002/10/07 20:39:50 jvisvanathan Exp $
+ * $Id: LifecycleFactoryImpl.java,v 1.8 2002/11/12 22:16:59 jvisvanathan Exp $
  */
 
 /*
@@ -31,7 +31,7 @@ import java.util.HashMap;
  *  in the JSF RI. <P>
  *
  *
- * @version $Id: LifecycleFactoryImpl.java,v 1.7 2002/10/07 20:39:50 jvisvanathan Exp $
+ * @version $Id: LifecycleFactoryImpl.java,v 1.8 2002/11/12 22:16:59 jvisvanathan Exp $
  * 
  * @see	javax.faces.lifecycle.LifecycleFactory
  *
@@ -173,7 +173,7 @@ public Lifecycle getLifecycle(String lifecycleId) throws FacesException
 
 public Iterator getLifecycleIds()
 {
-    return lifecycleMap.entrySet().iterator();
+    return lifecycleMap.keySet().iterator();
 }
 
 public void registerAfter(String lifecycleId, int phaseId, Phase phase)

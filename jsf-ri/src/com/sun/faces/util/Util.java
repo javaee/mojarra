@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.38 2002/10/16 22:22:51 eburns Exp $
+ * $Id: Util.java,v 1.39 2002/11/12 22:17:00 jvisvanathan Exp $
  */
 
 /*
@@ -50,7 +50,7 @@ import java.util.Locale;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.38 2002/10/16 22:22:51 eburns Exp $
+ * @version $Id: Util.java,v 1.39 2002/11/12 22:17:00 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -134,6 +134,9 @@ public class Util extends Object
 
     public static final String ILLEGAL_MODEL_REFERENCE_ID =
         "com.sun.faces.ILLEGAL_MODEL_REFERENCE";
+    
+     public static final String ATTRIBUTE_NOT_SUPORTED_ERROR_MESSAGE_ID =
+         "com.sun.faces.ATTRIBUTE_NOT_SUPORTED";
 
 //
 // Class Variables

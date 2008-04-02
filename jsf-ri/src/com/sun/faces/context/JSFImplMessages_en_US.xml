@@ -105,5 +105,8 @@
       <detail>ModelReference expression '{0}' is illegal in this context.</detail>
   </message>
 
+  <message messageId="com.sun.faces.ATTRIBUTE_NOT_SUPORTED" severity="3" summary="Attribute not supported">
+      <detail>Attribute '{0}' is not supported for the component type '{1}'.</detail>
+  </message>
 </messages>
 

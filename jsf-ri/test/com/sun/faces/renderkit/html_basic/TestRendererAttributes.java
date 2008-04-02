@@ -1,5 +1,5 @@
 /*
- * $Id: TestRendererAttributes.java,v 1.4 2002/09/08 20:45:46 eburns Exp $
+ * $Id: TestRendererAttributes.java,v 1.5 2002/11/12 22:17:01 jvisvanathan Exp $
  */
 
 /*
@@ -39,7 +39,7 @@ import junit.framework.TestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRendererAttributes.java,v 1.4 2002/09/08 20:45:46 eburns Exp $
+ * @version $Id: TestRendererAttributes.java,v 1.5 2002/11/12 22:17:01 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -168,6 +168,26 @@ public static final String CORRECT_OUTPUT_FILENAME =
         catch (IllegalArgumentException e) {
             bool = true;
         }
+        
+        // passing invalid attribute name should throw exception
+        bool = false;
+        try {
+            tr.getAttributeDescriptor(u.getComponentType(), "doesnotexist");
+        }
+        catch (IllegalArgumentException e) {
+            bool = true;
+        }
+        assertTrue(bool);
+        
+        // passing invalid component type should throw exception
+        bool = false;
+        try {
+            tr.getAttributeDescriptor("Invalidtype", "doesnotexist");
+        }
+        catch (IllegalArgumentException e) {
+            bool = true;
+        }
+        assertTrue(bool);
     }
 
 } // end of class TestRendererAttributes

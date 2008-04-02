@@ -103,6 +103,8 @@
       <detail>ModelReference Ausdruck '{0}' ist ungueltig.</detail>
   </message>
 
-
+  <message messageId="com.sun.faces.ATTRIBUTE_NOT_SUPORTED" severity="3" summary="Attribut nicht gest?tzt">
+      <detail>Attribut '{0}' wird nicht f?r die Teilart gest?tzt '{1}'.</detail>
+  </message>
 </messages>
 
