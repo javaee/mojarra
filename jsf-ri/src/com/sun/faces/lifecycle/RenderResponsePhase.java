@@ -1,5 +1,5 @@
 /*
- * $Id: RenderResponsePhase.java,v 1.2 2003/02/11 01:02:45 horwat Exp $
+ * $Id: RenderResponsePhase.java,v 1.3 2003/02/18 18:01:17 craigmcc Exp $
  */
 
 /*
@@ -29,6 +29,7 @@ import java.util.Iterator;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import com.sun.faces.RIConstants;
+import com.sun.faces.context.FacesContextImpl;
 
 
 /**
@@ -36,7 +37,7 @@ import com.sun.faces.RIConstants;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: RenderResponsePhase.java,v 1.2 2003/02/11 01:02:45 horwat Exp $
+ * @version $Id: RenderResponsePhase.java,v 1.3 2003/02/18 18:01:17 craigmcc Exp $
  * 
  * @see	com.sun.faces.lifecycle.DefaultLifecycleImpl
  * @see	javax.faces.lifecycle.Lifecycle#UPDATE_MODEL_VALUES_PHASE
@@ -84,6 +85,9 @@ public RenderResponsePhase(Lifecycle newDriver, int newId)
 
 public int execute(FacesContext facesContext) throws FacesException
 {
+    if (((FacesContextImpl)facesContext).getResponseComplete()) {
+        return Phase.GOTO_EXIT;
+    }
     int rc = Phase.GOTO_NEXT;
     Assert.assert_it(null != lifecycleDriver.getViewHandler());
     try { 
