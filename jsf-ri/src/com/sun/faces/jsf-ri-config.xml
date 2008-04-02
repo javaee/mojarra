@@ -49,8 +49,8 @@
   </component>
 
   <component>
-    <component-type>CommandHyperlink</component-type>
-    <component-class>javax.faces.component.html.HtmlCommandHyperlink</component-class>
+    <component-type>CommandLink</component-type>
+    <component-class>javax.faces.component.html.HtmlCommandLink</component-class>
   </component>
 
   <component>
@@ -1281,8 +1281,8 @@
     </renderer>
 
     <renderer>
-      <renderer-type>Hyperlink</renderer-type>
-      <renderer-class>com.sun.faces.renderkit.html_basic.HyperlinkRenderer</renderer-class>
+      <renderer-type>Link</renderer-type>
+      <renderer-class>com.sun.faces.renderkit.html_basic.LinkRenderer</renderer-class>
       &core-attrs;
       &events-attrs;
       &i18n-attrs;

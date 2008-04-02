@@ -1,5 +1,5 @@
 /*
- * $Id: Command_HyperlinkTag.java,v 1.42 2003/10/13 22:56:23 jvisvanathan Exp $
+ * $Id: Command_LinkTag.java,v 1.1 2003/10/23 05:17:44 eburns Exp $
  */
 
 /*
@@ -22,10 +22,10 @@ import com.sun.faces.util.Util;
 
 /**
  * This class is the tag handler that evaluates the 
- * <code>command_hyperlink</code> custom tag.
+ * <code>command_link</code> custom tag.
  */
 
-public class Command_HyperlinkTag extends BaseComponentTag
+public class Command_LinkTag extends BaseComponentTag
 {
     //
     // Protected Constants
@@ -85,10 +85,10 @@ public class Command_HyperlinkTag extends BaseComponentTag
     //
 
     public String getRendererType() { 
-        return "Hyperlink"; 
+        return "Link"; 
     }
     public String getComponentType() { 
-        return "CommandHyperlink"; 
+        return "CommandLink"; 
     }
 
 
@@ -155,4 +155,4 @@ public class Command_HyperlinkTag extends BaseComponentTag
         return super.doStartTag();
     }
 
-} // end of class Command_HyperlinkTag
+} // end of class Command_LinkTag

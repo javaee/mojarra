@@ -1,5 +1,5 @@
 /*
- * $Id: BuildComponentFromTagImpl.java,v 1.5 2003/10/07 23:05:49 rkitain Exp $
+ * $Id: BuildComponentFromTagImpl.java,v 1.6 2003/10/23 05:20:07 eburns Exp $
  */
 
 /*
@@ -69,7 +69,7 @@ import java.util.Hashtable;
  * Copy of com.sun.faces.tree.BuildComponentFromTagImpl in order to remove
  * demo dependancy on RI.
  *
- * @version $Id: BuildComponentFromTagImpl.java,v 1.5 2003/10/07 23:05:49 rkitain Exp $
+ * @version $Id: BuildComponentFromTagImpl.java,v 1.6 2003/10/23 05:20:07 eburns Exp $
  * 
  */
 
@@ -138,7 +138,7 @@ public class BuildComponentFromTagImpl extends Object
         // PENDING(edburns): read this from a persistent store
         classMap.put("Form", "javax.faces.component.UIForm");
         classMap.put("Command_Button", "javax.faces.component.UICommand");
-        classMap.put("Command_Hyperlink", "javax.faces.component.UICommand");
+        classMap.put("Command_Link", "javax.faces.component.UICommand");
         classMap.put("SelectBoolean_Checkbox", "javax.faces.component.UISelectBoolean");
         classMap.put("RadioGroup", "javax.faces.component.UISelectOne");
         classMap.put("SelectOne_Radio", PARENT_SELECTONE);

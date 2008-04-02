@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigFileTestCase.java,v 1.43 2003/10/21 16:42:01 eburns Exp $
+ * $Id: ConfigFileTestCase.java,v 1.44 2003/10/23 05:17:52 eburns Exp $
  */
 
 /*
@@ -448,7 +448,7 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
 	    "Grid",
 	    "Group",
 	    "Hidden",
-	    "Hyperlink",
+	    "Link",
 	    "Image",
 	    "Label",
 	    "Listbox",

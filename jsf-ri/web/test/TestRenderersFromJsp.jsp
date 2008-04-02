@@ -21,7 +21,7 @@
 
             <h:command_button id="login" />
 
-	    <!-- <h:command_hyperlink id="/basicForm/login" /> -->
+	    <!-- <h:command_link id="/basicForm/login" /> -->
 
             <h:output_text id="userLabel" />
 

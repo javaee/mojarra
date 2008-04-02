@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_1.java,v 1.46 2003/10/13 22:56:27 jvisvanathan Exp $
+ * $Id: TestRenderers_1.java,v 1.47 2003/10/23 05:17:53 eburns Exp $
  */
 
 /*
@@ -40,7 +40,7 @@ import com.sun.faces.application.ViewHandlerImpl;
 
 import com.sun.faces.renderkit.html_basic.FormRenderer;
 import com.sun.faces.renderkit.html_basic.ButtonRenderer;
-import com.sun.faces.renderkit.html_basic.HyperlinkRenderer;
+import com.sun.faces.renderkit.html_basic.LinkRenderer;
 import com.sun.faces.renderkit.html_basic.RadioRenderer;
 
 /**
@@ -49,7 +49,7 @@ import com.sun.faces.renderkit.html_basic.RadioRenderer;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_1.java,v 1.46 2003/10/13 22:56:27 jvisvanathan Exp $
+ * @version $Id: TestRenderers_1.java,v 1.47 2003/10/23 05:17:53 eburns Exp $
  * 
  *
  */
@@ -157,7 +157,7 @@ public class TestRenderers_1 extends JspFacesTestCase
             verifyFormRenderer(root, 1);
             verifyRadioRenderer(root);
             verifyButtonRenderer(root);
-            verifyHyperlinkRenderer(root);
+            verifyLinkRenderer(root);
             getFacesContext().getResponseWriter().endDocument();
 
             assertTrue(verifyExpectedOutput());
@@ -174,11 +174,11 @@ public class TestRenderers_1 extends JspFacesTestCase
 
     }
 
-    public void verifyHyperlinkRenderer(UIComponent root) throws IOException {
+    public void verifyLinkRenderer(UIComponent root) throws IOException {
         // Provide attributes for all possible lookups
         // make sure that valueRef is returned and no others.
-        System.out.println("Testing Hyperlink Renderer...");
-        HyperlinkRenderer hyperlinkRenderer = new HyperlinkRenderer();
+        System.out.println("Testing Link Renderer...");
+        LinkRenderer hyperlinkRenderer = new LinkRenderer();
         UICommand uiCommand = new UICommand();
         uiCommand.setId("labelLink1");
         uiCommand.setValue("PASSED");

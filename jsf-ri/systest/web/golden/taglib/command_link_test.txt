@@ -7,7 +7,7 @@
     
     
     
-    <title>command_hyperlink_test.jsp</title>
+    <title>command_link_test.jsp</title>
 </head>
 <body>
     

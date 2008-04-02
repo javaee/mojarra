@@ -3,7 +3,7 @@
  SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 -->
 
-<%-- $Id: UIData.jsp,v 1.3 2003/10/19 14:54:06 eburns Exp $ --%>
+<%-- $Id: UIData.jsp,v 1.4 2003/10/23 05:20:09 eburns Exp $ --%>
 
 <%@ page import="standard.CustomerBean" %>
 <%@ page import="java.util.ArrayList" %>
@@ -143,12 +143,12 @@
                     immediate="true"
                      valueRef="UIDataBean.pressLabel"
                          type="SUBMIT"/>
-      <h:command_hyperlink id="click"
+      <h:command_link id="click"
                     actionRef="UIDataBean.click"
                     immediate="true">
         <h:output_text
                      valueRef="UIDataBean.clickLabel"/>
-      </h:command_hyperlink>
+      </h:command_link>
     </h:column>
 
   </h:data_table>

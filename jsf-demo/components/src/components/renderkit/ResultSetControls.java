@@ -1,5 +1,5 @@
 /*
- * $Id: ResultSetControls.java,v 1.16 2003/10/07 14:31:06 eburns Exp $
+ * $Id: ResultSetControls.java,v 1.17 2003/10/23 05:20:06 eburns Exp $
  */
 
 /*
@@ -65,7 +65,7 @@ import java.util.MissingResourceException;
  *
  * 
  *
- * @version $Id: ResultSetControls.java,v 1.16 2003/10/07 14:31:06 eburns Exp $
+ * @version $Id: ResultSetControls.java,v 1.17 2003/10/23 05:20:06 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -249,7 +249,7 @@ public ResultSetControls() {
     /**
 
     * Write the markup to render a navigation widget.  Override this to
-    * replace the default navigation widget of hyperlink with something
+    * replace the default navigation widget of link with something
     * else.
 
     */

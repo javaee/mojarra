@@ -1,5 +1,5 @@
 /*
- * $Id: HyperlinkRenderer.java,v 1.63 2003/10/13 22:56:21 jvisvanathan Exp $
+ * $Id: LinkRenderer.java,v 1.1 2003/10/23 05:17:42 eburns Exp $
  */
 
 /*
@@ -7,7 +7,7 @@
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
-// HyperlinkRenderer.java
+// LinkRenderer.java
 
 package com.sun.faces.renderkit.html_basic;
 
@@ -32,14 +32,14 @@ import org.mozilla.util.Assert;
 
 /**
  *
- *  <B>HyperlinkRenderer</B> is a class ...
+ *  <B>LinkRenderer</B> is a class ...
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HyperlinkRenderer.java,v 1.63 2003/10/13 22:56:21 jvisvanathan Exp $
+ * @version $Id: LinkRenderer.java,v 1.1 2003/10/23 05:17:42 eburns Exp $
  */
 
-public class HyperlinkRenderer extends BaseCommandRenderer {
+public class LinkRenderer extends BaseCommandRenderer {
     //
     // Protected Constants
     //
@@ -292,4 +292,4 @@ public class HyperlinkRenderer extends BaseCommandRenderer {
         }
     }
 
-} // end of class HyperlinkRenderer
+} // end of class LinkRenderer

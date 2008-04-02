@@ -1,5 +1,5 @@
 /*
- * $Id: TestApplicationImpl_Config.java,v 1.22 2003/10/21 16:42:00 eburns Exp $
+ * $Id: TestApplicationImpl_Config.java,v 1.23 2003/10/23 05:17:51 eburns Exp $
  */
 
 /*
@@ -59,7 +59,7 @@ import java.util.Locale;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestApplicationImpl_Config.java,v 1.22 2003/10/21 16:42:00 eburns Exp $
+ * @version $Id: TestApplicationImpl_Config.java,v 1.23 2003/10/23 05:17:51 eburns Exp $
  */
 
 public class TestApplicationImpl_Config extends ServletFacesTestCase {
@@ -195,7 +195,7 @@ public class TestApplicationImpl_Config extends ServletFacesTestCase {
 	    "Column",
 	    "Command",
 	    "CommandButton",
-	    "CommandHyperlink",
+	    "CommandLink",
 	    "Data",
 	    "DataTable",
 	    "Form",

@@ -10,7 +10,7 @@
 <!ENTITY grid-renderer-class 'com.sun.faces.renderkit.html_basic.GridRenderer'>
 <!ENTITY group-renderer-class 'com.sun.faces.renderkit.html_basic.GroupRenderer'>
 <!ENTITY hidden-renderer-class 'com.sun.faces.renderkit.html_basic.HiddenRenderer'>
-<!ENTITY hyperlink-renderer-class 'com.sun.faces.renderkit.html_basic.HyperlinkRenderer'>
+<!ENTITY link-renderer-class 'com.sun.faces.renderkit.html_basic.LinkRenderer'>
 <!ENTITY image-renderer-class 'com.sun.faces.renderkit.html_basic.ImageRenderer'>
 <!ENTITY label-renderer-class 'com.sun.faces.renderkit.html_basic.LabelRenderer'>
 <!ENTITY listbox-renderer-class 'com.sun.faces.renderkit.html_basic.ListboxRenderer'>

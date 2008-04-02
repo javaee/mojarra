@@ -3,7 +3,7 @@
  SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 -->
 
-<%-- $Id: UICommand.jsp,v 1.5 2003/10/19 14:54:06 eburns Exp $ --%>
+<%-- $Id: UICommand.jsp,v 1.6 2003/10/23 05:20:08 eburns Exp $ --%>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
@@ -40,7 +40,7 @@
 
            <%@ include file="table_header.jsp" %>
 
-           <%@ include file="command_hyperlink_row.jsp" %>
+           <%@ include file="command_link_row.jsp" %>
 
          </table>
 

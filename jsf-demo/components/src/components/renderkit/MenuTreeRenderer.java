@@ -1,5 +1,5 @@
 /*
- * $Id: MenuTreeRenderer.java,v 1.5 2003/09/25 17:48:05 horwat Exp $
+ * $Id: MenuTreeRenderer.java,v 1.6 2003/10/23 05:20:05 eburns Exp $
  */
 
 /*
@@ -159,7 +159,7 @@ public class MenuTreeRenderer extends MenuBarRenderer {
 
         // Render the tree state image for this node. use the "onmousedown" event 
         // handler to track which node was clicked. The images are rendered
-        // as hyperlinks.
+        // as links.
         writer.write("    <td>");
         if (!node.isLeaf()) {
             // The image links of the nodes that have children behave like
@@ -222,7 +222,7 @@ public class MenuTreeRenderer extends MenuBarRenderer {
                 writer.write("</a>"); 
             } 
         } 
-        // Render the label for this node (if any) as hyperlink.
+        // Render the label for this node (if any) as link.
         if (node.getLabel() != null) {
             writer.write("   ");
             String labelStyle = null;

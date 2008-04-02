@@ -1,5 +1,5 @@
 /*
- * $Id: UIDataBean.java,v 1.3 2003/10/17 03:53:46 eburns Exp $
+ * $Id: UIDataBean.java,v 1.4 2003/10/23 05:20:08 eburns Exp $
  */
 
 /*
@@ -103,7 +103,7 @@ public class UIDataBean {
 
 
     /**
-     * <p>Return a customized label for the "Click" hyperlink.</p>
+     * <p>Return a customized label for the "Click" link.</p>
      */
     public String getClickLabel() {
 
@@ -142,7 +142,7 @@ public class UIDataBean {
 
 
     /**
-     * <p>Acknowledge that a row-specific hyperlink was clicked.</p>
+     * <p>Acknowledge that a row-specific link was clicked.</p>
      */
     private String click() {
 

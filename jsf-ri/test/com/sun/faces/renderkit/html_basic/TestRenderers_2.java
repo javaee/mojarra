@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_2.java,v 1.64 2003/10/21 16:42:04 eburns Exp $
+ * $Id: TestRenderers_2.java,v 1.65 2003/10/23 05:17:55 eburns Exp $
  */
 
 /*
@@ -48,7 +48,7 @@ import com.sun.faces.TestBean;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_2.java,v 1.64 2003/10/21 16:42:04 eburns Exp $
+ * @version $Id: TestRenderers_2.java,v 1.65 2003/10/23 05:17:55 eburns Exp $
  * 
  *
  */
@@ -128,9 +128,9 @@ public class TestRenderers_2 extends JspFacesTestCase
         theRequest.addParameter("myCheckboxYes", "yes");
         theRequest.addParameter("myCheckboxTrue", "true");
   
-        // for HyperlinkRenderer
+        // for LinkRenderer
         theRequest.addParameter("action", "command");
-        theRequest.addParameter("myCommand", "HyperlinkRenderer");
+        theRequest.addParameter("myCommand", "LinkRenderer");
         // for Listbox
         theRequest.addParameter("myListbox", "100");
         // for TextEntry_Secret
@@ -159,7 +159,7 @@ public class TestRenderers_2 extends JspFacesTestCase
             testCheckboxRenderer(root);
             // PENDING (visvan) revisit this test case once HyperLinkRenderer
             // is fixed.
-            // testHyperlinkRenderer(root);
+            // testLinkRenderer(root);
             getFacesContext().getResponseWriter().startDocument();
             testListboxRenderer(root);
             testSecretRenderer(root);
@@ -277,14 +277,14 @@ public class TestRenderers_2 extends JspFacesTestCase
         getFacesContext().getResponseWriter().writeText("\n", null);
     }
 
-    public void testHyperlinkRenderer(UIComponent root) throws IOException {
-        System.out.println("Testing HyperlinkRenderer");
+    public void testLinkRenderer(UIComponent root) throws IOException {
+        System.out.println("Testing LinkRenderer");
         UICommand command = new UICommand();
         command.setId("myCommand");
-        command.setRendererType("Hyperlink");
+        command.setRendererType("Link");
         root.getChildren().add(command);
 
-        HyperlinkRenderer hyperlinkRenderer = new HyperlinkRenderer();
+        LinkRenderer hyperlinkRenderer = new LinkRenderer();
 
         System.out.println("    Testing decode method...");
         hyperlinkRenderer.decode(getFacesContext(), command);

@@ -65,7 +65,7 @@
 
 	<TD>
 
-	      <h:command_hyperlink id="link" href="hello.html"
+	      <h:command_link id="link" href="hello.html"
 				       value="link text"/>
 
 	</TD>
@@ -76,7 +76,7 @@
 
 	<TD>
 
-	      <h:command_hyperlink id="imageLink" href="hello.html"
+	      <h:command_link id="imageLink" href="hello.html"
 				       image="duke.gif"/>
 
 	</TD>

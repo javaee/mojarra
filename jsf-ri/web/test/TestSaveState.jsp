@@ -30,7 +30,7 @@
 
 	<TD>
 
-	      <h:command_hyperlink id="link" href="hello.html"
+	      <h:command_link id="link" href="hello.html"
                            styleClass="hyperlinkClass"
 				       value="link text"/>
 

@@ -1,5 +1,5 @@
 /*
- * $Id: MenuBarRenderer.java,v 1.10 2003/10/07 14:31:06 eburns Exp $
+ * $Id: MenuBarRenderer.java,v 1.11 2003/10/23 05:20:05 eburns Exp $
  */
 
 /*
@@ -67,7 +67,7 @@ import javax.servlet.http.HttpServletResponse;
  * <p>Render our current value (which must be a <code>Graph</code>)
  * as a menu bar, where the children of the root node are treated as individual
  * menus, and grandchildren of the root node are the items on the main menus.
- * A real application would display things as hyperlinks to expand and contract
+ * A real application would display things as links to expand and contract
  * items, including recursive submenus.</p>
  */
 
@@ -187,7 +187,7 @@ public class MenuBarRenderer extends BaseRenderer {
                     Node node = (Node) items.next();
                     writer.write("<li>");
                     // Render the label for this node (if any) as a
-                    // hyperlink is the node is enabled. 
+                    // link is the node is enabled. 
                     if (node.getLabel() != null) {
                         writer.write("   ");
                         String labelStyle = null;

@@ -8,17 +8,17 @@
 
              <td>
 
-               <h:output_text id="commandHyperlink1Label"
-                     value="command_hyperlink with hard coded label"/>
+               <h:output_text id="commandLink1Label"
+                     value="command_link with hard coded label"/>
 
              </td>
 
              <td>
 
-	       <h:command_hyperlink id="commandHyperlink1" action="success"
+	       <h:command_link id="commandLink1" action="success"
                   value="Submit Form">
                  <f:action_listener type="standard.DefaultListener"/>
-               </h:command_hyperlink>
+               </h:command_link>
 
              </td>
 
@@ -28,17 +28,17 @@
 
              <td>
 
-               <h:output_text id="commandHyperlink2Label" 
-                     value="command_hyperlink using the model for the label"/>
+               <h:output_text id="commandLink2Label" 
+                     value="command_link using the model for the label"/>
 
              </td>
 
              <td>
 
-	      <h:command_hyperlink id="valueRefLink" action="success"
+	      <h:command_link id="valueRefLink" action="success"
                   valueRef="model.label">
                  <f:action_listener type="standard.DefaultListener"/>
-              </h:command_hyperlink>
+              </h:command_link>
 
              </td>
 
@@ -48,17 +48,17 @@
 
              <td>
 
-               <h:output_text id="commandHyperlink3Label" 
-                     value="command_hyperlink using ResourceBundle for the label"/>
+               <h:output_text id="commandLink3Label" 
+                     value="command_link using ResourceBundle for the label"/>
 
              </td>
 
              <td>
 
-	      <h:command_hyperlink id="resBundleLableLink" action="success"
+	      <h:command_link id="resBundleLableLink" action="success"
                   key="standardRenderKitSubmitLabel" bundle="standardBundle">
                  <f:action_listener type="standard.DefaultListener"/>
-               </h:command_hyperlink>
+               </h:command_link>
 
              </td>
 
@@ -68,17 +68,17 @@
 
              <td>
 
-               <h:output_text id="commandHyperlink4Label" 
-                     value="command_hyperlink as an image"/>
+               <h:output_text id="commandLink4Label" 
+                     value="command_link as an image"/>
 
              </td>
 
              <td>
 
-	      <h:command_hyperlink id="imageLink" action="success"
+	      <h:command_link id="imageLink" action="success"
                   image="duke.gif">
                  <f:action_listener type="standard.DefaultListener"/>
-               </h:command_hyperlink>
+               </h:command_link>
 
 
              </td>
@@ -89,17 +89,17 @@
 
              <td>
 
-               <h:output_text id="commandHyperlink5Label" 
-                     value="command_hyperlink using ResourceBundle for image path"/>
+               <h:output_text id="commandLink5Label" 
+                     value="command_link using ResourceBundle for image path"/>
 
              </td>
 
              <td>
 
-	      <h:command_hyperlink id="imageResourceBundleLink" 
+	      <h:command_link id="imageResourceBundleLink" 
                   imageKey="imageurl" bundle="standardBundle" action="success">
                  <f:action_listener type="standard.DefaultListener"/>
-               </h:command_hyperlink>
+               </h:command_link>
 
 
              </td>

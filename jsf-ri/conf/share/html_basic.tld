@@ -488,8 +488,8 @@
   </tag>
 
   <tag>
-    <name>command_hyperlink</name>
-    <tag-class>com.sun.faces.taglib.html_basic.Command_HyperlinkTag</tag-class>
+    <name>command_link</name>
+    <tag-class>com.sun.faces.taglib.html_basic.Command_LinkTag</tag-class>
       <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
     <body-content>JSP</body-content>
       <attribute>
