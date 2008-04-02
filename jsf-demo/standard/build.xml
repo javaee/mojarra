@@ -95,9 +95,9 @@
                 <include name="*.xml"/>
             </fileset>
         </copy>
-        <copy todir="${build}/${example}/WEB-INF/classes/${example}">
-            <fileset dir="web">
-                <include name="*properties"/>
+        <copy todir="${build}/${example}/WEB-INF/classes">
+            <fileset dir="src">
+                <include name="**/*properties"/>
             </fileset>
         </copy>
 

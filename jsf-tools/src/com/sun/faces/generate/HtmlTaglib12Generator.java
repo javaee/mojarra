@@ -49,7 +49,7 @@ import java.util.logging.Logger;
  * This class generates tag handler class code that is special to the
  * "html_basic" package.
  */
-public class HtmlTaglibGenerator extends AbstractGenerator {
+public class HtmlTaglib12Generator extends AbstractGenerator {
 
     // -------------------------------------------------------- Static Variables
     
@@ -78,7 +78,7 @@ public class HtmlTaglibGenerator extends AbstractGenerator {
 
     // ------------------------------------------------------------ Constructors
 
-    public HtmlTaglibGenerator(PropertyManager propManager) {
+    public HtmlTaglib12Generator(PropertyManager propManager) {
 
         this.propManager = propManager;
         
@@ -97,7 +97,7 @@ public class HtmlTaglibGenerator extends AbstractGenerator {
         addImport("javax.faces.webapp.*");
         addImport("javax.servlet.jsp.JspException");
 
-    } // END HtmlTaglibGenerator
+    } // END HtmlTaglib12Generator
 
 
     // ---------------------------------------------------------- Public Methods
@@ -120,7 +120,7 @@ public class HtmlTaglibGenerator extends AbstractGenerator {
 
         PropertyManager manager = PropertyManager.newInstance(args[0]);
         try {
-            Generator generator = new HtmlTaglibGenerator(manager);
+            Generator generator = new HtmlTaglib12Generator(manager);
             generator.generate(GeneratorUtil.getConfigBean(args[1]));
         } catch (Exception e) {
             throw new RuntimeException(e);

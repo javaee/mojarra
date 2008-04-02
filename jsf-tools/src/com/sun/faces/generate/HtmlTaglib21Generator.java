@@ -32,7 +32,7 @@ import com.sun.faces.config.beans.PropertyBean;
  * This class generates tag handler class code that is specifc to the
  * "html_basic" package and JSP 2.1.
  */
-public class HtmlTaglib21Generator extends HtmlTaglibGenerator {
+public class HtmlTaglib21Generator extends HtmlTaglib12Generator {
 
 
     // ------------------------------------------------------------ Constructors

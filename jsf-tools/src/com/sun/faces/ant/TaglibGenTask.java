@@ -1,5 +1,5 @@
 /*
- * $Id: TaglibGenTask.java,v 1.5 2005/08/22 22:12:14 ofung Exp $
+ * $Id: TaglibGenTask.java,v 1.6 2006/03/14 01:09:04 rlubke Exp $
  */
 
 /*
@@ -31,6 +31,8 @@ package com.sun.faces.ant;
 
 import org.apache.tools.ant.BuildException;
 
+import com.sun.faces.generate.PropertyManager;
+
 /**
  * <p>Task to create a JSP tags.</p>
  */
@@ -48,10 +50,18 @@ public class TaglibGenTask extends AbstractGeneratorTask {
 
     public void execute() throws BuildException {
 
-        if (generatorConfig.indexOf("12") > -1) {
+        PropertyManager manager = PropertyManager.newInstance(generatorConfig);
+        String jspVersion =
+              manager.getProperty(PropertyManager.JSP_VERSION_PROPERTY);
+        System.out.println("Generating taglibs for JSP version " + jspVersion);
+        if ("2.1".equals(jspVersion)) {
+            setGeneratorClass(GENERATOR_21_CLASS);
+        } else if ("1.2".equals(jspVersion)) {
             setGeneratorClass(GENERATOR_12_CLASS);
         } else {
-           setGeneratorClass(GENERATOR_21_CLASS);
+            throw new BuildException("Unsupported JSP version '"
+                                     + jspVersion
+                                     + '\'');
         }
 
         super.execute();
