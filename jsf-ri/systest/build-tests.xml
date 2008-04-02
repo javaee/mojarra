@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 
 <!--
- $Id: build-tests.xml,v 1.119 2006/07/31 20:28:06 rlubke Exp $
+ $Id: build-tests.xml,v 1.120 2006/07/31 23:01:28 rlubke Exp $
 -->
 
 <!--
@@ -270,7 +270,8 @@
                                    com/sun/faces/jsptest/CommandLinkNoFormTestCase.class,
                                    com/sun/faces/jsptest/PrependIdTestCase.class,
                                    com/sun/faces/jsptest/ConverterTestCase.class,
-                                   com/sun/faces/jsptest/IdRefTestCase.class"/>
+                                   com/sun/faces/jsptest/IdRefTestCase.class,
+                                   com/sun/faces/jsptest/ForEachTestCase.class"/>
             </tests>
         </jsf.junit>       
     </target>

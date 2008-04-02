@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentClassicTagBase.java,v 1.23 2006/07/12 22:51:38 rlubke Exp $
+ * $Id: UIComponentClassicTagBase.java,v 1.24 2006/07/31 23:01:28 rlubke Exp $
  */
 
 /*
@@ -457,7 +457,11 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
 
         UIComponent component = createComponent(context, componentId);
         UIComponentTagBase parentTag = getParentUIComponentClassicTagBase(pageContext);
-        parent.getChildren().add(parentTag.getIndexOfNextChildTag(), component);
+        int indexOfNextChildTag = parentTag.getIndexOfNextChildTag();
+        if (indexOfNextChildTag > parent.getChildCount()) {
+            indexOfNextChildTag = parent.getChildCount();
+        }
+        parent.getChildren().add(indexOfNextChildTag, component);
         created = true;
         return (component);
 
@@ -934,14 +938,17 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
             // value of indexOfComponentInParent, otherwise, call add()
         List createdIds = (List) 
               parent.getAttributes().get(JSP_CREATED_COMPONENT_IDS);
-        boolean replace =
-              (createdIds != null && createdIds.size() == children.size());             
         int indexOfComponentInParent = children.indexOf(component);
+        boolean replace =
+              (indexOfComponentInParent > 0 && createdIds != null &&
+              createdIds.size() == children.size());
         if (replace) {
-        indexOfComponentInParent = ((indexOfComponentInParent == 0)
-                                    ? 0
-                                    : (indexOfComponentInParent - 1));
-            children.set(indexOfComponentInParent, verbatim);
+            UIComponent oldVerbatim = children.get(indexOfComponentInParent - 1);
+            if (oldVerbatim instanceof UIOutput && oldVerbatim.isTransient()) {
+                children.set((indexOfComponentInParent - 1), verbatim);
+            } else {
+                children.add(indexOfComponentInParent, verbatim);
+            }
         } else {
             children.add(indexOfComponentInParent, verbatim);
         }
