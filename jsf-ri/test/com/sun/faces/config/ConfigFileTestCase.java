@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigFileTestCase.java,v 1.15 2003/05/20 16:35:32 eburns Exp $
+ * $Id: ConfigFileTestCase.java,v 1.16 2003/06/13 22:16:56 eburns Exp $
  */
 
 /*
@@ -135,13 +135,13 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
                            config.getServletContext());
 
         // <application>
-        assertEquals("com.mycompany.MyActionListener",
+        assertEquals("com.sun.faces.TestActionListener",
                      base.getActionListener());
-        assertEquals("com.mycompany.MyNavigationHandler",
+        assertEquals("com.sun.faces.TestNavigationHandler",
                      base.getNavigationHandler());
-        assertEquals("com.mycompany.MyPropertyResolver",
+        assertEquals("com.sun.faces.TestPropertyResolver",
                      base.getPropertyResolver());
-        assertEquals("com.mycompany.MyVariableResolver",
+        assertEquals("com.sun.faces.TestVariableResolver",
                      base.getVariableResolver());
 
         // <component>
@@ -167,7 +167,7 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
         assertNotNull(cc1);
         assertEquals("First",
                      cc1.getConverterId());
-        assertEquals("com.mycompany.MyFirstConverter",
+        assertEquals("com.sun.faces.TestFirstConverter",
                      cc1.getConverterClass());
         assertEquals(1, cc1.getAttributes().size());
         ConfigAttribute cc1a1 =
@@ -182,7 +182,7 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
         assertNotNull(cc2);
         assertEquals("Second",
                      cc2.getConverterId());
-        assertEquals("com.mycompany.MySecondConverter",
+        assertEquals("com.sun.faces.TestSecondConverter",
                      cc2.getConverterClass());
         assertEquals(0, cc2.getAttributes().size());
         assertEquals(1, cc2.getProperties().size());
@@ -202,7 +202,7 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
         assertNotNull(cv1);
         assertEquals("First",
                      cv1.getValidatorId());
-        assertEquals("com.mycompany.MyFirstValidator",
+        assertEquals("com.sun.faces.TestFirstValidator",
                      cv1.getValidatorClass());
         assertEquals(1, cv1.getAttributes().size());
         ConfigAttribute cv1a1 =
@@ -217,7 +217,7 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
         assertNotNull(cv2);
         assertEquals("Second",
                      cv2.getValidatorId());
-        assertEquals("com.mycompany.MySecondValidator",
+        assertEquals("com.sun.faces.TestSecondValidator",
                      cv2.getValidatorClass());
         assertEquals(0, cv2.getAttributes().size());
         assertEquals(1, cv2.getProperties().size());

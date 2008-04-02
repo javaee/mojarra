@@ -16,8 +16,8 @@
 
   <!-- Initial application element with partial values -->
   <application>
-    <action-listener>com.mycompany.MyActionListener</action-listener>
-    <variable-resolver>com.mycompany.OldVariableResolver</variable-resolver>
+    <action-listener>com.sun.faces.TestActionListener</action-listener>
+    <variable-resolver>com.sun.faces.TestOldVariableResolver</variable-resolver>
   </application>
 
 
@@ -30,7 +30,7 @@
       <large-icon>secondValidator.gif</large-icon>
     </icon>
     <validator-id>Second</validator-id>
-    <validator-class>com.mycompany.MySecondValidator</validator-class>
+    <validator-class>com.sun.faces.TestSecondValidator</validator-class>
     <property>
       <description>Second Validator Property 1 Description</description>
       <display-name>Second Validator Property 1 Display Name</display-name>
@@ -49,7 +49,7 @@
       <large-icon>firstValidator.gif</large-icon>
     </icon>
     <validator-id>First</validator-id>
-    <validator-class>com.mycompany.MyFirstValidator</validator-class>
+    <validator-class>com.sun.faces.TestFirstValidator</validator-class>
     <attribute>
       <description>First Validator Attribute 1 Description</description>
       <display-name>First Validator Attribute 1 Display Name</display-name>
@@ -77,7 +77,7 @@
       <large-icon>firstConverter.gif</large-icon>
     </icon>
     <converter-id>First</converter-id>
-    <converter-class>com.mycompany.MyFirstConverter</converter-class>
+    <converter-class>com.sun.faces.TestFirstConverter</converter-class>
     <attribute>
       <description>First Converter Attribute 1 Description</description>
       <display-name>First Converter Attribute 1 Display Name</display-name>
@@ -90,10 +90,10 @@
   <!-- Second application element with overapping values -->
   <application>
     <navigation-handler>
-      com.mycompany.MyNavigationHandler
+      com.sun.faces.TestNavigationHandler
     </navigation-handler>
-    <property-resolver>com.mycompany.MyPropertyResolver</property-resolver>
-    <variable-resolver>com.mycompany.MyVariableResolver</variable-resolver>
+    <property-resolver>com.sun.faces.TestPropertyResolver</property-resolver>
+    <variable-resolver>com.sun.faces.TestVariableResolver</variable-resolver>
   </application>
 
 
@@ -106,7 +106,7 @@
       <large-icon>secondConverter.gif</large-icon>
     </icon>
     <converter-id>Second</converter-id>
-    <converter-class>com.mycompany.MySecondConverter</converter-class>
+    <converter-class>com.sun.faces.TestSecondConverter</converter-class>
     <property>
       <description>Second Converter Property 1 Description</description>
       <display-name>Second Converter Property 1 Display Name</display-name>
