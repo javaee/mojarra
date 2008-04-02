@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigManagedBean.java,v 1.5 2003/05/10 00:43:03 horwat Exp $
+ * $Id: ConfigManagedBean.java,v 1.6 2003/08/05 18:23:14 jvisvanathan Exp $
  */
 
 /*
@@ -143,14 +143,15 @@ public class ConfigManagedBean extends ConfigFeature implements Cloneable {
 
     private Class getPropertyType(ConfigManagedBeanProperty property) 
         throws FacesException {
-
+        boolean isUIComponent = false;
+        
         Class propertyType = null;
-
+        Class clazz = null;
         // indexed and mapped properties have explicit types
         if (!property.hasValuesArray() && !property.hasMapEntries()) {
             PropertyDescriptor descs[] = null;
             try {
-                Class clazz = Util.loadClass
+                clazz = Util.loadClass
                     (managedBeanClass, this);
                 BeanInfo beanInfo = Introspector.getBeanInfo(clazz);
                 descs = beanInfo.getPropertyDescriptors();
@@ -159,22 +160,35 @@ public class ConfigManagedBean extends ConfigFeature implements Cloneable {
                 obj[0] = managedBeanClass;
                 throw new FacesException(Util.getExceptionMessage(Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, obj), ex);
             } catch (IntrospectionException ex) {
+                // if the property happens to be attribute on UIComponent
+                // then bean introspection will fail and we need to return null.
+                if (isUIComponentClass(clazz)) {
+                    return null;
+                }
                 Object[] obj = new Object[1];
                 obj[0] = managedBeanClass;
-                throw new FacesException(Util.getExceptionMessage(Util.CANT_INTROSPECT_CLASS_ERROR_MESSAGE_ID, obj), ex);
+                throw new FacesException(Util.getExceptionMessage(
+                    Util.CANT_INTROSPECT_CLASS_ERROR_MESSAGE_ID, obj), ex);
             }
             PropertyDescriptor desc = null;
 
             for (int i = 0; i < descs.length; i++) {
-               if (property.getPropertyName().equals(descs[i].getName())) {
+                if (property.getPropertyName().equals(descs[i].getName())) {
                    desc = descs[i];
                    break;
                }
             }
             if (desc == null) {
+                // if the property happens to be attribute on UIComponent
+                // then bean introspection will fail and we need to return null.
+                if (isUIComponentClass(clazz)) {
+                    return null;
+                }
                 Object[] obj = new Object[1];
                 obj[0] = managedBeanClass;
-                throw new FacesException(Util.getExceptionMessage(Util.CANT_INTROSPECT_CLASS_ERROR_MESSAGE_ID, obj));
+                throw new FacesException(
+                    Util.getExceptionMessage(
+                    Util.CANT_INTROSPECT_CLASS_ERROR_MESSAGE_ID, obj));
             }
 
             boolean isIndexed;
@@ -189,6 +203,28 @@ public class ConfigManagedBean extends ConfigFeature implements Cloneable {
         }
 
         return propertyType;
+    }
+    
+    /**
+     * Determines if the class or interface represented by clazz object is 
+     * either the same as, or is a superclass or superinterface of, 
+     * <code>javax.faces.component.UIComponent</code>
+     */
+    public boolean isUIComponentClass(Class clazz) {
+        Class uiComponentClass = null;
+        try {
+            uiComponentClass = 
+                Util.loadClass("javax.faces.component.UIComponent", this);
+        } catch (ClassNotFoundException cfe) {
+            Object[] obj = new Object[1];
+            obj[0] = uiComponentClass;
+            throw new FacesException(Util.getExceptionMessage(
+                    Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, obj), cfe);
+        }
+        if (uiComponentClass.isAssignableFrom(clazz)) {
+            return true;
+        }
+        return false;
     }
 
     /**

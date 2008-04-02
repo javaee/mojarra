@@ -56,9 +56,14 @@
       <property-name>stringProperty</property-name>
       <value>New String Value</value>
     </managed-property>
+    <managed-property>
+      <property-name>userName</property-name>
+      <value-ref>usernamecomponent</value-ref>
+    </managed-property>
   </managed-bean>
-
-
+ 
+   
+  
   <!-- Message Resources Custom Bundle #1 - Single Element -->
   <message-resources>
     <message-resources-id>javax.faces.context.FACES_API_MESSAGES</message-resources-id>
@@ -159,5 +164,21 @@
     <component-type>TestComponent</component-type>
     <component-class>com.sun.faces.systest.TestComponent</component-class>
   </component>
+  
+   <managed-bean>
+      <managed-bean-name>usernamecomponent</managed-bean-name>
+      <managed-bean-class>
+         javax.faces.component.UIInput
+      </managed-bean-class>
+      <managed-bean-scope>request</managed-bean-scope>
+      <managed-property>
+        <property-name>size</property-name>
+        <value>16</value>
+      </managed-property>
+      <managed-property>
+        <property-name>maxlength</property-name>
+        <value>32</value>
+      </managed-property>
+  </managed-bean>
 
 </faces-config>

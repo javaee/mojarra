@@ -19,7 +19,7 @@ This page should FAIL.
 <f:use_faces>
 
   <p>This must have either a label or key attribute.</p>
-  <h:command_button commandName="required">
+  <h:command_button>
     <h:output_text value="hello"/>
   </h:command_button>
 

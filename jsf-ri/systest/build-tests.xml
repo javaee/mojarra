@@ -4,7 +4,7 @@
  Copyright 2003 Sun Microsystems, Inc. All rights reserved.
  SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 
- $Id: build-tests.xml,v 1.10 2003/07/29 16:31:06 rlubke Exp $
+ $Id: build-tests.xml,v 1.11 2003/08/05 18:23:15 jvisvanathan Exp $
 -->
 
 
@@ -223,8 +223,10 @@
     <tester host="${host}" port="${port}" protocol="${protocol}"
          request="${context.path}/faces/standard/output_errors01.jsp"
           golden="${golden.path}/standard/output_errors01.txt"/>
-
-
+          
+    <tester host="${host}" port="${port}" protocol="${protocol}"
+         request="${context.path}/faces/standard/componentRef01.jsp"
+         outContent="/componentRef01.jsp PASSED"/>
   </target>
 
   <target name="test.html.taglib"

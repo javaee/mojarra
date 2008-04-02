@@ -1,5 +1,5 @@
 /*
- * $Id: TestBean.java,v 1.1 2003/05/10 00:48:05 craigmcc Exp $
+ * $Id: TestBean.java,v 1.2 2003/08/05 18:23:16 jvisvanathan Exp $
  */
 
 /*
@@ -9,6 +9,7 @@
 
 package com.sun.faces.systest.model;
 
+import javax.faces.component.UIInput;
 
 /**
  * <p>Test JavaBean for managed object creation facility.</p>
@@ -18,6 +19,7 @@ public class TestBean {
 
 
     private boolean booleanProperty = true;
+  
     public boolean getBooleanProperty() {
         return (this.booleanProperty);
     }
@@ -87,7 +89,12 @@ public class TestBean {
     public void setStringProperty(String stringProperty) {
         this.stringProperty = stringProperty;
     }
-
-
-
+    
+    private UIInput userName = null;
+    public UIInput getUserName() {
+        return (this.userName);
+    }
+    public void setUserName(UIInput userName) {
+        this.userName = userName;
+    }
 }

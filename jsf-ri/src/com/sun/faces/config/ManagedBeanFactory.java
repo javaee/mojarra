@@ -1,5 +1,5 @@
 /*
- * $Id: ManagedBeanFactory.java,v 1.4 2003/05/08 23:13:04 horwat Exp $
+ * $Id: ManagedBeanFactory.java,v 1.5 2003/08/05 18:23:14 jvisvanathan Exp $
  */
 
 /*
@@ -17,6 +17,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.FacesException;
 import javax.faces.el.ValueBinding;
 import javax.faces.el.PropertyNotFoundException;
+import javax.faces.component.UIComponent;
 
 import com.sun.faces.el.ValueBindingImpl;
 import com.sun.faces.util.Util;
@@ -74,7 +75,8 @@ public class ManagedBeanFactory extends Object {
      */
     public Object newInstance() throws FacesException {
         Object bean = null;
-
+        boolean isUIComponent = false;
+        
         if (managedBean.getManagedBeanCreate() != null) {
             if (managedBean.getManagedBeanCreate().equalsIgnoreCase("FALSE")) {
                 return bean;
@@ -97,6 +99,9 @@ public class ManagedBeanFactory extends Object {
             throw new FacesException(Util.getExceptionMessage(Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, obj), ex);
         }
 
+        if ( bean instanceof UIComponent) {
+            isUIComponent = true;
+        }
         //set the scope
         scope = managedBean.getManagedBeanScope();
 
@@ -133,9 +138,19 @@ public class ManagedBeanFactory extends Object {
                                 value);
                         }
                     } catch (Exception ex) {
-                        Object[] obj = new Object[1];
-                        obj[0] = cmp.getPropertyName();
-                        throw new FacesException(Util.getExceptionMessage(Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, obj), ex);
+                        // if the property happens to be attribute on UIComponent
+                        // then bean introspection will fail.
+                        if ( isUIComponent) {
+                            setComponentAttribute(bean, cmp.getPropertyName(), 
+                            value);  
+                        } else {
+                            Object[] obj = new Object[1];
+                            obj[0] = cmp.getPropertyName();
+                            throw new FacesException(
+                            Util.getExceptionMessage(
+                            Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, obj), 
+                            ex);
+                        }
                     }
                 }
             } else if (cmp.hasMapEntries()) {
@@ -159,12 +174,20 @@ public class ManagedBeanFactory extends Object {
                             (String)cmpm.getKey(), 
                             value);
                     } catch (Exception ex) {
-                        Object[] obj = new Object[1];
-                        obj[0] = cmp.getPropertyName();
-                        throw new FacesException(Util.getExceptionMessage(Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, obj), ex);
+                        if ( isUIComponent) {
+                            setComponentAttribute(bean, cmp.getPropertyName(), 
+                            value);
+                        } else {
+                            Object[] obj = new Object[1];
+                            obj[0] = cmp.getPropertyName();
+                            throw new FacesException(Util.getExceptionMessage(
+                            Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, obj), 
+                            ex);   
+                        }
                     }
                 }
             } else {
+               
                 cmpv = (ConfigManagedBeanPropertyValue)cmp.getValue();
 
                 //find properties and set them on the bean
@@ -174,20 +197,27 @@ public class ManagedBeanFactory extends Object {
                 } else {
                     value = cmpv.getValue();
                 }
-
                 try {
                     // if it's a class type do not set it
                     if (cmpv.getValueCategory() != 
+                    
                         ConfigManagedBeanPropertyValue.VALUE_CLASS) {
-                         PropertyUtils.setSimpleProperty(
+                        PropertyUtils.setSimpleProperty(
                             bean, 
                             cmp.getPropertyName(), 
                             value);
                     }
                 } catch (Exception ex) {
-                    Object[] obj = new Object[1];
-                    obj[0] = cmp.getPropertyName();
-                    throw new FacesException(Util.getExceptionMessage(Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, obj), ex);
+                    if ( isUIComponent) {
+                        setComponentAttribute(bean, cmp.getPropertyName(), 
+                            value);
+                    } else {
+                        Object[] obj = new Object[1];
+                        obj[0] = cmp.getPropertyName();
+                        throw new FacesException(Util.getExceptionMessage(
+                        Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, obj), 
+                        ex);
+                    }
                 }
             }
 
@@ -274,6 +304,14 @@ public class ManagedBeanFactory extends Object {
         //statements must be true.
         org.mozilla.util.Assert.assert_it(false);
         return false;
+    }
+    /**
+     * Sets the passed in property name and value as an attribute on 
+     * <ocde>UIComponent</code> instance.
+     */
+    public void setComponentAttribute(Object component, String propName,
+        Object propValue) {
+        ((UIComponent)component).setAttribute(propName, propValue);
     }
 
 }
