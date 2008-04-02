@@ -216,6 +216,51 @@
   </component>
 
   <component>
+    <component-type>Message</component-type>
+    <component-class>javax.faces.component.UIMessage</component-class>
+    &base-props;
+    <property>
+      <description>If true, the component must not display any summary.</description>
+      <display-name></display-name>
+      <icon></icon>
+      <property-name>noSummary</property-name>
+      <property-class>boolean</property-class>
+      <tag-attribute>yes</tag-attribute>
+    </property>
+    <property>
+      <description>If true, the component must not display any detail.</description>
+      <display-name></display-name>
+      <icon></icon>
+      <property-name>noDetail</property-name>
+      <property-class>boolean</property-class>
+      <tag-attribute>yes</tag-attribute>
+    </property>
+    <property>
+      <description>The clientId of the component for which to display messages.</description>
+      <display-name></display-name>
+      <icon></icon>
+      <property-name>for</property-name>
+      <property-class>java.lang.String</property-class>
+      <tag-attribute>required</tag-attribute>
+    </property>
+  </component>
+
+  <component>
+    <component-type>Messages</component-type>
+    <component-class>javax.faces.component.UIMessages</component-class>
+    &base-props;
+    <property>
+      <description>If true, only global messages, that have no associated clientId, will be displayed.</description>
+      <display-name></display-name>
+      <icon></icon>
+      <property-name>globalOnly</property-name>
+      <property-class>boolean</property-class>
+      <tag-attribute>yes</tag-attribute>
+    </property>
+  </component>
+
+
+  <component>
     <component-type>NamingContainer</component-type>
     <component-class>javax.faces.component.UINamingContainer</component-class>
     &base-props;
@@ -1325,11 +1370,81 @@
         <attribute-class>java.lang.String</attribute-class>
       </attribute>
 
+      <attribute>
+        <description>CSS style for info messages</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>infoStyle</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>CSS style class for info messages</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>infoStyleClass</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>CSS style for warn messages</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>warnStyle</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>CSS style class for warn messages</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>warnStyleClass</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>CSS style for error messages</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>errorStyle</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>CSS style class for error messages</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>errorStyleClass</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>CSS style for fatal messages</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>fatalStyle</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>CSS style class for fatal messages</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>fatalStyleClass</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>      
+
       <supported-component-type>
         <component-type>Output</component-type>
       </supported-component-type>
+      <supported-component-type>
+        <component-type>Message</component-type>
+      </supported-component-type>
       <supported-component-class>
         <component-class>javax.faces.component.UIOutput</component-class>
+      </supported-component-class>
+      <supported-component-class>
+        <component-class>javax.faces.component.UIMessage</component-class>
       </supported-component-class>
     </renderer>
 
@@ -1531,11 +1646,81 @@
         <attribute-class>java.lang.String</attribute-class>
       </attribute>
 
+      <attribute>
+        <description>CSS style for info messages</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>infoStyle</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>CSS style class for info messages</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>infoStyleClass</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>CSS style for warn messages</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>warnStyle</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>CSS style class for warn messages</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>warnStyleClass</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>CSS style for error messages</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>errorStyle</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>CSS style class for error messages</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>errorStyleClass</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>CSS style for fatal messages</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>fatalStyle</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>CSS style class for fatal messages</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>fatalStyleClass</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
       <supported-component-type>
         <component-type>Data</component-type>
       </supported-component-type>
+      <supported-component-type>
+        <component-type>Messages</component-type>
+      </supported-component-type>
       <supported-component-class>
         <component-class>javax.faces.component.UIData</component-class>
+      </supported-component-class>
+      <supported-component-class>
+        <component-class>javax.faces.component.UIMessages</component-class>
       </supported-component-class>
     </renderer>
 

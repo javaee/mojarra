@@ -1030,6 +1030,50 @@
   </component>
 
   <component>
+    <component-type>Message</component-type>
+    <component-class>javax.faces.component.html.HtmlMessage</component-class>
+    &base-props;
+    <property>
+      <description>If true, the component must not display any summary.</description>
+      <display-name></display-name>
+      <icon></icon>
+      <property-name>showSummary</property-name>
+      <property-class>boolean</property-class>
+      <tag-attribute>yes</tag-attribute>
+    </property>
+    <property>
+      <description>If true, the component must not display any detail.</description>
+      <display-name></display-name>
+      <icon></icon>
+      <property-name>showDetail</property-name>
+      <property-class>boolean</property-class>
+      <tag-attribute>yes</tag-attribute>
+    </property>
+    <property>
+      <description>The clientId of the component for which to display messages.</description>
+      <display-name></display-name>
+      <icon></icon>
+      <property-name>for</property-name>
+      <property-class>java.lang.String</property-class>
+      <tag-attribute>required</tag-attribute>
+    </property>
+  </component>
+
+  <component>
+    <component-type>Messages</component-type>
+    <component-class>javax.faces.component.html.HtmlMessages</component-class>
+    &base-props;
+    <property>
+      <description>If true, only global messages, that have no associated clientId, will be displayed.</description>
+      <display-name></display-name>
+      <icon></icon>
+      <property-name>globalOnly</property-name>
+      <property-class>boolean</property-class>
+      <tag-attribute>yes</tag-attribute>
+    </property>
+  </component>
+
+  <component>
     <component-type>OutputErrors</component-type>
     <component-class>javax.faces.component.html.HtmlOutputErrors</component-class>
     &base-props;
@@ -1039,14 +1083,6 @@
       <icon></icon>
       <property-name>for</property-name>
       <property-class>java.lang.String</property-class>
-    </property>
-    <property>
-      <description>The color of the text that will be displayed.</description>
-      <display-name></display-name>
-      <icon></icon>
-      <property-name>color</property-name>
-      <property-class>java.lang.String</property-class>
-      <tag-attribute>yes</tag-attribute>
     </property>
     <property>
       <description></description>
@@ -3072,6 +3108,27 @@
            attrs there.  -->
       &core-attrs;
       <attribute>
+	<description>If true, the component must not display any summary.</description>
+	<display-name></display-name>
+	<icon></icon>
+	<attribute-name>showSummary</attribute-name>
+	<attribute-class>boolean</attribute-class>
+      </attribute>
+      <attribute>
+	<description>If true, the component must not display any detail.</description>
+	<display-name></display-name>
+	<icon></icon>
+	<attribute-name>showDetail</attribute-name>
+	<attribute-class>boolean</attribute-class>
+      </attribute>
+      <attribute>
+	<description>The clientId of the component for which to display the message.</description>
+	<display-name></display-name>
+	<icon></icon>
+	<attribute-name>for</attribute-name>
+	<attribute-class>java.lang.String</attribute-class>
+      </attribute>
+      <attribute>
         <description>the ResourceBundle key for localized text</description>
         <display-name></display-name>
         <icon></icon>
@@ -3086,11 +3143,174 @@
         <attribute-class>java.lang.String</attribute-class>
       </attribute>
 
+      <attribute>
+        <description>CSS style for info messages</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>infoStyle</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>CSS style class for info messages</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>infoStyleClass</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>CSS style for warn messages</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>warnStyle</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>CSS style class for warn messages</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>warnStyleClass</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>CSS style for error messages</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>errorStyle</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>CSS style class for error messages</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>errorStyleClass</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>CSS style for fatal messages</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>fatalStyle</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>CSS style class for fatal messages</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>fatalStyleClass</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>      
+
       <supported-component-type>
         <component-type>OutputMessage</component-type>
       </supported-component-type>
+      <supported-component-type>
+        <component-type>Message</component-type>
+      </supported-component-type>
       <supported-component-class>
         <component-class>javax.faces.component.html.HtmlOutputMessage</component-class>
+      </supported-component-class>
+      <supported-component-class>
+        <component-class>javax.faces.component.html.HtmlMessage</component-class>
+      </supported-component-class>
+    </renderer>
+
+    <renderer>
+      <renderer-type>Messages</renderer-type>
+      <renderer-class>&messages-renderer-class;</renderer-class>
+      <!-- PENDING(edburns): make sure we render DIV and stuff the below
+           attrs there.  -->
+      &core-attrs;
+      <attribute>
+        <description>the ResourceBundle key for localized text</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>key</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+      <attribute>
+        <description>the name of the ResourceBundle</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>bundle</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>CSS style for info messages</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>infoStyle</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>CSS style class for info messages</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>infoStyleClass</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>CSS style for warn messages</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>warnStyle</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>CSS style class for warn messages</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>warnStyleClass</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>CSS style for error messages</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>errorStyle</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>CSS style class for error messages</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>errorStyleClass</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>CSS style for fatal messages</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>fatalStyle</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>CSS style class for fatal messages</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>fatalStyleClass</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>      
+
+      <supported-component-type>
+        <component-type>Messages</component-type>
+      </supported-component-type>
+      <supported-component-class>
+        <component-class>javax.faces.component.html.HtmlMessages</component-class>
       </supported-component-class>
     </renderer>
 
