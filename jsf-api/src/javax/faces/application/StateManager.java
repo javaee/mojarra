@@ -1,5 +1,5 @@
 /*
- * $Id: StateManager.java,v 1.5 2003/08/02 05:11:31 eburns Exp $
+ * $Id: StateManager.java,v 1.6 2003/08/07 18:03:19 eburns Exp $
  */
 
 /*
@@ -286,9 +286,6 @@ public abstract class StateManager {
      * javax.faces.component.UIComponent} tree is ready to be used for
      * the remainder of the request processing lifecycle.</p>
      *
-     * <p>This method must be called from the <em>Restore Component
-     * Tree</em> phase of the request processing lifecycle.</p>
-     *
      * <p> The implementation must consult the
      * <code>ServletContext</code> init parameter named as the value of
      * the constant {@link #STATE_SAVING_METHOD_PARAM_NAME} to determine
@@ -300,9 +297,13 @@ public abstract class StateManager {
      * <p>If the state was saved in the client, this method calls
      * through to {@link #restoreTreeStructure} and, if necessary {@link
      * #restoreTreeState}</p>
+     *
+     * @return true if there was a tree to restore, false if there was
+     * no state information from which to restore a tree and we had to
+     * create one ourselves.
      */
 
-    public abstract void restoreTree(FacesContext context, String treeId) throws IOException;
+    public abstract boolean restoreTree(FacesContext context, String treeId) throws IOException;
 
     /**
      *

@@ -1,5 +1,5 @@
 /*
- * $Id: MockRenderKit.java,v 1.3 2003/07/31 12:22:30 eburns Exp $
+ * $Id: MockRenderKit.java,v 1.4 2003/08/07 18:03:22 eburns Exp $
  */
 
 /*
@@ -58,6 +58,7 @@ public class MockRenderKit extends RenderKit {
 
 
     public ResponseWriter getResponseWriter(Writer writer,
+					    String contentTypeList,
                                             String characterEncoding) {
         return new MockResponseWriter(writer, characterEncoding);
     }

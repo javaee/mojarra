@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKit.java,v 1.18 2003/07/31 12:22:23 eburns Exp $
+ * $Id: RenderKit.java,v 1.19 2003/08/07 18:03:20 eburns Exp $
  */
 
 /*
@@ -85,8 +85,8 @@ public abstract class RenderKit {
 
     /**
      * <p>Use the provided <code>Writer</code> to create a new {@link
-     * ResponseWriter} instance for the specified character
-     * encoding.</p>
+     * ResponseWriter} instance for the specified (optional) content
+     * type, and character encoding.</p>
      *
      * <p>Implementors are advised to consult the
      * <code>getCharacterEncoding()</code> method of class {@link
@@ -100,6 +100,17 @@ public abstract class RenderKit {
      * @param writer the Writer around which this {@link ResponseWriter}
      * must be built.
      *
+     * @param contentTypeList an "Accept header style" list of content
+     * types for this response, or <code>null</code> if the
+     * <code>RenderKit</code> should choose the best fit.  The RenderKit
+     * must support a value for this argument that comes straight from
+     * the <code>Accept</code> HTTP header, and therefore requires
+     * parsing according to the specification of the <code>Accept</code>
+     * header.  Please see <a
+     * href="http://www.ietf.org/rfc/rfc2616.txt?number=2616">Section
+     * 14.1 of RFC 2616</a> for the specification of the
+     * <code>Accept</code> header.
+     *
      * @param characterEncoding such as "ISO-8859-1" for this
      * ResponseWriter.  Please see <a
      * href="http://www.iana.org/assignments/character-sets">the
@@ -109,6 +120,7 @@ public abstract class RenderKit {
      */
 
     public abstract ResponseWriter getResponseWriter(Writer writer,
+						     String contentTypeList,
 						     String characterEncoding);
 
     /** 

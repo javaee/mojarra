@@ -1,5 +1,5 @@
 /*
- * $Id: ViewHandler.java,v 1.4 2003/08/02 05:11:31 eburns Exp $
+ * $Id: ViewHandler.java,v 1.5 2003/08/07 18:03:19 eburns Exp $
  */
 
 /*
@@ -76,8 +76,17 @@ public interface ViewHandler {
      * treeId.  This method may call through to {@link
      * StateManager#restoreTree}.</p>
      *
+     * <p>This method must be called from the <em>Restore Component
+     * Tree</em> phase of the request processing lifecycle.</p>
+     *
      * <p>This method must cause the new <code>UIPage</code> to be
      * stored in the <code>FacesContext</code> as the new root.</p>
+     *
+     * <p>If this is an initial request - usually marked by a lack of
+     * available state for this tree - <code>restoreView()</code> must
+     * call <code>FacesContext.renderResponse()</code> to cause the
+     * intervening phases between <em>Restore Component Tree</em> and
+     * <em>Render Response</em> to be skipped.<p>
      *
      * @param context {@link FacesContext} for the current request
      * @param treeId the tree identifier for the current request
