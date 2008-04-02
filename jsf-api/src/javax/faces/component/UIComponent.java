@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.138 2006/02/01 03:06:00 edburns Exp $
+ * $Id: UIComponent.java,v 1.139 2006/02/06 21:44:54 edburns Exp $
  */
 
 /*
@@ -249,12 +249,18 @@ public abstract class UIComponent implements StateHolder {
      * 
      * <p>By default, this method will call through to {@link
      * #getClientId} and return the result.
+     *
+     * @since 1.2
      * 
      *  @throws NullPointerException if <code>context</code> is
      *  <code>null</code>
      */
-    public abstract String getContainerClientId(FacesContext context);
-
+    public String getContainerClientId(FacesContext context) {
+        if (context == null) {
+            throw new NullPointerException();
+        }
+        return this.getClientId(context);
+    }
 
     /**
      * <p>Return the identifier of the component family to which this
@@ -522,8 +528,19 @@ public abstract class UIComponent implements StateHolder {
      * associated with this {@link UIComponent}.  If there are no
      * facets, this method must return 0.  The method must not cause
      * the creation of a facet component map.</p>
+     *
+     * <p>For backwards compatability with classes that extend UIComponent
+     * directly, a default implementation is provided that simply calls 
+     * {@link #getFacets} and then calls the <code>size()</code> method on the 
+     * returned <code>Map</code>.  A more optimized version of this method is 
+     * provided in {@link UIComponentBase#getFacetCount}.
+     *
+     * @since 1.2
      */
-    public abstract int getFacetCount();
+    public int getFacetCount() {
+        return (getFacets().size());
+    }
+
 
 
     /**
