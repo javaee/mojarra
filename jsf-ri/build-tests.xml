@@ -347,6 +347,7 @@
     <target name="run.test" depends="compile.test,copy-test-data-files">
 
         <junit printsummary="yes" haltonfailure="yes" haltonerror="yes" fork="yes">
+            <jvmarg line="${debug.jvm.args}"/>
 
             <classpath>
                 <pathelement path="${java.class.path}"/>
