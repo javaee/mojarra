@@ -337,6 +337,10 @@
       <property-name>simpleProperty</property-name>
       <value>Bobby Orr</value>
     </managed-property>
+    <managed-property>
+      <property-name>nonManagedBean</property-name>
+      <value>#{nonManagedBean}</value>
+    </managed-property>
   </managed-bean>
 
 
