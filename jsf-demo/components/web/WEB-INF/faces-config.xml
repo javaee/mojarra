@@ -16,23 +16,23 @@
   <!-- Custom Components -->
 
   <component>
-    <component-class>components.components.UIArea</component-class>
     <component-type>Area</component-type>
+    <component-class>components.components.UIArea</component-class>
   </component>
 
   <component>
-    <component-class>components.components.GraphComponent</component-class>
     <component-type>Graph</component-type>
+    <component-class>components.components.GraphComponent</component-class>
   </component>
 
   <component>
-    <component-class>components.components.UIMap</component-class>
     <component-type>Map</component-type>
+    <component-class>components.components.UIMap</component-class>
   </component>
 
   <component>
-    <component-class>components.components.PaneComponent</component-class>
     <component-type>Pane</component-type>
+    <component-class>components.components.PaneComponent</component-class>
   </component>
 
   <!-- Custom Renderers -->

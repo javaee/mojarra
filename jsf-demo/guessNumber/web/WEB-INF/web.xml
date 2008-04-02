@@ -54,6 +54,11 @@
         <param-value>/WEB-INF/faces-config.xml</param-value>
     </context-param>
 
+    <context-param>
+        <param-name>com.sun.faces.validateXml</param-name>
+        <param-value>true</param-value>
+    </context-param>
+
     <listener>
         <listener-class>com.sun.faces.config.ConfigListener</listener-class>
     </listener>
