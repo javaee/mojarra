@@ -530,7 +530,7 @@
       <renderer-class>com.sun.faces.renderkit.html_basic.SelectManyCheckboxListRenderer</renderer-class>
     </renderer>
     <renderer>
-      <renderer-type>TextArea</renderer-type>
+      <renderer-type>Textarea</renderer-type>
       <renderer-class>com.sun.faces.renderkit.html_basic.TextAreaRenderer</renderer-class>
     </renderer>
     <renderer>
