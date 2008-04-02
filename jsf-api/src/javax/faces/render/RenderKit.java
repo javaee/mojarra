@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKit.java,v 1.23 2003/09/11 19:54:21 craigmcc Exp $
+ * $Id: RenderKit.java,v 1.24 2003/09/29 23:39:53 craigmcc Exp $
  */
 
 /*
@@ -43,12 +43,13 @@ public abstract class RenderKit {
 
 
     /**
-     * <p>Add a new {@link Renderer} instance, associated with the
+     * <p>Register the specified {@link Renderer} instance, associated with the
      * specified <code>rendererType</code>, to the set of
-     * {@link Renderer}s registered with this {@link RenderKit}.
+     * {@link Renderer}s registered with this {@link RenderKit}, replacing
+     * any previously registered {@link Renderer} for this identifier.
      *
-     * @param rendererType Renderer type of the new {@link Renderer}
-     * @param renderer The new {@link Renderer} instance
+     * @param rendererType Renderer type of the {@link Renderer} to register
+     * @param renderer {@link Renderer} instance we are registering
      *
      * @exception NullPointerException if <code>rendererType</code> or
      *  <code>renderer</code> is null
@@ -57,29 +58,26 @@ public abstract class RenderKit {
 
 
     /**
-     * <p>Create (if necessary) and return a {@link Renderer} instance
-     * with the specified renderer type.  Subsequent calls to this method
-     * with the same <code>rendererType</code>, from the same web application,
-     * must return the same instance.</p>
+     * <p>Return the {@link Renderer} instance most recently registered for
+     * the specified <code>rendererType</code>, if any; otherwise, return
+     * <code>null</code>.  The set of available renderer types is
+     * available via the <code>getRendererTypes()</code> method.</p>
      *
-     * @param rendererType Renderer type to be returned
+     * @param rendererType Renderer type of the requested
+     *  {@link Renderer} instance
      *
-     * @exception IllegalArgumentException if the requested renderer type
-     *  is not supported by this {@link RenderKit}
      * @exception NullPointerException if <code>rendererType</code>
      *  is <code>null</code>
      */
     public abstract Renderer getRenderer(String rendererType);
 
-    /**
-     *
-     * <p>This interface is where all the rendering-technology specific
-     * state management decisions are made.</p>
-     *
-     * @return the RenderKit's {@link ResponseStateManager}.
-     */
 
+    /**
+     * <p>Return an instance of {@link ResponseStateManager} to handle
+     * rendering technology specific state management decisions.</p>
+     */
     public abstract ResponseStateManager getResponseStateManager();
+
 
     /**
      * <p>Use the provided <code>Writer</code> to create a new {@link
@@ -123,17 +121,17 @@ public abstract class RenderKit {
      * <code>characterEncoding</code>.
      *
      */
-
     public abstract ResponseWriter createResponseWriter(Writer writer,
 							String contentTypeList,
 							String characterEncoding);
+
 
     /** 
      * <p>Use the provided <code>OutputStream</code> to create a new
      * {@link ResponseStream} instance.</p>
      *
      */ 
+    public abstract ResponseStream createResponseStream(OutputStream out);
 
-    public abstract ResponseStream getResponseStream(OutputStream out);
 
 }

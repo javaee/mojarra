@@ -1,5 +1,5 @@
 /*
- * $Id: MockRenderKit.java,v 1.5 2003/08/18 22:45:27 eburns Exp $
+ * $Id: MockRenderKit.java,v 1.6 2003/09/29 23:39:55 craigmcc Exp $
  */
 
 /*
@@ -63,7 +63,7 @@ public class MockRenderKit extends RenderKit {
         return new MockResponseWriter(writer, characterEncoding);
     }
 
-    public ResponseStream getResponseStream(OutputStream out) {
+    public ResponseStream createResponseStream(OutputStream out) {
 	final OutputStream os = out;
 	return new ResponseStream() {
 		public void close() throws IOException {

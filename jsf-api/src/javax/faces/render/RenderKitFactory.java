@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKitFactory.java,v 1.13 2003/02/20 22:46:36 ofung Exp $
+ * $Id: RenderKitFactory.java,v 1.14 2003/09/29 23:39:53 craigmcc Exp $
  */
 
 /*
@@ -16,8 +16,8 @@ import javax.faces.context.FacesContext;
 
 
 /**
- * <p><strong>RenderKitFactory</strong> is a factory object that creates
- * (if needed) and returns new {@link RenderKit} instances.  Implementations of
+ * <p><strong>RenderKitFactory</strong> is a factory object that registers
+ * and returns {@link RenderKit} instances.  Implementations of
  * JavaServer Faces must provide at least a default implementation of
  * {@link RenderKit}.  Advanced implementations (or external third party
  * libraries) may provide additional {@link RenderKit} implementations
@@ -44,18 +44,14 @@ public abstract class RenderKitFactory {
 
 
     /**
-     * <p>Register a new {@link RenderKit} instance, associated with
+     * <p>Register the specified {@link RenderKit} instance, associated with
      * the specified <code>renderKitId</code>, to be supported by this
-     * {@link RenderKitFactory}.  This method may be called at
-     * any time, and makes the corresponding {@link RenderKit} instance
-     * available throughout the remaining lifetime of this web application.
-     * </p>
+     * {@link RenderKitFactory}, replacing any previously registered
+     * {@link RenderKit} for this identifier.</p>
      *
-     * @param renderKitId Identifier of the new {@link RenderKit}
+     * @param renderKitId Identifier of the {@link RenderKit} to register
      * @param renderKit {@link RenderKit} instance that we are registering
      *
-     * @exception IllegalArgumentException if a {@link RenderKit} with the
-     *  specified <code>renderKitId</code> has already been registered
      * @exception NullPointerException if <code>renderKitId</code> or
      *  <code>renderKit</code> is <code>null</code>
      */
@@ -64,20 +60,14 @@ public abstract class RenderKitFactory {
 
 
     /**
-     * <p>Create (if needed) and return a {@link RenderKit} instance
-     * for the specified render kit identifier.  The set of available render
-     * kit identifiers is available via the <code>getRenderKitIds()</code>
-     * method.</p>
-     *
-     * <p>Each call to <code>getRenderKit()</code> for the same
-     * <code>renderKitId</code>, from within the same web application,
-     * must return the same {@link RenderKit} instance.</p>
+     * <p>Return the {@link RenderKit} instance most recently registered for
+     * the specified render kit identifier, if any; otherwise, return
+     * <code>null</code>.  The set of available render kit identifiers is
+     * available via the <code>getRenderKitIds()</code> method.</p>
      *
      * @param renderKitId Render kit identifier of the requested
      *  {@link RenderKit} instance
      *
-     * @exception IllegalArgumentException if no {@link RenderKit} instance
-     *  can be returned for the specified identifier
      * @exception NullPointerException if <code>renderKitId</code>
      *  is <code>null</code>
      */
@@ -85,11 +75,13 @@ public abstract class RenderKitFactory {
 
 
     /**
-     * <p>Create (if needed) and return a {@link RenderKit} instance
-     * for the specified render kit identifier, possibly customized based
-     * on dynamic characteristics of the specified {@link FacesContext}.
-     * The set of available render kit identifiers is available via the
-     * <code>getRenderKitIds()</code> method.</p>
+     * <p>Return a {@link RenderKit} instance for the
+     * specified render kit identifier, possibly customized based on
+     * dynamic characteristics of the specified {@link FacesContext}.
+     * If there is no registered {@link RenderKit} for the specified
+     * identifier, return <code>null</code>.  The set of available render
+     * kit identifiers is available via the <code>getRenderKitIds()</code>
+     * method.</p>
      *
      * @param renderKitId Render kit identifier of the requested
      *  {@link RenderKit} instance
@@ -106,13 +98,11 @@ public abstract class RenderKitFactory {
 
     /**
      * <p>Return an <code>Iterator</code> over the set of render kit
-     * identifiers supported by this factory.  This set must include
+     * identifiers registered with this factory.  This set must include
      * the value specified by <code>RenderKitFactory.DEFAULT_RENDER_KIT</code>.
      * </p>
      */
     public abstract Iterator getRenderKitIds();
-
-
 
 
 }
