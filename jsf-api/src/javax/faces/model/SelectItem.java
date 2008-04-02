@@ -1,5 +1,5 @@
 /*
- * $Id: SelectItem.java,v 1.13 2006/03/13 21:21:46 edburns Exp $
+ * $Id: SelectItem.java,v 1.14 2006/08/08 15:02:03 rogerk Exp $
  */
 
 /*
@@ -69,13 +69,10 @@ public class SelectItem implements Serializable {
      *
      * @param value Value to be delivered to the model if this
      *  item is selected by the user
-     *
-     * @throws NullPointerException if <code>value</code>
-     *  is <code>null</code>
      */
     public SelectItem(Object value) {
 
-        this(value, value.toString(), null, false, true);
+        this(value, value == null ? null : value.toString(), null, false, true);
 
     }
 
@@ -89,9 +86,6 @@ public class SelectItem implements Serializable {
      * @param value Value to be delivered to the model if this
      *  item is selected by the user
      * @param label Label to be rendered for this item in the response
-     *
-     * @throws NullPointerException if <code>value</code>
-     *  or <code>label</code> <code>null</code>
      */
     public SelectItem(Object value, String label) {
 
@@ -109,9 +103,6 @@ public class SelectItem implements Serializable {
      *  item is selected by the user
      * @param label Label to be rendered for this item in the response
      * @param description Description of this item, for use in tools
-     *
-     * @throws NullPointerException if <code>value</code>
-     *  or <code>label</code> is <code>null</code>
      */
     public SelectItem(Object value, String label, String description) {
 
@@ -129,9 +120,6 @@ public class SelectItem implements Serializable {
      * @param label Label to be rendered for this item in the response
      * @param description Description of this item, for use in tools
      * @param disabled Flag indicating that this option is disabled
-     *
-     * @throws NullPointerException if <code>value</code>
-     *  or <code>label</code> is <code>null</code>
      */
     public SelectItem(Object value, String label, String description,
                       boolean disabled) {
@@ -151,9 +139,6 @@ public class SelectItem implements Serializable {
      * @param disabled Flag indicating that this option is disabled
      * @param escape Flag indicating that the text of this option should be
      * escaped when rendered.
-     *
-     * @throws NullPointerException if <code>value</code>
-     *  or <code>label</code> is <code>null</code>
      * @since 1.2
      */
     public SelectItem(Object value, String label, String description,
@@ -245,9 +230,6 @@ public class SelectItem implements Serializable {
      * <p>Set the label of this item, to be rendered visibly for the user.
      *
      * @param label The new label
-     *
-     * @throws NullPointerException if <code>label</code>
-     *  is <code>null</code>
      */
     public void setLabel(String label) {
 
