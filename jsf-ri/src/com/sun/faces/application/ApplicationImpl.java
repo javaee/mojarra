@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationImpl.java,v 1.51 2004/07/14 21:30:53 rlubke Exp $
+ * $Id: ApplicationImpl.java,v 1.52 2004/07/15 18:08:31 rlubke Exp $
  */
 
 /*
@@ -30,7 +30,6 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.el.MethodBinding;
-import javax.faces.el.PropertyNotFoundException;
 import javax.faces.el.PropertyResolver;
 import javax.faces.el.ReferenceSyntaxException;
 import javax.faces.el.ValueBinding;
@@ -43,10 +42,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.TreeSet;
 
 
 /**
@@ -578,13 +575,22 @@ public class ApplicationImpl extends Application {
     }
 
 
-    public void setDefaultLocale(Locale newLocale) {
+    public void setDefaultLocale(Locale locale) {
+
+        if (locale == null) {
+            String message = Util.getExceptionMessageString
+                (Util.NULL_PARAMETERS_ERROR_MESSAGE_ID);
+            message = message + " locale " + locale;
+            throw new NullPointerException(message);
+        }
+
         synchronized (this) {
-            defaultLocale = newLocale;
+            defaultLocale = locale;
         }
         if (log.isTraceEnabled()) {
             log.trace("set defaultLocale " + defaultLocale);
         }
+
     }
 
 

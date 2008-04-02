@@ -1,5 +1,5 @@
 /*
- * $Id: TestApplicationImpl.java,v 1.19 2004/04/07 17:52:44 rkitain Exp $
+ * $Id: TestApplicationImpl.java,v 1.20 2004/07/15 18:08:32 rlubke Exp $
  */
 
 /*
@@ -23,6 +23,7 @@ import javax.faces.application.ApplicationFactory;
 import javax.faces.application.NavigationHandler;
 import javax.faces.application.StateManager;
 import javax.faces.application.ViewHandler;
+import javax.faces.application.Application;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
 import javax.faces.el.PropertyResolver;
@@ -40,7 +41,7 @@ import java.util.List;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestApplicationImpl.java,v 1.19 2004/04/07 17:52:44 rkitain Exp $
+ * @version $Id: TestApplicationImpl.java,v 1.20 2004/07/15 18:08:32 rlubke Exp $
  */
 
 public class TestApplicationImpl extends JspFacesTestCase {
@@ -443,6 +444,16 @@ public class TestApplicationImpl extends JspFacesTestCase {
             exceptionThrown = true;
         }
         assertTrue(exceptionThrown);
+    }
+
+    // Ensure ApplicationImpl.setDefaultLocale(null) throws NPE
+    public void testSetDefaultLocaleNPE() throws Exception {
+        try {
+            application.setDefaultLocale(null);
+            assertTrue(false);
+        } catch (NullPointerException npe) {
+            ; // we're ok
+        }
     }
 
 
