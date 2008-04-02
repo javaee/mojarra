@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_2.java,v 1.94 2006/03/29 23:05:01 rlubke Exp $
+ * $Id: TestRenderers_2.java,v 1.95 2006/10/09 17:28:30 rlubke Exp $
  */
 
 /*
@@ -66,7 +66,7 @@ import java.io.StringWriter;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_2.java,v 1.94 2006/03/29 23:05:01 rlubke Exp $
+ * @version $Id: TestRenderers_2.java,v 1.95 2006/10/09 17:28:30 rlubke Exp $
  */
 
 public class TestRenderers_2 extends JspFacesTestCase {
@@ -658,7 +658,7 @@ public class TestRenderers_2 extends JspFacesTestCase {
         //Summary and detail should be in body of span separated by space
         assertTrue(
             result.indexOf(
-                "<span id=\"myMessage_2\" class=\"errorClass\" style=\"style\">	global message summary_2 global message detail_2</span>") !=
+                "<span id=\"myMessage_2\" style=\"style\" class=\"errorClass\">	global message summary_2 global message detail_2</span>") !=
             -1);
 
         try {
@@ -708,7 +708,7 @@ public class TestRenderers_2 extends JspFacesTestCase {
         //Summary and detail should be in body of span separated by space
         assertTrue(
             result.indexOf(
-                "<span id=\"myMessage_3\" class=\"fatalClass\" style=\"style\">	global message summary_3 global message detail_3</span>") !=
+                "<span id=\"myMessage_3\" style=\"style\" class=\"fatalClass\">	global message summary_3 global message detail_3</span>") !=
             -1);
 
         try {
@@ -758,7 +758,7 @@ public class TestRenderers_2 extends JspFacesTestCase {
         //  detail displayed in the body of the span
         assertTrue(
             result.indexOf(
-                "<span id=\"myMessage_4\" class=\"styleClass\" style=\"style\" title=\"global message summary_4\">	global message detail_4</span>") !=
+                "<span id=\"myMessage_4\" style=\"style\" class=\"styleClass\" title=\"global message summary_4\">	global message detail_4</span>") !=
             -1);
 
         try {
@@ -812,7 +812,7 @@ public class TestRenderers_2 extends JspFacesTestCase {
         //Should be wrapped in a table
         assertTrue(
             result.indexOf(
-                "<span id=\"myMessage_5\" class=\"fatalClass\" style=\"style\" title=\"global message summary_5\">	global message detail_5</span>") !=
+                "<span id=\"myMessage_5\" style=\"style\" class=\"fatalClass\" title=\"global message summary_5\">	global message detail_5</span>") !=
             -1);
 
         try {
