@@ -1,5 +1,5 @@
 /*
- * $Id: MessageRenderer.java,v 1.25 2003/09/04 19:52:17 rkitain Exp $
+ * $Id: MessageRenderer.java,v 1.26 2003/09/05 18:56:58 eburns Exp $
  */
 
 /*
@@ -20,6 +20,7 @@ import java.util.Iterator;
 
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIOutput;
+import javax.faces.component.ValueHolder;
 import javax.faces.component.UIParameter;
 import javax.faces.context.ResponseWriter;
 import javax.faces.context.FacesContext;
@@ -32,7 +33,7 @@ import org.mozilla.util.Assert;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: MessageRenderer.java,v 1.25 2003/09/04 19:52:17 rkitain Exp $
+ * @version $Id: MessageRenderer.java,v 1.26 2003/09/05 18:56:58 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -143,7 +144,7 @@ public class MessageRenderer extends HtmlBasicRenderer {
                 continue;
             }
 
-            parameterList.add(((UIOutput)kid).currentValue(context));
+            parameterList.add(((ValueHolder)kid).currentValue(context));
         }
 
         String message = null;

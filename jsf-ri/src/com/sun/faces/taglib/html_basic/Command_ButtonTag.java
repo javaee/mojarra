@@ -1,5 +1,5 @@
 /*
- * $Id: Command_ButtonTag.java,v 1.41 2003/08/15 19:15:06 rlubke Exp $
+ * $Id: Command_ButtonTag.java,v 1.42 2003/09/05 18:57:00 eburns Exp $
  */
 
 /*
@@ -36,7 +36,7 @@ public class Command_ButtonTag extends FacesTag
     // Attribute Instance Variables
     protected String image = null;
     protected String actionRef = null;
-    protected String imageKey = null;
+    protected boolean immediate = false;
 
     // Relationship Instance Variables
 
@@ -60,6 +60,11 @@ public class Command_ButtonTag extends FacesTag
     public void setImage(String newImage) {
         image = newImage;
     }
+
+    public void setImmediate(boolean newImmediate) {
+        immediate = newImmediate;
+    }
+
 
     //
     // General Methods
@@ -89,6 +94,8 @@ public class Command_ButtonTag extends FacesTag
         if (null != image) {
             button.setAttribute("image", image);
         }
+
+	button.setImmediate(immediate);
     }
 
 

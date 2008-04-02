@@ -306,4 +306,17 @@
       </attribute>
   </tag>
 
+   <tag>
+      <name>verbatim</name>
+      <tag-class>com.sun.faces.taglib.jsf_core.VerbatimTag</tag-class>
+       <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
+      <body-content>tagdependent</body-content>
+      <attribute>
+	<name>escape</name>
+	<required>false</required>
+	<rtexprvalue>false</rtexprvalue>
+      </attribute>
+   </tag>
+
+
 </taglib>

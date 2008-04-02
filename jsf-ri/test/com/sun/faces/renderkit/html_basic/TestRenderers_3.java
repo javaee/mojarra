@@ -4,7 +4,7 @@
  */
 
 /**
- * $Id: TestRenderers_3.java,v 1.21 2003/08/27 18:52:09 eburns Exp $
+ * $Id: TestRenderers_3.java,v 1.22 2003/09/05 18:57:21 eburns Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -54,7 +54,7 @@ import com.sun.faces.JspFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_3.java,v 1.21 2003/08/27 18:52:09 eburns Exp $
+ * @version $Id: TestRenderers_3.java,v 1.22 2003/09/05 18:57:21 eburns Exp $
  * 
  *
  */
@@ -297,7 +297,7 @@ public class TestRenderers_3 extends JspFacesTestCase {
         // test decode method
         System.out.println("    Testing decode method... ");
         selectOneMenuRenderer.decode(getFacesContext(), selectOne); 
-        selectedValue = (String)selectOne.getSelectedValue();
+        selectedValue = (String)selectOne.getValue();
         assertTrue(selectedValue.equals("Blue"));
 
         // test encode method

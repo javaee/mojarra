@@ -1,5 +1,5 @@
 /*
- * $Id: Command_HyperlinkTag.java,v 1.34 2003/08/15 19:15:07 rlubke Exp $
+ * $Id: Command_HyperlinkTag.java,v 1.35 2003/09/05 18:57:00 eburns Exp $
  */
 
 /*
@@ -41,6 +41,7 @@ public class Command_HyperlinkTag extends FacesTag
     protected String commandname = null;
     protected String image = null;
     protected String actionRef = null;
+    protected boolean immediate = false;
 
     
     // Relationship Instance Variables
@@ -68,6 +69,10 @@ public class Command_HyperlinkTag extends FacesTag
     
     public void setActionRef(String newActionRef) {
         actionRef = newActionRef;
+    }
+
+    public void setImmediate(boolean newImmediate) {
+        immediate = newImmediate;
     }
 
     //
@@ -98,6 +103,7 @@ public class Command_HyperlinkTag extends FacesTag
         if (null != image) {
             link.setAttribute("image", image);
         }
+	link.setImmediate(immediate);
     }
 
     

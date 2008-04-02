@@ -191,4 +191,17 @@
     </renderer>
   </render-kit>
 
+  <!-- Component that renders its own "header" and "footer" facets -->
+  <component>
+    <component-type>FacetComponent</component-type>
+    <component-class>com.sun.faces.systest.FacetComponent</component-class>
+  </component>
+
+  <!-- Component that renders its own children -->
+  <component>
+    <component-type>ChildrenComponent</component-type>
+    <component-class>com.sun.faces.systest.ChildrenComponent</component-class>
+  </component>
+
+
 </faces-config>

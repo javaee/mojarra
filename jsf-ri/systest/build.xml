@@ -49,6 +49,9 @@
   <!-- Name of integration test web-app -->
   <property name="webapp.name"  value="systest"/>
 
+  <!-- HtmlUnit, installed relative to tomcat.home -->
+  <property name="htmlunit.home" value="${tomcat.home}/../htmlunit-1.2.3"/>
+
   <!-- Context Path of the integration test web-app -->
   <property name="context.path" value="/jsf-systest"/>
 
@@ -103,6 +106,7 @@
     <pathelement location="${servlet.jar}"/>
     <pathelement location="${jsp.jar}"/> 
     <pathelement location="${jstl.jar}"/>
+    <fileset dir="${htmlunit.home}/lib" includes="*.jar"/>
   </path>
 
 

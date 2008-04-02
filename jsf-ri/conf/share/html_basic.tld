@@ -205,6 +205,11 @@
         <rtexprvalue>false</rtexprvalue>
       </attribute>
       <attribute>
+        <name>immediate</name>
+        <required>false</required>
+        <rtexprvalue>false</rtexprvalue>
+      </attribute>
+      <attribute>
         <name>action</name>
         <required>false</required>
         <rtexprvalue>false</rtexprvalue>
@@ -364,6 +369,11 @@
       </attribute>
       <attribute>
         <name>actionRef</name>
+        <required>false</required>
+        <rtexprvalue>false</rtexprvalue>
+      </attribute>
+      <attribute>
+        <name>immediate</name>
         <required>false</required>
         <rtexprvalue>false</rtexprvalue>
       </attribute>

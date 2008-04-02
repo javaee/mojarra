@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigParser.java,v 1.32 2003/09/03 18:53:39 rlubke Exp $
+ * $Id: ConfigParser.java,v 1.33 2003/09/05 18:56:53 eburns Exp $
  */
 
 /*
@@ -264,6 +264,7 @@ public class ConfigParser {
     protected void configureRules(Digester digester) {
 
         configureRulesApplication(digester);
+        configureRulesFactory(digester);
         configureRulesConverter(digester);
         configureRulesMessageResources(digester);
         configureRulesComponent(digester);
@@ -296,6 +297,27 @@ public class ConfigParser {
         //
 	ApplicationRule aRule = new ApplicationRule();
         digester.addRule(prefix, aRule);
+    }
+
+    // Configure the rules for an <factory> element
+    protected void configureRulesFactory(Digester digester) {
+
+	String prefix = "faces-config/factory";
+
+        digester.addObjectCreate(prefix, "com.sun.faces.config.ConfigFactory");
+        digester.addCallMethod(prefix+"/application-factory",
+                               "setApplicationFactory", 0);
+        digester.addCallMethod(prefix+"/faces-context-factory",
+                               "setFacesContextFactory", 0);
+        digester.addCallMethod(prefix+"/lifecycle-factory",
+                               "setLifecycleFactory", 0);
+        digester.addCallMethod(prefix+"/render-kit-factory",
+                               "setRenderKitFactory", 0);
+	//
+        // This custom rule will set Factories into the FactoryFinder;
+        //
+	FactoryRule fRule = new FactoryRule();
+        digester.addRule(prefix, fRule);
     }
 
 
@@ -809,6 +831,66 @@ final class ApplicationRule extends Rule {
 	if (returnObject != null) {
 	    application.setViewHandler((ViewHandler)returnObject);
 	}
+    }
+
+    protected Object createInstance(String className) {
+	Class clazz = null;
+	Object returnObject = null;
+	if (className != null) {
+            try {
+	        clazz = Util.loadClass(className, this);
+	        if (clazz != null) {
+	            returnObject = clazz.newInstance();
+	        }
+	    } catch (Throwable t) {
+	        Object[] params = new Object[1];
+	        params[0] = className;
+	        String msg = Util.getExceptionMessage(
+		    Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, params);
+	        if (log.isErrorEnabled()) {
+	            log.error(msg + ":" + className + ":exception:"+
+		        t.getMessage());
+                }
+	    }
+        }
+	return returnObject;
+    }
+}
+
+/**
+ * This rule sets the Factory's Action Listener / Navigation Handler /
+ * PropertyResolver / VariableResolver instances;
+ */
+final class FactoryRule extends Rule {
+
+    protected static Log log = LogFactory.getLog(ConfigParser.class);
+
+    public FactoryRule() {
+        super();
+    }
+    public void end(String namespace, String name) throws Exception {
+        ConfigFactory cf = (ConfigFactory)digester.peek();
+	String implName = null;
+
+	// PENDING(edburns): I'd rather not have hard coded factory
+	// names.
+	if (null != (implName = cf.getApplicationFactory())) {
+	    FactoryFinder.setFactory(FactoryFinder.APPLICATION_FACTORY,
+				     implName);
+	}
+	if (null != (implName = cf.getFacesContextFactory())) {
+	    FactoryFinder.setFactory(FactoryFinder.FACES_CONTEXT_FACTORY,
+				     implName);
+	}
+	if (null != (implName = cf.getLifecycleFactory())) {
+	    FactoryFinder.setFactory(FactoryFinder.LIFECYCLE_FACTORY,
+				     implName);
+	}
+	if (null != (implName = cf.getRenderKitFactory())) {
+	    FactoryFinder.setFactory(FactoryFinder.RENDER_KIT_FACTORY,
+				     implName);
+	}
+	
     }
 
     protected Object createInstance(String className) {

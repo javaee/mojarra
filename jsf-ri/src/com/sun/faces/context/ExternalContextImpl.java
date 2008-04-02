@@ -1,5 +1,5 @@
 /*
- * $Id: ExternalContextImpl.java,v 1.13 2003/08/23 00:39:05 jvisvanathan Exp $
+ * $Id: ExternalContextImpl.java,v 1.14 2003/09/05 18:56:56 eburns Exp $
  */
 
 /*
@@ -47,7 +47,7 @@ import com.sun.faces.util.Util;
  * servlet implementation.
  *
  * @author Brendan Murray
- * @version $Id: ExternalContextImpl.java,v 1.13 2003/08/23 00:39:05 jvisvanathan Exp $
+ * @version $Id: ExternalContextImpl.java,v 1.14 2003/09/05 18:56:56 eburns Exp $
  *
  */
 public class ExternalContextImpl extends ExternalContext {
@@ -308,6 +308,17 @@ public class ExternalContextImpl extends ExternalContext {
             throw new FacesException(se);
         }
     }
+
+    public void log(String message) {
+        servletContext.log(message);
+    }
+
+
+    public void log(String message, Throwable throwable) {
+        servletContext.log(message, throwable);
+    }
+
+
 }
 
 abstract class BaseContextMap extends AbstractMap {

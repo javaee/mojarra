@@ -1,5 +1,5 @@
 /*
- * $Id: TextRenderer.java,v 1.50 2003/09/04 18:04:35 rlubke Exp $
+ * $Id: TextRenderer.java,v 1.51 2003/09/05 18:56:58 eburns Exp $
  */
 
 /*
@@ -119,7 +119,26 @@ public class TextRenderer extends HtmlBasicInputRenderer {
                 }
             }
             if (currentValue != null) {
-		writer.writeText(currentValue, "value");
+		Object val = null; 
+		boolean escape = true;
+		if (null != (val = component.getAttribute("escape"))) {
+		    if (val instanceof Boolean) {
+			escape = ((Boolean)val).booleanValue();
+		    }
+		    else if (val instanceof String) {
+			try {
+			    escape = Boolean.valueOf((String) val).booleanValue();
+			}
+			catch (Throwable e) {
+			}
+		    }
+		}
+		if (escape) {
+		    writer.writeText(currentValue, "value");
+		}
+		else {
+		    writer.write(currentValue);
+		}
             }
         }
 	if (null != styleClass) {

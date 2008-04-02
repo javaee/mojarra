@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTestCaseService.java,v 1.26 2003/08/15 19:15:37 rlubke Exp $
+ * $Id: FacesTestCaseService.java,v 1.27 2003/09/05 18:57:20 eburns Exp $
  */
 
 /*
@@ -54,7 +54,7 @@ import org.apache.cactus.server.ServletContextWrapper;
  * <B>Lifetime And Scope</B> <P> Same as the JspTestCase or
  * ServletTestCase instance that uses it.
  *
- * @version $Id: FacesTestCaseService.java,v 1.26 2003/08/15 19:15:37 rlubke Exp $
+ * @version $Id: FacesTestCaseService.java,v 1.27 2003/09/05 18:57:20 eburns Exp $
  * 
  * @see	com.sun.faces.context.FacesContextFactoryImpl
  * @see	com.sun.faces.context.FacesContextImpl
@@ -126,6 +126,18 @@ public void setUp()
 {
     HttpServletResponse response = null;
     RIConstants.IS_UNIT_TEST_MODE = true;
+    
+    // make sure the default factories are found, even if they have been
+    // cleared before.
+    FactoryFinder.setFactory(FactoryFinder.APPLICATION_FACTORY,
+			     "com.sun.faces.application.ApplicationFactoryImpl");
+    FactoryFinder.setFactory(FactoryFinder.FACES_CONTEXT_FACTORY,
+			     "com.sun.faces.context.FacesContextFactoryImpl");
+    FactoryFinder.setFactory(FactoryFinder.LIFECYCLE_FACTORY,
+			     "com.sun.faces.lifecycle.LifecycleFactoryImpl");
+    FactoryFinder.setFactory(FactoryFinder.RENDER_KIT_FACTORY,
+			     "com.sun.faces.renderkit.RenderKitFactoryImpl");
+    
     
     Util.verifyFactoriesAndInitDefaultRenderKit(facesTestCase.getConfig().getServletContext());
     

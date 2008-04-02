@@ -13,6 +13,13 @@
 
 <faces-config>
 
+  <factory>
+    <application-factory>com.sun.faces.application.ApplicationFactoryImpl</application-factory>
+    <faces-context-factory>com.sun.faces.context.FacesContextFactoryImpl</faces-context-factory>
+    <lifecycle-factory>com.sun.faces.lifecycle.LifecycleFactoryImpl</lifecycle-factory>
+    <render-kit-factory>com.sun.faces.renderkit.RenderKitFactoryImpl</render-kit-factory>
+  </factory>
+
 
   <!-- Initial application element with partial values -->
   <application>

@@ -1,5 +1,5 @@
 /*
- * $Id: ResponseStateManagerImpl.java,v 1.2 2003/09/04 21:15:06 jvisvanathan Exp $
+ * $Id: ResponseStateManagerImpl.java,v 1.3 2003/09/05 18:56:57 eburns Exp $
  */
 
 /*
@@ -139,7 +139,7 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
         return structure;
     }
     
-    public String writeState(Object content, Writer out, Object structure, 
+    public Object writeState(Object content, Writer out, Object structure, 
         Object state) {
         ByteArrayOutputStream bos = null;
         FacesContext context = FacesContext.getCurrentInstance();
