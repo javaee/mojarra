@@ -57,6 +57,7 @@
   <property name="javadoc.private"  value="false"/>
   <property name="javadoc.protected"  value="true"/>
   <property name="jsf-tools.dir"    value="${basedir}/../jsf-tools"/>
+  <property name="jsf-tck.dir"      value="${basedir}/../jsf-tck"/>
 
 
   <!-- Default value for debugging arguments is no.  Override in
@@ -130,7 +131,7 @@ jsf-api.jar.
          Build the API code
        ===================================================================
   -->
-  <target name="build" depends="prepare,generate">
+  <target name="build" depends="prepare,generate,detect.tck">
 
     <javac destdir="${build.classes}"
            debug="${debug}"
@@ -552,6 +553,21 @@ jsf-api.jar.
 
   </target>
 
+  <!--
+       ==================================================================
+          TCK related
+       ==================================================================
+  -->
+  
+  <target name="detect.tck" description="Detect the presence of the JSF TCK">
+      <available property="jsf.tck.present" file="${jsf-tck.dir}" type="dir"/>
+  </target>
+
+  <target name="copy.to.tck" description="Copy the jsf-api.jar to TCK_HOME/weblib"
+          if="jsf.tck.present">
+      <copy file="${build.lib}/${name}.jar" todir="${jsf-tck.dir}/weblib"
+            overwrite="true"/>
+  </target>
 
   <!--
        ===================================================================
@@ -640,7 +656,7 @@ jsf-api.jar.
          Main target
        ===================================================================
   -->
-  <target name="main" depends="jars"
+  <target name="main" depends="jars,copy.to.tck"
    description="Compile API classes and build JAR file"/>
 
 
