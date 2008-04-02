@@ -257,6 +257,10 @@
               <pathelement location="${jstl.jar}"/>
               <pathelement location="${jstl_el.jar}"/>
               <pathelement location="${servlet.jar}"/>
+              <pathelement location="${sax.jar}"/>
+              <pathelement location="${jaxp-api.jar}"/>
+              <pathelement location="${commons-logging.jar}"/>
+              <pathelement location="${crimson.jar}"/>
               <pathelement location="${java.home}/../lib/tools.jar"/>
               <fileset dir="${tomcat.home.40}">
                   <include name="bin/bootstrap.jar"/>
@@ -276,6 +280,10 @@
             <jvmarg value="-Dcatalina.home=${tomcat.home.40}"/>
             <arg value="stop"/>
             <classpath>
+              <pathelement location="${jaxp-api.jar}"/>
+              <pathelement location="${commons-logging.jar}"/>
+              <pathelement location="${crimson.jar}"/>
+              <pathelement location="${sax.jar}"/>
               <fileset dir="${tomcat.home.40}">
                   <include name="bin/bootstrap.jar"/>
                   <include name="server/catalina.jar"/>
@@ -369,6 +377,7 @@
 
             <formatter type="plain" usefile="false"/>
 
+            <test name="com.sun.faces.util.TestUtil_local"/>
             <test name="com.sun.faces.renderkit.html_basic.TestRendererAttributes"/>
         </junit>
 

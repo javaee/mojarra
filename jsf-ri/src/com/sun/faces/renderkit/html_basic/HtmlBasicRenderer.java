@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderer.java,v 1.28 2003/02/20 22:48:59 ofung Exp $
+ * $Id: HtmlBasicRenderer.java,v 1.29 2003/03/10 20:23:51 eburns Exp $
  */
 
 /*
@@ -19,6 +19,7 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 import javax.faces.FactoryFinder;
+import javax.faces.FacesException;
 import javax.faces.component.AttributeDescriptor;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UISelectItem;
@@ -257,13 +258,14 @@ public abstract class HtmlBasicRenderer extends Renderer {
 	}
 	
 	// verify the required Class is loadable
-	// PENDING(edburns): Find a way to do this once per ServletContext.
-	if (null == Thread.currentThread().getContextClassLoader().
-	    getResource("javax.servlet.jsp.jstl.fmt.LocalizationContext")){
+	try {
+	    Util.verifyRequiredClasses(context);
+	}  
+	catch (FacesException e) {
 	    Object [] params = { "javax.servlet.jsp.jstl.fmt.LocalizationContext" };
 	    throw new MissingResourceException(Util.getExceptionMessage(Util.MISSING_CLASS_ERROR_MESSAGE_ID, params), bundleName, key);
 	}
-	
+	    
 	// verify there is a ResourceBundle for this modelReference
 	javax.servlet.jsp.jstl.fmt.LocalizationContext locCtx = null;
 	if (null == (locCtx = (javax.servlet.jsp.jstl.fmt.LocalizationContext) 

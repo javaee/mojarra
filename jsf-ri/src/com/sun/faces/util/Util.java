@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.43 2003/02/20 22:49:42 ofung Exp $
+ * $Id: Util.java,v 1.44 2003/03/10 20:23:53 eburns Exp $
  */
 
 /*
@@ -43,6 +43,7 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Iterator;
 import java.util.Locale;
+import java.util.StringTokenizer;
 
 /**
  *
@@ -50,7 +51,7 @@ import java.util.Locale;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.43 2003/02/20 22:49:42 ofung Exp $
+ * @version $Id: Util.java,v 1.44 2003/03/10 20:23:53 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -352,6 +353,68 @@ private Util()
 			     defaultRenderKit);
     }
 
+    /**
+
+    * <p>Verifies that the required classes are available on either the
+    * ContextClassLoader, or the local ClassLoader.  Currently only
+    * checks for the class
+    * "javax.servlet.jsp.jstl.fmt.LocalizationContext", which is used
+    * for Localization.</p>  
+
+    * <p>The result of the check is saved in the ServletContext
+    * attribute RIConstants.HAS_REQUIRED_CLASSES_ATTR.</p>
+
+    * <p>Algorithm:</p>
+
+    * <p>Check the ServletContext for the attribute, if found, and the
+    * value is false, that means we've checked before, and we don't have
+    * the classes, just throw FacesException.  If the value is true,
+    * we've checked before and we have the classes, just return.</p>
+
+    */
+
+    public static void verifyRequiredClasses(FacesContext facesContext) throws FacesException {
+	ServletContext context = facesContext.getServletContext();
+	Boolean result = null;
+	String className = "javax.servlet.jsp.jstl.fmt.LocalizationContext";
+	Object [] params = {className};
+
+	// Have we checked before?
+	if (null != (result = (Boolean)
+		     context.getAttribute(RIConstants.HAS_REQUIRED_CLASSES_ATTR))) {
+	    // yes, and the check failed.
+	    if (Boolean.FALSE == result) {
+		throw new 
+		    FacesException(Util.getExceptionMessage(Util.MISSING_CLASS_ERROR_MESSAGE_ID, params));
+	    }
+	    else {
+		// yes, and the check passed.
+		return;
+	    }
+	}
+
+	//
+	// We've not checked before, so do the check now!
+	// 
+
+	// Acquire a ClassLoader.
+	ClassLoader cl = null;
+	if (null == (cl = Thread.currentThread().getContextClassLoader())) {
+	    cl = facesContext.getClass().getClassLoader();
+	}
+
+	try {
+	    cl.loadClass(className);
+	}
+	catch (ClassNotFoundException e) {
+	    context.setAttribute(RIConstants.HAS_REQUIRED_CLASSES_ATTR,
+				 Boolean.FALSE);
+	    throw new FacesException(Util.getExceptionMessage(Util.MISSING_CLASS_ERROR_MESSAGE_ID, params), e);
+	}
+	context.setAttribute(RIConstants.HAS_REQUIRED_CLASSES_ATTR,
+			     Boolean.TRUE);
+    }
+
     /** 
 
     * Release the factories and remove the default RenderKit from the
@@ -572,6 +635,38 @@ private Util()
 	}
 	
 	return renderedText.toString();
+    }
+
+    /**
+
+    * @return src with all occurrences of "from" replaced with "to".
+
+    */
+
+    public static String replaceOccurrences(String src, 
+					    String from,
+					    String to) {
+	// a little optimization: don't bother with strings that don't
+	// have any occurrences to replace.
+	if (-1 == src.indexOf(from)) {
+	    return src;
+	}
+	StringBuffer result = new StringBuffer(src.length());
+	StringTokenizer toker = new StringTokenizer(src, from, true);
+	String curToken = null;
+	while (toker.hasMoreTokens()) {
+	    // if the current token is a delimiter, replace it with "to"
+	    if ((curToken = toker.nextToken()).equals(from)) {
+		result.append(to);
+	    }
+	    else {
+		// it's not a delimiter, just output it.
+		result.append(curToken);
+	    }
+	}
+	
+	
+	return result.toString();
     }
 
 //

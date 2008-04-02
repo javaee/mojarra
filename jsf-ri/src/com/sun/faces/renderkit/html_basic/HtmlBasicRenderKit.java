@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderKit.java,v 1.38 2003/02/20 22:48:59 ofung Exp $
+ * $Id: HtmlBasicRenderKit.java,v 1.39 2003/03/10 20:23:50 eburns Exp $
  */
 
 /*
@@ -45,7 +45,7 @@ import javax.faces.render.Renderer;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HtmlBasicRenderKit.java,v 1.38 2003/02/20 22:48:59 ofung Exp $
+ * @version $Id: HtmlBasicRenderKit.java,v 1.39 2003/03/10 20:23:50 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -163,7 +163,8 @@ public class HtmlBasicRenderKit extends RenderKit
 	java.net.URL url = null;
         try {
 	    url = this.getClass().getClassLoader().getResource(fileName);
-            is = new InputSource(url.toExternalForm());
+            is = new InputSource(Util.replaceOccurrences(url.toExternalForm(),
+							 " ", "%20"));
 	    is.setByteStream(this.getClass().getClassLoader().getResourceAsStream(fileName));
         } catch (Throwable t) {
             throw new RuntimeException("Error Opening File:"+fileName);

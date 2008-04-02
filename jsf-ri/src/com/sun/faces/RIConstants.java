@@ -1,5 +1,5 @@
 /*
- * $Id: RIConstants.java,v 1.25 2003/02/20 22:48:32 ofung Exp $
+ * $Id: RIConstants.java,v 1.26 2003/03/10 20:23:49 eburns Exp $
  */
 
 /*
@@ -110,5 +110,12 @@ public class RIConstants {
      * <p>String identifer for <em>bundle attribute.</em>.</p>
      */
     public static final String BUNDLE_ATTR = "com.sun.faces.bundle";
+
+    /**
+     * <p>The name of the attribute in the ServletContext's attr set
+     * used to store the result of the check for the ability to load the
+     * required classes for the Faces RI.</p>
+     */
+    public static final String HAS_REQUIRED_CLASSES_ATTR = "com.sun.faces.HasRequiredClasses";
 
 }

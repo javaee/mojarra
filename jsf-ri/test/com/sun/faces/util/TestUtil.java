@@ -1,5 +1,5 @@
 /*
- * $Id: TestUtil.java,v 1.4 2003/02/20 22:50:12 ofung Exp $
+ * $Id: TestUtil.java,v 1.5 2003/03/10 20:23:55 eburns Exp $
  */
 
 /*
@@ -15,10 +15,13 @@ import org.mozilla.util.Assert;
 import org.mozilla.util.ParameterCheck;
 
 import com.sun.faces.ServletFacesTestCase;
+import com.sun.faces.RIConstants;
 
 import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
+
+import javax.servlet.ServletContext;
 
 /**
  *
@@ -26,7 +29,7 @@ import javax.faces.component.UIInput;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestUtil.java,v 1.4 2003/02/20 22:50:12 ofung Exp $
+ * @version $Id: TestUtil.java,v 1.5 2003/03/10 20:23:55 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -101,6 +104,23 @@ public class TestUtil extends ServletFacesTestCase
 	assertTrue(0 == result.length());
     }
 
+    public void testVerifyRequiredClasses() {
+	ServletContext servletContext = getFacesContext().getServletContext();
+	servletContext.removeAttribute(RIConstants.HAS_REQUIRED_CLASSES_ATTR);
+	try {
+	    Util.verifyRequiredClasses(getFacesContext());
+	}
+	catch (Throwable e) {
+	    assertTrue(false);
+	}
+
+	try {
+	    Util.verifyRequiredClasses(getFacesContext());
+	}
+	catch (Throwable e) {
+	    assertTrue(false);
+	}
+    }
 
 
 } // end of class TestUtil
