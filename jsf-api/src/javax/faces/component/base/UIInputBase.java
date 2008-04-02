@@ -1,5 +1,5 @@
 /*
- * $Id: UIInputBase.java,v 1.8 2003/09/15 23:18:59 jvisvanathan Exp $
+ * $Id: UIInputBase.java,v 1.9 2003/09/18 00:53:44 eburns Exp $
  */
 
 /*
@@ -350,7 +350,8 @@ public class UIInputBase extends UIOutputBase implements UIInput {
         validatorsList[0] = validators;
         validatorsList = (List[])
             context.getApplication().getViewHandler().getStateManager().
-            restoreAttachedObjectState(context, values[4], validatorsList);
+            restoreAttachedObjectState(context, values[4], validatorsList,
+				       this);
         if (validatorsList != null) {
             validators = (List) validatorsList[0];
         }

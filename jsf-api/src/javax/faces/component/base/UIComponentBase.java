@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.16 2003/09/16 23:12:24 eburns Exp $
+ * $Id: UIComponentBase.java,v 1.17 2003/09/18 00:53:43 eburns Exp $
  */
 
 /*
@@ -1332,7 +1332,7 @@ public abstract class UIComponentBase implements UIComponent {
         // invoked, merge them with the list to be restored.
         listeners = (List[])
             context.getApplication().getViewHandler().getStateManager().
-            restoreAttachedObjectState(context, values[6], listeners);
+            restoreAttachedObjectState(context, values[6], listeners, this);
     }
 
 

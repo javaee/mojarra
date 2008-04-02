@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBaseStateTestCase.java,v 1.6 2003/09/16 23:12:26 eburns Exp $
+ * $Id: UIComponentBaseStateTestCase.java,v 1.7 2003/09/18 00:53:48 eburns Exp $
  */
 
 /*
@@ -150,8 +150,12 @@ public class UIComponentBaseStateTestCase extends UIComponentBaseTestCase {
 	input.setPrevious("previous2");
 	input.setValid(true);
 	input.setRequired(false);
+	// note that I'm passing "input" as the last argument to the
+	// TestValueChangedListener ctor.  This exercises the logic that
+	// allows attached objects to maintain pointers to the
+	// components to which they are attached.
 	input.addValueChangedListener(new TestValueChangedListener("ANY2",
-								   PhaseId.ANY_PHASE));
+								   PhaseId.ANY_PHASE, input));
 
 	((UIPanelBase)input.getFacets().get("header")).setId("header");
 	((UIPanelBase)input.getFacets().get("footer")).setId("footer");
@@ -191,15 +195,17 @@ public class UIComponentBaseStateTestCase extends UIComponentBaseTestCase {
 						     root1, root2));
 	UIFormBase form1 = (UIFormBase) root1.getChildren().get(0);
 	UIFormBase form2 = (UIFormBase) root2.getChildren().get(0);
-	UIInputBase input1 = (UIInputBase) form1.getChildren().get(0);
-	UIInputBase input2 = (UIInputBase) form2.getChildren().get(0);
+	UIInputBaseTestCase.UIInputSub input1 = (UIInputBaseTestCase.UIInputSub) form1.getChildren().get(0);
+	UIInputBaseTestCase.UIInputSub input2 = (UIInputBaseTestCase.UIInputSub) form2.getChildren().get(0);
 	assertTrue(inputBaseTester.propertiesAreEqual(facesContext, 
 						      input1, input2));
 	assertTrue(this.propertiesAreEqual(facesContext, input1, input1));
 
-	input1 = (UIInputBase) form1.getChildren().get(1);
-	input2 = (UIInputBase) form2.getChildren().get(1);
+	input1 = (UIInputBaseTestCase.UIInputSub) form1.getChildren().get(1);
+	input2 = (UIInputBaseTestCase.UIInputSub) form2.getChildren().get(1);
 	assertTrue(inputBaseTester.propertiesAreEqual(facesContext, 
+						      input1, input2));
+	assertTrue(inputBaseTester.listenersAreEqual(facesContext, 
 						      input1, input2));
 
 	UIOutputBase output1 = (UIOutputBase) form1.getChildren().get(2);

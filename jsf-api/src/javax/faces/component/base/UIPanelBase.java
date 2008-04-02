@@ -1,5 +1,5 @@
 /*
- * $Id: UIPanelBase.java,v 1.8 2003/09/16 23:23:46 craigmcc Exp $
+ * $Id: UIPanelBase.java,v 1.9 2003/09/18 00:53:44 eburns Exp $
  */
 
 /*
@@ -190,7 +190,7 @@ public class UIPanelBase extends UIComponentBase
         super.restoreState(context, values[0]);
         List[] converterList = (List[])
             context.getApplication().getViewHandler().getStateManager().
-            restoreAttachedObjectState(context, values[1], null);
+            restoreAttachedObjectState(context, values[1], null, this);
         // PENDING(craigmcc) - it shouldn't be this hard to restore converters
 	if (converterList != null) {
             List theConverter = converterList[0];

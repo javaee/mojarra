@@ -1,5 +1,5 @@
 /*
- * $Id: UIOutputBase.java,v 1.11 2003/09/15 23:19:00 jvisvanathan Exp $
+ * $Id: UIOutputBase.java,v 1.12 2003/09/18 00:53:44 eburns Exp $
  */
 
 /*
@@ -184,7 +184,7 @@ public class UIOutputBase extends UIComponentBase implements UIOutput {
         super.restoreState(context, values[0]);
         List[] converterList = (List[])
             context.getApplication().getViewHandler().getStateManager().
-            restoreAttachedObjectState(context, values[1], null);
+            restoreAttachedObjectState(context, values[1], null, this);
         // PENDING(craigmcc) - it shouldn't be this hard to restore converters
 	if (converterList != null) {
             List theConverter = converterList[0];
