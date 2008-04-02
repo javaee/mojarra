@@ -1,5 +1,5 @@
 /*
- * $Id: AbstractGenerator.java,v 1.8 2004/12/13 19:07:48 rlubke Exp $
+ * $Id: AbstractGenerator.java,v 1.9 2005/04/04 18:34:39 edburns Exp $
  */
 
 /*
@@ -433,7 +433,8 @@ public abstract class AbstractGenerator implements Generator {
             writeLineComment("PROPERTY: " + propertyName);
             String iVarName = mangle(propertyName);
             fwrite("private " + type + ' ' + iVarName +
-                (defaultValue == null ? ";" : " = " + defaultValue) + '\n');
+		   (defaultValue == null ? ";" : " = " + defaultValue + ";") 
+		   + '\n');
             fwrite("public void set" + capitalize(propertyName) +
                 '(' + type + ' ' + iVarName + ") {\n");
             indent();
