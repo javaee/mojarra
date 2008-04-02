@@ -282,25 +282,8 @@ jsf-api.jar.
                 copy.template.sources,
                 test.FactoryFinder,
                 test.FactoryFinder2,
-                test.NamingContainer,
-                test.UIComponent,
-                test.UIComponentBase,
-                test.UIColumn,
-                test.UICommand,
-                test.UIData,
-                test.UIForm,
-                test.UIGraphic,
-                test.UIInput,
-                test.UIOutput,
-                test.UIPanel,
-                test.UIParameter,
-                test.UISelectBoolean,
-                test.UISelectItem,
-                test.UISelectItems,
-                test.UISelectMany,
-                test.UISelectOne,
-                test.UIViewRoot,
                 test.PhaseId,
+                test.component,
                 test.mock,
                 test.model,
                 test.webapp">
@@ -537,6 +520,19 @@ jsf-api.jar.
     </java>
   </target>
 
+  <target name="test.component" depends="build.test">
+    <echo message="Running javax.faces.component tests ..."/>
+    <junit printSummary="no" fork="no"
+          haltonfailure="yes" haltonerror="yes">
+      <classpath  refid="test.classpath"/>
+      <formatter   type="plain"      usefile="false"/>
+      <batchtest>
+        <fileset    dir="${build.test}"
+               includes="javax/faces/component/*TestCase.class"/>
+      </batchtest>
+    </junit>
+  </target>
+
   <target name="test.mock" depends="build.test">
     <echo message="Running javax.faces.mock tests ..."/>
     <junit printSummary="no" fork="no"
@@ -549,7 +545,6 @@ jsf-api.jar.
       </batchtest>
     </junit>
   </target>
-
 
   <target name="test.model" depends="build.test">
     <echo message="Running javax.faces.model tests ..."/>

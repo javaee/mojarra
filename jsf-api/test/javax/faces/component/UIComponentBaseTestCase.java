@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBaseTestCase.java,v 1.17 2003/11/07 01:23:55 craigmcc Exp $
+ * $Id: UIComponentBaseTestCase.java,v 1.18 2003/11/07 02:58:25 craigmcc Exp $
  */
 
 /*
@@ -17,7 +17,9 @@ import javax.faces.FactoryFinder;
 import javax.faces.application.Application;
 import javax.faces.application.ApplicationFactory;
 import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
 import javax.faces.event.FacesEvent;
+import javax.faces.mock.MockApplication;
 import javax.faces.mock.MockExternalContext;
 import javax.faces.mock.MockFacesContext;
 import javax.faces.mock.MockHttpServletRequest;
@@ -28,7 +30,7 @@ import javax.faces.mock.MockRenderKit;
 import javax.faces.mock.MockRenderKitFactory;
 import javax.faces.mock.MockServletConfig;
 import javax.faces.mock.MockServletContext;
-import javax.faces.mock.MockApplication;
+import javax.faces.mock.MockValueBinding;
 import javax.faces.TestUtil;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
@@ -332,6 +334,7 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
         assertNotNull(state);
         postSave.restoreState(facesContext, state);
         checkComponents(preSave, postSave);
+	checkValueBindings(preSave, postSave);
 
     }
 
@@ -668,6 +671,24 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
     }
 
 
+    // Check that the configured ValueBindings got restored
+    protected void checkValueBindings(UIComponent comp1, UIComponent comp2) {
+
+	ValueBinding vb1, vb2;
+
+	vb1 = comp1.getValueBinding("baz");
+	vb2 = comp2.getValueBinding("baz");
+	assertEquals(((MockValueBinding) vb1).ref(),
+		     ((MockValueBinding) vb2).ref());
+
+	vb1 = comp1.getValueBinding("bop");
+	vb2 = comp2.getValueBinding("bop");
+	assertEquals(((MockValueBinding) vb1).ref(),
+		     ((MockValueBinding) vb2).ref());
+
+    }
+
+
     // Create a pristine component of the type to be used in state holder tests
     protected UIComponent createComponent() {
         return (new TestComponent());
@@ -684,6 +705,11 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
         component.getClientId(facesContext); // Forces evaluation
         component.setRendered(false);
         component.setRendererType(null); // Since we have no renderers
+
+	component.setValueBinding("baz",
+				  application.getValueBinding("baz.value"));
+	component.setValueBinding("bop",
+				  application.getValueBinding("bop.value"));
 
     }
 

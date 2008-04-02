@@ -1,5 +1,5 @@
 /*
- * $Id: MockValueBinding.java,v 1.2 2003/11/07 01:24:00 craigmcc Exp $
+ * $Id: MockValueBinding.java,v 1.3 2003/11/07 02:58:26 craigmcc Exp $
  */
 
 /*
@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import javax.faces.application.Application;
+import javax.faces.component.StateHolder;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.el.PropertyNotFoundException;
@@ -35,20 +36,26 @@ import javax.faces.el.VariableResolver;
  * </ul>
  */
 
-public class MockValueBinding extends ValueBinding {
+public class MockValueBinding extends ValueBinding implements StateHolder {
 
 
     // ------------------------------------------------------------ Constructors
 
 
+    public MockValueBinding() {
+
+	this(null, null);
+
+    }
+
+
     public MockValueBinding(Application application, String ref) {
 
-        if ((application == null) || (ref == null)) {
-            throw new NullPointerException();
-        }
         this.application = application;
-	if (ref.startsWith("#{") && ref.endsWith("}")) {
-	    ref = ref.substring(2, ref.length() - 1);
+	if (ref != null) {
+	    if (ref.startsWith("#{") && ref.endsWith("}")) {
+		ref = ref.substring(2, ref.length() - 1);
+	    }
 	}
         this.ref = ref;
 
@@ -58,7 +65,7 @@ public class MockValueBinding extends ValueBinding {
     // ------------------------------------------------------ Instance Variables
 
 
-    private Application application;
+    private transient Application application; // Restored as necessary
     private String ref;
 
 
@@ -78,7 +85,7 @@ public class MockValueBinding extends ValueBinding {
         // }
 
         // Resolve the variable name
-        VariableResolver vr = application.getVariableResolver();
+        VariableResolver vr = application().getVariableResolver();
         String name = (String) names.get(0);
         Object base = vr.resolveVariable(context, name);
         // System.out.println("  base=" + base);
@@ -87,7 +94,7 @@ public class MockValueBinding extends ValueBinding {
         }
 
         // Resolve the property names
-        PropertyResolver pr = application.getPropertyResolver();
+        PropertyResolver pr = application().getPropertyResolver();
         for (int i = 1; i < names.size(); i++) {
             // System.out.println("  property=" + names.get(i));
             base = pr.getValue(base, (String) names.get(i));
@@ -113,7 +120,7 @@ public class MockValueBinding extends ValueBinding {
         // }
 
         // Resolve the variable name
-        VariableResolver vr = application.getVariableResolver();
+        VariableResolver vr = application().getVariableResolver();
         String name = (String) names.get(0);
         Object base = vr.resolveVariable(context, name);
         // System.out.println("  base=" + base);
@@ -144,7 +151,7 @@ public class MockValueBinding extends ValueBinding {
         }
 
         // Resolve the property names
-        PropertyResolver pr = application.getPropertyResolver();
+        PropertyResolver pr = application().getPropertyResolver();
         for (int i = 1; i < (names.size() - 1); i++) {
             // System.out.println("  property=" + names.get(i));
             base = pr.getValue(base, (String) names.get(i));
@@ -172,7 +179,54 @@ public class MockValueBinding extends ValueBinding {
     }
 
 
+    // ----------------------------------------------------- StateHolder Methods
+
+
+    public Object saveState(FacesContext context) {
+	Object values[] = new Object[1];
+	values[0] = ref;
+	return (values);
+    }
+
+
+    public void restoreState(FacesContext context, Object state) {
+	Object values[] = (Object[]) state;
+	ref = (String) values[0];
+    }
+
+
+    private boolean transientFlag = false;
+
+
+    public boolean isTransient() {
+	return (this.transientFlag);
+    }
+
+
+    public void setTransient(boolean transientFlag) {
+	this.transientFlag = transientFlag;
+    }
+
+
+    // ---------------------------------------------------------- Public Methods
+
+
+    public String ref(){
+	return (this.ref);
+    }
+
+
     // --------------------------------------------------------- Private Methods
+
+
+    private Application application() {
+
+	if (application == null) {
+	    application = FacesContext.getCurrentInstance().getApplication();
+	}
+	return (application);
+
+    }
 
 
     private ExternalContext econtext() {
