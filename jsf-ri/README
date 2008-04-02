@@ -88,7 +88,7 @@ JavaServer(tm) Faces Technology.
 
   Please see section 2.5.1 for a brief holistic description of this
   process.  Note that This change only impacts faces implementation
-  providers and advanced custom component authors.  This changes is
+  providers and advanced custom component authors.  These changes are 
   transparent to page authors.
 
   Remove the class ConvertibleValueHolder.  Note that anything that has
