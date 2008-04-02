@@ -6,13 +6,18 @@
 
 <web-app>
 
+    <!-- Validate the Application Configuration Resources -->
+    <context-param>
+      <param-name>com.sun.faces.validateXml</param-name>
+      <param-value>true</param-value>
+    </context-param>
+
     <!-- Faces Servlet -->
     <servlet>
         <servlet-name>Faces Servlet</servlet-name>
         <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
         <load-on-startup> 1 </load-on-startup>
     </servlet>
-
 
     <!-- Faces Servlet Mapping -->
     <servlet-mapping>

@@ -77,15 +77,15 @@
       <summary>This Is Custom1B Summary</summary>
       <detail>This Is Custom1B Detail</detail>
     </message>
-    <message xml:lang="en">
+    <message>
       <message-id>Custom1B</message-id>
-      <summary>This Is Custom1B Summary (en)</summary>
-      <detail>This Is Custom1B Detail (en)</detail>
+      <summary xml:lang="en">This Is Custom1B Summary (en)</summary>
+      <detail xml:lang="en">This Is Custom1B Detail (en)</detail>
     </message>
-    <message xml:lang="fr">
+    <message>
       <message-id>Custom1B</message-id>
-      <summary>This Is Custom1B Summary (fr)</summary>
-      <detail>This Is Custom1B Detail (fr)</detail>
+      <summary xml:lang="fr">This Is Custom1B Summary (fr)</summary>
+      <detail xml:lang="fr">This Is Custom1B Detail (fr)</detail>
     </message>
     <message>
       <message-id>Custom1C</message-id>
@@ -116,15 +116,12 @@
       <summary>This Is Custom2B Summary</summary>
       <detail>This Is Custom2B Detail</detail>
     </message>
-    <message xml:lang="en">
+    <message>
       <message-id>Custom2B</message-id>
-      <summary>This Is Custom2B Summary (en)</summary>
-      <detail>This Is Custom2B Detail (en)</detail>
-    </message>
-    <message xml:lang="fr">
-      <message-id>Custom2B</message-id>
-      <summary>This Is Custom2B Summary (fr)</summary>
-      <detail>This Is Custom2B Detail (fr)</detail>
+      <summary xml:lang="en">This Is Custom2B Summary (en)</summary>
+      <summary xml:lang="fr">This Is Custom2B Summary (fr)</summary>
+      <detail xml:lang="en">This Is Custom2B Detail (en)</detail>
+      <detail xml:lang="fr">This Is Custom2B Detail (fr)</detail>
     </message>
     <message>
       <message-id>Custom2C</message-id>
