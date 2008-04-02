@@ -55,6 +55,7 @@ public class HtmlTaglibGenerator extends GenerateTagBase implements TaglibGenera
 	valueHolderComponents.add("UIGraphic");
 	valueHolderComponents.add("UIOutput");
 	valueHolderComponents.add("UIPanel");
+	valueHolderComponents.add("UIInput");
 	convertibleValueHolderComponents = new ArrayList();
 	convertibleValueHolderComponents.add("UIOutput");
     }
@@ -328,7 +329,7 @@ public class HtmlTaglibGenerator extends GenerateTagBase implements TaglibGenera
 	    
 	    // these are already handled in javax.faces.webapp.UIComponentTag
 	    //
-	    if (attributeName.equals("id") || attributeName.equals("componentRef") ||
+	    if (attributeName.equals("componentRef") ||
 		attributeName.equals("rendered")) {
 		continue;
 	    }
@@ -352,16 +353,25 @@ public class HtmlTaglibGenerator extends GenerateTagBase implements TaglibGenera
 			" for type:"+type);
 		}
 	    }
+
 	    String ivar = generateIvar(attributeName);
 
-	    result.append("    private "+attributeClass+" "+ivar);
-	    // if it's a primitive
-	    if (isPrimitive(attributeClass)) {
-		// assign the default value
-		result.append(" = "+(String)defaultPrimitiveValues.get(attributeClass));
+	    // don't generate an Ivar for those things that are already
+	    // ivars in UIComponentTag.
+	    if (!(attributeName.equals("componentRef") ||
+		  attributeName.equals("id") || 
+		  attributeName.equals("override") ||
+		  attributeName.equals("rendered"))) {
+		
+		result.append("    private "+attributeClass+" "+ivar);
+		// if it's a primitive
+		if (isPrimitive(attributeClass)) {
+		    // assign the default value
+		    result.append(" = "+(String)defaultPrimitiveValues.get(attributeClass));
+		}
+		result.append(";\n");
 	    }
-	    result.append(";\n");
-
+	    
 	    // if it's a String, we need to generate the "<name>_" flavor 
 	    // for expression evaluation (later);
 	    // Special Condition: Don't generate it for "var" attribute;
@@ -394,7 +404,7 @@ public class HtmlTaglibGenerator extends GenerateTagBase implements TaglibGenera
 	result.append("\n\n    //\n    // Setter Methods\n    //\n");
 	for (int i=0; i<attributeNames.size(); i++) {
 	    attributeName = (String)attributeNames.get(i);
-	    if (attributeName.equals("id") || attributeName.equals("componentRef") ||
+	    if (attributeName.equals("componentRef") ||
 		attributeName.equals("rendered")) {
 		continue;
 	    }
@@ -486,8 +496,18 @@ public class HtmlTaglibGenerator extends GenerateTagBase implements TaglibGenera
 		        ".getAttributes().put(\""+ivar+"\", ");
 		} else {
 	            result.append("        if (null != "+ivar+") {\n");
-		    result.append("            "+componentType.toLowerCase()+
-		        ".getAttributes().put(\""+ivar+"\", ");
+		    if (ivar.equals("bundle")) {
+			result.append("            "+componentType.toLowerCase()+
+				      ".getAttributes().put(com.sun.faces.RIConstants.BUNDLE_ATTR, ");
+		    }
+		    else if (ivar.equals("_for")) {
+			result.append("            "+componentType.toLowerCase()+
+				      ".getAttributes().put(\"for\", ");
+		    }
+		    else {
+			result.append("            "+componentType.toLowerCase()+
+				      ".getAttributes().put(\""+ivar+"\", ");
+		    }
 		}
 		if (isPrimitive(attributeClass)) {
 		    if (attributeClass.equals("boolean")) {
@@ -501,7 +521,8 @@ public class HtmlTaglibGenerator extends GenerateTagBase implements TaglibGenera
 		}
 		result.append("        }\n");
 	    } else {
-	        if (attributeName.equals("id") || attributeName.equals("componentRef") ||
+	        if (attributeName.equals("id") || 
+		    attributeName.equals("componentRef") ||
 		    attributeName.equals("rendered") || attributeName.equals("converter") ||
 		    attributeName.equals("value") || attributeName.equals("valueRef")) {
 		    continue;
@@ -529,7 +550,7 @@ public class HtmlTaglibGenerator extends GenerateTagBase implements TaglibGenera
 	    attributeClass = getParser().getComponentPropertyClass(componentType, attributeName);
 	    String ivar = generateIvar(attributeName);
 
-	    if (attributeName.equals("id") || attributeName.equals("componentRef") ||
+	    if (attributeName.equals("componentRef") ||
 	        attributeName.equals("rendered") || attributeName.equals("converter") ||
 		attributeName.equals("value") || attributeName.equals("valueRef")) {
 		continue;

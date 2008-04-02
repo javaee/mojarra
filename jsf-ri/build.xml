@@ -166,7 +166,6 @@
   <target name="prepare.generate"
           depends="prepare,set.tools.property,verify.tools.property">
     <mkdir dir="${build.generate.tld}"/>
-    <mkdir dir="${build.home}/generate.classes"/>
   </target>
 
   <target name="set.tools.property" unless="jsf-tools">
@@ -219,6 +218,7 @@ must exist.  This is necessary for the MessageFactory class.
       <fileset dir="${jsf-tools.dir}/build/generate">
         <include name="conf/**/*.*"/>
         <include name="com/**/*.*"/>
+        <exclude name="com/sun/faces/taglib/html_basic/*_LinkTag.java"/>
       </fileset>
     </copy>
 
@@ -226,18 +226,10 @@ must exist.  This is necessary for the MessageFactory class.
 
   </target>
 
-  <target name="compile" depends="prepare,copy.template.sources"
+  <target name="compile" depends="prepare,generate,copy.template.sources"
    description="Just compile the classes">
     <!-- Run javac through everything -->
-    <javac srcdir="${build.generate}" excludes="com/sun/faces/taglib/**"
-           destdir="${build.home}/classes"
-             debug="${compile.debug}"
-       deprecation="${compile.deprecation}"
-          optimize="${compile.optimize}">
-      <classpath refid="compile.classpath"/>
-    </javac>
-
-    <javac srcdir="${source.home}"
+    <javac srcdir="${source.home}:${build.generate}"
            destdir="${build.home}/classes"
              debug="${compile.debug}"
        deprecation="${compile.deprecation}"
@@ -258,20 +250,6 @@ must exist.  This is necessary for the MessageFactory class.
          toDir="${build.home}/classes/META-INF"/>
     <copy file="${conf.share.dir}/jsf_core.tld"
          toDir="${build.home}/classes/META-INF"/>
-
-    </target>
-
-  <target name="compile.generated" depends="compile, generate"
-   description="Just compile the classes">
-    <!-- Run javac through everything -->
-    <javac
-           destdir="${build.home}/generate.classes"
-             debug="${compile.debug}"
-       deprecation="${compile.deprecation}"
-          optimize="${compile.optimize}">
-      <src path="${build.generate}"/>
-      <classpath refid="compile.classpath"/>
-    </javac>
 
     </target>
 
@@ -464,6 +442,6 @@ must exist.  This is necessary for the MessageFactory class.
    </target>
 
 
-  <target name="main" depends="prepare,generate,compile.generated,jars,copy.to.tck"/>
+  <target name="main" depends="jars,copy.to.tck"/>
 
 </project>
