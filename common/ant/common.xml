@@ -227,9 +227,13 @@
         <attribute name="jarfile"/>
         <attribute name="basedir"/>
         <attribute name="extension-name"/>
+        <attribute name="excludes" default=""/>
+        <attribute name="includes" default=""/>
         <sequential>
             <jar jarfile="@{jarfile}"
-                 basedir="@{basedir}">
+                 basedir="@{basedir}"
+                 excludes="@{excludes}"
+                 includes="@{includes}">
                 <manifest>
                     <attribute name="Specification-Title"
                                value="JavaServer Faces"/>
@@ -245,7 +249,7 @@
                                value="com.sun"/>
                     <attribute name="Extension-Name"
                                value="@{extension-name}"/>
-                </manifest>
+                </manifest>                
             </jar>
         </sequential>
     </macrodef>
