@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_2.java,v 1.29 2002/10/01 18:30:19 jvisvanathan Exp $
+ * $Id: TestRenderers_2.java,v 1.30 2002/10/04 19:59:26 eburns Exp $
  */
 
 /*
@@ -45,6 +45,7 @@ import javax.faces.tree.TreeFactory;
 import org.apache.cactus.WebRequest;
 
 import com.sun.faces.JspFacesTestCase;
+import com.sun.faces.TestBean;
 
 /**
  *
@@ -52,7 +53,7 @@ import com.sun.faces.JspFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_2.java,v 1.29 2002/10/01 18:30:19 jvisvanathan Exp $
+ * @version $Id: TestRenderers_2.java,v 1.30 2002/10/04 19:59:26 eburns Exp $
  * 
  *
  */
@@ -470,7 +471,7 @@ public class TestRenderers_2 extends JspFacesTestCase
     public void testGraphicImageRenderer(UIComponent root) throws IOException {
         System.out.println("Testing GraphicImageRenderer");
         UIGraphic img = new UIGraphic();
-        img.setValue(null);
+        img.setURL("/nonModelReferenceImage.gif");
         img.setComponentId("my_graphic_image");
         root.addChild(img);
 
@@ -497,6 +498,19 @@ public class TestRenderers_2 extends JspFacesTestCase
         assertTrue(result);
         result = imageRenderer.supportsComponentType("FooBar");
         assertTrue(!result);
+
+        System.out.println("    Testing graphic support of modelReference...");
+	img = new UIGraphic();
+	TestBean testBean = (TestBean) 
+	    getFacesContext().getHttpSession().getAttribute("TestBean");
+	assertTrue(null != testBean); // set in FacesTestCaseService
+	testBean.setImagePath("/foo/modelReferenceImage.gif");
+	img.setModelReference("TestBean.imagePath");
+
+        imageRenderer.encodeBegin(getFacesContext(), img);
+        imageRenderer.encodeEnd(getFacesContext(), img);
+        getFacesContext().getResponseWriter().flush();
+
     }
 
     public void testOutputErrorsRenderer(UIComponent root) throws IOException {

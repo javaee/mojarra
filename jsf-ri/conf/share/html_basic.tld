@@ -967,6 +967,11 @@
         <rtexprvalue>false</rtexprvalue>
       </attribute>
       <attribute>
+        <name>modelReference</name>
+        <required>false</required>
+        <rtexprvalue>false</rtexprvalue>
+      </attribute>
+      <attribute>
         <name>url</name>
         <required>false</required>
         <rtexprvalue>false</rtexprvalue>

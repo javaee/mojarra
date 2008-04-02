@@ -64,6 +64,18 @@ public InnerBean getInner()
     return inner;
 }
 
+protected String imagePath = null;
+
+public String getImagePath()
+{
+    return imagePath;
+}
+
+public void setImagePath(String newImagePath)
+{
+    imagePath = newImagePath;
+}
+
 public static class InnerBean extends Object
 {
 
