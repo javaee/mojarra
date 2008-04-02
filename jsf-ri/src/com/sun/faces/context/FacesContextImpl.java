@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContextImpl.java,v 1.68 2005/05/05 20:51:21 edburns Exp $
+ * $Id: FacesContextImpl.java,v 1.69 2005/06/23 20:29:33 jayashri Exp $
  */
 
 /*
@@ -11,8 +11,9 @@ package com.sun.faces.context;
 
 import com.sun.faces.util.Util;
 import org.apache.commons.collections.CursorableLinkedList;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import javax.faces.FactoryFinder;
 import javax.faces.application.Application;
@@ -49,7 +50,9 @@ public class FacesContextImpl extends FacesContext {
     // Class Variables
     //
 
-    private static final Log log = LogFactory.getLog(FacesContextImpl.class);
+    // Log instance for this class
+    private static Logger logger = Util.getLogger(Util.FACES_LOGGER 
+            + Util.CONTEXT_LOGGER);
 
     //
     // Instance Variables
@@ -299,12 +302,13 @@ public class FacesContextImpl extends FacesContext {
             facesEvents = new CursorableLinkedList();
         }
         facesEvents.add(event);
-        if (log.isDebugEnabled()) {
+                    
+        if (logger.isLoggable(Level.FINE)) {
             String id = event.getComponent().getId();
             if (id == null) {
                 id = "<<NONE>>";
             }
-            log.debug("Adding FacesEvent[sourceId=" + id +
+            logger.fine("Adding FacesEvent[sourceId=" + id +
                       ",type=" + event.getClass().getName());
         }
 
@@ -332,9 +336,8 @@ public class FacesContextImpl extends FacesContext {
             componentMessageLists.put(clientId, list);
         }
         list.add(message);
-
-        if (log.isDebugEnabled()) {
-            log.debug("Adding Message[sourceId=" +
+        if (logger.isLoggable(Level.FINE)) {
+            logger.fine("Adding Message[sourceId=" +
                       (clientId != null ? clientId : "<<NONE>>") +
                       ",summary=" + message.getSummary() + ")");
         }

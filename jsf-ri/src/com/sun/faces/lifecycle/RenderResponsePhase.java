@@ -1,5 +1,5 @@
 /*
- * $Id: RenderResponsePhase.java,v 1.15 2005/05/16 20:16:21 rlubke Exp $
+ * $Id: RenderResponsePhase.java,v 1.16 2005/06/23 20:29:33 jayashri Exp $
  */
 
 /*
@@ -18,15 +18,16 @@ import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseId;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.util.logging.Logger;
+import java.util.logging.Level;
+import com.sun.faces.util.Util;
 
 
 /**
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: RenderResponsePhase.java,v 1.15 2005/05/16 20:16:21 rlubke Exp $
+ * @version $Id: RenderResponsePhase.java,v 1.16 2005/06/23 20:29:33 jayashri Exp $
  */
 
 public class RenderResponsePhase extends Phase {
@@ -35,7 +36,8 @@ public class RenderResponsePhase extends Phase {
 // Protected Constants
 //
 // Log instance for this class
-    private static final Log log = LogFactory.getLog(RenderResponsePhase.class);
+    private static Logger logger = Util.getLogger(Util.FACES_LOGGER 
+            + Util.LIFECYCLE_LOGGER);
 
 //
 // Class Variables
@@ -75,13 +77,12 @@ public class RenderResponsePhase extends Phase {
 
 
     public void execute(FacesContext facesContext) throws FacesException {
-        if (log.isDebugEnabled()) {
-            log.debug("Entering RenderResponsePhase");
+        if (logger.isLoggable(Level.FINE)) {
+            logger.fine("Entering RenderResponsePhase");
         }
-        if (log.isDebugEnabled()) {
-            log.debug(
-                "About to render view " +
-                facesContext.getViewRoot().getViewId());
+        if (logger.isLoggable(Level.FINE)) {
+            logger.fine("About to render view " +
+                    facesContext.getViewRoot().getViewId());
         }
         try {
             facesContext.getApplication().getViewHandler().
@@ -89,8 +90,8 @@ public class RenderResponsePhase extends Phase {
         } catch (IOException e) {
             throw new FacesException(e.getMessage(), e);
         }
-        if (log.isDebugEnabled()) {
-            log.debug("Exiting RenderResponsePhase");
+        if (logger.isLoggable(Level.FINE)) {
+            logger.fine("Exiting RenderResponsePhase");
         }
     }
 

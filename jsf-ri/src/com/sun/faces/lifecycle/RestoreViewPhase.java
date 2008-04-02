@@ -1,5 +1,5 @@
 /*
- * $Id: RestoreViewPhase.java,v 1.23 2005/05/16 20:16:22 rlubke Exp $
+ * $Id: RestoreViewPhase.java,v 1.24 2005/06/23 20:29:34 jayashri Exp $
  */
 
 /*
@@ -26,15 +26,14 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.sun.faces.util.Util;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 /**
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: RestoreViewPhase.java,v 1.23 2005/05/16 20:16:22 rlubke Exp $
+ * @version $Id: RestoreViewPhase.java,v 1.24 2005/06/23 20:29:34 jayashri Exp $
  */
 
 public class RestoreViewPhase extends Phase {
@@ -42,8 +41,8 @@ public class RestoreViewPhase extends Phase {
     //
     // Protected Constants
     //
-    // Log instance for this class
-    private static final Log log = LogFactory.getLog(RestoreViewPhase.class);
+    private static Logger logger = Util.getLogger(Util.FACES_LOGGER 
+            + Util.LIFECYCLE_LOGGER);
 
     //
     // Class Variables
@@ -87,8 +86,8 @@ public class RestoreViewPhase extends Phase {
      */
 
     public void execute(FacesContext facesContext) throws FacesException {
-        if (log.isDebugEnabled()) {
-            log.debug("Entering RestoreViewPhase");
+        if (logger.isLoggable(Level.FINE)) {
+            logger.fine("Entering RestoreViewPhase");
         }
         if (null == facesContext) {
             throw new FacesException(Util.getExceptionMessageString(
@@ -100,8 +99,8 @@ public class RestoreViewPhase extends Phase {
         UIViewRoot viewRoot = facesContext.getViewRoot();
         Locale locale = null;
         if (viewRoot != null) {
-            if (log.isDebugEnabled()) {
-                log.debug("Found a pre created view in FacesContext");
+            if (logger.isLoggable(Level.FINE)) {
+                logger.fine("Found a pre created view in FacesContext");
             }
             locale = facesContext.getExternalContext().getRequestLocale();
             facesContext.getViewRoot().setLocale(locale);
@@ -133,8 +132,8 @@ public class RestoreViewPhase extends Phase {
         }
 
         if (viewId == null) {
-            if (log.isDebugEnabled()) {
-                log.debug("viewId is null");
+            if (logger.isLoggable(Level.WARNING)) {
+                logger.warning("viewId is null");
             }
             throw new FacesException(Util.getExceptionMessageString(
                 Util.NULL_REQUEST_VIEW_ERROR_MESSAGE_ID));
@@ -147,13 +146,13 @@ public class RestoreViewPhase extends Phase {
 		throw new FacesException(Util.getExceptionMessageString(
                 Util.NULL_REQUEST_VIEW_ERROR_MESSAGE_ID));
 	    }
-            if (log.isDebugEnabled()) {
-                log.debug("Postback: Restored view for " + viewId);
+            if (logger.isLoggable(Level.FINE)) {
+                logger.fine("Postback: Restored view for " + viewId);
             }
 	}
 	else {
-            if (log.isDebugEnabled()) {
-                log.debug("New request: creating a view for " + viewId);
+            if (logger.isLoggable(Level.FINE)) {
+                logger.fine("New request: creating a view for " + viewId);
             }
             // if that fails, create one
             viewRoot = (Util.getViewHandler(facesContext)).
@@ -165,8 +164,8 @@ public class RestoreViewPhase extends Phase {
         facesContext.setViewRoot(viewRoot);
         doPerComponentActions(facesContext, viewRoot);
 
-        if (log.isDebugEnabled()) {
-            log.debug("Exiting RestoreViewPhase");
+        if (logger.isLoggable(Level.FINE)) {
+            logger.fine("Exiting RestoreViewPhase");
         }
     }
 

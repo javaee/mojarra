@@ -1,5 +1,5 @@
 /*
- * $Id: ManagedBeanFactory.java,v 1.30 2005/06/10 21:59:54 rlubke Exp $
+ * $Id: ManagedBeanFactory.java,v 1.31 2005/06/23 20:29:32 jayashri Exp $
  */
 
 /*
@@ -34,8 +34,8 @@ import com.sun.faces.config.beans.MapEntryBean;
 import com.sun.faces.util.Util;
 
 import org.apache.commons.beanutils.PropertyUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 /**
  * <p>This class creates a managed bean instance. It has a contract with
@@ -102,7 +102,8 @@ public class ManagedBeanFactory extends Object {
     /**
      * <p>The <code>Log</code> instance for this class.</p>
      */
-    private static Log log = LogFactory.getLog(ManagedBeanFactory.class);
+    private static Logger logger = Util.getLogger(Util.FACES_LOGGER 
+            + Util.CONFIG_LOGGER);
 
 
 
@@ -153,8 +154,8 @@ public class ManagedBeanFactory extends Object {
 
     public Map getManagedBeanFactoryMap() {
 	if (null == managedBeanFactoryMap) {
-            if (log.isDebugEnabled()) {
-                log.trace("Contract violation: ManagedBeanFactory must be initialized with managedBeanFactoryMap after instantiation.");
+            if (logger.isLoggable(Level.INFO)) {
+                logger.info("Contract violation: ManagedBeanFactory must be initialized with managedBeanFactoryMap after instantiation.");
             }
 	}
 
@@ -204,8 +205,8 @@ public class ManagedBeanFactory extends Object {
         }
         
         if ( beanList.contains(managedBean.getManagedBeanName())) {
-            if ( log.isErrorEnabled()) {
-                log.error("Possible cyclic reference to managedBean " + 
+            if ( logger.isLoggable(Level.WARNING)) {
+                logger.warning("Possible cyclic reference to managedBean " + 
                    managedBean.getManagedBeanName() + " ");
             }
             Object[] obj = new Object[1];
@@ -414,8 +415,8 @@ public class ManagedBeanFactory extends Object {
         int len = 0;
 
         if (0 == (len = valuesFromConfig.length)) {
-            if (log.isTraceEnabled()) {
-                log.trace("zero length array");
+            if (logger.isLoggable(Level.FINE)) {
+                logger.fine("zero length array");
             }
             return null;
         }
@@ -463,8 +464,8 @@ public class ManagedBeanFactory extends Object {
             strValue = null;
 
         if (null == mapEntries || 0 == valuesFromConfig.length) {
-            if (log.isTraceEnabled()) {
-                log.trace("null or zero length array");
+            if (logger.isLoggable(Level.FINE)) {
+                logger.fine("null or zero length array");
             }
             return;
         }

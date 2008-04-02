@@ -1,5 +1,5 @@
 /*
- * $Id: InvokeApplicationPhase.java,v 1.17 2005/05/16 20:16:20 rlubke Exp $
+ * $Id: InvokeApplicationPhase.java,v 1.18 2005/06/23 20:29:33 jayashri Exp $
  */
 
 /*
@@ -16,41 +16,43 @@ import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseId;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.util.logging.Logger;
+import java.util.logging.Level;
+
+import com.sun.faces.util.Util;
 
 /**
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: InvokeApplicationPhase.java,v 1.17 2005/05/16 20:16:20 rlubke Exp $
+ * @version $Id: InvokeApplicationPhase.java,v 1.18 2005/06/23 20:29:33 jayashri Exp $
  */
 
 public class InvokeApplicationPhase extends Phase {
 
-//
-// Protected Constants
-//
+    //
+    // Protected Constants
+    //
 
-//
-// Class Variables
-//
+    //
+    // Class Variables
+    //
 
     // Log instance for this class
-    private static final Log log =
-        LogFactory.getLog(InvokeApplicationPhase.class);
+    private static Logger logger = Util.getLogger(Util.FACES_LOGGER 
+            + Util.LIFECYCLE_LOGGER);
 
-//
-// Instance Variables
-//
+    //
+    // Instance Variables
+    //
 
-// Attribute Instance Variables
+    // Attribute Instance Variables
 
-// Relationship Instance Variables
+    // Relationship Instance Variables
 
-//
-// Constructors and Genericializers    
-//
+    //
+    // Constructors and Genericializers    
+    //
 
     public InvokeApplicationPhase() {
         super();
@@ -64,8 +66,8 @@ public class InvokeApplicationPhase extends Phase {
 
     public void execute(FacesContext facesContext) throws FacesException {
 
-        if (log.isDebugEnabled()) {
-            log.debug("Entering InvokeApplicationsPhase");
+        if (logger.isLoggable(Level.FINE)) {
+            logger.fine("Entering InvokeApplicationsPhase");
         }
 
         UIViewRoot root = facesContext.getViewRoot();
@@ -76,15 +78,15 @@ public class InvokeApplicationPhase extends Phase {
         } catch (RuntimeException re) {
             String exceptionMessage = re.getMessage();
             if (null != exceptionMessage) {
-                if (log.isErrorEnabled()) {
-                    log.error(exceptionMessage, re);
+                if (logger.isLoggable(Level.WARNING)) {
+                    logger.log(Level.WARNING, exceptionMessage, re);
                 }
             }
             throw new FacesException(exceptionMessage, re);
         }
 
-        if (log.isDebugEnabled()) {
-            log.debug("Exiting InvokeApplicationsPhase");
+        if (logger.isLoggable(Level.FINE)) {
+            logger.fine("Exiting InvokeApplicationsPhase");
         }
     }
 

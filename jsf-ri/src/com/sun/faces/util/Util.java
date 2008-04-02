@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.163 2005/06/09 22:37:50 jayashri Exp $
+ * $Id: Util.java,v 1.164 2005/06/23 20:29:34 jayashri Exp $
  */
 
 /*
@@ -63,7 +63,7 @@ import java.text.MessageFormat;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.163 2005/06/09 22:37:50 jayashri Exp $
+ * @version $Id: Util.java,v 1.164 2005/06/23 20:29:34 jayashri Exp $
  */
 
 public class Util extends Object {
@@ -71,7 +71,7 @@ public class Util extends Object {
     //
     // Private/Protected Constants
     //
-    public static final String FACES_LOGGER = "javax.enterprise.resource.jsf.";
+    public static final String FACES_LOGGER = "javax.enterprise.resource.jsf";
     
     public static final String FACES_LOG_STRINGS = 
             "com.sun.faces.LogStrings";
@@ -84,9 +84,12 @@ public class Util extends Object {
     // parameters to test/com/sun/faces/util/TestUtil_messages (see comment there).
  
     // Loggers
-    public static final String RENDERKIT_LOGGER = "renderkit";
-    public static final String TAGLIB_LOGGER = "taglib";
-    public static final String APPLICATION_LOGGER = "application";
+    public static final String RENDERKIT_LOGGER = ".renderkit";
+    public static final String TAGLIB_LOGGER = ".taglib";
+    public static final String APPLICATION_LOGGER = ".application";
+    public static final String CONTEXT_LOGGER = ".context";
+    public static final String CONFIG_LOGGER = ".config";
+    public static final String LIFECYCLE_LOGGER = ".lifecycle";
     
     /**
      * The message identifier of the {@link FacesMessage} to be created as
@@ -1210,11 +1213,12 @@ public class Util extends Object {
 
         RenderKit renderKit = renderKitFactory.getRenderKit(context, renderKitId);
         if ( renderKit == null) {
-            if ( logger.isLoggable(Level.SEVERE)) {
-                logger.log(Level.SEVERE, 
-                        "Renderkit could not loaded for renderKitId " 
+            if (logger.isLoggable(Level.WARNING)) {
+                logger.warning("Renderkit could not loaded for renderKitId " 
                         + renderKitId);
             }
+            throw new FacesException("Renderkit could not loaded for renderKitId " 
+                        + renderKitId);
         }
         assert (null != renderKit);
 

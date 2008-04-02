@@ -1,5 +1,5 @@
 /*
- * $Id: ProcessValidationsPhase.java,v 1.23 2005/05/16 20:16:21 rlubke Exp $
+ * $Id: ProcessValidationsPhase.java,v 1.24 2005/06/23 20:29:33 jayashri Exp $
  */
 
 /*
@@ -14,8 +14,10 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseId;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.util.logging.Logger;
+import java.util.logging.Level;
+
+import com.sun.faces.util.Util;
 
 /**
  * ProcessValidationsPhase executes <code>processValidators</code> on each
@@ -28,8 +30,8 @@ public class ProcessValidationsPhase extends Phase {
 //
     
 // Log instance for this class
-    private static final Log log =
-        LogFactory.getLog(ProcessValidationsPhase.class);
+   private static Logger logger = Util.getLogger(Util.FACES_LOGGER 
+            + Util.LIFECYCLE_LOGGER);
 
 //
 // Class Variables
@@ -68,8 +70,8 @@ public class ProcessValidationsPhase extends Phase {
 
 
     public void execute(FacesContext facesContext) throws FacesException {
-        if (log.isDebugEnabled()) {
-            log.debug("Entering ProcessValidationsPhase");
+        if (logger.isLoggable(Level.FINE)) {
+            logger.fine("Entering ProcessValidationsPhase");
         }
         UIComponent component = facesContext.getViewRoot();
         assert (null != component);
@@ -79,14 +81,14 @@ public class ProcessValidationsPhase extends Phase {
         } catch (RuntimeException re) {
             String exceptionMessage = re.getMessage();
             if (null != exceptionMessage) {
-                if (log.isErrorEnabled()) {
-                    log.error(exceptionMessage, re);
+                if (logger.isLoggable(Level.WARNING)) {
+                    logger.log(Level.WARNING, exceptionMessage, re);
                 }
             }
 	    throw new FacesException(exceptionMessage, re);
         }
-        if (log.isDebugEnabled()) {
-            log.debug("Exiting ProcessValidationsPhase");
+        if (logger.isLoggable(Level.FINE)) {
+            logger.fine("Exiting ProcessValidationsPhase");
         }
     }
 

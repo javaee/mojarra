@@ -1,5 +1,5 @@
 /*
- * $Id: UpdateModelValuesPhase.java,v 1.38 2005/05/16 20:16:22 rlubke Exp $
+ * $Id: UpdateModelValuesPhase.java,v 1.39 2005/06/23 20:29:34 jayashri Exp $
  */
 
 /*
@@ -11,8 +11,8 @@ package com.sun.faces.lifecycle;
 
 import com.sun.faces.util.MessageFactory;
 import com.sun.faces.util.Util;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
@@ -26,29 +26,29 @@ import javax.faces.event.PhaseId;
  */
 public class UpdateModelValuesPhase extends Phase {
 
-//
-// Protected Constants
-//
+    //
+    // Protected Constants
+    //
 
-//
-// Class Variables
-//
+    //
+    // Class Variables
+    //
 
-//
-// Instance Variables
-//
-// Log instance for this class
-    private static final Log log =
-        LogFactory.getLog(UpdateModelValuesPhase.class);
+    //
+    // Instance Variables
+    //
+    // Log instance for this class
+    private static Logger logger = Util.getLogger(Util.FACES_LOGGER 
+            + Util.LIFECYCLE_LOGGER);
 
-// Attribute Instance Variables
+    // Attribute Instance Variables
 
-// Relationship Instance Variables
+    // Relationship Instance Variables
 
 
-//
-// Constructors and Genericializers    
-//
+    //
+    // Constructors and Genericializers    
+    //
 
     public UpdateModelValuesPhase() {
     }
@@ -71,8 +71,8 @@ public class UpdateModelValuesPhase extends Phase {
 
 
     public void execute(FacesContext facesContext) {
-        if (log.isDebugEnabled()) {
-            log.debug("Entering UpdateModelValuesPhase");
+        if (logger.isLoggable(Level.FINE)) {
+            logger.fine("Entering UpdateModelValuesPhase");
         }
         UIComponent component = facesContext.getViewRoot();
         assert (null != component);
@@ -90,14 +90,13 @@ public class UpdateModelValuesPhase extends Phase {
             Object[] params = new Object[3];
             params[2] = exceptionMessage;
             facesContext.addMessage(component.getClientId(facesContext),
-                                    MessageFactory.getMessage(facesContext,
-                                                              Util.MODEL_UPDATE_ERROR_MESSAGE_ID,
-                                                              params));
-            if (log.isErrorEnabled()) {
-                log.error(exceptionMessage);
+                    MessageFactory.getMessage(facesContext,
+                    Util.MODEL_UPDATE_ERROR_MESSAGE_ID, params));
+            if (logger.isLoggable(Level.WARNING)) {
+                logger.warning(exceptionMessage);
             }
-            if (log.isDebugEnabled()) {
-                log.debug("Exiting UpdateModelValuesPhase");
+            if (logger.isLoggable(Level.FINE)) {
+                logger.fine("Exiting UpdateModelValuesPhase");
             }
         }
     }

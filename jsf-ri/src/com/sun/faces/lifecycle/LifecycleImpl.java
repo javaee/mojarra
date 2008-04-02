@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleImpl.java,v 1.49 2005/06/15 20:42:26 jayashri Exp $
+ * $Id: LifecycleImpl.java,v 1.50 2005/06/23 20:29:33 jayashri Exp $
  */
 
 /*
@@ -10,8 +10,8 @@
 package com.sun.faces.lifecycle;
 
 import com.sun.faces.util.Util;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
@@ -51,7 +51,8 @@ public class LifecycleImpl extends Lifecycle {
 
 
     // Log instance for this class
-    private static final Log log = LogFactory.getLog(LifecycleImpl.class);
+    private static Logger logger = Util.getLogger(Util.FACES_LOGGER 
+            + Util.LIFECYCLE_LOGGER);
 
 
     // ------------------------------------------------------ Instance Variables
@@ -93,8 +94,8 @@ public class LifecycleImpl extends Lifecycle {
                  (Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
 
-        if (log.isDebugEnabled()) {
-            log.debug("execute(" + context + ")");
+        if (logger.isLoggable(Level.FINE)) {
+            logger.fine("execute(" + context + ")");
         }
         
         // populate the FacesCompositeELResolver stack if a request is being
@@ -111,8 +112,8 @@ public class LifecycleImpl extends Lifecycle {
             phase((PhaseId) PhaseId.VALUES.get(i), phases[i], context);
 
             if (reload((PhaseId) PhaseId.VALUES.get(i), context)) {
-                if (log.isDebugEnabled()) {
-                    log.debug("Skipping rest of execute() because of a reload");
+                if (logger.isLoggable(Level.FINE)) {
+                    logger.fine("Skipping rest of execute() because of a reload");
                 }
                 context.renderResponse();
             }
@@ -130,8 +131,8 @@ public class LifecycleImpl extends Lifecycle {
                  (Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
 
-        if (log.isDebugEnabled()) {
-            log.debug("render(" + context + ")");
+        if (logger.isLoggable(Level.FINE)) {
+            logger.fine("render(" + context + ")");
         }
 
         if (!context.getResponseComplete()) {
@@ -149,8 +150,8 @@ public class LifecycleImpl extends Lifecycle {
                 (Util.getExceptionMessageString
                  (Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
-        if (log.isDebugEnabled()) {
-            log.debug("addPhaseListener(" + listener.getPhaseId().toString()
+        if (logger.isLoggable(Level.FINE)) {
+            logger.fine("addPhaseListener(" + listener.getPhaseId().toString()
                       + "," + listener);
         }
         synchronized (listeners) {
@@ -179,8 +180,8 @@ public class LifecycleImpl extends Lifecycle {
                 (Util.getExceptionMessageString
                  (Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
-        if (log.isDebugEnabled()) {
-            log.debug("removePhaseListener(" +
+        if (logger.isLoggable(Level.FINE)) {
+            logger.fine("removePhaseListener(" +
                       listener.getPhaseId().toString()
                       + "," + listener);
         }
@@ -198,8 +199,8 @@ public class LifecycleImpl extends Lifecycle {
     private void phase(PhaseId phaseId, Phase phase, FacesContext context)
         throws FacesException {
 
-        if (log.isTraceEnabled()) {
-            log.trace("phase(" + phaseId.toString() + "," + context + ")");
+        if (logger.isLoggable(Level.FINE)) {
+            logger.fine("phase(" + phaseId.toString() + "," + context + ")");
         }
 
 	int 
@@ -229,8 +230,8 @@ public class LifecycleImpl extends Lifecycle {
             }
 	}
 	catch (Throwable e) {
-	    if (log.isTraceEnabled()) {
-		log.trace("phase(" + phaseId.toString() + "," + context + 
+	    if (logger.isLoggable(Level.WARNING)) {
+                logger.warning("phase(" + phaseId.toString() + "," + context + 
 			  ") threw exception: " + e + " " + e.getMessage() +
 			  "\n" + Util.getStackTraceString(e));
 	    }
@@ -259,8 +260,8 @@ public class LifecycleImpl extends Lifecycle {
                 }
 	    }
 	    catch (Throwable e) {
-		if (log.isTraceEnabled()) {
-		    log.trace("phase(" + phaseId.toString() + "," + context + 
+		if (logger.isLoggable(Level.WARNING)) {
+                    logger.warning("phase(" + phaseId.toString() + "," + context + 
 			      ") threw exception: " + e + " " + e.getMessage() +
 			      "\n" + Util.getStackTraceString(e));
 		}
@@ -334,6 +335,12 @@ public class LifecycleImpl extends Lifecycle {
             if (requestServiced == null) {
                 CompositeELResolver compositeELResolverForJsp = 
                         appAssociate.getFacesELResolverForJsp();
+                if (compositeELResolverForJsp == null) {
+                    if (logger.isLoggable(Level.INFO)) {
+                        logger.info("FacesELResolvers not registered with Jsp.");
+                    }
+                    return;
+                }
                 compositeELResolverForJsp.add(new ImplicitObjectELResolverForJsp());
                 compositeELResolverForJsp.add(new ManagedBeanELResolver());
 

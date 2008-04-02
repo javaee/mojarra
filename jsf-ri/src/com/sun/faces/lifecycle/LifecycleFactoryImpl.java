@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleFactoryImpl.java,v 1.23 2005/05/16 20:16:20 rlubke Exp $
+ * $Id: LifecycleFactoryImpl.java,v 1.24 2005/06/23 20:29:33 jayashri Exp $
  */
 
 /*
@@ -21,47 +21,47 @@ import javax.faces.lifecycle.LifecycleFactory;
 
 import com.sun.faces.util.Util;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 /**
  * <B>LifecycleFactoryImpl</B> is the stock implementation of Lifecycle
  * in the JSF RI. <P>
  *
- * @version $Id: LifecycleFactoryImpl.java,v 1.23 2005/05/16 20:16:20 rlubke Exp $
+ * @version $Id: LifecycleFactoryImpl.java,v 1.24 2005/06/23 20:29:33 jayashri Exp $
  * @see	javax.faces.lifecycle.LifecycleFactory
  */
 
 public class LifecycleFactoryImpl extends LifecycleFactory {
 
-//
-// Protected Constants
-//
+    //
+    // Protected Constants
+    //
     static final int FIRST_PHASE = PhaseId.RESTORE_VIEW.getOrdinal();
     static final int LAST_PHASE = PhaseId.RENDER_RESPONSE.getOrdinal();
 
-// Log instance for this class
-    private static final Log log =
-        LogFactory.getLog(LifecycleFactoryImpl.class);
+    // Log instance for this class
+    private static Logger logger = Util.getLogger(Util.FACES_LOGGER 
+            + Util.LIFECYCLE_LOGGER);
 
-//
-// Class Variables
-//
+    //
+    // Class Variables
+    //
 
-//
-// Instance Variables
-//
+    //
+    // Instance Variables
+    //
 
-// Attribute Instance Variables
+    // Attribute Instance Variables
 
-// Relationship Instance Variables
+    // Relationship Instance Variables
 
     protected HashMap lifecycleMap = null;
     protected Object lock = null;
 
-//
-// Constructors and Initializers    
-//
+    //
+    // Constructors and Initializers    
+    //
 
     public LifecycleFactoryImpl() {
         super();
@@ -71,8 +71,8 @@ public class LifecycleFactoryImpl extends LifecycleFactory {
         lifecycleMap.put(LifecycleFactory.DEFAULT_LIFECYCLE,
                          new LifecycleWrapper(new LifecycleImpl(),
                                               false));
-        if (log.isDebugEnabled()) {
-            log.debug("Created Default Lifecycle");
+        if (logger.isLoggable(Level.FINE)) {
+            logger.fine("Created Default Lifecycle");
         }
         lock = new Object();
     }
@@ -117,8 +117,8 @@ public class LifecycleFactoryImpl extends LifecycleFactory {
             message = Util.getExceptionMessageString(
                 Util.LIFECYCLE_ID_NOT_FOUND_ERROR_MESSAGE_ID,
                 params);
-            if (log.isErrorEnabled()) {
-                log.error("Error: " + message);
+            if (logger.isLoggable(Level.WARNING)) {
+                logger.warning(message);
             }
             throw new IllegalArgumentException(message);
         }
@@ -129,8 +129,8 @@ public class LifecycleFactoryImpl extends LifecycleFactory {
             message = Util.getExceptionMessageString(
                 Util.LIFECYCLE_ID_ALREADY_ADDED_ID,
                 params);
-            if (log.isErrorEnabled()) {
-                log.error("Error: " + message);
+            if (logger.isLoggable(Level.WARNING)) {
+                logger.warning(message);
             }
             throw new IllegalStateException(message);
         }
@@ -141,8 +141,8 @@ public class LifecycleFactoryImpl extends LifecycleFactory {
             message = Util.getExceptionMessageString(
                 Util.PHASE_ID_OUT_OF_BOUNDS_ERROR_MESSAGE_ID,
                 params);
-            if (log.isErrorEnabled()) {
-                log.error("Error: " + message);
+            if (logger.isLoggable(Level.WARNING)) {
+                logger.warning(message);
             }
             throw new IllegalArgumentException(message);
         }
@@ -163,14 +163,15 @@ public class LifecycleFactoryImpl extends LifecycleFactory {
             String message =
                 Util.getExceptionMessageString(Util.LIFECYCLE_ID_ALREADY_ADDED_ID,
                                          params);
-            if (log.isErrorEnabled()) {
-                log.error("addLifecycle: " + message);
+            if (logger.isLoggable(Level.WARNING)) {
+                logger.warning(Util.getExceptionMessageString(
+                        Util.LIFECYCLE_ID_ALREADY_ADDED_ID,params));
             }
             throw new IllegalArgumentException(message);
         }
         lifecycleMap.put(lifecycleId, new LifecycleWrapper(lifecycle, false));
-        if (log.isDebugEnabled()) {
-            log.debug("addedLifecycle: " + lifecycleId + " " + lifecycle);
+        if (logger.isLoggable(Level.FINE)) {
+            logger.fine("addedLifecycle: " + lifecycleId + " " + lifecycle);
         }
     }
 
@@ -190,8 +191,8 @@ public class LifecycleFactoryImpl extends LifecycleFactory {
                 Util.getExceptionMessageString(
                     Util.CANT_CREATE_LIFECYCLE_ERROR_MESSAGE_ID,
                     params);
-            if (log.isErrorEnabled()) {
-                log.error("LifecycleId " + lifecycleId + " does not exist");
+            if (logger.isLoggable(Level.WARNING)) {
+                logger.warning("LifecycleId " + lifecycleId + " does not exist");
             }
             throw new IllegalArgumentException(message);
         }
@@ -200,8 +201,8 @@ public class LifecycleFactoryImpl extends LifecycleFactory {
         result = wrapper.instance;
         wrapper.created = true;
 
-        if (log.isTraceEnabled()) {
-            log.trace("getLifecycle: " + lifecycleId + " " + result);
+        if (logger.isLoggable(Level.FINE)) {
+            logger.fine("getLifecycle: " + lifecycleId + " " + result);
         }
         return result;
     }
