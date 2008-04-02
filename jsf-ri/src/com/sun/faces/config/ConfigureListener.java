@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListener.java,v 1.9 2004/03/31 18:48:25 eburns Exp $
+ * $Id: ConfigureListener.java,v 1.10 2004/04/07 03:51:01 eburns Exp $
  */
 /*
  * Copyright 2004 Sun Microsystems, Inc. All Rights Reserved.
@@ -109,7 +109,7 @@ import java.util.Set;
  * <code>Application</code> instance presumes that the implementation class
  * is <code>ApplicationImpl</code> or a subclass thereof.</p>
  */
-public final class ConfigureListener implements ServletContextListener {
+public class ConfigureListener implements ServletContextListener {
 
 
     // -------------------------------------------------------- Static Variables
@@ -946,7 +946,7 @@ public final class ConfigureListener implements ServletContextListener {
      * @param validateXml if true, validation is turned on during parsing.
      * @throws MalformedURLException if a URL cannot be formed correctly
      */
-    private Digester digester(boolean validateXml)
+    protected Digester digester(boolean validateXml)
         throws MalformedURLException {
         Digester digester = new Digester();
 
@@ -1161,7 +1161,7 @@ public final class ConfigureListener implements ServletContextListener {
      * @throws IOException  if an input/output error occurs
      * @throws SAXException if an XML parsing error occurs
      */
-    private void parse(Digester digester, URL url, FacesConfigBean fcb)
+    protected void parse(Digester digester, URL url, FacesConfigBean fcb)
         throws IOException, SAXException {
 
         if (log.isDebugEnabled()) {
@@ -1201,7 +1201,7 @@ public final class ConfigureListener implements ServletContextListener {
      *
      * @param sc the servlet context
      */
-    private boolean validateTheXml(ServletContext sc) {
+    protected boolean validateTheXml(ServletContext sc) {
         String validateXml = sc.getInitParameter(RIConstants.VALIDATE_XML);
         if (validateXml != null) {
             if (!(validateXml.equals("true")) &&

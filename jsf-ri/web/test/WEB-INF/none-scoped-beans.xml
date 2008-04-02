@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<!--
+ Copyright 2004 Sun Microsystems, Inc. All rights reserved.
+ SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+-->
+
+
+<!DOCTYPE faces-config PUBLIC
+ "-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.0//EN"
+ "http://java.sun.com/dtd/web-facesconfig_1_0.dtd">
+
+<faces-config>
+
+
+  <managed-bean>
+    <managed-bean-name>outer</managed-bean-name>
+    <managed-bean-class>
+      com.sun.faces.TestBean
+    </managed-bean-class>
+    <managed-bean-scope>none</managed-bean-scope>
+    <managed-property>
+      <property-name>inner</property-name>
+      <value>#{innerBean}</value>
+    </managed-property>
+  </managed-bean>
+
+  <managed-bean>
+    <managed-bean-name>mybean</managed-bean-name>
+    <managed-bean-class>
+      com.sun.faces.TestBean.InnerBean
+    </managed-bean-class>
+    <managed-bean-scope>none</managed-bean-scope>
+    <managed-property>
+      <property-name>two</property-name>
+      <value>This is the String Property</value>
+    </managed-property>
+  </managed-bean>
+
+</faces-config>

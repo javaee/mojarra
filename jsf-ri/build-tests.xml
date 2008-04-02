@@ -201,7 +201,7 @@
 
         <javac srcdir="${src.test.dir}"
             destdir="${out.test.dir}/WEB-INF/classes"
-            excludes="com/sun/faces/config/ConfigFileTestCase.java,com/sun/faces/config/TestConfigListener.java"
+            excludes="com/sun/faces/config/TestConfigListener.java"
             debug="${compile.debug}"
             optimize="${compile.optimize}"
             deprecation="${compile.deprecation}">
@@ -312,8 +312,8 @@
             <test name="com.sun.faces.application.TestNavigationHandler"/>
             <test name="com.sun.faces.application.TestStateManagerImpl"/>
             <test name="com.sun.faces.application.TestViewHandlerImpl"/>
-<!-- PENDING: return to running, these need to be rewritten
             <test name="com.sun.faces.config.ConfigFileTestCase"/>
+<!-- PENDING: return to running, these need to be rewritten
             <test name="com.sun.faces.config.TestConfigListener"/>
 -->
             <test name="com.sun.faces.config.TestManagedBeanFactory"/>
@@ -339,6 +339,7 @@
             <test name="com.sun.faces.renderkit.html_basic.TestComponentType"/>
             <test name="com.sun.faces.renderkit.html_basic.TestHtmlResponseWriter"/>
             <test name="com.sun.faces.renderkit.html_basic.TestRendererConversions"/>
+-->
 <!-- PENDING: return to running
             <test name="com.sun.faces.renderkit.html_basic.TestRenderers_1"/>
 -->
