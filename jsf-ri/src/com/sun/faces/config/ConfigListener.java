@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigListener.java,v 1.10 2003/05/05 19:57:55 craigmcc Exp $
+ * $Id: ConfigListener.java,v 1.11 2003/05/05 23:31:31 craigmcc Exp $
  */
 /*
  * Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
@@ -178,6 +178,10 @@ public class ConfigListener implements ServletContextListener
         if (log.isTraceEnabled()) {
             log.trace("CONFIG BASE SET IN CONTEXT...");
         }
+
+        // Configure RenderKits and Renderers as well
+        configBase.updateRenderKits();
+
     }
 
     public void contextDestroyed(ServletContextEvent e) {  
@@ -237,6 +241,10 @@ public class ConfigListener implements ServletContextListener
                                         ConfigParser configParser,
                                         ConfigBase configBase,
                                         String jarPath) {
+
+        if (log.isTraceEnabled()) {
+            log.trace("Scanning JAR at " + jarPath);
+        }
 
         // Calculate a URL for the config resource (if it exists) in this JAR
         URL resourceURL = null;

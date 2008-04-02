@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigBase.java,v 1.7 2003/05/05 15:19:49 rkitain Exp $
+ * $Id: ConfigBase.java,v 1.8 2003/05/05 23:31:31 craigmcc Exp $
  */
 
 /*
@@ -11,15 +11,21 @@ package com.sun.faces.config;
 
 
 import com.sun.faces.application.ApplicationImpl;
+import com.sun.faces.util.Util;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.application.ApplicationFactory;
+import javax.faces.render.Renderer;
+import javax.faces.render.RenderKit;
+import javax.faces.render.RenderKitFactory;
 
 
 /**
@@ -201,6 +207,42 @@ public class ConfigBase {
             return (Collections.EMPTY_MAP);
         } else {
             return (this.renderKits);
+        }
+    }
+
+    public void updateRenderKits() {
+        if (renderKits == null) {
+            return;
+        }
+        RenderKitFactory renderKitFactory = (RenderKitFactory)
+            FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
+        Iterator renderKitIds = renderKits.keySet().iterator();
+        while (renderKitIds.hasNext()) {
+            String renderKitId = (String) renderKitIds.next();
+            ConfigRenderKit configRenderKit = (ConfigRenderKit)
+                renderKits.get(renderKitId);
+            RenderKit renderKit =
+                renderKitFactory.getRenderKit(renderKitId);
+            // PENDING(craigmcc) -- Looks like this wil never return null,
+            // but it also looks like we still try to load the old
+            // RenderKitConfig.xml file???
+            Map renderersMap = configRenderKit.getRenderers();
+            Iterator rendererIds = renderersMap.keySet().iterator();
+            while (rendererIds.hasNext()) {
+                String rendererId = (String) rendererIds.next();
+                ConfigRenderer configRenderer = (ConfigRenderer)
+                    renderersMap.get(rendererId);
+                String rendererClass = configRenderer.getRendererClass();
+                try {
+                    Class rendererClazz =
+                        Util.loadClass(rendererClass, this);
+                    Renderer renderer = (Renderer)
+                        rendererClazz.newInstance();
+                    renderKit.addRenderer(rendererId, renderer);
+                } catch (Exception e) {
+                    throw new FacesException(e);
+                }
+            }
         }
     }
 

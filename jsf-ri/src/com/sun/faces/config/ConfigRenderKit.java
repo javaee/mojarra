@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigRenderKit.java,v 1.1 2003/05/02 07:05:50 eburns Exp $
+ * $Id: ConfigRenderKit.java,v 1.2 2003/05/05 23:31:32 craigmcc Exp $
  */
 
 /*
@@ -19,20 +19,21 @@ import java.util.Collections;
  */
 public class ConfigRenderKit extends ConfigFeature {
 
-    private String messageResourcesId;
+    private String renderKitId = "DEFAULT";
     public String getRenderKitId() {
-        return (this.messageResourcesId);
+        return (this.renderKitId);
     }
-    public void setRenderKitId(String messageResourcesId) {
-        this.messageResourcesId = messageResourcesId;
+    public void setRenderKitId(String renderKitId) {
+        this.renderKitId = renderKitId;
     }
 
-    private String messageResourcesClass;
+    private String renderKitClass =
+        "com.sun.faces.renderkit.html_basic.HtmlBasicRenderKit";
     public String getRenderKitClass() {
-        return (this.messageResourcesClass);
+        return (this.renderKitClass);
     }
-    public void setRenderKitClass(String messageResourcesClass) {
-        this.messageResourcesClass = messageResourcesClass;
+    public void setRenderKitClass(String renderKitClass) {
+        this.renderKitClass = renderKitClass;
     }
 
     private Map renderers = null;
