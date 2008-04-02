@@ -1,5 +1,5 @@
 /*
- * $Id: NamingContainerImpl.java,v 1.2 2002/12/17 23:30:51 eburns Exp $
+ * $Id: NamingContainerImpl.java,v 1.3 2002/12/18 17:44:14 eburns Exp $
  */
 
 /*
@@ -10,9 +10,10 @@
 package javax.faces.component;
 
 import java.util.HashMap;
+import java.io.Serializable;
 
 
-public class NamingContainerImpl extends Object implements NamingContainer {
+public class NamingContainerImpl extends Object implements NamingContainer, Serializable {
 
 
     // ------------------------------------------------------------- Attributes
