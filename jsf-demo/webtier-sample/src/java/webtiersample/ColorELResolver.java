@@ -17,6 +17,10 @@ package webtiersample;
 
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.ArrayList;
+import java.util.List;
+import java.beans.FeatureDescriptor;
+
 import javax.el.ELContext;
 import javax.el.ELException;
 import javax.el.ELResolver;
@@ -145,10 +149,27 @@ public class ColorELResolver
         }
 
         if (base == null) {
-            result = Arrays.asList(new String[] {"Color"}).iterator();
+            FeatureDescriptor desc = new FeatureDescriptor();
+            desc.setName("Color");
+            desc.setDisplayName("Color");            
+            desc.setValue(ELResolver.TYPE, ColorImplicitObject.class);
+            desc.setValue(ELResolver.RESOLVABLE_AT_DESIGN_TIME, false);
+            result = Arrays.asList(new FeatureDescriptor[] { desc }).iterator();
         } else if (base instanceof ColorImplicitObject) {
             // Return all color names
-            result = ColorImplicitObject.colorNameIterator();          
+            List<FeatureDescriptor> descList = 
+                new ArrayList<FeatureDescriptor>();
+            for (Iterator<String> i = ColorImplicitObject.colorNameIterator();
+                 i.hasNext(); ) {
+                String colorName = i.next();
+                FeatureDescriptor desc = new FeatureDescriptor();
+                desc.setName(colorName);
+                desc.setDisplayName(colorName);
+                desc.setValue(ELResolver.TYPE, String.class);
+                desc.setValue(ELResolver.RESOLVABLE_AT_DESIGN_TIME, false);
+                descList.add(desc);
+            }
+            result = descList.iterator();          
         } 
 
         // BeanELResolver will add to this iterator with the bean properties.
