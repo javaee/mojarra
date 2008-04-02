@@ -1,5 +1,5 @@
 /*
- * $Id: SubviewTag.java,v 1.10 2006/03/29 23:03:52 rlubke Exp $
+ * $Id: SubviewTag.java,v 1.11 2006/10/11 01:22:08 rlubke Exp $
  */
 
 /*
@@ -29,98 +29,86 @@
 
 package com.sun.faces.taglib.jsf_core;
 
-import com.sun.faces.application.ViewHandlerResponseWrapper;
-import java.io.IOException;
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIOutput;
 import javax.faces.webapp.UIComponentELTag;
 import javax.servlet.jsp.JspException;
 
+import java.io.IOException;
+
+import com.sun.faces.application.ViewHandlerResponseWrapper;
+
 public class SubviewTag extends UIComponentELTag {
 
-    //
-    // Protected Constants
-    //
 
-    //
-    // Class Variables
-    //
+    // ------------------------------------------------------------ Constructors
 
-    //
-    // Instance Variables
-    //
-
-    // Attribute Instance Variables
-
-
-    // Relationship Instance Variables
-
-    //
-    // Constructors and Initializers
-    //
 
     public SubviewTag() {
+
         super();
+
     }
 
-    //
-    // Class methods
-    //
 
-    //
-    // Accessors
-    //
-
-    //
-    // General Methods
-    //
-
-    public String getRendererType() {
-        return null;
-    }
+    // ---------------------------------------------------------- Public Methods
 
 
     public String getComponentType() {
+
         return "javax.faces.NamingContainer";
+
     }
-    
+
+   
+    public String getRendererType() {
+
+        return null;
+
+    }
+
+
+    // ------------------------------------------------------- Protected Methods
+
+
     protected UIComponent createVerbatimComponentFromBodyContent() {
-	UIOutput verbatim = (UIOutput)
-                super.createVerbatimComponentFromBodyContent();
+
+        UIOutput verbatim = (UIOutput)
+              super.createVerbatimComponentFromBodyContent();
         String value = null;
-	
-	Object response = getFacesContext().getExternalContext().getResponse();
-	if (response instanceof ViewHandlerResponseWrapper) {
-	    ViewHandlerResponseWrapper wrapped =
-		    (ViewHandlerResponseWrapper) response;
-	    try {
-		if (wrapped.isBytes()) {
-		    wrapped.flushContentToWrappedResponse();
-		} else if (wrapped.isChars()) {
-		    char [] chars = wrapped.getChars();
-		    if (null != chars && 0 < chars.length) {
+
+        Object response = getFacesContext().getExternalContext().getResponse();
+        if (response instanceof ViewHandlerResponseWrapper) {
+            ViewHandlerResponseWrapper wrapped =
+                  (ViewHandlerResponseWrapper) response;
+            try {
+                if (wrapped.isBytes()) {
+                    wrapped.flushContentToWrappedResponse();
+                } else if (wrapped.isChars()) {
+                    char[] chars = wrapped.getChars();
+                    if (null != chars && 0 < chars.length) {
                         if (null != verbatim) {
                             value = (String) verbatim.getValue();
                         }
-			verbatim = super.createVerbatimComponent();
+                        verbatim = super.createVerbatimComponent();
                         if (null != value) {
                             verbatim.setValue(value + new String(chars));
-                        }
-                        else {
+                        } else {
                             verbatim.setValue(new String(chars));
                         }
-		    }
-		}
-		wrapped.clearWrappedResponse();
-	    } catch (IOException e) {
-		throw new FacesException(new JspException("Can't write content above <f:view> tag"
-			+ " " + e.getMessage()));
-	    }
-	}
-	
-	return verbatim;
+                    }
+                }
+                wrapped.clearWrappedResponse();
+            } catch (IOException e) {
+                throw new FacesException(new JspException(
+                      "Can't write content above <f:view> tag"
+                      + " " + e.getMessage()));
+            }
+        }
+
+        return verbatim;
+
     }
-    
 
 }
