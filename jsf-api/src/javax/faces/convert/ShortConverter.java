@@ -1,5 +1,5 @@
 /*
- * $Id: ShortConverter.java,v 1.2 2003/08/12 17:39:16 craigmcc Exp $
+ * $Id: ShortConverter.java,v 1.3 2003/08/12 19:05:31 craigmcc Exp $
  */
 
 /*
@@ -31,7 +31,7 @@ public class ShortConverter implements Converter, StateHolder {
 
         try {
             return (Short.valueOf(value));
-        } catch (ConverterException e) {
+        } catch (Exception e) {
             throw new ConverterException(e);
         }
 
@@ -44,7 +44,7 @@ public class ShortConverter implements Converter, StateHolder {
 
         try {
             return (Short.toString(((Short) value).shortValue()));
-        } catch (ConverterException e) {
+        } catch (Exception e) {
             throw new ConverterException(e);
         }
 

@@ -1,5 +1,5 @@
 /*
- * $Id: BooleanConverter.java,v 1.2 2003/08/12 17:39:15 craigmcc Exp $
+ * $Id: BooleanConverter.java,v 1.3 2003/08/12 19:05:30 craigmcc Exp $
  */
 
 /*
@@ -44,7 +44,7 @@ public class BooleanConverter implements Converter, StateHolder {
 
         try {
             return (Boolean.toString(((Boolean) value).booleanValue()));
-        } catch (ConverterException e) {
+        } catch (Exception e) {
             throw new ConverterException(e);
         }
 

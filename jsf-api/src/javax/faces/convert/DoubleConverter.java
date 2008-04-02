@@ -1,5 +1,5 @@
 /*
- * $Id: DoubleConverter.java,v 1.2 2003/08/12 17:39:16 craigmcc Exp $
+ * $Id: DoubleConverter.java,v 1.3 2003/08/12 19:05:30 craigmcc Exp $
  */
 
 /*
@@ -31,7 +31,7 @@ public class DoubleConverter implements Converter, StateHolder {
 
         try {
             return (Double.valueOf(value));
-        } catch (ConverterException e) {
+        } catch (Exception e) {
             throw new ConverterException(e);
         }
 
@@ -44,7 +44,7 @@ public class DoubleConverter implements Converter, StateHolder {
 
         try {
             return (Double.toString(((Double) value).doubleValue()));
-        } catch (ConverterException e) {
+        } catch (Exception e) {
             throw new ConverterException(e);
         }
 

@@ -1,5 +1,5 @@
 /*
- * $Id: ByteConverter.java,v 1.2 2003/08/12 17:39:15 craigmcc Exp $
+ * $Id: ByteConverter.java,v 1.3 2003/08/12 19:05:30 craigmcc Exp $
  */
 
 /*
@@ -31,7 +31,7 @@ public class ByteConverter implements Converter, StateHolder {
 
         try {
             return (Byte.valueOf(value));
-        } catch (ConverterException e) {
+        } catch (Exception e) {
             throw new ConverterException(e);
         }
 
@@ -44,7 +44,7 @@ public class ByteConverter implements Converter, StateHolder {
 
         try {
             return (Byte.toString(((Byte) value).byteValue()));
-        } catch (ConverterException e) {
+        } catch (Exception e) {
             throw new ConverterException(e);
         }
 
