@@ -1,0 +1,191 @@
+<?xml version="1.0"?>
+
+<!--
+ Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+-->
+
+<!--
+
+  This is a self contained build.xml file that packages the contents of
+  the current directory into a WAR for distribution in a Servlet
+  container.
+  
+-->
+
+<project name="cardemo" default="deploy-app" basedir=".">
+  <target name="init">
+      <tstamp/>
+  </target>
+
+  <property name="build" value="${basedir}/build" />
+  <property name="context" value="cardemo" />
+  <property environment="myenv" />
+
+  <!-- required jars for making this self contained -->
+  <property name="servlet23.jar" 
+            value="${myenv.JWSDP_HOME}/common/lib/servlet.jar"/>
+  <property name="commons-beanutils.jar" 
+            value="WEB-INF/lib/commons-beanutils.jar"/>
+  <property name="commons-logging.jar" 
+            value="WEB-INF/lib/commons-logging.jar"/>
+  <property name="commons-digester.jar" 
+            value="WEB-INF/lib/commons-digester.jar"/>
+  <property name="jsf-api.jar" 
+            value="WEB-INF/lib/jsf-api.jar"/>
+  <property name="jsf-ri.jar" 
+            value="WEB-INF/lib/jsf-ri.jar"/>
+  <property name="jstl.jar" 
+            value="WEB-INF/lib/jstl.jar"/>
+  <property name="standard.jar" 
+            value="WEB-INF/lib/standard.jar"/>
+
+  <property file="${user.home}/build.properties"/>   <!-- User local        -->
+  <property file="build.properties"/>                <!-- Component local   -->
+  <property file="../build.properties"/>             <!-- Commons local     -->
+
+  <path id="classpath">
+    <fileset dir="${build}/WEB-INF/lib" includes="*.jar"/>
+    <pathelement location="${build.home}/WEB-INF/classes"/>
+    <pathelement location="${servlet23.jar}"/>
+  </path>
+
+  <target name="clean" depends="clean-dist">
+    <delete dir="${build}" />
+    <delete file="cardemo.war" />
+  </target>
+
+  <target name="clean-dist">
+    <delete file="${myenv.JWSDP_HOME}/webapps/cardemo.war" />
+    <delete dir="${myenv.JWSDP_HOME}/webapps/cardemo" />
+  </target>
+
+  <target name="verifyPreconditions">
+
+    <antcall target="checkRequiredFile">
+       <param name="file" value="${servlet23.jar}"/>
+       <param name="fail.message" value="A jar file containing the Servlet 2.3 and JSP1.2 classes is required to compile cardemo.  Please define the property servlet23.jar in your build.properties file and ensure that the file exists."/>
+    </antcall>
+
+    <antcall target="checkRequiredFile">
+       <param name="file" value="${commons-beanutils.jar}"/>
+       <param name="fail.message" value="${commons-beanutils.jar} must exist."/>
+    </antcall>
+
+    <antcall target="checkRequiredFile">
+       <param name="file" value="${commons-digester.jar}"/>
+       <param name="fail.message" value="${commons-digester.jar} must exist."/>
+    </antcall>
+
+    <antcall target="checkRequiredFile">
+       <param name="file" value="${commons-logging.jar}"/>
+       <param name="fail.message" value="${commons-logging.jar} must exist."/>
+    </antcall>
+
+    <antcall target="checkRequiredFile">
+       <param name="file" value="${jsf-api.jar}"/>
+       <param name="fail.message" value="${jsf-api.jar} must exist."/>
+    </antcall>
+
+    <antcall target="checkRequiredFile">
+       <param name="file" value="${jsf-ri.jar}"/>
+       <param name="fail.message" value="${jsf-ri.jar} must exist."/>
+    </antcall>
+
+    <antcall target="checkRequiredFile">
+       <param name="file" value="${standard.jar}"/>
+       <param name="fail.message" value="${standard.jar} must exist."/>
+    </antcall>
+
+    <antcall target="checkRequiredFile">
+       <param name="file" value="${jstl.jar}"/>
+       <param name="fail.message" value="${jstl.jar} must exist."/>
+    </antcall>
+
+  </target>
+
+  <target name="prepare" depends="init,verifyPreconditions,clean-dist"
+   description="Create build directories.">
+    <mkdir dir="${build}" />
+    <mkdir dir="${build}/pictures" />
+    <mkdir dir="${build}/resources"/>
+    <mkdir dir="${build}/WEB-INF" />
+    <mkdir dir="${build}/WEB-INF/classes" />
+    <mkdir dir="${build}/WEB-INF/lib" />
+    <copy todir="${build}/WEB-INF/lib" >
+      <fileset dir="${basedir}/WEB-INF/lib">
+        <include name="*.jar"/>
+      </fileset>
+    </copy>
+  </target>
+
+  <target name="build-app" depends="prepare" 
+     description="Compile app Java files and copy HTML and JSP pages" >
+    <javac srcdir="${basedir}/WEB-INF/src" destdir="${build}/WEB-INF/classes">
+     	<classpath refid="classpath"/>
+    </javac>
+    <copy todir="${build}/WEB-INF">
+      <fileset dir="${basedir}/WEB-INF">
+        <include name="**/*" />
+      </fileset>
+    </copy>
+    <copy todir="${build}">
+      <fileset dir=".">
+        <include name="*.html" />
+        <include name="*.jsp" />
+      </fileset>
+    </copy>
+    <copy todir="${build}/pictures">
+      <fileset dir="./pictures">
+	<include name="*.gif" />
+	<include name="*.jpg" />
+	<include name="*.jpeg" />
+      </fileset>	
+    </copy>
+    <copy todir="${build}/resources">
+      <fileset dir="./resources">
+        <include name="*properties" />
+      </fileset>
+    </copy>      
+
+  </target>
+
+  <target name="build-war" depends="build-app" >
+    <jar jarfile="${basedir}/cardemo.war"
+         basedir="${build}"/>
+  </target>
+
+  <target name="deploy-app" depends="build-war"
+     description="Deploy app to webapps.">
+    <copy todir="${myenv.JWSDP_HOME}/webapps">
+      <fileset dir="${basedir}" >
+         <include name="cardemo.war" />
+      </fileset>
+    </copy>
+  </target>	 
+
+  <!-- =================================================================== -->
+  <!-- Scripts used with antcall for checking for required classes or jars -->
+  <!-- Must provide "class" or "file" and "fail.message" parameters        -->
+  <!-- =================================================================== -->
+  <target name="checkRequiredClass">
+    <available classname="${class}" property="requirement.satisfied"/>
+    <antcall target="checkRequired.fail"/>
+  </target>
+  <target name="checkRequiredFile">
+    <available file="${file}" property="requirement.satisfied"/>
+    <antcall target="checkRequired.fail"/>
+  </target>
+  <target name="checkOptionalFile">
+    <available file="${file}" property="requirement.satisfied"/>
+    <antcall target="checkRequired.warn"/>
+  </target>
+  <target name="checkRequired.fail" unless="requirement.satisfied">
+    <fail message="${fail.message}"/>
+  </target>
+  <target name="checkRequired.warn" unless="requirement.satisfied">
+    <echo message="WARNING: ${warn.message}"/>
+  </target>
+  
+</project>
+

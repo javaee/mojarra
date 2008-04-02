@@ -59,6 +59,10 @@
       <param name="demoDir" value="guessNumber"/>
     </antcall>
 
+    <ant target="clean" dir="cardemo"/>
+    <antcall target="deleteJarsFromDemo">
+      <param name="demoDir" value="cardemo"/>
+    </antcall>
 
 
     <delete> 
@@ -82,7 +86,10 @@
       <param name="demoDir" value="guessNumber"/>
     </antcall>
 
-
+    <antcall target="copyJarsToDemo">
+      <param name="demoDir" value="cardemo"/>
+    </antcall>
+    
   </target>
 
   <target name="copyJarsToDemo">
@@ -116,6 +123,7 @@
 
     <ant inheritAll="false" dir="${basedir}/helloDuke"/>
     <ant inheritAll="false" dir="${basedir}/guessNumber"/>
+    <ant inheritAll="false" dir="${basedir}/cardemo"/>
 
   </target>
 
