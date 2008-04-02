@@ -1,5 +1,5 @@
 /*
- * $Id: ResponseStateManager.java,v 1.25 2005/08/22 22:08:09 ofung Exp $
+ * $Id: ResponseStateManager.java,v 1.26 2006/01/23 21:01:43 edburns Exp $
  */
 
 /*
@@ -69,6 +69,8 @@ public abstract class ResponseStateManager {
     /**
      * <p>Implementations must use this value as the name and id of the client
      * parameter in which to save the state between requests.</p>
+     *
+     * @since 1.2
      */
 
     public static final String VIEW_STATE_PARAM = "javax.faces.ViewState";
@@ -262,9 +264,24 @@ public abstract class ResponseStateManager {
      * previous request to which this request is a postback,
      * <code>false</code> otherwise.</p>
      *
+     * <p>The implementation if this method for the Standard HTML
+     * RenderKit must consult the {@link ExternalContext}'s
+     * <code>requestParameterMap</code> and return <code>true</code> if
+     * and only if there is a key equal to the value of the symbolic
+     * constant {@link #VIEW_STATE_PARAM}.</p>
+     *
+     * <p>For backwards compatability with implementations of
+     * <code>ResponseStateManager</code> prior to JSF 1.2, a default
+     * implementation is provided that consults the {@link
+     * ExternalContext}'s <code>requestParameterMap</code> and return
+     * <code>true</code> if its size is greater than 0.</p>
+     *
+     * @since 1.2
      */
 
-    public abstract boolean isPostback(FacesContext context);
+    public boolean isPostback(FacesContext context) {
+        return (0 < context.getExternalContext().getRequestParameterMap().size());
+    }
 
 
 }

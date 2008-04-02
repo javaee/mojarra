@@ -1,5 +1,5 @@
 /* 
- * $Id: ViewHandlerImpl.java,v 1.63 2006/01/19 17:47:04 edburns Exp $ 
+ * $Id: ViewHandlerImpl.java,v 1.64 2006/01/23 21:01:43 edburns Exp $ 
  */ 
 
 
@@ -66,7 +66,7 @@ import com.sun.faces.util.MessageUtils;
 /**
  * <B>ViewHandlerImpl</B> is the default implementation class for ViewHandler.
  *
- * @version $Id: ViewHandlerImpl.java,v 1.63 2006/01/19 17:47:04 edburns Exp $
+ * @version $Id: ViewHandlerImpl.java,v 1.64 2006/01/23 21:01:43 edburns Exp $
  * @see javax.faces.application.ViewHandler
  */
 public class ViewHandlerImpl extends ViewHandler {
@@ -157,10 +157,7 @@ public class ViewHandlerImpl extends ViewHandler {
             newWriter = oldWriter.cloneWithWriter(strWriter);
         } else {
             newWriter = renderKit.createResponseWriter(strWriter, null,
-                    request.getCharacterEncoding());
-            newWriter = renderKit.createResponseWriter(strWriter, null,
-                    request.getCharacterEncoding());
-            
+                    request.getCharacterEncoding());            
         }
         context.setResponseWriter(newWriter);
         
@@ -171,12 +168,12 @@ public class ViewHandlerImpl extends ViewHandler {
         newWriter.endDocument();
         
         // replace markers in the body content and write it to response.
+
         ResponseWriter responseWriter = null;
         if (null != oldWriter) {
             responseWriter = oldWriter.cloneWithWriter(response.getWriter());
         } else {
-            responseWriter = renderKit.createResponseWriter(response.getWriter(),
-                    null, request.getCharacterEncoding());
+            responseWriter = newWriter.cloneWithWriter(response.getWriter());
         }
         context.setResponseWriter(responseWriter);
         

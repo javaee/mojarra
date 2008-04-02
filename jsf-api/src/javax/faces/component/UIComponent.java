@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.135 2005/12/05 16:42:44 edburns Exp $
+ * $Id: UIComponent.java,v 1.136 2006/01/23 21:01:42 edburns Exp $
  */
 
 /*
@@ -31,10 +31,14 @@ package javax.faces.component;
 
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import javax.el.ELContext;
+import javax.el.ELException;
 import javax.el.ValueExpression;
+import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
 import javax.faces.el.ValueBinding;
 import javax.faces.event.AbortProcessingException;
@@ -157,7 +161,19 @@ public abstract class UIComponent implements StateHolder {
      *  is <code>null</code>
      *
      */
-    public abstract ValueExpression getValueExpression(String name);
+    public ValueExpression getValueExpression(String name) {
+
+        if (name == null) {
+            throw new NullPointerException();
+        }
+        if (bindings == null) {
+            return (null);
+        } else {
+            return ((ValueExpression) bindings.get(name));
+        }
+
+    }
+
 
     /**
      * <p>Set the {@link ValueExpression} used to calculate the value
@@ -191,7 +207,37 @@ public abstract class UIComponent implements StateHolder {
      *  is <code>null</code>
      *
      */
-    public abstract void setValueExpression(String name, ValueExpression expression);
+    public void setValueExpression(String name, ValueExpression binding) {
+
+        if (name == null) {
+            throw new NullPointerException();
+        }  else            if ("id".equals(name) || "parent".equals(name)) {
+                throw new IllegalArgumentException();
+            }
+        if (binding != null) {
+            if (!binding.isLiteralText()) {
+                if (bindings == null) {
+                    bindings = new HashMap<String, ValueExpression>();
+                }
+                bindings.put(name, binding);
+            }  else {
+                ELContext context = FacesContext.getCurrentInstance().getELContext();
+                try {
+                    getAttributes().put(name, binding.getValue(context));
+                } catch (ELException ele) {
+                    throw new FacesException(ele);
+                }
+            }
+        }  else {
+            if (bindings != null) {
+                bindings.remove(name);
+                if (bindings.size()  == 0) {
+                    bindings = null;
+                }
+            }
+        }
+
+    }
 
     // -------------------------------------------------------------- Properties
 
@@ -650,7 +696,27 @@ public abstract class UIComponent implements StateHolder {
      * @throws NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
-    public abstract void encodeAll(FacesContext context) throws IOException;
+    
+    public void encodeAll(FacesContext context) throws IOException {
+        if (!isRendered()) {
+            return;
+        }
+
+        encodeBegin(context);
+        if (getRendersChildren()) {
+            encodeChildren(context);
+        }
+        else            if (this.getChildCount() > 0) {
+                Iterator kids = getChildren().iterator();
+                while (kids.hasNext()) {
+                    UIComponent kid = (UIComponent) kids.next();
+                    kid.encodeAll(context);
+                }
+            }
+        
+        encodeEnd(context);
+    }
+
 
 
     // -------------------------------------------------- Event Listener Methods
@@ -881,5 +947,14 @@ public abstract class UIComponent implements StateHolder {
      * @param context {@link FacesContext} for the current request
      */
     protected abstract Renderer getRenderer(FacesContext context);
+
+    // The set of ValueExpressions for this component, keyed by property
+    // name This collection is lazily instantiated
+    protected Map<String,ValueExpression> bindings = null;
+
+
+
+
+
 
 }
