@@ -1,5 +1,5 @@
 /*
- * $Id: TestUpdateModelValuesPhase.java,v 1.18 2003/03/12 19:53:44 rkitain Exp $
+ * $Id: TestUpdateModelValuesPhase.java,v 1.19 2003/04/03 18:39:05 rkitain Exp $
  */
 
 /*
@@ -25,16 +25,20 @@ import javax.faces.lifecycle.Lifecycle;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIForm;
 import javax.faces.component.UIInput;
+import javax.faces.component.UIOutput;
 import javax.faces.tree.Tree;
 import com.sun.faces.context.FacesContextImpl;
 import com.sun.faces.lifecycle.Phase;
 import com.sun.faces.ServletFacesTestCase;
 import com.sun.faces.TestBean;
 import com.sun.faces.tree.SimpleTreeImpl;
+import com.sun.faces.util.Util;
 
 import java.io.IOException;
 
 import java.util.Iterator;
+
+import com.sun.faces.util.DebugUtil;
 
 /**
  *
@@ -42,7 +46,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestUpdateModelValuesPhase.java,v 1.18 2003/03/12 19:53:44 rkitain Exp $
+ * @version $Id: TestUpdateModelValuesPhase.java,v 1.19 2003/04/03 18:39:05 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -89,13 +93,14 @@ public class TestUpdateModelValuesPhase extends ServletFacesTestCase
 
 public void testUpdateNormal()
 {
+//DebugUtil.waitForDebugger();
     UIForm form = null;
     TestUIInput userName = null;
     TestUIInput userName1 = null;
     TestUIInput userName2 = null;
     Tree tree = null;
     TestBean testBean = (TestBean)
-	(getFacesContext().getHttpSession()).getAttribute("TestBean");
+	(getFacesContext().getExternalContext().getSessionMap()).get("TestBean");
     String value = null;
     Phase updateModelValues = new UpdateModelValuesPhase();
     form = new UIForm();
@@ -104,19 +109,19 @@ public void testUpdateNormal()
     userName = new TestUIInput();
     userName.setComponentId("userName");
     userName.setValue("one");
-    userName.setModelReference("${TestBean.one}");
+    userName.setValueRef("TestBean.one");
     userName.testSetValid(true);
     form.addChild(userName);
     userName1 = new TestUIInput();
     userName1.setComponentId("userName1");
     userName1.setValue("one");
-    userName1.setModelReference("${TestBean.one}");
+    userName1.setValueRef("TestBean.one");
     userName1.testSetValid(true);
     form.addChild(userName1);
     userName2 = new TestUIInput();
     userName2.setComponentId("userName2");
     userName2.setValue("one");
-    userName2.setModelReference("${TestBean.one}");
+    userName2.setValueRef("TestBean.one");
     userName2.testSetValid(true);
     form.addChild(userName2);
 
@@ -128,6 +133,8 @@ public void testUpdateNormal()
         !((FacesContextImpl)getFacesContext()).getResponseComplete());
 
     assertTrue(null == userName.getValue());
+
+
 
     assertTrue(testBean.getOne().equals("one"));
     assertTrue(false == (getFacesContext().getMessages().hasNext()));
@@ -149,18 +156,18 @@ public void testUpdateFailed()
     userName.setComponentId("userName");
     userName.setValue("one");
     userName.testSetValid(true);
-    userName.setModelReference("${UserBean.one}");
+    userName.setValueRef("foobar");
     form.addChild(userName);
     userName1 = new TestUIInput();
     userName1.setComponentId("userName1");
     userName1.setValue("one");
     userName1.testSetValid(true);
-    userName1.setModelReference("${TestBean.one}");
+    userName1.setValueRef("TestBean.one");
     form.addChild(userName1);
     userName2 = new TestUIInput();
     userName2.setComponentId("userName2");
     userName2.setValue("one");
-    userName2.setModelReference("${TestBean.one}");
+    userName2.setValueRef("TestBean.one");
     userName2.testSetValid(true);
     form.addChild(userName2);
 
@@ -173,7 +180,6 @@ public void testUpdateFailed()
     updateModelValues.execute(getFacesContext());
     assertTrue(((FacesContextImpl)getFacesContext()).getRenderResponse());
 
-    assertTrue(null != userName.getValue());
     assertTrue(true == (getFacesContext().getMessages().hasNext()));
     
 }

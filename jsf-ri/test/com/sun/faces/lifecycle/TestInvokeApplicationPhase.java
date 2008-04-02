@@ -1,5 +1,5 @@
 /*
- * $Id: TestInvokeApplicationPhase.java,v 1.12 2003/03/12 19:53:42 rkitain Exp $
+ * $Id: TestInvokeApplicationPhase.java,v 1.13 2003/04/03 18:39:04 rkitain Exp $
  */
 
 /*
@@ -19,14 +19,10 @@ import org.mozilla.util.ParameterCheck;
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.context.FacesContext;
-//import javax.faces.lifecycle.Phase;
 import javax.faces.lifecycle.Lifecycle;
-import javax.faces.lifecycle.ApplicationHandler;
 import javax.faces.component.UIInput;
 import javax.faces.tree.Tree;
 import javax.faces.event.FacesEvent;
-import javax.faces.event.FormEvent;
-import javax.faces.event.CommandEvent;
 import com.sun.faces.ServletFacesTestCase;
 import com.sun.faces.context.FacesContextImpl;
 import com.sun.faces.lifecycle.LifecycleImpl;
@@ -43,7 +39,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestInvokeApplicationPhase.java,v 1.12 2003/03/12 19:53:42 rkitain Exp $
+ * @version $Id: TestInvokeApplicationPhase.java,v 1.13 2003/04/03 18:39:04 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -93,32 +89,6 @@ public static final String DID_FORM = "didForm";
 
 public void testInvokeNormal()
 {
-    System.setProperty(DID_COMMAND, EMPTY);
-    System.setProperty(DID_FORM, EMPTY);
-    final UIInput root = new UIInput();
-    Lifecycle life = new LifecycleImpl();
-    Tree tree = new SimpleTreeImpl(getFacesContext(),
-				root, "default.xul");
-    ApplicationHandler appHandler = new ApplicationHandler() {
-        public boolean processEvent(FacesContext context, FacesEvent event){
-		System.setProperty(DID_FORM, DID_FORM);
-                System.setProperty(DID_COMMAND, DID_COMMAND);
-		assertTrue(root == event.getComponent());
-                return true;
-	    }
-	};
-    Phase invokeApplicationPhase = new InvokeApplicationPhase(life);
-    getFacesContext().setTree(tree);
-
-    life.setApplicationHandler(appHandler);
-    getFacesContext().addApplicationEvent(new CommandEvent(root, "command"));
-    getFacesContext().addApplicationEvent(new FormEvent(root, "formName",
-							"commandName"));
-    invokeApplicationPhase.execute(getFacesContext());
-    assertTrue(!((FacesContextImpl)getFacesContext()).getRenderResponse() &&
-        !((FacesContextImpl)getFacesContext()).getResponseComplete());
-    assertTrue(System.getProperty(DID_COMMAND).equals(DID_COMMAND));
-    assertTrue(System.getProperty(DID_FORM).equals(DID_FORM));
 }
 
 public void testInvokeNoOp()

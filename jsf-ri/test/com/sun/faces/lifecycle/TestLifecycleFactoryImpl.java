@@ -1,5 +1,5 @@
 /*
- * $Id: TestLifecycleFactoryImpl.java,v 1.6 2003/03/12 19:53:42 rkitain Exp $
+ * $Id: TestLifecycleFactoryImpl.java,v 1.7 2003/04/03 18:39:05 rkitain Exp $
  */
 
 /*
@@ -10,6 +10,8 @@
 // TestLifecycleFactoryImpl.java
 
 package com.sun.faces.lifecycle;
+
+import com.sun.faces.ServletFacesTestCase;
 
 import org.apache.cactus.ServletTestCase;
 
@@ -27,14 +29,14 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestLifecycleFactoryImpl.java,v 1.6 2003/03/12 19:53:42 rkitain Exp $
+ * @version $Id: TestLifecycleFactoryImpl.java,v 1.7 2003/04/03 18:39:05 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
  *
  */
 
-public class TestLifecycleFactoryImpl extends ServletTestCase
+public class TestLifecycleFactoryImpl extends ServletFacesTestCase
 {
 //
 // Protected Constants
