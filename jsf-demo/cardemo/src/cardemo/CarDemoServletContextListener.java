@@ -1,5 +1,5 @@
 /*
- * $Id: CarDemoServletContextListener.java,v 1.10 2003/05/01 20:52:58 eburns Exp $
+ * $Id: CarDemoServletContextListener.java,v 1.11 2003/05/04 03:21:37 jvisvanathan Exp $
  */
 /*
  * Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
@@ -113,34 +113,13 @@ public class CarDemoServletContextListener implements ServletContextListener
 
     public void contextInitialized(ServletContextEvent e) 
     {
-	/***********
-// PENDING(edburns): this stuff is replaced by the faces-config.xml file
-        RenderKitFactory rkFactory = 
-		(RenderKitFactory) FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
-	RenderKit defaultRenderKit =
-		rkFactory.getRenderKit(RenderKitFactory.DEFAULT_RENDER_KIT);
-	defaultRenderKit.addRenderer("Area", new AreaRenderer());
-
-        LifecycleFactory factory = (LifecycleFactory)
-            FactoryFinder.getFactory(FactoryFinder.LIFECYCLE_FACTORY);
-        Lifecycle lifecycle =
-            factory.getLifecycle(LifecycleFactory.DEFAULT_LIFECYCLE); 
-
-        // register CreditCardConverter
-        ConverterFactory convertFactory =
-                (ConverterFactory) FactoryFinder.getFactory(
-                FactoryFinder.CONVERTER_FACTORY);
-        convertFactory.addConverter("creditcard", new CreditCardConverter());
-
-        // register CarDemo MessageResources.
-        MessageResourcesFactory mrFactory =
-                (MessageResourcesFactory) FactoryFinder.getFactory(
-                FactoryFinder.MESSAGE_RESOURCES_FACTORY);
-        MessageResourcesImpl carResource = 
-                new MessageResourcesImpl("carResources", 
-                "cardemo/CarDemoResources");
-        mrFactory.addMessageResources("carResources", carResource);
-
+	RenderKitFactory rkFactory = (RenderKitFactory) FactoryFinder.
+         getFactory(FactoryFinder.RENDER_KIT_FACTORY);
+        RenderKit defaultRenderKit =
+                rkFactory.getRenderKit(RenderKitFactory.DEFAULT_RENDER_KIT);
+        
+        defaultRenderKit.addRenderer("Area", new AreaRenderer());
+       
         // following is  a simulation of business logic that would 
         // look up the hot spots of an image map from a 
         // map from a database, so that image maps could be rendered
@@ -153,8 +132,8 @@ public class CarDemoServletContextListener implements ServletContextListener
 
         e.getServletContext().setAttribute("gerA", new ImageArea("poly", "Germany", "324,163,323,170,322,172,320,173,320,175,321,176,321,177,321,179,321,180,319,180,318,180,317,182,316,183,315,181,314,181,313,181,312,181,311,180,310,177,310,177,307,176,307,173,307,172,308,170,309,169,309,167,309,166,311,165,311,163,311,161,312,159,314,159,316,160,316,162,318,162,319,162"));
 
-        e.getServletContext().setAttribute("fraA", new ImageArea("poly", "France", "312,178,308,182,310,184,310,187,310,189,309,191,307,192,305,192,304,192,304,193,303,195,302,195,300,194,299,194,297,194,295,193,295,191,295,189,294,186,293,184,292,182,291,181,289,180,288,178,288,176,289,175,292,175,293,176,294,174,296,174,297,174,299,174,299,172,300,170,302,170,304,172,306,173,308,173,310,174"));
-	********/
+        e.getServletContext().setAttribute("fraA", new ImageArea("poly", "France", "312,178,308,182,310,184,310,187,310,189,309,191,307,192,305,192,304,192,304,193,303,195,302,195,300,194,299,194,297,194,295,193,295,191,295,189,294,186,293,184,292,182,291,181,289,180,288,178,288,176,289,175,292,175,293,176,294,174,296,174,297,174,299,174,299,172,300,170,302,170,304,172,306,173,308,173,310,174"));  
+      
     }
 
     public void contextDestroyed(ServletContextEvent e)
@@ -162,7 +141,7 @@ public class CarDemoServletContextListener implements ServletContextListener
         e.getServletContext().removeAttribute("NA");
         e.getServletContext().removeAttribute("SA");
         e.getServletContext().removeAttribute("gerA");
-        e.getServletContext().removeAttribute("fraA");
+        e.getServletContext().removeAttribute("fraA"); 
     }
 
 } // end of class CarDemoServletContextListener
