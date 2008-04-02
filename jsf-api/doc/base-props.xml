@@ -25,10 +25,10 @@
       </property>
 
       <property>
-        <description>The component reference used to wire up this component to a component property of a JavaBean class</description>
+        <description>The value binding expression used to wire up this component to a component property of a JavaBean class</description>
         <display-name></display-name>
         <icon></icon>
-        <property-name>componentRef</property-name>
+        <property-name>binding</property-name>
         <property-class>java.lang.String</property-class>
       </property>
 

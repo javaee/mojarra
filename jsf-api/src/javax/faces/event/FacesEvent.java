@@ -1,5 +1,5 @@
 /*
- * $Id: FacesEvent.java,v 1.7 2003/09/25 23:21:45 craigmcc Exp $
+ * $Id: FacesEvent.java,v 1.8 2003/12/17 15:10:53 rkitain Exp $
  */
 
 /*
@@ -56,6 +56,34 @@ public abstract class FacesEvent extends EventObject {
 
         return ((UIComponent) getSource());
 
+    }
+
+    private PhaseId phaseId = PhaseId.ANY_PHASE;
+
+    /**
+     * <p>Return the identifier of the request processing phase during
+     * which this event should be delivered.  Legal values are the
+     * singleton instances defined by the {@link PhaseId} class,
+     * including <code>PhaseId.ANY_PHASE</code>, which is the default
+     * value.</p>
+     */
+    public PhaseId getPhaseId() {
+	return phaseId;
+    }
+   
+    /**
+     * <p>Set the {@link PhaseId} during which this event will be
+     * delivered.</p>
+     *
+     * @exception IllegalArgumentException phaseId is null.
+     *
+     */ 
+
+    public void setPhaseId(PhaseId phaseId) {
+	if (null == phaseId) {
+	    throw new IllegalArgumentException();
+	}
+	this.phaseId = phaseId;
     }
 
 

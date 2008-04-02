@@ -1,5 +1,5 @@
 /*
- * $Id: PropertyResolver.java,v 1.2 2003/03/13 01:12:13 craigmcc Exp $
+ * $Id: PropertyResolver.java,v 1.3 2003/12/17 15:10:50 rkitain Exp $
  */
 
 /*
@@ -31,13 +31,16 @@ public abstract class PropertyResolver {
      * @param base The base object whose property value is to be returned
      * @param name Name of the property to be returned
      *
+     * @exception EvaluationException if an exception is thrown while getting
+     *  the property value (the thrown exception must be included as the
+     *  <code>cause</code> property of this exception)
      * @exception NullPointerException if <code>base</code> or
      *  <code>name</code> is <code>null</code>
      * @exception PropertyNotFoundException if the specified property name
      *  does not exist, or is not readable
      */
     public abstract Object getValue(Object base, String name)
-        throws PropertyNotFoundException;
+        throws EvaluationException, PropertyNotFoundException;
 
 
     /**
@@ -47,6 +50,9 @@ public abstract class PropertyResolver {
      * @param base The base object whose property value is to be returned
      * @param index Index of the value to return
      *
+     * @exception EvaluationException if an exception is thrown while getting
+     *  the property value (the thrown exception must be included as the
+     *  <code>cause</code> property of this exception)
      * @exception IndexOutOfBoundsException if thrown by the underlying
      *  access to the base object
      * @exception NullPointerException if <code>base</code>
@@ -54,7 +60,7 @@ public abstract class PropertyResolver {
      * @exception PropertyNotFoundException if some other exception occurs 
      */
     public abstract Object getValue(Object base, int index)
-        throws PropertyNotFoundException;
+        throws EvaluationException, PropertyNotFoundException;
 
 
     /**
@@ -65,13 +71,16 @@ public abstract class PropertyResolver {
      * @param name Name of the property to be set
      * @param value Value of the property to be set
      *
+     * @exception EvaluationException if an exception is thrown while setting
+     *  the property value (the thrown exception must be included as the
+     *  <code>cause</code> property of this exception)
      * @exception NullPointerException if <code>base</code> or
      *  <code>name</code> is <code>null</code>
      * @exception PropertyNotFoundException if the specified property name
      *  does not exist, or is not writeable
      */
     public abstract void setValue(Object base, String name, Object value)
-        throws PropertyNotFoundException;
+        throws EvaluationException, PropertyNotFoundException;
 
 
     /**
@@ -82,6 +91,9 @@ public abstract class PropertyResolver {
      * @param index Index of the value to set
      * @param value Value to be set
      *
+     * @exception EvaluationException if an exception is thrown while setting
+     *  the property value (the thrown exception must be included as the
+     *  <code>cause</code> property of this exception)
      * @exception IndexOutOfBoundsException if thrown by the underlying
      *  access to the base object
      * @exception NullPointerException if <code>base</code>
@@ -89,7 +101,7 @@ public abstract class PropertyResolver {
      * @exception PropertyNotFoundException if some other exception occurs
      */
     public abstract void setValue(Object base, int index, Object value)
-        throws PropertyNotFoundException;
+        throws EvaluationException, PropertyNotFoundException;
 
 
     /**

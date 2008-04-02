@@ -1,5 +1,5 @@
 /*
- * $Id: ListDataModel.java,v 1.8 2003/11/05 00:38:30 craigmcc Exp $
+ * $Id: ListDataModel.java,v 1.9 2003/12/17 15:10:58 rkitain Exp $
  */
 
 /*
@@ -87,7 +87,7 @@ public class ListDataModel extends DataModel {
 
 
     // The current row index (zero relative)
-    private int index;
+    private int index = -1;
 
 
     // The list we are wrapping
@@ -200,8 +200,7 @@ public class ListDataModel extends DataModel {
             return;
         }
         list = (List) data;
-        index = 0;
-
+	setRowIndex(0);
     }
 
 

@@ -1,5 +1,5 @@
 /*
- * $Id: LongRangeValidator.java,v 1.27 2003/11/18 19:40:15 eburns Exp $
+ * $Id: LongRangeValidator.java,v 1.28 2003/12/17 15:11:03 rkitain Exp $
  */
 
 /*
@@ -145,6 +145,7 @@ public class LongRangeValidator implements Validator, StateHolder {
 
         this.maximum = maximum;
         this.maximumSet = true;
+
     }
 
 
@@ -172,6 +173,7 @@ public class LongRangeValidator implements Validator, StateHolder {
 
         this.minimum = minimum;
         this.minimumSet = true;
+
     }
 
 

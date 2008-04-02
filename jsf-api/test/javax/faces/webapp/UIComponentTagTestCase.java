@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTagTestCase.java,v 1.20 2003/11/11 22:59:17 craigmcc Exp $
+ * $Id: UIComponentTagTestCase.java,v 1.21 2003/12/17 15:11:32 rkitain Exp $
  */
 
 /*
@@ -92,7 +92,7 @@ public class UIComponentTagTestCase extends TagTestCaseBase {
     /**
      * Tear down instance variables required by this test case.
      */
-    public void tearDown() {
+    public void tearDown() throws Exception {
         tags.clear();
 	super.tearDown();
 
@@ -274,7 +274,7 @@ public class UIComponentTagTestCase extends TagTestCaseBase {
     public void testValueBindings() throws Exception {
 
 	TestTag tag = new TestTag();
-	tag.setId("#{foo}");
+	tag.setLabel("#{foo}");
 	tag.setRendered("#{bar}");
 	add(root, tag);
 	request.setAttribute("foo", "bap");
@@ -285,10 +285,9 @@ public class UIComponentTagTestCase extends TagTestCaseBase {
 	UIViewRoot vr = facesContext.getViewRoot();
 	assertEquals(1, vr.getChildren().size());
 	UIComponent component = (UIComponent) vr.getChildren().get(0);
-	assertEquals("bap", component.getId());
+	assertEquals("bap", ((TestComponent) component).getLabel());
 	assertTrue(!component.isRendered());
-        // PENDING(craigmcc) - currently the VB for id is not passed through to the component
-	// assertNotNull(component.getValueBinding("id"));
+	assertNotNull(component.getValueBinding("label"));
 	assertNotNull(component.getValueBinding("rendered"));
 
     }
@@ -305,7 +304,7 @@ public class UIComponentTagTestCase extends TagTestCaseBase {
                 throw new IllegalStateException("Root tag already set");
             }
 	    root = new TestTag("ROOT", "root") {
-		    protected void overrideProperties(UIComponent component) {
+		    protected void setProperties(UIComponent component) {
 		    }
 		};
 	    add(root, child);

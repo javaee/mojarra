@@ -1,5 +1,5 @@
 /*
- * $Id: TestListener.java,v 1.3 2003/09/29 22:49:36 craigmcc Exp $
+ * $Id: TestListener.java,v 1.4 2003/12/17 15:11:11 rkitain Exp $
  */
 
 /*
@@ -11,44 +11,30 @@ package javax.faces.component;
 
 
 import javax.faces.event.FacesListener;
-import javax.faces.event.PhaseId;
-
 
 public class TestListener implements FacesListener {
 
 
-    public TestListener(String id, PhaseId phaseId,
+    public TestListener(String id,
                         String fromId, String toId) {
         this.id = id;
-        this.phaseId = phaseId;
         this.fromId = fromId; // When an event with this id is received ...
         this.toId = toId;     // queue an additional event with this id
     }
 
 
-    public TestListener(String id, PhaseId phaseId) {
-        this.id = id;
-        this.phaseId = phaseId;
-    }
-
-
     public TestListener(String id) {
-        this(id, PhaseId.ANY_PHASE);
+        this.id = id;
     }
 
 
     private String fromId = null;
     private String id = null;
-    private PhaseId phaseId = null;
     private String toId = null;
 
 
     public String getId() {
         return (this.id);
-    }
-
-    public PhaseId getPhaseId() {
-        return (this.phaseId);
     }
 
     public void processTest(TestEvent event) {

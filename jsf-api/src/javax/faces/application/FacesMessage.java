@@ -1,5 +1,5 @@
 /*
- * $Id: FacesMessage.java,v 1.4 2003/10/30 22:46:26 rlubke Exp $
+ * $Id: FacesMessage.java,v 1.5 2003/12/17 15:10:32 rkitain Exp $
  */
 
 /*
@@ -21,19 +21,13 @@ import java.util.HashMap;
 /**
  * <p><strong>FacesMessage</strong> represents a single validation (or
  * other) message, which is typically associated with a particular
- * component in the view.  A <code>FacesMessage</code> instance is
- * associated with a <code>messageId</code>.  The specification defines
+ * component in the view.  A {@link FacesMessage} instance may be created
+ * based on a specific <code>messageId</code>.  The specification defines
  * the set of <code>messageId</code>s for which there must be
- * <code>FacesMessage</code> instances.</p>
- *
- * <p>How to create and initialize a <code>FacesMessage</code>
- * instance</p>
- *
- * <p>Creating it is easy, just use one of the public constructors.</p>
+ * {@link FacesMessage} instances.</p>
  *
  * <p>The implementation must take the following steps when creating
- * <code>FacesMessage</code> instances given a
- * <code>messageId</code>.</p>
+ * <code>FacesMessage</code> instances given a <code>messageId</code>:</p>
  *
  * <ul>
  *
@@ -52,10 +46,9 @@ import java.util.HashMap;
  * <code>FacesMessage</code> instance.</p>
  *
  * <p>In all cases, if a <code>ResourceBundle</code> hit is found for
- * the <code>messageId</code>, look for further hits under the keys
- * <code>messageId_detail</code> and <code>messageId_summary</code>.
- * Use these values, if present, as the <code>detail</code> and
- * <code>severity</code> for the returned <code>FacesMessage</code>.</p>
+ * the <code>{messageId}</code>, look for further hits under the key
+ * <code>{messageId}_detail</code>. Use this value, if present, as 
+ * the <code>detail</code> for the returned <code>FacesMessage</code>.</p>
  *
  * <p>Make sure to perform any parameter substitution required for the
  * <code>summary</code> and <code>detail</code> of the
@@ -67,7 +60,9 @@ import java.util.HashMap;
 
 public class FacesMessage implements Serializable {
 
-    // ------------------------------------------------------ Constants
+
+    // --------------------------------------------------------------- Constants
+
 
     /**
      * <p><code>ResourceBundle</code> identifier for messages whose
@@ -77,10 +72,12 @@ public class FacesMessage implements Serializable {
     public static final String FACES_MESSAGES = "javax.faces.Messages";
 
 
-    // ------------------------------------------------ Message Severity Levels
+    // ------------------------------------------------- Message Severity Levels
+
 
     // Any new Severity values must go at the end of the list, or we will break
     // backwards compatibility on serialized instances
+
 
     private static final String SEVERITY_INFO_NAME = "INFO";
     /**
@@ -90,6 +87,7 @@ public class FacesMessage implements Serializable {
     public static final Severity SEVERITY_INFO = 
 	new Severity(SEVERITY_INFO_NAME);
 
+
     private static final String SEVERITY_WARN_NAME = "WARN";
     /**
      * <p>Message severity level indicating that an error might have
@@ -98,6 +96,7 @@ public class FacesMessage implements Serializable {
     public static final Severity SEVERITY_WARN = 
 	new Severity(SEVERITY_WARN_NAME);
 
+
     private static final String SEVERITY_ERROR_NAME = "ERROR";
     /**
      * <p>Message severity level indicating that an error has
@@ -105,6 +104,7 @@ public class FacesMessage implements Serializable {
      */
     public static final Severity SEVERITY_ERROR = 
 	new Severity(SEVERITY_ERROR_NAME);
+
 
     private static final String SEVERITY_FATAL_NAME = "FATAL";
     /**
@@ -123,59 +123,37 @@ public class FacesMessage implements Serializable {
     private static final Severity[] values =
     { SEVERITY_INFO, SEVERITY_WARN, SEVERITY_ERROR, SEVERITY_FATAL };
     
+
     /**
-     * <p>List of valid {@link FacesMessage.Severity} instances, in
-     * ascending order of their ordinal value.</p>
+     * <p>Immutable <code>List</code> of valid {@link FacesMessage.Severity}
+     * instances, in ascending order of their ordinal value.</p>
      */
     public static final List VALUES = 
 	Collections.unmodifiableList(Arrays.asList(values));
-    
-    public static Map VALUES_MAP = null;
+
+    private static Map _MODIFIABLE_MAP = new HashMap();
     
     static {
-	int 
-	    i = 0,
-	    len = 0;
-
-	VALUES_MAP = new HashMap() {
-		public void clear() {
-		    throw new UnsupportedOperationException();
-		}
-
-		public java.util.Set entrySet() {
-		    throw new UnsupportedOperationException();
-		}
-
-		public java.util.Set keySet() {
-		    throw new UnsupportedOperationException();
-		}
-
-		public Object put(Object key, Object value) {
-		    throw new UnsupportedOperationException();
-		}
-
-		public void putAll(Map otherMap) {
-		    throw new UnsupportedOperationException();
-		}
-
-		public Object remove(Object key) {
-		    throw new UnsupportedOperationException();
-		}
-		    
-	    };
-	
-	for (i = 0; i < len; i++) {
-	    VALUES_MAP.put(values[i].severityName, values[i]);
+	for (int i = 0, len = values.length; i < len; i++) {
+	    _MODIFIABLE_MAP.put(values[i].severityName, values[i]);
 	}
     }
+    
 
+    /**
+     * <p>Immutable <code>Map</code> of valid {@link FacesMessage.Severity}
+     * instances, keyed by name.</p>
+     */
+    public final static Map VALUES_MAP = 
+	Collections.unmodifiableMap(_MODIFIABLE_MAP);
+    
 
-    // ----------------------------------------------------------- Constructors
+    // ------------------------------------------------------------ Constructors
 
 
     /**
-     * <p>Construct a new <code>FacesMessage</code> with no initial
-     * values. The severity is set to Severity.ERROR.
+     * <p>Construct a new {@link FacesMessage} with no initial
+     * values. The severity is set to Severity.INFO.</p>
      */
     public FacesMessage() {
 
@@ -184,9 +162,10 @@ public class FacesMessage implements Serializable {
     }
 
 
+
     /**
-     * <p>Construct a new <code>FacesMessage</code> with the specified initial
-     * values.  The severity is set to Severity.ERROR.  </p>
+     * <p>Construct a new {@link FacesMessage} with the specified initial
+     * values.  The severity is set to Severity.INFO.</p>
      *
      * @param summary Localized summary message text
      * @param detail Localized detail message text
@@ -202,9 +181,10 @@ public class FacesMessage implements Serializable {
 
     }
 
+
     /**
      * <p>Construct a new <code>FacesMessage</code> with the specified
-     * initial values.  </p>
+     * initial values.</p>
      *
      * @param severity the severity
      * @param summary Localized summary message text
@@ -224,7 +204,7 @@ public class FacesMessage implements Serializable {
     }
 
 
-    // ----------------------------------------------------- Instance Variables
+    // ------------------------------------------------------ Instance Variables
 
 
     private Severity severity = FacesMessage.SEVERITY_INFO;
@@ -232,9 +212,12 @@ public class FacesMessage implements Serializable {
     private String detail = null;
 
 
-    // --------------------------------------------------------- Public Methods
+    // ---------------------------------------------------------- Public Methods
 
 
+    /**
+     * <p>Return the localized detail text.</p>
+     */
     public String getDetail() {
 
         return (this.detail);
@@ -253,6 +236,10 @@ public class FacesMessage implements Serializable {
 
     }
 
+
+    /**
+     * <p>Return the severity level.</p>
+     */
     public Severity getSeverity() {
 
         return (this.severity);
@@ -278,6 +265,10 @@ public class FacesMessage implements Serializable {
 	
     }
 
+
+    /**
+     * <p>Return the localized summary text.</p>
+     */
     public String getSummary() {
 
         return (this.summary);
@@ -296,9 +287,15 @@ public class FacesMessage implements Serializable {
 
     }
 
+
+    /**
+     * <p>Class used to represent message severity levels in a typesafe
+     * enumeration.</p>
+     */
     public static class Severity extends Object implements Comparable {
 
-	// ------------------------------------------------------  Constructors
+
+	// -------------------------------------------------------  Constructors
 
 	
 	/**
@@ -310,7 +307,7 @@ public class FacesMessage implements Serializable {
 	}
 	
 	
-	// ------------------------------------------------ Instance Variables
+	// -------------------------------------------------- Instance Variables
 	
 	
 	/**
@@ -318,14 +315,15 @@ public class FacesMessage implements Serializable {
 	 */
 	private final int ordinal = nextOrdinal++;
 	
+
 	/**
 	 * <p>The (optional) name for this severity.</p>
 	 */
+        String severityName = null;
 	
-	String severityName = null;
 	
-	
-	// ---------------------------------------------------  Public Methods
+	// -----------------------------------------------------  Public Methods
+
 
 	/**
 	 * <p>Compare this {@link FacesMessage.Severity} instance to the
@@ -348,6 +346,7 @@ public class FacesMessage implements Serializable {
 	    return (this.ordinal);
 	}
 	
+
 	/**
 	 * <p>Return a String representation of this {@link
 	 * FacesMessage.Severity} instance.</p>
@@ -360,7 +359,7 @@ public class FacesMessage implements Serializable {
 	}
 	
 	
-	// --------------------------------------------------  Static Variables
+	// ---------------------------------------------------  Static Variables
 	
 	
 	/**

@@ -1,5 +1,5 @@
 /*
- * $Id: MethodBinding.java,v 1.2 2003/10/25 22:08:49 craigmcc Exp $
+ * $Id: MethodBinding.java,v 1.3 2003/12/17 15:10:49 rkitain Exp $
  */
 
 /*
@@ -11,17 +11,16 @@
 package javax.faces.el;
 
 
-import java.lang.reflect.InvocationTargetException;
 import javax.faces.context.FacesContext;
 
 
 /**
- * <p><strong>MethodBinding</strong> represents an object that can be used
+ * <p><strong>MethodBinding</strong> is an object that can be used
  * to call an arbitrary public method, on an instance that is acquired by
  * evaluatng the leading portion of a method reference expression via a
  * {@link ValueBinding}.  An immutable {@link MethodBinding} for a particular
  * reference expression can be acquired by calling the
- * <code>getMethodBinding()</code> method of the
+ * <code>createMethodBinding()</code> method of the
  * {@link javax.faces.application.Application} instance for this web
  * application.  Implementations of {@link MethodBinding} are suitable for
  * caching the bindings for frequently accessed expressions, without requiring
@@ -41,14 +40,15 @@ public abstract class MethodBinding {
      * @param params Array of parameters to be passed to the called method,
      *  or <code>null</code> for no parameters
      *
-     * @exception InvocationTargetException if an exception is thrown
-     *  by the called method
+     * @exception EvaluationException if an exception is thrown
+     *  by the called method (the thrown exception must be included as the
+     *  <code>cause</code> property of this exception)
      * @exception MethodNotFoundException if no suitable method can be found
      * @exception NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
     public abstract Object invoke(FacesContext context, Object params[])
-        throws InvocationTargetException;
+        throws EvaluationException, MethodNotFoundException;
 
 
     /**
@@ -63,7 +63,20 @@ public abstract class MethodBinding {
      * @exception NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
-    public abstract Class getType(FacesContext context);
+    public abstract Class getType(FacesContext context)
+        throws MethodNotFoundException;
+
+    /**
+     * <p>Return the (possibly <code>null</code>) expression String,
+     * with leading and trailing delimiters, from which this
+     * <code>MethodBinding</code> was built.  The default implementation
+     * returns <code>null</code>.</p>
+     *
+     */
+    public String getExpressionString() {
+	return null;
+    }
+
 
 
 }

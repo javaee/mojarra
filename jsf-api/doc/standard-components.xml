@@ -14,6 +14,7 @@
   <!ENTITY events-attrs SYSTEM "events-attrs.xml">
   <!ENTITY base-props SYSTEM "base-props.xml">
   <!ENTITY events-props SYSTEM "events-props.xml">
+  <!ELEMENT tag-attribute    (#PCDATA)>
   <!ENTITY % impl SYSTEM "standard-html-renderkit-impl.xml">
   %impl;
 ]>
@@ -39,49 +40,54 @@
       <icon></icon>
       <property-name>required</property-name>
       <property-class>boolean</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
-      <property-name>actionRef</property-name>
+      <property-name>actionListener</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
-    </property>
-    <property>
-      <display-name></display-name>
-      <icon></icon>
-      <property-name>actionListenerRef</property-name>
-      <property-class>java.lang.String</property-class>
-      <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>immediate</property-name>
       <property-class>boolean</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>action</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>converter</property-name>
       <property-class>javax.faces.convert.Converter</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>value</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
   </component>
 
@@ -94,42 +100,54 @@
       <icon></icon>
       <property-name>converter</property-name>
       <property-class>javax.faces.convert.Converter</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>first</property-name>
       <property-class>int</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>rowIndex</property-name>
       <property-class>int</property-class>
+      <property-extension>
       <tag-attribute>no</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>rows</property-name>
       <property-class>int</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>value</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>var</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
   </component>
 
@@ -142,14 +160,18 @@
       <icon></icon>
       <property-name>value</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>URL</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
   </component>
 
@@ -162,35 +184,45 @@
      <icon></icon>
      <property-name>converter</property-name>
      <property-class>javax.faces.convert.Converter</property-class>
+     <property-extension>
      <tag-attribute>yes</tag-attribute>
+      </property-extension>
    </property>
    <property>
      <display-name></display-name>
      <icon></icon>
      <property-name>value</property-name>
      <property-class>java.lang.String</property-class>
+     <property-extension>
      <tag-attribute>yes</tag-attribute>
+      </property-extension>
    </property>
    <property>
      <display-name></display-name>
      <icon></icon>
-     <property-name>validateRef</property-name>
+     <property-name>validator</property-name>
      <property-class>java.lang.String</property-class>
+     <property-extension>
      <tag-attribute>yes</tag-attribute>
+      </property-extension>
    </property>
    <property>
      <display-name></display-name>
      <icon></icon>
-     <property-name>valueChangeListenerRef</property-name>
+     <property-name>valueChangeListener</property-name>
      <property-class>java.lang.String</property-class>
+     <property-extension>
      <tag-attribute>yes</tag-attribute>
+      </property-extension>
    </property>
    <property>
      <display-name></display-name>
      <icon></icon>
      <property-name>required</property-name>
      <property-class>boolean</property-class>
+     <property-extension>
      <tag-attribute>yes</tag-attribute>
+      </property-extension>
    </property>
   </component>
 
@@ -204,7 +236,9 @@
       <icon></icon>
       <property-name>showSummary</property-name>
       <property-class>boolean</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <description>If false, the component must not display any detail, defaults to false.</description>
@@ -212,7 +246,9 @@
       <icon></icon>
       <property-name>showDetail</property-name>
       <property-class>boolean</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <description>The clientId of the component for which to display messages.</description>
@@ -220,7 +256,9 @@
       <icon></icon>
       <property-name>for</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>required</tag-attribute>
+      </property-extension>
     </property>
   </component>
 
@@ -234,7 +272,9 @@
       <icon></icon>
       <property-name>globalOnly</property-name>
       <property-class>boolean</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <description>If false, the component must not display any summary, defaults to true.</description>
@@ -242,7 +282,9 @@
       <icon></icon>
       <property-name>showSummary</property-name>
       <property-class>boolean</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <description>If false, the component must not display any detail, defaults to false.</description>
@@ -250,7 +292,9 @@
       <icon></icon>
       <property-name>showDetail</property-name>
       <property-class>boolean</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <description>The clientId of the component for which to display messages.</description>
@@ -258,7 +302,9 @@
       <icon></icon>
       <property-name>for</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
   </component>
 
@@ -278,14 +324,18 @@
       <icon></icon>
       <property-name>value</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>converter</property-name>
       <property-class>javax.faces.convert.Converter</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
   </component>
 
@@ -304,14 +354,18 @@
       <icon></icon>
       <property-name>name</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>value</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
   </component>
 
@@ -322,30 +376,38 @@
     <property>
       <display-name></display-name>
       <icon></icon>
-      <property-name>validateRef</property-name>
+      <property-name>validator</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
-      <property-name>valueChangeListenerRef</property-name>
+      <property-name>valueChangeListener</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>value</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>required</property-name>
       <property-class>boolean</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
   </component>
 
@@ -366,21 +428,27 @@
       <icon></icon>
       <property-name>itemValue</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>itemLabel</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>itemDescription</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
   </component>
 
@@ -407,35 +475,45 @@
       <icon></icon>
       <property-name>converter</property-name>
       <property-class>javax.faces.convert.Converter</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>value</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
-      <property-name>validateRef</property-name>
+      <property-name>validator</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
-      <property-name>valueChangeListenerRef</property-name>
+      <property-name>valueChangeListener</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>required</property-name>
       <property-class>boolean</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
   </component>
 
@@ -448,35 +526,45 @@
       <icon></icon>
       <property-name>required</property-name>
       <property-class>boolean</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>value</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
-      <property-name>validateRef</property-name>
+      <property-name>validator</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
-      <property-name>valueChangeListenerRef</property-name>
+      <property-name>valueChangeListener</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>converter</property-name>
       <property-class>javax.faces.convert.Converter</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
   </component>
     
@@ -489,7 +577,9 @@
       <icon></icon>
       <property-name>locale</property-name>
       <property-class>java.util.Locale</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
 
   </component>
@@ -1040,7 +1130,9 @@
         <icon></icon>
         <attribute-name>for</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
         <tag-attribute>required</tag-attribute>
+      </attribute-extension>
       </attribute>
 
       <attribute>
@@ -1253,7 +1345,7 @@
         <description>CSS style class for info messages</description>
         <display-name></display-name>
         <icon></icon>
-        <attribute-name>infoStyleClass</attribute-name>
+        <attribute-name>infoClass</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
       </attribute>
 
@@ -1269,7 +1361,7 @@
         <description>CSS style class for warn messages</description>
         <display-name></display-name>
         <icon></icon>
-        <attribute-name>warnStyleClass</attribute-name>
+        <attribute-name>warnClass</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
       </attribute>
 
@@ -1285,7 +1377,7 @@
         <description>CSS style class for error messages</description>
         <display-name></display-name>
         <icon></icon>
-        <attribute-name>errorStyleClass</attribute-name>
+        <attribute-name>errorClass</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
       </attribute>
 
@@ -1301,7 +1393,7 @@
         <description>CSS style class for fatal messages</description>
         <display-name></display-name>
         <icon></icon>
-        <attribute-name>fatalStyleClass</attribute-name>
+        <attribute-name>fatalClass</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
       </attribute>      
 
@@ -1361,7 +1453,7 @@
         <description>CSS style class for info messages</description>
         <display-name></display-name>
         <icon></icon>
-        <attribute-name>infoStyleClass</attribute-name>
+        <attribute-name>infoClass</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
       </attribute>
 
@@ -1377,7 +1469,7 @@
         <description>CSS style class for warn messages</description>
         <display-name></display-name>
         <icon></icon>
-        <attribute-name>warnStyleClass</attribute-name>
+        <attribute-name>warnClass</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
       </attribute>
 
@@ -1393,7 +1485,7 @@
         <description>CSS style class for error messages</description>
         <display-name></display-name>
         <icon></icon>
-        <attribute-name>errorStyleClass</attribute-name>
+        <attribute-name>errorClass</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
       </attribute>
 
@@ -1409,7 +1501,7 @@
         <description>CSS style class for fatal messages</description>
         <display-name></display-name>
         <icon></icon>
-        <attribute-name>fatalStyleClass</attribute-name>
+        <attribute-name>fatalClass</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
       </attribute>      
 
@@ -1637,7 +1729,7 @@
         <description>CSS style class for info messages</description>
         <display-name></display-name>
         <icon></icon>
-        <attribute-name>infoStyleClass</attribute-name>
+        <attribute-name>infoClass</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
       </attribute>
 
@@ -1653,7 +1745,7 @@
         <description>CSS style class for warn messages</description>
         <display-name></display-name>
         <icon></icon>
-        <attribute-name>warnStyleClass</attribute-name>
+        <attribute-name>warnClass</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
       </attribute>
 
@@ -1669,7 +1761,7 @@
         <description>CSS style class for error messages</description>
         <display-name></display-name>
         <icon></icon>
-        <attribute-name>errorStyleClass</attribute-name>
+        <attribute-name>errorClass</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
       </attribute>
 
@@ -1685,7 +1777,7 @@
         <description>CSS style class for fatal messages</description>
         <display-name></display-name>
         <icon></icon>
-        <attribute-name>fatalStyleClass</attribute-name>
+        <attribute-name>fatalClass</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
       </attribute>
 
@@ -1805,6 +1897,14 @@
       </attribute>
 
       <attribute>
+        <description>if true, this field becomes disabled</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>disabled</attribute-name>
+        <attribute-class>boolean</attribute-class>
+      </attribute>
+
+      <attribute>
         <description>specific to each type of field</description>
         <display-name></display-name>
         <icon></icon>
@@ -1879,6 +1979,7 @@
       <supported-component-type>
         <component-type>Input</component-type>
 	<attribute-name>readonly</attribute-name>
+	<attribute-name>disabled</attribute-name>
 	<attribute-name>size</attribute-name>
 	<attribute-name>maxlength</attribute-name>
 	<attribute-name>alt</attribute-name>

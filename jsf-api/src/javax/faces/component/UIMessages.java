@@ -1,5 +1,5 @@
 /*
- * $Id: UIMessages.java,v 1.5 2003/11/13 05:20:36 eburns Exp $
+ * $Id: UIMessages.java,v 1.6 2003/12/17 15:10:39 rkitain Exp $
  */
 
 /*
@@ -83,8 +83,9 @@ public class UIMessages extends UIComponentBase {
     }
 
     /**
-     * <p>Return the flag indicating whether only global messages (that is,
-     * messages with no associated client identifier) should be rendered.</p>
+     * <p>Return the flag indicating whether only global messages (that
+     * is, messages with no associated client identifier) should be
+     * rendered.  Defaults to false.</p>
      */
     public boolean isGlobalOnly() {
 
@@ -116,8 +117,9 @@ public class UIMessages extends UIComponentBase {
     }
 
     /**
-     * <p>Return the flag indicating whether the <code>detail</code> property
-     * of the associated message(s) should be displayed.</p>
+     * <p>Return the flag indicating whether the <code>detail</code>
+     * property of the associated message(s) should be displayed.
+     * Defaults to false.</p>
      */
     public boolean isShowDetail() {
 
@@ -150,8 +152,9 @@ public class UIMessages extends UIComponentBase {
 
 
     /**
-     * <p>Return the flag indicating whether the <code>summary</code> property
-     * of the associated message(s) should be displayed.</p>
+     * <p>Return the flag indicating whether the <code>summary</code>
+     * property of the associated message(s) should be displayed.
+     * Defaults to true.</p>
      */
     public boolean isShowSummary() {
 
@@ -196,6 +199,7 @@ public class UIMessages extends UIComponentBase {
         values[4] = this.showDetailSet ? Boolean.TRUE : Boolean.FALSE;
         values[5] = this.showSummary ? Boolean.TRUE : Boolean.FALSE;
         values[6] = this.showSummarySet ? Boolean.TRUE : Boolean.FALSE;
+        values[7] = this.forVal;
 
         return (values);
 
@@ -212,6 +216,7 @@ public class UIMessages extends UIComponentBase {
         showDetailSet = ((Boolean) values[4]).booleanValue();
         showSummary = ((Boolean) values[5]).booleanValue();
         showSummarySet = ((Boolean) values[6]).booleanValue();
+        forVal = (String) values[7];
 
     }
 

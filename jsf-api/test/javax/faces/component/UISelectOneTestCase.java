@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectOneTestCase.java,v 1.14 2003/11/08 01:15:42 craigmcc Exp $
+ * $Id: UISelectOneTestCase.java,v 1.15 2003/12/17 15:11:15 rkitain Exp $
  */
 
 /*
@@ -123,6 +123,40 @@ public class UISelectOneTestCase extends UIInputTestCase {
     }
 
 
+    // Test validation of a required field
+    public void testValidateRequired() throws Exception {
+
+        UIViewRoot root = new UIViewRoot();
+        root.getChildren().add(component);
+        UISelectOne selectOne = (UISelectOne) component;
+        selectOne.getChildren().add(new UISelectItemSub("foo", null, null));
+        selectOne.getChildren().add(new UISelectItemSub("bar", null, null));
+        selectOne.getChildren().add(new UISelectItemSub("baz", null, null));
+        selectOne.setRequired(true);
+        checkMessages(0);
+
+        selectOne.setValid(true);
+        selectOne.setValue("foo");
+        selectOne.validate(facesContext);
+        checkMessages(0);
+        assertTrue(selectOne.isValid());
+
+        selectOne.setValid(true);
+        selectOne.setValue("");
+        selectOne.validate(facesContext);
+        checkMessages(1);
+        assertTrue(!selectOne.isValid());
+
+        selectOne.setValid(true);
+        selectOne.setValue(null);
+        selectOne.validate(facesContext);
+        checkMessages(2);
+        assertTrue(!selectOne.isValid());
+
+    }
+
+
+    // Test that appropriate properties are value binding enabled
     public void testValueBindings() {
 
 	super.testValueBindings();
@@ -132,7 +166,7 @@ public class UISelectOneTestCase extends UIInputTestCase {
 	request.setAttribute("foo", "bar");
 	test.setValue(null);
 	assertNull(test.getValue());
-	test.setValueBinding("value", application.getValueBinding("#{foo}"));
+	test.setValueBinding("value", application.createValueBinding("#{foo}"));
 	assertNotNull(test.getValueBinding("value"));
 	assertEquals("bar", test.getValue());
 	test.setValue("baz");

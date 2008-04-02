@@ -1,5 +1,5 @@
 /*
- * $Id: TestValueChangeListener.java,v 1.1 2003/10/27 04:10:08 craigmcc Exp $
+ * $Id: TestValueChangeListener.java,v 1.2 2003/12/17 15:11:11 rkitain Exp $
  */
 
 /*
@@ -12,7 +12,6 @@ package javax.faces.component;
 
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.event.ValueChangeListener;
-import javax.faces.event.PhaseId;
 import javax.faces.context.FacesContext;
 
 /**
@@ -31,19 +30,11 @@ public class TestValueChangeListener implements ValueChangeListener, StateHolder
     }
 
 
-    public TestValueChangeListener(String id, PhaseId phaseId) {
-        this.id = id;
-        this.phaseId = phaseId;
-    }
-
-
     public TestValueChangeListener(String id) {
-        this(id, PhaseId.ANY_PHASE);
+        this.id = id;
     }
-
 
     private String id = null;
-    private PhaseId phaseId = null;
 
 
     // ----------------------------------------------------------- Pubic Methods
@@ -51,10 +42,6 @@ public class TestValueChangeListener implements ValueChangeListener, StateHolder
 
     public String getId() {
         return (this.id);
-    }
-
-    public PhaseId getPhaseId() {
-        return (this.phaseId);
     }
 
     public void processValueChange(ValueChangeEvent event) {
@@ -98,29 +85,19 @@ public class TestValueChangeListener implements ValueChangeListener, StateHolder
 	if (null != id) {
 	    idsAreEqual = id.equals(other.id);
 	}
-	boolean result = 
-	    idsAreEqual && other.phaseId == this.phaseId;
-	return result;
+	return idsAreEqual;
     }
 
     //
     // methods from StateHolder
     //
 
-    public static final String SEP = "[sep]";
-
     public Object saveState(FacesContext context) {
-	return id + SEP + phaseId.getOrdinal();
+	return id;
     }
 
     public void restoreState(FacesContext context, Object state) {
-	String stateStr = (String) state;
-	int i = stateStr.indexOf(SEP);
-	id = stateStr.substring(0,i);
-	phaseId = (PhaseId)
-	    PhaseId.VALUES.get(Integer.
-			       valueOf(stateStr.
-				       substring(i+SEP.length())).intValue());
+	id = (String) state;
     }
 
     public boolean isTransient() { return false;

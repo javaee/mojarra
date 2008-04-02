@@ -1,5 +1,5 @@
 /*
- * $Id: UIViewRootTestCase.java,v 1.8 2003/11/10 21:45:50 eburns Exp $
+ * $Id: UIViewRootTestCase.java,v 1.9 2003/12/17 15:11:15 rkitain Exp $
  */
 
 /*
@@ -85,13 +85,19 @@ public class UIViewRootTestCase extends UIComponentBaseTestCase {
         // Register a listener that will conditionally queue a new event
         UIViewRoot root = new UIViewRoot();
         root.addFacesListener
-            (new TestListener("t", PhaseId.APPLY_REQUEST_VALUES, "2", "4"));
+            (new TestListener("t", "2", "4"));
         TestListener.trace(null);
 
         // Queue some events, including the trigger one
-        root.queueEvent(new TestEvent(root, "1"));
-        root.queueEvent(new TestEvent(root, "2"));
-        root.queueEvent(new TestEvent(root, "3"));
+	TestEvent event = new TestEvent(root, "1");
+	event.setPhaseId(PhaseId.APPLY_REQUEST_VALUES);
+        root.queueEvent(event);
+	event = new TestEvent(root, "2");
+	event.setPhaseId(PhaseId.APPLY_REQUEST_VALUES);
+        root.queueEvent(event);
+	event = new TestEvent(root, "3");
+	event.setPhaseId(PhaseId.APPLY_REQUEST_VALUES);
+        root.queueEvent(event);
 
         // Simulate the Apply Request Values phase
         root.processDecodes(facesContext);
@@ -117,7 +123,7 @@ public class UIViewRootTestCase extends UIComponentBaseTestCase {
 
     public void testLocaleFromVB() throws Exception {
 	UIViewRoot root = new UIViewRoot();
-	ValueBinding binding = application.getValueBinding("locale");
+	ValueBinding binding = application.createValueBinding("locale");
 	request.setAttribute("locale", Locale.CHINESE);
 	assertEquals(Locale.getDefault(), root.getLocale());
 	root.setValueBinding("locale", binding);
@@ -142,12 +148,17 @@ public class UIViewRootTestCase extends UIComponentBaseTestCase {
 
         // Register an event listener for the specified phase id
         UIViewRoot root = new UIViewRoot();
-        TestListener listener = new TestListener("t", phaseId);
+	TestEvent event = null;
+        TestListener listener = new TestListener("t");
         root.addFacesListener(listener);
 
         // Queue some events to be processed
-        root.queueEvent(new TestEvent(root, "1"));
-        root.queueEvent(new TestEvent(root, "2"));
+	event = new TestEvent(root, "1");
+	event.setPhaseId(phaseId);
+        root.queueEvent(event);
+	event = new TestEvent(root, "2");
+	event.setPhaseId(phaseId);
+        root.queueEvent(event);
         String expected = "/t/1/t/2";
 
         // Fire off the relevant lifecycle methods and check expected results

@@ -1,5 +1,5 @@
 /*
- * $Id: StateHolder.java,v 1.11 2003/11/06 15:39:42 eburns Exp $
+ * $Id: StateHolder.java,v 1.12 2003/12/17 15:10:36 rkitain Exp $
  */
 
 /*
@@ -40,6 +40,16 @@ public interface StateHolder {
      * instances as well.  <strong>This method must not save the state
      * of children and facets.</strong> That is done via the {@link
      * javax.faces.application.StateManager}</p>
+     *
+     * <p>This method must not alter the state of the implementing
+     * object.  In other words, after executing this code:</p>
+     *
+     * <code><pre>
+     * Object state = component.saveState(facesContext);
+     * </pre></code>
+     *
+     * <p><code>component</code> should be the same as before executing
+     * it.</p>
      *
      * <p>The return from this method must be <code>Serializable</code></p>
      * 

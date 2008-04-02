@@ -15,7 +15,7 @@
 
 
   <!-- Initial application element with partial values -->
-  <application>
+  <application id="applicationElement">
     <action-listener>com.mycompany.MyActionListener</action-listener>
     <variable-resolver>com.mycompany.OldVariableResolver</variable-resolver>
   </application>
@@ -145,7 +145,7 @@
     <from-view-id> * </from-view-id>
     <!-- Logout button on every page -->
     <navigation-case>
-      <from-action-ref>UserBean.Logout</from-action-ref>
+      <from-action>#{UserBean.Logout}</from-action>
       <to-view-id>/logout.jsp</to-view-id>
     </navigation-case>
     <!-- Generic "not logged in" handler -->
@@ -162,19 +162,19 @@
     <from-view-id> /login.jsp </from-view-id>
     <!-- Login action was invoked successfully -->
     <navigation-case>
-      <from-action-ref>UserBean.login</from-action-ref>
+      <from-action>UserBean.login</from-action>
       <from-outcome>success</from-outcome>
       <to-view-id>/home.jsp</to-view-id>
     </navigation-case>
     <!-- User registration required -->
     <navigation-case>
-      <from-action-ref>UserBean.register</from-action-ref>
+      <from-action>UserBean.register</from-action>
       <from-outcome>success</from-outcome>
       <to-view-id>/get-user-info.jsp</to-view-id>
     </navigation-case>
     <!-- User registration failed -->
     <navigation-case>
-      <from-action-ref>UserBean.register</from-action-ref>
+      <from-action>UserBean.register</from-action>
       <from-outcome>duplicate</from-outcome>
       <to-view-id>/try-another-name.jsp</to-view-id>
     </navigation-case>
@@ -186,7 +186,7 @@
     <!-- Omit the request view id this time -->
     <!-- General search form handling -->
     <navigation-case>
-      <from-action-ref>SearchForm.go</from-action-ref>
+      <from-action>SearchForm.go</from-action>
       <to-view-id>/search-results.jsp</to-view-id>
     </navigation-case>
   </navigation-rule>
@@ -198,7 +198,7 @@
     <from-view-id>/movies/*</from-view-id>
     <!-- Special search form handling -->
     <navigation-case>
-      <from-action-ref>SearchForm.go</from-action-ref>
+      <from-action>SearchForm.go</from-action>
       <to-view-id>/movies/movie-search-results.jsp</to-view-id>
     </navigation-case>
   </navigation-rule>
@@ -220,7 +220,7 @@
     <!-- Managed property initializations -->
     <managed-property>
       <property-name>minimumAge</property-name>
-      <value-ref>initParam.minimumCustomerAge</value-ref>
+      <value>#{initParam.minimumCustomerAge}</value>
     </managed-property>
     <managed-property>
       <property-name>maximumAge</property-name>
@@ -245,7 +245,7 @@
       <!-- Assume the type is java.util.List or java.lang.String[] -->
       <list-entries>
         <value>Thomas</value>
-        <value-ref>someOtherBean.someName</value-ref>
+        <value>#{someOtherBean.someName}</value>
         <null-value/>
       </list-entries>
     </managed-property>
@@ -264,7 +264,7 @@
         </map-entry>
         <map-entry>
           <key>water</key>
-          <value-ref>claimConfiguration.waterDamageAmount</value-ref>
+          <value>#{claimConfiguration.waterDamageAmount}</value>
         </map-entry>
         <map-entry>
           <key>earthquake</key>

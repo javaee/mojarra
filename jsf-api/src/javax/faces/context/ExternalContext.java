@@ -1,5 +1,5 @@
 /*
- * $Id: ExternalContext.java,v 1.10 2003/10/22 23:34:48 craigmcc Exp $
+ * $Id: ExternalContext.java,v 1.11 2003/12/17 15:10:44 rkitain Exp $
  */
  
 /*
@@ -23,19 +23,17 @@ import javax.servlet.http.Cookie;
 
 
 /**
-   
-* <p>This class allows the Faces API to be unaware of the nature of its
-* containing environment.  For example, this class allows Faces to run
-* in either a Servlet or a Portlet.  This class can be seen as an
-* extension of FacesContext.</p>
+ * <p>This class allows the Faces API to be unaware of the nature of its
+ * containing application environment.  In particular, this class allows
+ * JavaServer Faces based appications to run
+ * in either a Servlet or a Portlet environment.</p>
+ */
 
-* @author Brendan Murray
-* @author Ed Burns <ed.burns@sun.com>
-* @version 0.1
-* 
-*/
 public abstract class ExternalContext {
     
+
+    // ------------------------------------------------------ Manifest Constants
+
 
     /**
      * <p>String identifier for BASIC authentication.</p>
@@ -61,112 +59,149 @@ public abstract class ExternalContext {
     public static final String FORM_AUTH = "FORM";
 
 
+
+    // ---------------------------------------------------------- Public Methods
+
+
     /**
-     * @return the <code>HttpSession</code> instance for the session
-     * associated with the current request (if any); otherwise, return
-     * <code>null</code>.
-     
-     * @param create true - to create a new session for this request if
-     * necessary; false to return null if there's no current session
-     
-    */
-    public abstract Object getSession(boolean create);
-    
+     * <p>Return a mutable <code>Map</code> representing the application scope
+     * attributes for the current application.  In a portlet-based environment,
+     * this is the set of attributes accessible via the
+     * <code>getAttribute()</code>, <code>getAttributeNames()</code>,
+     * <code>removeAttribute()</code>, and <code>setAttribute()</code>
+     * methods on <code>PortletContext</code>.  In a servlet-based environment,
+     * this is the set of attributes accessible via the
+     * <code>getAttribute()</code>, <code>getAttributeNames()</code>,
+     * <code>removeAttribute()</code>, and <code>setAttribute()</code>
+     * methods on <code>ServletContext</code>.</p>
+     *
+     */
+     // <p>The following methods of <code>Map</code> must be supported.</p>
+     //
+     // <ul><p><code>get, put, equals, remove, entrySet</code>, and all
+     // of the <code>Map</code> methods from
+     // <code>java.util.AbstractMap</code>, except for below
+     // exclusions.</p></ul>
+     //
+     // <p>The following methods of <code>Map</code> must not be supported.</p>
+     //
+     // <ul><p><code>clear</code>, and <code>putAll</code>.</p></ul>
+    public abstract Map getApplicationMap();
+
+
     /**
-     * @return the <code>ServletContext</code> or
-     * <code>PortletContext</code> object for the web application
-     * associated with this request.
+     * <p>Return the application environment object instance for the current
+     * appication.  In a portet-based environment, this returns the current
+     * application's <code>PortletContext</code> instance.  In a servlet-based
+     * environment, this returns the current application's
+     * <code>ServletContext</code> instance.</p>
      */
     public abstract Object getContext();
-    
-    
+
+
     /**
-     * @return the <code>ServletRequest</code> or
-     * <code>PortletRequest</code> object representing the current
-     * request that is being processed.
+     * <p>Return the environment-specific object instance for the current
+     * request.  In a portlet-based environment, this returns the current
+     * <code>PortletRequest</code> instance.  In a servlet-based environment,
+     * this returns the current <code>HttpServletRequest</code> instance.</p>
      */
     public abstract Object getRequest();
-    
-    
+
+
     /**
-     * @return the <code>ServletResponse</code>
-     * <code>PortletResponse</code> object representing the current
-     * response that is being rendered.
+     * <p>Return a mutable <code>Map</code> representing the request scope
+     * attributes for the current request.  In a portlet-based environment,
+     * this is the set of attributes accessible via the
+     * <code>getAttribute()</code>, <code>getAttributeNames()</code>,
+     * <code>removeAttribute()</code>, and <code>setAttribute()</code>
+     * methods on <code>PortletRequest</code>.  In a servlet-based environment,
+     * this is the set of attributes accessible via the
+     * <code>getAttribute()</code>, <code>getAttributeNames()</code>,
+     * <code>removeAttribute()</code>, and <code>setAttribute()</code>
+     * methods on <code>ServletRequest</code>.</p>
+     *
+     */
+     // <p>The following methods of <code>Map</code> must be supported.</p>
+     //
+     // <ul><p><code>get, put, equals, remove, entrySet</code>, and all
+     // of the <code>Map</code> methods from
+     // <code>java.util.AbstractMap</code>, except for below
+     // exclusions.</p></ul>
+     //
+     // <p>The following methods of <code>Map</code> must not be supported.</p>
+     //
+     // <ul><p><code>clear</code>, and <code>putAll</code>.</p></ul>
+    public abstract Map getRequestMap();
+
+
+    /**
+     * <p>Return the environment-specific object instance for the current
+     * response.  In a portlet-based environment, this returns the current
+     * <code>PortletResponse</code> instance.  In a servlet-based environment,
+     * this returns the current <code>HttpServletResponse</code> instance.</p>
      */
     public abstract Object getResponse();
-    
+
+
     /**
-     *       
-     * <p>Calling <code>get(key)</code> on the <code>Map</code> obtained
-     * from this method is equivalent to getting the
-     * <code>ServletContext</code> for this request and calling
-     * <code>getAttribute(key)</code> on it.</p>
+     * <p>If the <code>create</code> parameter is <code>, return the
+     * session instance for the session associated with
+     * the current request; if there is none, create and return
+     * a new session instance.  If the <code>create</code> parameter is
+     * <code>false</code>, return the session instance for
+     * the session associated with the current request (if there is one);
+     * otherwise, return <code>null</code>.</p>
      *
-     * <p>The following methods of <code>Map</code> must be supported.</p>
+     * <p>In a portlet-based environment, this method delegates to
+     * <code>PortletRequest.getPortletSession(boolean)</code>.  In a
+     * servlet-based environment, this method delegates to
+     * <code>HttpServletRequest.getSession(boolean)</code>.</p>
      *
-     * <ul><p><code>get, put, equals, remove, entrySet</code>, and all
-     * of the <code>Map</code> methods from
-     * <code>java.util.AbstractMap</code>, except for below
-     * exclusions.</p></ul>
-     *
-     * <p>The following methods of <code>Map</code> must not be supported.</p>
-     *
-     * <ul><p><code>clear</code>, and <code>putAll</code>.</p></ul>
-     *
-     * @return a <code>Map</code> that wraps the ServletContext's
-     * attribute set.
+     * @param create Flag indicating whether or not a new session should be
+     *  created if there is no session associated with the current request
+     */
+    public abstract Object getSession(boolean create);
+
+
+    /**
+     * <p>Return a mutable <code>Map</code> representing the session scope
+     * attributes for the current request.  In a portlet-based environment,
+     * this is the set of attributes accessible via the
+     * <code>getAttribute()</code>, <code>getAttributeNames()</code>,
+     * <code>removeAttribute()</code>, and <code>setAttribute()</code>
+     * methods on <code>PortletRequest</code>.  In a servlet-based environment,
+     * this is the set of attributes accessible via the
+     * <code>getAttribute()</code>, <code>getAttributeNames()</code>,
+     * <code>removeAttribute()</code>, and <code>setAttribute()</code>
+     * methods on <code>ServletRequest</code>.</p>
      *
      */
-    public abstract Map getApplicationMap();
-    
-    /**
-     *     
-     * <p>Calling <code>get(key)</code> on the <code>Map</code> obtained
-     * from this method is equivalent to getting the
-     * <code>HttpSession</code> for this request and calling
-     * <code>getAttribute(key)</code> on it.</p>
-     *
-     * <p>The following methods of <code>Map</code> must be supported.</p>
-     *
-     * <ul><p><code>get, put, equals, remove, entrySet</code>, and all
-     * of the <code>Map</code> methods from
-     * <code>java.util.AbstractMap</code>, except for below
-     * exclusions.</p></ul>
-     *
-     * <p>The following methods of <code>Map</code> must not be supported.</p>
-     *
-     * <ul><p><code>clear</code>, and <code>putAll</code>.</p></ul>
-     *
-     * @return a <code>Map</code> that wraps the HttpSession's
-     * attribute set.
-     *
-     */
-    
+    // <p>The following methods of <code>Map</code> must be supported.</p>
+    //
+    // <ul><p><code>get, put, equals, remove, entrySet</code>, and all
+    // of the <code>Map</code> methods from
+    // <code>java.util.AbstractMap</code>, except for below
+    // exclusions.</p></ul>
+    //
+    // <p>The following methods of <code>Map</code> must not be supported.</p>
+    //
+    // <ul><p><code>clear</code>, and <code>putAll</code>.</p></ul>
+    //
+    // PENDING - clarify that this method returns null if no existing session
     public abstract Map getSessionMap();
+
+
+
+
+
     
-    /**
-     *     
-     * <p>Calling <code>get(key)</code> on the <code>Map</code> obtained
-     * from this method is equivalent to getting the
-     * <code>ServletRequest</code> for this request and calling
-     * <code>getAttribute(key)</code> on it.</p>
-     *
-     * <p>The following methods of <code>Map</code> must be supported.</p>
-     *
-     * <ul><p><code>get, put, equals, remove, entrySet</code>, and all
-     * of the <code>Map</code> methods from
-     * <code>java.util.AbstractMap</code>, except for below
-     * exclusions.</p></ul>
-     *
-     * <p>The following methods of <code>Map</code> must not be supported.</p>
-     *
-     * <ul><p><code>clear</code>, and <code>putAll</code>.</p></ul>
-     *
-     * @return a <code>Map</code> that wraps the Request's
-     * attribute set.
-     */
-    public abstract Map getRequestMap();
+
+
+
+
+
     
+
     /**
      *
      * <p>Calling <code>get(key)</code> on the <code>Map</code> obtained
@@ -307,25 +342,21 @@ public abstract class ExternalContext {
      * request.
      *
      */ 
-
     public abstract Map getRequestCookieMap();
 
+
     /**
-
-    * <p>A wrapper for <code>ServletRequest.getLocale()</code>.</p>
-
-    */
-    
+     * <p>A wrapper for <code>ServletRequest.getLocale()</code>.</p>
+     */
     public abstract Locale getRequestLocale();
     
+
     /**
-
-    * <p>A wrapper for <code>ServletRequest.getPathInfo()</code>.</p>
-
-    */
-    
+     * <p>A wrapper for <code>ServletRequest.getPathInfo()</code>.</p>
+     */
     public abstract String getRequestPathInfo();
     
+
     /**
 
     * <p>A wrapper for <code>HttpServletRequest.getContextPath()</code>.</p>
@@ -436,33 +467,37 @@ public abstract class ExternalContext {
 
 
     /**
-     * <p>Force any URL that causes an action to work within a portal/portlet. 
-     * This causes the URL to have the required redirection for the specific
-     * portal to be included</p>
+     * <p>Return the input URL, after performing any rewriting needed to
+     * ensure that it will correctly identify an addressable action in the
+     * current environment.  For a portlet-based application, delegate to
+     * the <code>PortletResponse.encodeURL()</code> method.  For a
+     * servlet-based application, delegate to the
+     * <code>HttpServletResponse.encodeURL()</code> method.</p>
      *
-     * @param sb The input URL to be reformatted
+     * @param url The input URL to be encoded
      */
-    public abstract String encodeActionURL(String sb);
+    public abstract String encodeActionURL(String url);
     
+
     /**
-     * <p>Force any URL that references a resource to work within a
-     * portal/portlet. This causes the URL to have the required
-     * redirection for the specific portal to be included. In reality,
-     * it simply returns an absolute URL.</p>
+     * <p>Return the input URL, after performing any rewriting needed to
+     * ensure that it will correctly identify an addressable resource in the
+     * current environment.  For a portlet-based application, deegate to
+     * the <code>PortletResponse.encodeURL()</code> method.  For a
+     * servlet-based application, delegate to the
+     * <code>HttpServletResponse.encodeURL()</code> method.</p>
      *
-     * @param sb The input URL to be reformatted
+     * @param url The input URL to be encoded
      */
+    public abstract String encodeResourceURL(String url);
 
-    public abstract String encodeResourceURL(String sb);
 
     /**
-
-    * PENDING(edburns): this does nothing for Servlets.  What does it to
-    * for Portlets?
-
-    */ 
-
+     * PENDING(edburns): this does nothing for Servlets.  What does it to
+     * for Portlets?
+     */ 
     public abstract String encodeNamespace(String aValue);
+
 
     /**
       * <p>Dispatch a request to the apropriate context. In the

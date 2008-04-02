@@ -1,5 +1,5 @@
 /*
- * $Id: MockRenderKit.java,v 1.7 2003/10/21 23:58:22 craigmcc Exp $
+ * $Id: MockRenderKit.java,v 1.8 2003/12/17 15:11:26 rkitain Exp $
  */
 
 /*
@@ -14,6 +14,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import javax.faces.component.UIComponent;
+import javax.faces.component.UIInput;
+import javax.faces.component.ValueHolder;
+import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.context.ResponseStream;
 import javax.faces.render.Renderer;
@@ -25,6 +28,10 @@ import java.io.IOException;
 
 
 public class MockRenderKit extends RenderKit {
+
+    public MockRenderKit() {
+        addRenderer("TestRenderer", new TestRenderer());
+    }
 
 
     private Map renderers = new HashMap();
@@ -76,6 +83,68 @@ public class MockRenderKit extends RenderKit {
 
     public ResponseStateManager getResponseStateManager() {
 	return null;
+    }
+
+
+    class TestRenderer extends Renderer {
+
+        public void decode(FacesContext context, UIComponent component) {
+
+            if ((context == null) || (component == null)) {
+                throw new NullPointerException();
+            }
+
+            if (!(component instanceof UIInput)) {
+                return;
+            }
+            UIInput input = (UIInput) component;
+            String clientId = input.getClientId(context);
+            // System.err.println("decode(" + clientId + ")");
+
+            // Save the previous value for future ValueChangeEvent handling
+            input.setPrevious(input.getValue());
+
+            // Decode incoming request parameters
+            Map params = context.getExternalContext().getRequestParameterMap();
+            if (params.containsKey(clientId)) {
+                // System.err.println("  '" + input.currentValue(context) +
+                //                    "' --> '" + params.get(clientId) + "'");
+                input.setValue((String) params.get(clientId));
+            }
+
+        }
+
+        public void encodeBegin(FacesContext context, UIComponent component)
+            throws IOException {
+
+            if ((context == null) || (component == null)) {
+                throw new NullPointerException();
+            }
+            ResponseWriter writer = context.getResponseWriter();
+            writer.write
+                ("<text id='" + component.getClientId(context) + "' value='" +
+                 ((ValueHolder) component).getValue() + "'/>\n");
+
+        }
+
+        public void encodeChildren(FacesContext context, UIComponent component)
+            throws IOException {
+
+            if ((context == null) || (component == null)) {
+                throw new NullPointerException();
+            }
+
+        }
+
+        public void encodeEnd(FacesContext context, UIComponent component)
+            throws IOException {
+
+            if ((context == null) || (component == null)) {
+                throw new NullPointerException();
+            }
+
+        }
+
     }
 
 

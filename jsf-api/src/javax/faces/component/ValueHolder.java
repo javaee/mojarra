@@ -1,5 +1,5 @@
 /*
- * $Id: ValueHolder.java,v 1.7 2003/11/08 01:15:28 craigmcc Exp $
+ * $Id: ValueHolder.java,v 1.8 2003/12/17 15:10:39 rkitain Exp $
  */
 
 /*
@@ -39,7 +39,11 @@ public interface ValueHolder {
 
 
     /**
-     * <p>Return the value of this {@link UIComponent} (if any).</p>
+     * <p>First consult the local value property of this component.  If
+     * non-<code>null</code> return it.  If non-null, see if we have a
+     * {@link javax.faces.el.ValueBinding} for the <code>value</code>
+     * property.  If so, return the result of evaluating the
+     * property, otherwise return null.</p>
      */
     public Object getValue();
 

@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectBooleanTestCase.java,v 1.12 2003/11/08 01:15:40 craigmcc Exp $
+ * $Id: UISelectBooleanTestCase.java,v 1.13 2003/12/17 15:11:14 rkitain Exp $
  */
 
 /*
@@ -142,7 +142,7 @@ public class UISelectBooleanTestCase extends UIInputTestCase {
 	request.setAttribute("foo", "bar");
 	test.setValue(null);
 	assertNull(test.getValue());
-	test.setValueBinding("value", application.getValueBinding("#{foo}"));
+	test.setValueBinding("value", application.createValueBinding("#{foo}"));
 	assertNotNull(test.getValueBinding("value"));
 	assertEquals("bar", test.getValue());
 	test.setValue("baz");

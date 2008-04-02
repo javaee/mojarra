@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.84 2003/11/14 22:56:03 rlubke Exp $
+ * $Id: UIComponentBase.java,v 1.85 2003/12/17 15:10:37 rkitain Exp $
  */
 
 /*
@@ -33,7 +33,6 @@ import javax.faces.el.ValueBinding;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.FacesEvent;
 import javax.faces.event.FacesListener;
-import javax.faces.event.PhaseId;
 import javax.faces.render.Renderer;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
@@ -279,12 +278,15 @@ public abstract class UIComponentBase extends UIComponent {
 
 
     /**
+     * @exception IllegalArgumentException {@inheritDoc}
      * @exception NullPointerException {@inheritDoc}
      */ 
     public void setValueBinding(String name, ValueBinding binding) {
 
 	if (name == null) {
 	    throw new NullPointerException();
+	} else if ("id".equals(name) || "parent".equals(name)) {
+            throw new IllegalArgumentException();
 	}
 	if (binding != null) {
 	    if (bindings == null) {
@@ -318,8 +320,14 @@ public abstract class UIComponentBase extends UIComponent {
      */ 
     public String getClientId(FacesContext context) {
 
-        // NOTE - client ids cannot be cached because the generated
-        // value has to be dynamically calculated in some cases (UIData)
+        if (context == null) {
+            throw new NullPointerException();
+        }
+
+        // Return any previously cached client identifier
+        if (clientId != null) {
+            return (clientId);
+        }
 
         // Search for an ancestor that is a naming container
         UIComponent containerComponent = this;
@@ -349,22 +357,6 @@ public abstract class UIComponentBase extends UIComponent {
 
 
     /**
-     * <p>The component reference expression for this component.</p>
-     */
-    private String componentRef = null;
-
-
-    public String getComponentRef() {
-        return (this.componentRef);
-    }
-
-
-    public void setComponentRef(String componentRef) {
-        this.componentRef = componentRef;
-    }
-
-
-    /**
      * <p>The component identifier for this component.</p>
      */
     private String id = null;
@@ -372,17 +364,10 @@ public abstract class UIComponentBase extends UIComponent {
 
     public String getId() {
 
-	if (id != null) {
 	    return (id);
-	}
-	ValueBinding vb = getValueBinding("id");
-	if (vb != null) {
-	    return ((String) vb.getValue(getFacesContext()));
-	} else {
-	    return (null);
-	}
 
     }
+
 
     /**
      * @exception IllegalArgumentException {@inheritDoc}
@@ -392,6 +377,7 @@ public abstract class UIComponentBase extends UIComponent {
         
         validateId(id);
         this.id = id;
+        this.clientId = null; // Erase any cached value
 
     }
 
@@ -967,100 +953,27 @@ public abstract class UIComponentBase extends UIComponent {
     // -------------------------------------------- Lifecycle Processing Methods
 
     /**
-     * The list of events that have already been broadcast to ANY_PHASE
-     * listeners for this component.  This data structure is lazily
-     * instantiated only if necessary.  It is <strong>NOT</strong>
-     * part of the saved and restored state of this {@link UIComponent}.</p>
-     */
-    private transient List anyPhaseEvents = null;
-
-
-    /**
-     * @exception IllegalArgumentException {@inheritDoc}
+     * @exception AbortProcessingException {@inheritDoc}
      * @exception IllegalStateException {@inheritDoc}
      * @exception NullPointerException {@inheritDoc}  
      */ 
-    public boolean broadcast(FacesEvent event, PhaseId phaseId)
+    public void broadcast(FacesEvent event)
         throws AbortProcessingException {
 
-        if ((event == null) || (phaseId == null)) {
+        if (event == null) {
             throw new NullPointerException();
         }
-        
-        if (PhaseId.ANY_PHASE.equals(phaseId)) {
-            throw new IllegalStateException();
-        }
-        
         if (listeners == null) {
-            return (false);
-        }
-
-        // Broadcast the event to interested listeners
-        List anyPhaseListeners = listeners[PhaseId.ANY_PHASE.getOrdinal()];
-        if (anyPhaseListeners != null) {
-            if ((anyPhaseEvents == null) ||
-                !anyPhaseEvents.contains(event)) {
-                broadcast(event, anyPhaseListeners);
-            }
-            if (anyPhaseEvents == null) {
-                anyPhaseEvents = new ArrayList(5);
-            }
-            anyPhaseEvents.add(event);
-        }
-        broadcast(event, listeners[phaseId.getOrdinal()]);
-
-        // Determine whether there are any registered listeners for later phases
-        // that are interested in this event
-        boolean result = false;
-        for (int i = phaseId.getOrdinal() + 1; i < listeners.length; i++) {
-            if ((listeners[i] != null) && (listeners[i].size() > 0)) {
-                int n = listeners[i].size();
-                for (int j = 0; j < n; j++) {
-                    FacesListener listener = (FacesListener)
-                        listeners[i].get(j);
-                    if (event.isAppropriateListener(listener)) {
-                        result = true;
-                    }
-                }
-            }
-        }
-        return (result);
-
-    }
-
-
-    /**
-     * <p>Broadcast this {@link FacesEvent} to all {@link FacesListener}s in
-     * the specified <code>List</code> (if any).  If the <code>list</code>
-     * is <code>null</code>, no action is taken.</p>
-     *
-     * <p>For each listener in the specified list, this method must first
-     * call <code>isAppropriateListener(FacesListener)</code> to determine
-     * whether this listener is interested in the current event, and (if it
-     * is) this method must call <code>processListener(FacesListener)</code> to
-     * actually broadcast the event.  Individual {@link FacesEvent} classes
-     * must implement these two abstract methods appropriately.</p>
-     *
-     * @param event {@link FacesEvent} to be broadcast
-     * @param list List of {@link FacesListener}s to notify (if any)
-     *
-     * @exception AbortProcessingException Signal the JavaServer Faces
-     *  implementation that no further processing on the current event
-     *  should be performed
-     */
-    private void broadcast(FacesEvent event, List list) {
-
-        if (list == null) {
             return;
         }
-        Iterator listeners = list.iterator();
-        while (listeners.hasNext()) {
-            FacesListener listener = (FacesListener) listeners.next();
+
+        Iterator iter = listeners.iterator();
+        while (iter.hasNext()) {
+            FacesListener listener = (FacesListener) iter.next();
             if (event.isAppropriateListener(listener)) {
                 event.processListener(listener);
             }
         }
-
     }
 
 
@@ -1142,11 +1055,10 @@ public abstract class UIComponentBase extends UIComponent {
 
 
     /**
-     * <p>Each element of this array is a <code>List</code> of registered
-     * {@link FacesListener}s for an ordinal {@link PhaseId} value.  This
-     * data structure is lazily instantiated as necessary.</p>
+     * <p>Our {@link javax.faces.event.FacesListener}s.  This data
+     * structure is lazily instantiated as necessary.</p>
      */
-    protected List listeners[];
+    protected List listeners;
 
 
     /**
@@ -1169,7 +1081,6 @@ public abstract class UIComponentBase extends UIComponent {
      * }
      *
      * public interface FooListener extends FacesListener {
-     *   public PhaseId getPhaseId();
      *   public void processFoo(FooEvent event);
      * }
      *
@@ -1196,13 +1107,9 @@ public abstract class UIComponentBase extends UIComponent {
             throw new NullPointerException();
         }
         if (listeners == null) {
-            listeners = new List[PhaseId.VALUES.size()];
+            listeners = new ArrayList();
         }
-        int ordinal = listener.getPhaseId().getOrdinal();
-        if (listeners[ordinal] == null) {
-            listeners[ordinal] = new ArrayList();
-        }
-        listeners[ordinal].add(listener);
+        listeners.add(listener);
 
     }
 
@@ -1224,18 +1131,13 @@ public abstract class UIComponentBase extends UIComponent {
         }
 
         List results = new ArrayList();
-        for (int i = 0; i < listeners.length; i++) {
-            if (listeners[i] == null) {
-                continue;
-            }
-            Iterator items = listeners[i].iterator();
+	Iterator items = listeners.iterator();
             while (items.hasNext()) {
                 FacesListener item = (FacesListener) items.next();
                 if (clazz.isAssignableFrom(item.getClass())) {
                     results.add(item);
                 }
             }
-        }
         return ((FacesListener[]) results.toArray
                 (new FacesListener[results.size()]));
 
@@ -1259,11 +1161,7 @@ public abstract class UIComponentBase extends UIComponent {
         if (listeners == null) {
             return;
         }
-        int ordinal = listener.getPhaseId().getOrdinal();
-        if (listeners[ordinal] != null) {
-            listeners[ordinal].remove(listener);
-        }
-
+	listeners.remove(listener);
     }
 
     /**
@@ -1549,7 +1447,7 @@ public abstract class UIComponentBase extends UIComponent {
 
     public Object saveState(FacesContext context) {
 
-        Object values[] = new Object[9];
+        Object values[] = new Object[8];
         // copy over "attributes" to a temporary map, so that
         // any references maintained due to "attributes" being an inner class
         // is not saved.
@@ -1559,12 +1457,11 @@ public abstract class UIComponentBase extends UIComponent {
         }
 	values[1] = saveBindingsState(context);
         values[2] = clientId;
-        values[3] = componentRef;
-        values[4] = id;
-        values[5] = rendered ? Boolean.TRUE : Boolean.FALSE;
-	values[6] = renderedSet ? Boolean.TRUE : Boolean.FALSE;
-        values[7] = rendererType;
-        values[8] = saveAttachedState(context, listeners);
+        values[3] = id;
+        values[4] = rendered ? Boolean.TRUE : Boolean.FALSE;
+	values[5] = renderedSet ? Boolean.TRUE : Boolean.FALSE;
+        values[6] = rendererType;
+        values[7] = saveAttachedState(context, listeners);
         // Don't save the transient flag.  Asssert that it is false
         // here.
                     
@@ -1589,34 +1486,18 @@ public abstract class UIComponentBase extends UIComponent {
         }
 	bindings = restoreBindingsState(context, values[1]);
         clientId = (String) values[2];
-        componentRef = (String) values[3];
-        id = (String) values[4];
-        rendered = ((Boolean) values[5]).booleanValue();
-        renderedSet = ((Boolean) values[6]).booleanValue();
-        rendererType = (String) values[7];
-        List [] restoredListeners = null;
-        if (null != (restoredListeners = (List [])
-                     restoreAttachedState(context, values[8]))) {
+        id = (String) values[3];
+        rendered = ((Boolean) values[4]).booleanValue();
+        renderedSet = ((Boolean) values[5]).booleanValue();
+        rendererType = (String) values[6];
+        List restoredListeners = null;
+        if (null != (restoredListeners = (List)
+                     restoreAttachedState(context, values[7]))) {
             // if there were some listeners registered prior to this
             // method being invoked, merge them with the list to be
             // restored.
             if (null != listeners) {
-                for (int i = 0, len = restoredListeners.length; i < len; i++) {
-                    // if the current restoredListener List has elements
-                    if (null != restoredListeners[i] && 
-                        !restoredListeners[i].isEmpty()) {
-                        // if the current existing listener List is
-                        // non-null
-                        if (null != listeners[i]) {
-                            listeners[i].addAll(restoredListeners[i]);
-                        }
-                        else {
-                            listeners[i] = restoredListeners[i];
-                        }
-                        restoredListeners[i] = null;
-                    }
-                    // else we don't need to do anything.
-                }
+		listeners.addAll(restoredListeners);
             }
             else {
                 listeners = restoredListeners;
@@ -1658,8 +1539,7 @@ public abstract class UIComponentBase extends UIComponent {
      * the attached objects.</p>
      *
      * <p>This method supports saving attached objects of the following
-     * type: <code>Object</code>, <code>List</code> of
-     * <code>Object</code> and array of <code>List</code> of
+     * type: <code>Object</code> and <code>List</code> of
      * <code>Object</code>.</p>
      *
      * <p>Algorithm:</p>
@@ -1668,10 +1548,6 @@ public abstract class UIComponentBase extends UIComponent {
      *
      * <p>If argument <code>attachedObject</code> is <code>null</code>
      * return.</p>
-     *
-     * <p>If the argument <code>attachedObject</code> is an array of
-     * <code>List</code> call a private helper method to handle this
-     * case.  Return the result.</p>
      *
      * <p>If the argument <code>attachedObject</code> is itself a
      * <code>List</code>, create a new <code>List</code> and fill it
@@ -1687,11 +1563,10 @@ public abstract class UIComponentBase extends UIComponent {
      *
      * @param context the {@link FacesContext} for this request.
      *
-     * @param attachedObject the object, which may be an array of
-     * <code>List</code> instances, a <code>List</code> instance, or an
-     * Object.  The <code>attachedObject</code> (or the elements that
-     * comprise <code>attachedObject</code> may implement {@link
-     * StateHolder}.
+     * @param attachedObject the object, which may be a
+     * <code>List</code> instance, or an Object.  The
+     * <code>attachedObject</code> (or the elements that comprise
+     * <code>attachedObject</code> may implement {@link StateHolder}.
      *
      * @exception NullPointerException if the context argument is null.
      *
@@ -1711,16 +1586,15 @@ public abstract class UIComponentBase extends UIComponent {
             resultList = null;
         Iterator listIter = null;
 
-        if (attachedObject instanceof List[]) {
-            result = saveAttachedListState(context, 
-                                           (List []) attachedObject);
-        }
-        else if (attachedObject instanceof List) {
+        if (attachedObject instanceof List) {
             attachedList = (List) attachedObject;
             resultList = new ArrayList(attachedList.size());
             listIter = attachedList.iterator();
+	    Object cur = null;
             while (listIter.hasNext()) {
-                resultList.add(new StateHolderSaver(context, listIter.next()));
+		if (null != (cur = listIter.next())) {
+		    resultList.add(new StateHolderSaver(context, cur));
+		}
             }
             result = resultList;
         }
@@ -1742,10 +1616,6 @@ public abstract class UIComponentBase extends UIComponent {
      * supported by {@link #saveAttachedState}.</p>
      *
      * <p>Algorithm:</p>
-     *
-     * <p>If the argument <code>stateObj</code> is an array of
-     * <code>Object</code> instances, call a private helper method and
-     * return the result.</p>
      *
      * <p>If the argument <code>stateObj</code> is a <code>List</code>,
      * create a new <code>List</code> to hold the result.  Treat each
@@ -1785,10 +1655,7 @@ public abstract class UIComponentBase extends UIComponent {
         Iterator iter = null;
         StateHolderSaver saver = null;
 
-        if (stateObj instanceof Object[]) {
-            result = restoreAttachedListState(context, stateObj);
-        }
-        else if (stateObj instanceof List) {
+	if (stateObj instanceof List) {
             stateList = (List) stateObj;
             resultList = new ArrayList(stateList.size());
             iter = stateList.iterator();
@@ -1812,171 +1679,6 @@ public abstract class UIComponentBase extends UIComponent {
         }
         return result;
     }
-
-    /**
-     *
-     * <p>This method is called by {@link
-     * UIComponent} subclasses that have attached
-     * Objects.  It is a convenience method that does the work of saving
-     * attached objects that may or may not implement the {@link
-     * StateHolder} interface.</p>
-     *
-     * <p>Algorithm:</p>
-     *
-     * <p>If argument attachedObjects is null return.</p>
-     *
-     * <p>Store the state of the attachedObjects as an opaque Object array,
-     * interpreted only by our corresponding {@link
-     * #restoreAttachedState} method.  Each element in the Object array
-     * is either null, or is itself an array of <code>StateHolderSaver</code>
-     * instances.</p>
-     *
-     * <p>For each element in the argument attachedObjects array:</p>
-     *
-     * <p>If the current element is null, assign the corresponding
-     * element in the Object array to null.</p>
-     *
-     * <p>If the current element is non-null, create an inner
-     * <code>StateHolderSaver</code> array and iterate over the elements
-     * in the <code>List</code> contained in the current element in the
-     * argument attachedObjects array.  For each element, save the
-     * attached object using the <code>StateHolderSaver</code> helper
-     * class</p>.
-     *
-     * <p>Save the inner <code>StateHolderSaver</code> array to the
-     * corresponding element in the result Object array</p>
-     *
-     * @param context the {@link FacesContext} for this request.
-     *
-     * @param attachedObjects the objects, which may implement {@link
-     * StateHolder}, that are attached to argument attachee.
-     *
-     * @exception NullPointerException if the context or attachee
-     * arguments are null.
-     *
-     */
-
-    private static Object saveAttachedListState(FacesContext context,
-                                                List attachedObjects[]) {
-        if (null == attachedObjects) {
-            return null;
-        }
-        if (null == context) {
-            throw new NullPointerException();
-        }
-        
-        int 
-            i, attachedObjectsLength = attachedObjects.length,
-            j, innerListLength;
-        Object [] result = new Object[attachedObjectsLength];
-        StateHolderSaver [] innerList = null;
-        Object curAttachedObject = null;
-        Iterator iter = null;
-        
-        // For each List in the List array.
-        for (i = 0; i < attachedObjectsLength; i++) {
-            // if there is no List
-            if (null == attachedObjects[i]) {
-                result[i] = null;
-            }
-            else {
-                // There is a List, therefore we have some attachedObjects
-                innerListLength = attachedObjects[i].size();
-                innerList = new StateHolderSaver[innerListLength];
-                iter = attachedObjects[i].iterator();
-                j = 0;
-                // Iteratate over the attachedObjects
-                while (iter.hasNext()) {
-                    curAttachedObject = iter.next();
-                    if (null != curAttachedObject) {
-                        innerList[j] = 
-                            new StateHolderSaver(context, curAttachedObject);
-                    }
-                    j++;
-                }
-                // at this point, innerList has the state of all the
-                // attachedObjects for this element in the argument attachedObjects
-                // array.
-                result[i] = innerList;
-            }
-        }
-        return result;
-    }
-    
-    /**
-     *
-     * <p>This method is tightly coupled with {@link #saveAttachedListState}.</p>
-     *
-     * <p>Algorithm:</p>
-     *
-     * <p>Interpret the argument Object as an Object array, which it
-     * must be because that's what {@link #getAttachedObjectState} has
-     * produced.  This method creates a new <code>List []</code> to
-     * store the restored attachedObjects.  For each element in the Object
-     * array:</p>
-     *
-     * <p>If the current element is non-null, it must be of type
-     * <code>StateHolderSaver</code> array.  Create an ArrayList to
-     * store the contents of the inner <code>StateHolderSaver</code> array.
-     * For each element in the inner <code>StateHolderSaver</code>
-     * array:</p>
-     *
-     * <ul>
-     *
-     * <p>Interpret the element as the fully qualified Java class name
-     * and create an instance of that class, storing it in the
-     * ArrayList.</p>
-     *
-     * </ul>
-     *
-     * @param context the {@link FacesContext} for this request
-     *
-     * @param stateObj the opaque object returned from {@link
-     * #getAttachedObjectState}
-     *
-     * @exception NullPointerException if context is null.
-     *
-     */
-    
-    private static List [] restoreAttachedListState(FacesContext context,
-                                                    Object stateObj) {
-        if (null == stateObj) {
-            return null;
-        }
-        if (null == context) {
-            throw new NullPointerException();
-        }
-        
-        Object [] state = (Object []) stateObj;
-        StateHolderSaver [] innerArray = null;
-        int 
-            i, j, innerLen, outerLen = state.length;
-        List [] result = null;
-        ArrayList curList = null;
-        Object curAttachedObject = null;
-        
-        for (i = 0; i < outerLen; i++) {
-            if (null != state[i]) {
-                if (null == result) {
-                    result = new List[outerLen];
-                }
-                innerArray = (StateHolderSaver []) state[i];
-                innerLen = innerArray.length;
-                result[i] = curList = new ArrayList();
-                // create the attachedObjects for this List
-                for (j = 0; j < innerLen; j++) {
-                    if (null != innerArray[j]) {
-                        curAttachedObject = innerArray[j].restore(context);
-                        if (null != curAttachedObject) {
-                            curList.add(curAttachedObject);
-                        }
-                    }
-                }
-            }
-        }
-        return result;
-    }
-
 
     private Map restoreBindingsState(FacesContext context, Object state) {
 

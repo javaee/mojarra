@@ -1,5 +1,5 @@
 /*
- * $Id: MockApplication.java,v 1.15 2003/10/30 16:14:01 eburns Exp $
+ * $Id: MockApplication.java,v 1.16 2003/12/17 15:11:24 rkitain Exp $
  */
 
 /*
@@ -44,6 +44,10 @@ public class MockApplication extends Application {
         addComponent("TestNamingContainer",
                      "javax.faces.webapp.TestNamingContainer");
         addComponent("TestComponent", "javax.faces.webapp.TestComponent");
+        addComponent("TestInput", "javax.faces.component.UIInput");
+        addComponent("TestOutput", "javax.faces.component.UIOutput");
+        addConverter("Integer", "javax.faces.convert.IntegerConverter");
+        addValidator("Length", "javax.faces.validator.LengthValidator");
     }
 
 
@@ -55,10 +59,6 @@ public class MockApplication extends Application {
 		    public void processAction(ActionEvent e) {
 			processActionCalled = true;
 		    }
-		    public PhaseId getPhaseId() {
-			return PhaseId.INVOKE_APPLICATION;
-		    }
-
 		    // see if the other object is the same as our
 		    // anonymous inner class implementation.
 		    public boolean equals(Object otherObj) {
@@ -66,9 +66,7 @@ public class MockApplication extends Application {
 			    return false;
 			}
 			ActionListener other = (ActionListener) otherObj;
-			if (other.getPhaseId() != this.getPhaseId()) {
-			    return false;
-			}
+
 			processActionCalled = false;
 			other.processAction(null);
 			boolean result = processActionCalled;
@@ -106,7 +104,7 @@ public class MockApplication extends Application {
     }
 
 
-    public MethodBinding getMethodBinding(String ref, Class params[]) {
+    public MethodBinding createMethodBinding(String ref, Class params[]) {
         if (ref == null) {
             throw new NullPointerException();
         } else {
@@ -115,7 +113,7 @@ public class MockApplication extends Application {
     }
 
 
-    public ValueBinding getValueBinding(String ref) {
+    public ValueBinding createValueBinding(String ref) {
         if (ref == null) {
             throw new NullPointerException();
         } else {
@@ -159,7 +157,7 @@ public class MockApplication extends Application {
             throw new FacesException(e);
         }
     }
-    public UIComponent createComponent(ValueBinding componentRef,
+    public UIComponent createComponent(ValueBinding componentBinding,
                                        FacesContext context,
                                        String componentType)
         throws FacesException {

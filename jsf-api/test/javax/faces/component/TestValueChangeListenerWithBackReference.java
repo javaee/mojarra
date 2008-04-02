@@ -1,5 +1,5 @@
 /*
- * $Id: TestValueChangeListenerWithBackReference.java,v 1.1 2003/10/27 04:10:08 craigmcc Exp $
+ * $Id: TestValueChangeListenerWithBackReference.java,v 1.2 2003/12/17 15:11:11 rkitain Exp $
  */
 
 /*
@@ -11,7 +11,6 @@ package javax.faces.component;
 
 
 import javax.faces.context.FacesContext;
-import javax.faces.event.PhaseId;
 import javax.faces.TestUtil;
 
 /**
@@ -31,15 +30,14 @@ public class TestValueChangeListenerWithBackReference extends TestValueChangeLis
 
 
     public TestValueChangeListenerWithBackReference(String id, 
-						     PhaseId phaseId, 
 						     UIComponent yourComponent) {
-	super(id, phaseId);
+	super(id);
 	this.yourComponent = yourComponent;
     }
 
 
     public TestValueChangeListenerWithBackReference(String id) {
-        super(id, PhaseId.ANY_PHASE);
+        super(id);
     }
 
     private UIComponent yourComponent = null;

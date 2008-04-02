@@ -1,5 +1,5 @@
 /*
- * $Id: MockPropertyResolver.java,v 1.2 2003/10/25 22:08:51 craigmcc Exp $
+ * $Id: MockPropertyResolver.java,v 1.3 2003/12/17 15:11:26 rkitain Exp $
  */
 
 /*
@@ -10,7 +10,9 @@
 package javax.faces.mock;
 
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
+import javax.faces.el.EvaluationException;
 import javax.faces.el.PropertyNotFoundException;
 import javax.faces.el.PropertyResolver;
 import org.apache.commons.beanutils.PropertyUtils;
@@ -38,7 +40,7 @@ public class MockPropertyResolver extends PropertyResolver {
 
 
     public Object getValue(Object base, String name)
-        throws PropertyNotFoundException {
+        throws EvaluationException, PropertyNotFoundException {
 
         if (base == null) {
             throw new NullPointerException();
@@ -54,8 +56,12 @@ public class MockPropertyResolver extends PropertyResolver {
             } else {
                 return (PropertyUtils.getSimpleProperty(base, name));
             }
-        } catch (Exception e) {
-            throw new PropertyNotFoundException(e);
+        } catch (IllegalAccessException e) {
+            throw new EvaluationException(e);
+        } catch (InvocationTargetException e) {
+            throw new EvaluationException(e.getTargetException());
+        } catch (NoSuchMethodException e) {
+            throw new PropertyNotFoundException(name);
         }
 
     }
@@ -81,8 +87,12 @@ public class MockPropertyResolver extends PropertyResolver {
             } else {
                 PropertyUtils.setSimpleProperty(base, name, value);
             }
-        } catch (Exception e) {
-            throw new PropertyNotFoundException(e);
+        } catch (IllegalAccessException e) {
+            throw new EvaluationException(e);
+        } catch (InvocationTargetException e) {
+            throw new EvaluationException(e.getTargetException());
+        } catch (NoSuchMethodException e) {
+            throw new PropertyNotFoundException(name);
         }
 
     }

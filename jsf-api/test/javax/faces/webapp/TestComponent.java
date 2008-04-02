@@ -1,5 +1,5 @@
 /*
- * $Id: TestComponent.java,v 1.4 2003/09/25 07:46:52 craigmcc Exp $
+ * $Id: TestComponent.java,v 1.5 2003/12/17 15:11:32 rkitain Exp $
  */
 
 /*
@@ -14,6 +14,7 @@ import java.io.IOException;
 import javax.faces.component.UIComponentBase;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
+import javax.faces.el.ValueBinding;
 
 
 // Test UIComponent Class
@@ -34,7 +35,15 @@ public class TestComponent extends UIComponentBase {
     private String label = null;
 
     public String getLabel() {
-        return (this.label);
+        if (this.label != null) {
+            return (this.label);
+        }
+        ValueBinding vb = getValueBinding("label");
+        if (vb != null) {
+            return ((String) vb.getValue(getFacesContext()));
+        } else {
+            return (null);
+        }
     }
 
     public void setLabel(String label) {

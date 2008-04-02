@@ -1,5 +1,5 @@
 /*
- * $Id: TestTag.java,v 1.4 2003/12/17 15:11:32 rkitain Exp $
+ * $Id: TestOutputTag.java,v 1.2 2003/12/17 15:11:32 rkitain Exp $
  */
 
 /*
@@ -14,28 +14,17 @@ import javax.faces.component.UIComponent;
 import javax.faces.el.ValueBinding;
 
 
-// Test UIComponent Tag
-public class TestTag extends UIComponentTag {
+// Test UIOutput Tag
+public class TestOutputTag extends UIComponentTag {
 
-    public TestTag() {
+    public TestOutputTag() {
         super();
     }
 
 
-    public TestTag(String componentId) {
-        this(componentId, componentId);
-    }
-
-    public TestTag(String componentId, String label) {
+    public TestOutputTag(String componentId) {
         super();
         setId(componentId);
-        setLabel(label);
-    }
-
-    private String label = null;
-
-    public void setLabel(String label) {
-        this.label = label;
     }
 
     private boolean rendersChildren = false;
@@ -48,16 +37,15 @@ public class TestTag extends UIComponentTag {
 
     public void release() {
         super.release();
-        this.label = null;
         this.rendersChildrenSet = false;
     }
 
     public String getComponentType() {
-        return ("TestComponent");
+        return ("TestOutput");
     }
 
     public String getRendererType() {
-        return (null);
+        return ("TestRenderer");
     }
 
 
@@ -65,15 +53,6 @@ public class TestTag extends UIComponentTag {
         super.setProperties(component);
         if (rendersChildrenSet) {
             ((TestComponent) component).setRendersChildren(rendersChildren);
-        }
-        if (label != null) {
-            if (isValueReference(label)) {
-                ValueBinding vb =
-                    context.getApplication().createValueBinding(label);
-                component.setValueBinding("label", vb);
-            } else {
-                ((TestComponent) component).setLabel(label);
-            }
         }
     }
 

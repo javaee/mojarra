@@ -17,6 +17,7 @@
   <!ENTITY i18n-props SYSTEM "i18n-props.xml">
   <!ENTITY core-props SYSTEM "core-props.xml">
   <!ENTITY table-props SYSTEM "table-props.xml">
+  <!ELEMENT tag-attribute    (#PCDATA)>
   <!ENTITY % impl SYSTEM "standard-html-renderkit-impl.xml">
   %impl;
 ]>
@@ -43,114 +44,137 @@
     <property>
       <display-name></display-name>
       <icon></icon>
-      <property-name>actionRef</property-name>
+      <property-name>actionListener</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
-    </property>
-    <property>
-      <display-name></display-name>
-      <icon></icon>
-      <property-name>actionListenerRef</property-name>
-      <property-class>java.lang.String</property-class>
-      <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>immediate</property-name>
       <property-class>boolean</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>action</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>converter</property-name>
       <property-class>javax.faces.convert.Converter</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>value</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>onchange</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>accesskey</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>image</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>size</property-name>
       <property-class>int</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>onblur</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>tabindex</property-name>
       <property-class>int</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>type</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>disabled</property-name>
       <property-class>boolean</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>alt</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>onselect</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
   </component>
 
@@ -164,121 +188,146 @@
     <property>
       <display-name></display-name>
       <icon></icon>
-      <property-name>actionRef</property-name>
+      <property-name>actionListener</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
-    </property>
-    <property>
-      <display-name></display-name>
-      <icon></icon>
-      <property-name>actionListenerRef</property-name>
-      <property-class>java.lang.String</property-class>
-      <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>immediate</property-name>
       <property-class>boolean</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>action</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>converter</property-name>
       <property-class>javax.faces.convert.Converter</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>value</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>shape</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>coords</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>rel</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>rev</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>hreflang</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>charset</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>accesskey</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>tabindex</property-name>
       <property-class>int</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>onfocus</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>onblur</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>type</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
   </component>
 
@@ -292,56 +341,72 @@
       <icon></icon>
       <property-name>converter</property-name>
       <property-class>javax.faces.convert.Converter</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>first</property-name>
       <property-class>int</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>rowIndex</property-name>
       <property-class>int</property-class>
+      <property-extension>
       <tag-attribute>no</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>rows</property-name>
       <property-class>int</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>styleClass</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>style</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>value</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>var</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
   </component>
 
@@ -356,70 +421,90 @@
       <icon></icon>
       <property-name>lang</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>action</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>method</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>enctype</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>dir</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>acceptcharset</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>onreset</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>onsubmit</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>accept</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>target</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
   </component>
 
@@ -435,77 +520,99 @@
       <icon></icon>
       <property-name>value</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>URL</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>longdesc</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>alt</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>height</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>width</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>onblur</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>onchange</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>onfocus</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>usemap</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>ismap</property-name>
       <property-class>boolean</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
   </component>
 
@@ -518,35 +625,45 @@
       <icon></icon>
       <property-name>value</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
-      <property-name>validateRef</property-name>
+      <property-name>validator</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
-      <property-name>valueChangeListenerRef</property-name>
+      <property-name>valueChangeListener</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>converter</property-name>
       <property-class>javax.faces.convert.Converter</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>required</property-name>
       <property-class>boolean</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
   </component>
 
@@ -559,135 +676,173 @@
     <property>
       <display-name></display-name>
       <icon></icon>
-      <property-name>validateRef</property-name>
+      <property-name>validator</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
-      <property-name>valueChangeListenerRef</property-name>
+      <property-name>valueChangeListener</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>redisplay</property-name>
       <property-class>boolean</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>converter</property-name>
       <property-class>javax.faces.convert.Converter</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>value</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>disabled</property-name>
       <property-class>boolean</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>readonly</property-name>
       <property-class>boolean</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>size</property-name>
       <property-class>int</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>maxlength</property-name>
       <property-class>int</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>alt</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>lang</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>tabindex</property-name>
       <property-class>int</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>accesskey</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>onfocus</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>onblur</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>onselect</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>onchange</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>dir</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>required</property-name>
       <property-class>boolean</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
   </component>
 
@@ -702,119 +857,162 @@
       <icon></icon>
       <property-name>converter</property-name>
       <property-class>javax.faces.convert.Converter</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>value</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>readonly</property-name>
       <property-class>boolean</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
+    </property>
+    <property>
+      <display-name></display-name>
+      <icon></icon>
+      <property-name>disabled</property-name>
+      <property-class>boolean</property-class>
+      <property-extension>
+        <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>size</property-name>
       <property-class>int</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>maxlength</property-name>
       <property-class>int</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>alt</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>lang</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>tabindex</property-name>
       <property-class>int</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>accesskey</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>onfocus</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>onblur</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>onselect</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>onchange</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>dir</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>required</property-name>
       <property-class>boolean</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
-      <property-name>validateRef</property-name>
+      <property-name>validator</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
-      <property-name>valueChangeListenerRef</property-name>
+      <property-name>valueChangeListener</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
   </component>
 
@@ -829,119 +1027,153 @@
       <icon></icon>
       <property-name>value</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
-      <property-name>validateRef</property-name>
+      <property-name>validator</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
-      <property-name>valueChangeListenerRef</property-name>
+      <property-name>valueChangeListener</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>disabled</property-name>
       <property-class>boolean</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>readonly</property-name>
       <property-class>boolean</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>cols</property-name>
       <property-class>int</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>rows</property-name>
       <property-class>int</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>alt</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>lang</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>tabindex</property-name>
       <property-class>int</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>accesskey</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>onfocus</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>onblur</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>onselect</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>onchange</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>dir</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>required</property-name>
       <property-class>boolean</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
   </component>
 
@@ -955,7 +1187,9 @@
       <icon></icon>
       <property-name>showSummary</property-name>
       <property-class>boolean</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <description>If true, the component must not display any detail.</description>
@@ -963,7 +1197,9 @@
       <icon></icon>
       <property-name>showDetail</property-name>
       <property-class>boolean</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <description>The clientId of the component for which to display messages.</description>
@@ -971,7 +1207,27 @@
       <icon></icon>
       <property-name>for</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>required</tag-attribute>
+      </property-extension>
+    </property>
+    <property>
+      <display-name></display-name>
+      <icon></icon>
+      <property-name>styleClass</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <tag-attribute>yes</tag-attribute>
+      </property-extension>
+    </property>
+    <property>
+      <display-name></display-name>
+      <icon></icon>
+      <property-name>style</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
   </component>
 
@@ -985,7 +1241,9 @@
       <icon></icon>
       <property-name>globalOnly</property-name>
       <property-class>boolean</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <description>The clientId of the component for which to display messages.</description>
@@ -993,7 +1251,9 @@
       <icon></icon>
       <property-name>for</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <description>If false, the component must not display any summary, defaults to true.</description>
@@ -1001,7 +1261,9 @@
       <icon></icon>
       <property-name>showSummary</property-name>
       <property-class>boolean</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <description>If false, the component must not display any detail, defaults to false.</description>
@@ -1009,7 +1271,27 @@
       <icon></icon>
       <property-name>showDetail</property-name>
       <property-class>boolean</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
+    </property>
+    <property>
+      <display-name></display-name>
+      <icon></icon>
+      <property-name>styleClass</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <tag-attribute>yes</tag-attribute>
+      </property-extension>
+    </property>
+    <property>
+      <display-name></display-name>
+      <icon></icon>
+      <property-name>style</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
   </component>
 
@@ -1025,56 +1307,72 @@
       <icon></icon>
       <property-name>for</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>required</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>lang</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>accesskey</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>onfocus</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>onblur</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>dir</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>value</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>converter</property-name>
       <property-class>javax.faces.convert.Converter</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
   </component>
 
@@ -1089,77 +1387,99 @@
       <icon></icon>
       <property-name>tabindex</property-name>
       <property-class>int</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>type</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>title</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>charset</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>styleClass</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>accesskey</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>onfocus</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>onblur</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>value</property-name>
       <property-class>java.lang.String</property-class>
-      <tag-attribute>yes</tag-attribute>
+      <property-extension>
+        <tag-attribute>required</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>target</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>converter</property-name>
       <property-class>javax.faces.convert.Converter</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
   </component>
 
@@ -1172,28 +1492,36 @@
       <icon></icon>
       <property-name>value</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>converter</property-name>
       <property-class>javax.faces.convert.Converter</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>styleClass</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>style</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
   </component>
 
@@ -1206,28 +1534,36 @@
       <icon></icon>
       <property-name>converter</property-name>
       <property-class>javax.faces.convert.Converter</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>value</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>styleClass</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>style</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
   </component>
 
@@ -1243,84 +1579,108 @@
       <icon></icon>
       <property-name>value</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>columns</property-name>
       <property-class>int</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>lang</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>dir</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>summary</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>bgcolor</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>frame</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>rules</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>border</property-name>
       <property-class>int</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>cellspacing</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>cellpadding</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>width</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
   </component>
 
@@ -1333,7 +1693,9 @@
       <icon></icon>
       <property-name>value</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
   </component>
 
@@ -1349,105 +1711,135 @@
       <icon></icon>
       <property-name>value</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>checked</property-name>
       <property-class>boolean</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>disabled</property-name>
       <property-class>boolean</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>readonly</property-name>
       <property-class>boolean</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>size</property-name>
       <property-class>int</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>alt</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>tabindex</property-name>
       <property-class>int</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>accesskey</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>onfocus</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>onblur</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>onselect</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>onchange</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>required</property-name>
       <property-class>boolean</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
-      <property-name>valueChangeListenerRef</property-name>
+      <property-name>valueChangeListener</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
-      <property-name>validateRef</property-name>
+      <property-name>validator</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
   </component>
 
@@ -1462,98 +1854,126 @@
       <icon></icon>
       <property-name>dir</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>disabled</property-name>
       <property-class>boolean</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>layout</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>lang</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>value</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>converter</property-name>
       <property-class>javax.faces.convert.Converter</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>name</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>onblur</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>onchange</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>onfocus</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>tabindex</property-name>
       <property-class>int</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>required</property-name>
       <property-class>boolean</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
-      <property-name>valueChangeListenerRef</property-name>
+      <property-name>valueChangeListener</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
-      <property-name>validateRef</property-name>
+      <property-name>validator</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
   </component>
 
@@ -1568,91 +1988,117 @@
       <icon></icon>
       <property-name>dir</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>disabled</property-name>
       <property-class>boolean</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>lang</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>value</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>converter</property-name>
       <property-class>javax.faces.convert.Converter</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>name</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>onblur</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>onchange</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>onfocus</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>tabindex</property-name>
       <property-class>int</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>required</property-name>
       <property-class>boolean</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
-      <property-name>valueChangeListenerRef</property-name>
+      <property-name>valueChangeListener</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
-      <property-name>validateRef</property-name>
+      <property-name>validator</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
   </component>
 
@@ -1668,105 +2114,135 @@
       <icon></icon>
       <property-name>border</property-name>
       <property-class>int</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>dir</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>disabled</property-name>
       <property-class>boolean</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>lang</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>value</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>converter</property-name>
       <property-class>javax.faces.convert.Converter</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>name</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>onblur</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>onchange</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>onfocus</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>size</property-name>
       <property-class>int</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>tabindex</property-name>
       <property-class>int</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>required</property-name>
       <property-class>boolean</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
-      <property-name>valueChangeListenerRef</property-name>
+      <property-name>valueChangeListener</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
-      <property-name>validateRef</property-name>
+      <property-name>validator</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
   </component>
 
@@ -1781,91 +2257,117 @@
       <icon></icon>
       <property-name>required</property-name>
       <property-class>boolean</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>value</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>converter</property-name>
       <property-class>javax.faces.convert.Converter</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>disabled</property-name>
       <property-class>boolean</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>lang</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>dir</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>tabindex</property-name>
       <property-class>int</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>onfocus</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>onblur</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>    
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>onselect</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>onchange</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
-      <property-name>valueChangeListenerRef</property-name>
+      <property-name>valueChangeListener</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
-      <property-name>validateRef</property-name>
+      <property-name>validator</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
   </component>
 
@@ -1881,98 +2383,126 @@
       <icon></icon>
       <property-name>required</property-name>
       <property-class>boolean</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>value</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>converter</property-name>
       <property-class>javax.faces.convert.Converter</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>disabled</property-name>
       <property-class>boolean</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>size</property-name>
       <property-class>int</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>lang</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>tabindex</property-name>
       <property-class>int</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>onfocus</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>onblur</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>onselect</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>onchange</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>dir</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
-      <property-name>valueChangeListenerRef</property-name>
+      <property-name>valueChangeListener</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
-      <property-name>validateRef</property-name>
+      <property-name>validator</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
   </component>
 
@@ -1985,28 +2515,36 @@
       <icon></icon>
       <property-name>value</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>converter</property-name>
       <property-class>javax.faces.convert.Converter</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>layout</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
       <property-name>border</property-name>
       <property-class>int</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <description>CSS style class</description>
@@ -2027,21 +2565,27 @@
       <icon></icon>
       <property-name>required</property-name>
       <property-class>boolean</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
-      <property-name>valueChangeListenerRef</property-name>
+      <property-name>valueChangeListener</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
-      <property-name>validateRef</property-name>
+      <property-name>validator</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
       <tag-attribute>yes</tag-attribute>
+      </property-extension>
     </property>
   </component>
 
@@ -2693,7 +3237,9 @@
         <icon></icon>
         <attribute-name>for</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
         <tag-attribute>required</tag-attribute>
+      </attribute-extension>
       </attribute>
 
       <attribute>
@@ -2925,7 +3471,7 @@
         <description>CSS style class for info messages</description>
         <display-name></display-name>
         <icon></icon>
-        <attribute-name>infoStyleClass</attribute-name>
+        <attribute-name>infoClass</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
       </attribute>
 
@@ -2941,7 +3487,7 @@
         <description>CSS style class for warn messages</description>
         <display-name></display-name>
         <icon></icon>
-        <attribute-name>warnStyleClass</attribute-name>
+        <attribute-name>warnClass</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
       </attribute>
 
@@ -2957,7 +3503,7 @@
         <description>CSS style class for error messages</description>
         <display-name></display-name>
         <icon></icon>
-        <attribute-name>errorStyleClass</attribute-name>
+        <attribute-name>errorClass</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
       </attribute>
 
@@ -2973,7 +3519,7 @@
         <description>CSS style class for fatal messages</description>
         <display-name></display-name>
         <icon></icon>
-        <attribute-name>fatalStyleClass</attribute-name>
+        <attribute-name>fatalClass</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
       </attribute>      
 
@@ -3025,7 +3571,7 @@
         <description>CSS style class for info messages</description>
         <display-name></display-name>
         <icon></icon>
-        <attribute-name>infoStyleClass</attribute-name>
+        <attribute-name>infoClass</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
       </attribute>
 
@@ -3041,7 +3587,7 @@
         <description>CSS style class for warn messages</description>
         <display-name></display-name>
         <icon></icon>
-        <attribute-name>warnStyleClass</attribute-name>
+        <attribute-name>warnClass</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
       </attribute>
 
@@ -3057,7 +3603,7 @@
         <description>CSS style class for error messages</description>
         <display-name></display-name>
         <icon></icon>
-        <attribute-name>errorStyleClass</attribute-name>
+        <attribute-name>errorClass</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
       </attribute>
 
@@ -3073,7 +3619,7 @@
         <description>CSS style class for fatal messages</description>
         <display-name></display-name>
         <icon></icon>
-        <attribute-name>fatalStyleClass</attribute-name>
+        <attribute-name>fatalClass</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
       </attribute>      
 
@@ -3551,6 +4097,14 @@
       </attribute>
 
       <attribute>
+        <description>unavailable in this context</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>disabled</attribute-name>
+        <attribute-class>boolean</attribute-class>
+      </attribute>
+
+      <attribute>
         <description>specific to each type of field</description>
         <display-name></display-name>
         <icon></icon>
@@ -3622,9 +4176,18 @@
         <attribute-class>java.lang.String</attribute-class>
       </attribute>
 
+      <attribute>
+        <description>Whether or not to escape HTML characters.  Default value is true.</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>escape</attribute-name>
+        <attribute-class>boolean</attribute-class>
+      </attribute>
+
       <supported-component-type>
         <component-type>InputText</component-type>
 	<attribute-name>readonly</attribute-name>
+	<attribute-name>disabled</attribute-name>
 	<attribute-name>size</attribute-name>
 	<attribute-name>maxlength</attribute-name>
 	<attribute-name>alt</attribute-name>
@@ -3654,6 +4217,7 @@
 	<component-type>OutputText</component-type>	
 	<attribute-name>styleClass</attribute-name>
 	<attribute-name>style</attribute-name>
+	<attribute-name>escape</attribute-name>
       </supported-component-type>
       <supported-component-class>
         <component-class>javax.faces.component.html.HtmlInputText</component-class>

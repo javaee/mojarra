@@ -1,5 +1,5 @@
 /*
- * $Id: TagTestCaseBase.java,v 1.1 2003/11/04 04:08:01 eburns Exp $
+ * $Id: TagTestCaseBase.java,v 1.2 2003/12/17 15:11:31 rkitain Exp $
  */
 
 /*
@@ -142,7 +142,7 @@ public class TagTestCaseBase extends TestCase {
     /**
      * Tear down instance variables required by this test case.
      */
-    public void tearDown() {
+    public void tearDown() throws Exception {
 
         application = null;
         config = null;

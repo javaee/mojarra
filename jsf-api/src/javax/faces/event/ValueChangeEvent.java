@@ -1,5 +1,5 @@
 /*
- * $Id: ValueChangeEvent.java,v 1.1 2003/10/27 04:10:02 craigmcc Exp $
+ * $Id: ValueChangeEvent.java,v 1.2 2003/12/17 15:10:55 rkitain Exp $
  */
 
 /*
@@ -30,6 +30,9 @@ public class ValueChangeEvent extends FacesEvent {
      * <p>Construct a new event object from the specified source component,
      * old value, and new value.</p>
      *
+     * <p>Set the {@link PhaseId} for this event to be {@link
+     * PhaseId#PROCESS_VALIDATIONS}.</p>
+     *
      * @param component Source {@link UIComponent} for this event
      * @param oldValue The previous local value of this {@link UIComponent}
      * @param newValue The new local value of thie {@link UIComponent}
@@ -43,7 +46,7 @@ public class ValueChangeEvent extends FacesEvent {
         super(component);
         this.oldValue = oldValue;
         this.newValue = newValue;
-
+	this.setPhaseId(PhaseId.PROCESS_VALIDATIONS);
     }
 
 

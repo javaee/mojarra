@@ -1,5 +1,5 @@
 /*
- * $Id: UIGraphicTestCase.java,v 1.14 2003/11/11 01:09:48 craigmcc Exp $
+ * $Id: UIGraphicTestCase.java,v 1.15 2003/12/17 15:11:13 rkitain Exp $
  */
 
 /*
@@ -131,7 +131,7 @@ public class UIGraphicTestCase extends ValueHolderTestCaseBase {
 	request.setAttribute("foo", "bar");
 	test.setValue(null);
 	assertNull(test.getValue());
-	test.setValueBinding("value", application.getValueBinding("#{foo}"));
+	test.setValueBinding("value", application.createValueBinding("#{foo}"));
 	assertNotNull(test.getValueBinding("value"));
 	assertEquals("bar", test.getValue());
 	test.setValue("baz");

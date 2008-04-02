@@ -1,5 +1,5 @@
 /*
- * $Id: ResponseStateManager.java,v 1.7 2003/09/13 12:57:46 eburns Exp $
+ * $Id: ResponseStateManager.java,v 1.8 2003/12/17 15:11:01 rkitain Exp $
  */
 
 /*
@@ -30,6 +30,7 @@ import java.io.Writer;
 
 public abstract class ResponseStateManager {
 
+
     /**
      *       
      * <p>Take the argument content buffer and replace the state markers
@@ -42,6 +43,9 @@ public abstract class ResponseStateManager {
      * character replacements to make the Strings suitable for inclusion
      * as an HTTP request paramater.</p>
      *
+     * @param context The {@link FacesContext} instance for the current request
+     * @param state The serialized state information previously buffered
+     *
      * @return the written state.  In the case of JSP, this is a
      * <code>String</code>.
      *
@@ -49,31 +53,34 @@ public abstract class ResponseStateManager {
     public abstract void writeState(FacesContext context,
 				    SerializedView state) throws IOException;
     
+
     /**
-
-    * <p>The implementation must inspect the current request and return
-    * the tree structure Object passed to it on a previous invocation of
-    * <code>writeState()</code>.</p>
-
-    * @return the tree structure Object passed in to
-    * <code>writeState</code>.  If this is the initial request, this
-    * method returns null.
-
-    */
-
+     * <p>The implementation must inspect the current request and return
+     * the tree structure Object passed to it on a previous invocation of
+     * <code>writeState()</code>.</p>
+     *
+     * @param context The {@link FacesContext} instance for the current request
+     * @param viewId View identifier of the view to be restored
+     *
+     * @return the tree structure Object passed in to
+     * <code>writeState</code>.  If this is the initial request, this
+     * method returns null.
+     */
     public abstract Object getTreeStructureToRestore(FacesContext context, 
 						     String viewId);
 
+
     /**
-
-    * <p>The implementation must inspect the current requst and return
-    * the component state Object passed to it on a previous invocation
-    * of <code>writeState()</code>.</p>
-
-    * @return the component state Object passed in to
-    * <code>writeState</code>.
-
-    */
-
+     * <p>The implementation must inspect the current request and return
+     * the component state Object passed to it on a previous invocation
+     * of <code>writeState()</code>.</p>
+     *
+     * @param context The {@link FacesContext} instance for the current request
+     *
+     * @return the component state Object passed in to
+     * <code>writeState</code>.
+     */
     public abstract Object getComponentStateToRestore(FacesContext context);
+
+
 }

@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContext.java,v 1.55 2003/10/30 23:18:47 eburns Exp $
+ * $Id: FacesContext.java,v 1.56 2003/12/17 15:10:44 rkitain Exp $
  */
 
 /*
@@ -18,6 +18,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.application.FacesMessage.Severity;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
+import javax.faces.render.RenderKit;
 
 
 /**
@@ -79,10 +80,10 @@ public abstract class FacesContext {
 
 
     /**
-     * <p>Return the maximum severity level recorded on any {@link FacesMessage}s
-     * that has been queued, whether or not they are associated with any
-     * specific {@link UIComponent}.  If no such messages have been queued,
-     * return <code>null</code>.</p>
+     * <p>Return the maximum severity level recorded on any
+     * {@link FacesMessage}s that has been queued, whether or not they are
+     * associated with any specific {@link UIComponent}.  If no such messages
+     * have been queued, return <code>null</code>.</p>
      *
      * @exception IllegalStateException if this method is called after
      *  this instance has been released
@@ -91,10 +92,10 @@ public abstract class FacesContext {
 
 
     /**
-     * <p>Return an <code>Iterator</code> over the {@link FacesMessage}s that have
-     * been queued, whether or not they are associated with any specific
-     * client identifier.  If no such messages have been queued, return an
-     * empty <code>Iterator</code>.</p>
+     * <p>Return an <code>Iterator</code> over the {@link FacesMessage}s
+     * that have been queued, whether or not they are associated with any
+     * specific client identifier.  If no such messages have been queued,
+     * return an empty <code>Iterator</code>.</p>
      *
      * @exception IllegalStateException if this method is called after
      *  this instance has been released
@@ -103,11 +104,11 @@ public abstract class FacesContext {
 
 
     /**
-     * <p>Return an <code>Iterator</code> over the {@link FacesMessage}s that have
-     * been queued that are associated with the specified client identifier
+     * <p>Return an <code>Iterator</code> over the {@link FacesMessage}s that
+     * have been queued that are associated with the specified client identifier
      * (if <code>clientId</code> is not <code>null</code>), or over the
-     * {@link FacesMessage}s that have been queued that are not associated with any
-     * specific client identifier (if <code>clientId</code> is
+     * {@link FacesMessage}s that have been queued that are not associated with
+     * any specific client identifier (if <code>clientId</code> is
      * <code>null</code>).  If no such messages have been queued, return an
      * empty <code>Iterator</code>.</p>
      *
@@ -119,6 +120,16 @@ public abstract class FacesContext {
      *  this instance has been released
      */
     public abstract Iterator getMessages(String clientId);
+
+
+    /**
+     * <p>Return the {@link RenderKit} instance for the render kit identifier
+     * specified on our {@link UIViewRoot}, if there is one.  If there is no
+     * current {@link UIViewRoot}, if the {@link UIViewRoot} does not have a
+     * specified <code>renderKitId</code>, or if there is no {@link RenderKit}
+     * for the specified identifier, return <code>null</code> instead.</p>
+     */
+    public abstract RenderKit getRenderKit();
 
 
     /**

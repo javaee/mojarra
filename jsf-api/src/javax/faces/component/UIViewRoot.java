@@ -1,5 +1,5 @@
 /*
- * $Id: UIViewRoot.java,v 1.14 2003/11/10 21:45:49 eburns Exp $
+ * $Id: UIViewRoot.java,v 1.15 2003/12/17 15:10:39 rkitain Exp $
  */
 
 /*
@@ -66,7 +66,8 @@ public class UIViewRoot extends UIComponentBase {
 
     /**
      * <p>Return the render kit identifier of the {@link RenderKit}
-     * associated with this view.</p>
+     * associated with this view.  Unless explicitly set, this will be the
+     * value defined by <code>RenderKitFactory.DEFAULT_RENDER_KIT</code>.</p>
      */
     public String getRenderKitId() {
 
@@ -77,7 +78,10 @@ public class UIViewRoot extends UIComponentBase {
 
     /**
      * <p>Set the render kit identifier of the {@link RenderKit}
-     * associated with this view.</p>
+     * associated with this view.  This method may be called at any time
+     * between the end of <em>Apply Request Values</em> phase of the
+     * request processing lifecycle (i.e. when events are being broadcast)
+     * and the beginning of the <em>Render Response</em> phase.</p>
      *
      * @param renderKitId The new {@link RenderKit} identifier,
      *  or <code>null</code> to disassociate this view with any
@@ -123,11 +127,14 @@ public class UIViewRoot extends UIComponentBase {
 
 
     /**
-     * <p>The list of events that have been queued for later broadcast.  This
-     * instance is lazily instantiated.  This list is <strong>NOT</strong>
-     * part of the state that is saved and restored for this component.</p>
+     * <p>An array of Lists of events that have been queued for later
+     * broadcast, with one List for each lifecycle phase.  The list
+     * indices match the ordinals of the PhaseId instances.  This
+     * instance is lazily instantiated.  This list is
+     * <strong>NOT</strong> part of the state that is saved and restored
+     * for this component.</p>
      */
-    private transient List events = null;
+    private transient List events[] = null;
 
 
     /**
@@ -142,16 +149,21 @@ public class UIViewRoot extends UIComponentBase {
      *  is <code>null</code>
      */
     public void queueEvent(FacesEvent event) {
-
+	
         if (event == null) {
             throw new NullPointerException();
         }
+	int
+	    i = 0,
+	    len = 0;
         // We are a UIViewRoot, so no need to check for the ISE
         if (events == null) {
-            events = new ArrayList(5);
+	    events = new List[len = PhaseId.VALUES.size()];
+	    for (i = 0; i < len; i++) {
+		events[i] = new ArrayList(5);
+	    }
         }
-        events.add(event);
-
+        events[event.getPhaseId().getOrdinal()].add(event);
     }
 
 
@@ -162,27 +174,61 @@ public class UIViewRoot extends UIComponentBase {
      * @param phaseId {@link PhaseId} of the current phase
      */
     private void broadcastEvents(FacesContext context, PhaseId phaseId) {
+	List eventsForPhaseId = null;
 
-        if (events == null) {
-            return;
-        }
+	if (null == events) {
+	    // no events have been queued
+	    return;
+	}
+	boolean 
+	    hasMoreAnyPhaseEvents = true,
+	    hasMoreCurrentPhaseEvents = true;
 
-        // We cannot use an Iterator because we will get
-        // ConcurrentModificationException errors, so fake it
-        int cursor = 0;
-        while (cursor < events.size()) {
-            FacesEvent event = (FacesEvent) events.get(cursor);
-            UIComponent source = event.getComponent();
-            if (!source.broadcast(event, phaseId)) {
-                events.remove(cursor); // Stay at current position
-            } else {
-                cursor++; // Advance to next event
-            }
-        }
+	eventsForPhaseId = events[PhaseId.ANY_PHASE.getOrdinal()];
+	
+	// keep iterating till we have no more events to broadcast.
+	// This is necessary for events that cause other events to be
+	// queued.  PENDING(edburns): here's where we'd put in a check
+	// to prevent infinite event queueing.
+	do {
+	    // broadcast the ANY_PHASE events first
+	    if (null != eventsForPhaseId) {
+		// We cannot use an Iterator because we will get
+		// ConcurrentModificationException errors, so fake it
+		int cursor = 0;
+		while (cursor < eventsForPhaseId.size()) {
+		    FacesEvent event = (FacesEvent)
+			eventsForPhaseId.get(cursor);
+		    UIComponent source = event.getComponent();
+		    source.broadcast(event);
+		    eventsForPhaseId.remove(cursor); // Stay at current position
+		}
+	    }
+	    
+	    // then broadcast the events for this phase.
+	    if (null != (eventsForPhaseId = events[phaseId.getOrdinal()])) {
+		// We cannot use an Iterator because we will get
+		// ConcurrentModificationException errors, so fake it
+		int cursor = 0;
+		while (cursor < eventsForPhaseId.size()) {
+		    FacesEvent event = 
+			(FacesEvent) eventsForPhaseId.get(cursor);
+		    UIComponent source = event.getComponent();
+		    source.broadcast(event);
+		    eventsForPhaseId.remove(cursor); // Stay at current position
+		}
+	    }
+	    // true if we have any more ANY_PHASE events
+	    hasMoreAnyPhaseEvents = 
+		(null != (eventsForPhaseId = 
+			  events[PhaseId.ANY_PHASE.getOrdinal()])) &&
+		eventsForPhaseId.size() > 0;
+	    // true if we have any more events for the argument phaseId
+	    hasMoreCurrentPhaseEvents = 
+		(null != events[phaseId.getOrdinal()]) &&
+		events[phaseId.getOrdinal()].size() > 0;
 
-        if (events.size() < 1) {
-            events = null;
-        }
+	} while (hasMoreAnyPhaseEvents || hasMoreCurrentPhaseEvents);
 
     }
 
@@ -191,9 +237,11 @@ public class UIViewRoot extends UIComponentBase {
 
 
     /**
-     * <p>Override the default {@link UIComponentBase#processDecodes} behavior
-     * to broadcast any queued events after the default processing has been
-     * completed.</p>
+     * <p>Override the default {@link UIComponentBase#processDecodes}
+     * behavior to broadcast any queued events after the default
+     * processing has been completed and to clear out any remaining
+     * events if the prior event processing caused {@link
+     * FacesContext#renderResponse} to be called.</p>
      *
      * @param context {@link FacesContext} for the request we are processing
      *
@@ -204,14 +252,20 @@ public class UIViewRoot extends UIComponentBase {
 	lastId = 0; // PENDING(edburns): shouldn't have to do this.
         super.processDecodes(context);
         broadcastEvents(context, PhaseId.APPLY_REQUEST_VALUES);
+	// clear out the events if we're skipping to render-response
+	if (context.getRenderResponse()) {
+	    events = null;
+	}
 
     }
 
 
     /**
      * <p>Override the default {@link UIComponentBase#processValidators}
-     * behavior to broadcast any queued events after the default processing
-     * has been completed.</p>
+     * behavior to broadcast any queued events after the default
+     * processing has been completed and to clear out any remaining
+     * events if the prior event processing caused {@link
+     * FacesContext#renderResponse} to be called.</p>
      *
      * @param context {@link FacesContext} for the request we are processing
      *
@@ -222,6 +276,10 @@ public class UIViewRoot extends UIComponentBase {
 
         super.processValidators(context);
         broadcastEvents(context, PhaseId.PROCESS_VALIDATIONS);
+	// clear out the events if we're skipping to render-response
+	if (context.getRenderResponse()) {
+	    events = null;
+	}
 
     }
 

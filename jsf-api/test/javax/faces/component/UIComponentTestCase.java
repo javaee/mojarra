@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTestCase.java,v 1.39 2003/10/09 22:58:12 craigmcc Exp $
+ * $Id: UIComponentTestCase.java,v 1.40 2003/12/17 15:11:12 rkitain Exp $
  */
 
 /*
@@ -162,18 +162,6 @@ public class UIComponentTestCase extends TestCase {
 
         assertEquals(component.getChildren(),
                      (List) component.getAttributes().get("children"));
-
-        assertEquals(component.getComponentRef(),
-                     (String) component.getAttributes().get("componentRef"));
-        component.setComponentRef("foo");
-        assertEquals("foo",
-                     (String) component.getAttributes().get("componentRef"));
-        component.setComponentRef(null);
-        assertNull((String) component.getAttributes().get("componentRef"));
-        component.getAttributes().put("componentRef", "bar");
-        assertEquals("bar", component.getComponentRef());
-        component.getAttributes().put("componentRef", null);
-        assertNull(component.getComponentRef());
 
         assertEquals(component.getFacets(),
                      (Map) component.getAttributes().get("facets"));
@@ -756,7 +744,6 @@ public class UIComponentTestCase extends TestCase {
         }
 
         // Validate properties
-        assertNull("no componentRef", component.getComponentRef());
         assertEquals("expected id",
                      expectedId, component.getId());
         assertNull("no parent", component.getParent());
@@ -830,11 +817,6 @@ public class UIComponentTestCase extends TestCase {
 
     // Test setting properties to valid values
     public void testPropertiesValid() throws Exception {
-
-        // componentRef
-        component.setComponentRef("foo.bar");
-        assertEquals("expected componentRef",
-                     "foo.bar", component.getComponentRef());
 
         // id - simple name
         component.setId("foo");

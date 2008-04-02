@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectItemTestCase.java,v 1.7 2003/11/08 01:15:40 craigmcc Exp $
+ * $Id: UISelectItemTestCase.java,v 1.8 2003/12/17 15:11:14 rkitain Exp $
  */
 
 /*
@@ -166,7 +166,7 @@ public class UISelectItemTestCase extends ValueHolderTestCaseBase {
 	request.setAttribute("foo", "bar");
 	test.setItemDescription(null);
 	assertNull(test.getItemDescription());
-	test.setValueBinding("itemDescription", application.getValueBinding("#{foo}"));
+	test.setValueBinding("itemDescription", application.createValueBinding("#{foo}"));
 	assertNotNull(test.getValueBinding("itemDescription"));
 	assertEquals("bar", test.getItemDescription());
 	test.setItemDescription("baz");
@@ -181,7 +181,7 @@ public class UISelectItemTestCase extends ValueHolderTestCaseBase {
 	request.setAttribute("foo", "bar");
 	test.setItemLabel(null);
 	assertNull(test.getItemLabel());
-	test.setValueBinding("itemLabel", application.getValueBinding("#{foo}"));
+	test.setValueBinding("itemLabel", application.createValueBinding("#{foo}"));
 	assertNotNull(test.getValueBinding("itemLabel"));
 	assertEquals("bar", test.getItemLabel());
 	test.setItemLabel("baz");
@@ -196,7 +196,7 @@ public class UISelectItemTestCase extends ValueHolderTestCaseBase {
 	request.setAttribute("foo", "bar");
 	test.setItemValue(null);
 	assertNull(test.getItemValue());
-	test.setValueBinding("itemValue", application.getValueBinding("#{foo}"));
+	test.setValueBinding("itemValue", application.createValueBinding("#{foo}"));
 	assertNotNull(test.getValueBinding("itemValue"));
 	assertEquals("bar", test.getItemValue());
 	test.setItemValue("baz");
@@ -211,7 +211,7 @@ public class UISelectItemTestCase extends ValueHolderTestCaseBase {
 	request.setAttribute("foo", "bar");
 	test.setValue(null);
 	assertNull(test.getValue());
-	test.setValueBinding("value", application.getValueBinding("#{foo}"));
+	test.setValueBinding("value", application.createValueBinding("#{foo}"));
 	assertNotNull(test.getValueBinding("value"));
 	assertEquals("bar", test.getValue());
 	test.setValue("baz");

@@ -1,5 +1,5 @@
 /*
- * $Id: ResultDataModel.java,v 1.8 2003/11/05 00:38:30 craigmcc Exp $
+ * $Id: ResultDataModel.java,v 1.9 2003/12/17 15:10:58 rkitain Exp $
  */
 
 /*
@@ -91,7 +91,7 @@ public class ResultDataModel extends DataModel {
 
 
     // The current row index (zero relative)
-    private int index;
+    private int index = -1;
 
 
     // The Result we are wrapping
@@ -211,8 +211,7 @@ public class ResultDataModel extends DataModel {
         }
         result = (Result) data;
         rows = result.getRows();
-        index = 0;
-
+	setRowIndex(0);
     }
 
 

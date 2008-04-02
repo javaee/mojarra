@@ -1,5 +1,5 @@
 /*
- * $Id: TestCommandActionListener.java,v 1.1 2003/10/27 04:10:05 craigmcc Exp $
+ * $Id: TestCommandActionListener.java,v 1.2 2003/12/17 15:11:10 rkitain Exp $
  */
 
 /*
@@ -12,7 +12,6 @@ package javax.faces.component;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
-import javax.faces.event.PhaseId;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.ActionListener;
 
@@ -31,11 +30,6 @@ public class TestCommandActionListener implements ActionListener {
     
     public void processAction(ActionEvent event) {
         trace(actionListenerId);
-    }
-
-
-    public PhaseId getPhaseId() {
-        return (PhaseId.APPLY_REQUEST_VALUES);
     }
 
 

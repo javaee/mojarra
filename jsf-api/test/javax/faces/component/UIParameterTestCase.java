@@ -1,5 +1,5 @@
 /*
- * $Id: UIParameterTestCase.java,v 1.13 2003/11/08 01:15:40 craigmcc Exp $
+ * $Id: UIParameterTestCase.java,v 1.14 2003/12/17 15:11:14 rkitain Exp $
  */
 
 /*
@@ -129,7 +129,7 @@ public class UIParameterTestCase extends ValueHolderTestCaseBase {
 	request.setAttribute("foo", "bar");
 	test.setName(null);
 	assertNull(test.getName());
-	test.setValueBinding("name", application.getValueBinding("#{foo}"));
+	test.setValueBinding("name", application.createValueBinding("#{foo}"));
 	assertNotNull(test.getValueBinding("name"));
 	assertEquals("bar", test.getName());
 	test.setName("baz");
@@ -144,7 +144,7 @@ public class UIParameterTestCase extends ValueHolderTestCaseBase {
 	request.setAttribute("foo", "bar");
 	test.setValue(null);
 	assertNull(test.getValue());
-	test.setValueBinding("value", application.getValueBinding("#{foo}"));
+	test.setValueBinding("value", application.createValueBinding("#{foo}"));
 	assertNotNull(test.getValueBinding("value"));
 	assertEquals("bar", test.getValue());
 	test.setValue("baz");

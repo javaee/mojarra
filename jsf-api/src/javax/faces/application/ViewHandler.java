@@ -1,5 +1,5 @@
 /*
- * $Id: ViewHandler.java,v 1.25 2003/11/12 20:37:40 eburns Exp $
+ * $Id: ViewHandler.java,v 1.26 2003/12/17 15:10:33 rkitain Exp $
  */
 
 /*
@@ -104,9 +104,10 @@ public interface ViewHandler {
      * parameter is not defined, use {@link #DEFAULT_SUFFIX} as the
      * extension.  If the <code>viewId</code> of the argument
      * <code>viewToRender</code> has a extension, replace it with the new
-     * extension.  Otherwise append the new extension.  Then call {@link
-     * javax.faces.context.ExternalContext#dispatchMessage} on the
-     * result.</p>
+     * extension.  Otherwise append the new extension.  Then call
+     * <code>setViewId()</code> to establish the revised view identifier,
+     * and call {@link javax.faces.context.ExternalContext#dispatchMessage}
+     * on the result.</p>
      *
      * <p>The default implementation of <code>ViewHandler</code>, being
      * designed for Faces pages written as JSPs, must cause the response
@@ -115,10 +116,10 @@ public interface ViewHandler {
      * <code>&lt;f:view&gt;</code> tag.  This must be done by calling
      * the <code>setLocale()</code> method on the response.  It must
      * also store the <code>Locale</code> in the
-     * <code>javax.servlet.jsp.jstl.core.Config</code> under the key
-     * <code>Config.FMT_LOCALE</code>.  This makes the locale available
-     * to JSTL tags.  The default implementation must also call
-     * <code>getCharacterEncoding()</code> on the
+     * <code>javax.servlet.jsp.jstl.core.Config</code> in "request
+     * scope" under the key <code>Config.FMT_LOCALE</code>.  This makes
+     * the locale available to JSTL tags.  The default implementation
+     * must also call <code>getCharacterEncoding()</code> on the
      * <code>ServletResponse</code> and store the result in the session
      * (if one is present already) under the key with the name equal to
      * the default value of the constant {@link

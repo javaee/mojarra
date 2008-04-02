@@ -1,5 +1,5 @@
 /*
- * $Id: TestDataValueChangeListener.java,v 1.1 2003/10/27 04:10:06 craigmcc Exp $
+ * $Id: TestDataValueChangeListener.java,v 1.2 2003/12/17 15:11:11 rkitain Exp $
  */
 
 /*
@@ -12,7 +12,6 @@ package javax.faces.component;
 
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.event.ValueChangeListener;
-import javax.faces.event.PhaseId;
 import javax.faces.context.FacesContext;
 
 
@@ -31,11 +30,6 @@ public class TestDataValueChangeListener implements ValueChangeListener {
 
 
     // ---------------------------------------------------------- Public Methods
-
-
-    public PhaseId getPhaseId() {
-        return (PhaseId.ANY_PHASE);
-    }
 
 
     public void processValueChange(ValueChangeEvent event) {

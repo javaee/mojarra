@@ -1,5 +1,5 @@
 /*
- * $Id: UIInput.java,v 1.48 2003/11/09 22:53:20 craigmcc Exp $
+ * $Id: UIInput.java,v 1.49 2003/12/17 15:10:38 rkitain Exp $
  */
 
 /*
@@ -10,7 +10,6 @@
 package javax.faces.component;
 
 
-import java.lang.reflect.InvocationTargetException;
 import javax.faces.FacesException;
 import javax.faces.application.Application;
 import javax.faces.application.FacesMessage;
@@ -100,6 +99,15 @@ public class UIInput extends UIOutput {
 
 
     // ------------------------------------------------------ Manifest Constants
+
+
+    /**
+     * <p>The message identifier of the
+     * {@link javax.faces.application.FacesMessage} to be created if
+     * a conversion error occurs.</p>
+     */
+    public static final String CONVERSION_MESSAGE_ID =
+        "javax.faces.component.UIInput.CONVERSION";
 
 
     /**
@@ -200,24 +208,24 @@ public class UIInput extends UIOutput {
     }
 
 
-    private String validateRef = null;
+    private MethodBinding validatorBinding = null;
 
 
     /**
-     * <p>Return a <em>method reference expression</em> pointing at a
+     * <p>Return a <code>MethodBinding</code> pointing at a
      * method that will be called during <em>Process Validations</em>
      * phase of the request processing lifecycle, to validate the current
      * value of this component.</p>
      */
-    public String getValidateRef() {
+    public MethodBinding getValidator() {
 
-        return (this.validateRef);
+        return (this.validatorBinding);
 
     }
 
 
     /**
-     * <p>Set a <em>method reference expression</em> pointing at a
+     * <p>Set a <code>MethodBinding</code> pointing at a
      * method that will be called during <em>Process Validations</em>
      * phase of the request processing lifecycle, to validate the current
      * value of this component.</p>
@@ -226,99 +234,76 @@ public class UIInput extends UIOutput {
      * a return type of <code>void</code>, and accept parameters of type
      * {@link FacesContext} and {@link UIInput}.</p>
      *
-     * @param validateRef The new method reference expression
+     * @param validatorBinding The new <code>MethodBinding</code> instance
      */
-    public void setValidateRef(String validateRef) {
+    public void setValidator(MethodBinding validatorBinding) {
 
-        this.validateRef = validateRef;
+        this.validatorBinding = validatorBinding;
 
     }
 
 
-    private String valueChangeListenerRef = null;
+   private MethodBinding valueChangeMethod = null;
 
 
     /**
-     * <p>Return a <em>method reference expression</em> pointing at a
+     * <p>Return a <code>MethodBinding </code> instance 
      * method that will be called during <em>Process Validations</em>
      * phase of he request processing lifecycle, after any registered
      * {@link ValueChangeListener}s have been notified of a value change.</p>
      */
-    public String getValueChangeListenerRef() {
+    public MethodBinding getValueChangeListener() {
 
-        return (this.valueChangeListenerRef);
+        return (this.valueChangeMethod);
 
     }
 
 
     /**
-     * <p>Set a <em>method reference expression</em> pointing at a
-     * method that will be called during <em>Process Validations</em>
+     * <p>Set a <code>MethodBinding</code> instance  a
+     * that will be called during <em>Process Validations</em>
      * phase of he request processing lifecycle, after any registered
      * {@link ValueChangeListener}s have been notified of a value change.</p>
      *
-     * <p>Any such method referenced by such an expression must be public,
-     * with a return type of <code>void</code>, and accept a parameter of
-     * type <code>ValueChangeEvent</code>.</p>
-     *
-     * @param valueChangeListenerRef The new method reference expression
+     * @param valueChangeMethod The new method binding instance 
      */
-    public void setValueChangeListenerRef(String valueChangeListenerRef) {
+    public void setValueChangeListener(MethodBinding valueChangeMethod) {
 
-        this.valueChangeListenerRef = valueChangeListenerRef;
+        this.valueChangeMethod = valueChangeMethod;
 
     }
 
 
     // ----------------------------------------------------- UIComponent Methods
 
-
-    // Parameter signature for "valueListenerRef" method
-    private static Class signature[] = { ValueChangeEvent.class };
-
-
     /**
      * <p>In addition to to the default {@link UIComponent#broadcast}
      * processing, pass the {@link ValueChangeEvent} being broadcast to the
-     * method referenced by <code>valueChangeListenerRef</code> (if any).</p>
+     * method referenced by <code>valueChangeListener</code> (if any).</p>
      *
      * @param event {@link FacesEvent} to be broadcast
-     * @param phaseId {@link PhaseId} of the current phase of the
-     *  request processing lifecycle
      *
      * @exception AbortProcessingException Signal the JavaServer Faces
      *  implementation that no further processing on the current event
      *  should be performed
      * @exception IllegalArgumentException if the implementation class
      *  of this {@link FacesEvent} is not supported by this component
-     * @exception IllegalStateException if PhaseId.ANY_PHASE is passed
-     *  for the phase identifier
-     * @exception NullPointerException if <code>event</code> or
-     *  <code>phaseId</code> is <code>null</code>
+     * @exception NullPointerException if <code>event</code> is
+     * <code>null</code>
      */
-    public boolean broadcast(FacesEvent event, PhaseId phaseId)
+    public void broadcast(FacesEvent event)
         throws AbortProcessingException {
 
         // Perform standard superclass processing
-        boolean returnValue = super.broadcast(event, phaseId);
+        super.broadcast(event);
 
         // Notify the specified value change listener method (if any)
-        String valueChangeListenerRef = getValueChangeListenerRef();
-        if ((valueChangeListenerRef != null) &&
-            phaseId.equals(PhaseId.PROCESS_VALIDATIONS)) {
+        MethodBinding valueChangeMethod = getValueChangeListener();
+        if ((valueChangeMethod != null) &&
+            event.getPhaseId().equals(PhaseId.PROCESS_VALIDATIONS)) {
             FacesContext context = getFacesContext();
-            MethodBinding mb =
-                context.getApplication().getMethodBinding
-                (valueChangeListenerRef, signature);
-            try {
-                mb.invoke(context, new Object[] { event });
-            } catch (InvocationTargetException e) {
-                throw new FacesException(e.getTargetException());
-            }
+            valueChangeMethod.invoke(context, new Object[] { event });
         }
-
-        // Return the flag indicating future interest
-        return (returnValue);
 
     }
 
@@ -336,12 +321,10 @@ public class UIInput extends UIOutput {
      * <li>If the <code>setValue()</code> method returns successfully:
      *     <ul>
      *     <li>Clear the local value of this {@link UIInput}.</li>
-     *     <li>Set the <code>valid</code> property of this {@link UIInput}
-     *         to <code>true</code>.</li>
      *     </ul></li>
      * <li>If the <code>setValue()</code> method call fails:
      *     <ul>
-     *     <li>Enqueue error messages by calling <code>addMessage()</code>
+     *     <li>Enqueue an error message by calling <code>addMessage()</code>
      *         on the specified {@link FacesContext} instance.</li>
      *     <li>Set the <code>valid</code> property of this {@link UIInput}
      *         to <code>false</code>.</li>
@@ -364,18 +347,24 @@ public class UIInput extends UIOutput {
 	ValueBinding vb = getValueBinding("value");
 	if (vb != null) {
 	    try {
-		vb.setValue(context, getValue());
+		vb.setValue(context, getLocalValue());
 		setValue(null);
 		return;
 	    } catch (FacesException e) {
+                FacesMessage message =
+                    MessageFactory.getMessage(context, CONVERSION_MESSAGE_ID);
+                context.addMessage(getClientId(context), message);
 		setValid(false);
-		throw e;
 	    } catch (IllegalArgumentException e) {
+                FacesMessage message =
+                    MessageFactory.getMessage(context, CONVERSION_MESSAGE_ID);
+                context.addMessage(getClientId(context), message);
 		setValid(false);
-		throw e;
 	    } catch (Exception e) {
+                FacesMessage message =
+                    MessageFactory.getMessage(context, CONVERSION_MESSAGE_ID);
+                context.addMessage(getClientId(context), message);
 		setValid(false);
-		throw new FacesException(e);
 	    }
 	}
 
@@ -383,10 +372,6 @@ public class UIInput extends UIOutput {
 
 
     // ------------------------------------------------------ Validation Methods
-
-
-    private Class validateParams[] =
-    { FacesContext.class, UIInput.class };
 
 
     /**
@@ -411,7 +396,7 @@ public class UIInput extends UIOutput {
      *     <code>true</code>, and the local value is not empty, call the
      *     <code>validate()</code> method of each {@link Validator}
      *     registered for this {@link UIInput}, followed by the method
-     *     pointed at by the <code>validateRef</code> property (if any).</li>
+     *     pointed at by the <code>validatorBinding</code> property (if any).</li>
      * <li>If the <code>valid</code> property of this component is still
      *     <code>true</code>, and if the local value is different from
      *     the previous value of this component, fire a
@@ -457,17 +442,9 @@ public class UIInput extends UIOutput {
 		    validator.validate(context, this);
 		}
 	    }
-            String validateRef = getValidateRef();
-            if (!(validateRef == null)) {
-                MethodBinding mb =
-                    context.getApplication().getMethodBinding
-                    (validateRef, validateParams);
-                try {
-                    mb.invoke(context,
-                              new Object[] { context, this });
-                } catch (InvocationTargetException e) {
-                    throw new FacesException(e.getTargetException());
-                }
+            if (validatorBinding != null) {
+                validatorBinding.invoke(context,
+                          new Object[] { context, this });
             }
 	}
 
@@ -643,8 +620,8 @@ public class UIInput extends UIOutput {
         values[2] = required ? Boolean.TRUE : Boolean.FALSE;
 	values[3] = requiredSet ? Boolean.TRUE : Boolean.FALSE;
         values[4] = saveAttachedState(context, validators);
-        values[5] = validateRef;
-        values[6] = valueChangeListenerRef;
+        values[5] = saveAttachedState(context, validatorBinding);
+        values[6] = saveAttachedState(context, valueChangeMethod);
         return (values);
 
     }
@@ -676,8 +653,10 @@ public class UIInput extends UIOutput {
 	    }
 	}
 
-        validateRef = (String) values[5];
-        valueChangeListenerRef = (String) values[6];
+        validatorBinding = (MethodBinding) restoreAttachedState(context,
+								values[5]);
+        valueChangeMethod = (MethodBinding) restoreAttachedState(context,
+								 values[6]);
 
     }
 

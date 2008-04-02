@@ -1,5 +1,5 @@
 /*
- * $Id: PhaseEvent.java,v 1.1 2003/06/21 03:23:41 craigmcc Exp $
+ * $Id: PhaseEvent.java,v 1.2 2003/12/17 15:10:54 rkitain Exp $
  */
 
 /*
@@ -12,6 +12,7 @@ package javax.faces.event;
 
 import java.util.EventObject;
 import javax.faces.context.FacesContext;
+import javax.faces.lifecycle.Lifecycle;
 
 
 /**
@@ -22,38 +23,44 @@ import javax.faces.context.FacesContext;
 
 public class PhaseEvent extends EventObject {
 
-
     // ----------------------------------------------------------- Constructors
 
 
     /**
      * <p>Construct a new event object from the specified parameters.
-     * The specified {@link FacesContext} will be the source of this event.</p>
+     * The specified {@link Lifecycle} will be the source of this event.</p>
      *
      * @param context {@link FacesContext} for the current request
      * @param phaseId Identifier of the current request processing
      *  lifecycle phase
+     * @param lifecycle Lifecycle instance
      *
      * @exception NullPointerException if <code>context</code> or
-     *  <code>phaseId</code> is <code>null</code>
+     *  <code>phaseId</code> or <code>Lifecycle</code>is <code>null</code>
      */
-    public PhaseEvent(FacesContext context, PhaseId phaseId) {
+    public PhaseEvent(FacesContext context, PhaseId phaseId, 
+            Lifecycle lifecycle) {
 
-        super(context);
+        super(lifecycle);
+        if ( phaseId == null || context == null || lifecycle == null) {
+            throw new NullPointerException();
+        }
 	this.phaseId = phaseId;
+        this.context = context;
 
     }
 
 
     // ------------------------------------------------------------- Properties
 
-
+    private FacesContext context = null;
+    
     /**
      * <p>Return the {@link FacesContext} for the request being processed.</p>
      */
     public FacesContext getFacesContext() {
 
-        return ((FacesContext) getSource());
+        return context;
 
     }
 

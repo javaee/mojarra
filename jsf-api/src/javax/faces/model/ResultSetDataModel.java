@@ -1,5 +1,5 @@
 /*
- * $Id: ResultSetDataModel.java,v 1.14 2003/11/05 00:38:30 craigmcc Exp $
+ * $Id: ResultSetDataModel.java,v 1.15 2003/12/17 15:10:59 rkitain Exp $
  */
 
 /*
@@ -255,9 +255,7 @@ public class ResultSetDataModel extends DataModel {
             this.metadata = null;
         }
         resultSet = (ResultSet) data;
-        index = 0;
-        updated = false;
-
+	setRowIndex(0);
     }
 
 

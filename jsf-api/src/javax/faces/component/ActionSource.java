@@ -1,5 +1,5 @@
 /*
- * $Id: ActionSource.java,v 1.5 2003/10/30 23:04:52 craigmcc Exp $
+ * $Id: ActionSource.java,v 1.6 2003/12/17 15:10:35 rkitain Exp $
  */
 
 /*
@@ -13,6 +13,7 @@ package javax.faces.component;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.ActionListener;
+import javax.faces.el.MethodBinding;
 
 
 
@@ -30,76 +31,57 @@ public interface ActionSource {
 
 
     /**
-     * <p>Return the literal action outcome value to be returned to the
-     * {@link ActionListener} processing application level events for this
-     * application.</p>
+     * <p>Return the {@link MethodBinding}pointing at the application
+     * action to be invoked, if this {@link UIComponent} is activated by
+     * the user, during the <em>Apply Request Values</em> or <em>Invoke
+     * Application</em> phase of the request processing lifecycle,
+     * depending on the value of the <code>immediate</code>
+     * property.</p>
      */
-    public String getAction();
-
+    public MethodBinding getAction();
 
     /**
-     * <p>Set the literal action outcome value for this component.</p>
+     * <p>Set the {@link MethodBinding} pointing at the appication
+     * action to be invoked, if this {@link UIComponent} is activated by
+     * the user, during the <em>Apply Request Values</em> or <em>Invoke
+     * Application</em> phase of the request processing lifecycle,
+     * depending on the value of the <code>immediate</code>
+     * property.</p>
      *
-     * @param action The new outcome value
+     * <p>Any method referenced by such an expression must be public, with
+     * a return type of <code>String</code>, and accept no parameters.</p>
+     *
+     * @param action The new MethodBinding expression
      */
-    public void setAction(String action);
+    public void setAction(MethodBinding action);
 
 
     /**
-     * <p>Return a <em>method reference expression</em> pointing at an
-     * action listener method to be invoked, if this {@link UIComponent}
-     * is activated by the user, during the <em>Apply Request Values</em>
+     * <p>Return the {@link MethodBinding} pointing at an action
+     * listener method to be invoked, if this {@link UIComponent} is
+     * activated by the user, during the <em>Apply Request Values</em>
      * or <em>Invoke Application</em> phase of the request processing
      * lifecycle, depending upon the value of the <code>immediate</code>
      * property.</p>
      */
-    public String getActionListenerRef();
+    public MethodBinding getActionListener();
 
 
     /**
-     * <p>Set a <em>method reference expression</em> pointing at an
-     * action listener method to be invoked, if this {@link UIComponent}
-     * is activated by the user, during the <em>Apply Request Values</em>
-     * or <em>Invoke Application</em> phase of the request processing
-     * lifecycle, depending upon the value of the <code>immmediate</code>
+     * <p>Set the {@link MethodBinding} pointing at an action listener
+     * method to be invoked, if this {@link UIComponent} is activated by
+     * the user, during the <em>Apply Request Values</em> or <em>Invoke
+     * Application</em> phase of the request processing lifecycle,
+     * depending upon the value of the <code>immmediate</code>
      * property.</p>
      *
      * <p>Any method referenced by such an expression must be public, with
      * a return type of <code>void</code>, and accept a singe parameter of
      * type <code>ActionEvent</code>.</p>
      *
-     * @param actionListenerRef The new method reference expression
+     * @param actionListener The new method reference expression
      */
-    public void setActionListenerRef(String actionListenerRef);
-
-
-
-    /**
-     * <p>Return a <em>method reference expression</em> pointing at the
-     * application action to be invoked, if this {@link UIComponent}
-     * is activated by the user, during the <em>Apply Request Values</em>
-     * or <em>Invoke Application</em> phase of the request processing
-     * lifecycle, depending on the value of the <code>immediate</code>
-     * property.</p>
-     */
-    public String getActionRef();
-
-
-    /**
-     * <p>Set a <em>method reference expression</em> pointing at the
-     * appication action to be invoked, if this {@link UIComponent}
-     * is activated by the user, during the <em>Apply Request Values</em>
-     * or <em>Invoke Application</em> phase of the request processing
-     * lifecycle, depending on the value of the <code>immediate</code>
-     * property.</p>
-     *
-     * <p>Any method referenced by such an expression must be public, with
-     * a return type of <code>String</code>, and accept no parameters.</p>
-     *
-     * @param actionRef The new method reference expression
-     */
-    public void setActionRef(String actionRef);
-
+    public void setActionListener(MethodBinding actionListener);
 
     /**
      * <p>Return a flag indicating that the default {@link ActionListener}

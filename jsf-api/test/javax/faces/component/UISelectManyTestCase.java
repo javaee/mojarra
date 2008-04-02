@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectManyTestCase.java,v 1.16 2003/11/08 01:15:41 craigmcc Exp $
+ * $Id: UISelectManyTestCase.java,v 1.17 2003/12/17 15:11:15 rkitain Exp $
  */
 
 /*
@@ -173,6 +173,40 @@ public class UISelectManyTestCase extends UIInputTestCase {
     }
 
 
+    // Test validation of a required field
+    public void testValidateRequired() throws Exception {
+
+        UIViewRoot root = new UIViewRoot();
+        root.getChildren().add(component);
+        UISelectMany selectMany = (UISelectMany) component;
+        selectMany.getChildren().add(new UISelectItemSub("foo", null, null));
+        selectMany.getChildren().add(new UISelectItemSub("bar", null, null));
+        selectMany.getChildren().add(new UISelectItemSub("baz", null, null));
+        selectMany.setRequired(true);
+        checkMessages(0);
+
+        selectMany.setValid(true);
+        selectMany.setValue(new Object[] { "foo" });
+        selectMany.validate(facesContext);
+        checkMessages(0);
+        assertTrue(selectMany.isValid());
+
+        selectMany.setValid(true);
+        selectMany.setValue(new Object[] { "" });
+        selectMany.validate(facesContext);
+        checkMessages(1);
+        assertTrue(!selectMany.isValid());
+
+        selectMany.setValid(true);
+        selectMany.setValue(null);
+        selectMany.validate(facesContext);
+        checkMessages(2);
+        assertTrue(!selectMany.isValid());
+
+    }
+
+
+    // Test that appropriate properties are value binding enabled
     public void testValueBindings() {
 
 	super.testValueBindings();
@@ -182,7 +216,7 @@ public class UISelectManyTestCase extends UIInputTestCase {
 	request.setAttribute("foo", "bar");
 	test.setValue(null);
 	assertNull(test.getValue());
-	test.setValueBinding("value", application.getValueBinding("#{foo}"));
+	test.setValueBinding("value", application.createValueBinding("#{foo}"));
 	assertNotNull(test.getValueBinding("value"));
 	assertEquals("bar", test.getValue());
 	test.setValue("baz");

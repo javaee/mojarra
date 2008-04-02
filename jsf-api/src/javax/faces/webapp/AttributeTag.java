@@ -1,5 +1,5 @@
 /*
- * $Id: AttributeTag.java,v 1.8 2003/09/20 00:48:13 craigmcc Exp $
+ * $Id: AttributeTag.java,v 1.9 2003/12/17 15:11:05 rkitain Exp $
  */
 
 /*
@@ -11,6 +11,8 @@ package javax.faces.webapp;
 
 
 import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.Tag;
 import javax.servlet.jsp.tagext.TagSupport;
@@ -88,12 +90,24 @@ public class AttributeTag extends TagSupport {
         }
 
         // Add this attribute if it is not already defined
-        UIComponent component = tag.getComponent();
+        UIComponent component = tag.getComponentInstance();
         if (component == null) { // PENDING - i18n
             throw new JspException("No component associated with UIComponentTag");
         }
-        if (component.getAttributes().get(name) == null) {
-            component.getAttributes().put(name, value);
+        String nameVal = name;
+        if (UIComponentTag.isValueReference(name)) {
+            ValueBinding vb =
+                getFacesContext().getApplication().createValueBinding(name);
+            nameVal = (String) vb.getValue(getFacesContext());
+        }
+        Object valueVal = value;
+        if (UIComponentTag.isValueReference(value)) {
+            ValueBinding vb =
+                getFacesContext().getApplication().createValueBinding(value);
+            valueVal = vb.getValue(getFacesContext());
+        }
+        if (component.getAttributes().get(nameVal) == null) {
+            component.getAttributes().put(nameVal, valueVal);
         }
         return (SKIP_BODY);
 
@@ -107,6 +121,24 @@ public class AttributeTag extends TagSupport {
 
         this.name = null;
         this.value = null;
+        this.context = null;
+
+    }
+
+
+    private FacesContext context;
+
+
+    /**
+     * <p>Retrieve the {@link FacesContext} instance for this request, caching
+     * it the first time.</p>
+     */
+    private FacesContext getFacesContext() {
+
+        if (context == null) {
+            context = FacesContext.getCurrentInstance();
+        }
+        return (context);
 
     }
 

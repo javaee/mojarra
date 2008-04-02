@@ -1,5 +1,5 @@
 /*
- * $Id: ArrayDataModel.java,v 1.8 2003/11/05 00:38:29 craigmcc Exp $
+ * $Id: ArrayDataModel.java,v 1.9 2003/12/17 15:10:57 rkitain Exp $
  */
 
 /*
@@ -90,7 +90,7 @@ public class ArrayDataModel extends DataModel {
 
 
     // The current row index (zero relative)
-    private int index;
+    private int index = -1;
 
 
     // -------------------------------------------------------------- Properties
@@ -199,8 +199,7 @@ public class ArrayDataModel extends DataModel {
             return;
         }
         array = (Object[]) data;
-        index = 0;
-
+	setRowIndex(0);
     }
 
 

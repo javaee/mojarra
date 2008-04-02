@@ -1,5 +1,5 @@
 /*
- * $Id: Application.java,v 1.20 2003/11/13 04:42:35 craigmcc Exp $
+ * $Id: Application.java,v 1.21 2003/12/17 15:10:32 rkitain Exp $
  */
 
 /*
@@ -15,8 +15,8 @@ import java.util.Collection;
 import java.util.Locale;
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
+import javax.faces.component.ActionSource;
 import javax.faces.component.UIComponent;
-import javax.faces.component.UICommand;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.el.MethodBinding;
@@ -46,7 +46,9 @@ import javax.faces.validator.Validator;
  * <p>The application also acts as a factory for several types of
  * Objects specified in the Faces Configuration file.  Please see {@link
  * Application#createComponent}, {@link Application#createConverter},
- * and {@link Application#createValidator}. </p>
+ * {@link Application#createMethodBinding},
+ * {@link Application#createValidator}, and
+ * {@link Application#createValueBinding}. </p>
  */
 
 public abstract class Application {
@@ -57,11 +59,10 @@ public abstract class Application {
 
     /**
      * <p>Return the default {@link ActionListener} to be registered for all
-     * {@link UICommand} components.  The default implementation must perform
-     * the following functions:</p>
+     * {@link ActionSource} components in this appication.  If not explicitly
+     * set, a default implementation must be provided that performs the
+     * following functions:</p>
      * <ul>
-     * <li>The <code>getPhaseId()</code> method of this listener instance
-     *     must return <code>PhaseId.INVOKE_APPLICATION</code>.</li>
      * <li>The <code>processAction()</code> method must first call
      *     <code>FacesContext.renderResponse()</code> in order to bypass
      *     any intervening lifecycle phases, once the method returns.</li>
@@ -71,36 +72,47 @@ public abstract class Application {
      *     <li>If the originating component has a non-<code>null</code>
      *         <code>action</code> property, its value is used as the
      *         logical outcome.</li>
+
      *     <li>If the originating component has a non-<code>null</code>
-     *         <code>actionRef</code> property, create a {@link ValueBinding}
-     *         for this reference expression, call <code>getValue()</code>
-     *         to retrieve an <code>Action</code> instance.  Call the
-     *         <code>invoke()</code> method on this instance, and use the
-     *         returned value as the logical outcome.</li>
+     *     <code>action</code> property retrieve the {@link
+     *     MethodBinding} from the property, and call
+     *     <code>invoke()</code> on it.  Convert the returned value (if
+     *     any) to a String, and use it as the logical outcome.</li>
+
      *     <li>Otherwise, the logical outcome is <code>null</code>.</li>
      *     </ul></li>
+
      * <li>The <code>processAction()</code> method must finally retrieve
      *     the <code>NavigationHandler()</code> instance for this
-     *     application, and pass the {@link FacesContext} for the
-     *     current request, the <code>actionRef</code> value of the
-     *     originating component (if any), and the logical outcome
-     *     as determined above to the <code>handleNavigation()</code>
-     *     method.</li>
+     *     application and call {@link
+     *     NavigationHandler#handleNavigation} passing: 
+     *
+     *     <ul>
+
+     *     <li>the {@link FacesContext} for the current request</li>
+
+     *     <li>If there is a <code>MethodBinding</code> instance for the
+     *     <code>action</code> property of this component, the result of
+     *     calling {@link MethodBinding#getExpressionString} on it, null
+     *     otherwise</li>
+     *
+     *     <li>the logical outcome as determined above</li>
+     *
+     *     </ul>
+     *
+     *     </li>
      * </ul>
      */
     public abstract ActionListener getActionListener();
 
 
     /**
-     * <p>Replace the default {@link ActionListener} to be registered for all
-     * {@link UICommand} components.</p>
+     * <p>Set the default {@link ActionListener} to be registered for all
+     * {@link ActionSource} components.</p>
+     * </p>
      *
-     * @param listener The new {@link ActionListener}
+     * @param listener The new default {@link ActionListener}
      *
-     * @exception IllegalArgumentException if the specified
-     *  <code>listener</code> does not return
-     *  <code>PhaseId.INVOKE_APPLICATION</code> from its
-     *  <code>getPhaseId()</code> method
      * @exception NullPointerException if <code>listener</code>
      *  is <code>null</code>
      */
@@ -108,44 +120,52 @@ public abstract class Application {
 
 
     /**
-     * <p>Return the default <code>Locale</code> that was given in the
-     * application configuration resources.</p>
-     *
+     * <p>Return the default <code>Locale</code> for this application.  If
+     * not explicitly set, <code>null</code> is returned.</p>
      */ 
     public abstract Locale getDefaultLocale();
 
 
     /**
+     * <p>Set the default <code>Locale</code> for this application.</p>
      *
-     * <p>Make it so the argument <code>newLocale</code> is returned the
-     * next time {@link #getDefaultLocale} is called.</p>     
+     * @param locale The new default <code>Locale</code>
+     *
+     * @exception NullPointerException if <code>locale</code>
+     *  is <code>null</code>
      */
-    public abstract void setDefaultLocale(Locale newLocale);
+    public abstract void setDefaultLocale(Locale locale);
+
 
     /**
-     * <p>Set the name of the <code>ResourceBundle</code> to be used for
-     * faces messages.  The argument can either designate a
-     * <code>ResourceBundle</code> class, in which case the value of the
-     * argument is a regular fully qualified classname. Alternatively,
-     * it can designate a properties file in which case the name of the
-     * properties file should be specified as the basename without the
-     * .properties extension relative to the package and using "." as
-     * the separator. That is, "foo/bar/messages.properties" should be
-     * specified as "foo.bar.messages".</p>
-     */ 
-    public abstract void setMessageBundle(String messageBundle);
-
-    /**
-     * <p>Return the value set by the previous call to {@link
-     * #setMessageBundle}.</p>
+     * <p>Return the fully qualified class name of the
+     * <code>ResourceBundle</code> to be used for JavaServer Faces messages
+     * for this application.  If not explicitly set, <code>null</code>
+     * is returned.</p>
      */
     public abstract String getMessageBundle();
+
+
+    /**
+     * <p>Set the fully qualified class name of the <code>ResourceBundle</code>
+     * to be used for JavaServer Faces messages for this application.  See the
+     * JavaDocs for the <code>java.util.ResourceBundle</code> class for more
+     * information about the syntax for resource bundle names.</p>
+     *
+     * @param bundle Base name of the resource bundle to be used
+     *
+     * @exception NullPointerException if <code>bundle</code>
+     *  is <code>null</code>
+     */
+    public abstract void setMessageBundle(String bundle);
+
 
     /**
      * <p>Return the {@link NavigationHandler} instance that will be passed
      * the outcome returned by any invoked application action for this
-     * web application.  The default implementation must provide the behavior
-     * described in the {@link NavigationHandler} class description.</p>
+     * web application.  If not explicitly set, a default implementation
+     * must be provided that performs the functions described in the
+     * {@link NavigationHandler} class description.</p>
      */
     public abstract NavigationHandler getNavigationHandler();
 
@@ -165,16 +185,16 @@ public abstract class Application {
 
     /**
      * <p>Return the {@link PropertyResolver} instance that will be utilized
-     * to resolve action and valus references.  The default implementation
-     * must provide the behavior described in the
-     * {@link PropertyResolver} class description.</p>
+     * to resolve method and value references.  If not explicitly set, a default
+     * implementation must be provided that performs the functions described in
+     * the {@link PropertyResolver} class description.</p>
      */
     public abstract PropertyResolver getPropertyResolver();
 
 
     /**
      * <p>Set the {@link PropertyResolver} instance that will be utilized
-     * to resolve action and value references.</p>
+     * to resolve method and value references.</p>
      *
      * @param resolver The new {@link PropertyResolver} instance
      *
@@ -186,16 +206,16 @@ public abstract class Application {
 
     /**
      * <p>Return the {@link VariableResolver} instance that will be utilized
-     * to resolve action and value references.  The default implementation
-     * must provide the behavior described in the
-     * {@link VariableResolver} class description.</p>
+     * to resolve method and value references.  If not explicitly set, a default
+     * implementation must be provided that performs the functions described in
+     * the {@link VariableResolver} class description.</p>
      */
     public abstract VariableResolver getVariableResolver();
 
 
     /**
      * <p>Set the {@link VariableResolver} instance that will be utilized
-     * to resolve action and value references.</p>
+     * to resolve method and value references.</p>
      *
      * @param resolver The new {@link VariableResolver} instance
      *
@@ -207,15 +227,17 @@ public abstract class Application {
 
     /**
      * <p>Return the {@link ViewHandler} instance that will be utilized
-     * during the <em>Render Response</em> and <em>Restore View</em>
-     * phases of the request processing lifecycle.</p>
+     * during the <em>Restore View</em> and <em>Render Response</em>
+     * phases of the request processing lifecycle.  If not explicitly set,
+     * a default implementation must be provided that performs the functions
+     * described in the {@link ViewHandler} class description.</p>
      */
     public abstract ViewHandler getViewHandler();
 
 
     /**
      * <p>Set the {@link ViewHandler} instance that will be utilized
-     * during the <em>Render Response</em> and <em>Restore View</em>
+     * during the <em>Restore View</em> and <em>Render Response</em>
      * phases of the request processing lifecycle.</p>
      *
      * @param handler The new {@link ViewHandler} instance
@@ -274,9 +296,9 @@ public abstract class Application {
      * pass the new component to the <code>setValue()</code> method of the
      * specified {@link ValueBinding}, and return it.</p>
      *
-     * @param componentRef {@link ValueBinding} representing a component
-     *  reference (typically specified by the <code>componentRef</code>
-     *  attribute of a custom tag)
+     * @param componentBinding {@link ValueBinding} representing a
+     * component value binding expression (typically specified by the
+     * <code>component</code> attribute of a custom tag)
      * @param context {@link FacesContext} for the current request
      * @param componentType Component type to create if the {@link ValueBinding}
      *  does not return a component instance
@@ -284,7 +306,7 @@ public abstract class Application {
      * @exception FacesException if a {@link UIComponent} cannot be created
      * @exception NullPointerException if any parameter is <code>null</code>
      */
-    public abstract UIComponent createComponent(ValueBinding componentRef,
+    public abstract UIComponent createComponent(ValueBinding componentBinding,
                                                 FacesContext context,
                                                 String componentType)
 	throws FacesException;
@@ -389,54 +411,47 @@ public abstract class Application {
      */
     public abstract Iterator getConverterTypes();
 
+
     /**
-     * <p>Return a {@link MethodBinding} for the specified method
-     * reference expression, which may be used to call the corresponding
-     * method later.  The returned {@link MethodBinding} instance must
-     * utilize the {@link PropertyResolver} and {@link VariableResolver}
-     * instances registered with this {@link Application} instance at the
-     * time that the {@link MethodBinding} instance was initially created.</p>
-     *
-     * <p>For maximum performance, implementations of {@link Application}
-     * may, but are not required to, cache {@link MethodBinding} instances
-     * in order to avoid repeated parsing of the reference expression.
-     * However, under no circumstances may a particular {@link MethodBinding}
-     * instance be shared across multiple web applications.</p>
+     * <p>Instantiate and return a new {@link MethodBinding} for the specified
+     * method reference expression, which may be used to call the corresponding
+     * method later.</p>
      *
      * @param ref Reference expression for which to return a
      *  {@link MethodBinding} instance
-     * @param params Parameter signatures that must match exactly on the
-     *  method to be invoked, or <code>null</code> for a method that takes
-     *  no parameters
+     * @param params Parameter signatures that must be compatible with those
+     *  of the method to be invoked, or a zero-length array or <code>null</code>
+     *  for a method that takes no parameters
      *
      * @exception NullPointerException if <code>ref</code>
      *  is <code>null</code>
      * @exception ReferenceSyntaxException if the specified <code>ref</code>
      *  has invalid syntax
      */
-    public abstract MethodBinding getMethodBinding(String ref, Class params[])
+    public abstract MethodBinding createMethodBinding(String ref,
+                                                      Class params[])
         throws ReferenceSyntaxException;
 
 
     /**
      * <p>Return an <code>Iterator</code> over the supported
-     * <code>Locale</code> instances specified in the application
-     * configuration resources.</p>
-     *
+     * <code>Locale</code>s for this appication.</p>
      */ 
     public abstract Iterator getSupportedLocales();
 
 
     /**
-     * <p>Make it so the <code>Locale</code> instances in the argument
-     * <code>newLocales</code> are returned the next time {@link
-     * #getSupportedLocales} is called.</p>
+     * <p>Set the <code>Locale</code> instances representing the supported
+     * <code>Locale</code>s for this application.</p>
+     *
+     * @param locales The set of supported <code>Locale</code>s
+     *  for this application
      *
      * @exception NullPointerException if the argument
      * <code>newLocales</code> is <code>null</code>.
      *
      */ 
-    public abstract void setSupportedLocales(Collection newLocales);
+    public abstract void setSupportedLocales(Collection locales);
 
 
     /**
@@ -481,18 +496,9 @@ public abstract class Application {
 
 
     /**
-     * <p>Return a {@link ValueBinding} for the specified action or value
-     * reference expression, which may be used to manipulate the corresponding
-     * property value later.  The returned {@link ValueBinding} instance must
-     * utilize the {@link PropertyResolver} and {@link VariableResolver}
-     * instances registered with this {@link Application} instance at the
-     * time that the {@link ValueBinding} instance was initially created.</p>
-     *
-     * <p>For maximum performance, implementations of {@link Application}
-     * may, but are not required to, cache {@link ValueBinding} instances
-     * in order to avoid repeated parsing of the reference expression.
-     * However, under no circumstances may a particular {@link ValueBinding}
-     * instance be shared across multiple web applications.</p>
+     * <p>Instantiate and return a new {@link ValueBinding} for the specified
+     * value reference expression, which may be used to manipulate the
+     * corresponding property value later.</p>
      *
      * @param ref Reference expression for which to return a
      *  {@link ValueBinding} instance
@@ -502,24 +508,8 @@ public abstract class Application {
      * @exception ReferenceSyntaxException if the specified <code>ref</code>
      *  has invalid syntax
      */
-    public abstract ValueBinding getValueBinding(String ref)
+    public abstract ValueBinding createValueBinding(String ref)
         throws ReferenceSyntaxException;
-
-
-    // ---------------------------------------------------------- Static Methods
-
-
-    /**
-     * <p>Return the {@link Application} instance for the
-     * current application.</p>
-     */
-    public static Application getCurrentInstance() {
-
-	ApplicationFactory factory = (ApplicationFactory)
-	    FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
-	return (factory.getApplication());
-
-    }
 
 
 }

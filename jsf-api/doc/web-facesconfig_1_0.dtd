@@ -13,7 +13,7 @@
      "-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.0//EN"
      "http://java.sun.com/dtd/web-facesconfig_1_0.dtd">
 
-    $Id: web-facesconfig_1_0.dtd,v 1.24 2003/11/07 22:40:06 eburns Exp $
+    $Id: web-facesconfig_1_0.dtd,v 1.25 2003/12/17 15:10:29 rkitain Exp $
 
 -->
 
@@ -22,10 +22,12 @@
 
 
 <!--
-    An "ActionRef" is a String that represents a value reference expression
-    that points at a property of type javax.faces.application.Action.
+    An "Action" is a String that represents a method reference
+    expression that points at a method with no arguments that returns a
+    String.  It must be bracketed with "#{}", for example,
+    "#{cardemo.buyCar}".
 -->
-<!ENTITY % ActionRef "CDATA">
+<!ENTITY % Action "CDATA">
 
 
 <!--
@@ -105,12 +107,6 @@
 <!ENTITY % ViewIdPattern "CDATA">
 
 
-<!--
-    A "ValueRef" is a syntactically valid value reference expression.
--->
-<!ENTITY % ValueRef "CDATA">
-
-
 <!-- ==================== Top Level Elements ============================== -->
 
 
@@ -120,6 +116,9 @@
     settings.
 -->
 <!ELEMENT faces-config    ((application|factory|component|converter|managed-bean|navigation-rule|referenced-bean|render-kit|lifecycle|validator)*)>
+<!ATTLIST faces-config
+       xmlns CDATA #FIXED "http://java.sun.com/JSF/Configuration">
+
 
 
 <!-- ==================== Definition Elements ============================= -->
@@ -151,7 +150,13 @@
     Attribute names must be unique within the scope of the parent (or related)
     component.
 -->
-<!ELEMENT attribute       (description*, display-name*, icon*, attribute-name, attribute-class, tag-attribute*, suggested-value?)>
+<!ELEMENT attribute       (description*, display-name*, icon*, attribute-name, attribute-class, suggested-value?, attribute-extension*)>
+
+<!-- 
+    Extension element for attribute.  May contain implementation
+    specific content.
+-->
+<!ELEMENT attribute-extension ANY>
 
 
 <!--
@@ -165,7 +170,14 @@
     identify JavaBeans properties of the component class that may be exposed
     for manipulation via tools.
 -->
-<!ELEMENT component       (description*, display-name*, icon*, component-type, component-class, attribute*, property*)>
+<!ELEMENT component       (description*, display-name*, icon*, component-type, component-class, attribute*, property*, component-extension*)>
+
+<!-- 
+    Extension element for component.  May contain implementation
+    specific content.
+-->
+<!ELEMENT component-extension ANY>
+
 
 
 <!--
@@ -221,7 +233,7 @@
     managed bean that will be configured to the specified value (or value set)
     if the corresponding managed bean is automatically created.
 -->
-<!ELEMENT managed-property (description*, display-name*, icon*, property-name, property-class?, (map-entries|null-value|value|value-ref|list-entries))>
+<!ELEMENT managed-property (description*, display-name*, icon*, property-name, property-class?, (map-entries|null-value|value|list-entries))>
 
 
 <!--
@@ -229,7 +241,7 @@
     will be added to the computed value of a managed property of type
     java.util.Map.
 -->
-<!ELEMENT map-entry (key, (null-value|value|value-ref))>
+<!ELEMENT map-entry (key, (null-value|value))>
 
 
 <!--
@@ -240,25 +252,22 @@
 -->
 <!ELEMENT map-entries (key-class?, value-class?, map-entry*)>
 
+
 <!--
-    If present, this can either designate a ResourceBundle class, in
-    which case the value of the faces-message-bundle element is a
-    regular fully qualified classname.  Alternatively, it can designate
-    a properties file in which case the name of the properties file
-    should be specified as the basename without the .properties
-    extension relative to the package and using "." as the
-    separator. That is, "foo/bar/messages.properties" should be
-    specified as "foo.bar.messages".
+    The base name of a resource bundle representing the message resources
+    for this application.  See the JavaDocs for the "java.util.ResourceBundle"
+    class for more information on the syntax of resource bundle names.
 -->
 
 <!ELEMENT message-bundle (#PCDATA)>
+
 
 <!--
     The "navigation-case" element describes a particular combination of
     conditions that must match for this case to be executed, and the
     view id of the component tree that should be selected next.
 -->
-<!ELEMENT navigation-case (description*, display-name*, icon*, from-action-ref?, from-outcome?, to-view-id, redirect?)>
+<!ELEMENT navigation-case (description*, display-name*, icon*, from-action?, from-outcome?, to-view-id, redirect?)>
 
 
 <!--
@@ -279,8 +288,13 @@
     property names that will be recognized when performing introspection
     against that class via java.beans.Introspector.
 -->
-<!ELEMENT property        (description*, display-name*, icon*, property-name, property-class, tag-attribute*, suggested-value?)>
+<!ELEMENT property        (description*, display-name*, icon*, property-name, property-class, suggested-value?, property-extension*)>
 
+<!-- 
+    Extension element for property.  May contain implementation
+    specific content.
+-->
+<!ELEMENT property-extension ANY>
 
 <!--
     The "referenced-bean" element represents at design time the promise
@@ -316,8 +330,13 @@
     by their type identifiers or the implementation class name, respectively,
     that are supported by this Renderer.
 -->
-<!ELEMENT renderer        (description*, display-name*, icon*, renderer-type, renderer-class, attribute*, supported-component-type*, supported-component-class*)>
+<!ELEMENT renderer        (description*, display-name*, icon*, renderer-type, renderer-class, attribute*, supported-component-type*, supported-component-class*, renderer-extension*)>
 
+<!-- 
+    Extension element for renderer.  May contain implementation
+    specific content.
+-->
+<!ELEMENT renderer-extension ANY>
 
 <!--
     The "supported-component-class" element identifies a component class that
@@ -362,7 +381,7 @@
     be used to declare the Java type to which each value should be
     converted before adding it to the Collection.
 -->
-<!ELEMENT list-entries    (value-class?, (null-value|value|value-ref)*)>
+<!ELEMENT list-entries    (value-class?, (null-value|value)*)>
 
 
 <!-- ==================== Subordinate Elements ============================ -->
@@ -473,20 +492,20 @@
 <!ELEMENT faces-context-factory (#PCDATA)>
 
 <!--
-    The "from-action-ref" element contains an action reference expression
+    The "from-action" element contains an action reference expression
     that must have been executed (by the default ActionListener for handling
     application level events) in order to select this navigation rule.  If
     not specified, this rule will be relevant no matter which action reference
     was executed (or if no action reference was executed).
 
-    This value must be of type "ActionRef".
+    This value must be of type "Action".
 -->
-<!ELEMENT from-action-ref (#PCDATA)>
+<!ELEMENT from-action (#PCDATA)>
 
 
 <!--
     The "from-outcome" element contains a logical outcome string returned
-    by the execution of an applications Action component selected via an
+    by the execution of an application action method selected via an
     "actionRef" property (or a literal value specified by an "action"
     property) of a UICommand component.  If specified, this rule will be
     relevant only if the outcome value matches this element's value.  If
@@ -511,8 +530,7 @@
 
 <!--
     The "key" element is the String representation of a map key that
-    will be stored in a managed property of type java.util.Map.  It must
-    be of type "ClassName".
+    will be stored in a managed property of type java.util.Map.  
 -->
 <!ELEMENT key             (#PCDATA)>
 
@@ -520,7 +538,7 @@
 <!--
     The "key-class" element defines the Java type to which each "key"
     element in a set of "map-entry" elements will be converted to.  It
-    must be of type "ClassName".  If ommitted, "java.lang.String"
+    must be of type "ClassName".  If omitted, "java.lang.String"
     is assumed.
 -->
 <!ELEMENT key-class       (#PCDATA)>
@@ -720,17 +738,6 @@ registered on the Lifecycle. It must be of type "ClassName".
 <!ELEMENT supported-locale (#PCDATA)>
 
 <!--
-    The "tag-attribute" element states that the property or attribute in
-    which this tag-attribute element is a child should be exposed as a
-    property settable by the page-author.  Valid values are "yes", "no"
-    and "required", without the quotes.  "required" means that this
-    attribute is should be exposed as a required page-author settable
-    property.  If no value is specified, a value of "yes" should be
-    assumed.
--->
-<!ELEMENT tag-attribute   (#PCDATA)>
-
-<!--
     The "to-view" element contains the view identifier of the next view
     that should be displayed if this navigation rule is matched.  It
     must be of type "ViewId".
@@ -755,8 +762,10 @@ registered on the Lifecycle. It must be of type "ClassName".
 
 <!--
     The "value" element is the String representation of a literal
-    value to which a scalar managed property will be set.  It will be
-    converted as specified for the actual property type.
+    value to which a scalar managed property will be set, or a value
+    reference expression ("#{...}") that will be used to calculate the
+    required value.  It will be converted as specified for the actual
+    property type.
 -->
 <!ELEMENT value (#PCDATA)>
 
@@ -766,21 +775,10 @@ registered on the Lifecycle. It must be of type "ClassName".
     "value" element's value will be converted to, prior to adding it to
     the "list-entries" list for a managed property that is a
     java.util.List, or a "map-entries" map for a managed property that
-    is a java.util.Map.  It must be of type "ClassName".  If ommitted,
+    is a java.util.Map.  It must be of type "ClassName".  If omitted,
     "java.lang.String" is assumed.
 -->
 <!ELEMENT value-class (#PCDATA)>
-
-
-<!--
-    The "value-ref" element is a value reference expression that must be
-    evaluated (in the same context as the expression that caused the creation
-    of the managed bean we are nsted in) to acquire the value used to
-    configure this managed property.  It must be of type "ValueRef".
--->
-<!ELEMENT value-ref (#PCDATA)>
-
-
 
 <!--
     The "variable-resolver" element contains the fully qualified class name
@@ -790,4 +788,83 @@ registered on the Lifecycle. It must be of type "ClassName".
 -->
 <!ELEMENT variable-resolver (#PCDATA)>
 
+
+<!-- ============================ Identifier Attributes ==================== -->
+
+
+<!ATTLIST action-listener                   id ID #IMPLIED>
+<!ATTLIST application                       id ID #IMPLIED>
+<!ATTLIST application-factory               id ID #IMPLIED>
+<!ATTLIST attribute                         id ID #IMPLIED>
+<!ATTLIST attribute-class                   id ID #IMPLIED>
+<!ATTLIST attribute-extension               id ID #IMPLIED>
+<!ATTLIST attribute-name                    id ID #IMPLIED>
+<!ATTLIST component                         id ID #IMPLIED>
+<!ATTLIST component-class                   id ID #IMPLIED>
+<!ATTLIST component-extension               id ID #IMPLIED>
+<!ATTLIST component-type                    id ID #IMPLIED>
+<!ATTLIST converter                         id ID #IMPLIED>
+<!ATTLIST converter-class                   id ID #IMPLIED>
+<!ATTLIST converter-for-class               id ID #IMPLIED>
+<!ATTLIST converter-id                      id ID #IMPLIED>
+<!ATTLIST default-locale                    id ID #IMPLIED>
+<!ATTLIST description                       id ID #IMPLIED>
+<!ATTLIST display-name                      id ID #IMPLIED>
+<!ATTLIST faces-config                      id ID #IMPLIED>
+<!ATTLIST faces-context-factory             id ID #IMPLIED>
+<!ATTLIST factory                           id ID #IMPLIED>
+<!ATTLIST from-action                       id ID #IMPLIED>
+<!ATTLIST from-outcome                      id ID #IMPLIED>
+<!ATTLIST from-view-id                      id ID #IMPLIED>
+<!ATTLIST icon                              id ID #IMPLIED>
+<!ATTLIST key                               id ID #IMPLIED>
+<!ATTLIST key-class                         id ID #IMPLIED>
+<!ATTLIST large-icon                        id ID #IMPLIED>
+<!ATTLIST lifecycle                         id ID #IMPLIED>
+<!ATTLIST lifecycle-factory                 id ID #IMPLIED>
+<!ATTLIST list-entries                      id ID #IMPLIED>
+<!ATTLIST locale-config                     id ID #IMPLIED>
+<!ATTLIST managed-bean                      id ID #IMPLIED>
+<!ATTLIST managed-bean-class                id ID #IMPLIED>
+<!ATTLIST managed-bean-name                 id ID #IMPLIED>
+<!ATTLIST managed-bean-scope                id ID #IMPLIED>
+<!ATTLIST managed-property                  id ID #IMPLIED>
+<!ATTLIST map-entries                       id ID #IMPLIED>
+<!ATTLIST map-entry                         id ID #IMPLIED>
+<!ATTLIST message-bundle                    id ID #IMPLIED>
+<!ATTLIST navigation-case                   id ID #IMPLIED>
+<!ATTLIST navigation-handler                id ID #IMPLIED>
+<!ATTLIST navigation-rule                   id ID #IMPLIED>
+<!ATTLIST null-value                        id ID #IMPLIED>
+<!ATTLIST phase-listener                    id ID #IMPLIED>
+<!ATTLIST property                          id ID #IMPLIED>
+<!ATTLIST property-class                    id ID #IMPLIED>
+<!ATTLIST property-extension                id ID #IMPLIED>
+<!ATTLIST property-name                     id ID #IMPLIED>
+<!ATTLIST property-resolver                 id ID #IMPLIED>
+<!ATTLIST redirect                          id ID #IMPLIED>
+<!ATTLIST referenced-bean                   id ID #IMPLIED>
+<!ATTLIST referenced-bean-class             id ID #IMPLIED>
+<!ATTLIST referenced-bean-name              id ID #IMPLIED>
+<!ATTLIST render-kit                        id ID #IMPLIED>
+<!ATTLIST render-kit-class                  id ID #IMPLIED>
+<!ATTLIST render-kit-factory                id ID #IMPLIED>
+<!ATTLIST render-kit-id                     id ID #IMPLIED>
+<!ATTLIST renderer                          id ID #IMPLIED>
+<!ATTLIST renderer-class                    id ID #IMPLIED>
+<!ATTLIST renderer-extension                id ID #IMPLIED>
+<!ATTLIST renderer-type                     id ID #IMPLIED>
+<!ATTLIST small-icon                        id ID #IMPLIED>
+<!ATTLIST suggested-value                   id ID #IMPLIED>
+<!ATTLIST supported-component-class         id ID #IMPLIED>
+<!ATTLIST supported-component-type          id ID #IMPLIED>
+<!ATTLIST supported-locale                  id ID #IMPLIED>
+<!ATTLIST to-view-id                        id ID #IMPLIED>
+<!ATTLIST validator                         id ID #IMPLIED>
+<!ATTLIST validator-class                   id ID #IMPLIED>
+<!ATTLIST validator-id                      id ID #IMPLIED>
+<!ATTLIST value                             id ID #IMPLIED>
+<!ATTLIST value-class                       id ID #IMPLIED>
+<!ATTLIST variable-resolver                 id ID #IMPLIED>
+<!ATTLIST view-handler                      id ID #IMPLIED>
 

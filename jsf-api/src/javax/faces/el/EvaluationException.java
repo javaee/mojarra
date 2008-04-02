@@ -1,5 +1,5 @@
 /*
- * $Id: EvaluationException.java,v 1.2 2003/03/13 01:12:10 craigmcc Exp $
+ * $Id: EvaluationException.java,v 1.3 2003/12/17 15:10:49 rkitain Exp $
  */
 
 /*
@@ -15,7 +15,8 @@ import javax.faces.FacesException;
 
 
 /**
- * <p>An exception caused by invalid syntax of an expression or reference.</p>
+ * <p>An exception reporting an error that occurred during the evaluation
+ * of an expression in a {@link MethodBinding} or {@link ValueBinding}.</p>
  */
 
 public class EvaluationException extends FacesException {

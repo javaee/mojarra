@@ -1,5 +1,5 @@
 /*
- * $Id: PhaseId.java,v 1.12 2003/08/22 14:03:19 eburns Exp $
+ * $Id: PhaseId.java,v 1.13 2003/12/17 15:10:55 rkitain Exp $
  */
 
 /*
@@ -17,7 +17,7 @@ import java.util.List;
 
 /**
  * <p>Typesafe enumeration of the legal values that may be returned by the
- * <code>getPhaseId()</code> method of the {@link FacesListener} interface.
+ * <code>getPhaseId()</code> method of the {@link FacesEvent} interface.
  */
 
 public class PhaseId implements Comparable {

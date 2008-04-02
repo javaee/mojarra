@@ -1,5 +1,5 @@
 /*
- * $Id: ConverterTag.java,v 1.4 2003/10/25 00:50:43 craigmcc Exp $
+ * $Id: ConverterTag.java,v 1.5 2003/12/17 15:11:05 rkitain Exp $
  */
 
 /*
@@ -12,7 +12,9 @@ package javax.faces.webapp;
 
 import javax.faces.component.ConvertibleValueHolder;
 import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
+import javax.faces.el.ValueBinding;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.Tag;
 import javax.servlet.jsp.tagext.TagSupport;
@@ -35,9 +37,12 @@ import javax.faces.FactoryFinder;
  * current page.</p>
  *
  * <p>This class may be used directly to implement a generic converter
- * registration tag (based on the fully qualified Java class name specified
- * by the <code>type</code> attribute), or as a base class for tag instances
- * that support specific {@link Converter} subclasses.</p>
+ * registration tag (based on the converter-id specified by the
+ * <code>converterId</code> attribute), or as a base class for tag
+ * instances that support specific {@link Converter} subclasses.  This
+ * <code>converterId</code> attribute must refer to one of the well
+ * known converter-ids, or a custom converter-id as defined in a
+ * <code>faces-config.xml</code> file.</p>
  *
  * <p>Subclasses of this class must implement the
  * <code>createConverter()</code> method, which creates and returns a
@@ -58,18 +63,18 @@ public class ConverterTag extends TagSupport {
     /**
      * <p>The identifier of the {@link Converter} instance to be created.</p>
      */
-    private String id = null;
+    private String converterId = null;
     
 
     /**
      * <p>Set the identifer of the {@link Converter} instance to be created.
      *
-     * @param id The new identifier of the converter instance to be
-     *                    created.
+     * @param converterId The identifier of the converter instance to be
+     * created.
      */
-    public void setId(String id) {
+    public void setConverterId(String converterId) {
 
-        this.id = id;
+        this.converterId = converterId;
 
     }
 
@@ -102,7 +107,7 @@ public class ConverterTag extends TagSupport {
 
         // Create and register an instance with the appropriate component
         Converter converter = createConverter();
-        ((ConvertibleValueHolder) tag.getComponent()).setConverter(converter);
+        ((ConvertibleValueHolder) tag.getComponentInstance()).setConverter(converter);
         return (SKIP_BODY);
 
     }
@@ -113,7 +118,7 @@ public class ConverterTag extends TagSupport {
      */
     public void release() {
 
-        this.id = null;
+        this.converterId = null;
 
     }
 
@@ -131,10 +136,14 @@ public class ConverterTag extends TagSupport {
         throws JspException {
 
         try {
-            ApplicationFactory aFactory = (ApplicationFactory)FactoryFinder.
-                getFactory(FactoryFinder.APPLICATION_FACTORY);
-	    Application application = aFactory.getApplication();
-            return (application.createConverter(id));
+            FacesContext context = FacesContext.getCurrentInstance();
+            String converterIdVal = converterId;
+            if (UIComponentTag.isValueReference(converterId)) {
+                ValueBinding vb =
+                    context.getApplication().createValueBinding(converterId);
+                converterIdVal = (String) vb.getValue(context);
+            }
+            return (context.getApplication().createConverter(converterIdVal));
         } catch (Exception e) {
             throw new JspException(e);
         }

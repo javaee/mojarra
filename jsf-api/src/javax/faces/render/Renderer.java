@@ -1,5 +1,5 @@
 /*
- * $Id: Renderer.java,v 1.27 2003/10/29 15:13:19 eburns Exp $
+ * $Id: Renderer.java,v 1.28 2003/12/17 15:11:01 rkitain Exp $
  */
 
 /*
@@ -191,7 +191,7 @@ public abstract class Renderer {
     }
 
     /**
-     * <p>Return a flag indicating whether this renderer is responsible
+     * <p>Return a flag indicating whether this {@link Renderer} is responsible
      * for rendering the children the component it is asked to render.
      * The default implementation returns <code>false</code>.</p>
      */

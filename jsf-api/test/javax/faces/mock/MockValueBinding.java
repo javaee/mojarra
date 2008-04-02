@@ -1,5 +1,5 @@
 /*
- * $Id: MockValueBinding.java,v 1.3 2003/11/07 02:58:26 craigmcc Exp $
+ * $Id: MockValueBinding.java,v 1.4 2003/12/17 15:11:26 rkitain Exp $
  */
 
 /*
@@ -10,6 +10,7 @@
 package javax.faces.mock;
 
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -17,6 +18,7 @@ import javax.faces.application.Application;
 import javax.faces.component.StateHolder;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.faces.el.EvaluationException;
 import javax.faces.el.PropertyNotFoundException;
 import javax.faces.el.PropertyResolver;
 import javax.faces.el.ReferenceSyntaxException;
@@ -73,7 +75,7 @@ public class MockValueBinding extends ValueBinding implements StateHolder {
 
 
     public Object getValue(FacesContext context)
-        throws PropertyNotFoundException {
+        throws EvaluationException, PropertyNotFoundException {
 
         if (context == null) {
             throw new NullPointerException();
@@ -108,7 +110,7 @@ public class MockValueBinding extends ValueBinding implements StateHolder {
 
 
     public void setValue(FacesContext context, Object value)
-        throws PropertyNotFoundException {
+        throws EvaluationException, PropertyNotFoundException {
 
         if (context == null) {
             throw new NullPointerException();
@@ -177,6 +179,12 @@ public class MockValueBinding extends ValueBinding implements StateHolder {
         throw new UnsupportedOperationException();
 
     }
+
+    public String getExpressionString() {
+	return "#{" + ref + "}";
+    }
+
+
 
 
     // ----------------------------------------------------- StateHolder Methods

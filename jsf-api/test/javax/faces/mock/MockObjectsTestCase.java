@@ -1,5 +1,5 @@
 /*
- * $Id: MockObjectsTestCase.java,v 1.1 2003/10/25 22:08:50 craigmcc Exp $
+ * $Id: MockObjectsTestCase.java,v 1.2 2003/12/17 15:11:26 rkitain Exp $
  */
 
 /*
@@ -161,16 +161,16 @@ public class MockObjectsTestCase extends TestCase {
         Class argsNone[] = new Class[0];
         assertEquals("::", bean.combine());
 
-        mb = application.getMethodBinding("test.setCommand", argsString);
+        mb = application.createMethodBinding("test.setCommand", argsString);
         mb.invoke(facesContext, new String[] { "command" });
         assertEquals("command", bean.getCommand());
-        mb = application.getMethodBinding("test.setInput", argsString);
+        mb = application.createMethodBinding("test.setInput", argsString);
         mb.invoke(facesContext, new String[] { "input" });
         assertEquals("input", bean.getInput());
-        mb = application.getMethodBinding("test.setOutput", argsString);
+        mb = application.createMethodBinding("test.setOutput", argsString);
         mb.invoke(facesContext, new String[] { "output" });
         assertEquals("output", bean.getOutput());
-        mb = application.getMethodBinding("test.combine", null);
+        mb = application.createMethodBinding("test.combine", null);
         assertEquals("command:input:output", bean.combine());
         assertEquals("command:input:output", mb.invoke(facesContext, null));
 
@@ -212,7 +212,7 @@ public class MockObjectsTestCase extends TestCase {
         assertNull(request.getAttribute("newSimpleName"));
         assertNull(session.getAttribute("newSimpleName"));
         assertNull(servletContext.getAttribute("newSimpleName"));
-        vb = application.getValueBinding("newSimpleName");
+        vb = application.createValueBinding("newSimpleName");
         vb.setValue(facesContext, "newSimpleValue");
         assertEquals("newSimpleValue", request.getAttribute("newSimpleName"));
         assertNull(session.getAttribute("newSimpleName"));
@@ -222,7 +222,7 @@ public class MockObjectsTestCase extends TestCase {
         assertNull(request.getAttribute("newReqName"));
         assertNull(session.getAttribute("newReqName"));
         assertNull(servletContext.getAttribute("newReqName"));
-        vb = application.getValueBinding("requestScope.newReqName");
+        vb = application.createValueBinding("requestScope.newReqName");
         vb.setValue(facesContext, "newReqValue");
         assertEquals("newReqValue", request.getAttribute("newReqName"));
         assertNull(session.getAttribute("newReqName"));
@@ -232,7 +232,7 @@ public class MockObjectsTestCase extends TestCase {
         assertNull(request.getAttribute("newSesName"));
         assertNull(session.getAttribute("newSesName"));
         assertNull(servletContext.getAttribute("newSesName"));
-        vb = application.getValueBinding("sessionScope.newSesName");
+        vb = application.createValueBinding("sessionScope.newSesName");
         vb.setValue(facesContext, "newSesValue");
         assertNull(request.getAttribute("newSesName"));
         assertEquals("newSesValue", session.getAttribute("newSesName"));
@@ -242,7 +242,7 @@ public class MockObjectsTestCase extends TestCase {
         assertNull(request.getAttribute("newAppName"));
         assertNull(session.getAttribute("newAppName"));
         assertNull(servletContext.getAttribute("newAppName"));
-        vb = application.getValueBinding("applicationScope.newAppName");
+        vb = application.createValueBinding("applicationScope.newAppName");
         vb.setValue(facesContext, "newAppValue");
         assertNull(request.getAttribute("newAppName"));
         assertNull(session.getAttribute("newAppName"));
@@ -252,7 +252,7 @@ public class MockObjectsTestCase extends TestCase {
         assertEquals("newSimpleValue", request.getAttribute("newSimpleName"));
         assertNull(session.getAttribute("newSimpleName"));
         assertNull(servletContext.getAttribute("newSimpleName"));
-        vb = application.getValueBinding("newSimpleName");
+        vb = application.createValueBinding("newSimpleName");
         vb.setValue(facesContext, "newerSimpleValue");
         assertEquals("newerSimpleValue", request.getAttribute("newSimpleName"));
         assertNull(session.getAttribute("newSimpleName"));
@@ -262,7 +262,7 @@ public class MockObjectsTestCase extends TestCase {
         assertEquals("sameKeyAppValue", servletContext.getAttribute("sameKey"));
         assertEquals("sameKeySesValue", session.getAttribute("sameKey"));
         assertEquals("sameKeyReqValue", request.getAttribute("sameKey"));
-        vb = application.getValueBinding("sameKey");
+        vb = application.createValueBinding("sameKey");
         vb.setValue(facesContext, "sameKeyNewValue");
         assertEquals("sameKeyAppValue", servletContext.getAttribute("sameKey"));
         assertEquals("sameKeySesValue", session.getAttribute("sameKey"));
@@ -278,7 +278,7 @@ public class MockObjectsTestCase extends TestCase {
     private void checkMethodBindingGetType(String ref, Class params[],
                                            Class expected) throws Exception {
 
-        MethodBinding mb = application.getMethodBinding(ref, params);
+        MethodBinding mb = application.createMethodBinding(ref, params);
         assertNotNull("MethodBinding[" + ref + "] exists", mb);
         assertEquals("MethodBinding[" + ref + "] type",
                      expected,
@@ -289,7 +289,7 @@ public class MockObjectsTestCase extends TestCase {
 
     private void checkValueBindingGetValue(String ref, Object expected) {
 
-        ValueBinding vb = application.getValueBinding(ref);
+        ValueBinding vb = application.createValueBinding(ref);
         assertNotNull("ValueBinding[" + ref + "] exists", vb);
         assertEquals("ValueBinding[" + ref + "] value",
                      expected,

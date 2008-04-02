@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.118 2003/11/11 14:53:07 rlubke Exp $
+ * $Id: UIComponent.java,v 1.119 2003/12/17 15:10:37 rkitain Exp $
  */
 
 /*
@@ -19,7 +19,6 @@ import javax.faces.el.ValueBinding;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.FacesEvent;
 import javax.faces.event.FacesListener;
-import javax.faces.event.PhaseId;
 import javax.faces.render.Renderer;
 
 
@@ -107,6 +106,11 @@ public abstract class UIComponent implements StateHolder {
      *  {@link ValueBinding}
      * @param binding The {@link ValueBinding} to set, or <code>null</code>
      *  to remove any currently set {@link ValueBinding}
+     *
+     * @exception IllegalArgumentException if <code>name</code> is one of
+     *  <code>id</code> or <code>parent</code>
+     * @exception NullPointerException if <code>name</code>
+     *  is <code>null</code>
      */
     public abstract void setValueBinding(String name, ValueBinding binding);
 
@@ -121,29 +125,15 @@ public abstract class UIComponent implements StateHolder {
      * convert the clientId to a form suitable for transmission to the
      * client.</p>
      *
+     * <p>The return from this method must be the same value throughout
+     * the lifetime of the instance.</p>
+     *
      * @param context The {@link FacesContext} for the current request
      *
      * @exception NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
     public abstract String getClientId(FacesContext context);
-
-
-    /**
-     * <p>Return the component reference expression for this {@link UIComponent}
-     * (if any).</p>
-     */
-    public abstract String getComponentRef();
-
-
-    /**
-     * <p>Set the component reference expression for this {@link UIComponent}.
-     * </p>
-     *
-     * @param componentRef The new component reference expression, or
-     *  <code>null</code> for no component reference expression
-     */
-    public abstract void setComponentRef(String componentRef);
 
 
     /**
@@ -274,8 +264,10 @@ public abstract class UIComponent implements StateHolder {
 
 
     /**
-     * <p>Return the number of child {@link UIComponent}s that are associated
-     * with this {@link UIComponent}.</p>
+     * <p>Return the number of child {@link UIComponent}s that are
+     * associated with this {@link UIComponent}.  If there are no
+     * children, this method must return 0.  The method must not cause
+     * the creation of a child component list.</p>
      */
     public abstract int getChildCount();
 
@@ -385,8 +377,9 @@ public abstract class UIComponent implements StateHolder {
 
 
     /**
-     * <p>Convenience method to return the named facet, if it exists,
-     * or <code>null</code> otherwise.</p>
+     * <p>Convenience method to return the named facet, if it exists, or
+     * <code>null</code> otherwise.  If the requested facet does not
+     * exist, the facets Map must not be created.</p>
      *
      * @param name Name of the desired facet
      */
@@ -413,45 +406,20 @@ public abstract class UIComponent implements StateHolder {
     /**
      * <p>Broadcast the specified {@link FacesEvent} to all registered
      * event listeners who have expressed an interest in events of this
-     * type, for the specified {@link PhaseId}.  The order in which registered
-     * listeners are notified must be:</p>
-     * <ul>
-     * <li>Listeners whose <code>getPhaseId()</code> method returns
-     *     <code>PhaseId.ANY_PHASE</code>, in the order that they were
-     *     registered.  However, the implementation must ensure that the same
-     *     event is not delivered to the same <code>PhaseId.ANY_PHASE</code>
-     *     listener more than once.</li>
-     * <li>Listeners whose <code>getPhaseId()</code> method returns
-     *     the <code>PhaseId</code> specified on this method call,
-     *     in the order that they were registered.</li>
-     * </ul>
-     *
-     * <p>After all interested listeners have been notified, return
-     * <code>false</code> if this event does not have any listeners
-     * interested in this event in future phases of the request processing
-     * lifecycle.  Otherwise, return <code>true</code>.  Note that listeners
-     * registered for <code>PhaseId.ANY_PHASE</code> are not counted as
-     * being interested in this event in a future phase (because they have
-     * already been notified about it.  However, if there are other
-     * listeners registered for a specific future phase, the
-     * <code>ANY_PHASE</code> listener will be notified of the event
-     * more than once.</p>
+     * type.  Listeners are called in the order in which they were
+     * added.</p>
      *
      * @param event The {@link FacesEvent} to be broadcast
-     * @param phaseId The {@link PhaseId} of the current phase of the
-     *  request processing lifecycle
      *
      * @exception AbortProcessingException Signal the JavaServer Faces
      *  implementation that no further processing on the current event
      *  should be performed
      * @exception IllegalArgumentException if the implementation class
      *  of this {@link FacesEvent} is not supported by this component
-     * @exception IllegalStateException if PhaseId.ANY_PHASE is passed
-     *  for the phase identifier
-     * @exception NullPointerException if <code>event</code> or
-     *  <code>phaseId</code> is <code>null</code>
+     * @exception NullPointerException if <code>event</code> is
+     * <code>null</code>
      */
-    public abstract boolean broadcast(FacesEvent event, PhaseId phaseId)
+    public abstract void broadcast(FacesEvent event)
         throws AbortProcessingException;
 
 
@@ -574,7 +542,6 @@ public abstract class UIComponent implements StateHolder {
      * public class FooEvent extends FacesEvent { ... }
      *
      * public interface FooListener extends FacesListener {
-     *   public PhaseId getPhaseId();
      *   public void processFoo(FooEvent event);
      * }
      *
@@ -657,6 +624,9 @@ public abstract class UIComponent implements StateHolder {
      * <li>Call the <code>restoreState()</code> method of this component.</li>
      * </ul>
      *
+     * <p>This method may not be called if the state saving method is
+     * set to server.</p>
+     *
      * @param context {@link FacesContext} for the request we are processing
      *
      * @exception NullPointerException if <code>context</code>
@@ -677,11 +647,7 @@ public abstract class UIComponent implements StateHolder {
      * <li>Call the <code>processDecodes()</code> method of all facets
      *     and children of this {@link UIComponent}, in the order determined
      *     by a call to <code>getFacetsAndChildren()</code>.</li>
-     * <li>Call the <code>decode()</code> method of this component,
-     *     if this component's <code>rendered</code> property is
-     *     <code>true</code> and it is not nested in a parent component
-     *     whose <code>rendersChildren</code> property is <code>true</code>
-     *     but whose <code>rendered</code> property is <code>false</code>.</li>
+     * <li>Call the <code>decode()</code> method of this component.</li>
      * <li>If a <code>RuntimeException</code> is thrown during
      *     decode processing, call {@link FacesContext#renderResponse}
      *     and re-throw the exception.</li>
@@ -706,14 +672,11 @@ public abstract class UIComponent implements StateHolder {
      * <li>Call the <code>processValidators()</code> method of all facets
      *     and children of this {@link UIComponent}, in the order determined
      *     by a call to <code>getFacetsAndChildren()</code>.</li>
-     * <li>If the current component is an {@link UIInput}, call its
-     *     <code>validate()</code> method, if this component's
-     *     <code>rendered</code> property is <code>true</code> and it is
-     *     not nested in a parent component whose <code>rendersChildren</code>
-     *     property is <code>true</code> but whose <code>rendered</code>
-     *     property is <code>false</code>.</li>
-     * <li>If the <code>isValid()</code> method of this component returns
-     *     <code>false</code>, call the <code>renderResponse()</code> method
+     * <li>If the current component is a {@link UIInput}, call its
+     *     <code>validate()</code> method.</li>
+     * <li>If the current component is a {@link UIInput}, and
+     *     its <code>valid</code> property is <code>false</code>,
+     *     call the <code>renderResponse()</code> method
      *     on the {@link FacesContext} instance for this request.</li>
      * <li>If a <code>RuntimeException</code> is thrown during
      *     validation processing, call {@link FacesContext#renderResponse}
@@ -741,15 +704,11 @@ public abstract class UIComponent implements StateHolder {
      *     and children of this {@link UIComponent}, in the order determined
      *     by a call to <code>getFacetsAndChildren()</code>.</li>
      * <li>If the current component is an {@link UIInput}, call its
-     *     <code>updateModel()</code> method of this component,
-     *     if this component's <code>rendered</code> property is
-     *     <code>true</code> and it is not nested in a parent component
-     *     whose <code>rendersChildren</code> property is <code>true</code>
-     *     but whose <code>rendered</code> property is <code>false</code>.</li>
-     * <li>If the <code>valid</code> property of this {@link UIComponent}
-     *     is now <code>false</code>, call
-     *     <code>FacesContext.renderResponse()</code>
-     *     to transfer control at the end of the current phase.</li>
+     *     <code>updateModel()</code> method of this component.</li>
+     * <li>If the current component is a {@link UIInput}, and
+     *     its <code>valid</code> property is <code>false</code>,
+     *     call the <code>renderResponse()</code> method
+     *     on the {@link FacesContext} instance for this request.</li>
      * <li>If a <code>RuntimeException</code> is thrown during
      *     update model processing, call {@link FacesContext#renderResponse}
      *     and re-throw the exception.</li>
@@ -783,6 +742,9 @@ public abstract class UIComponent implements StateHolder {
      * Serializable Object and return it.</li> 
      *
      * </ul>
+     *
+     * <p>This method may not be called if the state saving method is
+     * set to server.</p>
      *
      * @param context {@link FacesContext} for the request we are processing
      *

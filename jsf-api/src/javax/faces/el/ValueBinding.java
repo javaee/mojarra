@@ -1,5 +1,5 @@
 /*
- * $Id: ValueBinding.java,v 1.2 2003/03/13 01:12:14 craigmcc Exp $
+ * $Id: ValueBinding.java,v 1.3 2003/12/17 15:10:50 rkitain Exp $
  */
 
 /*
@@ -15,10 +15,10 @@ import javax.faces.context.FacesContext;
 
 
 /**
- * <p><strong>ValueBinding</strong> represents an object that can be used
+ * <p><strong>ValueBinding</strong> is an object that can be used
  * to access the property represented by an action or value reference
  * expression.  An immutable {@link ValueBinding} for a particular reference
- * can be acquired by calling the <code>getValueBinding()</code> method of
+ * can be acquired by calling the <code>createValueBinding()</code> method of
  * the {@link javax.faces.application.Application} instance for this web
  * application.  Implementations of {@link ValueBinding} are suitable for
  * caching the bindings for frequently accessed expressions, without requiring
@@ -35,13 +35,16 @@ public abstract class ValueBinding {
      *
      * @param context {@link FacesContext} for the current request
      *
+     * @exception EvaluationException if an exception is thrown while getting
+     *  the property value (the thrown exception must be included as the
+     *  <code>cause</code> property of this exception)
      * @exception NullPointerException if <code>context</code>
      *  is <code>null</code>
      * @exception PropertyNotFoundException if the specified property name
      *  does not exist, or is not readable
      */
     public abstract Object getValue(FacesContext context)
-        throws PropertyNotFoundException;
+        throws EvaluationException, PropertyNotFoundException;
 
 
     /**
@@ -52,13 +55,16 @@ public abstract class ValueBinding {
      * @param context {@link FacesContext} for the current request
      * @param value The new value to be set
      *
+     * @exception EvaluationException if an exception is thrown while setting
+     *  the property value (the thrown exception must be included as the
+     *  <code>cause</code> property of this exception)
      * @exception NullPointerException if <code>context</code>
      *  is <code>null</code>
      * @exception PropertyNotFoundException if the specified property name
      *  does not exist, or is not writeable
      */
     public abstract void setValue(FacesContext context, Object value)
-        throws PropertyNotFoundException;
+        throws EvaluationException, PropertyNotFoundException;
 
 
     /**
@@ -91,6 +97,20 @@ public abstract class ValueBinding {
      */
     public abstract Class getType(FacesContext context)
         throws PropertyNotFoundException;
+
+
+    /**
+     * <p>Return the (possibly <code>null</code>) expression String,
+     * with leading and trailing delimiters, from which this
+     * <code>ValueBinding</code> was built.  The default implementation
+     * returns <code>null</code>.</p>
+     *
+     */
+    public String getExpressionString() {
+	return null;
+    }
+
+
 
 
 }

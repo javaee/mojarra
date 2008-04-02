@@ -1,5 +1,5 @@
 /*
- * $Id: NavigationHandler.java,v 1.7 2003/10/27 04:09:56 craigmcc Exp $
+ * $Id: NavigationHandler.java,v 1.8 2003/12/17 15:10:33 rkitain Exp $
  */
 
 /*
@@ -40,7 +40,7 @@ public abstract class NavigationHandler {
      * returned by an executed application action.</p>
      *
      * @param context The {@link FacesContext} for the current request
-     * @param actionRef The action reference expression that was evaluated
+     * @param fromAction The action reference expression that was evaluated
      *  to retrieve the specified outcome, or <code>null</code> if the
      *  outcome was acquired by some other means
      * @param outcome The logical outcome returned by a previous invoked
@@ -50,22 +50,8 @@ public abstract class NavigationHandler {
      *  is <code>null</code>
      */
     public abstract void handleNavigation(FacesContext context,
-                                          String actionRef,
+                                          String fromAction,
                                           String outcome);
-
-
-    // ---------------------------------------------------------- Static Methods
-
-
-    /**
-     * <p>Return the {@link NavigationHandler} instance for the
-     * current application.</p>
-     */
-    public static NavigationHandler getCurrentInstance() {
-
-	return (Application.getCurrentInstance().getNavigationHandler());
-
-    }
 
 
 }

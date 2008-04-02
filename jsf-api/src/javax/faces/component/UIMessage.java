@@ -1,5 +1,5 @@
 /*
- * $Id: UIMessage.java,v 1.3 2003/11/07 18:55:31 craigmcc Exp $
+ * $Id: UIMessage.java,v 1.4 2003/12/17 15:10:38 rkitain Exp $
  */
 
 /*
@@ -72,8 +72,9 @@ public class UIMessage extends UIComponentBase {
 
 
     /**
-     * <p>Set the client identifier of the component for which
-     * this component represents associated message(s) (if any).</p>
+     * <p>Set the client identifier of the component for which this
+     * component represents associated message(s) (if any).  This
+     * property must be set before the message is displayed.</p>
      *
      * @param newFor The new client id
      */
@@ -85,8 +86,9 @@ public class UIMessage extends UIComponentBase {
 
 
     /**
-     * <p>Return the flag indicating whether the <code>detail</code> property
-     * of the associated message(s) should be displayed.</p>
+     * <p>Return the flag indicating whether the <code>detail</code>
+     * property of the associated message(s) should be displayed.
+     * Defaults to false.</p>
      */
     public boolean isShowDetail() {
 
@@ -119,8 +121,9 @@ public class UIMessage extends UIComponentBase {
 
 
     /**
-     * <p>Return the flag indicating whether the <code>summary</code> property
-     * of the associated message(s) should be displayed.</p>
+     * <p>Return the flag indicating whether the <code>summary</code>
+     * property of the associated message(s) should be displayed.
+     * Defaults to true.</p>
      */
     public boolean isShowSummary() {
 

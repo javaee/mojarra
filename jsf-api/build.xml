@@ -19,7 +19,7 @@
 
   <property name="Name"             value="JavaServer Faces API"/>
   <property name="name"             value="jsf-api"/>
-  <property name="version"          value="20031110_BETA_SCF"/>
+  <property name="version"          value="20031214_BETA"/>
 
   <property name="debug"            value="true" />
   <property name="deprecation"      value="false" />
@@ -679,10 +679,15 @@ jsf-api.jar.
 
     <mkdir dir="${build.mifdocs}"/>
     <javadoc packagenames="javax.*"
-             sourcepath="${src.dir}"
              destdir="${build.mifdocs}"
              private="false"
              protected="true">
+       <fileset dir="${src.dir}">
+         <include name="**/*.java"/>
+       </fileset>
+       <fileset dir="${build.generate}">
+         <include name="**/*.java"/>
+       </fileset>
       <classpath refid="compile.classpath"/>
       <doclet     name="com.sun.tools.doclets.mif.MIFDoclet"
                   path="${mifdoclet.jar}">

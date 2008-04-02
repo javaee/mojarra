@@ -1,5 +1,5 @@
 /*
- * $Id: NumberConverter.java,v 1.12 2003/10/28 17:53:36 rlubke Exp $
+ * $Id: NumberConverter.java,v 1.13 2003/12/17 15:10:48 rkitain Exp $
  */
 
 /*
@@ -54,7 +54,7 @@ import javax.faces.context.FacesContext;
  * </ul>
  *
  * <p>The <code>getAsString()</code> method expects a value of type
- * <code>java.util.Date</code> (or a subclass), and creates a formatted
+ * <code>java.lang.Number</code> (or a subclass), and creates a formatted
  * String according to the following algorithm:</p>
  * <ul>
  * <li>If the specified value is null or a zero-length String, return

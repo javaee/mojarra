@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTag.java,v 1.30 2003/11/11 22:59:16 craigmcc Exp $
+ * $Id: UIComponentTag.java,v 1.31 2003/12/17 15:11:07 rkitain Exp $
  */
 
 /*
@@ -150,24 +150,26 @@ public abstract class UIComponentTag implements Tag {
 
 
     /**
-     * <p>The component reference (if any) used to wire up this component
+     * <p>The value reference expression (if any) used to wire up this component
      * to a {@link UIComponent} property of a JavaBean class.</p>
      */
-    private String componentRef = null;
+    private String binding = null;
 
 
     /**
-     * <p>Set the component reference for our component.</p>
+     * <p>Set the value reference expression for our component.</p>
      *
-     * @param componentRef The new component reference
+     * @param binding The new value reference expression
+     *
+     * @exception IllegalArgumentException if the specified binding is not a
+     * valid value reference expression.
      */
-    public void setComponentRef(String componentRef) {
-
-	this.componentRef = componentRef;
-        if ((componentRef != null) && !overrideSet) {
-            override = false;
+    public void setBinding(String binding) throws JspException {
+	if (!isValueReference(binding)) {
+	    throw new IllegalArgumentException();
         }
 
+	this.binding = binding;
     }
 
 
@@ -185,28 +187,6 @@ public abstract class UIComponentTag implements Tag {
     public void setId(String id) {
 
         this.id = id;
-
-    }
-
-
-    /**
-     * <p>The "override properties" flag for this component.</p>
-     */
-    private boolean override = true;
-    private boolean overrideSet = false;
-
-
-    /**
-     * <p>Set the flag indicating whether <code>overrideProperties()</code>
-     * should be called on a redisplay of an existing component, instead of
-     * only when the component is initially created by this tag.</p>
-     *
-     * @param override The new override value
-     */
-    public void setOverride(boolean override) {
-
-        this.override = override;
-        this.overrideSet = true;
 
     }
 
@@ -250,7 +230,7 @@ public abstract class UIComponentTag implements Tag {
      * execution of <code>doStartTag()</code> and <code>doEndTag()</code>
      * on this tag instance.</p>
      */
-    public UIComponent getComponent() {
+    public UIComponent getComponentInstance() {
 
         return (this.component);
 
@@ -298,6 +278,32 @@ public abstract class UIComponentTag implements Tag {
      * </p>
      */
     public abstract String getRendererType();
+
+
+    /**
+     * <p>Return <code>true</code> if the specified value conforms to the
+     * syntax requirements of a value reference expression.  Such expressions
+     * may be used on most component tag attributes to signal a desire for
+     * deferred evaluation of the attribute or property value to be set on
+     * the underlying {@link UIComponent}.</p>
+     *
+     * @param value The value to evaluate
+     *
+     * @exception NullPointerException if <code>value</code> is
+     *  <code>null</code>
+     */
+    public static boolean isValueReference(String value) {
+
+	if (value == null) {
+	    throw new NullPointerException();
+	}
+	if (value.startsWith("#{") && value.endsWith("}")) {
+	    return (true);
+	} else {
+	    return (false);
+	}
+
+    }
 
 
     // --------------------------------------------------------- Tag Properties
@@ -530,11 +536,9 @@ public abstract class UIComponentTag implements Tag {
 
         this.parent = null;
 
-	this.componentRef = null;
+	this.binding = null;
         this.id = null;
         this.created = false;
-        this.override = true;
-        this.overrideSet = false;
         this.rendered = null;
     }
 
@@ -608,12 +612,9 @@ public abstract class UIComponentTag implements Tag {
      * <li>If this {@link UIComponentTag} instance has the
      *     <code>facetName</code> attribute set, ask the parent
      *     {@link UIComponent} for a facet with this name.  If not found,
-     *     create one, call <code>overrideProperties()</code> with the new
+     *     create one, call <code>setProperties()</code> with the new
      *     component as a parameter, and register it under this name.
-     *     if found, call <code>overrideProperties()</code> if the
-     *     <code>override</code> attribute has been set to <code>true</code>,
-     *     or no <code>componentRef</code> attribute has been set.  In either
-     *     case, return the facet {@link UIComponent}.</li>
+     *     Return the found or created facet {@link UIComponent}.</li>
      * <li>Determine the component id to be assigned to the new
      *     component, as follows:  if this {@link UIComponentTag} has
      *     an <code>id</code> attribute set, use that value; otherwise,
@@ -621,14 +622,11 @@ public abstract class UIComponentTag implements Tag {
      *     this {@link UIComponent} every time this page is processed
      *     (i.e. one based on the location of all {@link UIComponentTag}
      *     instances without an <code>id</code> attribute set).</li>
-     * <li>Ask the parent {@link UIComponent} for a child this identifier.
-     *     If not found, create one, call <code>overrideProperties()</code>
+     * <li>Ask the parent {@link UIComponent} for a child with this identifier.
+     *     If not found, create one, call <code>setProperties()</code>
      *     with the new component as a parameter, and register it as a child
-     *     with this identifier.  If found, call
-     *     <code>overrideProperties()</code> if the <code>override</code>
-     *     attribute has been set to <code>true</code>, or no
-     *     <code>componentRef</code> attribute has been set.  In either
-     *     case, return the child {@link UIComponent}.</li>
+     *     with this identifier.  Return the found or created
+     *     child {@link UIComponent}.</li>
      * </ol>
      */
     protected UIComponent findComponent(FacesContext context)
@@ -643,7 +641,7 @@ public abstract class UIComponentTag implements Tag {
         UIComponentTag parentTag = getParentUIComponentTag(pageContext);
         UIComponent parentComponent = null;
         if (parentTag != null) {
-            parentComponent = parentTag.getComponent();
+            parentComponent = parentTag.getComponentInstance();
         } else {
 	    //
 	    // Special case.  The component to be found is the
@@ -664,17 +662,17 @@ public abstract class UIComponentTag implements Tag {
 		    parentComponent.getAttributes().get(CURRENT_VIEW_ROOT)) {
 		    // No it hasn't.
 		    
-		    // make sure overrideProperties() and setId() are called
+		    // make sure setProperties() and setId() are called
 		    // once per UIViewRoot instance.
-		    overrideProperties(parentComponent);
+		    setProperties(parentComponent);
 		    if (null != this.id) {
 			parentComponent.setId(this.id);
 		    }
 		    parentComponent.getAttributes().put(CURRENT_VIEW_ROOT, 
 							CURRENT_VIEW_ROOT);
 		}
-		else if (override) {
-		    overrideProperties(parentComponent);
+		else if (binding == null) {
+		    setProperties(parentComponent);
 		}
 
 	    }
@@ -696,8 +694,6 @@ public abstract class UIComponentTag implements Tag {
             if (component == null) {
                 component = createFacet(context, parentComponent, facetName,
                         newId);
-            } else if (override) {
-                overrideProperties(component);
             }
             return (component);
         }
@@ -706,8 +702,6 @@ public abstract class UIComponentTag implements Tag {
         component = getChild(parentComponent, newId);
         if (component == null) {
             component = createChild(context, parentComponent, newId);
-        } else if (override) {
-            overrideProperties(component);
         }
         return (component);
 
@@ -799,32 +793,6 @@ public abstract class UIComponentTag implements Tag {
 
 
     /**
-     * <p>Return <code>true</code> if the specified value conforms to the
-     * syntax requirements of a value reference expression.  Such expressions
-     * may be used on most component tag attributes to signal a desire for
-     * deferred evaluation of the attribute or property value to be set on
-     * the underlying {@link UIComponent}.</p>
-     *
-     * @param value The value to evaluate
-     *
-     * @exception NullPointerException if <code>value</code> is
-     *  <code>null</code>
-     */
-    protected boolean isValueReference(String value) {
-
-	if (value == null) {
-	    throw new NullPointerException();
-	}
-	if (value.startsWith("#{") && value.endsWith("}")) {
-	    return (true);
-	} else {
-	    return (false);
-	}
-
-    }
-
-
-    /**
      * <p>Override properties and attributes of the specified component,
      * if the corresponding properties of this tag handler instance were
      * explicitly set.  This method must be called <strong>ONLY</strong>
@@ -833,14 +801,14 @@ public abstract class UIComponentTag implements Tag {
      * <strong>BEFORE</strong> the {@link UIComponent} is added to
      * the view.</p>
      *
-     * <p>Tag subclasses that want to support additional override properties
-     * must ensure that the base class <code>overrideProperties()</code>
+     * <p>Tag subclasses that want to support additional set properties
+     * must ensure that the base class <code>setProperties()</code>
      * method is still called.  A typical implementation that supports
      * extra properties <code>foo</code> and <code>bar</code> would look
      * something like this:</p>
      * <pre>
-     * protected void overrideProperties(UIComponent component) {
-     *   super.overrideProperties(component);
+     * protected void setProperties(UIComponent component) {
+     *   super.setProperties(component);
      *   if (foo != null) {
      *     component.setAttribute("foo", foo);
      *   }
@@ -855,8 +823,8 @@ public abstract class UIComponentTag implements Tag {
      * <li><code>componentId</code> - Set if a value for the
      *     <code>id</code> property is specified for
      *     this tag handler instance.</li>
-     * <li><code>componentRef</code> - Set if a value for the
-     *     <code>componentRef</code> property is specified for
+     * <li><code>component</code> - Set if a value for the
+     *     <code>component</code> property is specified for
      *     this tag handler instance.</li>
      * <li><code>rendered</code> - Set if a value for the
      *     <code>rendererd</code> property is specified for
@@ -868,17 +836,13 @@ public abstract class UIComponentTag implements Tag {
      * @param component {@link UIComponent} whose properties are to be
      *  overridden
      */
-    protected void overrideProperties(UIComponent component) {
-
-	if (componentRef != null) {
-	    component.setComponentRef(componentRef);
-	}
+    protected void setProperties(UIComponent component) {
         // The "id" property is explicitly set when components are created
         // so it does not need to be set here
         if (rendered != null) {
 	    if (isValueReference(rendered)) {
 		ValueBinding vb =
-		    context.getApplication().getValueBinding(rendered);
+		    context.getApplication().createValueBinding(rendered);
 		component.setValueBinding("rendered", vb);
 	    } else {
 		component.setRendered(Boolean.valueOf(rendered).booleanValue());
@@ -991,8 +955,8 @@ public abstract class UIComponentTag implements Tag {
      * calling <code>getComponentType()</code>.  If this {@link UIComponentTag}
      * has a non-null <code>componentType</code> attribute, this is done by
      * calling calling <code>getValue()</code> on a {@link ValueBinding} created
-     * for the <code>componentRef</code> attribute's value.  If this returns
-     * <code>null</code>, or there is no <code>componentRef</code> attribute
+     * for the <code>component</code> attribute's value.  If this returns
+     * <code>null</code>, or there is no <code>component</code> attribute
      * value, a new component is created and returned.</p>
      *
      * @param context {@link FacesContext} for the current request
@@ -1005,14 +969,15 @@ public abstract class UIComponentTag implements Tag {
 
         UIComponent component = null;
         Application application = context.getApplication();
-        if (componentRef != null) {
-            ValueBinding binding = application.getValueBinding(componentRef);
-            component = application.createComponent(binding, context,
+        if (binding != null) {
+            ValueBinding vb = application.createValueBinding(binding);
+            component = application.createComponent(vb, context,
                                                     getComponentType());
+	    component.setValueBinding("binding", vb);
         } else {
             component = application.createComponent(getComponentType());
         }
-        overrideProperties(component);
+        setProperties(component);
         component.setId(componentId);
         UIComponentTag parentTag = getParentUIComponentTag(pageContext);
         parent.getChildren().add(parentTag.getIndex(), component);
@@ -1037,7 +1002,7 @@ public abstract class UIComponentTag implements Tag {
 
         UIComponent component =
             context.getApplication().createComponent(getComponentType());
-        overrideProperties(component);
+        setProperties(component);
         component.setId(newId);
         parent.getFacets().put(name, component);
         created = true;
@@ -1055,11 +1020,6 @@ public abstract class UIComponentTag implements Tag {
 	    FacesContext context = 
 		(FacesContext) pageContext.getAttribute(CURRENT_FACES_CONTEXT);
 	    return context.getViewRoot().createUniqueId();
-	} else if (isValueReference(this.id)) {
-	    FacesContext context = 
-		(FacesContext) pageContext.getAttribute(CURRENT_FACES_CONTEXT);
-	    ValueBinding vb = context.getApplication().getValueBinding(this.id);
-	    return ((String) vb.getValue(context));
 	} else {
 	    return (this.id);
 	}

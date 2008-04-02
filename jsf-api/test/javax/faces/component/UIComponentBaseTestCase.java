@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBaseTestCase.java,v 1.19 2003/11/07 18:55:37 craigmcc Exp $
+ * $Id: UIComponentBaseTestCase.java,v 1.20 2003/12/17 15:11:12 rkitain Exp $
  */
 
 /*
@@ -347,7 +347,7 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
 	request.setAttribute("foo", "bar");
 	test.getAttributes().clear();
 	assertNull(test.getAttributes().get("baz"));
-	test.setValueBinding("baz", application.getValueBinding("#{foo}"));
+	test.setValueBinding("baz", application.createValueBinding("#{foo}"));
 	assertEquals("bar", test.getAttributes().get("baz"));
 	test.getAttributes().put("baz", "bop");
 	assertEquals("bop", test.getAttributes().get("baz"));
@@ -356,20 +356,23 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
 	test.setValueBinding("baz", null);
 	assertNull(test.getAttributes().get("baz"));
 
-	// "id" property
-	request.setAttribute("foo", "bar");
-	test.setId(null);
-	assertNull(test.getId());
-	test.setValueBinding("id", application.getValueBinding("#{foo}"));
-	assertNotNull(test.getValueBinding("id"));
-	assertEquals("bar", test.getId());
-	test.setId("baz");
-	assertEquals("baz", test.getId());
-	test.setId(null);
-	assertEquals("bar", test.getId());
-	test.setValueBinding("id", null);
-	assertNull(test.getValueBinding("id"));
-	assertNull(test.getId());
+        // "id" property
+        try {
+            test.setValueBinding("id",
+                                 application.createValueBinding("#{foo}"));
+            fail("Should have thrown IllegalArgumentException");
+        } catch (IllegalArgumentException e) {
+            ; // Expected response
+        }
+
+        // "parent" property
+        try {
+            test.setValueBinding("parent",
+                                 application.createValueBinding("#{foo}"));
+            fail("Should have thrown IllegalArgumentException");
+        } catch (IllegalArgumentException e) {
+            ; // Expected response
+        }
 
 	// "rendered" property
 	request.setAttribute("foo", Boolean.FALSE);
@@ -379,7 +382,7 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
 	} else {
 	    request.setAttribute("foo", Boolean.TRUE);
 	}
-	test.setValueBinding("rendered", application.getValueBinding("#{foo}"));
+	test.setValueBinding("rendered", application.createValueBinding("#{foo}"));
 	assertEquals(!initial, test.isRendered());
 	test.setRendered(initial);
 	assertEquals(initial, test.isRendered());
@@ -389,7 +392,7 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
 	request.setAttribute("foo", "bar");
 	test.setRendererType(null);
 	assertNull(test.getRendererType());
-	test.setValueBinding("rendererType", application.getValueBinding("#{foo}"));
+	test.setValueBinding("rendererType", application.createValueBinding("#{foo}"));
 	assertNotNull(test.getValueBinding("rendererType"));
 	assertEquals("bar", test.getRendererType());
 	test.setRendererType("baz");
@@ -696,7 +699,6 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
 
     // Check that the properties on the specified components are equal
     protected void checkProperties(UIComponent comp1, UIComponent comp2) {
-        assertEquals(comp1.getComponentRef(), comp2.getComponentRef());
         assertEquals(comp1.getClientId(facesContext),
                      comp2.getClientId(facesContext));
         assertEquals(comp1.getId(), comp2.getId());
@@ -735,16 +737,15 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
 
         component.getAttributes().put("foo", "foo value");
         component.getAttributes().put("bar", "bar value");
-        component.setComponentRef("foo.bar");
         component.setId("componentId");
         component.getClientId(facesContext); // Forces evaluation
         component.setRendered(false);
         component.setRendererType(null); // Since we have no renderers
 
 	component.setValueBinding("baz",
-				  application.getValueBinding("baz.value"));
+				  application.createValueBinding("baz.value"));
 	component.setValueBinding("bop",
-				  application.getValueBinding("bop.value"));
+				  application.createValueBinding("bop.value"));
 
     }
 

@@ -1,5 +1,5 @@
 /*
- * $Id: MockMethodBinding.java,v 1.2 2003/10/25 22:08:49 craigmcc Exp $
+ * $Id: MockMethodBinding.java,v 1.3 2003/12/17 15:11:25 rkitain Exp $
  */
 
 /*
@@ -19,6 +19,7 @@ import javax.faces.FacesException;
 import javax.faces.application.Application;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.faces.el.EvaluationException;
 import javax.faces.el.MethodBinding;
 import javax.faces.el.MethodNotFoundException;
 import javax.faces.el.PropertyNotFoundException;
@@ -26,6 +27,9 @@ import javax.faces.el.PropertyResolver;
 import javax.faces.el.ReferenceSyntaxException;
 import javax.faces.el.ValueBinding;
 import javax.faces.el.VariableResolver;
+import javax.faces.component.StateHolder;
+import javax.faces.component.UIComponentBase;
+
 
 
 /**
@@ -38,26 +42,29 @@ import javax.faces.el.VariableResolver;
  * </ul>
  */
 
-public class MockMethodBinding extends MethodBinding {
+public class MockMethodBinding extends MethodBinding implements StateHolder {
 
 
     // ------------------------------------------------------------ Constructors
+
+    public MockMethodBinding() {
+    }
 
 
     public MockMethodBinding(Application application, String ref,
                              Class args[]) {
 
-        if ((application == null) || (ref == null)) {
-            throw new NullPointerException();
-        }
-        this.application = application;
+	this.application = application;
         this.args = args;
+	if (ref.startsWith("#{") && ref.endsWith("}")) {
+	    ref = ref.substring(2, ref.length() - 1);
+	}
         this.ref = ref;
         int period = ref.lastIndexOf(".");
         if (period < 0) {
             throw new ReferenceSyntaxException(ref);
         }
-        vb = application.getValueBinding(ref.substring(0, period));
+        vb = application.createValueBinding(ref.substring(0, period));
         name = ref.substring(period + 1);
         if (name.length() < 1) {
             throw new ReferenceSyntaxException(ref);
@@ -80,7 +87,7 @@ public class MockMethodBinding extends MethodBinding {
 
 
     public Object invoke(FacesContext context, Object params[])
-        throws InvocationTargetException {
+        throws EvaluationException, MethodNotFoundException {
 
         if (context == null) {
             throw new NullPointerException();
@@ -90,7 +97,9 @@ public class MockMethodBinding extends MethodBinding {
         try {
             return (method.invoke(base, params));
         } catch (IllegalAccessException e) {
-            throw new FacesException(e);
+            throw new EvaluationException(e);
+        } catch (InvocationTargetException e) {
+            throw new EvaluationException(e.getTargetException());
         }
 
     }
@@ -107,6 +116,80 @@ public class MockMethodBinding extends MethodBinding {
             return (returnType);
         }
 
+    }
+
+    public String getExpressionString() {
+	return "#{" + ref + "}";
+    }
+
+    // ----------------------------------------------------- StateHolder Methods
+
+
+    public Object saveState(FacesContext context) {
+	Object values[] = new Object[4];
+	values[0] = name;
+	values[1] = ref;
+	values[2] = UIComponentBase.saveAttachedState(context, vb);
+	values[3] = args;
+	return (values);
+    }
+
+
+    public void restoreState(FacesContext context, Object state) {
+	Object values[] = (Object[]) state;
+	name = (String) values[0];
+	ref = (String) values[1];
+	vb = (ValueBinding) UIComponentBase.restoreAttachedState(context, 
+								 values[2]);
+	args = (Class []) values[3];
+    }
+
+
+    private boolean transientFlag = false;
+
+
+    public boolean isTransient() {
+	return (this.transientFlag);
+    }
+
+
+    public void setTransient(boolean transientFlag) {
+	this.transientFlag = transientFlag;
+    }
+
+    public boolean equals(Object otherObj) {
+	MockMethodBinding other = null;
+
+	if (!(otherObj instanceof MockMethodBinding)) {
+	    return false;
+	}
+	other = (MockMethodBinding) otherObj;
+	// test object reference equality
+	if (this.ref != other.ref) {
+	    // test object equality
+	    if (null != this.ref && null != other.ref) {
+		if (!this.ref.equals(other.ref)) {
+		    return false;
+		}
+	    }
+	    return false;
+	}
+	// no need to test name, since it flows from ref.
+	// test our args array
+	if (this.args != other.args) {
+	    if (this.args.length != other.args.length) {
+		return false;
+	    }
+	    for (int i = 0, len = this.args.length; i < len; i++) {
+		if (this.args[i] != other.args[i]) {
+		    if (!this.ref.equals(other.ref)) {
+			return false;
+		    }
+
+		}
+	    }
+	}
+	return true;
     }
 
 

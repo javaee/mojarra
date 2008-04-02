@@ -1,5 +1,5 @@
 /*
- * $Id: FacetTag.java,v 1.8 2003/05/02 05:04:55 craigmcc Exp $
+ * $Id: FacetTag.java,v 1.9 2003/12/17 15:11:06 rkitain Exp $
  */
 
 /*
@@ -9,6 +9,9 @@
 
 package javax.faces.webapp;
 
+
+import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.TagSupport;
 
@@ -18,7 +21,7 @@ import javax.servlet.jsp.tagext.TagSupport;
  * {@link javax.faces.component.UIComponent} is to be added as a
  * <code>facet</code> to the component associated with its parent.</p>
  *
- * <p>A <strong>FacetTag</strong> must have one and only one tag
+ * <p>A <strong>FacetTag</strong> must have one and only one
  * child.  This child must be a {@link UIComponentTag} instance representing
  * a single {@link javax.faces.component.UIComponent} instance.</p>
  */
@@ -26,55 +29,78 @@ import javax.servlet.jsp.tagext.TagSupport;
 public class FacetTag extends TagSupport {
 
 
-    // ------------------------------------------------- Instance Variables
+    // -------------------------------------------------------------- Properties
 
 
     /**
-     * <p>The number of child component tags that have been nested
-     * inside this tag.</p>
-     */
-    protected int children = 0;
-
-
-    // ------------------------------------------------------------- Properties
-
-
-    /**
-     * The name of this facet.  This will be used as the facet name for
+     * <p>The name of this facet.  This will be used as the facet name for
      * our <code>UIComponentTag</code> child in our <code>UIComponentTag</code>
-     * parent's facet list.
+     * parent's facet list.</p>
      */ 
-    protected String name = null;
+    private String name = null;
 
-    public String getName()
-    {
-	return name;
+
+    /**
+     * <p>Return the name to be assigned to this facet, after evaluating any
+     * value reference expression that was specified.</p>
+     */
+    public String getName() {
+
+        if (UIComponentTag.isValueReference(name)) {
+            FacesContext context = FacesContext.getCurrentInstance();
+            ValueBinding vb = context.getApplication().createValueBinding(name);
+            return ((String) vb.getValue(context));
+        } else {
+            return (name);
+        }
+
     }
     
-    public void setName(String newName)
-    {
-	name = newName;
+
+    /**
+     * <p>Set the name to be assigned to this facet, or a value reference
+     * expression to be used to calculate this name.</p>
+     *
+     * @param name The new name or value reference expression
+     */
+    public void setName(String name) {
+
+	this.name = name;
+
     }
 
 
-    // ------------------------------------------------------------ Tag Methods
+    // ------------------------------------------------------------- Tag Methods
 
 
+    /**
+     * <p>Release any resources allocated by this tag instance.
+     */
     public void release() {
 
         super.release();
         this.name = null;
+
     }
 
+
+    /**
+     * <p>Return <code>EVAL_BODY_INCLUDE</code> to cause nested body
+     * content to be evaluated.</p>
+     */
     public int doStartTag() throws JspException {
 
         return (EVAL_BODY_INCLUDE);
 
     }
 
+
+    /**
+     * <p>Return <code>EVAL_PAGE</code> to cause the remainder of the
+     * current page to be evaluated.</p>
+     */
     public int doEndTag() throws JspException {
 
-        children = 0;
         return (EVAL_PAGE);
 
     }

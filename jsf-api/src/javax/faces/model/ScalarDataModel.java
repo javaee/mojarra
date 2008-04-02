@@ -1,5 +1,5 @@
 /*
- * $Id: ScalarDataModel.java,v 1.7 2003/11/05 00:38:30 craigmcc Exp $
+ * $Id: ScalarDataModel.java,v 1.8 2003/12/17 15:10:59 rkitain Exp $
  */
 
 /*
@@ -200,8 +200,7 @@ public class ScalarDataModel extends DataModel {
             return;
         }
         scalar = data;
-        index = 0;
-
+	setRowIndex(0);
     }
 
 

@@ -1,5 +1,5 @@
 /*
- * $Id: UIDataTestCase.java,v 1.21 2003/11/08 01:15:36 craigmcc Exp $
+ * $Id: UIDataTestCase.java,v 1.22 2003/12/17 15:11:12 rkitain Exp $
  */
 
 /*
@@ -176,10 +176,10 @@ public class UIDataTestCase extends ValueHolderTestCaseBase {
     // Test reading the per-row data values
     public void testModelRead() throws Exception {
 
-        ValueBinding vb = application.getValueBinding("foo");
-        ValueBinding vbCommand = application.getValueBinding("foo.command");
-        ValueBinding vbInput = application.getValueBinding("foo.input");
-        ValueBinding vbOutput = application.getValueBinding("foo.output");
+        ValueBinding vb = application.createValueBinding("foo");
+        ValueBinding vbCommand = application.createValueBinding("foo.command");
+        ValueBinding vbInput = application.createValueBinding("foo.input");
+        ValueBinding vbOutput = application.createValueBinding("foo.output");
         UIData data = (UIData) component;
         setupModel();
         setupRenderers();
@@ -222,10 +222,10 @@ public class UIDataTestCase extends ValueHolderTestCaseBase {
     // Test writing the per-row data values
     public void testModelWrite() throws Exception {
 
-        ValueBinding vb = application.getValueBinding("foo");
-        ValueBinding vbCommand = application.getValueBinding("foo.command");
-        ValueBinding vbInput = application.getValueBinding("foo.input");
-        ValueBinding vbOutput = application.getValueBinding("foo.output");
+        ValueBinding vb = application.createValueBinding("foo");
+        ValueBinding vbCommand = application.createValueBinding("foo.command");
+        ValueBinding vbInput = application.createValueBinding("foo.input");
+        ValueBinding vbOutput = application.createValueBinding("foo.output");
         UIData data = (UIData) component;
         setupModel();
         setupRenderers();
@@ -349,9 +349,9 @@ public class UIDataTestCase extends ValueHolderTestCaseBase {
     // Test request processing lifecycle (successful input)
     public void testTreeLifecycle() throws Exception {
 
-        ValueBinding vbCommand = application.getValueBinding("foo.command");
-        ValueBinding vbInput = application.getValueBinding("foo.input");
-        ValueBinding vbOutput = application.getValueBinding("foo.output");
+        ValueBinding vbCommand = application.createValueBinding("foo.command");
+        ValueBinding vbInput = application.createValueBinding("foo.input");
+        ValueBinding vbOutput = application.createValueBinding("foo.output");
         String before[] =
             { "input3", "input4", "input5", "input6", "input7" };
         String after[] =
@@ -360,7 +360,7 @@ public class UIDataTestCase extends ValueHolderTestCaseBase {
         // Set up for this test
         setupModel();
         setupRenderers();
-        setupTree();
+        UICommand command = setupTree();
         UIData data = (UIData) component;
 
         // Set up our fake request parameters (two command invocations)
@@ -384,6 +384,7 @@ public class UIDataTestCase extends ValueHolderTestCaseBase {
         UIViewRoot root = (UIViewRoot) data.getParent();
 
         //   APPLY REQUEST VALUES
+	command.setImmediate(true);
         root.processDecodes(facesContext);
         assertEquals("/data:5:command" +
                      "/data:7:command",
@@ -473,9 +474,9 @@ public class UIDataTestCase extends ValueHolderTestCaseBase {
     // Test updating the tree's per-row values and validate the output twice
     public void testTreeUpdating() throws Exception {
 
-        ValueBinding vbCommand = application.getValueBinding("foo.command");
-        ValueBinding vbInput = application.getValueBinding("foo.input");
-        ValueBinding vbOutput = application.getValueBinding("foo.output");
+        ValueBinding vbCommand = application.createValueBinding("foo.command");
+        ValueBinding vbInput = application.createValueBinding("foo.input");
+        ValueBinding vbOutput = application.createValueBinding("foo.output");
 
         // Set up for this test
         setupModel();
@@ -506,9 +507,9 @@ public class UIDataTestCase extends ValueHolderTestCaseBase {
     // Test request processing lifecycle (validation errors)
     public void testTreeValidation() throws Exception {
 
-        ValueBinding vbCommand = application.getValueBinding("foo.command");
-        ValueBinding vbInput = application.getValueBinding("foo.input");
-        ValueBinding vbOutput = application.getValueBinding("foo.output");
+        ValueBinding vbCommand = application.createValueBinding("foo.command");
+        ValueBinding vbInput = application.createValueBinding("foo.input");
+        ValueBinding vbOutput = application.createValueBinding("foo.output");
         String before[] =
             { "input3", "input4", "input5", "input6", "input7" };
 
@@ -575,7 +576,7 @@ public class UIDataTestCase extends ValueHolderTestCaseBase {
 
 	// "first" property
 	request.setAttribute("foo", new Integer(5));
-	test.setValueBinding("first", application.getValueBinding("#{foo}"));
+	test.setValueBinding("first", application.createValueBinding("#{foo}"));
 	assertEquals(5, test.getFirst());
 	test.setFirst(10);
 	assertEquals(10, test.getFirst());
@@ -583,7 +584,7 @@ public class UIDataTestCase extends ValueHolderTestCaseBase {
 
 	// "rowIndex" property
 	request.setAttribute("foo", new Integer(5));
-	test.setValueBinding("rowIndex", application.getValueBinding("#{foo}"));
+	test.setValueBinding("rowIndex", application.createValueBinding("#{foo}"));
 	assertEquals(5, test.getRowIndex());
 	test.setRowIndex(10);
 	assertEquals(10, test.getRowIndex());
@@ -591,7 +592,7 @@ public class UIDataTestCase extends ValueHolderTestCaseBase {
 
 	// "rows" property
 	request.setAttribute("foo", new Integer(5));
-	test.setValueBinding("rows", application.getValueBinding("#{foo}"));
+	test.setValueBinding("rows", application.createValueBinding("#{foo}"));
 	assertEquals(5, test.getRows());
 	test.setRows(10);
 	assertEquals(10, test.getRows());
@@ -601,7 +602,7 @@ public class UIDataTestCase extends ValueHolderTestCaseBase {
 	request.setAttribute("foo", "bar");
 	test.setValue(null);
 	assertNull(test.getValue());
-	test.setValueBinding("value", application.getValueBinding("#{foo}"));
+	test.setValueBinding("value", application.createValueBinding("#{foo}"));
 	assertNotNull(test.getValueBinding("value"));
 	assertEquals("bar", test.getValue());
 	test.setValue("baz");
@@ -616,7 +617,7 @@ public class UIDataTestCase extends ValueHolderTestCaseBase {
 	request.setAttribute("foo", "bar");
 	test.setVar(null);
 	assertNull(test.getVar());
-	test.setValueBinding("var", application.getValueBinding("#{foo}"));
+	test.setValueBinding("var", application.createValueBinding("#{foo}"));
 	assertNotNull(test.getValueBinding("var"));
 	assertEquals("bar", test.getVar());
 	test.setVar("baz");
@@ -627,7 +628,7 @@ public class UIDataTestCase extends ValueHolderTestCaseBase {
 	assertNull(test.getValueBinding("var"));
 	assertNull(test.getVar());
 
-   }
+    }
 
 
     // --------------------------------------------------------- Support Methods
@@ -829,7 +830,7 @@ public class UIDataTestCase extends ValueHolderTestCaseBase {
 
 
     // Set up the component tree corresponding to the data model
-    protected void setupTree() throws Exception {
+    protected UICommand setupTree() throws Exception {
 
         // Attach our UIData to the view root
         UIData data = (UIData) component;
@@ -860,7 +861,7 @@ public class UIDataTestCase extends ValueHolderTestCaseBase {
         command = new UICommand();
         command.setId("command");
         command.setValueBinding("value",
-				application.getValueBinding("#{foo.command}"));
+				application.createValueBinding("#{foo.command}"));
         column.getChildren().add(command);
         data.getChildren().add(column);
         command.addActionListener(new TestDataActionListener());
@@ -878,7 +879,7 @@ public class UIDataTestCase extends ValueHolderTestCaseBase {
         input = new UIInput();
         input.setId("input");
         input.setValueBinding("value",
-			      application.getValueBinding("#{foo.input}"));
+			      application.createValueBinding("#{foo.input}"));
         column.getChildren().add(input);
         data.getChildren().add(column);
         input.addValidator(new TestDataValidator());
@@ -897,10 +898,11 @@ public class UIDataTestCase extends ValueHolderTestCaseBase {
         output = new UIOutput();
         output.setId("output");
         output.setValueBinding("value",
-			       application.getValueBinding("#{foo.output}"));
+			       application.createValueBinding("#{foo.output}"));
         column.getChildren().add(output);
         data.getChildren().add(column);
 
+	return command;
     }
 
 

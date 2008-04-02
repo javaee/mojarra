@@ -1,5 +1,5 @@
 /*
- * $Id: UICommandTestCase.java,v 1.19 2003/11/08 01:15:35 craigmcc Exp $
+ * $Id: UICommandTestCase.java,v 1.20 2003/12/17 15:11:11 rkitain Exp $
  */
 
 /*
@@ -16,11 +16,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import javax.faces.FactoryFinder;
+import javax.faces.application.Application;
 import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UICommand;
 import javax.faces.component.ValueHolder;
 import javax.faces.event.ActionEvent;
+import javax.faces.el.MethodBinding;
 import javax.faces.event.ActionListener;
 import javax.faces.event.PhaseId;
 import javax.faces.TestUtil;
@@ -52,6 +54,7 @@ public class UICommandTestCase extends ValueHolderTestCaseBase {
         super(name);
     }
 
+    private static Class actionListenerSignature[] = { ActionEvent.class };
 
     // ---------------------------------------------------- Overall Test Methods
 
@@ -79,7 +82,7 @@ public class UICommandTestCase extends ValueHolderTestCaseBase {
     // ------------------------------------------------- Individual Test Methods
 
 
-    // Test order of action listener calls with actionListenerRef also
+    // Test order of action listener calls with actionListener also
     public void testActionOrder() throws Exception {
 
         RenderKitFactory renderKitFactory = (RenderKitFactory)
@@ -90,10 +93,13 @@ public class UICommandTestCase extends ValueHolderTestCaseBase {
         UIViewRoot root = new UIViewRoot();
         root.getChildren().add(component);
         UICommand command = (UICommand) component;
+	MethodBinding binding = facesContext.getApplication().
+	    createMethodBinding("#{l3.processAction}", 
+				actionListenerSignature);
         command.setId("command");
         command.addActionListener(new TestCommandActionListener("l1"));
         command.addActionListener(new TestCommandActionListener("l2"));
-        command.setActionListenerRef("l3.processAction");
+        command.setActionListener(binding);
         command.setImmediate(true);
         request.setAttribute("l3", new TestCommandActionListener("l3"));
         Map map = new HashMap();
@@ -113,119 +119,124 @@ public class UICommandTestCase extends ValueHolderTestCaseBase {
 
         super.testAttributesTransparency();
         UICommand command = (UICommand) component;
+	Application app = facesContext.getApplication();
+	MethodBinding methodBinding = null;
 
         assertEquals(command.getAction(),
-                     (String) command.getAttributes().get("action"));
-        command.setAction("foo");
-        assertEquals("foo", (String) command.getAttributes().get("action"));
+                     (MethodBinding) command.getAttributes().get("action"));
+        command.setAction(methodBinding =
+			  app.createMethodBinding("#{foo.bar}", null));
+        assertEquals(methodBinding, 
+		     (MethodBinding) command.getAttributes().get("action"));
         command.setAction(null);
-        assertNull((String) command.getAttributes().get("action"));
-        command.getAttributes().put("action", "bar");
-        assertEquals("bar", command.getAction());
+        assertNull((MethodBinding) command.getAttributes().get("action"));
+	methodBinding = app.createMethodBinding("#{bar.baz}", null);
+        command.getAttributes().put("action", methodBinding);
+        assertEquals(methodBinding, command.getAction());
         command.getAttributes().put("action", null);
         assertNull(command.getAction());
 
-        assertEquals(command.getActionListenerRef(),
-                     (String) command.getAttributes().get("actionListenerRef"));
-        command.setActionListenerRef("foo");
-        assertEquals("foo", (String) command.getAttributes().get("actionListenerRef"));
-        command.setActionListenerRef(null);
-        assertNull((String) command.getAttributes().get("actionListenerRef"));
-        command.getAttributes().put("actionListenerRef", "bar");
-        assertEquals("bar", command.getActionListenerRef());
-        command.getAttributes().put("actionListenerRef", null);
-        assertNull(command.getActionListenerRef());
-
-        assertEquals(command.getActionRef(),
-                     (String) command.getAttributes().get("actionRef"));
-        command.setActionRef("foo");
-        assertEquals("foo", (String) command.getAttributes().get("actionRef"));
-        command.setActionRef(null);
-        assertNull((String) command.getAttributes().get("actionRef"));
-        command.getAttributes().put("actionRef", "bar");
-        assertEquals("bar", command.getActionRef());
-        command.getAttributes().put("actionRef", null);
-        assertNull(command.getActionRef());
+        assertEquals(command.getActionListener(),
+                     (MethodBinding) command.getAttributes().get("actionListener"));
+	methodBinding = app.createMethodBinding("#{foo.yoyo}", 
+						actionListenerSignature);
+        command.setActionListener(methodBinding);
+        assertEquals(methodBinding, 
+		     (MethodBinding) command.getAttributes().get("actionListener"));
+        command.setActionListener(null);
+        assertNull((MethodBinding) 
+		   command.getAttributes().get("actionListener"));
+	methodBinding = app.createMethodBinding("#{foo.buckaroo}", 
+						actionListenerSignature);
+        command.getAttributes().put("actionListener", methodBinding);
+        assertEquals(methodBinding, command.getActionListener());
+        command.getAttributes().put("actionListener", null);
+        assertNull(command.getActionListener());
 
     }
-
 
     // Test event queuing and broadcasting (any phase listeners)
     public void testEventsGeneric() {
 
         UICommand command = (UICommand) component;
+	command.setRendererType(null);
         ActionEvent event = new ActionEvent(command);
 
         // Register three listeners
         command.addActionListener
-            (new TestActionListener("AP0", PhaseId.ANY_PHASE));
+            (new TestActionListener("AP0"));
         command.addActionListener
-            (new TestActionListener("AP1", PhaseId.ANY_PHASE));
+            (new TestActionListener("AP1"));
         command.addActionListener
-            (new TestActionListener("AP2", PhaseId.ANY_PHASE));
+            (new TestActionListener("AP2"));
 
         // Fire events and evaluate results
         TestActionListener.trace(null);
-        assertTrue(command.broadcast(event, PhaseId.APPLY_REQUEST_VALUES));
-        assertTrue(command.broadcast(event, PhaseId.PROCESS_VALIDATIONS));
-        assertTrue(!command.broadcast(event, PhaseId.INVOKE_APPLICATION));
-        assertEquals("/AP0/AP1/AP2",
+	UIViewRoot root = new UIViewRoot();
+	root.getChildren().add(command);
+	command.queueEvent(event);
+	root.processDecodes(facesContext);
+	root.processValidators(facesContext);
+	root.processApplication(facesContext);
+        assertEquals("/AP0@INVOKE_APPLICATION 5/AP1@INVOKE_APPLICATION 5/AP2@INVOKE_APPLICATION 5",
                      TestActionListener.trace());
 
     }
-
 
     // Test event queuing and broadcasting (mixed phase listeners)
     public void testEventsMixed() {
 
         UICommand command = (UICommand) component;
+	command.setRendererType(null);
         ActionEvent event = new ActionEvent(command);
 
         // Register three listeners
         command.addActionListener
-            (new TestActionListener("ARV", PhaseId.APPLY_REQUEST_VALUES));
+            (new TestActionListener("ARV"));
         command.addActionListener
-            (new TestActionListener("PV", PhaseId.PROCESS_VALIDATIONS));
+            (new TestActionListener("PV"));
         command.addActionListener
-            (new TestActionListener("AP", PhaseId.ANY_PHASE));
+            (new TestActionListener("AP"));
 
         // Fire events and evaluate results
         TestActionListener.trace(null);
-        assertTrue(command.broadcast(event, PhaseId.APPLY_REQUEST_VALUES));
-        assertTrue(command.broadcast(event, PhaseId.PROCESS_VALIDATIONS));
-        assertTrue(!command.broadcast(event, PhaseId.INVOKE_APPLICATION));
-        assertEquals("/AP/ARV/PV",
+	UIViewRoot root = new UIViewRoot();
+	root.getChildren().add(command);
+	command.queueEvent(event);
+	root.processDecodes(facesContext);
+	root.processValidators(facesContext);
+	root.processApplication(facesContext);
+        assertEquals("/ARV@INVOKE_APPLICATION 5/PV@INVOKE_APPLICATION 5/AP@INVOKE_APPLICATION 5",
                      TestActionListener.trace());
 
     }
 
-
-    // Test event queuing and broadcasting (specific phase listeners)
-    public void testEventsSpecific() {
+    // Test event queuing and broadcasting (mixed phase listeners), with
+    // immediate set.
+    public void testEventsMixedImmediate() {
 
         UICommand command = (UICommand) component;
+	command.setImmediate(true);
+	command.setRendererType(null);
         ActionEvent event = new ActionEvent(command);
 
-        // Register five listeners
+        // Register three listeners
         command.addActionListener
-            (new TestActionListener("ARV0", PhaseId.APPLY_REQUEST_VALUES));
+            (new TestActionListener("ARV"));
         command.addActionListener
-            (new TestActionListener("ARV1", PhaseId.APPLY_REQUEST_VALUES));
+            (new TestActionListener("PV"));
         command.addActionListener
-            (new TestActionListener("PV0", PhaseId.PROCESS_VALIDATIONS));
-        command.addActionListener
-            (new TestActionListener("PV1", PhaseId.PROCESS_VALIDATIONS));
-        command.addActionListener
-            (new TestActionListener("PV2", PhaseId.PROCESS_VALIDATIONS));
+            (new TestActionListener("AP"));
 
         // Fire events and evaluate results
         TestActionListener.trace(null);
-        assertTrue(command.broadcast(event, PhaseId.RESTORE_VIEW));
-        assertTrue(command.broadcast(event, PhaseId.APPLY_REQUEST_VALUES));
-        assertTrue(command.broadcast(event, PhaseId.PROCESS_VALIDATIONS));
-        assertTrue(command.broadcast(event, PhaseId.UPDATE_MODEL_VALUES));
-        assertTrue(!command.broadcast(event, PhaseId.INVOKE_APPLICATION));
-        assertEquals("/ARV0/ARV1/PV0/PV1/PV2",
+	UIViewRoot root = new UIViewRoot();
+	root.getChildren().add(command);
+	command.queueEvent(event);
+	root.processDecodes(facesContext);
+	root.processValidators(facesContext);
+	root.processApplication(facesContext);
+        assertEquals("/ARV@APPLY_REQUEST_VALUES 2/PV@APPLY_REQUEST_VALUES 2/AP@APPLY_REQUEST_VALUES 2",
                      TestActionListener.trace());
 
     }
@@ -238,24 +249,23 @@ public class UICommandTestCase extends ValueHolderTestCaseBase {
         TestActionListener listener = null;
 
         command.addActionListener
-            (new TestActionListener("ARV0", PhaseId.APPLY_REQUEST_VALUES));
+            (new TestActionListener("ARV0"));
         command.addActionListener
-            (new TestActionListener("ARV1", PhaseId.APPLY_REQUEST_VALUES));
+            (new TestActionListener("ARV1"));
         command.addActionListener
-            (new TestActionListener("PV0", PhaseId.PROCESS_VALIDATIONS));
+            (new TestActionListener("PV0"));
         command.addActionListener
-            (new TestActionListener("PV1", PhaseId.PROCESS_VALIDATIONS));
+            (new TestActionListener("PV1"));
         command.addActionListener
-            (new TestActionListener("PV2", PhaseId.PROCESS_VALIDATIONS));
+            (new TestActionListener("PV2"));
 
         ActionListener listeners[] = command.getActionListeners();
         assertEquals(6, listeners.length); // Count the default one
         command.removeActionListener(listeners[2]);
-        listeners = command.getActionListeners();
+	listeners = command.getActionListeners();
         assertEquals(5, listeners.length);
 
     }
-
 
     // Test a pristine UICommand instance
     public void testPristine() {
@@ -264,8 +274,7 @@ public class UICommandTestCase extends ValueHolderTestCaseBase {
         UICommand command = (UICommand) component;
 
         assertNull("no action", command.getAction());
-        assertNull("no actionListenerRef", command.getActionListenerRef());
-        assertNull("no actionRef", command.getActionRef());
+        assertNull("no actionListener", command.getActionListener());
 
     }
 
@@ -284,77 +293,28 @@ public class UICommandTestCase extends ValueHolderTestCaseBase {
 
         super.testPropertiesValid();
         UICommand command = (UICommand) component;
+	Application app = facesContext.getApplication();
+	MethodBinding methodBinding = null;
 
-        command.setAction("foo");
-        assertEquals("foo", command.getAction());
+        command.setAction(methodBinding = 
+			  app.createMethodBinding("#{foo.bar}", null));
+        assertEquals(methodBinding, command.getAction());
         command.setAction(null);
         assertNull(command.getAction());
 
-        command.setActionListenerRef("foo");
-        assertEquals("foo", command.getActionListenerRef());
-        command.setActionListenerRef(null);
-        assertNull(command.getActionListenerRef());
-
-        command.setActionRef("foo");
-        assertEquals("foo", command.getActionRef());
-        command.setActionRef(null);
-        assertNull(command.getActionRef());
+	methodBinding = app.createMethodBinding("#{foo.yoyo}", 
+						actionListenerSignature);
+        command.setActionListener(methodBinding);
+        assertEquals(methodBinding, command.getActionListener());
+        command.setActionListener(null);
+        assertNull(command.getActionListener());
 
     }
-
-
-    public void testImmediate() throws Exception {
-	List [] listeners = null;
-	UICommandSub command = new UICommandSub();
-	assertTrue(!command.isImmediate());
-
-	// if there is a change in the immediate flag, from false to
-	// true, the default action listener should be replaced with an
-	// instance of WrapperActionListener.
-	command.setImmediate(true);
-	assertTrue(command.isImmediate());
-	listeners = command.getListeners();
-	// we should have one listener for APPLY_REQUEST_VALUES
-	assertTrue(1 == 
-		   ((List)listeners[PhaseId.APPLY_REQUEST_VALUES.getOrdinal()]).size());
-	// we should have no listeners for INVOKE_APPLICATION
-	assertTrue(0 == 
-		   ((List)listeners[PhaseId.INVOKE_APPLICATION.getOrdinal()]).size());
-	
-	// if there is a change in the immediate flag, from true to
-	// false, the default action listener should be restored.
-	command.setImmediate(false);
-	assertTrue(!command.isImmediate());
-	listeners = command.getListeners();
-	// we should have one listener for INVOKE_APPLICATION
-	assertTrue(1 == 
-		   ((List)listeners[PhaseId.INVOKE_APPLICATION.getOrdinal()]).size());
-	// we should have no listeners for APPLY_REQUEST_VALUES
-	assertTrue(0 == 
-		   ((List)listeners[PhaseId.APPLY_REQUEST_VALUES.getOrdinal()]).size());
-
-    }
-
 
     public void testValueBindings() {
 
 	super.testValueBindings();
 	UICommand test = (UICommand) component;
-
-	// "action" property
-	request.setAttribute("foo", "bar");
-	test.setAction(null);
-	assertNull(test.getAction());
-	test.setValueBinding("action", application.getValueBinding("#{foo}"));
-	assertNotNull(test.getValueBinding("action"));
-	assertEquals("bar", test.getAction());
-	test.setAction("baz");
-	assertEquals("baz", test.getAction());
-	test.setAction(null);
-	assertEquals("bar", test.getAction());
-	test.setValueBinding("action", null);
-	assertNull(test.getValueBinding("action"));
-	assertNull(test.getAction());
 
 	// "immediate" property
 	request.setAttribute("foo", Boolean.FALSE);
@@ -364,7 +324,7 @@ public class UICommandTestCase extends ValueHolderTestCaseBase {
 	} else {
 	    request.setAttribute("foo", Boolean.TRUE);
 	}
-	test.setValueBinding("immediate", application.getValueBinding("#{foo}"));
+	test.setValueBinding("immediate", application.createValueBinding("#{foo}"));
 	assertEquals(!initial, test.isImmediate());
 	test.setImmediate(initial);
 	assertEquals(initial, test.isImmediate());
@@ -374,7 +334,7 @@ public class UICommandTestCase extends ValueHolderTestCaseBase {
 	request.setAttribute("foo", "bar");
 	test.setValue(null);
 	assertNull(test.getValue());
-	test.setValueBinding("value", application.getValueBinding("#{foo}"));
+	test.setValueBinding("value", application.createValueBinding("#{foo}"));
 	assertNotNull(test.getValueBinding("value"));
 	assertEquals("bar", test.getValue());
 	test.setValue("baz");
@@ -397,8 +357,7 @@ public class UICommandTestCase extends ValueHolderTestCaseBase {
         UICommand c1 = (UICommand) comp1;
         UICommand c2 = (UICommand) comp2;
         assertEquals(c1.getAction(), c2.getAction());
-        assertEquals(c1.getActionListenerRef(), c2.getActionListenerRef());
-        assertEquals(c1.getActionRef(), c2.getActionRef());
+        assertEquals(c1.getActionListener(), c2.getActionListener());
     }
 
 
@@ -414,17 +373,22 @@ public class UICommandTestCase extends ValueHolderTestCaseBase {
     protected void populateComponent(UIComponent component) {
         super.populateComponent(component);
         UICommand c = (UICommand) component;
-        c.setAction("foo");
-        c.setActionListenerRef("baz.bop");
-        c.setActionRef("bar");
+	Application app = facesContext.getApplication();
+	MethodBinding methodBinding = null;
+	
+        c.setAction(methodBinding = app.createMethodBinding("#{foo.bar}", 
+							    null));
+        c.setActionListener(methodBinding = 
+			    app.createMethodBinding("#{baz.bop}", 
+						    actionListenerSignature));
     }
 
 
     protected boolean listenersAreEqual(FacesContext context,
 					UICommandSub comp1,
 					UICommandSub comp2) {
-	List [] list1 = comp1.getListeners();
-	List [] list2 = comp2.getListeners();
+	List list1 = comp1.getListeners();
+	List list2 = comp2.getListeners();
 	// make sure they're either both null or both non-null
 	if ((null == list1 && null != list2) ||
 	    (null != list1 && null == list2)) {
@@ -433,33 +397,22 @@ public class UICommandTestCase extends ValueHolderTestCaseBase {
 	if (null == list1) {
 	    return true;
 	}
-	int i = 0, j = 0, outerLen = list1.length, innerLen = 0;
+	int j = 0, outerLen = list1.size();
 	boolean result = true;
-	if (outerLen != list2.length) {
+	if (outerLen != list2.size()) {
 	    return false;
 	}
-	for (i = 0; i < outerLen; i++) {
-	    if ((null == list1[i] && null != list2[i]) ||
-		(null != list1[i] && null == list2[i])) {
+	for (j = 0; j < outerLen; j++) {
+	    result = list1.get(j).equals(list2.get(j));
+	    if (!result) {
 		return false;
-	    }
-	    else if (null != list1[i]) {
-		if (list1[i].size() != (innerLen = list2[i].size())) {
-		    return false;
-		}
-		for (j = 0; j < innerLen; j++) {
-		    result = list1[i].get(j).equals(list2[i].get(j));
-		    if (!result) {
-			return false;
-		    }
-		}
 	    }
 	}
 	return true;
     }
 
     public static class UICommandSub extends UICommand {
-	public List[] getListeners() { 
+	public List getListeners() { 
 	    return listeners;
 	}
     }

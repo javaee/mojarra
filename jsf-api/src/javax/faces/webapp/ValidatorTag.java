@@ -1,5 +1,5 @@
 /*
- * $Id: ValidatorTag.java,v 1.11 2003/09/12 16:25:24 craigmcc Exp $
+ * $Id: ValidatorTag.java,v 1.12 2003/12/17 15:11:07 rkitain Exp $
  */
 
 /*
@@ -12,6 +12,8 @@ package javax.faces.webapp;
 
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
+import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
 import javax.faces.validator.Validator;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.Tag;
@@ -35,9 +37,12 @@ import javax.faces.FactoryFinder;
  * current page.</p>
  *
  * <p>This class may be used directly to implement a generic validator
- * registration tag (based on the fully qualified Java class name specified
- * by the <code>type</code> attribute), or as a base class for tag instances
- * that support specific {@link Validator} subclasses.</p>
+ * registration tag (based on the validator-id specified by the
+ * <code>id</code> attribute), or as a base class for tag instances that
+ * support specific {@link Validator} subclasses.  This <code>id</code>
+ * attribute must refer to one of the well known validator-ids, or a
+ * custom validator-id as defined in a <code>faces-config.xml</code>
+ * file.</p>
  *
  * <p>Subclasses of this class must implement the
  * <code>createValidator()</code> method, which creates and returns a
@@ -58,17 +63,18 @@ public class ValidatorTag extends TagSupport {
     /**
      * <p>The identifier of the {@link Validator} instance to be created.</p>
      */
-    private String id = null;
+    private String validatorId = null;
     
+
     /**
      * <p>Set the identifer of the {@link Validator} instance to be created.
      *
-     * @param id The new identifier of the validator instance to be
+     * @param validatorId The new identifier of the validator instance to be
      *                    created.
      */
-    public void setId(String id) {
+    public void setValidatorId(String validatorId) {
 
-        this.id = id;
+        this.validatorId = validatorId;
 
     }
 
@@ -101,7 +107,7 @@ public class ValidatorTag extends TagSupport {
 
         // Create and register an instance with the appropriate component
         Validator validator = createValidator();
-        ((UIInput) tag.getComponent()).addValidator(validator);
+        ((UIInput) tag.getComponentInstance()).addValidator(validator);
         return (SKIP_BODY);
 
     }
@@ -130,10 +136,14 @@ public class ValidatorTag extends TagSupport {
         throws JspException {
 
         try {
-            ApplicationFactory aFactory = (ApplicationFactory)FactoryFinder.
-                getFactory(FactoryFinder.APPLICATION_FACTORY);
-	    Application application = aFactory.getApplication();
-            return (application.createValidator(id));
+            FacesContext context = FacesContext.getCurrentInstance();
+            String validatorIdVal = validatorId;
+            if (UIComponentTag.isValueReference(validatorId)) {
+                ValueBinding vb =
+                    context.getApplication().createValueBinding(validatorId);
+                validatorIdVal = (String) vb.getValue(context);
+            }
+            return (context.getApplication().createValidator(validatorIdVal));
         } catch (Exception e) {
             throw new JspException(e);
         }

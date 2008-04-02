@@ -1,5 +1,5 @@
 /*
- * $Id: MockFacesContext.java,v 1.15 2003/10/30 20:30:22 eburns Exp $
+ * $Id: MockFacesContext.java,v 1.16 2003/12/17 15:11:25 rkitain Exp $
  */
 
 /*
@@ -16,6 +16,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import javax.faces.FactoryFinder;
 import javax.faces.application.Application;
 import javax.faces.application.FacesMessage;
 import javax.faces.application.FacesMessage.Severity;
@@ -26,6 +27,8 @@ import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseStream;
 import javax.faces.context.ResponseWriter;
 import javax.faces.lifecycle.Lifecycle;
+import javax.faces.render.RenderKit;
+import javax.faces.render.RenderKitFactory;
 
 
 // Mock Object for FacesContext
@@ -117,6 +120,22 @@ public class MockFacesContext extends FacesContext {
     }
 
 
+    // renderKit
+    public RenderKit getRenderKit() {
+        UIViewRoot vr = getViewRoot();
+        if (vr == null) {
+            return (null);
+        }
+        String renderKitId = vr.getRenderKitId();
+        if (renderKitId == null) {
+            return (null);
+        }
+        RenderKitFactory rkFactory = (RenderKitFactory)
+            FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
+        return (rkFactory.getRenderKit(renderKitId));
+    }
+
+
     // renderResponse
     private boolean renderResponse = false;
     public boolean getRenderResponse() {
@@ -151,7 +170,7 @@ public class MockFacesContext extends FacesContext {
     }
 
 
-    // root
+    // viewRoot
     private UIViewRoot root = null;
     public UIViewRoot getViewRoot() {
         return (this.root);

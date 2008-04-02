@@ -1,5 +1,5 @@
 /*
- * $Id: ResponseWriter.java,v 1.12 2003/10/28 04:29:49 eburns Exp $
+ * $Id: ResponseWriter.java,v 1.13 2003/12/17 15:10:45 rkitain Exp $
  */
 
 /*
@@ -23,8 +23,6 @@ import javax.faces.component.UIComponent;
  * <code>java.io.Writer</code>, this class provides utility methods
  * that are useful in producing elements and attributes for markup languages
  * like HTML and XML.</p>
- *
- *
  */
 
 public abstract class ResponseWriter extends Writer {
@@ -83,8 +81,9 @@ public abstract class ResponseWriter extends Writer {
      * (that is, the trailing '>' character added)
      * on any subsequent call to <code>startElement()</code>,
      * <code>writeComment()</code>,
-     * <code>writeText()</code>, <code>endElement()</code>, or
-     * <code>endDocument()</code>.</p>
+     * <code>writeText()</code>, <code>endElement()</code>,
+     * <code>endDocument()</code>, <code>close()</code>,
+     * <code>flush()</code>, or <code>write()</code>.</p>
      *
      * @param name Name of the element to be started
      * @param component The {@link UIComponent} (if any) to which
@@ -100,7 +99,9 @@ public abstract class ResponseWriter extends Writer {
 
     /**
      * <p>Write the end of an element, after closing any open element
-     * created by a call to <code>startElement()</code>.
+     * created by a call to <code>startElement()</code>.  Elements must be
+     * closed in the inverse order from which they were opened; it is an
+     * error to do otherwise.</p>
      *
      * @param name Name of the element to be ended
      *
@@ -109,18 +110,6 @@ public abstract class ResponseWriter extends Writer {
      *  is <code>null</code>
      */
     public abstract void endElement(String name) throws IOException;
-
-    /**
-     * <p>Force the closing of the start tag currently being
-     * written, if it has not already been closed.</p>
-     *
-     * @param component the {@link UIComponent} (if any) to which this
-     * tag corresponds.
-     *
-     * @exception IOException if an input/output error occurs
-     */ 
-
-    public abstract void closeStartTag(UIComponent component) throws IOException;
 
 
     /**
