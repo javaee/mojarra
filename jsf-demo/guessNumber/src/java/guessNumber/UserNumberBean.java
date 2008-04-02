@@ -140,7 +140,7 @@ public class UserNumberBean {
                     if (minimumSet) {
                         throw new ValidatorException(
                             MessageFactory.getMessage
-                            (context, component,
+                            (context,
                              Validator.NOT_IN_RANGE_MESSAGE_ID,
                              new Object[]{
                                  new Integer(minimum),
@@ -150,7 +150,7 @@ public class UserNumberBean {
                     } else {
                         throw new ValidatorException(
                             MessageFactory.getMessage
-                            (context, component,
+                            (context,
                              LongRangeValidator.MAXIMUM_MESSAGE_ID,
                              new Object[]{
                                  new Integer(maximum)
@@ -161,7 +161,7 @@ public class UserNumberBean {
                     (converted < minimum)) {
                     if (maximumSet) {
                         throw new ValidatorException(MessageFactory.getMessage
-                                                     (context, component,
+                                                     (context,
                                                       Validator.NOT_IN_RANGE_MESSAGE_ID,
                                                       new Object[]{
                                                           new Double(minimum),
@@ -171,7 +171,7 @@ public class UserNumberBean {
                     } else {
                         throw new ValidatorException(
                             MessageFactory.getMessage
-                            (context, component,
+                            (context,
                              LongRangeValidator.MINIMUM_MESSAGE_ID,
                              new Object[]{
                                  new Integer(minimum)
@@ -181,7 +181,7 @@ public class UserNumberBean {
             } catch (NumberFormatException e) {
                 throw new ValidatorException(
                     MessageFactory.getMessage
-                    (context, component, LongRangeValidator.TYPE_MESSAGE_ID));
+                    (context, LongRangeValidator.TYPE_MESSAGE_ID));
             }
         }
 

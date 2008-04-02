@@ -1,5 +1,5 @@
 /*
- * $Id: MessageFactory.java,v 1.1 2004/05/20 21:24:48 rkitain Exp $
+ * $Id: MessageFactory.java,v 1.2 2004/06/11 15:02:05 rogerk Exp $
  */
 
 /*
@@ -45,7 +45,6 @@ package guessNumber;
 import javax.faces.application.Application;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-import javax.faces.component.UIComponent;
 import java.text.MessageFormat;
 import java.util.Locale;
 import java.util.MissingResourceException;
@@ -222,34 +221,6 @@ public class MessageFactory extends Object {
         return (getMessage(locale, messageId, params));
     }
 
-    public static FacesMessage getMessage(FacesContext context, 
-        UIComponent component, String messageId, Object params[]) {
-        // if component id is specified, insert the "id" at
-        // the end of the parameter list
-        String id = "";
-        if (component != null && component.getId() != null) {
-            id = (" \"" + component.getId() + "\"" + ": ");
-        }
-        int length = 1;
-        if (params != null) {
-            length = (params.length) + 1;
-        }
-        Object[] newParams = new Object[length];
-        if ( params != null) {
-            for (int i = 0; i < params.length; ++i ) {
-                newParams[i] = params[i];
-            }
-        }
-        newParams[length-1] = id;
-        return getMessage(context, messageId, newParams);
-   }
-
-    public static FacesMessage getMessage(FacesContext context, 
-        UIComponent component, String messageId) {
-        return getMessage(context, component, messageId, null);
-         
-    }
-    
     public static FacesMessage getMessage(FacesContext context, String messageId,
                                           Object param0) {
         return getMessage(context, messageId, new Object[]{param0});
