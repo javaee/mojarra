@@ -1,8 +1,8 @@
 /*
- * $Id: HtmlUtils.java,v 1.10 2006/08/03 21:09:37 youngm Exp $
+ * $Id: HtmlUtils.java,v 1.11 2006/08/24 19:25:01 youngm Exp $
  */
 /*
- * $Id: HtmlUtils.java,v 1.10 2006/08/03 21:09:37 youngm Exp $
+ * $Id: HtmlUtils.java,v 1.11 2006/08/24 19:25:01 youngm Exp $
  */
 
 /*
@@ -485,8 +485,7 @@ public class HtmlUtils {
      *                      question mark
      */
     static public void writeURL(Writer out,
-    							char[] buff,
-                                String text,
+    							String text,
                                 String queryEncoding,
                                 String contentType)
         throws IOException, UnsupportedEncodingException {

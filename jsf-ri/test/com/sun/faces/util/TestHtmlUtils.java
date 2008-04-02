@@ -1,5 +1,5 @@
 /*
- * $Id: TestHtmlUtils.java,v 1.1 2006/08/03 21:09:36 youngm Exp $
+ * $Id: TestHtmlUtils.java,v 1.2 2006/08/24 19:25:01 youngm Exp $
  */
 
 /*
@@ -41,7 +41,7 @@ import junit.framework.TestCase;
 /**
  * <B>TestHtmlUtils</B> is a class ...
  *
- * @version $Id: TestHtmlUtils.java,v 1.1 2006/08/03 21:09:36 youngm Exp $
+ * @version $Id: TestHtmlUtils.java,v 1.2 2006/08/24 19:25:01 youngm Exp $
  */
 public class TestHtmlUtils extends TestCase {
 	
@@ -65,11 +65,11 @@ public class TestHtmlUtils extends TestCase {
 	private void testURLEncoding(String urlToEncode, String expectedHTML, String expectedXML) throws UnsupportedEncodingException, IOException {
 		char[] buffer = new char[1024];
 		StringWriter xmlWriter = new StringWriter();
-		HtmlUtils.writeURL(xmlWriter, buffer, urlToEncode, "UTF-8", RIConstants.XHTML_CONTENT_TYPE);
+		HtmlUtils.writeURL(xmlWriter, urlToEncode, "UTF-8", RIConstants.XHTML_CONTENT_TYPE);
 //		System.out.println(xmlWriter.toString());
 		assertEquals(xmlWriter.toString(), expectedXML);
 		StringWriter htmlWriter = new StringWriter();
-		HtmlUtils.writeURL(htmlWriter, buffer, urlToEncode, "UTF-8", RIConstants.HTML_CONTENT_TYPE);
+		HtmlUtils.writeURL(htmlWriter, urlToEncode, "UTF-8", RIConstants.HTML_CONTENT_TYPE);
 //		System.out.println(htmlWriter.toString());
 		assertEquals(htmlWriter.toString(), expectedHTML);
 	}
