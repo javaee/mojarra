@@ -1,5 +1,5 @@
 /*
- * $Id: AttributeBean.java,v 1.4 2005/08/22 22:12:15 ofung Exp $
+ * $Id: AttributeBean.java,v 1.5 2005/10/14 22:14:38 rlubke Exp $
  */
 
 /*
@@ -86,6 +86,14 @@ public class AttributeBean extends FeatureBean {
     public boolean isTagAttribute() { return tagAttribute; }
     public void setTagAttribute(boolean tagAttribute)
     { this.tagAttribute = tagAttribute; }
+
+    private boolean renderAttributeIgnore = false;
+    public boolean isAttributeIgnoredForRenderer() {
+        return renderAttributeIgnore;
+    }
+    public void setAttributeIgnoredForRenderer(boolean renderAttributeIgnore) {
+        this.renderAttributeIgnore = renderAttributeIgnore;
+    }
 
 
     // ----------------------------------------------------------------- Methods

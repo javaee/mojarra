@@ -108,5 +108,8 @@
         <icon></icon>
         <property-name>label</property-name>
         <property-class>java.lang.String</property-class>
+        <property-extension>
+            <renderer-attribute-ignore>true</renderer-attribute-ignore>
+        </property-extension>
     </property>
 </root>

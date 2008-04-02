@@ -1,5 +1,5 @@
 /*
- * $Id: FacesConfigRuleSet.java,v 1.10 2005/08/22 22:12:20 ofung Exp $
+ * $Id: FacesConfigRuleSet.java,v 1.11 2005/10/14 22:14:38 rlubke Exp $
  */
 
 /*
@@ -404,6 +404,9 @@ public class FacesConfigRuleSet extends RuleSetBase {
         digester.addCallMethod
             (prefix + "/attribute/attribute-extension/tag-attribute",
              "setTagAttribute", 0, new String[] { "java.lang.Boolean" });
+        digester.addCallMethod
+            (prefix + "/attribute/attribute-extension/renderer-attribute-ignore",
+             "setAttributeIgnoredForRenderer", 0, new String[] {"java.lang.Boolean"});
     }
 
 

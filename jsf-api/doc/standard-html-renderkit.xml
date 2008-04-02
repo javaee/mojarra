@@ -4567,6 +4567,9 @@
       <icon/>
       <property-name>label</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
+        <renderer-attribute-ignore>true</renderer-attribute-ignore>
+      </property-extension>
     </property>
 
 
@@ -7755,6 +7758,9 @@
       <icon/>
       <property-name>label</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
+        <renderer-attribute-ignore>true</renderer-attribute-ignore>
+      </property-extension>
     </property>
 
 
@@ -8475,6 +8481,9 @@
       <icon/>
       <property-name>label</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
+        <renderer-attribute-ignore>true</renderer-attribute-ignore>
+      </property-extension>
     </property>
 
 
@@ -9179,6 +9188,9 @@
       <icon/>
       <property-name>label</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
+        <renderer-attribute-ignore>true</renderer-attribute-ignore>
+      </property-extension>
     </property>
 
 
@@ -12924,6 +12936,9 @@
       <icon/>
       <property-name>label</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
+        <renderer-attribute-ignore>true</renderer-attribute-ignore>
+      </property-extension>
     </property>
 
     <component-extension>
@@ -13590,6 +13605,9 @@
       <icon/>
       <property-name>label</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
+        <renderer-attribute-ignore>true</renderer-attribute-ignore>
+      </property-extension>
     </property>
 
 
@@ -14304,6 +14322,9 @@
       <icon/>
       <property-name>label</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
+        <renderer-attribute-ignore>true</renderer-attribute-ignore>
+      </property-extension>
     </property>
 
 
@@ -15002,6 +15023,9 @@
       <icon/>
       <property-name>label</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
+        <renderer-attribute-ignore>true</renderer-attribute-ignore>
+      </property-extension>
     </property>
 
 
@@ -15677,6 +15701,9 @@
       <icon/>
       <property-name>label</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
+        <renderer-attribute-ignore>true</renderer-attribute-ignore>
+      </property-extension>
     </property>
 
 
@@ -16362,6 +16389,9 @@
       <icon/>
       <property-name>label</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
+        <renderer-attribute-ignore>true</renderer-attribute-ignore>
+      </property-extension>
     </property>
 
 
@@ -17037,6 +17067,9 @@
       <icon/>
       <property-name>label</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
+        <renderer-attribute-ignore>true</renderer-attribute-ignore>
+      </property-extension>
     </property>
 
 
@@ -17564,6 +17597,9 @@
         <icon/>
         <attribute-name>label</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <renderer-attribute-ignore>true</renderer-attribute-ignore>
+        </attribute-extension>
       </attribute>
 
 
@@ -19601,6 +19637,9 @@
         <icon/>
         <attribute-name>label</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <renderer-attribute-ignore>true</renderer-attribute-ignore>
+        </attribute-extension>
       </attribute>
 
 
@@ -20026,6 +20065,9 @@
         <icon/>
         <attribute-name>label</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <renderer-attribute-ignore>true</renderer-attribute-ignore>
+        </attribute-extension>
       </attribute>
 
 
@@ -20428,6 +20470,9 @@
         <icon/>
         <attribute-name>label</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <renderer-attribute-ignore>true</renderer-attribute-ignore>
+        </attribute-extension>
       </attribute>
 
 
@@ -22674,6 +22719,9 @@
         <icon/>
         <attribute-name>label</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <renderer-attribute-ignore>true</renderer-attribute-ignore>
+        </attribute-extension>
       </attribute>
 
       <renderer-extension>
@@ -23050,6 +23098,9 @@
         <icon/>
         <attribute-name>label</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <renderer-attribute-ignore>true</renderer-attribute-ignore>
+        </attribute-extension>
       </attribute>
 
 
@@ -23542,6 +23593,9 @@
         <icon/>
         <attribute-name>label</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <renderer-attribute-ignore>true</renderer-attribute-ignore>
+        </attribute-extension>
       </attribute>
 
 
@@ -23932,6 +23986,9 @@
         <icon/>
         <attribute-name>label</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <renderer-attribute-ignore>true</renderer-attribute-ignore>
+        </attribute-extension>
       </attribute>
 
 
@@ -24312,6 +24369,9 @@
         <icon/>
         <attribute-name>label</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <renderer-attribute-ignore>true</renderer-attribute-ignore>
+        </attribute-extension>
       </attribute>
 
 
@@ -24702,6 +24762,9 @@
         <icon/>
         <attribute-name>label</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <renderer-attribute-ignore>true</renderer-attribute-ignore>
+        </attribute-extension>
       </attribute>
 
 
@@ -25103,6 +25166,9 @@
         <icon/>
         <attribute-name>label</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <renderer-attribute-ignore>true</renderer-attribute-ignore>
+        </attribute-extension>
       </attribute>
 
 
@@ -25168,6 +25234,9 @@
         <icon/>
         <attribute-name>label</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <renderer-attribute-ignore>true</renderer-attribute-ignore>
+        </attribute-extension>
       </attribute>
 
 

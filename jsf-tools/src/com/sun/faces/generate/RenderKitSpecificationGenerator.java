@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKitSpecificationGenerator.java,v 1.9 2005/08/25 17:11:04 rlubke Exp $
+ * $Id: RenderKitSpecificationGenerator.java,v 1.10 2005/10/14 22:14:39 rlubke Exp $
  */
 
 /*
@@ -425,6 +425,9 @@ public class RenderKitSpecificationGenerator implements Generator {
                 sb.append("	    \n");
                 // output each attribute
                 for (int j = 0, attrLen = attributes.length; j < attrLen; j++) {
+                    if (attributes[j].isAttributeIgnoredForRenderer()) {
+                        continue;
+                    }
                     sb.append(
                         "<tr BGCOLOR=\"white\" CLASS=\"TableRowColor\">\n");
                     sb.append(
