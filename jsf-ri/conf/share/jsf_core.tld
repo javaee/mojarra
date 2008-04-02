@@ -38,7 +38,7 @@
         The core JavaServer Faces custom actions that are independent of
         any particular RenderKit.
     </description>
-    <tlib-version>1.0</tlib-version>
+    <tlib-version>1.2</tlib-version>
     <short-name>f</short-name>
     <uri>http://java.sun.com/jsf/core</uri>
 
