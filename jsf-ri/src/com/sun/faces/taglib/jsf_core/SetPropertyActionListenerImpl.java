@@ -1,5 +1,5 @@
 /*
- * $Id: SetPropertyActionListenerImpl.java,v 1.4 2006/03/29 23:03:52 rlubke Exp $
+ * $Id: SetPropertyActionListenerImpl.java,v 1.5 2006/05/17 19:00:50 rlubke Exp $
  */
 /*
  * The contents of this file are subject to the terms
@@ -52,7 +52,6 @@ public class SetPropertyActionListenerImpl extends Object implements ActionListe
     }
     
     public void processAction(ActionEvent e) throws AbortProcessingException {
-        ActionSource host = (ActionSource) e.getComponent();
         ELContext elc = FacesContext.getCurrentInstance().getELContext();
         
         try {

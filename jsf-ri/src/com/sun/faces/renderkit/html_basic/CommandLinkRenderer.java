@@ -1,5 +1,5 @@
 /*
- * $Id: CommandLinkRenderer.java,v 1.50 2006/05/10 20:03:23 rogerk Exp $
+ * $Id: CommandLinkRenderer.java,v 1.51 2006/05/17 19:00:47 rlubke Exp $
  */
 
 /*
@@ -95,9 +95,13 @@ public class CommandLinkRenderer extends LinkRenderer {
 
     public void decode(FacesContext context, UIComponent component) {
 
-        if (context == null || component == null) {
+        if (context == null) {
             throw new NullPointerException(MessageUtils.getExceptionMessageString(
-                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "context"));
+        }
+        if (component == null) {
+            throw new NullPointerException(MessageUtils.getExceptionMessageString(
+                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "component"));
         }
 
         if (logger.isLoggable(Level.FINER)) {
@@ -149,9 +153,13 @@ public class CommandLinkRenderer extends LinkRenderer {
     public void encodeBegin(FacesContext context, UIComponent component)
         throws IOException {
 
-        if (context == null || component == null) {
+        if (context == null) {
             throw new NullPointerException(
-                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "context"));
+        }
+        if (component == null) {
+            throw new NullPointerException(
+                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "component"));
         }
         if (logger.isLoggable(Level.FINER)) {
             logger.log(Level.FINER,
@@ -197,9 +205,13 @@ public class CommandLinkRenderer extends LinkRenderer {
     public void encodeChildren(FacesContext context, UIComponent component)
         throws IOException {
                                                                                                                         
-        if (context == null || component == null) {
+        if (context == null) {
             throw new NullPointerException(
-                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "context"));
+        }
+        if (component == null) {
+            throw new NullPointerException(
+                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "component"));
         }
         if (logger.isLoggable(Level.FINER)) {
             logger.log(Level.FINER,
@@ -230,10 +242,15 @@ public class CommandLinkRenderer extends LinkRenderer {
 
     public void encodeEnd(FacesContext context, UIComponent component)
         throws IOException {
-        if (context == null || component == null) {
+        if (context == null) {
             throw new NullPointerException(
-                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "context"));
         }
+        if (component == null) {
+            throw new NullPointerException(
+                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "component"));
+        }
+
         UICommand command = (UICommand) component;
                                                                                                                         
         // suppress rendering if "rendered" property on the command is
@@ -404,7 +421,6 @@ public class CommandLinkRenderer extends LinkRenderer {
     private void writeScriptContent(FacesContext context, 
 				   ResponseWriter writer,
 				   UIComponent component) throws IOException {
-	Map<String,Object> requestMap = context.getExternalContext().getRequestMap();
 	UIForm myForm = getMyForm(component);
 	boolean isXHTML = writer.getContentType().equals(RIConstants.XHTML_CONTENT_TYPE); 
 

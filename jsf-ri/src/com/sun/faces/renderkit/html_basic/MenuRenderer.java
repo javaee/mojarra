@@ -24,7 +24,7 @@
  */
 
 /*
- * $Id: MenuRenderer.java,v 1.74 2006/05/09 20:18:48 rlubke Exp $
+ * $Id: MenuRenderer.java,v 1.75 2006/05/17 19:00:48 rlubke Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -105,9 +105,13 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
     //
 
     public void decode(FacesContext context, UIComponent component) {
-        if (context == null || component == null) {
-            throw new NullPointerException(MessageUtils.getExceptionMessageString(
-                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        if (context == null) {
+            throw new NullPointerException(
+                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "context"));
+        }
+        if (component == null) {
+            throw new NullPointerException(
+                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "component"));
         }
         if (logger.isLoggable(Level.FINER)) {
             logger.log(Level.FINER,"Begin decoding component " + component.getId());
@@ -415,18 +419,26 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
 
     public void encodeBegin(FacesContext context, UIComponent component)
         throws IOException {
-        if (context == null || component == null) {
-            throw new NullPointerException(MessageUtils.getExceptionMessageString(
-                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        if (context == null) {
+            throw new NullPointerException(
+                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "context"));
+        }
+        if (component == null) {
+            throw new NullPointerException(
+                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "component"));
         }
     }
 
     public void encodeEnd(FacesContext context, UIComponent component)
         throws IOException {
 
-        if (context == null || component == null) {
-            throw new NullPointerException(MessageUtils.getExceptionMessageString(
-                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        if (context == null) {
+            throw new NullPointerException(
+                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "context"));
+        }
+        if (component == null) {
+            throw new NullPointerException(
+                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "component"));
         }
 
         if (logger.isLoggable(Level.FINER)) {
@@ -700,7 +712,6 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
                     // get the type of the first element - Should
                     // we assume that all elements of the List are
                     // the same type?
-                    Class<?> type = list.get(0).getClass();
                     return list.toArray((Object[]) Array
                           .newInstance(list.get(0).getClass(),
                                        size));

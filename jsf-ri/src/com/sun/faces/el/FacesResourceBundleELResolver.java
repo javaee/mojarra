@@ -1,5 +1,5 @@
 /*
- * $Id: FacesResourceBundleELResolver.java,v 1.6 2006/03/29 23:03:44 rlubke Exp $
+ * $Id: FacesResourceBundleELResolver.java,v 1.7 2006/05/17 19:00:45 rlubke Exp $
  */
 
 /*
@@ -65,7 +65,7 @@ public class FacesResourceBundleELResolver extends ELResolver {
         }
         if (null == base && null == property) {
             String message = MessageUtils.getExceptionMessageString
-                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "base and property"); // ?????
             throw new PropertyNotFoundException(message);
         }
         ResourceBundle result = null;
@@ -92,7 +92,7 @@ public class FacesResourceBundleELResolver extends ELResolver {
 
         if (null == base && null == property) {
             String message = MessageUtils.getExceptionMessageString
-                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "base and property"); // ?????
             throw new PropertyNotFoundException(message);
         }
         
@@ -117,8 +117,7 @@ public class FacesResourceBundleELResolver extends ELResolver {
 
         if (base == null && property == null) {
             message = MessageUtils.getExceptionMessageString
-                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
-            message = message + " base " + base + " property " + property;
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "base and property"); // ?????
             throw new PropertyNotFoundException(message);
         }
         
@@ -146,8 +145,7 @@ public class FacesResourceBundleELResolver extends ELResolver {
         }
         if (property == null) {
             String message = MessageUtils.getExceptionMessageString
-                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
-            message = message + " base " + base + " property " + property;
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "property");
             throw new PropertyNotFoundException(message);
         }
         ResourceBundle result = null;

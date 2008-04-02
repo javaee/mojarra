@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleImpl.java,v 1.62 2006/05/11 18:48:04 rlubke Exp $
+ * $Id: LifecycleImpl.java,v 1.63 2006/05/17 19:00:46 rlubke Exp $
  */
 
 /*
@@ -100,7 +100,7 @@ public class LifecycleImpl extends Lifecycle {
         if (context == null) {
             throw new NullPointerException
                 (MessageUtils.getExceptionMessageString
-                 (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                 (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "context"));
         }
 
         if (LOGGER.isLoggable(Level.FINE)) {
@@ -133,7 +133,7 @@ public class LifecycleImpl extends Lifecycle {
         if (context == null) {
             throw new NullPointerException
                 (MessageUtils.getExceptionMessageString
-                 (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                 (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "context"));
         }
 
         if (LOGGER.isLoggable(Level.FINE)) {
@@ -153,7 +153,7 @@ public class LifecycleImpl extends Lifecycle {
         if (listener == null) {
             throw new NullPointerException
                 (MessageUtils.getExceptionMessageString
-                 (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                 (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "listener"));
         }
         if (LOGGER.isLoggable(Level.FINE)) {
             LOGGER.fine("addPhaseListener(" + listener.getPhaseId().toString()
@@ -178,7 +178,7 @@ public class LifecycleImpl extends Lifecycle {
         if (listener == null) {
             throw new NullPointerException
                   (MessageUtils.getExceptionMessageString
-                        (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                        (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "listener"));
         }
         if (LOGGER.isLoggable(Level.FINE)) {
             LOGGER.fine("removePhaseListener(" +

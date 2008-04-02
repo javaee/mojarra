@@ -1,5 +1,5 @@
 /*
- * $Id: RIConstants.java,v 1.85 2006/05/17 17:31:27 rlubke Exp $
+ * $Id: RIConstants.java,v 1.86 2006/05/17 19:00:43 rlubke Exp $
  */
 
 /*
@@ -36,7 +36,6 @@ import javax.faces.render.RenderKitFactory;
  */
 public class RIConstants {
 
-    public static final String URL_PREFIX = "/faces";
 
     /**
      * Used to add uniqueness to the names.
@@ -44,27 +43,7 @@ public class RIConstants {
     public final static String FACES_PREFIX = "com.sun.faces.";
 
     public final static String HTML_BASIC_RENDER_KIT = FACES_PREFIX +
-        RenderKitFactory.HTML_BASIC_RENDER_KIT;
-
-    /**
-     * If the following name=value pair appears in the request query
-     * string, the RestoreViewPhase will proceed directly to
-     * RenderResponsePhase.
-     */
-
-    public final static String INITIAL_REQUEST_NAME = "initialRequest";
-    public final static String INITIAL_REQUEST_VALUE = "true";
-
-    /**
-     * The presence of this UIComponent attribute with the value the same
-     * as its name indicates that the UIComponent instance has already
-     * had its SelectItem "children" configured.
-     */
-
-    public final static String SELECTITEMS_CONFIGURED = FACES_PREFIX +
-        "SELECTITEMS_CONFIGURED";
-
-    public final static String IMPL_MESSAGES = FACES_PREFIX + "IMPL_MESSAGES";
+        RenderKitFactory.HTML_BASIC_RENDER_KIT;       
 
     public static final String SAVESTATE_FIELD_MARKER = FACES_PREFIX +
         "saveStateFieldMarker";
@@ -75,14 +54,7 @@ public class RIConstants {
     public static final String ACTUAL_VIEW_MAP = FACES_PREFIX +
         "actualViewMap";
 
-    public static final String SAVED_STATE = FACES_PREFIX + "savedState";       
-
-
-    /**
-     * <p>Parser implementation for processing JSF reference expressions.</p>
-     */
-    public static final String FACES_RE_PARSER =
-        FACES_PREFIX + "el.impl.parser.ELParserImpl";    
+    public static final String SAVED_STATE = FACES_PREFIX + "savedState";          
 
     /**
      * <p>The name of the attribute in the ServletContext's attr set
@@ -90,14 +62,7 @@ public class RIConstants {
      * required classes for the Faces RI.</p>
      */
     public static final String HAS_REQUIRED_CLASSES_ATTR = FACES_PREFIX +
-        "HasRequiredClasses";
-
-    /**
-     * <p>Used in resolveVariable to mark immutable maps.</p>
-     */
-
-    public static final String IMMUTABLE_MARKER =
-        FACES_PREFIX + "IMMUTABLE";
+        "HasRequiredClasses";   
 
     public static final String ONE_TIME_INITIALIZATION_ATTR =
         FACES_PREFIX + "OneTimeInitialization";    
@@ -130,22 +95,10 @@ public class RIConstants {
         "http://java.sun.com/jsf/core";
     public static final String HTML_NAMESPACE = 
         "http://java.sun.com/jsf/html";
-    public static final String JSTL_NAMESPACE = 
-        "http://java.sun.com/jsp/jstl/core";
     
     public static final Class[] EMPTY_CLASS_ARGS = new Class[0];
     public static final Object[] EMPTY_METH_ARGS = new Object[0];
-
-    //
-    // Constructors and Initializers
-    //
-
-    private RIConstants() {
-
-        throw new IllegalStateException();
-        
-    }
-
+    
     public static final String EL_RESOLVER_CHAIN_TYPE_NAME = FACES_PREFIX + "ELResolverChainType";
 
     /**
@@ -159,5 +112,10 @@ public class RIConstants {
     public final static String CHAR_ENCODING = "ISO-8859-1";
 
 
+    private RIConstants() {
+
+        throw new IllegalStateException();
+        
+    }
 
 }

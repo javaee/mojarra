@@ -1,5 +1,5 @@
 /*
- * $Id: VariableResolverChainWrapper.java,v 1.8 2006/05/17 17:31:29 rlubke Exp $
+ * $Id: VariableResolverChainWrapper.java,v 1.9 2006/05/17 19:00:46 rlubke Exp $
  */
 /*
  * The contents of this file are subject to the terms
@@ -70,8 +70,7 @@ public class VariableResolverChainWrapper extends ELResolver {
         }
         if ( base == null && property == null) {
             String message = MessageUtils.getExceptionMessageString
-                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
-            message = message + " base " + base + " property " + property;
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "base and property"); // ?????
             throw new PropertyNotFoundException(message);
         }
         Object result = null;

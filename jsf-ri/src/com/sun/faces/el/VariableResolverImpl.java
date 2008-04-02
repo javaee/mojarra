@@ -1,5 +1,5 @@
 /*
- * $Id: VariableResolverImpl.java,v 1.29 2006/05/17 17:31:29 rlubke Exp $
+ * $Id: VariableResolverImpl.java,v 1.30 2006/05/17 19:00:46 rlubke Exp $
  */
 
 /*
@@ -60,10 +60,14 @@ public class VariableResolverImpl extends VariableResolver {
     public Object resolveVariable(FacesContext context, String name)
             throws EvaluationException {
         Object result = null;
-        if (context == null || name == null) {
+        if (context == null) {
             String message = MessageUtils.getExceptionMessageString
-                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
-            message = message + " context " + context + " name " + name;
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "context");
+            throw new NullPointerException(message);
+        }
+        if (name == null) {
+            String message = MessageUtils.getExceptionMessageString
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "name");
             throw new NullPointerException(message);
         }
 

@@ -280,7 +280,7 @@ public class RenderKitUtils {
         if (context == null) {            
             throw new IllegalArgumentException(
                 MessageUtils.getExceptionMessageString(
-                    MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                    MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "context"));
         }
         
         ArrayList<SelectItem> list = new ArrayList<SelectItem>();
@@ -438,7 +438,7 @@ public class RenderKitUtils {
         if (excludes == null) {
             throw new IllegalArgumentException(
                   MessageUtils.getExceptionMessageString(
-                        MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                        MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "excludes"));
         }
 
         if (hasPassThruAttributes(component)) {
@@ -520,7 +520,7 @@ public class RenderKitUtils {
         if (excludes == null) {
             throw new IllegalArgumentException(
                   MessageUtils.getExceptionMessageString(
-                        MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                        MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "excludes"));
         }
 
         if (excludes.length > 0) {
@@ -657,7 +657,7 @@ public class RenderKitUtils {
             return arrayAccept;
         // some helper variables
         String token = null;
-        String typeSubType = null;
+        StringBuffer typeSubType = null;
         String type = null;
         String subtype = null;
         String level = null;
@@ -674,13 +674,13 @@ public class RenderKitUtils {
             //    Example: text/html;level=1,text/html;level=2; q=.5
             if (token.contains(";")) {
                 String[] typeParts = token.split(";");
-                typeSubType = typeParts[0].trim();
+                typeSubType = new StringBuffer(typeParts[0].trim());
                 for (int j=1; j<typeParts.length; j++) {
                     quality = "not set";
                     token = typeParts[j].trim();
                     // if "level" is present, make sure it gets included in the "type/subtype"
                     if (token.contains("level")) {
-                        typeSubType += ';' + token;
+                        typeSubType.append(';').append(token);
                         String[] levelParts = token.split("=");
                         level = levelParts[0].trim();
                         if (level.equalsIgnoreCase("level")) {
@@ -699,16 +699,16 @@ public class RenderKitUtils {
                     }
                 }
             } else {
-                typeSubType = token;
+                typeSubType = new StringBuffer(token);
                 quality = "not set"; // to identifiy that no quality was supplied
             }
             // now split type and subtype
-            if (typeSubType.contains(CONTENT_TYPE_SUBTYPE_DELIMITER)) {
-                String[] typeSubTypeParts = typeSubType.split(CONTENT_TYPE_SUBTYPE_DELIMITER);
+            if (typeSubType.indexOf(CONTENT_TYPE_SUBTYPE_DELIMITER) >= 0) {
+                String[] typeSubTypeParts = typeSubType.toString().split(CONTENT_TYPE_SUBTYPE_DELIMITER);
                 type = typeSubTypeParts[0].trim();
                 subtype = typeSubTypeParts[1].trim();
             } else {
-                type = typeSubType;
+                type = typeSubType.toString();
                 subtype = "";
             }
             // check quality and assign values

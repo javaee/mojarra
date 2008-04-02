@@ -1,5 +1,5 @@
 /*
- * $Id: ButtonRenderer.java,v 1.7 2006/03/29 23:04:02 rlubke Exp $
+ * $Id: ButtonRenderer.java,v 1.8 2006/05/17 19:00:51 rlubke Exp $
  */
 
 /*
@@ -98,9 +98,13 @@ public class ButtonRenderer extends Renderer {
     //
 
     public void decode(FacesContext context, UIComponent component) {
-        if (context == null || component == null) {
-            throw new NullPointerException(MessageUtils.getExceptionMessageString(
-                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        if (context == null) {
+            throw new NullPointerException(
+                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "context"));
+        }
+        if (component == null) {
+            throw new NullPointerException(
+                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "component"));
         }
         if (log.isTraceEnabled()) {
             log.trace("Begin decoding component " + component.getId());
@@ -153,9 +157,13 @@ public class ButtonRenderer extends Renderer {
 
     public void encodeBegin(FacesContext context, UIComponent component)
         throws IOException {
-        if (context == null || component == null) {
-            throw new NullPointerException(MessageUtils.getExceptionMessageString(
-                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        if (context == null) {
+            throw new NullPointerException(
+                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "context"));
+        }
+        if (component == null) {
+            throw new NullPointerException(
+                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "component"));
         }
         if (log.isTraceEnabled()) {
             log.trace("Begin encoding component " + component.getId());
@@ -240,9 +248,13 @@ public class ButtonRenderer extends Renderer {
 
     public void encodeEnd(FacesContext context, UIComponent component)
         throws IOException {
-        if (context == null || component == null) {
-            throw new NullPointerException(MessageUtils.getExceptionMessageString(
-                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        if (context == null) {
+            throw new NullPointerException(
+                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "context"));
+        }
+        if (component == null) {
+            throw new NullPointerException(
+                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "component"));
         }
     }
 

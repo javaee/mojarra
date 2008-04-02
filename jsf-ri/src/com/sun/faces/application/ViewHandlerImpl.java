@@ -1,5 +1,5 @@
 /* 
- * $Id: ViewHandlerImpl.java,v 1.73 2006/05/17 17:31:28 rlubke Exp $ 
+ * $Id: ViewHandlerImpl.java,v 1.74 2006/05/17 19:00:44 rlubke Exp $ 
  */ 
 
 
@@ -68,7 +68,7 @@ import com.sun.faces.util.Util;
 /**
  * <B>ViewHandlerImpl</B> is the default implementation class for ViewHandler.
  *
- * @version $Id: ViewHandlerImpl.java,v 1.73 2006/05/17 17:31:28 rlubke Exp $
+ * @version $Id: ViewHandlerImpl.java,v 1.74 2006/05/17 19:00:44 rlubke Exp $
  * @see javax.faces.application.ViewHandler
  */
 public class ViewHandlerImpl extends ViewHandler {
@@ -263,8 +263,7 @@ public class ViewHandlerImpl extends ViewHandler {
     public UIViewRoot restoreView(FacesContext context, String viewId) {
         if (context == null) {
             String message = MessageUtils.getExceptionMessageString
-                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
-            message = message +" context " + context;
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "context");
             throw new NullPointerException(message);
         }
 
@@ -315,8 +314,7 @@ public class ViewHandlerImpl extends ViewHandler {
     public UIViewRoot createView(FacesContext context, String viewId) {
         if (context == null) {
             String message = MessageUtils.getExceptionMessageString
-                    (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
-            message = message +"context " + context;
+                    (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "context");
             throw new NullPointerException(message);
         }
 
@@ -390,11 +388,14 @@ public class ViewHandlerImpl extends ViewHandler {
     private boolean executePageToBuildView(FacesContext context,
                                         UIViewRoot viewToExecute) throws IOException, FacesException {
 
-        if (null == context || null == viewToExecute) {
+        if (null == context) {
             String message = MessageUtils.getExceptionMessageString
-                    (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
-            message = message + " context " + context + " viewToExecute " +
-                      viewToExecute;
+                    (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "context");
+            throw new NullPointerException(message);
+        }
+        if (null == viewToExecute) {
+            String message = MessageUtils.getExceptionMessageString
+                    (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "viewToExecute");
             throw new NullPointerException(message);
         }
 
@@ -496,8 +497,7 @@ public class ViewHandlerImpl extends ViewHandler {
 
         if (context == null) {
             String message = MessageUtils.getExceptionMessageString
-                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
-            message = message +"context " + context;
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "context");
             throw new NullPointerException(message);
         }
 
@@ -529,8 +529,7 @@ public class ViewHandlerImpl extends ViewHandler {
 
         if (context == null) {
             String message = MessageUtils.getExceptionMessageString
-                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
-            message = message +"context " + context;
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "context");
             throw new NullPointerException(message);
         }
         String result = null;
@@ -605,8 +604,7 @@ public class ViewHandlerImpl extends ViewHandler {
     public void writeState(FacesContext context) throws IOException {
         if (context == null) {
            String message = MessageUtils.getExceptionMessageString
-                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
-            message = message +"context " + context;
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "context");
             throw new NullPointerException(message);
         }
 
@@ -627,10 +625,14 @@ public class ViewHandlerImpl extends ViewHandler {
 
     public String getActionURL(FacesContext context, String viewId) {
 
-        if (context == null || viewId == null) {
+        if (context == null) {
             String message = MessageUtils.getExceptionMessageString
-                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
-            message = message +"context " + context + " viewId " + viewId;
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "context");
+            throw new NullPointerException(message);
+        }
+        if (viewId == null) {
+            String message = MessageUtils.getExceptionMessageString
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "viewId");
             throw new NullPointerException(message);
         }
 
@@ -710,8 +712,7 @@ public class ViewHandlerImpl extends ViewHandler {
 
         if (context == null) {
             String message = MessageUtils.getExceptionMessageString
-                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
-            message = message +" context " + context;
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "context");
             throw new NullPointerException(message);
         }
 

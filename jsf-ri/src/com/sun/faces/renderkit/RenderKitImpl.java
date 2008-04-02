@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKitImpl.java,v 1.39 2006/05/10 20:03:23 rogerk Exp $
+ * $Id: RenderKitImpl.java,v 1.40 2006/05/17 19:00:46 rlubke Exp $
  */
 
 /*
@@ -57,7 +57,7 @@ import java.util.logging.Logger;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: RenderKitImpl.java,v 1.39 2006/05/10 20:03:23 rogerk Exp $
+ * @version $Id: RenderKitImpl.java,v 1.40 2006/05/17 19:00:46 rlubke Exp $
  */
 
 public class RenderKitImpl extends RenderKit {
@@ -117,15 +117,22 @@ public class RenderKitImpl extends RenderKit {
 
     public void addRenderer(String family, String rendererType,
                             Renderer renderer) {
-        if (family == null || rendererType == null || renderer == null) {
+        if (family == null) {
             String message = MessageUtils.getExceptionMessageString
-                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
-            message = message + " family " + family + " rendererType " +
-                      rendererType + " renderer " + renderer;
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "family");
             throw new NullPointerException(message);
-
         }
-    HashMap<Object,Renderer> renderers = null;
+        if (rendererType == null) {
+            String message = MessageUtils.getExceptionMessageString
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "rendererType");
+            throw new NullPointerException(message);
+        }
+        if (renderer == null) {
+            String message = MessageUtils.getExceptionMessageString
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "renderer");
+            throw new NullPointerException(message);
+        }
+        HashMap<Object,Renderer> renderers = null;
 
         synchronized (rendererFamilies) {
         // PENDING(edburns): generics would be nice here.
@@ -139,11 +146,14 @@ public class RenderKitImpl extends RenderKit {
 
     public Renderer getRenderer(String family, String rendererType) {
 
-        if (rendererType == null || family == null) {
+        if (rendererType == null) {
             String message = MessageUtils.getExceptionMessageString
-                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
-            message = message + " family " + family + " rendererType " +
-                      rendererType;
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "rendererType");
+            throw new NullPointerException(message);
+        }
+        if (family == null) {
+            String message = MessageUtils.getExceptionMessageString
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "family");
             throw new NullPointerException(message);
         }
 
@@ -276,8 +286,6 @@ public class RenderKitImpl extends RenderKit {
 
     private String findMatch(FacesContext context, String desiredContentTypeList, String[] supportedTypes) {
         String contentType = null;
-
-        Map<String,Object> requestMap = context.getExternalContext().getRequestMap();
 
         String [] desiredTypes = contentTypeSplit(desiredContentTypeList);
         String curContentType = null, curDesiredType = null;

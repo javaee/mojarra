@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderer.java,v 1.107 2006/03/29 23:03:48 rlubke Exp $
+ * $Id: HtmlBasicRenderer.java,v 1.108 2006/05/17 19:00:48 rlubke Exp $
  */
 
 /*
@@ -123,9 +123,13 @@ public abstract class HtmlBasicRenderer extends Renderer {
 
     public void decode(FacesContext context, UIComponent component) {
 
-        if (context == null || component == null) {
-            throw new NullPointerException(MessageUtils.getExceptionMessageString(
-                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        if (context == null) {
+            throw new NullPointerException(
+                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "context"));
+        }
+        if (component == null) {
+            throw new NullPointerException(
+                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "component"));
         }
 
         if (logger.isLoggable(Level.FINER)) {
@@ -181,9 +185,13 @@ public abstract class HtmlBasicRenderer extends Renderer {
         String currentValue = null;
         ResponseWriter writer = null;       
 
-        if (context == null || component == null) {
-            throw new NullPointerException(MessageUtils.getExceptionMessageString(
-                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        if (context == null) {
+            throw new NullPointerException(
+                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "context"));
+        }
+        if (component == null) {
+            throw new NullPointerException(
+                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "component"));
         }
 
         if (logger.isLoggable(Level.FINER)) {

@@ -25,7 +25,7 @@
 
 
 /**
- * $Id: SelectManyCheckboxListRenderer.java,v 1.47 2006/03/29 23:03:49 rlubke Exp $
+ * $Id: SelectManyCheckboxListRenderer.java,v 1.48 2006/05/17 19:00:49 rlubke Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -97,9 +97,13 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
     public void encodeEnd(FacesContext context, UIComponent component)
         throws IOException {
 
-        if (context == null || component == null) {
-            throw new NullPointerException(MessageUtils.getExceptionMessageString(
-                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        if (context == null) {
+            throw new NullPointerException(
+                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "context"));
+        }
+        if (component == null) {
+            throw new NullPointerException(
+                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "component"));
         }
         
         // suppress rendering if "rendered" property on the component is

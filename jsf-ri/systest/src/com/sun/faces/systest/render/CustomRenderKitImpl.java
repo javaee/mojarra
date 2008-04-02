@@ -1,5 +1,5 @@
 /*
- * $Id: CustomRenderKitImpl.java,v 1.5 2006/03/29 23:04:02 rlubke Exp $
+ * $Id: CustomRenderKitImpl.java,v 1.6 2006/05/17 19:00:51 rlubke Exp $
  */
 
 /*
@@ -49,7 +49,7 @@ import java.util.HashMap;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: CustomRenderKitImpl.java,v 1.5 2006/03/29 23:04:02 rlubke Exp $
+ * @version $Id: CustomRenderKitImpl.java,v 1.6 2006/05/17 19:00:51 rlubke Exp $
  */
 
 public class CustomRenderKitImpl extends RenderKit {
@@ -107,15 +107,25 @@ public class CustomRenderKitImpl extends RenderKit {
 
     public void addRenderer(String family, String rendererType,
                             Renderer renderer) {
-        if (family == null || rendererType == null || renderer == null) {
+        if (family == null) {
             String message = MessageUtils.getExceptionMessageString
-                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
-            message = message + " family " + family + " rendererType " +
-                rendererType + " renderer " + renderer;
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "family");
             throw new NullPointerException(message);
                 
         }
-	HashMap renderers = null;
+        if (rendererType == null) {
+            String message = MessageUtils.getExceptionMessageString
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "rendererType");
+            throw new NullPointerException(message);
+                
+        }
+        if (renderer == null) {
+            String message = MessageUtils.getExceptionMessageString
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "renderer");
+            throw new NullPointerException(message);
+                
+        }
+        HashMap renderers = null;
 
         synchronized (rendererFamilies) {
 	    // PENDING(edburns): generics would be nice here.
@@ -129,17 +139,20 @@ public class CustomRenderKitImpl extends RenderKit {
 
     public Renderer getRenderer(String family, String rendererType) {
 
-        if (rendererType == null || family == null) {
+        if (rendererType == null) {
             String message = MessageUtils.getExceptionMessageString
-                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
-            message = message + " family " + family + " rendererType " +
-                rendererType;
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "rendererType");
+            throw new NullPointerException(message);
+        }
+        if (family == null) {
+            String message = MessageUtils.getExceptionMessageString
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "family");
             throw new NullPointerException(message);
         }
 
         assert (rendererFamilies != null);
 
-	HashMap renderers = null;
+        HashMap renderers = null;
         Renderer renderer = null;
 
 	if (null != (renderers = (HashMap) rendererFamilies.get(family))) {

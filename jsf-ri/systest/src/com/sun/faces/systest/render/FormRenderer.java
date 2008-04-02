@@ -1,5 +1,5 @@
 /*
- * $Id: FormRenderer.java,v 1.6 2006/03/29 23:04:02 rlubke Exp $
+ * $Id: FormRenderer.java,v 1.7 2006/05/17 19:00:51 rlubke Exp $
  */
 
 /*
@@ -126,9 +126,13 @@ public class FormRenderer extends Renderer {
         throws IOException {
         String styleClass = null;
 
-        if (context == null || component == null) {
-            throw new NullPointerException(MessageUtils.getExceptionMessageString(
-                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        if (context == null) {
+            throw new NullPointerException(
+                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "context"));
+        }
+        if (component == null) {
+            throw new NullPointerException(
+                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "component"));
         }
         if (log.isTraceEnabled()) {
             log.trace("Begin encoding component " +
@@ -193,9 +197,13 @@ public class FormRenderer extends Renderer {
 
     public void encodeEnd(FacesContext context, UIComponent component)
         throws IOException {
-        if (context == null || component == null) {
-            throw new NullPointerException(MessageUtils.getExceptionMessageString(
-                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        if (context == null) {
+            throw new NullPointerException(
+                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "context"));
+        }
+        if (component == null) {
+            throw new NullPointerException(
+                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "component"));
         }
         // suppress rendering if "rendered" property on the component is
         // false.

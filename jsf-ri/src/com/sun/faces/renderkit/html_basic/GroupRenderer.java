@@ -1,5 +1,5 @@
 /*
- * $Id: GroupRenderer.java,v 1.30 2006/03/29 23:03:47 rlubke Exp $
+ * $Id: GroupRenderer.java,v 1.31 2006/05/17 19:00:48 rlubke Exp $
  */
 
 /*
@@ -44,7 +44,7 @@ import java.util.Iterator;
  * Arbitrary grouping "renderer" that simply renders its children
  * recursively in the <code>encodeEnd()</code> method.
  *
- * @version $Id: GroupRenderer.java,v 1.30 2006/03/29 23:03:47 rlubke Exp $
+ * @version $Id: GroupRenderer.java,v 1.31 2006/05/17 19:00:48 rlubke Exp $
  */
 public class GroupRenderer extends HtmlBasicRenderer {
 
@@ -161,9 +161,13 @@ public class GroupRenderer extends HtmlBasicRenderer {
 
     public void encodeEnd(FacesContext context, UIComponent component)
         throws IOException {
-        if (context == null || component == null) {
-            throw new NullPointerException(MessageUtils.getExceptionMessageString(
-                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        if (context == null) {
+            throw new NullPointerException(
+                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "context"));
+        }
+        if (component == null) {
+            throw new NullPointerException(
+                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "component"));
         }
         // suppress rendering if "rendered" property on the component is
         // false.

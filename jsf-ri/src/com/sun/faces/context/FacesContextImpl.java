@@ -1,5 +1,5 @@
  /*
- * $Id: FacesContextImpl.java,v 1.80 2006/03/29 23:03:43 rlubke Exp $
+ * $Id: FacesContextImpl.java,v 1.81 2006/05/17 19:00:45 rlubke Exp $
  */
 
 /*
@@ -115,11 +115,13 @@ import com.sun.faces.util.MessageUtils;
 
 
      public FacesContextImpl(ExternalContext ec, Lifecycle lifecycle) {
-         if (null == ec || null == lifecycle) {
+         if (null == ec) {
              throw new NullPointerException
-                 (
-                     MessageUtils.getExceptionMessageString(
-                         MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                 (MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "ec"));
+         }
+         if (null == lifecycle) {
+             throw new NullPointerException
+                 (MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "lifecycle"));
          }
          this.externalContext = ec;
          setCurrentInstance(this);
@@ -294,7 +296,7 @@ import com.sun.faces.util.MessageUtils;
          if (root == null) {
              throw new NullPointerException
                  (MessageUtils.getExceptionMessageString(
-                     MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                     MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "root"));
          }
 
          viewRoot = root;
@@ -325,7 +327,7 @@ import com.sun.faces.util.MessageUtils;
              throw new NullPointerException
                  (
                      MessageUtils.getExceptionMessageString(
-                         MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                         MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "message"));
          }
 
          if (componentMessageLists == null) {

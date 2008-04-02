@@ -1,5 +1,5 @@
 /*
- * $Id: ButtonRenderer.java,v 1.97 2006/05/05 17:26:29 rlubke Exp $
+ * $Id: ButtonRenderer.java,v 1.98 2006/05/17 19:00:47 rlubke Exp $
  */
 
 /*
@@ -94,9 +94,13 @@ public class ButtonRenderer extends HtmlBasicRenderer {
     //
 
     public void decode(FacesContext context, UIComponent component) {
-        if (context == null || component == null) {
+        if (context == null) {
             throw new NullPointerException(MessageUtils.getExceptionMessageString(
-                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "context"));
+        }
+        if (component == null) {
+            throw new NullPointerException(MessageUtils.getExceptionMessageString(
+                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "component"));
         }
         if (logger.isLoggable(Level.FINER)) {
             logger.log(Level.FINER, 
@@ -150,9 +154,13 @@ public class ButtonRenderer extends HtmlBasicRenderer {
 
     public void encodeBegin(FacesContext context, UIComponent component)
         throws IOException {
-        if (context == null || component == null) {
+        if (context == null) {
             throw new NullPointerException(MessageUtils.getExceptionMessageString(
-                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "context"));
+        }
+        if (component == null) {
+            throw new NullPointerException(MessageUtils.getExceptionMessageString(
+                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "component"));
         }
          if (logger.isLoggable(Level.FINER)) {
             logger.log(Level.FINER, 
@@ -238,9 +246,13 @@ public class ButtonRenderer extends HtmlBasicRenderer {
 
     public void encodeEnd(FacesContext context, UIComponent component)
         throws IOException {
-        if (context == null || component == null) {
+        if (context == null) {
             throw new NullPointerException(MessageUtils.getExceptionMessageString(
-                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "context"));
+        }
+        if (component == null) {
+            throw new NullPointerException(MessageUtils.getExceptionMessageString(
+                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "component"));
         }
     }
 

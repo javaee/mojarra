@@ -1,5 +1,5 @@
 /*
- * $Id: ManagedBeanELResolver.java,v 1.13 2006/03/29 23:03:44 rlubke Exp $
+ * $Id: ManagedBeanELResolver.java,v 1.14 2006/05/17 19:00:45 rlubke Exp $
  */
 /*
  * The contents of this file are subject to the terms
@@ -60,8 +60,7 @@ public class ManagedBeanELResolver extends ELResolver {
         }
         if (property == null) {
             String message = MessageUtils.getExceptionMessageString
-                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
-            message = message + " base " + base + " property " + property;
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "property");
             throw new PropertyNotFoundException(message);
         }
 
@@ -95,8 +94,7 @@ public class ManagedBeanELResolver extends ELResolver {
 
         if (base == null && property == null) {
             String message = MessageUtils.getExceptionMessageString
-                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
-            message = message + " base " + base + " property " + property;
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "base and property"); // ?????
             throw new PropertyNotFoundException(message);
         }
 
@@ -109,8 +107,7 @@ public class ManagedBeanELResolver extends ELResolver {
 
         if (base == null && property == null) {
             String message = MessageUtils.getExceptionMessageString
-                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
-            message = message + " base " + base + " property " + property;
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "base and property"); // ?????
             throw new PropertyNotFoundException(message);
         }
 
@@ -123,8 +120,7 @@ public class ManagedBeanELResolver extends ELResolver {
         }
         if (property == null) {
             String message = MessageUtils.getExceptionMessageString
-                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
-            message = message + " base " + base + " property " + property;
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "property");
             throw new PropertyNotFoundException(message);
         }
 

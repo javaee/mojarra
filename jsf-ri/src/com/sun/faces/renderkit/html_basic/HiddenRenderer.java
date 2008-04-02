@@ -1,5 +1,5 @@
 /*
- * $Id: HiddenRenderer.java,v 1.27 2006/03/29 23:03:47 rlubke Exp $
+ * $Id: HiddenRenderer.java,v 1.28 2006/05/17 19:00:48 rlubke Exp $
  */
 
 /*
@@ -84,9 +84,13 @@ public class HiddenRenderer extends HtmlBasicInputRenderer {
 
     public void encodeBegin(FacesContext context, UIComponent component)
         throws IOException {
-        if (context == null || component == null) {
-            throw new NullPointerException(MessageUtils.getExceptionMessageString(
-                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        if (context == null) {
+            throw new NullPointerException(
+                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "context"));
+        }
+        if (component == null) {
+            throw new NullPointerException(
+                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "component"));
         }
     }
 

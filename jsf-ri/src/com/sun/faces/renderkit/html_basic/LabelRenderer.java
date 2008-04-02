@@ -1,5 +1,5 @@
 /*
- * $Id: LabelRenderer.java,v 1.42 2006/03/29 23:03:48 rlubke Exp $
+ * $Id: LabelRenderer.java,v 1.43 2006/05/17 19:00:48 rlubke Exp $
  */
 
 /*
@@ -87,9 +87,13 @@ public class LabelRenderer extends HtmlBasicInputRenderer {
     public void encodeBegin(FacesContext context, UIComponent component)
         throws IOException {
 
-        if (context == null || component == null) {
+        if (context == null) {
             throw new NullPointerException(
-                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "context"));
+        }
+        if (component == null) {
+            throw new NullPointerException(
+                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "component"));
         }
 
         if (logger.isLoggable(Level.FINER)) {
@@ -177,9 +181,13 @@ public class LabelRenderer extends HtmlBasicInputRenderer {
     public void encodeEnd(FacesContext context, UIComponent component)
         throws IOException {
 
-        if (context == null || component == null) {
+        if (context == null) {
             throw new NullPointerException(
-                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "context"));
+        }
+        if (component == null) {
+            throw new NullPointerException(
+                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "component"));
         }
         // render label end element if RENDER_END_ELEMENT is set.
         String render = (String) component.getAttributes().get(

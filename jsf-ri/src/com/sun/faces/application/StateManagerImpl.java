@@ -1,5 +1,5 @@
 /* 
- * $Id: StateManagerImpl.java,v 1.47 2006/05/17 17:31:28 rlubke Exp $ 
+ * $Id: StateManagerImpl.java,v 1.48 2006/05/17 19:00:44 rlubke Exp $ 
  */
 
 /*
@@ -61,7 +61,7 @@ import com.sun.faces.util.Util;
  * <B>StateManagerImpl</B> is the default implementation class for
  * StateManager.
  *
- * @version $Id: StateManagerImpl.java,v 1.47 2006/05/17 17:31:28 rlubke Exp $
+ * @version $Id: StateManagerImpl.java,v 1.48 2006/05/17 19:00:44 rlubke Exp $
  * @see javax.faces.application.ViewHandler
  */
 public class StateManagerImpl extends StateManager {
@@ -206,8 +206,7 @@ public class StateManagerImpl extends StateManager {
 
         if (null == renderKitId) {
             String message = MessageUtils.getExceptionMessageString
-                  (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
-            message = message + " renderKitId " + renderKitId;
+                  (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "renderKitId");
             throw new IllegalArgumentException(message);
         }
 
@@ -587,8 +586,7 @@ public class StateManagerImpl extends StateManager {
 
         if (null == renderKitId) {
             String message = MessageUtils.getExceptionMessageString
-                  (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
-            message = message + " renderKitId " + renderKitId;
+                  (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "renderKitId");
             throw new IllegalArgumentException(message);
         }
         Object state = null;
@@ -647,8 +645,7 @@ public class StateManagerImpl extends StateManager {
 
         if (null == renderKitId) {
             String message = MessageUtils.getExceptionMessageString
-                  (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
-            message = message + " renderKitId " + renderKitId;
+                  (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "renderKitId");
             throw new IllegalArgumentException(message);
         }
         UIComponent viewRoot = null;

@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationImpl.java,v 1.77 2006/05/17 17:31:27 rlubke Exp $
+ * $Id: ApplicationImpl.java,v 1.78 2006/05/17 19:00:44 rlubke Exp $
  */
 
 /*
@@ -182,14 +182,21 @@ public class ApplicationImpl extends Application {
     
     public UIComponent createComponent(ValueExpression componentExpression,
         FacesContext context, String componentType) throws FacesException {
-        if (null == componentExpression || null == context ||
-            null == componentType) {
-            String message = MessageUtils.getExceptionMessageString
-                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
-            message = message +" componentExpression " + componentExpression +
-                " context " + context + " componentType " + componentType;
-            throw new NullPointerException(message);
-        }
+    	if (null == componentExpression) {
+    		String message = MessageUtils.getExceptionMessageString
+    		(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "componentExpression");
+    		throw new NullPointerException(message);
+    	}
+    	if (null == context) {
+    		String message = MessageUtils.getExceptionMessageString
+    		(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "context");
+    		throw new NullPointerException(message);
+    	}
+    	if (null == componentType) {
+    		String message = MessageUtils.getExceptionMessageString
+    		(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "componentType");
+    		throw new NullPointerException(message);
+    	}
 
         Object result = null;
         boolean createOne = false;
@@ -300,8 +307,7 @@ public class ApplicationImpl extends Application {
     public void setViewHandler(ViewHandler handler) {
         if (handler == null) {
             String message = MessageUtils.getExceptionMessageString
-                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
-            message = message +" ViewHandler " + handler;
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "handler");
             throw new NullPointerException(message);
         }
         synchronized (this) {
@@ -331,8 +337,7 @@ public class ApplicationImpl extends Application {
     public void setStateManager(StateManager manager) {
         if (manager == null) {
             String message = MessageUtils.getExceptionMessageString
-                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
-            message = message + " StateManager " + manager;
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "manager");
             throw new NullPointerException(message);
         }
         synchronized (this) {
@@ -357,8 +362,7 @@ public class ApplicationImpl extends Application {
     public void setActionListener(ActionListener listener) {
         if (listener == null) {
             String message = MessageUtils.getExceptionMessageString
-                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
-            message = message +" ActionListener " + listener;
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "listener");
             throw new NullPointerException(message);
         }
         synchronized (this) {
@@ -394,8 +398,7 @@ public class ApplicationImpl extends Application {
     public void setNavigationHandler(NavigationHandler handler) {
         if (handler == null) {
             String message = MessageUtils.getExceptionMessageString
-                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
-            message = message +" NavigationHandler " + handler;
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "handler");
             throw new NullPointerException(message);
         }
         synchronized (this) {
@@ -435,8 +438,7 @@ public class ApplicationImpl extends Application {
         }
         if (resolver == null) {
             String message = MessageUtils.getExceptionMessageString
-                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
-            message = message +" PropertyResolver " + resolver;
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "resolver");
             throw new NullPointerException(message);
         }
         synchronized (this) {
@@ -452,8 +454,7 @@ public class ApplicationImpl extends Application {
         MethodExpression result = null;
         if (ref == null) {
             String message = MessageUtils.getExceptionMessageString
-                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
-            message = message +" ref " + ref;
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "ref");
             throw new NullPointerException(message);
         }
         if (!(ref.startsWith("#{") && ref.endsWith("}"))) {
@@ -484,8 +485,7 @@ public class ApplicationImpl extends Application {
         throws ReferenceSyntaxException {
         if (ref == null) {
             String message = MessageUtils.getExceptionMessageString
-                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
-            message = message +" ref " + ref;
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "ref");
             throw new NullPointerException(message);
         }
         ValueExpression result = null;
@@ -522,8 +522,7 @@ public class ApplicationImpl extends Application {
         }
         if (resolver == null) {
             String message = MessageUtils.getExceptionMessageString
-                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
-            message = message +" VariableResolver " + resolver;
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "resolver");
             throw new NullPointerException(message);
         }
         synchronized (this) {
@@ -536,11 +535,14 @@ public class ApplicationImpl extends Application {
 
 
     public void addComponent(String componentType, String componentClass) {
-        if (componentType == null || componentClass == null) {
+        if (componentType == null) {
             String message = MessageUtils.getExceptionMessageString
-                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
-            message = message +" componentType " + componentType +
-                " componentClass " + componentClass;
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "componentType");
+            throw new NullPointerException(message);
+        }
+        if (componentClass == null) {
+            String message = MessageUtils.getExceptionMessageString
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "componentClass");
             throw new NullPointerException(message);
         }
         
@@ -557,8 +559,7 @@ public class ApplicationImpl extends Application {
         throws FacesException {
         if (componentType == null) {
             String message = MessageUtils.getExceptionMessageString
-                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
-            message = message +" componentType " + componentType;
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "componentType");
             throw new NullPointerException(message);
         }
         UIComponent returnVal = null;
@@ -592,14 +593,21 @@ public class ApplicationImpl extends Application {
                                        FacesContext context,
                                        String componentType)
         throws FacesException {
-        if (null == componentBinding || null == context ||
-            null == componentType) {
+        if (null == componentBinding) {
             String message = MessageUtils.getExceptionMessageString
-                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
-            message = message +" componentBinding " + componentBinding +
-                " context " + context + " componentType " + componentType;
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "componentBinding");
             throw new NullPointerException(message);
         }
+        if (null == context) {
+                String message = MessageUtils.getExceptionMessageString
+                    (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "context");
+                throw new NullPointerException(message);
+            }
+        if (null == componentType) {
+                String message = MessageUtils.getExceptionMessageString
+                    (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "componentType");
+                throw new NullPointerException(message);
+            }
 
         Object result = null;
         boolean createOne = false;
@@ -629,11 +637,14 @@ public class ApplicationImpl extends Application {
 
 
     public void addConverter(String converterId, String converterClass) {
-        if (converterId == null || converterClass == null) {
+        if (converterId == null) {
             String message = MessageUtils.getExceptionMessageString
-                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
-            message = message + " converterId " + converterId +
-                " converterClass " + converterClass;
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "converterId");
+            throw new NullPointerException(message);
+        }
+        if (converterClass == null) {
+            String message = MessageUtils.getExceptionMessageString
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "converterClass");
             throw new NullPointerException(message);
         }
         
@@ -647,11 +658,14 @@ public class ApplicationImpl extends Application {
 
 
     public void addConverter(Class targetClass, String converterClass) {
-        if (targetClass == null || converterClass == null) {
+        if (targetClass == null) {
             String message = MessageUtils.getExceptionMessageString
-                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
-            message = message +" targetClass " + targetClass +
-                " converterClass " + converterClass;
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "targetClass");
+            throw new NullPointerException(message);
+        }
+        if (converterClass == null) {
+            String message = MessageUtils.getExceptionMessageString
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "converterClass");
             throw new NullPointerException(message);
         }
         
@@ -666,8 +680,7 @@ public class ApplicationImpl extends Application {
     public Converter createConverter(String converterId) {
         if (converterId == null) {
             String message = MessageUtils.getExceptionMessageString
-                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
-            message = message +" converterId " + converterId;
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "convertedId");
             throw new NullPointerException(message);
         }
         Converter returnVal = (Converter) newThing(converterId, converterIdMap);
@@ -690,8 +703,7 @@ public class ApplicationImpl extends Application {
     public Converter createConverter(Class targetClass) {
         if (targetClass == null) {
             String message = MessageUtils.getExceptionMessageString
-                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
-            message = message +" targetClass " + targetClass;
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "targetClass");
             throw new NullPointerException(message);
         }
         Converter returnVal = (Converter) newConverter(targetClass,
@@ -811,8 +823,7 @@ public class ApplicationImpl extends Application {
     public void setSupportedLocales(Collection<Locale> newLocales) {
         if (null == newLocales) {
             String message = MessageUtils.getExceptionMessageString
-                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
-            message = message +" newLocales " + newLocales;
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "newLocales");
             throw new NullPointerException(message);
         }
         synchronized (this) {
@@ -836,8 +847,7 @@ public class ApplicationImpl extends Application {
 
         if (locale == null) {
             String message = MessageUtils.getExceptionMessageString
-                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
-            message = message + " locale " + locale;
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "locale");
             throw new NullPointerException(message);
         }
 
@@ -865,11 +875,14 @@ public class ApplicationImpl extends Application {
 
 
     public void addValidator(String validatorId, String validatorClass) {
-        if (validatorId == null || validatorClass == null) {
+        if (validatorId == null) {
             String message = MessageUtils.getExceptionMessageString
-                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
-            message = message + " validatorId " + validatorId + 
-                " validatorClass " + validatorClass;
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "validatorId");
+            throw new NullPointerException(message);
+        }
+        if (validatorClass == null) {
+            String message = MessageUtils.getExceptionMessageString
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "validatorClass");
             throw new NullPointerException(message);
         }
         
@@ -885,8 +898,7 @@ public class ApplicationImpl extends Application {
     public Validator createValidator(String validatorId) throws FacesException {
         if (validatorId == null) {
             String message = MessageUtils.getExceptionMessageString
-                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
-            message = message +" validatorId " + validatorId;
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "validatorId");
             throw new NullPointerException(message);
         }
         Validator returnVal = (Validator) newThing(validatorId, validatorMap);

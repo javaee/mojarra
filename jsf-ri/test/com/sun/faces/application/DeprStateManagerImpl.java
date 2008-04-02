@@ -1,5 +1,5 @@
 /* 
- * $Id: DeprStateManagerImpl.java,v 1.6 2006/03/29 23:04:37 rlubke Exp $ 
+ * $Id: DeprStateManagerImpl.java,v 1.7 2006/05/17 19:00:52 rlubke Exp $ 
  */ 
 
 
@@ -58,7 +58,7 @@ import javax.faces.component.NamingContainer;
  * <B>DeprStateManagerImpl</B> is a test class which implements
  * deprecated methods only. 
  *
- * @version $Id: DeprStateManagerImpl.java,v 1.6 2006/03/29 23:04:37 rlubke Exp $
+ * @version $Id: DeprStateManagerImpl.java,v 1.7 2006/05/17 19:00:52 rlubke Exp $
  */
 public class DeprStateManagerImpl extends StateManager {
 
@@ -223,8 +223,7 @@ public class DeprStateManagerImpl extends StateManager {
                                   String renderKitId) {
         if (null == renderKitId) {
             String message = MessageUtils.getExceptionMessageString
-                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
-            message = message + " renderKitId " + renderKitId;
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "renderKitId");
             throw new IllegalArgumentException(message);
         }
 
@@ -300,8 +299,7 @@ public class DeprStateManagerImpl extends StateManager {
                                          UIViewRoot root, String renderKitId) {
         if (null == renderKitId) {
             String message = MessageUtils.getExceptionMessageString
-                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
-            message = message + " renderKitId " + renderKitId;
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "renderKitId");
             throw new IllegalArgumentException(message);
         }
         Object state = null;
@@ -315,8 +313,7 @@ public class DeprStateManagerImpl extends StateManager {
                                               String viewId, String renderKitId) {
         if (null == renderKitId) {
             String message = MessageUtils.getExceptionMessageString
-                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
-            message = message + " renderKitId " + renderKitId;
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "renderKitId");
             throw new IllegalArgumentException(message);
         }
         UIComponent viewRoot = null;

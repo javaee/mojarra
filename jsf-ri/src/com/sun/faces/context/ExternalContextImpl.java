@@ -1,5 +1,5 @@
 /*
- * $Id: ExternalContextImpl.java,v 1.47 2006/03/29 23:03:43 rlubke Exp $
+ * $Id: ExternalContextImpl.java,v 1.48 2006/05/17 19:00:45 rlubke Exp $
  */
 
 /*
@@ -29,27 +29,6 @@
 
 package com.sun.faces.context;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.AbstractCollection;
-import java.util.AbstractMap;
-import java.util.AbstractSet;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.NoSuchElementException;
-import java.util.Set;
-import java.util.Arrays;
-
 import javax.faces.FacesException;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
@@ -65,18 +44,38 @@ import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.sun.faces.RIConstants;
-import com.sun.faces.util.Util;
-import com.sun.faces.util.MessageUtils;
-
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.AbstractCollection;
+import java.util.AbstractMap;
+import java.util.AbstractSet;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Set;
 import java.util.logging.Logger;
+
+import com.sun.faces.RIConstants;
+import com.sun.faces.util.MessageUtils;
+import com.sun.faces.util.Util;
 
 /**
  * <p>This implementation of {@link ExternalContext} is specific to the
  * servlet implementation.
  *
  * @author Brendan Murray
- * @version $Id: ExternalContextImpl.java,v 1.47 2006/03/29 23:03:43 rlubke Exp $
+ * @version $Id: ExternalContextImpl.java,v 1.48 2006/05/17 19:00:45 rlubke Exp $
  */
 public class ExternalContextImpl extends ExternalContext {
 
@@ -1104,9 +1103,7 @@ class RequestParameterMap extends BaseContextMap {
         if (key == null) {
             throw new NullPointerException();
         }
-        if (key == RIConstants.IMMUTABLE_MARKER) {
-            return RIConstants.IMMUTABLE_MARKER;
-        }
+        
         return request.getParameter(key.toString());
     }
 
@@ -1168,9 +1165,7 @@ class RequestParameterValuesMap extends StringArrayValuesMap {
         if (key == null) {
             throw new NullPointerException();
         }
-        if (key == RIConstants.IMMUTABLE_MARKER) {
-            return RIConstants.IMMUTABLE_MARKER;
-        }
+        
         return request.getParameterValues(key.toString());
     }
 
@@ -1221,9 +1216,7 @@ class RequestHeaderMap extends BaseContextMap {
         if (key == null) {
             throw new NullPointerException();
         }
-        if (key == RIConstants.IMMUTABLE_MARKER) {
-            return RIConstants.IMMUTABLE_MARKER;
-        }
+       
         return (request.getHeader(key.toString()));
     }
 
@@ -1286,10 +1279,7 @@ class RequestHeaderValuesMap extends StringArrayValuesMap {
         if (key == null) {
             throw new NullPointerException();
         }
-        if (key == RIConstants.IMMUTABLE_MARKER) {
-            return RIConstants.IMMUTABLE_MARKER;
-        }
-
+      
         List<String> valuesList = new ArrayList<String>();
         Enumeration<String> valuesEnum = this.request.getHeaders(key.toString());
         while (valuesEnum.hasMoreElements()) {
@@ -1344,11 +1334,7 @@ class RequestCookieMap extends BaseContextMap {
     public Object get(Object key) {
         if (key == null) {
             throw new NullPointerException();
-        }
-
-        if (key == RIConstants.IMMUTABLE_MARKER) {
-            return RIConstants.IMMUTABLE_MARKER;
-        }
+        }        
 
         Cookie[] cookies = request.getCookies();
         if (null == cookies) {
@@ -1453,10 +1439,7 @@ class InitParameterMap extends BaseContextMap {
     public Object get(Object key) {
         if (key == null) {
             throw new NullPointerException();
-        }
-        if (key == RIConstants.IMMUTABLE_MARKER) {
-            return RIConstants.IMMUTABLE_MARKER;
-        }
+        }        
         String keyString = key.toString();
         return servletContext.getInitParameter(keyString);
     }

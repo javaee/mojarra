@@ -1,5 +1,5 @@
 /*
- * $Id: Application.java,v 1.45 2006/03/07 21:02:45 edburns Exp $
+ * $Id: Application.java,v 1.46 2006/05/17 19:00:42 rlubke Exp $
  */
 
 /*
@@ -592,6 +592,7 @@ public abstract class Application {
 	throws FacesException {
         if (null == componentExpression || null == context ||
             null == componentType) {
+        	// PENDING - i18n
             String message = "null parameters";
             message = message +" componentExpression " + componentExpression +
                 " context " + context + " componentType " + componentType;

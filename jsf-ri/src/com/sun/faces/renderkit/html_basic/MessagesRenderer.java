@@ -1,5 +1,5 @@
 /*
- * $Id: MessagesRenderer.java,v 1.27 2006/03/29 23:03:48 rlubke Exp $
+ * $Id: MessagesRenderer.java,v 1.28 2006/05/17 19:00:48 rlubke Exp $
  */
 
 /*
@@ -63,9 +63,13 @@ public class MessagesRenderer extends HtmlBasicRenderer {
 
     public void encodeBegin(FacesContext context, UIComponent component)
         throws IOException {
-        if (context == null || component == null) {
+        if (context == null) {
             throw new NullPointerException(
-                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "context"));
+        }
+        if (component == null) {
+            throw new NullPointerException(
+                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "component"));
         }
     }
 
@@ -76,9 +80,13 @@ public class MessagesRenderer extends HtmlBasicRenderer {
         FacesMessage curMessage = null;
         ResponseWriter writer = null;
 
-        if (context == null || component == null) {
-            throw new NullPointerException(MessageUtils.getExceptionMessageString(
-                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        if (context == null) {
+            throw new NullPointerException(
+                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "context"));
+        }
+        if (component == null) {
+            throw new NullPointerException(
+                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "component"));
         }
 
         if (logger.isLoggable(Level.FINER)) {

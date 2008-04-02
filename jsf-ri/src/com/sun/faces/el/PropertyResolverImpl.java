@@ -1,5 +1,5 @@
 /*
- * $Id: PropertyResolverImpl.java,v 1.24 2006/05/17 17:31:29 rlubke Exp $
+ * $Id: PropertyResolverImpl.java,v 1.25 2006/05/17 19:00:45 rlubke Exp $
  */
 
 /*
@@ -223,10 +223,14 @@ public class PropertyResolverImpl extends PropertyResolver {
 
     protected static void assertInput(Object base, Object property)
             throws PropertyNotFoundException {
-        if (base == null || property == null) {
+        if (base == null) {
             String message = MessageUtils.getExceptionMessageString
-                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
-            message = message + " base " + base + " property " + property;
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "base");
+            throw new PropertyNotFoundException(message);
+        }
+        if (property == null) {
+            String message = MessageUtils.getExceptionMessageString
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "property");
             throw new PropertyNotFoundException(message);
         }
     }
@@ -235,8 +239,7 @@ public class PropertyResolverImpl extends PropertyResolver {
             throws PropertyNotFoundException {
         if (base == null) {
             String message = MessageUtils.getExceptionMessageString
-                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
-            message = message + " base " + base;
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "base");
             throw new PropertyNotFoundException(message);
         }
         if (index < 0) {

@@ -1,5 +1,5 @@
 /*
- * $Id: NavigationHandlerImpl.java,v 1.47 2006/05/11 02:40:28 rlubke Exp $
+ * $Id: NavigationHandlerImpl.java,v 1.48 2006/05/17 19:00:44 rlubke Exp $
  */
 
 /*
@@ -126,14 +126,13 @@ public class NavigationHandlerImpl extends NavigationHandler {
                                  String outcome) {
         if (context == null) {
             String message = MessageUtils.getExceptionMessageString
-                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
-            message = message + " context " + context;
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "context");
             throw new NullPointerException(message);
         }
         if (outcome == null) {
            if (logger.isLoggable(Level.FINE)) {
-               logger.fine("No navigation rule found for outcome "
-                           + outcome + "and viewId " +
+               logger.fine("No navigation rule found for null outcome "
+                           + "and viewId " +
                            context.getViewRoot().getViewId() +
                            " Explicitly remain on the current view ");
             }

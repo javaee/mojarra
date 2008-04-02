@@ -1,5 +1,5 @@
 /*
- * $Id: OutputLinkRenderer.java,v 1.27 2006/03/29 23:03:48 rlubke Exp $
+ * $Id: OutputLinkRenderer.java,v 1.28 2006/05/17 19:00:48 rlubke Exp $
  */
 
 /*
@@ -50,7 +50,7 @@ import java.util.logging.Level;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: OutputLinkRenderer.java,v 1.27 2006/03/29 23:03:48 rlubke Exp $
+ * @version $Id: OutputLinkRenderer.java,v 1.28 2006/05/17 19:00:48 rlubke Exp $
  */
 
 public class OutputLinkRenderer extends LinkRenderer {
@@ -91,9 +91,13 @@ public class OutputLinkRenderer extends LinkRenderer {
     //
 
     public void decode(FacesContext context, UIComponent component) {
-        if (context == null || component == null) {
-            throw new NullPointerException(MessageUtils.getExceptionMessageString(
-                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        if (context == null) {
+            throw new NullPointerException(
+                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "context"));
+        }
+        if (component == null) {
+            throw new NullPointerException(
+                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "component"));
         }
 
         // take no action, this is an Output component.
@@ -117,9 +121,13 @@ public class OutputLinkRenderer extends LinkRenderer {
 
     public void encodeBegin(FacesContext context, UIComponent component)
         throws IOException {
-        if (context == null || component == null) {
+        if (context == null) {
             throw new NullPointerException(
-                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "context"));
+        }
+        if (component == null) {
+            throw new NullPointerException(
+                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "component"));
         }
         if (logger.isLoggable(Level.FINER)) {
             logger.log(Level.FINER,"Begin encoding component " + component.getId());
@@ -141,9 +149,13 @@ public class OutputLinkRenderer extends LinkRenderer {
 
     public void encodeChildren(FacesContext context, UIComponent component)
         throws IOException {
-        if (context == null || component == null) {
+        if (context == null) {
             throw new NullPointerException(
-                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "context"));
+        }
+        if (component == null) {
+            throw new NullPointerException(
+                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "component"));
         }
         if (logger.isLoggable(Level.FINER)) {
             logger.log(Level.FINER,"Begin encoding children " + component.getId());
@@ -171,9 +183,13 @@ public class OutputLinkRenderer extends LinkRenderer {
 
     public void encodeEnd(FacesContext context, UIComponent component)
         throws IOException {
-        if (context == null || component == null) {
+        if (context == null) {
             throw new NullPointerException(
-                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "context"));
+        }
+        if (component == null) {
+            throw new NullPointerException(
+                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "component"));
         }
                                                                                                                           
         if (logger.isLoggable(Level.FINER)) {

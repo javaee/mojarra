@@ -1,5 +1,5 @@
 /*
- * $Id: CustomResponseWriter.java,v 1.5 2006/03/29 23:04:02 rlubke Exp $
+ * $Id: CustomResponseWriter.java,v 1.6 2006/05/17 19:00:51 rlubke Exp $
  */
 
 /*
@@ -175,7 +175,7 @@ public class CustomResponseWriter extends ResponseWriter {
         throws IOException {
         if (name == null) {
             throw new NullPointerException(MessageUtils.getExceptionMessageString(
-                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "name"));
         }
         closeStartIfNecessary();
         char firstChar = name.charAt(0);
@@ -209,7 +209,7 @@ public class CustomResponseWriter extends ResponseWriter {
     public void endElement(String name) throws IOException {
         if (name == null) {
             throw new NullPointerException(MessageUtils.getExceptionMessageString(
-                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "name"));
         }
 
         // always turn escaping back on once an element ends
@@ -256,9 +256,13 @@ public class CustomResponseWriter extends ResponseWriter {
      */
     public void writeAttribute(String name, Object value, String componentPropertyName)
         throws IOException {
-        if (name == null || value == null) {
+        if (name == null) {
             throw new NullPointerException(MessageUtils.getExceptionMessageString(
-                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "name"));
+        }
+        if (value == null) {
+            throw new NullPointerException(MessageUtils.getExceptionMessageString(
+                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "value"));
         }
 
         Class valueClass = value.getClass();
@@ -308,9 +312,13 @@ public class CustomResponseWriter extends ResponseWriter {
     public void writeURIAttribute(String name, Object value,
                                   String componentPropertyName)
         throws IOException {
-        if (name == null || value == null) {
+        if (name == null) {
             throw new NullPointerException(MessageUtils.getExceptionMessageString(
-                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "name"));
+        }
+        if (value == null) {
+            throw new NullPointerException(MessageUtils.getExceptionMessageString(
+                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "value"));
         }
 
         //PENDING (horwat) using String as a result of Tomcat char writer
@@ -349,7 +357,7 @@ public class CustomResponseWriter extends ResponseWriter {
     public void writeComment(Object comment) throws IOException {
         if (comment == null) {
             throw new NullPointerException(MessageUtils.getExceptionMessageString(
-                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "comment"));
         }
         closeStartIfNecessary();
         writer.write("<!-- ");
@@ -375,7 +383,7 @@ public class CustomResponseWriter extends ResponseWriter {
         throws IOException {
         if (text == null) {
             throw new NullPointerException(MessageUtils.getExceptionMessageString(
-                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "text"));
         }
         closeStartIfNecessary();
         if (dontEscape) {
@@ -427,7 +435,7 @@ public class CustomResponseWriter extends ResponseWriter {
     public void writeText(char text[]) throws IOException {
         if (text == null) {
             throw new NullPointerException(MessageUtils.getExceptionMessageString(
-                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "text"));
         }
         closeStartIfNecessary();
         if (dontEscape) {
@@ -460,7 +468,7 @@ public class CustomResponseWriter extends ResponseWriter {
         throws IOException {
         if (text == null) {
             throw new NullPointerException(MessageUtils.getExceptionMessageString(
-                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "text"));
         }
         if (off < 0 || off > text.length || len < 0 || len > text.length) {
             throw new IndexOutOfBoundsException();

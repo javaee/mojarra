@@ -1,5 +1,5 @@
 /*
- * $Id: ImageRenderer.java,v 1.45 2006/05/10 20:03:23 rogerk Exp $
+ * $Id: ImageRenderer.java,v 1.46 2006/05/17 19:00:48 rlubke Exp $
  */
 
 /*
@@ -48,7 +48,7 @@ import java.io.IOException;
  * <B>ImageRenderer</B> is a class that handles the rendering of the graphic
  * ImageTag
  *
- * @version $Id: ImageRenderer.java,v 1.45 2006/05/10 20:03:23 rogerk Exp $
+ * @version $Id: ImageRenderer.java,v 1.46 2006/05/17 19:00:48 rlubke Exp $
  */
 
 public class ImageRenderer extends HtmlBasicRenderer {
@@ -92,9 +92,13 @@ public class ImageRenderer extends HtmlBasicRenderer {
 
     public void encodeBegin(FacesContext context, UIComponent component)
         throws IOException {
-        if (context == null || component == null) {
+        if (context == null) {
             throw new NullPointerException(
-                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "context"));
+        }
+        if (component == null) {
+            throw new NullPointerException(
+                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "component"));
         }
     }
 
@@ -104,9 +108,13 @@ public class ImageRenderer extends HtmlBasicRenderer {
         ResponseWriter writer = null;
         String styleClass = null;
 
-        if (context == null || component == null) {
+        if (context == null) {
             throw new NullPointerException(
-                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "context"));
+        }
+        if (component == null) {
+            throw new NullPointerException(
+                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "component"));
         }
 
         if (logger.isLoggable(Level.FINER)) {

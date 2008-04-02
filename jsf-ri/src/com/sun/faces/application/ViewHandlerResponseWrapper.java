@@ -1,5 +1,5 @@
 /* 
- * $Id: ViewHandlerResponseWrapper.java,v 1.7 2006/03/29 23:03:42 rlubke Exp $ 
+ * $Id: ViewHandlerResponseWrapper.java,v 1.8 2006/05/17 19:00:44 rlubke Exp $ 
  */ 
 
 
@@ -152,7 +152,6 @@ public class ViewHandlerResponseWrapper extends HttpServletResponseWrapper
     }
     
     public void clearWrappedResponse() throws IOException {
-	ServletResponse wrapped = this.getResponse();
 	if (null != caw) {
 	    caw.reset();
 	}

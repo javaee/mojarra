@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.190 2006/05/17 17:31:31 rlubke Exp $
+ * $Id: Util.java,v 1.191 2006/05/17 19:00:50 rlubke Exp $
  */
 
 /*
@@ -76,7 +76,7 @@ import com.sun.faces.spi.ManagedBeanFactory.Scope;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.190 2006/05/17 17:31:31 rlubke Exp $
+ * @version $Id: Util.java,v 1.191 2006/05/17 19:00:50 rlubke Exp $
  */
 
 public class Util {
@@ -268,7 +268,7 @@ public class Util {
         if (null != (result = (Boolean)
             applicationMap.get(RIConstants.HAS_REQUIRED_CLASSES_ATTR))) {
             // yes, and the check failed.
-            if (Boolean.FALSE == result) {
+            if (Boolean.FALSE.equals(result)) {
                 throw new
                     FacesException(
                         MessageUtils.getExceptionMessageString(
@@ -710,7 +710,7 @@ public class Util {
     public static void parameterNonNull(Object param) throws FacesException {
         if (null == param) {
             throw new FacesException(
-                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "param"));
         }
     }
 

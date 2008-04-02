@@ -1,7 +1,7 @@
 package com.sun.faces.el;
 
 /*
- * $Id: ScopedAttributeELResolver.java,v 1.7 2006/03/29 23:03:45 rlubke Exp $
+ * $Id: ScopedAttributeELResolver.java,v 1.8 2006/05/17 19:00:45 rlubke Exp $
  */
 /*
  * The contents of this file are subject to the terms
@@ -56,8 +56,7 @@ public class ScopedAttributeELResolver extends ELResolver {
         }
         if ( base == null && property == null) {
             String message = MessageUtils.getExceptionMessageString
-                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
-            message = message + " base " + base + " property " + property;
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "base and property"); // ?????
             throw new PropertyNotFoundException(message);
         }
 
@@ -85,8 +84,7 @@ public class ScopedAttributeELResolver extends ELResolver {
         }
         if ( base == null && property == null) {
             String message = MessageUtils.getExceptionMessageString
-                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
-            message = message + " base " + base + " property " + property;
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "base and property"); // ?????
             throw new PropertyNotFoundException(message);
         }
 
@@ -104,8 +102,7 @@ public class ScopedAttributeELResolver extends ELResolver {
         }
         if ( base == null && property == null) {
             String message = MessageUtils.getExceptionMessageString
-                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
-            message = message + " base " + base + " property " + property;
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "base and property"); // ?????
             throw new PropertyNotFoundException(message);
         }
 
@@ -138,8 +135,7 @@ public class ScopedAttributeELResolver extends ELResolver {
         }
         if ( base == null && property == null) {
             String message = MessageUtils.getExceptionMessageString
-                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
-            message = message + " base " + base + " property " + property;
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "base and property"); // ?????
             throw new PropertyNotFoundException(message);
         }
         context.setPropertyResolved(true);

@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.145 2006/04/24 19:38:43 edburns Exp $
+ * $Id: UIComponent.java,v 1.146 2006/05/17 19:00:43 rlubke Exp $
  */
 
 /*
@@ -674,7 +674,7 @@ private void doFind(FacesContext context, String clientId) {
         } else {
             Iterator<UIComponent> itr = this.getFacetsAndChildren();
             
-            while (itr.hasNext() & !found) {
+            while (itr.hasNext() && !found) {
                 found = itr.next().invokeOnComponent(context, clientId,
                         callback);
             }

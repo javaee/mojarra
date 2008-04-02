@@ -1,5 +1,5 @@
 /*
- * $Id: SecretRenderer.java,v 1.63 2006/03/29 23:03:49 rlubke Exp $
+ * $Id: SecretRenderer.java,v 1.64 2006/05/17 19:00:49 rlubke Exp $
  */
 
 /*
@@ -86,9 +86,13 @@ public class SecretRenderer extends HtmlBasicInputRenderer {
 
     public void encodeBegin(FacesContext context, UIComponent component)
         throws IOException {
-        if (context == null || component == null) {
+        if (context == null) {
             throw new NullPointerException(
-                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "context"));
+        }
+        if (component == null) {
+            throw new NullPointerException(
+                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "component"));
         }
     }
 

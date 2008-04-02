@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlResponseWriter.java,v 1.27 2006/05/17 17:31:30 rlubke Exp $
+ * $Id: HtmlResponseWriter.java,v 1.28 2006/05/17 19:00:48 rlubke Exp $
  */
 
 /*
@@ -180,7 +180,7 @@ public class HtmlResponseWriter extends ResponseWriter {
         throws IOException {
         if (name == null) {
             throw new NullPointerException(MessageUtils.getExceptionMessageString(
-                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "name"));
         }
         closeStartIfNecessary();
         char firstChar = name.charAt(0);
@@ -220,7 +220,7 @@ public class HtmlResponseWriter extends ResponseWriter {
     public void endElement(String name) throws IOException {
         if (name == null) {
             throw new NullPointerException(MessageUtils.getExceptionMessageString(
-                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "name"));
         }
 
         // always turn escaping back on once an element ends
@@ -275,7 +275,7 @@ public class HtmlResponseWriter extends ResponseWriter {
         throws IOException {
         if (name == null) {
             throw new NullPointerException(MessageUtils.getExceptionMessageString(
-                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "name"));
         }
         if ( value == null ) {
             return;
@@ -334,10 +334,14 @@ public class HtmlResponseWriter extends ResponseWriter {
     public void writeURIAttribute(String name, Object value,
                                   String componentPropertyName)
         throws IOException {
-        if (name == null || value == null) {
+        if (name == null) {
             throw new NullPointerException(MessageUtils.getExceptionMessageString(
-                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "name"));
         }
+        if (value == null) {
+            throw new NullPointerException(MessageUtils.getExceptionMessageString(
+                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "value"));
+        }       
         
         if (writingCdata) {
             return;
@@ -409,7 +413,7 @@ public class HtmlResponseWriter extends ResponseWriter {
         throws IOException {
         if (text == null) {
             throw new NullPointerException(MessageUtils.getExceptionMessageString(
-                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "text"));
         }
         closeStartIfNecessary();
         if (dontEscape) {
@@ -461,7 +465,7 @@ public class HtmlResponseWriter extends ResponseWriter {
     public void writeText(char text[]) throws IOException {
         if (text == null) {
             throw new NullPointerException(MessageUtils.getExceptionMessageString(
-                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "text"));
         }
         closeStartIfNecessary();
         if (dontEscape) {
@@ -494,7 +498,7 @@ public class HtmlResponseWriter extends ResponseWriter {
         throws IOException {
         if (text == null) {
             throw new NullPointerException(MessageUtils.getExceptionMessageString(
-                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "text"));
         }
         if (off < 0 || off > text.length || len < 0 || len > text.length) {
             throw new IndexOutOfBoundsException();

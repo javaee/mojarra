@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleFactoryImpl.java,v 1.29 2006/03/29 23:03:45 rlubke Exp $
+ * $Id: LifecycleFactoryImpl.java,v 1.30 2006/05/17 19:00:46 rlubke Exp $
  */
 
 /*
@@ -49,7 +49,7 @@ import java.util.logging.Level;
  * <B>LifecycleFactoryImpl</B> is the stock implementation of Lifecycle
  * in the JSF RI. <P>
  *
- * @version $Id: LifecycleFactoryImpl.java,v 1.29 2006/03/29 23:03:45 rlubke Exp $
+ * @version $Id: LifecycleFactoryImpl.java,v 1.30 2006/05/17 19:00:46 rlubke Exp $
  * @see	javax.faces.lifecycle.LifecycleFactory
  */
 
@@ -128,9 +128,13 @@ public class LifecycleFactoryImpl extends LifecycleFactory {
         LifecycleWrapper wrapper = null;
         Lifecycle result = null;
         Object[] params = {lifecycleId};
-        if (null == lifecycleId || null == phase) {
+        if (null == phase) {
             throw new NullPointerException(
-                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "lifecycleId"));
+        }
+        if (null == phase) {
+            throw new NullPointerException(
+                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "phace"));
         }
 
         if (null ==
@@ -175,9 +179,13 @@ public class LifecycleFactoryImpl extends LifecycleFactory {
 //
 
     public void addLifecycle(String lifecycleId, Lifecycle lifecycle) {
-        if (lifecycleId == null || lifecycle == null) {
+        if (lifecycleId == null) {
             throw new NullPointerException(
-                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "lifecycleId"));
+        }
+        if (lifecycle == null) {
+            throw new NullPointerException(
+                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "lifecycle"));
         }
         if (null != lifecycleMap.get(lifecycleId)) {
             Object params[] = {lifecycleId};
@@ -203,7 +211,7 @@ public class LifecycleFactoryImpl extends LifecycleFactory {
 
         if (null == lifecycleId) {
             throw new NullPointerException(
-                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "lifecycleId"));
         }
 
         if (null == lifecycleMap.get(lifecycleId)) {

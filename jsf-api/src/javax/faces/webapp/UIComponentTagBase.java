@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTagBase.java,v 1.7 2006/03/22 20:49:58 edburns Exp $
+ * $Id: UIComponentTagBase.java,v 1.8 2006/05/17 19:00:43 rlubke Exp $
  */
 
 /*
@@ -48,7 +48,7 @@ import java.util.logging.Logger;
 
 public abstract class UIComponentTagBase extends Object implements JspTag {
     
-    protected static Logger log = Logger.getLogger("javax.faces.webapp", 
+    protected static final Logger log = Logger.getLogger("javax.faces.webapp", 
             "javax.faces.LogStrings");
 
     /**

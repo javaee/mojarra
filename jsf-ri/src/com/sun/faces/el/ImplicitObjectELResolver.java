@@ -1,5 +1,5 @@
 /*
- * $Id: ImplicitObjectELResolver.java,v 1.9 2006/03/29 23:03:44 rlubke Exp $
+ * $Id: ImplicitObjectELResolver.java,v 1.10 2006/05/17 19:00:45 rlubke Exp $
  */
 /*
  * The contents of this file are subject to the terms
@@ -65,8 +65,7 @@ public class ImplicitObjectELResolver extends ELResolver implements ELConstants{
         }
         if (property == null) {
             String message = MessageUtils.getExceptionMessageString
-                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
-            message = message + " base " + base + " property " + property;
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "property");
             throw new PropertyNotFoundException(message);
         }
 
@@ -133,8 +132,7 @@ public class ImplicitObjectELResolver extends ELResolver implements ELConstants{
         }
         if (property == null) {
             String message = MessageUtils.getExceptionMessageString
-                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
-            message = message + " base " + base + " property " + property;
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "property");
             throw new PropertyNotFoundException(message);
         }
 
@@ -151,8 +149,7 @@ public class ImplicitObjectELResolver extends ELResolver implements ELConstants{
         }
         if (property == null) {
             String message = MessageUtils.getExceptionMessageString
-                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
-            message = message + " base " + base + " property " + property;
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "property");
             throw new PropertyNotFoundException(message);
         }
 
@@ -171,8 +168,7 @@ public class ImplicitObjectELResolver extends ELResolver implements ELConstants{
         }
         if (property == null) {
             String message = MessageUtils.getExceptionMessageString
-                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
-            message = message + " base " + base + " property " + property;
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "property");
             throw new PropertyNotFoundException(message);
         }
 

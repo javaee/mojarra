@@ -1,5 +1,5 @@
 /*
- * $Id: TextRenderer.java,v 1.74 2006/03/29 23:03:49 rlubke Exp $
+ * $Id: TextRenderer.java,v 1.75 2006/05/17 19:00:49 rlubke Exp $
  */
 
 /*
@@ -88,9 +88,13 @@ public class TextRenderer extends HtmlBasicInputRenderer {
 
     public void encodeBegin(FacesContext context, UIComponent component)
         throws IOException {
-        if (context == null || component == null) {
-            throw new NullPointerException(MessageUtils.getExceptionMessageString(
-                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        if (context == null) {
+            throw new NullPointerException(
+                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "context"));
+        }
+        if (component == null) {
+            throw new NullPointerException(
+                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "component"));
         }
     }
 

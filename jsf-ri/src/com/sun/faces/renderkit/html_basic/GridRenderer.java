@@ -1,5 +1,5 @@
 /*
- * $Id: GridRenderer.java,v 1.42 2006/03/29 23:03:47 rlubke Exp $
+ * $Id: GridRenderer.java,v 1.43 2006/05/17 19:00:47 rlubke Exp $
  */
 
 /*
@@ -95,9 +95,13 @@ public class GridRenderer extends HtmlBasicRenderer {
     public void encodeBegin(FacesContext context, UIComponent component)
         throws IOException {
 
-        if (context == null || component == null) {
-            throw new NullPointerException(MessageUtils.getExceptionMessageString(
-                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        if (context == null) {
+            throw new NullPointerException(
+                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "context"));
+        }
+        if (component == null) {
+            throw new NullPointerException(
+                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "component"));
         }
 
         if (logger.isLoggable(Level.FINER)) {
@@ -198,9 +202,13 @@ public class GridRenderer extends HtmlBasicRenderer {
     public void encodeChildren(FacesContext context, UIComponent component)
         throws IOException {
 
-        if (context == null || component == null) {
-            throw new NullPointerException(MessageUtils.getExceptionMessageString(
-                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        if (context == null) {
+            throw new NullPointerException(
+                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "context"));
+        }
+        if (component == null) {
+            throw new NullPointerException(
+                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "component"));
         }
         if (logger.isLoggable(Level.FINER)) {
             logger.log(Level.FINER,"Begin encoding children " + component.getId());
@@ -288,9 +296,13 @@ public class GridRenderer extends HtmlBasicRenderer {
     public void encodeEnd(FacesContext context, UIComponent component)
         throws IOException {
 
-        if (context == null || component == null) {
-            throw new NullPointerException(MessageUtils.getExceptionMessageString(
-                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        if (context == null) {
+            throw new NullPointerException(
+                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "context"));
+        }
+        if (component == null) {
+            throw new NullPointerException(
+                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "component"));
         }
         // suppress rendering if "rendered" property on the component is
         // false.

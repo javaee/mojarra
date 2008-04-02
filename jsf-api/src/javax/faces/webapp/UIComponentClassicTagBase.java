@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentClassicTagBase.java,v 1.19 2006/05/10 21:06:10 rlubke Exp $
+ * $Id: UIComponentClassicTagBase.java,v 1.20 2006/05/17 19:00:43 rlubke Exp $
  */
 
 /*
@@ -262,7 +262,7 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
      * Set in {@link #release}.  Never cleared.
      */
     
-    private String oldJspId = null;
+    //private String oldJspId = null;
 
     /**
      * This is simply the jspId prefixed by {@link #UNIQUE_ID_PREFIX}.
@@ -956,10 +956,15 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
 					   UIComponent component) {
 	int indexOfComponentInParent = 0;
 	UIComponent parent = component.getParent();
-	List children = parent.getChildren();
+	
+	// invert the order of this if and the assignment below.  Since this line is
+	// here, it appears an early return is acceptable/desired if parent is null,
+	// and, if it is null, we should probably check for that before we try to 
+	// access it.  2006-03-15 jdl
 	if (null == parent) {
 	    return;
 	}
+	List children = parent.getChildren();
 	indexOfComponentInParent = children.indexOf(component);
 	if (children.size() - 1 == indexOfComponentInParent) {
 	    children.add(verbatim);

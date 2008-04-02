@@ -1,5 +1,5 @@
 /*
- * $Id: CheckboxRenderer.java,v 1.79 2006/03/29 23:03:47 rlubke Exp $
+ * $Id: CheckboxRenderer.java,v 1.80 2006/05/17 19:00:47 rlubke Exp $
  *
  */
 
@@ -93,9 +93,13 @@ public class CheckboxRenderer extends HtmlBasicInputRenderer {
 
     public void decode(FacesContext context, UIComponent component) {
        
-        if (context == null || component == null) {
+        if (context == null) {
             throw new NullPointerException(MessageUtils.getExceptionMessageString(
-                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "context"));
+        }
+        if (component == null) {
+            throw new NullPointerException(MessageUtils.getExceptionMessageString(
+                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "component"));
         }
         if (logger.isLoggable(Level.FINER)) {
             logger.log(Level.FINER, 
@@ -155,9 +159,13 @@ public class CheckboxRenderer extends HtmlBasicInputRenderer {
 
     public void encodeBegin(FacesContext context, UIComponent component)
         throws IOException {
-        if (context == null || component == null) {
+        if (context == null) {
             throw new NullPointerException(
-                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "context"));
+        }
+        if (component == null) {
+            throw new NullPointerException(
+                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "component"));
         }
     }
 
