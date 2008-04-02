@@ -5,7 +5,7 @@
 
 
 /**
- * $Id: SelectOne_MenuTag.java,v 1.8 2003/07/16 00:00:13 jvisvanathan Exp $
+ * $Id: SelectOne_MenuTag.java,v 1.9 2003/08/15 19:15:19 rlubke Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -69,7 +69,7 @@ public class SelectOne_MenuTag extends FacesTag
     // General Methods
     //
 
-    public String getLocalRendererType() { 
+    public String getRendererType() { 
         return "Menu"; 
     } 
     public String getComponentType() { 

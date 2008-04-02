@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTestCaseService.java,v 1.25 2003/08/13 16:38:27 jvisvanathan Exp $
+ * $Id: FacesTestCaseService.java,v 1.26 2003/08/15 19:15:37 rlubke Exp $
  */
 
 /*
@@ -54,7 +54,7 @@ import org.apache.cactus.server.ServletContextWrapper;
  * <B>Lifetime And Scope</B> <P> Same as the JspTestCase or
  * ServletTestCase instance that uses it.
  *
- * @version $Id: FacesTestCaseService.java,v 1.25 2003/08/13 16:38:27 jvisvanathan Exp $
+ * @version $Id: FacesTestCaseService.java,v 1.26 2003/08/15 19:15:37 rlubke Exp $
  * 
  * @see	com.sun.faces.context.FacesContextFactoryImpl
  * @see	com.sun.faces.context.FacesContextImpl
@@ -168,8 +168,6 @@ public void setUp()
     } 
     TestBean testBean = new TestBean();
     facesContext.getExternalContext().getSessionMap().put("TestBean", testBean);
-    System.setProperty(RIConstants.DISABLE_RENDERERS, 
-		       RIConstants.DISABLE_RENDERERS);
 
     Iterator paramNames = getFacesContext().getExternalContext().getRequestParameterNames();
     while (paramNames.hasNext()) {
@@ -199,7 +197,6 @@ public void tearDown()
     ServletContextEvent e = 
 	new ServletContextEvent(facesTestCase.getConfig().getServletContext());
     configListener.contextDestroyed(e);
-    System.setProperty(RIConstants.DISABLE_RENDERERS, "");
     
     Util.releaseFactoriesAndDefaultRenderKit(facesTestCase.getConfig().getServletContext());
     // make sure session is not null. It will null in case release

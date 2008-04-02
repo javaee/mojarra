@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigParser.java,v 1.24 2003/08/08 23:16:59 rlubke Exp $
+ * $Id: ConfigParser.java,v 1.25 2003/08/15 19:15:02 rlubke Exp $
  */
 
 /*
@@ -482,14 +482,6 @@ public class ConfigParser {
                                "setRendererClass", 0);
     }
 
-
-    // Return the URL of the specified path, relative to our base directory
-    protected URL relativeURL(String relativePath) throws Exception {
-
-        File file = new File(System.getProperty("base.dir"), relativePath);
-        return (file.toURL());
-
-    }
 
     private boolean validateTheXml(ServletContext sc) {
         String validateXml = sc.getInitParameter(RIConstants.VALIDATE_XML);

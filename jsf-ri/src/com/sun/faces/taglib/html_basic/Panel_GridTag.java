@@ -1,5 +1,5 @@
 /*
- * $Id: Panel_GridTag.java,v 1.9 2003/07/16 00:00:12 jvisvanathan Exp $
+ * $Id: Panel_GridTag.java,v 1.10 2003/08/15 19:15:15 rlubke Exp $
  */
 
 /*
@@ -169,7 +169,7 @@ public class Panel_GridTag extends FacesTag {
      * This is implemented by faces subclasses to allow globally turing off
      * the render kit.
      */
-    public String getLocalRendererType() { 
+    public String getRendererType() { 
         return ("Grid");
     }
     public String getComponentType() { 

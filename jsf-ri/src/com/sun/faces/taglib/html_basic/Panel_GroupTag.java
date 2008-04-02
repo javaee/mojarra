@@ -1,5 +1,5 @@
 /*
- * $Id: Panel_GroupTag.java,v 1.7 2003/07/16 00:00:12 jvisvanathan Exp $
+ * $Id: Panel_GroupTag.java,v 1.8 2003/08/15 19:15:16 rlubke Exp $
  */
 
 /*
@@ -52,7 +52,7 @@ public class Panel_GroupTag extends FacesTag {
     // Accessors
     //
 
-    public String getLocalRendererType() { 
+    public String getRendererType() { 
         return ("Group"); 
     }
 

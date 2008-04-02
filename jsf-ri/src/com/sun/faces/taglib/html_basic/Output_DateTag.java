@@ -1,5 +1,5 @@
 /*
- * $Id: Output_DateTag.java,v 1.11 2003/08/13 02:08:07 eburns Exp $
+ * $Id: Output_DateTag.java,v 1.12 2003/08/15 19:15:12 rlubke Exp $
  */
 
 /*
@@ -57,7 +57,7 @@ public class Output_DateTag extends com.sun.faces.taglib.FacesTag
     //
     // General Methods
     //
-    public String getLocalRendererType() { 
+    public String getRendererType() { 
         return "Date"; 
     }
     public String getComponentType() { 

@@ -1,5 +1,5 @@
 /*
- * $Id: Output_TextTag.java,v 1.46 2003/08/13 02:08:08 eburns Exp $
+ * $Id: Output_TextTag.java,v 1.47 2003/08/15 19:15:14 rlubke Exp $
  */
 
 /*
@@ -63,7 +63,7 @@ public class Output_TextTag extends FacesTag
     // General Methods
     //
 
-    public String getLocalRendererType() { 
+    public String getRendererType() { 
         return "Text"; 
     }
     public String getComponentType() { 

@@ -1,5 +1,5 @@
 /*
- * $Id: Output_LabelTag.java,v 1.7 2003/07/16 00:00:11 jvisvanathan Exp $
+ * $Id: Output_LabelTag.java,v 1.8 2003/08/15 19:15:13 rlubke Exp $
  */
 
 /*
@@ -71,7 +71,7 @@ public class Output_LabelTag extends FacesTag
     // General Methods
     //
 
-    public String getLocalRendererType() { return "Label"; }
+    public String getRendererType() { return "Label"; }
     public String getComponentType() { return "Output"; }
 
     protected void overrideProperties(UIComponent component) {

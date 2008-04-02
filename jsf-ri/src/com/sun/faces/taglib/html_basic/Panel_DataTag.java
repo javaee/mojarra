@@ -1,5 +1,5 @@
 /*
- * $Id: Panel_DataTag.java,v 1.8 2003/07/16 00:00:12 jvisvanathan Exp $
+ * $Id: Panel_DataTag.java,v 1.9 2003/08/15 19:15:15 rlubke Exp $
  */
 
 /*
@@ -75,7 +75,7 @@ public class Panel_DataTag extends FacesTag {
         }
     }
 
-    public String getLocalRendererType() { 
+    public String getRendererType() { 
         return ("Data"); 
     }    
 

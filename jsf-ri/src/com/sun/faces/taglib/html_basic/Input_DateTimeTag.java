@@ -1,5 +1,5 @@
 /*
- * $Id: Input_DateTimeTag.java,v 1.5 2003/07/16 00:00:10 jvisvanathan Exp $
+ * $Id: Input_DateTimeTag.java,v 1.6 2003/08/15 19:15:09 rlubke Exp $
  */
 
 /*
@@ -54,7 +54,7 @@ public class Input_DateTimeTag extends InputTag
     // General Methods
     //
 
-    public String getLocalRendererType() { 
+    public String getRendererType() { 
         return "DateTime"; 
     }
 

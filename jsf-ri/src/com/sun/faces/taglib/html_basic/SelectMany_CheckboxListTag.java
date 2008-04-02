@@ -5,7 +5,7 @@
 
 
 /**
- * $Id: SelectMany_CheckboxListTag.java,v 1.6 2003/07/16 00:00:13 jvisvanathan Exp $
+ * $Id: SelectMany_CheckboxListTag.java,v 1.7 2003/08/15 19:15:18 rlubke Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -64,7 +64,7 @@ public class SelectMany_CheckboxListTag extends FacesTag
     // General Methods
     //
 
-    public String getLocalRendererType() { 
+    public String getRendererType() { 
         return "SelectManyCheckbox"; 
     } 
     public String getComponentType() {

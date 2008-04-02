@@ -1,5 +1,5 @@
 /*
- * $Id: SelectItemsTag.java,v 1.8 2003/07/29 18:23:30 jvisvanathan Exp $
+ * $Id: SelectItemsTag.java,v 1.9 2003/08/15 19:15:17 rlubke Exp $
  */
 
 /*
@@ -55,7 +55,7 @@ public class SelectItemsTag extends FacesTag
     //
     // General Methods
     //
-    public String getLocalRendererType() { 
+    public String getRendererType() { 
         return null; 
     }
     public String getComponentType() { 

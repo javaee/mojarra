@@ -1,5 +1,5 @@
 /*
- * $Id: Output_DateTimeTag.java,v 1.11 2003/08/13 02:08:08 eburns Exp $
+ * $Id: Output_DateTimeTag.java,v 1.12 2003/08/15 19:15:12 rlubke Exp $
  */
 
 /*
@@ -23,7 +23,7 @@ import com.sun.faces.util.Util;
 
 /**
  *
- * @version $Id: Output_DateTimeTag.java,v 1.11 2003/08/13 02:08:08 eburns Exp $
+ * @version $Id: Output_DateTimeTag.java,v 1.12 2003/08/15 19:15:12 rlubke Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -69,7 +69,7 @@ public class Output_DateTimeTag extends com.sun.faces.taglib.FacesTag
     //
     // General Methods
     //
-    public String getLocalRendererType() { 
+    public String getRendererType() { 
         return "DateTime"; 
     }
     public String getComponentType() { 

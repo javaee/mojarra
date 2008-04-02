@@ -1,5 +1,5 @@
 /*
- * $Id: Command_ButtonTag.java,v 1.40 2003/07/29 16:25:23 rlubke Exp $
+ * $Id: Command_ButtonTag.java,v 1.41 2003/08/15 19:15:06 rlubke Exp $
  */
 
 /*
@@ -65,7 +65,7 @@ public class Command_ButtonTag extends FacesTag
     // General Methods
     //
 
-    public String getLocalRendererType() { return "Button"; }
+    public String getRendererType() { return "Button"; }
     public String getComponentType() { return "Command"; }
 
     protected void overrideProperties(UIComponent component) {

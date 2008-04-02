@@ -1,5 +1,5 @@
 /*
- * $Id: Input_NumberTag.java,v 1.7 2003/07/16 00:00:10 jvisvanathan Exp $
+ * $Id: Input_NumberTag.java,v 1.8 2003/08/15 19:15:10 rlubke Exp $
  */
 
 /*
@@ -64,7 +64,7 @@ public class Input_NumberTag extends InputTag
     // General Methods
     //
 
-    public String getLocalRendererType() { 
+    public String getRendererType() { 
         return "Number"; 
     }
 

@@ -1,5 +1,5 @@
 /*
- * $Id: Command_HyperlinkTag.java,v 1.33 2003/07/29 16:25:23 rlubke Exp $
+ * $Id: Command_HyperlinkTag.java,v 1.34 2003/08/15 19:15:07 rlubke Exp $
  */
 
 /*
@@ -74,7 +74,7 @@ public class Command_HyperlinkTag extends FacesTag
     // General Methods
     //
 
-    public String getLocalRendererType() { 
+    public String getRendererType() { 
         return "Hyperlink"; 
     }
     public String getComponentType() { 

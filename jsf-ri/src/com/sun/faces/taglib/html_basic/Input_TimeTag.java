@@ -1,5 +1,5 @@
 /*
- * $Id: Input_TimeTag.java,v 1.5 2003/07/16 00:00:10 jvisvanathan Exp $
+ * $Id: Input_TimeTag.java,v 1.6 2003/08/15 19:15:11 rlubke Exp $
  */
 
 /*
@@ -53,7 +53,7 @@ public class Input_TimeTag extends InputTag
     // General Methods
     //
 
-    public String getLocalRendererType() { 
+    public String getRendererType() { 
         return "Time"; 
     }
 

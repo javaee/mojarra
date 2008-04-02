@@ -1,5 +1,5 @@
 /*
- * $Id: TestSaveStateInPage.java,v 1.11 2003/08/13 21:06:43 rkitain Exp $
+ * $Id: TestSaveStateInPage.java,v 1.12 2003/08/15 19:15:41 rlubke Exp $
  */
 
 /*
@@ -32,7 +32,7 @@ import javax.faces.tree.TreeFactory;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestSaveStateInPage.java,v 1.11 2003/08/13 21:06:43 rkitain Exp $
+ * @version $Id: TestSaveStateInPage.java,v 1.12 2003/08/15 19:15:41 rlubke Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -103,8 +103,7 @@ public void beginSaveStateInPage(WebRequest theRequest)
 }
 
 public void testSaveStateInPage()
-{
-    System.setProperty(RIConstants.DISABLE_RENDERERS, "");
+{    
 
     boolean result = false;
     UIComponentBase root = null;

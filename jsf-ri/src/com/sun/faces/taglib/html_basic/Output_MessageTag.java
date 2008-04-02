@@ -1,5 +1,5 @@
 /*
- * $Id: Output_MessageTag.java,v 1.10 2003/08/13 02:08:08 eburns Exp $
+ * $Id: Output_MessageTag.java,v 1.11 2003/08/15 19:15:13 rlubke Exp $
  */
 
 /*
@@ -58,7 +58,7 @@ public class Output_MessageTag extends FacesTag
     // General Methods
     //
 
-    public String getLocalRendererType() { 
+    public String getRendererType() { 
         return "Message"; 
     }
     

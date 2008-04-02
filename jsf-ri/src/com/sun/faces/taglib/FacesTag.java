@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTag.java,v 1.40 2003/08/13 18:18:24 rlubke Exp $
+ * $Id: FacesTag.java,v 1.41 2003/08/15 19:15:03 rlubke Exp $
  */
 
 /*
@@ -30,7 +30,7 @@ import javax.servlet.jsp.JspException;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: FacesTag.java,v 1.40 2003/08/13 18:18:24 rlubke Exp $
+ * @version $Id: FacesTag.java,v 1.41 2003/08/15 19:15:03 rlubke Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -1185,30 +1185,11 @@ public abstract class FacesTag extends javax.faces.webapp.UIComponentTag
         }
     }
 
-/**
-
-* This is implemented by faces subclasses to allow globally turing off
-* the render kit.
-
-*/
-
-public abstract String getLocalRendererType();
 
 //
 // Methods from Superclass
 // 
 
-public final String getRendererType()
-{
-    String disableRenderers =System.getProperty(RIConstants.DISABLE_RENDERERS);
-    
-    if (null != disableRenderers &&
-	disableRenderers.equals(RIConstants.DISABLE_RENDERERS)) {
-	return null;
-    }
-    
-    return getLocalRendererType();
-}
 
 protected void overrideProperties(UIComponent component) 
 {

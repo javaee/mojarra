@@ -1,5 +1,5 @@
 /*
- * $Id: Input_SecretTag.java,v 1.9 2003/07/16 00:00:10 jvisvanathan Exp $
+ * $Id: Input_SecretTag.java,v 1.10 2003/08/15 19:15:10 rlubke Exp $
  */
 
 /*
@@ -66,7 +66,7 @@ public class Input_SecretTag extends Input_TextTag
     // General Methods
     //
 
-    public String getLocalRendererType() { 
+    public String getRendererType() { 
         return "Secret"; 
     }
 

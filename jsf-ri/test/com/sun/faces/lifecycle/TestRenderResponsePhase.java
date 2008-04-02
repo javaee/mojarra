@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderResponsePhase.java,v 1.53 2003/08/13 21:28:06 eburns Exp $
+ * $Id: TestRenderResponsePhase.java,v 1.54 2003/08/15 19:15:39 rlubke Exp $
  */
 
 /*
@@ -50,7 +50,7 @@ import javax.servlet.jsp.PageContext;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderResponsePhase.java,v 1.53 2003/08/13 21:28:06 eburns Exp $
+ * @version $Id: TestRenderResponsePhase.java,v 1.54 2003/08/15 19:15:39 rlubke Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -123,8 +123,7 @@ public void beginHtmlBasicRenderKit(WebRequest theRequest)
 }
 
 public void testHtmlBasicRenderKit()
-{
-    System.setProperty(RIConstants.DISABLE_RENDERERS, "");
+{    
     
     
     boolean result = false;

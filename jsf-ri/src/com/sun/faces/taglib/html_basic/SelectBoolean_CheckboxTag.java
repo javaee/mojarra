@@ -1,5 +1,5 @@
 /*
- * $Id: SelectBoolean_CheckboxTag.java,v 1.43 2003/07/16 00:00:12 jvisvanathan Exp $
+ * $Id: SelectBoolean_CheckboxTag.java,v 1.44 2003/08/15 19:15:17 rlubke Exp $
  */
 
 /*
@@ -59,7 +59,7 @@ public class SelectBoolean_CheckboxTag extends FacesTag
     // General Methods
     //
 
-    public String getLocalRendererType() { 
+    public String getRendererType() { 
         return "Checkbox"; 
     }
     public String getComponentType() { 

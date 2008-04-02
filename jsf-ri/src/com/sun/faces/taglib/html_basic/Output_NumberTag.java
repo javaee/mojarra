@@ -1,5 +1,5 @@
 /*
- * $Id: Output_NumberTag.java,v 1.11 2003/08/13 02:08:08 eburns Exp $
+ * $Id: Output_NumberTag.java,v 1.12 2003/08/15 19:15:14 rlubke Exp $
  */
 
 /*
@@ -66,7 +66,7 @@ public class Output_NumberTag extends FacesTag
     // General Methods
     //
 
-    public String getLocalRendererType() { 
+    public String getRendererType() { 
         return "Number"; 
     }
     public String getComponentType() { 

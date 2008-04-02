@@ -1,5 +1,5 @@
 /*
- * $Id: Input_HiddenTag.java,v 1.12 2003/08/13 02:08:07 eburns Exp $
+ * $Id: Input_HiddenTag.java,v 1.13 2003/08/15 19:15:10 rlubke Exp $
  */
 
 /*
@@ -64,7 +64,7 @@ public class Input_HiddenTag extends FacesTag
     // General Methods
     //
 
-    public String getLocalRendererType() { 
+    public String getRendererType() { 
         return "Hidden"; 
     }
     public String getComponentType() { 

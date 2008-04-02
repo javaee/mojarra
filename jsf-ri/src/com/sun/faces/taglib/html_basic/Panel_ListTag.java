@@ -1,5 +1,5 @@
 /*
- * $Id: Panel_ListTag.java,v 1.8 2003/07/16 00:00:12 jvisvanathan Exp $
+ * $Id: Panel_ListTag.java,v 1.9 2003/08/15 19:15:16 rlubke Exp $
  */
 
 /*
@@ -159,7 +159,7 @@ public class Panel_ListTag extends FacesTag {
      * This is implemented by faces subclasses to allow globally turing off
      * the render kit.
      */
-    public String getLocalRendererType() {
+    public String getRendererType() {
         return ("List"); 
     }
 

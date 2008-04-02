@@ -1,5 +1,5 @@
 /*
- * $Id: Output_ErrorsTag.java,v 1.11 2003/07/16 00:00:11 jvisvanathan Exp $
+ * $Id: Output_ErrorsTag.java,v 1.12 2003/08/15 19:15:13 rlubke Exp $
  */
 
 /*
@@ -80,7 +80,7 @@ public class Output_ErrorsTag extends FacesTag {
     // General Methods
     //
 
-    public String getLocalRendererType() {
+    public String getRendererType() {
         return "Errors"; 
     }
     public String getComponentType() {

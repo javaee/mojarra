@@ -1,5 +1,5 @@
 /*
- * $Id: Output_TimeTag.java,v 1.11 2003/08/13 02:08:08 eburns Exp $
+ * $Id: Output_TimeTag.java,v 1.12 2003/08/15 19:15:15 rlubke Exp $
  */
 
 /*
@@ -55,7 +55,7 @@ public class Output_TimeTag extends com.sun.faces.taglib.FacesTag
     //
     // General Methods
     //
-    public String getLocalRendererType() { 
+    public String getRendererType() { 
         return "Time"; 
     }
     public String getComponentType() { 

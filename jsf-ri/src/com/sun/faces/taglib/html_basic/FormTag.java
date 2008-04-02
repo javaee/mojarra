@@ -1,5 +1,5 @@
 /*
- * $Id: FormTag.java,v 1.39 2003/07/16 00:00:09 jvisvanathan Exp $
+ * $Id: FormTag.java,v 1.40 2003/08/15 19:15:08 rlubke Exp $
  */
 
 /*
@@ -70,7 +70,7 @@ public class FormTag extends FacesTag
     // General Methods
     //
 
-    public String getLocalRendererType() { 
+    public String getRendererType() { 
         return "Form"; 
     }
     public String getComponentType() { 

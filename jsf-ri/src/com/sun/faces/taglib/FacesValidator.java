@@ -1,5 +1,5 @@
 /*
- * $Id: FacesValidator.java,v 1.3 2003/03/13 23:01:30 eburns Exp $
+ * $Id: FacesValidator.java,v 1.4 2003/08/15 19:15:04 rlubke Exp $
  */
 
 /*
@@ -188,18 +188,7 @@ public abstract class FacesValidator extends TagLibraryValidator {
 
     */
 
-    protected void maybeSnagTLPrefixes(String qName, Attributes attrs) {
-
-	// for testing purposes
-	if (Assert.enabled) {
-	    String thisName;
-	    // Only need one TLV instance
-	    if (null == System.getProperty(thisName = 
-					   this.getClass().getName())) {
-		// Save this so the test can access it.
-		System.getProperties().put(thisName, this);
-	    }
-	}
+    protected void maybeSnagTLPrefixes(String qName, Attributes attrs) {	
 		
 	if (!qName.equals("jsp:root")) {
 	    return;
