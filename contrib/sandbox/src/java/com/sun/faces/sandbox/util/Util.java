@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.5 2007/01/17 18:54:44 jdlee Exp $
+ * $Id: Util.java,v 1.6 2007/01/22 21:48:17 jdlee Exp $
  */
 
 /*
@@ -52,7 +52,7 @@ import javax.servlet.http.HttpServletRequest;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.5 2007/01/17 18:54:44 jdlee Exp $
+ * @version $Id: Util.java,v 1.6 2007/01/22 21:48:17 jdlee Exp $
  */
 
 public class Util {      
@@ -396,6 +396,7 @@ public class Util {
     public static void linkJavascript(ResponseWriter writer, String path) throws IOException {
         // TODO:  Class.forName("some.shale.class"); useShaleStuff(); catch (ClassNotFound) {useOurStuff()}; 
         writer.startElement("script", null);
+        writer.writeAttribute("type", "text/javascript", "type");
         writer.writeAttribute("src", generateStaticUri(path), "src");
         writer.endElement("script");
     }

@@ -25,11 +25,11 @@
  Copyright 2005 Sun Microsystems Inc. All Rights Reserved
 -->
 
-<!DOCTYPE faces-config PUBLIC
-  "-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.1//EN"
-  "http://java.sun.com/dtd/web-facesconfig_1_1.dtd" [
-]>
-<faces-config>
+<faces-config xmlns="http://java.sun.com/xml/ns/javaee" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns:xi="http://www.w3.org/2001/XInclude" 
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_1_2.xsd" 
+    version="1.2">
     <lifecycle>
         <phase-listener>com.sun.faces.sandbox.util.MultiFileUploadPhaseListener</phase-listener>
         <phase-listener>com.sun.faces.sandbox.util.DownloadPhaseListener</phase-listener>
@@ -78,6 +78,91 @@
     <component>                                                                                
         <component-type>com.sun.faces.sandbox.YuiCalendar</component-type>
         <component-class>com.sun.faces.sandbox.component.YuiCalendar</component-class>
+        <property>
+            <description>
+              	 Determines whether to hide extra weeks that are completely outside the current month.
+            </description>
+            <display-name>Hide Blank Weeks</display-name>
+            <icon />
+            <property-name>hideBlankWeeks</property-name>
+            <property-class>boolean</property-class>
+            <property-extension>
+                <value-expression-enabled>true</value-expression-enabled>
+            </property-extension>
+        </property>
+        <property>
+            <description>
+                 Determines whether the Calendar should allow for the selection of multiple dates.
+            </description>
+            <display-name>Multi-Select</display-name>
+            <icon />
+            <property-name>multiSelect</property-name>
+            <property-class>boolean</property-class>
+            <property-extension>
+                <value-expression-enabled>true</value-expression-enabled>
+            </property-extension>
+        </property>
+        <property>
+            <description>
+                 Allows the user to wire in a custom on change event handler.
+            </description>
+            <display-name>On Change Event Handler</display-name>
+            <icon />
+            <property-name>onChange</property-name>
+            <property-class>String</property-class>
+            <property-extension>
+                <value-expression-enabled>true</value-expression-enabled>
+            </property-extension>
+        </property>
+        <property>
+            <description>
+                 Determines whether to display the weekday headers.
+            </description>
+            <display-name>Show Weekdays</display-name>
+            <icon />
+            <property-name>showWeekdays</property-name>
+            <property-class>boolean</property-class>
+            <property-extension>
+                <value-expression-enabled>true</value-expression-enabled>
+            </property-extension>
+        </property>
+        <property>
+            <description>
+                  Determines whether to display row footers.
+            </description>
+            <display-name>Show Week Footer</display-name>
+            <icon />
+            <property-name>showWeekFooter</property-name>
+            <property-class>boolean</property-class>
+            <property-extension>
+                <value-expression-enabled>true</value-expression-enabled>
+            </property-extension>
+        </property>
+        <property>
+            <description>
+                  Determines whether to display row headers.
+            </description>
+            <display-name>Show Week Header</display-name>
+            <icon />
+            <property-name>showWeekHeader</property-name>
+            <property-class>boolean</property-class>
+            <property-extension>
+                <value-expression-enabled>true</value-expression-enabled>
+            </property-extension>
+        </property>
+        <property>
+            <description>
+                  0-6, representing the day that a week begins on.
+            </description>
+            <display-name>Start Weekday</display-name>
+            <icon />
+            <property-name>startWeekday</property-name>
+            <property-class>int</property-class>
+            <property-extension>
+                <value-expression-enabled>true</value-expression-enabled>
+            </property-extension>
+        </property>
+
         <component-extension>
             <renderer-type>com.sun.faces.sandbox.YuiCalendarRenderer</renderer-type>
         </component-extension>                                                                                

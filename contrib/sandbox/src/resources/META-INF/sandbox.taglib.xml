@@ -6,20 +6,6 @@
 <facelet-taglib>
     <namespace>http://java.sun.com/jsf/ri/sandbox</namespace>
     <tag>
-        <tag-name>dataTable</tag-name>
-        <component>
-            <component-type>com.sun.faces.sandbox.AccessibleHtmlDataTable</component-type>
-            <renderer-type>com.sun.faces.sandbox.AccessibleTableRenderer</renderer-type>
-        </component>
-    </tag>
-    <tag>
-        <tag-name>tree</tag-name>
-        <component>
-            <component-type>com.sun.faces.sandbox.YuiTree</component-type>
-            <renderer-type>com.sun.faces.sandbox.YuiTreeRenderer</renderer-type>
-        </component>
-    </tag>
-    <tag>
         <tag-name>calendar</tag-name>
         <component>
             <component-type>com.sun.faces.sandbox.YuiCalendar</component-type>
@@ -27,10 +13,24 @@
         </component>
     </tag>
     <tag>
+        <tag-name>dataTable</tag-name>
+        <component>
+            <component-type>com.sun.faces.sandbox.AccessibleHtmlDataTable</component-type>
+            <renderer-type>com.sun.faces.sandbox.AccessibleTableRenderer</renderer-type>
+        </component>
+    </tag>
+    <tag>
         <tag-name>download</tag-name>
         <component>
             <component-type>com.sun.faces.sandbox.FileDownload</component-type>
             <renderer-type>com.sun.faces.sandbox.FileDownloadRenderer</renderer-type>
+        </component>
+    </tag>
+    <tag>
+        <tag-name>menu</tag-name>
+        <component>
+            <component-type>com.sun.faces.sandbox.YuiMenu</component-type>
+            <renderer-type>com.sun.faces.sandbox.YuiMenuRenderer</renderer-type>
         </component>
     </tag>
     <tag>
@@ -46,5 +46,11 @@
             <component-type>com.sun.faces.sandbox.SelectItems</component-type>
         </component>
     </tag>
-
+    <tag>
+        <tag-name>tree</tag-name>
+        <component>
+            <component-type>com.sun.faces.sandbox.YuiTree</component-type>
+            <renderer-type>com.sun.faces.sandbox.YuiTreeRenderer</renderer-type>
+        </component>
+    </tag>
 </facelet-taglib>
