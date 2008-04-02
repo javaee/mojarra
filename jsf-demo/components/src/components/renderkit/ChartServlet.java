@@ -1,5 +1,5 @@
 /*
- * $Id: ChartServlet.java,v 1.4 2004/03/26 21:39:08 jvisvanathan Exp $
+ * $Id: ChartServlet.java,v 1.5 2004/03/27 01:12:34 jvisvanathan Exp $
  */
 
 /*
@@ -136,7 +136,7 @@ public final class ChartServlet extends HttpServlet {
 	    (!type.equals("bar")) && (!type.equals("pie"))) {
 	    type = "bar";
 	}
-        System.out.println("Type of chart " + type);
+        
 	if (type.equals("bar")) {
 	    generateBarChart(request, response);
 	} else {
@@ -177,6 +177,8 @@ public final class ChartServlet extends HttpServlet {
 
 	response.setContentType("image/jpeg");
 	
+        String id = request.getParameter("chartId");
+        
 	// get chart parameters
 	String title = request.getParameter("title");
 	if (title == null) {
@@ -212,8 +214,9 @@ public final class ChartServlet extends HttpServlet {
 	
 	// get an array of chart items containing our data..
         HttpSession session = request.getSession(true);
-	ChartItem[] chartItems = (ChartItem[])session.getAttribute("chart");
+	ChartItem[] chartItems = (ChartItem[])session.getAttribute(id);
 	if (chartItems == null) {
+            System.out.println("No data items specified...");
 	    throw new ServletException("No data items specified...");
 	}
 
@@ -389,7 +392,9 @@ public final class ChartServlet extends HttpServlet {
         JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(output);
         encoder.encode(bi);
         output.close();
-       
+        
+        // remvoe the chart data from session now that chart has been rendered.
+        session.removeAttribute(id);
     }
 
     /**
@@ -407,6 +412,7 @@ public final class ChartServlet extends HttpServlet {
         response.setContentType("image/jpeg");
 	
 	// get chart parameters
+        String id = request.getParameter("chartId");
 	String title = request.getParameter("title");
 	if (title == null) {
 	    title = "Chart";
@@ -430,8 +436,9 @@ public final class ChartServlet extends HttpServlet {
 	
 	// get an array of chart items containing our data..
         HttpSession session = request.getSession(true);
-	ChartItem[] chartItems = (ChartItem[])session.getAttribute("chart");
+	ChartItem[] chartItems = (ChartItem[])session.getAttribute(id);
 	if (chartItems == null) {
+            System.out.println("No data items specified...");
 	    throw new ServletException("No data items specified...");
 	}
         
@@ -567,6 +574,9 @@ public final class ChartServlet extends HttpServlet {
         JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(output);
         encoder.encode(bi);
         output.close();
+        
+        // remvoe the chart data from session now that chart has been rendered.
+        session.removeAttribute(id);
 
     }
     

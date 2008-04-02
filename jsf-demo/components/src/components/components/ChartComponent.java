@@ -316,7 +316,7 @@ public class ChartComponent extends UIOutput {
     }
     
     public void encodeEnd(FacesContext context) throws IOException {
-        placeChartDataInScope();
+        placeChartDataInScope(context);
         // render an image that would initiate a request to a URL pointing 
         // back into the webapp passing in whatever parameters are needed to 
         // create the dynamic image.
@@ -351,8 +351,15 @@ public class ChartComponent extends UIOutput {
         StringBuffer result = new StringBuffer(contextPath);
         result.append("/");
         result.append(CHART_SERVLET_NAME);
+        
         // append parameters to be passed to be servlet
-        result.append("?height=");
+        // ChartServlet will use clientId as the attribute name to get the chart 
+        // data from session.
+        result.append("?chartId=");
+        result.append(getClientId(context));
+        result.append("&");
+        
+        result.append("height=");
         if ( getHeight() != null ) {
             result.append(getHeight());
         }
@@ -401,7 +408,7 @@ public class ChartComponent extends UIOutput {
      * processed by the chart servlet. This servlet is responsible for 
      * writing out the chart as an image into the respone stream.
      */
-    protected void placeChartDataInScope() {
+    protected void placeChartDataInScope(FacesContext context) {
         int i = 0;
         ChartItem[] chartItems = null;
         // if there is a value attribute set on the bean, data for the chart is
@@ -427,10 +434,10 @@ public class ChartComponent extends UIOutput {
                 }
             }
         }
-
+        // store the chart data against the clientId in session. 
         Map sessionMap =
             getFacesContext().getExternalContext().getSessionMap();
-        sessionMap.put("chart", chartItems);
+        sessionMap.put(getClientId(context), chartItems);
     }
     
 }
