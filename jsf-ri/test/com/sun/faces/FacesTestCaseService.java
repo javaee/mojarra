@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTestCaseService.java,v 1.38 2004/04/12 22:04:25 eburns Exp $
+ * $Id: FacesTestCaseService.java,v 1.39 2004/05/07 13:53:19 eburns Exp $
  */
 
 /*
@@ -12,6 +12,7 @@
 package com.sun.faces;
 
 import com.sun.faces.config.ConfigureListener;
+import com.sun.faces.application.ApplicationAssociate;
 import com.sun.faces.util.Util;
 import org.apache.cactus.server.ServletContextWrapper;
 
@@ -45,7 +46,7 @@ import java.util.Iterator;
  * <B>Lifetime And Scope</B> <P> Same as the JspTestCase or
  * ServletTestCase instance that uses it.
  *
- * @version $Id: FacesTestCaseService.java,v 1.38 2004/04/12 22:04:25 eburns Exp $
+ * @version $Id: FacesTestCaseService.java,v 1.39 2004/05/07 13:53:19 eburns Exp $
  * @see	com.sun.faces.context.FacesContextFactoryImpl
  * @see	com.sun.faces.context.FacesContextImpl
  */
@@ -117,8 +118,14 @@ public class FacesTestCaseService extends Object {
         HttpServletResponse response = null;
         RIConstants.IS_UNIT_TEST_MODE = true;
 
+	// make sure the ApplicationAssociate is aware of the ServletContext
+	com.sun.faces.config.StoreServletContext storeSC = 
+	    new com.sun.faces.config.StoreServletContext();
+	storeSC.setServletContext(facesTestCase.getConfig().getServletContext());
+
         // make sure the default factories are found, even if they have been
         // cleared before.
+	FactoryFinder.releaseFactories();
         FactoryFinder.setFactory(FactoryFinder.APPLICATION_FACTORY,
                                  "com.sun.faces.application.ApplicationFactoryImpl");
         FactoryFinder.setFactory(FactoryFinder.FACES_CONTEXT_FACTORY,
@@ -128,7 +135,7 @@ public class FacesTestCaseService extends Object {
         FactoryFinder.setFactory(FactoryFinder.RENDER_KIT_FACTORY,
                                  "com.sun.faces.renderkit.RenderKitFactoryImpl");
 
-
+	ApplicationAssociate.clearInstance(facesTestCase.getConfig().getServletContext());
         Util.verifyFactoriesAndInitDefaultRenderKit(
             facesTestCase.getConfig().getServletContext());
 
@@ -205,7 +212,8 @@ public class FacesTestCaseService extends Object {
             configListener.contextInitialized(e);
         }
 
-        configListener.contextDestroyed(e);
+	storeSC.setServletContext(facesTestCase.getConfig().getServletContext());
+
     }
 
 
@@ -436,6 +444,7 @@ public class FacesTestCaseService extends Object {
         // clear out the attr that was set in the servletcontext attr set.
         facesTestCase.getConfig().getServletContext().removeAttribute(
             FacesServlet.CONFIG_FILES_ATTR);
+	ApplicationAssociate.clearInstance(facesTestCase.getConfig().getServletContext());
         // clear out the renderKit factory
         FactoryFinder.releaseFactories();
 
@@ -458,6 +467,7 @@ public class FacesTestCaseService extends Object {
         ConfigureListener configListener = new ConfigureListener();
         ServletContextEvent e =
             new ServletContextEvent(sc);
+        configListener.contextDestroyed(e);
         configListener.contextInitialized(e);
     }
 

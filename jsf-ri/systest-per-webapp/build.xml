@@ -113,14 +113,13 @@
   <taskdef  name="remove"   classname="org.apache.catalina.ant.RemoveTask">
       <classpath refid="catalina-ant.classpath" />
   </taskdef>
-  <property name="context.path" value="/basic"/>
   <property name="url"      value="http://localhost:8080/manager"/>
 
 
 <!-- ********** Tomcat Integration Targets ******************************** -->
 
 
-  <target name="install" depends="compile"
+  <target name="install.one" depends="compile"
    description="Install webapp on Tomcat">
     <install url="${url}" username="${username}" password="${password}"
             path="${context.path}"
@@ -134,23 +133,23 @@
   </target>
 
 
-  <target name="reload" depends="compile"
+  <target name="reload.one" depends="compile"
    description="Reload this webapp on Tomcat">
     <reload url="${url}" username="${username}" password="${password}"
             path="${context.path}"/>
   </target>
 
-  <target name="safe.remove"
+  <target name="safe.remove.one"
           description="Remove cactus unit test webapp, don't fail on error">
     <exec executable="ant.bat" os="Windows 2000" failonerror="false">
-      <arg line="-f build.xml -Dusername=${username} -Dpassword=${password} remove"/>
+      <arg line="-f build.xml -Dusername=${username} -Dpassword=${password} -Dcontext.path=${context.path} remove.one"/>
     </exec>
     <exec executable="ant" os="SunOS,Linux" failonerror="false">
-      <arg line="-f build.xml remove"/>
+      <arg line="-f build.xml  -Dcontext.path=${context.path} remove.one"/>
     </exec>
   </target>
 
-  <target name="remove"
+  <target name="remove.one"
    description="Remove this webapp from Tomcat">
     <remove url="${url}" username="${username}" password="${password}"
             path="${context.path}"/>
@@ -211,9 +210,13 @@
 
   </target>
 
-  <target name="install.all" depends="compile.base.sources"> 
+  <target name="install" depends="compile.base.sources"> 
 
-    <antcall target="install">
+    <antcall target="safe.remove.one">
+      <param name="context.path" value="/jsf-replace-application"/>
+    </antcall>
+    
+    <antcall target="install.one">
       <param name="webapp.build.home" 
              value="${basedir}/replace-application/build" />
       <param name="webapp.web.home" 
@@ -226,9 +229,9 @@
 
   </target>
 
-  <target name="reload.all" > 
+  <target name="reload" > 
 
-    <antcall target="reload">
+    <antcall target="reload.one">
       <param name="webapp.build.home" 
              value="${basedir}/replace-application/build" />
       <param name="webapp.web.home" 
@@ -239,6 +242,12 @@
 
     </antcall>
 
+  </target>
+
+  <target name="remove">
+    <antcall target="safe.remove.one">
+      <param name="context.path" value="/jsf-replace-application"/>
+    </antcall>
   </target>
 
 
@@ -269,14 +278,14 @@
   </target>
    
 
-  <target name="main" depends="install.all"/>
+  <target name="main" depends="install"/>
 
 
 <!-- ********** Test Execution Targets ************************************ -->
 
 
-  <target name="test" depends="compile"
-   description="Execute all tests against installed /jsf-systest application">
+  <target name="test" depends="install"
+   description="Execute all tests against installed /jsf-* applications">
 
     <ant antfile="build-tests.xml" target="test"/>
 

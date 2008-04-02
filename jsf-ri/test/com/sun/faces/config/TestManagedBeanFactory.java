@@ -1,5 +1,5 @@
 /*
- * $Id: TestManagedBeanFactory.java,v 1.20 2004/05/04 21:48:35 rkitain Exp $
+ * $Id: TestManagedBeanFactory.java,v 1.21 2004/05/07 13:53:23 eburns Exp $
  */
 
 /*
@@ -11,7 +11,6 @@ package com.sun.faces.config;
 
 import com.sun.faces.ServletFacesTestCase;
 import com.sun.faces.TestBean;
-import com.sun.faces.application.ApplicationImpl;
 import com.sun.faces.config.beans.ListEntriesBean;
 import com.sun.faces.config.beans.ManagedBeanBean;
 import com.sun.faces.config.beans.ManagedPropertyBean;
@@ -20,6 +19,9 @@ import com.sun.faces.config.beans.MapEntryBean;
 import com.sun.faces.el.ValueBindingImpl;
 
 import javax.faces.FacesException;
+import javax.faces.FactoryFinder;
+import javax.faces.application.ApplicationFactory;
+import javax.faces.application.Application;
 import javax.faces.el.ValueBinding;
 import javax.faces.el.PropertyNotFoundException;
 
@@ -329,7 +331,7 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
             "TestRefBean", testBean);
 
         ValueBindingImpl valueBinding = new
-            ValueBindingImpl(new ApplicationImpl());
+            ValueBindingImpl(getFacesContext().getApplication());
 
         valueBinding.setRef("TestRefBean.one");
         valueBinding.setValue(getFacesContext(), "one");
@@ -370,7 +372,7 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
             "TestRefBean", testBean);
 
         ValueBindingImpl valueBinding =
-            new ValueBindingImpl(new ApplicationImpl());
+            new ValueBindingImpl(getFacesContext().getApplication());
 
         valueBinding.setRef("TestRefBean.one");
         valueBinding.setValue(getFacesContext(), "one");
@@ -402,7 +404,7 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
         getFacesContext().getExternalContext().getRequestMap().put(
             "TestRefBean", testBean);
 
-        valueBinding = new ValueBindingImpl(new ApplicationImpl());
+        valueBinding = new ValueBindingImpl(getFacesContext().getApplication());
 
         valueBinding.setRef("TestRefBean.one");
         valueBinding.setValue(getFacesContext(), "one");
@@ -441,7 +443,7 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
         getFacesContext().getExternalContext().getSessionMap().put(
             "TestRefBean", testBean);
 
-        valueBinding = new ValueBindingImpl(new ApplicationImpl());
+        valueBinding = new ValueBindingImpl(getFacesContext().getApplication());
 
         valueBinding.setRef("sessionScope.TestRefBean.one");
         valueBinding.setValue(getFacesContext(), "one");
@@ -482,7 +484,7 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
             "TestRefBean", testBean);
 
         ValueBindingImpl valueBinding = 
-            new ValueBindingImpl(new ApplicationImpl());
+            new ValueBindingImpl(getFacesContext().getApplication());
 
         valueBinding.setRef("TestRefBean.one");
         valueBinding.setValue(getFacesContext(), "one");

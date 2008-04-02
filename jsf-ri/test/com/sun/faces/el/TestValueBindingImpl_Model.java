@@ -1,5 +1,5 @@
 /*
- * $Id: TestValueBindingImpl_Model.java,v 1.7 2004/02/26 20:34:25 eburns Exp $
+ * $Id: TestValueBindingImpl_Model.java,v 1.8 2004/05/07 13:53:25 eburns Exp $
  */
 
 /*
@@ -26,7 +26,7 @@ import javax.faces.el.PropertyNotFoundException;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestValueBindingImpl_Model.java,v 1.7 2004/02/26 20:34:25 eburns Exp $
+ * @version $Id: TestValueBindingImpl_Model.java,v 1.8 2004/05/07 13:53:25 eburns Exp $
  */
 
 public class TestValueBindingImpl_Model extends ServletFacesTestCase {
@@ -74,7 +74,7 @@ public class TestValueBindingImpl_Model extends ServletFacesTestCase {
 
     public void setUp() {
         super.setUp();
-        valueBinding = new ValueBindingImpl(new ApplicationImpl());
+        valueBinding = new ValueBindingImpl(getFacesContext().getApplication());
     }
 
 

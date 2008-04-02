@@ -1,5 +1,5 @@
 /*
- * $Id: TestValueBindingImpl.java,v 1.31 2004/04/27 17:25:13 eburns Exp $
+ * $Id: TestValueBindingImpl.java,v 1.32 2004/05/07 13:53:25 eburns Exp $
  */
 
 /*
@@ -106,7 +106,7 @@ public class TestValueBindingImpl extends ServletFacesTestCase {
         InnerBean newInner, oldInner = new InnerBean();
         testBean.setInner(oldInner);
         ValueBindingImpl valueBinding = new ValueBindingImpl(
-            new ApplicationImpl());
+            getFacesContext().getApplication());
         Object result = null;
         ExternalContext extContext = getFacesContext().getExternalContext();
 
@@ -218,7 +218,7 @@ public class TestValueBindingImpl extends ServletFacesTestCase {
         InnerBean newInner, oldInner = new InnerBean();
         testBean.setInner(oldInner);
         ValueBindingImpl valueBinding = new ValueBindingImpl(
-            new ApplicationImpl());
+            getFacesContext().getApplication());
         Object result = null;
         ExternalContext extContext = getFacesContext().getExternalContext();
 
@@ -360,7 +360,7 @@ public class TestValueBindingImpl extends ServletFacesTestCase {
 
     public void testReadOnly_singleCase() {
         ValueBindingImpl valueBinding = new ValueBindingImpl(
-            new ApplicationImpl());
+            getFacesContext().getApplication());
 
         // these are mutable Maps
         valueBinding.setRef("applicationScope");
@@ -388,7 +388,7 @@ public class TestValueBindingImpl extends ServletFacesTestCase {
 
     public void testReadOnly_multipleCase() {
         ValueBindingImpl valueBinding = new ValueBindingImpl(
-            new ApplicationImpl());
+            getFacesContext().getApplication());
 
         // these are mutable Maps
         valueBinding.setRef("applicationScope.value");
@@ -441,7 +441,7 @@ public class TestValueBindingImpl extends ServletFacesTestCase {
 
     public void testGetType_singleCase() {
         ValueBindingImpl valueBinding = new ValueBindingImpl(
-            new ApplicationImpl());
+            getFacesContext().getApplication());
 
         // these are mutable Maps
         valueBinding.setRef("applicationScope");
@@ -483,7 +483,7 @@ public class TestValueBindingImpl extends ServletFacesTestCase {
 
     public void testGetType_multipleCase() {
         ValueBindingImpl valueBinding = new ValueBindingImpl(
-            new ApplicationImpl());
+            getFacesContext().getApplication());
         String property = "testValueBindingImpl_property";
         getFacesContext().getExternalContext().getApplicationMap().put(
             property,
@@ -584,7 +584,7 @@ public class TestValueBindingImpl extends ServletFacesTestCase {
 
     public void testGetScopePositive() {
         ValueBindingImpl valueBinding = new ValueBindingImpl(
-            new ApplicationImpl());
+            getFacesContext().getApplication());
         TestBean testBean = new TestBean();
         getFacesContext().getExternalContext().getApplicationMap().
             put("TestApplicationBean", testBean);
@@ -669,7 +669,7 @@ public class TestValueBindingImpl extends ServletFacesTestCase {
 
     public void testGetScopeNegative() {
         ValueBindingImpl valueBinding = new ValueBindingImpl(
-            new ApplicationImpl());
+            getFacesContext().getApplication());
         String property = null;
 
         property = "[]";
@@ -695,7 +695,7 @@ public class TestValueBindingImpl extends ServletFacesTestCase {
     // one of the reserved scope names.
     public void testReservedScopeIdentifiers() {
         ValueBindingImpl valueBinding = new ValueBindingImpl(
-            new ApplicationImpl());
+            getFacesContext().getApplication());
         boolean exceptionThrown = false;
 
         try {
@@ -800,7 +800,7 @@ public class TestValueBindingImpl extends ServletFacesTestCase {
 
     public void testInvalidExpression() {
         ValueBindingImpl valueBinding = new ValueBindingImpl(
-            new ApplicationImpl());
+            getFacesContext().getApplication());
 
         boolean exceptionThrown = false;
         try {

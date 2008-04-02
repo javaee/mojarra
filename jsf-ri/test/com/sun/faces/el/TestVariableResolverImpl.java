@@ -1,5 +1,5 @@
 /*
- * $Id: TestVariableResolverImpl.java,v 1.16 2004/04/07 17:52:50 rkitain Exp $
+ * $Id: TestVariableResolverImpl.java,v 1.17 2004/05/07 13:53:26 eburns Exp $
  */
 
 /*
@@ -15,6 +15,7 @@ import com.sun.faces.ServletFacesTestCase;
 import com.sun.faces.TestBean;
 import com.sun.faces.TestBean.InnerBean;
 import com.sun.faces.application.ApplicationImpl;
+import com.sun.faces.application.ApplicationAssociate;
 import com.sun.faces.config.ManagedBeanFactory;
 import com.sun.faces.config.beans.ManagedBeanBean;
 import com.sun.faces.util.Util;
@@ -31,7 +32,7 @@ import javax.faces.el.VariableResolver;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestVariableResolverImpl.java,v 1.16 2004/04/07 17:52:50 rkitain Exp $
+ * @version $Id: TestVariableResolverImpl.java,v 1.17 2004/05/07 13:53:26 eburns Exp $
  */
 
 public class TestVariableResolverImpl extends ServletFacesTestCase {
@@ -257,7 +258,9 @@ public class TestVariableResolverImpl extends ServletFacesTestCase {
         ApplicationFactory aFactory = (ApplicationFactory) FactoryFinder.getFactory(
             FactoryFinder.APPLICATION_FACTORY);
         ApplicationImpl application = (ApplicationImpl) aFactory.getApplication();
-        application.addManagedBeanFactory(beanName, mbf);
+	ApplicationAssociate associate = ApplicationAssociate.getInstance(config.getServletContext());
+
+        associate.addManagedBeanFactory(beanName, mbf);
 
         VariableResolver variableResolver = application.getVariableResolver();
 

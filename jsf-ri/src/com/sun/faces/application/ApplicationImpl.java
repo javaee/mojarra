@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationImpl.java,v 1.48 2004/05/03 19:30:29 jvisvanathan Exp $
+ * $Id: ApplicationImpl.java,v 1.49 2004/05/07 13:53:10 eburns Exp $
  */
 
 /*
@@ -9,8 +9,6 @@
 
 package com.sun.faces.application;
 
-import com.sun.faces.RIConstants;
-import com.sun.faces.config.ManagedBeanFactory;
 import com.sun.faces.el.MethodBindingImpl;
 import com.sun.faces.el.MixedELValueBinding;
 import com.sun.faces.el.PropertyResolverImpl;
@@ -43,7 +41,6 @@ import javax.faces.validator.Validator;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -66,6 +63,8 @@ public class ApplicationImpl extends Application {
 
     // Relationship Instance Variables
 
+    private ApplicationAssociate associate = null;
+
     private ActionListener actionListener = null;
     private NavigationHandler navigationHandler = null;
     private PropertyResolver propertyResolver = null;
@@ -85,43 +84,7 @@ public class ApplicationImpl extends Application {
     private Map converterIdMap = null;
     private Map converterTypeMap = null;
     private Map validatorMap = null;
-    //
-    // This map stores "managed bean name" | "managed bean factory"
-    // mappings.
-    //
-    private Map managedBeanFactoriesMap = null;
-
-    // These maps stores "navigation rule" mappings.
-    //
-
-    /**
-     * Overall Map containing <code>from-view-id</code> key and
-     * <code>ArrayList</code> of <code>ConfigNavigationCase</code>
-     * objects for that key; The <code>from-view-id</code> strings in
-     * this map will be stored as specified in the configuration file -
-     * some of them will have a trailing asterisk "*" signifying wild
-     * card, and some may be specified as an asterisk "*".
-     */
-    private Map caseListMap = null;
-
-    /**
-     * The List that contains the <code>ConfigNavigationCase</code>
-     * objects for a <code>from-view-id</code>.
-     */
-    private List caseList = null;
-
-    /**
-     * The List that contains all view identifier strings ending in an
-     * asterisk "*".  The entries are stored without the trailing
-     * asterisk.
-     */
-    private TreeSet wildcardMatchList = null;
-
-
     private String messageBundle = null;
-
-    // Flag indicating that a response has been rendered.
-    private boolean responseRendered = false;
 
 //
 // Constructors and Initializers
@@ -132,14 +95,12 @@ public class ApplicationImpl extends Application {
      */
     public ApplicationImpl() {
         super();
+	associate = new ApplicationAssociate(this);
         valueBindingMap = new HashMap();
         componentMap = new HashMap();
         converterIdMap = new HashMap();
         converterTypeMap = new HashMap();
         validatorMap = new HashMap();
-        managedBeanFactoriesMap = new HashMap();
-        caseListMap = new HashMap();
-        wildcardMatchList = new TreeSet(new SortIt());
 
         if (log.isDebugEnabled()) {
             log.debug("Created Application instance ");
@@ -163,7 +124,7 @@ public class ApplicationImpl extends Application {
                 Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
         synchronized (this) {
-            if (responseRendered) {
+            if (associate.isResponseRendered()) {
                 // at least one response has been rendered.
                 if (log.isErrorEnabled()) {
                     log.error(
@@ -191,7 +152,7 @@ public class ApplicationImpl extends Application {
                 Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
         synchronized (this) {
-            if (responseRendered) {
+            if (associate.isResponseRendered()) {
                 // at least one response has been rendered.
                 if (log.isErrorEnabled()) {
                     log.error(
@@ -254,85 +215,6 @@ public class ApplicationImpl extends Application {
         if (log.isDebugEnabled()) {
             log.debug("set NavigationHandler Instance to " + navigationHandler);
         }
-    }
-
-
-    /**
-     * Add a navigation case to the internal case list.  If a case list
-     * does not already exist in the case list map containing this case
-     * (identified by <code>from-view-id</code>), start a new list,
-     * add the case to it, and store the list in the case list map.
-     * If a case list already exists, see if a case entry exists in the list
-     * with a matching <code>from-view-id</code><code>from-action</code>
-     * <code>from-outcome</code> combination.  If there is suach an entry,
-     * overwrite it with this new case.  Otherwise, add the case to the list.
-     *
-     * @param navigationCase the navigation case containing navigation
-     *                       mapping information from the configuration file.
-     */
-    public void addNavigationCase(ConfigNavigationCase navigationCase) {
-
-        String fromViewId = navigationCase.getFromViewId();
-        synchronized (this) {
-            caseList = (List) caseListMap.get(fromViewId);
-            if (caseList == null) {
-                caseList = new ArrayList();
-                caseList.add(navigationCase);
-                caseListMap.put(fromViewId, caseList);
-            } else {
-                String key = navigationCase.getKey();
-                boolean foundIt = false;
-                for (int i = 0; i < caseList.size(); i++) {
-                    ConfigNavigationCase navCase =
-                        (ConfigNavigationCase) caseList.get(i);
-                    // if there already is a case existing for the
-                    // fromviewid/fromaction.fromoutcome combination,
-                    // replace it ...  (last one wins).
-                    //
-                    if (key.equals(navCase.getKey())) {
-                        caseList.set(i, navigationCase);
-                        foundIt = true;
-                        break;
-                    }
-                }
-                if (!foundIt) {
-                    caseList.add(navigationCase);
-                }
-            }
-            if (fromViewId.endsWith("*")) {
-                fromViewId =
-                    fromViewId.substring(0, fromViewId.lastIndexOf("*"));
-                wildcardMatchList.add(fromViewId);
-            }
-        }
-    }
-
-
-    /**
-     * Return a <code>Map</code> of navigation mappings loaded from
-     * the configuration system.  The key for the returned <code>Map</code>
-     * is <code>from-view-id</code>, and the value is a <code>List</code>
-     * of navigation cases.
-     *
-     * @return Map the map of navigation mappings.
-     */
-    public Map getNavigationCaseListMappings() {
-        if (caseListMap == null) {
-            return Collections.EMPTY_MAP;
-        }
-        return caseListMap;
-    }
-
-
-    /**
-     * Return all navigation mappings whose <code>from-view-id</code>
-     * contained a trailing "*".
-     *
-     * @return <code>TreeSet</code> The navigation mappings sorted in
-     *         descending order.
-     */
-    public TreeSet getNavigationWildCardList() {
-        return wildcardMatchList;
     }
 
 
@@ -752,29 +634,6 @@ public class ApplicationImpl extends Application {
         return messageBundle;
     }
 
-    // 
-    // Methods leveraged by the RI only
-    //
-
-    /**
-     * <p>Adds a new mapping of managed bean name to a managed bean
-     * factory instance.</p>
-     *
-     * @param managedBeanName the name of the managed bean that will
-     *                        be created by the managed bean factory instance.
-     * @param factory         the managed bean factory instance.
-     */
-    synchronized public void addManagedBeanFactory(String managedBeanName,
-                                                   ManagedBeanFactory factory) {
-        managedBeanFactoriesMap.put(managedBeanName, factory);
-	factory.setManagedBeanFactoryMap(managedBeanFactoriesMap);
-        if (log.isTraceEnabled()) {
-            log.trace("Added managedBeanFactory " + factory + " for" +
-                      managedBeanName);
-        }
-    }
-
-
     /**
      * <p>PRECONDITIONS: the values in the Map are either Strings
      * representing fully qualified java class names, or java.lang.Class
@@ -833,67 +692,6 @@ public class ApplicationImpl extends Application {
         }
         return result;
     }
-
-
-    /**
-     * <p>The managedBeanFactories HashMap has been populated
-     * with ManagedBeanFactory object keyed by the bean name.
-     * Find the ManagedBeanFactory object and if it exists instantiate
-     * the bean and store it in the appropriate scope, if any.</p>
-     *
-     * @param context         The Faces context.
-     * @param managedBeanName The name identifying the managed bean.
-     * @return The managed bean.
-     * @throws FacesException if the managed bean
-     *                                   could not be created.
-     */
-    synchronized public Object createAndMaybeStoreManagedBeans(FacesContext context,
-                                                               String managedBeanName)
-        throws FacesException {
-        ManagedBeanFactory managedBean = (ManagedBeanFactory)
-            managedBeanFactoriesMap.get(managedBeanName);
-        if (managedBean == null) {
-            if (log.isDebugEnabled()) {
-                log.debug("Couldn't find a factory for " + managedBeanName);
-            }
-            return null;
-        }
-        
-        Object bean = null;
-        try {
-            bean = managedBean.newInstance(context);
-            if (log.isDebugEnabled()) {
-                log.debug("Created bean " + managedBeanName + " successfully ");
-            }
-        } catch (Exception ex) {
-            Object[] params = {ex.getMessage()};
-            if (log.isErrorEnabled()) {
-                log.error("Managedbean " + managedBeanName + 
-                    " could not be created " + ex.getMessage(), ex);
-            } 
-            throw new FacesException(ex);
-        }
-        //add bean to appropriate scope
-        String scope = managedBean.getScope();
-        //scope cannot be null
-        Util.doAssert(null != scope);
-        if (log.isTraceEnabled()) {
-            log.trace("Storing " + managedBeanName + " in scope " + scope);
-        }
-
-        if (scope.equalsIgnoreCase(RIConstants.APPLICATION)) {
-            context.getExternalContext().
-                getApplicationMap().put(managedBeanName, bean);
-        } else if (scope.equalsIgnoreCase(RIConstants.SESSION)) {
-            Util.getSessionMap(context).put(managedBeanName, bean);
-        } else if (scope.equalsIgnoreCase(RIConstants.REQUEST)) {
-            context.getExternalContext().
-                getRequestMap().put(managedBeanName, bean);
-        }
-        return bean;
-    }
-
-
     private void checkSyntax(String ref) throws ReferenceSyntaxException {
         try {
             ExpressionInfo exprInfo = new ExpressionInfo();
@@ -915,32 +713,6 @@ public class ApplicationImpl extends Application {
     }
 
 
-    // This is called by ViewHandlerImpl.renderView().
-    synchronized void responseRendered() {
-        responseRendered = true;
-    }
-
-
-    /**
-     * This Comparator class will help sort the <code>ConfigNavigationCase</code> objects
-     * based on their <code>fromViewId</code> properties in descending order -
-     * largest string to smallest string.
-     */
-    class SortIt implements Comparator {
-
-        public int compare(Object o1, Object o2) {
-            String fromViewId1 = (String) o1;
-            String fromViewId2 = (String) o2;
-            return -(fromViewId1.compareTo(fromViewId2));
-        }
-    }
-
-    class CaseStruct {
-
-        String viewId;
-        ConfigNavigationCase navCase;
-    }
-   
     // The testcase for this class is
     // com.sun.faces.application.TestApplicationImpl.java
 

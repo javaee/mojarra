@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigFileTestCase.java,v 1.58 2004/04/07 17:52:47 rkitain Exp $
+ * $Id: ConfigFileTestCase.java,v 1.59 2004/05/07 13:53:21 eburns Exp $
  */
 
 /*
@@ -15,6 +15,7 @@ import com.sun.faces.config.beans.FacesConfigBean;
 import org.apache.commons.digester.Digester;
 
 import com.sun.faces.application.ApplicationImpl;
+import com.sun.faces.application.ApplicationAssociate;
 import com.sun.faces.util.Util;
 import org.apache.cactus.WebRequest;
 import org.xml.sax.InputSource;
@@ -220,9 +221,10 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
             FactoryFinder.APPLICATION_FACTORY);
         ApplicationImpl application = (ApplicationImpl) aFactory.getApplication();
 
-        Object bean = application.createAndMaybeStoreManagedBeans(
-            getFacesContext(),
-            "SimpleBean");
+	ApplicationAssociate associate = ApplicationAssociate.getInstance(config.getServletContext());
+        Object bean = 
+	    associate.createAndMaybeStoreManagedBeans(getFacesContext(),
+						      "SimpleBean");
 
         // Assert the correct methods have been created in the bean
         // Also assert the value returned from the "get" method matches
@@ -569,9 +571,11 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
         ApplicationFactory aFactory = (ApplicationFactory) FactoryFinder.getFactory(
             FactoryFinder.APPLICATION_FACTORY);
         ApplicationImpl application = (ApplicationImpl) aFactory.getApplication();
+	ApplicationAssociate associate = ApplicationAssociate.getInstance(config.getServletContext());
+
 	com.sun.faces.TestBean bean = (com.sun.faces.TestBean)
-	    application.createAndMaybeStoreManagedBeans(getFacesContext(),
-							"outer");
+	    associate.createAndMaybeStoreManagedBeans(getFacesContext(),
+						      "outer");
 	assertNotNull(bean.getCustomerBean());
 	assertTrue(bean.getCustomerBean() instanceof com.sun.faces.CustomerBean);
 	

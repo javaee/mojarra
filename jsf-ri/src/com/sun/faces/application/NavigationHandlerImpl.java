@@ -1,5 +1,5 @@
 /*
- * $Id: NavigationHandlerImpl.java,v 1.30 2004/05/04 19:55:02 rlubke Exp $
+ * $Id: NavigationHandlerImpl.java,v 1.31 2004/05/07 13:53:10 eburns Exp $
  */
 
 /*
@@ -10,6 +10,7 @@
 package com.sun.faces.application;
 
 import com.sun.faces.util.Util;
+import com.sun.faces.config.ConfigureListener;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -49,10 +50,10 @@ public class NavigationHandlerImpl extends NavigationHandler {
     // Instance Variables
 
     /**
-     * Application instance that contains navigation mappings loaded from
-     * configuration file(s).
+     * Application associate that contains navigation mappings loaded
+     * from configuration file(s).
      */
-    private ApplicationImpl application = null;
+    private ApplicationAssociate associate = null;
 
 
     /**
@@ -65,9 +66,15 @@ public class NavigationHandlerImpl extends NavigationHandler {
         if (log.isDebugEnabled()) {
             log.debug("Created NavigationHandler instance ");
         }
+	// if the user is using the decorator pattern, this would cause
+	// our ApplicationAssociate to be created, if it isn't already
+	// created.
         ApplicationFactory aFactory = (ApplicationFactory) FactoryFinder.getFactory(
             FactoryFinder.APPLICATION_FACTORY);
-        application = (ApplicationImpl) aFactory.getApplication();
+        aFactory.getApplication();
+	associate = 
+	    ApplicationAssociate.getInstance(ConfigureListener.getServletContextDuringInitialize());
+
     }
 
 
@@ -183,7 +190,14 @@ public class NavigationHandlerImpl extends NavigationHandler {
                                                    String outcome) {
         String returnViewId = null;
 
-        Map caseListMap = application.getNavigationCaseListMappings();
+	// if the user has elected to replace the Application instance
+	// entirely
+	if (null == associate) {
+	    return null;
+	}
+	    
+
+        Map caseListMap = associate.getNavigationCaseListMappings();
         Util.doAssert(null != caseListMap);
 
         List caseList = (List) caseListMap.get(viewId);
@@ -220,9 +234,15 @@ public class NavigationHandlerImpl extends NavigationHandler {
                                                       String outcome) {
         CaseStruct result = null;
 
-        Map caseListMap = application.getNavigationCaseListMappings();
+	// if the user has elected to replace the Application instance
+	// entirely
+	if (null == associate) {
+	    return null;
+	}
+
+        Map caseListMap = associate.getNavigationCaseListMappings();
         Util.doAssert(null != caseListMap);
-        TreeSet wildcardMatchList = application.getNavigationWildCardList();
+        TreeSet wildcardMatchList = associate.getNavigationWildCardList();
         Util.doAssert(null != wildcardMatchList);
 
         Iterator iter = wildcardMatchList.iterator();
@@ -278,7 +298,13 @@ public class NavigationHandlerImpl extends NavigationHandler {
                                                      String outcome) {
         String returnViewId = null;
 
-        Map caseListMap = application.getNavigationCaseListMappings();
+	// if the user has elected to replace the Application instance
+	// entirely
+	if (null == associate) {
+	    return null;
+	}
+
+        Map caseListMap = associate.getNavigationCaseListMappings();
         Util.doAssert(null != caseListMap);
 
         List caseList = (List) caseListMap.get("*");

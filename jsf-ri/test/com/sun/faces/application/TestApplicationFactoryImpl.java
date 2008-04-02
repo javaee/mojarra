@@ -1,5 +1,5 @@
 /*
- * $Id: TestApplicationFactoryImpl.java,v 1.5 2004/02/26 20:34:08 eburns Exp $
+ * $Id: TestApplicationFactoryImpl.java,v 1.6 2004/05/07 13:53:20 eburns Exp $
  */
 
 /*
@@ -20,7 +20,7 @@ import javax.faces.application.Application;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestApplicationFactoryImpl.java,v 1.5 2004/02/26 20:34:08 eburns Exp $
+ * @version $Id: TestApplicationFactoryImpl.java,v 1.6 2004/05/07 13:53:20 eburns Exp $
  */
 
 public class TestApplicationFactoryImpl extends JspFacesTestCase {
@@ -64,6 +64,11 @@ public class TestApplicationFactoryImpl extends JspFacesTestCase {
 
     public void testFactory() {
         applicationFactory = new ApplicationFactoryImpl();
+	com.sun.faces.config.StoreServletContext storeSC = 
+	    new com.sun.faces.config.StoreServletContext();
+	storeSC.setServletContext(config.getServletContext());
+	ApplicationAssociate.clearInstance(config.getServletContext());
+
 
         // 1. Verify "getApplication" returns the same Application instance
         //    if called multiple times.
@@ -75,6 +80,7 @@ public class TestApplicationFactoryImpl extends JspFacesTestCase {
         // 2. Verify "setApplication" adds instances.. /
         //    and "getApplication" returns the same instance
         //
+	ApplicationAssociate.clearInstance(config.getServletContext());
         Application application3 = new ApplicationImpl();
         applicationFactory.setApplication(application3);
         Application application4 = applicationFactory.getApplication();
@@ -84,6 +90,10 @@ public class TestApplicationFactoryImpl extends JspFacesTestCase {
 
     public void testSpecCompliance() {
         applicationFactory = new ApplicationFactoryImpl();
+	com.sun.faces.config.StoreServletContext storeSC = 
+	    new com.sun.faces.config.StoreServletContext();
+	storeSC.setServletContext(config.getServletContext());
+	ApplicationAssociate.clearInstance(config.getServletContext());
 
         assertTrue(null != applicationFactory.getApplication());
     }

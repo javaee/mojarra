@@ -1,5 +1,5 @@
 /* 
- * $Id: ViewHandlerImpl.java,v 1.39 2004/03/31 18:48:22 eburns Exp $ 
+ * $Id: ViewHandlerImpl.java,v 1.40 2004/05/07 13:53:11 eburns Exp $ 
  */ 
 
 
@@ -41,7 +41,7 @@ import java.util.Map;
 /**
  * <B>ViewHandlerImpl</B> is the default implementation class for ViewHandler.
  *
- * @version $Id: ViewHandlerImpl.java,v 1.39 2004/03/31 18:48:22 eburns Exp $
+ * @version $Id: ViewHandlerImpl.java,v 1.40 2004/05/07 13:53:11 eburns Exp $
  * @see javax.faces.application.ViewHandler
  */
 public class ViewHandlerImpl extends ViewHandler {
@@ -97,9 +97,11 @@ public class ViewHandlerImpl extends ViewHandler {
             throw new NullPointerException(Util.getExceptionMessageString(
                 Util.NULL_CONTEXT_ERROR_MESSAGE_ID));
         }
-        Application application = context.getApplication();
-        if (application instanceof ApplicationImpl) {
-            ((ApplicationImpl) application).responseRendered();
+	
+	ApplicationAssociate associate = ApplicationAssociate.getInstance(context.getExternalContext().getContext());
+	
+        if (null != associate) {
+            associate.responseRendered();
         }
         String requestURI = viewToRender.getViewId();
         if (log.isDebugEnabled()) {

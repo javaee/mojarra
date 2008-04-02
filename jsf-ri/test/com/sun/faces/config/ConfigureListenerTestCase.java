@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListenerTestCase.java,v 1.6 2004/02/26 20:34:15 eburns Exp $
+ * $Id: ConfigureListenerTestCase.java,v 1.7 2004/05/07 13:53:22 eburns Exp $
  */
 
 /*
@@ -201,6 +201,20 @@ public class ConfigureListenerTestCase extends TestCase {
     // Test some boolean attributes that should have been set explicitly
     public void testBoolean() throws Exception {
 
+        context.setServletContextName("testBoolean");
+        ServletContextEvent sce = new ServletContextEvent(context);
+
+        // Initialize the context
+        try {
+            listener.contextInitialized(sce);
+        } catch (FacesException e) {
+            if (e.getCause() != null) {
+                throw (Exception) e.getCause();
+            } else {
+                throw e;
+            }
+        }
+
         RenderKitFactory rkFactory = (RenderKitFactory)
             FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
         RenderKit rk =
@@ -224,6 +238,9 @@ public class ConfigureListenerTestCase extends TestCase {
                          rendersChildrenTrue[i][1] + ")", true,
                          r.getRendersChildren());
         }
+
+        // Destroy the context
+        listener.contextDestroyed(sce);
 
     }
 

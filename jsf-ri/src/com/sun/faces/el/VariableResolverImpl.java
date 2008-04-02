@@ -1,5 +1,5 @@
 /*
- * $Id: VariableResolverImpl.java,v 1.18 2004/04/27 17:25:06 eburns Exp $
+ * $Id: VariableResolverImpl.java,v 1.19 2004/05/07 13:53:14 eburns Exp $
  */
 
 /*
@@ -11,13 +11,11 @@ package com.sun.faces.el;
 
 import com.sun.faces.RIConstants;
 
-import com.sun.faces.application.ApplicationImpl;
+import com.sun.faces.application.ApplicationAssociate;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import javax.faces.FactoryFinder;
-import javax.faces.application.Application;
-import javax.faces.application.ApplicationFactory;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.el.EvaluationException;
@@ -73,13 +71,13 @@ public class VariableResolverImpl extends VariableResolver {
                 if (null == (value = ec.getSessionMap().get(name))) {
                     if (null == (value = ec.getApplicationMap().get(name))) {
 // if it's a managed bean try and create it
-                        ApplicationFactory aFactory = (ApplicationFactory) FactoryFinder.getFactory(
-                            FactoryFinder.APPLICATION_FACTORY);
-                        Application application = aFactory.getApplication();
-                        if (application instanceof ApplicationImpl) {
+			ApplicationAssociate associate = 
+			    ApplicationAssociate.getInstance(context.getExternalContext().getContext());
+			
+                        if (null != associate) {
                             value =
-                                ((ApplicationImpl) application).createAndMaybeStoreManagedBeans(
-                                    context, name);
+                            associate.createAndMaybeStoreManagedBeans(context, 
+								      name);
                         }
                     }
                 }

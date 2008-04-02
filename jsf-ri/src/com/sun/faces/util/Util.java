@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.138 2004/05/04 21:17:12 eburns Exp $
+ * $Id: Util.java,v 1.139 2004/05/07 13:53:15 eburns Exp $
  */
 
 /*
@@ -12,6 +12,7 @@
 package com.sun.faces.util;
 
 import com.sun.faces.RIConstants;
+import com.sun.faces.application.ApplicationAssociate;
 import com.sun.faces.el.impl.ExpressionEvaluator;
 import com.sun.faces.el.impl.ExpressionEvaluatorImpl;
 import com.sun.faces.renderkit.RenderKitImpl;
@@ -59,7 +60,7 @@ import java.util.StringTokenizer;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.138 2004/05/04 21:17:12 eburns Exp $
+ * @version $Id: Util.java,v 1.139 2004/05/07 13:53:15 eburns Exp $
  */
 
 public class Util extends Object {
@@ -572,6 +573,7 @@ public class Util extends Object {
                       context.getAttribute(RIConstants.HTML_BASIC_RENDER_KIT));
         context.removeAttribute(RIConstants.HTML_BASIC_RENDER_KIT);
         context.removeAttribute(RIConstants.CONFIG_ATTR);
+	ApplicationAssociate.clearInstance(context);
     }
 
 

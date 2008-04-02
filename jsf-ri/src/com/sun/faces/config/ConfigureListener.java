@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListener.java,v 1.15 2004/05/04 19:55:03 rlubke Exp $
+ * $Id: ConfigureListener.java,v 1.16 2004/05/07 13:53:13 eburns Exp $
  */
 /*
  * Copyright 2004 Sun Microsystems, Inc. All Rights Reserved.
@@ -42,7 +42,7 @@
 package com.sun.faces.config;
 
 import com.sun.faces.RIConstants;
-import com.sun.faces.application.ApplicationImpl;
+import com.sun.faces.application.ApplicationAssociate;
 import com.sun.faces.application.ConfigNavigationCase;
 import com.sun.faces.application.ViewHandlerImpl;
 import com.sun.faces.config.beans.ApplicationBean;
@@ -105,9 +105,6 @@ import java.util.Set;
  * <p>Parse all relevant JavaServer Faces configuration resources, and
  * configure the Reference Implementation runtime environment.</p>
  * <p/>
- * <p><strong>IMPLEMENTATION NOTE</strong>:  The configuration of the
- * <code>Application</code> instance presumes that the implementation class
- * is <code>ApplicationImpl</code> or a subclass thereof.</p>
  */
 public class ConfigureListener implements ServletContextListener {
 
@@ -133,12 +130,50 @@ public class ConfigureListener implements ServletContextListener {
 
     // ------------------------------------------ ServletContextListener Methods
 
+    /**
+     * <p>This ivar is used to convey the ServletContext instance to the
+     * ApplicationAssociate ctor, which is executed when the Application
+     * is instantiated.  Note that this data bridge is only used by the
+     * Sun RI ApplicationImpl.  If the user replaces ApplicationFactory,
+     * and chooses to decorate the existing Application instance, this
+     * data bridge is used.  However, if the user replaces
+     * ApplicationFactory and entirely replaces the ApplicationInstance,
+     * this data-bridge is not used. </p>
+     *
+     */
+
+    private static ThreadLocal tlsServletContext = new ThreadLocal() {
+            protected Object initialValue() { return (null); }
+        };
+
+    static ThreadLocal getThreadLocalServletContext() {
+        if (RIConstants.IS_UNIT_TEST_MODE) {
+	    return tlsServletContext;
+	}
+	return null;
+    }
+
+    /**
+     * <p>During the execution of {@link #contextInitialized}, this
+     * method will return the ServletContext instance.</p>
+     */
+
+    public static ServletContext getServletContextDuringInitialize() {
+	return (ServletContext) tlsServletContext.get();
+    }
 
     public void contextInitialized(ServletContextEvent sce) {
         // Prepare local variables we will need
         Digester digester = null;
         FacesConfigBean fcb = new FacesConfigBean();
         ServletContext context = sce.getServletContext();
+
+	// store the servletContext instance in Thread local Storage.
+	// This enables our Application's ApplicationAssociate to locate
+	// it so it can store the ApplicationAssociate in the
+	// ServletContext.
+	tlsServletContext.set(context);
+
 	// see if we're operating in the unit test environment
 	try {
 	    if (RIConstants.IS_UNIT_TEST_MODE) {
@@ -342,7 +377,7 @@ public class ConfigureListener implements ServletContextListener {
         }
 
         context.setAttribute(RIConstants.CONFIG_ATTR, Boolean.TRUE);
-
+	tlsServletContext.set(null);
     }
 
 
@@ -356,6 +391,9 @@ public class ConfigureListener implements ServletContextListener {
 
         // Release any allocated application resources
         context.removeAttribute(RIConstants.CONFIG_ATTR);
+	FactoryFinder.releaseFactories();
+	ApplicationAssociate.clearInstance(context);
+	tlsServletContext.set(null);
 
         // Release the initialization mark on this web application
         release(context);
@@ -372,11 +410,11 @@ public class ConfigureListener implements ServletContextListener {
      * call this method prior to configuring the appropriate
      * <code>ApplicationFactory</code> class.</p>
      */
-    private ApplicationImpl application() {
+    private Application application() {
 
         ApplicationFactory afactory = (ApplicationFactory)
             FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
-        return ((ApplicationImpl) afactory.getApplication());
+        return afactory.getApplication();
 
     }
 
@@ -419,7 +457,7 @@ public class ConfigureListener implements ServletContextListener {
         if (config == null) {
             return;
         }
-        ApplicationImpl application = application();
+        Application application = application();
         Object instance;
         String value;
         String values[];
@@ -558,7 +596,7 @@ public class ConfigureListener implements ServletContextListener {
         if (config == null) {
             return;
         }
-        ApplicationImpl application = application();
+        Application application = application();
 
         for (int i = 0; i < config.length; i++) {
             if (log.isTraceEnabled()) {
@@ -604,7 +642,7 @@ public class ConfigureListener implements ServletContextListener {
      */
     private void configure(ConverterBean config[]) throws Exception {
         int i = 0, len = 0;
-        ApplicationImpl application = application();
+        Application application = application();
 
         // at a minimum, configure the primitive converters
         for (i = 0, len = primitiveClassesToConvert.length; i < len; i++) {
@@ -750,7 +788,7 @@ public class ConfigureListener implements ServletContextListener {
         if (config == null) {
             return;
         }
-        ApplicationImpl application = application();
+        Application application = application();
         String value;
         String values[];
 
@@ -793,7 +831,13 @@ public class ConfigureListener implements ServletContextListener {
         if (config == null) {
             return;
         }
-        ApplicationImpl application = application();
+        Application application = application();
+	ApplicationAssociate associate = 
+	    ApplicationAssociate.getInstance(getServletContextDuringInitialize());
+
+	if (null == associate) {
+	    return;
+	}
 
         for (int i = 0; i < config.length; i++) {
             if (log.isTraceEnabled()) {
@@ -802,11 +846,8 @@ public class ConfigureListener implements ServletContextListener {
                           config[i].getManagedBeanClass() + ")");
             }
             ManagedBeanFactory mbf = new ManagedBeanFactory(config[i]);
-            if (application instanceof ApplicationImpl) {
-                ((ApplicationImpl) application).addManagedBeanFactory(
-                    config[i].getManagedBeanName(),
-                    mbf);
-            }
+	    associate.addManagedBeanFactory(config[i].getManagedBeanName(),
+					    mbf);
         }
     }
 
@@ -822,7 +863,13 @@ public class ConfigureListener implements ServletContextListener {
         if (config == null) {
             return;
         }
-        ApplicationImpl application = application();
+        Application application = application();
+	ApplicationAssociate associate = 
+	    ApplicationAssociate.getInstance(getServletContextDuringInitialize());
+	
+	if (null == associate) {
+	    return;
+	}
 
         for (int i = 0; i < config.length; i++) {
             if (log.isTraceEnabled()) {
@@ -865,7 +912,7 @@ public class ConfigureListener implements ServletContextListener {
                 } else {
                     cnc.setRedirect(null);
                 }
-                application.addNavigationCase(cnc);
+                associate.addNavigationCase(cnc);
             }
         }
 
@@ -961,7 +1008,7 @@ public class ConfigureListener implements ServletContextListener {
         if (config == null) {
             return;
         }
-        ApplicationImpl application = application();
+        Application application = application();
 
         for (int i = 0; i < config.length; i++) {
             if (log.isTraceEnabled()) {
