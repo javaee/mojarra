@@ -1,5 +1,5 @@
 /*
- * $Id: Input_TextTag.java,v 1.1 2002/08/13 22:55:28 rkitain Exp $
+ * $Id: Input_TextTag.java,v 1.2 2002/09/23 20:34:17 rkitain Exp $
  */
 
 /*
@@ -16,7 +16,7 @@ import javax.faces.component.UIInput;
 
 /**
  *
- * @version $Id: Input_TextTag.java,v 1.1 2002/08/13 22:55:28 rkitain Exp $
+ * @version $Id: Input_TextTag.java,v 1.2 2002/09/23 20:34:17 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -36,6 +36,7 @@ public class Input_TextTag extends InputTag
 //
 // Instance Variables
 //
+    private String converter = null;
 
 // Attribute Instance Variables
 
@@ -44,11 +45,16 @@ public class Input_TextTag extends InputTag
 //
 // Constructors and Initializers    
 //
+    public Input_TextTag() {
+        super();
+    }
 
-public Input_TextTag()
-{
-    super();
-}
+//
+// Accessors
+//
+    public void setConverter(String converter) {
+        this.converter = converter;
+    }
 
 //
 // Class methods
@@ -62,6 +68,14 @@ public Input_TextTag()
 
     public UIComponent createComponent() {
         return (new UIInput());
+    }
+
+    protected void overrideProperties(UIComponent component) {
+        super.overrideProperties(component);
+        if ((converter != null) &&
+            (component.getAttribute("converter") == null)) {
+            component.setAttribute("converter", converter);
+        }
     }
 
 //

@@ -1,5 +1,5 @@
 /*
- * $Id: Input_SecretTag.java,v 1.2 2002/08/16 23:27:02 rkitain Exp $
+ * $Id: Input_SecretTag.java,v 1.3 2002/09/23 20:34:17 rkitain Exp $
  */
 
 /*
@@ -16,7 +16,7 @@ import javax.faces.component.UIInput;
 
 /**
  *
- * @version $Id: Input_SecretTag.java,v 1.2 2002/08/16 23:27:02 rkitain Exp $
+ * @version $Id: Input_SecretTag.java,v 1.3 2002/09/23 20:34:17 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -36,6 +36,7 @@ public class Input_SecretTag extends Input_TextTag
 //
 // Instance Variables
 //
+    private String converter = null;
 
 // Attribute Instance Variables
 
@@ -65,6 +66,9 @@ public Input_SecretTag()
 // 
 // Accessors
 //
+    public void setConverter(String converter) {
+        this.converter = converter;
+    }
 
 //
 // General Methods
@@ -82,6 +86,10 @@ public Input_SecretTag()
 
         if (null == input.getAttribute("redisplay")) {
             input.setAttribute("redisplay", getRedisplay());
+        }
+        if ((converter != null) &&
+            (component.getAttribute("converter") == null)) {
+            component.setAttribute("converter", converter);
         }
     }
 
