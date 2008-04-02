@@ -1,5 +1,5 @@
 /*
- * $Id: TagTestCaseBase.java,v 1.6 2004/02/26 20:32:14 eburns Exp $
+ * $Id: TagTestCaseBase.java,v 1.7 2004/04/07 17:41:01 rkitain Exp $
  */
 
 /*
@@ -120,13 +120,13 @@ public class TagTestCaseBase extends TestCase {
             new MockExternalContext(servletContext, request, response);
         lifecycle = new MockLifecycle();
         facesContext = new MockFacesContext(externalContext, lifecycle);
-	UIViewRoot root = new UIViewRoot();
-	root.setViewId("/root");
-        facesContext.setViewRoot(root);
         ApplicationFactory applicationFactory = (ApplicationFactory)
             FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
         application = (MockApplication) applicationFactory.getApplication();
         facesContext.setApplication(application);
+	UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
+	root.setViewId("/root");
+        facesContext.setViewRoot(root);
         RenderKitFactory renderKitFactory = (RenderKitFactory)
             FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
         RenderKit renderKit = new MockRenderKit();
