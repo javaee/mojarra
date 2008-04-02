@@ -21327,7 +21327,7 @@
       <component-family>javax.faces.Output</component-family>
       <renderer-type>javax.faces.Link</renderer-type>
       <renderer-class>
-       com.sun.faces.renderkit.html_basic.LinkRenderer
+       com.sun.faces.renderkit.html_basic.OutputLinkRenderer
     </renderer-class>
 
       <attribute>

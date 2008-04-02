@@ -1,5 +1,5 @@
 /*
- * $Id: OutputLinkRenderer.java,v 1.23 2005/08/26 15:27:16 rlubke Exp $
+ * $Id: OutputLinkRenderer.java,v 1.24 2005/10/14 20:33:33 rlubke Exp $
  */
 
 /*
@@ -49,10 +49,10 @@ import java.util.logging.Level;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: OutputLinkRenderer.java,v 1.23 2005/08/26 15:27:16 rlubke Exp $
+ * @version $Id: OutputLinkRenderer.java,v 1.24 2005/10/14 20:33:33 rlubke Exp $
  */
 
-public class OutputLinkRenderer extends HtmlBasicRenderer {
+public class OutputLinkRenderer extends LinkRenderer {
 
     //
     // Protected Constants
@@ -213,8 +213,9 @@ public class OutputLinkRenderer extends HtmlBasicRenderer {
        
     }
 
-    private void renderAsActive(FacesContext context, UIOutput component) 
-        throws IOException {
+    
+    protected void renderAsActive(FacesContext context, UIComponent component) 
+    throws IOException {
  
         String hrefVal = getCurrentValue(context, component);
         if (logger.isLoggable(Level.FINE)) {
@@ -245,7 +246,7 @@ public class OutputLinkRenderer extends HtmlBasicRenderer {
 
         //Write Anchor attributes
 
-        LinkRenderer.Param paramList[] = getParamList(context, component);
+        Param paramList[] = getParamList(context, component);
         int
             i = 0,
             len = paramList.length;
@@ -269,45 +270,9 @@ public class OutputLinkRenderer extends HtmlBasicRenderer {
         Util.renderPassThruAttributes(context, writer, component);
         Util.renderBooleanPassThruAttributes(writer, component);
 
-        //handle css style class
-        String styleClass = (String)
-            component.getAttributes().get("styleClass");
-        if (styleClass != null) {
-            writer.writeAttribute("class", styleClass, "styleClass");
-        }
+        writeCommonLinkAttributes(writer, component);
 
         writer.flush();
-    }
-
-    private void renderAsDisabled(FacesContext context, UIOutput component) 
-        throws IOException {
-
-        ResponseWriter writer = context.getResponseWriter();
-        assert (writer != null);
-
-        if (shouldWriteIdAttribute(component) ||
-            Util.hasPassThruAttributes(component) ||
-            (component.getAttributes().get("style") != null) ||
-            (component.getAttributes().get("styleClass") != null)) {
-            writer.startElement("span", component);
-        }
-        String writtenId = writeIdAttributeIfNecessary(context, writer, component);
-        if (null != writtenId) {
-            writer.writeAttribute("name", writtenId, "name");
-        }
-
-        Util.renderPassThruAttributes(context, writer, component);
-        String[] exclude = {"disabled"};
-        Util.renderBooleanPassThruAttributes(writer, component, exclude);
-                                                                                                                          
-        // style if present, rendered as passthru..
-        //handle css style class
-        String styleClass = (String)
-            component.getAttributes().get("styleClass");
-        if (styleClass != null) {
-            writer.writeAttribute("class", styleClass, "styleClass");
-        }
-        writer.flush();
-    }
+    }   
 
 } // end of class OutputLinkRenderer

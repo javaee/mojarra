@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_2.java,v 1.90 2005/08/22 22:11:23 ofung Exp $
+ * $Id: TestRenderers_2.java,v 1.91 2005/10/14 20:33:35 rlubke Exp $
  */
 
 /*
@@ -66,7 +66,7 @@ import java.io.StringWriter;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_2.java,v 1.90 2005/08/22 22:11:23 ofung Exp $
+ * @version $Id: TestRenderers_2.java,v 1.91 2005/10/14 20:33:35 rlubke Exp $
  */
 
 public class TestRenderers_2 extends JspFacesTestCase {
@@ -322,7 +322,7 @@ public class TestRenderers_2 extends JspFacesTestCase {
         command.setRendererType("Link");
         root.getChildren().add(command);
 
-        LinkRenderer hyperlinkRenderer = new LinkRenderer();
+        LinkRenderer hyperlinkRenderer = new CommandLinkRenderer();
 
         System.out.println("    Testing decode method...");
         hyperlinkRenderer.decode(getFacesContext(), command);

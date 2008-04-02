@@ -1,5 +1,5 @@
 /*
- * $Id: CommandLinkRenderer.java,v 1.38 2005/10/10 16:53:26 rlubke Exp $
+ * $Id: CommandLinkRenderer.java,v 1.39 2005/10/14 20:33:32 rlubke Exp $
  */
 
 /*
@@ -54,7 +54,7 @@ import java.util.logging.Level;
  * <code>UICommand<code> as a HyperLink that acts like a Button.
  */
 
-public class CommandLinkRenderer extends HtmlBasicRenderer {
+public class CommandLinkRenderer extends LinkRenderer {
 
     //
     // Protected Constants
@@ -282,8 +282,8 @@ public class CommandLinkRenderer extends HtmlBasicRenderer {
         }        
     }
 
-    private void renderAsActive(FacesContext context, UICommand command) 
-        throws IOException {
+    protected void renderAsActive(FacesContext context, UIComponent command) 
+    throws IOException {
 
         ResponseWriter writer = context.getResponseWriter();
         assert (writer != null);
@@ -307,7 +307,9 @@ public class CommandLinkRenderer extends HtmlBasicRenderer {
         writer.startElement("a", command);
         writeIdAttributeIfNecessary(context, writer, command);
         writer.writeAttribute("href", "#", "href");
-        Util.renderPassThruAttributes(context, writer, command,
+        Util.renderPassThruAttributes(context, 
+                                      writer, 
+                                      command,
                                       new String[]{"onclick", "target"});
         Util.renderBooleanPassThruAttributes(writer, command);
 
@@ -385,68 +387,13 @@ public class CommandLinkRenderer extends HtmlBasicRenderer {
 
         writer.writeAttribute("onclick", sb.toString(), "onclick");
 
-        //handle css style class
-        String styleClass = (String)
-            command.getAttributes().get("styleClass");
-        if (styleClass != null) {
-            writer.writeAttribute("class", styleClass, "styleClass");
-        }
+        writeCommonLinkAttributes(writer, command);
         
         // render the current value as link text.
         writeValue(command, writer);
         writer.flush();
 
-    }
-
-    private void renderAsDisabled(FacesContext context, UICommand command)
-        throws IOException {
-                                                                                                                        
-        ResponseWriter writer = context.getResponseWriter();
-        assert (writer != null);
-                                                                                                                        
-        if (shouldWriteIdAttribute(command) ||
-            Util.hasPassThruAttributes(command) ||
-            (command.getAttributes().get("style") != null) ||
-            (command.getAttributes().get("styleClass") != null)) {
-            writer.startElement("span", command);
-        }
-        String writtenId = writeIdAttributeIfNecessary(context, writer, command);
-        if (null != writtenId) {
-            writer.writeAttribute("name", writtenId, "name");
-        }
-                                                                                                                        
-        Util.renderPassThruAttributes(context, writer, command);
-        String[] exclude = {"disabled"};
-        Util.renderBooleanPassThruAttributes(writer, command, exclude);
-                                                                                                                        
-                                                                                                                        
-        // style if present, rendered as passthru..
-        //handle css style class
-        String styleClass = (String)
-            command.getAttributes().get("styleClass");
-        if (styleClass != null) {
-            writer.writeAttribute("class", styleClass, "styleClass");
-        }
-
-        // render the current value as span text.
-        writeValue(command, writer);
-        writer.flush();
-    }
-
-    private void writeValue(UICommand command, ResponseWriter writer) 
-    throws IOException {
-        String label = null;
-        Object value = command.getValue();
-        if (value != null) {
-            label = value.toString();
-        }
-        if (logger.isLoggable(Level.FINE)) {
-            logger.fine("Value to be rendered " + value);
-        }
-        if (label != null && label.length() != 0) {
-            writer.write(label);
-        }
-    }
+    }      
 
     private void writeScriptContent(FacesContext context, 
 				   ResponseWriter writer,

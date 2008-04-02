@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_1.java,v 1.66 2005/08/22 22:11:23 ofung Exp $
+ * $Id: TestRenderers_1.java,v 1.67 2005/10/14 20:33:34 rlubke Exp $
  */
 
 /*
@@ -63,7 +63,7 @@ import java.util.ResourceBundle;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_1.java,v 1.66 2005/08/22 22:11:23 ofung Exp $
+ * @version $Id: TestRenderers_1.java,v 1.67 2005/10/14 20:33:34 rlubke Exp $
  */
 
 public class TestRenderers_1 extends JspFacesTestCase {
@@ -208,7 +208,7 @@ public class TestRenderers_1 extends JspFacesTestCase {
         // Provide attributes for all possible lookups
         // make sure that valueRef is returned and no others.
         System.out.println("Testing Link Renderer...");
-        LinkRenderer linkRenderer = new LinkRenderer();
+        LinkRenderer linkRenderer = new OutputLinkRenderer();
         UIOutput uiOutput = new UIOutput();
         UIOutput output = new UIOutput();
         uiOutput.setId("labelLink1");
@@ -334,7 +334,7 @@ public class TestRenderers_1 extends JspFacesTestCase {
         // Provide attributes for all possible lookups
         // make sure that valueRef is returned and no others.
         System.out.println("Testing Link Renderer...");
-        LinkRenderer linkRenderer = new LinkRenderer();
+        LinkRenderer linkRenderer = new CommandLinkRenderer();
         UICommand uiCommand = new UICommand();
         UIOutput output = new UIOutput();
         UIForm form = new UIForm();
