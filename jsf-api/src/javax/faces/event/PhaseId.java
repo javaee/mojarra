@@ -1,5 +1,5 @@
 /*
- * $Id: PhaseId.java,v 1.9 2003/07/07 20:49:24 eburns Exp $
+ * $Id: PhaseId.java,v 1.10 2003/07/07 22:08:50 eburns Exp $
  */
 
 /*
@@ -107,7 +107,7 @@ public class PhaseId implements Comparable {
     // backwards compatibility on serialized instances
 
 
-    public static final String ANY_PHASE_NAME = "ANY";
+    private static final String ANY_PHASE_NAME = "ANY";
     /**
      * <p>Identifier that indicates an interest in events, on matter
      * which request processing phase is being performed.</p>
@@ -115,7 +115,7 @@ public class PhaseId implements Comparable {
     public static final PhaseId ANY_PHASE = new PhaseId(ANY_PHASE_NAME);
 
 
-    public static final String RECONSTITUTE_REQUEST_NAME = "RECONSTITUTE_REQUEST";
+    private static final String RECONSTITUTE_REQUEST_NAME = "RECONSTITUTE_REQUEST";
     /**
      * <p>Identifier that indicates an interest in events queued for
      * the <em>Reconstitute Request</em> phase of the request
@@ -124,7 +124,7 @@ public class PhaseId implements Comparable {
     public static final PhaseId RECONSTITUTE_REQUEST = new PhaseId(RECONSTITUTE_REQUEST_NAME);
 
 
-    public static final String APPLY_REQUEST_VALUES_NAME = "APPLY_REQUEST_VALUES";
+    private static final String APPLY_REQUEST_VALUES_NAME = "APPLY_REQUEST_VALUES";
     /**
      * <p>Identifier that indicates an interest in events queued for
      * the <em>Apply Request Values</em> phase of the request
@@ -133,7 +133,7 @@ public class PhaseId implements Comparable {
     public static final PhaseId APPLY_REQUEST_VALUES = new PhaseId(APPLY_REQUEST_VALUES_NAME);
 
 
-    public static final String PROCESS_VALIDATIONS_NAME = "PROCESS_VALIDATIONS";
+    private static final String PROCESS_VALIDATIONS_NAME = "PROCESS_VALIDATIONS";
     /**
      * <p>Identifier that indicates an interest in events queued for
      * the <em>Process Validations</em> phase of the request
@@ -142,7 +142,7 @@ public class PhaseId implements Comparable {
     public static final PhaseId PROCESS_VALIDATIONS = new PhaseId(PROCESS_VALIDATIONS_NAME);
 
 
-    public static final String UPDATE_MODEL_VALUES_NAME = "UPDATE_MODEL_VALUES";
+    private static final String UPDATE_MODEL_VALUES_NAME = "UPDATE_MODEL_VALUES";
     /**
      * <p>Identifier that indicates an interest in events queued for
      * the <em>Update Model Values</em> phase of the request
@@ -151,7 +151,7 @@ public class PhaseId implements Comparable {
     public static final PhaseId UPDATE_MODEL_VALUES = new PhaseId(UPDATE_MODEL_VALUES_NAME);
 
 
-    public static final String INVOKE_APPLICATION_NAME = "INVOKE_APPLICATION";
+    private static final String INVOKE_APPLICATION_NAME = "INVOKE_APPLICATION";
     /**
      * <p>Identifier that indicates an interest in events queued for
      * the <em>Invoke Application</em> phase of the request
@@ -159,7 +159,7 @@ public class PhaseId implements Comparable {
      */
     public static final PhaseId INVOKE_APPLICATION = new PhaseId(INVOKE_APPLICATION_NAME);
 
-    public static final String RENDER_RESPONSE_NAME = "RENDER_RESPONSE";
+    private static final String RENDER_RESPONSE_NAME = "RENDER_RESPONSE";
     /**
      * <p>Identifier for the <em>Render Response</em> phase of the
      * request processing lifecycle.</p>
