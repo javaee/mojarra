@@ -371,36 +371,6 @@ public class RenderKitUtils {
 
 
     /**
-     * <p>Used to determine if the specified #component has any passthrough
-     * attributes defined.</p>
-     * @param component the component
-     * @return <code>true</code> if the component has passthrough attributes, 
-     * otherwise <code>false</code>
-     */
-    public static boolean hasPassThruAttributes(UIComponent component) {
-
-        Map<String, Object> attrMap = component.getAttributes();
-
-        // didn't find the passthrough list.  Scan the 
-        // Component attribute map and store any attributes found
-        // in a list for later use
-        
-        boolean attrFound = false;
-        for (String attr : PASSTHROUGH_ATTRIBUTES) {
-            Object value = attrMap.get(attr);
-            attrFound = value != null;
-            if (attrFound) {
-                break;
-            }
-
-        }
-
-        return (attrFound);
-
-    }
-
-
-    /**
      * <p>Render any "passthru" attributes, where we simply just output the
      * raw name and value of the attribute.  This method is aware of the
      * set of HTML4 attributes that fall into this bucket.  Examples are

@@ -1,5 +1,5 @@
 /*
- * $Id: TextRenderer.java,v 1.77 2006/09/01 17:30:53 rlubke Exp $
+ * $Id: TextRenderer.java,v 1.78 2007/02/13 01:01:30 rlubke Exp $
  */
 
 /*
@@ -82,9 +82,11 @@ public class TextRenderer extends HtmlBasicInputRenderer {
               shouldWriteIdAttribute = false,
               isOutput = false;
 
-        String
-              style = (String) component.getAttributes().get("style"),
-              styleClass = (String) component.getAttributes().get("styleClass");
+        String style = (String) component.getAttributes().get("style");
+        String styleClass = (String) component.getAttributes().get("styleClass");
+        String dir = (String) component.getAttributes().get("dir");
+        String lang = (String) component.getAttributes().get("lang");
+        String title = (String) component.getAttributes().get("title");
         if (component instanceof UIInput) {
             writer.startElement("input", component);
             writeIdAttributeIfNecessary(context, writer, component);
@@ -120,9 +122,12 @@ public class TextRenderer extends HtmlBasicInputRenderer {
             writer.endElement("input");
 
         } else if (isOutput = (component instanceof UIOutput)) {
-            if (null != styleClass || null != style ||
-                RenderKitUtils.hasPassThruAttributes(component) ||
-                (shouldWriteIdAttribute = shouldWriteIdAttribute(component))) {
+            if (styleClass != null
+                 || style != null
+                 || dir != null
+                 || lang != null
+                 || title != null
+                 || (shouldWriteIdAttribute = shouldWriteIdAttribute(component))) {
                 writer.startElement("span", component);
                 writeIdAttributeIfNecessary(context, writer, component);
                 if (null != styleClass) {
@@ -134,7 +139,7 @@ public class TextRenderer extends HtmlBasicInputRenderer {
 
             }
             if (currentValue != null) {
-                Object val = null;
+                Object val;
                 boolean escape = true;
                 if (null != (val = component.getAttributes().get("escape"))) {
                     if (val instanceof Boolean) {
@@ -154,9 +159,12 @@ public class TextRenderer extends HtmlBasicInputRenderer {
                 }
             }
         }
-        if (isOutput && (null != styleClass || null != style ||
-                         RenderKitUtils.hasPassThruAttributes(component) ||
-                         shouldWriteIdAttribute)) {
+        if (isOutput && (styleClass != null
+                 || style != null
+                 || dir != null
+                 || lang != null
+                 || title != null
+                 || (shouldWriteIdAttribute))) {
             writer.endElement("span");
         }
 

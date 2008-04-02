@@ -1,5 +1,5 @@
 /*
- * $Id: TextRenderer.java,v 1.21 2006/10/31 19:34:50 rlubke Exp $
+ * $Id: TextRenderer.java,v 1.22 2007/02/13 01:01:30 rlubke Exp $
  */
 
 /*
@@ -178,9 +178,11 @@ public class TextRenderer extends Renderer {
             shouldWriteIdAttribute = false,
             isOutput = false;
 
-        String
-            style = (String) component.getAttributes().get("style"),
-            styleClass = (String) component.getAttributes().get("styleClass");
+        String style = (String) component.getAttributes().get("style");
+        String styleClass = (String) component.getAttributes().get("styleClass");
+        String dir = (String) component.getAttributes().get("dir");
+        String lang = (String) component.getAttributes().get("lang");
+        String title = (String) component.getAttributes().get("title");
         if (component instanceof UIInput) {
             writer.startElement("input", component);
             writeIdAttributeIfNecessary(context, writer, component);
@@ -203,9 +205,12 @@ public class TextRenderer extends Renderer {
             writer.endElement("input");
 
         } else if (isOutput = (component instanceof UIOutput)) {
-            if (null != styleClass || null != style ||
-                RenderKitUtils.hasPassThruAttributes(component) ||
-                (shouldWriteIdAttribute = shouldWriteIdAttribute(component))) {
+            if (styleClass != null
+                 || style != null
+                 || dir != null
+                 || lang != null
+                 || title != null
+                 || (shouldWriteIdAttribute = shouldWriteIdAttribute(component))) {
                 writer.startElement("span", component);
                 writeIdAttributeIfNecessary(context, writer, component);
                 if (null != styleClass) {
@@ -238,9 +243,12 @@ public class TextRenderer extends Renderer {
                 writer.writeText(" FROM THE CUSTOM RENDERER", null);
             }
         }
-        if (isOutput && (null != styleClass || null != style ||
-            RenderKitUtils.hasPassThruAttributes(component) ||
-            shouldWriteIdAttribute)) {
+        if (isOutput && (styleClass != null
+                 || style != null
+                 || dir != null
+                 || lang != null
+                 || title != null
+                 || (shouldWriteIdAttribute))) {
             writer.endElement("span");
         }
     }
