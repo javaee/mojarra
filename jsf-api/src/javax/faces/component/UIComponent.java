@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.83 2003/06/21 01:05:40 craigmcc Exp $
+ * $Id: UIComponent.java,v 1.84 2003/06/21 04:49:17 craigmcc Exp $
  */
 
 /*
@@ -126,6 +126,23 @@ public interface UIComponent extends Serializable {
 
      */
     public void setComponentId(String componentId);
+
+
+    /**
+     * <p>Return the component reference expression for this {@link UIComponent}
+     * (if any).</p>
+     */
+    public String getComponentRef();
+
+
+    /**
+     * <p>Set the component reference expression for this {@link UIComponent}.
+     * </p>
+     *
+     * @param componentRef The new component reference expression, or
+     *  <code>null</code> for no component reference expression
+     */
+    public void setComponentRef(String componentRef);
 
 
     /**

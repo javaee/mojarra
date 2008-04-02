@@ -1,5 +1,5 @@
 /*
- * $Id: Application.java,v 1.3 2003/04/29 18:51:25 eburns Exp $
+ * $Id: Application.java,v 1.4 2003/06/21 04:49:16 craigmcc Exp $
  */
 
 /*
@@ -18,6 +18,7 @@ import javax.faces.event.ActionEvent;
 import javax.faces.event.ActionListener;
 
 import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.context.MessageResources;
 import javax.faces.validator.Validator;
@@ -221,6 +222,29 @@ public abstract class Application {
      */ 
     public abstract UIComponent getComponent(String componentType)
         throws FacesException;
+
+
+    /**
+     * <p>Call the <code>getValue()</code> method on the specified
+     * {@link ValueBinding}.  If it returns a {@link UIComponent} instance,
+     * return it as the value of this method.  If it does not, instantiate
+     * and return a new {@link UIComponent} instance of the specified
+     * component type.</p>
+     *
+     * @param componentRef {@link ValueBinding} representing a component
+     *  reference (typically specified by the <code>componentRef</code>
+     *  attribute of a custom tag)
+     * @param FacesContext {@link FacesContext} for the current request
+     * @param componentType Component type to create if the {@link ValueBinding}
+     *  does not return a component instance
+     *
+     * @exception FacesException if a {@link UIComponent} cannot be created
+     * @exception NullPointerExcepton if any parameter is <code>null</code>
+     */
+    public abstract UIComponent getComponent(ValueBinding componentRef,
+					     FacesContext context,
+					     String componentType)
+	throws FacesException;
 
 
     /**

@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTag.java,v 1.4 2003/06/21 00:44:27 craigmcc Exp $
+ * $Id: UIComponentTag.java,v 1.5 2003/06/21 04:49:20 craigmcc Exp $
  */
 
 /*
@@ -19,6 +19,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.component.NamingContainer;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
+import javax.faces.el.ValueBinding;
 import javax.faces.tree.Tree;
 import javax.faces.application.Application;
 import javax.servlet.jsp.JspException;
@@ -84,6 +85,25 @@ public abstract class UIComponentTag implements Tag {
 
 
     // ------------------------------------------------------------- Attributes
+
+
+    /**
+     * <p>The component reference (if any) used to wire up this component
+     * to a {@link UIComponent} property of a JavaBean class.</p>
+     */
+    private String componentRef = null;
+
+
+    /**
+     * <p>Set the component reference for our component.</p>
+     *
+     * @param componentRef The new component reference
+     */
+    public void setComponentRef(String componentRef) {
+
+	this.componentRef = componentRef;
+
+    }
 
 
     /**
@@ -274,7 +294,6 @@ public abstract class UIComponentTag implements Tag {
         // Locate and configure the component that corresponds to this tag
         childIndex = 0;
         component = findComponent(context);
-        overrideProperties(component);
 
         // Render the beginning of the component associated with this tag
         try {
@@ -351,6 +370,7 @@ public abstract class UIComponentTag implements Tag {
 
         this.parent = null;
 
+	this.componentRef = null;
         this.id = null;
         this.created = false;
         this.rendered = true;
@@ -411,13 +431,27 @@ public abstract class UIComponentTag implements Tag {
     /**
      * <p>Find and return the {@link UIComponent}, from the component
      * tree, that corresponds to this tag handler instance.  If there
-     * is no such {@link UIComponent}, create one by calling
-     * <code>getComponent()</code>, and add it is a child or facet
-     * of the {@link UIComponent} associated with our nearest enclosing
-     * {@link UIComponentTag}.</p>
-     *
+     * is no such {@link UIComponent}, perform the following algorithm
+     * to create one that can be returned:</p>
+     * <ul>
+     * <li>If this tag has no <code>componentRef</code> attribute value,
+     *     call <code>Application.getComponent(String)</code>,
+     *     passing the result of calling <code>getComponentType()</code> on
+     *     this tag instance.</li>
+     * <li>If this tag has a <code>componentRef</code> attribute value,
+     *     call <code>Application.getComponent(String, FacesContext,
+     *     String)</code>, passing a {@link ValueBinding} based on the
+     *     <code>componentRef</code> attribute value, the {@link FacesContext}
+     *     for the current request, and the result of calling
+     *     <code>getComponentType() on this tag instance.</li>
+     * <li>After the component instance has been created by either of the
+     *     above mechanisms, call <code>overrideProperties()</code> to copy
+     *     values from the attributes of this tag instance to the corresponding
+     *     attributes and properties of the component instance.</li>
+     * </ul>
      */
-    protected UIComponent findComponent(FacesContext context) throws JspException {
+    protected UIComponent findComponent(FacesContext context)
+	throws JspException {
 
         // Have we already found the relevant component?
         if (component != null) {
@@ -427,9 +461,8 @@ public abstract class UIComponentTag implements Tag {
         // Identify the component that is, or will be, our parent
         UIComponentTag parentTag = getParentUIComponentTag();
         UIComponent parentComponent = null;
-        boolean 
-	    thisTagIsRoot = false,
-	    parentCreated = false;
+        boolean thisTagIsRoot = false;
+	boolean parentCreated = false;
         if (parentTag != null) {
             parentComponent = parentTag.getComponent();
             parentCreated = parentTag.getCreated();
@@ -449,18 +482,24 @@ public abstract class UIComponentTag implements Tag {
 	    else {
 		// Create a new component instance
 		try {
-		    Application app =
-			FacesContext.getCurrentInstance().getApplication();
-		    component = app.getComponent(getComponentType());
+		    Application application = context.getApplication();
+		    ValueBinding binding = null;
+		    if (this.componentRef != null) {
+			binding = application.getValueBinding(componentRef);
+			component = application.getComponent
+			    (binding, context, getComponentType());
+			overrideProperties(component);
+			binding.setValue(context, component);
+		    } else {
+			component =
+			    application.getComponent(getComponentType());
+			overrideProperties(component);
+		    }
 		}
 		catch (FacesException e) {
 		    throw new JspException(e);
 		}
 	    }
-
-            if (id != null) {
-                component.setComponentId(id);
-            }
             created = true;
 
             // Add it as a facet or a child
@@ -641,13 +680,18 @@ public abstract class UIComponentTag implements Tag {
      */
     protected void overrideProperties(UIComponent component) {
 
-        // The rendererType property is always overridden
-        component.setRendererType(getRendererType());
-
-        // Override other properties as required
+	if (componentRef != null) {
+	    component.setComponentRef(componentRef);
+	}
+	if (id != null) {
+	    component.setComponentId(id);
+	}
         if (renderedSet) {
             component.setRendered(rendered);
         }
+	if (getRendererType() != null) {
+	    component.setRendererType(getRendererType());
+	}
 
     }
 

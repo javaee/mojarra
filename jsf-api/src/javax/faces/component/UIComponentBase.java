@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.55 2003/06/21 01:05:40 craigmcc Exp $
+ * $Id: UIComponentBase.java,v 1.56 2003/06/21 04:49:18 craigmcc Exp $
  */
 
 /*
@@ -255,6 +255,23 @@ public abstract class UIComponentBase implements UIComponent {
 	}
 
     }
+
+
+    /**
+     * <p>The component reference expression for this component.</p>
+     */
+    private String componentRef = null;
+
+
+    public String getComponentRef() {
+	return (this.componentRef);
+    }
+
+
+    public void setComponentRef(String componentRef) {
+	this.componentRef = componentRef;
+    }
+
 
     /**
      * <p>The converter identifier for this component.</p>
