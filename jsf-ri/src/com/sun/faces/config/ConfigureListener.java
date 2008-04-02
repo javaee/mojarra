@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListener.java,v 1.59 2006/02/07 20:40:22 rlubke Exp $
+ * $Id: ConfigureListener.java,v 1.60 2006/02/09 20:18:38 rlubke Exp $
  */
 /*
  * The contents of this file are subject to the terms
@@ -349,209 +349,221 @@ public class ConfigureListener implements ServletRequestListener,
             }
         }
     
-    }    
+    }
 
     public void contextInitialized(ServletContextEvent sce) {
-        
-        ServletContext context = sce.getServletContext();
 
-        if (LOGGER.isLoggable(Level.INFO)) {
-            LOGGER.log(Level.INFO,
-                       "jsf.config.listener.version",
-                       context.getServletContextName());
-        }
+        try {
+            ServletContext context = sce.getServletContext();
 
-        // Check to see if the FacesServlet is present in the
-        // web.xml.   If it is, perform faces configuration as normal,
-        // otherwise, simply return.
-        if (!isFeatureEnabled(context, FORCE_LOAD_CONFIG)) {
-            WebXmlProcessor processor = new WebXmlProcessor(context);
-            if (!processor.isFacesServletPresent()) {
-                if (LOGGER.isLoggable(Level.FINE)) {
-                    LOGGER.fine("No FacesServlet found in deployment descriptor -" +
-                            " bypassing configuration.");
+            if (LOGGER.isLoggable(Level.INFO)) {
+                LOGGER.log(Level.INFO,
+                           "jsf.config.listener.version",
+                           context.getServletContextName());
+            }
+
+            // Check to see if the FacesServlet is present in the
+            // web.xml.   If it is, perform faces configuration as normal,
+            // otherwise, simply return.
+            if (!isFeatureEnabled(context, FORCE_LOAD_CONFIG)) {
+                WebXmlProcessor processor = new WebXmlProcessor(context);
+                if (!processor.isFacesServletPresent()) {
+                    if (LOGGER.isLoggable(Level.FINE)) {
+                        LOGGER.fine(
+                              "No FacesServlet found in deployment descriptor -"
+                              +
+                              " bypassing configuration.");
+                    }
+                    return;
                 }
+
+                if (LOGGER.isLoggable(Level.FINE)) {
+                    LOGGER.fine("FacesServlet found in deployment descriptor -"
+                                +
+                                " processing configuration.");
+                }
+            }
+
+            // Prepare local variables we will need
+            Digester digester = null;
+            FacesConfigBean fcb = new FacesConfigBean();
+
+            // store the servletContext instance in Thread local Storage.
+            // This enables our Application's ApplicationAssociate to locate
+            // it so it can store the ApplicationAssociate in the
+            // ServletContext.
+            tlsExternalContext.set(new ServletContextAdapter(context));
+
+            // see if we're operating in the unit test environment
+            try {
+                if (Util.isUnitTestModeEnabled()) {
+                    // if so, put the fcb in the servletContext
+                    context.setAttribute(FACES_CONFIG_BEAN_KEY, fcb);
+                }
+            }
+            catch (Exception e) {
+                if (LOGGER.isLoggable(Level.FINE)) {
+                    LOGGER.fine("Can't query for test environment");
+                }
+            }
+
+            // see if we need to disable our TLValidator
+            Util.setHtmlTLVActive(
+                  isFeatureEnabled(context, ENABLE_HTML_TLV));
+
+            URL url = null;
+            if (LOGGER.isLoggable(Level.FINE)) {
+                LOGGER.fine("contextInitialized("
+                            + context.getServletContextName()
+                            + ")");
+            }
+
+            // Ensure that we initialize a particular application ony once
+            if (initialized()) {
                 return;
             }
 
-            if (LOGGER.isLoggable(Level.FINE)) {
-                LOGGER.fine("FacesServlet found in deployment descriptor -" +
-                    " processing configuration.");
-            }
-        }
+            // Step 1, configure a Digester instance we can use
+            digester = digester(isFeatureEnabled(context, VALIDATE_XML));
 
-        // Prepare local variables we will need
-        Digester digester = null;
-        FacesConfigBean fcb = new FacesConfigBean();
+            // Step 2, parse the RI configuration resource
+            url = Util.getCurrentLoader(this).getResource(JSF_RI_CONFIG);
+            parse(digester, url, fcb);
 
-
-	// store the servletContext instance in Thread local Storage.
-	// This enables our Application's ApplicationAssociate to locate
-	// it so it can store the ApplicationAssociate in the
-	// ServletContext.
-	tlsExternalContext.set(new ServletContextAdapter(context));
-
-	// see if we're operating in the unit test environment
-	try {
-	    if (Util.isUnitTestModeEnabled()) {
-		// if so, put the fcb in the servletContext
-		context.setAttribute(FACES_CONFIG_BEAN_KEY, fcb);
-	    }
-	}
-	catch (Exception e) {
-	    if (LOGGER.isLoggable(Level.FINE)) {
-                LOGGER.fine("Can't query for test environment");
-	    }
-	}
-
-	    // see if we need to disable our TLValidator
-        Util.setHtmlTLVActive(
-            isFeatureEnabled(context, ENABLE_HTML_TLV));
-
-        URL url = null;
-        if (LOGGER.isLoggable(Level.FINE)) {
-            LOGGER.fine("contextInitialized(" + context.getServletContextName()
-                      + ")");
-        }
-
-        // Ensure that we initialize a particular application ony once
-        if (initialized()) {
-            return;
-        }
-
-        // Step 1, configure a Digester instance we can use
-        digester = digester(isFeatureEnabled(context, VALIDATE_XML));
-
-        // Step 2, parse the RI configuration resource
-        url = Util.getCurrentLoader(this).getResource(JSF_RI_CONFIG);
-        parse(digester, url, fcb);
-
-        // Step 3, parse any "/META-INF/faces-config.xml" resources
-        Iterator<URL> resources;
-        SortedMap<String,URL> sortedJarMap = new TreeMap<String,URL>();
-        List<URL> unsortedResourceList = new ArrayList<URL>();
-        String jarName = null, jarUrl = null;
-        URL nextElement = null;
-        int sepIndex, resourceIndex = 0;
-        char sep = ' ';
-        try {
-            Enumeration<URL> items = Util.getCurrentLoader(this).
-                getResources(META_INF_RESOURCES);
-            while (items.hasMoreElements()) {
-                nextElement = items.nextElement();
-                jarUrl = nextElement.toString();
-                jarName = null;
-                // If this resource has a faces-config file inside of it
-                if (-1 != (resourceIndex = jarUrl.indexOf(META_INF_RESOURCES))) {
-                    // Search backwards for the previous occurrence of File.SEPARATOR
-                    sepIndex = resourceIndex - 2;
-                    while (0 < sepIndex) {
-                        sep = jarUrl.charAt(sepIndex);
-                        if ('/' == sep) {
-                            break;
+            // Step 3, parse any "/META-INF/faces-config.xml" resources
+            Iterator<URL> resources;
+            SortedMap<String, URL> sortedJarMap = new TreeMap<String, URL>();
+            List<URL> unsortedResourceList = new ArrayList<URL>();
+            String jarName = null, jarUrl = null;
+            URL nextElement = null;
+            int sepIndex, resourceIndex = 0;
+            char sep = ' ';
+            try {
+                Enumeration<URL> items = Util.getCurrentLoader(this).
+                      getResources(META_INF_RESOURCES);
+                while (items.hasMoreElements()) {
+                    nextElement = items.nextElement();
+                    jarUrl = nextElement.toString();
+                    jarName = null;
+                    // If this resource has a faces-config file inside of it
+                    if (-1 != (resourceIndex =
+                          jarUrl.indexOf(META_INF_RESOURCES))) {
+                        // Search backwards for the previous occurrence of File.SEPARATOR
+                        sepIndex = resourceIndex - 2;
+                        while (0 < sepIndex) {
+                            sep = jarUrl.charAt(sepIndex);
+                            if ('/' == sep) {
+                                break;
+                            }
+                            sepIndex--;
                         }
-                        sepIndex--;
+                        if ('/' == sep) {
+                            jarName =
+                                  jarUrl.substring(sepIndex + 1, resourceIndex);
+                        }
                     }
-                    if ('/' == sep) {
-                        jarName = jarUrl.substring(sepIndex + 1, resourceIndex);
+                    if (null != jarName) {
+                        sortedJarMap.put(jarName, nextElement);
+                    } else {
+                        unsortedResourceList.add(0, nextElement);
                     }
                 }
-                if (null != jarName) {
-                    sortedJarMap.put(jarName, nextElement);
-                } else {
-                    unsortedResourceList.add(0, nextElement);
+            } catch (IOException e) {
+                throw new FacesException(e);
+            }
+            // Load the sorted resources first:
+            Iterator<Map.Entry<String, URL>> sortedResources =
+                  sortedJarMap.entrySet().iterator();
+            while (sortedResources.hasNext()) {
+                url = sortedResources.next().getValue();
+                parse(digester, url, fcb);
+            }
+            // Then load the unsorted resources
+            resources = unsortedResourceList.iterator();
+            while (resources.hasNext()) {
+                url = resources.next();
+                parse(digester, url, fcb);
+            }
+
+            // Step 4, parse any context-relative resources specified in
+            // the web application deployment descriptor
+            String paths =
+                  context.getInitParameter(FacesServlet.CONFIG_FILES_ATTR);
+            if (paths != null) {
+                String[] tokens = paths.trim().split(",");
+                for (int i = 0; i < tokens.length; i++) {
+
+                    url = getContextURLForPath(context, tokens[i].trim());
+                    if (url != null) {
+                        parse(digester, url, fcb);
+                    }
+
                 }
             }
-        } catch (IOException e) {            
-            throw new FacesException(e);
-        }
-        // Load the sorted resources first:
-        Iterator<Map.Entry<String,URL>> sortedResources = 
-            sortedJarMap.entrySet().iterator();
-        while (sortedResources.hasNext()) {
-            url = sortedResources.next().getValue();
-            parse(digester, url, fcb);
-        }
-        // Then load the unsorted resources
-        resources = unsortedResourceList.iterator();
-        while (resources.hasNext()) {
-            url = resources.next();
-            parse(digester, url, fcb);
-        }
 
-        // Step 4, parse any context-relative resources specified in
-        // the web application deployment descriptor
-        String paths =
-            context.getInitParameter(FacesServlet.CONFIG_FILES_ATTR);
-        if (paths != null) {
-            String[] tokens = paths.trim().split(",");
-            for (int i = 0; i < tokens.length; i++) {
-
-                url = getContextURLForPath(context, tokens[i].trim());
-                if (url != null) {
-                    parse(digester, url, fcb);
-                }
-
+            // Step 5, parse "/WEB-INF/faces-config.xml" if it exists
+            url = getContextURLForPath(context, WEB_INF_RESOURCE);
+            if (url != null) {
+                parse(digester, url, fcb);
             }
-        }
 
-        // Step 5, parse "/WEB-INF/faces-config.xml" if it exists
-        url = getContextURLForPath(context, WEB_INF_RESOURCE);
-        if (url != null) {
-            parse(digester, url, fcb);
-        }
+            // Step 6, use the accumulated configuration beans to configure the RI
+            try {
+                configure(context, fcb);
+            } catch (FacesException e) {
+                e.printStackTrace();
+                throw e;
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw new FacesException(e);
+            }
 
-        // Step 6, use the accumulated configuration beans to configure the RI
-        try {
-            configure(context, fcb);
-        } catch (FacesException e) {
-            e.printStackTrace();
-            throw e;
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new FacesException(e);
-        } 
-
-     
-        // Step 7, verify that all the configured factories are available
-        // and optionall that configured objects can be created
-        verifyFactories();
-        if (isFeatureEnabled(context, VERIFY_OBJECTS)) {
-            verifyObjects(context, fcb);
+            // Step 7, verify that all the configured factories are available
+            // and optionall that configured objects can be created
+            verifyFactories();
+            if (isFeatureEnabled(context, VERIFY_OBJECTS)) {
+                verifyObjects(context, fcb);
+            }
+            // Step 8, register FacesCompositeELResolver and ELContextListener with
+            // Jsp.
+            registerELResolverAndListenerWithJsp(context);
+        } finally {
+            tlsExternalContext.set(null);
         }
-        // Step 8, register FacesCompositeELResolver and ELContextListener with
-        // Jsp.
-        registerELResolverAndListenerWithJsp(context);
-        tlsExternalContext.set(null);
     }
 
 
     public void contextDestroyed(ServletContextEvent sce) {
 
-        ServletContext context = sce.getServletContext();
-        if (LOGGER.isLoggable(Level.FINE)) {
-            LOGGER.fine("contextDestroyed(" + context.getServletContextName()
-                      + ')');
-        }
-        ApplicationAssociate associate = 
-                ApplicationAssociate.getInstance(sce.getServletContext());
-        if (null != associate) {
-            try {
-                associate.handlePreDestroy(null, Scope.APPLICATION);
+        try {
+            ServletContext context = sce.getServletContext();
+            if (LOGGER.isLoggable(Level.FINE)) {
+                LOGGER.fine("contextDestroyed("
+                            + context.getServletContextName()
+                            + ')');
             }
-            catch (Throwable e) {
-                LOGGER.info(e.getMessage());
+            ApplicationAssociate associate =
+                  ApplicationAssociate.getInstance(sce.getServletContext());
+            if (null != associate) {
+                try {
+                    associate.handlePreDestroy(null, Scope.APPLICATION);
+                }
+                catch (Throwable e) {
+                    LOGGER.info(e.getMessage());
+                }
             }
+
+            // Release any allocated application resources
+            FactoryFinder.releaseFactories();
+            tlsExternalContext.set(new ServletContextAdapter(context));
+            ApplicationAssociate
+                  .clearInstance((ExternalContext) tlsExternalContext.get());
+
+            // Release the initialization mark on this web application
+            release();
+        } finally {
+            tlsExternalContext.set(null);
         }
-
-        // Release any allocated application resources
-	FactoryFinder.releaseFactories();
-        tlsExternalContext.set(new ServletContextAdapter(context));
-	ApplicationAssociate.clearInstance((ExternalContext)tlsExternalContext.get());
-	tlsExternalContext.set(null);
-
-        // Release the initialization mark on this web application
-        release();
 
     }
 
