@@ -1,5 +1,5 @@
 /*
- * $Id: Application.java,v 1.7 2003/07/16 23:11:00 craigmcc Exp $
+ * $Id: Application.java,v 1.8 2003/07/28 22:18:38 eburns Exp $
  */
 
 /*
@@ -55,7 +55,7 @@ public abstract class Application {
     /**
      * <p>Return the {@link ActionListener} that will be the default
      * {@link ActionListener} to be registered with relevant components
-     * during the <em>Reconstitute Component Tree</em> phase of the
+     * during the <em>Restore Component Tree</em> phase of the
      * request processing lifecycle.  The default implementation will
      * perform the following functions:</p>
      * <ul>
@@ -78,7 +78,7 @@ public abstract class Application {
 
     /**
      * <p>Replace the default {@link ActionListener} that will be registered
-     * with relevant components during the <em>Reconstitute Component Tree</em>
+     * with relevant components during the <em>Restore Component Tree</em>
      * phase of the request processing lifecycle.  This
      * listener must return <code>PhaseId.INVOKE_APPLICATION</code> from its
      * <code>getPhaseId()</code> method.</p>
@@ -183,6 +183,32 @@ public abstract class Application {
      *  is <code>null</code>
      */
     public abstract void setVariableResolver(VariableResolver resolver);
+
+    /**
+     * <p>Return the {@link ViewHandler} instance that will be utilized
+     * during the <em>Render Response</em> and <em>Restore Component
+     * Tree</em> phases of the request processing lifecycle.</p>
+     */
+    public abstract ViewHandler getViewHandler();
+
+
+    /**
+     * <p>Set the {@link ViewHandler} instance that will be utilized
+     * during the <em>Render Response</em> and <em>Restore Component
+     * Tree</em> phases of the request processing lifecycle.</p>
+     *
+     * @param handler The new {@link ViewHandler} instance
+     *
+     * @exception IllegalStateException if this method is called after
+     * at least one request has been processed by the
+     * <code>Lifecycle</code> instance for this application.
+     * @exception NullPointerException if <code>handler</code>
+     *  is <code>null</code>
+     */
+    public abstract void setViewHandler(ViewHandler handler);
+
+
+
 
 
     // ------------------------------------------------------- Object Factories

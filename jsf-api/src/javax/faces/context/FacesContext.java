@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContext.java,v 1.44 2003/06/24 19:14:49 craigmcc Exp $
+ * $Id: FacesContext.java,v 1.45 2003/07/28 22:18:50 eburns Exp $
  */
 
 /*
@@ -15,8 +15,8 @@ import java.util.Locale;
 import javax.faces.FacesException;
 import javax.faces.application.Application;
 import javax.faces.component.UIComponent;
+import javax.faces.component.UIPage;
 import javax.faces.event.FacesEvent;
-import javax.faces.tree.Tree;
 import javax.faces.application.Message;
 
 
@@ -184,15 +184,14 @@ public abstract class FacesContext {
     public abstract void setResponseWriter(ResponseWriter responseWriter);
 
     /**
-     * <p>Return the component {@link Tree} that is associated with the
-     * this request.
+     * <p>Return the root component that is associated with the this request.
      * </p>
      */
-    public abstract Tree getTree();
+    public abstract UIPage getRoot();
 
 
     /**
-     * <p>Set the component {@link Tree} that is associated with this request.
+     * <p>Set the root component that is associated with this request.
      * This method can only be called by the application handler (or a
      * class that the handler calls), and only during the <em>Invoke
      * Application</em> phase of the request processing lifecycle.</p>
@@ -204,7 +203,7 @@ public abstract class FacesContext {
      * @exception NullPointerException if <code>tree</code>
      *  is <code>null</code>
      */
-    public abstract void setTree(Tree tree);
+    public abstract void setRoot(UIPage newRoot);
 
 
     // --------------------------------------------------------- Public Methods

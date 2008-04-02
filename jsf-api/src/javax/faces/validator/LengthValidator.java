@@ -1,5 +1,5 @@
 /*
- * $Id: LengthValidator.java,v 1.19 2003/06/24 16:55:19 craigmcc Exp $
+ * $Id: LengthValidator.java,v 1.20 2003/07/28 22:19:05 eburns Exp $
  */
 
 /*
@@ -11,7 +11,7 @@ package javax.faces.validator;
 
 
 import javax.faces.component.UIInput;
-import javax.faces.component.UIInput;
+import javax.faces.component.StateHolder;
 import javax.faces.context.FacesContext;
 import javax.faces.application.Message;
 
@@ -37,7 +37,7 @@ import javax.faces.application.Message;
  * </ul>
  */
 
-public class LengthValidator extends ValidatorBase {
+public class LengthValidator extends ValidatorBase implements StateHolder {
 
 
     // ----------------------------------------------------- Manifest Constants
@@ -251,6 +251,38 @@ public class LengthValidator extends ValidatorBase {
         }
 
     }
+
+    public boolean equals(Object otherObj) {
+	if (!(otherObj instanceof LengthValidator)) {
+	    return false;
+	}
+	LengthValidator other = (LengthValidator) otherObj;
+	return (maximum == other.maximum && minimum == other.minimum &&
+		maximumSet == other.maximumSet && minimumSet == other.minimumSet);
+    }
+
+    // ------------------------------------------ methods from StateHolder
+    
+    public Object getState(FacesContext context) {
+	return maximum + "_" + maximumSet + "_" + minimum + "_" + minimumSet;
+    }
+
+    public void restoreState(FacesContext context, Object state) {
+	String stateStr = (String) state;
+	int i = stateStr.indexOf("_"), j;
+	maximum = Integer.valueOf(stateStr.substring(0,i)).intValue();
+	j = stateStr.indexOf("_", i + 1);
+	maximumSet = Boolean.valueOf(stateStr.substring(i + 1, j)).booleanValue();
+	i = stateStr.indexOf("_", j + 1);
+	minimum = Integer.valueOf(stateStr.substring(j + 1 ,i)).intValue();
+	minimumSet = Boolean.valueOf(stateStr.substring(i + 1)).booleanValue();
+    }
+
+    public boolean isTransient() { return false;
+    }
+
+    public void setTransient(boolean newT) {}    
+
 
 
 }

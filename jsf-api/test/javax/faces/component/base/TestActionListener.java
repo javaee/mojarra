@@ -1,5 +1,5 @@
 /*
- * $Id: TestActionListener.java,v 1.2 2003/07/26 17:55:18 craigmcc Exp $
+ * $Id: TestActionListener.java,v 1.3 2003/07/28 22:19:08 eburns Exp $
  */
 
 /*
@@ -10,6 +10,9 @@
 package javax.faces.component.base;
 
 
+import javax.faces.component.UIComponent;
+import javax.faces.component.StateHolder;
+import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.ActionListener;
 import javax.faces.event.PhaseId;
@@ -19,10 +22,11 @@ import javax.faces.event.PhaseId;
  * <p>Test {@link ActionListener} implementation.</p>
  */
 
-public class TestActionListener implements ActionListener {
+public class TestActionListener implements ActionListener, StateHolder {
 
-    // ------------------------------------------------------------ Constructors
-
+    public TestActionListener() {
+	phaseId = PhaseId.ANY_PHASE;
+    }
 
     public TestActionListener(String id, PhaseId phaseId) {
         this.id = id;
@@ -54,6 +58,24 @@ public class TestActionListener implements ActionListener {
         trace(getId());
     }
 
+    public boolean equals(Object otherObj) {
+	if (!(otherObj instanceof TestActionListener)) {
+	    return false;
+	}
+	TestActionListener other = (TestActionListener) otherObj;
+	if ((null != id && null == other.id) ||
+	    (null == id && null != other.id)) {
+	    return false;
+	}
+	boolean idsAreEqual = true;
+	if (null != id) {
+	    idsAreEqual = id.equals(other.id);
+	}
+	boolean result = 
+	    idsAreEqual && other.phaseId == this.phaseId;
+	return result;
+    }
+	    
 
     // ---------------------------------------------------- Static Trace Methods
 
@@ -76,5 +98,29 @@ public class TestActionListener implements ActionListener {
         return (trace.toString());
     }
 
+    //
+    // methods from StateHolder
+    //
+
+    public static final String SEP = "[sep]";
+
+    public Object getState(FacesContext context) {
+	return id + SEP + phaseId.getOrdinal();
+    }
+
+    public void restoreState(FacesContext context, Object state) {
+	String stateStr = (String) state;
+	int i = stateStr.indexOf(SEP);
+	id = stateStr.substring(0,i);
+	phaseId = (PhaseId)
+	    PhaseId.VALUES.get(Integer.
+			       valueOf(stateStr.
+				       substring(i+SEP.length())).intValue());
+    }
+
+    public boolean isTransient() { return false;
+    }
+
+    public void setTransient(boolean newT) {}
 
 }

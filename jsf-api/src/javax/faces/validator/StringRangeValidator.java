@@ -1,5 +1,5 @@
 /*
- * $Id: StringRangeValidator.java,v 1.15 2003/06/24 16:55:19 craigmcc Exp $
+ * $Id: StringRangeValidator.java,v 1.16 2003/07/28 22:19:05 eburns Exp $
  */
 
 /*
@@ -11,7 +11,7 @@ package javax.faces.validator;
 
 
 import javax.faces.component.UIInput;
-import javax.faces.component.UIInput;
+import javax.faces.component.StateHolder;
 import javax.faces.context.FacesContext;
 import javax.faces.application.Message;
 
@@ -37,7 +37,7 @@ import javax.faces.application.Message;
  * </ul>
  */
 
-public class StringRangeValidator extends ValidatorBase {
+public class StringRangeValidator extends ValidatorBase implements StateHolder {
 
 
     // ----------------------------------------------------- Manifest Constants
@@ -267,6 +267,40 @@ public class StringRangeValidator extends ValidatorBase {
         }
 
     }
+
+    public boolean equals(Object otherObj) {
+	if (!(otherObj instanceof StringRangeValidator)) {
+	    return false;
+	}
+	StringRangeValidator other = (StringRangeValidator) otherObj;
+	return (maximum.equals(other.maximum) && minimum.equals(other.minimum)
+		&&
+		maximumSet == other.maximumSet && minimumSet == other.minimumSet);
+    }
+
+    // ------------------------------------------ methods from StateHolder
+    private static String STR_SEP = "[javax.faces]";
+    private static int STR_SEP_LEN = 13;
+    
+    public Object getState(FacesContext context) {
+	return maximum + STR_SEP + maximumSet + STR_SEP + minimum + STR_SEP + minimumSet;
+    }
+
+    public void restoreState(FacesContext context, Object state) {
+	String stateStr = (String) state;
+	int i = stateStr.indexOf(STR_SEP), j;
+	maximum = stateStr.substring(0,i);
+	j = stateStr.indexOf(STR_SEP, i + STR_SEP_LEN);
+	maximumSet = Boolean.valueOf(stateStr.substring(i + STR_SEP_LEN, j)).booleanValue();
+	i = stateStr.indexOf(STR_SEP, j + STR_SEP_LEN);
+	minimum = stateStr.substring(j + STR_SEP_LEN ,i);
+	minimumSet = Boolean.valueOf(stateStr.substring(i + STR_SEP_LEN)).booleanValue();
+    }
+
+    public boolean isTransient() { return false;
+    }
+
+    public void setTransient(boolean newT) {}
 
 
 }

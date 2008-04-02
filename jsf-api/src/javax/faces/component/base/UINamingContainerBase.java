@@ -1,5 +1,5 @@
 /*
- * $Id: UINamingContainerBase.java,v 1.2 2003/07/26 17:54:50 craigmcc Exp $
+ * $Id: UINamingContainerBase.java,v 1.3 2003/07/28 22:18:46 eburns Exp $
  */
 
 /*
@@ -12,6 +12,9 @@ package javax.faces.component.base;
 
 import javax.faces.component.NamingContainer;
 import javax.faces.component.UIComponent;
+import javax.faces.component.StateHolder;
+import javax.faces.context.FacesContext;
+import java.io.IOException;
 
 
 /**
@@ -29,7 +32,7 @@ public class UINamingContainerBase extends UIComponentBase
     /**
      * <p>The {@link NamingContainer} implementation that we delegate to
      */
-    private NamingContainer namespace = new NamingContainerSupport();
+    protected NamingContainerSupport namespace = new NamingContainerSupport();
 
 
     // ------------------------------------------------- NamingContainer Methods
@@ -49,10 +52,28 @@ public class UINamingContainerBase extends UIComponentBase
 	return namespace.generateClientId();
     }
 
-
     public void removeComponentFromNamespace(UIComponent namedComponent) {
 	namespace.removeComponentFromNamespace(namedComponent);
     }
+
+    // ---------------------------------------------- methods from StateHolder
+
+    public void restoreState(FacesContext context, 
+			     Object stateObj) throws IOException {
+	Object [] state = (Object []) stateObj;
+	namespace.restoreState(context, state[THIS_INDEX]);
+	super.restoreState(context, state[SUPER_INDEX]);
+    }
+
+    public Object getState(FacesContext context) {
+	// get the state of our superclasses.
+	Object superState = super.getState(context);
+	Object [] result = new Object[2];
+	result[THIS_INDEX] = namespace.getState(context);
+	// save the state of our superclass
+	result[SUPER_INDEX] = superState;
+	return result;
+    }    
 
 
 }

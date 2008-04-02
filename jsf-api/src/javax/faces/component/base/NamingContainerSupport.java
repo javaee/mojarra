@@ -1,5 +1,5 @@
 /*
- * $Id: NamingContainerSupport.java,v 1.2 2003/07/26 17:54:46 craigmcc Exp $
+ * $Id: NamingContainerSupport.java,v 1.3 2003/07/28 22:18:44 eburns Exp $
  */
 
 /*
@@ -9,12 +9,16 @@
 
 package javax.faces.component.base;
 
+import javax.faces.context.FacesContext;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.io.Serializable;
 import javax.faces.component.NamingContainer;
 import javax.faces.component.UIComponent;
+import javax.faces.component.StateHolder;
+import java.io.IOException;
+import java.util.Iterator;
 
 
 /**
@@ -52,7 +56,7 @@ import javax.faces.component.UIComponent;
  * </pre>
  */
 
-public class NamingContainerSupport implements NamingContainer, Serializable {
+public class NamingContainerSupport implements NamingContainer, StateHolder, Serializable {
 
 
     // ------------------------------------------------------ Instance Variables
@@ -70,7 +74,7 @@ public class NamingContainerSupport implements NamingContainer, Serializable {
      * <p><strong>IMPLEMENTATION NOTE</strong> - This is lazily
      * allocated, initialized, and populated.</p>
      */
-    private Map namespace = null;
+    private HashMap namespace = null;
 
 
     /**
@@ -116,7 +120,7 @@ public class NamingContainerSupport implements NamingContainer, Serializable {
             return (null);
         }
 
-        int i = name.indexOf(SEPARATOR_CHAR);
+        int i = name.indexOf(UIComponent.SEPARATOR_CHAR);
         if ((i == 0) || (i == (name.length() - 1))) {
             throw new IllegalArgumentException(name);
         }
@@ -150,6 +154,47 @@ public class NamingContainerSupport implements NamingContainer, Serializable {
 
     }
 
+    public boolean equals(Object otherObj) {
+	if (!(otherObj instanceof NamingContainerSupport)) {
+	    return false;
+	}
+	NamingContainerSupport other = (NamingContainerSupport) otherObj;
+	if (other.serialNumber != serialNumber) {
+	    return false;
+	}
+	Iterator iter = other.namespace.keySet().iterator();
+	Object 
+	    val1 = null,
+	    val2 = null,
+	    cur = null;
+	
+	while (iter.hasNext()) {
+	    cur = iter.next();
+	    val1 = namespace.get(cur);
+	    val2 = other.namespace.get(cur);
+	    if ((val1 == null && val2 != null) || 
+		(val1 != null && val2 == null)) {
+		return false;
+	    }
+	    if (!val1.equals(val2)) {
+		return false;
+	    }
+	}
+	iter = namespace.keySet().iterator();
+	while (iter.hasNext()) {
+	    cur = iter.next();
+	    val1 = namespace.get(cur);
+	    val2 = other.namespace.get(cur);
+	    if ((val1 == null && val2 != null) || 
+		(val1 != null && val2 == null)) {
+		return false;
+	    }
+	    if (!val1.equals(val2)) {
+		return false;
+	    }
+	}
+	return true;
+    }
 
     public void removeComponentFromNamespace(UIComponent component) {
 
@@ -169,5 +214,28 @@ public class NamingContainerSupport implements NamingContainer, Serializable {
 
     }
 
+    // ---------------------------------------------- methods from StateHolder
+
+    public Object getState(FacesContext context) {
+	Object [] state = new Object[2];
+	state[SERIAL_INDEX] = "" + serialNumber;
+	state[NAMESPACE_INDEX] = namespace.clone();
+	return state;
+    }
+
+    private static final int SERIAL_INDEX = 0;
+    private static final int NAMESPACE_INDEX = 1;
+
+    public void restoreState(FacesContext context, Object stateObj) {
+	Object [] state = (Object []) stateObj;
+	serialNumber = Integer.valueOf((String)state[SERIAL_INDEX]).intValue();
+	namespace.clear();
+	namespace.putAll((Map) state[NAMESPACE_INDEX]);
+    }
+
+    public boolean isTransient() { return false;
+    }
+
+    public void setTransient(boolean newT) {}
 
 }

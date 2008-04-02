@@ -1,5 +1,5 @@
 /*
- * $Id: DoubleRangeValidator.java,v 1.17 2003/06/24 16:55:19 craigmcc Exp $
+ * $Id: DoubleRangeValidator.java,v 1.18 2003/07/28 22:19:05 eburns Exp $
  */
 
 /*
@@ -14,6 +14,7 @@ import javax.faces.component.UIInput;
 import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
 import javax.faces.application.Message;
+import javax.faces.component.StateHolder;
 
 
 /**
@@ -40,8 +41,7 @@ import javax.faces.application.Message;
  * </ul>
  */
 
-public class DoubleRangeValidator extends ValidatorBase {
-
+public class DoubleRangeValidator extends ValidatorBase implements StateHolder {
 
     // ----------------------------------------------------- Manifest Constants
 
@@ -267,6 +267,37 @@ public class DoubleRangeValidator extends ValidatorBase {
         }
 
     }
+
+    public boolean equals(Object otherObj) {
+	if (!(otherObj instanceof DoubleRangeValidator)) {
+	    return false;
+	}
+	DoubleRangeValidator other = (DoubleRangeValidator) otherObj;
+	return (maximum == other.maximum && minimum == other.minimum &&
+		maximumSet == other.maximumSet && minimumSet == other.minimumSet);
+    }
+
+    // ------------------------------------------ methods from StateHolder
+    
+    public Object getState(FacesContext context) {
+	return maximum + "_" + maximumSet + "_" + minimum + "_" + minimumSet;
+    }
+
+    public void restoreState(FacesContext context, Object state) {
+	String stateStr = (String) state;
+	int i = stateStr.indexOf("_"), j;
+	maximum = Double.valueOf(stateStr.substring(0,i)).doubleValue();
+	j = stateStr.indexOf("_", i + 1);
+	maximumSet = Boolean.valueOf(stateStr.substring(i + 1, j)).booleanValue();
+	i = stateStr.indexOf("_", j + 1);
+	minimum = Double.valueOf(stateStr.substring(j + 1 ,i)).doubleValue();
+	minimumSet = Boolean.valueOf(stateStr.substring(i + 1)).booleanValue();
+    }
+
+    public boolean isTransient() { return false;
+    }
+
+    public void setTransient(boolean newT) {}    
 
 
 }

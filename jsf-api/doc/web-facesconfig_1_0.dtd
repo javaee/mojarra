@@ -13,7 +13,7 @@
      "-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.0//EN"
      "http://java.sun.com/dtd/web-facesconfig_1_0.dtd">
 
-    $Id: web-facesconfig_1_0.dtd,v 1.3 2003/07/23 17:31:10 horwat Exp $
+    $Id: web-facesconfig_1_0.dtd,v 1.4 2003/07/28 22:18:36 eburns Exp $
 
 -->
 
@@ -139,7 +139,7 @@
     that are not specified, the JSF implementation must provide a suitable
     default.
 -->
-<!ELEMENT application     ((action-listener|navigation-handler|property-resolver|variable-resolver)*)>
+<!ELEMENT application     ((action-listener|navigation-handler|view-handler|property-resolver|variable-resolver)*)>
 
 
 <!--
@@ -557,6 +557,15 @@
 -->
 <!ELEMENT navigation-handler (#PCDATA)>
 
+<!--
+
+    The "view-handler" element contains the fully qualified class name
+    of the concrete ViewHandler implementation class that will be called
+    during the Restore Component Tree and Render Response phases of the
+    request processing lifecycle.  The faces implementation must provide
+    a default implementation of this class
+-->
+<!ELEMENT view-handler (#PCDATA)>
 
 <!--
     The "null-value" element indicates that the managed property in which we

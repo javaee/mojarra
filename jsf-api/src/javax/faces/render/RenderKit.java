@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKit.java,v 1.16 2003/07/19 04:52:58 eburns Exp $
+ * $Id: RenderKit.java,v 1.17 2003/07/28 22:19:00 eburns Exp $
  */
 
 /*
@@ -31,6 +31,10 @@ import java.io.Writer;
  * made available through calls to the <code>getRenderKit()</code> methods
  * of {@link RenderKitFactory}.  Because {@link RenderKit} instances
  * are shared, they must be implemented in a thread-safe manner.</p>
+ *
+ * <p>The <code>RenderKit</code> instance must also vend a {@link
+ * ResponseStateManager} instance, which is used in the process of
+ * saving and restoring tree structure and state.</p>
  */
 
 public abstract class RenderKit {
@@ -66,6 +70,16 @@ public abstract class RenderKit {
      *  is <code>null</code>
      */
     public abstract Renderer getRenderer(String rendererType);
+
+    /**
+     *
+     * <p>This interface is where all the rendering-technology specific
+     * state management decisions are made.</p>
+     *
+     * @return the RenderKit's {@link ResponseStateManager}.
+     */
+
+    public abstract ResponseStateManager getResponseStateManager();
 
     /**
      * <p>Use the provided <code>Writer</code> to create a new {@link

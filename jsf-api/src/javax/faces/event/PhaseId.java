@@ -1,5 +1,5 @@
 /*
- * $Id: PhaseId.java,v 1.10 2003/07/07 22:08:50 eburns Exp $
+ * $Id: PhaseId.java,v 1.11 2003/07/28 22:18:51 eburns Exp $
  */
 
 /*
@@ -115,13 +115,13 @@ public class PhaseId implements Comparable {
     public static final PhaseId ANY_PHASE = new PhaseId(ANY_PHASE_NAME);
 
 
-    private static final String RECONSTITUTE_REQUEST_NAME = "RECONSTITUTE_REQUEST";
+    private static final String RESTORE_COMPONENT_TREE_NAME = "RESTORE_COMPONENT_TREE";
     /**
      * <p>Identifier that indicates an interest in events queued for
-     * the <em>Reconstitute Request</em> phase of the request
+     * the <em>Restore Component Tree</em> phase of the request
      * processing lifecycle.</p>
      */
-    public static final PhaseId RECONSTITUTE_REQUEST = new PhaseId(RECONSTITUTE_REQUEST_NAME);
+    public static final PhaseId RESTORE_COMPONENT_TREE = new PhaseId(RESTORE_COMPONENT_TREE_NAME);
 
 
     private static final String APPLY_REQUEST_VALUES_NAME = "APPLY_REQUEST_VALUES";
@@ -174,7 +174,7 @@ public class PhaseId implements Comparable {
      * same order.</p>
      */
     private static final PhaseId[] values =
-    { ANY_PHASE, RECONSTITUTE_REQUEST, APPLY_REQUEST_VALUES,
+    { ANY_PHASE, RESTORE_COMPONENT_TREE, APPLY_REQUEST_VALUES,
       PROCESS_VALIDATIONS, UPDATE_MODEL_VALUES, INVOKE_APPLICATION, RENDER_RESPONSE };
 
 

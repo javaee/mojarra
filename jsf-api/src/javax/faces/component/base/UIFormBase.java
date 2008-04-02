@@ -1,5 +1,5 @@
 /*
- * $Id: UIFormBase.java,v 1.2 2003/07/26 17:54:49 craigmcc Exp $
+ * $Id: UIFormBase.java,v 1.3 2003/07/28 22:18:46 eburns Exp $
  */
 
 /*
@@ -19,7 +19,7 @@ import javax.faces.component.UIForm;
  * {@link UIForm}.</p>
  */
 
-public class UIFormBase extends UIComponentBase implements UIForm {
+public class UIFormBase extends UINamingContainerBase implements UIForm {
 
 
     // ------------------------------------------------------------ Constructors

@@ -203,6 +203,7 @@
                 test.UIComponentBase,
                 test.UICommandBase,
                 test.UIFormBase,
+                test.UIPageBase,
                 test.UIGraphicBase,
                 test.UIInputBase,
                 test.UIOutputBase,
@@ -263,6 +264,20 @@
       <sysproperty key="javax.faces.application.RenderKitFactory"
                  value="javax.faces.mock.MockRenderKitFactory"/>
       <arg value="javax.faces.component.base.UIFormBaseTestCase"/>
+      <classpath refid="test.classpath"/>
+    </java>
+  </target>
+
+  <target name="test.UIPageBase" depends="build.test">
+    <echo message="Running UIPageBase tests ..."/>
+    <java classname="${test.runner}" fork="yes"
+        failonerror="${test.failonerror}">
+      <jvmarg line="${debug.jvm.args}"/>
+      <sysproperty key="javax.faces.application.ApplicationFactory"
+                 value="javax.faces.mock.MockApplicationFactory"/>
+      <sysproperty key="javax.faces.application.RenderKitFactory"
+                 value="javax.faces.mock.MockRenderKitFactory"/>
+      <arg value="javax.faces.component.base.UIPageBaseTestCase"/>
       <classpath refid="test.classpath"/>
     </java>
   </target>

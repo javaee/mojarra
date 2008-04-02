@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.3 2003/07/27 00:48:24 craigmcc Exp $
+ * $Id: UIComponentBase.java,v 1.4 2003/07/28 22:18:45 eburns Exp $
  */
 
 /*
@@ -257,6 +257,14 @@ public abstract class UIComponentBase implements UIComponent {
         if (clientId != null) {
             return (clientId);
         }
+	NamingContainer closestContainer = null;
+	UIComponent containerComponent = this;
+
+	// note that this method uses different logic to locate the
+	// closest naming container than what is implemented in
+	// findClosestNamingContainer().  This is intentional and
+	// necessary to support the requirement of separating when you
+	// get a client id from when you add the child to the tree.
 
 	// if there is a Renderer for this component
         String rendererType = getRendererType();
@@ -266,11 +274,23 @@ public abstract class UIComponentBase implements UIComponent {
 	    Renderer renderer = getRenderer(context);
             clientId = renderer.getClientId(context, this);
 
+	    // Search for an ancestor that is a naming container
+	    while (null != (containerComponent = 
+			    containerComponent.getParent())) {
+		if (containerComponent instanceof NamingContainer) {
+		    closestContainer = (NamingContainer) containerComponent;
+		    break;
+		}
+	    }
+
+	    // If none is found, see if this is a naming container
+	    if (null == closestContainer && this instanceof NamingContainer) {
+		closestContainer = (NamingContainer) this;
+	    }
+
         } else {
 
 	    // we have to define the client id ourselves
-	    NamingContainer closestContainer = null;
-	    UIComponent containerComponent = this;
 
 	    // Search for an ancestor that is a naming container
 	    while (null != (containerComponent = 
@@ -310,6 +330,14 @@ public abstract class UIComponentBase implements UIComponent {
 	if (null == clientId) {
 	    throw new NullPointerException();
 	}
+
+	if (null != closestContainer && null != id) {
+	    // ensure we've been added to the namespace.
+	    if (null == closestContainer.findComponentInNamespace(id)){
+		closestContainer.addComponentToNamespace(this);
+	    }
+	}
+		
 	return (clientId);
     }
 
@@ -929,16 +957,6 @@ public abstract class UIComponentBase implements UIComponent {
 
     }
 
-
-    public void reconstitute(FacesContext context) throws IOException {
-
-        if (context == null) {
-            throw new NullPointerException();
-        }
-
-    }
-
-
     // ------------------------------------------------- Event Listener Methods
 
 
@@ -947,7 +965,7 @@ public abstract class UIComponentBase implements UIComponent {
      * {@link FacesListener}s for an ordinal {@link PhaseId} value.  This
      * data structure is lazily instantiated as necessary.</p>
      */
-    private List listeners[];
+    protected List listeners[];
 
 
     /**
@@ -1035,26 +1053,6 @@ public abstract class UIComponentBase implements UIComponent {
 
     // ----------------------------------------------- Lifecycle Phase Handlers
 
-
-    public void processReconstitutes(FacesContext context) throws IOException {
-
-        if (context == null) {
-            throw new NullPointerException();
-        }
-
-        // Process all facets and children of this component
-        Iterator kids = getFacetsAndChildren();
-        while (kids.hasNext()) {
-            UIComponent kid = (UIComponent) kids.next();
-            kid.processReconstitutes(context);
-        }
-
-        // Process this component itself
-        reconstitute(context);
-
-    }
-
-
     public void processDecodes(FacesContext context) throws IOException {
 
         if (context == null) {
@@ -1124,6 +1122,54 @@ public abstract class UIComponentBase implements UIComponent {
 
     }
 
+    private Object [] stateStruct;
+    private int MY_STATE = 0;
+    private int CHILD_STATE = 1;
+
+    public Object processGetState(FacesContext context) throws IOException {
+
+        if (context == null) {
+            throw new NullPointerException();
+        }
+
+        // Process all facets and children of this component
+        Iterator kids = getFacetsAndChildren();
+	Object childState = null;
+	if (null == stateStruct) {
+	    stateStruct = new Object[2];
+	}
+        while (kids.hasNext()) {
+            UIComponent kid = (UIComponent) kids.next();
+            stateStruct[CHILD_STATE] = kid.processGetState(context);
+        }
+
+        // Process this component itself
+        stateStruct[MY_STATE] = getState(context);
+	return stateStruct;
+    }
+
+    public void processRestoreState(FacesContext context, 
+				    Object state) throws IOException {
+
+        if (context == null) {
+            throw new NullPointerException();
+        }
+
+	stateStruct = (Object []) state;
+
+        // Process all facets and children of this component
+        Iterator kids = getFacetsAndChildren();
+        while (kids.hasNext()) {
+            UIComponent kid = (UIComponent) kids.next();
+            kid.processRestoreState(context, stateStruct[CHILD_STATE]);
+        }
+
+        // Process this component itself
+        restoreState(context, stateStruct[MY_STATE]);
+
+    }
+
+
 
     // ------------------------------------------------------- Protected Methods
 
@@ -1141,7 +1187,7 @@ public abstract class UIComponentBase implements UIComponent {
             RenderKitFactory rkFactory = (RenderKitFactory)
                 FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
             RenderKit renderKit = rkFactory.getRenderKit
-                (context.getTree().getRenderKitId());
+                (context.getRoot().getRenderKitId());
             return (renderKit.getRenderer(rendererType));
 	} else {
 	    return (null);
@@ -1149,5 +1195,94 @@ public abstract class UIComponentBase implements UIComponent {
 
     }
 
+    //---------------------------------------------- Methods from StateHolder
+
+    /**
+     *
+     * <p>As stipulated in {@link javax.faces.component.StateHolder} we
+     * implement both state methods.  The state we save at this level of
+     * the inheritance hierachy is:</p>
+     * 
+     * <p><code>
+     *
+     * 	<ul>
+     *
+     * <li>  clientId</li>
+     * <li>  componentId</li>
+     * <li>  componentRef</li>
+     * <li>  rendered</li>
+     * <li>  rendererType</li>
+     * <li>  rendersChildren</li>
+     * <li>  valid</li>
+     * <li>  transient</li>
+     * <li>  attributes</li>
+     *
+     *	</ul>
+     *
+     * </code></p>
+     *
+     * <p>Since this set is well known, let's use a simple data
+     * structure to represent it: Object array.  </p>
+     */
+
+    public void restoreState(FacesContext context, 
+			     Object stateObj) throws IOException {
+	Object [] state = (Object []) stateObj;
+
+	clientId = (String) state[CLIENT_ID_INDEX]; // no setter for this.
+	id = (String) state[COMPONENT_ID_INDEX]; // avoid namingContainer lookup.
+	componentRef = (String) state[COMPONENT_REF_INDEX];
+	rendered = (null != state[RENDERED_INDEX]) ? true : false;
+	rendererType = (String) state[RENDERER_TYPE_INDEX];
+	isTransient = (null != state[TRANSIENT_INDEX]) ? true : false;
+	attributes = (HashMap) state[ATTRIBUTES_INDEX];
+    }
+
+    private static final int CLIENT_ID_INDEX = 0;
+    private static final int COMPONENT_ID_INDEX = 1;
+    private static final int COMPONENT_REF_INDEX = 2;
+    private static final int RENDERED_INDEX = 3;
+    private static final int RENDERER_TYPE_INDEX = 4;
+    private static final int TRANSIENT_INDEX = 5;
+    private static final int ATTRIBUTES_INDEX = 6;
+    private static final int NUMBER_OF_PROPERTIES_TO_SAVE = 7;
+
+    /**
+     * <p>These constants are used so subclasses may save their
+     * state.</p>
+     */
+    
+    protected static final int THIS_INDEX = 0;
+    protected static final int SUPER_INDEX = 1;
+    protected static final String STATE_SEP = "[sep]";
+    protected static final int STATE_SEP_LEN = 5;
+
+
+    public Object getState(FacesContext context) {
+	Object [] result = new Object[NUMBER_OF_PROPERTIES_TO_SAVE];
+	// need to call getClientId because logic must execute.
+	result[CLIENT_ID_INDEX] = getClientId(context);
+	result[COMPONENT_ID_INDEX] = id;
+	result[COMPONENT_REF_INDEX] = componentRef;
+	result[RENDERED_INDEX] =  rendered ? result : null;
+	result[RENDERER_TYPE_INDEX] = rendererType;
+	result[TRANSIENT_INDEX] = isTransient ? result : null;
+	if (isAttributesAllocated()) {
+	    // PENDING(edburns): make sure all the attributes are
+	    // Serializable
+	    result[ATTRIBUTES_INDEX] = attributes;
+	}
+	return result;
+    }
+
+    protected boolean isTransient = false;
+
+    public boolean isTransient() {
+	return isTransient;
+    }
+
+    public void setTransient(boolean newTransient) {
+	isTransient = newTransient;
+    }
 
 }

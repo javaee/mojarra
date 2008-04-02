@@ -1,5 +1,5 @@
 /*
- * $Id: Lifecycle.java,v 1.23 2003/07/07 20:49:26 eburns Exp $
+ * $Id: Lifecycle.java,v 1.24 2003/07/28 22:18:58 eburns Exp $
  */
 
 /*
@@ -30,32 +30,6 @@ import javax.faces.event.PhaseListener;
  */
 
 public abstract class Lifecycle {
-
-
-    // ------------------------------------------------------------- Properties
-
-
-    /**
-     * <p>Return the {@link ViewHandler} instance that will be utilized
-     * during the <em>Render Response</em> phase of the request processing
-     * lifecycle.</p>
-     */
-    public abstract ViewHandler getViewHandler();
-
-
-    /**
-     * <p>Set the {@link ViewHandler} instance that will be utilized
-     * during the <em>Render Response</em> phase of the request processing
-     * lifecycle.</p>
-     *
-     * @param handler The new {@link ViewHandler} instance
-     *
-     * @exception IllegalStateException if this method is called after at least
-     *  one request has been processed by this <code>Lifecycle</code> instance
-     * @exception NullPointerException if <code>handler</code>
-     *  is <code>null</code>
-     */
-    public abstract void setViewHandler(ViewHandler handler);
 
 
     // --------------------------------------------------------- Public Methods

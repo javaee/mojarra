@@ -1,0 +1,93 @@
+/*
+ * $Id: ViewHandler.java,v 1.2 2003/07/28 22:18:39 eburns Exp $
+ */
+
+/*
+ * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+ */
+
+package javax.faces.application;
+
+import java.io.IOException;
+import javax.faces.FacesException;
+import javax.faces.context.FacesContext;
+import javax.faces.component.UIPage;
+
+
+/**
+ * <p><strong>ViewHandler</strong> is the pluggablity mechanism for
+ * allowing implementations of the JavaServer Faces specification to
+ * provide their own handling of the activities in the <em>Render
+ * Response</em> and <em>Restore Component Tree</em> phases of the
+ * request processing lifecycle.  This allows for implementations to
+ * support different response generation technologies, and state
+ * saving/restoring approaches.  JSF implementations, or JSF-based
+ * applications, can register an instance of this interface by calling
+ * the <code>setViewHandler()</code> method of the {@link Application}
+ * prior to the application receiving its first request from a client.
+ * </p>
+ *
+ * <p>The <code>ViewHandler</code> implementation must provide a
+ * reference to an implementation of a {@link StateManager}, which is
+ * used for saving and restoring the state of a Faces UI between
+ * requests.</p>
+ *
+ * <p>A default implementation of <code>ViewHandler</code> must be
+ * provided by the JSF implementation, which will be utilized unless
+ * <code>setViewHandler()</code> is called to establish a different one.
+ * During <em>Render Response</em>, this default instance will treat the
+ * <code>treeId</code> property of the response component tree as a
+ * context-relative path (after prefixing it with a slash), and will
+ * perform a {@link javax.faces.context.ExternalContext#dispatchMessage}
+ * call to that path.</p>
+ *
+ * <p>Please see {@link StateManager} for information on how the
+ * <code>ViewHandler</code> uses the {@link StateManager}. </p>
+ */
+
+public interface ViewHandler {
+
+
+    /**
+     * <p>Perform whatever actions are required to render the response
+     * component tree to the <code>ServletResponse</code> associated
+     * with the specified {@link FacesContext}.  Also perform required
+     * actions to save the state of the response between requests, using
+     * the {@link StateManager}.  The responsibility for saving state
+     * resides in this method due to the limitations of JSP
+     * technology.</p>
+     *
+     * @param context {@link FacesContext} for the current request
+     *
+     * @exception IOException if an input/output error occurs
+     * @exception NullPointerException if <code>context</code>
+     *  is <code>null</code>
+     * @exception FacesException if a servlet error occurs
+     */
+    public void renderView(FacesContext context)
+        throws IOException, FacesException;
+
+    /**
+     * <p>Perform whatever actions are required to restore the component
+     * tree associated with the specified {@link FacesContext} and
+     * treeId.</p>
+     *
+     * @param context {@link FacesContext} for the current request
+     * @param treeId the tree identifier for the current request
+     *
+     * @exception NullPointerException if <code>context</code>
+     *  is <code>null</code>
+     * @exception FacesException if a servlet error occurs
+     */
+    public UIPage restoreView(FacesContext context, String treeId);
+
+    /**
+     * @return the {@link StateManager} instance for this
+     * <code>ViewHandler</code>.
+     */
+    public StateManager getStateManager();
+
+
+
+}

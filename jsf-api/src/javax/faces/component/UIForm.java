@@ -1,5 +1,5 @@
 /*
- * $Id: UIForm.java,v 1.26 2003/07/26 17:54:36 craigmcc Exp $
+ * $Id: UIForm.java,v 1.27 2003/07/28 22:18:42 eburns Exp $
  */
 
 /*
@@ -21,7 +21,7 @@ package javax.faces.component;
  * <code>setRendererType()</code> method.</p>
  */
 
-public interface UIForm extends UIComponent {
+public interface UIForm extends UIComponent, NamingContainer {
 
 
 }

@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.87 2003/07/27 00:48:20 craigmcc Exp $
+ * $Id: UIComponent.java,v 1.88 2003/07/28 22:18:42 eburns Exp $
  */
 
 /*
@@ -40,7 +40,17 @@ import javax.faces.render.Renderer;
  * to the method signatures of this interface.</p>
  */
 
-public interface UIComponent extends Serializable {
+public interface UIComponent extends Serializable, StateHolder {
+
+
+    // ----------------------------------------------------- Manifest Constants
+
+
+    /**
+     * <p>The separator character used in component identifiers to demarcate
+     * navigation to a child naming container.</p>
+     */
+    public static final char SEPARATOR_CHAR = '.';
 
 
     // ------------------------------------------------------------- Attributes
@@ -461,22 +471,6 @@ public interface UIComponent extends Serializable {
     public void encodeEnd(FacesContext context) throws IOException;
 
 
-    /**
-     * <p>Perform any processing required to correct the state of this
-     * component as a result of the owning component tree having been
-     * reconstructed during <em>Reconstitute Component Tree</em> phase
-     * of the request processing lifecycle.  The default implementation
-     * of this method does nothing.</p>
-     *
-     * @param context {@link FacesContext} for the request we are processing
-     *
-     * @exception IOException if an input/output error occurs during processing
-     * @exception NullPointerException if <code>context</code>
-     *  is <code>null</code>
-     */
-    public void reconstitute(FacesContext context) throws IOException;
-
-
     // ------------------------------------------------- Event Listener Methods
 
 
@@ -532,28 +526,6 @@ public interface UIComponent extends Serializable {
 
 
     // ----------------------------------------------- Lifecycle Phase Handlers
-
-
-    /**
-     * <p>Perform the component tree processing required by the
-     * <em>Reconstitute Component Tree</em> phase of the request processing
-     * lifecycle for all facets of this component, all children of this
-     * component, and this component itself, as follows.</p>
-     * <ul>
-     * <li>Call the <code>processReconstitutes()</code> method of all facets
-     *     and children of this {@link UIComponent} in the order determined
-     *     by a call to <code>getFacetsAndChildren()</code>.</li>
-     * <li>Call the <code>reconstitute()</code> method of this component.</li>
-     * </ul>
-     *
-     * @param context {@link FacesContext} for the request we are processing
-     *
-     * @exception IOException if an input/output error occurs during processing
-     * @exception NullPointerException if <code>context</code>
-     *  is <code>null</code>
-     */
-    public void processReconstitutes(FacesContext context) throws IOException;
-
 
     /**
      * <p>Perform the component tree processing required by the
@@ -622,5 +594,57 @@ public interface UIComponent extends Serializable {
      */
     public void processUpdates(FacesContext context);
 
+    /**
+     * <p>Perform the component tree processing required by the state
+     * saving portion of the <em>Render Response</em> phase of the
+     * request processing lifecycle for all facets of this component,
+     * all children of this component, and this component itself, as
+     * follows.</p> <ul>
+     *
+     * <li>consult the <code>transient</code> property of this
+     * component.  If true, just return.</li>
+     *
+     * <li>Call the <code>processGetState()</code> method of all
+     * facets and children of this {@link UIComponent} in the order
+     * determined by a call to <code>getFacetsAndChildren()</code>.</li>
+     *
+     * <li>Call the <code>getState()</code> method of this component.</li>
+     *
+     * <li>Encapsulate the child state and your state into a
+     * Serializable Object and return it.</li> 
+     *
+     * </ul>
+     *
+     * @param context {@link FacesContext} for the request we are processing
+     *
+     * @exception IOException if an input/output error occurs during processing
+     * @exception NullPointerException if <code>context</code>
+     *  is <code>null</code>
+     */
+
+    public Object processGetState(FacesContext context) throws IOException;
+
+    /**
+     * <p>Perform the component tree processing required by the
+     * <em>Restore Component Tree</em> phase of the request processing
+     * lifecycle for all facets of this component, all children of this
+     * component, and this component itself, as follows.</p>
+     * <ul>
+
+     * <li>Call the <code>processRestoreState()</code> method of all
+     * facets and children of this {@link UIComponent} in the order
+     * determined by a call to <code>getFacetsAndChildren()</code>.</li>
+
+     * <li>Call the <code>restoreState()</code> method of this component.</li>
+     * </ul>
+     *
+     * @param context {@link FacesContext} for the request we are processing
+     *
+     * @exception IOException if an input/output error occurs during processing
+     * @exception NullPointerException if <code>context</code>
+     *  is <code>null</code>
+     */
+
+    public void processRestoreState(FacesContext context, Object state) throws IOException;
 
 }

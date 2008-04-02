@@ -1,5 +1,5 @@
 /*
- * $Id: UIInputBase.java,v 1.3 2003/07/27 00:48:25 craigmcc Exp $
+ * $Id: UIInputBase.java,v 1.4 2003/07/28 22:18:46 eburns Exp $
  */
 
 /*
@@ -23,6 +23,11 @@ import javax.faces.event.PhaseId;
 import javax.faces.event.ValueChangedEvent;
 import javax.faces.event.ValueChangedListener;
 import javax.faces.validator.Validator;
+
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.List;
+
 
 
 /**
@@ -230,7 +235,7 @@ public class UIInputBase extends UIOutputBase implements UIInput {
      * <p>The set of {@link Validator}s associated with this
      * <code>UIComponent</code>.</p>
      */
-    private ArrayList validators = null;
+    protected ArrayList validators = null;
 
 
     public void addValidator(Validator validator) {
@@ -270,6 +275,66 @@ public class UIInputBase extends UIOutputBase implements UIInput {
         removeFacesListener(listener);
 
     }
+
+
+    // ---------------------------------------------- methods from StateHolder
+
+    public void restoreState(FacesContext context, 
+			     Object stateObj) throws IOException {
+	Object [] state = (Object []) stateObj;
+	Object [] thisState = (Object []) state[THIS_INDEX];
+
+	// restore the attributes
+	String stateStr = (String) thisState[ATTRS_INDEX];
+	int i = stateStr.indexOf(STATE_SEP);
+	required = Boolean.valueOf(stateStr.substring(0, i)).booleanValue();
+	valid = Boolean.valueOf(stateStr.substring(i + STATE_SEP_LEN)).booleanValue();
+	// restore the listeners
+	listeners = context.getApplication().getViewHandler().
+	    getStateManager().restoreAttachedObjectState(context, 
+							 thisState[LISTENERS_INDEX]);
+	// restore the validators
+	List [] validatorsList = context.getApplication().getViewHandler().
+	    getStateManager().restoreAttachedObjectState(context, 
+							 thisState[VALIDATORS_INDEX]);
+	if (null != validatorsList) {
+	    validators = (ArrayList) validatorsList[0];
+	}
+	// restore the value
+	previous = thisState[PREVIOUS_INDEX];
+	
+	super.restoreState(context, state[SUPER_INDEX]);
+    }
+
+    private static final int ATTRS_INDEX = 0;
+    private static final int LISTENERS_INDEX = 1;
+    private static final int PREVIOUS_INDEX = 2;
+    private static final int VALIDATORS_INDEX = 3;
+
+
+    public Object getState(FacesContext context) {
+	// get the state of our superclasses.
+	Object superState = super.getState(context);
+	Object [] result = new Object[2];
+	Object [] thisState = new Object[4];
+	// save the attributes
+	thisState[ATTRS_INDEX] = required + STATE_SEP + valid;
+	// save the listeners
+	thisState[LISTENERS_INDEX] = context.getApplication().getViewHandler().getStateManager().getAttachedObjectState(context, this, "listeners", listeners);
+	if (null != validators) {
+	    List [] validatorsList = new List[1];
+	    validatorsList[0] = validators;
+	    thisState[VALIDATORS_INDEX] = context.getApplication().getViewHandler().getStateManager().getAttachedObjectState(context, this, "validators", validatorsList);
+	}
+	// save the value
+	if (previous instanceof Serializable) {
+	    thisState[PREVIOUS_INDEX] = previous;
+	}
+	result[THIS_INDEX] = thisState;
+	// save the state of our superclass
+	result[SUPER_INDEX] = superState;
+	return result;
+    }    
 
 
 }

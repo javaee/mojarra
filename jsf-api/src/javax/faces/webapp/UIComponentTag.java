@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTag.java,v 1.9 2003/07/26 17:55:01 craigmcc Exp $
+ * $Id: UIComponentTag.java,v 1.10 2003/07/28 22:19:07 eburns Exp $
  */
 
 /*
@@ -23,7 +23,6 @@ import javax.faces.context.ResponseWriter;
 import javax.faces.render.RenderKitFactory;
 import javax.faces.render.RenderKit;
 import javax.faces.el.ValueBinding;
-import javax.faces.tree.Tree;
 import javax.faces.application.Application;
 import javax.servlet.jsp.JspException;
 import javax.servlet.ServletResponse;
@@ -463,7 +462,7 @@ public abstract class UIComponentTag implements Tag {
         } else {
 	    // If there is no parent tag, this tag must be the root.
 	    thisTagIsRoot = true;
-            parentComponent = context.getTree().getRoot();
+            parentComponent = context.getRoot();
             parentCreated = parentComponent.getChildren().size() < 1;
         }
 
@@ -532,7 +531,7 @@ public abstract class UIComponentTag implements Tag {
             } else {
 		// The only case where parentTag == null is the root
 		// tag, therefore, the component is the rootComponent.
-                component = context.getTree().getRoot();
+                component = context.getRoot();
             }
             // PENDING - what if it's not there?
 
@@ -725,7 +724,7 @@ public abstract class UIComponentTag implements Tag {
 	    RenderKitFactory renderFactory = (RenderKitFactory)
 		FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
 	    RenderKit renderKit = 
-		renderFactory.getRenderKit(context.getTree().getRenderKitId());
+		renderFactory.getRenderKit(context.getRoot().getRenderKitId());
 	    ServletResponse response = (ServletResponse)
 		context.getExternalContext().getResponse();
             writer = 

@@ -1,5 +1,5 @@
 /*
- * $Id: UIOutputBase.java,v 1.2 2003/07/26 17:54:50 craigmcc Exp $
+ * $Id: UIOutputBase.java,v 1.3 2003/07/28 22:18:46 eburns Exp $
  */
 
 /*
@@ -17,6 +17,8 @@ import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.el.ValueBinding;
 
+import java.io.Serializable;
+import java.io.IOException;
 
 /**
  * <p><strong>UIOutputBase</strong> is a convenience base class that
@@ -129,5 +131,43 @@ public class UIOutputBase extends UIComponentBase implements UIOutput {
 
     }
 
+    // ---------------------------------------------- methods from StateHolder
+
+    public void restoreState(FacesContext context, 
+			     Object stateObj) throws IOException {
+	Object [] state = (Object []) stateObj;
+	Object [] myState = (Object []) state[THIS_INDEX];
+	String stateStr = (String) myState[ATTRS_INDEX];
+	int i = stateStr.indexOf(STATE_SEP);
+	valueRef = stateStr.substring(0, i);
+	if ("null".equals(valueRef)) {
+	    valueRef = null;
+	}
+	converter = stateStr.substring(i + STATE_SEP_LEN);
+	if ("null".equals(converter)) {
+	    converter = null;
+	}
+	
+	value = myState[VALUE_INDEX];
+
+	super.restoreState(context, state[SUPER_INDEX]);
+    }
+    private static final int ATTRS_INDEX = 0;
+    private static final int VALUE_INDEX = 1;
+
+    public Object getState(FacesContext context) {
+	Object superState = super.getState(context);
+	Object [] result = new Object[2];
+	Object [] myState = new Object[2];
+	myState[ATTRS_INDEX] = valueRef + STATE_SEP + converter;
+	// PENDING(edburns): is it correct to "just skip it" if value is
+	// not Serializable?
+	if (value instanceof Serializable) {
+	    myState[VALUE_INDEX] = value;
+	}
+	result[THIS_INDEX] = myState;
+	result[SUPER_INDEX] = superState;
+	return result;
+    }
 
 }

@@ -1,5 +1,5 @@
 /*
- * $Id: FactoryFinder.java,v 1.16 2003/04/29 18:51:24 eburns Exp $
+ * $Id: FactoryFinder.java,v 1.17 2003/07/28 22:18:37 eburns Exp $
  */
 
 /*
@@ -100,14 +100,6 @@ public final class FactoryFinder {
         "javax.faces.render.RenderKitFactory";
 
 
-    /**
-     * <p>The property name for the
-     * {@link javax.faces.tree.TreeFactory} class name.</p>
-     */
-    public final static String TREE_FACTORY =
-        "javax.faces.tree.TreeFactory";
-
-
     // ------------------------------------------------------- Static Variables
 
 
@@ -134,8 +126,7 @@ public final class FactoryFinder {
         APPLICATION_FACTORY,
         FACES_CONTEXT_FACTORY,
         LIFECYCLE_FACTORY,
-        RENDER_KIT_FACTORY,
-        TREE_FACTORY,
+        RENDER_KIT_FACTORY
     };
 
 
