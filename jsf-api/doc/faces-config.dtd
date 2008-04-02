@@ -15,6 +15,13 @@
 
 
 <!--
+    An "ActionRef" is a String that represents a value reference expression
+    that points at a property of type javax.faces.application.Action.
+-->
+<!ENTITY % ActionRef "CDATA">
+
+
+<!--
     A "ClassName" is the fully qualified name of a Java class that is
     instantiated to provide the functionality of the enclosing element.
 -->
@@ -52,6 +59,18 @@
 <!ENTITY % SEVERITY "(FATAL|ERROR|WARN|INFO)">
 
 
+<!--
+    A "TreeId" is the tree identifier of a JavaServer Faces component tree.
+-->
+<!ENTITY % TreeId "CDATA">
+
+
+<!--
+    A "ValueRef" is a syntactically valid value reference expression.
+-->
+<!ENTITY % ValueRef "CDATA">
+
+
 <!-- ==================== Top Level Elements ============================== -->
 
 
@@ -60,7 +79,7 @@
     hierarchy, and contains nested elements for all of the other configuration
     settings.
 -->
-<!ELEMENT faces-config    ((application|component|converter|message-resources|render-kit|validator)*)>
+<!ELEMENT faces-config    ((application|component|converter|message-resources|navigation-rules|render-kit|validator)*)>
 
 
 <!-- ==================== Definition Elements ============================= -->
@@ -135,6 +154,22 @@
     JSF implementation must provide a suitable default.
 -->
 <!ELEMENT message-resources (description*, display-name*, icon*, message-resources-id, message-resources-class?)>
+
+
+<!--
+    The "navigation-rule" element represents an individual decision rule
+    that will be utilized by the default NavigationHandler implementation
+    to make decisions on what component tree should be displayed next.
+-->
+<!ELEMENT navigation-rule (from-tree-id?, from-action-ref?, from-outcome?, to-tree-id)>
+
+
+<!--
+    The "navigation-rules" element represents a set of zero or more decision
+    rules that will be utilized by the default NavigationHandler implementation
+    to make decisions on what component tree should be displayed next.
+-->
+<!ELEMENT navigation-rules (navigation-rule*)>
 
 
 <!--
@@ -274,6 +309,42 @@
 
 
 <!--
+    The "from-action-ref" element contains an action reference expression
+    that must have been executed (by the default ActionListener for handling
+    application level events) in order to select this navigation rule.  If
+    not specified, this rule will be relevant no matter which action reference
+    was executed (or if no action reference was executed).
+
+    This value must be of type "ActionRef".
+-->
+<!ELEMENT from-action-ref EMPTY>
+
+
+<!--
+    The "from-outcome" element contains a logical outcome string returned
+    by the execution of an applications Action component selected via an
+    "actionRef" property (or a literal value specified by an "action"
+    property) of a UICommand component.  If specified, this rule will be
+    relevant only if the outcome value matches this element's value.  If
+    not specified, this rule will be relevant no matter what the outcome
+    value was.
+-->
+<!ELEMENT from-outcome    EMPTY>
+
+
+<!--
+    The "from-tree" element contains the component tree identifier of
+    the tree for which the containing navigation rule is relevant.  If
+    no "from-tree" element is specified, this rule applies to navigation
+    decisions on all component trees.  FIXME - decide whether this should
+    be a regular expression or some other sort of matching pattern.
+
+    This value must be of type "TreeId".
+-->
+<!ELEMENT from-tree-id    EMPTY>
+
+
+<!--
     The "icon" element contains "small-icon" and "large-icon" elements that
     specify the resoruce paths for small and large GIF or JPG icon images
     used to represent the parent element in a GUI tool.
@@ -403,6 +474,14 @@
 -->
 <!ELEMENT summary         EMPTY>
 <!ATTLIST summary         xml:lang        %Language;      #IMPLIED>
+
+
+<!--
+    The "to-tree" element contains the component tree identifier of
+    the next component tree that should be displayed if this navigation
+    rule is matched.  It must be of type "TreeId".
+-->
+<!ELEMENT to-tree-id      EMPTY>
 
 
 <!--
