@@ -1,5 +1,5 @@
 /*
- * $Id: EvaluatorBean.java,v 1.3 2004/10/14 19:53:41 edburns Exp $
+ * $Id: EvaluatorBean.java,v 1.4 2004/10/18 21:20:47 edburns Exp $
  */
 
 /*
@@ -120,7 +120,7 @@ public class EvaluatorBean extends Object {
 	    curInput.getAttributes().put("foo", "bar");
 	    runnable = new AttributeGetRunnable(curInput, getReps(), "foo", 
 						random, i, 
-						numThreads == 1 ? false: true,
+						true,
 						System.out,
 						this);
 
@@ -220,7 +220,7 @@ public class EvaluatorBean extends Object {
 		
 		if (sleepBetweenGets) {
 		    try {
-			Thread.sleep(Math.abs(random.nextLong()) % 10);
+			Thread.sleep(0L, Math.abs(random.nextInt()) % 100);
 		    }
 		    catch (InterruptedException e) {
 			host.getThreadOutcomes()[index] = e;

@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.101 2004/06/16 00:06:55 jvisvanathan Exp $
+ * $Id: UIComponentBase.java,v 1.102 2004/10/18 21:20:47 edburns Exp $
  */
 
 /*
@@ -75,7 +75,7 @@ public abstract class UIComponentBase extends UIComponent {
      * Reference to the map of <code>PropertyDescriptor</code>s for this class
      * in the <code>descriptors<code> <code>Map<code>.
      */
-    private WeakHashMap pdMap = null; 
+    private Map pdMap = null; 
 
     /**
      * <p>An empty argument list to be passed to reflection methods.</p>
@@ -84,14 +84,14 @@ public abstract class UIComponentBase extends UIComponent {
 
     public UIComponentBase() {
         synchronized(descriptors) {
-            pdMap = (WeakHashMap) descriptors.get(this.getClass());
+            pdMap = (Map) descriptors.get(this.getClass());
             if (pdMap != null) {
                 return;
             } 
             // load the property descriptors for this class.
             PropertyDescriptor pd[] = getPropertyDescriptors();
             if (pd != null) {
-                pdMap = new WeakHashMap(pd.length);
+                pdMap = new HashMap(pd.length);
                 for (int i = 0; i < pd.length; i++) {
                     pdMap.put(pd[i].getName(), pd[i]);    
                 }
