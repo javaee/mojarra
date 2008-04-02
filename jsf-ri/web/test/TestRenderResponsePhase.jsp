@@ -16,7 +16,7 @@
 
   <f:loadBundle basename="com.sun.faces.TestMessages" var="testMessages" />
 <h:form id="basicForm" title="basicForm" styleClass="formClass"
-      accept="html,wml" >
+      accept="html,wml" acceptcharset="some-charset">
 
   <TABLE BORDER="1">
 

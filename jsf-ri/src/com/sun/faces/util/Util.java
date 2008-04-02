@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.135 2004/04/27 17:25:07 eburns Exp $
+ * $Id: Util.java,v 1.136 2004/04/28 20:59:42 jvisvanathan Exp $
  */
 
 /*
@@ -59,7 +59,7 @@ import java.util.StringTokenizer;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.135 2004/04/27 17:25:07 eburns Exp $
+ * @version $Id: Util.java,v 1.136 2004/04/28 20:59:42 jvisvanathan Exp $
  */
 
 public class Util extends Object {
@@ -317,7 +317,6 @@ public class Util extends Object {
      */
     private static String passthruAttributes[] = {
         "accept",
-        "acceptcharset",
         "accesskey",
         "alt",
         "bgcolor",

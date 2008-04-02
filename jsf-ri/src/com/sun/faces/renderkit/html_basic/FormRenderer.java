@@ -1,5 +1,5 @@
 /*
- * $Id: FormRenderer.java,v 1.77 2004/03/31 18:48:34 eburns Exp $
+ * $Id: FormRenderer.java,v 1.78 2004/04/28 20:59:41 jvisvanathan Exp $
  */
 
 /*
@@ -125,7 +125,13 @@ public class FormRenderer extends HtmlBasicRenderer {
             component.getAttributes().get("styleClass"))) {
             writer.writeAttribute("class", styleClass, "styleClass");
         }
-
+        String acceptcharset = null;
+        if (null != (acceptcharset = (String)
+            component.getAttributes().get("acceptcharset"))) {
+            writer.writeAttribute("accept-charset", acceptcharset, 
+                    "acceptcharset");
+        }
+        
         Util.renderPassThruAttributes(writer, component);
         Util.renderBooleanPassThruAttributes(writer, component);
         writer.writeText("\n", null);
