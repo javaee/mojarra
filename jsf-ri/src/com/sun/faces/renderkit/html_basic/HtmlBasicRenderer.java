@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderer.java,v 1.103 2006/01/11 15:28:08 rlubke Exp $
+ * $Id: HtmlBasicRenderer.java,v 1.104 2006/03/21 23:43:16 rlubke Exp $
  */
 
 /*
@@ -475,7 +475,11 @@ public abstract class HtmlBasicRenderer extends Renderer {
             UIComponent comp = children.get(i);
 
             if (comp instanceof NamingContainer) {
-                retComp = comp.findComponent(forComponent);
+                try {
+                    retComp = comp.findComponent(forComponent);
+                } catch (IllegalArgumentException iae) {
+                    continue;
+                }
             }
 
             if (retComp == null) {
