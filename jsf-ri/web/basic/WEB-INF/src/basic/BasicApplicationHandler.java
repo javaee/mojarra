@@ -1,5 +1,5 @@
 /*
- * $Id: BasicApplicationHandler.java,v 1.10 2002/10/07 20:39:54 jvisvanathan Exp $
+ * $Id: BasicApplicationHandler.java,v 1.11 2002/10/10 17:27:45 jvisvanathan Exp $
  */
 
 /*
@@ -39,10 +39,10 @@ public class BasicApplicationHandler implements ApplicationHandler{
 
 	if (!(facesEvent instanceof FormEvent) &&
             !(facesEvent instanceof CommandEvent)) {
-	    return false;
+	    return true;
 	}
   
-        boolean returnValue = false;
+        boolean returnValue = true;
         String treeId = null;
 
         if (facesEvent instanceof FormEvent) {
@@ -55,10 +55,10 @@ public class BasicApplicationHandler implements ApplicationHandler{
 		treeId = "/StandardRenderKit.html";
 	    }
 	    else {
-		return false;
+		return true;
 	    }
 
-            returnValue = false;
+            returnValue = true;
         } else if (facesEvent instanceof CommandEvent) {
             CommandEvent commandEvent = (CommandEvent)facesEvent;
             UIComponent c = commandEvent.getComponent();

@@ -1,5 +1,5 @@
 /*
- * $Id: ApplyRequestValuesPhase.java,v 1.2 2002/08/01 15:54:14 rkitain Exp $
+ * $Id: ApplyRequestValuesPhase.java,v 1.3 2002/10/10 17:27:44 jvisvanathan Exp $
  */
 
 /*
@@ -30,7 +30,7 @@ import java.io.IOException;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: ApplyRequestValuesPhase.java,v 1.2 2002/08/01 15:54:14 rkitain Exp $
+ * @version $Id: ApplyRequestValuesPhase.java,v 1.3 2002/10/10 17:27:44 jvisvanathan Exp $
  * 
  * @see	com.sun.faces.lifecycle.DefaultLifecycleImpl
  * @see	javax.faces.lifecycle.Lifecycle#APPLY_REQUEST_VALUES_PHASE
@@ -66,13 +66,15 @@ public ApplyRequestValuesPhase(Lifecycle newDriver, int newId)
 	      public int takeActionOnComponent(FacesContext context,
 					       UIComponent comp) throws FacesException {
                   try {
-		      comp.decode(context);
+		      boolean status = comp.decode(context);
+                      if ( !status ) {
+                          return Phase.GOTO_RENDER;
+                      }    
 		  } catch (IOException e) {
 		      throw new FacesException("Can't decode: " + 
 		          comp.getComponentId(), e);
 		  }
-
-		  return Phase.GOTO_NEXT;
+                  return Phase.GOTO_NEXT;
 	      }
 	  });
 }

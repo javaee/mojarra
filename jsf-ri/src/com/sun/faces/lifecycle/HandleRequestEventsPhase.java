@@ -1,5 +1,5 @@
 /*
- * $Id: HandleRequestEventsPhase.java,v 1.6 2002/10/07 20:39:49 jvisvanathan Exp $
+ * $Id: HandleRequestEventsPhase.java,v 1.7 2002/10/10 17:27:44 jvisvanathan Exp $
  */
 
 /*
@@ -33,7 +33,7 @@ import java.util.Iterator;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: HandleRequestEventsPhase.java,v 1.6 2002/10/07 20:39:49 jvisvanathan Exp $
+ * @version $Id: HandleRequestEventsPhase.java,v 1.7 2002/10/10 17:27:44 jvisvanathan Exp $
  * 
  * @see	com.sun.faces.lifecycle.DefaultLifecycleImpl
  * @see	javax.faces.lifecycle.Lifecycle#HANDLE_REQUEST_EVENTS_PHASE
@@ -68,11 +68,11 @@ public HandleRequestEventsPhase(Lifecycle newDriver, int newId)
 	  new LifecycleCallback() {
 	      public int takeActionOnComponent(FacesContext context,
 					       UIComponent comp) throws FacesException {
-		  if (comp.processEvents(context)) {
-		      return Phase.GOTO_RENDER;
+		  if (!comp.processEvents(context)) {
+                      return Phase.GOTO_RENDER;
 		  }
 		  // PENDING(): how to skip to rendering?
-		  return Phase.GOTO_NEXT;
+                  return Phase.GOTO_NEXT;
 	      }
 	  });
 }
@@ -116,6 +116,7 @@ public int traverseTreeInvokingCallback(FacesContext facesContext)
     if (gotoRender) {
         result = Phase.GOTO_RENDER;
     }
+   
     return result;
 }
 

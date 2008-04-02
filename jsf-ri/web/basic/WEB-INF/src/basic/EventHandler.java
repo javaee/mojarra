@@ -1,5 +1,5 @@
 /*
- * $Id: EventHandler.java,v 1.11 2002/10/07 20:39:54 jvisvanathan Exp $
+ * $Id: EventHandler.java,v 1.12 2002/10/10 17:27:46 jvisvanathan Exp $
  */
 
 /*
@@ -29,7 +29,7 @@ public class EventHandler extends RequestEventHandler {
 				RequestEvent event) {
 	System.out.println("Received Event: " + event + " component: " + 
 			   component);
-	return false;
+	return true;
     }
     
 }
