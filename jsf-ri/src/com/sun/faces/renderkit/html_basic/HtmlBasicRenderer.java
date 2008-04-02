@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderer.java,v 1.48 2003/08/19 19:31:17 rlubke Exp $
+ * $Id: HtmlBasicRenderer.java,v 1.49 2003/08/21 22:32:50 rlubke Exp $
  */
 
 /*
@@ -395,7 +395,7 @@ public abstract class HtmlBasicRenderer extends Renderer {
 
             // If there is no componentId, generate one and store it
             if (component.getId() == null) {
-                // Don't call setComponentId() because it checks for
+                // Don't call setId() because it checks for
                 // uniqueness.  No need.
                 clientId = closestContainer.generateClientId();
             } else {
