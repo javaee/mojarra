@@ -7,5 +7,5 @@
 	<option value="103">Long4</option>
 </select>
 <input id="mySecret" type="password" name="mySecret" value="" />
-<input id="myInputText" type="text" name="myInputText" value="text" /><span id="myOutputText"></span><textarea id="myTextarea" name="myTextarea">TextareaRenderer</textarea>
-<img id="myGraphicImage" src="/test/nonModelReferenceImage.gif" usemap="usemap" ismap="ismap" alt="" /><img id="_id0" src="/test/foo/modelReferenceImage.gif" usemap="usemap" ismap="ismap" alt="" /><span>My name is Bobby Orr</span>
+<input id="myInputText" type="text" name="myInputText" value="text" /><span id="myOutputText"></span><textarea id="myTextarea" name="myTextarea" class="bar" style="foo">TextareaRenderer</textarea>
+<img id="myGraphicImage" src="/test/nonModelReferenceImage.gif;jsessionid=0896447ADBE479FF3C818D1CA00F731A" usemap="usemap" ismap="ismap" alt="" /><img src="/test/foo/modelReferenceImage.gif;jsessionid=0896447ADBE479FF3C818D1CA00F731A" usemap="usemap" ismap="ismap" alt="" /><span>My name is Bobby Orr</span>
