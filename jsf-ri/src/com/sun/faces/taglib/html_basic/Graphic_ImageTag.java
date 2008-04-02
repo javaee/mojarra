@@ -1,5 +1,5 @@
 /*
- * $Id: Graphic_ImageTag.java,v 1.15 2003/10/07 20:15:52 horwat Exp $
+ * $Id: Graphic_ImageTag.java,v 1.16 2003/10/09 20:02:22 jvisvanathan Exp $
  */
 
 /*
@@ -92,6 +92,12 @@ public class Graphic_ImageTag extends BaseComponentTag
         }
         if (alt != null) {
             component.getAttributes().put("alt", alt);
+        }
+        if (width != null) {
+            component.getAttributes().put("width", width);
+        }
+        if (height != null) {
+            component.getAttributes().put("height", height);
         }
     }
     

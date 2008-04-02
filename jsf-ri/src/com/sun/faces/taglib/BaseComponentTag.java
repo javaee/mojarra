@@ -1,5 +1,5 @@
 /*
- * $Id: BaseComponentTag.java,v 1.5 2003/10/08 00:43:22 rlubke Exp $
+ * $Id: BaseComponentTag.java,v 1.6 2003/10/09 20:02:22 jvisvanathan Exp $
  */
 
 /*
@@ -31,7 +31,7 @@ import javax.servlet.jsp.JspException;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: BaseComponentTag.java,v 1.5 2003/10/08 00:43:22 rlubke Exp $ 
+ * @version $Id: BaseComponentTag.java,v 1.6 2003/10/09 20:02:22 jvisvanathan Exp $ 
  */
 
 public abstract class BaseComponentTag extends UIComponentTag
@@ -92,24 +92,22 @@ public abstract class BaseComponentTag extends UIComponentTag
     protected String key_ = null;
     protected String bundle = null;
     protected String bundle_ = null;
-
-
+    protected String height = null; 
+    protected String height_ = null;
+    protected String width = null;
+    protected String width_ = null;
+    protected String cellspacing = null;
+    protected String cellspacing_ = null;
+    protected String cellpadding = null;
+    protected String cellpadding_ = null;
+    
     // non-String attrs
     protected boolean disabled = false;
     protected int size = Integer.MIN_VALUE;
     protected int tabindex = Integer.MIN_VALUE;
     protected boolean checked = false;
-    protected int height = Integer.MIN_VALUE; // PENDING(edburns): never
-                                              // pushed to component.
-                                              // PENDING(edburns): this
-                                              // should really be a
-                                              // String, so it can
-                                              // handle the percentage
-                                              // case.
-    protected int width = Integer.MIN_VALUE;
+    
     protected int border = Integer.MIN_VALUE;
-    protected int cellspacing = Integer.MIN_VALUE;
-    protected int cellpadding = Integer.MIN_VALUE;
     protected boolean readonly = false;
     protected int maxlength = Integer.MIN_VALUE;
     protected int rows = Integer.MIN_VALUE;
@@ -385,9 +383,9 @@ public abstract class BaseComponentTag extends UIComponentTag
 
     // Override height - For IMG HTML element
 
-    public void setHeight(int newHeight)
+    public void setHeight(String newHeight)
     {
-        height = newHeight;
+        height_ = newHeight;
     }
 
     // For "A" (Hyperlink) HTML element
@@ -711,8 +709,8 @@ public abstract class BaseComponentTag extends UIComponentTag
        this.summary_ = newSummary;
    } 
 
-   public  void setWidth(int newWidth) {
-       this.width = newWidth;
+   public  void setWidth(String newWidth) {
+       this.width_ = newWidth;
    } 
    
    public  void setBgcolor(String newColor) {
@@ -731,12 +729,12 @@ public abstract class BaseComponentTag extends UIComponentTag
        this.border = newBorder;
    }
    
-   public  void setCellspacing(int newCellspacing) {
-       this.cellspacing = newCellspacing;
+   public  void setCellspacing(String newCellspacing) {
+       this.cellspacing_ = newCellspacing;
    }
    
-   public  void setCellpadding(int newCellpadding) {
-       this.cellpadding = newCellpadding;
+   public  void setCellpadding(String newCellpadding) {
+       this.cellpadding_ = newCellpadding;
    }
 
     /**
@@ -947,6 +945,18 @@ public abstract class BaseComponentTag extends UIComponentTag
         }
         if (valueRef_ != null) {
             valueRef = Util.evaluateElExpression(valueRef_, pageContext);
+        }
+        if (height_ != null) {
+            height = Util.evaluateElExpression(height_, pageContext);
+        }
+        if (width_ != null) {
+            width = Util.evaluateElExpression(width_, pageContext);
+        }
+        if (cellspacing_ != null) {
+            cellspacing = Util.evaluateElExpression(cellspacing_, pageContext);
+        }
+        if (cellpadding_ != null) {
+            cellpadding = Util.evaluateElExpression(cellpadding_, pageContext);
         }
     }
 

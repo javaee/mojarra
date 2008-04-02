@@ -1,5 +1,5 @@
 /*
- * $Id: Panel_ListTag.java,v 1.16 2003/10/07 20:15:53 horwat Exp $
+ * $Id: Panel_ListTag.java,v 1.17 2003/10/09 20:02:23 jvisvanathan Exp $
  */
 
 /*
@@ -118,8 +118,11 @@ public class Panel_ListTag extends BaseComponentTag {
         if (summary != null) {
             component.getAttributes().put("summary", summary);
         }
-        if (width != Integer.MIN_VALUE) {
-            component.getAttributes().put("width", new Integer(width));
+        if (width != null) {
+            component.getAttributes().put("width", width);
+        }
+        if (height != null) {
+            component.getAttributes().put("height", height);
         }
         if (bgcolor != null) {
             component.getAttributes().put("bgcolor", bgcolor);
@@ -133,11 +136,11 @@ public class Panel_ListTag extends BaseComponentTag {
         if (border != Integer.MIN_VALUE) {
             component.getAttributes().put("border", new Integer(border));
         }
-        if (cellspacing != Integer.MIN_VALUE) {
-            component.getAttributes().put("cellspacing", new Integer(cellspacing));
+        if (cellspacing != null) {
+            component.getAttributes().put("cellspacing", cellspacing);
         }
-        if (cellpadding != Integer.MIN_VALUE) {
-            component.getAttributes().put("cellpadding", new Integer(cellpadding));
+        if (cellpadding != null) {
+            component.getAttributes().put("cellpadding", cellpadding);
         }
     }
 
