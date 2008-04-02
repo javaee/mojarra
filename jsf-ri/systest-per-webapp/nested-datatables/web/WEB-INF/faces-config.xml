@@ -53,4 +53,18 @@
     </managed-property>
   </managed-bean>
 
+  <managed-bean>
+    <managed-bean-name>testbean</managed-bean-name>
+    <managed-bean-class>com.tavve.webapps.nested.TestBean</managed-bean-class>
+    <managed-bean-scope>session</managed-bean-scope>
+  </managed-bean>
+  
+  <navigation-rule>
+    <from-view-id>/nested.jsp</from-view-id>
+    <navigation-case>
+      <from-outcome>OK</from-outcome>
+      <to-view-id>/nested.jsp</to-view-id>
+    </navigation-case>
+  </navigation-rule>
+
 </faces-config>
