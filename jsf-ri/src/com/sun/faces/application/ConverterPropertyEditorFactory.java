@@ -77,10 +77,7 @@ public class ConverterPropertyEditorFactory {
          * pool of the template class.
          */
         private static class Utf8InfoRef {
-            /**
-             * The text of the UTF8 constant.
-             */
-            String text;
+            
             /**
              * The position of the constant in the byte array that defines the
              * template class.
@@ -92,9 +89,8 @@ public class ConverterPropertyEditorFactory {
              */
             int length;
 
-            public Utf8InfoRef(String text, int index, int length) {
-                super();
-                this.text = text;
+            public Utf8InfoRef(int index, int length) {
+                super();               
                 this.index = index;
                 this.length = length;
             }
@@ -219,7 +215,7 @@ public class ConverterPropertyEditorFactory {
             for (int i = 1; i < constant_pool_count
                 && off < templateBytes.length; ++i) {
                 if (matchAtIndex(utf8InfoBytes, off)) {
-                    return new Utf8InfoRef(text, off, utf8InfoBytes.length);
+                    return new Utf8InfoRef(off, utf8InfoBytes.length);
                 }
                 switch (templateBytes[off]) {
                 case 1:// CONSTANT_Utf8
