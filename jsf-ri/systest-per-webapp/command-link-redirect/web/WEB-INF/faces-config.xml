@@ -24,6 +24,16 @@
       <to-view-id>/three.jsp</to-view-id>
       <redirect />
     </navigation-case>
+    <navigation-case>
+      <from-outcome>four</from-outcome>
+      <to-view-id>/three.jsp</to-view-id>
+      <redirect />
+    </navigation-case>
+    <navigation-case>
+      <from-outcome>five</from-outcome>
+      <to-view-id>/five.jsp</to-view-id>
+      <redirect />
+    </navigation-case>
   </navigation-rule>
 
   <navigation-rule>
@@ -55,6 +65,55 @@
     </navigation-case>
 
   </navigation-rule>
+
+  <navigation-rule>
+    <from-view-id>/four.jsp</from-view-id>
+    <navigation-case>
+      <from-outcome>two</from-outcome>
+      <to-view-id>/two.jsp</to-view-id>
+      <redirect />
+    </navigation-case>
+    <navigation-case>
+      <from-outcome>three</from-outcome>
+      <to-view-id>/three.jsp</to-view-id>
+      <redirect />
+    </navigation-case>
+    <navigation-case>
+      <from-outcome>one</from-outcome>
+      <to-view-id>/one.jsp</to-view-id>
+      <redirect />
+    </navigation-case>
+    <navigation-case>
+      <from-outcome>five</from-outcome>
+      <to-view-id>/five.jsp</to-view-id>
+      <redirect />
+    </navigation-case>
+  </navigation-rule>
+
+  <navigation-rule>
+    <from-view-id>/five.jsp</from-view-id>
+    <navigation-case>
+      <from-outcome>two</from-outcome>
+      <to-view-id>/two.jsp</to-view-id>
+      <redirect />
+    </navigation-case>
+    <navigation-case>
+      <from-outcome>three</from-outcome>
+      <to-view-id>/three.jsp</to-view-id>
+      <redirect />
+    </navigation-case>
+    <navigation-case>
+      <from-outcome>one</from-outcome>
+      <to-view-id>/one.jsp</to-view-id>
+      <redirect />
+    </navigation-case>
+    <navigation-case>
+      <from-outcome>four</from-outcome>
+      <to-view-id>/four.jsp</to-view-id>
+      <redirect />
+    </navigation-case>
+  </navigation-rule>
+
 
 
 </faces-config>

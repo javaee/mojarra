@@ -16,9 +16,43 @@
 
 <f:view>
 
-  <h:form>
-
     <p>Page One</p>
+
+	<ol>
+
+	  <li><p>Click one the "one" link below
+	  </p></li>
+
+	  <li><p>Use the browser back button to go back
+	  </p></li>
+
+	  <li><p>Click on the "two" link below
+	  </p></li>
+
+	  <li><p>Note you receive no IllegalStateException
+	  </p></li>
+
+	  <li><p>Click on the "one" link below
+	  </p></li>
+
+	  <li><p>Use the browser back button to go back
+	  </p></li>
+
+	  <li><p>Click on the "four" button" note that you go to page four
+	  </p></li>
+
+	  <li><p>Use the browser back button to go back
+	  </p></li>
+
+	  <li><p>Click on the "five" button" note that you go to page five
+	  </p></li>
+
+
+
+	</ol>
+
+
+  <h:form>
 
     <h:commandLink id="two" action="two">
       <h:outputText value="two" />
@@ -32,6 +66,22 @@
 
 
   </h:form>
+
+  <h:form>
+
+    <h:commandLink id="four" action="four">
+      <h:outputText value="four" />
+    </h:commandLink>
+
+<br />
+
+    <h:commandLink id="five" action="five">
+      <h:outputText value="five" />
+    </h:commandLink>
+
+
+  </h:form>
+
 
 </f:view>
 
