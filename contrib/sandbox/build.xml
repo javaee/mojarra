@@ -69,13 +69,11 @@
     <!-- ************ Executable Targets ************************************** -->
 
 
-    <target name="init"
-            description="Initialize and evaluate conditionals">
+    <target name="init" description="Initialize and evaluate conditionals">
         <echo message="-------- ${impl.name} ${impl.version} --------"/>
     </target>
 
-    <target name="prepare" depends="init"
-            description="Prepare build directory">
+    <target name="prepare" depends="init" description="Prepare build directory">
         <mkdir dir="${build.dir}"/>
         <mkdir dir="${build.classes.dir}"/>
         <mkdir dir="${build.classes.dir}/META-INF"/>
@@ -84,8 +82,7 @@
         <mkdir dir="${build.dir}/lib"/>       
     </target>
 
-    <target name="compile" depends="prepare"
-            description="Just compile the classes">
+    <target name="compile" depends="prepare" description="Just compile the classes">
         <if>
             <equals arg1="${container.name}" arg2="glassfish"/>
             <then>
@@ -113,8 +110,7 @@
 
     </target>
 
-    <target name="clean"
-            description="Clean build and distribution directories">
+    <target name="clean" description="Clean build and distribution directories">
 
         <delete dir="${build.dir}"/>
         <delete dir="${dist.dir}"/>
@@ -148,8 +144,8 @@
 
         <mkdir dir="${dist.dir}"/>
 
-        <antcall target="tlddocs"/>
-
+        <antcall target="docs"/>
+        
         <!-- Create the binary distribution -->
         <zip destfile="${dist.dir}/jsf-ri-sandbox-${sb.impl.version}.zip">
             <zipfileset dir="${build.dir}"
@@ -170,8 +166,13 @@
         <antcall target="sandbox.source"/>
 
     </target>
+    
+    <target name="docs" description="Generate the tld and javadoc documentation">
+        <antcall target="tlddocs"/>
+        <antcall target="javadoc"/>
+    </target>
 
-    <target name="tlddocs">
+    <target name="tlddocs" description="Generate tld docs">
         <java fork="true" jar="${tlddoc.jar}">
             <arg line="-d ${build.dir}/tlddocs"/>
             <arg line="-windowtitle jsf-ri-sandbox-${sb.impl.version}"/>
@@ -179,7 +180,23 @@
         </java>
     </target>
 
-
+    <target name="javadoc" description="Generate javadocs">
+        <mkdir dir="${build.dir}/javadocs" />
+        <javadoc packagenames="com.sun.faces.sandbox."
+                verbose="no"
+                defaultexcludes="yes"
+                classpathref="impl.compile.classpath"
+                destdir="${build.dir}/javadocs"
+                header="${javadoc.headertext}"
+                footer="${javadoc.footertext}"
+                author="true"
+                version="true"
+                access="protected"
+                useexternalfile="yes"
+                use="true">
+            <fileset dir="${source.dir}" defaultexcludes="yes" />
+        </javadoc>
+    </target>
 
     <!--
          ===================================================================
@@ -194,8 +211,4 @@
     </target>
 
     <target name="main" depends="jars"/>
-
-
-
-
 </project>

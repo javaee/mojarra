@@ -11,7 +11,7 @@ import com.sun.faces.sandbox.component.YuiTree;
 import com.sun.faces.sandbox.util.Util;
 
 /**
- * @author lee
+ * @author <a href="mailto:jdlee@dev.java.net">Jason Lee</a>
  *
  */
 public class YuiTreeTag  extends UIComponentTag {

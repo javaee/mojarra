@@ -66,4 +66,72 @@
             <renderer-class>com.sun.faces.sandbox.render.YuiTreeRenderer</renderer-class>
         </renderer>
     </render-kit>
+
+    <!-- *************************** YUI Calendar *************************** -->
+    <component>                                                                                
+        <component-type>com.sun.faces.sandbox.YuiCalendar</component-type>
+        <component-class>com.sun.faces.sandbox.component.YuiCalendar</component-class>
+        <component-extension>
+            <renderer-type>com.sun.faces.sandbox.YuiCalendarRenderer</renderer-type>
+        </component-extension>                                                                                
+    </component>
+    
+    <render-kit>
+        <renderer>
+            <component-family>com.sun.faces.sandbox.YuiCalendar</component-family>
+            <renderer-type>com.sun.faces.sandbox.YuiCalendarRenderer</renderer-type>
+            <renderer-class>com.sun.faces.sandbox.render.YuiCalendarRenderer</renderer-class>
+        </renderer>    
+    </render-kit>
+    
+    <!-- *************************** YUI Menu *************************** -->
+    <component>
+        <component-type>com.sun.faces.sandbox.YuiMenu</component-type>
+        <component-class>com.sun.faces.sandbox.component.YuiMenu</component-class>
+        <component-extension>
+            <renderer-type>com.sun.faces.sandbox.YuiMenuRenderer</renderer-type>
+        </component-extension>                                                                                
+    </component>
+    
+    <render-kit>
+        <renderer>
+            <component-family>com.sun.faces.sandbox.YuiMenu</component-family>
+            <renderer-type>com.sun.faces.sandbox.YuiMenuRenderer</renderer-type>
+            <renderer-class>com.sun.faces.sandbox.render.YuiRenderer</renderer-class>
+        </renderer>    
+    </render-kit>
+    
+    <!-- *************************** YUI Context Menu *************************** -->
+    <component>
+        <component-type>com.sun.faces.sandbox.YuiContextMenu</component-type>
+        <component-class>com.sun.faces.sandbox.component.YuiContextMenu</component-class>
+        <component-extension>
+            <renderer-type>com.sun.faces.sandbox.YuiContextMenuRenderer</renderer-type>
+        </component-extension>                                                                                
+    </component>
+    
+    <render-kit>
+        <renderer>
+            <component-family>com.sun.faces.sandbox.YuiContextMenu</component-family>
+            <renderer-type>com.sun.faces.sandbox.YuiContextMenuRenderer</renderer-type>
+            <renderer-class>com.sun.faces.sandbox.render.YuiContextMenuRenderer</renderer-class>
+        </renderer>    
+    </render-kit>
+    
+    <!-- *************************** YUI Menu Bar *************************** -->
+    <component>
+        <component-type>com.sun.faces.sandbox.YuiMenuBar</component-type>
+        <component-class>com.sun.faces.sandbox.component.YuiMenuBar</component-class>
+        <component-extension>
+            <renderer-type>com.sun.faces.sandbox.YuiMenuBarRenderer</renderer-type>
+        </component-extension>                                                                                
+    </component>
+    
+    <render-kit>
+        <renderer>
+            <component-family>com.sun.faces.sandbox.YuiMenuBar</component-family>
+            <renderer-type>com.sun.faces.sandbox.YuiMenuBarRenderer</renderer-type>
+            <renderer-class>com.sun.faces.sandbox.render.YuiBarRenderer</renderer-class>
+        </renderer>    
+    </render-kit>
 </faces-config>

@@ -4,7 +4,7 @@
 package com.sun.faces.sandbox.util;
 
 /**
- * @author lee
+ * @author <a href="mailto:jdlee@dev.java.net">Jason Lee</a>
  *
  */
 public class YuiConstants {
@@ -23,7 +23,6 @@ public class YuiConstants {
     public static final String JS_UTILITIES = YUI_ROOT + "utilities.js";
     public static final String JS_YAHOO_DOM_EVENT = YUI_ROOT + "yahoo-dom-event.js";
     
-//    public static final String JS_YUISF_CAL = "/META-INF/yuisfcal.js";
-//    public static final String JS_YUISF_MENU = "/META-INF/yuisfmenu.js";
-
+    public static final String JS_YUI_CALENDAR_HELPER = YUI_ROOT + "calendar_helper.js";
+    public static final String JS_YUI_MENU_HELPER = YUI_ROOT + "menu_helper.js";
 }

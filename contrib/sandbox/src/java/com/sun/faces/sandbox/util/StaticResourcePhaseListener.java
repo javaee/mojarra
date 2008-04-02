@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * @author lee
+ * @author <a href="mailto:jdlee@dev.java.net">Jason Lee</a>
  *
  */
 public class StaticResourcePhaseListener implements PhaseListener {

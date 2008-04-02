@@ -21,7 +21,7 @@ import com.sun.faces.sandbox.util.Util;
 import com.sun.faces.sandbox.util.YuiConstants;
 
 /**
- * @author lee
+ * @author <a href="mailto:jdlee@dev.java.net">Jason Lee</a>
  *
  */
 public class YuiTreeRenderer extends Renderer {

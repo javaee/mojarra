@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author lee
+ * @author <a href="mailto:jdlee@dev.java.net">Jason Lee</a>
  *
  */
 public class TreeNode {

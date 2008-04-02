@@ -4,7 +4,7 @@
 package com.sun.faces.sandbox.model;
 
 /**
- * @author lee
+ * @author <a href="mailto:jdlee@dev.java.net">Jason Lee</a>
  *
  */
 public class TextNode extends TreeNode {

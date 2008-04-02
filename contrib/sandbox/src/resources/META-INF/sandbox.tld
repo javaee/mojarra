@@ -780,27 +780,14 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.2//EN"
         </attribute>
     </tag>
     <tag>
-        <name>
-            tree
-        </name>
-        <tag-class>
-            com.sun.faces.sandbox.taglib.YuiTreeTag
-        </tag-class>
-        <body-content>
-            JSP
-        </body-content>
-        <description>
-        </description>
+        <name>tree</name>
+        <tag-class>com.sun.faces.sandbox.taglib.YuiTreeTag</tag-class>
+        <body-content>JSP</body-content>
+        <description></description>
         <attribute>
-            <name>
-                id
-            </name>
-            <required>
-                false
-            </required>
-            <rtexprvalue>
-                true
-            </rtexprvalue>
+            <name>id</name>
+            <required>false</required>
+            <rtexprvalue>false</rtexprvalue>
             <description>
                 <![CDATA[The component identifier for this component.  This value must be
                 unique within the closest parent component that is a naming
@@ -808,15 +795,348 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.2//EN"
             </description>
         </attribute>
         <attribute>
-            <name>
-                model
-            </name>
-            <required>
-                true
-            </required>
-            <rtexprvalue>true</rtexprvalue>
+            <name>model</name>
+            <required>true</required>
+            <rtexprvalue>false</rtexprvalue>
              <description>
                 <![CDATA[Expression which returns a TreeNode representing the data for the tree.]]>
+            </description>
+        </attribute>
+    </tag>
+    <tag>
+        <name>calendar</name>
+        <tag-class>com.steeplesoft.jsf.components.yui.tag.CalendarTag</tag-class>
+        <body-content>JSP</body-content>
+        <description>Display a JavaScript calendar</description>
+        <attribute>
+            <name>id</name>
+            <required>false</required>
+            <rtexprvalue>false</rtexprvalue>
+            <description>
+                <![CDATA[The component identifier for this component.  This value must be
+                unique within the closest parent component that is a naming container.]]>
+            </description>
+        </attribute>
+        <attribute>
+            <name>value</name>
+            <required>true</required>
+            <rtexprvalue>false</rtexprvalue>
+            <description>
+                <![CDATA[The current value of this component.]]>
+            </description>
+        </attribute>
+
+        <!--  TODO:  Add correct descriptions -->
+        <attribute>
+            <name>hideBlankWeeks</name>
+            <required>false</required>
+            <rtexprvalue>false</rtexprvalue>
+            <description>
+                <![CDATA[The current value of this component.]]>
+            </description>
+        </attribute>
+        <attribute>
+            <name>showWeekdays</name>
+            <required>false</required>
+            <rtexprvalue>false</rtexprvalue>
+            <description>
+                <![CDATA[The current value of this component.]]>
+            </description>
+        </attribute>
+        <attribute>
+            <name>showWeekFooter</name>
+            <required>false</required>
+            <rtexprvalue>false</rtexprvalue>
+            <description>
+                <![CDATA[The current value of this component.]]>
+            </description>
+        </attribute>
+        <attribute>
+            <name>showWeekHeader</name>
+            <required>false</required>
+            <rtexprvalue>false</rtexprvalue>
+            <description>
+                <![CDATA[The current value of this component.]]>
+            </description>
+        </attribute>
+        <attribute>
+            <name>startWeekday</name>
+            <required>false</required>
+            <rtexprvalue>false</rtexprvalue>
+            <description>
+                <![CDATA[The current value of this component.]]>
+            </description>
+        </attribute>
+
+        <!--  "Standard" properties -->
+        <attribute>
+            <name>converter</name>
+            <required>false</required>
+            <rtexprvalue>false</rtexprvalue>
+            <description>
+                <![CDATA[Converter instance registered with this component.]]>
+            </description>
+        </attribute>
+        <attribute>
+            <name>converterMessage</name>
+            <required>false</required>
+            <rtexprvalue>false</rtexprvalue>
+            <description>
+                <![CDATA[A ValueExpression enabled attribute that, if present, will be used as the text of the converter message, replacing any message
+                that comes from the converter.]]>
+            </description>
+        </attribute>
+        <attribute>
+            <name>immediate</name>
+            <required>false</required>
+            <rtexprvalue>false</rtexprvalue>
+            <description>
+                <![CDATA[Flag indicating that this component's value must be converted and validated immediately (that is, during
+                Apply Request Values phase), rather than waiting until Process Validations phase.]]>
+            </description>
+        </attribute>
+        <attribute>
+            <name>rendered</name>
+            <required>false</required>
+            <rtexprvalue>false</rtexprvalue>
+            <description>
+                <![CDATA[Flag indicating whether or not this component should be rendered (during Render Response Phase), or processed on any subsequent
+                form submit.  The default value for this property is true.]]>
+            </description>
+        </attribute>
+        <attribute>
+            <name>required</name>
+            <required>false</required>
+            <rtexprvalue>false</rtexprvalue>
+            <description>
+                <![CDATA[Flag indicating that the user is required to provide a submitted value for this input component.]]>
+            </description>
+        </attribute>
+        <attribute>
+            <name>requiredMessage</name>
+            <required>false</required>
+            <rtexprvalue>false</rtexprvalue>
+            <description>
+                <![CDATA[A ValueExpression enabled attribute that, if present, will be used as the text of the validation message for the "required"
+                facility, if the "required" facility is used.]]>
+            </description>
+        </attribute>
+        <attribute>
+            <name>validator</name>
+            <required>false</required>
+            <rtexprvalue>false</rtexprvalue>
+            <description>
+                <![CDATA[MethodExpression representing a validator method that will be called during Process Validations to perform correctness checks on the
+                value of this component.  The expression must evaluate to a public method that takes FacesContext, UIComponent, and Object parameters,
+                with a return type of void.]]>
+            </description>
+        </attribute>
+        <attribute>
+            <name>validatorMessage</name>
+            <required>false</required>
+            <rtexprvalue>false</rtexprvalue>
+            <description>
+                <![CDATA[A ValueExpression enabled attribute that, if present, will be used as the text of the validator message, replacing any message that comes from the validator.]]>
+            </description>
+        </attribute>
+        <attribute>
+            <name>valueChangeListener</name>
+            <required>false</required>
+            <rtexprvalue>false</rtexprvalue>
+            <description>
+                <![CDATA[MethodExpression representing a value change listener method that will be notified when a new value has been set for this input component.  The
+                expression must evaluate to a public method that takes a ValueChangeEvent parameter, with a return type of void.]]>
+            </description>
+        </attribute>
+        <attribute>
+            <name>accesskey</name>
+            <required>false</required>
+            <rtexprvalue>false</rtexprvalue>
+            <description>
+                <![CDATA[Access key that, when pressed, transfers focus to this element.]]>
+            </description>
+        </attribute>
+        <attribute>
+            <name>dir</name>
+            <required>false</required>
+            <rtexprvalue>false</rtexprvalue>
+            <description>
+                <![CDATA[Direction indication for text that does not inherit directionality. Valid values are "LTR" (left-to-right) and "RTL" (right-to-left).]]>
+            </description>
+        </attribute>
+        <attribute>
+            <name>disabled</name>
+            <required>false</required>
+            <rtexprvalue>false</rtexprvalue>
+            <description>
+                <![CDATA[Flag indicating that this element must never receive focus or be included in a subsequent submit.  A value of false causes
+                no attribute to be rendered, while a value of true causes the attribute to be rendered as disabled="disabled".]]>
+            </description>
+        </attribute>
+        <attribute>
+            <name>label</name>
+            <required>false</required>
+            <rtexprvalue>false</rtexprvalue>
+            <description>
+                <![CDATA[A localized user presentable name for this component.]]>
+            </description>
+        </attribute>
+        <attribute>
+            <name>lang</name>
+            <required>false</required>
+            <rtexprvalue>false</rtexprvalue>
+            <description>
+                <![CDATA[Code describing the language used in the generated markup for this component.]]>
+            </description>
+        </attribute>
+        <attribute>
+            <name>onchange</name>
+            <required>false</required>
+            <rtexprvalue>false</rtexprvalue>
+            <description>
+                <![CDATA[Javascript code executed when this element loses focus and its value has been modified since gaining focus.]]>
+            </description>
+        </attribute>
+        <attribute>
+            <name>style</name>
+            <required>false</required>
+            <rtexprvalue>false</rtexprvalue>
+            <description>
+                <![CDATA[CSS style(s) to be applied when this component is rendered.]]>
+            </description>
+        </attribute>
+        <attribute>
+            <name>styleClass</name>
+            <required>false</required>
+            <rtexprvalue>false</rtexprvalue>
+            <description>
+                <![CDATA[Space-separated list of CSS style class(es) to be applied when this element is rendered.  This value must be passed through as the "class" attribute on generated markup.]]>
+            </description>
+        </attribute>
+        <attribute>
+            <name>tabindex</name>
+            <required>false</required>
+            <rtexprvalue>false</rtexprvalue>
+            <description>
+                <![CDATA[Position of this element in the tabbing order for the current document.  This value must be an integer between 0 and 32767.]]>
+            </description>
+        </attribute>
+        <attribute>
+            <name>title</name>
+            <required>false</required>
+            <rtexprvalue>false</rtexprvalue>
+            <description>
+                <![CDATA[Advisory title information about markup elements generated for this component.]]>
+            </description>
+        </attribute>
+        <attribute>
+            <name>binding</name>
+            <required>false</required>
+            <rtexprvalue>false</rtexprvalue>
+            <description>The ValueExpression linking this component to a property in a backing bean</description>
+        </attribute>
+    </tag>
+    <!-- YUI Menu Component -->
+    <tag>
+        <name>menu</name>
+        <tag-class>com.steeplesoft.jsf.components.yui.tag.MenuTag</tag-class>
+        <body-content>JSP</body-content>
+        <description>Display a JavaScript Menu</description>
+        <attribute>
+            <name>id</name>
+            <required>false</required>
+            <rtexprvalue>false</rtexprvalue>
+            <description>
+                <![CDATA[The component identifier for this component.  This value must be
+                unique within the closest parent component that is a naming container.]]>
+            </description>
+        </attribute>
+        <attribute>
+            <name>value</name>
+            <required>true</required>
+            <rtexprvalue>false</rtexprvalue>
+            <description>
+                <![CDATA[The current value of this component.]]>
+            </description>
+        </attribute>
+        <attribute>
+            <name>width</name>
+            <required>false</required>
+            <rtexprvalue>false</rtexprvalue>
+            <description>
+                <![CDATA[The display width for the menu]]>
+            </description>
+        </attribute>
+    </tag>
+    <!-- YUI Menu Bar Component -->
+    <tag>
+        <name>menuBar</name>
+        <tag-class>com.steeplesoft.jsf.components.yui.tag.MenuBarTag</tag-class>
+        <body-content>JSP</body-content>
+        <description>Display a JavaScript Menu</description>
+        <attribute>
+            <name>id</name>
+            <required>false</required>
+            <rtexprvalue>false</rtexprvalue>
+            <description>
+                <![CDATA[The component identifier for this component.  This value must be
+                unique within the closest parent component that is a naming container.]]>
+            </description>
+        </attribute>
+        <attribute>
+            <name>value</name>
+            <required>true</required>
+            <rtexprvalue>false</rtexprvalue>
+            <description>
+                <![CDATA[The current value of this component.]]>
+            </description>
+        </attribute>
+        <attribute>
+            <name>width</name>
+            <required>false</required>
+            <rtexprvalue>false</rtexprvalue>
+            <description>
+                <![CDATA[The display width for the menu]]>
+            </description>
+        </attribute>
+    </tag>
+    <!-- YUI Context Menu Component -->
+    <tag>
+        <name>contextMenu</name>
+        <tag-class>com.steeplesoft.jsf.components.yui.tag.ContextMenuTag</tag-class>
+        <body-content>JSP</body-content>
+        <description>Display a JavaScript context menu</description>
+        <attribute>
+            <name>id</name>
+            <required>false</required>
+            <rtexprvalue>false</rtexprvalue>
+            <description>
+                <![CDATA[The component identifier for this component.  This value must be
+                unique within the closest parent component that is a naming container.]]>
+            </description>
+        </attribute>
+        <attribute>
+            <name>value</name>
+            <required>true</required>
+            <rtexprvalue>false</rtexprvalue>
+            <description>
+                <![CDATA[The current value of this component.]]>
+            </description>
+        </attribute>
+        <attribute>
+            <name>trigger</name>
+            <required>true</required>
+            <rtexprvalue>false</rtexprvalue>
+            <description>
+                <![CDATA[The trigger DOM element for the context menu.]]>
+            </description>
+        </attribute>
+        <attribute>
+            <name>width</name>
+            <required>false</required>
+            <rtexprvalue>false</rtexprvalue>
+            <description>
+                <![CDATA[The display width for the menu]]>
             </description>
         </attribute>
     </tag>

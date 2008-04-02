@@ -10,7 +10,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import com.sun.faces.sandbox.model.TreeNode;
 
 /**
- * @author lee
+ * @author <a href="mailto:jdlee@dev.java.net">Jason Lee</a>
  *
  */
 public class YuiTree extends UIOutput {
