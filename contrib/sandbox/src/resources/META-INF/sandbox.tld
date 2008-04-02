@@ -1401,4 +1401,108 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.2//EN"
     <!-- ******************************************************************* -->
     <!-- End MultiFileUpload tag attributes                                  -->
     <!-- ******************************************************************* -->
+    <tag>
+        <name>selectItems</name>
+        <tag-class>com.sun.faces.taglib.jsf_core.SelectItemsTag</tag-class>
+        <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
+        <body-content>empty</body-content>
+        <description><![CDATA[
+            <p>
+            UISelectItems is meant to be a drop-in replacement for &lt;f:selectItems&gt;
+            with the additional capability of passing in lists of POJOs to the componenet
+            instead of being limited to only a SelectItem[]. Three additional optional
+            attributes are introduced: itemValue, itemLabel, and itemVar.
+            </p>
+            <p>
+            The default behavior is to convert the POJO to a SelectItem using the result
+            of toString() for both the value and the label.
+            </p>
+
+            <pre><code>    &lt;fl:selectItems value="#{bean.listOfIntegers}" /&gt;</code></pre>
+
+            <p>
+            The value or label of the SelectItem can be controlled using EL in the
+            itemValue or itemLabel. The default variable mapping of "item" is used to
+            represent the individual POJO.
+            </p>
+
+            <pre><code>
+    &lt;fl:selectItems value="#{bean.personList}"
+                    itemValue="#{item.id}"
+                    itemLabel="#{item.lastName}, #{item.firstName}" /&gt;</code></pre>
+
+            <p>
+            If there is a naming conflict with "item", then the variable used can be
+            controlled using the "itemVar" attribute. Note that this is only necessary if
+            you intend to use the external "item" variable within the selectItem EL.
+            UISelectItems will not stomp on your defined beans.
+            </p>
+            
+            <pre><code>
+    &lt;fl:selectItems value="#{bean.personList}"
+                    itemVar="person"
+                    itemValue="#{person.id}"
+                    itemLabel="Foo #{item.foo} for #{person.lastName}" /&gt;</code></pre>]]>
+        </description>
+
+        <attribute>
+            <name>binding</name>
+            <description><![CDATA[
+                Value binding expression to a backing bean
+                property bound to the component instance for
+                the UIComponent created by this custom action.]]>
+            </description>
+        </attribute>
+
+        <attribute>
+            <name>id</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <description><![CDATA[
+                Component identifier of the UISelectItems
+                component to be created.]]>
+            </description>
+        </attribute>
+        <attribute>
+            <name>value</name>
+            <rtexprvalue>false</rtexprvalue>
+            <description><![CDATA[
+                Value binding expression pointing at a List
+                or array of SelectItem instances containing the
+                information for these options.]]>
+            </description>
+        </attribute>
+        <attribute>
+            <name>itemVar</name>
+            <rtexprvalue>false</rtexprvalue>
+            <description><![CDATA[
+                String which specifies the variable name to be used to reference
+                an item in the List or array as it is processed.  The default value
+                is 'item'.]]>
+            </description>
+        </attribute>
+        <attribute>
+            <name>itemValue</name>
+            <rtexprvalue>false</rtexprvalue>
+            <description><![CDATA[
+                EL expression which evaluates, using the value of itemVar, to the
+                value used as the <code>value</code> attribute in the resulting
+                <code>option</code> tag.  For example,
+                
+                <pre><code>    &lt;option value="#{item.value}"&gt;#{item.label}&lt;/option&gt;
+                ]]>
+            </description>
+        </attribute>
+        <attribute>
+            <name>itemLabel</name>
+            <rtexprvalue>false</rtexprvalue>
+            <description><![CDATA[
+                EL expression which evaluates, using the value of itemVar, to the
+                label used as the in the resulting <code>option</code> tag.  For example,
+                
+                <pre><code>    &lt;option value="#{item.value}"&gt;#{item.label}&lt;/option&gt;
+                ]]>
+            </description>
+        </attribute>
+    </tag>
 </taglib>

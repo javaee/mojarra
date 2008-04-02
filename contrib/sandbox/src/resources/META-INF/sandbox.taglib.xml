@@ -40,4 +40,11 @@
             <renderer-type>com.sun.faces.sandbox.MultiFileUploadRenderer</renderer-type>
         </component>
     </tag>
+    <tag>
+        <tag-name>selectItems</tag-name>
+        <component>
+            <component-type>com.sun.faces.SelectItems</component-type>
+        </component>
+    </tag>
+
 </facelet-taglib>

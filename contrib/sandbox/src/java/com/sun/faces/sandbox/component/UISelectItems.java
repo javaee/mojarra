@@ -25,7 +25,7 @@ import javax.faces.model.SelectItemGroup;
  * </p>
  * 
  * <pre>
- *     &lt;fl:selectItems value=&quot;#{bean.listOfIntegers}&quot; /&gt;
+ *     &lt;risb:selectItems value=&quot;#{bean.listOfIntegers}&quot; /&gt;
  * </pre>
  * 
  * <p>
@@ -35,7 +35,7 @@ import javax.faces.model.SelectItemGroup;
  * </p>
  * 
  * <pre>
- *     &lt;fl:selectItems value=&quot;#{bean.personList}&quot;
+ *     &lt;risb:selectItems value=&quot;#{bean.personList}&quot;
  *                     itemValue=&quot;#{item.id}&quot;
  *                     itemLabel=&quot;#{item.lastName}, #{item.firstName}&quot; /&gt;
  * </pre>
@@ -48,23 +48,20 @@ import javax.faces.model.SelectItemGroup;
  * </p>
  * 
  * <pre>
- *     &lt;fl:selectItems value=&quot;#{bean.personList}&quot;
+ *     &lt;risb:selectItems value=&quot;#{bean.personList}&quot;
  *                     itemVar=&quot;person&quot;
  *                     itemValue=&quot;#{person.id}&quot;
  *                     itemLabel=&quot;Foo #{item.foo} for #{person.lastName}&quot; /&gt;
  * </pre>
  * 
- * @author Blevins
+ * @author Mitch Blevins, International Environmental Corporation
  * 
  */
 public class UISelectItems extends javax.faces.component.UISelectItems {
     public static final String COMPONENT_TYPE = "com.sun.faces.SelectItems";
-
-    private String itemLabel;
-
-    private String itemValue;
-
-    private String itemVar;
+    protected String itemLabel;
+    protected String itemValue;
+    protected String itemVar;
 
     public UISelectItems() {
         super();
@@ -94,7 +91,7 @@ public class UISelectItems extends javax.faces.component.UISelectItems {
         this.itemLabel = itemLabel;
     }
 
-    private boolean useItemLabel() {
+    protected boolean useItemLabel() {
         return this.itemLabel != null
                 || this.getValueExpression("itemLabel") != null;
     }
@@ -124,7 +121,7 @@ public class UISelectItems extends javax.faces.component.UISelectItems {
         this.itemValue = itemValue;
     }
 
-    private boolean useItemValue() {
+    protected boolean useItemValue() {
         return this.itemValue != null
                 || this.getValueExpression("itemValue") != null;
     }
@@ -179,10 +176,10 @@ public class UISelectItems extends javax.faces.component.UISelectItems {
         return ret;
     }
 
-    private class ListWrapper implements InvocationHandler {
-        private List list;
+    protected class ListWrapper implements InvocationHandler {
+        protected List list;
 
-        private UISelectItems si;
+        protected UISelectItems si;
 
         public ListWrapper(List list, UISelectItems si) {
             this.list = list;
@@ -198,22 +195,22 @@ public class UISelectItems extends javax.faces.component.UISelectItems {
             return method.invoke(list, args);
         }
 
-        private class IteratorWrapper implements Iterator {
-            private Iterator i;
+        protected class IteratorWrapper implements Iterator {
+            protected Iterator i;
 
-            private UISelectItems si;
+            protected UISelectItems si;
 
-            private String itemVar;
+            protected String itemVar;
 
-            private ELResolver er;
+            protected ELResolver er;
 
-            private ELContext ec;
+            protected ELContext ec;
 
-            private boolean useItemLabel;
+            protected boolean useItemLabel;
 
-            private boolean useItemValue;
+            protected boolean useItemValue;
 
-            private boolean saveOldBinding;
+            protected boolean saveOldBinding;
 
             public IteratorWrapper(Iterator i, UISelectItems si) {
                 this.i = i;
