@@ -1,5 +1,5 @@
 /*
- * $Id: TestApplicationImpl_Config.java,v 1.8 2003/06/26 19:08:45 horwat Exp $
+ * $Id: TestApplicationImpl_Config.java,v 1.9 2003/06/27 01:09:55 jvisvanathan Exp $
  */
 
 /*
@@ -30,6 +30,7 @@ import javax.faces.FactoryFinder;
 import javax.faces.component.*;
 import javax.faces.convert.Converter;
 import javax.faces.validator.Validator;
+import javax.faces.validator.LengthValidator;
 import javax.faces.application.Message;
 import com.sun.faces.convert.*;
 
@@ -51,7 +52,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestApplicationImpl_Config.java,v 1.8 2003/06/26 19:08:45 horwat Exp $
+ * @version $Id: TestApplicationImpl_Config.java,v 1.9 2003/06/27 01:09:55 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -371,13 +372,13 @@ public class TestApplicationImpl_Config extends ServletFacesTestCase {
     public void testValidatorPositive() {
 	Validator 
 	    newTestValidator = null,
-	    testValidator = new Validator();
+	    testValidator = new LengthValidator();
 	Validator val = null;
 	
 	// runtime addition
 	
 	application.addValidator("Billybob",
-				 "javax.faces.validator.Validator");
+				 "javax.faces.validator.LengthValidator");
 	assertTrue(null != (newTestValidator = (Validator)
 			    application.getValidator("Billybob")));
 	assertTrue(newTestValidator != testValidator);

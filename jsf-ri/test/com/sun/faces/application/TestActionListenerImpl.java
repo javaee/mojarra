@@ -1,5 +1,5 @@
 /*
- * $Id: TestActionListenerImpl.java,v 1.7 2003/05/20 16:35:30 eburns Exp $
+ * $Id: TestActionListenerImpl.java,v 1.8 2003/06/27 01:09:55 jvisvanathan Exp $
  */
 
 /*
@@ -43,7 +43,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestActionListenerImpl.java,v 1.7 2003/05/20 16:35:30 eburns Exp $
+ * @version $Id: TestActionListenerImpl.java,v 1.8 2003/06/27 01:09:55 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -102,7 +102,7 @@ public class TestActionListenerImpl extends ServletFacesTestCase
         context.setTree(new SimpleTreeImpl(context, "/login.jsp"));
 
         ActionListenerImpl actionListener = new ActionListenerImpl();
-        ActionEvent actionEvent = new ActionEvent(command, "login");
+        ActionEvent actionEvent = new ActionEvent(command);
 
         actionListener.processAction(actionEvent);
 
@@ -122,7 +122,7 @@ public class TestActionListenerImpl extends ServletFacesTestCase
 
         context.setTree(new SimpleTreeImpl(context, "/login.jsp"));
 
-        actionEvent = new ActionEvent(command, "register");
+        actionEvent = new ActionEvent(command);
         actionListener.processAction(actionEvent);
 
         newTreeId = context.getTree().getTreeId();
@@ -143,7 +143,7 @@ public class TestActionListenerImpl extends ServletFacesTestCase
 
         UICommand command = new UICommand();
         command.setActionRef("Foo");
-        ActionEvent actionEvent = new ActionEvent(command, "login");
+        ActionEvent actionEvent = new ActionEvent(command);
 
         ActionListenerImpl actionListener = new ActionListenerImpl();
         try {

@@ -1,5 +1,5 @@
 /*
- * $Id: TestFirstValidator.java,v 1.2 2003/06/26 19:08:43 horwat Exp $
+ * $Id: TestFirstValidator.java,v 1.3 2003/06/27 01:09:53 jvisvanathan Exp $
  */
 
 /*
@@ -11,9 +11,7 @@
 
 package com.sun.faces;
 
-//PENDING: FIX_ME - replace RequiredValidator with Validator
-import javax.faces.validator.Validator;
+import javax.faces.validator.LengthValidator;
 
-//PENDING: FIX_ME - replace RequiredValidator with Validator
-public class TestFirstValidator extends Validator {
+public class TestFirstValidator extends LengthValidator {
 }

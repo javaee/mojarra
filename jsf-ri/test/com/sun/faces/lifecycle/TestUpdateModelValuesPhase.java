@@ -1,5 +1,5 @@
 /*
- * $Id: TestUpdateModelValuesPhase.java,v 1.19 2003/04/03 18:39:05 rkitain Exp $
+ * $Id: TestUpdateModelValuesPhase.java,v 1.20 2003/06/27 01:09:57 jvisvanathan Exp $
  */
 
 /*
@@ -46,7 +46,7 @@ import com.sun.faces.util.DebugUtil;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestUpdateModelValuesPhase.java,v 1.19 2003/04/03 18:39:05 rkitain Exp $
+ * @version $Id: TestUpdateModelValuesPhase.java,v 1.20 2003/06/27 01:09:57 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -105,7 +105,6 @@ public void testUpdateNormal()
     Phase updateModelValues = new UpdateModelValuesPhase();
     form = new UIForm();
     form.setComponentId("form");
-    form.setValid(true);
     userName = new TestUIInput();
     userName.setComponentId("userName");
     userName.setValue("one");

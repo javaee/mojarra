@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_1.java,v 1.27 2003/04/29 20:52:36 eburns Exp $
+ * $Id: TestRenderers_1.java,v 1.28 2003/06/27 01:09:58 jvisvanathan Exp $
  */
 
 /*
@@ -41,7 +41,7 @@ import com.sun.faces.renderkit.html_basic.RadioRenderer;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_1.java,v 1.27 2003/04/29 20:52:36 eburns Exp $
+ * @version $Id: TestRenderers_1.java,v 1.28 2003/06/27 01:09:58 jvisvanathan Exp $
  * 
  *
  */
@@ -190,7 +190,6 @@ public class TestRenderers_1 extends JspFacesTestCase
         System.out.println("Testing ButtonRenderer");
         UICommand uiCommand = new UICommand();
         uiCommand.setComponentId("buttonRenderer");
-        uiCommand.setCommandName("Login");
         uiCommand.setAttribute("label", "Login");
         root.addChild(uiCommand);
 
@@ -214,7 +213,6 @@ public class TestRenderers_1 extends JspFacesTestCase
         // Test <Button> element rendering
         uiCommand = new UICommand();
         uiCommand.setComponentId("myButton");
-        uiCommand.setCommandName("button");
         uiCommand.setAttribute("type", "submit");
         root.addChild(uiCommand);
         System.out.println("Testing encode (<button> rendering) method");

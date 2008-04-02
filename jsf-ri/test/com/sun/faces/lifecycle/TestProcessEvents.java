@@ -1,5 +1,5 @@
 /*
- * $Id: TestProcessEvents.java,v 1.4 2003/04/29 20:52:32 eburns Exp $
+ * $Id: TestProcessEvents.java,v 1.5 2003/06/27 01:09:56 jvisvanathan Exp $
  */
 
 /*
@@ -43,7 +43,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestProcessEvents.java,v 1.4 2003/04/29 20:52:32 eburns Exp $
+ * @version $Id: TestProcessEvents.java,v 1.5 2003/06/27 01:09:56 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -203,8 +203,6 @@ public void testSingleAction()
     eventsProcessed = new HashMap();
 
     UICommand button = new UICommand();
-    button.setCommandName("login");
-
     // clear the property
     System.setProperty(HANDLED_ACTIONEVENT1, EMPTY);
 
@@ -215,7 +213,7 @@ public void testSingleAction()
 
     // add action event (containing the component) to the queue
 
-    getFacesContext().addFacesEvent(new ActionEvent(button, "login"));
+    getFacesContext().addFacesEvent(new ActionEvent(button));
 
     PhaseId phaseId = PhaseId.APPLY_REQUEST_VALUES;
     processEvents(getFacesContext(), phaseId);
@@ -233,16 +231,13 @@ public void testActionRecursion()
     eventsProcessed = new HashMap();
 
     UICommand button = new UICommand();
-    button.setCommandName("login");
-
     // add actionListener to the component
-
     ActionRecursion action = new ActionRecursion();
     button.addActionListener(action);
 
     // add action event (containing the component) to the queue
 
-    getFacesContext().addFacesEvent(new ActionEvent(button, "login"));
+    getFacesContext().addFacesEvent(new ActionEvent(button));
 
     PhaseId phaseId = PhaseId.APPLY_REQUEST_VALUES;
     boolean exceptionthrown = false;
@@ -342,7 +337,7 @@ public class ActionRecursion implements ActionListener {
 
     public void processAction(ActionEvent event) {
         getFacesContext().addFacesEvent(new ActionEvent(
-            event.getComponent(), event.getActionCommand()));
+        event.getComponent()));
     }
 }
 } // end of class TestProcessEvents

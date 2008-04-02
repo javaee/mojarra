@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_2.java,v 1.44 2003/04/29 20:52:37 eburns Exp $
+ * $Id: TestRenderers_2.java,v 1.45 2003/06/27 01:09:59 jvisvanathan Exp $
  */
 
 /*
@@ -54,7 +54,7 @@ import com.sun.faces.TestBean;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_2.java,v 1.44 2003/04/29 20:52:37 eburns Exp $
+ * @version $Id: TestRenderers_2.java,v 1.45 2003/06/27 01:09:59 jvisvanathan Exp $
  * 
  *
  */
@@ -279,7 +279,6 @@ public class TestRenderers_2 extends JspFacesTestCase
     public void testHyperlinkRenderer(UIComponent root) throws IOException {
         System.out.println("Testing HyperlinkRenderer");
         UICommand command = new UICommand();
-        command.setCommandName("HyperlinkRenderer");
         command.setComponentId("my_command");
         command.setRendererType("Hyperlink");
         root.addChild(command);
