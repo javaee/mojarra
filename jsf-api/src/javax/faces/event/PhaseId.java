@@ -1,5 +1,5 @@
 /*
- * $Id: PhaseId.java,v 1.4 2003/02/03 22:57:49 craigmcc Exp $
+ * $Id: PhaseId.java,v 1.5 2003/02/12 18:52:51 craigmcc Exp $
  */
 
 /*
@@ -20,7 +20,7 @@ import java.util.List;
  * <code>getPhaseId()</code> method of the {@link FacesListener} interface.
  */
 
-public class PhaseId {
+public class PhaseId implements Comparable {
 
 
     // ----------------------------------------------------------- Constructors
@@ -46,7 +46,9 @@ public class PhaseId {
 
 
     /**
-     * <p>Compare this {@link PhaseId} instance to the specified one.</p>
+     * <p>Compare this {@link PhaseId} instance to the specified one.
+     * Returns a negative integer, zero, or a positive integer if this
+     * object is less than, equal to, or greater than the specified object.</p>
      *
      * @param other The other object to be compared to
      */
