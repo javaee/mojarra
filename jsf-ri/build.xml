@@ -40,6 +40,11 @@
   <property file="build.properties"/>                <!-- Component local   -->
   <property file="../build.properties"/>             <!-- Commons local     -->  
 
+  <!-- These may be overridden in build.properties as well.. -->
+  <property name="host" value="localhost"/>
+  <property name="port" value="8080"/>
+  <property name="appserver.domain" value="domain1" />
+
 
 <!-- ************ Where are we building into? ***************************** -->
 
@@ -166,7 +171,7 @@
           <pathelement location="${catalina-ant.jar}" />
         </classpath>
   </taskdef>    
-  <property name="url"      value="http://localhost:8080/manager"/>
+  <property name="url"      value="http://${host}:${port}/manager"/>
 
 
     <!-- Directory where tlds are stored -->
@@ -816,18 +821,18 @@ must exist.  This is necessary for the MessageFactory class.
     </target>
     
     <target name="config.appserver">
-        <replace file="${tomcat.home}/domains/domain1/config/server.policy"
+        <replace file="${tomcat.home}/domains/${appserver.domain}/config/server.policy"
                  token="permission java.util.PropertyPermission &quot;*&quot;, &quot;read&quot;;"
                  value="permission java.util.PropertyPermission &quot;*&quot;, &quot;read,write&quot;;"/>
         <concat append="true"
-                destfile="${tomcat.home}/domains/domain1/config/server.policy">
+                destfile="${tomcat.home}/domains/${appserver.domain}/config/server.policy">
 grant {
     permission java.lang.reflect.ReflectPermission &quot;*&quot;;
 };
         </concat>
-        <chmod file="${tomcat.home}/domains/domain1/config/server.policy"
+        <chmod file="${tomcat.home}/domains/${appserver.domain}/config/server.policy"
                perm="777"/>
-        <replace file="${tomcat.home}/domains/domain1/config/domain.xml"
+        <replace file="${tomcat.home}/domains/${appserver.domain}/config/domain.xml"
                  token="keep-alive max-connections=&quot;250&quot; thread-count=&quot;1&quot; timeout-in-seconds=&quot;30&quot;"
                  value="keep-alive max-connections=&quot;250&quot; thread-count=&quot;1&quot; timeout-in-seconds=&quot;70&quot;"/>
     </target>
