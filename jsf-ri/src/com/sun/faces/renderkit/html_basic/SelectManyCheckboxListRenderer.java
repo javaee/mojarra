@@ -5,7 +5,7 @@
 
 
 /**
- * $Id: SelectManyCheckboxListRenderer.java,v 1.40 2005/05/05 20:51:25 edburns Exp $
+ * $Id: SelectManyCheckboxListRenderer.java,v 1.41 2005/08/02 20:24:54 rogerk Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -19,6 +19,7 @@ package com.sun.faces.renderkit.html_basic;
 
 import com.sun.faces.util.Util;
 
+import javax.faces.component.NamingContainer;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
@@ -114,8 +115,10 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
 
         Iterator items = Util.getSelectItems(context, component);
         SelectItem curItem = null;
+        int idx = -1;
         while (items.hasNext()) {
             curItem = (SelectItem) items.next();
+            idx++;
             // If we come across a group of options, render them as a nested
             // table.
             if (curItem instanceof SelectItemGroup) {
@@ -144,7 +147,7 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
                     ((SelectItemGroup) curItem).getSelectItems();
                 for (int i = 0; i < itemsArray.length; ++i) {
                     renderOption(context, component, itemsArray[i],
-                                 alignVertical);
+                                 alignVertical, i);
                 }
                 renderEndText(component, alignVertical, context, false);
                 writer.endElement("td");
@@ -153,7 +156,7 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
                     writer.writeText("\n", null);
                 }
             } else {
-                renderOption(context, component, curItem, alignVertical);
+                renderOption(context, component, curItem, alignVertical, idx);
             }
         }
 
@@ -162,7 +165,7 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
 
 
     protected void renderOption(FacesContext context, UIComponent component,
-                                SelectItem curItem, boolean alignVertical)
+                                SelectItem curItem, boolean alignVertical, int itemNumber)
         throws IOException {
 
         ResponseWriter writer = context.getResponseWriter();
@@ -191,16 +194,12 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
         writer.startElement("td", component);
         writer.writeText("\n", null);
 
-        writer.startElement("label", component);
-        // if enabledClass or disabledClass attributes are specified, apply
-        // it on the label.
-        if (labelClass != null) {
-            writer.writeAttribute("class", labelClass, "labelClass");
-        }
-
         writer.startElement("input", component);
         writer.writeAttribute("name", component.getClientId(context),
                               "clientId");
+        String idString = component.getClientId(context) + NamingContainer.SEPARATOR_CHAR + 
+            new Integer(itemNumber).toString(); 
+        writer.writeAttribute("id", idString, "id");
         String valueString = getFormattedValue(context, component,
                                                curItem.getValue());
         writer.writeAttribute("value", valueString, "value");
@@ -243,12 +242,19 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
                                       new String[]{"style", "border"});
         Util.renderBooleanPassThruAttributes(writer, component);
        
+        writer.endElement("input");
+        writer.startElement("label", component);
+        writer.writeAttribute("for", idString, "for");
+        // if enabledClass or disabledClass attributes are specified, apply
+        // it on the label.
+        if (labelClass != null) {
+            writer.writeAttribute("class", labelClass, "labelClass");
+        }
         String itemLabel = curItem.getLabel();
         if (itemLabel != null) {
             writer.writeText(" ", null);
             writer.writeText(itemLabel, "label");
         }
-        writer.endElement("input");
         writer.endElement("label");
         writer.endElement("td");
         writer.writeText("\n", null);

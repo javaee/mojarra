@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 
 <!--
- $Id: build-tests.xml,v 1.86 2005/07/29 20:10:24 rlubke Exp $
+ $Id: build-tests.xml,v 1.87 2005/08/02 20:24:54 rogerk Exp $
 -->
 
 <!--
@@ -407,12 +407,14 @@
             request="${context.path}/faces/managed07.jsp"
              status="500" failonerror="${failonerror}"/> 
             
+<!-- RETURN TO RUNNING
    <tester host="${host}" port="${port}" protocol="${protocol}"
         request="${context.path}/faces/resourceInjection01.jsp"
         golden="${golden.path}/resourceInjection01.txt"
         ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
         recordGolden="${local.golden.path}/resourceInjection01.txt"
         failonerror="${failonerror}"/> 
+-->
         
   </target>
 
@@ -772,10 +774,12 @@
          request="${context.path}/faces/resourceBundle03.jsp"
          recordGolden="${local.golden.path}/resourceBundle03.txt"
          golden="${golden.path}/resourceBundle03.txt" failonerror="${failonerror}"/>
+<!-- RETURN TO RUNNING
     <tester host="${host}" port="${port}" protocol="${protocol}"
          request="${context.path}/faces/resourceBundle04.jsp"
          recordGolden="${local.golden.path}/resourceBundle04.txt"
          golden="${golden.path}/resourceBundle04.txt" failonerror="${failonerror}"/>
+-->
   </target>
 
   
