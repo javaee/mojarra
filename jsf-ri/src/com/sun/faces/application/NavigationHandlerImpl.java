@@ -1,5 +1,5 @@
 /*
- * $Id: NavigationHandlerImpl.java,v 1.1 2003/04/01 17:39:06 rkitain Exp $
+ * $Id: NavigationHandlerImpl.java,v 1.2 2003/04/04 18:16:06 eburns Exp $
  */
 
 /*
@@ -17,6 +17,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.tree.TreeFactory;
 
 import com.sun.faces.util.Util;
+import com.sun.faces.RIConstants;
 
 
 
@@ -51,7 +52,7 @@ public class NavigationHandlerImpl extends NavigationHandler {
         context = FacesContext.getCurrentInstance();
 
         NavigationConfig navConfig = (NavigationConfig)context.getExternalContext().getApplicationMap().
-            get("navConfig");
+            get(RIConstants.NAVIGATION_CONFIG_ATTR);
         if (null == navConfig) {
             throw new RuntimeException(Util.getExceptionMessage(Util.NULL_CONFIGURATION_ERROR_MESSAGE_ID));
         }
