@@ -78,19 +78,11 @@ public class ButtonRenderer extends BaseRenderer {
         }
         
         // Was our command the one that caused this submission?
-        // we don' have to worry about getting the value from request parameter
-        // because we just need to know if this command caused the submission. We
-        // can get the command name by calling currentValue. This way we can 
-        // get around the IE bug.
         String clientId = component.getClientId(context);
         Map requestParameterMap = context.getExternalContext()
             .getRequestParameterMap();
-        String value = (String) requestParameterMap.get(clientId);
-        if (value == null) {
-            if (requestParameterMap.get(clientId + ".x") == null &&
-                requestParameterMap.get(clientId + ".y") == null) {
+        if (requestParameterMap.get(clientId) == null) {
                 return;
-            }
         }
 
         ActionEvent actionEvent = new ActionEvent(component);
@@ -210,10 +202,6 @@ public class ButtonRenderer extends BaseRenderer {
         writer.writeText(label, null);
         writer.endElement("text");
         writer.writeText("\n", null);
-        writer.endElement("g");
-        writer.writeText("\n", null);
-        
-
 
         if (log.isTraceEnabled()) {
             log.trace("End encoding component " + component.getId());
@@ -226,6 +214,9 @@ public class ButtonRenderer extends BaseRenderer {
             // PENDING - i18n
             throw new NullPointerException("'context' and/or 'component' is null");
         }
+        ResponseWriter writer = context.getResponseWriter();
+        writer.endElement("g");
+        writer.writeText("\n", null);
     }
 
     //
