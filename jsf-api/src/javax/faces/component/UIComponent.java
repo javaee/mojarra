@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.69 2003/01/17 02:18:07 craigmcc Exp $
+ * $Id: UIComponent.java,v 1.70 2003/01/22 23:36:42 eburns Exp $
  */
 
 /*
@@ -37,6 +37,15 @@ import javax.faces.validator.Validator;
 public interface UIComponent extends Serializable {
 
     public static char SEPARATOR_CHAR = '.';
+
+    /**
+
+    * Attribute name for the UIComponent for which this component is a
+    * facet.
+
+    */ 
+    
+    public static final String FACET_PARENT = "javax.faces.component.FacetParent";
 
 
     // ------------------------------------------------------------- Attributes
@@ -418,7 +427,11 @@ public interface UIComponent extends Serializable {
      * <p>Add the specified <code>UIComponent</code> as a facet
      * associated with the name specified by the <code>facetName</code>
      * argument, replacing any previous facet with that name.</p>
-     *
+
+     * <p>This method causes the {@link #FACET_PARENT}
+     * attribute of the argument facet to be set to
+     * this UIComponent instance. </p>
+
      * @param facetName The name of this facet
      * @param facet The new facet {@link UIComponent}
      *
@@ -460,7 +473,10 @@ public interface UIComponent extends Serializable {
     /**
      * <p>Remove the facet <code>UIComponent</code> associated with the
      * specified name, if there is one.</p>
-     *
+
+     * <p>This method causes the {@link #FACET_PARENT}
+     * attribute of the argument facet to be cleared. </p>
+
      * @param name Name of the facet to be removed
      *
      * @exception NullPointerException if <code>name</code>

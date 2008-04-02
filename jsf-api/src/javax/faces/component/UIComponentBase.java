@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.41 2003/01/21 20:37:12 eburns Exp $
+ * $Id: UIComponentBase.java,v 1.42 2003/01/22 23:36:42 eburns Exp $
  */
 
 /*
@@ -727,12 +727,16 @@ public abstract class UIComponentBase implements UIComponent {
         if (null == facet || null == facetName) {
             throw new NullPointerException();
         }
+	facet.setAttribute(FACET_PARENT, this);
         getFacets().put(facetName, facet);
 
     }
 
 
     public void clearFacets() {
+
+	// PENDING(edburns): do we need to clear the FACET_PARENT
+	// attribute of each of the facets?  This would cost some time.
 
         facets = null;
 
@@ -764,8 +768,11 @@ public abstract class UIComponentBase implements UIComponent {
         if (name == null) {
             throw new NullPointerException();
         }
+	UIComponent facet = null;
         if (facets != null) {
-            facets.remove(name);
+	    if (null != (facet = (UIComponent) facets.remove(name))) {
+		facet.setAttribute(FACET_PARENT, null);
+	    }
         }
 
     }

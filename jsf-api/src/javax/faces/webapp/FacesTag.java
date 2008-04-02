@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTag.java,v 1.30 2003/01/17 02:30:16 craigmcc Exp $
+ * $Id: FacesTag.java,v 1.31 2003/01/22 23:36:43 eburns Exp $
  */
 
 /*
@@ -407,12 +407,22 @@ public abstract class FacesTag extends TagSupport {
         
         UIComponent parent = (UIComponent) componentStack.peek();
 	UIComponent child = parent;
+	Object facetParent = null;
         if (id != null) { // FIXME - i18n
 	    // find the nearest ancestor that is a naming container
 	    NamingContainer closestContainer = null;
 	    
 	    while (!(child instanceof NamingContainer)) {
-		child = child.getParent();
+		// If child is a facet
+		if (null != (facetParent = child.getAttribute(UIComponent.FACET_PARENT))){
+		    // Use the UIComponent.FACET_PARENT attribute to get the
+		    // UIComponent for which child is a facet.
+		    child = (UIComponent) facetParent;
+		}
+		else {
+		    // child is not a facet, just use getParent()
+		    child = child.getParent();
+		}
 	    }
 	    if (null == child) {
 		throw new JspException("Can't find NamingContainer");
