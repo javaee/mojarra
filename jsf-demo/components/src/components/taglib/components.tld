@@ -1125,4 +1125,124 @@
     </attribute>
 
   </tag>
+  
+  <tag>
+
+    <name>chart</name>
+    <tag-class>components.taglib.ChartTag</tag-class>
+    <body-content>JSP</body-content>
+    <description>
+      Displays various types of Charts such as Bar, Pie, Line etc.
+    </description>
+
+    <attribute>
+      <name>width</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Width of the Chart
+      </description>
+    </attribute>
+
+    <attribute>
+      <name>height</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        height of the Chart
+      </description>
+    </attribute>
+
+    <attribute>
+      <name>type</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+         Type of Chart. Valid values are "BarChart" and "PieChart".
+      </description>
+    </attribute>
+    
+    <attribute>
+      <name>orientation</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Orientation of the Chart. This attribute applies only to Pie chart.
+      </description>
+    </attribute>
+    
+    <attribute>
+      <name>value</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+         Points to a collection of ChartItem. Currently the only array type
+         is supported. So either value should be present or
+         a set of nested chartItem tags should be present. If both are
+         present, value takes precedence and nested ChartItem tags are ignored.
+      </description>
+    </attribute>
+  </tag>
+  
+  <tag>
+
+    <name>chartItem</name>
+    <tag-class>components.taglib.ChartItemTag</tag-class>
+    <body-content>empty</body-content>
+    <description>
+       Specifies data for individual entries of the chart, for instance, 
+       if a bar chart is being displayed, the attributes will correspond to 
+       label, color and value of an particular bar in the chart. ChartComponent 
+       then aggregates the various chartItem instances into a collection for 
+       display purposes.
+    </description>
+
+    <attribute>
+      <name>itemColor</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Color of the Chart entry
+      </description>
+    </attribute>
+
+    <attribute>
+      <name>itemLabel</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Label of the Chart entry
+      </description>
+    </attribute>
+
+    <attribute>
+      <name>itemValue</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+         Value of Chart entry of type Integer.
+      </description>
+    </attribute>
+    
+    <attribute>
+      <name>value</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+         Points of a ChartItem instance. So either value should be present or
+         itemColor, itemLabel and itemValue should be present. If both are
+         present, value takes precedence and other attributes are ignored.
+      </description>
+    </attribute>
+    
+    <attribute>
+      <name>value</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+         Pointing to a collection of ChartItem. Currently the only array type
+         is supported.
+      </description>
+    </attribute>
+  </tag>
 </taglib>

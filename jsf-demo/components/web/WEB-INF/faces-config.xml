@@ -238,5 +238,11 @@
     <managed-bean-class>demo.model.CalendarBean</managed-bean-class>
     <managed-bean-scope>session</managed-bean-scope>
   </managed-bean>
+  
+  <managed-bean>
+    <managed-bean-name>ChartBean</managed-bean-name>
+    <managed-bean-class>demo.model.ChartBean</managed-bean-class>
+    <managed-bean-scope>session</managed-bean-scope>
+  </managed-bean>
 
 </faces-config>

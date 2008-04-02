@@ -94,6 +94,12 @@
         <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
         <load-on-startup> 1 </load-on-startup>
     </servlet>
+    
+    <!-- Chart Servlet -->
+    <servlet>
+        <servlet-name>ChartServlet</servlet-name>
+        <servlet-class>components.renderkit.ChartServlet</servlet-class>
+    </servlet>
 
 
     <!-- Faces Servlet Mapping -->
@@ -105,6 +111,11 @@
     <servlet-mapping>
         <servlet-name>Faces Servlet</servlet-name>
         <url-pattern>/faces/*</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>ChartServlet</servlet-name>
+        <url-pattern>/ChartServlet</url-pattern>
     </servlet-mapping>
 
 

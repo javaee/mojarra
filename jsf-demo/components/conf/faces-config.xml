@@ -99,6 +99,23 @@
     <component-class>components.components.CalendarComponent</component-class>
   </component>
 
+  <component>
+    <component-type>Chart</component-type>
+    <component-class>components.components.ChartComponent</component-class>
+    
+    <component-extension>
+      <component-family>Chart</component-family>
+    </component-extension>
+  </component>
+  
+  <component>
+    <component-type>ChartItem</component-type>
+    <component-class>components.components.ChartItemComponent</component-class>
+    
+    <component-extension>
+      <component-family>ChartItem</component-family>
+    </component-extension>
+  </component>
     <!-- Custom Renderers -->
 
   <render-kit>
