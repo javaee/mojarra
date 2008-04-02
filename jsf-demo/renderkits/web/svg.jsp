@@ -38,8 +38,6 @@
       rect:hover {fill-opacity:0.3;}
     </style>
 
-    <script xlink:href="../src/script/http-svg.es"/>
-    <script xlink:href="../src/script/lifecycle.es"/>
     <f:view renderKitId="SVG" >  
         <g:form id="form">
            <g:outputText x="100" y="50" textAnchor="middle" value="JSF Request Processing Lifecycle"
