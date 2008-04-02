@@ -1,5 +1,5 @@
 /*
- * $Id: MessageResources.java,v 1.5 2003/04/29 18:51:39 eburns Exp $
+ * $Id: MessageResources.java,v 1.6 2003/05/19 21:00:18 eburns Exp $
  */
 
 /*
@@ -19,7 +19,7 @@ import javax.faces.application.Message;
  * message list in a {@link FacesContext}.</p>
  *
  * <p>An instance of <code>MessageResources</code> is created by calling the
- * <code>createMessageResources()</code> method of
+ * <code>getMessageResources()</code> method of
  * {@link javax.faces.application.Application}, for a specified message
  * resources identifier.  Because this instance is shared across multiple
  * requests, it must be implemented in a thread-safe manner.</p>
