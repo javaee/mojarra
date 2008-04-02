@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderResponsePhase.java,v 1.51 2003/08/13 16:38:28 jvisvanathan Exp $
+ * $Id: TestRenderResponsePhase.java,v 1.52 2003/08/13 21:06:42 rkitain Exp $
  */
 
 /*
@@ -25,7 +25,6 @@ import javax.faces.lifecycle.Lifecycle;
 import javax.faces.component.UINamingContainer;
 import javax.faces.validator.Validator;
 
-import com.sun.faces.context.FacesContextImpl;
 import com.sun.faces.lifecycle.Phase;
 import com.sun.faces.JspFacesTestCase;
 import com.sun.faces.FileOutputResponseWrapper;
@@ -51,7 +50,7 @@ import javax.servlet.jsp.PageContext;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderResponsePhase.java,v 1.51 2003/08/13 16:38:28 jvisvanathan Exp $
+ * @version $Id: TestRenderResponsePhase.java,v 1.52 2003/08/13 21:06:42 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -146,8 +145,8 @@ public void testHtmlBasicRenderKit()
     getFacesContext().setTree(requestTree);
 
     renderResponse.execute(getFacesContext());
-    assertTrue(!((FacesContextImpl)getFacesContext()).getRenderResponse() &&
-        !((FacesContextImpl)getFacesContext()).getResponseComplete());
+    assertTrue(!(getFacesContext().getRenderResponse()) &&
+        !(getFacesContext().getResponseComplete()));
 
     assertTrue(verifyExpectedOutput());
 }

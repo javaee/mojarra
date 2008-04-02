@@ -1,5 +1,5 @@
 /*
- * $Id: TestSaveStateInPage.java,v 1.10 2003/03/12 19:53:44 rkitain Exp $
+ * $Id: TestSaveStateInPage.java,v 1.11 2003/08/13 21:06:43 rkitain Exp $
  */
 
 /*
@@ -19,7 +19,6 @@ import javax.faces.context.FacesContext;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.component.UIComponentBase;
 
-import com.sun.faces.context.FacesContextImpl;
 import com.sun.faces.lifecycle.Phase;
 import com.sun.faces.JspFacesTestCase;
 import com.sun.faces.RIConstants;
@@ -33,7 +32,7 @@ import javax.faces.tree.TreeFactory;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestSaveStateInPage.java,v 1.10 2003/03/12 19:53:44 rkitain Exp $
+ * @version $Id: TestSaveStateInPage.java,v 1.11 2003/08/13 21:06:43 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -125,8 +124,8 @@ public void testSaveStateInPage()
     getFacesContext().setTree(requestTree);
 
     renderResponse.execute(getFacesContext());
-    assertTrue(!((FacesContextImpl)getFacesContext()).getRenderResponse() &&
-        !((FacesContextImpl)getFacesContext()).getResponseComplete());
+    assertTrue(!(getFacesContext().getRenderResponse()) &&
+        !(getFacesContext().getResponseComplete()));
 
     assertTrue(verifyExpectedOutput());
 }

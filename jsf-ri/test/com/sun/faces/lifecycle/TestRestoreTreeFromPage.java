@@ -1,5 +1,5 @@
 /*
- * $Id: TestRestoreTreeFromPage.java,v 1.9 2003/03/12 19:53:43 rkitain Exp $
+ * $Id: TestRestoreTreeFromPage.java,v 1.10 2003/08/13 21:06:42 rkitain Exp $
  */
 
 /*
@@ -34,7 +34,6 @@ import java.io.PrintStream;
 import java.io.IOException;
 import com.sun.faces.CompareFiles;
 import com.sun.faces.FileOutputResponseWriter;
-import com.sun.faces.context.FacesContextImpl;
 import com.sun.faces.lifecycle.Phase;
 
 /**
@@ -43,7 +42,7 @@ import com.sun.faces.lifecycle.Phase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRestoreTreeFromPage.java,v 1.9 2003/03/12 19:53:43 rkitain Exp $
+ * @version $Id: TestRestoreTreeFromPage.java,v 1.10 2003/08/13 21:06:42 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -115,8 +114,8 @@ public void testRestoreTreeFromPage()
         e.printStackTrace();
 	assertTrue(false);
     }
-    assertTrue(!((FacesContextImpl)getFacesContext()).getRenderResponse() &&
-        !((FacesContextImpl)getFacesContext()).getResponseComplete());
+    assertTrue(!(getFacesContext().getRenderResponse()) &&
+        !(getFacesContext().getResponseComplete()));
 
     assertTrue(null != getFacesContext().getTree());
     assertTrue(null != getFacesContext().getTree().getRoot());

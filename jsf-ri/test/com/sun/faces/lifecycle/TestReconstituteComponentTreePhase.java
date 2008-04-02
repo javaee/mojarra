@@ -1,5 +1,5 @@
 /*
- * $Id: TestReconstituteComponentTreePhase.java,v 1.5 2003/05/21 18:46:29 rkitain Exp $
+ * $Id: TestReconstituteComponentTreePhase.java,v 1.6 2003/08/13 21:06:42 rkitain Exp $
  */
 
 /*
@@ -12,7 +12,6 @@
 package com.sun.faces.lifecycle;
 
 import com.sun.faces.RIConstants;
-import com.sun.faces.context.FacesContextImpl;
 import com.sun.faces.lifecycle.Phase;
 import com.sun.faces.ServletFacesTestCase;
 import com.sun.faces.tree.SimpleTreeImpl;
@@ -47,7 +46,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestReconstituteComponentTreePhase.java,v 1.5 2003/05/21 18:46:29 rkitain Exp $
+ * @version $Id: TestReconstituteComponentTreePhase.java,v 1.6 2003/08/13 21:06:42 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -115,8 +114,8 @@ public void testReconstituteRequestInitial()
         e.printStackTrace();
 	assertTrue(false);
     }
-    assertTrue(!((FacesContextImpl)getFacesContext()).getRenderResponse() &&
-        !((FacesContextImpl)getFacesContext()).getResponseComplete());
+    assertTrue(!(getFacesContext().getRenderResponse()) &&
+        !(getFacesContext().getResponseComplete()));
 
     assertTrue(null != getFacesContext().getTree());
     assertTrue(RenderKitFactory.DEFAULT_RENDER_KIT == 
@@ -169,8 +168,8 @@ public void testReconstituteRequestSubmit()
     catch (Throwable e) {
 	assertTrue(false);
     }
-    assertTrue(!((FacesContextImpl)getFacesContext()).getRenderResponse() &&
-        !((FacesContextImpl)getFacesContext()).getResponseComplete());
+    assertTrue(!(getFacesContext().getRenderResponse()) &&
+        !(getFacesContext().getResponseComplete()));
 
     assertTrue(null != getFacesContext().getTree());
     assertTrue(RenderKitFactory.DEFAULT_RENDER_KIT == 
@@ -234,8 +233,8 @@ public void testRegisterListeners() {
     catch (Throwable e) {
 	assertTrue(false);
     }
-    assertTrue(!((FacesContextImpl)getFacesContext()).getRenderResponse() &&
-        !((FacesContextImpl)getFacesContext()).getResponseComplete());
+    assertTrue(!(getFacesContext().getRenderResponse()) &&
+        !(getFacesContext().getResponseComplete()));
 
     assertTrue(command1.getDefaultListenerCount() > 0); 
     assertTrue(command2.getDefaultListenerCount() > 0); 
@@ -271,8 +270,8 @@ public void testRegisterListeners() {
     catch (Throwable e) {
 	assertTrue(false);
     }   
-    assertTrue(!((FacesContextImpl)getFacesContext()).getRenderResponse() &&
-        !((FacesContextImpl)getFacesContext()).getResponseComplete());
+    assertTrue(!(getFacesContext().getRenderResponse()) &&
+        !(getFacesContext().getResponseComplete()));
 
     assertTrue(command1.getDefaultListenerCount() > 0); 
     assertTrue(command2.getDefaultListenerCount() > 0); 

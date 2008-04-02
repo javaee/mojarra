@@ -1,5 +1,5 @@
 /* 
- * $Id: TestViewHandlerImpl.java,v 1.17 2003/08/13 16:38:29 jvisvanathan Exp $ 
+ * $Id: TestViewHandlerImpl.java,v 1.18 2003/08/13 21:06:43 rkitain Exp $ 
  */ 
 
 
@@ -38,7 +38,6 @@ import com.sun.faces.tree.SimpleTreeImpl;
 import com.sun.faces.util.Util; 
 import com.sun.faces.CompareFiles; 
 
-import com.sun.faces.context.FacesContextImpl; 
 import com.sun.faces.tree.SimpleTreeImpl; 
 
 
@@ -61,7 +60,7 @@ import javax.servlet.jsp.PageContext;
  * 
  * <B>Lifetime And Scope</B> <P> 
  * 
- * @version $Id: TestViewHandlerImpl.java,v 1.17 2003/08/13 16:38:29 jvisvanathan Exp $ 
+ * @version $Id: TestViewHandlerImpl.java,v 1.18 2003/08/13 21:06:43 rkitain Exp $ 
  * 
  * @see Blah 
  * @see Bloo 
@@ -164,8 +163,8 @@ public void testRender()
         System.out.println("ViewHandler FacesException: "+fe); 
     }
 
-    assertTrue(!((FacesContextImpl)getFacesContext()).getRenderResponse() &&
-        !((FacesContextImpl)getFacesContext()).getResponseComplete());
+    assertTrue(!(getFacesContext().getRenderResponse()) &&
+        !(getFacesContext().getResponseComplete()));
 
     assertTrue(verifyExpectedOutput()); 
 } 

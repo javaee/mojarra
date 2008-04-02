@@ -1,5 +1,5 @@
 /*
- * $Id: TestProcessValidationsPhase.java,v 1.17 2003/07/07 20:53:20 eburns Exp $
+ * $Id: TestProcessValidationsPhase.java,v 1.18 2003/08/13 21:06:42 rkitain Exp $
  */
 
 /*
@@ -26,7 +26,6 @@ import javax.faces.component.UIInput;
 import javax.faces.validator.Validator;
 
 import com.sun.faces.ServletFacesTestCase;
-import com.sun.faces.context.FacesContextImpl;
 import com.sun.faces.lifecycle.Phase;
 import java.io.IOException;
 
@@ -38,7 +37,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestProcessValidationsPhase.java,v 1.17 2003/07/07 20:53:20 eburns Exp $
+ * @version $Id: TestProcessValidationsPhase.java,v 1.18 2003/08/13 21:06:42 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -111,8 +110,8 @@ public void testCallback()
         e.printStackTrace();
         assertTrue(false);
     }
-    assertTrue(!((FacesContextImpl)getFacesContext()).getRenderResponse() &&
-        !((FacesContextImpl)getFacesContext()).getResponseComplete());
+    assertTrue(!(getFacesContext().getRenderResponse()) &&
+        !(getFacesContext().getResponseComplete()));
     assertTrue(null != getFacesContext().getTree());
 
     root = getFacesContext().getTree().getRoot();
@@ -151,8 +150,8 @@ public void testCallback()
     assertTrue(userName.isValid());
 
     applyValues.execute(getFacesContext());
-    assertTrue(!((FacesContextImpl)getFacesContext()).getRenderResponse() &&
-        !((FacesContextImpl)getFacesContext()).getResponseComplete());
+    assertTrue(!(getFacesContext().getRenderResponse()) &&
+        !(getFacesContext().getResponseComplete()));
     
     processValidations.execute(getFacesContext());
     assertTrue(!System.getProperty(DID_VALIDATE).equals(EMPTY));

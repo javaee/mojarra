@@ -1,5 +1,5 @@
 /*
- * $Id: TestPhase.java,v 1.2 2003/04/03 18:39:05 rkitain Exp $
+ * $Id: TestPhase.java,v 1.3 2003/08/13 21:06:42 rkitain Exp $
  */
 
 /*
@@ -29,7 +29,6 @@ import java.util.Iterator;
 import com.sun.faces.ServletFacesTestCase;
 import com.sun.faces.CompareFiles;
 import com.sun.faces.FileOutputResponseWrapper;
-import com.sun.faces.context.FacesContextImpl;
 import com.sun.faces.lifecycle.Phase;
 import com.sun.faces.tree.SimpleTreeImpl;
 import java.io.PrintStream;
@@ -44,7 +43,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestPhase.java,v 1.2 2003/04/03 18:39:05 rkitain Exp $
+ * @version $Id: TestPhase.java,v 1.3 2003/08/13 21:06:42 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -104,8 +103,8 @@ public void testExecute()
         assertTrue(false);
     }
 
-    assertTrue(!((FacesContextImpl)getFacesContext()).getRenderResponse() &&
-        !((FacesContextImpl)getFacesContext()).getResponseComplete());
+    assertTrue(!(getFacesContext().getRenderResponse()) &&
+        !(getFacesContext().getResponseComplete()));
     assertTrue(null != getFacesContext().getTree());
 
     // 2. Add components to tree
@@ -131,8 +130,8 @@ public void testExecute()
 	e.printStackTrace();
 	assertTrue(false);
     }
-    assertTrue(!((FacesContextImpl)getFacesContext()).getRenderResponse() &&
-        !((FacesContextImpl)getFacesContext()).getResponseComplete());
+    assertTrue(!(getFacesContext().getRenderResponse()) &&
+        !(getFacesContext().getResponseComplete()));
 }
 
 } // end of class TestPhase

@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleImpl.java,v 1.27 2003/07/07 20:52:56 eburns Exp $
+ * $Id: LifecycleImpl.java,v 1.28 2003/08/13 21:07:25 rkitain Exp $
  */
 
 /*
@@ -11,7 +11,6 @@
 
 package com.sun.faces.lifecycle;
 
-import com.sun.faces.context.FacesContextImpl;
 import com.sun.faces.util.Util;
 import com.sun.faces.RIConstants;
 import org.mozilla.util.Assert;
@@ -38,7 +37,7 @@ import java.util.HashMap;
  *  Lifecycle in the JSF RI. <P>
  *
  *
- * @version $Id: LifecycleImpl.java,v 1.27 2003/07/07 20:52:56 eburns Exp $
+ * @version $Id: LifecycleImpl.java,v 1.28 2003/08/13 21:07:25 rkitain Exp $
  * 
  * @see	javax.faces.lifecycle.Lifecycle
  *
@@ -198,9 +197,9 @@ public class LifecycleImpl extends Lifecycle
                 processEvents(context, PhaseId.INVOKE_APPLICATION);
             }
 
-            if (((FacesContextImpl)context).getResponseComplete()) {
+            if (context.getResponseComplete()) {
                 return;
-            } else if (((FacesContextImpl)context).getRenderResponse()) {
+            } else if (context.getRenderResponse()) {
                 executeRender(context);
                 return;
             }
@@ -344,8 +343,8 @@ public class LifecycleImpl extends Lifecycle
             while (phaseIter.hasNext()) {
 	        curPhase = (Phase) phaseIter.next();
 	        curPhase.execute(context);
-                if (((FacesContextImpl)context).getResponseComplete() || 
-                    ((FacesContextImpl)context).getRenderResponse()) {
+                if (context.getResponseComplete() || 
+                    context.getRenderResponse()) {
                     return;
                 }
             }

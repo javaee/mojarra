@@ -1,5 +1,5 @@
 /*
- * $Id: TestInvokeApplicationPhase.java,v 1.13 2003/04/03 18:39:04 rkitain Exp $
+ * $Id: TestInvokeApplicationPhase.java,v 1.14 2003/08/13 21:06:42 rkitain Exp $
  */
 
 /*
@@ -24,7 +24,6 @@ import javax.faces.component.UIInput;
 import javax.faces.tree.Tree;
 import javax.faces.event.FacesEvent;
 import com.sun.faces.ServletFacesTestCase;
-import com.sun.faces.context.FacesContextImpl;
 import com.sun.faces.lifecycle.LifecycleImpl;
 import com.sun.faces.lifecycle.Phase;
 import com.sun.faces.tree.SimpleTreeImpl;
@@ -39,7 +38,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestInvokeApplicationPhase.java,v 1.13 2003/04/03 18:39:04 rkitain Exp $
+ * @version $Id: TestInvokeApplicationPhase.java,v 1.14 2003/08/13 21:06:42 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -101,8 +100,8 @@ public void testInvokeNoOp()
     getFacesContext().setTree(tree);
 
     invokeApplicationPhase.execute(getFacesContext());
-    assertTrue(!((FacesContextImpl)getFacesContext()).getRenderResponse() &&
-        !((FacesContextImpl)getFacesContext()).getResponseComplete());
+    assertTrue(!(getFacesContext().getRenderResponse()) &&
+        !(getFacesContext().getResponseComplete()));
 }
 
 } // end of class TestInvokeApplicationPhase

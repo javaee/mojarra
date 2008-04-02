@@ -1,5 +1,5 @@
 /*
- * $Id: TestUpdateModelValuesPhase.java,v 1.21 2003/08/13 18:21:59 rlubke Exp $
+ * $Id: TestUpdateModelValuesPhase.java,v 1.22 2003/08/13 21:06:43 rkitain Exp $
  */
 
 /*
@@ -10,8 +10,6 @@
 // TestUpdateModelValuesPhase.java
 
 package com.sun.faces.lifecycle;
-
-import com.sun.faces.context.FacesContextImpl;
 
 import org.apache.cactus.WebRequest;
 
@@ -27,7 +25,6 @@ import javax.faces.component.UIForm;
 import javax.faces.component.UIInput;
 import javax.faces.component.UIOutput;
 import javax.faces.tree.Tree;
-import com.sun.faces.context.FacesContextImpl;
 import com.sun.faces.lifecycle.Phase;
 import com.sun.faces.ServletFacesTestCase;
 import com.sun.faces.TestBean;
@@ -46,7 +43,7 @@ import com.sun.faces.util.DebugUtil;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestUpdateModelValuesPhase.java,v 1.21 2003/08/13 18:21:59 rlubke Exp $
+ * @version $Id: TestUpdateModelValuesPhase.java,v 1.22 2003/08/13 21:06:43 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -128,8 +125,8 @@ public void testUpdateNormal()
 			   "updateModel.xul");
     getFacesContext().setTree(tree);
     updateModelValues.execute(getFacesContext());
-    assertTrue(!((FacesContextImpl)getFacesContext()).getRenderResponse() &&
-        !((FacesContextImpl)getFacesContext()).getResponseComplete());
+    assertTrue(!(getFacesContext().getRenderResponse()) &&
+        !(getFacesContext().getResponseComplete()));
 
     assertTrue(null == userName.getValue());
 
@@ -177,7 +174,7 @@ public void testUpdateFailed()
     // This stage will go to render, since there was at least one error
     // during component updates... 
     updateModelValues.execute(getFacesContext());
-    assertTrue(((FacesContextImpl)getFacesContext()).getRenderResponse());
+    assertTrue(getFacesContext().getRenderResponse());
 
     assertTrue(true == (getFacesContext().getMessages().hasNext()));
     

@@ -1,5 +1,5 @@
 /*
- * $Id: TestApplyRequestValuesPhase.java,v 1.12 2003/03/12 19:53:41 rkitain Exp $
+ * $Id: TestApplyRequestValuesPhase.java,v 1.13 2003/08/13 21:06:41 rkitain Exp $
  */
 
 /*
@@ -25,7 +25,6 @@ import javax.faces.component.UIComponent;
 import javax.faces.component.UIForm;
 import javax.faces.component.UIInput;
 
-import com.sun.faces.context.FacesContextImpl;
 import com.sun.faces.lifecycle.Phase;
 import com.sun.faces.ServletFacesTestCase;
 
@@ -35,7 +34,7 @@ import com.sun.faces.ServletFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestApplyRequestValuesPhase.java,v 1.12 2003/03/12 19:53:41 rkitain Exp $
+ * @version $Id: TestApplyRequestValuesPhase.java,v 1.13 2003/08/13 21:06:41 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -105,8 +104,8 @@ public void testCallback()
         e.printStackTrace();
         assertTrue(false);
     }
-    assertTrue(!((FacesContextImpl)getFacesContext()).getRenderResponse() &&
-        !((FacesContextImpl)getFacesContext()).getResponseComplete());
+    assertTrue(!(getFacesContext().getRenderResponse()) &&
+        !(getFacesContext().getResponseComplete()));
     assertTrue(null != getFacesContext().getTree());
 
     // 2. Add components to tree
@@ -122,8 +121,8 @@ public void testCallback()
     // 3. Apply values
     //
     applyValues.execute(getFacesContext());
-    assertTrue(!((FacesContextImpl)getFacesContext()).getRenderResponse() &&
-        !((FacesContextImpl)getFacesContext()).getResponseComplete());
+    assertTrue(!(getFacesContext().getRenderResponse()) &&
+        !(getFacesContext().getResponseComplete()));
     
     root = getFacesContext().getTree().getRoot();
     try {
