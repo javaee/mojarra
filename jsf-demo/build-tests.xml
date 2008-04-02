@@ -53,6 +53,8 @@
     <property name="mapping-prefix.war" value="${basedir}/test/mappingDemo/build/jsf-mappingDemo-prefix.war"/>        
     <property name="test.results.dir" value="${basedir}/testresults"/>
 
+    <property name="appserver.domain" value="domain1" />
+    
     <path id="classpath">
       <pathelement location="${jsf-api.jar}"/>
       <pathelement location="${build}/classes"/>
@@ -133,7 +135,7 @@
     </target>
 
     <target name="run.tests">
-        <echo message="Tomcat Home: ${tomcat.home}"/>
+        
         <junit printsummary="yes" haltonfailure="yes" haltonerror="yes">
             <classpath refid="run.classpath"/>
             <formatter type="plain" usefile="false"/>
@@ -141,9 +143,11 @@
             <jvmarg line="${debug.jvm.args}"/>
             <jvmarg value="-Dhost=${host}"/>
             <jvmarg value="-Dport=${port}"/> 
+            <!--
             <jvmarg value="-Dorg.apache.commons.logging.Log=${logger}"/> 
             <jvmarg value="-Dorg.apache.commons.logging.simplelog.log.com.sun.faces.demotest=${level}"/> 
-            <jvmarg value="-Dcontext.path=${context.path}"/>
+            -->
+             <jvmarg value="-Dcontext.path=${context.path}"/>
 
             <!-- Suite of tests -->
             <batchtest fork="yes" todir="${test.results.dir}">
@@ -203,6 +207,7 @@
     <!-- Global test target to run all unit tests -->
     <target name="test" depends="build" 
             description="Runs all of available demo unit tests">
+        
         <delete dir="${test.results.dir}"/>
         <mkdir dir="${test.results.dir}"/>
 <!--        <antcall target="run.mapping-extension.tests"/>   
@@ -287,6 +292,71 @@
         <touch file="${build}/component.last-testrun"/>
     </target>
 
+    <target name="test.appserver" depends="build" 
+            description="Runs all of available demo unit tests">
+        <delete dir="${test.results.dir}"/>
+        <mkdir dir="${test.results.dir}"/>
+         <antcall target="deploy.appserver">
+            <param name="demo.war" value="${components.war}"/>
+         </antcall>
+         <antcall target="deploy.appserver">
+            <param name="demo.war" value="${cardemo.war}"/>
+         </antcall>
+         <!--
+         <antcall target="deploy.appserver">
+            <param name="demo.war" value="${guessNumber.war}"/>
+         </antcall> 
+         
+         <antcall target="deploy.appserver">
+            <param name="demo.war" value="${mapping-extension.war}"/>
+         </antcall>
+         <antcall target="deploy.appserver">
+            <param name="demo.war" value="${mapping-prefix.war}"/>
+         </antcall> -->        
+        <sleep seconds="40"/>   
+        <antcall target="run.tests">
+            <param name="context.path" value="${components.context.path}"/>
+            <param name="demo.name" value="components"/>
+        </antcall>
+        <antcall target="run.cardemo.tests.appserver" />
+        <!--
+        <antcall target="run.tests">
+            <param name="context.path" value="${guessNumber.context.path}"/>
+            <param name="demo.name" value="guessNumber"/>
+        </antcall> 
+        
+         <antcall target="run.tests">
+            <param name="context.path" value="${mapping-prefix.context.path}"/>
+            <param name="demo.name" value="mappingTest"/>                        
+        </antcall>
+        
+        <antcall target="run.tests">
+            <param name="context.path" value="${mapping-extension.context.path}"/>
+            <param name="demo.name" value="mappingTest"/>                       
+        </antcall>  -->
+        
+    </target>
+    
+    <target name="deploy.appserver" description="Install web application" depends="build">
+       <copy file="${demo.war}" todir="${tomcat.home}/domains/${appserver.domain}/autodeploy"/>                
+    </target>
+    
+    <target name="run.cardemo.tests.appserver" depends="build">
+        <uptodate property="skip.deploy"
+            targetfile="${build}/cardemo.last-testrun"
+            srcfile="${cardemo.war}"/>    
 
+        <copy todir="${build}/classes">
+          <fileset dir="${basedir}/carstore/src/java">
+            <include name="**/*.properties" />
+          </fileset>
+        </copy>
+        
+        <antcall target="run.tests">
+            <param name="context.path" value="${cardemo.context.path}"/>
+            <param name="demo.name" value="cardemo"/>
+        </antcall>
+    </target>
+    
 </project>
 
