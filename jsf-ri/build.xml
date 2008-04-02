@@ -72,6 +72,7 @@
             value="${tomcat.home}/jstl/lib/standard.jar"/>
   <property name="jsf-api.jar" value="${jsf-api.home}/build/lib/jsf-api.jar"/>
   <property name="jsf-api.dtd" value="${jsf-api.home}/build/lib/web-facesconfig_1_0.dtd"/>
+  <property name="tlddoc.jar" value="${tomcat.home}/../tlddoc-1_0/tlddoc.jar"/>
 
 <!-- ************ Compiler Defaults *************************************** -->
 
@@ -146,6 +147,7 @@
     <mkdir dir="${build.home}/classes"/>
     <mkdir dir="${build.home}/classes/META-INF"/>
     <mkdir dir="${build.home}/javadocs"/>
+    <mkdir dir="${build.home}/tlddocs"/>
     <mkdir dir="${build.home}/lib"/>
     <copy file="${conf.share.dir}/html_basic.tld"
          toDir="${build.home}/classes/META-INF"/>
@@ -219,15 +221,27 @@
   <target name="dist" depends="jars" description="Build distribution files">
     <mkdir dir="${dist.home}"/>
 
+    <antcall target="tlddocs"/>
+
     <!-- Create the binary distribution -->
     <zip     destfile="${dist.home}/jsf-ri-${version}.zip">
       <zipfileset dir="${build.home}"
-             includes="lib/**"
+             includes="lib/**,tlddocs/**"
                prefix="jsf-ri-${version}"/>
     </zip>
 
     <antcall target="ri.source"/>
     
+  </target>
+
+  <target name="tlddocs">
+
+    <java fork="true" jar="${tlddoc.jar}">
+      <arg line="-d ${build.home}/tlddocs"/>
+      <arg line="-windowtitle jsf-ri-${version}"/>
+      <arg value="${conf.share.dir}/html_basic.tld"/>
+      <arg value="${conf.share.dir}/jsf_core.tld"/>
+    </java>
   </target>
 
     <target name="compile.test" depends="prepare,compile"
