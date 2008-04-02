@@ -1,5 +1,5 @@
 /*
- * $Id: CoreValidator.java,v 1.14 2004/12/02 18:42:24 rogerk Exp $
+ * $Id: CoreValidator.java,v 1.15 2004/12/08 17:55:35 edburns Exp $
  */
 
 /*
@@ -130,7 +130,6 @@ public class CoreValidator extends FacesValidator {
                                  String ln,
                                  String qn,
                                  Attributes attrs) {
-            debugPrintTagData(ns,ln,qn,attrs);
             maybeSnagTLPrefixes(qn, attrs);
 
             validatorInfo.setNameSpace(ns);
