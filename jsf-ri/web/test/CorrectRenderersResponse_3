@@ -14,14 +14,16 @@
 <label for="myCheckboxlist" class="disabledClass"><input name="myCheckboxlist" value="Red" type="checkbox" disabled="disabled" tabindex="5" title="title"> Red</input></label></td>
 <td>
 <label for="myCheckboxlist" class="enabledClass"><input name="myCheckboxlist" value="Blue" type="checkbox"  checked tabindex="5" title="title"> Blue</input></label></td>
-<span id="myCheckboxlist"><table border="0" class="styleClass">
+
+group
+<table border="1">
 	<tr>
 <td>
 <label for="myCheckboxlist" class="enabledClass"><input name="myCheckboxlist" value="Green" type="checkbox" tabindex="5" title="title"> Green</input></label></td>
 <td>
 <label for="myCheckboxlist" class="enabledClass"><input name="myCheckboxlist" value="Yellow" type="checkbox" tabindex="5" title="title"> Yellow</input></label></td>
 	</tr>
-</table></span>	</tr>
+</table>	</tr>
 </table></span>
 <select id="myOnemenu" name="myOnemenu" size="1">	<option value="Red">Red</option>
 	<option value="Blue"  selected>Blue</option>
