@@ -1,5 +1,5 @@
 /*
- * $Id: DateRenderer.java,v 1.15 2003/02/04 22:26:37 visvan Exp $
+ * $Id: DateRenderer.java,v 1.16 2003/02/18 23:05:11 eburns Exp $
  */
 
 /*
@@ -47,7 +47,7 @@ import com.sun.faces.RIConstants;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: DateRenderer.java,v 1.15 2003/02/04 22:26:37 visvan Exp $
+ * @version $Id: DateRenderer.java,v 1.16 2003/02/18 23:05:11 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -128,9 +128,9 @@ public class DateRenderer extends HtmlBasicInputRenderer {
         String modelRef = null;
 	Date newDateValue = null;
         
-        if (null == newValue) {
-	    return newValue;
-	}
+        if ( newValue == null || newValue.length() == 0) {
+            return null;
+        }
 	modelRef = component.getModelReference();
 	
 	// Try to get the newValue as a Date

@@ -1,5 +1,5 @@
 /*
- * $Id: NumberRenderer.java,v 1.14 2003/01/24 21:42:42 rkitain Exp $
+ * $Id: NumberRenderer.java,v 1.15 2003/02/18 23:05:12 eburns Exp $
  */
 
 /*
@@ -46,7 +46,7 @@ import java.text.ParseException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: NumberRenderer.java,v 1.14 2003/01/24 21:42:42 rkitain Exp $
+ * @version $Id: NumberRenderer.java,v 1.15 2003/02/18 23:05:12 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -106,7 +106,7 @@ public class NumberRenderer extends HtmlBasicInputRenderer {
         Class modelType = null;
        
         if ( newValue == null || newValue.length() == 0) {
-            return newValue;
+            return null;
         }
         
         newValue = newValue.trim();

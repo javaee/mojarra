@@ -1,5 +1,5 @@
 /*
- * $Id: TextRenderer.java,v 1.40 2003/01/24 21:42:43 rkitain Exp $
+ * $Id: TextRenderer.java,v 1.41 2003/02/18 23:05:13 eburns Exp $
  */
 
 /*
@@ -44,7 +44,7 @@ import com.sun.faces.RIConstants;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TextRenderer.java,v 1.40 2003/01/24 21:42:43 rkitain Exp $
+ * @version $Id: TextRenderer.java,v 1.41 2003/02/18 23:05:13 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -97,22 +97,6 @@ public class TextRenderer extends HtmlBasicInputRenderer {
             componentType.equals(UIOutput.TYPE));
     }
 
-    public Object getConvertedValue(FacesContext context, UIComponent component,
-            String newValue) throws IOException {
-        Converter converter = getConverter(component);
-        if (converter != null) {
-            try {
-                Object converted = 
-                    converter.getAsObject(context, component, newValue);
-                return(converted);
-            } catch (ConverterException e) {
-                throw new IOException(e.getMessage());
-            }
-        } else {
-            return newValue;
-        }
-    }
-         
     public void encodeBegin(FacesContext context, UIComponent component) 
             throws IOException {
         if (context == null || component == null) {

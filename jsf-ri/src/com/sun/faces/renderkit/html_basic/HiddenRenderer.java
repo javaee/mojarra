@@ -1,5 +1,5 @@
 /*
- * $Id: HiddenRenderer.java,v 1.4 2003/01/24 21:42:41 rkitain Exp $
+ * $Id: HiddenRenderer.java,v 1.5 2003/02/18 23:05:12 eburns Exp $
  */
 
 /*
@@ -40,7 +40,7 @@ import com.sun.faces.RIConstants;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HiddenRenderer.java,v 1.4 2003/01/24 21:42:41 rkitain Exp $
+ * @version $Id: HiddenRenderer.java,v 1.5 2003/02/18 23:05:12 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -92,22 +92,6 @@ public class HiddenRenderer extends HtmlBasicInputRenderer {
         return (componentType.equals(UIInput.TYPE));
     }
 
-    public Object getConvertedValue(FacesContext context, UIComponent component,
-            String newValue) throws IOException {
-        Converter converter = getConverter(component);
-        if (converter != null) {
-            try {
-                Object converted = 
-                    converter.getAsObject(context, component, newValue);
-                return(converted);
-            } catch (ConverterException e) {
-                throw new IOException(e.getMessage());
-            }
-        } else {
-            return newValue;
-        }
-    }
-         
     public void encodeBegin(FacesContext context, UIComponent component) 
             throws IOException {
         if (context == null || component == null) {

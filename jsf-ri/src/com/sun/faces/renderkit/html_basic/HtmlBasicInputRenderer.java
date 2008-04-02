@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicInputRenderer.java,v 1.1 2003/01/24 21:42:42 rkitain Exp $
+ * $Id: HtmlBasicInputRenderer.java,v 1.2 2003/02/18 23:05:12 eburns Exp $
  */
 
 /*
@@ -13,11 +13,16 @@ package com.sun.faces.renderkit.html_basic;
 
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
+import javax.faces.convert.Converter;
+import javax.faces.convert.ConverterException;
+import javax.faces.context.FacesContext;
 
 import org.mozilla.util.Assert;
 import org.mozilla.util.Debug;
 import org.mozilla.util.Log;
 import org.mozilla.util.ParameterCheck;
+
+import java.io.IOException;
 
 /**
  *
@@ -67,5 +72,23 @@ public abstract class HtmlBasicInputRenderer extends HtmlBasicRenderer {
             component.setAttribute(UIInput.PREVIOUS_VALUE, value);
         }
     }
+
+    public Object getConvertedValue(FacesContext context, UIComponent component,
+            String newValue) throws IOException {
+        Converter converter = getConverter(component);
+	Object result = null;
+        if (converter != null) {
+            try {
+                result = converter.getAsObject(context, component, newValue);
+            } catch (ConverterException e) {
+                throw new IOException(e.getMessage());
+            }
+        } else if ( null != newValue && 0 < newValue.length()) {
+	    result = newValue;
+	}
+	return result;
+    }
+         
+
 
 } // end of class HtmlBasicInputRenderer
