@@ -1,5 +1,5 @@
 /*
- * $Id: CommandLinkRenderer.java,v 1.37 2005/09/14 21:27:17 jayashri Exp $
+ * $Id: CommandLinkRenderer.java,v 1.38 2005/10/10 16:53:26 rlubke Exp $
  */
 
 /*
@@ -32,7 +32,6 @@
 package com.sun.faces.renderkit.html_basic;
 
 import java.io.IOException;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.ArrayList;
 
@@ -138,8 +137,7 @@ public class CommandLinkRenderer extends HtmlBasicRenderer {
         if (logger.isLoggable(Level.FINER)) {
             logger.log(Level.FINER, 
                     "End decoding component " + component.getId());
-        }
-        return;
+        }        
     }
 
     public boolean getRendersChildren() {
@@ -206,9 +204,7 @@ public class CommandLinkRenderer extends HtmlBasicRenderer {
             }
             return;
         }
-        Iterator<UIComponent> kids = component.getChildren().iterator();
-        while (kids.hasNext()) {
-            UIComponent kid = kids.next();
+        for (UIComponent kid : component.getChildren()) {
             kid.encodeBegin(context);
             if (kid.getRendersChildren()) {
                 kid.encodeChildren(context);
@@ -271,7 +267,7 @@ public class CommandLinkRenderer extends HtmlBasicRenderer {
                                                                                                                         
         renderHiddenFieldsAndScriptIfNecessary(context, writer, component, fieldName);
                                                                                                                         
-        UIForm uiform = getMyForm(context, command);
+        UIForm uiform = getMyForm(command);
         if ( uiform == null ) {
             if (logger.isLoggable(Level.WARNING)) {
                  logger.warning("component " + component.getId() +
@@ -283,9 +279,7 @@ public class CommandLinkRenderer extends HtmlBasicRenderer {
         if (logger.isLoggable(Level.FINER)) {
             logger.log(Level.FINER,
                     "End encoding component " + component.getId());
-        }
-                                                                                                                        
-        return;
+        }        
     }
 
     private void renderAsActive(FacesContext context, UICommand command) 
@@ -296,7 +290,7 @@ public class CommandLinkRenderer extends HtmlBasicRenderer {
 
         String clientId = command.getClientId(context);
 
-        UIForm uiform = getMyForm(context, command);
+        UIForm uiform = getMyForm(command);
         if ( uiform == null ) {
             if (logger.isLoggable(Level.WARNING)) {
                  logger.warning("component " + command.getId() +
@@ -336,14 +330,16 @@ public class CommandLinkRenderer extends HtmlBasicRenderer {
         
         // call the javascript function that clears the all the hidden field
         // parameters in the form.
-        sb.append(CLEAR_HIDDEN_FIELD_FN_NAME + "_" + formClientId.replace(NamingContainer.SEPARATOR_CHAR, '_'));
+        sb.append(CLEAR_HIDDEN_FIELD_FN_NAME);
+        sb.append('_');
+        sb.append(formClientId.replace(NamingContainer.SEPARATOR_CHAR, '_'));
         sb.append("('");
         sb.append(formClientId);
         sb.append("');");
         sb.append("document.forms[");
-        sb.append("'");
+        sb.append('\'');
         sb.append(formClientId);
-        sb.append("'");
+        sb.append('\'');
         sb.append("]['");
         sb.append(getHiddenFieldName(context, command));
         sb.append("'].value='");
@@ -351,9 +347,9 @@ public class CommandLinkRenderer extends HtmlBasicRenderer {
         sb.append("';");
         for (int i = 0, len = paramList.length; i < len; i++) {
             sb.append("document.forms[");
-            sb.append("'");
+            sb.append('\'');
             sb.append(formClientId);
-            sb.append("'");
+            sb.append('\'');
             sb.append("]['");
             sb.append(paramList[i].getName());
             sb.append("'].value='");
@@ -367,17 +363,17 @@ public class CommandLinkRenderer extends HtmlBasicRenderer {
         String target = (String) command.getAttributes().get("target");
         if (target != null && target.trim().length() > 0) {
             sb.append(" document.forms[");
-            sb.append("'");
+            sb.append('\'');
             sb.append(formClientId);
-            sb.append("'");
+            sb.append('\'');
             sb.append("].target='");
             sb.append(target);
             sb.append("';");
         }
         sb.append(" document.forms[");
-        sb.append("'");
+        sb.append('\'');
         sb.append(formClientId);
-        sb.append("'");
+        sb.append('\'');
         sb.append("].submit()");
 
         sb.append("; return false;");
@@ -397,17 +393,7 @@ public class CommandLinkRenderer extends HtmlBasicRenderer {
         }
         
         // render the current value as link text.
-        String label = null;
-        Object value = ((UICommand) command).getValue();
-        if (value != null) {
-            label = value.toString();
-        }
-        if (logger.isLoggable(Level.FINE)) {
-             logger.fine("Value to be rendered " + value);
-        }
-        if (label != null && label.length() != 0) {
-            writer.write(label);
-        }
+        writeValue(command, writer);
         writer.flush();
 
     }
@@ -441,14 +427,32 @@ public class CommandLinkRenderer extends HtmlBasicRenderer {
         if (styleClass != null) {
             writer.writeAttribute("class", styleClass, "styleClass");
         }
+
+        // render the current value as span text.
+        writeValue(command, writer);
         writer.flush();
+    }
+
+    private void writeValue(UICommand command, ResponseWriter writer) 
+    throws IOException {
+        String label = null;
+        Object value = command.getValue();
+        if (value != null) {
+            label = value.toString();
+        }
+        if (logger.isLoggable(Level.FINE)) {
+            logger.fine("Value to be rendered " + value);
+        }
+        if (label != null && label.length() != 0) {
+            writer.write(label);
+        }
     }
 
     private void writeScriptContent(FacesContext context, 
 				   ResponseWriter writer,
 				   UIComponent component) throws IOException {
 	Map<String,Object> requestMap = context.getExternalContext().getRequestMap();
-	UIForm myForm = getMyForm(context, component);
+	UIForm myForm = getMyForm(component);
 	boolean isXHTML = 
 	    requestMap.containsKey(RIConstants.CONTENT_TYPE_IS_XHTML);
 
@@ -510,7 +514,7 @@ public class CommandLinkRenderer extends HtmlBasicRenderer {
      * with that name, or there is one, but it's a different name then
      * "our" hidden field name, render the hidden field.</p>
      */
-
+    
     private void renderHiddenFieldsAndScriptIfNecessary(FacesContext context,
 					       ResponseWriter writer,
 					       UIComponent component,
@@ -522,11 +526,10 @@ public class CommandLinkRenderer extends HtmlBasicRenderer {
 	    return;
 	}
 	String keyName = RIConstants.FACES_PREFIX + fieldName;
-	Object keyVal = null;
+	Object keyVal;
 	// if the hidden field for this form hasn't yet been rendered
 	if ((null == (keyVal = requestMap.get(keyName))) 
-	    ||
-	    (null != keyVal && !keyVal.equals(keyName))) {
+	    || (!keyVal.equals(keyName))) {
             
 	    writer.startElement("input", component);
 	    writer.writeAttribute("type", "hidden", null);
@@ -541,26 +544,28 @@ public class CommandLinkRenderer extends HtmlBasicRenderer {
         // get UIParameter children...
         Param paramList[] = getParamList(context, component);
         if (paramList != null && paramList.length > 0) {            
-            renderedFields = (ArrayList)requestMap.get(RENDERED_HIDDEN_FIELDS);           
+            renderedFields = (ArrayList<String>)requestMap.get(RENDERED_HIDDEN_FIELDS);           
             if (renderedFields == null) {
-                renderedFields = new ArrayList();
+                renderedFields = new ArrayList<String>();
+            }
+
+            // render any hidden fields that haven't been already for this form.
+            // Hidden fields should be rendered only once per form.
+            for (int i = 0; i < paramList.length; i++) {
+                fieldName = paramList[i].getName();
+                keyName = RIConstants.FACES_PREFIX + fieldName;
+                int keyLocation = renderedFields.indexOf(keyName);
+
+                if (keyLocation == -1) {
+                    writer.startElement("input", component);
+                    writer.writeAttribute("type", "hidden", null);
+                    writer.writeAttribute("name", fieldName, null);
+                    writer.endElement("input");
+                    renderedFields.add(keyName);
+                }
             }
         }
-        // render any hidden fields that haven't been already for this form.
-        // Hidden fields should be rendered only once per form.
-        for (int i = 0; i < paramList.length; i++) {
-            fieldName = paramList[i].getName();            
-            keyName = RIConstants.FACES_PREFIX + fieldName;
-            int keyLocation = renderedFields.indexOf(keyName);
-            
-            if (keyLocation == -1) {
-                writer.startElement("input", component);
-                writer.writeAttribute("type", "hidden", null);
-                writer.writeAttribute("name", fieldName, null);
-                writer.endElement("input");
-                renderedFields.add(keyName);
-            }
-        }
+        
         requestMap.put(RENDERED_HIDDEN_FIELDS, renderedFields);
 	writeScriptContent(context, writer, component);
     }
@@ -568,7 +573,7 @@ public class CommandLinkRenderer extends HtmlBasicRenderer {
     
     private String getHiddenFieldName(FacesContext context, 
 					UIComponent component) {
-	UIForm uiform = getMyForm(context, component);
+	UIForm uiform = getMyForm(component);
 	if (null == uiform) {
 	    return null;
 	}
@@ -577,7 +582,7 @@ public class CommandLinkRenderer extends HtmlBasicRenderer {
 		UIViewRoot.UNIQUE_ID_PREFIX + "cl");
     }
     
-    private UIForm getMyForm(FacesContext context, UIComponent component) {
+    private UIForm getMyForm(UIComponent component) {
         UIComponent parent = component.getParent();
         while (parent != null) {
             if (parent instanceof UIForm) {
