@@ -1,5 +1,5 @@
 /*
- * $Id: JspTLD21Generator.java,v 1.8 2006/05/12 15:40:21 rlubke Exp $
+ * $Id: JspTLD21Generator.java,v 1.9 2006/05/16 20:55:22 rlubke Exp $
  */
 
 /*
@@ -253,7 +253,7 @@ public class JspTLD21Generator extends JspTLDGenerator {
                             writer.writeText(
                                 property.getMethodSignature());
                             writer.closeElement(2);
-                        } else {
+                        } else if (property.isValueExpressionEnabled()) {
                             // PENDING FIX ME
                             String type = property.getPropertyClass();
 //                            String wrapperType = (String)
@@ -265,8 +265,11 @@ public class JspTLD21Generator extends JspTLDGenerator {
                             writer.startElement("type");
                             writer.writeText(type);
                             writer.closeElement(2);
+                        } else {
+                            writer.startElement("type");
+                            writer.writeText(property.getPropertyClass());
+                            writer.closeElement();                       
                         }
-
                     } else {
                         writer.startElement("rtexprvalue");
                         writer.writeText(getRtexprvalue(tagName, propertyName));

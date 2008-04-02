@@ -154,6 +154,9 @@
         <icon></icon>
         <property-name>rendered</property-name>
         <property-class>boolean</property-class>
+        <property-extension>
+            <value-expression-enabled>true</value-expression-enabled>
+        </property-extension>
     </property>
 
     <property>
