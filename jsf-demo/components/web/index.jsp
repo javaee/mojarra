@@ -84,7 +84,7 @@ Faces technology.</p>
 <a href="ShowSource.jsp?filename=/src/demo/model/CalendarBean.java">demo/model/CalendarBean.java</a>
 </td>
 
-<td><a href="calendar.jsf"><img src="images/execute.gif" width="24" height="24" border="0"></a>
+<td><a href="calendar.faces"><img src="images/execute.gif" width="24" height="24" border="0"></a>
 </td>
 
 </tr>
