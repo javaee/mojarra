@@ -9,13 +9,167 @@
     .green { color: green; }
     .black { color: black; }    
     .ra { background-color: lightgray; }
-    .rb { background-color: lavender; }    
+    .rb { background-color: lavender; }   
+    .ln { color: rgb(0,0,0); font-weight: normal; font-style: normal; }
+    .s0 { color: rgb(0,0,128); font-weight: bold; }
+    .s1 { }
+    .s2 { color: rgb(128,128,128); font-style: italic; }
+    .s3 { color: rgb(128,128,128); font-style: italic; }
+    .s4 { color: rgb(128,128,128); font-weight: bold; font-style: italic; }
 </style>
 <body>
 
+<h2>New Features Added In This Release</h2>
+
+<p>
+    We've added four new context initialization parameters since
+    the release of 1.2"
+</p>
+<table width="100%" cellpadding="5" style="font-size:small;border:1px solid; border-width:1px;">
+    <tr style=background-color:silver>
+        <th>
+            Paramter Name
+        </th>        
+        <th>
+            Description
+        </th>
+        <th>
+            Default Value
+        </th>
+    </tr>
+    <tr class="rb">
+        <td>
+            com.sun.faces.displayConfiguration
+        </td>
+        <td>
+            If <code>true</code> then all web confiration information 
+            (context initialization parameters and environment entries) will
+            be written to the log.  This is useful during development to
+            confirm your application is configured as expected.  Valid
+            values for this parameter are <code>true</code> and <code>false</code>
+        </td>
+        <td>
+            false
+        </td>
+    </tr>
+    <tr class="ra">
+        <td>
+            com.sun.faces.injectionProvider
+        </td>
+        <td>
+            This parameter specifies a class that implements the <a href="#injection">InjectionProvider</a>
+            SPI.  This implementation represents a hook the JSF implementation will use to provide
+            resource injection support.  See the documentation of the <a href="#injection">InjectionProvider</a> interface
+            for more details
+        </td>
+        <td>
+            NONE
+        </td>
+    </tr>
+    <tr class="rb">
+        <td>
+            com.sun.faces.responseBufferSize
+        </td>
+        <td>
+            This parameter specifies the size, in bytes, of the buffer that is used to write
+            all generated content <em>exluding</em> state.
+        </td>
+        <td>
+            4096
+        </td>
+    </tr>
+    <tr class="ra">
+        <td>
+            com.sun.faces.clientStateWriteBufferSize
+        </td>
+        <td>
+            This parameter specifies the size, in bytes, of the buffer that is
+            used to write client state.  It should be noted, that the buffer
+            used is split - half is for raw bytes, the other half is for the
+            Base64 encoded characters of said bytes.  So, for example, if the
+            default, <code>8192</code>, is used, then <code>4096</code> of that is used for the bytes,
+            and the other <code>4096</code> is used for the Base42 encoded characters.
+        </td>
+        <td>
+            8192
+        </td>
+    </tr>
+</table>
+
+<br/>
+
+<p>
+    We've deprecated several context initialization parameters as well:
+</p>
+<table width="100%" cellpadding="5" style="font-size:small;border:1px solid; border-width:1px;">
+    <tr style=background-color:silver>
+        <th>
+            Paramter Name
+        </th>        
+        <th>
+            New Parameter Name
+        </th>
+        <th>
+            Default Value
+        </th>
+    </tr>
+    <tr class="rb">
+        <td>
+            com.sun.faces.NUMBER_OF_VIEWS_IN_SESSION
+        </td>
+        <td>
+            com.sun.faces.numberOfViewsInSession
+        </td>
+        <td>
+            15
+        </td>
+    </tr>
+    <tr class="ra">
+        <td>
+            com.sun.faces.NUMBER_OF_VIEWS_IN_LOGICAL_VIEW_IN_SESSION
+        </td>
+        <td>
+            com.sun.faces.numberOfLogicalViews
+        </td>
+        <td>
+            15
+        </td>
+    </tr>
+    <tr class="rb">
+        <td>
+            com.sun.faces.PreferXHTML
+        </td>
+        <td>
+            com.sun.faces.preferXHTML
+        </td>
+        <td>
+            false
+        </td>
+    </tr>
+    <tr class="ra">
+        <td>
+            com.sun.faces.COMPRESS_STATE
+        </td>
+        <td>
+            com.sun.faces.compressViewState
+        </td>
+        <td>
+            true
+        </td>
+    </tr>
+ </table>
+<p>
+    If you're not familiar with the parameters above check the FAQ or 
+    Java EE 5 tutorial for details.  
+    <br/>
+    <em>NOTE:</em> The deprecated parameters will continue to work, but a message
+    will now be logged stating the deprecation as well as giving the name
+    of the associated non-deprecated parameter.
+</p>
+
 <h2>Issues Resolved In This Release</h2>
-<table width="100%" style="font-size:small;">
-<tr>
+<table width="100%" style="font-size:small;border:1px solid; border-width:1px;">
+<tr style="background-color:silver">
     <th>ID</th>
     <th>Type</th>
     <th>Pri</th>
@@ -786,6 +940,63 @@
 
 </table>
 
+
+<h2>New Service Provider Interfaces (SPIs)</h2>
+<a name="injection"/>
+
+<table width="100%" style="font-size:small;border:1px solid; border-width:1px;">
+    <tr style=background-color:silver>
+       <th>InjectionProvider.java</th>
+    </tr>
+    <tr>
+       <td>        
+<pre style="font-size:medium;">
+
+<a name="l1"><span class="ln">1    </span></a><span class="s0">package </span><span class="s1">com.sun.faces.spi; 
+<a name="l2"><span class="ln">2    </span></a> 
+<a name="l3"><span class="ln">3    </span></a></span><span class="s2">/** 
+<a name="l4"><span class="ln">4    </span></a> * </span><span class="s3">&lt;p&gt;</span><span class="s2">This interface defines an integration point for Java EE vendors. 
+<a name="l5"><span class="ln">5    </span></a> * Each vendor will need to provide an implementation of this interface 
+<a name="l6"><span class="ln">6    </span></a> * which will provide the JSF implementation the necessary hooks to  
+<a name="l7"><span class="ln">7    </span></a> * perform resource injection.</span><span class="s3">&lt;/p&gt;  </span><span class="s2"> 
+<a name="l8"><span class="ln">8    </span></a> *  
+<a name="l9"><span class="ln">9    </span></a> * </span><span class="s3">&lt;p&gt;</span><span class="s2">The implementation of this interface *must* be thread-safe and must 
+<a name="l10"><span class="ln">10   </span></a> * have a no-arg constructor.</span><span class="s3">&lt;/p&gt;</span><span class="s2"> 
+<a name="l11"><span class="ln">11   </span></a> */</span><span class="s1"> 
+<a name="l12"><span class="ln">12   </span></a></span><span class="s0">public interface </span><span class="s1">InjectionProvider { 
+<a name="l13"><span class="ln">13   </span></a> 
+<a name="l14"><span class="ln">14   </span></a>    </span><span class="s2">/** 
+<a name="l15"><span class="ln">15   </span></a>     * </span><span class="s3">&lt;p&gt;</span><span class="s2">The implementation of this method must perform the following 
+<a name="l16"><span class="ln">16   </span></a>     * steps: 
+<a name="l17"><span class="ln">17   </span></a>     *    </span><span class="s3">&lt;ul&gt;</span><span class="s2"> 
+<a name="l18"><span class="ln">18   </span></a>     *        </span><span class="s3">&lt;li&gt;</span><span class="s2">Inject the supported resources per the Servlet 2.5 
+<a name="l19"><span class="ln">19   </span></a>     *           specification into the provided object</span><span class="s3">&lt;/li&gt;</span><span class="s2"> 
+<a name="l20"><span class="ln">20   </span></a>     *        </span><span class="s3">&lt;li&gt;</span><span class="s2">Inoke any method marked with the </span><span class="s3">&lt;code&gt;</span><span class="s2">@PostConstruct</span><span class="s3">&lt;/code&gt;</span><span class="s2"> 
+<a name="l21"><span class="ln">21   </span></a>     *          annotation (per the Common Annotations Specification)</span><span class="s3">&lt;/li&gt;</span><span class="s2"> 
+<a name="l22"><span class="ln">22   </span></a>     *    </span><span class="s3">&lt;/ul&gt;</span><span class="s2"> 
+<a name="l23"><span class="ln">23   </span></a>     * </span><span class="s3">&lt;/p&gt;</span><span class="s2"> 
+<a name="l24"><span class="ln">24   </span></a>     * </span><span class="s4">@param </span><span class="s2">managedBean the target managed bean 
+<a name="l25"><span class="ln">25   </span></a>     * </span><span class="s4">@throws </span><span class="s2">InjectionProviderException if an error occurs during  
+<a name="l26"><span class="ln">26   </span></a>     *  resource injection 
+<a name="l27"><span class="ln">27   </span></a>     */</span><span class="s1"> 
+<a name="l28"><span class="ln">28   </span></a>    </span><span class="s0">public void </span><span class="s1">inject(Object managedBean) </span><span class="s0">throws </span><span class="s1">InjectionProviderException; 
+<a name="l29"><span class="ln">29   </span></a> 
+<a name="l30"><span class="ln">30   </span></a>     
+<a name="l31"><span class="ln">31   </span></a>    </span><span class="s2">/** 
+<a name="l32"><span class="ln">32   </span></a>     * </span><span class="s3">&lt;p&gt;</span><span class="s2">The implemenation of this method must invoke any 
+<a name="l33"><span class="ln">33   </span></a>     * method marked with the </span><span class="s3">&lt;code&gt;</span><span class="s2">@PreDestroy</span><span class="s3">&lt;/code&gt; </span><span class="s2">annotation 
+<a name="l34"><span class="ln">34   </span></a>     * (per the Common Annotations Specification). 
+<a name="l35"><span class="ln">35   </span></a>     * </span><span class="s4">@param </span><span class="s2">managedBean the target managed bean 
+<a name="l36"><span class="ln">36   </span></a>     * </span><span class="s4">@throws </span><span class="s2">InjectionProviderException if an error occurs when invoking 
+<a name="l37"><span class="ln">37   </span></a>     *  the method annotated by the </span><span class="s3">&lt;code&gt;</span><span class="s2">@PreDestroy</span><span class="s3">&lt;/code&gt; </span><span class="s2">annotation 
+<a name="l38"><span class="ln">38   </span></a>     */</span><span class="s1"> 
+<a name="l39"><span class="ln">39   </span></a>    </span><span class="s0">public void </span><span class="s1">invokePreDestroy(Object managedBean)  
+<a name="l40"><span class="ln">40   </span></a>    </span><span class="s0">throws </span><span class="s1">InjectionProviderException; 
+<a name="l41"><span class="ln">41   </span></a>} 
+<a name="l42"><span class="ln">42   </span></a></span></pre>
+</td>
+</tr>
+    </table>
 
 </body>
 </html>
