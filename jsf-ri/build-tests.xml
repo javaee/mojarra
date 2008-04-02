@@ -116,7 +116,6 @@
       <pathelement location="${commons-digester.jar}"/>
       <pathelement location="${commons-logging.jar}"/>      
       <pathelement location="${build.home}/classes"/>
-      <pathelement location="${xerces.jar}"/>
       <pathelement location="${tomcat.home}/bin/bootstrap.jar"/>
       <!-- For cactus.properties -->
       <pathelement location="${conf.test.dir}"/>

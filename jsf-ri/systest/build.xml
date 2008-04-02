@@ -102,7 +102,6 @@
     <pathelement location="${jsf.ri.jar}"/>
     <pathelement location="${servlet.jar}"/>
     <pathelement location="${jsp.jar}"/> 
-    <pathelement location="${xerces.jar}"/>
     <pathelement location="${jstl.jar}"/>
   </path>
 
