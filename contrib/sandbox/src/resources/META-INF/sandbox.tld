@@ -824,6 +824,29 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.2//EN"
     <!-- ******************************************************************* -->
 
     <!-- ******************************************************************* -->
+    <!-- Begin TreeNode tag attributes                                       -->
+    <!-- ******************************************************************* -->
+    <tag>
+        <name>treeNode</name>
+        <tag-class>com.sun.faces.sandbox.taglib.YuiTreeNodeTag</tag-class>
+        <body-content>JSP</body-content>
+        <description></description>
+        <attribute>
+            <name>id</name>
+            <required>false</required>
+            <rtexprvalue>false</rtexprvalue>
+            <description>
+                <![CDATA[The component identifier for this component.  This value must be
+                unique within the closest parent component that is a naming
+                container.]]>
+            </description>
+        </attribute>
+    </tag>
+    <!-- ******************************************************************* -->
+    <!-- End TreeNode tag attributes                                         -->
+    <!-- ******************************************************************* -->
+
+    <!-- ******************************************************************* -->
     <!-- Begin Calendar tag attributes                                       -->
     <!-- ******************************************************************* -->
     <tag>
@@ -1318,7 +1341,8 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.2//EN"
             <name>iframe</name>
             <required>false</required>
             <rtexprvalue>false</rtexprvalue>
-            <description><![CDATA[Whether or not to use asn iframe for displaying the object; used only for method=inline]]></description>
+            <description><![CDATA[A boolean value indicating whether or not to use an iframe for displaying the object
+            (default is false).  This us used only for when method="inline".]]></description>
         </attribute>
         <attribute>
             <name>urlVar</name>

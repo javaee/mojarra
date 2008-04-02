@@ -73,6 +73,10 @@
             <renderer-class>com.sun.faces.sandbox.render.YuiTreeRenderer</renderer-class>
         </renderer>
     </render-kit>
+    <component>
+        <component-type>com.sun.faces.sandbox.YuiTreeNode</component-type>
+        <component-class>com.sun.faces.sandbox.component.YuiTreeNode</component-class>
+    </component>
 
     <!-- *************************** YUI Calendar *************************** -->
     <component>                                                                                
