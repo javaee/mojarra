@@ -1,5 +1,5 @@
 /* 
- * $Id: ViewHandlerImpl.java,v 1.8 2003/09/04 21:15:04 jvisvanathan Exp $ 
+ * $Id: ViewHandlerImpl.java,v 1.9 2003/09/08 19:04:45 horwat Exp $ 
  */ 
 
 
@@ -37,7 +37,7 @@ import javax.faces.render.ResponseStateManager;
 
 /** 
  * <B>ViewHandlerImpl</B> is the default implementation class for ViewHandler. 
- * @version $Id: ViewHandlerImpl.java,v 1.8 2003/09/04 21:15:04 jvisvanathan Exp $ 
+ * @version $Id: ViewHandlerImpl.java,v 1.9 2003/09/08 19:04:45 horwat Exp $ 
  * 
  * @see javax.faces.application.ViewHandler 
  * 
@@ -66,6 +66,11 @@ public class ViewHandlerImpl extends StateManager
     }
     
     public UIViewRoot restoreView(FacesContext context, String viewId) {
+        if (context == null) {
+            throw new NullPointerException(Util.getExceptionMessage(
+                Util.NULL_CONTEXT_ERROR_MESSAGE_ID));
+        }
+
         UIViewRoot viewRoot = null;
         try {
             viewRoot = getView(context, viewId);
@@ -84,6 +89,11 @@ public class ViewHandlerImpl extends StateManager
     }
 
     public UIViewRoot createView(FacesContext context, String viewId) {
+        if (context == null) {
+            throw new NullPointerException(Util.getExceptionMessage(
+                Util.NULL_CONTEXT_ERROR_MESSAGE_ID));
+        }
+
 	UIViewRoot result = new UIViewRootBase();
 	result.setViewId(viewId);
 	// PENDING(): not sure if we should set the RenderKitId here.
