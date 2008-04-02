@@ -1,5 +1,5 @@
 /*
- * $Id: GenerateConcreteClasses.java,v 1.9 2003/12/23 19:57:35 eburns Exp $
+ * $Id: GenerateConcreteClasses.java,v 1.10 2004/01/06 23:02:44 eburns Exp $
  */
 
 /*
@@ -322,10 +322,37 @@ public class GenerateConcreteClasses extends GenerateBase {
 		}
 		result.append("      if (null != (vb = getValueBinding(\"" +
 			      ivar + "\"))) {\n");
-		result.append("          result = ((" +
-			      (String) wrappersForNumbers.get(attrClass) +
-			      ") vb.getValue(getFacesContext()))." + 
-			      attrClass + "Value();\n");
+		// protect against nall return from vb.getValue()
+		result.append("          Object objVal = vb.getValue(getFacesContext());\n");
+		// deal with boolean differently from other primitives
+		if ("Boolean".equals((String)wrappersForNumbers.get(attrClass))) {
+		    // see if we have a user-supplied default-value
+		    if (null != defaultValue) {
+			if ("true".equalsIgnoreCase(defaultValue)) {
+			    result.append("          result = !Boolean.FALSE.equals(objVal);\n");
+			}
+			else {
+			    result.append("          result = Boolean.TRUE.equals(objVal);\n");
+			}
+		    }
+		    else {
+			result.append("          result = Boolean.TRUE.equals(objVal);\n");
+		    }
+		}
+		// it's a number primitive
+		else {
+		    result.append("          if (null == objVal) {\n");
+		    result.append("            result = " + 
+				  (String) wrappersForNumbers.get(attrClass) +
+				  ".MIN_VALUE;\n");
+		    result.append("          }\n");
+		    result.append("          else {\n");
+		    result.append("            result = ((" +
+				  (String) wrappersForNumbers.get(attrClass) +
+				  ") objVal)." + 
+				  attrClass + "Value();\n");
+		    result.append("          }\n");
+		}
 		result.append("      }\n");
  		result.append("      return result;\n");
 	    }

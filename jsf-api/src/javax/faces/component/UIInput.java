@@ -1,5 +1,5 @@
 /*
- * $Id: UIInput.java,v 1.56 2004/01/06 14:52:11 rkitain Exp $
+ * $Id: UIInput.java,v 1.57 2004/01/06 23:02:41 eburns Exp $
  */
 
 /*
@@ -192,8 +192,7 @@ public class UIInput extends UIOutput {
 	}
 	ValueBinding vb = getValueBinding("required");
 	if (vb != null) {
-	    Boolean value = (Boolean) vb.getValue(getFacesContext());
-	    return (value.booleanValue());
+	    return (Boolean.TRUE.equals(vb.getValue(getFacesContext())));
 	} else {
 	    return (this.required);
 	}

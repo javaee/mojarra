@@ -168,6 +168,9 @@ public class UIData extends UIComponentBase
 	ValueBinding vb = getValueBinding("first");
 	if (vb != null) {
 	    Integer value = (Integer) vb.getValue(getFacesContext());
+	    if (null == value) {
+		return first;
+	    }
 	    return (value.intValue());
 	} else {
 	    return (this.first);
@@ -371,6 +374,9 @@ public class UIData extends UIComponentBase
 	ValueBinding vb = getValueBinding("rows");
 	if (vb != null) {
 	    Integer value = (Integer) vb.getValue(getFacesContext());
+	    if (null == value) {
+		return rows;
+	    }
 	    return (value.intValue());
 	} else {
 	    return (this.rows);

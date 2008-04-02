@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.87 2004/01/06 14:52:10 rkitain Exp $
+ * $Id: UIComponentBase.java,v 1.88 2004/01/06 23:02:40 eburns Exp $
  */
 
 /*
@@ -411,8 +411,7 @@ public abstract class UIComponentBase extends UIComponent {
 	}
 	ValueBinding vb = getValueBinding("rendered");
 	if (vb != null) {
-	    Boolean value = (Boolean) vb.getValue(getFacesContext());
-	    return (value.booleanValue());
+	    return (!Boolean.FALSE.equals(vb.getValue(getFacesContext())));
 	} else {
 	    return (this.rendered);
 	}

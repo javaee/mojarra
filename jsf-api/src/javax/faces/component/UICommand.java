@@ -1,5 +1,5 @@
 /*
- * $Id: UICommand.java,v 1.59 2003/12/24 23:10:20 craigmcc Exp $
+ * $Id: UICommand.java,v 1.60 2004/01/06 23:02:39 eburns Exp $
  */
 
 /*
@@ -124,8 +124,7 @@ public class UICommand extends UIComponentBase
 	}
 	ValueBinding vb = getValueBinding("immediate");
 	if (vb != null) {
-	    Boolean value = (Boolean) vb.getValue(getFacesContext());
-	    return (value.booleanValue());
+	    return (Boolean.TRUE.equals(vb.getValue(getFacesContext())));
 	} else {
 	    return (this.immediate);
 	}

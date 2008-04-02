@@ -1,5 +1,5 @@
 /*
- * $Id: UIMessage.java,v 1.4 2003/12/17 15:10:38 rkitain Exp $
+ * $Id: UIMessage.java,v 1.5 2004/01/06 23:02:41 eburns Exp $
  */
 
 /*
@@ -97,8 +97,7 @@ public class UIMessage extends UIComponentBase {
 	}
 	ValueBinding vb = getValueBinding("showDetail");
 	if (vb != null) {
-	    Boolean value = (Boolean) vb.getValue(getFacesContext());
-	    return (value.booleanValue());
+	    return (Boolean.TRUE.equals(vb.getValue(getFacesContext())));
 	} else {
 	    return (this.showDetail);
 	}
@@ -132,8 +131,7 @@ public class UIMessage extends UIComponentBase {
 	}
 	ValueBinding vb = getValueBinding("showSummary");
 	if (vb != null) {
-	    Boolean value = (Boolean) vb.getValue(getFacesContext());
-	    return (value.booleanValue());
+	    return (!Boolean.FALSE.equals(vb.getValue(getFacesContext())));
 	} else {
 	    return (this.showSummary);
 	}
