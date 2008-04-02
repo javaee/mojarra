@@ -1,5 +1,5 @@
 /*
- * $Id: StateManager.java,v 1.33 2004/02/26 20:30:25 eburns Exp $
+ * $Id: StateManager.java,v 1.34 2004/10/20 20:00:46 rlubke Exp $
  */
 
 /*
@@ -9,22 +9,14 @@
 
 package javax.faces.application;
 
-import javax.faces.FacesException;
+import javax.faces.component.NamingContainer;
+import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
-import javax.faces.component.NamingContainer;
-import javax.faces.component.StateHolder;
-import javax.faces.component.UIComponent;
-import javax.faces.component.UIViewRoot;
 import javax.faces.render.RenderKit;
 import javax.faces.render.ResponseStateManager;
 
 import java.io.IOException;
-import java.io.Writer;
-
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Iterator;
 
 
 
@@ -117,9 +109,6 @@ public abstract class StateManager {
      * children and facets, to be omitted from the saved  tree structure
      * information.</p>
      *
-     * <p>PENDING(craigmcc) - Does this method need to be in the
-     * public APIs?</p>
-     *
      * @param context {@link FacesContext} for the current request
      */
     protected abstract Object getTreeStructureToSave(FacesContext context);
@@ -138,9 +127,6 @@ public abstract class StateManager {
      * This must cause the component itself, as well as all of that component's
      * children and facets, to be omitted from the saved component state
      * information.</p>
-     *
-     * <p>PENDING(craigmcc) - Does this method need to be in the
-     * public APIs?</p>
      *
      * @param context {@link FacesContext} for the current request
      */
@@ -221,9 +207,6 @@ public abstract class StateManager {
      * tree structure of the component tree being restored.  If no saved
      * state information is available, return <code>null</code> instead.</p>
      *
-     * <p>PENDING(craigmcc) - Does this method need to be in the
-     * public APIs?</p>
-     *
      * @param context {@link FacesContext} for the current request
      * @param viewId View identifier of the view to be restored
      * @param renderKitId the renderKitId used to render this response.
@@ -240,10 +223,7 @@ public abstract class StateManager {
      * <p>Convenience method, which must be called by
      * <code>restoreView()</code>, to restore the attributes, properties,
      * and attached objects of all components in the restored component tree.
-     * </p>
-     *
-     * <p>PENDING(craigmcc) - Does this method need to be in the
-     * public APIs?</p>
+     * </p>    
      *
      * @param context {@link FacesContext} for the current request
      * @param viewRoot {@link UIViewRoot} returned by a previous call
