@@ -253,8 +253,10 @@
 
     <echo> Handle the top level files </echo>
     <copy file="README" todir="${dist.home}"/>
+<!-- PENDING(edburrns): don't copy these for wspack
     <copy file="LICENSE.html" todir="${dist.home}"/>
     <copy file="LICENSE-APACHE.txt" todir="${dist.home}"/>
+-->
     <copy file="LICENSE-MOZILLA.txt" todir="${dist.home}"/>
     <copy file="${jsf.api.dtd}" todir="${dist.home}/lib"/>
 

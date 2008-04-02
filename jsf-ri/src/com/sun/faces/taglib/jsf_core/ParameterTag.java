@@ -1,5 +1,5 @@
 /*
- * $Id: ParameterTag.java,v 1.3 2003/04/29 20:52:19 eburns Exp $
+ * $Id: ParameterTag.java,v 1.4 2003/05/22 19:21:50 eburns Exp $
  */
 
 /*
@@ -64,7 +64,7 @@ public class ParameterTag extends FacesTag {
 //
 
     public String getLocalRendererType() { return null; }
-    public String getComponentType() { return null; }
+    public String getComponentType() { return "Parameter"; }
 
     public UIComponent createComponent() {
         return (new UIParameter());
