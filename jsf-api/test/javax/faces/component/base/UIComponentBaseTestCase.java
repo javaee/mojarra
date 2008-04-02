@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBaseTestCase.java,v 1.8 2003/08/22 14:03:26 eburns Exp $
+ * $Id: UIComponentBaseTestCase.java,v 1.9 2003/08/27 21:16:31 craigmcc Exp $
  */
 
 /*
@@ -210,7 +210,44 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
     }
 
 
-    // Test removing components from or naming container.
+    // Test recursive adding and removing child trees with ids
+    public void testChildrenRecursive() {
+
+        // Create the components we will need
+        UIComponent testComponent = new TestComponentNamingContainer();
+        UIComponent child1 = new TestComponent("child1");
+        UIComponent child2 = new TestComponent("child2");
+        UIComponent child3 = new TestComponent("child3");
+
+        // Prepare ancestry tree before adding to base component
+        child1.getChildren().add(child2);
+        child2.getChildren().add(child3);
+
+        // Verify that no child ids are visible yet
+        assertNull(testComponent.findComponent("child1"));
+        assertNull(testComponent.findComponent("child2"));
+        assertNull(testComponent.findComponent("child3"));
+
+        // Add the entire tree
+        testComponent.getChildren().add(child1);
+
+        // Verify that all named children get added
+        assertEquals(child1, testComponent.findComponent("child1"));
+        assertEquals(child2, testComponent.findComponent("child2"));
+        assertEquals(child3, testComponent.findComponent("child3"));
+
+        // Remove the entire tree
+        testComponent.getChildren().remove(child1);
+
+        // Verify that child ids are no longer visible
+        assertNull(testComponent.findComponent("child1"));
+        assertNull(testComponent.findComponent("child2"));
+        assertNull(testComponent.findComponent("child3"));
+
+    }
+
+
+    // Test removing components from our naming container.
     public void testComponentRemoval() {
 
         UIComponent testComponent = new TestComponentNamingContainer();

@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.7 2003/08/27 00:56:50 craigmcc Exp $
+ * $Id: UIComponentBase.java,v 1.8 2003/08/27 21:16:30 craigmcc Exp $
  */
 
 /*
@@ -467,13 +467,7 @@ public abstract class UIComponentBase implements UIComponent {
                         } else {
                             UIComponent child =
                                 (UIComponent) element;
-                            String id = child.getId();
-                            validateId(id);
-                            NamingContainer naming = getNamingContainer();
-                            validateMissing(naming, id);
-                            if ((naming != null) && (id != null)) {
-                                naming.addComponentToNamespace(child);
-                            }
+                            addRecursive(getNamingContainer(), child);
                             child.setParent(UIComponentBase.this);
                             super.add(index, child);
                         }
@@ -487,13 +481,7 @@ public abstract class UIComponentBase implements UIComponent {
                         } else {
                             UIComponent child =
                                 (UIComponent) element;
-                            String id = child.getId();
-                            validateId(id);
-                            NamingContainer naming = getNamingContainer();
-                            validateMissing(naming, id);
-                            if ((naming != null) && (id != null)) {
-                                naming.addComponentToNamespace(child);
-                            }
+                            addRecursive(getNamingContainer(), child);
                             child.setParent(UIComponentBase.this);
                             return (super.add(element));
                         }
@@ -540,9 +528,7 @@ public abstract class UIComponentBase implements UIComponent {
                         for (int i = 0; i < n; i++) {
                             UIComponent child = (UIComponent) get(i);
                             child.setParent(null);
-                            if ((naming != null) && (child.getId() != null)) {
-                                naming.removeComponentFromNamespace(child);
-                            }
+                            removeRecursive(naming, child);
                         }
                         super.clear();
                     }
@@ -566,10 +552,7 @@ public abstract class UIComponentBase implements UIComponent {
                         UIComponent child = (UIComponent) get(index);
                         super.remove(index);
                         child.setParent(null);
-                        NamingContainer naming = getNamingContainer();
-                        if (naming != null) {
-                            naming.removeComponentFromNamespace(child);
-                        }
+                        removeRecursive(getNamingContainer(), child);
                         return (child);
                     }
 
@@ -582,10 +565,7 @@ public abstract class UIComponentBase implements UIComponent {
                         if (super.remove(element)) {
                             UIComponent child = (UIComponent) element;
                             child.setParent(null);
-                            NamingContainer naming = getNamingContainer();
-                            if (naming != null) {
-                                naming.removeComponentFromNamespace(child);
-                            }
+                            removeRecursive(getNamingContainer(), child);
                             return (true);
                         } else {
                             return (false);
@@ -626,12 +606,46 @@ public abstract class UIComponentBase implements UIComponent {
                                 (UIComponent) get(index);
                             previous.setParent(null);
                             if (naming != null) {
-                                naming.removeComponentFromNamespace(previous);
-                                naming.addComponentToNamespace(child);
+                                removeRecursive(naming, previous);
+                                addRecursive(naming, child);
                             }
                             child.setParent(UIComponentBase.this);
                             super.set(index, element);
                             return (previous);
+                        }
+                    }
+
+                    // Add any named children to this naming container
+                    private void addRecursive(NamingContainer naming,
+                                              UIComponent component) {
+                        if ((naming == null) || (component == null)) {
+                            return;
+                        }
+                        String id = component.getId();
+                        if (id != null) {
+                            validateId(id);
+                            validateMissing(naming, id);
+                            naming.addComponentToNamespace(component);
+                        }
+                        Iterator kids = component.getChildren().iterator();
+                        while (kids.hasNext()) {
+                            addRecursive(naming, (UIComponent) kids.next());
+                        }
+                    }
+
+
+                    // Remove any named children from this naming container
+                    private void removeRecursive(NamingContainer naming,
+                                                 UIComponent component) {
+                        if ((naming == null) || (component == null)) {
+                            return;
+                        }
+                        if (component.getId() != null) {
+                            naming.removeComponentFromNamespace(component);
+                        }
+                        Iterator kids = component.getChildren().iterator();
+                        while (kids.hasNext()) {
+                            removeRecursive(naming, (UIComponent) kids.next());
                         }
                     }
 
