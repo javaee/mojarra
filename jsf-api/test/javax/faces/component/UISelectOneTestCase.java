@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectOneTestCase.java,v 1.23 2004/07/12 14:26:05 rlubke Exp $
+ * $Id: UISelectOneTestCase.java,v 1.24 2005/03/07 21:50:28 rogerk Exp $
  */
 
 /*
@@ -13,11 +13,13 @@ package javax.faces.component;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
+import javax.faces.application.FacesMessage;
 import javax.faces.model.SelectItem;
 import javax.faces.model.SelectItemGroup;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -117,11 +119,16 @@ public class UISelectOneTestCase extends UIInputTestCase {
         assertTrue(selectOne.isValid());
 
         // Validate a value that is not on the list
+        selectOne.getAttributes().put("label", "mylabel");
         selectOne.setValid(true);
         selectOne.setSubmittedValue("bop");
         selectOne.validate(facesContext);
         assertTrue(!selectOne.isValid());
-
+        Iterator messages = facesContext.getMessages();
+        while (messages.hasNext()) {
+            FacesMessage message = (FacesMessage) messages.next();
+            assertTrue(message.getSummary().indexOf("mylabel") >= 0);
+        }
     }
 
     // Test validation of component with UISelectItems pointing to map

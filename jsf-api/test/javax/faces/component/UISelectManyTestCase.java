@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectManyTestCase.java,v 1.27 2004/07/12 14:26:05 rlubke Exp $
+ * $Id: UISelectManyTestCase.java,v 1.28 2005/03/07 21:50:28 rogerk Exp $
  */
 
 /*
@@ -13,12 +13,14 @@ package javax.faces.component;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
+import javax.faces.application.FacesMessage;
 import javax.faces.el.ValueBinding;
 import javax.faces.model.SelectItem;
 import javax.faces.model.SelectItemGroup;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -185,11 +187,19 @@ public class UISelectManyTestCase extends UIInputTestCase {
         assertTrue(selectMany.isValid());
 
         // Validate one value on the list and one not on the list
+        selectMany.getAttributes().put("label", "mylabel");
         selectMany.setValid(true);
         selectMany.setSubmittedValue(new Object[] { "bar", "bop"});
         selectMany.setRendererType(null); // We don't have any renderers
         selectMany.validate(facesContext);
         assertTrue(!selectMany.isValid());
+
+        Iterator messages = facesContext.getMessages();
+        while (messages.hasNext()) {
+            FacesMessage message = (FacesMessage) messages.next();
+            assertTrue(message.getSummary().indexOf("mylabel") >= 0);
+        }
+
 
     }
 

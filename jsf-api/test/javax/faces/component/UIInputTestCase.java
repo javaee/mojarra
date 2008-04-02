@@ -1,5 +1,5 @@
 /*
- * $Id: UIInputTestCase.java,v 1.34 2004/04/07 17:39:26 rkitain Exp $
+ * $Id: UIInputTestCase.java,v 1.35 2005/03/07 21:50:28 rogerk Exp $
  */
 
 /*
@@ -408,11 +408,18 @@ public class UIInputTestCase extends UIOutputTestCase {
         checkMessages(0);
         assertTrue(input.isValid());
 
+        input.getAttributes().put("label", "mylabel");
         input.setValid(true);
         input.setSubmittedValue("");
         input.validate(facesContext);
         checkMessages(1);
         assertTrue(!input.isValid());
+                                                                 
+        Iterator messages = facesContext.getMessages();
+        while (messages.hasNext()) {
+            FacesMessage message = (FacesMessage) messages.next();
+            assertTrue(message.getSummary().indexOf("mylabel") >= 0);
+        }
         
         input.setValid(true);
         input.setSubmittedValue(null);
