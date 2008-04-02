@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_2.java,v 1.87 2005/05/06 22:02:11 edburns Exp $
+ * $Id: TestRenderers_2.java,v 1.88 2005/05/09 22:12:19 edburns Exp $
  */
 
 /*
@@ -12,6 +12,7 @@
 package com.sun.faces.renderkit.html_basic;
 
 import com.sun.faces.JspFacesTestCase;
+import com.sun.faces.RIConstants;
 import com.sun.faces.TestBean;
 import com.sun.faces.util.Util;
 import org.apache.cactus.WebRequest;
@@ -37,8 +38,6 @@ import javax.faces.context.ResponseWriter;
 import javax.faces.convert.Converter;
 import javax.faces.model.SelectItem;
 
-import javax.el.ValueExpression;
-
 import java.io.IOException;
 import java.io.StringWriter;
 
@@ -47,7 +46,7 @@ import java.io.StringWriter;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_2.java,v 1.87 2005/05/06 22:02:11 edburns Exp $
+ * @version $Id: TestRenderers_2.java,v 1.88 2005/05/09 22:12:19 edburns Exp $
  */
 
 public class TestRenderers_2 extends JspFacesTestCase {
@@ -122,6 +121,9 @@ public class TestRenderers_2 extends JspFacesTestCase {
         UIViewRoot page = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
         page.setViewId("viewId");
         getFacesContext().setViewRoot(page);
+        Object view = 
+	    Util.getStateManager(getFacesContext()).saveSerializedView(getFacesContext());
+	getFacesContext().getExternalContext().getRequestMap().put(RIConstants.SAVED_STATE, view);
         assertTrue(null != getFacesContext().getResponseWriter());
     }
 

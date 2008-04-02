@@ -202,6 +202,7 @@ necessary to generate required classes.
                     fork="true">
         <classpath refid="run.classpath" />
         <sysproperty key="java.endorsed.dirs" value="${tomcat.home}/common/endorsed"/>
+        <jvmarg line="${debug.jvm.args}"/>
     </generateTaglib>
 
   </target>

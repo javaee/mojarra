@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_1.java,v 1.63 2005/05/06 22:02:10 edburns Exp $
+ * $Id: TestRenderers_1.java,v 1.64 2005/05/09 22:12:19 edburns Exp $
  */
 
 /*
@@ -12,8 +12,10 @@
 package com.sun.faces.renderkit.html_basic;
 
 import com.sun.faces.JspFacesTestCase;
+import com.sun.faces.RIConstants;
 import com.sun.faces.application.ViewHandlerImpl;
 import com.sun.faces.util.Util;
+
 import org.apache.cactus.WebRequest;
 
 import javax.faces.component.UICommand;
@@ -28,14 +30,10 @@ import javax.faces.component.UIViewRoot;
 import javax.el.ValueExpression;
 import javax.faces.model.SelectItem;
 import javax.faces.model.SelectItemGroup;
-import javax.servlet.jsp.jstl.core.Config;
-import javax.servlet.jsp.jstl.fmt.LocalizationContext;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.List;
 import java.util.ListResourceBundle;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -45,7 +43,7 @@ import java.util.ResourceBundle;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_1.java,v 1.63 2005/05/06 22:02:10 edburns Exp $
+ * @version $Id: TestRenderers_1.java,v 1.64 2005/05/09 22:12:19 edburns Exp $
  */
 
 public class TestRenderers_1 extends JspFacesTestCase {
@@ -160,6 +158,9 @@ public class TestRenderers_1 extends JspFacesTestCase {
         
         getFacesContext().getApplication().setViewHandler(viewHandler);
         getFacesContext().setViewRoot(root);
+        Object view = 
+	    Util.getStateManager(getFacesContext()).saveSerializedView(getFacesContext());
+	getFacesContext().getExternalContext().getRequestMap().put(RIConstants.SAVED_STATE, view);
         // Call this twice to test the multiple forms in a page logic.
         getFacesContext().getResponseWriter().startDocument();
         verifyFormRenderer(root, 0);

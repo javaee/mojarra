@@ -4,7 +4,7 @@
  */
 
 /**
- * $Id: TestRenderers_4.java,v 1.16 2004/04/07 17:53:01 rkitain Exp $
+ * $Id: TestRenderers_4.java,v 1.17 2005/05/09 22:12:20 edburns Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -17,6 +17,7 @@
 package com.sun.faces.renderkit.html_basic;
 
 import com.sun.faces.JspFacesTestCase;
+import com.sun.faces.RIConstants;
 import com.sun.faces.util.Util;
 import org.apache.cactus.WebRequest;
 
@@ -33,7 +34,7 @@ import java.io.IOException;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_4.java,v 1.16 2004/04/07 17:53:01 rkitain Exp $
+ * @version $Id: TestRenderers_4.java,v 1.17 2005/05/09 22:12:20 edburns Exp $
  */
 
 public class TestRenderers_4 extends JspFacesTestCase {
@@ -87,6 +88,9 @@ public class TestRenderers_4 extends JspFacesTestCase {
         UIViewRoot page = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
         page.setViewId("viewId");
         getFacesContext().setViewRoot(page);
+        Object view = 
+	    Util.getStateManager(getFacesContext()).saveSerializedView(getFacesContext());
+	getFacesContext().getExternalContext().getRequestMap().put(RIConstants.SAVED_STATE, view);
         assertTrue(null != getFacesContext().getResponseWriter());
     }
 
