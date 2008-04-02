@@ -1,5 +1,5 @@
 /*
- * $Id: PropertyResolverImpl.java,v 1.5 2003/08/19 19:31:06 rlubke Exp $
+ * $Id: PropertyResolverImpl.java,v 1.6 2003/10/23 15:20:22 rlubke Exp $
  */
 
 /*
@@ -10,7 +10,13 @@
 package com.sun.faces.el;
 
 
-import java.beans.IndexedPropertyDescriptor;
+import com.sun.faces.RIConstants;
+
+import javax.faces.component.UIComponent;
+import javax.faces.el.PropertyNotFoundException;
+import javax.faces.el.PropertyResolver;
+import javax.faces.FacesException;
+
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Array;
@@ -18,11 +24,6 @@ import java.lang.reflect.Method;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import javax.faces.component.UIComponent;
-import javax.faces.el.PropertyNotFoundException;
-import javax.faces.el.PropertyResolver;
-
-import com.sun.faces.RIConstants;
 
 
 /**
@@ -205,28 +206,89 @@ public class PropertyResolverImpl extends PropertyResolver {
 
     // Specified by javax.faces.el.PropertyResolver.getType(Object,int)
     public Class getType(Object base, int index) {
-	Class result = null;
+        Class result = null;
 
         if (base == null) {
             throw new NullPointerException();
         }
         if (base instanceof UIComponent) {
-            result =  (UIComponent.class);
-	}
-	if (base.getClass().isArray()) {
-	    try {
-		result = ((Object [])base)[index].getClass();
-	    }
-	    catch (Throwable e) {
-		throw new PropertyNotFoundException("" + index, e);
-	    }
-        } else if (base instanceof List) {
-            result = ((List)base).get(index).getClass();
-        }   
-	else {
-	    throw new PropertyNotFoundException("" + index);
+            result = (UIComponent.class);
         }
-	return result;
+        Class baseClass = base.getClass();
+        if (baseClass.isArray()) {
+            Class componentType = baseClass.getComponentType();
+            if (Object.class.isAssignableFrom(componentType)) {
+                try {
+                    result = ((Object[]) base)[index].getClass();
+                } catch (Exception e) {
+                    throw new PropertyNotFoundException("" + index, e);
+                }
+            } else if (Boolean.TYPE.equals(componentType)) {
+                try {
+                    boolean b = ((boolean[]) base)[index];
+                    return Boolean.TYPE;                    
+                } catch (Exception e) {
+                    throw new PropertyNotFoundException("" + index, e);
+                }
+            } else if (Byte.TYPE.equals(componentType)) {
+                try {
+                    byte b = ((byte[]) base)[index];
+                    return Byte.TYPE;
+                } catch (Exception e) {
+                    throw new PropertyNotFoundException("" + index, e);
+                }
+            } else if (Short.TYPE.equals(componentType)) {
+                try {
+                    short s = ((short[]) base)[index];
+                    return Short.TYPE;
+                } catch (Exception e) {
+                    throw new PropertyNotFoundException("" + index, e);
+                }
+            } else if (Integer.TYPE.equals(componentType)) {
+                try {
+                    int i = ((int[]) base)[index];
+                    return Integer.TYPE;
+                } catch (Exception e) {
+                    throw new PropertyNotFoundException("" + index, e);
+                }
+            } else if (Long.TYPE.equals(componentType)) {
+                try {
+                    long l = ((long[]) base)[index];
+                    return Long.TYPE;
+                } catch (Exception e) {
+                    throw new PropertyNotFoundException("" + index, e);
+                }
+            } else if (Float.TYPE.equals(componentType)) {
+                try {
+                    float f = ((float[]) base)[index];
+                    return Float.TYPE;
+                } catch (Exception e) {
+                    throw new PropertyNotFoundException("" + index, e);
+                }
+            } else if (Double.TYPE.equals(componentType)) {
+                try {
+                    double d = ((double[]) base)[index];
+                    return Boolean.TYPE;
+                } catch (Exception e) {
+                    throw new PropertyNotFoundException("" + index, e);
+                }
+            } else if (Character.TYPE.equals(componentType)) {
+                try {
+                    char c = ((char[]) base)[index];
+                    return Character.TYPE;
+                } catch (Exception e) {
+                    throw new PropertyNotFoundException("" + index, e);
+                }
+            } else {
+                // Should not get here...
+                throw new FacesException();
+            }
+        } else if (base instanceof List) {
+            result = ((List) base).get(index).getClass();
+        } else {
+            throw new PropertyNotFoundException("" + index);
+        }
+        return result;
     }
 
     // -------------------------------------------------------- Private Methods
