@@ -1,5 +1,5 @@
 /*
- * $Id: ValueBindingImpl.java,v 1.21 2003/11/07 18:45:25 eburns Exp $
+ * $Id: ValueBindingImpl.java,v 1.22 2003/11/10 05:07:38 craigmcc Exp $
  */
 
 /*
@@ -261,6 +261,8 @@ public class ValueBindingImpl extends ValueBinding implements StateHolder
                 e = t;
             }
         }
+        System.err.println("VBI EXCEPTION: " + e.getMessage());
+        e.printStackTrace(System.err);
 	    throw new PropertyNotFoundException(Util.getExceptionMessage(Util.ILLEGAL_MODEL_REFERENCE_ID, params), e);
 	}
 	return result;
