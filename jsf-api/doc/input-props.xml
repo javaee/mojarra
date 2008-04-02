@@ -44,13 +44,12 @@
 <root>
     <property>
         <description>
-          Flag indicating that this element must never
-          receive focus or be included in a subsequent
-          submit.  This attribute
-          may be rendered using attribute minimization such that
-          a false value causes no attribute to be rendered, and a
-          true value causes only the attribute name, "disabled", 
-          to be rendered.
+          Flag indicating that this element must never receive focus or
+          be included in a subsequent submit.  According to the HTML
+          4.01 specification, this attribute must be rendered using
+          attribute minimization such that a false value causes no
+          attribute to be rendered, and a true value causes only the
+          attribute name, "disabled", to be rendered.
         </description>
         <display-name>Disabled Flag</display-name>
         <icon></icon>
@@ -91,13 +90,13 @@
 
     <property>
         <description>
-          Flag indicating that this component will prohibit
-          changes by the user.  The element may receive focus
-          unless it has also been disabled.  This attribute
-          may be rendered using attribute minimization such that
-          a false value causes no attribute to be rendered, and a
-          true value causes only the attribute name, "readonly", 
-          to be rendered.
+          Flag indicating that this component will prohibit changes by
+          the user.  The element may receive focus unless it has also
+          been disabled.  According to the HTML 4.01 specification, This
+          attribute must be rendered using attribute minimization such
+          that a false value causes no attribute to be rendered, and a
+          true value causes only the attribute name, "readonly", to be
+          rendered.
         </description>
         <display-name>Read Only Flag</display-name>
         <icon></icon>
