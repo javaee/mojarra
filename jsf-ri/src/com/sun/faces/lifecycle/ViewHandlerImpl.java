@@ -1,5 +1,5 @@
 /* 
- * $Id: ViewHandlerImpl.java,v 1.7 2003/01/17 18:07:16 rkitain Exp $ 
+ * $Id: ViewHandlerImpl.java,v 1.8 2003/01/22 05:38:12 rkitain Exp $ 
  */ 
 
 
@@ -31,7 +31,7 @@ import javax.servlet.RequestDispatcher;
 
 /** 
  * <B>ViewHandlerImpl</B> is the default implementation class for ViewHandler. 
- * @version $Id: ViewHandlerImpl.java,v 1.7 2003/01/17 18:07:16 rkitain Exp $ 
+ * @version $Id: ViewHandlerImpl.java,v 1.8 2003/01/22 05:38:12 rkitain Exp $ 
  * 
  * @see javax.faces.lifecycle.ViewHandler 
  * 
@@ -51,15 +51,8 @@ public class ViewHandlerImpl implements ViewHandler {
         RequestDispatcher requestDispatcher = null; 
         Tree tree = context.getTree(); 
         
-        try { 
-            String requestURI = context.getTree().getTreeId();
-            requestDispatcher = request.getRequestDispatcher(requestURI); 
-            requestDispatcher.forward(request, context.getServletResponse()); 
-        } catch (IOException ioe) {
-            // e.printStackTrace();
-            throw new IOException(ioe.getMessage()); 
-	} catch (ServletException se) {
-            throw new ServletException(se.getMessage()); 
-	}
+        String requestURI = context.getTree().getTreeId();
+        requestDispatcher = request.getRequestDispatcher(requestURI); 
+        requestDispatcher.forward(request, context.getServletResponse()); 
     } 
 } 
