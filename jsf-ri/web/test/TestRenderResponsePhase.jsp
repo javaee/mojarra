@@ -772,6 +772,11 @@ see the <i>angle brackets</i> on this text"></h:outputText>
 
 <h:outputText title="output text with title" value="should be spanned" />
 
+<h:outputFormat id="userMsg" value="Param 0: {0}" >
+   <f:param value="my param"/>
+</h:outputFormat>
+
+
 </h:form>
 </f:view>
 

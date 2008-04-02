@@ -356,6 +356,21 @@ well as logging for rest of the RI will be done in a future release.
 Known Issues With This Release
 ==============================
 
+<!-- Do not remove - for 1.1_01 release  ------------------------------>
+
+* You can add a "title" attribute to <h:message*> but it won't appear. 
+  "title" gets rendered with the value of the "summary" attribute. 
+  Refer to the standard renderer docs for more information.
+  "title" will be deprecated from the list of supported attributes for 
+  <h:message*> for 1.2.
+
+* The standard renderer docs need to be clarified with regards to
+  the rendering of the "span" element. The "span" element should be 
+  rendered if any pass through attributes are present (not just
+  "style" and "styleClass"). 
+
+<!---------------------------------------------------------------------->
+
 * The Map returned by the UIComponent.getAttributes() method implements 
   get() so that if you ask for a key that is implemented as a property, 
   you get the property value. However, if you call iterator() on the Map, 

@@ -1,5 +1,5 @@
 /*
- * $Id: OutputMessageRenderer.java,v 1.14 2004/03/31 18:48:38 eburns Exp $
+ * $Id: OutputMessageRenderer.java,v 1.15 2004/07/28 14:52:13 rogerk Exp $
  */
 
 /*
@@ -159,6 +159,7 @@ public class OutputMessageRenderer extends HtmlBasicRenderer {
             Util.hasPassThruAttributes(component) ||
             shouldWriteIdAttribute(component)) {
             writer.startElement("span", component);
+            writeIdAttributeIfNecessary(context, writer, component);
             wroteSpan = true;
 
             if (null != styleClass) {
