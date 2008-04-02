@@ -1,5 +1,5 @@
 /*
- * $Id: NavigationHandlerImpl.java,v 1.42 2005/12/06 01:58:08 rlubke Exp $
+ * $Id: NavigationHandlerImpl.java,v 1.43 2005/12/06 15:37:17 rlubke Exp $
  */
 
 /*
@@ -269,9 +269,9 @@ public class NavigationHandlerImpl extends NavigationHandler {
      * @return The <code>view</code> identifier.
      */
 
-    synchronized private CaseStruct findWildCardMatch(String viewId,
-                                                      String fromAction,
-                                                      String outcome) {
+    private CaseStruct findWildCardMatch(String viewId,
+                                         String fromAction,
+                                         String outcome) {
         CaseStruct result = null;
 
         // if the user has elected to replace the Application instance
@@ -327,8 +327,8 @@ public class NavigationHandlerImpl extends NavigationHandler {
      * @return The <code>view</code> identifier.
      */
 
-    synchronized private CaseStruct findDefaultMatch(String fromAction,
-                                                     String outcome) {
+    private CaseStruct findDefaultMatch(String fromAction,
+                                        String outcome) {
         // if the user has elected to replace the Application instance
         // entirely
         if (!navigationConfigured) {
@@ -361,10 +361,10 @@ public class NavigationHandlerImpl extends NavigationHandler {
      * @return The <code>view</code> identifier.
      */
 
-    private synchronized
-    CaseStruct determineViewFromActionOutcome(List<ConfigNavigationCase> caseList,
-                                              String fromAction,
-                                              String outcome) {
+    
+    private CaseStruct determineViewFromActionOutcome(List<ConfigNavigationCase> caseList,
+                                                      String fromAction,
+                                                      String outcome) {
         
         CaseStruct result = new CaseStruct();
         for (ConfigNavigationCase cnc : caseList) {           
