@@ -271,6 +271,8 @@
                 <test todir="${impl.test.results.dir}"
                       name="com.sun.faces.application.TestApplicationImpl_Config"/>
                 <test todir="${impl.test.results.dir}"
+                    name="com.sun.faces.application.TestFacesMessage"/>
+                <test todir="${impl.test.results.dir}"
                     name="com.sun.faces.application.TestHASDeprStateManagerImpl"/>
                 <test todir="${impl.test.results.dir}"
                       name="com.sun.faces.application.TestNavigationHandler"/>
