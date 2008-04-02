@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKit.java,v 1.21 2003/08/20 22:43:51 eburns Exp $
+ * $Id: RenderKit.java,v 1.22 2003/08/21 16:21:31 eburns Exp $
  */
 
 /*
@@ -112,7 +112,8 @@ public abstract class RenderKit {
      * <code>Accept</code> header.
      *
      * @param characterEncoding such as "ISO-8859-1" for this
-     * ResponseWriter.  Please see <a
+     * ResponseWriter, or <code>null</code> if the
+     * <code>RenderKit</code> should choose the best fit.  Please see <a
      * href="http://www.iana.org/assignments/character-sets">the
      * IANA</a> for a list of character encodings.
      *
