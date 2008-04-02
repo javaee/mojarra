@@ -720,50 +720,32 @@ See <a href="http://tokyo.betaversion.org:8080/issues/id/JSFA51">JSFA51</a> in S
 <issue>
   <id>ValidatorParams-44</id>
   <originator>Hans</originator>
-  <summary>Should we set validation properties on the validator instance
-           instead of on the component</summary>
+  <summary>JSFA52 in Scarab</summary>
   <description>
-    <p>I suggested a while ago that the validation arguments should be
-    properties of the validator instead of being handled as untyped
-    attributes on the component, and got a lot of support from Adam,
-    Jeff, and Craig.  It greatly simplifies both the JSP and the
-    non-JSP cases.</p>
-
+See <a href="http://tokyo.betaversion.org:8080/issues/id/JSFA52">JSFA52</a> in Scarab.
   </description>
-  <resolution>
-    <p><em>12 Sep 2002</em> - Partially implemented in 0902 draft, but
-    spec needs updating (esp. 3.5.2.x and 3.1.7 example).</p>
-    <p><em>02 Oct 2002</em> - Spec updates were completed for 0920 draft.</p>
-  </resolution>
-  <status>CLOSED</status>
-  <status-date>02 Oct 2002</status-date>
-  <priority>5</priority>
+  <resolution></resolution>
+  <status></status>
+  <status-date></status-date>
+  <priority></priority>
   <effort></effort>
+
 </issue>
 
 
 <issue>
   <id>MultiRequest-45</id>
   <originator>Bart &amp; Kris</originator>
-  <summary>What about rendering that takes more than one HTTP request?</summary>
+  <summary>JSFA53 in Scarab</summary>
   <description>
-    <p>One cannot assume that rendering <em>one</em> complete response
-    view is completed in <em>one</em> HTTP request/response cycle.
-    RenderKits may contain render strategies that take more than one cycle
-    to complete the response view rendering.</p>
-
-    <p>For more background, and sample scenarios, see the EG mailing list
-    message from Kris on 09/13/2002 entitled "Request Processing Lifecycle
-    Issue."</p>
-
-    <p>Craig:  Might become a JSF 1.1 issue.</p>
+See <a href="http://tokyo.betaversion.org:8080/issues/id/JSFA53">JSFA53</a> in Scarab.
   </description>
-  <resolution>
-  </resolution>
-  <status>OPEN</status>
-  <status-date>18 Sep 2002</status-date>
-  <priority>3</priority>
+  <resolution></resolution>
+  <status></status>
+  <status-date></status-date>
+  <priority></priority>
   <effort></effort>
+
 </issue>
 
 
@@ -786,53 +768,32 @@ See <a href="http://tokyo.betaversion.org:8080/issues/id/JSFA49">JSFA49</a> in S
 <issue>
   <id>ValidatorCombos-47</id>
   <originator>Hans</originator>
-  <summary>Is an AND-based validation model sufficient?</summary>
+  <summary>JSFA54 in Scarab</summary>
   <description>
-    <p>Is the AND-based validation model sufficient, or do we need to
-    support a more sophisticated model where both AND and OR relations
-    between validators can be defined?</p>
+See <a href="http://tokyo.betaversion.org:8080/issues/id/JSFA54">JSFA54</a> in Scarab.
   </description>
-  <resolution>
-  </resolution>
-  <status>OPEN</status>
-  <status-date>18 Sep 2002</status-date>
-  <priority>3</priority>
+  <resolution></resolution>
+  <status></status>
+  <status-date></status-date>
+  <priority></priority>
   <effort></effort>
+
 </issue>
 
 
 <issue>
   <id>GenericAttributes-48</id>
   <originator>Hans</originator>
-  <summary>Can we eliminate use of generic component attributes?</summary>
+  <summary>JSFA55 in Scarab</summary>
   <description>
-    <p>Currently, a component is associated with a RendererType and the
-    JSF implementation finds an instance of this type when needed.  The
-    renderer may then use generic attributes of the component to adjust
-    its behavior.  If we implement <code>[ValidatorParams-44]</code>, this
-    is the last specific use of Generic Attributes defined by the spec (the
-    spec says they can also be used for application-specific, general
-    purpose attributes).</p>
-
-    <p>Would we lose anything by handling renderers the same as we
-    handle Validators (as per [ValidatorParams-44]), i.e. associate a
-    specific Renderer <em>instance</em> with the component instead of
-    a type?  It would make the model more consistent, and probably provide
-    the same simplifications as [ValidatorParams-44]).  I assume that an
-    argument against it is that it makes it impossible (or at least harder)
-    to switch from one RenderKit to another for an existing tree, but how
-    useful is that really?</p>
-
-    <p>(<em>Spec Lead Note - one implication to consider is that Renderer
-    instances would need to be Serializable, or some other mechanism for
-    saving and restoring them would need to be provided.</em>)</p>
+See <a href="http://tokyo.betaversion.org:8080/issues/id/JSFA55">JSFA55</a> in Scarab.
   </description>
-  <resolution>
-  </resolution>
-  <status>OPEN</status>
-  <status-date>18 Sep 2002</status-date>
-  <priority>3</priority>
+  <resolution></resolution>
+  <status></status>
+  <status-date></status-date>
+  <priority></priority>
   <effort></effort>
+
 </issue>
 
 
@@ -855,161 +816,112 @@ See <a href="http://tokyo.betaversion.org:8080/issues/id/JSFA50">JSFA50</a> in S
 <issue>
   <id>NonPublicClasses-50</id>
   <originator>CTS</originator>
-  <summary>Non-Public Classes in jsf-api</summary>
+  <summary>JSFA56 in Scarab</summary>
   <description>
-    <p>The current <code>jsf-api</code> includes a couple of non-public
-    base classes (like <code>ValidatorBase</code>) to assist in the
-    implementation of some concrete classes that are part of the API.
-    The design intent was that this was just an implementation choice
-    made for this particular version of the API classes.
-    The existence of such classes causes problems in the developing
-    signature tests that validate the spec compliance of a particular
-    version of the API classes.  We need to make such classes public,
-    eliminate them, or perhaps remove the concrete classes from the
-    API somehow.</p>
+See <a href="http://tokyo.betaversion.org:8080/issues/id/JSFA56">JSFA56</a> in Scarab.
   </description>
-  <resolution>
-  </resolution>
-  <status>OPEN</status>
-  <status-date>18 Sep 2002</status-date>
-  <priority>1</priority>
-  <effort>Medium</effort>
+  <resolution></resolution>
+  <status></status>
+  <status-date></status-date>
+  <priority></priority>
+  <effort></effort>
+
 </issue>
 
 
 <issue>
   <id>MessageResources-51</id>
   <originator>Hans</originator>
-  <summary>Can we remove MessageResources/MessageResourcesFactory</summary>
+  <summary>JSFA57 in Scarab</summary>
   <description>
-    <p>Do we really need MessageResources/MessageResourcesFactory?  Does
-    it offer significant features over what the regular ResourceBundle
-    class offers (I can't see any)_?  For the FACES_API_MESSAGES and
-    FACES_IMPL_MESSAGES resources, we could instead require JSF implementations
-    to make ResourceBundles with javax.faces.* names available.</p>
-
-    <p><em>(Craig - eliminating these would also assist in interoperating
-    with JSTL's i18n classes, which already use resource bundles)</em></p>
+See <a href="http://tokyo.betaversion.org:8080/issues/id/JSFA57">JSFA57</a> in Scarab.
   </description>
-  <resolution>
-  </resolution>
-  <status>OPEN</status>
-  <status-date>18 Sep 2002</status-date>
-  <priority>3</priority>
+  <resolution></resolution>
+  <status></status>
+  <status-date></status-date>
+  <priority></priority>
   <effort></effort>
+
 </issue>
 
 
 <issue>
   <id>Lifecycle-52</id>
   <originator>Hans</originator>
-  <summary>Do we need to support additional phases, or have Lifecycle at all?</summary>
+  <summary>JSFA58 in Scarab</summary>
   <description>
-    <p>Do we really have strong use-cases for supporting additional phases?
-    It seems to complicate things and a feature that may impact the
-    portability of components.</p>
-
-    <p>Additional note from Joe:  Should we allow Phase.execute() to return
-    any phase identifier value, instead of just symbolic constants for the
-    known cases?</p>
-
-    <p><em>(Craig - additionally, if we relax the rules to allow a JSF
-    implementation to simply call the standard Phase implementations in the
-    right order, and obey the return value appropriately, we might not
-    need Lifecycle/LifecycleFactory at all.)</em></p>
+See <a href="http://tokyo.betaversion.org:8080/issues/id/JSFA58">JSFA58</a> in Scarab.
   </description>
-  <resolution>
-  </resolution>
-  <status>OPEN</status>
-  <status-date>18 Sep 2002</status-date>
-  <priority>3</priority>
+  <resolution></resolution>
+  <status></status>
+  <status-date></status-date>
+  <priority></priority>
   <effort></effort>
+
 </issue>
 
 
 <issue>
   <id>BackButton-53</id>
   <originator>Joe</originator>
-  <summary>Dealing with the browser BACK button</summary>
+  <summary>JSFA59 in Scarab</summary>
   <description>
-    <p>What should the spec say about the eternal issues of dealing with
-    a browser user using the BACK button, such as transaction tokens to
-    avoid processing the same form submit more than once?  Note that tokens
-    should be scoped to specific forms, not a global property of a JSF
-    implementation (i.e. probably don't want one on search forms).</p>
+See <a href="http://tokyo.betaversion.org:8080/issues/id/JSFA59">JSFA59</a> in Scarab.
   </description>
-  <resolution>
-  </resolution>
-  <status>OPEN</status>
-  <status-date>18 Sep 2002</status-date>
-  <priority>3</priority>
+  <resolution></resolution>
+  <status></status>
+  <status-date></status-date>
+  <priority></priority>
   <effort></effort>
+
 </issue>
 
 
 <issue>
   <id>DefaultRendering-54</id>
   <originator>Joe</originator>
-  <summary>Should components have default decode/encode behavior?</summary>
+  <summary>JSFA60 in Scarab</summary>
   <description>
-    <p>We currently describe default behavior for the <code>decode()</code>
-    and <code>encodeXxx()</code> methods of standard component classes.  This
-    was done originally to avoid the case where a page author forgets to
-    set the renderer type, and no decode/encode processing at all is performed.
-    (Note that this won't happen in the typical JSP case, because setting the
-    renderer type is implicit in the choice of tag used).  Do we still want
-    this?</p>
+See <a href="http://tokyo.betaversion.org:8080/issues/id/JSFA60">JSFA60</a> in Scarab.
   </description>
-  <resolution>
-  </resolution>
-  <status>OPEN</status>
-  <status-date>18 Sep 2002</status-date>
-  <priority>2</priority>
-  <effort>Small</effort>
+  <resolution></resolution>
+  <status></status>
+  <status-date></status-date>
+  <priority></priority>
+  <effort></effort>
+
 </issue>
 
 
 <issue>
   <id>TypeSpecificRenderers-55</id>
   <originator>Joe</originator>
-  <summary>Should converters replace type-specific renderers like
-           Date, DateTime, and Time?</summary>
+  <summary>JSFA61 in Scarab</summary>
   <description>
-    <p>The recently added Converter functionality has a lot of overlap with
-    the previously defined Date, DateTime, and Time renderers.  Do we want
-    to keep both?  Don't forget to consider the usability implications on
-    how you specify such things in a JSP page (in particular, how you
-    parametrically configure converters for things like date patterns).</p>
+See <a href="http://tokyo.betaversion.org:8080/issues/id/JSFA61">JSFA61</a> in Scarab.
   </description>
-  <resolution>
-  </resolution>
-  <status>OPEN</status>
-  <status-date>18 Sep 2002</status-date>
-  <priority>3</priority>
+  <resolution></resolution>
+  <status></status>
+  <status-date></status-date>
+  <priority></priority>
   <effort></effort>
+
 </issue>
 
 
 <issue>
   <id>URLs-56</id>
   <originator>Adam</originator>
-  <summary>Should JSF perform context-path prefixing on "/" URLs?</summary>
+  <summary>JSFA62 in Scarab</summary>
   <description>
-    <p>The current description of UIGraphic states that JSF will add a
-    context path prefix in front of URLs that begin with a "/" character.
-    This feature is replicated in other places where URLs are specified.</p>
-
-    <p>Struts developers have found the automatic prefixing functionality
-    to be very useful, but Adam is concerned because it changes semantics
-    that webapp developers might be expecting (i.e. '/' URLs are server
-    relative).  Do we want to keep this behavior?</p>
+See <a href="http://tokyo.betaversion.org:8080/issues/id/JSFA62">JSFA62</a> in Scarab.
   </description>
-  <resolution>
-  </resolution>
-  <status>OPEN</status>
-  <status-date>20 Sep 2002</status-date>
-  <priority>3</priority>
+  <resolution></resolution>
+  <status></status>
+  <status-date></status-date>
+  <priority></priority>
   <effort></effort>
+
 </issue>
 
 
@@ -1030,40 +942,18 @@ See <a href="http://tokyo.betaversion.org:8080/issues/id/JSFA50">JSFA50</a> in S
 
 
 <issue>
-  <id>FacesContext-58</id>
+  <id> FacesContext-58</id>
   <originator>Adam</originator>
-  <summary>Should FacesContext be factored out into APIs for related
-           sets of methods?</summary>
+  <summary>JSFA63 in Scarab</summary>
   <description>
-    <p>Recently, we have been moving towards a lot of functionality
-    added to FacesContext, to the degree where it might be too confusing.
-    Example:  MessageList used to be a separate object that had all the
-    message queue related methods.  Do we want to continue this trend,
-    or reverse it?</p>
-
-    <p>For the FacesContext user, it makes calling simpler
-    (<code>context.addMessage()</code> instead of
-    <code>context.getMessageList().addMessage()</code>), at the cost
-    of lots of methods on FacesContext.</p>
-
-    <p>In addition, it may be appropriate to consider factoring <em>in</em>
-    method calls to eliminate the need for components and applications to
-    use factories to retrieve MessageResources and Converter instances.</p>
-
-   <p> I'd like to see the FacesContext made available from a
-     thread-local variable via a static method call such as
-     FacesContext.currentContext().  This obviously goes hand-in-hand
-     with guaranteeing single-threaded processing throughout the
-     lifecycle, but I think such a guarantee is probably overdue
-     anyway. </p>
-
+See <a href="http://tokyo.betaversion.org:8080/issues/id/JSFA63">JSFA63</a> in Scarab.
   </description>
-  <resolution>
-  </resolution>
-  <status>OPEN</status>
-  <status-date>20 Sep 2002</status-date>
-  <priority>3</priority>
+  <resolution></resolution>
+  <status></status>
+  <status-date></status-date>
+  <priority></priority>
   <effort></effort>
+
 </issue>
 
 
@@ -1086,188 +976,144 @@ See <a href="http://tokyo.betaversion.org:8080/issues/id/JSFA48">JSFA48</a> in S
 <issue>
   <id>ValidatorMessages-60</id>
   <originator>Jeff</originator>
-  <summary>We should allow "validation message" attributes to be specified
-           along with the other configuration properties</summary>
+  <summary>JSFA64 in Scarab</summary>
   <description>
-    <p>See Jeff's "comments on the 0902 spec" message dated 09/13/2002.</p>
+See <a href="http://tokyo.betaversion.org:8080/issues/id/JSFA64">JSFA64</a> in Scarab.
   </description>
-  <resolution>
-  </resolution>
-  <status>OPEN</status>
-  <status-date>20 Sep 2002</status-date>
-  <priority>3</priority>
+  <resolution></resolution>
+  <status></status>
+  <status-date></status-date>
+  <priority></priority>
   <effort></effort>
+
 </issue>
 
 
 <issue>
   <id>URLRewriting-61</id>
   <originator>Jeff</originator>
-  <summary>Should URL rewriting be performed on generated URLs?</summary>
+  <summary>JSFA65 in Scarab</summary>
   <description>
-    <p>Currently, the spec required URL rewriting on generated URLs.  Should
-    this be unconditional, conditional, or not performed?</p>
+See <a href="http://tokyo.betaversion.org:8080/issues/id/JSFA65">JSFA65</a> in Scarab.
   </description>
-  <resolution>
-  </resolution>
-  <status>OPEN</status>
-  <status-date>20 Sep 2002</status-date>
-  <priority>3</priority>
+  <resolution></resolution>
+  <status></status>
+  <status-date></status-date>
+  <priority></priority>
   <effort></effort>
+
 </issue>
 
 
 <issue>
   <id>FileUpload-62</id>
   <originator>Jeff</originator>
-  <summary>Do we need a file upload component/renderer?</summary>
+  <summary>JSFA66 in Scarab</summary>
   <description>
-    <p>It would be useful to have a component and/or renderer for processing
-    file uploads.</p>
-
-    <p>Sounds like a good JSF 1.1 feature addition.</p>
+See <a href="http://tokyo.betaversion.org:8080/issues/id/JSFA66">JSFA66</a> in Scarab.
   </description>
-  <resolution>
-  </resolution>
-  <status>OPEN</status>
-  <status-date>20 Sep 2002</status-date>
-  <priority>4</priority>
+  <resolution></resolution>
+  <status></status>
+  <status-date></status-date>
+  <priority></priority>
   <effort></effort>
+
 </issue>
 
 
 <issue>
   <id>XForms-63</id>
   <originator>Jeff</originator>
-  <summary>Additional XForms input types to be supported?</summary>
+  <summary>JSFA67 in Scarab</summary>
   <description>
-    <p>Should we support additional XForms input types:  range, trigger,
-    submit?</p>
+See <a href="http://tokyo.betaversion.org:8080/issues/id/JSFA67">JSFA67</a> in Scarab.
   </description>
-  <resolution>
-  </resolution>
-  <status>OPEN</status>
-  <status-date>20 Sep 2002</status-date>
-  <priority>3</priority>
+  <resolution></resolution>
+  <status></status>
+  <status-date></status-date>
+  <priority></priority>
   <effort></effort>
+
 </issue>
 
 
 <issue>
   <id>RenderKitComponents-64</id>
   <originator>Jeff</originator>
-  <summary>The relationship between renderkits and component types/classes
-           seems confusing and duplicative</summary>
+  <summary>JSFA68 in Scarab</summary>
   <description>
-    <p>Currently, we register components with renderkits by either component
-    type or class.  Do we need both, or only one?  If one, which?</p>
+See <a href="http://tokyo.betaversion.org:8080/issues/id/JSFA68">JSFA68</a> in Scarab.
   </description>
-  <resolution>
-  </resolution>
-  <status>OPEN</status>
-  <status-date>20 Sep 2002</status-date>
-  <priority>1</priority>
-  <effort>Medium</effort>
+  <resolution></resolution>
+  <status></status>
+  <status-date></status-date>
+  <priority></priority>
+  <effort></effort>
+
 </issue>
 
 
 <issue>
   <id>BrowserVersions-65</id>
   <originator>Jeff</originator>
-  <summary>Reconfirm browser versions supported by standard RenderKit</summary>
+  <summary>JSFA69 in Scarab</summary>
   <description>
-    <p>What browsers are we going to certify the standard RenderKit against?
-    (Currently we just say "HTML/4.01").  Despite what we claim for this,
-    what concessions are we willing to make for back-level browsers?</p>
+See <a href="http://tokyo.betaversion.org:8080/issues/id/JSFA69">JSFA69</a> in Scarab.
   </description>
-  <resolution>
-  </resolution>
-  <status>OPEN</status>
-  <status-date>20 Sep 2002</status-date>
-  <priority>3</priority>
+  <resolution></resolution>
+  <status></status>
+  <status-date></status-date>
+  <priority></priority>
   <effort></effort>
+
 </issue>
 
 
 <issue>
   <id>XHTML-66</id>
   <originator>Jeff</originator>
-  <summary>Mandatory or optional XHTML/1.0 compatibility?</summary>
+  <summary>JSFA70 in Scarab</summary>
   <description>
-    <p>How much (if any) should we specify for the standard HTML render kit
-    (beyond HTML/4.01) for compatibility with XHTML/1.0?</p>
+See <a href="http://tokyo.betaversion.org:8080/issues/id/JSFA70">JSFA70</a> in Scarab.
   </description>
-  <resolution>
-  </resolution>
-  <status>OPEN</status>
-  <status-date>20 Sep 2002</status-date>
-  <priority>3</priority>
+  <resolution></resolution>
+  <status></status>
+  <status-date></status-date>
+  <priority></priority>
   <effort></effort>
+
 </issue>
 
 
 <issue>
   <id>JstlDependencies-67</id>
   <originator>Craig</originator>
-  <summary>Should we mandate a JSTL 1.0 dependency when using JSP?</summary>
+  <summary>JSFA71 in Scarab</summary>
   <description>
-    <p>For JSF page authors using JSP as their rendering technology, it is
-    highly desireable that we interoperate seamlessly with JSTL tags and
-    APIs where appropriate.  Examples include:</p>
-    <ul>
-    <li>A data grid ([DataGrid-16]) should be able to process data provided
-        via a <code>javax.servlet.jstl.sql.Result</code>, among others.</li>
-    <li>Localization should be sensitive to any current
-        <code>javax.servlet.jsp.jstl.fmt.LocalizationContext</code>.</li>
-    <li>Iterative rendering might need to interoperate with JSTL iteration
-        constructs, including
-        <code>javax.servlet.jsp.jstl.core.LoopTagStatus</code>.</li>
-    </ul>
-
-    <p>Note that the data structure APIs (like Result) may be useful for
-    application developers even in a non-JSP rendering environment.  However,
-    doing any of this means we must declare a dependency on having a JSTL 1.0
-    implementation available, along with a JSF 1.0 implementation (and of
-    course Servlet 2.3 and JSP 1.2).</p>
+See <a href="http://tokyo.betaversion.org:8080/issues/id/JSFA71">JSFA71</a> in Scarab.
   </description>
-  <resolution>
-  </resolution>
-  <status>OPEN</status>
-  <status-date>03 Oct 2002</status-date>
-  <priority>1</priority>
-  <effort>Small</effort>
+  <resolution></resolution>
+  <status></status>
+  <status-date></status-date>
+  <priority></priority>
+  <effort></effort>
+
 </issue>
 
 
 <issue>
   <id>VerbatimOutput-68</id>
   <originator>EG</originator>
-  <summary>Need a mechansim for including raw HTML (or whatever)</summary>
+  <summary>JSFA72 in Scarab</summary>
   <description>
-    <p>Although JSF components will normally generate the HTML (or other)
-    markup language to render themselves, there are cases where we'd like
-    to be able to output raw markup directly.  In a JSP page, you can do
-    that using embedded template text, but there needs to be a mechanism
-    for this purpose at the component API level.  Options include:</p>
-    <ul>
-    <li>New <code>UIVerbatim</code> component that specifically contains
-        markup, but is otherwise treated similarly to <code>UIOutput</code>.
-        </li>
-    <li>New <code>Verbatim</code> Renderer that treats any
-        <code>UIOutput</code> component as the source of raw markup,
-        and just renders it literally.  <em>(Craig:  I'm not sure that
-        this is functionally any different than the <code>Text</code>
-        renderer processing an UIOutput component, unless we decide to
-        make that one do some sort of filtering for characters sensitive
-        to HTML.)</em></li>
-    </ul>
+See <a href="http://tokyo.betaversion.org:8080/issues/id/JSFA72">JSFA72</a> in Scarab.
   </description>
-  <resolution>
-  </resolution>
-  <status>OPEN</status>
-  <status-date>08 Oct 2002</status-date>
-  <priority>1</priority>
-  <effort>Small</effort>
+  <resolution></resolution>
+  <status></status>
+  <status-date></status-date>
+  <priority></priority>
+  <effort></effort>
+
 </issue>
 
 <issue>
@@ -1301,42 +1147,46 @@ See <a href="http://tokyo.betaversion.org:8080/issues/id/JSFA48">JSFA48</a> in S
 <issue>
   <id>Re-OrganizingSpec-71</id>
   <originator>Ed Burns</originator>
-  <summary>Re-organize spec.</summary>
+  <summary>JSFS6 in Scarab</summary>
   <description>
-    <p> </p>
+See <a href="http://tokyo.betaversion.org:8080/issues/id/JSFS6">JSFS6</a> in Scarab.
   </description>
-  <status>OPEN</status>
-  <status-date>8 January 2003</status-date>
-  <priority>2</priority>
-  <effort>Medium</effort>
+  <resolution></resolution>
+  <status></status>
+  <status-date></status-date>
+  <priority></priority>
+  <effort></effort>
+
 </issue>
 
 <issue>
   <id>Iterator_Support-72</id>
   <originator>JSF-Forum, C1</originator>
-  <summary>Will JSF support Iterator tag ?</summary>
+  <summary>JSFA73 in Scarab</summary>
   <description>
-    <p> Currently JSF doesn't have an iterator tag. List Pages are very common in any application.  Richard from C1 has made some suggestions in the forum discussions on how it can be possibly implemented</p>
+See <a href="http://tokyo.betaversion.org:8080/issues/id/JSFA73">JSFA73</a> in Scarab.
   </description>
-  <status>OPEN</status>
-  <status-date>8 January 2003</status-date>
-  <priority>2</priority>
-  <effort>Medium</effort>
+  <resolution></resolution>
+  <status></status>
+  <status-date></status-date>
+  <priority></priority>
+  <effort></effort>
+
 </issue>
 
 <issue>
   <id>Template_Text_In_Renderers-73</id>
   <originator>JSF-Forum, Heath Chiavettone</originator>
-  <summary>Can Renderers use JSP or other template text?</summary>
+  <summary>JSFA74 in Scarab</summary>
   <description>
-<p>Also, I'm thinking that section JSF.8.2.7 might be impacted, if you agree
-with my assessment that components (and their Renderers) should be allowed
-to render themselves via inclusion of (JSP) templates.  </p>
+See <a href="http://tokyo.betaversion.org:8080/issues/id/JSFA74">JSFA74</a> in Scarab.
   </description>
-  <status>OPEN</status>
-  <status-date>10 January 2003</status-date>
-  <priority>2</priority>
-  <effort>Medium</effort>
+  <resolution></resolution>
+  <status></status>
+  <status-date></status-date>
+  <priority></priority>
+  <effort></effort>
+
 </issue>
 
 
