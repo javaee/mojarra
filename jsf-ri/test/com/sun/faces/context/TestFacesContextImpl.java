@@ -1,5 +1,5 @@
 /*
- * $Id: TestFacesContextImpl.java,v 1.20 2003/02/20 22:49:50 ofung Exp $
+ * $Id: TestFacesContextImpl.java,v 1.21 2003/02/22 03:17:21 eburns Exp $
  */
 
 /*
@@ -54,7 +54,7 @@ import com.sun.faces.ServletFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestFacesContextImpl.java,v 1.20 2003/02/20 22:49:50 ofung Exp $
+ * @version $Id: TestFacesContextImpl.java,v 1.21 2003/02/22 03:17:21 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -358,6 +358,14 @@ public void testRelease() {
     assertTrue(getFacesContext().getViewHandler() == null);
     assertTrue(getFacesContext().getApplicationHandler() == null);
 }
+
+public void testCreateSessionWithSaveStateInitParamFalse() {
+    // If saveStateInClient is false, a session should be created.
+    assertTrue(null != getFacesContext().getHttpSession());
+}
+
+
+
 // Unit tests to update and retrieve values from model objects
 // are in TestFacesContextImpl_Model.java
 } // end of class TestFacesContextImpl

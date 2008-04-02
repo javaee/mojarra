@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContextImpl.java,v 1.31 2003/02/20 22:48:35 ofung Exp $
+ * $Id: FacesContextImpl.java,v 1.32 2003/02/22 03:17:20 eburns Exp $
  */
 
 /*
@@ -124,10 +124,19 @@ public class FacesContextImpl extends FacesContext
         this.response = response;
         this.locale = request.getLocale();
 
-	// PENDING(edburns): don't depend on the session being there!
         if (this.request instanceof HttpServletRequest) {
+	    // If saveStateInPage is false, we need to create the
+	    // session at this point.
+	    boolean createSession = true;
+	    String paramValue = null;
+	    
+	    if (null != (paramValue = 
+			sc.getInitParameter(RIConstants.SAVESTATE_INITPARAM))){
+		createSession = !paramValue.equalsIgnoreCase("true");
+	    }
+
             this.session =
-                ((HttpServletRequest) request).getSession();
+                ((HttpServletRequest) request).getSession(createSession);
         }
         this.viewHandler = lifecycle.getViewHandler();
         this.applicationHandler = lifecycle.getApplicationHandler();
@@ -182,7 +191,11 @@ public class FacesContextImpl extends FacesContext
     }
 
     public HttpSession getHttpSession() {
-        return (this.session);
+	HttpSession result = null;
+	if (null != request) {
+	    result = ((HttpServletRequest) request).getSession(false);
+	}
+        return result;
     }
     
     public Locale getLocale() {
