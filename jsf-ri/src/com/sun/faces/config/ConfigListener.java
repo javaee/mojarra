@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigListener.java,v 1.21 2003/10/07 19:53:09 rlubke Exp $
+ * $Id: ConfigListener.java,v 1.22 2003/10/27 15:58:45 eburns Exp $
  */
 /*
  * Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
@@ -48,6 +48,7 @@ import java.io.InputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -308,11 +309,14 @@ public class ConfigListener implements ServletContextListener
         }
 
         // Create an InputSource for this resource (if it exists)
+	URLConnection conn = null;
         InputStream stream = null;
         InputSource source = null;
         try {
-            stream = resourceURL.openStream();
+	    conn = resourceURL.openConnection();
+	    conn.setUseCaches(false);
             source = new InputSource(resourceURL.toExternalForm());
+            stream = conn.getInputStream();
             source.setByteStream(stream);
         } catch (IOException e) {
             source = null;
