@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKit.java,v 1.25 2004/01/21 03:50:28 eburns Exp $
+ * $Id: RenderKit.java,v 1.26 2004/01/27 07:57:08 eburns Exp $
  */
 
 /*
@@ -104,11 +104,15 @@ public abstract class RenderKit {
      *
      * @param contentTypeList an "Accept header style" list of content
      * types for this response, or <code>null</code> if the
-     * <code>RenderKit</code> should choose the best fit.  The RenderKit
-     * must support a value for this argument that comes straight from
-     * the <code>Accept</code> HTTP header, and therefore requires
-     * parsing according to the specification of the <code>Accept</code>
-     * header.  Please see <a
+     * <code>RenderKit</code> should choose the best fit.  As of the
+     * current version, the values accepted by the Standard render-kit
+     * for this parameter include any valid "Accept header style" String
+     * that includes the String <code>text/html</code>.  This will
+     * expand in a future version.  The RenderKit must support a value
+     * for this argument that comes straight from the
+     * <code>Accept</code> HTTP header, and therefore requires parsing
+     * according to the specification of the <code>Accept</code> header.
+     * Please see <a
      * href="http://www.ietf.org/rfc/rfc2616.txt?number=2616">Section
      * 14.1 of RFC 2616</a> for the specification of the
      * <code>Accept</code> header.
