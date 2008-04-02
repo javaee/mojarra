@@ -1,5 +1,5 @@
 /*
- * $Id: TestSaveStateInPage.java,v 1.33 2006/03/29 23:04:56 rlubke Exp $
+ * $Id: TestSaveStateInPage.java,v 1.34 2006/05/18 20:55:16 rlubke Exp $
  */
 
 /*
@@ -31,13 +31,6 @@
 
 package com.sun.faces.lifecycle;
 
-import com.sun.faces.cactus.JspFacesTestCase;
-import com.sun.faces.application.StateManagerImpl;
-import com.sun.faces.application.ViewHandlerImpl;
-import com.sun.faces.util.TreeStructure;
-import com.sun.faces.util.Util;
-import org.apache.cactus.WebRequest;
-
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIComponentBase;
 import javax.faces.component.UIForm;
@@ -45,7 +38,17 @@ import javax.faces.component.UIInput;
 import javax.faces.component.UIPanel;
 import javax.faces.component.UIViewRoot;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+
+import org.apache.cactus.WebRequest;
+
+import com.sun.faces.application.StateManagerImpl;
+import com.sun.faces.application.ViewHandlerImpl;
+import com.sun.faces.cactus.JspFacesTestCase;
+import com.sun.faces.cactus.TestingUtil;
+import com.sun.faces.util.Util;
 
 
 /**
@@ -53,7 +56,7 @@ import java.util.Map;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestSaveStateInPage.java,v 1.33 2006/03/29 23:04:56 rlubke Exp $
+ * @version $Id: TestSaveStateInPage.java,v 1.34 2006/05/18 20:55:16 rlubke Exp $
  */
 
 public class TestSaveStateInPage extends JspFacesTestCase {
@@ -185,17 +188,30 @@ public class TestSaveStateInPage extends JspFacesTestCase {
         ViewHandlerImpl viewHandler = new ViewHandlerImpl();
         StateManagerImpl stateManager = new StateManagerImpl();
 
-        TreeStructure structRoot =
-            new TreeStructure(((UIComponent) getFacesContext().getViewRoot()));
-        stateManager.buildTreeStructureToSave(getFacesContext(),
-                                              ((UIComponent) root),
-                                              structRoot, null);
+//        TreeStructure structRoot =
+//            new TreeStructure(((UIComponent) getFacesContext().getViewRoot()));
+//        stateManager.buildTreeStructureToSave(getFacesContext(),
+//                                              ((UIComponent) root),
+//                                              structRoot, null);
+//
+//        // make sure restored tree structure is correct
+//        UIViewRoot viewRoot = (UIViewRoot) structRoot.createComponent();
+//        assertTrue(null != viewRoot);
+//        stateManager.restoreComponentTreeStructure(structRoot,
+//                                                   ((UIComponent) viewRoot));
 
-        // make sure restored tree structure is correct
-        UIViewRoot viewRoot = (UIViewRoot) structRoot.createComponent();
-        assertTrue(null != viewRoot);
-        stateManager.restoreComponentTreeStructure(structRoot,
-                                                   ((UIComponent) viewRoot));
+        List structureList = new ArrayList();
+        TestingUtil.invokePrivateMethod("captureChild",
+                                        new Class[] {List.class, Integer.TYPE, UIComponent.class},
+                                        new Object[] { structureList, 0, root },
+                                        StateManagerImpl.class,
+                                        stateManager);
+        Object[] structArray = structureList.toArray();
+        UIViewRoot viewRoot = (UIViewRoot) TestingUtil.invokePrivateMethod("restoreTree",
+                                                                           new Class[] { Object[].class },
+                                                                           new Object[] { structArray },
+                                                                           StateManagerImpl.class,
+                                                                           stateManager);
 
         UIComponent component = (UIComponent) viewRoot.getChildren().get(0);
         assertTrue(component instanceof UIForm);

@@ -1,5 +1,5 @@
 /*
- * $Id: TreeStructure.java,v 1.14 2006/03/29 23:03:53 rlubke Exp $
+ * $Id: TreeStructure.java,v 1.1 2006/05/18 20:55:16 rlubke Exp $
  */
 
 /*

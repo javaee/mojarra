@@ -1,36 +1,31 @@
-/* 
- * $Id: StateManagerImpl.java,v 1.48 2006/05/17 19:00:44 rlubke Exp $ 
- */
-
 /*
-* The contents of this file are subject to the terms
-* of the Common Development and Distribution License
-* (the License). You may not use this file except in
-* compliance with the License.
-* 
-* You can obtain a copy of the License at
-* https://javaserverfaces.dev.java.net/CDDL.html or
-* legal/CDDLv1.0.txt. 
-* See the License for the specific language governing
-* permission and limitations under the License.
-* 
-* When distributing Covered Code, include this CDDL
-* Header Notice in each file and include the License file
-* at legal/CDDLv1.0.txt.    
-* If applicable, add the following below the CDDL Header,
-* with the fields enclosed by brackets [] replaced by
-* your own identifying information:
-* "Portions Copyrighted [year] [name of copyright owner]"
-* 
-* [Name of File] [ver.__] [Date]
-* 
-* Copyright 2005 Sun Microsystems Inc. All Rights Reserved
-*/
-
-// StateManagerImpl.java 
+ * The contents of this file are subject to the terms
+ * of the Common Development and Distribution License
+ * (the License). You may not use this file except in
+ * compliance with the License.
+ *
+ * You can obtain a copy of the License at
+ * https://javaserverfaces.dev.java.net/CDDL.html or
+ * legal/CDDLv1.0.txt.
+ * See the License for the specific language governing
+ * permission and limitations under the License.
+ *
+ * When distributing Covered Code, include this CDDL
+ * Header Notice in each file and include the License file
+ * at legal/CDDLv1.0.txt.
+ * If applicable, add the following below the CDDL Header,
+ * with the fields enclosed by brackets [] replaced by
+ * your own identifying information:
+ * "Portions Copyrighted [year] [name of copyright owner]"
+ *
+ * [Name of File] [ver.__] [Date]
+ *
+ * Copyright 2006 Sun Microsystems Inc. All Rights Reserved
+ */
 
 package com.sun.faces.application;
 
+import javax.faces.FacesException;
 import javax.faces.application.StateManager;
 import javax.faces.component.NamingContainer;
 import javax.faces.component.UIComponent;
@@ -39,12 +34,19 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.render.ResponseStateManager;
 
+import java.io.Externalizable;
 import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -54,192 +56,47 @@ import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
 import com.sun.faces.renderkit.RenderKitUtils;
 import com.sun.faces.util.LRUMap;
 import com.sun.faces.util.MessageUtils;
-import com.sun.faces.util.TreeStructure;
 import com.sun.faces.util.Util;
 
-/**
- * <B>StateManagerImpl</B> is the default implementation class for
- * StateManager.
- *
- * @version $Id: StateManagerImpl.java,v 1.48 2006/05/17 19:00:44 rlubke Exp $
- * @see javax.faces.application.ViewHandler
- */
 public class StateManagerImpl extends StateManager {
 
+    private static final Logger LOGGER =
+              Util.getLogger(Util.FACES_LOGGER + Util.APPLICATION_LOGGER);
 
-    // Log instance for this class
-    private static final Logger LOGGER = 
-          Util.getLogger(Util.FACES_LOGGER + Util.APPLICATION_LOGGER);   
-
-    /**
-     * Keyed by renderKitId, this Map contains a boolean that
-     * indicates if the ResponseStateManager for the renderKitId
-     * has non-deprecated methods.  True indicates the presence
-     * of non-deprecated methods.
-     */
     private HashMap<String, Boolean> responseStateManagerInfo = null;
-
+    
     private char requestIdSerial = 0;
 
     /** Number of views in logical view to be saved in session. */
     private int noOfViews = 0;
     private int noOfViewsInLogicalView = 0;
+    private Map<String,Class<?>> classMap = 
+          new ConcurrentHashMap<String,Class<?>>(32);
+
 
 
     // ---------------------------------------------------------- Public Methods
-
-
-    /**
-     * Builds a hierarchy of TreeStrucure objects simulating the component
-     * tree hierarchy.
-     */
-    public void buildTreeStructureToSave(FacesContext context,
-                                         UIComponent component,
-                                         TreeStructure treeStructure,
-                                         Set<String> componentIds) {
-
-        // traverse the component hierarchy and save the tree structure 
-        // information for every component.
-
-        // Set for catching duplicate IDs
-        if (null == componentIds) {
-            componentIds = new HashSet<String>();
-        }
-
-        // save the structure info of the children of the component 
-        // being processed.
-        Iterator<UIComponent> kids = component.getChildren().iterator();
-        String id;
-        while (kids.hasNext()) {
-            UIComponent kid = kids.next();
-
-            // check for id uniqueness
-            id = kid.getClientId(context);
-            if (id != null && !componentIds.add(id)) {
-                if (LOGGER.isLoggable(Level.SEVERE)) {
-                    LOGGER.log(Level.SEVERE,
-                               "jsf.duplicate_component_id_error",
-                               id);
-                }
-                throw new IllegalStateException(
-                      MessageUtils.getExceptionMessageString(
-                        MessageUtils.DUPLICATE_COMPONENT_ID_ERROR_ID, id));
-            }
-
-            // if a component is marked transient do not persist its state as
-            // well as its children.
-            if (!kid.isTransient()) {
-                TreeStructure treeStructureChild = new TreeStructure(kid);
-                treeStructure.addChild(treeStructureChild);
-                buildTreeStructureToSave(context, kid, treeStructureChild,
-                                         componentIds);
-            }
-        }
-
-        // save structure info of the facets of the component currenly being 
-        // processed.
-        for (String facetName : component.getFacets().keySet()) {
-            UIComponent facetComponent = component.getFacets().
-                  get(facetName);
-
-            // check for id uniqueness
-            id = facetComponent.getClientId(context);
-            if (id != null && !componentIds.add(id)) {
-                if (LOGGER.isLoggable(Level.SEVERE)) {
-                    LOGGER.log(Level.SEVERE, "jsf.duplicate_component_id_error",
-                               id);
-                }
-                throw new IllegalStateException(
-                      MessageUtils.getExceptionMessageString(
-                        MessageUtils.DUPLICATE_COMPONENT_ID_ERROR_ID, id));
-            }
-
-            // if a facet is marked transient do not persist its state as well as
-            // its children.
-            if (!(facetComponent.isTransient())) {
-                TreeStructure treeStructureFacet =
-                      new TreeStructure(facetComponent);
-                treeStructure.addFacet(facetName, treeStructureFacet);
-                // process children of facet.
-                buildTreeStructureToSave(context,
-                                         facetComponent, treeStructureFacet,
-                                         componentIds);
-            }
-        }
-
-    }
-
-
-    /** Reconstitutes the component tree from TreeStructure hierarchy */
-    public void restoreComponentTreeStructure(TreeStructure treeStructure,
-                                              UIComponent component) {
-
-        // traverse the tree strucure hierarchy and restore component
-        // structure.
-
-        // restore the structure of the children of the component being processed.
-        Iterator kids = treeStructure.getChildren();
-        while (kids.hasNext()) {
-            TreeStructure kid = (TreeStructure) kids.next();
-            UIComponent child = kid.createComponent();
-            component.getChildren().add(child);
-            restoreComponentTreeStructure(kid, child);
-        }
-
-        // process facets
-        Iterator facets = treeStructure.getFacetNames();
-        while (facets.hasNext()) {
-            String facetName = (String) facets.next();
-            TreeStructure facetTreeStructure =
-                  treeStructure.getTreeStructureForFacet(facetName);
-            UIComponent facetComponent = facetTreeStructure.createComponent();
-            component.getFacets().put(facetName, facetComponent);
-            restoreComponentTreeStructure(facetTreeStructure, facetComponent);
-        }
-
-    }
-
 
     @SuppressWarnings("Deprecation")
     public UIViewRoot restoreView(FacesContext context, String viewId,
                                   String renderKitId) {
 
-        if (null == renderKitId) {
-            String message = MessageUtils.getExceptionMessageString
-                  (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "renderKitId");
-            throw new IllegalArgumentException(message);
-        }
-
         UIViewRoot viewRoot = null;
         if (isSavingStateInClient(context)) {
-            // restore view from response.
-            if (LOGGER.isLoggable(Level.FINE)) {
-                LOGGER.log(Level.FINE, "Begin restoring view from response "
-                                       + viewId);
-            }
-            viewRoot = restoreTreeStructure(context, viewId, renderKitId);
+            viewRoot = restoreTree(context, viewId, renderKitId);
+
             if (viewRoot != null) {
-                restoreComponentState(context, viewRoot, renderKitId);
-            } else {
-                if (LOGGER.isLoggable(Level.FINE)) {
-                    LOGGER.fine(
-                          "Possibly a new request. Tree structure could not "
-                          + " be restored for " + viewId);
-                }
-            }
-            if (LOGGER.isLoggable(Level.FINE)) {
-                LOGGER.fine("End restoring view from response " + viewId);
+                restoreState(context, viewRoot, renderKitId);
             }
         } else {
             // restore tree from session.
             // The ResponseStateManager implementation may be using the new 
             // methods or deprecated methods.  We need to know which one 
             // to call.
-            Object id = null;
+            Object id;
             ResponseStateManager rsm =
                   RenderKitUtils.getResponseStateManager(context, renderKitId);
-            if (hasDeclaredMethod(responseStateManagerInfo,
-                                  renderKitId,
+            if (hasDeclaredMethod(renderKitId,
                                   rsm,
                                   "getState")) {
                 Object[] stateArray = (Object[]) rsm.getState(context, viewId);
@@ -253,9 +110,9 @@ public class StateManagerImpl extends StateManager {
                     LOGGER.fine("Begin restoring view in session for viewId "
                                 + viewId);
                 }
-                String idString = (String) id,
-                      idInLogicalMap = null,
-                      idInActualMap = null;
+                String idString = (String) id;
+                String idInLogicalMap;
+                String idInActualMap;
 
                 int sep = idString.indexOf(NamingContainer.SEPARATOR_CHAR);
                 assert(-1 != sep);
@@ -277,8 +134,6 @@ public class StateManagerImpl extends StateManager {
                     return null;
                 }
 
-
-                TreeStructure structRoot = null;
                 Object [] stateArray = null;
                 synchronized (sessionObj) {
                     Map logicalMap = (Map) externalCtx.getSessionMap()
@@ -286,11 +141,16 @@ public class StateManagerImpl extends StateManager {
                     if (logicalMap != null) {
                         Map actualMap = (Map) logicalMap.get(idInLogicalMap);
                         if (actualMap != null) {
-                            context.getExternalContext().getRequestMap()
-                                  .put(RIConstants.LOGICAL_VIEW_MAP,
-                                       idInLogicalMap);
+                            Map<String,Object> requestMap = 
+                                  context.getExternalContext().getRequestMap();
+                            requestMap.put(RIConstants.LOGICAL_VIEW_MAP,
+                                           idInLogicalMap);
+                            if (rsm.isPostback(context)) {
+                                requestMap.put(RIConstants.ACTUAL_VIEW_MAP,
+                                               idInActualMap);
+                            }
                             stateArray =
-                                  (Object []) actualMap.get(idInActualMap);
+                                  (Object[]) actualMap.get(idInActualMap);
                         }
                     }
                 }
@@ -302,10 +162,8 @@ public class StateManagerImpl extends StateManager {
                     }
                     return null;
                 }
-                structRoot = (TreeStructure) stateArray[0];
-                viewRoot = (UIViewRoot) structRoot.createComponent();
-                restoreComponentTreeStructure(structRoot, viewRoot);
 
+                viewRoot = restoreTree(((Object[]) stateArray[0]));
                 viewRoot.processRestoreState(context, stateArray[1]);
 
                 if (LOGGER.isLoggable(Level.FINE)) {
@@ -314,18 +172,18 @@ public class StateManagerImpl extends StateManager {
                 }
             }
         }
-        return viewRoot;
 
+        return viewRoot;
     }
 
 
     @SuppressWarnings("Deprecation")
-    public SerializedView saveSerializedView(FacesContext context)
-          throws IllegalStateException {
+    @Override
+    public SerializedView saveSerializedView(FacesContext context) {
+
 
         SerializedView result = null;
-        Object treeStructure = null;
-        Object componentState = null;
+       
         // irrespective of method to save the tree, if the root is transient
         // no state information needs to  be persisted.
         UIViewRoot viewRoot = context.getViewRoot();
@@ -341,10 +199,11 @@ public class StateManagerImpl extends StateManager {
             LOGGER.fine("Begin creating serialized view for "
                         + viewRoot.getViewId());
         }
-        result = new SerializedView(treeStructure =
-              getTreeStructureToSave(context),
-                                    componentState =
-                                          getComponentStateToSave(context));
+        List<TreeNode> treeList = new ArrayList<TreeNode>(32);
+        captureChild(treeList, 0, viewRoot);
+        Object state = viewRoot.processSaveState(context);
+        Object[] tree = treeList.toArray();      
+        
         if (LOGGER.isLoggable(Level.FINE)) {
             LOGGER.fine("End creating serialized view " + viewRoot.getViewId());
         }
@@ -367,66 +226,75 @@ public class StateManagerImpl extends StateManager {
             // apps that need this multi-window behavior.                                                     
             int logicalMapSize = getNumberOfViewsParameter(context);
             int actualMapSize = getNumberOfViewsInLogicalViewParameter(context);
-
-            Object stateArray[] = {treeStructure, componentState};
+        
             ExternalContext externalContext = context.getExternalContext();
             Object sessionObj = externalContext.getSession(true);
             Map<String, Object> sessionMap = Util.getSessionMap(context);
 
 
             synchronized (sessionObj) {
-                LRUMap<String, LRUMap<String, Object[]>> logicalMap;
-                LRUMap<String, Object[]> actualMap;
-                if (null == (logicalMap =
+                LRUMap<String, LRUMap<String, Object[]>> logicalMap =
                       (LRUMap<String, LRUMap<String, Object[]>>) sessionMap
-                            .get(RIConstants.LOGICAL_VIEW_MAP))) {
-                    logicalMap =
-                          new LRUMap<String, LRUMap<String, Object[]>>(
-                                logicalMapSize);
+                            .get(RIConstants.LOGICAL_VIEW_MAP);
+                if (logicalMap == null) {
+                    logicalMap = new LRUMap<String, LRUMap<String, Object[]>>(
+                          logicalMapSize);
                     sessionMap.put(RIConstants.LOGICAL_VIEW_MAP, logicalMap);
                 }
 
+                Map<String, Object> requestMap =
+                      externalContext.getRequestMap();
                 String idInLogicalMap = (String)
-                      externalContext.getRequestMap()
-                            .get(RIConstants.LOGICAL_VIEW_MAP);
-                if (null == idInLogicalMap) {
+                      requestMap.get(RIConstants.LOGICAL_VIEW_MAP);
+                if (idInLogicalMap == null) {
                     idInLogicalMap = createUniqueRequestId();
                 }
                 assert(null != idInLogicalMap);
 
-                String idInActualMap = createUniqueRequestId();
-                if (null == (actualMap = logicalMap.get(idInLogicalMap))) {
+                // this value will not be null if this is a post
+                // back
+                String idInActualMap = (String)
+                      requestMap.get(RIConstants.ACTUAL_VIEW_MAP);
+                if (idInActualMap == null) {
+                    idInActualMap = createUniqueRequestId();
+                }
+                LRUMap<String, Object[]> actualMap =
+                      logicalMap.get(idInLogicalMap);
+                if (actualMap == null) {
                     actualMap = new LRUMap<String, Object[]>(actualMapSize);
                     logicalMap.put(idInLogicalMap, actualMap);
                 }
+
                 String id = idInLogicalMap + NamingContainer.SEPARATOR_CHAR +
                             idInActualMap;
-                result = new SerializedView(id, null);
-                actualMap.put(idInActualMap, stateArray);
+                result = new SerializedView(id, null);                
+                Object[] stateArray = actualMap.get(idInActualMap);
+                // reuse the array if possible
+                if (stateArray != null) {                    
+                    stateArray[0] = tree;
+                    stateArray[1] = state;
+                } else {
+                    actualMap.put(idInActualMap, new Object[] { tree, state });
+                }                
             }
+        } else {
+            result = new SerializedView(tree, state);
         }
 
-        return result;
+        return result;           
 
     }
-
-
-    public Object saveView(FacesContext context) {
-
-        return (super.saveView(context));
-
-    }
-
+    
 
     @SuppressWarnings("Deprecation")
+    @Override
     public void writeState(FacesContext context, SerializedView state)
           throws IOException {
 
         String renderKitId = context.getViewRoot().getRenderKitId();
         ResponseStateManager rsm =
               RenderKitUtils.getResponseStateManager(context, renderKitId);
-        if (hasDeclaredMethod(responseStateManagerInfo,
-                              renderKitId,
+        if (hasDeclaredMethod(renderKitId,
                               rsm,
                               "getState")) {
             Object[] stateArray = new Object[2];
@@ -437,15 +305,7 @@ public class StateManagerImpl extends StateManager {
             rsm.writeState(context, state);
         }
 
-    }
-
-
-    public void writeState(FacesContext context, Object state)
-          throws IOException {
-
-        super.writeState(context, state);
-
-    }
+    }    
 
 
     // ------------------------------------------------------- Protected Methods
@@ -480,207 +340,138 @@ public class StateManagerImpl extends StateManager {
     }
 
 
-    @SuppressWarnings("Deprecation")
-    protected Object getComponentStateToSave(FacesContext context) {
-
-        return context.getViewRoot().processSaveState(context);
-
-    }
-
-
-    /**
-     * Returns the value of ServletContextInitParameter that specifies the
-     * maximum number of views to be saved in this logical view. If none is specified
-     * returns <code>DEFAULT_NUMBER_OF_VIEWS_IN_LOGICAL_VIEW_IN_SESSION</code>.
-     */
-    protected int getNumberOfViewsInLogicalViewParameter(FacesContext context) {
-
-        if (noOfViewsInLogicalView != 0) {
-            return noOfViewsInLogicalView;
-        }
-        WebConfiguration webConfig = 
-              WebConfiguration.getInstance(context.getExternalContext());
-        String noOfViewsStr = webConfig
-              .getContextInitParameter(WebContextInitParameter.NumberOfLogicalViews);
-        String defaultValue =
-              WebContextInitParameter.NumberOfLogicalViews.getDefaultValue();
-        try {
-            noOfViewsInLogicalView = Integer.valueOf(noOfViewsStr);
-        } catch (NumberFormatException nfe) {
-            if (LOGGER.isLoggable(Level.FINE)) {
-                    LOGGER.fine("Error parsing the servetInitParameter "
-                                +
-                                WebContextInitParameter.NumberOfLogicalViews.getQualifiedName() 
-                                + ". Using default "
-                                +
-                                noOfViewsInLogicalView);
-            }
-            try {
-                noOfViewsInLogicalView = Integer.valueOf(defaultValue);
-            } catch (NumberFormatException ne) {
-                // won't occur
-            }
-        }        
-       
-        return noOfViewsInLogicalView;
-
-    }
-
-
-    /**
-     * Returns the value of ServletContextInitParameter that specifies the
-     * maximum number of logical views to be saved in session. If none is specified
-     * returns <code>DEFAULT_NUMBER_OF_VIEWS_IN_SESSION</code>.
-     */
-    protected int getNumberOfViewsParameter(FacesContext context) {
-        
-        if (noOfViews != 0) {
-            return noOfViews;
-        }
-        WebConfiguration webConfig = 
-              WebConfiguration.getInstance(context.getExternalContext());
-        String noOfViewsStr = webConfig
-              .getContextInitParameter(WebContextInitParameter.NumberOfViews);
-        String defaultValue =
-              WebContextInitParameter.NumberOfViews.getDefaultValue();
-        try {
-            noOfViews = Integer.valueOf(noOfViewsStr);
-        } catch (NumberFormatException nfe) {
-            if (LOGGER.isLoggable(Level.FINE)) {
-                    LOGGER.fine("Error parsing the servetInitParameter "
-                                +
-                                WebContextInitParameter.NumberOfViews.getQualifiedName() 
-                                + ". Using default "
-                                +
-                                noOfViews);
-            }
-            try {
-                noOfViews = Integer.valueOf(defaultValue);
-            } catch (NumberFormatException ne) {
-                // won't occur
-            }
-        }        
-       
-        return noOfViews;        
-
-    }
-
-
-    @SuppressWarnings("Deprecation")
-    protected Object getTreeStructureToSave(FacesContext context) {
-
-        TreeStructure structRoot = null;
-        UIComponent viewRoot = context.getViewRoot();
-        if (!(viewRoot.isTransient())) {
-            structRoot = new TreeStructure(viewRoot);
-            buildTreeStructureToSave(context, viewRoot, structRoot, null);
-        }
-        return structRoot;
-
-    }
-
-
-    @SuppressWarnings("Deprecation")
-    protected void restoreComponentState(FacesContext context,
-                                         UIViewRoot root, String renderKitId) {
-
-        if (null == renderKitId) {
-            String message = MessageUtils.getExceptionMessageString
-                  (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "renderKitId");
-            throw new IllegalArgumentException(message);
-        }
-        Object state = null;
-        ResponseStateManager rsm =
-              RenderKitUtils.getResponseStateManager(context, renderKitId);
-        if (hasDeclaredMethod(responseStateManagerInfo,
-                              renderKitId,
-                              rsm,
-                              "getState")) {
-            Object[] stateArray =
-                  (Object[]) rsm.getState(context, root.getViewId());
-            state = stateArray[1];
-        } else {
-            state = rsm.getComponentStateToRestore(context);
-        }
-        root.processRestoreState(context, state);
-
-    }
-
-
-    /**
-     * Returns the <code> UIViewRoot</code> corresponding the
-     * <code> viewId </code> by restoring the view structure and state.
-     */
-    @SuppressWarnings("Deprecation")
-    protected UIViewRoot restoreSerializedView(FacesContext context,
-                                               SerializedView sv,
-                                               String viewId) {
-
-        if (sv == null) {
-            if (LOGGER.isLoggable(Level.FINE)) {
-                LOGGER.fine("Possibly a new request. Tree structure could not "
-                            + " be restored for " + viewId);
-            }
-            return null;
-        }
-        TreeStructure structRoot = (TreeStructure) sv.getStructure();
-        if (structRoot == null) {
-            return null;
-        }
-        UIComponent viewRoot = structRoot.createComponent();
-        if (viewRoot != null) {
-            restoreComponentTreeStructure(structRoot, viewRoot);
-            Object state = sv.getState();
-            viewRoot.processRestoreState(context, state);
-        }
-        return ((UIViewRoot) viewRoot);
-
-    }
-
-
-    @SuppressWarnings("Deprecation")
-    protected UIViewRoot restoreTreeStructure(FacesContext context,
-                                              String viewId,
-                                              String renderKitId) {
-
-        if (null == renderKitId) {
-            String message = MessageUtils.getExceptionMessageString
-                  (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "renderKitId");
-            throw new IllegalArgumentException(message);
-        }
-        UIComponent viewRoot = null;
-        TreeStructure structRoot = null;
-        ResponseStateManager rsm =
-              RenderKitUtils.getResponseStateManager(context, renderKitId);
-        if (hasDeclaredMethod(responseStateManagerInfo,
-                              renderKitId,
-                              rsm,
-                              "getState")) {
-            Object[] stateArray = (Object[]) rsm.getState(context, viewId);
-            structRoot = (TreeStructure) stateArray[0];
-        } else {
-            structRoot = (TreeStructure) rsm
-                  .getTreeStructureToRestore(context, viewId);
-        }
-        if (structRoot == null) {
-            return null;
-        }
-        viewRoot = structRoot.createComponent();
-        restoreComponentTreeStructure(structRoot, viewRoot);
-        return ((UIViewRoot) viewRoot);
-
-    }
-
-
     // --------------------------------------------------------- Private Methods
 
+    /**
+         * Returns the value of ServletContextInitParameter that specifies the
+         * maximum number of views to be saved in this logical view. If none is specified
+         * returns <code>DEFAULT_NUMBER_OF_VIEWS_IN_LOGICAL_VIEW_IN_SESSION</code>.
+         * @param context the FacesContext
+         * @return number of logical views
+         */
+        protected int getNumberOfViewsInLogicalViewParameter(FacesContext context) {
 
-    private String createUniqueRequestId() {
+            if (noOfViewsInLogicalView != 0) {
+                return noOfViewsInLogicalView;
+            }
+            WebConfiguration webConfig = 
+                  WebConfiguration.getInstance(context.getExternalContext());
+            String noOfViewsStr = webConfig
+                  .getContextInitParameter(WebContextInitParameter.NumberOfLogicalViews);
+            String defaultValue =
+                  WebContextInitParameter.NumberOfLogicalViews.getDefaultValue();
+            try {
+                noOfViewsInLogicalView = Integer.valueOf(noOfViewsStr);
+            } catch (NumberFormatException nfe) {
+                if (LOGGER.isLoggable(Level.FINE)) {
+                        LOGGER.fine("Error parsing the servetInitParameter "
+                                    +
+                                    WebContextInitParameter.NumberOfLogicalViews.getQualifiedName() 
+                                    + ". Using default "
+                                    +
+                                    noOfViewsInLogicalView);
+                }
+                try {
+                    noOfViewsInLogicalView = Integer.valueOf(defaultValue);
+                } catch (NumberFormatException ne) {
+                    // won't occur
+                }
+            }        
+       
+            return noOfViewsInLogicalView;
 
-        if (requestIdSerial++ == Character.MAX_VALUE) {
-            requestIdSerial = 0;
         }
-        return UIViewRoot.UNIQUE_ID_PREFIX + ((int) requestIdSerial);
+
+
+        /**
+         * Returns the value of ServletContextInitParameter that specifies the
+         * maximum number of logical views to be saved in session. If none is specified
+         * returns <code>DEFAULT_NUMBER_OF_VIEWS_IN_SESSION</code>.
+         * @param context the FacesContext
+         * @return number of logical views
+         */
+        protected int getNumberOfViewsParameter(FacesContext context) {
+        
+            if (noOfViews != 0) {
+                return noOfViews;
+            }
+            WebConfiguration webConfig = 
+                  WebConfiguration.getInstance(context.getExternalContext());
+            String noOfViewsStr = webConfig
+                  .getContextInitParameter(WebContextInitParameter.NumberOfViews);
+            String defaultValue =
+                  WebContextInitParameter.NumberOfViews.getDefaultValue();
+            try {
+                noOfViews = Integer.valueOf(noOfViewsStr);
+            } catch (NumberFormatException nfe) {
+                if (LOGGER.isLoggable(Level.FINE)) {
+                        LOGGER.fine("Error parsing the servetInitParameter "
+                                    +
+                                    WebContextInitParameter.NumberOfViews.getQualifiedName() 
+                                    + ". Using default "
+                                    +
+                                    noOfViews);
+                }
+                try {
+                    noOfViews = Integer.valueOf(defaultValue);
+                } catch (NumberFormatException ne) {
+                    // won't occur
+                }
+            }        
+       
+            return noOfViews;        
+
+        }
+    
+    
+    
+    private static void captureChild(List<TreeNode> tree, int parent,
+                                     UIComponent c) {
+
+        if (!c.isTransient()) {
+            TreeNode n = new TreeNode(parent, c);
+            int pos = tree.size();
+            tree.add(n);
+            captureRest(tree, pos, c);
+        }
+
+    }
+
+
+    private static void captureFacet(List<TreeNode> tree, int parent, String name,
+                                     UIComponent c) {
+
+        if (!c.isTransient()) {
+            FacetNode n = new FacetNode(parent, name, c);
+            int pos = tree.size();
+            tree.add(n);
+            captureRest(tree, pos, c);
+        }
+
+    }
+
+
+    private static void captureRest(List<TreeNode> tree, int pos, UIComponent c) {
+
+        // store children
+        int sz = c.getChildCount();
+        if (sz > 0) {
+            List<UIComponent> child = c.getChildren();
+            for (int i = 0; i < sz; i++) {
+                captureChild(tree, pos, child.get(i));
+            }
+        }
+
+        // store facets
+        sz = c.getFacetCount();
+        if (sz > 0) {
+            for (Entry<String, UIComponent> entry : c.getFacets().entrySet()) {
+                captureFacet(tree,
+                             pos,
+                             entry.getKey(),
+                             entry.getValue());
+            }
+        }
 
     }
 
@@ -690,32 +481,233 @@ public class StateManagerImpl extends StateManager {
      * class and returns a <code>boolean</code> outcome (true, if the method 
      * exists).
      *
-     * @param resultMap  A <code>Map</code> possibly containing the specified 
-     *  "key" argument, and the corresponding <code>boolean</code> value 
-     *  indicating the outcome of the search.
-     * @param key  The object that will be used for the lookup.  This key 
+     * @param renderKitId  The object that will be used for the lookup.  This key 
      *  will also be stored in the <code>Map</code> with a corresponding 
      *  <code>Boolean</code> value indicating the result of the search.
      * @param instance The instance of the class that will be used as 
      *  the search domain.
      * @param methodName The name of the method we are looking for.
+     * 
+     * @return <code>true</code> if the method exists, otherwise 
+     *  <code>false</code>
      */
-    private boolean hasDeclaredMethod(Map<String, Boolean> resultMap,
-                                      String key, ResponseStateManager instance,
+    private boolean hasDeclaredMethod(String renderKitId,
+                                      ResponseStateManager instance,
                                       String methodName) {
 
-        boolean result = false;
-        if (resultMap == null) {
-            resultMap = new HashMap<String, Boolean>();
+        boolean result;
+        if (responseStateManagerInfo == null) {
+            responseStateManagerInfo = new HashMap<String, Boolean>();
         }
-        Boolean value = resultMap.get(key);
+        Boolean value = responseStateManagerInfo.get(renderKitId);
         if (value != null) {
             return value;
         }
         result = Util.hasDeclaredMethod(instance, methodName);
-        resultMap.put(key, result);
+        responseStateManagerInfo.put(renderKitId, result);
         return result;
 
     }
 
-}
+
+    private UIComponent newInstance(TreeNode n) throws FacesException {
+
+        try {
+            Class<?> t = classMap.get(n.componentType);
+            if (t == null) {
+                t = Util.loadClass(n.componentType, n);
+                if (t != null) {
+                    classMap.put(n.componentType, t);
+                } else {
+                    throw new NullPointerException();
+                }
+            }
+            
+            UIComponent c = (UIComponent) t.newInstance();
+            c.setId(n.id);
+            return c;
+        } catch (Exception e) {
+            throw new FacesException(e);
+        }
+
+    }
+
+    @SuppressWarnings("Deprecation")
+    private void restoreState(FacesContext context,
+                              UIViewRoot root,
+                              String renderKitId) {
+        ResponseStateManager rsm =
+              RenderKitUtils.getResponseStateManager(context, renderKitId);
+        Object state;
+        if (hasDeclaredMethod(renderKitId,
+                              rsm,
+                              "getState")) {
+            Object[] stateArray =
+                  (Object[]) rsm.getState(context, root.getViewId());
+            state = stateArray[1];
+        } else {
+            state = rsm.getComponentStateToRestore(context);
+        }
+        root.processRestoreState(context, state);
+    }
+
+
+    @SuppressWarnings("Deprecation")
+    private UIViewRoot restoreTree(FacesContext context,
+                                   String viewId,
+                                   String renderKitId) {
+
+        ResponseStateManager rsm =
+              RenderKitUtils.getResponseStateManager(context, renderKitId);
+        Object[] treeStructure;
+         if (hasDeclaredMethod(renderKitId,
+                               rsm,
+                               "getState")) {
+
+            Object[] stateArray = (Object[]) rsm.getState(context, viewId);
+            treeStructure = (Object[]) stateArray[0];
+        } else {
+           treeStructure = (Object[]) rsm
+                  .getTreeStructureToRestore(context, viewId);
+        }
+
+        if (treeStructure == null) {
+            return null;
+        }
+
+        return restoreTree(treeStructure);
+    }
+    
+     private String createUniqueRequestId() {
+
+        if (requestIdSerial++ == Character.MAX_VALUE) {
+            requestIdSerial = 0;
+        }
+        return UIViewRoot.UNIQUE_ID_PREFIX + ((int) requestIdSerial);
+
+    }
+
+
+    private UIViewRoot restoreTree(Object[] tree) throws FacesException {
+
+        UIComponent c;
+        FacetNode fn;
+        TreeNode tn;
+        for (int i = 0; i < tree.length; i++) {
+            if (tree[i]instanceof FacetNode) {
+                fn = (FacetNode) tree[i];
+                c = newInstance(fn);
+                tree[i] = c;
+                if (i != fn.parent) {
+                    ((UIComponent) tree[fn.parent]).getFacets()
+                          .put(fn.facetName, c);
+                }
+
+            } else {
+                tn = (TreeNode) tree[i];
+                c = newInstance(tn);
+                tree[i] = c;
+                if (i != tn.parent) {
+                    ((UIComponent) tree[tn.parent]).getChildren().add(c);
+                }
+            }
+        }
+        return (UIViewRoot) tree[0];
+
+    }
+
+
+    private static class TreeNode implements Externalizable {
+
+
+        public String componentType;
+        public String id;
+
+        public int parent;
+
+        private static final long serialVersionUID = -835775352718473281L;
+
+
+    // ------------------------------------------------------------ Constructors
+
+
+        public TreeNode() { }
+
+
+        public TreeNode(int parent, UIComponent c) {
+
+            this.parent = parent;
+            this.id = c.getId();
+            this.componentType = c.getClass().getName();
+
+        }
+
+
+    // --------------------------------------------- Methods From Externalizable
+
+        public void writeExternal(ObjectOutput out) throws IOException {
+
+            out.writeInt(this.parent);
+            out.writeUTF(this.componentType);
+            if (this.id != null) {
+                out.writeUTF(this.id);
+            }
+
+        }
+
+
+        public void readExternal(ObjectInput in)
+              throws IOException, ClassNotFoundException {
+
+            this.parent = in.readInt();
+            this.componentType = in.readUTF();
+            if (in.available() > 0) {
+                this.id = in.readUTF();
+            }
+
+        }
+
+    }
+
+    private static final class FacetNode extends TreeNode {
+
+
+        public String facetName;
+
+        private static final long serialVersionUID = -3777170310958005106L;
+
+
+    // ------------------------------------------------------------ Constructors
+        
+        public FacetNode() { }
+
+        public FacetNode(int parent, String name, UIComponent c) {
+
+            super(parent, c);
+            this.facetName = name;
+
+        }
+
+
+    // ---------------------------------------------------------- Public Methods
+
+        @Override
+        public void readExternal(ObjectInput in)
+              throws IOException, ClassNotFoundException {
+
+            super.readExternal(in);
+            this.facetName = in.readUTF();
+
+        }
+
+        @Override
+        public void writeExternal(ObjectOutput out) throws IOException {
+
+            super.writeExternal(out);
+            out.writeUTF(this.facetName);
+
+        }
+
+    }
+
+} // END StateManagerImpl

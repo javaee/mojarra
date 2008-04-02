@@ -1,5 +1,5 @@
 /*
- * $Id: DebugUtil.java,v 1.36 2006/03/29 23:03:53 rlubke Exp $
+ * $Id: DebugUtil.java,v 1.37 2006/05/18 20:55:15 rlubke Exp $
  */
 
 /*
@@ -31,22 +31,22 @@ package com.sun.faces.util;
 
 // DebugUtil.java
 
+import javax.faces.component.UIComponent;
+import javax.faces.component.ValueHolder;
+import javax.faces.context.FacesContext;
+import javax.faces.model.SelectItem;
+
 import java.io.IOException;
 import java.io.PrintStream;
 import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.io.Writer;
 import java.util.Iterator;
-
-import javax.faces.component.UIComponent;
-import javax.faces.component.ValueHolder;
-import javax.faces.model.SelectItem;
-
-import com.sun.faces.renderkit.RenderKitUtils;
-import com.sun.faces.io.FastStringWriter;
-import java.io.StringWriter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.faces.context.FacesContext;
+
+import com.sun.faces.io.FastStringWriter;
+import com.sun.faces.renderkit.RenderKitUtils;
 
 /**
  * <B>DebugUtil</B> is a class ...
@@ -246,54 +246,54 @@ public class DebugUtil {
     }
 
 
-    /**
-     * Output of printTree() as a String. 
-     * Useful when used with a Logger. For example:
-     *    logger.log(DebugUtil.printTree(root));
-     */
-    public static String printTree(TreeStructure root) {
-        Writer writer = new FastStringWriter(1024);
-        printTree(root, writer);
-        return writer.toString();
-    }
-
-    /**
-     * Output of printTree() to a PrintStream. 
-     * Usage:
-     *    DebugUtil.printTree(root, System.out);
-     */
-    public static void printTree(TreeStructure root, PrintStream out) {
-        PrintWriter writer = new PrintWriter(out);
-        printTree(root, writer);
-        writer.flush();
-    }
-
-    public static void printTree(TreeStructure root, Writer out) {
-        if (null == root) {
-            return;
-        }
-        int i = 0;
-        Object value = null;
-
-/* PENDING
-   indentPrintln(out, "===>Type:" + root.getComponentType());
-*/
-        indentPrintln(out, "id:" + root.id);
-        indentPrintln(out, "type:" + root.className);
-
-        Iterator items = null;
-        SelectItem curItem = null;
-        int j = 0;
-
-        curDepth++;
-        if (null != root.children) {
-            Iterator<TreeStructure> it = root.children.iterator();
-            while (it.hasNext()) {
-                printTree(it.next(), out);
-            }
-        }
-        curDepth--;
-    }
+//    /**
+//     * Output of printTree() as a String. 
+//     * Useful when used with a Logger. For example:
+//     *    logger.log(DebugUtil.printTree(root));
+//     */
+//    public static String printTree(TreeStructure root) {
+//        Writer writer = new FastStringWriter(1024);
+//        printTree(root, writer);
+//        return writer.toString();
+//    }
+//
+//    /**
+//     * Output of printTree() to a PrintStream. 
+//     * Usage:
+//     *    DebugUtil.printTree(root, System.out);
+//     */
+//    public static void printTree(TreeStructure root, PrintStream out) {
+//        PrintWriter writer = new PrintWriter(out);
+//        printTree(root, writer);
+//        writer.flush();
+//    }
+//
+//    public static void printTree(TreeStructure root, Writer out) {
+//        if (null == root) {
+//            return;
+//        }
+//        int i = 0;
+//        Object value = null;
+//
+///* PENDING
+//   indentPrintln(out, "===>Type:" + root.getComponentType());
+//*/
+//        indentPrintln(out, "id:" + root.id);
+//        indentPrintln(out, "type:" + root.className);
+//
+//        Iterator items = null;
+//        SelectItem curItem = null;
+//        int j = 0;
+//
+//        curDepth++;
+//        if (null != root.children) {
+//            Iterator<TreeStructure> it = root.children.iterator();
+//            while (it.hasNext()) {
+//                printTree(it.next(), out);
+//            }
+//        }
+//        curDepth--;
+//    }
 
     public static void printTree(Object [] root, Writer out) {
         if (null == root) {
