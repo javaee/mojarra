@@ -1,5 +1,5 @@
 /* 
- * $Id: StateManagerImpl.java,v 1.1 2003/09/13 12:58:47 eburns Exp $ 
+ * $Id: StateManagerImpl.java,v 1.2 2003/09/15 20:23:08 eburns Exp $ 
  */ 
 
 
@@ -38,14 +38,14 @@ import javax.faces.render.ResponseStateManager;
 /** 
  * <B>StateManagerImpl</B> is the default implementation class for
  * StateManager.
- * @version $Id: StateManagerImpl.java,v 1.1 2003/09/13 12:58:47 eburns Exp $ 
+ * @version $Id: StateManagerImpl.java,v 1.2 2003/09/15 20:23:08 eburns Exp $ 
  * 
  * @see javax.faces.application.ViewHandler 
  * 
  */ 
 public class StateManagerImpl extends StateManager  { 
     
-    public SerializedView getSerializedView(FacesContext context) {
+    public SerializedView saveSerializedView(FacesContext context) {
 	SerializedView result = null;
         
         // irrespective of method to save the tree, if the root is transient
@@ -99,13 +99,7 @@ public class StateManagerImpl extends StateManager  {
     protected Object getComponentStateToSave(FacesContext context){
         Object state = null;
         UIViewRoot viewRoot =  context.getViewRoot();
-        try {
-            state = viewRoot.processGetState(context);
-        } catch (IOException ioe) {
-            Object [] params = { ioe.getMessage() };
-            throw new FacesException(Util.getExceptionMessage(
-                    Util.SAVING_STATE_ERROR_MESSAGE_ID, params));
-        }
+	state = viewRoot.processSaveState(context);
         return state;
     }
     
@@ -121,8 +115,7 @@ public class StateManagerImpl extends StateManager  {
     }
     
     
-    public UIViewRoot getView(FacesContext context, String viewId) throws 
-            IOException {
+    public UIViewRoot restoreView(FacesContext context, String viewId) {
         UIViewRoot viewRoot = null;
         if (isSavingStateInClient(context)) {
             viewRoot = restoreTreeStructure(context, viewId);
@@ -146,16 +139,10 @@ public class StateManagerImpl extends StateManager  {
     }
 
     protected void restoreComponentState(FacesContext context, 
-            UIViewRoot root) throws IOException {
+            UIViewRoot root) {
         Object state = (Util.getResponseStateManager(context)).
                 getComponentStateToRestore(context);
-        try {
-            root.processRestoreState(context, state);
-        } catch (IOException ioe) {
-            Object [] params = { ioe.getMessage() };
-            throw new FacesException(Util.getExceptionMessage(
-                    Util.SAVING_STATE_ERROR_MESSAGE_ID, params));
-        }
+	root.processRestoreState(context, state);
     }
    
     protected UIViewRoot restoreTreeStructure(FacesContext context, 

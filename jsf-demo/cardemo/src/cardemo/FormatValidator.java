@@ -1,5 +1,5 @@
 /*
- * $Id: FormatValidator.java,v 1.5 2003/09/08 20:21:06 jvisvanathan Exp $
+ * $Id: FormatValidator.java,v 1.6 2003/09/15 20:26:01 eburns Exp $
  */
 
 /*
@@ -290,7 +290,7 @@ public class FormatValidator implements Validator, StateHolder {
         return (carResources);
     }
     
-    public Object getState(FacesContext context) {
+    public Object saveState(FacesContext context) {
         Object values[] = new Object[2];
         values[0] = formatPatterns;
         values[1] = formatPatternsList;

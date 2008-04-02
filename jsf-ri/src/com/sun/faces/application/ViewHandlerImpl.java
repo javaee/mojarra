@@ -1,5 +1,5 @@
 /* 
- * $Id: ViewHandlerImpl.java,v 1.10 2003/09/13 12:58:47 eburns Exp $ 
+ * $Id: ViewHandlerImpl.java,v 1.11 2003/09/15 20:23:08 eburns Exp $ 
  */ 
 
 
@@ -38,7 +38,7 @@ import javax.faces.render.ResponseStateManager;
 
 /** 
  * <B>ViewHandlerImpl</B> is the default implementation class for ViewHandler. 
- * @version $Id: ViewHandlerImpl.java,v 1.10 2003/09/13 12:58:47 eburns Exp $ 
+ * @version $Id: ViewHandlerImpl.java,v 1.11 2003/09/15 20:23:08 eburns Exp $ 
  * 
  * @see javax.faces.application.ViewHandler 
  * 
@@ -83,13 +83,8 @@ public class ViewHandlerImpl extends Object
         }
 
         UIViewRoot viewRoot = null;
-        try {
-            viewRoot = getStateManager().getView(context, viewId);
-        } catch (IOException ioe) {
-            Object [] params = { ioe.getMessage() };
-            throw new FacesException(Util.getExceptionMessage(
-                    Util.SAVING_STATE_ERROR_MESSAGE_ID, params));
-        }
+	viewRoot = getStateManager().restoreView(context, viewId);
+
         if ( viewRoot == null) {
             viewRoot = new UIViewRootBase();
             context.renderResponse();

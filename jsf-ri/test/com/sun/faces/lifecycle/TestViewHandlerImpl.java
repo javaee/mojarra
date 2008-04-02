@@ -1,5 +1,5 @@
 /* 
- * $Id: TestViewHandlerImpl.java,v 1.26 2003/09/09 20:45:55 rkitain Exp $ 
+ * $Id: TestViewHandlerImpl.java,v 1.27 2003/09/15 20:23:10 eburns Exp $ 
  */ 
 
 
@@ -63,7 +63,7 @@ import javax.servlet.jsp.PageContext;
  * 
  * <B>Lifetime And Scope</B> <P> 
  * 
- * @version $Id: TestViewHandlerImpl.java,v 1.26 2003/09/09 20:45:55 rkitain Exp $ 
+ * @version $Id: TestViewHandlerImpl.java,v 1.27 2003/09/15 20:23:10 eburns Exp $ 
  * 
  * @see Blah 
  * @see Bloo 
@@ -217,7 +217,7 @@ public void testTransient()
     getFacesContext().setViewRoot(root);
 
     ViewHandlerImpl viewHandler = new ViewHandlerImpl(); 
-    viewHandler.getStateManager().getSerializedView(getFacesContext());
+    viewHandler.getStateManager().saveSerializedView(getFacesContext());
    
     // make sure that the transient property is not persisted.
     basicForm = (UIFormBase)(getFacesContext().getViewRoot()).findComponent("basicForm");

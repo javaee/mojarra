@@ -71,6 +71,14 @@ public class UserNumberBean {
             return "Sorry, "+userNumber+" is incorrect.";
         }
     }
-    	
+
+    protected String [] status = null;
+    public String [] getStatus() {
+    	return status;
+    }
+
+    public void setStatus(String [] newStatus) {
+	status = newStatus;
+    }
 
 }

@@ -1,5 +1,5 @@
 /* 
- * $Id: XulViewHandlerImpl.java,v 1.2 2003/09/08 19:31:22 horwat Exp $ 
+ * $Id: XulViewHandlerImpl.java,v 1.3 2003/09/15 20:26:07 eburns Exp $ 
  */ 
 
 
@@ -89,7 +89,7 @@ import org.mozilla.util.Assert;
 /** 
  * <B>XulViewHandlerImpl</B> is the Xul non-JSP ViewHandler implementation
  *
- * @version $Id: XulViewHandlerImpl.java,v 1.2 2003/09/08 19:31:22 horwat Exp $ 
+ * @version $Id: XulViewHandlerImpl.java,v 1.3 2003/09/15 20:26:07 eburns Exp $ 
  * 
  * @see javax.faces.application.ViewHandler 
  * 
@@ -356,5 +356,8 @@ public class XulViewHandlerImpl implements ViewHandler {
             printView((UIComponent) kids.next());
         }
         log.debug("VIEW: " + uic.getId());
+    }
+
+    public void writeState(FacesContext context) throws IOException {
     }
 } 

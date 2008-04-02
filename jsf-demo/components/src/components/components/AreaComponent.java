@@ -170,9 +170,9 @@ public class AreaComponent extends UIOutputBase {
      *
      * @param context <code>FacesContext</code> for the current request
      */
-    public Object getState(FacesContext context) {
+    public Object saveState(FacesContext context) {
         Object values[] = new Object[4];
-        values[0] = super.getState(context);
+        values[0] = super.saveState(context);
         values[1] = alt;
         values[2] = coords;
         values[3] = shape;

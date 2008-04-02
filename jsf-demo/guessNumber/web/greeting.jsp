@@ -53,6 +53,18 @@
 	 <h:command_button id="submit" action="success" value="Submit" />
          <p>
 	 <h:output_errors id="errors1" for="userNo"/>
+
+<hr>
+<p>
+       <h:selectmany_checkboxlist valueRef="UserNumberBean.status">
+         <h:selectitem itemValue="1" itemLabel="Open" />
+         <h:selectitem itemValue="2" itemLabel="Submitted" />
+         <h:selectitem itemValue="3" itemLabel="Accepted" />
+         <h:selectitem itemValue="4" itemLabel="Rejected" />
+       </h:selectmany_checkboxlist>
+</p>
+<hr>
+
     </h:form>
     </f:view>
 </HTML>  

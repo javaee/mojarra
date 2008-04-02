@@ -133,9 +133,9 @@ public class MapComponent extends UIComponentBase {
      *
      * @param context <code>FacesContext</code> for the current request
      */
-    public Object getState(FacesContext context) {
+    public Object saveState(FacesContext context) {
         Object values[] = new Object[2];
-        values[0] = super.getState(context);
+        values[0] = super.saveState(context);
         values[1] = current;
         return (values);
     }

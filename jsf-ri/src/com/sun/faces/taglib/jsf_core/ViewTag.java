@@ -1,5 +1,5 @@
 /*
- * $Id: ViewTag.java,v 1.4 2003/09/13 12:58:51 eburns Exp $
+ * $Id: ViewTag.java,v 1.5 2003/09/15 20:23:09 eburns Exp $
  */
 
 /*
@@ -32,7 +32,7 @@ import org.mozilla.util.Assert;
  *  any renderers or attributes. It exists mainly to save the state of
  *  the response tree once all tags have been rendered.
  *
- * @version $Id: ViewTag.java,v 1.4 2003/09/13 12:58:51 eburns Exp $
+ * @version $Id: ViewTag.java,v 1.5 2003/09/15 20:23:09 eburns Exp $
  * 
  *
  */
@@ -131,7 +131,7 @@ public class ViewTag extends UIComponentBodyTag
             }    
 	    content = bodyContent.getString();
 	    
-	    if (null == (view = stateManager.getSerializedView(context))) {
+	    if (null == (view = stateManager.saveSerializedView(context))) {
 		getPreviousOut().write(content);
 	    }
 	    else {
