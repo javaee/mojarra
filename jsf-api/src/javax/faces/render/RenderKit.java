@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKit.java,v 1.31 2004/12/17 17:09:41 edburns Exp $
+ * $Id: RenderKit.java,v 1.32 2004/12/20 15:19:06 edburns Exp $
  */
 
 /*
@@ -112,11 +112,12 @@ public abstract class RenderKit {
      * should choose the best fit.  As of the current version, the
      * values accepted by the Standard render-kit for this parameter
      * include any valid "Accept header style" String that includes the
-     * String <code>text/html</code> or
-     * <code>application/xhtml+xml</code>.  This may change in a future
-     * version.  The RenderKit must support a value for this argument
-     * that comes straight from the <code>Accept</code> HTTP header, and
-     * therefore requires parsing according to the specification of the
+     * String <code>text/html</code>,
+     * <code>application/xhtml+xml</code>, <code>application/xml</code>
+     * or <code>text/xml</code>.  This may change in a future version.
+     * The RenderKit must support a value for this argument that comes
+     * straight from the <code>Accept</code> HTTP header, and therefore
+     * requires parsing according to the specification of the
      * <code>Accept</code> header.  Please see <a
      * href="http://www.ietf.org/rfc/rfc2616.txt?number=2616">Section
      * 14.1 of RFC 2616</a> for the specification of the

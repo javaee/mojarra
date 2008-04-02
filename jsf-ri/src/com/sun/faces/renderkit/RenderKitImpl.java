@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKitImpl.java,v 1.25 2004/12/17 17:09:42 edburns Exp $
+ * $Id: RenderKitImpl.java,v 1.26 2004/12/20 15:19:06 edburns Exp $
  */
 
 /*
@@ -33,7 +33,7 @@ import java.util.Map;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: RenderKitImpl.java,v 1.25 2004/12/17 17:09:42 edburns Exp $
+ * @version $Id: RenderKitImpl.java,v 1.26 2004/12/20 15:19:06 edburns Exp $
  */
 
 public class RenderKitImpl extends RenderKit {
@@ -52,6 +52,8 @@ public class RenderKitImpl extends RenderKit {
     // used for ResponseWriter creation;
     private static String HTML_CONTENT_TYPE = "text/html";
     private static String XHTML_CONTENT_TYPE = "application/xhtml+xml";
+    private static String APPLICATION_XML_CONTENT_TYPE = "application/xml";
+    private static String TEXT_XML_CONTENT_TYPE = "text/xml";
     private static String CHAR_ENCODING = "ISO-8859-1";
 //
 // Ivars used during actual client lifetime
@@ -175,7 +177,9 @@ public class RenderKitImpl extends RenderKit {
 				   Boolean.TRUE);
 		    break;
 		}
-		else if (-1 != curContentType.indexOf(XHTML_CONTENT_TYPE)) {
+		else if (-1 != curContentType.indexOf(XHTML_CONTENT_TYPE) ||
+			 -1 != curContentType.indexOf(APPLICATION_XML_CONTENT_TYPE) ||
+			 -1 != curContentType.indexOf(TEXT_XML_CONTENT_TYPE)) {
 		    contentType = XHTML_CONTENT_TYPE;
 		    requestMap.put(RIConstants.CONTENT_TYPE_IS_XHTML,
 				   Boolean.TRUE);
