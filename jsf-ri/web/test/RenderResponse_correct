@@ -33,8 +33,6 @@
                         
                      
 
-                     <!-- Panel data elements -->
-
                     
 
                     
@@ -69,49 +67,6 @@
 
              </td>
            </tr>
-
-             <tr><td>
-                 
-
-                  <!-- List Data -->
-
-                  
-                    
-                    
-                    
-                    
-                  
-
-                 <table title="List with no stylesheets" border="1" cellspacing="3" cellpadding="3" summary="List with HTML attributes.">
-<tbody><tr>
-<td>123456</td>
-<td>Alpha Beta Company</td>
-<td>ABC</td>
-<td>1234.56</td>
-</tr>
-<tr>
-<td>445566</td>
-<td>General Services, Ltd.</td>
-<td>GS</td>
-<td>33.33</td>
-</tr>
-<tr>
-<td>654321</td>
-<td>Summa Cum Laude, Inc.</td>
-<td>SCL</td>
-<td>76543.21</td>
-</tr>
-<tr>
-<td>333333</td>
-<td>Yabba Dabba Doo</td>
-<td>YDD</td>
-<td>333.33</td>
-</tr>
-</tbody></table>
- 
-             </td>
-
-            </tr>
 
       <TR>
 
@@ -252,7 +207,7 @@
                 
                 
 
-              <table border="-2147483648">
+              <table>
 	<tr>
 <td><input type="radio" name="basicForm:shipType" value="nextDay" tabindex="30" title="Next day shipment" /> Next Day</td>
 <td><input type="radio" name="basicForm:shipType" value="nextWeek" tabindex="40" title="Next week shipment" /> Next Week</td>

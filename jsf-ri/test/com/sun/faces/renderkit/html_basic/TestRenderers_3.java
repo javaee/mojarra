@@ -4,7 +4,7 @@
  */
 
 /**
- * $Id: TestRenderers_3.java,v 1.26 2003/10/15 16:59:20 jvisvanathan Exp $
+ * $Id: TestRenderers_3.java,v 1.27 2003/10/21 22:39:46 jvisvanathan Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -36,6 +36,7 @@ import javax.faces.model.SelectItem;
 import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.util.Date;
+import java.util.TimeZone;
 
 import com.sun.faces.renderkit.html_basic.HiddenRenderer;
 import org.apache.cactus.WebRequest;
@@ -48,7 +49,7 @@ import com.sun.faces.JspFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_3.java,v 1.26 2003/10/15 16:59:20 jvisvanathan Exp $
+ * @version $Id: TestRenderers_3.java,v 1.27 2003/10/21 22:39:46 jvisvanathan Exp $
  * 
  *
  */
@@ -313,7 +314,7 @@ public class TestRenderers_3 extends JspFacesTestCase {
         DateFormat dateformatter =
 	    DateFormat.getDateInstance(DateFormat.MEDIUM,
 	    getFacesContext().getViewRoot().getLocale());
-        
+        dateformatter.setTimeZone(TimeZone.getTimeZone("GMT")); 
         // test hidden renderer with converter set to date
         // test decode method
 	System.out.println("    Testing decode method...");

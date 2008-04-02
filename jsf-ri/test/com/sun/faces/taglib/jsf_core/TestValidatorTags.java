@@ -1,5 +1,5 @@
 /*
- * $Id: TestValidatorTags.java,v 1.21 2003/10/21 16:42:06 eburns Exp $
+ * $Id: TestValidatorTags.java,v 1.22 2003/10/21 22:39:47 jvisvanathan Exp $
  */
 
 /*
@@ -32,7 +32,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestValidatorTags.java,v 1.21 2003/10/21 16:42:06 eburns Exp $ 
+ * @version $Id: TestValidatorTags.java,v 1.22 2003/10/21 22:39:47 jvisvanathan Exp $ 
  */
 
 public class TestValidatorTags extends JspFacesTestCase
@@ -56,10 +56,6 @@ public static final String INBOUNDS3_ID = "validatorForm" + NamingContainer.SEPA
 public static final String INBOUNDS3_VALUE = "1100";
 public static final String REQUIRED1_ID = "validatorForm" + NamingContainer.SEPARATOR_CHAR + "required1";
 public static final String REQUIRED1_VALUE = "required";
-public static final String OUTOFBOUNDS4_ID = "validatorForm" + NamingContainer.SEPARATOR_CHAR + "outOfBounds4";
-public static final String OUTOFBOUNDS4_VALUE = "aaa";
-public static final String INBOUNDS4_ID = "validatorForm" + NamingContainer.SEPARATOR_CHAR + "inBounds4";
-public static final String INBOUNDS4_VALUE = "ccc";
 public static final String REQUIRED2_ID = "validatorForm" + NamingContainer.SEPARATOR_CHAR + "required2";
 public static final String REQUIRED2_VALUE = "required";
 
@@ -111,8 +107,6 @@ public void beginValidators(WebRequest theRequest)
     theRequest.addParameter(OUTOFBOUNDS3_ID, OUTOFBOUNDS3_VALUE);
     theRequest.addParameter(INBOUNDS3_ID, INBOUNDS3_VALUE);
     theRequest.addParameter(REQUIRED1_ID, "");
-    theRequest.addParameter(OUTOFBOUNDS4_ID, OUTOFBOUNDS4_VALUE);
-    theRequest.addParameter(INBOUNDS4_ID, INBOUNDS4_VALUE);
     theRequest.addParameter(REQUIRED2_ID, "");
     theRequest.addParameter("validatorForm","validatorForm");
   
@@ -205,18 +199,6 @@ public void testValidators()
 		getFacesContext().getViewRoot().findComponent(REQUIRED1_ID)));
     assertTrue(null != (messages = getFacesContext().getMessages(comp.getClientId(getFacesContext()))));
     assertTrue(messages.hasNext());
-
-    assertTrue(null != 
-	       (comp = 
-		getFacesContext().getViewRoot().findComponent(OUTOFBOUNDS4_ID)));
-    assertTrue(null != (messages = getFacesContext().getMessages(comp.getClientId(getFacesContext()))));
-    assertTrue(messages.hasNext());
-
-    assertTrue(null != 
-	       (comp = 
-		getFacesContext().getViewRoot().findComponent(INBOUNDS4_ID)));
-    assertTrue(null != (messages = getFacesContext().getMessages(comp.getClientId(getFacesContext()))));
-    assertTrue(!messages.hasNext());
 
     assertTrue(null != 
 	       (comp = 

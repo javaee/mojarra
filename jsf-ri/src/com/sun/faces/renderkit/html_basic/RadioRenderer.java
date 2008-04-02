@@ -1,5 +1,5 @@
 /*
- * $Id: RadioRenderer.java,v 1.51 2003/10/07 13:05:30 eburns Exp $
+ * $Id: RadioRenderer.java,v 1.52 2003/10/21 22:39:41 jvisvanathan Exp $
  */
 
 /*
@@ -127,7 +127,9 @@ public class RadioRenderer extends HtmlBasicInputRenderer {
 	}
 	
         writer.startElement("table", component);
-        writer.writeAttribute("border", new Integer(border), "border");
+        if (border != Integer.MIN_VALUE) {
+            writer.writeAttribute("border", new Integer(border), "border");
+        }
         writer.writeText("\n", null);
 
 	if (!alignVertical) {

@@ -137,7 +137,7 @@
     <component-type>PanelData</component-type>
     <component-class>javax.faces.component.html.HtmlPanelData</component-class>
   </component>
-
+  
   <component>
     <component-type>PanelGrid</component-type>
     <component-class>javax.faces.component.html.HtmlPanelGrid</component-class>
@@ -270,7 +270,7 @@
     <message-resources-id>javax.faces.context.FACES_API_MESSAGES</message-resources-id>
     <message-resources-class>com.sun.faces.application.MessageResourcesImpl</message-resources-class>
     <message>
-      <message-id>javax.faces.validator.NOT_IN_RANGE_MESSAGE_ID</message-id>
+      <message-id>javax.faces.validator.NOT_IN_RANGE</message-id>
       <message-class>javax.faces.application.MessageImpl</message-class>
       <summary xml:lang="en">Validation Error: Specified attribute is not between the expected values of {0} and {1}.</summary>
       <summary xml:lang="de">Validierungs-Fehler: Spezifiziertes liegt nicht zwischen {0} und {1}.</summary>

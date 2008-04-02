@@ -304,7 +304,6 @@
             <formatter type="plain" usefile="false"/>
 
             <!-- Suite of tests -->
-<!-- these work, commented out for convenience
             <test name="com.sun.faces.application.TestActionListenerImpl"/>
             <test name="com.sun.faces.application.TestApplicationFactoryImpl"/>
             <test name="com.sun.faces.application.TestApplicationImpl"/>
@@ -319,7 +318,6 @@
             <test name="com.sun.faces.context.TestExternalContextImpl"/>
             <test name="com.sun.faces.context.TestFacesContextFactoryImpl"/>
             <test name="com.sun.faces.context.TestFacesContextImpl"/> 
--->
             <test name="com.sun.faces.convert.TestConverters"/>
             <test name="com.sun.faces.el.impl.TestELImpl"/>
             <test name="com.sun.faces.el.TestPropertyResolverImpl"/>

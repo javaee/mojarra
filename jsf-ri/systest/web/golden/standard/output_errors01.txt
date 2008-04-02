@@ -28,7 +28,7 @@
 
 
 
-<font color="RED"><span class="errors">	Validation Error: Value is required.	Validation Error: Specified attribute cannot be converted to proper type.	Validation Error: Value is not of the correct type.</span></font> 
+<font color="RED"><span class="errors">	Validation Error: Value is required.	Validation Error: Specified attribute cannot be converted to proper type.</span></font> 
 
 
 

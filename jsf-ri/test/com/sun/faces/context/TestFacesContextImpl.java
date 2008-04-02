@@ -1,5 +1,5 @@
 /*
- * $Id: TestFacesContextImpl.java,v 1.39 2003/10/21 16:42:02 eburns Exp $
+ * $Id: TestFacesContextImpl.java,v 1.40 2003/10/21 22:39:44 jvisvanathan Exp $
  */
 
 /*
@@ -35,7 +35,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestFacesContextImpl.java,v 1.39 2003/10/21 16:42:02 eburns Exp $
+ * @version $Id: TestFacesContextImpl.java,v 1.40 2003/10/21 22:39:44 jvisvanathan Exp $
  */
 
 public class TestFacesContextImpl extends ServletFacesTestCase
@@ -69,6 +69,12 @@ public class TestFacesContextImpl extends ServletFacesTestCase
 //
 // Methods from TestCase
 //
+public void setUp() {
+	super.setUp();
+        UIViewRoot viewRoot = new UIViewRoot();
+	viewRoot.setViewId("viewId");
+	getFacesContext().setViewRoot(viewRoot);
+    }
 
 //
 // General Methods

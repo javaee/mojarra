@@ -1,5 +1,5 @@
 /*
- * $Id: TestConverters.java,v 1.21 2003/10/21 16:42:03 eburns Exp $
+ * $Id: TestConverters.java,v 1.22 2003/10/21 22:39:45 jvisvanathan Exp $
  */
 
 /*
@@ -28,6 +28,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.context.FacesContextFactory;
 
 import java.util.Date;
+import java.util.TimeZone;
 import java.util.List;
 import java.text.SimpleDateFormat;
 import java.text.DecimalFormat;
@@ -44,7 +45,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestConverters.java,v 1.21 2003/10/21 16:42:03 eburns Exp $
+ * @version $Id: TestConverters.java,v 1.22 2003/10/21 22:39:45 jvisvanathan Exp $
  * 
  *
  */
@@ -430,6 +431,7 @@ public class TestConverters extends JspFacesTestCase
 	Object expected = null;
 	try {
 	    SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");
+            df.setTimeZone(TimeZone.getTimeZone("GMT")); 
 	    expected = df.parse("19460819");
 	}
 	catch (ParseException e) {
