@@ -6,7 +6,7 @@
 # modules that the jsf-ri depends on.  Copy this file to "build.properties"
 # in the top-level source directory, and customize it as needed.
 #
-# $Id: build.properties.sample,v 1.24 2003/08/05 19:04:30 rkitain Exp $
+# $Id: build.properties.sample,v 1.25 2004/04/08 18:58:26 jvisvanathan Exp $
 # -----------------------------------------------------------------------------
 
 # The build.xml file in this directory assumes JWSDP 1.2 directory
@@ -50,6 +50,7 @@ compile.debug = true
 # ----- Default Paths for Dependent Packages -----
 
 base.path=D:\\Files_2k\
+portlet.home=/usr/local/portlet1_0
 
 # --------------------------------------------------
 #		 REQUIRED LIBRARIES
@@ -61,7 +62,7 @@ commons-logging.jar=${tomcat.home}/server/lib/commons-logging.jar
 commons-digester.jar=${tomcat.home}/server/lib/commons-digester.jar
 jstl.jar=${tomcat.home}/jstl/lib/jstl.jar
 standard.jar=${tomcat.home}/jstl/lib/standard.jar
-
+portlet-api.jar=${portlet.home}/lib/portlet.jar
 
 # Comment the following if you are building with JWSDP1.1.x
 # or TOMCAT 4.x
