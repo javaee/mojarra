@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.203 2006/12/19 18:35:49 rlubke Exp $
+ * $Id: Util.java,v 1.204 2007/01/23 01:04:21 rlubke Exp $
  */
 
 /*
@@ -79,7 +79,7 @@ import com.sun.faces.spi.ManagedBeanFactory.Scope;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.203 2006/12/19 18:35:49 rlubke Exp $
+ * @version $Id: Util.java,v 1.204 2007/01/23 01:04:21 rlubke Exp $
  */
 
 public class Util {
@@ -616,7 +616,7 @@ public class Util {
                                        "jsf.util.no.adapter.ctor.available",
                                        new Object[]{
                                              clazz.getName(),
-                                             rootType.getName()
+                                             (rootType != null ? rootType.getName() : "null")
                                        });
                         }
                         returnObject = clazz.newInstance();
