@@ -1,5 +1,5 @@
 /*
- * $Id: TextRenderer.java,v 1.3 2003/09/24 23:58:57 craigmcc Exp $
+ * $Id: TextRenderer.java,v 1.4 2003/10/02 22:34:58 craigmcc Exp $
  */
 
 /*
@@ -32,7 +32,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TextRenderer.java,v 1.3 2003/09/24 23:58:57 craigmcc Exp $
+ * @version $Id: TextRenderer.java,v 1.4 2003/10/02 22:34:58 craigmcc Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -120,6 +120,11 @@ public class TextRenderer extends Renderer {
         writer.writeText("This IS TEXT FROM THE CUSTOM RENDERER", null);
     }
 
+    public String convertClientId(FacesContext context, String clientId) {
+        return clientId;
+    }
+
+    /* Replaced by convertClientId() above
     public String getClientId(FacesContext context, UIComponent component){
 	String clientId = null;
 	NamingContainer closestContainer = null;
@@ -156,7 +161,7 @@ public class TextRenderer extends Renderer {
             // If this is the root naming container, break
             if (null != containerComponent.getParent()) {
                 clientId = containerComponent.getClientId(context) +
-                    UIComponent.SEPARATOR_CHAR + clientId;
+                    NamingContainer.SEPARATOR_CHAR + clientId;
             }
         }
 
@@ -165,5 +170,6 @@ public class TextRenderer extends Renderer {
 	}
 	return (clientId);
     }
+    */
 
 } // end of class TextRenderer

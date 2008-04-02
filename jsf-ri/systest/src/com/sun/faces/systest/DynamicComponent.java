@@ -1,5 +1,5 @@
 /*
- * $Id: DynamicComponent.java,v 1.2 2003/09/30 22:23:43 craigmcc Exp $
+ * $Id: DynamicComponent.java,v 1.3 2003/10/02 22:34:56 craigmcc Exp $
  */
 
 /*
@@ -16,8 +16,8 @@ import java.util.Map;
 import javax.faces.context.FacesContext;
 import javax.faces.event.FacesEvent;
 import javax.faces.component.UIComponent;
-import javax.faces.component.base.UIComponentBase;
-import javax.faces.component.base.UIOutputBase;
+import javax.faces.component.UIComponentBase;
+import javax.faces.component.UIOutput;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 
@@ -120,7 +120,7 @@ public class DynamicComponent extends UIComponentBase {
         if (mode == null) {
             return;
         } else if ("create".equals(mode)) {
-            UIOutputBase output = new UIOutputBase();
+            UIOutput output = new UIOutput();
             output.setId(id);
             output.setRendererType("Text");
             output.setValue(value);

@@ -1,5 +1,5 @@
 /*
- * $Id: ChildrenComponent.java,v 1.2 2003/09/05 18:57:08 eburns Exp $
+ * $Id: ChildrenComponent.java,v 1.3 2003/10/02 22:34:55 craigmcc Exp $
  */
 
 /*
@@ -16,14 +16,13 @@ import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIOutput;
-import javax.faces.component.base.UIOutputBase;
 
 
 /**
  * <p>Test <code>UIComponent</code> for sys tests.</p>
  */
 
-public class ChildrenComponent extends UIOutputBase {
+public class ChildrenComponent extends UIOutput {
 
 
     public ChildrenComponent() {

@@ -1,5 +1,5 @@
 /*
- * $Id: FormInputTestCase.java,v 1.1 2003/09/30 22:23:42 craigmcc Exp $
+ * $Id: FormInputTestCase.java,v 1.2 2003/10/02 22:34:54 craigmcc Exp $
  */
 
 /*
@@ -22,6 +22,7 @@ import com.sun.faces.htmlunit.AbstractTestCase;
 import java.net.URL;
 import java.util.Iterator;
 import java.util.List;
+import javax.faces.component.NamingContainer;
 import javax.faces.component.UIComponent;
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -124,7 +125,7 @@ public class FormInputTestCase extends AbstractTestCase {
         HtmlForm form = getFormById(page, formInput02_name);
         assertNotNull("form exists", form);
         HtmlSubmitInput submit = (HtmlSubmitInput)
-            form.getInputByName(formInput02_name + UIComponent.SEPARATOR_CHAR +
+            form.getInputByName(formInput02_name + NamingContainer.SEPARATOR_CHAR +
                                 "submit");
         page = (HtmlPage) submit.click();
         checkFormInput02(page, formInput02_pristine);
@@ -143,13 +144,13 @@ public class FormInputTestCase extends AbstractTestCase {
         for (int i = 0; i < formInput02_names.length; i++) {
             HtmlTextInput input = (HtmlTextInput)
                 form.getInputByName(formInput02_name +
-                                    UIComponent.SEPARATOR_CHAR +
+                                    NamingContainer.SEPARATOR_CHAR +
                                     formInput02_names[i]);
             assertNotNull("field '" + formInput02_names[i] + "' exists", input);
             input.setValueAttribute(formInput02_updated[i]);
         }
         HtmlSubmitInput submit = (HtmlSubmitInput)
-            form.getInputByName(formInput02_name + UIComponent.SEPARATOR_CHAR +
+            form.getInputByName(formInput02_name + NamingContainer.SEPARATOR_CHAR +
                                 "submit");
         page = (HtmlPage) submit.click();
         checkFormInput02(page, formInput02_updated);
@@ -199,7 +200,7 @@ public class FormInputTestCase extends AbstractTestCase {
         for (int i = 0; i < expected.length; i++) {
             HtmlTextInput input = (HtmlTextInput)
                 form.getInputByName(formInput02_name +
-                                    UIComponent.SEPARATOR_CHAR +
+                                    NamingContainer.SEPARATOR_CHAR +
                                     formInput02_names[i]);
             assertNotNull("field '" + formInput02_names[i] + "' exists", input);
             assertEquals("field '" + formInput02_names[i] + "' value",

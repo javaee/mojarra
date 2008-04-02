@@ -1,5 +1,5 @@
 /*
- * $Id: TestComponent.java,v 1.4 2003/09/24 23:58:55 craigmcc Exp $
+ * $Id: TestComponent.java,v 1.5 2003/10/02 22:34:56 craigmcc Exp $
  */
 
 /*
@@ -11,15 +11,16 @@ package com.sun.faces.systest;
 
 
 import java.io.IOException;
+import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
 import javax.faces.event.FacesEvent;
-import javax.faces.component.base.UIInputBase;
+
 
 /**
  * <p>Test <code>UIComponent</code> for sys tests.</p>
  */
 
-public class TestComponent extends UIInputBase {
+public class TestComponent extends UIInput {
 
 
     public TestComponent() {

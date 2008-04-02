@@ -1,5 +1,5 @@
 /*
- * $Id: FacetComponent.java,v 1.3 2003/09/26 20:00:40 horwat Exp $
+ * $Id: FacetComponent.java,v 1.4 2003/10/02 22:34:56 craigmcc Exp $
  */
 
 /*
@@ -14,14 +14,13 @@ import java.io.IOException;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.component.UIOutput;
-import javax.faces.component.base.UIOutputBase;
 
 
 /**
  * <p>Test <code>UIComponent</code> for sys tests.</p>
  */
 
-public class FacetComponent extends UIOutputBase {
+public class FacetComponent extends UIOutput {
 
 
     public FacetComponent() {
