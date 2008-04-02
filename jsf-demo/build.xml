@@ -77,7 +77,7 @@
   <property name="wspack.home" value="${tomcat.home}"/>
   
   <!-- Use LICENSE.txt for FCS release. -->
-  <property name="license" value="PRE-RELEASE-LICENSE.txt"/>
+  <property name="license" value="LICENSE.TXT"/>
 
   <property name="build.properties.demo" value="build.properties.demo" />
 
