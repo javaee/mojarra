@@ -1,5 +1,5 @@
 /*
- * $Id: TestUtil_messages.java,v 1.53 2006/05/17 19:00:52 rlubke Exp $
+ * $Id: TestUtil_messages.java,v 1.54 2006/05/30 20:08:33 rlubke Exp $
  */
 
 /*
@@ -43,7 +43,7 @@ import com.sun.faces.cactus.ServletFacesTestCase;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestUtil_messages.java,v 1.53 2006/05/17 19:00:52 rlubke Exp $
+ * @version $Id: TestUtil_messages.java,v 1.54 2006/05/30 20:08:33 rlubke Exp $
  */
 
 public class TestUtil_messages extends ServletFacesTestCase {
@@ -150,7 +150,10 @@ public class TestUtil_messages extends ServletFacesTestCase {
         {MessageUtils.COMMAND_LINK_NO_FORM_MESSAGE_ID, "0"},
         {MessageUtils.FACES_CONTEXT_NOT_FOUND_ID, "0"},
         {MessageUtils.NO_IMPLEMENTATION_CONFIG_FILE_FOUND_MESSAGE_ID, "1"},
-        {MessageUtils.NOT_NESTED_IN_TYPE_TAG_ERROR_MESSAGE_ID, "2"}
+        {MessageUtils.NOT_NESTED_IN_TYPE_TAG_ERROR_MESSAGE_ID, "2"},
+        {MessageUtils.CANT_WRITE_ID_ATTRIBUTE_ERROR_MESSAGE_ID, "1"},
+        {MessageUtils.NOT_NESTED_IN_UICOMPONENT_TAG_ERROR_MESSAGE_ID, "0"},
+        {MessageUtils.NO_COMPONENT_ASSOCIATED_WITH_UICOMPONENT_TAG_MESSAGE_ID, "0"}
     };
 
     private String[][] toolsMessageInfo = {

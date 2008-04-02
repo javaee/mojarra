@@ -1,5 +1,5 @@
 /*
- * $Id: AttributeTag.java,v 1.7 2006/03/29 23:03:51 rlubke Exp $
+ * $Id: AttributeTag.java,v 1.8 2006/05/30 20:08:32 rlubke Exp $
  */
 
 /*
@@ -38,6 +38,8 @@ import javax.faces.webapp.UIComponentELTag;
 import javax.faces.webapp.UIComponentClassicTagBase;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.TagSupport;
+
+import com.sun.faces.util.MessageUtils;
 
 
 /**
@@ -109,14 +111,18 @@ public class AttributeTag extends TagSupport {
         // Locate our parent UIComponentTagBase
         UIComponentClassicTagBase tag =
             UIComponentELTag.getParentUIComponentClassicTagBase(pageContext);
-        if (tag == null) { // PENDING - i18n
-            throw new JspException("Not nested in a UIComponentTag");
+        if (tag == null) {
+        	String message = MessageUtils.getExceptionMessageString
+        	(MessageUtils.NOT_NESTED_IN_UICOMPONENT_TAG_ERROR_MESSAGE_ID);
+        	throw new JspException(message);
         }
-
+        
         // Add this attribute if it is not already defined
         UIComponent component = tag.getComponentInstance();
-        if (component == null) { // PENDING - i18n
-            throw new JspException("No component associated with UIComponentTag");
+        if (component == null) {
+        	String message = MessageUtils.getExceptionMessageString
+        	(MessageUtils.NO_COMPONENT_ASSOCIATED_WITH_UICOMPONENT_TAG_MESSAGE_ID);
+        	throw new JspException(message);
         }
 
         FacesContext context = FacesContext.getCurrentInstance();

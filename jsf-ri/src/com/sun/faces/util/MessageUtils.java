@@ -67,6 +67,8 @@ public class MessageUtils {
           "com.sun.faces.CANT_INSTANTIATE_CLASS";
     public static final String CANT_PARSE_FILE_ERROR_MESSAGE_ID =
           "com.sun.faces.CANT_PARSE_FILE";
+    public static final String CANT_WRITE_ID_ATTRIBUTE_ERROR_MESSAGE_ID =
+          "com.sun.faces.CANT_WRITE_ID_ATTRIBUTE";
     public static final String CHILD_NOT_OF_EXPECTED_TYPE_ID =
           "com.sun.faces.CHILD_NOT_OF_EXPECTED_TYPE";
     public static final String COMMAND_LINK_NO_FORM_MESSAGE_ID =
@@ -163,10 +165,14 @@ public class MessageUtils {
           "com.sun.faces.NOT_NESTED_IN_FACES_TAG_ERROR";
     public static final String NOT_NESTED_IN_TYPE_TAG_ERROR_MESSAGE_ID =
           "com.sun.faces.NOT_NESTED_IN_TYPE_TAG_ERROR";
+    public static final String NOT_NESTED_IN_UICOMPONENT_TAG_ERROR_MESSAGE_ID =
+          "com.sun.faces.NOT_NESTED_IN_UICOMPONENT_TAG_ERROR";
     public static final String NO_DTD_FOUND_ERROR_ID =
           "com.sun.faces.NO_DTD_FOUND_ERROR";
     public static final String NO_IMPLEMENTATION_CONFIG_FILE_FOUND_MESSAGE_ID =
           "com.sun.faces.NO_IMPLEMENTATION_CONFIG_FOUND";
+    public static final String NO_COMPONENT_ASSOCIATED_WITH_UICOMPONENT_TAG_MESSAGE_ID =
+          "com.sun.faces.NO_COMPONENT_ASSOCIATED_WITH_UICOMPONENT_TAG";
     public static final String NULL_BODY_CONTENT_ERROR_MESSAGE_ID =
           "com.sun.faces.NULL_BODY_CONTENT_ERROR";
     public static final String NULL_COMPONENT_ERROR_MESSAGE_ID =

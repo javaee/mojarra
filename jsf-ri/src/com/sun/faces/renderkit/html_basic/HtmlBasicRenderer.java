@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderer.java,v 1.108 2006/05/17 19:00:48 rlubke Exp $
+ * $Id: HtmlBasicRenderer.java,v 1.109 2006/05/30 20:08:31 rlubke Exp $
  */
 
 /*
@@ -539,8 +539,9 @@ public abstract class HtmlBasicRenderer extends Renderer {
                                       "id");
             } catch (IOException e) {
                 if (logger.isLoggable(Level.WARNING)) {
-                    // PENDING I18N
-                    logger.warning("Can't write ID attribute" + e.getMessage());
+                	String message = MessageUtils.getExceptionMessageString
+                	    (MessageUtils.CANT_WRITE_ID_ATTRIBUTE_ERROR_MESSAGE_ID, e.getMessage());
+                	logger.warning(message);
                 }
             }
         }

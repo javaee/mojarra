@@ -1,5 +1,5 @@
 /*
- * $Id: LoadBundleTag.java,v 1.14 2006/03/29 23:03:51 rlubke Exp $
+ * $Id: LoadBundleTag.java,v 1.15 2006/05/30 20:08:32 rlubke Exp $
  */
 
 /*
@@ -44,6 +44,7 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.TagSupport;
 
 import com.sun.faces.util.Util;
+import com.sun.faces.util.MessageUtils;
 
 /**
  * <p>Tag action that loads the specified ResourceBundle as a Map into
@@ -113,9 +114,15 @@ public class LoadBundleTag extends TagSupport {
                                          context.getELContext());
 
 
-        if (null == basename || null == var) { // PENDING - i18n
-            throw new JspException("The 'basename' or 'var' attributes" +
-                " evaluated to null.");
+        if (null == basename) {
+        	String message = MessageUtils.getExceptionMessageString
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "baseName");
+        	throw new NullPointerException(message);
+        }
+        if (null == var) {
+        	String message = MessageUtils.getExceptionMessageString
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "baseName");
+        	throw new NullPointerException(message);
         }
 
         final ResourceBundle bundle =
