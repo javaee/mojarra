@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigFileTestCase.java,v 1.7 2004/04/08 22:54:08 eburns Exp $
+ * $Id: ConfigFileTestCase.java,v 1.8 2004/11/08 20:15:57 rlubke Exp $
  */
 
 /*
@@ -25,6 +25,7 @@ import junit.framework.TestSuite;
 import org.apache.commons.digester.Digester;
 
 import org.xml.sax.InputSource;
+import com.sun.faces.config.DigesterFactory;
 
 /**
  * <p>Unit tests for Configuration File processing.</p>
@@ -283,10 +284,7 @@ public class ConfigFileTestCase extends TestCase {
     // Create a Digester instance with no rules yet
     protected Digester createDigester() throws Exception {
 
-        Digester digester = new Digester();
-        digester.register(CONFIG_DTD_PUBLIC_ID,
-                          relativeURL("doc/web-facesconfig_1_1.dtd").toString());
-        digester.setValidating(true);
+        digester = DigesterFactory.newInstance(true).createDigester();        
         return (digester);
 
     }

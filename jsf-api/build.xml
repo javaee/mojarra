@@ -100,6 +100,7 @@
     <pathelement location="${dom.jar}"/>
     <pathelement location="${jaxp-api.jar}"/>
     <pathelement location="${jcov.jar}"/>
+    <pathelement location="${jsf-tools.dir}/build/classes"/>
   </path>
 
   <property name="test.factory"
