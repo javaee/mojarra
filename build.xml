@@ -1,0 +1,101 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<!--
+ Copyright 2004 Sun Microsystems, Inc. All rights reserved.
+ SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+-->
+
+
+<!-- ************ JSF build file ************************************** -->
+
+<project name="publish.java.net" default="publish.java.net" basedir=".">
+
+<!-- ************ Per user local properties ******************************* -->
+
+  <property file="build.properties"/>                <!-- Component local   -->
+  <property file="../build.properties"/>             <!-- Commons local     -->
+  <property file="${user.home}/build.properties"/>   <!-- User local        -->
+  <property environment="myenv" />
+
+
+<!-- ************ Where are we building into? ***************************** -->
+
+  <!-- the root of our tomcat -->
+
+  <!-- The base directory for compilation targets -->
+  
+  <!-- The base directory for the JSF APIs -->
+  <property name="jsf-api.home" value ="${basedir}/jsf-api"/>
+
+  <property name="jsf-tools.home"    value="${basedir}/jsf-tools"/>
+  
+  <property name="jsf-portlet.home"    value="${basedir}/jsf-portlet"/>
+  
+  <property name="jsf-ri.home" value ="${basedir}/jsf-ri"/>
+  
+  <property name="jsf-demo.home"    value="${basedir}/jsf-demo"/>
+  
+  <property name="version"    value="20040714"/>
+  
+  <property name="installer.home"    
+      value="${tomcat.home}/../installer/"/>
+
+<!-- ************ Compiler Defaults *************************************** -->
+
+
+<!-- ************ Executable Targets ************************************** -->
+
+  
+ <taskdef name="installerBuilder" classname="com.sun.tools.xjc.installer.builder.BuilderTask">
+     <classpath>
+         <fileset dir="${installer.home}" includes="*.jar"/>
+     </classpath>
+  </taskdef>
+  
+  <target name="clean" 
+   description="Clean build and distribution directories">
+    <delete file="${basedir}/javaserverfaces_binary_${version}.zip" />
+    <delete file="${basedir}/javaserverfaces_source_${version}.zip" />
+    <delete file="${basedir}/javaserverfaces_source_${version}_class" />
+  </target>
+
+  <!-- Create the source distribution -->
+  <target name="jsf.source">
+    <zip     destfile="${basedir}/javaserverfaces_source_${version}.zip">
+    
+      <zipfileset dir="${jsf-api.home}"
+               excludes="**/CVS/**, **/build/**"
+               prefix="jsf-api"/> 
+     
+      <zipfileset dir="${jsf-ri.home}"
+             excludes="**/CVS/**, **/build/**"
+               prefix="jsf-ri"/>
+               
+      <zipfileset dir="${jsf-tools.home}"
+             excludes="**/CVS/**, **/build/**"
+               prefix="jsf-tools"/>
+                       
+      <zipfileset dir="${jsf-portlet.home}"
+             excludes="**/CVS/**, **/build/**"
+               prefix="jsf-portlet"/>
+  
+    </zip>
+  </target>
+
+
+  <target name="publish.java.net" description="Build distribution files">
+  <ant dir="${jsf-demo.home}" target="dist" inheritAll="false" />
+ 
+  <copy file="${jsf-demo.home}/jsf-${version}.zip"
+          tofile="${basedir}/javaserverfaces_binary_${version}.zip" />
+          
+  <delete file="${jsf-demo.home}/jsf-${version}.zip" />
+    
+  <ant target="jsf.source" />
+  
+  <installerBuilder
+          classFile="javaserverfaces_source_${version}_class"
+          licenseFile="${installer.home}/jrl_1_3.txt"
+          zipFile="${basedir}/javaserverfaces_source_${version}.zip" />
+  </target>
+</project>
