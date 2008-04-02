@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContext.java,v 1.41 2003/06/20 22:29:58 craigmcc Exp $
+ * $Id: FacesContext.java,v 1.42 2003/06/21 00:30:17 craigmcc Exp $
  */
 
 /*
@@ -13,6 +13,7 @@ package javax.faces.context;
 import java.util.Iterator;
 import java.util.Locale;
 import javax.faces.FacesException;
+import javax.faces.application.Application;
 import javax.faces.component.UIComponent;
 import javax.faces.event.FacesEvent;
 import javax.faces.tree.Tree;
@@ -41,6 +42,25 @@ public abstract class FacesContext {
 
 
     // ------------------------------------------------------------- Properties
+
+
+    /**
+     * <p>Return the {@link Application} instance associated with this
+     * web application.</p>
+     */
+    public abstract Application getApplication();
+
+
+    /**
+     * <p>Set the {@ink Application} instance associated with this
+     * web application.  This method should <strong>only</strong> be
+     * called by the JavaServer Faces implementation, at the beginning
+     * of the request processing lifecycle for the request represented
+     * by this {@link FacesContext} instance.</p>
+     *
+     * @param application The new {@link Application} instance
+     */
+    public abstract void setApplication(Application application);
 
 
     /**

@@ -1,5 +1,5 @@
 /*
- * $Id: FacesServlet.java,v 1.13 2003/03/13 01:12:32 craigmcc Exp $
+ * $Id: FacesServlet.java,v 1.14 2003/06/21 00:30:17 craigmcc Exp $
  */
 
 /*
@@ -13,6 +13,8 @@ package javax.faces.webapp;
 import java.io.IOException;
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
+import javax.faces.application.Application;
+import javax.faces.application.ApplicationFactory;
 import javax.faces.context.FacesContext;
 import javax.faces.context.FacesContextFactory;
 import javax.faces.lifecycle.Lifecycle;
@@ -49,6 +51,12 @@ public final class FacesServlet implements Servlet {
      */
     private static final String LIFECYCLE_ID_ATTR =
         "javax.faces.lifecycle.LIFECYCLE_ID";
+
+
+    /**
+     * <p>The {@link Application} instance for this web application.</p>
+     */
+    private Application application = null;
 
 
     /**
@@ -123,6 +131,20 @@ public final class FacesServlet implements Servlet {
             }
         }
 
+        // Acquire our Application instance
+        try {
+            ApplicationFactory applicationFactory = (ApplicationFactory)
+                FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
+            application = applicationFactory.getApplication();
+        } catch (FacesException e) {
+            Throwable rootCause = e.getCause();
+            if (rootCause == null) {
+                throw e;
+            } else {
+                throw new ServletException(e.getMessage(), rootCause);
+            }
+        }
+
         // Acquire our Lifecycle instance
         try {
             LifecycleFactory lifecycleFactory = (LifecycleFactory)
@@ -163,6 +185,7 @@ public final class FacesServlet implements Servlet {
         // Acquire the FacesContext instance for this request
         FacesContext context = facesContextFactory.getFacesContext
             (servletConfig.getServletContext(), request, response, lifecycle);
+	context.setApplication(application);
 
         // Execute the request processing lifecycle for this request
         try {
@@ -183,6 +206,7 @@ public final class FacesServlet implements Servlet {
         }
 
         // Release the FacesContext instance for this request
+	context.setApplication(null);
         context.release();
         
     }
