@@ -3963,6 +3963,27 @@
     </renderer>
 
     <renderer>
+      <description>If the "styleClass" attribute is specified, render a
+      "span" element and render the value of the "styleClass attribute
+      as the value of the "class" attribute on the "span" element.
+      Render a "table" element.  If the "border" attribute is specified,
+      pass it thru.  If the "layout" attribute is specified, and its
+      value is "PAGE_DIRECTION", render the children elements
+      vertically, otherwise horizontally, in the table.  If any of the
+      children are an instance of SelectItemGroup, render them as a
+      nested table.  Each of the children are ultimately rendererd as
+      follows.  Render a "label" element with the "for" attribute being
+      the clientId of the component.  Inside of the "label", render an
+      "input" element of "type" "checkbox".  The clientId is rendered as
+      the value of the "name" and "id" attributes.  The value of the
+      current SelectItem is rendered as the value of the "value"
+      attribute.  If the value of the enclosing UISelectMany matches the
+      current value, render "checked" as the value of the "checked"
+      attribute.  If the current SelectItem.isDisabled() returns true,
+      render "disabled" as the value of the "disabled" attribute.  Close
+      out the "input" element and render the return value from
+      SelectItem.getLabel().  Close out the "label" element and any
+      other nested elements.</description>
       <renderer-type>CheckboxList</renderer-type>
       <renderer-class>&selectmanycheckboxlist-renderer-class;</renderer-class>
       &core-attrs;
@@ -4094,6 +4115,8 @@
     </renderer>
 
     <renderer>
+      <description>Renders an HTML "textarea" element.  Render the
+      clientId as the value of the name attribute.</description>
       <renderer-type>Textarea</renderer-type>
       <renderer-class>&textarea-renderer-class;</renderer-class>
       &core-attrs;
@@ -4196,6 +4219,23 @@
     </renderer>
 
     <renderer>
+      <description>When rendering a UIInput, Renders an HTML "input"
+      element of "type" "text".  Render the clientId of the component as
+      the value of the "name" attribute.  Render the current value of
+      the component as the value of the "value" attribute.  If the
+      "styleClass" attribute is specified, render its value as the value
+      of the "class" attribute.  When rendering a UIOutput, if the
+      "styleClass" or "style" attributes are present, render a "span"
+      element.  If the "styleClass" attribute is present, render its
+      value as the value of the "class" attribute.  If the "style"
+      attribute is present, pass it thru.  If the "escape" attribute is
+      not present, or it is present and its value is "true" all angle
+      brackets should be converted to the ampersand xx semicolon syntax
+      when rendering the value of the "value" attribute as the value of
+      the component.  If the "escape" attribute is present and is
+      "false" the value of the component should be rendered as the value
+      of the "value" attribute without escaping.
+      </description>
       <renderer-type>Text</renderer-type>
       <renderer-class>&text-renderer-class;</renderer-class>
       &core-attrs;
