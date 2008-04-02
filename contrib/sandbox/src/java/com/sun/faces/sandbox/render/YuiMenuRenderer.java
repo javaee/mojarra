@@ -170,9 +170,16 @@ public class YuiMenuRenderer extends Renderer {
         writer.writeAttribute("type", "text/javascript", "type");
 
         String ctorArgs = buildConstructorArgs(component);
-        writer.writeText(("var oMenu_%%%ID%%% = new YUISF.Menu(\"%%%ID%%%\", {" + ctorArgs + 
-        "});").replaceAll("%%%ID%%%", component.getClientId(FacesContext.getCurrentInstance()) + "_1") , null);
+        String javaScript = "var oMenu_%%%JS_VAR%%% = new YUISF.Menu(\"%%%ID%%%\", {" + ctorArgs + "});";
+        javaScript = javaScript.replaceAll("%%%ID%%%", component.getClientId(FacesContext.getCurrentInstance()) + "_1")
+            .replaceAll("%%%JS_VAR%%%", getJavascriptVar(component.getClientId(FacesContext.getCurrentInstance()) + "_1"));
+        writer.writeText(javaScript , null);
         writer.endElement("script");
+    }
+    
+    // Return a JavaScript-friendly variable name
+    protected String getJavascriptVar(String name) {
+        return name.replaceAll(":", "_");
     }
 
     /**

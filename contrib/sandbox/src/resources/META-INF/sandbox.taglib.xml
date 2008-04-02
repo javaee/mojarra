@@ -34,6 +34,12 @@
         </component>
     </tag>
     <tag>
+        <tag-name>menuItem</tag-name>
+        <component>
+            <component-type>com.sun.faces.sandbox.YuiMenuItem</component-type>
+        </component>
+    </tag>
+    <tag>
         <tag-name>multiFileUpload</tag-name>
         <component>
             <component-type>com.sun.faces.sandbox.MultiFileUpload</component-type>
@@ -51,6 +57,12 @@
         <component>
             <component-type>com.sun.faces.sandbox.YuiTree</component-type>
             <renderer-type>com.sun.faces.sandbox.YuiTreeRenderer</renderer-type>
+        </component>
+    </tag>
+    <tag>
+        <tag-name>treeNode</tag-name>
+        <component>
+            <component-type>com.sun.faces.sandbox.YuiTreeNode</component-type>
         </component>
     </tag>
 </facelet-taglib>

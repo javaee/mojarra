@@ -9,4 +9,12 @@
         <managed-bean-class>com.sun.faces.sandbox.test.webapp.TestBean</managed-bean-class>
         <managed-bean-scope>session</managed-bean-scope>
     </managed-bean>
+    
+	<navigation-rule>
+		<from-view-id>*</from-view-id>
+		<navigation-case>
+			<from-outcome>home</from-outcome>
+			<to-view-id>/jsp/index.jsf</to-view-id>
+		</navigation-case>
+    </navigation-rule>
 </faces-config>

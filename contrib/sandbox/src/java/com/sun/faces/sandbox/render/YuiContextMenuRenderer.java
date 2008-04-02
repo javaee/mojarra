@@ -28,9 +28,10 @@ public class YuiContextMenuRenderer extends YuiMenuRenderer {
         writer.startElement("script", component);
         writer.writeAttribute("type", "text/javascript", "type");
         String javaScript = 
-                "var oMenu_%%%ID%%% = new YAHOO.widget.ContextMenu(\"%%%ID%%%\", {" + buildConstructorArgs(contextMenu) + "});" +
-                "oMenu_%%%ID%%%.render(document.getElementById(\"%%%TRIGGER%%%\"));";
+                "var oMenu_%%%JS_VAR%%% = new YAHOO.widget.ContextMenu(\"%%%ID%%%\", {" + buildConstructorArgs(contextMenu) + "});" +
+                "oMenu_%%%JS_VAR%%%.render(document.getElementById(\"%%%TRIGGER%%%\"));";
         javaScript = javaScript.replaceAll("%%%ID%%%", component.getClientId(FacesContext.getCurrentInstance()) + "_1")
+                .replaceAll("%%%JS_VAR%%%", getJavascriptVar(component.getClientId(FacesContext.getCurrentInstance())) + "_1")
                 .replaceAll("%%%TRIGGER%%%", component.getParent().getClientId(FacesContext.getCurrentInstance())); 
                         //getFullyQualifiedId(contextMenu.getTrigger()));
         
