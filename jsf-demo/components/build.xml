@@ -36,10 +36,7 @@
  maintenance of any nuclear facility.
 -->
 
-<project name="components" default="build" basedir=".">
-  <target name="init" depends="verifyPreconditions">
-      <tstamp/>
-  </target>
+<project name="components" default="build" basedir=".">  
 
   <property name="depth" value=".."/>
 
@@ -78,13 +75,28 @@
     <pathelement location="${jsp.jar}"/> 
   </path>
 
-
+    <target name="init" depends="check.changes,verifyPreconditions">
+        <tstamp/>          
+    </target>
+    
+    <target name="check.changes">
+        <uptodate property="skip.build"
+            targetfile="${build}/last-build">
+            <srcfiles dir="${basedir}">
+                <include name="src/**/*.*"/>
+                <include name="conf/**/*.*"/>
+                <include name="web/**/*.*"/>
+            </srcfiles>
+        </uptodate>      
+    </target>
+    
   <target name="clean" >
     <delete dir="${build}" />
     <delete dir="${context.path}" />
+    <delete file="${basedir}/last-build"/>
   </target>
 
-  <target name="verifyPreconditions">
+  <target name="verifyPreconditions" unless="skip.build">
 
     <antcall target="checkRequiredFile">
        <param name="file" value="${servlet.jar}"/>
@@ -193,8 +205,9 @@
           path="${context.path}"/>
   </target>
 
-  <target name="build" depends="copyJars" 
+  <target name="build" unless="skip.build" depends="copyJars" 
      description="Compile Java files for components, not webapp." >
+      <touch file="${build}/last-build"/>
     <javac debug="on" srcdir="src" destdir="${build}/classes/components">
         <include name="components/**" />
      <classpath refid="classpath"/>

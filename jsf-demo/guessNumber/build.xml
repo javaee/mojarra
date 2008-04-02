@@ -37,10 +37,7 @@
 -->
 
 <project name="guessNumber" default="build" basedir=".">
-  <target name="init" depends="verifyPreconditions">
-      <tstamp/>
-  </target>
-
+ 
   <property name="depth" value=".."/>
 
   <property file="build.properties"/>                <!-- this demo local -->
@@ -73,13 +70,28 @@
   <path id="catalina-ant.classpath">
     <pathelement location="${catalina-ant.jar}"/>
   </path>
+    
+    <target name="init" depends="check.changes,verifyPreconditions">
+        <tstamp/>        
+    </target>
+    
+    <target name="check.changes">
+        <uptodate property="skip.build"
+            targetfile="${build}/last-build">
+            <srcfiles dir="${basedir}">
+                <include name="src/**/*.*"/>
+                <include name="conf/**/*.*"/>
+                <include name="web/**/*.*"/>
+            </srcfiles>
+        </uptodate>
+    </target>
 
   <target name="clean" >
     <delete dir="${build}" />
     <delete dir="${context.path}" />
   </target>
 
-  <target name="verifyPreconditions">
+  <target name="verifyPreconditions" unless="skip.build">
 
     <antcall target="checkRequiredFile">
        <param name="file" value="${servlet.jar}"/>
@@ -184,8 +196,9 @@
           path="${context.path}"/>
   </target>
 
-  <target name="build" depends="copyJars" 
+  <target name="build" unless="skip.build" depends="copyJars" 
      description="Compile Java files and copy static files." >
+      <touch file="${build}/last-build"/>
     <javac srcdir="src" destdir="${build}/${example}/WEB-INF/classes">
     	<include name="**/*.java" />
      <classpath refid="classpath"/>

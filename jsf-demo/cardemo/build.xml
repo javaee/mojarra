@@ -37,10 +37,7 @@
 -->
 
 <project name="cardemo" default="build.war" basedir=".">
-  <target name="init" depends="verifyPreconditions">
-      <tstamp/>
-  </target>
-
+  
   <property name="depth" value=".."/>
 
   <property file="build.properties"/>                <!-- this demo local -->
@@ -81,6 +78,20 @@
     <pathelement location="${jsp.jar}" />
   </path>
 
+    <target name="init" depends="check.changes,verifyPreconditions">
+        <tstamp/>
+    </target>
+    
+    <target name="check.changes">
+        <uptodate property="skip.build"
+            targetfile="${build}/last-build">
+            <srcfiles dir="${basedir}">
+                <include name="src/**/*.*"/>
+                <include name="conf/**/*.*"/>
+                <include name="web/**/*.*"/>
+            </srcfiles>
+        </uptodate>
+    </target>
 
   <target name="clean" >
     <delete dir="${build}" />
@@ -88,7 +99,7 @@
     <delete file="${example}.war" />
   </target>
 
-  <target name="verifyPreconditions">
+  <target name="verifyPreconditions" unless="skip.build">
 
     <antcall target="checkRequiredFile">
        <param name="file" value="${servlet.jar}"/>
@@ -212,8 +223,9 @@
           path="${context.path}"/>
   </target>
 
-  <target name="build" depends="copyJars, wspack.copyJars"
+  <target name="build" unless="skip.build" depends="copyJars, wspack.copyJars"
      description="Compile Java files and copy static files." >
+      <touch file="${build}/last-build"/>
     <javac debug="on" srcdir="src" 
            destdir="${build}/${example}/WEB-INF/classes">
     	<include name="**/*.java" />
@@ -247,7 +259,7 @@
     </copy>
   </target>	 
 
-  <target name="build.war" depends="build">
+  <target name="build.war" unless="skip.build" depends="build">
     <!-- create a war file for distribution -->
     <jar jarfile="${example}.war" basedir="${build}/${example}"/> 
     <copy todir="${build}" file="${example}.war" />

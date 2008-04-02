@@ -36,10 +36,7 @@
  maintenance of any nuclear facility.
 -->
 
-<project name="JSF Demo unit tests" default="build" basedir=".">
-    <target name="init" depends="verifyPreconditions">
-        <tstamp/>
-    </target>
+<project name="JSF Demo unit tests" default="build" basedir=".">    
 
     <!-- Test Properties -->
     <property file="build.properties"/>
@@ -51,6 +48,10 @@
     <!-- Default value for debugging arguments is no.  Override in
          build.properties -->
     <property name="debug.jvm.args" value=""/>
+    
+    <!-- Demo WAR files -->
+    <property name="components.war" value="${basedir}/components/build/jsf-components.war"/>
+    <property name="guessNumber.war" value="${basedir}/guessNumber/build/jsf-guessNumber.war"/>        
 
     <path id="classpath">
         <pathelement location="${htmlunit.jar}"/>
@@ -66,9 +67,22 @@
 
     <path id="catalina-ant.classpath">
         <pathelement location="${catalina-ant.jar}"/>
-    </path>    
+    </path>   
+    
+    <target name="init" depends="check.changes,verifyPreconditions">
+        <tstamp/>       
+    </target>
+    
+    <target name="check.changes">
+        <uptodate property="skip.build"
+            targetfile="${build}/last-build">
+            <srcfiles dir="${basedir}">
+                <include name="test/src/**/*.*"/>               
+            </srcfiles>
+        </uptodate>
+    </target>
 
-    <target name="verifyPreconditions">
+    <target unless="skip.build" name="verifyPreconditions">
 
         <antcall target="checkRequiredFile">
             <param name="file" value="${htmlunit.jar}"/>
@@ -131,7 +145,7 @@
         <list url="${url}" username="${username}" password="${password}"/>
     </target>
 
-    <target name="install" unless="no.installer" description="Install web application" depends="build">
+    <target name="install" unless="skip.deploy" description="Install web application" depends="build">
         <install url="${url}" username="${username}" password="${password}"
             path="${context.path}" war="file://${demo.path}/"/>
     </target>
@@ -141,13 +155,12 @@
             path="${context.path}"/>
     </target>
 
-    <target name="remove" unless="no.installer" description="Remove web application">
+    <target name="remove" unless="skip.deploy" description="Remove web application">
         <remove url="${url}" username="${username}" password="${password}"
             path="${context.path}"/>
     </target>
     
-    <target name="safe.remove" unless="no.installer"
-        description="Remove demo webapp, don't fail on error">
+    <target name="safe.remove" unless="skip.deploy" description="Remove demo webapp, don't fail on error">
         <exec executable="ant.bat" os="Windows 2000" failonerror="false">
             <arg line="-f build-tests.xml -Dusername=${username} -Dpassword=${password} -Dcontext.path=${context.path} remove"/>
         </exec>
@@ -174,8 +187,9 @@
         </junit>
     </target>
 
-    <target name="build"
+    <target name="build" unless="skip.build"
         description="Compile Java files." depends="prepare">
+        <touch file="${build}/last-build"/>
         <javac srcdir="test" destdir="${build}/classes"
             debug="true">
             <include name="**/*.java"/>
@@ -192,31 +206,31 @@
         <fail message="${fail.message}"/>
     </target>
 
-    <!-- base target of sorts to avoid duplication --> 
-    <target name="test.invoker">
-        <!-- PENDING(): would be nice to only remove and re-install if necessary -->
-
+    <!-- base target of sorts to avoid duplication -->     
+    <target name="test.invoker">                       
         <!-- remove the application if it already exists -->
         <antcall target="safe.remove">
             <param name="context.path" value="${context.path}"/>
         </antcall>
+        
         <!-- install the application -->
         <antcall target="install">
             <param name="context.path" value="${context.path}"/>
             <param name="demo.path" value="${demo.path}"/>
-        </antcall>
+        </antcall>  
         
         <!-- run the tests for the application -->
         <antcall target="run.tests">
             <param name="context.path" value="${context.path}"/>
             <param name="demo.name" value="${demo.name}"/>
-        </antcall>
+        </antcall>  
         
         <!-- remove the application -->
-        <antcall target="remove">
-            <param name="context.path" value="${context.path}"/>
-        </antcall>
-    </target>
+        <!--<antcall target="remove">
+        <param name="context.path" value="${context.path}"/>
+        <param name="skip.deploy" value="${skip.deploy}"/>
+        </antcall>-->
+    </target>       
 
     <!-- ============== UNIT TESTS =============== -->
     <!-- Global test target to run all unit tests -->
@@ -226,21 +240,31 @@
         <antcall target="run.components.tests"/>    
     </target>
 
-    <!-- Unit test configuration for guessNumber -->
+    <!-- Unit test configuration for guessNumber -->            
     <target name="run.guessNumber.tests" depends="build">
+        <uptodate property="skip.deploy"
+            targetfile="${build}/guessnumber.last-testrun"
+            srcfile="${guessNumber.war}"/>    
+        
         <antcall target="test.invoker">
             <param name="context.path" value="${guessNumber.context.path}"/>
             <param name="demo.path" value="${basedir}/guessNumber/build/jsf-guessNumber"/>
-            <param name="demo.name" value="guessNumber"/>
-        </antcall>
+            <param name="demo.name" value="guessNumber"/>                        
+        </antcall> 
+        <touch file="${build}/guessnumber.last-testrun"/>
     </target>
 
     <target name="run.components.tests" depends="build">
+        <uptodate property="skip.deploy"
+            targetfile="${build}/component.last-testrun"
+            srcfile="${components.war}"/>
+        
         <antcall target="test.invoker">
             <param name="context.path" value="${components.context.path}"/>
             <param name="demo.path" value="${basedir}/components/build/demo"/>
-            <param name="demo.name" value="components"/>
-        </antcall>
+            <param name="demo.name" value="components"/>                        
+        </antcall>                                    
+        <touch file="${build}/component.last-testrun"/>
     </target>
 
 
