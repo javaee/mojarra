@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.21 2002/08/31 23:16:10 craigmcc Exp $
+ * $Id: UIComponentBase.java,v 1.22 2002/09/20 01:32:42 craigmcc Exp $
  */
 
 /*
@@ -1276,41 +1276,57 @@ public abstract class UIComponentBase implements UIComponent {
 
 
     /**
-     * <p>If this <code>UIComponent</code> has a non-null
-     * <code>modelReference</code> property, and the current
-     * <code>valid</code> property of this component is <code>true</code>,
-     * use the <code>setModelValue()</code> method of the specified
-     * {@link FacesContext} to update the corresponding model data
-     * from the current value of this component.  If an error occurs
-     * during the update processing, set the <code>valid</code> property
-     * of this component to <code>false</code>.</p>
-     *
-     * <p>This method can be overridden by custom component classes when
-     * more complex update logic is required.</p>
+     * <p>Perform the following algorithm to update the model data
+     * associated with this component, if any, as appropriate.</p>
+     * <ul>
+     * <li>If the <code>valid</code> property of this component is
+     *     <code>false</code>, return <code>false</code>.</li>
+     * <li>If the <code>modelReference</code> property of this component
+     *     is <code>null</code>, return <code>true</code>.</li>
+     * <li>Call the <code>setModelValue()</code> method on the specified
+     *     {@link FacesContext} instance, passing this component's
+     *     <code>modelReference</code> property and its local value.</li>
+     * <li>If the <code>setModelValue()</code> method returns successfully:
+     *     <ul>
+     *     <li>Clear the local value of this component.</li>
+     *     <li>Set the <code>valid</code> property of this component to
+     *         <code>true</code>.</li>
+     *     <li>Return <code>true</code> to the caller.</li>
+     *     </ul></li>
+     * <li>If the <code>setModelValue()</code> method call fails:
+     *     <ul>
+     *     <li>Enqueue error messages by calling <code>addMessage()</code>
+     *         on the specified {@link FacesContext} instance.</li>
+     *     <li>Set the <code>valid</code> property of this component to
+     *         <code>false</code>.</li>
+     *     <li>Return <code>false</code> to the caller.</li>
+     *     </ul></li>
+     * </ul>
      *
      * @param context FacesContext for the request we are processing
      *
-     * @exception FacesException if an error occurs during execution
-     *  of the <code>setModelValue()</code> method
      * @exception IllegalArgumentException if the <code>modelReference</code>
      *  property has invalid syntax for an expression
      * @exception NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
-    public void updateModel(FacesContext context) {
+    public boolean updateModel(FacesContext context) {
 
         if (context == null) {
             throw new NullPointerException();
         }
         if (!isValid()) {
-            return;
+            return (false);
         }
         String modelReference = getModelReference();
         if (modelReference == null) {
-            return;
+            return (true);
         }
         try {
             context.setModelValue(modelReference, getValue());
+            setValid(true);
+            setValue(null);
+            return (true);
         } catch (FacesException e) {
             setValid(false);
             throw e;

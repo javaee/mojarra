@@ -1,5 +1,5 @@
 /*
- * $Id: UIOutput.java,v 1.17 2002/08/30 20:11:20 craigmcc Exp $
+ * $Id: UIOutput.java,v 1.18 2002/09/20 01:32:43 craigmcc Exp $
  */
 
 /*
@@ -111,10 +111,18 @@ public class UIOutput extends UIComponentBase {
      * even if there is a non-null <code>modelReference</code> expression.
      *
      * @param context FacesContext for the request we are processing
+     *
+     * @exception IllegalArgumentException if the <code>modelReference</code>
+     *  property has invalid syntax for an expression
+     * @exception NullPointerException if <code>context</code>
+     *  is <code>null</code>
      */
-    public void updateModel(FacesContext context) {
+    public boolean updateModel(FacesContext context) {
 
-        ; // No action required
+        if (context == null) {
+            throw new NullPointerException();
+        }
+        return (true);
 
     }
 

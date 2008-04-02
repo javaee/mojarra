@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectItems.java,v 1.3 2002/08/30 20:11:20 craigmcc Exp $
+ * $Id: UISelectItems.java,v 1.4 2002/09/20 01:32:43 craigmcc Exp $
  */
 
 /*
@@ -160,20 +160,21 @@ public class UISelectItems extends UIComponentBase {
 
 
     /**
-     * <p>Override the default behavior and take no action.</p>
+     * <p>Suppress model updates for this component.</p>
      *
      * @param context FacesContext for the request we are processing
      *
+     * @exception IllegalArgumentException if the <code>modelReference</code>
+     *  property has invalid syntax for an expression
      * @exception NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
-    public void updateModel(FacesContext context) {
+    public boolean updateModel(FacesContext context) {
 
         if (context == null) {
             throw new NullPointerException();
         }
-
-        // No updating is performed
+        return (true);
 
     }
 

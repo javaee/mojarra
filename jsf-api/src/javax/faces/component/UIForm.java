@@ -1,5 +1,5 @@
 /*
- * $Id: UIForm.java,v 1.17 2002/08/15 16:51:16 craigmcc Exp $
+ * $Id: UIForm.java,v 1.18 2002/09/20 01:32:43 craigmcc Exp $
  */
 
 /*
@@ -140,20 +140,17 @@ public class UIForm extends UIComponentBase {
      *
      * @param context FacesContext for the request we are processing
      *
-     * @exception FacesException if an error occurs during execution
-     *  of the <code>setModelValue()</code> method
      * @exception IllegalArgumentException if the <code>modelReference</code>
      *  property has invalid syntax for an expression
      * @exception NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
-    public void updateModel(FacesContext context) {
+    public boolean updateModel(FacesContext context) {
 
         if (context == null) {
             throw new NullPointerException();
         }
-
-        ; // No action required
+        return (true);
 
     }
 

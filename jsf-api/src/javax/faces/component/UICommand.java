@@ -1,5 +1,5 @@
 /*
- * $Id: UICommand.java,v 1.21 2002/08/30 20:11:19 craigmcc Exp $
+ * $Id: UICommand.java,v 1.22 2002/09/20 01:32:42 craigmcc Exp $
  */
 
 /*
@@ -191,20 +191,17 @@ public class UICommand extends UIComponentBase {
      *
      * @param context FacesContext for the request we are processing
      *
-     * @exception FacesException if an error occurs during execution
-     *  of the <code>setModelValue()</code> method
      * @exception IllegalArgumentException if the <code>modelReference</code>
      *  property has invalid syntax for an expression
      * @exception NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
-    public void updateModel(FacesContext context) {
+    public boolean updateModel(FacesContext context) {
 
         if (context == null) {
             throw new NullPointerException();
         }
-
-        ; // No action required
+        return (true);
 
     }
 
