@@ -1,5 +1,5 @@
 /*
- * $Id: TestConverters.java,v 1.39 2006/08/07 21:08:49 rogerk Exp $
+ * $Id: TestConverters.java,v 1.40 2007/01/30 00:38:55 rlubke Exp $
  */
 
 /*
@@ -53,13 +53,14 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
+import java.util.Locale;
 
 /**
  * Test encode and decode methods in Renderer classes.
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestConverters.java,v 1.39 2006/08/07 21:08:49 rogerk Exp $
+ * @version $Id: TestConverters.java,v 1.40 2007/01/30 00:38:55 rlubke Exp $
  */
 
 public class TestConverters extends JspFacesTestCase {
@@ -123,6 +124,7 @@ public class TestConverters extends JspFacesTestCase {
         try {
             // create a dummy root for the tree.
             UIViewRoot root = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
+            root.setLocale(Locale.US);
             root.setId("root");
 
             testDateConverter(root);
