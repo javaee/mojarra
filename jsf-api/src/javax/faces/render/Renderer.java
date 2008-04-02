@@ -1,5 +1,5 @@
 /*
- * $Id: Renderer.java,v 1.26 2003/10/29 04:20:10 eburns Exp $
+ * $Id: Renderer.java,v 1.27 2003/10/29 15:13:19 eburns Exp $
  */
 
 /*
@@ -81,7 +81,11 @@ public abstract class Renderer {
      * @exception NullPointerException if <code>context</code>
      *  or <code>component</code> is <code>null</code>
      */
-    public abstract void decode(FacesContext context, UIComponent component);
+    public void decode(FacesContext context, UIComponent component) {
+	if (null == context || null == component) {
+	    throw new NullPointerException();
+	}
+    }
 
 
     /**
@@ -102,9 +106,13 @@ public abstract class Renderer {
      * @exception NullPointerException if <code>context</code>
      *  or <code>component</code> is null
      */
-    public abstract void encodeBegin(FacesContext context,
-                                     UIComponent component)
-        throws IOException;
+    public void encodeBegin(FacesContext context,
+			    UIComponent component)
+        throws IOException {
+	if (null == context || null == component) {
+	    throw new NullPointerException();
+	}
+    }
 
 
     /**
@@ -151,9 +159,13 @@ public abstract class Renderer {
      * @exception NullPointerException if <code>context</code>
      *  or <code>component</code> is <code>null</code>
      */
-    public abstract void encodeEnd(FacesContext context,
-                                   UIComponent component)
-        throws IOException;
+    public void encodeEnd(FacesContext context,
+			  UIComponent component)
+        throws IOException {
+	if (null == context || null == component) {
+	    throw new NullPointerException();
+	}
+    }
 
     /**
      * <p>Convert the component generated client id to a form suitable
