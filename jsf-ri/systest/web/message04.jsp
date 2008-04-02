@@ -53,12 +53,12 @@
 
   // Check specific message characteristics (en_US)
   message = mr.getMessage(facesContext, "Custom2B");
-  if (!"This Is Custom 2B Detail (en)".equals(message.getDetail())) {
+  if (!"This Is Custom2B Detail (en)".equals(message.getDetail())) {
     out.println("/message04.jsp FAILED - Bad en_US detail '" +
                 message.getDetail() + "'");
     return;
   }
-  if (!"This Is Custom 2B Summary (en)".equals(message.getSummary())) {
+  if (!"This Is Custom2B Summary (en)".equals(message.getSummary())) {
     out.println("/message04.jsp FAILED - Bad en_US summary '" +
                 message.getSummary() + "'");
     return;
@@ -77,12 +77,12 @@
 
   // Check specific message characteristics (fr_FR)
   message = mr.getMessage(facesContext, "Custom2B");
-  if (!"This Is Custom 2B Detail (fr)".equals(message.getDetail())) {
+  if (!"This Is Custom2B Detail (fr)".equals(message.getDetail())) {
     out.println("/message04.jsp FAILED - Bad fr_FR detail '" +
                 message.getDetail() + "'");
     return;
   }
-  if (!"This Is Custom 2B Summary (fr)".equals(message.getSummary())) {
+  if (!"This Is Custom2B Summary (fr)".equals(message.getSummary())) {
     out.println("/message04.jsp FAILED - Bad fr_FR summary '" +
                 message.getSummary() + "'");
     return;
