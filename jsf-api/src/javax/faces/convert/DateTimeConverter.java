@@ -1,5 +1,5 @@
 /*
- * $Id: DateTimeConverter.java,v 1.11 2003/09/30 19:15:32 rlubke Exp $
+ * $Id: DateTimeConverter.java,v 1.12 2003/10/01 17:57:20 rlubke Exp $
  */
 
 /*
@@ -71,15 +71,20 @@ import javax.faces.context.FacesContext;
 
 public class DateTimeConverter implements Converter, StateHolder {
 
+    // -------------------------------------------------------- Static Variables
+    
+    
+    private static final TimeZone DEFAULT_TIME_ZONE = TimeZone.getDefault();
 
+    
     // ------------------------------------------------------ Instance Variables
 
 
     private String dateStyle = "default";
-    private Locale parseLocale = null;
+    private Locale locale = null;
     private String pattern = null;
     private String timeStyle = "default";
-    private TimeZone timeZone = null;
+    private TimeZone timeZone = DEFAULT_TIME_ZONE;
     private String type = "date";
 
 
@@ -88,7 +93,7 @@ public class DateTimeConverter implements Converter, StateHolder {
 
     /**
      * <p>Return the style to be used to format or parse dates.  If not set,
-     * the default value will be "default".</p>
+     * the default value, <code>default<code>, is returned.</p>
      */
     public String getDateStyle() {
 
@@ -114,27 +119,32 @@ public class DateTimeConverter implements Converter, StateHolder {
 
 
     /**
-     * <p>Return the <code>Locale</code> to be used when parsing numbers.
-     * If this value is <code>null</code>, the <code>Locale</code> stored
-     * in {@link FacesContext} for the current request will be utilized.</p>
+     * <p>Return the <code>Locale</code> to be used when parsing or formatting
+     * dates and times. If not explicitly set, the <code>Locale</code> stored
+     * in the {@link FacesContext} for the current request is returned.</p>
      */
-    public Locale getParseLocale() {
+    public Locale getLocale() {
 
-        return (this.parseLocale);
+        if (this.locale == null) {
+            this.locale =
+                getLocale(FacesContext.getCurrentInstance());
+        }
+        return (this.locale);
 
     }
 
 
     /**
-     * <p>Set the <code>Locale</code> to be used when parsing numbers.
-     * If set to <code>null</code>, the <code>Locale</code> stored in
-     * {@link FacesContext} for the current request will be utilized.</p>
+     * <p>Set the <code>Locale</code> to be used when parsing or formatting
+     * dates and times.  If set to <code>null</code>, the <code>Locale</code> 
+     * stored in {@link FacesContext} for the current request will 
+     * be utilized.</p>
      *
-     * @param parseLocale The new <code>Locale</code> (or <code>null</code>)
+     * @param locale The new <code>Locale</code> (or <code>null</code>)
      */
-    public void setParseLocale(Locale parseLocale) {
+    public void setLocale(Locale locale) {
 
-        this.parseLocale = parseLocale;
+        this.locale = locale;
 
     }
 
@@ -168,7 +178,7 @@ public class DateTimeConverter implements Converter, StateHolder {
 
     /**
      * <p>Return the style to be used to format or parse times.  If not set,
-     * the default value will be "default".</p>
+     * the default value, <code>default</code>, is returned.</p>
      */
     public String getTimeStyle() {
 
@@ -195,7 +205,8 @@ public class DateTimeConverter implements Converter, StateHolder {
 
     /**
      * <p>Return the <code>TimeZone</code> used to interpret a time value.
-     * If not set, the default time zone of the server will be used.</p>
+     * If not explicitly set, the default time zone of the server is 
+     * returned.</p>
      */
     public TimeZone getTimeZone() {
 
@@ -218,7 +229,8 @@ public class DateTimeConverter implements Converter, StateHolder {
 
     /**
      * <p>Return the type of value to be formatted or parsed.
-     * If not modified, the default type is <code>date</code>.</p>
+     * If not explicitly set, the default type, <code>date</code> 
+     * is returned.</p>
      */
     public String getType() {
 
@@ -264,14 +276,12 @@ public class DateTimeConverter implements Converter, StateHolder {
             }
 
             // Identify the Locale to use for parsing
-            Locale locale = getLocale(context, component);
+            Locale locale = getLocale(context);
 
             // Create and configure the parser to be used
             DateFormat parser =
-                getDateFormat(context, component, locale);
-            if (timeZone != null) {
-                parser.setTimeZone(timeZone);
-            }
+                getDateFormat(context, locale);         
+            parser.setTimeZone(timeZone);            
 
             // Perform the requested parsing
             return (parser.parse(value));
@@ -304,14 +314,12 @@ public class DateTimeConverter implements Converter, StateHolder {
             }
 
             // Identify the Locale to use for formatting
-            Locale locale = getLocale(context, component);
+            Locale locale = getLocale(context);
 
             // Create and configure the formatter to be used
             DateFormat formatter =
-                getDateFormat(context, component, locale);
-            if (timeZone != null) {
-                formatter.setTimeZone(timeZone);
-            }
+                getDateFormat(context, locale);
+            formatter.setTimeZone(timeZone);            
 
             // Perform the requested formatting
             return (formatter.format(value));
@@ -332,32 +340,34 @@ public class DateTimeConverter implements Converter, StateHolder {
      * <p>Return a <code>DateFormat</code> instance to use for formatting
      * and parsing in this {@link Converter}.</p>
      *
-     * @param context The {@link FacesContext} for the current request
-     * @param component The {@link UIComponent} for which we are converting
+     * @param context The {@link FacesContext} for the current request     
      * @param locale The <code>Locale</code> used to select formatting
      *  and parsing conventions
      *
      * @exception ConverterException if no instance can be created
      */
-    private DateFormat getDateFormat
-        (FacesContext context, UIComponent component, Locale locale) {
+    private DateFormat getDateFormat (FacesContext context, Locale locale) {
 
         // PENDING(craigmcc) - Implement pooling if needed for performance?
-
+        
+        if (pattern == null && type == null) {
+            throw new IllegalArgumentException("Either pattern or type must" +
+                " be specified.");
+        }    
+        
         DateFormat df = null;
-        if ((pattern != null) && !pattern.equals("")) {
+        if (pattern != null) {
             df = new SimpleDateFormat(pattern, locale);
         } else if (type.equals("both")) {
             df = DateFormat.getDateTimeInstance
-                (getStyle(dateStyle), getStyle(timeStyle));
+                (getStyle(dateStyle), getStyle(timeStyle), locale);
         } else if (type.equals("date")) {
-            df = DateFormat.getDateInstance(getStyle(dateStyle));
+            df = DateFormat.getDateInstance(getStyle(dateStyle), locale);
         } else if (type.equals("time")) {
-            df = DateFormat.getTimeInstance(getStyle(timeStyle));
+            df = DateFormat.getTimeInstance(getStyle(timeStyle), locale);
         } else {
             // PENDING(craigmcc) - i18n
-            throw new ConverterException
-                (new IllegalArgumentException(type));
+            new IllegalArgumentException("Invalid type: " + type);
         }
         df.setLenient(false);
         return (df);
@@ -369,19 +379,15 @@ public class DateTimeConverter implements Converter, StateHolder {
      * <p>Return the <code>Locale</code> we will use for localizing our
      * formatting and parsing processing.</p>
      *
-     * @param context The {@link FacesContext} for the current request
-     * @param component The {@link UIComponent} for which we are converting
+     * @param context The {@link FacesContext} for the current request     
      */
-    private Locale getLocale(FacesContext context, UIComponent component) {
+    private Locale getLocale(FacesContext context) {
 
         // PENDING(craigmcc) - JSTL localization context?
-        Locale locale = parseLocale;
+        Locale locale = this.locale;
         if (locale == null) {
             locale = context.getLocale();
-        }
-        if (locale == null) {
-            locale = Locale.getDefault();
-        }
+        }        
         return (locale);
 
     }
@@ -421,7 +427,7 @@ public class DateTimeConverter implements Converter, StateHolder {
 
         Object values[] = new Object[6];
         values[0] = dateStyle;
-        values[1] = parseLocale;
+        values[1] = locale;
         values[2] = pattern;
         values[3] = timeStyle;
         values[4] = timeZone;
@@ -435,7 +441,7 @@ public class DateTimeConverter implements Converter, StateHolder {
 
         Object values[] = (Object[]) state;
         dateStyle = (String) values[0];
-        parseLocale = (Locale) values[1];
+        locale = (Locale) values[1];
         pattern = (String) values[2];
         timeStyle = (String) values[3];
         timeZone = (TimeZone) values[4];
