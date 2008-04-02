@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+
+<!--
+ Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+-->
+
+
+<!DOCTYPE taglib
+PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.2//EN"
+"http://java.sun.com/dtd/web-jsptaglibrary_1_2.dtd">
+
+<taglib>
+
+  <!-- ============== Tag Library Description Elements ============= -->
+
+<tlib-version>1.0</tlib-version>
+<jsp-version>1.2</jsp-version>
+<short-name>HTML Tags</short-name>
+<uri>http://java.sun.com/jsf/html</uri>
+<description>
+  This tag library contains JavaServer Faces component tags for all
+  UIComponent + HTML RenderKit Renderer combinations defined in the
+  JavaServer Faces Specification.
+</description>
+
+<!-- ============== Tag Library Validator ============= -->
+
+<validator>
+  <validator-class>
+    com.sun.faces.taglib.html_basic.HtmlBasicValidator
+  </validator-class>
+</validator>
+
+<!-- ===================== HTML 4.0 basic tags ====================== -->

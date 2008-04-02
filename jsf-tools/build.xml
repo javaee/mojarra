@@ -15,7 +15,6 @@
 
   <property file="build.properties"/>                <!-- Component local   -->
   <property file="${user.home}/build.properties"/>   <!-- User local        -->
-  <property file="../build.properties"/>             <!-- Commons local     -->
 
   <property name="Name"             value="JavaServer Faces Tools"/>
   <property name="name"             value="jsf-tools"/>
@@ -54,6 +53,7 @@
   <property name="build.lib"        value="${build.dir}/lib"/>
   <property name="build.test"       value="${build.dir}/test"/>
   <property name="build.generate"   value="${build.dir}/generate"/>
+  <property name="build.generate.tld"   value="${build.dir}/generate/conf/share"/>
   <property name="build.javadocs"   value="${build.dir}/javadocs"/>
   <property name="build.mifdocs"    value="${build.dir}/mifdocs"/>
   <property name="javadoc.private"  value="false"/>
@@ -97,6 +97,7 @@
     <mkdir dir="${build.classes}"/>
     <mkdir dir="${build.lib}"/>
     <mkdir dir="${build.generate}"/>
+    <mkdir dir="${build.generate.tld}"/>
   </target>
 
   <target name="set.required-properties" 
@@ -134,7 +135,7 @@ necessary to generate required classes.
          Build the Code Generating code
        ===================================================================
   -->
-  <target name="build" depends="generate">
+  <target name="build" depends="generate, generate.taglib">
   </target>
 
   <target name="generate" depends="tools,check.generation.necessity" 
@@ -154,19 +155,30 @@ necessary to generate required classes.
       <arg value="-c"/> <arg path="${basedir}/COPYRIGHT"/>
     </java>
 
+    <touch file="${build.generate}/last-generation"/>
+  </target>
+
+  <target name="generate.taglib" depends="tools,check.taglib.generation.necessity"
+          if="standard-html-renderkit-impl" unless="skip.taglib.generation">
+
+    <copy todir="${build.classes}"
+          file="${jsf-api.dir}/doc/web-facesconfig_1_0.dtd"/>
+
     <java fork="yes" 
 	  classname="com.sun.faces.generate.GenerateTaglib">
-      <!-- <jvmarg line="${debug.jvm.args}"/> -->
+      <!-- <jvmarg line="${debug.jvm.args}"/> --> 
       <classpath refid="compile.classpath" />
       <classpath refid="run.classpath" />
       <arg value="-f"/> <arg path="${standard-html-renderkit}"/>
       <arg value="-e"/> <arg path="${standard-html-renderkit-impl}"/>
+      <arg value="-a"/> <arg path="${build.generate.tld}"/>
       <arg value="-d"/> <arg path="${build.generate}"/>
       <arg value="-c"/> <arg path="${basedir}/COPYRIGHT"/>
+      <arg value="-b"/> <arg path="${basedir}/TLD-TOP"/>
     </java>
 
 
-    <touch file="${build.generate}/last-generation"/>
+    <touch file="${build.generate}/last-taglib-generation"/>
 
   </target>
 
@@ -199,6 +211,15 @@ necessary to generate required classes.
     </uptodate>
   </target>
 
+  <target name="check.taglib.generation.necessity" if="standard-html-renderkit-impl">
+    <uptodate property="skip.taglib.generation"
+              targetfile="${build.generate}/last-taglib-generation">
+       <srcfiles dir="${jsf-api.dir}/doc">
+         <include name="*.xml"/>               
+       </srcfiles>
+    </uptodate>
+  </target>
+
   <!--
        ===================================================================
          Clean up build and distribution directories
@@ -217,6 +238,17 @@ necessary to generate required classes.
 
   <target name="clean.generated" description="Clean generated code">
     <delete dir="${build.generate}" />
+  </target>
+
+  <target name="clean.generated.components" description="Clean generated components code">
+    <delete dir="${build.generate}/javax" />
+    <delete file="${build.generate}/last-generation" />
+  </target>
+
+  <target name="clean.generated.taglib" description="Clean generated taglib code">
+    <delete dir="${build.generate}/com" />
+    <delete dir="${build.generate}/conf" />
+    <delete file="${build.generate}/last-taglib-generation" />
   </target>
 
   <!--
