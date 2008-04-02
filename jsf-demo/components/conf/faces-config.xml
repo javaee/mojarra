@@ -95,11 +95,6 @@
   </component>
 
   <component>
-    <component-type>Calendar</component-type>
-    <component-class>components.components.CalendarComponent</component-class>
-  </component>
-
-  <component>
     <component-type>Chart</component-type>
     <component-class>components.components.ChartComponent</component-class>
     
@@ -168,15 +163,6 @@
         <attribute-name>styleClass</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
       </attribute>
-    </renderer>
-
-    <renderer>
-      <description>
-        Renderer for a Calendar component that accepts date inputs.
-      </description>
-      <component-family>Calendar</component-family>
-      <renderer-type>Calendar</renderer-type>
-      <renderer-class>components.renderkit.CalendarRenderer</renderer-class>
     </renderer>
 
     <renderer>
