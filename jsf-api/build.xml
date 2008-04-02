@@ -413,8 +413,7 @@
                    assert.classes="${assertion.classes}">
             <tests>
                 <fileset dir="${build.test.dir}"
-                         includes="javax/faces/component/*TestCase.class"
-                         excludes="javax/faces/component/UIDataTestCase.class"/>
+                         includes="javax/faces/component/*TestCase.class"/>
             </tests>
         </jsf.junit>
     </target>

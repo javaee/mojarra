@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBaseTestCase.java,v 1.34 2006/02/10 16:02:08 edburns Exp $
+ * $Id: UIComponentBaseTestCase.java,v 1.35 2006/02/13 16:30:35 edburns Exp $
  */
 
 /*
@@ -1092,6 +1092,40 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
 
         foundComponent = null;
         boolean result = false;
+        boolean exceptionThrown = false;
+
+	// Negative case 0, null pointers
+	exceptionThrown = false;
+	FacesContext nullContext = null;
+	ContextCallback nullCallback = null;
+	try {
+	    root.invokeOnComponent(nullContext, "form:input7", 
+				   nullCallback);
+	}
+	catch (NullPointerException npe) {
+	    exceptionThrown = true;
+	}
+	assertTrue(exceptionThrown);
+
+ 	exceptionThrown = false;
+	try {
+	    root.invokeOnComponent(facesContext, null, 
+				   nullCallback);
+	}
+	catch (NullPointerException npe) {
+	    exceptionThrown = true;
+	}
+	assertTrue(exceptionThrown);
+
+ 	exceptionThrown = false;
+	try {
+	    root.invokeOnComponent(nullContext, null, 
+				   nullCallback);
+	}
+	catch (NullPointerException npe) {
+	    exceptionThrown = true;
+	}
+	assertTrue(exceptionThrown);
 
         // Negative case 1, not found component.
         result = root.invokeOnComponent(facesContext, 
@@ -1106,7 +1140,7 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
         // Negative case 2A, callback throws exception with found component
         foundComponent = null;
         result = false;
-        boolean exceptionThrown = false;
+        exceptionThrown = false;
         try {
             result = root.invokeOnComponent(facesContext,
                     "form2:input2",

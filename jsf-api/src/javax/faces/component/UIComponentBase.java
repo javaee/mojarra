@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.127 2006/02/10 16:02:08 edburns Exp $
+ * $Id: UIComponentBase.java,v 1.128 2006/02/13 16:30:34 edburns Exp $
  */
 
 /*
@@ -701,6 +701,10 @@ public abstract class UIComponentBase extends UIComponent {
     public boolean invokeOnComponent(FacesContext context, String clientId, 
 				     ContextCallback callback) 
 	throws FacesException {
+	if (null == context || null == clientId || null == callback) {
+	    throw new NullPointerException();
+	}
+
 	boolean found = false;        
 	if (clientId.equals(this.getClientId(context))) {
 	    try {

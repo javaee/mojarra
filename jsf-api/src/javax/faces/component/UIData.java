@@ -689,6 +689,110 @@ public class UIData extends UIComponentBase
         }
 
     }
+    
+    /**
+     * <p>Override behavior from {@link
+     * UIComponentBase#invokeOnComponent} to provide special care for
+     * positioning the data properly before finding the component and
+     * invoking the callback on it.  If the argument
+     * <code>clientId</code> is equal to <code>this.getClientId()</code>
+     * simply invoke the <code>contextCallback</code>, passing the
+     * <code>context</code> argument and <b>this</b> as arguments, and
+     * return <code>true.</code> Otherwise, attempt to extract a
+     * rowIndex from the <code>clientId</code>.  For example, if the
+     * argument <code>clientId</code> was
+     * <code>form:data:3:customerHeader</code> the rowIndex would be
+     * <code>3</code>.  Let this value be called <code>newIndex</code>.
+     * The current rowIndex of this instance must be saved aside and
+     * restored before returning in all cases, regardless of the outcome
+     * of the search or if any exceptions are thrown in the process.</p>
+     * 
+     * <p>The implementation of this method must never return
+     * <code>true</code> if setting the rowIndex of this instance to be
+     * equal to <code>newIndex</code> causes this instance to return
+     * <code>false</code> from {@link #isRowAvailable}.</p>
+     *
+     * @since 1.2
+     * @throws NullPointerException {@inheritDoc}
+     * @throws FacesException {@inheritDoc}  Also throws 
+     * <code>FacesException</code> if any exception is thrown when deriving
+     * the rowIndex from the argument <code>clientId</code>.
+     *
+     */ 
+    public boolean invokeOnComponent(FacesContext context, String clientId, 
+            ContextCallback callback) throws FacesException {
+	if (null == context || null == clientId || null == callback) {
+	    throw new NullPointerException();
+	}
+
+        String myId = this.getClientId(context);
+	boolean found = false;        
+	if (clientId.equals(myId)) {
+	    try {
+		callback.invokeContextCallback(context, this);
+		return true;
+	    }
+	    catch (Exception e) {
+		throw new FacesException(e);
+	    }
+	} 
+        int lastSep, newRow, savedRowIndex = this.getRowIndex();
+        try {
+            // If we need to strip out the rowIndex from our id
+            // PENDING(edburns): is this safe with respect to I18N?
+            if (myId.endsWith("" + savedRowIndex)) {
+                lastSep = myId.lastIndexOf(NamingContainer.SEPARATOR_CHAR);
+                assert(-1 != lastSep);
+                myId = myId.substring(0, lastSep);
+            }
+        
+	    // myId will be something like form:outerData for a non-nested table,
+            // and form:outerData:3:data for a nested table.
+            // clientId will be something like form:outerData:3:outerColumn
+	    // for a non-nested table.  clientId will be something like
+	    // outerData:3:data:3:input for a nested table.
+            if (clientId.startsWith(myId)) {
+                int preRowIndexSep, postRowIndexSep;
+                
+                if (-1 != (preRowIndexSep = 
+                           clientId.indexOf(NamingContainer.SEPARATOR_CHAR, 
+                                            myId.length()))) {
+                    // Check the length
+                    if (++preRowIndexSep < clientId.length()) {
+                        if (-1 != (postRowIndexSep =
+                                clientId.indexOf(NamingContainer.SEPARATOR_CHAR,
+                                preRowIndexSep + 1))) {
+                            try {
+                                newRow = Integer.valueOf(clientId.substring(preRowIndexSep,
+                                        postRowIndexSep)).intValue();
+                            } catch (NumberFormatException ex) {
+                                // PENDING(edburns): I18N
+                                String message = "Trying to extract rowIndex from clientId \'" + 
+                                        clientId + "\' " + ex.getMessage();
+                                throw new NumberFormatException(message); 
+                            }
+                            this.setRowIndex(newRow);
+                            if (this.isRowAvailable()) {
+                                found = super.invokeOnComponent(context, 
+                                        clientId, callback);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        catch (FacesException fe) {
+            throw fe;
+        }
+        catch (Exception e) {
+            throw new FacesException(e);
+        }
+        finally {
+            this.setRowIndex(savedRowIndex);
+        }
+	return found;
+    }
+    
 
 
     /**
@@ -1276,33 +1380,10 @@ public class UIData extends UIComponentBase
         while (facetNames.hasNext()) {
             UIComponent c = component.getFacet( (String) facetNames.next() );
             if (c!=null)
-                restoreDescendantState(c, context);
+                saveDescendantState(c, context);
         }
 
     }
-
-
-    /**
-     * <p>Return a client identifier for this component that includes the
-     * current value of the <code>rowIndex</code> property, if it is not
-     * set to -1.  This implies that multiple calls to
-     * <code>getClientId()</code> may return different results,
-     * but ensures that child components can themselves generate
-     * row-specific client identifiers (since {@link UIData} is a
-     * {@link NamingContainer}).</p>
-     *
-     * @throws NullPointerException if <code>context</code>
-     *  is <code>null</code>
-     */
-    public String getContainerClientId(FacesContext context) {
-        String baseClientId = super.getContainerClientId(context);
-        if (rowIndex >= 0) {
-            return (baseClientId + NamingContainer.SEPARATOR_CHAR + rowIndex);
-        } else {
-            return (baseClientId);
-        }
-    }
-
 
 }
 

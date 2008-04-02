@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.141 2006/02/10 16:02:08 edburns Exp $
+ * $Id: UIComponent.java,v 1.142 2006/02/13 16:30:34 edburns Exp $
  */
 
 /*
@@ -422,6 +422,9 @@ public abstract class UIComponent implements StateHolder {
      * that matches the specified search expression (if any), according to the
      * algorithm described below.</p>
      *
+     * <p>For a method to find a component given a simple
+     * <code>clientId</code>, see {@link #invokeOnComponent}.</p>
+     *
      * <p>Component identifiers are required to be unique within the scope of
      * the closest ancestor {@link NamingContainer} that encloses this
      * component (which might be this component itself).  If there are no
@@ -533,6 +536,25 @@ public abstract class UIComponent implements StateHolder {
      * #getFacetsAndChildren} returned <code>true</code> from
      * <code>invokeOnComponent()</code>, return <code>false</code>.</p>
      *
+     * <p>Simple usage example to find a component by
+     * <code>clientId</code>.</p>
+
+* <pre><code>
+private UIComponent found = null;
+
+private void doFind(FacesContext context, String clientId) {
+  context.getViewRoot().invokeOnComponent(context, clientId,
+      new ContextCallback() {
+         public void invokeOnComponent(FacesContext context,
+                                       UIComponent component) {
+           found = component;
+         }
+      });
+}
+* </code></pre>
+
+     *
+     *
      * @since 1.2
      *
      * @param context the {@link FacesContext} for the current request
@@ -545,12 +567,13 @@ public abstract class UIComponent implements StateHolder {
      * @throws NullPointerException if any of the arguments are null
      *
      * @throws FacesException if the argument Callback throws an
-     * Exception, it is wrapped in a FacesException and re-thrown.
+     * Exception, it is wrapped in a <code>FacesException</code> and re-thrown.  
      *
-     * @return true if the a component with the given clientId is found,
-     * the callback method was successfully invoked passing that component
-     * as an argument, and no Exception was thrown.  Returns false if no
-     * component with the given clientId is found.
+     * @return <code>true</code> if the a component with the given
+     * <code>clientId</code> is found, the callback method was
+     * successfully invoked passing that component as an argument, and
+     * no Exception was thrown.  Returns <code>false</code> if no
+     * component with the given <code>clientId</code> is found.
      *
      */
     

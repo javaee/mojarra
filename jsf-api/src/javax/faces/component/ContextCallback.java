@@ -2,7 +2,7 @@
  * ComponentCallback.java
  *
  * Created on February 9, 2006, 12:58 PM
- * $Id: ContextCallback.java,v 1.1 2006/02/10 16:02:07 edburns Exp $
+ * $Id: ContextCallback.java,v 1.2 2006/02/13 16:30:34 edburns Exp $
  */
 
 /*
@@ -46,12 +46,22 @@ import javax.faces.context.FacesContext;
 public interface ContextCallback {
     
     /**
-     * <p>This method will be called by an implementation of 
-     * {@link UIComponent#invokeOnComponent}.  At the point in time when this 
-     * method is called, the argument <code>target</code> is guaranteed to be
-     * in the proper state with respect to its ancestors in the View.
+     * <p>This method will be called by an implementation of {@link
+     * UIComponent#invokeOnComponent} and must be passed the component
+     * with the <code>clientId</code> given as an argument to
+     * <code>invokeOnComponent</code>.  At the point in time when this
+     * method is called, the argument <code>target</code> is guaranteed
+     * to be in the proper state with respect to its ancestors in the
+     * View.</p>
+     *
+     * @param context the <code>FacesContext</code> for this request.
+     *
+     * @param target the {@link UIComponent} that was located by
+     * <code>clientId</code> by a call to {@link
+     * UIComponent#invokeOnComponent}.
      */
     
-    public void invokeContextCallback(FacesContext context, UIComponent target) throws FacesException;
+    public void invokeContextCallback(FacesContext context, 
+				      UIComponent target);
     
 }

@@ -1,5 +1,5 @@
 /*
- * $Id: UIDataTestCase.java,v 1.42 2005/10/19 19:51:11 edburns Exp $
+ * $Id: UIDataTestCase.java,v 1.43 2006/02/13 16:30:35 edburns Exp $
  */
 
 /*
@@ -44,20 +44,18 @@ import javax.faces.FactoryFinder;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
-import javax.faces.convert.Converter;
-import javax.faces.convert.ConverterException;
-import javax.faces.convert.LongConverter;
-import javax.faces.convert.ShortConverter;
 import javax.faces.el.ValueBinding;
 import javax.faces.event.ActionEvent;
 import com.sun.faces.mock.MockExternalContext;
 import com.sun.faces.mock.MockResponseWriter;
+import javax.faces.FacesException;
+import javax.faces.TestUtil;
+import javax.faces.component.UIComponentBaseTestCase;
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
 import javax.faces.render.Renderer;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
-import junit.framework.TestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
@@ -480,6 +478,551 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
 
     }
 
+    UIComponent getNamingContainer(UIComponent start) {
+        UIComponent namingContainer = start.getParent();
+        while (namingContainer != null) {
+            if (namingContainer instanceof NamingContainer) {
+                return namingContainer;
+            }
+            namingContainer = namingContainer.getParent();
+        }
+        return null;
+    }
+
+
+    public void testInvokeOnComponent() throws Exception {
+
+        // Set up for this test
+        setupModel();
+        setupRenderers();
+        UIViewRoot viewRoot = facesContext.getApplication().getViewHandler().createView(facesContext, null);
+        viewRoot.setRenderKitId(RenderKitFactory.HTML_BASIC_RENDER_KIT);
+        viewRoot.setViewId("/view");
+        facesContext.setViewRoot(viewRoot);
+        
+        UIForm form1 = new UIForm(), form2 = new UIForm();
+        form1.setId("form1");
+        form2.setId("form2");
+        viewRoot.getChildren().add(form1);
+        viewRoot.getChildren().add(form2);
+        setupTree(form1, true, true);
+        
+        // replace the "component" ivar with a new instance.
+        component = new UIData();
+        List beans = new ArrayList();
+        
+        for (int i = 0; i < 10; i++) {
+            TestDataBean bean = new TestDataBean();
+            bean.setCommand("command" + i);
+            bean.setInput("input" + i);
+            bean.setOutput("output" + i);
+            beans.add(bean);
+        }
+        DataModel model = new ListDataModel(beans);
+        assertEquals(10, model.getRowCount());
+
+        setupModel();
+        setupTree(form2, true, true);
+        
+        boolean exceptionThrown = false, found = false;
+        // At this point we have two forms, each containing a UIData 
+        
+        UIData data1 = (UIData) viewRoot.findComponent("form1:data");
+        UIData data2 = (UIData) viewRoot.findComponent("form2:data");
+        assertNotNull(data1);
+        assertNotNull(data2);
+
+	// Negative case 0, null pointers
+	exceptionThrown = false;
+	FacesContext nullContext = null;
+	ContextCallback nullCallback = null;
+	try {
+	    viewRoot.invokeOnComponent(nullContext, "form:input7", 
+				   nullCallback);
+	}
+	catch (NullPointerException npe) {
+	    exceptionThrown = true;
+	}
+	assertTrue(exceptionThrown);
+
+ 	exceptionThrown = false;
+	try {
+	    viewRoot.invokeOnComponent(facesContext, null, 
+				   nullCallback);
+	}
+	catch (NullPointerException npe) {
+	    exceptionThrown = true;
+	}
+	assertTrue(exceptionThrown);
+
+ 	exceptionThrown = false;
+	try {
+	    viewRoot.invokeOnComponent(nullContext, null, 
+				   nullCallback);
+	}
+	catch (NullPointerException npe) {
+	    exceptionThrown = true;
+	}
+	assertTrue(exceptionThrown);
+
+        
+        // Case 1, positive invoke on form1:data:commandHeader component of the 4th row
+        found = false;
+        data1.setRowIndex(3);
+        assertEquals(3, data1.getRowIndex());
+        found = viewRoot.invokeOnComponent(facesContext, "form1:data:4:commandHeader",
+                new ContextCallback() {
+
+                  public void invokeContextCallback(FacesContext context, 
+                                                    UIComponent component) {
+                      UIData data = (UIData) getNamingContainer(component);
+                      UIForm form = (UIForm) getNamingContainer(data);
+                      assertEquals(4, data.getRowIndex());
+                      assertEquals("form1", form.getId());
+                      assertEquals("commandHeader", component.getId());
+                  }
+        });
+        assertEquals(3, data1.getRowIndex());
+        assertTrue(found);
+        
+        // Case 2, positive invoke on form2:data:commandHeader component of the 5th row
+        data2.setRowIndex(4);
+        found = false;
+        assertEquals(4, data2.getRowIndex());
+        found = viewRoot.invokeOnComponent(facesContext, "form2:data:5:commandHeader",
+                new ContextCallback() {
+
+                  public void invokeContextCallback(FacesContext context, 
+                                                    UIComponent component) {
+                      UIData data = (UIData) getNamingContainer(component);
+                      UIForm form = (UIForm) getNamingContainer(data);
+                      assertEquals(5, data.getRowIndex());
+                      assertEquals("form2", form.getId());
+                      assertEquals("commandHeader", component.getId());
+                  }
+        });
+        assertEquals(4, data2.getRowIndex());
+        assertTrue(found);
+        
+        // Case 3, not found invoke on form2:data:5:yoyodyne
+        data2.setRowIndex(4);
+        found = false;
+        assertEquals(4, data2.getRowIndex());
+        found = viewRoot.invokeOnComponent(facesContext, "form2:data:5:yoyodyne",
+                new ContextCallback() {
+
+                  public void invokeContextCallback(FacesContext context, 
+                                                    UIComponent component) {
+                      fail();
+                 }
+        });
+        assertEquals(4, data2.getRowIndex());
+        assertTrue(!found);
+        
+        // Case 4, not found due to invalid rowIndex
+        data1.setRowIndex(3);
+        found = false;
+        assertEquals(3, data1.getRowIndex());
+        found = viewRoot.invokeOnComponent(facesContext, "form1:data:999:commandHeader",
+                new ContextCallback() {
+
+                  public void invokeContextCallback(FacesContext context, 
+                                                    UIComponent component) {
+                      fail();
+                 }
+        });
+        assertEquals(3, data1.getRowIndex());
+        assertTrue(!found);
+        
+        // Case 5, not found due to invalid clientId (too many ':')
+        data2.setRowIndex(6);
+        found = false;
+        exceptionThrown = false;
+        assertEquals(6, data2.getRowIndex());
+        try {
+            found = viewRoot.invokeOnComponent(facesContext, "form2:data::7:commandHeader",
+                    new ContextCallback() {
+
+                      public void invokeContextCallback(FacesContext context, 
+                                                        UIComponent component) {
+                          fail();
+                     }
+            });
+        } 
+        catch (FacesException fe) {
+            assertTrue(fe.getCause() instanceof NumberFormatException);
+            exceptionThrown = true;
+        }
+        assertEquals(6, data2.getRowIndex());
+        assertTrue(!found);
+        assertTrue(exceptionThrown);
+        
+        // Case 6, not found due to callback throwing Exception
+        found = false;
+        exceptionThrown = true;
+        data1.setRowIndex(3);
+        assertEquals(3, data1.getRowIndex());
+        try {
+            found = viewRoot.invokeOnComponent(facesContext, "form1:data:4:commandHeader",
+                    new ContextCallback() {
+
+                      public void invokeContextCallback(FacesContext context, 
+                                                        UIComponent component) {
+                          throw new IllegalStateException();
+                      }
+            });
+        } catch (FacesException ex) {
+            assertTrue(ex.getCause() instanceof IllegalStateException);
+            exceptionThrown = true;
+        }
+        assertEquals(3, data1.getRowIndex());
+        assertTrue(!found);
+        assertTrue(exceptionThrown);
+
+
+    }
+    
+    /**
+     * <p>Test invokeOnComponent on the following tree.</p>
+     *
+     * <code><pre>
+     * id:null
+     * type:UIViewRoot
+     *
+     *   id:outerData
+     *   type:UIData
+     *
+     *     id:outerColumn
+     *     type:UIColumn
+     *
+     *       id:form1
+     *       type:UIForm
+     *
+     *         id:data
+     *         type:UIData
+     *
+     *           id:commandColumn
+     *           type:UIColumn
+     *
+     *             id:commandFooter
+     *             type:UIOutput
+     *
+     *             id:commandHeader
+     *             type:UIOutput
+     *
+     *             id:command
+     *             type:UICommand
+     *
+     *           id:inputColumn
+     *           type:UIColumn
+     *
+     *             id:inputFooter
+     *             type:UIOutput
+     *
+     *             id:inputHeader
+     *             type:UIOutput
+     *
+     *             id:input
+     *             type:UIInput
+     *
+     *           id:outputColumn
+     *           type:UIColumn
+     *
+     *             id:outputFooter
+     *             type:UIOutput
+     *
+     *             id:outputHeader
+     *             type:UIOutput
+     *
+     *             id:output
+     *             type:UIOutput
+     *
+     *           id:constantColumn
+     *           type:UIColumn
+     *
+     *             id:constantFooter
+     *             type:UIOutput
+     *
+     *             id:constantHeader
+     *             type:UIOutput
+     *
+     *             id:constant
+     *             type:UIOutput
+     *
+     *       id:form2
+     *       type:UIForm
+     *
+     *         id:data
+     *         type:UIData
+     *
+     *           id:commandColumn
+     *           type:UIColumn
+     *
+     *             id:commandFooter
+     *             type:UIOutput
+     *
+     *             id:commandHeader
+     *             type:UIOutput
+     *
+     *             id:command
+     *             type:UICommand
+     *
+     *           id:inputColumn
+     *           type:UIColumn
+     *
+     *             id:inputFooter
+     *             type:UIOutput
+     *
+     *             id:inputHeader
+     *             type:UIOutput
+     *
+     *             id:input
+     *             type:UIInput
+     *
+     *           id:outputColumn
+     *           type:UIColumn
+     *
+     *             id:outputFooter
+     *             type:UIOutput
+     *
+     *             id:outputHeader
+     *             type:UIOutput
+     *
+     *             id:output
+     *             type:UIOutput
+     *
+     *           id:constantColumn
+     *           type:UIColumn
+     *
+     *             id:constantFooter
+     *             type:UIOutput
+     *
+     *             id:constantHeader
+     *             type:UIOutput
+     *
+     *             id:constant
+     *             type:UIOutput
+     *</pre></code>
+     *
+     *
+     */
+    
+    public void testInvokeOnComponentNested() throws Exception {
+        
+	UIData 
+	    outer = (UIData) component,
+	    inner = new UIData();
+	List innerBeans = new ArrayList();
+        for (int i = 0; i < 3; i++) {
+            TestDataBean bean = new TestDataBean();
+            bean.setCommand("innerCommand" + i);
+            bean.setInput("innerInput" + i);
+            bean.setOutput("innerOutput" + i);
+            innerBeans.add(bean);
+        }
+	DataModel innerDataModel = new ListDataModel(innerBeans);
+        
+
+	// set up the model for the outer table.
+	setupModel();
+        
+	// set up the tree for the outer data table
+        setupRenderers();
+        UIViewRoot viewRoot = facesContext.getApplication().getViewHandler().createView(facesContext, null);
+        viewRoot.setRenderKitId(RenderKitFactory.HTML_BASIC_RENDER_KIT);
+        viewRoot.setViewId("/view");
+        facesContext.setViewRoot(viewRoot);
+	outer.setId("outerData");
+	viewRoot.getChildren().add(outer);
+
+	UIColumn column = new UIColumn();
+	column.setId("outerColumn");
+	outer.getChildren().add(column);
+
+        // Set up for this test
+        setupModel();
+        
+        UIForm form1 = new UIForm(), form2 = new UIForm();
+        form1.setId("form1");
+        form2.setId("form2");
+        column.getChildren().add(form1);
+        column.getChildren().add(form2);
+        
+        // replace the "component" ivar with a new instance.
+        component = new UIData();
+        List beans = new ArrayList();
+        
+        for (int i = 0; i < 10; i++) {
+            TestDataBean bean = new TestDataBean();
+            bean.setCommand("command" + i);
+            bean.setInput("input" + i);
+            bean.setOutput("output" + i);
+            beans.add(bean);
+        }
+        DataModel model = new ListDataModel(beans);
+        assertEquals(10, model.getRowCount());
+
+        setupModel();
+        setupTree(form1, true, true);
+        
+        component = new UIData();
+        beans = new ArrayList();
+        
+        for (int i = 0; i < 10; i++) {
+            TestDataBean bean = new TestDataBean();
+            bean.setCommand("command" + i);
+            bean.setInput("input" + i);
+            bean.setOutput("output" + i);
+            beans.add(bean);
+        }
+        model = new ListDataModel(beans);
+        assertEquals(10, model.getRowCount());
+
+        setupModel();
+        setupTree(form2, true, true);
+        
+        boolean exceptionThrown = false, found = false;
+        // At this point we have two forms, each containing a UIData 
+        UIData outerData = (UIData) viewRoot.findComponent("outerData");
+        UIData data1 = (UIData) viewRoot.findComponent("outerData:form1:data");
+        UIData data2 = (UIData) viewRoot.findComponent("outerData:form2:data");
+        assertNotNull(data1);
+        assertNotNull(data2);
+        
+        
+        // Case 1, positive invoke on form1:data:commandHeader component of the 4th row
+        found = false;
+        outerData.setRowIndex(1);
+        assertEquals(1, outerData.getRowIndex());
+        data1.setRowIndex(3);
+        assertEquals(3, data1.getRowIndex());
+        found = viewRoot.invokeOnComponent(facesContext, "outerData:2:form1:data:4:commandHeader",
+                new ContextCallback() {
+
+                  public void invokeContextCallback(FacesContext context, 
+                                                    UIComponent component) {
+                      UIData data = (UIData) getNamingContainer(component);
+                      UIForm form = (UIForm) getNamingContainer(data);
+                      assertEquals(4, data.getRowIndex());
+                      assertEquals("form1", form.getId());
+                      assertEquals("commandHeader", component.getId());
+                  }
+        });
+        assertEquals(1, outerData.getRowIndex());
+        assertEquals(3, data1.getRowIndex());
+        assertTrue(found);
+        
+        // Case 2, positive invoke on form2:data:commandHeader component of the 5th row
+        outerData.setRowIndex(3);
+        assertEquals(3, outerData.getRowIndex());
+        data2.setRowIndex(4);
+        found = false;
+        assertEquals(4, data2.getRowIndex());
+        found = viewRoot.invokeOnComponent(facesContext, "outerData:1:form2:data:5:commandHeader",
+                new ContextCallback() {
+
+                  public void invokeContextCallback(FacesContext context, 
+                                                    UIComponent component) {
+                      UIData data = (UIData) getNamingContainer(component);
+                      UIForm form = (UIForm) getNamingContainer(data);
+                      assertEquals(5, data.getRowIndex());
+                      assertEquals("form2", form.getId());
+                      assertEquals("commandHeader", component.getId());
+                  }
+        });
+        assertEquals(3, outerData.getRowIndex());
+        assertEquals(4, data2.getRowIndex());
+        assertTrue(found);
+        
+        // Case 3, not found invoke on form2:data:5:yoyodyne
+        outerData.setRowIndex(1);
+        assertEquals(1, outerData.getRowIndex());
+        data2.setRowIndex(4);
+        found = false;
+        assertEquals(4, data2.getRowIndex());
+        found = viewRoot.invokeOnComponent(facesContext, "outerData:2:form2:data:5:yoyodyne",
+                new ContextCallback() {
+
+                  public void invokeContextCallback(FacesContext context, 
+                                                    UIComponent component) {
+                      fail();
+                 }
+        });
+        assertEquals(1, outerData.getRowIndex());
+        assertEquals(4, data2.getRowIndex());
+        assertTrue(!found);
+        
+        // Case 4, not found due to invalid rowIndex
+        outerData.setRowIndex(1);
+        assertEquals(1, outerData.getRowIndex());
+        data1.setRowIndex(3);
+        found = false;
+        assertEquals(3, data1.getRowIndex());
+        found = viewRoot.invokeOnComponent(facesContext, "outerData:3:form1:data:999:commandHeader",
+                new ContextCallback() {
+
+                  public void invokeContextCallback(FacesContext context, 
+                                                    UIComponent component) {
+                      fail();
+                 }
+        });
+        assertEquals(1, outerData.getRowIndex());
+        assertEquals(3, data1.getRowIndex());
+        assertTrue(!found);
+        
+        // Case 5, not found due to invalid clientId (too many ':')
+        outerData.setRowIndex(3);
+        assertEquals(3, outerData.getRowIndex());
+        data2.setRowIndex(6);
+        found = false;
+        exceptionThrown = false;
+        assertEquals(6, data2.getRowIndex());
+        try {
+            found = viewRoot.invokeOnComponent(facesContext, "outerData:1:form2:data::7:commandHeader",
+                    new ContextCallback() {
+
+                      public void invokeContextCallback(FacesContext context, 
+                                                        UIComponent component) {
+                          fail();
+                     }
+            });
+        } 
+        catch (FacesException fe) {
+            assertTrue(fe.getCause() instanceof NumberFormatException);
+            exceptionThrown = true;
+        }
+        assertEquals(3, outerData.getRowIndex());
+        assertEquals(6, data2.getRowIndex());
+        assertTrue(!found);
+        assertTrue(exceptionThrown);
+        
+        // Case 6, not found due to callback throwing Exception
+        found = false;
+        exceptionThrown = true;
+        outerData.setRowIndex(3);
+        assertEquals(3, outerData.getRowIndex());
+        data1.setRowIndex(3);
+        assertEquals(3, data1.getRowIndex());
+        try {
+            found = viewRoot.invokeOnComponent(facesContext, "outerData:1:form1:data:4:commandHeader",
+                    new ContextCallback() {
+
+                      public void invokeContextCallback(FacesContext context, 
+                                                        UIComponent component) {
+                          throw new IllegalStateException();
+                      }
+            });
+        } catch (FacesException ex) {
+            assertTrue(ex.getCause() instanceof IllegalStateException);
+            exceptionThrown = true;
+        }
+        assertEquals(3, outerData.getRowIndex());
+        assertEquals(3, data1.getRowIndex());
+        assertTrue(!found);
+        assertTrue(exceptionThrown);
+
+
+    }    
 
     // Test request processing lifecycle (with controls in header facets)
     public void testTreeLifecycleFacets() throws Exception {
@@ -1300,7 +1843,108 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
 			      "javax.faces.Text", new TextRenderer());
 
     }
-
+    
+    /* If labels == true the tree looks like this
+     
+     * root: viewId: /view
+     *
+     *  data: id: data
+     *
+     *    column: id: commandColumn
+     *
+     *      facets
+     *
+     *	      header: id: commandHeader
+     *
+     *	      footer: id: commandFooter
+     *
+     *      command: id: command value: #{foo.command}
+     *               actionListener: TestDataActionListener()
+     *
+     *    column: id: inputColumn
+     *
+     *      facets:
+     *
+     *        header: id: inputHeader
+     *
+     *        footer: id: inputFooter
+     *
+     *      input: id: input value: #{foo.input} validator: TestDataValidator
+     *             valueChangeListener: TestValueChangeListener:
+     *
+     *    column: id: outputColumn
+     *
+     *      facets:
+     *
+     *        header: id: outputHeader
+     *
+     *        header: id: inputHeader
+     *
+     *       output: id: output: value: #{foo.output}
+     *
+     *    column: id: constantColumn
+     *
+     *      facets:
+     *
+     *        header: id: outputHeader
+     *
+     *        header: id: inputHeader
+     *
+     *      constant: id: constant: value: Constant Value
+     *
+     * If labels == false, the tree looks like
+     * root: viewId: /view
+     *
+     *   data: id: data
+     *
+     *     column: id commandColumn
+     *
+     *       facets:
+     *
+     *         header: UICommand id: commandAction actionListener: #{hb.action}
+     *                 value: Command Action
+     *
+     *         footer: UIOutput id: commandFooter
+     *
+     *       command: id: command value: #{foo.command}
+     *                actionListener: TestDataActionListener()
+     *
+     *     column: id inputColumn
+     *
+     *       facets:
+     *
+     *         header: UIInput id: hinput validator: #{hb.validate}
+     *
+     *                 value: #{hb.value}
+     *
+     *         footer: UIOutput id: inputFooter
+     *
+     *       input: id: input value: #{foo.input} validator: TestDataValidator
+     *              valueChangeListener: TestValueChangeListener:
+     *
+     *     column: id: outputColumn
+     *
+     *       facets:
+     *
+     *         header: id: outputHeader
+     *
+     *         header: id: inputHeader
+     *
+     *       output: id: output: value: #{foo.output}
+     *
+     *    column: id: constantColumn
+     *
+     *      facets:
+     *
+     *        header: id: outputHeader
+     *
+     *        header: id: inputHeader
+     *
+     *      constant: id: constant: value: Constant Value
+     *
+     *
+     *
+     */
 
     // Set up the component tree corresponding to the data model
     // labels==true - header facet of command and input contain labels
@@ -1560,8 +2204,9 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
 
             // Render the beginning of the table
             data.setRowIndex(-1);
+            String tableId = data.getClientId(context);
             writer.write
-                ("<table id='" + data.getClientId(context) + "'>\n");
+                ("<table id='" + tableId + "'>\n");
             UIComponent header = (UIComponent) data.getFacet("header");
             if (header != null) {
                 writer.write
@@ -1597,8 +2242,9 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
                 UIColumn column = (UIColumn) kid;
                 UIComponent header = column.getFacet("header");
                 if (header != null) {
+                    String headerClientId = header.getClientId(context);
                     writer.write("<column-header id='" +
-                                 header.getClientId(context) + "'>\n");
+                                 headerClientId + "'>\n");
                     encodeRecursive(context, header);
                     writer.write("</column-header>\n");
                 }
@@ -1624,7 +2270,8 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
                         continue;
                     }
                     UIColumn column = (UIColumn) kid;
-                    writer.write("<column id='" + column.getClientId(context) +
+                    String columnClientId = column.getClientId(context);
+                    writer.write("<column id='" + columnClientId +
                                  "'>\n");
                     encodeRecursive(context, column);
                     writer.write("</column>\n");
@@ -1643,8 +2290,9 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
                 UIColumn column = (UIColumn) kid;
                 UIComponent footer = column.getFacet("footer");
                 if (footer != null) {
+                    String footerClientId = footer.getClientId(context);
                     writer.write("<column-footer id='" +
-                                 footer.getClientId(context) + "'>\n");
+                                 footerClientId + "'>\n");
                     encodeRecursive(context, footer);
                     writer.write("</column-footer>\n");
                 }

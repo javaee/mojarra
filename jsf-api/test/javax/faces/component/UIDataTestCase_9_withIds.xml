@@ -1,28 +1,3 @@
-<!--
- The contents of this file are subject to the terms
- of the Common Development and Distribution License
- (the License). You may not use this file except in
- compliance with the License.
- 
- You can obtain a copy of the License at
- https://javaserverfaces.dev.java.net/CDDL.html or
- legal/CDDLv1.0.txt. 
- See the License for the specific language governing
- permission and limitations under the License.
- 
- When distributing Covered Code, include this CDDL
- Header Notice in each file and include the License file
- at legal/CDDLv1.0.txt.    
- If applicable, add the following below the CDDL Header,
- with the fields enclosed by brackets [] replaced by
- your own identifying information:
- "Portions Copyrighted [year] [name of copyright owner]"
- 
- [Name of File] [ver.__] [Date]
- 
- Copyright 2005 Sun Microsystems Inc. All Rights Reserved
--->
-
 <table id='outerData'>
 <table-row rowId='3'>
 <column id='outerData:3:outerColumn'>
@@ -127,17 +102,17 @@
 <table-row rowId='4'>
 <column id='outerData:4:outerColumn'>
 <table id='outerData:4:data'>
-<column-header id='outerData:3:data:commandHeader'>
-<text id='outerData:3:data:commandHeader' value='Command Header'/>
+<column-header id='outerData:4:data:commandHeader'>
+<text id='outerData:4:data:commandHeader' value='Command Header'/>
 </column-header>
-<column-header id='outerData:3:data:inputHeader'>
-<text id='outerData:3:data:inputHeader' value='Input Header'/>
+<column-header id='outerData:4:data:inputHeader'>
+<text id='outerData:4:data:inputHeader' value='Input Header'/>
 </column-header>
-<column-header id='outerData:3:data:outputHeader'>
-<text id='outerData:3:data:outputHeader' value='Output Header'/>
+<column-header id='outerData:4:data:outputHeader'>
+<text id='outerData:4:data:outputHeader' value='Output Header'/>
 </column-header>
-<column-header id='outerData:3:data:constantHeader'>
-<text id='outerData:3:data:constantHeader' value='Constant Header'/>
+<column-header id='outerData:4:data:constantHeader'>
+<text id='outerData:4:data:constantHeader' value='Constant Header'/>
 </column-header>
 <table-row rowId='3'>
 <column id='outerData:4:data:3:commandColumn'>
@@ -209,17 +184,17 @@
 <text id='outerData:4:data:7:constant' value='Constant Value'/>
 </column>
 </table-row>
-<column-footer id='outerData:3:data:commandFooter'>
-<text id='outerData:3:data:commandFooter' value='Command Footer'/>
+<column-footer id='outerData:4:data:commandFooter'>
+<text id='outerData:4:data:commandFooter' value='Command Footer'/>
 </column-footer>
-<column-footer id='outerData:3:data:inputFooter'>
-<text id='outerData:3:data:inputFooter' value='Input Footer'/>
+<column-footer id='outerData:4:data:inputFooter'>
+<text id='outerData:4:data:inputFooter' value='Input Footer'/>
 </column-footer>
-<column-footer id='outerData:3:data:outputFooter'>
-<text id='outerData:3:data:outputFooter' value='Output Footer'/>
+<column-footer id='outerData:4:data:outputFooter'>
+<text id='outerData:4:data:outputFooter' value='Output Footer'/>
 </column-footer>
-<column-footer id='outerData:3:data:constantFooter'>
-<text id='outerData:3:data:constantFooter' value='Constant Footer'/>
+<column-footer id='outerData:4:data:constantFooter'>
+<text id='outerData:4:data:constantFooter' value='Constant Footer'/>
 </column-footer>
 </table>
 </column>
@@ -227,17 +202,17 @@
 <table-row rowId='5'>
 <column id='outerData:5:outerColumn'>
 <table id='outerData:5:data'>
-<column-header id='outerData:3:data:commandHeader'>
-<text id='outerData:3:data:commandHeader' value='Command Header'/>
+<column-header id='outerData:5:data:commandHeader'>
+<text id='outerData:5:data:commandHeader' value='Command Header'/>
 </column-header>
-<column-header id='outerData:3:data:inputHeader'>
-<text id='outerData:3:data:inputHeader' value='Input Header'/>
+<column-header id='outerData:5:data:inputHeader'>
+<text id='outerData:5:data:inputHeader' value='Input Header'/>
 </column-header>
-<column-header id='outerData:3:data:outputHeader'>
-<text id='outerData:3:data:outputHeader' value='Output Header'/>
+<column-header id='outerData:5:data:outputHeader'>
+<text id='outerData:5:data:outputHeader' value='Output Header'/>
 </column-header>
-<column-header id='outerData:3:data:constantHeader'>
-<text id='outerData:3:data:constantHeader' value='Constant Header'/>
+<column-header id='outerData:5:data:constantHeader'>
+<text id='outerData:5:data:constantHeader' value='Constant Header'/>
 </column-header>
 <table-row rowId='3'>
 <column id='outerData:5:data:3:commandColumn'>
@@ -309,17 +284,17 @@
 <text id='outerData:5:data:7:constant' value='Constant Value'/>
 </column>
 </table-row>
-<column-footer id='outerData:3:data:commandFooter'>
-<text id='outerData:3:data:commandFooter' value='Command Footer'/>
+<column-footer id='outerData:5:data:commandFooter'>
+<text id='outerData:5:data:commandFooter' value='Command Footer'/>
 </column-footer>
-<column-footer id='outerData:3:data:inputFooter'>
-<text id='outerData:3:data:inputFooter' value='Input Footer'/>
+<column-footer id='outerData:5:data:inputFooter'>
+<text id='outerData:5:data:inputFooter' value='Input Footer'/>
 </column-footer>
-<column-footer id='outerData:3:data:outputFooter'>
-<text id='outerData:3:data:outputFooter' value='Output Footer'/>
+<column-footer id='outerData:5:data:outputFooter'>
+<text id='outerData:5:data:outputFooter' value='Output Footer'/>
 </column-footer>
-<column-footer id='outerData:3:data:constantFooter'>
-<text id='outerData:3:data:constantFooter' value='Constant Footer'/>
+<column-footer id='outerData:5:data:constantFooter'>
+<text id='outerData:5:data:constantFooter' value='Constant Footer'/>
 </column-footer>
 </table>
 </column>
@@ -327,17 +302,17 @@
 <table-row rowId='6'>
 <column id='outerData:6:outerColumn'>
 <table id='outerData:6:data'>
-<column-header id='outerData:3:data:commandHeader'>
-<text id='outerData:3:data:commandHeader' value='Command Header'/>
+<column-header id='outerData:6:data:commandHeader'>
+<text id='outerData:6:data:commandHeader' value='Command Header'/>
 </column-header>
-<column-header id='outerData:3:data:inputHeader'>
-<text id='outerData:3:data:inputHeader' value='Input Header'/>
+<column-header id='outerData:6:data:inputHeader'>
+<text id='outerData:6:data:inputHeader' value='Input Header'/>
 </column-header>
-<column-header id='outerData:3:data:outputHeader'>
-<text id='outerData:3:data:outputHeader' value='Output Header'/>
+<column-header id='outerData:6:data:outputHeader'>
+<text id='outerData:6:data:outputHeader' value='Output Header'/>
 </column-header>
-<column-header id='outerData:3:data:constantHeader'>
-<text id='outerData:3:data:constantHeader' value='Constant Header'/>
+<column-header id='outerData:6:data:constantHeader'>
+<text id='outerData:6:data:constantHeader' value='Constant Header'/>
 </column-header>
 <table-row rowId='3'>
 <column id='outerData:6:data:3:commandColumn'>
@@ -409,17 +384,17 @@
 <text id='outerData:6:data:7:constant' value='Constant Value'/>
 </column>
 </table-row>
-<column-footer id='outerData:3:data:commandFooter'>
-<text id='outerData:3:data:commandFooter' value='Command Footer'/>
+<column-footer id='outerData:6:data:commandFooter'>
+<text id='outerData:6:data:commandFooter' value='Command Footer'/>
 </column-footer>
-<column-footer id='outerData:3:data:inputFooter'>
-<text id='outerData:3:data:inputFooter' value='Input Footer'/>
+<column-footer id='outerData:6:data:inputFooter'>
+<text id='outerData:6:data:inputFooter' value='Input Footer'/>
 </column-footer>
-<column-footer id='outerData:3:data:outputFooter'>
-<text id='outerData:3:data:outputFooter' value='Output Footer'/>
+<column-footer id='outerData:6:data:outputFooter'>
+<text id='outerData:6:data:outputFooter' value='Output Footer'/>
 </column-footer>
-<column-footer id='outerData:3:data:constantFooter'>
-<text id='outerData:3:data:constantFooter' value='Constant Footer'/>
+<column-footer id='outerData:6:data:constantFooter'>
+<text id='outerData:6:data:constantFooter' value='Constant Footer'/>
 </column-footer>
 </table>
 </column>
@@ -427,17 +402,17 @@
 <table-row rowId='7'>
 <column id='outerData:7:outerColumn'>
 <table id='outerData:7:data'>
-<column-header id='outerData:3:data:commandHeader'>
-<text id='outerData:3:data:commandHeader' value='Command Header'/>
+<column-header id='outerData:7:data:commandHeader'>
+<text id='outerData:7:data:commandHeader' value='Command Header'/>
 </column-header>
-<column-header id='outerData:3:data:inputHeader'>
-<text id='outerData:3:data:inputHeader' value='Input Header'/>
+<column-header id='outerData:7:data:inputHeader'>
+<text id='outerData:7:data:inputHeader' value='Input Header'/>
 </column-header>
-<column-header id='outerData:3:data:outputHeader'>
-<text id='outerData:3:data:outputHeader' value='Output Header'/>
+<column-header id='outerData:7:data:outputHeader'>
+<text id='outerData:7:data:outputHeader' value='Output Header'/>
 </column-header>
-<column-header id='outerData:3:data:constantHeader'>
-<text id='outerData:3:data:constantHeader' value='Constant Header'/>
+<column-header id='outerData:7:data:constantHeader'>
+<text id='outerData:7:data:constantHeader' value='Constant Header'/>
 </column-header>
 <table-row rowId='3'>
 <column id='outerData:7:data:3:commandColumn'>
@@ -509,17 +484,17 @@
 <text id='outerData:7:data:7:constant' value='Constant Value'/>
 </column>
 </table-row>
-<column-footer id='outerData:3:data:commandFooter'>
-<text id='outerData:3:data:commandFooter' value='Command Footer'/>
+<column-footer id='outerData:7:data:commandFooter'>
+<text id='outerData:7:data:commandFooter' value='Command Footer'/>
 </column-footer>
-<column-footer id='outerData:3:data:inputFooter'>
-<text id='outerData:3:data:inputFooter' value='Input Footer'/>
+<column-footer id='outerData:7:data:inputFooter'>
+<text id='outerData:7:data:inputFooter' value='Input Footer'/>
 </column-footer>
-<column-footer id='outerData:3:data:outputFooter'>
-<text id='outerData:3:data:outputFooter' value='Output Footer'/>
+<column-footer id='outerData:7:data:outputFooter'>
+<text id='outerData:7:data:outputFooter' value='Output Footer'/>
 </column-footer>
-<column-footer id='outerData:3:data:constantFooter'>
-<text id='outerData:3:data:constantFooter' value='Constant Footer'/>
+<column-footer id='outerData:7:data:constantFooter'>
+<text id='outerData:7:data:constantFooter' value='Constant Footer'/>
 </column-footer>
 </table>
 </column>
