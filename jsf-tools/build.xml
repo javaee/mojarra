@@ -316,6 +316,13 @@ necessary to generate required classes.
       <xmlcatalog refid="standard-renderkit" />
     </style>
 
+    <style style="doc/standard-html-renderkit-specification.xsl"
+          in="${build.classes}/standard-html-renderkit.xml"
+          out="${build.generate}/standard-html-renderkit-specification.txt">
+      <xmlcatalog refid="standard-renderkit" />
+    </style>
+
+
   </target>
 
   <!--
