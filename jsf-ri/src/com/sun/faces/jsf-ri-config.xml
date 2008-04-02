@@ -30,8 +30,18 @@
   <!-- Standard Components -->
 
   <component>
+    <component-type>Column</component-type>
+    <component-class>javax.faces.component.UIColumn</component-class>
+  </component>
+
+  <component>
     <component-type>Command</component-type>
     <component-class>javax.faces.component.base.UICommandBase</component-class>
+  </component>
+
+  <component>
+    <component-type>Data</component-type>
+    <component-class>javax.faces.component.UIData</component-class>
   </component>
 
   <component>
@@ -961,6 +971,10 @@
     <renderer>
       <renderer-type>SelectManyCheckbox</renderer-type>
       <renderer-class>com.sun.faces.renderkit.html_basic.SelectManyCheckboxListRenderer</renderer-class>
+    </renderer>
+    <renderer>
+      <renderer-type>Table</renderer-type>
+      <renderer-class>com.sun.faces.renderkit.html_basic.TableRenderer</renderer-class>
     </renderer>
     <renderer>
       <renderer-type>Textarea</renderer-type>

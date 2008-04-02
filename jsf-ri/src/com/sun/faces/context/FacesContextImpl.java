@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContextImpl.java,v 1.45 2003/08/26 18:37:01 horwat Exp $
+ * $Id: FacesContextImpl.java,v 1.46 2003/09/11 15:27:26 craigmcc Exp $
  */
 
 /*
@@ -14,22 +14,27 @@ import java.util.Iterator;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Collections;
+import java.util.List;
 import java.util.Locale;
 
 import javax.faces.FacesException;     
+import javax.faces.FactoryFinder;
 import javax.faces.application.Application;
 import javax.faces.application.ApplicationFactory;
-import javax.faces.FactoryFinder;
 import javax.faces.application.Message;
+import javax.faces.application.RepeaterMessage;
 import javax.faces.application.ViewHandler;
+import javax.faces.component.Repeater;
+import javax.faces.component.RepeaterSupport;
+import javax.faces.component.UIComponent;
+import javax.faces.component.UIViewRoot;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.context.ResponseStream;
-import javax.faces.component.UIComponent;
-import javax.faces.component.UIViewRoot;
-import javax.faces.lifecycle.Lifecycle;
 import javax.faces.event.FacesEvent;
+import javax.faces.event.RepeaterEvent;
+import javax.faces.lifecycle.Lifecycle;
 
 import org.apache.commons.collections.CursorableLinkedList;
 
@@ -223,26 +228,46 @@ public class FacesContextImpl extends FacesContext
     }
 
     public Iterator getMessages(UIComponent component) {
-        Iterator result = null;
-        ArrayList list = null;
 
+        // If no messages have been enqueued at all,
+        // return an empty List Iterator
         if (null == messageLists) {
-            result = Collections.EMPTY_LIST.iterator();
+            return (Collections.EMPTY_LIST.iterator());
         }
-	else {
-	    // Look up the ArrayList for this (possibly null) component
-	    if (null != (list = (ArrayList) messageLists.get(component))) {
-		if (list.size() > 0 ) {
-		    result = list.iterator();
-		} else {
-		    result = Collections.EMPTY_LIST.iterator();
-		}
-	    }
-	    else {
-		result = Collections.EMPTY_LIST.iterator();
-	    }
+
+        // If no messages have been enqueued for the specified
+        // (possibly null) UIComponent, return an empty list iterator
+        List list = (List) messageLists.get(component);
+        if (null == list) {
+            return (Collections.EMPTY_LIST.iterator());
         }
-        return result;
+
+        // If the specified UIComponent was null, just return the iterator
+        if (component == null) {
+            return (list.iterator());
+        }
+
+        // If the specified UIComponent is not nested inside a
+        // Repeater, just return the iterator
+        Repeater repeater =
+            RepeaterSupport.findParentRepeater(component);
+        if (repeater == null) {
+            return (list.iterator());
+        }
+        int rowIndex = repeater.getRowIndex();
+
+        // Return only the messages for the relevant rowIndex value
+        List results = new ArrayList();
+        Iterator items = list.iterator();
+        while (items.hasNext()) {
+            RepeaterMessage  item = (RepeaterMessage) items.next();
+            if (rowIndex != item.getRowIndex()) {
+                continue;
+            }
+            results.add(item.getMessage());
+        }
+        return (results.iterator());
+
     }    
 
     public ResponseStream getResponseStream() {
@@ -261,6 +286,9 @@ public class FacesContextImpl extends FacesContext
     }
    
     public void setViewRoot(UIViewRoot root) {
+        if (viewRoot != root) {
+            facesEvents = null;
+        }
 	viewRoot = root;
     }
     
@@ -277,10 +305,23 @@ public class FacesContextImpl extends FacesContext
     }
 
     public void addFacesEvent(FacesEvent event) {
+
+        // Validate our preconditions
         if (event == null) {
-            throw new NullPointerException(Util.getExceptionMessage(
-                Util.NULL_EVENT_ERROR_MESSAGE_ID));
+            throw new NullPointerException
+                (Util.getExceptionMessage(Util.NULL_EVENT_ERROR_MESSAGE_ID));
         }
+
+        // If the source component is a descendant of a Repeater,
+        // wrap this event so we can restore the rowIndex later
+        Repeater repeater =
+            RepeaterSupport.findParentRepeater(event.getComponent());
+        if (repeater != null) {
+            event = new RepeaterEvent((UIComponent) repeater, event,
+                                      repeater.getRowIndex());
+        }
+
+        // Add this event to our internal queue
         if (facesEvents == null) {
             facesEvents = new CursorableLinkedList();
         }
@@ -288,15 +329,29 @@ public class FacesContextImpl extends FacesContext
     }
 
     public void addMessage(UIComponent component, Message message) {
-        ArrayList list = null;
+
+        // Validate our preconditions
         if ( null == message ) {
-            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+            throw new NullPointerException
+                (Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
+
+        // If the relevant component is a descendant of a Repeater,
+        // wrap the message so we can restore the rowIndex later
+        Repeater repeater = null;
+        if (component != null) {
+            repeater = RepeaterSupport.findParentRepeater(component);
+        }
+        if (repeater != null) {
+            message = new RepeaterMessage(message,
+                                          repeater.getRowIndex());
+        }
+
+        // Add this message to our internal queue
         if (null == messageLists) {
             messageLists = new HashMap();
         }
-        
-        list = (ArrayList) messageLists.get(component);
+        List list = (List) messageLists.get(component);
         if (list == null) {
             list = new ArrayList();
             messageLists.put(component, list);
@@ -310,6 +365,7 @@ public class FacesContextImpl extends FacesContext
         responseStream = null;
         responseWriter = null;
         facesEvents = null;
+        messageLists = null;
         viewHandler = null;
         renderResponse = false;
         responseComplete = false;
