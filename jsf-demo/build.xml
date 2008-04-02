@@ -126,7 +126,7 @@
   </target>
 
   <target name="verifyPreconditions" 
-          depends="verifyPreconditions.devmode,verifyPreconditions.distmode"> 
+          depends="verifyPreconditions.devmode"> 
     <antcall target="checkRequiredFile">
        <param name="file" value="${tomcat.home}"/>
        <param name="fail.message" value="tomcat.home must be set."/>
@@ -171,45 +171,7 @@
 
   <target name="verifyPreconditions.devmode" unless="build.wspack">
   </target>
-  <target name="verifyPreconditions.distmode" if="build.wspack">
-    <antcall target="checkRequiredFile">
-       <param name="file" value="${jsp.jar}"/>
-       <param name="fail.message" value="jsp.jar must be set"/>
-    </antcall>
-    <antcall target="checkRequiredFile">
-       <param name="file" value="${commons-modeler.jar}"/>
-       <param name="fail.message" value="commons-modeler.jar must be set"/>
-    </antcall>
-    <antcall target="checkRequiredFile">
-       <param name="file" value="${jmx.jar}"/>
-       <param name="fail.message" value="jmx.jar must be set"/>
-    </antcall>
-    <antcall target="checkRequiredFile">
-       <param name="file" value="${commons-el.jar}"/>
-       <param name="fail.message" value="commons-el.jar must be set"/>
-    </antcall>
-    <antcall target="checkRequiredFile">
-       <param name="file" value="${naming-resources.jar}"/>
-       <param name="fail.message" value="naming-resources.jar must be set"/>
-    </antcall>
-    <antcall target="checkRequiredFile">
-       <param name="file" value="${naming-common.jar}"/>
-       <param name="fail.message" value="naming-common.jar must be set"/>
-    </antcall>
-    <antcall target="checkRequiredFile">
-       <param name="file" value="${jasper-compiler.jar}"/>
-       <param name="fail.message" value="jasper-compiler.jar must be set"/>
-    </antcall>
-    <antcall target="checkRequiredFile">
-       <param name="file" value="${jasper-runtime.jar}"/>
-       <param name="fail.message" value="jasper-runtime.jar must be set"/>
-    </antcall>
-    <antcall target="checkRequiredFile">
-       <param name="file" value="${jsf-api.dtd}"/>
-       <param name="fail.message" value="jsf-api.dtd must be set"/>
-    </antcall>
-  </target>
-
+  
   <target name="test" depends="main,run.test">
       <echo>
           Before running this target you must:
@@ -220,11 +182,9 @@
      </echo> 
   </target>
   <target name="run.test">
-    <!--<ant target="test" antfile="cardemo/crashtest.xml" inheritAll="false"/>-->
       <ant target="test" antfile="build-tests.xml"/>
   </target>
-    
-
+  
   <target name="clean.wspack" depends="clean"
           description="Clear jsf out from the wspack distribution, if present"
           if="build.wspack">
