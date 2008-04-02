@@ -116,9 +116,8 @@ public class AreaTag extends FacesTag
     // Gets the renderer associated with this component    
     public String getRendererType() { return "Area"; } 
 
-    // Creates the <code>UIArea</code> component instance associated with this tag.    
-    public UIComponent createComponent() {
-            return (new UIArea());
+    public String getComponentType() {
+            return ("Area");
     }
 
 } // end of class

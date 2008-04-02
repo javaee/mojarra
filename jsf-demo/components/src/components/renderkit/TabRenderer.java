@@ -1,5 +1,5 @@
 /*
- * $Id: TabRenderer.java,v 1.2 2003/02/21 23:44:56 ofung Exp $
+ * $Id: TabRenderer.java,v 1.3 2003/04/30 06:31:22 eburns Exp $
  */
 
 /*
@@ -47,7 +47,6 @@ import components.components.PaneComponent;
 import java.io.IOException;
 import java.util.Iterator;
 import javax.faces.FacesException;
-import javax.faces.component.AttributeDescriptor;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
@@ -77,38 +76,6 @@ public class TabRenderer extends BaseRenderer {
 
 
     private static Log log = LogFactory.getLog(TabRenderer.class);
-
-
-    public AttributeDescriptor getAttributeDescriptor
-        (UIComponent component, String name) {
-        return (null); // FIXME
-    }
-
-
-    public AttributeDescriptor getAttributeDescriptor
-        (String componentType, String name) {
-        return (null); // FIXME
-    }
-
-
-    public Iterator getAttributeNames(UIComponent component) {
-        return (null); // FIXME
-    }
-
-
-    public Iterator getAttributeNames(String componentType) {
-        return (null); // FIXME
-    }
-
-
-    public boolean supportsComponentType(UIComponent component) {
-        return (component instanceof PaneComponent);
-    }
-
-
-    public boolean supportsComponentType(String componentType) {
-        return (componentType.equals(PaneComponent.TYPE));
-    }
 
 
     public void decode(FacesContext context, UIComponent component)

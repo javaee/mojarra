@@ -1,5 +1,5 @@
 /*
- * $Id: BaseRenderer.java,v 1.4 2003/03/27 19:43:33 jvisvanathan Exp $
+ * $Id: BaseRenderer.java,v 1.5 2003/04/30 06:31:21 eburns Exp $
  */
 
 /*
@@ -45,7 +45,6 @@ package components.renderkit;
 
 import javax.faces.component.NamingContainer;
 import javax.faces.component.UIComponent;
-import javax.faces.component.AttributeDescriptor;
 import javax.faces.context.FacesContext;
 import javax.faces.render.Renderer;
 
@@ -59,37 +58,8 @@ import java.util.Iterator;
 
 public abstract class BaseRenderer extends Renderer {
 
-    /**
-     * <p>String identifer for <em>bundle attribute.</em>.</p>
-     */
     public static final String BUNDLE_ATTR = "com.sun.faces.bundle";
 
-    public boolean supportsComponentType(UIComponent component) {
-        if ( component == null ) {
-            throw new NullPointerException();
-        }     
-        return supportsComponentType(component.getComponentType());
-    }
-
-    public Iterator getAttributeNames(String componentType) {
-	return null;
-    }
-
-    public Iterator getAttributeNames(UIComponent component) {
-	return null;
-    }
-
-    public AttributeDescriptor getAttributeDescriptor(
-        UIComponent component, String name) {
-	return null;
-    }
-
-    public AttributeDescriptor getAttributeDescriptor(
-        String componentType, String name) {
-	return null;
-    }
-
-    
     /**
      * <p>Return the client-side id for the argument component.</p>
      *

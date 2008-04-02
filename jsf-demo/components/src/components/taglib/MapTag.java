@@ -94,9 +94,8 @@ public MapTag()
 // Gets the renderer associated with this component    
     	public String getRendererType() { return null; } 
     
-// Creates the <code>UIMap</code> component instance associated with this tag.        
-    	public UIComponent createComponent() {
-        	return (new UIMap());
+    	public String getComponentType() {
+        	return ("Map");
     	}
 
 } // end of class

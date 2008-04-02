@@ -1,5 +1,5 @@
 /*
- * $Id: PaneTabTag.java,v 1.2 2003/02/21 23:45:01 ofung Exp $
+ * $Id: PaneTabTag.java,v 1.3 2003/04/30 06:31:27 eburns Exp $
  */
 
 /*
@@ -66,8 +66,8 @@ public class PaneTabTag extends FacesTag {
         this.selected = selected;
     }
 
-    public UIComponent createComponent() {
-        return (new PaneComponent());
+    public String getComponentType() {
+        return ("Pane");
     }
 
     public String getRendererType() {

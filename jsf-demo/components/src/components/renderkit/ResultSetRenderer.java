@@ -1,5 +1,5 @@
 /*
- * $Id: ResultSetRenderer.java,v 1.4 2003/03/27 19:43:35 jvisvanathan Exp $
+ * $Id: ResultSetRenderer.java,v 1.5 2003/04/30 06:31:21 eburns Exp $
  */
 
 /*
@@ -77,7 +77,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ResultSetRenderer.java,v 1.4 2003/03/27 19:43:35 jvisvanathan Exp $
+ * @version $Id: ResultSetRenderer.java,v 1.5 2003/04/30 06:31:21 eburns Exp $
  *  
  */
 
@@ -127,13 +127,6 @@ public class ResultSetRenderer extends BaseRenderer {
     //
     // Methods From Renderer
     //
-
-    public boolean supportsComponentType(String componentType) {
-        if ( componentType == null ) {
-            throw new NullPointerException();
-        }    
-        return (componentType.equals(UIPanel.TYPE));
-    }
 
     public void decode(FacesContext context, UIComponent component)
         throws IOException {

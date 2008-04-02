@@ -1,5 +1,5 @@
 /*
- * $Id: StylesheetRenderer.java,v 1.3 2003/03/27 19:43:35 jvisvanathan Exp $
+ * $Id: StylesheetRenderer.java,v 1.4 2003/04/30 06:31:22 eburns Exp $
  */
 
 /*
@@ -63,12 +63,6 @@ public class StylesheetRenderer extends BaseRenderer {
     public boolean supportsComponentType(UIComponent component) {
         return (component instanceof UIOutput);
     }
-
-
-    public boolean supportsComponentType(String componentType) {
-        return (componentType.equals(UIOutput.TYPE));
-    }
-
 
     public void decode(FacesContext context, UIComponent component)
         throws IOException {

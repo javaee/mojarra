@@ -59,8 +59,8 @@ public class StylesheetTag extends FacesTag {
     }
 
 
-    public UIComponent createComponent() {
-        	return (new UIOutput());
+    public String getComponentType() {
+        	return ("Output");
     }
 
 

@@ -1,5 +1,5 @@
 /*
- * $Id: MenuBarRenderer.java,v 1.3 2003/03/27 19:43:34 jvisvanathan Exp $
+ * $Id: MenuBarRenderer.java,v 1.4 2003/04/30 06:31:21 eburns Exp $
  */
 
 /*
@@ -53,7 +53,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import javax.faces.FacesException;
-import javax.faces.component.AttributeDescriptor;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;

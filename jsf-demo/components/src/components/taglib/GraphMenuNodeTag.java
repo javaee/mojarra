@@ -1,5 +1,5 @@
 /*
- * $Id: GraphMenuNodeTag.java,v 1.3 2003/03/27 19:43:39 jvisvanathan Exp $
+ * $Id: GraphMenuNodeTag.java,v 1.4 2003/04/30 06:31:26 eburns Exp $
  */
 
 /*
@@ -155,7 +155,7 @@ public class GraphMenuNodeTag extends FacesBodyTag {
         this.action = action;
     }
 
-    public UIComponent createComponent() {
+    public String getComponentType() {
         return null;
     }
     

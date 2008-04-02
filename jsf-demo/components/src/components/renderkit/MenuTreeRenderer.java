@@ -1,5 +1,5 @@
 /*
- * $Id: MenuTreeRenderer.java,v 1.3 2003/03/27 19:43:34 jvisvanathan Exp $
+ * $Id: MenuTreeRenderer.java,v 1.4 2003/04/30 06:31:21 eburns Exp $
  */
 
 /*
@@ -52,7 +52,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
 import javax.faces.FacesException;
-import javax.faces.component.AttributeDescriptor;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIForm;
 import javax.faces.context.FacesContext;

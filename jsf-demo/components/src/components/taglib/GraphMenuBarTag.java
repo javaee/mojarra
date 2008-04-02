@@ -1,5 +1,5 @@
 /*
- * $Id: GraphMenuBarTag.java,v 1.4 2003/03/27 19:43:38 jvisvanathan Exp $
+ * $Id: GraphMenuBarTag.java,v 1.5 2003/04/30 06:31:26 eburns Exp $
  */
 
 /*
@@ -65,10 +65,9 @@ public class GraphMenuBarTag extends FacesTag {
     protected String unselectedClass = null;
     protected String valueRef = null;
     
-    public UIComponent createComponent() {
-        return (new GraphComponent());
+    public String getComponentType() {
+        return ("Graph");
     }
-
   
     public String getRendererType() {
         return ("MenuBar");
