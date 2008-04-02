@@ -136,7 +136,9 @@ public class ELResolverInitPhaseListener implements PhaseListener {
               appAssociate.getFacesELResolverForJsp();
         if (compositeELResolverForJsp == null) {
             if (LOGGER.isLoggable(Level.INFO)) {
-                LOGGER.info("jsf.lifecycle.initphaselistener.resolvers_not_registered");
+                LOGGER.log(Level.INFO,
+                           "jsf.lifecycle.initphaselistener.resolvers_not_registered",
+                           new Object[] { appAssociate.getContextName() });
             }
             return;
         }
@@ -181,7 +183,9 @@ public class ELResolverInitPhaseListener implements PhaseListener {
         }
 
         if (LOGGER.isLoggable(Level.INFO)) {
-            LOGGER.info("jsf.lifecycle.initphaselistener.resolvers_registered");
+            LOGGER.log(Level.INFO,
+                       "jsf.lifecycle.initphaselistener.resolvers_registered",
+                       new Object[] { appAssociate.getContextName() });
         }
     }
 

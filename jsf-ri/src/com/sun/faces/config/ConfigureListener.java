@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListener.java,v 1.75 2006/05/18 22:36:37 rlubke Exp $
+ * $Id: ConfigureListener.java,v 1.76 2006/05/22 22:38:07 rlubke Exp $
  */
 /*
  * The contents of this file are subject to the terms
@@ -516,20 +516,22 @@ public class ConfigureListener implements ServletContextListener {
             registerELResolverAndListenerWithJsp(context);
         } finally {
             if (!initialized) {
-		JSFVersionTracker tracker = getJSFVersionTracker();
-		if (null != tracker) {
-		    tracker.publishInstanceToApplication();
-		}
-		releaseDigester(digester);
-	    }
+                JSFVersionTracker tracker = getJSFVersionTracker();
+                if (null != tracker) {
+                    tracker.publishInstanceToApplication();
+                }
+                releaseDigester(digester);
+            }
             tlsExternalContext.set(null);
-            
+            ApplicationAssociate.getInstance(context)
+                  .setContextName(getServletContextIdentifier(context));
+
             if (LOGGER.isLoggable(Level.INFO)) {
                 LOGGER.log(Level.INFO,
                            "jsf.config.listener.version.complete",
                            getServletContextIdentifier(context));
             }
-            
+
         }
     }
 

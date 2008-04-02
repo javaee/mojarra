@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationAssociate.java,v 1.31 2006/05/22 15:05:55 rlubke Exp $
+ * $Id: ApplicationAssociate.java,v 1.32 2006/05/22 22:38:07 rlubke Exp $
  */
 
 /*
@@ -132,6 +132,8 @@ public class ApplicationAssociate {
     private CompositeELResolver facesELResolverForJsp = null;
 
     private InjectionProvider injectionProvider;
+    
+    private String contextName;
 
     public ApplicationAssociate(ApplicationImpl appImpl) {
     app = appImpl;
@@ -231,6 +233,14 @@ public class ApplicationAssociate {
     
     public InjectionProvider getInjectionProvider() {
         return injectionProvider;
+    }
+    
+    public void setContextName(String contextName) {
+        this.contextName = contextName;
+    }
+    
+    public String getContextName() {
+        return contextName;
     }
 
     /**
