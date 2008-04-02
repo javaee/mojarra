@@ -1,5 +1,5 @@
 /*
- * $Id: NamingContainerTestCase.java,v 1.1 2003/10/31 18:47:59 craigmcc Exp $
+ * $Id: NamingContainerTestCase.java,v 1.2 2003/11/01 00:46:07 craigmcc Exp $
  */
 
 /*
@@ -69,6 +69,62 @@ public class NamingContainerTestCase extends TestCase {
     // ------------------------------------------------- Individual Test Methods
 
 
+    // Test nested NamingContainer callbacks
+    public void testNested() {
+
+        TestNamingContainer a = new TestNamingContainer(); a.setId("a");
+        TestNamingContainer b = new TestNamingContainer(); b.setId("b");
+        TestNamingContainer d = new TestNamingContainer(); d.setId("d");
+        UIPanel e = new UIPanel(); e.setId("e");
+        UIPanel g = new UIPanel(); g.setId("g");
+        a.getChildren().add(b);
+        b.getChildren().add(d);
+        b.getChildren().add(g);
+        d.getChildren().add(e);
+
+        TestNamingContainer.trace(null);
+        assertTrue(a == a.findComponent("a"));
+        assertEquals("/a/a", TestNamingContainer.trace());
+
+        TestNamingContainer.trace(null);
+        assertTrue(a == a.findComponent(":a"));
+        assertEquals("/a/:a", TestNamingContainer.trace());
+
+        TestNamingContainer.trace(null);
+        assertTrue(b == a.findComponent("b"));
+        assertEquals("/a/b", TestNamingContainer.trace());
+
+        TestNamingContainer.trace(null);
+        assertTrue(b == a.findComponent(":b"));
+        assertEquals("/a/:b", TestNamingContainer.trace());
+
+        TestNamingContainer.trace(null);
+        assertTrue(d == a.findComponent("b:d"));
+        assertEquals("/a/b:d/b/d", TestNamingContainer.trace());
+
+        TestNamingContainer.trace(null);
+        assertTrue(d == a.findComponent(":b:d"));
+        assertEquals("/a/:b:d/b/d", TestNamingContainer.trace());
+
+        TestNamingContainer.trace(null);
+        assertTrue(e == a.findComponent("b:d:e"));
+        assertEquals("/a/b:d:e/b/d:e/d/e", TestNamingContainer.trace());
+
+        TestNamingContainer.trace(null);
+        assertTrue(e == a.findComponent(":b:d:e"));
+        assertEquals("/a/:b:d:e/b/d:e/d/e", TestNamingContainer.trace());
+
+        TestNamingContainer.trace(null);
+        assertTrue(g == a.findComponent("b:g"));
+        assertEquals("/a/b:g/b/g", TestNamingContainer.trace());
+
+        TestNamingContainer.trace(null);
+        assertTrue(g == a.findComponent(":b:g"));
+        assertEquals("/a/:b:g/b/g", TestNamingContainer.trace());
+
+    }
+
+
     // Test standard NamingContainer functionality
     public void testStandard() {
 
@@ -122,12 +178,12 @@ public class NamingContainerTestCase extends TestCase {
         assertTrue(g == b.findComponent("g"));
 
         // Negative relative searches from "b"
-        // assertNull(b.findComponent("a"));
-        // assertNull(b.findComponent("c"));
+        assertNull(b.findComponent("a"));
+        assertNull(b.findComponent("c"));
         assertNull(b.findComponent("e"));
         assertNull(b.findComponent("f"));
-        // assertNull(b.findComponent("h"));
-        // assertNull(b.findComponent("i"));
+        assertNull(b.findComponent("h"));
+        assertNull(b.findComponent("i"));
 
         // Positive relative searches from "c"
         assertTrue(a == c.findComponent("a"));
@@ -153,9 +209,9 @@ public class NamingContainerTestCase extends TestCase {
 
         // Negative relative searches from "d"
         assertNull(d.findComponent("a"));
-        // assertNull(d.findComponent("b"));
+        assertNull(d.findComponent("b"));
         assertNull(d.findComponent("c"));
-        // assertNull(d.findComponent("g"));
+        assertNull(d.findComponent("g"));
         assertNull(d.findComponent("h"));
         assertNull(d.findComponent("i"));
 
@@ -235,103 +291,159 @@ public class NamingContainerTestCase extends TestCase {
         assertNull(i.findComponent("g"));
 
         // Absolute searches from "a"
-        // assertTrue(a == a.findComponent(":a"));
-        // assertTrue(b == a.findComponent(":b"));
-        // assertTrue(c == a.findComponent(":c"));
-        // assertTrue(d == a.findComponent(":b:d"));
-        // assertTrue(e == a.findComponent(":b:d:e"));
-        // assertTrue(f == a.findComponent(":b:d:f"));
-        // assertTrue(g == a.findComponent(":b:g"));
-        // assertTrue(h == a.findComponent(":h"));
-        // assertTrue(i == a.findComponent(":i"));
+        assertTrue(a == a.findComponent(":a"));
+        assertTrue(b == a.findComponent(":b"));
+        assertTrue(c == a.findComponent(":c"));
+        assertTrue(d == a.findComponent(":b:d"));
+        assertTrue(e == a.findComponent(":b:d:e"));
+        assertTrue(f == a.findComponent(":b:d:f"));
+        assertTrue(g == a.findComponent(":b:g"));
+        assertTrue(h == a.findComponent(":h"));
+        assertTrue(i == a.findComponent(":i"));
 
         // Absolute searches from "b"
-        // assertTrue(a == b.findComponent(":a"));
-        // assertTrue(b == b.findComponent(":b"));
-        // assertTrue(c == b.findComponent(":c"));
-        // assertTrue(d == b.findComponent(":b:d"));
-        // assertTrue(e == b.findComponent(":b:d:e"));
-        // assertTrue(f == b.findComponent(":b:d:f"));
-        // assertTrue(g == b.findComponent(":b:g"));
-        // assertTrue(h == b.findComponent(":h"));
-        // assertTrue(i == b.findComponent(":i"));
+        assertTrue(a == b.findComponent(":a"));
+        assertTrue(b == b.findComponent(":b"));
+        assertTrue(c == b.findComponent(":c"));
+        assertTrue(d == b.findComponent(":b:d"));
+        assertTrue(e == b.findComponent(":b:d:e"));
+        assertTrue(f == b.findComponent(":b:d:f"));
+        assertTrue(g == b.findComponent(":b:g"));
+        assertTrue(h == b.findComponent(":h"));
+        assertTrue(i == b.findComponent(":i"));
 
         // Absolute searches from "c"
-        // assertTrue(a == c.findComponent(":a"));
-        // assertTrue(b == c.findComponent(":b"));
-        // assertTrue(c == c.findComponent(":c"));
-        // assertTrue(d == c.findComponent(":b:d"));
-        // assertTrue(e == c.findComponent(":b:d:e"));
-        // assertTrue(f == c.findComponent(":b:d:f"));
-        // assertTrue(g == c.findComponent(":b:g"));
-        // assertTrue(h == c.findComponent(":h"));
-        // assertTrue(i == c.findComponent(":i"));
+        assertTrue(a == c.findComponent(":a"));
+        assertTrue(b == c.findComponent(":b"));
+        assertTrue(c == c.findComponent(":c"));
+        assertTrue(d == c.findComponent(":b:d"));
+        assertTrue(e == c.findComponent(":b:d:e"));
+        assertTrue(f == c.findComponent(":b:d:f"));
+        assertTrue(g == c.findComponent(":b:g"));
+        assertTrue(h == c.findComponent(":h"));
+        assertTrue(i == c.findComponent(":i"));
 
         // Absolute searches from "d"
-        // assertTrue(a == d.findComponent(":a"));
-        // assertTrue(b == d.findComponent(":b"));
-        // assertTrue(c == d.findComponent(":c"));
-        // assertTrue(d == d.findComponent(":b:d"));
-        // assertTrue(e == d.findComponent(":b:d:e"));
-        // assertTrue(f == d.findComponent(":b:d:f"));
-        // assertTrue(g == d.findComponent(":b:g"));
-        // assertTrue(h == d.findComponent(":h"));
-        // assertTrue(i == d.findComponent(":i"));
+        assertTrue(a == d.findComponent(":a"));
+        assertTrue(b == d.findComponent(":b"));
+        assertTrue(c == d.findComponent(":c"));
+        assertTrue(d == d.findComponent(":b:d"));
+        assertTrue(e == d.findComponent(":b:d:e"));
+        assertTrue(f == d.findComponent(":b:d:f"));
+        assertTrue(g == d.findComponent(":b:g"));
+        assertTrue(h == d.findComponent(":h"));
+        assertTrue(i == d.findComponent(":i"));
 
         // Absolute searches from "e"
-        // assertTrue(a == e.findComponent(":a"));
-        // assertTrue(b == e.findComponent(":b"));
-        // assertTrue(c == e.findComponent(":c"));
-        // assertTrue(d == e.findComponent(":b:d"));
-        // assertTrue(e == e.findComponent(":b:d:e"));
-        // assertTrue(f == e.findComponent(":b:d:f"));
-        // assertTrue(g == e.findComponent(":b:g"));
-        // assertTrue(h == e.findComponent(":h"));
-        // assertTrue(i == e.findComponent(":i"));
+        assertTrue(a == e.findComponent(":a"));
+        assertTrue(b == e.findComponent(":b"));
+        assertTrue(c == e.findComponent(":c"));
+        assertTrue(d == e.findComponent(":b:d"));
+        assertTrue(e == e.findComponent(":b:d:e"));
+        assertTrue(f == e.findComponent(":b:d:f"));
+        assertTrue(g == e.findComponent(":b:g"));
+        assertTrue(h == e.findComponent(":h"));
+        assertTrue(i == e.findComponent(":i"));
 
         // Absolute searches from "f"
-        // assertTrue(a == f.findComponent(":a"));
-        // assertTrue(b == f.findComponent(":b"));
-        // assertTrue(c == f.findComponent(":c"));
-        // assertTrue(d == f.findComponent(":b:d"));
-        // assertTrue(e == f.findComponent(":b:d:e"));
-        // assertTrue(f == f.findComponent(":b:d:f"));
-        // assertTrue(g == f.findComponent(":b:g"));
-        // assertTrue(h == f.findComponent(":h"));
-        // assertTrue(i == f.findComponent(":i"));
+        assertTrue(a == f.findComponent(":a"));
+        assertTrue(b == f.findComponent(":b"));
+        assertTrue(c == f.findComponent(":c"));
+        assertTrue(d == f.findComponent(":b:d"));
+        assertTrue(e == f.findComponent(":b:d:e"));
+        assertTrue(f == f.findComponent(":b:d:f"));
+        assertTrue(g == f.findComponent(":b:g"));
+        assertTrue(h == f.findComponent(":h"));
+        assertTrue(i == f.findComponent(":i"));
 
         // Absolute searches from "g"
-        // assertTrue(a == g.findComponent(":a"));
-        // assertTrue(b == g.findComponent(":b"));
-        // assertTrue(c == g.findComponent(":c"));
-        // assertTrue(d == g.findComponent(":b:d"));
-        // assertTrue(e == g.findComponent(":b:d:e"));
-        // assertTrue(f == g.findComponent(":b:d:f"));
-        // assertTrue(g == g.findComponent(":b:g"));
-        // assertTrue(h == g.findComponent(":h"));
-        // assertTrue(i == g.findComponent(":i"));
+        assertTrue(a == g.findComponent(":a"));
+        assertTrue(b == g.findComponent(":b"));
+        assertTrue(c == g.findComponent(":c"));
+        assertTrue(d == g.findComponent(":b:d"));
+        assertTrue(e == g.findComponent(":b:d:e"));
+        assertTrue(f == g.findComponent(":b:d:f"));
+        assertTrue(g == g.findComponent(":b:g"));
+        assertTrue(h == g.findComponent(":h"));
+        assertTrue(i == g.findComponent(":i"));
 
         // Absolute searches from "h"
-        // assertTrue(a == h.findComponent(":a"));
-        // assertTrue(b == h.findComponent(":b"));
-        // assertTrue(c == h.findComponent(":c"));
-        // assertTrue(d == h.findComponent(":b:d"));
-        // assertTrue(e == h.findComponent(":b:d:e"));
-        // assertTrue(f == h.findComponent(":b:d:f"));
-        // assertTrue(g == h.findComponent(":b:g"));
-        // assertTrue(h == h.findComponent(":h"));
-        // assertTrue(i == h.findComponent(":i"));
+        assertTrue(a == h.findComponent(":a"));
+        assertTrue(b == h.findComponent(":b"));
+        assertTrue(c == h.findComponent(":c"));
+        assertTrue(d == h.findComponent(":b:d"));
+        assertTrue(e == h.findComponent(":b:d:e"));
+        assertTrue(f == h.findComponent(":b:d:f"));
+        assertTrue(g == h.findComponent(":b:g"));
+        assertTrue(h == h.findComponent(":h"));
+        assertTrue(i == h.findComponent(":i"));
 
         // Absolute searches from "i"
-        // assertTrue(a == i.findComponent(":a"));
-        // assertTrue(b == i.findComponent(":b"));
-        // assertTrue(c == i.findComponent(":c"));
-        // assertTrue(d == i.findComponent(":b:d"));
-        // assertTrue(e == i.findComponent(":b:d:e"));
-        // assertTrue(f == i.findComponent(":b:d:f"));
-        // assertTrue(g == i.findComponent(":b:g"));
-        // assertTrue(h == i.findComponent(":h"));
-        // assertTrue(i == i.findComponent(":i"));
+        assertTrue(a == i.findComponent(":a"));
+        assertTrue(b == i.findComponent(":b"));
+        assertTrue(c == i.findComponent(":c"));
+        assertTrue(d == i.findComponent(":b:d"));
+        assertTrue(e == i.findComponent(":b:d:e"));
+        assertTrue(f == i.findComponent(":b:d:f"));
+        assertTrue(g == i.findComponent(":b:g"));
+        assertTrue(h == i.findComponent(":h"));
+        assertTrue(i == i.findComponent(":i"));
+
+        // Cases that should throw exceptions
+        try {
+            a.findComponent(null);
+            fail("Should have thrown NullPointerException");
+        } catch (NullPointerException ex) {
+            ; // Expected result
+        }
+        try {
+            a.findComponent("a:c:h");
+            fail("Should have thrown IllegalArgumentException");
+        } catch (IllegalArgumentException ex) {
+            ; // Expected result
+        }
+        try {
+            a.findComponent("a:c:i");
+            fail("Should have thrown IllegalArgumentException");
+        } catch (IllegalArgumentException ex) {
+            ; // Expected result
+        }
+        try {
+            a.findComponent(":a:c:h");
+            fail("Should have thrown IllegalArgumentException");
+        } catch (IllegalArgumentException ex) {
+            ; // Expected result
+        }
+        try {
+            a.findComponent(":a:c:i");
+            fail("Should have thrown IllegalArgumentException");
+        } catch (IllegalArgumentException ex) {
+            ; // Expected result
+        }
+        try {
+            a.findComponent("c:h");
+            fail("Should have thrown IllegalArgumentException");
+        } catch (IllegalArgumentException ex) {
+            ; // Expected result
+        }
+        try {
+            a.findComponent("c:i");
+            fail("Should have thrown IllegalArgumentException");
+        } catch (IllegalArgumentException ex) {
+            ; // Expected result
+        }
+        try {
+            a.findComponent(":c:h");
+            fail("Should have thrown IllegalArgumentException");
+        } catch (IllegalArgumentException ex) {
+            ; // Expected result
+        }
+        try {
+            a.findComponent(":c:i");
+            fail("Should have thrown IllegalArgumentException");
+        } catch (IllegalArgumentException ex) {
+            ; // Expected result
+        }
 
     }
 

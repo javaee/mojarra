@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.112 2003/10/31 04:45:26 craigmcc Exp $
+ * $Id: UIComponent.java,v 1.113 2003/11/01 00:46:05 craigmcc Exp $
  */
 
 /*
@@ -251,31 +251,59 @@ public abstract class UIComponent implements StateHolder {
 
 
     /**
-     * <p>Searches for a component with an <code>id</code> that matches
-     * the specified search expression.  The search will
-     * begin either from the root of the component tree or the nearest
-     * ancestor <code>NamingContainer</code>, whichever is closer, and
-     * continue recursively through all children and facets, but will
-     * not continue inside any <code>NamingContainers</code>.</p>
+     * <p>Search for and return the {@link UIComponent} with an <code>id</code>
+     * that matches the specified search expression (if any), according to the
+     * algorithm described below.</p>
      *
-     * <p>If this component is itself a <code>NamingContainer</code>,
-     * the search will first recursively search children and facets
-     * inside of this component, then search from the root of the
-     * component tree or the nearest ancestor <code>NamingContainer</code>,
-     * whichever is closer.</p>
+     * <p>Component identifiers are required to be unique within the scope of
+     * the closest ancestor {@link NamingContainer} that encloses this
+     * component (which might be this component itself).  If there are no
+     * {@link NamingContainer} components in the ancestry of this component,
+     * the root component in the tree is treated as if it were a
+     * {@link NamingContainer}, whether or not its class actually implements
+     * the {@link NamingContainer} interface.</p>
      *
-     * <p>If the search expression contains instances of
-     * <code>NamingContainer.SEPARATOR_CHAR</code>, then the call is
-     * treated as a request for a recursive search.  The search expression
-     * will be divided into a series of subexpressions separated by
-     * <code>NamingContainer.SEPARATOR_CHAR</code>, reading from left to
-     * right.  The search begins as above, but will instead search for a
-     * component whose <code>id</code> matches the first subexprssion.
-     * If that search suceeds, <code>findComponent()</code> will search
-     * recursively all children and facets inside of that component for
-     * a descendant matching the second subexpression, and so on.
-     * If any step of the search fails, <code>findComponent()</code>
-     * returns <code>null</code> (and does not throw an exception).</p>
+     * <p>A <em>search expression</em> consists of either an
+     * identifier (which is matched exactly against the <code>id</code>
+     * property of a {@link UIComponent}, or a series of such identifiers
+     * linked by the {@link NamingContainer#SEPARATOR_CHAR} character value.
+     * The search algorithm operates as follows:</p>
+     * <ul>
+     * <li>Identify the {@link UIComponent} that will be the base for searching,
+     *     by stopping as soon as one of the following conditions is met:
+     *     <ul>
+     *     <li>If the search expression begins with the the separator character
+     *         (called an "absolute" search expression),
+     *         the base will be the root {@link UIComponent} of the component
+     *         tree.  The leading separator character will be stripped off,
+     *         and the remainder of the search expression will be treated as
+     *         a "relative" search expression as described below.</li>
+     *     <li>Otherwise, if this {@link UIComponent} is a
+     *         {@link NamingContainer} it will serve as the basis.</li>
+     *     <li>Otherwise, search up the parents of this component.  If
+     *         a {@link NamingContainer} is encountered, it will be the base.
+     *         </li>
+     *     <li>Otherwise (if no {@link NamingContainer} is encountered)
+     *         the root {@link UIComponent} will be the base.</li>
+     *     </ul></li>
+     * <li>The search expression (possibly modified in the previous step) is now
+     *     a "relative" search expression that will be used to locate the
+     *     component (if any) that has an <code>id</code> that matches, within
+     *     the scope of the base component.  The match is performed as follows:
+     *     <ul>
+     *     <li>If the search expression is a simple identifier, this value is
+     *         compared to the <code>id</code> property, and then recursively
+     *         through the facets and children of the base {@link UIComponent}
+     *         (except that if a descendant {@link NamingContainer} is found,
+     *         its own facets and children are not searched).</li>
+     *     <li>If the search expression includes more than one identifier
+     *         separated by the separator character, the first identifier is
+     *         used to locate a {@link NamingContainer} by the rules in the
+     *         previous bullet point.  Then, the <code>findComponent()</code>
+     *         method of this {@link NamingContainer} will be called, passing
+     *         the remainder of the search expression.</li>
+     *     </ul></li>
+     * </ul>
      *
      * @param expr Search expression identifying the {@link UIComponent}
      *  to be returned
@@ -283,6 +311,9 @@ public abstract class UIComponent implements StateHolder {
      * @return the found {@link UIComponent}, or <code>null</code>
      *  if the component was not found.
      *
+     * @exception IllegalArgumentException if an intermediate identifier
+     *  in a search expression identifies a {@link UIComponent} that is
+     *  not a {@link NamingContainer}
      * @exception NullPointerException if <code>expr</code>
      *  is <code>null</code>
      */

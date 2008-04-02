@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.78 2003/10/31 04:45:26 craigmcc Exp $
+ * $Id: UIComponentBase.java,v 1.79 2003/11/01 00:46:05 craigmcc Exp $
  */
 
 /*
@@ -646,95 +646,103 @@ public abstract class UIComponentBase extends UIComponent {
     }
 
 
+    private static String separatorString =
+        "" + NamingContainer.SEPARATOR_CHAR;
+
+
     /**
      * @exception NullPointerException {@inheritDoc}
      */ 
-    public UIComponent findComponent(String id) {
+    public UIComponent findComponent(String expr) {
 
-        if (id ==  null) {
+        if (expr == null) {
             throw new NullPointerException();
         }
-        UIComponent from;
 
-        // If we ourselves are a NamingContainer, look only inside
-        if (this instanceof NamingContainer) {
-            UIComponent result = findComponentCompound(this, id);
-            if (result != null) {
-                return (result);
+        // Identify the base component from which we will perform our search
+        UIComponent base = this;
+        if (expr.startsWith(separatorString)) {
+            // Absolute searches start at the root of the tree
+            while (base.getParent() != null) {
+                base = base.getParent();
             }
-            from = getParent();
+            // Treat remainder of the expression as relative
+            expr = expr.substring(1);
         } else {
-            from = this;
+            // Relative expressions start at the closest NamingContainer or root
+            while (base.getParent() != null) {
+                if (base instanceof NamingContainer) {
+                    break;
+                }
+                base = base.getParent();
+            }
         }
 
-        // Go up until we find a parent that is one of a NamingContainer or
-        // the root (whether a UIViewRoot or we're in an unattached subtree)
-        while (true) {
-            if ((from instanceof NamingContainer) ||
-                // Intentionally not checking for instanceof UIViewRoot;
-                // that's handled by the next line
-                (from.getParent() == null)) {
-                break;
+        // Evaluate the search expression (now guaranteed to be relative)
+        String id = null;
+        UIComponent result = null;
+        while (expr.length() > 0) {
+            int separator = expr.indexOf(NamingContainer.SEPARATOR_CHAR);
+            if (separator >= 0) {
+                id = expr.substring(0, separator);
+                expr = expr.substring(separator + 1);
+            } else {
+                id = expr;
+                expr = "";
             }
-            from = from.getParent();
+            result = findComponent(base, id);
+            if ((result == null) || (expr.length() == 0)) {
+                break; // Missing intermediate node or this is the last node
+            }
+            if (result instanceof NamingContainer) {
+                result = result.findComponent(expr);
+                break;
+            } else {
+                throw new IllegalArgumentException(id);
+            }
         }
-        return (findComponentCompound(from, id));
+
+        // Return the final result of our search
+        return (result);
 
     }
 
     
-    // Find the component matching the (possibly compound) "id" inside "from"
-    private UIComponent findComponentCompound(UIComponent from, String id) {
+    /**
+     * <p>Return the {@link UIComponent} (if any) with the specified
+     * <code>id</code>, searching recursively starting at the specified
+     * <code>base</code>, and examining the base component itself, followed
+     * by examining all the base component's facets and children (unless
+     * the base component is a {@link NamingContainer}, in which case the
+     * recursive scan is skipped.</p>
+     *
+     * @param base Base {@link UIComponent} from which to search
+     * @param id Component identifier to be matched
+     */
+    private UIComponent findComponent(UIComponent base, String id) {
 
-        while (from != null) {
-
-            // Identify the next segment to match on
-            int separatorIndex = id.indexOf(NamingContainer.SEPARATOR_CHAR);
-            String singleId;
-            if (separatorIndex < 0) {
-                singleId = id;
-            } else {
-                singleId = id.substring(0, separatorIndex);
-                id = id.substring(separatorIndex + 1);
-            }
-            from = findComponentSimple(from, singleId);
-            
-            // End of the road: return what we found
-            if (separatorIndex < 0) {
-                return (from);
-            }
-
-        }
-        return null;
-
-    }
-
-
-    // Find the component matching the specified "id" inside "from"
-    private UIComponent findComponentSimple(UIComponent from, String id) {
-
-        // Is the "from" component itself the match we are looking for?
-        if (id.equals(from.getId())) {
-            return (from);
+        // Is the "base" component itself the match we are looking for?
+        if (id.equals(base.getId())) {
+            return (base);
         }
 
         // Search through our facets and children
-        Iterator kids = from.getFacetsAndChildren();
-        while (kids.hasNext()) {
-            UIComponent kid = (UIComponent) kids.next();
-            // Stop at NamingContainers
+        UIComponent kid = null;
+        UIComponent result = null;
+        Iterator kids = base.getFacetsAndChildren();
+        while (kids.hasNext() && (result == null)) {
+            kid = (UIComponent) kids.next();
             if (!(kid instanceof NamingContainer)) {
-                UIComponent returned = findComponentSimple(kid, id);
-                if (returned != null) {
-                    return (returned);
-                }            
-                // the NamingContainer component could be what is being searched
-                // for, but that will be picked up by the previous test
+                result = findComponent(kid, id);
+                if (result != null) {
+                    break;
+                }
             } else if (id.equals(kid.getId())) {
-                return (kid);
+                result = kid;
+                break;
             }
         }
-        return (null);
+        return (result);
 
     }
 
