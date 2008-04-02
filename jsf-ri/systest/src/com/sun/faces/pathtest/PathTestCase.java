@@ -1,5 +1,5 @@
 /*
- * $Id: PathTestCase.java,v 1.1 2003/10/13 18:08:48 rlubke Exp $
+ * $Id: PathTestCase.java,v 1.2 2003/10/17 13:55:43 rlubke Exp $
  */
 
 /*
@@ -79,7 +79,7 @@ public class PathTestCase extends AbstractTestCase {
      * to the context root.  
      * Additionally verify that after request to a particular view
      * has been made, if a subsequent request is made to the
-     * prefix path, that the current view is returned.
+     * prefix path, context root redirection occurs.
      */ 
     public void testVerifyPathBehavior() throws Exception {
         final String welcomePage = "WELCOMEPAGE";
@@ -93,9 +93,9 @@ public class PathTestCase extends AbstractTestCase {
         assertTrue("/hello.jsp PASSED".equals(
             response.getContentAsString().trim()));
         
-        textPage = getTextPage("/faces");
-        response = textPage.getWebResponse();
-        assertTrue("/hello.jsp PASSED".equals(
+        page = getPage("/faces");
+        response = page.getWebResponse();
+        assertTrue("WELCOMEPAGE".equals(
             response.getContentAsString().trim()));        
     }
 

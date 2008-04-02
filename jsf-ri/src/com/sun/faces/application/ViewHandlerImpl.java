@@ -1,5 +1,5 @@
 /* 
- * $Id: ViewHandlerImpl.java,v 1.18 2003/10/17 00:01:09 jvisvanathan Exp $ 
+ * $Id: ViewHandlerImpl.java,v 1.19 2003/10/17 13:55:42 rlubke Exp $ 
  */ 
 
 
@@ -17,7 +17,6 @@ import com.sun.faces.RIConstants;
 import com.sun.faces.util.Util;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.mozilla.util.Assert;
 
 import javax.faces.FacesException;
 import javax.faces.application.Application;
@@ -34,14 +33,13 @@ import javax.servlet.jsp.jstl.core.Config;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 import java.util.Locale;
 import java.util.Iterator;
 import java.util.Enumeration;
 
 /** 
  * <B>ViewHandlerImpl</B> is the default implementation class for ViewHandler. 
- * @version $Id: ViewHandlerImpl.java,v 1.18 2003/10/17 00:01:09 jvisvanathan Exp $ 
+ * @version $Id: ViewHandlerImpl.java,v 1.19 2003/10/17 13:55:42 rlubke Exp $ 
  * 
  * @see javax.faces.application.ViewHandler 
  * 
@@ -60,14 +58,7 @@ public class ViewHandlerImpl extends Object
      * request.</p>
      */ 
     private static final String INVOCATION_PATH =
-        RIConstants.FACES_PREFIX + "INVOCATION_PATH";
-    
-    /**
-     * <p>The <code>session</code> scoped attribute used to store the 
-     * current view ID.</p>
-     */
-    private static final String CURRENT_VIEW_ID =
-        RIConstants.FACES_PREFIX + "CURRENT_VIEW_ID";
+        RIConstants.FACES_PREFIX + "INVOCATION_PATH";        
 
     //
     // Relationship Instance Variables
@@ -110,15 +101,12 @@ public class ViewHandlerImpl extends Object
         if (application instanceof ApplicationImpl) {
             ((ApplicationImpl) application).responseRendered();
         }
-        String requestURI = viewToRender.getViewId();
-        Map sessionMap = context.getExternalContext().getSessionMap();
-        Assert.assert_it(sessionMap != null);
-        sessionMap.put(CURRENT_VIEW_ID, requestURI);
+        String requestURI = viewToRender.getViewId();       
         
         String mapping = getFacesMapping(context);
         // If we have a valid mapping (meaning we were invoked via the
         // FacesServlet) and we're extension mapped, do the replacement.
-        if (mapping != null && !isPrefixMapped(getFacesMapping(context))) {            
+        if (mapping != null && !isPrefixMapped(mapping)) {            
             
             if (contextDefaultSuffix == null) {
                 contextDefaultSuffix = context.getExternalContext().
@@ -170,27 +158,21 @@ public class ViewHandlerImpl extends Object
         // maping could be null if a non-faces request triggered
         // this response.
         if (extContext.getRequestPathInfo() == null && mapping != null &&
-            isPrefixMapped(getFacesMapping(context))) {
-            // request was prefix mapped with no view ID.  Use the current
-            // view ID
-            viewId = (String) extContext.getSessionMap().get(CURRENT_VIEW_ID);
-            
-            if (viewId == null) {
-                // this was probably an initial request
-                // send them off to the root of the web application
-                try {
-                    Object response = extContext.getResponse();
-                    context.responseComplete();
+            isPrefixMapped(mapping)) {                                   
+            // this was probably an initial request
+            // send them off to the root of the web application
+            try {
+                Object response = extContext.getResponse();
+                context.responseComplete();
                     
-                    // PENDING -- Need to consider Portlets
-                    if (response instanceof HttpServletResponse) {
-                        ((HttpServletResponse) response).sendRedirect(
-                            extContext.getRequestContextPath());
-                    }                    
-                } catch (IOException ioe) {
-                    throw new FacesException(ioe);   
+                // PENDING -- Need to consider Portlets
+                if (response instanceof HttpServletResponse) {
+                    ((HttpServletResponse) response).sendRedirect(
+                        extContext.getRequestContextPath());
                 }
-            }
+            } catch (IOException ioe) {
+                throw new FacesException(ioe);
+            }           
         } else {
             viewRoot = getStateManager().restoreView(context, viewId);
         }        
