@@ -62,6 +62,11 @@
     <component-type>Pane</component-type>
     <component-class>components.components.PaneComponent</component-class>
   </component>
+  
+  <component>
+    <component-type>Scroller</component-type>
+    <component-class>components.components.ScrollerComponent</component-class>
+  </component>
 
   <!-- Custom Renderers -->
 
@@ -127,11 +132,6 @@
     <renderer>
       <renderer-type>MenuTree</renderer-type>
       <renderer-class>components.renderkit.MenuTreeRenderer</renderer-class>
-    </renderer>
-
-    <renderer>
-      <renderer-type>ResultSet</renderer-type>
-      <renderer-class>components.renderkit.ResultSetRenderer</renderer-class>
     </renderer>
 
     <renderer>

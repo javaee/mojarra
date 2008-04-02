@@ -121,7 +121,6 @@ Faces technology.</p>
 
 </tr>
 
-<!-- PENDING(visvan): uncomment this when it works.
 <tr>
 
 <td>Result Set
@@ -131,9 +130,8 @@ Faces technology.</p>
 </td>
 
 <td>
-<a href="ShowSource.jsp?filename=/src/components/taglib/ResultSetTag.java">components/taglib/ResultSetTag.java</a><br>
-<a href="ShowSource.jsp?filename=/src/components/renderkit/ResultSetControls.java">components/renderkit/ResultSetControls.java</a><br>
-<a href="ShowSource.jsp?filename=/src/components/renderkit/ResultSetRenderer.java">components/renderkit/ResultSetRenderer.java</a><br>
+<a href="ShowSource.jsp?filename=/src/components/taglib/ScrollerTag.java">components/taglib/ScrollerTag.java</a><br>
+<a href="ShowSource.jsp?filename=/src/components/components/ScrollerComponent.java">components/components/ScrollerComponent.java</a><br>
 </td>
 
 <td><a href="result-set.jsf"><img src="images/execute.gif" width="24" height="24" border="0"></a>
@@ -142,7 +140,6 @@ Faces technology.</p>
 </tr>
 
 <tr>
--->
 
 <td>Tabbed Pane
 </td>

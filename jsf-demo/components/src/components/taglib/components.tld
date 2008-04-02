@@ -497,63 +497,15 @@
 
   <tag>
 
-    <name>panel_resultset</name>
-    <tag-class>components.taglib.ResultSetTag</tag-class>
+    <name>scroller</name>
+    <tag-class>components.taglib.ScrollerTag</tag-class>
     <body-content>JSP</body-content>
     <description>
-      Render a repeating set of data using an HTML "table" element for
-      layout management.  Child tags nested inside this tag must be:
-
-      * panel_group tag containing the individual values for each
-        column header (if headerClass is defined).  The number of
-        child components should match the number of columns to be created.
-
-      * panel_data tag(s) containing a template of the components that will
-        be used to render each row of the list.  The number of child
-        components should match the number of columns to be created.
-
-      * panel_group tag containing the individual values for each
-        column footer (if footerClass is defined).  The number of
-        child components should match the number of columns to be created.
+    Render a set of hyperlinks to enable navigation over results that span
+    across several pages.  Child tags nested inside this tag must be:
+    * facet tags that can optionally nest panel_group tag that provide widgets
+    * for easy navigation.
     </description>
-
-    <attribute>
-      <name>columnClasses</name>
-      <required>false</required>
-      <rtexprvalue>false</rtexprvalue>
-      <description>
-        Comma-delimited list of the class names of the CSS styles to be
-        used for each column.  These styles should specialize the styles
-        specified by rowClasses and panelClass (if any), because CSS
-        cascading is performed.  If the number of class names on this list
-        is less than the value specified for "columns", the pattern will
-        be repeated for the remaining columns of the current row; however,
-        the first column in each row will always use the first style listed.
-
-        Note that these styles are applied only to content rows, not to the
-        header or footer rows (if any).
-      </description>
-    </attribute>
-
-    <attribute>
-      <name>footerClass</name>
-      <required>false</required>
-      <rtexprvalue>false</rtexprvalue>
-      <description>
-        If this panel has a "footer" facet, it will be rendered with
-        this CSS style.
-      </description>
-    </attribute>
-
-    <attribute>
-      <name>headerClass</name>
-      <required>false</required>
-      <rtexprvalue>false</rtexprvalue>
-      <description>
-        If this panel has a "header" fact, it will be rendered with
-        this CSS style.
-      </description>
-    </attribute>
 
     <attribute>
       <name>id</name>
@@ -561,6 +513,15 @@
       <rtexprvalue>false</rtexprvalue>
       <description>
         Component id of this component.
+      </description>
+    </attribute>
+    
+    <attribute>
+      <name>for</name>
+      <required>true</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        The data grid component for which this acts as a scroller.
       </description>
     </attribute>
 
@@ -575,43 +536,7 @@
         Case insensitive.
       </description>
     </attribute>
-
-    <attribute>
-      <name>panelClass</name>
-      <required>false</required>
-      <rtexprvalue>false</rtexprvalue>
-      <description>
-        Class name of the CSS style to be used for the entire panel.
-      </description>
-    </attribute>
-
-    <attribute>
-      <name>rowClasses</name>
-      <required>false</required>
-      <rtexprvalue>false</rtexprvalue>
-      <description>
-        Comma-delimited list of the class names of the CSS styles to be
-        used for each row.  These styles should specialize the style
-        specified by panelClass (if any), because CSS cascading is
-        performed.  If the number of class names on this list
-        is less than the actual number of rows over which the list is
-        iterating, the pattern will be repeated as many times as needed.
-
-        Note that these styles are applied only to content rows, not to the
-        header or footer rows (if any).
-      </description>
-    </attribute>
-
-    <attribute>
-      <name>rowsPerPage</name>
-      <required>false</required>
-      <rtexprvalue>false</rtexprvalue>
-      <description>
-        How many rows of the result set should we display at one time.
-      </description>
-    </attribute>
-
-  </tag>
+</tag>
 
 
   <tag>

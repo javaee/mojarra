@@ -1,5 +1,5 @@
 /*
- * $Id: ResultSetControls.java,v 1.17 2003/10/23 05:20:06 eburns Exp $
+ * $Id: ScrollerComponent.java,v 1.1 2003/10/28 20:11:00 jvisvanathan Exp $
  */
 
 /*
@@ -40,148 +40,91 @@
  * maintenance of any nuclear facility.
  */
 
-// DemoResultSetScroller.java
-
-package components.renderkit;
+package components.components;
 
 import java.io.IOException;
 
 import java.util.List;
 import java.util.Map;
 
-import javax.faces.component.ValueHolder;
+import javax.faces.component.UIData;
 import javax.faces.component.UIForm;
-import javax.faces.component.UIPanel;
+import javax.faces.component.UICommand;
+import javax.faces.event.ActionEvent;
 import javax.faces.component.UIComponent;
-import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 
 import java.util.MissingResourceException;
 
 /**
- * <p>This class is intended for use with a ResultSetRenderer.  </p>
-
- *
- * 
- *
- * @version $Id: ResultSetControls.java,v 1.17 2003/10/23 05:20:06 eburns Exp $
- * 
- * @see	Blah
- * @see	Bloo
- *
+ * This component produces a search engine style scroller that facilitates
+ * easy navigation over results that span across several pages.
  */
-
-public class ResultSetControls extends UIInput {
-
-//
-// Protected Constants
-//
-
-    public static final String TYPE = "demo.renderer.ResultSetControls";
-
+public class ScrollerComponent extends UICommand {
+   
+    public static final String NORTH = "NORTH";
+    public static final String SOUTH = "SOUTH";
+    public static final String EAST = "EAST";
+    public static final String WEST = "WEST";
+    public static final String BOTH = "BOTH";
+    
     public static final int ACTION_NEXT = -1;
     public static final int ACTION_PREVIOUS = -2;
     public static final int ACTION_NUMBER = -3;
-    public static final String CURRENT_PAGE_ATTR = 
-	"ResultSetRenderer.currentPage";
-    public static final String ROWS_PER_PAGE_ATTR = 
-	"rowsPerPage";
-
+ 
     public static final String FORM_NUMBER_ATTR = "com.sun.faces.FormNumber";
-
+    
     /**
-
-    * The component attribute that tells where to put the user supplied
-    * markup in relation to the "jump to the Nth page of results"
-    * widget.
-
-    */
-
+     * The component attribute that tells where to put the user supplied
+     * markup in relation to the "jump to the Nth page of results"
+     * widget.
+     */
     public static final String FACET_MARKUP_ORIENTATION_ATTR = 
 	"navFacetOrientation";
 
-//
-// Class Variables
-//
-
-//
-// Instance Variables
-//
-
-// Attribute Instance Variables
-
-// Relationship Instance Variables
-
-//
-// Constructors and Initializers    
-//
-public ResultSetControls() {
+    public ScrollerComponent() {
+        super();
+        this.setRendererType(null);
+    }
     
-    super();
-    this.setRendererType("ResultSet");
-}
-
-//
-// Class methods
-//
-
-//
-// General Methods
-//
-
-    public UIPanel getPanel() {
-	return (UIPanel) this.getParent();
-    }
-
-    public UIComponent getData() {
-	return (UIComponent) this.getPanel().getChildren().get(0);
-    }
-//
-// Methods from UIComponent
-//
-
-    public String getComponentType() {
-
-        return (TYPE);
-
-    }
-
-    public boolean isValid() { return true; }
-
     public void decode(FacesContext context) {
-	String 
-	    clientId = getPanel().getClientId(context),
-	    curPage = null,
-	    action = null;
-	int 
-	    actionInt = 0,
-	    currentPage = 0;
-         Map requestParameterMap = (Map) context.getExternalContext().
+        String curPage = null;
+	String action = null;
+	int actionInt = 0;
+	int currentPage = 1;
+        int currentRow = 1;
+        String clientId = getClientId(context);
+        Map requestParameterMap = (Map) context.getExternalContext().
                 getRequestParameterMap();
-         action = (String) requestParameterMap.get(clientId + "_action");
-	if (null != action) {
-	    // Assert that we have a currentPage.
-	    curPage = (String) requestParameterMap.get(clientId + "_curPage");
-            currentPage = Integer.valueOf(curPage).intValue();
-            
-	    // Assert that action's length is 1.
+        action = (String) requestParameterMap.get(clientId + "_action");
+        if ( action == null || action.length() == 0 ) {
+            // nothing to decode
+            return;
+        }
+	
+        this.getAttributes().put("action", action);
+        curPage = (String) requestParameterMap.get(clientId + "_curPage");
+        currentPage = Integer.valueOf(curPage).intValue();
 
-	    switch (actionInt = Integer.valueOf(action).intValue()) {
-	    case ACTION_NEXT:
-		currentPage++;
-		break;
-	    case ACTION_PREVIOUS:
-		currentPage--;
-		// Assert 1 < currentPage
-		break;
-	    default:
-		currentPage = actionInt;
-		break;
-	    }
-	    getPanel().getAttributes().put(CURRENT_PAGE_ATTR, 
-				           new Integer(currentPage));
-	} 
+        // Assert that action's length is 1.
+        switch (actionInt = Integer.valueOf(action).intValue()) {
+        case ACTION_NEXT:
+            currentPage++;
+            break;
+        case ACTION_PREVIOUS:
+            currentPage--;
+            // Assert 1 < currentPage
+            break;
+        default:
+            currentPage = actionInt;
+            break;
+        } 
+        // from the currentPage, calculate the current row to scroll to.
+        currentRow = (currentPage - 1) * getRowsPerPage(context);
+        this.getAttributes().put("currentPage", new Integer(currentPage));
+        this.getAttributes().put("currentRow", new Integer(currentRow));
+        this.queueEvent(new ActionEvent(this));
     }
 
     public void encodeBegin(FacesContext context) throws IOException {
@@ -189,14 +132,17 @@ public ResultSetControls() {
     }
 
     public void encodeEnd(FacesContext context) throws IOException {
+        int currentPage = 1;
+        
         ResponseWriter writer = context.getResponseWriter();
 
-	// PENDING(edburns): render the facets
-	// PENDING(edburns): make the strings localizable
-	// PENDING(edburns): make this CSSable
-	int currentPage = getCurrentPage();
+        String clientId = getClientId(context);
+	Integer curPage = (Integer)getAttributes().get("currentPage");
+        if ( curPage != null) {
+            currentPage = curPage.intValue();
+        }
 	int totalPages = getTotalPages(context);
-	String clientId = getPanel().getClientId(context);
+        
 	writer.write("<table border=\"0\" cellpadding=\"0\" align=\"center\">");
 	writer.write("<tr align=\"center\" valign=\"top\">");
 	writer.write("<td><font size=\"-1\">Result&nbsp;Page:&nbsp;</font></td>");
@@ -208,14 +154,10 @@ public ResultSetControls() {
 	// last arg is true iff we're not the first page
 	writer.write("</td>");
 
-
-	//
 	// render the page navigation links
-	//
-	int 
-	    i = 0,
-	    first = 1,
-	    last = totalPages;
+	int i = 0;
+	int first = 1;
+	int last = totalPages;
 	
 	if (10 < currentPage) {
 	    first = currentPage - 10;
@@ -237,37 +179,33 @@ public ResultSetControls() {
 	writer.write("</tr>");
 	writer.write(getHiddenFields(clientId));
 	writer.write("</table>");
-	
     }
 
-    public boolean getRendersChildren() { return true; }
-
+    public boolean getRendersChildren() { 
+        return true; 
+    }
+     
     //
     // Helper methods
     // 
 
     /**
-
-    * Write the markup to render a navigation widget.  Override this to
-    * replace the default navigation widget of link with something
-    * else.
-
-    */
-
-    protected void writeNavWidgetMarkup(FacesContext context,
+     * Write the markup to render a navigation widget.  Override this to
+     * replace the default navigation widget of link with something
+     * else.
+     */
+     protected void writeNavWidgetMarkup(FacesContext context,
 					String clientId,
 					int navActionType,
 					boolean enabled) throws IOException {
         ResponseWriter writer = context.getResponseWriter();
-	String 
-	    facetOrientation = ResultSetRenderer.NORTH,
-	    facetName = null,
-	    linkText = null,
-	    localLinkText = null;
+	String facetOrientation = NORTH;
+	String facetName = null;
+	String linkText = null;
+	String localLinkText = null;
 	UIComponent facet = null;
-	boolean 
-	    isCurrentPage = false,
-	    isPageNumber = false;
+	boolean isCurrentPage = false;
+	boolean isPageNumber = false;
 
 	// Assign values for local variables based on the navActionType
 	switch (navActionType) {
@@ -294,32 +232,34 @@ public ResultSetControls() {
 
 	// leverage any navigation facets we have 
 	writer.write("\n&nbsp;");
-
-	if (enabled) {
+        if (enabled) {
 	    writer.write("<a " + getAnchorAttrs(context, clientId, 
 						navActionType) + ">");
-	}
-
+        }
+        
+        facet = getFacet(facetName);
 	// render the facet pertaining to this widget type in the NORTH
 	// and WEST cases.
-        if (null != (facet = (UIComponent) getPanel().getFacet(facetName))) {
+        if (facet != null) {
 	    // If we're rendering a "go to the Nth page" link
 	    if (isPageNumber) {
 		// See if the user specified an orientation
-		String facetO;
-		if (null != (facetO = (String)
-			     getPanel().getAttributes().get(FACET_MARKUP_ORIENTATION_ATTR))) {
+		String facetO = (String) getAttributes().get(FACET_MARKUP_ORIENTATION_ATTR);
+		if (facet != null) {
 		    facetOrientation = facetO;
 		    // verify that the orientation is valid
-		    if (!(facetOrientation.equalsIgnoreCase(ResultSetRenderer.NORTH) || facetOrientation.equalsIgnoreCase(ResultSetRenderer.SOUTH) || facetOrientation.equalsIgnoreCase(ResultSetRenderer.EAST) || facetOrientation.equalsIgnoreCase(ResultSetRenderer.WEST))) {
-			facetOrientation = ResultSetRenderer.NORTH;
+		    if (!(facetOrientation.equalsIgnoreCase(NORTH) || 
+                          facetOrientation.equalsIgnoreCase(SOUTH) || 
+                          facetOrientation.equalsIgnoreCase(EAST) || 
+                          facetOrientation.equalsIgnoreCase(WEST))) {
+			  facetOrientation = NORTH;
 		    }
 		}
 	    }
 
 	    // output the facet as specified in facetOrientation
-	    if (facetOrientation.equalsIgnoreCase(ResultSetRenderer.NORTH) || 
-		facetOrientation.equalsIgnoreCase(ResultSetRenderer.EAST)) {
+	    if (facetOrientation.equalsIgnoreCase(NORTH) || 
+		facetOrientation.equalsIgnoreCase(EAST)) {
 		facet.encodeBegin(context);
 		if (facet.getRendersChildren()) {
 		    facet.encodeChildren(context);
@@ -328,23 +268,12 @@ public ResultSetControls() {
 	    }
 	    // The difference between NORTH and EAST is that NORTH
 	    // requires a <br>.
-	    if (facetOrientation.equalsIgnoreCase(ResultSetRenderer.NORTH)) {
+	    if (facetOrientation.equalsIgnoreCase(NORTH)) {
 		writer.startElement("br", null); // PENDING(craigmcc)
 		writer.endElement("br");
 	    }
 	}
 	
-	// output the link text
-	try {
-	    if (null != (localLinkText = ((ResultSetRenderer)
-			 getRenderer(context)).getKeyAndLookupInBundle(context,
-								  getPanel(),
-								  linkText))) {
-		linkText = localLinkText;
-	    }
-	} catch (MissingResourceException e) {
-	}
-
 	// if we have a facet, only output the link text if
 	// navActionType is number
 	if (null != facet) {
@@ -359,14 +288,14 @@ public ResultSetControls() {
 
 	// output the facet in the EAST and SOUTH cases
 	if (null != facet) {
-	    if (facetOrientation.equalsIgnoreCase(ResultSetRenderer.SOUTH)) {
+	    if (facetOrientation.equalsIgnoreCase(SOUTH)) {
 		writer.startElement("br", null); // PENDING(craigmcc)
 		writer.endElement("br");
 	    }
 	    // The difference between SOUTH and WEST is that SOUTH
 	    // requires a <br>.
-	    if (facetOrientation.equalsIgnoreCase(ResultSetRenderer.SOUTH) || 
-		facetOrientation.equalsIgnoreCase(ResultSetRenderer.WEST)) {	    
+	    if (facetOrientation.equalsIgnoreCase(SOUTH) || 
+		facetOrientation.equalsIgnoreCase(WEST)) {	    
 		facet.encodeBegin(context);
 		if (facet.getRendersChildren()) {
 		    facet.encodeChildren(context);
@@ -382,28 +311,27 @@ public ResultSetControls() {
     }
 
     /**
-
-    * <p>build and return the string consisting of the attibutes for a
-    * result set navigation link anchor.</p>
-
-    * @param context the FacesContext
-    * @param clientId the clientId of the enclosing UIComponent
-    * @param action the value for the rhs of the =
-
-    * @return a String suitable for setting as the value of a navigation
-    * href.
-
-    */
-
-    private String getAnchorAttrs(FacesContext context, 
-				  String clientId,  
-				  int action) {
-	int formNumber = getPanelFormNumber(context, getPanelForm(context));
+     * <p>Build and return the string consisting of the attibutes for a
+     * result set navigation link anchor.</p>
+     * @param context the FacesContext
+     * @param clientId the clientId of the enclosing UIComponent
+     * @param action the value for the rhs of the =
+     * @return a String suitable for setting as the value of a navigation
+     * href.
+     */
+     private String getAnchorAttrs(FacesContext context, String clientId,  
+             int action) {
+        int currentPage = 1;                           
+	int formNumber = getFormNumber(context, getForm(context));
+        Integer curPage = (Integer)getAttributes().get("currentPage");
+        if ( curPage != null) {
+            currentPage = curPage.intValue();
+        }
 	String result = 
 	    "href=\"#\" " + 
 	    "onmousedown=\"" + 
 	    "document.forms[" + formNumber + "]['" + clientId + "_action'].value='" + action + "'; " + 
-	    "document.forms[" + formNumber + "]['" + clientId + "_curPage'].value='" + getCurrentPage() + "'; " +
+	    "document.forms[" + formNumber + "]['" + clientId + "_curPage'].value='" + currentPage + "'; " +
 	    "document.forms[" + formNumber + "].submit()\"";
 
 	return result;
@@ -419,9 +347,8 @@ public ResultSetControls() {
 
     // PENDING(edburns): avoid doing this each time called.  Perhaps
     // store in our own attr?
-
-    protected UIForm getPanelForm(FacesContext context) {
-        UIComponent parent = getPanel().getParent();
+    protected UIForm getForm(FacesContext context) {
+        UIComponent parent = this.getParent();
         while (parent != null) {
             if (parent instanceof UIForm) {
                 break;
@@ -431,7 +358,7 @@ public ResultSetControls() {
 	return (UIForm) parent;
     }
 
-    protected int getPanelFormNumber(FacesContext context, UIForm form) {
+    protected int getFormNumber(FacesContext context, UIForm form) {
 	// If we don't have a form, return 0
 	if (null == form) {
 	    return 0;
@@ -442,44 +369,44 @@ public ResultSetControls() {
 	return formsInt.intValue();
     }
 
+    /**
+     * Returns the total number of pages in the result set based on 
+     * <code>rows</code> and <code>rowCount</code> of <code>UIData</code> 
+     * component that this scroller is associated with.
+     * For the purposes of this demo, we are assuming the <code>UIData</code> to 
+     * be child of <code>UIForm</code> component and not nested inside a custom
+     * NamingContainer.
+     */
     protected int getTotalPages(FacesContext context) {
-	int 
-	    rowsPerPage = getRowsPerPage(),
-	    totalRows = 0,
-	    result = 0;
-        Object value = ((ValueHolder)getData()).currentValue(context);
-        if (value instanceof List) {
-	    totalRows = ((List)value).size();
-	}
+        String forValue = (String) getAttributes().get("for");
+	UIData uiData = (UIData) getForm(context).findComponent(forValue);
+        if ( uiData == null) {
+            return 0;
+        }
+	int rowsPerPage = uiData.getRows();
+	int totalRows = 0;
+	int result = 0;
+        totalRows = uiData.getRowCount();
 	result = totalRows / rowsPerPage;
 	if (0 != (totalRows % rowsPerPage)) {
 	    result++;
 	}
 	return result;
     }
-
-    //
-    // Methods called from enclosing UIPanel;
-    //
-
-    int getRowsPerPage() {
-	int result = 10;
-	// Set from JSP or programmatically.
-	Integer currentPage = (Integer) getPanel().getAttributes().get(ROWS_PER_PAGE_ATTR);
-	if (null != currentPage) {
-	    result = currentPage.intValue();
-	}
-	return result;
+    
+    /**
+     * Returns the number of rows to display by looking up the 
+     * <code>UIData</code> component that this scroller is associated with.
+     * For the purposes of this demo, we are assuming the <code>UIData</code> to 
+     * be child of <code>UIForm</code> component and not nested inside a custom
+     * NamingContainer.
+     */
+    protected int getRowsPerPage(FacesContext context) {
+       String forValue = (String) getAttributes().get("for");
+       UIData uiData = (UIData) getForm(context).findComponent(forValue);
+        if (uiData == null ) {
+            return 0;
+        }
+	return uiData.getRows();
     }
-
-    int getCurrentPage() {
-	int result = 1;
-	// Set in decode()
-	Integer currentPage=(Integer)getPanel().getAttributes().get(CURRENT_PAGE_ATTR);
-	if (null != currentPage) {
-	    result = currentPage.intValue();
-	}
-	return result;
-    }
-
-} // end of class ResultSetControls
+} 
