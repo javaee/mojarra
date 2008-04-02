@@ -126,6 +126,11 @@ public class RectangleRenderer extends BaseRenderer {
         if (style != null) {
             writer.writeAttribute("style", style, "style");
         }
+        String onclick = (String)component.getAttributes().get("onclick");
+        if (onclick != null) {
+            writer.writeAttribute("onclick", onclick, "onclick");
+        }
+
         writer.writeText("\n    ", null);
     }
 
