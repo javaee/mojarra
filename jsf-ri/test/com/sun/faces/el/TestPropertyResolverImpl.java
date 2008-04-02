@@ -1,5 +1,5 @@
 /*
- * $Id: TestPropertyResolverImpl.java,v 1.12 2004/02/26 20:34:24 eburns Exp $
+ * $Id: TestPropertyResolverImpl.java,v 1.13 2004/04/07 17:52:50 rkitain Exp $
  */
 
 /*
@@ -13,6 +13,7 @@ package com.sun.faces.el;
 
 import com.sun.faces.ServletFacesTestCase;
 import com.sun.faces.TestBean;
+import com.sun.faces.util.Util;
 import org.apache.cactus.WebRequest;
 
 import javax.faces.component.UIViewRoot;
@@ -28,7 +29,7 @@ import java.util.List;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestPropertyResolverImpl.java,v 1.12 2004/02/26 20:34:24 eburns Exp $
+ * @version $Id: TestPropertyResolverImpl.java,v 1.13 2004/04/07 17:52:50 rkitain Exp $
  */
 
 public class TestPropertyResolverImpl extends ServletFacesTestCase {
@@ -448,7 +449,7 @@ public class TestPropertyResolverImpl extends ServletFacesTestCase {
         assertTrue(resolver.isReadOnly(ec.getRequestCookieMap(), "hello"));
         assertTrue(resolver.isReadOnly(ec.getInitParameterMap(), "hello"));
 
-        UIViewRoot root = new UIViewRoot();
+        UIViewRoot root = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
         assertTrue(resolver.isReadOnly(root, "childCount"));
 
         TestBean testBean = (TestBean) ec.getSessionMap().get("TestBean");

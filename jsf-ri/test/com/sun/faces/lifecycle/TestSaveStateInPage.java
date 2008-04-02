@@ -1,5 +1,5 @@
 /*
- * $Id: TestSaveStateInPage.java,v 1.27 2004/02/26 20:34:30 eburns Exp $
+ * $Id: TestSaveStateInPage.java,v 1.28 2004/04/07 17:52:56 rkitain Exp $
  */
 
 /*
@@ -15,6 +15,7 @@ import com.sun.faces.JspFacesTestCase;
 import com.sun.faces.application.StateManagerImpl;
 import com.sun.faces.application.ViewHandlerImpl;
 import com.sun.faces.util.TreeStructure;
+import com.sun.faces.util.Util;
 import org.apache.cactus.WebRequest;
 
 import javax.faces.component.UIComponent;
@@ -32,7 +33,7 @@ import java.util.Map;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestSaveStateInPage.java,v 1.27 2004/02/26 20:34:30 eburns Exp $
+ * @version $Id: TestSaveStateInPage.java,v 1.28 2004/04/07 17:52:56 rkitain Exp $
  */
 
 public class TestSaveStateInPage extends JspFacesTestCase {
@@ -108,7 +109,7 @@ public class TestSaveStateInPage extends JspFacesTestCase {
         UIComponentBase root = null;
         String value = null;
         Phase renderResponse = new RenderResponsePhase();
-        UIViewRoot page = new UIViewRoot();
+        UIViewRoot page = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
         page.setId("root");
         page.setViewId(TEST_URI);
         getFacesContext().setViewRoot(page);
@@ -127,7 +128,7 @@ public class TestSaveStateInPage extends JspFacesTestCase {
         // precreate tree and set it in session and make sure the tree is
         // restored from session.
         getFacesContext().setViewRoot(null);
-        UIViewRoot root = new UIViewRoot();
+        UIViewRoot root = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
         root.setViewId(TEST_URI);
 
         UIForm basicForm = new UIForm();

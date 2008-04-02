@@ -1,5 +1,5 @@
 /*
- * $Id: TestPhase.java,v 1.14 2004/02/26 20:34:29 eburns Exp $
+ * $Id: TestPhase.java,v 1.15 2004/04/07 17:52:53 rkitain Exp $
  */
 
 /*
@@ -12,6 +12,7 @@
 package com.sun.faces.lifecycle;
 
 import com.sun.faces.ServletFacesTestCase;
+import com.sun.faces.util.Util;
 import org.apache.cactus.WebRequest;
 
 import javax.faces.component.NamingContainer;
@@ -26,7 +27,7 @@ import javax.faces.component.UIViewRoot;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestPhase.java,v 1.14 2004/02/26 20:34:29 eburns Exp $
+ * @version $Id: TestPhase.java,v 1.15 2004/04/07 17:52:53 rkitain Exp $
  */
 
 public class TestPhase extends ServletFacesTestCase {
@@ -101,7 +102,7 @@ public class TestPhase extends ServletFacesTestCase {
         root.getChildren().add(basicForm);
         basicForm.getChildren().add(userName);
 
-        UIViewRoot page = new UIViewRoot();
+        UIViewRoot page = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
         page.getChildren().add(basicForm);
         page.setViewId("root");
         getFacesContext().setViewRoot(page);

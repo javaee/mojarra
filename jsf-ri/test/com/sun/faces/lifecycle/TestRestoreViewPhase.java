@@ -1,5 +1,5 @@
 /*
- * $Id: TestRestoreViewPhase.java,v 1.17 2004/02/26 20:34:30 eburns Exp $
+ * $Id: TestRestoreViewPhase.java,v 1.18 2004/04/07 17:52:55 rkitain Exp $
  */
 
 /*
@@ -10,6 +10,8 @@
 package com.sun.faces.lifecycle;
 
 import com.sun.faces.ServletFacesTestCase;
+import com.sun.faces.util.Util;
+
 import org.apache.cactus.WebRequest;
 
 import javax.faces.component.UICommand;
@@ -28,7 +30,7 @@ import java.util.Locale;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRestoreViewPhase.java,v 1.17 2004/02/26 20:34:30 eburns Exp $
+ * @version $Id: TestRestoreViewPhase.java,v 1.18 2004/04/07 17:52:55 rkitain Exp $
  */
 
 public class TestRestoreViewPhase extends ServletFacesTestCase {
@@ -120,7 +122,7 @@ public class TestRestoreViewPhase extends ServletFacesTestCase {
         // precreate tree and set it in session and make sure the tree is
         // restored from session.
 
-        UIViewRoot root = new UIViewRoot();
+        UIViewRoot root = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
         root.setViewId(TEST_URI);
 
         UIForm basicForm = new UIForm();
@@ -178,7 +180,7 @@ public class TestRestoreViewPhase extends ServletFacesTestCase {
         // precreate tree and set it in session and make sure the tree is
         // restored from session.
 
-        UIViewRoot root = new UIViewRoot();
+        UIViewRoot root = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
         root.setViewId(TEST_URI);
 
         UIForm basicForm = new UIForm();
@@ -215,7 +217,7 @@ public class TestRestoreViewPhase extends ServletFacesTestCase {
         //
         getFacesContext().setViewRoot(null);
 
-        root = new UIViewRoot();
+        root = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
         root.setViewId(TEST_URI);
 
         basicForm = new UIForm();

@@ -1,5 +1,5 @@
 /*
- * $Id: TestInvokeApplicationPhase.java,v 1.23 2004/02/26 20:34:28 eburns Exp $
+ * $Id: TestInvokeApplicationPhase.java,v 1.24 2004/04/07 17:52:52 rkitain Exp $
  */
 
 /*
@@ -12,6 +12,7 @@
 package com.sun.faces.lifecycle;
 
 import com.sun.faces.ServletFacesTestCase;
+import com.sun.faces.util.Util;
 import org.apache.cactus.WebRequest;
 
 import javax.faces.component.UIInput;
@@ -22,7 +23,7 @@ import javax.faces.component.UIViewRoot;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestInvokeApplicationPhase.java,v 1.23 2004/02/26 20:34:28 eburns Exp $
+ * @version $Id: TestInvokeApplicationPhase.java,v 1.24 2004/04/07 17:52:52 rkitain Exp $
  */
 
 public class TestInvokeApplicationPhase extends ServletFacesTestCase {
@@ -73,7 +74,7 @@ public class TestInvokeApplicationPhase extends ServletFacesTestCase {
 
     public void testInvokeNoOp() {
         UIInput root = new UIInput();
-        UIViewRoot page = new UIViewRoot();
+        UIViewRoot page = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
         page.setViewId("default.xul");
         Phase invokeApplicationPhase = new InvokeApplicationPhase();
         getFacesContext().setViewRoot(page);

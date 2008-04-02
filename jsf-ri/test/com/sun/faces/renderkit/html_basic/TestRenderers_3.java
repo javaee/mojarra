@@ -4,7 +4,7 @@
  */
 
 /**
- * $Id: TestRenderers_3.java,v 1.34 2004/02/26 20:34:40 eburns Exp $
+ * $Id: TestRenderers_3.java,v 1.35 2004/04/07 17:53:01 rkitain Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -17,6 +17,7 @@
 package com.sun.faces.renderkit.html_basic;
 
 import com.sun.faces.JspFacesTestCase;
+import com.sun.faces.util.Util;
 import org.apache.cactus.WebRequest;
 
 import javax.faces.FactoryFinder;
@@ -46,7 +47,7 @@ import java.util.TimeZone;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_3.java,v 1.34 2004/02/26 20:34:40 eburns Exp $
+ * @version $Id: TestRenderers_3.java,v 1.35 2004/04/07 17:53:01 rkitain Exp $
  */
 
 public class TestRenderers_3 extends JspFacesTestCase {
@@ -110,7 +111,7 @@ public class TestRenderers_3 extends JspFacesTestCase {
             (ApplicationFactory) FactoryFinder.getFactory(
                 FactoryFinder.APPLICATION_FACTORY);
         application = aFactory.getApplication();
-        UIViewRoot xmlTree = new UIViewRoot();
+        UIViewRoot xmlTree = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
         xmlTree.setViewId("viewId");
         xmlTree.getChildren().add(new UICommand());
         getFacesContext().setViewRoot(xmlTree);

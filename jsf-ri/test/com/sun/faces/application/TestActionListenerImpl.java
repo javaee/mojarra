@@ -1,5 +1,5 @@
 /*
- * $Id: TestActionListenerImpl.java,v 1.21 2004/02/26 20:34:08 eburns Exp $
+ * $Id: TestActionListenerImpl.java,v 1.22 2004/04/07 17:52:44 rkitain Exp $
  */
 
 /*
@@ -12,6 +12,7 @@
 package com.sun.faces.application;
 
 import com.sun.faces.ServletFacesTestCase;
+import com.sun.faces.util.Util;
 import org.apache.cactus.WebRequest;
 
 import javax.faces.FacesException;
@@ -29,7 +30,7 @@ import javax.faces.event.ActionEvent;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestActionListenerImpl.java,v 1.21 2004/02/26 20:34:08 eburns Exp $
+ * @version $Id: TestActionListenerImpl.java,v 1.22 2004/04/07 17:52:44 rkitain Exp $
  */
 
 /**
@@ -89,7 +90,7 @@ public class TestActionListenerImpl extends ServletFacesTestCase {
         command.setAction(
             context.getApplication().createMethodBinding(
                 "#{newCustomer.loginRequired}", null));
-        UIViewRoot page = new UIViewRoot();
+        UIViewRoot page = Util.getViewHandler(context).createView(context, null);
         page.setViewId("/login.jsp");
         context.setViewRoot(page);
 
@@ -115,7 +116,7 @@ public class TestActionListenerImpl extends ServletFacesTestCase {
             user ==
             context.getExternalContext().getSessionMap().get("userBean"));
 
-        page = new UIViewRoot();
+        page = Util.getViewHandler(context).createView(context, null);
         page.setViewId("/login.jsp");
         context.setViewRoot(page);
 
@@ -133,7 +134,7 @@ public class TestActionListenerImpl extends ServletFacesTestCase {
         boolean exceptionThrown = false;
 
         FacesContext context = FacesContext.getCurrentInstance();
-        UIViewRoot page = new UIViewRoot();
+        UIViewRoot page = Util.getViewHandler(getFacesContext()).createView(context, null);
         page.setViewId("/login.jsp");
         context.setViewRoot(page);
         UserBean user = new UserBean();

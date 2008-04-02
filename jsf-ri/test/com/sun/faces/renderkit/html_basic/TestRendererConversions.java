@@ -1,5 +1,5 @@
 /*
- * $Id: TestRendererConversions.java,v 1.12 2004/02/26 20:34:38 eburns Exp $
+ * $Id: TestRendererConversions.java,v 1.13 2004/04/07 17:52:59 rkitain Exp $
  */
 
 /*
@@ -12,6 +12,7 @@
 package com.sun.faces.renderkit.html_basic;
 
 import com.sun.faces.ServletFacesTestCase;
+import com.sun.faces.util.Util;
 import org.apache.cactus.WebRequest;
 
 import javax.faces.component.UIComponent;
@@ -24,7 +25,7 @@ import javax.faces.component.UIViewRoot;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRendererConversions.java,v 1.12 2004/02/26 20:34:38 eburns Exp $
+ * @version $Id: TestRendererConversions.java,v 1.13 2004/04/07 17:52:59 rkitain Exp $
  */
 
 public class TestRendererConversions extends ServletFacesTestCase {
@@ -79,7 +80,7 @@ public class TestRendererConversions extends ServletFacesTestCase {
 
     public void setUp() {
         super.setUp();
-        UIViewRoot page = new UIViewRoot();
+        UIViewRoot page = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
         page.setViewId("viewId");
         getFacesContext().setViewRoot(page);
     }
@@ -90,7 +91,7 @@ public class TestRendererConversions extends ServletFacesTestCase {
      */
 
     public void testEmptyStrings() {
-        UIViewRoot root = new UIViewRoot();
+        UIViewRoot root = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
         UIInput
             text = new UIInput(),
             hidden = new UIInput(),
@@ -140,7 +141,7 @@ public class TestRendererConversions extends ServletFacesTestCase {
 
 
     public void testBadConversion() {
-        UIComponent root = new UIViewRoot();
+        UIComponent root = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
     }
 
 

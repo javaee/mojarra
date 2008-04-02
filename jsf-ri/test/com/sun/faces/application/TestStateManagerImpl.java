@@ -1,5 +1,5 @@
 /*
- * $Id: TestStateManagerImpl.java,v 1.9 2004/02/26 20:34:09 eburns Exp $
+ * $Id: TestStateManagerImpl.java,v 1.10 2004/04/07 17:52:44 rkitain Exp $
  */
 
 /*
@@ -11,6 +11,7 @@ package com.sun.faces.application;
 
 import com.sun.faces.RIConstants;
 import com.sun.faces.ServletFacesTestCase;
+import com.sun.faces.util.Util;
 
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIGraphic;
@@ -52,6 +53,7 @@ public class TestStateManagerImpl extends ServletFacesTestCase {
     // components.
     public void testDuplicateIdDetectionServer() throws Exception {
 
+        FacesContext context = getFacesContext();
         UIViewRoot root = null;
 
         UIComponent comp1 = null;
@@ -65,7 +67,7 @@ public class TestStateManagerImpl extends ServletFacesTestCase {
         UIComponent facet2 = null;
         
         // construct a view
-        root = new UIViewRoot();
+        root = Util.getViewHandler(getFacesContext()).createView(context, null); 
         root.setViewId("/test");
         root.setId("root");
 
@@ -91,7 +93,6 @@ public class TestStateManagerImpl extends ServletFacesTestCase {
         root.getChildren().add(comp2);
         root.getChildren().add(comp3);
 
-        FacesContext context = getFacesContext();
         HttpSession session =
             (HttpSession) context.getExternalContext().getSession(false);
         session.setAttribute("/test", root);
@@ -114,7 +115,7 @@ public class TestStateManagerImpl extends ServletFacesTestCase {
         // multiple componentns with a null ID should not
         // trigger an exception
         // construct a view
-        root = new UIViewRoot();
+        root = Util.getViewHandler(getFacesContext()).createView(context, null); 
         root.setViewId("/test");
         root.setId("root");
 
@@ -155,7 +156,7 @@ public class TestStateManagerImpl extends ServletFacesTestCase {
         // transient components with duplicate ids should 
         // trigger an error condition
         // construct a view
-        root = new UIViewRoot();
+        root = Util.getViewHandler(getFacesContext()).createView(context, null); 
         root.setViewId("/test");
         root.setId("root");
 
@@ -212,7 +213,7 @@ public class TestStateManagerImpl extends ServletFacesTestCase {
     public void testRemoveViewFromSession() {
         ArrayList viewList = new ArrayList(10);
         FacesContext context = getFacesContext();
-        UIViewRoot newViewRoot = new UIViewRoot();
+        UIViewRoot newViewRoot = Util.getViewHandler(getFacesContext()).createView(context, null);
         newViewRoot.setViewId("viewId");
         context.setViewRoot(newViewRoot);
 
@@ -221,7 +222,7 @@ public class TestStateManagerImpl extends ServletFacesTestCase {
         for (int i = 0; i < 21; ++i) {
             String viewId = "viewId" + i;
             viewList.add(viewId);
-            UIViewRoot viewRoot = new UIViewRoot();
+            UIViewRoot viewRoot = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
             viewRoot.setViewId(viewId);
             session.setAttribute(viewId, viewRoot);
         }

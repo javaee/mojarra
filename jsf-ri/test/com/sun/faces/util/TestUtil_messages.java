@@ -1,5 +1,5 @@
 /*
- * $Id: TestUtil_messages.java,v 1.32 2004/03/31 18:48:56 eburns Exp $
+ * $Id: TestUtil_messages.java,v 1.33 2004/04/07 17:53:06 rkitain Exp $
  */
 
 /*
@@ -23,7 +23,7 @@ import java.util.Locale;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestUtil_messages.java,v 1.32 2004/03/31 18:48:56 eburns Exp $
+ * @version $Id: TestUtil_messages.java,v 1.33 2004/04/07 17:53:06 rkitain Exp $
  */
 
 public class TestUtil_messages extends ServletFacesTestCase {
@@ -134,7 +134,7 @@ public class TestUtil_messages extends ServletFacesTestCase {
     
     public void setUp() {
         super.setUp();
-        UIViewRoot viewRoot = new UIViewRoot();
+        UIViewRoot viewRoot = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
         viewRoot.setViewId("viewId");
         getFacesContext().setViewRoot(viewRoot);
 

@@ -1,5 +1,5 @@
 /*
- * $Id: TestNavigationHandler.java,v 1.18 2004/02/26 20:34:09 eburns Exp $
+ * $Id: TestNavigationHandler.java,v 1.19 2004/04/07 17:52:44 rkitain Exp $
  */
 
 /*
@@ -12,6 +12,7 @@
 package com.sun.faces.application;
 
 import com.sun.faces.ServletFacesTestCase;
+import com.sun.faces.util.Util;
 import org.apache.commons.digester.CallMethodRule;
 import org.apache.commons.digester.CallParamRule;
 import org.apache.commons.digester.Digester;
@@ -38,7 +39,7 @@ import java.util.Map;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestNavigationHandler.java,v 1.18 2004/02/26 20:34:09 eburns Exp $
+ * @version $Id: TestNavigationHandler.java,v 1.19 2004/04/07 17:52:44 rkitain Exp $
  */
 
 public class TestNavigationHandler extends ServletFacesTestCase {
@@ -167,7 +168,7 @@ public class TestNavigationHandler extends ServletFacesTestCase {
             System.out.println("Testing from-view-id=" + testResult.fromViewId +
                                " from-action=" + testResult.fromAction +
                                " from-outcome=" + testResult.fromOutcome);
-            page = new UIViewRoot();
+            page = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
             page.setViewId(testResult.fromViewId);
             context.setViewRoot(page);
             try {

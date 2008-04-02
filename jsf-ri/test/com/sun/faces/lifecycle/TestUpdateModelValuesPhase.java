@@ -1,5 +1,5 @@
 /*
- * $Id: TestUpdateModelValuesPhase.java,v 1.35 2004/02/26 20:34:31 eburns Exp $
+ * $Id: TestUpdateModelValuesPhase.java,v 1.36 2004/04/07 17:52:56 rkitain Exp $
  */
 
 /*
@@ -25,7 +25,7 @@ import javax.faces.component.UIViewRoot;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestUpdateModelValuesPhase.java,v 1.35 2004/02/26 20:34:31 eburns Exp $
+ * @version $Id: TestUpdateModelValuesPhase.java,v 1.36 2004/04/07 17:52:56 rkitain Exp $
  */
 
 public class TestUpdateModelValuesPhase extends ServletFacesTestCase {
@@ -103,7 +103,7 @@ public class TestUpdateModelValuesPhase extends ServletFacesTestCase {
         userName2.testSetValid(true);
         form.getChildren().add(userName2);
 
-        UIViewRoot viewRoot = new UIViewRoot();
+        UIViewRoot viewRoot = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
         viewRoot.getChildren().add(form);
         viewRoot.setViewId("updateModel.xul");
         getFacesContext().setViewRoot(viewRoot);
@@ -156,7 +156,7 @@ public class TestUpdateModelValuesPhase extends ServletFacesTestCase {
         userName2.testSetValid(true);
         form.getChildren().add(userName2);
 
-        UIViewRoot viewRoot = new UIViewRoot();
+        UIViewRoot viewRoot = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
         viewRoot.getChildren().add(form);
         viewRoot.setViewId("updateModel.xul");
         getFacesContext().setViewRoot(viewRoot);

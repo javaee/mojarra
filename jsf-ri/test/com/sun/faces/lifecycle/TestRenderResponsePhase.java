@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderResponsePhase.java,v 1.77 2004/02/26 20:34:30 eburns Exp $
+ * $Id: TestRenderResponsePhase.java,v 1.78 2004/04/07 17:52:55 rkitain Exp $
  */
 
 /*
@@ -12,6 +12,7 @@
 package com.sun.faces.lifecycle;
 
 import com.sun.faces.JspFacesTestCase;
+import com.sun.faces.util.Util;
 import org.apache.cactus.JspTestCase;
 import org.apache.cactus.WebRequest;
 
@@ -23,7 +24,7 @@ import javax.faces.component.UIViewRoot;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderResponsePhase.java,v 1.77 2004/02/26 20:34:30 eburns Exp $
+ * @version $Id: TestRenderResponsePhase.java,v 1.78 2004/04/07 17:52:55 rkitain Exp $
  */
 
 public class TestRenderResponsePhase extends JspFacesTestCase {
@@ -100,7 +101,7 @@ public class TestRenderResponsePhase extends JspFacesTestCase {
         String value = null;
         LifecycleImpl lifecycle = new LifecycleImpl();
         Phase renderResponse = new RenderResponsePhase();
-        UIViewRoot page = new UIViewRoot();
+        UIViewRoot page = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
         page.setId("root");
         page.setViewId(TEST_URI);
         getFacesContext().setViewRoot(page);

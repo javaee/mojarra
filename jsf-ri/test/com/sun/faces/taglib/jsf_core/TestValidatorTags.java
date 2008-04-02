@@ -1,5 +1,5 @@
 /*
- * $Id: TestValidatorTags.java,v 1.26 2004/02/26 20:34:44 eburns Exp $
+ * $Id: TestValidatorTags.java,v 1.27 2004/04/07 17:53:03 rkitain Exp $
  */
 
 /*
@@ -17,6 +17,7 @@ import com.sun.faces.lifecycle.ApplyRequestValuesPhase;
 import com.sun.faces.lifecycle.Phase;
 import com.sun.faces.lifecycle.ProcessValidationsPhase;
 import com.sun.faces.lifecycle.RenderResponsePhase;
+import com.sun.faces.util.Util;
 import org.apache.cactus.WebRequest;
 
 import javax.faces.component.NamingContainer;
@@ -30,7 +31,7 @@ import java.util.Iterator;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestValidatorTags.java,v 1.26 2004/02/26 20:34:44 eburns Exp $
+ * @version $Id: TestValidatorTags.java,v 1.27 2004/04/07 17:53:03 rkitain Exp $
  */
 
 public class TestValidatorTags extends JspFacesTestCase {
@@ -147,7 +148,7 @@ public class TestValidatorTags extends JspFacesTestCase {
             processValidations = new ProcessValidationsPhase(),
             applyRequestValues = new ApplyRequestValuesPhase();
 
-        UIViewRoot page = new UIViewRoot();
+        UIViewRoot page = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
         page.setViewId(TEST_URI);
         getFacesContext().setViewRoot(page);
 

@@ -1,5 +1,5 @@
 /*
- * $Id: TestViewTag.java,v 1.9 2004/02/26 20:34:44 eburns Exp $
+ * $Id: TestViewTag.java,v 1.10 2004/04/07 17:53:04 rkitain Exp $
  */
 
 /*
@@ -14,6 +14,7 @@ package com.sun.faces.taglib.jsf_core;
 import com.sun.faces.JspFacesTestCase;
 import com.sun.faces.lifecycle.Phase;
 import com.sun.faces.lifecycle.RenderResponsePhase;
+import com.sun.faces.util.Util;
 import org.apache.cactus.JspTestCase;
 import org.apache.cactus.WebRequest;
 
@@ -29,7 +30,7 @@ import java.util.Locale;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestViewTag.java,v 1.9 2004/02/26 20:34:44 eburns Exp $
+ * @version $Id: TestViewTag.java,v 1.10 2004/04/07 17:53:04 rkitain Exp $
  */
 
 public class TestViewTag extends JspFacesTestCase {
@@ -84,7 +85,7 @@ public class TestViewTag extends JspFacesTestCase {
         String value = null;
         Locale expectedLocale = new Locale("ps", "PS");
         Phase renderResponse = new RenderResponsePhase();
-        UIViewRoot page = new UIViewRoot();
+        UIViewRoot page = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
         page.setId("root");
         page.setViewId(TEST_URI);
         page.setLocale(Locale.CANADA_FRENCH);
@@ -125,7 +126,7 @@ public class TestViewTag extends JspFacesTestCase {
         Locale expectedLocale = new Locale("ps", "PS", "Traditional");
         request.setAttribute("locale", expectedLocale);
         Phase renderResponse = new RenderResponsePhase();
-        UIViewRoot page = new UIViewRoot();
+        UIViewRoot page = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
         page.setId("root");
         page.setViewId(TEST_URI2);
         getFacesContext().setViewRoot(page);

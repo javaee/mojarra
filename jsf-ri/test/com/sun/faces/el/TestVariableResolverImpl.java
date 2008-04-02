@@ -1,5 +1,5 @@
 /*
- * $Id: TestVariableResolverImpl.java,v 1.15 2004/02/26 20:34:25 eburns Exp $
+ * $Id: TestVariableResolverImpl.java,v 1.16 2004/04/07 17:52:50 rkitain Exp $
  */
 
 /*
@@ -17,6 +17,7 @@ import com.sun.faces.TestBean.InnerBean;
 import com.sun.faces.application.ApplicationImpl;
 import com.sun.faces.config.ManagedBeanFactory;
 import com.sun.faces.config.beans.ManagedBeanBean;
+import com.sun.faces.util.Util;
 import org.apache.cactus.WebRequest;
 
 import javax.faces.FactoryFinder;
@@ -30,7 +31,7 @@ import javax.faces.el.VariableResolver;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestVariableResolverImpl.java,v 1.15 2004/02/26 20:34:25 eburns Exp $
+ * @version $Id: TestVariableResolverImpl.java,v 1.16 2004/04/07 17:52:50 rkitain Exp $
  */
 
 public class TestVariableResolverImpl extends ServletFacesTestCase {
@@ -192,7 +193,7 @@ public class TestVariableResolverImpl extends ServletFacesTestCase {
 
         // tree
         // create a dummy root for the tree.
-        UIViewRoot page = new UIViewRoot();
+        UIViewRoot page = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
         page.setId("root");
         page.setViewId("newTree");
         getFacesContext().setViewRoot(page);

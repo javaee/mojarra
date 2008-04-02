@@ -1,5 +1,5 @@
 /*
- * $Id: TestLifecycleImpl.java,v 1.28 2004/02/26 20:34:29 eburns Exp $
+ * $Id: TestLifecycleImpl.java,v 1.29 2004/04/07 17:52:53 rkitain Exp $
  */
 
 /*
@@ -13,6 +13,7 @@ package com.sun.faces.lifecycle;
 
 import com.sun.faces.JspFacesTestCase;
 import com.sun.faces.RIConstants;
+import com.sun.faces.util.Util;
 import org.apache.cactus.WebRequest;
 
 import javax.faces.component.UIForm;
@@ -29,7 +30,7 @@ import javax.servlet.http.HttpSession;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestLifecycleImpl.java,v 1.28 2004/02/26 20:34:29 eburns Exp $
+ * @version $Id: TestLifecycleImpl.java,v 1.29 2004/04/07 17:52:53 rkitain Exp $
  */
 
 public class TestLifecycleImpl extends JspFacesTestCase {
@@ -97,7 +98,7 @@ public class TestLifecycleImpl extends JspFacesTestCase {
     public void setUp() {
         RIConstants.IS_UNIT_TEST_MODE = true;
         super.setUp();
-        UIViewRoot root = new UIViewRoot();
+        UIViewRoot root = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
         root.setViewId(TEST_URI);
 
         UIForm basicForm = new UIForm();

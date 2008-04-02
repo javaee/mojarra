@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_1.java,v 1.59 2004/02/26 20:34:39 eburns Exp $
+ * $Id: TestRenderers_1.java,v 1.60 2004/04/07 17:52:59 rkitain Exp $
  */
 
 /*
@@ -45,7 +45,7 @@ import java.util.ResourceBundle;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_1.java,v 1.59 2004/02/26 20:34:39 eburns Exp $
+ * @version $Id: TestRenderers_1.java,v 1.60 2004/04/07 17:52:59 rkitain Exp $
  */
 
 public class TestRenderers_1 extends JspFacesTestCase {
@@ -90,7 +90,7 @@ public class TestRenderers_1 extends JspFacesTestCase {
     public void setUp() {
         super.setUp();
 
-        UIViewRoot xmlView = new UIViewRoot();
+        UIViewRoot xmlView = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
         xmlView.setViewId("viewId");
         getFacesContext().setViewRoot(xmlView);
         assertTrue(getFacesContext().getResponseWriter() != null);
@@ -153,7 +153,7 @@ public class TestRenderers_1 extends JspFacesTestCase {
         Map sessionMap = getFacesContext().getExternalContext().getSessionMap();
        
         // create a dummy root for the tree.
-        UIViewRoot root = new UIViewRoot();
+        UIViewRoot root = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
         root.setId("root");
         root.setViewId("/root");
         ViewHandlerImpl viewHandler = new ViewHandlerImpl();

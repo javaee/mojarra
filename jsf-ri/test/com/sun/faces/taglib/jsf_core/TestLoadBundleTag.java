@@ -1,5 +1,5 @@
 /*
- * $Id: TestLoadBundleTag.java,v 1.8 2004/02/26 20:34:43 eburns Exp $
+ * $Id: TestLoadBundleTag.java,v 1.9 2004/04/07 17:53:03 rkitain Exp $
  */
 
 /*
@@ -12,6 +12,7 @@
 package com.sun.faces.taglib.jsf_core;
 
 import com.sun.faces.ServletFacesTestCase;
+import com.sun.faces.util.Util;
 
 import javax.faces.component.UIViewRoot;
 
@@ -19,7 +20,7 @@ import java.util.Map;
 
 
 /**
- * @version $Id: TestLoadBundleTag.java,v 1.8 2004/02/26 20:34:43 eburns Exp $
+ * @version $Id: TestLoadBundleTag.java,v 1.9 2004/04/07 17:53:03 rkitain Exp $
  */
 
 public class TestLoadBundleTag extends ServletFacesTestCase {
@@ -61,7 +62,7 @@ public class TestLoadBundleTag extends ServletFacesTestCase {
 //
 
     public void testLoadBundle() throws Exception {
-        getFacesContext().setViewRoot(new UIViewRoot());
+        getFacesContext().setViewRoot(Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null));
         LoadBundleTag tag = new LoadBundleTag();
         tag.setBasename("com.sun.faces.TestMessages");
         tag.setVar("messages");
@@ -89,7 +90,7 @@ public class TestLoadBundleTag extends ServletFacesTestCase {
         boolean gotException = false;
         Object key = "buckaroo";
         Object value = "banzai";
-        getFacesContext().setViewRoot(new UIViewRoot());
+        getFacesContext().setViewRoot(Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null));
 
         LoadBundleTag tag = new LoadBundleTag();
         tag.setBasename("com.sun.faces.TestMessages");

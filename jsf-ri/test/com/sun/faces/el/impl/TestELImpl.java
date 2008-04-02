@@ -4,7 +4,7 @@
  */
 
 /*
- * $Id: TestELImpl.java,v 1.7 2004/02/26 20:34:27 eburns Exp $
+ * $Id: TestELImpl.java,v 1.8 2004/04/07 17:52:52 rkitain Exp $
  */
 
 // TestELImpl
@@ -212,7 +212,7 @@ public class TestELImpl extends JspFacesTestCase {
 
 
     static void createTestContext(FacesContext context) {
-        UIViewRoot root = new UIViewRoot();
+        UIViewRoot root = Util.getViewHandler(context).createView(context, null);
         UIInput input = new UIInput();
         input.setValue("inputValue");
         root.getChildren().add(input);

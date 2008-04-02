@@ -1,5 +1,5 @@
 /*
- * $Id: TestCoreTagsVBEnabled.java,v 1.5 2004/02/26 20:34:43 eburns Exp $
+ * $Id: TestCoreTagsVBEnabled.java,v 1.6 2004/04/07 17:53:03 rkitain Exp $
  */
 
 /*
@@ -15,6 +15,7 @@ import com.sun.faces.lifecycle.ApplyRequestValuesPhase;
 import com.sun.faces.lifecycle.Phase;
 import com.sun.faces.lifecycle.ProcessValidationsPhase;
 import com.sun.faces.lifecycle.RenderResponsePhase;
+import com.sun.faces.util.Util;
 import org.apache.cactus.WebRequest;
 
 import javax.faces.component.NamingContainer;
@@ -28,7 +29,7 @@ import java.util.Iterator;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestCoreTagsVBEnabled.java,v 1.5 2004/02/26 20:34:43 eburns Exp $
+ * @version $Id: TestCoreTagsVBEnabled.java,v 1.6 2004/04/07 17:53:03 rkitain Exp $
  */
 
 public class TestCoreTagsVBEnabled extends JspFacesTestCase {
@@ -145,7 +146,7 @@ public class TestCoreTagsVBEnabled extends JspFacesTestCase {
             processValidations = new ProcessValidationsPhase(),
             applyRequestValues = new ApplyRequestValuesPhase();
 
-        UIViewRoot page = new UIViewRoot();
+        UIViewRoot page = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
         page.setViewId(TEST_URI);
         getFacesContext().setViewRoot(page);
 

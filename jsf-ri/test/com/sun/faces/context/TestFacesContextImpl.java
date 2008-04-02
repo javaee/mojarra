@@ -1,5 +1,5 @@
 /*
- * $Id: TestFacesContextImpl.java,v 1.46 2004/02/26 20:34:21 eburns Exp $
+ * $Id: TestFacesContextImpl.java,v 1.47 2004/04/07 17:52:48 rkitain Exp $
  */
 
 /*
@@ -13,6 +13,7 @@ package com.sun.faces.context;
 
 import com.sun.faces.ServletFacesTestCase;
 import com.sun.faces.lifecycle.LifecycleImpl;
+import com.sun.faces.util.Util;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UICommand;
@@ -34,7 +35,7 @@ import java.util.Iterator;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestFacesContextImpl.java,v 1.46 2004/02/26 20:34:21 eburns Exp $
+ * @version $Id: TestFacesContextImpl.java,v 1.47 2004/04/07 17:52:48 rkitain Exp $
  */
 
 public class TestFacesContextImpl extends ServletFacesTestCase {
@@ -76,7 +77,7 @@ public class TestFacesContextImpl extends ServletFacesTestCase {
 //
     public void setUp() {
         super.setUp();
-        UIViewRoot viewRoot = new UIViewRoot();
+        UIViewRoot viewRoot = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
         viewRoot.setViewId("viewId");
         getFacesContext().setViewRoot(viewRoot);
     }
@@ -124,7 +125,7 @@ public class TestFacesContextImpl extends ServletFacesTestCase {
         ServletResponse resp = null;
         ServletContext sc = null;
 
-        UIViewRoot page = new UIViewRoot();
+        UIViewRoot page = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
         page.setViewId("viewId");
         getFacesContext().setViewRoot(page);
         UIViewRoot root = getFacesContext().getViewRoot();

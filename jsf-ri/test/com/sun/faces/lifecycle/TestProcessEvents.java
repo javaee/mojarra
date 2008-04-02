@@ -1,5 +1,5 @@
 /*
- * $Id: TestProcessEvents.java,v 1.17 2004/02/26 20:34:29 eburns Exp $
+ * $Id: TestProcessEvents.java,v 1.18 2004/04/07 17:52:53 rkitain Exp $
  */
 
 /*
@@ -12,6 +12,7 @@
 package com.sun.faces.lifecycle;
 
 import com.sun.faces.ServletFacesTestCase;
+import com.sun.faces.util.Util;
 import org.apache.cactus.WebRequest;
 
 import javax.faces.component.UICommand;
@@ -29,7 +30,7 @@ import java.util.HashMap;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestProcessEvents.java,v 1.17 2004/02/26 20:34:29 eburns Exp $
+ * @version $Id: TestProcessEvents.java,v 1.18 2004/04/07 17:52:53 rkitain Exp $
  */
 
 public class TestProcessEvents extends ServletFacesTestCase {
@@ -84,7 +85,7 @@ public class TestProcessEvents extends ServletFacesTestCase {
 
     public void setUp() {
         super.setUp();
-        UIViewRoot root = new UIViewRoot();
+        UIViewRoot root = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
         getFacesContext().setViewRoot(root);
     }
 

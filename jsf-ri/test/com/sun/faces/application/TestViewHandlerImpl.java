@@ -1,5 +1,5 @@
 /* 
- * $Id: TestViewHandlerImpl.java,v 1.16 2004/02/26 20:34:09 eburns Exp $ 
+ * $Id: TestViewHandlerImpl.java,v 1.17 2004/04/07 17:52:45 rkitain Exp $ 
  */ 
 
 
@@ -18,6 +18,7 @@ package com.sun.faces.application;
 import com.sun.faces.JspFacesTestCase;
 import com.sun.faces.context.ExternalContextImpl;
 import com.sun.faces.context.FacesContextImpl;
+import com.sun.faces.util.Util;
 import org.apache.cactus.WebRequest;
 
 import javax.faces.FacesException;
@@ -48,7 +49,7 @@ import java.util.Map;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestViewHandlerImpl.java,v 1.16 2004/02/26 20:34:09 eburns Exp $
+ * @version $Id: TestViewHandlerImpl.java,v 1.17 2004/04/07 17:52:45 rkitain Exp $
  */
 
 
@@ -252,7 +253,7 @@ public class TestViewHandlerImpl extends JspFacesTestCase {
     public void testGetActionURLExceptions() throws Exception {
         boolean exceptionThrown = false;
         ViewHandler handler =
-            getFacesContext().getApplication().getViewHandler();
+            Util.getViewHandler(getFacesContext());
         try {
             handler.getActionURL(null, "/test.jsp");
         } catch (NullPointerException npe) {
@@ -292,23 +293,23 @@ public class TestViewHandlerImpl extends JspFacesTestCase {
 
         // Validate correct calculations
         assertEquals(request.getContextPath() + "/index.jsp",
-                     context.getApplication().getViewHandler().
+                     Util.getViewHandler(getFacesContext()).
                      getResourceURL(context, "/index.jsp"));
         assertEquals("index.jsp",
-                     context.getApplication().getViewHandler().
+                     Util.getViewHandler(getFacesContext()).
                      getResourceURL(context, "index.jsp"));
 
     }
 
 
     public void testRender() {
-        UIViewRoot newView = new UIViewRoot();
+        UIViewRoot newView = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
         newView.setViewId(TEST_URI);
         getFacesContext().setViewRoot(newView);
 
         try {
             ViewHandler viewHandler =
-                getFacesContext().getApplication().getViewHandler();
+                Util.getViewHandler(getFacesContext());
             viewHandler.renderView(getFacesContext(),
                                    getFacesContext().getViewRoot());
         } catch (IOException e) {
@@ -328,7 +329,7 @@ public class TestViewHandlerImpl extends JspFacesTestCase {
         // Change the viewID to end with .jsf and make sure that
         // the implementation changes .jsf to .jsp and properly dispatches
         // the message.
-        UIViewRoot newView = new UIViewRoot();
+        UIViewRoot newView = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
         newView.setViewId(TEST_URI);
         getFacesContext().setViewRoot(newView);
 
@@ -336,7 +337,7 @@ public class TestViewHandlerImpl extends JspFacesTestCase {
         getFacesContext().setViewRoot(newView);
         try {
             ViewHandler viewHandler =
-                getFacesContext().getApplication().getViewHandler();
+                Util.getViewHandler(getFacesContext());
             viewHandler.renderView(getFacesContext(),
                                    getFacesContext().getViewRoot());
         } catch (IOException ioe) {
@@ -397,7 +398,7 @@ public class TestViewHandlerImpl extends JspFacesTestCase {
         // precreate tree and set it in session and make sure the tree is
         // restored from session.
         getFacesContext().setViewRoot(null);
-        UIViewRoot root = new UIViewRoot();
+        UIViewRoot root = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
         root.setViewId(TEST_URI);
 
         UIForm basicForm = new UIForm();
@@ -436,7 +437,7 @@ public class TestViewHandlerImpl extends JspFacesTestCase {
         getFacesContext().setViewRoot(root);
 
         ViewHandler viewHandler =
-            getFacesContext().getApplication().getViewHandler();
+            Util.getViewHandler(getFacesContext());
         StateManager stateManager =
             getFacesContext().getApplication().getStateManager();
         stateManager.saveSerializedView(getFacesContext());

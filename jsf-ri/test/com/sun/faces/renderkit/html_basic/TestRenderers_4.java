@@ -4,7 +4,7 @@
  */
 
 /**
- * $Id: TestRenderers_4.java,v 1.15 2004/02/26 20:34:40 eburns Exp $
+ * $Id: TestRenderers_4.java,v 1.16 2004/04/07 17:53:01 rkitain Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -17,6 +17,7 @@
 package com.sun.faces.renderkit.html_basic;
 
 import com.sun.faces.JspFacesTestCase;
+import com.sun.faces.util.Util;
 import org.apache.cactus.WebRequest;
 
 import javax.faces.component.UIComponent;
@@ -32,7 +33,7 @@ import java.io.IOException;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_4.java,v 1.15 2004/02/26 20:34:40 eburns Exp $
+ * @version $Id: TestRenderers_4.java,v 1.16 2004/04/07 17:53:01 rkitain Exp $
  */
 
 public class TestRenderers_4 extends JspFacesTestCase {
@@ -83,7 +84,7 @@ public class TestRenderers_4 extends JspFacesTestCase {
     //
     public void setUp() {
         super.setUp();
-        UIViewRoot page = new UIViewRoot();
+        UIViewRoot page = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
         page.setViewId("viewId");
         getFacesContext().setViewRoot(page);
         assertTrue(null != getFacesContext().getResponseWriter());
@@ -99,12 +100,12 @@ public class TestRenderers_4 extends JspFacesTestCase {
 
         try {
             // create a dummy root for the tree.
-            UIViewRoot root = new UIViewRoot();
+            UIViewRoot root = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
             root.setId("root");
 
             testGridRenderer(root);
 
-            root = new UIViewRoot();
+            root = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
             root.setId("root");
             testGridRendererWithNonRenderedChildren(root);
 

@@ -1,5 +1,5 @@
 /*
- * $Id: TestConverters.java,v 1.28 2004/02/26 20:34:22 eburns Exp $
+ * $Id: TestConverters.java,v 1.29 2004/04/07 17:52:49 rkitain Exp $
  */
 
 /*
@@ -39,7 +39,7 @@ import java.util.TimeZone;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestConverters.java,v 1.28 2004/02/26 20:34:22 eburns Exp $
+ * @version $Id: TestConverters.java,v 1.29 2004/04/07 17:52:49 rkitain Exp $
  */
 
 public class TestConverters extends JspFacesTestCase {
@@ -87,7 +87,7 @@ public class TestConverters extends JspFacesTestCase {
             (ApplicationFactory) FactoryFinder.getFactory(
                 FactoryFinder.APPLICATION_FACTORY);
         application = aFactory.getApplication();
-        UIViewRoot viewRoot = new UIViewRoot();
+        UIViewRoot viewRoot = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
         viewRoot.setViewId("viewId");
         getFacesContext().setViewRoot(viewRoot);
     }
@@ -102,7 +102,7 @@ public class TestConverters extends JspFacesTestCase {
 
         try {
             // create a dummy root for the tree.
-            UIViewRoot root = new UIViewRoot();
+            UIViewRoot root = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
             root.setId("root");
 
             testDateConverter(root);
@@ -347,7 +347,7 @@ public class TestConverters extends JspFacesTestCase {
         getFacesContext().getExternalContext().getRequestMap().put("bean",
                                                                    bean);
         // create a dummy root for the tree.
-        UIViewRoot root = new UIViewRoot();
+        UIViewRoot root = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
         root.setId("root");
         getFacesContext().setViewRoot(root);
 

@@ -1,5 +1,5 @@
 /*
- * $Id: TestValueBindingImpl.java,v 1.29 2004/02/26 20:34:24 eburns Exp $
+ * $Id: TestValueBindingImpl.java,v 1.30 2004/04/07 17:52:50 rkitain Exp $
  */
 
 /*
@@ -16,6 +16,7 @@ import com.sun.faces.TestBean;
 import com.sun.faces.TestBean.Inner2Bean;
 import com.sun.faces.TestBean.InnerBean;
 import com.sun.faces.application.ApplicationImpl;
+import com.sun.faces.util.Util;
 import org.apache.cactus.WebRequest;
 
 import javax.faces.FacesException;
@@ -413,7 +414,7 @@ public class TestValueBindingImpl extends ServletFacesTestCase {
 
         // tree
         // create a dummy root for the tree.
-        UIViewRoot page = new UIViewRoot();
+        UIViewRoot page = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
         page.setId("root");
         page.setViewId("newTree");
         getFacesContext().setViewRoot(page);
@@ -539,7 +540,7 @@ public class TestValueBindingImpl extends ServletFacesTestCase {
 
         // tree
         // create a dummy root for the tree.
-        UIViewRoot page = new UIViewRoot();
+        UIViewRoot page = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
         page.setId("root");
         page.setViewId("newTree");
         getFacesContext().setViewRoot(page);
@@ -922,7 +923,7 @@ public class TestValueBindingImpl extends ServletFacesTestCase {
         UIForm form = null;
         UIInput input = null;
         Object state = null;
-        getFacesContext().setViewRoot(root = new UIViewRoot());
+        getFacesContext().setViewRoot(root = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null));
         root.getChildren().add(form = new UIForm());
         form.getChildren().add(input = new UIInput());
         input.setValueBinding("buckaroo",
@@ -932,7 +933,7 @@ public class TestValueBindingImpl extends ServletFacesTestCase {
         state = root.processSaveState(getFacesContext());
 
         // synthesize the tree structure
-        getFacesContext().setViewRoot(root = new UIViewRoot());
+        getFacesContext().setViewRoot(root = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null));
         root.getChildren().add(form = new UIForm());
         form.getChildren().add(input = new UIInput());
         root.processRestoreState(getFacesContext(), state);

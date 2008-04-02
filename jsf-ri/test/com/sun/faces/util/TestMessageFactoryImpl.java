@@ -1,5 +1,5 @@
 /*
- * $Id: TestMessageFactoryImpl.java,v 1.6 2004/02/26 20:34:46 eburns Exp $
+ * $Id: TestMessageFactoryImpl.java,v 1.7 2004/04/07 17:53:06 rkitain Exp $
  */
 
 /*
@@ -25,7 +25,7 @@ import java.util.Locale;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestMessageFactoryImpl.java,v 1.6 2004/02/26 20:34:46 eburns Exp $
+ * @version $Id: TestMessageFactoryImpl.java,v 1.7 2004/04/07 17:53:06 rkitain Exp $
  */
 
 public class TestMessageFactoryImpl extends ServletFacesTestCase {
@@ -67,7 +67,7 @@ public class TestMessageFactoryImpl extends ServletFacesTestCase {
     //
     public void setUp() {
         super.setUp();
-        UIViewRoot viewRoot = new UIViewRoot();
+        UIViewRoot viewRoot = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
         viewRoot.setViewId("viewId");
         getFacesContext().setViewRoot(viewRoot);
     }

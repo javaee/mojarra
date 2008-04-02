@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigFileTestCase.java,v 1.57 2004/04/07 17:22:14 eburns Exp $
+ * $Id: ConfigFileTestCase.java,v 1.58 2004/04/07 17:52:47 rkitain Exp $
  */
 
 /*
@@ -420,7 +420,7 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
                 FactoryFinder.APPLICATION_FACTORY);
         ApplicationImpl application = (ApplicationImpl) aFactory.getApplication();
         NavigationHandler navHandler = application.getNavigationHandler();
-        UIViewRoot page = new UIViewRoot();
+        UIViewRoot page = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
         page.setViewId("/login.jsp");
         getFacesContext().setViewRoot(page);
         navHandler.handleNavigation(getFacesContext(), "#{UserBean.login}",
@@ -518,7 +518,7 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
             LifecycleFactory.DEFAULT_LIFECYCLE);
         parseConfig("config1.xml", config.getServletContext());
 
-        UIViewRoot page = new UIViewRoot();
+        UIViewRoot page = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
         page.setViewId("/login.jsp");
         getFacesContext().setViewRoot(page);
         try {

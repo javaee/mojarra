@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_2.java,v 1.81 2004/02/26 20:34:39 eburns Exp $
+ * $Id: TestRenderers_2.java,v 1.82 2004/04/07 17:53:00 rkitain Exp $
  */
 
 /*
@@ -45,7 +45,7 @@ import java.io.StringWriter;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_2.java,v 1.81 2004/02/26 20:34:39 eburns Exp $
+ * @version $Id: TestRenderers_2.java,v 1.82 2004/04/07 17:53:00 rkitain Exp $
  */
 
 public class TestRenderers_2 extends JspFacesTestCase {
@@ -121,7 +121,7 @@ public class TestRenderers_2 extends JspFacesTestCase {
             (ApplicationFactory) FactoryFinder.getFactory(
                 FactoryFinder.APPLICATION_FACTORY);
         application = aFactory.getApplication();
-        UIViewRoot page = new UIViewRoot();
+        UIViewRoot page = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
         page.setViewId("viewId");
         getFacesContext().setViewRoot(page);
         assertTrue(null != getFacesContext().getResponseWriter());
@@ -157,7 +157,7 @@ public class TestRenderers_2 extends JspFacesTestCase {
     public void testRenderers() throws Exception {
 
         // create a dummy root for the tree.
-        UIViewRoot root = new UIViewRoot();
+        UIViewRoot root = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
         root.setId("root");
 
         testCheckboxRenderer(root);
