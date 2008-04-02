@@ -30,7 +30,7 @@ import com.sun.faces.sandbox.util.YuiConstants;
  *
  */
 public class YuiTreeRenderer extends Renderer {
-    public static int level = 0;
+    //public static int level = 0;
     private static final String scriptIds[] = {
         YuiConstants.JS_YAHOO_DOM_EVENT,
         YuiConstants.JS_TREEVIEW

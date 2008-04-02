@@ -4,6 +4,7 @@
 package com.sun.faces.sandbox.render;
 
 import java.io.IOException;
+import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -131,6 +132,21 @@ public class YuiRendererHelper {
     public static String getJavascriptVar(UIComponent comp) {
         return comp.getClientId(FacesContext.getCurrentInstance()).replaceAll(":", "_");
     }
+    
+    public static String getRenderedOutput(FacesContext context, ResponseWriter writer, UIComponent component) throws IOException {
+        StringWriter stringWriter = new StringWriter();
+        ResponseWriter newWriter = writer.cloneWithWriter(stringWriter);
+        context.setResponseWriter(newWriter);
+        component.encodeAll(context);
+        String output = stringWriter.toString();
+        if (output != null) {
+            output = output.trim();
+            output = sanitizeStringForJavaScript(output);
+        }
+        context.setResponseWriter(writer);
+        
+        return output;
+    }
 
     /**
      * @param context the <code>FacesContext</code> for the current request
@@ -150,5 +166,27 @@ public class YuiRendererHelper {
     @SuppressWarnings("unchecked")
     private static void setResourceAsRendered(FacesContext context, String key) {
         context.getExternalContext().getRequestMap().put(key, Boolean.TRUE);
+    }
+
+    private static String sanitizeStringForJavaScript( String s )
+    {
+        /*
+        StringBuffer buf = new StringBuffer();
+        for ( int i = 0; i < s.length(); i++ )
+        {
+            char c = s.charAt( i );
+            if ( c>='a' && c<='z' || c>='A' && c<='Z' || c>='0' && c<='9' )
+            {
+                buf.append( c );
+            }
+            else
+            {
+                buf.append( "&#" + (int)c + ";" );
+            }
+        }
+        return buf.toString();
+        */
+        return s.replaceAll("\\n", "")
+            .replaceAll("'", "\\\\'");
     }
 }

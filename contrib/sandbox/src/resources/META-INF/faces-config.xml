@@ -274,11 +274,49 @@
     </component>
 
     <render-kit>
-        <description>Renderkit implementation for the Download component</description>
+        <description>Renderkit implementation for the MultiFileUpload component</description>
         <renderer>
             <component-family>com.sun.faces.sandbox.MultiFileUpload</component-family>
             <renderer-type>com.sun.faces.sandbox.MultiFileUploadRenderer</renderer-type>
             <renderer-class>com.sun.faces.sandbox.render.MultiFileUploadRenderer</renderer-class>
+        </renderer>
+    </render-kit>
+
+    <component>
+        <description></description>
+        <display-name>TabView</display-name>
+        <component-type>com.sun.faces.sandbox.YuiTabView</component-type>
+        <component-class>com.sun.faces.sandbox.component.YuiTabView</component-class>
+        <component-extension>
+            <renderer-type>com.sun.faces.sandbox.YuiTabViewRenderer</renderer-type>
+        </component-extension>
+    </component>
+
+    <render-kit>
+        <description>Renderkit implementation for the TabView component</description>
+        <renderer>
+            <component-family>com.sun.faces.sandbox.YuiTabView</component-family>
+            <renderer-type>com.sun.faces.sandbox.YuiTabViewRenderer</renderer-type>
+            <renderer-class>com.sun.faces.sandbox.render.YuiTabViewRenderer</renderer-class>
+        </renderer>
+    </render-kit>
+
+    <component>
+        <description></description>
+        <display-name>Tab</display-name>
+        <component-type>com.sun.faces.sandbox.YuiTab</component-type>
+        <component-class>com.sun.faces.sandbox.component.YuiTab</component-class>
+        <component-extension>
+            <renderer-type>com.sun.faces.sandbox.YuiTabRenderer</renderer-type>
+        </component-extension>
+    </component>
+
+    <render-kit>
+        <description>Renderkit implementation for the Tab component</description>
+        <renderer>
+            <component-family>com.sun.faces.sandbox.YuiTab</component-family>
+            <renderer-type>com.sun.faces.sandbox.YuiTabRenderer</renderer-type>
+            <renderer-class>com.sun.faces.sandbox.render.YuiTabRenderer</renderer-class>
         </renderer>
     </render-kit>
 </faces-config>

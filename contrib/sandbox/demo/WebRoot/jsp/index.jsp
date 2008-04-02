@@ -7,6 +7,7 @@
     <li><a href="menuBar.jsf">Menu Bar Demo</a></li>
     <li><a href="multiFileUpload.jsf">Multi-file Upload Demo</a></li>
     <!-- li><a href="selectItems.jsf">SelectItems Demo</a></li -->
+    <li><a href="tabView.jsf">TabView Demo</a></li>
     <li><a href="tree.jsf">Tree Demo</a></li>
 </ul>
 <%@ include file="footer.inc" %>

@@ -1,5 +1,6 @@
-<%@ include file="header.inc" %>
-    <f:view>
+<%@ include file="header.inc"%>
+<f:view>
+    <h:form>
         <risb:menu>
             <risb:menuItem id="jsfsites" value="JSF Sites">
                 <risb:menuItem value="JSF RI Homepage" url="https://javaserverfaces.dev.java.net" />
@@ -17,6 +18,12 @@
                 <risb:menuItem value="Jacob Hookom's Blog #2" url="http://hookom.blogspot.com" />
                 <risb:menuItem value="Jason Lee's Blog" url="http://blogs.steeplesoft.com/javaserver-faces" />
             </risb:menuItem>
+            <risb:menuItem value="Throw Away">
+                <risb:menuItem>
+                    <h:commandLink value="Home" action="home" />
+                </risb:menuItem>
+            </risb:menuItem>
         </risb:menu>
-    </f:view>
-<%@ include file="footer.inc" %>
+    </h:form>
+</f:view>
+<%@ include file="footer.inc"%>

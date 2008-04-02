@@ -79,4 +79,16 @@
             <component-type>com.sun.faces.sandbox.YuiTreeNode</component-type>
         </component>
     </tag>
+    <tag>
+        <tag-name>tabView</tag-name>
+        <component>
+            <component-type>com.sun.faces.sandbox.YuiTabView</component-type>
+        </component>
+    </tag>
+    <tag>
+        <tag-name>tab</tag-name>
+        <component>
+            <component-type>com.sun.faces.sandbox.YuiTab</component-type>
+        </component>
+    </tag>
 </facelet-taglib>
