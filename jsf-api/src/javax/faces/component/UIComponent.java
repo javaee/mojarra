@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.108 2003/10/21 05:37:44 craigmcc Exp $
+ * $Id: UIComponent.java,v 1.109 2003/10/24 18:55:42 eburns Exp $
  */
 
 /*
@@ -189,7 +189,11 @@ public abstract class UIComponent implements StateHolder {
 
     /**
      * <p>Return a flag indicating whether this component is responsible
-     * for rendering its child components.</p>
+     * for rendering its child components.  The default implementation
+     * in {@link UIComponentBase#getRendersChildren} tries to find the
+     * renderer for this component.  If it does, it calls {@link
+     * Renderer#getRendersChildren} and returns the result.  If it
+     * doesn't, it returns false.</p>
      */
     public abstract boolean getRendersChildren();
 

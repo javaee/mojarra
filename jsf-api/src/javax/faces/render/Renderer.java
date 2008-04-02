@@ -1,5 +1,5 @@
 /*
- * $Id: Renderer.java,v 1.24 2003/10/21 23:58:18 craigmcc Exp $
+ * $Id: Renderer.java,v 1.25 2003/10/24 18:55:44 eburns Exp $
  */
 
 /*
@@ -164,6 +164,16 @@ public abstract class Renderer {
         }
         return (clientId);
 
+    }
+
+    /**
+     * <p>Return a flag indicating whether this renderer is responsible
+     * for rendering the children the component it is asked to render.
+     * The default implementation returns <code>false</code>.</p>
+     */
+
+    public boolean getRendersChildren() {
+	return false;
     }
 
 

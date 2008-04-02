@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.70 2003/10/21 05:37:44 craigmcc Exp $
+ * $Id: UIComponentBase.java,v 1.71 2003/10/24 18:55:43 eburns Exp $
  */
 
 /*
@@ -44,10 +44,12 @@ import javax.faces.render.RenderKitFactory;
  * implements the default concrete behavior of all methods defined by
  * {@link UIComponent}.</p>
  *
- * <p>By default, this class defines <code>getRendersChildren()</code> to
- * return <code>false</code>.  Subclasses that wish to manage the rendering
- * of their children should override this method to return <code>true</code>
- * instead.</p>
+ * <p>By default, this class defines <code>getRendersChildren()</code>
+ * to find the renderer for this component and call its
+ * <code>getRendersChildren()</code> method.  The default implementation
+ * on the <code>Renderer</code> returns <code>false</code>.  Subclasses
+ * that wish to manage the rendering of their children should override
+ * this method to return <code>true</code> instead.</p>
  */
 
 public abstract class UIComponentBase extends UIComponent {
@@ -378,7 +380,13 @@ public abstract class UIComponentBase extends UIComponent {
 
 
     public boolean getRendersChildren() {
-        return (false);
+	boolean result = false;
+	Renderer renderer = null;
+	if (null != 
+	    (renderer = getRenderer(FacesContext.getCurrentInstance()))) {
+	    result = renderer.getRendersChildren();
+	}
+	return result;
     }
 
 
