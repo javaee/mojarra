@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListener.java,v 1.56 2005/12/03 20:30:21 edburns Exp $
+ * $Id: ConfigureListener.java,v 1.57 2005/12/08 22:00:01 rlubke Exp $
  */
 /*
  * The contents of this file are subject to the terms
@@ -455,24 +455,12 @@ public class ConfigureListener implements ServletRequestListener,
                     unsortedResourceList.add(0, nextElement);
                 }
             }
-        } catch (IOException e) {
-            String message = null;
-            try {
-                message = Util.getExceptionMessageString
-                    (Util.CANT_PARSE_FILE_ERROR_MESSAGE_ID,
-                     new Object[]{ META_INF_RESOURCES });
-            } catch (Exception ee) {
-                message = "Can't parse configuration file:" +
-                    META_INF_RESOURCES;
-            }
-            if ( logger.isLoggable(Level.WARNING)) {
-                logger.log(Level.WARNING, message, e);
-            }
-            throw new FacesException(message, e);
+        } catch (IOException e) {            
+            throw new FacesException(e);
         }
         // Load the sorted resources first:
-	Iterator<Map.Entry<String,URL>> sortedResources = 
-	    sortedJarMap.entrySet().iterator();
+        Iterator<Map.Entry<String,URL>> sortedResources = 
+            sortedJarMap.entrySet().iterator();
         while (sortedResources.hasNext()) {
             url = sortedResources.next().getValue();
             parse(digester, url, fcb);
@@ -2064,10 +2052,9 @@ public class ConfigureListener implements ServletRequestListener,
 
 
         /**
-         * <p>Return <code>true</code> if the <code>WebXmlProcessor</code>
+         * @return <code>true</code> if the <code>WebXmlProcessor</code>
          * detected a <code>FacesServlet</code> entry, otherwise return
-         * <code>false</code>.</p>
-         * @return
+         * <code>false</code>.</p>        
          */
         boolean isFacesServletPresent() {
 
