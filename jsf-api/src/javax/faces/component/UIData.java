@@ -100,6 +100,16 @@ public class UIData extends UIComponentBase
      * and restored state of the component.</p>
      */
     private transient DataModel model = null;
+    
+    
+    /**
+     * <p> During iteration through the rows of this table,
+     * This ivar is used to store the previous "var" value 
+     * for this instance.  When the row iteration is complete,
+     * this value is restored to the request map.
+     */
+    
+    private transient Object oldVar;
 
 
     /**
@@ -392,11 +402,15 @@ public class UIData extends UIComponentBase
             Map requestMap =
                 getFacesContext().getExternalContext().getRequestMap();
             if (rowIndex == -1) {
-                requestMap.remove(var);
+                oldVar = requestMap.remove(var);
             } else if (isRowAvailable()) {
 		requestMap.put(var, getRowData());
 	    } else {
 		requestMap.remove(var);
+                if (null != oldVar) {
+                    requestMap.put("var", oldVar);
+                    oldVar = null;
+                }
             }
         }
 
