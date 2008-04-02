@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationAssociate.java,v 1.34 2006/09/14 22:38:39 tony_robertson Exp $
+ * $Id: ApplicationAssociate.java,v 1.35 2006/10/03 21:18:20 rlubke Exp $
  */
 
 /*
@@ -359,6 +359,9 @@ public class ApplicationAssociate {
 
     public ResourceBundle getResourceBundle(FacesContext context,
                                             String var) {
+        if (!resourceBundles.containsKey(var)) {
+            return null;
+        }
         UIViewRoot root = null;
         // Start out with the default locale
         Locale locale = null, defaultLocale = Locale.getDefault();
