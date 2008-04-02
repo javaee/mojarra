@@ -5,7 +5,7 @@
 
 
 /**
- * $Id: SelectManyCheckboxListRenderer.java,v 1.31 2004/02/26 20:33:01 eburns Exp $
+ * $Id: SelectManyCheckboxListRenderer.java,v 1.32 2004/03/02 20:08:04 rkitain Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -168,9 +168,15 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
         ResponseWriter writer = context.getResponseWriter();
         Util.doAssert(writer != null);
                 
-        // disable the radio button if the attribute is set.
+        // disable the check box if the attribute is set.
         String labelClass = null;
-        if (curItem.isDisabled()) {
+	boolean componentDisabled = false;
+	if (component.getAttributes().get("disabled") != null) {
+            if ((component.getAttributes().get("disabled")).equals(Boolean.TRUE)) {
+	        componentDisabled = true;
+	    }
+	}
+        if (componentDisabled || curItem.isDisabled()) {
             labelClass = (String) component.
                 getAttributes().get("disabledClass");
         } else {

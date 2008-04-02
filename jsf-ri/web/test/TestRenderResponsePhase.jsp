@@ -261,7 +261,7 @@
 	    <h:selectOneRadio id="shipType" layout="LINE_DIRECTION" 
                 tabindex="3" disabledClass="disabledClass" 
                 enabledClass="enabledClass" accesskey="A" 
-                styleClass = "styleClass">
+                styleClass = "styleClass" disabled="true">
 
                 <f:selectItem itemValue="nextDay" itemLabel="Next Day" itemDisabled="true"/>
                 <f:selectItem itemValue="nextWeek" itemLabel="Next Week" />
@@ -536,6 +536,18 @@
 						<f:selectItem itemValue="8" itemLabel="eight" />
 						<f:selectItem itemValue="9" itemLabel="nine" />
 					</h:selectManyCheckbox></TD>
+</tr>
+
+<tr>
+                                        <TD><h:selectManyCheckbox id="checklistmodel"
+                                               value="#{LoginBean.currentOptions}"
+                                               disabledClass="disabedClass"
+                                               enabledClass="enabledClass"
+                                               disabled="true">
+						<f:selectItem itemValue="1" itemLabel="one" />
+						<f:selectItem itemValue="2" itemLabel="two" />
+						<f:selectItem itemValue="3" itemLabel="three"/>
+                                            </h:selectManyCheckbox></TD>
 </tr>
 
 <tr>
