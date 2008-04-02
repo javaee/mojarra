@@ -1,5 +1,5 @@
 /*
- * $Id: ErrorsRenderer.java,v 1.12 2003/04/29 20:51:50 eburns Exp $
+ * $Id: ErrorsRenderer.java,v 1.13 2003/05/07 02:02:25 horwat Exp $
  */
 
 /*
@@ -36,7 +36,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ErrorsRenderer.java,v 1.12 2003/04/29 20:51:50 eburns Exp $
+ * @version $Id: ErrorsRenderer.java,v 1.13 2003/05/07 02:02:25 horwat Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -160,9 +160,7 @@ public class ErrorsRenderer extends HtmlBasicRenderer {
 	}
         while (messageIter.hasNext()) {
             curMessage = (Message) messageIter.next();
-            writer.write("\t" + curMessage.getSummary() + "<BR>");
-            writer.write("\tSeverity: " + curMessage.getSeverity() + "<BR>");
-            writer.write("\t" + curMessage.getDetail());
+            writer.write("\t" + curMessage.getSummary());
         }
 	if (null != outputClass) {
 	    writer.write("</span>");
