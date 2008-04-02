@@ -162,7 +162,7 @@ public class GlassFishInjectionProvider extends DiscoverableInjectionProvider {
     private void invokePostConstruct(Object instance,
                                      JndiNameEnvironment envDescriptor)
     throws InjectionException {
-        LinkedList<Method> preDestroyMethods = new LinkedList<Method>();
+        LinkedList<Method> postConstructMethods = new LinkedList<Method>();
 
         Class<? extends Object> nextClass = instance.getClass();
 
@@ -180,15 +180,15 @@ public class GlassFishInjectionProvider extends DiscoverableInjectionProvider {
 
                 // Invoke the preDestroy methods starting from
                 // the least-derived class downward.
-                preDestroyMethods.addFirst(postConstructMethod);
+                postConstructMethods.addFirst(postConstructMethod);
             }
 
             nextClass = nextClass.getSuperclass();
         }
 
-        for (Method preDestroyMethod : preDestroyMethods) {
+        for (Method postConstructMethod : postConstructMethods) {
 
-            invokeLifecycleMethod(preDestroyMethod, instance);
+            invokeLifecycleMethod(postConstructMethod, instance);
 
         }
 
