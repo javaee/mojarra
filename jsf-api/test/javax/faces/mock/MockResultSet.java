@@ -1,5 +1,5 @@
 /*
- * $Id: MockResultSet.java,v 1.2 2003/10/15 04:17:36 craigmcc Exp $
+ * $Id: MockResultSet.java,v 1.3 2003/10/15 21:18:40 craigmcc Exp $
  */
 
 /*
@@ -200,9 +200,23 @@ public class MockResultSet implements ResultSet {
     }
 
 
+    public int getRow() throws SQLException {
+
+        return (this.row);
+
+    }
+
+
     public int getType() throws SQLException {
 
         return (ResultSet.TYPE_SCROLL_INSENSITIVE);
+
+    }
+
+
+    public boolean last() throws SQLException {
+
+        return (absolute(beans.length));
 
     }
 
@@ -472,11 +486,6 @@ public class MockResultSet implements ResultSet {
     }
 
 
-    public int getRow() throws SQLException {
-        throw new UnsupportedOperationException();
-    }
-
-
     public short getShort(int columnIndex) throws SQLException {
         throw new UnsupportedOperationException();
     }
@@ -592,11 +601,6 @@ public class MockResultSet implements ResultSet {
 
 
     public boolean isLast() throws SQLException {
-        throw new UnsupportedOperationException();
-    }
-
-
-    public boolean last() throws SQLException {
         throw new UnsupportedOperationException();
     }
 

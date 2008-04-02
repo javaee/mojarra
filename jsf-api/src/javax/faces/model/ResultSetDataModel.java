@@ -1,5 +1,5 @@
 /*
- * $Id: ResultSetDataModel.java,v 1.8 2003/10/15 20:43:00 craigmcc Exp $
+ * $Id: ResultSetDataModel.java,v 1.9 2003/10/15 21:18:40 craigmcc Exp $
  */
 
 /*
@@ -139,9 +139,10 @@ public class ResultSetDataModel extends DataModel {
 
         if (size == Integer.MIN_VALUE) {
             try {
-                size = 0;
-                while (resultSet.absolute(size + 1)) {
-                    size++;
+                if (resultSet.last()) {
+                    size = resultSet.getRow();
+                } else {
+                    size = 0;
                 }
             } catch (SQLException e) {
                 throw new FacesException(e);
