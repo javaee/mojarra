@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTag.java,v 1.33 2004/01/06 04:28:20 eburns Exp $
+ * $Id: UIComponentTag.java,v 1.34 2004/01/11 21:15:03 eburns Exp $
  */
 
 /*
@@ -901,11 +901,6 @@ public abstract class UIComponentTag implements Tag {
 		},
                                                null,
                                                request.getCharacterEncoding());
-	    // set the response's content type based on this
-	    // ResponseWriter's content type + character encoding.
-	    response.setContentType(writer.getContentType() + "; charset=" + 
-				    writer.getCharacterEncoding());
-	    
 	    
             context.setResponseWriter(writer);
         }

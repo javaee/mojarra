@@ -11,6 +11,20 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
 <title>JavaServer Faces 1.0 Standard HTML RenderKit Specification</title>
 
+<STYLE TYPE="text/css" MEDIA="screen">
+
+<xsl:comment>
+
+  TABLE  { border-width: medium; border-style: groove }
+
+  TD  { border-width: thin; border-style: groove }
+
+  TH { background-color: #dcdcdc }
+
+</xsl:comment>
+
+</STYLE>
+
 </head>
 
 <!-- Note that you need to modify the standard-html-renderkit.xml file
@@ -19,7 +33,344 @@ XSL file to work.  -->
 
 <body>
 
-  <table border="1">
+  <h2>Passthru attributes</h2>
+
+  <p>The following attributes are passed thru without interpretation
+  directly to the rendered markup.</p>
+
+  <table>
+
+    <tr>
+
+      <th>attribute</th>
+
+      <th>renderers supporting that attribute</th>
+
+    </tr>
+
+    <tr>
+
+      <td>disabled</td>
+
+    </tr>
+
+    <tr>
+
+      <td>readonly</td>
+
+    </tr>
+
+    <tr>
+
+      <td>ismap</td>
+
+    </tr>
+
+    <tr>
+
+      <td>accesskey</td>
+
+    </tr>
+
+    <tr>
+
+      <td>alt</td>
+
+    </tr>
+
+    <tr>
+
+      <td>cols</td>
+
+    </tr>
+
+    <tr>
+
+      <td>height</td>
+
+    </tr>
+
+    <tr>
+
+      <td>lang</td>
+
+    </tr>
+
+    <tr>
+
+      <td>longdesc</td>
+
+    </tr>
+
+    <tr>
+
+      <td>maxlength</td>
+
+    </tr>
+
+    <tr>
+
+      <td>onblur</td>
+
+    </tr>
+
+    <tr>
+
+      <td>onchange</td>
+
+    </tr>
+
+    <tr>
+
+      <td>onclick</td>
+
+    </tr>
+
+    <tr>
+
+      <td>ondblclick</td>
+
+    </tr>
+
+    <tr>
+
+      <td>onfocus</td>
+
+    </tr>
+
+    <tr>
+
+      <td>onkeydown</td>
+
+    </tr>
+
+    <tr>
+
+      <td>onkeypress</td>
+
+    </tr>
+
+    <tr>
+
+      <td>onkeyup</td>
+
+    </tr>
+
+    <tr>
+
+      <td>onload</td>
+
+    </tr>
+
+    <tr>
+
+      <td>onmousedown</td>
+
+    </tr>
+
+    <tr>
+
+      <td>onmousemove</td>
+
+    </tr>
+
+    <tr>
+
+      <td>onmouseout</td>
+
+    </tr>
+
+    <tr>
+
+      <td>onmouseover</td>
+
+    </tr>
+
+    <tr>
+
+      <td>onmouseup</td>
+
+    </tr>
+
+    <tr>
+
+      <td>onreset</td>
+
+    </tr>
+
+    <tr>
+
+      <td>onselect</td>
+
+    </tr>
+
+    <tr>
+
+      <td>onsubmit</td>
+
+    </tr>
+
+    <tr>
+
+      <td>onunload</td>
+
+    </tr>
+
+    <tr>
+
+      <td>rows</td>
+
+    </tr>
+
+    <tr>
+
+      <td>size</td>
+
+    </tr>
+
+    <tr>
+
+      <td>tabindex</td>
+
+    </tr>
+
+    <tr>
+
+      <td>title</td>
+
+    </tr>
+
+    <tr>
+
+      <td>style</td>
+
+    </tr>
+
+    <tr>
+
+      <td>width</td>
+
+    </tr>
+
+    <tr>
+
+      <td>dir</td>
+
+    </tr>
+
+    <tr>
+
+      <td>rules</td>
+
+    </tr>
+
+    <tr>
+
+      <td>frame</td>
+
+    </tr>
+
+    <tr>
+
+      <td>border</td>
+
+    </tr>
+
+    <tr>
+
+      <td>cellspacing</td>
+
+    </tr>
+
+    <tr>
+
+      <td>cellpadding</td>
+
+    </tr>
+
+    <tr>
+
+      <td>summary</td>
+
+    </tr>
+
+    <tr>
+
+      <td>bgcolor</td>
+
+    </tr>
+
+    <tr>
+
+      <td>usemap</td>
+
+    </tr>
+
+    <tr>
+
+      <td>enctype </td>
+
+    </tr>
+
+    <tr>
+
+      <td>acceptcharset </td>
+
+    </tr>
+
+    <tr>
+
+      <td>accept </td>
+
+    </tr>
+
+    <tr>
+
+      <td>target </td>
+
+    </tr>
+
+    <tr>
+
+      <td>onreset</td>
+
+    </tr>
+
+    <tr>
+
+      <td>rel</td>
+
+    </tr>
+
+    <tr>
+
+      <td>rev</td>
+
+    </tr>
+
+    <tr>
+
+      <td>shape</td>
+
+    </tr>
+
+    <tr>
+
+      <td>coords</td>
+
+    </tr>
+
+    <tr>
+
+      <td>hreflang</td>
+
+    </tr>
+
+  </table>
+
+  <h2>Renderer Descriptions</h2>
+
+  <table>
 
     <tr>
 
