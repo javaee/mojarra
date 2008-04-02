@@ -1,5 +1,5 @@
 /*
- * $Id: ModelBean.java,v 1.10 2005/09/13 17:46:37 rogerk Exp $
+ * $Id: ModelBean.java,v 1.11 2005/12/14 22:27:47 rlubke Exp $
  */
 
 /*
@@ -35,7 +35,7 @@ import java.util.Date;
 /**
  * Simple bean for Model value demonstration.
  *
- * @version $Id: ModelBean.java,v 1.10 2005/09/13 17:46:37 rogerk Exp $
+ * @version $Id: ModelBean.java,v 1.11 2005/12/14 22:27:47 rlubke Exp $
  */
 
 public class ModelBean {
@@ -160,7 +160,6 @@ public class ModelBean {
     public void setWhichComponent(String newWhich) {
         whichComponent = newWhich;
     }
-
 
     //
     // Actions

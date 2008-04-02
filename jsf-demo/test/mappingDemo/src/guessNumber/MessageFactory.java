@@ -1,5 +1,5 @@
 /*
- * $Id: MessageFactory.java,v 1.5 2005/08/22 22:09:52 ofung Exp $
+ * $Id: MessageFactory.java,v 1.6 2005/12/14 22:27:49 rlubke Exp $
  */
 
 /*
@@ -75,8 +75,9 @@ public class MessageFactory extends Object {
     //
     // General Methods
     //
-    
-    public static String substituteParams(Locale locale, String msgtext, Object params[]) {
+
+    public static String substituteParams(Locale locale, String msgtext,
+                                          Object params[]) {
         String localizedStr = null;
 
         if (params == null || msgtext == null) {
@@ -119,17 +120,17 @@ public class MessageFactory extends Object {
                                           Object params[]) {
         FacesMessage result = null;
         String
-            summary = null,
-            detail = null,
-            bundleName = null;
+              summary = null,
+              detail = null,
+              bundleName = null;
         ResourceBundle bundle = null;
 
         // see if we have a user-provided bundle
         if (null != (bundleName = getApplication().getMessageBundle())) {
             if (null !=
                 (bundle =
-                ResourceBundle.getBundle(bundleName, locale,
-                                         getCurrentLoader(bundleName)))) {
+                      ResourceBundle.getBundle(bundleName, locale,
+                                               getCurrentLoader(bundleName)))) {
                 // see if we have a hit
                 try {
                     summary = bundle.getString(messageId);
@@ -179,16 +180,18 @@ public class MessageFactory extends Object {
     //
     // Methods from MessageFactory
     // 
-    public static FacesMessage getMessage(FacesContext context, String messageId) {
+    public static FacesMessage getMessage(FacesContext context,
+                                          String messageId) {
         return getMessage(context, messageId, null);
     }
 
 
-    public static FacesMessage getMessage(FacesContext context, String messageId,
+    public static FacesMessage getMessage(FacesContext context,
+                                          String messageId,
                                           Object params[]) {
         if (context == null || messageId == null) {
             throw new NullPointerException(
-                "One or more parameters could be null");
+                  "One or more parameters could be null");
         }
         Locale locale = null;
         // viewRoot may not have been initialized at this point.
@@ -209,19 +212,22 @@ public class MessageFactory extends Object {
     }
 
 
-    public static FacesMessage getMessage(FacesContext context, String messageId,
+    public static FacesMessage getMessage(FacesContext context,
+                                          String messageId,
                                           Object param0) {
         return getMessage(context, messageId, new Object[]{param0});
     }
 
 
-    public static FacesMessage getMessage(FacesContext context, String messageId,
+    public static FacesMessage getMessage(FacesContext context,
+                                          String messageId,
                                           Object param0, Object param1) {
         return getMessage(context, messageId, new Object[]{param0, param1});
     }
 
 
-    public static FacesMessage getMessage(FacesContext context, String messageId,
+    public static FacesMessage getMessage(FacesContext context,
+                                          String messageId,
                                           Object param0, Object param1,
                                           Object param2) {
         return getMessage(context, messageId,
@@ -229,7 +235,8 @@ public class MessageFactory extends Object {
     }
 
 
-    public static FacesMessage getMessage(FacesContext context, String messageId,
+    public static FacesMessage getMessage(FacesContext context,
+                                          String messageId,
                                           Object param0, Object param1,
                                           Object param2, Object param3) {
         return getMessage(context, messageId,
@@ -244,7 +251,7 @@ public class MessageFactory extends Object {
 
     protected static ClassLoader getCurrentLoader(Object fallbackClass) {
         ClassLoader loader =
-            Thread.currentThread().getContextClassLoader();
+              Thread.currentThread().getContextClassLoader();
         if (loader == null) {
             loader = fallbackClass.getClass().getClassLoader();
         }

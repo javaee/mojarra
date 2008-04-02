@@ -1,5 +1,5 @@
 /*
- * $Id: TestExternalContextImpl.java,v 1.18 2005/10/19 19:51:30 edburns Exp $
+ * $Id: TestExternalContextImpl.java,v 1.19 2005/12/14 22:28:00 rlubke Exp $
  */
 
 /*
@@ -57,7 +57,7 @@ import java.util.Collection;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestExternalContextImpl.java,v 1.18 2005/10/19 19:51:30 edburns Exp $
+ * @version $Id: TestExternalContextImpl.java,v 1.19 2005/12/14 22:28:00 rlubke Exp $
  */
 
 public class TestExternalContextImpl extends ServletFacesTestCase {
@@ -315,7 +315,7 @@ public class TestExternalContextImpl extends ServletFacesTestCase {
 
     public void testGetResourceAsStream() {
         InputStream is = getFacesContext().getExternalContext()
-            .getResourceAsStream("/TestExternalContext");
+            .getResourceAsStream("/WEB-INF/web.xml");
         assertTrue(null != is);
     }
 

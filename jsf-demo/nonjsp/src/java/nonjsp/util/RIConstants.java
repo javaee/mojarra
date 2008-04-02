@@ -1,5 +1,5 @@
 /*
- * $Id: RIConstants.java,v 1.2 2005/08/22 22:09:24 ofung Exp $
+ * $Id: RIConstants.java,v 1.3 2005/12/14 22:27:34 rlubke Exp $
  */
 
 /*
@@ -33,21 +33,21 @@ import javax.faces.render.RenderKitFactory;
 
 /**
  * This class contains literal strings used throughout the Faces RI.
- *
+ * <p/>
  * Based on com.sun.faces.RIConstants
  *
- * @version $Id: RIConstants.java,v 1.2 2005/08/22 22:09:24 ofung Exp $
+ * @version $Id: RIConstants.java,v 1.3 2005/12/14 22:27:34 rlubke Exp $
  * @see com.sun.faces.RIConstants
  */
 public class RIConstants {
 
-    /**
-     * Used to add uniqueness to the names.
-     */
+    /** Used to add uniqueness to the names. */
     public final static String FACES_PREFIX = "com.sun.faces.";
 
-    public final static String HTML_BASIC_RENDER_KIT = FACES_PREFIX +
-        RenderKitFactory.HTML_BASIC_RENDER_KIT;
+    public final static String HTML_BASIC_RENDER_KIT = FACES_PREFIX
+                                                       +
+                                                       RenderKitFactory
+                                                             .HTML_BASIC_RENDER_KIT;
 
     public final static String FACES_VIEW = FACES_PREFIX + "VIEW";
     public final static String REQUEST_LOCALE = FACES_PREFIX + "LOCALE";

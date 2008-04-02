@@ -1,5 +1,5 @@
 /*
- * $Id: DefaultListener.java,v 1.6 2005/08/22 22:09:42 ofung Exp $
+ * $Id: DefaultListener.java,v 1.7 2005/12/14 22:27:46 rlubke Exp $
  */
 
 /*
@@ -39,24 +39,24 @@ import javax.faces.event.ActionListener;
 /**
  * Set a request parameter telling me which UIComponent was actuated
  *
- * @version $Id: DefaultListener.java,v 1.6 2005/08/22 22:09:42 ofung Exp $
+ * @version $Id: DefaultListener.java,v 1.7 2005/12/14 22:27:46 rlubke Exp $
  */
 
 public class DefaultListener extends Object implements ActionListener {
 
     public void processAction(ActionEvent event)
-        throws AbortProcessingException {
+          throws AbortProcessingException {
         System.out.println("DefaultListener.processAction");
         // PENDING(edburns): make sure getComponentId() returns a copy
         // so we don't leak UIComponent instances.
         String id = event.getComponent().getId();
         FacesContext context = FacesContext.getCurrentInstance();
         ValueBinding vb = context.getApplication().createValueBinding(
-            "#{model.hasComponent}");
+              "#{model.hasComponent}");
         vb.setValue(context, "true");
         vb =
-            context.getApplication().createValueBinding(
-                "#{model.whichComponent}");
+              context.getApplication().createValueBinding(
+                    "#{model.whichComponent}");
         vb.setValue(context, id);
     }
 

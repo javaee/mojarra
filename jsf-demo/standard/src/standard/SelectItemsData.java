@@ -1,5 +1,5 @@
 /*
- * $Id: SelectItemsData.java,v 1.5 2005/08/22 22:09:43 ofung Exp $
+ * $Id: SelectItemsData.java,v 1.6 2005/12/14 22:27:47 rlubke Exp $
  */
 
 /*
@@ -45,7 +45,6 @@ import java.util.List;
 
 public class SelectItemsData {
 
-
     // --------------------------------------------------------- Data Properties
 
 
@@ -90,15 +89,14 @@ public class SelectItemsData {
             nesteds = new ArrayList();
             System.out.println("Creating nesteds");
             nesteds.add(new SelectItemGroup
-                ("Primary", "", false, primary));
+                  ("Primary", "", false, primary));
             nesteds.add(new SelectItemGroup
-                ("Secondary", "", true, secondary));
+                  ("Secondary", "", true, secondary));
             System.out.println("Returning nesteds");
         }
         return (nesteds);
 
     }
-
 
     // -------------------------------------------------------- Value Properties
 

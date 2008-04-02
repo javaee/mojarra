@@ -25,16 +25,15 @@
 
 package renderkits.renderkit.svg;
 
-import java.io.IOException;
-
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.render.Renderer;
 
-import java.util.logging.Logger;
+import java.io.IOException;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import renderkits.util.Util;
 
@@ -42,19 +41,17 @@ import renderkits.util.Util;
  * <B>BaseRenderer</B> is a base class for implementing renderers
  * for <code>SVGRenderKit</code>.
  */
-                                                                                       
+
 public abstract class BaseRenderer extends Renderer {
 
     protected static Logger logger =
-            Util.getLogger(Util.FACES_LOGGER + Util.RENDERKIT_LOGGER);
+          Util.getLogger(Util.FACES_LOGGER + Util.RENDERKIT_LOGGER);
 
-    /**
-     * @return true if this renderer should render an id attribute.
-     */
+    /** @return true if this renderer should render an id attribute. */
     protected boolean shouldWriteIdAttribute(UIComponent component) {
         String id;
         return (null != (id = component.getId()) &&
-            !id.startsWith(UIViewRoot.UNIQUE_ID_PREFIX));
+                !id.startsWith(UIViewRoot.UNIQUE_ID_PREFIX));
     }
 
     protected void writeIdAttributeIfNecessary(FacesContext context,

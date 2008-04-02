@@ -1,5 +1,5 @@
 /*
- * $Id: TestCarDemo.java,v 1.10 2005/08/22 22:09:55 ofung Exp $
+ * $Id: TestCarDemo.java,v 1.11 2005/12/14 22:27:50 rlubke Exp $
  */
 
 /*
@@ -29,15 +29,19 @@
 
 package com.sun.faces.demotest.cardemo;
 
-import com.gargoylesoftware.htmlunit.html.*;
-import com.sun.faces.demotest.HtmlUnitTestCase;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+import com.gargoylesoftware.htmlunit.html.HtmlCheckBoxInput;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
+import com.gargoylesoftware.htmlunit.html.HtmlTableDataCell;
+import com.sun.faces.demotest.HtmlUnitTestCase;
 
 /**
  * <p>Assumptions: the app is localized for four locales, English,
@@ -56,21 +60,19 @@ public class TestCarDemo extends HtmlUnitTestCase {
 
     protected ResourceBundle resources = null;
     protected String[] carBundleNames = {
-        "carstore.bundles.Jalopy",
-        "carstore.bundles.Luxury",
-        "carstore.bundles.Roadster",
-        "carstore.bundles.SUV"
+          "carstore.bundles.Jalopy",
+          "carstore.bundles.Luxury",
+          "carstore.bundles.Roadster",
+          "carstore.bundles.SUV"
     };
     protected String[] packageLabelKeys = {
-        "Custom",
-        "Standard",
-        "Performance",
-        "Deluxe"
+          "Custom",
+          "Standard",
+          "Performance",
+          "Deluxe"
     };
 
     protected ResourceBundle[] carBundles = null;
-
-
 
     // PENDING: find a way to cause the WebClient's Accept_Charset
     // header to be set so we can test the locale calculation algorithm.
@@ -90,20 +92,20 @@ public class TestCarDemo extends HtmlUnitTestCase {
         HtmlSubmitInput button = null;
         int i, j = 0;
         Locale[] locales = {
-            Locale.ENGLISH,
-            Locale.GERMAN,
-            Locale.FRENCH,
-            new Locale("es", "")
+              Locale.ENGLISH,
+              Locale.GERMAN,
+              Locale.FRENCH,
+              new Locale("es", "")
         };
 
         for (i = 0; i < locales.length; i++) {
             resources = ResourceBundle.getBundle("carstore.bundles.Resources",
                                                  locales[i]);
             carBundles =
-                new ResourceBundle[carBundleNames.length];
+                  new ResourceBundle[carBundleNames.length];
             for (j = 0; j < carBundleNames.length; j++) {
                 carBundles[j] =
-                    ResourceBundle.getBundle(carBundleNames[j], locales[i]);
+                      ResourceBundle.getBundle(carBundleNames[j], locales[i]);
             }
 
             button = (HtmlSubmitInput) buttons.get(i);
@@ -133,8 +135,8 @@ public class TestCarDemo extends HtmlUnitTestCase {
         HtmlSubmitInput button = null;
         HtmlTableDataCell cell = null;
         String
-            description = null,
-            moreButton = null;
+              description = null,
+              moreButton = null;
         Iterator iter = null;
         boolean found = false;
         int i;
@@ -142,10 +144,10 @@ public class TestCarDemo extends HtmlUnitTestCase {
         assertNotNull(storeFront);
 
         List
-            cells = getAllElementsOfGivenClass(storeFront, null,
-                                               HtmlTableDataCell.class),
-            buttons = getAllElementsOfGivenClass(storeFront, null,
-                                                 HtmlSubmitInput.class);
+              cells = getAllElementsOfGivenClass(storeFront, null,
+                                                 HtmlTableDataCell.class),
+              buttons = getAllElementsOfGivenClass(storeFront, null,
+                                                   HtmlSubmitInput.class);
 
         // verify the expected descriptions are present
 
@@ -188,9 +190,9 @@ public class TestCarDemo extends HtmlUnitTestCase {
     public void doCarDetail(HtmlPage carDetail) throws Exception {
         assertNotNull(carDetail);
         int
-            previousPrice = 0,
-            basePrice = getNumberNearLabel("basePriceLabel", carDetail),
-            currentPrice = getNumberNearLabel("yourPriceLabel", carDetail);
+              previousPrice = 0,
+              basePrice = getNumberNearLabel("basePriceLabel", carDetail),
+              currentPrice = getNumberNearLabel("yourPriceLabel", carDetail);
         List buttons = getAllElementsOfGivenClass(carDetail, null,
                                                   HtmlSubmitInput.class);
         HtmlSubmitInput button = null;
@@ -248,15 +250,15 @@ public class TestCarDemo extends HtmlUnitTestCase {
                 // press it
                 carDetail = (HtmlPage) button.click();
                 checkboxes =
-                    getAllElementsOfGivenClass(carDetail, null,
-                                               HtmlCheckBoxInput.class);
+                      getAllElementsOfGivenClass(carDetail, null,
+                                                 HtmlCheckBoxInput.class);
                 // verify that at least one of the checkboxes are
                 // disabled.
                 checkboxIter = checkboxes.iterator();
                 while (checkboxIter.hasNext()) {
                     checkbox = (HtmlCheckBoxInput) checkboxIter.next();
                     if (null != (disabledValue =
-                        checkbox.getDisabledAttribute())) {
+                          checkbox.getDisabledAttribute())) {
                         if (log.isTraceEnabled()) {
                             log.trace("Checkbox disabled: " + disabledValue);
                         }

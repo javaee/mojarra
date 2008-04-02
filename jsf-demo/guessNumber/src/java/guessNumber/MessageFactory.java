@@ -1,64 +1,53 @@
 /*
- * $Id: MessageFactory.java,v 1.5 2005/08/22 22:09:07 ofung Exp $
+ * $Id: MessageFactory.java,v 1.6 2005/12/14 22:27:25 rlubke Exp $
  */
- 
+
 /*
- * The contents of this file are subject to the terms
- * of the Common Development and Distribution License
- * (the License). You may not use this file except in
- * compliance with the License.
- * 
- * You can obtain a copy of the License at
- * https://javaserverfaces.dev.java.net/CDDL.html or
- * legal/CDDLv1.0.txt. 
- * See the License for the specific language governing
- * permission and limitations under the License.
- * 
- * When distributing Covered Code, include this CDDL
- * Header Notice in each file and include the License file
- * at legal/CDDLv1.0.txt.    
- * If applicable, add the following below the CDDL Header,
- * with the fields enclosed by brackets [] replaced by
- * your own identifying information:
- * "Portions Copyrighted [year] [name of copyright owner]"
- * 
- * [Name of File] [ver.__] [Date]
- * 
- * Copyright 2005 Sun Microsystems Inc. All Rights Reserved
- */
+* The contents of this file are subject to the terms
+* of the Common Development and Distribution License
+* (the License). You may not use this file except in
+* compliance with the License.
+* 
+* You can obtain a copy of the License at
+* https://javaserverfaces.dev.java.net/CDDL.html or
+* legal/CDDLv1.0.txt. 
+* See the License for the specific language governing
+* permission and limitations under the License.
+* 
+* When distributing Covered Code, include this CDDL
+* Header Notice in each file and include the License file
+* at legal/CDDLv1.0.txt.    
+* If applicable, add the following below the CDDL Header,
+* with the fields enclosed by brackets [] replaced by
+* your own identifying information:
+* "Portions Copyrighted [year] [name of copyright owner]"
+* 
+* [Name of File] [ver.__] [Date]
+* 
+* Copyright 2005 Sun Microsystems Inc. All Rights Reserved
+*/
 
 package guessNumber;
 
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.io.IOException;
-
-import java.util.Locale;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Properties;
-import java.util.ResourceBundle;
-import java.util.MissingResourceException;
 import javax.el.ValueExpression;
-import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.application.Application;
 import javax.faces.application.ApplicationFactory;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
-import javax.faces.FacesException;
+
 import java.text.MessageFormat;
-import java.io.IOException;
+import java.util.Locale;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
 
 /**
- * 
  * <p>supported filters: <code>package</code> and
  * <code>protection</code>.</p>
  */
 
-public class MessageFactory extends Object
-{
+public class MessageFactory extends Object {
     //
     // Protected Constants
     //
@@ -89,15 +78,13 @@ public class MessageFactory extends Object
     //
     // General Methods
     //
-    
+
     /**
+     * This version of getMessage() is used in the RI for localizing RI
+     * specific messages.
+     */
 
-    * This version of getMessage() is used in the RI for localizing RI
-    * specific messages.
-
-    */
-
-     public static FacesMessage getMessage(String messageId, Object params[]) {
+    public static FacesMessage getMessage(String messageId, Object params[]) {
         Locale locale = null;
         FacesContext context = FacesContext.getCurrentInstance();
         // context.getViewRoot() may not have been initialized at this point.
@@ -109,63 +96,63 @@ public class MessageFactory extends Object
         } else {
             locale = Locale.getDefault();
         }
-        
-	return getMessage(locale, messageId, params);
+
+        return getMessage(locale, messageId, params);
     }
 
-     public static FacesMessage getMessage(Locale locale, String messageId, 
-					   Object params[]) {
-	FacesMessage result = null;
-	String 
-	    summary = null,
-	    detail = null,
-	    bundleName = null;
-	ResourceBundle bundle = null;
+    public static FacesMessage getMessage(Locale locale, String messageId,
+                                          Object params[]) {
+        FacesMessage result = null;
+        String
+              summary = null,
+              detail = null,
+              bundleName = null;
+        ResourceBundle bundle = null;
 
-	// see if we have a user-provided bundle
-	if (null != (bundleName = getApplication().getMessageBundle())) {
-	    if (null != 
-		(bundle = 
-		 ResourceBundle.getBundle(bundleName, locale,
-					  getCurrentLoader(bundleName)))) {
-		// see if we have a hit
-		try {
-		    summary = bundle.getString(messageId);
+        // see if we have a user-provided bundle
+        if (null != (bundleName = getApplication().getMessageBundle())) {
+            if (null !=
+                (bundle =
+                      ResourceBundle.getBundle(bundleName, locale,
+                                               getCurrentLoader(bundleName)))) {
+                // see if we have a hit
+                try {
+                    summary = bundle.getString(messageId);
                     detail = bundle.getString(messageId + "_detail");
-		}
-		catch (MissingResourceException e) {
-		}
-	    }
-	}
-	
-	// we couldn't find a summary in the user-provided bundle
-	if (null == summary) {
-	    // see if we have a summary in the app provided bundle
-	    bundle = ResourceBundle.getBundle(FacesMessage.FACES_MESSAGES, 
-					      locale,
-					      getCurrentLoader(bundleName));
-	    if (null == bundle) {
-		throw new NullPointerException();
-	    }
-	    // see if we have a hit
-	    try {
-		summary = bundle.getString(messageId);
-                detail = bundle.getString(messageId + "_detail");
-	    }
-	    catch (MissingResourceException e) {
-	    }
-	}
-	
-	// we couldn't find a summary anywhere!  Return null
-	if (null == summary) {
-	    return null;
-	}
+                }
+                catch (MissingResourceException e) {
+                }
+            }
+        }
 
-	if (null == summary || null == bundle) {
-            throw new NullPointerException(" summary " + summary + " bundle " + 
-                bundle);
-	}
-	// At this point, we have a summary and a bundle.
+        // we couldn't find a summary in the user-provided bundle
+        if (null == summary) {
+            // see if we have a summary in the app provided bundle
+            bundle = ResourceBundle.getBundle(FacesMessage.FACES_MESSAGES,
+                                              locale,
+                                              getCurrentLoader(bundleName));
+            if (null == bundle) {
+                throw new NullPointerException();
+            }
+            // see if we have a hit
+            try {
+                summary = bundle.getString(messageId);
+                detail = bundle.getString(messageId + "_detail");
+            }
+            catch (MissingResourceException e) {
+            }
+        }
+
+        // we couldn't find a summary anywhere!  Return null
+        if (null == summary) {
+            return null;
+        }
+
+        if (null == summary || null == bundle) {
+            throw new NullPointerException(" summary " + summary + " bundle " +
+                                           bundle);
+        }
+        // At this point, we have a summary and a bundle.
         // 
         return (new BindingFacesMessage(locale, summary, detail, params));
     }
@@ -174,15 +161,20 @@ public class MessageFactory extends Object
     //
     // Methods from MessageFactory
     // 
-     public static FacesMessage getMessage(FacesContext context, String messageId) {
+    public static FacesMessage getMessage(FacesContext context,
+                                          String messageId) {
         return getMessage(context, messageId, null);
-    }    
-    
-     public static FacesMessage getMessage(FacesContext context, String messageId,
-					   Object params[]) {
-        if (context == null || messageId == null ) {
-            throw new NullPointerException(" context " + context + " messageId " + 
-                messageId);
+    }
+
+    public static FacesMessage getMessage(FacesContext context,
+                                          String messageId,
+                                          Object params[]) {
+        if (context == null || messageId == null) {
+            throw new NullPointerException(" context "
+                                           + context
+                                           + " messageId "
+                                           +
+                                           messageId);
         }
         Locale locale = null;
         // viewRoot may not have been initialized at this point.
@@ -191,45 +183,49 @@ public class MessageFactory extends Object
         } else {
             locale = Locale.getDefault();
         }
-	if (null == locale) {
-	    throw new NullPointerException(" locale " + locale);
-	}
+        if (null == locale) {
+            throw new NullPointerException(" locale " + locale);
+        }
         FacesMessage message = getMessage(locale, messageId, params);
         if (message != null) {
             return message;
         }
         locale = Locale.getDefault();
         return (getMessage(locale, messageId, params));
-    }  
-    
-     public static FacesMessage getMessage(FacesContext context, String messageId,
-                                       Object param0) {
-        return getMessage(context, messageId, new Object[]{param0});                                       
-    }                                       
-    
-     public static FacesMessage getMessage(FacesContext context, String messageId,
-                                       Object param0, Object param1) {
-         return getMessage(context, messageId, new Object[]{param0, param1});                                        
-    }                                       
+    }
 
-     public static FacesMessage getMessage(FacesContext context, String messageId,
-                                       Object param0, Object param1,
-                                       Object param2) {
-         return getMessage(context, messageId, 
-             new Object[]{param0, param1, param2});                                        
-    }                                       
+    public static FacesMessage getMessage(FacesContext context,
+                                          String messageId,
+                                          Object param0) {
+        return getMessage(context, messageId, new Object[]{param0});
+    }
 
-     public static FacesMessage getMessage(FacesContext context, String messageId,
-                                       Object param0, Object param1,
-                                       Object param2, Object param3) {
-         return getMessage(context, messageId, 
-                 new Object[]{param0, param1, param2, param3});                                        
-    }                                       
+    public static FacesMessage getMessage(FacesContext context,
+                                          String messageId,
+                                          Object param0, Object param1) {
+        return getMessage(context, messageId, new Object[]{param0, param1});
+    }
+
+    public static FacesMessage getMessage(FacesContext context,
+                                          String messageId,
+                                          Object param0, Object param1,
+                                          Object param2) {
+        return getMessage(context, messageId,
+                          new Object[]{param0, param1, param2});
+    }
+
+    public static FacesMessage getMessage(FacesContext context,
+                                          String messageId,
+                                          Object param0, Object param1,
+                                          Object param2, Object param3) {
+        return getMessage(context, messageId,
+                          new Object[]{param0, param1, param2, param3});
+    }
 
     // Gets the "label" property from the component.
 
-    public static Object getLabel(FacesContext context, 
-        UIComponent component) {
+    public static Object getLabel(FacesContext context,
+                                  UIComponent component) {
         Object o = component.getAttributes().get("label");
         if (o == null) {
             o = component.getValueExpression("label");
@@ -242,43 +238,43 @@ public class MessageFactory extends Object
     }
 
     protected static Application getApplication() {
-	FacesContext context = FacesContext.getCurrentInstance();
-	if (context != null) {
-	    return (FacesContext.getCurrentInstance().getApplication());
-	}
-	ApplicationFactory afactory = (ApplicationFactory)
-	    FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
-	return (afactory.getApplication());
+        FacesContext context = FacesContext.getCurrentInstance();
+        if (context != null) {
+            return (FacesContext.getCurrentInstance().getApplication());
+        }
+        ApplicationFactory afactory = (ApplicationFactory)
+              FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
+        return (afactory.getApplication());
     }
 
     protected static ClassLoader getCurrentLoader(Object fallbackClass) {
         ClassLoader loader =
-	    Thread.currentThread().getContextClassLoader();
-	if (loader == null) {
-	    loader = fallbackClass.getClass().getClassLoader();
-	}
-	return loader;
+              Thread.currentThread().getContextClassLoader();
+        if (loader == null) {
+            loader = fallbackClass.getClass().getClassLoader();
+        }
+        return loader;
     }
 
     /**
      * This class overrides FacesMessage to provide the evaluation
      * of binding expressions in addition to Strings.
      * It is often the case, that a binding expression may reference
-     * a localized property value that would be used as a 
+     * a localized property value that would be used as a
      * substitution parameter in the message.  For example:
-     *  <code>#{bundle.userLabel}</code>
+     * <code>#{bundle.userLabel}</code>
      * "bundle" may not be available until the page is rendered.
-     * The "late" binding evaluation in <code>getSummary</code> and 
+     * The "late" binding evaluation in <code>getSummary</code> and
      * <code>getDetail</code> allow the expression to be evaluated
      * when that property is available.
      */
     static class BindingFacesMessage extends FacesMessage {
         BindingFacesMessage(
-            Locale locale,
-            String messageFormat,
-            String detailMessageFormat,
-            // array of parameters, both Strings and ValueExpressions
-            Object[] parameters) {
+              Locale locale,
+              String messageFormat,
+              String detailMessageFormat,
+              // array of parameters, both Strings and ValueExpressions
+              Object[] parameters) {
 
             super(messageFormat, detailMessageFormat);
             this.locale = locale;
@@ -309,7 +305,8 @@ public class MessageFactory extends Object
                         if (context == null) {
                             context = FacesContext.getCurrentInstance();
                         }
-                        o = ((ValueExpression) o).getValue(context.getELContext());
+                        o = ((ValueExpression) o)
+                              .getValue(context.getELContext());
                     }
                     // to avoid 'null' appearing in message
                     if (o == null) {
@@ -322,8 +319,8 @@ public class MessageFactory extends Object
 
         private String getFormattedString(String msgtext, Object[] params) {
             String localizedStr = null;
-                                                                                
-            if (params == null || msgtext == null ) {
+
+            if (params == null || msgtext == null) {
                 return msgtext;
             }
             StringBuffer b = new StringBuffer(100);

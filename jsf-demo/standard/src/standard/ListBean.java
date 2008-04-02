@@ -1,5 +1,5 @@
 /*
- * $Id: ListBean.java,v 1.4 2005/08/22 22:09:42 ofung Exp $
+ * $Id: ListBean.java,v 1.5 2005/12/14 22:27:46 rlubke Exp $
  */
 
 /*
@@ -34,7 +34,7 @@ import java.util.ArrayList;
 /**
  * <p>JavaBean to represent a list of customer bean.</p>
  *
- * @version $Id: ListBean.java,v 1.4 2005/08/22 22:09:42 ofung Exp $
+ * @version $Id: ListBean.java,v 1.5 2005/12/14 22:27:46 rlubke Exp $
  */
 
 public class ListBean extends ArrayList {
@@ -44,8 +44,8 @@ public class ListBean extends ArrayList {
         add(new CustomerBean("123456", "Alpha Beta Company", "ABC", 1234.56));
         add(new CustomerBean("445566", "General Services, Ltd.", "GS", 33.33));
         add(
-            new CustomerBean("654321", "Summa Cum Laude, Inc.", "SCL",
-                             76543.21));
+              new CustomerBean("654321", "Summa Cum Laude, Inc.", "SCL",
+                               76543.21));
         add(new CustomerBean("333333", "Yabba Dabba Doo", "YDD", 333.33));
     }
 }

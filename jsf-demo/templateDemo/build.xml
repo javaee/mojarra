@@ -24,185 +24,83 @@
 -->
 
 <project name="templateDemo" default="build" basedir=".">
-  <target name="init">
-      <tstamp/>
-  </target>
+   
 
-  <property name="depth" value=".."/>
-
-  <property file="${user.home}/build.properties"/>   <!-- User local        -->
-  <property file="build.properties"/>                <!-- Component local   -->
-  <property file="../build.properties"/>             <!-- Demos local     -->
-  <property file="../../build.properties"/>          <!-- jsf local       -->
-  <property file="../default.properties"/>           <!-- last resort     -->
+    <property file="${user.home}/build.properties"/> 
+    <property file="../../build.properties"/>
+    <import file="${jsf.build.home}/common/ant/common.xml"/>
     
-  <!-- Configure the context path for this application -->
-  <property name="context.path" value="/jsf-templateDemo"/>
-  <property name="example" value="jsf-templateDemo" />
-  <property name="build"   value="${basedir}/build" />
+    <!-- Configure the context path for this application -->
+    <property name="context.path" value="/jsf-templateDemo"/>
+    <property name="example" value="jsf-templateDemo"/>
+    <property name="build" value="${basedir}/build"/>   
 
-  <!-- Configure properties to access the Manager application -->
-  <property name="url"      value="http://localhost:8080/manager"/>
-
-  <!-- Location dependent jars -->
-  <property name="jsf-demo.lib" value="../lib"/>
+    <!-- Location dependent jars -->
+    <property name="jsf-demo.lib" value="../lib"/>
 
 
-  <path id="classpath">
-    <pathelement location="${commons-beanutils.jar}"/>
-    <pathelement location="${commons-collections.jar}"/>
-    <pathelement location="${commons-digester.jar}"/>
-    <pathelement location="${commons-logging.jar}"/>
-    <pathelement location="${jsf-api.jar}"/>
-    <pathelement location="${jsf-impl.jar}"/>
-    <pathelement location="${demo-components.jar}"/>
-    <pathelement location="${jstl.jar}"/>
-    <pathelement location="${build}/WEB-INF/classes"/>
-    <pathelement location="${servlet.jar}"/>
-    <pathelement location="${jsp.jar}" />
-  </path>
+    <path id="classpath">       
+        <pathelement location="${jsf-api.jar}"/>
+        <pathelement location="${jsf-impl.jar}"/>       
+        <pathelement location="${build}/WEB-INF/classes"/>
+        <pathelement location="${jsf-demo.lib}/ui.jar"/>
+        <path refid="compile.classpath"/>
+    </path>
+    
+    <target name="init">
+        <tstamp/>
+    </target>
 
-  <path id="catalina-ant.classpath">
-    <pathelement location="${catalina-ant.jar}"/>
-  </path>
+    <target name="clean">
+        <delete dir="${build}"/>
+        <delete dir="${context.path}"/>
+    </target>    
 
-  <target name="clean" >
-    <delete dir="${build}" />
-    <delete dir="${context.path}" />
-  </target>
+    <target name="prepare" depends="init"
+            description="Create build directories.">
+        <mkdir dir="${build}${example}/"/>
+        <mkdir dir="${build}/${example}/WEB-INF"/>
+        <mkdir dir="${build}/${example}/WEB-INF/classes"/>
+        <mkdir dir="${build}/${example}/WEB-INF/lib"/>
+    </target>       
 
-  <target name="verifyPreconditions">
+    <target name="build" depends="prepare"
+            description="Compile Java files and copy static files.">
+         <jsf.javac srcdir="src"
+                   destdir="${build}/${example}/WEB-INF/classes">
+            <classpath>
+                <path refid="classpath"/>
+            </classpath>
+        </jsf.javac>
+        <copy todir="${build}/${example}/WEB-INF">
+            <fileset dir="web/WEB-INF">
+                <include name="web.xml"/>
+            </fileset>
+        </copy>
 
-    <antcall target="checkRequiredFile">
-       <param name="file" value="${servlet.jar}"/>
-       <param name="fail.message" value="A jar file containing the Servlet 2.3 and JSP1.2 classes is required to compile templateDemo.  Please define the property servlet.jar in your build.properties file and ensure that the file exists."/>
-    </antcall>
-
-    <antcall target="checkRequiredFile">
-       <param name="file" value="${commons-beanutils.jar}"/>
-       <param name="fail.message" value="${commons-beanutils.jar} must exist."/>
-    </antcall>
-
-    <antcall target="checkRequiredFile">
-       <param name="file" value="${commons-digester.jar}"/>
-       <param name="fail.message" value="${commons-digester.jar} must exist."/>
-    </antcall>
-
-    <antcall target="checkRequiredFile">
-       <param name="file" value="${commons-logging.jar}"/>
-       <param name="fail.message" value="${commons-logging.jar} must exist."/>
-    </antcall>
-
-    <antcall target="checkRequiredFile">
-       <param name="file" value="${commons-collections.jar}"/>
-       <param name="fail.message" value="${commons-collections.jar} must exist."/>
-    </antcall>
-
-    <antcall target="checkRequiredFile">
-       <param name="file" value="${jsf-api.jar}"/>
-       <param name="fail.message" value="${jsf-api.jar} must exist."/>
-    </antcall>
-
-    <antcall target="checkRequiredFile">
-       <param name="file" value="${jsf-impl.jar}"/>
-       <param name="fail.message" value="${jsf-impl.jar} must exist."/>
-    </antcall>
-
-    <antcall target="checkRequiredFile">
-       <param name="file" value="${standard.jar}"/>
-       <param name="fail.message" value="${standard.jar} must exist."/>
-    </antcall>
-
-    <antcall target="checkRequiredFile">
-       <param name="file" value="${jstl.jar}"/>
-       <param name="fail.message" value="${jstl.jar} must exist."/>
-    </antcall>
-
-  </target>
-
-  <target name="prepare" depends="init"
-   	description="Create build directories.">
-    <mkdir dir="${build}${example}/" />
-    <mkdir dir="${build}/${example}/WEB-INF" />
-    <mkdir dir="${build}/${example}/WEB-INF/classes" />
-    <mkdir dir="${build}/${example}/WEB-INF/lib" />
-  </target>
-
-   <target name="copyJars" depends="prepare" if="build.standalone">
-    <copy todir="${build}/${example}/WEB-INF/lib" file="${demo-components.jar}"/>
-    <copy todir="${build}/${example}/WEB-INF/lib" file="${commons-beanutils.jar}" />
-    <copy todir="${build}/${example}/WEB-INF/lib" file="${commons-collections.jar}" />
-    <copy todir="${build}/${example}/WEB-INF/lib" file="${commons-logging.jar}" />
-    <copy todir="${build}/${example}/WEB-INF/lib" file="${commons-digester.jar}" />
-    <copy todir="${build}/${example}/WEB-INF/lib" file="${jsf-api.jar}" />
-    <copy todir="${build}/${example}/WEB-INF/lib" file="${jsf-impl.jar}" />
-    <copy todir="${build}/${example}/WEB-INF/lib" file="${jstl.jar}" />
-    <copy todir="${build}/${example}/WEB-INF/lib" file="${standard.jar}" />
-  </target>
-  
-  <taskdef  name="install"  classname="org.apache.catalina.ant.InstallTask">
-      <classpath refid="catalina-ant.classpath" />
-  </taskdef>
-  <taskdef  name="list"     classname="org.apache.catalina.ant.ListTask">
-      <classpath refid="catalina-ant.classpath" />
-  </taskdef>
-  <taskdef  name="reload"   classname="org.apache.catalina.ant.ReloadTask">
-      <classpath refid="catalina-ant.classpath" />
-  </taskdef>
-  <taskdef  name="remove"   classname="org.apache.catalina.ant.RemoveTask">
-      <classpath refid="catalina-ant.classpath" />
-  </taskdef>
-
-  <!-- Executable Targets -->
-
-  <target name="list" description="List web applications" >
-    <list url="${url}" username="${username}" password="${password}" />
-  </target>
-
-  <target name="install" description="Install web application"
-          depends="build">
-    <install url="${url}" username="${username}" password="${password}"
-          path="${context.path}"  war="file:${build}" />
-  </target>
-
-  <target name="reload" description="Reload web application"
-          depends="build">
-    <reload  url="${url}" username="${username}" password="${password}"
-          path="${context.path}"/>
-  </target>
-
-  <target name="remove" description="Remove web application">
-    <remove url="${url}" username="${username}" password="${password}"
-          path="${context.path}"/>
-  </target>
-
-  <target name="build" depends="copyJars" 
-     description="Compile Java files and copy static files." >
-    <javac srcdir="src/java" destdir="${build}/${example}/WEB-INF/classes">
-    	<include name="**/*.java" />
-     <classpath refid="classpath"/>
-    </javac>
-    <copy todir="${build}/${example}/WEB-INF">
-      <fileset dir="web/WEB-INF"    >
-        <include name="web.xml" />
-      </fileset>
-    </copy>
-
-     <copy todir="${build}/${example}/">
-      <fileset dir="web">
-        <include name="*.html" />
-        <include name="*.gif" />
-        <include name="*.jpg" />
-        <include name="*.jsp" />
-        <include name="*.xml" />
-      </fileset>
-    </copy>
-    <copy todir="${build}/${example}/WEB-INF/classes/templateDemo" >
-      <fileset dir="web" >
-         <include name="*properties"/>
-      </fileset>
-    </copy>
-  </target>	 
+        <copy todir="${build}/${example}/">
+            <fileset dir="web">
+                <include name="*.html"/>
+                <include name="*.gif"/>
+                <include name="*.jpg"/>
+                <include name="*.jsp"/>
+                <include name="*.xml"/>
+            </fileset>
+        </copy>
+        <copy todir="${build}/${example}/WEB-INF/classes/templateDemo">
+            <fileset dir="web">
+                <include name="*properties"/>
+            </fileset>
+        </copy>
+        
+        <jsf.war basedir="${build}"
+                 archive-name="${example}"
+                 webxml="${build}/${example}/WEB-INF/web.xml">
+            <archive-elements>
+                <zipfileset dir="${build}/${example}"/>
+            </archive-elements>
+        </jsf.war>
+    </target>
 
 </project>
 

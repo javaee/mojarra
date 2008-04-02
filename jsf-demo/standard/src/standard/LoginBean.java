@@ -1,5 +1,5 @@
 /*
- * $Id: LoginBean.java,v 1.15 2005/09/22 23:26:07 jayashri Exp $
+ * $Id: LoginBean.java,v 1.16 2005/12/14 22:27:46 rlubke Exp $
  */
 
 /*
@@ -39,32 +39,32 @@ import java.util.Date;
 public class LoginBean {
 
     private static final String defaultOptions[] = {
-        "pinto",
-        "black",
-        "garbanzo",
-        "green",
-        "string",
-        "coffee",
-        "baked"
+          "pinto",
+          "black",
+          "garbanzo",
+          "green",
+          "string",
+          "coffee",
+          "baked"
     };
 
     private static final SelectItem options1[] = {
-        new SelectItem("pinto", "pinto", "pinto"),
-        new SelectItem("black", "black", "black"),
-        new SelectItem("garbanzo", "garbanzo", "garbanzo")
+          new SelectItem("pinto", "pinto", "pinto"),
+          new SelectItem("black", "black", "black"),
+          new SelectItem("garbanzo", "garbanzo", "garbanzo")
     };
 
     private static final SelectItem options2[] = {
-        new SelectItem("green", "green", "green"),
-        new SelectItem("string", "string", "string"),
-        new SelectItem("coffee", "coffee", "coffee"),
-        new SelectItem("baked", "baked", "baked")
+          new SelectItem("green", "green", "green"),
+          new SelectItem("string", "string", "string"),
+          new SelectItem("coffee", "coffee", "coffee"),
+          new SelectItem("baked", "baked", "baked")
     };
 
     Long[] longOptions = {new Long(1001), new Long(1002), new Long(1003)};
     Boolean booleanOptions[] = {
-        new Boolean(true), new Boolean(false),
-        new Boolean(false)
+          new Boolean(true), new Boolean(false),
+          new Boolean(false)
     };
 
     ArrayList longList = new ArrayList(3);
@@ -329,7 +329,7 @@ public class LoginBean {
 
     public Boolean getCurrentBooleanOption() {
         System.out.println(
-            "get currentBooleanOption " + currentBooleanOption.toString());
+              "get currentBooleanOption " + currentBooleanOption.toString());
         return currentBooleanOption;
     }
 
@@ -337,7 +337,7 @@ public class LoginBean {
     public void setCurrentBooleanOption(Boolean newBooleanOption) {
         currentBooleanOption = newBooleanOption;
         System.out.println(
-            "set currentBooleanOption " + currentBooleanOption.toString());
+              "set currentBooleanOption " + currentBooleanOption.toString());
     }
 
 

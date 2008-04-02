@@ -1,5 +1,5 @@
 /*
- * $Id: DigesterFactory.java,v 1.8 2005/11/15 15:54:24 rlubke Exp $
+ * $Id: DigesterFactory.java,v 1.9 2005/12/14 22:28:03 rlubke Exp $
  */
 
 /*
@@ -289,7 +289,7 @@ public class DigesterFactory {
                 if (url == null) {
                     if (logger.isLoggable(Level.WARNING)) {
                         logger.log(Level.WARNING,
-                                   "nable to locate local resource '"
+                                   "Unable to locate local resource '"
                                    + aDTD_SCHEMA_INFO[1]
                                    + "'.  Standard entity "
                                    + "resolution will be used when request "

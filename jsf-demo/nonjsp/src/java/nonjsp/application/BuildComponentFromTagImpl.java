@@ -1,5 +1,5 @@
 /*
- * $Id: BuildComponentFromTagImpl.java,v 1.2 2005/08/22 22:09:22 ofung Exp $
+ * $Id: BuildComponentFromTagImpl.java,v 1.3 2005/12/14 22:27:32 rlubke Exp $
  */
 
 /*
@@ -31,12 +31,6 @@
 
 package nonjsp.application;
 
-import nonjsp.util.Util;
-import org.apache.commons.beanutils.PropertyUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.xml.sax.Attributes;
-
 import javax.faces.component.UICommand;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UISelectOne;
@@ -46,17 +40,24 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Hashtable;
 
+import org.apache.commons.beanutils.PropertyUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.xml.sax.Attributes;
+
+import nonjsp.util.Util;
+
 /**
  * <B>BuildComponentFromTagImpl</B> is a class ...
- *
+ * <p/>
  * Copy of com.sun.faces.tree.BuildComponentFromTagImpl in order to remove
  * demo dependancy on RI.
  *
- * @version $Id: BuildComponentFromTagImpl.java,v 1.2 2005/08/22 22:09:22 ofung Exp $
+ * @version $Id: BuildComponentFromTagImpl.java,v 1.3 2005/12/14 22:27:32 rlubke Exp $
  */
 
 public class BuildComponentFromTagImpl extends Object
-    implements BuildComponentFromTag {
+      implements BuildComponentFromTag {
 
     //
     // Protected Constants
@@ -65,7 +66,7 @@ public class BuildComponentFromTagImpl extends Object
     protected static String PARENT = "faces.parent:";
 
     protected static String PARENT_SELECTONE = PARENT +
-        "javax.faces.UISelectOne";
+                                               "javax.faces.UISelectOne";
 
     /**
      * stores model value of the form temporarily to support implicit mapping
@@ -74,7 +75,7 @@ public class BuildComponentFromTagImpl extends Object
     protected static String FORM_MODELREF = "faces.FORM_MODELREF";
 
     protected static Log log = LogFactory.getLog(
-        BuildComponentFromTagImpl.class);
+          BuildComponentFromTagImpl.class);
 
     //
     // Class Variables
@@ -88,12 +89,9 @@ public class BuildComponentFromTagImpl extends Object
 
     // Relationship Instance Variables
 
-    /**
-     * Store the mapping between shortTagName and component class
-     */
+    /** Store the mapping between shortTagName and component class */
 
     protected Hashtable classMap;
-
 
     //
     // Constructors and Initializers    
@@ -112,9 +110,7 @@ public class BuildComponentFromTagImpl extends Object
     // General Methods
     //
 
-    /**
-     * This is a total RAD hack.
-     */
+    /** This is a total RAD hack. */
 
     private void initializeClassMap() {
         classMap = new Hashtable(30);
@@ -188,10 +184,10 @@ public class BuildComponentFromTagImpl extends Object
 
     private void handleSpecialAttr(UIComponent child, String attrName,
                                    String attrValue)
-        throws IllegalAccessException,
-        IllegalArgumentException,
-        InvocationTargetException,
-        NoSuchMethodException {
+          throws IllegalAccessException,
+          IllegalArgumentException,
+          InvocationTargetException,
+          NoSuchMethodException {
 
         Class[] stringArg = {String.class};
         Method attrMethod = null;
@@ -200,15 +196,16 @@ public class BuildComponentFromTagImpl extends Object
         if (attrName.equals("valueChangeListener")) {
             try {
                 attrMethod =
-                    child.getClass().getMethod("addValueChangeListener",
-                                               stringArg);
+                      child.getClass().getMethod("addValueChangeListener",
+                                                 stringArg);
             } catch (SecurityException e) {
                 log.trace("handleSpecialAttr: " + e);
             }
         } else if (attrName.equals("actionListener")) {
             try {
                 attrMethod =
-                    child.getClass().getMethod("addActionListener", stringArg);
+                      child.getClass()
+                            .getMethod("addActionListener", stringArg);
             } catch (SecurityException e) {
                 log.trace("handleSpecialAttr: " + e);
             }
@@ -231,7 +228,6 @@ public class BuildComponentFromTagImpl extends Object
             attrMethod.invoke(child, args);
         }
     }
-
 
     // 
     // Methods from BuildComponentFromTag
@@ -295,7 +291,8 @@ public class BuildComponentFromTagImpl extends Object
 
 
     public void handleNestedComponentTag(UIComponent parent,
-                                         String shortTagName, Attributes attrs) {
+                                         String shortTagName,
+                                         Attributes attrs) {
 
         if (null == parent || null == shortTagName || null == attrs) {
             return;
@@ -304,7 +301,7 @@ public class BuildComponentFromTagImpl extends Object
         if (null == val || (0 != val.indexOf(PARENT))) {
             return;
         }
-    
+
         // At this point, we know that we are in a nested tag.
 
         // PENDING(edburns): check that parent is really the correct parent
@@ -336,7 +333,6 @@ public class BuildComponentFromTagImpl extends Object
                 checked = true;
             }
         }
-
 
         /********** PENDING(edburns): Fix this for non-jsp example
          SelectItem [] oldItems = (SelectItem []) uiSelectOne.getItems();
@@ -430,7 +426,7 @@ public class BuildComponentFromTagImpl extends Object
                 log.trace(e.getMessage());
             }
         }
-    
+
         // cleanup: make sure we have the necessary required attributes
         if (child.getId() == null) {
             String gId = "foo" + Util.generateId();

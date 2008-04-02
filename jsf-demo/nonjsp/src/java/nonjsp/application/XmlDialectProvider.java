@@ -1,5 +1,5 @@
 /*
- * $Id: XmlDialectProvider.java,v 1.2 2005/08/22 22:09:22 ofung Exp $
+ * $Id: XmlDialectProvider.java,v 1.3 2005/12/14 22:27:32 rlubke Exp $
  */
 
 /*
@@ -38,13 +38,11 @@ import org.apache.commons.digester.RuleSetBase;
  * logic required for creating a tree of UIComponent instances from an
  * Xml file. <P>
  *
- * @version $Id: XmlDialectProvider.java,v 1.2 2005/08/22 22:09:22 ofung Exp $
+ * @version $Id: XmlDialectProvider.java,v 1.3 2005/12/14 22:27:32 rlubke Exp $
  */
 public interface XmlDialectProvider {
 
-    /**
-     * @return the Digester rule set for use in this implementation
-     */
+    /** @return the Digester rule set for use in this implementation */
 
     public RuleSetBase getRuleSet();
 

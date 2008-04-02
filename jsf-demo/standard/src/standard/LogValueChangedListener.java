@@ -1,5 +1,5 @@
 /*
- * $Id: LogValueChangedListener.java,v 1.6 2005/08/22 22:09:42 ofung Exp $
+ * $Id: LogValueChangedListener.java,v 1.7 2005/12/14 22:27:46 rlubke Exp $
  */
 
 /*
@@ -35,12 +35,9 @@ import javax.faces.event.ValueChangeEvent;
 import javax.faces.event.ValueChangeListener;
 
 
-/**
- * <p>Log the occurrence of this event.</p>
- */
+/** <p>Log the occurrence of this event.</p> */
 
 public class LogValueChangedListener implements ValueChangeListener {
-
 
     // --------------------------------------------- ValueChangeListener Methods
 
@@ -62,7 +59,7 @@ public class LogValueChangedListener implements ValueChangeListener {
     private void append(FacesContext context, String value) {
 
         String message = (String)
-            context.getExternalContext().getRequestMap().get("message");
+              context.getExternalContext().getRequestMap().get("message");
         if (message == null) {
             message = "";
         }

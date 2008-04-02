@@ -28,717 +28,161 @@
 
 <!-- ************ JSF build file ************************************** -->
 
-<project name="JSF-RI-Systest-per-webapp" default="main" basedir=".">
+<project name="JSF-RI-Systest-per-webapp" default="test" basedir=".">
+
+    <property name="Name" value="JavaServer Faces RI per-webapp System Test"/>
+    <property name="name" value="jsf-ri-systest-per-webapp"/>
+
+    <!-- ************ Per user local properties ******************************* -->
+
+    <property file="${user.home}/build.properties"/>
+    <!-- User local        -->
+    <property file="../../build.properties"/>
+    <!-- Project local     -->
+    <import file="${jsf.build.home}/common/ant/common.xml"/>   
+
+    <!-- Construct compile classpath -->
+    <path id="test.compile.classpath">
+        <path refid="compile.classpath"/>
+        <pathelement location="${basedir}/build/classes"/>
+        <pathelement location="${jsf-api.jar}"/>
+        <pathelement location="${jsf-impl.jar}"/>
+        <pathelement location="${jsf.test.jar}"/>
+        <path refid="htmlunit.compile.classpath"/>
+    </path>
+
+    <!-- Property containing all of the currenly running systests.  
+         This property list *must* match the one defined in the
+         systest-per-webapp build-tests.xml. -->
+    <property name="applications"
+              value="replace-application,
+                   replace-statemanager,                                    
+                   command-link-back-button,
+                   nested-datatables,
+                   jar-ordering,                  
+                   replace-lifecycle"/>
+
+    <!-- 
+       EXCLUDED APPLICATIONS:
+          view-expired
+          core-tags
+          el-performance
+          command-link-redirect
+    -->
+
+    <!-- ************ Executable Targets ************************************** -->
+
+
+    <target name="init"
+            description="Initialize and evaluate conditionals">
+        <echo message="-------- ${Name} ${impl.version} --------"/>
+    </target>
+
+
+    <target name="prepare" depends="init"
+            description="Prepare build directory">       
+
+    </target>    
+
+    <macrodef name="deploy.app">
+        <attribute name="base-app-dir"/>
+        <attribute name="appname"/>
+        <sequential>
+            <mkdir dir="@{base-app-dir}/build/classes"/>
+            <jsf.javac srcdir="@{base-app-dir}/src/java"
+                       destdir="@{base-app-dir}/build/classes">
+                <classpath>
+                    <path refid="test.compile.classpath"/>
+                </classpath>
+            </jsf.javac>
+            <jsf.war archive-name="jsf-@{appname}"
+                     basedir="@{base-app-dir}/build"
+                     webxml="@{base-app-dir}/web/WEB-INF/web.xml">
+                <archive-elements>
+                    <zipfileset dir="@{base-app-dir}/web"
+                                includes="**/*"/>
+                    <zipfileset dir="@{base-app-dir}/build/classes"
+                                prefix="WEB-INF/classes"/>
+                    <zipfileset dir="@{base-app-dir}/src/java"
+                                includes="**/*.properties,**/*.xml"
+                                prefix="WEB-INF/classes"/>
+                    <zipfileset file="${jsf.test.jar}"
+                                prefix="WEB-INF/lib"/>
+                    <zipfileset dir="${basedir}/build/classes"
+                                prefix="WEB-INF/classes"/>
+                    <zipfileset dir="${impl.dir}/build/test/classes"
+                                prefix="WEB-INF/classes"/>
+                </archive-elements>
+            </jsf.war>
+            <deploy.artifact
+                  artifact="@{base-app-dir}/build/jsf-@{appname}.war"
+                  appName="jsf-@{appname}"/>
+        </sequential>
+    </macrodef>
+
+    <macrodef name="undeploy.app">
+        <attribute name="appname"/>
+        <sequential>
+            <undeploy.artifact artifact="jsf-@{appname}.war"
+                               appName="jsf-@{appname}"/>
+        </sequential>
+    </macrodef>
+
+    <target name="compile.base.sources">
+        <mkdir dir="${basedir}/build/classes"/>
+        <jsf.javac srcdir="${impl.dir}/systest/src"
+                   destdir="${basedir}/build/classes">
+            <classpath>
+                <path refid="test.compile.classpath"/>
+            </classpath>
+        </jsf.javac>
+    </target>
+
+    <target name="install" depends="compile.base.sources">
+        
+        <for list="${applications}" param="app" trim="true">
+            <sequential>
+                <undeploy.app appname="@{app}"/>
+                <deploy.app appname="@{app}"
+                            base-app-dir="${basedir}/@{app}"/>
+            </sequential>
+        </for>
+
+    </target>
 
-  <property name="Name" value="JavaServer Faces RI per-webapp System Test"/>
-  <property name="name" value="jsf-ri-systest-per-webapp"/>
-  <property name="version" value="20040504"/>
-
-<!-- ************ Per user local properties ******************************* -->
-
-  <property file="${user.home}/build.properties"/>   <!-- User local        -->
-  <property file="build.properties"/>                <!-- Component local   -->
-  <property file="../build.properties"/>             <!-- RI local          -->
-  <property file="../../build.properties"/>          <!-- Project local     -->
-
-
-<!-- ************ Where are we building into? ***************************** -->
-
-  <!-- the root of our tomcat -->
-
-  <!-- The home directory for Ant -->
-  <property name="ant.home" value="/usr/local/ant"/>
-
-  <!-- The base directory for the JSF APIs -->
-  <property name="jsf-api.home" value ="${basedir}/../../jsf-api"/>
-
-  <!-- The base directory for the JSF RI -->
-  <property name="jsf-ri.home" value ="${basedir}/.."/>
-
-  <!-- The base directory for dependent jars -->
-  <property name="lib.home" value="${basedir}/../lib"/>
-
-  <!-- HtmlUnit, installed relative to tomcat.home -->
-  <property name="htmlunit.home" value="${tomcat.home}/../htmlunit-1.4"/>
-
-  <property name="username" value="tomcat"/>
-  <property name="password" value="tomcat"/>
-
-<!-- ************ Dependencies **** *************************************** -->
-
-  <!-- The locations of necessary jar files -->
-
-  <property name="ant.jar" value="${ant.home}/lib/ant.jar"/>
-  <property name="servlet.jar" value="${tomcat.home}/common/lib/servlet-api.jar"/>
-  <property name="jsp.jar" value="${tomcat.home}/common/lib/jsp-api.jar"/>
-  <property name="jstl.jar" value="${tomcat.home}/jstl/lib/jstl.jar"/>
-  <property name="standard.jar" value="${tomcat.home}/jstl/lib/standard.jar"/>
-  <property name="catalina-ant.jar" value="${tomcat.home}/server/lib/catalina-ant.jar"/>
-  <property name="commons-beanutils.jar" 
-            value="${tomcat.home}/jwsdp-shared/lib/commons-beanutils.jar"/>
-  <property name="commons-collections.jar" 
-            value="${tomcat.home}/jwsdp-shared/lib/commons-collections.jar"/>
-  <property name="commons-logging.jar" 
-            value="${tomcat.home}/jwsdp-shared/lib/commons-logging.jar"/>
-  <property name="commons-digester.jar" 
-            value="${tomcat.home}/jwsdp-shared/lib/commons-digester.jar"/>
-  <property name="jsf-api.jar" value="${jsf-api.home}/build/lib/jsf-api.jar"/>
-  <property name="jsf-api.dtd" value="${jsf-api.home}/build/lib/web-facesconfig_1_1.dtd"/>
-  <property name="jsf-impl.jar"  value="${jsf-ri.home}/build/lib/jsf-impl.jar"/>
-  <property name="el-api.jar" value="${tomcat.home}/common/lib/el-api.jar"/>
-  <property name="jsf-extensions-test-time.jar" value="${basedir}/../../lib/jsf-extensions-test-time.jar"/>
-
-
-
-
-<!-- ************ Compiler Defaults *************************************** -->
-
-  <!-- Should Java compilations set the 'debug' compiler option? -->
-  <property name="compile.debug" value="true"/>
-
-  <!-- Should Java compilations set the 'deprecation' compiler option? -->
-  <property name="compile.deprecation" value="false"/>
-
-  <!-- Should Java compilations set the 'optimize' compiler option? -->
-  <property name="compile.optimize" value="false"/>
-
-  <!-- Construct compile classpath -->
-  <path id="compile.classpath">
-    <pathelement location="${ant.jar}"/>
-    <pathelement location="${commons-beanutils.jar}"/>
-    <pathelement location="${commons-collections.jar}"/>
-    <pathelement location="${commons-digester.jar}"/>
-    <pathelement location="${commons-logging.jar}"/>
-    <pathelement location="${jsf-api.jar}"/>
-    <pathelement location="${jsf-impl.jar}"/>
-    <pathelement location="${servlet.jar}"/>
-    <pathelement location="${jsp.jar}"/> 
-    <pathelement location="${jstl.jar}"/>
-    <pathelement location="${el-api.jar}"/>
-    <pathelement location="${basedir}/../build/test/WEB-INF/classes"/>
-    <pathelement location="${jsf-extensions-test-time.jar}"/>
-    <fileset dir="${htmlunit.home}/lib" includes="*.jar"/>
-  </path>
-
-
-  <!-- Catalina Ant Custom Taskdef Classpath -->
-  <path id="catalina-ant.classpath">
-    <pathelement location="${tomcat.home}/server/lib/catalina-ant.jar"/>
-    <pathelement location="${catalina-ant.jar}"/>
-  </path>
-
-
-  <!-- Custom Tomcat Integration -->
-  <taskdef  name="install"  classname="org.apache.catalina.ant.InstallTask">
-      <classpath refid="catalina-ant.classpath" />
-  </taskdef>
-  <taskdef  name="list"     classname="org.apache.catalina.ant.ListTask">
-      <classpath refid="catalina-ant.classpath" />
-  </taskdef>    
-  <taskdef  name="reload"   classname="org.apache.catalina.ant.ReloadTask">
-      <classpath refid="catalina-ant.classpath" />
-  </taskdef>
-  <taskdef  name="remove"   classname="org.apache.catalina.ant.RemoveTask">
-      <classpath refid="catalina-ant.classpath" />
-  </taskdef>
-  <property name="url"      value="http://localhost:8080/manager"/>
-
-
-<!-- ********** Tomcat Integration Targets ******************************** -->
-
-
-  <target name="install.one" depends="compile"
-   description="Install webapp on Tomcat">
-    <install url="${url}" username="${username}" password="${password}"
-            path="${context.path}"
-             war="file://${webapp.build.home}"/>
-  </target>
-
-
-  <target name="list"
-   description="List installed webapps on Tomcat">
-    <list url="${url}" username="${username}" password="${password}"/>
-  </target>
-
-
-  <target name="reload.one" depends="compile"
-   description="Reload this webapp on Tomcat">
-    <reload url="${url}" username="${username}" password="${password}"
-            path="${context.path}"/>
-  </target>
-
-  <target name="safe.remove.one"
-          description="Remove cactus unit test webapp, don't fail on error">
-    <exec executable="ant.bat" os="Windows 2000" failonerror="false">
-      <arg line="-f build.xml -Dusername=${username} -Dpassword=${password} -Dcontext.path=${context.path} remove.one"/>
-    </exec>
-    <exec executable="ant" os="SunOS,Linux" failonerror="false">
-      <arg line="-f build.xml  -Dcontext.path=${context.path} remove.one"/>
-    </exec>
-  </target>
-
-  <target name="remove.one"
-   description="Remove this webapp from Tomcat">
-    <remove url="${url}" username="${username}" password="${password}"
-            path="${context.path}"/>
-  </target>
-
-
-<!-- ************ Executable Targets ************************************** -->
-
-
-  <target name="init"
-   description="Initialize and evaluate conditionals">
-    <echo message="-------- ${Name} ${version} --------"/>
-  </target>
-
-
-  <target name="prepare" depends="init"
-   description="Prepare build directory">
-
-    <!-- Set up webapp build directory -->
-    <mkdir dir="${webapp.build.home}"/>
-    <mkdir dir="${webapp.build.home}/WEB-INF"/>
-    <mkdir dir="${webapp.build.home}/WEB-INF/classes"/>
-    <mkdir dir="${webapp.build.home}/WEB-INF/lib"/>
-
-    <!-- Copy static webapp content -->
-    <copy todir="${webapp.build.home}">
-      <fileset dir="${webapp.web.home}"/>
-    </copy>
-
-  </target>
-
-  <target name="libraries.standalone" if="build.standalone">
-    <!-- Copy required libraries -->
-    <copy file="${commons-beanutils.jar}" todir="${webapp.build.home}/WEB-INF/lib"/>
-    <copy file="${commons-collections.jar}" todir="${webapp.build.home}/WEB-INF/lib"/>
-    <copy file="${commons-digester.jar}" todir="${webapp.build.home}/WEB-INF/lib"/>
-    <copy file="${commons-logging.jar}" todir="${webapp.build.home}/WEB-INF/lib"/>
-    <copy file="${jstl.jar}" todir="${webapp.build.home}/WEB-INF/lib"/>
-    <copy file="${standard.jar}" todir="${webapp.build.home}/WEB-INF/lib"/>
-    <copy file="${jsf-api.jar}" todir="${webapp.build.home}/WEB-INF/lib"/>
-    <copy file="${jsf-impl.jar}" todir="${webapp.build.home}/WEB-INF/lib"/>
-
-  </target>
-
-  <target name="libraries.bundled" unless="build.standalone">
-
-  </target>
-
-  <target name="libraries" unless="jwsdp.deploy" depends="prepare,libraries.standalone,libraries.bundled">
-    <copy todir="${webapp.build.home}/WEB-INF/classes"
-          file="${jsf-extensions-test-time.jar}" />
-
-    <copy todir="${webapp.build.home}/WEB-INF/classes">
-      <fileset dir="${basedir}/build/classes" />
-    </copy>
-    <copy todir="${webapp.build.home}/WEB-INF/classes">
-      <fileset dir="${basedir}/../build/test/WEB-INF/classes" />
-    </copy>
-    <!-- delete references to the ResourceInjection, since they seem to be tripping things up -->
-    <delete file="${webapp.build.home}/WEB-INF/sun-web.xml" />
-    <delete file="${webapp.build.home}/WEB-INF/classes/com/sun/faces/systest/model/ResourceInjectionBean.class" />
-  </target>
-
-  <target name="compile.base.sources">
-
-    <mkdir dir="${basedir}/build/classes" />
-
-    <javac  srcdir="${basedir}/../systest/src"
-           destdir="${basedir}/build/classes"
-             debug="${compile.debug}"
-       deprecation="${compile.deprecation}"
-          optimize="${compile.optimize}">
-      <classpath refid="compile.classpath"/>
-    </javac>
-
-  </target>
-
-  <target name="install" depends="compile.base.sources"> 
-
-    <antcall target="safe.remove.one">
-      <param name="context.path" value="/jsf-replace-application"/>
-    </antcall>
-
-    <antcall target="safe.remove.one">
-      <param name="context.path" value="/jsf-replace-statemanager"/>
-    </antcall>
-
-    <antcall target="safe.remove.one">
-      <param name="context.path" value="/jsf-el-performance"/>
-    </antcall>
-
-    <antcall target="safe.remove.one">
-      <param name="context.path" value="/jsf-command-link-redirect"/>
-    </antcall>
-
-    <antcall target="safe.remove.one">
-      <param name="context.path" value="/jsf-command-link-back-button"/>
-    </antcall>
-
-    <antcall target="safe.remove.one">
-      <param name="context.path" value="/jsf-nested-datatables"/>
-    </antcall>
-
-    <antcall target="safe.remove.one">
-      <param name="context.path" value="/jar-ordering"/>
-    </antcall>
-
-    <antcall target="safe.remove.one">
-      <param name="context.path" value="/jsf-core-tags"/>
-    </antcall>
-
-    <antcall target="safe.remove.one">
-      <param name="context.path" value="/jsf-replace-lifecycle"/>
-    </antcall>
-      
-    <antcall target="safe.remove.one">
-      <param name="context.path" value="/jsf-view-expired"/>
-    </antcall>
-
-    <antcall target="install.one">
-      <param name="webapp.build.home" 
-             value="${basedir}/replace-application/build" />
-      <param name="webapp.web.home" 
-             value="${basedir}/replace-application/web" />
-      <param name="source.home" 
-             value="${basedir}/replace-application/src/java" />
-      <param name="context.path" value="/jsf-replace-application"/>
-
-    </antcall>
-
-    <antcall target="install.one">
-      <param name="webapp.build.home" 
-             value="${basedir}/replace-statemanager/build" />
-      <param name="webapp.web.home" 
-             value="${basedir}/replace-statemanager/web" />
-      <param name="source.home" 
-             value="${basedir}/replace-statemanager/src/java" />
-      <param name="context.path" value="/jsf-replace-statemanager"/>
-
-    </antcall>   
-
-    <antcall target="install.one">
-      <param name="webapp.build.home" 
-             value="${basedir}/command-link-back-button/build" />
-      <param name="webapp.web.home" 
-             value="${basedir}/command-link-back-button/web" />
-      <param name="source.home" 
-             value="${basedir}/command-link-back-button/src/java" />
-      <param name="context.path" value="/jsf-command-link-back-button"/>
-
-    </antcall>
-
-    <antcall target="install.one">
-      <param name="webapp.build.home" 
-             value="${basedir}/nested-datatables/build" />
-      <param name="webapp.web.home" 
-             value="${basedir}/nested-datatables/web" />
-      <param name="source.home" 
-             value="${basedir}/nested-datatables/src/java" />
-      <param name="context.path" value="/jsf-nested-datatables"/>
-
-    </antcall>
-    
-    <antcall target="install.one">
-      <param name="webapp.build.home" 
-             value="${basedir}/jar-ordering/build" />
-      <param name="webapp.web.home" 
-             value="${basedir}/jar-ordering/web" />
-      <param name="source.home" 
-             value="${basedir}/jar-ordering/src/java" />
-      <param name="context.path" value="/jsf-jar-ordering"/>
-
-    </antcall>
-    
-    <antcall target="install.one">
-      <param name="webapp.build.home" 
-             value="${basedir}/replace-lifecycle/build" />
-      <param name="webapp.web.home" 
-             value="${basedir}/replace-lifecycle/web" />
-      <param name="source.home" 
-             value="${basedir}/replace-lifecycle/src/java" />
-      <param name="context.path" value="/jsf-replace-lifecycle"/>
-
-    </antcall>
-      
-    <antcall target="install.one">
-      <param name="webapp.build.home" 
-             value="${basedir}/view-expired/build" />
-      <param name="webapp.web.home" 
-             value="${basedir}/view-expired/web" />
-      <param name="source.home" 
-             value="${basedir}/view-expired/src/java" />
-      <param name="context.path" value="/jsf-view-expired"/>
-
-    </antcall>
-
-    <!-- PENDING: return to running
-    <antcall target="install.one">
-      <param name="webapp.build.home" 
-             value="${basedir}/core-tags/build" />
-      <param name="webapp.web.home" 
-             value="${basedir}/core-tags/web" />
-      <param name="source.home" 
-             value="${basedir}/core-tags/src/java" />
-      <param name="context.path" value="/jsf-core-tags"/>
-
-    </antcall> -->
-
-    <!--
-    <antcall target="install.one">
-      <param name="webapp.build.home" 
-             value="${basedir}/el-performance/build" />
-      <param name="webapp.web.home" 
-             value="${basedir}/el-performance/web" />
-      <param name="source.home" 
-             value="${basedir}/el-performance/src/java" />
-      <param name="context.path" value="/jsf-el-performance"/>
-
-    </antcall>
-
-    <antcall target="install.one">
-      <param name="webapp.build.home" 
-             value="${basedir}/command-link-redirect/build" />
-      <param name="webapp.web.home" 
-             value="${basedir}/command-link-redirect/web" />
-      <param name="source.home" 
-             value="${basedir}/command-link-redirect/src/java" />
-      <param name="context.path" value="/jsf-command-link-redirect"/>
-
-    </antcall> -->
-
-  </target>
-
-  <target name="reload" > 
-
-    <antcall target="reload.one">
-      <param name="webapp.build.home" 
-             value="${basedir}/replace-application/build" />
-      <param name="webapp.web.home" 
-             value="${basedir}/replace-application/web" />
-      <param name="source.home" 
-             value="${basedir}/replace-application/src/java" />
-      <param name="context.path" value="/jsf-replace-application"/>
-
-    </antcall>
-
-    <antcall target="reload.one">
-      <param name="webapp.build.home" 
-             value="${basedir}/replace-statemanager/build" />
-      <param name="webapp.web.home" 
-             value="${basedir}/replace-statemanager/web" />
-      <param name="source.home" 
-             value="${basedir}/replace-statemanager/src/java" />
-      <param name="context.path" value="/jsf-replace-statemanager"/>
-
-    </antcall>
-
-    <antcall target="reload.one">
-      <param name="webapp.build.home" 
-             value="${basedir}/el-performance/build" />
-      <param name="webapp.web.home" 
-             value="${basedir}/el-performance/web" />
-      <param name="source.home" 
-             value="${basedir}/el-performance/src/java" />
-      <param name="context.path" value="/jsf-el-performance"/>
-
-    </antcall>
-
-    <antcall target="reload.one">
-      <param name="webapp.build.home" 
-             value="${basedir}/command-link-redirect/build" />
-      <param name="webapp.web.home" 
-             value="${basedir}/command-link-redirect/web" />
-      <param name="source.home" 
-             value="${basedir}/command-link-redirect/src/java" />
-      <param name="context.path" value="/jsf-command-link-redirect"/>
-
-    </antcall>
-
-    <antcall target="reload.one">
-      <param name="webapp.build.home" 
-             value="${basedir}/command-link-back-button/build" />
-      <param name="webapp.web.home" 
-             value="${basedir}/command-link-back-button/web" />
-      <param name="source.home" 
-             value="${basedir}/command-link-back-button/src/java" />
-      <param name="context.path" value="/jsf-command-link-back-button"/>
-
-    </antcall>
-
-    <antcall target="reload.one">
-      <param name="webapp.build.home" 
-             value="${basedir}/nested-datatables/build" />
-      <param name="webapp.web.home" 
-             value="${basedir}/nested-datatables/web" />
-      <param name="source.home" 
-             value="${basedir}/nested-datatables/src/java" />
-      <param name="context.path" value="/jsf-nested-datatables"/>
-
-    </antcall>
-
-    <antcall target="reload.one">
-      <param name="webapp.build.home" 
-             value="${basedir}/jar-ordering/build" />
-      <param name="webapp.web.home" 
-             value="${basedir}/jar-ordering/web" />
-      <param name="source.home" 
-             value="${basedir}/jar-ordering/src/java" />
-      <param name="context.path" value="/jsf-jar-ordering"/>
-
-    </antcall>
-
-    <antcall target="reload.one">
-      <param name="webapp.build.home" 
-             value="${basedir}/core-tags/build" />
-      <param name="webapp.web.home" 
-             value="${basedir}/core-tags/web" />
-      <param name="source.home" 
-             value="${basedir}/core-tags/src/java" />
-      <param name="context.path" value="/jsf-core-tags"/>
-
-    </antcall>
-
-    <antcall target="reload.one">
-      <param name="webapp.build.home" 
-             value="${basedir}/replace-lifecycle/build" />
-      <param name="webapp.web.home" 
-             value="${basedir}/replace-lifecycle/web" />
-      <param name="source.home" 
-             value="${basedir}/replace-lifecycle/src/java" />
-      <param name="context.path" value="/jsf-replace-lifecycle"/>
-
-    </antcall>
-      
-    <antcall target="reload.one">
-      <param name="webapp.build.home" 
-             value="${basedir}/view-expired/build" />
-      <param name="webapp.web.home" 
-             value="${basedir}/view-expired/web" />
-      <param name="source.home" 
-             value="${basedir}/view-expired/src/java" />
-      <param name="context.path" value="/jsf-view-expired"/>
-
-    </antcall>
-  </target>
-
-  <target name="remove">
-    <antcall target="safe.remove.one">
-      <param name="context.path" value="/jsf-replace-application"/>
-    </antcall>
-    <antcall target="safe.remove.one">
-      <param name="context.path" value="/jsf-replace-statemanager"/>
-    </antcall>
-    <antcall target="safe.remove.one">
-      <param name="context.path" value="/jsf-el-performance"/>
-    </antcall>
-    <antcall target="safe.remove.one">
-      <param name="context.path" value="/jsf-command-link-redirect"/>
-    </antcall>
-    <antcall target="safe.remove.one">
-      <param name="context.path" value="/jsf-command-link-back-button"/>
-    </antcall>
-    <antcall target="safe.remove.one">
-      <param name="context.path" value="/jsf-nested-datatables"/>
-    </antcall>
-    <antcall target="safe.remove.one">
-      <param name="context.path" value="/jsf-jar-ordering"/>
-    </antcall>
-    <antcall target="safe.remove.one">
-      <param name="context.path" value="/jsf-core-tags"/>
-    </antcall>
-    <antcall target="safe.remove.one">
-      <param name="context.path" value="/jsf-replace-lifecycle"/>
-    </antcall>
-  </target>
-
-
-  <target name="compile" depends="libraries"
-   description="Just compile the classes">
-    <!-- Run javac through everything -->
-    <javac  srcdir="${source.home}"
-           destdir="${webapp.build.home}/WEB-INF/classes"
-             debug="${compile.debug}"
-       deprecation="${compile.deprecation}"
-           
-          optimize="${compile.optimize}">
-      <classpath refid="compile.classpath"/>
-    </javac>
-    <copy todir="${webapp.build.home}/WEB-INF/classes">
-        <fileset dir="${source.home}" includes="**/*.properties"/>
-    </copy>
-    <copy todir="${webapp.build.home}/WEB-INF/classes">
-        <fileset dir="${source.home}" includes="**/*.xml"/>
-    </copy>
-  </target>
-
-
-  <target name="clean" 
-   description="Clean build and distribution directories">
-    <delete dir="${basedir}/build" />
-
-    <delete    dir="${basedir}/replace-application/build"/>
-    <delete    dir="${basedir}/replace-statemanager/build"/>
-    <delete    dir="${basedir}/el-performance/build"/>
-    <delete    dir="${basedir}/command-link-redirect/build"/>
-    <delete    dir="${basedir}/command-link-back-button/build"/>
-    <delete    dir="${basedir}/nested-datatables/build"/>
-    <delete    dir="${basedir}/jar-ordering/build"/>
-    <delete    dir="${basedir}/core-tags/build"/>
-    <delete    dir="${basedir}/replace-lifecycle/build"/>
-    <delete    dir="${basedir}/view-expired/build"/>
-  </target>
    
 
-  <target name="main" depends="install"/>
+    <target name="remove">
+        
+        <for list="${applications}" param="app" trim="true">
+            <sequential>
+                <undeploy.app appname="@{app}"/>              
+            </sequential>
+        </for>
+        
+    </target>
+
+    <target name="clean"
+            description="Clean build and distribution directories">
+        
+        <delete dir="${basedir}/build"/>
+        <for list="${applications}" param="app" trim="true">
+            <sequential>
+               <delete dir="${basedir}/@{app}/build"/>
+            </sequential>
+        </for>
+               
+    </target>    
 
 
-<!-- ********** Test Execution Targets ************************************ -->
+    <!-- ********** Test Execution Targets ************************************ -->
 
 
-  <target name="test" depends="install"
-   description="Execute all tests against installed /jsf-* applications">
+    <target name="test" depends="install"
+            description="Execute all tests against installed /jsf-* applications">
 
-    <ant antfile="build-tests.xml" target="test"/>
+        <ant antfile="build-tests.xml" target="test"/>
 
-  </target>
-  
-   <target name="passthru" depends="compile"
-   description="Convenience target to execute just one test.  Just change the nested traget attribute.">
-
-    <ant antfile="build-tests.xml" target="test.standard"/>
-
-  </target>
-  
-  <target name="test.appserver" depends="install.appserver"
-   description="Execute all tests against installed /jsf-* applications">
-     <sleep seconds="60"/>   
-    <ant antfile="build-tests.xml" target="test"/>
-
-  </target>
-  
-  <target name="install.appserver" depends="compile.base.sources"> 
-
-    <antcall target="install.one.appserver">
-      <param name="webapp.build.home" 
-             value="${basedir}/jar-ordering/build" />
-      <param name="webapp.web.home" 
-             value="${basedir}/jar-ordering/web" />
-      <param name="source.home" 
-             value="${basedir}/jar-ordering/src/java" />
-      <param name="context.path" value="/jsf-jar-ordering"/>
-
-    </antcall>
-
-    <antcall target="install.one.appserver">
-      <param name="webapp.build.home" 
-             value="${basedir}/replace-application/build" />
-      <param name="webapp.web.home" 
-             value="${basedir}/replace-application/web" />
-      <param name="source.home" 
-             value="${basedir}/replace-application/src/java" />
-      <param name="context.path" value="/jsf-replace-application"/>
-
-    </antcall>
-
-    <antcall target="install.one.appserver">
-      <param name="webapp.build.home" 
-             value="${basedir}/replace-statemanager/build" />
-      <param name="webapp.web.home" 
-             value="${basedir}/replace-statemanager/web" />
-      <param name="source.home" 
-             value="${basedir}/replace-statemanager/src/java" />
-      <param name="context.path" value="/jsf-replace-statemanager"/>
-
-    </antcall>
-    
-    <antcall target="install.one.appserver">
-      <param name="webapp.build.home" 
-             value="${basedir}/command-link-back-button/build" />
-      <param name="webapp.web.home" 
-             value="${basedir}/command-link-back-button/web" />
-      <param name="source.home" 
-             value="${basedir}/command-link-back-button/src/java" />
-      <param name="context.path" value="/jsf-command-link-back-button"/>
-
-    </antcall>
-
-    <antcall target="install.one.appserver">
-      <param name="webapp.build.home" 
-             value="${basedir}/nested-datatables/build" />
-      <param name="webapp.web.home" 
-             value="${basedir}/nested-datatables/web" />
-      <param name="source.home" 
-             value="${basedir}/nested-datatables/src/java" />
-      <param name="context.path" value="/jsf-nested-datatables"/>
-
-    </antcall>
-
-    <antcall target="install.one.appserver">
-      <param name="webapp.build.home" 
-             value="${basedir}/replace-lifecycle/build" />
-      <param name="webapp.web.home" 
-             value="${basedir}/replace-lifecycle/web" />
-      <param name="source.home" 
-             value="${basedir}/replace-lifecycle/src/java" />
-      <param name="context.path" value="/jsf-replace-lifecycle"/>
-
-    </antcall>
-      
-    <antcall target="install.one.appserver">
-      <param name="webapp.build.home" 
-             value="${basedir}/view-expired/build" />
-      <param name="webapp.web.home" 
-             value="${basedir}/view-expired/web" />
-      <param name="source.home" 
-             value="${basedir}/view-expired/src/java" />
-      <param name="context.path" value="/jsf-view-expired"/>
-
-    </antcall>
-
-    <!-- PENDING return to running
-    <antcall target="install.one.appserver">
-      <param name="webapp.build.home" 
-             value="${basedir}/core-tags/build" />
-      <param name="webapp.web.home" 
-             value="${basedir}/core-tags/web" />
-      <param name="source.home" 
-             value="${basedir}/core-tags/src/java" />
-      <param name="context.path" value="/jsf-core-tags"/>
-
-    </antcall>
-    
-    <antcall target="install.one.appserver">
-      <param name="webapp.build.home" 
-             value="${basedir}/command-link-redirect/build" />
-      <param name="webapp.web.home" 
-             value="${basedir}/command-link-redirect/web" />
-      <param name="source.home" 
-             value="${basedir}/command-link-redirect/src/java" />
-      <param name="context.path" value="/jsf-command-link-redirect"/>
-
-    </antcall>
-
-    <antcall target="install.one.appserver">
-      <param name="webapp.build.home" 
-             value="${basedir}/el-performance/build" />
-      <param name="webapp.web.home" 
-             value="${basedir}/el-performance/web" />
-      <param name="source.home" 
-             value="${basedir}/el-performance/src/java" />
-      <param name="context.path" value="/jsf-el-performance"/>
-
-    </antcall> -->
-
-  </target>
-
-  <target name="install.one.appserver" depends="compile"
-   description="Install webapp on AppServer">
-    <delete file="${webapp.build.home}/${context.path}.war" /> 
-       <jar jarfile="${webapp.build.home}/${context.path}.war" basedir="${webapp.build.home}"/>
-       <copy file="${webapp.build.home}/${context.path}.war" 
-           todir="${tomcat.home}/domains/domain1/autodeploy"/>               
-  </target>
+    </target>    
+        
 </project>

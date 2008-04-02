@@ -28,16 +28,16 @@ package j2meDemo.model;
 public class Game {
     private GameBoard board;
 
-    public Game() { 
-        initialize(); 
+    public Game() {
+        initialize();
     }
 
-    public GameBoard getBoard() { 
-        return board; 
-    }   
+    public GameBoard getBoard() {
+        return board;
+    }
 
-    public void setBoard(GameBoard board) { 
-        this.board = board; 
+    public void setBoard(GameBoard board) {
+        this.board = board;
     }
 
     public String initialize() {

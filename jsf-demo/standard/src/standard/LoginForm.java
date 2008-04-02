@@ -1,5 +1,5 @@
 /*
- * $Id: LoginForm.java,v 1.7 2005/08/22 22:09:42 ofung Exp $
+ * $Id: LoginForm.java,v 1.8 2005/12/14 22:27:46 rlubke Exp $
  */
 
 /*
@@ -35,12 +35,9 @@ import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
 
 
-/**
- * <p>Backing Bean for a username and password login form.</p>
- */
+/** <p>Backing Bean for a username and password login form.</p> */
 
 public class LoginForm {
-
 
     // -------------------------------------------------------------- Components
 
@@ -70,7 +67,6 @@ public class LoginForm {
         this.username = username;
     }
 
-
     // ---------------------------------------------------------------- Handlers
 
 
@@ -84,10 +80,10 @@ public class LoginForm {
         } else {
             FacesContext context = FacesContext.getCurrentInstance();
             context.addMessage
-                (this.username.getClientId(context),
-                 new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                                  "Invalid username or password, please retry",
-                                  null));
+                  (this.username.getClientId(context),
+                   new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                                    "Invalid username or password, please retry",
+                                    null));
             return (null);
         }
 

@@ -23,340 +23,142 @@
  Copyright 2005 Sun Microsystems Inc. All Rights Reserved
 -->
 
-<project name="JSF Demo unit tests" default="build" basedir=".">    
+<project name="JSF Demo unit tests" default="build" basedir=".">
 
     <!-- Test Properties -->
-    <property file="${user.home}/build.properties"/>   <!-- User local        -->
-    <property file="build.properties"/>                <!-- Component local   -->
-    <property file="../build.properties"/>             <!-- Commons local     -->
- 
-    <property file="default.properties"/>
+    <property file="${user.home}/build.properties"/>
+    <property file="../build.properties"/>
+    <import file="${jsf.build.home}/common/ant/common.xml"/>
 
     <property name="build" value="${basedir}/test/build"/>
-    <property name="url" value="http://${host}:${port}/manager"/>
     <property name="guessNumber.context.path" value="/jsf-guessNumber"/>
     <property name="components.context.path" value="/jsf-components"/>
     <property name="cardemo.context.path" value="/jsf-cardemo"/>
-    <property name="mapping-extension.context.path" value="/jsf-mappingDemo-extension"/>
-    <property name="mapping-prefix.context.path" value="/jsf-mappingDemo-prefix"/>
+    <property name="mapping-extension.context.path"
+              value="/jsf-mappingDemo-extension"/>
+    <property name="mapping-prefix.context.path"
+              value="/jsf-mappingDemo-prefix"/>
     <!-- Default value for debugging arguments is no.  Override in
          build.properties -->
-    <property name="debug.jvm.args" value=""/>
-    <property name="logger" value="org.apache.commons.logging.impl.SimpleLog" />
-    <property name="level" value="trace" />
-    
+
+
     <!-- Demo WAR files -->
-    <property name="components.war" value="${basedir}/components/build/jsf-components.war"/>
-    <property name="guessNumber.war" value="${basedir}/guessNumber/build/jsf-guessNumber.war"/>        
-    <property name="cardemo.war" value="${basedir}/carstore/build/jsf-cardemo.war"/>        
-    <property name="mapping-extension.war" value="${basedir}/test/mappingDemo/build/jsf-mappingDemo-extension.war"/>        
-    <property name="mapping-prefix.war" value="${basedir}/test/mappingDemo/build/jsf-mappingDemo-prefix.war"/>        
+    <property name="components.war"
+              value="${basedir}/components/build/jsf-components.war"/>
+    <property name="guessNumber.war"
+              value="${basedir}/guessNumber/build/jsf-guessNumber.war"/>
+    <property name="cardemo.war"
+              value="${basedir}/carstore/build/jsf-cardemo.war"/>
+    <property name="mapping-extension.war"
+              value="${basedir}/test/mappingDemo/build/jsf-mappingDemo-extension.war"/>
+    <property name="mapping-prefix.war"
+              value="${basedir}/test/mappingDemo/build/jsf-mappingDemo-prefix.war"/>
     <property name="test.results.dir" value="${basedir}/testresults"/>
 
-    <property name="appserver.domain" value="domain1" />
-    
+    <property name="appserver.domain" value="domain1"/>
+
     <path id="classpath">
-      <pathelement location="${jsf-api.jar}"/>
-      <pathelement location="${build}/classes"/>
-      <fileset dir="${htmlunit.home}/lib">
-        <include name="*.jar"/>
-      </fileset>
+        <pathelement location="${jsf-api.jar}"/>
+        <pathelement location="${build}/classes"/>
+        <path refid="htmlunit.compile.classpath"/>
+        <path refid="compile.classpath"/>
     </path>
 
     <path id="run.classpath">
-      <path refid="classpath"/>
-      <!-- Include this to have access to the ResourceBundles for carstore -->
-      <pathelement location="${basedir}/carstore/src" />
+        <path refid="htmlunit.runtime.classpath"/>
+        <!-- Include this to have access to the ResourceBundles for carstore -->
+        <pathelement location="${basedir}/carstore/src"/>
     </path>
 
-    <path id="catalina-ant.classpath">
-        <pathelement location="${catalina-ant.jar}"/>
-    </path>   
-    
     <target name="init" depends="check.changes">
-        <tstamp/>       
+        <tstamp/>
     </target>
-    
+
     <target name="check.changes">
         <uptodate property="skip.build"
-            targetfile="${build}/last-build">
+                  targetfile="${build}/last-build">
             <srcfiles dir="${basedir}">
-                <include name="test/**/*.*"/>               
+                <include name="test/**/*.*"/>
             </srcfiles>
         </uptodate>
     </target>
 
     <target name="prepare" depends="init"
-        description="Create build directories.">
+            description="Create build directories.">
         <mkdir dir="${build}/classes"/>
     </target>
 
-    <taskdef name="install" classname="org.apache.catalina.ant.InstallTask">
-        <classpath refid="catalina-ant.classpath"/>
-    </taskdef>
-    <taskdef name="list" classname="org.apache.catalina.ant.ListTask">
-        <classpath refid="catalina-ant.classpath"/>
-    </taskdef>
-    <taskdef name="reload" classname="org.apache.catalina.ant.ReloadTask">
-        <classpath refid="catalina-ant.classpath"/>
-    </taskdef>
-    <taskdef name="remove" classname="org.apache.catalina.ant.RemoveTask">
-        <classpath refid="catalina-ant.classpath"/>
-    </taskdef>
+    <macrodef name="run-tests">
+        <attribute name="context-path"/>
+        <attribute name="demo-name"/>
+        <attribute name="demo-war"/>
+        <sequential>
+            <undeploy.artifact artifact="@{demo-war}"
+                               artifact-name="@{demo-name}"/>
+            <deploy.artifact artifact="@{demo-war}"
+                             artifact-name="@{demo-name}"/>
+            <jsf.junit context-path="@{context-path}"
+                       classpath-refid="run.classpath"
+                       test-results-dir="${test.results.dir}">
+                <tests>
+                    <fileset dir="test/tests">
+                        <include name="**/@{demo-name}/**Test*.java"/>
+                    </fileset>
+                </tests>
+            </jsf.junit>
+            <undeploy.artifact artifact="@{demo-war}"
+                               artifact-name="@{demo-name}"/>
+        </sequential>
+    </macrodef>
 
-    <!-- Executable Targets -->
-
-    <target name="list" description="List web applications">
-        <list url="${url}" username="${username}" password="${password}"/>
-    </target>
-
-    <target name="install" unless="skip.deploy" description="Install web application" depends="build">
-        <install url="${url}" username="${username}" password="${password}"
-            path="${context.path}" war="file://${demo.path}"/>
-    </target>
-
-    <target name="reload" description="Reload web application" depends="build">
-        <reload url="${url}" username="${username}" password="${password}"
-            path="${context.path}"/>
-    </target>
-
-    <target name="remove" unless="skip.deploy" description="Remove web application">
-        <remove url="${url}" username="${username}" password="${password}"
-            path="${context.path}"/>
-    </target>
-    
-    <target name="safe.remove" unless="skip.deploy" description="Remove demo webapp, don't fail on error">
-        <exec executable="ant.bat" os="Windows 2000" failonerror="false">
-            <arg line="-f build-tests.xml -Dusername=${username} -Dpassword=${password} -Dcontext.path=${context.path} remove"/>
-        </exec>
-        <exec executable="ant" os="SunOS,Linux" failonerror="false">
-            <arg line="-f build-tests.xml -Dusername=${username} -Dpassword=${password} -Dcontext.path=${context.path} remove"/>
-        </exec>
-    </target>
-
-    <target name="run.tests">
-        
-        <junit printsummary="yes" haltonfailure="yes" haltonerror="yes">
-            <classpath refid="run.classpath"/>
-            <formatter type="plain" usefile="false"/>
-            <formatter type="xml" usefile="true"/>
-            <jvmarg line="${debug.jvm.args}"/>
-            <jvmarg value="-Dhost=${host}"/>
-            <jvmarg value="-Dport=${port}"/> 
-            <!--
-            <jvmarg value="-Dorg.apache.commons.logging.Log=${logger}"/> 
-            <jvmarg value="-Dorg.apache.commons.logging.simplelog.log.com.sun.faces.demotest=${level}"/> 
-            -->
-             <jvmarg value="-Dcontext.path=${context.path}"/>
-
-            <!-- Suite of tests -->
-            <batchtest fork="yes" todir="${test.results.dir}">
-                <fileset dir="test/tests">
-                    <include name="**/${demo.name}/**Test*.java"/>    
-                </fileset>    
-            </batchtest>
-        </junit>
-    </target>
 
     <target name="build" unless="skip.build"
-        description="Compile Java files." depends="prepare">
+            description="Compile Java files." depends="prepare">
         <touch file="${build}/last-build"/>
-        <javac srcdir="test" destdir="${build}/classes"
-            debug="true">
-            <include name="**/*.java"/>
-            <classpath refid="classpath"/>
-        </javac>
+        <jsf.javac srcdir="test"
+                   destdir="${build}/classes">
+            <classpath>
+                <path refid="classpath"/>
+            </classpath>
+        </jsf.javac>
     </target>
 
-    <target name="checkRequiredFile">
-        <available file="${file}" property="requirement.satisfied"/>
-        <antcall target="checkRequired.fail"/>
-    </target>
-
-    <target name="checkRequired.fail" unless="requirement.satisfied">
-        <fail message="${fail.message}"/>
-    </target>
-
-    <!-- base target of sorts to avoid duplication -->     
-    <target name="test.invoker">                       
-        <!-- remove the application if it already exists -->
-        <antcall target="safe.remove">
-            <param name="context.path" value="${context.path}"/>
-        </antcall>
-        
-        <!-- install the application -->
-        <antcall target="install">
-            <param name="context.path" value="${context.path}"/>
-            <param name="demo.path" value="${demo.path}"/>
-        </antcall>  
-        
-        <!-- run the tests for the application -->
-        <antcall target="run.tests">
-            <param name="context.path" value="${context.path}"/>
-            <param name="demo.name" value="${demo.name}"/>
-        </antcall>  
-        
-        <!-- remove the application -->
-        <!--<antcall target="remove">
-        <param name="context.path" value="${context.path}"/>
-        <param name="skip.deploy" value="${skip.deploy}"/>
-        </antcall>-->
-    </target>       
 
     <!-- ============== UNIT TESTS =============== -->
     <!-- Global test target to run all unit tests -->
-    <target name="test" depends="build" 
-            description="Runs all of available demo unit tests">
-        
-        <delete dir="${test.results.dir}"/>
-        <mkdir dir="${test.results.dir}"/>
-<!--        <antcall target="run.mapping-extension.tests"/>   
-            <antcall target="run.mapping-prefix.tests"/>    -->
-        <antcall target="run.cardemo.tests"/>    
-<!-- HTMLUnit 1.2.3 doesn't understand xhtml.  Patch submitted: https://sourceforge.net/tracker/index.php?func=detail&aid=1088709&group_id=47038&atid=448268
-        <antcall target="run.guessNumber.tests"/>    -->
-        <antcall target="run.components.tests"/>    
-    </target>
 
-    <!-- Unit test configuration for mapping tests -->            
-    <target name="run.mapping-extension.tests" depends="build">
-        <uptodate property="skip.deploy"
-            targetfile="${build}/mapping-extension.last-testrun"
-            srcfile="${mapping-extension.war}"/>    
-        
-        <antcall target="test.invoker">
-            <param name="context.path" value="${mapping-extension.context.path}"/>
-            <param name="demo.path" value="${basedir}/test/mappingDemo/build/jsf-mappingDemo-extension.war"/>
-            <param name="demo.name" value="mappingTest"/>                        
-        </antcall> 
-        <touch file="${build}/mapping-extension.last-testrun"/>
-    </target>
 
-    <target name="run.mapping-prefix.tests" depends="build">
-        <uptodate property="skip.deploy"
-            targetfile="${build}/mapping-prefix.last-testrun"
-            srcfile="${mapping-prefix.war}"/>    
-        
-        <antcall target="test.invoker">
-            <param name="context.path" value="${mapping-prefix.context.path}"/>
-            <param name="demo.path" value="${basedir}/test/mappingDemo/build/jsf-mappingDemo-prefix.war"/>
-            <param name="demo.name" value="mappingTest"/>                        
-        </antcall> 
-        <touch file="${build}/mapping-prefix.last-testrun"/>
-    </target>
-
-    <!-- Unit test configuration for cardemo -->            
-    <target name="run.cardemo.tests" depends="build">
-        <uptodate property="skip.deploy"
-            targetfile="${build}/cardemo.last-testrun"
-            srcfile="${cardemo.war}"/>    
-
-        <copy todir="${build}/classes">
-          <fileset dir="${basedir}/carstore/src/java">
-            <include name="**/*.properties" />
-          </fileset>
-        </copy>
-        
-        <antcall target="test.invoker">
-            <param name="context.path" value="${cardemo.context.path}"/>
-            <param name="demo.path" value="${basedir}/carstore/build/jsf-cardemo"/>
-            <param name="demo.name" value="cardemo"/>                        
-        </antcall> 
-        <touch file="${build}/cardemo.last-testrun"/>
-    </target>
-
-    <!-- Unit test configuration for guessNumber -->            
-    <target name="run.guessNumber.tests" depends="build">
-        <uptodate property="skip.deploy"
-            targetfile="${build}/guessnumber.last-testrun"
-            srcfile="${guessNumber.war}"/>    
-        
-        <antcall target="test.invoker">
-            <param name="context.path" value="${guessNumber.context.path}"/>
-            <param name="demo.path" value="${basedir}/guessNumber/build/jsf-guessNumber"/>
-            <param name="demo.name" value="guessNumber"/>                        
-        </antcall> 
-        <touch file="${build}/guessnumber.last-testrun"/>
-    </target>
-
-    <target name="run.components.tests" depends="build">
-        <uptodate property="skip.deploy"
-            targetfile="${build}/component.last-testrun"
-            srcfile="${components.war}"/>
-        
-        <antcall target="test.invoker">
-            <param name="context.path" value="${components.context.path}"/>
-            <param name="demo.path" value="${basedir}/components/build/jsf-components"/>
-            <param name="demo.name" value="components"/>                        
-        </antcall>                                    
-        <touch file="${build}/component.last-testrun"/>
-    </target>
-
-    <target name="test.appserver" depends="build" 
+    <target name="test" depends="build"
             description="Runs all of available demo unit tests">
         <delete dir="${test.results.dir}"/>
         <mkdir dir="${test.results.dir}"/>
-         <antcall target="deploy.appserver">
-            <param name="demo.war" value="${components.war}"/>
-         </antcall>
-         <antcall target="deploy.appserver">
-            <param name="demo.war" value="${cardemo.war}"/>
-         </antcall>
-         <!--
-         <antcall target="deploy.appserver">
-            <param name="demo.war" value="${guessNumber.war}"/>
-         </antcall> 
-         
-         <antcall target="deploy.appserver">
-            <param name="demo.war" value="${mapping-extension.war}"/>
-         </antcall>
-         <antcall target="deploy.appserver">
-            <param name="demo.war" value="${mapping-prefix.war}"/>
-         </antcall> -->        
-        <sleep seconds="40"/>   
-        <antcall target="run.tests">
-            <param name="context.path" value="${components.context.path}"/>
-            <param name="demo.name" value="components"/>
-        </antcall>
-        <antcall target="run.cardemo.tests.appserver" />
-        <!--
-        <antcall target="run.tests">
-            <param name="context.path" value="${guessNumber.context.path}"/>
-            <param name="demo.name" value="guessNumber"/>
-        </antcall> 
+
+        <run-tests demo-war="${components.war}" 
+                   demo-name="components"
+                   context-path="${components.context.path}"/>
         
-         <antcall target="run.tests">
-            <param name="context.path" value="${mapping-prefix.context.path}"/>
-            <param name="demo.name" value="mappingTest"/>                        
-        </antcall>
+         <run-tests demo-war="${guessNumber.war}" 
+                   demo-name="guessNumber"
+                   context-path="${guessNumber.context.path}"/>
         
-        <antcall target="run.tests">
-            <param name="context.path" value="${mapping-extension.context.path}"/>
-            <param name="demo.name" value="mappingTest"/>                       
-        </antcall>  -->
+         <run-tests demo-war="${mapping-prefix.war}" 
+                   demo-name="mapping-prefix"
+                   context-path="${mapping-prefix.context.path}"/>
         
-    </target>
-    
-    <target name="deploy.appserver" description="Install web application" depends="build">
-       <copy file="${demo.war}" todir="${tomcat.home}/domains/${appserver.domain}/autodeploy"/>                
-    </target>
-    
-    <target name="run.cardemo.tests.appserver" depends="build">
-        <uptodate property="skip.deploy"
-            targetfile="${build}/cardemo.last-testrun"
-            srcfile="${cardemo.war}"/>    
+         <run-tests demo-war="${mapping-extension.war}" 
+                   demo-name="mapping-extension"
+                   context-path="${mapping-extension.context.path}"/>       
 
         <copy todir="${build}/classes">
-          <fileset dir="${basedir}/carstore/src/java">
-            <include name="**/*.properties" />
-          </fileset>
+            <fileset dir="${basedir}/carstore/src/java">
+                <include name="**/*.properties"/>
+            </fileset>
         </copy>
         
-        <antcall target="run.tests">
-            <param name="context.path" value="${cardemo.context.path}"/>
-            <param name="demo.name" value="cardemo"/>
-        </antcall>
-    </target>
-    
+        <run-tests demo-war="${cardemo.war}" 
+                   demo-name="cardemo"
+                   context-path="${cardemo.context.path}"/> 
+    </target>   
+
 </project>
 

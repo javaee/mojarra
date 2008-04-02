@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+      
+<!--
+ The contents of this file are subject to the terms
+ of the Common Development and Distribution License
+ (the License). You may not use this file except in
+ compliance with the License.
+ 
+ You can obtain a copy of the License at
+ https://javaserverfaces.dev.java.net/CDDL.html or
+ legal/CDDLv1.0.txt. 
+ See the License for the specific language governing
+ permission and limitations under the License.
+ 
+ When distributing Covered Code, include this CDDL
+ Header Notice in each file and include the License file
+ at legal/CDDLv1.0.txt.    
+ If applicable, add the following below the CDDL Header,
+ with the fields enclosed by brackets [] replaced by
+ your own identifying information:
+ "Portions Copyrighted [year] [name of copyright owner]"
+ 
+ [Name of File] [ver.__] [Date]
+ 
+ Copyright 2005 Sun Microsystems Inc. All Rights Reserved
+-->
+<project name="Test Classpath" basedir=".">
+ 
+    
+    <path id="compile.classpath">
+        <pathelement location="${container.home}/lib/javaee.jar"/>
+        <pathelement location="${container.home}/lib/appserv-rt.jar"/>
+        <pathelement location="${container.home}/lib/appserv-jstl.jar"/>
+        <pathelement location="${container.home}/lib/commons-logging.jar"/>
+    </path>
+
+    <!-- JARs that may be packaged in WEB-INF/lib
+  in order for the implementation to run 
+  properly if they aren't availabe in the
+  container's classloader.  
+   
+  This is a comma separated list of fully
+  qualified JARs -->
+    <property name="webapp.jars" value=""/>
+
+
+    <!-- Required Targets -->
+    
+    <macrodef name="deploy.artifact">
+        <attribute name="artifact"
+                   description="The WAR to deploy"/>
+        <attribute name="appName"
+                   description="The name of the application"/>
+        <sequential>
+            <condition property="exec.name" value="cmd.exe">
+                <os family="windows"/>
+            </condition>
+            <condition property="exec.arg.1"
+                       value="/c ${container.home}/bin/asadmin">
+                <os family="windows"/>
+            </condition>
+            <property name="exec.name" value="${container.home}/bin/asadmin"/>
+            <property name="exec.arg.1" value=""/>
+            <echo message=" ------- Deploying @{appName} ------- "/>
+            <exec executable="${exec.name}" failonerror="true">
+                <arg line="${exec.arg.1}"/>
+                <arg line="deploy"/>
+                <arg line="--user ${glassfish.admin.user}"/>
+                <arg line="--passwordfile ${glassfish.password.file}"/>
+                <arg line="--host ${glassfish.admin.host}"/>
+                <arg line="--port ${glassfish.admin.port}"/>
+                <arg line="@{artifact}"/>
+            </exec>
+        </sequential>
+    </macrodef>
+
+    <macrodef name="undeploy.artifact">
+        <attribute name="artifact"
+                   description="The WAR to deploy"/>
+        <attribute name="appName"
+                   description="The name of the application"/>
+        <sequential>
+            <condition property="exec.name" value="cmd.exe">
+                <os family="windows"/>
+            </condition>
+            <condition property="exec.arg.1"
+                       value="/c ${container.home}/bin/asadmin">
+                <os family="windows"/>
+            </condition>
+            <property name="exec.name" value="${container.home}/bin/asadmin"/>
+            <property name="exec.arg.1" value=""/>
+            <echo message=" ------- Undeploying @{appName} ------- "/>
+            <exec executable="${exec.name}">
+                <arg line="${exec.arg.1}"/>
+                <arg line="undeploy"/>
+                <arg line="--user ${glassfish.admin.user}"/>
+                <arg line="--passwordfile ${glassfish.password.file}"/>
+                <arg line="--host ${glassfish.admin.host}"/>
+                <arg line="--port ${glassfish.admin.port}"/>
+                <arg line="@{appName}"/>
+            </exec>
+        </sequential>
+    </macrodef>
+    
+    <target name="config.container"
+            description="Perform any container specific configuration necessary for the unit tests to run">
+        <replace
+              file="${container.home}/domains/${glassfish.domain}/config/server.policy"
+              token="permission java.util.PropertyPermission &quot;*&quot;, &quot;read&quot;;"
+              value="permission java.util.PropertyPermission &quot;*&quot;, &quot;read,write&quot;;"/>
+        <concat append="true"
+                destfile="${container.home}/domains/${glassfish.domain}/config/server.policy">
+grant {
+    permission java.lang.reflect.ReflectPermission &quot;*&quot;;
+};
+        </concat>
+        <chmod
+              file="${container.home}/domains/${glassfish.domain}/config/server.policy"
+              perm="777"/>
+        <replace
+              file="${container.home}/domains/${glassfish.domain}/config/domain.xml"
+              token="keep-alive max-connections=&quot;250&quot; thread-count=&quot;1&quot; timeout-in-seconds=&quot;30&quot;"
+              value="keep-alive max-connections=&quot;250&quot; thread-count=&quot;1&quot; timeout-in-seconds=&quot;70&quot;"/>
+    </target>
+
+    <!-- Require target to display information about the build environment -->
+    <target name="props">
+        <echo message="PENDING - Please add a message"/>            
+    </target>
+    
+    <target name="update.impl.manifest">
+        <echo message="PENDING = Please implement"/>
+    </target>
+
+    <target name="container.deploy" 
+            description="Deploy the JSF Implementation artifacts to the target container.">
+        <delete>
+                <fileset dir="${container.home}/lib" includes="jsf-*.jar"/>
+        </delete> 
+        <jar jarfile="${container.home}/lib/javaee.jar" update="yes">
+                <zipfileset src="${api.dir}/build/lib/jsf-api.jar"/>
+        </jar>
+        <copy todir="${container.home}/lib"
+              file="${impl.dir}/build/lib/jsf-impl.jar"/>      
+    </target>
+    
+</project>

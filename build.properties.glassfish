@@ -1,118 +1,151 @@
-# -----------------------------------------------------------------------------
-# build.properties.sample
 #
-# This is an example "build.properties" file, used to customize building the
-# javaserverfaces-sources for your local environment.  It defines the location
-# of all external modules that the javaserverfaces-source project relies on.
+# The contents of this file are subject to the terms
+# of the Common Development and Distribution License
+# (the License). You may not use this file except in
+# compliance with the License.
+# 
+# You can obtain a copy of the License at
+# https://javaserverfaces.dev.java.net/CDDL.html or
+# legal/CDDLv1.0.txt. 
+# See the License for the specific language governing
+# permission and limitations under the License.
+# 
+# When distributing Covered Code, include this CDDL
+# Header Notice in each file and include the License file
+# at legal/CDDLv1.0.txt.    
+# If applicable, add the following below the CDDL Header,
+# with the fields enclosed by brackets [] replaced by
+# your own identifying information:
+# "Portions Copyrighted [year] [name of copyright owner]"
+# 
+# [Name of File] [ver.__] [Date]
+# 
+# Copyright 2005 Sun Microsystems Inc. All Rights Reserved
 #
-# $Id: build.properties.glassfish,v 1.3 2005/11/22 14:49:34 rogerk Exp $
+#
+# -----------------------------------------------------------------------------
+# build.properties.glassfish
+#
+# This build.properties allows for the building of 
+# javaserverfaces-sources against Glassfish.
+#
+# $Id: build.properties.glassfish,v 1.4 2005/12/14 22:27:05 rlubke Exp $
 # -----------------------------------------------------------------------------
 
 # --------------------------------------------------
-#    BUILD REQUIRES ANT 1.6 OR ABOVE
+#    BUILD REQUIRES ANT 1.6.5 OR ABOVE
 # --------------------------------------------------
 
-# ----- Compile Control Flags -----
-
-compile.deprecation = true
-compile.optimized = true
-compile.debug = false
+# --------------------------------------------------
+# Set this to the directory in which the sources
+# were checked out into
+# --------------------------------------------------
+jsf.build.home=<SET CURRENT DIRECTORY>
 
 # --------------------------------------------------
-#    Path to Glassfish installation
+#    Container Name - a simple identifier which maps
+#      to the container.xml file in 
+#      ${jsf.build.home}/common/ant/${container.name}
+#   
+#     See ${jsf.build.home}/common/ant/template/README
+#     for details on these files
 # --------------------------------------------------
-tomcat.home=
+container.name=glassfish
 
 # --------------------------------------------------
-#    Required libraries to build API and RI
+#    Path to the web container installation
 # --------------------------------------------------
+container.home=
+container.host=localhost
+container.port=8080
 
-servlet.jar=${tomcat.home}/lib/javaee.jar
-jsp.jar=${tomcat.home}/lib/javaee.jar
-el-api.jar=${tomcat.home}/lib/javaee.jar
+# --------------------------------------------------
+#    Glassfish specific properties needed by
+#    ${jsf.build.home}/common/ant/glassfish/container.xml
+#
+#    glassfish.admin.user - administrative user
+#    glassfish.password.file - file containing the 
+#     ${admin.user}'s password.  This is a simple
+#     file consisting of:
+#        AS_ADMIN_PASSWORD=<password>
+#    glassfish.admin.host - host of the 
+#     Glassfish administrative server (usually
+#     the same as ${container.host} above.
+#    glassfish.admin.port - port number the
+#     Glassfish administrative server is listening
+#     on.  This defaults to 4848.
+#    glassfish.domain - the default Glassfish domain.
+# --------------------------------------------------
+glassfish.admin.user=admin
+glassfish.password.file=
+glassfish.admin.host=localhost
+glassfish.admin.port=4848
+glassfish.domain=domain1
 
-# ----- Commons Library JARs
-commons-logging.jar=${tomcat.home}/lib/commons-logging.jar
-commons-digester.jar=${tomcat.home}/lib/appserv-rt.jar
-commons-beanutils.jar=${tomcat.home}/lib/appserv-rt.jar
-commons-collections.jar=${tomcat.home}/lib/appserv-rt.jar
+# --------------------------------------------------
+#    Compilation flags
+# --------------------------------------------------
+compile.deprecation=off
+compile.debug=off
 
-# ----- JSTL 1.0 or 1.1 Library JARs
-jstl.jar=${tomcat.home}/lib/appserv-jstl.jar
-standard.jar=${tomcat.home}/lib/appserv-jstl.jar
+# --------------------------------------------------
+#    Java 'Endorsed' directory
+# --------------------------------------------------
+endorsed.dirs=
 
-# ----- Endorsed Directory
-endorsed.dirs=${JAVA_HOME}/lib/endorsed
+# --------------------------------------------------
+#    Base library path
+#     - Base location where the following build
+#     - dependencies can be found
+#     JUnit 3.8.1 (http://www.junit.org)
+#     HtmlUnit 1.7 (http://htmlunit.sourceforge.net)
+#     Cactus 13-1.7.1 (http://jakarta.apache.org/cactus/)#    
+#     Taglibrarydoc 1.3 (https://taglibrarydoc.dev.java.net)
+#
+#     Install all of these dependencies into the directory
+#     referenced by dependency.base.dir and the build will 
+#     pick up the libraries automatically.
+# --------------------------------------------------
+dependency.base.dir=
+junit.home=${dependency.base.dir}/junit3.8.1
+htmlunit.home=${dependency.base.dir}/htmlunit-1.4
+cactus.home=${dependency.base.dir}/jakarta-cactus-13-1.7.1
+taglibdoc.home=${dependency.base.dir}/taglibrarydoc-1_3
 
-# ----- Build Control Flags -----
+# --------------------------------------------------
+#    Web application packaging
+#      - true: no dependent libraries packaged with
+#              applications
+#      - false: dependent libraries packaged with
+#               applications
+# --------------------------------------------------
+build.standalone=false
 
-# determines whether dependent library JARs are included with the generated WAR.
-# By default all depedent jars are bundled with the application. If you don't 
-# want to do so, comment the following property and uncomment build.wspack 
-# property.
+# --------------------------------------------------
+#   Unit testing 
+#     - If 'yes', then the unit tests will stop 
+#       running if any failure occurs
+#     - If 'no', then the unit tests will run 
+#       through to completion regardless of errors
+# --------------------------------------------------
+halt.on.failure=yes
 
-build.standalone = true
-#build.wspack = true
 
-
-# ----- Run Control Flags -----
-
+# --------------------------------------------------
+#     Debugging control Flags 
+#
 # Define the arguments to give to the jvm to enable debugging
 # If this is commented out, no debugging arguments will be passed.
 # Make sure to uncomment the proper arguments for your platform.
+# --------------------------------------------------
 
-# ----- Unix
+# --------------------------------------------------
+#    Unix
+# --------------------------------------------------
 #debug.jvm.args = -Xdebug -Xrunjdwp:transport=dt_socket,address=8000,server=y,suspend=n
 
-# ----- Windows 
+# --------------------------------------------------
+#    Windows
+## -------------------------------------------------- 
 #debug.jvm.args = -Xdebug -Xrunjdwp:transport=dt_shmem,address=jdbconn,server=y,suspend=n
-
-
-# ------------------------------------------------------------------------------
-# Base Path for dependent library JARs not included with JWSDP.
-# For simplicity, install these libraries in your home directory.
-#  JUnit 3.8.1
-#  HtmlUnit 1.4 or later
-#  MIF Doclet (http://developer.java.sun.com/developer/earlyAccess/mifdoclet)
-#  Portlet API 1.0
-#  Jakarta Cactus version 13-1.4.1 or later.
-#  These libraries are required only if you want to run the test suites.
-# ------------------------------------------------------------------------------
-base.library.path=/home/user
-
-mifdoclet.home=${base.library.path}/mifdoclet1.2
-mifdoclet.jar=${mifdoclet.home}/lib/mifdoclet.jar
-
-junit.home=${base.library.path}/junit3.8.1
-junit.jar=${junit.home}/junit.jar
-
-htmlunit.home=${base.library.path}/htmlunit-1.4
-
-cactus.home=${base.library.path}/jakarta-cactus-13-1.4.1
-cactus.lib=${cactus.home}/lib
-cactus.jar=${cactus.lib}/cactus-1.4.1.jar
-cactus.ant.jar=${cactus.lib}/cactus-ant-1.4.1.jar
-httpclient.jar=${cactus.lib}/commons-httpclient-2.0alpha1-20020606.jar
-aspectjrt.jar=${cactus.lib}/aspectjrt-1.0.5.jar
-
-# --------------------------------------------------
-#    PATH TO PORTLET API and PLUTO INSTALLATION
-#    (OPTIONAL unless working with portlets)
-# --------------------------------------------------
-portlet-api.home=${base.library.path}/portlet1_0
-portlet-api.jar=${portlet-api.home}/lib/portlet.jar
-
-pluto.home=
-
-# ----------------------------------------------------------------------
-# Properties to deploy demos and test suites with asadmin utility
-# ----------------------------------------------------------------------
-admin.user=admin
-admin.password=adminadmin
-admin.host=localhost
-admin.port=4848
-
-host=localhost
-port=8080
-appserver.domain=domain1
 

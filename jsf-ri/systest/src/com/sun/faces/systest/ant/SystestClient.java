@@ -174,7 +174,7 @@ import java.util.Map;
  * </ul>
  *
  * @author Craig R. McClanahan
- * @version $Revision: 1.13 $ $Date: 2005/08/22 22:10:40 $
+ * @version $Revision: 1.14 $ $Date: 2005/12/14 22:27:57 $
  */
 
 public class SystestClient extends Task {
@@ -259,7 +259,9 @@ public class SystestClient extends Task {
 
 
     public void setGolden(String golden) {
-        this.golden = golden;
+        if (golden.length() > 0) {
+            this.golden = golden;
+        }
     }
 
 
@@ -291,7 +293,9 @@ public class SystestClient extends Task {
 
 
     public void setIgnore(String ignore) {
-        this.ignore = ignore;
+        if (ignore.length() > 0) {
+            this.ignore = ignore;
+        }
     }
 
     /**
@@ -306,7 +310,9 @@ public class SystestClient extends Task {
 
 
     public void setIgnoreIfContains(String ignoreIfContains) {
-        this.ignoreIfContains = ignoreIfContains;
+        if (ignoreIfContains.length() > 0) {
+            this.ignoreIfContains = ignoreIfContains;
+        }
     }
 
 
@@ -407,7 +413,9 @@ public class SystestClient extends Task {
 
 
     public void setOutContent(String outContent) {
-        this.outContent = outContent;
+        if (outContent.length() > 0) {
+            this.outContent = outContent;
+        }
     }
 
 
@@ -522,7 +530,9 @@ public class SystestClient extends Task {
 
 
     public void setRecordGolden(String recordGolden) {
-        this.recordGolden = recordGolden;
+        if (recordGolden.length() > 0) {
+            this.recordGolden = recordGolden;
+        }
     }
 
 

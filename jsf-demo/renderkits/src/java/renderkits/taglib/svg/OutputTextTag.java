@@ -25,22 +25,15 @@
 
 package renderkits.taglib.svg;
 
-import java.io.IOException;
-import javax.el.*;
-import javax.faces.*;
-import javax.faces.component.*;
-import javax.faces.context.*;
-import javax.faces.convert.*;
-import javax.faces.el.*;
-import javax.faces.event.*;
-import javax.faces.validator.*;
-import javax.faces.webapp.*;
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+import javax.faces.convert.Converter;
+import javax.faces.webapp.UIComponentELTag;
 import javax.servlet.jsp.JspException;
 
-
 /*
- * ******* GENERATED CODE - DO NOT EDIT *******
- */
+* ******* GENERATED CODE - DO NOT EDIT *******
+*/
 
 
 public final class OutputTextTag extends UIComponentELTag {
@@ -49,78 +42,91 @@ public final class OutputTextTag extends UIComponentELTag {
     // Setter Methods
     // PROPERTY: converter
     private javax.el.ValueExpression converter;
+
     public void setConverter(javax.el.ValueExpression converter) {
         this.converter = converter;
     }
 
     // PROPERTY: value
     private javax.el.ValueExpression value;
+
     public void setValue(javax.el.ValueExpression value) {
         this.value = value;
     }
 
     // PROPERTY: escape
     private javax.el.ValueExpression escape;
+
     public void setEscape(javax.el.ValueExpression escape) {
         this.escape = escape;
     }
 
     // PROPERTY: style
     private javax.el.ValueExpression style;
+
     public void setStyle(javax.el.ValueExpression style) {
         this.style = style;
     }
 
     // PROPERTY: styleClass
     private javax.el.ValueExpression styleClass;
+
     public void setStyleClass(javax.el.ValueExpression styleClass) {
         this.styleClass = styleClass;
     }
 
     // PROPERTY: x
     private javax.el.ValueExpression x;
+
     public void setX(javax.el.ValueExpression x) {
         this.x = x;
     }
-                                                                                                                       
+
     // PROPERTY: y
     private javax.el.ValueExpression y;
+
     public void setY(javax.el.ValueExpression y) {
         this.y = y;
     }
-                                                                                                                       
+
     // PROPERTY: dx
     private javax.el.ValueExpression dx;
+
     public void setDx(javax.el.ValueExpression dx) {
         this.dx = dx;
     }
-                                                                                                                       
+
     // PROPERTY: dy
     private javax.el.ValueExpression dy;
+
     public void setDy(javax.el.ValueExpression dy) {
         this.dy = dy;
     }
 
     // PROPERTY: textAnchor 
     private javax.el.ValueExpression textAnchor;
+
     public void setTextAnchor(javax.el.ValueExpression textAnchor) {
-        this.textAnchor =  textAnchor;
+        this.textAnchor = textAnchor;
     }
 
     // PROPERTY: rotate 
     private javax.el.ValueExpression rotate;
+
     public void setRotate(javax.el.ValueExpression rotate) {
         this.rotate = rotate;
     }
 
     // PROPERTY: textLength 
     private javax.el.ValueExpression textLength;
+
     public void setTextLength(javax.el.ValueExpression textLength) {
         this.textLength = textLength;
     }
 
     // PROPERTY: textAdjust 
     private javax.el.ValueExpression textAdjust;
+
     public void setTextAdjust(javax.el.ValueExpression textAdjust) {
         this.textAdjust = textAdjust;
     }
@@ -140,14 +146,18 @@ public final class OutputTextTag extends UIComponentELTag {
         try {
             output = (javax.faces.component.UIOutput) component;
         } catch (ClassCastException cce) {
-            throw new IllegalStateException("Component " + component.toString() + " not expected type.  Expected: javax.faces.component.UIOutput.  Perhaps you're missing a tag?");
+            throw new IllegalStateException("Component "
+                                            + component.toString()
+                                            + " not expected type.  Expected: javax.faces.component.UIOutput.  Perhaps you're missing a tag?");
         }
 
         if (converter != null) {
             if (!converter.isLiteralText()) {
                 output.setValueExpression("converter", converter);
             } else {
-                Converter conv = FacesContext.getCurrentInstance().getApplication().createConverter(converter.getExpressionString());
+                Converter conv = FacesContext.getCurrentInstance()
+                      .getApplication()
+                      .createConverter(converter.getExpressionString());
                 output.setConverter(conv);
             }
         }
@@ -164,21 +174,24 @@ public final class OutputTextTag extends UIComponentELTag {
             if (!escape.isLiteralText()) {
                 output.setValueExpression("escape", escape);
             } else {
-                output.getAttributes().put("escape", java.lang.Boolean.valueOf(escape.getExpressionString()));
+                output.getAttributes().put("escape",
+                                           java.lang.Boolean.valueOf(escape.getExpressionString()));
             }
         }
         if (style != null) {
             if (!style.isLiteralText()) {
                 output.setValueExpression("style", style);
             } else {
-                output.getAttributes().put("style", style.getExpressionString());
+                output.getAttributes()
+                      .put("style", style.getExpressionString());
             }
         }
         if (styleClass != null) {
             if (!styleClass.isLiteralText()) {
                 output.setValueExpression("styleClass", styleClass);
             } else {
-                output.getAttributes().put("styleClass", styleClass.getExpressionString());
+                output.getAttributes()
+                      .put("styleClass", styleClass.getExpressionString());
             }
         }
         if (x != null) {
@@ -213,25 +226,29 @@ public final class OutputTextTag extends UIComponentELTag {
             if (!textAnchor.isLiteralText()) {
                 output.setValueExpression("textAnchor", textAnchor);
             } else {
-                output.getAttributes().put("textAnchor", textAnchor.getExpressionString());
+                output.getAttributes()
+                      .put("textAnchor", textAnchor.getExpressionString());
             }
         }
         if (rotate != null) {
             if (!rotate.isLiteralText()) {
                 output.setValueExpression("rotate", rotate);
             } else {
-                output.getAttributes().put("rotate", rotate.getExpressionString());
+                output.getAttributes()
+                      .put("rotate", rotate.getExpressionString());
             }
         }
         if (textLength != null) {
             if (!textLength.isLiteralText()) {
                 output.setValueExpression("textLength", textLength);
             } else {
-                output.getAttributes().put("textLength", textLength.getExpressionString());
+                output.getAttributes()
+                      .put("textLength", textLength.getExpressionString());
             }
         }
 
     }
+
     // Methods From TagSupport
     public int doStartTag() throws JspException {
         try {
@@ -272,7 +289,8 @@ public final class OutputTextTag extends UIComponentELTag {
     }
 
     public String getDebugString() {
-        String result = "id: " + this.getId() + " class: " + this.getClass().getName();
+        String result =
+              "id: " + this.getId() + " class: " + this.getClass().getName();
         return result;
     }
 

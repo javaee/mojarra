@@ -1,0 +1,70 @@
+#
+# The contents of this file are subject to the terms
+# of the Common Development and Distribution License
+# (the License). You may not use this file except in
+# compliance with the License.
+# 
+# You can obtain a copy of the License at
+# https://javaserverfaces.dev.java.net/CDDL.html or
+# legal/CDDLv1.0.txt. 
+# See the License for the specific language governing
+# permission and limitations under the License.
+# 
+# When distributing Covered Code, include this CDDL
+# Header Notice in each file and include the License file
+# at legal/CDDLv1.0.txt.    
+# If applicable, add the following below the CDDL Header,
+# with the fields enclosed by brackets [] replaced by
+# your own identifying information:
+# "Portions Copyrighted [year] [name of copyright owner]"
+# 
+# [Name of File] [ver.__] [Date]
+# 
+# Copyright 2005 Sun Microsystems Inc. All Rights Reserved
+#
+#
+# -----------------------------------------------------------------------------
+# build.properties.sample
+#
+# This is an example "build.properties" file, used to build the demos.
+# In order to build the samples you must have Apache Ant 1.6.5 or above,
+# and the ant-contrib tasks installed as an extension to your ant
+# installation.
+#
+# $Id: build.properties.sample,v 1.1 2005/12/14 22:27:23 rlubke Exp $
+# -----------------------------------------------------------------------------
+
+# -------------------------------------
+#  Compile dependencies
+#    commons-digester (version 1.5)
+#    commons-beanutils (version 1.6.1)
+#    commons-logging (latest)
+#    commons-collections (version 2.1)
+#    Servlet (version 2.5)
+#    JSP (version 2.1)
+#    JSTL (version 1.2)
+# -------------------------------------
+compile.classpath=
+
+# -------------------------------------
+#  packaged.libs
+#    specifies a comma-separated list
+#    of fully qualified JAR files that
+#    will be included with the packaged
+#    WAR files.  This is useful for the 
+#    case where the target container doesn't
+#    include the required dependencies 
+#    for Sun's JSF implementation.
+#
+#    As an example, if using Sun's implementation
+#    with a container that doesn't include it already,
+#    you would specify the following dependencies:
+#       commons-digester (version 1.5)
+#       commons-beanutils (version 1.6.1)
+#       commons-logging (latest)
+#       commons-collections (version 2.1)
+#
+#    If the container already has the necessary dependencies,
+#    then leave this property blank.
+# ---------------------------------------
+packaged.libs=

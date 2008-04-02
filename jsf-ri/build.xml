@@ -30,811 +30,389 @@
 
 <project name="JSF-RI" default="main" basedir=".">
 
-  <property name="Name" value="JavaServer Faces RI"/>
-  <property name="name" value="jsf-impl"/>
-  <property name="version" value="1.2-b11"/>
 
-<!-- ************ Per user local properties ******************************* -->
-
-  <property file="${user.home}/build.properties"/>   <!-- User local        -->
-  <property file="build.properties"/>                <!-- Component local   -->
-  <property file="../build.properties"/>             <!-- Commons local     -->  
-
-  <!-- These may be overridden in build.properties as well.. -->
-  <property name="host" value="localhost"/>
-  <property name="port" value="8080"/>
-  <property name="appserver.domain" value="domain1" />
-
-
-<!-- ************ Where are we building into? ***************************** -->
-
-  <!-- the root of our tomcat -->
-
-  <!-- The base directory for compilation targets -->
-  <property name="build.home" value="build"/>
-  <property name="build.classes" value="${build.home}/classes"/>
-
-  <property name="build.generate"   value="${build.home}/generate"/>
-  <property name="build.generate.tld"   value="${build.generate}/conf/share"/>
-
-  <property name="build.coverage"   value="${build.home}/coverage"/>
-  <property name="build.classes.instr" 
-            value="${build.coverage}/classes_instr"/>
-  <property name="build.coverage.report"   
-            value="${build.coverage}/report"/>
-
-
-  <!-- The base directory for the JSF APIs -->
-  <property name="jsf-api.home" value ="../jsf-api"/>
-
-  <property name="jsf-tools.dir"    value="${basedir}/../jsf-tools"/>
-  <property name="jsf-extensions-test-time.jar" value="${basedir}/../lib/jsf-extensions-test-time.jar"/>
-
-  
-  <!-- The base directory for distribution targets -->
-  <property name="dist.home" value="${basedir}/dist"/>
-
-  <!-- The base directory for component sources -->
-  <property name="source.home" value="${basedir}/src"/>
-
-  <!-- The base directory for component tests -->
-  <property name="test.home" value="${basedir}/test"/>
-
-  <!-- The directory in which test results are written -->
-  <property name="test.results.dir" value="${basedir}/testresults"/>
-
-  <!-- The base directory for dependent jars -->
-  <property name="lib.home" value="${basedir}/lib"/>
-
-  <!-- The base directory for executable scripts -->
-  <property name="bin.home" value="${basedir}/etc/bin"/>
-
-  <!-- The home directory for Ant -->
-  <property name="ant.home" value="${basedir}/lib"/>
-
-  <!-- The base directory of the JSF TCK -->
-  <property name="jsf-tck.home" value="../jsf-tck"/>
-
-  <property name="debug.jvm.args" value=""/>
-
-  <!-- ************ Dependencies **** *************************************** -->
-
-  <!-- The locations of necessary jar files -->
-  <property name="servlet.jar" value="${tomcat.home}/common/lib/servlet-api.jar"/>
-  <property name="jsp.jar" value="${tomcat.home}/common/lib/jsp-api.jar"/>
-  <property name="catalina-ant.jar" value="${tomcat.home}/server/lib/catalina-ant.jar"/>
-  <property name="commons-logging.jar" 
-            value="${tomcat.home}/jwsdp-shared/lib/commons-logging.jar"/>
-  <property name="commons-digester.jar" 
-            value="${tomcat.home}/jwsdp-shared/lib/commons-digester.jar"/>
-  <property name="commons-beanutils.jar" 
-            value="${tomcat.home}/jwsdp-shared/lib/commons-beanutils.jar"/>
-  <property name="commons-collections.jar" 
-            value="${tomcat.home}/jwsdp-shared/lib/commons-collections.jar"/>
-  <property name="jstl.jar" 
-            value="${tomcat.home}/jstl/lib/jstl.jar"/>
-  <property name="standard.jar" 
-            value="${tomcat.home}/jstl/lib/standard.jar"/>
-  <property name="jsf-api.jar" value="${jsf-api.home}/build/lib/jsf-api.jar"/>
-  <property name="jsf-api.dtd" value="${jsf-api.home}/build/lib/web-facesconfig_1_1.dtd"/>
-  <property name="tlddoc.jar" value="${tomcat.home}/../tlddoc-1_0/tlddoc.jar"/>
-
-<!-- ************ Compiler Defaults *************************************** -->
-
-  <!-- Should Java compilations set the 'debug' compiler option? -->
-  <property name="compile.debug" value="true"/>
-
-  <!-- Should Java compilations set the 'deprecation' compiler option? -->
-  <property name="compile.deprecation" value="false"/>
-
-  <!-- Should Java compilations set the 'optimize' compiler option? -->
-  <property name="compile.optimize" value="false"/>
-
-  <!-- Construct compile classpath -->
-  <path id="compile.classpath">
-    <pathelement location="${build.classes}"/>
-    <pathelement location="${commons-beanutils.jar}"/>
-    <pathelement location="${commons-collections.jar}"/>
-    <pathelement location="${commons-digester.jar}"/>
-    <pathelement location="${commons-logging.jar}"/>
-    <pathelement location="${jsf-api.jar}"/>
-    <pathelement location="${servlet.jar}"/>
-    <pathelement location="${jsp.jar}"/> 
-    <pathelement location="${jstl.jar}"/>
-    <pathelement location="${el-api.jar}"/>
-  </path>
-
-  <path id="catalina-ant.classpath">
-    <pathelement location="${catalina-ant.jar}"/>
-  </path>
-
-  <path id="test.classpath">
-    <pathelement location="${build.classes}"/>
-    <pathelement location="${build.home}/test"/>
-    <pathelement location="${commons-beanutils.jar}"/>
-    <pathelement location="${commons-collections.jar}"/>
-    <pathelement location="${commons-digester.jar}"/>
-    <pathelement location="${commons-logging.jar}"/>
-    <pathelement location="${jsf-api.jar}"/>
-    <pathelement location="${jsp.jar}"/> 
-    <pathelement location="${jstl.jar}"/>
-    <pathelement location="${junit.jar}"/>
-    <pathelement location="${servlet.jar}"/>
-    <pathelement location="${standard.jar}"/>
-    <pathelement location="${el-api.jar}"/>
-    <pathelement location="${jsf-extensions-test-time.jar}"/>
-  </path>
-
-  <!-- Custom Tomcat Integration -->
-  <taskdef  name="list"     classname="org.apache.catalina.ant.ListTask">
-        <classpath>
-          <pathelement location="${catalina-ant.jar}" />
-        </classpath>
-  </taskdef>    
-  <property name="url"      value="http://${host}:${port}/manager"/>
-
-
-    <!-- Directory where tlds are stored -->
-    <property name="conf.share.dir" value="conf/share"/>
-
-
-<!-- ************ Executable Targets ************************************** -->
-
-  <!-- 
-       ===================================================================
-         Convenience target: cvs update              
-       =================================================================== 
-  -->
-  <target name="cvsupdate">
-    <cvs command="update -d -P"/>
-  </target>
-
-  <!-- 
-       ===================================================================
-         Convenience target: pull.clean.build
-       =================================================================== 
-  -->
-  <target name="pull.clean.build" depends="cvsupdate,clean,main">
-  </target>
-
-
-  <target name="init"
-   description="Initialize and evaluate conditionals">
-    <echo message="-------- ${Name} ${version} --------"/>
-  </target>
-
-  <target name="prepare" 
-          depends="init,detect.tck,set.tools.property,verify.tools.property"
-   description="Prepare build directory">
-    <mkdir dir="${build.home}"/>
-    <mkdir dir="${build.home}/generate"/>
-    <mkdir dir="${build.home}/bin"/>
-    <mkdir dir="${build.classes}"/>
-    <mkdir dir="${build.classes}/META-INF"/>
-    <mkdir dir="${build.home}/javadocs"/>
-    <mkdir dir="${build.home}/tlddocs"/>
-    <mkdir dir="${build.home}/lib"/>
-  </target>
-
-  <target name="prepare.generate"
-          depends="prepare,set.tools.property,verify.tools.property">
-    <mkdir dir="${build.generate.tld}"/>
-  </target>
-
-  <target name="set.tools.property" unless="jsf-tools">
-    <available property="jsf-tools" value="${jsf-tools.dir}"
-               file="${jsf-tools.dir}/build.xml"/>
-  </target>
-
-  <target name="verify.tools.property" unless="jsf-tools">
-
-<fail>
-You must have the property jsf-tools defined, or the path ../jsf-tools
-must exist.  This is necessary for the MessageFactory class.
-</fail>
-  </target>
-
-  <target name="copy.template.sources" depends="prepare"
-     description="Copy template sources from ${jsf-tools.dir}/template-source">
-
-    <mkdir dir="${build.generate}/com/sun/faces/util"/>
-    <filter token="protection" value="public"/>
-
-    <filter token="package" value="com.sun.faces.util"/>
-    <copy file="${jsf-tools.dir}/template-src/MessageFactory.java" 
-          todir="${build.generate}/com/sun/faces/util"
-          filtering="true"/>
-
-    <filter token="protection" value="public"/>
-
-    <filter token="package" value="com.sun.faces.application"/>
-    <copy todir="${build.generate}/com/sun/faces/application"
-          filtering="true">
-      <fileset dir="${jsf-api.home}/template-src">
-        <include name="*Adapter.java" />
-      </fileset>
-    </copy>
-
-    <replace file="${build.generate}/com/sun/faces/application/MethodBindingMethodExpressionAdapter.java"
-             token="@serialVersionUID@"
-             value="6351778415298720238L"/>
-                                                                                                                          
-    <replace file="${build.generate}/com/sun/faces/application/MethodExpressionMethodBindingAdapter.java"
-             token="@serialVersionUID@"
-             value="5639227653537610567L"/>
-                                                                                                                          
-    <replace file="${build.generate}/com/sun/faces/application/ValueExpressionValueBindingAdapter.java"
-             token="@serialVersionUID@"
-             value="2990621816592041196L"/>
-                                                                                                                          
-    <replace file="${build.generate}/com/sun/faces/application/ValueBindingValueExpressionAdapter.java"
-             token="@serialVersionUID@"
-             value="7410146713650507654L"/>
-
-
-  </target>
-
-  <target name="check.taglib.generation.necessity" if="jsf-tools">
-    <uptodate property="skip.taglib.generation"
-              targetfile="${build.generate}/last-taglib-generation">
-       <srcfiles dir="${jsf-api.home}/doc">
-         <include name="standard-html-renderkit.xml"/>
-       </srcfiles>
-    </uptodate>
-  </target>
-
-  <target name="generate" depends="prepare.generate,check.taglib.generation.necessity"
-          if="jsf-tools" unless="skip.taglib.generation">
-    <echo>
-      jsf-tools is ${jsf-tools.dir}
-    </echo>
-
-    <copy todir="${build.home}">
-        <fileset dir="${jsf-tools.dir}/conf">
-            <include name="TAG-*"/>
-        </fileset>
-    </copy>
-
-    <ant dir="${jsf-tools.dir}" inheritall="false" target="clean.generated.taglib"/>
-
-    <ant dir="${jsf-tools.dir}" inheritall="false" target="generate.taglib">
-      <property name="tomcat.home" value="${tomcat.home}" />
-      <property name="commons-beanutils.jar" value="${commons-beanutils.jar}" />
-      <property name="commons-digester.jar" value="${commons-digester.jar}" />
-      <property name="commons-logging.jar" value="${commons-logging.jar}" />
-      <property name="commons-collections.jar" value="${commons-collections.jar}" />
-      <property name="xerces.jar" value="${xerces.jar}" />
-      <property name="dom.jar.dir" value="${dom.jar.dir}" />
-      <property name="dom.jar" value="${dom.jar}" />
-    </ant>
-
-    <copy todir="${build.generate}">
-
-      <!-- Copy the configuration processing classes -->
-      <fileset dir="${jsf-tools.dir}/src">
-        <include name="com/sun/faces/config/DigesterFactory.java"/>
-        <include name="com/sun/faces/config/beans/*.java"/>
-        <include name="com/sun/faces/config/rules/*.java"/>
-        <include name="com/sun/faces/util/*.java"/>
-      </fileset>
-
-      <!-- Copy the generated tag classes and TLD -->
-      <fileset dir="${jsf-tools.dir}/build/generate">
-        <include name="conf/**/*.*"/>
-        <include name="com/**/*.*"/>
-      </fileset>
-  
-    </copy>
-
-    <touch file="${build.generate}/last-taglib-generation"/>
-
-  </target>
-
-  <target         name="props"
-           description="Display resolved properties">
-
-    <echo      message="commons-beanutils.jar =   ${commons-beanutils.jar}"/>
-    <echo      message="commons-collections.jar = ${commons-collections.jar}"/>
-    <echo      message="commons-digester.jar =    ${commons-digester.jar}"/>
-    <echo      message="commons-logging.jar =     ${commons-logging.jar}"/>
-    <echo      message="jsf-api.jar =             ${jsf-api.jar}"/>
-    <echo      message="jsp.jar =                 ${jsp.jar}"/>
-    <echo      message="jstl.jar =                ${jstl.jar}"/>
-    <echo      message="junit.jar =               ${junit.jar}"/>
-    <echo      message="servlet.jar =             ${servlet.jar}"/>
-    <echo      message="standard.jar =            ${standard.jar}"/>
-
-  </target>
-
- <target name="compile.old" if="old.compiler">
-    <javac srcdir="${source.home}:${build.generate}"
-           destdir="${build.classes}"
-             debug="${compile.debug}"
-       deprecation="${compile.deprecation}"
-          fork="true"
-          executable="${old.compiler}"
-          optimize="${compile.optimize}">
-      <classpath refid="compile.classpath"/>
-    </javac>
-  </target>
-                                                                                                                                    
-  <target name="compile.standard" unless="old.compiler">
-    <javac srcdir="${source.home}:${build.generate}"
-           destdir="${build.classes}"
-             debug="${compile.debug}"
-       deprecation="${compile.deprecation}"
-            source="1.5"
-          optimize="${compile.optimize}">
-      <classpath refid="compile.classpath"/>
-    </javac>
-  </target>
-
-  <target name="compile" depends="prepare,generate,copy.template.sources"
-   description="Just compile the classes">
-    <!-- Run javac through everything -->
-    <antcall target="compile.old"/>
-    <antcall target="compile.standard"/>
-
-    <copy todir="${build.classes}">
-        <fileset dir="${source.home}" includes="**/*.properties"/>
-        <fileset dir="${jsf-tools.dir}/src" includes="**/*.properties"/>
-    </copy>    
-
-    <copy todir="${build.classes}/com/sun/faces">
-        <fileset dir="${jsf-api.home}/doc">
-          <include name="*.dtd"/>
-          <include name="standard-html-renderkit.xml"/>
-          <include name="*.xsd"/>
-        </fileset>
-    </copy>
-
-    <copy file="${build.generate.tld}/html_basic.tld"
-         toDir="${build.classes}/META-INF"/>
-    <copy file="${conf.share.dir}/jsf_core.tld"
-         toDir="${build.classes}/META-INF"/>
+    <!-- ************ Per user local properties ******************************* -->
+
+    <property file="${user.home}/build.properties"/>    
+    <property file="../build.properties"/>    
+    <import file="${jsf.build.home}/common/ant/common.xml"/>
+
+
+    <!-- ******************* Structural ************************** -->
+
+    <!-- The base directory for compilation targets -->
+    <property name="build.dir" value="build"/>
+    <property name="build.classes.dir" value="${build.dir}/classes"/>
+    <property name="build.generate.dir" value="${build.dir}/generate"/>
+    <property name="build.generate.tld.dir"
+              value="${build.generate.dir}/conf/share"/>
+
+    <!-- The base directory for distribution targets -->
+    <property name="dist.dir" value="${basedir}/dist"/>
+
+    <!-- The base directory for component sources -->
+    <property name="source.dir" value="${basedir}/src"/>
+
+    <!-- The base directory for component tests -->
+    <property name="test.dir" value="${basedir}/test"/>
+    
+    <!-- Misc -->
+    <property name="conf.share.dir" value="${basedir}/conf/share"/>
+    <property name="name" value="jsf-impl"/>
+
+
+    <!-- ************ Executable Targets ************************************** -->
+
+
+    <target name="init"
+            description="Initialize and evaluate conditionals">
+        <echo message="-------- ${impl.name} ${impl.version} --------"/>
+    </target>
+
+    <target name="prepare" depends="init"
+            description="Prepare build directory">
+        <mkdir dir="${build.dir}"/>
+        <mkdir dir="${build.generate.dir}"/>
+        <mkdir dir="${build.generate.tld.dir}"/>        
+        <mkdir dir="${build.classes.dir}"/>
+        <mkdir dir="${build.classes.dir}/META-INF"/>
+        <mkdir dir="${build.dir}/javadocs"/>
+        <mkdir dir="${build.dir}/tlddocs"/>
+        <mkdir dir="${build.dir}/lib"/>
+    </target>        
+
+    <target name="copy.template.sources" depends="prepare"
+            description="Copy template sources from ${tools.dir}/template-source">
+
+        <mkdir dir="${build.generate.dir}/com/sun/faces/util"/>
+        <filter token="protection" value="public"/>
+
+        <filter token="package" value="com.sun.faces.util"/>
+        <copy file="${tools.dir}/template-src/MessageFactory.java"
+              todir="${build.generate.dir}/com/sun/faces/util"
+              filtering="true"/>
+
+        <filter token="protection" value="public"/>
+
+        <filter token="package" value="com.sun.faces.application"/>
+        <copy todir="${build.generate.dir}/com/sun/faces/application"
+              filtering="true">
+            <fileset dir="${api.dir}/template-src">
+                <include name="*Adapter.java"/>
+            </fileset>
+        </copy>
+
+        <replace
+              file="${build.generate.dir}/com/sun/faces/application/MethodBindingMethodExpressionAdapter.java"
+              token="@serialVersionUID@"
+              value="6351778415298720238L"/>
+
+        <replace
+              file="${build.generate.dir}/com/sun/faces/application/MethodExpressionMethodBindingAdapter.java"
+              token="@serialVersionUID@"
+              value="5639227653537610567L"/>
+
+        <replace
+              file="${build.generate.dir}/com/sun/faces/application/ValueExpressionValueBindingAdapter.java"
+              token="@serialVersionUID@"
+              value="2990621816592041196L"/>
+
+        <replace
+              file="${build.generate.dir}/com/sun/faces/application/ValueBindingValueExpressionAdapter.java"
+              token="@serialVersionUID@"
+              value="7410146713650507654L"/>
+    </target>
+
+    <target name="check.taglib.generation.necessity">
+        <uptodate property="skip.taglib.generation"
+                  targetfile="${build.generate.dir}/last-taglib-generation">
+            <srcfiles dir="${api.dir}/doc">
+                <include name="standard-html-renderkit.xml"/>
+            </srcfiles>
+        </uptodate>
+    </target>
+
+    <target name="generate"
+            depends="check.taglib.generation.necessity"
+            unless="skip.taglib.generation">        
+
+        <copy todir="${build.dir}">
+            <fileset dir="${tools.dir}/conf">
+                <include name="TAG-*"/>
+            </fileset>
+        </copy>
+        
+        <delete dir="${build.generate.dir}"/>
+
+        <mkdir dir="${tools.dir}/build/classes"/>
+        <mkdir dir="${build.generate.dir}"/>
+        <javac srcdir="${tools.dir}/src"
+               destdir="${tools.dir}/build/classes">
+            <classpath>
+                <path refid="compile.classpath"/>
+            </classpath>
+        </javac>
+        <copy todir="${tools.dir}/build/classes">
+            <fileset dir="${tools.dir}/src"
+                     includes="**/*.properties"/>            
+        </copy>
+        <copy todir="${tools.dir}/build/classes/com/sun/faces"
+              flatten="true">
+            <fileset dir="${api.dir}/doc"
+                      includes="*.dtd,*.xsd"/>
+        </copy>
+        <taskdef name="generateTaglib"
+                 classname="com.sun.faces.ant.TaglibGenTask">
+            <classpath>
+                <pathelement location="${tools.dir}/build/classes"/>
+            </classpath>
+        </taskdef>
+        <generateTaglib
+              generatorConfig="${tools.dir}/conf/HtmlBasicTaglib21.properties"
+              facesConfig="${standard.renderkit.xml}"
+              fork="true">
+            <classpath>
+                <path refid="compile.classpath"/>                
+                <pathelement location="${tools.dir}/build/classes"/>
+            </classpath>
+            <sysproperty key="java.endorsed.dirs" value="${endorsed.dirs}"/>
+            <jvmarg line="${debug.jvm.args}"/>
+        </generateTaglib>
+
+        <copy todir="${build.generate.dir}">
+
+            <!-- Copy the configuration processing classes -->
+            <fileset dir="${tools.dir}/src">
+                <include name="com/sun/faces/config/DigesterFactory.java"/>
+                <include name="com/sun/faces/config/beans/*.java"/>
+                <include name="com/sun/faces/config/rules/*.java"/>
+                <include name="com/sun/faces/util/*.java"/>
+            </fileset>
+           
+        </copy>
+
+        <touch file="${build.generate.dir}/last-taglib-generation"/>
+
+    </target>    
+    
+    <target name="compile" depends="prepare,generate,copy.template.sources"
+            description="Just compile the classes">
+        <!-- Run javac through everything -->
+        <jsf.javac srcdir="${source.dir}:${build.generate.dir}"
+                   destdir="${build.classes.dir}">
+            <classpath>
+                <path refid="compile.classpath"/>
+            </classpath>            
+        </jsf.javac>
+
+        <copy todir="${build.classes.dir}">
+            <fileset dir="${source.dir}" includes="**/*.properties"/>
+            <fileset dir="${tools.dir}/src" includes="**/*.properties"/>
+        </copy>
+
+        <copy todir="${build.classes.dir}/com/sun/faces">
+            <fileset dir="${api.dir}/doc">
+                <include name="*.dtd"/>
+                <include name="standard-html-renderkit.xml"/>
+                <include name="*.xsd"/>
+            </fileset>
+        </copy>
+
+        <copy file="${build.generate.tld.dir}/html_basic.tld"
+              toDir="${build.classes.dir}/META-INF"/>
+        <copy file="${conf.share.dir}/jsf_core.tld"
+              toDir="${build.classes.dir}/META-INF"/>
 
     </target>
 
-  <target name="clean" 
-   description="Clean build and distribution directories">
-    <ant antfile="build-tests.xml" target="safe.remove"/>
-    <ant antfile="build-tests.xml" target="remove.tstamp"/>
-    <delete    dir="${build.home}"/>
-    <delete    dir="${dist.home}"/>
-    <delete    dir="${test.results.dir}"/>
-    <delete> 
-      <fileset dir="." includes="**/*~" defaultexcludes="no"/>
-      <fileset dir="." includes="**/.nbattrs" defaultexcludes="no"/>
-    </delete>
-    <delete file="jsf-${version}.zip"/>
-    <delete file="jsf-${version}_src.zip"/>
-    <delete  dir="${tomcat.home}/jsf-${version}/lib" />
-    <ant dir="${basedir}/systest" inheritall="false" target="safe.remove"/>  
-    <ant dir="${basedir}/systest" inheritall="false" target="clean"/>  
-    <ant dir="${basedir}/systest-per-webapp" inheritall="false" target="remove"/>  
-    <ant dir="${basedir}/systest-per-webapp" inheritall="false" target="clean"/>  
-    <ant antfile="build-tests.xml" target="remove.jsp.incompat.workaround"/>
-  </target>
+    <target name="clean"
+            description="Clean build and distribution directories">        
+        <ant antfile="build-tests.xml" target="remove.tstamp"/>
+        <delete dir="${build.dir}"/>
+        <delete dir="${dist.dir}"/>
+        <delete dir="${impl.test.results.dir}"/>
+        <delete>
+            <fileset dir="." includes="**/*~" defaultexcludes="no"/>
+            <fileset dir="." includes="**/.nbattrs" defaultexcludes="no"/>
+        </delete>
+        <delete file="jsf-${impl.version}.zip"/>
+        <delete file="jsf-${impl.version}_src.zip"/>               
+        <ant dir="${basedir}/systest" inheritall="false" target="clean"/>        
+        <ant dir="${basedir}/systest-per-webapp" inheritall="false"
+             target="clean"/>     
+         <delete dir="${tools.dir}/build"/>
+    </target>
 
-  <target name="all" depends="clean,prepare,compile"
-   description="Clean and compile all components"/>
+    <target name="all" depends="clean,prepare,compile"
+            description="Clean and compile all components"/>
 
-  <!-- Create the source distribution -->
-  <target name="ri.source">
-    <zip     destfile="${dist.home}/jsf-ri-src-${version}.zip">
-      <zipfileset dir="${basedir}"
-             includes="build.xml build-tests.xml README COPYRIGHT LICENSE*.*"
-               prefix="jsf-ri-src-${version}"/>
-      <zipfileset dir="${source.home}"
-             excludes="**/CVS/**"
-               prefix="jsf-ri-src-${version}/src"/>
-      <zipfileset dir="${test.home}"
-             excludes="**/CVS/**"
-               prefix="jsf-ri-src-${version}/test"/>
-      <zipfileset dir="${basedir}"
-             includes="conf/** web/**"
-               prefix="jsf-ri-src-${version}"/>
-    </zip>
-  </target>
+    <!-- Create the source distribution -->
+    <target name="ri.source">
+        <zip destfile="${dist.dir}/jsf-ri-src-${impl.version}.zip">
+            <zipfileset dir="${basedir}"
+                        includes="build.xml build-tests.xml README COPYRIGHT LICENSE*.*"
+                        prefix="jsf-ri-src-${impl.version}"/>
+            <zipfileset dir="${source.dir}"
+                        excludes="**/CVS/**"
+                        prefix="jsf-ri-src-${impl.version}/src"/>
+            <zipfileset dir="${test.dir}"
+                        excludes="**/CVS/**"
+                        prefix="jsf-ri-src-${impl.version}/test"/>
+            <zipfileset dir="${basedir}"
+                        includes="conf/** web/**"
+                        prefix="jsf-ri-src-${impl.version}"/>
+        </zip>
+    </target>
 
 
-  <target name="dist" depends="jars" description="Build distribution files">
+    <target name="dist" depends="jars" description="Build distribution files">      
 
-    <antcall target="get-update-manifest-info">
-             <param name="jar-name" value="commons-beanutils"/>
-             <param name="jar-file" value="${commons-beanutils.jar}"/>
-    </antcall>
-    <antcall target="get-update-manifest-info">
-             <param name="jar-name" value="commons-collections"/>
-             <param name="jar-file" value="${commons-collections.jar}"/>
-    </antcall>
-    <antcall target="get-update-manifest-info">
-             <param name="jar-name" value="commons-digester"/>
-             <param name="jar-file" value="${commons-digester.jar}"/>
-    </antcall>
-    <antcall target="get-update-manifest-info">
-             <param name="jar-name" value="commons-logging"/>
-             <param name="jar-file" value="${commons-logging.jar}"/>
-    </antcall>
+        <mkdir dir="${dist.dir}"/>
 
-    <mkdir dir="${dist.home}"/>
+        <antcall target="tlddocs"/>
 
-    <antcall target="tlddocs"/>
+        <!-- Create the binary distribution -->
+        <zip destfile="${dist.dir}/jsf-ri-${impl.version}.zip">
+            <zipfileset dir="${build.dir}"
+                        includes="lib/**,tlddocs/**"
+                        prefix="jsf-ri-${impl.version}"/>
+        </zip>
 
-    <!-- Create the binary distribution -->
-    <zip     destfile="${dist.home}/jsf-ri-${version}.zip">
-      <zipfileset dir="${build.home}"
-             includes="lib/**,tlddocs/**"
-               prefix="jsf-ri-${version}"/>
-    </zip>
+        <!-- Create a buildable source distribution -->
+        <zip destfile="${dist.dir}/jsf-ri-src-${impl.version}.zip">
+            <zipfileset dir="${basedir}"
+                        includes="build.xml build-tests.xml README COPYRIGHT LICENSE*.*"
+                        prefix="jsf-ri-src-${impl.version}"/>
+            <zipfileset dir="${source.dir}"
+                        excludes="**/CVS/**"
+                        prefix="jsf-ri-src-${impl.version}/src"/>
 
-    <!-- Create a buildable source distribution -->
-    <zip     destfile="${dist.home}/jsf-ri-src-${version}.zip">
-      <zipfileset dir="${basedir}"
-             includes="build.xml build-tests.xml README COPYRIGHT LICENSE*.*"
-               prefix="jsf-ri-src-${version}"/>
-      <zipfileset dir="${source.home}"
-             excludes="**/CVS/**"
-               prefix="jsf-ri-src-${version}/src"/>
-         
-      <zipfileset dir="${test.home}"
-             excludes="**/CVS/**"
-               prefix="jsf-ri-src-${version}/test"/>
-      <zipfileset dir="${basedir}/systest"
-             excludes="**/CVS/**"
-               prefix="jsf-ri-src-${version}/systest"/>
-      <zipfileset dir="${basedir}"
-             includes="conf/** web/**"
-	     excludes="**/fruitstand/**"
-               prefix="jsf-ri-src-${version}"/>
-    </zip>
-    <antcall target="ri.source"/>
-    
-  </target>
+            <zipfileset dir="${test.dir}"
+                        excludes="**/CVS/**"
+                        prefix="jsf-ri-src-${impl.version}/test"/>
+            <zipfileset dir="${basedir}/systest"
+                        excludes="**/CVS/**"
+                        prefix="jsf-ri-src-${impl.version}/systest"/>            
+        </zip>
+        <antcall target="ri.source"/>
 
-  <target name="tlddocs">
+    </target>
 
-    <echo message="tlddoc.jar = ${tlddoc.jar}"/>
-
-    <java fork="true" jar="${tlddoc.jar}">
-      <arg line="-d ${build.home}/tlddocs"/>
-      <arg line="-windowtitle jsf-ri-${version}"/>
-      <arg value="${build.generate.tld}/html_basic.tld"/>
-      <arg value="${conf.share.dir}/jsf_core.tld"/>
-    </java>
-  </target>
+    <target name="tlddocs">                
+        <java fork="true" jar="${tlddoc.jar}">
+            <arg line="-d ${build.dir}/tlddocs"/>
+            <arg line="-windowtitle jsf-ri-${spec.version}"/>
+            <arg value="${build.generate.tld.dir}/html_basic.tld"/>
+            <arg value="${conf.share.dir}/jsf_core.tld"/>
+        </java>
+    </target>
 
     <target name="compile.test" depends="prepare,compile"
-     description="Run unit tests">
+            description="Run unit tests">
 
         <ant antfile="build-tests.xml" target="compile.test"/>
-    
+
     </target>
 
-    <target name="test" depends="init.test,run.junit.test,run.cactus.test,test.config,run.systest,run.systest-per-webapp"
-     description="Run all unit and system tests"/>
+    <target name="test"
+            depends="init.test,run.junit.test,run.cactus.test,run.systest,run.systest-per-webapp"
+            description="Run all unit and system tests"/>
 
     <target name="init.test">
-        <mkdir dir="${test.results.dir}"/>
+        <mkdir dir="${impl.test.results.dir}"/>
     </target>
 
-    <target name="run.systest" description="Run system tests" depends="init.test">
-      <ant dir="${basedir}/systest" inheritall="false" target="safe.remove"/>
-      <ant dir="${basedir}/systest" inheritall="false" target="install"/>
-      <ant dir="${basedir}/systest" inheritall="false" target="test"/>
-      <ant dir="${basedir}/systest" inheritall="false" target="remove"/>
+    <target name="run.systest" description="Run system tests"
+            depends="init.test">              
+        <ant dir="${basedir}/systest" inheritall="false" target="test"/>        
     </target>
 
-    <target name="run.systest-per-webapp" description="Run per-webapp system tests" depends="init.test,compile.test">
-      <ant dir="${basedir}/systest-per-webapp" inheritall="false" target="test"/>
-      <ant dir="${basedir}/systest-per-webapp" inheritall="false" target="remove"/>
+    <target name="run.systest-per-webapp"
+            description="Run per-webapp system tests"
+            depends="init.test,compile.test">
+        <ant dir="${basedir}/systest-per-webapp" inheritall="false"
+             target="test"/>
+        <ant dir="${basedir}/systest-per-webapp" inheritall="false"
+             target="remove"/>
     </target>
 
 
     <target name="run.junit.test" depends="init.test,compile.test"
-     description="Run unit tests not requiring cactus">
+            description="Run unit tests not requiring cactus">
         <ant antfile="build-tests.xml" target="run.test"/>
     </target>
 
-    <target name="run.cactus.test" depends="init.test,compile.test,jars"
-     description="Run unit tests requiring cactus">
+    <target name="run.cactus.test" depends="init.test,compile.test"
+            description="Run unit tests requiring cactus">
         <ant antfile="build-tests.xml" target="execute.cactus.tests"/>
     </target>
 
-    <target name="force.run.cactus.test" depends="init.test,compile.test,jars"
-     description="Run unit tests requiring cactus, forcing reinstall">
+    <target name="force.run.cactus.test" depends="init.test,compile.test"
+            description="Run unit tests requiring cactus, forcing reinstall">
         <ant antfile="build-tests.xml" target="force.execute.cactus.tests"/>
-    </target>
+    </target>   
 
-    <target name="passthru">
-        <echo>Invoking target ${passthru}</echo>
-        <ant antfile="build-tests.xml" target="${passthru}"/>
-    </target>
-
-   <target name="prepare.test.webapp">
+    <target name="prepare.test.webapp">
         <echo>Invoking target prepare.test.webapp</echo>
         <ant antfile="build-tests.xml" target="prepare.test.webapp"/>
     </target>
 
-  <!-- 
-       =================================================================== 
-         Create the jars
-       =================================================================== 
-  -->
+    <!-- 
+         =================================================================== 
+           Create the jars
+         =================================================================== 
+    -->
 
-  <target name="jars" depends="compile,create.runtime.config">
-    <echo message="${build.classes}" />
-    <jar jarfile="${build.home}/lib/${name}.jar" 
-         basedir="${build.classes}" > 
-         <manifest>
-          <attribute name="Specification-Title" value="JavaServer Faces"/>
-          <attribute name="Specification-Version" value="1.2"/>
-          <attribute name="Implementation-Title" value="'${name}': ${Name}"/>
-          <attribute name="Implementation-Version" value="${version}"/>
-          <attribute name="Implementation-Vendor" value="Sun Microsystems, Inc."/>
-          <attribute name="Implementation-Vendor-Id" value="com.sun"/>
-          <attribute name="Extension-Name" value="com.sun.faces"/>
-        </manifest>
-    </jar>
-  </target>
+    <target name="jars" depends="compile,create.runtime.config">
+        <jsf.manifested.jar jarfile="${build.dir}/lib/${name}.jar"
+                            basedir="${build.classes.dir}"
+                            extension-name="com.sun.faces"/>                                               
+    </target>
 
-  <target name="get-update-manifest-info">
-          <mkdir dir="${build.home}/work" />
-          <unzip dest="${build.home}/work">
-                 <patternset>
-                   <include name="**/MANIFEST.MF"/>
-                 </patternset>
-                 <fileset file="${jar-file}"/>
-          </unzip>
-          <loadproperties srcFile="${build.home}/work/META-INF/MANIFEST.MF">
-                 <filterchain>
-                  <linecontains>
-                    <contains value="Implementation-Version"/>
-                  </linecontains>
-                 </filterchain>
-          </loadproperties>
-          <antcall target="update-manifest-info">
-                   <param name="${jar-name}" value="${Implementation-Version}"/>
-                   <param name="i-version" value="${Implementation-Version}"/>
-          </antcall>
-          <delete dir="${build.home}/work" />
-  </target>
+    <target name="main" depends="jars"/>
 
-  <target name="update-manifest-info">
-          <jar jarfile="${build.home}/lib/${name}.jar" update="true"> 
-               <manifest>
-                 <section name = "${jar-name}">
-                          <attribute name="Implementation-Version" value="${i-version}"/>
-                 </section>
-               </manifest>
-          </jar>
-  </target>
-
-  <!--
-       ==================================================================
-          TCK related
-       ==================================================================
-  -->
-                                                                                
-  <target name="detect.tck" description="Detect the presence of the JSF TCK">
-      <available property="jsf.tck.present" file="${jsf-tck.home}" type="dir"/>
-  </target>
-                                                                                
-  <target name="copy.to.tck" description="Copy the jsf-impl.jar to TCK_HOME/weblib"
-          if="jsf.tck.present">
-      <copy file="${build.home}/lib/${name}.jar" todir="${jsf-tck.home}/weblib"
-            overwrite="true"/>
-  </target>
-
-
-<!--
-       ===================================================================
-         Tomcat integration targets
-       ===================================================================
-  -->
-
-  <target name="list"
-   description="List installed webapps on Tomcat">
-    <list url="${url}" username="${username}" password="${password}"/>
-  </target>
-
-     <!--
-      ===================================================================
-       This target copies the JSF libraries under ${jwsdp.home}. This
-       target simulates JWSDP 1.2 distribution environment.
-      ===================================================================
-     -->
-   <target name="jsf.deploy.wspack" depends="jars">
-     <mkdir dir="${tomcat.home}/jsf"/>
-     <mkdir dir="${tomcat.home}/jsf/lib"/>
-
-     <copy file="${build.home}/lib/${name}.jar" todir="${tomcat.home}/jsf/lib"/>
-     <copy file="${jsf-api.jar}" todir="${tomcat.home}/jsf/lib"/>
-   </target>
-
-
-  <target name="main" depends="jars,copy.to.tck"/>
-
-  <target name="create.runtime.config">
-      <xslt in="${build.home}/classes/com/sun/faces/standard-html-renderkit.xml"
-            out="merged.xml" 
-            style="conf/xslt/merge-config.xsl">
-      </xslt>
-      <replace file="merged.xml">
-          <replacetoken><![CDATA[xmlns:jsf="http://java.sun.com/xml/ns/javaee"]]></replacetoken>
-          <replacevalue><![CDATA[]]></replacevalue>
-      </replace>
-      <replace file="merged.xml">
-          <replacetoken><![CDATA[ >]]></replacetoken>
-          <replacevalue><![CDATA[>]]></replacevalue>
-      </replace>
-      <xslt in="merged.xml"
-            out="${build.home}/classes/com/sun/faces/jsf-ri-runtime.xml" 
-            style="conf/xslt/prune-tool-data.xsl">
-      </xslt>
-      <replace file="${build.home}/classes/com/sun/faces/jsf-ri-runtime.xml">
-          <replacetoken><![CDATA[xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xi="http://www.w3.org/2001/XInclude"]]></replacetoken>
-      </replace>
-      <replace file="${build.home}/classes/com/sun/faces/jsf-ri-runtime.xml">
-          <replacetoken><![CDATA[ >]]></replacetoken>
-          <replacevalue><![CDATA[>]]></replacevalue>
-      </replace>
-      <replace file="${build.home}/classes/com/sun/faces/jsf-ri-runtime.xml">
-          <replacetoken><![CDATA[<faces-config>]]></replacetoken>
-          <replacevalue><![CDATA[
+    <target name="create.runtime.config">
+        <xslt in="${build.dir}/classes/com/sun/faces/standard-html-renderkit.xml"
+              out="merged.xml"
+              style="conf/xslt/merge-config.xsl">
+        </xslt>
+        <replace file="${basedir}/merged.xml">
+            <replacetoken><![CDATA[xmlns:jsf="http://java.sun.com/xml/ns/javaee"]]></replacetoken>
+            <replacevalue><![CDATA[]]></replacevalue>
+        </replace>
+        <replace file="${basedir}/merged.xml">
+            <replacetoken><![CDATA[ >]]></replacetoken>
+            <replacevalue><![CDATA[>]]></replacevalue>
+        </replace>
+        <xslt in="${basedir}/merged.xml"
+              out="${build.dir}/classes/com/sun/faces/jsf-ri-runtime.xml"
+              style="conf/xslt/prune-tool-data.xsl">
+        </xslt>
+        <replace file="${build.dir}/classes/com/sun/faces/jsf-ri-runtime.xml">
+            <replacetoken><![CDATA[xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"]]></replacetoken>
+        </replace>
+        <replace file="${build.dir}/classes/com/sun/faces/jsf-ri-runtime.xml">
+            <replacetoken><![CDATA[ >]]></replacetoken>
+            <replacevalue><![CDATA[>]]></replacevalue>
+        </replace>
+        <replace file="${build.dir}/classes/com/sun/faces/jsf-ri-runtime.xml">
+            <replacetoken><![CDATA[<faces-config>]]></replacetoken>
+            <replacevalue><![CDATA[
 <faces-config xmlns="http://java.sun.com/xml/ns/javaee"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_1_2.xsd"
     version="1.2">]]>
-          </replacevalue>
-      </replace>
-      <delete file="${basedir}/merged.xml"/>
-  </target>
-
-  <!--
-       ===================================================================
-         Temporary Testing Targets
-       ===================================================================
-  -->
-
-  <target name="test.compile"
-       depends="compile"
-   description="Compile standalone JUnit tests">
-
-      <mkdir             dir="${basedir}/build/test"/>
-
-      <javac          srcdir="${basedir}/test"
-                     destdir="${basedir}/build/test"
-                       debug="${compile.debug}"
-                    optimize="${compile.optimize}"
-                      source="1.5"
-                 deprecation="${compile.deprecation}">
-
-        <classpath     refid="test.classpath"/>
-
-        <!-- PENDING(craigmcc) -  "config" and "mock" subpackages only
-             until generators work again -->
-        <include        name="com/sun/faces/config/ConfigureListenerTestCase.java"/>
-        <include        name="com/sun/faces/config/TestComponent.java"/>
-        <include        name="com/sun/faces/config/TestConverter.java"/>
-        <include        name="com/sun/faces/config/TestRenderer.java"/>
-        <include        name="com/sun/faces/config/TestValidator.java"/>
-        <include        name="com/sun/faces/mock/*.java"/>
-
-    </javac>
-
-    <copy              todir="${basedir}/build/test">
-      <fileset           dir="${basedir}/test"
-                    includes="**/*.properties"/>
-    </copy>
-
-  </target>
-
-  <property name="log.impl"         value="org.apache.commons.logging.impl.SimpleLog"/>
-  <property name="log.level"        value="info"/> <!-- Unit test -->
-  <property name="log.digester"     value="info"/> <!-- Digester main -->
-  <property name="log.sax"          value="info"/> <!-- SAX events -->
-
-  <target name="prepare.config"
-       depends="jars"
-   description="Prepare pseudo-webapps for configuration testing">
-
-    <!-- Set up webapp "test-config-1" -->
-    <mkdir          dir="${build.home}/test-config-1"/>
-    <copy         todir="${build.home}/test-config-1">
-      <fileset      dir="web/test-config-1"/>
-    </copy>
-    <mkdir          dir="${build.home}/test-config-1/WEB-INF/classes"/>
-    <mkdir          dir="${build.home}/test-config-1/WEB-INF/lib"/>
-    <copy         todir="${build.home}/test-config-1/WEB-INF/lib"
-                   file="${jsf-api.jar}"/>
-    <copy         todir="${build.home}/test-config-1/WEB-INF/lib"
-                   file="${build.home}/lib/${name}.jar"/>
-
-    <!-- Set up webapp "test-config-2" by copying "test-config-1" ... -->
-    <mkdir          dir="${build.home}/test-config-2"/>
-    <copy         todir="${build.home}/test-config-2">
-      <fileset      dir="${build.home}/test-config-1"/>
-    </copy>
-    <!-- ... and adding a META-INF/faces-config.xml file in /WEB-INF/classes -->
-    <mkdir          dir="${build.home}/test-config-2/WEB-INF/classes/META-INF"/>
-    <copy        tofile="${build.home}/test-config-2/WEB-INF/classes/META-INF/faces-config.xml"
-                   file="${build.home}/test-config-2/WEB-INF/embed-config.xml"/>
-
-  </target>
-
-  <target name="test.config"
-       depends="prepare.config,test.compile"
-   description="Execute standalone JUnit tests on config subsystem">
-
-    <echo message="Running com.sun.faces.config tests ..."/>
-    <junit printSummary="no" fork="no"
-          haltonfailure="yes" haltonerror="yes">
-
-      <classpath  refid="test.classpath"/>
-      <formatter   type="plain"
-                usefile="false"/>
-      <formatter type="xml" usefile="true" />
-
-      <sysproperty   key="basedir"
-                   value="${build.home}"/>
-
-      <sysproperty   key="java.endorsed.dirs"
-                   value="${endorsed.dirs}"/>
-
-      <sysproperty   key="org.apache.commons.logging.Log"
-                   value="${log.impl}"/>
-      <sysproperty   key="org.apache.commons.logging.simplelog.defaultlog"
-                   value="info"/>
-      <sysproperty   key="org.apache.commons.logging.simplelog.log.com.sun.faces"
-                   value="${log.level}"/>
-      <sysproperty   key="org.apache.commons.logging.simplelog.log.org.apache.commons.digester.Digester"
-                   value="${log.digester}"/>
-      <sysproperty   key="org.apache.commons.logging.simplelog.log.org.apache.commons.digester.Digester.sax"
-                   value="${log.sax}"/>
-      <sysproperty   key="base.dir" value="${basedir}/build"/>
-
-      <batchtest todir="${test.results.dir}">
-        <fileset    dir="${basedir}/build/test"
-               includes="com/sun/faces/config/ConfigureListenerTestCase.class"/>
-      </batchtest>
-    </junit>
-  </target>
-
-   <target name="test.appserver" 
-           depends="init.test,run.junit.test,run.cactus.test.appserver,
-               test.config,run.systest.appserver,run.systest-per-webapp.appserver"
-           description="Run all unit and system tests"/>
-    
-    <target name="run.systest.appserver" description="Run system tests" depends="init.test">
-      <ant dir="${basedir}/systest" inheritall="false" target="test.appserver"/>
-      
+            </replacevalue>
+        </replace>
+        <!--<delete file="${basedir}/merged.xml"/> -->
     </target>
 
-    <target name="run.systest-per-webapp.appserver" description="Run per-webapp system tests" depends="init.test,compile.test">
-      <ant dir="${basedir}/systest-per-webapp" inheritall="false" target="test.appserver"/>
-    </target>
+    <!--
+         ===================================================================
+           Temporary Testing Targets
+         ===================================================================
+    -->
 
-    <target name="run.cactus.test.appserver" depends="init.test,compile.test,jars"
-     description="Run unit tests requiring cactus">
-        <ant antfile="build-tests.xml" target="run.cactus.test.appserver"/>
-    </target>
-    
-    <target name="config.appserver">
-        <replace file="${tomcat.home}/domains/${appserver.domain}/config/server.policy"
-                 token="permission java.util.PropertyPermission &quot;*&quot;, &quot;read&quot;;"
-                 value="permission java.util.PropertyPermission &quot;*&quot;, &quot;read,write&quot;;"/>
-        <concat append="true"
-                destfile="${tomcat.home}/domains/${appserver.domain}/config/server.policy">
-grant {
-    permission java.lang.reflect.ReflectPermission &quot;*&quot;;
-};
-        </concat>
-        <chmod file="${tomcat.home}/domains/${appserver.domain}/config/server.policy"
-               perm="777"/>
-        <replace file="${tomcat.home}/domains/${appserver.domain}/config/domain.xml"
-                 token="keep-alive max-connections=&quot;250&quot; thread-count=&quot;1&quot; timeout-in-seconds=&quot;30&quot;"
-                 value="keep-alive max-connections=&quot;250&quot; thread-count=&quot;1&quot; timeout-in-seconds=&quot;70&quot;"/>
-    </target>
+   
     
 </project>

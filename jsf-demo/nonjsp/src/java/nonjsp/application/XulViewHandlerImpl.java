@@ -1,45 +1,35 @@
 /* 
- * $Id: XulViewHandlerImpl.java,v 1.4 2005/08/22 22:09:22 ofung Exp $ 
- */ 
-
-
-/*
- * The contents of this file are subject to the terms
- * of the Common Development and Distribution License
- * (the License). You may not use this file except in
- * compliance with the License.
- * 
- * You can obtain a copy of the License at
- * https://javaserverfaces.dev.java.net/CDDL.html or
- * legal/CDDLv1.0.txt. 
- * See the License for the specific language governing
- * permission and limitations under the License.
- * 
- * When distributing Covered Code, include this CDDL
- * Header Notice in each file and include the License file
- * at legal/CDDLv1.0.txt.    
- * If applicable, add the following below the CDDL Header,
- * with the fields enclosed by brackets [] replaced by
- * your own identifying information:
- * "Portions Copyrighted [year] [name of copyright owner]"
- * 
- * [Name of File] [ver.__] [Date]
- * 
- * Copyright 2005 Sun Microsystems Inc. All Rights Reserved
+ * $Id: XulViewHandlerImpl.java,v 1.5 2005/12/14 22:27:32 rlubke Exp $ 
  */
 
+/*
+* The contents of this file are subject to the terms
+* of the Common Development and Distribution License
+* (the License). You may not use this file except in
+* compliance with the License.
+* 
+* You can obtain a copy of the License at
+* https://javaserverfaces.dev.java.net/CDDL.html or
+* legal/CDDLv1.0.txt. 
+* See the License for the specific language governing
+* permission and limitations under the License.
+* 
+* When distributing Covered Code, include this CDDL
+* Header Notice in each file and include the License file
+* at legal/CDDLv1.0.txt.    
+* If applicable, add the following below the CDDL Header,
+* with the fields enclosed by brackets [] replaced by
+* your own identifying information:
+* "Portions Copyrighted [year] [name of copyright owner]"
+* 
+* [Name of File] [ver.__] [Date]
+* 
+* Copyright 2005 Sun Microsystems Inc. All Rights Reserved
+*/
 
 // XulViewHandlerImpl.java 
 
 package nonjsp.application;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.util.Enumeration;
-import java.util.Iterator;
-import java.util.Locale;
-import java.util.Map;
 
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
@@ -54,6 +44,14 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.Locale;
+import java.util.Map;
+
 import org.apache.commons.digester.Digester;
 import org.apache.commons.digester.RuleSetBase;
 import org.apache.commons.logging.Log;
@@ -66,7 +64,7 @@ import nonjsp.util.RIConstants;
 /**
  * <B>XulViewHandlerImpl</B> is the Xul non-JSP ViewHandler implementation
  *
- * @version $Id: XulViewHandlerImpl.java,v 1.4 2005/08/22 22:09:22 ofung Exp $ *
+ * @version $Id: XulViewHandlerImpl.java,v 1.5 2005/12/14 22:27:32 rlubke Exp $ *
  * @see javax.faces.application.ViewHandler
  */
 public class XulViewHandlerImpl extends ViewHandler {
@@ -77,9 +75,7 @@ public class XulViewHandlerImpl extends ViewHandler {
     protected static final String CONTENT_TYPE = "text/html";
 
     //PENDING(rogerk) maybe config file?
-    /**
-     * Should we use a validating XML parser to read the configuration file?
-     */
+    /** Should we use a validating XML parser to read the configuration file? */
     protected boolean validate = false;
 
     /**
@@ -90,8 +86,8 @@ public class XulViewHandlerImpl extends ViewHandler {
      * Could be read from config file instead.
      */
     protected String registrations[] = {
-        "-//UIT//DTD UIML 2.0 Draft//EN",
-        "UIML2_0d.dtd"
+          "-//UIT//DTD UIML 2.0 Draft//EN",
+          "UIML2_0d.dtd"
     };
 
 
@@ -108,7 +104,7 @@ public class XulViewHandlerImpl extends ViewHandler {
     // Render the components
     public void renderView(FacesContext context,
                            UIViewRoot viewToRender) throws IOException,
-        FacesException {
+          FacesException {
 
         if (context == null || viewToRender == null) {
             throw new NullPointerException("RenderView: FacesContext is null");
@@ -120,16 +116,16 @@ public class XulViewHandlerImpl extends ViewHandler {
         String viewId = viewToRender.getViewId();
 
         HttpServletResponse response = (HttpServletResponse)
-            (context.getExternalContext().getResponse());
+              (context.getExternalContext().getResponse());
         log.trace("Set ResponseWriter in FacesContext");
 
         RenderKitFactory factory = (RenderKitFactory)
-            FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
+              FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
         RenderKit renderKit = factory.getRenderKit(context,
                                                    RenderKitFactory.HTML_BASIC_RENDER_KIT);
 
         ResponseWriter writer = renderKit.createResponseWriter(
-            response.getWriter(), CONTENT_TYPE, CHAR_ENCODING);
+              response.getWriter(), CONTENT_TYPE, CHAR_ENCODING);
         context.setResponseWriter(writer);
         response.setContentType(CONTENT_TYPE);
 
@@ -142,7 +138,8 @@ public class XulViewHandlerImpl extends ViewHandler {
         Map sessionMap = getSessionMap(context);
         sessionMap.put(RIConstants.REQUEST_LOCALE,
                        context.getViewRoot().getLocale());
-        sessionMap.put(javax.faces.render.ResponseStateManager.VIEW_STATE_PARAM, context.getViewRoot());
+        sessionMap.put(javax.faces.render.ResponseStateManager.VIEW_STATE_PARAM,
+                       context.getViewRoot());
 
     }
 
@@ -160,7 +157,7 @@ public class XulViewHandlerImpl extends ViewHandler {
         RuleSetBase ruleSet = null;
 
         root = new UIViewRoot();
-	root.setRenderKitId(RenderKitFactory.HTML_BASIC_RENDER_KIT);
+        root.setRenderKitId(RenderKitFactory.HTML_BASIC_RENDER_KIT);
 
         if (null == viewId) {
             // PENDING(edburns): need name for default view
@@ -175,7 +172,7 @@ public class XulViewHandlerImpl extends ViewHandler {
 
         try {
             viewInput =
-                context.getExternalContext().getResourceAsStream(viewId);
+                  context.getExternalContext().getResourceAsStream(viewId);
             if (null == viewInput) {
                 throw new NullPointerException();
             }
@@ -246,7 +243,7 @@ public class XulViewHandlerImpl extends ViewHandler {
     public String getActionURL(FacesContext context, String viewId) {
         if (viewId.charAt(0) != '/') {
             throw new IllegalArgumentException(
-                "Illegal view ID " + viewId + ". the ID must begin with '/'");
+                  "Illegal view ID " + viewId + ". the ID must begin with '/'");
         }
         // PENDING(edburns): do a more complete implementation that
         // deals with the vagaries of prefix and suffix mapping.  For
@@ -306,8 +303,8 @@ public class XulViewHandlerImpl extends ViewHandler {
         UIComponent root = context.getViewRoot();
         if (log.isTraceEnabled()) {
             log.trace(
-                "Rendering " + root + " with " + root.getChildCount() +
-                " children");
+                  "Rendering " + root + " with " + root.getChildCount() +
+                  " children");
         }
         renderResponse(context, root);
 
@@ -316,7 +313,7 @@ public class XulViewHandlerImpl extends ViewHandler {
 
     // Render the response content for an individual component
     private void renderResponse(FacesContext context, UIComponent component)
-        throws IOException {
+          throws IOException {
 
         if (log.isTraceEnabled()) {
             log.trace("Render Begin: " + component.getId());
@@ -370,7 +367,7 @@ public class XulViewHandlerImpl extends ViewHandler {
         // Accept-Language header and the find the best match among the 
         // supported locales specified by the client.
         Enumeration e = ((ServletRequest)
-            context.getExternalContext().getRequest()).getLocales();
+              context.getExternalContext().getRequest()).getLocales();
         while (e.hasMoreElements()) {
             Locale perf = (Locale) e.nextElement();
             result = findMatch(context, perf);

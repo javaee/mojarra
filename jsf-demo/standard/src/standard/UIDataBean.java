@@ -1,5 +1,5 @@
 /*
- * $Id: UIDataBean.java,v 1.13 2005/08/22 22:09:43 ofung Exp $
+ * $Id: UIDataBean.java,v 1.14 2005/12/14 22:27:47 rlubke Exp $
  */
 
 /*
@@ -40,19 +40,14 @@ import java.util.Iterator;
 import java.util.List;
 
 
-/**
- * <p>Backing file bean for <code>/UIData.jsp</code> demo.</p>
- */
+/** <p>Backing file bean for <code>/UIData.jsp</code> demo.</p> */
 
 public class UIDataBean {
-
 
     // -------------------------------------------------------- Bound Components
 
 
-    /**
-     * <p>The <code>accountId</code> field for the current row.</p>
-     */
+    /** <p>The <code>accountId</code> field for the current row.</p> */
     private UIInput accountId = null;
 
 
@@ -66,9 +61,7 @@ public class UIDataBean {
     }
 
 
-    /**
-     * <p>The <code>checked</code> field for the current row.</p>
-     */
+    /** <p>The <code>checked</code> field for the current row.</p> */
     private UISelectBoolean checked = null;
 
 
@@ -82,9 +75,7 @@ public class UIDataBean {
     }
 
 
-    /**
-     * <p>The <code>created</code> field for the current row.</p>
-     */
+    /** <p>The <code>created</code> field for the current row.</p> */
     private UISelectBoolean created = null;
 
 
@@ -98,9 +89,7 @@ public class UIDataBean {
     }
 
 
-    /**
-     * <p>The <code>UIData</code> component representing the entire table.</p>
-     */
+    /** <p>The <code>UIData</code> component representing the entire table.</p> */
     private UIData data = null;
 
 
@@ -113,13 +102,10 @@ public class UIDataBean {
         this.data = data;
     }
 
-
     // --------------------------------------------------- Calculated Properties
 
 
-    /**
-     * <p>Return a customized label for the "Click" link.</p>
-     */
+    /** <p>Return a customized label for the "Click" link.</p> */
     public String getClickLabel() {
 
         return ("Click");
@@ -135,9 +121,7 @@ public class UIDataBean {
     }
 
 
-    /**
-     * <p>Return a customized label for the "Press" button.</p>
-     */
+    /** <p>Return a customized label for the "Press" button.</p> */
     public String getPressLabel() {
 
         return ("Press");
@@ -152,22 +136,20 @@ public class UIDataBean {
 
     }
 
-
     // --------------------------------------------------------- Action Handlers
 
 
-    /**
-     * <p>Acknowledge that a row-specific link was clicked.</p>
-     */
+    /** <p>Acknowledge that a row-specific link was clicked.</p> */
     public String click() {
 
         FacesContext context = FacesContext.getCurrentInstance();
         append("click(rowIndex=" + data.getRowIndex() +
                ",accountId=" +
                accountId.getValue() + ")");
-	CustomerBean customer = (CustomerBean) context.getExternalContext().getRequestMap().get("customer");
-	System.out.println("accountId: " + customer.getAccountId());
-	context.getExternalContext().getSessionMap().put("customer", customer);
+        CustomerBean customer = (CustomerBean) context.getExternalContext()
+              .getRequestMap().get("customer");
+        System.out.println("accountId: " + customer.getAccountId());
+        context.getExternalContext().getSessionMap().put("customer", customer);
         clear();
         return ("click");
 
@@ -215,9 +197,9 @@ public class UIDataBean {
         for (int i = 0; i < n; i++) {
             data.setRowIndex(i);
             System.out.println(
-                "delete(accountId=" + accountId.getValue() + ",checked=" +
-                checked.getSubmittedValue() +
-                ")");
+                  "delete(accountId=" + accountId.getValue() + ",checked=" +
+                  checked.getSubmittedValue() +
+                  ")");
             if ("true".equals(checked.getSubmittedValue())) {
                 removes.add(data.getRowData());
                 checked.setSelected(false);
@@ -252,9 +234,9 @@ public class UIDataBean {
         for (int i = 0; i < n; i++) {
             data.setRowIndex(i);
             System.out.println(
-                "delete(accountId=" + accountId.getValue() + ",checked=" +
-                checked.isSelected() +
-                ")");
+                  "delete(accountId=" + accountId.getValue() + ",checked=" +
+                  checked.isSelected() +
+                  ")");
             if (checked.isSelected()) {
                 removes.add(data.getRowData());
                 checked.setSelected(false);
@@ -275,9 +257,7 @@ public class UIDataBean {
     }
 
 
-    /**
-     * <p>Scroll directly to the first page.</p>
-     */
+    /** <p>Scroll directly to the first page.</p> */
     public String first() {
 
         append("first()");
@@ -287,9 +267,7 @@ public class UIDataBean {
     }
 
 
-    /**
-     * <p>Acknowledge that the footer button was pressed.</p>
-     */
+    /** <p>Acknowledge that the footer button was pressed.</p> */
     public String footer() {
 
         FacesContext context = FacesContext.getCurrentInstance();
@@ -300,9 +278,7 @@ public class UIDataBean {
     }
 
 
-    /**
-     * <p>Acknowledge that the header button was pressed.</p>
-     */
+    /** <p>Acknowledge that the header button was pressed.</p> */
     public String header() {
 
         FacesContext context = FacesContext.getCurrentInstance();
@@ -313,9 +289,7 @@ public class UIDataBean {
     }
 
 
-    /**
-     * <p>Scroll directly to the last page.</p>
-     */
+    /** <p>Scroll directly to the last page.</p> */
     public String last() {
 
         append("last()");
@@ -325,9 +299,7 @@ public class UIDataBean {
     }
 
 
-    /**
-     * <p>Scroll forwards to the next page.</p>
-     */
+    /** <p>Scroll forwards to the next page.</p> */
     public String next() {
 
         append("next()");
@@ -338,9 +310,7 @@ public class UIDataBean {
     }
 
 
-    /**
-     * <p>Acknowledge that a row-specific button was pressed.</p>
-     */
+    /** <p>Acknowledge that a row-specific button was pressed.</p> */
     public String press() {
 
         FacesContext context = FacesContext.getCurrentInstance();
@@ -353,9 +323,7 @@ public class UIDataBean {
     }
 
 
-    /**
-     * <p>Scroll backwards to the previous page.</p>
-     */
+    /** <p>Scroll backwards to the previous page.</p> */
     public String previous() {
 
         append("previous()");
@@ -366,9 +334,7 @@ public class UIDataBean {
     }
 
 
-    /**
-     * <p>Handle a "reset" button by clearing local component values.</p>
-     */
+    /** <p>Handle a "reset" button by clearing local component values.</p> */
     public String reset() {
 
         append("reset()");
@@ -393,7 +359,6 @@ public class UIDataBean {
 
     }
 
-
     // --------------------------------------------------------- Private Methods
 
 
@@ -408,7 +373,7 @@ public class UIDataBean {
         //        System.out.println("APPEND:  " + text);
         FacesContext context = FacesContext.getCurrentInstance();
         String message = (String)
-            context.getExternalContext().getRequestMap().get("message");
+              context.getExternalContext().getRequestMap().get("message");
         if (message == null) {
             message = "";
         }
@@ -418,9 +383,7 @@ public class UIDataBean {
     }
 
 
-    /**
-     * <p>Clear the checked state for all customers.</p>
-     */
+    /** <p>Clear the checked state for all customers.</p> */
     private void clear() {
 
         append("clear()");
@@ -433,9 +396,7 @@ public class UIDataBean {
     }
 
 
-    /**
-     * <p>Clear the created state of all customers.</p>
-     */
+    /** <p>Clear the created state of all customers.</p> */
     private void created() {
 
         append("created()");
@@ -471,8 +432,8 @@ public class UIDataBean {
     private List list() {
 
         List list = (List)
-            FacesContext.getCurrentInstance().getExternalContext().
-            getSessionMap().get("list");
+              FacesContext.getCurrentInstance().getExternalContext().
+                    getSessionMap().get("list");
         return (list);
 
     }

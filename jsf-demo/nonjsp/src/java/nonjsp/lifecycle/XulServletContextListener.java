@@ -27,8 +27,6 @@
 
 package nonjsp.lifecycle;
 
-import nonjsp.application.XulViewHandlerImpl;
-
 import javax.faces.FactoryFinder;
 import javax.faces.application.Application;
 import javax.faces.application.ApplicationFactory;
@@ -36,14 +34,16 @@ import javax.faces.application.ViewHandler;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
+import nonjsp.application.XulViewHandlerImpl;
+
 /**
  * <B>XulServletContextListener</B> is a class that sets the
  * XulViewHandler to be the default ViewHandler for the web
  * application.
- *
+ * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: XulServletContextListener.java,v 1.2 2005/08/22 22:09:22 ofung Exp $
+ * @version $Id: XulServletContextListener.java,v 1.3 2005/12/14 22:27:33 rlubke Exp $
  */
 
 public class XulServletContextListener implements ServletContextListener {
@@ -87,9 +87,9 @@ public class XulServletContextListener implements ServletContextListener {
         //Set the ViewHandler to the Xul implementation
         ViewHandler handler = new XulViewHandlerImpl();
         ApplicationFactory factory = (ApplicationFactory)
-            FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
+              FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
         Application application =
-            factory.getApplication();
+              factory.getApplication();
         application.setViewHandler(handler);
     }
 

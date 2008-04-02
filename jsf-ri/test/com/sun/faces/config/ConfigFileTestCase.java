@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigFileTestCase.java,v 1.70 2005/10/19 19:51:29 edburns Exp $
+ * $Id: ConfigFileTestCase.java,v 1.71 2005/12/14 22:27:59 rlubke Exp $
  */
 
 /*
@@ -69,22 +69,21 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
     ConfigParser parser = new ConfigParser();
 
     public static class ConfigParser extends ConfigureListener {
-	public void parseFromStr(ServletContext context, String str, 
-                String testRootDir) throws Exception {
-	    Digester digester = null;
-	    URL url = null;
-	    FacesConfigBean fcb = 
-		(FacesConfigBean) context.getAttribute(FACES_CONFIG_BEAN_KEY);
+        public void parseFromStr(ServletContext context, String str) throws Exception {
+            Digester digester = null;
+            URL url = null;
+            FacesConfigBean fcb =
+                  (FacesConfigBean) context.getAttribute(FACES_CONFIG_BEAN_KEY);
             fcb.getApplication().clearResourceBundles();
-	    
-	    // Step 1, configure a Digester instance we can use
-	    digester = digester(isFeatureEnabled(context, VALIDATE_XML));
-	    
-	    url = (new File(testRootDir)).toURL();
-	    url = new URL(url, str);
-	    parse(digester, url, fcb);
-	    configure(context, fcb);
-	}
+
+            // Step 1, configure a Digester instance we can use
+            digester = digester(isFeatureEnabled(context, VALIDATE_XML));
+
+            url = context.getResource(str);
+            //url = new URL(url, str);
+            parse(digester, url, fcb);
+            configure(context, fcb);
+        }
     }
     
 
@@ -121,12 +120,12 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
     protected void parseConfig(String resource,
                                ServletContext context)
         throws Exception {
-        String testRootDir = getTestRootDir();
+        
         ApplicationFactory aFactory = (ApplicationFactory) FactoryFinder.getFactory(
             FactoryFinder.APPLICATION_FACTORY);
         ApplicationImpl application = (ApplicationImpl) aFactory.getApplication();
         com.sun.faces.application.TestApplicationImpl.clearResourceBundlesFromAssociate(application);
-	parser.parseFromStr(context, resource, testRootDir);
+	parser.parseFromStr(context, resource);
     }
 
 
@@ -136,7 +135,7 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
             FactoryFinder.APPLICATION_FACTORY);
         ApplicationImpl application = (ApplicationImpl) aFactory.getApplication();
         com.sun.faces.application.TestApplicationImpl.clearResourceBundlesFromAssociate(application);
-        parseConfig("WEB-INF/faces-config.xml",
+        parseConfig("/WEB-INF/faces-config.xml",
                     config.getServletContext());
 
         // <application>
@@ -215,7 +214,7 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
             FactoryFinder.APPLICATION_FACTORY);
         ApplicationImpl application = (ApplicationImpl) aFactory.getApplication();
         com.sun.faces.application.TestApplicationImpl.clearResourceBundlesFromAssociate(application);
-        parseConfig("WEB-INF/faces-config-1.0.xml",
+        parseConfig("/WEB-INF/faces-config-1.0.xml",
                     config.getServletContext());
 
         // <application>
@@ -299,7 +298,7 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
             FactoryFinder.APPLICATION_FACTORY);
         ApplicationImpl application = (ApplicationImpl) aFactory.getApplication();
         com.sun.faces.application.TestApplicationImpl.clearResourceBundlesFromAssociate(application);
-        parseConfig("WEB-INF/faces-config-empty.xml",
+        parseConfig("/WEB-INF/faces-config-empty.xml",
                     config.getServletContext());
     }
 
@@ -312,7 +311,7 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
         ApplicationImpl application = (ApplicationImpl) aFactory.getApplication();
         com.sun.faces.application.TestApplicationImpl.clearResourceBundlesFromAssociate(application);
 
-        parseConfig("WEB-INF/faces-config.xml",
+        parseConfig("/WEB-INF/faces-config.xml",
                     config.getServletContext());
 
 	ApplicationAssociate associate = ApplicationAssociate.getInstance(getFacesContext().getExternalContext());
@@ -353,7 +352,7 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
         ApplicationFactory aFactory = (ApplicationFactory) FactoryFinder.getFactory(
             FactoryFinder.APPLICATION_FACTORY);
         ApplicationImpl application = (ApplicationImpl) aFactory.getApplication();
-        parseConfig("WEB-INF/faces-config.xml",
+        parseConfig("/WEB-INF/faces-config.xml",
                     config.getServletContext());
 
         ValueBinding valueBinding =
@@ -409,7 +408,7 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
         ApplicationFactory aFactory = (ApplicationFactory) FactoryFinder.getFactory(
             FactoryFinder.APPLICATION_FACTORY);
         ApplicationImpl application = (ApplicationImpl) aFactory.getApplication();
-        parseConfig("WEB-INF/config-lists-and-maps.xml",
+        parseConfig("/WEB-INF/config-lists-and-maps.xml",
                     config.getServletContext());
 
         ValueBinding valueBinding =
@@ -515,7 +514,7 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
             FactoryFinder.APPLICATION_FACTORY);
         ApplicationImpl application = (ApplicationImpl) aFactory.getApplication();
         com.sun.faces.application.TestApplicationImpl.clearResourceBundlesFromAssociate(application);
-        parseConfig("WEB-INF/faces-config.xml",
+        parseConfig("/WEB-INF/faces-config.xml",
                     config.getServletContext());
         NavigationHandler navHandler = application.getNavigationHandler();
         UIViewRoot page = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
@@ -582,7 +581,7 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
         ApplicationFactory aFactory = (ApplicationFactory) FactoryFinder.getFactory(
             FactoryFinder.APPLICATION_FACTORY);
         ApplicationImpl application = (ApplicationImpl) aFactory.getApplication();
-        parseConfig("config1.xml", config.getServletContext());
+        parseConfig("/config1.xml", config.getServletContext());
     }
 
 
@@ -598,7 +597,7 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
         ApplicationImpl application = (ApplicationImpl) aFactory.getApplication();
         boolean exceptionThrown = false;
         try {
-            parseConfig("config-with-failing-property-conversion.xml",
+            parseConfig("/config-with-failing-property-conversion.xml",
                         config.getServletContext());
         } catch (RuntimeException re) {
             exceptionThrown = true;
@@ -614,7 +613,7 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
             FactoryFinder.LIFECYCLE_FACTORY);
         Lifecycle lifecycle = lFactory.getLifecycle(
             LifecycleFactory.DEFAULT_LIFECYCLE);
-        parseConfig("config1.xml", config.getServletContext());
+        parseConfig("/config1.xml", config.getServletContext());
 
         UIViewRoot page = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
         page.setViewId("/login.jsp");
@@ -667,7 +666,7 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
             FactoryFinder.APPLICATION_FACTORY);
         ApplicationImpl application = (ApplicationImpl) aFactory.getApplication();
         com.sun.faces.application.TestApplicationImpl.clearResourceBundlesFromAssociate(application);
-	parseConfig("WEB-INF/none-scoped-beans.xml", config.getServletContext());
+	parseConfig("/WEB-INF/none-scoped-beans.xml", config.getServletContext());
 	ApplicationAssociate associate = ApplicationAssociate.getInstance(getFacesContext().getExternalContext());
 
 	com.sun.faces.TestBean bean = (com.sun.faces.TestBean)
@@ -683,7 +682,7 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
             FactoryFinder.APPLICATION_FACTORY);
         ApplicationImpl application = (ApplicationImpl) aFactory.getApplication();
         com.sun.faces.application.TestApplicationImpl.clearResourceBundlesFromAssociate(application);
-        parseConfig("WEB-INF/faces-config.xml",
+        parseConfig("/WEB-INF/faces-config.xml",
                     config.getServletContext());
                                                                                         
         ApplicationAssociate associate = ApplicationAssociate.getInstance(getFacesContext().getExternalContext());

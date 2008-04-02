@@ -25,9 +25,7 @@
 
 package characterCombat;
 
-/**
- * <p>CharacterBean represents the data of an individual character</p>
- */
+/** <p>CharacterBean represents the data of an individual character</p> */
 public class CharacterBean {
 
     String name = null;
@@ -44,7 +42,7 @@ public class CharacterBean {
     /**
      * <p>Set the character name</p>
      *
-     * @param character name String
+     * @param name
      */
     public void setName(String name) {
         this.name = name;

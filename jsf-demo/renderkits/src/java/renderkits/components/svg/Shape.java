@@ -28,10 +28,8 @@ package renderkits.components.svg;
 import javax.faces.component.UIOutput;
 
 
-/**
- * <B>Shape</B> is a base class for <code>SVG</code> shapes. 
- */
-                                                                                       
+/** <B>Shape</B> is a base class for <code>SVG</code> shapes. */
+
 public abstract class Shape extends UIOutput {
 
 

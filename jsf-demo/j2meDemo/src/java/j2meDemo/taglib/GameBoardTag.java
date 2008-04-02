@@ -31,14 +31,16 @@ import javax.faces.context.FacesContext;
 import javax.faces.el.ValueBinding;
 import javax.faces.webapp.UIComponentTag;
 
-public class GameBoardTag extends UIComponentTag { 
+public class GameBoardTag extends UIComponentTag {
     private String value;
-   
-    public void setValue(String newValue) { value = newValue; }
 
-    public void setProperties(UIComponent component) { 
-        super.setProperties(component); 
-      
+    public void setValue(String newValue) {
+        value = newValue;
+    }
+
+    public void setProperties(UIComponent component) {
+        super.setProperties(component);
+
         if (value != null) {
             if (isValueReference(value)) {
                 FacesContext context = FacesContext.getCurrentInstance();
@@ -49,16 +51,17 @@ public class GameBoardTag extends UIComponentTag {
                 component.getAttributes().put("value", value);
             }
         }
-    } 
+    }
 
     public void release() {
         value = null;
     }
 
-    public String getRendererType() { 
-        return "j2meDemo.renderkit.GameBoard"; 
-    } 
-    public String getComponentType() { 
-        return "j2meDemo.renderkit.GameBoard"; 
-    }  
+    public String getRendererType() {
+        return "j2meDemo.renderkit.GameBoard";
+    }
+
+    public String getComponentType() {
+        return "j2meDemo.renderkit.GameBoard";
+    }
 }

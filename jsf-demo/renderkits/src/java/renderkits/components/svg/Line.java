@@ -33,25 +33,19 @@ package renderkits.components.svg;
 
 public class Line extends Shape {
 
-    /**
-     * <p>The standard component type for this component.</p>
-     */
+    /** <p>The standard component type for this component.</p> */
     public static final String COMPONENT_TYPE = "Line";
 
 
-    /**
-     * <p>The standard component family for this component.</p>
-     */
+    /** <p>The standard component family for this component.</p> */
     public static final String COMPONENT_FAMILY = "Line";
-    
+
     public Line() {
         super();
     }
 
-    
-    /**
-     * <p>Return the component family for this component.
-     */
+
+    /** <p>Return the component family for this component. */
     public String getFamily() {
 
         return (COMPONENT_FAMILY);

@@ -1,5 +1,5 @@
 /*
- * $Id: SelectManyBean.java,v 1.4 2005/08/22 22:09:43 ofung Exp $
+ * $Id: SelectManyBean.java,v 1.5 2005/12/14 22:27:47 rlubke Exp $
  */
 
 /*
@@ -33,7 +33,6 @@ package standard;
 import javax.faces.model.SelectItem;
 
 import java.io.Serializable;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,7 +44,6 @@ import java.util.List;
 
 public class SelectManyBean implements Serializable {
 
-
     // ------------------------------------------------------------- Constructor
 
 
@@ -53,11 +51,11 @@ public class SelectManyBean implements Serializable {
         System.out.println("SelectManyBean()");
     }
 
-
     // ---------------------------------------------------------- Current Values
 
 
-    private int intValuesArray[] = new int[] { 2, 4, 6 };
+    private int intValuesArray[] = new int[]{2, 4, 6};
+
     public int[] getIntValuesArray() {
         System.out.print("getIntValuesArray(");
         if (intValuesArray != null) {
@@ -68,6 +66,7 @@ public class SelectManyBean implements Serializable {
         System.out.println(")");
         return (this.intValuesArray);
     }
+
     public void setIntValuesArray(int intValuesArray[]) {
         System.out.print("setIntValuesArray(");
         if (intValuesArray != null) {
@@ -81,11 +80,12 @@ public class SelectManyBean implements Serializable {
 
 
     private Integer integerValuesArray[] = new Integer[]
-        {
-            new Integer(3),
-            new Integer(5),
-            new Integer(7),
-        };
+          {
+                new Integer(3),
+                new Integer(5),
+                new Integer(7),
+          };
+
     public Integer[] getIntegerValuesArray() {
         System.out.print("getIntegerValuesArray(");
         if (integerValuesArray != null) {
@@ -96,6 +96,7 @@ public class SelectManyBean implements Serializable {
         System.out.println(")");
         return (this.integerValuesArray);
     }
+
     public void setIntegerValuesArray(Integer integerValuesArray[]) {
         System.out.print("setIntegerValuesArray(");
         if (integerValuesArray != null) {
@@ -109,11 +110,13 @@ public class SelectManyBean implements Serializable {
 
 
     private List integerValuesList = new ArrayList();
+
     {
         integerValuesList.add(new Integer(1));
         integerValuesList.add(new Integer(3));
         integerValuesList.add(new Integer(5));
     }
+
     public List getIntegerValuesList() {
         System.out.print("getIntegerValuesList(");
         if (integerValuesList != null) {
@@ -124,6 +127,7 @@ public class SelectManyBean implements Serializable {
         System.out.println(")");
         return (this.integerValuesList);
     }
+
     public void setIntegerValuesList(List integerValuesList) {
         System.out.print("setIntegerValuesList(");
         if (integerValuesList != null) {
@@ -137,11 +141,12 @@ public class SelectManyBean implements Serializable {
 
 
     private String stringValuesArray[] = new String[]
-        {
-            "String 4",
-            "String 6",
-            "String 8",
-        };
+          {
+                "String 4",
+                "String 6",
+                "String 8",
+          };
+
     public String[] getStringValuesArray() {
         System.out.print("getStringValuesArray(");
         if (stringValuesArray != null) {
@@ -152,6 +157,7 @@ public class SelectManyBean implements Serializable {
         System.out.println(")");
         return (this.stringValuesArray);
     }
+
     public void setStringValuesArray(String stringValuesArray[]) {
         System.out.print("setStringValuesArray(");
         if (stringValuesArray != null) {
@@ -165,11 +171,13 @@ public class SelectManyBean implements Serializable {
 
 
     private List stringValuesList = new ArrayList();
+
     {
         stringValuesList.add("String 3");
         stringValuesList.add("String 6");
         stringValuesList.add("String 9");
     }
+
     public List getStringValuesList() {
         System.out.print("getStringValuesList(");
         if (stringValuesList != null) {
@@ -180,6 +188,7 @@ public class SelectManyBean implements Serializable {
         System.out.println(")");
         return (this.stringValuesList);
     }
+
     public void setStringValuesList(List stringValuesList) {
         System.out.print("setStringValuesList(");
         if (stringValuesList != null) {
@@ -193,30 +202,34 @@ public class SelectManyBean implements Serializable {
 
 
     private SelectManyRegistered registeredArray[] =
-        new SelectManyRegistered[]
-        { new SelectManyRegistered("foo"),
-          new SelectManyRegistered("baz"),
-        };
+          new SelectManyRegistered[]
+                {new SelectManyRegistered("foo"),
+                 new SelectManyRegistered("baz"),
+                };
+
     public SelectManyRegistered[] getRegisteredArray() {
         return (this.registeredArray);
     }
+
     public void setRegisteredArray(SelectManyRegistered registeredArray[]) {
         this.registeredArray = registeredArray;
     }
 
 
     private SelectManyUnregistered unregisteredArray[] =
-        new SelectManyUnregistered[]
-        { new SelectManyUnregistered("foo"),
-          new SelectManyUnregistered("baz"),
-        };
+          new SelectManyUnregistered[]
+                {new SelectManyUnregistered("foo"),
+                 new SelectManyUnregistered("baz"),
+                };
+
     public SelectManyUnregistered[] getUnregisteredArray() {
         return (this.unregisteredArray);
     }
-    public void setUnregisteredArray(SelectManyUnregistered unregisteredArray[]) {
+
+    public void setUnregisteredArray(
+          SelectManyUnregistered unregisteredArray[]) {
         this.unregisteredArray = unregisteredArray;
     }
-
 
     // ----------------------------------------------------------- Options Lists
 

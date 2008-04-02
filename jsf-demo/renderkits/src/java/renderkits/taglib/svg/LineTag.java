@@ -25,18 +25,9 @@
 
 package renderkits.taglib.svg;
 
-import java.io.IOException;
-import javax.el.*;
-import javax.faces.*;
-import javax.faces.component.*;
-import javax.faces.context.*;
-import javax.faces.convert.*;
-import javax.faces.el.*;
-import javax.faces.event.*;
-import javax.faces.validator.*;
-import javax.faces.webapp.*;
+import javax.faces.component.UIComponent;
+import javax.faces.webapp.UIComponentELTag;
 import javax.servlet.jsp.JspException;
-
 
 
 public final class LineTag extends UIComponentELTag {
@@ -44,78 +35,91 @@ public final class LineTag extends UIComponentELTag {
 
     // PROPERTY: onclick
     private javax.el.ValueExpression onclick;
+
     public void setOnclick(javax.el.ValueExpression onclick) {
         this.onclick = onclick;
     }
 
     // PROPERTY: onfocusin
     private javax.el.ValueExpression onfocusin;
+
     public void setOnfocusin(javax.el.ValueExpression onfocusin) {
         this.onfocusin = onfocusin;
     }
 
     // PROPERTY: onfocusout
     private javax.el.ValueExpression onfocusout;
+
     public void setOnfocusout(javax.el.ValueExpression onfocusout) {
         this.onfocusout = onfocusout;
     }
 
     // PROPERTY: onmousedown
     private javax.el.ValueExpression onmousedown;
+
     public void setOnmousedown(javax.el.ValueExpression onmousedown) {
         this.onmousedown = onmousedown;
     }
 
     // PROPERTY: onmousemove
     private javax.el.ValueExpression onmousemove;
+
     public void setOnmousemove(javax.el.ValueExpression onmousemove) {
         this.onmousemove = onmousemove;
     }
 
     // PROPERTY: onmouseout
     private javax.el.ValueExpression onmouseout;
+
     public void setOnmouseout(javax.el.ValueExpression onmouseout) {
         this.onmouseout = onmouseout;
     }
 
     // PROPERTY: onmouseover
     private javax.el.ValueExpression onmouseover;
+
     public void setOnmouseover(javax.el.ValueExpression onmouseover) {
         this.onmouseover = onmouseover;
     }
 
     // PROPERTY: onmouseup
     private javax.el.ValueExpression onmouseup;
+
     public void setOnmouseup(javax.el.ValueExpression onmouseup) {
         this.onmouseup = onmouseup;
     }
 
     // PROPERTY: style
     private javax.el.ValueExpression style;
+
     public void setStyle(javax.el.ValueExpression style) {
         this.style = style;
     }
 
     // PROPERTY: x1
     private javax.el.ValueExpression x1;
+
     public void setX1(javax.el.ValueExpression x1) {
         this.x1 = x1;
     }
-                                                                                                                       
+
     // PROPERTY: y1
     private javax.el.ValueExpression y1;
+
     public void setY1(javax.el.ValueExpression y1) {
         this.y1 = y1;
     }
 
     // PROPERTY: x2
     private javax.el.ValueExpression x2;
+
     public void setX2(javax.el.ValueExpression x2) {
         this.x2 = x2;
     }
-                                                                                                                       
+
     // PROPERTY: y2
     private javax.el.ValueExpression y2;
+
     public void setY2(javax.el.ValueExpression y2) {
         this.y2 = y2;
     }
@@ -135,63 +139,73 @@ public final class LineTag extends UIComponentELTag {
         try {
             line = (renderkits.components.svg.Line) component;
         } catch (ClassCastException cce) {
-            throw new IllegalStateException("Component " + component.toString() + " not expected type.  Expected: renderkits.components.svg.Line.  Perhaps you're missing a tag?");
+            throw new IllegalStateException("Component "
+                                            + component.toString()
+                                            + " not expected type.  Expected: renderkits.components.svg.Line.  Perhaps you're missing a tag?");
         }
 
         if (onclick != null) {
             if (!onclick.isLiteralText()) {
                 line.setValueExpression("onclick", onclick);
             } else {
-                line.getAttributes().put("onclick", onclick.getExpressionString());
+                line.getAttributes()
+                      .put("onclick", onclick.getExpressionString());
             }
         }
         if (onfocusin != null) {
             if (!onfocusin.isLiteralText()) {
                 line.setValueExpression("onfocusin", onfocusin);
             } else {
-                line.getAttributes().put("onfocusin", onfocusin.getExpressionString());
+                line.getAttributes()
+                      .put("onfocusin", onfocusin.getExpressionString());
             }
         }
-        if (onfocusout  != null) {
+        if (onfocusout != null) {
             if (!onfocusout.isLiteralText()) {
                 line.setValueExpression("onfocusout", onfocusout);
             } else {
-                line.getAttributes().put("onfocusout", onfocusout.getExpressionString());
+                line.getAttributes()
+                      .put("onfocusout", onfocusout.getExpressionString());
             }
         }
         if (onmousedown != null) {
             if (!onmousedown.isLiteralText()) {
                 line.setValueExpression("onmousedown", onmousedown);
             } else {
-                line.getAttributes().put("onmousedown", onmousedown.getExpressionString());
+                line.getAttributes()
+                      .put("onmousedown", onmousedown.getExpressionString());
             }
         }
         if (onmousemove != null) {
             if (!onmousemove.isLiteralText()) {
                 line.setValueExpression("onmousemove", onmousemove);
             } else {
-                line.getAttributes().put("onmousemove", onmousemove.getExpressionString());
+                line.getAttributes()
+                      .put("onmousemove", onmousemove.getExpressionString());
             }
         }
         if (onmouseout != null) {
             if (!onmouseout.isLiteralText()) {
                 line.setValueExpression("onmouseout", onmouseout);
             } else {
-                line.getAttributes().put("onmouseout", onmouseout.getExpressionString());
+                line.getAttributes()
+                      .put("onmouseout", onmouseout.getExpressionString());
             }
         }
         if (onmouseover != null) {
             if (!onmouseover.isLiteralText()) {
                 line.setValueExpression("onmouseover", onmouseover);
             } else {
-                line.getAttributes().put("onmouseover", onmouseover.getExpressionString());
+                line.getAttributes()
+                      .put("onmouseover", onmouseover.getExpressionString());
             }
         }
         if (onmouseup != null) {
             if (!onmouseup.isLiteralText()) {
                 line.setValueExpression("onmouseup", onmouseup);
             } else {
-                line.getAttributes().put("onmouseup", onmouseup.getExpressionString());
+                line.getAttributes()
+                      .put("onmouseup", onmouseup.getExpressionString());
             }
         }
         if (style != null) {
@@ -230,6 +244,7 @@ public final class LineTag extends UIComponentELTag {
             }
         }
     }
+
     // Methods From TagSupport
     public int doStartTag() throws JspException {
         try {
@@ -276,7 +291,8 @@ public final class LineTag extends UIComponentELTag {
     }
 
     public String getDebugString() {
-        String result = "id: " + this.getId() + " class: " + this.getClass().getName();
+        String result =
+              "id: " + this.getId() + " class: " + this.getClass().getName();
         return result;
     }
 

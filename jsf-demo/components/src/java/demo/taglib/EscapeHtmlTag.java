@@ -80,8 +80,6 @@
 
 package demo.taglib;
 
-import org.apache.taglibs.standard.lang.support.ExpressionEvaluatorManager;
-
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.tagext.BodyTagSupport;
@@ -95,23 +93,25 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.io.Writer;
 
+import org.apache.taglibs.standard.lang.support.ExpressionEvaluatorManager;
+
 /**
  * <p>Tag handler for &lt;escapeHtml&gt;
  *
  * @author Pierre Delisle
- * @version $Revision: 1.2 $ $Date: 2005/08/22 22:09:00 $
+ * @version $Revision: 1.3 $ $Date: 2005/12/14 22:27:23 $
  */
 public class EscapeHtmlTag extends BodyTagSupport {
 
     //*********************************************************************
     // Instance variables
-    
+
     private String reader;
     private String writer;
-    
+
     //*********************************************************************
     // Constructors
-    
+
     public EscapeHtmlTag() {
         super();
         init();
@@ -122,29 +122,24 @@ public class EscapeHtmlTag extends BodyTagSupport {
         reader = null;
         writer = null;
     }
-    
-    
+
     //*********************************************************************
     // Tag's properties
-    
-    /**
-     * Tag's 'reader' attribute
-     */
+
+    /** Tag's 'reader' attribute */
     public void setReader(String reader) {
         this.reader = reader;
     }
 
 
-    /**
-     * Tag's 'writer' attribute
-     */
+    /** Tag's 'writer' attribute */
     public void setWriter(String reader) {
         this.writer = writer;
     }
-    
+
     //*********************************************************************
     // TagSupport methods
-    
+
     public int doEndTag() throws JspException {
         Reader in;
         Writer out;
@@ -171,22 +166,18 @@ public class EscapeHtmlTag extends BodyTagSupport {
     }
 
 
-    /**
-     * Releases any resources we may have (or inherit)
-     */
+    /** Releases any resources we may have (or inherit) */
     public void release() {
         super.release();
         init();
     }
-    
+
     //*********************************************************************
     // Tag's scific behavior methods
-    
-    /**
-     * Transform
-     */
+
+    /** Transform */
     public void transform(Reader reader, Writer writer)
-        throws JspException {
+          throws JspException {
         int c;
         try {
             writer.write("<pre>");
@@ -205,15 +196,13 @@ public class EscapeHtmlTag extends BodyTagSupport {
                                    "error copying chars", ex);
         }
     }
-    
+
     //*********************************************************************
     // Utility methods
-    
-    /**
-     * Evaluate elexprvalue
-     */
+
+    /** Evaluate elexprvalue */
     private Object eval(String attName, String attValue, Class clazz)
-        throws JspException {
+          throws JspException {
         Object obj = ExpressionEvaluatorManager.evaluate(attName, attValue,
                                                          clazz, this,
                                                          pageContext);

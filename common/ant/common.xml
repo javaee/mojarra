@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="UTF-8"?>
+      
+<!--
+ The contents of this file are subject to the terms
+ of the Common Development and Distribution License
+ (the License). You may not use this file except in
+ compliance with the License.
+ 
+ You can obtain a copy of the License at
+ https://javaserverfaces.dev.java.net/CDDL.html or
+ legal/CDDLv1.0.txt. 
+ See the License for the specific language governing
+ permission and limitations under the License.
+ 
+ When distributing Covered Code, include this CDDL
+ Header Notice in each file and include the License file
+ at legal/CDDLv1.0.txt.    
+ If applicable, add the following below the CDDL Header,
+ with the fields enclosed by brackets [] replaced by
+ your own identifying information:
+ "Portions Copyrighted [year] [name of copyright owner]"
+ 
+ [Name of File] [ver.__] [Date]
+ 
+ Copyright 2005 Sun Microsystems Inc. All Rights Reserved
+-->
+      
+<project name="JSF Common" basedir=".">
+
+    <import
+          file="${jsf.build.home}/common/ant/${container.name}/container.xml"/>
+    <taskdef resource="net/sf/antcontrib/antlib.xml">
+        <classpath>
+            <pathelement
+                  location="${jsf.build.home}/common/lib/ant-contrib.jar"/>
+        </classpath>
+    </taskdef>
+
+    <taskdef name="installerBuilder"
+             classname="org.jvnet.poormans_installer.builder.BuilderTask">
+        <classpath>
+            <pathelement
+                  location="${jsf.build.home}/common/lib/installer-builder.jar"/>
+            <pathelement
+                  location="${jsf.build.home}/common/lib/sfx4j-1.0.jar"/>
+        </classpath>
+    </taskdef>
+
+    <taskdef resource="org/kohsuke/javanettasks.properties">
+        <classpath>
+            <pathelement
+                  location="${jsf.build.home}/common/lib/javanettasks-1.0.5.jar"/>
+        </classpath>
+    </taskdef>
+    <!-- Properties needed throughout the project -->
+
+    <!-- Structural -->
+    <property name="api.dir" value="${jsf.build.home}/jsf-api"/>
+    <property name="impl.dir" value="${jsf.build.home}/jsf-ri"/>
+    <property name="tools.dir" value="${jsf.build.home}/jsf-tools"/>
+    <property name="portlet.dir" value="${jsf.build.home}/jsf-portlet"/>
+    <property name="demo.dir" value="${jsf.build.home}/jsf-demo"/>
+    <property name="impl.test.results.dir"
+              value="${impl.dir}/testresults"/>
+    <property name="api.test.results.dir"
+              value="${api.dir}/testresults"/>
+
+    <!-- Artifacts of interest -->
+    <property name="jsf-api.jar"
+              value="${api.dir}/build/lib/jsf-api.jar"/>
+    <property name="jsf-tools.jar"
+              value="${tools.dir}/build/lib/jsf-tools.jar"/>
+    <property name="jsf-impl.jar"
+              value="${impl.dir}/build/lib/jsf-impl.jar"/>
+    <property name="jsf-portlet.jar"
+              value="${portlet.dir}/portlet-lib/build/lib/jsf-portlet.jar"/>
+    <property name="jsf.test.jar"
+              value="${jsf.build.home}/lib/jsf-extensions-test-time.jar"/>
+    <property name="tlddoc.jar"
+              value="${taglibdoc.home}/tlddoc.jar"/>
+    <property name="installer.jar"
+              value="${jsf.build.home}/common/lib/installer-builder.jar"/>
+    <property name="javanettasks.jar"
+              value="${jsf.build.home}/common/lib/javanettasks-1.0.5.jar"/>
+    <property name="standard.renderkit.xml"
+              value="${api.dir}/doc/standard-html-renderkit.xml"/>
+
+    <!-- Version -->
+    <property name="spec.version" value="1.2"/>
+    <property name="impl.name"
+              value="Sun Microsystems JavaServer Faces Implementation"/>
+    <property name="build.number" value="b12"/>
+    <property name="impl.version" value="1.2-${build.number}"/>
+
+    <!-- Debug args (OVERRIDE IN BUILD.PROPERTIES) -->
+    <property name="debug.jvm.args" value=""/>
+
+    <!-- Test classpaths that are used in multiple places within the project -->
+    <path id="junit.classpath">
+        <pathelement location="${junit.home}/junit.jar}"/>
+    </path>
+
+    <path id="jsf.test.jar.classpath">
+        <pathelement location="${jsf.test.jar}"/>
+    </path>
+
+    <path id="htmlunit.compile.classpath">
+        <path refid="junit.classpath"/>
+        <fileset dir="${htmlunit.home}/lib" includes="htmlunit*.jar,
+                                                      commons-httpclient*.jar"/>
+    </path>
+
+    <path id="htmlunit.runtime.classpath">
+        <path refid="junit.classpath"/>
+        <fileset dir="${htmlunit.home}/lib" includes="*.jar"/>
+    </path>
+
+    <path id="cactus.compile.classpath">
+        <path refid="junit.classpath"/>
+        <fileset dir="${cactus.home}/lib" includes="cactus-*.jar"
+                 excludes="*ant*.jar"/>
+    </path>
+
+    <path id="cactus.runtime.classpath">
+        <path refid="junit.classpath"/>
+        <fileset dir="${cactus.home}/lib" includes="*.jar"/>
+    </path>
+
+    <!-- Common Targets -->
+
+    <!-- Convenience macro for javac -->
+    <macrodef name="jsf.javac">        
+        <attribute name="srcdir"/>
+        <attribute name="destdir"/>
+        <attribute name="includes"
+                   default=""/>
+        <element name="classpath"
+                 implicit="true"
+                 optional="yes"/>
+        <sequential>           
+            <javac srcdir="@{srcdir}"
+                   destdir="@{destdir}"
+                   debug="${compile.debug}"
+                   deprecation="${compile.deprecation}"
+                   source="1.5"
+                   includes="@{includes}">
+                <classpath/>
+            </javac>
+        </sequential>
+    </macrodef>
+
+    <!-- Convenience wrapper for junit -->
+    <macrodef name="jsf.junit">
+        <attribute name="classpath-refid"/>
+        <attribute name="context-path" default=""/>
+        <attribute name="test-results-dir"/>
+        <attribute name="assert.classes" default=""/>
+        <element name="tests"
+                 optional="true"/>
+        <element name="custom-sysproperties"
+                 optional="true"/>
+        <element name="suite"
+                 optional="true"/>
+        <sequential>
+            <junit printsummary="yes"
+                   fork="yes"
+                   haltonfailure="${halt.on.failure}"
+                   haltonerror="${halt.on.failure}">
+                <jvmarg line="${debug.jvm.args}"/>
+                <jvmarg line="@{assert.classes}"/>
+                <classpath refid="@{classpath-refid}"/>
+                <formatter type="plain" usefile="false"/>
+                <formatter type="xml" usefile="true"/>
+                <sysproperty key="host" value="${container.host}"/>
+                <sysproperty key="port" value="${container.port}"/>
+                <sysproperty key="context.path" value="@{context-path}"/>
+                <custom-sysproperties/>
+                <batchtest todir="@{test-results-dir}">
+                    <tests/>
+                </batchtest>
+                <suite/>
+            </junit>
+        </sequential>
+    </macrodef>
+
+    <!-- Conveninece macro for building WARs -->
+    <macrodef name="jsf.war">
+        <attribute name="basedir"/>
+        <attribute name="archive-name"/>
+        <attribute name="webxml"/>
+        <element name="archive-elements" optional="true"/>
+        <sequential>
+            <echo message="Creating archive '@{archive-name}'..."/>
+
+            <jar destfile="@{basedir}/@{archive-name}.war">
+                <zipfileset file="@{webxml}"
+                            prefix="WEB-INF"/>
+                <archive-elements/>
+            </jar>
+            <if>
+                <equals arg1="${build.standalone}" arg2="true"/>
+                <then>
+                    <echo message="Adding dependent libraries..."/>
+
+                    <for list="${jsf-impl.jar},${jsf-api.jar},${webapp.jars}"
+                         param="jar">
+                        <sequential>
+                            <echo message="JAR: @{jar}"/>
+                            <jar destfile="@{basedir}/@{archive-name}.war"
+                                 update="true">
+                                <zipfileset file="@{jar}" prefix="WEB-INF/lib"/>
+                            </jar>
+                        </sequential>
+                    </for>
+
+                </then>
+                <else>
+                    <echo message="Will not package dependent libraries..."/>
+                </else>
+            </if>
+        </sequential>
+    </macrodef>
+
+    <!--
+       Build a JAR file which includes a manifest including
+       information pertaining to Sun's JavaServer Faces
+       implementation.
+    -->
+    <macrodef name="jsf.manifested.jar">
+        <attribute name="jarfile"/>
+        <attribute name="basedir"/>
+        <attribute name="extension-name"/>
+        <sequential>
+            <jar jarfile="@{jarfile}"
+                 basedir="@{basedir}">
+                <manifest>
+                    <attribute name="Specification-Title"
+                               value="JavaServer Faces"/>
+                    <attribute name="Specification-Version"
+                               value="${spec.version}"/>
+                    <attribute name="Implementation-Title"
+                               value="${impl.name}"/>
+                    <attribute name="Implementation-Version"
+                               value="${impl.version}"/>
+                    <attribute name="Implementation-Vendor"
+                               value="Sun Microsystems, Inc."/>
+                    <attribute name="Implementation-Vendor-Id"
+                               value="com.sun"/>
+                    <attribute name="Extension-Name"
+                               value="@{extension-name}"/>
+                </manifest>
+            </jar>
+        </sequential>
+    </macrodef>
+
+    <macrodef name="jsf.generate.html.components">
+        <attribute name="output-dir"/>
+
+        <sequential>
+            <mkdir dir="${tools.dir}/build/classes"/>
+            <javac srcdir="${tools.dir}/src"
+                   destdir="${tools.dir}/build/classes">
+                <classpath>
+                    <path refid="compile.classpath"/>
+                </classpath>
+            </javac>
+            <taskdef name="generateComponents"
+                     classname="com.sun.faces.ant.ComponentGenTask">
+                <classpath>
+                    <pathelement location="${tools.dir}/build/classes"/>
+                </classpath>
+            </taskdef>
+            <generateComponents
+                  generatorConfig="${tools.dir}/conf/HtmlBasicTaglib21.properties"
+                  facesConfig="${standard.renderkit.xml}"
+                  fork="true">
+                <classpath>
+                    <path refid="compile.classpath"/>
+                    <pathelement location="${jsf-api.jar}"/>
+                    <pathelement location="${tools.dir}/build/classes"/>
+                </classpath>
+                <sysproperty key="java.endorsed.dirs" value="${endorsed.dirs}"/>
+            </generateComponents>
+        </sequential>
+    </macrodef>
+    
+    
+</project>

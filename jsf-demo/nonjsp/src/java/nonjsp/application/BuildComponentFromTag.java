@@ -1,5 +1,5 @@
 /*
- * $Id: BuildComponentFromTag.java,v 1.2 2005/08/22 22:09:21 ofung Exp $
+ * $Id: BuildComponentFromTag.java,v 1.3 2005/12/14 22:27:32 rlubke Exp $
  */
 
 /*
@@ -31,26 +31,26 @@
 
 package nonjsp.application;
 
-import org.xml.sax.Attributes;
-
 import javax.faces.component.UIComponent;
+
+import org.xml.sax.Attributes;
 
 /**
  * An instance of this class knows how to build a UIComponent instance
  * from a JSP tag.  This allows locating this knowledge near the tag
  * handlers.  <P>
- *
+ * <p/>
  * The implementation must be modified if the tags change. <P>
- *
+ * <p/>
  * Copy of com.sun.faces.tree.BuildComponentFromTag in order to remove
  * demo dependancy on RI.
- *
+ * <p/>
  * <B>Lifetime And Scope</B> <P>
- *
+ * <p/>
  * Has the same scope as the ViewEngine instance.  The ViewEngine has a
  * BuildComponentFromTag instance. <P>
  *
- * @version $Id: BuildComponentFromTag.java,v 1.2 2005/08/22 22:09:21 ofung Exp $
+ * @version $Id: BuildComponentFromTag.java,v 1.3 2005/12/14 22:27:32 rlubke Exp $
  */
 
 public interface BuildComponentFromTag {

@@ -1,5 +1,5 @@
 /*
- * $Id: ConstantMethodBinding.java,v 1.2 2005/08/22 22:09:22 ofung Exp $
+ * $Id: ConstantMethodBinding.java,v 1.3 2005/12/14 22:27:32 rlubke Exp $
  */
 
 /*
@@ -36,7 +36,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.el.MethodBinding;
 
 public class ConstantMethodBinding extends MethodBinding
-    implements StateHolder {
+      implements StateHolder {
 
     private String outcome = null;
 

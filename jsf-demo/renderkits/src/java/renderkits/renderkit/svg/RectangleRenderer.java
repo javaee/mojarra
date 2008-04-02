@@ -27,17 +27,15 @@
 
 package renderkits.renderkit.svg;
 
-import java.io.IOException;
-import java.util.logging.Logger;
-import java.util.logging.Level;
-
-import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 
+import java.io.IOException;
+import java.util.logging.Level;
+
 /**
- * <B>RectangleRenderer</B> is a class that renders an <code>SVG</code> 
+ * <B>RectangleRenderer</B> is a class that renders an <code>SVG</code>
  * Rectangle.
  */
 
@@ -56,7 +54,6 @@ public class RectangleRenderer extends BaseRenderer {
 
     // Attribute Instance Variables
 
-
     // Relationship Instance Variables
 
     //
@@ -70,7 +67,7 @@ public class RectangleRenderer extends BaseRenderer {
     //
     // General Methods
     //
-    
+
     //
     // Methods From Renderer
     //
@@ -84,61 +81,65 @@ public class RectangleRenderer extends BaseRenderer {
 
 
     public void encodeBegin(FacesContext context, UIComponent component)
-        throws IOException {
+          throws IOException {
         if (context == null || component == null) {
             // PENDING - i18n
-            throw new NullPointerException("'context' and/or 'component' is null");
+            throw new NullPointerException(
+                  "'context' and/or 'component' is null");
         }
         if (logger.isLoggable(Level.FINER)) {
-            logger.log(Level.FINER,"Begin encoding component " +
-                component.getId());
+            logger.log(Level.FINER, "Begin encoding component " +
+                                    component.getId());
         }
         // suppress rendering if "rendered" property on the component is
         // false.
         if (!component.isRendered()) {
             if (logger.isLoggable(Level.FINER)) {
-                logger.log(Level.FINER,"End encoding component " +
-                    component.getId() + " since rendered attribute " +
-                    "is set to false ");
+                logger.log(Level.FINER, "End encoding component "
+                                        +
+                                        component.getId()
+                                        + " since rendered attribute "
+                                        +
+                                        "is set to false ");
             }
             return;
         }
-        
+
         ResponseWriter writer = context.getResponseWriter();
 
         writer.startElement("g", component);
         writer.writeText("\n    ", null);
         writer.startElement("rect", component);
         writeIdAttributeIfNecessary(context, writer, component);
-        String width = (String)component.getAttributes().get("width");
+        String width = (String) component.getAttributes().get("width");
         if (width != null) {
             writer.writeAttribute("width", width, "width");
         }
-        String height = (String)component.getAttributes().get("height");
+        String height = (String) component.getAttributes().get("height");
         if (height != null) {
             writer.writeAttribute("height", height, "height");
         }
-        String x = (String)component.getAttributes().get("x");
+        String x = (String) component.getAttributes().get("x");
         if (x != null) {
             writer.writeAttribute("x", x, "x");
         }
-        String y = (String)component.getAttributes().get("y");
+        String y = (String) component.getAttributes().get("y");
         if (y != null) {
             writer.writeAttribute("y", y, "y");
         }
-        String rx = (String)component.getAttributes().get("rx");
+        String rx = (String) component.getAttributes().get("rx");
         if (rx != null) {
             writer.writeAttribute("rx", rx, "rx");
         }
-        String ry = (String)component.getAttributes().get("ry");
+        String ry = (String) component.getAttributes().get("ry");
         if (ry != null) {
             writer.writeAttribute("ry", ry, "ry");
         }
-        String style = (String)component.getAttributes().get("style");
+        String style = (String) component.getAttributes().get("style");
         if (style != null) {
             writer.writeAttribute("style", style, "style");
         }
-        String onclick = (String)component.getAttributes().get("onclick");
+        String onclick = (String) component.getAttributes().get("onclick");
         if (onclick != null) {
             writer.writeAttribute("onclick", onclick, "onclick");
         }
@@ -147,10 +148,11 @@ public class RectangleRenderer extends BaseRenderer {
     }
 
     public void encodeEnd(FacesContext context, UIComponent component)
-        throws IOException {
+          throws IOException {
         if (context == null || component == null) {
             // PENDING - i18n
-            throw new NullPointerException("'context' and/or 'component' is null");
+            throw new NullPointerException(
+                  "'context' and/or 'component' is null");
         }
         ResponseWriter writer = context.getResponseWriter();
 

@@ -25,9 +25,7 @@
 
 package characterCombat;
 
-/**
- * <p>SpeciesBean represents the data associated with a species type</p>
- */
+/** <p>SpeciesBean represents the data associated with a species type</p> */
 public class SpeciesBean {
 
     String type = null;
@@ -44,7 +42,7 @@ public class SpeciesBean {
     /**
      * <p>Set the species type</p>
      *
-     * @param species type String
+     * @param type - species type
      */
     public void setType(String type) {
         this.type = type;
@@ -64,7 +62,7 @@ public class SpeciesBean {
     /**
      * <p>Set the language associated with the species</p>
      *
-     * @param species language String
+     * @param language - species language
      */
     public void setLanguage(String language) {
         this.language = language;
@@ -84,7 +82,7 @@ public class SpeciesBean {
     /**
      * <p>Set the immortal state associated with the species</p>
      *
-     * @param species immortal boolean
+     * @param immortal - is the species immortal
      */
     public void setImmortal(boolean immortal) {
         this.immortal = immortal;

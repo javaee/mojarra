@@ -26,342 +26,129 @@
 -->
 
 
-<!-- ************ JSF build file ************************************** -->
+<!-- ************ JSF build file ******************************************* -->
 
-<project name="JSF-RI-Systest" default="main" basedir=".">
+<project name="JSF-RI-Systest" default="main" basedir=".">    
 
-  <property name="Name" value="JavaServer Faces RI System Test"/>
-  <property name="name" value="jsf-ri-systest"/>
-  <property name="version" value="20040127"/>
+    <property name="Name" value="JavaServer Faces RI System Test"/>   
 
-<!-- ************ Per user local properties ******************************* -->
-  <property file="${user.home}/build.properties"/>   <!-- User local        -->
-  <property file="build.properties"/>                <!-- Component local   -->
-  <property file="../build.properties"/>             <!-- RI local          -->
-  <property file="../../build.properties"/>          <!-- Project local     -->
+    <!-- ************ Per user local properties **************************** -->
+    <property file="${user.home}/build.properties"/>    
+    <property file="../../build.properties"/>
+    
+    <!-- Deployment handling import -->  
+    <import file="${jsf.build.home}/common/ant/common.xml"/>
 
 
-<!-- ************ Where are we building into? ***************************** -->
+    <!-- ************ Where are we building into? ************************** -->
 
-  <!-- the root of our tomcat -->
+    <property name="test.suite.name" value="jsf-systest"/>  
 
-  <!-- The home directory for Ant -->
-  <property name="ant.home" value="/usr/local/ant"/>
+    <!-- The base directory for compilation targets -->
+    <property name="build.dir" value="${basedir}/build"/>
+    <property name="dist.dir" value="${basedir}/dist"/>
 
-  <!-- The base directory for compilation targets -->
-  <property name="build.home" value="${basedir}/build"/>
-  <property name="dist.home" value="${basedir}/dist"/>
+    <!-- The base directory for system test sources -->
+    <property name="source.dir" value="${basedir}/src"/>   
 
-  <!-- The base directory for the JSF APIs -->
-  <property name="jsf-api.home" value ="${basedir}/../../jsf-api"/>
+    <!-- The base directory for static web files -->
+    <property name="web.dir" value="${basedir}/web"/>
 
-  <!-- The base directory for the JSF RI -->
-  <property name="jsf-ri.home" value ="${basedir}/.."/>
 
-  <!-- The base directory for system test sources -->
-  <property name="source.home" value="${basedir}/src"/>
+    <!-- Context Path of the integration test web-app -->
+    <property name="context.path" value="/${test.suite.name}"/>
 
-  <!-- The base directory for dependent jars -->
-  <property name="lib.home" value="${basedir}/../lib"/>
+    <path id="systest.compile.classpath">
+        <pathelement path="${jsf-api.jar}"/>
+        <pathelement path="${jsf-impl.jar}"/>
+        <path refid="jsf.test.jar.classpath"/>
+        <path refid="compile.classpath"/>
+        <path refid="htmlunit.compile.classpath"/> 
+    </path>
+           
+    <!-- ************ Executable Targets ************************************** -->
 
-  <!-- The base directory for static web files -->
-  <property name="web.home" value="${basedir}/web"/>
 
-  <!-- Name of integration test web-app -->
-  <property name="webapp.name"  value="systest"/>
-
-  <!-- HtmlUnit, installed relative to tomcat.home -->
-  <property name="htmlunit.home" value="${tomcat.home}/../htmlunit-1.4"/>
-
-  <!-- Context Path of the integration test web-app -->
-  <property name="context.path" value="/jsf-systest"/>
-
-  <property name="username" value="tomcat"/>
-  <property name="password" value="tomcat"/>
-
-<!-- ************ Dependencies **** *************************************** -->
-
-  <!-- The locations of necessary jar files -->
-
-  <property name="ant.jar" value="${ant.home}/lib/ant.jar"/>
-  <property name="servlet.jar" value="${tomcat.home}/common/lib/servlet-api.jar"/>
-  <property name="jsp.jar" value="${tomcat.home}/common/lib/jsp-api.jar"/>
-  <property name="jstl.jar" value="${tomcat.home}/jstl/lib/jstl.jar"/>
-  <property name="standard.jar" value="${tomcat.home}/jstl/lib/standard.jar"/>
-  <property name="catalina-ant.jar" value="${tomcat.home}/server/lib/catalina-ant.jar"/>
-  <property name="commons-beanutils.jar" 
-            value="${tomcat.home}/jwsdp-shared/lib/commons-beanutils.jar"/>
-  <property name="commons-collections.jar" 
-            value="${tomcat.home}/jwsdp-shared/lib/commons-collections.jar"/>
-  <property name="commons-logging.jar" 
-            value="${tomcat.home}/jwsdp-shared/lib/commons-logging.jar"/>
-  <property name="commons-digester.jar" 
-            value="${tomcat.home}/jwsdp-shared/lib/commons-digester.jar"/>
-  <property name="jsf-api.jar" value="${jsf-api.home}/build/lib/jsf-api.jar"/>
-  <property name="jsf-api.dtd" value="${jsf-api.home}/build/lib/web-facesconfig_1_1.dtd"/>
-  <property name="jsf-impl.jar"  value="${jsf-ri.home}/build/lib/jsf-impl.jar"/>
-  <property name="jsf-extensions-test-time.jar" value="${basedir}/../../lib/jsf-extensions-test-time.jar"/>
-
-
-
-<!-- ************ Compiler Defaults *************************************** -->
-
-  <!-- Should Java compilations set the 'debug' compiler option? -->
-  <property name="compile.debug" value="true"/>
-
-  <!-- Should Java compilations set the 'deprecation' compiler option? -->
-  <property name="compile.deprecation" value="false"/>
-
-  <!-- Should Java compilations set the 'optimize' compiler option? -->
-  <property name="compile.optimize" value="false"/>
-
-  <!-- Construct compile classpath -->
-  <path id="compile.classpath">
-    <pathelement location="${build.home}/WEB-INF/classes"/>
-    <pathelement location="${ant.jar}"/>
-    <pathelement location="${commons-beanutils.jar}"/>
-    <pathelement location="${commons-collections.jar}"/>
-    <pathelement location="${commons-digester.jar}"/>
-    <pathelement location="${commons-logging.jar}"/>
-    <pathelement location="${jsf-api.jar}"/>
-    <pathelement location="${jsf-impl.jar}"/>
-    <pathelement location="${servlet.jar}"/>
-    <pathelement location="${jsp.jar}"/> 
-    <pathelement location="${jstl.jar}"/>
-    <pathelement location="${junit.jar}"/>
-    <pathelement location="${jsf-extensions-test-time.jar}"/>
-    <pathelement location="${build.home/WEB-INF/classes}"/>
-    <fileset dir="${htmlunit.home}/lib" includes="*.jar"/>
-  </path>
-
-
-  <!-- Catalina Ant Custom Taskdef Classpath -->
-  <path id="catalina-ant.classpath">
-    <pathelement location="${tomcat.home}/server/lib/catalina-ant.jar"/>
-    <pathelement location="${catalina-ant.jar}"/>
-  </path>
-
-
-  <!-- Custom Tomcat Integration -->
-  <taskdef  name="install"  classname="org.apache.catalina.ant.InstallTask">
-      <classpath refid="catalina-ant.classpath" />
-  </taskdef>
-  <taskdef  name="list"     classname="org.apache.catalina.ant.ListTask">
-      <classpath refid="catalina-ant.classpath" />
-  </taskdef>    
-  <taskdef  name="reload"   classname="org.apache.catalina.ant.ReloadTask">
-      <classpath refid="catalina-ant.classpath" />
-  </taskdef>
-  <taskdef  name="remove"   classname="org.apache.catalina.ant.RemoveTask">
-      <classpath refid="catalina-ant.classpath" />
-  </taskdef>
-  <property name="context.path" value="/basic"/>
-  <property name="url"      value="http://localhost:8080/manager"/>
-
-
-<!-- ********** Tomcat Integration Targets ******************************** -->
-
-
-  <target name="install" depends="compile"
-   description="Install webapp on Tomcat">
-    <install url="${url}" username="${username}" password="${password}"
-            path="${context.path}"
-             war="file://${build.home}"/>
-  </target>
-
-
-  <target name="list"
-   description="List installed webapps on Tomcat">
-    <list url="${url}" username="${username}" password="${password}"/>
-  </target>
-
-
-  <target name="reload" depends="compile"
-   description="Reload this webapp on Tomcat">
-    <reload url="${url}" username="${username}" password="${password}"
-            path="${context.path}"/>
-  </target>
-
-  <target name="safe.remove"
-          description="Remove cactus unit test webapp, don't fail on error">
-    <exec executable="ant.bat" os="Windows 2000" failonerror="false">
-      <arg line="-f build.xml -Dusername=${username} -Dpassword=${password} remove"/>
-    </exec>
-    <exec executable="ant" os="SunOS,Linux" failonerror="false">
-      <arg line="-f build.xml remove"/>
-    </exec>
-  </target>
-
-  <target name="remove"
-   description="Remove this webapp from Tomcat">
-    <remove url="${url}" username="${username}" password="${password}"
-            path="${context.path}"/>
-  </target>
-
-
-<!-- ************ Executable Targets ************************************** -->
-
-
-  <target name="init"
-   description="Initialize and evaluate conditionals">
-    <echo message="-------- ${Name} ${version} --------"/>
-  </target>
-
-
-  <target name="prepare" depends="init"
-   description="Prepare build directory">
-
-    <!-- Set up webapp build directory -->
-    <mkdir dir="${build.home}"/>
-    <mkdir dir="${build.home}/WEB-INF"/>
-    <mkdir dir="${build.home}/WEB-INF/classes"/>
-    <mkdir dir="${build.home}/WEB-INF/lib"/>
-    <mkdir dir="${dist.home}"/>
-    <!-- Copy static webapp content -->
-    <copy todir="${build.home}">
-      <fileset dir="${web.home}"/>
-    </copy>
-
-  </target>
-
-  <target name="libraries" depends="prepare" if="build.standalone" unless="jwsdp.deploy">
-    <!-- Copy required libraries -->
-    <copy file="${commons-beanutils.jar}" todir="${build.home}/WEB-INF/lib"/>
-    <copy file="${commons-collections.jar}" todir="${build.home}/WEB-INF/lib"/>
-    <copy file="${commons-digester.jar}" todir="${build.home}/WEB-INF/lib"/>
-    <copy file="${commons-logging.jar}" todir="${build.home}/WEB-INF/lib"/>
-    <copy file="${jstl.jar}" todir="${build.home}/WEB-INF/lib"/>
-    <copy file="${standard.jar}" todir="${build.home}/WEB-INF/lib"/>
-    <copy file="${jsf-api.jar}" todir="${build.home}/WEB-INF/lib"/>
-    <copy file="${jsf-impl.jar}" todir="${build.home}/WEB-INF/lib"/> 
-  </target>
-
-
-  <target name="compile" depends="libraries"
-   description="Just compile the classes">
-
-    <!-- Run javac through everything -->
-    <javac srcdir="${basedir}/../test"
-           destdir="${build.home}/WEB-INF/classes"
-           debug="${compile.debug}"
-     deprecation="${compile.deprecation}"
-        optimize="${compile.optimize}"
-        includes="**/TestingUtil**">
-      <classpath refid="compile.classpath"/>
-    </javac>
-    <javac  srcdir="${source.home}"
-           destdir="${build.home}/WEB-INF/classes"
-             debug="${compile.debug}"
-       deprecation="${compile.deprecation}"
-          optimize="${compile.optimize}">
-      <classpath refid="compile.classpath"/>
-    </javac>
-    <copy todir="${build.home}/WEB-INF/classes">
-        <fileset dir="${source.home}" includes="**/*.properties"/>
-    </copy>
-    <copy todir="${build.home}/WEB-INF/classes">
-        <fileset dir="${source.home}" includes="**/*.xml"/>
-    </copy>
-  </target>
-
-
-  <target name="clean" 
-   description="Clean build and distribution directories">
-    <delete    dir="${build.home}"/>
-    <delete    dir="${dist.home}"/>
-  </target>
-   
-
-  <target name="main" depends="compile"/>
-
-
-<!-- ********** Test Execution Targets ************************************ -->
-
-
-  <target name="test" depends="compile"
-   description="Execute all tests against installed /jsf-systest application">
-    <ant antfile="build-tests.xml" target="test"/>
-
-  </target>
-  
-  <target name="test.appserver" depends="compile, undeploy, deploy,test"
-   description="Execute all tests against installed /jsf-systest application" />
-
-  <target name="build.war.standalone" if="build.standalone">
-      <!-- edburns: remove this deletion when the glassfish regression is fixed 
-      <delete file="${build.home}/WEB-INF/sun-web.xml" /> -->
-      <delete>
-        <fileset dir="${build.home}/WEB-INF/lib">
-          <exclude name="commons-*.jar" />
-          <exclude name="jsf-impl.jar" />
-          <include name="*.jar" />
-        </fileset>
-      </delete>
-  </target>
-
-  <target name="build.war.bundled" unless="build.standalone">
-      <!-- edburns: remove this deletion when the glassfish regression is fixed 
-      <delete file="${build.home}/WEB-INF/sun-web.xml" /> -->
-
-  </target>
-   
-  <target name="build.war" depends="build.war.standalone,build.war.bundled"> 
-      <copy todir="${build.home}/WEB-INF/lib" 
-            file="${jsf-extensions-test-time.jar}" />
-      <jar jarfile="${dist.home}/jsf-systest.war" basedir="${build.home}"/>
-  </target>
-   
-  <target description="Deploy web applications"  name="deploy.autodeploy" depends="build.war"> 
-
-       <copy file="${dist.home}/jsf-systest.war" 
-           todir="${tomcat.home}/domains/domain1/autodeploy}"/>        
-	<sleep seconds="30"/>
-        <ant antfile="build-tests.xml" target="test"/>
-  </target>
-  
-   <target name="deploy" depends="-check-os,build.war" >
-        <exec executable="${exec.name}" failonerror="true">
-            <arg line="${exec.arg.1}"/>
-            <arg line="deploy"/>
-            <arg line="--user ${admin.user}"/>
-            <arg line="--password ${admin.password}"/>       
-            <arg line="--host ${admin.host}"/>
-            <arg line="--port ${admin.port}"/>            
-            <arg line="${dist.home}/jsf-systest.war"/>            
-        </exec>
-      
+    <target name="init"
+            description="Initialize and evaluate conditionals">
+        <echo message="-------- ${test.suite.name} ${impl.version} --------"/>
     </target>
     
-    <target name="undeploy" depends="-check-os">
-        <exec executable="${exec.name}">
-            <arg line="${exec.arg.1}"/>
-            <arg line="undeploy"/>
-            <arg line="--user ${admin.user}"/>
-            <arg line="--password ${admin.password}"/>       
-            <arg line="--host ${admin.host}"/>
-            <arg line="--port ${admin.port}"/>           
-            <arg line="jsf-systest"/>            
-        </exec>
+    
+    <target name="build.war" depends="compile">
+        <jsf.war basedir="${build.dir}"
+                 archive-name="jsf-systest"
+                 webxml="${web.dir}/WEB-INF/web.xml">
+            <archive-elements>
+                <zipfileset dir="${source.dir}"
+                            includes="**/*.properties,**/*.xml"
+                            prefix="WEB-INF/classes"/>
+                <zipfileset dir="${build.dir}/classes"
+                            prefix="WEB-INF/classes"/>
+                <zipfileset dir="${web.dir}"/>
+            </archive-elements>
+        </jsf.war>
+    </target>
+
+
+    <target name="compile" depends=""
+            description="Just compile the classes">
+        <mkdir dir="${build.dir}/classes"/>
+        <!-- Run javac through everything -->
+        <jsf.javac srcdir="${impl.dir}/test"
+                   destdir="${build.dir}/classes"
+                   includes="**/TestingUtil**">
+            <classpath>
+                <path refid="systest.compile.classpath"/>                   
+            </classpath>              
+        </jsf.javac>
+        <jsf.javac srcdir="${source.dir}"
+                   destdir="${build.dir}/classes">
+            <classpath>
+                <path refid="systest.compile.classpath"/>                   
+            </classpath>
+        </jsf.javac>                         
+    </target>
+
+
+    <target name="clean"
+            description="Clean build and distribution directories">
+        <delete dir="${build.dir}"/>
+        <delete dir="${dist.dir}"/>
+    </target>
+
+
+    <target name="main" depends="init,compile"/>
+
+
+    <!-- ********** Test Execution Targets ************************************ -->
+
+
+    <target name="test" depends="init,build.war"
+            description="Execute all tests against installed /jsf-systest application">
        
+        <antcall target="undeploy"/>
+        <antcall target="deploy"/>
+        <ant antfile="build-tests.xml" target="test"/>
+        <antcall target="undeploy"/>
+        
+    </target>  
+    
+    <target name="test.with.nodeploy"
+            description="The same as 'test', but with no deployment">
+        <ant antfile="build-tests.xml" target="test"/>    
     </target>
-   
-    <target name="-check-os">
-      <condition property="exec.name" value="cmd.exe">
-        <os family="windows"/>
-      </condition>
-      <condition property="exec.arg.1" value="/c ${tomcat.home}/bin/asadmin">
-        <os family="windows"/>
-      </condition>
-      <property name="exec.name" value="${tomcat.home}/bin/asadmin"/>
-      <property name="exec.arg.1" value=""/>
+
+    <target name="deploy" 
+            description="Deploy the jsf-systest application">
+        <deploy.artifact artifact="${build.dir}/jsf-systest.war"
+                appName="jsf-systest"/>
     </target>
     
-  <target name="passthru" depends="compile"
-   description="Convenience target to execute just one test.  Just change the nested traget attribute.">
-
-    <ant antfile="build-tests.xml" target="test.subview"/>
-
-  </target>
-
-
+    <target name="undeploy" 
+            description="Undeploy the jsf-systest application">
+        <undeploy.artifact artifact="${build.dir}/jsf-systest.war"
+                  appName="jsf-systest"/>
+    </target>
+        
 </project>

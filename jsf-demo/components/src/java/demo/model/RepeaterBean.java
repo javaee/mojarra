@@ -1,5 +1,5 @@
 /*
- * $Id: RepeaterBean.java,v 1.5 2005/12/06 02:17:50 rlubke Exp $
+ * $Id: RepeaterBean.java,v 1.6 2005/12/14 22:27:22 rlubke Exp $
  */
 
 /*
@@ -30,6 +30,8 @@
 package demo.model;
 
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIData;
@@ -37,38 +39,30 @@ import javax.faces.component.UIInput;
 import javax.faces.component.UISelectBoolean;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 
-
-/**
- * <p>Backing file bean for <code>/repeater.jsp</code> demo.</p>
- */
+/** <p>Backing file bean for <code>/repeater.jsp</code> demo.</p> */
 
 public class RepeaterBean {
 
-    
+
     @PostConstruct public void postConstruct() {
         System.out.printf("postConstruct Called\n");
     }
 
-    
+
     @PreDestroy public void preDestroy() {
         System.out.printf("preDestroy Called\n");
     }
 
-
     // -------------------------------------------------------- Bound Components
 
 
-    /**
-     * <p>The <code>accountId</code> field for the current row.</p>
-     */
+    /** <p>The <code>accountId</code> field for the current row.</p> */
     private UIInput accountId = null;
 
 
@@ -82,9 +76,7 @@ public class RepeaterBean {
     }
 
 
-    /**
-     * <p>The <code>checked</code> field for the current row.</p>
-     */
+    /** <p>The <code>checked</code> field for the current row.</p> */
     private UISelectBoolean checked = null;
 
 
@@ -98,9 +90,7 @@ public class RepeaterBean {
     }
 
 
-    /**
-     * <p>The <code>created</code> field for the current row.</p>
-     */
+    /** <p>The <code>created</code> field for the current row.</p> */
     private UISelectBoolean created = null;
 
 
@@ -114,9 +104,7 @@ public class RepeaterBean {
     }
 
 
-    /**
-     * <p>The <code>UIData</code> component representing the entire table.</p>
-     */
+    /** <p>The <code>UIData</code> component representing the entire table.</p> */
     private UIData data = null;
 
 
@@ -129,20 +117,17 @@ public class RepeaterBean {
         this.data = data;
     }
 
-
     // --------------------------------------------------- Calculated Properties
 
 
-    /**
-     * <p>Return the customer list containing the data backing this demo.</p>
-     */
-    public List getCustomers() {
+    /** <p>Return the customer list containing the data backing this demo.</p> */
+    public List<CustomerBean> getCustomers() {
 
-        List list = (List)
-            FacesContext.getCurrentInstance().getExternalContext().
-            getSessionMap().get("list");
+        List<CustomerBean> list = (List<CustomerBean>)
+              FacesContext.getCurrentInstance().getExternalContext().
+                    getSessionMap().get("list");
         if (list == null) {
-            list = new ArrayList();
+            list = new ArrayList<CustomerBean>();
             list.add(new CustomerBean("123456", "Alpha Beta Company",
                                       "ABC", 1234.56));
             list.add(new CustomerBean("445566", "General Services, Ltd.",
@@ -158,30 +143,24 @@ public class RepeaterBean {
                                           ((double) i) * 10.0));
             }
             FacesContext.getCurrentInstance().getExternalContext().
-                getSessionMap().put("list", list);
+                  getSessionMap().put("list", list);
         }
         return (list);
 
     }
 
 
-    /**
-     * <p>Return a calculated label for the per-row button.</p>
-     */
+    /** <p>Return a calculated label for the per-row button.</p> */
     public String getPressLabel() {
 
         return ("Account " + accountId.getValue());
 
     }
 
-
-
     // --------------------------------------------------------- Action Handlers
 
 
-    /**
-     * <p>Acknowledge that a row-specific link was clicked.</p>
-     */
+    /** <p>Acknowledge that a row-specific link was clicked.</p> */
     public String click() {
 
         append("Link clicked for account " + accountId.getValue());
@@ -191,11 +170,11 @@ public class RepeaterBean {
     }
 
     public void clickAction(ActionEvent e) {
-    UIComponent link = e.getComponent();
-    String key = (String) link.getAttributes().get("key");
+        UIComponent link = e.getComponent();
+        String key = (String) link.getAttributes().get("key");
         append("Link clicked for account " + accountId.getValue());
-    append("actionEvent occurred " + key);
-    clear();
+        append("actionEvent occurred " + key);
+        clear();
 
     }
 
@@ -210,7 +189,7 @@ public class RepeaterBean {
         clear();
 
         // Add a new row to the table
-        List list = getCustomers();
+        List<CustomerBean> list = getCustomers();
         if (list != null) {
             CustomerBean customer = new CustomerBean();
             list.add(customer);
@@ -227,9 +206,7 @@ public class RepeaterBean {
     }
 
 
-    /**
-     * <p>Delete any customers who have been checked from the list.</p>
-     */
+    /** <p>Delete any customers who have been checked from the list.</p> */
     public String delete() {
 
         append("DELETE CHECKED button pressed");
@@ -246,7 +223,7 @@ public class RepeaterBean {
             }
         }
         if (removes.size() > 0) {
-            List list = getCustomers();
+            List<CustomerBean> list = getCustomers();
             Iterator remove = removes.iterator();
             while (remove.hasNext()) {
                 list.remove(remove.next());
@@ -258,9 +235,7 @@ public class RepeaterBean {
     }
 
 
-    /**
-     * <p>Scroll directly to the first page.</p>
-     */
+    /** <p>Scroll directly to the first page.</p> */
     public String first() {
 
         append("FIRST PAGE button pressed");
@@ -270,9 +245,7 @@ public class RepeaterBean {
     }
 
 
-    /**
-     * <p>Scroll directly to the last page.</p>
-     */
+    /** <p>Scroll directly to the last page.</p> */
     public String last() {
 
         append("LAST PAGE button pressed");
@@ -282,9 +255,7 @@ public class RepeaterBean {
     }
 
 
-    /**
-     * <p>Scroll forwards to the next page.</p>
-     */
+    /** <p>Scroll forwards to the next page.</p> */
     public String next() {
 
         append("NEXT PAGE button pressed");
@@ -295,9 +266,7 @@ public class RepeaterBean {
     }
 
 
-    /**
-     * <p>Acknowledge that a row-specific button was pressed.</p>
-     */
+    /** <p>Acknowledge that a row-specific button was pressed.</p> */
     public String press() {
 
         append("Button pressed for account " + accountId.getValue());
@@ -307,9 +276,7 @@ public class RepeaterBean {
     }
 
 
-    /**
-     * <p>Scroll backwards to the previous page.</p>
-     */
+    /** <p>Scroll backwards to the previous page.</p> */
     public String previous() {
 
         append("PREVIOUS PAGE button pressed");
@@ -320,9 +287,7 @@ public class RepeaterBean {
     }
 
 
-    /**
-     * <p>Handle a "reset" button by clearing local component values.</p>
-     */
+    /** <p>Handle a "reset" button by clearing local component values.</p> */
     public String reset() {
 
         append("RESET CHANGES button pressed");
@@ -347,7 +312,6 @@ public class RepeaterBean {
 
     }
 
-
     // --------------------------------------------------------- Private Methods
 
 
@@ -367,9 +331,7 @@ public class RepeaterBean {
     }
 
 
-    /**
-     * <p>Clear the checked state for all customers.</p>
-     */
+    /** <p>Clear the checked state for all customers.</p> */
     private void clear() {
 
         int n = count();
@@ -381,9 +343,7 @@ public class RepeaterBean {
     }
 
 
-    /**
-     * <p>Return the actual row count from our underlying data model.</p>
-     */
+    /** <p>Return the actual row count from our underlying data model.</p> */
     private int count() {
 
         int n = data.getRowCount();
@@ -402,9 +362,7 @@ public class RepeaterBean {
     }
 
 
-    /**
-     * <p>Clear the created state of all customers.</p>
-     */
+    /** <p>Clear the created state of all customers.</p> */
     private void created() {
 
         int n = count();
@@ -420,9 +378,9 @@ public class RepeaterBean {
      * <p>Return an <code>Iterator</code> over the customer list, if any;
      * otherwise return <code>null</code>.</p>
      */
-    private Iterator iterator() {
+    private Iterator<CustomerBean> iterator() {
 
-        List list = getCustomers();
+        List<CustomerBean> list = getCustomers();
         if (list != null) {
             return (list.iterator());
         } else {

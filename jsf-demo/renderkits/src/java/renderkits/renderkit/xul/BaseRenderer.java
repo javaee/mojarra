@@ -25,14 +25,6 @@
 
 package renderkits.renderkit.xul;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.logging.Logger;
-import java.util.logging.Level;
-
-
 import javax.faces.component.NamingContainer;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
@@ -44,26 +36,31 @@ import javax.faces.convert.Converter;
 import javax.faces.convert.ConverterException;
 import javax.faces.render.Renderer;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import renderkits.util.Util;
 
 /**
  * <B>BaseRenderer</B> is a base class for implementing renderers
  * for <code>SVGRenderKit</code>.
  */
-                                                                                       
+
 public abstract class BaseRenderer extends Renderer {
 
-                                                                                                   
+
     protected static Logger logger =
-            Util.getLogger(Util.FACES_LOGGER + Util.RENDERKIT_LOGGER);
-                                                                                               
-    /**
-     * @return true if this renderer should render an id attribute.
-     */
+          Util.getLogger(Util.FACES_LOGGER + Util.RENDERKIT_LOGGER);
+
+    /** @return true if this renderer should render an id attribute. */
     protected boolean shouldWriteIdAttribute(UIComponent component) {
         String id;
         return (null != (id = component.getId()) &&
-            !id.startsWith(UIViewRoot.UNIQUE_ID_PREFIX));
+                !id.startsWith(UIViewRoot.UNIQUE_ID_PREFIX));
     }
 
     protected void writeIdAttributeIfNecessary(FacesContext context,
@@ -87,15 +84,16 @@ public abstract class BaseRenderer extends Renderer {
      * Gets value to be rendered and formats it if required. Sets to empty
      * string if value is null.
      */
-    protected String getCurrentValue(FacesContext context, UIComponent component) {
-                                                                                                                    
+    protected String getCurrentValue(FacesContext context,
+                                     UIComponent component) {
+
         if (component instanceof UIInput) {
             Object submittedValue = ((UIInput) component).getSubmittedValue();
             if (submittedValue != null) {
                 return (String) submittedValue;
             }
         }
-                                                                                                                    
+
         String currentValue = null;
         Object currentObj = getValue(component);
         if (currentObj != null) {
@@ -108,10 +106,11 @@ public abstract class BaseRenderer extends Renderer {
      * Renderers override this method in case output value needs to be
      * formatted
      */
-    protected String getFormattedValue(FacesContext context, UIComponent component,
+    protected String getFormattedValue(FacesContext context,
+                                       UIComponent component,
                                        Object currentValue)
-        throws ConverterException {
-                                                                                                                    
+          throws ConverterException {
+
         String result = null;
         // formatting is supported only for components that support
         // converting value attributes.
@@ -121,14 +120,13 @@ public abstract class BaseRenderer extends Renderer {
             }
             return result;
         }
-                                                                                                                    
+
         Converter converter = null;
-                                                                                                                    
+
         // If there is a converter attribute, use it to to ask application
         // instance for a converter with this identifer.
         converter = ((ValueHolder) component).getConverter();
-                                                                                                                    
-                                                                                                                    
+
         // if value is null and no converter attribute is specified, then
         // return a zero length String.
         if (converter == null && currentValue == null) {
@@ -139,13 +137,13 @@ public abstract class BaseRenderer extends Renderer {
             if (currentValue instanceof String) {
                 return (String) currentValue;
             }
-                                                                                                                    
+
             // if converter attribute set, try to acquire a converter
             // using its class type.
-                                                                                                                    
+
             Class converterType = currentValue.getClass();
             converter = Util.getConverterForClass(converterType);
-                                                                                                                    
+
             // if there is no default converter available for this identifier,
             // assume the model type to be String.
             if (converter == null) {
@@ -153,20 +151,20 @@ public abstract class BaseRenderer extends Renderer {
                 return result;
             }
         }
-                                                                                                                    
+
         return converter.getAsString(context, component, currentValue);
-                                                                                                                    
+
     }
 
     protected Object getValue(UIComponent component) {
         if (component instanceof ValueHolder) {
             Object value = ((ValueHolder) component).getValue();
             if (logger.isLoggable(Level.FINE)) {
-                 logger.fine("component.getValue() returned " + value);
+                logger.fine("component.getValue() returned " + value);
             }
             return value;
         }
-                                                                                                                    
+
         return null;
     }
 
@@ -175,15 +173,17 @@ public abstract class BaseRenderer extends Renderer {
      *
      * @param forComponent - the component to search for
      * @param component    - the starting point in which to begin the search
+     *
      * @return the component with the the <code>id</code that matches
      *         <code>forComponent</code> otheriwse null if no match is found.
      */
     private UIComponent getForComponent(FacesContext context,
-                                          String forComponent, UIComponent component) {
+                                        String forComponent,
+                                        UIComponent component) {
         if (null == forComponent || forComponent.length() == 0) {
             return null;
         }
-                                                                                                                    
+
         UIComponent result = null;
         UIComponent currentParent = component;
         try {
@@ -194,8 +194,9 @@ public abstract class BaseRenderer extends Renderer {
                 // If the current component is a NamingContainer,
                 // see if it contains what we're looking for.
                 result = currentParent.findComponent(forComponent);
-                if (result != null)
+                if (result != null) {
                     break;
+                }
                 // if not, start checking further up in the view
                 currentParent = currentParent.getParent();
             }
@@ -203,23 +204,22 @@ public abstract class BaseRenderer extends Renderer {
             // that contains the component we're looking for from the root.
             if (result == null) {
                 result =
-                    findUIComponentBelow(context.getViewRoot(), forComponent);
+                      findUIComponentBelow(context.getViewRoot(), forComponent);
             }
         } catch (Throwable t) {
             //PENDING i18n
-            throw new RuntimeException("Component not found:"+forComponent);
+            throw new RuntimeException("Component not found:" + forComponent);
         }
         // log a message if we were unable to find the specified
         // component (probably a misconfigured 'for' attribute
         if (result == null) {
             if (logger.isLoggable(Level.WARNING)) {
-                 //PENDING i18n
-                 logger.warning("Component not found in view:"+forComponent);
+                //PENDING i18n
+                logger.warning("Component not found in view:" + forComponent);
             }
         }
         return result;
     }
-
 
 
     /**
@@ -229,27 +229,30 @@ public abstract class BaseRenderer extends Renderer {
      *
      * @param startPoint   - the starting point in which to begin the search
      * @param forComponent - the component to search for
+     *
      * @return the component with the the <code>id</code that matches
      *         <code>forComponent</code> otheriwse null if no match is found.
      */
-    protected UIComponent findUIComponentBelow(UIComponent startPoint, String forComponent) {
+    protected UIComponent findUIComponentBelow(UIComponent startPoint,
+                                               String forComponent) {
         UIComponent retComp = null;
         List<UIComponent> children = startPoint.getChildren();
         for (int i = 0, size = children.size(); i < size; i++) {
             UIComponent comp = children.get(i);
-                                                                                                                    
+
             if (comp instanceof NamingContainer) {
                 retComp = comp.findComponent(forComponent);
             }
-                                                                                                                    
+
             if (retComp == null) {
                 if (comp.getChildCount() > 0) {
                     retComp = findUIComponentBelow(comp, forComponent);
                 }
             }
-                                                                                                                    
-            if (retComp != null)
+
+            if (retComp != null) {
                 break;
+            }
         }
         return retComp;
     }
@@ -262,7 +265,7 @@ public abstract class BaseRenderer extends Renderer {
      * @param component <code>UIComponent</code> for which to extract children
      */
     protected Iterator<UIComponent> getChildren(UIComponent component) {
-                                                                                                                       
+
         List<UIComponent> results = new ArrayList<UIComponent>();
         Iterator<UIComponent> kids = component.getChildren().iterator();
         while (kids.hasNext()) {
@@ -272,7 +275,7 @@ public abstract class BaseRenderer extends Renderer {
             }
         }
         return (results.iterator());
-                                                                                                                       
+
     }
 
     /**
@@ -281,14 +284,14 @@ public abstract class BaseRenderer extends Renderer {
      * property is <code>true</code>.</p>
      */
     protected void encodeRecursive(FacesContext context, UIComponent component)
-        throws IOException {
-                                                                                                                       
+          throws IOException {
+
         // suppress rendering if "rendered" property on the component is
         // false.
         if (!component.isRendered()) {
             return;
         }
-                                                                                                                       
+
         // Render this component and its children recursively
         component.encodeBegin(context);
         if (component.getRendersChildren()) {

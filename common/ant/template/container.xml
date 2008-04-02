@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+      
+<!--
+ The contents of this file are subject to the terms
+ of the Common Development and Distribution License
+ (the License). You may not use this file except in
+ compliance with the License.
+ 
+ You can obtain a copy of the License at
+ https://javaserverfaces.dev.java.net/CDDL.html or
+ legal/CDDLv1.0.txt. 
+ See the License for the specific language governing
+ permission and limitations under the License.
+ 
+ When distributing Covered Code, include this CDDL
+ Header Notice in each file and include the License file
+ at legal/CDDLv1.0.txt.    
+ If applicable, add the following below the CDDL Header,
+ with the fields enclosed by brackets [] replaced by
+ your own identifying information:
+ "Portions Copyrighted [year] [name of copyright owner]"
+ 
+ [Name of File] [ver.__] [Date]
+ 
+ Copyright 2005 Sun Microsystems Inc. All Rights Reserved
+-->
+<project name="Test Classpath" basedir=".">
+ 
+    <!--
+        This definition should include all
+        the compile dependencies required
+        by Sun's Javaserver Faces implementation.
+        
+        commons-digester (version 1.5)
+        commons-beanutils (version 1.6.1)
+        commons-logging (latest)
+        commons-collections (version 2.1)
+        Servlet (version 2.5)
+        JSP (version 2.1)
+        JSTL (version 1.2)
+    -->
+    <path id="compile.classpath"/>        
+    
+
+    <!-- 
+       JARs that may be packaged in WEB-INF/lib
+       in order for the implementation to run 
+       properly if they aren't availabe in the
+       container's classloader.  
+   
+       This is a comma separated list of fully
+       qualified JARs. 
+    -->
+    <property name="webapp.jars" value=""/>
+
+
+    <!-- Required Targets/Macrodefs -->
+    
+    <!-- 
+       Deploys the specified artifact to the
+       target container.
+    -->      
+    <macrodef name="deploy.artifact">
+        <attribute name="artifact"
+                   description="The WAR to deploy"/>
+        <attribute name="appName"
+                   description="The name of the application"/>
+        <sequential>
+            <echo message="Provide 'deploy.artifact' implementation"/>
+        </sequential>
+    </macrodef>
+
+    <!-- 
+        Undeploy the specified WAR from the 
+        target container.
+    -->
+    <macrodef name="undeploy.artifact">
+        <attribute name="artifact"
+                   description="The WAR to deploy"/>
+        <attribute name="appName"
+                   description="The name of the application"/>
+        <sequential>
+            <echo message="Provide 'undeploy.artifact' implementation"/>
+        </sequential>
+    </macrodef>
+    
+    <!-- 
+        Perform any configuration of the target container in order
+        to run the unit tests.
+        
+        Ensure the following at a minimum:
+           java.util.PropertyPermission is read,write
+           java.lang.ReflectPermission is "*"                   
+    -->
+    <target name="config.container"
+            description="Perform any container specific configuration necessary for the unit tests to run">
+        <echo message="Provide 'undeploy.artifact' implementation"/>
+    </target>
+
+    <!--
+         Display/Validate any property information necessary to build 
+         successfully.
+     -->
+    <target name="props">
+        <echo message="Provide 'props' implementation"/>            
+    </target>
+    
+    <!--
+        OPTIONAL
+          Update the jsf-impl.jar's manfest file
+          with the versions of the compile time
+          dependencies.
+    -->
+    <target name="update.impl.manifest">
+        <echo message="Provide 'update.impl.manifest' implementation"/>
+    </target>
+
+    <!--
+        OPTIONAL
+          Perform whatever steps are necessary to integrate
+          Sun's JavaServer Faces implementation into the
+          target container.
+    -->
+    <target name="container.deploy" 
+            description="Deploy the JSF Implementation artifacts to the target container.">
+        <echo message="Provide 'container.deploy' implementation"/>    
+    </target>
+    
+</project>

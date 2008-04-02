@@ -1,5 +1,5 @@
 /*
- * $Id: XmlXulRuleSet.java,v 1.2 2005/08/22 22:09:22 ofung Exp $
+ * $Id: XmlXulRuleSet.java,v 1.3 2005/12/14 22:27:32 rlubke Exp $
  */
 
 /*
@@ -31,7 +31,10 @@
 
 package nonjsp.application;
 
-import nonjsp.util.Util;
+import javax.faces.component.UIComponent;
+import javax.faces.component.UIForm;
+import javax.faces.component.UIOutput;
+
 import org.apache.commons.digester.AbstractObjectCreationFactory;
 import org.apache.commons.digester.Digester;
 import org.apache.commons.digester.Rule;
@@ -41,9 +44,7 @@ import org.apache.commons.logging.LogFactory;
 import org.xml.sax.Attributes;
 import org.xml.sax.helpers.AttributesImpl;
 
-import javax.faces.component.UIComponent;
-import javax.faces.component.UIForm;
-import javax.faces.component.UIOutput;
+import nonjsp.util.Util;
 
 /**
  * <p>The set of Digester rules required to parse a Faces Xul (Xml)
@@ -135,7 +136,7 @@ final class UIComponentFactory extends AbstractObjectCreationFactory {
         String className = attributes.getValue("class");
         String id = attributes.getValue("id");
         String value = attributes.getValue("value");
-        
+
         // Instantiate the new object and return it
         try {
             cClass = Util.loadClass(className);
@@ -191,8 +192,8 @@ final class ComponentRule extends Rule {
             attrs.setValue(i, attributes.getValue(qName));
             if (log.isTraceEnabled()) {
                 log.trace(
-                    "ComponentRule: qName: " + qName + " value: " +
-                    attributes.getValue(qName));
+                      "ComponentRule: qName: " + qName + " value: " +
+                      attributes.getValue(qName));
             }
         }
         bc.applyAttributesToComponentInstance(uic, attrs);

@@ -1,5 +1,5 @@
 /*
- * $Id: ViewTagTestCase.java,v 1.8 2005/10/15 01:32:10 edburns Exp $
+ * $Id: ViewTagTestCase.java,v 1.9 2005/12/14 22:27:56 rlubke Exp $
  */
 
 /*
@@ -116,12 +116,7 @@ public class ViewTagTestCase extends AbstractTestCase {
                                 "button");
 
         // press the button
-        page = (HtmlPage) submit.click();
-        ResourceBundle messages = ResourceBundle.getBundle(
-            "javax.faces.Messages",
-            Locale.FRENCH);
-        String message = messages.getString(
-            "javax.faces.validator.RequiredValidator.FAILED");
+        page = (HtmlPage) submit.click();        
         assertTrue(-1 != page.asText().indexOf("Erreur"));
 
     }

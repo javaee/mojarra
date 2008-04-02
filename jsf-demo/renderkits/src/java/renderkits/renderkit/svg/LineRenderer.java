@@ -27,17 +27,15 @@
 
 package renderkits.renderkit.svg;
 
-import java.io.IOException;
-import java.util.logging.Logger;
-import java.util.logging.Level;
-
-import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 
+import java.io.IOException;
+import java.util.logging.Level;
+
 /**
- * <B>LineRenderer</B> is a class that renders an <code>SVG</code> 
+ * <B>LineRenderer</B> is a class that renders an <code>SVG</code>
  * Line.
  */
 
@@ -56,7 +54,6 @@ public class LineRenderer extends BaseRenderer {
 
     // Attribute Instance Variables
 
-
     // Relationship Instance Variables
 
     //
@@ -70,7 +67,7 @@ public class LineRenderer extends BaseRenderer {
     //
     // General Methods
     //
-    
+
     //
     // Methods From Renderer
     //
@@ -83,47 +80,51 @@ public class LineRenderer extends BaseRenderer {
     }
 
     public void encodeBegin(FacesContext context, UIComponent component)
-        throws IOException {
+          throws IOException {
         if (context == null || component == null) {
             // PENDING - i18n
-            throw new NullPointerException("'context' and/or 'component' is null");
+            throw new NullPointerException(
+                  "'context' and/or 'component' is null");
         }
         if (logger.isLoggable(Level.FINER)) {
-            logger.log(Level.FINER,"Begin encoding component " + 
-                component.getId());
+            logger.log(Level.FINER, "Begin encoding component " +
+                                    component.getId());
         }
         // suppress rendering if "rendered" property on the component is
         // false.
         if (!component.isRendered()) {
             if (logger.isLoggable(Level.FINER)) {
-                logger.log(Level.FINER,"End encoding component " + 
-                    component.getId() + " since rendered attribute " +
-                    "is set to false ");
+                logger.log(Level.FINER, "End encoding component "
+                                        +
+                                        component.getId()
+                                        + " since rendered attribute "
+                                        +
+                                        "is set to false ");
             }
             return;
         }
-        
+
         ResponseWriter writer = context.getResponseWriter();
 
         writer.startElement("line", component);
         writeIdAttributeIfNecessary(context, writer, component);
-        String x1 = (String)component.getAttributes().get("x1");
+        String x1 = (String) component.getAttributes().get("x1");
         if (x1 != null) {
             writer.writeAttribute("x1", x1, "x1");
         }
-        String y1 = (String)component.getAttributes().get("y1");
+        String y1 = (String) component.getAttributes().get("y1");
         if (y1 != null) {
             writer.writeAttribute("y1", y1, "y1");
         }
-        String x2 = (String)component.getAttributes().get("x2");
+        String x2 = (String) component.getAttributes().get("x2");
         if (x2 != null) {
             writer.writeAttribute("x2", x2, "x2");
         }
-        String y2 = (String)component.getAttributes().get("y2");
+        String y2 = (String) component.getAttributes().get("y2");
         if (y2 != null) {
             writer.writeAttribute("y2", y2, "y2");
         }
-        String style = (String)component.getAttributes().get("style");
+        String style = (String) component.getAttributes().get("style");
         if (style != null) {
             writer.writeAttribute("style", style, "style");
         }
@@ -131,10 +132,11 @@ public class LineRenderer extends BaseRenderer {
     }
 
     public void encodeEnd(FacesContext context, UIComponent component)
-        throws IOException {
+          throws IOException {
         if (context == null || component == null) {
             // PENDING - i18n
-            throw new NullPointerException("'context' and/or 'component' is null");
+            throw new NullPointerException(
+                  "'context' and/or 'component' is null");
         }
         ResponseWriter writer = context.getResponseWriter();
 

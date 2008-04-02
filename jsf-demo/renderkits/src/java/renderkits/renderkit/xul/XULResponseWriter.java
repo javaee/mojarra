@@ -25,13 +25,13 @@
 
 package renderkits.renderkit.xul;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.io.Writer;
-
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 import javax.faces.context.ResponseWriter;
+
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.io.Writer;
 
 import renderkits.util.Util;
 
@@ -78,10 +78,11 @@ public class XULResponseWriter extends ResponseWriter {
      * @param writer      the <code>ResponseWriter</code>
      * @param contentType the content type.
      * @param encoding    the character encoding.
+     *
      * @throws if the encoding is not recognized.
      */
     public XULResponseWriter(Writer writer, String contentType, String encoding)
-        throws FacesException {
+          throws FacesException {
         this.writer = writer;
 
         if (null != contentType) {
@@ -94,14 +95,13 @@ public class XULResponseWriter extends ResponseWriter {
             Util.validateEncoding(encoding);
         } catch (UnsupportedEncodingException e) {
             // PENDING i18n
-            throw new IllegalArgumentException("Unrecognized Character Encoding.");
+            throw new IllegalArgumentException(
+                  "Unrecognized Character Encoding.");
         }
     }
 
 
-    /**
-     * @return the content type for this ResponseWriter.
-     */
+    /** @return the content type for this ResponseWriter. */
     public String getContentType() {
         return contentType;
     }
@@ -128,9 +128,7 @@ public class XULResponseWriter extends ResponseWriter {
     }
 
 
-    /**
-     * Output the text for the end of a document.
-     */
+    /** Output the text for the end of a document. */
     public void endDocument() throws IOException {
         writer.flush();
     }
@@ -156,15 +154,17 @@ public class XULResponseWriter extends ResponseWriter {
      * @param name                Name of the starting element
      * @param componentForElement The UIComponent instance that applies to this
      *                            element.  This argument may be <code>null</code>.
+     *
      * @throws IOException          if an input/output error occurs
      * @throws NullPointerException if <code>name</code>
      *                              is <code>null</code>
      */
     public void startElement(String name, UIComponent componentForElement)
-        throws IOException {
+          throws IOException {
         if (name == null) {
             // PENDING i18n
-            throw new NullPointerException("Argument Error: One or more parameters are null.");
+            throw new NullPointerException(
+                  "Argument Error: One or more parameters are null.");
         }
         closeStartIfNecessary();
         char firstChar = name.charAt(0);
@@ -175,8 +175,7 @@ public class XULResponseWriter extends ResponseWriter {
                 dontEscape = true;
             }
         }
-        
-        
+
         //PENDING (horwat) using String as a result of Tomcat char writer
         //         ArrayIndexOutOfBoundsException (3584)
         writer.write("<");
@@ -191,6 +190,7 @@ public class XULResponseWriter extends ResponseWriter {
      * <code>startElement()</code>.
      *
      * @param name Name of the element to be ended
+     *
      * @throws IOException          if an input/output error occurs
      * @throws NullPointerException if <code>name</code>
      *                              is <code>null</code>
@@ -198,7 +198,8 @@ public class XULResponseWriter extends ResponseWriter {
     public void endElement(String name) throws IOException {
         if (name == null) {
             // PENDING - i18n
-            throw new NullPointerException("Argument Error: One or more parameters are null.");
+            throw new NullPointerException(
+                  "Argument Error: One or more parameters are null.");
         }
 
         // always turn escaping back on once an element ends
@@ -227,18 +228,21 @@ public class XULResponseWriter extends ResponseWriter {
      * @param componentPropertyName The name of the component property to
      *                              which this attribute argument applies.  This argument may be
      *                              <code>null</code>.
+     *
      * @throws IllegalStateException if this method is called when there
      *                               is no currently open element
      * @throws IOException           if an input/output error occurs
      * @throws NullPointerException  if <code>name</code> is <code>null</code>
      */
-    public void writeAttribute(String name, Object value, String componentPropertyName)
-        throws IOException {
+    public void writeAttribute(String name, Object value,
+                               String componentPropertyName)
+          throws IOException {
         if (name == null) {
             // PENDING i18n
-            throw new NullPointerException("Argument Error: One or more parameters are null.");
+            throw new NullPointerException(
+                  "Argument Error: One or more parameters are null.");
         }
-        if ( value == null ) {
+        if (value == null) {
             return;
         }
 
@@ -258,7 +262,7 @@ public class XULResponseWriter extends ResponseWriter {
             writer.write(" ");
             writer.write(name);
             writer.write("=\"");
-            
+
             // write the attribute value
             Util.writeAttribute(writer, buffer, value.toString());
             writer.write("\"");
@@ -278,6 +282,7 @@ public class XULResponseWriter extends ResponseWriter {
      * @param componentPropertyName The name of the component property to
      *                              which this attribute argument applies.  This argument may be
      *                              <code>null</code>.
+     *
      * @throws IllegalStateException if this method is called when there
      *                               is no currently open element
      * @throws IOException           if an input/output error occurs
@@ -286,10 +291,11 @@ public class XULResponseWriter extends ResponseWriter {
      */
     public void writeURIAttribute(String name, Object value,
                                   String componentPropertyName)
-        throws IOException {
+          throws IOException {
         if (name == null || value == null) {
             // PENDING i18n
-            throw new NullPointerException("Argument Error: One or more parameters are null.");
+            throw new NullPointerException(
+                  "Argument Error: One or more parameters are null.");
         }
 
         writer.write(" ");
@@ -311,6 +317,7 @@ public class XULResponseWriter extends ResponseWriter {
      * first.</p>
      *
      * @param comment Text content of the comment
+     *
      * @throws IOException          if an input/output error occurs
      * @throws NullPointerException if <code>comment</code>
      *                              is <code>null</code>
@@ -318,7 +325,8 @@ public class XULResponseWriter extends ResponseWriter {
     public void writeComment(Object comment) throws IOException {
         if (comment == null) {
             // PENDING i18n
-            throw new NullPointerException("Argument Error: One or more parameters are null.");
+            throw new NullPointerException(
+                  "Argument Error: One or more parameters are null.");
         }
         closeStartIfNecessary();
         writer.write("<!-- ");
@@ -336,15 +344,17 @@ public class XULResponseWriter extends ResponseWriter {
      * @param text                  Text to be written
      * @param componentPropertyName The name of the component property to
      *                              which this text argument applies.  This argument may be <code>null</code>.
+     *
      * @throws IOException          if an input/output error occurs
      * @throws NullPointerException if <code>text</code>
      *                              is <code>null</code>
      */
     public void writeText(Object text, String componentPropertyName)
-        throws IOException {
+          throws IOException {
         if (text == null) {
             // PENDING i18n
-            throw new NullPointerException("Argument Error: One or more parameters are null.");
+            throw new NullPointerException(
+                  "Argument Error: One or more parameters are null.");
         }
         closeStartIfNecessary();
         if (dontEscape) {
@@ -364,6 +374,7 @@ public class XULResponseWriter extends ResponseWriter {
      * using the &amp;gt; &amp;lt; syntax.</p>
      *
      * @param text Text to be written
+     *
      * @throws IOException if an input/output error occurs
      */
     public void writeText(char text) throws IOException {
@@ -389,6 +400,7 @@ public class XULResponseWriter extends ResponseWriter {
      * using the &amp;gt; &amp;lt; syntax.</p>
      *
      * @param text Text to be written
+     *
      * @throws IOException          if an input/output error occurs
      * @throws NullPointerException if <code>text</code>
      *                              is <code>null</code>
@@ -396,7 +408,8 @@ public class XULResponseWriter extends ResponseWriter {
     public void writeText(char text[]) throws IOException {
         if (text == null) {
             // PENDING i18n
-            throw new NullPointerException("Argument Error: One or more parameters are null.");
+            throw new NullPointerException(
+                  "Argument Error: One or more parameters are null.");
         }
         closeStartIfNecessary();
         if (dontEscape) {
@@ -419,6 +432,7 @@ public class XULResponseWriter extends ResponseWriter {
      * @param text Text to be written
      * @param off  Starting offset (zero-relative)
      * @param len  Number of characters to be written
+     *
      * @throws IndexOutOfBoundsException if the calculated starting or
      *                                   ending position is outside the bounds of the character array
      * @throws IOException               if an input/output error occurs
@@ -426,10 +440,11 @@ public class XULResponseWriter extends ResponseWriter {
      *                                   is <code>null</code>
      */
     public void writeText(char text[], int off, int len)
-        throws IOException {
+          throws IOException {
         if (text == null) {
             // PENDING i18n
-            throw new NullPointerException("Argument Error: One or more parameters are null.");
+            throw new NullPointerException(
+                  "Argument Error: One or more parameters are null.");
         }
         if (off < 0 || off > text.length || len < 0 || len > text.length) {
             throw new IndexOutOfBoundsException();
@@ -453,7 +468,7 @@ public class XULResponseWriter extends ResponseWriter {
     public ResponseWriter cloneWithWriter(Writer writer) {
         try {
             return new XULResponseWriter(writer, getContentType(),
-                                          getCharacterEncoding());
+                                         getCharacterEncoding());
         } catch (FacesException e) {
             // This should never happen
             throw new IllegalStateException();
@@ -473,9 +488,7 @@ public class XULResponseWriter extends ResponseWriter {
     }
 
 
-    /**
-     * Methods From <code>java.io.Writer</code>
-     */
+    /** Methods From <code>java.io.Writer</code> */
 
     public void close() throws IOException {
         closeStartIfNecessary();

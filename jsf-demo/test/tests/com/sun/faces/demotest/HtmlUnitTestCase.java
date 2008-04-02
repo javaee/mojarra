@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlUnitTestCase.java,v 1.9 2005/08/22 22:09:54 ofung Exp $
+ * $Id: HtmlUnitTestCase.java,v 1.10 2005/12/14 22:27:49 rlubke Exp $
  */
 
 /*
@@ -150,7 +150,7 @@ public class HtmlUnitTestCase extends TestCase {
     protected void parseSession(HtmlPage page) {
 
         String value =
-            page.getWebResponse().getResponseHeaderValue("Set-Cookie");
+              page.getWebResponse().getResponseHeaderValue("Set-Cookie");
         if (value == null) {
             return;
         }
@@ -169,9 +169,7 @@ public class HtmlUnitTestCase extends TestCase {
     }
 
 
-    /**
-     * Added due to API change in HtmlUnit.
-     */
+    /** Added due to API change in HtmlUnit. */
     protected List getAllElementsOfGivenClass(HtmlPage page, List list,
                                               Class matchClass) {
 

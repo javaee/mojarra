@@ -27,11 +27,6 @@
 
 package renderkits.renderkit.svg;
 
-import java.io.IOException;
-import java.util.Map;
-import java.util.logging.Logger;
-import java.util.logging.Level;
-
 import javax.faces.FactoryFinder;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIForm;
@@ -39,16 +34,18 @@ import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.lifecycle.LifecycleFactory;
-import javax.faces.render.Renderer;
 import javax.faces.webapp.FacesServlet;
-
 import javax.servlet.ServletContext;
+
+import java.io.IOException;
+import java.util.Map;
+import java.util.logging.Level;
 
 /**
  * <B>FormRenderer</B> is a class that renders a <code>UIForm<code> as a Form.
  * This class specifically renders <code>SVG</code> markup - a <code><g></code>
  * element.  The element is rendered with the necessary attributes to facilitate
- * a form submission. 
+ * a form submission.
  */
 
 public class FormRenderer extends BaseRenderer {
@@ -70,7 +67,6 @@ public class FormRenderer extends BaseRenderer {
     //
 
     // Attribute Instance Variables
-
 
     // Relationship Instance Variables
 
@@ -95,11 +91,11 @@ public class FormRenderer extends BaseRenderer {
     //
 
     /**
-     * Determine if this form caused the submission.  
+     * Determine if this form caused the submission.
      * Install a <code>PhaseListener</code> that will listen for
      * <code>XMLHttpRequest(s)</code>.
      *
-     * @see renderkits.renderkit.svg.ResponsePhaseListener
+     * @see ResponsePhaseListener
      */
     public void decode(FacesContext context, UIComponent component) {
         // Was our form the one that was submitted?  If so, we need to set
@@ -107,61 +103,67 @@ public class FormRenderer extends BaseRenderer {
         //
         String clientId = component.getClientId(context);
         if (logger.isLoggable(Level.FINER)) {
-            logger.log(Level.FINER,"Begin decoding component " + component.getId());
+            logger.log(Level.FINER,
+                       "Begin decoding component " + component.getId());
         }
-        Map<String,String> requestParameterMap = context.getExternalContext()
-            .getRequestParameterMap();
+        Map<String, String> requestParameterMap = context.getExternalContext()
+              .getRequestParameterMap();
         if (requestParameterMap.containsKey(clientId)) {
             ((UIForm) component).setSubmitted(true);
         } else {
             ((UIForm) component).setSubmitted(false);
         }
         if (logger.isLoggable(Level.FINER)) {
-            logger.log(Level.FINER,"End decoding component " + component.getId());
+            logger.log(Level.FINER,
+                       "End decoding component " + component.getId());
         }
         getLifecycle(context).addPhaseListener(new ResponsePhaseListener());
     }
 
 
-    /**
-     * Render the starting <code><g></code> element.
-     */
+    /** Render the starting <code><g></code> element. */
     public void encodeBegin(FacesContext context, UIComponent component)
-        throws IOException {
+          throws IOException {
         String styleClass = null;
 
         if (context == null || component == null) {
             //PENDING - i18n
-            throw new NullPointerException("'context' and/or 'component' is null");
+            throw new NullPointerException(
+                  "'context' and/or 'component' is null");
         }
         if (logger.isLoggable(Level.FINER)) {
-            logger.log(Level.FINER,"Begin encoding component " + 
-                component.getId());
+            logger.log(Level.FINER, "Begin encoding component " +
+                                    component.getId());
         }
         // suppress rendering if "rendered" property on the component is
         // false.
         if (!component.isRendered()) {
             if (logger.isLoggable(Level.FINER)) {
-                logger.log(Level.FINER,"Begin encoding component " + 
-                    component.getId() + " since " +
-                    "rendered attribute is set to false ");
+                logger.log(Level.FINER, "Begin encoding component " +
+                                        component.getId() + " since " +
+                                        "rendered attribute is set to false ");
             }
             return;
         }
         ResponseWriter writer = context.getResponseWriter();
 
         // Only render the main script elements once per request.
-        if (!context.getExternalContext().getRequestMap().containsKey(RENDERED_SCRIPT)) {
+        if (!context.getExternalContext().getRequestMap()
+              .containsKey(RENDERED_SCRIPT)) {
             context.getExternalContext().getRequestMap().put(RENDERED_SCRIPT,
-                    Boolean.TRUE);
+                                                             Boolean.TRUE);
             writer.startElement("script", component);
-            writer.writeAttribute("xlink:href", 
-                context.getExternalContext().getRequestContextPath()+"/src/script/http-svg.es", null);
+            writer.writeAttribute("xlink:href",
+                                  context.getExternalContext()
+                                        .getRequestContextPath()
+                                  + "/src/script/http-svg.es", null);
             writer.endElement("script");
             writer.writeText("\n", null);
             writer.startElement("script", component);
             writer.writeAttribute("xlink:href",
-                context.getExternalContext().getRequestContextPath()+"/src/script/lifecycle.es", null);
+                                  context.getExternalContext()
+                                        .getRequestContextPath()
+                                  + "/src/script/lifecycle.es", null);
             writer.endElement("script");
             writer.writeText("\n", null);
         }
@@ -172,11 +174,11 @@ public class FormRenderer extends BaseRenderer {
         writer.writeAttribute("action", getActionStr(context), null);
         String acceptcharset = null;
         if (null != (acceptcharset = (String)
-            component.getAttributes().get("acceptcharset"))) {
-            writer.writeAttribute("accept-charset", acceptcharset, 
-                    "acceptcharset");
+              component.getAttributes().get("acceptcharset"))) {
+            writer.writeAttribute("accept-charset", acceptcharset,
+                                  "acceptcharset");
         }
-        
+
         writer.writeText("\n", null);
     }
 
@@ -190,29 +192,30 @@ public class FormRenderer extends BaseRenderer {
     private String getActionStr(FacesContext context) {
         String viewId = context.getViewRoot().getViewId();
         String actionURL =
-            context.getApplication().getViewHandler().
-            getActionURL(context, viewId);
+              context.getApplication().getViewHandler().
+                    getActionURL(context, viewId);
         return (context.getExternalContext().encodeActionURL(actionURL));
     }
 
 
     /**
-     * Render the necessary <code>ECMAScript</code> to facilitate a 
+     * Render the necessary <code>ECMAScript</code> to facilitate a
      * form submission.  Render the closing <code><g></code> element.
      */
     public void encodeEnd(FacesContext context, UIComponent component)
-        throws IOException {
+          throws IOException {
         if (context == null || component == null) {
             //PENDING - i18n
-            throw new NullPointerException("'context' and/or 'component' is null");
+            throw new NullPointerException(
+                  "'context' and/or 'component' is null");
         }
         // suppress rendering if "rendered" property on the component is
         // false.
         if (!component.isRendered()) {
             if (logger.isLoggable(Level.FINER)) {
-                logger.log(Level.FINER,"End encoding component " +
-                    component.getId() + " since " +
-                    "rendered attribute is set to false ");
+                logger.log(Level.FINER, "End encoding component " +
+                                        component.getId() + " since " +
+                                        "rendered attribute is set to false ");
             }
             return;
         }
@@ -224,30 +227,29 @@ public class FormRenderer extends BaseRenderer {
         writer.endElement("g");
         writer.writeText("\n", null);
         if (logger.isLoggable(Level.FINER)) {
-            logger.log(Level.FINER,"End encoding component " +
-                component.getId());
+            logger.log(Level.FINER, "End encoding component " +
+                                    component.getId());
         }
 
         buildPost(context, component);
     }
 
-    /**
-     * Helper method to render the <code>ECMAScript</code>.
-     */
-    private void buildPost(FacesContext context, UIComponent component) 
-        throws IOException {
+    /** Helper method to render the <code>ECMAScript</code>. */
+    private void buildPost(FacesContext context, UIComponent component)
+          throws IOException {
         ResponseWriter writer = context.getResponseWriter();
         writer.startElement("script", component);
         writer.writeText("<![CDATA[\n", null);
         String formMethodName = component.getClientId(context) + "_post";
-        String formMethodText = "function "+formMethodName+"(evt) {\n";
+        String formMethodText = "function " + formMethodName + "(evt) {\n";
 
         // write out global variables
 
         writer.writeText(formMethodText, null);
         writer.writeText("  var control = evt.target;\n", null);
         writer.writeText("  var form = getForm(control);\n", null);
-        writer.writeText("  var postData = getPostData(form, control);\n", null);
+        writer.writeText("  var postData = getPostData(form, control);\n",
+                         null);
         writer.writeText("  var url = \"", null);
         writer.writeText(getActionStr(context), null);
         writer.writeText("\";\n", null);
@@ -256,27 +258,25 @@ public class FormRenderer extends BaseRenderer {
         writer.writeText("//]]>\n", null);
         writer.endElement("script");
     }
-                                                                                      
-    /**
-     * Helper method used to install <code>PhaseListener</code>.
-     */
+
+    /** Helper method used to install <code>PhaseListener</code>. */
     private Lifecycle getLifecycle(FacesContext context) {
         if (null != lifecycle) {
-          return lifecycle;
+            return lifecycle;
         }
-            LifecycleFactory lifecycleFactory = (LifecycleFactory)
-                FactoryFinder.getFactory(FactoryFinder.LIFECYCLE_FACTORY);
-            String lifecycleId =
-                ((ServletContext) context.getExternalContext().getContext()).getInitParameter
-                (FacesServlet.LIFECYCLE_ID_ATTR);
-            if (lifecycleId == null) {
-                lifecycleId = LifecycleFactory.DEFAULT_LIFECYCLE;
-            }
-            lifecycle = lifecycleFactory.getLifecycle(lifecycleId);
-                                                                                                                       
+        LifecycleFactory lifecycleFactory = (LifecycleFactory)
+              FactoryFinder.getFactory(FactoryFinder.LIFECYCLE_FACTORY);
+        String lifecycleId =
+              ((ServletContext) context.getExternalContext().getContext())
+                    .getInitParameter
+                          (FacesServlet.LIFECYCLE_ID_ATTR);
+        if (lifecycleId == null) {
+            lifecycleId = LifecycleFactory.DEFAULT_LIFECYCLE;
+        }
+        lifecycle = lifecycleFactory.getLifecycle(lifecycleId);
+
         return lifecycle;
     }
-
 
 
 } // end of class FormRenderer

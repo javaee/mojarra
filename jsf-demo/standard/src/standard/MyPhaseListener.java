@@ -1,5 +1,5 @@
 /*
- * $Id: MyPhaseListener.java,v 1.5 2005/08/22 22:09:42 ofung Exp $
+ * $Id: MyPhaseListener.java,v 1.6 2005/12/14 22:27:47 rlubke Exp $
  */
 
 /*
@@ -35,9 +35,7 @@ import javax.faces.event.PhaseId;
 import javax.faces.event.PhaseListener;
 
 
-/**
- * <p>Debugging implementation of <code>PhaseListener</code>.</p>
- */
+/** <p>Debugging implementation of <code>PhaseListener</code>.</p> */
 
 public class MyPhaseListener implements PhaseListener {
 

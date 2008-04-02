@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.2 2005/08/22 22:09:24 ofung Exp $
+ * $Id: Util.java,v 1.3 2005/12/14 22:27:34 rlubke Exp $
  */
 
 /*
@@ -33,15 +33,15 @@ package nonjsp.util;
 
 /**
  * <B>Util</B> is a class ...
- *
+ * <p/>
  * Copy of com.sun.faces.util.Util in order to remove
  * demo dependancy on RI.
- *
- *
+ * <p/>
+ * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.2 2005/08/22 22:09:24 ofung Exp $
- * @see	com.sun.faces.util.Util
+ * @version $Id: Util.java,v 1.3 2005/12/14 22:27:34 rlubke Exp $
+ * @see    com.sun.faces.util.Util
  */
 
 public class Util extends Object {
@@ -55,7 +55,6 @@ public class Util extends Object {
 //
 
     private static long id = 0;
-
 
 //
 // Instance Variables
@@ -76,9 +75,10 @@ public class Util extends Object {
 //
 // Class methods
 //
+
     public static Class loadClass(String name) throws ClassNotFoundException {
         ClassLoader loader =
-            Thread.currentThread().getContextClassLoader();
+              Thread.currentThread().getContextClassLoader();
         if (loader == null) {
             return Class.forName(name);
         } else {

@@ -1,5 +1,5 @@
 /*
- * $Id: LabelRenderer.java,v 1.2 2005/08/22 22:09:33 ofung Exp $
+ * $Id: LabelRenderer.java,v 1.3 2005/12/14 22:27:41 rlubke Exp $
  */
 
 /*
@@ -31,20 +31,15 @@
 
 package renderkits.renderkit.xul;
 
-import java.io.IOException;
-import java.util.logging.Logger;
-import java.util.logging.Level;
-
 import javax.faces.component.NamingContainer;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 
-import renderkits.util.Util;
+import java.io.IOException;
+import java.util.logging.Level;
 
-/**
- * <p><B>LabelRenderer</B> renders Label element.<p>.
- */
+/** <p><B>LabelRenderer</B> renders Label element.<p>. */
 public class LabelRenderer extends BaseRenderer {
 
     //
@@ -57,9 +52,9 @@ public class LabelRenderer extends BaseRenderer {
     //
     // Instance Variables
     //
-    private static final String RENDER_END_ELEMENT = "com.sun.faces.RENDER_END_ELEMENT";
+    private static final String RENDER_END_ELEMENT =
+          "com.sun.faces.RENDER_END_ELEMENT";
     // Attribute Instance Variables
-
 
     // Relationship Instance Variables
 
@@ -84,7 +79,7 @@ public class LabelRenderer extends BaseRenderer {
     //
 
     public void encodeBegin(FacesContext context, UIComponent component)
-        throws IOException {
+          throws IOException {
 
         if (context == null || component == null) {
             // PENDING - i18n
@@ -92,20 +87,21 @@ public class LabelRenderer extends BaseRenderer {
         }
 
         if (logger.isLoggable(Level.FINER)) {
-            logger.log(Level.FINER,"Begin decoding component " + component.getId());
+            logger.log(Level.FINER,
+                       "Begin decoding component " + component.getId());
         }
         ResponseWriter writer = null;
         String forValue = null;
         String styleClass = (String)
-            component.getAttributes().get("styleClass");
+              component.getAttributes().get("styleClass");
 
         // suppress rendering if "rendered" property on the component is
         // false.
         if (!component.isRendered()) {
             if (logger.isLoggable(Level.FINE)) {
-                 logger.fine("End encoding component " +
-                          component.getId() + " since " +
-                          "rendered attribute is set to false ");
+                logger.fine("End encoding component " +
+                            component.getId() + " since " +
+                            "rendered attribute is set to false ");
             }
             return;
         }
@@ -114,73 +110,73 @@ public class LabelRenderer extends BaseRenderer {
         UIComponent forComponent = null;
         String forClientId = null;
         forValue = (String) component.getAttributes().get("for");
-        if ( forValue != null ) {
+        if (forValue != null) {
             forComponent = getForComponent(context, forValue, component);
-            if (forComponent == null ) {
+            if (forComponent == null) {
                 // it could that the component hasn't been created yet. So
                 // construct the clientId for component.
-                forClientId = getForComponentClientId(component, context, 
-                        forValue);
+                forClientId = getForComponentClientId(component, context,
+                                                      forValue);
             } else {
-                forClientId = forComponent.getClientId(context);   
+                forClientId = forComponent.getClientId(context);
             }
         }
-        
+
         // set a temporary attribute on the component to indicate that
         // label end element needs to be rendered.
         component.getAttributes().put(RENDER_END_ELEMENT, "yes");
         writer.writeText("\n", null);
         writer.startElement("box", component);
         String boxClass = (String)
-            component.getAttributes().get("boxClass");
+              component.getAttributes().get("boxClass");
         if (boxClass != null) {
             writer.writeAttribute("class", boxClass, "boxClass");
         }
         String boxStyle = (String)
-            component.getAttributes().get("boxStyle");
+              component.getAttributes().get("boxStyle");
         if (boxStyle != null) {
             writer.writeAttribute("style", boxStyle, "boxStyle");
         }
         String pack = (String)
-            component.getAttributes().get("pack");
+              component.getAttributes().get("pack");
         if (pack != null) {
             writer.writeAttribute("pack", pack, "pack");
         }
         writer.writeText("\n", null);
         writer.startElement("label", component);
         writeIdAttributeIfNecessary(context, writer, component);
-        if ( forClientId != null ) {
+        if (forClientId != null) {
             writer.writeAttribute("control", forClientId, "control");
         }
 
         String style = (String)
-            component.getAttributes().get("style");
+              component.getAttributes().get("style");
         if (null != style) {
             writer.writeAttribute("style", style, "style");
         }
         if (null != styleClass) {
             writer.writeAttribute("class", styleClass, "styleClass");
         }
-        
+
         // render the curentValue as label text if specified.
         String value = getCurrentValue(context, component);
         if (logger.isLoggable(Level.FINE)) {
-             logger.fine("Value to be rendered " + value);
+            logger.fine("Value to be rendered " + value);
         }
         if (value != null && value.length() != 0) {
-	    boolean escape = true;
-	    Object val = null;
-	    if (null != (val = component.getAttributes().get("escape"))) {
-		if (val instanceof Boolean) {
-		    escape = ((Boolean) val).booleanValue();
-		} else if (val instanceof String) {
-		    try {
-			escape =
-			    Boolean.valueOf((String) val).booleanValue();
-		    } catch (Throwable e) {
-		    }
-		}
-	    }
+            boolean escape = true;
+            Object val = null;
+            if (null != (val = component.getAttributes().get("escape"))) {
+                if (val instanceof Boolean) {
+                    escape = ((Boolean) val).booleanValue();
+                } else if (val instanceof String) {
+                    try {
+                        escape =
+                              Boolean.valueOf((String) val).booleanValue();
+                    } catch (Throwable e) {
+                    }
+                }
+            }
             writer.writeAttribute("value", value, "value");
         }
         writer.flush();
@@ -188,7 +184,7 @@ public class LabelRenderer extends BaseRenderer {
 
 
     public void encodeEnd(FacesContext context, UIComponent component)
-        throws IOException {
+          throws IOException {
 
         if (context == null || component == null) {
             // PENDING - i18n
@@ -197,7 +193,7 @@ public class LabelRenderer extends BaseRenderer {
 
         // render label end element if RENDER_END_ELEMENT is set.
         String render = (String) component.getAttributes().get(
-            RENDER_END_ELEMENT);
+              RENDER_END_ELEMENT);
         if ("yes".equals(render)) {
             component.getAttributes().remove(RENDER_END_ELEMENT);
             ResponseWriter writer = context.getResponseWriter();
@@ -206,23 +202,26 @@ public class LabelRenderer extends BaseRenderer {
             writer.endElement("box");
         }
         if (logger.isLoggable(Level.FINER)) {
-            logger.log(Level.FINER,"End encoding component " + component.getId());
+            logger.log(Level.FINER,
+                       "End encoding component " + component.getId());
         }
     }
-    
+
     /**
      * Builds and returns the clientId of the component that is
      * represented by the forValue. Since the component has not been created
      * yet, invoking <code>getClientId(context)</code> is not possible.
      *
      * @param component UIComponent that represents the label
-     * @param context FacesContext for this request
-     * @param forValue String representing the "id" of the component
-     *        that this label represents.
+     * @param context   FacesContext for this request
+     * @param forValue  String representing the "id" of the component
+     *                  that this label represents.
+     *
      * @return String clientId of the component represented by the forValue.
      */
-    private String getForComponentClientId(UIComponent component, 
-            FacesContext context, String forValue) {
+    private String getForComponentClientId(UIComponent component,
+                                           FacesContext context,
+                                           String forValue) {
         String result = null;
         // ASSUMPTION: The component for which this acts as the label
         // as well ths label component are part of the same form.
@@ -237,7 +236,7 @@ public class LabelRenderer extends BaseRenderer {
         if (parent == null) {
             if (logger.isLoggable(Level.WARNING)) {
                 logger.warning("component " + component.getId() +
-                          " must be enclosed inside a form ");
+                               " must be enclosed inside a form ");
             }
             return result;
         }
@@ -252,15 +251,17 @@ public class LabelRenderer extends BaseRenderer {
      *
      * @param forComponent - the component to search for
      * @param component    - the starting point in which to begin the search
+     *
      * @return the component with the the <code>id</code that matches
      *         <code>forComponent</code> otheriwse null if no match is found.
      */
     private UIComponent getForComponent(FacesContext context,
-                                          String forComponent, UIComponent component) {
+                                        String forComponent,
+                                        UIComponent component) {
         if (null == forComponent || forComponent.length() == 0) {
             return null;
         }
-                                                                                                                    
+
         UIComponent result = null;
         UIComponent currentParent = component;
         try {
@@ -271,8 +272,9 @@ public class LabelRenderer extends BaseRenderer {
                 // If the current component is a NamingContainer,
                 // see if it contains what we're looking for.
                 result = currentParent.findComponent(forComponent);
-                if (result != null)
+                if (result != null) {
                     break;
+                }
                 // if not, start checking further up in the view
                 currentParent = currentParent.getParent();
             }
@@ -280,23 +282,22 @@ public class LabelRenderer extends BaseRenderer {
             // that contains the component we're looking for from the root.
             if (result == null) {
                 result =
-                    findUIComponentBelow(context.getViewRoot(), forComponent);
+                      findUIComponentBelow(context.getViewRoot(), forComponent);
             }
         } catch (Throwable t) {
             //PENDING i18n
-            throw new RuntimeException("Component not found:"+forComponent);
+            throw new RuntimeException("Component not found:" + forComponent);
         }
         // log a message if we were unable to find the specified
         // component (probably a misconfigured 'for' attribute
         if (result == null) {
             if (logger.isLoggable(Level.WARNING)) {
                 //PENDING i18n
-                 logger.warning("Component not found in view:"+forComponent);
+                logger.warning("Component not found in view:" + forComponent);
             }
         }
         return result;
     }
-
 
     // The testcase for this class is TestRenderResponsePhase.java
 

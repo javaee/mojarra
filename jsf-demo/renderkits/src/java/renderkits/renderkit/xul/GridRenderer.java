@@ -26,16 +26,13 @@
 package renderkits.renderkit.xul;
 
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 
-import java.util.logging.Logger;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.logging.Level;
 
 /**
@@ -48,7 +45,7 @@ public class GridRenderer extends BaseRenderer {
     //
     // Protected Constants
     //
-    
+
     //
     // Class Variables
     //
@@ -58,7 +55,6 @@ public class GridRenderer extends BaseRenderer {
     //
 
     // Attribute Instance Variables
-
 
     // Relationship Instance Variables
 
@@ -88,7 +84,7 @@ public class GridRenderer extends BaseRenderer {
 
 
     public void encodeBegin(FacesContext context, UIComponent component)
-        throws IOException {
+          throws IOException {
 
         if (context == null || component == null) {
             // PENDING - i18n
@@ -97,27 +93,27 @@ public class GridRenderer extends BaseRenderer {
 
         if (logger.isLoggable(Level.FINER)) {
             logger.log(Level.FINER, "Begin encoding component " +
-                      component.getId());
+                                    component.getId());
         }
-        
+
         // suppress rendering if "rendered" property on the component is
         // false.
         if (!component.isRendered()) {
             if (logger.isLoggable(Level.FINE)) {
-                 logger.fine("End encoding component "
-                          + component.getId() + " since " +
-                          "rendered attribute is set to false ");
+                logger.fine("End encoding component "
+                            + component.getId() + " since " +
+                            "rendered attribute is set to false ");
             }
             return;
         }
-        
+
         // Render the beginning of this panel
         ResponseWriter writer = context.getResponseWriter();
         writer.writeText("\n", null);
         writer.startElement("grid", component);
         writeIdAttributeIfNecessary(context, writer, component);
         String styleClass =
-            (String) component.getAttributes().get("styleClass");
+              (String) component.getAttributes().get("styleClass");
         if (styleClass != null) {
             writer.writeAttribute("class", styleClass, "styleClass");
         }
@@ -139,23 +135,24 @@ public class GridRenderer extends BaseRenderer {
 
 
     public void encodeChildren(FacesContext context, UIComponent component)
-        throws IOException {
+          throws IOException {
 
         if (context == null || component == null) {
             // PENDING - i18n
             throw new NullPointerException("'context' and/or 'component is null");
         }
         if (logger.isLoggable(Level.FINER)) {
-            logger.log(Level.FINER,"Begin encoding children " + component.getId());
+            logger.log(Level.FINER,
+                       "Begin encoding children " + component.getId());
         }
 
         // suppress rendering if "rendered" property on the component is
         // false.
         if (!component.isRendered()) {
             if (logger.isLoggable(Level.FINE)) {
-                 logger.fine("End encoding component " +
-                          component.getId() + " since " +
-                          "rendered attribute is set to false ");
+                logger.fine("End encoding component " +
+                            component.getId() + " since " +
+                            "rendered attribute is set to false ");
             }
             return;
         }
@@ -221,13 +218,14 @@ public class GridRenderer extends BaseRenderer {
         }
         writer.writeText("\n", null);
         if (logger.isLoggable(Level.FINER)) {
-            logger.log(Level.FINER,"End encoding children " + component.getId());
+            logger.log(Level.FINER,
+                       "End encoding children " + component.getId());
         }
     }
 
 
     public void encodeEnd(FacesContext context, UIComponent component)
-        throws IOException {
+          throws IOException {
 
         if (context == null || component == null) {
             // PENDING - i18n
@@ -238,9 +236,9 @@ public class GridRenderer extends BaseRenderer {
         // false.
         if (!component.isRendered()) {
             if (logger.isLoggable(Level.FINE)) {
-                 logger.fine("End encoding component " +
-                          component.getId() + " since " +
-                          "rendered attribute is set to false ");
+                logger.fine("End encoding component " +
+                            component.getId() + " since " +
+                            "rendered attribute is set to false ");
             }
             return;
         }
@@ -251,7 +249,8 @@ public class GridRenderer extends BaseRenderer {
         writer.endElement("grid");
         writer.writeText("\n", null);
         if (logger.isLoggable(Level.FINER)) {
-            logger.log(Level.FINER,"End encoding component " + component.getId());
+            logger.log(Level.FINER,
+                       "End encoding component " + component.getId());
         }
     }
 

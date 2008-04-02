@@ -24,9 +24,9 @@
  */
 
 /*
- * $Header: /cvs/javaserverfaces-sources/jsf-demo/renderkits/src/java/renderkits/util/Base64.java,v 1.2 2005/08/22 22:09:36 ofung Exp $
- * $Revision: 1.2 $
- * $Date: 2005/08/22 22:09:36 $
+ * $Header: /cvs/javaserverfaces-sources/jsf-demo/renderkits/src/java/renderkits/util/Base64.java,v 1.3 2005/12/14 22:27:44 rlubke Exp $
+ * $Revision: 1.3 $
+ * $Date: 2005/12/14 22:27:44 $
  * ====================================================================
  *
  * The Apache Software License, Version 1.1
@@ -102,7 +102,7 @@ import java.io.UnsupportedEncodingException;
  * </p>
  *
  * @@author Jeffrey Rodriguez
- * @@version $Revision: 1.2 $ $Date: 2005/08/22 22:09:36 $
+ * @@version $Revision: 1.3 $ $Date: 2005/12/14 22:27:44 $
  */
 public final class Base64 {
 
@@ -140,14 +140,17 @@ public final class Base64 {
         base64Alphabet['+'] = 62;
         base64Alphabet['/'] = 63;
 
-        for (int i = 0; i <= 25; i++)
+        for (int i = 0; i <= 25; i++) {
             lookUpBase64Alphabet[i] = (byte) ('A' + i);
+        }
 
-        for (int i = 26, j = 0; i <= 51; i++, j++)
+        for (int i = 26, j = 0; i <= 51; i++, j++) {
             lookUpBase64Alphabet[i] = (byte) ('a' + j);
+        }
 
-        for (int i = 52, j = 0; i <= 61; i++, j++)
+        for (int i = 52, j = 0; i <= 61; i++, j++) {
             lookUpBase64Alphabet[i] = (byte) ('0' + j);
+        }
         lookUpBase64Alphabet[62] = (byte) '+';
         lookUpBase64Alphabet[63] = (byte) '/';
 
@@ -180,8 +183,9 @@ public final class Base64 {
             return true;
         }
         for (int i = 0; i < length; i++) {
-            if (!Base64.isBase64(arrayOctect[i]))
+            if (!Base64.isBase64(arrayOctect[i])) {
                 return false;
+            }
         }
         return true;
     }
@@ -194,8 +198,9 @@ public final class Base64 {
      * @@return Base64-encoded array
      */
     public static byte[] encode(byte[] binaryData) {
-        if (binaryData == null)
+        if (binaryData == null) {
             binaryData = EMPTY_BYTE_ARRAY;
+        }
 
         int lengthDataBits = binaryData.length * EIGHTBIT;
         int fewerThan24bits = lengthDataBits % TWENTYFOURBITGROUP;
@@ -204,9 +209,12 @@ public final class Base64 {
 
 
         if (fewerThan24bits != 0) //data not divisible by 24 bit
+        {
             encodedData = new byte[(numberTriplets + 1) * 4];
-        else // 16 or 8 bit
+        } else // 16 or 8 bit
+        {
             encodedData = new byte[numberTriplets * 4];
+        }
 
         byte k = 0, l = 0, b1 = 0, b2 = 0, b3 = 0;
 
@@ -225,18 +233,18 @@ public final class Base64 {
 
             encodedIndex = i * 4;
             byte val1 = ((b1 & SIGN) == 0) ?
-                (byte) (b1 >> 2) : (byte) ((b1) >> 2 ^ 0xc0);
+                        (byte) (b1 >> 2) : (byte) ((b1) >> 2 ^ 0xc0);
 
             byte val2 = ((b2 & SIGN) == 0) ?
-                (byte) (b2 >> 4) : (byte) ((b2) >> 4 ^ 0xf0);
+                        (byte) (b2 >> 4) : (byte) ((b2) >> 4 ^ 0xf0);
             byte val3 = ((b3 & SIGN) == 0) ?
-                (byte) (b3 >> 6) : (byte) ((b3) >> 6 ^ 0xfc);
+                        (byte) (b3 >> 6) : (byte) ((b3) >> 6 ^ 0xfc);
 
             encodedData[encodedIndex] = lookUpBase64Alphabet[val1];
             encodedData[encodedIndex + 1] =
-                lookUpBase64Alphabet[val2 | (k << 4)];
+                  lookUpBase64Alphabet[val2 | (k << 4)];
             encodedData[encodedIndex + 2] =
-                lookUpBase64Alphabet[(l << 2) | val3];
+                  lookUpBase64Alphabet[(l << 2) | val3];
             encodedData[encodedIndex + 3] = lookUpBase64Alphabet[b3 & 0x3f];
         }
 
@@ -247,7 +255,7 @@ public final class Base64 {
             b1 = binaryData[dataIndex];
             k = (byte) (b1 & 0x03);
             byte val1 = ((b1 & SIGN) == 0) ?
-                (byte) (b1 >> 2) : (byte) ((b1) >> 2 ^ 0xc0);
+                        (byte) (b1 >> 2) : (byte) ((b1) >> 2 ^ 0xc0);
             encodedData[encodedIndex] = lookUpBase64Alphabet[val1];
             encodedData[encodedIndex + 1] = lookUpBase64Alphabet[k << 4];
             encodedData[encodedIndex + 2] = PAD;
@@ -259,13 +267,13 @@ public final class Base64 {
             k = (byte) (b1 & 0x03);
 
             byte val1 = ((b1 & SIGN) == 0) ?
-                (byte) (b1 >> 2) : (byte) ((b1) >> 2 ^ 0xc0);
+                        (byte) (b1 >> 2) : (byte) ((b1) >> 2 ^ 0xc0);
             byte val2 = ((b2 & SIGN) == 0) ?
-                (byte) (b2 >> 4) : (byte) ((b2) >> 4 ^ 0xf0);
+                        (byte) (b2 >> 4) : (byte) ((b2) >> 4 ^ 0xf0);
 
             encodedData[encodedIndex] = lookUpBase64Alphabet[val1];
             encodedData[encodedIndex + 1] =
-                lookUpBase64Alphabet[val2 | (k << 4)];
+                  lookUpBase64Alphabet[val2 | (k << 4)];
             encodedData[encodedIndex + 2] = lookUpBase64Alphabet[l << 2];
             encodedData[encodedIndex + 3] = PAD;
         }
@@ -302,13 +310,15 @@ public final class Base64 {
      * @@return Base64-encoded String
      */
     public static String encode(String data, String charEncoding)
-        throws UnsupportedEncodingException {
+          throws UnsupportedEncodingException {
 
         // Check arguments
-        if (data == null)
+        if (data == null) {
             data = "";
-        if (charEncoding == null)
+        }
+        if (charEncoding == null) {
             charEncoding = DEFAULT_CHAR_ENCODING;
+        }
 
         // Convert to byte[]
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -323,8 +333,9 @@ public final class Base64 {
         byte[] encodedData = encode(bos.toByteArray());
 
         // Convert to String
-        if (encodedData == null)
+        if (encodedData == null) {
             return "";
+        }
         bos = new ByteArrayOutputStream(encodedData.length);
         try {
             bos.write(encodedData);
@@ -383,7 +394,7 @@ public final class Base64 {
 
                 decodedData[encodedIndex] = (byte) (b1 << 2 | b2 >> 4);
                 decodedData[encodedIndex + 1] =
-                    (byte) (((b2 & 0xf) << 4) | ((b3 >> 2) & 0xf));
+                      (byte) (((b2 & 0xf) << 4) | ((b3 >> 2) & 0xf));
                 decodedData[encodedIndex + 2] = (byte) (b3 << 6 | b4);
             } else if (marker0 == PAD) {
                 //Two PAD e.g. 3c[Pad][Pad]
@@ -394,7 +405,7 @@ public final class Base64 {
 
                 decodedData[encodedIndex] = (byte) (b1 << 2 | b2 >> 4);
                 decodedData[encodedIndex + 1] =
-                    (byte) (((b2 & 0xf) << 4) | ((b3 >> 2) & 0xf));
+                      (byte) (((b2 & 0xf) << 4) | ((b3 >> 2) & 0xf));
             }
             encodedIndex += 3;
         }

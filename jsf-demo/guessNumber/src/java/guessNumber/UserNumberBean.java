@@ -25,17 +25,12 @@
 
 package guessNumber;
 
-import java.util.ArrayList;
-import java.util.List;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.LongRangeValidator;
 import javax.faces.validator.ValidatorException;
 
 import java.util.Random;
-import javax.faces.event.AbortProcessingException;
-import javax.faces.event.ValueChangeEvent;
-import javax.faces.model.SelectItem;
 
 
 public class UserNumberBean {
@@ -143,54 +138,58 @@ public class UserNumberBean {
                     (converted > maximum)) {
                     if (minimumSet) {
                         throw new ValidatorException(
-                            MessageFactory.getMessage
-                            (context,
-                             LongRangeValidator.NOT_IN_RANGE_MESSAGE_ID,
-                             new Object[]{
-                                 new Integer(minimum),
-                                 new Integer(maximum),
-                                 MessageFactory.getLabel(context, component)
-                             }));
+                              MessageFactory.getMessage
+                                    (context,
+                                     LongRangeValidator.NOT_IN_RANGE_MESSAGE_ID,
+                                     new Object[]{
+                                           new Integer(minimum),
+                                           new Integer(maximum),
+                                           MessageFactory.getLabel(context,
+                                                                   component)
+                                     }));
 
                     } else {
                         throw new ValidatorException(
-                            MessageFactory.getMessage
-                            (context,
-                             LongRangeValidator.MAXIMUM_MESSAGE_ID,
-                             new Object[]{
-                                 new Integer(maximum),
-                                 MessageFactory.getLabel(context, component)
-                             }));
+                              MessageFactory.getMessage
+                                    (context,
+                                     LongRangeValidator.MAXIMUM_MESSAGE_ID,
+                                     new Object[]{
+                                           new Integer(maximum),
+                                           MessageFactory.getLabel(context,
+                                                                   component)
+                                     }));
                     }
                 }
                 if (minimumSet &&
                     (converted < minimum)) {
                     if (maximumSet) {
                         throw new ValidatorException(MessageFactory.getMessage
-                                                     (context,
-                                                      LongRangeValidator.NOT_IN_RANGE_MESSAGE_ID,
-                                                      new Object[]{
-                                                          new Double(minimum),
-                                                          new Double(maximum),
-                                                          MessageFactory.getLabel(context, component)
-                                                      }));
+                              (context,
+                               LongRangeValidator.NOT_IN_RANGE_MESSAGE_ID,
+                               new Object[]{
+                                     new Double(minimum),
+                                     new Double(maximum),
+                                     MessageFactory.getLabel(context, component)
+                               }));
 
                     } else {
                         throw new ValidatorException(
-                            MessageFactory.getMessage
-                            (context,
-                             LongRangeValidator.MINIMUM_MESSAGE_ID,
-                             new Object[]{
-                                 new Integer(minimum),
-                                 MessageFactory.getLabel(context, component)
-                             }));
+                              MessageFactory.getMessage
+                                    (context,
+                                     LongRangeValidator.MINIMUM_MESSAGE_ID,
+                                     new Object[]{
+                                           new Integer(minimum),
+                                           MessageFactory.getLabel(context,
+                                                                   component)
+                                     }));
                     }
                 }
             } catch (NumberFormatException e) {
                 throw new ValidatorException(
-                    MessageFactory.getMessage
-                    (context, LongRangeValidator.TYPE_MESSAGE_ID,
-                     new Object[]{MessageFactory.getLabel(context, component)}));
+                      MessageFactory.getMessage
+                            (context, LongRangeValidator.TYPE_MESSAGE_ID,
+                             new Object[]{MessageFactory.getLabel(context,
+                                                                  component)}));
             }
         }
 
@@ -198,7 +197,7 @@ public class UserNumberBean {
 
 
     private int intValue(Object attributeValue)
-        throws NumberFormatException {
+          throws NumberFormatException {
 
         if (attributeValue instanceof Number) {
             return (((Number) attributeValue).intValue());

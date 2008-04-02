@@ -1,5 +1,5 @@
 /*
- * $Id: TestComponents.java,v 1.18 2005/08/22 22:09:55 ofung Exp $
+ * $Id: TestComponents.java,v 1.19 2005/12/14 22:27:50 rlubke Exp $
  */
 
 /*
@@ -31,8 +31,6 @@ package com.sun.faces.demotest.components;
 
 import java.util.Iterator;
 
-import com.sun.faces.demotest.HtmlUnitTestCase;
-
 import com.gargoylesoftware.htmlunit.ElementNotFoundException;
 import com.gargoylesoftware.htmlunit.ScriptResult;
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
@@ -44,6 +42,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlInput;
 import com.gargoylesoftware.htmlunit.html.HtmlMap;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlTable;
+import com.sun.faces.demotest.HtmlUnitTestCase;
 
 public class TestComponents extends HtmlUnitTestCase {
 
@@ -53,19 +52,19 @@ public class TestComponents extends HtmlUnitTestCase {
      */
     public void testImageMap() throws Exception {
         String[] welcomeTexts = {
-            "Welcome",
-            "Bienvenido",
-            "Tervetuloa",
-            "Wilkommen",
-            "Bienvenue"
+              "Welcome",
+              "Bienvenido",
+              "Tervetuloa",
+              "Wilkommen",
+              "Bienvenue"
         };
 
         String[] lang = {
-            "NAmerica",
-            "SAmerica",
-            "Finland",
-            "Germany",
-            "France"
+              "NAmerica",
+              "SAmerica",
+              "Finland",
+              "Germany",
+              "France"
         };
 
         HtmlPage mapPage = null;
@@ -89,7 +88,8 @@ public class TestComponents extends HtmlUnitTestCase {
             mapPage = (HtmlPage) result.getNewPage();
 
             assertTrue(
-                -1 != getImageMapWelcomeText(mapPage).indexOf(welcomeTexts[i]));
+                  -1 != getImageMapWelcomeText(mapPage)
+                        .indexOf(welcomeTexts[i]));
         }
 
     }
@@ -233,11 +233,13 @@ public class TestComponents extends HtmlUnitTestCase {
         // the correct current page display.
         // simulate the link being clicked
 
-        hidden1 = (HtmlHiddenInput) form.getInputByName("_id_id19:_id_id64_curPage");
+        hidden1 = (HtmlHiddenInput) form
+              .getInputByName("_id_id19:_id_id64_curPage");
         assertNotNull(hidden1);
         hidden1.setValueAttribute(currentListNum);
 
-        hidden2 = (HtmlHiddenInput) form.getInputByName("_id_id19:_id_id64_action");
+        hidden2 =
+              (HtmlHiddenInput) form.getInputByName("_id_id19:_id_id64_action");
         assertNotNull(hidden2);
         hidden2.setValueAttribute(newListNum);
         page = (HtmlPage) form.submit();
@@ -264,7 +266,7 @@ public class TestComponents extends HtmlUnitTestCase {
 
 
     protected HtmlPage executeTabbedPane(HtmlPage page, String buttonName)
-        throws Exception {
+          throws Exception {
         HtmlForm form = (HtmlForm) page.getAllForms().get(0);
         assertNotNull(form);
         HtmlInput button = (HtmlInput) form.getInputByName(buttonName);

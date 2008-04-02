@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.2 2005/08/22 22:09:18 ofung Exp $
+ * $Id: Util.java,v 1.3 2005/12/14 22:27:30 rlubke Exp $
  */
 
 /*
@@ -42,7 +42,6 @@ import javax.faces.el.MethodBinding;
 import javax.faces.el.ValueBinding;
 import javax.faces.model.SelectItem;
 
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -55,7 +54,7 @@ import java.util.Map;
  * <B>Util</B> is a class which houses common functionality used by
  * other classes.
  *
- * @version $Id: Util.java,v 1.2 2005/08/22 22:09:18 ofung Exp $
+ * @version $Id: Util.java,v 1.3 2005/12/14 22:27:30 rlubke Exp $
  */
 
 public class Util extends Object {
@@ -77,9 +76,9 @@ public class Util extends Object {
      */
 
     private static String booleanPassthruAttributes[] = {
-        "disabled",
-        "readonly",
-        "ismap"
+          "disabled",
+          "readonly",
+          "ismap"
     };
 
     /**
@@ -92,57 +91,56 @@ public class Util extends Object {
      * @see renderPassthruAttributes
      */
     private static String passthruAttributes[] = {
-        "accesskey",
-        "alt",
-        "cols",
-        "height",
-        "lang",
-        "longdesc",
-        "maxlength",
-        "onblur",
-        "onchange",
-        "onclick",
-        "ondblclick",
-        "onfocus",
-        "onkeydown",
-        "onkeypress",
-        "onkeyup",
-        "onload",
-        "onmousedown",
-        "onmousemove",
-        "onmouseout",
-        "onmouseover",
-        "onmouseup",
-        "onreset",
-        "onselect",
-        "onsubmit",
-        "onunload",
-        "rows",
-        "size",
-        "tabindex",
-        //"class",   PENDING(rlubke)  revisit this for JSFA105
-        "title",
-        "style",
-        "width",
-        "dir",
-        "rules",
-        "frame",
-        "border",
-        "cellspacing",
-        "cellpadding",
-        "summary",
-        "bgcolor",
-        "usemap",
-        "enctype",
-        "accept-charset",
-        "accept",
-        "target",
-        "onsubmit",
-        "onreset"
+          "accesskey",
+          "alt",
+          "cols",
+          "height",
+          "lang",
+          "longdesc",
+          "maxlength",
+          "onblur",
+          "onchange",
+          "onclick",
+          "ondblclick",
+          "onfocus",
+          "onkeydown",
+          "onkeypress",
+          "onkeyup",
+          "onload",
+          "onmousedown",
+          "onmousemove",
+          "onmouseout",
+          "onmouseover",
+          "onmouseup",
+          "onreset",
+          "onselect",
+          "onsubmit",
+          "onunload",
+          "rows",
+          "size",
+          "tabindex",
+          //"class",   PENDING(rlubke)  revisit this for JSFA105
+          "title",
+          "style",
+          "width",
+          "dir",
+          "rules",
+          "frame",
+          "border",
+          "cellspacing",
+          "cellpadding",
+          "summary",
+          "bgcolor",
+          "usemap",
+          "enctype",
+          "accept-charset",
+          "accept",
+          "target",
+          "onsubmit",
+          "onreset"
     };
 
     private static long id = 0;
-
 
 //
 // Instance Variables
@@ -163,9 +161,10 @@ public class Util extends Object {
 //
 // Class methods
 //
+
     public static Class loadClass(String name) throws ClassNotFoundException {
         ClassLoader loader =
-            Thread.currentThread().getContextClassLoader();
+              Thread.currentThread().getContextClassLoader();
         if (loader == null) {
             return Class.forName(name);
         } else {
@@ -190,40 +189,40 @@ public class Util extends Object {
 
     /**
      * Return a Locale instance using the following algorithm: <P>
-     *
+     * <p/>
      * <UL>
-     *
+     * <p/>
      * <LI>
-     *
+     * <p/>
      * If this component instance has an attribute named "bundle",
      * interpret it as a model reference to a LocalizationContext
      * instance accessible via FacesContext.getModelValue().
-     *
+     * <p/>
      * </LI>
-     *
+     * <p/>
      * <LI>
-     *
+     * <p/>
      * If FacesContext.getModelValue() returns a LocalizationContext
      * instance, return its Locale.
-     *
+     * <p/>
      * </LI>
-     *
+     * <p/>
      * <LI>
-     *
+     * <p/>
      * If FacesContext.getModelValue() doesn't return a
      * LocalizationContext, return the FacesContext's Locale.
-     *
+     * <p/>
      * </LI>
-     *
+     * <p/>
      * </UL>
      */
 
     public static Locale
-        getLocaleFromContextOrComponent(FacesContext context,
-                                        UIComponent component) {
+          getLocaleFromContextOrComponent(FacesContext context,
+                                          UIComponent component) {
         Locale result = null;
         String bundleName = null, bundleAttr = "bundle";
-	
+
 //	ParameterCheck.nonNull(context);
 //	ParameterCheck.nonNull(component);
 
@@ -233,8 +232,8 @@ public class Util extends Object {
             // verify there is a Locale for this modelReference
             javax.servlet.jsp.jstl.fmt.LocalizationContext locCtx = null;
             if (null != (locCtx =
-                (javax.servlet.jsp.jstl.fmt.LocalizationContext)
-                (Util.getValueBinding(bundleName)).getValue(context))) {
+                  (javax.servlet.jsp.jstl.fmt.LocalizationContext)
+                        (Util.getValueBinding(bundleName)).getValue(context))) {
                 result = locCtx.getLocale();
 //		Assert.assert_it(null != result);
             }
@@ -249,7 +248,7 @@ public class Util extends Object {
 
     /**
      * Render any boolean "passthru" attributes.
-     * <P>
+     * <p/>
      *
      * @see passthruAttributes
      */
@@ -263,7 +262,8 @@ public class Util extends Object {
 
         for (i = 0; i < len; i++) {
             if (null != (value = (String)
-                component.getAttributes().get(booleanPassthruAttributes[i]))) {
+                  component.getAttributes().get(booleanPassthruAttributes[i])))
+            {
                 if (thisIsTheFirstAppend) {
                     // prepend ' '
                     renderedText.append(' ');
@@ -301,7 +301,7 @@ public class Util extends Object {
 
         for (i = 0; i < len; i++) {
             if (null != (value = (String)
-                component.getAttributes().get(passthruAttributes[i]))) {
+                  component.getAttributes().get(passthruAttributes[i]))) {
                 if (thisIsTheFirstAppend) {
                     // prepend ' '
                     renderedText.append(' ');
@@ -318,7 +318,7 @@ public class Util extends Object {
 
     public static ValueBinding getValueBinding(String valueRef) {
         ApplicationFactory af = (ApplicationFactory)
-            FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
+              FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
         Application a = af.getApplication();
         return (a.createValueBinding(valueRef));
     }
@@ -333,15 +333,15 @@ public class Util extends Object {
         Iterator children = component.getChildren().iterator();
         while (children.hasNext()) {
             UIComponent child = (UIComponent) children.next();
-                                                                                
+
             if (child instanceof UISelectItem) {
                 Object value = ((UISelectItem) child).getValue();
                 if (value == null) {
                     UISelectItem item = (UISelectItem) child;
                     list.add(new SelectItem(item.getItemValue(),
-                     item.getItemLabel(),
-                     item.getItemDescription(),
-                     item.isItemDisabled()));
+                                            item.getItemLabel(),
+                                            item.getItemDescription(),
+                                            item.isItemDisabled()));
                 } else if (value instanceof SelectItem) {
                     list.add(value);
                 }
@@ -357,15 +357,15 @@ public class Util extends Object {
                     Iterator entries = ((Map) value).entrySet().iterator();
                     while (entries.hasNext()) {
                         Map.Entry entry = (Map.Entry) entries.next();
-                                                                                
+
                         list.add(new SelectItem(entry.getKey(),
-                            "" + entry.getValue()));
+                                                "" + entry.getValue()));
                     }
                 }
             }
         }
         return list;
-    }    
+    }
 
     public static boolean componentIsDisabledOrReadonly(UIComponent component) {
         Object disabledOrReadonly = null;
@@ -387,10 +387,9 @@ public class Util extends Object {
                 result = disabledOrReadonly.equals(Boolean.TRUE);
             }
         }
-                                                                                                                        
+
         return result;
     }
-
 
 //
 // General Methods

@@ -25,21 +25,19 @@
 
 package renderkits.util;
 
+import javax.faces.FactoryFinder;
+import javax.faces.application.Application;
+import javax.faces.application.ApplicationFactory;
+import javax.faces.component.UIComponent;
+import javax.faces.convert.Converter;
+
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.util.logging.Logger;
-import java.util.logging.Level;
-
-import javax.faces.FactoryFinder;
-import javax.faces.application.Application;
-import javax.faces.application.ApplicationFactory;
-import javax.faces.component.ValueHolder;
-import javax.faces.component.UIComponent;
-import javax.faces.convert.Converter;
 
 public class Util extends Object {
-                                                                                                               
+
     //
     // Private/Protected Constants
     //
@@ -47,23 +45,22 @@ public class Util extends Object {
     public static final String RENDERKIT_LOGGER = "renderkit";
     public static final String TAGLIB_LOGGER = "taglib";
 
-                                                                                                               
+
     public static final String FACES_LOG_STRINGS =
-            "com.sun.faces.LogStrings";
-                                                                                                               
+          "com.sun.faces.LogStrings";
+
     // Log instance for this class
     private static Logger logger;
+
     static {
         logger = getLogger(FACES_LOGGER);
     }
 
-    public static Logger getLogger( String loggerName ) {
-        return Logger.getLogger(loggerName, FACES_LOG_STRINGS );
+    public static Logger getLogger(String loggerName) {
+        return Logger.getLogger(loggerName, FACES_LOG_STRINGS);
     }
-    
-    /**
-     * Utility method for determining if a component is 'disabled' or 'readonly'
-     */
+
+    /** Utility method for determining if a component is 'disabled' or 'readonly' */
     public static boolean componentIsDisabledOnReadonly(UIComponent component) {
         Object disabledOrReadonly = null;
         boolean result = false;
@@ -84,7 +81,7 @@ public class Util extends Object {
                 result = disabledOrReadonly.equals(Boolean.TRUE);
             }
         }
-                                                                                                                    
+
         return result;
     }
 
@@ -94,8 +91,8 @@ public class Util extends Object {
         }
         try {
             ApplicationFactory aFactory =
-                (ApplicationFactory) FactoryFinder.getFactory(
-                    FactoryFinder.APPLICATION_FACTORY);
+                  (ApplicationFactory) FactoryFinder.getFactory(
+                        FactoryFinder.APPLICATION_FACTORY);
             Application application = aFactory.getApplication();
             return (application.createConverter(converterClass));
         } catch (Exception e) {
@@ -109,16 +106,16 @@ public class Util extends Object {
     //----------------------------------------------------------
     //
     static public void validateEncoding(String encoding)
-        throws UnsupportedEncodingException {
+          throws UnsupportedEncodingException {
         if (encoding != null) {
             // Try creating a string off of the default encoding
             new String(encodingTestBytes, encoding);
         }
     }
-    
+
     // Private array used simply to verify character encodings
     static private final byte[] encodingTestBytes = new byte[]{(byte) 65};
-    
+
     /**
      * Write a string attribute.  Note that this code
      * is duplicated below for character arrays - change both
@@ -133,7 +130,7 @@ public class Util extends Object {
         int length = text.length();
         for (int i = 0; i < length; i++) {
             char ch = text.charAt(i);
-            
+
             // Tilde or less...
             if (ch < 0xA0) {
                 // If "?" or over, no escaping is needed (this covers
@@ -159,13 +156,14 @@ public class Util extends Object {
                 } else {
                     if (ch == '&') {
                         buffIndex = flushBuffer(out, buff, buffIndex);
-                        
+
                         // HTML 4.0, section B.7.1: ampersands followed by
                         // an open brace don't get escaped
-                        if ((i + 1 < length) && (text.charAt(i + 1) == '{'))
+                        if ((i + 1 < length) && (text.charAt(i + 1) == '{')) {
                             out.write(ch);
-                        else
+                        } else {
                             out.write("&amp;");
+                        }
                     } else if (ch == '"') {
                         buffIndex = flushBuffer(out, buff, buffIndex);
 
@@ -177,7 +175,7 @@ public class Util extends Object {
                 }
             } else {
                 buffIndex = flushBuffer(out, buff, buffIndex);
-                
+
                 // Double-byte characters to encode.
                 // PENDING: when outputting to an encoding that
                 // supports double-byte characters (UTF-8, for example),
@@ -188,13 +186,13 @@ public class Util extends Object {
 
         flushBuffer(out, buff, buffIndex);
     }
-    
+
     static public void writeAttribute(Writer out,
                                       char[] buffer,
                                       char[] text) throws IOException {
         writeAttribute(out, buffer, text, 0, text.length);
     }
-    
+
     /**
      * Write a character array attribute.  Note that this code
      * is duplicated above for string - change both places if you make
@@ -239,10 +237,11 @@ public class Util extends Object {
 
                         // HTML 4.0, section B.7.1: ampersands followed by
                         // an open brace don't get escaped
-                        if ((i + 1 < end) && (text[i + 1] == '{'))
+                        if ((i + 1 < end) && (text[i + 1] == '{')) {
                             out.write(ch);
-                        else
+                        } else {
                             out.write("&amp;");
+                        }
                     } else if (ch == '"') {
                         buffIndex = flushBuffer(out, buff, buffIndex);
 
@@ -254,7 +253,7 @@ public class Util extends Object {
                 }
             } else {
                 buffIndex = flushBuffer(out, buff, buffIndex);
-                
+
                 // Double-byte characters to encode.
                 // PENDING: when outputting to an encoding that
                 // supports double-byte characters (UTF-8, for example),
@@ -265,7 +264,7 @@ public class Util extends Object {
 
         flushBuffer(out, buff, buffIndex);
     }
-    
+
     //-------------------------------------------------
     // The following methods include the handling of
     // escape characters....
@@ -293,7 +292,7 @@ public class Util extends Object {
         int end = start + length;
         for (int i = start; i < end; i++) {
             char ch = text[i];
-            
+
             // Tilde or less...
             if (ch < 0xA0) {
                 // If "?" or over, no escaping is needed (this covers
@@ -356,7 +355,7 @@ public class Util extends Object {
 
         for (int i = 0; i < length; i++) {
             char ch = text.charAt(i);
-            
+
             // Tilde or less...
             if (ch < 0xA0) {
                 // If "?" or over, no escaping is needed (this covers
@@ -401,7 +400,7 @@ public class Util extends Object {
 
         flushBuffer(out, buff, buffIndex);
     }
-    
+
     /**
      * Writes a character as a decimal escape.  Hex escapes are smaller than
      * the decimal version, but Netscape didn't support hex escapes until
@@ -453,8 +452,9 @@ public class Util extends Object {
     private static int flushBuffer(Writer out,
                                    char[] buffer,
                                    int bufferIndex) throws IOException {
-        if (bufferIndex > 0)
+        if (bufferIndex > 0) {
             out.write(buffer, 0, bufferIndex);
+        }
 
         return 0;
     }
@@ -477,7 +477,7 @@ public class Util extends Object {
 
         return bufferIndex + 1;
     }
-    
-    
+
+
 }
 

@@ -1,5 +1,5 @@
 /*
- * $Id: TextRenderer.java,v 1.2 2005/08/22 22:09:33 ofung Exp $
+ * $Id: TextRenderer.java,v 1.3 2005/12/14 22:27:41 rlubke Exp $
  */
 
 /*
@@ -31,13 +31,13 @@
 
 package renderkits.renderkit.xul;
 
-import java.io.IOException;
-
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
 import javax.faces.component.UIOutput;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
+
+import java.io.IOException;
 
 /**
  * <B>TextRenderer</B> is a class that renders the current value of
@@ -59,7 +59,6 @@ public class TextRenderer extends BaseRenderer {
     //
 
     // Attribute Instance Variables
-
 
     // Relationship Instance Variables
 
@@ -84,7 +83,7 @@ public class TextRenderer extends BaseRenderer {
     //
 
     public void encodeBegin(FacesContext context, UIComponent component)
-        throws IOException {
+          throws IOException {
         if (context == null || component == null) {
             // PENDING - i18n
             throw new NullPointerException("'context' and/or 'component is null");
@@ -93,16 +92,16 @@ public class TextRenderer extends BaseRenderer {
 
 
     public void encodeEnd(FacesContext context, UIComponent component)
-        throws IOException {
+          throws IOException {
 
         ResponseWriter writer = context.getResponseWriter();
         boolean
-            shouldWriteIdAttribute = false,
-            isOutput = false;
+              shouldWriteIdAttribute = false,
+              isOutput = false;
 
         String
-            style = (String) component.getAttributes().get("style"),
-            styleClass = (String) component.getAttributes().get("styleClass");
+              style = (String) component.getAttributes().get("style"),
+              styleClass = (String) component.getAttributes().get("styleClass");
         if (component instanceof UIInput) {
             writer.startElement("textbox", component);
             writeIdAttributeIfNecessary(context, writer, component);
@@ -144,7 +143,7 @@ public class TextRenderer extends BaseRenderer {
                     } else if (val instanceof String) {
                         try {
                             escape =
-                                Boolean.valueOf((String) val).booleanValue();
+                                  Boolean.valueOf((String) val).booleanValue();
                         } catch (Throwable e) {
                         }
                     }

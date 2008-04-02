@@ -22,16 +22,16 @@
  * 
  * Copyright 2005 Sun Microsystems Inc. All Rights Reserved
  */
- 
-package guessNumber;
 
-import java.util.Random;
+package guessNumber;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
+import javax.faces.validator.LongRangeValidator;
 import javax.faces.validator.Validator;
 import javax.faces.validator.ValidatorException;
-import javax.faces.validator.LongRangeValidator;
+
+import java.util.Random;
 
 
 public class UserNumberBean {
@@ -39,14 +39,14 @@ public class UserNumberBean {
     Integer userNumber = null;
     Integer randomInt = null;
     String response = null;
-    
 
-    public UserNumberBean () {
-	Random randomGR = new Random();
-	randomInt = new Integer(randomGR.nextInt(10));
-        System.out.println("Duke's number: "+randomInt);
+
+    public UserNumberBean() {
+        Random randomGR = new Random();
+        randomInt = new Integer(randomGR.nextInt(10));
+        System.out.println("Duke's number: " + randomInt);
     }
-  
+
     public void setUserNumber(Integer user_number) {
         userNumber = user_number;
         System.out.println("Set userNumber " + userNumber);
@@ -58,21 +58,21 @@ public class UserNumberBean {
     }
 
     public String getResponse() {
-    	if(userNumber != null && userNumber.compareTo(randomInt) == 0) {
-            return "Yay! You got it!"; 
-        }
-	else {
-            return "Sorry, "+userNumber+" is incorrect.";
+        if (userNumber != null && userNumber.compareTo(randomInt) == 0) {
+            return "Yay! You got it!";
+        } else {
+            return "Sorry, " + userNumber + " is incorrect.";
         }
     }
 
     protected String [] status = null;
+
     public String [] getStatus() {
-    	return status;
+        return status;
     }
 
     public void setStatus(String [] newStatus) {
-	status = newStatus;
+        status = newStatus;
     }
 
     private int maximum = 0;
@@ -101,8 +101,8 @@ public class UserNumberBean {
     }
 
     public void validate(FacesContext context,
-                         UIComponent  component,
-                         Object       value) throws ValidatorException {
+                         UIComponent component,
+                         Object value) throws ValidatorException {
 
         if ((context == null) || (component == null)) {
             throw new NullPointerException();
@@ -112,62 +112,58 @@ public class UserNumberBean {
                 int converted = intValue(value);
                 if (maximumSet &&
                     (converted > maximum)) {
-		    if (minimumSet) {
+                    if (minimumSet) {
                         throw new ValidatorException(MessageFactory.getMessage
-					   (context,
-					    Validator.NOT_IN_RANGE_MESSAGE_ID,
-					    new Object[] {
-						new Integer(minimum),
-						new Integer(maximum) }));
-			
-		    }
-		    else {
+                              (context,
+                               Validator.NOT_IN_RANGE_MESSAGE_ID,
+                               new Object[]{
+                                     new Integer(minimum),
+                                     new Integer(maximum)}));
+
+                    } else {
                         throw new ValidatorException(MessageFactory.getMessage
-					   (context,
-					    LongRangeValidator.MAXIMUM_MESSAGE_ID,
-					    new Object[] {
-						new Integer(maximum) }));
-		    }
+                              (context,
+                               LongRangeValidator.MAXIMUM_MESSAGE_ID,
+                               new Object[]{
+                                     new Integer(maximum)}));
+                    }
                 }
                 if (minimumSet &&
                     (converted < minimum)) {
-		    if (maximumSet) {
+                    if (maximumSet) {
                         throw new ValidatorException(MessageFactory.getMessage
-					   (context,
-					    Validator.NOT_IN_RANGE_MESSAGE_ID,
-					    new Object[] {
-						new Double(minimum),
-						new Double(maximum) }));
-			
-		    }
-		    else {
+                              (context,
+                               Validator.NOT_IN_RANGE_MESSAGE_ID,
+                               new Object[]{
+                                     new Double(minimum),
+                                     new Double(maximum)}));
+
+                    } else {
                         throw new ValidatorException(MessageFactory.getMessage
-					   (context,
-					    LongRangeValidator.MINIMUM_MESSAGE_ID,
-					    new Object[] {
-						new Integer(minimum) }));
-		    }
+                              (context,
+                               LongRangeValidator.MINIMUM_MESSAGE_ID,
+                               new Object[]{
+                                     new Integer(minimum)}));
+                    }
                 }
             } catch (NumberFormatException e) {
                 throw new ValidatorException(MessageFactory.getMessage
-                                     (context, LongRangeValidator.TYPE_MESSAGE_ID));
+                      (context, LongRangeValidator.TYPE_MESSAGE_ID));
             }
         }
 
     }
 
     private int intValue(Object attributeValue)
-        throws NumberFormatException {
+          throws NumberFormatException {
 
         if (attributeValue instanceof Number) {
-            return ( ((Number) attributeValue).intValue() );
+            return (((Number) attributeValue).intValue());
         } else {
             return (Integer.parseInt(attributeValue.toString()));
         }
 
     }
-
-
 
 
 }

@@ -1,5 +1,5 @@
 /*
- * $Id: ResultSetBean.java,v 1.2 2005/08/22 22:09:00 ofung Exp $
+ * $Id: ResultSetBean.java,v 1.3 2005/12/14 22:27:22 rlubke Exp $
  */
 
 /*
@@ -29,9 +29,6 @@
 
 package demo.model;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIData;
 import javax.faces.context.FacesContext;
@@ -40,25 +37,26 @@ import javax.faces.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * <p>Backing file bean for <code>ResultSet</code> demo.</p>
- */
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+/** <p>Backing file bean for <code>ResultSet</code> demo.</p> */
 
 public class ResultSetBean {
 
     private static Log log = LogFactory.getLog(ResultSetBean.class);
 
-    private List list = null;
+    private List<CustomerBean> list = null;
 
 
     public ResultSetBean() {
     }
 
 
-    public List getList() {
+    public List<CustomerBean> getList() {
         // Construct a preconfigured customer list lazily.
         if (list == null) {
-            list = new ArrayList();
+            list = new ArrayList<CustomerBean>();
             for (int i = 0; i < 1000; i++) {
                 list.add(new CustomerBean(Integer.toString(i),
                                           "name_" + Integer.toString(i),
@@ -69,15 +67,13 @@ public class ResultSetBean {
     }
 
 
-    public void setList(List newlist) {
+    public void setList(List<CustomerBean> newlist) {
         this.list = newlist;
     }
 
     // -------------------------------------------------------- Bound Components
 
-    /**
-     * <p>The <code>UIData</code> component representing the entire table.</p>
-     */
+    /** <p>The <code>UIData</code> component representing the entire table.</p> */
     private UIData data = null;
 
 
@@ -90,13 +86,10 @@ public class ResultSetBean {
         this.data = data;
     }
 
-
     // ---------------------------------------------------------- Action Methods
 
 
-    /**
-     * <p>Scroll directly to the first page.</p>
-     */
+    /** <p>Scroll directly to the first page.</p> */
     public String first() {
         scroll(0);
         return (null);
@@ -104,9 +97,7 @@ public class ResultSetBean {
     }
 
 
-    /**
-     * <p>Scroll directly to the last page.</p>
-     */
+    /** <p>Scroll directly to the last page.</p> */
     public String last() {
         scroll(data.getRowCount() - 1);
         return (null);
@@ -114,9 +105,7 @@ public class ResultSetBean {
     }
 
 
-    /**
-     * <p>Scroll forwards to the next page.</p>
-     */
+    /** <p>Scroll forwards to the next page.</p> */
     public String next() {
         int first = data.getFirst();
         scroll(first + data.getRows());
@@ -125,9 +114,7 @@ public class ResultSetBean {
     }
 
 
-    /**
-     * <p>Scroll backwards to the previous page.</p>
-     */
+    /** <p>Scroll backwards to the previous page.</p> */
     public String previous() {
         int first = data.getFirst();
         scroll(first - data.getRows());

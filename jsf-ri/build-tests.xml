@@ -1,3 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
 <!--
  The contents of this file are subject to the terms
  of the Common Development and Distribution License
@@ -23,67 +25,29 @@
  Copyright 2005 Sun Microsystems Inc. All Rights Reserved
 -->
 
-<project name="Java Server Faces Unit Tests" default="test.local" basedir=".">
+<project name="Java Server Faces Unit Tests" basedir=".">
 
-<!--
-        This is a generic build.xml file for Ant that is used to run the
-        Java Server Faces unit tests. This build file *must* be called from the
-        build.xml file in order to inherit most of it's needed properties
-        (See below for the list of these properties).
--->
+    <!--
+            This is a generic build.xml file for Ant that is used to run the
+            Java Server Faces unit tests. This build file *must* be called from the
+            build.xml file in order to inherit most of it's needed properties
+            (See below for the list of these properties).
+    -->
 
-<!-- ========== Prerequisite Properties =================================== -->
+    <!-- ========== Prerequisite Properties =================================== -->
 
+    <!-- ========== Initialization Properties ================================= -->
 
-<!--
-        These properties MUST be set on the "ant" command line, the "antrc"
-        properties file in your home directory, or from settings in a superior
-        build.xml script.
+    <!-- ========== Derived Properties ======================================== -->
 
-        build.home                    Base directory into which we are building
-                                      the Struts components.
+    <!--
+            These property values are derived from values defined above, and
+            generally should NOT be overridden by command line settings
+    -->
 
-        servlet.jar                   The servlet jar (either 2.2 or 2.3)
-
-        cactus.jar                    The Cactus jar (either for Servlet API
-                                      2.2 or 2.3)
-
-        cactus.ant.jar                The Cactus custom Ant tasks jar
-
-        httpclient.jar                The Cactus httpclient jar
-
-        aspectjrt.jar                 The Cactus AspectJ Language Support jar
-
-        junit.jar                     The JUnit jar
-
-        tomcat.home                   The home directory of where Tomcat 
-                                      is installed
-
-        compile.debug                 The debug mode for compilation
-
-        compile.deprecation           The deprecation mode for compilation
-
-        compile.optimize              The optimization mode for compilation
-
-        src.dir                       The location of the source directory
-
-        app.name                      The name of the Struts jar (without the
-                                      '.jar' suffix
-
--->
-
-<!-- ========== Initialization Properties ================================= -->
-
-<!-- ========== Derived Properties ======================================== -->
-
-<!--
-        These property values are derived from values defined above, and
-        generally should NOT be overridden by command line settings
--->
-
-    <property file="${user.home}/build.properties"/>   <!-- User local        -->
-    <property file="build.properties"/>                <!-- Component local   -->
-    <property file="../build.properties"/>             <!-- Commons local     -->
+    <property file="${user.home}/build.properties"/>
+    <property file="../build.properties"/>
+    <import file="${jsf.build.home}/common/ant/common.xml"/>    
 
     <!-- Default value for debugging arguments is no.  Override in
          build.properties -->
@@ -98,400 +62,362 @@
     <!-- Output directory for tests -->
     <property name="out.test.dir" value="${basedir}/build/test"/>
 
-    <!-- all of these properties must have valid values -->
-    <property name="catalina-ant.jar" value="${tomcat.home}/server/lib/catalina-ant.jar"/>
-    <property name="cactus.home" 
-              value="${tomcat.home}/../jakarta-cactus-13-1.7.1"/>
-    <property name="cactus.ant.jar" 
-              value="${cactus.home}/lib/cactus-ant-1.7.1.jar"/>
-    <property name="cactus.jar" 
-              value="${cactus.home}/lib/cactus-1.7.1.jar"/>
-    <property name="aspectjrt.jar" 
-              value="${cactus.home}/lib/aspectjrt-1.2.1.jar"/>
-    <property name="httpclient.jar" 
-              value="${cactus.home}/lib/commons-httpclient-2.0.2.jar"/>
-
-    <property name="junit.jar" 
-              value="${tomcat.home}/../junit3.8.1/junit.jar"/>
-
-    <property name="standard.jar" 
-              value="${tomcat.home}/jstl/lib/standard.jar"/>
-    
-    <property name="username" value="tomcat"/>
-    <property name="password" value="tomcat"/>
-    <property name="host" value="localhost"/>
-    <property name="port" value="8080"/>
-    <property name="appserver.domain" value="domain1" />
-
-    <property name="url"      value="http://localhost:8080/manager"/>
-
     <!-- Compilation Classpath -->
-    <path id="compile.classpath">
-      <pathelement location="${servlet.jar}"/>
-      <pathelement location="${jsp.jar}"/>
-      <pathelement location="${junit.jar}"/>
-      <pathelement location="${cactus.jar}"/>
-      <pathelement location="${httpclient.jar}"/>
-      <pathelement location="${aspectjrt.jar}"/>
-      <pathelement location="${jsf-api.jar}"/>
-      <pathelement location="${commons-beanutils.jar}"/>
-      <pathelement location="${commons-collections.jar}"/>
-      <pathelement location="${commons-digester.jar}"/>
-      <pathelement location="${commons-logging.jar}"/>      
-      <pathelement location="${build.classes}"/>
-      <pathelement location="${tomcat.home}/bin/bootstrap.jar"/>
-      <!-- For cactus.properties -->
-      <pathelement location="${conf.test.dir}"/>
-      <pathelement location="${jstl.jar}"/>
-      <pathelement location="${el-api.jar}"/>
-      <pathelement location="${jsf-extensions-test-time.jar}"/>
+    <path id="test.compile.classpath">
+        <path refid="compile.classpath"/>
+        <path refid="cactus.compile.classpath"/>
+        <pathelement location="${conf.test.dir}"/>
+        <pathelement location="${jsf-api.jar}"/>      
+        <pathelement location="${jsf-impl.jar}"/>
+        <pathelement location="${jsf.test.jar}"/>
     </path>
 
-    <path id="catalina-ant.classpath">
-      <pathelement location="${catalina-ant.jar}"/>
+    <path id="test.runtime.classpath">
+        <path refid="compile.classpath"/>
+        <path refid="cactus.runtime.classpath"/>
+        <pathelement location="${out.test.dir}/classes"/>
+        <pathelement location="${conf.test.dir}"/> 
+        <pathelement location="${jsf-api.jar}"/>      
+        <pathelement location="${jsf-impl.jar}"/>
+        <pathelement location="${jsf.test.jar}"/>
     </path>
 
-<!-- ========== Executable Targets ======================================== -->
+    <!-- ========== Executable Targets ======================================== -->
 
-<!--
-        Initialization of custom Ant tasks
--->
+    <!--
+            Initialization of custom Ant tasks
+    -->
     <target name="init">
         <taskdef name="runservertests"
-            classname="org.apache.cactus.integration.ant.RunServerTestsTask">
+                 classname="org.apache.cactus.integration.ant.RunServerTestsTask">
             <classpath>
-                <pathelement location="${commons-logging.jar}"/>
-                <pathelement location="${cactus.ant.jar}"/>
-                <pathelement path="${java.class.path}"/>
+                <path refid="test.runtime.classpath"/>
             </classpath>
         </taskdef>
 
-      <uptodate property="skip.build" 
-                targetfile="${out.test.dir}/last-testrun">
-        <srcfiles dir="${basedir}">
-          <include name="src/**/*.*"/>
-          <include name="test/**/*.*"/>
-          <include name="conf/**/*.*"/>
-          <include name="web/test/**/*.*"/>
-        </srcfiles>
-      </uptodate>
+        <uptodate property="skip.build"
+                  targetfile="${out.test.dir}/last-testrun">
+            <srcfiles dir="${basedir}">
+                <include name="src/**/*.*"/>
+                <include name="test/**/*.*"/>
+                <include name="conf/**/*.*"/>
+                <include name="web/test/**/*.*"/>       
+            </srcfiles>
+        </uptodate>
     </target>
 
-    <target name="remove.jsp.incompat.workaround">
 
-    <!-- this file is copied from a source file in the
-         discover.jsp.level business -->
-
-      <delete file="${basedir}/test/com/sun/faces/el/impl/PageContextImpl.java"/>  </target>
-
-
-
-<!-- 
-        Create directories and copy files for the struts tests
--->
+    <!-- 
+            Create directories and copy files for the struts tests
+    -->
     <target name="prepare.test" depends="init">
-    <!--
-            depends="init,discover.jsp.level,prepare.test.jsp2,prepare.test.jsp12">
--->
-        <!-- Create target directories for classes -->
-        <mkdir dir="${out.test.dir}/WEB-INF/classes"/>
 
+       
+        <mkdir dir="${out.test.dir}/classes"/>
         <!-- Create a lib directory where needed libs for the test war will
              be put -->
-        <mkdir dir="${out.test.dir}/WEB-INF/lib"/>
+        <!--<mkdir dir="${out.test.dir}/WEB-INF/lib"/>
 
         <copy file="${build.classes}/com/sun/faces/util/MessageFactory.class"
-          tofile="${out.test.dir}/WEB-INF/classes/com/sun/faces/util/MessageFactory.class"/>
+              tofile="${out.test.dir}/WEB-INF/classes/com/sun/faces/util/MessageFactory.class"/>
         <copy file="${build.classes}/com/sun/faces/util/MessageFactory$BindingFacesMessage.class"
-          tofile="${out.test.dir}/WEB-INF/classes/com/sun/faces/util/MessageFactory$BindingFacesMessage.class"/>
+              tofile="${out.test.dir}/WEB-INF/classes/com/sun/faces/util/MessageFactory$BindingFacesMessage.class"/>-->
 
     </target>
 
-    <!--
-  <target name="discover.jsp.level">
-    <echo message="jsp.jar is ${jsp.jar}"/>
-    <available classpath="${jsp.jar}" 
-               classname="javax.servlet.jsp.el.VariableResolver"
-               property="is.jsp2"/>
-    <echo message="${is.jsp2}"/>
-  </target>
-
-  <target name="prepare.test.jsp2" if="is.jsp2">
-    <copy file="${basedir}/test/com/sun/faces/el/impl/PageContextImpl.jsp2"
-          tofile="${basedir}/test/com/sun/faces/el/impl/PageContextImpl.java"/>
-  </target>
-
-  <target name="prepare.test.jsp12" unless="is.jsp2">
-    <copy file="${basedir}/test/com/sun/faces/el/impl/PageContextImpl.jsp12"
-          tofile="${basedir}/test/com/sun/faces/el/impl/PageContextImpl.java"/>
-  </target>
-  -->
-
-<!-- 
-        Compile unit tests
--->
+    <!-- 
+            Compile unit tests
+    -->
     <target name="compile.test" depends="prepare.test">
+        <jsf.javac srcdir="${src.test.dir}"
+                   destdir="${out.test.dir}/classes">
+            <classpath>
+                <path refid="test.compile.classpath"/>
+            </classpath>
+        </jsf.javac>
+    </target>    
 
-        <javac srcdir="${src.test.dir}"
-            destdir="${out.test.dir}/WEB-INF/classes"
-            debug="${compile.debug}"
-            optimize="${compile.optimize}"
-            source="1.5"
-            deprecation="${compile.deprecation}">
-
-            <classpath refid="compile.classpath"/>
-        </javac>
-        <copy todir="${out.test.dir}/WEB-INF/classes">
-            <fileset dir="${src.test.dir}" includes="**/*.properties"/>
-        </copy>
-      <antcall target="remove.jsp.incompat.workaround"/>
-    </target>
-
-    <target name="prepare.test.standalone" if="build.standalone">
-        <!-- Copy needed libs in /lib -->
-        <copy file="${jsf-api.jar}" todir="${out.test.dir}/WEB-INF/lib"/>
-        <copy file="${jstl.jar}" todir="${out.test.dir}/WEB-INF/lib"/>
-        <copy file="${standard.jar}" todir="${out.test.dir}/WEB-INF/lib"/>
-        <copy file="${basedir}/build/lib/jsf-impl.jar" todir="${out.test.dir}/WEB-INF/lib"/>
-
-    </target>
-
-    <target name="prepare.test.bundled" unless="build.standalone">
-
-    </target>
-
-    <target name="prepare.test.webapp" unless="skip.build" 
+    <target name="prepare.test.webapp" unless="skip.build"
             description="put the test webapp in the WAR file format in out.test.dir"
-            depends="compile.test,prepare.test.standalone,prepare.test.bundled">
-
-        <copy file="${junit.jar}" todir="${out.test.dir}/WEB-INF/lib"/>
-        <copy file="${cactus.jar}" todir="${out.test.dir}/WEB-INF/lib"/>
-        <copy file="${aspectjrt.jar}" todir="${out.test.dir}/WEB-INF/lib"/>
-        <copy file="${commons-beanutils.jar}" todir="${out.test.dir}/WEB-INF/lib"/>
-        <copy file="${commons-collections.jar}" todir="${out.test.dir}/WEB-INF/lib"/>
-        <copy file="${commons-digester.jar}" todir="${out.test.dir}/WEB-INF/lib"/>
-        <copy file="${commons-logging.jar}" todir="${out.test.dir}/WEB-INF/lib"/>
-        <copy file="${jsf-extensions-test-time.jar}" todir="${out.test.dir}/WEB-INF/lib"/>
-
-        <!-- copy the all important web.xml -->
-        <echo message="out.test.dir ${out.test.dir}" />
+            depends="compile.test">
         <filter token="test.root.dir" value="${out.test.dir}"/>
-        <copy file="${conf.test.dir}/web.xml" todir="${out.test.dir}/WEB-INF"
+        <copy file="${conf.test.dir}/web.xml" todir="${out.test.dir}"
               filtering="on"/>
-
-        <!-- copy the test data files -->
-        <antcall target="copy-test-data-files"/>
-        <jar jarfile="${build.home}/test.war" basedir="${out.test.dir}"/>
+        <jsf.war basedir="${basedir}/build"
+                 archive-name="test"
+                 webxml="${out.test.dir}/web.xml">
+            <archive-elements>
+                <zipfileset dir="${src.test.dir}"
+                            includes="**/*.properties,**/*.xml"
+                            prefix="WEB-INF/classes"/>
+                <zipfileset dir="${out.test.dir}/classes"
+                            prefix="WEB-INF/classes"/>                
+                <zipfileset dir="${cactus.home}/lib"
+                            prefix="WEB-INF/lib"
+                            includes="cactus*.jar,
+                                      aspect*.jar,
+                                      commons-logging*.jar"
+                            excludes="*ant*.jar"/>
+                <zipfileset dir="${junit.home}"
+                            prefix="WEB-INF/lib"
+                            includes="junit.jar"/>
+                <zipfileset file="${jsf.test.jar}"
+                            prefix="WEB-INF/lib"/>
+                <zipfileset dir="${basedir}/web/test"
+                            includes="*.jsp,*.xml,*.gif,*html"
+                            excludes="**/CVS/**"/>
+                <zipfileset dir="${cactus.home}/web"
+                            includes="jspRedirector.jsp"/>
+                <zipfileset dir="${basedir}/web/test/WEB-INF"
+                            prefix="WEB-INF"/>
+            </archive-elements>
+        </jsf.war>        
+        <copy todir="${out.test.dir}">
+            <fileset dir="${basedir}/web/test"
+                     excludes="*.jsp,*.xml,*.gif,*html,**/WEB-INF/**"/>
+        </copy>
     </target>
 
     <target name="execute.cactus.tests" depends="prepare.test.webapp">
-      <antcall target="safe.remove"/>
-      <antcall target="install"/>
-      <touch file="${out.test.dir}/last-testrun"/>
-      <antcall target="run.cactus.test"/>
+        <antcall target="undeploy"/>
+        <antcall target="deploy"/>
+        <touch file="${out.test.dir}/last-testrun"/>
+        <antcall target="run.cactus.test"/>  
+        <antcall target="undeploy"/>
     </target>
 
     <target name="force.execute.cactus.tests">
-      <antcall target="remove.tstamp"/>
-      <antcall target="execute.cactus.tests"/>
+        <antcall target="remove.tstamp"/>
+        <antcall target="execute.cactus.tests"/>
     </target>
 
     <target name="remove.tstamp">
-      <delete file="${out.test.dir}/last-testrun"/>
+        <delete file="${out.test.dir}/last-testrun"/>
     </target>
 
-    <target name="copy-test-data-files">
-       <!-- Copy Unit test static files. -->
-       <copy todir="${out.test.dir}">
-           <fileset dir="${basedir}/web/test"/>
-           <fileset dir="${cactus.home}/web" includes="jspRedirector.jsp"/>
-       </copy>
+    <target name="deploy"
+            description="Deploy the Cactus test application">
+        <deploy.artifact artifact="${basedir}/build/test.war"
+                         appName="test"/>
     </target>
 
-    <target name="install" unless="skip.build" depends="prepare.test.webapp"
-            description="Install cactus unit test webapp">
-       <install url="${url}" username="${username}" password="${password}"
-                path="/test"
-                war="file://${out.test.dir}"/>
+    <target name="undeploy"
+            description="Undeploy the jsf-systest application">
+        <undeploy.artifact artifact="${basedir}/build/test.war"
+                           appName="test"/>
     </target>
 
-    <target name="remove" unless="skip.build"
-            description="Remove cactus unit test webapp"> 
-      <remove url="${url}" username="${username}" password="${password}"
-            path="/test"/>
-    </target>
-
-    <target name="safe.remove" unless="skip.build"
-            description="Remove cactus unit test webapp, don't fail on error">
-      <exec executable="ant.bat" os="Windows 2000" failonerror="false">
-        <arg line="-f build-tests.xml -Dusername=${username} -Dpassword=${password} remove"/>
-      </exec>
-      <exec executable="ant" os="SunOS,Linux" failonerror="false">
-        <arg line="-f build-tests.xml -Dusername=${username} -Dpassword=${password} remove"/>
-      </exec>
-    </target>
-
-<!--
-        Start the Cactus test using JUnit test runner.
--->
+    <!--
+            Start the Cactus test using JUnit test runner.
+    -->
     <target name="run.cactus.test">
-        <junit printsummary="yes" haltonfailure="yes" haltonerror="yes" fork="yes">
-            <sysproperty key="cactus.contextURL"  value="http://${host}:${port}/test"/>
-            <classpath>
-                <pathelement path="${java.class.path}"/>
-                <pathelement location="${out.test.dir}/WEB-INF/classes"/>
-                <!-- For cactus.properties -->
-                <pathelement location="${conf.test.dir}"/>                
-            </classpath>
-            <classpath refid="compile.classpath"/>
-
-            <formatter type="plain" usefile="false"/>
-            <formatter type="xml" usefile="true"/>
-
-            <!-- Suite of tests -->
-            <test todir="${test.results.dir}" name="com.sun.faces.application.TestActionListenerImpl"/>
-            <test todir="${test.results.dir}" name="com.sun.faces.application.TestApplicationFactoryImpl"/>
-            <test todir="${test.results.dir}" name="com.sun.faces.application.TestApplicationImpl"/>
-            <test todir="${test.results.dir}" name="com.sun.faces.application.TestApplicationImpl_Config"/>
-            <test todir="${test.results.dir}" name="com.sun.faces.application.TestHASDeprStateManagerImpl"/>
-            <test todir="${test.results.dir}" name="com.sun.faces.application.TestNavigationHandler"/>
-            <test todir="${test.results.dir}" name="com.sun.faces.application.TestStateManagerImpl"/>
-            <test todir="${test.results.dir}" name="com.sun.faces.application.TestViewHandlerImpl"/>
-            <test todir="${test.results.dir}" name="com.sun.faces.config.ConfigFileTestCase"/>
-            <test todir="${test.results.dir}" name="com.sun.faces.config.TestConfigListener"/>
-            <test todir="${test.results.dir}" name="com.sun.faces.config.TestManagedBeanFactory"/>
-            <test todir="${test.results.dir}" name="com.sun.faces.context.TestExternalContextImpl"/>
-            <test todir="${test.results.dir}" name="com.sun.faces.context.TestFacesContextFactoryImpl"/>
-            <test todir="${test.results.dir}" name="com.sun.faces.context.TestFacesContextImpl"/> 
-            <test todir="${test.results.dir}" name="com.sun.faces.convert.TestConverters"/>
-            <test todir="${test.results.dir}" name="com.sun.faces.el.impl.TestELImpl"/>
-            <test todir="${test.results.dir}" name="com.sun.faces.el.impl.TestUnifiedELImpl"/>
-            <test todir="${test.results.dir}" name="com.sun.faces.el.TestPropertyResolverImpl"/>
-            <test todir="${test.results.dir}" name="com.sun.faces.el.TestFacesResourceBundleELResolver"/>
-            <test todir="${test.results.dir}" name="com.sun.faces.el.TestValueBindingImpl"/> 
-            <test todir="${test.results.dir}" name="com.sun.faces.el.TestValueExpressionImpl"/> 
-            <test todir="${test.results.dir}" name="com.sun.faces.el.TestValueBindingImpl_Model"/> 
-            <test todir="${test.results.dir}" name="com.sun.faces.el.TestValueExpressionImpl_Model"/> 
-            <test todir="${test.results.dir}" name="com.sun.faces.el.TestVariableResolverImpl"/>
-            <test todir="${test.results.dir}" name="com.sun.faces.el.TestMethodRef"/>
-            <test todir="${test.results.dir}" name="com.sun.faces.el.TestMethodExpressionImpl"/>
-            <test todir="${test.results.dir}" name="com.sun.faces.lifecycle.TestApplyRequestValuesPhase"/>
-            <test todir="${test.results.dir}" name="com.sun.faces.lifecycle.TestInvokeApplicationPhase"/>
-            <test todir="${test.results.dir}" name="com.sun.faces.lifecycle.TestLifecycleFactoryImpl"/>
-            <test todir="${test.results.dir}" name="com.sun.faces.lifecycle.TestLifecycleImpl"/> 
-            <test todir="${test.results.dir}" name="com.sun.faces.lifecycle.TestLifecycleImpl_initial"/>
-            <test todir="${test.results.dir}" name="com.sun.faces.lifecycle.TestPhase"/>
-            <test todir="${test.results.dir}" name="com.sun.faces.lifecycle.TestProcessEvents"/>
-            <test todir="${test.results.dir}" name="com.sun.faces.lifecycle.TestProcessValidationsPhase"/>
-            <test todir="${test.results.dir}" name="com.sun.faces.lifecycle.TestRenderResponsePhase"/>
-            <!-- Commented out.  This test relies heavily on a bug in FacesContext.setViewRoot()
-                 that allowed one to pass a null value in.  This test case needs to be revisited. 
-            <test todir="${test.results.dir}" name="com.sun.faces.lifecycle.TestRestoreViewPhase"/> -->
-            <test todir="${test.results.dir}" name="com.sun.faces.lifecycle.TestUpdateModelValuesPhase"/>
-            <test todir="${test.results.dir}" name="com.sun.faces.renderkit.html_basic.TestComponentType"/>
-            <test todir="${test.results.dir}" name="com.sun.faces.renderkit.html_basic.TestHtmlResponseWriter"/>
-            <test todir="${test.results.dir}" name="com.sun.faces.renderkit.html_basic.TestRendererConversions"/>
-            <test todir="${test.results.dir}" name="com.sun.faces.renderkit.html_basic.TestRenderers_1"/>
-            <test todir="${test.results.dir}" name="com.sun.faces.renderkit.html_basic.TestRenderers_2"/>
-            <test todir="${test.results.dir}"  name="com.sun.faces.renderkit.html_basic.TestRenderers_3"/>
-            <test todir="${test.results.dir}"  name="com.sun.faces.renderkit.html_basic.TestRenderers_4"/>
-            <test todir="${test.results.dir}"  name="com.sun.faces.renderkit.TestRenderKit"/>
-            <test todir="${test.results.dir}"  name="com.sun.faces.renderkit.TestRenderKitFactory"/>
-            <test todir="${test.results.dir}"  name="com.sun.faces.taglib.TlvTestCase"/>
-            <test todir="${test.results.dir}"  name="com.sun.faces.taglib.jsf_core.TestLoadBundleTag"/>
-            <test todir="${test.results.dir}"  name="com.sun.faces.taglib.jsf_core.TestValidatorTags"/>
-            <test todir="${test.results.dir}"  name="com.sun.faces.taglib.jsf_core.TestViewTag"/>
-            <test todir="${test.results.dir}"  name="com.sun.faces.util.TestUtil"/>
-            <test todir="${test.results.dir}"  name="com.sun.faces.util.TestUtil_messages"/>
-            <test todir="${test.results.dir}"  name="com.sun.faces.taglib.jsf_core.TestCoreTagsVBEnabled"/>
-            <!-- To run the following tests, uncomment
+        <jsf.junit classpath-refid="test.runtime.classpath"
+                   test-results-dir="${impl.test.results.dir}">
+            <custom-sysproperties>
+                <sysproperty key="cactus.contextURL"
+                             value="http://${container.host}:${container.port}/test"/>
+            </custom-sysproperties>
+            <suite>
+                <test todir="${impl.test.results.dir}"
+                      name="com.sun.faces.application.TestActionListenerImpl"/>
+                <test todir="${impl.test.results.dir}"
+                      name="com.sun.faces.application.TestApplicationFactoryImpl"/>
+                <test todir="${impl.test.results.dir}"
+                      name="com.sun.faces.application.TestApplicationImpl"/>
+                <test todir="${impl.test.results.dir}"
+                      name="com.sun.faces.application.TestApplicationImpl_Config"/>
+                <test todir="${impl.test.results.dir}"
+                      name="com.sun.faces.application.TestHASDeprStateManagerImpl"/>
+                <test todir="${impl.test.results.dir}"
+                      name="com.sun.faces.application.TestNavigationHandler"/>
+                <test todir="${impl.test.results.dir}"
+                      name="com.sun.faces.application.TestStateManagerImpl"/>
+                <test todir="${impl.test.results.dir}"
+                      name="com.sun.faces.application.TestViewHandlerImpl"/>
+                <test todir="${impl.test.results.dir}"
+                      name="com.sun.faces.config.ConfigFileTestCase"/>
+                <test todir="${impl.test.results.dir}"
+                      name="com.sun.faces.config.TestConfigListener"/>
+                <test todir="${impl.test.results.dir}"
+                      name="com.sun.faces.config.TestManagedBeanFactory"/>
+                <test todir="${impl.test.results.dir}"
+                      name="com.sun.faces.context.TestExternalContextImpl"/>
+                <test todir="${impl.test.results.dir}"
+                      name="com.sun.faces.context.TestFacesContextFactoryImpl"/>
+                <test todir="${impl.test.results.dir}"
+                      name="com.sun.faces.context.TestFacesContextImpl"/>
+                <test todir="${impl.test.results.dir}"
+                      name="com.sun.faces.convert.TestConverters"/>
+                <test todir="${impl.test.results.dir}"
+                      name="com.sun.faces.el.impl.TestELImpl"/>
+                <test todir="${impl.test.results.dir}"
+                      name="com.sun.faces.el.impl.TestUnifiedELImpl"/>
+                <test todir="${impl.test.results.dir}"
+                      name="com.sun.faces.el.TestPropertyResolverImpl"/>
+                <test todir="${impl.test.results.dir}"
+                      name="com.sun.faces.el.TestFacesResourceBundleELResolver"/>
+                <test todir="${impl.test.results.dir}"
+                      name="com.sun.faces.el.TestValueBindingImpl"/>
+                <test todir="${impl.test.results.dir}"
+                      name="com.sun.faces.el.TestValueExpressionImpl"/>
+                <test todir="${impl.test.results.dir}"
+                      name="com.sun.faces.el.TestValueBindingImpl_Model"/>
+                <test todir="${impl.test.results.dir}"
+                      name="com.sun.faces.el.TestValueExpressionImpl_Model"/>
+                <test todir="${impl.test.results.dir}"
+                      name="com.sun.faces.el.TestVariableResolverImpl"/>
+                <test todir="${impl.test.results.dir}"
+                      name="com.sun.faces.el.TestMethodRef"/>
+                <test todir="${impl.test.results.dir}"
+                      name="com.sun.faces.el.TestMethodExpressionImpl"/>
+                <test todir="${impl.test.results.dir}"
+                      name="com.sun.faces.lifecycle.TestApplyRequestValuesPhase"/>
+                <test todir="${impl.test.results.dir}"
+                      name="com.sun.faces.lifecycle.TestInvokeApplicationPhase"/>
+                <test todir="${impl.test.results.dir}"
+                      name="com.sun.faces.lifecycle.TestLifecycleFactoryImpl"/>
+                <test todir="${impl.test.results.dir}"
+                      name="com.sun.faces.lifecycle.TestLifecycleImpl"/>
+                <test todir="${impl.test.results.dir}"
+                      name="com.sun.faces.lifecycle.TestLifecycleImpl_initial"/>
+                <test todir="${impl.test.results.dir}"
+                      name="com.sun.faces.lifecycle.TestPhase"/>
+                <test todir="${impl.test.results.dir}"
+                      name="com.sun.faces.lifecycle.TestProcessEvents"/>
+                <test todir="${impl.test.results.dir}"
+                      name="com.sun.faces.lifecycle.TestProcessValidationsPhase"/>
+                <test todir="${impl.test.results.dir}"
+                      name="com.sun.faces.lifecycle.TestRenderResponsePhase"/>
+                <!-- Commented out.  This test relies heavily on a bug in 
+                     FacesContext.setViewRoot() that allowed one to pass a null 
+                     value in.  This test case needs to be revisited. 
+                <test todir="${impl.test.results.dir}" 
+                      name="com.sun.faces.lifecycle.TestRestoreViewPhase"/> -->
+                <test todir="${impl.test.results.dir}"
+                      name="com.sun.faces.lifecycle.TestUpdateModelValuesPhase"/>
+                <test todir="${impl.test.results.dir}"
+                      name="com.sun.faces.renderkit.html_basic.TestComponentType"/>
+                <test todir="${impl.test.results.dir}"
+                      name="com.sun.faces.renderkit.html_basic.TestHtmlResponseWriter"/>
+                <test todir="${impl.test.results.dir}"
+                      name="com.sun.faces.renderkit.html_basic.TestRendererConversions"/>
+                <test todir="${impl.test.results.dir}"
+                      name="com.sun.faces.renderkit.html_basic.TestRenderers_1"/>
+                <test todir="${impl.test.results.dir}"
+                      name="com.sun.faces.renderkit.html_basic.TestRenderers_2"/>
+                <test todir="${impl.test.results.dir}"
+                      name="com.sun.faces.renderkit.html_basic.TestRenderers_3"/>
+                <test todir="${impl.test.results.dir}"
+                      name="com.sun.faces.renderkit.html_basic.TestRenderers_4"/>
+                <test todir="${impl.test.results.dir}"
+                      name="com.sun.faces.renderkit.TestRenderKit"/>
+                <test todir="${impl.test.results.dir}"
+                      name="com.sun.faces.renderkit.TestRenderKitFactory"/>
+                <test todir="${impl.test.results.dir}"
+                      name="com.sun.faces.taglib.TlvTestCase"/>
+                <test todir="${impl.test.results.dir}"
+                      name="com.sun.faces.taglib.jsf_core.TestLoadBundleTag"/>
+                <test todir="${impl.test.results.dir}"
+                      name="com.sun.faces.taglib.jsf_core.TestValidatorTags"/>
+                <test todir="${impl.test.results.dir}"
+                      name="com.sun.faces.taglib.jsf_core.TestViewTag"/>
+                <test todir="${impl.test.results.dir}"
+                      name="com.sun.faces.util.TestUtil"/>
+                <test todir="${impl.test.results.dir}"
+                      name="com.sun.faces.util.TestUtil_messages"/>
+                <test todir="${impl.test.results.dir}"
+                      name="com.sun.faces.taglib.jsf_core.TestCoreTagsVBEnabled"/>
+                <!-- To run the following tests, uncomment
                  following tests and set javax.faces.STATE_SAVING_METHOD 
                  property in conf/test/web.xml to client. Tests that 
                  excercise save state in server code have to be commented as 
                  well 
-            <test todir="${test.results.dir}"  name="com.sun.faces.lifecycle.TestSaveStateInPage"/>
-            <test todir="${test.results.dir}"  name="com.sun.faces.lifecycle.TestRestoreViewFromPage"/> -->
+                <test todir="${impl.test.results.dir}"  
+                      name="com.sun.faces.lifecycle.TestSaveStateInPage"/>
+                <test todir="${impl.test.results.dir}"  
+                      name="com.sun.faces.lifecycle.TestRestoreViewFromPage"/> -->
+            </suite>
 
-        </junit>
-
+        </jsf.junit>       
     </target>
 
 
-    <target name="run.test" depends="compile.test,copy-test-data-files">
-        <junit printsummary="yes" haltonfailure="yes" haltonerror="yes" fork="yes">
-            <!-- uncomment the below line to enable attaching a debugger -->
-            <jvmarg line="${debug.jvm.args}"/>
+    <target name="run.test" depends="compile.test">
+        <jsf.junit classpath-refid="test.runtime.classpath"
+                   test-results-dir="${impl.test.results.dir}">
+            <suite>
+                <test todir="${impl.test.results.dir}"
+                      name="com.sun.faces.util.TestUtil_local"/>    
+            </suite>    
+        </jsf.junit>
+        <antcall target="test.config"/>
+    </target>
+    
+     <target name="config.compile"            
+            description="Compile standalone JUnit tests">
 
+        <mkdir dir="${basedir}/build/test"/>
+        <jsf.javac srcdir="${basedir}/test"
+                   destdir="${basedir}/build/test/classes"
+                   includes="com/sun/faces/config/ConfigureListenerTestCase.java,
+                             com/sun/faces/config/TestComponent.java,
+                             com/sun/faces/config/TestConverter.java,
+                             com/sun/faces/config/TestRenderer.java,
+                             com/sun/faces/config/TestValidator.java,
+                             com/sun/faces/mock/*.java">
             <classpath>
-                <pathelement path="${java.class.path}"/>
-                <pathelement location="${out.test.dir}/WEB-INF/classes"/>
-            </classpath>
-            <classpath refid="compile.classpath"/>
+                <path refid="test.compile.classpath"/>
+                
+            </classpath>    
+        </jsf.javac>      
+        <copy todir="${basedir}/build/test/classes">
+            <fileset dir="${basedir}/test"
+                     includes="**/*.properties"/>
+        </copy>
+    </target>    
 
-            <formatter type="plain" usefile="false"/>
-            <formatter type="xml" usefile="true"/>
-            <test todir="${test.results.dir}"  name="com.sun.faces.util.TestUtil_local"/>            
-        </junit>
+    <target name="prepare.config"   
+            description="Prepare pseudo-webapps for configuration testing">
+
+        <!-- Set up webapp "test-config-1" -->
+        <mkdir dir="${build.dir}/test-config-1"/>
+        <copy todir="${build.dir}/test-config-1">
+            <fileset dir="web/test-config-1"/>
+        </copy>
+        <mkdir dir="${build.dir}/test-config-1/WEB-INF/classes"/>
+        <mkdir dir="${build.dir}/test-config-1/WEB-INF/lib"/>
+        <copy todir="${build.dir}/test-config-1/WEB-INF/lib"
+              file="${jsf-api.jar}"/>
+        <copy todir="${build.dir}/test-config-1/WEB-INF/lib"
+              file="${build.dir}/lib/${name}.jar"/>
+
+        <!-- Set up webapp "test-config-2" by copying "test-config-1" ... -->
+        <mkdir dir="${build.dir}/test-config-2"/>
+        <copy todir="${build.dir}/test-config-2">
+            <fileset dir="${build.dir}/test-config-1"/>
+        </copy>
+        <!-- ... and adding a META-INF/faces-config.xml file in /WEB-INF/classes -->
+        <mkdir dir="${build.dir}/test-config-2/WEB-INF/classes/META-INF"/>
+        <copy tofile="${build.dir}/test-config-2/WEB-INF/classes/META-INF/faces-config.xml"
+              file="${build.dir}/test-config-2/WEB-INF/embed-config.xml"/>
 
     </target>
 
-    <!-- Custom Tomcat Integration -->
-    <taskdef  name="install"  classname="org.apache.catalina.ant.InstallTask">
-        <classpath>
-          <pathelement location="${catalina-ant.jar}" />
-        </classpath>
-    </taskdef>
-    <taskdef  name="remove"   classname="org.apache.catalina.ant.RemoveTask">
-        <classpath>
-          <pathelement location="${catalina-ant.jar}" />
-        </classpath>
-    </taskdef>
-    
-    <target name="run.cactus.test.appserver" depends="prepare.test.webapp">
-      <antcall target="deploy"/>
-      <antcall target="run.cactus.test"/>
-    </target>
-    
-    <target name="-check-os">
-      <condition property="exec.name" value="cmd.exe">
-        <os family="windows"/>
-      </condition>
-      <condition property="exec.arg.1" value="/c ${tomcat.home}/bin/asadmin">
-        <os family="windows"/>
-      </condition>
-      <property name="exec.name" value="${tomcat.home}/bin/asadmin"/>
-      <property name="exec.arg.1" value=""/>
+    <target name="test.config"
+            depends="prepare.config,config.compile"
+            description="Execute standalone JUnit tests on config subsystem">
+
+        <echo message="Running com.sun.faces.config tests ..."/>
+        <jsf.junit classpath-refid="test.runtime.classpath"
+                   test-results-dir="${impl.test.results.dir}">
+            <custom-sysproperties>
+                <sysproperty   key="base.dir" value="${basedir}/build"/>
+            </custom-sysproperties>
+            <tests>
+                <fileset dir="${basedir}/build/test/classes"
+                         includes="com/sun/faces/config/ConfigureListenerTestCase.class"/>
+            </tests>             
+        </jsf.junit>        
     </target>
 
-    <target name="deploy.asadmin" depends="-check-os" >
-        <exec executable="${exec.name}" failonerror="true">
-            <arg line="${exec.arg.1}"/>
-            <arg line="deploy"/>
-            <arg line="--user ${admin.user}"/>
-            <arg line="--password ${admin.password}"/>       
-            <arg line="--host ${admin.host}"/>
-            <arg line="--port ${admin.port}"/>     
-            <arg line="${basedir}/${build.home}/test.war"/>            
-        </exec>       
-    </target>
-    
-    <target name="undeploy.asadmin" depends="-check-os">
-        <exec executable="${exec.name}">
-            <arg line="${exec.arg.1}"/>
-            <arg line="undeploy"/>
-            <arg line="--user ${admin.user}"/>
-            <arg line="--password ${admin.password}"/>       
-            <arg line="--host ${admin.host}"/>
-            <arg line="--port ${admin.port}"/>     
-            <arg line="test"/>            
-        </exec>
-        
-    </target>
-
-
-    <target description="Deploy web applications"  name="deploy">   
-       <copy file="${basedir}/${build.home}/test.war" 
-           todir="${tomcat.home}/domains/${appserver.domain}/autodeploy"/>        
-	<sleep seconds="60"/> 
-  </target>
 </project>

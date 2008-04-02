@@ -25,16 +25,15 @@
 
 package characterCombat;
 
-import javax.faces.model.SelectItem;
-import javax.faces.event.ActionEvent;
 import javax.faces.event.AbortProcessingException;
+import javax.faces.event.ActionEvent;
+import javax.faces.model.SelectItem;
 
-import java.util.Arrays;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 
 /**
@@ -49,22 +48,18 @@ public class ModelBean {
     // Class Variables ---------------------------------------------------------
     // -------------------------------------------------------------------------
 
-    /**
-     * <p>Array of SelectItem entries for the available species</p>
-     */
+    /** <p>Array of SelectItem entries for the available species</p> */
     private static SelectItem characterSpeciesOptions[] = {
-        new SelectItem("Maia"),
-        new SelectItem("Istari"),
-        new SelectItem("Ent"),
-        new SelectItem("Elf"),
-        new SelectItem("Man"),
-        new SelectItem("Dwarf"),
-        new SelectItem("Hobbit")
+          new SelectItem("Maia"),
+          new SelectItem("Istari"),
+          new SelectItem("Ent"),
+          new SelectItem("Elf"),
+          new SelectItem("Man"),
+          new SelectItem("Dwarf"),
+          new SelectItem("Hobbit")
     };
 
-    /**
-     * <p>Tie result String</p>
-     */
+    /** <p>Tie result String</p> */
     private static String tieResult = "No One";
 
     // -------------------------------------------------------------------------
@@ -75,8 +70,7 @@ public class ModelBean {
      * <p>Map of available species and their respective properties. Map
      * is keyed by species type and contains SpeciesBean entries</p>
      */
-    private HashMap speciesPropertyMap = null;
-
+    private HashMap<String, SpeciesBean> speciesPropertyMap = null;
 
     // -------------------------------------------------------------------------
     // Constructor -------------------------------------------------------------
@@ -91,31 +85,30 @@ public class ModelBean {
         populate();
     }
 
-
     // -------------------------------------------------------------------------
     // Value Properties --------------------------------------------------------
     // -------------------------------------------------------------------------
 
-    ArrayList dataList = null;
+    ArrayList<CharacterBean> dataList = null;
 
     /**
      * <p>Returns List of characters</p>
-     * 
+     *
      * @return the list of characters
      */
-    public List getDataList() {
+    public List<CharacterBean> getDataList() {
         return dataList;
     }
 
     /**
      * <p>Set the internal list of characters</p>
      *
-     * @param ArrayList of characters
+     * @param dataList List of characters
      */
-    public void setDataList(ArrayList dataList) {
+    public void setDataList(ArrayList<CharacterBean> dataList) {
         this.dataList = dataList;
     }
-    
+
     private String customName = null;
 
     /**
@@ -130,7 +123,7 @@ public class ModelBean {
     /**
      * <p>Set the custom entry's name</p>
      *
-     * @param new custom name String
+     * @param customName custom name
      */
     public void setCustomName(String customName) {
         this.customName = customName;
@@ -150,7 +143,7 @@ public class ModelBean {
     /**
      * <p>Set the custom entry's species</p>
      *
-     * @param new custom species String
+     * @param customSpecies
      */
     public void setCustomSpecies(String customSpecies) {
         this.customSpecies = customSpecies;
@@ -171,7 +164,7 @@ public class ModelBean {
     /**
      * <p>Set the current character name</p>
      *
-     * @param new current character name String
+     * @param currentSelection
      */
     public void setCurrentSelection(String currentSelection) {
         this.currentSelection = currentSelection;
@@ -185,16 +178,16 @@ public class ModelBean {
      * @return first selected character name String
      */
     public String getFirstSelection() {
-	if (null == firstSelection) {
-	    firstSelection = ((CharacterBean)dataList.get(0)).getName();
-	}
+        if (null == firstSelection) {
+            firstSelection = (dataList.get(0)).getName();
+        }
         return firstSelection;
     }
 
     /**
      * <p>Set the first selected character name</p>
      *
-     * @param new first selected character name String
+     * @param firstSelection
      */
     public void setFirstSelection(String firstSelection) {
         this.firstSelection = firstSelection;
@@ -208,22 +201,21 @@ public class ModelBean {
      * @return second selected character name String
      */
     public String getSecondSelection() {
-	if (null == secondSelection) {
-	    List available = getCharactersToSelect();
-	    secondSelection = (String) ((SelectItem)available.get(0)).getValue();
-	}
+        if (null == secondSelection) {
+            List<SelectItem> available = getCharactersToSelect();
+            secondSelection = (String) (available.get(0)).getValue();
+        }
         return secondSelection;
     }
 
     /**
      * <p>Set the second selected character name</p>
      *
-     * @param new second selected character name String
+     * @param secondSelection
      */
     public void setSecondSelection(String secondSelection) {
         this.secondSelection = secondSelection;
     }
-
 
     // -------------------------------------------------------------------------
     // Data Properties ---------------------------------------------------------
@@ -234,7 +226,7 @@ public class ModelBean {
      *
      * @return List of available species options
      */
-    public List getSpeciesOptions() {
+    public List<SelectItem> getSpeciesOptions() {
         return Arrays.asList(characterSpeciesOptions);
     }
 
@@ -247,13 +239,13 @@ public class ModelBean {
      *
      * @return List of available SelectItem characters
      */
-    public List getCharactersToSelect() {
-        List selectItemList = new ArrayList();
-        Iterator iter = dataList.iterator();
-        SelectItem selectItem = null;
+    public List<SelectItem> getCharactersToSelect() {
+        List<SelectItem> selectItemList = new ArrayList<SelectItem>();
+        Iterator<CharacterBean> iter = dataList.iterator();
+        SelectItem selectItem;
 
         while (iter.hasNext()) {
-            CharacterBean item = (CharacterBean) iter.next();
+            CharacterBean item = iter.next();
 
             //If a character has been selected, do not include it
             if (!item.getName().equals(firstSelection)) {
@@ -271,17 +263,17 @@ public class ModelBean {
      *
      * @return List of all SelectItem characters
      */
-    public List getAllCharactersToSelect() {
-        List selectItemList = new ArrayList();
-        Iterator iter = dataList.iterator();
-        SelectItem selectItem = null;
+    public List<SelectItem> getAllCharactersToSelect() {
+        List<SelectItem> selectItemList = new ArrayList<SelectItem>();
+        Iterator<CharacterBean> iter = dataList.iterator();
+        SelectItem selectItem;
 
         while (iter.hasNext()) {
-            CharacterBean item = (CharacterBean) iter.next();
-	    
-	    selectItem = new SelectItem(item.getName());
-	    selectItemList.add(selectItem);
-	}
+            CharacterBean item = iter.next();
+
+            selectItem = new SelectItem(item.getName());
+            selectItemList.add(selectItem);
+        }
 
         return selectItemList;
     }
@@ -301,18 +293,20 @@ public class ModelBean {
 
         int firstCount = -1;
         int secondCount = -1;
-        for (int i=0; i< characterSpeciesOptions.length; i++ ) {
+        for (int i = 0; i < characterSpeciesOptions.length; i++) {
             if (firstSelectionSpecies.equals(
-               characterSpeciesOptions[i].getLabel())) {
+                  characterSpeciesOptions[i].getLabel())) {
                 firstCount = i;
             }
             if (secondSelectionSpecies.equals(
-               characterSpeciesOptions[i].getLabel())) {
+                  characterSpeciesOptions[i].getLabel())) {
                 secondCount = i;
             }
         }
-        
-        if (firstCount == secondCount) return tieResult;
+
+        if (firstCount == secondCount) {
+            return tieResult;
+        }
         return (firstCount < secondCount) ? firstSelection : secondSelection;
     }
 
@@ -326,14 +320,13 @@ public class ModelBean {
      *
      * @param event the ActionEvent that triggered the action
      */
-    public void addCustomName(ActionEvent event) throws AbortProcessingException {
+    public void addCustomName(ActionEvent event)
+          throws AbortProcessingException {
         if ((customName != null) && (!customName.trim().equals(""))) {
             customName = customName.trim();
 
             //check to see if name already exists in list
-            Iterator iter = dataList.iterator();
-            while (iter.hasNext()) {
-                CharacterBean item = (CharacterBean) iter.next();
+            for (CharacterBean item : dataList) {
                 if (item.getName().equals(customName)) {
                     reset();
                     return;
@@ -343,12 +336,10 @@ public class ModelBean {
             //create new entry
             CharacterBean item = new CharacterBean();
             item.setName(customName);
-            item.setSpecies((SpeciesBean) 
-                speciesPropertyMap.get(customSpecies));
+            item.setSpecies(speciesPropertyMap.get(customSpecies));
             dataList.add(item);
         }
     }
-
 
     // -------------------------------------------------------------------------
     // Private Methods ---------------------------------------------------------
@@ -357,14 +348,13 @@ public class ModelBean {
     /**
      * <p>Get species type based on character name<p>
      *
-     * @param character name String
+     * @param name
+     *
      * @return species type String
      */
     private String getSpeciesByName(String name) {
-        Iterator iter = dataList.iterator();
 
-        while (iter.hasNext()) {
-            CharacterBean item = (CharacterBean) iter.next();
+        for (CharacterBean item : dataList) {
             if (item.getName().equals(name)) {
                 return item.getSpecies().getType();
             }
@@ -378,79 +368,74 @@ public class ModelBean {
      * available characters</p>
      */
     private void populate() {
-         populateSpeciesMap();
-         populateCharacterList();
+        populateSpeciesMap();
+        populateCharacterList();
     }
 
-         
-    /**
-     * <p>Populate species type to properties mappings</p>
-     */
+
+    /** <p>Populate species type to properties mappings</p> */
     private void populateSpeciesMap() {
-         speciesPropertyMap = new HashMap();
-         SpeciesBean species = new SpeciesBean();
-         species.setType("Maia");
-         species.setLanguage("Black Speech");
-         species.setImmortal(true);
-         speciesPropertyMap.put(species.getType(), species);
+        speciesPropertyMap = new HashMap<String, SpeciesBean>();
+        SpeciesBean species = new SpeciesBean();
+        species.setType("Maia");
+        species.setLanguage("Black Speech");
+        species.setImmortal(true);
+        speciesPropertyMap.put(species.getType(), species);
 
-         species = new SpeciesBean();
-         species.setType("Istari");
-         species.setLanguage("Common Tongue");
-         species.setImmortal(true);
-         speciesPropertyMap.put(species.getType(), species);
+        species = new SpeciesBean();
+        species.setType("Istari");
+        species.setLanguage("Common Tongue");
+        species.setImmortal(true);
+        speciesPropertyMap.put(species.getType(), species);
 
-         species = new SpeciesBean();
-         species.setType("Elf");
-         species.setLanguage("Quenya/Sindarin");
-         species.setImmortal(true);
-         speciesPropertyMap.put(species.getType(), species);
+        species = new SpeciesBean();
+        species.setType("Elf");
+        species.setLanguage("Quenya/Sindarin");
+        species.setImmortal(true);
+        speciesPropertyMap.put(species.getType(), species);
 
-         species = new SpeciesBean();
-         species.setType("Ent");
-         species.setLanguage("Quenya/Sindarin");
-         species.setImmortal(true);
-         speciesPropertyMap.put(species.getType(), species);
+        species = new SpeciesBean();
+        species.setType("Ent");
+        species.setLanguage("Quenya/Sindarin");
+        species.setImmortal(true);
+        speciesPropertyMap.put(species.getType(), species);
 
-         species = new SpeciesBean();
-         species = new SpeciesBean();
-         species.setType("Man");
-         species.setLanguage("Common Tongue");
-         species.setImmortal(false);
-         speciesPropertyMap.put(species.getType(), species);
+        species = new SpeciesBean();
+        species.setType("Man");
+        species.setLanguage("Common Tongue");
+        species.setImmortal(false);
+        speciesPropertyMap.put(species.getType(), species);
 
-         species = new SpeciesBean();
-         species.setType("Dwarf");
-         species.setLanguage("Dwarfish");
-         species.setImmortal(false);
-         speciesPropertyMap.put(species.getType(), species);
+        species = new SpeciesBean();
+        species.setType("Dwarf");
+        species.setLanguage("Dwarfish");
+        species.setImmortal(false);
+        speciesPropertyMap.put(species.getType(), species);
 
-         species = new SpeciesBean();
-         species.setType("Hobbit");
-         species.setLanguage("Common Tongue");
-         species.setImmortal(false);
-         speciesPropertyMap.put(species.getType(), species);
+        species = new SpeciesBean();
+        species.setType("Hobbit");
+        species.setLanguage("Common Tongue");
+        species.setImmortal(false);
+        speciesPropertyMap.put(species.getType(), species);
     }
 
-    /**
-     * <p>Populate initial characters list</p>
-     */
+    /** <p>Populate initial characters list</p> */
     private void populateCharacterList() {
-         dataList = new ArrayList();
-         CharacterBean item = new CharacterBean();
-         item.setName("Gandalf");
-         item.setSpecies((SpeciesBean) speciesPropertyMap.get("Istari"));
-         dataList.add(item);
+        dataList = new ArrayList<CharacterBean>();
+        CharacterBean item = new CharacterBean();
+        item.setName("Gandalf");
+        item.setSpecies(speciesPropertyMap.get("Istari"));
+        dataList.add(item);
 
-         item = new CharacterBean();
-         item.setName("Frodo");
-         item.setSpecies((SpeciesBean) speciesPropertyMap.get("Hobbit"));
-         dataList.add(item);
+        item = new CharacterBean();
+        item.setName("Frodo");
+        item.setSpecies(speciesPropertyMap.get("Hobbit"));
+        dataList.add(item);
 
-         item = new CharacterBean();
-         item.setName("Legolas");
-         item.setSpecies((SpeciesBean) speciesPropertyMap.get("Elf"));
-         dataList.add(item);
+        item = new CharacterBean();
+        item.setName("Legolas");
+        item.setSpecies(speciesPropertyMap.get("Elf"));
+        dataList.add(item);
     }
 
     /**

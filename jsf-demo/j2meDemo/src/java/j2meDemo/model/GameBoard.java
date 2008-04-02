@@ -25,11 +25,11 @@
 
 package j2meDemo.model;
 
+import javax.faces.model.SelectItem;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-
-import javax.faces.model.SelectItem;
 
 public class GameBoard {
     public static final int CLIENT_PLAYER = 1;
@@ -37,7 +37,7 @@ public class GameBoard {
     public static final int DRAW = 3;
 
     private static Random generator = new Random();
-    private static final int[] BOARD_SIZES = { 3, 4, 5, 6 };
+    private static final int[] BOARD_SIZES = {3, 4, 5, 6};
     private int rows;
     private int columns;
     private int currentRow;
@@ -45,37 +45,51 @@ public class GameBoard {
     private int[][] positions;
 
     // PROPERTY: rows
-    public void setRows(int newValue) { rows = newValue; }
-    public int getRows() { return rows; }
+    public void setRows(int newValue) {
+        rows = newValue;
+    }
+
+    public int getRows() {
+        return rows;
+    }
 
     // PROPERTY: columns
-    public void setColumns(int newValue) { columns = newValue; }
-    public int getColumns() { return columns; }
+    public void setColumns(int newValue) {
+        columns = newValue;
+    }
+
+    public int getColumns() {
+        return columns;
+    }
 
     public void initialize() {
-       positions = new int[rows][columns];
+        positions = new int[rows][columns];
     }
 
     public List getBoardSizes() {
-       List boardSizes = new ArrayList();
-       for (int i = 0; i < BOARD_SIZES.length; i++) {
-           String label = "" + BOARD_SIZES[i];
-           boardSizes.add(new SelectItem(label, label, null));
-       }
-       return boardSizes;
+        List boardSizes = new ArrayList();
+        for (int i = 0; i < BOARD_SIZES.length; i++) {
+            String label = "" + BOARD_SIZES[i];
+            boardSizes.add(new SelectItem(label, label, null));
+        }
+        return boardSizes;
     }
 
     public int getCellValue(int i, int j) {
-       if (positions == null) return 0;
-       if (0 <= i && i < rows && 0 <= j && j < columns)
-          return positions[i][j];
-       else
-          return 0;
+        if (positions == null) {
+            return 0;
+        }
+        if (0 <= i && i < rows && 0 <= j && j < columns) {
+            return positions[i][j];
+        } else {
+            return 0;
+        }
     }
 
     public void setCurrent(String pos) {
-        if (pos == null || pos.length() < 2) 
+        if (pos == null || pos.length() < 2) {
             throw new IllegalArgumentException();
+        }
         int r = pos.charAt(0) - 'A';
         int c = Integer.parseInt(pos.substring(1)) - 1;
         if (r < 0 || r >= rows || c < 0 || c >= columns) {
@@ -111,10 +125,10 @@ public class GameBoard {
         }
     }
 
-    /** 
+    /**
      * Returns an integer corresponding to the winning player if
      * there is one.  If there is no winning player, zero will
-     * be returned.  If the game is complete with no winner, 
+     * be returned.  If the game is complete with no winner,
      * DRAW (a value 3) will be returned (indicating draw).
      */
     public int gameComplete() {
@@ -167,8 +181,8 @@ public class GameBoard {
         }
         same = true;
         int j = 0;
-        playerType = getCellValue(rows-1, j);
-        for (int i = rows-1; i >= 0; i--) {
+        playerType = getCellValue(rows - 1, j);
+        for (int i = rows - 1; i >= 0; i--) {
             if ((getCellValue(i, j) == playerType) && (playerType > 0)) {
                 j++;
                 continue;

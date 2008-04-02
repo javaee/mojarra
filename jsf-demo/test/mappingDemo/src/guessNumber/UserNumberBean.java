@@ -125,46 +125,46 @@ public class UserNumberBean {
                     (converted > maximum)) {
                     if (minimumSet) {
                         throw new ValidatorException(MessageFactory.getMessage
-                                                     (context,
-                                                      Validator.NOT_IN_RANGE_MESSAGE_ID,
-                                                      new Object[]{
-                                                          new Integer(minimum),
-                                                          new Integer(maximum)
-                                                      }));
+                              (context,
+                               Validator.NOT_IN_RANGE_MESSAGE_ID,
+                               new Object[]{
+                                     new Integer(minimum),
+                                     new Integer(maximum)
+                               }));
 
                     } else {
                         throw new ValidatorException(MessageFactory.getMessage
-                                                     (context,
-                                                      LongRangeValidator.MAXIMUM_MESSAGE_ID,
-                                                      new Object[]{
-                                                          new Integer(maximum)
-                                                      }));
+                              (context,
+                               LongRangeValidator.MAXIMUM_MESSAGE_ID,
+                               new Object[]{
+                                     new Integer(maximum)
+                               }));
                     }
                 }
                 if (minimumSet &&
                     (converted < minimum)) {
                     if (maximumSet) {
                         throw new ValidatorException(MessageFactory.getMessage
-                                                     (context,
-                                                      Validator.NOT_IN_RANGE_MESSAGE_ID,
-                                                      new Object[]{
-                                                          new Double(minimum),
-                                                          new Double(maximum)
-                                                      }));
+                              (context,
+                               Validator.NOT_IN_RANGE_MESSAGE_ID,
+                               new Object[]{
+                                     new Double(minimum),
+                                     new Double(maximum)
+                               }));
 
                     } else {
                         throw new ValidatorException(MessageFactory.getMessage
-                                                     (context,
-                                                      LongRangeValidator.MINIMUM_MESSAGE_ID,
-                                                      new Object[]{
-                                                          new Integer(minimum)
-                                                      }));
+                              (context,
+                               LongRangeValidator.MINIMUM_MESSAGE_ID,
+                               new Object[]{
+                                     new Integer(minimum)
+                               }));
                     }
                 }
             } catch (NumberFormatException e) {
                 throw new ValidatorException(MessageFactory.getMessage
-                                             (context,
-                                              LongRangeValidator.TYPE_MESSAGE_ID));
+                      (context,
+                       LongRangeValidator.TYPE_MESSAGE_ID));
             }
         }
 
@@ -172,7 +172,7 @@ public class UserNumberBean {
 
 
     private int intValue(Object attributeValue)
-        throws NumberFormatException {
+          throws NumberFormatException {
 
         if (attributeValue instanceof Number) {
             return (((Number) attributeValue).intValue());

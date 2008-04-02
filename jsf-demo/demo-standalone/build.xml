@@ -1,0 +1,96 @@
+<?xml version="1.0"?>
+
+<!--
+ The contents of this file are subject to the terms
+ of the Common Development and Distribution License
+ (the License). You may not use this file except in
+ compliance with the License.
+ 
+ You can obtain a copy of the License at
+ https://javaserverfaces.dev.java.net/CDDL.html or
+ legal/CDDLv1.0.txt. 
+ See the License for the specific language governing
+ permission and limitations under the License.
+ 
+ When distributing Covered Code, include this CDDL
+ Header Notice in each file and include the License file
+ at legal/CDDLv1.0.txt.    
+ If applicable, add the following below the CDDL Header,
+ with the fields enclosed by brackets [] replaced by
+ your own identifying information:
+ "Portions Copyrighted [year] [name of copyright owner]"
+ 
+ [Name of File] [ver.__] [Date]
+ 
+ Copyright 2005 Sun Microsystems Inc. All Rights Reserved
+-->
+
+
+<project name="jsf-demo" default="main" basedir=".">
+
+    <taskdef resource="net/sf/antcontrib/antlib.xml"/>
+    
+    <property file="build.properties"/>
+    <property name="jsf-api.jar" value="../lib/jsf-api.jar"/>
+    <property name="jsf-impl.jar" value="../lib/jsf-impl.jar"/>
+    <property name="ui.jar" value="${basedir}/ui.jar"/>   
+        
+        
+    <target name="main">
+        <build-sample sample-name="jsf-cardemo" sample-dir="cardemo"/>
+        <build-sample sample-name="jsf-guessNumber" sample-dir="guessNumber"/>
+        <build-sample sample-name="jsf-nonjsp" sample-dir="nonjsp"/>
+        <build-sample sample-name="jsf-components" sample-dir="components"/>
+        <build-sample sample-name="jsf-renderkits" sample-dir="renderkits"/>
+        <build-sample sample-name="webtier-sample" sample-dir="webtier-sample"/>
+    </target>    
+
+    <macrodef name="build-sample">
+        <attribute name="sample-name"/>
+        <attribute name="sample-dir"/>
+        
+        <sequential>
+            <echo>
+                
+--------------- Building @{sample-name} ----------------
+                
+            </echo>
+            <mkdir dir="@{sample-dir}/build/classes"/>
+            <javac srcdir="@{sample-dir}/src"
+                   destdir="@{sample-dir}/build/classes">
+                <classpath>
+                    <pathelement location="${jsf-api.jar}"/>
+                    <pathelement location="${jsf-impl.jar}"/>
+                    <pathelement location="${ui.jar}"/>
+                    <pathelement path="${compile.classpath}"/>
+                </classpath>
+            </javac>
+            <jar update="true" destfile="${basedir}/@{sample-name}.war">
+                <zipfileset dir="@{sample-dir}/web"/>
+                <zipfileset dir="@{sample-dir}/build/classes"
+                            prefix="WEB-INF/classes"/>
+                <zipfileset dir="@{sample-dir}/src"
+                            includes="**/*.properties"/>
+                <zipfileset file="${ui.jar}"
+                            prefix="WEB-INF/lib"/>                
+            </jar>
+            <if>
+                <isset property="${packaged.libs}"/>
+                <then>
+                    <echo message="Packing dependent libraries"/>
+                    <for list="${jsf-impl.jar},${jsf-api.jar},${packaged.libs}"
+                         param="jar">
+                        <sequential>
+                            <jar destfile="${basedir}/@{sample-name}.war"
+                                 update="true">
+                                <zipfileset file="@{jar}" prefix="WEB-INF/lib"/>
+                            </jar>
+                        </sequential>
+                    </for>
+                </then>
+            </if>  
+            <delete dir="@{sample-dir}/build/classes"/>
+        </sequential>
+    </macrodef>
+    
+</project>

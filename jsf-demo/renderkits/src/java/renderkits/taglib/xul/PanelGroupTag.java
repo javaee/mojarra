@@ -25,22 +25,13 @@
 
 package renderkits.taglib.xul;
 
-import java.io.IOException;
-import javax.el.*;
-import javax.faces.*;
-import javax.faces.component.*;
-import javax.faces.context.*;
-import javax.faces.convert.*;
-import javax.faces.el.*;
-import javax.faces.event.*;
-import javax.faces.validator.*;
-import javax.faces.webapp.*;
+import javax.faces.component.UIComponent;
+import javax.faces.webapp.UIComponentELTag;
 import javax.servlet.jsp.JspException;
 
-
 /*
- * ******* GENERATED CODE - DO NOT EDIT *******
- */
+* ******* GENERATED CODE - DO NOT EDIT *******
+*/
 
 
 public final class PanelGroupTag extends UIComponentELTag {
@@ -48,24 +39,28 @@ public final class PanelGroupTag extends UIComponentELTag {
 
     // PROPERTY: captionClass 
     private javax.el.ValueExpression captionClass;
+
     public void setCaptionClass(javax.el.ValueExpression captionClass) {
         this.captionClass = captionClass;
     }
 
     // PROPERTY: captionLabel 
     private javax.el.ValueExpression captionLabel;
+
     public void setCaptionLabel(javax.el.ValueExpression captionLabel) {
         this.captionLabel = captionLabel;
     }
 
     // PROPERTY: style
     private javax.el.ValueExpression style;
+
     public void setStyle(javax.el.ValueExpression style) {
         this.style = style;
     }
 
     // PROPERTY: styleClass
     private javax.el.ValueExpression styleClass;
+
     public void setStyleClass(javax.el.ValueExpression styleClass) {
         this.styleClass = styleClass;
     }
@@ -86,21 +81,25 @@ public final class PanelGroupTag extends UIComponentELTag {
         try {
             panel = (javax.faces.component.UIPanel) component;
         } catch (ClassCastException cce) {
-            throw new IllegalStateException("Component " + component.toString() + " not expected type.  Expected: javax.faces.component.UIPanel.  Perhaps you're missing a tag?");
+            throw new IllegalStateException("Component "
+                                            + component.toString()
+                                            + " not expected type.  Expected: javax.faces.component.UIPanel.  Perhaps you're missing a tag?");
         }
 
         if (captionClass != null) {
             if (!captionClass.isLiteralText()) {
                 panel.setValueExpression("captionClass", captionClass);
             } else {
-                panel.getAttributes().put("captionClass", captionClass.getExpressionString());
+                panel.getAttributes()
+                      .put("captionClass", captionClass.getExpressionString());
             }
         }
         if (captionLabel != null) {
             if (!captionLabel.isLiteralText()) {
                 panel.setValueExpression("captionLabel", captionLabel);
             } else {
-                panel.getAttributes().put("captionLabel", captionLabel.getExpressionString());
+                panel.getAttributes()
+                      .put("captionLabel", captionLabel.getExpressionString());
             }
         }
         if (style != null) {
@@ -114,10 +113,12 @@ public final class PanelGroupTag extends UIComponentELTag {
             if (!styleClass.isLiteralText()) {
                 panel.setValueExpression("styleClass", styleClass);
             } else {
-                panel.getAttributes().put("styleClass", styleClass.getExpressionString());
+                panel.getAttributes()
+                      .put("styleClass", styleClass.getExpressionString());
             }
         }
     }
+
     // Methods From TagSupport
     public int doStartTag() throws JspException {
         try {
@@ -157,7 +158,8 @@ public final class PanelGroupTag extends UIComponentELTag {
     }
 
     public String getDebugString() {
-        String result = "id: " + this.getId() + " class: " + this.getClass().getName();
+        String result =
+              "id: " + this.getId() + " class: " + this.getClass().getName();
         return result;
     }
 }

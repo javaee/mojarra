@@ -30,294 +30,271 @@
 
 <project name="javaserverfaces" default="main" basedir=".">
 
-<!-- ************ Per user local properties ******************************* -->
+    <!-- ************ Per user local properties ******************************* -->
 
-  <property file="build.properties"/>                <!-- Component local   -->
-  <property file="../build.properties"/>             <!-- Commons local     -->
-  <property file="${user.home}/build.properties"/>   <!-- User local        -->
-  <property environment="myenv" />
-
-
-<!-- ************ Where are we building into? ***************************** -->
-
-  <!-- the root of our tomcat -->
-
-  <!-- The base directory for compilation targets -->
-  
-  <!-- The base directory for the JSF APIs -->
-  <property name="jsf-api.home" value ="${basedir}/jsf-api"/>
-
-  <property name="jsf-tools.home"    value="${basedir}/jsf-tools"/>
-  
-  <property name="jsf-portlet.home"    value="${basedir}/jsf-portlet"/>
-  
-  <property name="jsf-ri.home" value ="${basedir}/jsf-ri"/>
-  
-  <property name="jsf-demo.home"    value="${basedir}/jsf-demo"/>
-  
-  <property name="javaee.jar"    value="${tomcat.home}/lib/javaee.jar"/>
-  
-  <property name="installer.home"    
-      value="${tomcat.home}/../installer/"/>
-  <property name="javanettasks.home"    
-      value="${installer.home}/javanettasks-1.0.3-SNAPSHOT"/>
-      
-  <property name="LICENSEFILE"    value="${basedir}/legal/jsf-cddl/CDDLv1.0.txt"/>
-
-<!-- ************ Compiler Defaults *************************************** -->
+    <property file="build.properties"/>
+    <property environment="myenv"/>
+    <import file="${jsf.build.home}/common/ant/common.xml"/>
 
 
-<!-- ************ Executable Targets ************************************** -->
+    <property name="LICENSEFILE"
+              value="${basedir}/legal/jsf-cddl/CDDLv1.0.txt"/>
 
- <target name="clean" 
-   description="Clean build and distribution directories">
-    <delete file="${basedir}/javaserverfaces_binary.zip" />
-    <delete file="${basedir}/javaserverfaces_binary.class" />
-    <delete file="${basedir}/javaserverfaces_source.zip" />
-    <delete file="${basedir}/javaserverfaces_source.class" />
-    <delete file="jsf-portlet.zip" />
-    <delete file="jsf-portlet_source.zip" />
-    <delete file="javaserverfaces_portlet.class"/>
-    <delete file="javaserverfaces_portlet_source.class"/>
-    <delete dir="${jsf-portlet.home}/dist" />
-    <delete file="jsf-samples.zip"/>
-    <delete file="${basedir}/javaserverfaces_samples.class" />
-    <delete dir="${basedir}/build" />
-    <ant dir="${jsf-api.home}" target="clean" inheritAll="false" />
-    <ant dir="${jsf-ri.home}" target="clean" inheritAll="false" />
-  </target>
+    <!-- ************ Compiler Defaults *************************************** -->
 
-  <!-- Create the source distribution -->
-  <target name="jsf.source">
-    <zip     destfile="${basedir}/javaserverfaces_source.zip">
-    
-      <zipfileset dir="${basedir}"  
-          excludes="**/CVS/**, **/build/**, **/dist/**, **/www/**, **/jsf-portlet/**,
+
+    <!-- ************ Executable Targets ************************************** -->
+
+    <target name="clean"
+            description="Clean build and distribution directories">
+        <delete file="${basedir}/javaserverfaces_binary.zip"/>
+        <delete file="${basedir}/javaserverfaces_binary.class"/>
+        <delete file="${basedir}/javaserverfaces_source.zip"/>
+        <delete file="${basedir}/javaserverfaces_source.class"/>
+        <delete file="jsf-portlet.zip"/>
+        <delete file="jsf-portlet_source.zip"/>
+        <delete file="javaserverfaces_portlet.class"/>
+        <delete file="javaserverfaces_portlet_source.class"/>
+        <delete dir="${portlet.dir}/dist"/>
+        <delete file="jsf-samples.zip"/>
+        <delete file="${basedir}/javaserverfaces_samples.class"/>
+        <delete dir="${basedir}/build"/>
+        <ant dir="${api.dir}" 
+             antfile="build.xml" 
+             target="clean" 
+             inheritAll="false"/>
+        <ant dir="${impl.dir}"
+             antfile="build.xml"
+             target="clean" 
+             inheritAll="false"/>
+    </target>    
+
+    <!-- Create the source distribution -->
+    <target name="jsf.source">
+        <zip destfile="${basedir}/javaserverfaces_source.zip">
+
+            <zipfileset dir="${basedir}"
+                        excludes="**/CVS/**, **/build/**, **/dist/**, **/www/**, **/jsf-portlet/**,
           **/jsf-demo/**, **/test-sqe/**" prefix="javaserverfaces_sources"/>
-         
-    </zip>
-  </target>
+
+        </zip>
+    </target>
 
 
-  <target name="build.java.net" description="Build distribution files">
-  <taskdef name="installerBuilder" classname="com.sun.tools.xjc.installer.builder.BuilderTask">
-     <classpath>
-         <fileset dir="${installer.home}" includes="*.jar"/>
-     </classpath>
-  </taskdef>
-  
-  <ant dir="${jsf-demo.home}" target="dist" inheritAll="false" />
+    <target name="build.java.net" 
+            description="Build distribution files"
+            depends="main">
+        
+
+        <ant dir="${demo.dir}" 
+             antfile="build.xml"
+             target="dist" 
+             inheritAll="false"/>
+
+        <copy file="${demo.dir}/jsf-${impl.version}.zip"
+              tofile="${basedir}/javaserverfaces_binary.zip"/>
+
+        <delete file="${demo.dir}/jsf-${impl.version}.zip"/>
+
+        <ant target="jsf.source"/>
+
+        <installerBuilder
+              classFile="javaserverfaces_binary.class"
+              licenseFile="${LICENSEFILE}"
+              zipFile="${basedir}/javaserverfaces_binary.zip"/>
+
+        <installerBuilder
+              classFile="javaserverfaces_source.class"
+              licenseFile="${LICENSEFILE}"
+              zipFile="${basedir}/javaserverfaces_source.zip"/>
+    </target>
+
+    <!-- 
+         =================================================================== 
+           Create the Portlet Integration library
+         =================================================================== 
+    -->
+    <target name="build-portletLibrary"
+            description="Build Portlet Integration Library">
+        <mkdir dir="${portlet.dir}/dist/jsf-portlet"/>
+        <mkdir dir="${portlet.dir}/dist/jsf-portlet/samples"/>
+        <mkdir dir="${portlet.dir}/dist/jsf-portlet/lib"/>       
+
+        <delete file="jsf-portlet.zip"/>
+        <delete file="jsf-portlet_source.zip"/>
+        <delete file="javaserverfaces_portlet.class"/>
+        <delete file="javaserverfaces_portlet_source.class"/>
+        <delete dir="${portlet.dir}/dist"/>
+        <delete dir="${portlet.dir}/build"/>
+
+        <zip destfile="${basedir}/jsf-portlet_source.zip">
+            <zipfileset dir="${basedir}/jsf-portlet"
+                        excludes="**/CVS/**, **/build/**, **/dist/**"
+                        prefix="jsf-portlet_sources"/>
+        </zip>
+
+        <installerBuilder
+              classFile="javaserverfaces_portlet_source.class"
+              licenseFile="${LICENSEFILE}"
+              zipFile="${basedir}/jsf-portlet_source.zip"/>
+
+        <ant dir="${portlet.dir}" 
+             antfile="build.xml"
+             inheritall="false" 
+             target="main"/>
+        <copy file="${LICENSEFILE}"
+              todir="${portlet.dir}/dist/jsf-portlet"/>
+        <copy file="${portlet.dir}/portlet-lib/build/lib/jsf-portlet.jar"
+              todir="${portlet.dir}/dist/jsf-portlet/lib"/>
+
+        <!-- copy the portlet-guessNumber.war and source -->
+        <ant dir="${portlet.dir}/portlet-guessNumber" inheritAll="false">
+        </ant>
+        <copy todir="${portlet.dir}/dist/jsf-portlet/samples"
+              file="${portlet.dir}/portlet-guessNumber/build/portlet-guessNumber.war"/>
+
+        <copy todir="${portlet.dir}/dist/jsf-portlet/samples/portlet-guessNumber"
+              includeEmptyDirs="false">
+            <fileset dir="${portlet.dir}/portlet-guessNumber"
+                     excludes="**/build/**"/>
+        </copy>
+        <zip zipfile="jsf-portlet.zip">
+            <fileset dir="${portlet.dir}/dist"
+                     includes="jsf-portlet/**"/>
+        </zip>
+
+        <installerBuilder
+              classFile="javaserverfaces_portlet.class"
+              licenseFile="${LICENSEFILE}"
+              zipFile="${basedir}/jsf-portlet.zip"/>
+
+    </target>
+
+    <target name="nightly" depends="build.java.net"
+            description="update nightly build">
+        
+
+        <javaNetUpload projectName="javaserverfaces"
+                       toFile="/nightly/javaserverfaces_binary.class"
+                       fromFile="${basedir}/javaserverfaces_binary.class"
+                       fileDescription="Nightly snapshot.Requires Glassfish/JavaEE5. Run 'java -cp . javaserverfaces_binary' to install"
+                       overwrite="yes"/>
+
+
+        <javaNetUpload projectName="javaserverfaces"
+                       toFile="/nightly/javaserverfaces_source.class"
+                       fromFile="${basedir}/javaserverfaces_source.class"
+                       fileDescription="Nightly source snapshot. Run 'java -cp . javaserverfaces_source' to install"
+                       overwrite="yes"/>
+    </target>
+
+    <target name="weekly" depends="build.java.net"
+            description="update weekly build">        
+
+        <javaNetUpload projectName="javaserverfaces"
+                       toFile="/weekly/javaserverfaces_binary.class"
+                       fromFile="${basedir}/javaserverfaces_binary.class"
+                       fileDescription="Weekly binary snapshot. Requires Glassfish/JavaEE5. Run 'java -cp . javaserverfaces_binary' to install"
+                       overwrite="yes"/>
+
+
+        <javaNetUpload projectName="javaserverfaces"
+                       toFile="/weekly/javaserverfaces_source.class"
+                       fromFile="${basedir}/javaserverfaces_source.class"
+                       fileDescription="Weekly source snapshot. Run 'java -cp . javaserverfaces_source' to install"
+                       overwrite="yes"/>
+    </target>
+
+    <target name="main" description="Build API and RI">
+        <ant dir="${api.dir}" 
+             antfile="build.xml"
+             target="main" 
+             inheritAll="false"/>
+        <ant dir="${impl.dir}" 
+             antfile="build.xml"
+             target="main" inheritAll="false"/>
+    </target>
+
+    <target name="test" description="Run API, RI, Demo automated tests">
+        <ant dir="${api.dir}" 
+             antfile="build.xml"
+             target="test" 
+             inheritAll="false"/>
+        <ant antfile="build.xml"
+             dir="${impl.dir}" 
+             target="test" 
+             inheritAll="false"/>
+    </target>
+
+    <target name="build.samples.zip" depends="main">       
+
+        <ant dir="${demo.dir}" 
+             antfile="build.xml"
+             target="main" 
+             inheritAll="false"/>
+        <mkdir dir="samples"/>
+        <copy todir="${basedir}/samples/jsf-samples"
+              file="${demo.dir}/guessNumber/build/jsf-guessNumber.war"/>
+        <copy todir="${basedir}/samples/jsf-samples"
+              file="${demo.dir}/carstore/build/jsf-cardemo.war"/>
+        <copy todir="${basedir}/samples/jsf-samples"
+              file="${demo.dir}/components/build/jsf-components.war"/>
+        <copy todir="${basedir}/samples/jsf-samples"
+              file="${demo.dir}/webtier-sample/build/webtier-sample.war"/>
+        <copy todir="${basedir}/samples/jsf-samples"
+              file="${demo.dir}/renderkits/build/jsf-renderkits.war"/>
+
+        <copy toFile="${basedir}/samples/jsf-samples/README.html"
+              file="${impl.dir}/docs/samples.html"/>
+
+        <copy toFile="${basedir}/samples/jsf-samples/License.txt"
+              file="${LICENSEFILE}"/>
+        <zip destfile="${basedir}/jsf-samples.zip"
+             basedir="${basedir}/samples"/>
+        <delete dir="samples"/>
+
+        <installerBuilder
+              classFile="javaserverfaces_samples.class"
+              licenseFile="${LICENSEFILE}"
+              zipFile="${basedir}/jsf-samples.zip"/>
+    </target>
+
+
+    <!--
+     Commenting out for now.  
+   <target name="update.glassfish">
+     <mkdir dir="${basedir}/build" />
+     <mkdir dir="${basedir}/build/javaee" />
+     <unjar dest="${basedir}/build/javaee" 
+            src="${javaee.jar}"/>
+     <delete>
+       <fileset dir="${basedir}/build/javaee/javax/faces">
+         <include name="**/*.*" />
+       </fileset>
+     </delete>
+     <jar destfile="${javaee.jar}">
+       <fileset dir="${basedir}/build/javaee">
+         <include name="**/*.*" />
+       </fileset>
+     </jar>
+     <antcall target="copy.jars"/>
+   </target>
  
-  <copy file="${jsf-demo.home}/jsf-${version}.zip"
-          tofile="${basedir}/javaserverfaces_binary.zip" />
-          
-  <delete file="${jsf-demo.home}/jsf-${version}.zip" />
-    
-  <ant target="jsf.source" />
-  
-  <installerBuilder
-          classFile="javaserverfaces_binary.class"
-          licenseFile="${LICENSEFILE}"
-          zipFile="${basedir}/javaserverfaces_binary.zip" />
-          
-  <installerBuilder
-          classFile="javaserverfaces_source.class"
-          licenseFile="${LICENSEFILE}"
-          zipFile="${basedir}/javaserverfaces_source.zip" />
-  </target>
-  
-   <!-- 
-       =================================================================== 
-         Create the Portlet Integration library
-       =================================================================== 
-  -->
-  <target name="build-portletLibrary"
-      description="Build Portlet Integration Library">
-      <mkdir dir="${jsf-portlet.home}/dist/jsf-portlet" />
-      <mkdir dir="${jsf-portlet.home}/dist/jsf-portlet/samples"/>
-      <mkdir dir="${jsf-portlet.home}/dist/jsf-portlet/lib"/>
-      <echo>
-      jsf-portlet is ${jsf-portlet.home}
-    </echo>
-    
-    <taskdef name="installerBuilder" classname="com.sun.tools.xjc.installer.builder.BuilderTask">
-     <classpath>
-         <fileset dir="${installer.home}" includes="*.jar"/>
-     </classpath>
-    </taskdef>
-  
-    <delete file="jsf-portlet.zip" />
-    <delete file="jsf-portlet_source.zip" />
-    <delete file="javaserverfaces_portlet.class"/>
-    <delete file="javaserverfaces_portlet_source.class"/>
-    <delete dir="${jsf-portlet.home}/dist" />
-    <delete dir="${jsf-portlet.home}/build" />
-    
-    <zip     destfile="${basedir}/jsf-portlet_source.zip">
-        <zipfileset dir="${basedir}/jsf-portlet"  
-          excludes="**/CVS/**, **/build/**, **/dist/**"
-          prefix="jsf-portlet_sources"/>
-    </zip>
-     
-     <installerBuilder
-          classFile="javaserverfaces_portlet_source.class"
-          licenseFile="${LICENSEFILE}"
-          zipFile="${basedir}/jsf-portlet_source.zip" />
-             
-    <ant dir="${jsf-portlet.home}" inheritall="false" target="main"/>
-    <copy file="${LICENSEFILE}"
-         todir="${jsf-portlet.home}/dist/jsf-portlet" />
-    <copy file="${jsf-portlet.home}/portlet-lib/build/lib/jsf-portlet.jar"
-         todir="${jsf-portlet.home}/dist/jsf-portlet/lib" />
-    
-    <!-- copy the portlet-guessNumber.war and source -->
-    <ant dir="${jsf-demo.home}/portlet-guessNumber" inheritAll="false">
-    </ant>
-    <copy todir="${jsf-portlet.home}/dist/jsf-portlet/samples"
-          file="${jsf-demo.home}/portlet-guessNumber/build/portlet-guessNumber.war"/>
-          
-    <copy todir="${jsf-portlet.home}/dist/jsf-portlet/samples/portlet-guessNumber" 
-        includeEmptyDirs="false">
-      <fileset dir="${jsf-demo.home}/portlet-guessNumber" excludes="**/build/**"/>
-    </copy>
-     <zip zipfile="jsf-portlet.zip">
-      <fileset dir="${jsf-portlet.home}/dist"
-               includes="jsf-portlet/**"/>
-    </zip>
-    
-    <installerBuilder
-          classFile="javaserverfaces_portlet.class"
-          licenseFile="${LICENSEFILE}"
-          zipFile="${basedir}/jsf-portlet.zip" />
-      
-  </target>
-  
-  <target name="nightly" depends="build.java.net" 
-      description="update nightly build" >
-  <taskdef resource="org/kohsuke/javanettasks.properties">
-    <classpath>
-      <fileset dir="${javanettasks.home}/lib" includes="*.jar"/>
-    </classpath>
-  </taskdef>
-  
-  <javaNetUpload projectName="javaserverfaces" 
-      toFile="/nightly/javaserverfaces_binary.class" fromFile="${basedir}/javaserverfaces_binary.class" 
-      fileDescription="Nightly snapshot.Requires Glassfish/JavaEE5. Run 'java -cp . javaserverfaces_binary' to install" overwrite="yes" />
-  
-     
-  <javaNetUpload projectName="javaserverfaces" 
-      toFile="/nightly/javaserverfaces_source.class" fromFile="${basedir}/javaserverfaces_source.class" 
-      fileDescription="Nightly source snapshot. Run 'java -cp . javaserverfaces_source' to install" overwrite="yes" /> 
-  </target>
-  
-  <target name="weekly" depends="build.java.net" 
-      description="update weekly build" >
-  <taskdef resource="org/kohsuke/javanettasks.properties">
-    <classpath>
-      <fileset dir="${javanettasks.home}/lib" includes="*.jar"/>
-    </classpath>
-  </taskdef>
-  
-  <javaNetUpload projectName="javaserverfaces" 
-      toFile="/weekly/javaserverfaces_binary.class" fromFile="${basedir}/javaserverfaces_binary.class" 
-      fileDescription="Weekly binary snapshot. Requires Glassfish/JavaEE5. Run 'java -cp . javaserverfaces_binary' to install" overwrite="yes" />
-  
-     
-  <javaNetUpload projectName="javaserverfaces" 
-      toFile="/weekly/javaserverfaces_source.class" fromFile="${basedir}/javaserverfaces_source.class" 
-      fileDescription="Weekly source snapshot. Run 'java -cp . javaserverfaces_source' to install" overwrite="yes" /> 
-  </target>
-  
-  <target name="main" description="Build API and RI" >
-      <ant dir="${jsf-api.home}" target="main" inheritAll="false" />
-      <ant dir="${jsf-ri.home}" target="main" inheritAll="false" />
-  </target>
-  
-  <target name="test" description="Run API, RI, Demo automated tests" >
-      <ant dir="${jsf-api.home}" target="test" inheritAll="false" />
-      <ant dir="${jsf-ri.home}" target="test" inheritAll="false" />
-  </target>
-
-  <target name="glassfish.deploy" description="Replace JSF jars in a glassfish instance">
-    <antcall target="clean.jsf.from.glassfish" />
-    
-    <jar jarfile="${javaee.jar}" update="yes" >
-        <zipfileset src="${jsf-api.home}/build/lib/jsf-api.jar"/>
-    </jar>
-    <copy todir="${tomcat.home}/lib" 
-          file="${jsf-ri.home}/build/lib/jsf-impl.jar" />
-  </target>
-
-  <target name="clean.jsf.from.glassfish">
-    <delete>
-      <fileset dir="${tomcat.home}/lib" includes="jsf-*.jar"/>
-   </delete>
-  </target>
-  
-  <target name="build.samples.zip" depends="main" >
-      <taskdef name="installerBuilder" classname="com.sun.tools.xjc.installer.builder.BuilderTask">
-         <classpath>
-             <fileset dir="${installer.home}" includes="*.jar"/>
-         </classpath>
-     </taskdef>
-  
-      <ant dir="${jsf-demo.home}" target="main" inheritAll="false" />
-      <mkdir dir="samples" />
-      <copy todir="${basedir}/samples/jsf-samples" 
-          file="${jsf-demo.home}/guessNumber/build/jsf-guessNumber.war" />
-      <copy todir="${basedir}/samples/jsf-samples" 
-          file="${jsf-demo.home}/carstore/build/jsf-cardemo.war" />
-      <copy todir="${basedir}/samples/jsf-samples" 
-          file="${jsf-demo.home}/components/build/jsf-components.war" />
-      <copy todir="${basedir}/samples/jsf-samples" 
-          file="${jsf-demo.home}/webtier-sample/build/webtier-sample.war" />
-      <copy todir="${basedir}/samples/jsf-samples"
-          file="${jsf-demo.home}/renderkits/build/jsf-renderkits.war" />
-          
-      <copy toFile="${basedir}/samples/jsf-samples/README.html" 
-          file="${jsf-ri.home}/docs/samples.html" />    
-          
-      <copy toFile="${basedir}/samples/jsf-samples/License.txt"
-          file="${LICENSEFILE}" />      
-      <zip destfile="${basedir}/jsf-samples.zip" basedir="${basedir}/samples" />
-      <delete dir="samples" />
-     
-       <installerBuilder
-          classFile="javaserverfaces_samples.class"
-          licenseFile="${LICENSEFILE}"
-          zipFile="${basedir}/jsf-samples.zip" />
-  </target>
-
-  <target name="update.glassfish">
-    <mkdir dir="${basedir}/build" />
-    <mkdir dir="${basedir}/build/javaee" />
-    <unjar dest="${basedir}/build/javaee" 
-           src="${javaee.jar}"/>
-    <delete>
-      <fileset dir="${basedir}/build/javaee/javax/faces">
-        <include name="**/*.*" />
-      </fileset>
-    </delete>
-    <jar destfile="${javaee.jar}">
-      <fileset dir="${basedir}/build/javaee">
-        <include name="**/*.*" />
-      </fileset>
-    </jar>
-    <antcall target="copy.jars"/>
-  </target>
-
-  <target name="copy.jars">
-    <copy file="${basedir}/jsf-ri/build/lib/jsf-impl.jar" 
-          todir="${tomcat.home}/lib" />
-    <copy file="${basedir}/jsf-api/build/lib/jsf-api.jar" 
-          todir="${tomcat.home}/lib" />
-    <mkdir dir="${myenv.HOME}/.maven/repository/javax.faces" />
-    <mkdir dir="${myenv.HOME}/.maven/repository/javax.faces/jars" />
-    <copy file="${basedir}/jsf-api/build/lib/jsf-api.jar" 
-          tofile="${myenv.HOME}/.maven/repository/javax.faces/jars/jsf-api-1.2a1.jar" />
-    <copy file="${basedir}/jsf-ri/build/lib/jsf-impl.jar" 
-          tofile="${myenv.HOME}/.maven/repository/javax.faces/jars/jsf-impl-1.2a1.jar" />
-
-  </target>
+   <target name="copy.jars">
+     <copy file="${basedir}/jsf-ri/build/lib/jsf-impl.jar" 
+           todir="${tomcat.home}/lib" />
+     <copy file="${basedir}/jsf-api/build/lib/jsf-api.jar" 
+           todir="${tomcat.home}/lib" />
+     <mkdir dir="${myenv.HOME}/.maven/repository/javax.faces" />
+     <mkdir dir="${myenv.HOME}/.maven/repository/javax.faces/jars" />
+     <copy file="${basedir}/jsf-api/build/lib/jsf-api.jar" 
+           tofile="${myenv.HOME}/.maven/repository/javax.faces/jars/jsf-api-1.2a1.jar" />
+     <copy file="${basedir}/jsf-ri/build/lib/jsf-impl.jar" 
+           tofile="${myenv.HOME}/.maven/repository/javax.faces/jars/jsf-impl-1.2a1.jar" />
+   
+ 
+   </target>
+   
+    -->
 
 </project>

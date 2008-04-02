@@ -1,5 +1,5 @@
 /*
- * $Id: GraphBean.java,v 1.3 2005/10/26 21:37:11 edburns Exp $
+ * $Id: GraphBean.java,v 1.4 2005/12/14 22:27:22 rlubke Exp $
  */
 
 /*
@@ -29,19 +29,18 @@
 
 package demo.model;
 
-import com.sun.javaee.blueprints.components.ui.components.GraphComponent;
-import com.sun.javaee.blueprints.components.ui.model.Graph;
-import com.sun.javaee.blueprints.components.ui.model.Node;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 import javax.faces.event.ActionEvent;
 
 import java.util.Iterator;
 
-/**
- * <p>Backing file bean for TreeControl demo.</p>
- */
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+import com.sun.javaee.blueprints.components.ui.components.GraphComponent;
+import com.sun.javaee.blueprints.components.ui.model.Graph;
+import com.sun.javaee.blueprints.components.ui.model.Node;
+
+/** <p>Backing file bean for TreeControl demo.</p> */
 
 public class GraphBean {
 
@@ -64,30 +63,42 @@ public class GraphBean {
                                  true, true);
             root.addChild(file);
             file.addChild(
-                new Node("File-New", "New 2", "/demo-test.faces", null, true,
-                         false));
+                  new Node("File-New", "New 2", "/demo-test.faces", null, true,
+                           false));
             file.addChild(
-                new Node("File-Open", "Open 2", "/demo-test.faces", null, true,
-                         false));
+                  new Node("File-Open",
+                           "Open 2",
+                           "/demo-test.faces",
+                           null,
+                           true,
+                           false));
             Node close = new Node("File-Close", "Close 2", "/demo-test.faces",
                                   null, false, false);
             file.addChild(close);
             file.addChild(
-                new Node("File-Exit", "Exit 2", "/demo-test.faces", null, true,
-                         false));
+                  new Node("File-Exit",
+                           "Exit 2",
+                           "/demo-test.faces",
+                           null,
+                           true,
+                           false));
 
             Node edit = new Node("Edit", "Edit 2", "/demo-test.faces", null,
                                  true, false);
             root.addChild(edit);
             edit.addChild(
-                new Node("Edit-Cut", "Cut 2", "/demo-test.faces", null, true,
-                         false));
+                  new Node("Edit-Cut", "Cut 2", "/demo-test.faces", null, true,
+                           false));
             edit.addChild(
-                new Node("Edit-Copy", "Copy 2", "/demo-test.faces", null, true,
-                         false));
+                  new Node("Edit-Copy",
+                           "Copy 2",
+                           "/demo-test.faces",
+                           null,
+                           true,
+                           false));
             edit.addChild(
-                new Node("Edit-Paste", "Paste 2", "/demo-test.faces", null,
-                         false, false));
+                  new Node("Edit-Paste", "Paste 2", "/demo-test.faces", null,
+                           false, false));
 
             menuGraph.setSelected(close);
         }
@@ -110,30 +121,42 @@ public class GraphBean {
                                  true, true);
             root.addChild(file);
             file.addChild(
-                new Node("File-New", "New 4", "/demo-test.faces", null, true,
-                         false));
+                  new Node("File-New", "New 4", "/demo-test.faces", null, true,
+                           false));
             file.addChild(
-                new Node("File-Open", "Open 4", "/demo-test.faces", null, true,
-                         false));
+                  new Node("File-Open",
+                           "Open 4",
+                           "/demo-test.faces",
+                           null,
+                           true,
+                           false));
             Node close = new Node("File-Close", "Close 4", "/demo-test.faces",
                                   null, false, false);
             file.addChild(close);
             file.addChild(
-                new Node("File-Exit", "Exit 4", "/demo-test.faces", null, true,
-                         false));
+                  new Node("File-Exit",
+                           "Exit 4",
+                           "/demo-test.faces",
+                           null,
+                           true,
+                           false));
 
             Node edit = new Node("Edit", "Edit 4", "/demo-test.faces", null,
                                  true, false);
             root.addChild(edit);
             edit.addChild(
-                new Node("Edit-Cut", "Cut 4", "/demo-test.faces", null, true,
-                         false));
+                  new Node("Edit-Cut", "Cut 4", "/demo-test.faces", null, true,
+                           false));
             edit.addChild(
-                new Node("Edit-Copy", "Copy 4", "/demo-test.faces", null, true,
-                         false));
+                  new Node("Edit-Copy",
+                           "Copy 4",
+                           "/demo-test.faces",
+                           null,
+                           true,
+                           false));
             edit.addChild(
-                new Node("Edit-Paste", "Paste 4", "/demo-test.faces", null,
-                         false, false));
+                  new Node("Edit-Paste", "Paste 4", "/demo-test.faces", null,
+                           false, false));
 
             treeGraph.setSelected(close);
         }

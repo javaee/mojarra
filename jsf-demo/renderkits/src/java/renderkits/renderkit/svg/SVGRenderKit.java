@@ -25,9 +25,9 @@
 
 package renderkits.renderkit.svg;
 
+import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseStream;
 import javax.faces.context.ResponseWriter;
-import javax.faces.context.FacesContext;
 import javax.faces.render.RenderKit;
 import javax.faces.render.Renderer;
 import javax.faces.render.ResponseStateManager;
@@ -41,7 +41,7 @@ import java.util.Map;
 /**
  * <p><B>SVGRenderKit</B> is a class that houses a collection of <code>SVG</code>
  * renderers.  It also creates the <code>ResponseWriter</code> used to write
- * <code>SVG</code> markup.</p> 
+ * <code>SVG</code> markup.</p>
  */
 public class SVGRenderKit extends RenderKit {
 
@@ -61,7 +61,7 @@ public class SVGRenderKit extends RenderKit {
     private static String APPLICATION_XML_CONTENT_TYPE = "application/xml";
     private static String TEXT_XML_CONTENT_TYPE = "text/xml";
     private static String ALL_MEDIA = "*/*";
-    
+
     private static String CHAR_ENCODING = "ISO-8859-1";
     private static String CONTENT_TYPE_IS_SVG = "ContentTypeIsSVG";
 //
@@ -76,7 +76,7 @@ public class SVGRenderKit extends RenderKit {
      * Renderer instances themselves.
      */
 
-    private HashMap<String,HashMap<Object,Renderer>> rendererFamilies; 
+    private HashMap<String, HashMap<Object, Renderer>> rendererFamilies;
 
     private ResponseStateManager responseStateManager = null;
 //
@@ -85,9 +85,8 @@ public class SVGRenderKit extends RenderKit {
 
     public SVGRenderKit() {
         super();
-        rendererFamilies = new HashMap<String, HashMap<Object,Renderer>>();
+        rendererFamilies = new HashMap<String, HashMap<Object, Renderer>>();
     }
-
 
     //
     // Class methods
@@ -105,17 +104,18 @@ public class SVGRenderKit extends RenderKit {
                             Renderer renderer) {
         if (family == null || rendererType == null || renderer == null) {
             // PENDING - i18n
-            String message = "Argument Error: One or more parameters are null."; 
+            String message = "Argument Error: One or more parameters are null.";
             message = message + " family " + family + " rendererType " +
-                rendererType + " renderer " + renderer;
+                      rendererType + " renderer " + renderer;
             throw new NullPointerException(message);
-                
+
         }
-        HashMap<Object,Renderer> renderers = null;
+        HashMap<Object, Renderer> renderers = null;
 
         synchronized (rendererFamilies) {
             if (null == (renderers = rendererFamilies.get(family))) {
-                rendererFamilies.put(family, renderers = new HashMap<Object, Renderer>());
+                rendererFamilies
+                      .put(family, renderers = new HashMap<Object, Renderer>());
             }
             renderers.put(rendererType, renderer);
         }
@@ -126,19 +126,19 @@ public class SVGRenderKit extends RenderKit {
 
         if (rendererType == null || family == null) {
             // PENDING - i18n
-            String message = "Argument Error: One or more parameters are null."; 
+            String message = "Argument Error: One or more parameters are null.";
             message = message + " family " + family + " rendererType " +
-                rendererType;
+                      rendererType;
             throw new NullPointerException(message);
         }
 
-        HashMap<Object,Renderer> renderers = null;
+        HashMap<Object, Renderer> renderers = null;
         Renderer renderer = null;
 
         if (null != (renderers = rendererFamilies.get(family))) {
-            renderer = renderers.get(rendererType); 
+            renderer = renderers.get(rendererType);
         }
-	
+
         return renderer;
     }
 
@@ -151,31 +151,32 @@ public class SVGRenderKit extends RenderKit {
     }
 
 
-    public ResponseWriter createResponseWriter(Writer writer, 
-					       String desiredContentTypeList,
+    public ResponseWriter createResponseWriter(Writer writer,
+                                               String desiredContentTypeList,
                                                String characterEncoding) {
         if (writer == null) {
             return null;
         }
         String contentType = null;
-	FacesContext context = FacesContext.getCurrentInstance();
-        
-        String [] supportedTypes = { SVG_CONTENT_TYPE, APPLICATION_XML_CONTENT_TYPE,
-            TEXT_XML_CONTENT_TYPE };
+        FacesContext context = FacesContext.getCurrentInstance();
+
+        String [] supportedTypes =
+              {SVG_CONTENT_TYPE, APPLICATION_XML_CONTENT_TYPE,
+               TEXT_XML_CONTENT_TYPE};
         String [] desiredTypes = null;
-            
 
         // Obtain the desired content type list
-	// first crack is the passed in list
-	if (null == desiredContentTypeList) {
-	    // second crack is the response content type
-	    desiredContentTypeList = 
-                    context.getExternalContext().getResponseContentType();
-	}
+        // first crack is the passed in list
+        if (null == desiredContentTypeList) {
+            // second crack is the response content type
+            desiredContentTypeList =
+                  context.getExternalContext().getResponseContentType();
+        }
         if (null == desiredContentTypeList) {
             // third crack is the Accept header.
             desiredContentTypeList = (String)
-	      context.getExternalContext().getRequestHeaderMap().get("Accept");
+                  context.getExternalContext().getRequestHeaderMap()
+                        .get("Accept");
         }
         // fourth, default to image/svg+xml 
         if (null == desiredContentTypeList ||
@@ -183,15 +184,16 @@ public class SVGRenderKit extends RenderKit {
             desiredContentTypeList = SVG_CONTENT_TYPE;
         }
 
-	if (null != desiredContentTypeList) {
-            Map<String,Object> requestMap = context.getExternalContext().getRequestMap();
-	    
-	    desiredTypes = contentTypeSplit(desiredContentTypeList);
-	    String curContentType = null, curDesiredType = null;                       
-            
+        if (null != desiredContentTypeList) {
+            Map<String, Object> requestMap =
+                  context.getExternalContext().getRequestMap();
+
+            desiredTypes = contentTypeSplit(desiredContentTypeList);
+            String curContentType = null, curDesiredType = null;
+
             // For each entry in the desiredTypes array, look for a match in 
             // the supportedTypes array
-	    for (int i = 0; i < desiredTypes.length; i++) {
+            for (int i = 0; i < desiredTypes.length; i++) {
                 curDesiredType = desiredTypes[i];
                 for (int j = 0; j < supportedTypes.length; j++) {
                     curContentType = supportedTypes[j].trim();
@@ -203,18 +205,17 @@ public class SVGRenderKit extends RenderKit {
                 if (null != contentType) {
                     break;
                 }
-	    }
-	    // If none of the contentTypes about which we know was in
-	    // desiredContentTypeList
-	    if (null == contentType) {
+            }
+            // If none of the contentTypes about which we know was in
+            // desiredContentTypeList
+            if (null == contentType) {
                 // PENDING - i18n
                 throw new IllegalArgumentException("Unrecognized Content Type.");
-	    }
-	}
-	else {
-	    // there was no argument contentType list, or Accept header
-	    contentType = SVG_CONTENT_TYPE;
-	}
+            }
+        } else {
+            // there was no argument contentType list, or Accept header
+            contentType = SVG_CONTENT_TYPE;
+        }
 
         if (characterEncoding == null) {
             characterEncoding = CHAR_ENCODING;
@@ -222,13 +223,13 @@ public class SVGRenderKit extends RenderKit {
 
         return new SVGResponseWriter(writer, contentType, characterEncoding);
     }
-    
+
     private String[] contentTypeSplit(String contentTypeString) {
         String [] result = contentTypeString.split(",");
         for (int i = 0; i < result.length; i++) {
             int semicolon = result[i].indexOf(";");
             if (-1 != semicolon) {
-                result[i] = result[i].substring(0,semicolon);
+                result[i] = result[i].substring(0, semicolon);
             }
         }
         return result;
@@ -262,7 +263,7 @@ public class SVGRenderKit extends RenderKit {
                 output.close();
             }
         };
-    }       
+    }
 
 } // end of class SVGRenderKit
 
