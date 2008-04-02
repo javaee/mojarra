@@ -1,5 +1,5 @@
 /*
- * $Id: TableRenderer.java,v 1.41 2006/10/24 17:46:07 rlubke Exp $
+ * $Id: TableRenderer.java,v 1.42 2007/01/26 20:33:43 rlubke Exp $
  */
 
 /*
@@ -131,7 +131,7 @@ public class TableRenderer extends HtmlBasicRenderer {
             if (headerClass != null) {
                 writer.writeAttribute("class", headerClass, "headerClass");
             }
-            writer.writeAttribute("colspan", "" + columns.size(), null);
+            writer.writeAttribute("colspan", String.valueOf(columns.size()), null);
             writer.writeAttribute("scope", "colgroup", null);
             encodeRecursive(context, header);
             writer.endElement("th");
@@ -181,7 +181,7 @@ public class TableRenderer extends HtmlBasicRenderer {
             if (footerClass != null) {
                 writer.writeAttribute("class", footerClass, "footerClass");
             }
-            writer.writeAttribute("colspan", "" + columns.size(), null);
+            writer.writeAttribute("colspan", String.valueOf(columns.size()), null);
             encodeRecursive(context, footer);
             writer.endElement("td");
             writer.endElement("tr");

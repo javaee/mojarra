@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.141 2007/01/25 22:51:43 jdlee Exp $
+ * $Id: UIComponentBase.java,v 1.142 2007/01/26 20:33:47 rlubke Exp $
  */
 
 /*
@@ -557,7 +557,7 @@ public abstract class UIComponentBase extends UIComponent {
 
 
     private static final String SEPARATOR_STRING =
-        "" + NamingContainer.SEPARATOR_CHAR;
+        String.valueOf(NamingContainer.SEPARATOR_CHAR);
 
     /**
      * @throws NullPointerException {@inheritDoc}
@@ -1892,7 +1892,7 @@ public abstract class UIComponentBase extends UIComponent {
         public ChildrenListIterator(ChildrenList list, int index) {
             this.list = list;
             if ((index < 0) || (index >= list.size())) {
-                throw new IndexOutOfBoundsException("" + index);
+                throw new IndexOutOfBoundsException(String.valueOf(index));
             } else {
                 this.index = index;
             }
@@ -1915,7 +1915,7 @@ public abstract class UIComponentBase extends UIComponent {
                 last = index++;
                 return (o);
             } catch (IndexOutOfBoundsException e) {
-                throw new NoSuchElementException("" + index);
+                throw new NoSuchElementException(String.valueOf(index));
             }
         }
 

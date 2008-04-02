@@ -1,5 +1,5 @@
 /*
- * $Id: FacesMessage.java,v 1.15 2006/08/25 09:50:15 tony_robertson Exp $
+ * $Id: FacesMessage.java,v 1.16 2007/01/26 20:33:43 rlubke Exp $
  */
 
 /*
@@ -299,7 +299,7 @@ public class FacesMessage implements Serializable {
 	
         if ((severity.getOrdinal() < SEVERITY_INFO.getOrdinal()) || 
 	    (severity.getOrdinal() > SEVERITY_FATAL.getOrdinal())) {
-            throw new IllegalArgumentException("" + severity);
+            throw new IllegalArgumentException(String.valueOf(severity));
         }
         this.severity = severity;
 	
@@ -393,9 +393,9 @@ public class FacesMessage implements Serializable {
 	 */
 	public String toString() {
 	    if (null == severityName) {
-		return ("" + this.ordinal);
+		return (String.valueOf(this.ordinal));
 	    }
-	    return ("" + this.severityName + " " + this.ordinal);
+	    return (String.valueOf(this.severityName) + ' ' + this.ordinal);
 	}
 	
 	

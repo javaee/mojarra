@@ -1,5 +1,5 @@
 /*
- * $Id: GridRenderer.java,v 1.45 2006/09/01 17:30:54 rlubke Exp $
+ * $Id: GridRenderer.java,v 1.46 2007/01/26 20:33:45 rlubke Exp $
  */
 
 /*
@@ -124,7 +124,7 @@ public class GridRenderer extends HtmlBasicRenderer {
             if (headerClass != null) {
                 writer.writeAttribute("class", headerClass, "headerClass");
             }
-            writer.writeAttribute("colspan", "" + getColumnCount(component),
+            writer.writeAttribute("colspan", String.valueOf(getColumnCount(component)),
                                   null);
             writer.writeAttribute("scope", "colgroup", null);
             encodeRecursive(context, header);
@@ -147,7 +147,7 @@ public class GridRenderer extends HtmlBasicRenderer {
             if (footerClass != null) {
                 writer.writeAttribute("class", footerClass, "footerClass");
             }
-            writer.writeAttribute("colspan", "" + getColumnCount(component),
+            writer.writeAttribute("colspan", String.valueOf(getColumnCount(component)),
                                   null);
             encodeRecursive(context, footer);
             writer.endElement("td");

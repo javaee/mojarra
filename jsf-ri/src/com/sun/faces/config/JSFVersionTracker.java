@@ -2,7 +2,7 @@
  * JSFVersionTracker
  *
  * Created on February 15, 2006, 11:41 AM
- * $Id: JSFVersionTracker.java,v 1.9 2006/11/09 21:09:14 rlubke Exp $
+ * $Id: JSFVersionTracker.java,v 1.10 2007/01/26 20:33:50 rlubke Exp $
  */
 
 /*
@@ -372,7 +372,7 @@ public class JSFVersionTracker implements Serializable {
         }
         
         public String toString() {
-            return ("" + getMajorVersion() + "." + getMinorVersion());
+            return (String.valueOf(getMajorVersion()) + '.' + getMinorVersion());
         }
     }
 

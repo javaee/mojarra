@@ -222,7 +222,7 @@ public class UIData extends UIComponentBase
     public void setFirst(int first) {
 
 	if (first < 0) {
-	    throw new IllegalArgumentException("" + first);
+	    throw new IllegalArgumentException(String.valueOf(first));
 	}
         this.first = first;
 	this.firstSet = true;
@@ -483,7 +483,7 @@ public class UIData extends UIComponentBase
     public void setRows(int rows) {
 
 	if (rows < 0) {
-	    throw new IllegalArgumentException("" + rows);
+	    throw new IllegalArgumentException(String.valueOf(rows));
 	}
         this.rows = rows;
 	this.rowsSet = true;
@@ -745,7 +745,7 @@ public class UIData extends UIComponentBase
         try {
             // If we need to strip out the rowIndex from our id
             // PENDING(edburns): is this safe with respect to I18N?
-            if (myId.endsWith("" + savedRowIndex)) {
+            if (myId.endsWith(String.valueOf(savedRowIndex))) {
                 lastSep = myId.lastIndexOf(NamingContainer.SEPARATOR_CHAR);
                 assert(-1 != lastSep);
                 myId = myId.substring(0, lastSep);

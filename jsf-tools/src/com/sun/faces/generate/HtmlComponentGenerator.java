@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlComponentGenerator.java,v 1.23 2007/01/25 20:28:02 rlubke Exp $
+ * $Id: HtmlComponentGenerator.java,v 1.24 2007/01/26 20:33:46 rlubke Exp $
  */
 
 /*
@@ -447,7 +447,7 @@ public class HtmlComponentGenerator extends AbstractGenerator {
         writer.fwrite("if (_values == null) {\n");
         writer.indent();
         writer.fwrite("_values = new Object[");
-        writer.write("" + (properties.size() + p + 1));
+        writer.write(String.valueOf((properties.size() + p + 1)));
         writer.write("];\n");
         writer.outdent();
         writer.fwrite("}\n");
@@ -459,7 +459,7 @@ public class HtmlComponentGenerator extends AbstractGenerator {
             String name = mangle(pb.getPropertyName());
             String type = pb.getPropertyClass();
             writer.fwrite("_values[");
-            writer.write("" + n++);
+            writer.write(String.valueOf(n++));
             writer.write("] = ");
             if ("boolean".equals(type)) {
                 writer.write("this.");
@@ -477,7 +477,7 @@ public class HtmlComponentGenerator extends AbstractGenerator {
             writer.write(";\n");
             if (primitive(type)) {
                 writer.fwrite("_values[");
-                writer.write("" + n++);
+                writer.write(String.valueOf(n++));
                 writer.write("] = this.");
                 writer.write(name);
                 writer.write("_set ? Boolean.TRUE : Boolean.FALSE;\n");
@@ -505,7 +505,7 @@ public class HtmlComponentGenerator extends AbstractGenerator {
                 writer.write("((");
                 writer.write(GeneratorUtil.convertToObject(type));
                 writer.write(") _values[");
-                writer.write("" + n++);
+                writer.write(String.valueOf(n++));
                 writer.write("]).");
                 writer.write(GeneratorUtil.convertToPrimitive(type));
                 writer.write("()");
@@ -513,7 +513,7 @@ public class HtmlComponentGenerator extends AbstractGenerator {
                 writer.write("(");
                 writer.write(type);
                 writer.write(") _values[");
-                writer.write("" + n++);
+                writer.write(String.valueOf(n++));
                 writer.write("]");
             }
             writer.write(";\n");
@@ -521,7 +521,7 @@ public class HtmlComponentGenerator extends AbstractGenerator {
                 writer.fwrite("this.");
                 writer.write(name);
                 writer.write("_set = ((Boolean) _values[");
-                writer.write("" + n++);
+                writer.write(String.valueOf(n++));
                 writer.write("]).booleanValue();\n");
             }
         }

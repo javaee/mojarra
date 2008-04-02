@@ -1,5 +1,5 @@
 /*
- * $Id: PhaseId.java,v 1.20 2006/10/03 23:32:12 rlubke Exp $
+ * $Id: PhaseId.java,v 1.21 2007/01/26 20:33:49 rlubke Exp $
  */
 
 /*
@@ -103,10 +103,10 @@ public class PhaseId implements Comparable {
      */
     public String toString() {
 	if (null == phaseName) {
-	    return ("" + this.ordinal);
+	    return (String.valueOf(this.ordinal));
 	}
 	
-	return ("" + this.phaseName + " " + this.ordinal);
+	return (String.valueOf(this.phaseName) + ' ' + this.ordinal);
     }
 
 
