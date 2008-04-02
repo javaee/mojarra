@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigFileTestCase.java,v 1.22 2003/07/25 05:52:30 horwat Exp $
+ * $Id: ConfigFileTestCase.java,v 1.23 2003/08/05 16:06:45 eburns Exp $
  */
 
 /*
@@ -301,4 +301,19 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
 	    assertTrue(null != (renderKit.getRenderer(defaultRenderers[i])));
 	}
     }
+
+    /**
+     *
+     *<p>Test that using the same name for different artifacts works.</p>
+     */
+
+    public void testDuplicateNames() throws Exception {
+        ConfigParser cp = new ConfigParser(config.getServletContext());
+        ApplicationFactory aFactory = (ApplicationFactory)FactoryFinder.getFactory(
+        FactoryFinder.APPLICATION_FACTORY);
+        ApplicationImpl application = (ApplicationImpl)aFactory.getApplication();
+        parseConfig(cp, "config1.xml", config.getServletContext());
+    }
+
+
 }

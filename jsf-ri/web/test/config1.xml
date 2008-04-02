@@ -26,4 +26,16 @@
     <managed-bean-scope>session</managed-bean-scope>
   </managed-bean>
 
+   <component>
+     <component-type>tree</component-type>
+     <component-class>javax.faces.component.UICommand</component-class>
+   </component>
+   <render-kit>
+     <renderer>
+       <renderer-type>tree</renderer-type>
+       <renderer-class>com.sun.faces.renderkit.html_basic.CheckboxRenderer</renderer-class>
+     </renderer>
+   </render-kit> 
+
+
 </faces-config>
