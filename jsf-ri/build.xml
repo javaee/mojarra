@@ -45,9 +45,6 @@
 
   <property name="jsf-tools.dir"    value="${basedir}/../jsf-tools"/>
   
-  <property name="jsf-portlet.dir"    value="${basedir}/../jsf-portlet"/>
-
-
   <!-- The base directory for distribution targets -->
   <property name="dist.home" value="${basedir}/dist"/>
 
@@ -95,7 +92,6 @@
   <property name="standard.jar" 
             value="${tomcat.home}/jstl/lib/standard.jar"/>
   <property name="jsf-api.jar" value="${jsf-api.home}/build/lib/jsf-api.jar"/>
-  <property name="jsf-portlet.jar" value="${jsf-portlet.dir}/portlet-lib/build/lib/jsf-portlet.jar"/>
   <property name="jsf-api.dtd" value="${jsf-api.home}/build/lib/web-facesconfig_1_1.dtd"/>
   <property name="tlddoc.jar" value="${tomcat.home}/../tlddoc-1_0/tlddoc.jar"/>
   <property name="jcov.jar" 
@@ -422,7 +418,6 @@ must exist.  This is necessary for the MessageFactory class.
     <ant dir="${basedir}/systest-per-webapp" inheritall="false" target="remove"/>  
     <ant dir="${basedir}/systest-per-webapp" inheritall="false" target="clean"/>  
     <ant antfile="build-tests.xml" target="remove.jsp.incompat.workaround"/>
-    <ant dir="${jsf-portlet.dir}" inheritall="false" target="clean"/>
   </target>
 
   <target name="all" depends="clean,prepare,compile"
@@ -609,19 +604,6 @@ must exist.  This is necessary for the MessageFactory class.
          basedir="${build.coverage}/jar" />
   </target>
   
-   <!-- 
-       =================================================================== 
-         Create the Portlet Integration library
-       =================================================================== 
-  -->
-  <target name="build-jsf-portlet.jar" depends="jars">
-    <echo>
-      jsf-portlet is ${jsf-portlet.dir}
-    </echo>
-    <ant dir="${jsf-portlet.dir}" inheritall="false" target="main"/>
-    <copy file="${jsf-portlet.jar}" todir="${build.home}/lib" />
-  </target>
-
   <!--
        ==================================================================
           TCK related
@@ -665,7 +647,7 @@ must exist.  This is necessary for the MessageFactory class.
    </target>
 
 
-  <target name="main" depends="jars,build-jsf-portlet.jar,copy.to.tck"/>
+  <target name="main" depends="jars,copy.to.tck"/>
 
   <!--
        ===================================================================

@@ -57,6 +57,7 @@
     <delete file="${basedir}/javaserverfaces_binary_${version}.zip" />
     <delete file="${basedir}/javaserverfaces_source_${version}.zip" />
     <delete file="${basedir}/javaserverfaces_source_${version}.class" />
+    <delete file="jsf-portlet.zip" />
   </target>
 
   <!-- Create the source distribution -->
@@ -97,5 +98,44 @@
           classFile="javaserverfaces_source_${version}.class"
           licenseFile="${installer.home}/jrl_1_3.txt"
           zipFile="${basedir}/javaserverfaces_source_${version}.zip" />
+  </target>
+  
+   <!-- 
+       =================================================================== 
+         Create the Portlet Integration library
+       =================================================================== 
+  -->
+  <target name="build-portletLibrary"
+      description="Build Portlet Integration Library">
+      <mkdir dir="${jsf-portlet.home}/dist"/>
+      <mkdir dir="${jsf-portlet.home}/dist/samples"/>
+      <mkdir dir="${jsf-portlet.home}/dist/lib"/>
+      <echo>
+      jsf-portlet is ${jsf-portlet.home}
+    </echo>
+    
+    <delete file="jsf-portlet.zip" />
+    <delete dir="${jsf-portlet.home}/dist" />
+    <delete dir="${jsf-portlet.home}/build" />
+    
+    <ant dir="${jsf-portlet.home}" inheritall="false" target="main"/>
+    <copy file="${jsf-portlet.home}/portlet-lib/build/lib/jsf-portlet.jar"
+         todir="${jsf-portlet.home}/dist/lib" />
+    
+    <!-- copy the portlet-guessNumber.war and source -->
+    <ant dir="${jsf-demo.home}/portlet-guessNumber" inheritAll="false">
+    </ant>
+    <copy todir="${jsf-portlet.home}/dist/samples"
+          file="${jsf-demo.home}/portlet-guessNumber/build/portlet-guessNumber.war"/>
+          
+    <copy todir="${jsf-portlet.home}/dist/samples/portlet-guessNumber" 
+        includeEmptyDirs="false">
+      <fileset dir="${jsf-demo.home}/portlet-guessNumber" excludes="**/build/**"/>
+    </copy>
+     <zip zipfile="jsf-portlet.zip">
+      <fileset dir="${jsf-portlet.home}"
+               includes="dist/**"/>
+    </zip>
+      
   </target>
 </project>
