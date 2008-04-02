@@ -1,5 +1,5 @@
 /*
- * $Id: TabLabelRenderer.java,v 1.1 2003/02/15 00:57:53 rkitain Exp $
+ * $Id: TabLabelRenderer.java,v 1.2 2003/02/15 01:20:46 rkitain Exp $
  */
 
 /*
@@ -31,11 +31,6 @@ import org.apache.commons.logging.LogFactory;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.mozilla.util.Assert;
-import org.mozilla.util.Debug;
-import org.mozilla.util.Log;
-import org.mozilla.util.ParameterCheck;
-
 import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.commons.beanutils.ConversionException;
 
@@ -48,7 +43,7 @@ import org.apache.commons.beanutils.ConversionException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TabLabelRenderer.java,v 1.1 2003/02/15 00:57:53 rkitain Exp $
+ * @version $Id: TabLabelRenderer.java,v 1.2 2003/02/15 01:20:46 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo

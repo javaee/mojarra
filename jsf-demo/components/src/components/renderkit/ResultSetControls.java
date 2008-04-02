@@ -1,5 +1,5 @@
 /*
- * $Id: ResultSetControls.java,v 1.1 2003/02/14 20:36:17 eburns Exp $
+ * $Id: ResultSetControls.java,v 1.2 2003/02/15 01:20:46 rkitain Exp $
  */
 
 /*
@@ -15,11 +15,6 @@ import java.io.IOException;
 
 import java.util.List;
 
-import org.mozilla.util.Assert;
-import org.mozilla.util.Debug;
-import org.mozilla.util.Log;
-import org.mozilla.util.ParameterCheck;
-
 import javax.faces.component.UIInput;
 import javax.faces.component.UIForm;
 import javax.faces.component.UIComponent;
@@ -34,7 +29,7 @@ import java.util.MissingResourceException;
  *
  * 
  *
- * @version $Id: ResultSetControls.java,v 1.1 2003/02/14 20:36:17 eburns Exp $
+ * @version $Id: ResultSetControls.java,v 1.2 2003/02/15 01:20:46 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo

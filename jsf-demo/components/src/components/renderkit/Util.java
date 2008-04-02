@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.1 2003/02/15 00:57:54 rkitain Exp $
+ * $Id: Util.java,v 1.2 2003/02/15 01:20:46 rkitain Exp $
  */
 
 /*
@@ -10,9 +10,6 @@
 // Util.java
 
 package components.renderkit;
-
-import org.mozilla.util.Assert;
-import org.mozilla.util.ParameterCheck;
 
 import javax.servlet.ServletContext;
 import javax.faces.FacesException;
@@ -47,7 +44,7 @@ import java.util.Locale;
  *  <B>Util</B> is a class which houses common functionality used by
  *     other classes.
  *
- * @version $Id: Util.java,v 1.1 2003/02/15 00:57:54 rkitain Exp $
+ * @version $Id: Util.java,v 1.2 2003/02/15 01:20:46 rkitain Exp $
  * 
  */
 
@@ -221,8 +218,8 @@ private Util()
 	Locale result = null;
 	String bundleName = null, bundleAttr = "bundle";
 	
-	ParameterCheck.nonNull(context);
-	ParameterCheck.nonNull(component);
+//	ParameterCheck.nonNull(context);
+//	ParameterCheck.nonNull(component);
 	
 	// verify our component has the proper attributes for bundle.
 	if (null != (bundleName = (String)component.getAttribute(bundleAttr))){
@@ -232,7 +229,7 @@ private Util()
 			 (javax.servlet.jsp.jstl.fmt.LocalizationContext) 
 			 context.getModelValue(bundleName))) {
 		result = locCtx.getLocale();
-		Assert.assert_it(null != result);
+//		Assert.assert_it(null != result);
 	    }
 	}
 	if (null == result) {
