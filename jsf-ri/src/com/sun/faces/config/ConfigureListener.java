@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListener.java,v 1.46 2005/08/09 17:38:26 jayashri Exp $
+ * $Id: ConfigureListener.java,v 1.47 2005/08/11 18:19:57 edburns Exp $
  */
 /*
  * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
@@ -800,8 +800,16 @@ public class ConfigureListener implements ServletContextListener {
                 if (logger.isLoggable(Level.FINER)) {
                     logger.finer("addPhaseListener(" + listeners[i] + ')');
                 }
-                Class clazz = Util.loadClass(listeners[i], this);
-                lifecycle.addPhaseListener((PhaseListener) clazz.newInstance());
+                try {
+                    Class clazz = Util.loadClass(listeners[i], this);
+                    lifecycle.addPhaseListener((PhaseListener) clazz.newInstance());
+                } catch (Exception e) {
+                    Object [] args = { "phase-listener: " + listeners[i] };
+                    String message =
+                        Util.getExceptionMessageString(Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID,  args);
+                    logger.log(Level.SEVERE, message);
+                    throw e;
+                }
             }
         }
     }
@@ -966,12 +974,24 @@ public class ConfigureListener implements ServletContextListener {
                           config[i].getRendererType() + ',' +
                           config[i].getRendererClass() + ')');
             }
-            Renderer r = (Renderer)
+            try {
+                Renderer r = (Renderer)
                 Util.loadClass(
-                    config[i].getRendererClass(), this).newInstance();
-            rk.addRenderer(config[i].getComponentFamily(),
-                           config[i].getRendererType(),
-                           r);
+                        config[i].getRendererClass(), this).newInstance();
+                rk.addRenderer(config[i].getComponentFamily(),
+                        config[i].getRendererType(),
+                        r);
+            }
+            catch (Exception e) {
+                Object [] args = { "component-family: " + 
+                        config[i].getComponentFamily() + 
+                        " renderer-type: " + config[i].getRendererType() + 
+                        " renderer-class: " + config[i].getRendererClass() };
+                String message = 
+                        Util.getExceptionMessageString(Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID,  args);
+                logger.log(Level.SEVERE, message);
+                throw e;
+            }
         }
 
     }
@@ -1005,10 +1025,21 @@ public class ConfigureListener implements ServletContextListener {
                         ("No renderKitClass for renderKit " +
                          config[i].getRenderKitId());
                 }
-                rk = (RenderKit)
+                try {
+                    rk = (RenderKit)
                     Util.loadClass(
-                        config[i].getRenderKitClass(), this).newInstance();
-                rkFactory.addRenderKit(config[i].getRenderKitId(), rk);
+                            config[i].getRenderKitClass(), this).newInstance();
+                    rkFactory.addRenderKit(config[i].getRenderKitId(), rk);
+                } catch (Exception e) {
+                    Object [] args = { "render-kit-id: " +
+                            config[i].getRenderKitId() +
+                            " render-kit-class: " + config[i].getRenderKitClass() };
+                    String message =
+                        Util.getExceptionMessageString(Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID,  args);
+                    logger.log(Level.SEVERE, message);
+                    throw e;
+                            
+                }
             } else {
                 if (logger.isLoggable(Level.FINER)) {
                     logger.finer("getRenderKit(" +
@@ -1089,8 +1120,17 @@ public class ConfigureListener implements ServletContextListener {
      */
     protected Digester digester(boolean validateXml) {
 
-        Digester digester =
-            DigesterFactory.newInstance(validateXml).createDigester();
+        Digester digester = null;
+        try {
+            digester = DigesterFactory.newInstance(validateXml).createDigester();
+        }
+        catch (RuntimeException e) {
+            Object [] args = { "Digester" };
+            String message =
+                   Util.getExceptionMessageString(Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID,  args);
+            logger.log(Level.SEVERE, message);
+            throw e;
+        }
 
         // Configure parsing rules
         // PENDING - Read from file?

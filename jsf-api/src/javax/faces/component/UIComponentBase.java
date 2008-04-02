@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.114 2005/08/09 23:58:42 edburns Exp $
+ * $Id: UIComponentBase.java,v 1.115 2005/08/11 18:19:56 edburns Exp $
  */
 
 /*
@@ -20,6 +20,7 @@ import java.util.AbstractCollection;
 import java.util.AbstractSet;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -743,11 +744,11 @@ public abstract class UIComponentBase extends UIComponent {
         }
         // If there are only facets and no children
         else if (0 == childCount) {
-            result = getFacets().values().iterator();
+            result = Collections.unmodifiableCollection(getFacets().values()).iterator();
         }
         // If there are only children and no facets
         else if (0 == facetCount) {
-            result = getChildren().iterator();
+            result = Collections.unmodifiableList(getChildren()).iterator();
         }
         // If there are both children and facets
         else {

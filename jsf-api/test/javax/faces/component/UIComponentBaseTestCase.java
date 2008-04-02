@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBaseTestCase.java,v 1.29 2005/08/01 17:34:49 edburns Exp $
+ * $Id: UIComponentBaseTestCase.java,v 1.30 2005/08/11 18:19:57 edburns Exp $
  */
 
 /*
@@ -931,7 +931,16 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
 
         Iterator iter = testComponent.getFacetsAndChildren();
         Object cur = null;
+        boolean exceptionThrown = false;
         assertTrue(iter.hasNext());
+        
+        try {
+            iter.remove();
+        }
+        catch (UnsupportedOperationException e) {
+            exceptionThrown = true;
+        }
+        assertTrue(exceptionThrown);
 
         // facets are returned in an undefined order.
         cur = iter.next();
