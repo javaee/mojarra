@@ -17,32 +17,12 @@
 Begin test &lt;c:import&gt; with subview tag in importing page
 </p>
 
-<p><!--
- Copyright 2004 Sun Microsystems, Inc. All rights reserved.
- SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
--->
-
-
-
-
-
-
-foo02</p>
+<p>foo02</p>
 
 
 <p>subview02</p>
 
-<p><!--
- Copyright 2004 Sun Microsystems, Inc. All rights reserved.
- SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
--->
-
-
-
-
-
-
-bar02
+<p>bar02
 </p>
 
 <p>End test &lt;c:import&gt; with subview tag in importing page</p>

@@ -1,0 +1,54 @@
+<!--
+ Copyright 2004 Sun Microsystems, Inc. All rights reserved.
+ SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+-->
+
+
+
+
+
+
+<html>
+<head>
+<title>interweaving07</title>
+</head>
+<body>
+<p>Begin test &lt;c:import&gt; with iterator tag in imported page</p>
+<br />
+<p><!--
+ Copyright 2004 Sun Microsystems, Inc. All rights reserved.
+ SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+-->
+
+
+
+
+
+
+  <br>
+  
+    Array[0]: 
+    This component has no ID <br>
+    <input type="text" name="_id_id15" value="This component has no ID " /><br>
+  
+    Array[1]: 
+    This component has no ID <br>
+    <input type="text" name="_id_id15_id_1" value="This component has no ID " /><br>
+  
+    Array[2]: 
+    This component has no ID <br>
+    <input type="text" name="_id_id15_id_2" value="This component has no ID " /><br>
+  
+    Array[3]: 
+    This component has no ID <br>
+    <input type="text" name="_id_id15_id_3" value="This component has no ID " /><br>
+  
+
+</p>
+
+<p>Text from interweaving07.jsp</p>
+
+<p>End test &lt;c:import&gt; with iterator tag in imported page</p>
+</body>
+</html>
+

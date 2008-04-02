@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentClassicTagBase.java,v 1.14 2005/12/06 01:58:08 rlubke Exp $
+ * $Id: UIComponentClassicTagBase.java,v 1.15 2006/02/14 19:59:41 rlubke Exp $
  */
 
 /*
@@ -34,21 +34,21 @@ import javax.faces.component.UIComponent;
 import javax.faces.component.UIOutput;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
-import javax.servlet.jsp.tagext.JspIdConsumer;
-import javax.servlet.jsp.tagext.Tag;
-import javax.servlet.jsp.tagext.BodyTag;
-import javax.servlet.jsp.tagext.BodyContent;
-import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
+import javax.servlet.jsp.PageContext;
+import javax.servlet.jsp.jstl.core.LoopTag;
+import javax.servlet.jsp.tagext.BodyContent;
+import javax.servlet.jsp.tagext.BodyTag;
+import javax.servlet.jsp.tagext.JspIdConsumer;
+import javax.servlet.jsp.tagext.Tag;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.HashMap;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.io.IOException;
-import javax.faces.component.NamingContainer;
 
 
 /**
@@ -1003,24 +1003,27 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
             componentIds = (Map) requestMap.get(GLOBAL_ID_VIEW);
         }
 
-	// If we're not inside of a facet, and if we are inside of a
-	// rendersChildren==true component, stuff any template text or
-	// custom tag output into a transient component.
+        // If we're not inside of a facet, and if we are inside of a
+        // rendersChildren==true component, stuff any template text or
+        // custom tag output into a transient component.
         if (null == getFacetName() &&
-	    null != parentTag) {
-            // If we're not inside a JSP tag, flush the buffer 
-            // to our wrapped response
-            if (null == this.getParent()) {
-        	JspWriter out = pageContext.getOut();
-		try {
-		    out.flush();
-		}
-		catch (IOException ioe) {
-		    throw new JspException(ioe);
-		}
-	    }
-	    verbatim = parentTag.createVerbatimComponentFromBodyContent();
-	}
+            null != parentTag) {
+            Tag p = this.getParent();
+            // If we're not inside a JSP tag or we're inside a LoopTag, 
+            // flush the buffer to our wrapped response
+            if (null == p || p instanceof LoopTag) {
+                JspWriter out = pageContext.getOut();                                
+                if (!(out instanceof BodyContent)) {
+                    try {
+                        out.flush();
+                    }
+                    catch (IOException ioe) {
+                        throw new JspException(ioe);
+                    }
+                }
+            }
+            verbatim = parentTag.createVerbatimComponentFromBodyContent();
+        }
 
         // Locate the UIComponent associated with this UIComponentTag,
         // creating one if necessary

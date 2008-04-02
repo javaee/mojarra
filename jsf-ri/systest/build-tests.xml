@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 
 <!--
- $Id: build-tests.xml,v 1.102 2006/02/03 21:39:11 edburns Exp $
+ $Id: build-tests.xml,v 1.103 2006/02/14 19:59:43 rlubke Exp $
 -->
 
 <!--
@@ -238,6 +238,11 @@
 
     <target name="test.jsp"
             description="Test JSP Integration">
+        
+        <jsf.tester
+              request="${context.path}/faces/positiveTagFile.jsp"
+              status="200"/>
+        
         <jsf.junit context-path="${context.path}"
                    classpath-refid="html.classpath"
                    test-results-dir="${impl.test.results.dir}">
@@ -880,12 +885,24 @@
               request="${context.path}/faces/interweaving05.jsp"
               recordGolden="${local.golden.path}/interweaving05.txt"
               golden="${golden.path}/interweaving05.txt"/>
-
+        
+        <jsf.tester
+              request="${context.path}/faces/interweaving06.jsp"  
+              recordGolden="${local.golden.path}/interweaving06.txt"
+              golden="${golden.path}/interweaving06.txt"/>
+         
+         <!-- Commented out until JSTL fix is publically available
+         <jsf.tester
+              request="${context.path}/faces/interweaving07.jsp"  
+              recordGolden="${local.golden.path}/interweaving07.txt"
+              golden="${golden.path}/interweaving07.txt"/>
+         -->
+        
         <jsf.tester
               request="${context.path}/faces/include-import-interweaving.jsp"
               ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
               golden="${golden.path}/include-import-interweaving.txt"
-              />
+              recordGolden="${local.golden.path}/include-import-interweaving.txt"/>
 
     </target>
 

@@ -1,5 +1,5 @@
 /*
- * $Id: ManagedBeanFactoryImpl.java,v 1.5 2006/01/27 21:39:04 edburns Exp $
+ * $Id: ManagedBeanFactoryImpl.java,v 1.6 2006/02/14 19:59:42 rlubke Exp $
  */
 
 /*
@@ -183,19 +183,15 @@ public class ManagedBeanFactoryImpl extends ManagedBeanFactory {
         scope = getScopeFromString(managedBean.getManagedBeanScope());
         
         // try to get the managedbean class
-        try {
-            Class<?> managedBeanClass =
-                  Thread.currentThread().getContextClassLoader()
-                        .loadClass(managedBean.getManagedBeanClass());
+        Class<?> managedBeanClass = this.getManagedBeanClass();
+        if (managedBeanClass != null) {
             postConstructMethods = 
-                  getMethodsWithAnnotation(managedBeanClass,
-                                           Annotations.POST_CONSTRUCT);
+                  this.getMethodsWithAnnotation(managedBeanClass,
+                                                Annotations.POST_CONSTRUCT);
             preDestroyMethods = 
-                  getMethodsWithAnnotation(managedBeanClass,
-                                           Annotations.PRE_DESTROY);
-        } catch (ClassNotFoundException cnfe) {
-            throw new FacesException(cnfe);
-        }
+                  this.getMethodsWithAnnotation(managedBeanClass,
+                                                Annotations.PRE_DESTROY);    
+        }                
     }
 
     public Method[] getPostConstructMethods() {

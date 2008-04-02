@@ -83,7 +83,7 @@
     <property name="spec.version" value="1.2"/>
     <property name="impl.name"
               value="Sun Microsystems JavaServer Faces Implementation"/>
-    <property name="build.number" value="b14"/>
+    <property name="build.number" value="b15"/>
     <property name="impl.version" value="1.2-${build.number}"/>
 
     <!-- Environment -->

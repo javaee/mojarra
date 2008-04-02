@@ -174,7 +174,7 @@ import java.util.Map;
  * </ul>
  *
  * @author Craig R. McClanahan
- * @version $Revision: 1.14 $ $Date: 2005/12/14 22:27:57 $
+ * @version $Revision: 1.15 $ $Date: 2006/02/14 19:59:44 $
  */
 
 public class SystestClient extends Task {
@@ -1350,9 +1350,10 @@ public class SystestClient extends Task {
         
         // write the goldenfile if the GF size from the server was 0
         // and the goldenfile doesn't already exist on the local filesystem.
+        System.out.println("RECORD GOLDEN: " + recordGolden);
         if (recordGolden != null) {
             File gf = new File(recordGolden);
-            if (!gf.exists()) {
+            if (!gf.exists() || gf.length() == 0) {
                 System.out.println(
                     "[INFO] RECORDING GOLDENFILE: " + recordGolden);
                 // write the goldenfile using the encoding specified in the response.

@@ -17,20 +17,9 @@ Begin
 test
 jstl import without verbatim
 interweaving
-<!--
- Copyright 2004 Sun Microsystems, Inc. All rights reserved.
- SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
--->
-
-
-
-
-
 works
 well!!
 End
-
-
 
 
 test
