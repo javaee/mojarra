@@ -1,0 +1,139 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>shale-mailreader-userlogon-not-registered</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">shale-mailreader-userlogon-not-registered</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>/shale-mailreader/</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTitle</td>
+	<td>MailReader Demonstration Application</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTitle</td>
+	<td>MailReader Demonstration Application</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td>MailReader Demonstration Application Options</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td>Register with the MailReader Demonstration Application</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td>Log on to the MailReader Demonstration Application</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=Log on to the MailReader Demonstration Application</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTitle</td>
+	<td>MailReader Demonstration Application - Logon</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td>Logon Form</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td>Username:</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>logon:username</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td>Password:</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>logon:password</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>logon:submit</td>
+	<td>Log On</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>logon:reset</td>
+	<td>Reset</td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td>Enter your username and password, and press the Log On button</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>logon:submit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTitle</td>
+	<td>MailReader Demonstration Application - Logon</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td>logon:username: Validation Error: Value is required.</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td>logon:password: Validation Error: Value is required.</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>logon:username</td>
+	<td>rlubke</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>logon:password</td>
+	<td>password</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>logon:submit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTitle</td>
+	<td>MailReader Demonstration Application - Logon</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td>Invalid username or password, please try again</td>
+	<td></td>
+</tr>
+
+</tbody></table>
+</body>
+</html>
