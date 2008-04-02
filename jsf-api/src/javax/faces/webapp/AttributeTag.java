@@ -1,5 +1,5 @@
 /*
- * $Id: AttributeTag.java,v 1.11 2004/02/26 20:31:18 eburns Exp $
+ * $Id: AttributeTag.java,v 1.12 2004/07/29 21:18:05 edburns Exp $
  */
 
 /*
@@ -95,16 +95,19 @@ public class AttributeTag extends TagSupport {
             throw new JspException("No component associated with UIComponentTag");
         }
         String nameVal = name;
+
+	FacesContext context = FacesContext.getCurrentInstance();
+
         if (UIComponentTag.isValueReference(name)) {
             ValueBinding vb =
-                getFacesContext().getApplication().createValueBinding(name);
-            nameVal = (String) vb.getValue(getFacesContext());
+                context.getApplication().createValueBinding(name);
+            nameVal = (String) vb.getValue(context);
         }
         Object valueVal = value;
         if (UIComponentTag.isValueReference(value)) {
             ValueBinding vb =
-                getFacesContext().getApplication().createValueBinding(value);
-            valueVal = vb.getValue(getFacesContext());
+                context.getApplication().createValueBinding(value);
+            valueVal = vb.getValue(context);
         }
         if (component.getAttributes().get(nameVal) == null) {
             component.getAttributes().put(nameVal, valueVal);
@@ -121,26 +124,6 @@ public class AttributeTag extends TagSupport {
 
         this.name = null;
         this.value = null;
-        this.context = null;
-
     }
-
-
-    private FacesContext context;
-
-
-    /**
-     * <p>Retrieve the {@link FacesContext} instance for this request, caching
-     * it the first time.</p>
-     */
-    private FacesContext getFacesContext() {
-
-        if (context == null) {
-            context = FacesContext.getCurrentInstance();
-        }
-        return (context);
-
-    }
-
 
 }
