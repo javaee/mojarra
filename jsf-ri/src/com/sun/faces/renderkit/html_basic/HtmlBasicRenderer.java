@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderer.java,v 1.109 2006/05/30 20:08:31 rlubke Exp $
+ * $Id: HtmlBasicRenderer.java,v 1.110 2006/06/21 21:42:32 rlubke Exp $
  */
 
 /*
@@ -31,11 +31,6 @@
 
 package com.sun.faces.renderkit.html_basic;
 
-import com.sun.faces.util.MessageFactory;
-import com.sun.faces.util.Util;
-import com.sun.faces.util.MessageUtils;
-import com.sun.faces.RIConstants;
-
 import javax.faces.component.NamingContainer;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
@@ -54,9 +49,14 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
-import java.util.logging.Logger;
+import java.util.NoSuchElementException;
 import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import com.sun.faces.RIConstants;
+import com.sun.faces.util.MessageFactory;
+import com.sun.faces.util.MessageUtils;
+import com.sun.faces.util.Util;
 
 /**
  * <B>HtmlBasicRenderer</B> is a base class for implementing renderers
@@ -248,7 +248,7 @@ public abstract class HtmlBasicRenderer extends Renderer {
         }
         component.encodeEnd(context);
     }
-
+    
 
     /**
      * <p>Return an Iterator over the children of the specified
@@ -257,19 +257,17 @@ public abstract class HtmlBasicRenderer extends Renderer {
      *
      * @param component <code>UIComponent</code> for which to extract children
      */
-    protected Iterator<UIComponent> getChildren(UIComponent component) {
-
-        List<UIComponent> results = new ArrayList<UIComponent>();
-        Iterator<UIComponent> kids = component.getChildren().iterator();
-        while (kids.hasNext()) {
-            UIComponent kid = kids.next();
-            if (kid.isRendered()) {
-                results.add(kid);
-            }
+    protected Iterator getChildren(UIComponent component) {
+        int childCount = component.getChildCount();
+        if (childCount > 0) {
+            return new RenderedChildIterator(component
+                  .getChildren().iterator());
+        } else {
+            return Collections.EMPTY_LIST.iterator();
         }
-        return (results.iterator());
-
     }
+
+    
 
 
 
@@ -595,6 +593,76 @@ public abstract class HtmlBasicRenderer extends Renderer {
 
         public String getValue() {
             return value;
+        }
+    }
+    
+    /**
+     * <p>This <code>Iterator</code> is used to Iterator over
+     * children components that are set to be rendered.</p>
+     */
+    private static class RenderedChildIterator implements Iterator {
+        
+        Iterator childIterator;
+        boolean hasNext;
+        Object child;
+        
+        // -------------------------------------------------------- Constructors
+        
+        
+        private RenderedChildIterator(Iterator childIterator) {
+            
+            this.childIterator = childIterator;
+            update();
+            
+        }
+        
+        
+        // ----------------------------------------------- Methods from Iterator
+
+
+        public void remove() {
+            
+            throw new UnsupportedOperationException();
+            
+        }
+
+        public boolean hasNext() {
+            
+            return hasNext;
+            
+        }
+
+        public Object next() {
+            
+            if (!hasNext) {
+                throw new NoSuchElementException();
+            }
+            Object temp = child;
+            update();                         
+            return temp;
+            
+        }
+        
+        // ----------------------------------------------------- Private Methods
+
+        /**
+         * <p>Moves the internal pointer to the next renderable
+         * component skipping any that are not to be rendered.</p>
+         */
+        private void update() {
+
+            while (childIterator.hasNext()) {
+                UIComponent comp = (UIComponent) childIterator.next();
+                if (comp.isRendered()) {
+                    child = comp;
+                    hasNext = true;
+                    return;
+                }
+            }
+
+            hasNext = false;
+            child = null;
+
         }
     }
 
