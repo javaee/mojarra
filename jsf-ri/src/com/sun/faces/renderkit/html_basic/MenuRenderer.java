@@ -1,5 +1,5 @@
 /*
- * $Id: MenuRenderer.java,v 1.1 2002/09/19 00:38:22 jvisvanathan Exp $
+ * $Id: MenuRenderer.java,v 1.2 2002/10/01 18:30:18 jvisvanathan Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -32,7 +32,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: MenuRenderer.java,v 1.1 2002/09/19 00:38:22 jvisvanathan Exp $
+ * @version $Id: MenuRenderer.java,v 1.2 2002/10/01 18:30:18 jvisvanathan Exp $
  * 
  * @see Blah
  * @see Bloo
@@ -96,12 +96,17 @@ public class MenuRenderer extends HtmlBasicRenderer {
 
         String compoundId = component.getCompoundId();
         Assert.assert_it(compoundId != null);
-
-        String newValues[] =
-            context.getServletRequest().getParameterValues(compoundId);
         // currently we assume the model type to be of type string or 
         // convertible to string and localised by the application.
-        component.setValue(newValues);
+        if ( component.getComponentType().equals(UISelectMany.TYPE)) {
+            String newValues[] =
+                context.getServletRequest().getParameterValues(compoundId);
+            component.setValue(newValues);
+        } else {
+            String newValue =
+                context.getServletRequest().getParameter(compoundId);
+            component.setValue(newValue);
+        }    
 	return true;
     }
 

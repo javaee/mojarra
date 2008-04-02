@@ -124,7 +124,7 @@
                  This is a push button 
                  <img src="/test/duke.gif;jsessionid=884241010348B244D954B77358716144">
                  <!-- this isn't valid HTML, but it works for our label case -->
-                 <label for="/basicForm/pushButton"  accesskey="Z" lang="en_US" lang="en_US" style="12pt"  class="outputClass" >
+                 <label for="/basicForm/pushButton"  accesskey="Z" lang="en_US" style="12pt"  class="outputClass" >
 
                  Label for PushButon
                  </label>

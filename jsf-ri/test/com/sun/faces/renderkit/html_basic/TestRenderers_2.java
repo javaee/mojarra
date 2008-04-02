@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_2.java,v 1.28 2002/09/17 20:08:00 jvisvanathan Exp $
+ * $Id: TestRenderers_2.java,v 1.29 2002/10/01 18:30:19 jvisvanathan Exp $
  */
 
 /*
@@ -52,7 +52,7 @@ import com.sun.faces.JspFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_2.java,v 1.28 2002/09/17 20:08:00 jvisvanathan Exp $
+ * @version $Id: TestRenderers_2.java,v 1.29 2002/10/01 18:30:19 jvisvanathan Exp $
  * 
  *
  */
@@ -346,8 +346,8 @@ public class TestRenderers_2 extends JspFacesTestCase
 
         System.out.println("    Testing decode method... ");
         listboxRenderer.decode(getFacesContext(), selectOne);
-        String[] values = (String[])selectOne.getValue();
-        assertTrue((values[0]).equals("Blue"));
+        String value = (String)selectOne.getValue();
+        assertTrue(value.equals("Blue"));
 
         // test encode method
 

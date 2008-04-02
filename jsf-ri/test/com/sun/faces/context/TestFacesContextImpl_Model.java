@@ -1,5 +1,5 @@
 /*
- * $Id: TestFacesContextImpl_Model.java,v 1.8 2002/09/13 19:23:13 visvan Exp $
+ * $Id: TestFacesContextImpl_Model.java,v 1.9 2002/10/01 18:30:18 jvisvanathan Exp $
  */
 
 /*
@@ -27,7 +27,7 @@ import com.sun.faces.TestBean.Inner2Bean;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestFacesContextImpl_Model.java,v 1.8 2002/09/13 19:23:13 visvan Exp $
+ * @version $Id: TestFacesContextImpl_Model.java,v 1.9 2002/10/01 18:30:18 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -113,6 +113,16 @@ public void testSetWithNoCurlyBraces()
     
     (facesContext.getHttpSession()).removeAttribute("TestBean");
     (facesContext.getServletRequest()).setAttribute("TestBean", testBean);
+    
+    // Test implicit scopes
+    // direct access to scope objects should throw an illegalArgumentException
+    boolean gotException =false;
+    try {
+        facesContext.setModelValue("sessionScope", testBean);
+    }catch (IllegalArgumentException iae) {
+        gotException = true;
+    }    
+    assertTrue( gotException);    
     
     // Test one level of nesting
     System.setProperty(TestBean.PROP, TestBean.FALSE);

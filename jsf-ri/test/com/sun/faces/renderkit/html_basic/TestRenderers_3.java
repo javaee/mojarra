@@ -1,5 +1,5 @@
 /**
- * $Id: TestRenderers_3.java,v 1.3 2002/09/19 00:38:28 jvisvanathan Exp $
+ * $Id: TestRenderers_3.java,v 1.4 2002/10/01 18:30:20 jvisvanathan Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -32,7 +32,7 @@ import com.sun.faces.tree.XmlTreeImpl;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_3.java,v 1.3 2002/09/19 00:38:28 jvisvanathan Exp $
+ * @version $Id: TestRenderers_3.java,v 1.4 2002/10/01 18:30:20 jvisvanathan Exp $
  * 
  *
  */
@@ -283,7 +283,7 @@ public class TestRenderers_3 extends JspFacesTestCase {
         SelectItem item3 = new SelectItem("Green", "Green", null);
         SelectItem item4 = new SelectItem("Yellow", "Yellow", null);
         SelectItem[] selectItems = { item1, item2, item3, item4 };
-        Object selectedValues[] = null;
+        String selectedValue = null;
         uiSelectItems.setValue(selectItems);
         uiSelectItems.setComponentId("manyitems");
         selectOne.addChild(uiSelectItems);
@@ -294,10 +294,9 @@ public class TestRenderers_3 extends JspFacesTestCase {
 
         // test decode method
         System.out.println("    Testing decode method... ");
-        selectOneMenuRenderer.decode(getFacesContext(), selectOne);
-	assertTrue(null != (selectedValues = (Object[])selectOne.getValue()));
-	assertTrue(1 == selectedValues.length);
-        assertTrue(((String)selectedValues[0]).equals("Blue"));
+        selectOneMenuRenderer.decode(getFacesContext(), selectOne); 
+        selectedValue = (String)selectOne.getSelectedValue();
+        assertTrue(selectedValue.equals("Blue"));
 
         // test encode method
         System.out.println("    Testing encode method... ");
