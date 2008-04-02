@@ -1,5 +1,5 @@
 /*
- * $Id: NumberConverter.java,v 1.11 2003/10/24 17:45:34 rlubke Exp $
+ * $Id: NumberConverter.java,v 1.12 2003/10/28 17:53:36 rlubke Exp $
  */
 
 /*
@@ -425,6 +425,10 @@ public class NumberConverter implements Converter, StateHolder {
      */ 
     public Object getAsObject(FacesContext context, UIComponent component,
                               String value) {
+        
+        if (context == null || component == null) {
+            throw new NullPointerException();
+        }
 
         try {
 
@@ -464,6 +468,10 @@ public class NumberConverter implements Converter, StateHolder {
     public String getAsString(FacesContext context, UIComponent component,
                               Object value) {
 
+        if (context == null || component == null) {
+            throw new NullPointerException();
+        }
+        
         try {
             
             // If the specified value is null or zero-length, return a 
@@ -672,11 +680,16 @@ public class NumberConverter implements Converter, StateHolder {
      * @exception ConverterException if no instance can be created
      */
     private NumberFormat getNumberFormat(Locale locale) {
+        
+        if (pattern == null && type == null) {
+            throw new IllegalArgumentException("Either pattern or type must" +
+                                               " be specified.");
+        }  
 
         // PENDING(craigmcc) - Implement pooling if needed for performance?
 
         // If pattern is specified, type is ignored
-        if ((pattern != null) && (pattern.length() > 0)) {
+        if (pattern != null) {
             DecimalFormatSymbols symbols = new DecimalFormatSymbols(locale);
             return (new DecimalFormat(pattern, symbols));
         }
