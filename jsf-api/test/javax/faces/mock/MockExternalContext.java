@@ -1,5 +1,5 @@
 /*
- * $Id: MockExternalContext.java,v 1.5 2003/09/11 17:05:37 craigmcc Exp $
+ * $Id: MockExternalContext.java,v 1.6 2003/09/29 21:09:03 eburns Exp $
  */
 
 /*
@@ -175,11 +175,6 @@ public class MockExternalContext extends ExternalContext {
 
 
     public String encodeNamespace(String aValue) {
-        throw new UnsupportedOperationException();
-    }
-
-
-    public String encodeURL(String url) {
         throw new UnsupportedOperationException();
     }
 

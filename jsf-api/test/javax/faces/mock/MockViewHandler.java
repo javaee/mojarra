@@ -1,5 +1,5 @@
 /*
- * $Id: MockViewHandler.java,v 1.14 2003/09/25 07:46:51 craigmcc Exp $
+ * $Id: MockViewHandler.java,v 1.15 2003/09/29 21:09:04 eburns Exp $
  */
 
 /*
@@ -63,6 +63,10 @@ public class MockViewHandler extends Object implements ViewHandler {
 		};
 	}
 	return stateManager;
+    }
+
+    public String getViewIdPath(FacesContext context, String viewId) {
+	return null;
     }
 
 }

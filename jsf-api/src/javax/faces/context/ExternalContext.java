@@ -1,5 +1,5 @@
 /*
- * $Id: ExternalContext.java,v 1.7 2003/09/11 15:56:10 craigmcc Exp $
+ * $Id: ExternalContext.java,v 1.8 2003/09/29 21:09:03 eburns Exp $
  */
  
 /*
@@ -457,14 +457,6 @@ public abstract class ExternalContext {
     */ 
 
     public abstract String encodeNamespace(String aValue);
-
-    /**
-
-    * <p>A wrapper for <code>ServletResponse.encodeURL()</code>.</p>
-
-    */
-    
-    public abstract String encodeURL(String url);
 
     /**
       * <p>Dispatch a request to the apropriate context. In the

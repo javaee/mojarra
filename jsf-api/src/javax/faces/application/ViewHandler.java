@@ -1,5 +1,5 @@
 /*
- * $Id: ViewHandler.java,v 1.10 2003/09/15 22:09:38 eburns Exp $
+ * $Id: ViewHandler.java,v 1.11 2003/09/29 21:09:02 eburns Exp $
  */
 
 /*
@@ -48,6 +48,24 @@ import javax.faces.component.UIViewRoot;
 
 public interface ViewHandler {
 
+    /**
+     * <p>Allow the web application to define an alternate suffix for
+     * pages containing JSF content.  If this init parameter is not
+     * specified, the default value is taken from the value of the
+     * constant {@link #DEFAULT_SUFFIX}.</p>
+     *
+     */
+
+    public static String DEFAULT_SUFFIX_PARAM_NAME = 
+	"javax.faces.DEFAULT_SUFFIX";
+
+    /**
+     * <p>The value to use for the default suffix if the webapp is using
+     * url suffix mapping.</p>
+     */
+
+    public static String DEFAULT_SUFFIX = ".jsp";
+
 
     /**
      * <p>Perform whatever actions are required to render the response
@@ -60,6 +78,22 @@ public interface ViewHandler {
      * javax.faces.context.ResponseStream} instances for the current
      * request.</p>
      *
+     * <p>The default implementation of <code>restoreView</code> must
+     * examine the deployment descriptor for this web application to
+     * determine the manner in which the {@link
+     * javax.faces.webapp.FacesServlet} has been mapped to incoming
+     * urls.  If prefix mapping is used, this method simply calls {@link
+     * javax.faces.context.ExternalContext#dispatchMessage} passing the
+     * <code>viewId</code> of the argument <code>viewToRender</code>.
+     * If suffix mapping is used, the default implementation must check
+     * the the servlet context init parameter named by the value of the
+     * constant {@link #DEFAULT_SUFFIX_PARAM_NAME}.  If this parameter
+     * is not defined, use {@link #DEFAULT_SUFFIX} as the suffix.
+     * Append the suffix to the <code>viewId</code> of the argument
+     * <code>viewToRender</code>, and call {@link
+     * javax.faces.context.ExternalContext#dispatchMessage} on the
+     * result.</p>
+     * 
      * @param context {@link FacesContext} for the current request
      *
      * @param viewToRender the view to render
@@ -139,6 +173,36 @@ public interface ViewHandler {
 
     public void writeState(FacesContext context) throws IOException;
 
+    /**
+     * <p>Returns the context relative path of the argument
+     * <code>viewId</code>, including any <code>url-pattern</code>
+     * prefix mapping defined by the application.</p>
+     *
+     * <p>The default implementation must examine the deployment
+     * descriptor for the current webapp and determine the
+     * <code>url-pattern</code> mapping given for the {@link
+     * javax.faces.webapp.FacesServlet}.  If the mapping is a prefix
+     * mapping, prepend the prefix mapping to the viewId, making sure to
+     * take any wildcards into account.  If the mapping is an extension
+     * mapping, take no action and just return the argument
+     * <code>viewId</code>.  The default implementation expects the
+     * argument <code>viewId</code> to be a context relative path,
+     * starting with '<code>/</code>'.  If this is not the case, the
+     * default implementation thows
+     * <code>IllegalArgumentException</code>.</p>
+     *
+     * @param context the {@link FacesContext} for this request.
+     *
+     * @param viewId the context relative path of this viewId.
+     *
+     * @exception NullPointerException if <code>context</code> or
+     * <code>viewId</code> is <code>null</code>.
+     *
+     * @exception IllegalArgumentException if <code>viewId</code> is not
+     * valid for this <code>ViewHandler</code>.
+     *
+     */
 
+    public String getViewIdPath(FacesContext context, String viewId);
 
 }
