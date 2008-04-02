@@ -204,29 +204,56 @@ public class UIData extends UIComponentBase
 
 
     /**
-     * <p>Return the number of rows in the underlying data model.</p>
+     * <p>Return a flag indicating whether there is <code>rowData</code>
+     * available at the current <code>rowIndex</code>.  If no
+     * <code>wrappedData</code> is available, return <code>false</code>.</p>
+     *
+     * @exception FacesException if an error occurs getting the row availability
+     */
+    public boolean isRowAvailable() {
+
+	return (getDataModel().isRowAvailable());
+
+    }
+
+
+    /**
+     * <p>Return the number of rows in the underlying data model.  If the
+     * number of available rows is unknown, return -1.</p>
+     *
+     * @exception FacesException if an error occurs getting the row count
      */
     public int getRowCount() {
 
-        return (getDataModel(FacesContext.getCurrentInstance()).getRowCount());
+        return (getDataModel().getRowCount());
 
     }
 
 
     /**
      * <p>Return the data object representing the data for the currently
-     * selected row index.</p>
+     * selected row index, if any.</p>
+     *
+     * @exception FacesException if an error occurs getting the row data
+     * @exception IllegalArgumentException if now row data is available
+     *  at the currently specified row index
      */
     public Object getRowData() {
 
-        return (getDataModel(FacesContext.getCurrentInstance()).getRowData());
+        return (getDataModel().getRowData());
 
     }
 
 
+    /**
+     * <p>Return the zero-relative index of the currently selected row.  If
+     * we are not currently positioned on a row, return -1.</p>
+     *
+     * @exception FacesException if an error occurs getting the row index
+     */
     public int getRowIndex() {
 
-        return (this.rowIndex);
+	return (rowIndex);
 
     }
 
@@ -234,6 +261,10 @@ public class UIData extends UIComponentBase
     /**
      * <p>Set the zero relative index of the current row, or -1 to indicate that
      * no row is currently selected, by implementing the following algorithm.
+     * It is possible to set the row index at a value for which the underlying
+     * data collection does not contain any row data.  Therefore, callers may
+     * use the <code>isRowAvailable()</code> method to detect whether row data
+     * will be available for use by the <code>getRowData()</code> methodl</p>
      *</p>
      * <ul>
      * <li>Save current state information for all descendant components (as
@@ -287,11 +318,9 @@ public class UIData extends UIComponentBase
      *
      * @param rowIndex The new row index value, or -1 for no associated row
      *
+     * @exception FacesException if an error occurs setting the row index
      * @exception IllegalArgumentException if <code>rowIndex</code>
      *  is less than -1
-     * @exception IndexOutOfBoundsException if <code>rowIndex</code>
-     *  is not -1, and the underlying {@link DataModel} reports that
-     *  there is now data available at the specified row index
      */
     public void setRowIndex(int rowIndex) {
 
@@ -301,13 +330,8 @@ public class UIData extends UIComponentBase
         // Update to the new row index
         int previous = this.rowIndex;
         this.rowIndex = rowIndex;
-        DataModel model = getDataModel(FacesContext.getCurrentInstance());
+        DataModel model = getDataModel();
         model.setRowIndex(rowIndex);
-        if ((rowIndex >= 0) && !model.isRowAvailable()) {
-            this.rowIndex = previous;
-            model.setRowIndex(previous);
-            throw new IndexOutOfBoundsException("" + rowIndex);
-        }
 
         // Clear or expose the current row data as a request scope attribute
         if (var != null) {
@@ -316,8 +340,10 @@ public class UIData extends UIComponentBase
                 getRequestMap();
             if (rowIndex == -1) {
                 requestMap.remove(var);
-            } else {
-                requestMap.put(var, getRowData());
+            } else if (isRowAvailable()) {
+		requestMap.put(var, getRowData());
+	    } else {
+		requestMap.remove(var);
             }
         }
 
@@ -620,10 +646,8 @@ public class UIData extends UIComponentBase
     /**
      * <p>Return the {@link DataModel} object representing the data objects
      * that we will iterate over in this component's rendering.</p>
-     *
-     * @param context {@link FacesContext} for the current request
      */
-    private DataModel getDataModel(FacesContext context) {
+    private DataModel getDataModel() {
 
         // Return any previously cached DataModel instance
         if (this.model != null) {
@@ -631,6 +655,7 @@ public class UIData extends UIComponentBase
         }
 
         // Synthesize a DataModel around our current value if possible
+	FacesContext context = FacesContext.getCurrentInstance();
         Object current = currentValue(context);
         if (current == null) {
             this.model = new ListDataModel(Collections.EMPTY_LIST);
@@ -709,9 +734,8 @@ public class UIData extends UIComponentBase
 	    }
 
 	    // Expose the current row in the specified request attribute
-            try {
-                setRowIndex(++rowIndex);
-            } catch (IndexOutOfBoundsException e) {
+	    setRowIndex(++rowIndex);
+	    if (!isRowAvailable()) {
                 break; // Scrolled past the last row
             }
 

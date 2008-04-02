@@ -1,5 +1,5 @@
 /*
- * $Id: DataModel.java,v 1.8 2003/11/05 00:38:30 craigmcc Exp $
+ * $Id: DataModel.java,v 1.9 2003/11/05 01:01:12 craigmcc Exp $
  */
 
 /*
@@ -107,6 +107,8 @@ public abstract class DataModel {
      * <code>null</code>.</p>
      *
      * @exception FacesException if an error occurs getting the row data
+     * @exception IllegalArgumentException if now row data is available
+     *  at the currently specified row index
      */
     public abstract Object getRowData();
 

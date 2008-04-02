@@ -1,5 +1,5 @@
 /*
- * $Id: UIDataTestCase.java,v 1.17 2003/10/30 20:30:20 eburns Exp $
+ * $Id: UIDataTestCase.java,v 1.18 2003/11/05 01:01:12 craigmcc Exp $
  */
 
 /*
@@ -970,11 +970,10 @@ public class UIDataTestCase extends ValueHolderTestCaseBase {
                 if ((rows > 0) && (++done > rows)) {
                     break;
                 }
-                try {
-                    data.setRowIndex(++rowId);
-                } catch (IndexOutOfBoundsException e) {
-                    break; // Scrolled past the last row
-                }
+		data.setRowIndex(++rowId);
+		if (!data.isRowAvailable()) {
+		    break;
+		}
                 writer.write("<table-row rowId='" + rowId + "'>\n");
                 kids = data.getChildren().iterator();
                 while (kids.hasNext()) {
