@@ -1,5 +1,5 @@
 /*
- * $Id: CarServer.java,v 1.4 2003/08/28 08:22:17 rkitain Exp $
+ * $Id: CarServer.java,v 1.5 2003/08/29 15:41:19 eburns Exp $
  */
 /*
  * Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
@@ -73,22 +73,22 @@ public class CarServer extends Object {
     protected String currentPrice = null;
    
     protected ArrayList engineOption;
-    protected Object currentEngineOption = null;
+    protected String currentEngineOption = null;
     
     protected ArrayList brakeOption;
-    protected Object currentBrakeOption = null;
+    protected String currentBrakeOption = null;
     
     protected ArrayList suspensionOption;
-    protected Object currentSuspensionOption = null;
+    protected String currentSuspensionOption = null;
     
     protected ArrayList speakerOption;
-    protected Object currentSpeakerOption = null;
+    protected String currentSpeakerOption = null;
     
     protected ArrayList audioOption;
-    protected Object currentAudioOption = null;
+    protected String currentAudioOption = null;
     
     protected ArrayList transmissionOption;
-    protected Object currentTransmissionOption = null;
+    protected String currentTransmissionOption = null;
 
     protected String currentPackageName = "null"; 
     protected String defaultPackage = "Custom";
@@ -304,11 +304,11 @@ public class CarServer extends Object {
         return engineOption;
     }
     
-    public void setCurrentEngineOption(Object eng) {
-        currentEngineOption = eng;
+    public void setCurrentEngineOption(String op) {
+        currentEngineOption = op;
     }
     
-    public Object getCurrentEngineOption() {
+    public String getCurrentEngineOption() {
         return currentEngineOption;
     }
     
@@ -320,11 +320,11 @@ public class CarServer extends Object {
         return brakeOption;
     }
     
-    public void setCurrentBrakeOption(Object op) {
+    public void setCurrentBrakeOption(String op) {
         currentBrakeOption = op;
     }
     
-    public Object getCurrentBrakeOption() {
+    public String getCurrentBrakeOption() {
         return currentBrakeOption;
     }
     
@@ -336,11 +336,11 @@ public class CarServer extends Object {
         return suspensionOption;
     }
     
-    public void setCurrentSuspensionOption(Object op) {
+    public void setCurrentSuspensionOption(String op) {
         currentSuspensionOption = op;
     }
     
-    public Object getCurrentSuspensionOption() {
+    public String getCurrentSuspensionOption() {
         return currentSuspensionOption;
     }
     
@@ -352,11 +352,11 @@ public class CarServer extends Object {
         return speakerOption;
     }
     
-    public void setCurrentSpeakerOption(Object op) {
+    public void setCurrentSpeakerOption(String op) {
         currentSpeakerOption = op;
     }
     
-    public Object getCurrentSpeakerOption() {
+    public String getCurrentSpeakerOption() {
         return currentSpeakerOption;
     }
     
@@ -368,11 +368,11 @@ public class CarServer extends Object {
         return audioOption;
     }
     
-    public void setCurrentAudioOption(Object op) {
+    public void setCurrentAudioOption(String op) {
         currentAudioOption = op;
     }
     
-    public Object getCurrentAudioOption() {
+    public String getCurrentAudioOption() {
         return currentAudioOption;
     }
     
@@ -384,11 +384,11 @@ public class CarServer extends Object {
         return transmissionOption;
     }
     
-    public void setCurrentTransmissionOption(Object op) {
+    public void setCurrentTransmissionOption(String op) {
         currentTransmissionOption = op;
     }
     
-    public Object getCurrentTransmissionOption() {
+    public String getCurrentTransmissionOption() {
         return currentTransmissionOption;
     }
     

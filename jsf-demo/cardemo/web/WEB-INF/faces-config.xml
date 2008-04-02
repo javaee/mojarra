@@ -33,7 +33,7 @@
   </converter>
   
   <navigation-rule>
-    <from-tree-id>/Storefront.jsp</from-tree-id>
+    <from-view-id>/Storefront.jsp</from-view-id>
     <navigation-case>
       <from-outcome>more1</from-outcome>
       <to-view-id>/more.jsp</to-view-id>
@@ -41,7 +41,7 @@
   </navigation-rule>
 
   <navigation-rule>
-    <from-tree-id>/Storefront.jsp</from-tree-id>
+    <from-view-id>/Storefront.jsp</from-view-id>
     <navigation-case>
       <from-outcome>more2</from-outcome>
       <to-view-id>/more.jsp</to-view-id>
@@ -49,7 +49,7 @@
   </navigation-rule>
 
   <navigation-rule>
-    <from-tree-id>/Storefront.jsp</from-tree-id>
+    <from-view-id>/Storefront.jsp</from-view-id>
     <navigation-case>
       <from-outcome>more3</from-outcome>
       <to-view-id>/more.jsp</to-view-id>
@@ -57,7 +57,7 @@
   </navigation-rule>
 
   <navigation-rule>
-    <from-tree-id>/Storefront.jsp</from-tree-id>
+    <from-view-id>/Storefront.jsp</from-view-id>
     <navigation-case>
       <from-outcome>more4</from-outcome>
       <to-view-id>/more.jsp</to-view-id>
@@ -65,7 +65,7 @@
   </navigation-rule>
 
   <navigation-rule>
-    <from-tree-id>/more.jsp</from-tree-id>
+    <from-view-id>/more.jsp</from-view-id>
     <navigation-case>
       <from-outcome>success</from-outcome>
       <to-view-id>/buy.jsp</to-view-id>
@@ -77,7 +77,7 @@
   </navigation-rule>
   
   <navigation-rule>
-    <from-tree-id>/outofstock.jsp</from-tree-id>
+    <from-view-id>/outofstock.jsp</from-view-id>
     <navigation-case>
       <from-outcome>reconfigure</from-outcome>
       <to-view-id>/more.jsp</to-view-id>
@@ -89,7 +89,7 @@
   </navigation-rule>
 
   <navigation-rule>
-    <from-tree-id>/buy.jsp</from-tree-id>
+    <from-view-id>/buy.jsp</from-view-id>
     <navigation-case>
       <from-outcome>success</from-outcome>
       <to-view-id>/Customer.jsp</to-view-id>
@@ -97,7 +97,7 @@
   </navigation-rule>
 
   <navigation-rule>
-    <from-tree-id>/Customer.jsp</from-tree-id>
+    <from-view-id>/Customer.jsp</from-view-id>
     <navigation-case>
       <from-outcome>success</from-outcome>
       <to-view-id>/thanks.jsp</to-view-id>
@@ -197,6 +197,31 @@
       </value>
     </managed-property>
   </managed-bean>
+
+  <!-- =================== Business Logic Beans ============== -->
+
+  <managed-bean>
+    <description>
+      The main hook for business logic.
+    </description>
+    <managed-bean-name> CarServer </managed-bean-name>
+    <managed-bean-class> cardemo.CarServer </managed-bean-class>
+    <managed-bean-scope> session </managed-bean-scope>
+    <managed-property>
+      <property-name>carImage</property-name>
+      <value>current.gif</value>
+    </managed-property>
+  </managed-bean>
+
+  <managed-bean>
+    <description>
+      The bean representing a customer
+    </description>
+    <managed-bean-name> CustomerBean </managed-bean-name>
+    <managed-bean-class> cardemo.CustomerBean </managed-bean-class>
+    <managed-bean-scope> session </managed-bean-scope>
+  </managed-bean>
+
 
   <message-resources>
     <message-resources-id>carDemoResources</message-resources-id>

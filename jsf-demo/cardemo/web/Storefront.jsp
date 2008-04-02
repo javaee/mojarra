@@ -54,11 +54,6 @@
 	    basename="cardemo.Resources"
 	    scope="session" var="carDemoBundle"/>
 
-        <jsp:useBean id="CarServer" class="cardemo.CarServer" scope="session" >
-            <jsp:setProperty name="CarServer" property="carImage"
-                value="current.gif"/>
-        </jsp:useBean>
-
 <f:view>  
 
 <h:form  formName="carStoreForm">

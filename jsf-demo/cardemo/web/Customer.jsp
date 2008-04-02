@@ -54,7 +54,6 @@
 	    basename="cardemo.Resources"
 	    scope="session" var="cardemoBundle"/>
 
-<jsp:useBean id="CustomerBean" class="cardemo.CustomerBean" scope="session" />
 <f:view>
 <h:form  formName="CustomerForm">
 <table border="0" width="660" bgcolor="#4f4f72">
@@ -74,8 +73,9 @@
                                 <td valign="top" align="right">
                                 <h:output_text  key="titleLabel" bundle="carDemoBundle" /></font></td>
                                 <td valign="top"> <font face="Arial, Helvetica">
-                                    <h:selectone_menu id="title">
-                                        <h:selectitem  itemValue="mr" valueRef="CustomerBean.mr" selected="true"/>
+                                    <h:selectone_menu id="title" 
+                                                       valueRef="CustomerBean.mr">
+                                        <h:selectitem  itemValue="mr" valueRef="CustomerBean.mr" />
                         		<h:selectitem  itemValue="mrs" valueRef="CustomerBean.mrs" />
                         		<h:selectitem  itemValue="ms" valueRef="CustomerBean.ms" />
                                     </h:selectone_menu></font></td>
@@ -121,9 +121,9 @@
                                 <td valign="top" align="right"><font face="Arial, Helvetica">
       <h:output_text 	key="stateLabel" bundle="carDemoBundle" /></font></td>
                                 <td valign="top"> <font face="Arial, Helvetica">
-      <h:selectone_menu  valueRef="CustomerBean.state" >
+      <h:selectone_menu  valueRef="CustomerBean.state" value="CA">
 
-		<h:selectitem  itemValue="AL" itemLabel="AL" selected="true" />
+		<h:selectitem  itemValue="AL" itemLabel="AL" />
 		<h:selectitem  itemValue="AK" itemLabel="AK"/>
 		<h:selectitem  itemValue="AZ" itemLabel="AZ"/>
 		<h:selectitem  itemValue="AR" itemLabel="AR"/>
@@ -185,8 +185,7 @@
                                 <td valign="top"> <font face="Arial, Helvetica">
       <h:input_text id="zip"  
 			valueRef="CustomerBean.zip"
-                        size="10">
-           <f:validate_required />
+                        size="10" required="true">
           <cd:format_validator formatPatterns="99999|99999-9999|### ###"/> 
        </h:input_text>
       <h:output_errors  for="zip" />    
@@ -201,8 +200,7 @@
       </font></td>
                                 <td valign="top"> <font face="Arial, Helvetica">
       <h:input_text id="ccno" size="16"
-           converter="creditcard" >
-          <f:validate_required />
+           converter="creditcard" required="true">
           <cd:format_validator 
           formatPatterns="9999999999999999|9999 9999 9999 9999|9999-9999-9999-9999"/>
       </h:input_text>
@@ -240,6 +238,8 @@
                               </tr>
                             </tbody>
                           </table>
+
+<h:output_errors for=""/>
     
 <h:command_button  key="finishButton" bundle="carDemoBundle"
         action="success" />
