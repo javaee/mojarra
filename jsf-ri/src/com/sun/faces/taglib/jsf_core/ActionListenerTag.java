@@ -1,5 +1,5 @@
 /*
- * $Id: ActionListenerTag.java,v 1.27 2006/03/29 23:03:51 rlubke Exp $
+ * $Id: ActionListenerTag.java,v 1.28 2006/05/10 23:26:09 rlubke Exp $
  */
 
 /*
@@ -155,7 +155,7 @@ public class ActionListenerTag extends TagSupport {
                 MessageUtils.getExceptionMessageString(MessageUtils.NULL_COMPONENT_ERROR_MESSAGE_ID));
         }
         if (!(component instanceof ActionSource)) {
-            Object params [] = {this.getClass().getName()};
+            Object params [] = {"actionListener", "javax.faces.component.ActionSource"};
             throw new JspException(
                 MessageUtils.getExceptionMessageString(
                     MessageUtils.NOT_NESTED_IN_TYPE_TAG_ERROR_MESSAGE_ID, params));

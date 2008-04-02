@@ -1,5 +1,5 @@
 /*
- * $Id: SetPropertyActionListenerTag.java,v 1.5 2006/03/29 23:03:52 rlubke Exp $
+ * $Id: SetPropertyActionListenerTag.java,v 1.6 2006/05/10 23:26:09 rlubke Exp $
  */
 
 /*
@@ -28,20 +28,20 @@
  */
 
 package com.sun.faces.taglib.jsf_core;
+
 import javax.el.ValueExpression;
-import javax.faces.context.FacesContext;
+import javax.faces.component.ActionSource;
+import javax.faces.component.UIComponent;
 import javax.faces.event.ActionListener;
 import javax.faces.webapp.UIComponentClassicTagBase;
 import javax.faces.webapp.UIComponentELTag;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.TagSupport;
 
-import com.sun.faces.util.Util;
-import com.sun.faces.util.MessageUtils;
-
 import java.util.logging.Logger;
-import javax.faces.component.ActionSource;
 
+import com.sun.faces.util.MessageUtils;
+import com.sun.faces.util.Util;
 
 
 /**
@@ -80,7 +80,7 @@ public class SetPropertyActionListenerTag extends TagSupport {
     // ------------------------------------------------------------- Attributes
 
     static final long serialVersionUID = 7966883942522780374L;
-    private static final Logger logger = 
+    private static final Logger logger =
             Util.getLogger(Util.FACES_LOGGER + Util.TAGLIB_LOGGER);
     /**
      * <p>The target of the value attribute.</p>
@@ -111,7 +111,7 @@ public class SetPropertyActionListenerTag extends TagSupport {
      * @throws JspException if a JSP error occurs
      */
     public void setValue(ValueExpression value) {
-	this.value = value;
+    this.value = value;
     }
 
     // --------------------------------------------------------- Public Methods
@@ -139,29 +139,27 @@ public class SetPropertyActionListenerTag extends TagSupport {
                 MessageUtils.getExceptionMessageString(
                     MessageUtils.NOT_NESTED_IN_FACES_TAG_ERROR_MESSAGE_ID, params));
         }
-        
+
         // Nothing to do unless this tag created a component
         if (!tag.getCreated()) {
             return (SKIP_BODY);
-        }
-                
-        FacesContext context = FacesContext.getCurrentInstance();
+        }    
 
-        ActionSource component = (ActionSource)tag.getComponentInstance();
+        UIComponent component = tag.getComponentInstance();
         if (component == null) {
             throw new JspException(
                 MessageUtils.getExceptionMessageString(MessageUtils.NULL_COMPONENT_ERROR_MESSAGE_ID));
         }
         if (!(component instanceof ActionSource)) {
-            Object params [] = {this.getClass().getName()};
+            Object params [] = {"setPropertyActionListener", "javax.faces.component.ActionSource"};
             throw new JspException(
                 MessageUtils.getExceptionMessageString(
                     MessageUtils.NOT_NESTED_IN_TYPE_TAG_ERROR_MESSAGE_ID, params));
         }
-        
+
         handler = new SetPropertyActionListenerImpl(target, value);
-        component.addActionListener(handler);
-                       
+        ((ActionSource) component).addActionListener(handler);
+
         return (SKIP_BODY);
 
     }
@@ -176,7 +174,7 @@ public class SetPropertyActionListenerTag extends TagSupport {
         this.target = null;
 
     }
-    
+
 
 
 }

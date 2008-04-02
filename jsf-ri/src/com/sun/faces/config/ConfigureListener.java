@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListener.java,v 1.71 2006/05/03 14:49:21 edburns Exp $
+ * $Id: ConfigureListener.java,v 1.72 2006/05/10 23:26:09 rlubke Exp $
  */
 /*
  * The contents of this file are subject to the terms
@@ -433,8 +433,7 @@ public class ConfigureListener implements ServletRequestListener,
             // see if we need to disable our TLValidator
             Util.setHtmlTLVActive(
                   isFeatureEnabled(BooleanWebContextInitParameter.EnableHtmlTagLibraryValidator));
-
-            URL url = null;
+            
             if (LOGGER.isLoggable(Level.FINE)) {
                 LOGGER.fine("contextInitialized("
                             + context.getServletContextName()
@@ -452,7 +451,17 @@ public class ConfigureListener implements ServletRequestListener,
             digester = digester(isFeatureEnabled(BooleanWebContextInitParameter.ValidateFacesConfigFiles));
             
             // Step 2, parse the RI configuration resource
-            url = Util.getCurrentLoader(this).getResource(JSF_RI_CONFIG);
+            URL url = Util.getCurrentLoader(this).getResource(JSF_RI_CONFIG);
+            
+            // 'url' cannot be null
+            if (url == null) {
+                throw new FacesException(
+                      MessageUtils.getExceptionMessageString(
+                            MessageUtils.NO_IMPLEMENTATION_CONFIG_FILE_FOUND_MESSAGE_ID,
+                                                             JSF_RI_CONFIG)
+                );
+            }
+            
             parse(digester, url, fcb);
 
             // Step 3, parse any "/META-INF/faces-config.xml" resources

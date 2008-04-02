@@ -1,5 +1,5 @@
 /*
- * $Id: ValueChangeListenerTag.java,v 1.21 2006/03/29 23:03:52 rlubke Exp $
+ * $Id: ValueChangeListenerTag.java,v 1.22 2006/05/10 23:26:09 rlubke Exp $
  */
 
 /*
@@ -156,7 +156,7 @@ public class ValueChangeListenerTag extends TagSupport {
                 MessageUtils.getExceptionMessageString(MessageUtils.NULL_COMPONENT_ERROR_MESSAGE_ID));
         }
         if (!(component instanceof EditableValueHolder)) {
-            Object[] params = {this.getClass().getName()};
+            Object[] params = {"valueChangeListener", "javax.faces.component.EditableValueHolder"};
             throw new JspException(
                 MessageUtils.getExceptionMessageString(
                     MessageUtils.NOT_NESTED_IN_TYPE_TAG_ERROR_MESSAGE_ID, params));
