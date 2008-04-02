@@ -3,7 +3,7 @@
  SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 -->
 
-<%-- $Id: UIData.jsp,v 1.11 2004/01/17 23:27:24 craigmcc Exp $ --%>
+<%-- $Id: UIData.jsp,v 1.12 2004/01/19 04:44:34 craigmcc Exp $ --%>
 
 <%@ page import="standard.CustomerBean" %>
 <%@ page import="java.util.ArrayList" %>
@@ -136,7 +136,14 @@
 
     <h:column>
       <f:facet           name="header">
+        <h:command_button  id="headerButton"
+                       action="#{UIDataBean.header}"
+                    immediate="true"
+                        value="Header"
+                         type="SUBMIT"/>
+<%--
         <h:output_text  value="Commands"/>
+--%>
       </f:facet>
       <h:command_button    id="press"
                     action="#{UIDataBean.press}"

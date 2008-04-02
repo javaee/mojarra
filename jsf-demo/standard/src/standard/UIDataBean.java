@@ -1,5 +1,5 @@
 /*
- * $Id: UIDataBean.java,v 1.7 2004/01/12 06:52:58 craigmcc Exp $
+ * $Id: UIDataBean.java,v 1.8 2004/01/19 04:44:33 craigmcc Exp $
  */
 
 /*
@@ -257,6 +257,19 @@ public class UIDataBean {
 
         append("first()");
 	scroll(0);
+	return (null);
+
+    }
+
+
+    /**
+     * <p>Acknowledge that the header button was pressed.</p>
+     */
+    public String header() {
+
+        FacesContext context = FacesContext.getCurrentInstance();
+        append("header()");
+	clear();
 	return (null);
 
     }
