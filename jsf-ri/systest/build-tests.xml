@@ -4,7 +4,7 @@
  Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 
- $Id: build-tests.xml,v 1.54 2004/05/03 19:30:37 jvisvanathan Exp $
+ $Id: build-tests.xml,v 1.55 2004/05/04 19:19:20 eburns Exp $
 -->
 
 
@@ -109,6 +109,27 @@
         <tester host="${host}" port="${port}" protocol="${protocol}"
             request="${context.path}/faces/duplicateIds03.jsp"
              status="200" failonerror="${failonerror}"/>
+
+    <junit printsummary="yes" fork="yes"
+          haltonfailure="yes" haltonerror="yes">
+
+      <!-- uncomment the below line to enable attaching a debugger -->
+      <jvmarg line="${debug.jvm.args}"/>
+
+      <classpath refid="html.classpath"/>
+      <formatter  type="plain"      usefile="false"/>
+      <sysproperty key="host"         value="${host}"/>
+      <sysproperty key="port"         value="${port}"/>
+      <sysproperty key="context.path" value="${context.path}"/>
+
+      <batchtest>
+        <fileset    dir="${basedir}/build/WEB-INF/classes"
+               includes="com/sun/faces/systest/TestDuplicateIds04.class"/>
+      </batchtest>
+
+    </junit>
+
+
     </target>
 
   <target name="test.external"

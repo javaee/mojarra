@@ -1,5 +1,5 @@
 /*
- * $Id: JspIntegrationTestCase.java,v 1.6 2004/02/26 20:33:33 eburns Exp $
+ * $Id: JspIntegrationTestCase.java,v 1.7 2004/05/04 19:19:21 eburns Exp $
  */
 
 /*
@@ -95,6 +95,7 @@ public class JspIntegrationTestCase extends AbstractTestCase {
                           "[A] { } [Z]");
 
         // Check with children that do not have ids
+	/********** PENDING(edburns): pending resolution of 5040235
         checkJspDynamic00();
         checkJspDynamic01("",
                           "[A] { } [Z]");
@@ -104,6 +105,7 @@ public class JspIntegrationTestCase extends AbstractTestCase {
                           "[A] { [1] [2] } [Z]");
         checkJspDynamic01("?mode=create&value=[3]",
                           "[A] { [1] [2] [3] } [Z]");
+	**************/
         checkJspDynamic00();
         client = new WebClient();
         checkJspDynamic01("",

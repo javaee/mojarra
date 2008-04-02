@@ -279,6 +279,16 @@
     </managed-property>
   </managed-bean>
 
+  <managed-bean>
+    <managed-bean-name>duplicateIds04</managed-bean-name>
+    <managed-bean-class>
+      com.sun.faces.systest.DuplicateIds04
+    </managed-bean-class>
+    <managed-bean-scope>session</managed-bean-scope>
+  </managed-bean>
+
+
+
   <navigation-rule>
     <from-view-id>/redirect.jsp</from-view-id>
     <navigation-case>

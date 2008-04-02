@@ -1,5 +1,5 @@
 /* 
- * $Id: StateManagerImpl.java,v 1.19 2004/03/31 18:48:22 eburns Exp $ 
+ * $Id: StateManagerImpl.java,v 1.20 2004/05/04 19:19:17 eburns Exp $ 
  */ 
 
 
@@ -35,7 +35,7 @@ import java.util.Set;
  * <B>StateManagerImpl</B> is the default implementation class for
  * StateManager.
  *
- * @version $Id: StateManagerImpl.java,v 1.19 2004/03/31 18:48:22 eburns Exp $
+ * @version $Id: StateManagerImpl.java,v 1.20 2004/05/04 19:19:17 eburns Exp $
  * @see javax.faces.application.ViewHandler
  */
 public class StateManagerImpl extends StateManager {
@@ -112,15 +112,13 @@ public class StateManagerImpl extends StateManager {
         String id;
         while (kids.hasNext()) {
             kid = (UIComponent) kids.next();
-            if (null != kid.getId()) {
-                // check for id uniqueness
-                id = kid.getClientId(context);
-                if (id != null && !componentIds.add(id)) {
-                    throw new IllegalStateException(Util.getExceptionMessageString(
+	    // check for id uniqueness
+	    id = kid.getClientId(context);
+	    if (id != null && !componentIds.add(id)) {
+		throw new IllegalStateException(Util.getExceptionMessageString(
                         Util.DUPLICATE_COMPONENT_ID_ERROR_ID,
                         new Object[]{id}));
-                }
-            }
+	    }
 
             if (kid.isTransient()) {
                 kids.remove();
@@ -132,15 +130,13 @@ public class StateManagerImpl extends StateManager {
         kids = component.getFacets().values().iterator();
         while (kids.hasNext()) {
             kid = (UIComponent) kids.next();
-            if (null != kid.getId()) {
-                // check for id uniqueness
-                id = kid.getClientId(context);
-                if (id != null && !componentIds.add(id)) {
-                    throw new IllegalStateException(Util.getExceptionMessageString(
+	    // check for id uniqueness
+	    id = kid.getClientId(context);
+	    if (id != null && !componentIds.add(id)) {
+		throw new IllegalStateException(Util.getExceptionMessageString(
                         Util.DUPLICATE_COMPONENT_ID_ERROR_ID,
                         new Object[]{id}));
-                }
-            }
+	    }
 
             if (kid.isTransient()) {
                 kids.remove();
@@ -328,15 +324,13 @@ public class StateManagerImpl extends StateManager {
         while (kids.hasNext()) {
             UIComponent kid = (UIComponent) kids.next();
 
-            if (null != kid.getId()) {
-                // check for id uniqueness
-                id = kid.getClientId(context);
-                if (id != null && !componentIds.add(id)) {
-                    throw new IllegalStateException(Util.getExceptionMessageString(
+	    // check for id uniqueness
+	    id = kid.getClientId(context);
+	    if (id != null && !componentIds.add(id)) {
+		throw new IllegalStateException(Util.getExceptionMessageString(
                         Util.DUPLICATE_COMPONENT_ID_ERROR_ID,
                         new Object[]{id}));
-                }
-            }
+	    }
             
             // if a component is marked transient do not persist its state as
             // well as its children.
@@ -356,15 +350,13 @@ public class StateManagerImpl extends StateManager {
             UIComponent facetComponent = (UIComponent) component.getFacets().
                 get(facetName);
 
-            if (null != facetComponent.getId()) {
-                // check for id uniqueness
-                id = facetComponent.getClientId(context);
-                if (id != null && !componentIds.add(id)) {
-                    throw new IllegalStateException(Util.getExceptionMessageString(
+	    // check for id uniqueness
+	    id = facetComponent.getClientId(context);
+	    if (id != null && !componentIds.add(id)) {
+		throw new IllegalStateException(Util.getExceptionMessageString(
                         Util.DUPLICATE_COMPONENT_ID_ERROR_ID,
                         new Object[]{id}));
-                }
-            }
+	    }
             
             // if a facet is marked transient do not persist its state as well as
             // its children.
