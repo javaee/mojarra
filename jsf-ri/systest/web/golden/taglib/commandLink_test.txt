@@ -11,20 +11,20 @@
 <body>
     
     
-      <form id="form01" method="post" action="/jsf-systest/faces/taglib/commandLink_test.jsp;jsessionid=B8EDFA9A0AB457EDFE32008DB353556E" enctype="application/x-www-form-urlencoded">
+      <form id="form01" method="post" action="/jsf-systest/faces/taglib/commandLink_test.jsp;jsessionid=B390F8BC8DBD4A20114B294D3FF48F67" enctype="application/x-www-form-urlencoded">
 
-        <a id="form01:hyperlink01" href="#" onclick="clearFormHiddenParams('form01');document.forms['form01']['form01:_idcl'].value='form01:hyperlink01'; document.forms['form01'].submit(); return false;">My Link</a>
-        <a id="form01:hyperlink02" href="#" onclick="clearFormHiddenParams('form01');document.forms['form01']['form01:_idcl'].value='form01:hyperlink02'; document.forms['form01'].submit(); return false;">This is a String property</a>
-        <a id="form01:hyperlink03" href="#" onclick="clearFormHiddenParams('form01');document.forms['form01']['form01:_idcl'].value='form01:hyperlink03'; document.forms['form01'].submit(); return false;">RES-BUNDLE LINK</a>
-        <a id="form01:hyperlink04" href="#" onclick="clearFormHiddenParams('form01');document.forms['form01']['form01:_idcl'].value='form01:hyperlink04'; document.forms['form01'].submit(); return false;"><img src="duke.gif" /></a>
-        <a id="form01:hyperlink05" href="#" onclick="clearFormHiddenParams('form01');document.forms['form01']['form01:_idcl'].value='form01:hyperlink05'; document.forms['form01'].submit(); return false;"><img src="resbundle_image.gif;jsessionid=B8EDFA9A0AB457EDFE32008DB353556E" /></a>
+        <a id="form01:hyperlink01" href="#" onclick="clearFormHiddenParams_form01('form01');document.forms['form01']['form01:_idcl'].value='form01:hyperlink01'; document.forms['form01'].submit(); return false;">My Link</a>
+        <a id="form01:hyperlink02" href="#" onclick="clearFormHiddenParams_form01('form01');document.forms['form01']['form01:_idcl'].value='form01:hyperlink02'; document.forms['form01'].submit(); return false;">This is a String property</a>
+        <a id="form01:hyperlink03" href="#" onclick="clearFormHiddenParams_form01('form01');document.forms['form01']['form01:_idcl'].value='form01:hyperlink03'; document.forms['form01'].submit(); return false;">RES-BUNDLE LINK</a>
+        <a id="form01:hyperlink04" href="#" onclick="clearFormHiddenParams_form01('form01');document.forms['form01']['form01:_idcl'].value='form01:hyperlink04'; document.forms['form01'].submit(); return false;"><img src="duke.gif" /></a>
+        <a id="form01:hyperlink05" href="#" onclick="clearFormHiddenParams_form01('form01');document.forms['form01']['form01:_idcl'].value='form01:hyperlink05'; document.forms['form01'].submit(); return false;"><img src="resbundle_image.gif;jsessionid=B390F8BC8DBD4A20114B294D3FF48F67" /></a>
         
             
-        <a id="form01:hyperlink06" href="#" onclick="clearFormHiddenParams('form01');document.forms['form01']['form01:_idcl'].value='form01:hyperlink06';document.forms['form01']['param1'].value='value1'; document.forms['form01'].submit(); return false;">Paramter Link</a>
+        <a id="form01:hyperlink06" href="#" onclick="clearFormHiddenParams_form01('form01');document.forms['form01']['form01:_idcl'].value='form01:hyperlink06';document.forms['form01']['param1'].value='value1'; document.forms['form01'].submit(); return false;">Paramter Link</a>
       <input type="hidden" name="form01" value="form01" /><input type="hidden" name="param1" /><input type="hidden" name="form01:_idcl" />
 <script type="text/javascript">
 <!--
-function clearFormHiddenParams(curFormName) {
+function clearFormHiddenParams_form01(curFormName) {
   var curForm = document.forms[curFormName];
  curForm.elements['param1'].value = null;
  curForm.elements['form01:_idcl'].value = null;

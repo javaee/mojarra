@@ -1,5 +1,5 @@
 /*
- * $Id: CommandLinkRenderer.java,v 1.24 2004/11/12 18:00:25 jayashri Exp $
+ * $Id: CommandLinkRenderer.java,v 1.25 2004/12/14 21:08:55 jayashri Exp $
  */
 
 /*
@@ -174,7 +174,7 @@ public class CommandLinkRenderer extends HtmlBasicRenderer {
         sb = new StringBuffer();
         // call the javascript function that clears the all the hidden field
         // parameters in the form.
-        sb.append(CLEAR_HIDDEN_FIELD_FN_NAME);
+        sb.append(CLEAR_HIDDEN_FIELD_FN_NAME + "_" + formClientId);
         sb.append("('");
         sb.append(formClientId);
         sb.append("');");

@@ -1,5 +1,5 @@
 /*
- * $Id: ButtonRenderer.java,v 1.79 2004/11/12 18:00:25 jayashri Exp $
+ * $Id: ButtonRenderer.java,v 1.80 2004/12/14 21:08:55 jayashri Exp $
  */
 
 /*
@@ -171,10 +171,20 @@ public class ButtonRenderer extends HtmlBasicRenderer {
             writer.writeAttribute("value", label, "value");
         }
         
+        // look up the clientId of the form in request scope to arrive the name of
+        // the javascript function to invoke from the onclick event handler.
+        // PENDING (visvan) we need to fix this dependency between the renderers.
+        // This solution is only temporary.
+        Map requestMap = context.getExternalContext().getRequestMap();
+        String formClientId = (String)requestMap.get(FORM_CLIENT_ID_ATTR);
+        
         StringBuffer sb = new StringBuffer();
         // call the javascript function that clears the all the hidden field
         // parameters in the form.
         sb.append(CLEAR_HIDDEN_FIELD_FN_NAME);
+        if (formClientId != null) {
+            sb.append("_" + formClientId);
+        }
         sb.append("(this.form.id);");
         // append user specified script for onclick if any.
         String onclickAttr = (String)component.getAttributes().get("onclick");

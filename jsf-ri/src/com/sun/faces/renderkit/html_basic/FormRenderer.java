@@ -1,5 +1,5 @@
 /*
- * $Id: FormRenderer.java,v 1.80 2004/11/12 18:00:25 jayashri Exp $
+ * $Id: FormRenderer.java,v 1.81 2004/12/14 21:08:55 jayashri Exp $
  */
 
 /*
@@ -135,6 +135,14 @@ public class FormRenderer extends HtmlBasicRenderer {
         Util.renderPassThruAttributes(writer, component);
         Util.renderBooleanPassThruAttributes(writer, component);
         writer.writeText("\n", null);
+        
+        // store the clientId of the form in request scope. This will be used
+        // by the commandLinkRenderer and ButtonRenderer to arrive the name of
+        // the javascript function to invoke from the onclick event handler.
+        // PENDING (visvan) we need to fix this dependency between the renderers.
+        // This solution is only temporary.
+        Map requestMap =context.getExternalContext().getRequestMap();
+        requestMap.put(FORM_CLIENT_ID_ATTR, component.getClientId(context));
     }
 
 
@@ -200,6 +208,9 @@ public class FormRenderer extends HtmlBasicRenderer {
         if (log.isTraceEnabled()) {
             log.trace("End encoding component " + component.getId());
         }
+        
+        Map requestMap = context.getExternalContext().getRequestMap();
+        String formClientId = (String)requestMap.put(FORM_CLIENT_ID_ATTR, null);
     }
 
 
@@ -229,7 +240,8 @@ public class FormRenderer extends HtmlBasicRenderer {
             requestMap.put(HIDDEN_FIELD_KEY, null);
         }
         String formTarget = (String) component.getAttributes().get("target");
-        renderClearHiddenParamsJavaScript(writer, map, formTarget);
+        renderClearHiddenParamsJavaScript(writer, map, formTarget, 
+            component.getClientId(context));
     }
 
 
@@ -274,7 +286,7 @@ public class FormRenderer extends HtmlBasicRenderer {
      * associated with a form and reset the target attribute if necessary.
      */
     private static void renderClearHiddenParamsJavaScript(ResponseWriter writer,
-        Map formParams, String formTarget) throws IOException {
+        Map formParams, String formTarget, String formName) throws IOException {
             
          // clear all the hidden field parameters in the form represented by
          // formName.
@@ -283,7 +295,8 @@ public class FormRenderer extends HtmlBasicRenderer {
          writer.writeAttribute(SCRIPT_TYPE, "text/javascript", null);
          writer.write("\n<!--");
          writer.write("\nfunction ");
-         writer.write(CLEAR_HIDDEN_FIELD_FN_NAME);
+         String functionName = (CLEAR_HIDDEN_FIELD_FN_NAME + "_" + formName);
+         writer.write(functionName);
          writer.write("(curFormName) {");
          writer.write("\n  var curForm = document.forms[curFormName];"); 
          if (formParams != null) {
