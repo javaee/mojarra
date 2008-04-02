@@ -222,7 +222,7 @@ public class RenderKitUtils {
           + "\n            i += 1;"
           + "\n        }"
           + "\n    };"
-          + "\n}";    
+          + "\n}";         
     
     /**
      * <p>A <code>compressed</code> version of <code>FORM_INIT_JS</code>.</p>
@@ -942,13 +942,12 @@ public class RenderKitUtils {
      */
     public static String getCommandLinkParamScript(String formClientId,
                                                    String commandClientId,
-                                                   Param[] params
-    ) {
+                                                   Param[] params) {
 
-        StringBuilder sb = new StringBuilder(64);       
-        sb.append("document.forms['");
+        StringBuilder sb = new StringBuilder(64);          
+        sb.append("var f = document.forms['");
         sb.append(formClientId);        
-        sb.append("'].apf('");        
+        sb.append("']; if(f.apf){f.apf('");        
         sb.append(commandClientId);
         sb.append(',');
         sb.append(commandClientId);               
@@ -960,7 +959,7 @@ public class RenderKitUtils {
             sb.append(param.value);            
         }
         
-        sb.append("');");
+        sb.append("');};");
 
         return sb.toString();
         
