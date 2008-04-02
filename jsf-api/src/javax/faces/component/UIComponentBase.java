@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.57 2003/07/15 00:03:20 craigmcc Exp $
+ * $Id: UIComponentBase.java,v 1.58 2003/07/21 18:46:48 horwat Exp $
  */
 
 /*
@@ -568,8 +568,15 @@ public abstract class UIComponentBase implements UIComponent {
             return;
         }
         int n = children.size();
+        NamingContainer closestContainer = findClosestNamingContainer(this);
+
         for (int i = 0; i < n; i++) {
-            ((UIComponent) children.get(i)).setParent(null);
+            UIComponent child = (UIComponent) children.get(i);
+            child.setParent(null);
+
+            if (null != closestContainer) {
+                closestContainer.removeComponentFromNamespace(child);
+            }
         }
         children = null;
 
@@ -644,6 +651,12 @@ public abstract class UIComponentBase implements UIComponent {
         getChildList().remove(index);
         kid.setParent(null);
 
+        NamingContainer closestContainer = null;
+
+        if (null != (closestContainer = findClosestNamingContainer(this))) {
+            closestContainer.removeComponentFromNamespace(kid);
+        }
+
     }
 
     public void removeChild(UIComponent component) {
@@ -654,6 +667,13 @@ public abstract class UIComponentBase implements UIComponent {
         if (containsChild(component)) {
             getChildList().remove(component);
             component.setParent(null);
+
+            NamingContainer closestContainer = null;
+
+            if (null != (closestContainer = findClosestNamingContainer(this))) {
+                closestContainer.removeComponentFromNamespace(component);
+            }
+
         } else {
             throw new IllegalArgumentException("removeChild");
         }

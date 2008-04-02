@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBaseTestCase.java,v 1.7 2003/07/20 00:41:43 craigmcc Exp $
+ * $Id: UIComponentBaseTestCase.java,v 1.8 2003/07/21 18:46:49 horwat Exp $
  */
 
 /*
@@ -158,6 +158,64 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
                      lifecycleTrace("pU", "u"),
                      TestComponent.trace());
 
+    }
+
+    /*
+     * test removing components from naming container
+     */
+    public void testComponentRemoval() {
+        UIComponent testComponent = new TestComponentNamingContainer();
+        UIComponent child1 = new TestComponent("child1");
+        UIComponent child2 = new TestComponent("child2");
+        UIComponent child3 = new TestComponent("child3");
+        UIComponent child = null;
+
+        //adding children to naming container
+        testComponent.addChild(child1);
+        testComponent.addChild(child2);
+        testComponent.addChild(child3);
+
+        // make sure children are stored in naming container properly
+        Iterator kidItr = null;
+
+        kidItr = testComponent.getFacetsAndChildren();
+
+        child = (UIComponent) kidItr.next();
+        assertTrue(child.equals(child1));
+
+        child = (UIComponent) kidItr.next();
+        assertTrue(child.equals(child2));
+
+        child = (UIComponent) kidItr.next();
+        assertTrue(child.equals(child3));
+
+        //make sure child is removed from component and naming container
+        //pass in a component to remove method
+        testComponent.removeChild(child1);
+
+        kidItr = testComponent.getFacetsAndChildren();
+
+        child = (UIComponent) kidItr.next();
+        assertTrue(child.equals(child2));
+
+        child = (UIComponent) kidItr.next();
+        assertTrue(child.equals(child3));
+
+        //make sure child is removed from component and naming container
+        //pass an index to remove method
+        testComponent.removeChild(0);
+
+        kidItr = testComponent.getFacetsAndChildren();
+
+        child = (UIComponent) kidItr.next();
+        assertTrue(child.equals(child3));
+
+        //make sure child is removed from component and naming container
+        //remove all children
+        testComponent.clearChildren();
+
+        kidItr = testComponent.getFacetsAndChildren();
+        assertTrue(!kidItr.hasNext());
     }
 
 
