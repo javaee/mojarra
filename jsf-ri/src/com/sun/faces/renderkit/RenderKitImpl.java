@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKitImpl.java,v 1.24 2004/12/16 17:56:36 edburns Exp $
+ * $Id: RenderKitImpl.java,v 1.25 2004/12/17 17:09:42 edburns Exp $
  */
 
 /*
@@ -33,7 +33,7 @@ import java.util.Map;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: RenderKitImpl.java,v 1.24 2004/12/16 17:56:36 edburns Exp $
+ * @version $Id: RenderKitImpl.java,v 1.25 2004/12/17 17:09:42 edburns Exp $
  */
 
 public class RenderKitImpl extends RenderKit {
@@ -150,17 +150,16 @@ public class RenderKitImpl extends RenderKit {
             return null;
         }
         String contentType = null;
+	FacesContext context = FacesContext.getCurrentInstance();
 
 	// if no contentTypeList was passed
 	if (null == contentTypeList) {
-	    FacesContext context = FacesContext.getCurrentInstance();
-	    
-	    contentTypeList = 
-		Util.getContentTypeFromResponse(context.getExternalContext().getResponse());
+	    // use the Accept header.
+	    contentTypeList = (String)
+	      context.getExternalContext().getRequestHeaderMap().get("Accept");
 	}
 
 	if (null != contentTypeList) {
-	    FacesContext context = FacesContext.getCurrentInstance();
 	    Map requestMap = context.getExternalContext().getRequestMap();
 
 	    // search for the first occurrence of XHTML_CONTENT_TYPE or

@@ -1,3 +1,7 @@
+<!DOCTYPE html
+PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
 <!--
  Copyright 2004 Sun Microsystems, Inc. All Rights Reserved.
  
@@ -36,10 +40,6 @@
  maintenance of any nuclear facility.
 -->
 
-<!DOCTYPE html
-PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
     <head> <title>Guess The Number</title> </head>
     <%@ page contentType="application/xhtml+xml" %>
@@ -51,7 +51,7 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
         <h:graphicImage id="waveImg" url="/wave.med.gif" />
     <h2><h:outputText id="result" lang="en"
     			value="#{UserNumberBean.response}"/></h2>   
-    <h:commandButton id="back" value="Back" action="success"/><p>
+    <h:commandButton id="back" value="Back" action="success"/><p />
 
     </h:form>
     </f:view>

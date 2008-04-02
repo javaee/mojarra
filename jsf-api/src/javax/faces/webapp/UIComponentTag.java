@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTag.java,v 1.53 2004/12/08 15:59:37 edburns Exp $
+ * $Id: UIComponentTag.java,v 1.54 2004/12/17 17:09:41 edburns Exp $
  */
 
 /*
@@ -937,8 +937,8 @@ public abstract class UIComponentTag implements Tag {
 				      int len) throws IOException {
 			pageContext.getOut().write(str, off, len);
 		    }
-		},
-                                               null,
+		    },
+                                               pageContext.getResponse().getContentType(),
             pageContext.getRequest().getCharacterEncoding());
 	    
             context.setResponseWriter(writer);
