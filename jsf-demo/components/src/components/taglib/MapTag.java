@@ -72,10 +72,6 @@ public MapTag()
 //
 
 
-    public String getCurrentArea() {
-    	return currentArea;
-    }
-
     public void setCurrentArea(String area) {
     	currentArea = area;
     }
@@ -87,8 +83,9 @@ public MapTag()
 	public void overrideProperties(UIComponent component) {
 		super.overrideProperties(component);
 		UIMap map = (UIMap) component;
-		if(map.getAttribute("currentArea") == null)
-			map.setAttribute("currentArea", getCurrentArea());
+		if (null != currentArea) {
+		    map.setAttribute("currentArea", currentArea);
+		}
 	}    
 
 // Gets the renderer associated with this component    

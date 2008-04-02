@@ -66,14 +66,12 @@ import javax.faces.component.UICommand;
 
 public class UIMap extends UICommand {
 
+    public UIMap() {
+	super();
+	setRendererType(null);
+    }
 
-    /* Component type for this component
-    public static final String TYPE = "UIMap";
 
-    // Return our component type
-    public String getComponentType() {
-        return (TYPE);
-    } */ 
 
    // Renders the beginning of the <code>map</code> tag.
    public void encodeBegin(FacesContext context) throws IOException {
