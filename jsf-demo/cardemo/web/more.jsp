@@ -104,8 +104,8 @@
                 valueRef="CarServer.carCurrentPrice" />
 
             <BR> <BR>
-            <h:command_button commandName="buy" action="success" key="buy" 
-                bundle="carDemoBundle">
+            <h:command_button commandName="buy" key="buy" 
+                bundle="carDemoBundle" actionRef="CarServer.carBuyAction" >
                 <f:action_listener type="cardemo.CarActionListener"/>
             </h:command_button>
             <BR> <BR>

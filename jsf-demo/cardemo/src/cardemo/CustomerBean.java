@@ -1,5 +1,5 @@
 /*
- * $Id: CustomerBean.java,v 1.3 2003/02/21 23:44:26 ofung Exp $
+ * $Id: CustomerBean.java,v 1.4 2003/06/03 19:03:16 jvisvanathan Exp $
  */
 /*
  * Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
@@ -59,7 +59,7 @@ public class CustomerBean extends Object {
     String mailingAddress = null;
     String city = null;
     String state = null;
-    int zip;
+    String zip = null;
     String month = null;
     String year = null;
     
@@ -147,11 +147,11 @@ public class CustomerBean extends Object {
         return state;
     }
     
-    public void setZip(int zipCode) {
+    public void setZip(String zipCode) {
         zip = zipCode;
     }
     
-    public int getZip() {
+    public String getZip() {
         return zip;
     }
     

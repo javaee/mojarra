@@ -1,5 +1,5 @@
 /*
- * $Id: FormatValidator.java,v 1.2 2003/06/02 17:04:57 jvisvanathan Exp $
+ * $Id: FormatValidator.java,v 1.3 2003/06/03 19:03:17 jvisvanathan Exp $
  */
 
 /*
@@ -183,36 +183,40 @@ public class FormatValidator implements Validator {
     //
     public void validate(FacesContext context, UIComponent component) {
         boolean valid = false;
+        String value = null;
         if ((context == null) || (component == null)) {
             throw new NullPointerException();
         }
         if (!(component instanceof UIOutput)) {
             return;
         }    
-     
+        
         if ( formatPatternsList == null ) {
             // no patterns to match
             component.setValid(true);
             return;
         }
         
-        String value = (((UIOutput)component).getValue()).toString();
-        // validate the value against the list of valid patterns.
-        Iterator patternIt = formatPatternsList.iterator();
-        while (patternIt.hasNext()) {
-            valid = isFormatValid(((String)patternIt.next()), value);
-            if (valid) {
-                break;
+        Object input = ((UIOutput)component).getValue();
+        if ( input != null ) {
+            value = input.toString();
+            // validate the value against the list of valid patterns.
+            Iterator patternIt = formatPatternsList.iterator();
+            while (patternIt.hasNext()) {
+                valid = isFormatValid(((String)patternIt.next()), value);
+                if (valid) {
+                    break;
+                }
             }
-        }
-        if ( valid ) {
-            component.setValid(true);
-        } else {
-            component.setValid(false);
-            Message errMsg = getMessageResources().getMessage(context, 
-                    FORMAT_INVALID_MESSAGE_ID, 
-                    (new Object[] {formatPatterns}));
-            context.addMessage(component, errMsg);
+            if ( valid ) {
+                component.setValid(true);
+            } else {
+                component.setValid(false);
+                Message errMsg = getMessageResources().getMessage(context, 
+                        FORMAT_INVALID_MESSAGE_ID, 
+                        (new Object[] {formatPatterns}));
+                context.addMessage(component, errMsg);
+            }
         }
     }
     
