@@ -824,5 +824,15 @@ public class RenderKitUtils {
         match[0][2] = results[idx][2];
         return match;
     }
-    
+
+    /**
+     * <p>Replaces all occurrences of <code>-</code> with <code>$_</code>.</p>
+     * 
+     * @param origIdentifier the original identifer that needs to be
+     *  'ECMA-ized'
+     * @return an ECMA valid identifer
+     */
+    public static String createValidECMAIdentifier(String origIdentifier) {
+        return origIdentifier.replace("-", "$_");
+    }
 } // END RenderKitUtils

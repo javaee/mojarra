@@ -1,5 +1,5 @@
 /*
- * $Id: CommandLinkRenderer.java,v 1.44 2006/03/17 21:02:27 rlubke Exp $
+ * $Id: CommandLinkRenderer.java,v 1.45 2006/03/17 21:10:43 rlubke Exp $
  */
 
 /*
@@ -335,7 +335,7 @@ public class CommandLinkRenderer extends LinkRenderer {
         // call the javascript function that clears the all the hidden field
         // parameters in the form.
         String functionName =
-              Util.createValidECMAIdentifier(CLEAR_HIDDEN_FIELD_FN_NAME
+              RenderKitUtils.createValidECMAIdentifier(CLEAR_HIDDEN_FIELD_FN_NAME
                                              + '_'
                                              + formClientId
                     .replace(NamingContainer.SEPARATOR_CHAR, '_')); 
@@ -426,7 +426,7 @@ public class CommandLinkRenderer extends LinkRenderer {
         }
 	writer.write("\nfunction ");
         String functionName =
-              Util.createValidECMAIdentifier(CLEAR_HIDDEN_FIELD_FN_NAME
+              RenderKitUtils.createValidECMAIdentifier(CLEAR_HIDDEN_FIELD_FN_NAME
                                              + "_"
                                              + formName
                     .replace(NamingContainer.SEPARATOR_CHAR, '_')); 

@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.186 2006/03/17 21:02:27 rlubke Exp $
+ * $Id: Util.java,v 1.187 2006/03/17 21:10:44 rlubke Exp $
  */
 
 /*
@@ -80,7 +80,7 @@ import com.sun.faces.spi.ManagedBeanFactory.Scope;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.186 2006/03/17 21:02:27 rlubke Exp $
+ * @version $Id: Util.java,v 1.187 2006/03/17 21:10:44 rlubke Exp $
  */
 
 public class Util {
@@ -1055,15 +1055,4 @@ public class Util {
         return result;
     }
 
-    /**
-     * <p>Replaces all occurrences of <code>-</code> with <code>$_</code>.</p>
-     * 
-     * @param origIdentifier the original identifer that needs to be
-     *  'ECMA-ized'
-     * @return an ECMA valid identifer
-     */
-    public static String createValidECMAIdentifier(String origIdentifier) {
-        return origIdentifier.replace("-", "$_");        
-    }
-    
 } // end of class Util
