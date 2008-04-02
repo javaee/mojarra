@@ -1,5 +1,5 @@
 /*
- * $Id: GenerateConcreteClasses.java,v 1.4 2003/11/06 15:57:55 eburns Exp $
+ * $Id: GenerateConcreteClasses.java,v 1.5 2003/11/07 22:31:34 eburns Exp $
  */
 
 /*
@@ -209,6 +209,7 @@ public class GenerateConcreteClasses extends GenerateBase {
 
 	// imports
 	result.append("import javax.faces.context.FacesContext;\n");
+	result.append("import javax.faces.el.ValueBinding;\n");
 	result.append("import java.io.IOException;\n");
 	
 	// class declaration
@@ -229,6 +230,7 @@ public class GenerateConcreteClasses extends GenerateBase {
 	    getOrIs = null,
 	    is = "is",
 	    get = "get";
+	boolean isPrimitive = false;
 
 	// attributes
 	while (iter.hasNext()) {
@@ -236,12 +238,15 @@ public class GenerateConcreteClasses extends GenerateBase {
 	    ivar = generateIvar(attrName);
 	    attrClass = getParser().getRendererAttributeClass(rendererType,attrName).trim();
 	    // ivar declaration
-	    result.append("  protected " + attrClass + " " + ivar);
+	    result.append("  private " + attrClass + " " + ivar);
 	    // if it's a primitive
-	    if (isPrimitive(attrClass)) {
+	    if (isPrimitive = isPrimitive(attrClass)) {
 		// assign the default value
 		result.append(" = " + 
-			      (String) defaultPrimitiveValues.get(attrClass));
+			      (String) defaultPrimitiveValues.get(attrClass) +
+			      ";\n");
+		result.append("  private boolean " + ivar + 
+			      "Set = false");
 	    }
 	    result.append(";\n");
 
@@ -252,6 +257,9 @@ public class GenerateConcreteClasses extends GenerateBase {
 			  attrClass + " " + ivar + ") {\n");
 	    result.append("      this." + ivar + " = " + 
 			  ivar + ";\n");
+	    if (isPrimitive) {
+		result.append("      this." + ivar + "Set = true;\n");
+	    }
 	    result.append("  }\n");
 	    if (attrClass.equals("boolean")) {
 		getOrIs = is;
@@ -263,9 +271,35 @@ public class GenerateConcreteClasses extends GenerateBase {
 	    result.append("  public " + attrClass + " " + getOrIs + 
 			  Character.toUpperCase(attrName.charAt(0)) +
 			  attrName.substring(1) + "() {\n");
-	    result.append("      return " + ivar + ";\n");
+	    if (isPrimitive) {
+		result.append("      if (this." + ivar + "Set) {\n");
+		result.append("          return (this." + ivar + ");\n");
+		result.append("      }\n");
+		result.append("      ValueBinding vb = null;\n");
+		result.append("      " + attrClass + " result = " + 
+			      (String) defaultPrimitiveValues.get(attrClass) +
+			      ";\n");
+		result.append("      if (null != (vb = getValueBinding(\"" +
+			      ivar + "\"))) {\n");
+		result.append("          result = ((" +
+			      (String) wrappersForNumbers.get(attrClass) +
+			      ") vb.getValue(getFacesContext()))." + 
+			      attrClass + "Value();\n");
+		result.append("      }\n");
+ 		result.append("      return result;\n");
+	    }
+	    else {
+		result.append("      if (null != this." + ivar + ") {\n");
+		result.append("          return (this." + ivar + ");\n");
+		result.append("      }\n");
+		result.append("      ValueBinding vb = null;\n");
+		result.append("      if (null != (vb = getValueBinding(\"" +
+			      ivar + "\"))) {\n");
+		result.append("          return ((String) vb.getValue(getFacesContext()));\n");
+		result.append("      }\n");
+ 		result.append("      return null;\n");
+	    }
 	    result.append("  }\n\n");
-	    
 	}
 
 	//
@@ -318,6 +352,10 @@ public class GenerateConcreteClasses extends GenerateBase {
 				  (String) wrappersForNumbers.get(attrClass) +
 				  "(" + ivar + ");\n");
 		}
+		// save the "ivarSet" ivar.
+		curAttr++;
+		result.append("    values[" + curAttr + "] = " + ivar + 
+			      "Set ? Boolean.TRUE : Boolean.FALSE;\n");
 	    }
 	    else if (attrClass.equals("String") || 
 		     attrClass.equals("java.lang.String")) {
@@ -363,6 +401,9 @@ public class GenerateConcreteClasses extends GenerateBase {
 				  ") values[" + curAttr + 
 				  "])." + attrClass + "Value();\n");
 		}
+		curAttr++;
+		result.append("    " + ivar + "Set = ((Boolean) values[" + 
+			      curAttr + "]).booleanValue();\n");
 	    }
 	    else if (attrClass.equals("String") || 
 		     attrClass.equals("java.lang.String")) {

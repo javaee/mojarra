@@ -1,5 +1,5 @@
 /*
- * $Id: GenerateBase.java,v 1.2 2003/11/04 18:38:33 rkitain Exp $
+ * $Id: GenerateBase.java,v 1.3 2003/11/07 22:31:34 eburns Exp $
  */
 
 /*
@@ -51,6 +51,8 @@ public abstract class GenerateBase extends Object {
     File outputDir = null;
 
     protected Map defaultPrimitiveValues = null;
+    // PENDING(edburns): change the name of this ivar to be
+    // wrappersForPrimitives
     protected Map wrappersForNumbers = null;
 
     //
@@ -77,6 +79,7 @@ public abstract class GenerateBase extends Object {
 	wrappersForNumbers.put("byte", "Byte");
 	wrappersForNumbers.put("long", "Long");
 	wrappersForNumbers.put("int", "Integer");
+	wrappersForNumbers.put("boolean", "Boolean");
     }
    
     //
