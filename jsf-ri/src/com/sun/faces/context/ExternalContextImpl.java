@@ -1,5 +1,5 @@
 /*
- * $Id: ExternalContextImpl.java,v 1.6 2003/05/14 18:36:18 craigmcc Exp $
+ * $Id: ExternalContextImpl.java,v 1.7 2003/05/15 17:39:01 craigmcc Exp $
  */
 
 /*
@@ -53,7 +53,6 @@ public class ExternalContextImpl extends ExternalContext {
 
     private ServletContext servletContext = null;
     private ServletRequest request = null;
-    private HttpSession session = null;
     private ServletResponse response = null;
 
     private ApplicationMap applicationMap = null;
@@ -68,7 +67,8 @@ public class ExternalContextImpl extends ExternalContext {
 
     public ExternalContextImpl(ServletContext sc, ServletRequest request,
         ServletResponse response) {
-									   	
+								   	
+        // Validate the incoming parameters
         try {
             ParameterCheck.nonNull(sc);
             ParameterCheck.nonNull(request);
@@ -77,6 +77,7 @@ public class ExternalContextImpl extends ExternalContext {
             throw new FacesException(Util.getExceptionMessage(Util.FACES_CONTEXT_CONSTRUCTION_ERROR_MESSAGE_ID));
         }
         
+        // Save references to our context, request, and response
         this.servletContext = sc;
         // PENDING(craigmcc) - Work around a Tomcat 4.1 and 5.0 bug where
         // the request wrapper used on a RequestDispatcher.forward() call
@@ -91,32 +92,23 @@ public class ExternalContextImpl extends ExternalContext {
             this.request = new MyServletRequestWrapper(request);
         }                
         this.response = response;
+
+        // Create a session (if needed) if we are saving state there
         if (this.request instanceof HttpServletRequest) {
-            // If saveStateInPage is false, we need to create the
-            // session at this point.
             boolean createSession = true;
             String paramValue = null;
-	    
             if (null != (paramValue = 
                 sc.getInitParameter(RIConstants.SAVESTATE_INITPARAM))){
                 createSession = !paramValue.equalsIgnoreCase("true");
             }
-
-            this.session = ((HttpServletRequest) request).getSession(createSession);
+            ((HttpServletRequest) request).getSession(createSession);
         }
 
-        applicationMap = new ApplicationMap(servletContext);
-        sessionMap = new SessionMap(session);
-        requestMap = new RequestMap(this.request);
     }
 
 
     public Object getSession(boolean create) {
-        HttpSession result = null;
-        if (null != request) {
-            result = ((HttpServletRequest) request).getSession(create);
-        }
-        return result;
+        return (((HttpServletRequest) request).getSession(create));
     }
 
     public Object getContext() {
@@ -132,14 +124,28 @@ public class ExternalContextImpl extends ExternalContext {
     }
 
     public Map getApplicationMap() {
+        if (applicationMap == null) {
+            applicationMap = new ApplicationMap(servletContext);
+        }
         return applicationMap;
     }
 
     public Map getSessionMap() {
-        return sessionMap;
+        HttpSession session = (HttpSession) getSession(false);
+        if (session != null) {
+            if (sessionMap == null) {
+                sessionMap = new SessionMap(session);
+            }
+            return sessionMap;
+        } else {
+            return (null);
+        }
     }
 
     public Map getRequestMap() {
+        if (requestMap == null) {
+            requestMap = new RequestMap(this.request);
+        }
         return requestMap;
     }
 
