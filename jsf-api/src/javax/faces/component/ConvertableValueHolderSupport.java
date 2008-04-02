@@ -1,5 +1,5 @@
 /*
- * $Id: ConvertableValueHolderSupport.java,v 1.1 2003/10/09 19:18:06 craigmcc Exp $
+ * $Id: ConvertableValueHolderSupport.java,v 1.2 2003/10/09 21:58:28 craigmcc Exp $
  */
 
 /*
@@ -145,7 +145,7 @@ public class ConvertableValueHolderSupport extends ValueHolderSupport {
 
         Object values[] = new Object[3];
         values[0] = super.saveState(context);
-        values[1] = this.converter;
+        values[1] = UIComponentBase.saveAttachedState(context, converter);
 
         int rowCount = 0;
         Repeater repeater = RepeaterSupport.findParentRepeater(this.component);
@@ -173,7 +173,8 @@ public class ConvertableValueHolderSupport extends ValueHolderSupport {
     public void restoreState(FacesContext context, Object state)
         throws IOException {
 
-        super.restoreState(context, state);
+        Object values[] = (Object[]) state;
+        super.restoreState(context, values[0]);
         extraStateToRestore = state;
 
     }
@@ -186,6 +187,8 @@ public class ConvertableValueHolderSupport extends ValueHolderSupport {
             return;
         }
         Object values[] = (Object[]) extraStateToRestore;
+        converter = (Converter) UIComponentBase.restoreAttachedState
+            (FacesContext.getCurrentInstance(), values[1]);
         Repeater repeater = RepeaterSupport.findParentRepeater(component);
         if ((repeater != null) && (repeater.getRowIndex() > 0)) {
             int rowCount = repeater.getRowCount();
