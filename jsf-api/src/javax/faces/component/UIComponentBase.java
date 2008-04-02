@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.95 2004/01/27 20:29:16 craigmcc Exp $
+ * $Id: UIComponentBase.java,v 1.96 2004/01/28 20:16:17 craigmcc Exp $
  */
 
 /*
@@ -24,6 +24,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.WeakHashMap;
 import javax.faces.FacesException;
@@ -482,157 +483,7 @@ public abstract class UIComponentBase extends UIComponent {
     public List getChildren() {
 
         if (children == null) {
-            children = new ArrayList() {
-
-                    public void add(int index, Object element) {
-                        if (element == null) {
-                            throw new NullPointerException();
-                        } else if (!(element instanceof UIComponent)) {
-                            throw new ClassCastException();
-                        } else if ((index < 0) || (index > size())) {
-                            throw new IndexOutOfBoundsException();
-                        } else {
-                            UIComponent child =
-                                (UIComponent) element;
-                            eraseParent(child);
-                            child.setParent(UIComponentBase.this);
-                            super.add(index, child);
-                        }
-                    }
-
-                    public boolean add(Object element) {
-                        if (element == null) {
-                            throw new NullPointerException();
-                        } else if (!(element instanceof UIComponent)) {
-                            throw new ClassCastException();
-                        } else {
-                            UIComponent child =
-                                (UIComponent) element;
-                            eraseParent(child);
-                            child.setParent(UIComponentBase.this);
-                            return (super.add(element));
-                        }
-                    }
-
-                    public boolean addAll(Collection collection) {
-                        Iterator elements = collection.iterator();
-                        boolean changed = false;
-                        while (elements.hasNext()) {
-                            UIComponent element =
-                                (UIComponent) elements.next();
-                            if (element == null) {
-                                throw new NullPointerException();
-                            } else {
-                                add(element);
-                                changed = true;
-                            }
-                        }
-                        return (changed);
-                    }
-
-                    public boolean addAll(int index, Collection collection) {
-                        Iterator elements = collection.iterator();
-                        boolean changed = false;
-                        while (elements.hasNext()) {
-                            UIComponent element =
-                                (UIComponent) elements.next();
-                            if (element == null) {
-                                throw new NullPointerException();
-                            } else {
-                                add(index++, element);
-                                changed = true;
-                            }
-                        }
-                        return (changed);
-                    }
-
-                    public void clear() {
-                        int n = size();
-                        if (n < 1) {
-                            return;
-                        }
-                        for (int i = 0; i < n; i++) {
-                            UIComponent child = (UIComponent) get(i);
-                            child.setParent(null);
-                        }
-                        super.clear();
-                    }
-
-                    public Iterator iterator() {
-                        // PENDING(craigmcc) - Custom remove support needed
-                        return (super.iterator());
-                    }
-
-                    public ListIterator listIterator() {
-                        // PENDING(craigmcc) - Custom remove support needed
-                        return (super.listIterator());
-                    }
-
-                    public ListIterator listIterator(int index) {
-                        // PENDING(craigmcc) - Custom remove support needed
-                        return (super.listIterator(index));
-                    }
-
-                    public Object remove(int index) {
-                        UIComponent child = (UIComponent) get(index);
-                        super.remove(index);
-                        child.setParent(null);
-                        return (child);
-                    }
-
-                    public boolean remove(Object element) {
-                        if (element == null) {
-                            throw new NullPointerException();
-                        } else if (!(element instanceof UIComponent)) {
-                            return (false);
-                        }
-                        if (super.remove(element)) {
-                            UIComponent child = (UIComponent) element;
-                            child.setParent(null);
-                            return (true);
-                        } else {
-                            return (false);
-                        }
-                    }
-
-                    public boolean removeAll(Collection collection) {
-                        boolean result = false;
-                        Iterator elements = collection.iterator();
-                        while (elements.hasNext()) {
-                            if (remove(elements.next())) {
-                                result = true;
-                            }
-                        }
-                        return (result);
-                    }
-
-                    public boolean retainAll(Collection collection) {
-                        // PENDING(craigmcc) - Custom remove support needed
-                        return (super.retainAll(collection));
-                    }
-
-                    public Object set(int index, Object element) {
-                        if (element == null) {
-                            throw new NullPointerException();
-                        } else if (!(element instanceof UIComponent)) {
-                            throw new ClassCastException();
-                        } else if ((index < 0) || (index >= size())) {
-                            throw new IndexOutOfBoundsException();
-                        } else {
-                            UIComponent child =
-                                (UIComponent) element;
-                            eraseParent(child);
-                            UIComponent previous =
-                                (UIComponent) get(index);
-                            previous.setParent(null);
-                            child.setParent(UIComponentBase.this);
-                            super.set(index, element);
-                            return (previous);
-                        }
-                    }
-
-                };
-
+            children = new ChildrenList();
         }
         return (children);
 
@@ -1644,6 +1495,258 @@ public abstract class UIComponentBase extends UIComponent {
 	values[0] = (String[]) names.toArray(new String[names.size()]);
 	values[1] = (Object[]) states.toArray(new Object[states.size()]);
 	return (values);
+
+    }
+
+
+    // --------------------------------------------------------- Private Classes
+
+
+    // Private implementation of List that supports the functionality
+    // required by UIComponent.getChildren()
+    private class ChildrenList extends ArrayList {
+
+        public void add(int index, Object element) {
+            if (element == null) {
+                throw new NullPointerException();
+            } else if (!(element instanceof UIComponent)) {
+                throw new ClassCastException();
+            } else if ((index < 0) || (index > size())) {
+                throw new IndexOutOfBoundsException();
+            } else {
+                UIComponent child =
+                    (UIComponent) element;
+                eraseParent(child);
+                child.setParent(UIComponentBase.this);
+                super.add(index, child);
+            }
+        }
+
+        public boolean add(Object element) {
+            if (element == null) {
+                throw new NullPointerException();
+            } else if (!(element instanceof UIComponent)) {
+                throw new ClassCastException();
+            } else {
+                UIComponent child =
+                    (UIComponent) element;
+                eraseParent(child);
+                child.setParent(UIComponentBase.this);
+                return (super.add(element));
+            }
+        }
+
+        public boolean addAll(Collection collection) {
+            Iterator elements = collection.iterator();
+            boolean changed = false;
+            while (elements.hasNext()) {
+                UIComponent element =
+                    (UIComponent) elements.next();
+                if (element == null) {
+                    throw new NullPointerException();
+                } else {
+                    add(element);
+                    changed = true;
+                }
+            }
+            return (changed);
+        }
+
+        public boolean addAll(int index, Collection collection) {
+            Iterator elements = collection.iterator();
+            boolean changed = false;
+            while (elements.hasNext()) {
+                UIComponent element =
+                    (UIComponent) elements.next();
+                if (element == null) {
+                    throw new NullPointerException();
+                } else {
+                    add(index++, element);
+                    changed = true;
+                }
+            }
+            return (changed);
+        }
+
+        public void clear() {
+            int n = size();
+            if (n < 1) {
+                return;
+            }
+            for (int i = 0; i < n; i++) {
+                UIComponent child = (UIComponent) get(i);
+                child.setParent(null);
+            }
+            super.clear();
+        }
+
+        public Iterator iterator() {
+            return (new ChildrenListIterator(this));
+        }
+
+        public ListIterator listIterator() {
+            return (new ChildrenListIterator(this));
+        }
+
+        public ListIterator listIterator(int index) {
+            return (new ChildrenListIterator(this, index));
+        }
+
+        public Object remove(int index) {
+            UIComponent child = (UIComponent) get(index);
+            super.remove(index);
+            child.setParent(null);
+            return (child);
+        }
+
+        public boolean remove(Object element) {
+            if (element == null) {
+                throw new NullPointerException();
+            } else if (!(element instanceof UIComponent)) {
+                return (false);
+            }
+            if (super.remove(element)) {
+                UIComponent child = (UIComponent) element;
+                child.setParent(null);
+                return (true);
+            } else {
+                return (false);
+            }
+        }
+
+        public boolean removeAll(Collection collection) {
+            boolean result = false;
+            Iterator elements = collection.iterator();
+            while (elements.hasNext()) {
+                if (remove(elements.next())) {
+                    result = true;
+                }
+            }
+            return (result);
+        }
+
+        public boolean retainAll(Collection collection) {
+            boolean modified = false;
+            Iterator items = iterator();
+            while (items.hasNext()) {
+                if (!collection.contains(items.next())) {
+                    items.remove();
+                    modified = true;
+                }
+            }
+            return (modified);
+        }
+
+        public Object set(int index, Object element) {
+            if (element == null) {
+                throw new NullPointerException();
+            } else if (!(element instanceof UIComponent)) {
+                throw new ClassCastException();
+            } else if ((index < 0) || (index >= size())) {
+                throw new IndexOutOfBoundsException();
+            } else {
+                UIComponent child =
+                    (UIComponent) element;
+                eraseParent(child);
+                UIComponent previous =
+                    (UIComponent) get(index);
+                previous.setParent(null);
+                child.setParent(UIComponentBase.this);
+                super.set(index, element);
+                return (previous);
+            }
+        }
+
+    }
+
+
+    // Private implementation of ListIterator for ChildrenList
+    private class ChildrenListIterator implements ListIterator {
+
+
+        public ChildrenListIterator(ChildrenList list) {
+            this.list = list;
+            this.index = 0;
+        }
+
+        public ChildrenListIterator(ChildrenList list, int index) {
+            this.list = list;
+            if ((index < 0) || (index >= list.size())) {
+                throw new IndexOutOfBoundsException("" + index);
+            } else {
+                this.index = index;
+            }
+        }
+
+
+        private ChildrenList list;
+        private int index;
+        private int last = -1; // Index last returned by next() or previous()
+
+        // Iterator methods
+
+        public boolean hasNext() {
+            return (index < list.size());
+        }
+
+        public Object next() {
+            try {
+                Object o = list.get(index);
+                last = index++;
+                return (o);
+            } catch (IndexOutOfBoundsException e) {
+                throw new NoSuchElementException("" + index);
+            }
+        }
+
+        public void remove() {
+            if (last == -1) {
+                throw new IllegalStateException();
+            }
+            list.remove(last);
+            if (last < index) {
+                index--;
+            }
+            last = -1;
+        }
+
+        // ListIterator methods
+
+        public void add(Object o) {
+            last = -1;
+            list.add(index++, o);
+        }
+
+        public boolean hasPrevious() {
+            return (index > 1);
+        }
+
+        public int nextIndex() {
+            return (index);
+        }
+
+        public Object previous() {
+            try {
+                int current = index - 1;
+                Object o = list.get(current);
+                last = current;
+                index = current;
+                return (o);
+            } catch (IndexOutOfBoundsException e) {
+                throw new NoSuchElementException();
+            }
+        }
+
+        public int previousIndex() {
+            return (index - 1);
+        }
+
+        public void set(Object o) {
+            if (last == -1) {
+                throw new IllegalStateException();
+            }
+            list.set(last, o);
+        }
 
     }
 

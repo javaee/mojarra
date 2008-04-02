@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTestCase.java,v 1.41 2004/01/27 20:30:06 craigmcc Exp $
+ * $Id: UIComponentTestCase.java,v 1.42 2004/01/28 20:16:20 craigmcc Exp $
  */
 
 /*
@@ -204,6 +204,211 @@ public class UIComponentTestCase extends TestCase {
         assertEquals(component.getRendersChildren(),
                      ((Boolean) component.getAttributes().
                       get("rendersChildren")).booleanValue());
+
+    }
+
+
+    // Test getChildren().iterator()
+    public void testChildrenIterator() {
+
+        Iterator kids;
+
+        // Construct components we will need
+        UIComponent comp0 = new TestComponent(null);
+        UIComponent comp1 = new TestComponent("comp1");
+        UIComponent comp2 = new TestComponent("comp2");
+        UIComponent comp3 = new TestComponent("comp3");
+        UIComponent comp4 = new TestComponent("comp4");
+        UIComponent comp5 = new TestComponent("comp5");
+        List comps = new ArrayList();
+        comps.add(comp0);
+        comps.add(comp1);
+        comps.add(comp2);
+        comps.add(comp3);
+        comps.add(comp4);
+        comps.add(comp5);
+
+        // Test hasNext() and next()
+        component.getChildren().clear();
+        component.getChildren().addAll(comps);
+        kids = component.getChildren().iterator();
+        assertTrue(kids.hasNext());
+        assertEquals(comp0, (UIComponent) kids.next());
+        assertEquals(comp1, (UIComponent) kids.next());
+        assertEquals(comp2, (UIComponent) kids.next());
+        assertEquals(comp3, (UIComponent) kids.next());
+        assertEquals(comp4, (UIComponent) kids.next());
+        assertEquals(comp5, (UIComponent) kids.next());
+        assertTrue(!kids.hasNext());
+
+        // Test remove()
+        component.getChildren().clear();
+        component.getChildren().addAll(comps);
+        kids = component.getChildren().iterator();
+        while (kids.hasNext()) {
+            UIComponent kid = (UIComponent) kids.next();
+            if ((kid == comp2) || (kid == comp4))  {
+                kids.remove();
+            }
+        }
+        kids = component.getChildren().iterator();
+        assertTrue(kids.hasNext());
+        assertEquals(comp0, (UIComponent) kids.next());
+        assertEquals(comp1, (UIComponent) kids.next());
+        assertEquals(comp3, (UIComponent) kids.next());
+        assertEquals(comp5, (UIComponent) kids.next());
+        assertTrue(!kids.hasNext());
+
+    }
+
+
+    // Test getChildren().listIterator()
+    public void testChildrenListIterator() {
+
+        ListIterator kids;
+
+        // Construct components we will need
+        UIComponent comp0 = new TestComponent(null);
+        UIComponent comp1 = new TestComponent("comp1");
+        UIComponent comp2 = new TestComponent("comp2");
+        UIComponent comp3 = new TestComponent("comp3");
+        UIComponent comp4 = new TestComponent("comp4");
+        UIComponent comp5 = new TestComponent("comp5");
+        UIComponent comp6 = new TestComponent("comp6");
+        List comps = new ArrayList();
+        comps.add(comp0);
+        comps.add(comp1);
+        comps.add(comp2);
+        comps.add(comp3);
+        comps.add(comp4);
+        comps.add(comp5);
+
+        // Test hasNext(), next(), and nextIndex()
+        component.getChildren().clear();
+        component.getChildren().addAll(comps);
+        kids = component.getChildren().listIterator();
+        assertTrue(kids.hasNext());
+        assertEquals(0, kids.nextIndex());
+        assertEquals(comp0, (UIComponent) kids.next());
+        assertEquals(1, kids.nextIndex());
+        assertEquals(comp1, (UIComponent) kids.next());
+        assertEquals(2, kids.nextIndex());
+        assertEquals(comp2, (UIComponent) kids.next());
+        assertEquals(3, kids.nextIndex());
+        assertEquals(comp3, (UIComponent) kids.next());
+        assertEquals(4, kids.nextIndex());
+        assertEquals(comp4, (UIComponent) kids.next());
+        assertEquals(5, kids.nextIndex());
+        assertEquals(comp5, (UIComponent) kids.next());
+        assertEquals(6, kids.nextIndex());
+        assertTrue(!kids.hasNext());
+
+        // Test hasPrevious(), previous(), and previousIndex()
+        assertTrue(kids.hasPrevious());
+        assertEquals(5, kids.previousIndex());
+        assertEquals(comp5, (UIComponent) kids.previous());
+        assertEquals(4, kids.previousIndex());
+        assertEquals(comp4, (UIComponent) kids.previous());
+        assertEquals(3, kids.previousIndex());
+        assertEquals(comp3, (UIComponent) kids.previous());
+        assertEquals(2, kids.previousIndex());
+        assertEquals(comp2, (UIComponent) kids.previous());
+        assertEquals(1, kids.previousIndex());
+        assertEquals(comp1, (UIComponent) kids.previous());
+        assertEquals(0, kids.previousIndex());
+        assertEquals(comp0, (UIComponent) kids.previous());
+        assertEquals(-1, kids.previousIndex());
+        assertTrue(!kids.hasPrevious());
+
+        // Test remove()
+        component.getChildren().clear();
+        component.getChildren().addAll(comps);
+        kids = component.getChildren().listIterator();
+        while (kids.hasNext()) {
+            UIComponent kid = (UIComponent) kids.next();
+            if ((kid == comp2) || (kid == comp4))  {
+                kids.remove();
+            }
+        }
+        kids = component.getChildren().listIterator();
+        assertTrue(kids.hasNext());
+        assertEquals(comp0, (UIComponent) kids.next());
+        assertEquals(comp1, (UIComponent) kids.next());
+        assertEquals(comp3, (UIComponent) kids.next());
+        assertEquals(comp5, (UIComponent) kids.next());
+        assertTrue(!kids.hasNext());
+
+        // Test set()
+        component.getChildren().clear();
+        component.getChildren().addAll(comps);
+        kids = component.getChildren().listIterator();
+        while (kids.hasNext()) {
+            UIComponent kid = (UIComponent) kids.next();
+            if (kid == comp2) {
+                kids.set(comp6);
+            }
+        }
+        kids = component.getChildren().listIterator();
+        assertTrue(kids.hasNext());
+        assertEquals(0, kids.nextIndex());
+        assertEquals(comp0, (UIComponent) kids.next());
+        assertEquals(1, kids.nextIndex());
+        assertEquals(comp1, (UIComponent) kids.next());
+        assertEquals(2, kids.nextIndex());
+        assertEquals(comp6, (UIComponent) kids.next());
+        assertEquals(3, kids.nextIndex());
+        assertEquals(comp3, (UIComponent) kids.next());
+        assertEquals(4, kids.nextIndex());
+        assertEquals(comp4, (UIComponent) kids.next());
+        assertEquals(5, kids.nextIndex());
+        assertEquals(comp5, (UIComponent) kids.next());
+        assertEquals(6, kids.nextIndex());
+        assertTrue(!kids.hasNext());
+
+        // Test add()
+        component.getChildren().clear();
+        component.getChildren().addAll(comps);
+        kids = component.getChildren().listIterator();
+        while (kids.hasNext()) {
+            UIComponent kid = (UIComponent) kids.next();
+            if (kid == comp2) {
+                kids.add(comp6);
+            }
+        }
+        kids = component.getChildren().listIterator();
+        assertTrue(kids.hasNext());
+        assertEquals(0, kids.nextIndex());
+        assertEquals(comp0, (UIComponent) kids.next());
+        assertEquals(1, kids.nextIndex());
+        assertEquals(comp1, (UIComponent) kids.next());
+        assertEquals(2, kids.nextIndex());
+        assertEquals(comp2, (UIComponent) kids.next());
+        assertEquals(3, kids.nextIndex());
+        assertEquals(comp6, (UIComponent) kids.next());
+        assertEquals(4, kids.nextIndex());
+        assertEquals(comp3, (UIComponent) kids.next());
+        assertEquals(5, kids.nextIndex());
+        assertEquals(comp4, (UIComponent) kids.next());
+        assertEquals(6, kids.nextIndex());
+        assertEquals(comp5, (UIComponent) kids.next());
+        assertEquals(7, kids.nextIndex());
+        assertTrue(!kids.hasNext());
+
+        // Test listIterator(int)
+        component.getChildren().clear();
+        component.getChildren().addAll(comps);
+        kids = component.getChildren().listIterator(2);
+        assertTrue(kids.hasNext());
+        assertTrue(kids.hasPrevious());
+        assertEquals(2, kids.nextIndex());
+        assertEquals(1, kids.previousIndex());
+        assertEquals(comp2, (UIComponent) kids.next());
+        assertEquals(comp3, (UIComponent) kids.next());
+        assertEquals(comp4, (UIComponent) kids.next());
+        assertEquals(comp4, (UIComponent) kids.previous());
+        assertEquals(comp3, (UIComponent) kids.previous());
+        assertEquals(comp2, (UIComponent) kids.previous());
+        assertEquals(comp1, (UIComponent) kids.previous());
 
     }
 
@@ -446,15 +651,9 @@ public class UIComponentTestCase extends TestCase {
 
         // isEmpty() is tested in checkChildCount
 
-        // iterator()
-        Iterator iter = children.iterator();
-        assertEquals(comp0, (UIComponent) iter.next());
-        assertEquals(comp1, (UIComponent) iter.next());
-        assertEquals(comp2, (UIComponent) iter.next());
-        assertEquals(comp3, (UIComponent) iter.next());
-        assertEquals(comp4, (UIComponent) iter.next());
-        assertEquals(comp5, (UIComponent) iter.next());
-        // PENDING(craigmcc) tests of Iterator.remove()
+        // iterator() is tested in testChildrenIterator
+
+        // listIterator() is tested in testChildrenListIterator
 
         // toArray(Object[])
         UIComponent kids[] =
@@ -465,33 +664,6 @@ public class UIComponentTestCase extends TestCase {
         assertEquals(comp3, kids[3]);
         assertEquals(comp4, kids[4]);
         assertEquals(comp5, kids[5]);
-
-        // listIterator()
-        ListIterator listIter1 = children.listIterator();
-        assertEquals(comp0, (UIComponent) listIter1.next());
-        assertEquals(comp1, (UIComponent) listIter1.next());
-        assertEquals(comp2, (UIComponent) listIter1.next());
-        assertEquals(comp3, (UIComponent) listIter1.next());
-        assertEquals(comp4, (UIComponent) listIter1.next());
-        assertEquals(comp5, (UIComponent) listIter1.next());
-        assertEquals(comp5, (UIComponent) listIter1.previous());
-        assertEquals(comp4, (UIComponent) listIter1.previous());
-        assertEquals(comp3, (UIComponent) listIter1.previous());
-        assertEquals(comp2, (UIComponent) listIter1.previous());
-        assertEquals(comp1, (UIComponent) listIter1.previous());
-        assertEquals(comp0, (UIComponent) listIter1.previous());
-        // PENDING(craigmcc) tests of ListIterator.remove()
-        // PENDING(craigmcc) tests of ListIterator.set()
-
-        // listIterator(int)
-        ListIterator listIter2 = children.listIterator(2);
-        assertEquals(comp2, (UIComponent) listIter2.next());
-        assertEquals(comp3, (UIComponent) listIter2.next());
-        assertEquals(comp4, (UIComponent) listIter2.next());
-        assertEquals(comp4, (UIComponent) listIter2.previous());
-        assertEquals(comp3, (UIComponent) listIter2.previous());
-        assertEquals(comp2, (UIComponent) listIter2.previous());
-        assertEquals(comp1, (UIComponent) listIter2.previous());
 
         // subList(int,int)
         List subList = children.subList(3, 5);
@@ -538,7 +710,21 @@ public class UIComponentTestCase extends TestCase {
         assertTrue(!children.containsAll(list1));
         assertTrue(!children.containsAll(list2));
 
-        // PENDING(craigmcc) - retainAll() functionality and tests
+        // retainAll()
+        ArrayList list3 = new ArrayList();
+        list3.add(comp1);
+        list3.add(comp3);
+        list3.add(comp5);
+        children.retainAll(list3);
+        checkChildCount(component, 2);
+        checkChildMissing(component, comp0);
+        checkChildPresent(component, comp1, 0);
+        checkChildMissing(component, comp2);
+        checkChildMissing(component, comp3);
+        checkChildMissing(component, comp4);
+        checkChildPresent(component, comp5, 1);
+        checkChildMissing(component, comp6);
+        assertTrue(!children.containsAll(list3));
 
         // size() is tested in checkChildCount
 
