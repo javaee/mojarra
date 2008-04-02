@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigBase.java,v 1.6 2003/05/02 07:05:49 eburns Exp $
+ * $Id: ConfigBase.java,v 1.7 2003/05/05 15:19:49 rkitain Exp $
  */
 
 /*
@@ -177,7 +177,6 @@ public class ConfigBase {
         }
         navigationCase.setFromTreeId(getFromTreeId());
         navigationCases.add(navigationCase);
-        setFromTreeId(null);
     }
     public List getNavigationCases() {
         if (navigationCases == null) {
