@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTag.java,v 1.26 2002/12/23 22:46:01 jvisvanathan Exp $
+ * $Id: FacesTag.java,v 1.27 2003/01/10 02:40:56 craigmcc Exp $
  */
 
 /*
@@ -105,6 +105,36 @@ public abstract class FacesTag extends TagSupport {
 
     }
 
+
+
+    /**
+     * <p>Should this component be created as a facet rather than a child.</p>
+     */
+    protected boolean facet = false;
+
+
+    /**
+     * <p>Return the "facet or child" flag.</p>
+     */
+    public boolean isFacet() {
+
+        return (this.facet);
+
+    }
+
+
+    /**
+     * <p>Set the "facet or child" flag.</p>
+     *
+     * @param facet <code>true</code> if this component should be
+     *  created as a facet rather than as a child
+     */
+    public void setFacet(boolean facet) {
+
+        this.facet = facet;
+
+    }
+    
 
 
     /**
@@ -312,6 +342,7 @@ public abstract class FacesTag extends TagSupport {
     public void release() {
 
         super.release();
+        this.facet = false;
         this.id = null;
         this.modelReference = null;
         this.created = false;
@@ -408,22 +439,32 @@ public abstract class FacesTag extends TagSupport {
         UIComponent parent = (UIComponent) componentStack.peek();
 	UIComponent child = parent;
         if (id != null) { // FIXME - i18n
-	    // find the nearest ancestor that is a naming container
-	    NamingContainer closestContainer = null;
-	    
-	    while (!(child instanceof NamingContainer)) {
-		child = child.getParent();
-	    }
-	    if (null == child) {
-		throw new JspException("Can't find NamingContainer");
-	    } 
-	    closestContainer = (NamingContainer) child;
-	    if (null != (child = 
-			 closestContainer.findComponentInNamespace(id))) {
-                created = false;
-                return (child);
+            if (isFacet()) {
+                UIComponent facet = child.getFacet(id);
+                if (facet != null) {
+                    created = false;
+                    return (facet);
+                }
+            } else {
+                // find the nearest ancestor that is a naming container
+                NamingContainer closestContainer = null;
+                while (!(child instanceof NamingContainer)) {
+                    child = child.getParent();
+                }
+                if (null == child) {
+                    throw new JspException("Can't find NamingContainer");
+                } 
+                closestContainer = (NamingContainer) child;
+                if (null != (child = 
+                             closestContainer.findComponentInNamespace(id))) {
+                    created = false;
+                    return (child);
+                }
             }
         } else {
+            if (isFacet()) {
+                throw new JspException("id attribute required if facet=true");
+            }
             // generate the tagKey and use it locate the component in tagHash
             tagKey = this.generateTagKey();
              if ( tagHash != null ) {
@@ -450,7 +491,11 @@ public abstract class FacesTag extends TagSupport {
             root.setAttribute("tagHash", tagHash);
             tagHash.put(tagKey,child);
         }    
-        parent.addChild(child);
+        if (isFacet()) {
+            parent.addFacet(child);
+        } else {
+            parent.addChild(child);
+        }
         created = true;
         return (child);
 
