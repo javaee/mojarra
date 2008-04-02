@@ -310,6 +310,7 @@
 
             <test name="com.sun.faces.renderkit.TestRenderKitFactory"/>
             <test name="com.sun.faces.lifecycle.TestRenderResponsePhase"/>
+            <test name="com.sun.faces.renderkit.html_basic.TestRenderers_1"/>
             <test name="com.sun.faces.renderkit.html_basic.TestRenderers_2"/>
             <test name="com.sun.faces.renderkit.html_basic.TestRenderers_3"/>
             <test name="com.sun.faces.context.TestMessageResourcesImpl"/>
