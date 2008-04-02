@@ -1,5 +1,5 @@
 /*
- * $Id: TestProcessValidationsPhase.java,v 1.22 2003/08/27 18:52:05 eburns Exp $
+ * $Id: TestProcessValidationsPhase.java,v 1.23 2003/09/24 19:50:26 rkitain Exp $
  */
 
 /*
@@ -39,7 +39,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestProcessValidationsPhase.java,v 1.22 2003/08/27 18:52:05 eburns Exp $
+ * @version $Id: TestProcessValidationsPhase.java,v 1.23 2003/09/24 19:50:26 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -93,6 +93,7 @@ public void beginCallback(WebRequest theRequest)
 {
     theRequest.setURL("localhost:8080", null, null, TEST_URI, null);
     theRequest.addParameter("basicForm" + UIComponent.SEPARATOR_CHAR + "userName", "jerry");
+    theRequest.addParameter("basicForm", "basicForm");
 }
 
 public void testCallback()

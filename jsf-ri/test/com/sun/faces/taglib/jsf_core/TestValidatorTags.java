@@ -1,5 +1,5 @@
 /*
- * $Id: TestValidatorTags.java,v 1.17 2003/08/27 18:52:11 eburns Exp $
+ * $Id: TestValidatorTags.java,v 1.18 2003/09/24 19:50:53 rkitain Exp $
  */
 
 /*
@@ -40,7 +40,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestValidatorTags.java,v 1.17 2003/08/27 18:52:11 eburns Exp $
+ * @version $Id: TestValidatorTags.java,v 1.18 2003/09/24 19:50:53 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -126,6 +126,7 @@ public void beginValidators(WebRequest theRequest)
     theRequest.addParameter(OUTOFBOUNDS4_ID, OUTOFBOUNDS4_VALUE);
     theRequest.addParameter(INBOUNDS4_ID, INBOUNDS4_VALUE);
     theRequest.addParameter(REQUIRED2_ID, "");
+    theRequest.addParameter("validatorForm","validatorForm");
   
 }
 
