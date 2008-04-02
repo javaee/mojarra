@@ -197,9 +197,7 @@
                 <zipfileset dir="${jsf.build.home}/lib"
                             prefix="WEB-INF/lib"
                             includes="cactus*.jar"/>
-                <zipfileset dir="${junit.home}"
-                            prefix="WEB-INF/lib"
-                            includes="junit.jar"/>
+                <zipfileset file="${junit.jar}" />
                 <zipfileset file="${jsf.test.jar}"
                             prefix="WEB-INF/lib"/>
                 <zipfileset dir="${basedir}/web/test"
