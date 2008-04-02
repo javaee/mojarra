@@ -22,6 +22,16 @@
   core actions that are independent of a particular RenderKit.</description>
 
 
+  <!-- ============== Tag Library Validator ============= -->
+
+  <!-- This TLV verifies that a Faces tag has an ID if it is a 
+       child or sibling of a JSTL conditional or iterator tag  -->
+  <validator>
+    <validator-class>
+	com.sun.faces.taglib.FacesIdTLV
+    </validator-class>
+  </validator>
+
    <tag>
       <name>attribute</name>
       <tag-class>javax.faces.webapp.AttributeTag</tag-class>
