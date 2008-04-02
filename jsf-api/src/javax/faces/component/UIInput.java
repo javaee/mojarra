@@ -1,5 +1,5 @@
 /*
- * $Id: UIInput.java,v 1.54 2003/12/24 23:10:20 craigmcc Exp $
+ * $Id: UIInput.java,v 1.55 2003/12/24 23:46:04 jvisvanathan Exp $
  */
 
 /*
@@ -449,7 +449,7 @@ public class UIInput extends UIOutput {
 		while (validators.hasNext()) {
 		    Validator validator = (Validator) validators.next();
                     try { 
-                        validator.validate(context, this, getValue());
+                        validator.validate(context, this, getLocalValue());
                     }
                     catch (ValidatorException ve) {
                         // If the validator throws an exception, we're
@@ -466,7 +466,7 @@ public class UIInput extends UIOutput {
             if (validatorBinding != null) {
                 try {
                     validatorBinding.invoke(context,
-                              new Object[] { context, this, getValue()});
+                              new Object[] { context, this, getLocalValue()});
                 }
                 catch (EvaluationException ee) {
                     if (ee.getCause() instanceof ValidatorException) {
@@ -491,7 +491,7 @@ public class UIInput extends UIOutput {
 
 	// If our value is valid, emit a ValueChangeEvent if appropriate
 	if (isValid()) {
-	    Object value = getValue();
+	    Object value = getLocalValue();
             if (compareValues(previous, value)) {
                 queueEvent(new ValueChangeEvent(this, previous, value));
             }
@@ -522,7 +522,7 @@ public class UIInput extends UIOutput {
 
     private boolean isEmpty() {
 
-	Object value = getValue();
+	Object value = getLocalValue();
 	if (value == null) {
 	    return (true);
 	} else if ((value instanceof String) &&

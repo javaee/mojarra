@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectMany.java,v 1.38 2003/12/20 02:58:47 craigmcc Exp $
+ * $Id: UISelectMany.java,v 1.39 2003/12/24 23:46:05 jvisvanathan Exp $
  */
 
 /*
@@ -234,7 +234,7 @@ public class UISelectMany extends UIInput {
      */
     public void validate(FacesContext context) {
 
-        Object value = getValue();
+        Object value = getLocalValue();
 
         // Skip validation if it is not necessary
         if ((value == null) || !isValid()) {
