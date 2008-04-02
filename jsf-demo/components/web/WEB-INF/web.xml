@@ -96,4 +96,28 @@
         <welcome-file>index.jsp</welcome-file>
     </welcome-file-list>
 
+    <security-constraint>
+        <!-- This security constraint illustrates how JSP pages
+             with JavaServer Faces components can be protected from
+             being accessed without going through the Faces Servlet.
+             The security constraint ensures that the Faces Servlet will
+             be used or the pages will not be processed. -->
+        <display-name>Restrict access to JSP pages</display-name>
+        <web-resource-collection>
+            <web-resource-name>
+                Restrict access to JSP pages
+            </web-resource-name>
+            <url-pattern>/imagemap.jsp</url-pattern>
+            <url-pattern>/menu.jsp</url-pattern>
+            <url-pattern>/repeater.jsp</url-pattern>
+            <url-pattern>/result-set.jsp</url-pattern>
+            <url-pattern>/tabbedpanes.jsp</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+                <description>
+                    With no roles defined, no access granted
+                </description>
+        </auth-constraint>
+    </security-constraint>
+
 </web-app>
