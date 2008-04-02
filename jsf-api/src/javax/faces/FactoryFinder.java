@@ -1,5 +1,5 @@
 /*
- * $Id: FactoryFinder.java,v 1.32 2007/01/29 17:59:16 rlubke Exp $
+ * $Id: FactoryFinder.java,v 1.33 2007/01/29 18:02:52 rlubke Exp $
  */
 
 /*
@@ -175,6 +175,7 @@ public final class FactoryFinder {
      * <p/>
      * </ol>
      */
+    @SuppressWarnings({"CollectionWithoutInitialCapacity"})
     private static final Map<ClassLoader, Map<String, Object>> applicationMaps =
          new HashMap<ClassLoader, Map<String, Object>>();
 
@@ -235,9 +236,8 @@ public final class FactoryFinder {
             Map<String, Object> appMap = getApplicationMap();
             // assert(null != appMap);
 
-            Object
-                 factory = null,
-                 factoryOrList = appMap.get(factoryName);
+            Object factory;
+            Object factoryOrList = appMap.get(factoryName);
 
             // If this factory has been retrieved before
             if (factoryOrList != null && (!(factoryOrList instanceof List))) {
@@ -286,8 +286,8 @@ public final class FactoryFinder {
     public static void setFactory(String factoryName,
                                   String implName) {
         validateFactoryName(factoryName);
-        Object previouslySetFactories = null;
-        Map<String, Object> appMap = null;
+        Object previouslySetFactories;
+        Map<String, Object> appMap;
         synchronized (applicationMaps) {
             appMap = getApplicationMap();
             // assert(null != appMap);
@@ -305,6 +305,7 @@ public final class FactoryFinder {
                 // List
             } else {
                 // No.  Create a List for this FactoryName.
+                //noinspection CollectionWithoutInitialCapacity
                 previouslySetFactories = new ArrayList<String>();
                 appMap.put(factoryName, previouslySetFactories);
             }
@@ -420,8 +421,9 @@ public final class FactoryFinder {
                                                     List implementations)
          throws FacesException {
         Object result = null;
-        String curImplClass = null;
-        int len = 0, i = 0;
+        String curImplClass;
+        int len;
+        int i = 0;
 
         // step 1.
         if (null != implementations &&
@@ -493,8 +495,8 @@ public final class FactoryFinder {
                 } catch (Throwable t) {
                     ;
                 }
+                //noinspection UnusedAssignment
                 reader = null;
-                stream = null;
             }
             if (stream != null) {
                 try {
@@ -502,6 +504,7 @@ public final class FactoryFinder {
                 } catch (Throwable t) {
                     ;
                 }
+                //noinspection UnusedAssignment
                 stream = null;
             }
         }
@@ -532,10 +535,11 @@ public final class FactoryFinder {
                                                    String factoryName,
                                                    String implName,
                                                    Object previousImpl) {
-        Class clazz = null, factoryClass = null;
-        Class[] getCtorArg = null;
+        Class clazz;
+        Class factoryClass = null;
+        Class[] getCtorArg;
         Object[] newInstanceArgs = new Object[1];
-        Constructor ctor = null;
+        Constructor ctor;
         Object result = null;
 
         // if we have a previousImpl and the appropriate one arg ctor.
@@ -603,12 +607,13 @@ public final class FactoryFinder {
     private static Map<String, Object> getApplicationMap() {
         // Identify the web application class loader
         ClassLoader classLoader = getClassLoader();
-        Map<String, Object> result = null;
+        Map<String, Object> result ;
 
         // Return any previously instantiated factory instance (of the
         // specified name) for this web application
         result = applicationMaps.get(classLoader);
         if (result == null) {
+            //noinspection CollectionWithoutInitialCapacity
             result = new HashMap<String, Object>();
             applicationMaps.put(classLoader, result);
         }
