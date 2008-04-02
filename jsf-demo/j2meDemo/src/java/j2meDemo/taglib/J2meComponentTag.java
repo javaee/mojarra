@@ -1,32 +1,55 @@
 package j2meDemo.taglib;
 
+import javax.faces.application.Application;
 import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+import javax.faces.el.MethodBinding;
+import javax.faces.el.ValueBinding;
 import javax.faces.webapp.UIComponentTag;
 
+import j2meDemo.util.Util;
+
+/**
+ * Top level tag handler class for other tags.
+ */
 public abstract class J2meComponentTag extends UIComponentTag {   
-   private String value;
-   private String action;
-   private String validator;
+    private String value;
+    private String action;
 
-   // PROPERTY: value
-   public void setValue(String newValue) { value = newValue; }
+    public void setValue(String newValue) { 
+        value = newValue; 
+    }
 
-   // PROPERTY: action
-   public void setAction(String newValue) { action = newValue; }
+    public void setAction(String newValue) { 
+        action = newValue; 
+    }
 
-   // PROPERTY: validator
-   public void setValidator(String newValue) { validator = newValue; }
+    public void setProperties(UIComponent component) { 
+        super.setProperties(component); 
+        
+        if (value != null) {
+            if (isValueReference(value)) {
+                ValueBinding vb = Util.getValueBinding(value);
+                component.setValueBinding("value", vb);
+            } else {
+                component.getAttributes().put("value", value);
+            }
+        }
 
-   public void setProperties(UIComponent component) { 
-      super.setProperties(component); 
-      j2meDemo.util.Tags.setString(component, "value", value);
-      j2meDemo.util.Tags.setAction(component, action);
-      j2meDemo.util.Tags.setValidator(component, validator);
-   } 
+        if (action != null) {
+            if (isValueReference(action)) {
+                MethodBinding mb = FacesContext.getCurrentInstance().
+                    getApplication().createMethodBinding(action, null);
+                component.getAttributes().put("action", mb);
+            } else {
+                MethodBinding mb = Util.createConstantMethodBinding(action);
+                component.getAttributes().put("action", mb);
+            }
+        }
+    } 
 
-   public void release() {
-      value = null;
-      validator = null;
-      action = null;
-   }
+    public void release() {
+        value = null;
+        action = null;
+    }
 }

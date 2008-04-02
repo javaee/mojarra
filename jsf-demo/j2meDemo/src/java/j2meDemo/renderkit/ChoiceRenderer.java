@@ -12,13 +12,15 @@ import javax.faces.context.ResponseWriter;
 import javax.faces.model.SelectItem;
 import javax.faces.render.Renderer;
 
+import j2meDemo.util.Util;
+
 public class ChoiceRenderer extends Renderer {
    public void encodeEnd(FacesContext context, UIComponent component)
       throws IOException {
       ResponseWriter writer = context.getResponseWriter();
       EditableValueHolder input = (EditableValueHolder) component;
       String id = component.getId();
-      List items = j2meDemo.util.Renderers.getSelectItems(component);
+      List items = Util.getSelectItems(component);
       String value = input.getValue().toString();
       String label = findLabel(items, value);
       writer.write(id + "=" + URLEncoder.encode(label, "UTF8") + "\n");
@@ -38,7 +40,7 @@ public class ChoiceRenderer extends Renderer {
       if (requestMap.containsKey(id) 
          && component instanceof ValueHolder) {
          String label = (String) requestMap.get(id);
-         List items = j2meDemo.util.Renderers.getSelectItems(component); 
+         List items = Util.getSelectItems(component); 
          Object value = findValue(items, label);
          ((ValueHolder) component).setValue(value);
       }
