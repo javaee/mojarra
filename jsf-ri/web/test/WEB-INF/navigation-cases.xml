@@ -105,6 +105,18 @@
        fromOutcome="foobar"
           toViewId="/login.jsp"/>
 
+  <!-- Mismatched fromAction -->
+  <test fromViewId="/login.jsp"
+     fromAction="*"
+       fromOutcome="success"
+          toViewId="/login.jsp"/>
+
+  <!-- Mismatched fromOutcome -->
+  <test fromViewId="/login.jsp"
+     fromAction="#{userBean.login}"
+       fromOutcome="*"
+          toViewId="/login.jsp"/>
+
   <!-- Missing fromAction -->
   <test fromViewId="/login.jsp"
        fromOutcome="success"
