@@ -1,5 +1,5 @@
 /* 
- * $Id: StateManagerImpl.java,v 1.30 2005/06/02 16:06:32 edburns Exp $ 
+ * $Id: StateManagerImpl.java,v 1.31 2005/06/06 18:04:45 edburns Exp $ 
  */ 
 
 
@@ -24,19 +24,20 @@ import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.logging.Logger;
 import java.util.logging.Level;
+import javax.faces.application.StateManager.SerializedView;
+import javax.faces.component.NamingContainer;
 
 /**
  * <B>StateManagerImpl</B> is the default implementation class for
  * StateManager.
  *
- * @version $Id: StateManagerImpl.java,v 1.30 2005/06/02 16:06:32 edburns Exp $
+ * @version $Id: StateManagerImpl.java,v 1.31 2005/06/06 18:04:45 edburns Exp $
  * @see javax.faces.application.ViewHandler
  */
 public class StateManagerImpl extends StateManager {
@@ -51,12 +52,17 @@ public class StateManagerImpl extends StateManager {
         RIConstants.FACES_PREFIX + "NUMBER_OF_VIEWS_IN_SESSION";
     private static final int DEFAULT_NUMBER_OF_VIEWS_IN_SESSION = 15;
 
+    private static final String NUMBER_OF_VIEWS_IN_LOGICAL_VIEW_IN_SESSION =
+        RIConstants.FACES_PREFIX + "NUMBER_OF_VIEWS_IN_LOGICAL_VIEW_IN_SESSION";
+    private static final int DEFAULT_NUMBER_OF_VIEWS_IN_LOGICAL_VIEW_IN_SESSION = 15;
+
     private static final String FACES_VIEW_LIST =
         RIConstants.FACES_PREFIX + "VIEW_LIST";
     /**
-     * Number of views to be saved in session.
+     * Number of views in logical view to be saved in session.
      */
     int noOfViews = 0;
+    int noOfViewsInLogicalView = 0;
     
     public SerializedView saveSerializedView(FacesContext context) 
         throws IllegalStateException{
@@ -85,22 +91,58 @@ public class StateManagerImpl extends StateManager {
  	if (logger.isLoggable(Level.FINE)) {
             logger.fine("End creating serialized view " + viewRoot.getViewId());
  	}
- 	if (!isSavingStateInClient(context)) {
- 	    String id = null;
-	    
+        if (!isSavingStateInClient(context)) {
+            //
+            // Server Side state saving is handled stored in two nested LRU maps
+            // in the session.
+            //
+            // The first map is called the LOGICAL_VIEW_MAP.  A logical view
+            // is a top level view that may have one or more actual views inside
+            // of it.  This will be the case when you have a frameset, or an
+            // application that has multiple windows operating at the same time.
+            // The LOGICAL_VIEW_MAP map contains 
+            // an entry for each logical view, up to the limit specified by the
+            // numberOfViewsParameter.  Each entry in the LOGICAL_VIEW_MAP
+            // is an LRU Map, configured with the numberOfViewsInLogicalView
+            // parameter.  
+            //
+            // The motivation for this is to allow better memory tuning for 
+            // apps that need this multi-window behavior.
+            
+            String id = null,
+                   idInActualMap = null,
+                   idInLogicalMap = (String)
+                context.getExternalContext().getRequestMap().get(RIConstants.LOGICAL_VIEW_MAP);
+            LRUMap logicalMap = null, actualMap = null;
+            int 
+                logicalMapSize = getNumberOfViewsParameter(context),
+                actualMapSize = getNumberOfViewsInLogicalViewParameter(context);
+            
+            Object stateArray[] = { treeStructure, componentState };
+            Map sessionMap = Util.getSessionMap(context);
+            
  	    synchronized (this) {
- 		id = createUniqueRequestId();
- 		LRUMap lruMap = null;
- 		Map sessionMap = Util.getSessionMap(context);
-		Object stateArray[] = { treeStructure, componentState };
+                if (null == (logicalMap = (LRUMap) sessionMap.get(RIConstants.LOGICAL_VIEW_MAP))) {
+                    logicalMap = new LRUMap(logicalMapSize);
+ 		    sessionMap.put(RIConstants.LOGICAL_VIEW_MAP, logicalMap);
+                }
+                assert(null != logicalMap); 
+
+                if (null == idInLogicalMap) {
+                    idInLogicalMap = createUniqueRequestId();
+                }
+                assert(null != idInLogicalMap);
  
- 		if (null == (lruMap = (LRUMap) 
-                        sessionMap.get(RIConstants.STATE_MAP))) {
-		    lruMap = new LRUMap(getNumberOfViewsParameter(context)); 
- 		    sessionMap.put(RIConstants.STATE_MAP, lruMap);
+                idInActualMap = createUniqueRequestId();
+ 		if (null == (actualMap = (LRUMap) 
+                        logicalMap.get(idInLogicalMap))) {
+		    actualMap = new LRUMap(actualMapSize);
+                    logicalMap.put(idInLogicalMap, actualMap);
  		}
+                id = idInLogicalMap + NamingContainer.SEPARATOR_CHAR + 
+                        idInActualMap;
 		result = new SerializedView(id, null);
- 		lruMap.put(id, stateArray);
+                actualMap.put(idInActualMap, stateArray);
  	    }
  	}
 	
@@ -214,8 +256,21 @@ public class StateManagerImpl extends StateManager {
                     logger.fine( "Begin restoring view in session for viewId " 
                             + viewId);
 		}
-		
-		Map lruMap, sessionMap = Util.getSessionMap(context);
+                String idString = (String) id,
+                       idInLogicalMap = null,
+                       idInActualMap = null;
+                
+                int sep = idString.indexOf(NamingContainer.SEPARATOR_CHAR);
+                assert(-1 != sep);
+                assert(sep < idString.length());
+                
+                idInLogicalMap = idString.substring(0, sep);
+                idInActualMap = idString.substring(sep + 1);
+                		
+		Map logicalMap = null,
+                    actualMap = null,
+                    sessionMap = Util.getSessionMap(context);
+                
                 
                 if (null == sessionMap) {
                     if (logger.isLoggable(Level.FINE)) {
@@ -228,8 +283,11 @@ public class StateManagerImpl extends StateManager {
 		TreeStructure structRoot = null;
 		Object [] stateArray = null;
 		synchronized (this) {
-		    lruMap = (Map) sessionMap.get(RIConstants.STATE_MAP);
-		    stateArray = (Object []) lruMap.get(id);
+		    logicalMap = (Map) sessionMap.get(RIConstants.LOGICAL_VIEW_MAP);
+                    actualMap = (Map) logicalMap.get(idInLogicalMap);
+                    context.getExternalContext().getRequestMap().put(RIConstants.LOGICAL_VIEW_MAP, 
+                            idInLogicalMap);
+		    stateArray = (Object []) actualMap.get(idInActualMap);
 		}
 		structRoot = (TreeStructure)stateArray[0];
 		viewRoot = (UIViewRoot) structRoot.createComponent();
@@ -424,7 +482,7 @@ public class StateManagerImpl extends StateManager {
     
     /**
      * Returns the value of ServletContextInitParameter that specifies the
-     * maximum number of views to be saved in session. If none is specified
+     * maximum number of logical views to be saved in session. If none is specified
      * returns <code>DEFAULT_NUMBER_OF_VIEWS_IN_SESSION</code>.
      */
     protected int getNumberOfViewsParameter(FacesContext context) {
@@ -447,4 +505,32 @@ public class StateManagerImpl extends StateManager {
         } 
         return noOfViews;
     }
+
+    /**
+     * Returns the value of ServletContextInitParameter that specifies the
+     * maximum number of views to be saved in this logical view. If none is specified
+     * returns <code>DEFAULT_NUMBER_OF_VIEWS_IN_LOGICAL_VIEW_IN_SESSION</code>.
+     */
+    protected int getNumberOfViewsInLogicalViewParameter(FacesContext context) {
+        if (noOfViewsInLogicalView != 0) { 
+            return noOfViewsInLogicalView;
+        }
+        noOfViewsInLogicalView = DEFAULT_NUMBER_OF_VIEWS_IN_LOGICAL_VIEW_IN_SESSION;
+        String noOfViewsStr = context.getExternalContext().
+                getInitParameter(NUMBER_OF_VIEWS_IN_LOGICAL_VIEW_IN_SESSION);
+        if (noOfViewsStr != null) {
+            try {
+                noOfViewsInLogicalView = Integer.valueOf(noOfViewsStr).intValue();
+            } catch (NumberFormatException nfe) {
+                if (logger.isLoggable(Level.FINE)) {
+                    logger.fine("Error parsing the servetInitParameter " +
+                            NUMBER_OF_VIEWS_IN_LOGICAL_VIEW_IN_SESSION + ". Using default " + 
+                            noOfViewsInLogicalView);
+                }
+            }
+        } 
+        return noOfViewsInLogicalView;
+    }
+    
+
 }

@@ -1,5 +1,6 @@
+
 /*
- * $Id: TestStateManagerImpl.java,v 1.11 2005/03/11 18:14:23 edburns Exp $
+ * $Id: TestStateManagerImpl.java,v 1.12 2005/06/06 18:04:48 edburns Exp $
  */
 
 /*
@@ -8,10 +9,11 @@
  */
 
 package com.sun.faces.application;
-
 import com.sun.faces.RIConstants;
 import com.sun.faces.ServletFacesTestCase;
 import com.sun.faces.util.Util;
+import java.util.Map;
+import javax.faces.application.StateManager.SerializedView;
 
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIGraphic;
@@ -19,10 +21,9 @@ import javax.faces.component.UIInput;
 import javax.faces.component.UIOutput;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
-import javax.faces.render.RenderKitFactory;
 import javax.servlet.http.HttpSession;
+import org.apache.cactus.WebRequest;
 
-import java.util.ArrayList;
 
 
 /**
@@ -213,5 +214,76 @@ public class TestStateManagerImpl extends ServletFacesTestCase {
 	((StateManagerImpl) Util.getStateManager(context)).requestIdSerial = 0;
 	
     }
+    
+    public void beginMultiWindowSaveServer(WebRequest theRequest) {
+        theRequest.addParameter("javax.faces.ViewState", "_id1:_id2");
+    }
 
+    public void testMultiWindowSaveServer() throws Exception {
+        StateManagerImpl wrapper =
+            new StateManagerImpl() {
+                public boolean isSavingStateInClient(FacesContext context) {
+                    return false;
+                }
+            };
+        getFacesContext().getApplication().setStateManager(wrapper);
+        
+        // build the tree
+        
+        UIViewRoot root, newRoot = null;
+
+        UIComponent comp1 = null;
+
+        UIComponent comp2 = null;
+
+        UIComponent comp3 = null;
+
+        UIComponent facet1 = null;
+
+        UIComponent facet2 = null;
+        
+        // construct a view
+        root = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null); 
+        root.setViewId("/test");
+        root.setId("root");
+
+        comp1 = new UIInput();
+        comp1.setId("comp1");
+
+        comp2 = new UIOutput();
+        comp2.setId("comp2");
+
+        comp3 = new UIGraphic();
+        comp3.setId("comp3");
+
+        facet1 = new UIOutput();
+        facet1.setId("comp4");
+
+        comp2.getFacets().put("facet1", facet1);
+
+        root.getChildren().add(comp1);
+        root.getChildren().add(comp2);
+        root.getChildren().add(comp3);
+        
+        getFacesContext().setViewRoot(root);
+        root.getAttributes().put("checkThisValue", "checkThisValue");
+        
+        SerializedView viewState = wrapper.saveSerializedView(getFacesContext());
+        
+        // See that the Logical View and Actual View maps are correctly created
+        Map sessionMap = Util.getSessionMap(getFacesContext());
+        assertTrue(sessionMap.containsKey(RIConstants.LOGICAL_VIEW_MAP));
+        assertTrue(((Map)sessionMap.get(RIConstants.LOGICAL_VIEW_MAP)).containsKey("_id1"));
+        
+        newRoot = wrapper.restoreView(getFacesContext(), "test", "HTML_BASIC");
+        assertNotNull(newRoot);
+        assertEquals(root.getAttributes().get("checkThisValue"),
+                     newRoot.getAttributes().get("checkThisValue"));
+        assertNotNull(getFacesContext().getExternalContext().getRequestMap().get(RIConstants.LOGICAL_VIEW_MAP));
+        assertEquals(getFacesContext().getExternalContext().getRequestMap().get(RIConstants.LOGICAL_VIEW_MAP), 
+                     "_id1");
+        
+        
+    }
+    
 }

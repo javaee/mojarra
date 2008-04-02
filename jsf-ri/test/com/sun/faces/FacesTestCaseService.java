@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTestCaseService.java,v 1.44 2005/06/01 14:03:39 rlubke Exp $
+ * $Id: FacesTestCaseService.java,v 1.45 2005/06/06 18:04:48 edburns Exp $
  */
 
 /*
@@ -48,7 +48,7 @@ import org.apache.cactus.server.ServletContextWrapper;
  * <B>Lifetime And Scope</B> <P> Same as the JspTestCase or
  * ServletTestCase instance that uses it.
  *
- * @version $Id: FacesTestCaseService.java,v 1.44 2005/06/01 14:03:39 rlubke Exp $
+ * @version $Id: FacesTestCaseService.java,v 1.45 2005/06/06 18:04:48 edburns Exp $
  * @see	com.sun.faces.context.FacesContextFactoryImpl
  * @see	com.sun.faces.context.FacesContextImpl
  */
@@ -209,6 +209,9 @@ public class FacesTestCaseService extends Object {
         }
 
 	storeSC.setServletContext(facesTestCase.getConfig().getServletContext());
+        
+        // remove any view state in request state
+        facesContext.getExternalContext().getRequestMap().remove(RIConstants.LOGICAL_VIEW_MAP);
 
     }
 

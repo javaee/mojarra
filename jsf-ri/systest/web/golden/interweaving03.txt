@@ -25,4 +25,4 @@
 </tr>
 </tbody>
 </table>
-<input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="_id5" /><input type="hidden" name="_id_id10" value="_id_id10" /></form>
+<input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="_id5:_id6" /><input type="hidden" name="_id_id10" value="_id_id10" /></form>

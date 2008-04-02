@@ -714,11 +714,11 @@ see the <i>angle brackets</i> on this text
 
 </table>
 
-<input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="_id1" /><input type="hidden" name="basicForm" value="basicForm" /></form><form id="form2" method="post" action="/test/faces/TestRenderResponsePhase.jsp;jsessionid=9179BEE4202D82A1FDA416E2E334913E" enctype="application/x-www-form-urlencoded">
+<input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="_id1:_id2" /><input type="hidden" name="basicForm" value="basicForm" /></form><form id="form2" method="post" action="/test/faces/TestRenderResponsePhase.jsp;jsessionid=9179BEE4202D82A1FDA416E2E334913E" enctype="application/x-www-form-urlencoded">
 <input type="submit" name="form2:_id_id818" value="form2 button1" onclick="clearFormHiddenParams_form2(this.form.id);" />
    <p />
   <input type="submit" name="form2:_id_id821" value="form2 button2" onclick="clearFormHiddenParams_form2(this.form.id);" /> <p />
-<input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="_id1" /><input type="hidden" name="form2" value="form2" /></form><form id="form3" method="post" action="/test/faces/TestRenderResponsePhase.jsp;jsessionid=9179BEE4202D82A1FDA416E2E334913E" enctype="application/x-www-form-urlencoded">
+<input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="_id1:_id2" /><input type="hidden" name="form2" value="form2" /></form><form id="form3" method="post" action="/test/faces/TestRenderResponsePhase.jsp;jsessionid=9179BEE4202D82A1FDA416E2E334913E" enctype="application/x-www-form-urlencoded">
 <input type="submit" name="form3:_id_id827" value="form3 button1" onclick="clearFormHiddenParams_form3(this.form.id);" />
    <p />
   <a href="#" onclick="clearFormHiddenParams_form3('form3');document.forms['form3']['form3:_idcl'].value='form3:_id_id830'; document.forms['form3'].submit(); return false;">form3 link1</a><input type="hidden" name="form3:_idcl" /><script type="text/javascript" language="Javascript"><!--
@@ -729,7 +729,7 @@ function clearFormHiddenParams_form3(curFormName) {
 }
 //-->
 </script> <p />
-<input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="_id1" /><input type="hidden" name="form3" value="form3" /></form>
+<input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="_id1:_id2" /><input type="hidden" name="form3" value="form3" /></form>
 
     </BODY>
 </HTML>

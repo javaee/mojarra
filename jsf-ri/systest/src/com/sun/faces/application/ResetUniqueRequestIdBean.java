@@ -1,5 +1,5 @@
 /*
- * $Id: ResetUniqueRequestIdBean.java,v 1.1 2005/03/14 14:56:20 edburns Exp $
+ * $Id: ResetUniqueRequestIdBean.java,v 1.2 2005/06/06 18:04:46 edburns Exp $
  */
 
 /*
@@ -21,7 +21,7 @@ public class ResetUniqueRequestIdBean extends Object {
     public String getReset() {
 	FacesContext context = FacesContext.getCurrentInstance();
 	LRUMap lruMap = new LRUMap(15);
-	context.getExternalContext().getSessionMap().put(RIConstants.STATE_MAP, lruMap);
+	context.getExternalContext().getSessionMap().put(RIConstants.LOGICAL_VIEW_MAP, lruMap);
 	((StateManagerImpl)context.getApplication().getStateManager()).requestIdSerial = (char) -1;
 	return reset;
     }

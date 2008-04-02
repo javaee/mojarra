@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 
 <!--
- $Id: build-tests.xml,v 1.80 2005/05/25 18:06:42 jayashri Exp $
+ $Id: build-tests.xml,v 1.81 2005/06/06 18:04:46 edburns Exp $
 -->
 
 <!--
@@ -233,7 +233,7 @@
 -->
       <batchtest todir="${test.results.dir}">
         <fileset    dir="${basedir}/build/WEB-INF/classes"
-               includes="com/sun/faces/jsptest/*TestCase.class"/>          
+               includes="com/sun/faces/jsptest/JspIntegrationTestCase.class"/>          
       </batchtest> 
 
     </junit>
@@ -354,11 +354,13 @@
 
     <tester host="${host}" port="${port}" protocol="${protocol}"
          request="${context.path}/faces/config01.jsp"
-      outContent="/config01.jsp PASSED" failonerror="${failonerror}"/>
+         ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
+         outContent="/config01.jsp PASSED" failonerror="${failonerror}"/>
 
    <tester host="${host}" port="${port}" protocol="${protocol}"
         request="${context.path}/faces/factoryFinder.jsp"
         golden="${golden.path}/factoryFinder.txt" 
+         ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
         recordGolden="${local.golden.path}/factoryFinder.txt"
         failonerror="${failonerror}"/>
   </target>
@@ -367,6 +369,7 @@
    description="Test listener">
                                                                                 
     <tester host="${host}" port="${port}" protocol="${protocol}"
+         ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
         request="${context.path}/faces/listener.jsp"
          status="200" failonerror="${failonerror}"/>
   </target>
@@ -376,15 +379,18 @@
 
     <!-- Managed Bean Create #1 (No Property Setters) -->
     <tester host="${host}" port="${port}" protocol="${protocol}"
+         ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
          request="${context.path}/faces/managed01.jsp"
       outContent="/managed01.jsp PASSED" failonerror="${failonerror}"/>
 
     <!-- Managed Bean Create #2 (Primitive Property Setters) -->
     <tester host="${host}" port="${port}" protocol="${protocol}"
+         ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
          request="${context.path}/faces/managed02.jsp"
       outContent="/managed02.jsp PASSED" failonerror="${failonerror}"/>
 
     <tester host="${host}" port="${port}" protocol="${protocol}"
+         ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
          request="${context.path}/faces/managed03.jsp"
       status="500" failonerror="${failonerror}"/>
 
@@ -396,6 +402,7 @@
         failonerror="${failonerror}"/> 
 
    <tester host="${host}" port="${port}" protocol="${protocol}"
+         ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
             request="${context.path}/faces/managed07.jsp"
              status="500" failonerror="${failonerror}"/> 
   </target>
@@ -407,21 +414,25 @@
 
     <!-- Standard API Message Resources -->
     <tester host="${host}" port="${port}" protocol="${protocol}"
+         ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
          request="${context.path}/faces/message01.jsp"
       outContent="/message01.jsp PASSED" failonerror="${failonerror}"/>
 
     <!-- Standard IMPL Message Resources -->
     <tester host="${host}" port="${port}" protocol="${protocol}"
+         ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
          request="${context.path}/faces/message02.jsp"
       outContent="/message02.jsp PASSED" failonerror="${failonerror}"/>
 
     <!-- Single Message Resources Element -->
     <tester host="${host}" port="${port}" protocol="${protocol}"
+         ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
          request="${context.path}/faces/message03.jsp"
       outContent="/message03.jsp PASSED" failonerror="${failonerror}"/>
 
     <!-- Double Message Resources Element -->
     <tester host="${host}" port="${port}" protocol="${protocol}"
+         ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
          request="${context.path}/faces/message04.jsp"
       outContent="/message04.jsp PASSED" failonerror="${failonerror}"/>
 
@@ -436,26 +447,32 @@
    description="Test the RI Tag Library Validator">
 
     <tester host="${host}" port="${port}" protocol="${protocol}"
+         ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
          request="${context.path}/faces/TestHtmlBasicValidatorFail.jsp"
       status="500" failonerror="${failonerror}"/>
 
     <tester host="${host}" port="${port}" protocol="${protocol}"
+         ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
          request="${context.path}/faces/TestHtmlBasicValidatorSucceed.jsp"
       status="200" failonerror="${failonerror}"/>
 
     <tester host="${host}" port="${port}" protocol="${protocol}"
+         ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
          request="${context.path}/faces/TestCoreValidatorFail.jsp"
       status="500" failonerror="${failonerror}"/>
 
     <tester host="${host}" port="${port}" protocol="${protocol}"
+         ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
          request="${context.path}/faces/TestCoreValidatorSucceed.jsp"
       status="200" failonerror="${failonerror}"/>
 
     <tester host="${host}" port="${port}" protocol="${protocol}"
+         ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
          request="${context.path}/faces/TestCoreValidatorIfFail.jsp"
       status="200" failonerror="${failonerror}"/>
 
     <tester host="${host}" port="${port}" protocol="${protocol}"
+         ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
          request="${context.path}/faces/TestCoreValidatorIfSucceed.jsp"
       status="200" failonerror="${failonerror}"/>
 <!-- JSTL forEach integration indefinately inoperable.
@@ -469,38 +486,47 @@
 -->
 
     <tester host="${host}" port="${port}" protocol="${protocol}"
+         ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
          request="${context.path}/faces/TestElValidatorActionRefFail.jsp"
       status="500" failonerror="${failonerror}"/>
 
     <tester host="${host}" port="${port}" protocol="${protocol}"
+         ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
          request="${context.path}/faces/TestElValidatorActionRefSucceed.jsp"
       status="200" failonerror="${failonerror}"/>
 
     <tester host="${host}" port="${port}" protocol="${protocol}"
+         ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
          request="${context.path}/faces/TestElValidatorComponentFail.jsp"
       status="500" failonerror="${failonerror}"/>
 
     <tester host="${host}" port="${port}" protocol="${protocol}"
+         ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
    	 request="${context.path}/faces/TestElValidatorComponentSucceed.jsp"
       status="200" failonerror="${failonerror}"/>
 
     <tester host="${host}" port="${port}" protocol="${protocol}"
+         ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
     	 request="${context.path}/faces/TestElValidatorIdFail.jsp"
       status="500" failonerror="${failonerror}"/>
 
     <tester host="${host}" port="${port}" protocol="${protocol}"
+         ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
     	 request="${context.path}/faces/TestElValidatorIdSucceed.jsp"
       status="200" failonerror="${failonerror}"/>
 
     <tester host="${host}" port="${port}" protocol="${protocol}"
+         ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
     	 request="${context.path}/faces/TestElValidatorValueRefFail.jsp"
       status="500" failonerror="${failonerror}"/>
 
     <tester host="${host}" port="${port}" protocol="${protocol}"
+         ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
     	 request="${context.path}/faces/TestElValidatorValueRefSucceed.jsp"
       status="200" failonerror="${failonerror}"/>
 
     <tester host="${host}" port="${port}" protocol="${protocol}"
+         ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
     	 request="${context.path}/faces/jsp/tlvTest01.jsp"
       status="200" failonerror="${failonerror}"/>
 
@@ -511,6 +537,7 @@
 
     <!-- Test Converter creation -->
     <tester host="${host}" port="${port}" protocol="${protocol}"
+         ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
          request="${context.path}/faces/converter.jsp"
       outContent="/converter.jsp PASSED" failonerror="${failonerror}"/>
   </target>
@@ -519,6 +546,7 @@
    description="Test standard Converter replacement">
 
     <tester host="${host}" port="${port}" protocol="${protocol}"
+         ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
          request="${context.path}/faces/converter01.jsp"
       outContent="/converter01.jsp PASSED" failonerror="${failonerror}"/>
   </target>
@@ -527,6 +555,7 @@
    description="Test passing Converter instances to component tag">
    
    <tester host="${host}" port="${port}" protocol="${protocol}"
+         ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
         request="${context.path}/faces/converter02.jsp"
         recordGolden="${local.golden.path}/standard/converter02.txt"
         golden="${golden.path}/standard/converter02.txt" failonerror="${failonerror}"/>
@@ -536,6 +565,7 @@
    description="Test converter">
                                                                                      
     <tester host="${host}" port="${port}" protocol="${protocol}"
+         ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
         request="${context.path}/faces/converter03.jsp"
          status="200" failonerror="${failonerror}"/>
   </target>
@@ -544,12 +574,14 @@
    description="Test converter">
                                                                                      
     <tester host="${host}" port="${port}" protocol="${protocol}"
+         ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
         request="${context.path}/faces/converter04.jsp"
          status="200" failonerror="${failonerror}"/>
   </target>
 
     <target name="test.converter05">
     <tester host="${host}" port="${port}" protocol="${protocol}"
+         ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
         request="${context.path}/faces/converter05.jsp"
         recordGolden="${local.golden.path}/standard/converter05.txt"
         golden="${golden.path}/standard/converter05.txt" failonerror="${failonerror}"/>
@@ -560,6 +592,7 @@
 
     <!-- Test validator creation -->
     <tester host="${host}" port="${port}" protocol="${protocol}"
+         ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
          request="${context.path}/faces/validator.jsp"
       outContent="/validator.jsp PASSED" failonerror="${failonerror}"/>
   </target>
@@ -568,6 +601,7 @@
    description="Test standard Validator replacement">
 
     <tester host="${host}" port="${port}" protocol="${protocol}"
+         ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
          request="${context.path}/faces/validator01.jsp"
       outContent="/validator01.jsp PASSED" failonerror="${failonerror}"/>
   </target>
@@ -576,6 +610,7 @@
    description="Test validator">
                                                                                      
     <tester host="${host}" port="${port}" protocol="${protocol}"
+         ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
         request="${context.path}/faces/validator02.jsp"
          status="200" failonerror="${failonerror}"/>
   </target>
@@ -585,6 +620,7 @@
                                                                                 
                                                                                 
     <tester host="${host}" port="${port}" protocol="${protocol}"
+         ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
         request="${context.path}/faces/validator03.jsp"
          status="200" failonerror="${failonerror}"/>
   </target>
@@ -594,6 +630,7 @@
 
     <!-- Test Component creation -->
     <tester host="${host}" port="${port}" protocol="${protocol}"
+         ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
          request="${context.path}/faces/component.jsp"
       outContent="/component.jsp PASSED" failonerror="${failonerror}"/>
   </target>
@@ -602,6 +639,7 @@
    description="Test standard Component replacement">
 
    <tester host="${host}" port="${port}" protocol="${protocol}"
+         ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
          request="${context.path}/faces/component01.jsp"
       outContent="/component01.jsp PASSED" failonerror="${failonerror}"/>
   </target>
@@ -609,16 +647,19 @@
   <target name="test.standard"
           description="Test the Standard RenderKit">
     <tester host="${host}" port="${port}" protocol="${protocol}"
+         ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
          request="${context.path}/faces/standard/messages01.jsp"
           recordGolden="${local.golden.path}/standard/messages01.txt"
           golden="${golden.path}/standard/messages01.txt" failonerror="${failonerror}"/>
 
     <tester host="${host}" port="${port}" protocol="${protocol}"
+         ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
          request="${context.path}/faces/standard/messages02.jsp"
           golden="${golden.path}/standard/messages02.txt" failonerror="${failonerror}"
           recordGolden="${local.golden.path}/standard/messages02.txt"/>
           
     <tester host="${host}" port="${port}" protocol="${protocol}"
+         ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
          request="${context.path}/faces/standard/component01.jsp"
          recordGolden="${local.golden.path}/standard/component01.txt"
          golden="${golden.path}/standard/component01.txt" failonerror="${failonerror}"/>
@@ -645,6 +686,7 @@
               ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
               recordGolden="${local.golden.path}/taglib/commandLink_multiform_test.txt" />
       <tester host="${host}" port="${port}" protocol="${protocol}" 
+         ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
               request="${context.path}/faces/taglib/attributeTest.jsp" 
               recordGolden="${local.golden.path}/taglib/attributeTest.txt"
               golden="${golden.path}/taglib/attributeTest.txt" failonerror="${failonerror}" />
@@ -655,10 +697,12 @@
           description="Test the Verbatim tag">
       <echo message="Testing verbatim..."/>
       <tester host="${host}" port="${port}" protocol="${protocol}"
+         ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
            request="${context.path}/faces/verbatim_test.jsp"
             golden="${golden.path}/verbatim_test.txt"
        failonerror="${failonerror}"/>
       <tester host="${host}" port="${port}" protocol="${protocol}"
+         ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
            request="${context.path}/faces/escape_test.jsp"
             golden="${golden.path}/escape_test.txt"
        failonerror="${failonerror}"/>
@@ -669,14 +713,17 @@
    description="Test renderkit processing">
 
    <tester host="${host}" port="${port}" protocol="${protocol}"
+         ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
          request="${context.path}/faces/renderkit01.jsp"
       outContent="/renderkit01.jsp PASSED" failonerror="${failonerror}"/>
    <tester host="${host}" port="${port}" protocol="${protocol}"
+         ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
         request="${context.path}/renderkit02.jsp"
 	golden="${golden.path}/renderkit02A.txt" 
         recordGolden="${local.golden.path}/renderkit02A.txt"
         failonerror="${failonerror}"/>
    <tester host="${host}" port="${port}" protocol="${protocol}"
+         ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
         request="${context.path}/renderkit03.jsp"
         recordGolden="${local.golden.path}/renderkit03A.txt"
 	golden="${golden.path}/renderkit03A.txt" failonerror="${failonerror}"/>
@@ -705,6 +752,7 @@
   <target name="test.phases"
    description="Test Phase processing with Phase Listener">
    <tester host="${host}" port="${port}" protocol="${protocol}"
+         ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
          request="${context.path}/faces/phaseListener01.jsp"
          outContent="/phaseListener01.jsp PASSED" failonerror="${failonerror}"/>
          <!-- PENDING investigate the need for this
@@ -717,21 +765,25 @@
           description="Test subview tag">
 
     <tester host="${host}" port="${port}" protocol="${protocol}"
+         ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
          request="${context.path}/faces/subview01.jsp"
           recordGolden="${local.golden.path}/subview01.txt"
           golden="${golden.path}/subview01.txt" failonerror="${failonerror}"/>
           
     <tester host="${host}" port="${port}" protocol="${protocol}"
+         ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
          request="${context.path}/faces/subview02.jsp"
          recordGolden="${local.golden.path}/subview02.txt"
          golden="${golden.path}/subview02.txt" failonerror="${failonerror}"/>
          
     <tester host="${host}" port="${port}" protocol="${protocol}"
+         ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
          request="${context.path}/faces/subview03.jsp"
          recordGolden="${local.golden.path}/subview03.txt"
          golden="${golden.path}/subview03.txt" failonerror="${failonerror}"/>
          
     <tester host="${host}" port="${port}" protocol="${protocol}"
+         ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
          request="${context.path}/faces/subview04.jsp"
          recordGolden="${local.golden.path}/subview04.txt"
          golden="${golden.path}/subview04.txt" failonerror="${failonerror}"/>
@@ -753,26 +805,31 @@
           description="Test interweaving">
 
     <tester host="${host}" port="${port}" protocol="${protocol}"
+         ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
          request="${context.path}/faces/interweaving01.jsp"
           recordGolden="${local.golden.path}/interweaving01.txt"
           golden="${golden.path}/interweaving01.txt" failonerror="${failonerror}"/>
           
     <tester host="${host}" port="${port}" protocol="${protocol}"
+         ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
          request="${context.path}/faces/interweaving02.jsp"
          recordGolden="${local.golden.path}/interweaving02.txt"
          golden="${golden.path}/interweaving02.txt" failonerror="${failonerror}"/>
          
     <tester host="${host}" port="${port}" protocol="${protocol}"
+         ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
          request="${context.path}/faces/interweaving03.jsp"
          recordGolden="${local.golden.path}/interweaving03.txt"
          golden="${golden.path}/interweaving03.txt" failonerror="${failonerror}"/>
          
     <tester host="${host}" port="${port}" protocol="${protocol}"
+         ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
          request="${context.path}/faces/interweaving04.jsp"
          recordGolden="${local.golden.path}/interweaving04.txt"
          golden="${golden.path}/interweaving04.txt" failonerror="${failonerror}"/>
          
     <tester host="${host}" port="${port}" protocol="${protocol}"
+         ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
          request="${context.path}/faces/interweaving05.jsp"
          recordGolden="${local.golden.path}/interweaving05.txt"
          golden="${golden.path}/interweaving05.txt" failonerror="${failonerror}"/>

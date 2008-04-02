@@ -1,5 +1,5 @@
 /*
- * $Id: RIConstants.java,v 1.74 2005/06/01 14:03:30 rlubke Exp $
+ * $Id: RIConstants.java,v 1.75 2005/06/06 18:04:45 edburns Exp $
  */
 
 /*
@@ -49,8 +49,11 @@ public class RIConstants {
     public static final String SAVESTATE_FIELD_MARKER = FACES_PREFIX +
         "saveStateFieldMarker";
 
-    public static final String STATE_MAP = FACES_PREFIX +
-        "saveStateMap";
+    public static final String LOGICAL_VIEW_MAP = FACES_PREFIX +
+        "logicalViewMap";
+
+    public static final String ACTUAL_VIEW_MAP = FACES_PREFIX +
+        "actualViewMap";
 
     public static final String SAVED_STATE = FACES_PREFIX + "savedState";
 

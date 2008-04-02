@@ -1,5 +1,5 @@
 /*
- * $Id: TestRestoreViewPhase.java,v 1.21 2005/05/02 19:27:15 edburns Exp $
+ * $Id: TestRestoreViewPhase.java,v 1.22 2005/06/06 18:04:48 edburns Exp $
  */
 
 /*
@@ -21,7 +21,6 @@ import javax.faces.component.UIPanel;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 import javax.faces.render.RenderKitFactory;
-import javax.servlet.http.HttpSession;
 
 import java.util.Locale;
 
@@ -31,7 +30,7 @@ import java.util.Locale;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRestoreViewPhase.java,v 1.21 2005/05/02 19:27:15 edburns Exp $
+ * @version $Id: TestRestoreViewPhase.java,v 1.22 2005/06/06 18:04:48 edburns Exp $
  */
 
 public class TestRestoreViewPhase extends ServletFacesTestCase {
@@ -78,14 +77,14 @@ public class TestRestoreViewPhase extends ServletFacesTestCase {
     public void beginReconstituteRequestSubmit(WebRequest theRequest) {
         theRequest.setURL("localhost:8080", null, null, TEST_URI, null);
 	theRequest.addParameter("javax.faces.ViewState",
-				"_id1");
+				"_id1:_id2");
     }
 
 
     public void beginRegisterListeners(WebRequest theRequest) {
         theRequest.setURL("localhost:8080", null, null, TEST_URI, null);
 	theRequest.addParameter("javax.faces.ViewState",
-				"_id1");
+				"_id1:_id2");
     }
 
     public void testReconstituteRequestSubmit() {
@@ -142,7 +141,6 @@ public class TestRestoreViewPhase extends ServletFacesTestCase {
 	assertTrue(userName.getId().equals(basicForm.findComponent("userName").getId()));
         getFacesContext().setViewRoot(null);
     }
-
 
     /**
      * This method will test the <code>registerActionListeners</code> method.
