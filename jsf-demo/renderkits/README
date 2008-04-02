@@ -1,0 +1,23 @@
+============================================================ 
+Building, Deploying And Running The Multiple Renderkits Demo
+============================================================ 
+
+REQUIREMENTS:
+
+ - Mozilla browser with SVG support - FireFox - the demo uses
+   XMLHttpRequest.
+ - JSP 1.2 container
+
+BUILDING:
+ - See https://javaserverfaces.dev.java.net/faq.html#Code_build
+
+DEPLOYING:
+ - For Glassfish:
+       - autodeploy the war: copy jsf-demo/renderkits/build/jsf-renderkits.war to
+             the <glassfish home>/domains/domain1/autodeploy directory.
+
+RUNNING:
+ - Fire up your browser and enter:
+    http://<hostname>:<port>/jsf-renderkits
+   where <hostName> is the host where the server is running
+   and <port> is the port for requests.
