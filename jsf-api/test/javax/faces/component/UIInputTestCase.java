@@ -1,5 +1,5 @@
 /*
- * $Id: UIInputTestCase.java,v 1.2 2002/12/17 23:30:59 eburns Exp $
+ * $Id: UIInputTestCase.java,v 1.3 2003/01/16 20:24:24 craigmcc Exp $
  */
 
 /*
@@ -12,6 +12,9 @@ package javax.faces.component;
 
 import java.util.Iterator;
 import javax.faces.event.FacesEvent;
+import javax.faces.event.PhaseId;
+import javax.faces.event.ValueChangedEvent;
+import javax.faces.event.ValueChangedListener;
 import javax.faces.validator.Validator;
 import junit.framework.TestCase;
 import junit.framework.Test;
@@ -122,6 +125,84 @@ private class UIInputNamingContainer extends UIInput implements NamingContainer 
 
         super.testAttributePropertyTransparency();
         UIInput input = (UIInput) component;
+
+    }
+
+
+    // ----- ValueChangedEvents Tests -----
+
+    public void testValueChangedEvent1() {
+
+        // Add a single listener interested in a single phase
+        UIInput input = (UIInput) component;
+        ValueChangedEvent event = new ValueChangedEvent(input, "", "");
+        TestValueChangedListener listener =
+            new TestValueChangedListener(PhaseId.APPLY_REQUEST_VALUES);
+        input.addValueChangedListener(listener);
+
+        // Ensure that it is called only once
+        assertEquals("Listener has not been called yet",
+                     0, listener.getCount());
+        input.broadcast(event, PhaseId.RECONSTITUTE_REQUEST);
+        input.broadcast(event, PhaseId.APPLY_REQUEST_VALUES);
+        input.broadcast(event, PhaseId.PROCESS_VALIDATIONS);
+        input.broadcast(event, PhaseId.UPDATE_MODEL_VALUES);
+        assertEquals("Listener was called exactly once",
+                     1, listener.getCount());
+
+    }
+
+
+    public void testValueChangedEvent2() {
+
+        // Add a single listener interested in all phases
+        UIInput input = (UIInput) component;
+        ValueChangedEvent event = new ValueChangedEvent(input, "", "");
+        TestValueChangedListener listener =
+            new TestValueChangedListener(PhaseId.ANY_PHASE);
+        input.addValueChangedListener(listener);
+
+        // Ensure that it is called only once
+        assertEquals("Listener has not been called yet",
+                     0, listener.getCount());
+        input.broadcast(event, PhaseId.RECONSTITUTE_REQUEST);
+        input.broadcast(event, PhaseId.APPLY_REQUEST_VALUES);
+        input.broadcast(event, PhaseId.PROCESS_VALIDATIONS);
+        input.broadcast(event, PhaseId.UPDATE_MODEL_VALUES);
+        assertEquals("Listener was called exactly four times",
+                     4, listener.getCount());
+
+    }
+
+
+    public void testValueChangedEvent3() {
+
+        UIInput input = (UIInput) component;
+        ValueChangedEvent event = new ValueChangedEvent(input, "", "");
+
+        // No registered listeners at all
+        if (input.broadcast(event, PhaseId.RECONSTITUTE_REQUEST)) {
+            fail("(1) should have returned false");
+        }
+
+        // Retroactively added listener -- too late
+        input.addValueChangedListener
+                    (new TestValueChangedListener(PhaseId.RECONSTITUTE_REQUEST));
+        if (input.broadcast(event, PhaseId.APPLY_REQUEST_VALUES)) {
+            fail("(2) should have returned false");
+        }
+
+        // Future-phase listener should trigger true return
+        input.addValueChangedListener
+                    (new TestValueChangedListener(PhaseId.UPDATE_MODEL_VALUES));
+        if (!input.broadcast(event, PhaseId.PROCESS_VALIDATIONS)) {
+            fail("(3) should have returned true");
+        }
+
+        // Last-phase listener should trigger false return
+        if (input.broadcast(event, PhaseId.UPDATE_MODEL_VALUES)) {
+            fail("(4) should have returned false");
+        }
 
     }
 

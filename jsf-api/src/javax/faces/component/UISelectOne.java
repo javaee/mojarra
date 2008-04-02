@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectOne.java,v 1.18 2002/12/17 23:30:53 eburns Exp $
+ * $Id: UISelectOne.java,v 1.19 2003/01/16 20:24:17 craigmcc Exp $
  */
 
 /*
@@ -91,6 +91,7 @@ public class UISelectOne extends UISelectBase {
         }
 
         // Delegate to our associated Renderer if needed
+        previous = getValue();
         if (getRendererType() != null) {
             return (super.decode(context));
         }

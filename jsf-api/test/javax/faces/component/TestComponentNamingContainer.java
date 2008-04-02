@@ -1,5 +1,5 @@
 /*
- * $Id: TestComponentNamingContainer.java,v 1.2 2002/12/17 23:30:58 eburns Exp $
+ * $Id: TestComponentNamingContainer.java,v 1.3 2003/01/16 20:24:24 craigmcc Exp $
  */
 
 /*
@@ -12,7 +12,7 @@ package javax.faces.component;
 
 import java.io.IOException;
 import javax.faces.context.FacesContext;
-import javax.faces.event.RequestEvent;
+import javax.faces.event.FacesEvent;
 
 
 /**
@@ -63,12 +63,6 @@ public class TestComponentNamingContainer extends UINamingContainer {
     }
 
 
-    public boolean processEvent(FacesContext context, RequestEvent event) {
-        TestComponent.trace("e-" + getComponentId());
-        return (super.processEvent(context, event));
-    }
-
-
     public boolean updateModel(FacesContext context) {
         TestComponent.trace("u-" + getComponentId());
         return (super.updateModel(context));
@@ -84,12 +78,6 @@ public class TestComponentNamingContainer extends UINamingContainer {
     public boolean processDecodes(FacesContext context) throws IOException {
         TestComponent.trace("pD-" + getComponentId());
         return (super.processDecodes(context));
-    }
-
-
-    public boolean processEvents(FacesContext context) {
-        TestComponent.trace("pE-" + getComponentId());
-        return (super.processEvents(context));
     }
 
 

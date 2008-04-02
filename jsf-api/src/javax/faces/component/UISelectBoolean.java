@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectBoolean.java,v 1.19 2002/12/17 23:30:53 eburns Exp $
+ * $Id: UISelectBoolean.java,v 1.20 2003/01/16 20:24:17 craigmcc Exp $
  */
 
 /*
@@ -110,6 +110,7 @@ public class UISelectBoolean extends UIInput {
         }
 
         // Delegate to our associated Renderer if needed
+        previous = getValue();
         if (getRendererType() != null) {
             return (super.decode(context));
         }

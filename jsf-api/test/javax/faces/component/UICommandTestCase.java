@@ -1,5 +1,5 @@
 /*
- * $Id: UICommandTestCase.java,v 1.2 2002/12/17 23:30:58 eburns Exp $
+ * $Id: UICommandTestCase.java,v 1.3 2003/01/16 20:24:24 craigmcc Exp $
  */
 
 /*
@@ -11,7 +11,10 @@ package javax.faces.component;
 
 
 import java.util.Iterator;
+import javax.faces.event.ActionEvent;
+import javax.faces.event.ActionListener;
 import javax.faces.event.FacesEvent;
+import javax.faces.event.PhaseId;
 import javax.faces.validator.Validator;
 import junit.framework.TestCase;
 import junit.framework.Test;
@@ -135,6 +138,84 @@ private class UICommandNamingContainer extends UICommand implements NamingContai
         command.setAttribute("value", null);
         assertNull("commandName7", command.getCommandName());
         assertNull("commandName8", command.getAttribute("value"));
+
+    }
+
+
+    // ----- ActionEvents Tests -----
+
+    public void testActionEvent1() {
+
+        // Add a single listener interested in a single phase
+        UICommand command = (UICommand) component;
+        ActionEvent event = new ActionEvent(command, "");
+        TestActionListener listener =
+            new TestActionListener(PhaseId.APPLY_REQUEST_VALUES);
+        command.addActionListener(listener);
+
+        // Ensure that it is called only once
+        assertEquals("Listener has not been called yet",
+                     0, listener.getCount());
+        command.broadcast(event, PhaseId.RECONSTITUTE_REQUEST);
+        command.broadcast(event, PhaseId.APPLY_REQUEST_VALUES);
+        command.broadcast(event, PhaseId.PROCESS_VALIDATIONS);
+        command.broadcast(event, PhaseId.UPDATE_MODEL_VALUES);
+        assertEquals("Listener was called exactly once",
+                     1, listener.getCount());
+
+    }
+
+
+    public void testActionEvent2() {
+
+        // Add a single listener interested in all phases
+        UICommand command = (UICommand) component;
+        ActionEvent event = new ActionEvent(command, "");
+        TestActionListener listener =
+            new TestActionListener(PhaseId.ANY_PHASE);
+        command.addActionListener(listener);
+
+        // Ensure that it is called only once
+        assertEquals("Listener has not been called yet",
+                     0, listener.getCount());
+        command.broadcast(event, PhaseId.RECONSTITUTE_REQUEST);
+        command.broadcast(event, PhaseId.APPLY_REQUEST_VALUES);
+        command.broadcast(event, PhaseId.PROCESS_VALIDATIONS);
+        command.broadcast(event, PhaseId.UPDATE_MODEL_VALUES);
+        assertEquals("Listener was called exactly four times",
+                     4, listener.getCount());
+
+    }
+
+
+    public void testActionEvent3() {
+
+        UICommand command = (UICommand) component;
+        ActionEvent event = new ActionEvent(command, "");
+
+        // No registered listeners at all
+        if (command.broadcast(event, PhaseId.RECONSTITUTE_REQUEST)) {
+            fail("(1) should have returned false");
+        }
+
+        // Retroactively added listener -- too late
+        command.addActionListener
+                    (new TestActionListener(PhaseId.RECONSTITUTE_REQUEST));
+        if (command.broadcast(event, PhaseId.APPLY_REQUEST_VALUES)) {
+            fail("(2) should have returned false");
+        }
+
+        // Future-phase listener should trigger true return
+        command.addActionListener
+                    (new TestActionListener(PhaseId.UPDATE_MODEL_VALUES));
+        if (!command.broadcast(event, PhaseId.PROCESS_VALIDATIONS)) {
+            fail("(3) should have returned true");
+        }
+
+        // Last-phase listener should trigger false return
+        if (command.broadcast(event, PhaseId.UPDATE_MODEL_VALUES)) {
+            fail("(4) should have returned false");
+        }
 
     }
 

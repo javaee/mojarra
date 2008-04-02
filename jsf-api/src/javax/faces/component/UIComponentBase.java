@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.32 2003/01/08 18:35:54 eburns Exp $
+ * $Id: UIComponentBase.java,v 1.33 2003/01/16 20:24:17 craigmcc Exp $
  */
 
 /*
@@ -20,8 +20,8 @@ import java.util.Map;
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.context.FacesContext;
-import javax.faces.event.RequestEvent;
-import javax.faces.event.RequestEventHandler;
+import javax.faces.event.FacesEvent;
+import javax.faces.event.PhaseId;
 import javax.faces.render.Renderer;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
@@ -335,35 +335,6 @@ public abstract class UIComponentBase implements UIComponent {
 
     }
 
-    /**
-     * <p>Return <code>true</code> if the value of the 'rendered' attribute 
-     * is a Boolean representing <code>true</code> or <code>null</code>, 
-     * otherwise return <code>false</code>.</p>
-     */
-    public boolean isRendered() {
-
-        Boolean rendered = (Boolean) getAttribute("rendered");
-        if (rendered != null) {
-            return (rendered.booleanValue());
-        } else {
-            return (true);
-        }
-    }
-    
-    /**
-     * <p>Set the rendered attribute of this <code>UIComponent</code>.</p>
-     * 
-     * @param rendered If <code>true</code> render this component.
-     * Otherwise, do not render this component.
-     */
-    public void setRendered(boolean rendered) {
-        if ( rendered ) {
-            setAttribute("rendered", Boolean.TRUE);
-        } else {
-            setAttribute("rendered", Boolean.FALSE);  
-        }
-    }
-
 
     /**
      * <p>Return the parent <code>UIComponent</code> of this
@@ -387,6 +358,37 @@ public abstract class UIComponentBase implements UIComponent {
 
         setAttribute("parent", parent);
 
+    }
+
+
+    /**
+     * <p>Return <code>true</code> if the value of the 'rendered' attribute 
+     * is a Boolean representing <code>true</code> or <code>null</code>, 
+     * otherwise return <code>false</code>.</p>
+     */
+    public boolean isRendered() {
+
+        Boolean rendered = (Boolean) getAttribute("rendered");
+        if (rendered != null) {
+            return (rendered.booleanValue());
+        } else {
+            return (true);
+        }
+    }
+    
+
+    /**
+     * <p>Set the rendered attribute of this <code>UIComponent</code>.</p>
+     * 
+     * @param rendered If <code>true</code> render this component.
+     * Otherwise, do not render this component.
+     */
+    public void setRendered(boolean rendered) {
+        if ( rendered ) {
+            setAttribute("rendered", Boolean.TRUE);
+        } else {
+            setAttribute("rendered", Boolean.FALSE);  
+        }
     }
 
 
@@ -1057,80 +1059,6 @@ public abstract class UIComponentBase implements UIComponent {
     }
 
 
-    // ------------------------------------------ Request Event Handler Methods
-
-
-    /**
-     * <p>The set of {@link RequestEventHandler}s associated with this
-     * <code>UIComponent</code>.</p>
-     */
-    private ArrayList handlers = null;
-
-
-    /**
-     * <p>Add a {@link RequestEventHandler} instance to the set associated with
-     * this <code>UIComponent</code>.</p>
-     *
-     * @param handler The {@link RequestEventHandler} to add
-     *
-     * @exception NullPointerException if <code>handler</code>
-     *  is null
-     */
-    public void addRequestEventHandler(RequestEventHandler handler) {
-
-        if (handler == null) {
-            throw new NullPointerException();
-        }
-        if (handlers == null) {
-            handlers = new ArrayList();
-        }
-        handlers.add(handler);
-
-    }
-
-
-    /**
-     * <p>Clear any {@link RequestEventHandler}s that have been registered for
-     * processing by this component.</p>
-     */
-    public void clearRequestEventHandlers() {
-
-        handlers = null;
-
-    }
-
-
-    /**
-     * <p>Return an <code>Iterator</code> over the {@link RequestEventHandler}s
-     * associated with this <code>UIComponent</code>.</p>
-     */
-    public Iterator getRequestEventHandlers() {
-
-        if (handlers != null) {
-            return (handlers.iterator());
-        } else {
-            return (Collections.EMPTY_LIST.iterator());
-        }
-
-    }
-
-
-    /**
-     * <p>Remove a {@link RequestEventHandler} instance from the set associated with
-     * this <code>UIComponent</code>, if it was previously associated.
-     * Otherwise, do nothing.</p>
-     *
-     * @param handler The {@link RequestEventHandler} to remove
-     */
-    public void removeRequestEventHandler(RequestEventHandler handler) {
-
-        if (handlers != null) {
-            handlers.remove(handler);
-        }
-
-    }
-
-
     // ----------------------------------------------------- Validators Methods
 
 
@@ -1209,15 +1137,56 @@ public abstract class UIComponentBase implements UIComponent {
 
 
     /**
+     * <p>Broadcast the specified {@link FacesEvent} to all registered
+     * event listeners who have expressed an interest in events of this
+     * type, for the specified {@link PhaseId}.  The order in which
+     * registered listeners are notified is implementation dependent.</p>
+     *
+     * <p>After all interested listeners have been notified, return
+     * <code>false</code> if this event does not have any listeners
+     * interested in this event in future phases of the request processing
+     * lifecycle.  Otherwise, return <code>true</code>.</p>
+     *
+     * <p>The default implementation throws IllegalArgumentException
+     * (assuming that the parameters are non-null),
+     * because {@link UIComponentBase} does not support any event types.</p>
+     *
+     * @param event The {@link FacesEvent} to be broadcast
+     * @param phaseId The {@link PhaseId} of the current phase of the
+     *  request processing lifecycle
+     *
+     * @exception IllegalArgumentException if the implementation class
+     *  of this {@link FacesEvent} is not supported by this component
+     * @exception IllegalStateException if PhaseId.ANY_PHASE is passed
+     *  for the phase identifier
+     * @exception NullPointerException if <code>event</code> or
+     *  <code>phaseId</code> is <code>null</code>
+     */
+    public boolean broadcast(FacesEvent event, PhaseId phaseId) {
+
+        if ((event == null) || (phaseId == null)) {
+            throw new NullPointerException();
+        }
+        throw new IllegalArgumentException();
+
+    }
+
+
+    /**
      * <p>Decode the current state of this <code>UIComponent</code> from the
      * request contained in the specified {@link FacesContext}, and attempt
      * to convert this state information into an object of the required type
-     * for this component.  If conversion is successful, save the resulting
-     * object via a call to <code>setValue()</code>, and set the
-     * <code>valid</code> property of this component to <code>true</code>.
-     * If conversion is not successful:</p>
+     * for this component.  If conversion is successful:</p>
      * <ul>
-     * <li>Save the state information in such a way that encoding
+     * <li>Save the new local value of this component by calling
+     *     <code>setValue()</code> and passing the new value.</li>
+     * <li>Set the <code>valid</code> property of this component
+     *     to <code>true</code>.</li>
+     * </ul>
+     *
+     * <p>If conversion is not successful:</p>
+     * <ul>
+     * <li>Save state information in such a way that encoding
      *     can reproduce the previous input (even though it was syntactically
      *     or semantically incorrect)</li>
      * <li>Add an appropriate conversion failure error message by calling
@@ -1228,7 +1197,7 @@ public abstract class UIComponentBase implements UIComponent {
      *
      * <p>During decoding, events may be enqueued for later processing
      * (by this component or some other component),  by calling
-     * <code>addRequestEvent()</code> on the associated {@link FacesContext}.
+     * <code>addFacesEvent()</code> on the associated {@link FacesContext}.
      * </p>
      *
      * <p>The default behavior of this method is to delegate to the
@@ -1376,30 +1345,6 @@ public abstract class UIComponentBase implements UIComponent {
 
 
     /**
-     * <p>Process an individual event queued to this <code>UIComponent</code>.
-     * The default implementation does nothing, but can be overridden by
-     * subclasses of <code>UIComponent</code>.  Return <code>false</code> if
-     * lifecycle processing should proceed directly to the <em>Render
-     * Response</em> phase once all events have been processed for all
-     * components, or <code>true</code> for the normal lifecycle flow.</p>
-     *
-     * @param context FacesContext for the request we are processing
-     * @param event Event to be processed against this component
-     *
-     * @exception NullPointerException if <code>context</code> or
-     *  <code>event</code> is <code>null</code>
-     */
-    public boolean processEvent(FacesContext context, RequestEvent event) {
-
-        if ((context == null) || (event == null)) {
-            throw new NullPointerException();
-        }
-        return (true); // Default implementation does nothing
-
-    }
-
-
-    /**
      * <p>Perform the following algorithm to update the model data
      * associated with this component, if any, as appropriate.</p>
      * <ul>
@@ -1467,15 +1412,21 @@ public abstract class UIComponentBase implements UIComponent {
 
     /**
      * <p>Perform any correctness checks that this component wishes to perform
-     * on itself.  This method will be called, along with calls to all
-     * {@link Validator}s registered on this component, during the
-     * <em>Process Validations</em> phase of the request processing lifecycle.
-     * If errors are encountered, appropriate <code>Message</code> instances
-     * should be added to the {@link FacesContext} for the current request.
+     * on itself.  This method will be called during the
+     * <em>Process Validations</em> phase of the request processing
+     * lifecycle.  If errors are encountered, appropriate <code>Message</code>
+     * instances should be added to the {@link FacesContext} for the current
+     * request.</p>
+     *
+     * <p>The default implementation calls the <code>validate()</code>
+     * method of all {@link Validator} instances that have been registered
+     * on this component, and returns <code>false</code> if any of them
+     * returned <code>false</code>.</p>
      *
      * @param context FacesContext for the request we are processing
      *
-     * @return <code>false</code> if the <code>valid</code> 
+     * @return <code>false</code> if the <code>valid</code> property
+     *  is <code>false</code>, indicating that a validation failure occurred
      * @return <code>true</code> if all validations performed by this
      *  method passed successfully, or <code>false</code> if one or more
      *  validations performed by this method failed
@@ -1488,7 +1439,16 @@ public abstract class UIComponentBase implements UIComponent {
         if (context == null) {
             throw new NullPointerException();
         }
-        return (true); // Default implementation simply returns true
+        boolean success = true;
+        Iterator validators = getValidators();
+        while (validators.hasNext()) {
+            Validator validator = (Validator) validators.next();
+            if (!validator.validate(context, this)) {
+                setValid(false);
+                success = false;
+            }
+        }
+        return (success);
 
     }
 
@@ -1547,74 +1507,6 @@ public abstract class UIComponentBase implements UIComponent {
 
     /**
      * <p>Perform the request component tree processing required by the
-     * <em>Handle Request Events</em> phase of the request processing
-     * lifecycle for all facets of this component, all children of this
-     * component, and this component itself, as follows.</p>
-     * <ul>
-     * <li>Call the <code>processEvents()</code> method of all facets
-     *     and children of this component, in the order determined
-     *     by a call to <code>getFacetsAndChildren()</code>.</li>
-     * <li>For each event queued to this component:
-     *     <ul>
-     *     <li>Call the <code>processEvent()</code> method of each registered
-     *         {@link RequestEventHandler} for this component.</li>
-     *     <li>Call the <code>processEvent()</code> method of this
-     *         component.</li>
-     *     </ul></li>
-     * </ul>
-     *
-     * <p>Return <code>false</code> if any <code>processEvents()</code> or
-     * <code>processEvent()</code> method call returned <code>false</code>.
-     * Otherwise, return <code>true</code>.</p>
-     *
-     * @param context {@link FacesContext} for the request we are processing
-     *
-     * @exception NullPointerException if <code>context</code>
-     *  is <code>null</code>
-     */
-    public boolean processEvents(FacesContext context) {
-
-        if (context == null) {
-            throw new NullPointerException();
-        }
-        boolean result = true;
-
-        // Process all facets and children of this component
-        Iterator kids = getFacetsAndChildren();
-        while (kids.hasNext()) {
-            UIComponent kid = (UIComponent) kids.next();
-            if (!kid.processEvents(context)) {
-                result = false;
-            }
-        }
-
-        // Process this component itself
-        Iterator events = context.getRequestEvents(this);
-        while (events.hasNext()) {
-            RequestEvent event = (RequestEvent) events.next();
-            if (!processEvent(context, event)) {
-                result = false;
-            }
-            if (handlers != null) {
-                Iterator handlers = getRequestEventHandlers();
-                while (handlers.hasNext()) {
-                    RequestEventHandler handler =
-                        (RequestEventHandler) handlers.next();
-                    if (!handler.processEvent(context, this, event)) {
-                        result = false;
-                    }
-                }
-            }
-        }
-
-        // Return the final result
-        return (result);
-
-    }
-
-
-    /**
-     * <p>Perform the request component tree processing required by the
      * <em>Process Validations</em> phase of the request processing
      * lifecycle for all facets of this component, all children of this
      * component, and this component itself, as follows.</p>
@@ -1625,12 +1517,10 @@ public abstract class UIComponentBase implements UIComponent {
      * <li>If the <code>valid</code> property of this component is
      *     currently <code>true</code>:
      *     <ul>
-     *     <li>Call the <code>validate()</code> method of each
-     *         {@link Validator} instance associated with this component.</li>
      *     <li>Call the <code>validate()</code> method of this component.</li>
-     *     <li>If any of the calls to a <code>validate()</code> method
-     *         returned <code>false</code>, set the <code>valid</code>
-     *         property of this component to <code>false</code>.</li>
+     *     <li>Set the <code>valid</code> property of this component
+     *         to the result returned from the <code>validate()</code>
+     *         method.</li>
      *     </ul></li>
      * </ul>
      *
@@ -1665,14 +1555,6 @@ public abstract class UIComponentBase implements UIComponent {
             if (!validate(context)) {
                 setValid(false);
                 result = false;
-            }
-            Iterator validators = getValidators();
-            while (validators.hasNext()) {
-                Validator validator = (Validator) validators.next();
-                if (!validator.validate(context, this)) {
-                    setValid(false);
-                    result = false;
-                }
             }
         } else {
             result = false;

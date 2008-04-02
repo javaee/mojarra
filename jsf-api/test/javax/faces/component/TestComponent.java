@@ -1,5 +1,5 @@
 /*
- * $Id: TestComponent.java,v 1.3 2002/12/03 01:04:59 craigmcc Exp $
+ * $Id: TestComponent.java,v 1.4 2003/01/16 20:24:24 craigmcc Exp $
  */
 
 /*
@@ -12,7 +12,7 @@ package javax.faces.component;
 
 import java.io.IOException;
 import javax.faces.context.FacesContext;
-import javax.faces.event.RequestEvent;
+import javax.faces.event.FacesEvent;
 
 
 /**
@@ -63,12 +63,6 @@ public class TestComponent extends UIComponentBase {
     }
 
 
-    public boolean processEvent(FacesContext context, RequestEvent event) {
-        trace("e-" + getComponentId());
-        return (super.processEvent(context, event));
-    }
-
-
     public boolean updateModel(FacesContext context) {
         trace("u-" + getComponentId());
         return (super.updateModel(context));
@@ -84,12 +78,6 @@ public class TestComponent extends UIComponentBase {
     public boolean processDecodes(FacesContext context) throws IOException {
         trace("pD-" + getComponentId());
         return (super.processDecodes(context));
-    }
-
-
-    public boolean processEvents(FacesContext context) {
-        trace("pE-" + getComponentId());
-        return (super.processEvents(context));
     }
 
 

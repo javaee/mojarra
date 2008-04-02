@@ -1,9 +1,9 @@
 /*
- * $Id: UIComponent.java,v 1.61 2003/01/08 18:35:53 eburns Exp $
+ * $Id: UIComponent.java,v 1.62 2003/01/16 20:24:16 craigmcc Exp $
  */
 
 /*
- * Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2002-2003 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -14,8 +14,8 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.Iterator;
 import javax.faces.context.FacesContext;
-import javax.faces.event.RequestEvent;
-import javax.faces.event.RequestEventHandler;
+import javax.faces.event.FacesEvent;
+import javax.faces.event.PhaseId;
 import javax.faces.render.Renderer;
 import javax.faces.validator.Validator;
 
@@ -151,14 +151,12 @@ public interface UIComponent extends Serializable {
 
 
     /**
-     * <p>Set the rendered attribute of this <code>UIComponent</code>.</p>
-     * 
-     * @param rendered If <code>true</code> render this component.
-     * Otherwise, do not render this component.
+     * <p>Return the parent <code>UIComponent</code> of this
+     * <code>UIComponent</code>, if any.</p>
      */
-    public void setRendered(boolean rendered);
+    public UIComponent getParent();
 
-    
+
     /**
      * <p>Return <code>true</code> if the value of the 'rendered' attribute 
      * is a Boolean representing <code>true</code> or <code>null</code>, 
@@ -168,12 +166,14 @@ public interface UIComponent extends Serializable {
 
 
     /**
-     * <p>Return the parent <code>UIComponent</code> of this
-     * <code>UIComponent</code>, if any.</p>
+     * <p>Set the rendered attribute of this <code>UIComponent</code>.</p>
+     * 
+     * @param rendered If <code>true</code> render this component.
+     * Otherwise, do not render this component.
      */
-    public UIComponent getParent();
+    public void setRendered(boolean rendered);
 
-
+    
     /**
      * <p>Return the {@link Renderer} type for this <code>UIComponent</code>
      * (if any).</p>
@@ -470,45 +470,6 @@ public interface UIComponent extends Serializable {
     public Iterator getFacetsAndChildren();
     
     
-    // ------------------------------------------ Request Event Handler Methods
-
-
-    /**
-     * <p>Add a {@link RequestEventHandler} instance to the set associated with
-     * this <code>UIComponent</code>.</p>
-     *
-     * @param handler The {@link RequestEventHandler} to add
-     *
-     * @exception NullPointerException if <code>handler</code>
-     *  is null
-     */
-    public void addRequestEventHandler(RequestEventHandler handler);
-
-
-    /**
-     * <p>Clear any {@link RequestEventHandler}s that have been registered for
-     * processing by this component.</p>
-     */
-    public void clearRequestEventHandlers();
-
-
-    /**
-     * <p>Return an <code>Iterator</code> over the {@link RequestEventHandler}s
-     * associated with this <code>UIComponent</code>.</p>
-     */
-    public Iterator getRequestEventHandlers();
-
-
-    /**
-     * <p>Remove a {@link RequestEventHandler} instance from the set associated with
-     * this <code>UIComponent</code>, if it was previously associated.
-     * Otherwise, do nothing.</p>
-     *
-     * @param handler The {@link RequestEventHandler} to remove
-     */
-    public void removeRequestEventHandler(RequestEventHandler handler);
-
-
     // ----------------------------------------------------- Validators Methods
 
 
@@ -552,31 +513,57 @@ public interface UIComponent extends Serializable {
 
 
     /**
+     * <p>Broadcast the specified {@link FacesEvent} to all registered
+     * event listeners who have expressed an interest in events of this
+     * type, for the specified {@link PhaseId}.  The order in which
+     * registered listeners are notified is implementation dependent.</p>
+     *
+     * <p>After all interested listeners have been notified, return
+     * <code>false</code> if this event does not have any listeners
+     * interested in this event in future phases of the request processing
+     * lifecycle.  Otherwise, return <code>true</code>.</p>
+     *
+     * @param event The {@link FacesEvent} to be broadcast
+     * @param phaseId The {@link PhaseId} of the current phase of the
+     *  request processing lifecycle
+     *
+     * @exception IllegalArgumentException if the implementation class
+     *  of this {@link FacesEvent} is not supported by this component
+     * @exception IllegalStateException if PhaseId.ANY_PHASE is passed
+     *  for the phase identifier
+     * @exception NullPointerException if <code>event</code> or
+     *  <code>phaseId</code> is <code>null</code>
+     */
+    public abstract boolean broadcast(FacesEvent event, PhaseId phaseId);
+
+
+    /**
      * <p>Decode the current state of this <code>UIComponent</code> from the
      * request contained in the specified {@link FacesContext}, and attempt
      * to convert this state information into an object of the required type
-     * for this component.  If conversion is successful, save the resulting
-     * object via a call to <code>setValue()</code>, and set the
-     * <code>valid</code> property of this component to <code>true</code>.
-     * If conversion is not successful:</p>
+     * for this component.  If conversion is successful:</p>
      * <ul>
-     * <li>Save the state information in such a way that encoding
+     * <li>Save the new local value of this component by calling
+     *     <code>setValue()</code> and passing the new value.</li>
+     * <li>Set the <code>valid</code> property of this component
+     *     to <code>true</code>.</li>
+     * </ul>
+     *
+     * <p>If conversion is not successful:</p>
+     * <ul>
+     * <li>Save state information in such a way that encoding
      *     can reproduce the previous input (even though it was syntactically
      *     or semantically incorrect)</li>
      * <li>Add an appropriate conversion failure error message by calling
      *     <code>context.addMessage()</code>.</li>
-     * <li>Set the <code>valid</code> property of this component
+     * <li>Set the <code>valid</code> property of this comonent
      *     to <code>false</code>.</li>
      * </ul>
      *
      * <p>During decoding, events may be enqueued for later processing
      * (by this component or some other component),  by calling
-     * <code>addRequestEvent()</code> on the associated {@link FacesContext}.
+     * <code>addFacesEvent()</code> on the associated {@link FacesContext}.
      * </p>
-     *
-     * <p>The default behavior of this method is to delegate to the
-     * associated {@link Renderer} if there is one; otherwise this method
-     * simply returns <code>true</code>.</p>
      *
      * @param context FacesContext for the request we are processing
      *
@@ -654,23 +641,6 @@ public interface UIComponent extends Serializable {
 
 
     /**
-     * <p>Process an individual event queued to this <code>UIComponent</code>.
-     * The default implementation does nothing, but can be overridden by
-     * subclasses of <code>UIComponent</code>.  Return <code>false</code> if
-     * lifecycle processing should proceed directly to the <em>Render
-     * Response</em> phase once all events have been processed for all
-     * components, or <code>true</code> for the normal lifecycle flow.</p>
-     *
-     * @param context FacesContext for the request we are processing
-     * @param event Event to be processed against this component
-     *
-     * @exception NullPointerException if <code>context</code> or
-     *  <code>event</code> is <code>null</code>
-     */
-    public boolean processEvent(FacesContext context, RequestEvent event);
-
-
-    /**
      * <p>Perform the following algorithm to update the model data
      * associated with this component, if any, as appropriate.</p>
      * <ul>
@@ -710,15 +680,16 @@ public interface UIComponent extends Serializable {
 
     /**
      * <p>Perform any correctness checks that this component wishes to perform
-     * on itself.  This method will be called, along with calls to all
-     * {@link Validator}s registered on this component, during the
-     * <em>Process Validations</em> phase of the request processing lifecycle.
-     * If errors are encountered, appropriate <code>Message</code> instances
-     * should be added to the {@link FacesContext} for the current request,
-     * and <code>setValid(false)</code> should be called.</p>
+     * on itself.  This method will be called during the
+     * <em>Process Validations</em> phase of the request processing
+     * lifecycle.  If errors are encountered, appropriate <code>Message</code>
+     * instances should be added to the {@link FacesContext} for the current
+     * request.</p>
      *
      * @param context FacesContext for the request we are processing
      *
+     * @return <code>false</code> if the <code>valid</code> property
+     *  is <code>false</code>, indicating that a validation failure occurred
      * @return <code>true</code> if all validations performed by this
      *  method passed successfully, or <code>false</code> if one or more
      *  validations performed by this method failed
@@ -762,58 +733,20 @@ public interface UIComponent extends Serializable {
 
     /**
      * <p>Perform the request component tree processing required by the
-     * <em>Handle Request Events</em> phase of the request processing
-     * lifecycle for all facets of this component, all children of this
-     * component, and this component itself, as follows.</p>
-     * <ul>
-     * <li>Call the <code>processEvents()</code> method of all facets
-     *     of this component, in the order their names would be
-     *     returned by a call to <code>getFacetNames()</code>.</li>
-     * <li>Call the <code>processEvents()</code> method of all children
-     *     of this component, in the order they would be returned
-     *     by a call to <code>getChildren()</code>.</li>
-     * <li>For each event queued to this component:
-     *     <ul>
-     *     <li>Call the <code>processEvent()</code> method of each registered
-     *         {@link RequestEventHandler} for this component.</li>
-     *     <li>Call the <code>processEvent()</code> method of this
-     *         component.</li>
-     *     </ul></li>
-     * </ul>
-     *
-     * <p>Return <code>false</code> if any <code>processEvents()</code> or
-     * <code>processEvent()</code> method call returned <code>false</code>.
-     * Otherwise, return <code>true</code>.</p>
-     *
-     * @param context {@link FacesContext} for the request we are processing
-     *
-     * @exception NullPointerException if <code>context</code>
-     *  is <code>null</code>
-     */
-    public boolean processEvents(FacesContext context);
-
-
-    /**
-     * <p>Perform the request component tree processing required by the
      * <em>Process Validations</em> phase of the request processing
      * lifecycle for all facets of this component, all children of this
      * component, and this component itself, as follows.</p>
      * <ul>
      * <li>Call the <code>processValidators()</code> method of all facets
-     *     of this component, in the order their names would be
-     *     returned by a call to <code>getFacetNames()</code>.</li>
-     * <li>Call the <code>processValidators()</code> method of all
-     *     children of this component, in the order they would be
-     *     returned by a call to <code>getChildren()</code>.</li>
+     *     and children of this component, in the order determined
+     *     by a call to <code>getFacetsAndChildren()</code>.</li>
      * <li>If the <code>valid</code> property of this component is
      *     currently <code>true</code>:
      *     <ul>
-     *     <li>Call the <code>validate()</code> method of each
-     *         {@link Validator} instance associated with this component.</li>
      *     <li>Call the <code>validate()</code> method of this component.</li>
-     *     <li>If any of the calls to a <code>validate()</code> method
-     *         returned <code>false</code>, set the <code>valid</code>
-     *         property of this component to <code>false</code>.</li>
+     *     <li>Set the <code>valid</code> property of this component
+     *         to the result returned from the <code>validate()</code>
+     *         method.</li>
      *     </ul></li>
      * </ul>
      *

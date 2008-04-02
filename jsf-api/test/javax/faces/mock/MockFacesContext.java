@@ -1,5 +1,5 @@
 /*
- * $Id: MockFacesContext.java,v 1.1 2002/12/03 01:05:01 craigmcc Exp $
+ * $Id: MockFacesContext.java,v 1.2 2003/01/16 20:24:26 craigmcc Exp $
  */
 
 /*
@@ -14,6 +14,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Locale;
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
@@ -22,7 +24,7 @@ import javax.faces.context.Message;
 import javax.faces.context.ResponseStream;
 import javax.faces.context.ResponseWriter;
 import javax.faces.event.ApplicationEvent;
-import javax.faces.event.RequestEvent;
+import javax.faces.event.FacesEvent;
 import javax.faces.lifecycle.ApplicationHandler;
 import javax.faces.lifecycle.ViewHandler;
 import javax.faces.tree.Tree;
@@ -35,7 +37,11 @@ import javax.servlet.http.HttpSession;
 // Mock Object for FacesContext
 public class MockFacesContext extends FacesContext {
 
-    private ArrayList applicationEvents = new ArrayList();
+    public MockFacesContext() {
+        setCurrentInstance(this);
+    }
+
+    private List applicationEvents = new ArrayList();
 
     public Iterator getApplicationEvents() {
         return (applicationEvents.iterator());
@@ -47,6 +53,13 @@ public class MockFacesContext extends FacesContext {
 
     public ApplicationHandler getApplicationHandler() {
         throw new UnsupportedOperationException();
+    }
+
+    private List facesEvents = new LinkedList();
+
+    public Iterator getFacesEvents() {
+        // FIXME - specialized iterator behavior is missing
+        return (facesEvents.iterator());
     }
 
     public HttpSession getHttpSession() {
@@ -72,26 +85,6 @@ public class MockFacesContext extends FacesContext {
     }
 
     public Iterator getMessages(UIComponent component) {
-        throw new UnsupportedOperationException();
-    }
-
-    // key=component, value=ArrayList of RequestEvents
-    private HashMap requestEvents = new HashMap();
-
-    public Iterator getRequestEvents(UIComponent component) {
-        ArrayList list = (ArrayList) requestEvents.get(component);
-        if (list == null) {
-            return (Collections.EMPTY_LIST.iterator());
-        } else {
-            return (list.iterator());
-        }
-    }
-
-    public int getRequestEventsCount() {
-        throw new UnsupportedOperationException();
-    }
-
-    public int getRequestEventsCount(UIComponent component) {
         throw new UnsupportedOperationException();
     }
 
@@ -174,20 +167,24 @@ public class MockFacesContext extends FacesContext {
     }
 
     public void addApplicationEvent(ApplicationEvent event) {
+        if (event == null) {
+            throw new NullPointerException();
+        }
         applicationEvents.add(event);
     }
 
-    public void addMessage(UIComponent component, Message message) {
-        throw new UnsupportedOperationException();
+    public void addFacesEvent(FacesEvent event) {
+        if (event == null) {
+            throw new NullPointerException();
+        }
+        facesEvents.add(event);
     }
 
-    public void addRequestEvent(UIComponent component, RequestEvent event) {
-        ArrayList list = (ArrayList) requestEvents.get(component);
-        if (list == null) {
-            list = new ArrayList();
-            requestEvents.put(component, list);
+    public void addMessage(UIComponent component, Message message) {
+        if (message == null) {
+            throw new NullPointerException();
         }
-        list.add(event);
+        throw new UnsupportedOperationException();
     }
 
     public Class getModelType(String modelReference) {
@@ -204,8 +201,8 @@ public class MockFacesContext extends FacesContext {
 
     public void release() {
         applicationEvents.clear();
+        facesEvents.clear();
         locale = null;
-        requestEvents.clear();
         requestTree = null;
         responseStream = null;
         responseTree = null;

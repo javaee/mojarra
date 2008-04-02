@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBaseTestCase.java,v 1.1 2002/12/03 01:04:59 craigmcc Exp $
+ * $Id: UIComponentBaseTestCase.java,v 1.2 2003/01/16 20:24:24 craigmcc Exp $
  */
 
 /*
@@ -14,8 +14,6 @@ import java.io.IOException;
 import java.util.Iterator;
 import javax.faces.context.FacesContext;
 import javax.faces.event.FacesEvent;
-import javax.faces.event.RequestEvent;
-import javax.faces.event.RequestEventHandler;
 import javax.faces.validator.Validator;
 import junit.framework.TestCase;
 import junit.framework.Test;
@@ -123,16 +121,16 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
         child2.addChild(child2b);
         checkChildCount(child2, 2);
 
-        // Enqueue a single RequestEvent for each component
-        context.addRequestEvent(component, new RequestEvent(component));
-        context.addRequestEvent(facet1, new RequestEvent(component));
-        context.addRequestEvent(facet2, new RequestEvent(component));
-        context.addRequestEvent(facet3, new RequestEvent(component));
-        context.addRequestEvent(child1, new RequestEvent(component));
-        context.addRequestEvent(child2, new RequestEvent(component));
-        context.addRequestEvent(child3, new RequestEvent(component));
-        context.addRequestEvent(child2a, new RequestEvent(component));
-        context.addRequestEvent(child2b, new RequestEvent(component));
+        // Enqueue a single FacesEvent for each component
+        context.addFacesEvent(new FacesEvent(component));
+        context.addFacesEvent(new FacesEvent(facet1));
+        context.addFacesEvent(new FacesEvent(facet2));
+        context.addFacesEvent(new FacesEvent(facet3));
+        context.addFacesEvent(new FacesEvent(child1));
+        context.addFacesEvent(new FacesEvent(child2));
+        context.addFacesEvent(new FacesEvent(child3));
+        context.addFacesEvent(new FacesEvent(child2a));
+        context.addFacesEvent(new FacesEvent(child2b));
 
         // Test processDecodes()
         TestComponent.trace(null);
@@ -143,13 +141,6 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
         }
         assertEquals("processDecodes",
                      lifecycleTrace("pD", "d"),
-                     TestComponent.trace());
-
-        // Test processEvents()
-        TestComponent.trace(null);
-        component.processEvents(context);
-        assertEquals("processEvents",
-                     lifecycleTrace("pE", "e"),
                      TestComponent.trace());
 
         // Test processValidators()
