@@ -1,5 +1,5 @@
 /*
- * $Id: FactoryFinder.java,v 1.33 2007/01/29 18:02:52 rlubke Exp $
+ * $Id: FactoryFinder.java,v 1.34 2007/01/29 22:24:55 rlubke Exp $
  */
 
 /*
@@ -40,7 +40,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
 import java.lang.reflect.Constructor;
@@ -423,7 +422,6 @@ public final class FactoryFinder {
         Object result = null;
         String curImplClass;
         int len;
-        int i = 0;
 
         // step 1.
         if (null != implementations &&
@@ -466,8 +464,7 @@ public final class FactoryFinder {
         // Check for a services definition
         String result = null;
         BufferedReader reader = null;
-        String resourceName = "META-INF/services/" + factoryName;
-        Properties props = null;
+        String resourceName = "META-INF/services/" + factoryName;        
         InputStream stream = null;
         try {
             stream = classLoader.getResourceAsStream(resourceName);
@@ -482,9 +479,6 @@ public final class FactoryFinder {
                     reader = new BufferedReader(new InputStreamReader(stream));
                 }
                 result = reader.readLine();
-                reader.close();
-                reader = null;
-                stream = null;
             }
         } catch (IOException e) {
         } catch (SecurityException e) {
