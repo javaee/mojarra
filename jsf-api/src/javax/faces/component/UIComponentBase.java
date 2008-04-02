@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.130 2006/03/07 18:28:09 edburns Exp $
+ * $Id: UIComponentBase.java,v 1.131 2006/03/08 19:06:36 rlubke Exp $
  */
 
 /*
@@ -30,6 +30,16 @@
 package javax.faces.component;
 
 
+import javax.el.ELException;
+import javax.el.ValueExpression;
+import javax.faces.FacesException;
+import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
+import javax.faces.event.AbortProcessingException;
+import javax.faces.event.FacesEvent;
+import javax.faces.event.FacesListener;
+import javax.faces.render.Renderer;
+
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
@@ -51,17 +61,6 @@ import java.util.Set;
 import java.util.WeakHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import javax.el.ELContext;
-import javax.el.ELException;
-import javax.el.ValueExpression;
-import javax.faces.FacesException;
-import javax.faces.context.FacesContext;
-import javax.faces.el.ValueBinding;
-import javax.faces.event.AbortProcessingException;
-import javax.faces.event.FacesEvent;
-import javax.faces.event.FacesListener;
-import javax.faces.render.Renderer;
 
 /**
  * <p><strong>UIComponentBase</strong> is a convenience base class that
@@ -99,8 +98,9 @@ public abstract class UIComponentBase extends UIComponent {
      * container's class loader that is a parent to webapp class loaders,
      * references to the classes will eventually expire.</p>
      */
-    private static WeakHashMap<String,Map<String,PropertyDescriptor>> 
-            descriptors = new WeakHashMap<String,Map<String,PropertyDescriptor>>();
+    private static Map<Class<?>, Map<String, PropertyDescriptor>>
+          descriptors =
+          new WeakHashMap<Class<?>, Map<String, PropertyDescriptor>>();
 
     /**
      * Reference to the map of <code>PropertyDescriptor</code>s for this class
@@ -118,35 +118,35 @@ public abstract class UIComponentBase extends UIComponent {
     }
 
     private void populateDescriptorsMapIfNecessary() {
-        String className = this.getClass().getName();
-        pdMap = descriptors.get(className);
+        Class<?> clazz = this.getClass();
+        pdMap = descriptors.get(clazz);
         if (null != pdMap) {
             return;
         }
-        if (null == pdMap) {
-            // load the property descriptors for this class.
-            PropertyDescriptor pd[] = getPropertyDescriptors();
-            if (pd != null) {
-                pdMap = new HashMap<String, PropertyDescriptor>(pd.length);
-                for (int i = 0; i < pd.length; i++) {
-                    pdMap.put(pd[i].getName(), pd[i]);    
-                }
-                if (log.isLoggable(Level.FINE)) {
-                    log.log(Level.FINE, "fine.component.populating_descriptor_map",
-                            new Object[] { className, 
-                            Thread.currentThread().getName() });
-                }
 
-                // Check again
-                Map<String,PropertyDescriptor> reCheckMap = 
-                        descriptors.get(className);
-                if (null != reCheckMap) {
-                    return;
-                }
-                descriptors.put(className,pdMap);
+        // load the property descriptors for this class.
+        PropertyDescriptor pd[] = getPropertyDescriptors();
+        if (pd != null) {
+            pdMap = new WeakHashMap<String, PropertyDescriptor>(pd.length);
+            for (PropertyDescriptor aPd : pd) {
+                pdMap.put(aPd.getName(), aPd);
             }
-            
+            if (log.isLoggable(Level.FINE)) {
+                log.log(Level.FINE, "fine.component.populating_descriptor_map",
+                        new Object[]{clazz,
+                                     Thread.currentThread().getName()});
+            }
+
+            // Check again
+            Map<String, PropertyDescriptor> reCheckMap =
+                  descriptors.get(clazz);
+            if (null != reCheckMap) {
+                return;
+            }
+            descriptors.put(clazz, pdMap);
         }
+
+
     }
 
     /**
@@ -160,7 +160,7 @@ public abstract class UIComponentBase extends UIComponent {
      */
     private PropertyDescriptor getPropertyDescriptor(String name) {
         if (pdMap != null) {
-            return ((PropertyDescriptor)pdMap.get(name));
+            return (pdMap.get(name));
         }
         return (null);
     }

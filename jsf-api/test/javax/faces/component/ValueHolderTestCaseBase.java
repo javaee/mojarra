@@ -1,5 +1,5 @@
 /*
- * $Id: ValueHolderTestCaseBase.java,v 1.12 2006/03/07 18:28:10 edburns Exp $
+ * $Id: ValueHolderTestCaseBase.java,v 1.13 2006/03/08 19:06:36 rlubke Exp $
  */
 
 /*
@@ -30,15 +30,17 @@
 package javax.faces.component;
 
 
-import java.beans.PropertyDescriptor;
-import java.util.WeakHashMap;
-import java.lang.reflect.Field;
-import java.util.Map;
+import javax.faces.component.html.HtmlInputText;
 import javax.faces.convert.Converter;
 import javax.faces.convert.LongConverter;
 import javax.faces.convert.NumberConverter;
 import javax.faces.convert.ShortConverter;
-import javax.faces.component.html.HtmlInputText;
+
+import java.beans.PropertyDescriptor;
+import java.lang.reflect.Field;
+import java.util.Map;
+import java.util.WeakHashMap;
+
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
@@ -169,8 +171,9 @@ public abstract class ValueHolderTestCaseBase extends UIComponentBaseTestCase {
     private void clearDescriptors() throws Exception {
         Field descriptorsField = UIComponentBase.class.getDeclaredField("descriptors");
         descriptorsField.setAccessible(true);
-        WeakHashMap<String,Map<String,PropertyDescriptor>> descriptors = 
-                (WeakHashMap) descriptorsField.get(null);
+        WeakHashMap<Class<?>, Map<String, PropertyDescriptor>> descriptors =
+              (WeakHashMap<Class<?>, Map<String, PropertyDescriptor>>) descriptorsField
+                    .get(null);
         descriptors.clear();        
     }
 
