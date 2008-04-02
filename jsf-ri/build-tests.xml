@@ -101,6 +101,7 @@
     <property name="password" value="tomcat"/>
     <property name="host" value="localhost"/>
     <property name="port" value="8080"/>
+    <property name="appserver.domain" value="domain1" />
 
     <property name="url"      value="http://localhost:8080/manager"/>
 
@@ -451,7 +452,7 @@
 
     <target description="Deploy web applications"  name="deploy">   
        <copy file="${basedir}/${build.home}/test.war" 
-           todir="${tomcat.home}/domains/domain1/autodeploy"/>        
+           todir="${tomcat.home}/domains/${appserver.domain}/autodeploy"/>        
 	<sleep seconds="60"/> 
   </target>
 </project>
