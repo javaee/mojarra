@@ -70,8 +70,8 @@ public class AreaSelectedHandler implements AreaSelectedListener {
     public AreaSelectedHandler ( ) {
 
         locales = new HashMap();
-    	locales.put("NAmericas", Locale.ENGLISH);
-	locales.put("SAmericas", new Locale("es","es"));
+    	locales.put("NAmerica", Locale.ENGLISH);
+	locales.put("SAmerica", new Locale("es","es"));
 	locales.put("Germany", Locale.GERMAN);
 	locales.put("Finland", new Locale("fi","fi"));
 	locales.put("France", Locale.FRENCH); 	
