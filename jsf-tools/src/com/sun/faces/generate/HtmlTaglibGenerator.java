@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.HashMap;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -26,9 +27,13 @@ public class HtmlTaglibGenerator extends GenerateTagBase implements TaglibGenera
     //
     private List valueBindingEnabledProperties = null;
 
+    // This List holds component property names which are "method
+    // binding enabled"
+    private List methodBindingEnabledProperties = null;
+
     // A component in these lists signifies that the component is a ValueHolder or
     // ConvertibleValueHolder;  This is used to determine if we generate ValueHolder
-    // ConvertibleValueHolder code in "overrideProperties" method;
+    // ConvertibleValueHolder code in "setProperties" method;
     //
     private List valueHolderComponents;
     private List convertibleValueHolderComponents;
@@ -57,7 +62,6 @@ public class HtmlTaglibGenerator extends GenerateTagBase implements TaglibGenera
 	convertibleValueHolderComponents.add("UIOutput");
 
 	valueBindingEnabledProperties = new ArrayList();
-	valueBindingEnabledProperties.add("action");
 	valueBindingEnabledProperties.add("immediate");
 	valueBindingEnabledProperties.add("value");
 	valueBindingEnabledProperties.add("first");
@@ -70,6 +74,13 @@ public class HtmlTaglibGenerator extends GenerateTagBase implements TaglibGenera
 	valueBindingEnabledProperties.add("globalOnly");
 	valueBindingEnabledProperties.add("converter");
 	valueBindingEnabledProperties.add("URL");
+
+	methodBindingEnabledProperties = new ArrayList();
+	methodBindingEnabledProperties.add("action");
+	methodBindingEnabledProperties.add("actionListener");
+	methodBindingEnabledProperties.add("validator");
+	methodBindingEnabledProperties.add("valueChangeListener");
+
     }
 
     // Not that the following methods simply return a global default value now.  When we
@@ -131,8 +142,11 @@ public class HtmlTaglibGenerator extends GenerateTagBase implements TaglibGenera
 	sb.append("import com.sun.faces.util.*;\n");
 	sb.append("import javax.faces.component.*;\n");
 	sb.append("import javax.faces.context.FacesContext;\n");
+	sb.append("import javax.faces.event.ActionEvent;\n");
+	sb.append("import javax.faces.event.ValueChangeEvent;\n");
 	sb.append("import javax.faces.convert.Converter;\n");
 	sb.append("import javax.faces.el.ValueBinding;\n");
+	sb.append("import javax.faces.el.MethodBinding;\n");
 	sb.append("import javax.faces.webapp.UIComponentTag;\n");
 	sb.append("import javax.servlet.jsp.JspException;\n");
 	sb.append("import org.apache.commons.logging.*;\n");
@@ -175,7 +189,7 @@ public class HtmlTaglibGenerator extends GenerateTagBase implements TaglibGenera
     }
 
     /**
-     * Generate general methods that may be used in the tag handler (ex: overrideProperties);
+     * Generate general methods that may be used in the tag handler (ex: setProperties);
      */
     public String generateGeneralMethods(List rendererAttributeNames, 
 	List componentAttributeNames, String rendererType, String componentRendererType) {
@@ -189,8 +203,8 @@ public class HtmlTaglibGenerator extends GenerateTagBase implements TaglibGenera
 	result.append("    public String getComponentType() { return ");
 	result.append("\""+componentRendererType+"\"; }\n\n");
 
-	result.append("    public void overrideProperties(UIComponent component) {\n");
-	result.append("        super.overrideProperties(component);\n");
+	result.append("    protected void setProperties(UIComponent component) {\n");
+	result.append("        super.setProperties(component);\n");
 	String component = "UI"+componentType;
 	result.append("        "+component+" "+componentType.toLowerCase()+
 	    " = (UI"+componentType+ ")component;\n\n");
@@ -200,7 +214,7 @@ public class HtmlTaglibGenerator extends GenerateTagBase implements TaglibGenera
 	    result.append("                if (isValueReference(value)) {\n");
 	    result.append("                    ValueBinding vb = \n");
 	    result.append("                        FacesContext.getCurrentInstance().getApplication().\n");
-	    result.append("                        getValueBinding(value);\n");
+	    result.append("                        createValueBinding(value);\n");
 	    result.append("                    "+componentType.toLowerCase()+".setValueBinding(");
 	    result.append("\""+"value\", vb);\n"); 
 	    result.append("                } else {\n"); 
@@ -215,7 +229,7 @@ public class HtmlTaglibGenerator extends GenerateTagBase implements TaglibGenera
 	    result.append("                if (isValueReference(converter)) {\n");
 	    result.append("                    ValueBinding vb = \n");
 	    result.append("                        FacesContext.getCurrentInstance().getApplication().\n");
-	    result.append("                        getValueBinding(converter);\n");
+	    result.append("                        createValueBinding(converter);\n");
 	    result.append("                    "+componentType.toLowerCase()+".setValueBinding(");
 	    result.append("\""+"converter\", vb);\n"); 
 	    result.append("                } else {\n"); 
@@ -234,7 +248,7 @@ public class HtmlTaglibGenerator extends GenerateTagBase implements TaglibGenera
 	    result.append(info);
 	}
 	info = generateOverrideMethodFromAttributes(componentAttributeNames, rendererType,
-	    componentRendererType, "component", generated);
+	    componentRendererType, "binding", generated);
 	if (info != null) {
 	    result.append(info);
 	}
@@ -250,7 +264,7 @@ public class HtmlTaglibGenerator extends GenerateTagBase implements TaglibGenera
     }
 
     /**
-     * Generate general methods that may be used in the tag handler (ex: overrideProperties);
+     * Generate general methods that may be used in the tag handler (ex: setProperties);
      * This method designed to handle generation based on component type only.  It is used
      * when generating tag class information from components not associated with any renderer.
      */
@@ -263,8 +277,8 @@ public class HtmlTaglibGenerator extends GenerateTagBase implements TaglibGenera
 	result.append("    public String getComponentType() { return ");
 	result.append("\""+componentType+"\"; }\n\n");
 
-	result.append("    public void overrideProperties(UIComponent component) {\n");
-	result.append("        super.overrideProperties(component);\n");
+	result.append("    protected void setProperties(UIComponent component) {\n");
+	result.append("        super.setProperties(component);\n");
 	String component = "UI"+componentType;
 	result.append("        "+component+" "+componentType.toLowerCase()+
 	    " = (UI"+componentType+ ")component;\n\n");
@@ -274,7 +288,7 @@ public class HtmlTaglibGenerator extends GenerateTagBase implements TaglibGenera
 	    result.append("                if (isValueReference(value)) {\n");
 	    result.append("                    ValueBinding vb = \n");
 	    result.append("                        FacesContext.getCurrentInstance().getApplication().\n");
-	    result.append("                        getValueBinding(value);\n");
+	    result.append("                        createValueBinding(value);\n");
 	    result.append("                    "+componentType.toLowerCase()+".setValueBinding(");
 	    result.append("\""+"value\", vb);\n"); 
 	    result.append("                } else {\n"); 
@@ -289,7 +303,7 @@ public class HtmlTaglibGenerator extends GenerateTagBase implements TaglibGenera
 	    result.append("                if (isValueReference(converter)) {\n");
 	    result.append("                    ValueBinding vb = \n");
 	    result.append("                        FacesContext.getCurrentInstance().getApplication().\n");
-	    result.append("                        getValueBinding(converter);\n");
+	    result.append("                        createValueBinding(converter);\n");
 	    result.append("                    "+componentType.toLowerCase()+".setValueBinding(");
 	    result.append("\""+"converter\", vb);\n"); 
 	    result.append("                } else {\n"); 
@@ -319,13 +333,7 @@ public class HtmlTaglibGenerator extends GenerateTagBase implements TaglibGenera
     }
 
     public String generateGlobalAttributes() {
-	return (
-		"    <attribute>\n" +
-		"      <name>override</name>\n" +
-		"      <required>false</required>\n" +
-		"      <rtexprvalue>false</rtexprvalue>\n" +
-		"    </attribute>\n");
-	
+	return ("");
     }
 
 
@@ -356,7 +364,7 @@ public class HtmlTaglibGenerator extends GenerateTagBase implements TaglibGenera
 	    
 	    // these are already handled in javax.faces.webapp.UIComponentTag
 	    //
-	    if (attributeName.equals("componentRef") ||
+	    if (attributeName.equals("binding") ||
 		attributeName.equals("rendered")) {
 		continue;
 	    }
@@ -389,7 +397,7 @@ public class HtmlTaglibGenerator extends GenerateTagBase implements TaglibGenera
 
 	    // don't generate an Ivar for those things that are already
 	    // ivars in UIComponentTag.
-	    if (!(attributeName.equals("componentRef") ||
+	    if (!(attributeName.equals("binding") ||
 		  attributeName.equals("id") || 
 		  attributeName.equals("override") ||
 		  attributeName.equals("rendered"))) {
@@ -400,7 +408,8 @@ public class HtmlTaglibGenerator extends GenerateTagBase implements TaglibGenera
 		//
 		if (isRendererAttribute) {
 		    result.append("    private java.lang.String "+ivar);
-		} else if (valueBindingEnabledProperties.contains(attributeName)) {
+		} else if (valueBindingEnabledProperties.contains(attributeName) || 
+			   methodBindingEnabledProperties.contains(attributeName)) {
 		    result.append("    private java.lang.String "+ivar);
 		} else {
 		    result.append("    private "+attributeClass+" "+ivar);
@@ -433,7 +442,7 @@ public class HtmlTaglibGenerator extends GenerateTagBase implements TaglibGenera
 	result.append("\n\n    //\n    // Setter Methods\n    //\n");
 	for (int i=0; i<attributeNames.size(); i++) {
 	    attributeName = (String)attributeNames.get(i);
-	    if (attributeName.equals("componentRef") || attributeName.equals("id") ||
+	    if (attributeName.equals("binding") || attributeName.equals("id") ||
 		attributeName.equals("rendered")) {
 		continue;
 	    }
@@ -473,7 +482,8 @@ public class HtmlTaglibGenerator extends GenerateTagBase implements TaglibGenera
 	    result.append("    public void set" + setWhat + "(");
 	    if (isRendererAttribute) {
 	        result.append("java.lang.String " + ivar + ") {\n");
-	    } else if (valueBindingEnabledProperties.contains(attributeName)) {
+	    } else if (valueBindingEnabledProperties.contains(attributeName) ||
+		       methodBindingEnabledProperties.contains(attributeName)) {
 	        result.append("java.lang.String " + ivar + ") {\n");
 	    } else {
 		result.append(attributeClass + " " + ivar + ") {\n");
@@ -487,7 +497,7 @@ public class HtmlTaglibGenerator extends GenerateTagBase implements TaglibGenera
     }
 
     /**
-     * Generate override property method from a List of attribute names, 
+     * Generate set property method from a List of attribute names, 
      * the type (component.renderer).
      * The "generated" Map contains attribute name|attribute type mappings, and is used to
      * ensure we don't use the same attribute for generation more than once.
@@ -529,7 +539,7 @@ public class HtmlTaglibGenerator extends GenerateTagBase implements TaglibGenera
 	        result.append("        if ("+ivar+" != null) {\n");
 		result.append("            if (isValueReference("+ivar+")) {\n");
 		result.append("                ValueBinding vb = FacesContext.getCurrentInstance().");
-		result.append("getApplication().getValueBinding("+ivar+");\n");
+		result.append("getApplication().createValueBinding("+ivar+");\n");
                 result.append("                "+componentType.toLowerCase());
 		if (ivar.equals("_for")) {
 	            result.append(".setValueBinding(\""+"_"+vbKey+"\", vb);\n");
@@ -572,7 +582,7 @@ public class HtmlTaglibGenerator extends GenerateTagBase implements TaglibGenera
 		result.append("        }\n");
 	    } else {
 	        if (attributeName.equals("id") || 
-		    attributeName.equals("componentRef") ||
+		    attributeName.equals("binding") ||
 		    attributeName.equals("rendered") || attributeName.equals("converter") ||
 		    attributeName.equals("value") || attributeName.equals("valueRef")) {
 		    continue;
@@ -581,7 +591,7 @@ public class HtmlTaglibGenerator extends GenerateTagBase implements TaglibGenera
 	            result.append("        if ("+ivar+" != null) {\n");
 		    result.append("            if (isValueReference("+ivar+")) {\n");
 		    result.append("                ValueBinding vb = FacesContext.getCurrentInstance().");
-		    result.append("getApplication().getValueBinding("+ivar+");\n");
+		    result.append("getApplication().createValueBinding("+ivar+");\n");
                     result.append("                "+componentType.toLowerCase());
 		    result.append(".setValueBinding(\""+vbKey+"\", vb);\n");
 		    result.append("            } else {\n");
@@ -599,7 +609,12 @@ public class HtmlTaglibGenerator extends GenerateTagBase implements TaglibGenera
 		    }
 		    result.append("            }\n");
 		    result.append("        }\n");
-	        } else {
+	        }
+		else if (methodBindingEnabledProperties.contains(attributeName)) {
+		    generateMethodBindingSetter(ivar, attributeName, 
+						componentType, result);
+		}
+		else {
 	            result.append("        "+componentType.toLowerCase()+".set" + 
 		        Character.toUpperCase(attributeName.charAt(0)) +
 		        attributeName.substring(1) + "(" + ivar + ");\n");
@@ -628,7 +643,7 @@ public class HtmlTaglibGenerator extends GenerateTagBase implements TaglibGenera
 	        vbKey = "value";
 	    }
 
-	    if (attributeName.equals("componentRef") || attributeName.equals("id") ||
+	    if (attributeName.equals("binding") || attributeName.equals("id") ||
 	        attributeName.equals("rendered") || attributeName.equals("converter") ||
 		attributeName.equals("value") || attributeName.equals("valueRef")) {
 		continue;
@@ -637,7 +652,7 @@ public class HtmlTaglibGenerator extends GenerateTagBase implements TaglibGenera
 	        result.append("        if ("+ivar+" != null) {\n");
 	        result.append("            if (isValueReference("+ivar+")) {\n");
 		result.append("                ValueBinding vb = FacesContext.getCurrentInstance().");
-		result.append("getApplication().getValueBinding("+ivar+");\n");
+		result.append("getApplication().createValueBinding("+ivar+");\n");
                 result.append("                "+componentType.toLowerCase());
 		result.append(".setValueBinding(\""+vbKey+"\", vb);\n");
 		result.append("            } else {\n");
@@ -707,5 +722,48 @@ public class HtmlTaglibGenerator extends GenerateTagBase implements TaglibGenera
 
     protected Log getLog() {
 	return log;
+    }
+
+    private void generateMethodBindingSetter(String ivar, 
+					     String attributeName, 
+					     String componentType, 
+					     StringBuffer result) {
+	// special case this, we need to generate a
+	// MethodBinding instance inner class.
+	if (ivar.equals("action")) {
+	    result.append("        if ("+ivar+" != null) {\n");
+	    result.append("            if (isValueReference("+ivar+")) {\n");
+	    result.append("                MethodBinding vb = FacesContext.getCurrentInstance().");
+	    result.append("getApplication().createMethodBinding("+ivar+", null);\n");
+	    result.append("                "+componentType.toLowerCase());
+	    result.append(".setAction(vb);\n");
+	    result.append("            } else {\n");
+	    result.append("                final String outcome = " + ivar + ";\n");
+	    result.append("                MethodBinding vb = Util.createConstantMethodBinding("+ivar+");\n");
+	    result.append("                "+componentType.toLowerCase()+".setAction(vb);\n");
+	    result.append("            }\n");
+	    result.append("        }\n");
+	}
+	else {
+	    HashMap signatureMap = new HashMap(3);
+	    signatureMap.put("actionListener",
+			     "Class args[] = { ActionEvent.class };");
+	    signatureMap.put("validator",
+			     "Class args[] = { FacesContext.class, UIInput.class };");
+	    signatureMap.put("valueChangeListener",
+			     "Class args[] = { ValueChangeEvent.class };");
+	    result.append("        if ("+ivar+" != null) {\n");
+	    result.append("            if (isValueReference("+ivar+")) {\n");
+	    result.append("                " + signatureMap.get(ivar) + "\n");
+	    result.append("                MethodBinding vb = FacesContext.getCurrentInstance().");
+	    result.append("getApplication().createMethodBinding("+ivar+", args);\n");
+	    result.append("                "+componentType.toLowerCase());
+	    result.append(".set" + Character.toUpperCase(ivar.charAt(0)) + ivar.substring(1) + "(vb);\n");
+	    result.append("            } else {\n");
+	    result.append("              Object params [] = {" + ivar + "};\n");
+	    result.append("              throw new javax.faces.FacesException(Util.getExceptionMessage(Util.INVALID_EXPRESSION_ID, params));\n");
+	    result.append("            }\n");
+	    result.append("        }\n");
+	}
     }
 }

@@ -1,5 +1,5 @@
 /*
- * $Id: GenerateConcreteClasses.java,v 1.7 2003/11/18 14:36:02 rlubke Exp $
+ * $Id: GenerateConcreteClasses.java,v 1.8 2003/12/17 15:16:36 rkitain Exp $
  */
 
 /*
@@ -248,9 +248,15 @@ public class GenerateConcreteClasses extends GenerateBase {
 	    // if it's a primitive
 	    if (isPrimitive = isPrimitive(attrClass)) {
 		// assign the default value
+		// special case.  The escape attribute must default to true.
+		if (ivar.equals("escape")) {
+		    result.append(" = true;\n");
+		}
+		else {
 		result.append(" = " + 
 			      (String) defaultPrimitiveValues.get(attrClass) +
 			      ";\n");
+		}
 		result.append("  private boolean " + ivar + 
 			      "Set = false");
 	    }
@@ -294,9 +300,14 @@ public class GenerateConcreteClasses extends GenerateBase {
 		result.append("          return (this." + ivar + ");\n");
 		result.append("      }\n");
 		result.append("      ValueBinding vb = null;\n");
+		if (ivar.equals("escape")) {
+		    result.append("      " + attrClass + " result = true;\n");
+		}
+		else {
 		result.append("      " + attrClass + " result = " + 
 			      (String) defaultPrimitiveValues.get(attrClass) +
 			      ";\n");
+		}
 		result.append("      if (null != (vb = getValueBinding(\"" +
 			      ivar + "\"))) {\n");
 		result.append("          result = ((" +

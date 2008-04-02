@@ -1,5 +1,5 @@
 /*
- * $Id: MessageFactory.java,v 1.2 2003/10/30 21:21:27 eburns Exp $
+ * $Id: MessageFactory.java,v 1.3 2003/12/17 15:16:39 rkitain Exp $
  */
 
 /*
@@ -50,9 +50,6 @@ import java.io.IOException;
     // Attribute Instance Variables
 
     // Relationship Instance Variables
-
-    private static Application application = null;
-     
 
     //
     // Constructors and Initializers    
@@ -112,11 +109,9 @@ import java.io.IOException;
 					   Object params[]) {
 	FacesMessage result = null;
 	String 
-	    severityStr = null,
 	    summary = null,
 	    detail = null,
 	    bundleName = null;
-	FacesMessage.Severity severity = null;
 	ResourceBundle bundle = null;
 
 	// see if we have a user-provided bundle
@@ -170,19 +165,7 @@ import java.io.IOException;
 	catch (MissingResourceException e) {
 	}
 
-	try {
-	    if (null != (severityStr = bundle.getString(messageId + "_severity"))){
-		severity = (FacesMessage.Severity)
-		    FacesMessage.VALUES_MAP.get(severityStr);
-	    }
-	}
-	catch (MissingResourceException e) {
-	}
-	if (null == severity) {
-	    severity = FacesMessage.SEVERITY_INFO;
-	}
-	
-        return (new FacesMessage(severity, summary, detail));
+        return (new FacesMessage(summary, detail));
     }
 
 
@@ -241,10 +224,7 @@ import java.io.IOException;
     }                                       
 
     protected static Application getApplication() {
-	if (null == application) {
-	    application = Application.getCurrentInstance();
-	}
-	return application;
+        return (FacesContext.getCurrentInstance().getApplication());
     }
 
     protected static ClassLoader getCurrentLoader(Object fallbackClass) {

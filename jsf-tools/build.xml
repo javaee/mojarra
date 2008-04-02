@@ -19,7 +19,7 @@
 
   <property name="Name"             value="JavaServer Faces Tools"/>
   <property name="name"             value="jsf-tools"/>
-  <property name="version"          value="20031023"/>
+  <property name="version"          value="20031214_BETA"/>
 
   <property name="debug"            value="true" />
   <property name="deprecation"      value="false" />
@@ -293,6 +293,29 @@ necessary to generate required classes.
        </fileset>
       <classpath refid="compile.classpath"/>
     </javadoc>
+  </target>
+
+  <xmlcatalog id="standard-renderkit">
+
+    <dtd 
+      publicId="-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.0//EN"
+      location="${jsf-api.dir}/doc/web-facesconfig_1_0.dtd" />
+
+  </xmlcatalog>
+
+  <target name="docs" depends="prepare.generate">
+    <copy todir="${build.classes}">
+      <fileset dir="${jsf-api.dir}/doc" includes="**/*.xml" />
+    </copy>
+
+    <copy todir="${build.classes}" file="${standard-html-renderkit-impl}"/>
+
+    <style style="doc/standard-html-components.xsl"
+          in="${build.classes}/standard-html-renderkit.xml"
+          out="${build.generate}/standard-html-components.txt">
+      <xmlcatalog refid="standard-renderkit" />
+    </style>
+
   </target>
 
   <!--

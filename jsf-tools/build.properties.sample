@@ -6,7 +6,7 @@
 # modules that the jsf-api depends on.  Copy this file to "build.properties"
 # in the top-level source directory, and customize it as needed.
 #
-# $Id: build.properties.sample,v 1.1 2003/10/09 16:37:13 eburns Exp $
+# $Id: build.properties.sample,v 1.2 2003/12/17 15:16:33 rkitain Exp $
 # -----------------------------------------------------------------------------
 
 
@@ -54,7 +54,7 @@ tomcat.home=<path to tomcat or jwsdp installation>
 #		 REQUIRED LIBRARIES TO RUN UNIT TESTS
 # --------------------------------------------------
 
-jsf-ri.jar=<path to jaf-ri.jar>
+jsf-impl.jar=<path to jsf-impl.jar>
 commons-logging.jar=${tomcat.home}/jwsdp-shared/lib/commons-logging.jar
 commons-digester.jar=${tomcat.home}/server/lib/commons-digester.jar
 commons-beanutils.jar=${tomcat.home}/server/lib/commons-beanutils.jar

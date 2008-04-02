@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigParser.java,v 1.3 2003/11/04 18:38:33 rkitain Exp $
+ * $Id: ConfigParser.java,v 1.4 2003/12/17 15:16:36 rkitain Exp $
  */
 
 /*
@@ -163,7 +163,7 @@ class ConfigParser extends Object {
                                "setAttributeClass", 0);
         digester.addCallMethod(prefix + "/description",
                                "setDescription", 0);
-        digester.addCallMethod(prefix + "/tag-attribute",
+        digester.addCallMethod(prefix + "/attribute-extension/tag-attribute",
                                "setTagAttribute", 0);
 	
 	prefix = "faces-config/render-kit";
@@ -199,7 +199,7 @@ class ConfigParser extends Object {
             "setAttributeClass", 0);
         digester.addCallMethod(prefix + "/description",
                                "setDescription", 0);
-        digester.addCallMethod(prefix + "/tag-attribute",
+        digester.addCallMethod(prefix + "/property-extension/tag-attribute",
                                "setTagAttribute", 0);
 
 	// for nested "attribute" elements within "component" elements
@@ -215,7 +215,7 @@ class ConfigParser extends Object {
             "setAttributeClass", 0);
         digester.addCallMethod(prefix + "/description",
                                "setDescription", 0);
-        digester.addCallMethod(prefix + "/tag-attribute",
+        digester.addCallMethod(prefix + "/attribute-extension/tag-attribute",
                                "setTagAttribute", 0);
 
 	prefix = "faces-config";

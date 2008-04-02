@@ -1,5 +1,5 @@
 /*
- * $Id: GenerateTaglib.java,v 1.7 2003/11/13 15:51:40 eburns Exp $
+ * $Id: GenerateTaglib.java,v 1.8 2003/12/17 15:16:37 rkitain Exp $
  */
 
 /*
@@ -46,9 +46,9 @@ public class GenerateTaglib extends GenerateTagBase {
 
     private TaglibGenerator tagLibGenerator = null;
 
-    // Seperate buffer for building "overrideProperties" method
+    // Separate buffer for building "setProperties" method
     //
-    private StringBuffer overridePropertiesBuf = null;
+    private StringBuffer setPropertiesBuf = null;
 
     //
     // Constructors and Initializers    
@@ -360,7 +360,7 @@ public class GenerateTaglib extends GenerateTagBase {
 	    result.append(info);
 	}
 
-	// generate general methods (override properties, etc...)
+	// generate general methods (set properties, etc...)
 	//
 	info = tagLibGenerator.generateGeneralMethods(rendererAttributeNames,
 	    componentAttributeNames, rendererType, componentType);
@@ -674,7 +674,7 @@ public class GenerateTaglib extends GenerateTagBase {
 	        result.append(info);
 	    }
 
-	    // generate general methods (override properties, etc...)
+	    // generate general methods (set properties, etc...)
 	    //
 	    info = tagLibGenerator.generateGeneralMethods(componentAttributeNames, componentType);
 	    if (info != null) {
