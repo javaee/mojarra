@@ -21,54 +21,70 @@ System.out.println("getDataTable...");
         //TO DO: this method needs to be intelligent enough to omit
         //the first pick and second pick from the tables.
 
+        return dataTable;
+    }
 
-        //TO DO: does this make sense?
-        //needs to return a list of SelectItem instances
-/*
+
+    public List getCharactersToSelect() {
         List selectItemList = new ArrayList();
         Iterator iter = dataTable.iterator();
         SelectItem selectItem = null;
 
         while(iter.hasNext()) {
             CharacterBean item = (CharacterBean) iter.next();
-            selectItem = new SelectItem(item.getName());
-            selectItemList.add(selectItem);
+            if (!item.getName().equals(firstSelection)) {
+                selectItem = new SelectItem(item.getName());
+                selectItemList.add(selectItem);
+            }
         }
 
         return selectItemList;
-*/
-        return dataTable;
     }
+
 
     public void setDataTable(List dataTable) {
         this.dataTable = dataTable;
     }
     
 
-    String firstPick = null;
+    String firstSelection = null;
 
-    public String getFirstPick() {
-        return firstPick;
+    public String getFirstSelection() {
+        if (firstSelection == null) {
+            //We know our table will not be empty because we pre-populate
+
+            //TO DO: make this more intelligent
+            return ((CharacterBean) dataTable.get(0)).getName();
+        }
+        return firstSelection;
     }
 
-    public void setFirstPick(String firstPick) {
-        this.firstPick = firstPick;
+    public void setFirstSelection(String firstSelection) {
+System.out.println("setFirstSelection: " + firstSelection);
+        this.firstSelection = firstSelection;
     }
 
 
-    String secondPick = null;
+    String secondSelection = null;
 
-    public String getSecondPick() {
-        return secondPick;
+    public String getSecondSelection() {
+        if (secondSelection == null) {
+            //We know our table will not be empty because we pre-populate
+
+            //TO DO: make this more intelligent
+            return ((CharacterBean) dataTable.get(0)).getName();
+        }
+        return secondSelection;
     }
 
-    public void setSecondPick(String secondPick) {
-        this.secondPick = secondPick;
+    public void setSecondSelection(String secondSelection) {
+System.out.println("setSecondSelection: " + secondSelection);
+        this.secondSelection = secondSelection;
     }
 
 
     private void populate() {
-System.out.println("POPULATING...");
+System.out.println("POPULATING......");
          dataTable = new ArrayList();
 
          CharacterBean item = new CharacterBean();
