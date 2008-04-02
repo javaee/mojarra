@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicInputRenderer.java,v 1.25 2004/05/10 19:56:06 jvisvanathan Exp $
+ * $Id: HtmlBasicInputRenderer.java,v 1.26 2004/06/11 15:00:25 rogerk Exp $
  */
 
 /*
@@ -171,7 +171,7 @@ public abstract class HtmlBasicInputRenderer extends HtmlBasicRenderer {
 	    };
 
             throw new ConverterException(MessageFactory.getMessage(
-                context, component, Util.CONVERSION_ERROR_MESSAGE_ID, params));
+                context, Util.CONVERSION_ERROR_MESSAGE_ID, params));
         }
     }
 } // end of class HtmlBasicInputRenderer

@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderer.java,v 1.84 2004/05/10 19:56:07 jvisvanathan Exp $
+ * $Id: HtmlBasicRenderer.java,v 1.85 2004/06/11 15:00:25 rogerk Exp $
  */
 
 /*
@@ -81,7 +81,7 @@ public abstract class HtmlBasicRenderer extends Renderer {
         Object[] params = new Object[3];
         params[0] = param;
         facesContext.addMessage(component.getClientId(facesContext),
-            MessageFactory.getMessage(facesContext, component,messageId, params));
+            MessageFactory.getMessage(facesContext, messageId, params));
     }
 
 
@@ -287,7 +287,7 @@ public abstract class HtmlBasicRenderer extends Renderer {
 	    };
 	    
             throw new ConverterException(MessageFactory.getMessage(
-                context, component, Util.CONVERSION_ERROR_MESSAGE_ID, params));
+                context, Util.CONVERSION_ERROR_MESSAGE_ID, params));
         }
     }
 
