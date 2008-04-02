@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_1.java,v 1.52 2003/11/09 05:11:13 eburns Exp $
+ * $Id: TestRenderers_1.java,v 1.53 2003/11/10 01:08:58 jvisvanathan Exp $
  */
 
 /*
@@ -20,10 +20,12 @@ import java.io.IOException;
 import java.util.ResourceBundle;
 import java.util.ListResourceBundle;
 import java.util.Locale;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
 import java.util.ArrayList;
-
+import java.util.Enumeration;
+import javax.faces.el.ValueBinding;
 import javax.faces.component.UIForm;
 import javax.faces.component.UICommand;
 import javax.faces.component.UIOutput;
@@ -53,7 +55,7 @@ import com.sun.faces.renderkit.html_basic.RadioRenderer;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_1.java,v 1.52 2003/11/09 05:11:13 eburns Exp $
+ * @version $Id: TestRenderers_1.java,v 1.53 2003/11/10 01:08:58 jvisvanathan Exp $
  * 
  *
  */
@@ -103,6 +105,22 @@ public class TestRenderers_1 extends JspFacesTestCase
 	xmlView.setViewId("viewId");
 	getFacesContext().setViewRoot(xmlView);
         assertTrue(getFacesContext().getResponseWriter() != null);
+        
+        // Spoof a loadBundle action...
+        ResourceBundle bundle = new Messages_en();
+	if (null == bundle) {
+	    return;
+	}
+	
+	HashMap toStore = new HashMap();
+        Enumeration keys = bundle.getKeys();
+	String key = null;
+	while (keys.hasMoreElements()) {
+	    key = (String) keys.nextElement();
+	    toStore.put(key, bundle.getString(key));
+	}
+	getFacesContext().getExternalContext().
+                getRequestMap().put("Messages", toStore);
      }     
 
     // Methods from FacesTestCase
@@ -139,11 +157,7 @@ public class TestRenderers_1 extends JspFacesTestCase
 //        com.sun.faces.util.DebugUtil.waitForDebugger();
         
         Map sessionMap = getFacesContext().getExternalContext().getSessionMap();
-        // Spoof a setBundle action...
-        LocalizationContext locContext = new LocalizationContext(new Messages_en(), Locale.ENGLISH);
-        sessionMap.put("Messages", locContext);
-
-
+       
         try {
             // create a dummy root for the tree.
             UIViewRoot root = new UIViewRoot();
@@ -193,8 +207,6 @@ public class TestRenderers_1 extends JspFacesTestCase
         uiOutput.setId("labelLink1");
 	uiOutput.setValue("hrefValue");
         output.setValue("PASSED");
-        output.getAttributes().put(RIConstants.BUNDLE_ATTR, "Messages");
-        output.getAttributes().put("key", "failed.key");
         output.setValueBinding("value", Util.getValueBinding("#{TestBean.modelLabel}"));
 	uiOutput.getChildren().add(output);
         root.getChildren().add(uiOutput);
@@ -210,8 +222,6 @@ public class TestRenderers_1 extends JspFacesTestCase
         uiOutput.setId("labelLink2");
 	uiOutput.setValue("hrefValue");
 	output = new UIOutput();
-        output.getAttributes().put(RIConstants.BUNDLE_ATTR, "Messages");
-        output.getAttributes().put("key", "failed.key");
         output.setValueBinding("value", Util.getValueBinding("#{TestBean.modelLabel}"));
 	uiOutput.getChildren().add(output);
         root.getChildren().add(uiOutput);
@@ -227,9 +237,9 @@ public class TestRenderers_1 extends JspFacesTestCase
 	output = new UIOutput();
         uiOutput.setId("labelLink3");
 	uiOutput.setValue("hrefValue");
-        output.getAttributes().put(RIConstants.BUNDLE_ATTR, "Messages");
-        output.getAttributes().put("key", "passed.key");
-	uiOutput.getChildren().add(output);
+        ValueBinding vb = Util.getValueBinding("#{Messages.passedkey}");
+        output.setValueBinding("value", vb);
+        uiOutput.getChildren().add(output);
         root.getChildren().add(uiOutput);
         System.out.println("Testing label lookup from ResourceBundle...");
         linkRenderer.encodeBegin(getFacesContext(), uiOutput);
@@ -243,8 +253,6 @@ public class TestRenderers_1 extends JspFacesTestCase
 	output = new UIOutput();
         uiOutput.setId("labelLink4");
 	uiOutput.setValue("hrefValue");
-        output.getAttributes().put(RIConstants.BUNDLE_ATTR, "Messages");
-        output.getAttributes().put("key", "non.key");
         uiOutput.getAttributes().put("rel", "rel");
         uiOutput.getAttributes().put("rev", "rev");
         uiOutput.getAttributes().put("shape", "shape");
@@ -278,8 +286,8 @@ public class TestRenderers_1 extends JspFacesTestCase
 	graphic = new UIGraphic();
         uiOutput.setId("linkImage2");
 	uiOutput.setValue("hrefValue");
-        graphic.getAttributes().put("key", "image.key");
-        graphic.getAttributes().put(RIConstants.BUNDLE_ATTR, "Messages");
+        vb = Util.getValueBinding("#{Messages.imagekey}");
+        graphic.setValueBinding("value", vb);
 	uiOutput.getChildren().add(graphic);
         root.getChildren().add(uiOutput);
         System.out.println("Testing link image via resource lookup");
@@ -320,8 +328,6 @@ public class TestRenderers_1 extends JspFacesTestCase
 	UIOutput output = new UIOutput();
         uiCommand.setId("labelLink1");
         output.setValue("PASSED");
-        output.getAttributes().put(RIConstants.BUNDLE_ATTR, "Messages");
-        output.getAttributes().put("key", "failed.key");
         output.setValueBinding("value", Util.getValueBinding("#{TestBean.modelLabel}"));
 	uiCommand.getChildren().add(output);
         root.getChildren().add(uiCommand);
@@ -336,8 +342,6 @@ public class TestRenderers_1 extends JspFacesTestCase
         uiCommand = new UICommand();
         uiCommand.setId("labelLink2");
 	output = new UIOutput();
-        output.getAttributes().put(RIConstants.BUNDLE_ATTR, "Messages");
-        output.getAttributes().put("key", "failed.key");
         output.setValueBinding("value", Util.getValueBinding("#{TestBean.modelLabel}"));
 	uiCommand.getChildren().add(output);
         root.getChildren().add(uiCommand);
@@ -352,8 +356,8 @@ public class TestRenderers_1 extends JspFacesTestCase
         uiCommand = new UICommand();
 	output = new UIOutput();
         uiCommand.setId("labelLink3");
-        output.getAttributes().put(RIConstants.BUNDLE_ATTR, "Messages");
-        output.getAttributes().put("key", "passed.key");
+        ValueBinding vb = Util.getValueBinding("#{Messages.passedkey}");
+        output.setValueBinding("value", vb);
 	uiCommand.getChildren().add(output);
         root.getChildren().add(uiCommand);
         System.out.println("Testing label lookup from ResourceBundle...");
@@ -367,8 +371,6 @@ public class TestRenderers_1 extends JspFacesTestCase
         uiCommand = new UICommand();
 	output = new UIOutput();
         uiCommand.setId("labelLink4");
-        output.getAttributes().put(RIConstants.BUNDLE_ATTR, "Messages");
-        output.getAttributes().put("key", "non.key");
         uiCommand.getAttributes().put("rel", "rel");
         uiCommand.getAttributes().put("rev", "rev");
         uiCommand.getAttributes().put("shape", "shape");
@@ -400,9 +402,9 @@ public class TestRenderers_1 extends JspFacesTestCase
         uiCommand = new UICommand();
 	graphic = new UIGraphic();
         uiCommand.setId("linkImage2");
-        graphic.getAttributes().put("key", "image.key");
-        graphic.getAttributes().put(RIConstants.BUNDLE_ATTR, "Messages");
-	uiCommand.getChildren().add(graphic);
+        vb = Util.getValueBinding("#{Messages.imagekey}");
+        graphic.setValueBinding("value", vb);
+        uiCommand.getChildren().add(graphic);
         root.getChildren().add(uiCommand);
         System.out.println("Testing link image via resource lookup");
         linkRenderer.encodeBegin(getFacesContext(), uiCommand);
@@ -493,8 +495,8 @@ public class TestRenderers_1 extends JspFacesTestCase
         // Test button as image with image specified in resource bundle
         uiCommand = new UICommand();
         uiCommand.setId("imageButton2");
-        uiCommand.getAttributes().put("imageKey", "image.key");
-        uiCommand.getAttributes().put(RIConstants.BUNDLE_ATTR, "Messages");
+        ValueBinding vb = Util.getValueBinding("#{Messages.imagekey}");
+        uiCommand.setValueBinding("image", vb);
         root.getChildren().add(uiCommand);
         System.out.println("Testing link image via resource lookup");
         buttonRenderer.encodeBegin(getFacesContext(), uiCommand);
@@ -508,8 +510,6 @@ public class TestRenderers_1 extends JspFacesTestCase
         uiCommand.setId("labelButton1");
         uiCommand.getAttributes().put("type", "submit");
         uiCommand.setValue("PASSED");
-        uiCommand.getAttributes().put(RIConstants.BUNDLE_ATTR, "Messages");
-        uiCommand.getAttributes().put("key", "failed.key");
         uiCommand.setValueBinding("value", Util.getValueBinding("#{TestBean.modelLabel}"));
         root.getChildren().add(uiCommand);
         System.out.println("Testing label lookup from local value...");
@@ -522,8 +522,6 @@ public class TestRenderers_1 extends JspFacesTestCase
         uiCommand = new UICommand();
         uiCommand.setId("labelButton2");
         uiCommand.getAttributes().put("type", "reset");
-        uiCommand.getAttributes().put(RIConstants.BUNDLE_ATTR, "Messages");
-        uiCommand.getAttributes().put("key", "failed.key");
         uiCommand.setValueBinding("value", Util.getValueBinding("#{TestBean.modelLabel}"));
         root.getChildren().add(uiCommand);
         System.out.println("Testing label lookup from model...");
@@ -536,8 +534,8 @@ public class TestRenderers_1 extends JspFacesTestCase
         uiCommand = new UICommand();
         uiCommand.setId("labelButton3");
         uiCommand.getAttributes().put("type", "submit");
-        uiCommand.getAttributes().put(RIConstants.BUNDLE_ATTR, "Messages");
-        uiCommand.getAttributes().put("key", "passed.key");
+        vb = Util.getValueBinding("#{Messages.passedkey}");
+        uiCommand.setValueBinding("value", vb);
         root.getChildren().add(uiCommand);
         System.out.println("Testing label lookup from ResourceBundle...");
         buttonRenderer.encodeBegin(getFacesContext(), uiCommand);
@@ -549,8 +547,6 @@ public class TestRenderers_1 extends JspFacesTestCase
         uiCommand.setId("labelButton4");
         uiCommand.getAttributes().put("type", "reset");
         uiCommand.setValueBinding("value", Util.getValueBinding("#{NonBean.label}"));
-        uiCommand.getAttributes().put(RIConstants.BUNDLE_ATTR, "Messages");
-        uiCommand.getAttributes().put("key", "non.key");
         root.getChildren().add(uiCommand);
         System.out.println("Testing empty label...");
         buttonRenderer.encodeBegin(getFacesContext(), uiCommand);
@@ -610,9 +606,9 @@ class Messages_en extends ListResourceBundle {
      */
     protected Object[][] getContents() {
         return new Object[][] {
-            { "failed.key", "RES-BUNDLE FAILED" },
-            { "passed.key", "RES-BUNDLE PASSED" },
-            { "image.key", "resduke.gif" }
+            { "failedkey", "RES-BUNDLE FAILED" },
+            { "passedkey", "RES-BUNDLE PASSED" },
+            { "imagekey", "resduke.gif" }
         };
     }
 }

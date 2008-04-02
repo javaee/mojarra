@@ -3,7 +3,7 @@
    SUN PROPRIETARY/CONFIDENTIAL.  Use is subject license terms.
 --%>
 
-<%-- $Id: command_link_test.jsp,v 1.4 2003/11/10 00:08:34 eburns Exp $ --%>
+<%-- $Id: command_link_test.jsp,v 1.5 2003/11/10 01:08:57 jvisvanathan Exp $ --%>
 
 <html>
 <head>
@@ -12,7 +12,7 @@
     <title>command_link_test.jsp</title>
 </head>
 <body>
-    <fmt:setBundle basename="com.sun.faces.systest.resources.Resources" 
+    <f:loadBundle basename="com.sun.faces.systest.resources.Resources" 
          var="messageResources"/>
     <f:view>
         <h:command_link id="hyperlink01"><f:verbatim>My Link</f:verbatim></h:command_link>

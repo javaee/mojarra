@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderer.java,v 1.65 2003/11/09 05:11:04 eburns Exp $
+ * $Id: HtmlBasicRenderer.java,v 1.66 2003/11/10 01:08:53 jvisvanathan Exp $
  */
 
 /*
@@ -138,14 +138,11 @@ public abstract class HtmlBasicRenderer extends Renderer {
 							  messageId, params));
     }
 
-    /**
-
+   /**
     * Look up the attribute named keyAttr in the component's attr set.
     * Use the result as a key into the resource bundle named by the
     * model reference in the component's "bundle" attribute.
-
     */
-
     protected String getKeyAndLookupInBundle(FacesContext context,
 					     UIComponent component, 
 					     String keyAttr) throws MissingResourceException{
@@ -190,7 +187,7 @@ public abstract class HtmlBasicRenderer extends Renderer {
 	}
 	
 	return bundle.getString(key);
-    }
+    } 
     
     public void decode(FacesContext context, UIComponent component) {
 

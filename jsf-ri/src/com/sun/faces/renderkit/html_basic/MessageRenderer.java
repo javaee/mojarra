@@ -1,5 +1,5 @@
 /*
- * $Id: MessageRenderer.java,v 1.31 2003/11/09 05:11:05 eburns Exp $
+ * $Id: MessageRenderer.java,v 1.32 2003/11/10 01:08:54 jvisvanathan Exp $
  */
 
 /*
@@ -32,7 +32,7 @@ import org.mozilla.util.Assert;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: MessageRenderer.java,v 1.31 2003/11/09 05:11:05 eburns Exp $
+ * @version $Id: MessageRenderer.java,v 1.32 2003/11/10 01:08:54 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -116,16 +116,6 @@ public class MessageRenderer extends HtmlBasicRenderer {
                 currentValue = (String)currentObj;
             } else {
                 currentValue = currentObj.toString();
-            }
-        }
-
-        if (currentValue == null) {
-            try {
-                currentValue = getKeyAndLookupInBundle(context, 
-                    component, "key");
-            } catch (java.util.MissingResourceException e) {
-                // Do nothing since the absence of a resource is not an
-                // error.
             }
         }
 

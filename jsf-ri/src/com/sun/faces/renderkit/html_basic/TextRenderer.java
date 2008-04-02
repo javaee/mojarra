@@ -1,5 +1,5 @@
 /*
- * $Id: TextRenderer.java,v 1.56 2003/11/03 21:44:05 eburns Exp $
+ * $Id: TextRenderer.java,v 1.57 2003/11/10 01:08:55 jvisvanathan Exp $
  */
 
 /*
@@ -120,16 +120,6 @@ public class TextRenderer extends HtmlBasicInputRenderer {
 		    writer.writeAttribute("style", style, "style");
 		}
 	    } 
-            if (currentValue == null || currentValue == "") {
-                try {
-                    currentValue = getKeyAndLookupInBundle(context, component,
-                                                       "key");
-                } catch (java.util.MissingResourceException e) {
-                    // Do nothing since the absence of a resource is not an
-                    // error.
-                    return;
-                }
-            }
             if (currentValue != null) {
 		Object val = null; 
 		boolean escape = true;

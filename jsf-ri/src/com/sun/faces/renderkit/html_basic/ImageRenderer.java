@@ -1,5 +1,5 @@
 /*
- * $Id: ImageRenderer.java,v 1.22 2003/11/09 05:11:05 eburns Exp $
+ * $Id: ImageRenderer.java,v 1.23 2003/11/10 01:08:54 jvisvanathan Exp $
  */
 
 /*
@@ -33,7 +33,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ImageRenderer.java,v 1.22 2003/11/09 05:11:05 eburns Exp $
+ * @version $Id: ImageRenderer.java,v 1.23 2003/11/10 01:08:54 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -104,13 +104,13 @@ public class ImageRenderer extends HtmlBasicRenderer {
         if (!component.isRendered()) {
             return;
         }
-        
+       
         writer = context.getResponseWriter();
         Assert.assert_it(writer != null );
         
 	writer.startElement("img", component);
 	writer.writeAttribute("id", component.getClientId(context), "clientId");
-	writer.writeAttribute("src", src(context, component), "value");
+	writer.writeAttribute("src", src(context,component), "value");
 
         Util.renderPassThruAttributes(writer, component);
         Util.renderBooleanPassThruAttributes(writer, component);
@@ -126,21 +126,10 @@ public class ImageRenderer extends HtmlBasicRenderer {
     }
 
     private String src(FacesContext context, UIComponent component) {
-
-        String value = (String)((UIGraphic)component).getValue();
-        if (value == null) {
-            value = "";
+        String value = (String)((UIGraphic)component).getValue(); 
+        if (value == null ) {
+            return "";
         }
-
-        if (value == "") {
-            try {
-                value = getKeyAndLookupInBundle(context, component, "key");
-            } catch (java.util.MissingResourceException e) {
-                // Do nothing since the absence of a resource is not an
-                // error.
-            }
-        }
-                              
         StringBuffer sb = new StringBuffer();
         if (value.startsWith("/")) {
             sb.append(context.getExternalContext().getRequestContextPath());

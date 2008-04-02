@@ -1,5 +1,5 @@
 /*
- * $Id: ButtonRenderer.java,v 1.65 2003/11/09 05:11:03 eburns Exp $
+ * $Id: ButtonRenderer.java,v 1.66 2003/11/10 01:08:53 jvisvanathan Exp $
  */
 
 /*
@@ -32,7 +32,7 @@ import org.mozilla.util.Assert;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ButtonRenderer.java,v 1.65 2003/11/09 05:11:03 eburns Exp $
+ * @version $Id: ButtonRenderer.java,v 1.66 2003/11/10 01:08:53 jvisvanathan Exp $
  *
  */
 
@@ -144,10 +144,13 @@ public class ButtonRenderer extends HtmlBasicRenderer {
 
         ResponseWriter writer = context.getResponseWriter();
         Assert.assert_it(writer != null );
-
-        String imageSrc = getImageSrc(context, component);
-        String label = getLabel(context, component);            
-
+        
+        String label = "";
+        Object value = ((UICommand) component).getValue();
+        if (value != null) {
+              label = value.toString();
+        } 
+        String imageSrc = (String) component.getAttributes().get("image");
         writer.startElement("input", component);
         if (imageSrc != null) {
             writer.writeAttribute("type", "image", "type");
