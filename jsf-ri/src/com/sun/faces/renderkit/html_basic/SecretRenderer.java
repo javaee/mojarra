@@ -1,5 +1,5 @@
 /*
- * $Id: SecretRenderer.java,v 1.55 2004/03/31 18:48:38 eburns Exp $
+ * $Id: SecretRenderer.java,v 1.56 2004/10/12 14:39:53 rlubke Exp $
  */
 
 /*
@@ -85,7 +85,7 @@ public class SecretRenderer extends HtmlBasicInputRenderer {
                                       UIComponent component, String currentValue)
         throws IOException {
         ResponseWriter writer = context.getResponseWriter();
-        Util.doAssert(writer != null);
+        assert (writer != null);
 
         String styleClass = null;
 

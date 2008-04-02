@@ -1,5 +1,5 @@
 /*
- * $Id: InvokeApplicationPhase.java,v 1.15 2004/02/26 20:32:46 eburns Exp $
+ * $Id: InvokeApplicationPhase.java,v 1.16 2004/10/12 14:39:50 rlubke Exp $
  */
 
 /*
@@ -24,7 +24,7 @@ import javax.faces.event.PhaseId;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: InvokeApplicationPhase.java,v 1.15 2004/02/26 20:32:46 eburns Exp $
+ * @version $Id: InvokeApplicationPhase.java,v 1.16 2004/10/12 14:39:50 rlubke Exp $
  */
 
 public class InvokeApplicationPhase extends Phase {
@@ -69,7 +69,7 @@ public class InvokeApplicationPhase extends Phase {
         }
 
         UIViewRoot root = facesContext.getViewRoot();
-        Util.doAssert(null != root);
+        assert (null != root);
 
         try {
             root.processApplication(facesContext);

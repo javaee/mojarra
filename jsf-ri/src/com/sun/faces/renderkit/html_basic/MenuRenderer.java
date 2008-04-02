@@ -4,7 +4,7 @@
  */
 
 /*
- * $Id: MenuRenderer.java,v 1.52 2004/09/01 21:45:50 edburns Exp $
+ * $Id: MenuRenderer.java,v 1.53 2004/10/12 14:39:52 rlubke Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -105,7 +105,7 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
         }
 
         String clientId = component.getClientId(context);
-        Util.doAssert(clientId != null);
+        assert (clientId != null);
         // currently we assume the model type to be of type string or 
         // convertible to string and localised by the application.
         if (component instanceof UISelectMany) {
@@ -310,7 +310,7 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
             }
         }
 
-        Util.doAssert(null != result);
+        assert (null != result);
         if (elementType.isPrimitive()) {
             for (i = 0; i < len; i++) {
                 if (elementType.equals(Boolean.TYPE)) {
@@ -440,7 +440,7 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
                       UIComponent component) throws IOException {
 
         ResponseWriter writer = context.getResponseWriter();
-        Util.doAssert(writer != null);
+        assert (writer != null);
 
         if (log.isTraceEnabled()) {
             log.trace("Rendering 'select'");
@@ -507,7 +507,7 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
         throws IOException {
 
         ResponseWriter writer = context.getResponseWriter();
-        Util.doAssert(writer != null);
+        assert (writer != null);
 
         Iterator items = Util.getSelectItems(context, component);
         SelectItem curItem = null;
@@ -534,7 +534,7 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
     protected void renderOption(FacesContext context, UIComponent component,
                                 SelectItem curItem) throws IOException {
         ResponseWriter writer = context.getResponseWriter();
-        Util.doAssert(writer != null);
+        assert (writer != null);
 
         writer.writeText("\t", null);
         writer.startElement("option", component);

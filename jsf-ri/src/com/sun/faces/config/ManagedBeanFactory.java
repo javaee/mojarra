@@ -1,5 +1,5 @@
 /*
- * $Id: ManagedBeanFactory.java,v 1.25 2004/08/02 20:21:07 rogerk Exp $
+ * $Id: ManagedBeanFactory.java,v 1.26 2004/10/12 14:39:49 rlubke Exp $
  */
 
 /*
@@ -234,7 +234,7 @@ public class ManagedBeanFactory extends Object {
                     break;
                 default:
                     // notreached
-                    Util.doAssert(false);
+                    assert (false);
                     break;
             }
         } catch (FacesException fe) {
@@ -282,7 +282,7 @@ public class ManagedBeanFactory extends Object {
 
         // is it a Map?
         if (null != (mapEntries = managedBean.getMapEntries())) {
-            Util.doAssert(-1 == result);
+            assert (-1 == result);
 
             // managed-bean instances that are Maps, must not have
             // properties or list-entries.  It is a configuration error
@@ -300,7 +300,7 @@ public class ManagedBeanFactory extends Object {
         }
 
         if (TYPE_IS_LIST != result && TYPE_IS_MAP != result) {
-            Util.doAssert(-1 == result);
+            assert (-1 == result);
 
             // if it's not a List or a Map, it must be a Bean
             if (bean instanceof UIComponent) {
@@ -310,7 +310,7 @@ public class ManagedBeanFactory extends Object {
             }
         }
 
-        Util.doAssert(-1 != result);
+        assert (-1 != result);
         return result;
     }
 
@@ -344,7 +344,7 @@ public class ManagedBeanFactory extends Object {
 
         // is it a Map?
         if (null != (mapEntries = bean.getMapEntries())) {
-            Util.doAssert(-1 == result);
+            assert (-1 == result);
 
             // managed-property instances that have map-entries, must
             // not have value or list-entries.  It is a configuration
@@ -361,7 +361,7 @@ public class ManagedBeanFactory extends Object {
         }
 
         if (TYPE_IS_LIST != result && TYPE_IS_MAP != result) {
-            Util.doAssert(-1 == result);
+            assert (-1 == result);
 
             if (null != bean.getValue() || bean.isNullValue()) {
                 result = TYPE_IS_SIMPLE;
@@ -560,7 +560,7 @@ public class ManagedBeanFactory extends Object {
                                                         value);
                         break;
                     default:
-                        Util.doAssert(false);
+                        assert (false);
                 }
             } catch (FacesException fe) {
                 throw fe;
@@ -968,7 +968,7 @@ public class ManagedBeanFactory extends Object {
         //the managed bean is required to be in either "request", "session",
         //"application", or "none" scopes. One of the previous decision
         //statements must be true.
-        Util.doAssert(false);
+        assert (false);
         return false;
     }
 

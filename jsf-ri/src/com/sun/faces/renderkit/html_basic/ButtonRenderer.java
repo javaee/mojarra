@@ -1,5 +1,5 @@
 /*
- * $Id: ButtonRenderer.java,v 1.77 2004/04/26 16:37:37 jvisvanathan Exp $
+ * $Id: ButtonRenderer.java,v 1.78 2004/10/12 14:39:51 rlubke Exp $
  */
 
 /*
@@ -149,7 +149,7 @@ public class ButtonRenderer extends HtmlBasicRenderer {
         }
 
         ResponseWriter writer = context.getResponseWriter();
-        Util.doAssert(writer != null);
+        assert (writer != null);
 
         String label = "";
         Object value = ((UICommand) component).getValue();

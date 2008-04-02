@@ -1,5 +1,5 @@
 /*
- * $Id: RestoreViewPhase.java,v 1.16 2004/03/31 18:48:31 eburns Exp $
+ * $Id: RestoreViewPhase.java,v 1.17 2004/10/12 14:39:51 rlubke Exp $
  */
 
 /*
@@ -35,7 +35,7 @@ import java.util.Map;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: RestoreViewPhase.java,v 1.16 2004/03/31 18:48:31 eburns Exp $
+ * @version $Id: RestoreViewPhase.java,v 1.17 2004/10/12 14:39:51 rlubke Exp $
  */
 
 public class RestoreViewPhase extends Phase {
@@ -169,7 +169,7 @@ public class RestoreViewPhase extends Phase {
                 log.debug("Postback: Restored view for " + viewId);
             }
         }
-        Util.doAssert(null != viewRoot);
+        assert (null != viewRoot);
 
         facesContext.setViewRoot(viewRoot);
         doPerComponentActions(facesContext, viewRoot);

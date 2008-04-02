@@ -1,5 +1,5 @@
 /*
- * $Id: OutputMessageRenderer.java,v 1.15 2004/07/28 14:52:13 rogerk Exp $
+ * $Id: OutputMessageRenderer.java,v 1.16 2004/10/12 14:39:53 rlubke Exp $
  */
 
 /*
@@ -106,7 +106,7 @@ public class OutputMessageRenderer extends HtmlBasicRenderer {
             styleClass = (String) component.getAttributes().get("styleClass");
 
         ResponseWriter writer = context.getResponseWriter();
-        Util.doAssert(writer != null);
+        assert (writer != null);
 
         // suppress rendering if "rendered" property on the component is
         // false.

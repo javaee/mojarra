@@ -208,6 +208,7 @@
             excludes="com/sun/faces/config/TestConfigListener.java"
             debug="${compile.debug}"
             optimize="${compile.optimize}"
+            source="1.4"
             deprecation="${compile.deprecation}">
 
             <classpath refid="compile.classpath"/>

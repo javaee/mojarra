@@ -1,5 +1,5 @@
 /*
- * $Id: UpdateModelValuesPhase.java,v 1.36 2004/02/26 20:32:48 eburns Exp $
+ * $Id: UpdateModelValuesPhase.java,v 1.37 2004/10/12 14:39:51 rlubke Exp $
  */
 
 /*
@@ -74,7 +74,7 @@ public class UpdateModelValuesPhase extends Phase {
             log.debug("Entering UpdateModelValuesPhase");
         }
         UIComponent component = facesContext.getViewRoot();
-        Util.doAssert(null != component);
+        assert (null != component);
         String exceptionMessage = null;
 
         try {

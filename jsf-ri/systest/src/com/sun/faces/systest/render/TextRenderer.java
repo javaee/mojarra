@@ -1,5 +1,5 @@
 /*
- * $Id: TextRenderer.java,v 1.9 2004/03/31 18:48:54 eburns Exp $
+ * $Id: TextRenderer.java,v 1.10 2004/10/12 14:39:56 rlubke Exp $
  */
 
 /*
@@ -25,7 +25,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TextRenderer.java,v 1.9 2004/03/31 18:48:54 eburns Exp $
+ * @version $Id: TextRenderer.java,v 1.10 2004/10/12 14:39:56 rlubke Exp $
  * @see	Blah
  * @see	Bloo
  */
@@ -97,7 +97,7 @@ public class TextRenderer extends Renderer {
     public void encodeEnd(FacesContext context, UIComponent component)
         throws IOException {
         ResponseWriter writer = context.getResponseWriter();
-        Util.doAssert(writer != null);
+        assert (writer != null);
 
         String styleClass = null;
 

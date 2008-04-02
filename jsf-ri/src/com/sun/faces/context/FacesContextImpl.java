@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContextImpl.java,v 1.66 2004/03/31 18:48:27 eburns Exp $
+ * $Id: FacesContextImpl.java,v 1.67 2004/10/12 14:39:49 rlubke Exp $
  */
 
 /*
@@ -125,7 +125,7 @@ public class FacesContextImpl extends FacesContext {
             (ApplicationFactory) FactoryFinder.getFactory(
                 FactoryFinder.APPLICATION_FACTORY);
         application = aFactory.getApplication();
-        Util.doAssert(null != application);
+        assert (null != application);
         return application;
     }
 

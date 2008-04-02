@@ -1,5 +1,5 @@
 /*
- * $Id: ViewTag.java,v 1.26 2004/08/05 20:02:19 jayashri Exp $
+ * $Id: ViewTag.java,v 1.27 2004/10/12 14:39:54 rlubke Exp $
  */
 
 /*
@@ -40,7 +40,7 @@ import java.util.Locale;
  * any renderers or attributes. It exists mainly to save the state of
  * the response tree once all tags have been rendered.
  *
- * @version $Id: ViewTag.java,v 1.26 2004/08/05 20:02:19 jayashri Exp $
+ * @version $Id: ViewTag.java,v 1.27 2004/10/12 14:39:54 rlubke Exp $
  */
 
 public class ViewTag extends UIComponentBodyTag {
@@ -118,13 +118,13 @@ public class ViewTag extends UIComponentBodyTag {
         }
 
         FacesContext facesContext = FacesContext.getCurrentInstance();
-        Util.doAssert(facesContext != null);
+        assert (facesContext != null);
 
         // this must happen after our overriderProperties executes.
         pageContext.getResponse().setLocale(facesContext.getViewRoot().getLocale());
     
         ResponseWriter writer = facesContext.getResponseWriter();
-        Util.doAssert(writer != null);
+        assert (writer != null);
 
         try {
             writer.startDocument();
@@ -216,7 +216,7 @@ public class ViewTag extends UIComponentBodyTag {
         // have a facesContext ivar.
         FacesContext context = FacesContext.getCurrentInstance();
         ResponseWriter writer = context.getResponseWriter();
-        Util.doAssert(writer != null);
+        assert (writer != null);
         try {
             writer.endDocument();
         } catch (IOException e) {
@@ -238,7 +238,7 @@ public class ViewTag extends UIComponentBodyTag {
      * This should never get called for PageTag.
      */
     public String getComponentType() {
-        Util.doAssert(false);
+        assert (false);
         throw new IllegalStateException();
     }
 

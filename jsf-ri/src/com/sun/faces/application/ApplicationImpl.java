@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationImpl.java,v 1.52 2004/07/15 18:08:31 rlubke Exp $
+ * $Id: ApplicationImpl.java,v 1.53 2004/10/12 14:39:49 rlubke Exp $
  */
 
 /*
@@ -691,9 +691,9 @@ public class ApplicationImpl extends Application {
      * @return The new object instance.
      */
     protected Object newThing(Object key, Map map) {
-        Util.doAssert(key != null);
-        Util.doAssert(map != null);
-        Util.doAssert(key instanceof String || key instanceof Class);
+        assert (key != null);
+        assert (map != null);
+        assert (key instanceof String || key instanceof Class);
 
         Object result = null;
         Class clazz = null;
@@ -705,11 +705,11 @@ public class ApplicationImpl extends Application {
             if (value == null) {
                 return null;
             }
-            Util.doAssert(value instanceof String || value instanceof Class);
+            assert (value instanceof String || value instanceof Class);
             if (value instanceof String) {
                 try {
                     clazz = Util.loadClass((String) value, value);
-                    Util.doAssert(clazz != null);
+                    assert (clazz != null);
                     map.put(key, clazz);
                 } catch (Throwable t) {
                     Object[] params = {t.getMessage()};

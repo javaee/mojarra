@@ -1,5 +1,5 @@
 /*
- * $Id: TextareaRenderer.java,v 1.12 2004/04/20 16:37:24 rkitain Exp $
+ * $Id: TextareaRenderer.java,v 1.13 2004/10/12 14:39:53 rlubke Exp $
  */
 
 /*
@@ -85,7 +85,7 @@ public class TextareaRenderer extends HtmlBasicInputRenderer {
                                       String currentValue) throws IOException {
 
         ResponseWriter writer = context.getResponseWriter();
-        Util.doAssert(writer != null);
+        assert (writer != null);
 
 	String styleClass = (String)component.getAttributes().get("styleClass");
 

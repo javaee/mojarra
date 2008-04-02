@@ -1,5 +1,5 @@
 /*
- * $Id: CoreValidator.java,v 1.11 2004/02/26 20:33:17 eburns Exp $
+ * $Id: CoreValidator.java,v 1.12 2004/10/12 14:39:54 rlubke Exp $
  */
 
 /*
@@ -87,7 +87,7 @@ public class CoreValidator extends FacesValidator {
      */
     protected String getFailureMessage(String prefix, String uri) {
         // we should only get called if this Validator failed
-        Util.doAssert(failed);
+        assert (failed);
         StringBuffer result = new StringBuffer();
 
         if (idTagParser.hasFailed()) {

@@ -1,5 +1,5 @@
 /*
- * $Id: LabelRenderer.java,v 1.31 2004/05/12 01:32:57 jvisvanathan Exp $
+ * $Id: LabelRenderer.java,v 1.32 2004/10/12 14:39:52 rlubke Exp $
  */
 
 /*
@@ -92,7 +92,7 @@ public class LabelRenderer extends HtmlBasicInputRenderer {
             return;
         }
         writer = context.getResponseWriter();
-        Util.doAssert(writer != null);
+        assert (writer != null);
 
         UIComponent forComponent = null;
         String forClientId = null;
@@ -157,7 +157,7 @@ public class LabelRenderer extends HtmlBasicInputRenderer {
         if (render != null && render.equals("yes")) {
             component.getAttributes().remove(RENDER_END_ELEMENT);
             ResponseWriter writer = context.getResponseWriter();
-            Util.doAssert(writer != null);
+            assert (writer != null);
             writer.endElement("label");
         }
         if (log.isTraceEnabled()) {

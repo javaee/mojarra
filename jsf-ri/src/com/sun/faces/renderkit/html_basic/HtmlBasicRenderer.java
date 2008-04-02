@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderer.java,v 1.85 2004/06/11 15:00:25 rogerk Exp $
+ * $Id: HtmlBasicRenderer.java,v 1.86 2004/10/12 14:39:52 rlubke Exp $
  */
 
 /*
@@ -120,7 +120,7 @@ public abstract class HtmlBasicRenderer extends Renderer {
         }
 
         String clientId = component.getClientId(context);
-        Util.doAssert(clientId != null);
+        assert (clientId != null);
         Map requestMap = context.getExternalContext().getRequestParameterMap();
         // Don't overwrite the value unless you have to!
         if (requestMap.containsKey(clientId)) {
@@ -164,7 +164,7 @@ public abstract class HtmlBasicRenderer extends Renderer {
         }
 
         writer = context.getResponseWriter();
-        Util.doAssert(writer != null);
+        assert (writer != null);
 
         currentValue = getCurrentValue(context, component);
         if (log.isTraceEnabled()) {

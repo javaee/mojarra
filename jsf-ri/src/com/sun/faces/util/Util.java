@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.143 2004/08/10 13:38:25 rlubke Exp $
+ * $Id: Util.java,v 1.144 2004/10/12 14:39:55 rlubke Exp $
  */
 
 /*
@@ -12,7 +12,6 @@
 package com.sun.faces.util;
 
 import com.sun.faces.RIConstants;
-import com.sun.faces.application.ApplicationAssociate;
 import com.sun.faces.el.impl.ExpressionEvaluator;
 import com.sun.faces.el.impl.ExpressionEvaluatorImpl;
 import com.sun.faces.renderkit.RenderKitImpl;
@@ -29,8 +28,8 @@ import javax.faces.application.ViewHandler;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UISelectItem;
 import javax.faces.component.UISelectItems;
-import javax.faces.context.FacesContext;
 import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
 import javax.faces.context.FacesContextFactory;
 import javax.faces.context.ResponseWriter;
 import javax.faces.convert.Converter;
@@ -50,8 +49,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
-import java.util.Locale;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.StringTokenizer;
 
@@ -60,7 +59,7 @@ import java.util.StringTokenizer;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.143 2004/08/10 13:38:25 rlubke Exp $
+ * @version $Id: Util.java,v 1.144 2004/10/12 14:39:55 rlubke Exp $
  */
 
 public class Util extends Object {
@@ -82,14 +81,14 @@ public class Util extends Object {
     // parameters to test/com/sun/faces/util/TestUtil_messages (see comment there).
  
     /**
-     * The message identifier of the {@link Message} to be created as
+     * The message identifier of the {@link FacesMessage} to be created as
      * a result of type conversion error.
      */
     public static final String CONVERSION_ERROR_MESSAGE_ID =
         "com.sun.faces.TYPECONVERSION_ERROR";
 
     /**
-     * The message identifier of the {@link Message} to be created if
+     * The message identifier of the {@link FacesMessage} to be created if
      * there is model update failure.
      */
     public static final String MODEL_UPDATE_ERROR_MESSAGE_ID =
@@ -304,10 +303,10 @@ public class Util extends Object {
      * but have have no value in HTML.  For example "disabled" or
      * "readonly". <P>
      *
-     * @see renderBooleanPassthruAttributes
+     * @see #renderBooleanPassThruAttributes
      */
 
-    private static String booleanPassthruAttributes[] = {
+    private static String[] booleanPassthruAttributes = {
         "disabled",
         "readonly",
         "ismap"
@@ -320,9 +319,9 @@ public class Util extends Object {
      * attribute requires interpretation by a Renderer, it should be
      * removed from this array.<P>
      *
-     * @see renderPassthruAttributes
+     * @see #renderPassThruAttributes
      */
-    private static String passthruAttributes[] = {
+    private static String[] passthruAttributes = {
         "accept",
         "accesskey",
         "alt",
@@ -423,7 +422,7 @@ public class Util extends Object {
      */
 
     public static synchronized String getExceptionMessageString(String messageId,
-                                                          Object params[]) {
+                                                          Object[] params) {
         String result = null;
 
         FacesMessage message = MessageFactory.getMessage(messageId, params);
@@ -444,7 +443,7 @@ public class Util extends Object {
     }
 
     public static synchronized FacesMessage getExceptionMessage(String messageId,
-								      Object params[]) {
+								      Object[] params) {
         return MessageFactory.getMessage(messageId, params);
     }
 
@@ -470,19 +469,19 @@ public class Util extends Object {
 
         renderKitFactory = (RenderKitFactory)
             FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
-        Util.doAssert(null != renderKitFactory);
+        assert (null != renderKitFactory);
 
         lifecycleFactory = (LifecycleFactory)
             FactoryFinder.getFactory(FactoryFinder.LIFECYCLE_FACTORY);
-        Util.doAssert(null != lifecycleFactory);
+        assert (null != lifecycleFactory);
 
         facesContextFactory = (FacesContextFactory)
             FactoryFinder.getFactory(FactoryFinder.FACES_CONTEXT_FACTORY);
-        Util.doAssert(null != facesContextFactory);
+        assert (null != facesContextFactory);
 
         applicationFactory = (ApplicationFactory)
             FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
-        Util.doAssert(null != applicationFactory);
+        assert (null != applicationFactory);
 
         defaultRenderKit =
             renderKitFactory.getRenderKit(null,
@@ -564,7 +563,7 @@ public class Util extends Object {
 
 
     /**
-     * <p>Return an Iterator over {@link SelectItemWrapper} instances representing the
+     * <p>Return an Iterator over {@link SelectItem} instances representing the
      * available options for this component, assembled from the set of
      * {@link UISelectItem} and/or {@link UISelectItems} components that are
      * direct children of this component.  If there are no such children, a
@@ -601,7 +600,7 @@ public class Util extends Object {
                 if (value instanceof SelectItem) {
                     list.add(value);
                 } else if (value instanceof SelectItem[]) {
-                    SelectItem items[] = (SelectItem[]) value;
+                    SelectItem[] items = (SelectItem[]) value;
                     for (int i = 0; i < items.length; i++) {
                         list.add(items[i]);
                     }
@@ -683,7 +682,7 @@ public class Util extends Object {
                 (javax.servlet.jsp.jstl.fmt.LocalizationContext)
                 (Util.getValueBinding(bundleName)).getValue(context))) {
                 result = locCtx.getLocale();
-                Util.doAssert(null != result);
+                assert (null != result);
             }
         }
         if (null == result) {
@@ -755,8 +754,8 @@ public class Util extends Object {
                                                        UIComponent component,
                                                        String[] excludes)
         throws IOException {
-        Util.doAssert(null != writer);
-        Util.doAssert(null != component);
+        assert (null != writer);
+        assert (null != component);
 
         int i = 0, len = booleanPassthruAttributes.length, j,
             jLen = (null != excludes ? excludes.length : 0);
@@ -787,7 +786,7 @@ public class Util extends Object {
                     if (!(value instanceof String)) {
                         value = value.toString();
                     }
-                    result = (new Boolean((String) value)).booleanValue();
+                    result = (Boolean.valueOf((String) value)).booleanValue();
                 }
                 //PENDING(rogerk) will revisit "null" param soon..
                 if (result) {
@@ -821,8 +820,8 @@ public class Util extends Object {
                                                 UIComponent component,
                                                 String[] excludes)
         throws IOException {
-        Util.doAssert(null != writer);
-        Util.doAssert(null != component);
+        assert (null != writer);
+        assert (null != component);
 
         int i = 0, len = passthruAttributes.length, j,
             jLen = (null != excludes ? excludes.length : 0);
@@ -1046,7 +1045,6 @@ public class Util extends Object {
         if (null == expression) {
             return false;
         }
-        int start = 0;
         // if it doesn't start and end with delimiters
         if (!(expression.startsWith("#{") && expression.endsWith("}"))) {
             // see if it has some inside.
@@ -1066,11 +1064,11 @@ public class Util extends Object {
         throws FacesException {
         // Get Application instance
         Application application = context.getApplication();
-        Util.doAssert(application != null);
+        assert (application != null);
 
         // Get the ViewHandler
         ViewHandler viewHandler = application.getViewHandler();
-        Util.doAssert(viewHandler != null);
+        assert (viewHandler != null);
 
         return viewHandler;
     }
@@ -1084,12 +1082,12 @@ public class Util extends Object {
 
         renderKitFactory = (RenderKitFactory)
             FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
-        Util.doAssert(null != renderKitFactory);
+        assert (null != renderKitFactory);
 
-        Util.doAssert(null != renderKitId);
+        assert (null != renderKitId);
 
         renderKit = renderKitFactory.getRenderKit(context, renderKitId);
-        Util.doAssert(null != renderKit);
+        assert (null != renderKit);
 
         result = renderKit.getResponseStateManager();
         return result;
@@ -1271,7 +1269,7 @@ public class Util extends Object {
 
     public static String stripBracketsIfNecessary(String expression)
         throws ReferenceSyntaxException {
-        Util.doAssert(null != expression);
+        assert (null != expression);
         int len = 0;
         // look for invalid expressions
         if ('#' == expression.charAt(0)) {
@@ -1293,15 +1291,6 @@ public class Util extends Object {
     //
     // General Methods
     //
-
-    private static boolean assertEnabled = true;
-
-
-    public static void doAssert(boolean cond) throws FacesException {
-        if (assertEnabled && !cond) {
-            throw new FacesException(getExceptionMessageString(ASSERTION_FAILED_ID));
-        }
-    }
 
 
     public static void parameterNonNull(Object param) throws FacesException {
@@ -1417,10 +1406,10 @@ public class Util extends Object {
     }
 
     /**
-     * @result a List of expressions from the expressionString
-     *
      * @param expressionString the expression string, with delimiters
      * intact.
+     *
+     * @return a List of expressions from the expressionString
      */
 
     public static List getExpressionsFromString(String expressionString) throws ReferenceSyntaxException {
@@ -1447,8 +1436,8 @@ public class Util extends Object {
      * @return index of the first occurrence of . or [
      */
     private static int getFirstSegmentIndex(String valueBinding) {
-        int segmentIndex = valueBinding.indexOf(".");
-        int bracketIndex = valueBinding.indexOf("[");
+        int segmentIndex = valueBinding.indexOf('.');
+        int bracketIndex = valueBinding.indexOf('[');
 
         //there is no "." in the valueBinding so take the bracket value
         if (segmentIndex < 0) {

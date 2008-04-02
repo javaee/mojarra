@@ -4,7 +4,7 @@
  */
 
 /*
- * $Id: InstancePool.java,v 1.3 2004/06/01 16:58:49 eburns Exp $
+ * $Id: InstancePool.java,v 1.4 2004/10/12 14:39:55 rlubke Exp $
  */
 
 package com.sun.faces.util;
@@ -154,7 +154,7 @@ public class InstancePool extends Object {
 	if (-1 == (i = instances.indexOf(toCheckin))) {
 	    throw new IllegalStateException("Trying to checkin an instance that is not in the pool: " + toCheckin);
 	}
-	Util.doAssert(checkedOut.get(i));
+	assert (checkedOut.get(i));
 	checkedOut.clear(i);
     }
 

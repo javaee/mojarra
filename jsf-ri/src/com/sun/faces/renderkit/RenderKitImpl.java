@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKitImpl.java,v 1.22 2004/07/30 16:11:57 edburns Exp $
+ * $Id: RenderKitImpl.java,v 1.23 2004/10/12 14:39:51 rlubke Exp $
  */
 
 /*
@@ -30,7 +30,7 @@ import java.util.HashMap;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: RenderKitImpl.java,v 1.22 2004/07/30 16:11:57 edburns Exp $
+ * @version $Id: RenderKitImpl.java,v 1.23 2004/10/12 14:39:51 rlubke Exp $
  */
 
 public class RenderKitImpl extends RenderKit {
@@ -118,7 +118,7 @@ public class RenderKitImpl extends RenderKit {
             throw new NullPointerException(message);
         }
 
-        Util.doAssert(rendererFamilies != null);
+        assert (rendererFamilies != null);
 
 	HashMap renderers = null;
         Renderer renderer = null;

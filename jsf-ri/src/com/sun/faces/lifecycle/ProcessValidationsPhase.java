@@ -1,5 +1,5 @@
 /*
- * $Id: ProcessValidationsPhase.java,v 1.21 2004/03/30 03:51:10 eburns Exp $
+ * $Id: ProcessValidationsPhase.java,v 1.22 2004/10/12 14:39:51 rlubke Exp $
  */
 
 /*
@@ -72,7 +72,7 @@ public class ProcessValidationsPhase extends Phase {
             log.debug("Entering ProcessValidationsPhase");
         }
         UIComponent component = facesContext.getViewRoot();
-        Util.doAssert(null != component);
+        assert (null != component);
 
         try {
             component.processValidators(facesContext);

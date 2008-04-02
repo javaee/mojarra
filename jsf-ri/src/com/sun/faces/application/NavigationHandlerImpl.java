@@ -1,5 +1,5 @@
 /*
- * $Id: NavigationHandlerImpl.java,v 1.34 2004/07/17 01:37:12 jayashri Exp $
+ * $Id: NavigationHandlerImpl.java,v 1.35 2004/10/12 14:39:49 rlubke Exp $
  */
 
 /*
@@ -107,7 +107,7 @@ public class NavigationHandlerImpl extends NavigationHandler {
         ExternalContext extContext = context.getExternalContext();
         if (caseStruct != null) {
             ViewHandler viewHandler = Util.getViewHandler(context);
-            Util.doAssert(null != viewHandler);
+            assert (null != viewHandler);
 
             if (caseStruct.navCase.hasRedirect()) {
                 // perform a 302 redirect.
@@ -200,7 +200,7 @@ public class NavigationHandlerImpl extends NavigationHandler {
 	    
 
         Map caseListMap = associate.getNavigationCaseListMappings();
-        Util.doAssert(null != caseListMap);
+        assert (null != caseListMap);
 
         List caseList = (List) caseListMap.get(viewId);
 
@@ -243,9 +243,9 @@ public class NavigationHandlerImpl extends NavigationHandler {
 	}
 
         Map caseListMap = associate.getNavigationCaseListMappings();
-        Util.doAssert(null != caseListMap);
+        assert (null != caseListMap);
         TreeSet wildcardMatchList = associate.getNavigationWildCardList();
-        Util.doAssert(null != wildcardMatchList);
+        assert (null != wildcardMatchList);
 
         Iterator iter = wildcardMatchList.iterator();
         while (iter.hasNext()) {
@@ -307,7 +307,7 @@ public class NavigationHandlerImpl extends NavigationHandler {
 	}
 
         Map caseListMap = associate.getNavigationCaseListMappings();
-        Util.doAssert(null != caseListMap);
+        assert (null != caseListMap);
 
         List caseList = (List) caseListMap.get("*");
 

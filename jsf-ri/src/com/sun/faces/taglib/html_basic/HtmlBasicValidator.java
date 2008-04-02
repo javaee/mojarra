@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicValidator.java,v 1.10 2004/07/26 21:12:44 rlubke Exp $
+ * $Id: HtmlBasicValidator.java,v 1.11 2004/10/12 14:39:53 rlubke Exp $
  */
 
 /*
@@ -73,7 +73,7 @@ public class HtmlBasicValidator extends FacesValidator {
 
     protected String getFailureMessage(String prefix, String uri) {
         // we should only get called if this Validator failed
-        Util.doAssert(failed);
+        assert (failed);
 
         StringBuffer result = new StringBuffer();
         if (commandTagParser.hasFailed()) {

@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigFileTestCase.java,v 1.64 2004/08/02 20:22:44 rogerk Exp $
+ * $Id: ConfigFileTestCase.java,v 1.65 2004/10/12 14:39:57 rlubke Exp $
  */
 
 /*
@@ -293,7 +293,7 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
             Class c = bean.getClass();
             Method m[] = c.getDeclaredMethods();
             for (int i = 0; i < m.length; i++) {
-                Util.doAssert(m[i].getName().equals("setSimpleProperty") ||
+                assert (m[i].getName().equals("setSimpleProperty") ||
                               m[i].getName().equals("getSimpleProperty") ||
                               m[i].getName().equals("setIntProperty") ||
                               m[i].getName().equals("getIntProperty") ||
@@ -304,7 +304,7 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
                 if (m[i].getName().equals("getSimpleProperty")) {
                     Object args[] = null;
                     Object value = m[i].invoke(bean, args);
-                    Util.doAssert(((String) value).equals("Bobby Orr"));
+                    assert (((String) value).equals("Bobby Orr"));
                 }
             }
         } catch (Throwable t) {

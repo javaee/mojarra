@@ -5,7 +5,7 @@
 
 
 /**
- * $Id: SelectManyCheckboxListRenderer.java,v 1.37 2004/07/27 19:59:17 rogerk Exp $
+ * $Id: SelectManyCheckboxListRenderer.java,v 1.38 2004/10/12 14:39:53 rlubke Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -86,7 +86,7 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
         }
 
         ResponseWriter writer = context.getResponseWriter();
-        Util.doAssert(writer != null);
+        assert (writer != null);
 
         String alignStr = null;
         Object borderObj = null;
@@ -166,7 +166,7 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
         throws IOException {
 
         ResponseWriter writer = context.getResponseWriter();
-        Util.doAssert(writer != null);
+        assert (writer != null);
                 
         // disable the check box if the attribute is set.
         String labelClass = null;
@@ -257,7 +257,7 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
         throws IOException {
 
         ResponseWriter writer = context.getResponseWriter();
-        Util.doAssert(writer != null);
+        assert (writer != null);
         
         writer.startElement("table", component);
         if (border != Integer.MIN_VALUE) {
@@ -296,7 +296,7 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
         throws IOException {
 
         ResponseWriter writer = context.getResponseWriter();
-        Util.doAssert(writer != null);
+        assert (writer != null);
 
         if (!alignVertical) {
             writer.writeText("\t", null);

@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationAssociate.java,v 1.3 2004/07/17 01:37:11 jayashri Exp $
+ * $Id: ApplicationAssociate.java,v 1.4 2004/10/12 14:39:48 rlubke Exp $
  */
 
 /*
@@ -268,7 +268,7 @@ public class ApplicationAssociate extends Object {
         //add bean to appropriate scope
         String scope = managedBean.getScope();
         //scope cannot be null
-        Util.doAssert(null != scope);
+        assert (null != scope);
         if (log.isTraceEnabled()) {
             log.trace("Storing " + managedBeanName + " in scope " + scope);
         }

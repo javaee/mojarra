@@ -1,5 +1,5 @@
 /*
- * $Id: ConvertNumberTag.java,v 1.10 2004/04/06 14:18:19 eburns Exp $
+ * $Id: ConvertNumberTag.java,v 1.11 2004/10/12 14:39:54 rlubke Exp $
  */
 
 /*
@@ -22,7 +22,7 @@ import java.util.Locale;
  * <p>ConvertNumberTag is a ConverterTag implementation for
  * javax.faces.convert.NumberConverter</p>
  *
- * @version $Id: ConvertNumberTag.java,v 1.10 2004/04/06 14:18:19 eburns Exp $
+ * @version $Id: ConvertNumberTag.java,v 1.11 2004/10/12 14:39:54 rlubke Exp $
  */
 
 public class ConvertNumberTag extends ConverterTag {
@@ -194,7 +194,7 @@ public class ConvertNumberTag extends ConverterTag {
         NumberConverter result = null;
 
         result = (NumberConverter) super.createConverter();
-        Util.doAssert(null != result);
+        assert (null != result);
 
         evaluateExpressions();
         result.setCurrencyCode(currencyCode);
@@ -242,7 +242,7 @@ public class ConvertNumberTag extends ConverterTag {
             if (Util.isVBExpression(groupingUsed_)) {
                 Boolean booleanObj = (Boolean) Util.evaluateVBExpression(
                     groupingUsed_);
-                Util.doAssert(null != booleanObj);
+                assert (null != booleanObj);
                 groupingUsed = booleanObj.booleanValue();
             } else {
                 groupingUsed = new Boolean(groupingUsed_).booleanValue();
@@ -252,7 +252,7 @@ public class ConvertNumberTag extends ConverterTag {
             if (Util.isVBExpression(integerOnly_)) {
                 Boolean booleanObj = (Boolean) Util.evaluateVBExpression(
                     integerOnly_);
-                Util.doAssert(null != booleanObj);
+                assert (null != booleanObj);
                 integerOnly = booleanObj.booleanValue();
             } else {
                 integerOnly = new Boolean(integerOnly_).booleanValue();
@@ -262,7 +262,7 @@ public class ConvertNumberTag extends ConverterTag {
             if (Util.isVBExpression(maxFractionDigits_)) {
                 intObj =
                     (Integer) Util.evaluateVBExpression(maxFractionDigits_);
-                Util.doAssert(null != intObj);
+                assert (null != intObj);
                 maxFractionDigits = intObj.intValue();
             } else {
                 maxFractionDigits = new Integer(maxFractionDigits_).intValue();
@@ -271,7 +271,7 @@ public class ConvertNumberTag extends ConverterTag {
         if (maxIntegerDigits_ != null) {
             if (Util.isVBExpression(maxIntegerDigits_)) {
                 intObj = (Integer) Util.evaluateVBExpression(maxIntegerDigits_);
-                Util.doAssert(null != intObj);
+                assert (null != intObj);
                 maxIntegerDigits = intObj.intValue();
             } else {
                 maxIntegerDigits = new Integer(maxIntegerDigits_).intValue();
@@ -281,7 +281,7 @@ public class ConvertNumberTag extends ConverterTag {
             if (Util.isVBExpression(minFractionDigits_)) {
                 intObj =
                     (Integer) Util.evaluateVBExpression(minFractionDigits_);
-                Util.doAssert(null != intObj);
+                assert (null != intObj);
                 minFractionDigits = intObj.intValue();
             } else {
                 minFractionDigits = new Integer(minFractionDigits_).intValue();
@@ -290,7 +290,7 @@ public class ConvertNumberTag extends ConverterTag {
         if (minIntegerDigits_ != null) {
             if (Util.isVBExpression(minIntegerDigits_)) {
                 intObj = (Integer) Util.evaluateVBExpression(minIntegerDigits_);
-                Util.doAssert(null != intObj);
+                assert (null != intObj);
                 minIntegerDigits = intObj.intValue();
             } else {
                 minIntegerDigits = new Integer(minIntegerDigits_).intValue();

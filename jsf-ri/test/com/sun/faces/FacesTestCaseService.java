@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTestCaseService.java,v 1.40 2004/07/17 01:37:13 jayashri Exp $
+ * $Id: FacesTestCaseService.java,v 1.41 2004/10/12 14:39:56 rlubke Exp $
  */
 
 /*
@@ -49,7 +49,7 @@ import com.sun.faces.RIConstants;
  * <B>Lifetime And Scope</B> <P> Same as the JspTestCase or
  * ServletTestCase instance that uses it.
  *
- * @version $Id: FacesTestCaseService.java,v 1.40 2004/07/17 01:37:13 jayashri Exp $
+ * @version $Id: FacesTestCaseService.java,v 1.41 2004/10/12 14:39:56 rlubke Exp $
  * @see	com.sun.faces.context.FacesContextFactoryImpl
  * @see	com.sun.faces.context.FacesContextImpl
  */
@@ -144,7 +144,7 @@ public class FacesTestCaseService extends Object {
 
         facesContextFactory = (FacesContextFactory)
             FactoryFinder.getFactory(FactoryFinder.FACES_CONTEXT_FACTORY);
-        Util.doAssert(null != facesContextFactory);
+        assert (null != facesContextFactory);
 
         // Since we run using tomcat's deploy targets, we must obtain the
         // absolute path to where we are to write our output files.
@@ -152,14 +152,14 @@ public class FacesTestCaseService extends Object {
             facesTestCase.getConfig().getServletContext().getInitParameter(
                 "testRootDir");
 
-        Util.doAssert(null != testRootDir);
+        assert (null != testRootDir);
         System.setProperty("testRootDir", testRootDir);
 
         String jcovFile =
             facesTestCase.getConfig().getServletContext().getInitParameter(
                 "jcovFile");
 
-        Util.doAssert(null != jcovFile);
+        assert (null != jcovFile);
         System.setProperty("jcovFile", jcovFile);
 
         // See if the testcase wants to have its output sent to a file.
@@ -172,9 +172,9 @@ public class FacesTestCaseService extends Object {
 
         LifecycleFactory factory = (LifecycleFactory)
             FactoryFinder.getFactory(FactoryFinder.LIFECYCLE_FACTORY);
-        Util.doAssert(null != factory);
+        assert (null != factory);
         lifecycle = factory.getLifecycle(LifecycleFactory.DEFAULT_LIFECYCLE);
-        Util.doAssert(null != lifecycle);
+        assert (null != lifecycle);
 
 
         facesContext =
@@ -182,7 +182,7 @@ public class FacesTestCaseService extends Object {
                                                 getServletContext(),
                                                 facesTestCase.getRequest(),
                                                 response, lifecycle);
-        Util.doAssert(null != facesContext);
+        assert (null != facesContext);
 
         if (facesTestCase.sendWriterToFile()) {
             ResponseWriter responseWriter = new FileOutputResponseWriter();

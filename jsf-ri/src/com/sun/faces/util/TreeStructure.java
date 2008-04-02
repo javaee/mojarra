@@ -1,5 +1,5 @@
 /*
- * $Id: TreeStructure.java,v 1.7 2004/03/31 18:48:51 eburns Exp $
+ * $Id: TreeStructure.java,v 1.8 2004/10/12 14:39:55 rlubke Exp $
  */
 
 /*
@@ -131,7 +131,7 @@ public class TreeStructure implements java.io.Serializable {
                 Util.MISSING_CLASS_ERROR_MESSAGE_ID,
                 params));
         }
-        Util.doAssert(component != null);
+        assert (component != null);
         component.setId(id);
         return component;
     }

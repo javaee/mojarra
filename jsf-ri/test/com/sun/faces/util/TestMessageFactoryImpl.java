@@ -1,5 +1,5 @@
 /*
- * $Id: TestMessageFactoryImpl.java,v 1.7 2004/04/07 17:53:06 rkitain Exp $
+ * $Id: TestMessageFactoryImpl.java,v 1.8 2004/10/12 14:39:57 rlubke Exp $
  */
 
 /*
@@ -25,7 +25,7 @@ import java.util.Locale;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestMessageFactoryImpl.java,v 1.7 2004/04/07 17:53:06 rkitain Exp $
+ * @version $Id: TestMessageFactoryImpl.java,v 1.8 2004/10/12 14:39:57 rlubke Exp $
  */
 
 public class TestMessageFactoryImpl extends ServletFacesTestCase {
@@ -81,7 +81,7 @@ public class TestMessageFactoryImpl extends ServletFacesTestCase {
         FacesMessage msg = null;
 
         FacesContext facesContext = getFacesContext();
-        Util.doAssert(facesContext != null);
+        assert (facesContext != null);
 
         System.out.println("Testing get methods");
         try {

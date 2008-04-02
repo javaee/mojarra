@@ -1,5 +1,5 @@
 /*
- * $Id: CommandLinkRenderer.java,v 1.22 2004/06/08 13:47:28 rogerk Exp $
+ * $Id: CommandLinkRenderer.java,v 1.23 2004/10/12 14:39:52 rlubke Exp $
  */
 
 /*
@@ -172,7 +172,7 @@ public class CommandLinkRenderer extends HtmlBasicRenderer {
             return;
         }
         ResponseWriter writer = context.getResponseWriter();
-        Util.doAssert(writer != null);
+        assert (writer != null);
 
         clientId = command.getClientId(context);
 
@@ -305,7 +305,7 @@ public class CommandLinkRenderer extends HtmlBasicRenderer {
             return;
         }
         ResponseWriter writer = context.getResponseWriter();
-        Util.doAssert(writer != null);
+        assert (writer != null);
 
         //Write Anchor inline elements
 

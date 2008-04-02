@@ -1,5 +1,5 @@
 /*
- * $Id: TextRenderer.java,v 1.66 2004/03/31 18:48:39 eburns Exp $
+ * $Id: TextRenderer.java,v 1.67 2004/10/12 14:39:53 rlubke Exp $
  */
 
 /*
@@ -87,7 +87,7 @@ public class TextRenderer extends HtmlBasicInputRenderer {
         throws IOException {
 
         ResponseWriter writer = context.getResponseWriter();
-        Util.doAssert(writer != null);
+        assert (writer != null);
         boolean
             shouldWriteIdAttribute = false,
             isOutput = false;

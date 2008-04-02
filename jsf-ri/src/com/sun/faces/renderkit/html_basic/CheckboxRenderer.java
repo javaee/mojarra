@@ -1,5 +1,5 @@
 /*
- * $Id: CheckboxRenderer.java,v 1.68 2004/05/04 19:55:07 rlubke Exp $
+ * $Id: CheckboxRenderer.java,v 1.69 2004/10/12 14:39:51 rlubke Exp $
  *
  */
 
@@ -96,7 +96,7 @@ public class CheckboxRenderer extends HtmlBasicInputRenderer {
         }
 
         String clientId = component.getClientId(context);
-        Util.doAssert(clientId != null);
+        assert (clientId != null);
         // Convert the new value
         UIInput uiInput = (UIInput) component;
         Map requestParameterMap = context.getExternalContext()
@@ -157,7 +157,7 @@ public class CheckboxRenderer extends HtmlBasicInputRenderer {
                                       String currentValue) throws IOException {
 
         ResponseWriter writer = context.getResponseWriter();
-        Util.doAssert(writer != null);
+        assert (writer != null);
         String styleClass = null;
 
         writer.startElement("input", component);

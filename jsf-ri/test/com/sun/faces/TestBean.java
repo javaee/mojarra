@@ -43,7 +43,7 @@ public class TestBean extends Object {
 
     public void setOne(String newOne) {
         one = newOne;
-        Util.doAssert(newOne.equals("one"));
+        assert (newOne.equals("one"));
         System.setProperty(PROP, TRUE);
     }
 
@@ -325,7 +325,7 @@ public class TestBean extends Object {
 
         public void setTwo(String newTwo) {
             two = newTwo;
-            Util.doAssert(newTwo.equals("two"));
+            assert (newTwo.equals("two"));
             System.setProperty(PROP, TRUE);
         }
 
@@ -395,7 +395,7 @@ public class TestBean extends Object {
 
         public void setThree(String newThree) {
             three = newThree;
-            Util.doAssert(newThree.equals("three"));
+            assert (newThree.equals("three"));
             System.setProperty(PROP, TRUE);
         }
 

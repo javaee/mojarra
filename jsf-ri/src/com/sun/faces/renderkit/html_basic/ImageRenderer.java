@@ -1,5 +1,5 @@
 /*
- * $Id: ImageRenderer.java,v 1.34 2004/09/01 21:15:20 edburns Exp $
+ * $Id: ImageRenderer.java,v 1.35 2004/10/12 14:39:52 rlubke Exp $
  */
 
 /*
@@ -26,7 +26,7 @@ import java.io.IOException;
  * <B>ImageRenderer</B> is a class that handles the rendering of the graphic
  * ImageTag
  *
- * @version $Id: ImageRenderer.java,v 1.34 2004/09/01 21:15:20 edburns Exp $
+ * @version $Id: ImageRenderer.java,v 1.35 2004/10/12 14:39:52 rlubke Exp $
  */
 
 public class ImageRenderer extends HtmlBasicRenderer {
@@ -112,7 +112,7 @@ public class ImageRenderer extends HtmlBasicRenderer {
         }
 
         writer = context.getResponseWriter();
-        Util.doAssert(writer != null);
+        assert (writer != null);
 
         writer.startElement("img", component);
         writeIdAttributeIfNecessary(context, writer, component);

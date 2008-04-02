@@ -365,6 +365,7 @@ must exist.  This is necessary for the MessageFactory class.
            destdir="${build.classes}"
              debug="${compile.debug}"
        deprecation="${compile.deprecation}"
+            source="1.4"
           optimize="${compile.optimize}">
       <compilerarg line="${jcov.javac.args}" />
       <classpath refid="compile.classpath"/>
@@ -688,6 +689,7 @@ must exist.  This is necessary for the MessageFactory class.
                      destdir="${basedir}/build/test"
                        debug="${compile.debug}"
                     optimize="${compile.optimize}"
+                      source="1.4"
                  deprecation="${compile.deprecation}">
 
         <classpath     refid="test.classpath"/>

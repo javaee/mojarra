@@ -1,5 +1,5 @@
 /*
- * $Id: FileOutputResponseWriter.java,v 1.13 2004/02/26 20:33:59 eburns Exp $
+ * $Id: FileOutputResponseWriter.java,v 1.14 2004/10/12 14:39:56 rlubke Exp $
  */
 
 /*
@@ -30,7 +30,7 @@ import java.io.Writer;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: FileOutputResponseWriter.java,v 1.13 2004/02/26 20:33:59 eburns Exp $
+ * @version $Id: FileOutputResponseWriter.java,v 1.14 2004/10/12 14:39:56 rlubke Exp $
  */
 
 public class FileOutputResponseWriter extends ResponseWriter {
@@ -69,7 +69,7 @@ public class FileOutputResponseWriter extends ResponseWriter {
             writer = new HtmlResponseWriter(out, "text/html", "ISO-8859-1");
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            Util.doAssert(false);
+            assert (false);
         }
     }
 
@@ -82,7 +82,7 @@ public class FileOutputResponseWriter extends ResponseWriter {
             String testRootDir;
             // prepend the testRootDir to the RESPONSE_WRITER_FILENAME
             testRootDir = System.getProperty("testRootDir");
-            Util.doAssert(null != testRootDir);
+            assert (null != testRootDir);
             FACES_RESPONSE_ROOT = testRootDir + "/";
             RESPONSE_WRITER_FILENAME =
                 FACES_RESPONSE_ROOT + RESPONSE_WRITER_FILENAME;

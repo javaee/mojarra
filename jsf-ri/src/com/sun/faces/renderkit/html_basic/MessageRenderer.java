@@ -1,5 +1,5 @@
 /*
- * $Id: MessageRenderer.java,v 1.47 2004/03/31 18:48:38 eburns Exp $
+ * $Id: MessageRenderer.java,v 1.48 2004/10/12 14:39:52 rlubke Exp $
  */
 
 /*
@@ -111,7 +111,7 @@ public class MessageRenderer extends HtmlBasicRenderer {
             return;
         }
         writer = context.getResponseWriter();
-        Util.doAssert(writer != null);
+        assert (writer != null);
 
         String clientId = ((UIMessage) component).getFor();
         //"for" attribute required for Message. Should be taken care of
@@ -127,7 +127,7 @@ public class MessageRenderer extends HtmlBasicRenderer {
         messageIter = getMessageIter(context, clientId, component);
 
 
-        Util.doAssert(messageIter != null);
+        assert (messageIter != null);
         if (!messageIter.hasNext()) {
             //no messages to render
             return;

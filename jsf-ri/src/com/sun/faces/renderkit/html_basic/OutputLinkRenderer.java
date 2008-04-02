@@ -1,5 +1,5 @@
 /*
- * $Id: OutputLinkRenderer.java,v 1.15 2004/03/31 18:48:38 eburns Exp $
+ * $Id: OutputLinkRenderer.java,v 1.16 2004/10/12 14:39:53 rlubke Exp $
  */
 
 /*
@@ -29,7 +29,7 @@ import java.util.Iterator;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: OutputLinkRenderer.java,v 1.15 2004/03/31 18:48:38 eburns Exp $
+ * @version $Id: OutputLinkRenderer.java,v 1.16 2004/10/12 14:39:53 rlubke Exp $
  */
 
 public class OutputLinkRenderer extends HtmlBasicRenderer {
@@ -127,7 +127,7 @@ public class OutputLinkRenderer extends HtmlBasicRenderer {
             return;
         }
         ResponseWriter writer = context.getResponseWriter();
-        Util.doAssert(writer != null);
+        assert (writer != null);
         writer.startElement("a", component);
         writeIdAttributeIfNecessary(context, writer, component);
 
@@ -228,7 +228,7 @@ public class OutputLinkRenderer extends HtmlBasicRenderer {
             return;
         }
         ResponseWriter writer = context.getResponseWriter();
-        Util.doAssert(writer != null);
+        assert (writer != null);
 
         //Write Anchor inline elements
 

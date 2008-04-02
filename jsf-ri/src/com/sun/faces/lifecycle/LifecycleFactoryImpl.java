@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleFactoryImpl.java,v 1.21 2004/03/31 18:48:30 eburns Exp $
+ * $Id: LifecycleFactoryImpl.java,v 1.22 2004/10/12 14:39:50 rlubke Exp $
  */
 
 /*
@@ -27,7 +27,7 @@ import java.util.Iterator;
  * <B>LifecycleFactoryImpl</B> is the stock implementation of Lifecycle
  * in the JSF RI. <P>
  *
- * @version $Id: LifecycleFactoryImpl.java,v 1.21 2004/03/31 18:48:30 eburns Exp $
+ * @version $Id: LifecycleFactoryImpl.java,v 1.22 2004/10/12 14:39:50 rlubke Exp $
  * @see	javax.faces.lifecycle.LifecycleFactory
  */
 
@@ -121,7 +121,7 @@ public class LifecycleFactoryImpl extends LifecycleFactory {
             throw new IllegalArgumentException(message);
         }
         result = wrapper.instance;
-        Util.doAssert(null != result);
+        assert (null != result);
 
         if (alreadyCreated(lifecycleId)) {
             message = Util.getExceptionMessageString(

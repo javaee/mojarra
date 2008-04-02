@@ -1,5 +1,5 @@
 /*
- * $Id: ValueBindingImpl.java,v 1.35 2004/07/17 01:37:12 jayashri Exp $
+ * $Id: ValueBindingImpl.java,v 1.36 2004/10/12 14:39:50 rlubke Exp $
  */
 
 /*
@@ -114,7 +114,7 @@ public class ValueBindingImpl extends ValueBinding implements StateHolder {
 		    });
 	    }
 	}						      
-        Util.doAssert(null != applicationMap);
+        assert (null != applicationMap);
     }
 
 //

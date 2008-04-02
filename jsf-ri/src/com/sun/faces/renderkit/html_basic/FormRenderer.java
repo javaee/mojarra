@@ -1,5 +1,5 @@
 /*
- * $Id: FormRenderer.java,v 1.78 2004/04/28 20:59:41 jvisvanathan Exp $
+ * $Id: FormRenderer.java,v 1.79 2004/10/12 14:39:52 rlubke Exp $
  */
 
 /*
@@ -114,7 +114,7 @@ public class FormRenderer extends HtmlBasicRenderer {
             return;
         }
         ResponseWriter writer = context.getResponseWriter();
-        Util.doAssert(writer != null);
+        assert (writer != null);
         // since method and action are rendered here they are not added
         // to the pass through attributes in Util class.
         writer.startElement("form", component);
@@ -183,7 +183,7 @@ public class FormRenderer extends HtmlBasicRenderer {
 
         // Render the end tag for form
         ResponseWriter writer = context.getResponseWriter();
-        Util.doAssert(writer != null);
+        assert (writer != null);
 
         // this hidden field will be checked in the decode method to determine if
         // this form has been submitted.

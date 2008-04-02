@@ -1,5 +1,5 @@
 /*
- * $Id: ApplyRequestValuesPhase.java,v 1.17 2004/02/26 20:32:46 eburns Exp $
+ * $Id: ApplyRequestValuesPhase.java,v 1.18 2004/10/12 14:39:50 rlubke Exp $
  */
 
 /*
@@ -73,7 +73,7 @@ public class ApplyRequestValuesPhase extends Phase {
         }
 
         UIComponent component = facesContext.getViewRoot();
-        Util.doAssert(null != component);
+        assert (null != component);
 
         try {
             component.processDecodes(facesContext);
