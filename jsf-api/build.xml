@@ -29,6 +29,7 @@
   <property name="src.dir"          value="${basedir}/src"/>
   <property name="tools.dir"        value="${basedir}/tools"/>
   <property name="test.dir"         value="${basedir}/test"/>
+  <property name="test.results.dir" value="${basedir}/testresults"/>
   <property name="dist.dir"         value="${basedir}/dist"/>
   <property name="jcov.javac.args"         value=""/>
   <property name="jcov.jvm.args"         value=""/>
@@ -281,7 +282,9 @@ jsf-api.jar.
 
 
   <target name="prepare.test" 
-          depends="discover.jsp.level,prepare.test.jsp2,prepare.test.jsp12"/>
+          depends="discover.jsp.level,prepare.test.jsp2,prepare.test.jsp12">
+      <mkdir dir="${test.results.dir}"/>
+  </target> 
 
   <target name="discover.jsp.level">
     <echo message="jsp.jar is ${jsp.jar}"/>
@@ -615,8 +618,9 @@ jsf-api.jar.
       <jvmarg line="${debug.jvm.args}"/>
       <jvmarg line="${jcov.jvm.args}"/>
       <classpath  refid="test.classpath"/>
-      <formatter   type="plain"      usefile="false"/>
-      <batchtest>
+      <formatter   type="plain" usefile="false"/>
+      <formatter   type="xml" usefile="true"/>
+      <batchtest todir="${test.results.dir}">
         <fileset    dir="${build.test}"
                includes="javax/faces/component/*TestCase.class"/>
       </batchtest>
@@ -631,7 +635,8 @@ jsf-api.jar.
       <jvmarg line="${jcov.jvm.args}"/>
       <classpath  refid="test.classpath"/>
       <formatter   type="plain"      usefile="false"/>
-      <batchtest>
+      <formatter   type="xml" usefile="true"/>
+      <batchtest todir="${test.results.dir}">
         <fileset    dir="${build.test}"
                includes="javax/faces/validator/*TestCase.class"/>
       </batchtest>
@@ -644,7 +649,8 @@ jsf-api.jar.
           haltonfailure="yes" haltonerror="yes">
       <classpath  refid="test.classpath"/>
       <formatter   type="plain"      usefile="false"/>
-      <batchtest>
+      <formatter   type="xml" usefile="true"/>
+      <batchtest todir="${test.results.dir}">
         <fileset    dir="${build.test}"
                includes="javax/faces/mock/*TestCase.class"/>
       </batchtest>
@@ -659,7 +665,8 @@ jsf-api.jar.
       <jvmarg line="${jcov.jvm.args}"/>
       <classpath  refid="test.classpath"/>
       <formatter   type="plain"      usefile="false"/>
-      <batchtest>
+      <formatter   type="xml" usefile="true"/>
+      <batchtest todir="${test.results.dir}">
         <fileset    dir="${build.test}"
                includes="javax/faces/model/*TestCase.class"/>
       </batchtest>
@@ -675,7 +682,8 @@ jsf-api.jar.
       <sysproperty key="base.dir" value="${basedir}"/>
       <classpath  refid="test.classpath"/>
       <formatter   type="plain"      usefile="false"/>
-      <batchtest>
+      <formatter   type="xml" usefile="true"/>
+      <batchtest todir="${test.results.dir}">
         <fileset    dir="${build.test}"
                includes="javax/faces/webapp/*TestCase.class"/>
       </batchtest>
@@ -729,6 +737,7 @@ jsf-api.jar.
   -->
   <target name="clean" description="Clean build directory">
     <delete dir="${build.dir}" />
+    <delete dir="${test.results.dir}" />
     <delete>
       <fileset dir="." includes="**/.nbattrs" defaultexcludes="no"/>
       <fileset dir="." includes="**/*~" defaultexcludes="no"/>
