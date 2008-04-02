@@ -84,7 +84,7 @@ public class PackageValueChanged implements ValueChangedListener {
             log.debug("vEvent.getNewValue: "+vEvent.getNewValue());
             
             log.debug("Vevent name: " + (vEvent.getNewValue()).getClass().getName());
-            
+            // the if is for the SelectItems; else is for checkboxes
             if ((componentId.equals("currentEngine")) ||
             (componentId.equals("currentBrake")) ||
             (componentId.equals("currentSuspension")) ||
