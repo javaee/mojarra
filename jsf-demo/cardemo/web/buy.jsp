@@ -136,7 +136,7 @@
      <h:panel_group>
         <h:output_text  key="yourPriceLabel" bundle="carDemoBundle"  />
         &nbsp;
-        <h:output_text  valueRef="CurrentOptionServer.packagePrice" />
+        <h:output_text  valueRef="CurrentOptionServer.carCurrentPrice" />
      </h:panel_group>
   </f:facet>
 
