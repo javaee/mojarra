@@ -1,5 +1,5 @@
 /*
- * $Id: TestReconstituteComponentTreePhase.java,v 1.2 2003/03/12 19:53:43 rkitain Exp $
+ * $Id: TestReconstituteComponentTreePhase.java,v 1.3 2003/03/28 18:34:08 horwat Exp $
  */
 
 /*
@@ -41,7 +41,7 @@ import java.util.Locale;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestReconstituteComponentTreePhase.java,v 1.2 2003/03/12 19:53:43 rkitain Exp $
+ * @version $Id: TestReconstituteComponentTreePhase.java,v 1.3 2003/03/28 18:34:08 horwat Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -148,7 +148,8 @@ public void testReconstituteRequestSubmit()
             TEST_URI);
     assertTrue(requestTree != null);
     
-    HttpSession session = getFacesContext().getHttpSession();
+    HttpSession session = (HttpSession) 
+        getFacesContext().getExternalContext().getSession(false);
     session.setAttribute(RIConstants.FACES_TREE, requestTree);
     // set a locale
     Locale locale = new Locale("France", "french");

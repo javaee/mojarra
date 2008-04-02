@@ -1,5 +1,5 @@
 /*
- * $Id: ReconstituteComponentTreePhase.java,v 1.4 2003/03/21 23:22:45 rkitain Exp $
+ * $Id: ReconstituteComponentTreePhase.java,v 1.5 2003/03/28 18:34:07 horwat Exp $
  */
 
 /*
@@ -20,6 +20,10 @@ import javax.faces.context.FacesContext;
 import javax.faces.tree.Tree;
 import javax.faces.tree.TreeFactory;
 import javax.faces.FactoryFinder;
+import javax.faces.component.UIComponent;
+import javax.faces.component.UICommand;
+import javax.faces.application.ApplicationFactory;
+import javax.faces.event.ActionListener;
 import java.util.Iterator;
 import java.util.Map;
 import javax.servlet.ServletContext;
@@ -36,12 +40,15 @@ import javax.servlet.http.HttpServletRequest;
 import com.sun.faces.util.DebugUtil;
 import com.sun.faces.util.Util;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 /**
 
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: ReconstituteComponentTreePhase.java,v 1.4 2003/03/21 23:22:45 rkitain Exp $
+ * @version $Id: ReconstituteComponentTreePhase.java,v 1.5 2003/03/28 18:34:07 horwat Exp $
  * 
  */
 
@@ -49,6 +56,8 @@ public class ReconstituteComponentTreePhase extends Phase {
 //
 // Protected Constants
 //
+    // Log instance for this class
+    protected static Log log = LogFactory.getLog(ReconstituteComponentTreePhase.class);
 
 //
 // Class Variables
@@ -58,6 +67,7 @@ public class ReconstituteComponentTreePhase extends Phase {
 // Instance Variables
 //
 private TreeFactory treeFactory = null;
+private ActionListener actionListener = null;
 
 // Attribute Instance Variables
 
@@ -71,6 +81,12 @@ public ReconstituteComponentTreePhase() {
     treeFactory = (TreeFactory)
          FactoryFinder.getFactory(FactoryFinder.TREE_FACTORY);
     Assert.assert_it(treeFactory != null);
+
+    ApplicationFactory aFactory = (ApplicationFactory)
+        FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
+    if (aFactory != null) {
+        actionListener = aFactory.getApplication().getActionListener();
+    }
 }
 
 //
@@ -126,8 +142,11 @@ public void execute(FacesContext facesContext) throws FacesException
 public void restoreTreeFromPage(FacesContext facesContext) {
     Tree requestTree = null;
     Locale locale = null;
+    long beginTime = 0;
 
-    //long beginTime = System.currentTimeMillis();
+    if (log.isTraceEnabled()) {
+        beginTime = System.currentTimeMillis();
+    }
    
     // reconstitute tree from page. 
     Map requestMap = facesContext.getExternalContext().getRequestMap();
@@ -146,23 +165,27 @@ public void restoreTreeFromPage(FacesContext facesContext) {
             requestTree = (Tree) ois.readObject();
             locale = (Locale) ois.readObject();
             ois.close();
-            // DebugUtil.printTree(root, System.out);
+            if (log.isDebugEnabled()) {
+                DebugUtil.printTree(requestTree.getRoot(), System.out);
+            }
         } catch (java.io.OptionalDataException ode) {
-            // PENDING (visvan) log error
-            System.err.println(ode.getMessage());
+            log.error(ode.getMessage(), ode);
         } catch (java.lang.ClassNotFoundException cnfe) {
-            System.err.println(cnfe.getMessage());
+            log.error(cnfe.getMessage(), cnfe);
         } catch (java.io.IOException iox) {
-            System.err.println(iox.getMessage());
+            log.error(iox.getMessage(), iox);
         }
     }
     facesContext.setTree(requestTree);
     if ( locale != null ) {
         facesContext.setLocale(locale);
     }
+    processTree(facesContext);
     // PENDING(visvan): If we wanted to track time, here is where we'd do it
-    // long endTime = System.currentTimeMillis();
-    // System.out.println("Time to reconstitute tree " + (endTime-beginTime));
+    if (log.isTraceEnabled()) {
+        long endTime = System.currentTimeMillis();
+        log.trace("Time to reconstitute tree " + (endTime-beginTime));
+    }
 }
 
 protected void restoreTreeFromSession(FacesContext facesContext) {
@@ -205,6 +228,29 @@ protected void restoreTreeFromSession(FacesContext facesContext) {
     }
     facesContext.setLocale(locale);
     sessionMap.remove(RIConstants.REQUEST_LOCALE);
+    processTree(facesContext);
+}
+
+protected void processTree(FacesContext facesContext) {
+    UIComponent root = facesContext.getTree().getRoot();
+    try {
+        root.processReconstitutes(facesContext);
+    } catch (java.io.IOException iox) {
+        log.error(iox.getMessage(), iox);
+    }
+    if (actionListener != null) {
+        registerActionListeners(root);
+    }
+}
+
+protected void registerActionListeners(UIComponent uic) {
+    Iterator kids = uic.getChildren();
+    while (kids.hasNext()) {
+        registerActionListeners((UIComponent) kids.next());
+    }
+    if (uic instanceof UICommand) {
+        ((UICommand)uic).addActionListener(actionListener);
+    }
 }
 
 // The testcase for this class is TestReconstituteComponentTreePhase.java
