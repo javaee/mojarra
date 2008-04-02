@@ -866,6 +866,15 @@
         <summary xml:lang="fr">Invalid Message severity ''{0}'' defined in configuration.</summary>
         <summary xml:lang="es">Invalid Message severity ''{0}'' defined in configuration.</summary>
     </message>
+
+    <message>
+        <message-id>com.sun.faces.CANT_CLOSE_INPUT_STREAM</message-id>
+        <message-class>javax.faces.application.MessageImpl</message-class>
+        <summary xml:lang="en">Unable to close input stream.</summary>
+        <summary xml:lang="de">Unable to close input stream.</summary>
+        <summary xml:lang="fr">Unable to close input stream.</summary>
+        <summary xml:lang="es">Unbale to close input stream.</summary>
+    </message>
   </message-resources>
 
   <!-- Standard Validators -->

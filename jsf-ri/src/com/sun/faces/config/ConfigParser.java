@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigParser.java,v 1.35 2003/09/11 23:12:57 eburns Exp $
+ * $Id: ConfigParser.java,v 1.36 2003/09/12 19:48:43 rkitain Exp $
  */
 
 /*
@@ -132,16 +132,16 @@ public class ConfigParser {
                 converter = (Converter) TYPES[i][2].newInstance();
                 ConvertUtils.register(converter, TYPES[i][0]);
                 ConvertUtils.register(converter, TYPES[i][1]);
-            } catch (Throwable t) {
+            } catch (Exception e) {
                 String msg = Util.getExceptionMessage(
                     Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, 
                     new Object[]{TYPES[i][2]});
                 if (log.isErrorEnabled()) {
                     log.error(
                         msg + ":" + TYPES[i][2] + ":exception:" +
-                        t.getMessage());
+                        e.getMessage());
                 }
-                throw new RuntimeException(msg);
+                throw new FacesException(msg, e);
             }            
         }        
     }
@@ -180,17 +180,22 @@ public class ConfigParser {
 	try {
             digester.clear();
             digester.parse(input);
-        } catch (Throwable t) {
+        } catch (Exception e) {
             Object[] obj = new Object[1];
             obj[0] = input.toString(); 
-            throw new RuntimeException(Util.getExceptionMessage(
-                Util.CANT_PARSE_FILE_ERROR_MESSAGE_ID, obj)+t.getMessage());
-        }
-	
-        try {
-            input.close();
-        } catch(Throwable t) {
-        }
+            throw new FacesException(Util.getExceptionMessage(
+                Util.CANT_PARSE_FILE_ERROR_MESSAGE_ID, obj)+e.getMessage(), e);
+        } finally {
+	    try {
+		if (input != null) {
+	            input.close();
+		}
+	    } catch (Exception ee) {
+	        if (log.isWarnEnabled()) {
+	            log.warn(Util.getExceptionMessage(Util.CANT_CLOSE_INPUT_STREAM_ID), ee);
+	        }
+            }
+	}
     }
 
     /**
@@ -201,19 +206,19 @@ public class ConfigParser {
     */
 
     // Parse the configuration file at the specified path; 
-    protected void parseConfig(String configPath, 
-				     ServletContext servletContext) {
+    protected void parseConfig(String configPath, ServletContext servletContext) {
         InputStream input = null;
 
         try {
             input = servletContext.getResourceAsStream(configPath);
-        } catch (Throwable t) {
+	    // Input Stream should be closed when this method completes;
+	    this.parseConfig(input);
+        } catch (Exception e) {
             Object[] obj = new Object[1];
             obj[0] = configPath;
-            throw new RuntimeException(Util.getExceptionMessage(
-                Util.ERROR_OPENING_FILE_ERROR_MESSAGE_ID, obj));
-        }
-	this.parseConfig(input);
+            throw new FacesException(Util.getExceptionMessage(
+                Util.ERROR_OPENING_FILE_ERROR_MESSAGE_ID, obj), e);
+        } 
     }
 
     /*
@@ -221,6 +226,27 @@ public class ConfigParser {
      * <p>Add to the configuration the
      * config information at the specified InputSource.</p>
      */
+    /*
+    protected void parseConfig(InputSource input) {
+        try {
+            digester.clear();
+            digester.parse(input);
+        } catch (Exception e) {
+            Object[] obj = new Object[1];
+            obj[0] = input.toString(); 
+            throw new FacesException(Util.getExceptionMessage(
+                Util.CANT_PARSE_FILE_ERROR_MESSAGE_ID, obj), e);
+        } finally {
+	    try {
+	        input.getByteStream().close();
+	    } catch (Exception ee) {
+	        if (log.isWarnEnabled()) {
+	            log.warn(Util.getExceptionMessage(Util.CANT_CLOSE_INPUT_STREAM_ID), ee);
+		}
+	    }
+	}
+    }
+    */
     protected void parseConfig(InputSource input) {
         try {
             digester.clear();
@@ -249,11 +275,11 @@ public class ConfigParser {
 			      Util.replaceOccurrences(url.toExternalForm(),
 						      " ", "%20"));
             digester.setValidating(validateXml);
-        } catch (Throwable t) {
+        } catch (Exception e) {
             Object[] obj = new Object[1];
             obj[0] = "/com/sun/faces/config/web-facesconfig_1_0.dtd";
-            throw new RuntimeException(Util.getExceptionMessage(
-                Util.ERROR_REGISTERING_DTD_ERROR_MESSAGE_ID, obj)+t.getMessage());
+            throw new FacesException(Util.getExceptionMessage(
+                Util.ERROR_REGISTERING_DTD_ERROR_MESSAGE_ID, obj), e);
         }
         return (digester);
 
@@ -590,7 +616,7 @@ public class ConfigParser {
             if (!(validateXml.equals("true")) && !(validateXml.equals("false"))) {
                 Object[] obj = new Object[1];
                 obj[0] = "validateXml";
-                throw new RuntimeException(Util.getExceptionMessage(
+                throw new FacesException(Util.getExceptionMessage(
                     Util.INVALID_INIT_PARAM_ERROR_MESSAGE_ID, obj));
             }
         } else {
@@ -727,8 +753,8 @@ final class ConvertersRule extends Rule {
 	    if (null == (idOrClassName = cc.getConverterForClass())) {
 		Object[] obj = new Object[1];
 		obj[0] = "converter: " + cc.getConverterClass();
-		throw new RuntimeException(Util.getExceptionMessage(
-								    Util.CANT_PARSE_FILE_ERROR_MESSAGE_ID, obj));
+		throw new FacesException(Util.getExceptionMessage(
+                    Util.CANT_PARSE_FILE_ERROR_MESSAGE_ID, obj));
 	    }
 	    Class theClass = null;
 	    // is it valid?
@@ -744,7 +770,7 @@ final class ConvertersRule extends Rule {
                 if (log.isErrorEnabled()) {
                     log.error(message, c);
                 }
-		throw new RuntimeException(message);
+		throw new FacesException(message);
 	    }
 	    // store by class
 	    application.addConverter(theClass, cc.getConverterClass());
@@ -889,14 +915,14 @@ final class ApplicationRule extends Rule {
 	        if (clazz != null) {
 	            returnObject = clazz.newInstance();
 	        }
-	    } catch (Throwable t) {
+	    } catch (Exception e) {
 	        Object[] params = new Object[1];
 	        params[0] = className;
 	        String msg = Util.getExceptionMessage(
 		    Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, params);
 	        if (log.isErrorEnabled()) {
 	            log.error(msg + ":" + className + ":exception:"+
-		        t.getMessage());
+		        e.getMessage());
                 }
 	    }
         }
@@ -949,14 +975,14 @@ final class FactoryRule extends Rule {
 	        if (clazz != null) {
 	            returnObject = clazz.newInstance();
 	        }
-	    } catch (Throwable t) {
+	    } catch (Exception e) {
 	        Object[] params = new Object[1];
 	        params[0] = className;
 	        String msg = Util.getExceptionMessage(
 		    Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, params);
 	        if (log.isErrorEnabled()) {
 	            log.error(msg + ":" + className + ":exception:"+
-		        t.getMessage());
+		        e.getMessage());
                 }
 	    }
         }

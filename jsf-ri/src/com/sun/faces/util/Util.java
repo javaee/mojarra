@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.87 2003/09/11 23:13:00 eburns Exp $
+ * $Id: Util.java,v 1.88 2003/09/12 19:48:44 rkitain Exp $
  */
 
 /*
@@ -61,7 +61,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.87 2003/09/11 23:13:00 eburns Exp $
+ * @version $Id: Util.java,v 1.88 2003/09/12 19:48:44 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -269,6 +269,9 @@ public class Util extends Object
     
    public static final String INVALID_MESSAGE_SEVERITY_IN_CONFIG_ID =
          "com.sun.faces.INVALID_MESSAGE_SEVERITY_IN_CONFIG";
+
+   public static final String CANT_CLOSE_INPUT_STREAM_ID =
+         "com.sun.faces.CANT_CLOSE_INPUT_STREAM";
 
 // README - make sure to add the message identifier constant
 // (ex: Util.CONVERSION_ERROR_MESSAGE_ID) and the number of substitution
