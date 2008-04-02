@@ -1,5 +1,5 @@
 /*
- * $Id: UIViewRoot.java,v 1.19 2004/01/20 04:51:32 eburns Exp $
+ * $Id: UIViewRoot.java,v 1.20 2004/01/21 01:11:33 craigmcc Exp $
  */
 
 /*
@@ -399,7 +399,7 @@ public class UIViewRoot extends UIComponentBase {
             // expression has just language code in it. make sure the 
             // expression contains exactly 2 characters.
             if (localeExpr.length() == 2) {
-                result = new Locale(localeExpr);
+                result = new Locale(localeExpr, "");
             }
         } else {
             // expression has country code in it. make sure the expression 
