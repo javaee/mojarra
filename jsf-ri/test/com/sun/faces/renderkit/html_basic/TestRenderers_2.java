@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_2.java,v 1.54 2003/08/25 20:31:04 rkitain Exp $
+ * $Id: TestRenderers_2.java,v 1.55 2003/08/27 16:27:12 rlubke Exp $
  */
 
 /*
@@ -11,10 +11,10 @@
 
 package com.sun.faces.renderkit.html_basic;
 
-import com.sun.faces.renderkit.html_basic.CheckboxRenderer;
 import com.sun.faces.util.Util;
 
 import java.io.IOException;
+import java.io.StringWriter;
 import java.util.Iterator;
 
 import javax.faces.FactoryFinder;
@@ -31,6 +31,7 @@ import javax.faces.component.UISelectOne;
 import javax.faces.component.UIGraphic;
 import javax.faces.component.UIInput;
 import javax.faces.component.UIViewRoot;
+import javax.faces.component.UIForm;
 import javax.faces.component.base.UISelectBooleanBase;
 import javax.faces.component.base.UICommandBase;
 import javax.faces.component.base.UISelectItemsBase;
@@ -41,8 +42,9 @@ import javax.faces.component.base.UIGraphicBase;
 import javax.faces.component.base.UIParameterBase;
 import javax.faces.component.base.UINamingContainerBase;
 import javax.faces.component.base.UIViewRootBase;
-import javax.faces.context.FacesContext;
+import javax.faces.component.base.UIFormBase;
 import javax.faces.context.FacesContextFactory;
+import javax.faces.context.ResponseWriter;
 import javax.faces.convert.Converter;
 import javax.faces.model.SelectItem;
 
@@ -57,7 +59,7 @@ import com.sun.faces.TestBean;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_2.java,v 1.54 2003/08/25 20:31:04 rkitain Exp $
+ * @version $Id: TestRenderers_2.java,v 1.55 2003/08/27 16:27:12 rlubke Exp $
  * 
  *
  */
@@ -162,9 +164,7 @@ public class TestRenderers_2 extends JspFacesTestCase
 
         try {
             // create a dummy root for the tree.
-            UINamingContainerBase root = new UINamingContainerBase() {
-                public String getComponentType() { return "root"; }
-            };
+            UIViewRoot root = new UIViewRootBase();
             root.setId("root");
 
             testCheckboxRenderer(root);
@@ -177,11 +177,8 @@ public class TestRenderers_2 extends JspFacesTestCase
             testInputTextRenderer(root);
             testOutputTextRenderer(root);
             testTextAreaRenderer(root);
-            testGraphicImageRenderer(root);
-            // order in which the messages are output is indeterminant since
-            // the messages are stored in a HashMap. so its difficult test
-            // using the golden file approach.
-            // testOutputErrorsRenderer(root);
+            testGraphicImageRenderer(root);            
+            testOutputErrorsRenderer(root);
             testOutputMessageRenderer(root);
             getFacesContext().getResponseWriter().endDocument();
             assertTrue(verifyExpectedOutput());
@@ -449,9 +446,20 @@ public class TestRenderers_2 extends JspFacesTestCase
         UIOutput output = new UIOutputBase();
         output.setId("my_output_errors");
         root.getChildren().add(output);
+        
+        ResponseWriter originalWriter = getFacesContext().getResponseWriter();
+        UIViewRoot originalRoot = getFacesContext().getViewRoot();
+        
+        getFacesContext().setViewRoot((UIViewRoot) root);
+        
+        // setup a new HtmlResponseWriter using a StringWriter. 
+        // This allows us to capture the output and check for
+        // correctness without using a goldenfile.
+        StringWriter writer = new StringWriter();
+        HtmlResponseWriter htmlWriter = new HtmlResponseWriter(writer, "text/html", "ISO-8859-1");
+        getFacesContext().setResponseWriter(htmlWriter);
 
-        ErrorsRenderer errorsRenderer = new ErrorsRenderer();
-
+        ErrorsRenderer errorsRenderer = new ErrorsRenderer();       
         // populate facescontext with some errors
         // specifically, add a "global" message and
         // "component" message. 
@@ -463,9 +471,228 @@ public class TestRenderers_2 extends JspFacesTestCase
 
         // test encode method
 
+        // no 'for' attribute specified, so both messages should be present
         System.out.println("    Testing encode method...");
         errorsRenderer.encodeBegin(getFacesContext(), output);
         errorsRenderer.encodeEnd(getFacesContext(), output);
+               
+        String result = writer.toString();
+        assertTrue(result.indexOf("global message summary") != -1);
+        assertTrue(result.indexOf("component message summary") != -1);
+        
+        try {
+            writer.close();
+        } catch (IOException ioe) {
+            ; // ignore
+        }
+        
+        // a 'for' attribute with a zero-length string will result 
+        // will result in global message not associated with a component
+        // to be returned.
+        writer = new StringWriter();
+        htmlWriter = new HtmlResponseWriter(writer, "text/html", "ISO-8859-1");
+        getFacesContext().setResponseWriter(htmlWriter);
+        output.setAttribute("for", "");
+        errorsRenderer.encodeBegin(getFacesContext(), output);
+        errorsRenderer.encodeEnd(getFacesContext(), output);
+        
+        result = writer.toString();
+        assertTrue(result.indexOf("global message summary") != -1);
+        assertTrue(result.indexOf("component message summary") == -1);
+        
+        try {
+            writer.close();
+        } catch (IOException ioe) {
+            ; // ignore
+        }
+        
+        // a 'for' attribute the specified a component with a valid 'id'
+        // this will ensure scanning up the tree works.
+        writer = new StringWriter();
+        htmlWriter = new HtmlResponseWriter(writer, "text/html", "ISO-8859-1");
+        getFacesContext().setResponseWriter(htmlWriter);
+        UIInput input = new UIInputBase();
+        input.setId("error_input");
+        root.getChildren().add(input);
+        root.getChildren().remove(output);
+        input.getChildren().add(output);
+        getFacesContext().addMessage(input, 
+            new MessageImpl(1, "error message summary_1", "error message detail_1"));
+                
+        output.setAttribute("for", "error_input");
+        errorsRenderer.encodeBegin(getFacesContext(), output);
+        errorsRenderer.encodeEnd(getFacesContext(), output);
+        
+        result = writer.toString();        
+        assertTrue(result.indexOf("global message summary") == -1);
+        assertTrue(result.indexOf("component message summary") == -1);
+        assertTrue(result.indexOf("error message summary_1") != -1);
+        
+        try {
+            writer.close();
+        } catch (IOException ioe) {
+            ; // ignore
+        }
+                
+        writer = new StringWriter();
+        htmlWriter = new HtmlResponseWriter(writer, "text/html", "ISO-8859-1");
+        getFacesContext().setResponseWriter(htmlWriter);
+        input.getChildren().remove(output);
+        root.getChildren().add(output);
+        UIInput input1 = new UIInputBase();         
+        input1.setId("error_input1");        
+        UIInput anon1 = new UIInputBase();
+        anon1.setId("anon1");        
+        output.getChildren().add(anon1);
+        UIInput anon2 = new UIInputBase();
+        anon2.setId("anon2");
+        anon1.getChildren().add(anon2);        
+        anon2.getChildren().add(input1);
+        
+        getFacesContext().addMessage(input1,
+            new MessageImpl(1, "error message summary_2", "error message detail_2"));
+                
+        output.setAttribute("for", "error_input1");
+        errorsRenderer.encodeBegin(getFacesContext(), output);
+        errorsRenderer.encodeEnd(getFacesContext(), output);
+
+        result = writer.toString();
+        assertTrue(result.indexOf("global message summary") == -1);
+        assertTrue(result.indexOf("component message summary") == -1);
+        assertTrue(result.indexOf("error message summary_1") == -1);
+        assertTrue(result.indexOf("error message summary_2") != -1);
+        
+        try {
+            writer.close();
+        } catch (IOException ioe) {
+            ; // ignore
+        }
+        
+        // now scan downward where the component isn't at the very bottom,
+        // but somewhere between the output component and the bottom.
+        writer = new StringWriter();
+        htmlWriter = new HtmlResponseWriter(writer, "text/html", "ISO-8859-1");
+        getFacesContext().setResponseWriter(htmlWriter);
+        UIInput input2 = new UIInputBase();
+        input2.setId("error_input2");   
+        UIInput anon3 = new UIInputBase();
+        anon3.setId("anon3");
+        UIInput anon4 = new UIInputBase();   
+        anon4.setId("anon4");
+        UIInput anon5 = new UIInputBase();
+        anon5.setId("anon5");
+        
+        anon2.getChildren().remove(input1);
+        anon1.getChildren().remove(anon2);
+        
+        anon1.getChildren().add(input1);
+        input1.getChildren().add(anon2);
+        anon2.getChildren().add(anon3);
+        anon2.getChildren().add(anon4);
+        anon2.getChildren().add(input2);
+        input2.getChildren().add(anon5);
+                                    
+        getFacesContext().addMessage(input2,
+                new MessageImpl(1, "error message summary_3", "error message detail_3"));
+
+        output.setAttribute("for", "error_input2");
+        errorsRenderer.encodeBegin(getFacesContext(), output);
+        errorsRenderer.encodeEnd(getFacesContext(), output);
+
+        result = writer.toString();
+        assertTrue(result.indexOf("global message summary") == -1);
+        assertTrue(result.indexOf("component message summary") == -1);
+        assertTrue(result.indexOf("error message summary_1") == -1);
+        assertTrue(result.indexOf("error message summary_2") == -1);
+        assertTrue(result.indexOf("error message summary_3") != -1);
+        
+        // clean the tree
+        output.getChildren().remove(anon1);
+
+        try {
+            writer.close();
+        } catch (IOException ioe) {
+            ; // ignore
+        }
+        
+        // check for the a component down the tree when
+        // the component exists in another naming container
+        // further down the view as a child of the current component
+        writer = new StringWriter();
+        htmlWriter = new HtmlResponseWriter(writer, "text/html", "ISO-8859-1");
+        getFacesContext().setResponseWriter(htmlWriter);
+        UIForm form = new UIFormBase();
+        form.setId("form");
+        UIInput input3 = new UIInputBase();
+        input3.setId("error_input3");
+        anon1 = new UIInputBase();
+        anon1.setId("anon1");        
+        output.getChildren().add(anon1);
+        anon1.getChildren().add(form);
+        form.getChildren().add(input3);
+        getFacesContext().addMessage(input3,
+            new MessageImpl(1, "error message summary_4", "error message detail_4"));
+        
+        output.setAttribute("for", "error_input3");
+        errorsRenderer.encodeBegin(getFacesContext(), output);
+        errorsRenderer.encodeEnd(getFacesContext(), output);
+
+        result = writer.toString();
+        assertTrue(result.indexOf("global message summary") == -1);
+        assertTrue(result.indexOf("component message summary") == -1);
+        assertTrue(result.indexOf("error message summary_1") == -1);
+        assertTrue(result.indexOf("error message summary_2") == -1);
+        assertTrue(result.indexOf("error message summary_3") == -1);
+        assertTrue(result.indexOf("error message summary_4") != -1);               
+        
+        try {
+            writer.close();
+        } catch (IOException ioe) {
+            ; // ignore
+        }
+        
+        // now have multiple NamingContainers that exist
+        // as a sibling of the output component
+        writer = new StringWriter();
+        htmlWriter = new HtmlResponseWriter(writer, "text/html", "ISO-8859-1");
+        getFacesContext().setResponseWriter(htmlWriter);
+        UIForm form1 = new UIFormBase();
+        form1.setId("form1");
+        UIForm form2 = new UIFormBase();
+        form2.setId("form2");
+        UIInput input4 = new UIInputBase();
+        input4.setId("error_input4");
+        UIOutput anonout1 = new UIOutputBase();
+        anonout1.setId("anonout1");
+        getFacesContext().getViewRoot().getChildren().add(form1);
+        form1.getChildren().add(anonout1);
+        anonout1.getChildren().add(form2);
+        form2.getChildren().add(input4);
+        getFacesContext().addMessage(input4,
+            new MessageImpl(1, "error message summary_5", "error message detail_5"));
+        
+        output.setAttribute("for", "error_input4");
+        errorsRenderer.encodeBegin(getFacesContext(), output);
+        errorsRenderer.encodeEnd(getFacesContext(), output);
+
+        result = writer.toString();        
+        assertTrue(result.indexOf("global message summary") == -1);
+        assertTrue(result.indexOf("component message summary") == -1);
+        assertTrue(result.indexOf("error message summary_1") == -1);
+        assertTrue(result.indexOf("error message summary_2") == -1);
+        assertTrue(result.indexOf("error message summary_3") == -1);
+        assertTrue(result.indexOf("error message summary_4") == -1);  
+        assertTrue(result.indexOf("error message summary_5") != -1); 
+        
+        try {
+            writer.close();
+        } catch (IOException ioe) {
+            ; // ignore
+        }
+        
+        // restore the original ResponseWriter
+        getFacesContext().setResponseWriter(originalWriter);
+        getFacesContext().setViewRoot(originalRoot);
     }
 
     public void testOutputMessageRenderer(UIComponent root) throws IOException {
@@ -515,6 +742,6 @@ public class TestRenderers_2 extends JspFacesTestCase
         textAreaRenderer.encodeBegin(getFacesContext(), textEntry);
         textAreaRenderer.encodeEnd(getFacesContext(), textEntry);
         getFacesContext().getResponseWriter().writeText("\n", null);
-    }
+    }       
     
 } // end of class TestRenderers2_

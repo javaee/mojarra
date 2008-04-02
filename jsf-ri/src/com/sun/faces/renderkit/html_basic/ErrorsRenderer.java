@@ -1,5 +1,5 @@
 /*
- * $Id: ErrorsRenderer.java,v 1.19 2003/08/25 20:40:12 rlubke Exp $
+ * $Id: ErrorsRenderer.java,v 1.20 2003/08/27 16:27:11 rlubke Exp $
  */
 
 /*
@@ -12,33 +12,24 @@
 package com.sun.faces.renderkit.html_basic;
 
 import com.sun.faces.util.Util;
-import com.sun.faces.RIConstants;
-
-import java.util.Iterator;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.mozilla.util.Assert;
 
 import javax.faces.application.Message;
 import javax.faces.component.UIComponent;
 import javax.faces.component.NamingContainer;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
-
-import org.mozilla.util.Assert;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 import java.io.IOException;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  *
- *  <B>ErrorsRenderer</B> is a class ...
+ * <p><B>ErrorsRenderer</B> handles rendering for the Output_ErrorsTag<p>. 
  *
- * <B>Lifetime And Scope</B> <P>
- *
- * @version $Id: ErrorsRenderer.java,v 1.19 2003/08/25 20:40:12 rlubke Exp $
- * 
- * @see	Blah
- * @see	Bloo
- *
+ * @version $Id: ErrorsRenderer.java,v 1.20 2003/08/27 16:27:11 rlubke Exp $*
  */
 
 public class ErrorsRenderer extends HtmlBasicRenderer {
@@ -46,36 +37,40 @@ public class ErrorsRenderer extends HtmlBasicRenderer {
     // Prviate/Protected Constants
     //
     private static final Log log = LogFactory.getLog(ErrorsRenderer.class);
-
-    //
-    // Class Variables
-    //
-
-    //
-    // Instance Variables
-    //
-
-    // Attribute Instance Variables
-
-
-    // Relationship Instance Variables
-
-    //
-    // Constructors and Initializers    
-    //
-
-    public ErrorsRenderer() {
-        super();
+   
+    
+    /**
+     * <p>Recursively searches for {@link NamingContainer}s from the
+     * given start point looking for the component with the <code>id</code>
+     * specified by <code>forComponent</code>.
+     * @param startPoint - the starting point in which to begin the search
+     * @param forComponent - the component to search for
+     * @return the component with the the <code>id</code that matches 
+     *         <code>forComponent</code> otheriwse null if no match is found.
+     */
+    private UIComponent findUIComponentBelow(UIComponent startPoint, String forComponent) {        
+        UIComponent retComp = null;
+        List children = startPoint.getChildren();
+        for (int i = 0, size = children.size(); i < size; i++) {
+            UIComponent comp = (UIComponent) children.get(i);
+            
+            if (comp instanceof NamingContainer) {
+                retComp = ((NamingContainer) comp).findComponentInNamespace(forComponent);    
+            }
+            
+            if (retComp == null) {
+                if (comp.getChildren().size() > 0) {                
+                    retComp = findUIComponentBelow(comp, forComponent);
+                }  
+            }                        
+            
+            if (retComp != null)
+                break;
+        }
+        return retComp;
     }
 
-    //
-    // Class methods
-    //
-
-    //
-    // General Methods
-    //
-
+    
     //
     // Methods From Renderer
     //
@@ -95,8 +90,7 @@ public class ErrorsRenderer extends HtmlBasicRenderer {
 
     public void encodeEnd(FacesContext context, UIComponent component) 
             throws IOException {
-        Iterator messageIter = null;
-        String curColor = null;
+        Iterator messageIter = null;        
         Message curMessage = null;
         ResponseWriter writer = null;
         
@@ -126,22 +120,28 @@ public class ErrorsRenderer extends HtmlBasicRenderer {
           
             if (forComponent.length() == 0) {
                 messageIter = context.getMessages(null);
-            } else {
-                UIComponent root = context.getViewRoot();
-                Assert.assert_it(null != root);
+            } else {               
                 UIComponent comp = null;
                 UIComponent currentParent = component;
                 try {
-                    // Scan recursively up the tree for the component 
-                    // identified with forComponent
-                    while (currentParent != null) {                       
+                    // Check the naming container of the current 
+                    // component for component identified by
+                    // 'forComponent'
+                    while (currentParent != null) {       
+                        // If the current component is a NamingContainer,
+                        // see if it contains what we're looking for.
                         comp = currentParent.findComponent(forComponent);
                         if (comp != null)
                             break;
+                        // if not, start checking further up in the view
                         currentParent = currentParent.getParent();
                     }                   
-                    // PENDING (rluble): Recurse down the tree as well if we
-                    // cant find anything here or above.
+                    
+                    // no hit from above, scan for a NamingContainer
+                    // that contains the component we're looking for from the root.    
+                    if (comp == null) {                                                                                             
+                        comp = findUIComponentBelow(context.getViewRoot(), forComponent);                                     
+                    }
                 } catch (Throwable t) {
                     Object[] params = {forComponent};
                     throw new RuntimeException(Util.getExceptionMessage(
