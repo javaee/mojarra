@@ -54,8 +54,6 @@
   <!-- Name of ultra-simple web-app -->
   <property name="basic.name"  value="basic"/>
 
-  <property name="spec.pdf"  value="${basedir}/docs/JSF_LATEST.pdf"/>
-
 
   <!-- ************ Dependencies **** *************************************** -->
 
@@ -213,7 +211,6 @@
     <copy file="LICENSE.html" todir="${dist.home}"/>
     <copy file="LICENSE-APACHE.txt" todir="${dist.home}"/>
     <copy file="LICENSE-MOZILLA.txt" todir="${dist.home}"/>
-    <copy file="${spec.pdf}" tofile="${dist.home}/JSF_SPEC_PRD.pdf"/>
 
     <echo> Build the API Javadocs </echo>
     <ant dir="${jsf.api.home}" 
