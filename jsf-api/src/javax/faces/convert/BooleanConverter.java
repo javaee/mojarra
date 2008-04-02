@@ -1,5 +1,5 @@
 /*
- * $Id: BooleanConverter.java,v 1.4 2003/08/13 18:42:47 craigmcc Exp $
+ * $Id: BooleanConverter.java,v 1.5 2003/08/20 01:49:22 rlubke Exp $
  */
 
 /*
@@ -41,8 +41,8 @@ public class BooleanConverter implements Converter {
     public String getAsString(FacesContext context, UIComponent component,
                               Object value) throws ConverterException {
 
-        try {
-            return (Boolean.toString(((Boolean) value).booleanValue()));
+        try {            
+            return (new Boolean(((Boolean) value).booleanValue()).toString());
         } catch (Exception e) {
             throw new ConverterException(e);
         }
