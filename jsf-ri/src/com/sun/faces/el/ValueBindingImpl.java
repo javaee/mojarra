@@ -1,5 +1,5 @@
 /*
- * $Id: ValueBindingImpl.java,v 1.19 2003/10/23 01:32:57 rlubke Exp $
+ * $Id: ValueBindingImpl.java,v 1.20 2003/10/23 02:04:19 rlubke Exp $
  */
 
 /*
@@ -262,7 +262,11 @@ public class ValueBindingImpl extends ValueBinding
 
     public void setValue(FacesContext context, Object value)
         throws PropertyNotFoundException {
-
+        if (context == null) {
+            throw new NullPointerException(
+                Util.getExceptionMessage(Util.NULL_CONTEXT_ERROR_MESSAGE_ID)
+            );
+        }
         if (isReservedIdentifier(ref)) {
             throw new ReferenceSyntaxException(
                 Util.getExceptionMessage(Util.ILLEGAL_IDENTIFIER_LVALUE_MODE_ID, new Object[]{ref}));
