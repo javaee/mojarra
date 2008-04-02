@@ -811,7 +811,7 @@ must exist.  This is necessary for the MessageFactory class.
         <concat append="true"
                 destfile="${tomcat.home}/domains/domain1/config/server.policy">
 grant {
-    permission java.lang.ReflectPermission &quot;suppressAccessChecks&quot;;
+    permission java.lang.reflect.ReflectPermission &quot;suppressAccessChecks&quot;;
 };
         </concat>
         <chmod file="${tomcat.home}/domains/domain1/config/server.policy"
