@@ -1,5 +1,5 @@
 /*
- * $Id: ElTagParserImpl.java,v 1.4 2003/10/11 04:53:03 horwat Exp $
+ * $Id: ElTagParserImpl.java,v 1.5 2003/11/06 22:40:16 horwat Exp $
  */
 
 /*
@@ -51,8 +51,6 @@ public class ElTagParserImpl implements TagParser {
     /**
      * <p>ElTagParserImpl constructor</p>
      *
-     * @param validatorInfo Bean with element property values populated
-     *                      by the validator
      */
     public ElTagParserImpl() {
         failed = false;

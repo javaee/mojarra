@@ -1,5 +1,5 @@
 /*
- * $Id: CommandTagParserImpl.java,v 1.2 2003/09/09 01:01:07 horwat Exp $
+ * $Id: CommandTagParserImpl.java,v 1.3 2003/11/06 22:40:15 horwat Exp $
  */
 
 /*
@@ -37,11 +37,8 @@ public class CommandTagParserImpl implements TagParser {
     /**
      * <p>CommandTagParserImpl constructor</p>
      *
-     * @param validatorInfo Bean with element property values populated
-     *                      by the validator
      */
     public CommandTagParserImpl() {
-        this.validatorInfo = validatorInfo;
         failed = false;
 	failureMessages = new StringBuffer();
     }
