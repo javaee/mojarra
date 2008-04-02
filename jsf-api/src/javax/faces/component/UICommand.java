@@ -1,5 +1,5 @@
 /*
- * $Id: UICommand.java,v 1.54 2003/11/08 01:15:21 craigmcc Exp $
+ * $Id: UICommand.java,v 1.55 2003/11/09 22:53:19 craigmcc Exp $
  */
 
 /*
@@ -62,8 +62,7 @@ public class UICommand extends UIComponentBase
         super();
         setRendererType("Button");
         // add the default action listener
-        FacesContext context = FacesContext.getCurrentInstance();
-	addDefaultActionListener(context);
+	addDefaultActionListener(getFacesContext());
     }
 
 
@@ -171,7 +170,7 @@ public class UICommand extends UIComponentBase
 
 	// if the immediate value is changing.
 	if (immediate != this.immediate) {
-	    FacesContext context = FacesContext.getCurrentInstance();
+	    FacesContext context = getFacesContext();
 	    // remove the current default action listener
 	    removeDefaultActionListener(context);
 	    this.immediate = immediate;
@@ -328,7 +327,7 @@ public class UICommand extends UIComponentBase
                  phaseId.equals(PhaseId.APPLY_REQUEST_VALUES)) ||
                 (!isImmediate() &&
                  phaseId.equals(PhaseId.INVOKE_APPLICATION))) {
-                FacesContext context = FacesContext.getCurrentInstance();
+                FacesContext context = getFacesContext();
                 MethodBinding mb =
                     context.getApplication().getMethodBinding
                     (actionListenerRef, signature);

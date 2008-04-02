@@ -353,8 +353,7 @@ public class UIData extends UIComponentBase
         // Clear or expose the current row data as a request scope attribute
         if (var != null) {
             Map requestMap =
-                FacesContext.getCurrentInstance().getExternalContext().
-                getRequestMap();
+                getFacesContext().getExternalContext().getRequestMap();
             if (rowIndex == -1) {
                 requestMap.remove(var);
             } else if (isRowAvailable()) {
@@ -784,7 +783,7 @@ public class UIData extends UIComponentBase
      */
     private void restoreDescendantState() {
 
-        FacesContext context = FacesContext.getCurrentInstance();
+        FacesContext context = getFacesContext();
         Iterator kids = getChildren().iterator();
         while (kids.hasNext()) {
             UIComponent kid = (UIComponent) kids.next();
@@ -838,7 +837,7 @@ public class UIData extends UIComponentBase
      */
     private void saveDescendantState() {
 
-        FacesContext context = FacesContext.getCurrentInstance();
+        FacesContext context = getFacesContext();
         Iterator kids = getChildren().iterator();
         while (kids.hasNext()) {
             UIComponent kid = (UIComponent) kids.next();

@@ -1,5 +1,5 @@
 /*
- * $Id: UIInput.java,v 1.47 2003/11/08 01:15:23 craigmcc Exp $
+ * $Id: UIInput.java,v 1.48 2003/11/09 22:53:20 craigmcc Exp $
  */
 
 /*
@@ -306,7 +306,7 @@ public class UIInput extends UIOutput {
         String valueChangeListenerRef = getValueChangeListenerRef();
         if ((valueChangeListenerRef != null) &&
             phaseId.equals(PhaseId.PROCESS_VALIDATIONS)) {
-            FacesContext context = FacesContext.getCurrentInstance();
+            FacesContext context = getFacesContext();
             MethodBinding mb =
                 context.getApplication().getMethodBinding
                 (valueChangeListenerRef, signature);
