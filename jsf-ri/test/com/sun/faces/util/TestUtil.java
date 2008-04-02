@@ -1,5 +1,5 @@
 /*
- * $Id: TestUtil.java,v 1.26 2005/10/19 19:51:40 edburns Exp $
+ * $Id: TestUtil.java,v 1.27 2005/11/01 16:40:25 rlubke Exp $
  */
 
 /*
@@ -51,7 +51,7 @@ import java.util.Map;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestUtil.java,v 1.26 2005/10/19 19:51:40 edburns Exp $
+ * @version $Id: TestUtil.java,v 1.27 2005/11/01 16:40:25 rlubke Exp $
  */
 
 public class TestUtil extends ServletFacesTestCase {
@@ -155,7 +155,7 @@ public class TestUtil extends ServletFacesTestCase {
                                                     "ISO-8859-1");
             input.setReadonly(true);
             Util.renderBooleanPassThruAttributes(writer, input);
-            expectedResult = " readonly";
+            expectedResult = " readonly=\"readonly\"";
             assertEquals(expectedResult, sw.toString());
 
 
@@ -202,7 +202,7 @@ public class TestUtil extends ServletFacesTestCase {
             input.getAttributes().put("disabled", "true");
             input.getAttributes().put("readonly", "false");
             Util.renderBooleanPassThruAttributes(writer, input);
-            String expectedResult = " disabled";
+            String expectedResult = " disabled=\"disabled\"";
             assertEquals(expectedResult, sw.toString());
 
             // verify no passthru attributes returns empty string

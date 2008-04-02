@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlResponseWriter.java,v 1.20 2005/10/18 00:27:05 rlubke Exp $
+ * $Id: HtmlResponseWriter.java,v 1.21 2005/11/01 16:40:23 rlubke Exp $
  */
 
 /*
@@ -46,10 +46,7 @@ import java.io.Writer;
  * of the <code>ResponseWriter</code> abstract class.
  * Kudos to Adam Winer (Oracle) for much of this code.
  */
-public class HtmlResponseWriter extends ResponseWriter {
-
-    // XHTML content type that will be passed from RenderKitImpl    
-    private static String XHTML_CONTENT_TYPE = "application/xhtml+xml";
+public class HtmlResponseWriter extends ResponseWriter {    
 
     // Content Type for this Writer.
     //
@@ -71,10 +68,7 @@ public class HtmlResponseWriter extends ResponseWriter {
     // True when we shouldn't be escaping output (basically,
     // inside of <script> and <style> elements).
     //
-    private boolean dontEscape;
-    
-    // Flag controlling the rendering of element attributes
-    private boolean usingXhtmlStyle;
+    private boolean dontEscape;        
 
     // Internal buffer used when outputting properly escaped information
     // using HtmlUtils class.
@@ -95,21 +89,10 @@ public class HtmlResponseWriter extends ResponseWriter {
     public HtmlResponseWriter(Writer writer, String contentType, String encoding)
         throws FacesException {
         this.writer = writer;
-	// PENDING(): Do the right thing for XHTML vs HTML:
-	/*
-	 * - When in HTML mode, use HTML attribute minimization ("disabled")
-	 *   and HTML-style empty tags (<br>, not <br />)
-	 * - When in XHTML mode, use XML rules (disabled="disabled" and 
-         *   <br />)
-	 */
 
         if (null != contentType) {
             this.contentType = contentType;
-        }
-
-        if (XHTML_CONTENT_TYPE.equals(this.contentType)) {
-            usingXhtmlStyle = true;
-        }
+        }        
         
         this.encoding = encoding;               
 
@@ -287,16 +270,16 @@ public class HtmlResponseWriter extends ResponseWriter {
         // Output Boolean values specially
         if (valueClass == Boolean.class) {
             if (Boolean.TRUE.equals(value)) {
-                if (!usingXhtmlStyle) {
-                    writer.write(' ');
-                    writer.write(name);
-                } else {
-                    writer.write(' ');
-                    writer.write(name);
-                    writer.write("=\"");
-                    writer.write(name);
-                    writer.write('"');
-                }
+                // NOTE:  HTML 4.01 states that boolean attributes
+                //        may legally take a single value which is the
+                //        name of the attribute itself or appear using
+                //        minimization.  
+                //  http://www.w3.org/TR/html401/intro/sgmltut.html#h-3.3.4.2
+                writer.write(' ');
+                writer.write(name);
+                writer.write("=\"");
+                writer.write(name);
+                writer.write('"');
             }
         } else {
             writer.write(' ');
@@ -304,9 +287,7 @@ public class HtmlResponseWriter extends ResponseWriter {
             writer.write("=\"");
             
             // write the attribute value
-            HtmlUtils.writeAttribute(writer, buffer, value.toString());
-            //PENDING (horwat) using String as a result of Tomcat char 
-            //        writer ArrayIndexOutOfBoundsException (3584)
+            HtmlUtils.writeAttribute(writer, buffer, value.toString());            
             writer.write('"');
         }
     }

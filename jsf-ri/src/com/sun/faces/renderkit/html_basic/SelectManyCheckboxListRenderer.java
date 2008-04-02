@@ -25,7 +25,7 @@
 
 
 /**
- * $Id: SelectManyCheckboxListRenderer.java,v 1.43 2005/10/18 00:27:06 rlubke Exp $
+ * $Id: SelectManyCheckboxListRenderer.java,v 1.44 2005/11/01 16:40:23 rlubke Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -288,7 +288,7 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
 
 
     String getSelectedTextString() {
-        return " checked";
+        return "checked";
     }
 
 

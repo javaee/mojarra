@@ -1,5 +1,5 @@
 /*
- * $Id: TestHtmlResponseWriter.java,v 1.16 2005/10/19 19:51:38 edburns Exp $
+ * $Id: TestHtmlResponseWriter.java,v 1.17 2005/11/01 16:40:24 rlubke Exp $
  */
 
 /*
@@ -49,7 +49,7 @@ import java.io.StringWriter;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestHtmlResponseWriter.java,v 1.16 2005/10/19 19:51:38 edburns Exp $
+ * @version $Id: TestHtmlResponseWriter.java,v 1.17 2005/11/01 16:40:24 rlubke Exp $
  */
 
 public class TestHtmlResponseWriter extends ServletFacesTestCase // ServletTestCase
@@ -178,20 +178,20 @@ public class TestHtmlResponseWriter extends ServletFacesTestCase // ServletTestC
             Boolean bool = new Boolean("true");
             writer.writeAttribute("readonly", bool, "readonly");
             assertTrue(
-                sw.toString().equals("<input type=" + "\"text\"" + " readonly"));
+                sw.toString().equals("<input type=" + "\"text\"" + " readonly=\"readonly\""));
             //
             //Assert that boolean "false" values don't get written out
             //
             bool = new Boolean("false");
             writer.writeAttribute("disabled", bool, "disabled");
             assertTrue(
-                sw.toString().equals("<input type=" + "\"text\"" + " readonly"));
+                sw.toString().equals("<input type=" + "\"text\"" + " readonly=\"readonly\""));
             //
             //Assert correct escape char
             //
             writer.writeAttribute("greaterthan", ">", "greaterthan");
             assertTrue(sw.toString().equals("<input type=" + "\"text\"" +
-                                            " readonly" +
+                                            " readonly=\"readonly\"" +
                                             " greaterthan=" + "\"&gt;\""));
         } catch (IOException e) {
             assertTrue(false);

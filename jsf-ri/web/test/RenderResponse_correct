@@ -27,7 +27,7 @@
 </tr>
 <tr>
 <td><input id="basicForm:username1" type="text" name="basicForm:username1" value="JavaServerFaces" class="inputClass" /></td>
-<td><input id="basicForm:username2" type="text" name="basicForm:username2" value="JavaServerFaces" class="inputClass" disabled /></td>
+<td><input id="basicForm:username2" type="text" name="basicForm:username2" value="JavaServerFaces" class="inputClass" disabled="disabled" /></td>
 </tr>
 <tr>
 <td><span id="basicForm:text2" class="outputClass">Password:</span></td>
@@ -47,7 +47,7 @@
 
 	<TD>
 
-            <input id="basicForm:pushButton" type="image" src="duke.gif;jsessionid=99ec0282023f3f31a393ffff9aa4" name="basicForm:pushButton" onclick="clearFormHiddenParams_basicForm(this.form.id);" style="someStyle" disabled />
+            <input id="basicForm:pushButton" type="image" src="duke.gif;jsessionid=99ec0282023f3f31a393ffff9aa4" name="basicForm:pushButton" onclick="clearFormHiddenParams_basicForm(this.form.id);" style="someStyle" disabled="disabled" />
 	</TD>
 
       </TR>
@@ -107,7 +107,7 @@ function clearFormHiddenParams_basicForm(curFormName) {
 	</TD>
 
         <TD> 
-            <img id="basicForm:graphicImage" src="/test/duke.gif;jsessionid=99ec0282023f3f31a393ffff9aa4" style="someStyle" usemap="#map1" ismap /> 
+            <img id="basicForm:graphicImage" src="/test/duke.gif;jsessionid=99ec0282023f3f31a393ffff9aa4" style="someStyle" usemap="#map1" ismap="ismap" /> 
         </TD>
 
       </TR>
@@ -155,7 +155,7 @@ function clearFormHiddenParams_basicForm(curFormName) {
 	</TD>
 
         <TD> 
-            <img id="basicForm:output_graphicImage" src="/test/duke.gif;jsessionid=99ec0282023f3f31a393ffff9aa4" usemap="#map1" ismap /> 
+            <img id="basicForm:output_graphicImage" src="/test/duke.gif;jsessionid=99ec0282023f3f31a393ffff9aa4" usemap="#map1" ismap="ismap" /> 
         </TD>
 
       </TR>
@@ -266,7 +266,7 @@ escape&lt;p&gt;this markup&lt;/p&gt;<span id="basicForm:outputlabel8">andsometex
 
 	<TD>
 
-	     <select name="basicForm:_id_id299" class="selectoneClass" size="10" style="someStyle" tabindex="20" title="Select Quantity">	<option value="0" disabled class="dclass">0</option>
+	     <select name="basicForm:_id_id299" class="selectoneClass" size="10" style="someStyle" tabindex="20" title="Select Quantity">	<option value="0" disabled="disabled" class="dclass">0</option>
 	<option value="1" class="eclass">1</option>
 	<option value="2" class="eclass">2</option>
 	<option value="3" class="eclass">3</option>
@@ -309,11 +309,11 @@ escape&lt;p&gt;this markup&lt;/p&gt;<span id="basicForm:outputlabel8">andsometex
 	    <table id="basicForm:shipType" class="someStyleClass" style="someStyle">
 	<tr>
 <td>
-<input type="radio" name="basicForm:shipType" id="basicForm:shipType:0" value="nextDay" accesskey="A" tabindex="3" disabled /><label for="basicForm:shipType:0" class="disabledClass"> Next Day</label></td>
+<input type="radio" name="basicForm:shipType" id="basicForm:shipType:0" value="nextDay" accesskey="A" tabindex="3" disabled="disabled" /><label for="basicForm:shipType:0" class="disabledClass"> Next Day</label></td>
 <td>
-<input type="radio" name="basicForm:shipType" id="basicForm:shipType:1" value="nextWeek" accesskey="A" tabindex="3" disabled /><label for="basicForm:shipType:1" class="disabledClass"> Next Week</label></td>
+<input type="radio" name="basicForm:shipType" id="basicForm:shipType:1" value="nextWeek" accesskey="A" tabindex="3" disabled="disabled" /><label for="basicForm:shipType:1" class="disabledClass"> Next Week</label></td>
 <td>
-<input type="radio" name="basicForm:shipType" id="basicForm:shipType:2" value="nextMonth" accesskey="A" tabindex="3" disabled /><label for="basicForm:shipType:2" class="disabledClass"> Next Month</label></td>
+<input type="radio" name="basicForm:shipType" id="basicForm:shipType:2" value="nextMonth" accesskey="A" tabindex="3" disabled="disabled" /><label for="basicForm:shipType:2" class="disabledClass"> Next Month</label></td>
 	</tr>
 </table>
 
@@ -327,15 +327,15 @@ escape&lt;p&gt;this markup&lt;/p&gt;<span id="basicForm:outputlabel8">andsometex
             <table border="1" id="basicForm:verticalRadio">
 	<tr>
 <td>
-<input type="radio" name="basicForm:verticalRadio" id="basicForm:verticalRadio:0" value="nextDay" disabled /><label for="basicForm:verticalRadio:0"> Next Day</label></td>
+<input type="radio" name="basicForm:verticalRadio" id="basicForm:verticalRadio:0" value="nextDay" disabled="disabled" /><label for="basicForm:verticalRadio:0"> Next Day</label></td>
 	</tr>
 	<tr>
 <td>
-<input type="radio" name="basicForm:verticalRadio" id="basicForm:verticalRadio:1" value="nextWeek" disabled /><label for="basicForm:verticalRadio:1"> Next Week</label></td>
+<input type="radio" name="basicForm:verticalRadio" id="basicForm:verticalRadio:1" value="nextWeek" disabled="disabled" /><label for="basicForm:verticalRadio:1"> Next Week</label></td>
 	</tr>
 	<tr>
 <td>
-<input type="radio" name="basicForm:verticalRadio" id="basicForm:verticalRadio:2" value="nextMonth" disabled /><label for="basicForm:verticalRadio:2"> Next Month</label></td>
+<input type="radio" name="basicForm:verticalRadio" id="basicForm:verticalRadio:2" value="nextMonth" disabled="disabled" /><label for="basicForm:verticalRadio:2"> Next Month</label></td>
 	</tr>
 </table>
 
@@ -371,7 +371,7 @@ escape&lt;p&gt;this markup&lt;/p&gt;<span id="basicForm:outputlabel8">andsometex
         <TD>Disabled Date: 
         </TD>
 
-	<TD><input id="basicForm:date2" type="text" name="basicForm:date2" value="July 11, 1996" accesskey="D" maxlength="20" size="3" tabindex="1" readonly />
+	<TD><input id="basicForm:date2" type="text" name="basicForm:date2" value="July 11, 1996" accesskey="D" maxlength="20" size="3" tabindex="1" readonly="readonly" />
 	</TD>
 
       </TR>
@@ -445,7 +445,7 @@ escape&lt;p&gt;this markup&lt;/p&gt;<span id="basicForm:outputlabel8">andsometex
 
              <td>
 
-               <input id="basicForm:inputDate1" type="text" name="basicForm:inputDate1" value="Jan 12, 1952" accesskey="D" alt="input_date medium readonly" maxlength="20" size="10" title="input_date medium readonly" readonly />
+               <input id="basicForm:inputDate1" type="text" name="basicForm:inputDate1" value="Jan 12, 1952" accesskey="D" alt="input_date medium readonly" maxlength="20" size="10" title="input_date medium readonly" readonly="readonly" />
 
 
              </td>
@@ -485,11 +485,11 @@ escape&lt;p&gt;this markup&lt;/p&gt;<span id="basicForm:outputlabel8">andsometex
 
 <tr>
 					<TD>Multi-select menu:</TD>
-					<TD><select id="basicForm:ManyApples" name="basicForm:ManyApples" class="selectmanyClass" multiple size="1" style="someStyle">	<option value="0" class="eclass">zero</option>
+					<TD><select id="basicForm:ManyApples" name="basicForm:ManyApples" class="selectmanyClass" multiple="multiple" size="1" style="someStyle">	<option value="0" class="eclass">zero</option>
 	<option value="1" class="eclass">one</option>
 	<option value="2" class="eclass">two</option>
 	<option value="3" class="eclass">three</option>
-	<option value="4" disabled class="dclass">four</option>
+	<option value="4" disabled="disabled" class="dclass">four</option>
 	<option value="5" class="eclass">five</option>
 	<option value="6" class="eclass">six</option>
 	<option value="7" class="eclass">seven</option>
@@ -501,7 +501,7 @@ escape&lt;p&gt;this markup&lt;/p&gt;<span id="basicForm:outputlabel8">andsometex
 
 <tr>
 					<TD>Multi-select listbox:</TD>
-					<TD><select name="basicForm:_id_id555" multiple size="10" style="someStyle">	<option value="0" class="dclass">zero</option>
+					<TD><select name="basicForm:_id_id555" multiple="multiple" size="10" style="someStyle">	<option value="0" class="dclass">zero</option>
 	<option value="1" class="dclass">one</option>
 	<option value="2" class="dclass">two</option>
 	<option value="3" class="dclass">three</option>
@@ -519,7 +519,7 @@ escape&lt;p&gt;this markup&lt;/p&gt;<span id="basicForm:outputlabel8">andsometex
 						<table border="1" id="basicForm:ManyApples3" class="styleClass" style="someStyle">
 	<tr>
 <td>
-<input name="basicForm:ManyApples3" id="basicForm:ManyApples3:0" value="0" type="checkbox" disabled accesskey="A" tabindex="3" /><label for="basicForm:ManyApples3:0" class="disabledClass"> zero</label></td>
+<input name="basicForm:ManyApples3" id="basicForm:ManyApples3:0" value="0" type="checkbox" disabled="disabled" accesskey="A" tabindex="3" /><label for="basicForm:ManyApples3:0" class="disabledClass"> zero</label></td>
 <td>
 <input name="basicForm:ManyApples3" id="basicForm:ManyApples3:1" value="1" type="checkbox" accesskey="A" tabindex="3" /><label for="basicForm:ManyApples3:1" class="enabledClass"> one</label></td>
 <td>
@@ -546,11 +546,11 @@ escape&lt;p&gt;this markup&lt;/p&gt;<span id="basicForm:outputlabel8">andsometex
                                         <TD><table id="basicForm:checklistmodel">
 	<tr>
 <td>
-<input name="basicForm:checklistmodel" id="basicForm:checklistmodel:0" value="1" type="checkbox" disabled /><label for="basicForm:checklistmodel:0" class="disabedClass"> one</label></td>
+<input name="basicForm:checklistmodel" id="basicForm:checklistmodel:0" value="1" type="checkbox" disabled="disabled" /><label for="basicForm:checklistmodel:0" class="disabedClass"> one</label></td>
 <td>
-<input name="basicForm:checklistmodel" id="basicForm:checklistmodel:1" value="2" type="checkbox" disabled /><label for="basicForm:checklistmodel:1" class="disabedClass"> two</label></td>
+<input name="basicForm:checklistmodel" id="basicForm:checklistmodel:1" value="2" type="checkbox" disabled="disabled" /><label for="basicForm:checklistmodel:1" class="disabedClass"> two</label></td>
 <td>
-<input name="basicForm:checklistmodel" id="basicForm:checklistmodel:2" value="3" type="checkbox" disabled /><label for="basicForm:checklistmodel:2" class="disabedClass"> three</label></td>
+<input name="basicForm:checklistmodel" id="basicForm:checklistmodel:2" value="3" type="checkbox" disabled="disabled" /><label for="basicForm:checklistmodel:2" class="disabedClass"> three</label></td>
 	</tr>
 </table></TD>
 </tr>
