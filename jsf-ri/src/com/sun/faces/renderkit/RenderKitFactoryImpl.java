@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKitFactoryImpl.java,v 1.11 2003/07/08 15:38:33 eburns Exp $
+ * $Id: RenderKitFactoryImpl.java,v 1.12 2003/10/06 19:27:58 rkitain Exp $
  */
 
 /*
@@ -53,65 +53,32 @@ public class RenderKitFactoryImpl extends RenderKitFactory {
         renderKits = new HashMap();
     }
     
-    /**
-     * Adds the {@link RenderKit} instance to the internal set.
-     *
-     * @param renderKitId The RenderKit identifier for the RenderKit
-     *        that will be added.
-     * @param renderKit The RenderKit instance that will be added.
-     * @exception NullPointerException if <code>renderKitId</code>
-     *  or <code>renderKit</code> arguments are <code>null</code>
-     */
     public void addRenderKit(String renderKitId, RenderKit renderKit) {
 
         if (renderKitId == null || renderKit == null) {
             throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
 
-        if (renderKits.containsKey(renderKitId)) {
-            throw new IllegalArgumentException(renderKitId);
-        }
         synchronized(renderKits) {
             renderKits.put(renderKitId, renderKit);
         }
     }
 
-    /**
-     * Return a {@link RenderKit} instance for the given render
-     * kit identifier.  If a {@link RenderKit} instance does not
-     * exist for the identifier, create one and add it to the
-     * internal table.
-     *
-     * @param renderKitId A RenderKit identifier.
-     * @returns RenderKit A RenderKit instance.
-     * @exception NullPointerException if <code>renderKitId</code>
-     *  argument is <code>null</code>
-     */ 
     public RenderKit getRenderKit(String renderKitId) {
 
         if (renderKitId == null) {
             throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
 
-        RenderKitImpl renderKit = null;
+        RenderKit renderKit = null;
         this.renderKitId = renderKitId;
 
         // If an instance already exists, return it.
         //
         synchronized(renderKits) {
             if (renderKits.containsKey(renderKitId)) {
-                return ((RenderKit) renderKits.get(renderKitId));
+		renderKit = (RenderKit) renderKits.get(renderKitId);
             }
-        }
-
-        // Not found, so create an instance of RenderKitImpl.
-        //
-        renderKit = new RenderKitImpl();
-
-        // Add the newly created renderkit to the table.
-        //
-        synchronized(renderKits) {
-            renderKits.put(renderKitId, renderKit);
         }
 
         return renderKit;
@@ -127,13 +94,6 @@ public class RenderKitFactoryImpl extends RenderKitFactory {
         return getRenderKit(renderKitId);
     }
 
-
-    /**
-     * Return an iteration of render kit identifiers maintained
-     * by this factory instance.
-     *
-     * @returns Iterator The iteration of identfiers.
-     */
     public Iterator getRenderKitIds() {
         return (renderKits.keySet().iterator());
     }

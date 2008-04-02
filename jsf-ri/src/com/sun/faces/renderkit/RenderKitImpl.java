@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKitImpl.java,v 1.12 2003/10/02 00:39:56 jvisvanathan Exp $
+ * $Id: RenderKitImpl.java,v 1.13 2003/10/06 19:27:58 rkitain Exp $
  */
 
 /*
@@ -48,7 +48,7 @@ import javax.faces.render.ResponseStateManager;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: RenderKitImpl.java,v 1.12 2003/10/02 00:39:56 jvisvanathan Exp $
+ * @version $Id: RenderKitImpl.java,v 1.13 2003/10/06 19:27:58 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -107,18 +107,6 @@ public class RenderKitImpl extends RenderKit {
     // Methods From RenderKit
     //
 
-    /**
-     * This method adds a <code>Renderer</code> with its associated 
-     * <code>rendererType</code> to the internal map.
-     * If a <code>Renderer</code> already exists for this 
-     * <code>rendererType</code>, it will be replaced with the
-     * new <code>renderer</code>.
-     *
-     * @param rendererType The <code>Renderer</code> type.
-     * @param renderer The <code>Renderer</code> instance.
-     *
-     * @throws NullPointerException if either parameter is null.
-     */
     public void addRenderer(String rendererType, Renderer renderer) {
         if (rendererType == null || renderer == null) {
             throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
@@ -127,14 +115,6 @@ public class RenderKitImpl extends RenderKit {
 	renderersByRendererType.put(rendererType, renderer);
     }
 
-    /**
-     * This method returns a renderer instance given a renderer type.
-     *
-     * @param rendererType The renderer type.
-     * @return Renderer A Renderer instance.
-     * @throws FacesException If the renderer instance is not found for
-     *         the given renderer type.
-     */
     public Renderer getRenderer(String rendererType) {
 
         if (rendererType == null) {
@@ -144,11 +124,6 @@ public class RenderKitImpl extends RenderKit {
         Assert.assert_it(renderersByRendererType != null);
 
         Renderer renderer = (Renderer)renderersByRendererType.get(rendererType);
-        if (renderer == null) {
-	    Object [] params = { rendererType };
-            throw new IllegalArgumentException(Util.getExceptionMessage(
-                Util.RENDERER_NOT_FOUND_ERROR_MESSAGE_ID, params));
-        }
 
         return renderer;
     }
@@ -160,23 +135,6 @@ public class RenderKitImpl extends RenderKit {
         return responseStateManager;
     }
 
-    /**
-     * Create a new {@link ResponseWriter} instance from the provided
-     * <code>Writer</code>, (optional) content type and character encoding.
-     *
-     * @param writer The contained <code>Writer</code>.
-     * @param contentTypeList an "Accept header style" list of content types
-     * for this response.  This argument may be null, in which case, the 
-     * <code>RenderKit</code> will choose the best fit.
-     * @param characterEncoding such as "ISO-8859-1" for this {@link ResponseWriter}.
-     * If this argument is null, then the character encoding "ISO-8859-1"
-     * will be used.
-     *
-     * @return a new {@link ResponseWriter}.
-     *
-     * @exception IllegalArgumentException if a recognizeable content type can not
-     * be found in the content type list.
-     */
     public ResponseWriter createResponseWriter(Writer writer, String contentTypeList, 
         String characterEncoding) {
         if (writer == null) {
