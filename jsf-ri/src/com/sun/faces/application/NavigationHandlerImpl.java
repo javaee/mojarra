@@ -1,5 +1,5 @@
 /*
- * $Id: NavigationHandlerImpl.java,v 1.48 2006/05/17 19:00:44 rlubke Exp $
+ * $Id: NavigationHandlerImpl.java,v 1.49 2006/07/20 19:34:36 rlubke Exp $
  */
 
 /*
@@ -29,12 +29,6 @@
 
 package com.sun.faces.application;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.application.ApplicationFactory;
@@ -44,9 +38,15 @@ import javax.faces.component.UIViewRoot;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import com.sun.faces.config.ConfigureListener;
-import com.sun.faces.util.Util;
 import com.sun.faces.util.MessageUtils;
+import com.sun.faces.util.Util;
 
 /**
  * <p><strong>NavigationHandlerImpl</strong> is the class that implements
@@ -190,20 +190,27 @@ public class NavigationHandlerImpl extends NavigationHandler {
      */
     private CaseStruct getViewId(FacesContext context, String fromAction,
                                  String outcome) {
-        String viewId = context.getViewRoot().getViewId();
-        CaseStruct caseStruct;
+        
+        UIViewRoot root = context.getViewRoot();
+        String viewId = (root != null ? root.getViewId() : null);
+        
+        // if viewId is not null, use its value to find
+        // a navigation match, otherwise look for a match
+        // based soley on the fromAction and outcome
+        CaseStruct caseStruct = null;
+        if (viewId != null) {
+            caseStruct = findExactMatch(viewId, fromAction, outcome);
 
-        caseStruct = findExactMatch(viewId, fromAction, outcome);
-
-        if (caseStruct == null) {
-            caseStruct = findWildCardMatch(viewId, fromAction, outcome);
+            if (caseStruct == null) {
+                caseStruct = findWildCardMatch(viewId, fromAction, outcome);
+            }
         }
 
         if (caseStruct == null) {
             caseStruct = findDefaultMatch(fromAction, outcome);
         }
 
-         if (caseStruct == null && logger.isLoggable(Level.WARNING)) {
+        if (caseStruct == null && logger.isLoggable(Level.WARNING)) {
             if (fromAction == null) {
                 logger.log(Level.FINE,
                            "jsf.navigation.no_matching_outcome",
