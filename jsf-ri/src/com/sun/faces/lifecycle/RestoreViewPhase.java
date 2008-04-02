@@ -1,5 +1,5 @@
 /*
- * $Id: RestoreViewPhase.java,v 1.2 2003/08/23 00:39:06 jvisvanathan Exp $
+ * $Id: RestoreViewPhase.java,v 1.3 2003/09/04 21:15:05 jvisvanathan Exp $
  */
 
 /*
@@ -55,7 +55,7 @@ import org.apache.commons.logging.LogFactory;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: RestoreViewPhase.java,v 1.2 2003/08/23 00:39:06 jvisvanathan Exp $
+ * @version $Id: RestoreViewPhase.java,v 1.3 2003/09/04 21:15:05 jvisvanathan Exp $
  * 
  */
 
@@ -163,20 +163,10 @@ public class RestoreViewPhase extends Phase {
         while (kids.hasNext()) {
             doPerComponentActions(context, (UIComponent) kids.next());
         }
-        if (uic instanceof UICommand && null != actionListener) {
-
-            // register actionlistener if it has not been registered already
-            // PENDING (visvan) This could cause a problem because the components
-            // are exposed to applications. Instead move this logic to the root
-            // component.
-            if ( (uic.getAttribute("com.sun.faces.ActionListener")) == null ) {
-                ((UICommand)uic).addActionListener(actionListener);
-                uic.setAttribute("com.sun.faces.ActionListener", Boolean.TRUE);
-            }     
-        }
         if (uic instanceof UIInput) {
             ((UIInput)uic).setValid(true);
         }
+      
         // if this component has a componentRef, make sure to populate the
         // ValueBinding for it.
         if (null != (componentRef = uic.getComponentRef())) {

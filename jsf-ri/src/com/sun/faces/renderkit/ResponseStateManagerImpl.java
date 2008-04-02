@@ -1,5 +1,5 @@
 /*
- * $Id: ResponseStateManagerImpl.java,v 1.1 2003/08/23 00:39:07 jvisvanathan Exp $
+ * $Id: ResponseStateManagerImpl.java,v 1.2 2003/09/04 21:15:06 jvisvanathan Exp $
  */
 
 /*
@@ -13,6 +13,8 @@ package com.sun.faces.renderkit;
 import javax.faces.render.ResponseStateManager;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
+import java.io.StringReader;
+import javax.faces.FacesException;
 
 import java.io.IOException;
 import java.io.Writer;
@@ -21,7 +23,25 @@ import java.io.Reader;
 import com.sun.faces.RIConstants;
 import com.sun.faces.util.Util;
 
+import com.sun.faces.RIConstants;
+import com.sun.faces.util.Base64;
+import com.sun.faces.util.Util;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutput;
+import java.io.ObjectOutputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ObjectInputStream;
+
 import org.mozilla.util.Assert;
+import java.util.Locale;
+import java.util.Map;
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 
 /**
  *
@@ -34,7 +54,10 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
     //
     // Protected Constants
     //
-
+    protected static Log log = 
+        LogFactory.getLog(ResponseStateManagerImpl.class);
+    private static final String FACES_VIEW_STATE = 
+            "com.sun.faces.FACES_VIEW_STATE";
     //
     // Class Variables
     //
@@ -72,22 +95,82 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
     //
 
     public Object getComponentStateToRestore(FacesContext context) {
-        // PENDING (visvan) implement saveStateInPage in the next phase
-        // of state saving.
-        return null;
+     
+        Map requestMap = context.getExternalContext().getRequestMap();
+        Object state = requestMap.get(FACES_VIEW_STATE);
+        // null out the temporary attribute, since we don't need it anymore.
+        requestMap.put(FACES_VIEW_STATE, null);
+        return state;
     }
     
     public Object getTreeStructureToRestore(FacesContext context, 
         String treeId) {
-        // PENDING (visvan) implement saveStateInPage in the next phase
-        // of state saving.
-        return null;
+        Object structure = null;
+        Object state = null;
+        
+        Map requestParamMap = context.getExternalContext().getRequestParameterMap();
+        
+        String viewString = (String) requestParamMap.get(RIConstants.FACES_VIEW);
+        if ( viewString == null ) {
+            return null;
+        }
+        byte[] bytes  = Base64.decode(viewString.getBytes());
+        try {
+            ObjectInputStream ois = new ObjectInputStream(
+                    new ByteArrayInputStream(bytes));
+            structure = ois.readObject();
+            state = ois.readObject();
+            Map requestMap = context.getExternalContext().getRequestMap();
+            // store the state object temporarily in request scope until it is
+            // processed by getComponentStateToRestore which resets it.
+            requestMap.put(FACES_VIEW_STATE, state);
+            Locale locale = (Locale) ois.readObject();
+            if ( locale != null) {
+                context.setLocale(locale);
+            }
+            ois.close();
+        } catch (java.io.OptionalDataException ode) {
+            log.error(ode.getMessage(), ode);
+        } catch (java.lang.ClassNotFoundException cnfe) {
+            log.error(cnfe.getMessage(), cnfe);
+        } catch (java.io.IOException iox) {
+            log.error(iox.getMessage(), iox);
+        }
+        return structure;
     }
     
-    public void writeState(Reader content, Writer out, Object structure, 
+    public String writeState(Object content, Writer out, Object structure, 
         Object state) {
-        // PENDING (visvan) implement saveStateInPage in the next phase
-        // of state saving.
+        ByteArrayOutputStream bos = null;
+        FacesContext context = FacesContext.getCurrentInstance();
+        String hiddenField = null; 
+        
+        Assert.assert_it(content != null);
+        String response = content.toString();
+        Assert.assert_it(structure != null);
+        Assert.assert_it(state != null);
+        Assert.assert_it(context.getLocale() != null);
+ 
+        try {
+            bos = new ByteArrayOutputStream();
+            ObjectOutput output = new ObjectOutputStream(bos);
+            output.writeObject(structure);
+            output.writeObject(state);
+            output.writeObject(context.getLocale());
+            
+            hiddenField = " <input type=\"hidden\" name=\"" 
+	    + RIConstants.FACES_VIEW +  "\"" + " value=\"" +
+	    (new String(Base64.encode(bos.toByteArray()), "ISO-8859-1")) + 
+            "\">\n ";
+        } catch (Exception se ) {
+            Object [] params = { se.getMessage() };
+            throw new FacesException(Util.getExceptionMessage(
+                    Util.SAVING_STATE_ERROR_MESSAGE_ID, params)); 
+        }
+        
+        response = replaceMarkers(response, 
+                RIConstants.SAVESTATE_FIELD_MARKER, hiddenField);
+        return response;
     }
     
     public void writeStateMarker(FacesContext context) throws IOException {
@@ -100,6 +183,22 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
 	    writer.writeText(RIConstants.SAVESTATE_FIELD_MARKER,null);
         }
     }
+    
+    protected String replaceMarkers(String response, String marker, 
+        String hiddenField) {
+       
+        int markerIdx = response.indexOf(marker);
+        while (markerIdx != -1 ) {
+            String replacedContent = response.substring(0,markerIdx);
+            int markerEnd = markerIdx + marker.length();
+            String endPortion = response.substring(markerEnd, response.length());
+            replacedContent = replacedContent.concat(hiddenField);
+            replacedContent = replacedContent.concat(endPortion);
+            response = replacedContent;
+            markerIdx = response.indexOf(marker);
+        }
+        return response;
+   }                               
     
 
 } // end of class ResponseStateManagerImpl

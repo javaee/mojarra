@@ -1,5 +1,5 @@
 /*
- * $Id: TestRestoreViewFromPage.java,v 1.3 2003/08/23 19:56:14 jvisvanathan Exp $
+ * $Id: TestRestoreViewFromPage.java,v 1.4 2003/09/04 21:15:12 jvisvanathan Exp $
  */
 
 /*
@@ -40,7 +40,7 @@ import com.sun.faces.lifecycle.Phase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRestoreViewFromPage.java,v 1.3 2003/08/23 19:56:14 jvisvanathan Exp $
+ * @version $Id: TestRestoreViewFromPage.java,v 1.4 2003/09/04 21:15:12 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -60,7 +60,7 @@ public class TestRestoreViewFromPage extends ServletFacesTestCase
 //
 // Instance Variables
 //
-public static final String TEST_URI = "/TestSaveState.jsp";
+public static final String TEST_URI = "/greeting.jsp";
 public static final String  RESTORE_VIEW_OUTPUT_FILE = FileOutputResponseWriter.FACES_RESPONSE_ROOT + 
     "RestoreView_output";
 public static final String  RESTORE_VIEW_CORRECT_FILE = FileOutputResponseWriter.FACES_RESPONSE_ROOT + 
@@ -97,7 +97,7 @@ public void beginRestoreViewFromPage(WebRequest theRequest)
 {
     theRequest.setURL("localhost:8080", null, null, TEST_URI, null);
     theRequest.addParameter("com.sun.faces.VIEW", 
-			    "rO0ABXNyACFjb20uc3VuLmZhY2VzLnRyZWUuU2ltcGxlVHJlZUltcGx8SgHTtTLr8AIAA0wAC3JlbmRlcktpdElkdAASTGphdmEvbGFuZy9TdHJpbmc7TAAEcm9vdHQAI0xqYXZheC9mYWNlcy9jb21wb25lbnQvVUlDb21wb25lbnQ7TAAGdHJlZUlkcQB+AAF4cgAVamF2YXguZmFjZXMudHJlZS5UcmVlPrWmwgkoaEwCAAB4cHQAB0RFRkFVTFRzcgAjY29tLnN1bi5mYWNlcy50cmVlLlNpbXBsZVRyZWVJbXBsJDGZzr1VeEns/QIAAUwABnRoaXMkMHQAI0xjb20vc3VuL2ZhY2VzL3RyZWUvU2ltcGxlVHJlZUltcGw7eHIAJWphdmF4LmZhY2VzLmNvbXBvbmVudC5VSUNvbXBvbmVudEJhc2XC5mq6oKj1YgIABEwACmF0dHJpYnV0ZXN0ABNMamF2YS91dGlsL0hhc2hNYXA7TAAIY2hpbGRyZW50ABVMamF2YS91dGlsL0FycmF5TGlzdDtMAAhoYW5kbGVyc3EAfgAKTAAKdmFsaWRhdG9yc3EAfgAKeHBwc3IAE2phdmEudXRpbC5BcnJheUxpc3R4gdIdmcdhnQMAAUkABHNpemV4cAAAAAF3BAAAAApzcgAcamF2YXguZmFjZXMuY29tcG9uZW50LlVJRm9ybd/vQSa1Eq3gAgAAeHEAfgAIc3IAEWphdmEudXRpbC5IYXNoTWFwBQfawcMWYNEDAAJGAApsb2FkRmFjdG9ySQAJdGhyZXNob2xkeHA/QAAAAAAACHcIAAAACwAAAAR0AAtjb21wb25lbnRJZHQACWJhc2ljRm9ybXQADHJlbmRlcmVyVHlwZXQABEZvcm10AAZwYXJlbnRxAH4AC3QABXZhbHVlcQB+ABN4c3EAfgAMAAAABXcEAAAACnNyAB1qYXZheC5mYWNlcy5jb21wb25lbnQuVUlJbnB1dKvJFthZlLUYAgAAeHEAfgAIc3EAfgAQP0AAAAAAAAh3CAAAAAsAAAAEcQB+ABJ0AAh1c2VyTmFtZXEAfgAUdAAEVGV4dHEAfgAWcQB+AA9xAH4AF3QAD0phdmFTZXJ2ZXJGYWNlc3hwcHNxAH4ADAAAAAJ3BAAAAApzcgAlamF2YXguZmFjZXMudmFsaWRhdG9yLkxlbmd0aFZhbGlkYXRvchOY3QOS02mPAgAESQAHbWF4aW11bVoACm1heGltdW1TZXRJAAdtaW5pbXVtWgAKbWluaW11bVNldHhyACNqYXZheC5mYWNlcy52YWxpZGF0b3IuVmFsaWRhdG9yQmFzZYngGzccBXsFAgAAeHAAAAAKAQAAAAYBc3IAJ2phdmF4LmZhY2VzLnZhbGlkYXRvci5SZXF1aXJlZFZhbGlkYXRvcjfoy9Dkh/T+AgAAeHEAfgAheHNyAB9qYXZheC5mYWNlcy5jb21wb25lbnQuVUlDb21tYW5kyDZjy8ASvIsCAAB4cQB+AAhzcQB+ABA/QAAAAAAACHcIAAAACwAAAAZ0AAxjb21tYW5kQ2xhc3N0AA5oeXBlcmxpbmtDbGFzc3QABWxhYmVsdAAJbGluayB0ZXh0cQB+ABJ0AARsaW5rcQB+ABR0AAlIeXBlcmxpbmtxAH4AFnEAfgAPdAAGdGFyZ2V0dAAKaGVsbG8uaHRtbHhwcHBzcgAlamF2YXguZmFjZXMuY29tcG9uZW50LlVJU2VsZWN0Qm9vbGVhbiiDmwtDyLEhAgAAeHEAfgAZc3EAfgAQP0AAAAAAAAh3CAAAAAsAAAAEdAASc2VsZWN0Ym9vbGVhbkNsYXNzcQB+ADNxAH4AEnQACXZhbGlkVXNlcnEAfgAUdAAIQ2hlY2tib3hxAH4AFnEAfgAPeHBwcHNyACFqYXZheC5mYWNlcy5jb21wb25lbnQuVUlTZWxlY3RPbmWK9BXfbmCzEgIAAHhyACJqYXZheC5mYWNlcy5jb21wb25lbnQuVUlTZWxlY3RCYXNllB");
+			    "rO0ABXNyACBjb20uc3VuLmZhY2VzLnV0aWwuVHJlZVN0cnVjdHVyZRRmG0QclWAgAgAETAAIY2hpbGRyZW50ABVMamF2YS91dGlsL0FycmF5TGlzdDtMAAljbGFzc05hbWV0ABJMamF2YS9sYW5nL1N0cmluZztMAAZmYWNldHN0ABNMamF2YS91dGlsL0hhc2hNYXA7TAACaWRxAH4AAnhwc3IAE2phdmEudXRpbC5BcnJheUxpc3R4gdIdmcdhnQMAAUkABHNpemV4cAAAAAF3BAAAAApzcQB+AABzcQB+AAUAAAACdwQAAAAKc3EAfgAAcHQAJmphdmF4LmZhY2VzLmNvbXBvbmVudC5iYXNlLlVJSW5wdXRCYXNlcHQABnVzZXJOb3NxAH4AAHB0AChqYXZheC5mYWNlcy5jb21wb25lbnQuYmFzZS5VSUNvbW1hbmRCYXNlcHQABnN1Ym1pdHh0ACVqYXZheC5mYWNlcy5jb21wb25lbnQuYmFzZS5VSUZvcm1CYXNlcHQACWhlbGxvRm9ybXh0AClqYXZheC5mYWNlcy5jb21wb25lbnQuYmFzZS5VSVZpZXdSb290QmFzZXB0AARyb290dXIAE1tMamF2YS5sYW5nLk9iamVjdDuQzlifEHMpbAIAAHhwAAAAAnVxAH4AEwAAAAJ0ABlERUZBVUxUW3NlcF0vZ3JlZXRpbmcuanNwdXEAfgATAAAABnEAfgAScHEAfgAXcHBwdXEAfgATAAAAAXVxAH4AEwAAAAJ1cQB+ABMAAAAGcQB+ABBwcQB+ABp0AARGb3JtcHNyABFqYXZhLnV0aWwuSGFzaE1hcAUH2sHDFmDRAwACRgAKbG9hZEZhY3RvckkACXRocmVzaG9sZHhwP0AAAAAAABB3CAAAABAAAAACdAAYY29tLnN1bi5mYWNlcy5Gb3JtTnVtYmVyc3IAEWphdmEubGFuZy5JbnRlZ2VyEuKgpPeBhzgCAAFJAAV2YWx1ZXhyABBqYXZhLmxhbmcuTnVtYmVyhqyVHQuU4IsCAAB4cAAAAAB0AARuYW1ldAAJaGVsbG9Gb3JteHVxAH4AEwAAAAJ1cQB+ABMAAAACdXEAfgATAAAAAnVxAH4AEwAAAAR0AA5mYWxzZVtzZXBddHJ1ZXBwcHVxAH4AEwAAAAJ1cQB+ABMAAAADcHQABk5VTUJFUnB1cQB+ABMAAAAGdAAQaGVsbG9Gb3JtX3VzZXJOb3BxAH4ALHQABFRleHRwcHVxAH4AEwAAAAB1cQB+ABMAAAACdXEAfgATAAAAAnVxAH4AEwAAAAJ0AA1udWxsW3NlcF1udWxsdXEAfgATAAAAB3BwcHBwdXIAK1tMamF2YXguZmFjZXMuYXBwbGljYXRpb24uU3RhdGVIb2xkZXJTYXZlcjus7jOyrNsurwIAAHhwAAAAAHB1cQB+ABMAAAACdXEAfgATAAAAA3B0AAZTdWJtaXRwdXEAfgATAAAABnQAEGhlbGxvRm9ybV9zdWJtaXRwcQB+ADp0AAZCdXR0b25wc3EAfgAcP0AAAAAAABB3CAAAABAAAAABdAAEdHlwZXQABnN1Ym1pdHh1cQB+ABMAAAAAc3IAEGphdmEudXRpbC5Mb2NhbGV++BFgnDD57AMABEkACGhhc2hjb2RlTAAHY291bnRyeXEAfgACTAAIbGFuZ3VhZ2VxAH4AAkwAB3ZhcmlhbnRxAH4AAnhw/////3QAAlVTdAACZW50AAB4");
 }
 
 
@@ -118,8 +118,7 @@ public void testRestoreViewFromPage()
     assertTrue(null != getFacesContext().getViewRoot());    
     assertTrue(RenderKitFactory.DEFAULT_RENDER_KIT.equals(
            getFacesContext().getViewRoot().getRenderKitId()));
-      
-    assertTrue(getFacesContext().getLocale().equals(Locale.ENGLISH));
+    assertTrue(getFacesContext().getLocale().equals(Locale.US));
     CompareFiles cf = new CompareFiles();
     try {
         FileOutputStream os = new FileOutputStream(RESTORE_VIEW_OUTPUT_FILE);
@@ -133,6 +132,8 @@ public void testRestoreViewFromPage()
 	boolean status = cf.filesIdentical(RESTORE_VIEW_OUTPUT_FILE, 
                 RESTORE_VIEW_CORRECT_FILE, ignoreList);
         assertTrue(status);
+        // PENDING (visvan) test case to verify nothing is persisted if the root
+        // is marked transient for both client tand server case.
     }
     catch (IOException e) {
 	System.out.println(e.getMessage());

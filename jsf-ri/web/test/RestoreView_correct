@@ -1,93 +1,11 @@
-===>Type:root
-id:null
-value=null
-  ===>Type:javax.faces.component.UIForm
-  id:basicForm
-  value=basicForm
-  attr=componentId : basicForm
-  attr=rendererType : Form
-  attr=parent : com.sun.faces.tree.SimpleTreeImpl
-  attr=value : basicForm
-    ===>Type:javax.faces.component.UIInput
-    id:userName
-    value=JavaServerFaces
-    attr=componentId : userName
-    attr=rendererType : Text
-    attr=parent : javax.faces.component.UIForm
-    attr=value : JavaServerFaces
-    ===>Type:javax.faces.component.UICommand
-    id:link
-    value=null
-    attr=commandClass : hyperlinkClass
-    attr=componentId : link
-    attr=label : link text
-    attr=rendererType : Hyperlink
-    attr=parent : javax.faces.component.UIForm
-    attr=target : hello.html
-    ===>Type:javax.faces.component.UISelectBoolean
-    id:validUser
-    value=null
-    attr=selectbooleanClass : selectbooleanClass
-    attr=componentId : validUser
-    attr=rendererType : Checkbox
-    attr=parent : javax.faces.component.UIForm
-    ===>Type:javax.faces.component.UISelectOne
-    id:appleQuantity
-     {
-    	 value=0 label=0 description=null
-    	 value=4 label=4 description=null
-    	 value=9 label=9 description=null
-     }
-      ===>Type:javax.faces.component.UISelectItem
-      id:0
-      value=null
-      attr=componentId : 0
-      attr=parent : javax.faces.component.UISelectOne
-      attr=disabled : true
-      attr=itemLabel : 0
-      attr=itemValue : 0
-      ===>Type:javax.faces.component.UISelectItem
-      id:4
-      value=null
-      attr=componentId : 4
-      attr=parent : javax.faces.component.UISelectOne
-      attr=itemLabel : 4
-      attr=title : Four
-      attr=itemValue : 4
-      ===>Type:javax.faces.component.UISelectItem
-      id:9
-      value=null
-      attr=componentId : 9
-      attr=parent : javax.faces.component.UISelectOne
-      attr=itemLabel : 9
-      attr=title : nine
-      attr=itemValue : 9
-    ===>Type:javax.faces.component.UISelectMany
-    id:ManyApples
-    value=[Ljava.lang.Object;@14a18d
-    attr=componentId : ManyApples
-    attr=rendererType : Menu
-    attr=size : 1
-    attr=parent : javax.faces.component.UIForm
-    attr=value : [Ljava.lang.Object;
-      ===>Type:javax.faces.component.UISelectItem
-      id:4
-      value=null
-      attr=componentId : 4
-      attr=parent : javax.faces.component.UISelectMany
-      attr=itemLabel : four
-      attr=itemValue : 4
-      ===>Type:javax.faces.component.UISelectItem
-      id:6
-      value=null
-      attr=componentId : 6
-      attr=parent : javax.faces.component.UISelectMany
-      attr=itemLabel : six
-      attr=itemValue : 6
-      ===>Type:javax.faces.component.UISelectItem
-      id:7
-      value=null
-      attr=componentId : 7
-      attr=parent : javax.faces.component.UISelectMany
-      attr=itemLabel : seven
-      attr=itemValue : 7
+id:root
+value= null
+  id:helloForm
+  value= null
+  attr=com.sun.faces.FormNumber : 0
+  attr=name : helloForm
+    id:userNo
+    value= NUMBER
+    id:submit
+    value= Submit
+    attr=type : submit

@@ -1,83 +1,55 @@
 <!--
- Copyright 2002 Sun Microsystems, Inc. All rights reserved.
- SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+ Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
+ 
+ Redistribution and use in source and binary forms, with or
+ without modification, are permitted provided that the following
+ conditions are met:
+ 
+ - Redistributions of source code must retain the above copyright
+   notice, this list of conditions and the following disclaimer.
+ 
+ - Redistribution in binary form must reproduce the above
+   copyright notice, this list of conditions and the following
+   disclaimer in the documentation and/or other materials
+   provided with the distribution.
+    
+ Neither the name of Sun Microsystems, Inc. or the names of
+ contributors may be used to endorse or promote products derived
+ from this software without specific prior written permission.
+  
+ This software is provided "AS IS," without a warranty of any
+ kind. ALL EXPRESS OR IMPLIED CONDITIONS, REPRESENTATIONS AND
+ WARRANTIES, INCLUDING ANY IMPLIED WARRANTY OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE OR NON-INFRINGEMENT, ARE HEREBY
+ EXCLUDED. SUN AND ITS LICENSORS SHALL NOT BE LIABLE FOR ANY
+ DAMAGES OR LIABILITIES SUFFERED BY LICENSEE AS A RESULT OF OR
+ RELATING TO USE, MODIFICATION OR DISTRIBUTION OF THIS SOFTWARE OR
+ ITS DERIVATIVES. IN NO EVENT WILL SUN OR ITS LICENSORS BE LIABLE
+ FOR ANY LOST REVENUE, PROFIT OR DATA, OR FOR DIRECT, INDIRECT,
+ SPECIAL, CONSEQUENTIAL, INCIDENTAL OR PUNITIVE DAMAGES, HOWEVER
+ CAUSED AND REGARDLESS OF THE THEORY OF LIABILITY, ARISING OUT OF
+ THE USE OF OR INABILITY TO USE THIS SOFTWARE, EVEN IF SUN HAS
+ BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
+  
+ You acknowledge that this software is not designed, licensed or
+ intended for use in the design, construction, operation or
+ maintenance of any nuclear facility.
 -->
 
 <HTML>
-    <HEAD> <TITLE> JSF Basic Components Test Page </TITLE> </HEAD>
-
+    <HEAD> <title>Hello</title> </HEAD>
     
     
+    <body bgcolor="white">
+    <h2>Hi. My name is Duke.  I'm thinking of a number from 0 to 10.
+    Can you guess it?</h2>
+    
+    <form id="helloForm" method="post" action="/test/faces/greeting.jsp;jsessionid=09AF72F7E5EA209865AFFAB72D0F7B33">
 
-    <BODY>
-        <H3> JSF Basic Components Test Page </H3>
+  	<input type="text" name="helloForm_userNo" value="NUMBER"> <BR>
 
-
-<form method="post" action="/test/faces/TestSaveState.jsp;jsessionid=5DD4AFE4BEB34D9118D5F1CE6B8F93CE">
-
-  <TABLE BORDER="1">
-
-      <TR>
-      <td>
-                    
-		     
-		     
-                   <input type="text" name="/basicForm/userName" value="JavaServerFaces">
-
-              </td>
-
-
-	<TD>
-
-	      <a href="hello.html" class="hyperlinkClass">link text</A>
-
-	</TD>
-
-      </TR>
-
-      <TR>
-
-	<TD>
-
-            <input type="checkbox"  name="/basicForm/validUser" class="selectbooleanClass" >
-	</TD>
-
-      </TR>
-
-      <TR>
-
-	<TD>
-
-	     
-
-                
-                
-                
-
-              <select name="/basicForm/appleQuantity" accesskey="N" size="3" tabindex="20" title="Select Quantity" >	<option value="0" disabled >0</option>
-	<option value="4" selected title="Four" >4</option>
-	<option value="9" title="nine" >9</option>
-</select>
-
-	</TD>
-
-      </TR>
-
-					<TD>
-						
-						
-						
-					<select name="/basicForm/ManyApples" multiple  size="1" >	<option value="4" selected>four</option>
-	<option value="6">six</option>
-	<option value="7" selected>seven</option>
-</select></TD>
-
-</tr>
-
-  </TABLE>
-
- <input type="hidden" name="com.sun.faces.TREE" value="rO0ABXNyACFjb20uc3VuLmZhY2VzLnRyZWUuU2ltcGxlVHJlZUltcGx8SgHTtTLr8AIAA0wAC3JlbmRlcktpdElkdAASTGphdmEvbGFuZy9TdHJpbmc7TAAEcm9vdHQAI0xqYXZheC9mYWNlcy9jb21wb25lbnQvVUlDb21wb25lbnQ7TAAGdHJlZUlkcQB+AAF4cgAVamF2YXguZmFjZXMudHJlZS5UcmVlPrWmwgkoaEwCAAB4cHQAB0RFRkFVTFRzcgAjY29tLnN1bi5mYWNlcy50cmVlLlNpbXBsZVRyZWVJbXBsJDGZzr1VeEns/QIAAUwABnRoaXMkMHQAI0xjb20vc3VuL2ZhY2VzL3RyZWUvU2ltcGxlVHJlZUltcGw7eHIAJWphdmF4LmZhY2VzLmNvbXBvbmVudC5VSUNvbXBvbmVudEJhc2XC5mq6oKj1YgIABEwACmF0dHJpYnV0ZXN0ABNMamF2YS91dGlsL0hhc2hNYXA7TAAIY2hpbGRyZW50ABVMamF2YS91dGlsL0FycmF5TGlzdDtMAAhoYW5kbGVyc3EAfgAKTAAKdmFsaWRhdG9yc3EAfgAKeHBwc3IAE2phdmEudXRpbC5BcnJheUxpc3R4gdIdmcdhnQMAAUkABHNpemV4cAAAAAF3BAAAAApzcgAcamF2YXguZmFjZXMuY29tcG9uZW50LlVJRm9ybd/vQSa1Eq3gAgAAeHEAfgAIc3IAEWphdmEudXRpbC5IYXNoTWFwBQfawcMWYNEDAAJGAApsb2FkRmFjdG9ySQAJdGhyZXNob2xkeHA/QAAAAAAACHcIAAAACwAAAAR0AAtjb21wb25lbnRJZHQACWJhc2ljRm9ybXQADHJlbmRlcmVyVHlwZXQABEZvcm10AAZwYXJlbnRxAH4AC3QABXZhbHVlcQB+ABN4c3EAfgAMAAAABXcEAAAACnNyAB1qYXZheC5mYWNlcy5jb21wb25lbnQuVUlJbnB1dKvJFthZlLUYAgAAeHEAfgAIc3EAfgAQP0AAAAAAAAh3CAAAAAsAAAAEcQB+ABJ0AAh1c2VyTmFtZXEAfgAUdAAEVGV4dHEAfgAWcQB+AA9xAH4AF3QAD0phdmFTZXJ2ZXJGYWNlc3hwcHNxAH4ADAAAAAJ3BAAAAApzcgAlamF2YXguZmFjZXMudmFsaWRhdG9yLkxlbmd0aFZhbGlkYXRvchOY3QOS02mPAgAESQAHbWF4aW11bVoACm1heGltdW1TZXRJAAdtaW5pbXVtWgAKbWluaW11bVNldHhyACNqYXZheC5mYWNlcy52YWxpZGF0b3IuVmFsaWRhdG9yQmFzZYngGzccBXsFAgAAeHAAAAAKAQAAAAYBc3IAJ2phdmF4LmZhY2VzLnZhbGlkYXRvci5SZXF1aXJlZFZhbGlkYXRvcjfoy9Dkh/T+AgAAeHEAfgAheHNyAB9qYXZheC5mYWNlcy5jb21wb25lbnQuVUlDb21tYW5kyDZjy8ASvIsCAAB4cQB+AAhzcQB+ABA/QAAAAAAACHcIAAAACwAAAAZ0AAxjb21tYW5kQ2xhc3N0AA5oeXBlcmxpbmtDbGFzc3QABWxhYmVsdAAJbGluayB0ZXh0cQB+ABJ0AARsaW5rcQB+ABR0AAlIeXBlcmxpbmtxAH4AFnEAfgAPdAAGdGFyZ2V0dAAKaGVsbG8uaHRtbHhwcHBzcgAlamF2YXguZmFjZXMuY29tcG9uZW50LlVJU2VsZWN0Qm9vbGVhbiiDmwtDyLEhAgAAeHEAfgAZc3EAfgAQP0AAAAAAAAh3CAAAAAsAAAAEdAASc2VsZWN0Ym9vbGVhbkNsYXNzcQB+ADNxAH4AEnQACXZhbGlkVXNlcnEAfgAUdAAIQ2hlY2tib3hxAH4AFnEAfgAPeHBwcHNyACFqYXZheC5mYWNlcy5jb21wb25lbnQuVUlTZWxlY3RPbmWK9BXfbmCzEgIAAHhyACJqYXZheC5mYWNlcy5jb21wb25lbnQuVUlTZWxlY3RCYXNllBz75IQJYFYCAAB4cQB+ABlzcQB+ABA/QAAAAAAAEXcIAAAAFwAAAAl0ACRjb20uc3VuLmZhY2VzLlNFTEVDVElURU1TX0NPTkZJR1VSRURxAH4AOnQACHRhYmluZGV4dAACMjBxAH4AEnQADWFwcGxlUXVhbnRpdHlxAH4AFHQAB0xpc3Rib3h0AAV0aXRsZXQAD1NlbGVjdCBRdWFudGl0eXEAfgAXdAABNHEAfgAWcQB+AA90AAlhY2Nlc3NrZXl0AAFOdAAEc2l6ZXQAATN4c3EAfgAMAAAAA3cEAAAACnNyACJqYXZheC5mYWNlcy5jb21wb25lbnQuVUlTZWxlY3RJdGVtFkLE91p2YNECAAB4cQB+AAhzcQB+ABA/QAAAAAAACHcIAAAACwAAAAVxAH4AEnQAATB0AAlpdGVtTGFiZWxxAH4ASnQACGRpc2FibGVkdAAEdHJ1ZXEAfgAWcQB+ADh0AAlpdGVtVmFsdWVxAH4ASnhwcHBzcQB+AEdzcQB+ABA/QAAAAAAACHcIAAAACwAAAAVxAH4AEnEAfgBBcQB+AEtxAH4AQXEAfgAWcQB+ADhxAH4ATnEAfgBBcQB+AD90AARGb3VyeHBwcHNxAH4AR3NxAH4AED9AAAAAAAAIdwgAAAALAAAABXEAfgASdAABOXEAfgBLcQB+AFRxAH4AFnEAfgA4cQB+AE5xAH4AVHEAfgA/dAAEbmluZXhwcHB4cHBzcgAiamF2YXguZmFjZXMuY29tcG9uZW50LlVJU2VsZWN0TWFueUYuYie5pNNTAgAAeHEAfgA3c3EAfgAQP0AAAAAAAAh3CAAAAAsAAAAFcQB+ABJ0AApNYW55QXBwbGVzcQB+AER0AAExcQB+ABR0AARNZW51cQB+ABZxAH4AD3EAfgAXdXIAE1tMamF2YS5sYW5nLk9iamVjdDuQzlifEHMpbAIAAHhwAAAAAnEAfgBBdAABN3hzcQB+AAwAAAADdwQAAAAKc3EAfgBHc3EAfgAQP0AAAAAAAAh3CAAAAAsAAAAEcQB+ABJxAH4AQXEAfgBLdAAEZm91cnEAfgAWcQB+AFdxAH4ATnEAfgBBeHBwcHNxAH4AR3NxAH4AED9AAAAAAAAIdwgAAAALAAAABHEAfgASdAABNnEAfgBLdAADc2l4cQB+ABZxAH4AV3EAfgBOcQB+AGV4cHBwc3EAfgBHc3EAfgAQP0AAAAAAAAh3CAAAAAsAAAAEcQB+ABJxAH4AXnEAfgBLdAAFc2V2ZW5xAH4AFnEAfgBXcQB+AE5xAH4AXnhwcHB4cHB4cHB4cHBxAH4ABHQAEi9UZXN0U2F2ZVN0YXRlLmpzcHNyABBqYXZhLnV0aWwuTG9jYWxlfvgRYJww+ewDAARJAAhoYXNoY29kZUwAB2NvdW50cnlxAH4AAUwACGxhbmd1YWdlcQB+AAFMAAd2YXJpYW50cQB+AAF4cP////90AAB0AAJlbnEAfgBteA==" /></form>
-
-
-    </BODY>
-</HTML>
+	 <input type="submit" name="helloForm_submit" value="Submit">
+     <input type="hidden" name="com.sun.faces.VIEW" value="rO0ABXNyACBjb20uc3VuLmZhY2VzLnV0aWwuVHJlZVN0cnVjdHVyZRRmG0QclWAgAgAETAAIY2hpbGRyZW50ABVMamF2YS91dGlsL0FycmF5TGlzdDtMAAljbGFzc05hbWV0ABJMamF2YS9sYW5nL1N0cmluZztMAAZmYWNldHN0ABNMamF2YS91dGlsL0hhc2hNYXA7TAACaWRxAH4AAnhwc3IAE2phdmEudXRpbC5BcnJheUxpc3R4gdIdmcdhnQMAAUkABHNpemV4cAAAAAF3BAAAAApzcQB+AABzcQB+AAUAAAACdwQAAAAKc3EAfgAAcHQAJmphdmF4LmZhY2VzLmNvbXBvbmVudC5iYXNlLlVJSW5wdXRCYXNlcHQABnVzZXJOb3NxAH4AAHB0AChqYXZheC5mYWNlcy5jb21wb25lbnQuYmFzZS5VSUNvbW1hbmRCYXNlcHQABnN1Ym1pdHh0ACVqYXZheC5mYWNlcy5jb21wb25lbnQuYmFzZS5VSUZvcm1CYXNlcHQACWhlbGxvRm9ybXh0AClqYXZheC5mYWNlcy5jb21wb25lbnQuYmFzZS5VSVZpZXdSb290QmFzZXB0AARyb290dXIAE1tMamF2YS5sYW5nLk9iamVjdDuQzlifEHMpbAIAAHhwAAAAAnVxAH4AEwAAAAJ0ABlERUZBVUxUW3NlcF0vZ3JlZXRpbmcuanNwdXEAfgATAAAABnEAfgAScHEAfgAXcHBwdXEAfgATAAAAAXVxAH4AEwAAAAJ1cQB+ABMAAAAGcQB+ABBwcQB+ABp0AARGb3JtcHNyABFqYXZhLnV0aWwuSGFzaE1hcAUH2sHDFmDRAwACRgAKbG9hZEZhY3RvckkACXRocmVzaG9sZHhwP0AAAAAAABB3CAAAABAAAAACdAAYY29tLnN1bi5mYWNlcy5Gb3JtTnVtYmVyc3IAEWphdmEubGFuZy5JbnRlZ2VyEuKgpPeBhzgCAAFJAAV2YWx1ZXhyABBqYXZhLmxhbmcuTnVtYmVyhqyVHQuU4IsCAAB4cAAAAAB0AARuYW1ldAAJaGVsbG9Gb3JteHVxAH4AEwAAAAJ1cQB+ABMAAAACdXEAfgATAAAAAnVxAH4AEwAAAAR0AA5mYWxzZVtzZXBddHJ1ZXBwcHVxAH4AEwAAAAJ1cQB+ABMAAAADcHQABk5VTUJFUnB1cQB+ABMAAAAGdAAQaGVsbG9Gb3JtX3VzZXJOb3BxAH4ALHQABFRleHRwcHVxAH4AEwAAAAB1cQB+ABMAAAACdXEAfgATAAAAAnVxAH4AEwAAAAJ0AA1udWxsW3NlcF1udWxsdXEAfgATAAAAB3BwcHBwdXIAK1tMamF2YXguZmFjZXMuYXBwbGljYXRpb24uU3RhdGVIb2xkZXJTYXZlcjus7jOyrNsurwIAAHhwAAAAAHB1cQB+ABMAAAACdXEAfgATAAAAA3B0AAZTdWJtaXRwdXEAfgATAAAABnQAEGhlbGxvRm9ybV9zdWJtaXRwcQB+ADp0AAZCdXR0b25wc3EAfgAcP0AAAAAAABB3CAAAABAAAAABdAAEdHlwZXQABnN1Ym1pdHh1cQB+ABMAAAAAc3IAEGphdmEudXRpbC5Mb2NhbGV++BFgnDD57AMABEkACGhhc2hjb2RlTAAHY291bnRyeXEAfgACTAAIbGFuZ3VhZ2VxAH4AAkwAB3ZhcmlhbnRxAH4AAnhw/////3QAAlVTdAACZW50AAB4">
+ </form>
+    
+</HTML>  

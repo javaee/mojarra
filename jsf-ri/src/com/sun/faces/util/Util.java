@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.83 2003/09/03 18:53:40 rlubke Exp $
+ * $Id: Util.java,v 1.84 2003/09/04 21:15:09 jvisvanathan Exp $
  */
 
 /*
@@ -60,7 +60,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.83 2003/09/03 18:53:40 rlubke Exp $
+ * @version $Id: Util.java,v 1.84 2003/09/04 21:15:09 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -885,8 +885,6 @@ private Util()
 	    FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
 	Assert.assert_it(null != renderKitFactory);
 
-        // PENDING (visvan) can root be null on postback ? If not, then we don't
-        // need this check.
 	if (context.getViewRoot() == null || 
 	    (renderKitId = context.getViewRoot().getRenderKitId()) == null) {
             renderKitId = RIConstants.DEFAULT_RENDER_KIT;
@@ -935,19 +933,6 @@ private Util()
 	return result;
     }
     
-    public static String parseStringFromReader(StringReader reader) 
-            throws IOException {
-        int ch=0;
-        String content = null;
-        StringBuffer sb = new StringBuffer("");
-        while((ch = reader.read()) != -1) {
-            sb.append((char) ch);
-        }
-        content = sb.toString();
-        return content;
-    }
-
-
     //
     // General Methods
     //

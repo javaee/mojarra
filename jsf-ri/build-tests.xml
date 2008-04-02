@@ -327,9 +327,11 @@
             <test name="com.sun.faces.util.TestUtil"/>
             <test name="com.sun.faces.util.TestUtil_messages"/>
 
-            <!-- To run the following tests, comment last 3 tests, uncomment
-                 following tests and set saveStateInClient property in
-                 conf/test/web.xml to true
+            <!-- To run the following tests, uncomment
+                 following tests and set javax.faces.STATE_SAVING_METHOD 
+                 property in conf/test/web.xml to client. Tests that 
+                 excercise save state in server code have to be commented as 
+                 well 
             <test name="com.sun.faces.lifecycle.TestSaveStateInPage"/>
             <test name="com.sun.faces.lifecycle.TestRestoreViewFromPage"/> -->
 

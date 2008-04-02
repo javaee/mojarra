@@ -1,5 +1,5 @@
 /*
- * $Id: RIConstants.java,v 1.44 2003/08/28 15:56:23 rlubke Exp $
+ * $Id: RIConstants.java,v 1.45 2003/09/04 21:15:03 jvisvanathan Exp $
  */
 
 /*
@@ -36,9 +36,10 @@ public class RIConstants {
 
     public final static String INITIAL_REQUEST_NAME = "initialRequest";
     public final static String INITIAL_REQUEST_VALUE = "true";
-       
-    public final static String FACES_VIEW = FACES_PREFIX + "VIEW";
+
     public final static String REQUEST_LOCALE = FACES_PREFIX + "LOCALE";
+
+    public final static String FACES_VIEW = FACES_PREFIX + "VIEW";
    
     /**
 
@@ -66,8 +67,6 @@ public class RIConstants {
     // EVENT_LIMIT is configured as servlet init param;
     public static final String EVENT_LIMIT = "maxevents";
     public static final int MAX_EVENTS = 100;
-
-    public static final String FACES_LOCALE = "FacesLocale";
 
     public final static String FORM_NUMBER_ATTR = FACES_PREFIX +
 	"FormNumber";

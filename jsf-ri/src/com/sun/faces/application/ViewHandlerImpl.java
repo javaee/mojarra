@@ -1,5 +1,5 @@
 /* 
- * $Id: ViewHandlerImpl.java,v 1.7 2003/08/28 15:52:26 rlubke Exp $ 
+ * $Id: ViewHandlerImpl.java,v 1.8 2003/09/04 21:15:04 jvisvanathan Exp $ 
  */ 
 
 
@@ -14,11 +14,13 @@
 package com.sun.faces.application; 
 
 import com.sun.faces.util.Util;
+import com.sun.faces.util.TreeStructure;
 import com.sun.faces.RIConstants;
 
 import java.io.IOException; 
 import java.io.Reader;
 import java.util.Map;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Iterator;
 
@@ -31,11 +33,11 @@ import javax.faces.application.StateManager;
 import javax.faces.application.Application;
 import javax.faces.context.FacesContext;  
 import javax.faces.application.StateManager.SerializedView;
-
+import javax.faces.render.ResponseStateManager;
 
 /** 
  * <B>ViewHandlerImpl</B> is the default implementation class for ViewHandler. 
- * @version $Id: ViewHandlerImpl.java,v 1.7 2003/08/28 15:52:26 rlubke Exp $ 
+ * @version $Id: ViewHandlerImpl.java,v 1.8 2003/09/04 21:15:04 jvisvanathan Exp $ 
  * 
  * @see javax.faces.application.ViewHandler 
  * 
@@ -92,12 +94,15 @@ public class ViewHandlerImpl extends StateManager
     
     public SerializedView getSerializedView(FacesContext context) {
 	SerializedView result = null;
+        
+        // irrespective of method to save the tree, if the root is transient
+        // no state information needs to  be persisted.
+        UIViewRoot viewRoot = context.getViewRoot();
+        if (viewRoot.isTransient()) {
+            return result;
+        }
         boolean isSaveStateInPage = Util.isSaveStateInPage(context);
         if (!isSaveStateInPage) {
-            UIViewRoot viewRoot = context.getViewRoot();
-            if (viewRoot.isTransient()) {
-                return result;
-            }
             // honor the transient property and remove children from the tree
             // that are marked transient.
             removeTransientChildrenAndFacets((UIComponent)viewRoot);   
@@ -154,20 +159,26 @@ public class ViewHandlerImpl extends StateManager
     
     
     protected Object getTreeStructureToSave(FacesContext context) {
-        // PENDING (visvan) implement in the next phase
-        // of state saving. Make sure to honor the transient property while
-        // saving the structure.
-        return null;
+        TreeStructure structRoot = null;
+        UIComponent viewRoot = (UIComponent)context.getViewRoot();
+        if (!(viewRoot.isTransient())) {
+            structRoot = new TreeStructure(viewRoot);
+            buildTreeStructureToSave(viewRoot, structRoot, true);
+        }
+        return structRoot;
     }
+    
     
     public UIViewRoot getView(FacesContext context, String viewId) throws 
             IOException {
         UIViewRoot viewRoot = null;
+        // PENDING (visvan) cache isSaveStateInPage so that its not looked
+        // up everytime.
         boolean isSaveStateInPage = Util.isSaveStateInPage(context);
         if (isSaveStateInPage) {
             viewRoot = restoreTreeStructure(context, viewId);
             if (viewRoot != null) {
-                restoreComponentState(context, viewRoot);
+                 restoreComponentState(context, viewRoot);
             }
         } else {
             // restore tree from session.
@@ -187,26 +198,130 @@ public class ViewHandlerImpl extends StateManager
 
     protected void restoreComponentState(FacesContext context, 
             UIViewRoot root) throws IOException {
-        // PENDING (visvan) implement saveStateInPage in the next phase
-        // of state saving.
+        Object state = (Util.getResponseStateManager(context)).
+                getComponentStateToRestore(context);
+        try {
+            root.processRestoreState(context, state);
+        } catch (IOException ioe) {
+            Object [] params = { ioe.getMessage() };
+            throw new FacesException(Util.getExceptionMessage(
+                    Util.SAVING_STATE_ERROR_MESSAGE_ID, params));
+        }
     }
    
     protected UIViewRoot restoreTreeStructure(FacesContext context, 
              String viewId) {
-        // PENDING (visvan) implement saveStateInPage in the next phase
-        // of state saving.
-        return null;
+        UIComponent viewRoot = null;
+        TreeStructure structRoot = null;
+        structRoot =  (TreeStructure)((Util.getResponseStateManager(context)).
+                getTreeStructureToRestore(context, viewId));
+        if ( structRoot == null) {
+            return null;
+        }
+        viewRoot = structRoot.createComponent();
+        restoreComponentTreeStructure(structRoot, viewRoot,  true);
+        return ((UIViewRoot) viewRoot);
     }
     
-    public void saveView(FacesContext context, Reader content, 
+    public Object saveView(FacesContext context, Object content, 
             SerializedView state) {
-        /* Util.getResponseStateManager.writeState(content, 
-                context.getResponseWriter(),state.getStructure(), state.getState());
-        */
+         content = Util.getResponseStateManager(context).writeState(content, 
+                context.getResponseWriter(),state.getStructure(), 
+                state.getState());
+         return content;
     }
     
     public void writeStateMarker(FacesContext context) throws IOException {
         Util.getResponseStateManager(context).writeStateMarker(context);
+    }
+    
+    /**
+     * Builds a hierarchy of TreeStrucure objects simulating the component
+     * tree hierarchy.
+     */
+    public void  buildTreeStructureToSave(UIComponent component, 
+            TreeStructure treeStructure, boolean isRoot) {
+        // traverse the component hierarchy and save the tree structure 
+        // information for every component.
+        TreeStructure treeStructureChild= null;
+        UIComponent kid = null;
+        // if a component is marked transient do not persist its state.
+        if (component.isTransient()) {
+            return;
+        }
+        // we have already created the tree structure corresponding to root
+        // so don't create it again
+        if (isRoot) {
+            treeStructureChild = treeStructure;
+        } else {
+            treeStructureChild = new TreeStructure(component);
+        }
+        // save the structure info of the children of the component 
+        // being processed.
+        Iterator kids = component.getChildren().iterator();
+        while (kids.hasNext()) {
+            kid = (UIComponent) kids.next();
+            buildTreeStructureToSave(kid, treeStructureChild, false);
+        }
+
+        // we should not add the treeStructure object representing the root
+        // to itself.
+        if (!isRoot) {
+            treeStructure.addChild(treeStructureChild);
+        }
+        
+        // save structure info of the facets of the component currenly being 
+        // processed.
+        Iterator facets = component.getFacets().keySet().iterator();
+        while (facets.hasNext()) {
+            String facetName = (String) facets.next();
+            UIComponent facetComponent = (UIComponent) component.getFacets().
+                    get(facetName);
+            if (!(facetComponent.isTransient())) {
+                TreeStructure treeStructureFacet = 
+                        new TreeStructure(facetComponent);
+                treeStructureChild.addFacet(facetName, treeStructureFacet);
+            }
+        }
+        
+    }
+    
+    /**
+     * Reconstitutes the component tree from TreeStructure hierarchy
+     */
+    public void restoreComponentTreeStructure(TreeStructure treeStructure, 
+            UIComponent component, boolean isRoot) {
+        // traverse the tree strucure hierarchy and restore component
+        // component structure.
+        UIComponent child = null;
+        // root of the tree has been created already, so don't create it again.
+        if (isRoot) {
+            child = component;
+        } else {
+           child = treeStructure.createComponent(); 
+        }
+     
+        if (!isRoot) {
+            component.getChildren().add(child);
+        }
+        // restore the structure of the children of the component being processed.
+        Iterator kids = treeStructure.getChildren();
+        while (kids.hasNext()) {
+            restoreComponentTreeStructure((TreeStructure) kids.next(), child, 
+                    false);
+        }
+        
+        // process facets
+        Iterator facets = treeStructure.getFacetNames();
+        while (facets.hasNext()) {
+            // component that is a facet cannot have children. Hence no need
+            // for recursion.
+            String facetName = (String) facets.next();
+            TreeStructure facetTreeStructure = 
+                    treeStructure.getTreeStructureForFacet(facetName);
+            UIComponent facetComponent = facetTreeStructure.createComponent();
+            child.getFacets().put(facetName, facetComponent);
+        }
     }
     
 } 
