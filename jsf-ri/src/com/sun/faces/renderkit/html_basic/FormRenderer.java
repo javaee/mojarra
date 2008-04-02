@@ -1,5 +1,5 @@
 /*
- * $Id: FormRenderer.java,v 1.83 2005/03/10 21:39:15 jayashri Exp $
+ * $Id: FormRenderer.java,v 1.84 2005/04/15 21:19:38 rogerk Exp $
  */
 
 /*
@@ -16,6 +16,7 @@ import com.sun.faces.util.Util;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import javax.faces.component.NamingContainer;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIForm;
 import javax.faces.context.FacesContext;
@@ -295,7 +296,7 @@ public class FormRenderer extends HtmlBasicRenderer {
          writer.writeAttribute(SCRIPT_TYPE, "text/javascript", null);
          writer.write("\n<!--");
          writer.write("\nfunction ");
-         String functionName = (CLEAR_HIDDEN_FIELD_FN_NAME + "_" + formName);
+         String functionName = (CLEAR_HIDDEN_FIELD_FN_NAME + "_" + formName.replace(NamingContainer.SEPARATOR_CHAR, '_')); 
          writer.write(functionName);
          writer.write("(curFormName) {");
          writer.write("\n  var curForm = document.forms[curFormName];"); 

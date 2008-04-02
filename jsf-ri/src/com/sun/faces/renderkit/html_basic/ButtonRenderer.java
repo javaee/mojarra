@@ -1,5 +1,5 @@
 /*
- * $Id: ButtonRenderer.java,v 1.82 2005/03/22 22:31:27 jayashri Exp $
+ * $Id: ButtonRenderer.java,v 1.83 2005/04/15 21:19:38 rogerk Exp $
  */
 
 /*
@@ -15,6 +15,7 @@ import com.sun.faces.util.Util;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import javax.faces.component.NamingContainer;
 import javax.faces.component.UICommand;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -182,7 +183,7 @@ public class ButtonRenderer extends HtmlBasicRenderer {
         // parameters in the form.
         sb.append(CLEAR_HIDDEN_FIELD_FN_NAME);
         if (formClientId != null) {
-            sb.append("_" + formClientId);
+            sb.append("_" + formClientId.replace(NamingContainer.SEPARATOR_CHAR, '_'));
         }
         sb.append("(this.form.id);");
         // append user specified script for onclick if any.
