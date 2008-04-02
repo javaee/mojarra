@@ -1,5 +1,5 @@
 /*
- * $Id: ActionListenerTag.java,v 1.16 2004/12/02 18:42:23 rogerk Exp $
+ * $Id: ActionListenerTag.java,v 1.17 2004/12/08 16:38:40 edburns Exp $
  */
 
 /*
@@ -153,6 +153,8 @@ public class ActionListenerTag extends TagSupport {
                 try {
                     handler = (ActionListener)vb.getValue(context);
                     if (handler != null) {
+			// we ignore the type in this case, even though
+			// it may have been set.
                         ((ActionSource)component).addActionListener(handler);
                         return (SKIP_BODY);
                     }

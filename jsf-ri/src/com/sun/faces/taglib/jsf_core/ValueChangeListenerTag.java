@@ -1,5 +1,5 @@
 /*
- * $Id: ValueChangeListenerTag.java,v 1.9 2004/12/02 18:42:24 rogerk Exp $
+ * $Id: ValueChangeListenerTag.java,v 1.10 2004/12/08 16:38:40 edburns Exp $
  */
 
 /*
@@ -154,6 +154,8 @@ public class ValueChangeListenerTag extends TagSupport {
                 try {
                     handler = (ValueChangeListener)vb.getValue(context);
                     if (handler != null) {
+			// we ignore the type in this case, even though
+			// it may have been set.
                         ((EditableValueHolder)component).addValueChangeListener(handler);
                         return (SKIP_BODY);
                     }
