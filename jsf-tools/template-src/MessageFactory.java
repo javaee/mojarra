@@ -1,5 +1,5 @@
 /*
- * $Id: MessageFactory.java,v 1.8 2005/02/24 15:20:28 rogerk Exp $
+ * $Id: MessageFactory.java,v 1.9 2005/05/16 20:17:16 rlubke Exp $
  */
 
 /*
@@ -19,6 +19,7 @@ import java.util.Iterator;
 import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.MissingResourceException;
+import javax.el.ValueExpression;
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.application.Application;
@@ -211,7 +212,7 @@ import java.io.IOException;
     @protection@ static Object getLabel(FacesContext context, 
         UIComponent component) {
         Object o = component.getAttributes().get("label");
-        if (o == null) {
+        if (o == null || (o instanceof String && ((String) o).length() == 0)) {
             o = component.getValueBinding("label");
         }
         // Use the "clientId" if there was no label specified.
@@ -290,6 +291,12 @@ import java.io.IOException;
                             context = FacesContext.getCurrentInstance();
                         }
                         o = ((ValueBinding) o).getValue(context);
+                    }
+                    if (o instanceof ValueExpression) {
+                        if (context == null) {
+                            context = FacesContext.getCurrentInstance();
+                        }
+                        o = ((ValueExpression) o).getValue(context.getELContext());
                     }
                     // to avoid 'null' appearing in message
                     if (o == null) {
