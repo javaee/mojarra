@@ -69,7 +69,7 @@ public class ChartItemTag extends UIComponentTag {
      */
     private String itemLabel = null;
     /**
-     *<p>Set the label for this item.</p>
+     *<p>Set the label for this item.
      */
     public void setItemLabel(String label) {
         this.itemLabel = label;
@@ -80,7 +80,7 @@ public class ChartItemTag extends UIComponentTag {
      */
     private String itemColor = null;
     /**
-     *<p>Set the color for this item.</p>
+     *<p>Set the color for this item.
      */
     public void setItemColor(String color) {
         this.itemColor = color;
@@ -91,7 +91,7 @@ public class ChartItemTag extends UIComponentTag {
      */
     private String itemValue = null;
     /**
-     *<p>Set the ualue for this item.</p>
+     *<p>Set the ualue for this item.
      */
     public void setItemValue(String itemVal) {
         this.itemValue = itemVal;
@@ -107,21 +107,21 @@ public class ChartItemTag extends UIComponentTag {
     //
 
     /**
-     * <p>Return the type of the component.</p>
+     * <p>Return the type of the component.
      */
     public String getComponentType() {
         return "ChartItem";
     }
 
     /**
-     * <p>Return the renderer type (if any)</p>
+     * <p>Return the renderer type (if any)
      */
     public String getRendererType() {
         return null;
     }
 
     /**
-     * <p>Release any resources used by this tag handler</p>
+     * <p>Release any resources used by this tag handler
      */
     public void release() {
         super.release();
@@ -135,7 +135,7 @@ public class ChartItemTag extends UIComponentTag {
     //
 
     /**
-     * <p>Set the component properties</p>
+     * <p>Set the component properties
      */
     protected void setProperties(UIComponent component) {
         super.setProperties(component);

@@ -1,5 +1,5 @@
 /*
- * $Id: ScrollerTag.java,v 1.1 2004/05/20 17:09:07 jvisvanathan Exp $
+ * $Id: ScrollerTag.java,v 1.2 2004/07/16 01:09:19 jayashri Exp $
  */
 
 /*
@@ -52,7 +52,7 @@ import javax.faces.event.ActionEvent;
 import javax.faces.webapp.UIComponentTag;
 
 /**
- * ScrollerTag is the tag handler class for <code>ScrollerComponent.</code>
+ * <p> ScrollerTag is the tag handler class for <code>ScrollerComponent.
  */
 public class ScrollerTag extends UIComponentTag {
 

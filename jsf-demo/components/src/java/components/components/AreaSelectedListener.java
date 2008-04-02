@@ -1,5 +1,5 @@
 /*
- * $Id: AreaSelectedListener.java,v 1.1 2004/05/20 17:08:45 jvisvanathan Exp $
+ * $Id: AreaSelectedListener.java,v 1.2 2004/07/16 01:09:18 jayashri Exp $
  */
 
 /*
@@ -48,7 +48,7 @@ import javax.faces.event.FacesListener;
 
 /**
  * <p>{@link AreaSelectedListener} defines an event listener interested in
- * {@link AreaSelecteEvent}s from a {@link MapComponent}.</p>
+ * {@link AreaSelectedEvent}s from a {@link MapComponent}.</p>
  */
 
 public interface AreaSelectedListener extends FacesListener {

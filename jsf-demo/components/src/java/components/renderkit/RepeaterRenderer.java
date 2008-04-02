@@ -1,5 +1,5 @@
 /*
- * $Id: RepeaterRenderer.java,v 1.1 2004/05/20 17:08:58 jvisvanathan Exp $
+ * $Id: RepeaterRenderer.java,v 1.2 2004/07/16 01:09:19 jayashri Exp $
  */
 
 /*
@@ -244,7 +244,7 @@ public class RepeaterRenderer extends BaseRenderer {
      * @param data    <code>UIData</code> being rendered
      * @param writer  <code>ResponseWriter</code> to render to
      *
-     * @excepton IOException if an input/output error occurs
+     * @exception IOException if an input/output error occurs
      */
     protected void rowBegin(FacesContext context, UIData data,
                             ResponseWriter writer) throws IOException {
@@ -265,7 +265,7 @@ public class RepeaterRenderer extends BaseRenderer {
      * @param data    <code>UIData</code> being rendered
      * @param writer  <code>ResponseWriter</code> to render to
      *
-     * @excepton IOException if an input/output error occurs
+     * @exception IOException if an input/output error occurs
      */
     protected void rowBody(FacesContext context, UIData data,
                            ResponseWriter writer) throws IOException {
@@ -302,7 +302,7 @@ public class RepeaterRenderer extends BaseRenderer {
      * @param data    <code>UIData</code> being rendered
      * @param writer  <code>ResponseWriter</code> to render to
      *
-     * @excepton IOException if an input/output error occurs
+     * @exception IOException if an input/output error occurs
      */
     protected void rowEnd(FacesContext context, UIData data,
                           ResponseWriter writer) throws IOException {
@@ -330,7 +330,7 @@ public class RepeaterRenderer extends BaseRenderer {
      * @param data    <code>UIData</code> being rendered
      * @param writer  <code>ResponseWriter</code> to render to
      *
-     * @excepton IOException if an input/output error occurs
+     * @exception IOException if an input/output error occurs
      */
     protected void tableBegin(FacesContext context, UIData data,
                               ResponseWriter writer) throws IOException {
@@ -412,7 +412,7 @@ public class RepeaterRenderer extends BaseRenderer {
      * @param data    <code>UIData</code> being rendered
      * @param writer  <code>ResponseWriter</code> to render to
      *
-     * @excepton IOException if an input/output error occurs
+     * @exception IOException if an input/output error occurs
      */
     protected void tableEnd(FacesContext context, UIData data,
                             ResponseWriter writer) throws IOException {

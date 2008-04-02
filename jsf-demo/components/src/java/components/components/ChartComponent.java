@@ -94,7 +94,7 @@ public class ChartComponent extends UIOutput {
     
     // -------------------------------------------------------------- Properties
     /**
-     * <p>Return the width of the chart</p>
+     * <p>Return the width of the chart
      */
     public String getWidth() {
         if (null != this.width) {
@@ -110,7 +110,7 @@ public class ChartComponent extends UIOutput {
 
 
     /**
-     * <p>Set the width of the chart</p>
+     * <p>Set the width of the chart
      *
      * @param width The new width of the chart
      */
@@ -120,7 +120,7 @@ public class ChartComponent extends UIOutput {
     }
     
     /**
-     * <p>Return the height of the chart</p>
+     * <p>Return the height of the chart
      */
     public String getHeight() {
         if (null != this.height) {
@@ -136,7 +136,7 @@ public class ChartComponent extends UIOutput {
 
 
     /**
-     * <p>Set the height of the chart</p>
+     * <p>Set the height of the chart
      *
      * @param height The new height of the chart
      */
@@ -145,7 +145,7 @@ public class ChartComponent extends UIOutput {
     }
     
     /**
-     * <p>Return the orientation of the chart</p>
+     * <p>Return the orientation of the chart
      */
     public String getOrientation() {
         if (null != this.orientation) {
@@ -161,7 +161,7 @@ public class ChartComponent extends UIOutput {
 
 
     /**
-     * <p>Set the orientation of the chart</p>
+     * <p>Set the orientation of the chart
      *
      * @param orientation The new orientation of the chart
      */
@@ -170,7 +170,7 @@ public class ChartComponent extends UIOutput {
     }
     
     /**
-     * <p>Return the type of the chart</p>
+     * <p>Return the type of the chart
      */
     public String getType() {
         if (null != this.type) {
@@ -186,7 +186,7 @@ public class ChartComponent extends UIOutput {
 
 
     /**
-     * <p>Set the type of the chart</p>
+     * <p>Set the type of the chart
      *
      * @param type The new type of the chart
      */
@@ -195,7 +195,7 @@ public class ChartComponent extends UIOutput {
     }
 
     /**
-     * <p>Return the title of the chart</p>
+     * <p>Return the title of the chart
      */
     public String getTitle() {
         if (null != this.title) {
@@ -210,7 +210,7 @@ public class ChartComponent extends UIOutput {
     }
 
     /**
-     * <p>Set the title of the chart</p>
+     * <p>Set the title of the chart
      *
      * @param title The new title of the chart
      */
@@ -219,7 +219,7 @@ public class ChartComponent extends UIOutput {
     }
 
     /**
-     * <p>Return the x axis label of the chart</p>
+     * <p>Return the x axis label of the chart
      */
     public String getXlabel() {
         if (null != this.xlabel) {
@@ -234,7 +234,7 @@ public class ChartComponent extends UIOutput {
     }
 
     /**
-     * <p>Set the x axis label of the chart</p>
+     * <p>Set the x axis label of the chart
      *
      * @param xlabel The new x axis label of the chart
      */
@@ -243,7 +243,7 @@ public class ChartComponent extends UIOutput {
     }
 
     /**
-     * <p>Return the y axis label of the chart</p>
+     * <p>Return the y axis label of the chart
      */
     public String getYlabel() {
         if (null != this.ylabel) {
@@ -258,7 +258,7 @@ public class ChartComponent extends UIOutput {
     }
 
     /**
-     * <p>Set the y axis label of the chart</p>
+     * <p>Set the y axis label of the chart
      *
      * @param ylabel The new y axis label of the chart
      */
@@ -267,7 +267,7 @@ public class ChartComponent extends UIOutput {
     }
 
     /**
-     * <p>Return the component family for this component.</p>
+     * <p>Return the component family for this component.
      */
     public String getFamily() {
 
@@ -277,7 +277,7 @@ public class ChartComponent extends UIOutput {
    
     // ----------------------------------------------------- StateHolder Methods
     /**
-     * <p>Return the state to be saved for this component.</p>
+     * <p>Return the state to be saved for this component.
      *
      * @param context <code>FacesContext</code> for the current request
      */
@@ -296,7 +296,7 @@ public class ChartComponent extends UIOutput {
 
 
     /**
-     * <p>Restore the state for this component.</p>
+     * <p>Restore the state for this component.
      *
      * @param context <code>FacesContext</code> for the current request
      * @param state   State to be restored

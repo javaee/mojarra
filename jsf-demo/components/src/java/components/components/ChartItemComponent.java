@@ -1,5 +1,5 @@
 /*
- * $Id: ChartItemComponent.java,v 1.1 2004/05/20 17:08:47 jvisvanathan Exp $
+ * $Id: ChartItemComponent.java,v 1.2 2004/07/16 01:09:18 jayashri Exp $
  */
 
 /*
@@ -52,17 +52,18 @@ import javax.faces.component.UIComponentBase;
 
 /**
  * <p><strong>ChartItemComponent</strong> is a component that may be nested
- * inside a {@link ChartComponent}, and causes the addition of a 
- * {@link DataItem} instance to the list of available options for the 
+ * inside a <code>ChartItem</code>, and causes the addition of a 
+ * <code>ChartItem</code> instance to the list of available options for the 
  * parent component.  The contents of the
- * {@link ChartItem} can be specified in one of the following ways:</p>
+ * <code>ChartItem</code> can be specified in one of the following ways:</p>
  * <ul>
- * <li>The <code>value</code> attribute's value is an instance of
- *     {@link ChartItem}.</li>
+ * <li>The <code>itemValue</code> attribute's value is an instance of
+ *     <code>ChartItem</code>.</li>
  * <li>The associated {@link ValueBinding} points at a model data
- *     item of type {@link ChartItem}.</li>
- * <li>A new {@link ChartItem} instance is synthesized from the values
- *     of the <code>itemLabel</code>, <code>color</code>, <code>value</code></li>
+ *     item of type <code>ChartItem</code>.</li>
+ * <li>A new <code>ChartItem</code> instance is synthesized from the values
+ *     of the <code>itemLabel</code>, <code>itemColor</code>, 
+ * <code>itemValue</code></li>
  * </ul>
  */
 
@@ -88,7 +89,7 @@ public class ChartItemComponent extends UIComponentBase {
 
 
     /**
-     * <p>Create a new {@link UISelectItem} instance with default property
+     * <p>Create a new <code>ChartItem</code> instance with default property
      * values.</p>
      */
     public ChartItemComponent() {
@@ -119,7 +120,7 @@ public class ChartItemComponent extends UIComponentBase {
 
 
     /**
-     * <p>Return the label for this chart item.</p>
+     * <p>Return the label for this chart item.
      */
     public String getItemLabel() {
 
@@ -137,7 +138,7 @@ public class ChartItemComponent extends UIComponentBase {
 
 
     /**
-     * <p>Set the label for this chart item.</p>
+     * <p>Set the label for this chart item.
      *
      * @param label The new label
      */
@@ -148,7 +149,7 @@ public class ChartItemComponent extends UIComponentBase {
     }
 
     /**
-     * <p>Return the color for this chart item.</p>
+     * <p>Return the color for this chart item.
      */
     public String getItemColor() {
 
@@ -166,7 +167,7 @@ public class ChartItemComponent extends UIComponentBase {
 
 
     /**
-     * <p>Set the color for this chart item.</p>
+     * <p>Set the color for this chart item.
      *
      * @param color The new color
      */
@@ -177,7 +178,7 @@ public class ChartItemComponent extends UIComponentBase {
     }
     
     /**
-     * <p>Return the server value for this selection item.</p>
+     * <p>Return the server value for this selection item.
      */
     public Object getItemValue() {
 
@@ -193,7 +194,7 @@ public class ChartItemComponent extends UIComponentBase {
     }
     
     /**
-     * <p>Set the server value for this selection item.</p>
+     * <p>Set the server value for this selection item.
      *
      * @param itemValue The new server value
      */
@@ -204,7 +205,7 @@ public class ChartItemComponent extends UIComponentBase {
     }
 
     /**
-     * <p>Returns the <code>value</code> of this chart item</p>
+     * <p>Returns the <code>value</code> of this chart item
      */
     public Object getValue() {
 
@@ -221,7 +222,7 @@ public class ChartItemComponent extends UIComponentBase {
 
 
     /**
-     * <p>Sets the <code>value</code> property of this chart item</p>
+     * <p>Sets the <code>value</code> property of this chart item
      * 
      * @param value the new value
      */

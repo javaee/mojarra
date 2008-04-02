@@ -1,5 +1,5 @@
 /*
- * $Id: PaneComponent.java,v 1.1 2004/05/20 17:08:48 jvisvanathan Exp $
+ * $Id: PaneComponent.java,v 1.2 2004/07/16 01:09:18 jayashri Exp $
  */
 
 /*
@@ -73,7 +73,7 @@ public class PaneComponent extends UIComponentBase {
 
 
     /**
-     * <p>Return the component family for this component.</p>
+     * <p>Return the component family for this component.
      */
     public String getFamily() {
 
@@ -113,7 +113,7 @@ public class PaneComponent extends UIComponentBase {
 
     /**
      * <p>Faces Listener implementation which sets the selected tab
-     * component;</p>
+     * component
      */
     public class PaneSelectedListener implements FacesListener, StateHolder {
 

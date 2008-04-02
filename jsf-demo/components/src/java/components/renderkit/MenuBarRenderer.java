@@ -1,5 +1,5 @@
 /*
- * $Id: MenuBarRenderer.java,v 1.1 2004/05/20 17:08:57 jvisvanathan Exp $
+ * $Id: MenuBarRenderer.java,v 1.2 2004/07/16 01:09:19 jayashri Exp $
  */
 
 /*
@@ -228,10 +228,11 @@ public class MenuBarRenderer extends BaseRenderer {
 
 
     /**
-     * Returns a string that is rendered as the value of
-     * onmousedown attribute. onmousedown event handler is used
-     * the track the node that was clicked using a hidden field, then submits
-     * the form so that we have the state information to reconstitute the tree.
+     * <p> Returns a string that is rendered as the value of
+     * <code>onmousedown</code> attribute. <code>onmousedown</code> event 
+     * handler is used the track the node that was clicked using a hidden field, 
+     * then submits the form so that we have the state information to 
+     * reconstitute the tree.
      */
     protected String getSubmitScript(String path, FacesContext context) {
         UIForm uiform = getMyForm();

@@ -1,5 +1,5 @@
 /*
- * $Id: TabLabelRenderer.java,v 1.1 2004/05/20 17:08:58 jvisvanathan Exp $
+ * $Id: TabLabelRenderer.java,v 1.2 2004/07/16 01:09:19 jayashri Exp $
  */
 
 /*
@@ -62,9 +62,7 @@ import java.util.MissingResourceException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TabLabelRenderer.java,v 1.1 2004/05/20 17:08:58 jvisvanathan Exp $
- * @see	Blah
- * @see	Bloo
+ * @version $Id: TabLabelRenderer.java,v 1.2 2004/07/16 01:09:19 jayashri Exp $
  */
 
 public class TabLabelRenderer extends BaseRenderer {

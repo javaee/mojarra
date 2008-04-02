@@ -1,5 +1,5 @@
 /*
- * $Id: ChartServlet.java,v 1.1 2004/05/20 17:08:56 jvisvanathan Exp $
+ * $Id: ChartServlet.java,v 1.2 2004/07/16 01:09:19 jayashri Exp $
  */
 
 /*
@@ -606,8 +606,8 @@ public final class ChartServlet extends HttpServlet {
     /**
      * Returns the Color instance corresponding the color passed in.
      *
-     * @param color a string representing a color instance.
-     * @ return Color instance corresponding to the input color.
+     * @param colorStr a string representing a color instance.
+     * @return Color instance corresponding to the input color.
      */
     protected Color getColor(String colorStr) {
         Color color = null;

@@ -84,7 +84,7 @@ public class ImageMap {
     /**
      * <p>Select a new Locale based on this event.</p>
      *
-     * @param event The {@link AreaSelectedEvent} that has occurred
+     * @param actionEvent The {@link AreaSelectedEvent} that has occurred
      */
     public void processAreaSelected(ActionEvent actionEvent) {
         AreaSelectedEvent event = (AreaSelectedEvent) actionEvent;

@@ -1,5 +1,5 @@
 /*
- * $Id: Node.java,v 1.1 2004/05/20 17:08:54 jvisvanathan Exp $
+ * $Id: Node.java,v 1.2 2004/07/16 01:09:18 jayashri Exp $
  */
 
 /*
@@ -304,7 +304,7 @@ public class Node {
 
 
     /**
-     * Is this a "leaf" node (i.e. one with no children)?
+     * <p> Is this a "leaf" node that is with no children?
      */
     public boolean isLeaf() {
         synchronized (children) {

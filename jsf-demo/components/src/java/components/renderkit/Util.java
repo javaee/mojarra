@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.1 2004/05/20 17:08:59 jvisvanathan Exp $
+ * $Id: Util.java,v 1.2 2004/07/16 01:09:19 jayashri Exp $
  */
 
 /*
@@ -58,7 +58,7 @@ import java.util.Locale;
  * <B>Util</B> is a class which houses common functionality used by
  * other classes.
  *
- * @version $Id: Util.java,v 1.1 2004/05/20 17:08:59 jvisvanathan Exp $
+ * @version $Id: Util.java,v 1.2 2004/07/16 01:09:19 jayashri Exp $
  */
 
 public class Util extends Object {
@@ -192,33 +192,33 @@ public class Util extends Object {
 
 
     /**
-     * Return a Locale instance using the following algorithm: <P>
+     * <p> Return a Locale instance using the following algorithm: 
      *
-     * <UL>
+     * <ul>
      *
-     * <LI>
+     * <li>
      *
      * If this component instance has an attribute named "bundle",
      * interpret it as a model reference to a LocalizationContext
      * instance accessible via FacesContext.getModelValue().
      *
-     * </LI>
+     * </li>
      *
-     * <LI>
+     * <li>
      *
      * If FacesContext.getModelValue() returns a LocalizationContext
      * instance, return its Locale.
      *
-     * </LI>
+     * </li>
      *
-     * <LI>
+     * <li>
      *
      * If FacesContext.getModelValue() doesn't return a
      * LocalizationContext, return the FacesContext's Locale.
      *
-     * </LI>
+     * </li>
      *
-     * </UL>
+     * </ul>
      */
 
     public static Locale
@@ -252,9 +252,6 @@ public class Util extends Object {
 
     /**
      * Render any boolean "passthru" attributes.
-     * <P>
-     *
-     * @see passthruAttributes
      */
 
     public static String renderBooleanPassthruAttributes(FacesContext context,
@@ -291,8 +288,6 @@ public class Util extends Object {
      * @return the rendererd attributes as specified in the component.
      *         Padded with leading and trailing ' '.  If there are no passthru
      *         attributes in the component, return the empty String.
-     *
-     * @see passthruAttributes
      */
 
     public static String renderPassthruAttributes(FacesContext context,

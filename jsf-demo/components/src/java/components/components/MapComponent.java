@@ -135,13 +135,11 @@ public class MapComponent extends UICommand {
 
 
     /**
-     * <p>In addition to to the default {@link UIComponent#broadcast}
+     * <p>In addition to to the default <code>UIComponentBase#broadcast</code>
      * processing, pass the {@link ActionEvent} being broadcast to the
      * method referenced by <code>actionListener</code> (if any).</p>
      *
      * @param event   {@link FacesEvent} to be broadcast
-     * @param phaseId {@link PhaseId} of the current phase of the
-     *                request processing lifecycle
      *
      * @throws AbortProcessingException Signal the JavaServer Faces
      *                                  implementation that no further processing on the current event
