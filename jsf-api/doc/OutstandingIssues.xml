@@ -466,7 +466,7 @@
     <p>Besides supporting JavaBean arrays, Collections, and Maps (like the
     propotype "List" renderer in jsf-psuedo) does, we should consider
     supporting a control whose model reference points at either a JSTL
-    <code>java.servlet.jsp.jstl.sql.Result</code> or a JDBC
+    <code>javax.servlet.jsp.jstl.sql.Result</code> or a JDBC
     <code>java.sql.ResultSet</code> (or <code>RowSet</code>) directly.
     Using a <code>Result</code> object would allow very easy interoperability
     with JSTL's SQL tags.</p>
@@ -1544,9 +1544,16 @@
     <li><strong>UIComponent</strong> - Change "modelReference" to "ref"
         for XForms consistency (Craig - I think going back to "model" would
         be better than this unless the semantics match exactly).</li>
+    <li><strong>UIGraphic</strong> - Change to "UIMedia" or "UIResource"
+        to remove visual connotation.</li>
+    <li><strong>UIPanel</strong> - Change to something that doesn't connote
+        visual representation (UIContainer?  UIManager?).</li>
     <li><strong>UISelectMany</strong> - Rename to UISelect (new XForms).</li>
     <li><strong>UISelectOne</strong> - Rename to UISelect1 (new XForms).</li>
     </ul>
+    <p>It's also worth reviewing the recent XForms 1.0 working draft
+    (08/21/2002) because they've changed some of the component names we
+    originally copied.</p>
   </description>
   <resolution>
     <p><em>02 Oct 2002</em> - Consolidate [DecodeEncode-41] into this.</p>
@@ -1680,6 +1687,38 @@
   <effort></effort>
 </issue>
 
+
+<issue>
+  <id>JstlDependencies-67</id>
+  <originator>Craig</originator>
+  <summary>Should we mandate a JSTL 1.0 dependency when using JSP?</summary>
+  <description>
+    <p>For JSF page authors using JSP as their rendering technology, it is
+    highly desireable that we interoperate seamlessly with JSTL tags and
+    APIs where appropriate.  Examples include:</p>
+    <ul>
+    <li>A data grid ([DataGrid-16]) should be able to process data provided
+        via a <code>javax.servlet.jstl.sql.Result</code>, among others.</li>
+    <li>Localization should be sensitive to any current
+        <code>javax.servlet.jsp.jstl.fmt.LocalizationContext</code>.</li>
+    <li>Iterative rendering might need to interoperate with JSTL iteration
+        constructs, including
+        <code>javax.servlet.jsp.jstl.core.LoopTagStatus</code>.</li>
+    </ul>
+
+    <p>Note that the data structure APIs (like Result) may be useful for
+    application developers even in a non-JSP rendering environment.  However,
+    doing any of this means we must declare a dependency on having a JSTL 1.0
+    implementation available, along with a JSF 1.0 implementation (and of
+    course Servlet 2.3 and JSP 1.2).</p>
+  </description>
+  <resolution>
+  </resolution>
+  <status>OPEN</status>
+  <status-date>03 Oct 2002</status-date>
+  <priority>1</priority>
+  <effort>Small</effort>
+</issue>
 
 
 </issues>
