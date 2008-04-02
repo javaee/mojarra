@@ -45,9 +45,31 @@
   <target name="test"
    description="Execute all tests against installed application"
        depends="test.hello,
+                test.external,
                 test.managed,
                 test.navigation
                "/>
+
+
+  <target name="test.external"
+   description="Test ExternalContext implementation issues">
+
+    <!-- Request scope attribute transparency -->
+    <tester host="${host}" port="${port}" protocol="${protocol}"
+         request="${context.path}/faces/external01.jsp"
+      outContent="/external01.jsp PASSED"/>
+
+    <!-- Session scope attribute transparency -->
+    <tester host="${host}" port="${port}" protocol="${protocol}"
+         request="${context.path}/faces/external02.jsp"
+      outContent="/external02.jsp PASSED"/>
+
+    <!-- Application scope attribute transparency -->
+    <tester host="${host}" port="${port}" protocol="${protocol}"
+         request="${context.path}/faces/external03.jsp"
+      outContent="/external03.jsp PASSED"/>
+
+  </target>
 
 
   <target name="test.hello"
