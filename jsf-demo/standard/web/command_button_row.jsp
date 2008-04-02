@@ -22,6 +22,24 @@
 
             </tr>
 
+           <tr>
+
+             <td>
+
+               <h:output_text id="command_button6_label"
+                     value="command_button with label from model"/>
+
+             </td>
+
+             <td>
+
+               <h:command_button id="command_button6" action="success"
+                   valueRef="model.label"/>
+
+              </td>
+
+            </tr>
+
             <tr>
 
              <td>
