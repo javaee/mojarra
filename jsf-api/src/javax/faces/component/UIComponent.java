@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.143 2006/02/24 18:05:04 edburns Exp $
+ * $Id: UIComponent.java,v 1.144 2006/03/14 17:24:27 edburns Exp $
  */
 
 /*
@@ -369,7 +369,10 @@ public abstract class UIComponent implements StateHolder {
 
     /**
      * <p>Return the parent {@link UIComponent} of this
-     * <code>UIComponent</code>, if any.</p>
+     * <code>UIComponent</code>, if any.  A component must allow child
+     * components to be added to and removed from the list of children
+     * of this component, even though the child component returns null
+     * from <code>getParent( )</code>.</p>
      */
     public abstract UIComponent getParent();
 

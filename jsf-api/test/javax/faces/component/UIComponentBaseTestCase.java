@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBaseTestCase.java,v 1.35 2006/02/13 16:30:35 edburns Exp $
+ * $Id: UIComponentBaseTestCase.java,v 1.36 2006/03/14 17:24:28 edburns Exp $
  */
 
 /*
@@ -218,6 +218,23 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
         assertNull(testComponent.findComponent("child2"));
         assertNull(testComponent.findComponent("child3"));
 
+    }
+
+    public void testChildrenAndFacetsWithNullGetParent() throws Exception {
+	TestComponent child = new TestComponent() {
+		public UIComponent getParent() {
+		    return null;
+		}
+	    };
+	component.getChildren().add(child);
+	assertNull(component.getChildren().get(0).getParent());
+	TestComponent facet = new TestComponent() {
+		public UIComponent getParent() {
+		    return null;
+		}
+	    };
+	component.getFacets().put("nullParent", facet);
+	assertNull(component.getFacets().get("nullParent").getParent());
     }
 
 
