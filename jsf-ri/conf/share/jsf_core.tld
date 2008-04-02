@@ -201,7 +201,7 @@
             <description>
                 Time zone in which to interpret any time information in the date
                 String.  Value must be either a VB expression that evaluates to
-                a java.util.TimeVone instance, or a String that is a timezone ID
+                a java.util.TimeZone instance, or a String that is a timezone ID
                 as described in the javadocs for
                 java.util.TimeZone.getTimeZone().
             </description>
