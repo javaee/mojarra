@@ -47,12 +47,11 @@
     <property name="jsp.api.version" value="2.1"/>
     <property name="jstl.api.version" value="1.2"/>
     <property name="annotation.api.version" value="1.0"/>
+    <property name="maven.repository.importer.version" value="1.2"/>
 	
     <property name="maven2.mirror" value="http://mirrors.ibiblio.org/pub/mirrors/maven2"/>
 	<property name="java.net.maven" value="https://maven-repository.dev.java.net/nonav/repository/"/>
     <property name="download.java.net" value="http://download.java.net/javaee5/external/shared"/>
-
-    <property name="maven.repository.importer.version" value="1.2"/>
 
     <property name="junit.home" value="${dependency.base.dir}/junit${junit.version}"/>
     <property name="htmlunit.home" value="${dependency.base.dir}/htmlunit-${htmlunit.version}"/>
@@ -76,6 +75,9 @@
     <property name="sun-commons-digester.jar"      value="${dependency.jar.dir}/com-sun-commons-digester.jar"/>
     <property name="sun-commons-collections.jar"   value="${dependency.jar.dir}/com-sun-commons-collections.jar"/>
     <property name="sun-commons-logging.jar"       value="${dependency.jar.dir}/com-sun-commons-logging.jar"/>
+
+    <property name="glassfish.download.url"        value="http://java.net/download/javaee5/fcs_branch/promoted" />
+    <property name="glassfish.installer.jar"       value="glassfish-installer-v1_ur1-p01-b02.jar"/>
 
     <target name="update" description="Download project dependencies">
         <mkdir dir="${dependency.base.dir}/downloads"/>
@@ -295,19 +297,19 @@
             <then>
                 <if>
                     <not>
-                        <available file="${dependency.base.dir}/glassfish-installer-v1_ur1-p01-b02.jar"
+                        <available file="${dependency.base.dir}/${glassfish.installer.jar}"
                                 property="ignored"/>
                     </not>
                     <then>
-                        <get src="http://java.net/download/javaee5/fcs_branch/promoted/${dl.os}/glassfish-installer-v1_ur1-p01-b02.jar"
-                            dest="${dependency.base.dir}/glassfish-installer-v1_ur1-p01-b02.jar"
+                        <get src="${glassfish.download.url}/${dl.os}/${glassfish.installer.jar}"
+                            dest="${dependency.base.dir}/${glassfish.installer.jar}"
                             usetimestamp="true"/>
                     </then>
                 </if>
                 <echo file="${dependency.base.dir}/install.bat">
 <![CDATA[
 echo a > input
-java -Xmx256m -jar ${dependency.base.dir}/glassfish-installer-v1_ur1-p01-b02.jar -console < ./input
+java -Xmx256m -jar ${dependency.base.dir}/${glassfish.installer.jar} -console < ./input
 ]]>
                 </echo>
                 <chmod file="${dependency.base.dir}/install.bat" perm="700"/>
