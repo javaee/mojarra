@@ -21,6 +21,23 @@ import com.sun.faces.sandbox.util.Util;
 public class FileDownloadRenderer extends Renderer {
 
     @Override
+    public boolean getRendersChildren() {
+        return false;
+    }
+    
+    @Override
+    public void encodeBegin(FacesContext context, UIComponent comp) throws IOException {
+        if ((context == null) || (comp == null)) {
+            throw new NullPointerException();
+        }
+        FileDownload dl = (FileDownload) comp;
+        super.encodeBegin(context, comp);
+        if (FileDownload.METHOD_DOWNLOAD.equals(dl.getMethod())) {
+            renderLink(context, dl);
+        }
+    }
+
+    @Override
     public void encodeEnd(FacesContext context, UIComponent comp) throws IOException {
         if ((context == null) || (comp == null)) {
             throw new NullPointerException();
@@ -29,7 +46,8 @@ public class FileDownloadRenderer extends Renderer {
         if (FileDownload.METHOD_INLINE.equals(dl.getMethod())) {
             renderInline(context, dl);
         } else if (FileDownload.METHOD_DOWNLOAD.equals(dl.getMethod())) {
-            renderLink(context, dl);
+            ResponseWriter writer = context.getResponseWriter();
+            writer.endElement("a"); // finsh up the link!
         }
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
         request.getSession().setAttribute("HtmlDownload-" + dl.getClientId(context), dl);
@@ -39,16 +57,9 @@ public class FileDownloadRenderer extends Renderer {
     protected void renderInline(FacesContext context, FileDownload comp) throws IOException {
         String width = comp.getWidth();
         String height = comp.getHeight();
-//        if ((width != null) && !"".equals(width)) {
-//            throw new FacesException ("HtmlDownload:  'width' must be specified when method='inline'");
-//        }
-//        if ((height != null) && !"".equals(height)) {
-//            throw new FacesException ("HtmlDownload:  'height' must be specified when method='inline'");
-//        }
         
         ResponseWriter writer = context.getResponseWriter();
         String uri = generateUri(context, comp);
-//        Boolean iframe = comp.getIframe() != null ? comp.getIframe() : Boolean.FALSE; 
         if (Boolean.TRUE.equals(comp.getIframe())) {
             writer.startElement("iframe", comp);
             writer.writeAttribute("src", uri, "src");
@@ -67,16 +78,14 @@ public class FileDownloadRenderer extends Renderer {
 
     protected void renderLink(FacesContext context, FileDownload comp) throws IOException {
         ResponseWriter writer = context.getResponseWriter();
-        String text = comp.getText();
 
         writer.startElement("a", comp);
         writer.writeAttribute("href", generateUri(context, comp), "data");
-        if ((text != null) && !"".equals(text)) {
-            writer.writeText(text, null);
+        if (comp.getChildCount() > 0) {
+            //
         } else {
             writer.writeText("Download", null);
         }
-        writer.endElement("a");
 
     }
 
