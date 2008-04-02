@@ -1,5 +1,5 @@
 /*
- * $Id: TestComponentNamingContainer.java,v 1.6 2003/01/17 01:47:03 craigmcc Exp $
+ * $Id: TestComponentNamingContainer.java,v 1.7 2003/01/17 02:18:11 craigmcc Exp $
  */
 
 /*
@@ -63,9 +63,9 @@ public class TestComponentNamingContainer extends UINamingContainer {
     }
 
 
-    public boolean updateModel(FacesContext context) {
+    public void updateModel(FacesContext context) {
         TestComponent.trace("u-" + getComponentId());
-        return (super.updateModel(context));
+        super.updateModel(context);
     }
 
 
@@ -87,9 +87,9 @@ public class TestComponentNamingContainer extends UINamingContainer {
     }
 
 
-    public boolean processUpdates(FacesContext context) {
+    public void processUpdates(FacesContext context) {
         TestComponent.trace("pU-" + getComponentId());
-        return (super.processUpdates(context));
+        super.processUpdates(context);
     }
 
 }

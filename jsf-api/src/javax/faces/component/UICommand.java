@@ -1,5 +1,5 @@
 /*
- * $Id: UICommand.java,v 1.30 2003/01/17 00:26:46 craigmcc Exp $
+ * $Id: UICommand.java,v 1.31 2003/01/17 02:18:07 craigmcc Exp $
  */
 
 /*
@@ -198,12 +198,11 @@ public class UICommand extends UIComponentBase {
      * @exception NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
-    public boolean updateModel(FacesContext context) {
+    public void updateModel(FacesContext context) {
 
         if (context == null) {
             throw new NullPointerException();
         }
-        return (true);
 
     }
 

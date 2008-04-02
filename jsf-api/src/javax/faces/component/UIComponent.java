@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.68 2003/01/17 02:00:37 craigmcc Exp $
+ * $Id: UIComponent.java,v 1.69 2003/01/17 02:18:07 craigmcc Exp $
  */
 
 /*
@@ -666,7 +666,6 @@ public interface UIComponent extends Serializable {
      *     <li>Clear the local value of this component.</li>
      *     <li>Set the <code>valid</code> property of this component to
      *         <code>true</code>.</li>
-     *     <li>Return <code>true</code> to the caller.</li>
      *     </ul></li>
      * <li>If the <code>setModelValue()</code> method call fails:
      *     <ul>
@@ -674,7 +673,6 @@ public interface UIComponent extends Serializable {
      *         on the specified {@link FacesContext} instance.</li>
      *     <li>Set the <code>valid</code> property of this component to
      *         <code>false</code>.</li>
-     *     <li>Return <code>false</code> to the caller.</li>
      *     </ul></li>
      * </ul>
      *
@@ -685,7 +683,7 @@ public interface UIComponent extends Serializable {
      * @exception NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
-    public boolean updateModel(FacesContext context);
+    public void updateModel(FacesContext context);
 
 
     /**
@@ -778,18 +776,18 @@ public interface UIComponent extends Serializable {
      *     children of this component, in the order they would be
      *     returned by a call to <code>getChildren()</code>.</li>
      * <li>Call the <code>updateModel()</code> method of this component.</li>
+     * <li>If the <code>valid</code> property of this {@link UIComponent}
+     *     is now <code>false</code>, call
+     *     <code>FacesContext.renderResponse()</code>
+     *     to transfer control at the end of the current phase.</li>
      * </ul>
-     *
-     * <p>Return <code>false</code> if any <code>processUpdates()</code>
-     * or <code>updateModel()</code> method call returned <code>false</code>.
-     * Otherwise, return <code>true</code>.</p>
      *
      * @param context {@link FacesContext} for the request we are processing
      *
      * @exception NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
-    public boolean processUpdates(FacesContext context);
+    public void processUpdates(FacesContext context);
 
 
 }
