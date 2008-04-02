@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlComponentGenerator.java,v 1.2 2004/01/27 20:14:15 eburns Exp $
+ * $Id: HtmlComponentGenerator.java,v 1.3 2004/01/29 20:59:20 eburns Exp $
  */
 
 /*
@@ -189,17 +189,26 @@ public class HtmlComponentGenerator extends AbstractGenerator {
 
         // Generate the class JavaDocs (if any)
         DescriptionBean db = cb.getDescription("");
-        if (db != null) {
+	String 
+	    rendererTypeDocs = null,
+	    rendererType = cb.getRendererType();
+        if (db != null || rendererType != null) {
             String description = db.getDescription();
             if (description == null) {
                 description = "";
             }
             description = description.trim();
+	    writer.write("/**\n");
             if (description.length() > 0) {
-                writer.write("/**\n");
                 description(description, writer, 1);
-                writer.write(" */\n");
             }
+	    if (rendererType != null) {
+		rendererTypeDocs = "<p>By default, the <code>rendererType</code> property must be set to \"<code>" + 
+		    rendererType + 
+		    "</code>\" This value can be changed by calling the <code>setRendererType()</code> method.</p>";
+		description(rendererTypeDocs, writer, 1);
+	    }
+	    writer.write(" */\n");
         }
 
         // Generate the class declaration
@@ -214,7 +223,6 @@ public class HtmlComponentGenerator extends AbstractGenerator {
         writer.write(shortName(cb.getComponentClass()));
         writer.write("() {\n");
         writer.write("    super();\n");
-        String rendererType = cb.getRendererType();
         if (rendererType != null) {
             writer.write("    setRendererType(\"");
             writer.write(rendererType);
