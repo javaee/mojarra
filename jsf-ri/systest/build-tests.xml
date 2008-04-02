@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 
 <!--
- $Id: build-tests.xml,v 1.71 2005/04/26 16:41:38 jayashri Exp $
+ $Id: build-tests.xml,v 1.72 2005/05/02 14:58:45 rogerk Exp $
 -->
 
 <!--
@@ -390,6 +390,7 @@
    <tester host="${host}" port="${port}" protocol="${protocol}"
         request="${context.path}/faces/managed04.jsp"
         golden="${golden.path}/managed04.txt"
+        ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
         recordGolden="${local.golden.path}/managed04.txt" 
         failonerror="${failonerror}"/> 
 
@@ -628,10 +629,12 @@
       <tester host="${host}" port="${port}" protocol="${protocol}"
               request="${context.path}/faces/taglib/commandLink_test.jsp"
               golden="${golden.path}/taglib/commandLink_test.txt" failonerror="${failonerror}" 
+              ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
               recordGolden="${local.golden.path}/taglib/commandLink_test.txt" />
       <tester host="${host}" port="${port}" protocol="${protocol}"
               request="${context.path}/faces/taglib/commandLink_multiform_test.jsp"
               golden="${golden.path}/taglib/commandLink_multiform_test.txt" failonerror="${failonerror}" 
+              ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
               recordGolden="${local.golden.path}/taglib/commandLink_multiform_test.txt" />
       <tester host="${host}" port="${port}" protocol="${protocol}" 
               request="${context.path}/faces/taglib/attributeTest.jsp" 
@@ -669,6 +672,25 @@
         request="${context.path}/renderkit03.jsp"
         recordGolden="${local.golden.path}/renderkit03A.txt"
 	golden="${golden.path}/renderkit03A.txt" failonerror="${failonerror}"/>
+
+    <junit printsummary="yes" fork="yes"
+          haltonfailure="yes" haltonerror="yes">
+                                                                                                                   
+      <jvmarg line="${debug.jvm.args}"/>
+                                                                                                                   
+      <classpath refid="html.classpath"/>
+      <formatter  type="plain"      usefile="false"/>
+      <formatter  type="xml"        usefile="true"/>
+      <sysproperty key="host"         value="${host}"/>
+      <sysproperty key="port"         value="${port}"/>
+      <sysproperty key="context.path" value="${context.path}"/>
+                                                                                                                   
+      <batchtest todir="${test.results.dir}">
+        <fileset    dir="${basedir}/build/WEB-INF/classes"
+               includes="com/sun/faces/systest/RenderKitsTestCase.class"/>
+      </batchtest>
+                                                                                                                   
+    </junit>
 
   </target>
 

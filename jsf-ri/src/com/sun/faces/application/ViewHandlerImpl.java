@@ -1,5 +1,5 @@
 /* 
- * $Id: ViewHandlerImpl.java,v 1.51 2005/04/26 16:41:38 jayashri Exp $ 
+ * $Id: ViewHandlerImpl.java,v 1.52 2005/05/02 14:58:44 rogerk Exp $ 
  */ 
 
 
@@ -34,6 +34,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
+import javax.faces.render.ResponseStateManager;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -48,7 +49,7 @@ import com.sun.faces.util.Util;
 /**
  * <B>ViewHandlerImpl</B> is the default implementation class for ViewHandler.
  *
- * @version $Id: ViewHandlerImpl.java,v 1.51 2005/04/26 16:41:38 jayashri Exp $
+ * @version $Id: ViewHandlerImpl.java,v 1.52 2005/05/02 14:58:44 rogerk Exp $
  * @see javax.faces.application.ViewHandler
  */
 public class ViewHandlerImpl extends ViewHandler {
@@ -550,9 +551,16 @@ public class ViewHandlerImpl extends ViewHandler {
         }
         String result = null;
 
-        if (null ==
-            (result = context.getApplication().getDefaultRenderKitId())) {
-            result = RenderKitFactory.HTML_BASIC_RENDER_KIT;
+        Map requestParamMap = context.getExternalContext()
+            .getRequestParameterMap();
+        result = (String) requestParamMap.get(
+            ResponseStateManager.RENDER_KIT_ID_PARAM);
+
+        if (result == null) {
+            if (null ==
+                (result = context.getApplication().getDefaultRenderKitId())) {
+                result = RenderKitFactory.HTML_BASIC_RENDER_KIT;
+            }
         }
         return result;
     }

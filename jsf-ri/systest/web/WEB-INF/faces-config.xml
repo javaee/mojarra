@@ -197,14 +197,24 @@
       </managed-property>
   </managed-bean>
 
-  <!-- standard renderkit -->
+  <!-- custom renderkit -->
   <render-kit>
     <render-kit-id>CUSTOM</render-kit-id>
-    <render-kit-class>com.sun.faces.renderkit.RenderKitImpl</render-kit-class>
+    <render-kit-class>com.sun.faces.systest.render.CustomRenderKitImpl</render-kit-class>
     <renderer>
       <component-family>javax.faces.Output</component-family>
       <renderer-type>javax.faces.Text</renderer-type>
       <renderer-class>com.sun.faces.systest.render.TextRenderer</renderer-class>
+    </renderer>
+    <renderer>
+      <component-family>javax.faces.Form</component-family>
+      <renderer-type>javax.faces.Form</renderer-type>
+      <renderer-class>com.sun.faces.systest.render.FormRenderer</renderer-class>
+    </renderer>
+    <renderer>
+      <component-family>javax.faces.Command</component-family>
+      <renderer-type>javax.faces.Button</renderer-type>
+      <renderer-class>com.sun.faces.systest.render.ButtonRenderer</renderer-class>
     </renderer>
   </render-kit>
 
@@ -402,5 +412,27 @@
        <to-view-id>/redirect1.jsp</to-view-id>
      </navigation-case>
   </navigation-rule>
+
+  <navigation-rule>
+    <from-view-id>/renderkit04.jsp</from-view-id>
+    <navigation-case>
+      <description>If the action returns "success", goto
+      renderkit05.jsp</description>
+      <display-name>The Generic Rule</display-name>
+      <from-outcome>success</from-outcome>
+      <to-view-id>/renderkit05.jsp</to-view-id>
+    </navigation-case>
+  </navigation-rule>
+  <navigation-rule>
+    <from-view-id>/renderkit05.jsp</from-view-id>
+    <navigation-case>
+      <description>If the action returns "success", goto
+      renderkit04.jsp</description>
+      <display-name>The Generic Rule</display-name>
+      <from-outcome>success</from-outcome>
+      <to-view-id>/renderkit04.jsp</to-view-id>
+    </navigation-case>
+  </navigation-rule>
+
 
 </faces-config>

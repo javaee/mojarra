@@ -1,5 +1,5 @@
 /*
- * $Id: ViewTag.java,v 1.33 2005/04/21 18:55:39 edburns Exp $
+ * $Id: ViewTag.java,v 1.34 2005/05/02 14:58:45 rogerk Exp $
  */
 
 /*
@@ -23,6 +23,7 @@ import javax.faces.context.ResponseWriter;
 import javax.faces.el.ValueBinding;
 import javax.faces.el.MethodBinding;
 import javax.faces.event.PhaseEvent;
+import javax.faces.render.RenderKitFactory;
 import javax.faces.webapp.UIComponentTag;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -43,7 +44,7 @@ import com.sun.faces.application.ViewHandlerResponseWrapper;
  * Renderer. It exists mainly to provide a guarantee that all faces
  * components reside inside of this tag.
  *
- * @version $Id: ViewTag.java,v 1.33 2005/04/21 18:55:39 edburns Exp $
+ * @version $Id: ViewTag.java,v 1.34 2005/05/02 14:58:45 rogerk Exp $
  */
 
 public class ViewTag extends UIComponentTag {
@@ -64,8 +65,13 @@ public class ViewTag extends UIComponentTag {
 
     // Attribute Instance Variables
 
-    protected String locale = null;
+    protected String renderKitId = null;
+                                                                                         
+    public void setRenderKitId(String renderKitId) {
+        this.renderKitId = renderKitId;
+    }
 
+    protected String locale = null;
 
     public void setLocale(String newLocale) {
         locale = newLocale;
@@ -250,6 +256,23 @@ public class ViewTag extends UIComponentTag {
         ValueBinding vb = null;
         MethodBinding mb = null;
 	UIViewRoot viewRoot = (UIViewRoot) component;
+
+        if (null != renderKitId) {
+            if (isValueReference(renderKitId)) {
+                viewRoot.setValueBinding("renderKitId", 
+                    vb = Util.getValueBinding(renderKitId));
+            } else {
+                viewRoot.setRenderKitId(renderKitId);
+            }
+        } else if (viewRoot.getRenderKitId() == null) {
+            String renderKitIdString = FacesContext.getCurrentInstance().
+                getApplication().getDefaultRenderKitId();
+            if (null == renderKitIdString) {
+                renderKitIdString = RenderKitFactory.HTML_BASIC_RENDER_KIT;
+            }
+            viewRoot.setRenderKitId(renderKitIdString);
+        }
+
         if (null != locale) {
             if (isValueReference(locale)) {
                 viewRoot.setValueBinding("locale",

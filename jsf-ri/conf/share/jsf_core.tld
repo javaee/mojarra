@@ -976,6 +976,16 @@
     </description>
 
     <attribute>
+      <name>renderKitId</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Identifier for the RenderKit to use for
+        rendering this page.
+      </description>
+    </attribute>
+
+    <attribute>
       <name>locale</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>

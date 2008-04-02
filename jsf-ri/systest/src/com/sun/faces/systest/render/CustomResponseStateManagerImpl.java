@@ -1,5 +1,5 @@
 /*
- * $Id: ResponseStateManagerImpl.java,v 1.18 2005/05/02 14:58:44 rogerk Exp $
+ * $Id: CustomResponseStateManagerImpl.java,v 1.1 2005/05/02 14:58:47 rogerk Exp $
  */
 
 /*
@@ -8,9 +8,10 @@
  */
 
 
-package com.sun.faces.renderkit;
+package com.sun.faces.systest.render;
 
 import com.sun.faces.RIConstants;
+import com.sun.faces.renderkit.ByteArrayGuard;
 import com.sun.faces.util.Base64;
 import com.sun.faces.util.Util;
 import org.apache.commons.logging.Log;
@@ -21,7 +22,6 @@ import javax.faces.application.StateManager;
 import javax.faces.context.FacesContext;
 import javax.faces.render.RenderKitFactory;
 import javax.faces.render.ResponseStateManager;
-import javax.faces.context.ResponseWriter;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -38,13 +38,13 @@ import java.util.Map;
  * <B>RenderKitImpl</B> is a class ...
  */
 
-public class ResponseStateManagerImpl extends ResponseStateManager {
+public class CustomResponseStateManagerImpl extends ResponseStateManager {
 
     //
     // Protected Constants
     //
     protected static Log log =
-        LogFactory.getLog(ResponseStateManagerImpl.class);
+        LogFactory.getLog(CustomResponseStateManagerImpl.class);
     private static final String FACES_VIEW_STATE =
         "com.sun.faces.FACES_VIEW_STATE";
     
@@ -71,7 +71,7 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
     // Constructors and Initializers    
     //
 
-    public ResponseStateManagerImpl() {
+    public CustomResponseStateManagerImpl() {
         super();
         byteArrayGuard = new ByteArrayGuard();
     }
@@ -169,13 +169,6 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
         throws IOException {
         String hiddenField = null;
 	StateManager stateManager = Util.getStateManager(context);
-        ResponseWriter writer = context.getResponseWriter();
-
-	writer.startElement("input", context.getViewRoot());
-	writer.writeAttribute("type", "hidden", null);
-	writer.writeAttribute("name", RIConstants.FACES_VIEW, null);
-	writer.writeAttribute("id", RIConstants.FACES_VIEW, null);
-	
 	
 	if (stateManager.isSavingStateInClient(context)) {
 	    GZIPOutputStream zos = null;
@@ -201,26 +194,30 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
             byte[] securedata = byteArrayGuard.encrypt(context, 
                     bos.toByteArray());
 	    bos.close();
-	    String valueToWrite = (new String(Base64.encode(securedata), 
-					      "ISO-8859-1"));
-	    writer.writeAttribute("value", 
-				  valueToWrite, null);
+	    
+	    hiddenField = " <input type=\"hidden\" name=\""
+		+ RIConstants.FACES_VIEW + "\"" + " value=\"" +
+                    (new String(Base64.encode(securedata), "ISO-8859-1"))
+		+ "\" />\n ";
 	}
 	else {
-	    writer.writeAttribute("value", view.getStructure(), null);
+	    hiddenField = " <input type=\"hidden\" name=\""
+		+ RIConstants.FACES_VIEW + "\"" + " value=\"" +
+		view.getStructure() +
+		"\" />\n ";
+	    
 	}
-	writer.endElement("input");
+        context.getResponseWriter().write(hiddenField);
 
         // write this out regardless of state saving mode
-        // Only write it out if there is a default render kit Identifier specified,
-        // and this render kit identifier is not the default.
+        // Only write it out if there is a default specified, and 
+        // this render kit identifier is not the default.
         String result = context.getApplication().getDefaultRenderKitId();
-        if (result != null && !result.equals(RenderKitFactory.HTML_BASIC_RENDER_KIT)) {
-            writer.startElement("input", context.getViewRoot());
-            writer.writeAttribute("type", "hidden", "type");
-            writer.writeAttribute("name", ResponseStateManager.RENDER_KIT_ID_PARAM, "name");
-            writer.writeAttribute("value", RenderKitFactory.HTML_BASIC_RENDER_KIT, "value");
-            writer.endElement("input");
+        if ((null != result && !result.equals("CUSTOM")) || result == null) {
+            hiddenField = " <input type=\"hidden\" name=\""
+                + ResponseStateManager.RENDER_KIT_ID_PARAM + "\"" + " value=\"CUSTOM\"" +
+                "\" />\n ";
+            context.getResponseWriter().write(hiddenField);
         }
     }
     
@@ -239,5 +236,5 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
     }
 
 
-} // end of class ResponseStateManagerImpl
+} // end of class CustomResponseStateManagerImpl
 

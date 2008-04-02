@@ -1,5 +1,5 @@
 /*
- * $Id: TestBean.java,v 1.12 2004/05/03 19:30:38 jvisvanathan Exp $
+ * $Id: TestBean.java,v 1.13 2005/05/02 14:58:47 rogerk Exp $
  */
 
 /*
@@ -168,6 +168,25 @@ public class TestBean {
         this.userName = userName;
     }
     
+    private String renderKitInfo = null;
+    public String getRenderKitInfo() {
+        renderKitInfo = FacesContext.getCurrentInstance().
+            getViewRoot().getRenderKitId();
+        return renderKitInfo;
+    }
+    public void setRenderKitInfo(String renderKitInfo) {
+        this.renderKitInfo = renderKitInfo;
+    }
+    private String responseWriterInfo = null;
+    public String getResponseWriterInfo() {
+        responseWriterInfo = FacesContext.getCurrentInstance().
+            getResponseWriter().getClass().getName();
+        return responseWriterInfo;
+    }
+    public void setResponseWriterInfo(String responseWriterInfo) {
+        this.responseWriterInfo = responseWriterInfo;
+    }
+
     private Object bean = null;
 
 
