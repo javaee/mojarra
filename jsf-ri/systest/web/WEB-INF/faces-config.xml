@@ -209,4 +209,14 @@
     <component-class>com.sun.faces.systest.DynamicComponent</component-class>
   </component>
 
+  <!-- Managed Bean for "jsp/form-input-02" tests -->
+  <managed-bean>
+    <managed-bean-name>formInput02</managed-bean-name>
+    <managed-bean-class>
+      com.sun.faces.systest.model.TestBean
+    </managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+  </managed-bean>
+
+
 </faces-config>

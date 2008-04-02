@@ -1,5 +1,5 @@
 /*
- * $Id: DynamicComponent.java,v 1.1 2003/09/24 23:58:54 craigmcc Exp $
+ * $Id: DynamicComponent.java,v 1.2 2003/09/30 22:23:43 craigmcc Exp $
  */
 
 /*
@@ -58,7 +58,6 @@ public class DynamicComponent extends UIComponentBase {
     public DynamicComponent(String componentId) {
         super();
         setId(componentId);
-        System.out.println("Created dynamic id=" + componentId + " " + this);
     }
 
 
@@ -97,7 +96,6 @@ public class DynamicComponent extends UIComponentBase {
     private void encodeRecursive(FacesContext context, UIComponent component)
         throws IOException {
 
-        System.out.println("Rendered output id=" + component.getId() + " " + component);
         component.encodeBegin(context);
         if (component.getRendersChildren()) {
             component.encodeChildren(context);
@@ -127,14 +125,12 @@ public class DynamicComponent extends UIComponentBase {
             output.setRendererType("Text");
             output.setValue(value);
             getChildren().add(output);
-            System.out.println("Created output id=" + id + " " + output);
         } else if ("delete".equals(mode)) {
             Iterator kids = getChildren().iterator();
             while (kids.hasNext()) {
                 UIComponent kid = (UIComponent) kids.next();
                 if (id.equals(kid.getId())) {
                     getChildren().remove(kid);
-                    System.out.println("Removed output id=" + id + " " + kid);
                     break;
                 }
             }
