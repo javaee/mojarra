@@ -58,6 +58,19 @@
     <description>
         The decision rule used by the NavigationHandler to
         determine which view must be displayed after the
+        current view, ImageMap.jsp is processed.
+    </description>
+    <from-view-id>/ImageMap.jsp</from-view-id>
+    <navigation-case>
+        <from-outcome>success</from-outcome>
+      <to-view-id>/Storefront.jsp</to-view-id>
+    </navigation-case>
+  </navigation-rule>
+
+  <navigation-rule>
+    <description>
+        The decision rule used by the NavigationHandler to
+        determine which view must be displayed after the
         current view, Storefront.jsp is processed.
     </description>
     <from-view-id>/Storefront.jsp</from-view-id>
@@ -212,6 +225,16 @@
   </navigation-rule>
 
   <!-- =================== Initialize Image Map Hotspot Data ============== -->
+
+  <managed-bean>
+    <description>
+      The "backing file" bean that contains the event handler method for
+      setting the locale.
+    </description>
+    <managed-bean-name>imageMap</managed-bean-name>
+    <managed-bean-class> components.model.ImageMap </managed-bean-class>
+    <managed-bean-scope> application </managed-bean-scope>
+  </managed-bean>
 
   <managed-bean>
     <description>

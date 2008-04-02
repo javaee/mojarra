@@ -71,15 +71,18 @@
                               <TR> 
                                 <TD>
           <h:graphic_image id="mapImage" url="/world.jpg" usemap="#worldMap" />
-                <d:map id="worldMap" current="NAmericas">
-                        <d:area_selected type="cardemo.AreaSelectedHandler"/> 
-                        <d:area id="NAmerica" valueRef="#{NA}" onmouseover="/world_namer.jpg" onmouseout="/world.jpg" 
+                <d:map id="worldMap" 
+                  actionListenerRef="imageMap.processAreaSelected"
+                  actionRef="imageMap.status"
+                  immediate="true"
+                  current="NAmericas">
+                        <d:area id="NAmerica" value="#{NA}" onmouseover="/world_namer.jpg" onmouseout="/world.jpg" 
                                 targetImage="mapImage" />
-                        <d:area id="SAmerica" valueRef="#{SA}" onmouseover="/world_samer.jpg" onmouseout="/world.jpg" 
+                        <d:area id="SAmerica" value="#{SA}" onmouseover="/world_samer.jpg" onmouseout="/world.jpg" 
                                 targetImage="mapImage" />
-                        <d:area id="Germany" valueRef="#{gerA}" onmouseover="/world_germany.jpg" onmouseout="/world.jpg" 
+                        <d:area id="Germany" value="#{gerA}" onmouseover="/world_germany.jpg" onmouseout="/world.jpg" 
                                 targetImage="mapImage" />
-                        <d:area id="France" valueRef="#{fraA}" onmouseover="/world_france.jpg" onmouseout="/world.jpg" 
+                        <d:area id="France" value="#{fraA}" onmouseover="/world_france.jpg" onmouseout="/world.jpg" 
                                 targetImage="mapImage" />
                 </d:map>
      </TD>
