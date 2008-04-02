@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTagTestCase.java,v 1.1 2003/03/13 22:02:37 craigmcc Exp $
+ * $Id: FacesTagTestCase.java,v 1.2 2003/03/14 01:16:03 craigmcc Exp $
  */
 
 /*
@@ -190,7 +190,8 @@ public class FacesTagTestCase extends TestCase {
 
 
     // Test double multiple tag rendering with missing ids
-    public void testDoubleMultipleTagNoIds() throws Exception {
+    // Scenario 1 -- both ids missing
+    public void testDoubleMultipleTagNoIds1() throws Exception {
 
         FacesTag a = new TestTag("A", "a");
         FacesTag b2 = new TestTag("B2", "b2");
@@ -207,6 +208,52 @@ public class FacesTagTestCase extends TestCase {
         render(); // Should not create components twice
         assertEquals("/bA/bB1/eB1/bB2/b/e/b/e/eB2/bB3/eB3/eA", text());
         assertEquals("//A-a/B1-b1/B2-b2/-c1/-c2/B3-b3", ids());
+
+    }
+
+
+    // Test double multiple tag rendering with missing ids
+    // Scenario 2 -- first id missing
+    public void testDoubleMultipleTagNoIds2() throws Exception {
+
+        FacesTag a = new TestTag("A", "a");
+        FacesTag b2 = new TestTag("B2", "b2");
+        add(null, a);
+        add(a, new TestTag("B1", "b1"));
+        add(a, b2);
+        add(a, new TestTag("B3", "b3"));
+        add(b2, new TestTag(null, "c1"));
+        add(b2, new TestTag("C2", "c2"));
+
+        render();
+        assertEquals("//A-a/B1-b1/B2-b2/-c1/C2-c2/B3-b3", ids());
+        reset();
+        render(); // Should not create components twice
+        assertEquals("/bA/bB1/eB1/bB2/b/e/bC2/eC2/eB2/bB3/eB3/eA", text());
+        assertEquals("//A-a/B1-b1/B2-b2/-c1/C2-c2/B3-b3", ids());
+
+    }
+
+
+    // Test double multiple tag rendering with missing ids
+    // Scenario 3 -- second id missing
+    public void testDoubleMultipleTagNoIds3() throws Exception {
+
+        FacesTag a = new TestTag("A", "a");
+        FacesTag b2 = new TestTag("B2", "b2");
+        add(null, a);
+        add(a, new TestTag("B1", "b1"));
+        add(a, b2);
+        add(a, new TestTag("B3", "b3"));
+        add(b2, new TestTag("C1", "c1"));
+        add(b2, new TestTag(null, "c2"));
+
+        render();
+        assertEquals("//A-a/B1-b1/B2-b2/C1-c1/-c2/B3-b3", ids());
+        reset();
+        render(); // Should not create components twice
+        assertEquals("/bA/bB1/eB1/bB2/bC1/eC1/b/e/eB2/bB3/eB3/eA", text());
+        assertEquals("//A-a/B1-b1/B2-b2/C1-c1/-c2/B3-b3", ids());
 
     }
 
@@ -329,6 +376,7 @@ public class FacesTagTestCase extends TestCase {
         assertEquals("//", ids());
 
     }
+
 
 
     // ------------------------------------------------------ Protected Methods

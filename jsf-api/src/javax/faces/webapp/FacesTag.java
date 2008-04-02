@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTag.java,v 1.34 2003/03/13 01:12:32 craigmcc Exp $
+ * $Id: FacesTag.java,v 1.35 2003/03/14 01:16:01 craigmcc Exp $
  */
 
 /*
@@ -12,7 +12,6 @@ package javax.faces.webapp;
 
 import java.io.IOException;
 import java.util.Iterator;
-import java.util.Stack;
 import java.util.HashMap;
 import javax.faces.FactoryFinder;
 import javax.faces.component.UIComponent;
@@ -44,24 +43,16 @@ public abstract class FacesTag implements Tag {
 
 
     /**
-     * <p>The request attribute under which our component stack is stored.</p>
+     * <p>The current index into the children of this tag's component.</p>
      */
-    protected static final String COMPONENT_STACK_ATTR =
-        "javax.faces.webapp.FacesTag.COMPONENT_STACK";
+    private int childIndex = 0;
 
 
     /**
      * <p>The {@link UIComponent} that is being encoded by this tag,
      * if any.</p>
      */
-    protected UIComponent component = null;
-
-
-    /**
-     * <p>The {@link UIComponent} stack representing the current nesting
-     * of components for the current response.</p>
-     */
-    protected Stack componentStack = null;
+    private UIComponent component = null;
 
 
     /**
@@ -75,13 +66,7 @@ public abstract class FacesTag implements Tag {
      * <p>Was a new component instance dynamically created when our
      * <code>findComponent()</code> method was called.</p>
      */
-    protected boolean created = false;
-
-
-    /**
-     * <p>The component identifier for the associated component.</p>
-     */
-    protected String id = null;
+    private boolean created = false;
 
 
     /**
@@ -93,7 +78,28 @@ public abstract class FacesTag implements Tag {
     /**
      * <p>The JSP <code>Tag</code> that is the parent of this tag.</p>
      */
-    protected Tag parent = null;
+    private Tag parent = null;
+
+
+    // ------------------------------------------------------------- Attributes
+
+
+    /**
+     * <p>The component identifier for the associated component.</p>
+     */
+    protected String id = null;
+
+
+    /**
+     * <p>Set the component identifier for our component.</p>
+     *
+     * @param id The new component identifier
+     */
+    public void setId(String id) {
+
+        this.id = id;
+
+    }
 
 
     /**
@@ -109,21 +115,6 @@ public abstract class FacesTag implements Tag {
      */
     protected boolean renderedSet = false;
     
-
-    // ------------------------------------------------------------- Attributes
-
-
-    /**
-     * <p>Set the component identifier for our component.</p>
-     *
-     * @param id The new component identifier
-     */
-    public void setId(String id) {
-
-        this.id = id;
-
-    }
-
 
     /**
      * <p>Set an override for the rendered attribute.</p>
@@ -157,7 +148,10 @@ public abstract class FacesTag implements Tag {
 
     /**
      * <p>Return <code>true</code> if we dynamically created a new component
-     * instance during our <code>doStartTag()</code> method.</p>
+     * instance during execution of this tag.  This method is designed to be
+     * used by tags nested within this tag, and only returns useful results
+     * between the execution of <code>doStartTag()</code> and
+     * <code>doEndTag()</code> on this tag instance.</p>
      */
     public boolean getCreated() {
 
@@ -215,12 +209,6 @@ public abstract class FacesTag implements Tag {
 
         this.parent = parent;
 
-        FacesTag parentFacesTag = (FacesTag)this.getNearestEnclosingFacesTag();
-        if (parentFacesTag != null ) {
-            parentFacesTag.incrementNumChildren();
-            this.childIndex = parentFacesTag.getNumChildren() - 1;
-        }    
-
     }
 
 
@@ -268,11 +256,9 @@ public abstract class FacesTag implements Tag {
         setupResponseWriter();
 
         // Locate and configure the component that corresponds to this tag
-        componentStack = findComponentStack();
+        childIndex = 0;
         component = findComponent();
         overrideProperties(component);
-        boolean rendersChildren = component.getRendersChildren();
-        componentStack.push(component);
 
         // Render the beginning of the component associated with this tag
         try {
@@ -282,8 +268,6 @@ public abstract class FacesTag implements Tag {
         } catch (IOException e) {
             component = null;
             context = null;
-            componentStack.pop();
-            componentStack = null;
             throw new JspException(e);
         }
 
@@ -317,10 +301,9 @@ public abstract class FacesTag implements Tag {
 
         // Render the children (if needed) and  end of the component
         // associated with this tag
-        boolean rendersChildren = component.getRendersChildren();
         try {
             if (!isSuppressed()) {
-                if (rendersChildren) {
+                if (component.getRendersChildren()) {
                     encodeChildren();
                 }
                 encodeEnd();
@@ -332,14 +315,9 @@ public abstract class FacesTag implements Tag {
             context = null;
         }
 
-        // Pop the component stack, and release it if we are outermost
-        componentStack.pop();
-        componentStack = null;
-        // Need to reset these ivars here because the release() is not
-        // called right away after end tag is processed.
-        this.numChildren = 0;
-        this.childIndex = 0;
         // Return the appropriate control value
+        childIndex = 0;
+        created = false;
         return (getDoEndValue());
 
     }
@@ -367,7 +345,7 @@ public abstract class FacesTag implements Tag {
      * <p>Create and return a new {@link UIComponent} that is acceptable
      * to this tag.  Concrete subclasses must override this method.</p>
      */
-    public abstract UIComponent createComponent();
+    protected abstract UIComponent createComponent();
 
 
     /**
@@ -419,210 +397,91 @@ public abstract class FacesTag implements Tag {
 
 
     /**
-     * <p>Find and return the component, from the component
-     * tree, that corresponds to the relative identifier defined by the
-     * <code>id</code> attribute of this tag. If the value of the <code>id</code>
-     * attribute is non null, see if there is a component with this
-     * <code>id</code> in the namespace of the nearest ancestor to the
-     * top of the stack that is a naming container.  If so, return that
-     * component. If the <code>id</code> is null, generate a tagKey and use
-     * it as a key into <code>tagHash</code> to locate the component. 
-     * If component is found, return it. Otherwise create the component and 
-     * store it in <code>tagHash</code> against the generated tagKey. 
-     * <code>tagHash</code>is stored as an attribute in root component
-     * so that it is available on postback. </p> 
-     *
-     * @exception JspException if the specified component cannot be located
-
-     * @exception JspException if the id is non-null, and no
-     * NamingContainer can be found.
+     * <p>Find and return the {@link UIComponent}, from the component
+     * tree, that corresponds to this tag handler instance.  If there
+     * is no such {@link UIComponent}, create one by calling
+     * <code>createComponent()</code>, and add it is a child or facet
+     * of the {@link UIComponent} associated with our nearest enclosing
+     * {@link FacesTag}.</p>
      *
      */
     protected UIComponent findComponent() throws JspException {
 
-        // Validate the requested identifier
-        String tagKey = null;
-        
-        String id = this.id;
-        UIComponent root = context.getTree().getRoot();
-        HashMap tagHash = (HashMap)root.getAttribute("tagHash");
-        
-        UIComponent parent = (UIComponent) componentStack.peek();
-	UIComponent child = parent;
-	Object facetParent = null;
-        if (id != null) { // FIXME - i18n
-	    // find the nearest ancestor that is a naming container
-	    NamingContainer closestContainer = null;
-	    
-	    while (!(child instanceof NamingContainer)) {
-		// If child is a facet
-		if (null != (facetParent = child.getAttribute(UIComponent.FACET_PARENT_ATTR))){
-		    // Use the UIComponent.FACET_PARENT_ATTR attribute to get
-		    // the UIComponent for which child is a facet.
-		    child = (UIComponent) facetParent;
-		}
-		else {
-		    // child is not a facet, just use getParent()
-		    child = child.getParent();
-		}
-	    }
-	    if (null == child) {
-		throw new JspException("Can't find NamingContainer");
-	    } 
-	    closestContainer = (NamingContainer) child;
-	    if (null != (child = 
-			 closestContainer.findComponentInNamespace(id))) {
-                created = false;
-                return (child);
-            }
+        // Have we already found the relevant component?
+        if (component != null) {
+            return (component);
+        }
+
+        // Identify the component that is, or will be, our parent
+        FacesTag parentTag = getParentFacesTag();
+        UIComponent parentComponent = null;
+        boolean parentCreated = false;
+        if (parentTag != null) {
+            parentComponent = parentTag.getComponent();
+            parentCreated = parentTag.getCreated();
         } else {
-            // generate the tagKey and use it locate the component in tagHash
-            tagKey = this.generateTagKey();
-             if ( tagHash != null ) {
-                 // if the component is found, then it is a postback case.
-                 UIComponent component = (UIComponent)tagHash.get(tagKey);
-                 if (component != null ) {
-                     created = false;
-                     return component;
-                 }    
-             } 
-        }    
+            parentComponent = context.getTree().getRoot();
+            parentCreated = parentComponent.getChildCount() < 1;
+        }
 
-        // Create and return a new child component of the appropriate type
-        child = createComponent();
-	if (null != id) {
-	    child.setComponentId(id);
-	} else {
-            if ( tagHash == null ) {
-                // since the tagHash is null, request is processed 
-                // for the first time. 
-                tagHash = new HashMap();
+        // Case 1 -- Our parent was just created, so we must do so also
+        if (parentCreated) {
+
+            // Create a new component instance
+            component = createComponent();
+            if (id != null) {
+                component.setComponentId(id);
             }
-            // store this component in tagHash against the generated tagKey.
-            root.setAttribute("tagHash", tagHash);
-            tagHash.put(tagKey,child);
-        }    
-	// handle the case when we're supposed to be a facet
-	Tag parentTag = null;
-	if ((parentTag = this.getParent()) instanceof FacetTag) {
-	    FacetTag parentFacetTag = (FacetTag)parentTag;
-	    parentFacetTag.verifySingleChild();
-	    parent.addFacet(parentFacetTag.getName(), child);
-	}
-	else {
-	    parent.addChild(child);
-	}
-        created = true;
-        return (child);
+            created = true;
 
-    }
-
-
-    /**
-     * <p>Locate and return the component stack for this response,
-     * creating one if this has not been done already.</p>
-     */
-    protected Stack findComponentStack() {
-
-        Stack componentStack = (Stack)
-            pageContext.getAttribute(COMPONENT_STACK_ATTR,
-                                     PageContext.REQUEST_SCOPE);
-        if (componentStack == null) {
-            componentStack = new Stack();
-            componentStack.push(context.getTree().getRoot());
-            pageContext.setAttribute(COMPONENT_STACK_ATTR,
-                                     componentStack,
-                                     PageContext.REQUEST_SCOPE);
-        }
-        return (componentStack);
-
-    }
-
-
-    /** 
-     * Returns a string composed of one or more atoms, separated by ':', 
-     * where an atom is: 
-     * <This Tag ClassName>_<index Of This Tag In Parent's Child List>
-     */
-    private String generateTagKey() {
-
-        String tagKey = "";
-        Tag tagObj = this.getParent();
-	FacesTag facesTag = null;
-        while ( tagObj != null ) {
-            if ( tagObj instanceof FacesTag) {
-		facesTag = (FacesTag) tagObj;
-                tagKey = 
-		    facesTag.getClass().getName() + "_" + 
-		    facesTag.getChildIndex() + ":" + tagKey;
+            // Add it as a facet or a child
+            String facetName = getFacetName();
+            if (facetName != null) {
+                parentComponent.addFacet(facetName, component);
+            } else {
+                parentComponent.addChild(component);
             }
-            tagObj = tagObj.getParent();             
+
+            // Return the newly created component
+            return (component);
+
         }
-        tagKey = tagKey + this.getClass().getName() +"_"+ this.getChildIndex();
-        return tagKey;
 
-    }
+        // Case 2 -- Our parent was not created, so locate ourself
+        String facetName = getFacetName();
+        if (facetName != null) {
 
+            // Case 2A -- Look up facet by name
+            component = parentComponent.getFacet(facetName);
+            // PENDING - what if it's not there?
 
-    /**
-     * This ivar is the number of children we have.
-     */
-    protected int numChildren = 0;
+        } else {
 
+            // Case 2B -- Look up child by position
+            if (parentTag != null) {
+                component =
+                    parentComponent.getChild(parentTag.getChildIndex());
+                parentTag.incrementChildIndex();
+            } else {
+                component = parentComponent.getChild(0);
+            }
+            // PENDING - what if it's not there?
 
-    /**
-     * This ivar is the index of this child Tag in its parent's child
-     * list.
-     */
-    protected int childIndex = 0; 
-
-
-    /**
-     * Returns the nearest enclosing <code>FacesTag</code>.
-     */
-    protected Tag getNearestEnclosingFacesTag() {
-
-        Tag tagObj = this.getParent();
-        while ( tagObj != null ) {
-            if ( tagObj instanceof FacesTag) {
-                tagObj = (FacesTag) tagObj;
-                break;
-            } 
-            tagObj = tagObj.getParent(); 
         }
-        if (tagObj == null ) {
-            return null;
-        }    
-        return tagObj;
 
-    }
-    
-    /** 
-     * Increments current value of <code>numChildren</code>.
-     */
-    protected void incrementNumChildren() {
-
-        numChildren++;
-
-    }
-    
-
-    /** 
-     * Returns current value of <code>numChildren</code>.
-     */
-    protected int getNumChildren() {
-
-        return this.numChildren;
+        // Return the located component
+        return (component);
 
     }
 
 
-    /** 
-     * Returns current value of <code>childIndex</code>.
+    /**
+     * <p>Return the current index into the children of this tag's
+     * corresponding {@link UIComponent}.</p>
      */
     protected int getChildIndex() {
 
-        return this.childIndex;
+        return (this.childIndex);
 
     }
 
@@ -658,18 +517,63 @@ public abstract class FacesTag implements Tag {
 
 
     /**
+     * <p>Return the facet name that we should be stored under, if any;
+     * otherwise, return null (indicating that we will be a child component).
+     * </p>
+     */
+    protected String getFacetName() {
+
+        Tag parent = getParent();
+        if (parent instanceof FacetTag) {
+            return (((FacetTag) parent).getName());
+        } else {
+            return (null);
+        }
+
+    }
+
+
+    /**
+     * <p>Locate and return the nearest enclosing {@link FacesTag} if any;
+     * otherwise, return <code>null</code>.</p>
+     */
+    protected FacesTag getParentFacesTag() {
+
+        Tag tag = getParent();
+        while (tag != null) {
+            if (tag instanceof FacesTag) {
+                return ((FacesTag) tag);
+            }
+            tag = tag.getParent();
+        }
+        return (null);
+
+    }
+    
+
+    /**
+     * <p>Increment the index into the children of this tag's component.</p>
+     */
+    protected void incrementChildIndex() {
+
+        childIndex++;
+
+    }
+
+
+    /**
      * <p>Return <code>true</code> if rendering should be suppressed because
-     * some parent component on the stack has been configured with
-     * <code>getRendersChildreN()</code> as true.</p>
+     * some parent component has been configured with
+     * <code>getRendersChildren()</code> as true.</p>
      */
     protected boolean isSuppressed() {
 
-        int n = componentStack.size() - 1; // Skip ourself
-        for (int i = (n - 1); i >= 0; i--) {
-            UIComponent component = (UIComponent) componentStack.get(i);
+        UIComponent component = this.component.getParent();
+        while (component != null) {
             if (component.getRendersChildren()) {
                 return (true);
             }
+            component = component.getParent();
         }
         return (false);
 
