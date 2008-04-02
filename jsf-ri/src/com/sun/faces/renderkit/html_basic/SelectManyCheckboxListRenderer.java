@@ -5,7 +5,7 @@
 
 
 /**
- * $Id: SelectManyCheckboxListRenderer.java,v 1.25 2004/01/27 21:04:29 eburns Exp $
+ * $Id: SelectManyCheckboxListRenderer.java,v 1.26 2004/01/28 18:11:09 jvisvanathan Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -130,12 +130,12 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
                     renderOption(context, component, itemsArray[i], 
                             alignVertical);
                 }
-                renderEndText(alignVertical, context);
+                renderEndText(component, alignVertical, context);
             } else {
                 renderOption(context, component, curItem, alignVertical);
             }
         }
-        renderEndText(alignVertical, context);
+        renderEndText(component, alignVertical, context);
     }
     
     protected void renderOption(FacesContext context, UIComponent component,
@@ -235,6 +235,10 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
         ResponseWriter writer = context.getResponseWriter();
         Util.doAssert(writer != null );
         
+        if (shouldWriteIdAttribute(component)) {
+            writer.startElement("span", component);
+            writeIdAttributeIfNecessary(context, writer, component);
+        }
 	writer.startElement("table", component);
         if (border != Integer.MIN_VALUE) {
             writer.writeAttribute("border", new Integer(border), "border");
@@ -255,7 +259,7 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
        }
    }
     
-    protected void renderEndText(boolean alignVertical,
+    protected void renderEndText(UIComponent component, boolean alignVertical,
             FacesContext context ) throws IOException {
                 
         ResponseWriter writer = context.getResponseWriter();
@@ -267,6 +271,9 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
 	    writer.writeText("\n", null);
 	}
         writer.endElement("table");
+        if (shouldWriteIdAttribute(component)) {
+            writer.endElement("span");
+        }
     }
     
 } // end of class SelectManyCheckboxListRenderer
