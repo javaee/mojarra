@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.53 2002/09/21 21:40:56 craigmcc Exp $
+ * $Id: UIComponent.java,v 1.54 2002/09/21 22:02:26 craigmcc Exp $
  */
 
 /*
@@ -53,7 +53,8 @@ public interface UIComponent extends Serializable {
 
     /**
      * <p>Return an <code>Iterator</code> over the names of all
-     * currently defined attributes of this <code>UIComponent</code>.
+     * currently defined attributes of this <code>UIComponent</code> that
+     * have a non-null value.</p>
      */
     public Iterator getAttributeNames();
 

@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.24 2002/09/21 21:40:56 craigmcc Exp $
+ * $Id: UIComponentBase.java,v 1.25 2002/09/21 22:02:26 craigmcc Exp $
  */
 
 /*
@@ -134,7 +134,8 @@ public abstract class UIComponentBase implements UIComponent {
 
     /**
      * <p>Return an <code>Iterator</code> over the names of all
-     * currently defined attributes of this <code>UIComponent</code>.
+     * currently defined attributes of this <code>UIComponent</code> that
+     * have a non-null value.</p>
      */
     public Iterator getAttributeNames() {
 
