@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlResponseWriter.java,v 1.32 2006/10/06 19:09:23 rogerk Exp $
+ * $Id: HtmlResponseWriter.java,v 1.33 2006/10/09 15:10:42 rogerk Exp $
  */
 
 /*
@@ -77,6 +77,10 @@ public class HtmlResponseWriter extends ResponseWriter {
 
     // flag to indicate that we're writing a 'script' or 'style' element
     private boolean scriptOrStyle;
+
+    // flag to indicate that we're writing a 'src' attribute as part of 
+    // 'script' or 'style' element 
+    private boolean scriptOrStyleSrc;
 
     // flag to indicate if the content type is Xhtml
     private boolean isXhtml;
@@ -216,7 +220,7 @@ public class HtmlResponseWriter extends ResponseWriter {
         dontEscape = false;
         isXhtml = getContentType().equals(
             RIConstants.XHTML_CONTENT_TYPE);
-        if (scriptOrStyle) {
+        if (scriptOrStyle && !scriptOrStyleSrc) {
             if (isXhtml) {
                 writer.write("\n//]]>\n");
             } else {
@@ -297,6 +301,7 @@ public class HtmlResponseWriter extends ResponseWriter {
         }
         closeStartIfNecessary();
         scriptOrStyle = false;
+        scriptOrStyleSrc = false;
         if ("script".equalsIgnoreCase(name) ||
             "style".equalsIgnoreCase(name)) {
             scriptOrStyle = true;
@@ -388,6 +393,10 @@ public class HtmlResponseWriter extends ResponseWriter {
 
         if (writingCdata) {
             return;
+        }
+
+        if (name.equalsIgnoreCase("src") && scriptOrStyle) {
+            scriptOrStyleSrc = true;
         }
 
         Class valueClass = value.getClass();
@@ -648,7 +657,7 @@ public class HtmlResponseWriter extends ResponseWriter {
             writer.write('>');
             closeStart = false;
         }
-        if (scriptOrStyle) {
+        if (scriptOrStyle && !scriptOrStyleSrc) {
             scriptOrStyle = false;
             isXhtml = getContentType().equals(
                 RIConstants.XHTML_CONTENT_TYPE);
