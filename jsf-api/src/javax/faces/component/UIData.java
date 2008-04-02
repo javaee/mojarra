@@ -725,7 +725,7 @@ public class UIData extends UIComponentBase
 	    throw new NullPointerException();
 	}
 
-        String myId = this.getClientId(context);
+        String myId = super.getClientId(context);
 	boolean found = false;        
 	if (clientId.equals(myId)) {
 	    try {
