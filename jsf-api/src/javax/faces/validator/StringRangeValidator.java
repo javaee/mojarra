@@ -1,9 +1,9 @@
 /*
- * $Id: StringRangeValidator.java,v 1.10 2003/01/21 20:37:16 eburns Exp $
+ * $Id: StringRangeValidator.java,v 1.11 2003/02/20 22:46:41 ofung Exp $
  */
 
 /*
- * Copyright 2002-2003 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 

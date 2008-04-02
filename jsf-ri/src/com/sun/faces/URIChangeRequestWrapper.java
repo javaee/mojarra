@@ -1,9 +1,9 @@
 /*
- * $Id: URIChangeRequestWrapper.java,v 1.2 2002/03/13 18:04:21 eburns Exp $
+ * $Id: URIChangeRequestWrapper.java,v 1.3 2003/02/20 22:48:33 ofung Exp $
  */
 
 /*
- * Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -42,7 +42,7 @@ import java.util.NoSuchElementException;
  * is kept to this instance and we rely on automatic garbage collection. <P>
 
  *
- * @version $Id: URIChangeRequestWrapper.java,v 1.2 2002/03/13 18:04:21 eburns Exp $
+ * @version $Id: URIChangeRequestWrapper.java,v 1.3 2003/02/20 22:48:33 ofung Exp $
  * 
  * @see	com.sun.faces.CommandDispatcherImpl#dispatch
  *

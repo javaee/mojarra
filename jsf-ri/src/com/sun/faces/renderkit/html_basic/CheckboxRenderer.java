@@ -1,10 +1,10 @@
 /*
- * $Id: CheckboxRenderer.java,v 1.41 2003/01/24 21:42:41 rkitain Exp $
+ * $Id: CheckboxRenderer.java,v 1.42 2003/02/20 22:48:57 ofung Exp $
  *
  */
 
 /*
- * Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -40,7 +40,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: CheckboxRenderer.java,v 1.41 2003/01/24 21:42:41 rkitain Exp $
+ * @version $Id: CheckboxRenderer.java,v 1.42 2003/02/20 22:48:57 ofung Exp $
  * 
  * @see	Blah
  * @see	Bloo

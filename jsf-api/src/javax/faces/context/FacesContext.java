@@ -1,9 +1,9 @@
 /*
- * $Id: FacesContext.java,v 1.36 2003/02/03 22:57:48 craigmcc Exp $
+ * $Id: FacesContext.java,v 1.37 2003/02/20 22:46:20 ofung Exp $
  */
 
 /*
- * Copyright 2002-2003 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 

@@ -1,9 +1,9 @@
 /*
- * $Id: Action.java,v 1.1 2003/01/21 23:23:32 rkitain Exp $
+ * $Id: Action.java,v 1.2 2003/02/20 22:50:37 ofung Exp $
  */
 
 /*
- * Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -24,7 +24,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Action.java,v 1.1 2003/01/21 23:23:32 rkitain Exp $
+ * @version $Id: Action.java,v 1.2 2003/02/20 22:50:37 ofung Exp $
  * 
  * @see	Blah
  * @see	Bloo

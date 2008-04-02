@@ -1,9 +1,9 @@
 /*
- * $Id: LifecycleCallback.java,v 1.1 2002/06/01 00:58:21 eburns Exp $
+ * $Id: LifecycleCallback.java,v 1.2 2003/02/20 22:48:47 ofung Exp $
  */
 
 /*
- * Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -20,7 +20,7 @@ import javax.faces.context.FacesContext;
  *  <B>LifecycleCallback</B> defines an interface that allows plugging
  *  into the GenericPhase.traverseTreeInvokingMethod() system.
  *
- * @version $Id: LifecycleCallback.java,v 1.1 2002/06/01 00:58:21 eburns Exp $
+ * @version $Id: LifecycleCallback.java,v 1.2 2003/02/20 22:48:47 ofung Exp $
  * 
  * @see	com.sun.faces.lifecycle.GenericPhaseImpl
  *

@@ -1,9 +1,9 @@
 /*
- * $Id: TestMessageResourcesFactoryImpl.java,v 1.2 2002/07/25 16:36:35 eburns Exp $
+ * $Id: TestMessageResourcesFactoryImpl.java,v 1.3 2003/02/20 22:49:52 ofung Exp $
  */
 
 /*
- * Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -25,7 +25,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestMessageResourcesFactoryImpl.java,v 1.2 2002/07/25 16:36:35 eburns Exp $
+ * @version $Id: TestMessageResourcesFactoryImpl.java,v 1.3 2003/02/20 22:49:52 ofung Exp $
  * 
  * @see	Blah
  * @see	Bloo

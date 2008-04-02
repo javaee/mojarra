@@ -1,9 +1,9 @@
 /*
- * $Id: ReconstituteRequestTreePhase.java,v 1.9 2003/01/17 18:07:16 rkitain Exp $
+ * $Id: ReconstituteRequestTreePhase.java,v 1.10 2003/02/20 22:48:48 ofung Exp $
  */
 
 /*
- * Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -40,7 +40,7 @@ import com.sun.faces.util.DebugUtil;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: ReconstituteRequestTreePhase.java,v 1.9 2003/01/17 18:07:16 rkitain Exp $
+ * @version $Id: ReconstituteRequestTreePhase.java,v 1.10 2003/02/20 22:48:48 ofung Exp $
  * 
  * @see	com.sun.faces.lifecycle.DefaultLifecycleImpl
  * @see	javax.faces.lifecycle.Lifecycle#CREATE_REQUEST_TREE_PHASE

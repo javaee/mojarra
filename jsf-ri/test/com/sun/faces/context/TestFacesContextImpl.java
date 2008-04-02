@@ -1,9 +1,9 @@
 /*
- * $Id: TestFacesContextImpl.java,v 1.19 2003/02/11 01:03:00 horwat Exp $
+ * $Id: TestFacesContextImpl.java,v 1.20 2003/02/20 22:49:50 ofung Exp $
  */
 
 /*
- * Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -54,7 +54,7 @@ import com.sun.faces.ServletFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestFacesContextImpl.java,v 1.19 2003/02/11 01:03:00 horwat Exp $
+ * @version $Id: TestFacesContextImpl.java,v 1.20 2003/02/20 22:49:50 ofung Exp $
  * 
  * @see	Blah
  * @see	Bloo

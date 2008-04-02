@@ -1,9 +1,9 @@
 /*
- * $Id: NumberRenderer.java,v 1.16 2003/02/19 00:31:52 rkitain Exp $
+ * $Id: NumberRenderer.java,v 1.17 2003/02/20 22:49:01 ofung Exp $
  */
 
 /*
- * Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -46,7 +46,7 @@ import java.text.ParseException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: NumberRenderer.java,v 1.16 2003/02/19 00:31:52 rkitain Exp $
+ * @version $Id: NumberRenderer.java,v 1.17 2003/02/20 22:49:01 ofung Exp $
  * 
  * @see	Blah
  * @see	Bloo

@@ -1,9 +1,9 @@
 /*
- * $Id: FactoryFinder.java,v 1.13 2003/02/03 22:57:45 craigmcc Exp $
+ * $Id: FactoryFinder.java,v 1.14 2003/02/20 22:46:08 ofung Exp $
  */
 
 /*
- * Copyright 2002-2003 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 

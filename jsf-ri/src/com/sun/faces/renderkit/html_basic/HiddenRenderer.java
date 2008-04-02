@@ -1,9 +1,9 @@
 /*
- * $Id: HiddenRenderer.java,v 1.5 2003/02/18 23:05:12 eburns Exp $
+ * $Id: HiddenRenderer.java,v 1.6 2003/02/20 22:48:59 ofung Exp $
  */
 
 /*
- * Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -40,7 +40,7 @@ import com.sun.faces.RIConstants;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HiddenRenderer.java,v 1.5 2003/02/18 23:05:12 eburns Exp $
+ * @version $Id: HiddenRenderer.java,v 1.6 2003/02/20 22:48:59 ofung Exp $
  * 
  * @see	Blah
  * @see	Bloo

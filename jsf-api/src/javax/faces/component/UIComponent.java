@@ -1,9 +1,9 @@
 /*
- * $Id: UIComponent.java,v 1.74 2003/02/14 00:40:09 craigmcc Exp $
+ * $Id: UIComponent.java,v 1.75 2003/02/20 22:46:11 ofung Exp $
  */
 
 /*
- * Copyright 2002-2003 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 

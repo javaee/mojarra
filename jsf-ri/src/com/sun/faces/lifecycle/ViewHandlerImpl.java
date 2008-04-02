@@ -1,12 +1,12 @@
 /* 
- * $Id: ViewHandlerImpl.java,v 1.8 2003/01/22 05:38:12 rkitain Exp $ 
+ * $Id: ViewHandlerImpl.java,v 1.9 2003/02/20 22:48:48 ofung Exp $ 
  */ 
 
 
-/* 
- * Copyright 2002 Sun Microsystems, Inc. All rights reserved. 
- * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms. 
- */ 
+/*
+ * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+ */
 
 
 // ViewHandlerImpl.java 
@@ -31,7 +31,7 @@ import javax.servlet.RequestDispatcher;
 
 /** 
  * <B>ViewHandlerImpl</B> is the default implementation class for ViewHandler. 
- * @version $Id: ViewHandlerImpl.java,v 1.8 2003/01/22 05:38:12 rkitain Exp $ 
+ * @version $Id: ViewHandlerImpl.java,v 1.9 2003/02/20 22:48:48 ofung Exp $ 
  * 
  * @see javax.faces.lifecycle.ViewHandler 
  * 

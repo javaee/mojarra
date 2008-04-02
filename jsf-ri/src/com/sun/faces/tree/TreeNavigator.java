@@ -1,9 +1,9 @@
 /*
- * $Id: TreeNavigator.java,v 1.1 2002/06/01 00:58:22 eburns Exp $
+ * $Id: TreeNavigator.java,v 1.2 2003/02/20 22:49:38 ofung Exp $
  */
 
 /*
- * Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -38,7 +38,7 @@ import javax.faces.component.UIComponent;
  * multiple times by calling reset between traversals.
 
  *
- * @version $Id: TreeNavigator.java,v 1.1 2002/06/01 00:58:22 eburns Exp $
+ * @version $Id: TreeNavigator.java,v 1.2 2003/02/20 22:49:38 ofung Exp $
  * 
  * @see	Blah
  * @see	Bloo

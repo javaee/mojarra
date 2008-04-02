@@ -1,9 +1,9 @@
 /*
- * $Id: TestRenderResponsePhase.java,v 1.45 2003/02/14 00:52:14 horwat Exp $
+ * $Id: TestRenderResponsePhase.java,v 1.46 2003/02/20 22:49:57 ofung Exp $
  */
 
 /*
- * Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -51,7 +51,7 @@ import javax.servlet.jsp.PageContext;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderResponsePhase.java,v 1.45 2003/02/14 00:52:14 horwat Exp $
+ * @version $Id: TestRenderResponsePhase.java,v 1.46 2003/02/20 22:49:57 ofung Exp $
  * 
  * @see	Blah
  * @see	Bloo

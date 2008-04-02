@@ -1,9 +1,9 @@
 /*
- * $Id: LifecycleImpl.java,v 1.17 2003/02/04 19:57:31 rogerk Exp $
+ * $Id: LifecycleImpl.java,v 1.18 2003/02/20 22:48:48 ofung Exp $
  */
 
 /*
- * Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -37,7 +37,7 @@ import java.util.HashMap;
  *  Lifecycle in the JSF RI. <P>
  *
  *
- * @version $Id: LifecycleImpl.java,v 1.17 2003/02/04 19:57:31 rogerk Exp $
+ * @version $Id: LifecycleImpl.java,v 1.18 2003/02/20 22:48:48 ofung Exp $
  * 
  * @see	javax.faces.lifecycle.Lifecycle
  *

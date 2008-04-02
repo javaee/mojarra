@@ -1,9 +1,9 @@
 /*
- * $Id: CustomerBean.java,v 1.2 2002/09/10 01:05:31 visvan Exp $
+ * $Id: CustomerBean.java,v 1.3 2003/02/20 22:49:45 ofung Exp $
  */
 
 /*
- * Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 

@@ -1,5 +1,10 @@
+/*
+ * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+ */
+
 /**
- * $Id: TestRenderers_3.java,v 1.12 2003/02/14 01:14:46 craigmcc Exp $
+ * $Id: TestRenderers_3.java,v 1.13 2003/02/20 22:50:06 ofung Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -38,7 +43,7 @@ import com.sun.faces.tree.SimpleTreeImpl;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_3.java,v 1.12 2003/02/14 01:14:46 craigmcc Exp $
+ * @version $Id: TestRenderers_3.java,v 1.13 2003/02/20 22:50:06 ofung Exp $
  * 
  *
  */

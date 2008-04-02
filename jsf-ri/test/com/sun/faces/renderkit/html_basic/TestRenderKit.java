@@ -1,9 +1,9 @@
 /*
- * $Id: TestRenderKit.java,v 1.16 2002/09/07 16:36:06 eburns Exp $
+ * $Id: TestRenderKit.java,v 1.17 2003/02/20 22:50:05 ofung Exp $
  */
 
 /*
- * Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -41,7 +41,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderKit.java,v 1.16 2002/09/07 16:36:06 eburns Exp $
+ * @version $Id: TestRenderKit.java,v 1.17 2003/02/20 22:50:05 ofung Exp $
  * 
  * @see	Blah
  * @see	Bloo

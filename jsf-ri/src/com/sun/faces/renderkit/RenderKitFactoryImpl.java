@@ -1,9 +1,9 @@
 /*
- * $Id: RenderKitFactoryImpl.java,v 1.7 2003/02/14 18:35:28 eburns Exp $
+ * $Id: RenderKitFactoryImpl.java,v 1.8 2003/02/20 22:48:54 ofung Exp $
  */
 
 /*
- * Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 

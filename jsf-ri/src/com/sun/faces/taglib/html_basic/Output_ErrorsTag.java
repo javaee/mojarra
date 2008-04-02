@@ -1,9 +1,9 @@
 /*
- * $Id: Output_ErrorsTag.java,v 1.4 2003/02/04 01:17:43 edburns Exp $
+ * $Id: Output_ErrorsTag.java,v 1.5 2003/02/20 22:49:17 ofung Exp $
  */
 
 /*
- * Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -28,7 +28,7 @@ import javax.faces.component.UIOutput;
 
  *
 
- * @version $Id: Output_ErrorsTag.java,v 1.4 2003/02/04 01:17:43 edburns Exp $
+ * @version $Id: Output_ErrorsTag.java,v 1.5 2003/02/20 22:49:17 ofung Exp $
  * 
  * @see	Blah
  * @see	Bloo

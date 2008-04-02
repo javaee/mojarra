@@ -1,9 +1,9 @@
 /*
- * $Id: PhaseId.java,v 1.5 2003/02/12 18:52:51 craigmcc Exp $
+ * $Id: PhaseId.java,v 1.6 2003/02/20 22:46:29 ofung Exp $
  */
 
 /*
- * Copyright 2002-2003 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 

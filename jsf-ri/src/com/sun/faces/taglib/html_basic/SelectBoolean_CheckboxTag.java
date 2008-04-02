@@ -1,9 +1,9 @@
 /*
- * $Id: SelectBoolean_CheckboxTag.java,v 1.38 2002/10/22 21:27:00 jvisvanathan Exp $
+ * $Id: SelectBoolean_CheckboxTag.java,v 1.39 2003/02/20 22:49:19 ofung Exp $
  */
 
 /*
- * Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -30,7 +30,7 @@ import com.sun.faces.taglib.FacesTag;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: SelectBoolean_CheckboxTag.java,v 1.38 2002/10/22 21:27:00 jvisvanathan Exp $
+ * @version $Id: SelectBoolean_CheckboxTag.java,v 1.39 2003/02/20 22:49:19 ofung Exp $
  * 
  * @see	Blah
  * @see	Bloo

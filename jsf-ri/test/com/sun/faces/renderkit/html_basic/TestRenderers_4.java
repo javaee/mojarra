@@ -1,5 +1,10 @@
+/*
+ * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+ */
+
 /**
- * $Id: TestRenderers_4.java,v 1.3 2003/02/11 01:38:02 horwat Exp $
+ * $Id: TestRenderers_4.java,v 1.4 2003/02/20 22:50:06 ofung Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -32,7 +37,7 @@ import java.util.ArrayList;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_4.java,v 1.3 2003/02/11 01:38:02 horwat Exp $
+ * @version $Id: TestRenderers_4.java,v 1.4 2003/02/20 22:50:06 ofung Exp $
  * 
  *
  */

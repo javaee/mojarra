@@ -1,9 +1,9 @@
 /*
- * $Id: LabelRenderer.java,v 1.8 2002/12/23 16:02:25 eburns Exp $
+ * $Id: LabelRenderer.java,v 1.9 2003/02/20 22:49:00 ofung Exp $
  */
 
 /*
- * Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -36,7 +36,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: LabelRenderer.java,v 1.8 2002/12/23 16:02:25 eburns Exp $
+ * @version $Id: LabelRenderer.java,v 1.9 2003/02/20 22:49:00 ofung Exp $
  * 
  * @see	Blah
  * @see	Bloo

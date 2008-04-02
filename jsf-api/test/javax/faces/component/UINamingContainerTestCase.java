@@ -1,9 +1,9 @@
 /*
- * $Id: UINamingContainerTestCase.java,v 1.1 2002/12/23 22:59:36 eburns Exp $
+ * $Id: UINamingContainerTestCase.java,v 1.2 2003/02/20 22:46:51 ofung Exp $
  */
 
 /*
- * Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 

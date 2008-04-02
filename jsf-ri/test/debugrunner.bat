@@ -1,5 +1,5 @@
 REM
-REM Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+REM Copyright 2003 Sun Microsystems, Inc. All rights reserved.
 REM SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 REM
 

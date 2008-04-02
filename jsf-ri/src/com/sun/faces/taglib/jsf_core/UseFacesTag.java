@@ -1,9 +1,9 @@
 /*
- * $Id: UseFacesTag.java,v 1.4 2003/01/17 18:07:23 rkitain Exp $
+ * $Id: UseFacesTag.java,v 1.5 2003/02/20 22:49:33 ofung Exp $
  */
 
 /*
- * Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -42,7 +42,7 @@ import javax.servlet.jsp.tagext.BodyTag;
  * does not have any renderers or attributes. It exists mainly to
  * save the state of the response tree once all tags have been rendered.
  *
- * @version $Id: UseFacesTag.java,v 1.4 2003/01/17 18:07:23 rkitain Exp $
+ * @version $Id: UseFacesTag.java,v 1.5 2003/02/20 22:49:33 ofung Exp $
  * 
  * @see	Blah
  * @see	Bloo

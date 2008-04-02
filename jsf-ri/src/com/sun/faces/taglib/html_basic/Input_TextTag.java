@@ -1,9 +1,9 @@
 /*
- * $Id: Input_TextTag.java,v 1.5 2003/02/14 01:14:44 craigmcc Exp $
+ * $Id: Input_TextTag.java,v 1.6 2003/02/20 22:49:17 ofung Exp $
  */
 
 /*
- * Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -16,7 +16,7 @@ import javax.faces.component.UIInput;
 
 /**
  *
- * @version $Id: Input_TextTag.java,v 1.5 2003/02/14 01:14:44 craigmcc Exp $
+ * @version $Id: Input_TextTag.java,v 1.6 2003/02/20 22:49:17 ofung Exp $
  * 
  * @see	Blah
  * @see	Bloo

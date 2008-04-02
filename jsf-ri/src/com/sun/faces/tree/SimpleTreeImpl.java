@@ -1,9 +1,9 @@
 /*
- * $Id: SimpleTreeImpl.java,v 1.6 2002/12/18 20:55:06 eburns Exp $
+ * $Id: SimpleTreeImpl.java,v 1.7 2003/02/20 22:49:38 ofung Exp $
  */
 
 /*
- * Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -29,7 +29,7 @@ import com.sun.faces.RIConstants;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: SimpleTreeImpl.java,v 1.6 2002/12/18 20:55:06 eburns Exp $
+ * @version $Id: SimpleTreeImpl.java,v 1.7 2003/02/20 22:49:38 ofung Exp $
  * 
  * @see	javax.faces.tree.Tree
  *

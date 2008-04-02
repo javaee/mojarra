@@ -1,9 +1,9 @@
 /*
- * $Id: FormTag.java,v 1.34 2003/02/04 20:54:19 visvan Exp $
+ * $Id: FormTag.java,v 1.35 2003/02/20 22:49:16 ofung Exp $
  */
 
 /*
- * Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -32,7 +32,7 @@ import com.sun.faces.RIConstants;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: FormTag.java,v 1.34 2003/02/04 20:54:19 visvan Exp $
+ * @version $Id: FormTag.java,v 1.35 2003/02/20 22:49:16 ofung Exp $
  * 
  * @see	Blah
  * @see	Bloo

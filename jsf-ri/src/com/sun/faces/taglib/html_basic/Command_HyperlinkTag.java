@@ -1,9 +1,9 @@
 /*
- * $Id: Command_HyperlinkTag.java,v 1.25 2003/02/20 21:36:48 horwat Exp $
+ * $Id: Command_HyperlinkTag.java,v 1.26 2003/02/20 22:49:15 ofung Exp $
  */
 
 /*
- * Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -31,7 +31,7 @@ import com.sun.faces.taglib.FacesTag;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: Command_HyperlinkTag.java,v 1.25 2003/02/20 21:36:48 horwat Exp $
+ * @version $Id: Command_HyperlinkTag.java,v 1.26 2003/02/20 22:49:15 ofung Exp $
  * 
  * @see	Blah
  * @see	Bloo

@@ -1,9 +1,9 @@
 /*
- * $Id: MessageResourcesFactoryImpl.java,v 1.4 2002/07/31 18:32:06 eburns Exp $
+ * $Id: MessageResourcesFactoryImpl.java,v 1.5 2003/02/20 22:48:36 ofung Exp $
  */
 
 /*
- * Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 

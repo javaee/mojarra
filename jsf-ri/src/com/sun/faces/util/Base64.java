@@ -1,7 +1,12 @@
 /*
- * $Header: /cvs/javaserverfaces-sources/jsf-ri/src/com/sun/faces/util/Attic/Base64.java,v 1.1 2002/07/31 19:22:03 jvisvanathan Exp $
- * $Revision: 1.1 $
- * $Date: 2002/07/31 19:22:03 $
+ * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+ */
+
+/*
+ * $Header: /cvs/javaserverfaces-sources/jsf-ri/src/com/sun/faces/util/Attic/Base64.java,v 1.2 2003/02/20 22:49:41 ofung Exp $
+ * $Revision: 1.2 $
+ * $Date: 2003/02/20 22:49:41 $
  * ====================================================================
  *
  * The Apache Software License, Version 1.1
@@ -76,7 +81,7 @@ import java.io.UnsupportedEncodingException;
  * 1996. Available at: http://www.ietf.org/rfc/rfc2045.txt
  * </p>
  * @@author Jeffrey Rodriguez
- * @@version $Revision: 1.1 $ $Date: 2002/07/31 19:22:03 $
+ * @@version $Revision: 1.2 $ $Date: 2003/02/20 22:49:41 $
  */
 public final class Base64 {
 

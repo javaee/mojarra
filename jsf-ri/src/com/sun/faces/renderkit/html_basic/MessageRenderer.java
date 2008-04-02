@@ -1,9 +1,9 @@
 /*
- * $Id: MessageRenderer.java,v 1.14 2003/01/17 18:07:21 rkitain Exp $
+ * $Id: MessageRenderer.java,v 1.15 2003/02/20 22:49:01 ofung Exp $
  */
 
 /*
- * Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -40,7 +40,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: MessageRenderer.java,v 1.14 2003/01/17 18:07:21 rkitain Exp $
+ * @version $Id: MessageRenderer.java,v 1.15 2003/02/20 22:49:01 ofung Exp $
  * 
  * @see	Blah
  * @see	Bloo

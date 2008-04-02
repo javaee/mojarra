@@ -1,9 +1,9 @@
 /*
- * $Id: TextRenderer.java,v 1.42 2003/02/19 00:31:52 rkitain Exp $
+ * $Id: TextRenderer.java,v 1.43 2003/02/20 22:49:02 ofung Exp $
  */
 
 /*
- * Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -44,7 +44,7 @@ import com.sun.faces.RIConstants;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TextRenderer.java,v 1.42 2003/02/19 00:31:52 rkitain Exp $
+ * @version $Id: TextRenderer.java,v 1.43 2003/02/20 22:49:02 ofung Exp $
  * 
  * @see	Blah
  * @see	Bloo

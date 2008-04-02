@@ -1,9 +1,9 @@
 /*
- * $Id: DataRenderer.java,v 1.4 2003/01/17 18:07:19 rkitain Exp $
+ * $Id: DataRenderer.java,v 1.5 2003/02/20 22:48:57 ofung Exp $
  */
 
 /*
- * Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -23,7 +23,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: DataRenderer.java,v 1.4 2003/01/17 18:07:19 rkitain Exp $
+ * @version $Id: DataRenderer.java,v 1.5 2003/02/20 22:48:57 ofung Exp $
  *  
  */
 

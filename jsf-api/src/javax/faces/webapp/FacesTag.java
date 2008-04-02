@@ -1,9 +1,9 @@
 /*
- * $Id: FacesTag.java,v 1.32 2003/02/03 22:57:52 craigmcc Exp $
+ * $Id: FacesTag.java,v 1.33 2003/02/20 22:46:44 ofung Exp $
  */
 
 /*
- * Copyright 2002-2003 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 

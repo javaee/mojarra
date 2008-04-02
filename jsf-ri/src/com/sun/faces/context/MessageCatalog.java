@@ -1,9 +1,9 @@
 /*
- * $Id: MessageCatalog.java,v 1.2 2002/06/25 20:47:55 jvisvanathan Exp $
+ * $Id: MessageCatalog.java,v 1.3 2003/02/20 22:48:36 ofung Exp $
  */
 
 /*
- * Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -21,7 +21,7 @@ import org.mozilla.util.ParameterCheck;
  *
  *  <B>MessageCatalog</B> maintains a list of messages for a particular locale.
  *
- * @version $Id: MessageCatalog.java,v 1.2 2002/06/25 20:47:55 jvisvanathan Exp $
+ * @version $Id: MessageCatalog.java,v 1.3 2003/02/20 22:48:36 ofung Exp $
  * 
  * @see com.sun.faces.context.MessageTemplate
  *

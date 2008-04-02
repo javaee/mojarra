@@ -1,9 +1,9 @@
 /*
- * $Id: HyperlinkRenderer.java,v 1.38 2003/02/20 21:36:47 horwat Exp $
+ * $Id: HyperlinkRenderer.java,v 1.39 2003/02/20 22:49:00 ofung Exp $
  */
 
 /*
- * Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -46,7 +46,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HyperlinkRenderer.java,v 1.38 2003/02/20 21:36:47 horwat Exp $
+ * @version $Id: HyperlinkRenderer.java,v 1.39 2003/02/20 22:49:00 ofung Exp $
  * 
  * @see	Blah
  * @see	Bloo

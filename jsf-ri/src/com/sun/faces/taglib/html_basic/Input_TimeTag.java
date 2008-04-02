@@ -1,9 +1,9 @@
 /*
- * $Id: Input_TimeTag.java,v 1.2 2002/10/22 21:26:59 jvisvanathan Exp $
+ * $Id: Input_TimeTag.java,v 1.3 2003/02/20 22:49:17 ofung Exp $
  */
 
 /*
- * Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -25,7 +25,7 @@ import com.sun.faces.util.Util;
 
 /**
  *
- * @version $Id: Input_TimeTag.java,v 1.2 2002/10/22 21:26:59 jvisvanathan Exp $
+ * @version $Id: Input_TimeTag.java,v 1.3 2003/02/20 22:49:17 ofung Exp $
  * 
  * @see	Blah
  * @see	Bloo

@@ -1,9 +1,9 @@
 /*
- * $Id: GenericPhaseImpl.java,v 1.6 2003/01/17 18:07:15 rkitain Exp $
+ * $Id: GenericPhaseImpl.java,v 1.7 2003/02/20 22:48:47 ofung Exp $
  */
 
 /*
- * Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -32,7 +32,7 @@ import com.sun.faces.tree.TreeNavigatorImpl;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: GenericPhaseImpl.java,v 1.6 2003/01/17 18:07:15 rkitain Exp $
+ * @version $Id: GenericPhaseImpl.java,v 1.7 2003/02/20 22:48:47 ofung Exp $
  * 
  * @see	com.sun.faces.lifecycle.DefaultLifecycleImpl
  * @see	javax.faces.lifecycle.Phase

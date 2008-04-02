@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<!--
+ Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+-->
+
 <!-- Content Stylesheet for Outstanding Issues Detail List -->
-<!-- $Id: OutstandingIssuesDetail.xsl,v 1.2 2002/10/03 00:47:02 craigmcc Exp $ -->
+<!-- $Id: OutstandingIssuesDetail.xsl,v 1.3 2003/02/20 22:46:06 ofung Exp $ -->
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 version="1.0">

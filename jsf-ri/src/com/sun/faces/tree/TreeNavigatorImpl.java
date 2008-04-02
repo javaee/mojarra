@@ -1,9 +1,9 @@
 /*
- * $Id: TreeNavigatorImpl.java,v 1.2 2003/02/14 00:18:02 eburns Exp $
+ * $Id: TreeNavigatorImpl.java,v 1.3 2003/02/20 22:49:38 ofung Exp $
  */
 
 /*
- * Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -21,7 +21,7 @@ import java.util.Stack;
 
 /**
 
- * @version $Id: TreeNavigatorImpl.java,v 1.2 2003/02/14 00:18:02 eburns Exp $
+ * @version $Id: TreeNavigatorImpl.java,v 1.3 2003/02/20 22:49:38 ofung Exp $
  * 
  * @see	javax.faces.TreeNavigator
 

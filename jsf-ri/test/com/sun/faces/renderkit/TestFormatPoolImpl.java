@@ -1,9 +1,9 @@
 /*
- * $Id: TestFormatPoolImpl.java,v 1.7 2002/10/11 00:58:35 jvisvanathan Exp $
+ * $Id: TestFormatPoolImpl.java,v 1.8 2003/02/20 22:50:03 ofung Exp $
  */
 
 /*
- * Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -37,7 +37,7 @@ import com.sun.faces.RIConstants;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestFormatPoolImpl.java,v 1.7 2002/10/11 00:58:35 jvisvanathan Exp $
+ * @version $Id: TestFormatPoolImpl.java,v 1.8 2003/02/20 22:50:03 ofung Exp $
  * 
  * @see	Blah
  * @see	Bloo

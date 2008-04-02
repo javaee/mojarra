@@ -1,3 +1,8 @@
+<!--
+ Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+-->
+
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
   <head>
@@ -10,7 +15,7 @@
 
     <h1>UIPanel</h1>
 
-    <h3>$Id: UIPanel.jsp,v 1.8 2003/01/11 00:26:57 eburns Exp $</h3>
+    <h3>$Id: UIPanel.jsp,v 1.9 2003/02/20 22:50:15 ofung Exp $</h3>
 
     <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
     <%@ taglib uri="http://java.sun.com/jstl/fmt" prefix="fmt" %>

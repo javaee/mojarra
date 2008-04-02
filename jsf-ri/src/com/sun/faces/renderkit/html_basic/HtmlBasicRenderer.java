@@ -1,9 +1,9 @@
 /*
- * $Id: HtmlBasicRenderer.java,v 1.27 2003/02/19 00:31:51 rkitain Exp $
+ * $Id: HtmlBasicRenderer.java,v 1.28 2003/02/20 22:48:59 ofung Exp $
  */
 
 /*
- * Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 

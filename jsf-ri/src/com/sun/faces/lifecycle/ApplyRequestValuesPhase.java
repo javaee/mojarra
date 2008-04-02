@@ -1,9 +1,9 @@
 /*
- * $Id: ApplyRequestValuesPhase.java,v 1.6 2003/01/21 23:23:15 rkitain Exp $
+ * $Id: ApplyRequestValuesPhase.java,v 1.7 2003/02/20 22:48:46 ofung Exp $
  */
 
 /*
- * Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -32,7 +32,7 @@ import java.io.IOException;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: ApplyRequestValuesPhase.java,v 1.6 2003/01/21 23:23:15 rkitain Exp $
+ * @version $Id: ApplyRequestValuesPhase.java,v 1.7 2003/02/20 22:48:46 ofung Exp $
  * 
  * @see	com.sun.faces.lifecycle.DefaultLifecycleImpl
  * @see	javax.faces.lifecycle.Lifecycle#APPLY_REQUEST_VALUES_PHASE

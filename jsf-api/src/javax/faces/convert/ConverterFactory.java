@@ -1,9 +1,9 @@
 /*
- * $Id: ConverterFactory.java,v 1.5 2003/02/13 03:49:45 craigmcc Exp $
+ * $Id: ConverterFactory.java,v 1.6 2003/02/20 22:46:25 ofung Exp $
  */
 
 /*
- * Copyright 2002-2003 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 

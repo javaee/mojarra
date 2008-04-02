@@ -1,6 +1,11 @@
+/*
+ * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+ */
+
 
 /**
- * $Id: SelectManyCheckboxListRenderer.java,v 1.5 2002/12/18 20:55:00 eburns Exp $
+ * $Id: SelectManyCheckboxListRenderer.java,v 1.6 2003/02/20 22:49:02 ofung Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -27,7 +32,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: SelectManyCheckboxListRenderer.java,v 1.5 2002/12/18 20:55:00 eburns Exp $
+ * @version $Id: SelectManyCheckboxListRenderer.java,v 1.6 2003/02/20 22:49:02 ofung Exp $
  * 
  * @see Blah
  * @see Bloo

@@ -1,9 +1,9 @@
 /*
- * $Id: Command_ButtonTag.java,v 1.31 2002/10/22 21:26:58 jvisvanathan Exp $
+ * $Id: Command_ButtonTag.java,v 1.32 2003/02/20 22:49:15 ofung Exp $
  */
 
 /*
- * Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -31,7 +31,7 @@ import com.sun.faces.taglib.FacesTag;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: Command_ButtonTag.java,v 1.31 2002/10/22 21:26:58 jvisvanathan Exp $
+ * @version $Id: Command_ButtonTag.java,v 1.32 2003/02/20 22:49:15 ofung Exp $
  * 
  * @see	Blah
  * @see	Bloo

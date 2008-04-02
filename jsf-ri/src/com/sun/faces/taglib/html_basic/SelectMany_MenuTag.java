@@ -1,6 +1,11 @@
+/*
+ * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+ */
+
 
 /**
- * $Id: SelectMany_MenuTag.java,v 1.4 2002/10/22 21:27:01 jvisvanathan Exp $
+ * $Id: SelectMany_MenuTag.java,v 1.5 2003/02/20 22:49:19 ofung Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -25,7 +30,7 @@ import com.sun.faces.taglib.FacesTag;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: SelectMany_MenuTag.java,v 1.4 2002/10/22 21:27:01 jvisvanathan Exp $
+ * @version $Id: SelectMany_MenuTag.java,v 1.5 2003/02/20 22:49:19 ofung Exp $
  * 
  * @see	Blah
  * @see	Bloo

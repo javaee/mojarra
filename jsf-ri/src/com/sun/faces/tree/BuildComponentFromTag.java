@@ -1,9 +1,9 @@
 /*
- * $Id: BuildComponentFromTag.java,v 1.2 2002/07/31 22:40:10 eburns Exp $
+ * $Id: BuildComponentFromTag.java,v 1.3 2003/02/20 22:49:37 ofung Exp $
  */
 
 /*
- * Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -27,7 +27,7 @@ import org.xml.sax.Attributes;
  * Has the same scope as the TreeEngine instance.  The TreeEngine has a
  * BuildComponentFromTag instance. <P>
  *
- * @version $Id: BuildComponentFromTag.java,v 1.2 2002/07/31 22:40:10 eburns Exp $
+ * @version $Id: BuildComponentFromTag.java,v 1.3 2003/02/20 22:49:37 ofung Exp $
  * 
  * @see	com.sun.faces.treebuilder.TreeEngine#getTreeForURI
  *

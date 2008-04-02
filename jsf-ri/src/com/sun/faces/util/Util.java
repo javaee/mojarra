@@ -1,9 +1,9 @@
 /*
- * $Id: Util.java,v 1.42 2003/02/04 01:44:08 visvan Exp $
+ * $Id: Util.java,v 1.43 2003/02/20 22:49:42 ofung Exp $
  */
 
 /*
- * Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -50,7 +50,7 @@ import java.util.Locale;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.42 2003/02/04 01:44:08 visvan Exp $
+ * @version $Id: Util.java,v 1.43 2003/02/20 22:49:42 ofung Exp $
  * 
  * @see	Blah
  * @see	Bloo

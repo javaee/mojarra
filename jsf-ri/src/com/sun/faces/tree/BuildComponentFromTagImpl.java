@@ -1,9 +1,9 @@
 /*
- * $Id: BuildComponentFromTagImpl.java,v 1.9 2003/02/14 01:14:46 craigmcc Exp $
+ * $Id: BuildComponentFromTagImpl.java,v 1.10 2003/02/20 22:49:37 ofung Exp $
  */
 
 /*
- * Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -36,7 +36,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: BuildComponentFromTagImpl.java,v 1.9 2003/02/14 01:14:46 craigmcc Exp $
+ * @version $Id: BuildComponentFromTagImpl.java,v 1.10 2003/02/20 22:49:37 ofung Exp $
  * 
  * @see	Blah
  * @see	Bloo

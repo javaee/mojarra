@@ -1,9 +1,9 @@
 /*
- * $Id: Panel_GridTag.java,v 1.3 2002/10/22 21:27:00 jvisvanathan Exp $
+ * $Id: Panel_GridTag.java,v 1.4 2003/02/20 22:49:18 ofung Exp $
  */
 
 /*
- * Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -16,7 +16,7 @@ import javax.servlet.jsp.JspException;
 
 /**
  *
- * @version $Id: Panel_GridTag.java,v 1.3 2002/10/22 21:27:00 jvisvanathan Exp $
+ * @version $Id: Panel_GridTag.java,v 1.4 2003/02/20 22:49:18 ofung Exp $
  * 
  * @see	Blah
  * @see	Bloo

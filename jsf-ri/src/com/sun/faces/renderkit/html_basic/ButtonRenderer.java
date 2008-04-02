@@ -1,9 +1,9 @@
 /*
- * $Id: ButtonRenderer.java,v 1.43 2003/02/18 20:18:34 eburns Exp $
+ * $Id: ButtonRenderer.java,v 1.44 2003/02/20 22:48:56 ofung Exp $
  */
 
 /*
- * Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -52,7 +52,7 @@ import javax.servlet.http.HttpServletRequest;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ButtonRenderer.java,v 1.43 2003/02/18 20:18:34 eburns Exp $
+ * @version $Id: ButtonRenderer.java,v 1.44 2003/02/20 22:48:56 ofung Exp $
  * 
  * @see	Blah
  * @see	Bloo

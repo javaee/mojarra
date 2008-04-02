@@ -1,12 +1,12 @@
 /* 
- * $Id: TestViewHandlerImpl.java,v 1.12 2003/02/14 00:52:15 horwat Exp $ 
+ * $Id: TestViewHandlerImpl.java,v 1.13 2003/02/20 22:49:58 ofung Exp $ 
  */ 
 
 
-/* 
- * Copyright 2002 Sun Microsystems, Inc. All rights reserved. 
- * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms. 
- */ 
+/*
+ * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+ */
 
 
 // TestViewHandlerImpl.java 
@@ -63,7 +63,7 @@ import javax.servlet.jsp.PageContext;
  * 
  * <B>Lifetime And Scope</B> <P> 
  * 
- * @version $Id: TestViewHandlerImpl.java,v 1.12 2003/02/14 00:52:15 horwat Exp $ 
+ * @version $Id: TestViewHandlerImpl.java,v 1.13 2003/02/20 22:49:58 ofung Exp $ 
  * 
  * @see Blah 
  * @see Bloo 

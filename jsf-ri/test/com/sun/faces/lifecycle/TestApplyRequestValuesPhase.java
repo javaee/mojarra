@@ -1,9 +1,9 @@
 /*
- * $Id: TestApplyRequestValuesPhase.java,v 1.9 2003/01/21 23:23:23 rkitain Exp $
+ * $Id: TestApplyRequestValuesPhase.java,v 1.10 2003/02/20 22:49:55 ofung Exp $
  */
 
 /*
- * Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -34,7 +34,7 @@ import com.sun.faces.ServletFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestApplyRequestValuesPhase.java,v 1.9 2003/01/21 23:23:23 rkitain Exp $
+ * @version $Id: TestApplyRequestValuesPhase.java,v 1.10 2003/02/20 22:49:55 ofung Exp $
  * 
  * @see	Blah
  * @see	Bloo

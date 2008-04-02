@@ -1,5 +1,10 @@
 /*
- * $Id: ListboxRenderer.java,v 1.5 2002/09/19 00:38:22 jvisvanathan Exp $
+ * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+ */
+
+/*
+ * $Id: ListboxRenderer.java,v 1.6 2003/02/20 22:49:00 ofung Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -26,7 +31,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ListboxRenderer.java,v 1.5 2002/09/19 00:38:22 jvisvanathan Exp $
+ * @version $Id: ListboxRenderer.java,v 1.6 2003/02/20 22:49:00 ofung Exp $
  * 
  * @see Blah
  * @see Bloo

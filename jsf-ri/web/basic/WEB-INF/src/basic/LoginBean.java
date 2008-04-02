@@ -1,9 +1,9 @@
 /*
- * $Id: LoginBean.java,v 1.18 2003/02/04 01:44:09 visvan Exp $
+ * $Id: LoginBean.java,v 1.19 2003/02/20 22:50:39 ofung Exp $
  */
 
 /*
- * Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 

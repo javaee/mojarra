@@ -1,9 +1,9 @@
 /*
- * $Id: FormatPool.java,v 1.5 2002/08/17 21:57:10 eburns Exp $
+ * $Id: FormatPool.java,v 1.6 2003/02/20 22:48:52 ofung Exp $
  */
 
 /*
- * Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -49,7 +49,7 @@ Date date = formatPool.dateFormat_parse(getFacesContext(), input, result);
 
  * We'll add methods to this interface/implementation as needed. <P>
 
- * @version $Id: FormatPool.java,v 1.5 2002/08/17 21:57:10 eburns Exp $
+ * @version $Id: FormatPool.java,v 1.6 2003/02/20 22:48:52 ofung Exp $
  * 
  * @see	Blah
  * @see	Bloo

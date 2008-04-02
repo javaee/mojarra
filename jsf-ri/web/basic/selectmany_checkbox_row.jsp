@@ -1,3 +1,8 @@
+<!--
+ Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+-->
+
 				<tr>
 					<td>Multi-select checkbox:</td>
 					<td><h:selectmany_checkboxlist id="ManyApples3">

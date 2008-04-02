@@ -1,9 +1,9 @@
 /*
- * $Id: TestValidatorTags.java,v 1.5 2003/02/04 19:57:32 rogerk Exp $
+ * $Id: TestValidatorTags.java,v 1.6 2003/02/20 22:50:10 ofung Exp $
  */
 
 /*
- * Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -41,7 +41,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestValidatorTags.java,v 1.5 2003/02/04 19:57:32 rogerk Exp $
+ * @version $Id: TestValidatorTags.java,v 1.6 2003/02/20 22:50:10 ofung Exp $
  * 
  * @see	Blah
  * @see	Bloo

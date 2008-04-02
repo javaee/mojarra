@@ -1,5 +1,10 @@
 /*
- * $Id: MenuRenderer.java,v 1.9 2003/02/19 00:31:51 rkitain Exp $
+ * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+ */
+
+/*
+ * $Id: MenuRenderer.java,v 1.10 2003/02/20 22:49:01 ofung Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -33,7 +38,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: MenuRenderer.java,v 1.9 2003/02/19 00:31:51 rkitain Exp $
+ * @version $Id: MenuRenderer.java,v 1.10 2003/02/20 22:49:01 ofung Exp $
  * 
  * @see Blah
  * @see Bloo

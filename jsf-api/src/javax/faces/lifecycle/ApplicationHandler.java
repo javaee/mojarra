@@ -1,9 +1,9 @@
 /*
- * $Id: ApplicationHandler.java,v 1.6 2003/02/03 22:57:50 craigmcc Exp $
+ * $Id: ApplicationHandler.java,v 1.7 2003/02/20 22:46:33 ofung Exp $
  */
 
 /*
- * Copyright 2002-2003 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 

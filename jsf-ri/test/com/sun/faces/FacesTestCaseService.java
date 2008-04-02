@@ -1,9 +1,9 @@
 /*
- * $Id: FacesTestCaseService.java,v 1.9 2003/02/11 01:02:59 horwat Exp $
+ * $Id: FacesTestCaseService.java,v 1.10 2003/02/20 22:49:46 ofung Exp $
  */
 
 /*
- * Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -44,7 +44,7 @@ import java.io.IOException;
  * <B>Lifetime And Scope</B> <P> Same as the JspTestCase or
  * ServletTestCase instance that uses it.
  *
- * @version $Id: FacesTestCaseService.java,v 1.9 2003/02/11 01:02:59 horwat Exp $
+ * @version $Id: FacesTestCaseService.java,v 1.10 2003/02/20 22:49:46 ofung Exp $
  * 
  * @see	com.sun.faces.context.FacesContextFactoryImpl
  * @see	com.sun.faces.context.FacesContextImpl

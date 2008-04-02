@@ -1,15 +1,10 @@
 /*
- * $Id: CommandListenerImpl.java,v 1.9 2002/04/05 19:41:22 jvisvanathan Exp $
- *
- * Copyright 2000-2001 by Sun Microsystems, Inc.,
- * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
- * All rights reserved.
- *
- * This software is the confidential and proprietary information
- * of Sun Microsystems, Inc. ("Confidential Information").  You
- * shall not disclose such Confidential Information and shall use
- * it only in accordance with the terms of the license agreement
- * you entered into with Sun.
+ * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+ */
+
+/*
+ * $Id: CommandListenerImpl.java,v 1.10 2003/02/20 22:50:45 ofung Exp $
  */
 
 // CommandListenerImpl.java
@@ -50,7 +45,7 @@ import java.io.OptionalDataException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: CommandListenerImpl.java,v 1.9 2002/04/05 19:41:22 jvisvanathan Exp $
+ * @version $Id: CommandListenerImpl.java,v 1.10 2003/02/20 22:50:45 ofung Exp $
  * 
  * @see	Blah
  * @see	Bloo

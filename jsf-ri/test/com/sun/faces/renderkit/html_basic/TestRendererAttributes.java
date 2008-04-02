@@ -1,9 +1,9 @@
 /*
- * $Id: TestRendererAttributes.java,v 1.5 2002/11/12 22:17:01 jvisvanathan Exp $
+ * $Id: TestRendererAttributes.java,v 1.6 2003/02/20 22:50:05 ofung Exp $
  */
 
 /*
- * Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -39,7 +39,7 @@ import junit.framework.TestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRendererAttributes.java,v 1.5 2002/11/12 22:17:01 jvisvanathan Exp $
+ * @version $Id: TestRendererAttributes.java,v 1.6 2003/02/20 22:50:05 ofung Exp $
  * 
  * @see	Blah
  * @see	Bloo

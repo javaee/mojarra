@@ -1,9 +1,9 @@
 /*
- * $Id: TextModel.java,v 1.2 2001/12/20 22:26:45 ofung Exp $
+ * $Id: TextModel.java,v 1.3 2003/02/20 22:50:46 ofung Exp $
  */
 
 /*
- * Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -21,7 +21,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TextModel.java,v 1.2 2001/12/20 22:26:45 ofung Exp $
+ * @version $Id: TextModel.java,v 1.3 2003/02/20 22:50:46 ofung Exp $
  * 
  * @see	Blah
  * @see	Bloo

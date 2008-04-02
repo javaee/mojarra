@@ -1,9 +1,9 @@
 /*
- * $Id: ImageRenderer.java,v 1.8 2003/01/17 18:07:20 rkitain Exp $
+ * $Id: ImageRenderer.java,v 1.9 2003/02/20 22:49:00 ofung Exp $
  */
 
 /*
- * Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -35,7 +35,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ImageRenderer.java,v 1.8 2003/01/17 18:07:20 rkitain Exp $
+ * @version $Id: ImageRenderer.java,v 1.9 2003/02/20 22:49:00 ofung Exp $
  * 
  * @see	Blah
  * @see	Bloo

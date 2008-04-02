@@ -1,9 +1,9 @@
 /*
- * $Id: LengthValidator.java,v 1.13 2003/01/21 20:37:14 eburns Exp $
+ * $Id: LengthValidator.java,v 1.14 2003/02/20 22:46:40 ofung Exp $
  */
 
 /*
- * Copyright 2002-2003 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 

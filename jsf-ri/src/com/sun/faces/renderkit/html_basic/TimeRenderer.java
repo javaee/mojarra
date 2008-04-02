@@ -1,9 +1,9 @@
 /*
- * $Id: TimeRenderer.java,v 1.1 2002/08/17 21:57:12 eburns Exp $
+ * $Id: TimeRenderer.java,v 1.2 2003/02/20 22:49:02 ofung Exp $
  */
 
 /*
- * Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -51,7 +51,7 @@ import com.sun.faces.RIConstants;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TimeRenderer.java,v 1.1 2002/08/17 21:57:12 eburns Exp $
+ * @version $Id: TimeRenderer.java,v 1.2 2003/02/20 22:49:02 ofung Exp $
  * 
  * @see	Blah
  * @see	Bloo

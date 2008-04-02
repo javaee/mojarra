@@ -1,9 +1,9 @@
 /*
- * $Id: ConverterException.java,v 1.2 2003/02/03 22:57:49 craigmcc Exp $
+ * $Id: ConverterException.java,v 1.3 2003/02/20 22:46:25 ofung Exp $
  */
 
 /*
- * Copyright 2002-2003 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 

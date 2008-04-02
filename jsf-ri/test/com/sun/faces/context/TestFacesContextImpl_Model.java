@@ -1,9 +1,9 @@
 /*
- * $Id: TestFacesContextImpl_Model.java,v 1.10 2002/10/16 22:22:53 eburns Exp $
+ * $Id: TestFacesContextImpl_Model.java,v 1.11 2003/02/20 22:49:51 ofung Exp $
  */
 
 /*
- * Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -27,7 +27,7 @@ import com.sun.faces.TestBean.Inner2Bean;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestFacesContextImpl_Model.java,v 1.10 2002/10/16 22:22:53 eburns Exp $
+ * @version $Id: TestFacesContextImpl_Model.java,v 1.11 2003/02/20 22:49:51 ofung Exp $
  * 
  * @see	Blah
  * @see	Bloo

@@ -1,9 +1,9 @@
 /*
- * $Id: TestHtmlBasicValidator.java,v 1.2 2003/02/04 19:57:32 rogerk Exp $
+ * $Id: TestHtmlBasicValidator.java,v 1.3 2003/02/20 22:50:09 ofung Exp $
  */
 
 /*
- * Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -54,7 +54,7 @@ import javax.servlet.jsp.PageContext;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestHtmlBasicValidator.java,v 1.2 2003/02/04 19:57:32 rogerk Exp $
+ * @version $Id: TestHtmlBasicValidator.java,v 1.3 2003/02/20 22:50:09 ofung Exp $
  * 
  * @see	Blah
  * @see	Bloo
