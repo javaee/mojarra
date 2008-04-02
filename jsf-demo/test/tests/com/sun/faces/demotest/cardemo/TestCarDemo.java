@@ -1,5 +1,5 @@
 /*
- * $Id: TestCarDemo.java,v 1.5 2004/01/29 17:37:50 eburns Exp $
+ * $Id: TestCarDemo.java,v 1.6 2004/02/02 16:35:09 eburns Exp $
  */
 
 /*
@@ -187,6 +187,11 @@ public class TestCarDemo extends HtmlUnitTestCase {
 	Iterator iter = null;
 	
 	assertEquals(basePrice, currentPrice);
+
+	if (log.isTraceEnabled()) {
+	    log.trace("No package selected: base price: " + basePrice + 
+		      " current price: " + currentPrice);
+	}
 	
 	// press each of the package buttons and see that the price
 	// increases for each one.
@@ -203,11 +208,55 @@ public class TestCarDemo extends HtmlUnitTestCase {
 		    // resample yourPrice
 		    currentPrice = getNumberNearLabel("yourPriceLabel", 
 						      carDetail);
+		    if (log.isTraceEnabled()) {
+			log.trace("Package: " + label + " currentPrice: " + 
+				  currentPrice);
+		    }
+		    
 		    assertTrue(previousPrice < currentPrice);
 		    break;
 		}
 	    }
 	}
+
+	// press the "performance" button and see that some of the
+	// checkboxes are disabled.
+	HtmlCheckBoxInput checkbox = null;
+	List checkboxes = null;
+	Iterator checkboxIter = null;
+	boolean foundDisabled = false;
+	String disabledValue = null;
+	iter = buttons.iterator();
+	while (iter.hasNext()) {
+	    button = (HtmlSubmitInput) iter.next();
+	    // 2 is the index for the "performance" label
+	    label = resources.getString(packageLabelKeys[2]).trim();
+	    // if this is the button we're looking for
+	    if (-1 != (button.asText().indexOf(label))) {
+		// press it
+		carDetail = (HtmlPage) button.click();
+		checkboxes = getAllElementsOfGivenClass(carDetail, null,
+							HtmlCheckBoxInput.class);
+		// verify that at least one of the checkboxes are
+		// disabled.
+		checkboxIter = checkboxes.iterator();
+		while (checkboxIter.hasNext()) {
+		    checkbox = (HtmlCheckBoxInput) checkboxIter.next();
+		    if (null != (disabledValue = 
+				 checkbox.getDisabledAttribute())) {
+			if (log.isTraceEnabled()) {
+			    log.trace("Checkbox disabled: " + disabledValue);
+			}
+			foundDisabled = true;
+		    }
+		    break;
+		}
+	    }
+	    if (foundDisabled) {
+		break;
+	    }
+	}
+	assertTrue(foundDisabled);
     }
 
     protected int getNumberNearLabel(String label, HtmlPage page) {
