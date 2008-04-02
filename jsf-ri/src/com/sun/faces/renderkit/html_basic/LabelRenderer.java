@@ -1,5 +1,5 @@
 /*
- * $Id: LabelRenderer.java,v 1.30 2004/03/31 23:49:20 jvisvanathan Exp $
+ * $Id: LabelRenderer.java,v 1.31 2004/05/12 01:32:57 jvisvanathan Exp $
  */
 
 /*
@@ -25,7 +25,7 @@ import java.io.IOException;
 /**
  * <p><B>LabelRenderer</B> renders Label element.<p>.
  */
-public class LabelRenderer extends HtmlBasicRenderer {
+public class LabelRenderer extends HtmlBasicInputRenderer {
 
     //
     // Protected Constants
@@ -123,6 +123,15 @@ public class LabelRenderer extends HtmlBasicRenderer {
             writer.writeAttribute("class", styleClass, "styleClass");
         }
         writer.writeText("\n", null);
+        
+        // render the curentValue as label text if specified.
+        String value = getCurrentValue(context, component);
+        if (log.isTraceEnabled()) {
+            log.trace("Value to be rendered " + value);
+        }
+        if (value != null && value.length() != 0) {
+            writer.write(value);
+        }
         writer.flush();
     }
 

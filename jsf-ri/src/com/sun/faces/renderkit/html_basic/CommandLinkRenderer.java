@@ -1,5 +1,5 @@
 /*
- * $Id: CommandLinkRenderer.java,v 1.19 2004/03/31 18:48:34 eburns Exp $
+ * $Id: CommandLinkRenderer.java,v 1.20 2004/05/12 01:32:57 jvisvanathan Exp $
  */
 
 /*
@@ -223,6 +223,19 @@ public class CommandLinkRenderer extends HtmlBasicRenderer {
             command.getAttributes().get("styleClass");
         if (styleClass != null) {
             writer.writeAttribute("class", styleClass, "styleClass");
+        }
+        
+        // render the current value as link text.
+        String label = null;
+        Object value = ((UICommand) component).getValue();
+        if (value != null) {
+            label = value.toString();
+        }
+        if (log.isTraceEnabled()) {
+            log.trace("Value to be rendered " + value);
+        }
+        if (label != null && label.length() != 0) {
+            writer.write(label);
         }
         writer.flush();
 

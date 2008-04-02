@@ -446,9 +446,6 @@ must exist.  This is necessary for the MessageFactory class.
       <zipfileset dir="${source.home}"
              excludes="**/CVS/**"
                prefix="jsf-ri-src-${version}/src"/>
-               
-      <zipfileset dir="${jsf-portlet.dir}/portlet-lib" 
-            prefix="jsf-portlet-src-${version}" excludes="**/CVS/**" />
          
       <zipfileset dir="${test.home}"
              excludes="**/CVS/**"

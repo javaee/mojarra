@@ -96,6 +96,28 @@
 
 	<TD>
 
+	      <h:commandLink id="linkWithValue1" styleClass="hyperlinkClass"
+                  value="link text" />
+	</TD>
+
+      </TR>
+
+      <TR>
+
+	<TD>
+
+	      <h:commandLink id="linkWithValue2" styleClass="hyperlinkClass"
+                  value="link text">
+                  <h:outputText value="with some text" />
+              </h:commandLink>   
+	</TD>
+
+      </TR>
+
+      <TR>
+
+	<TD>
+
 	      <h:commandLink id="imageLink" style="someStyle">
                 <h:graphicImage url="duke.gif"/>
               </h:commandLink>
@@ -260,6 +282,27 @@
 
       </TR>
 
+      <TR>
+        <TD>
+             <h:outputLabel id="labe16" for="checkbox6" value = "LabelWithValue" />
+           
+              <h:selectBooleanCheckbox  id="checkbox6" rendered="true"
+                   styleClass="selectbooleanClass" />
+	</TD>
+
+      </TR>
+   
+      <TR>
+        <TD>
+             <h:outputLabel id="labe17" for="checkbox7" value="LabelWithValue">
+                <h:outputText id="outputlabel7" value="andsometext"/>
+              </h:outputLabel>
+           
+              <h:selectBooleanCheckbox  id="checkbox7" rendered="true"
+                   styleClass="selectbooleanClass" />
+	</TD>
+
+      </TR>
       <TR>
 
 	<TD>
