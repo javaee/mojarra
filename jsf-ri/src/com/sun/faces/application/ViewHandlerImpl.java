@@ -1,5 +1,5 @@
 /* 
- * $Id: ViewHandlerImpl.java,v 1.79 2006/08/31 21:58:00 rlubke Exp $ 
+ * $Id: ViewHandlerImpl.java,v 1.81 2006/08/31 22:26:39 rlubke Exp $ 
  */ 
 
 
@@ -69,7 +69,7 @@ import com.sun.faces.util.Util;
 /**
  * <B>ViewHandlerImpl</B> is the default implementation class for ViewHandler.
  *
- * @version $Id: ViewHandlerImpl.java,v 1.79 2006/08/31 21:58:00 rlubke Exp $
+ * @version $Id: ViewHandlerImpl.java,v 1.81 2006/08/31 22:26:39 rlubke Exp $
  * @see javax.faces.application.ViewHandler
  */
 public class ViewHandlerImpl extends ViewHandler {
@@ -148,24 +148,22 @@ public class ViewHandlerImpl extends ViewHandler {
                 renderFactory.getRenderKit(context, viewToRender.getRenderKitId());
                 
         ResponseWriter oldWriter = context.getResponseWriter();
+
         if (bufSize == -1) {
-            synchronized (this) {
-                if (bufSize == -1) {
-                    WebConfiguration webConfig =
-                          WebConfiguration
-                                .getInstance(context.getExternalContext());
-                    try {
-                        bufSize = Integer
-                              .parseInt(webConfig.getContextInitParameter(
-                                    WebContextInitParameter.ResponseBufferSize));
-                    } catch (NumberFormatException nfe) {
-                        bufSize = Integer
-                              .parseInt(WebContextInitParameter.ResponseBufferSize.getDefaultValue());
-                    }
-                }
+            WebConfiguration webConfig =
+                  WebConfiguration
+                        .getInstance(context.getExternalContext());
+            try {
+                bufSize = Integer
+                      .parseInt(webConfig.getContextInitParameter(
+                            WebContextInitParameter.ResponseBufferSize));
+            } catch (NumberFormatException nfe) {
+                bufSize = Integer
+                      .parseInt(WebContextInitParameter.ResponseBufferSize.getDefaultValue());
             }
         }
-              
+
+
         WriteBehindStringWriter strWriter = 
               new WriteBehindStringWriter(context, bufSize);
         ResponseWriter newWriter;
@@ -885,19 +883,21 @@ public class ViewHandlerImpl extends ViewHandler {
      * @return the view ID with an altered suffix mapping (if necessary)
      */
     private String convertViewId(FacesContext context, String viewId) {
-        synchronized (this) {
+
+        if (contextDefaultSuffix == null) {
+            contextDefaultSuffix =
+                  WebConfiguration
+                        .getInstance(context.getExternalContext())
+                        .getContextInitParameter(WebContextInitParameter.JspDefaultSuffix);
             if (contextDefaultSuffix == null) {
-                contextDefaultSuffix =
-                    context.getExternalContext().
-                    getInitParameter(ViewHandler.DEFAULT_SUFFIX_PARAM_NAME);
-                if (contextDefaultSuffix == null) {
-                    contextDefaultSuffix = ViewHandler.DEFAULT_SUFFIX;
-                }
-                if (logger.isLoggable(Level.FINE)) {
-                    logger.fine("contextDefaultSuffix " + contextDefaultSuffix);
-                }
+                contextDefaultSuffix = ViewHandler.DEFAULT_SUFFIX;
+            }
+            if (logger.isLoggable(Level.FINE)) {
+                logger.fine("contextDefaultSuffix "
+                            + contextDefaultSuffix);
             }
         }
+           
         String convertedViewId = viewId;
         // if the viewId doesn't already use the above suffix,
         // replace or append.
