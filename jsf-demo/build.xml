@@ -84,6 +84,11 @@
       <param name="demoDir" value="imageMapRender"/>
     </antcall>
 
+    <ant target="clean" dir="nonjsp"/>
+    <antcall target="deleteJarsFromDemo">
+	<param name="demoDir" value="nonjsp"/>
+    </antcall>
+
 
     <delete> 
       <fileset dir="." includes="**/*~" defaultexcludes="no"/>
@@ -121,6 +126,11 @@
     <antcall target="copyJarsToDemo">
       <param name="demoDir" value="imageMapRender"/>
     </antcall>
+
+    <antcall target="copyJarsToDemo">
+	<param name="demoDir" value="nonjsp"/>
+    </antcall>
+
   </target>
 
   <target name="copyJarsToDemo">
@@ -164,6 +174,7 @@
     <ant inheritAll="false" dir="${basedir}/cardemo"/>
     <ant inheritAll="false" dir="${basedir}/imageMap"/>
     <ant inheritAll="false" dir="${basedir}/imageMapRender"/>
+    <ant inheritAll="false" dir="${basedir}/nonjsp"/>
 
   </target>
 
