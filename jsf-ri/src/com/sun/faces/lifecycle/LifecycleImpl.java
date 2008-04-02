@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleImpl.java,v 1.50 2005/06/23 20:29:33 jayashri Exp $
+ * $Id: LifecycleImpl.java,v 1.51 2005/07/11 17:43:48 jayashri Exp $
  */
 
 /*
@@ -242,32 +242,36 @@ public class LifecycleImpl extends Lifecycle {
 	    if (!skipping(phaseId, context)) {
 		phase.execute(context);
 	    }
-	}
-	finally {
-	    try {
-		// Notify the "afterPhase" method of interested listeners
-		// (descending)
-		if (tempListeners.size() > 0) {
-                    PhaseEvent event = new PhaseEvent(context, phaseId, this);
-                    for (i = maxBefore; i >= 0; i--) {
-                        PhaseListener listener = (PhaseListener) 
-                            tempListeners.get(i);
-                        if (phaseId.equals(listener.getPhaseId()) ||
-                            PhaseId.ANY_PHASE.equals(listener.getPhaseId())) {
-                            listener.afterPhase(event);
-                        }
+	} catch (Exception e) {
+            // Log the problem, but continue
+            if (logger.isLoggable(Level.WARNING)) {
+                logger.log(Level.WARNING, "executePhase(" + phaseId.toString() + "," 
+                        + context + ") threw exception", e);
+            }
+        } 
+	
+        try {
+            // Notify the "afterPhase" method of interested listeners
+            // (descending)
+            if (tempListeners.size() > 0) {
+                PhaseEvent event = new PhaseEvent(context, phaseId, this);
+                for (i = maxBefore; i >= 0; i--) {
+                    PhaseListener listener = (PhaseListener) 
+                        tempListeners.get(i);
+                    if (phaseId.equals(listener.getPhaseId()) ||
+                        PhaseId.ANY_PHASE.equals(listener.getPhaseId())) {
+                        listener.afterPhase(event);
                     }
                 }
-	    }
-	    catch (Throwable e) {
-		if (logger.isLoggable(Level.WARNING)) {
-                    logger.warning("phase(" + phaseId.toString() + "," + context + 
-			      ") threw exception: " + e + " " + e.getMessage() +
-			      "\n" + Util.getStackTraceString(e));
-		}
-	    }
-	}
-
+            }
+        }
+        catch (Throwable e) {
+            if (logger.isLoggable(Level.WARNING)) {
+                logger.warning("phase(" + phaseId.toString() + "," + context + 
+                          ") threw exception: " + e + " " + e.getMessage() +
+                          "\n" + Util.getStackTraceString(e));
+            }
+        }
     }
 
 
@@ -327,12 +331,17 @@ public class LifecycleImpl extends Lifecycle {
             // been populated already.
             return;
         }
-        ApplicationAssociate appAssociate =  
-            ApplicationAssociate.getInstance(context.getExternalContext());
-        synchronized(this) { 
+        
+        synchronized(applicationMap) { 
             requestServiced = (String) 
                 applicationMap.get(this.FIRST_REQUEST_SERVICED);
             if (requestServiced == null) {
+                // this needs to be set irrespective whether the FacesResolvers
+                // are added to compositeELResolverForJsp or not.
+                applicationMap.put(this.FIRST_REQUEST_SERVICED, "true");  
+                
+                ApplicationAssociate appAssociate =  
+                ApplicationAssociate.getInstance(context.getExternalContext());
                 CompositeELResolver compositeELResolverForJsp = 
                         appAssociate.getFacesELResolverForJsp();
                 if (compositeELResolverForJsp == null) {
@@ -381,7 +390,7 @@ public class LifecycleImpl extends Lifecycle {
                         compositeELResolverForJsp.add((ELResolver) it.next());
                     }
                 }
-                applicationMap.put(this.FIRST_REQUEST_SERVICED, "true");  
+                
             }
         }
     }
