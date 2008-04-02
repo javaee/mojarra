@@ -250,7 +250,7 @@ public class MessageUtils {
      * @return a new <code>FacesMessage</code> based on the provided
      *  <code>messageId</code>
      */
-    public static synchronized FacesMessage getExceptionMessage(
+    public static FacesMessage getExceptionMessage(
           String messageId,
           Object... params) {
 
@@ -268,7 +268,7 @@ public class MessageUtils {
      * @return the localized message for the specified 
      *  <code>messageId</code>
      */
-    public static synchronized String getExceptionMessageString(
+    public static String getExceptionMessageString(
           String messageId,
           Object... params) {
 

@@ -1,5 +1,5 @@
 /*
- * $Id: VariableResolverImpl.java,v 1.31 2006/08/29 06:13:00 tony_robertson Exp $
+ * $Id: VariableResolverImpl.java,v 1.32 2006/11/15 23:19:18 rlubke Exp $
  */
 
 /*
@@ -46,12 +46,6 @@ import com.sun.faces.util.MessageUtils;
 @SuppressWarnings("deprecation")
 public class VariableResolverImpl extends VariableResolver {
 
-    private ELResolver elResolver = null;
-
-    public VariableResolverImpl(ELResolver resolver ) {
-        this.elResolver = resolver;
-    }
-
     //
     // Relationship Instance Variables
     // 
@@ -72,7 +66,7 @@ public class VariableResolverImpl extends VariableResolver {
         }
 
         try {
-            result = elResolver.getValue(context.getELContext(), null, name);
+            result = context.getApplication().getELResolver().getValue(context.getELContext(), null, name);
         } catch (ELException elex) {
             throw new EvaluationException(elex);
         }

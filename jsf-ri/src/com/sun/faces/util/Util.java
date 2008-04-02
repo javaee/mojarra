@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.199 2006/09/11 20:45:55 rlubke Exp $
+ * $Id: Util.java,v 1.200 2006/11/15 23:19:20 rlubke Exp $
  */
 
 /*
@@ -77,7 +77,7 @@ import com.sun.faces.spi.ManagedBeanFactory.Scope;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.199 2006/09/11 20:45:55 rlubke Exp $
+ * @version $Id: Util.java,v 1.200 2006/11/15 23:19:20 rlubke Exp $
  */
 
 public class Util {
@@ -982,18 +982,13 @@ public class Util {
      * @param regex the regex used for splitting
      * @return the result of <code>Pattern.spit(String, int)</code>
      */
-    public static String[] split(String toSplit, String regex) {
+    public synchronized static String[] split(String toSplit, String regex) {
         Pattern pattern = patternCache.get(regex);
         if (pattern == null) {
-            synchronized(patternCache) {
-                pattern = patternCache.get(regex);
-                if (pattern == null) {
-                    pattern = Pattern.compile(regex);
-                    patternCache.put(regex, pattern);
-                } 
-            }
+            pattern = Pattern.compile(regex);
+            patternCache.put(regex, pattern);
         }
-        return pattern.split(toSplit, 0);        
+        return pattern.split(toSplit, 0);
     }
 
 

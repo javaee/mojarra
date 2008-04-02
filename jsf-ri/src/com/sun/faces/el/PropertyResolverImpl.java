@@ -1,5 +1,5 @@
 /*
- * $Id: PropertyResolverImpl.java,v 1.27 2006/09/01 01:22:48 tony_robertson Exp $
+ * $Id: PropertyResolverImpl.java,v 1.28 2006/11/15 23:19:18 rlubke Exp $
  */
 
 /*
@@ -49,13 +49,6 @@ import com.sun.faces.util.MessageUtils;
 @SuppressWarnings("deprecation")
 public class PropertyResolverImpl extends PropertyResolver {
 
-    private ELResolver elResolver = null;
-
-    public PropertyResolverImpl(ELResolver resolver ) {
-        this.elResolver = resolver;
-    }
-
-
     // Specified by javax.faces.el.PropertyResolver.getType(Object,int)
     public Class getType(Object base, int index)
         throws EvaluationException, PropertyNotFoundException{
@@ -94,7 +87,7 @@ public class PropertyResolverImpl extends PropertyResolver {
         Class result = null;
         try {
             FacesContext context = FacesContext.getCurrentInstance();
-            result = elResolver.getType(context.getELContext(), base,property);
+            result = context.getApplication().getELResolver().getType(context.getELContext(), base,property);
         } catch (javax.el.PropertyNotFoundException pnfe) {
             throw new PropertyNotFoundException(pnfe);
         } catch (ELException elex) {
@@ -135,7 +128,7 @@ public class PropertyResolverImpl extends PropertyResolver {
         Object result = null;
         try {
             FacesContext context = FacesContext.getCurrentInstance();
-            result = elResolver.getValue(context.getELContext(), base,property);
+            result = context.getApplication().getELResolver().getValue(context.getELContext(), base,property);
         } catch (javax.el.PropertyNotFoundException pnfe) {
             throw new PropertyNotFoundException(pnfe);
         } catch (ELException elex) {
@@ -163,7 +156,7 @@ public class PropertyResolverImpl extends PropertyResolver {
         boolean result = false;
         try {
             FacesContext context = FacesContext.getCurrentInstance();
-            result = elResolver.isReadOnly(context.getELContext(), base,property);
+            result = context.getApplication().getELResolver().isReadOnly(context.getELContext(), base,property);
         } catch (ELException elex) {
             throw new EvaluationException(elex);
         }
@@ -211,7 +204,7 @@ public class PropertyResolverImpl extends PropertyResolver {
     public void setValue(Object base, Object property, Object value) {
         try {
             FacesContext context = FacesContext.getCurrentInstance();
-            elResolver.setValue(context.getELContext(), base,property, value);
+            context.getApplication().getELResolver().setValue(context.getELContext(), base,property, value);
         } catch (javax.el.PropertyNotFoundException pnfe) {
             throw new PropertyNotFoundException(pnfe);
         } catch (javax.el.PropertyNotWritableException pnwe) {

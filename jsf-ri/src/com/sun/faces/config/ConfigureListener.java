@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListener.java,v 1.88 2006/11/06 22:40:30 rlubke Exp $
+ * $Id: ConfigureListener.java,v 1.89 2006/11/15 23:19:17 rlubke Exp $
  */
 /*
  * The contents of this file are subject to the terms
@@ -110,6 +110,7 @@ import com.sun.faces.el.DummyPropertyResolverImpl;
 import com.sun.faces.el.DummyVariableResolverImpl;
 import com.sun.faces.el.FacesCompositeELResolver;
 import com.sun.faces.renderkit.JsfJsResourcePhaseListener;
+import com.sun.faces.renderkit.RenderKitUtils;
 import com.sun.faces.spi.ManagedBeanFactory;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
@@ -462,7 +463,7 @@ public class ConfigureListener implements ServletContextListener {
             if (associate != null) {
                 associate.setContextName(getServletContextIdentifier(context));
             }
-                  
+            RenderKitUtils.loadSunJsfJs(tlsExternalContext.get());      
             tlsExternalContext.set(null);          
             if (LOGGER.isLoggable(Level.FINE)) {
                 LOGGER.log(Level.FINE,
@@ -484,8 +485,7 @@ public class ConfigureListener implements ServletContextListener {
             }           
 
             // Release any allocated application resources
-            FactoryFinder.releaseFactories();
-            ReflectionUtils.clearCache(Util.getCurrentLoader(this));
+            FactoryFinder.releaseFactories();            
             tlsExternalContext.set(new ServletContextAdapter(context));
             ApplicationAssociate
                   .clearInstance(tlsExternalContext.get());
@@ -493,6 +493,7 @@ public class ConfigureListener implements ServletContextListener {
             // Release the initialization mark on this web application
             release();
         } finally {
+            ReflectionUtils.clearCache(Util.getCurrentLoader(this));
             tlsExternalContext.set(null);    
             WebConfiguration.clear(context);
         }

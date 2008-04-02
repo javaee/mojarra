@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContextFactoryImpl.java,v 1.17 2006/03/29 23:03:43 rlubke Exp $
+ * $Id: FacesContextFactoryImpl.java,v 1.18 2006/11/15 23:19:17 rlubke Exp $
  */
 
 /*
@@ -78,10 +78,10 @@ public class FacesContextFactoryImpl extends FacesContextFactory {
     //
     // Methods from FacesContextFactory
     //
-    public synchronized FacesContext getFacesContext(Object sc,
-                                                     Object request,
-                                                     Object response,
-                                                     Lifecycle lifecycle)
+    public FacesContext getFacesContext(Object sc,
+                                        Object request,
+                                        Object response,
+                                        Lifecycle lifecycle)
         throws FacesException {
 
         try {

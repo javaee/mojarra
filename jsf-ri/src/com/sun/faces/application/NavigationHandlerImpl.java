@@ -1,5 +1,5 @@
 /*
- * $Id: NavigationHandlerImpl.java,v 1.51 2006/10/24 21:29:09 rlubke Exp $
+ * $Id: NavigationHandlerImpl.java,v 1.52 2006/11/15 23:19:16 rlubke Exp $
  */
 
 /*
@@ -105,6 +105,18 @@ public class NavigationHandlerImpl extends NavigationHandler {
         ApplicationAssociate associate = ApplicationAssociate.getInstance(
               ConfigureListener.getExternalContextDuringInitialize());
         if (associate != null) {
+            caseListMap = associate.getNavigationCaseListMappings();
+            wildCardSet = associate.getNavigationWildCardList();
+            navigationConfigured = (wildCardSet != null &&
+                                    caseListMap != null);
+        }
+    }
+
+
+    NavigationHandlerImpl(ApplicationAssociate associate) {
+        if (associate == null) {
+            throw new NullPointerException();
+        } else {
             caseListMap = associate.getNavigationCaseListMappings();
             wildCardSet = associate.getNavigationWildCardList();
             navigationConfigured = (wildCardSet != null &&

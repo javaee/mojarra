@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKitImpl.java,v 1.51 2006/11/13 19:01:51 rlubke Exp $
+ * $Id: RenderKitImpl.java,v 1.52 2006/11/15 23:19:19 rlubke Exp $
  */
 
 /*
@@ -56,7 +56,7 @@ import com.sun.faces.util.Util;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: RenderKitImpl.java,v 1.51 2006/11/13 19:01:51 rlubke Exp $
+ * @version $Id: RenderKitImpl.java,v 1.52 2006/11/15 23:19:19 rlubke Exp $
  */
 
 public class RenderKitImpl extends RenderKit {
@@ -82,18 +82,13 @@ public class RenderKitImpl extends RenderKit {
      * Renderer instances themselves.
      */
 
-    private ConcurrentHashMap<String, HashMap<Object, Renderer>> rendererFamilies;
+    private ConcurrentHashMap<String, HashMap<Object, Renderer>> rendererFamilies =
+         new ConcurrentHashMap<String, HashMap<Object, Renderer>>();
 
-    private ResponseStateManager responseStateManager;
+    private ResponseStateManager responseStateManager =
+         new ResponseStateManagerImpl();
     private Boolean preferXHTML;
     private Boolean isScriptHidingEnabled;
-
-
-    public RenderKitImpl() {
-        super();
-        rendererFamilies =
-             new ConcurrentHashMap<String, HashMap<Object, Renderer>>();
-    }
 
 
     public void addRenderer(String family, String rendererType,

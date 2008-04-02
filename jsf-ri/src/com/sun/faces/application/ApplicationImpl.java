@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationImpl.java,v 1.84 2006/11/14 17:50:13 rlubke Exp $
+ * $Id: ApplicationImpl.java,v 1.85 2006/11/15 23:19:16 rlubke Exp $
  */
 
 /*
@@ -105,12 +105,14 @@ public class ApplicationImpl extends Application {
 
     private ApplicationAssociate associate = null;
 
-    private ActionListener actionListener = null;
-    private NavigationHandler navigationHandler = null;
-    private PropertyResolver propertyResolver = null;
-    private VariableResolver variableResolver = null;
-    private ViewHandler viewHandler = null;
-    private StateManager stateManager = null;
+    private volatile ActionListener actionListener = null;
+    private volatile NavigationHandler navigationHandler = null;
+    private volatile PropertyResolver propertyResolver = null;
+    private volatile VariableResolver variableResolver = null;
+    private volatile ViewHandler viewHandler = null;
+    private volatile StateManager stateManager = null;
+    private volatile ArrayList<Locale> supportedLocales = null;
+    private volatile Locale defaultLocale = null;
     //
     // This map stores reference expression | value binding instance
     // mappings.
@@ -124,7 +126,7 @@ public class ApplicationImpl extends Application {
     private Map<String,Object> converterIdMap = null;
     private Map<Class,Object> converterTypeMap = null;
     private Map<String,Object> validatorMap = null;
-    private String messageBundle = null;
+    private volatile String messageBundle = null;
 
     private ArrayList<ELContextListener> elContextListeners = null;
     private ArrayList<ELResolver> elResolvers = null;
@@ -140,6 +142,9 @@ public class ApplicationImpl extends Application {
         converterIdMap = new ConcurrentHashMap<String, Object>();
         converterTypeMap = new ConcurrentHashMap<Class, Object>();
         validatorMap = new ConcurrentHashMap<String, Object>();
+        navigationHandler = new NavigationHandlerImpl(associate);
+        propertyResolver = new PropertyResolverImpl();
+        variableResolver = new VariableResolverImpl();
 
         if (logger.isLoggable(Level.FINE)) {
             logger.log(Level.FINE, "Created Application instance ");
@@ -306,28 +311,28 @@ public class ApplicationImpl extends Application {
     }
 
 
-    public void setViewHandler(ViewHandler handler) {
+    public synchronized void setViewHandler(ViewHandler handler) {
         if (handler == null) {
             String message = MessageUtils.getExceptionMessageString
-                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "handler");
+                 (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "handler");
             throw new NullPointerException(message);
         }
-        synchronized (this) {
-            if (associate.isResponseRendered()) {
-                // at least one response has been rendered.
-                if (logger.isLoggable(Level.SEVERE)) {
-                    logger.log(Level.SEVERE,
-                        "jsf.illegal_attempt_setting_viewhandler_error");
-                }
-                throw new IllegalStateException(MessageUtils.getExceptionMessageString(
-                    MessageUtils.ILLEGAL_ATTEMPT_SETTING_VIEWHANDLER_ID));
+
+        if (associate.isResponseRendered()) {
+            // at least one response has been rendered.
+            if (logger.isLoggable(Level.SEVERE)) {
+                logger.log(Level.SEVERE,
+                     "jsf.illegal_attempt_setting_viewhandler_error");
             }
-            viewHandler = handler;
-            if (logger.isLoggable(Level.FINE)) {
-                logger.log(Level.FINE,"set ViewHandler Instance to " 
-                        + viewHandler);
-            }
+            throw new IllegalStateException(MessageUtils.getExceptionMessageString(
+                 MessageUtils.ILLEGAL_ATTEMPT_SETTING_VIEWHANDLER_ID));
         }
+        viewHandler = handler;
+        if (logger.isLoggable(Level.FINE)) {
+            logger.log(Level.FINE, "set ViewHandler Instance to "
+                 + viewHandler.getClass().getName());
+        }
+
     }
 
 
@@ -336,42 +341,43 @@ public class ApplicationImpl extends Application {
     }
 
 
-    public void setStateManager(StateManager manager) {
+    public synchronized void setStateManager(StateManager manager) {
         if (manager == null) {
             String message = MessageUtils.getExceptionMessageString
-                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "manager");
+                 (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "manager");
             throw new NullPointerException(message);
         }
-        synchronized (this) {
-            if (associate.isResponseRendered()) {
-                // at least one response has been rendered.
-                if (logger.isLoggable(Level.SEVERE)) {
-                    logger.log(Level.SEVERE,
-                        "jsf.illegal_attempt_setting_statemanager_error");
-                }
-                throw new IllegalStateException(MessageUtils.getExceptionMessageString(
-                    MessageUtils.ILLEGAL_ATTEMPT_SETTING_STATEMANAGER_ID));
+
+        if (associate.isResponseRendered()) {
+            // at least one response has been rendered.
+            if (logger.isLoggable(Level.SEVERE)) {
+                logger.log(Level.SEVERE,
+                     "jsf.illegal_attempt_setting_statemanager_error");
             }
-            stateManager = manager;
-            if (logger.isLoggable(Level.FINE)) {
-                logger.log(Level.FINE, "set StateManager Instance to " 
-                        + stateManager);
-            }
+            throw new IllegalStateException(MessageUtils.getExceptionMessageString(
+                 MessageUtils.ILLEGAL_ATTEMPT_SETTING_STATEMANAGER_ID));
         }
+        stateManager = manager;
+        if (logger.isLoggable(Level.FINE)) {
+            logger.log(Level.FINE, "set StateManager Instance to "
+                 + stateManager.getClass().getName());
+        }
+
     }
 
 
-    public void setActionListener(ActionListener listener) {
+    public synchronized void setActionListener(ActionListener listener) {
         if (listener == null) {
             String message = MessageUtils.getExceptionMessageString
                 (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "listener");
             throw new NullPointerException(message);
         }
-        synchronized (this) {
-            this.actionListener = listener;
-        }
+
+        this.actionListener = listener;
+
         if (logger.isLoggable(Level.FINE)) {
-            logger.fine("set ActionListener Instance to " + actionListener);
+            logger.fine("set ActionListener Instance to "
+                 + actionListener.getClass().getName());
         }
     }
 
@@ -382,11 +388,6 @@ public class ApplicationImpl extends Application {
      * an instance does not exist, it will be created.
      */
     public NavigationHandler getNavigationHandler() {
-        synchronized (this) {
-            if (null == navigationHandler) {
-                navigationHandler = new NavigationHandlerImpl();
-            }
-        }
         return navigationHandler;
     }
 
@@ -397,28 +398,23 @@ public class ApplicationImpl extends Application {
      *
      * @param handler The <code>NavigationHandler</code> instance.
      */
-    public void setNavigationHandler(NavigationHandler handler) {
+    public synchronized void setNavigationHandler(NavigationHandler handler) {
         if (handler == null) {
             String message = MessageUtils.getExceptionMessageString
                 (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "handler");
             throw new NullPointerException(message);
         }
-        synchronized (this) {
-            this.navigationHandler = handler;
-        }
+
+        this.navigationHandler = handler;
+
         if (logger.isLoggable(Level.FINE)) {
-            logger.fine("set NavigationHandler Instance to "+ navigationHandler);
+            logger.fine("set NavigationHandler Instance to "
+                 + navigationHandler.getClass().getName());
         }
     }
 
     @SuppressWarnings("deprecation")
     public PropertyResolver getPropertyResolver() {
-        synchronized (this) {
-            if (null == propertyResolver) {
-                propertyResolver = 
-                    new PropertyResolverImpl(getELResolver());
-            }
-        }
         return propertyResolver;
     }
     
@@ -430,7 +426,7 @@ public class ApplicationImpl extends Application {
     }
 
     @SuppressWarnings("deprecation")
-    public void setPropertyResolver(PropertyResolver resolver) {
+    public synchronized void setPropertyResolver(PropertyResolver resolver) {
         // Throw Illegal State Exception if  a PropertyResolver is set after 
         // application initialization has completed. 
         if (FacesContext.getCurrentInstance() != null) {
@@ -447,7 +443,8 @@ public class ApplicationImpl extends Application {
             associate.setLegacyPropertyResolver(resolver); 
         }
         if (logger.isLoggable(Level.FINE)) {
-            logger.fine("set PropertyResolver Instance to " + propertyResolver);
+            logger.fine("set PropertyResolver Instance to "
+                 + propertyResolver.getClass().getName());
         }
     }
 
@@ -504,17 +501,12 @@ public class ApplicationImpl extends Application {
     }
 
     @SuppressWarnings("deprecation")
-    public VariableResolver getVariableResolver() {
-        synchronized (this) {
-            if (null == variableResolver) {
-                variableResolver = new VariableResolverImpl(getELResolver());
-            }
-        }
+    public VariableResolver getVariableResolver() {       
         return variableResolver;
     }
 
     @SuppressWarnings("deprecation")
-    public void setVariableResolver(VariableResolver resolver) {
+    public synchronized void setVariableResolver(VariableResolver resolver) {
         // Throw Illegal State Exception if VariableResolver is set after 
         // application initialization has completed. 
         if (FacesContext.getCurrentInstance() != null) {
@@ -531,7 +523,8 @@ public class ApplicationImpl extends Application {
             associate.setLegacyVariableResolver(resolver); 
         }
         if (logger.isLoggable(Level.FINE)) {
-            logger.fine("set VariableResolver Instance to " + variableResolver);
+            logger.fine("set VariableResolver Instance to "
+                 + variableResolver.getClass().getName());
         }
     }
 
@@ -852,37 +845,31 @@ public class ApplicationImpl extends Application {
     }
 
 
-    ArrayList<Locale> supportedLocales = null;
-
-
     public Iterator<Locale> getSupportedLocales() {
-        List<Locale> list = Collections.emptyList();
-        Iterator<Locale> result = list.iterator();
-        synchronized (this) {
+
             if (null != supportedLocales) {
-                result = supportedLocales.iterator();
+                return supportedLocales.iterator();
+            } else {
+                return Collections.<Locale>emptyList().iterator();
             }
-        }
-        return result;
+
     }
 
 
-    public void setSupportedLocales(Collection<Locale> newLocales) {
+    public synchronized void setSupportedLocales(Collection<Locale> newLocales) {
         if (null == newLocales) {
             String message = MessageUtils.getExceptionMessageString
                 (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "newLocales");
             throw new NullPointerException(message);
         }
-        synchronized (this) {
-            supportedLocales = new ArrayList<Locale>(newLocales);
-        }
+
+        supportedLocales = new ArrayList<Locale>(newLocales);
+
         if (logger.isLoggable(Level.FINE)) {
-            logger.log(Level.FINE, "set Supported Locales");
+            logger.log(Level.FINE, "set Supported Locales " +
+                 supportedLocales.toString());
         }
     }
-
-
-    protected Locale defaultLocale = null;
 
 
     public Locale getDefaultLocale() {
@@ -890,21 +877,20 @@ public class ApplicationImpl extends Application {
     }
 
 
-    public void setDefaultLocale(Locale locale) {
+    public synchronized void setDefaultLocale(Locale locale) {
 
         if (locale == null) {
             String message = MessageUtils.getExceptionMessageString
-                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "locale");
+                 (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "locale");
             throw new NullPointerException(message);
         }
 
-        synchronized (this) {
-            defaultLocale = locale;
-        }
-        if (logger.isLoggable(Level.FINE)) {
-            logger.log(Level.FINE, ("set defaultLocale " + defaultLocale));
-        }
+        defaultLocale = locale;
 
+        if (logger.isLoggable(Level.FINE)) {
+            logger.log(Level.FINE, ("set defaultLocale "
+                 + defaultLocale.getClass().getName()));
+        }
     }
 
 
@@ -972,17 +958,17 @@ public class ApplicationImpl extends Application {
     }
 
 
-    public void setMessageBundle(String messageBundle) {
-        synchronized (this) {
-            this.messageBundle = messageBundle;
-        }
+    public synchronized void setMessageBundle(String messageBundle) {
+
+        this.messageBundle = messageBundle;
+
         if (logger.isLoggable(Level.FINE)) {
             logger.log(Level.FINE, "set messageBundle " + messageBundle);
         }
     }
 
 
-    synchronized public String getMessageBundle() {
+    public String getMessageBundle() {
         return messageBundle;
     }
 

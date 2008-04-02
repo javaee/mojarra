@@ -18,7 +18,7 @@
  * your own identifying information:
  * "Portions Copyrighted [year] [name of copyright owner]"
  * 
- * [WebConfiguration] [$Id: WebConfiguration.java,v 1.15 2006/11/13 06:19:07 rlubke Exp $] [Apr 2, 2006]
+ * [WebConfiguration] [$Id: WebConfiguration.java,v 1.16 2006/11/15 23:19:17 rlubke Exp $] [Apr 2, 2006]
  * 
  * Copyright 2006 Sun Microsystems Inc. All Rights Reserved
  */
@@ -105,7 +105,16 @@ public class WebConfiguration {
 
         FacesContext facesContext = FacesContext.getCurrentInstance();
         if (facesContext == null) {
-            return null;
+            // Some cases, it is useful to have access to the ServletContext
+            // where one isn't readily available during initialization.  So
+            // we'll check the ConfigureListener for an ExternalContext...
+            ExternalContext extContext = 
+                 ConfigureListener.getExternalContextDuringInitialize();
+            if (extContext == null) {
+                return null;
+            } else {
+                return getInstance(extContext);
+            }
         } else {
             return getInstance(facesContext.getExternalContext());
         }

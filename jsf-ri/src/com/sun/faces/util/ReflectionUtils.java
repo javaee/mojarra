@@ -43,7 +43,7 @@ public final class ReflectionUtils {
     /**
      * <p>Cache</p>
      */
-    private static final WeakHashMap<ClassLoader, ConcurrentMap<String, MetaData>> REFLECTION_CACHE =
+    private static final Map<ClassLoader, ConcurrentMap<String, MetaData>> REFLECTION_CACHE =
           new WeakHashMap<ClassLoader,ConcurrentMap<String, MetaData>>();
 
 
@@ -58,6 +58,8 @@ public final class ReflectionUtils {
 
     /**
      * <p>Clears the cache for the specified <code>ClassLoader</code>.</p>
+     * <p>This method <em>MUST</em> be called when <code>ConfigureListener
+     * .contextDestroyed()</code> is called.</p>
      * @param loader the <code>ClassLoader</code> whose associated cache
      *  should be cleared
      */
@@ -136,7 +138,7 @@ public final class ReflectionUtils {
                 if (cache == null) {
                     cache = new ConcurrentHashMap<String, MetaData>();
                     REFLECTION_CACHE.put(loader, cache);
-                } 
+                }
             }
         }
 
@@ -168,7 +170,7 @@ public final class ReflectionUtils {
         /**
          * <p>Constructs a new <code>MetaData</code> instance for the specified
          * class.</p>
-         * @param clazz
+         * @param clazz class to construct a new MetaData instance from.
          */
         public MetaData(Class<?> clazz) {
 

@@ -32,6 +32,7 @@ import javax.faces.component.UISelectItem;
 import javax.faces.component.UISelectItems;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
+import javax.faces.context.ExternalContext;
 import javax.faces.model.SelectItem;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
@@ -1012,8 +1013,7 @@ public class RenderKitUtils {
      * 
      */
     public static void writeSunJS(FacesContext context, Writer writer)
-    throws IOException {
-        loadSunJsfJs(context);
+    throws IOException {   
         writer.write((char[]) context.getExternalContext().getApplicationMap()
               .get(SUN_JSF_JS));
     }
@@ -1024,70 +1024,66 @@ public class RenderKitUtils {
 
     /**
      * <p>Loads the contents of the sunjsf.js file into memory removing any
-     * comments/empty lines it encoutners, and, if enabled, compressing the 
-     * result.</p>
+     * comments/empty lines it encoutners, and, if enabled, compressing the
+     * result.</p>  This method should only be called when the application is
+     * being initialized.
+     *
      * @return the JavaScript sans comments and blank lines
      */
-    private static void loadSunJsfJs(FacesContext context) {
-        Map<String,Object> appMap = 
-              context.getExternalContext().getApplicationMap();
-        char[] sunJsfJs = (char[]) appMap.get(SUN_JSF_JS);
-        if (sunJsfJs == null) {
-            synchronized (XHTML_ATTR_PREFIX) {
-                sunJsfJs = (char[]) appMap.get(SUN_JSF_JS);
-                if (sunJsfJs == null) {
-                    BufferedReader reader = null;
-                    try {
-                        URL url = Util.getCurrentLoader(appMap)
-                              .getResource("com/sun/faces/sunjsf.js");
-                        if (url == null) {
-                            LOGGER.severe(
-                                  "jsf.renderkit.util.cannot_load_js");
-                            return;
-                        }
-                        URLConnection conn = url.openConnection();
-                        conn.setUseCaches(false);
-                        InputStream input = conn.getInputStream();
-                        reader = new BufferedReader(
-                                    new InputStreamReader(input));                        
-                        StringBuilder builder = new StringBuilder(128);                       
-                        for (String line = reader.readLine();
-                             line != null;
-                             line = reader.readLine()) {
+    public synchronized static void loadSunJsfJs(ExternalContext extContext) {
+        Map<String, Object> appMap =
+             extContext.getApplicationMap();
+        char[] sunJsfJs;
 
-                            String temp = line.trim();
-                            if (temp.length() == 0
-                                || temp.startsWith("/*")
-                                || temp.startsWith("*")
-                                || temp.startsWith("*/")
-                                || temp.startsWith("//")) {
-                                continue;
-                            }
-                            builder.append(line).append('\n');
-                        }
-                        builder.deleteCharAt(builder.length() - 1);
-                        if (WebConfiguration
-                              .getInstance(context.getExternalContext())
-                              .getBooleanContextInitParameter(
-                                    BooleanWebContextInitParameter.CompressJavaScript)) {
-                            sunJsfJs = compressJS(builder.toString());
-                        } else {
-                            sunJsfJs = builder.toString().toCharArray();
-                        }
-                        appMap.put(SUN_JSF_JS, sunJsfJs);
-                    } catch (IOException ioe) {
-                        LOGGER.log(Level.SEVERE,
-                                   "jsf.renderkit.util.cannot_load_js",
-                                   ioe);
-                    } finally {
-                        if (reader != null) {
-                            try {
-                                reader.close();
-                            } catch (IOException ioe) {
-                                // ignore                    
-                            }
-                        }
-                    }
+        BufferedReader reader = null;
+        try {
+            URL url = Util.getCurrentLoader(appMap)
+                 .getResource("com/sun/faces/sunjsf.js");
+            if (url == null) {
+                LOGGER.severe(
+                     "jsf.renderkit.util.cannot_load_js");
+                return;
+            }
+            URLConnection conn = url.openConnection();
+            conn.setUseCaches(false);
+            InputStream input = conn.getInputStream();
+            reader = new BufferedReader(
+                 new InputStreamReader(input));
+            StringBuilder builder = new StringBuilder(128);
+            for (String line = reader.readLine();
+                 line != null;
+                 line = reader.readLine()) {
+
+                String temp = line.trim();
+                if (temp.length() == 0
+                     || temp.startsWith("/*")
+                     || temp.startsWith("*")
+                     || temp.startsWith("*/")
+                     || temp.startsWith("//")) {
+                    continue;
+                }
+                builder.append(line).append('\n');
+            }
+            builder.deleteCharAt(builder.length() - 1);
+            if (WebConfiguration
+                 .getInstance(extContext)
+                 .getBooleanContextInitParameter(
+                      BooleanWebContextInitParameter.CompressJavaScript)) {
+                sunJsfJs = compressJS(builder.toString());
+            } else {
+                sunJsfJs = builder.toString().toCharArray();
+            }
+            appMap.put(SUN_JSF_JS, sunJsfJs);
+        } catch (IOException ioe) {
+            LOGGER.log(Level.SEVERE,
+                 "jsf.renderkit.util.cannot_load_js",
+                 ioe);
+        } finally {
+            if (reader != null) {
+                try {
+                    reader.close();
+                } catch (IOException ioe) {
+                    // ignore
                 }
             }
         }
