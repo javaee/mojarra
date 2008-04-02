@@ -69,5 +69,11 @@ public interface TaglibGenerator {
      */
     public String generateGeneralMethods(List componentAttributeNames, String componentType);
 
+    /**
+     * Implementations provide logic to return attributes that are
+     * inserted into the TLD of every tag.
+     */
+    public String generateGlobalAttributes();
+
     public void setParser(ConfigParser parser);
 }

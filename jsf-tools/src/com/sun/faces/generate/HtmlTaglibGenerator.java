@@ -310,6 +310,17 @@ public class HtmlTaglibGenerator extends GenerateTagBase implements TaglibGenera
 	return result.toString();
     }
 
+    public String generateGlobalAttributes() {
+	return (
+		"    <attribute>\n" +
+		"      <name>override</name>\n" +
+		"      <required>false</required>\n" +
+		"      <rtexprvalue>false</rtexprvalue>\n" +
+		"    </attribute>\n");
+	
+    }
+
+
     public void setParser(ConfigParser parser) {
         this.parser = parser;
     }

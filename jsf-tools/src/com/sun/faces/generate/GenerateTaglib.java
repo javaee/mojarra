@@ -1,5 +1,5 @@
 /*
- * $Id: GenerateTaglib.java,v 1.5 2003/11/11 00:02:33 eburns Exp $
+ * $Id: GenerateTaglib.java,v 1.6 2003/11/11 00:14:17 eburns Exp $
  */
 
 /*
@@ -257,6 +257,7 @@ public class GenerateTaglib extends GenerateTagBase {
 		    result = generateTldComponentAttributes(result, componentType,
 		    tagName, attributeNames, alreadyGenerated);
 		}
+		result.append(tagLibGenerator.generateGlobalAttributes());
 		result.append("  </tag>\n\n");
             }
 	}
