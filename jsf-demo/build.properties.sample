@@ -1,10 +1,62 @@
-# If your jsf-api and jsf-ri directories are not siblings of this
-# directory, you can locate them here.
+# -----------------------------------------------------------------------------
+# build.properties.sample
+#
+# This is an example "build.properties" file, used to customize building the
+# jsf-demo for your local environment.  It defines the location of all external
+# modules that the jsf-demo depends on.  Copy this file to "build.properties"
+# in the top-level source directory, and customize it as needed.
+#
+# $Id: build.properties.sample,v 1.3 2003/02/13 21:52:13 horwat Exp $
+# -----------------------------------------------------------------------------
 
-jsf.api.home=../../jsf-trunk/jsf-api
-jsf.ri.home=../../jsf-trunk/jsf-ri
 
-# You must locate standard.jar and jstl.jar
+# ----- Compile Control Flags -----
 
-standard.jar=/tomcat4.0/common/lib/standard.jar
-jstl.jar=/tomcat4.0/common/lib/jstl.jar
+
+# ----- Build Control Flags -----
+
+
+# ----- Run Control Flags -----
+
+
+# ----- Default Paths for Dependent Packages -----
+
+base.path=/usr/local
+jsf.base.path=${base.path}
+
+
+# --------------------------------------------------
+#		 REQUIRED LIBRARIES
+# --------------------------------------------------
+
+
+# ----- JSF API -----
+jsf.api.home=${jsf.base.path}/jsf-api
+
+# ----- JSF RI -----
+jsf.ri.home=${jsf.base.path}/jsf-ri
+
+# ----- Servlet 2.3 API -----
+servlet.jar=${jsf.ri.home}/lib/servlet.jar
+
+# ----- Jakarta JSTL, version 1.0 or later -----
+jstl.home=${base.path}/jakarta-taglibs/standard-1.0.2
+jstl.lib=${jstl.home}/lib
+jstl.jar=${jstl.lib}/jstl.jar
+standard.jar=${jstl.lib}/standard.jar
+
+jstl.loc=http://jakarta.apache.org/builds/jakarta-taglibs/releases/standard/jakarta-taglibs-standard-1.0.2.tar.gz
+
+
+# --------------------------------------------------
+#		 OPTIONAL LIBRARIES
+# --------------------------------------------------
+
+
+# --------------------------------------------------
+#		 RUN-TIME COMPONENTS
+# --------------------------------------------------
+
+#Management tool username and password. Used in Tomcat integration targets.
+username=tomcat
+password=tomcat

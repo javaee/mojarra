@@ -44,7 +44,9 @@
   </target>
 
   <!-- Configure the context path for this application -->
-  <property file="build.properties"/>
+  <property file="${user.home}/build.properties"/>  <!-- User local        -->
+  <property file="build.properties"/>               <!-- Component local   -->
+  <property file="../build.properties"/>            <!-- Commons local     -->
   <property name="context.path" value="/templateDemo"/>
   <property name="example" value="templateDemo" />
   <property name="build"   value="${basedir}/build" />
@@ -53,8 +55,6 @@
   <property name="url"      value="http://localhost:8080/manager"/>
 
   <!-- Required jars for making this self-contained -->
-  <property name="servlet23.jar" 
-            value="${tomcat.home}/common/lib/servlet.jar"/>
   <property name="commons-beanutils.jar" 
             value="web/WEB-INF/lib/commons-beanutils.jar"/>
   <property name="commons-collections.jar"
@@ -77,7 +77,7 @@
   <path id="classpath">
     <fileset dir="${build}/WEB-INF/lib" includes="*.jar" />
     <pathelement location="${build}/WEB-INF/classes"/>
-    <pathelement location="${servlet23.jar}"/>
+    <pathelement location="${servlet.jar}"/>
   </path>
 
 
@@ -89,8 +89,8 @@
   <target name="verifyPreconditions">
 
     <antcall target="checkRequiredFile">
-       <param name="file" value="${servlet23.jar}"/>
-       <param name="fail.message" value="A jar file containing the Servlet 2.3 and JSP1.2 classes is required to compile templateDemo.  Please define the property servlet23.jar in your build.properties file and ensure that the file exists."/>
+       <param name="file" value="${servlet.jar}"/>
+       <param name="fail.message" value="A jar file containing the Servlet 2.3 and JSP1.2 classes is required to compile templateDemo.  Please define the property servlet.jar in your build.properties file and ensure that the file exists."/>
     </antcall>
 
     <antcall target="checkRequiredFile">
@@ -208,6 +208,6 @@
       </fileset>
     </copy>
   </target>	 
-
+
 </project>
 

@@ -44,8 +44,9 @@
   </target>
 
   <!-- Configure the context path for this application -->
-  <property file="build.properties"/>
-  <property file="../build.properties"/>
+  <property file="${user.home}/build.properties"/>  <!-- User local        -->
+  <property file="build.properties"/>               <!-- Component local   -->
+  <property file="../build.properties"/>            <!-- Commons local     -->
   <property name="context.path" value="/components"/>
   <property name="example" value="components" />
   <property name="build"   value="${basedir}/build" />
