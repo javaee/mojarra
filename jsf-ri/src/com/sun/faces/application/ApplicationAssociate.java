@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationAssociate.java,v 1.22 2005/09/30 03:57:19 edburns Exp $
+ * $Id: ApplicationAssociate.java,v 1.23 2005/11/03 19:18:20 rlubke Exp $
  */
 
 /*
@@ -340,9 +340,9 @@ public class ApplicationAssociate {
      *
      * @return Map the map of navigation mappings.
      */
-    public Map getNavigationCaseListMappings() {
+    public Map<String,List<ConfigNavigationCase>> getNavigationCaseListMappings() {
         if (caseListMap == null) {
-            return Collections.EMPTY_MAP;
+            return Collections.emptyMap();
         }
         return caseListMap;
     }

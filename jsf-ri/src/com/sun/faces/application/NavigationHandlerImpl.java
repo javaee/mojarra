@@ -1,5 +1,5 @@
 /*
- * $Id: NavigationHandlerImpl.java,v 1.40 2005/08/26 15:26:59 rlubke Exp $
+ * $Id: NavigationHandlerImpl.java,v 1.41 2005/11/03 19:18:21 rlubke Exp $
  */
 
 /*
@@ -177,7 +177,7 @@ public class NavigationHandlerImpl extends NavigationHandler {
     private CaseStruct getViewId(FacesContext context, String fromAction,
                                  String outcome) {        
         String viewId = context.getViewRoot().getViewId();
-        CaseStruct caseStruct = null;
+        CaseStruct caseStruct;
 
         synchronized (this) {
             caseStruct = findExactMatch(viewId, fromAction, outcome);
@@ -188,6 +188,18 @@ public class NavigationHandlerImpl extends NavigationHandler {
 
             if (caseStruct == null) {
                 caseStruct = findDefaultMatch(fromAction, outcome);
+            }
+        }
+        
+         if (caseStruct == null && logger.isLoggable(Level.WARNING)) {
+            if (fromAction == null) {            
+                logger.log(Level.WARNING, 
+                           "jsf.navigation.no_matching_outcome", 
+                           new Object[] {viewId, outcome});                
+            } else {
+                logger.log(Level.WARNING, 
+                           "jsf.navigation.no_matching_outcome_action", 
+                           new Object[] {viewId, outcome, fromAction});
             }
         }
         return caseStruct;
@@ -217,10 +229,11 @@ public class NavigationHandlerImpl extends NavigationHandler {
 	}
 	    
 
-        Map caseListMap = associate.getNavigationCaseListMappings();
+        Map<String,List<ConfigNavigationCase>> caseListMap = 
+              associate.getNavigationCaseListMappings();
         assert (null != caseListMap);
 
-        List caseList = (List) caseListMap.get(viewId);
+        List<ConfigNavigationCase> caseList = caseListMap.get(viewId);
 
         if (caseList == null) {
             return null;
@@ -260,9 +273,11 @@ public class NavigationHandlerImpl extends NavigationHandler {
 	    return null;
 	}
 
-        Map caseListMap = associate.getNavigationCaseListMappings();
+        Map<String,List<ConfigNavigationCase>> caseListMap = 
+              associate.getNavigationCaseListMappings();
         assert (null != caseListMap);
-        TreeSet<String> wildcardMatchList = associate.getNavigationWildCardList();
+        TreeSet<String> wildcardMatchList = 
+              associate.getNavigationWildCardList();
         assert (null != wildcardMatchList);
 
         for (String fromViewId : wildcardMatchList) {
@@ -279,7 +294,7 @@ public class NavigationHandlerImpl extends NavigationHandler {
             // Append the trailing "*" so we can do our map lookup;
 
             String wcFromViewId = fromViewId + "*";
-            List caseList = (List) caseListMap.get(wcFromViewId);
+            List<ConfigNavigationCase> caseList = caseListMap.get(wcFromViewId);
 
             if (caseList == null) {
                 return null;
@@ -321,10 +336,11 @@ public class NavigationHandlerImpl extends NavigationHandler {
 	    return null;
 	}
 
-        Map caseListMap = associate.getNavigationCaseListMappings();
+        Map<String,List<ConfigNavigationCase>> caseListMap = 
+              associate.getNavigationCaseListMappings();
         assert (null != caseListMap);
 
-        List caseList = (List) caseListMap.get("*");
+        List<ConfigNavigationCase> caseList = caseListMap.get("*");
 
         if (caseList == null) {
             return null;
@@ -351,19 +367,15 @@ public class NavigationHandlerImpl extends NavigationHandler {
      */
 
     private synchronized
-    CaseStruct determineViewFromActionOutcome(List caseList,
+    CaseStruct determineViewFromActionOutcome(List<ConfigNavigationCase> caseList,
                                               String fromAction,
                                               String outcome) {
-
-        String cncFromAction = null;
-        String fromOutcome = null;
-        String toViewId = null;
+        
         CaseStruct result = new CaseStruct();
-        for (int i = 0; i < caseList.size(); i++) {
-            ConfigNavigationCase cnc = (ConfigNavigationCase) caseList.get(i);
-            cncFromAction = cnc.getFromAction();
-            fromOutcome = cnc.getFromOutcome();
-            toViewId = cnc.getToViewId();
+        for (ConfigNavigationCase cnc : caseList) {           
+            String cncFromAction = cnc.getFromAction();
+            String fromOutcome = cnc.getFromOutcome();
+            String toViewId = cnc.getToViewId();
             if ((cncFromAction != null) && (fromOutcome != null)) {
                 if ((cncFromAction.equals(fromAction)) &&
                     (fromOutcome.equals(outcome))) {
@@ -372,27 +384,15 @@ public class NavigationHandlerImpl extends NavigationHandler {
                     return result;
                 }
             }
-        }
-
-        for (int i = 0; i < caseList.size(); i++) {
-            ConfigNavigationCase cnc = (ConfigNavigationCase) caseList.get(i);
-            cncFromAction = cnc.getFromAction();
-            fromOutcome = cnc.getFromOutcome();
-            toViewId = cnc.getToViewId();
-            if ((cncFromAction == null) && (fromOutcome != null)) {
+            
+             if ((cncFromAction == null) && (fromOutcome != null)) {
                 if (fromOutcome.equals(outcome)) {
                     result.viewId = toViewId;
                     result.navCase = cnc;
                     return result;
                 }
             }
-        }
-
-        for (int i = 0; i < caseList.size(); i++) {
-            ConfigNavigationCase cnc = (ConfigNavigationCase) caseList.get(i);
-            cncFromAction = cnc.getFromAction();
-            fromOutcome = cnc.getFromOutcome();
-            toViewId = cnc.getToViewId();
+            
             if ((cncFromAction != null) && (fromOutcome == null)) {
                 if (cncFromAction.equals(fromAction)) {
                     result.viewId = toViewId;
@@ -400,19 +400,13 @@ public class NavigationHandlerImpl extends NavigationHandler {
                     return result;
                 }
             }
-        }
-
-        for (int i = 0; i < caseList.size(); i++) {
-            ConfigNavigationCase cnc = (ConfigNavigationCase) caseList.get(i);
-            cncFromAction = cnc.getFromAction();
-            fromOutcome = cnc.getFromOutcome();
-            toViewId = cnc.getToViewId();
+            
             if ((cncFromAction == null) && (fromOutcome == null)) {
                 result.viewId = toViewId;
                 result.navCase = cnc;
                 return result;
             }
-        }
+        }                 
 
         return null;
     }
