@@ -50,6 +50,8 @@
               value="${dependency.base.dir}/jakarta-cactus-${cactus.version}"/>
     <property name="taglibdoc.home"
               value="${dependency.base.dir}/taglibrarydoc-${taglibdoc.version}"/>
+    <property name="tlddoc.jar"
+              value="${taglibdoc.home}/tlddoc-${taglibdoc.version}.jar"/>
 
     <target name="update" description="Download project dependencies">
         <!-- setup the proxy if necessary -->

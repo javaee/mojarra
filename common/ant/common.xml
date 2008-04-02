@@ -74,9 +74,7 @@
     <property name="jsf-portlet.jar"
               value="${portlet.dir}/portlet-lib/build/lib/jsf-portlet.jar"/>
     <property name="jsf.test.jar"
-              value="${jsf.build.home}/lib/jsf-extensions-test-time.jar"/>
-    <property name="tlddoc.jar"
-              value="${taglibdoc.home}/tlddoc.jar"/>
+              value="${jsf.build.home}/lib/jsf-extensions-test-time.jar"/>    
     <property name="installer.jar"
               value="${jsf.build.home}/common/lib/installer-builder.jar"/>
     <property name="javanettasks.jar"
