@@ -1,5 +1,5 @@
 /*
- * $Id: TestComponents.java,v 1.3 2003/09/08 21:53:22 eburns Exp $
+ * $Id: TestComponents.java,v 1.4 2003/09/08 22:59:29 eburns Exp $
  */
 
 /*
@@ -85,6 +85,12 @@ public class TestComponents extends HtmlUnitTestCase {
 	// getFirstAnchorByText.  That would enable the "img link" case
 	// to work.  For now, skip it.
 	// page = executeTreeTest(page, "5");
+    }
+
+    public void testResultSet() throws Exception {
+	HtmlPage page = accessAppAndGetPage("faces/result-set.jsp");
+	HtmlAnchor anchor = null;
+	assertNotNull(page);
     }
 
     protected HtmlPage executeTreeTest(HtmlPage page, 
