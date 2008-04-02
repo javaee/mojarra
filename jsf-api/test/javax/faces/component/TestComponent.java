@@ -1,5 +1,5 @@
 /*
- * $Id: TestComponent.java,v 1.6 2003/01/17 00:26:51 craigmcc Exp $
+ * $Id: TestComponent.java,v 1.7 2003/01/17 01:47:03 craigmcc Exp $
  */
 
 /*
@@ -69,9 +69,9 @@ public class TestComponent extends UIComponentBase {
     }
 
 
-    public boolean validate(FacesContext context) {
+    public void validate(FacesContext context) {
         trace("v-" + getComponentId());
-        return (super.validate(context));
+        super.validate(context);
     }
 
 
@@ -81,9 +81,9 @@ public class TestComponent extends UIComponentBase {
     }
 
 
-    public boolean processValidators(FacesContext context) {
+    public void processValidators(FacesContext context) {
         trace("pV-" + getComponentId());
-        return (super.processValidators(context));
+        super.processValidators(context);
     }
 
 

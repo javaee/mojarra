@@ -1,5 +1,5 @@
 /*
- * $Id: UIInput.java,v 1.8 2003/01/17 00:26:47 craigmcc Exp $
+ * $Id: UIInput.java,v 1.9 2003/01/17 01:46:59 craigmcc Exp $
  */
 
 /*
@@ -161,15 +161,16 @@ public class UIInput extends UIComponentBase {
      * @exception NullPointerException if <code>context</code>
      *  is null
      */
-    public boolean validate(FacesContext context) {
+    public void validate(FacesContext context) {
 
         // Save and reset the previous value for this component
         Object previous = this.previous;
         this.previous = null;
 
-        // Perform standard delegation to registered Validators
-        if (!super.validate(context)) {
-            return (false);
+        // Perform any default validations from our parent class
+        super.validate(context);
+        if (!isValid()) {
+            return;
         }
 
         // Determine whether a value change has actually occurred
@@ -193,7 +194,6 @@ public class UIInput extends UIComponentBase {
         if (changed) {
             fireValueChangedEvent(context, previous, value);
         }
-        return (true);
 
     }
 

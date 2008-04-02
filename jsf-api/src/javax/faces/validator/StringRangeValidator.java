@@ -1,9 +1,9 @@
 /*
- * $Id: StringRangeValidator.java,v 1.8 2002/09/20 02:48:37 craigmcc Exp $
+ * $Id: StringRangeValidator.java,v 1.9 2003/01/17 01:47:01 craigmcc Exp $
  */
 
 /*
- * Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2002-2003 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -243,25 +243,19 @@ public class StringRangeValidator extends ValidatorBase {
 
     /**
      * <p>Perform the correctness checks implemented by this
-     * <code>Validator</code> against the specified {@link UIComponent}.
-     * Add {@link Message}s describing any correctness violations to the
-     * specified {@link FacesContext}.</p>
+     * {@link Validator} against the specified {@link UIComponent}.</p>
      *
      * @param context FacesContext for the request we are processing
      * @param component UIComponent we are checking for correctness
      *
-     * @return <code>true</code> if all validations performed by this
-     *  method passed successfully, or <code>false</code> if one or more
-     *  validations performed by this method failed
-     *
-     * @exception NullPointerException if any parameter is <code>null</code>
+     * @exception NullPointerException if <code>context</code>
+     *  or <code>component</code> is <code>null</code>
      */
-    public boolean validate(FacesContext context, UIComponent component) {
+    public void validate(FacesContext context, UIComponent component) {
 
         if ((context == null) || (component == null)) {
             throw new NullPointerException();
         }
-        boolean result = true;
         Object value = component.getValue();
         if (value != null) {
             String converted = stringValue(value);
@@ -272,7 +266,7 @@ public class StringRangeValidator extends ValidatorBase {
                                               MAXIMUM_MESSAGE_ID,
                                               new Object[] {
                                        new String(maximum) }));
-                result = false;
+                component.setValid(false);
             }
             if (isMinimumSet() &&
                 (converted.compareTo(minimum) < 0)) {
@@ -281,10 +275,9 @@ public class StringRangeValidator extends ValidatorBase {
                                               MINIMUM_MESSAGE_ID,
                                               new Object[] {
                                        new String(minimum) }));
-                result = false;
+                component.setValid(false);
             }
         }
-        return (result);
 
     }
 

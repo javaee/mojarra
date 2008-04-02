@@ -1,5 +1,5 @@
 /*
- * $Id: TestComponentNamingContainer.java,v 1.5 2003/01/17 00:26:51 craigmcc Exp $
+ * $Id: TestComponentNamingContainer.java,v 1.6 2003/01/17 01:47:03 craigmcc Exp $
  */
 
 /*
@@ -69,9 +69,9 @@ public class TestComponentNamingContainer extends UINamingContainer {
     }
 
 
-    public boolean validate(FacesContext context) {
+    public void validate(FacesContext context) {
         TestComponent.trace("v-" + getComponentId());
-        return (super.validate(context));
+        super.validate(context);
     }
 
 
@@ -81,9 +81,9 @@ public class TestComponentNamingContainer extends UINamingContainer {
     }
 
 
-    public boolean processValidators(FacesContext context) {
+    public void processValidators(FacesContext context) {
         TestComponent.trace("pV-" + getComponentId());
-        return (super.processValidators(context));
+        super.processValidators(context);
     }
 
 
