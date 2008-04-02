@@ -1,5 +1,5 @@
 /*
- * $Id: FacesMessage.java,v 1.5 2003/12/17 15:10:32 rkitain Exp $
+ * $Id: FacesMessage.java,v 1.6 2004/01/10 22:26:30 eburns Exp $
  */
 
 /*
@@ -160,6 +160,18 @@ public class FacesMessage implements Serializable {
         super();
 
     }
+
+    /**
+     * <p>Construct a new {@link FacesMessage} with just a summary.  The
+     * detail is <code>null</code>, the severity is set to
+     * <code>Severity.INFO</code>.</p>
+     */
+    public FacesMessage(String summary) {
+
+        super();
+	setSummary(summary);
+    }
+
 
 
 
