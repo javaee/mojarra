@@ -227,10 +227,12 @@
     <copy todir="${dist.home}/docs">
       <fileset dir="${basedir}/docs"
                includes="index.html,samples.html,ReleaseNotes.html"/>
+      <fileset dir="${basedir}" includes="README"/>
     </copy>
     <copy todir="${dist.home}/docs/style">
       <fileset dir="${basedir}/docs/style" includes="default.css"/>
     </copy>
+    
   </target>
 
   <target name="prepare.dist" depends="jars">

@@ -1,8 +1,8 @@
 This README documents the Sun Reference implementation (RI) for JSR 127,
 JavaServer (tm) Faces.
 
-jsf-api cvs tag for this implementation: JSF_API_PRD_20030224
-jsf-api-spec for this implementation: JSF_SPEC_PRD.pdf
+jsf-api cvs tag for this implementation: JSF_API_20030519
+jsf-api-spec for this implementation: JSF_SPEC_PRD2.pdf
 
 Installation Notes
 ==================
@@ -21,383 +21,402 @@ distribution in your WEB-INF/lib directory in your webapp.
 Major changes/features in this release:
 =======================================
 
-* [EventTypes-19] [Listeners-3] [HandlersModifyTree-33]
-  [HandlersSelectTree-34] [StandardComponentEvents-38]
-  [EventProcessingPhases-39]
+* Application Configuration Resources (the faces-config.xml file)
 
-  New Event model as in section JSF.3.3
+  JavaServer Faces, v 1.0 EA4 defines a portable configuration resource
+  format (as an XML document) for configuring resources required at
+  application startup time. In previous releases, these resources had to
+  be configured programmatically. The configurable resources include:
+  custom components, renderers, converters, and validators; render kits;
+  navigation rules; and model beans. This new feature eliminates the
+  need for: an ApplicationHandler to define navigation; and a
+  ServletContextListener to register converters, validators, renderers,
+  render kits, and messages.
 
-  This is the biggest change since the previous release.  This change is
-  too big to cover in detail in the README.  Two important aspects are:
-  we now have "ValueChangedEvents" and there is only one tree, not
-  separate request and response trees as before.  Please read the
-  appropriate spec section.
+  The runtime RenderKit inspection APIs have been removed in favor of
+  the data they exposed being codified in the faces-config.xml file.
+  This means the following API have disappeared.
 
-  Related API classes and interfaces
+  class javax.faces.component.AttributeDescriptor
 
-    javax.faces.event.AbortProcessingException
-    javax.faces.event.ActionEvent
-    javax.faces.event.CommandEvent
-    javax.faces.event.FacesEvent
-    javax.faces.event.FormEvent
-    javax.faces.event.ActionListener
-    javax.faces.event.ApplicationEvent
-    javax.faces.event.FacesListener
-    javax.faces.event.ValueChangedEvent
-    javax.faces.event.ValueChangedListener
-    javax.faces.event.PhaseId
-    javax.faces.context.FacesContext
-    javax.faces.component.UICommand
-    javax.faces.component.UIComponent
-    javax.faces.component.UIComponentBas
-    javax.faces.tree.Tree
+  methods javax.faces.render.Renderer.getAttributeDescriptor()
+          javax.faces.render.Renderer.supportsComponentType()
 
-  Related RI classes and interfaces
+  Please see section 10.3 of the spec.
 
-    All of the Lifecycle phase implementation classes and the
-    FacesContext implementation are impacted.  In addition, the class 
+* Navigation Handling mechanism.
 
-    com.sun.faces.taglib.jsf_core.ActionListenerTag
+  This new feature is closely tied to the Application Configuration
+  Resources feature described above. In previous releases, navigation
+  rules were defined programmatically in the ApplicationHandler. For
+  this release, navigation rules are defined in the portable
+  configuration resource, described in the previous section.
 
-    is impacted.
+  Please see section 7.4 of the spec.  
 
-  Removed API classes and interfaces from previous release
+* Object Management
 
-    javax.faces.event.RequestEventHandler
-    javax.faces.webapp.EventHandlerTag
+  This new feature is also tied to the Application Configuration
+  Resources feature. In previous releases, JavaServer Faces technology
+  enabled you to create model objects that encapsulated data and
+  business logic separately from UI component objects. This release
+  fully specifies how these objects are created and managed. This
+  release also provides a Managed Bean Creation facility, which creates
+  new model objects and stores them in scope. This facility is also
+  configured using the Application Configuration Resource.
 
-  Removed RI classes and interfaces from previous release
+  Please see section 10.3 of the spec.
 
-    com.sun.faces.lifecycle.HandleRequestEventsPhase
+* New class javax.faces.application.Application:
 
+  Application represents a per-web-application singleton object where
+  applications based on JavaServer Faces (or implementations wishing to
+  provide extended functionality) can register application-wide
+  singletons that provide functionality required by JavaServer Faces.
 
-* [ComponentNamespace-10] Flat namespace changes.  The compoundId
-  property has gone away, in its place we have getClientId().  Component
-  identifiers are no longer required in all cases.  When using JSF from
-  JSP, component identifiers are only required when interacting with
-  JSTL. See Section JSF 3.1.2 in the spec.  We have a tag library
-  validator to enforce this rule.
+  This class is accessible through the existing FactoryFinder mechanism.
 
-  Every component can be named by a component identifier, which must be
-  unique among the components that share a common naming container
-  parent in a component tree. 
+  Application serves as an abstract factory for several other faces
+  classes.  It has subsumed the responsibilities of the former
+  javax.faces.convert.ConverterFactory and
+  javax.faces.context.MessageResourcesFactory classes; thus Application
+  currently vends instances of
 
+  ValueBinding
+  UIComponent
+  Converter
+  MessageResources
+  Validator
 
-  The root of the component tree must be a NamingContainer.
+  Please see Chapter 7 of the spec.
 
-  Related API classes and interfaces
+* Removal of "built-in-rendering" in UIComponent classes
 
-    javax.faces.component.NamingContainer
+  Instead of all the components having built-in-rendering, each
+  component now has a default rendererType property value which maps to
+  a Renderer in the mandatory standard Render Kit.
 
-      An interface defining what it means to be a NaminingContainer
+  Please see section 8.4 of the spec.
 
-    javax.faces.component.NamingContainerSupport
+* Removal of componentType property for UIComponent and all subclasses.
 
-      The implementation of that interface
+  This property has been moved outside of the UIComponent instance.  In
+  the JSP case, this property resides on the tag handler that
+  corresponds to the UIComponent.  The componentType is used as a key to
+  the UIComponent factory method on Application.
 
-    javax.faces.component.UINamingContainer
+  Please see section 7.1.6 of the spec.
 
-      A UIComponent that implements NamingContainer, used as the root of
-      the tree
+* UIComponent hierarchy shuffling.
 
-    javax.faces.render.Renderer
+  Here is an ASCII inheritance diagram, where indentation represents
+  inheritance.
 
-      Account for removal of getComponentId().
+  UIComponent
 
-  Related RI classes and interfaces
+    UICommand
 
-    com.sun.faces.taglib.FacesValidator
+    UIForm
 
-      Base class for Faces TLV
+    UINamingContainer
 
-    com.sun.faces.taglib.jsf_core.CoreValidator
+    UIOutput
 
-      Enforces the rule that components must have ids if they are
-      intermixed with certain JSTL tags.
+      UIGraphic
 
-    com.sun.faces.component.UIComponent
-    com.sun.faces.component.UIComponentBase
-
-      Changes for getClientId().
-
-* [NamedChild-4] Support for component facets.  
-
-  An additional useful facility would be to define particular subordinate
-  components that have a specific role with respect to the owning
-  component, which is typically independent of the parent-child
-  relationship. An example might be a "data grid" control, where the
-  children represent the columns to be rendered in the grid. It is
-  useful to be able to identify a component that represents the column
-  header and/or footer, separate from the usual child collection that
-  represents the column data. To meet this requirement, JavaServer Faces
-  components offer support for facets, which represent a named
-  collection of subordinate (but non-child) components that are related
-  to the current component by virtue of a unique facet name that
-  represents the role that particular component plays.
-
-  Related API classes and interfaces
-
-    javax.faces.webapp.FacetTag
-
-      Used by the implementation to denote that a component should be
-      added as a facet to its parent, rather than as a child.
-
-    javax.faces.webapp.FacesTag
-
-      Contains some Facet specific logic.
-
-    javax.faces.component.UIComponent
-    javax.faces.component.UIComponentBase
-
-      Support for facets and children
-
-  Related RI classes and interfaces
-
-    com.sun.faces.renderkit.html_basic.HtmlBasicRenderer
-
-      Contains some Facet specific logic.
-
-* [TraversalOrder-43] Change the way components are processed so they
-  honor the new Facet work.  In addition, add new UIComponent traversal
-  methods.
-
-  Instead of using the TreeNavigator class to traverse the tree, this is
-  now handled by the UIComponent implementations.
-
-    com.sun.faces.lifecycle.ApplyRequestValuesPhase
-
-      Just call processDecodes() on the root of the tree.
-
-    com.sun.faces.lifecycle.ProcessValidationsPhase
-
-      Just call processValidators() on the root of the tree.
-
-    com.sun.faces.lifecycle.UpdateModelValuesPhase
-
-      Just call processUpdates() on the root of the tree.
-
-    javax.faces.component.UIComponent
-    javax.faces.component.UIComponentBase
-
-      Implementation of processDecodes(), processValidators(),
-      processUpdates().  These methods all call getFacetsAndChildren()
-      so that Facets are processed first, then children.
-
-    javax.faces.webapp.FacesTag
-    javax.faces.webapp.FacetTag
-
-     Support for facets.
-
-* [VisibleProperty-27] Add support for the "rendered" property, which is
-  leveraged during encode/decode.  See section JSF 3.1.12 of the spec.
-
-  Related API classes and interfaces
-
-    javax.faces.component.UIComponent
-    javax.faces.component.UIComponentBase
-
-  All of the Renderers must check this property:
-
-    public void encode*() {
-      
-      [...]
-
-      // suppress rendering if "rendered" property on the component is
-      // false.
-      if (!component.isRendered()) {
-          return;
-      }    
-
-      [...]
-
-    }
-
-* [JspDependencies-7] New Tag Library 
-
-  The URI for the html basic tld has changed to be spec compliant.  It
-  is now <http://java.sun.com/jsf/html>.  The recommended prefix for
-  this tag lib is "h".
-
-  We have broken the non-component tags out into the jsf-core taglib.
-  The URI for this taglib is <http://java.sun.com/jsf/core>.  The
-  recommended prefix for this tag lib is "f".
-
-* [UsabilityRenames-59] Class javax.faces.component.UIInput replaces
-  javax.faces.component.UITextEntry.  UIInput is for anything
-  that can take input from the user.  This change impacts the tags as
-  well.  For example, input_secret takes the place of textentry_secret.
-
-  selectone_radio takes the place of selectone_radiogroup
-  selectone_listbox takes the place of selectone_optionlist
-  output_errors takes the place of validation_message
-
-* [UIParameter-20] Class javax.faces.component.UIParameter and
-  com.sun.faces.taglib.jsf_core.ParameterTag are used to specify
-  parameters to components.  For example, in the case of output_message:
-
-  <h:output_message id="userMsg" 
-    value="Welcome {0}.  Thanks for trying the {1} application." >
-
-    <f:parameter id="param1" modelReference="LoginBean.userName"/>
-
-    <f:parameter id="param2" value="Faces Basic"/>
+      UIPanel
   
-  </h:output_message>
+      UIInput
 
-* [Converters-29] Add support for type conversion as in section JSF.3.2.
-  Converters enable model data to be stored in a model specific type,
-  such as java.util.Date even though.  I addition, the complete set of
-  rich formatting offered by the java.text package is exposed through
-  Converters.
+        UISelectBase
 
-  Related API classes and interfaces
+          UISelectMany
 
-    javax.faces.convert.ConverterException
-    javax.faces.convert.Converter
-    javax.faces.convert.ConverterFactory
-    javax.faces.component.UIComponent
-    javax.faces.component.UIComponentBase
-    javax.faces.FactoryFinder
+          UISelectOne
 
-  Related RI classes and interfaces
+        UISelectBoolean
 
-    com.sun.faces.convert.BooleanConverter
-    com.sun.faces.convert.DateConverter
-    com.sun.faces.convert.DateTimeConverter
-    com.sun.faces.convert.TimeConverter
-    com.sun.faces.convert.ConverterFactoryImpl
-    com.sun.faces.convert.NumberConverter
+      UIParameter
 
-* [ELDependencies-8]
+      UISelectItem
 
-  On a component, modelReference values can include any of the following
-  implicit objects as the first part of the expression, in addition to
-  the name of a model bean stored in the request, session, or
-  application scopes:
+      UISelectItems
 
-  Read-only implicit objects
+  Please see chapter 4 of the spec.
 
-	"facesContext"
-	"header"
-	"headerValues"
+* New valueRef and actionRef mechanism
 
-  Read-write implicit objects
+  The valueRef property on UIOutput takes the place of modelReference.
+  In addition, the actionRef property on UICommand provides a hook into
+  the Navigation System.
 
-	"param"
-	"paramValues"
-	"initParam"
-	"cookie"
-	"requestScope",
-	"sessionScope"
-	"applicationScope"
+  All of the modelReference methods have left FacesContext and are now
+  part of the new ValueBinding system.  Briefly, you ask the Application
+  for a ValueBinding for a given valueRef.  The returned ValueBinding
+  has all of the old modelReference methods.
 
-  The leading "${" and trailing "}" characters for modelReference values
-  are optional.
+  This new feature includes the ability to plug in your own classes for
+  resolving variables and properties in the valueRef and actionRef
+  expressions.
 
-* [Standard-Renderkit] Several new Renderers, and accompanying tags,
-  have been added.  Please see Section JSF.7.4 for details.
+  Please see chapter 5 of the spec.
 
-  Related RI classes and interfaces
+* Portlet compatibility.
 
-    com.sun.faces.renderkit.html_basic.DataRenderer
-    com.sun.faces.renderkit.html_basic.DateTimeRenderer
-    com.sun.faces.renderkit.html_basic.ErrorsRenderer
-    com.sun.faces.renderkit.html_basic.GridRenderer
-    com.sun.faces.renderkit.html_basic.GroupRenderer
-    com.sun.faces.renderkit.html_basic.ImageRenderer
-    com.sun.faces.renderkit.html_basic.LabelRenderer
-    com.sun.faces.renderkit.html_basic.ListRenderer
-    com.sun.faces.renderkit.html_basic.ListboxRenderer
-    com.sun.faces.renderkit.html_basic.SelectManyCheckboxListRenderer
-    com.sun.faces.renderkit.html_basic.TimeRenderer
-    com.sun.faces.renderkit.html_basic.DateRenderer
-    com.sun.faces.renderkit.html_basic.HiddenRenderer
-    com.sun.faces.renderkit.html_basic.HtmlBasicInputRenderer
-    com.sun.faces.renderkit.html_basic.MenuRenderer
-    com.sun.faces.renderkit.html_basic.NumberRenderer
-    com.sun.faces.taglib.html_basic.Graphic_ImageTag
-    com.sun.faces.taglib.html_basic.HtmlBasicValidator
-    com.sun.faces.taglib.html_basic.InputTag
-    com.sun.faces.taglib.html_basic.Input_DateTag
-    com.sun.faces.taglib.html_basic.Input_DateTimeTag
-    com.sun.faces.taglib.html_basic.Input_HiddenTag
-    com.sun.faces.taglib.html_basic.Input_NumberTag
-    com.sun.faces.taglib.html_basic.Input_SecretTag
-    com.sun.faces.taglib.html_basic.Input_TextAreaTag
-    com.sun.faces.taglib.html_basic.Input_TextTag
-    com.sun.faces.taglib.html_basic.Input_TimeTag
-    com.sun.faces.taglib.html_basic.Output_DateTag
-    com.sun.faces.taglib.html_basic.Output_DateTimeTag
-    com.sun.faces.taglib.html_basic.Output_ErrorsTag
-    com.sun.faces.taglib.html_basic.Output_LabelTag
-    com.sun.faces.taglib.html_basic.Output_MessageTag
-    com.sun.faces.taglib.html_basic.Output_NumberTag
-    com.sun.faces.taglib.html_basic.Output_TimeTag
-    com.sun.faces.taglib.html_basic.Panel_DataTag
-    com.sun.faces.taglib.html_basic.Panel_GridTag
-    com.sun.faces.taglib.html_basic.Panel_GroupTag
-    com.sun.faces.taglib.html_basic.Panel_ListTag
-    com.sun.faces.taglib.html_basic.SelectMany_CheckboxListTag
-    com.sun.faces.taglib.html_basic.SelectMany_ListboxTag
-    com.sun.faces.taglib.html_basic.SelectMany_MenuTag
-    com.sun.faces.taglib.html_basic.SelectOne_ListboxTag
-    com.sun.faces.taglib.html_basic.SelectOne_MenuTag
-    com.sun.faces.taglib.html_basic.SelectOne_RadioTag
+  To allow faces to run inside of portlets, all of the compile-time
+  dependencies on the servlet API have been removed.  Semantically, all
+  Servlet API dependencies have been converted to type Object and moved
+  to the new ExternalContext class, which shares the lifetime of the
+  FacesContext.
 
-  The renderer
-  com.sun.faces.renderkit.html_basic.TextAndGraphicRenderer has
-  been removed.  It is replaced by using separete text and graphic
-  renderers.
+  Please see section 6.1.1 of the spec
 
-* [ValidatorsAPI-42] Please see section JSF.2.2.3 for more detail.
-  There are now tags for the commonly used validators.
+* javax.faces.webapp.{FacesTag,FacesBodyTag} are now
+  javax.faces.webapp.{UIComponentTag,UIComponentBodyTag}.
 
-  Related RI classes and interfaces
+  Because the purpose of this tag is to represent a UIComponent instance
+  in the page, it has been renamed.  The old classes will continue to
+  work, but have been deprecated.
 
-    com.sun.faces.taglib.jsf_core.ValidateDoubleRangeTag
-    com.sun.faces.taglib.jsf_core.ValidateLengthTag
-    com.sun.faces.taglib.jsf_core.ValidateLongRangeTag
-    com.sun.faces.taglib.jsf_core.ValidateRequiredTag
-    com.sun.faces.taglib.jsf_core.ValidateStringRangeTag
-    com.sun.faces.taglib.jsf_core.ValueChangedListenerTag
+  Please see chapter 9 for more information.
 
-* Deprecated APIs
+Per-class changes
+=================
 
-  These will be REMOVED before the spec becomes final.
+javax.faces.FactoryFinder.java
 
-  javax.faces.context.FacesContext.addApplicationEvent()
-  javax.faces.context.FacesContext.getApplicationEvents()
-  javax.faces.context.FacesContext.getApplicationEventsCount()
-  javax.faces.context.FacesContext.getApplicationHandler()
-  javax.faces.event.CommandEvent
-  javax.faces.event.FormEvent
-  javax.faces.lifecycle.ApplicationHandler
-  javax.faces.lifecycle.Lifecycle.getApplicationHandler()
-  javax.faces.lifecycle.Lifecycle.setApplicationHandler()
-  javax.faces.lifecycle.Lifecycle.executePhase()
-  javax.faces.lifecycle.Phase
+- Addition of APPLICATION_FACTORY
+
+- Removal of MESSAGE_RESOURCES_FACTORY, and CONVERTER_FACTORY
+
+javax.faces.component.AttributeDescriptor.java 
+
+- This class has been removed, since its functionality is now present in
+  the Application Configuration Resources mechanism.
+
+javax/faces/component/UICommand.java
+
+- addition of actionRef.
+
+- removal of default encode/decode.
+
+javax/faces/component/UIComponent.java
+
+- removal of modelReference property, in favor of valueRef property on
+  UIOutput.
+
+- removal of FACET_PARENT attribute, in favor of setParent() method.
+
+src/javax/faces/component/UIComponentBase.java 
+
+- change getClientId() logic to use the renderer's getClientId() to set
+  the clientId instance variable.
+
+- removal of getComponentType method.
+
+- removal of modelReference property
+
+- performance enhancement, use ivars for common properties, instead of
+  HashMap storage.
+
+javax/faces/component/UIForm.java
+javax/faces/component/UIGraphic.java 
+javax/faces/component/UIInput.java 
+javax/faces/component/UINamingContainer.java 
+
+- extend UIOutput instead of UIComponentBase
+
+- removal of getComponentType method.
+
+- removal of default encode/decode.
+
+javax/faces/component/UINamingContainer.java 
+
+- removal of getComponentType method.
+
+javax/faces/component/UIOutput.java	
+
+- add valueRef property
+
+- removal of getComponentType method.
+
+- removal of default encode/decode.
+
+javax/faces/component/UIParameter.java
+
+- removal of getComponentType method.
+
+- removal of default encode/decode.
+
+javax/faces/component/UISelectBase.java 
+
+- bugfix in getSelectItems().
+
+- removed unused utilitiy methods.
+
+javax/faces/component/UISelectBoolean.java 
+javax/faces/component/UISelectOne.java 
+javax/faces/component/UISelectItems.java
+
+- removal of getComponentType method.
+
+- removal of default encode/decode.
+
+javax/faces/component/UISelectItem.java 
+javax/faces/component/UISelectMany.java 
+
+- performance enhancement, use ivars for common properties, instead of
+  HashMap storage.
+
+- removal of getComponentType method.
+
+- removal of default encode/decode.
+
+javax/faces/context/FacesContext.java
+
+- Removal of request attribute for storing FacesContext.
+  Replaced with static method that utilizes ThreadLocal,
+  FacesContext.getCurrentInstance().
+
+- Removal of deprecated methods:
+
+     public abstract Iterator getApplicationEvents();
+     public abstract int getApplicationEventsCount();
+     public abstract ApplicationHandler getApplicationHandler();
+     public abstract void addApplicationEvent(ApplicationEvent event);
+
+  functionality taken over by navigation system.
+
+- Servlet API methods moved in type neutral fashion to new class
+  ExternalContext
+
+     public abstract HttpSession getHttpSession();
+     public abstract ServletContext getServletContext();
+     public abstract ServletRequest getServletRequest();
+     public abstract ServletResponse getServletResponse();
+
+- getViewHandler() is redundant with the one in Lifecycle.  This one was
+  removed.
+
+- modelReference methods moved to ValueBinding
+
+- new accessor for ExternalContext
+
+javax/faces/context/FacesContextFactory.java
+
+- Take Object instead of Servlet API classes to getFacesContext().
+
+javax/faces/context/MessageResourcesFactory.java
+javax/faces/convert/ConverterFactory.java
+
+- Moved into Application interface
+
+javax/faces/context/Message.java
+javax/faces/context/MessageImpl.java
+
+- Moved into application package
+
+javax/faces/event/PhaseId.java
+
+- Add phaseName to toString() method for debugging purposes.
+
+javax/faces/lifecycle/Phase.java
+
+- removed, not necessary in API.
+
+javax/faces/lifecycle/Lifecycle.java
+
+- removed ApplicationHandler, replaced by Navigation system.
+
+- removed executePhase(), not necessary in API
+
+javax/faces/lifecycle/ViewHandler.java
+
+- renderView throws FacesException instead of ServletException
+
+javax/faces/render/RenderKit.java
+
+- removal of methods made unnecessary by faces-config.xml
+
+     public abstract void addComponentClass(Class componentClass);
+     public abstract Iterator getComponentClasses();
+
+- removal of methods that only make sense at design time
+
+     public abstract Iterator getRendererTypes();
+     public abstract Iterator getRendererTypes(String componentType);
+     public abstract Iterator getRendererTypes(UIComponent component);
+
+javax/faces/render/Renderer.java
+
+- removal of methods that only make sense at design time
+
+    public abstract AttributeDescriptor getAttributeDescriptor(UIComponent component, String name);
+
+    public abstract AttributeDescriptor getAttributeDescriptor(String componentType, String name);
+
+    public abstract Iterator getAttributeNames(String componentType);
+
+    public abstract Iterator getAttributeNames(String componentType);
+
+    public abstract boolean supportsComponentType(UIComponent component);
+
+    public abstract boolean supportsComponentType(String componentType);
+
+javax/faces/validator/DoubleRangeValidator.java
+javax/faces/validator/LengthValidator.java
+javax/faces/validator/LongRangeValidator.java
+javax/faces/validator/StringRangeValidator.java
+
+- changes to deal with new UIComponent hierarchy.
+
+- changes to deal with new package for Message.
+
+javax/faces/validator/ValidatorBase.java
+
+- Leverage the Application's MessageResources/Message facility
+
+javax/faces/webapp/AttributeTag.java
+javax/faces/webapp/FacetTag.java
+
+- Deal with name change of FacesTag to UIComponentTag.  
+
+javax/faces/webapp/FacesBodyTag.java 
+
+- Name change, to UIComponentBodyTag.
+
+javax/faces/webapp/FacesServlet.java
+
+- Don't cache the FacesContext in a request attribute.
+
+javax/faces/webapp/FacesTag.java
+
+- Name change, to UIComponentTag.
+
+
 
 Known Issues With This Release
 ==============================
 
-* Be aware of bug
-  <http://nagoya.apache.org/bugzilla/show_bug.cgi?id=12492>.
-  JSP with lots of custom tags crashes tomcat VM
+* The current implementation does not support adding custom render kits
+  from the Application Configuration Resources file. The workaround for
+  this is to use a ServletContextListener, obtain a reference to the
+  RenderKitFactory, and manually add the render kit to the factory.
 
-* Due to a bug in JSTL 1.0, you must have the jstl.jar and standard.jar in
-  your WEB-INF/lib directory of each webapp.  It is not sufficient to
-  place these jars in your tomcat/common/lib directory.
+* When using graphic_image, make sure to start your "url" attribute with
+  a "/" to cause the proper context path to be prepended to your image.
 
 * When saving tree in session, we don't support multiple concurrent
   requests to faces app from one client.
 
-*  Component type is hard coded in component subclasses (ex: UICommand)
-   as fully qualfied class names (ex: javax.faces.component.UICommand).
-   However, a component's type is configurable in the renderkit's xml 
-   configuration file (HtmlBasicRenderKit.xml).
+* SaveState in page option cannot be used if your web app has event
+  handlers and validators because they are not serializable currently.
 
-*  AttributeDescriptor support happens all the time, even though it's
-   only used at design time.
+* Additionally, in the areas of functionality released in the EA, there
+  are already significant changes in progress in the
+  specification. Therefore, only experimental code should be developed
+  against this release since it will not be compatabile with subsequent
+  releases.
 
 Legal Notice
 ============
