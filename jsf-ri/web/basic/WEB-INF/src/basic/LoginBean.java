@@ -1,5 +1,5 @@
 /*
- * $Id: LoginBean.java,v 1.13 2002/09/17 00:08:59 rkitain Exp $
+ * $Id: LoginBean.java,v 1.14 2002/09/23 20:36:27 rkitain Exp $
  */
 
 /*
@@ -241,6 +241,22 @@ public class LoginBean {
     public void setDate(Date newDate)
     {
 	date = newDate;
+    }
+
+    protected Date time;
+    public Date getTime() {
+        return time;
+    }
+    public void setTime(Date newTime) {
+        time = newTime;
+    }
+
+    protected Date dateTime;
+    public Date getDateTime() {
+        return dateTime;
+    }
+    public void setDateTime(Date newDateTime) {
+        dateTime = newDateTime;
     }
 
     protected Float floater = new Float(3.141592);
