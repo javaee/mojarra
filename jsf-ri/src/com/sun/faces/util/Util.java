@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.137 2004/05/03 19:30:33 jvisvanathan Exp $
+ * $Id: Util.java,v 1.138 2004/05/04 21:17:12 eburns Exp $
  */
 
 /*
@@ -59,7 +59,7 @@ import java.util.StringTokenizer;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.137 2004/05/03 19:30:33 jvisvanathan Exp $
+ * @version $Id: Util.java,v 1.138 2004/05/04 21:17:12 eburns Exp $
  */
 
 public class Util extends Object {
@@ -1411,11 +1411,11 @@ public class Util extends Object {
         }
 
 	// handle implicit objects
-        if (identifier.equalsIgnoreCase(RIConstants.COOKIE_IMPLICIT_OBJ)) {
-	    return RIConstants.APPLICATION;
-        }	
         if (identifier.equalsIgnoreCase(RIConstants.INIT_PARAM_IMPLICIT_OBJ)) {
 	    return RIConstants.APPLICATION;
+        }	
+        if (identifier.equalsIgnoreCase(RIConstants.COOKIE_IMPLICIT_OBJ)) {
+	    return RIConstants.REQUEST;
         }	
         if (identifier.equalsIgnoreCase(RIConstants.FACES_CONTEXT_IMPLICIT_OBJ)) {
 	    return RIConstants.REQUEST;
