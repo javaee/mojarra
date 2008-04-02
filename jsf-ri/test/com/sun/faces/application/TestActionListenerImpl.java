@@ -1,5 +1,5 @@
 /*
- * $Id: TestActionListenerImpl.java,v 1.6 2003/05/10 01:05:41 rkitain Exp $
+ * $Id: TestActionListenerImpl.java,v 1.7 2003/05/20 16:35:30 eburns Exp $
  */
 
 /*
@@ -33,7 +33,6 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContext;
 
 import org.apache.cactus.WebRequest;
-import org.apache.cactus.server.ServletContextWrapper;
 import org.mozilla.util.Assert;
 import org.mozilla.util.Debug;
 import org.mozilla.util.ParameterCheck;
@@ -44,7 +43,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestActionListenerImpl.java,v 1.6 2003/05/10 01:05:41 rkitain Exp $
+ * @version $Id: TestActionListenerImpl.java,v 1.7 2003/05/20 16:35:30 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -92,48 +91,8 @@ public class TestActionListenerImpl extends ServletFacesTestCase
 // General Methods
 //
 
-    private void loadConfigFile() {
-        config.getServletContext().removeAttribute(RIConstants.CONFIG_ATTR);
-	// clear out the renderKit factory
-	FactoryFinder.releaseFactories();
-
-        final String paramVal = "WEB-INF/faces-navigation.xml";
-
-        // work around a bug in cactus where calling
-        // config.setInitParameter() doesn't cause
-        // servletContext.getInitParameter() to relfect the call.
-
-        ServletContextWrapper sc =
-            new ServletContextWrapper(config.getServletContext()) {
-                public String getInitParameter(String theName) {
-                    if (null != theName &&
-                        theName.equals(RIConstants.CONFIG_FILES_INITPARAM)) {
-                        return paramVal;
-                    }
-                    return super.getInitParameter(theName);
-                }
-            };
-
-        ConfigListener configListener = new ConfigListener();
-        ServletContextEvent e =
-            new ServletContextEvent(sc);
-        configListener.contextInitialized(e);
-
-        System.out.println("NAV CASES LOADED:");
-        ConfigBase cbase = (ConfigBase)config.getServletContext().getAttribute(RIConstants.CONFIG_ATTR);
-        List navs = cbase.getNavigationCases();
-        for (int i=0; i<navs.size(); i++) {
-            ConfigNavigationCase nc = (ConfigNavigationCase)navs.get(i);
-            System.out.println("<from-tree-id>:"+nc.getFromTreeId());
-            System.out.println(" : <from-action-ref>:"+nc.getFromActionRef());
-            System.out.println(" : <from-outcome>:"+nc.getFromOutcome());
-            System.out.println(" : <to-tree-id>:"+nc.getToTreeId());
-            System.out.println("----------------------------------------------");
-        }
-    }
-
     public void testProcessAction() {
-        loadConfigFile();
+	loadFromInitParam("WEB-INF/faces-navigation.xml");
         FacesContext context = getFacesContext();
 
         System.out.println("Testing With Action Literal Set...");

@@ -1,5 +1,5 @@
 /*
- * $Id: JspFacesTestCase.java,v 1.6 2003/05/13 03:55:45 eburns Exp $
+ * $Id: JspFacesTestCase.java,v 1.7 2003/05/20 16:35:29 eburns Exp $
  */
 
 /*
@@ -22,6 +22,7 @@ import javax.servlet.jsp.PageContext;
 import javax.faces.context.FacesContext;
 
 import java.util.Iterator;
+import com.sun.faces.config.ConfigBase;
 
 /**
  *
@@ -31,7 +32,7 @@ import java.util.Iterator;
  *  by cactus.  This class just delegates all method calls to
  *  facesService.
  *
- * @version $Id: JspFacesTestCase.java,v 1.6 2003/05/13 03:55:45 eburns Exp $
+ * @version $Id: JspFacesTestCase.java,v 1.7 2003/05/20 16:35:29 eburns Exp $
  * 
  * @see	#facesService
  *
@@ -171,6 +172,10 @@ public boolean isSubset(String [] subset, Iterator superset) {
 public boolean requestsHaveSameAttributeSet(HttpServletRequest request1,
 					    HttpServletRequest request2) {
     return facesService.requestsHaveSameAttributeSet(request1, request2);
+}
+
+public ConfigBase loadFromInitParam(String paramValue) {
+    return facesService.loadFromInitParam(paramValue);
 }
 
 } // end of class JspFacesTestCase

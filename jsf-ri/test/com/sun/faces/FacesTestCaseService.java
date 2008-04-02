@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTestCaseService.java,v 1.18 2003/05/15 22:25:50 rkitain Exp $
+ * $Id: FacesTestCaseService.java,v 1.19 2003/05/20 16:35:29 eburns Exp $
  */
 
 /*
@@ -26,6 +26,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.context.FacesContextFactory;
 import javax.faces.component.UICommand;
 import com.sun.faces.renderkit.html_basic.HtmlBasicRenderKit;
+import com.sun.faces.config.ConfigBase;
 import javax.servlet.jsp.PageContext;
 
 import com.sun.faces.util.Util;
@@ -39,6 +40,9 @@ import java.util.Enumeration;
 
 import java.io.IOException;
 
+import org.apache.cactus.server.ServletContextWrapper;
+
+
 /**
  *
 
@@ -51,7 +55,7 @@ import java.io.IOException;
  * <B>Lifetime And Scope</B> <P> Same as the JspTestCase or
  * ServletTestCase instance that uses it.
  *
- * @version $Id: FacesTestCaseService.java,v 1.18 2003/05/15 22:25:50 rkitain Exp $
+ * @version $Id: FacesTestCaseService.java,v 1.19 2003/05/20 16:35:29 eburns Exp $
  * 
  * @see	com.sun.faces.context.FacesContextFactoryImpl
  * @see	com.sun.faces.context.FacesContextImpl
@@ -359,6 +363,39 @@ public boolean requestsHaveSameAttributeSet(HttpServletRequest request1,
     return true;
 }
     
+public ConfigBase loadFromInitParam(String paramValue) {
+    final String paramVal = paramValue;
+    ConfigBase result = null;
+    
+    // clear out the attr that was set in the servletcontext attr set.
+    facesTestCase.getConfig().getServletContext().removeAttribute(RIConstants.CONFIG_ATTR);
+    // clear out the renderKit factory
+    FactoryFinder.releaseFactories();
+    
+    // work around a bug in cactus where calling
+    // config.setInitParameter() doesn't cause
+    // servletContext.getInitParameter() to relfect the call.
+    
+    ServletContextWrapper sc = 
+	new ServletContextWrapper(facesTestCase.getConfig().getServletContext()) {
+	    public String getInitParameter(String theName) {
+		if (null != theName &&
+		    theName.equals(RIConstants.CONFIG_FILES_INITPARAM)) {
+		    return paramVal;
+		}
+		return super.getInitParameter(theName);
+	    }
+	};
+    
+    ConfigListener configListener = new ConfigListener();
+    ServletContextEvent e = 
+	new ServletContextEvent(sc);
+    configListener.contextInitialized(e);
+    result = (ConfigBase) sc.getAttribute(RIConstants.CONFIG_ATTR);
+    Assert.assert_it(null != result);
+
+    return result;
+}
 
 
 } // end of class FacesTestCaseService

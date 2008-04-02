@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigFileTestCase.java,v 1.14 2003/05/06 03:30:46 eburns Exp $
+ * $Id: ConfigFileTestCase.java,v 1.15 2003/05/20 16:35:32 eburns Exp $
  */
 
 /*
@@ -32,7 +32,6 @@ import javax.faces.render.RenderKitFactory;
 
 import org.apache.cactus.ServletTestCase;
 import org.apache.cactus.WebRequest;
-import org.apache.cactus.server.ServletContextWrapper;
 import com.sun.faces.ServletFacesTestCase;
 
 /**
@@ -333,34 +332,8 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
     }
 
     public void testInitParams() {
-	// clear out the attr that was set in the servletcontext attr set.
-	config.getServletContext().removeAttribute(RIConstants.CONFIG_ATTR);
-	// clear out the renderKit factory
-	FactoryFinder.releaseFactories();
-
 	final String paramVal = "config1.xml,config2.xml,/WEB-INF/faces-config.xml";
-
-	// work around a bug in cactus where calling
-	// config.setInitParameter() doesn't cause
-	// servletContext.getInitParameter() to relfect the call.
-	
-	ServletContextWrapper sc = 
-	    new ServletContextWrapper(config.getServletContext()) {
-		public String getInitParameter(String theName) {
-		    if (null != theName &&
-			theName.equals(RIConstants.CONFIG_FILES_INITPARAM)) {
-			return paramVal;
-		    }
-		    return super.getInitParameter(theName);
-		}
-	    };
-	    
-	ConfigListener configListener = new ConfigListener();
-	ServletContextEvent e = 
-	    new ServletContextEvent(sc);
-	configListener.contextInitialized(e);
-	ConfigBase configBase = (ConfigBase) 
-	    sc.getAttribute(RIConstants.CONFIG_ATTR);
+	ConfigBase configBase = loadFromInitParam(paramVal);
 	assertTrue(null != configBase);
 	// make sure we have the managed beans from all three config
 	// files: 1. the stock RI 2. config1.xml 3. config2.xml

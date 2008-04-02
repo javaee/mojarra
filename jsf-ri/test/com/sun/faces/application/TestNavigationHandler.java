@@ -1,5 +1,5 @@
 /*
- * $Id: TestNavigationHandler.java,v 1.2 2003/05/10 01:05:41 rkitain Exp $
+ * $Id: TestNavigationHandler.java,v 1.3 2003/05/20 16:35:31 eburns Exp $
  */
 
 /*
@@ -29,7 +29,6 @@ import javax.faces.FactoryFinder;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContext;
 
-import org.apache.cactus.server.ServletContextWrapper;
 import org.apache.commons.digester.Digester;
 import org.apache.commons.digester.CallMethodRule;
 import org.apache.commons.digester.CallParamRule;
@@ -51,7 +50,7 @@ import com.sun.faces.ServletFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestNavigationHandler.java,v 1.2 2003/05/10 01:05:41 rkitain Exp $
+ * @version $Id: TestNavigationHandler.java,v 1.3 2003/05/20 16:35:31 eburns Exp $
  * 
  */
 
@@ -98,34 +97,8 @@ public class TestNavigationHandler extends ServletFacesTestCase
     }
 
     private void loadConfigFile() {
-        config.getServletContext().removeAttribute(RIConstants.CONFIG_ATTR);
-	// clear out the renderKit factory
-	FactoryFinder.releaseFactories();
-
-        final String paramVal = "WEB-INF/faces-navigation.xml";
-
-        // work around a bug in cactus where calling
-        // config.setInitParameter() doesn't cause
-        // servletContext.getInitParameter() to relfect the call.
-
-        ServletContextWrapper sc =
-            new ServletContextWrapper(config.getServletContext()) {
-                public String getInitParameter(String theName) {
-                    if (null != theName &&
-                        theName.equals(RIConstants.CONFIG_FILES_INITPARAM)) {
-                        return paramVal;
-                    }
-                    return super.getInitParameter(theName);
-                }
-            };
-
-        ConfigListener configListener = new ConfigListener();
-        ServletContextEvent e =
-            new ServletContextEvent(sc);
-        configListener.contextInitialized(e);
-
+	ConfigBase cbase = loadFromInitParam("WEB-INF/faces-navigation.xml");
         System.out.println("NAV CASES LOADED:");
-        ConfigBase cbase = (ConfigBase)config.getServletContext().getAttribute(RIConstants.CONFIG_ATTR);
         List navs = cbase.getNavigationCases();
         for (int i=0; i<navs.size(); i++) {
             ConfigNavigationCase nc = (ConfigNavigationCase)navs.get(i);
