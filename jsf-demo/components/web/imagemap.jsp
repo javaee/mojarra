@@ -60,11 +60,11 @@
 		<h:graphic_image id="mapImage" url="/images/world.gif" usemap="#worldMap" />	
 		<d:map id="worldMap" currentArea="NAmericas" >	
                     <f:action_listener type="demo.model.ImageMapEventHandler"/>
-       			<d:area id="NAmericas" valueRef="NA" onmouseover="images/world_namer.gif" onmouseout="images/world.gif" />
-			<d:area id="SAmericas" valueRef="SA" onmouseover="images/world_samer.gif" onmouseout="images/world.gif" />
-			<d:area id="Finland" valueRef="finA" onmouseover="images/world_finland.gif" onmouseout="images/world.gif"  />
-			<d:area id="Germany" valueRef="gerA" onmouseover="images/world_germany.gif" onmouseout="images/world.gif" />
-       			<d:area id="France" valueRef="fraA" onmouseover="images/world_france.gif" onmouseout="images/world.gif" />
+       			<d:area id="NAmericas" valueRef="NA" onmouseover="/images/world_namer.gif" onmouseout="/images/world.gif" />
+			<d:area id="SAmericas" valueRef="SA" onmouseover="/images/world_samer.gif" onmouseout="/images/world.gif" />
+			<d:area id="Finland" valueRef="finA" onmouseover="/images/world_finland.gif" onmouseout="/images/world.gif"  />
+			<d:area id="Germany" valueRef="gerA" onmouseover="/images/world_germany.gif" onmouseout="/images/world.gif" />
+       			<d:area id="France" valueRef="fraA" onmouseover="/images/world_france.gif" onmouseout="/images/world.gif" />
 		</d:map>
 	     </TD></TR>
 	</TABLE>
