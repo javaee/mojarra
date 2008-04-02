@@ -58,6 +58,9 @@ Sun RI changes
      access.  To further optimize look up, the saved map of descriptors is 
      keyed by "name" instead of array of property descriptors.
 
+  -  Improved the performance of checking whether a component's rendering
+     should be suppressed in UIComponentTag. 
+
 * Fixed bug where an exception would be thrown if you had a managed bean
   property referencing a non managed bean.  ManageBeanFactory threw an 
   exception because it didn't know the scope of the referenced non
