@@ -13,14 +13,14 @@
     
       <form id="form01" method="post" action="/jsf-systest/faces/taglib/command_link_test.jsp">
 
-        <a id="form01:hyperlink01" href="#" onmousedown="document.forms[0]['form01:hyperlink01'].value='form01:hyperlink01'; document.forms[0].submit()">My Link</a>
-        <a id="form01:hyperlink02" href="#" onmousedown="document.forms[0]['form01:hyperlink02'].value='form01:hyperlink02'; document.forms[0].submit()">This is a String property</a>
-        <a id="form01:hyperlink03" href="#" onmousedown="document.forms[0]['form01:hyperlink03'].value='form01:hyperlink03'; document.forms[0].submit()">RES-BUNDLE LINK</a>
-        <a id="form01:hyperlink04" href="#" onmousedown="document.forms[0]['form01:hyperlink04'].value='form01:hyperlink04'; document.forms[0].submit()"><img src="duke.gif" /></a>
-        <a id="form01:hyperlink05" href="#" onmousedown="document.forms[0]['form01:hyperlink05'].value='form01:hyperlink05'; document.forms[0].submit()"><img id="form01:_id4" src="resbundle_image.gif" alt="" /></a>
+        <a id="form01:hyperlink01" href="#" onclick="document.forms[0]['form01:hyperlink01'].value='form01:hyperlink01'; document.forms[0].submit()">My Link</a>
+        <a id="form01:hyperlink02" href="#" onclick="document.forms[0]['form01:hyperlink02'].value='form01:hyperlink02'; document.forms[0].submit()">This is a String property</a>
+        <a id="form01:hyperlink03" href="#" onclick="document.forms[0]['form01:hyperlink03'].value='form01:hyperlink03'; document.forms[0].submit()">RES-BUNDLE LINK</a>
+        <a id="form01:hyperlink04" href="#" onclick="document.forms[0]['form01:hyperlink04'].value='form01:hyperlink04'; document.forms[0].submit()"><img src="duke.gif" /></a>
+        <a id="form01:hyperlink05" href="#" onclick="document.forms[0]['form01:hyperlink05'].value='form01:hyperlink05'; document.forms[0].submit()"><img id="form01:_id4" src="resbundle_image.gif" alt="" /></a>
         
             
-        <a id="form01:hyperlink06" href="#" onmousedown="document.forms[0]['form01:hyperlink06'].value='form01:hyperlink06';document.forms[0]['param1'].value='value1'; document.forms[0].submit()">Paramter Link</a>
+        <a id="form01:hyperlink06" href="#" onclick="document.forms[0]['form01:hyperlink06'].value='form01:hyperlink06';document.forms[0]['param1'].value='value1'; document.forms[0].submit()">Paramter Link</a>
       <input type="hidden" name="form01" value="form01" /><input type="hidden" name="form01:hyperlink02" /><input type="hidden" name="form01:hyperlink06" /><input type="hidden" name="form01:hyperlink04" /><input type="hidden" name="form01:hyperlink01" /><input type="hidden" name="form01:hyperlink03" /><input type="hidden" name="param1" /><input type="hidden" name="form01:hyperlink05" /></form>
     
 </body>

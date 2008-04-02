@@ -1,5 +1,5 @@
 /*
- * $Id: CommandLinkRenderer.java,v 1.7 2004/01/15 07:34:04 eburns Exp $
+ * $Id: CommandLinkRenderer.java,v 1.8 2004/01/16 18:15:19 horwat Exp $
  */
 
 /*
@@ -36,7 +36,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: CommandLinkRenderer.java,v 1.7 2004/01/15 07:34:04 eburns Exp $
+ * @version $Id: CommandLinkRenderer.java,v 1.8 2004/01/16 18:15:19 horwat Exp $
  */
 
 public class CommandLinkRenderer extends HtmlBasicRenderer {
@@ -195,7 +195,13 @@ public class CommandLinkRenderer extends HtmlBasicRenderer {
 	sb.append("");
 	sb.append("].submit()");
 
-	writer.writeAttribute("onmousedown", sb.toString(), null); 
+        //If 'onclick' specified append 'return false' 
+        //to end javascript mouse event processing
+        if (component.getAttributes().get("onclick") != null) {
+            sb.append("; return false");
+        }
+
+	writer.writeAttribute("onclick", sb.toString(), null); 
 
         //handle css style class
 	String styleClass = (String)
