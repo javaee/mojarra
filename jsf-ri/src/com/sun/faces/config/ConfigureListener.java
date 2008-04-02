@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListener.java,v 1.39 2005/07/03 07:33:13 jhook Exp $
+ * $Id: ConfigureListener.java,v 1.40 2005/07/03 19:17:14 jhook Exp $
  */
 /*
  * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
@@ -1355,31 +1355,27 @@ public class ConfigureListener implements ServletContextListener {
         CompositeELResolver compositeELResolverForJsp = 
             new FacesCompositeELResolver();    
         appAssociate.setFacesELResolverForJsp(compositeELResolverForJsp);
-        
-        try {
                 
-            // get JspApplicationContext.
-            JspApplicationContext jspAppContext = JspFactory.getDefaultFactory().
-                getJspApplicationContext(context);
-            
-            // cache the ExpressionFactory instance in ApplicationAssociate
-            appAssociate.
-                setExpressionFactory(jspAppContext.getExpressionFactory());
-            
-            // register compositeELResolver with JSP
-            jspAppContext.addELResolver(compositeELResolverForJsp);
-            
-            //register JSF ELContextListenerImpl with Jsp
-            ELContextListenerImpl elContextListener = new ELContextListenerImpl();
-            jspAppContext.addELContextListener(elContextListener);
+        // get JspApplicationContext.
+        JspApplicationContext jspAppContext = JspFactory.getDefaultFactory()
+                .getJspApplicationContext(context);
 
-        } catch (Exception e) {
-            logger.log(Level.SEVERE, "Cannot Register ELResolvers", e);
-        }
+        // cache the ExpressionFactory instance in ApplicationAssociate
+        appAssociate.setExpressionFactory(jspAppContext.getExpressionFactory());
+
+        // register compositeELResolver with JSP
+        jspAppContext.addELResolver(compositeELResolverForJsp);
+
+        // register JSF ELContextListenerImpl with Jsp
+        ELContextListenerImpl elContextListener = new ELContextListenerImpl();
+        jspAppContext.addELContextListener(elContextListener);
+
     }
 
     /**
-     * <p>Release the mark that this web application has been initialized.</p>
+     * <p>
+     * Release the mark that this web application has been initialized.
+     * </p>
      */
     private void release() {
 
