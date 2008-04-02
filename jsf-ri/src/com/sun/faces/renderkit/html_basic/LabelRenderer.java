@@ -1,5 +1,5 @@
 /*
- * $Id: LabelRenderer.java,v 1.19 2003/11/03 21:44:04 eburns Exp $
+ * $Id: LabelRenderer.java,v 1.20 2003/11/13 02:58:42 jvisvanathan Exp $
  */
 
 /*
@@ -21,30 +21,23 @@ import javax.faces.context.ResponseWriter;
 
 import org.mozilla.util.Assert;
 import org.mozilla.util.Debug;
-import org.mozilla.util.Log;
 import org.mozilla.util.ParameterCheck;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
 /**
- *
- *  <B>LabelRenderer</B> is a class ...
- *
- * <B>Lifetime And Scope</B> <P>
- *
- * @version $Id: LabelRenderer.java,v 1.19 2003/11/03 21:44:04 eburns Exp $
- * 
- * @see	Blah
- * @see	Bloo
+ * <p><B>LabelRenderer</B> renders Label element.<p>. 
  *
  */
-
 public class LabelRenderer extends HtmlBasicRenderer {
     //
     // Protected Constants
     //
-
+    private static final Log log = LogFactory.getLog(LabelRenderer.class);
     //
     // Class Variables
     //
@@ -52,7 +45,7 @@ public class LabelRenderer extends HtmlBasicRenderer {
     //
     // Instance Variables
     //
-
+    private static final String RENDER_END_ELEMENT="com.sun.faces.RENDER_END_ELEMENT";
     // Attribute Instance Variables
 
 
@@ -99,23 +92,32 @@ public class LabelRenderer extends HtmlBasicRenderer {
         Assert.assert_it(writer != null );
 
 	forValue = (String) component.getAttributes().get("for");
-	Assert.assert_it(null != forValue);
-
+        if ( forValue == null ) {
+            if (log.isErrorEnabled()) {
+                log.error(Util.getExceptionMessage(Util.NULL_FORVALUE_ID, 
+                    new Object[]{ forValue }));
+            }
+            return;
+        }
+        
+        UIComponent forComponent = getForComponent(context, forValue, component);
+        if ( forComponent == null) {
+            return;
+        }
+        
+        // set a temporary attribute on the component to indicate that
+        // label end element needs to be rendered.
+        component.getAttributes().put(RENDER_END_ELEMENT, "yes");
 	writer.startElement("label", component);
-	writer.writeAttribute("for", forValue, "for");
+        String forClientId = forComponent.getClientId(context);
+	writer.writeAttribute("for", forClientId, "for");
 
         Util.renderPassThruAttributes(writer, component);
-
-	if (null != styleClass || null != style)	{
-	    writer.startElement("span", component);
-	    if (null != styleClass) {
-		writer.writeAttribute("class", styleClass, "styleClass");
-	    }
-	    if (null != style) {
-		writer.writeAttribute("style", style, "style");
-	    }
+	if (null != styleClass ){
+            writer.writeAttribute("class", styleClass, "styleClass");
 	}
         writer.writeText("\n", null);
+        writer.closeStartTag(component);
     }
 
     public void encodeChildren(FacesContext context, UIComponent component) {
@@ -130,14 +132,14 @@ public class LabelRenderer extends HtmlBasicRenderer {
         if (context == null || component == null) {
             throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
-
-        ResponseWriter writer = context.getResponseWriter();
-        Assert.assert_it(writer != null );
-	if ((null != component.getAttributes().get("styleClass")) || 
-	    (null != component.getAttributes().get("style")))	{
-	    writer.endElement("span");
-	}
-	writer.endElement("label");
+        // render label end element if RENDER_END_ELEMENT is set.
+        String render = (String) component.getAttributes().get(RENDER_END_ELEMENT);
+        if ( render != null && render.equals("yes")) {
+            component.getAttributes().remove(RENDER_END_ELEMENT);
+            ResponseWriter writer = context.getResponseWriter();
+            Assert.assert_it(writer != null );
+	    writer.endElement("label");
+        }
     }
 
     // The testcase for this class is TestRenderResponsePhase.java

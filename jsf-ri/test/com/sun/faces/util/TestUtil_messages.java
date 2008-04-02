@@ -1,5 +1,5 @@
 /*
- * $Id: TestUtil_messages.java,v 1.24 2003/11/07 18:45:31 eburns Exp $
+ * $Id: TestUtil_messages.java,v 1.25 2003/11/13 02:58:47 jvisvanathan Exp $
  */
 
 /*
@@ -24,7 +24,7 @@ import java.util.Locale;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestUtil_messages.java,v 1.24 2003/11/07 18:45:31 eburns Exp $
+ * @version $Id: TestUtil_messages.java,v 1.25 2003/11/13 02:58:47 jvisvanathan Exp $
  */
 
 public class TestUtil_messages extends ServletFacesTestCase {
@@ -106,7 +106,8 @@ public class TestUtil_messages extends ServletFacesTestCase {
         {Util.DUPLICATE_COMPONENT_ID_ERROR_ID, "1"},        
         {Util.FACES_SERVLET_MAPPING_CANNOT_BE_DETERMINED_ID, "1"},
         {Util.ILLEGAL_VIEW_ID_ID, "1"},
-        {Util.INVALID_EXPRESSION_ID, "1"}
+        {Util.INVALID_EXPRESSION_ID, "1"},
+        {Util.NULL_FORVALUE_ID, "1"}
         
     };
 

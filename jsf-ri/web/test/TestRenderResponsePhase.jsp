@@ -32,8 +32,9 @@
                         <h:output_text id="B2" value="Form"/>
                      </h:panel_group>
 
+                   
                     <h:output_text id="text1" value="Username:"/>
-
+                   
                     <h:input_text id="username1" styleClass="inputClass" value="JavaServerFaces" />
 
                     <h:output_text id="text2" styleClass="outputClass" value="Password:"/>
@@ -202,8 +203,9 @@
       <TR>
 
 	<TD>
-
-	      <h:output_text value="Output Text" />
+              
+             <h:output_text id="outputText" value="Output Text"/>
+            
               <h:output_text id="testvisible1" value="This should not be visible"
                                rendered="false" />
               <h:graphic_image id="testvisible2" url="/duke.gif" rendered="false"  />
@@ -215,9 +217,12 @@
       <TR>
 
 	<TD>
-
-            <h:selectboolean_checkbox  rendered="true"
+            
+            <h:selectboolean_checkbox  id="checkbox1" rendered="true"
                    styleClass="selectbooleanClass"/>
+             <h:output_label id="labe11" for="checkbox1">
+                        <h:output_text id="outputlabel" value="Checkbox"/>
+              </h:output_label>
 	</TD>
 
       </TR>

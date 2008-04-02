@@ -29,8 +29,9 @@
                         
                      
 
+                   
                     
-
+                   
                     
 
                     
@@ -211,8 +212,9 @@
       <TR>
 
 	<TD>
-
-	      Output Text
+              
+             Output Text
+            
               
               
 
@@ -223,8 +225,12 @@
       <TR>
 
 	<TD>
+            
+            <input type="checkbox" name="basicForm:checkbox1" class="selectbooleanClass" />
+             <label for="basicForm:checkbox1">
 
-            <input type="checkbox" name="basicForm:_id14" class="selectbooleanClass" />
+                        Checkbox
+              </label>
 	</TD>
 
       </TR>
@@ -246,7 +252,7 @@
                 
                 
 
-              <span class="selectoneClass"><select name="basicForm:_id15" size="10" tabindex="20" title="Select Quantity">	<option value="0">0</option>
+              <span class="selectoneClass"><select name="basicForm:_id13" size="10" tabindex="20" title="Select Quantity">	<option value="0">0</option>
 	<option value="1">1</option>
 	<option value="2">2</option>
 	<option value="3">3</option>
@@ -316,7 +322,7 @@
 
 	<TD>
                 
-            <input type="text" name="basicForm:_id32" value="Wed, Jul 10, 1996" class="inputClass" />
+            <input type="text" name="basicForm:_id30" value="Wed, Jul 10, 1996" class="inputClass" />
 	</TD>
 
       </TR>
@@ -504,7 +510,7 @@
 						
 						
 						
-					<select name="basicForm:_id43" multiple size="10">	<option value="0">zero</option>
+					<select name="basicForm:_id41" multiple size="10">	<option value="0">zero</option>
 	<option value="1">one</option>
 	<option value="2">two</option>
 	<option value="3">three</option>
@@ -565,7 +571,7 @@
 
 
     
-<input type="hidden" name="basicForm:_id66" value="48%" />
+<input type="hidden" name="basicForm:_id64" value="48%" />
 
   <TABLE>
 
