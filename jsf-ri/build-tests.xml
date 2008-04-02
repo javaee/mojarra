@@ -36,7 +36,7 @@
 
         junit.jar                     The JUnit jar
 
-        tomcat.home                   The home directory of where Tomcat 4.0
+        tomcat.home                   The home directory of where Tomcat 
                                       is installed
 
         compile.debug                 The debug mode for compilation
@@ -185,79 +185,59 @@
 
     </target>
 
-<!--
-        Prepare test directory structure for Tomcat 4.0 servlet engine
--->
-    <target name="prepare.test.tomcat.40" depends="prepare.test.war,copy-test-data-files" if="tomcat.home.40">
+    <target name="copyServerConfFile.tomcat4" 
+        depends="prepare.test.war,copy-test-data-files" if="tomcat4.home">
 
-        <property name="out.tomcat.40.dir" value="${out.test.dir}/servers/tomcat40"/>
-        <filter token="out.tomcat.40.full.dir" value="${out.tomcat.40.dir}"/>
-
-        <mkdir dir="${out.tomcat.40.dir}/webapps/test"/>
-        <mkdir dir="${out.tomcat.40.dir}/conf"/>
-
-        <!-- Expand the war file -->
-        <unjar src="${out.test.dir}/test.war" dest="${out.tomcat.40.dir}/webapps/test"/>
-    
-        <!-- Copy configuration files -->
+        <filter token="out.tomcat.full.dir" value="${out.test.dir}/servers/tomcat"/>
         <copy file="${conf.test.dir}/tomcat40/server.xml"
-            todir="${out.tomcat.40.dir}/conf" filtering="on"/>
-
-        <!-- Copy JspRedirector (jsp) file needed for JSP cactus tests. -->
-        <copy file="${cactus.home}/web/jspRedirector.jsp"
-            todir="${out.tomcat.40.dir}/webapps/test"/>
+            todir="${out.tomcat.dir}/conf" filtering="on"/>
 
     </target>
 
+    <target name="copyServerConfFile.tomcat5" 
+        depends="prepare.test.war,copy-test-data-files" if="tomcat5.home">
+
+        <filter token="out.tomcat.full.dir" value="${out.test.dir}/servers/tomcat"/>
+        <copy file="${conf.test.dir}/tomcat50/server.xml"
+            todir="${out.tomcat.dir}/conf" filtering="on"/>
+    </target>
+
+    
+
 <!--
-        Prepare test directory structure for Tomcat 5.x servlet engine
+        Prepare test directory structure for Tomcat servlet engine
 -->
-    <target name="prepare.test.tomcat.50" depends="prepare.test.war,copy-test-data-files" if="tomcat.home.50">
+    <target name="prepare.test.tomcat" 
+         depends="prepare.test.war,copy-test-data-files">
 
-        <property name="out.tomcat.50.dir" value="${out.test.dir}/servers/tomcat50"/>
-        <filter token="out.tomcat.50.full.dir" value="${out.tomcat.50.dir}"/>
+        <property name="out.tomcat.dir" value="${out.test.dir}/servers/tomcat"/>
 
-        <mkdir dir="${out.tomcat.50.dir}/webapps/test"/>
-        <mkdir dir="${out.tomcat.50.dir}/conf"/>
+        <mkdir dir="${out.tomcat.dir}/webapps/test"/>
+        <mkdir dir="${out.tomcat.dir}/conf"/>
 
         <!-- Expand the war file -->
-        <unjar src="${out.test.dir}/test.war" dest="${out.tomcat.50.dir}/webapps/test"/>
+        <unjar src="${out.test.dir}/test.war" dest="${out.tomcat.dir}/webapps/test"/>
     
-        <!-- Copy configuration files -->
-        <copy file="${conf.test.dir}/tomcat50/server.xml"
-            todir="${out.tomcat.50.dir}/conf" filtering="on"/>
-
         <!-- Copy JspRedirector (jsp) file needed for JSP cactus tests. -->
         <copy file="${cactus.home}/web/jspRedirector.jsp"
-            todir="${out.tomcat.50.dir}/webapps/test"/>
+            todir="${out.tomcat.dir}/webapps/test"/>
 
     </target>
 
 
-
-   <target name="copy-test-data-files" 
-           depends="copy-test-data-files-40,copy-test-data-files-50"/>
-
-   <target name="copy-test-data-files-40" if="tomcat.home.40">
+   <target name="copy-test-data-files">
         <!-- Copy Unit test static files. -->
-        <property name="out.tomcat.40.dir" value="${out.test.dir}/servers/tomcat40"/>
-        <copy todir="${out.tomcat.40.dir}/webapps/test">
-            <fileset dir="${basedir}/web/test"/>
-        </copy>
-   </target>
-
-   <target name="copy-test-data-files-50" if="tomcat.home.50">
-        <!-- Copy Unit test static files. -->
-        <property name="out.tomcat.50.dir" value="${out.test.dir}/servers/tomcat50"/>
-        <copy todir="${out.tomcat.50.dir}/webapps/test">
+        <property name="out.tomcat.dir" value="${out.test.dir}/servers/tomcat"/>
+        <copy todir="${out.tomcat.dir}/webapps/test">
             <fileset dir="${basedir}/web/test"/>
         </copy>
    </target>
 
 <!--
-        Run unit tests on Tomcat 4.0 servlet engine
+        Run unit tests on Tomcat servlet engine
 -->
-    <target name="test.tomcat.40" depends="prepare.test.tomcat.40">
+    <target name="test.tomcat" depends="prepare.test.tomcat,
+            copyServerConfFile.tomcat4, copyServerConfFile.tomcat5">
 
         <!-- Start the servlet engine, wait for it to be started, run the
              unit tests, stop the servlet engine, wait for it to be stopped.
@@ -265,91 +245,20 @@
              any reason.-->
 
         <runservertests testURL="http://localhost:8080/test"
-            startTarget="start.tomcat.40"
-            stopTarget="stop.tomcat.40"
+            startTarget="start.tomcat"
+            stopTarget="stop.tomcat"
             testTarget="run.cactus.test"/>
 
     </target>
 
-<!--
-        Start Tomcat 4.0 servlet engine
--->
-    <target name="start.tomcat.40">
-
-<echo message="${out.tomcat.40.dir}"/>
-
-        <java classname="org.apache.catalina.startup.Bootstrap" fork="yes">
-            <jvmarg value="-Dcatalina.home=${tomcat.home.40}"/>
-            <!-- uncomment this to attach the debugger to the tomcat vm -->
-            <jvmarg line="${debug.jvm.args}"/>
-
-            <arg value="-config"/>
-            <arg value="${out.tomcat.40.dir}/conf/server.xml"/>
-            <arg value="start"/>
-            <classpath>
+    <path id="tomcat.classpath">
               <pathelement location="${jstl.jar}"/>
               <pathelement location="${servlet.jar}"/>
               <pathelement location="${jsp.jar}"/>
               <pathelement location="${sax.jar}"/>
               <pathelement location="${jaxp-api.jar}"/>
               <pathelement location="${commons-logging.jar}"/>
-              <pathelement location="${crimson.jar}"/>
-              <pathelement location="${java.home}/../lib/tools.jar"/>
-              <fileset dir="${tomcat.home.40}">
-                  <include name="bin/bootstrap.jar"/>
-                  <include name="server/catalina.jar"/>
-              </fileset>
-            </classpath>
-        </java>
-
-    </target>
-
-<!--
-        Stop Tomcat 4.0 servlet engine
--->
-    <target name="stop.tomcat.40">
-
-        <java classname="org.apache.catalina.startup.Bootstrap" fork="yes">
-            <jvmarg value="-Dcatalina.home=${tomcat.home.40}"/>
-            <arg value="stop"/>
-            <classpath>
-              <pathelement location="${jaxp-api.jar}"/>
-              <pathelement location="${commons-logging.jar}"/>
-              <pathelement location="${crimson.jar}"/>
-              <pathelement location="${sax.jar}"/>
-              <fileset dir="${tomcat.home.40}">
-                  <include name="bin/bootstrap.jar"/>
-                  <include name="server/catalina.jar"/>
-              </fileset>
-            </classpath>
-        </java>
-
-    </target>
-
-<!--
-        Run unit tests on Tomcat 5.0 servlet engine
--->
-    <target name="test.tomcat.50" depends="prepare.test.tomcat.50">
-
-        <!-- Start the servlet engine, wait for it to be started, run the
-             unit tests, stop the servlet engine, wait for it to be stopped.
-             The servlet engine is automatically stopped if the tests fail for
-             any reason.-->
-
-        <runservertests testURL="http://localhost:8080/test"
-            startTarget="start.tomcat.50"
-            stopTarget="stop.tomcat.50"
-            testTarget="run.cactus.test"/>
-
-    </target>
-
-    <path id="tomcat.50.classpath">
-              <pathelement location="${jstl.jar}"/>
-              <pathelement location="${servlet.jar}"/>
-              <pathelement location="${jsp.jar}"/>
-              <pathelement location="${sax.jar}"/>
-              <pathelement location="${jaxp-api.jar}"/>
-              <pathelement location="${commons-logging.jar}"/>
+              <pathelement location="${commons-el.jar}"/>
               <pathelement location="${commons-collections.jar}"/>
               <pathelement location="${commons-beanutils.jar}"/>
               <pathelement location="${commons-modeler.jar}"/>
@@ -357,11 +266,12 @@
               <pathelement location="${jasper-compiler.jar}"/>
               <pathelement location="${jasper-runtime.jar}"/>
               <pathelement location="${naming-common.jar}"/>
+              <pathelement location="${ant.jar}"/>
               <pathelement location="${naming-resources.jar}"/>
               <pathelement location="${crimson.jar}"/>
               <pathelement location="${jmx.jar}"/>
               <pathelement location="${java.home}/../lib/tools.jar"/>
-              <fileset dir="${tomcat.home.50}">
+              <fileset dir="${tomcat.home}">
                   <include name="bin/bootstrap.jar"/>
                   <include name="server/lib/catalina.jar"/>
                   <include name="server/lib/tomcat-coyote.jar"/>
@@ -376,45 +286,39 @@
 
 
 <!--
-        Start Tomcat 5.0 servlet engine
+        Start Tomcat servlet engine
 -->
-    <target name="start.tomcat.50">
+    <target name="start.tomcat">
 
-        <echo message="${out.tomcat.50.dir}"/>
+        <echo message="${out.tomcat.dir}"/>
 
         <java classname="org.apache.catalina.startup.Bootstrap" fork="yes">
-            <jvmarg value="-Dcatalina.home=${tomcat.home.50}"/>
-            <jvmarg value="-Dcatalina.base=${tomcat.home.50}"/>
-            <jvmarg value="-Djava.endorsed.dirs=${tomcat.home.50}"/>
-            <jvmarg value="-Djava.io.tmpdir=${tomcat.home.50}/temp"/>
-            <arg value="-config"/>
-            <arg value="${out.tomcat.50.dir}/conf/server.xml"/>
-            <!-- uncomment this to attach the debugger to the tomcat vm -->
-            <jvmarg line="${debug.jvm.args}"/>
-
-
-<!--            <arg value="-config"/>
-            <arg value="${out.tomcat.50.dir}/conf/server.xml"/> -->
+            <classpath refid="tomcat.classpath"/>
             <arg value="start"/>
-            <classpath refid="tomcat.50.classpath"/>
+            <sysproperty key="catalina.home" value="${tomcat.home}"/>
+            <sysproperty key="java.endorsed.dirs" 
+               value="${tomcat.home}"/>
+            
+            <arg value="-config"/>
+            <arg value="${out.tomcat.dir}/conf/server.xml"/> 
         </java>
 
     </target>
 
 <!--
-        Stop Tomcat 5.0 servlet engine
+        Stop Tomcat servlet engine
 -->
-    <target name="stop.tomcat.50">
+    <target name="stop.tomcat">
 
         <java classname="org.apache.catalina.startup.Bootstrap" fork="yes">
-            <jvmarg value="-Dcatalina.home=${tomcat.home.50}"/>
+            <sysproperty key="catalina.home" value="${tomcat.home}"/>
             <arg value="stop"/>
             <classpath>
               <pathelement location="${jaxp-api.jar}"/>
               <pathelement location="${commons-logging.jar}"/>
               <pathelement location="${crimson.jar}"/>
               <pathelement location="${sax.jar}"/>
-              <fileset dir="${tomcat.home.50}">
+              <fileset dir="${tomcat.home}">
                   <include name="bin/bootstrap.jar"/>
                   <include name="server/catalina.jar"/>
               </fileset>
@@ -476,8 +380,8 @@
             <test name="javax.faces.validator.RequiredValidatorTestCase"/>
 
             <!-- To run the following tests, comment last 3 tests, uncomment
-                 following tests and set saveStateInClient property in 
-                 conf/test/web.xml to true 
+                 following tests and set saveStateInClient property in
+                 conf/test/web.xml to true
 
             <test name="com.sun.faces.lifecycle.TestSaveStateInPage"/>
             <test name="com.sun.faces.lifecycle.TestRestoreTreeFromPage"/> -->

@@ -1,5 +1,5 @@
 /*
- * $Id: FileOutputResponseWrapper.java,v 1.2 2003/02/20 22:49:46 ofung Exp $
+ * $Id: FileOutputResponseWrapper.java,v 1.3 2003/05/15 21:33:10 jvisvanathan Exp $
  */
 
 /*
@@ -31,7 +31,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: FileOutputResponseWrapper.java,v 1.2 2003/02/20 22:49:46 ofung Exp $
+ * @version $Id: FileOutputResponseWrapper.java,v 1.3 2003/05/15 21:33:10 jvisvanathan Exp $
  * 
  *
  */
@@ -50,7 +50,7 @@ public class FileOutputResponseWrapper extends HttpServletResponseWrapper
 // Instance Variables
 //
 protected PrintWriter out = null;
-public static final String FACES_RESPONSE_ROOT = "./build/test/servers/tomcat40/webapps/test/";
+public static final String FACES_RESPONSE_ROOT = "./build/test/servers/tomcat/webapps/test/";
 public static final String  FACES_RESPONSE_FILENAME = FACES_RESPONSE_ROOT + 
     "FacesResponse.txt";
 

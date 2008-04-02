@@ -6,7 +6,7 @@
 # modules that the jsf-ri depends on.  Copy this file to "build.properties"
 # in the top-level source directory, and customize it as needed.
 #
-# $Id: build.properties.sample,v 1.19 2003/04/26 02:39:05 eburns Exp $
+# $Id: build.properties.sample,v 1.20 2003/05/15 21:33:07 jvisvanathan Exp $
 # -----------------------------------------------------------------------------
 
 
@@ -40,41 +40,24 @@ base.path=D:\\Files_2k\
 # --------------------------------------------------
 #		 REQUIRED LIBRARIES
 # --------------------------------------------------
-# Following settings assume that you are using JWSDP 1.1.
-commons-logging.jar=${tomcat.home}/jwsdp-shared/lib/commons-logging.jar
-commons-digester.jar=${tomcat.home}/server/lib/commons-digester.jar
+# Following settings assume that you are using JWSDP 1.2.
 commons-beanutils.jar=${tomcat.home}/server/lib/commons-beanutils.jar
 commons-collections.jar=${tomcat.home}/common/lib/commons-collections.jar
-commons-modeler.jar=${tomcat.home}/server/lib/commons-modeler.jar
-naming-resources.jar=${tomcat.home}/common/lib/naming-resources.jar
-jasper-compiler.jar=${tomcat.home}/common/lib/jasper-compiler.jar
-jasper-runtime.jar=${tomcat.home}/common/lib/jasper-runtime.jar
-xerces.jar=${tomcat.home}/jaxp/lib/endorsed/xercesImpl.jar
-jstl.jar=${tomcat.home}/jstl-1.0.3/standard/lib/jstl.jar
-standard.jar=${tomcat.home}/jstl-1.0.3/standard/lib/standard.jar
-#jstl.jar=${tomcat.home}/jstl/lib/jstl.jar
-#standard.jar=${tomcat.home}/jstl/lib/standard.jar
+commons-logging.jar=${tomcat.home}/server/lib/commons-logging.jar
+commons-digester.jar=${tomcat.home}/server/lib/commons-digester.jar
+jstl.jar=${tomcat.home}/jstl/lib/jstl.jar
+standard.jar=${tomcat.home}/jstl/lib/standard.jar
+xerces.jar=${tomcat.home}/jaxp/lib/xercesImpl.jar
 
 
-# Set the following only if you are building with JWSDP1.2.x
-# or TOMCAT 5.x
-#jsp.jar=${tomcat.home}/common/lib/jsp-api.jar
-#servlet.jar=${tomcat.home}/common/lib/servlet-api.jar
-#jmx.jar=${tomcat.home}/common/lib/jmx.jar
-#naming-common.jar=${tomcat.home}/common/lib/naming-common.jar
+# Comment the following if you are building with JWSDP1.1.x
+# or TOMCAT 4.x
+jsp.jar=${tomcat.home}/common/lib/jsp-api.jar
+servlet.jar=${tomcat.home}/common/lib/servlet-api.jar
 	  
 # set the property tomcat.home.50 to point to tomcat.home if running tomcat.5
 # set the property tomcat.home.40 to point to tomcat.home if running tomcat.4
-tomcat.home.50=${tomcat.home}
-
-
-# --------------------------------------------------
-#  REQUIRED LIBRARIES TO RUN UNIT TESTS
-# --------------------------------------------------
-jaxp-api.jar=${tomcat.home}/jaxp/lib/jaxp-api.jar
-crimson.jar=D:\\Files_2k\\jwsdp-1_0_01\\tools\\deploytool\\endorsed\\crimson.jar
-#sax.jar=${tomcat.home}/jaxp-1.2.2/lib/endorsed/sax.jar
-sax.jar=${tomcat.home}/jaxp/lib/endorsed/sax.jar
+tomcat5.home=${tomcat.home}
 
 # ----- Commons Cactus, version 13-1.4.1 -----
 cactus.home=${base.path}/jakarta-cactus-13-1.4.1
@@ -96,39 +79,46 @@ junit.loc=http://prdownloads.sourceforge.net/junit/junit3.8.1.zip
 
 
 # --------------------------------------------------
-#		 OPTIONAL LIBRARIES
-# --------------------------------------------------
-
-
-# --------------------------------------------------
 #		 RUN-TIME COMPONENTS
 # --------------------------------------------------
 
-
 # ----- Jakarta Tomcat, version 4.0.x or later -----
-tomcat.home=D:\\Files_2k\\jwsdp-1.1
-tomcat.home.40=${tomcat.home}
+tomcat.home=<path to JWSDP or Tomcat installation>
 tomcat.loc=http://jakarta.apache.org/builds/jakarta-tomcat-4.0/release/v4.1.12/bin/jakarta-tomcat-4.1.12.tar.gz
 
 username=tomcat
 password=tomcat
 
+# By default, all the dependent libraries are bundled with every sample app.
+# To bundle only the libraries that are not in the JWSDP1.2,
+# comment build.standalone property and uncomment build.wspack property
+#build.standalone=true
+build.wspack=true
+
 # --------------------------------------------------
-#   PROPERTIES FOR JWSDP 1.2 NIGHTLY BUILDS           
+#   PROPERTIES FOR RUNNING UNIT TESTS
+# --------------------------------------------------
+
+jmx.jar=${tomcat.home}/common/lib/jmx.jar
+naming-resources.jar=${tomcat.home}/common/lib/naming-resources.jar
+jasper-compiler.jar=${tomcat.home}/common/lib/jasper-compiler.jar
+jasper-runtime.jar=${tomcat.home}/common/lib/jasper-runtime.jar
+naming-common.jar=${tomcat.home}/common/lib/naming-common.jar
+commons-modeler.jar=${tomcat.home}/server/lib/commons-modeler.jar
+commons-el.jar=${tomcat.home}/common/lib/commons-el.jar
+ant.jar=${tomcat.home}/apache-ant/lib/ant.jar
+jaxp-api.jar=${tomcat.home}/jaxp/lib/jaxp-api.jar
+sax.jar=${tomcat.home}/jaxp/lib/endorsed/sax.jar
+
+#Set this if you are running unit tests with JWSDP 1.1 or Tomcat 4.1.x
+#crimson.jar=D:\\Files_2k\\jwsdp-1_0_01\\tools\\deploytool\\endorsed\\crimson.jar
+
+# --------------------------------------------------
+#   PROPERTIES FOR JWSDP 1.2 NIGHTLY BUILDS      
 # --------------------------------------------------
 
 # Set the following only for distribution with JWSDP 1.2.
 #build.home=/home/visvan/testwspack/build
 #dist.home=/home/visvan/testwspack/dist
 #wspack.home=/home/visvan/testwspack/wspack
-
-
-# By default, all the dependent libraries are bundled with every sample app.
-# To bundle only the libraries that are not in the JWSDP1.2,
-# comment build.standalone property and uncomment build.wspack property
-build.standalone=true
-#build.wspack=true
-#jsf-ri.jar=../jsf-ri/build/lib/jsf-ri.jar
-wspack.home=${tomcat.home}
-
 

@@ -15,7 +15,7 @@
 
       <Realm className="org.apache.catalina.realm.MemoryRealm" />
 
-     <Host name="localhost" debug="0" appBase="@out.tomcat.50.full.dir@/webapps">
+     <Host name="localhost" debug="0" appBase="@out.tomcat.full.dir@/webapps">
       </Host>
 
     </Engine>

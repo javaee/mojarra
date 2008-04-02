@@ -1,5 +1,5 @@
 /*
- * $Id: FileOutputResponseWriter.java,v 1.3 2003/02/20 22:49:46 ofung Exp $
+ * $Id: FileOutputResponseWriter.java,v 1.4 2003/05/15 21:33:10 jvisvanathan Exp $
  */
 
 /*
@@ -30,7 +30,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: FileOutputResponseWriter.java,v 1.3 2003/02/20 22:49:46 ofung Exp $
+ * @version $Id: FileOutputResponseWriter.java,v 1.4 2003/05/15 21:33:10 jvisvanathan Exp $
  * 
  *
  */
@@ -49,7 +49,7 @@ public class FileOutputResponseWriter extends ResponseWriter
 // Instance Variables
 //
 protected PrintWriter out = null;
-public static final String FACES_RESPONSE_ROOT = "./build/test/servers/tomcat40/webapps/test/";
+public static final String FACES_RESPONSE_ROOT = "./build/test/servers/tomcat/webapps/test/";
 public static final String  RESPONSE_WRITER_FILENAME = FACES_RESPONSE_ROOT + 
     "ResponseWriter.txt";
 
