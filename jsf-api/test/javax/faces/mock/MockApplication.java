@@ -1,5 +1,5 @@
 /*
- * $Id: MockApplication.java,v 1.8 2003/08/26 21:50:06 craigmcc Exp $
+ * $Id: MockApplication.java,v 1.9 2003/08/27 22:34:03 craigmcc Exp $
  */
 
 /*
@@ -47,7 +47,7 @@ public class MockApplication extends Application {
 			throw new UnsupportedOperationException();
 		    }
 		    public PhaseId getPhaseId() {
-			return PhaseId.APPLY_REQUEST_VALUES;
+			return PhaseId.INVOKE_APPLICATION;
 		    }
 
 		    // see if the other object is the same as our
@@ -78,44 +78,6 @@ public class MockApplication extends Application {
         this.actionListener = actionListener;
     }
 
-    private ActionListener applicationListener = null;
-    public ActionListener getApplicationListener() {
-	if (null == applicationListener) {
-	    applicationListener = new ActionListener() {
-		    public void processAction(ActionEvent e) {
-			throw new UnsupportedOperationException();
-		    }
-		    public PhaseId getPhaseId() {
-			return PhaseId.INVOKE_APPLICATION;
-		    }
-
-		    // see if the other object is the same as our
-		    // anonymous inner class implementation.
-		    public boolean equals(Object otherObj) {
-			if (!(otherObj instanceof ActionListener)) {
-			    return false;
-			}
-			ActionListener other = (ActionListener) otherObj;
-			boolean exceptionThrown = false;
-			if (other.getPhaseId() != this.getPhaseId()) {
-			    return false;
-			}
-			try {
-			    other.processAction(null);
-			}
-			catch (UnsupportedOperationException e) {
-			    exceptionThrown = true;
-			}
-			return exceptionThrown;
-		    }
-		};
-	}
-	
-        return (this.applicationListener);
-    }
-    public void setApplicationListener(ActionListener applicationListener) {
-        this.applicationListener = applicationListener;
-    }
 
     private NavigationHandler navigationHandler = null;
     public NavigationHandler getNavigationHandler() {

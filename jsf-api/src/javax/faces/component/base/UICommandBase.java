@@ -1,5 +1,5 @@
 /*
- * $Id: UICommandBase.java,v 1.7 2003/08/27 00:56:49 craigmcc Exp $
+ * $Id: UICommandBase.java,v 1.8 2003/08/27 22:34:01 craigmcc Exp $
  */
 
 /*
@@ -10,10 +10,13 @@
 package javax.faces.component.base;
 
 
+import java.util.Iterator;
+import java.util.List;
 import javax.faces.component.UICommand;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.ActionListener;
+import javax.faces.event.PhaseId;
 import java.io.IOException;
 
 
@@ -156,21 +159,71 @@ public class UICommandBase extends UIOutputBase implements UICommand {
     }
 
 
+    // --------------------------------------------------------- Private Methods
+
+
     // Add the default action listener
     private void addDefaultActionListener(FacesContext context) {
-        ActionListener listener = immediate ?
-            context.getApplication().getActionListener() :
-            context.getApplication().getApplicationListener();
-        addActionListener(listener);
+
+        ActionListener listener =
+            context.getApplication().getActionListener();
+        if (immediate) {
+            addActionListener(new WrapperActionListener(listener));
+        } else {
+            addActionListener(listener);
+        }
+
     }
 
 
     // Remove the default action listener
     private void removeDefaultActionListener(FacesContext context) {
-        ActionListener listener = immediate ?
-            context.getApplication().getActionListener() :
-            context.getApplication().getApplicationListener();
-        removeActionListener(listener);
+
+        if (immediate) {
+            if (listeners == null) {
+                return;
+            }
+            List list = listeners[PhaseId.APPLY_REQUEST_VALUES.getOrdinal()];
+            if (list == null) {
+                return;
+            }
+            Iterator items = list.iterator();
+            while (items.hasNext()) {
+                Object item = items.next();
+                if (item instanceof WrapperActionListener) {
+                    removeActionListener((ActionListener) item);
+                    return;
+                }
+            }
+        } else {
+            removeActionListener(context.getApplication().getActionListener());
+        }
+
+    }
+
+
+
+    // ------------------------------------------------ Private Wrapper Listener
+
+
+    // Wrapper for the default ActionListener that overrides getPhaseId()
+    // to return PhaseId.APPLY_REQUEST_VALUES, for "immediate" commands
+    private class WrapperActionListener implements ActionListener {
+
+        public WrapperActionListener(ActionListener wrapped) {
+            this.wrapped = wrapped;
+        }
+
+        private ActionListener wrapped;
+
+        public PhaseId getPhaseId() {
+            return (PhaseId.APPLY_REQUEST_VALUES);
+        }
+
+        public void processAction(ActionEvent event) {
+            wrapped.processAction(event);
+        }
+
     }
 
 

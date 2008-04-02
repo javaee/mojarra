@@ -1,5 +1,5 @@
 /*
- * $Id: UICommandBaseTestCase.java,v 1.9 2003/08/27 00:56:55 craigmcc Exp $
+ * $Id: UICommandBaseTestCase.java,v 1.10 2003/08/27 22:34:02 craigmcc Exp $
  */
 
 /*
@@ -317,12 +317,9 @@ public class UICommandBaseTestCase extends UIOutputBaseTestCase {
 	}
 	assertTrue(null != postSave.getListeners());
 	// make sure the default action listener has been added on restore
-	List [] lister = (List []) preSave.getListeners();
-        // Note that we expect the *application* listener because
-        // the default for the "immediate" property is false and
-        // we have not changed it.
+	List [] lister = (List []) postSave.getListeners();
 	assertTrue(lister[PhaseId.INVOKE_APPLICATION.getOrdinal()].get(0) == 
-		   facesContext.getApplication().getApplicationListener());
+		   facesContext.getApplication().getActionListener());
 	assertTrue(propertiesAreEqual(facesContext, preSave, postSave));
 
 	// test page with action and actionRef

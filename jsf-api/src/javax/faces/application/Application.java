@@ -1,5 +1,5 @@
 /*
- * $Id: Application.java,v 1.11 2003/08/26 21:50:01 craigmcc Exp $
+ * $Id: Application.java,v 1.12 2003/08/27 22:34:00 craigmcc Exp $
  */
 
 /*
@@ -55,12 +55,11 @@ public abstract class Application {
 
     /**
      * <p>Return the default {@link ActionListener} to be registered for all
-     * {@link UICommand} components whose <code>immediate</code> property is
-     * <code>true</code>.  The default implementation must perform the
-     * following functions:</p>
+     * {@link UICommand} components.  The default implementation must perform
+     * the following functions:</p>
      * <ul>
      * <li>The <code>getPhaseId()</code> method of this listener instance
-     *     must return <code>PhaseId.APPLY_REQUEST_VALUES</code>.</li>
+     *     must return <code>PhaseId.INVOKE_APPLICATION</code>.</li>
      * <li>The <code>processAction()</code> method must first call
      *     <code>FacesContext.renderResponse()</code> in order to bypass
      *     any intervening lifecycle phases, once the method returns.</li>
@@ -92,37 +91,7 @@ public abstract class Application {
 
     /**
      * <p>Replace the default {@link ActionListener} to be registered for all
-     * {@link UICommand} components whose <code>immediate</code> property is
-     * <code>true</code>.</p>
-     *
-     * @param listener The new {@link ActionListener}
-     *
-     * @exception IllegalArgumentException if the specified
-     *  <code>listener</code> does not return
-     *  <code>PhaseId.APPLY_REQUEST_VALUES</code> from its
-     *  <code>getPhaseId()</code> method
-     * @exception NullPointerException if <code>listener</code>
-     *  is <code>null</code>
-     */
-    public abstract void setActionListener(ActionListener listener);
-
-
-    /**
-     * <p>Return the default {@link ActionListener} to be registered for all
-     * {@link UICommand} components whose <code>immediate</code> property is
-     * <code>false</code>.  The default implementation must behave identically
-     * to the default listener returned by <code>getActionListener</code>,
-     * except that the <code>getPhaseId()</code> method must return
-     * <code>PhaseId.INVOKE_APPLICATION</code> instead of
-     * <code>PhaseId.APPLY_REQUEST_VALUES</code>.</p>
-     */
-    public abstract ActionListener getApplicationListener();
-
-
-    /**
-     * <p>Replace the default {@link ActionListener} to be registered for all
-     * {@link UICommand} components whose <code>immediate</code> property is
-     * <code>false</code>.</p>
+     * {@link UICommand} components.</p>
      *
      * @param listener The new {@link ActionListener}
      *
@@ -133,7 +102,7 @@ public abstract class Application {
      * @exception NullPointerException if <code>listener</code>
      *  is <code>null</code>
      */
-    public abstract void setApplicationListener(ActionListener listener);
+    public abstract void setActionListener(ActionListener listener);
 
 
     /**
