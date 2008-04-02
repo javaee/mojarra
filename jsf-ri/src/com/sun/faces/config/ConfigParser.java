@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigParser.java,v 1.40 2003/10/07 19:53:09 rlubke Exp $
+ * $Id: ConfigParser.java,v 1.41 2003/10/13 17:07:36 eburns Exp $
  */
 
 /*
@@ -512,16 +512,16 @@ public class ConfigParser {
         configureRulesManagedBeanPropertyValueRef(digester, prefix + "/null-value");
         digester.addRule(prefix+"/null-value", cpvnRule);
 
-        // for value arrays
+        // for value arrays or Lists
 
-        configureRulesManagedBeanPropertyValueArr(digester, prefix + "/values/value");
-        configureRulesManagedBeanPropertyValueArr(digester, prefix + "/values/value-ref");
-        configureRulesManagedBeanPropertyValueArr(digester, prefix + "/values/value-class");
-        configureRulesManagedBeanPropertyValueArr(digester, prefix + "/values/null-value");
-        digester.addRule(prefix+"/values/value-class", cpvtRule);
-        digester.addRule(prefix+"/values/value", cpvRule);
-        digester.addRule(prefix+"/values/value-ref", cpvrRule);
-        digester.addRule(prefix+"/values/null-value", cpvnRule);
+        configureRulesManagedBeanPropertyValueArr(digester, prefix + "/list-entries/value");
+        configureRulesManagedBeanPropertyValueArr(digester, prefix + "/list-entries/value-ref");
+        configureRulesManagedBeanPropertyValueArr(digester, prefix + "/list-entries/value-class");
+        configureRulesManagedBeanPropertyValueArr(digester, prefix + "/list-entries/null-value");
+        digester.addRule(prefix+"/list-entries/value-class", cpvtRule);
+        digester.addRule(prefix+"/list-entries/value", cpvRule);
+        digester.addRule(prefix+"/list-entries/value-ref", cpvrRule);
+        digester.addRule(prefix+"/list-entries/null-value", cpvnRule);
 
         // for map entries
     
@@ -549,12 +549,12 @@ public class ConfigParser {
         digester.addCallMethod(prefix, "setValue", 0);
     }
 
-    // Configure the rules for the values of <managed-bean><property><values><value>,
-    // <managed-bean><property><values><value-ref>,
-    // <managed-bean><property><values><value-class>
-    // <managed-bean><property><values><null-value> elements.
+    // Configure the rules for the list-entries of <managed-bean><property><list-entries><value>,
+    // <managed-bean><property><list-entries><value-ref>,
+    // <managed-bean><property><list-entries><value-class>
+    // <managed-bean><property><list-entries><null-value> elements.
     // This method creates property value object, sets the value, and adds it to
-    // the property values array in the property object
+    // the property list-entries array in the property object
  
     protected void configureRulesManagedBeanPropertyValueArr(Digester digester, String prefix) {
         digester.addObjectCreate(prefix, "com.sun.faces.config.ConfigManagedBeanPropertyValue");

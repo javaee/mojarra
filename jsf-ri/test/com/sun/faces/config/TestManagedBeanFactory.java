@@ -1,5 +1,5 @@
 /*
- * $Id: TestManagedBeanFactory.java,v 1.9 2003/09/15 16:29:40 rkitain Exp $
+ * $Id: TestManagedBeanFactory.java,v 1.10 2003/10/13 17:07:39 eburns Exp $
  */
 
 /*
@@ -239,8 +239,8 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
 
         //make sure bean instantiated properly. Get property back from bean.
         ArrayList properties = (ArrayList) testBean.getIndexProperties();
-        assertTrue(properties.get(0).equals("foo"));
-        assertTrue(properties.get(1).equals("bar"));
+        assertTrue(properties.get(5).equals("foo"));
+        assertTrue(properties.get(6).equals("bar"));
 
         //make sure scope is stored properly
         assertTrue(mbf.getScope().equals("session"));
@@ -319,7 +319,7 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
 	assertTrue(properties.get(1) instanceof Integer);
 
         Integer integer = new Integer("23");
-	assertTrue(properties.get(1).equals(integer));
+	assertTrue(properties.get(2).equals(integer));
     }
 
     public void testMapTypeProperty() throws Exception {

@@ -165,8 +165,8 @@ public class TestBean extends Object {
         return indexProperties;
     }
 
-    public void setIndexProperties(String property) {
-        indexProperties.add(property);
+    public void setIndexProperties(ArrayList newIndexProperties) {
+        indexProperties = newIndexProperties;
     }
 
     protected ArrayList indexIntegerProperties = null;
@@ -175,8 +175,9 @@ public class TestBean extends Object {
         return indexIntegerProperties;
     }
 
-    public void setIndexIntegerProperties(String property) {
-        indexIntegerProperties.add(property);
+    public void setIndexIntegerProperties(ArrayList newIndexIntegerProperties){
+	indexIntegerProperties = newIndexIntegerProperties;
+	
     }
 
     protected Map mapProperty = new HashMap();
@@ -237,11 +238,8 @@ public class TestBean extends Object {
             return customers;
         }
 
-        public void setCustomers(String customer) {
-            if (null == customers) {
-                customers = new ArrayList();
-            }
-            customers.add(customer);
+        public void setCustomers(Collection newCustomers) {
+	    customers = new ArrayList(newCustomers);
         }
 
         public void setResult(Boolean newResult) {

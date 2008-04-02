@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigFileTestCase.java,v 1.40 2003/10/07 19:53:17 rlubke Exp $
+ * $Id: ConfigFileTestCase.java,v 1.41 2003/10/13 17:07:38 eburns Exp $
  */
 
 /*
@@ -28,6 +28,7 @@ import javax.faces.lifecycle.LifecycleFactory;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
 import javax.faces.validator.Validator;
+import javax.faces.el.ValueBinding;
 import javax.servlet.ServletContext;
 
 import java.io.InputStream;
@@ -257,6 +258,57 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
 	} catch (Throwable t) {
 	    assertTrue(false);
 	}
+    }
+
+    public void testMapPositive() throws Exception {
+        ConfigParser cp = new ConfigParser(config.getServletContext(), mappings);
+        ApplicationFactory aFactory = (ApplicationFactory)FactoryFinder.getFactory(
+        FactoryFinder.APPLICATION_FACTORY);
+        ApplicationImpl application = (ApplicationImpl)aFactory.getApplication();
+        parseConfig(cp, "/WEB-INF/faces-config.xml",
+                           config.getServletContext());
+
+	ValueBinding valueBinding = 
+	    application.getValueBinding("NewCustomerFormHandler.claimAmounts");
+	assertNotNull(valueBinding);
+
+	Map claimAmounts = (Map) valueBinding.getValue(getFacesContext());
+	assertNotNull(claimAmounts);
+
+	assertNotNull(claimAmounts.get("fire"));
+	assertTrue(claimAmounts.get("fire") instanceof Double);
+	assertNull(claimAmounts.get("water"));
+	assertNull(claimAmounts.get("earthquake"));
+
+	valueBinding = application.getValueBinding("NewCustomerFormHandler.allowableValues");
+	assertNotNull(valueBinding);
+	
+	List list1 = (List) valueBinding.getValue(getFacesContext());
+	assertNotNull(list1);
+
+	assertEquals("allowableValues size not as expected", 4, list1.size());
+	assertEquals("allowableValues.get(0) not as expected", 
+		     new Integer(10), list1.get(0));
+	assertEquals("allowableValues.get(1) not as expected", 
+		     new Integer(20), list1.get(1));
+	assertEquals("allowableValues.get(2) not as expected", 
+		     new Integer(60), list1.get(2));
+	assertNull("allowableValues.get(3) not as expected", list1.get(3));
+
+	valueBinding = application.getValueBinding("NewCustomerFormHandler.firstNames");
+	assertNotNull(valueBinding);
+	
+	String [] strings = 
+	    (String []) valueBinding.getValue(getFacesContext());
+	assertNotNull(strings);
+
+	assertEquals("firstNames size not as expected", 5, strings.length);
+	assertEquals("firstNames[0] not as expected", "bob", strings[0]);
+	assertEquals("firstNames[1] not as expected", "jerry", strings[1]);
+	assertEquals("firstNames[2] not as expected", "Thomas", strings[2]);
+	assertNull("firstNames[3] not as expected", strings[3]);
+	assertNull("firstNames[4] not as expected", strings[4]);
+
     }
 
     public void testNavigationCase() throws Exception {

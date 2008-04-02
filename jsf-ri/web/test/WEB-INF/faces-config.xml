@@ -209,21 +209,22 @@
     <managed-property>
       <property-name>allowableValues</property-name>
       <!-- Assume the type is java.util.List -->
-      <values>
+      <list-entries>
         <value-class>java.lang.Integer</value-class>
         <value>10</value>
         <value>20</value>
         <value>60</value>
-      </values>
+        <null-value/>
+      </list-entries>
     </managed-property>
     <managed-property>
       <property-name>firstNames</property-name>
       <!-- Assume the type is java.util.List or java.lang.String[] -->
-      <values>
+      <list-entries>
         <value>Thomas</value>
         <value-ref>someOtherBean.someName</value-ref>
         <null-value/>
-      </values>
+      </list-entries>
     </managed-property>
     <managed-property>
       <description>

@@ -45,6 +45,17 @@ public class NewCustomerFormHandler {
         this.allowableValues = allowableValues;
     }
 
+    private String [] firstNames = { 
+	"bob",
+	"jerry"
+    };
+    public String [] getFirstNames() {
+	return firstNames;
+    }
+    public void setFirstNames(String [] newNames) {
+	firstNames = newNames;
+    }
+
     private HashMap claimAmounts;
 
     public HashMap getClaimAmounts() {

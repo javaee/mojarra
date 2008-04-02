@@ -13,7 +13,7 @@
      "-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.0//EN"
      "http://java.sun.com/dtd/web-facesconfig_1_0.dtd">
 
-    $Id: web-facesconfig_1_0.dtd,v 1.17 2003/10/12 05:08:34 craigmcc Exp $
+    $Id: web-facesconfig_1_0.dtd,v 1.18 2003/10/13 17:05:57 eburns Exp $
 
 -->
 
@@ -222,7 +222,7 @@
     managed bean that will be configured to the specified value (or value set)
     if the corresponding managed bean is automatically created.
 -->
-<!ELEMENT managed-property (description*, display-name*, icon*, property-name, property-class?, (map-entries|null-value|value|value-ref|values))>
+<!ELEMENT managed-property (description*, display-name*, icon*, property-name, property-class?, (map-entries|null-value|value|value-ref|list-entries))>
 
 
 <!--
@@ -370,13 +370,13 @@
 
 
 <!--
-    The "values" element represents a set of initialization elements for
-    a managed property that is a Collection or an array.  In the former
-    case, the "value-class" element can optionally be used to declare the
-    Java type to which each value should be converted before adding it to
-    the Collection.
+    The "list-entries" element represents a set of initialization
+    elements for a managed property that is a java.util.List or an
+    array.  In the former case, the "value-class" element can optionally
+    be used to declare the Java type to which each value should be
+    converted before adding it to the Collection.
 -->
-<!ELEMENT values          (value-class?, (null-value|value|value-ref)*)>
+<!ELEMENT list-entries    (value-class?, (null-value|value|value-ref)*)>
 
 
 <!-- ==================== Subordinate Elements ============================ -->
@@ -806,9 +806,10 @@ registered on the Lifecycle. It must be of type "ClassName".
 <!--
     The "value-class" element defines the Java type to which each
     "value" element's value will be converted to, prior to adding it to
-    the "values" list for a managed property that is a Collection.
-    It must be of type "ClassName".  If ommitted, "java.lang.String"
-    is assumed.
+    the "list-entries" list for a managed property that is a
+    java.util.List, or a "map-entries" map for a managed property that
+    is a java.util.Map.  It must be of type "ClassName".  If ommitted,
+    "java.lang.String" is assumed.
 -->
 <!ELEMENT value-class (#PCDATA)>
 
