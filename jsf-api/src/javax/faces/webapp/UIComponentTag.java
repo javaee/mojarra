@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTag.java,v 1.5 2003/06/21 04:49:20 craigmcc Exp $
+ * $Id: UIComponentTag.java,v 1.6 2003/07/15 00:33:10 craigmcc Exp $
  */
 
 /*
@@ -28,15 +28,10 @@ import javax.servlet.jsp.tagext.Tag;
 
 
 /**
- * <p><strong>UIComponentTag</strong> is a base class for all JSP custom
+ * <p><strong>UIComponentTag</strong> is the base class for all JSP custom
  * actions that correspond to user interface components in a page that is
  * rendered by JavaServer Faces.  Tags that need to process their tag bodies
  * should subclass {@link UIComponentBodyTag} instead.</p>
- *
- * <p>The <strong>id</strong> attribute of a <code>UIComponentTag</code> is
- * used to set the <code>componentId</code> property of the {@link UIComponent}
- * associated with this tag.</p>
- * </p>
  */
 
 public abstract class UIComponentTag implements Tag {
@@ -126,7 +121,7 @@ public abstract class UIComponentTag implements Tag {
 
     /**
      * <p>An override for the rendered attribute associated with our
-     * {@link UIComponent}, if not <code>true</code>.</p>
+     * {@link UIComponent}.</p>
      */
     protected boolean rendered = true;
 
@@ -152,19 +147,17 @@ public abstract class UIComponentTag implements Tag {
 
 
     // ------------------------------------------------------------- Properties
+
+
     /**
-
-    * <p>Returns the componentType for the component that is or will be
-    * bound to this tag.</p>
-
-    * @return the componentType for this tag instance.  This value can
-    * be plugged into {@link
-    * javax.faces.application.Application#getComponent} to create the
-    * {@link javax.faces.component.UIComponent} instance for this tag.
-
-    */
-
+     * <p>Return the component type for the component that is or will be
+     * bound to this tag.  This value can be passed to
+     * {@link javax.faces.application.Application#getComponent} to create
+     * the {@link UIComponent} instance for this tag.  Subclasses must
+     * override this method to return the appropriate value.</p>
+     */
     protected abstract String getComponentType();
+
 
     /**
      * <p>Return the {@link UIComponent} instance that is associated with
@@ -231,11 +224,7 @@ public abstract class UIComponentTag implements Tag {
 
 
     /**
-     * <p>Set the <code>Tag</code> that is the parent of this instance.
-     * In addition, locate the closest enclosing <code>UIComponentTag</code> and
-     * increment its <code>numChildren</code> counter.  Finally, save our
-     * <code>childIndex</code> as
-     * <code>(enclosingUIComponentTag.numChildren - 1)</code>.</p>
+     * <p>Set the <code>Tag</code> that is the parent of this instance.</p>
      *
      * @param parent The new parent <code>Tag</code>
      */
@@ -379,6 +368,7 @@ public abstract class UIComponentTag implements Tag {
 
 
     // ------------------------------------------------------ Protected Methods
+
 
     /**
      * <p>Delegate to the <code>encodeBegin()</code> method of our
@@ -657,9 +647,13 @@ public abstract class UIComponentTag implements Tag {
 
 
     /**
-     * <p>Override properties of the specified component if the corresponding
-     * properties of this tag handler were explicitly set, and the
-     * corresponding attribute of the component is not set.</p>
+     * <p>Override properties and attributes of the specified component,
+     * if the corresponding properties of this tag handler instance were
+     * explicitly set.  This method will be called <strong>ONLY</strong>
+     * if the specified {@link UIComponent} was in fact created during
+     * the execution of this tag handler instance, and this call will occur
+     * <strong>BEFORE</strong> the {@link UIComponent} is added to
+     * the component tree.</p>
      *
      * <p>Tag subclasses that want to support additional override properties
      * must ensure that the base class <code>overrideProperties()</code>
@@ -677,6 +671,24 @@ public abstract class UIComponentTag implements Tag {
      *   }
      * }
      * </pre>
+     *
+     * <p>The default implementation overrides the following properties:</p>
+     * <ul>
+     * <li><code>componentId</code> - Set if a value for the
+     *     <code>id</code> property is specified for
+     *     this tag handler instance.</li>
+     * <li><code>componentRef</code> - Set if a value for the
+     *     <code>componentRef</code> property is specified for
+     *     this tag handler instance.</li>
+     * <li><code>rendered</code> - Set if a value for the
+     *     <code>rendererd</code> property is specified for
+     *     this tag handler instance.</li>
+     * <li><code>rendererType</code> - Set if the <code>getRendererType()</code>
+     *     method returns a non-null value.</li>
+     * </ul>
+     *
+     * @param component {@link UIComponent} whose properties are to be
+     *  overridden
      */
     protected void overrideProperties(UIComponent component) {
 
