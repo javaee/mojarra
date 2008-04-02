@@ -4,6 +4,7 @@
 %><%@ page import="javax.faces.context.FacesContextFactory"
 %><%@ page import="javax.faces.component.UIViewRoot"
 %><%@ page import="javax.faces.lifecycle.Lifecycle"
+%><%@ page import="javax.faces.render.RenderKitFactory"
 %><%@ page import="javax.faces.lifecycle.LifecycleFactory"
 %><%
 
@@ -36,7 +37,7 @@
     if ( view == null)  {
         view = facesContext.getApplication().getViewHandler().createView(facesContext, "/renderkit03A.jsp");
     }
-    // Set the "DEFAULT" renderkit Id
+    // Set the RenderKitFactory.HTML_BASIC_RENDER_KIT renderkit Id
     view.setRenderKitId("CUSTOM");
     facesContext.setViewRoot(view);
     facesContext.renderResponse();

@@ -1,5 +1,5 @@
 /*
- * $Id: RIConstants.java,v 1.51 2004/01/06 04:28:23 eburns Exp $
+ * $Id: RIConstants.java,v 1.52 2004/01/20 04:51:41 eburns Exp $
  */
 
 /*
@@ -23,8 +23,8 @@ public class RIConstants {
     */
     public final static String FACES_PREFIX = "com.sun.faces.";
 
-    public final static String DEFAULT_RENDER_KIT = FACES_PREFIX +
-	RenderKitFactory.DEFAULT_RENDER_KIT;
+    public final static String HTML_BASIC_RENDER_KIT = FACES_PREFIX +
+	RenderKitFactory.HTML_BASIC_RENDER_KIT;
 
     /**
 

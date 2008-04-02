@@ -1,5 +1,5 @@
 /*
- * $Id: MockObjectsTestCase.java,v 1.2 2003/12/17 15:11:26 rkitain Exp $
+ * $Id: MockObjectsTestCase.java,v 1.3 2004/01/20 04:51:37 eburns Exp $
  */
 
 /*
@@ -84,7 +84,7 @@ public class MockObjectsTestCase extends TestCase {
             FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
         RenderKit renderKit = new MockRenderKit();
         try {
-            renderKitFactory.addRenderKit(RenderKitFactory.DEFAULT_RENDER_KIT,
+            renderKitFactory.addRenderKit(RenderKitFactory.HTML_BASIC_RENDER_KIT,
                                           renderKit);
         } catch (IllegalArgumentException e) {
             ;

@@ -1,5 +1,5 @@
 /*
- * $Id: ViewHandler.java,v 1.31 2004/01/15 23:13:22 eburns Exp $
+ * $Id: ViewHandler.java,v 1.32 2004/01/20 04:51:31 eburns Exp $
  */
 
 /*
@@ -279,7 +279,7 @@ public interface ViewHandler {
     /** 
      * <p>Returns a renderKitId to use for the client.  The default
      * implementation simply returns
-     * {@link RenderKitFactory#DEFAULT_RENDER_KIT}</p>
+     * {@link RenderKitFactory#HTML_BASIC_RENDER_KIT}</p>
      * 
      * <p>This method is invoked by the default view handler on the first
      * incoming JSF request. On any subsequent requests, the default view

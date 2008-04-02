@@ -32,7 +32,7 @@
     boolean foundCustom= false; 
     while (renderKitIds.hasNext()) {
         String renderKitId = (String)renderKitIds.next();
-        if (renderKitId.equals("DEFAULT")) {
+        if (renderKitId.equals(RenderKitFactory.HTML_BASIC_RENDER_KIT)) {
             foundDefault = true;
         } else if (renderKitId.equals("CUSTOM")) {
             foundCustom = true;
@@ -53,7 +53,7 @@
 	    return;
 	}
 	Renderer renderer = null;
-	if (renderKitId.equals("DEFAULT")) {
+	if (renderKitId.equals(RenderKitFactory.HTML_BASIC_RENDER_KIT)) {
 	    for (int i=0; i<defaultList.length; i++) {
 	        try {
 	            renderer = rKit.getRenderer(defaultList[i]);

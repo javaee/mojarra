@@ -1,5 +1,5 @@
 /*
- * $Id: UICommandTestCase.java,v 1.25 2004/01/20 03:22:26 eburns Exp $
+ * $Id: UICommandTestCase.java,v 1.26 2004/01/20 04:51:34 eburns Exp $
  */
 
 /*
@@ -89,7 +89,7 @@ public class UICommandTestCase extends UIComponentBaseTestCase {
             FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
         RenderKit renderKit =
             renderKitFactory.getRenderKit(facesContext, 
-					  RenderKitFactory.DEFAULT_RENDER_KIT);
+					  RenderKitFactory.HTML_BASIC_RENDER_KIT);
         renderKit.addRenderer("Button", new ButtonRenderer());
         UIViewRoot root = new UIViewRoot();
         root.getChildren().add(component);

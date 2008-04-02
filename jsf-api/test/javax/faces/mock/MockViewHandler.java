@@ -1,5 +1,5 @@
 /*
- * $Id: MockViewHandler.java,v 1.18 2004/01/15 21:34:00 eburns Exp $
+ * $Id: MockViewHandler.java,v 1.19 2004/01/20 04:51:37 eburns Exp $
  */
 
 /*
@@ -74,7 +74,7 @@ public class MockViewHandler extends Object implements ViewHandler {
     }
 
     public String calculateRenderKitId(FacesContext context) {
-        return RenderKitFactory.DEFAULT_RENDER_KIT;
+        return RenderKitFactory.HTML_BASIC_RENDER_KIT;
     }
 
 }

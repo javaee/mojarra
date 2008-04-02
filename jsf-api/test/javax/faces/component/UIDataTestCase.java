@@ -1,5 +1,5 @@
 /*
- * $Id: UIDataTestCase.java,v 1.34 2004/01/19 04:43:28 craigmcc Exp $
+ * $Id: UIDataTestCase.java,v 1.35 2004/01/20 04:51:35 eburns Exp $
  */
 
 /*
@@ -1170,7 +1170,7 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
             FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
         RenderKit renderKit =
             renderKitFactory.getRenderKit(facesContext,
-					  RenderKitFactory.DEFAULT_RENDER_KIT);
+					  RenderKitFactory.HTML_BASIC_RENDER_KIT);
         renderKit.addRenderer("Button", new ButtonRenderer());
         renderKit.addRenderer("Table", new TableRenderer());
         renderKit.addRenderer("Text", new TextRenderer());
@@ -1187,7 +1187,7 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
         UIData data = (UIData) component;
         data.setId("data");
         UIViewRoot root = new UIViewRoot();
-        root.setRenderKitId(RenderKitFactory.DEFAULT_RENDER_KIT);
+        root.setRenderKitId(RenderKitFactory.HTML_BASIC_RENDER_KIT);
         root.setViewId("/view");
         facesContext.setViewRoot(root);
         root.getChildren().add(data);

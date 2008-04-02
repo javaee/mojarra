@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKitFactory.java,v 1.15 2003/12/17 23:25:53 eburns Exp $
+ * $Id: RenderKitFactory.java,v 1.16 2004/01/20 04:51:33 eburns Exp $
  */
 
 /*
@@ -40,7 +40,7 @@ public abstract class RenderKitFactory {
      * <p>The render kit identifier of the default {@link RenderKit} instance
      * for this JavaServer Faces implementation.</p>
      */
-    public static final String DEFAULT_RENDER_KIT = "DEFAULT";
+    public static final String HTML_BASIC_RENDER_KIT = "HTML_BASIC";
 
 
     /**
@@ -85,7 +85,7 @@ public abstract class RenderKitFactory {
     /**
      * <p>Return an <code>Iterator</code> over the set of render kit
      * identifiers registered with this factory.  This set must include
-     * the value specified by <code>RenderKitFactory.DEFAULT_RENDER_KIT</code>.
+     * the value specified by <code>RenderKitFactory.HTML_BASIC_RENDER_KIT</code>.
      * </p>
      */
     public abstract Iterator getRenderKitIds();

@@ -1,5 +1,5 @@
 /* 
- * $Id: ViewHandlerImpl.java,v 1.29 2004/01/16 22:00:05 craigmcc Exp $ 
+ * $Id: ViewHandlerImpl.java,v 1.30 2004/01/20 04:51:42 eburns Exp $ 
  */ 
 
 
@@ -46,7 +46,7 @@ import java.util.Map;
 
 /** 
  * <B>ViewHandlerImpl</B> is the default implementation class for ViewHandler. 
- * @version $Id: ViewHandlerImpl.java,v 1.29 2004/01/16 22:00:05 craigmcc Exp $ 
+ * @version $Id: ViewHandlerImpl.java,v 1.30 2004/01/20 04:51:42 eburns Exp $ 
  * 
  * @see javax.faces.application.ViewHandler 
  * 
@@ -341,7 +341,7 @@ public class ViewHandlerImpl extends Object
                 Util.NULL_CONTEXT_ERROR_MESSAGE_ID));
         }
         
-        return RenderKitFactory.DEFAULT_RENDER_KIT;
+        return RenderKitFactory.HTML_BASIC_RENDER_KIT;
     }
 
 

@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.121 2004/01/10 05:43:57 eburns Exp $
+ * $Id: Util.java,v 1.122 2004/01/20 04:51:45 eburns Exp $
  */
 
 /*
@@ -70,7 +70,7 @@ import com.sun.faces.el.impl.JspVariableResolver;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.121 2004/01/10 05:43:57 eburns Exp $ 
+ * @version $Id: Util.java,v 1.122 2004/01/20 04:51:45 eburns Exp $ 
  */
 
 public class Util extends Object
@@ -479,16 +479,16 @@ private Util()
 
 	defaultRenderKit = 
 	    renderKitFactory.getRenderKit(null,
-					  RenderKitFactory.DEFAULT_RENDER_KIT);
+					  RenderKitFactory.HTML_BASIC_RENDER_KIT);
 	if (defaultRenderKit == null) {
 	    // create default renderkit if doesn't exist
 	    //
 	    defaultRenderKit = new RenderKitImpl();
-	    renderKitFactory.addRenderKit(RenderKitFactory.DEFAULT_RENDER_KIT,
+	    renderKitFactory.addRenderKit(RenderKitFactory.HTML_BASIC_RENDER_KIT,
 	        defaultRenderKit);
 	}
 	
-	context.setAttribute(RIConstants.DEFAULT_RENDER_KIT, 
+	context.setAttribute(RIConstants.HTML_BASIC_RENDER_KIT, 
 			     defaultRenderKit);
 
 	context.setAttribute(RIConstants.ONE_TIME_INITIALIZATION_ATTR,
@@ -560,8 +560,8 @@ private Util()
 	FactoryFinder.releaseFactories();
 
 	Util.doAssert(null != 
-		 context.getAttribute(RIConstants.DEFAULT_RENDER_KIT));
-	context.removeAttribute(RIConstants.DEFAULT_RENDER_KIT);
+		 context.getAttribute(RIConstants.HTML_BASIC_RENDER_KIT));
+	context.removeAttribute(RIConstants.HTML_BASIC_RENDER_KIT);
 	context.removeAttribute(RIConstants.CONFIG_ATTR);
     }
 			 
@@ -983,7 +983,7 @@ private Util()
 
 	if (context.getViewRoot() == null || 
 	    (renderKitId = context.getViewRoot().getRenderKitId()) == null) {
-            renderKitId = RenderKitFactory.DEFAULT_RENDER_KIT;
+            renderKitId = RenderKitFactory.HTML_BASIC_RENDER_KIT;
 	}
 	Util.doAssert(null != renderKitId);
 

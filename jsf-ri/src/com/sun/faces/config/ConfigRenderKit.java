@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigRenderKit.java,v 1.3 2003/10/06 19:26:52 rkitain Exp $
+ * $Id: ConfigRenderKit.java,v 1.4 2004/01/20 04:51:44 eburns Exp $
  */
 
 /*
@@ -13,13 +13,15 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.Collections;
 
+import javax.faces.render.RenderKitFactory;
+
 
 /**
  * <p>Config Bean for a RenderKit instance.</p>
  */
 public class ConfigRenderKit extends ConfigFeature {
 
-    private String renderKitId = "DEFAULT";
+    private String renderKitId = RenderKitFactory.HTML_BASIC_RENDER_KIT;
     public String getRenderKitId() {
         return (this.renderKitId);
     }

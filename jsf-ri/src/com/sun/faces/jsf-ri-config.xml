@@ -417,7 +417,7 @@
 
   <!-- standard renderkit -->
   <render-kit>
-    <render-kit-id>DEFAULT</render-kit-id>
+    <render-kit-id>HTML_BASIC</render-kit-id>
     <render-kit-class>com.sun.faces.renderkit.RenderKitImpl</render-kit-class>
 
     <renderer>

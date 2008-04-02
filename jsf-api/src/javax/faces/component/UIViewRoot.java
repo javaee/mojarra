@@ -1,5 +1,5 @@
 /*
- * $Id: UIViewRoot.java,v 1.18 2004/01/15 21:33:58 eburns Exp $
+ * $Id: UIViewRoot.java,v 1.19 2004/01/20 04:51:32 eburns Exp $
  */
 
 /*
@@ -71,7 +71,7 @@ public class UIViewRoot extends UIComponentBase {
     /**
      * <p>Return the render kit identifier of the {@link RenderKit}
      * associated with this view.  Unless explicitly set, this will be the
-     * value defined by <code>RenderKitFactory.DEFAULT_RENDER_KIT</code>.</p>
+     * value defined by <code>RenderKitFactory.HTML_BASIC_RENDER_KIT</code>.</p>
      */
     public String getRenderKitId() {
 
@@ -85,7 +85,7 @@ public class UIViewRoot extends UIComponentBase {
 		result = (String) vb.getValue(getFacesContext());
 	    } 
 	    else {
-                result = RenderKitFactory.DEFAULT_RENDER_KIT;
+                result = RenderKitFactory.HTML_BASIC_RENDER_KIT;
 	    }
 	}
 

@@ -1,5 +1,5 @@
 /*
- * $Id: RIConstants.java,v 1.6 2003/09/08 19:31:31 horwat Exp $
+ * $Id: RIConstants.java,v 1.7 2004/01/20 04:51:58 eburns Exp $
  */
 
 /*
@@ -49,7 +49,7 @@ import javax.faces.render.RenderKitFactory;
  *
  * Based on com.sun.faces.RIConstants
  *
- * @version $Id: RIConstants.java,v 1.6 2003/09/08 19:31:31 horwat Exp $
+ * @version $Id: RIConstants.java,v 1.7 2004/01/20 04:51:58 eburns Exp $
  *
  * @see com.sun.faces.RIConstants
  *
@@ -61,8 +61,8 @@ public class RIConstants {
     */
     public final static String FACES_PREFIX = "com.sun.faces.";
 
-    public final static String DEFAULT_RENDER_KIT = FACES_PREFIX +
-	RenderKitFactory.DEFAULT_RENDER_KIT;
+    public final static String HTML_BASIC_RENDER_KIT = FACES_PREFIX +
+	RenderKitFactory.HTML_BASIC_RENDER_KIT;
     
     public final static String FACES_VIEW = FACES_PREFIX + "VIEW";
     public final static String REQUEST_LOCALE = FACES_PREFIX + "LOCALE";

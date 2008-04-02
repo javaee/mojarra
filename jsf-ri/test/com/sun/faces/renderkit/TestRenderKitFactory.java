@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderKitFactory.java,v 1.9 2003/12/17 23:26:08 eburns Exp $
+ * $Id: TestRenderKitFactory.java,v 1.10 2004/01/20 04:51:52 eburns Exp $
  */
 
 /*
@@ -33,7 +33,7 @@ import com.sun.faces.ServletFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderKitFactory.java,v 1.9 2003/12/17 23:26:08 eburns Exp $
+ * @version $Id: TestRenderKitFactory.java,v 1.10 2004/01/20 04:51:52 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -80,9 +80,9 @@ public class TestRenderKitFactory extends ServletFacesTestCase {
         //    if called multiple times with the same identifier.
         //  
         RenderKit renderKit1 = renderKitFactory.getRenderKit(getFacesContext(),
-							     "DEFAULT");
+							     RenderKitFactory.HTML_BASIC_RENDER_KIT);
         RenderKit renderKit2 = renderKitFactory.getRenderKit(getFacesContext(),
-							     "DEFAULT");
+							     RenderKitFactory.HTML_BASIC_RENDER_KIT);
         assertTrue(renderKit1 == renderKit2);
 
         // 2. Verify "addRenderKit" adds instances.. /
@@ -118,7 +118,7 @@ public class TestRenderKitFactory extends ServletFacesTestCase {
         boolean exists = false; 
         while (iter.hasNext()) {
             id = (String)iter.next();
-            if (id.equals(RenderKitFactory.DEFAULT_RENDER_KIT)) {
+            if (id.equals(RenderKitFactory.HTML_BASIC_RENDER_KIT)) {
                 exists=true;
                 break;
             }
@@ -131,7 +131,7 @@ public class TestRenderKitFactory extends ServletFacesTestCase {
         RenderKit rKit = null;
 
         rKit = renderKitFactory.getRenderKit(getFacesContext(),
-					     "DEFAULT");
+					     RenderKitFactory.HTML_BASIC_RENDER_KIT);
 
 	// Verify NPE for "addRenderKit"
 	//

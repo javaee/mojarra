@@ -1,5 +1,5 @@
 /* 
- * $Id: XulViewHandlerImpl.java,v 1.14 2004/01/15 21:34:04 eburns Exp $ 
+ * $Id: XulViewHandlerImpl.java,v 1.15 2004/01/20 04:51:57 eburns Exp $ 
  */ 
 
 
@@ -83,7 +83,7 @@ import javax.servlet.ServletRequest;
 /** 
  * <B>XulViewHandlerImpl</B> is the Xul non-JSP ViewHandler implementation
  *
- * @version $Id: XulViewHandlerImpl.java,v 1.14 2004/01/15 21:34:04 eburns Exp $ 
+ * @version $Id: XulViewHandlerImpl.java,v 1.15 2004/01/20 04:51:57 eburns Exp $ 
  * 
  * @see javax.faces.application.ViewHandler 
  * 
@@ -144,7 +144,7 @@ public class XulViewHandlerImpl implements ViewHandler {
 
         RenderKitFactory factory = (RenderKitFactory)
             FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
-        RenderKit renderKit = factory.getRenderKit(context, RenderKitFactory.DEFAULT_RENDER_KIT);
+        RenderKit renderKit = factory.getRenderKit(context, RenderKitFactory.HTML_BASIC_RENDER_KIT);
 
         ResponseWriter writer = renderKit.createResponseWriter(
             response.getWriter(), CONTENT_TYPE, CHAR_ENCODING);

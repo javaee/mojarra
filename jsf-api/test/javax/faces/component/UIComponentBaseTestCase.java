@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBaseTestCase.java,v 1.20 2003/12/17 15:11:12 rkitain Exp $
+ * $Id: UIComponentBaseTestCase.java,v 1.21 2004/01/20 04:51:35 eburns Exp $
  */
 
 /*
@@ -114,7 +114,7 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
             FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
         RenderKit renderKit = new MockRenderKit();
         try {
-            renderKitFactory.addRenderKit(RenderKitFactory.DEFAULT_RENDER_KIT,
+            renderKitFactory.addRenderKit(RenderKitFactory.HTML_BASIC_RENDER_KIT,
                                           renderKit);
         } catch (IllegalArgumentException e) {
             ;

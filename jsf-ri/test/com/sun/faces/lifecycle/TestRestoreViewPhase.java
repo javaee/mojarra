@@ -1,5 +1,5 @@
 /*
- * $Id: TestRestoreViewPhase.java,v 1.12 2004/01/20 03:22:28 eburns Exp $
+ * $Id: TestRestoreViewPhase.java,v 1.13 2004/01/20 04:51:50 eburns Exp $
  */
 
 /*
@@ -42,7 +42,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRestoreViewPhase.java,v 1.12 2004/01/20 03:22:28 eburns Exp $
+ * @version $Id: TestRestoreViewPhase.java,v 1.13 2004/01/20 04:51:50 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -119,7 +119,7 @@ public void testReconstituteRequestInitial()
         !(getFacesContext().getResponseComplete()));
 
     assertTrue(null != getFacesContext().getViewRoot());
-    assertTrue(RenderKitFactory.DEFAULT_RENDER_KIT == 
+    assertTrue(RenderKitFactory.HTML_BASIC_RENDER_KIT == 
             getFacesContext().getViewRoot().getRenderKitId());
 
     assertTrue(null != getFacesContext().getViewRoot().getLocale());
@@ -169,7 +169,7 @@ public void testReconstituteRequestSubmit()
         !(getFacesContext().getResponseComplete()));
 
     assertTrue(null != getFacesContext().getViewRoot());
-    assertTrue(RenderKitFactory.DEFAULT_RENDER_KIT == 
+    assertTrue(RenderKitFactory.HTML_BASIC_RENDER_KIT == 
             getFacesContext().getViewRoot().getRenderKitId());
 
     assertTrue(locale == getFacesContext().getViewRoot().getLocale());

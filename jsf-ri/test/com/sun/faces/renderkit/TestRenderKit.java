@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderKit.java,v 1.9 2003/12/17 23:26:07 eburns Exp $
+ * $Id: TestRenderKit.java,v 1.10 2004/01/20 04:51:52 eburns Exp $
  */
 
 /*
@@ -46,7 +46,7 @@ import java.io.ByteArrayOutputStream;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderKit.java,v 1.9 2003/12/17 23:26:07 eburns Exp $
+ * @version $Id: TestRenderKit.java,v 1.10 2004/01/20 04:51:52 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -97,7 +97,7 @@ public static final String CORRECT_OUTPUT_FILENAME =
         RenderKitFactory renderKitFactory = (RenderKitFactory)
             FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
         renderKit = renderKitFactory.getRenderKit(getFacesContext(),
-						  "DEFAULT");
+						  RenderKitFactory.HTML_BASIC_RENDER_KIT);
 
         // 1. Verify "getRenderer()" returns a Renderer instance
         //  
@@ -128,7 +128,7 @@ public static final String CORRECT_OUTPUT_FILENAME =
         RenderKitFactory renderKitFactory = (RenderKitFactory)
             FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
         renderKit = renderKitFactory.getRenderKit(getFacesContext(),
-						  "DEFAULT");
+						  RenderKitFactory.HTML_BASIC_RENDER_KIT);
 	// Test to see if addRenderer replaces the renderer if given
 	// the same rendererType.
 	//
@@ -161,7 +161,7 @@ public static final String CORRECT_OUTPUT_FILENAME =
         RenderKitFactory renderKitFactory = (RenderKitFactory)
                 FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
         renderKit = renderKitFactory.getRenderKit(getFacesContext(),
-						  "DEFAULT");
+						  RenderKitFactory.HTML_BASIC_RENDER_KIT);
         
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         ResponseStream stream = renderKit.createResponseStream(out);

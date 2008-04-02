@@ -1,5 +1,5 @@
 /*
- * $Id: TestUtil.java,v 1.17 2003/12/17 23:26:10 eburns Exp $
+ * $Id: TestUtil.java,v 1.18 2004/01/20 04:51:56 eburns Exp $
  */
 
 /*
@@ -38,7 +38,7 @@ import javax.servlet.ServletContext;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestUtil.java,v 1.17 2003/12/17 23:26:10 eburns Exp $
+ * @version $Id: TestUtil.java,v 1.18 2004/01/20 04:51:56 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -84,7 +84,7 @@ public class TestUtil extends ServletFacesTestCase
 	        FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
 	    RenderKit renderKit = 
 		renderKitFactory.getRenderKit(getFacesContext(),
-					      "DEFAULT");
+					       RenderKitFactory.HTML_BASIC_RENDER_KIT);
 	    StringWriter sw = new StringWriter();
 	    ResponseWriter writer = renderKit.createResponseWriter(sw, "text/html", "ISO-8859-1");
 	    getFacesContext().setResponseWriter(writer);
@@ -117,7 +117,7 @@ public class TestUtil extends ServletFacesTestCase
 	        FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
 	    RenderKit renderKit = 
 		renderKitFactory.getRenderKit(getFacesContext(),
-					      "DEFAULT");
+					      RenderKitFactory.HTML_BASIC_RENDER_KIT);
 	    StringWriter sw = new StringWriter();
 	    ResponseWriter writer = renderKit.createResponseWriter(sw, "text/html", "ISO-8859-1");
 	    getFacesContext().setResponseWriter(writer);
@@ -168,7 +168,7 @@ public class TestUtil extends ServletFacesTestCase
 	        FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
 	    RenderKit renderKit = 
 		renderKitFactory.getRenderKit(getFacesContext(),
-					      "DEFAULT");
+					      RenderKitFactory.HTML_BASIC_RENDER_KIT);
 	    StringWriter sw = new StringWriter();
 	    ResponseWriter writer = renderKit.createResponseWriter(sw, "text/html", "ISO-8859-1");
 	    getFacesContext().setResponseWriter(writer);
