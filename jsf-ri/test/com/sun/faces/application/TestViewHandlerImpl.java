@@ -1,5 +1,5 @@
 /* 
- * $Id: TestViewHandlerImpl.java,v 1.10 2004/01/30 21:49:22 craigmcc Exp $ 
+ * $Id: TestViewHandlerImpl.java,v 1.11 2004/01/30 22:57:41 eburns Exp $ 
  */ 
 
 
@@ -51,7 +51,7 @@ import java.util.Locale;
  * 
  * <B>Lifetime And Scope</B> <P> 
  * 
- * @version $Id: TestViewHandlerImpl.java,v 1.10 2004/01/30 21:49:22 craigmcc Exp $  
+ * @version $Id: TestViewHandlerImpl.java,v 1.11 2004/01/30 22:57:41 eburns Exp $  
  */ 
 
 
@@ -155,6 +155,10 @@ public boolean sendResponseToFile()
         theRequest.addHeader("Accept-Language", "es-ES,tg-AF,tk-IQ");
     }
     
+    public void beginCalculateLocaleFindDefault(WebRequest theRequest) {
+        theRequest.setURL("localhost:8080", "/test", "/somepath/greeting.jsf", null, null);
+        theRequest.addHeader("Accept-Language", "en,fr");
+    }
     
     
     public void testGetActionURL() {
@@ -356,6 +360,13 @@ public boolean sendResponseToFile()
         ViewHandler handler = new ViewHandlerImpl();
         Locale locale = handler.calculateLocale(getFacesContext());
         assertTrue(locale.equals(new Locale("en", "US")));
+    }
+
+    public void testCalculateLocaleFindDefault() {
+        System.out.println("Testing calculateLocale - find default");
+        ViewHandler handler = new ViewHandlerImpl();
+        Locale locale = handler.calculateLocale(getFacesContext());
+        assertEquals(Locale.ENGLISH.toString(), locale.toString());
     }
     
     public void testCalculateLocaleLowerCase() {
