@@ -1,0 +1,60 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<!--
+ Copyright 2004 Sun Microsystems, Inc. All rights reserved.
+ SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+-->
+
+
+<!DOCTYPE faces-config PUBLIC
+ "-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.1//EN"
+ "http://java.sun.com/dtd/web-facesconfig_1_1.dtd">
+
+<faces-config>
+
+  <navigation-rule>
+    <from-view-id>/one.jsp</from-view-id>
+    <navigation-case>
+      <from-outcome>two</from-outcome>
+      <to-view-id>/two.jsp</to-view-id>
+      <redirect />
+    </navigation-case>
+    <navigation-case>
+      <from-outcome>three</from-outcome>
+      <to-view-id>/three.jsp</to-view-id>
+      <redirect />
+    </navigation-case>
+  </navigation-rule>
+
+  <navigation-rule>
+    <from-view-id>/two.jsp</from-view-id>
+    <navigation-case>
+      <from-outcome>one</from-outcome>
+      <to-view-id>/one.jsp</to-view-id>
+      <redirect />
+    </navigation-case>
+    <navigation-case>
+      <from-outcome>three</from-outcome>
+      <to-view-id>/three.jsp</to-view-id>
+      <redirect />
+    </navigation-case>
+
+  </navigation-rule>
+
+  <navigation-rule>
+    <from-view-id>/three.jsp</from-view-id>
+    <navigation-case>
+      <from-outcome>one</from-outcome>
+      <to-view-id>/one.jsp</to-view-id>
+      <redirect />
+    </navigation-case>
+    <navigation-case>
+      <from-outcome>two</from-outcome>
+      <to-view-id>/two.jsp</to-view-id>
+      <redirect />
+    </navigation-case>
+
+  </navigation-rule>
+
+
+</faces-config>

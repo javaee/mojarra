@@ -219,6 +219,10 @@
     <antcall target="safe.remove.one">
       <param name="context.path" value="/jsf-el-performance"/>
     </antcall>
+
+    <antcall target="safe.remove.one">
+      <param name="context.path" value="/jsf-command-link-redirect"/>
+    </antcall>
     
     <antcall target="install.one">
       <param name="webapp.build.home" 
@@ -239,6 +243,17 @@
       <param name="source.home" 
              value="${basedir}/el-performance/src/java" />
       <param name="context.path" value="/jsf-el-performance"/>
+
+    </antcall>
+
+    <antcall target="install.one">
+      <param name="webapp.build.home" 
+             value="${basedir}/command-link-redirect/build" />
+      <param name="webapp.web.home" 
+             value="${basedir}/command-link-redirect/web" />
+      <param name="source.home" 
+             value="${basedir}/command-link-redirect/src/java" />
+      <param name="context.path" value="/jsf-command-link-redirect"/>
 
     </antcall>
 
@@ -268,6 +283,17 @@
 
     </antcall>
 
+    <antcall target="reload.one">
+      <param name="webapp.build.home" 
+             value="${basedir}/command-link-redirect/build" />
+      <param name="webapp.web.home" 
+             value="${basedir}/command-link-redirect/web" />
+      <param name="source.home" 
+             value="${basedir}/command-link-redirect/src/java" />
+      <param name="context.path" value="/jsf-command-link-redirect"/>
+
+    </antcall>
+
 
   </target>
 
@@ -277,6 +303,9 @@
     </antcall>
     <antcall target="safe.remove.one">
       <param name="context.path" value="/jsf-el-performance"/>
+    </antcall>
+    <antcall target="safe.remove.one">
+      <param name="context.path" value="/jsf-command-link-redirect"/>
     </antcall>
   </target>
 
@@ -306,6 +335,7 @@
 
     <delete    dir="${basedir}/replace-application/build"/>
     <delete    dir="${basedir}/el-performance/build"/>
+    <delete    dir="${basedir}/command-link-redirect/build"/>
   </target>
    
 
