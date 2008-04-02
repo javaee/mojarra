@@ -1,5 +1,5 @@
 /*
- * $Id: RIConstants.java,v 1.19 2002/10/07 20:39:48 jvisvanathan Exp $
+ * $Id: RIConstants.java,v 1.20 2002/10/16 22:22:48 eburns Exp $
  */
 
 /*
@@ -96,6 +96,7 @@ public class RIConstants {
      */
     public static final int INVOKE_APPLICATION_PHASE = 50;
 
+    public static final String ELEVALUATOR = "org.apache.taglibs.standard.jstl_el.jstl.ELEvaluator";
 
     /**
      * <p>Phase identifier for <em>Render Response</em>.</p>

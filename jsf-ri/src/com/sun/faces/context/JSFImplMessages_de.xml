@@ -99,5 +99,10 @@
       <detail>Lifecylce id '{0}' ist schon addiert.</detail>
   </message>
 
+  <message messageId="com.sun.faces.ILLEGAL_MODEL_REFERENCE" severity="3" summary="Illegal Model Reference.">
+      <detail>ModelReference Ausdruck '{0}' ist ungueltig.</detail>
+  </message>
+
+
 </messages>
 

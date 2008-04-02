@@ -1,5 +1,5 @@
 /*
- * $Id: TestFacesContextImpl_Model.java,v 1.9 2002/10/01 18:30:18 jvisvanathan Exp $
+ * $Id: TestFacesContextImpl_Model.java,v 1.10 2002/10/16 22:22:53 eburns Exp $
  */
 
 /*
@@ -27,7 +27,7 @@ import com.sun.faces.TestBean.Inner2Bean;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestFacesContextImpl_Model.java,v 1.9 2002/10/01 18:30:18 jvisvanathan Exp $
+ * @version $Id: TestFacesContextImpl_Model.java,v 1.10 2002/10/16 22:22:53 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -114,11 +114,11 @@ public void testSetWithNoCurlyBraces()
     (facesContext.getHttpSession()).removeAttribute("TestBean");
     (facesContext.getServletRequest()).setAttribute("TestBean", testBean);
     
-    // Test implicit scopes
-    // direct access to scope objects should throw an illegalArgumentException
+    // Test implicit scopes direct access to some scope objects should
+    // throw an illegalArgumentException
     boolean gotException =false;
     try {
-        facesContext.setModelValue("sessionScope", testBean);
+        facesContext.setModelValue("header.header-one", testBean);
     }catch (IllegalArgumentException iae) {
         gotException = true;
     }    
@@ -333,30 +333,22 @@ public void testModelObjectSearch() {
     
     // Test Bean in request scope.
     (facesContext.getServletRequest()).setAttribute("TestBean", testBean);
-    result = (String) facesContext.getModelValue("requestScope.TestBean.one");
+    result = (String) facesContext.getModelValue("${requestScope.TestBean.one}");
     assertTrue(result.equals("one"));
     (facesContext.getServletRequest()).removeAttribute("TestBean");
    
     // Test Bean in session scope.
     (facesContext.getHttpSession()).setAttribute("TestBean", testBean);
-    result = (String) facesContext.getModelValue("sessionScope.TestBean.one");
+    result = (String) facesContext.getModelValue("${sessionScope.TestBean.one}");
     assertTrue(result.equals("one"));
     (facesContext.getHttpSession()).removeAttribute("TestBean");
   
     // Test Bean in ServletContext
     (facesContext.getServletContext()).setAttribute("TestBean", testBean);
-    result = (String) facesContext.getModelValue("applicationScope.TestBean.one");
+    result = (String) facesContext.getModelValue("${applicationScope.TestBean.one}");
     assertTrue(result.equals("one"));
     (facesContext.getServletContext()).removeAttribute("TestBean");
     
-    // make sure we get an exception if bean doesn't exist
-    gotException = false;
-    try {
-        result = (String) facesContext.getModelValue("sessionScope.TestBean.one");
-    } catch ( FacesException fe) {
-        gotException = true;
-    }    
-    assertTrue(gotException);
 }
 
 public void testModelObjectSearchWithNoCurlyFries() {
@@ -412,15 +404,98 @@ public void testModelObjectSearchWithNoCurlyFries() {
     result = (String) facesContext.getModelValue("TestBean.one");
     assertTrue(result.equals("one"));
     (facesContext.getServletContext()).removeAttribute("TestBean");
+}
+
+public void testNullCases() {
+
+    TestBean testBeanFromContext = null, testBean = null;
+
+    assertTrue(null != (testBean = (TestBean)
+	       (getFacesContext().getHttpSession()).getAttribute("TestBean")));
+    assertTrue(null != (testBeanFromContext = (TestBean)
+			(getFacesContext().getModelValue("${TestBean}"))));
+    assertTrue(testBean == testBeanFromContext);
+	       
+
+    // case 1 -- "TestBean.prop" when the testBean.getProp() method
+    // returns null should definitely return null
+    testBean.setProp(null);
+    try {
+	assertTrue(null == getFacesContext().getModelValue("TestBean.prop"));
+    }
+    catch (Throwable e) {
+	assertTrue(false);
+    }
+
+    // case 2 -- "TestBean.inner.inner2.nicknames.joebob" (where
+    // "nicknames" is a Map and the "joebob" key is missing) should also
+    // return null
+    Inner2Bean inner2 = new Inner2Bean();
+    InnerBean inner = new InnerBean();
+    inner.setInner2(inner2);
+    testBean.setInner(inner);
+
+    try {
+	assertTrue(null == getFacesContext().getModelValue("TestBean.inner.inner2.nicknames.joebob"));
+    }
+    catch (Throwable e) {
+	assertTrue(false);
+    }
     
-    // make sure we get an exception if bean doesn't exist
+
+    // case 3 -- "TestBean.inner.inner2.nicknames.joebob" when
+    // testBean.getInner().getInner2().getNicknames() returns null is
+    // more problematic. Right now, I think this should return
+    // FacesException, but ultimately the object manager facilities to
+    // automatically create an address will come into play here.
+    inner2.setNicknames(null);
+    boolean gotException = false;
+    try {
+	getFacesContext().getModelValue("TestBean.inner.inner2.nicknames.joebob");
+    }
+    catch (FacesException e) {
+	gotException = true;
+    }
+    assertTrue(gotException);
+
+    // case 3A, this is the same case, but for set.
     gotException = false;
     try {
-        result = (String) facesContext.getModelValue("TestBean.one");
-    } catch ( FacesException fe) {
-        gotException = true;
-    }    
+	getFacesContext().setModelValue("TestBean.inner.inner2.nicknames",
+					"joebob");
+    }
+    catch (FacesException e) {
+	gotException = true;
+    }
     assertTrue(gotException);
-}    
+
+
+    // case 4 -- "TestBean.inner.inner2" when
+    // testBean.getInner() returns null is more problematic. Right
+    // now, I think this should return FacesException, but ultimately
+    // the object manager facilities to automatically create an address
+    // will come into play here.
+    gotException = false;
+    testBean.setInner(null);
+    try {
+	getFacesContext().getModelValue("TestBean.inner.inner2");
+    }
+    catch (FacesException e) {
+	gotException = true;
+    }
+    assertTrue(gotException);
+
+    // case 4A, the same as above, but for set
+    gotException = false;
+    try {
+	getFacesContext().setModelValue("TestBean.inner.inner2", inner2);
+    }
+    catch (FacesException e) {
+	gotException = true;
+    }
+    assertTrue(gotException);
+
+}
+
 
 } // end of class TestFacesContextImpl_Model

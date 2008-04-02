@@ -1,5 +1,5 @@
 /*
- * $Id: EvaluationContext.java,v 1.2 2002/09/13 19:23:12 visvan Exp $
+ * $Id: EvaluationContext.java,v 1.3 2002/10/16 22:22:49 eburns Exp $
  */
 
 /*
@@ -12,14 +12,29 @@ package com.sun.faces.context;
 
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.Map;
 import java.util.Set;
 import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.beanutils.PropertyUtils;
+
+import org.apache.taglibs.standard.jstl_el.jstl.VariableResolver;
+import org.apache.taglibs.standard.jstl_el.jstl.ELEvaluator;
+import org.apache.taglibs.standard.jstl_el.jstl.ELException;
+
+import com.sun.faces.RIConstants;
+
+import org.mozilla.util.Assert;
+
+import com.sun.faces.util.Util;
 
 
 /**
@@ -31,13 +46,51 @@ import org.apache.commons.beanutils.PropertyUtils;
 
 public class EvaluationContext {
 
+    private ELEvaluator elEvaluator = null;
+
 
     public EvaluationContext(FacesContext facesContext) {
         this.facesContext = facesContext;
+	
+	// Lazily create elEvaluator
+	if (null == (elEvaluator = (ELEvaluator)
+		     facesContext.getServletContext().
+		     getAttribute(RIConstants.ELEVALUATOR))) {
+	    facesContext.getServletContext().
+		setAttribute(RIConstants.ELEVALUATOR,
+			     elEvaluator = new ELEvaluator(new ECResolver()));
+	}
+	Assert.assert_it(null != elEvaluator);
     }
 
+    /**
+
+    * The array of valid implicit objects.  Make sure the read-only
+    * implicts are at the front of the array and that the
+    * LAST_READONLY_IMPLICIT_INDEX is updated accordingly.
+
+    */
+
     private String implicits[] =
-    { "applicationScope", "facesContext", "requestScope", "sessionScope" };
+    { 
+	"facesContext", 
+	"header",
+	"headerValues",
+	"param",
+	"paramValues",
+	"initParam",
+	"cookie",
+	"requestScope", 
+	"sessionScope",
+	"applicationScope"
+    };
+    /**
+
+    * The index in the implicits array of the last read-only implicit
+    * object.
+
+    */
+    private final int LAST_READONLY_IMPLICIT_INDEX = 2;
 
 
     private Map applicationScope = null;
@@ -47,6 +100,61 @@ public class EvaluationContext {
                 new ApplicationScopeMap(facesContext.getServletContext());
         }
         return (applicationScope);
+    }
+
+    private Map header = null;
+    public Map getHeader() {
+        if (header == null) {
+            header =
+                new HeaderMap(facesContext);
+        }
+        return (header);
+    }
+
+    private Map headerValues = null;
+    public Map getHeaderValues() {
+        if (headerValues == null) {
+            headerValues =
+                new HeaderValuesMap(facesContext);
+        }
+        return (headerValues);
+    }
+
+
+    private Map param = null;
+    public Map getParam() {
+        if (param == null) {
+            param =
+                new ParamMap(facesContext);
+        }
+        return (param);
+    }
+
+    private Map paramValues = null;
+    public Map getParamValues() {
+        if (paramValues == null) {
+            paramValues =
+                new ParamValuesMap(facesContext);
+        }
+        return (paramValues);
+    }
+
+    private Map initParam = null;
+    public Map getInitParam() {
+        if (initParam == null) {
+            initParam =
+                new InitParamMap(facesContext);
+        }
+        return (initParam);
+    }
+
+    private Map cookie = null;
+    public Map getCookie() {
+        if (cookie == null) {
+            cookie =
+                new CookieMap(facesContext);
+        }
+        return (cookie);
     }
 
 
@@ -81,10 +189,16 @@ public class EvaluationContext {
         facesContext = null;
         requestScope = null;
         sessionScope = null;
+	header = null;
+	headerValues = null;
+	param = null;
+	paramValues = null;
+	initParam = null;
+	cookie = null;
     }
 
 
-    private boolean isImplicit(String name) {
+    boolean isImplicit(String name) {
      
         for (int i = 0; i < implicits.length; i++) {
             if (name.equals(implicits[i])) {
@@ -94,40 +208,26 @@ public class EvaluationContext {
         return (false);
     }
 
+    private boolean isReadOnly(String name) {
+	for (int i = 0; i < LAST_READONLY_IMPLICIT_INDEX; i++) {
+            if (name.equals(implicits[i])) {
+		return true;
+            }
+	}
+	return false;
+    }
+
 
     public Object get(String modelReference) throws FacesException {
-
-        // Extract the actual expression to be evaluated
-        String expression = expression(modelReference);
-
-        // Direct access to implicit objects returns them
-        if (isImplicit(expression)) {
-            try {
-                return (PropertyUtils.getSimpleProperty(this, expression));
-            } catch (Exception e) {
-                throw new FacesException(e);
-            }
-        }
-
-        int period = expression.indexOf(".");
-        if (period >= 0) {
-            // Dotted expression -- explicit or implicit scoped lookup
-            Object base = this;
-            String first = expression.substring(0, period);
-            if (!isImplicit(first)) {
-                base = lookup(first);
-                expression = expression.substring(period + 1);
-            }
-         
-            try {
-                return (PropertyUtils.getProperty(base, expression));
-            } catch (Exception e) {
-                throw new FacesException(e);
-            }
-         } else {
-             // Simple expression -- scoped lookup
-             return (lookup(expression));
-         }
+	Object result = null;
+	try {
+	    result = elEvaluator.evaluate(addBracketsIfNecessary(modelReference), 
+					  this, Object.class);
+	}
+	catch (Throwable e) {
+	    throw new FacesException(Util.getExceptionMessage(Util.ILLEGAL_MODEL_REFERENCE_ID), e);
+	}
+	return result;
      }
     
      public Class getModelType (String modelReference) throws FacesException {
@@ -136,7 +236,7 @@ public class EvaluationContext {
          Object modelObj = null;
        
          // Extract the actual expression to be evaluated
-         String expression = expression(modelReference);
+         String expression = stripBracketsIfNecessary(modelReference);
   
         // Direct access to implicit objects returns them
         if (isImplicit(expression)) {
@@ -205,37 +305,40 @@ public class EvaluationContext {
 
     public void set(String modelReference, Object value)
         throws FacesException {
-
-        // Extract the actual expression to be evaluated
-        String expression = expression(modelReference);
-
-        // Direct access to implicit objects is prohibited
-        if (isImplicit(expression)) {
-            throw new IllegalArgumentException(modelReference);
-        }
-
-        int period = expression.indexOf(".");
+	if (null == modelReference) {
+	    throw new NullPointerException();
+	}
+	
+        String expression = stripBracketsIfNecessary(modelReference);
+	boolean isReadOnly = false;
+	int period = expression.indexOf(".");
         if (period >= 0) {
             // Dotted expression -- explicit or implicit scoped lookup
-            Object base = this;
-            String first = expression.substring(0, period);
-            if (!isImplicit(first)) {
-                base = lookup(first);
-                expression = expression.substring(period + 1);
-            }
-            try {
-                PropertyUtils.setProperty(base, expression, value);
-            } catch (Exception e) {
-                throw new FacesException(e);
-            }
-        } else {
-            // Simple expression -- store as request attribute
-            facesContext.getServletRequest().setAttribute(expression, value);
-        }
+	    isReadOnly = isReadOnly(expression.substring(0, period));
+	    
+	}
+	else {
+	    isReadOnly = isReadOnly(expression);
+	}
+	if (isReadOnly) {
+	    String params[] = new String[1];
+	    params[0] = modelReference;
+	    throw new 
+		IllegalArgumentException(Util.getExceptionMessage(Util.ILLEGAL_MODEL_REFERENCE_ID,
+								  params));
+	}
+	try {
+	    elEvaluator.evaluate(addBracketsIfNecessary(modelReference), 
+				 value, this, Object.class);
+	    return;
+	}
+	catch (Throwable e) {
+	    throw new FacesException(Util.getExceptionMessage(Util.ILLEGAL_MODEL_REFERENCE_ID), e);
+	}
     }
 
 
-    private String expression(String modelReference) {
+    private String stripBracketsIfNecessary(String modelReference) {
         if (modelReference == null) {
             throw new NullPointerException();
         }
@@ -247,9 +350,19 @@ public class EvaluationContext {
         return (result);
     }
 
+    private String addBracketsIfNecessary(String modelReference) {
+        if (modelReference == null) {
+            throw new NullPointerException();
+        }
+        String result = modelReference;
+        if (!(result.startsWith("${") &&
+	      result.endsWith("}"))) {
+            result = "${" + modelReference + "}";
+        }
+        return (result);
+    }
 
-    private Object lookup(String name) {
-        
+    Object lookup(String name) {
         Object value = null;
         if (value == null) {
             value = facesContext.getServletRequest().getAttribute(name);
@@ -263,6 +376,85 @@ public class EvaluationContext {
         } 
         return (value);
     }
+}
+
+class ECResolver extends Object implements VariableResolver {
+
+    //
+    // Methods from VariableResolver
+    // 
+
+    public Object resolveVariable(String pName,
+				   Object pContext) throws ELException {
+	Object result = null;
+
+	EvaluationContext eContext = (EvaluationContext) pContext;
+
+	if (eContext.isImplicit(pName)) {
+	    // PENDING(edburns): doing string comparisons doesn't seem
+	    // quite right here.
+
+	    if (pName.equals("requestScope")) {
+		result = eContext.getRequestScope();
+	    }	    
+	    else if (pName.equals("sessionScope")) {
+		result = eContext.getSessionScope();
+	    }
+	    else if (pName.equals("applicationScope")) {
+		result = eContext.getApplicationScope();
+	    }
+	    else if (pName.equals("param")) {
+		// We can't use getServletRequest().getParameterMap();
+		// because that Map has keys that are arrays of Strings.
+		// We want a map whose keys *are* Strings.
+		result = eContext.getParam();
+	    }
+	    else if (pName.equals("paramValues")) {
+		result = eContext.getParamValues();
+	    }
+	    else if (pName.equals("initParam")) {
+		result = eContext.getInitParam();
+	    }
+	    else if (pName.equals("cookie")) {
+		result = eContext.getCookie();
+	    }
+	    else if (pName.equals("header")) {
+		result = eContext.getHeader();
+	    }
+	    else if (pName.equals("headerValues")) {
+		result = eContext.getHeaderValues();
+	    }
+	    else if (pName.equals("facesContext")) {
+		result = eContext.getFacesContext();
+	    }
+
+	    else {
+		Assert.assert_it(false, "not reached");
+	    }
+	}
+	else if (isThrowException(pName)) {
+	    throwException(pName, pContext);
+	}
+	else {    
+	    result = eContext.lookup(pName);
+	}
+	return result;
+    }
+
+    public boolean isThrowException(String pName) {
+	boolean result = false;
+	if (null != pName) {
+	    if (pName.equals("ELEvaluator.throwException")) {
+		result = true;
+	    }
+	}
+	return result;
+    }
+    
+    public void throwException(String pName, Object pContext) throws ELException {
+	throw new ELException("Can't evaluate");
+    }
+
 }
 
 
@@ -531,6 +723,483 @@ class SessionScopeMap implements Map {
         Object result = session.getAttribute(keyString);
         session.removeAttribute(keyString);
         return (result);
+    }
+
+
+    public int size() {
+        throw new UnsupportedOperationException();
+    }
+
+
+    public Collection values() {
+        throw new UnsupportedOperationException();
+    }
+
+}
+
+class HeaderMap implements Map {
+    protected FacesContext facesContext = null;
+
+
+    public HeaderMap(FacesContext newFacesContext) {
+	facesContext= newFacesContext;
+    }
+
+    public void clear() {
+        throw new UnsupportedOperationException();
+    }
+
+
+    public boolean containsKey(Object key) {
+        throw new UnsupportedOperationException();
+    }
+
+
+    public boolean containsValue(Object value) {
+        throw new UnsupportedOperationException();
+    }
+
+
+    public Set entrySet() {
+        throw new UnsupportedOperationException();
+    }
+
+
+    public Object get(Object key) {
+        if (key == null) {
+            throw new NullPointerException();
+        }
+        String keyString = key.toString();
+        return (((HttpServletRequest)facesContext.getServletRequest()).
+		getHeader(keyString));
+    }
+
+
+    public boolean isEmpty() {
+        throw new UnsupportedOperationException();
+    }
+
+
+    public Set keySet() {
+        throw new UnsupportedOperationException();
+    }
+
+
+    public Object put(Object key, Object value) {
+        throw new UnsupportedOperationException();
+    }
+
+    public void putAll(Map map) {
+        throw new UnsupportedOperationException();
+    }
+
+
+    public Object remove(Object key) {
+        throw new UnsupportedOperationException();
+    }
+
+
+    public int size() {
+        throw new UnsupportedOperationException();
+    }
+
+
+    public Collection values() {
+        throw new UnsupportedOperationException();
+    }
+
+
+}
+
+class HeaderValuesMap implements Map {
+    protected FacesContext facesContext = null;
+
+
+    public HeaderValuesMap(FacesContext newFacesContext) {
+	facesContext= newFacesContext;
+    }
+
+    public void clear() {
+        throw new UnsupportedOperationException();
+    }
+
+
+    public boolean containsKey(Object key) {
+        throw new UnsupportedOperationException();
+    }
+
+
+    public boolean containsValue(Object value) {
+        throw new UnsupportedOperationException();
+    }
+
+
+    public Set entrySet() {
+        throw new UnsupportedOperationException();
+    }
+
+
+    public Object get(Object key) {
+        if (key == null) {
+            throw new NullPointerException();
+        }
+        String keyString = key.toString();
+	Enumeration headerValues = null;
+	ArrayList headerArray = null;
+	Object result = null;
+
+	if (null != (headerValues = 
+		     ((HttpServletRequest)facesContext.getServletRequest()).
+		     getHeaders(keyString))) {
+	    headerArray = new ArrayList();
+	    while (headerValues.hasMoreElements()) {
+		headerArray.add(headerValues.nextElement());
+	    }
+	    result = new String[headerArray.size()];
+	    headerArray.toArray((Object []) result);
+	}
+        return result;
+    }
+
+
+    public boolean isEmpty() {
+        throw new UnsupportedOperationException();
+    }
+
+
+    public Set keySet() {
+        throw new UnsupportedOperationException();
+    }
+
+
+    public Object put(Object key, Object value) {
+        throw new UnsupportedOperationException();
+    }
+
+
+    public void putAll(Map map) {
+        throw new UnsupportedOperationException();
+    }
+
+
+    public Object remove(Object key) {
+        throw new UnsupportedOperationException();
+    }
+
+
+    public int size() {
+        throw new UnsupportedOperationException();
+    }
+
+
+    public Collection values() {
+        throw new UnsupportedOperationException();
+    }
+
+
+}
+
+class ParamMap implements Map {
+    protected FacesContext facesContext = null;
+
+
+    public ParamMap(FacesContext newFacesContext) {
+	facesContext= newFacesContext;
+    }
+
+    public void clear() {
+        throw new UnsupportedOperationException();
+    }
+
+
+    public boolean containsKey(Object key) {
+        throw new UnsupportedOperationException();
+    }
+
+
+    public boolean containsValue(Object value) {
+        throw new UnsupportedOperationException();
+    }
+
+
+    public Set entrySet() {
+        throw new UnsupportedOperationException();
+    }
+
+
+    public Object get(Object key) {
+        if (key == null) {
+            throw new NullPointerException();
+        }
+        String keyString = key.toString();
+        return (((HttpServletRequest)facesContext.getServletRequest()).
+		getParameter(keyString));
+    }
+
+
+    public boolean isEmpty() {
+        throw new UnsupportedOperationException();
+    }
+
+
+    public Set keySet() {
+        throw new UnsupportedOperationException();
+    }
+
+
+    public Object put(Object key, Object value) {
+        throw new UnsupportedOperationException();
+    }
+
+
+    public void putAll(Map map) {
+        throw new UnsupportedOperationException();
+    }
+
+
+    public Object remove(Object key) {
+        throw new UnsupportedOperationException();
+    }
+
+
+    public int size() {
+        throw new UnsupportedOperationException();
+    }
+
+
+    public Collection values() {
+        throw new UnsupportedOperationException();
+    }
+
+
+}
+
+class ParamValuesMap implements Map {
+    protected FacesContext facesContext = null;
+
+
+    public ParamValuesMap(FacesContext newFacesContext) {
+	facesContext= newFacesContext;
+    }
+
+    public void clear() {
+        throw new UnsupportedOperationException();
+    }
+
+
+    public boolean containsKey(Object key) {
+        throw new UnsupportedOperationException();
+    }
+
+
+    public boolean containsValue(Object value) {
+        throw new UnsupportedOperationException();
+    }
+
+
+    public Set entrySet() {
+        throw new UnsupportedOperationException();
+    }
+
+
+    public Object get(Object key) {
+        if (key == null) {
+            throw new NullPointerException();
+        }
+        String keyString = key.toString();
+        return (((HttpServletRequest)facesContext.getServletRequest()).
+		getParameterValues(keyString));
+    }
+
+
+    public boolean isEmpty() {
+        throw new UnsupportedOperationException();
+    }
+
+
+    public Set keySet() {
+        throw new UnsupportedOperationException();
+    }
+
+
+    public Object put(Object key, Object value) {
+        throw new UnsupportedOperationException();
+    }
+
+
+    public void putAll(Map map) {
+        throw new UnsupportedOperationException();
+    }
+
+
+    public Object remove(Object key) {
+        throw new UnsupportedOperationException();
+    }
+
+
+    public int size() {
+        throw new UnsupportedOperationException();
+    }
+
+
+    public Collection values() {
+        throw new UnsupportedOperationException();
+    }
+
+
+}
+
+class InitParamMap implements Map {
+    protected ServletContext servletContext = null;
+
+    public InitParamMap(FacesContext newFacesContext) {
+	servletContext = newFacesContext.getServletContext();
+    }
+
+    public void clear() {
+        throw new UnsupportedOperationException();
+    }
+
+
+    public boolean containsKey(Object key) {
+        throw new UnsupportedOperationException();
+    }
+
+
+    public boolean containsValue(Object value) {
+        throw new UnsupportedOperationException();
+    }
+
+
+    public Set entrySet() {
+        throw new UnsupportedOperationException();
+    }
+
+
+    public Object get(Object key) {
+        if (key == null) {
+            throw new NullPointerException();
+        }
+        String keyString = key.toString();
+        return servletContext.getInitParameter(keyString);
+    }
+
+
+    public boolean isEmpty() {
+        throw new UnsupportedOperationException();
+    }
+
+
+    public Set keySet() {
+        throw new UnsupportedOperationException();
+    }
+
+
+    public Object put(Object key, Object value) {
+        throw new UnsupportedOperationException();
+    }
+
+
+    public void putAll(Map map) {
+        throw new UnsupportedOperationException();
+    }
+
+
+    public Object remove(Object key) {
+        throw new UnsupportedOperationException();
+    }
+
+
+    public int size() {
+        throw new UnsupportedOperationException();
+    }
+
+
+    public Collection values() {
+        throw new UnsupportedOperationException();
+    }
+
+
+}
+
+class CookieMap implements Map {
+    protected Cookie[] cookies = null;
+    protected final int cookieLen;
+
+    public CookieMap(FacesContext newFacesContext) {
+	cookies = ((HttpServletRequest)newFacesContext.getServletRequest()).
+	    getCookies();
+	if (null != cookies) {
+	    cookieLen = cookies.length;
+	}
+	else {
+	    cookieLen = -1;
+	}
+    }
+
+    public void clear() {
+        throw new UnsupportedOperationException();
+    }
+
+
+    public boolean containsKey(Object key) {
+        throw new UnsupportedOperationException();
+    }
+
+
+    public boolean containsValue(Object value) {
+        throw new UnsupportedOperationException();
+    }
+
+
+    public Set entrySet() {
+        throw new UnsupportedOperationException();
+    }
+
+
+    public Object get(Object key) {
+        if (key == null) {
+            throw new NullPointerException();
+        }
+	if (null == cookies) {
+	    return null;
+	}
+        String keyString = key.toString();
+	Object result = null;
+	int i = 0;
+
+	for (i = 0; i < cookieLen; i++) {
+	    if (cookies[i].getName().equals(keyString)) {
+		result = cookies[i];
+		break;
+	    }
+	}
+        return result;
+    }
+
+
+    public boolean isEmpty() {
+        throw new UnsupportedOperationException();
+    }
+
+
+    public Set keySet() {
+        throw new UnsupportedOperationException();
+    }
+
+
+    public Object put(Object key, Object value) {
+        throw new UnsupportedOperationException();
+    }
+
+
+    public void putAll(Map map) {
+        throw new UnsupportedOperationException();
+    }
+
+
+    public Object remove(Object key) {
+        throw new UnsupportedOperationException();
     }
 
 

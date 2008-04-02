@@ -101,5 +101,9 @@
       <detail>Lifecylce id '{0}' has already been added.</detail>
   </message>
 
+  <message messageId="com.sun.faces.ILLEGAL_MODEL_REFERENCE" severity="3" summary="Illegal Model Reference.">
+      <detail>ModelReference expression '{0}' is illegal in this context.</detail>
+  </message>
+
 </messages>
 

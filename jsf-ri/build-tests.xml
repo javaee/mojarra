@@ -296,6 +296,7 @@
             <test name="com.sun.faces.context.TestFacesContextFactoryImpl"/>
             <test name="com.sun.faces.context.TestFacesContextImpl"/>
             <test name="com.sun.faces.context.TestFacesContextImpl_Model"/>
+            <test name="com.sun.faces.context.TestFacesContextImpl_EL"/>
 
             <test name="com.sun.faces.lifecycle.TestGenericPhaseImpl"/> 
             <test name="com.sun.faces.lifecycle.TestApplyRequestValuesPhase"/>

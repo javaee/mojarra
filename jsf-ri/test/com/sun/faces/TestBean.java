@@ -2,6 +2,11 @@ package com.sun.faces;
 
 import org.mozilla.util.Assert;
 
+import java.util.Collection;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.HashMap;
+
 
 public class TestBean extends Object
 {
@@ -82,6 +87,7 @@ public static class InnerBean extends Object
 protected String two = null;
 protected Integer pin = null;
 protected Boolean result = null; 
+protected ArrayList customers = null;
 
 public void setTwo(String newTwo)
 {
@@ -103,6 +109,18 @@ public void setPin(Integer newPin)
 public Integer getPin() 
 {
     return pin;
+}
+
+public Collection getCustomers() {
+    if (null == customers) {
+	customers = new ArrayList();
+	customers.add("Mickey");
+	customers.add("Jerry");
+	customers.add("Phil");
+	customers.add("Bill");
+	customers.add("Bob");
+    }
+    return customers;
 }
 
 public void setResult(Boolean newResult)
@@ -147,6 +165,15 @@ public String getThree()
     return three;
 }
 
+protected Map nicknames = new HashMap();
+
+public Map getNicknames() {
+    return nicknames;
+}
+
+public void setNicknames(Map newNicknames) {
+    nicknames = newNicknames;
+}
 
 }
 
