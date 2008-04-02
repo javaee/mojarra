@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListener.java,v 1.89 2006/11/15 23:19:17 rlubke Exp $
+ * $Id: ConfigureListener.java,v 1.90 2006/11/21 17:09:44 rlubke Exp $
  */
 /*
  * The contents of this file are subject to the terms
@@ -1546,8 +1546,8 @@ public class ConfigureListener implements ServletContextListener {
             JspFactory.class.getMethod("getJspApplicationContext", 
                                        ServletContext.class );
         } catch (NoSuchMethodException nsme) {
-            if (LOGGER.isLoggable(Level.WARNING)) {
-                LOGGER.warning(MessageUtils.getExceptionMessageString(MessageUtils.INCORRECT_JSP_VERSION_ID,
+            if (LOGGER.isLoggable(Level.FINE)) {
+                LOGGER.fine(MessageUtils.getExceptionMessageString(MessageUtils.INCORRECT_JSP_VERSION_ID,
                "getJspApplicationContext"));
             }
             return false;
