@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 
 <!--
- $Id: build-tests.xml,v 1.91 2005/09/28 16:03:06 edburns Exp $
+ $Id: build-tests.xml,v 1.92 2005/10/05 17:55:23 edburns Exp $
 -->
 
 <!--
@@ -150,6 +150,10 @@
 
         <tester host="${host}" port="${port}" protocol="${protocol}"
             request="${context.path}/faces/duplicateIds05.jsp"
+            status="200" failonerror="${failonerror}" />
+
+        <tester host="${host}" port="${port}" protocol="${protocol}"
+            request="${context.path}/faces/forEach02.jsp"
             status="200" failonerror="${failonerror}" />
 
 <!-- PENDING: return to running

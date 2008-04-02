@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentClassicTagBase.java,v 1.8 2005/08/22 22:08:11 ofung Exp $
+ * $Id: UIComponentClassicTagBase.java,v 1.9 2005/10/05 17:55:22 edburns Exp $
  */
 
 /*
@@ -189,6 +189,12 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
     protected static final String UNIQUE_ID_PREFIX = 
 	UIViewRoot.UNIQUE_ID_PREFIX + "_";
 
+    /**
+     * Used to store the previousJspId Map in requestScope
+     */
+    protected static final String PREVIOUS_JSP_ID_MAP = 
+	"javax.faces.webapp.PREVIOUS_JSP_ID_MAP";
+
     // ------------------------------------------------------ Instance Variables
     /**
      * <p>The <code>bodyContent</code> for this tag handler.</p>
@@ -247,6 +253,13 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
      */ 
 
     private String jspId = null;
+    
+    /**
+     * Only consulted in setJspId to detect the iterator case.  
+     * Set in {@link #release}.  Never cleared.
+     */
+    
+    private String oldJspId = null;
 
     /**
      * This is simply the jspId prefixed by {@link #UNIQUE_ID_PREFIX}.
@@ -264,6 +277,12 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
      * tag. This is used for duplicate id detection.
      */
     private UIComponentClassicTagBase parentTag = null;
+    
+    /**
+     * Set to true if this component is nested inside of an iterating
+     * tag
+     */
+    private boolean isNestedInIterator = false;
 
     // --------------------------------------------- Support Methods for Tag
 
@@ -1145,7 +1164,7 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
      * tag handler.</p>
      */
     public void release() {
-
+        
         this.parent = null;
 
         this.id = null;
@@ -1153,6 +1172,7 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
         this.facesJspId = null;
         this.created = false;
 	this.bodyContent = null;
+        this.isNestedInIterator = false;
     }
 
     // -------------------------------------------- Support methods for BodyTag
@@ -1333,6 +1353,9 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
             if (childComponents != null) {
                 result = childComponents.contains(componentId);
             }
+            else {
+                result = parentTag.isNestedInIterator;
+            }
         }
        
         return result;
@@ -1401,7 +1424,48 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
 
     public void setJspId(String id) {
 	facesJspId = null;
+        updatePreviousJspIdAndIteratorStatus(id);
 	jspId = id;
+    }
+
+    /**
+     * <p>Called from {@link #setJspId} to update the value saved for
+     * the previous call to {@link setJspId} for this component <b>on
+     * this request</b>.  If this method is presented with the same
+     * argument <code>id</code> for the same tag instance more than once
+     * on the same request, then we know that the tag instance lies
+     * inside an iterator tag, such as <code>c:forEach</code>.  If so,
+     * we set the <code>isNestedInIterator</code> ivar to
+     * <code>true</code> otherwise, we set it to <code>false</code>.</p>
+     *
+     * <p>The implementation for this method stores a Map from tag
+     * instance to id String as a request scoped attribute.  This map
+     * contains the value used as the previousJspId and compared with
+     * the argument <code>id</code>.
+     *
+     * @param id the id to be compared with the previous id, if any, for
+     * this tag instance on this request.
+     */
+    
+    private void updatePreviousJspIdAndIteratorStatus(String id) {
+        Map<Object,String> previousJspIdMap = null;
+        String oldJspId = null;
+       
+        if (null == (previousJspIdMap = (Map<Object, String>)
+            pageContext.getRequest().getAttribute(PREVIOUS_JSP_ID_MAP))) {
+            pageContext.getRequest().setAttribute(PREVIOUS_JSP_ID_MAP, 
+                    previousJspIdMap = new HashMap<Object,String>());
+        }
+        assert(null != previousJspIdMap);
+        oldJspId = previousJspIdMap.get(this);
+        // detect the iterator case
+        if (null != oldJspId && oldJspId.equals(id)) {
+            isNestedInIterator = true;
+        }
+        else {
+            isNestedInIterator = false;
+            previousJspIdMap.put(this, id);
+        }
     }
 
     public String getJspId() {

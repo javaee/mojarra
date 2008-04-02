@@ -98,6 +98,11 @@
     <managed-bean-scope>session</managed-bean-scope>
   </managed-bean>
 
+  <managed-bean>
+        <managed-bean-name>BooksBean</managed-bean-name>
+        <managed-bean-class>com.sun.faces.systest.model.BooksBean</managed-bean-class> 
+        <managed-bean-scope>session</managed-bean-scope>
+  </managed-bean>     
 
   <!-- Managed Bean #2, Primitive Property Overrides -->
   <managed-bean>
@@ -212,7 +217,7 @@
         <value>32</value>
       </managed-property>
   </managed-bean>
-
+  
   <!-- custom renderkit -->
   <render-kit>
     <render-kit-id>CUSTOM</render-kit-id>
