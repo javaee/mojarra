@@ -365,7 +365,7 @@ public class UIData extends UIComponentBase
      * @param index The new index value
      *
      * @exception IllegalArgumentException if <code>index</code>
-     *  is less than -1
+     *  is less than -1, or greater than or equal to the number of rows
      */
     public void setRowIndex(int index) {
 
