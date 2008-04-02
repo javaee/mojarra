@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.107 2005/05/05 20:51:03 edburns Exp $
+ * $Id: UIComponentBase.java,v 1.108 2005/05/18 00:52:41 jayashri Exp $
  */
 
 /*
@@ -1307,10 +1307,19 @@ public abstract class UIComponentBase extends UIComponent {
         rendered = ((Boolean) values[4]).booleanValue();
         renderedSet = ((Boolean) values[5]).booleanValue();
         rendererType = (String) values[6];
-        // if there were some listeners registered prior to this
-        // method being invoked, override them with the list to be
-        // restored in order to prevent accumulation.
-        listeners = (List) restoreAttachedState(context, values[7]);
+        List restoredListeners = null;
+        if (null != (restoredListeners = (List)
+                     restoreAttachedState(context, values[7]))) {
+            // if there were some listeners registered prior to this
+            // method being invoked, merge them with the list to be
+            // restored.
+            if (null != listeners) {
+		listeners.addAll(restoredListeners);
+            }
+            else {
+                listeners = restoredListeners;
+            }
+        }
     }
 
 
