@@ -1,5 +1,5 @@
 /*
- * $Id: ExternalContext.java,v 1.1 2003/03/18 21:29:10 eburns Exp $
+ * $Id: ExternalContext.java,v 1.2 2003/03/20 21:38:16 eburns Exp $
  */
  
 /*
@@ -125,7 +125,7 @@ public abstract class ExternalContext {
     
     /**
        
-    * <p>Similar to {@link getRequestParameterMap}, but useful for those
+    * <p>Similar to <code>getRequestParameterMap</code>, but useful for those
     * parameters that can have multiple values with one key.</p>
     
     * <p>Calling <code>get(key)</code> on the <code>Map</code> obtained
