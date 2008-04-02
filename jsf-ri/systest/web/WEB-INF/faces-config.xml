@@ -218,5 +218,13 @@
     <managed-bean-scope>request</managed-bean-scope>
   </managed-bean>
 
+  <!-- Managed Bean for "jsp/jstl-foreach-XX" tests -->
+  <managed-bean>
+    <managed-bean-name>forEachBean</managed-bean-name>
+    <managed-bean-class>
+      com.sun.faces.systest.model.ForEachBean
+    </managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+  </managed-bean>
 
 </faces-config>

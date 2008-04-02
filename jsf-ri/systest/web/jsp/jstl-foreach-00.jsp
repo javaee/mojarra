@@ -1,0 +1,15 @@
+<%@ page contentType="text/html" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jstl/core" %>
+<%@ taglib prefix="f" uri="http://java.sun.com/jsf/core" %>
+<%@ taglib prefix="h" uri="http://java.sun.com/jsf/html" %>
+
+<f:view>
+<html>
+<head>
+<title>jstl-foreach-00</title>
+</head>
+<body>
+Dummy page to force resetting the component tree.
+</body>
+</html>
+</f:view>
