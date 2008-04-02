@@ -81,7 +81,7 @@ public class FileDownloadRenderer extends Renderer {
     }
 
     // TODO:  Look at the Util method by the same name.  There's a good opportunity
-    // for a refactor here.  Thanks you merging code bases. :)
+    // for a refactor here.  Thank you, merging code bases. :)
     protected String generateUri(FacesContext context, FileDownload comp) {
         String uri = "";
         String mapping = Util.getFacesMapping(context);

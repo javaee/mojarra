@@ -119,7 +119,8 @@ public class MultiFileUploadPhaseListener implements PhaseListener {
                     response.getOutputStream().write(destinationUrl.getBytes());
                     context.responseComplete();
                 } catch (Exception e1) {
-                    // TODO Auto-generated catch block
+                    // TODO:  Determine the configured error page and go there?
+                    // Return a 500 to the client?
                     e1.printStackTrace();
                 }
             }

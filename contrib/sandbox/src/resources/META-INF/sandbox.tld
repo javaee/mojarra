@@ -40,8 +40,11 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.2//EN"
         JSF RI sandbox.
     </description>
 
-    <!-- ==================== Tag Definitions ============================= -->
+    <!-- ===================== Tag Definitions ============================= -->
 
+    <!-- ******************************************************************* -->
+    <!-- Begin DataTable tag attributes                                      -->
+    <!-- ******************************************************************* -->
     <tag>
 
         <name>
@@ -683,7 +686,13 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.2//EN"
             </description>
         </attribute>
     </tag>
+    <!-- ******************************************************************* -->
+    <!-- End DataTable tag attributes                                        -->
+    <!-- ******************************************************************* -->
 
+    <!-- ******************************************************************* -->
+    <!-- Begin Column tag attributes                                         -->
+    <!-- ******************************************************************* -->
     <tag>
         <name>
             column
@@ -779,6 +788,13 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.2//EN"
             </description>
         </attribute>
     </tag>
+    <!-- ******************************************************************* -->
+    <!-- End Column tag attributes                                           -->
+    <!-- ******************************************************************* -->
+
+    <!-- ******************************************************************* -->
+    <!-- Begin Tree tag attributes                                           -->
+    <!-- ******************************************************************* -->
     <tag>
         <name>tree</name>
         <tag-class>com.sun.faces.sandbox.taglib.YuiTreeTag</tag-class>
@@ -803,6 +819,13 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.2//EN"
             </description>
         </attribute>
     </tag>
+    <!-- ******************************************************************* -->
+    <!-- End Tree tag attributes                                             -->
+    <!-- ******************************************************************* -->
+
+    <!-- ******************************************************************* -->
+    <!-- Begin Calendar tag attributes                                       -->
+    <!-- ******************************************************************* -->
     <tag>
         <name>calendar</name>
         <tag-class>com.steeplesoft.jsf.components.yui.tag.CalendarTag</tag-class>
@@ -1036,7 +1059,13 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.2//EN"
             <description>The ValueExpression linking this component to a property in a backing bean</description>
         </attribute>
     </tag>
-    <!-- YUI Menu Component -->
+    <!-- ******************************************************************* -->
+    <!-- End Calendar tag attributes                                         -->
+    <!-- ******************************************************************* -->
+
+    <!-- ******************************************************************* -->
+    <!-- Begin Menu tag attributes                                           -->
+    <!-- ******************************************************************* -->
     <tag>
         <name>menu</name>
         <tag-class>com.steeplesoft.jsf.components.yui.tag.MenuTag</tag-class>
@@ -1068,7 +1097,13 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.2//EN"
             </description>
         </attribute>
     </tag>
-    <!-- YUI Menu Bar Component -->
+    <!-- ******************************************************************* -->
+    <!-- End Menu tag attributes                                             -->
+    <!-- ******************************************************************* -->
+
+    <!-- ******************************************************************* -->
+    <!-- Begin MenuBar tag attributes                                        -->
+    <!-- ******************************************************************* -->
     <tag>
         <name>menuBar</name>
         <tag-class>com.steeplesoft.jsf.components.yui.tag.MenuBarTag</tag-class>
@@ -1100,7 +1135,13 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.2//EN"
             </description>
         </attribute>
     </tag>
-    <!-- YUI Context Menu Component -->
+    <!-- ******************************************************************* -->
+    <!-- End MenuBar tag attributes                                          -->
+    <!-- ******************************************************************* -->
+
+    <!-- ******************************************************************* -->
+    <!-- Begin ContextMenu tag attributes                                    -->
+    <!-- ******************************************************************* -->
     <tag>
         <name>contextMenu</name>
         <tag-class>com.steeplesoft.jsf.components.yui.tag.ContextMenuTag</tag-class>
@@ -1140,6 +1181,10 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.2//EN"
             </description>
         </attribute>
     </tag>
+    <!-- ******************************************************************* -->
+    <!-- End ContextMenu tag attributes                                      -->
+    <!-- ******************************************************************* -->
+
     <!-- ******************************************************************* -->
     <!-- Begin HtmlDownload tag attributes                                   -->
     <!-- ******************************************************************* -->
@@ -1212,8 +1257,115 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.2//EN"
     <!-- Begin MultiFileUpload tag attributes                                -->
     <!-- ******************************************************************* -->
     
-    <!--  TODO                                                               -->
-    
+    <tag>
+        <description>Download an arbitrary binary object</description>
+        <name>multiFileUpload</name>
+        <tag-class>com.sun.faces.sandbox.taglib.DownloadTag</tag-class>
+        <body-content>JSP</body-content>
+        <attribute>
+            <name>id</name>
+            <required>false</required>
+            <rtexprvalue>false</rtexprvalue>
+            <description><![CDATA[ ]]></description>
+        </attribute>
+        <attribute>
+            <name>type</name>
+            <required>false</required>
+            <rtexprvalue>false</rtexprvalue>
+            <description>
+                <![CDATA[<p>The manner in which to render the applet: 'full' or 
+                'button'.  In 'full' mode, the applet will be rendered <code>height</code>
+                pixels tall, by <code>width</code> pixels wide.  In this mode, the
+                user will be allowed to add and remove files, as well as verify the
+                list of selected files before the upload is performed.</p>
+                
+                <p>In 'button' mode,
+                the applet will be rendered as a button <code>height</code>
+                pixels tall, by <code>width</code> pixels wide on the web page.
+                When clicked, a file selection dialog will be displayed to the user.
+                Once 'OK' is clicked, the files will be uploaded, with no chance
+                to add more or remove any files.</p>]]>
+            </description>
+        </attribute>
+        <attribute>
+            <name>fileHolder</name>
+            <required>true</required>
+            <rtexprvalue>false</rtexprvalue>
+            <description>
+                <![CDATA[<p>The fileHolder object is an object provided by
+                a backing bean which will hold the files uploaded.  The component will
+                get the reference to the file holder and add each file uploaded to the
+                object.  The storage mechanism can be the default <code>Map</code> of
+                <code>InputStream</code>s, keyed by file name, or more sophisticated,
+                user-defined mechanisms, such as database for filesystem storage. </p>]]>
+            </description>
+        </attribute>
+        <attribute>
+            <name>destinationUrl</name>
+            <required>true</required>
+            <rtexprvalue>false</rtexprvalue>
+            <description>
+                <![CDATA[<p>The <code>destinationUrl</code> tells the component
+                the page to which to navigate after an upload.  If the value is
+                a hard-coded URL, navgiation will always redirect to the page.  
+                If the value is a ValueBinding expression, then the method specified 
+                will be called to determine the destination.  This gives the application 
+                the chance to analyze or otherwise process the files and make a 
+                determination on where to send the client</p>
+                
+                <p><em>Important Note:</em>  This does *NOT* currently resolve a 
+                navigation case result string to the mapped view from the Faces 
+                configuration.  This assumes that the string in question is the 
+                <em>name</em> of a view, so "success" will become 
+                http://localhost:8080/MyContext/success.jsf, and <em>not</em>
+                http://localhost:8080/MyContext/youdidit.jsf that you may have 
+                mapped in your Faces config.  This is due to the lack of a portable 
+                way of making that resolution.</p>]]>
+            </description>
+        </attribute>
+        <attribute>
+            <name>fileFilter </name>
+            <required>false</required>
+            <rtexprvalue>false</rtexprvalue>
+            <description><![CDATA[<p>A string listing the extensions to allow, 
+            as well as a filter description (i.e., "Image Files|jpg,png,gif")</p>]]></description>
+        </attribute>
+        <attribute>
+            <name>maxFileSize</name>
+            <required>false</required>
+            <rtexprvalue>false</rtexprvalue>
+            <description><![CDATA[The maximum size per file in bytes.]]></description>
+        </attribute>
+        <attribute>
+            <name>startDir </name>
+            <required>false</required>
+            <rtexprvalue>false</rtexprvalue>
+            <description>
+                <![CDATA[<p>The directory in which to start looking for files.
+                Care must be taken when using the <code>startDir</code> attribute, 
+                as file systems paths are far from portable. For in-house 
+                applications, one can probably safely use this parameter.</p>]]>
+            </description>
+        </attribute>
+        <attribute>
+            <name>buttonText</name>
+            <required>false</required>
+            <rtexprvalue>false</rtexprvalue>
+            <description><![CDATA[The text on the button if type is set to 'button'.]]></description>
+        </attribute>
+        <attribute>
+            <name>height</name>
+            <required>false</required>
+            <rtexprvalue>false</rtexprvalue>
+            <description><![CDATA[The height of the rendered applet.]]></description>
+        </attribute>
+        <attribute>
+            <name>width</name>
+            <required>false</required>
+            <rtexprvalue>false</rtexprvalue>
+            <description><![CDATA[The width of the rendered applet.]]></description>
+        </attribute>
+    </tag>    
     <!-- ******************************************************************* -->
     <!-- End MultiFileUpload tag attributes                                  -->
     <!-- ******************************************************************* -->
