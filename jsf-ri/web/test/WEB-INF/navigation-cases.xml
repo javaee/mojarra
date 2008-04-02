@@ -1,0 +1,245 @@
+<?xml version="1.0"?>
+
+<!--
+     This document contains test scenarios for the implementation
+     of the default NavigationHandler implementation, as described
+     in Section 7.4.2 of the spec.  These rules assume that an
+     application configuration file including all of the example
+     navigation rules in Section 7.4.3 has been processed.
+
+     Each test scenario is represented by a "test" element with the
+     following attributes:
+
+     fromTreeId                Tree id from the tree currently
+                               being processed (required)
+
+     fromActionRef             Action reference of the action that
+                               was invoked (optional)
+
+     fromOutcome               Logical outcome from the
+                               action that was called (optional)
+
+     toTreeId                  Tree id of the tree that should be
+                               selected next, which may be the same
+                               as the from tree (required)
+
+-->
+
+<tests>
+
+  <!-- ============ Tests From /login.jsp Tree Identifier ================= -->
+
+
+  <!-- Positive tests that should match specific rules -->
+
+  <test fromTreeId="/login.jsp"
+     fromActionRef="userBean.login"
+       fromOutcome="success"
+          toTreeId="/home.jsp"/>
+
+  <test fromTreeId="/login.jsp"
+     fromActionRef="userBean.register"
+       fromOutcome="success"
+          toTreeId="/welcome.jsp"/>
+
+  <test fromTreeId="/login.jsp"
+     fromActionRef="userBean.register"
+       fromOutcome="duplicateUserName"
+          toTreeId="/try-another-name.jsp"/>
+
+
+  <!-- Positive tests that should match application wide rules -->
+
+  <!-- Matches the generic logout rule #1 -->
+  <test fromTreeId="/login.jsp"
+     fromActionRef="userBean.logout"
+          toTreeId="/logout.jsp"/>
+
+  <!-- Matches the generic logout rule #2 -->
+  <test fromTreeId="/login.jsp"
+     fromActionRef="userBean.logout"
+       fromOutcome="whatever"
+          toTreeId="/logout.jsp"/>
+
+  <!-- Matches generic error outcome rule #1 -->
+  <test fromTreeId="/login.jsp"
+       fromOutcome="loginRequired"
+          toTreeId="/must-login-first.jsp"/>
+
+  <!-- Matches generic error outcome rule #2 -->
+  <test fromTreeId="/login.jsp"
+     fromActionRef="foo.bar"
+       fromOutcome="loginRequired"
+          toTreeId="/must-login-first.jsp"/>
+
+  <!-- Matches generic search results #1 -->
+  <test fromTreeId="/login.jsp"
+     fromActionRef="searchForm.go"
+          toTreeId="/search-problem.jsp"/>
+
+  <!-- Matches generic search results #2 -->
+  <test fromTreeId="/login.jsp"
+     fromActionRef="searchForm.go"
+       fromOutcome="success"
+          toTreeId="/search-results.jsp"/>
+
+
+  <!-- Negative tests that should not match any rules -->
+
+
+  <!-- Mismatched fromActionRef -->
+  <test fromTreeId="/login.jsp"
+     fromActionRef="foo.bar"
+       fromOutcome="success"
+          toTreeId="/login.jsp"/>
+
+  <!-- Mismatched fromOutcome -->
+  <test fromTreeId="/login.jsp"
+     fromActionRef="userBean.login"
+       fromOutcome="foobar"
+          toTreeId="/login.jsp"/>
+
+  <!-- Missing fromActionRef -->
+  <test fromTreeId="/login.jsp"
+       fromOutcome="success"
+          toTreeId="/login.jsp"/>
+
+  <!-- Missing fromOutcome -->
+  <test fromTreeId="/login.jsp"
+     fromActionRef="userBean.login"
+          toTreeId="/login.jsp"/>
+
+
+  <!-- ============ Tests From /other.jsp Tree Identifier ================= -->
+
+
+  <!-- Positive tests that should match application wide rules -->
+
+
+  <!-- Matches the generic logout rule #1 -->
+  <test fromTreeId="/other.jsp"
+     fromActionRef="userBean.logout"
+          toTreeId="/logout.jsp"/>
+
+  <!-- Matches the generic logout rule #2 -->
+  <test fromTreeId="/other.jsp"
+     fromActionRef="userBean.logout"
+       fromOutcome="whatever"
+          toTreeId="/logout.jsp"/>
+
+  <!-- Matches generic error outcome rule #1 -->
+  <test fromTreeId="/other.jsp"
+       fromOutcome="loginRequired"
+          toTreeId="/must-login-first.jsp"/>
+
+  <!-- Matches generic error outcome rule #2 -->
+  <test fromTreeId="/other.jsp"
+     fromActionRef="foo.bar"
+       fromOutcome="loginRequired"
+          toTreeId="/must-login-first.jsp"/>
+
+  <!-- Matches generic search results #1 -->
+  <test fromTreeId="/other.jsp"
+     fromActionRef="searchForm.go"
+          toTreeId="/search-problem.jsp"/>
+
+  <!-- Matches generic search results #2 -->
+  <test fromTreeId="/other.jsp"
+     fromActionRef="searchForm.go"
+       fromOutcome="success"
+          toTreeId="/search-results.jsp"/>
+
+
+  <!-- Negative tests that should not match any rules -->
+
+
+  <!-- Mismatched fromActionRef -->
+  <test fromTreeId="/other.jsp"
+     fromActionRef="foo.bar"
+       fromOutcome="success"
+          toTreeId="/other.jsp"/>
+
+  <!-- Mismatched fromOutcome -->
+  <test fromTreeId="/other.jsp"
+     fromActionRef="userBean.login"
+       fromOutcome="foobar"
+          toTreeId="/other.jsp"/>
+
+  <!-- Missing fromActionRef -->
+  <test fromTreeId="/other.jsp"
+       fromOutcome="success"
+          toTreeId="/other.jsp"/>
+
+  <!-- Missing fromOutcome -->
+  <test fromTreeId="/other.jsp"
+     fromActionRef="userBean.login"
+          toTreeId="/other.jsp"/>
+
+
+  <!-- ========= Tests From /movies/index.jsp Tree Identifier ============= -->
+
+
+  <!-- Positive tests that should match application wide rules -->
+
+
+  <!-- Matches the generic logout rule #1 -->
+  <test fromTreeId="/movies/index.jsp"
+     fromActionRef="userBean.logout"
+          toTreeId="/logout.jsp"/>
+
+  <!-- Matches the generic logout rule #2 -->
+  <test fromTreeId="/movies/index.jsp"
+     fromActionRef="userBean.logout"
+       fromOutcome="whatever"
+          toTreeId="/logout.jsp"/>
+
+  <!-- Matches generic error outcome rule #1 -->
+  <test fromTreeId="/movies/index.jsp"
+       fromOutcome="loginRequired"
+          toTreeId="/must-login-first.jsp"/>
+
+  <!-- Matches generic error outcome rule #2 -->
+  <test fromTreeId="/movies/index.jsp"
+     fromActionRef="foo.bar"
+       fromOutcome="loginRequired"
+          toTreeId="/must-login-first.jsp"/>
+
+  <!-- Matches special search results #1 -->
+  <test fromTreeId="/movies/index.jsp"
+     fromActionRef="searchForm.go"
+          toTreeId="/search-problem.jsp"/>
+
+  <!-- Matches special search results #2 -->
+  <test fromTreeId="/movies/index.jsp"
+     fromActionRef="searchForm.go"
+       fromOutcome="success"
+          toTreeId="/movie-search-results.jsp"/>
+
+
+  <!-- Negative tests that should not match any rules -->
+
+
+  <!-- Mismatched fromActionRef -->
+  <test fromTreeId="/movies/index.jsp"
+     fromActionRef="foo.bar"
+       fromOutcome="success"
+          toTreeId="/movies/index.jsp"/>
+
+  <!-- Mismatched fromOutcome -->
+  <test fromTreeId="/movies/index.jsp"
+     fromActionRef="userBean.login"
+       fromOutcome="foobar"
+          toTreeId="/movies/index.jsp"/>
+
+  <!-- Missing fromActionRef -->
+  <test fromTreeId="/movies/index.jsp"
+       fromOutcome="success"
+          toTreeId="/movies/index.jsp"/>
+
+  <!-- Missing fromOutcome -->
+  <test fromTreeId="/movies/index.jsp"
+     fromActionRef="userBean.login"
+          toTreeId="/movies/index.jsp"/>
+
+
+</tests>

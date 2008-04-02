@@ -447,7 +447,7 @@
             <test name="com.sun.faces.application.TestActionListenerImpl"/>
             <test name="com.sun.faces.application.TestApplicationFactoryImpl"/>
             <test name="com.sun.faces.application.TestApplicationImpl"/>
-            <test name="com.sun.faces.application.TestNavigation"/>
+            <test name="com.sun.faces.application.TestNavigationHandler"/>
             <test name="com.sun.faces.context.TestExternalContextImpl"/>
             <test name="com.sun.faces.context.TestFacesContextFactoryImpl"/>
             <test name="com.sun.faces.context.TestFacesContextImpl"/>

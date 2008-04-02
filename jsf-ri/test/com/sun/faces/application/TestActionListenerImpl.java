@@ -1,5 +1,5 @@
 /*
- * $Id: TestActionListenerImpl.java,v 1.4 2003/05/06 03:30:21 eburns Exp $
+ * $Id: TestActionListenerImpl.java,v 1.5 2003/05/08 23:13:30 rkitain Exp $
  */
 
 /*
@@ -18,6 +18,8 @@ import com.sun.faces.config.ConfigListener;
 import com.sun.faces.config.ConfigNavigationCase;
 import com.sun.faces.context.FacesContextImpl;
 import com.sun.faces.tree.SimpleTreeImpl;
+
+import com.sun.faces.util.DebugUtil;
 
 import java.util.List;
 
@@ -42,7 +44,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestActionListenerImpl.java,v 1.4 2003/05/06 03:30:21 eburns Exp $
+ * @version $Id: TestActionListenerImpl.java,v 1.5 2003/05/08 23:13:30 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -132,7 +134,7 @@ public class TestActionListenerImpl extends ServletFacesTestCase
         System.out.println("Testing With Action Literal Set...");
 
         UICommand command = new UICommand();
-        command.setAction("success");
+        command.setAction("loginRequired");
         context.setTree(new SimpleTreeImpl(context, "/login.jsp"));
 
         ActionListenerImpl actionListener = new ActionListenerImpl();
@@ -141,27 +143,28 @@ public class TestActionListenerImpl extends ServletFacesTestCase
         actionListener.processAction(actionEvent);
 
         String newTreeId = context.getTree().getTreeId();
-        assertTrue(newTreeId.equals("/home.jsp"));
-
+        assertTrue(newTreeId.equals("/must-login-first.jsp"));
 
         System.out.println("Testing With ActionRef Set...");
 
-        UserBean user = new UserBean();
-        context.getExternalContext().getApplicationMap().put("UserBean", user);
-        assertTrue(user == context.getExternalContext().getApplicationMap().get("UserBean"));
-
         command = new UICommand();
-        command.setActionRef("UserBean");
+        command.setActionRef("userBean.login");
+
+        UserBean user = new UserBean();
+        LoginAction login  = new LoginAction();
+        user.setLogin(login);
+        context.getExternalContext().getSessionMap().put("userBean", user);
+        assertTrue(user == context.getExternalContext().getSessionMap().get("userBean"));
+
         context.setTree(new SimpleTreeImpl(context, "/login.jsp"));
 
         actionEvent = new ActionEvent(command, "register");
         actionListener.processAction(actionEvent);
 
         newTreeId = context.getTree().getTreeId();
-System.out.println("NEWTREEID:"+newTreeId);
         // expected outcome should be tree id corresponding to "page/outcome" search..
 
-        assertTrue(newTreeId.equals("/get-user-info.jsp"));
+        assertTrue(newTreeId.equals("/home.jsp"));
     }
 
     public void testIllegalArgException() {
@@ -187,10 +190,21 @@ System.out.println("NEWTREEID:"+newTreeId);
         assertTrue(exceptionThrown);
     }
 
+    public static class LoginAction extends Action {
+        public String invoke() {
+            return "success";
+        }
+    }
+
+    public static class UserBean extends Object {
+        private Action login = null;
+
+        public void setLogin(Action login) {
+            this.login = login;
+        }
+        public Action getLogin() {
+            return login;
+        }
+    }
 } // end of class TestActionListenerImpl
 
-class UserBean extends Action {
-    public String invoke() {
-        return "success";
-    }
-}

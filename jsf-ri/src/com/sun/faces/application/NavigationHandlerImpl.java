@@ -1,5 +1,5 @@
 /*
- * $Id: NavigationHandlerImpl.java,v 1.5 2003/05/05 15:19:01 rkitain Exp $
+ * $Id: NavigationHandlerImpl.java,v 1.6 2003/05/08 23:13:29 rkitain Exp $
  */
 
 /*
@@ -9,7 +9,6 @@
 
 package com.sun.faces.application;
 
-import com.sun.faces.RIConstants;
 import com.sun.faces.config.ConfigBase;
 import com.sun.faces.config.ConfigNavigationCase;
 import com.sun.faces.util.Util;
@@ -18,7 +17,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -46,15 +44,17 @@ public class NavigationHandlerImpl extends NavigationHandler {
     // original list
     private List navigationCases = null;
 
-    // exact match Map - this java.util.Map contains:
-    // treeid (key) java.util.List of cases for that tree (value) 
-    private Map exactMatchMap = null;
-    private List exactMatchCaseList = null;
+    // overall Map containing from-tree-id key and ArrayList of ConfigNavigationCase 
+    // objects for that key; 
+    //
+    private Map caseListMap = null;
 
-    // contains "*" tree id(s)
-    private List defaultMatchList = null;
+    // the ArrayList containing the ConfigNavigationCase objects for the from-tree-id
+    //
+    private List caseList = null;
 
-    // wildcard list - contains tree id(s) ending in "*"
+    // wildcard list - contains tree id strings ending in "*"
+    //
     private List wildcardMatchList= null;
 
 
@@ -99,7 +99,12 @@ public class NavigationHandlerImpl extends NavigationHandler {
         }
     }
 
-    // This method uses the search algorithms to return the new tree identifier.
+    // This method uses helper methods to determine the new tree identifier:
+    // 1. By performing an exact match search with the current tree identifier;
+    // 2. If not found, then by searching any wild card patterns (ex: /log*)
+    // 3. And finally, if still not found, the match is performed against any
+    //    "from-tree-id" pattern of just an "*";
+    // If nothing turns up, then the current tree identifier will not change; 
  
     private String getTreeId(FacesContext context, String actionRef, String outcome) {
         String nextTreeId = null;
@@ -111,19 +116,23 @@ public class NavigationHandlerImpl extends NavigationHandler {
         }
 
         if (nextTreeId == null) {
-             nextTreeId = findDefaultMatch(treeId, actionRef, outcome);
+             nextTreeId = findDefaultMatch(actionRef, outcome);
         }
 
         return nextTreeId;
     }
 
         
-    // This method will search the exact match list.
+    // This method finds the List of cases for the current tree identifier;
+    // After the cases are found, then "from-action-ref" and "from-outcome" values
+    // are evaluated to determine the new tree identifier;  
 
     private String findExactMatch(String treeId, String actionRef, String outcome) {
         String returnTreeId = null;
 
-        List caseList = (List)exactMatchMap.get(treeId);
+        Assert.assert_it(null != caseListMap);
+
+        List caseList = (List)caseListMap.get(treeId);
 
         if (caseList == null) {
             return null;
@@ -136,78 +145,24 @@ public class NavigationHandlerImpl extends NavigationHandler {
         // 3) elements specifying only from-action-ref
         // 4) elements where both from-action-ref and from-outcome are null
 
-        String fromActionRef = null;
-        String fromOutcome = null;
-        String toTreeId = null;
 
-        if (actionRef != null && outcome != null) {
-            for (int i = 0; i < caseList.size(); i++) {
-                ConfigNavigationCase cnc = (ConfigNavigationCase) caseList.get(i);
-                fromActionRef = cnc.getFromActionRef();
-                fromOutcome = cnc.getFromOutcome();
-                toTreeId = cnc.getToTreeId();
-                if (fromActionRef != null && fromOutcome != null) {
-                    if (fromActionRef.equals(actionRef) && fromOutcome.equals(outcome)) {
-                        return toTreeId;
-                    }
-                }
-            }
-        } 
-
-        if (outcome != null) {
-            for (int i = 0; i < caseList.size(); i++) {
-                ConfigNavigationCase cnc = (ConfigNavigationCase) caseList.get(i);
-                fromActionRef = cnc.getFromActionRef();
-                fromOutcome = cnc.getFromOutcome();
-                toTreeId = cnc.getToTreeId();
-
-                if (fromOutcome != null) {
-                    if (fromOutcome.equals(outcome)) {
-                        return toTreeId;
-                    }
-                }
-            }
-        }
-
-        if (actionRef != null) {
-           for (int i = 0; i < caseList.size(); i++) {
-               ConfigNavigationCase cnc = (ConfigNavigationCase) caseList.get(i);
-               fromActionRef = cnc.getFromActionRef();
-               fromOutcome = cnc.getFromOutcome();
-               toTreeId = cnc.getToTreeId();
-                if (fromActionRef != null) {
-                    if (fromActionRef.equals(actionRef)) {
-                        return toTreeId;
-                    }
-                }
-            }
-        }
-
-        if (actionRef == null && outcome == null) {
-            for (int i = 0; i < caseList.size(); i++) {
-                ConfigNavigationCase cnc = (ConfigNavigationCase) caseList.get(i);
-                fromActionRef = cnc.getFromActionRef();
-                fromOutcome = cnc.getFromOutcome();
-                toTreeId = cnc.getToTreeId();
-                if (fromActionRef == null && fromOutcome == null) {
-                    return toTreeId;
-                }
-            }
-        }
+        returnTreeId = determineTreeFromActionRefOutcome(caseList, actionRef, outcome);
 
         return returnTreeId;
     }
 
-    // This method will search the wild card list .
+    // This method traverses the wild card match List (containing "from-tree-id" strings)
+    // and finds the List of cases for each "from-tree-id"; After the cases are found,
+    // then "from-action-ref" and "from-outcome" values are evaluated to determine the
+    // new tree identifier; 
 
     private String findWildCardMatch(String treeId, String actionRef, String outcome) {
         String returnTreeId = null;
+
+        Assert.assert_it(null != wildcardMatchList);
+
         for (int i=0; i<wildcardMatchList.size(); i++) {
-            ConfigNavigationCase cnc = (ConfigNavigationCase)wildcardMatchList.get(i);
-            String fromTreeId = cnc.getFromTreeId();
-            String fromActionRef = cnc.getFromActionRef();
-            String fromOutcome = cnc.getFromOutcome();  
-            String toTreeId = cnc.getToTreeId();
+            String fromTreeId = (String)wildcardMatchList.get(i);
 
             // See if the entire wildcard string (without the trailing "*" is
             // contained in the incoming treeId.  Ex: /foobar is contained with /foobarbaz
@@ -218,14 +173,22 @@ public class NavigationHandlerImpl extends NavigationHandler {
                 continue;
             }
 
+            // Append the trailing "*" so we can do our map lookup;
+
+            String wcFromTreeId = fromTreeId + "*"; 
+            List caseList = (List)caseListMap.get(wcFromTreeId);
+
+            if (caseList == null) {
+                return null;
+            }
+
             // If we've found a match, then we need to evaluate actionref/outcome in the following
             // order:  1)elements specifying both from-action-ref and from-outcome
             // 2) elements specifying only from-outcome
             // 3) elements specifying only from-action-ref
             // 4) elements where both from-action-ref and from-outcome are null
 
-            returnTreeId = determineTreeFromActionRefOutcome(actionRef, outcome,
-                fromActionRef, fromOutcome, toTreeId);
+            returnTreeId = determineTreeFromActionRefOutcome(caseList, actionRef, outcome);
             if (returnTreeId != null) {
                 break;
             }
@@ -236,88 +199,96 @@ public class NavigationHandlerImpl extends NavigationHandler {
     // This method will check the default match list;  Entries in this list have
     // a fromTreeId of "*";
  
-    private String findDefaultMatch(String treeId, String actionRef, String outcome) {
+    private String findDefaultMatch(String actionRef, String outcome) {
         String returnTreeId = null;
 
-        for (int i=0; i<defaultMatchList.size(); i++) {
-            ConfigNavigationCase cnc = (ConfigNavigationCase)defaultMatchList.get(i);
-            String fromTreeId = cnc.getFromTreeId();
-            String fromActionRef = cnc.getFromActionRef();
-            String fromOutcome = cnc.getFromOutcome();
-            String toTreeId = cnc.getToTreeId();
+        Assert.assert_it(null != caseListMap);
 
+        List caseList = (List)caseListMap.get("*"); 
 
-            // We need to evaluate actionref/outcome in the follow
-            // order:  1)elements specifying both from-action-ref and from-outcome
-            // 2) elements specifying only from-outcome
-            // 3) elements specifying only from-action-ref
-            // 4) elements where both from-action-ref and from-outcome are null
-
-            returnTreeId = determineTreeFromActionRefOutcome(actionRef, outcome,
-                fromActionRef, fromOutcome, toTreeId);
-            if (returnTreeId != null) {
-                break;
-            }
+        if (caseList == null) {
+            return null;
         }
+
+        // We need to evaluate actionref/outcome in the follow
+        // order:  1)elements specifying both from-action-ref and from-outcome
+        // 2) elements specifying only from-outcome
+        // 3) elements specifying only from-action-ref
+        // 4) elements where both from-action-ref and from-outcome are null
+
+        returnTreeId = determineTreeFromActionRefOutcome(caseList, actionRef, outcome);
         return returnTreeId;
     }
         
     // This method will attempt to find the tree identifier based on action reference
     // and outcome;
 
-    private String determineTreeFromActionRefOutcome(String actionRef, String outcome,
-        String fromActionRef, String fromOutcome, String toTreeId) {
+    private String determineTreeFromActionRefOutcome(List caseList, String actionRef, String outcome) {
 
         String returnTreeId = null;
 
-        if (actionRef != null && outcome != null) {
-            if (fromActionRef != null && fromOutcome != null) {
-                if (fromActionRef.equals(actionRef) && fromOutcome.equals(outcome)) {
-                    returnTreeId = toTreeId;
+        String fromActionRef = null;
+        String fromOutcome = null;
+        String toTreeId = null;
+
+        for (int i = 0; i < caseList.size(); i++) {
+            ConfigNavigationCase cnc = (ConfigNavigationCase) caseList.get(i);
+            fromActionRef = cnc.getFromActionRef();
+            fromOutcome = cnc.getFromOutcome();
+            toTreeId = cnc.getToTreeId();
+            if ((fromActionRef != null) && (fromOutcome != null)) {
+                if ((fromActionRef.equals(actionRef)) && (fromOutcome.equals(outcome))) {
+                    return toTreeId;
                 }
             }
         }
 
-        if (outcome != null) {
-            if (fromOutcome != null) {
+        for (int i = 0; i < caseList.size(); i++) {
+            ConfigNavigationCase cnc = (ConfigNavigationCase) caseList.get(i);
+            fromActionRef = cnc.getFromActionRef();
+            fromOutcome = cnc.getFromOutcome();
+            toTreeId = cnc.getToTreeId();
+            if ((fromActionRef == null) && (fromOutcome != null)) {
                 if (fromOutcome.equals(outcome)) {
-                    returnTreeId = toTreeId;
+                    return toTreeId;
                 }
             }
         }
 
-        if (actionRef != null) {
-            if (fromActionRef != null) {
+        for (int i = 0; i < caseList.size(); i++) {
+            ConfigNavigationCase cnc = (ConfigNavigationCase) caseList.get(i);
+            fromActionRef = cnc.getFromActionRef();
+            fromOutcome = cnc.getFromOutcome();
+            toTreeId = cnc.getToTreeId();
+            if ((fromActionRef != null) && (fromOutcome == null)) {
                 if (fromActionRef.equals(actionRef)) {
-                    returnTreeId = toTreeId;
+                    return toTreeId;
                 }
             }
         }
 
-        if (fromActionRef == null && fromOutcome == null) {
-            returnTreeId = toTreeId;
+        for (int i = 0; i < caseList.size(); i++) {
+            ConfigNavigationCase cnc = (ConfigNavigationCase) caseList.get(i);
+            fromActionRef = cnc.getFromActionRef();
+            fromOutcome = cnc.getFromOutcome();
+            toTreeId = cnc.getToTreeId();
+            if ((fromActionRef == null) && (fromOutcome == null)) {
+                return toTreeId;
+            }
         }
 
         return returnTreeId;
     }
 
-    // This method builds three search structures:
-    //     o exact match Map - the tree id(s) in this Map do not contain
-    //       a trailing "*" (wildcard)  (ex: /login.jsp)  This Map contains
-    //       <from-tree-id> as the key, and a List of cases for that tree
-    //       id as the value;
-    //     o wild card match list - the tree id(s) in this list do contain
-    //       a trailing "*" (wildcard) (ex: /login*)
-    //     o default match list - the tree id(s) in this list are "*"
-    // If the tree id contains an ending "*" (wildcard), the trailing "*"
-    // is removed, and the tree id is reset in the ConfigNavigationCase object
-    // before it is added to the wild card match list; 
-    // A null fromTreeId is treated as global ("*");
+    // This method builds two search structures:
+    //     o case list Map - A Map containing all the "from-tree-id" values as 
+    //       the key, and a List of ConfigNavigationCase objects for that key; 
+    //     o wild card match list - A List of "from-tree-id" strings whose trailing
+    //       character is an "*"; The trailing "*" is removed just before it is added
+    //       to the list, and the List is sorted in descending order (longest -> shortest).
 
     private void buildSearchLists() {
-        exactMatchMap = new HashMap();
-        exactMatchCaseList = new ArrayList();
-        defaultMatchList = new ArrayList();
+        caseListMap = new HashMap();
         wildcardMatchList = new ArrayList();
 
         for (int i=0; i<navigationCases.size(); i++) {
@@ -327,25 +298,17 @@ public class NavigationHandlerImpl extends NavigationHandler {
                 fromTreeId = "*";
             }
             if (fromTreeId != null) {
-                if (fromTreeId.equals("*")) {
-                    defaultMatchList.add(cnc);
-                } else if (!fromTreeId.endsWith("*")) {
-                    List caseList = (List)exactMatchMap.get(fromTreeId);
-                    if (caseList == null) {
-                        exactMatchCaseList = new ArrayList();
-                        exactMatchCaseList.add(cnc);
-                        exactMatchMap.put(fromTreeId, exactMatchCaseList);
-                    } else {
-                        caseList.add(cnc);
-                    } 
+                caseList = (List)caseListMap.get(fromTreeId);
+                if (caseList == null) {
+                    caseList = new ArrayList();
+                    caseList.add(cnc);
+                    caseListMap.put(fromTreeId, caseList);
                 } else {
+                    caseList.add(cnc);
+                }
+                if (fromTreeId.endsWith("*")) {
                     fromTreeId = fromTreeId.substring(0,fromTreeId.lastIndexOf("*"));
-                    ConfigNavigationCase cnc1 = new ConfigNavigationCase();
-                    cnc1.setFromTreeId(fromTreeId);
-                    cnc1.setFromActionRef(cnc.getFromActionRef());
-                    cnc1.setFromOutcome(cnc.getFromOutcome());
-                    cnc1.setToTreeId(cnc.getToTreeId());
-                    wildcardMatchList.add(cnc1);
+                    wildcardMatchList.add(fromTreeId);
                 }
             }
         }
@@ -364,9 +327,9 @@ public class NavigationHandlerImpl extends NavigationHandler {
 
     class SortIt implements Comparator {
         public int compare(Object o1, Object o2) {
-            ConfigNavigationCase cnc1 = (ConfigNavigationCase)o1;
-            ConfigNavigationCase cnc2 = (ConfigNavigationCase)o2;
-            return -(cnc1.getFromTreeId().compareTo(cnc2.getFromTreeId()));
+            String fromTreeId1 = (String)o1;
+            String fromTreeId2 = (String)o2;
+            return -(fromTreeId1.compareTo(fromTreeId2));
         }
     }
 
