@@ -62,7 +62,7 @@
 <h:form  formName="carStoreForm" modelReference="CurrentOptionServer" >
 
 <P>
-<TABLE BORDER="0" WIDTH="760" BGCOLOR="#4F4F72">
+<TABLE BORDER="0" WIDTH="660" BGCOLOR="#4F4F72">
 <TR>
     <TD WIDTH="828">
     <TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0" WIDTH="100%">
