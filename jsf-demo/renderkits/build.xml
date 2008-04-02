@@ -1,0 +1,290 @@
+<!--
+ Copyright 2004 Sun Microsystems, Inc. All Rights Reserved.
+ 
+ Redistribution and use in source and binary forms, with or
+ without modification, are permitted provided that the following
+ conditions are met:
+ 
+ - Redistributions of source code must retain the above copyright
+   notice, this list of conditions and the following disclaimer.
+ 
+ - Redistribution in binary form must reproduce the above
+   copyright notice, this list of conditions and the following
+   disclaimer in the documentation and/or other materials
+   provided with the distribution.
+    
+ Neither the name of Sun Microsystems, Inc. or the names of
+ contributors may be used to endorse or promote products derived
+ from this software without specific prior written permission.
+  
+ This software is provided "AS IS," without a warranty of any
+ kind. ALL EXPRESS OR IMPLIED CONDITIONS, REPRESENTATIONS AND
+ WARRANTIES, INCLUDING ANY IMPLIED WARRANTY OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE OR NON-INFRINGEMENT, ARE HEREBY
+ EXCLUDED. SUN AND ITS LICENSORS SHALL NOT BE LIABLE FOR ANY
+ DAMAGES OR LIABILITIES SUFFERED BY LICENSEE AS A RESULT OF OR
+ RELATING TO USE, MODIFICATION OR DISTRIBUTION OF THIS SOFTWARE OR
+ ITS DERIVATIVES. IN NO EVENT WILL SUN OR ITS LICENSORS BE LIABLE
+ FOR ANY LOST REVENUE, PROFIT OR DATA, OR FOR DIRECT, INDIRECT,
+ SPECIAL, CONSEQUENTIAL, INCIDENTAL OR PUNITIVE DAMAGES, HOWEVER
+ CAUSED AND REGARDLESS OF THE THEORY OF LIABILITY, ARISING OUT OF
+ THE USE OF OR INABILITY TO USE THIS SOFTWARE, EVEN IF SUN HAS
+ BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
+  
+ You acknowledge that this software is not designed, licensed or
+ intended for use in the design, construction, operation or
+ maintenance of any nuclear facility.
+-->
+
+<project name="renderkits" default="build" basedir=".">  
+
+  <property name="depth" value=".."/>
+
+  <property file="${user.home}/build.properties"/>   <!-- User local        -->
+  <property file="build.properties"/>                <!-- Component local   -->
+  <property file="../build.properties"/>             <!-- Demos local     -->
+  <property file="../../build.properties"/>          <!-- jsf local       -->
+  <property file="../default.properties"/>           <!-- last resort     --> 
+
+  <!-- Configure the context path for this application -->
+  <property name="context.path" value="/jsf-renderkits"/>
+  <property name="example" value="jsf-renderkits" />
+  <property name="webapp" value="jsf-renderkits" />
+  <property name="build"   value="${basedir}/build" />
+
+  <!-- The base directory for demo apps -->
+  <property name="jsf-demo.lib" value="../lib"/> 
+
+  <!-- Configure properties to access the Manager application -->
+  <property name="url"      value="http://localhost:8080/manager"/>
+
+  <path id="catalina-ant.classpath">
+    <pathelement location="${catalina-ant.jar}"/>
+  </path>
+
+  <path id="classpath">
+    <pathelement location="${commons-beanutils.jar}"/>
+    <pathelement location="${commons-collections.jar}"/>
+    <pathelement location="${commons-digester.jar}"/>
+    <pathelement location="${commons-logging.jar}"/>
+    <pathelement location="${jsf-api.jar}"/>
+    <pathelement location="${jstl.jar}"/>
+    <pathelement location="${standard.jar}"/>
+    <pathelement location="${el-api.jar}"/>
+    <pathelement location="${build}/WEB-INF/classes"/>
+    <pathelement location="${servlet.jar}"/>
+    <pathelement location="${jsp.jar}"/> 
+  </path>
+
+    <target name="init" depends="check.changes,verifyPreconditions">
+        <tstamp/>          
+    </target>
+    
+    <target name="check.changes">
+        <uptodate property="skip.build"
+            targetfile="${build}/last-build">
+            <srcfiles dir="${basedir}">
+                <include name="src/**/*.*"/>
+                <include name="conf/**/*.*"/>
+                <include name="web/**/*.*"/>
+            </srcfiles>
+        </uptodate>      
+    </target>
+    
+  <target name="clean" >
+    <delete dir="${build}" />
+    <delete dir="${context.path}" />
+    <delete file="${basedir}/last-build"/>
+  </target>
+
+  <target name="verifyPreconditions" unless="skip.build">
+
+    <antcall target="checkRequiredFile">
+       <param name="file" value="${servlet.jar}"/>
+       <param name="fail.message" value="A jar file containing the Servlet 2.3 and JSP1.2 classes is required to compile components.  Please define the property servlet23.jar in your build.properties file and ensure that the file exists."/>
+    </antcall>
+
+    <antcall target="checkRequiredFile">
+       <param name="file" value="${commons-beanutils.jar}"/>
+       <param name="fail.message" value="${commons-beanutils.jar} must exist."/>
+    </antcall>
+
+    <antcall target="checkRequiredFile">
+       <param name="file" value="${commons-digester.jar}"/>
+       <param name="fail.message" value="${commons-digester.jar} must exist."/>
+    </antcall>
+
+    <antcall target="checkRequiredFile">
+       <param name="file" value="${commons-logging.jar}"/>
+       <param name="fail.message" value="${commons-logging.jar} must exist."/>
+    </antcall>
+
+    <antcall target="checkRequiredFile">
+       <param name="file" value="${commons-collections.jar}"/>
+       <param name="fail.message" value="${commons-collections.jar} must exist."/>
+    </antcall>
+
+    <antcall target="checkRequiredFile">
+       <param name="file" value="${jsf-api.jar}"/>
+       <param name="fail.message" value="${jsf-api.jar} must exist."/>
+    </antcall>
+
+    <antcall target="checkRequiredFile">
+       <param name="file" value="${jsf-impl.jar}"/>
+       <param name="fail.message" value="${jsf-impl.jar} must exist."/>
+    </antcall>
+
+    <antcall target="checkRequiredFile">
+       <param name="file" value="${standard.jar}"/>
+       <param name="fail.message" value="${standard.jar} must exist."/>
+    </antcall>
+
+    <antcall target="checkRequiredFile">
+       <param name="file" value="${jstl.jar}"/>
+       <param name="fail.message" value="${jstl.jar} must exist."/>
+    </antcall>
+
+  </target>
+
+  <target name="prepare" depends="init"
+   	description="Create build directories.">
+    <mkdir dir="${build}" />
+    <mkdir dir="${build}/${webapp}" />
+    <mkdir dir="${build}/classes" />
+    <mkdir dir="${build}/classes/${webapp}" />
+    <mkdir dir="${build}/classes/renderkits" />
+    <mkdir dir="${build}/classes/renderkits/META-INF" />
+    <mkdir dir="${build}/${webapp}/src/java/renderkits" />
+    <mkdir dir="${build}/${webapp}/src/java/demo" />
+    <mkdir dir="${build}/${webapp}/src/script" />
+    <mkdir dir="${build}/${webapp}/WEB-INF/lib" />
+    <mkdir dir="${build}/${webapp}/WEB-INF/classes" />
+  </target>
+
+  <target name="copyJars" depends="prepare" if="build.standalone">
+    <copy todir="${build}/${webapp}/WEB-INF/lib" file="${commons-beanutils.jar}" />
+    <copy todir="${build}/${webapp}/WEB-INF/lib" file="${commons-collections.jar}" />
+    <copy todir="${build}/${webapp}/WEB-INF/lib" file="${commons-logging.jar}" />
+    <copy todir="${build}/${webapp}/WEB-INF/lib" file="${commons-digester.jar}" />
+    <copy todir="${build}/${webapp}/WEB-INF/lib" file="${jsf-api.jar}" />
+    <copy todir="${build}/${webapp}/WEB-INF/lib" file="${jstl.jar}" />
+    <copy todir="${build}/${webapp}/WEB-INF/lib" file="${standard.jar}" />
+    <copy todir="${build}/${webapp}/WEB-INF/lib" file="${jsf-impl.jar}" />
+  </target>
+
+  <taskdef  name="install"  classname="org.apache.catalina.ant.InstallTask">
+      <classpath refid="catalina-ant.classpath" />
+  </taskdef>
+  <taskdef  name="list"     classname="org.apache.catalina.ant.ListTask">
+      <classpath refid="catalina-ant.classpath" />
+  </taskdef>
+  <taskdef  name="reload"   classname="org.apache.catalina.ant.ReloadTask">
+      <classpath refid="catalina-ant.classpath" />
+  </taskdef>
+  <taskdef  name="remove"   classname="org.apache.catalina.ant.RemoveTask">
+      <classpath refid="catalina-ant.classpath" />
+  </taskdef>
+
+  <!-- Executable Targets -->
+
+  <target name="list" description="List web applications" >
+    <list url="${url}" username="${username}" password="${password}" />
+  </target>
+
+  <target name="install" description="Install web application"
+          depends="build">
+    <install url="${url}" username="${username}" password="${password}"
+          path="${context.path}"  war="file://${build}/${webapp}" />
+  </target>
+
+  <target name="reload" description="Reload web application"
+          depends="build">
+    <reload  url="${url}" username="${username}" password="${password}"
+          path="${context.path}"/>
+  </target>
+
+  <target name="remove" description="Remove web application">
+    <remove url="${url}" username="${username}" password="${password}"
+          path="${context.path}"/>
+  </target>
+
+  <target name="build" unless="skip.build" depends="copyJars" 
+     description="Compile Java files for components, not webapp." >
+      <touch file="${build}/last-build"/>
+
+    <javac debug="true" srcdir="src/java" destdir="${build}/classes/renderkits"
+           fork="true">
+	
+        <include name="renderkits/**" />
+        <classpath refid="classpath"/>
+    </javac>
+    
+    <javac debug="true" srcdir="src/java" fork="true" destdir="${build}/${webapp}/WEB-INF/classes">
+         <include name="demo/**" />
+         <classpath refid="classpath"/>
+    </javac>
+
+    <!-- strip out the components -->
+    <delete dir="${build}/${webapp}/WEB-INF/classes/renderkits" />
+
+    <copy todir="${build}/${webapp}/WEB-INF">
+      <fileset dir="web/WEB-INF"    >
+        <include name="web.xml" />
+      </fileset>
+    </copy>
+
+    <!-- copy over the properties -->
+    <copy todir="${build}/${webapp}/WEB-INF/classes/">
+      <fileset dir="src/java"    >
+        <include name="**/*.properties" />
+      </fileset>
+    </copy>
+
+
+    <!-- copy over the application configuration resource -->
+    <mkdir  dir="${build}/classes/renderkits/META-INF"/>
+    <copy todir="${build}/classes/renderkits/META-INF"
+           file="src/conf/faces-config.xml"/>
+
+    <!-- copy the java source to the webapp for viewing by the user -->
+    <copy todir="${build}/${webapp}/src/java/renderkits">
+      <fileset dir="src/java/renderkits"/>
+    </copy>
+    <copy todir="${build}/${webapp}/WEB-INF" file="web/WEB-INF/tlds/svg.tld"/>
+
+    <!-- copy the script files to the webapp for viewing by the user -->
+    <copy todir="${build}/${webapp}/src/script">
+      <fileset dir="src/script"/>
+    </copy>
+
+    <copy todir="${build}/${webapp}">
+      <fileset dir="web">
+        <include name="**/*.html" />
+        <include name="**/*.gif" />
+        <include name="**/*.jpg" />
+        <include name="**/*.jsp" />
+        <include name="**/*.css" />
+        <include name="**/*.xml" />
+        <include name="**/*.svg" />
+      </fileset>   
+    </copy>
+           
+    <jar jarfile="${build}/${webapp}/WEB-INF/lib/demo-renderkits.jar" 
+	 basedir="${build}/classes/renderkits"/>
+
+    <jar jarfile="${build}/${example}.war" 
+	 basedir="${build}/${webapp}"/>
+
+  </target>
+
+  <target name="checkRequiredFile">
+    <available file="${file}" property="requirement.satisfied"/>
+    <antcall target="checkRequired.fail"/>
+  </target>
+
+  <target name="checkRequired.fail" unless="requirement.satisfied">
+    <fail message="${fail.message}"/>
+  </target>
+
+</project>
+
