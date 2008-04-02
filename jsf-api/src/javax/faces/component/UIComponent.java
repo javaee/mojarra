@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.51 2002/09/20 01:32:42 craigmcc Exp $
+ * $Id: UIComponent.java,v 1.52 2002/09/21 21:26:46 craigmcc Exp $
  */
 
 /*
@@ -599,8 +599,10 @@ public interface UIComponent extends Serializable {
      *     {@link Validator} instance for this component.</li>
      * <li>If any of the calls to a <code>validate()</code> method performed
      *     in the preceding steps returns <code>false</code>, set the
-     *     <code>valid</code> property of this component to <code>false</code>.
-     *     </li>
+     *     <code>valid</code> property of this component to <code>false</code>
+     *     and return <code>false</code>.</li>
+     * <li>Otherwise, set the <code>valid</code> property of this component
+     *     to <code>true</code>, and return <code>true</code>.</li>
      * </ul>
      *
      * <p>Normally, component writers will not overwrite this method -- it is
