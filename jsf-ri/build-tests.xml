@@ -143,11 +143,20 @@
 
     </target>
 
+    <target name="remove.jsp.incompat.workaround">
+
+    <!-- this file is copied from a source file in the
+         discover.jsp.level business -->
+
+      <delete file="${basedir}/test/com/sun/faces/el/impl/PageContextImpl.java"/>  </target>
+
+
 
 <!-- 
         Create directories and copy files for the struts tests
 -->
-    <target name="prepare.test" depends="init">
+    <target name="prepare.test" 
+            depends="init,discover.jsp.level,prepare.test.jsp2,prepare.test.jsp12">
 
         <!-- Create target directories for classes -->
         <mkdir dir="${out.test.dir}/WEB-INF/classes"/>
@@ -157,6 +166,24 @@
         <mkdir dir="${out.test.dir}/WEB-INF/lib"/>
 
     </target>
+
+  <target name="discover.jsp.level">
+    <echo message="jsp.jar is ${jsp.jar}"/>
+    <available classpath="${jsp.jar}" 
+               classname="javax.servlet.jsp.el.VariableResolver"
+               property="is.jsp2"/>
+    <echo message="${is.jsp2}"/>
+  </target>
+
+  <target name="prepare.test.jsp2" if="is.jsp2">
+    <copy file="${basedir}/test/com/sun/faces/el/impl/PageContextImpl.jsp2"
+          tofile="${basedir}/test/com/sun/faces/el/impl/PageContextImpl.java"/>
+  </target>
+
+  <target name="prepare.test.jsp12" unless="is.jsp2">
+    <copy file="${basedir}/test/com/sun/faces/el/impl/PageContextImpl.jsp12"
+          tofile="${basedir}/test/com/sun/faces/el/impl/PageContextImpl.java"/>
+  </target>
 
 <!-- 
         Compile unit tests
@@ -209,6 +236,7 @@
       <antcall target="install"/>
       <antcall target="run.cactus.test"/>
       <antcall target="remove"/>
+      <antcall target="remove.jsp.incompat.workaround"/>
     </target>
 
     <target name="copy-test-data-files">
