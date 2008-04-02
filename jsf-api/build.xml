@@ -560,6 +560,17 @@ jsf-api.jar.
     </junit>
   </target>
 
+  <target name="test.StateHolderSaver" depends="build.test">
+    <echo message="Running StateHolderSaver tests ..."/>
+    <java classname="${test.runner}" fork="yes"
+        failonerror="${test.failonerror}">
+      <jvmarg line="${debug.jvm.args}"/>
+      <arg value="javax.faces.component.StateHolderSaverTestCase"/>
+      <classpath refid="test.classpath"/>
+    </java>
+  </target>
+
+
 
   <target name="test.webapp" depends="build.test">
     <echo message="Running javax.faces.webapp tests ..."/>
