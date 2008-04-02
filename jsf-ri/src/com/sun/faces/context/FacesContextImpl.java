@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContextImpl.java,v 1.29 2003/01/21 23:23:14 rkitain Exp $
+ * $Id: FacesContextImpl.java,v 1.30 2003/01/23 03:30:47 jvisvanathan Exp $
  */
 
 /*
@@ -103,6 +103,9 @@ public class FacesContextImpl extends FacesContext
     //
     // Constructors and Initializers    
     // 
+    public FacesContextImpl() {
+    }
+
     public FacesContextImpl(ServletContext sc, ServletRequest request,
 			    ServletResponse response, Lifecycle lifecycle)
         throws FacesException {
