@@ -1,5 +1,5 @@
 /*
- * $Id: ValueChangeListenerTestCase.java,v 1.2 2004/10/27 16:58:59 edburns Exp $
+ * $Id: ValueChangeListenerTestCase.java,v 1.3 2004/12/14 18:47:16 edburns Exp $
  */
 
 /*
@@ -129,10 +129,10 @@ public class ValueChangeListenerTestCase extends AbstractTestCase {
 
 	for (int i = 0; i < list.size(); i++) {
 	    span = (HtmlSpan) list.get(i);
-	    if (-1 != span.asXml().indexOf("dir=\"LTR\" lang=\"en\"")) {
+	    if (-1 != span.asXml().indexOf("dir=\"LTR\" lang=\"en\" xml:lang=\"en\"")) {
 		hasMessagesContent = true;
 	    }
-	    if (-1 != span.asXml().indexOf("dir=\"RTL\" lang=\"de\"")) {
+	    if (-1 != span.asXml().indexOf("dir=\"RTL\" lang=\"de\" xml:lang=\"de\"")) {
 		hasMessageContent = true;
 	    }
 	}

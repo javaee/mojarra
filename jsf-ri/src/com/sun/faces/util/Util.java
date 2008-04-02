@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.149 2004/12/02 18:42:24 rogerk Exp $
+ * $Id: Util.java,v 1.150 2004/12/14 18:47:16 edburns Exp $
  */
 
 /*
@@ -58,7 +58,7 @@ import java.util.StringTokenizer;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.149 2004/12/02 18:42:24 rogerk Exp $
+ * @version $Id: Util.java,v 1.150 2004/12/14 18:47:16 edburns Exp $
  */
 
 public class Util extends Object {
@@ -337,62 +337,57 @@ public class Util extends Object {
      *
      * @see #renderPassThruAttributes
      */
-    private static String[] passthruAttributes = {
-        "accept",
-        "accesskey",
-        "alt",
-        "bgcolor",
-        "border",
-        "cellpadding",
-        "cellspacing",
-        "charset",
-        "cols",
-        "coords",
-        "dir",
-        "enctype",
-        "frame",
-        "height",
-        "hreflang",
-        "lang",
-        "longdesc",
-        "maxlength",
-        "onblur",
-        "onchange",
-        "onclick",
-        "ondblclick",
-        "onfocus",
-        "onkeydown",
-        "onkeypress",
-        "onkeyup",
-        "onload",
-        "onmousedown",
-        "onmousemove",
-        "onmouseout",
-        "onmouseover",
-        "onmouseup",
-        "onreset",
-        "onselect",
-        "onsubmit",
-        "onunload",
-        "rel",
-        "rev",
-        "rows",
-        "rules",
-        "shape",
-        "size",
-        "style",
-        "summary",
-        "tabindex",
-        "target",
-        "title",
-        "usemap",
-        "width"
+    private static String[][] passthruAttributes = {
+        { "accept", null },
+        { "accesskey", null },
+        { "alt", null },
+        { "bgcolor", null },
+        { "border", null },
+        { "cellpadding", null },
+        { "cellspacing", null },
+        { "charset", null },
+        { "cols", null },
+        { "coords", null },
+        { "dir", null },
+        { "enctype", null },
+        { "frame", null },
+        { "height", null },
+        { "hreflang", null },
+        { "lang", "xml" },
+        { "longdesc", null },
+        { "maxlength", null },
+        { "onblur", null },
+        { "onchange", null },
+        { "onclick", null },
+        { "ondblclick", null },
+        { "onfocus", null },
+        { "onkeydown", null },
+        { "onkeypress", null },
+        { "onkeyup", null },
+        { "onload", null },
+        { "onmousedown", null },
+        { "onmousemove", null },
+        { "onmouseout", null },
+        { "onmouseover", null },
+        { "onmouseup", null },
+        { "onreset", null },
+        { "onselect", null },
+        { "onsubmit", null },
+        { "onunload", null },
+        { "rel", null },
+        { "rev", null },
+        { "rows", null },
+        { "rules", null },
+        { "shape", null },
+        { "size", null },
+        { "style", null },
+        { "summary", null },
+        { "tabindex", null },
+        { "target", null },
+        { "title", null },
+        { "usemap", null },
+        { "width", null }
     };
-
-    //NOTE - "type" was deliberately skipped from the list of passthru
-    //attrs above All renderers that need this attribute should manually
-    //pass it.
-    
 
 
 //
@@ -729,7 +724,7 @@ public class Util extends Object {
         Object attrVal;
         String empty = "";
         for (int i = 0; i < passthruAttributes.length; i++) {
-            if (null != (attrVal = attrs.get(passthruAttributes[i]))
+            if (null != (attrVal = attrs.get(passthruAttributes[i][0]))
                 &&
                 !empty.equals(attrVal)) {
                 result = true;
@@ -843,7 +838,7 @@ public class Util extends Object {
             if (null != excludes) {
                 for (int j = 0, jLen = excludes.length; j < jLen; j++) {
                     if (null != excludes[j] &&
-                        excludes[j].equals(passthruAttributes[i])) {
+                        excludes[j].equals(passthruAttributes[i][0])) {
                         skip = true;
                         break;
                     }
@@ -853,14 +848,27 @@ public class Util extends Object {
                 continue;
             }
 
-            value = component.getAttributes().get(passthruAttributes[i]);
+            value = component.getAttributes().get(passthruAttributes[i][0]);
             if (value != null && shouldRenderAttribute(value)) {
                 if (!(value instanceof String)) {
                     value = value.toString();
                 }
                 //PENDING(rogerk) will revisit "null" param soon..
-                writer.writeAttribute(passthruAttributes[i], value,
-                                      passthruAttributes[i]);
+		// if we have no XML prefix
+		if (null == passthruAttributes[i][1]) {
+		    writer.writeAttribute(passthruAttributes[i][0], value,
+					  passthruAttributes[i][0]);
+		}
+		else {
+		    // we have an XML prefix.  Write out both prefixed
+		    // and un-prefixed elements, per
+		    // http://www.w3.org/TR/xhtml1/#C_7
+		    writer.writeAttribute(passthruAttributes[i][1] + ':' +
+					  passthruAttributes[i][0], value,
+					  passthruAttributes[i][0]);
+		    writer.writeAttribute(passthruAttributes[i][0], value,
+					  passthruAttributes[i][0]);
+		}
             }
         }
     }
