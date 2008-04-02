@@ -314,7 +314,7 @@
       <TR>
         <TD><h:output_text id="buttonlabel2" value="Button rendered with 'image'attribute:" /> 
             <h:command_button id="pushButton" type="button" 
-                commandName="push" disabled = "true" image="duke.gif">
+                commandName="push" image="duke.gif">
             </h:command_button>
         </TD>
       </TR>
