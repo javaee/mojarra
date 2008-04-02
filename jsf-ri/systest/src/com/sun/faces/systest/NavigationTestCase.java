@@ -1,5 +1,5 @@
 /*
- * $Id: NavigationTestCase.java,v 1.4 2004/02/26 20:33:40 eburns Exp $
+ * $Id: NavigationTestCase.java,v 1.5 2004/05/01 00:48:43 rkitain Exp $
  */
 
 /*
@@ -99,4 +99,25 @@ public class NavigationTestCase extends AbstractTestCase {
     }
 
 
+    public void testNavigateWithVerbatim() throws Exception {
+        HtmlForm form;
+        HtmlSubmitInput submit;
+        HtmlPage page, page1;
+
+        page = getPage("/faces/jsp/verbatim-test.jsp");
+        form = getFormById(page, "form1");
+        assertNotNull("form exists", form);
+        submit = (HtmlSubmitInput)
+            form.getInputByName("form1" + NamingContainer.SEPARATOR_CHAR +
+                                "submit");
+
+        // press the button
+	try {
+            page1 = (HtmlPage) submit.click();
+            assertTrue(-1 != page1.asText().indexOf("Thank you"));
+	} catch (Exception e) {
+	    e.printStackTrace();
+	    assertTrue(false);
+	}
+    }
 }

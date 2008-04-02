@@ -239,6 +239,17 @@
     </navigation-case>
   </navigation-rule>
 
+  <navigation-rule>
+    <from-view-id>/jsp/verbatim-test.jsp</from-view-id>
+    <navigation-case>
+      <description>If the action returns "success", goto
+      redirect1.jsp</description> 
+      <display-name>The Generic Rule</display-name> 
+      <from-outcome>success</from-outcome>
+      <to-view-id>/redirect1.jsp</to-view-id>
+    </navigation-case>
+  </navigation-rule>
+
   
 
 </faces-config>
