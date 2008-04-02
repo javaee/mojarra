@@ -1,5 +1,5 @@
 /*
- * $Id: DoubleRangeValidator.java,v 1.49 2006/12/15 17:44:43 rlubke Exp $
+ * $Id: DoubleRangeValidator.java,v 1.50 2007/01/29 07:13:41 rlubke Exp $
  */
 
 /*
@@ -258,18 +258,16 @@ public class DoubleRangeValidator implements Validator, StateHolder {
                         throw new ValidatorException(MessageFactory.getMessage
                              (context,
                                   NOT_IN_RANGE_MESSAGE_ID,
-                                  new Object[]{
-                                       stringValue(component, new Double(minimum)),
-                                       stringValue(component, new Double(maximum)),
-                                       MessageFactory.getLabel(context, component)}));
+                                  stringValue(component, new Double(minimum), context),
+                                  stringValue(component, new Double(maximum), context),
+                                  MessageFactory.getLabel(context, component)));
 
                     } else {
                         throw new ValidatorException(MessageFactory.getMessage
                              (context,
                                   MAXIMUM_MESSAGE_ID,
-                                  new Object[]{
-                                       stringValue(component, new Double(maximum)),
-                                       MessageFactory.getLabel(context, component)}));
+                                  stringValue(component, new Double(maximum), context),
+                                  MessageFactory.getLabel(context, component)));
                     }
                 }
                 if (minimumSet &&
@@ -278,24 +276,22 @@ public class DoubleRangeValidator implements Validator, StateHolder {
                         throw new ValidatorException(MessageFactory.getMessage
                              (context,
                                   NOT_IN_RANGE_MESSAGE_ID,
-                                  new Object[]{
-                                       stringValue(component, new Double(minimum)),
-                                       stringValue(component, new Double(maximum)),
-                                       MessageFactory.getLabel(context, component)}));
+                                  stringValue(component, new Double(minimum), context),
+                                  stringValue(component, new Double(maximum), context),
+                                  MessageFactory.getLabel(context, component)));
 
                     } else {
                         throw new ValidatorException(MessageFactory.getMessage
                              (context,
                                   MINIMUM_MESSAGE_ID,
-                                  new Object[]{
-                                       stringValue(component, new Double(minimum)),
-                                       MessageFactory.getLabel(context, component)}));
+                                  stringValue(component, new Double(minimum), context),
+                                  MessageFactory.getLabel(context, component)));
                     }
                 }
             } catch (NumberFormatException e) {
                 throw new ValidatorException(MessageFactory.getMessage
                      (context, TYPE_MESSAGE_ID,
-                          new Object[]{MessageFactory.getLabel(context, component)}));
+                          MessageFactory.getLabel(context, component)));
             }
         }
 
@@ -336,7 +332,7 @@ public class DoubleRangeValidator implements Validator, StateHolder {
      * @param attributeValue The attribute value to be converted
      * @throws NumberFormatException if conversion is not possible
      */
-    private double doubleValue(Object attributeValue)
+    private static double doubleValue(Object attributeValue)
          throws NumberFormatException {
 
         if (attributeValue instanceof Number) {
@@ -347,15 +343,14 @@ public class DoubleRangeValidator implements Validator, StateHolder {
 
     }
 
-    private String stringValue(UIComponent component, Double toConvert) {
-        String result = null;
-        Converter converter = null;
-        FacesContext context = FacesContext.getCurrentInstance();
+    private static String stringValue(UIComponent component,
+                                      Double toConvert,
+                                      FacesContext context) {
 
-        converter = (Converter)
-             context.getApplication().createConverter("javax.faces.Number");
-        result = converter.getAsString(context, component, toConvert);
+        Converter converter = context.getApplication().createConverter("javax.faces.Number");
+        String result = converter.getAsString(context, component, toConvert);
         return result;
+
     }
 
     // ----------------------------------------------------- StateHolder Methods

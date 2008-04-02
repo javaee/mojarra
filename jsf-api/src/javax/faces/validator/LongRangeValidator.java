@@ -1,5 +1,5 @@
 /*
- * $Id: LongRangeValidator.java,v 1.44 2006/12/15 17:44:44 rlubke Exp $
+ * $Id: LongRangeValidator.java,v 1.45 2007/01/29 07:13:41 rlubke Exp $
  */
 
 /*
@@ -257,21 +257,19 @@ public class LongRangeValidator implements Validator, StateHolder {
                         throw new ValidatorException(MessageFactory.getMessage
                              (context,
                                   NOT_IN_RANGE_MESSAGE_ID,
-                                  new Object[]{
-                                       stringValue(component,
-                                            new Long(minimum)),
-                                       stringValue(component,
-                                            new Long(maximum)),
-                                       MessageFactory.getLabel(context, component)}));
+                                  stringValue(component,
+                                            new Long(minimum), context),
+                                  stringValue(component,
+                                            new Long(maximum), context),
+                                  MessageFactory.getLabel(context, component)));
 
                     } else {
                         throw new ValidatorException(MessageFactory.getMessage
                              (context,
                                   MAXIMUM_MESSAGE_ID,
-                                  new Object[]{
-                                       stringValue(component,
-                                            new Long(maximum)),
-                                       MessageFactory.getLabel(context, component)}));
+                                  stringValue(component,
+                                            new Long(maximum), context),
+                                  MessageFactory.getLabel(context, component)));
                     }
                 }
                 if (minimumSet &&
@@ -280,27 +278,25 @@ public class LongRangeValidator implements Validator, StateHolder {
                         throw new ValidatorException(MessageFactory.getMessage
                              (context,
                                   NOT_IN_RANGE_MESSAGE_ID,
-                                  new Object[]{
-                                       stringValue(component,
-                                            new Long(minimum)),
-                                       stringValue(component,
-                                            new Long(maximum)),
-                                       MessageFactory.getLabel(context, component)}));
+                                  stringValue(component,
+                                            new Long(minimum), context),
+                                  stringValue(component,
+                                            new Long(maximum), context),
+                                  MessageFactory.getLabel(context, component)));
 
                     } else {
                         throw new ValidatorException(MessageFactory.getMessage
                              (context,
                                   MINIMUM_MESSAGE_ID,
-                                  new Object[]{
-                                       stringValue(component,
-                                            new Long(minimum)),
-                                       MessageFactory.getLabel(context, component)}));
+                                  stringValue(component,
+                                            new Long(minimum), context),
+                                  MessageFactory.getLabel(context, component)));
                     }
                 }
             } catch (NumberFormatException e) {
                 throw new ValidatorException(MessageFactory.getMessage
                      (context, TYPE_MESSAGE_ID,
-                          new Object[]{MessageFactory.getLabel(context, component)}));
+                          MessageFactory.getLabel(context, component)));
             }
         }
 
@@ -341,7 +337,7 @@ public class LongRangeValidator implements Validator, StateHolder {
      * @param attributeValue The attribute value to be converted
      * @throws NumberFormatException if conversion is not possible
      */
-    private long longValue(Object attributeValue)
+    private static long longValue(Object attributeValue)
          throws NumberFormatException {
 
         if (attributeValue instanceof Number) {
@@ -352,15 +348,15 @@ public class LongRangeValidator implements Validator, StateHolder {
 
     }
 
-    private String stringValue(UIComponent component, Long toConvert) {
-        String result = null;
-        Converter converter = null;
-        FacesContext context = FacesContext.getCurrentInstance();
+    private static String stringValue(UIComponent component,
+                                      Long toConvert,
+                                      FacesContext context) {
 
-        converter = (Converter)
+        Converter converter =
              context.getApplication().createConverter("javax.faces.Number");
-        result = converter.getAsString(context, component, toConvert);
+        String result = converter.getAsString(context, component, toConvert);
         return result;
+
     }
 
     // ----------------------------------------------------- StateHolder Methods

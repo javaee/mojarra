@@ -1,5 +1,5 @@
 /*
- * $Id: LengthValidator.java,v 1.48 2006/12/15 17:44:43 rlubke Exp $
+ * $Id: LengthValidator.java,v 1.49 2007/01/29 07:13:41 rlubke Exp $
  */
 
 /*
@@ -222,20 +222,18 @@ public class LengthValidator implements Validator, StateHolder {
                 throw new ValidatorException(MessageFactory.getMessage
                      (context,
                           MAXIMUM_MESSAGE_ID,
-                          new Object[]{
-                               integerToString(component,
-                                    new Integer(maximum)),
-                               MessageFactory.getLabel(context, component)}));
+                          integerToString(component,
+                                    new Integer(maximum), context),
+                          MessageFactory.getLabel(context, component)));
             }
             if (minimumSet &&
                  (converted.length() < minimum)) {
                 throw new ValidatorException(MessageFactory.getMessage
                      (context,
                           MINIMUM_MESSAGE_ID,
-                          new Object[]{
-                               integerToString(component,
-                                    new Integer(minimum)),
-                               MessageFactory.getLabel(context, component)}));
+                          integerToString(component,
+                                    new Integer(minimum), context),
+                          MessageFactory.getLabel(context, component)));
             }
         }
 
@@ -273,7 +271,7 @@ public class LengthValidator implements Validator, StateHolder {
      *
      * @param attributeValue The attribute value to be converted
      */
-    private String stringValue(Object attributeValue) {
+    private static String stringValue(Object attributeValue) {
 
         if (attributeValue == null) {
             return (null);
@@ -285,15 +283,15 @@ public class LengthValidator implements Validator, StateHolder {
 
     }
 
-    private String integerToString(UIComponent component, Integer toConvert) {
-        String result = null;
-        Converter converter = null;
-        FacesContext context = FacesContext.getCurrentInstance();
+    private static String integerToString(UIComponent component,
+                                          Integer toConvert,
+                                          FacesContext context) {
 
-        converter = (Converter)
+        Converter converter =
              context.getApplication().createConverter("javax.faces.Number");
-        result = converter.getAsString(context, component, toConvert);
+        String result = converter.getAsString(context, component, toConvert);
         return result;
+
     }
 
     // ----------------------------------------------------- StateHolder Methods
