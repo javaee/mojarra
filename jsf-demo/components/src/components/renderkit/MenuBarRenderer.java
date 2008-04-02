@@ -1,5 +1,5 @@
 /*
- * $Id: MenuBarRenderer.java,v 1.8 2003/09/12 18:00:02 craigmcc Exp $
+ * $Id: MenuBarRenderer.java,v 1.9 2003/09/25 17:48:04 horwat Exp $
  */
 
 /*
@@ -86,8 +86,7 @@ public class MenuBarRenderer extends BaseRenderer {
     protected UIComponent component = null;
     protected FacesContext context = null;
     
-    public void decode(FacesContext context, UIComponent component)
-        throws IOException {
+    public void decode(FacesContext context, UIComponent component) {
             
         Graph graph = null;
   
@@ -139,9 +138,9 @@ public class MenuBarRenderer extends BaseRenderer {
         this.context = context;
         clientId = component.getClientId(context);
      
-        treeClass = (String)component.getAttribute("menuClass");
-        selectedClass = (String)component.getAttribute("selectedClass");
-        unselectedClass = (String)component.getAttribute("unselectedClass");
+        treeClass = (String)component.getAttributes().get("menuClass");
+        selectedClass = (String)component.getAttributes().get("selectedClass");
+        unselectedClass = (String)component.getAttributes().get("unselectedClass");
         
         // Render the menu bar for this graph
         Iterator menus = null;
@@ -284,7 +283,7 @@ public class MenuBarRenderer extends BaseRenderer {
 	    return 0;
 	}
 	Integer formsInt = (Integer) 
-	    form.getAttribute(FORM_NUMBER_ATTR);
+	    form.getAttributes().get(FORM_NUMBER_ATTR);
 	// Assert.assert_it(null != formsInt);
 	return formsInt.intValue();
     }

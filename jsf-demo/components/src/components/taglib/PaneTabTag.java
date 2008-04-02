@@ -1,5 +1,5 @@
 /*
- * $Id: PaneTabTag.java,v 1.4 2003/08/25 21:39:41 craigmcc Exp $
+ * $Id: PaneTabTag.java,v 1.5 2003/09/25 17:48:12 horwat Exp $
  */
 
 /*
@@ -91,9 +91,9 @@ public class PaneTabTag extends UIComponentTag {
         if (selectedSet) {
             log.debug("OVERRIDING " + component.getId());
             if (selected) {
-                component.setAttribute("selected", Boolean.TRUE);
+                component.getAttributes().put("selected", Boolean.TRUE);
             } else {
-                component.setAttribute("selected", Boolean.FALSE);
+                component.getAttributes().put("selected", Boolean.FALSE);
             }
         }
 

@@ -1,5 +1,5 @@
 /*
- * $Id: GraphMenuTreeTag.java,v 1.5 2003/04/30 06:31:26 eburns Exp $
+ * $Id: GraphMenuTreeTag.java,v 1.6 2003/09/25 17:48:11 horwat Exp $
  */
 
 /*
@@ -44,18 +44,18 @@ package components.taglib;
 
 import components.model.Graph;
 import javax.faces.component.UIComponent;
-import javax.faces.webapp.FacesTag;
+import javax.faces.context.FacesContext;
+import javax.faces.webapp.UIComponentBodyTag;
 import javax.servlet.jsp.JspException;
 import components.components.GraphComponent;
 import components.renderkit.Util;
-import javax.faces.context.FacesContext;
 
 /**
  * This class creates a <code>Graph</code> instance if there is no modelReference
  * attribute specified on the component, represented by this tag and
  * stores it against the attribute name "graph_tree" in session scope.
  */
-public class GraphMenuTreeTag extends FacesTag {
+public class GraphMenuTreeTag extends UIComponentBodyTag {
 
     protected String action_listener = null;
     protected String graphClass = null;
@@ -134,21 +134,21 @@ public class GraphMenuTreeTag extends FacesTag {
 
         GraphComponent graphComponent = (GraphComponent)component;
         if ((action_listener != null) &&
-            (component.getAttribute("action_listener") == null)) {
-            component.setAttribute("action_listener", action_listener);
+            (component.getAttributes().get("action_listener") == null)) {
+            component.getAttributes().put("action_listener", action_listener);
         }
 
         if ((graphClass != null) &&
-            (component.getAttribute("graphClass") == null)) {
-            component.setAttribute("graphClass", graphClass);
+            (component.getAttributes().get("graphClass") == null)) {
+            component.getAttributes().put("graphClass", graphClass);
         }
         if ((selectedClass != null) &&
-            (component.getAttribute("selectedClass") == null)) {
-            component.setAttribute("selectedClass", selectedClass);
+            (component.getAttributes().get("selectedClass") == null)) {
+            component.getAttributes().put("selectedClass", selectedClass);
         }
         if ((unselectedClass != null) &&
-            (component.getAttribute("unselectedClass") == null)) {
-            component.setAttribute("unselectedClass", unselectedClass);
+            (component.getAttributes().get("unselectedClass") == null)) {
+            component.getAttributes().put("unselectedClass", unselectedClass);
         }
         if(graphComponent.getValueRef() == null && valueRef != null ) {
             graphComponent.setValueRef(valueRef);

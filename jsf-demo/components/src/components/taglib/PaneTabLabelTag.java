@@ -1,5 +1,5 @@
 /*
- * $Id: PaneTabLabelTag.java,v 1.4 2003/08/25 21:39:41 craigmcc Exp $
+ * $Id: PaneTabLabelTag.java,v 1.5 2003/09/25 17:48:12 horwat Exp $
  */
 
 /*
@@ -99,13 +99,13 @@ public class PaneTabLabelTag extends UIComponentTag {
         super.overrideProperties(component);
 
         if (commandName != null) {
-            component.setAttribute("commandName", commandName);
+            component.getAttributes().put("commandName", commandName);
         }
         if (image != null) {
-            component.setAttribute("image", image);
+            component.getAttributes().put("image", image);
         }
         if (label != null) {
-            component.setAttribute("label", label);
+            component.getAttributes().put("label", label);
         }
 
     }

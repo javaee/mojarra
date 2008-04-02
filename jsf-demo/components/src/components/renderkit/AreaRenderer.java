@@ -69,8 +69,7 @@ public class AreaRenderer extends BaseRenderer {
      * @param context <code>FacesContext</code>for the current request
      * @param component <code>UIComponent</code> to be decoded
      */
-    public void decode(FacesContext context, UIComponent component)
-        throws IOException {
+    public void decode(FacesContext context, UIComponent component) {
 
         if ((context == null) || (component == null)) {
             throw new NullPointerException();
@@ -136,12 +135,12 @@ public class AreaRenderer extends BaseRenderer {
         writer.writeAttribute("shape", iarea.getShape(), "shape");
         // PENDING(craigmcc) - onmouseout only works on first form of a page
         sb = new StringBuffer("document.forms[0]['").append(targetImageId).append("'].src='");
-        sb.append(getURI(context, (String) area.getAttribute("onmouseout")));
+        sb.append(getURI(context, (String) area.getAttributes().get("onmouseout")));
         sb.append("'");
         writer.writeAttribute("onmouseout", sb.toString(), "onmouseout");
         // PENDING(craigmcc) - onmouseover only works on first form of a page
         sb = new StringBuffer("document.forms[0]['").append(targetImageId).append("'].src='");
-        sb.append(getURI(context, (String) area.getAttribute("onmouseover")));
+        sb.append(getURI(context, (String) area.getAttributes().get("onmouseover")));
         sb.append("'");
         writer.writeAttribute("onmouseover", sb.toString(), "onmouseover");
         // PENDING(craigmcc) - onclick only works on first form of a page

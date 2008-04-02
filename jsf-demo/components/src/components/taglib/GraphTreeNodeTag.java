@@ -1,5 +1,5 @@
 /*
- * $Id: GraphTreeNodeTag.java,v 1.4 2003/04/30 06:31:27 eburns Exp $
+ * $Id: GraphTreeNodeTag.java,v 1.5 2003/09/25 17:48:11 horwat Exp $
  */
 
 /*
@@ -52,7 +52,7 @@ import components.model.Node;
 import components.renderkit.Util;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
-import javax.faces.webapp.FacesBodyTag;
+import javax.faces.webapp.UIComponentBodyTag;
 import javax.servlet.jsp.tagext.TagSupport;
 import javax.servlet.jsp.tagext.BodyTag;
 
@@ -65,7 +65,7 @@ import javax.servlet.jsp.tagext.BodyTag;
  * node is assumed to be root.
  */
 
-public class GraphTreeNodeTag extends FacesBodyTag {
+public class GraphTreeNodeTag extends UIComponentBodyTag {
     
     //
     // Protected Constants

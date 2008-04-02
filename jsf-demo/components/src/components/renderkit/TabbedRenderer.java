@@ -1,5 +1,5 @@
 /*
- * $Id: TabbedRenderer.java,v 1.4 2003/08/25 21:39:36 craigmcc Exp $
+ * $Id: TabbedRenderer.java,v 1.5 2003/09/25 17:48:06 horwat Exp $
  */
 
 /*
@@ -72,8 +72,7 @@ public class TabbedRenderer extends BaseRenderer {
     private static Log log = LogFactory.getLog(TabbedRenderer.class);
 
 
-    public void decode(FacesContext context, UIComponent component)
-        throws IOException {
+    public void decode(FacesContext context, UIComponent component) {
     }
 
 
@@ -85,7 +84,7 @@ public class TabbedRenderer extends BaseRenderer {
         }
 
         // Render the outer border and tabs of our owning table
-        String paneClass = (String) component.getAttribute("paneClass");
+        String paneClass = (String) component.getAttributes().get("paneClass");
         ResponseWriter writer = context.getResponseWriter();
         writer.write("<table");
         if (paneClass != null) {
@@ -145,9 +144,9 @@ public class TabbedRenderer extends BaseRenderer {
 
         // Render the labels for our tabs
         String selectedClass =
-            (String) component.getAttribute("selectedClass");
+            (String) component.getAttributes().get("selectedClass");
         String unselectedClass =
-            (String) component.getAttribute("unselectedClass");
+            (String) component.getAttributes().get("unselectedClass");
         ResponseWriter writer = context.getResponseWriter();
         writer.write("<tr>\n");
         int percent;
@@ -181,9 +180,9 @@ public class TabbedRenderer extends BaseRenderer {
             UIComponent facet = (UIComponent) pane.getFacets().get("label");
             if (facet != null) {
                 if (pane.isSelected() && (selectedClass != null)) {
-                    facet.setAttribute("paneTabLabelClass", selectedClass);
+                    facet.getAttributes().put("paneTabLabelClass", selectedClass);
                 } else if (!pane.isSelected() && (unselectedClass != null)) {
-                    facet.setAttribute("paneTabLabelClass", unselectedClass);
+                    facet.getAttributes().put("paneTabLabelClass", unselectedClass);
                 }
                 facet.encodeBegin(context);
             }
@@ -192,7 +191,7 @@ public class TabbedRenderer extends BaseRenderer {
         writer.write("</tr>\n");
 
         // Begin the containing element for the selected child pane
-        String contentClass = (String) component.getAttribute("contentClass");
+        String contentClass = (String) component.getAttributes().get("contentClass");
         writer.write("<tr><td width=\"100%\" colspan=\"");
         writer.write("" + n);
         writer.write("\"");

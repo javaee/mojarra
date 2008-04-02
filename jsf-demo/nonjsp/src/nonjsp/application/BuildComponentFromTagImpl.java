@@ -1,5 +1,5 @@
 /*
- * $Id: BuildComponentFromTagImpl.java,v 1.2 2003/09/09 01:03:53 horwat Exp $
+ * $Id: BuildComponentFromTagImpl.java,v 1.3 2003/09/25 17:48:16 horwat Exp $
  */
 
 /*
@@ -74,7 +74,7 @@ import org.apache.commons.logging.LogFactory;
  * Copy of com.sun.faces.tree.BuildComponentFromTagImpl in order to remove
  * demo dependancy on RI.
  *
- * @version $Id: BuildComponentFromTagImpl.java,v 1.2 2003/09/09 01:03:53 horwat Exp $
+ * @version $Id: BuildComponentFromTagImpl.java,v 1.3 2003/09/25 17:48:16 horwat Exp $
  * 
  */
 
@@ -427,7 +427,7 @@ public class BuildComponentFromTagImpl extends Object
 		    }
 		    else {
 		        // If that doesn't work, this will.
-		        child.setAttribute(attrName, attrValue);
+		        child.getAttributes().put(attrName, attrValue);
 		    }
 	        }
 	        catch (IllegalAccessException innerE) {

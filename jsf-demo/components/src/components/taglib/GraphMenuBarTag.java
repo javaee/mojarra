@@ -1,5 +1,5 @@
 /*
- * $Id: GraphMenuBarTag.java,v 1.6 2003/08/25 21:39:40 craigmcc Exp $
+ * $Id: GraphMenuBarTag.java,v 1.7 2003/09/25 17:48:10 horwat Exp $
  */
 
 /*
@@ -140,21 +140,21 @@ public class GraphMenuBarTag extends UIComponentTag {
 
         GraphComponent graphComponent = (GraphComponent)component;
         if ((action_listener != null) &&
-            (component.getAttribute("action_listener") == null)) {
-            component.setAttribute("action_listener", action_listener);
+            (component.getAttributes().get("action_listener") == null)) {
+            component.getAttributes().put("action_listener", action_listener);
         }
 
         if ((graphClass != null) &&
-            (component.getAttribute("graphClass") == null)) {
-            component.setAttribute("graphClass", graphClass);
+            (component.getAttributes().get("graphClass") == null)) {
+            component.getAttributes().put("graphClass", graphClass);
         }
         if ((selectedClass != null) &&
-            (component.getAttribute("selectedClass") == null)) {
-            component.setAttribute("selectedClass", selectedClass);
+            (component.getAttributes().get("selectedClass") == null)) {
+            component.getAttributes().put("selectedClass", selectedClass);
         }
         if ((unselectedClass != null) &&
-            (component.getAttribute("unselectedClass") == null)) {
-            component.setAttribute("unselectedClass", unselectedClass);
+            (component.getAttributes().get("unselectedClass") == null)) {
+            component.getAttributes().put("unselectedClass", unselectedClass);
         }
         if(graphComponent.getValueRef() == null && valueRef != null ) {
             graphComponent.setValueRef(valueRef);

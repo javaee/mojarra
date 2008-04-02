@@ -1,5 +1,5 @@
 /*
- * $Id: MenuTreeRenderer.java,v 1.4 2003/04/30 06:31:21 eburns Exp $
+ * $Id: MenuTreeRenderer.java,v 1.5 2003/09/25 17:48:05 horwat Exp $
  */
 
 /*
@@ -100,9 +100,9 @@ public class MenuTreeRenderer extends MenuBarRenderer {
         clientId = component.getClientId(context);
         imageLocation = getImagesLocation(context);
       
-        treeClass = (String)component.getAttribute("graphClass");
-        selectedClass = (String)component.getAttribute("selectedClass");
-        unselectedClass = (String)component.getAttribute("unselectedClass");
+        treeClass = (String)component.getAttributes().get("graphClass");
+        selectedClass = (String)component.getAttributes().get("selectedClass");
+        unselectedClass = (String)component.getAttributes().get("unselectedClass");
         
         ResponseWriter writer = context.getResponseWriter();
        

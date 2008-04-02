@@ -1,5 +1,5 @@
 /*
- * $Id: ResultSetRenderer.java,v 1.8 2003/09/18 20:14:54 eburns Exp $
+ * $Id: ResultSetRenderer.java,v 1.9 2003/09/25 17:48:05 horwat Exp $
  */
 
 /*
@@ -77,7 +77,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ResultSetRenderer.java,v 1.8 2003/09/18 20:14:54 eburns Exp $
+ * @version $Id: ResultSetRenderer.java,v 1.9 2003/09/25 17:48:05 horwat Exp $
  *  
  */
 
@@ -128,8 +128,7 @@ public class ResultSetRenderer extends BaseRenderer {
     // Methods From Renderer
     //
 
-    public void decode(FacesContext context, UIComponent component)
-        throws IOException {
+    public void decode(FacesContext context, UIComponent component) {
 	return;
     }
 
@@ -145,7 +144,7 @@ public class ResultSetRenderer extends BaseRenderer {
             return;
         }
 
-        String panelClass = (String) component.getAttribute("panelClass");
+        String panelClass = (String) component.getAttributes().get("panelClass");
         
         // Render the beginning of this panel
         ResponseWriter writer = context.getResponseWriter();
@@ -172,7 +171,7 @@ public class ResultSetRenderer extends BaseRenderer {
             return;
         }
 	String controlsLocation = 
-	    (String) component.getAttribute("scrollerControlsLocation");
+	    (String) component.getAttributes().get("scrollerControlsLocation");
 
 	// attach our hack Facet on the initial render, but not on
 	// postback
@@ -189,8 +188,8 @@ public class ResultSetRenderer extends BaseRenderer {
         // Set up variables we will need
         // PENDING (visvan) is it possible to use hardcoded column headings
         // without using stylesheets ?
-        String footerClass = (String) component.getAttribute("footerClass");
-        String headerClass = (String) component.getAttribute("headerClass");
+        String footerClass = (String) component.getAttributes().get("footerClass");
+        String headerClass = (String) component.getAttributes().get("headerClass");
         String columnClasses[] = getColumnClasses(component);
         int columnStyle = 0;
         int columnStyles = columnClasses.length;
@@ -247,7 +246,7 @@ public class ResultSetRenderer extends BaseRenderer {
 	}
 	
 	UIComponent group = (UIComponent) component.getChildren().get(0);
-	String var = (String) group.getAttribute("var");
+	String var = (String) group.getAttributes().get("var");
 	
 	Iterator rows = getIterator(context, scroller, group);
 	while (rows.hasNext()) {
@@ -388,7 +387,7 @@ public class ResultSetRenderer extends BaseRenderer {
     * may not have a stylesheet
     */
     private String[] getColumnClasses(UIComponent component) {
-        String values = (String) component.getAttribute("columnClasses");
+        String values = (String) component.getAttributes().get("columnClasses");
         if (values == null) {
             return (new String[0]);
         }
@@ -448,7 +447,7 @@ public class ResultSetRenderer extends BaseRenderer {
     * may not have a stylesheet
     */
     private String[] getRowClasses(UIComponent component) {
-        String values = (String) component.getAttribute("rowClasses");
+        String values = (String) component.getAttributes().get("rowClasses");
         if (values == null) {
             return (new String[0]);
         }

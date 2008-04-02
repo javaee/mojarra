@@ -1,5 +1,5 @@
 /*
- * $Id: TabLabelRenderer.java,v 1.11 2003/09/16 00:30:35 jvisvanathan Exp $
+ * $Id: TabLabelRenderer.java,v 1.12 2003/09/25 17:48:05 horwat Exp $
  */
 
 /*
@@ -72,7 +72,7 @@ import org.apache.commons.beanutils.ConversionException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TabLabelRenderer.java,v 1.11 2003/09/16 00:30:35 jvisvanathan Exp $
+ * @version $Id: TabLabelRenderer.java,v 1.12 2003/09/25 17:48:05 horwat Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -135,12 +135,12 @@ public class TabLabelRenderer extends BaseRenderer {
 
     protected String getImageSrc(FacesContext context,
                                  UIComponent component) {
-        String result = (String) component.getAttribute("image");
+        String result = (String) component.getAttributes().get("image");
 
         if (result != null) {
             if (!result.startsWith("/")) {
                 result = "/" + result;
-                component.setAttribute("image", result);
+                component.getAttributes().put("image", result);
             }
         }
  
@@ -177,7 +177,7 @@ public class TabLabelRenderer extends BaseRenderer {
             // error.
         }
         if (null == result) {
-            result = (String) component.getAttribute("label");
+            result = (String) component.getAttributes().get("label");
         }
         return result;
     }
@@ -187,8 +187,7 @@ public class TabLabelRenderer extends BaseRenderer {
     // Methods From Renderer
     //
 
-    public void decode(FacesContext context, UIComponent component) 
-            throws IOException {
+    public void decode(FacesContext context, UIComponent component) {
 	if (context == null || component == null) {
 	    throw new NullPointerException("Null Faces context or component parameter"); 
         }
@@ -265,7 +264,7 @@ public class TabLabelRenderer extends BaseRenderer {
         writer.write(Util.renderPassthruAttributes(context, component));
         writer.write(Util.renderBooleanPassthruAttributes(context, component));
         if (null != (paneTabLabelClass = (String) 
-            component.getAttribute("paneTabLabelClass"))) {
+            component.getAttributes().get("paneTabLabelClass"))) {
 	    writer.write(" class=\"" + paneTabLabelClass + "\" ");
 	}
         writer.write(">");

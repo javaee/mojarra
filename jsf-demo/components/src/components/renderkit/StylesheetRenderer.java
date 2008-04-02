@@ -1,5 +1,5 @@
 /*
- * $Id: StylesheetRenderer.java,v 1.5 2003/07/07 21:01:09 eburns Exp $
+ * $Id: StylesheetRenderer.java,v 1.6 2003/09/25 17:48:05 horwat Exp $
  */
 
 /*
@@ -64,8 +64,7 @@ public class StylesheetRenderer extends BaseRenderer {
         return (component instanceof UIOutput);
     }
 
-    public void decode(FacesContext context, UIComponent component)
-        throws IOException {
+    public void decode(FacesContext context, UIComponent component) {
     }
 
 
@@ -105,7 +104,7 @@ public class StylesheetRenderer extends BaseRenderer {
         writer.write("<link rel=\"stylesheet\" type=\"text/css\" href=\"");
         
         writer.write(contextPath);
-        writer.write((String) component.getAttribute("path"));
+        writer.write((String) component.getAttributes().get("path"));
         writer.write("\">");
 
     }

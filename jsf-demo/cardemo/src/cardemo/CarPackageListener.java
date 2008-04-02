@@ -1,5 +1,5 @@
 /*
- * $Id: CarPackageListener.java,v 1.1 2003/08/28 08:22:17 rkitain Exp $
+ * $Id: CarPackageListener.java,v 1.2 2003/09/25 17:48:02 horwat Exp $
  */
 
 /*
@@ -88,7 +88,7 @@ public class CarPackageListener extends CarActionListener implements ActionListe
         // Note: Name of the Package resources file must match the key attribute
         // of the UICommand component. The key was chosen so that it is not
         // dependent in any locale
-        String packageKey = (String)component.getAttribute("key");
+        String packageKey = (String)component.getAttributes().get("key");
         (Util.getValueBinding("CarServer.currentPackageName")).
                 setValue(context, packageKey);
         updateComponentState(context, component);

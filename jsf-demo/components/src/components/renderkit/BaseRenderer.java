@@ -1,5 +1,5 @@
 /*
- * $Id: BaseRenderer.java,v 1.6 2003/08/25 21:39:35 craigmcc Exp $
+ * $Id: BaseRenderer.java,v 1.7 2003/09/25 17:48:04 horwat Exp $
  */
 
 /*
@@ -132,15 +132,15 @@ public abstract class BaseRenderer extends Renderer {
 	String key = null, bundleName = null;
 	ResourceBundle bundle = null;
 
-        key = (String) component.getAttribute(keyAttr);
-        bundleName = (String)component.getAttribute(BUNDLE_ATTR);
+        key = (String) component.getAttributes().get(keyAttr);
+        bundleName = (String)component.getAttributes().get(BUNDLE_ATTR);
 
         // if the bundleName is null for this component, it might have
         // been set on the root component.
         if ( bundleName == null ) {
             UIComponent root = context.getViewRoot();
 
-            bundleName = (String)root.getAttribute(BUNDLE_ATTR);
+            bundleName = (String)root.getAttributes().get(BUNDLE_ATTR);
         }
 	// verify our component has the proper attributes for key and bundle.
 	if (null == key || null == bundleName) {

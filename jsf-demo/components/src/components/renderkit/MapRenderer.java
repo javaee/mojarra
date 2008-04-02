@@ -64,8 +64,7 @@ public class MapRenderer extends BaseRenderer {
      * @param context <code>FacesContext</code>for the current request
      * @param component <code>UIComponent</code> to be decoded
      */
-    public void decode(FacesContext context, UIComponent component)
-        throws IOException {
+    public void decode(FacesContext context, UIComponent component) {
 
         if ((context == null) || (component == null)) {
             throw new NullPointerException();

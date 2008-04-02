@@ -88,7 +88,7 @@ public class MapTag extends UIComponentTag {
             map.setCurrent(current);
         }
         if (styleClass != null) {
-            map.setAttribute("styleClass", styleClass);
+            map.getAttributes().put("styleClass", styleClass);
         }
     }
 

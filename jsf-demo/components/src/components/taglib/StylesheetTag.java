@@ -71,7 +71,7 @@ public class StylesheetTag extends UIComponentTag {
         super.overrideProperties(component);
 
         if (path != null) {
-            component.setAttribute("path", path);
+            component.getAttributes().put("path", path);
         }
 
     }

@@ -1,5 +1,5 @@
 /*
- * $Id: TabRenderer.java,v 1.4 2003/08/25 21:39:36 craigmcc Exp $
+ * $Id: TabRenderer.java,v 1.5 2003/09/25 17:48:05 horwat Exp $
  */
 
 /*
@@ -78,8 +78,7 @@ public class TabRenderer extends BaseRenderer {
     private static Log log = LogFactory.getLog(TabRenderer.class);
 
 
-    public void decode(FacesContext context, UIComponent component)
-        throws IOException {
+    public void decode(FacesContext context, UIComponent component) {
     }
 
 

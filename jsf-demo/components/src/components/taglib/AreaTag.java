@@ -129,16 +129,16 @@ public class AreaTag extends UIComponentTag {
             area.setCoords(coords);
         }
         if (onmouseout != null) {
-            area.setAttribute("onmouseout", onmouseout);
+            area.getAttributes().put("onmouseout", onmouseout);
         }
         if (onmouseover != null) {
-            area.setAttribute("onmouseover", onmouseover);
+            area.getAttributes().put("onmouseover", onmouseover);
         }
         if (shape != null) {
             area.setShape(shape);
         }
         if (styleClass != null) {
-            area.setAttribute("styleClass", styleClass);
+            area.getAttributes().put("styleClass", styleClass);
         }
         if (valueRef != null) {
             area.setValueRef(valueRef);

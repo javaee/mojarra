@@ -1,5 +1,5 @@
 /*
- * $Id: PaneTabbedTag.java,v 1.4 2003/08/25 21:39:41 craigmcc Exp $
+ * $Id: PaneTabbedTag.java,v 1.5 2003/09/25 17:48:12 horwat Exp $
  */
 
 /*
@@ -107,16 +107,16 @@ public class PaneTabbedTag extends UIComponentTag {
         super.overrideProperties(component);
 
         if (contentClass != null) {
-            component.setAttribute("contentClass", contentClass);
+            component.getAttributes().put("contentClass", contentClass);
         }
         if (paneClass != null) {
-            component.setAttribute("paneClass", paneClass);
+            component.getAttributes().put("paneClass", paneClass);
         }
         if (selectedClass != null) {
-            component.setAttribute("selectedClass", selectedClass);
+            component.getAttributes().put("selectedClass", selectedClass);
         }
         if (unselectedClass != null) {
-            component.setAttribute("unselectedClass", unselectedClass);
+            component.getAttributes().put("unselectedClass", unselectedClass);
         }
 
     }

@@ -1,5 +1,5 @@
 /*
- * $Id: ResultSetTag.java,v 1.5 2003/09/16 00:30:37 jvisvanathan Exp $
+ * $Id: ResultSetTag.java,v 1.6 2003/09/25 17:48:12 horwat Exp $
  */
 
 /*
@@ -131,28 +131,28 @@ public class ResultSetTag extends UIComponentTag {
         super.overrideProperties(component);
 
         if (columnClasses != null) {
-            component.setAttribute("columnClasses", columnClasses);
+            component.getAttributes().put("columnClasses", columnClasses);
         }
         if (footerClass != null) {
-            component.setAttribute("footerClass", footerClass);
+            component.getAttributes().put("footerClass", footerClass);
         }
         if (headerClass != null) {
-            component.setAttribute("headerClass", headerClass);
+            component.getAttributes().put("headerClass", headerClass);
         }
         if (navFacetOrientation != null) {
-            component.setAttribute("navFacetOrientation", navFacetOrientation);
+            component.getAttributes().put("navFacetOrientation", navFacetOrientation);
         }
         if (panelClass != null) {
-            component.setAttribute("panelClass", panelClass);
+            component.getAttributes().put("panelClass", panelClass);
         }
         if (rowClasses != null) {
-            component.setAttribute("rowClasses", rowClasses);
+            component.getAttributes().put("rowClasses", rowClasses);
         }
         if (rowsPerPageSet) {
-            component.setAttribute("rowsPerPage", new Integer(rowsPerPage));
+            component.getAttributes().put("rowsPerPage", new Integer(rowsPerPage));
         }
         if (scrollerControlsLocation != null) {
-            component.setAttribute("scrollerControlsLocation", 
+            component.getAttributes().put("scrollerControlsLocation", 
 				   scrollerControlsLocation);
         }
 

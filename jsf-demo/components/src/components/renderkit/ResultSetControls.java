@@ -1,5 +1,5 @@
 /*
- * $Id: ResultSetControls.java,v 1.13 2003/09/18 20:14:54 eburns Exp $
+ * $Id: ResultSetControls.java,v 1.14 2003/09/25 17:48:05 horwat Exp $
  */
 
 /*
@@ -65,7 +65,7 @@ import java.util.MissingResourceException;
  *
  * 
  *
- * @version $Id: ResultSetControls.java,v 1.13 2003/09/18 20:14:54 eburns Exp $
+ * @version $Id: ResultSetControls.java,v 1.14 2003/09/25 17:48:05 horwat Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -149,8 +149,7 @@ public ResultSetControls() {
 
     public boolean isValid() { return true; }
 
-    public void decode(FacesContext context)
-        throws IOException {
+    public void decode(FacesContext context) {
 	String 
 	    clientId = getPanel().getClientId(context),
 	    curPage = null,
@@ -180,8 +179,8 @@ public ResultSetControls() {
 		currentPage = actionInt;
 		break;
 	    }
-	    getPanel().setAttribute(CURRENT_PAGE_ATTR, 
-				   new Integer(currentPage));
+	    getPanel().getAttributes().put(CURRENT_PAGE_ATTR, 
+				           new Integer(currentPage));
 	} 
     }
 
@@ -309,7 +308,7 @@ public ResultSetControls() {
 		// See if the user specified an orientation
 		String facetO;
 		if (null != (facetO = (String)
-			     getPanel().getAttribute(FACET_MARKUP_ORIENTATION_ATTR))) {
+			     getPanel().getAttributes().get(FACET_MARKUP_ORIENTATION_ATTR))) {
 		    facetOrientation = facetO;
 		    // verify that the orientation is valid
 		    if (!(facetOrientation.equalsIgnoreCase(ResultSetRenderer.NORTH) || facetOrientation.equalsIgnoreCase(ResultSetRenderer.SOUTH) || facetOrientation.equalsIgnoreCase(ResultSetRenderer.EAST) || facetOrientation.equalsIgnoreCase(ResultSetRenderer.WEST))) {
@@ -438,7 +437,7 @@ public ResultSetControls() {
 	    return 0;
 	}
 	Integer formsInt = (Integer) 
-	    form.getAttribute(FORM_NUMBER_ATTR);
+	    form.getAttributes().get(FORM_NUMBER_ATTR);
 
 	return formsInt.intValue();
     }
@@ -466,7 +465,7 @@ public ResultSetControls() {
     int getRowsPerPage() {
 	int result = 10;
 	// Set from JSP or programmatically.
-	Integer currentPage = (Integer) getPanel().getAttribute(ROWS_PER_PAGE_ATTR);
+	Integer currentPage = (Integer) getPanel().getAttributes().get(ROWS_PER_PAGE_ATTR);
 	if (null != currentPage) {
 	    result = currentPage.intValue();
 	}
@@ -476,7 +475,7 @@ public ResultSetControls() {
     int getCurrentPage() {
 	int result = 1;
 	// Set in decode()
-	Integer currentPage=(Integer)getPanel().getAttribute(CURRENT_PAGE_ATTR);
+	Integer currentPage=(Integer)getPanel().getAttributes().get(CURRENT_PAGE_ATTR);
 	if (null != currentPage) {
 	    result = currentPage.intValue();
 	}

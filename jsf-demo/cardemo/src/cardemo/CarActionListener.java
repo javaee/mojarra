@@ -1,5 +1,5 @@
 /*
- * $Id: CarActionListener.java,v 1.8 2003/08/28 08:22:16 rkitain Exp $
+ * $Id: CarActionListener.java,v 1.9 2003/09/25 17:48:02 horwat Exp $
  */
 
 /*
@@ -143,23 +143,23 @@ public class CarActionListener implements ActionListener {
             // propValue of 2 represents, the option will be disabled and 
             // unselected.
             if ( propValue.equals("0")) {
-                foundComponent.setAttribute("selectbooleanClass", 
+                foundComponent.getAttributes().put("selectbooleanClass", 
                     "option-unselected");
-                foundComponent.setAttribute("disabled", "false");
+                foundComponent.getAttributes().put("disabled", "false");
                 // if we do not check for Custom here, current value will be lost
                 // and the value will be set to false.
                 if (!(packageName.equals("Custom"))) {
                     ((UISelectBoolean)foundComponent).setValue(Boolean.FALSE);
                 }    
             } else if (propValue.equals("1")){
-                foundComponent.setAttribute("selectbooleanClass", 
+                foundComponent.getAttributes().put("selectbooleanClass", 
                     "package-selected");
-                foundComponent.setAttribute("disabled", "true");
+                foundComponent.getAttributes().put("disabled", "true");
                 ((UISelectBoolean)foundComponent).setValue(Boolean.TRUE);
             }  else if (propValue.equals("2")) {
-                 foundComponent.setAttribute("selectbooleanClass", 
+                 foundComponent.getAttributes().put("selectbooleanClass", 
                     "package-selected");
-                foundComponent.setAttribute("disabled", "true");
+                foundComponent.getAttributes().put("disabled", "true");
                 ((UISelectBoolean)foundComponent).setValue(Boolean.FALSE);
             } // end of if  
         }  // end of while
@@ -176,9 +176,9 @@ public class CarActionListener implements ActionListener {
             return;
         }
         if ( packName.equals("Custom")) {
-            foundComponent.setAttribute("commandClass", "package-selected");
+            foundComponent.getAttributes().put("commandClass", "package-selected");
         } else {
-            foundComponent.setAttribute("commandClass", "package-unselected"); 
+            foundComponent.getAttributes().put("commandClass", "package-unselected"); 
         }
         
         foundComponent = component.findComponent("standard");
@@ -186,9 +186,9 @@ public class CarActionListener implements ActionListener {
             return;
         }
         if ( packName.equals("Standard")) {
-            foundComponent.setAttribute("commandClass", "package-selected");
+            foundComponent.getAttributes().put("commandClass", "package-selected");
         } else {
-            foundComponent.setAttribute("commandClass", "package-unselected"); 
+            foundComponent.getAttributes().put("commandClass", "package-unselected"); 
         }
         
         foundComponent = component.findComponent("performance");
@@ -196,9 +196,9 @@ public class CarActionListener implements ActionListener {
             return;
         }
         if ( packName.equals("Performance")) {
-            foundComponent.setAttribute("commandClass", "package-selected");
+            foundComponent.getAttributes().put("commandClass", "package-selected");
         } else {
-            foundComponent.setAttribute("commandClass", "package-unselected"); 
+            foundComponent.getAttributes().put("commandClass", "package-unselected"); 
         }
         
         foundComponent = component.findComponent("deluxe");
@@ -206,9 +206,9 @@ public class CarActionListener implements ActionListener {
             return;
         }
         if ( packName.equals("Deluxe")) {
-            foundComponent.setAttribute("commandClass", "package-selected");
+            foundComponent.getAttributes().put("commandClass", "package-selected");
         } else {
-            foundComponent.setAttribute("commandClass", "package-unselected"); 
+            foundComponent.getAttributes().put("commandClass", "package-unselected"); 
         }
     }
    

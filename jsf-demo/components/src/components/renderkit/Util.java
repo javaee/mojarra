@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.8 2003/08/27 21:56:04 rlubke Exp $
+ * $Id: Util.java,v 1.9 2003/09/25 17:48:06 horwat Exp $
  */
 
 /*
@@ -78,7 +78,7 @@ import java.util.Locale;
  *  <B>Util</B> is a class which houses common functionality used by
  *     other classes.
  *
- * @version $Id: Util.java,v 1.8 2003/08/27 21:56:04 rlubke Exp $
+ * @version $Id: Util.java,v 1.9 2003/09/25 17:48:06 horwat Exp $
  * 
  */
 
@@ -256,7 +256,7 @@ private Util()
 //	ParameterCheck.nonNull(component);
 	
 	// verify our component has the proper attributes for bundle.
-	if (null != (bundleName = (String)component.getAttribute(bundleAttr))){
+	if (null != (bundleName = (String)component.getAttributes().get(bundleAttr))){
 	    // verify there is a Locale for this modelReference
 	    javax.servlet.jsp.jstl.fmt.LocalizationContext locCtx = null;
 	    if (null != (locCtx = 
@@ -292,7 +292,7 @@ private Util()
 
 	for (i = 0; i < len; i++) {
 	    if (null != (value = (String) 
-		      component.getAttribute(booleanPassthruAttributes[i]))) {
+		      component.getAttributes().get(booleanPassthruAttributes[i]))) {
 		if (thisIsTheFirstAppend) {
 		    // prepend ' '
 		    renderedText.append(' ');
@@ -331,7 +331,7 @@ private Util()
 
 	for (i = 0; i < len; i++) {
 	    if (null != (value = (String) 
-			 component.getAttribute(passthruAttributes[i]))) {
+			 component.getAttributes().get(passthruAttributes[i]))) {
 		if (thisIsTheFirstAppend) {
 		    // prepend ' '
 		    renderedText.append(' ');
