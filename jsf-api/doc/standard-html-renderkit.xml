@@ -1231,26 +1231,6 @@
   </component>
 
   <component>
-    <component-type>PanelData</component-type>
-    <component-class>javax.faces.component.html.HtmlPanelData</component-class>
-    &base-props;
-    <property>
-      <display-name></display-name>
-      <icon></icon>
-      <property-name>valueRef</property-name>
-      <property-class>java.lang.String</property-class>
-      <tag-attribute>yes</tag-attribute>
-    </property>
-    <property>
-      <display-name></display-name>
-      <icon></icon>
-      <property-name>value</property-name>
-      <property-class>java.lang.String</property-class>
-      <tag-attribute>yes</tag-attribute>
-    </property>
-  </component>
-
-  <component>
     <component-type>PanelGrid</component-type>
     <component-class>javax.faces.component.html.HtmlPanelGrid</component-class>
     &base-props;
@@ -1313,110 +1293,6 @@
       <display-name></display-name>
       <icon></icon>
       <property-name>value</property-name>
-      <property-class>java.lang.String</property-class>
-      <tag-attribute>yes</tag-attribute>
-    </property>
-  </component>
-
-  <component>
-    <component-type>PanelList</component-type>
-    <component-class>javax.faces.component.html.HtmlPanelList</component-class>
-    &base-props;
-    <property>
-      <display-name></display-name>
-      <icon></icon>
-      <property-name>valueRef</property-name>
-      <property-class>java.lang.String</property-class>
-      <tag-attribute>yes</tag-attribute>
-    </property>
-    <property>
-      <display-name></display-name>
-      <icon></icon>
-      <property-name>value</property-name>
-      <property-class>java.lang.String</property-class>
-      <tag-attribute>yes</tag-attribute>
-    </property>
-    <property>
-      <display-name></display-name>
-      <icon></icon>
-      <property-name>frame</property-name>
-      <property-class>java.lang.String</property-class>
-      <tag-attribute>yes</tag-attribute>
-    </property>
-    <property>
-      <display-name></display-name>
-      <icon></icon>
-      <property-name>summary</property-name>
-      <property-class>java.lang.String</property-class>
-      <tag-attribute>yes</tag-attribute>
-    </property>
-    <property>
-      <display-name></display-name>
-      <icon></icon>
-      <property-name>width</property-name>
-      <property-class>java.lang.String</property-class>
-      <tag-attribute>yes</tag-attribute>
-    </property>
-    <property>
-      <display-name></display-name>
-      <icon></icon>
-      <property-name>cellpadding</property-name>
-      <property-class>java.lang.String</property-class>
-      <tag-attribute>yes</tag-attribute>
-    </property>
-    <property>
-      <display-name></display-name>
-      <icon></icon>
-      <property-name>rowClasses</property-name>
-      <property-class>java.lang.String</property-class>
-      <tag-attribute>yes</tag-attribute>
-    </property>
-    <property>
-      <display-name></display-name>
-      <icon></icon>
-      <property-name>rules</property-name>
-      <property-class>java.lang.String</property-class>
-      <tag-attribute>yes</tag-attribute>
-    </property>
-    <property>
-      <display-name></display-name>
-      <icon></icon>
-      <property-name>columnClasses</property-name>
-      <property-class>java.lang.String</property-class>
-      <tag-attribute>yes</tag-attribute>
-    </property>
-    <property>
-      <display-name></display-name>
-      <icon></icon>
-      <property-name>cellspacing</property-name>
-      <property-class>java.lang.String</property-class>
-      <tag-attribute>yes</tag-attribute>
-    </property>
-    <property>
-      <display-name></display-name>
-      <icon></icon>
-      <property-name>border</property-name>
-      <property-class>int</property-class>
-      <tag-attribute>yes</tag-attribute>
-    </property>
-    <property>
-      <display-name></display-name>
-      <icon></icon>
-      <property-name>bgcolor</property-name>
-      <property-class>java.lang.String</property-class>
-      <tag-attribute>yes</tag-attribute>
-    </property>
-    <property>
-      <display-name></display-name>
-      <icon></icon>
-      <property-name>headerClass</property-name>
-      <property-class>java.lang.String</property-class>
-      <tag-attribute>yes</tag-attribute>
-    </property>
-    <property>
-      <display-name></display-name>
-      <icon></icon>
-      <property-name>footerClass</property-name>
       <property-class>java.lang.String</property-class>
       <tag-attribute>yes</tag-attribute>
     </property>
@@ -2587,17 +2463,6 @@
     </renderer>
 
     <renderer>
-      <renderer-type>Data</renderer-type>
-      <renderer-class>&data-renderer-class;</renderer-class>
-      <supported-component-type>
-        <component-type>PanelData</component-type>
-      </supported-component-type>
-      <supported-component-class>
-        <component-class>javax.faces.component.html.HtmlPanelData</component-class>
-      </supported-component-class>
-    </renderer>
-
-    <renderer>
       <renderer-type>Errors</renderer-type>
       <renderer-class>&errors-renderer-class;</renderer-class>
       <!-- PENDING(edburns): make sure we render DIV and stuff the below
@@ -2989,86 +2854,6 @@
       </supported-component-type>
       <supported-component-class>
         <component-class>javax.faces.component.html.HtmlOutputLabel</component-class>
-      </supported-component-class>
-    </renderer>
-
-    <renderer>
-      <renderer-type>List</renderer-type>
-      <renderer-class>&list-renderer-class;</renderer-class>
-
-      <!-- non-html renderer specific attributes -->
-
-      &table-attrs;
-
-      <attribute>
-        <description>the summary of the list</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>summary</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-      </attribute>
-
-      <attribute>
-        <description>the background color for the list </description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>bgcolor</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-      </attribute>
-
-      <attribute>
-        <description></description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>frame</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-      </attribute>
-
-      <attribute>
-        <description></description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>rules</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-      </attribute>
-
-      <attribute>
-        <description>the border for the list</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>border</attribute-name>
-        <attribute-class>int</attribute-class>
-      </attribute>
-
-      <attribute>
-        <description>the cellspacing for the list</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>cellspacing</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-      </attribute>
-
-      <attribute>
-        <description>the cellpadding for the list</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>cellpadding</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-      </attribute>
-
-      <attribute>
-        <description>the width for the list</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>width</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-      </attribute>
-
-      <supported-component-type>
-        <component-type>PanelList</component-type>
-      </supported-component-type>
-      <supported-component-class>
-        <component-class>javax.faces.component.html.HtmlPanelList</component-class>
       </supported-component-class>
     </renderer>
 
