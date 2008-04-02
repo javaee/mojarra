@@ -1,5 +1,5 @@
 /*
- * $Id: OutputMessageRenderer.java,v 1.7 2004/02/02 18:31:49 eburns Exp $
+ * $Id: OutputMessageRenderer.java,v 1.8 2004/02/03 01:27:29 craigmcc Exp $
  */
 
 /*
@@ -130,23 +130,18 @@ public class OutputMessageRenderer extends HtmlBasicRenderer {
             parameterList.add(((UIParameter)kid).getValue());
         }
 
+        // If at least one substitution parameter was specified,
+        // use the string as a MessageFormat instance.
         String message = null;
-
-        //PENDING(rogerk) if string contains "{" char and enclosing "}"
-        // two char positions later (ex: "{0}") assume it has
-        // something like "{0}", in which case do the message format.
-
-        int i = 0;
-        if ((-1 != (i = currentValue.indexOf('{'))) && 
-            (currentValue.charAt(i + 2) == '}') && 
-            (parameterList.size() > 0)) {
-            Object[] params = parameterList.toArray();
-            message = MessageFormat.format(currentValue, params);
+        if (parameterList.size() > 0) {
+            message = MessageFormat.format
+                (currentValue, parameterList.toArray
+                 (new Object[parameterList.size()]));
         } else {
             message = currentValue;
         }
+
 	boolean wroteSpan = false;
-                
 	if (null != styleClass || null != style || 
 	    Util.hasPassThruAttributes(component) ||
 	    shouldWriteIdAttribute(component)) {
@@ -160,7 +155,24 @@ public class OutputMessageRenderer extends HtmlBasicRenderer {
 	    Util.renderPassThruAttributes(writer, component);
 	    Util.renderBooleanPassThruAttributes(writer, component);
 	}
-        writer.writeText(message, null);
+        Boolean escape = Boolean.TRUE;
+        Object val = component.getAttributes().get("escape");
+        if (val != null) {
+            if (val instanceof Boolean) {
+                escape = (Boolean) val;
+            } else if (val instanceof String) {
+                try {
+                    escape = Boolean.valueOf((String) val);
+                }
+                catch (Throwable e) {
+                }
+            }
+        }
+        if (escape.booleanValue()) {
+            writer.writeText(message, "value");
+        } else {
+            writer.write(message);
+        }
 	if (wroteSpan) {
 	    writer.endElement("span");
 	}

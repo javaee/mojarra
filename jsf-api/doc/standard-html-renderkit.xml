@@ -52,6 +52,7 @@
   <!ENTITY input-textarea-props     SYSTEM "input-textarea-props.xml">
   <!ENTITY message-message-props    SYSTEM "message-message-props.xml">
   <!ENTITY messages-messages-props  SYSTEM "messages-messages-props.xml">
+  <!ENTITY output-format-props      SYSTEM "output-format-props.xml">
   <!ENTITY output-label-props       SYSTEM "output-label-props.xml">
   <!ENTITY output-text-props        SYSTEM "output-text-props.xml">
   <!ENTITY panel-grid-props         SYSTEM "panel-grid-props.xml">
@@ -77,6 +78,7 @@
   <!ENTITY input-textarea-attrs     SYSTEM "input-textarea-attrs.xml">
   <!ENTITY message-message-attrs    SYSTEM "message-message-attrs.xml">
   <!ENTITY messages-messages-attrs  SYSTEM "messages-messages-attrs.xml">
+  <!ENTITY output-format-attrs      SYSTEM "output-format-attrs.xml">
   <!ENTITY output-label-attrs       SYSTEM "output-label-attrs.xml">
   <!ENTITY output-text-attrs        SYSTEM "output-text-attrs.xml">
   <!ENTITY panel-grid-attrs         SYSTEM "panel-grid-attrs.xml">
@@ -628,6 +630,7 @@
 
     &uioutput-props;
     &core-props;
+    &output-format-props;
 
     <component-extension>
       <base-component-type>javax.faces.Output</base-component-type>
@@ -1513,9 +1516,6 @@
       <renderer-type>javax.faces.Message</renderer-type>
       <renderer-class>&message-message-renderer-class;</renderer-class>
 
-      <!-- PENDING(edburns): make sure we render DIV and stuff the below
-           attrs there.  -->
-
       &core-attrs;
       &message-message-attrs;
 
@@ -1541,9 +1541,6 @@
       <renderer-type>javax.faces.Messages</renderer-type>
       <renderer-class>&messages-messages-renderer-class;</renderer-class>
 
-      <!-- PENDING(edburns): make sure we render DIV and stuff the below
-           attrs there.  -->
-
       &core-attrs;
       &messages-messages-attrs;
 
@@ -1551,31 +1548,26 @@
 
     <renderer>
 
-      <description><p>Render parameterized text.  Obtain the "style",
-      "styleClass" and "value" properties from the component.  If either
-      are present, render a "span" element.  Output the "styleClass"
-      attribute (if present) as the value of the "style" attribute.
-      Output the "style" attribute as the value of the "style"
-      attribute.  Accure a list from all of the children of the
-      component that are <code>UIParameter</code> instances.  If the
-      "value" parameter contains any
-      <code>java.text.MessageFormat</code> style parameter markers, such
-      as "the value is {0}", convert the list of
-      <code>UIParameter</code> children to an <code>Object</code> array
-      and call <code>MessageFormat.format()</code>, with the first
-      argument being the "value" of the component, and the second one
-      being the <code>Object</code> array.  Output the result.  If the
-      "value" property doesn't conatin any parameter markers, just
-      output the "value" property.</p>
+      <description><p>Render parameterized text.  Obtain the <code>style</code>
+      and <code>styleClass</code> attributees from this component.  If either
+      are present, render a "span" element.  Output the <code>styleClass</code>
+      attribute (if present) as the value of the <code>class</code> attribute.
+      Output the <code>style</code> attribute as the value of the
+      <code>style</code> attribute.  Accrue a list of the values of all
+      child <code>UIParameter</code> components of this component.  If there
+      are one or more accumulated parameter values, convert the list of
+      parameter values to an <code>Object</code> array, call
+      <code>MessageFormat.format()</code>, passing the <code>value</code>
+      of this component as the first argument, and the array of parameter
+      values as the second argument, and render the result.  Otherwise,
+      render the <code>value</code> of this component unmodified.</p>
       </description>
       <component-family>javax.faces.Output</component-family>
       <renderer-type>javax.faces.Format</renderer-type>
       <renderer-class>&output-format-renderer-class;</renderer-class>
 
-      <!-- PENDING(edburns): make sure we render DIV and stuff the below
-           attrs there.  -->
-
       &core-attrs;
+      &output-format-attrs;
 
     </renderer>
 
@@ -2141,9 +2133,6 @@
       <component-family>javax.faces.SelectOne</component-family>
       <renderer-type>javax.faces.Radio</renderer-type>
       <renderer-class>&selectone-radio-renderer-class;</renderer-class>
-
-      <!-- PENDING(edburns): make sure we render DIV and stuff the below
-           attrs there, as appropriate.  -->
 
       &core-attrs;
       &events-attrs;

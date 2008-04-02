@@ -1,0 +1,39 @@
+<?xml encoding='UTF-8'?>
+
+<!--
+ Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+-->
+
+
+<!-- ========== Output+Format Properties =================================== -->
+
+
+<!-- template
+
+      <property>
+        <description>
+        </description>
+        <display-name></display-name>
+        <icon></icon>
+        <property-name></property-name>
+        <property-class>java.lang.String</property-class>
+      </property>
+
+-->
+
+    <property>
+      <description>
+        Flag indicating that characters that are sensitive
+        in HTML and XML markup must be escaped.  This flag
+        is set to "true" by default.
+      </description>
+      <display-name>Escape Characters</display-name>
+      <icon></icon>
+      <property-name>escape</property-name>
+      <property-class>boolean</property-class>
+      <property-extension>
+        <default-value>true</default-value>
+      </property-extension>
+    </property>
+
