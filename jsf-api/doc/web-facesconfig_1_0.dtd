@@ -13,7 +13,7 @@
      "-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.0//EN"
      "http://java.sun.com/dtd/web-facesconfig_1_0.dtd">
 
-    $Id: web-facesconfig_1_0.dtd,v 1.23 2003/10/31 01:12:09 eburns Exp $
+    $Id: web-facesconfig_1_0.dtd,v 1.24 2003/11/07 22:40:06 eburns Exp $
 
 -->
 
@@ -151,7 +151,7 @@
     Attribute names must be unique within the scope of the parent (or related)
     component.
 -->
-<!ELEMENT attribute       (description*, display-name*, icon*, attribute-name, attribute-class, tag-attribute*)>
+<!ELEMENT attribute       (description*, display-name*, icon*, attribute-name, attribute-class, tag-attribute*, suggested-value?)>
 
 
 <!--
@@ -279,7 +279,7 @@
     property names that will be recognized when performing introspection
     against that class via java.beans.Introspector.
 -->
-<!ELEMENT property        (description*, display-name*, icon*, property-name, property-class, tag-attribute*)>
+<!ELEMENT property        (description*, display-name*, icon*, property-name, property-class, tag-attribute*, suggested-value?)>
 
 
 <!--
@@ -591,6 +591,13 @@ registered on the Lifecycle. It must be of type "ClassName".
     rather than the usual ViewHandler mechanisms.
 -->
 <!ELEMENT redirect EMPTY>
+
+<!--
+    The "suggested-value" contains the value for the property or
+    attribute in which this element resides.  This value is advisory
+    only and is intended for tools to use when populating pallettes.
+-->
+<!ELEMENT suggested-value (#PCDATA)>
 
 
 <!--
