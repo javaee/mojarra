@@ -1,5 +1,5 @@
 /*
- * $Id: TestValueBindingImpl.java,v 1.2 2003/03/28 04:39:21 eburns Exp $
+ * $Id: TestValueBindingImpl.java,v 1.3 2003/03/31 21:16:29 rkitain Exp $
  */
 
 /*
@@ -32,7 +32,7 @@ import java.util.Enumeration;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestValueBindingImpl.java,v 1.2 2003/03/28 04:39:21 eburns Exp $
+ * @version $Id: TestValueBindingImpl.java,v 1.3 2003/03/31 21:16:29 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -61,7 +61,7 @@ public class TestValueBindingImpl extends ServletFacesTestCase
 // Constructors and Initializers    
 //
 
-    public TestValueBindingImpl() {super("TestFacesContext");}
+    public TestValueBindingImpl() {super("TestValueBindingImpl");}
     public TestValueBindingImpl(String name) {super(name);}
 //
 // Class methods
@@ -93,8 +93,7 @@ public class TestValueBindingImpl extends ServletFacesTestCase
 	TestBean testBean = new TestBean();
 	InnerBean newInner, oldInner = new InnerBean();
 	testBean.setInner(oldInner);
-	ValueBindingImpl valueBinding = new ValueBindingImpl(getFacesContext(),
-							     new VariableResolverImpl(),
+	ValueBindingImpl valueBinding = new ValueBindingImpl(new VariableResolverImpl(),
 							     new PropertyResolverImpl());
 	Object result = null;
 
@@ -179,8 +178,7 @@ public class TestValueBindingImpl extends ServletFacesTestCase
 	TestBean testBean = new TestBean();
 	InnerBean newInner, oldInner = new InnerBean();
 	testBean.setInner(oldInner);
-	ValueBindingImpl valueBinding = new ValueBindingImpl(getFacesContext(),
-							     new VariableResolverImpl(),
+	ValueBindingImpl valueBinding = new ValueBindingImpl(new VariableResolverImpl(),
 							     new PropertyResolverImpl());
 	Object result = null;
 

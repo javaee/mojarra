@@ -1,5 +1,5 @@
 /*
- * $Id: TestValueBindingImpl_Model.java,v 1.1 2003/03/28 04:41:18 eburns Exp $
+ * $Id: TestValueBindingImpl_Model.java,v 1.2 2003/03/31 21:16:29 rkitain Exp $
  */
 
 /*
@@ -34,7 +34,7 @@ import javax.faces.el.PropertyNotFoundException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestValueBindingImpl_Model.java,v 1.1 2003/03/28 04:41:18 eburns Exp $
+ * @version $Id: TestValueBindingImpl_Model.java,v 1.2 2003/03/31 21:16:29 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -64,7 +64,7 @@ public class TestValueBindingImpl_Model extends ServletFacesTestCase
 // Constructors and Initializers    
 //
 
-    public TestValueBindingImpl_Model() {super("TestFacesContext");}
+    public TestValueBindingImpl_Model() {super("TestValueBindingImpl");}
     public TestValueBindingImpl_Model(String name) {super(name);}
 //
 // Class methods
@@ -80,8 +80,7 @@ public class TestValueBindingImpl_Model extends ServletFacesTestCase
 
     public void setUp() {
 	super.setUp();
-	valueBinding = new ValueBindingImpl(getFacesContext(),
-							     new VariableResolverImpl(),
+	valueBinding = new ValueBindingImpl(new VariableResolverImpl(),
 							     new PropertyResolverImpl());
     }
 
