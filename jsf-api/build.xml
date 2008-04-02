@@ -18,7 +18,7 @@
 
   <property name="Name"             value="JavaServer Faces API"/>
   <property name="name"             value="jsf-api"/>
-  <property name="version"          value="JSF_API_20020920"/>
+  <property name="version"          value="20030121"/>
 
   <property name="debug"            value="true" />
   <property name="deprecation"      value="false" />
@@ -27,6 +27,7 @@
   <property name="lib.home"         value="${basedir}/lib"/>
   <property name="src.dir"          value="${basedir}/src"/>
   <property name="test.dir"         value="${basedir}/test"/>
+  <property name="dist.dir"         value="${basedir}/dist"/>
 
   <property name="junit.jar"        value="${lib.home}/junit.jar"/>
   <property name="servlet.jar"      value="${lib.home}/servlet.jar"/>
@@ -305,6 +306,7 @@
       <fileset dir="." includes="**/.nbattrs" defaultexcludes="no"/>
       <fileset dir="." includes="**/*~" defaultexcludes="no"/>
     </delete>
+    <delete dir="${dist.dir}"/>
   </target> 
 
 
@@ -353,6 +355,37 @@
   -->
   <target name="main" depends="jars"
    description="Compile API classes and build JAR file"/>
+
+
+  <!-- 
+       =================================================================== 
+         Distributions target
+       =================================================================== 
+  -->
+  <target name="dist" depends="main,javadocs"
+   description="Build distribution files">
+
+    <!-- Create the distributions directory -->
+    <mkdir        dir="${dist.dir}"/>
+
+    <!-- Create the binary distribution -->
+    <zip     destfile="${dist.dir}/jsf-api-${version}.zip">
+      <zipfileset dir="${build.dir}"
+             includes="lib/** javadocs/**"
+               prefix="jsf-api-${version}"/>
+    </zip>
+
+    <!-- Create the source distribution -->
+    <zip     destfile="${dist.dir}/jsf-api-src-${version}.zip">
+      <zipfileset dir="${basedir}"
+             includes="build.xml COPYRIGHT LICENSE.html"
+               prefix="jsf-api-src-${version}"/>
+      <zipfileset dir="${src.dir}"
+             excludes="**/CVS/**"
+               prefix="jsf-api-src-${version}/src"/>
+    </zip>
+
+  </target>
 
 
   <!-- 
