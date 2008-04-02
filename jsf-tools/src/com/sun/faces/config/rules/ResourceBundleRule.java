@@ -1,5 +1,5 @@
 /*
- * $Id: ResourceBundleRule.java,v 1.3 2006/05/26 01:10:40 rlubke Exp $
+ * $Id: ResourceBundleRule.java,v 1.4 2006/05/26 16:23:22 rlubke Exp $
  */
 
 /*
@@ -61,7 +61,7 @@ public class ResourceBundleRule extends FeatureRule {
      * @param attributes The attribute list of this element
      *
      * @exception IllegalStateException if the parent stack element is not
-     *  of type FacesConfigBean
+     *  of type ApplicationBean
      */
     public void begin(String namespace, String name,
                       Attributes attributes) throws Exception {
