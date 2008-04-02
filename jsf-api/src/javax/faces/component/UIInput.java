@@ -1,5 +1,5 @@
 /*
- * $Id: UIInput.java,v 1.79 2005/05/05 20:51:03 edburns Exp $
+ * $Id: UIInput.java,v 1.80 2005/07/22 19:39:15 rogerk Exp $
  */
 
 /*
@@ -114,6 +114,14 @@ public class UIInput extends UIOutput implements EditableValueHolder {
     public static final String REQUIRED_MESSAGE_ID =
         "javax.faces.component.UIInput.REQUIRED";
 
+    /**
+     * <p>The message identifier of the
+     * {@link javax.faces.application.FacesMessage} to be created if
+     * a model update error occurs, and the thrown exception has 
+     * no message.</p>
+     */
+    public static final String UPDATE_MESSAGE_ID =
+        "javax.faces.component.UIInput.UPDATE";
 
     // ------------------------------------------------------------ Constructors
 
@@ -614,10 +622,16 @@ public class UIInput extends UIOutput implements EditableValueHolder {
 		return;
 	    } catch (ELException e) {
 		String messageStr = e.getMessage();
+                Throwable result = e.getCause();
+                while (null != result && 
+                    result.getClass().isAssignableFrom(ELException.class)) {
+                    messageStr = result.getMessage();
+                    result = result.getCause();
+                }
 		FacesMessage message = null;
 		if (null == messageStr) {
 		    message =
-			MessageFactory.getMessage(context, CONVERSION_MESSAGE_ID,
+			MessageFactory.getMessage(context, UPDATE_MESSAGE_ID,
                              new Object[] {MessageFactory.getLabel(
                                  context, this)});
 		}
@@ -627,18 +641,9 @@ public class UIInput extends UIOutput implements EditableValueHolder {
                 message.setSeverity(FacesMessage.SEVERITY_ERROR);
                 context.addMessage(getClientId(context), message);
 		setValid(false);
-	    }
-	    catch (FacesException e) {
-                FacesMessage message =
-                    MessageFactory.getMessage(context, CONVERSION_MESSAGE_ID,
-                        new Object[] {MessageFactory.getLabel(
-                            context, this)});
-                message.setSeverity(FacesMessage.SEVERITY_ERROR);
-                context.addMessage(getClientId(context), message);
-		setValid(false);
 	    } catch (IllegalArgumentException e) {
                 FacesMessage message =
-                    MessageFactory.getMessage(context, CONVERSION_MESSAGE_ID,
+                    MessageFactory.getMessage(context, UPDATE_MESSAGE_ID,
                         new Object[] {MessageFactory.getLabel(
                             context, this)});
                 message.setSeverity(FacesMessage.SEVERITY_ERROR);
@@ -646,7 +651,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
 		setValid(false);
 	    } catch (Exception e) {
                 FacesMessage message =
-                    MessageFactory.getMessage(context, CONVERSION_MESSAGE_ID,
+                    MessageFactory.getMessage(context, UPDATE_MESSAGE_ID,
                         new Object[] {MessageFactory.getLabel(
                             context, this)});
                 message.setSeverity(FacesMessage.SEVERITY_ERROR);
