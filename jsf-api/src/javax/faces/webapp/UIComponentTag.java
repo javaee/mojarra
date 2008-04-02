@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTag.java,v 1.59 2007/01/29 07:29:01 rlubke Exp $
+ * $Id: UIComponentTag.java,v 1.60 2007/03/14 19:20:38 rlubke Exp $
  */
 
 /*
@@ -222,17 +222,69 @@ public abstract class UIComponentTag extends UIComponentClassicTagBase implement
      */
     public static UIComponentTag getParentUIComponentTag(PageContext context) {
 
-	// PENDING(): this method may have to wrap the returned thing in
-	// an instance of UIComponentTag if it is not an instance of
-	// UIComponentTag.
-
-	UIComponentClassicTagBase result = 
-	    getParentUIComponentClassicTagBase(context);
-	return ((UIComponentTag)result);
+        UIComponentClassicTagBase result =
+             getParentUIComponentClassicTagBase(context);
+        if (!(result instanceof UIComponentTag)) {
+            return new UIComponentTagAdapter(result);
+        }
+        return ((UIComponentTag) result);
 
     }
 
 
+    // --------------------------------------------------------- Private Classes
+
+
+    /**
+     * This adatper exposes a UIComponentClassicTagBase as a UIComponentTag
+     * for 1.1 component libraries that rely on UIComponent.getParentUIComponentTag().
+     *
+     * This will work for most use cases, but there are probably some edge
+     * cases out there that we're not aware of.
+     */
+    private static class UIComponentTagAdapter extends UIComponentTag {
+
+        UIComponentClassicTagBase classicDelegate;
+
+        public UIComponentTagAdapter(UIComponentClassicTagBase classicDelegate) {
+
+            this.classicDelegate = classicDelegate;
+
+        }
+
+        public String getComponentType() {
+            return classicDelegate.getComponentType();
+        }
+
+        public String getRendererType() {
+            return classicDelegate.getRendererType();
+        }
+
+        public int doStartTag() throws JspException {
+            throw new IllegalStateException();
+        }
+
+        public int doEndTag() throws JspException {
+            throw new IllegalStateException();
+        }
+
+        public UIComponent getComponentInstance() {
+            return classicDelegate.getComponentInstance();
+        }
+
+        public boolean getCreated() {
+            return classicDelegate.getCreated();
+        }
+
+        public Tag getParent() {
+            return classicDelegate.getParent();
+        }
+
+        public void setParent(Tag parent) {
+            throw new IllegalStateException();
+        }
+                
+    }
 
 
 }
