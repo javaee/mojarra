@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTag.java,v 1.41 2004/01/28 18:12:02 jvisvanathan Exp $
+ * $Id: UIComponentTag.java,v 1.42 2004/02/03 16:07:25 eburns Exp $
  */
 
 /*
@@ -138,7 +138,7 @@ public abstract class UIComponentTag implements Tag {
     /**
      * <p>The JSP <code>PageContext</code> for the page we are embedded in.</p>
      */
-    private PageContext pageContext = null;
+    protected PageContext pageContext = null;
 
 
     /**
