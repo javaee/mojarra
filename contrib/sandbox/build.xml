@@ -436,12 +436,15 @@
                                    fromFile="${dist.dir}/jsf-ri-sandbox-0.1.zip"
                                    fileDescription="Nightly snapshot of the Sandbox components"
                                    overwrite="yes"/>
-
-
                     <javaNetUpload projectName="javaserverfaces"
                                    toFile="/RI Sandbox/jsf-ri-sandbox-src-0.1.zip"
                                    fromFile="${dist.dir}/jsf-ri-sandbox-src-0.1.zip"
                                    fileDescription="Nightly snapshot of the source bundle for the Sandbox components"
+                                   overwrite="yes"/>
+                    <javaNetUpload projectName="javaserverfaces"
+                                   toFile="/RI Sandbox/README"
+                                   fromFile="README"
+                                   fileDescription=""
                                    overwrite="yes"/>
                 </sequential>
             </then>
