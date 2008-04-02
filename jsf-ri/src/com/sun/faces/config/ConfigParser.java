@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigParser.java,v 1.15 2003/05/06 01:54:12 craigmcc Exp $
+ * $Id: ConfigParser.java,v 1.16 2003/05/12 22:53:30 eburns Exp $
  */
 
 /*
@@ -183,7 +183,9 @@ public class ConfigParser {
         digester.setUseContextClassLoader(true);
         try {
             URL url = this.getClass().getResource("/com/sun/faces/config/web-facesconfig_1_0.dtd");
-            digester.register(CONFIG_DTD_PUBLIC_ID, url.toString());
+            digester.register(CONFIG_DTD_PUBLIC_ID, 
+			      Util.replaceOccurrences(url.toExternalForm(),
+						      " ", "%20"));
             digester.setValidating(validateXml);
         } catch (Throwable t) {
             Object[] obj = new Object[1];
