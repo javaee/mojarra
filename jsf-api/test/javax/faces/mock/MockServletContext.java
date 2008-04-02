@@ -1,5 +1,5 @@
 /*
- * $Id: MockServletContext.java,v 1.2 2003/02/20 22:46:59 ofung Exp $
+ * $Id: MockServletContext.java,v 1.3 2003/03/13 06:06:18 craigmcc Exp $
  */
 
 /*
@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Enumeration;
+import java.util.Hashtable;
 import java.util.Set;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.Servlet;
@@ -26,23 +27,62 @@ import javax.servlet.ServletException;
 public class MockServletContext implements ServletContext {
 
 
+    private Hashtable attributes = new Hashtable();
+    private Hashtable parameters = new Hashtable();
+
+
+    // --------------------------------------------------------- Public Methods
+
+
+    public void addInitParameter(String name, String value) {
+        parameters.put(name, value);
+    }
+
+
+    // ------------------------------------------------- ServletContext Methods
+
+
+    public Object getAttribute(String name) {
+        return (attributes.get(name));
+    }
+
+    public Enumeration getAttributeNames() {
+        return (attributes.keys());
+    }
+
     public ServletContext getContext(String uripath) {
         throw new UnsupportedOperationException();
+    }
+
+    public String getInitParameter(String name) {
+        return ((String) parameters.get(name));
+    }
+
+    public Enumeration getInitParameterNames() {
+        return (parameters.keys());
     }
 
     public int getMajorVersion() {
         return (2);
     }
 
-    public int getMinorVersion() {
-        return (3);
-    }
-
     public String getMimeType(String path) {
         throw new UnsupportedOperationException();
     }
 
-    public Set getResourcePaths(String path) {
+    public int getMinorVersion() {
+        return (3);
+    }
+
+    public RequestDispatcher getNamedDispatcher(String name) {
+        throw new UnsupportedOperationException();
+    }
+
+    public String getRealPath(String path) {
+        throw new UnsupportedOperationException();
+    }
+
+    public RequestDispatcher getRequestDispatcher(String path) {
         throw new UnsupportedOperationException();
     }
 
@@ -54,16 +94,20 @@ public class MockServletContext implements ServletContext {
         throw new UnsupportedOperationException();
     }
 
-    public RequestDispatcher getRequestDispatcher(String path) {
-        throw new UnsupportedOperationException();
-    }
-
-    public RequestDispatcher getNamedDispatcher(String name) {
+    public Set getResourcePaths(String path) {
         throw new UnsupportedOperationException();
     }
 
     public Servlet getServlet(String name) throws ServletException {
         throw new UnsupportedOperationException();
+    }
+
+    public String getServletContextName() {
+        return ("MockServletContext");
+    }
+
+    public String getServerInfo() {
+        return ("MockServletContext");
     }
 
     public Enumeration getServlets() {
@@ -86,42 +130,13 @@ public class MockServletContext implements ServletContext {
         throw new UnsupportedOperationException();
     }
 
-    public String getRealPath(String path) {
-        throw new UnsupportedOperationException();
-    }
-
-    public String getServerInfo() {
-        throw new UnsupportedOperationException();
-    }
-
-    public String getInitParameter(String name) {
-        throw new UnsupportedOperationException();
-    }
-
-    public Enumeration getInitParameterNames() {
-        throw new UnsupportedOperationException();
-    }
-
-    public Object getAttribute(String name) {
-        throw new UnsupportedOperationException();
-    }
-
-    public Enumeration getAttributeNames() {
-        throw new UnsupportedOperationException();
-    }
-
-    public void setAttribute(String name, Object object) {
-        throw new UnsupportedOperationException();
-    }
-
     public void removeAttribute(String name) {
-        throw new UnsupportedOperationException();
+        attributes.remove(name);
     }
 
-    public String getServletContextName() {
-        throw new UnsupportedOperationException();
+    public void setAttribute(String name, Object value) {
+        attributes.put(name, value);
     }
-
 
 
 }
