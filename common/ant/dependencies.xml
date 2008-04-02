@@ -212,7 +212,7 @@
                 <available file="${annotation.jar}" property="ignored"/>
             </not>
             <then>
-                <get src="${download.java.net}/javax.annotation/jars/jsr250-api-${annotation.api.version}.jar"
+                <get src="${java.net.maven}/javax.annotation/jars/jsr250-api-${annotation.api.version}.jar"
                      dest="${annotation.jar}"
                      usetimestamp="true"/>
 
