@@ -17,7 +17,7 @@
              <td>
 
              <h:output_errors id="output_number1_errors"
-                          compoundId="/standardRenderKitForm/output_number1" />
+                          clientId="output_number1" />
 
              </td>
             </tr>
@@ -41,7 +41,7 @@
 	      <td>
 
 		<h:output_errors id="output_number2_errors" 
-			  compoundId="/standardRenderKitForm/output_number2" />
+			  clientId="output_number2" />
 
 	      </td>
 
@@ -67,7 +67,7 @@
 	      <td>
 
 		<h:output_errors id="output_number3_errors" 
-			  compoundId="/standardRenderKitForm/output_number3" />
+			  clientId="output_number3" />
 
 	      </td>
 
@@ -92,7 +92,7 @@
 	      <td>
 
 		<h:output_errors id="output_number4_errors" 
-			  compoundId="/standardRenderKitForm/output_number4" />
+			  clientId="output_number4" />
 
 	      </td>
 
@@ -117,7 +117,7 @@
               <td>
 
                 <h:output_errors id="output_number5_errors"
-                          compoundId="/standardRenderKitForm/output_number5" />
+                          clientId="output_number5" />
 
               </td>
 

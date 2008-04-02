@@ -1,5 +1,5 @@
 /*
- * $Id: TextRenderer.java,v 1.37 2002/09/23 20:33:33 rkitain Exp $
+ * $Id: TextRenderer.java,v 1.38 2002/12/18 20:55:01 eburns Exp $
  */
 
 /*
@@ -44,7 +44,7 @@ import com.sun.faces.RIConstants;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TextRenderer.java,v 1.37 2002/09/23 20:33:33 rkitain Exp $
+ * @version $Id: TextRenderer.java,v 1.38 2002/12/18 20:55:01 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -141,7 +141,7 @@ public class TextRenderer extends HtmlBasicRenderer {
         if (UIInput.TYPE == component.getComponentType()) {
             buffer.append("<input type=\"text\"");
             buffer.append(" name=\"");
-            buffer.append(component.getCompoundId());
+            buffer.append(component.getClientId(context));
             buffer.append("\"");
 
             // render default text specified

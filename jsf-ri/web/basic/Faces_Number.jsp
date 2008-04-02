@@ -67,7 +67,7 @@
                    <h:input_number id="byteInput" numberStyle="integer"
                         modelReference="LoginBean.byte"/>
               </td>
-              <td> <h:output_errors id="errByte" compoundId="/numberForm/byteInput"/> </td>
+              <td> <h:output_errors id="errByte" clientId="byteInput"/> </td>
              </tr>
 
              <tr>
@@ -76,7 +76,7 @@
                    <h:input_number id="doubleInput" numberStyle="number"
                         modelReference="LoginBean.double"/>
               </td>
-              <td> <h:output_errors id="errDouble" compoundId="/numberForm/doubleInput"/> </td>
+              <td> <h:output_errors id="errDouble" clientId="doubleInput"/> </td>
              </tr>
 
              <tr>
@@ -85,7 +85,7 @@
                    <h:input_number id="floatInput" numberStyle="number"
                         modelReference="LoginBean.float"/>
               </td>
-              <td> <h:output_errors id="errFloat" compoundId="/numberForm/floatInput"/> </td>
+              <td> <h:output_errors id="errFloat" clientId="floatInput"/> </td>
              </tr>
 
              <tr>
@@ -94,7 +94,7 @@
                    <h:input_number id="intInput" numberStyle="integer"
                         modelReference="LoginBean.int"/>
               </td>
-              <td> <h:output_errors id="errInt" compoundId="/numberForm/intInput"/> </td>
+              <td> <h:output_errors id="errInt" clientId="intInput"/> </td>
              </tr>
 
              <tr>
@@ -103,7 +103,7 @@
                    <h:input_number id="longInput" numberStyle="number"
                         modelReference="LoginBean.long"/>
               </td>
-              <td> <h:output_errors id="errLong" compoundId="/numberForm/longInput"/> </td>
+              <td> <h:output_errors id="errLong" clientId="longInput"/> </td>
              </tr>
 
               <tr>
@@ -112,7 +112,7 @@
                    <h:input_number id="shortInput" numberStyle="number"
                         modelReference="LoginBean.short"/>
               </td>
-              <td> <h:output_errors id="errShort" compoundId="/numberForm/shortInput"/> </td>
+              <td> <h:output_errors id="errShort" clientId="shortInput"/> </td>
              </tr>
 
              <tr>
@@ -121,7 +121,7 @@
                    <h:input_number id="charInput" numberStyle="integer"
                         modelReference="LoginBean.char"/>
               </td>
-              <td> <h:output_errors id="errChar" compoundId="/numberForm/charInput"/> </td>
+              <td> <h:output_errors id="errChar" clientId="charInput"/> </td>
              </tr>
 
             <tr>

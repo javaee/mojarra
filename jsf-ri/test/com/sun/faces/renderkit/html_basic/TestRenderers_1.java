@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_1.java,v 1.20 2002/11/25 19:56:44 jvisvanathan Exp $
+ * $Id: TestRenderers_1.java,v 1.21 2002/12/18 20:55:10 eburns Exp $
  */
 
 /*
@@ -24,7 +24,7 @@ import javax.faces.component.UICommand;
 import javax.faces.component.UISelectOne;
 import javax.faces.component.SelectItem;
 import javax.faces.component.UISelectItems;
-import javax.faces.component.UIComponentBase;
+import javax.faces.component.UINamingContainer;
 import javax.faces.component.UIComponent;
 import javax.faces.event.FormEvent;
 import javax.faces.event.CommandEvent;
@@ -43,7 +43,7 @@ import com.sun.faces.renderkit.html_basic.RadioRenderer;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_1.java,v 1.20 2002/11/25 19:56:44 jvisvanathan Exp $
+ * @version $Id: TestRenderers_1.java,v 1.21 2002/12/18 20:55:10 eburns Exp $
  * 
  *
  */
@@ -108,7 +108,7 @@ public class TestRenderers_1 extends JspFacesTestCase
     public String [] getLinesToIgnore() {
         String[] lines =  {
 
-	"<form method=\"post\" action=\"/test/facestreeId;jsessionid=24B278ACCA9F795C78E4F80903111C29\">"
+	    "<form method=\"post\" action=\"/test/facestreeId;jsessionid=575D6C6F09D1D27971C8F7DB81991DF6\">"
 };
         return lines;
     }    
@@ -118,7 +118,7 @@ public class TestRenderers_1 extends JspFacesTestCase
         theRequest.setURL("localhost:8080", null, null, TEST_URI, null);
        // theRequest.addParameter("name", "FormRenderer");
         //theRequest.addParameter("action", "form");
-        theRequest.addParameter("/radio_renderer", "Two");
+        theRequest.addParameter("radio_renderer", "Two");
         theRequest.addParameter("name", "ButtonRenderer");
         theRequest.addParameter("name", "button");
     } 
@@ -129,7 +129,7 @@ public class TestRenderers_1 extends JspFacesTestCase
     public void testRenderers() {
         try {
             // create a dummy root for the tree.
-            UIComponentBase root = new UIComponentBase() {
+            UINamingContainer root = new UINamingContainer() {
 	        public String getComponentType() { return "root"; } 
 	    };
             root.setComponentId("root");

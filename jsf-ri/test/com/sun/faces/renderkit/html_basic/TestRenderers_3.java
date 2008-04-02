@@ -1,5 +1,5 @@
 /**
- * $Id: TestRenderers_3.java,v 1.6 2002/10/31 17:59:20 jvisvanathan Exp $
+ * $Id: TestRenderers_3.java,v 1.7 2002/12/18 20:55:10 eburns Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -15,7 +15,7 @@ import java.io.IOException;
 import javax.faces.component.SelectItem;
 import javax.faces.component.UICommand;
 import javax.faces.component.UIComponent;
-import javax.faces.component.UIComponentBase;
+import javax.faces.component.UINamingContainer;
 import javax.faces.component.UISelectItems;
 import javax.faces.component.UISelectMany;
 import javax.faces.component.UISelectOne;
@@ -38,7 +38,7 @@ import com.sun.faces.tree.XmlTreeImpl;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_3.java,v 1.6 2002/10/31 17:59:20 jvisvanathan Exp $
+ * @version $Id: TestRenderers_3.java,v 1.7 2002/12/18 20:55:10 eburns Exp $
  * 
  *
  */
@@ -102,13 +102,13 @@ public class TestRenderers_3 extends JspFacesTestCase {
     }
 
     public void beginRenderers(WebRequest theRequest) {
-        theRequest.addParameter("/my_menu", "Blue");
-        theRequest.addParameter("/my_listbox", "Blue");
-        theRequest.addParameter("/my_checkboxlist", "Blue");
-        theRequest.addParameter("/my_onemenu", "Blue");
+        theRequest.addParameter("my_menu", "Blue");
+        theRequest.addParameter("my_listbox", "Blue");
+        theRequest.addParameter("my_checkboxlist", "Blue");
+        theRequest.addParameter("my_onemenu", "Blue");
         // parameters to test hidden renderer
-        theRequest.addParameter("/my_number_hidden", NUMBER_STR);
-        theRequest.addParameter("/my_input_date_hidden", DATE_STR);
+        theRequest.addParameter("my_number_hidden", NUMBER_STR);
+        theRequest.addParameter("my_input_date_hidden", DATE_STR);
 
     }
 
@@ -116,7 +116,7 @@ public class TestRenderers_3 extends JspFacesTestCase {
 
         try {
             // create a dummy root for the tree.
-            UIComponentBase root = new UIComponentBase() {
+            UINamingContainer root = new UINamingContainer() {
                 public String getComponentType() {
                     return "root";
                 }

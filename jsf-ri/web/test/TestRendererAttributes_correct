@@ -3574,13 +3574,13 @@ Text
 		class java.lang.String
 
 Errors
-	compoundId
+	clientId
 
 		An expression that identifies a component
 
-		Compound Identifier
+		Client Side Identifier
 
-		compoundId
+		clientId
 
 		class java.lang.String
 

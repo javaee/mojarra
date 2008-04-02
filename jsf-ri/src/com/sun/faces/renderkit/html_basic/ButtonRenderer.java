@@ -1,5 +1,5 @@
 /*
- * $Id: ButtonRenderer.java,v 1.38 2002/10/14 19:25:39 rkitain Exp $
+ * $Id: ButtonRenderer.java,v 1.39 2002/12/18 20:54:58 eburns Exp $
  */
 
 /*
@@ -52,7 +52,7 @@ import javax.servlet.http.HttpServletRequest;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ButtonRenderer.java,v 1.38 2002/10/14 19:25:39 rkitain Exp $
+ * @version $Id: ButtonRenderer.java,v 1.39 2002/12/18 20:54:58 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -185,11 +185,11 @@ public class ButtonRenderer extends HtmlBasicRenderer {
         // because we just need to know if this command caused the submission. We
         // can get the command name by calling currentValue. This way we can 
         // get around the IE bug.
-        String compoundId = component.getCompoundId();
-        String value = context.getServletRequest().getParameter(compoundId);
+        String clientId = component.getClientId(context);
+        String value = context.getServletRequest().getParameter(clientId);
         if (value == null) {
-            if (context.getServletRequest().getParameter(compoundId+".x") == null &&
-                context.getServletRequest().getParameter(compoundId+".y") == null) {
+            if (context.getServletRequest().getParameter(clientId+".x") == null &&
+                context.getServletRequest().getParameter(clientId+".y") == null) {
                 return result;
             }
         }
@@ -212,7 +212,7 @@ public class ButtonRenderer extends HtmlBasicRenderer {
         }
         if (formName == null) {
             // PENDING (visvan) log error
-            //log.error("Button[" + component.getCompoundId() +
+            //log.error("Button[" + component.getClientId() +
             //          "] not nested in a form");
             return false;
         }
@@ -249,14 +249,14 @@ public class ButtonRenderer extends HtmlBasicRenderer {
                 writer.write(imageSrc);
                 writer.write("\"");
                 writer.write(" name=\"");
-                writer.write(component.getCompoundId());
+                writer.write(component.getClientId(context));
                 writer.write("\"");
             } else {
                 writer.write("\"");
                 writer.write(type.toLowerCase());
                 writer.write("\"");
                 writer.write(" name=\"");
-                writer.write(component.getCompoundId());
+                writer.write(component.getClientId(context));
                 writer.write("\"");
                 writer.write(" value=\"");
                 writer.write(padLabel(label));

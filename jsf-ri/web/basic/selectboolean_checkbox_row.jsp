@@ -55,7 +55,7 @@
              <td>
 
                 <h:output_errors id="checkbox3_errors"
-                          compoundId="/standardRenderKitForm/checkbox3" />
+                          clientId="checkbox3" />
 
               </td
 

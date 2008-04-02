@@ -1,5 +1,5 @@
 /*
- * $Id: TestApplyRequestValuesPhase.java,v 1.7 2002/10/07 22:58:00 jvisvanathan Exp $
+ * $Id: TestApplyRequestValuesPhase.java,v 1.8 2002/12/18 20:55:07 eburns Exp $
  */
 
 /*
@@ -34,7 +34,7 @@ import com.sun.faces.ServletFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestApplyRequestValuesPhase.java,v 1.7 2002/10/07 22:58:00 jvisvanathan Exp $
+ * @version $Id: TestApplyRequestValuesPhase.java,v 1.8 2002/12/18 20:55:07 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -84,7 +84,7 @@ public static final String TEST_URI = "/components.jsp";
 public void beginCallback(WebRequest theRequest)
 {
     theRequest.setURL("localhost:8080", null, null, TEST_URI, null);
-    theRequest.addParameter("/basicForm/userName", "jerry");
+    theRequest.addParameter("userName", "jerry");
 }
 
 public void testCallback()
@@ -128,7 +128,7 @@ public void testCallback()
     
     root = getFacesContext().getRequestTree().getRoot();
     try {
-	userName = (UIInput) root.findComponent("/basicForm/userName");
+	userName = (UIInput) root.findComponent("userName");
     }
     catch (Throwable e) {
 	System.out.println(e.getMessage());

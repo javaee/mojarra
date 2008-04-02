@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderer.java,v 1.14 2002/11/12 22:16:59 jvisvanathan Exp $
+ * $Id: HtmlBasicRenderer.java,v 1.15 2002/12/18 20:54:59 eburns Exp $
  */
 
 /*
@@ -24,6 +24,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.component.UISelectItem;
 import javax.faces.component.UISelectItems;
 import javax.faces.component.UIOutput;
+import javax.faces.component.NamingContainer;
 
 import javax.faces.render.Renderer;
 import javax.faces.context.Message;
@@ -267,10 +268,10 @@ public abstract class HtmlBasicRenderer extends Renderer {
             return true;
         }
 
-        String compoundId = component.getCompoundId();
-        Assert.assert_it(compoundId != null );
+        String clientId = component.getClientId(context);
+        Assert.assert_it(clientId != null );
         
-        String newValue = context.getServletRequest().getParameter(compoundId);
+        String newValue = context.getServletRequest().getParameter(clientId);
         
         //PENDING(rogerk) FIXME this will most likely be changed in the 
         // API later, in which case we could remove this..
@@ -380,6 +381,57 @@ public abstract class HtmlBasicRenderer extends Renderer {
         } catch (Exception e) {
             return (null);
         }
+    }
+
+    public String getClientId(FacesContext context, UIComponent component){
+	String result = null;
+	
+	if (null != (result = (String) component.getAttribute("clientId"))) {
+	    return result;
+	}
+
+	NamingContainer closestContainer = null;
+	UIComponent containerComponent = component;
+	
+	// Search for an ancestor that is a naming container
+	while (null != (containerComponent = 
+			containerComponent.getParent())) {
+	    if (containerComponent instanceof NamingContainer) {
+		closestContainer = (NamingContainer) containerComponent;
+		break;
+	    }
+	}
+	
+	// If none is found, see if this is a naming container
+	if (null == closestContainer && component instanceof NamingContainer) {
+	    closestContainer = (NamingContainer) component;
+	}
+	
+	if (null != closestContainer) {
+	    // If there is no componentId, generate one and store it
+	    if (null == (result = component.getComponentId())) {
+		// Don't call setComponentId() because it checks for
+		// uniqueness.  No need.
+		component.setAttribute("componentId",
+				       result = closestContainer.generateClientId());
+	    }
+	    //
+	    // build the client side id
+	    //
+	    
+	    containerComponent = (UIComponent) closestContainer;
+	    // If this is the root naming container, break
+	    if (null != containerComponent.getParent()) {
+		result = containerComponent.getClientId(context) +
+		    UIComponent.SEPARATOR_CHAR + result;
+	    }
+	}
+	
+	if (null == result) {
+	    throw new NullPointerException();
+	}
+	component.setAttribute("clientId", result);
+	return result;
     }
 
 } // end of class HtmlBasicRenderer

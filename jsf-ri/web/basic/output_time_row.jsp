@@ -39,7 +39,7 @@
 	      <td>
 
 		<h:output_errors id="output_time2_errors" 
-		        compoundId="/standardRenderKitForm/output_time2" />
+		        clientId="output_time2" />
 
 	      </td>
 

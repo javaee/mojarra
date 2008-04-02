@@ -46,7 +46,7 @@
 	      <td>
 
 		<h:output_errors id="input_secret2_errors" 
-			  compoundId="/standardRenderKitForm/input_secret2" />
+			  clientId="input_secret2" />
 
 	      </td>
 
@@ -76,7 +76,7 @@
 	      <td>
 
 		<h:output_errors id="input_secret3_errors" 
-			  compoundId="/standardRenderKitForm/input_secret3" />
+			  clientId="input_secret3" />
 
 	      </td>
 
@@ -107,7 +107,7 @@
 	      <td>
 
 		<h:output_errors id="input_secret4_errors" 
-			  compoundId="/standardRenderKitForm/input_secret4" />
+			  clientId="input_secret4" />
 
 	      </td>
 

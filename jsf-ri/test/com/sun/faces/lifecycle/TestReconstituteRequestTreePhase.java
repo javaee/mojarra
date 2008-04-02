@@ -1,5 +1,5 @@
 /*
- * $Id: TestReconstituteRequestTreePhase.java,v 1.5 2002/10/07 22:58:02 jvisvanathan Exp $
+ * $Id: TestReconstituteRequestTreePhase.java,v 1.6 2002/12/18 20:55:08 eburns Exp $
  */
 
 /*
@@ -24,7 +24,7 @@ import javax.faces.lifecycle.Lifecycle;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
 import javax.faces.component.UIForm;
-import javax.faces.component.UIComponentBase;
+import javax.faces.component.UINamingContainer;
 import com.sun.faces.tree.SimpleTreeImpl;
 import javax.faces.tree.TreeFactory;
 import javax.faces.tree.Tree;
@@ -41,7 +41,7 @@ import java.util.Locale;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestReconstituteRequestTreePhase.java,v 1.5 2002/10/07 22:58:02 jvisvanathan Exp $
+ * @version $Id: TestReconstituteRequestTreePhase.java,v 1.6 2002/12/18 20:55:08 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -135,7 +135,7 @@ public void testReconstituteRequestSubmit()
     // precreate tree and set it in session and make sure the tree is
     // restored from session.
    
-    UIComponent root = new UIComponentBase() {
+    UIComponent root = new UINamingContainer() {
         public String getComponentType() { return "root"; }
     };
     
@@ -182,8 +182,8 @@ public void testReconstituteRequestSubmit()
     root = getFacesContext().getRequestTree().getRoot();
     // components should exist.
     assertTrue(root.getChildCount() == 1);
-    assertTrue(userName == root.findComponent("/basicForm/userName"));
-    assertTrue(basicForm == root.findComponent("/basicForm")); 
+    assertTrue(userName == root.findComponent("userName"));
+    assertTrue(basicForm == root.findComponent("basicForm")); 
 }
 
 

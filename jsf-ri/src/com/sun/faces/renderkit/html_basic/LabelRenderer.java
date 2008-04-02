@@ -1,5 +1,5 @@
 /*
- * $Id: LabelRenderer.java,v 1.5 2002/09/13 23:43:46 visvan Exp $
+ * $Id: LabelRenderer.java,v 1.6 2002/12/18 20:55:00 eburns Exp $
  */
 
 /*
@@ -36,7 +36,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: LabelRenderer.java,v 1.5 2002/09/13 23:43:46 visvan Exp $
+ * @version $Id: LabelRenderer.java,v 1.6 2002/12/18 20:55:00 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -108,7 +108,7 @@ public class LabelRenderer extends HtmlBasicRenderer {
 	if (!forValue.startsWith("/")) {
 	    try {
 		java.net.URL base = new java.net.URL("http://ha" + 
-						    component.getCompoundId());
+						    component.getClientId(context));
 		java.net.URL relative = new java.net.URL(base, forValue);
 		forValue = relative.getPath();
 	    }

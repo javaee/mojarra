@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_2.java,v 1.33 2002/10/11 17:55:33 rkitain Exp $
+ * $Id: TestRenderers_2.java,v 1.34 2002/12/18 20:55:10 eburns Exp $
  */
 
 /*
@@ -27,7 +27,7 @@ import java.text.DecimalFormat;
 import javax.faces.component.SelectItem;
 import javax.faces.component.UISelectItems;
 import javax.faces.component.UICommand;
-import javax.faces.component.UIComponentBase;
+import javax.faces.component.UINamingContainer;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIOutput;
 import javax.faces.component.UIParameter;
@@ -53,7 +53,7 @@ import com.sun.faces.TestBean;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_2.java,v 1.33 2002/10/11 17:55:33 rkitain Exp $
+ * @version $Id: TestRenderers_2.java,v 1.34 2002/12/18 20:55:10 eburns Exp $
  * 
  *
  */
@@ -85,7 +85,7 @@ public class TestRenderers_2 extends JspFacesTestCase
 	    "<img src=\"\">",
 	    "<img src=\";jsessionid=614035E9A2D45743F4E803A0B536E386\">",
 	    "<img src=\";jsessionid=614035E9A2D45743F4E803A0B536E386\">",
-            "<img src=\"/test/nonModelReferenceImage.gif;jsessionid=5CF5CA12513CC57431DCFE26CCE7095D\"><img src=\"/test/foo/modelReferenceImage.gif;jsessionid=5CF5CA12513CC57431DCFE26CCE7095D\">"
+	    "<img id=\"my_graphic_image\" src=\"/test/nonModelReferenceImage.gif;jsessionid=6732BD8EC0A27A54DB35011F2B5F3C5F\"><img id=\"0\" src=\"/test/foo/modelReferenceImage.gif;jsessionid=6732BD8EC0A27A54DB35011F2B5F3C5F\">"
 };
         return lines;
     }   
@@ -127,45 +127,45 @@ public class TestRenderers_2 extends JspFacesTestCase
 
     public void beginRenderers(WebRequest theRequest) {
         // for CheckboxRenderer
-        theRequest.addParameter("/my_checkbox_on", "on");
-        theRequest.addParameter("/my_checkbox_yes", "yes");
-        theRequest.addParameter("/my_checkbox_true", "true");
+        theRequest.addParameter("my_checkbox_on", "on");
+        theRequest.addParameter("my_checkbox_yes", "yes");
+        theRequest.addParameter("my_checkbox_true", "true");
         // for HyperlinkRenderer
         theRequest.addParameter("action", "command");
         theRequest.addParameter("name", "HyperlinkRenderer");
         // for Listbox
-        theRequest.addParameter("/my_listbox", "Blue");
+        theRequest.addParameter("my_listbox", "Blue");
         // for TextEntry_Secret
-        theRequest.addParameter("/my_secret", "secret");
+        theRequest.addParameter("my_secret", "secret");
         // for Text
-        theRequest.addParameter("/my_input_text", "text");
+        theRequest.addParameter("my_input_text", "text");
 
         // for Text - NumberFormat
-        theRequest.addParameter("/my_number", "47%");
-        theRequest.addParameter("/my_number2", "1999.8769432");
+        theRequest.addParameter("my_number", "47%");
+        theRequest.addParameter("my_number2", "1999.8769432");
 
-        theRequest.addParameter("/my_input_date", DATE_STR);
-        theRequest.addParameter("/my_input_date2", DATE_STR_LONG);
-        theRequest.addParameter("/my_output_date", DATE_STR);
-        theRequest.addParameter("/my_input_time", TIME_STR);
-        theRequest.addParameter("/my_output_time", TIME_STR);
-        theRequest.addParameter("/my_output_date2", DATE_STR_LONG);
-        theRequest.addParameter("/my_output_text", "text");
+        theRequest.addParameter("my_input_date", DATE_STR);
+        theRequest.addParameter("my_input_date2", DATE_STR_LONG);
+        theRequest.addParameter("my_output_date", DATE_STR);
+        theRequest.addParameter("my_input_time", TIME_STR);
+        theRequest.addParameter("my_output_time", TIME_STR);
+        theRequest.addParameter("my_output_date2", DATE_STR_LONG);
+        theRequest.addParameter("my_output_text", "text");
 
-        theRequest.addParameter("/my_textarea", "TextAreaRenderer");
+        theRequest.addParameter("my_textarea", "TextAreaRenderer");
 
-        theRequest.addParameter("/my_graphic_image", "graphicimage");
+        theRequest.addParameter("my_graphic_image", "graphicimage");
 
-        theRequest.addParameter("/my_output_errors", "outputerrors");
+        theRequest.addParameter("my_output_errors", "outputerrors");
 
-        theRequest.addParameter("/my_output_message", "outputmessage");
+        theRequest.addParameter("my_output_message", "outputmessage");
     } 
 
     public void testRenderers() {
 
         try {
             // create a dummy root for the tree.
-            UIComponentBase root = new UIComponentBase() {
+            UINamingContainer root = new UINamingContainer() {
                 public String getComponentType() { return "root"; }
             };
             root.setComponentId("root");
@@ -500,7 +500,9 @@ public class TestRenderers_2 extends JspFacesTestCase
         assertTrue(!result);
 
         System.out.println("    Testing graphic support of modelReference...");
+	root.removeChild(img);
 	img = new UIGraphic();
+	root.addChild(img);
 	TestBean testBean = (TestBean) 
 	    getFacesContext().getHttpSession().getAttribute("TestBean");
 	assertTrue(null != testBean); // set in FacesTestCaseService

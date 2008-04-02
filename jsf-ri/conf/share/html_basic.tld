@@ -2517,7 +2517,7 @@
       <rtexprvalue>false</rtexprvalue>
    </attribute>
    <attribute>
-     <name>compoundId</name>
+     <name>clientId</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
    </attribute>

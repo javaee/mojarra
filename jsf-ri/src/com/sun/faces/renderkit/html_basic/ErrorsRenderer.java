@@ -1,5 +1,5 @@
 /*
- * $Id: ErrorsRenderer.java,v 1.3 2002/09/11 20:02:22 edburns Exp $
+ * $Id: ErrorsRenderer.java,v 1.4 2002/12/18 20:54:59 eburns Exp $
  */
 
 /*
@@ -37,7 +37,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ErrorsRenderer.java,v 1.3 2002/09/11 20:02:22 edburns Exp $
+ * @version $Id: ErrorsRenderer.java,v 1.4 2002/12/18 20:54:59 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -120,26 +120,26 @@ public class ErrorsRenderer extends HtmlBasicRenderer {
         writer = context.getResponseWriter();
         Assert.assert_it(writer != null );
         
-        // Attempt to use the compoundId expression to locate 
+        // Attempt to use the clientId expression to locate 
         // messages.  Threee possible scenarios here:
-        // 1. valid compoundId expression - messages returned
-        //    for valid component identified by compoundId expression.
-        // 2. zero length compoundId expression - global errors
+        // 1. valid clientId expression - messages returned
+        //    for valid component identified by clientId expression.
+        // 2. zero length clientId expression - global errors
         //    not associated with any component returned
-        // 3. no compoundId expression - all messages returned.
+        // 3. no clientId expression - all messages returned.
         // 
-        String compoundId = (String)component.getAttribute("compId");
-        if (null != compoundId) {
-            if (compoundId.length() == 0) {
+        String clientId = (String)component.getAttribute("clientId");
+        if (null != clientId) {
+            if (clientId.length() == 0) {
                 messageIter = context.getMessages(null);
             } else {
                 UIComponent root = context.getResponseTree().getRoot();
                 Assert.assert_it(null != root);
                 UIComponent comp = null;
                 try {
-                    comp = root.findComponent(compoundId);
+                    comp = root.findComponent(clientId);
                 } catch (Throwable t) {
-                    Object[] params = {compoundId};
+                    Object[] params = {clientId};
                     throw new RuntimeException(Util.getExceptionMessage(
                         Util.COMPONENT_NOT_FOUND_ERROR_MESSAGE_ID, params));
                 }

@@ -1,5 +1,5 @@
 /*
- * $Id: HiddenRenderer.java,v 1.1 2002/10/31 17:59:17 jvisvanathan Exp $
+ * $Id: HiddenRenderer.java,v 1.2 2002/12/18 20:54:59 eburns Exp $
  */
 
 /*
@@ -40,7 +40,7 @@ import com.sun.faces.RIConstants;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HiddenRenderer.java,v 1.1 2002/10/31 17:59:17 jvisvanathan Exp $
+ * @version $Id: HiddenRenderer.java,v 1.2 2002/12/18 20:54:59 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -128,7 +128,7 @@ public class HiddenRenderer extends HtmlBasicRenderer {
 
         buffer.append("<input type=\"hidden\"");
         buffer.append(" name=\"");
-        buffer.append(component.getCompoundId());
+        buffer.append(component.getClientId(context));
         buffer.append("\"");
 
         // render default text specified

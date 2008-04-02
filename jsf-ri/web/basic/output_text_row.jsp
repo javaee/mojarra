@@ -61,7 +61,7 @@
 	      <td>
 
 		<h:output_errors id="output_text2_errors" 
-			  compoundId="/standardRenderKitForm/output_text2" />
+			  clientId="output_text2" />
 
 	      </td>
 

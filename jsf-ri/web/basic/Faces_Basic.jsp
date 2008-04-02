@@ -63,7 +63,7 @@
 
               </td>
 
-            <td> <h:output_errors id="err1" compoundId="/basicForm/userName" /> </td>
+            <td> <h:output_errors id="err1" clientId="userName" /> </td>
 
             </tr>
 
@@ -79,7 +79,7 @@
 
                </td>
 
-            <td> <h:output_errors id="err2" compoundId="/basicForm/password"/> </td>
+            <td> <h:output_errors id="err2" clientId="password"/> </td>
 
              </tr>
 
@@ -96,7 +96,7 @@
 
                </td>
 
--              <td> <h:output_errors id="err3" compoundId="/basicForm/double"/> </td>
+-              <td> <h:output_errors id="err3" clientId="double"/> </td>
 
 
              </tr>
@@ -115,7 +115,7 @@
 
                </td>
 
-              <td> <h:output_errors id="err4" compoundId="/basicForm/integer"/> </td>
+              <td> <h:output_errors id="err4" clientId="integer"/> </td>
 
 
              </tr>
@@ -134,7 +134,7 @@
 
                </td>
 
-              <td> <h:output_errors id="err5" compoundId="/basicForm/string"/> </td>
+              <td> <h:output_errors id="err5" clientId="string"/> </td>
 
 
              </tr>

@@ -1,5 +1,5 @@
 /*
- * $Id: CheckboxRenderer.java,v 1.38 2002/09/17 20:07:57 jvisvanathan Exp $
+ * $Id: CheckboxRenderer.java,v 1.39 2002/12/18 20:54:59 eburns Exp $
  *
  */
 
@@ -39,7 +39,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: CheckboxRenderer.java,v 1.38 2002/09/17 20:07:57 jvisvanathan Exp $
+ * @version $Id: CheckboxRenderer.java,v 1.39 2002/12/18 20:54:59 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -129,7 +129,7 @@ public class CheckboxRenderer extends HtmlBasicRenderer {
 	String selectbooleanClass = null;
         buffer.append("<input type=\"checkbox\" ");
         buffer.append(" name=\"");
-        buffer.append(component.getCompoundId());
+        buffer.append(component.getClientId(context));
         buffer.append("\"");
 
         if (currentValue.equals("true")) {

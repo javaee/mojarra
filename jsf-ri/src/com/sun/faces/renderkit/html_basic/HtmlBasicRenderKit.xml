@@ -411,8 +411,8 @@
             <type>Errors</type>
             <class>com.sun.faces.renderkit.html_basic.ErrorsRenderer</class>
             <attribute>
-                <name>compoundId</name>
-                <display-name>Compound Identifier</display-name>
+                <name>clientId</name>
+                <display-name>Client Side Identifier</display-name>
                 <description>An expression that identifies a component</description>
                 <type>java.lang.String</type>
             </attribute>

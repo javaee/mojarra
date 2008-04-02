@@ -1,5 +1,5 @@
 /*
- * $Id: TestProcessValidationsPhase.java,v 1.9 2002/10/07 22:58:02 jvisvanathan Exp $
+ * $Id: TestProcessValidationsPhase.java,v 1.10 2002/12/18 20:55:08 eburns Exp $
  */
 
 /*
@@ -39,7 +39,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestProcessValidationsPhase.java,v 1.9 2002/10/07 22:58:02 jvisvanathan Exp $
+ * @version $Id: TestProcessValidationsPhase.java,v 1.10 2002/12/18 20:55:08 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -92,7 +92,7 @@ public static UIInput userName = null;
 public void beginCallback(WebRequest theRequest)
 {
     theRequest.setURL("localhost:8080", null, null, TEST_URI, null);
-    theRequest.addParameter("/root/basicForm/userName", "jerry");
+    theRequest.addParameter("userName", "jerry");
 }
 
 public void testCallback()
@@ -134,7 +134,7 @@ public void testCallback()
     System.setProperty(DID_VALIDATE, EMPTY);
 
     try {
-	userName = (UIInput) root.findComponent("./basicForm/userName");
+	userName = (UIInput) root.findComponent("userName");
     }
     catch (Throwable e) {
 	System.out.println(e.getMessage());

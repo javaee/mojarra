@@ -1,5 +1,5 @@
 /*
- * $Id: SecretRenderer.java,v 1.35 2002/09/23 20:33:33 rkitain Exp $
+ * $Id: SecretRenderer.java,v 1.36 2002/12/18 20:55:00 eburns Exp $
  */
 
 /*
@@ -35,7 +35,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: SecretRenderer.java,v 1.35 2002/09/23 20:33:33 rkitain Exp $
+ * @version $Id: SecretRenderer.java,v 1.36 2002/12/18 20:55:00 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -129,7 +129,7 @@ public class SecretRenderer extends HtmlBasicRenderer {
 
         buffer.append("<input type=\"password\"");
         buffer.append(" name=\"");
-        buffer.append(component.getCompoundId());
+        buffer.append(component.getClientId(context));
         buffer.append("\"");
 
         // render default text specified

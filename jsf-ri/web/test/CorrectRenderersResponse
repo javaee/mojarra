@@ -1,11 +1,11 @@
-<form method="post" action="/test/facestreeId;jsessionid=24B278ACCA9F795C78E4F80903111C29">
+<form method="post" action="/test/facestreeId;jsessionid=575D6C6F09D1D27971C8F7DB81991DF6">
 </form>
 <table border="0">
 	<tr>
-<td><input type="radio" name="/radio_renderer" value="One"> One</td>
-<td><input type="radio" checked name="/radio_renderer" value="Two"> Two</td>
-<td><input type="radio" name="/radio_renderer" value="Three"> Three</td>
+<td><input type="radio" name="radio_renderer" value="One"> One</td>
+<td><input type="radio" checked name="radio_renderer" value="Two"> Two</td>
+<td><input type="radio" name="radio_renderer" value="Three"> Three</td>
 	</tr>
 </table>
-<input type="submit" name="/buttonRenderer" value="Login">
+<input type="submit" name="buttonRenderer" value="Login">
 >

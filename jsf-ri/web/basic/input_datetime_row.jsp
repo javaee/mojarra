@@ -22,7 +22,7 @@
 	      <td>
 
 		<h:output_errors id="input_datetime2_errors" 
-		        compoundId="/standardRenderKitForm/input_datetime2" />
+		        clientId="input_datetime2" />
 
 	      </td>
 

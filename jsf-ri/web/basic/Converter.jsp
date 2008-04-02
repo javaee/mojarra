@@ -29,7 +29,7 @@
                       modelReference="LoginBean.date"
                       converter="date"/></td>
               <td><h:output_errors id="secretdateerr"
-                      compoundId="/converterForm/secretdatetext"/> </td>
+                      clientId="secretdatetext"/> </td>
             </tr>
             <tr>
               <td><b><h:output_text id="dateconvert"
@@ -38,7 +38,7 @@
                       modelReference="LoginBean.date"
                       converter="date"/></td>
               <td><h:output_errors id="dateerr"
-                      compoundId="/converterForm/datetext"/> </td>
+                      clientId="datetext"/> </td>
             </tr>
             <tr>
               <td><b><h:output_text id="timeconvert"
@@ -47,7 +47,7 @@
                       modelReference="LoginBean.time"
                       converter="time"/></td>
               <td><h:output_errors id="timeerr"
-                      compoundId="/converterForm/timetext"/> </td>
+                      clientId="timetext"/> </td>
             </tr>
             <tr>
               <td><b><h:output_text id="datetimeconvert"
@@ -56,7 +56,7 @@
                       modelReference="LoginBean.dateTime"
                       converter="datetime"/></td>
               <td><h:output_errors id="datetimeerr"
-                      compoundId="/converterForm/datetimetext"/> </td>
+                      clientId="datetimetext"/> </td>
             </tr>
             <tr>
               <td><b><h:output_text id="boolconvert"
@@ -75,7 +75,7 @@
                     </h:input_text>
               </td>
               <td> <h:output_errors id="errByte"
-                       compoundId="/converterForm/byteInput"/> </td>
+                       clientId="byteInput"/> </td>
             </tr>
             <tr>
               <td><b><h:output_text id="doubleLabel" 
@@ -88,7 +88,7 @@
                     </h:input_text>
               </td>
               <td> <h:output_errors id="errDouble"
-                       compoundId="/converterForm/doubleInput"/> </td>
+                       clientId="doubleInput"/> </td>
              </tr>
             <tr>
               <td><b><h:output_text id="floatLabel" 
@@ -101,7 +101,7 @@
                     </h:input_text>
               </td>
               <td> <h:output_errors id="errFloat"
-                       compoundId="/converterForm/floatInput"/> </td>
+                       clientId="floatInput"/> </td>
             </tr>
             <tr>
               <td><b><h:output_text id="intLabel" 
@@ -114,7 +114,7 @@
                     </h:input_text>
               </td>
               <td> <h:output_errors id="errInt"
-                       compoundId="/converterForm/intInput"/> </td>
+                       clientId="intInput"/> </td>
             </tr>
             <tr>
               <td><b><h:output_text id="longLabel" 
@@ -127,7 +127,7 @@
                     </h:input_text>
               </td>
               <td> <h:output_errors id="errLong"
-                       compoundId="/converterForm/longInput"/> </td>
+                       clientId="longInput"/> </td>
             </tr>
             <tr>
               <td><b><h:output_text id="shortLabel" 
@@ -140,7 +140,7 @@
                     </h:input_text>
               </td>
               <td> <h:output_errors id="errShort"
-                       compoundId="/converterForm/shortInput"/> </td>
+                       clientId="shortInput"/> </td>
             </tr>
             </table
             <p>

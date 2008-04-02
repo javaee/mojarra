@@ -1,5 +1,5 @@
 /*
- * $Id: Output_ErrorsTag.java,v 1.2 2002/10/22 21:27:00 jvisvanathan Exp $
+ * $Id: Output_ErrorsTag.java,v 1.3 2002/12/18 20:55:05 eburns Exp $
  */
 
 /*
@@ -28,7 +28,7 @@ import javax.faces.component.UIOutput;
 
  *
 
- * @version $Id: Output_ErrorsTag.java,v 1.2 2002/10/22 21:27:00 jvisvanathan Exp $
+ * @version $Id: Output_ErrorsTag.java,v 1.3 2002/12/18 20:55:05 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -51,7 +51,7 @@ public class Output_ErrorsTag extends FacesTag {
 
 // Attribute Instance Variables
 
-    protected String compoundId = null;
+    protected String clientId = null;
     protected String color = null;
 
 // Relationship Instance Variables
@@ -72,12 +72,12 @@ public class Output_ErrorsTag extends FacesTag {
 // Accessors
 //
 
-    public String getCompoundId() {
-        return compoundId;
+    public String getClientId() {
+        return clientId;
     }
 
-    public void setCompoundId(String newCompoundId) {
-        compoundId = newCompoundId;
+    public void setClientId(String newClientId) {
+        clientId = newClientId;
     }
 
 
@@ -103,8 +103,8 @@ public class Output_ErrorsTag extends FacesTag {
         super.overrideProperties(component);
         UIOutput output = (UIOutput) component;
 
-        if (null == component.getAttribute("compId")) {
-            component.setAttribute("compId", getCompoundId());
+        if (null == component.getAttribute("clientId")) {
+            component.setAttribute("clientId", getClientId());
         }
         if (null == component.getAttribute("color")) {
             component.setAttribute("color", getColor());

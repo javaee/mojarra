@@ -1,5 +1,5 @@
 /*
- * $Id: TestValidatorTags.java,v 1.2 2002/10/07 22:58:08 jvisvanathan Exp $
+ * $Id: TestValidatorTags.java,v 1.3 2002/12/18 20:55:12 eburns Exp $
  */
 
 /*
@@ -40,7 +40,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestValidatorTags.java,v 1.2 2002/10/07 22:58:08 jvisvanathan Exp $
+ * @version $Id: TestValidatorTags.java,v 1.3 2002/12/18 20:55:12 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -54,25 +54,25 @@ public class TestValidatorTags extends JspFacesTestCase
 //
 
 public static final String TEST_URI = "/TestValidatorTags.jsp";
-public static final String OUTOFBOUNDS1_ID = "/validatorForm/outOfBounds1";
+public static final String OUTOFBOUNDS1_ID = "outOfBounds1";
 public static final String OUTOFBOUNDS1_VALUE = "3.1415";
-public static final String INBOUNDS1_ID = "/validatorForm/inBounds1";
+public static final String INBOUNDS1_ID = "inBounds1";
 public static final String INBOUNDS1_VALUE = "10.25";
-public static final String OUTOFBOUNDS2_ID = "/validatorForm/outOfBounds2";
+public static final String OUTOFBOUNDS2_ID = "outOfBounds2";
 public static final String OUTOFBOUNDS2_VALUE = "fox";
-public static final String INBOUNDS2_ID = "/validatorForm/inBounds2";
+public static final String INBOUNDS2_ID = "inBounds2";
 public static final String INBOUNDS2_VALUE = "alligator22";
-public static final String OUTOFBOUNDS3_ID = "/validatorForm/outOfBounds3";
+public static final String OUTOFBOUNDS3_ID = "outOfBounds3";
 public static final String OUTOFBOUNDS3_VALUE = "30000";
-public static final String INBOUNDS3_ID = "/validatorForm/inBounds3";
+public static final String INBOUNDS3_ID = "inBounds3";
 public static final String INBOUNDS3_VALUE = "1100";
-public static final String REQUIRED1_ID = "/validatorForm/required1";
+public static final String REQUIRED1_ID = "required1";
 public static final String REQUIRED1_VALUE = "required";
-public static final String OUTOFBOUNDS4_ID = "/validatorForm/outOfBounds4";
+public static final String OUTOFBOUNDS4_ID = "outOfBounds4";
 public static final String OUTOFBOUNDS4_VALUE = "aaa";
-public static final String INBOUNDS4_ID = "/validatorForm/inBounds4";
+public static final String INBOUNDS4_ID = "inBounds4";
 public static final String INBOUNDS4_VALUE = "ccc";
-public static final String REQUIRED2_ID = "/validatorForm/required2";
+public static final String REQUIRED2_ID = "required2";
 public static final String REQUIRED2_VALUE = "required";
 
 public boolean sendResponseToFile() 

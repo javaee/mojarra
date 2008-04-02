@@ -1,5 +1,5 @@
 /*
- * $Id: RadioRenderer.java,v 1.35 2002/09/17 20:07:57 jvisvanathan Exp $
+ * $Id: RadioRenderer.java,v 1.36 2002/12/18 20:55:00 eburns Exp $
  */
 
 /*
@@ -46,7 +46,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: RadioRenderer.java,v 1.35 2002/09/17 20:07:57 jvisvanathan Exp $
+ * @version $Id: RadioRenderer.java,v 1.36 2002/12/18 20:55:00 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -167,7 +167,7 @@ public class RadioRenderer extends HtmlBasicRenderer {
                 buffer.append(" checked");
             }
             buffer.append(" name=\"");
-            buffer.append(uiSelectOne.getCompoundId());
+            buffer.append(uiSelectOne.getClientId(context));
             buffer.append("\" value=\"");
             buffer.append((String) curItem.getValue());
             buffer.append("\"");

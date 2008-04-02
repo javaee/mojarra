@@ -10,7 +10,7 @@
                       modelReference="LoginBean.date"
                       converter="date"/></td>
               <td><h:output_errors id="dateErr"
-                      compoundId="/standardRenderKitForm/datetextHidden"/> </td>
+                      clientId="datetextHidden"/> </td>
             </tr>
             <tr>
               <td><b><h:output_text id="timeconvertLabel"
@@ -19,7 +19,7 @@
                       modelReference="LoginBean.time"
                       converter="time"/></td>
               <td><h:output_errors id="timeErr"
-                      compoundId="/standardRenderKitForm/timetextHidden"/> </td>
+                      clientId="timetextHidden"/> </td>
             </tr>
             <tr>
               <td><b><h:output_text id="datetimeconvertLabel"
@@ -28,7 +28,7 @@
                       modelReference="LoginBean.dateTime"
                       converter="datetime"/></td>
               <td><h:output_errors id="datetimeErr"
-                      compoundId="/standardRenderKitForm/datetimetextHidden"/> </td>
+                      clientId="datetimetextHidden"/> </td>
             </tr>
             <tr>
               <td><b><h:output_text id="boolconvertLabel"

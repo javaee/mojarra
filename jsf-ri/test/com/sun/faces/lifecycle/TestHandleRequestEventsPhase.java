@@ -1,5 +1,5 @@
 /*
- * $Id: TestHandleRequestEventsPhase.java,v 1.12 2002/10/10 18:30:30 jvisvanathan Exp $
+ * $Id: TestHandleRequestEventsPhase.java,v 1.13 2002/12/18 20:55:07 eburns Exp $
  */
 
 /*
@@ -36,7 +36,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestHandleRequestEventsPhase.java,v 1.12 2002/10/10 18:30:30 jvisvanathan Exp $
+ * @version $Id: TestHandleRequestEventsPhase.java,v 1.13 2002/12/18 20:55:07 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -91,8 +91,8 @@ public static final String DID_EVENT2 = "didEvent2";
 public void beginCallback(WebRequest theRequest)
 {
     theRequest.setURL("localhost:8080", null, null, TEST_URI, null);
-    theRequest.addParameter("/valueChange1", "jerry");
-    theRequest.addParameter("/valueChange2", "robert");
+    theRequest.addParameter("valueChange1", "jerry");
+    theRequest.addParameter("valueChange2", "robert");
 }
 
 // This method will build a tree, create two components, add them
@@ -181,7 +181,7 @@ public boolean decode(FacesContext context) throws IOException
 	throw new NullPointerException();
     }
     String newValue =
-	context.getServletRequest().getParameter(getCompoundId());
+	context.getServletRequest().getParameter(getClientId(context));
     boolean valueChanged = false;
     // if the new value is different from the old value
     if ((null == this.getValue() && null != newValue) ||
@@ -218,7 +218,7 @@ public boolean decode(FacesContext context) throws IOException
         throw new NullPointerException();
     }
     String newValue =
-        context.getServletRequest().getParameter(getCompoundId());
+        context.getServletRequest().getParameter(getClientId(context));
     boolean valueChanged = false;
     // if the new value is different from the old value
     if ((null == this.getValue() && null != newValue) ||

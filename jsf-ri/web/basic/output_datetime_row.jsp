@@ -19,7 +19,7 @@
 	      <td>
 
 		<h:output_errors id="output_datetime2_errors" 
-		        compoundId="/standardRenderKitForm/output_datetime2" />
+		        clientId="output_datetime2" />
 
 	      </td>
 
@@ -46,7 +46,7 @@
 	      <td>
 
 		<h:output_errors id="output_datetime3_errors" 
-		        compoundId="/standardRenderKitForm/output_datetime2" />
+		        clientId="output_datetime2" />
 
 	      </td>
 

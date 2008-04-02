@@ -1,5 +1,5 @@
 /*
- * $Id: TestGenericPhaseImpl.java,v 1.7 2002/10/07 22:58:00 jvisvanathan Exp $
+ * $Id: TestGenericPhaseImpl.java,v 1.8 2002/12/18 20:55:07 eburns Exp $
  */
 
 /*
@@ -45,7 +45,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestGenericPhaseImpl.java,v 1.7 2002/10/07 22:58:00 jvisvanathan Exp $
+ * @version $Id: TestGenericPhaseImpl.java,v 1.8 2002/12/18 20:55:07 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -96,7 +96,7 @@ public static final String CORRECT_OUTPUT_FILENAME =
 public void beginExecute(WebRequest theRequest)
 {
     theRequest.setURL("localhost:8080", null, null, TEST_URI, null);
-    theRequest.addParameter("/basicForm/userName", "jerry");
+    theRequest.addParameter("userName", "jerry");
 }
 
 public void testExecute()
@@ -163,6 +163,7 @@ public void testExecute()
     }
     catch (Throwable e) {
 	System.out.println("Throwable: " + e.getMessage());
+	e.printStackTrace();
 	assertTrue(false);
     }
     assertTrue(Phase.GOTO_NEXT == result);

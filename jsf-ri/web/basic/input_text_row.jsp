@@ -46,7 +46,7 @@
 	      <td>
 
 		<h:output_errors id="input_text2_errors" 
-			  compoundId="/standardRenderKitForm/input_text2" />
+			  clientId="input_text2" />
 
 	      </td>
 
@@ -76,7 +76,7 @@
 	      <td>
 
 		<h:output_errors id="input_text3_errors" 
-			  compoundId="/standardRenderKitForm/input_text3" />
+			  clientId="input_text3" />
 
 	      </td>
 
@@ -107,7 +107,7 @@
 	      <td>
 
 		<h:output_errors id="input_text4_errors" 
-			  compoundId="/standardRenderKitForm/input_text4" />
+			  clientId="input_text4" />
 
 	      </td>
 
