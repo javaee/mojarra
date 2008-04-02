@@ -1,5 +1,5 @@
 /*
- * $Id: UseFacesTag.java,v 1.8 2003/03/21 23:25:08 rkitain Exp $
+ * $Id: UseFacesTag.java,v 1.9 2003/04/04 05:11:27 eburns Exp $
  */
 
 /*
@@ -44,14 +44,14 @@ import javax.servlet.jsp.tagext.BodyTag;
  * does not have any renderers or attributes. It exists mainly to
  * save the state of the response tree once all tags have been rendered.
  *
- * @version $Id: UseFacesTag.java,v 1.8 2003/03/21 23:25:08 rkitain Exp $
+ * @version $Id: UseFacesTag.java,v 1.9 2003/04/04 05:11:27 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
  *
  */
 
-public class UseFacesTag extends FacesBodyTag
+public class UseFacesTag extends BodyTagSupport
 {
     //
     // Protected Constants

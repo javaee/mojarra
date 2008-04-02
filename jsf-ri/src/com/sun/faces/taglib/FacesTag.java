@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTag.java,v 1.31 2003/03/21 18:28:45 jvisvanathan Exp $
+ * $Id: FacesTag.java,v 1.32 2003/04/04 05:11:26 eburns Exp $
  */
 
 /*
@@ -36,7 +36,7 @@ import com.sun.faces.RIConstants;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: FacesTag.java,v 1.31 2003/03/21 18:28:45 jvisvanathan Exp $
+ * @version $Id: FacesTag.java,v 1.32 2003/04/04 05:11:26 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -1176,7 +1176,7 @@ protected void overrideProperties(UIComponent component)
 
     if ( valueRef != null && component instanceof UIOutput ) {
         UIOutput output = (UIOutput)component;
-        if ( output.getValueRef() != null ) {
+        if (null == output.getValueRef()) {
             output.setValueRef(valueRef);
         }    
     }    
