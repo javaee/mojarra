@@ -466,9 +466,9 @@
                 Name of the facet to be created.
             </description>
             <name>name</name>
-            <deferred-value>
-                <type>java.lang.String</type>
-            </deferred-value>
+            <required>true</required>
+            <rtexprvalue>false</rtexprvalue>
+            <type>java.lang.String</type>
         </attribute>
 
     </tag>
