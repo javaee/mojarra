@@ -162,7 +162,7 @@
 
   <!-- Executable Targets -->
 
-  <target name="build">
+  <target name="build" depends="deploy.copyJars">
     <mkdir dir="${build}/${webapp}/WEB-INF/lib"/>
     <copy todir="${build}/${webapp}/WEB-INF/lib" file="${demo-components.jar}"/>
     <javac debug="on" srcdir="src" destdir="${build}/${webapp}/WEB-INF/classes">
@@ -197,6 +197,17 @@
 	 basedir="${build}/${webapp}"/>
     <copy file="${build}/${example}.war" todir=".."/>
 
+  </target>
+
+  <target name="deploy.copyJars" if="build.standalone">
+    <copy todir="${build}/${webapp}/WEB-INF/lib" file="${commons-beanutils.jar}" />
+    <copy todir="${build}/${webapp}/WEB-INF/lib" file="${commons-collections.jar}" />
+    <copy todir="${build}/${webapp}/WEB-INF/lib" file="${commons-logging.jar}" />
+    <copy todir="${build}/${webapp}/WEB-INF/lib" file="${commons-digester.jar}" />
+    <copy todir="${build}/${webapp}/WEB-INF/lib" file="${jsf-api.jar}" />
+    <copy todir="${build}/${webapp}/WEB-INF/lib" file="${jsf-ri.jar}" />
+    <copy todir="${build}/${webapp}/WEB-INF/lib" file="${jstl.jar}" />
+    <copy todir="${build}/${webapp}/WEB-INF/lib" file="${standard.jar}" />
   </target>
 
   <target name="checkRequiredFile">

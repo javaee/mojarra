@@ -164,8 +164,19 @@
     <mkdir dir="${build}/${example}/WEB-INF/lib" />
   </target>
 
-  <target name="copyJars" depends="prepare">
+  <target name="copyJars" depends="prepare,deploy.copyJars">
     <copy todir="${build}/${example}/WEB-INF/lib" file="${demo-components.jar}"/>
+  </target>
+
+  <target name="deploy.copyJars" if="build.standalone">
+    <copy todir="${build}/${example}/WEB-INF/lib" file="${commons-beanutils.jar}" />
+    <copy todir="${build}/${example}/WEB-INF/lib" file="${commons-collections.jar}" />
+    <copy todir="${build}/${example}/WEB-INF/lib" file="${commons-logging.jar}" />
+    <copy todir="${build}/${example}/WEB-INF/lib" file="${commons-digester.jar}" />
+    <copy todir="${build}/${example}/WEB-INF/lib" file="${jsf-api.jar}" />
+    <copy todir="${build}/${example}/WEB-INF/lib" file="${jsf-ri.jar}" />
+    <copy todir="${build}/${example}/WEB-INF/lib" file="${jstl.jar}" />
+    <copy todir="${build}/${example}/WEB-INF/lib" file="${standard.jar}" />
   </target>
 
   <!-- Executable Targets -->
