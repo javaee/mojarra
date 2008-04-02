@@ -844,7 +844,7 @@ With type: java.lang.Boolean
 
 Expression: ${bean1a > "hello"}
 ExpectedType: boolean
-Evaluates to: false 
+Evaluates to: false
 With type: java.lang.Boolean
 
 Expression: ${bean1a.bean1 < 14}
