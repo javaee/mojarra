@@ -201,7 +201,7 @@
         <copy todir="${out.test.dir}/WEB-INF/classes">
             <fileset dir="${src.test.dir}" includes="**/*.properties"/>
         </copy>
-
+      <antcall target="remove.jsp.incompat.workaround"/>
     </target>
 
     <target name="prepare.test.webapp" 
@@ -236,7 +236,6 @@
       <antcall target="install"/>
       <antcall target="run.cactus.test"/>
       <antcall target="remove"/>
-      <antcall target="remove.jsp.incompat.workaround"/>
     </target>
 
     <target name="copy-test-data-files">
