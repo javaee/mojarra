@@ -1,5 +1,5 @@
 /*
- * $Id: ButtonRenderer.java,v 1.81 2004/12/16 17:56:36 edburns Exp $
+ * $Id: ButtonRenderer.java,v 1.82 2005/03/22 22:31:27 jayashri Exp $
  */
 
 /*
@@ -162,9 +162,8 @@ public class ButtonRenderer extends HtmlBasicRenderer {
 	String clientId = component.getClientId(context);
         if (imageSrc != null) {
             writer.writeAttribute("type", "image", "type");
-            writer.writeURIAttribute("src", imageSrc, "image");
-            writer.writeAttribute("name", clientId,
-                                  "clientId");
+            writer.writeURIAttribute("src", src(context, imageSrc), "image");
+            writer.writeAttribute("name", clientId, "clientId");
         } else {
             writer.writeAttribute("type", type.toLowerCase(), "type");
             writer.writeAttribute("name", clientId, "clientId");
@@ -229,6 +228,15 @@ public class ButtonRenderer extends HtmlBasicRenderer {
     //
     // General Methods
     //
+       
+    private String src(FacesContext context, String value) {
+        if (value == null) {
+            return "";
+        }
+        value = context.getApplication().getViewHandler().
+            getResourceURL(context, value);
+        return (context.getExternalContext().encodeResourceURL(value));
+    }
 
 
 } // end of class ButtonRenderer

@@ -73,7 +73,7 @@
 	<TD>
 
             <h:commandButton id="imageOnlyButton" type="submit"
-                 image="duke.gif" rendered="true"> 
+                 image="/duke.gif" rendered="true"> 
              </h:commandButton>
 	</TD>
 

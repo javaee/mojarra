@@ -15,7 +15,7 @@
 
 
   
-<form id="basicForm" method="post" action="/test/faces/TestRenderResponsePhase.jsp;jsessionid=95F83ADE9D04C306D880389D1992A343" class="formClass" accept-charset="some-charset" accept="html,wml" enctype="application/x-www-form-urlencoded" target="_self" title="basicForm">
+<form id="basicForm" method="post" action="/test/faces/TestRenderResponsePhase.jsp;jsessionid=8C853078D9B98E65C535A8DB400DFB47" class="formClass" accept-charset="some-charset" accept="html,wml" enctype="application/x-www-form-urlencoded" target="_self" title="basicForm">
 
 
   <TABLE BORDER="1">
@@ -74,7 +74,7 @@
 
 	<TD>
 
-            <input id="basicForm:pushButton" type="image" src="duke.gif" name="basicForm:pushButton" onclick="clearFormHiddenParams_basicForm(this.form.id);" style="someStyle" disabled="disabled" />
+            <input id="basicForm:pushButton" type="image" src="duke.gif;jsessionid=8C853078D9B98E65C535A8DB400DFB47" name="basicForm:pushButton" onclick="clearFormHiddenParams_basicForm(this.form.id);" style="someStyle" disabled="disabled" />
             
 	</TD>
 
@@ -85,7 +85,7 @@
 
 	<TD>
 
-            <input id="basicForm:imageOnlyButton" type="image" src="duke.gif" name="basicForm:imageOnlyButton" onclick="clearFormHiddenParams_basicForm(this.form.id);" /> 
+            <input id="basicForm:imageOnlyButton" type="image" src="/test/duke.gif;jsessionid=8C853078D9B98E65C535A8DB400DFB47" name="basicForm:imageOnlyButton" onclick="clearFormHiddenParams_basicForm(this.form.id);" /> 
              
 	</TD>
 
@@ -130,12 +130,12 @@
 
 	      
                 
-              <a id="basicForm:imageLink" href="#" style="someStyle" onclick="clearFormHiddenParams_basicForm('basicForm');document.forms['basicForm']['basicForm:_idcl'].value='basicForm:imageLink'; document.forms['basicForm'].submit(); return false;"><img src="duke.gif;jsessionid=95F83ADE9D04C306D880389D1992A343" /></a>
+              <a id="basicForm:imageLink" href="#" style="someStyle" onclick="clearFormHiddenParams_basicForm('basicForm');document.forms['basicForm']['basicForm:_idcl'].value='basicForm:imageLink'; document.forms['basicForm'].submit(); return false;"><img src="duke.gif;jsessionid=8C853078D9B98E65C535A8DB400DFB47" /></a>
 
 	</TD>
 
         <TD> 
-            <img id="basicForm:graphicImage" src="/test/duke.gif;jsessionid=95F83ADE9D04C306D880389D1992A343" style="someStyle" usemap="#map1" ismap="ismap" /> 
+            <img id="basicForm:graphicImage" src="/test/duke.gif;jsessionid=8C853078D9B98E65C535A8DB400DFB47" style="someStyle" usemap="#map1" ismap="ismap" /> 
         </TD>
 
       </TR>
@@ -169,7 +169,7 @@
               
               
               
-            <a id="basicForm:hrefParamLink" href="#" onclick="clearFormHiddenParams_basicForm('basicForm');document.forms['basicForm']['basicForm:_idcl'].value='basicForm:hrefParamLink';document.forms['basicForm']['name'].value='horwat';document.forms['basicForm']['value'].value='password'; document.forms['basicForm'].target='_top'; document.forms['basicForm'].submit(); return false;"><img src="duke.gif;jsessionid=95F83ADE9D04C306D880389D1992A343" /></a>
+            <a id="basicForm:hrefParamLink" href="#" onclick="clearFormHiddenParams_basicForm('basicForm');document.forms['basicForm']['basicForm:_idcl'].value='basicForm:hrefParamLink';document.forms['basicForm']['name'].value='horwat';document.forms['basicForm']['value'].value='password'; document.forms['basicForm'].target='_top'; document.forms['basicForm'].submit(); return false;"><img src="duke.gif;jsessionid=8C853078D9B98E65C535A8DB400DFB47" /></a>
         </TD>
       </TR>
 
@@ -177,7 +177,7 @@
 
 	<TD>
 
-	      <a id="basicForm:outputLink" href="test.html;jsessionid=95F83ADE9D04C306D880389D1992A343" class="hyperlinkClass">output link text</a>
+	      <a id="basicForm:outputLink" href="test.html;jsessionid=8C853078D9B98E65C535A8DB400DFB47" class="hyperlinkClass">output link text</a>
 
 	</TD>
 
@@ -189,12 +189,12 @@
 
 	      
                 
-              <a id="basicForm:output_imageLink" href="test.html;jsessionid=95F83ADE9D04C306D880389D1992A343" style="position: absolute; left: 96px; top: 168px"><img src="duke.gif;jsessionid=95F83ADE9D04C306D880389D1992A343" /></a>
+              <a id="basicForm:output_imageLink" href="test.html;jsessionid=8C853078D9B98E65C535A8DB400DFB47" style="position: absolute; left: 96px; top: 168px"><img src="duke.gif;jsessionid=8C853078D9B98E65C535A8DB400DFB47" /></a>
 
 	</TD>
 
         <TD> 
-            <img id="basicForm:output_graphicImage" src="/test/duke.gif;jsessionid=95F83ADE9D04C306D880389D1992A343" usemap="#map1" ismap="ismap" /> 
+            <img id="basicForm:output_graphicImage" src="/test/duke.gif;jsessionid=8C853078D9B98E65C535A8DB400DFB47" usemap="#map1" ismap="ismap" /> 
         </TD>
 
       </TR>
@@ -202,7 +202,7 @@
       <TR>
         <TD>
             
-            <a id="basicForm:output_commandLink" href="test.html;jsessionid=95F83ADE9D04C306D880389D1992A343" style="position: absolute; left: 96px; top: 168px" class="hyperlinkClass">link text</a>
+            <a id="basicForm:output_commandLink" href="test.html;jsessionid=8C853078D9B98E65C535A8DB400DFB47" style="position: absolute; left: 96px; top: 168px" class="hyperlinkClass">link text</a>
        </TD>
       </TR>
 
@@ -212,13 +212,13 @@
               
               
               
-            <a id="basicForm:output_commandParamLink" href="test.html;jsessionid=95F83ADE9D04C306D880389D1992A343?name=horwat&value=password" class="hyperlinkClass">link text</a>
+            <a id="basicForm:output_commandParamLink" href="test.html;jsessionid=8C853078D9B98E65C535A8DB400DFB47?name=horwat&value=password" class="hyperlinkClass">link text</a>
         </TD>
       </TR>
 
       <TR>
         <TD>
-            <a id="basicForm:output_hrefLink" href="test.html;jsessionid=95F83ADE9D04C306D880389D1992A343"><img src="duke.gif"></a>
+            <a id="basicForm:output_hrefLink" href="test.html;jsessionid=8C853078D9B98E65C535A8DB400DFB47"><img src="duke.gif"></a>
         </TD>
       </TR>
 
@@ -228,7 +228,7 @@
               
               
               
-            <a id="basicForm:output_hrefParamLink" href="test.html;jsessionid=95F83ADE9D04C306D880389D1992A343?name=horwat&value=password"><img src="duke.gif;jsessionid=95F83ADE9D04C306D880389D1992A343" /></a>
+            <a id="basicForm:output_hrefParamLink" href="test.html;jsessionid=8C853078D9B98E65C535A8DB400DFB47?name=horwat&value=password"><img src="duke.gif;jsessionid=8C853078D9B98E65C535A8DB400DFB47" /></a>
         </TD>
       </TR>
 
