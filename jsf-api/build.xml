@@ -56,7 +56,7 @@
   <property name="build.mifdocs"    value="${build.dir}/mifdocs"/>
   <property name="javadoc.private"  value="false"/>
   <property name="javadoc.protected"  value="true"/>
-  <property name="jsf-ri.dir"         value="${basedir}/../jsf-ri"/>
+  <property name="jsf-tools.dir"    value="${basedir}/../jsf-tools"/>
 
 
   <!-- Default value for debugging arguments is no.  Override in
@@ -106,24 +106,21 @@
   </target>
 
   <target name="prepare.generate" 
-          depends="prepare,set.standard-html-renderkit.property,verify.standard-html-renderkit.property">
+          depends="prepare,set.tools.property,verify.tools.property">
     <mkdir dir="${build.generate}"/>
   </target>
 
-  <target name="set.standard-html-renderkit.property" 
-          unless="standard-html-renderkit-impl">
-    <available property="standard-html-renderkit-impl" 
-          value="${jsf-ri.dir}/src/com/sun/faces/standard-html-renderkit-impl.xml"
-          file="${jsf-ri.dir}/src/com/sun/faces/standard-html-renderkit-impl.xml"/>
+  <target name="set.tools.property" unless="jsf-tools">
+    <available property="jsf-tools" value="${jsf-tools.dir}"
+               file="${jsf-tools.dir}/build.xml"/>
   </target>
 
-  <target name="verify.standard-html-renderkit.property" 
-          unless="standard-html-renderkit-impl">
+  <target name="verify.tools.property" unless="jsf-tools">
 
 <fail>
-You must have the property standard-html-renderkit-impl defined, or the
-path ../jsf-ri/src/com/sun/faces/standard-html-renderkit-impl.xml must
-exist.  This is necessary to generate required classes for jsf-api.jar.
+You must have the property jsf-tools defined, or the path ../jsf-tools
+must exist.  This is necessary to generate required classes for
+jsf-api.jar.
 </fail>
   </target>
 
@@ -157,27 +154,7 @@ exist.  This is necessary to generate required classes for jsf-api.jar.
 
   </target>
 
-  <target name="tools" depends="prepare.generate" 
-                       if="standard-html-renderkit-impl">
-
-    <javac srcdir="${tools.dir}"
-           destdir="${build.classes}"
-           debug="${debug}"
-           deprecation="${deprecation}"
-           optimize="${optimize}" >
-      <classpath refid="compile.classpath" />
-      <classpath refid="test.classpath" />
-    </javac>
-
-    <copy todir="${build.classes}">
-      <fileset dir="${src.dir}">
-        <exclude name="**/*.java" />
-      </fileset>
-    </copy>
-
-  </target>
-
-  <target name="check.generation.necessity" if="standard-html-renderkit-impl">
+  <target name="check.generation.necessity" if="jsf-tools">
     <uptodate property="skip.generation"
               targetfile="${build.generate}/last-generation">
        <srcfiles dir="${basedir}/doc">
@@ -186,24 +163,23 @@ exist.  This is necessary to generate required classes for jsf-api.jar.
     </uptodate>
   </target>
 
-  <target name="generate" depends="tools,check.generation.necessity" 
-          if="standard-html-renderkit-impl" unless="skip.generation">
+  <target name="generate" depends="prepare.generate,check.generation.necessity" 
+          if="jsf-tools" unless="skip.generation">
+    <echo>
+      jsf-tools is ${jsf-tools.dir}
+    </echo>
 
-    <copy todir="${build.classes}" 
-          file="${basedir}/doc/web-facesconfig_1_0.dtd"/>
+    <ant antfile="${jsf-tools.dir}/build.xml" inheritall="false"
+         target="main"/>
 
-    <java fork="yes" 
-	  classname="javax.faces.generate.GenerateConcreteClasses">
-      <!-- <jvmarg line="${debug.jvm.args}"/> -->
-      <classpath refid="compile.classpath" />
-      <classpath refid="test.classpath" />
-      <arg line="-f ${basedir}/doc/standard-html-renderkit.xml"/>
-      <arg line="-e ${standard-html-renderkit-impl}"/>
-      <arg line="-d ${build.generate}"/>
-      <arg line="-c ${basedir}/COPYRIGHT"/>
-  </java>
+    <copy todir="${build.generate}">
 
-  <touch file="${build.generate}/last-generation"/>
+      <fileset dir="${jsf-tools.dir}/build/generate">
+        <include name="**/*.*"/>
+      </fileset>
+    </copy>
+
+    <touch file="${build.generate}/last-generation"/>
 
   </target>
 
@@ -692,19 +668,18 @@ exist.  This is necessary to generate required classes for jsf-api.jar.
       <zipfileset dir="${basedir}"
              includes="build.xml COPYRIGHT LICENSE.html"
                prefix="jsf-api"/> 
-
       <zipfileset dir="${src.dir}"
              excludes="**/CVS/**"
                prefix="jsf-api/src"/>
-      <zipfileset dir="${tools.dir}"
-             excludes="**/CVS/**"
-               prefix="jsf-api/tools"/>
       <zipfileset dir="${test.dir}"
              excludes="**/CVS/**"
                prefix="jsf-api/test"/>
       <zipfileset dir="${doc.dir}"
              includes="*.dtd,*.xml"
                prefix="jsf-api/doc"/>
+      <zipfileset dir="${jsf-tools.dir}"
+             excludes="**/CVS/**, **/build/**"
+               prefix="jsf-tools"/>
     </zip>
 
   </target>
