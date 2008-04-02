@@ -1313,13 +1313,14 @@
       <p>The value of the "method" attribute must be "post".  The value
       of the "action" attribute must be the result of passing the view
       identifier of the current view to the <code>getActionURL()</code>
-      method of the <code>ViewHandler</code> for this application,
-      then passing that String to the <code>encodeActionURL()</code>
-      method on the <code>ExternalContext</code>.  If the "styleClass"
+      method of the <code>ViewHandler</code> for this application, then
+      passing that String to the <code>encodeActionURL()</code> method
+      on the <code>ExternalContext</code>.  If the "styleClass"
       attribute is specified, render its value as the value of the
-      "class" attribute.  Render all the necessary hidden fields for all
-      commandLink instances in the page just before the close of the
-      "form" element.</p>
+      "class" attribute.  Call <code>ViewHandler.writeState()</code>
+      before the the close of the "form" element.  Render all the
+      necessary hidden fields for all commandLink instances in the page
+      just before the close of the "form" element.</p>
 
       </ul>
 
