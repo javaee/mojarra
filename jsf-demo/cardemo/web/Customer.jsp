@@ -183,11 +183,12 @@
                                 <td valign="top" align="right"><font face="Arial, Helvetica">
       <h:output_text  key="zipLabel" bundle="carDemoBundle" /></font></td>
                                 <td valign="top"> <font face="Arial, Helvetica">
-      <h:input_number id="zip"  formatPattern="#####"
+      <h:input_text id="zip"  
 			valueRef="CustomerBean.zip"
                         size="5">
-        <f:validate_longrange minimum="10000" maximum="99999" /> 
-      </h:input_number>
+           <f:validate_required />
+          <cd:format_validator formatPatterns="99999|99999-9999|### ###"/> 
+       </h:input_text>
       <h:output_errors  for="zip" />    
             </font></td>
                               </tr>
@@ -201,10 +202,9 @@
                                 <td valign="top"> <font face="Arial, Helvetica">
       <h:input_text id="ccno" size="16"
            converter="creditcard" >
-          <f:validate_required/>
-          <f:validate_length minimum="16" maximum="16"/>
-          <cd:creditcard_validator maximumChar="9" minimumChar="0" />
-          
+          <f:validate_required />
+          <cd:format_validator 
+          formatPatterns="9999999999999999|9999 9999 9999 9999|9999-9999-9999-9999"/>
       </h:input_text>
       <h:output_errors  for="ccno"/> </font></td>
                               </tr>

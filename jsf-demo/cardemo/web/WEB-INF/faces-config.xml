@@ -39,9 +39,9 @@
   
   <message-resources>
     <message-resources-id>carDemoResources</message-resources-id>
-    <message-resources-class>cardemo.CarDemoResources</message-resources-class>
+    <message-resources-class>cardemo.CarDemoMessageResourcesImpl</message-resources-class>
     <message>
-      <message-id>cardemo.CreditCardValidator.Invalid_Characters</message-id>
+      <message-id>cardemo.Format_Invalid</message-id>
       <message-class>javax.faces.application.MessageImpl</message-class>
     </message>
   </message-resources>

@@ -37,8 +37,8 @@
 -->
 
 <messages>
-  <message messageId="cardemo.CreditCardValidator.Invalid_Characters" severity="2" summary="Ungueltige Kreditkartennummer">
-  	<detail>Kreditkarte akzeptiert nur Zeichen im Bereich zwischen {0} und {1}</detail>
+  <message messageId="cardemo.Format_Invalid" severity="2" summary="Eingang muß eins der folgenden Muster zusammenbringen {0}">
+  	<detail>Eingang muß eins der folgenden Muster zusammenbringen {0}</detail>
   </message>
 </messages>
 

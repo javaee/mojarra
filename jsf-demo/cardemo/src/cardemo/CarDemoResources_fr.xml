@@ -37,8 +37,8 @@
 -->
 
 <messages>
-  <message messageId="cardemo.CreditCardValidator.Invalid_Characters" severity="2" summary="le num&#233;ro de carte de cr&#233;dit est invalide">
-  	<detail>Le num&#233;ro de carte de cr&#233;dit ne permet que des caract&#232;res compris entre {0} et {1}</detail>
+  <message messageId="cardemo.Format_Invalid" severity="2" summary="L'entrée doit assortir un des modèles suivants '{0}'">
+  	<detail>L'entrée doit assortir un des modèles suivants '{0}'</detail>
   </message>
 </messages>
 

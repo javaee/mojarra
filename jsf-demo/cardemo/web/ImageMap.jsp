@@ -75,10 +75,10 @@
           <h:graphic_image id="mapImage" url="/world.jpg" usemap="#worldMap" />
                 <d:map id="worldMap" currentArea="NAmericas" >
                     <f:action_listener type="cardemo.ImageMapEventHandler"/> 
-                        <d:area id="NAmericas" valueRef="NA" onmouseover="/jsf-cardemo/world_namer.jpg" onmouseout="/jsf-cardemo/world.jpg" />
-                        <d:area id="SAmericas" valueRef="SA" onmouseover="/jsf-cardemo/world_samer.jpg" onmouseout="/jsf-cardemo/world.jpg" />
-                        <d:area id="Germany" valueRef="gerA" onmouseover="/jsf-cardemo/world_germany.jpg" onmouseout="/jsf-cardemo/world.jpg" />
-                        <d:area id="France" valueRef="fraA" onmouseover="/jsf-cardemo/world_france.jpg" onmouseout="/jsf-cardemo/world.jpg" />
+                        <d:area id="NAmericas" valueRef="NA" onmouseover="/world_namer.jpg" onmouseout="/world.jpg" />
+                        <d:area id="SAmericas" valueRef="SA" onmouseover="/world_samer.jpg" onmouseout="/world.jpg" />
+                        <d:area id="Germany" valueRef="gerA" onmouseover="/world_germany.jpg" onmouseout="/world.jpg" />
+                        <d:area id="France" valueRef="fraA" onmouseover="/world_france.jpg" onmouseout="/world.jpg" />
                 </d:map>
      </TD>
                               </TR>

@@ -56,15 +56,10 @@
 
   <!-- ===================== ImageMap tags ====================== -->
   <tag>
-    <name>creditcard_validator</name>
-    <tag-class>cardemo.CreditCardValidatorTag</tag-class>
+    <name>format_validator</name>
+    <tag-class>cardemo.FormatValidatorTag</tag-class>
       <attribute>
-        <name>minimumChar</name>
-	<required>true</required>
-	<rtexprvalue>false</rtexprvalue>
-      </attribute>
-      <attribute>
-        <name>maximumChar</name>
+        <name>formatPatterns</name>
 	<required>true</required>
 	<rtexprvalue>false</rtexprvalue>
       </attribute>

@@ -122,22 +122,18 @@ public class AreaRenderer extends BaseRenderer {
 	writer.write(" onmouseover=\"");
 	writer.write("document.forms[0].mapImage.src='");
 	imagePath = (String) component.getAttribute("onmouseover");
-	if ('/' == imagePath.charAt(0)) {
-	    writer.write(imagePath);
-	}
-	else {
-	    writer.write(contextPath + imagePath);
-	}
+        if (imagePath.startsWith("/")) {
+            writer.write(contextPath);
+        }
+	writer.write(imagePath);
 	writer.write("';\"");
 	writer.write(" onmouseout=\"");
 	writer.write("document.forms[0].mapImage.src='");
 	imagePath = (String) component.getAttribute("onmouseout");
-	if ('/' == imagePath.charAt(0)) {
-	    writer.write(imagePath);
-	}
-	else {
-	    writer.write(contextPath + imagePath);
-	}
+	if (imagePath.startsWith("/")) {
+            writer.write(contextPath);
+        }
+        writer.write(imagePath);
 	writer.write("';\"");
 	writer.write(" alt=\"");
 	writer.write(ia.getAlt());

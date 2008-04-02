@@ -1,5 +1,5 @@
 /*
- * $Id: CreditCardValidatorTag.java,v 1.2 2003/02/21 23:44:26 ofung Exp $
+ * $Id: FormatValidatorTag.java,v 1.1 2003/05/08 18:55:01 jvisvanathan Exp $
  */
 
 /*
@@ -50,19 +50,12 @@ import javax.faces.validator.Validator;
 import javax.servlet.jsp.JspException;
 
 /**
- *
- *  <B>ValidateLengthTag</B> is a class ...
- *
- * <B>Lifetime And Scope</B> <P>
- *
- * @version $Id: CreditCardValidatorTag.java,v 1.2 2003/02/21 23:44:26 ofung Exp $
- * 
- * @see	Blah
- * @see	Bloo
+ * FormatValidatorTag is the tag handler class for FormatValidator tag,
+ * <code>format_validator</code>.
  *
  */
 
-public class CreditCardValidatorTag extends ValidatorTag {
+public class FormatValidatorTag extends ValidatorTag {
     //
     // Protected Constants
     //
@@ -76,8 +69,8 @@ public class CreditCardValidatorTag extends ValidatorTag {
     //
 
     // Attribute Instance Variables
-    protected int maximumChar = 0;
-    protected int minimumChar = 0;
+    protected String formatPatterns = null;
+ 
   
     // Relationship Instance Variables
 
@@ -85,9 +78,9 @@ public class CreditCardValidatorTag extends ValidatorTag {
     // Constructors and Initializers    
     //
 
-    public CreditCardValidatorTag() {
+    public FormatValidatorTag() {
         super();
-        super.setType("cardemo.CreditCardValidator");
+        super.setType("cardemo.FormatValidator");
     }
 
     //
@@ -98,35 +91,26 @@ public class CreditCardValidatorTag extends ValidatorTag {
     // General Methods
     //
 
-    public int getMaximumChar() {
-        return maximumChar;
+    public String getFormatPatterns() {
+        return formatPatterns;
     }
 
-    public void setMaximumChar(int newMaximumChar){
-       maximumChar = newMaximumChar;
+    public void setFormatPatterns(String fmtPatterns){
+       formatPatterns = fmtPatterns;
     }
 
-    public int getMinimumChar(){
-        return minimumChar;
-    }
-
-    public void setMinimumChar(int newMinimumChar){
-        minimumChar = newMinimumChar;
-    }
-   
     // 
     // Methods from ValidatorTag
     // 
 
     protected Validator createValidator() throws JspException
     {
-        CreditCardValidator result = null;
-        result = (CreditCardValidator) super.createValidator();
+        FormatValidator result = null;
+        result = (FormatValidator) super.createValidator();
         Assert.assert_it(null != result);
         
-        result.setMaximumChar(getMaximumChar());
-        result.setMinimumChar(getMinimumChar());
+        result.setFormatPatterns(formatPatterns);
         return result;
     }
 
-} // end of class CreditCardValidatorTag
+} // end of class FormatValidatorTag
