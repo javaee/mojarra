@@ -1,5 +1,5 @@
 /*
- * $Id: Application.java,v 1.47 2007/01/29 06:44:05 rlubke Exp $
+ * $Id: Application.java,v 1.48 2007/03/12 01:37:40 rlubke Exp $
  */
 
 /*
@@ -34,9 +34,12 @@ import java.util.Iterator;
 import java.util.Collection;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import java.lang.reflect.Method;
+
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
+import javax.faces.context.ExternalContext;
 import javax.faces.convert.Converter;
 import javax.faces.el.MethodBinding;
 import javax.faces.el.PropertyResolver;
@@ -309,11 +312,10 @@ public abstract class Application {
      */
     
     public ResourceBundle getResourceBundle(FacesContext ctx, String name) {
-        Application impl;
-        if (null != (impl = (Application) ctx.getExternalContext().getApplicationMap().
-                get("com.sun.faces.ApplicationImpl"))) {
+        Application app = getRIApplicationImpl(ctx);
+        if (app != null) {
             //noinspection TailRecursion
-            return impl.getResourceBundle(ctx, name);
+            return app.getResourceBundle(ctx, name);
         }
         
         throw new UnsupportedOperationException();
@@ -403,7 +405,12 @@ public abstract class Application {
      */
 
     public void addELResolver(ELResolver resolver) {
-        throw new UnsupportedOperationException();
+        Application app = getRIApplicationImpl();
+        if (app != null) {
+            app.addELResolver(resolver);
+        } else {
+            throw new UnsupportedOperationException();
+        }
     }
 
     /**
@@ -441,6 +448,11 @@ public abstract class Application {
      */
 
     public ELResolver getELResolver() {
+        Application app = getRIApplicationImpl();
+        if (app != null) {
+            //noinspection TailRecursion
+            return app.getELResolver();
+        }
         throw new UnsupportedOperationException();
     }
 
@@ -746,6 +758,12 @@ public abstract class Application {
      */
 
     public ExpressionFactory getExpressionFactory() {
+        Application app = getRIApplicationImpl();
+        if (app != null) {
+            //noinspection TailRecursion
+            return app.getExpressionFactory();
+        }
+
         throw new UnsupportedOperationException();
     }
 
@@ -763,10 +781,15 @@ public abstract class Application {
      * the <code>Application</code> continue to work.
      *
      */
-    
+
     public Object evaluateExpressionGet(FacesContext context,
-						 String expression, 
-						 Class expectedType) throws ELException {
+                                        String expression,
+                                        Class expectedType) throws ELException {
+        Application app = getRIApplicationImpl(context);
+        if (app != null) {
+            //noinspection TailRecursion
+            return app.evaluateExpressionGet(context, expression, expectedType);
+        }
         throw new UnsupportedOperationException();
     }
 
@@ -830,7 +853,12 @@ public abstract class Application {
      */
 
     public void addELContextListener(ELContextListener listener) {
-        throw new UnsupportedOperationException();
+        Application app = getRIApplicationImpl();
+        if (app != null) {
+            app.addELContextListener(listener);
+        } else {
+            throw new UnsupportedOperationException();
+        }
     }
 
     /**
@@ -848,7 +876,13 @@ public abstract class Application {
      */
 
     public void removeELContextListener(ELContextListener listener) {
-        throw new UnsupportedOperationException();
+        Application app = getRIApplicationImpl();
+        if (app != null) {
+            app.removeELContextListener(listener);
+        } else {
+            throw new UnsupportedOperationException();
+        }
+
     }
 
     /**
@@ -866,7 +900,13 @@ public abstract class Application {
      */
 
     public ELContextListener [] getELContextListeners() {
-        throw new UnsupportedOperationException();
+        Application app = getRIApplicationImpl();
+        if (app != null) {
+            //noinspection TailRecursion
+            return app.getELContextListeners();
+        } else {
+            throw new UnsupportedOperationException();
+        }
     }
 
 
@@ -933,5 +973,48 @@ public abstract class Application {
     public abstract ValueBinding createValueBinding(String ref)
         throws ReferenceSyntaxException;
 
+
+    // --------------------------------------------------------- Private Methods
+
+    
+    private static ExternalContext getCurrentExternalContext(FacesContext context) {
+        if (context != null) {
+            return context.getExternalContext();
+        }
+        context = FacesContext.getCurrentInstance();
+        if (context != null) {
+            return context.getExternalContext();
+        } else {
+            // hold your nose....
+            try {
+                Class cl =
+                     Class.forName("com.sun.faces.config.ConfigureListener",
+                                   true,
+                                   Thread.currentThread().getContextClassLoader());
+                if (cl != null) {
+                    Method method = cl.getMethod("getExternalContextDuringInitialize()");
+                    if (method != null) {
+                        return ((ExternalContext) method.invoke(null));
+                    }
+                }
+            } catch (Exception e) {
+               ;
+            }
+        }
+        return null;
+    }
+
+    private static Application getRIApplicationImpl(FacesContext context) {
+        ExternalContext extContext = getCurrentExternalContext(context);
+        if (extContext != null) {
+            return ((Application) extContext.getApplicationMap().
+                 get("com.sun.faces.ApplicationImpl"));
+        }
+        return null;
+    }
+
+    private static Application getRIApplicationImpl() {
+        return getRIApplicationImpl(null);
+    }
 
 }
