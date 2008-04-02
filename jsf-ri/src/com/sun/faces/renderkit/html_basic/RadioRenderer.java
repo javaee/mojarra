@@ -1,5 +1,5 @@
 /*
- * $Id: RadioRenderer.java,v 1.38 2003/03/13 01:06:33 eburns Exp $
+ * $Id: RadioRenderer.java,v 1.39 2003/04/15 17:07:58 jvisvanathan Exp $
  */
 
 /*
@@ -46,14 +46,14 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: RadioRenderer.java,v 1.38 2003/03/13 01:06:33 eburns Exp $
+ * @version $Id: RadioRenderer.java,v 1.39 2003/04/15 17:07:58 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
  *
  */
 
-public class RadioRenderer extends HtmlBasicRenderer {
+public class RadioRenderer extends HtmlBasicInputRenderer {
     //
     // Protected Constants
     //

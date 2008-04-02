@@ -1,5 +1,5 @@
 /*
- * $Id: CheckboxRenderer.java,v 1.45 2003/03/21 23:24:00 rkitain Exp $
+ * $Id: CheckboxRenderer.java,v 1.46 2003/04/15 17:07:57 jvisvanathan Exp $
  *
  */
 
@@ -42,7 +42,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: CheckboxRenderer.java,v 1.45 2003/03/21 23:24:00 rkitain Exp $
+ * @version $Id: CheckboxRenderer.java,v 1.46 2003/04/15 17:07:57 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -115,7 +115,10 @@ public class CheckboxRenderer extends HtmlBasicInputRenderer {
             } catch (ConverterException e) {
                 setPreviousValue(component, Boolean.FALSE);
             }
-        }
+        } else {
+            // current value is already of the type Boolean.
+            setPreviousValue(component, curValue);
+        }    
 
         // Convert the new value
 

@@ -482,9 +482,6 @@
 
   <target name="install" depends="build.basic.war"
    description="Install webapp on Tomcat">
-    <classpath>
-        <pathelement location="${catalina.ant.jar}"/>
-    </classpath>
     <install url="${url}" username="${username}" password="${password}"
             path="${context.path}"
              war="file://${dist.home}/${basic.name}"/>
@@ -492,26 +489,17 @@
 
   <target name="list"
    description="List installed webapps on Tomcat">
-    <classpath>
-        <pathelement location="${catalina.ant.jar}"/>
-    </classpath>
     <list url="${url}" username="${username}" password="${password}"/>
   </target>
 
   <target name="reload" depends="build.basic.war"
    description="Reload this webapp on Tomcat">
-    <classpath>
-        <pathelement location="${catalina.ant.jar}"/>
-    </classpath>
     <reload url="${url}" username="${username}" password="${password}"
             path="${context.path}"/>
   </target>
 
   <target name="remove"
    description="Remove this webapp from Tomcat">
-    <classpath>
-        <pathelement location="${catalina.ant.jar}"/>
-    </classpath>
     <remove url="${url}" username="${username}" password="${password}"
             path="${context.path}"/>
   </target>
