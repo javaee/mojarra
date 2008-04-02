@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.72 2003/02/03 22:57:46 craigmcc Exp $
+ * $Id: UIComponent.java,v 1.73 2003/02/12 23:59:19 craigmcc Exp $
  */
 
 /*
@@ -762,11 +762,6 @@ public interface UIComponent extends Serializable {
      *     and children of this {@link UIComponent}, in the order determined
      *     by a call to <code>getFacetsAndChildren()</code>.</li>
      * <li>Call the <code>decode()</code> method of this component.</li>
-     * <li>If the <code>valid</code> property of this {@link UIComponent}
-     *     is now <code>false</code>, call
-     *     <code>FacesContext.renderResponse()</code>
-     *     to transfer control at the end of the current phase.</li>
-     * </ul>
      *
      * @param context {@link FacesContext} for the request we are processing
      *

@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.43 2003/02/03 22:57:46 craigmcc Exp $
+ * $Id: UIComponentBase.java,v 1.44 2003/02/12 23:59:19 craigmcc Exp $
  */
 
 /*
@@ -998,9 +998,6 @@ public abstract class UIComponentBase implements UIComponent {
 
         // Process this component itself
         decode(context);
-        if (!isValid()) {
-            context.renderResponse();
-        }
 
     }
 
