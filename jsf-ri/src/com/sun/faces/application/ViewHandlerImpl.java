@@ -1,5 +1,5 @@
 /* 
- * $Id: ViewHandlerImpl.java,v 1.85 2006/09/15 17:19:18 rlubke Exp $ 
+ * $Id: ViewHandlerImpl.java,v 1.86 2006/09/20 19:37:46 rlubke Exp $ 
  */ 
 
 
@@ -68,7 +68,7 @@ import com.sun.faces.util.Util;
 /**
  * <B>ViewHandlerImpl</B> is the default implementation class for ViewHandler.
  *
- * @version $Id: ViewHandlerImpl.java,v 1.85 2006/09/15 17:19:18 rlubke Exp $
+ * @version $Id: ViewHandlerImpl.java,v 1.86 2006/09/20 19:37:46 rlubke Exp $
  * @see javax.faces.application.ViewHandler
  */
 public class ViewHandlerImpl extends ViewHandler {
@@ -611,8 +611,7 @@ public class ViewHandlerImpl extends ViewHandler {
                         context.getViewRoot().getViewId());
         }
 
-        context.getResponseWriter().writeText(
-                    RIConstants.SAVESTATE_FIELD_MARKER, null);
+        context.getResponseWriter().write(RIConstants.SAVESTATE_FIELD_MARKER);
         if (logger.isLoggable(Level.FINE)) {
             logger.fine("End writing marker for viewId " +
                         context.getViewRoot().getViewId());

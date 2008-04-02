@@ -48,6 +48,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -74,8 +75,7 @@ public class StateManagerImpl extends StateManager {
     /** Number of views in logical view to be saved in session. */
     private int noOfViews;
     private int noOfViewsInLogicalView;
-    private Map<String,Class<?>> classMap = 
-          new ConcurrentHashMap<String,Class<?>>(32);
+    private ClassCache classCache = new ClassCache();
 
 
 
@@ -423,7 +423,7 @@ public class StateManagerImpl extends StateManager {
     
     
     
-    private static void captureChild(List<TreeNode> tree, 
+    private void captureChild(List<TreeNode> tree, 
                                      int parent,
                                      UIComponent c,
                                      FacesContext ctx) {
@@ -432,13 +432,15 @@ public class StateManagerImpl extends StateManager {
             TreeNode n = new TreeNode(parent, c, ctx);
             int pos = tree.size();
             tree.add(n);
+            Class<?> cl = c.getClass();
+            classCache.addEntry(cl.hashCode(), cl);
             captureRest(tree, pos, c, ctx);
         }
 
     }
 
 
-    private static void captureFacet(List<TreeNode> tree, 
+    private void captureFacet(List<TreeNode> tree, 
                                      int parent, 
                                      String name,
                                      UIComponent c,
@@ -448,13 +450,15 @@ public class StateManagerImpl extends StateManager {
             FacetNode n = new FacetNode(parent, name, c, ctx);
             int pos = tree.size();
             tree.add(n);
+            Class<?> cl = c.getClass();
+            classCache.addEntry(cl.hashCode(), cl);
             captureRest(tree, pos, c, ctx);
         }
 
     }
 
 
-    private static void captureRest(List<TreeNode> tree, 
+    private void captureRest(List<TreeNode> tree, 
                                     int pos, 
                                     UIComponent c,
                                     FacesContext ctx) {
@@ -509,15 +513,7 @@ public class StateManagerImpl extends StateManager {
     throws FacesException {
 
         try {
-            Class<?> t = classMap.get(n.componentType);
-            if (t == null) {
-                t = Util.loadClass(n.componentType, n);
-                if (t != null) {
-                    classMap.put(n.componentType, t);
-                } else {
-                    throw new NullPointerException();
-                }
-            }
+            Class<?> t = classCache.getEntry(n.componentType);         
             
             UIComponent c = (UIComponent) t.newInstance();
             c.setId(n.id);
@@ -609,7 +605,7 @@ public class StateManagerImpl extends StateManager {
 
         private static final String NULL_ID = "";
 
-        public String componentType;
+        public int componentType;
         public String id;
         public Serializable state;
         public boolean trans;
@@ -629,7 +625,7 @@ public class StateManagerImpl extends StateManager {
 
             this.parent = parent;
             this.id = c.getId();
-            this.componentType = c.getClass().getName(); 
+            this.componentType = c.getClass().hashCode(); 
             this.trans = c.isTransient();
             if (!trans) {
                 this.state = (Serializable) c.saveState(ctx);
@@ -643,7 +639,7 @@ public class StateManagerImpl extends StateManager {
         public void writeExternal(ObjectOutput out) throws IOException {
 
             out.writeInt(this.parent);
-            out.writeUTF(this.componentType);
+            out.writeInt(this.componentType);
             out.writeBoolean(this.trans);
             if (this.id != null) {
                 out.writeUTF(this.id);
@@ -661,7 +657,7 @@ public class StateManagerImpl extends StateManager {
               throws IOException, ClassNotFoundException {
 
             this.parent = in.readInt();
-            this.componentType = in.readUTF();
+            this.componentType = in.readInt();
             this.trans = in.readBoolean();
             this.id = in.readUTF();
             if (id.length() == 0) {
@@ -717,6 +713,28 @@ public class StateManagerImpl extends StateManager {
 
         }
 
+    }
+    
+    
+    private static class ClassCache {
+        
+        private ConcurrentMap<Integer,Class<?>> cache = 
+              new ConcurrentHashMap<Integer,Class<?>>();
+        
+        
+        // ------------------------------------------------------ Public Methods
+        
+        
+        public void addEntry(int hash, Class<?> clazz) {
+            if (!cache.containsKey(hash)) {
+                cache.put(hash, clazz); 
+            }
+        }
+        
+        
+        public Class<?> getEntry(int hash) {
+            return cache.get(hash);
+        }
     }
 
 } // END StateManagerImpl
