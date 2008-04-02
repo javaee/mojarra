@@ -1,5 +1,5 @@
 /*
- * $Id: UIForm.java,v 1.50 2005/12/05 16:42:45 edburns Exp $
+ * $Id: UIForm.java,v 1.51 2006/01/11 14:57:04 edburns Exp $
  */
 
 /*
@@ -31,6 +31,9 @@ package javax.faces.component;
 
 
 import java.util.Iterator;
+import javax.el.ELException;
+import javax.el.ValueExpression;
+import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
 
 
@@ -131,26 +134,42 @@ public class UIForm extends UIComponentBase implements NamingContainer {
 
     }
     
+    /**
+     * <p>The prependId flag.</p>
+     */
     private boolean prependId = true;
-    
-    /**
-     * <p>If true, this <code>UIForm</code> instance does allow its id
-     * to be pre-pended to its descendent's id during the generation of
-     * clientIds for the descendents.  The default value of this
-     * property is <code>true</code>.</p>
-     */
+    private boolean prependIdSet = false;
+
+
     public boolean isPrependId() {
-        return this.prependId;
-    }
-    
-    /**
-     * <p>Set the value of the <code>prependId</code> property.  See
-     * {@link #isPrependId}.</p>
-     */
-    public void setPrependId(boolean prependId) {
-        this.prependId = prependId;
+
+	if (this.prependIdSet) {
+	    return (this.prependId);
+	}
+	ValueExpression ve = getValueExpression("prependId");
+	if (ve != null) {
+	    try {
+		return (Boolean.TRUE.equals(ve.getValue(getFacesContext().getELContext())));
+	    }
+	    catch (ELException e) {
+		throw new FacesException(e);
+	    }
+	} else {
+	    return (this.prependId);
+	}
+
     }
 
+
+    public void setPrependId(boolean prependId) {
+
+	// if the prependId value is changing.
+	if (prependId != this.prependId) {
+	    this.prependId = prependId;
+	}
+	this.prependIdSet = true;
+
+    }
 
     // ----------------------------------------------------- UIComponent Methods
 
