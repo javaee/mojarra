@@ -1171,6 +1171,48 @@
     </property>
     <property>
       <description>
+          A ValueExpression enabled attribute that, if present, will be
+          used as the text of the validation message for the "required"
+          facility, if the "required" facility is used.
+        </description>
+      <display-name>Required Message</display-name>
+      <icon/>
+      <property-name>requiredMessage</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <value-expression-enabled>true</value-expression-enabled>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          A ValueExpression enabled attribute that, if present, will be
+          used as the text of the converter message, replacing any message
+          that comes from the converter.
+        </description>
+      <display-name>Converter Message</display-name>
+      <icon/>
+      <property-name>converterMessage</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <value-expression-enabled>true</value-expression-enabled>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          A ValueExpression enabled attribute that, if present, will be
+          used as the text of the validator message, replacing any
+          message that comes from the validator.
+        </description>
+      <display-name>Validator Message</display-name>
+      <icon/>
+      <property-name>validatorMessage</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <value-expression-enabled>true</value-expression-enabled>
+      </property-extension>
+    </property>
+    <property>
+      <description>
           The value submitted for this input component by the user, prior to
           any required conversion or validation.
         </description>
@@ -2471,6 +2513,48 @@
     </property>
     <property>
       <description>
+          A ValueExpression enabled attribute that, if present, will be
+          used as the text of the validation message for the "required"
+          facility, if the "required" facility is used.
+        </description>
+      <display-name>Required Message</display-name>
+      <icon/>
+      <property-name>requiredMessage</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <value-expression-enabled>true</value-expression-enabled>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          A ValueExpression enabled attribute that, if present, will be
+          used as the text of the converter message, replacing any message
+          that comes from the converter.
+        </description>
+      <display-name>Converter Message</display-name>
+      <icon/>
+      <property-name>converterMessage</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <value-expression-enabled>true</value-expression-enabled>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          A ValueExpression enabled attribute that, if present, will be
+          used as the text of the validator message, replacing any
+          message that comes from the validator.
+        </description>
+      <display-name>Validator Message</display-name>
+      <icon/>
+      <property-name>validatorMessage</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <value-expression-enabled>true</value-expression-enabled>
+      </property-extension>
+    </property>
+    <property>
+      <description>
           The value submitted for this input component by the user, prior to
           any required conversion or validation.
         </description>
@@ -3125,6 +3209,48 @@
     </property>
     <property>
       <description>
+          A ValueExpression enabled attribute that, if present, will be
+          used as the text of the validation message for the "required"
+          facility, if the "required" facility is used.
+        </description>
+      <display-name>Required Message</display-name>
+      <icon/>
+      <property-name>requiredMessage</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <value-expression-enabled>true</value-expression-enabled>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          A ValueExpression enabled attribute that, if present, will be
+          used as the text of the converter message, replacing any message
+          that comes from the converter.
+        </description>
+      <display-name>Converter Message</display-name>
+      <icon/>
+      <property-name>converterMessage</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <value-expression-enabled>true</value-expression-enabled>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          A ValueExpression enabled attribute that, if present, will be
+          used as the text of the validator message, replacing any
+          message that comes from the validator.
+        </description>
+      <display-name>Validator Message</display-name>
+      <icon/>
+      <property-name>validatorMessage</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <value-expression-enabled>true</value-expression-enabled>
+      </property-extension>
+    </property>
+    <property>
+      <description>
           The value submitted for this input component by the user, prior to
           any required conversion or validation.
         </description>
@@ -3420,6 +3546,48 @@
       <icon/>
       <property-name>required</property-name>
       <property-class>boolean</property-class>
+      <property-extension>
+        <value-expression-enabled>true</value-expression-enabled>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          A ValueExpression enabled attribute that, if present, will be
+          used as the text of the validation message for the "required"
+          facility, if the "required" facility is used.
+        </description>
+      <display-name>Required Message</display-name>
+      <icon/>
+      <property-name>requiredMessage</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <value-expression-enabled>true</value-expression-enabled>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          A ValueExpression enabled attribute that, if present, will be
+          used as the text of the converter message, replacing any message
+          that comes from the converter.
+        </description>
+      <display-name>Converter Message</display-name>
+      <icon/>
+      <property-name>converterMessage</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <value-expression-enabled>true</value-expression-enabled>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          A ValueExpression enabled attribute that, if present, will be
+          used as the text of the validator message, replacing any
+          message that comes from the validator.
+        </description>
+      <display-name>Validator Message</display-name>
+      <icon/>
+      <property-name>validatorMessage</property-name>
+      <property-class>java.lang.String</property-class>
       <property-extension>
         <value-expression-enabled>true</value-expression-enabled>
       </property-extension>
@@ -6782,6 +6950,48 @@
     </property>
     <property>
       <description>
+          A ValueExpression enabled attribute that, if present, will be
+          used as the text of the validation message for the "required"
+          facility, if the "required" facility is used.
+        </description>
+      <display-name>Required Message</display-name>
+      <icon/>
+      <property-name>requiredMessage</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <value-expression-enabled>true</value-expression-enabled>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          A ValueExpression enabled attribute that, if present, will be
+          used as the text of the converter message, replacing any message
+          that comes from the converter.
+        </description>
+      <display-name>Converter Message</display-name>
+      <icon/>
+      <property-name>converterMessage</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <value-expression-enabled>true</value-expression-enabled>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          A ValueExpression enabled attribute that, if present, will be
+          used as the text of the validator message, replacing any
+          message that comes from the validator.
+        </description>
+      <display-name>Validator Message</display-name>
+      <icon/>
+      <property-name>validatorMessage</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <value-expression-enabled>true</value-expression-enabled>
+      </property-extension>
+    </property>
+    <property>
+      <description>
           The value submitted for this input component by the user, prior to
           any required conversion or validation.
         </description>
@@ -7071,6 +7281,48 @@
       <icon/>
       <property-name>required</property-name>
       <property-class>boolean</property-class>
+      <property-extension>
+        <value-expression-enabled>true</value-expression-enabled>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          A ValueExpression enabled attribute that, if present, will be
+          used as the text of the validation message for the "required"
+          facility, if the "required" facility is used.
+        </description>
+      <display-name>Required Message</display-name>
+      <icon/>
+      <property-name>requiredMessage</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <value-expression-enabled>true</value-expression-enabled>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          A ValueExpression enabled attribute that, if present, will be
+          used as the text of the converter message, replacing any message
+          that comes from the converter.
+        </description>
+      <display-name>Converter Message</display-name>
+      <icon/>
+      <property-name>converterMessage</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <value-expression-enabled>true</value-expression-enabled>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          A ValueExpression enabled attribute that, if present, will be
+          used as the text of the validator message, replacing any
+          message that comes from the validator.
+        </description>
+      <display-name>Validator Message</display-name>
+      <icon/>
+      <property-name>validatorMessage</property-name>
+      <property-class>java.lang.String</property-class>
       <property-extension>
         <value-expression-enabled>true</value-expression-enabled>
       </property-extension>
@@ -7743,6 +7995,48 @@
     </property>
     <property>
       <description>
+          A ValueExpression enabled attribute that, if present, will be
+          used as the text of the validation message for the "required"
+          facility, if the "required" facility is used.
+        </description>
+      <display-name>Required Message</display-name>
+      <icon/>
+      <property-name>requiredMessage</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <value-expression-enabled>true</value-expression-enabled>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          A ValueExpression enabled attribute that, if present, will be
+          used as the text of the converter message, replacing any message
+          that comes from the converter.
+        </description>
+      <display-name>Converter Message</display-name>
+      <icon/>
+      <property-name>converterMessage</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <value-expression-enabled>true</value-expression-enabled>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          A ValueExpression enabled attribute that, if present, will be
+          used as the text of the validator message, replacing any
+          message that comes from the validator.
+        </description>
+      <display-name>Validator Message</display-name>
+      <icon/>
+      <property-name>validatorMessage</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <value-expression-enabled>true</value-expression-enabled>
+      </property-extension>
+    </property>
+    <property>
+      <description>
           The value submitted for this input component by the user, prior to
           any required conversion or validation.
         </description>
@@ -8387,6 +8681,48 @@
       <icon/>
       <property-name>required</property-name>
       <property-class>boolean</property-class>
+      <property-extension>
+        <value-expression-enabled>true</value-expression-enabled>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          A ValueExpression enabled attribute that, if present, will be
+          used as the text of the validation message for the "required"
+          facility, if the "required" facility is used.
+        </description>
+      <display-name>Required Message</display-name>
+      <icon/>
+      <property-name>requiredMessage</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <value-expression-enabled>true</value-expression-enabled>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          A ValueExpression enabled attribute that, if present, will be
+          used as the text of the converter message, replacing any message
+          that comes from the converter.
+        </description>
+      <display-name>Converter Message</display-name>
+      <icon/>
+      <property-name>converterMessage</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <value-expression-enabled>true</value-expression-enabled>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          A ValueExpression enabled attribute that, if present, will be
+          used as the text of the validator message, replacing any
+          message that comes from the validator.
+        </description>
+      <display-name>Validator Message</display-name>
+      <icon/>
+      <property-name>validatorMessage</property-name>
+      <property-class>java.lang.String</property-class>
       <property-extension>
         <value-expression-enabled>true</value-expression-enabled>
       </property-extension>
@@ -12069,6 +12405,48 @@
     </property>
     <property>
       <description>
+          A ValueExpression enabled attribute that, if present, will be
+          used as the text of the validation message for the "required"
+          facility, if the "required" facility is used.
+        </description>
+      <display-name>Required Message</display-name>
+      <icon/>
+      <property-name>requiredMessage</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <value-expression-enabled>true</value-expression-enabled>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          A ValueExpression enabled attribute that, if present, will be
+          used as the text of the converter message, replacing any message
+          that comes from the converter.
+        </description>
+      <display-name>Converter Message</display-name>
+      <icon/>
+      <property-name>converterMessage</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <value-expression-enabled>true</value-expression-enabled>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          A ValueExpression enabled attribute that, if present, will be
+          used as the text of the validator message, replacing any
+          message that comes from the validator.
+        </description>
+      <display-name>Validator Message</display-name>
+      <icon/>
+      <property-name>validatorMessage</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <value-expression-enabled>true</value-expression-enabled>
+      </property-extension>
+    </property>
+    <property>
+      <description>
           The value submitted for this input component by the user, prior to
           any required conversion or validation.
         </description>
@@ -12687,6 +13065,48 @@
       <icon/>
       <property-name>required</property-name>
       <property-class>boolean</property-class>
+      <property-extension>
+        <value-expression-enabled>true</value-expression-enabled>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          A ValueExpression enabled attribute that, if present, will be
+          used as the text of the validation message for the "required"
+          facility, if the "required" facility is used.
+        </description>
+      <display-name>Required Message</display-name>
+      <icon/>
+      <property-name>requiredMessage</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <value-expression-enabled>true</value-expression-enabled>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          A ValueExpression enabled attribute that, if present, will be
+          used as the text of the converter message, replacing any message
+          that comes from the converter.
+        </description>
+      <display-name>Converter Message</display-name>
+      <icon/>
+      <property-name>converterMessage</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <value-expression-enabled>true</value-expression-enabled>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          A ValueExpression enabled attribute that, if present, will be
+          used as the text of the validator message, replacing any
+          message that comes from the validator.
+        </description>
+      <display-name>Validator Message</display-name>
+      <icon/>
+      <property-name>validatorMessage</property-name>
+      <property-class>java.lang.String</property-class>
       <property-extension>
         <value-expression-enabled>true</value-expression-enabled>
       </property-extension>
@@ -13365,6 +13785,48 @@
     </property>
     <property>
       <description>
+          A ValueExpression enabled attribute that, if present, will be
+          used as the text of the validation message for the "required"
+          facility, if the "required" facility is used.
+        </description>
+      <display-name>Required Message</display-name>
+      <icon/>
+      <property-name>requiredMessage</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <value-expression-enabled>true</value-expression-enabled>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          A ValueExpression enabled attribute that, if present, will be
+          used as the text of the converter message, replacing any message
+          that comes from the converter.
+        </description>
+      <display-name>Converter Message</display-name>
+      <icon/>
+      <property-name>converterMessage</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <value-expression-enabled>true</value-expression-enabled>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          A ValueExpression enabled attribute that, if present, will be
+          used as the text of the validator message, replacing any
+          message that comes from the validator.
+        </description>
+      <display-name>Validator Message</display-name>
+      <icon/>
+      <property-name>validatorMessage</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <value-expression-enabled>true</value-expression-enabled>
+      </property-extension>
+    </property>
+    <property>
+      <description>
           The value submitted for this input component by the user, prior to
           any required conversion or validation.
         </description>
@@ -14021,6 +14483,48 @@
     </property>
     <property>
       <description>
+          A ValueExpression enabled attribute that, if present, will be
+          used as the text of the validation message for the "required"
+          facility, if the "required" facility is used.
+        </description>
+      <display-name>Required Message</display-name>
+      <icon/>
+      <property-name>requiredMessage</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <value-expression-enabled>true</value-expression-enabled>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          A ValueExpression enabled attribute that, if present, will be
+          used as the text of the converter message, replacing any message
+          that comes from the converter.
+        </description>
+      <display-name>Converter Message</display-name>
+      <icon/>
+      <property-name>converterMessage</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <value-expression-enabled>true</value-expression-enabled>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          A ValueExpression enabled attribute that, if present, will be
+          used as the text of the validator message, replacing any
+          message that comes from the validator.
+        </description>
+      <display-name>Validator Message</display-name>
+      <icon/>
+      <property-name>validatorMessage</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <value-expression-enabled>true</value-expression-enabled>
+      </property-extension>
+    </property>
+    <property>
+      <description>
           The value submitted for this input component by the user, prior to
           any required conversion or validation.
         </description>
@@ -14661,6 +15165,48 @@
       <icon/>
       <property-name>required</property-name>
       <property-class>boolean</property-class>
+      <property-extension>
+        <value-expression-enabled>true</value-expression-enabled>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          A ValueExpression enabled attribute that, if present, will be
+          used as the text of the validation message for the "required"
+          facility, if the "required" facility is used.
+        </description>
+      <display-name>Required Message</display-name>
+      <icon/>
+      <property-name>requiredMessage</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <value-expression-enabled>true</value-expression-enabled>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          A ValueExpression enabled attribute that, if present, will be
+          used as the text of the converter message, replacing any message
+          that comes from the converter.
+        </description>
+      <display-name>Converter Message</display-name>
+      <icon/>
+      <property-name>converterMessage</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <value-expression-enabled>true</value-expression-enabled>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          A ValueExpression enabled attribute that, if present, will be
+          used as the text of the validator message, replacing any
+          message that comes from the validator.
+        </description>
+      <display-name>Validator Message</display-name>
+      <icon/>
+      <property-name>validatorMessage</property-name>
+      <property-class>java.lang.String</property-class>
       <property-extension>
         <value-expression-enabled>true</value-expression-enabled>
       </property-extension>
@@ -15310,6 +15856,48 @@
     </property>
     <property>
       <description>
+          A ValueExpression enabled attribute that, if present, will be
+          used as the text of the validation message for the "required"
+          facility, if the "required" facility is used.
+        </description>
+      <display-name>Required Message</display-name>
+      <icon/>
+      <property-name>requiredMessage</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <value-expression-enabled>true</value-expression-enabled>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          A ValueExpression enabled attribute that, if present, will be
+          used as the text of the converter message, replacing any message
+          that comes from the converter.
+        </description>
+      <display-name>Converter Message</display-name>
+      <icon/>
+      <property-name>converterMessage</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <value-expression-enabled>true</value-expression-enabled>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          A ValueExpression enabled attribute that, if present, will be
+          used as the text of the validator message, replacing any
+          message that comes from the validator.
+        </description>
+      <display-name>Validator Message</display-name>
+      <icon/>
+      <property-name>validatorMessage</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <value-expression-enabled>true</value-expression-enabled>
+      </property-extension>
+    </property>
+    <property>
+      <description>
           The value submitted for this input component by the user, prior to
           any required conversion or validation.
         </description>
@@ -15937,6 +16525,48 @@
       <icon/>
       <property-name>required</property-name>
       <property-class>boolean</property-class>
+      <property-extension>
+        <value-expression-enabled>true</value-expression-enabled>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          A ValueExpression enabled attribute that, if present, will be
+          used as the text of the validation message for the "required"
+          facility, if the "required" facility is used.
+        </description>
+      <display-name>Required Message</display-name>
+      <icon/>
+      <property-name>requiredMessage</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <value-expression-enabled>true</value-expression-enabled>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          A ValueExpression enabled attribute that, if present, will be
+          used as the text of the converter message, replacing any message
+          that comes from the converter.
+        </description>
+      <display-name>Converter Message</display-name>
+      <icon/>
+      <property-name>converterMessage</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <value-expression-enabled>true</value-expression-enabled>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          A ValueExpression enabled attribute that, if present, will be
+          used as the text of the validator message, replacing any
+          message that comes from the validator.
+        </description>
+      <display-name>Validator Message</display-name>
+      <icon/>
+      <property-name>validatorMessage</property-name>
+      <property-class>java.lang.String</property-class>
       <property-extension>
         <value-expression-enabled>true</value-expression-enabled>
       </property-extension>

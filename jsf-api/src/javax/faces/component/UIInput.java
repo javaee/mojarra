@@ -1,5 +1,5 @@
 /*
- * $Id: UIInput.java,v 1.80 2005/07/22 19:39:15 rogerk Exp $
+ * $Id: UIInput.java,v 1.81 2005/07/26 14:09:28 edburns Exp $
  */
 
 /*
@@ -99,8 +99,8 @@ public class UIInput extends UIOutput implements EditableValueHolder {
     /**
      * <p>The message identifier of the
      * {@link javax.faces.application.FacesMessage} to be created if
-     * a conversion error occurs, and the {@link ConverterException}
-     * does not provide a message.</p>
+     * a conversion error occurs, and neither the page author nor 
+     * the {@link ConverterException} provides a message.</p>
      */
     public static final String CONVERSION_MESSAGE_ID =
         "javax.faces.component.UIInput.CONVERSION";
@@ -240,8 +240,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
      */
     private boolean required = false;
     private boolean requiredSet = false;
-
-
+    
     /**
      * <p>Return the "required field" state for this component.</p>
      */
@@ -263,7 +262,139 @@ public class UIInput extends UIOutput implements EditableValueHolder {
 	}
 
     }
+        
+    private String requiredMessage = null;
+    private boolean requiredMessageSet = false;
+    
+    /**
+     * <p>If there has been a call to {@link #setRequiredMessage} on this
+     * instance, return the message.  Otherwise, call {@link #getValueExpression}
+     * passing the key "requiredMessage", get the result of the expression, and return it.
+     * Any {@link ELException}s thrown during the call to <code>getValue()</code>
+     * must be wrapped in a {@link FacesException} and rethrown.
+     */
+    
+    public String getRequiredMessage() {
+        if (requiredMessageSet) {
+            return requiredMessage;
+        }
+        
+	ValueExpression ve = getValueExpression("requiredMessage");
+	if (ve != null) {
+	    try {
+		return ((String) ve.getValue(getFacesContext().getELContext()));
+	    }
+	    catch (ELException e) {
+		throw new FacesException(e);
+	    }
+	} else {
+	    return (this.requiredMessage);
+	}
+        
+    }
+    
+    /**
+     * <p>Override any {@link ValueExpression} set for the "requiredMessage" 
+     * with the literal argument provided to this method.  Subsequent calls
+     * to {@link #getRequiredMessage} will return this value;</p>
+     *
+     * @param message the literal message value to be displayed in the event
+     * the user hasn't supplied a value and one is required.
+     */
 
+    public void setRequiredMessage(String message) {
+        requiredMessageSet = true;
+        requiredMessage = message;
+    }
+
+    private String converterMessage = null;
+    private boolean converterMessageSet = false;
+    
+    /**
+     * <p>If there has been a call to {@link #setConverterMessage} on this
+     * instance, return the message.  Otherwise, call {@link #getValueExpression}
+     * passing the key "converterMessage", get the result of the expression, and return it.
+     * Any {@link ELException}s thrown during the call to <code>getValue()</code>
+     * must be wrapped in a {@link FacesException} and rethrown.
+     */
+    
+    public String getConverterMessage() {
+        if (converterMessageSet) {
+            return converterMessage;
+        }
+        
+	ValueExpression ve = getValueExpression("converterMessage");
+	if (ve != null) {
+	    try {
+		return ((String) ve.getValue(getFacesContext().getELContext()));
+	    }
+	    catch (ELException e) {
+		throw new FacesException(e);
+	    }
+	} else {
+	    return (this.converterMessage);
+	}
+        
+    }
+
+    /**
+     * <p>Override any {@link ValueExpression} set for the "converterMessage" 
+     * with the literal argument provided to this method.  Subsequent calls
+     * to {@link #getConverterMessage} will return this value;</p>
+     *
+     * @param message the literal message value to be displayed in the event
+     * conversion fails.
+     */
+
+    public void setConverterMessage(String message) {
+        converterMessageSet = true;
+        converterMessage = message;
+    }
+    
+    private String validatorMessage = null;
+    private boolean validatorMessageSet = false;
+    
+    /**
+     * <p>If there has been a call to {@link #setRequiredMessage} on this
+     * instance, return the message.  Otherwise, call {@link #getValueExpression}
+     * passing the key "requiredMessage", get the result of the expression, and return it.
+     * Any {@link ELException}s thrown during the call to <code>getValue()</code>
+     * must be wrapped in a {@link FacesException} and rethrown.
+     */
+    
+    public String getValidatorMessage() {
+        if (validatorMessageSet) {
+            return validatorMessage;
+        }
+        
+	ValueExpression ve = getValueExpression("validatorMessage");
+	if (ve != null) {
+	    try {
+		return ((String) ve.getValue(getFacesContext().getELContext()));
+	    }
+	    catch (ELException e) {
+		throw new FacesException(e);
+	    }
+	} else {
+	    return (this.validatorMessage);
+	}
+        
+    }
+
+    /**
+     * <p>Override any {@link ValueExpression} set for the "validatorMessage" 
+     * with the literal argument provided to this method.  Subsequent calls
+     * to {@link #getValidatorMessage} will return this value;</p>
+     *
+     * @param message the literal message value to be displayed in the event
+     * validation fails.
+     */
+
+    public void setValidatorMessage(String message) {
+        validatorMessageSet = true;
+        validatorMessage = message;
+    }
+    
     private boolean valid = true;
 
 
@@ -292,8 +423,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
 	this.requiredSet = true;
 
     }
-
-
+    
     /**
      * <p>The immediate flag.</p>
      */
@@ -823,7 +953,12 @@ public class UIInput extends UIOutput implements EditableValueHolder {
      *     <ul>
      *     <li>Enqueue an appropriate error message by calling the
      *         <code>addMessage()</code> method on the <code>FacesContext</code>
-     *         instance for the current request.</li>
+     *         instance for the current request.  If the {@link #getRequiredMessage}
+     *         returns non-<code>null</code>, use the value as the <code>summary</code>
+     *         and <code>detail</code> in the {@link FacesMessage} that
+     *         is enqueued on the <code>FacesContext</code>, otherwise
+     *         use the message for the {@link #REQUIRED_MESSAGE_ID}.
+     *         </li>
      *     <li>Set the <code>valid</code> property on this component to
      *         <code>false</code>.</li>
      *     </ul></li>
@@ -844,10 +979,17 @@ public class UIInput extends UIOutput implements EditableValueHolder {
     protected void validateValue(FacesContext context, Object newValue) {
 	// If our value is valid, enforce the required property if present
 	if (isValid() && isRequired() && isEmpty(newValue)) {
-	    FacesMessage message =
+            String requiredMessageStr = getRequiredMessage();
+	    FacesMessage message = null;
+            if (null != requiredMessageStr) {
+                message = new FacesMessage(requiredMessageStr, requiredMessageStr);
+            }
+            else {
+                message = 
 		MessageFactory.getMessage(context, REQUIRED_MESSAGE_ID,
                     new Object[] {MessageFactory.getLabel(
                         context, this)});
+            }
             message.setSeverity(FacesMessage.SEVERITY_ERROR);
 	    context.addMessage(getClientId(context), message);
 	    setValid(false);
@@ -866,7 +1008,16 @@ public class UIInput extends UIOutput implements EditableValueHolder {
                         // If the validator throws an exception, we're
                         // invalid, and we need to add a message
                         setValid(false);
-                        FacesMessage message = ve.getFacesMessage();
+                        FacesMessage message = null;
+                        String validatorMessageString = getValidatorMessage();
+                        
+                        if (null != validatorMessageString) {
+                            message = new FacesMessage(validatorMessageString, 
+                                    validatorMessageString);
+                        }
+                        else {
+                            message = ve.getFacesMessage();
+                        }
                         if (message != null) {
 			    message.setSeverity(FacesMessage.SEVERITY_ERROR);
                             context.addMessage(getClientId(context), message);
@@ -1053,15 +1204,21 @@ public class UIInput extends UIOutput implements EditableValueHolder {
 
     public Object saveState(FacesContext context) {
 
-        Object values[] = new Object[8];
+        Object values[] = new Object[14];
         values[0] = super.saveState(context);
         values[1] = localValueSet ? Boolean.TRUE : Boolean.FALSE;
         values[2] = required ? Boolean.TRUE : Boolean.FALSE;
 	values[3] = requiredSet ? Boolean.TRUE : Boolean.FALSE;
-        values[4] = this.valid ? Boolean.TRUE : Boolean.FALSE;
-        values[5] = immediate ? Boolean.TRUE : Boolean.FALSE;
-        values[6] = immediateSet ? Boolean.TRUE : Boolean.FALSE;
-        values[7] = saveAttachedState(context, validators);
+        values[4] = requiredMessage;
+	values[5] = requiredMessageSet ? Boolean.TRUE : Boolean.FALSE;
+        values[6] = converterMessage;
+	values[7] = converterMessageSet ? Boolean.TRUE : Boolean.FALSE;
+        values[8] = validatorMessage;
+	values[9] = validatorMessageSet ? Boolean.TRUE : Boolean.FALSE;
+        values[10] = this.valid ? Boolean.TRUE : Boolean.FALSE;
+        values[11] = immediate ? Boolean.TRUE : Boolean.FALSE;
+        values[12] = immediateSet ? Boolean.TRUE : Boolean.FALSE;
+        values[13] = saveAttachedState(context, validators);
         return (values);
 
     }
@@ -1074,14 +1231,20 @@ public class UIInput extends UIOutput implements EditableValueHolder {
         localValueSet = ((Boolean) values[1]).booleanValue();
         required = ((Boolean) values[2]).booleanValue();
         requiredSet = ((Boolean) values[3]).booleanValue();
-        valid = ((Boolean) values[4]).booleanValue();
-        immediate = ((Boolean) values[5]).booleanValue();
-        immediateSet = ((Boolean) values[6]).booleanValue();
+        requiredMessage = ((String)values[4]);
+        requiredMessageSet = ((Boolean)values[5]).booleanValue();
+        converterMessage = ((String)values[6]);
+        converterMessageSet = ((Boolean)values[7]).booleanValue();
+        validatorMessage = ((String)values[8]);
+        validatorMessageSet = ((Boolean)values[9]).booleanValue();
+        valid = ((Boolean) values[10]).booleanValue();
+        immediate = ((Boolean) values[11]).booleanValue();
+        immediateSet = ((Boolean) values[12]).booleanValue();
 	List restoredValidators = null;
 	Iterator iter = null;
 
 	if (null != (restoredValidators = (List) 
-		     restoreAttachedState(context, values[7]))) {
+		     restoreAttachedState(context, values[13]))) {
 	    // if there were some validators registered prior to this
 	    // method being invoked, merge them with the list to be
 	    // restored.
@@ -1137,15 +1300,22 @@ public class UIInput extends UIOutput implements EditableValueHolder {
 
     private void addConversionErrorMessage(FacesContext context, 
             ConverterException ce, Object value) {
-        FacesMessage message = ce.getFacesMessage();
-        if (message == null) {
-            message = MessageFactory.getMessage(context,
-                                                CONVERSION_MESSAGE_ID);
-            if (message.getDetail() == null) {
-                message.setDetail(ce.getMessage());
+        FacesMessage message = null;
+        String converterMessageString = getConverterMessage();
+        if (null != converterMessageString) {
+            message = new FacesMessage(converterMessageString, converterMessageString);
+        }
+        else {
+            message = ce.getFacesMessage();
+            if (message == null) {
+                message = MessageFactory.getMessage(context,
+                        CONVERSION_MESSAGE_ID);
+                if (message.getDetail() == null) {
+                    message.setDetail(ce.getMessage());
+                }
             }
         }
-
+        
         message.setSeverity(FacesMessage.SEVERITY_ERROR);
         context.addMessage(getClientId(context), message);
     }

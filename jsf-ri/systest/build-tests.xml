@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 
 <!--
- $Id: build-tests.xml,v 1.83 2005/07/25 18:40:26 edburns Exp $
+ $Id: build-tests.xml,v 1.84 2005/07/26 14:09:29 edburns Exp $
 -->
 
 <!--
@@ -234,7 +234,7 @@
 -->
       <batchtest todir="${test.results.dir}">
         <fileset    dir="${basedir}/build/WEB-INF/classes"
-               includes="com/sun/faces/jsptest/SetPropertyTestCase.class,com/sun/faces/jsptest/JspIntegrationTestCase.class"/>          
+               includes="com/sun/faces/jsptest/SetPropertyTestCase.class,com/sun/faces/jsptest/JspIntegrationTestCase.class,com/sun/faces/jsptest/ValidatorTestCase.class"/>
       </batchtest> 
 
     </junit>

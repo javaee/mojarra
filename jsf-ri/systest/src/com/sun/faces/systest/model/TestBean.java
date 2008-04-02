@@ -1,5 +1,5 @@
 /*
- * $Id: TestBean.java,v 1.15 2005/07/25 18:40:27 edburns Exp $
+ * $Id: TestBean.java,v 1.16 2005/07/26 14:09:30 edburns Exp $
  */
 
 /*
@@ -435,6 +435,34 @@ public class TestBean {
     public String getCounter() {
         counter = Integer.valueOf(counterInt++).toString();
         return counter;
+    }
+
+    /**
+     * Holds value of property validatorMessage.
+     */
+    private String validatorMessage = "Validator Message Expression";
+
+    /**
+     * Getter for property validatorMessage.
+     * @return Value of property validatorMessage.
+     */
+    public String getValidatorMessage() {
+
+        return this.validatorMessage;
+    }
+
+    /**
+     * Holds value of property converterMessage.
+     */
+    private String converterMessage = "Converter Message Expression";
+
+    /**
+     * Getter for property converterMessage.
+     * @return Value of property converterMessage.
+     */
+    public String getConverterMessage() {
+
+        return this.converterMessage;
     }
 
 	

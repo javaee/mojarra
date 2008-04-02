@@ -1,5 +1,5 @@
 /*
- * $Id: ValidatorTestCase.java,v 1.5 2005/05/16 20:16:35 rlubke Exp $
+ * $Id: ValidatorTestCase.java,v 1.6 2005/07/26 14:09:30 edburns Exp $
  */
 
 /*
@@ -104,6 +104,24 @@ public class ValidatorTestCase extends AbstractTestCase {
         assertTrue(-1 != page.asText().indexOf("Length2: Validation Error: Value is less than allowable minimum of '2'"));
         assertTrue(-1 != page.asText().indexOf("_id_id17:lr1: Validation Error: Specified attribute is not between the expected values of 2 and 5."));
         assertTrue(-1 != page.asText().indexOf("LongRange2: Validation Error: Specified attribute is not between the expected values of 2 and 5."));
+    }
+    
+    public void testRequiredValidatorMessage() throws Exception {
+        HtmlPage page = getPage("/faces/validator04.jsp");
+        List list;
+        list = getAllElementsOfGivenClass(page, null, HtmlTextInput.class);
+        ((HtmlTextInput)list.get(2)).setValueAttribute("a");
+        ((HtmlTextInput)list.get(3)).setValueAttribute("a");
+        ((HtmlTextInput)list.get(4)).setValueAttribute("20");
+        ((HtmlTextInput)list.get(5)).setValueAttribute("20");
+        list = getAllElementsOfGivenClass(page, null, HtmlSubmitInput.class);
+        page = (HtmlPage) ((HtmlSubmitInput)list.get(0)).click();
+        assertTrue(-1 != page.asText().indexOf("Literal Message"));
+        assertTrue(-1 != page.asText().indexOf("New String Value"));
+        assertTrue(-1 != page.asText().indexOf("Converter Literal"));
+        assertTrue(-1 != page.asText().indexOf("Converter Message Expression"));
+        assertTrue(-1 != page.asText().indexOf("Validator Literal"));
+        assertTrue(-1 != page.asText().indexOf("Validator Message Expression"));
     }
 
 }
