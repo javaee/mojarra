@@ -210,7 +210,7 @@
      description="Compile Java files for components, not webapp." >
       <touch file="${build}/last-build"/>
 
-    <javac debug="on" srcdir="src/java" destdir="${build}/classes/components"
+    <javac debug="true" srcdir="src/java" destdir="${build}/classes/components"
            fork="true">
 	
         <include name="components/**" />
@@ -220,7 +220,7 @@
     <copy todir="${build}/classes/components/META-INF" 
             file="src/java/components/taglib/components.tld"/>
 
-    <javac debug="on" srcdir="src/java" fork="true" destdir="${build}/${webapp}/WEB-INF/classes">
+    <javac debug="true" srcdir="src/java" fork="true" destdir="${build}/${webapp}/WEB-INF/classes">
          <include name="demo/**" />
          <classpath refid="classpath"/>
     </javac>
