@@ -244,7 +244,7 @@
     <!-- copy over the application configuration resource -->
     <mkdir  dir="${build}/classes/components/META-INF"/>
     <copy todir="${build}/classes/components/META-INF"
-           file="conf/faces-config.xml"/>
+           file="src/conf/faces-config.xml"/>
 
     <!-- copy the java source to the webapp for viewing by the user -->
     <copy todir="${build}/${webapp}/src/java/components">
@@ -256,7 +256,14 @@
     <copy todir="${build}/${webapp}/WEB-INF" file="web/WEB-INF/tlds/demo.tld"/>
 
     <copy todir="${build}/${webapp}">
-      <fileset dir="web"/> 
+      <fileset dir="web">
+        <include name="**/*.html" />
+        <include name="**/*.gif" />
+        <include name="**/*.jpg" />
+        <include name="**/*.jsp" />
+        <include name="**/*.css" />
+        <include name="**/*.xml" />
+      </fileset>
     </copy>
         
     <jar jarfile="${build}/${webapp}/WEB-INF/lib/demo-components.jar" 

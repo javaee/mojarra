@@ -309,10 +309,10 @@
     <copy todir="${dist.home}/samples/components" includeEmptyDirs="false">
       <fileset dir="${basedir}/components" 
                      excludes="build.xml,wspack-build.xml,
-                     src/components/components/CalendarComponent.java,
-                     src/components/taglib/CalendarTag.java,
-                     src/components/renderkit/CalendarRenderer.java,
-                     src/demo/model/CalendarBean.java,
+                     src/java/components/components/CalendarComponent.java,
+                     src/java/components/taglib/CalendarTag.java,
+                     src/java/components/renderkit/CalendarRenderer.java,
+                     src/java/demo/model/CalendarBean.java,
                      web/calendar.jsp,
                      web/images/calendar.css,
                      web/images/calendar.gif,
