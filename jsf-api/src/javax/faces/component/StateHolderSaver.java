@@ -1,5 +1,5 @@
 /*
- * $Id: StateHolderSaver.java,v 1.13 2006/06/06 19:59:47 rlubke Exp $
+ * $Id: StateHolderSaver.java,v 1.14 2007/01/29 07:56:03 rlubke Exp $
  */
 
 /*
@@ -67,7 +67,7 @@ class StateHolderSaver extends Object implements Serializable {
 
     public Object restore(FacesContext context) throws IllegalStateException {
         Object result = null;
-        Class toRestoreClass = null;
+        Class toRestoreClass;
 
 	// if the Object to save implemented Serializable but not
 	// StateHolder

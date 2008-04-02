@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.148 2006/10/03 23:32:07 rlubke Exp $
+ * $Id: UIComponent.java,v 1.149 2007/01/29 07:56:11 rlubke Exp $
  */
 
 /*
@@ -183,6 +183,7 @@ public abstract class UIComponent implements StateHolder {
                 if (null != binding) {
                     result = new ValueExpressionValueBindingAdapter(binding);
                     // Cache this for future reference.
+                    //noinspection CollectionWithoutInitialCapacity
                     bindings = new HashMap<String, ValueExpression>();
                     bindings.put(name, result);
                 }
@@ -239,6 +240,7 @@ public abstract class UIComponent implements StateHolder {
         if (binding != null) {
             if (!binding.isLiteralText()) {
                 if (bindings == null) {
+                    //noinspection CollectionWithoutInitialCapacity
                     bindings = new HashMap<String, ValueExpression>();
                 }
                 bindings.put(name, binding);
@@ -254,7 +256,7 @@ public abstract class UIComponent implements StateHolder {
         } else {
             if (bindings != null) {
                 bindings.remove(name);
-                if (bindings.size() == 0) {
+                if (bindings.isEmpty()) {
                     bindings = null;
                 }
             }

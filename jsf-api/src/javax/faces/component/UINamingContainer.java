@@ -1,5 +1,5 @@
 /*
- * $Id: UINamingContainer.java,v 1.17 2005/08/22 22:07:56 ofung Exp $
+ * $Id: UINamingContainer.java,v 1.18 2007/01/29 07:56:06 rlubke Exp $
  */
 
 /*
@@ -29,8 +29,6 @@
 
 package javax.faces.component;
 
-
-import javax.faces.context.FacesContext;
 
 
 /**

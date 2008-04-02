@@ -1,5 +1,5 @@
 /*
- * $Id: UIInput.java,v 1.89 2006/12/17 07:19:11 rlubke Exp $
+ * $Id: UIInput.java,v 1.90 2007/01/29 07:56:04 rlubke Exp $
  */
 
 /*
@@ -134,6 +134,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
      */
     public static final String UPDATE_MESSAGE_ID =
          "javax.faces.component.UIInput.UPDATE";
+    private static final Validator[] EMPTY_VALIDATOR = new Validator[0];
 
     // ------------------------------------------------------------ Constructors
 
@@ -537,7 +538,8 @@ public class UIInput extends UIOutput implements EditableValueHolder {
                     }
                 }
                 // if we want to replace the validatorBinding
-                else if (validatorBinding == curValidators[i]) {
+                else //noinspection ObjectEquality
+                    if (validatorBinding == curValidators[i]) {
                     removeValidator(curValidators[i]);
                     break;
                 }
@@ -594,7 +596,8 @@ public class UIInput extends UIOutput implements EditableValueHolder {
                     }
                 }
                 // if we want to replace the valueChangeListener
-                else if (valueChangeListener == curListeners[i]) {
+                else //noinspection ObjectEquality
+                    if (valueChangeListener == curListeners[i]) {
                     removeFacesListener(curListeners[i]);
                     break;
                 }
@@ -771,12 +774,12 @@ public class UIInput extends UIOutput implements EditableValueHolder {
                     messageStr = result.getMessage();
                     result = result.getCause();
                 }
-                FacesMessage message = null;
+                FacesMessage message;
                 if (null == messageStr) {
                     message =
                          MessageFactory.getMessage(context, UPDATE_MESSAGE_ID,
-                              new Object[]{MessageFactory.getLabel(
-                                   context, this)});
+                              MessageFactory.getLabel(
+                                   context, this));
                 } else {
                     message = new FacesMessage(FacesMessage.SEVERITY_ERROR,
                                                messageStr,
@@ -787,15 +790,15 @@ public class UIInput extends UIOutput implements EditableValueHolder {
             } catch (IllegalArgumentException e) {
                 FacesMessage message =
                      MessageFactory.getMessage(context, UPDATE_MESSAGE_ID,
-                          new Object[]{MessageFactory.getLabel(
-                               context, this)});
+                          MessageFactory.getLabel(
+                               context, this));
                 context.addMessage(getClientId(context), message);
                 setValid(false);
             } catch (Exception e) {
                 FacesMessage message =
                      MessageFactory.getMessage(context, UPDATE_MESSAGE_ID,
-                          new Object[]{MessageFactory.getLabel(
-                               context, this)});
+                          MessageFactory.getLabel(
+                               context, this));
                 context.addMessage(getClientId(context), message);
                 setValid(false);
             }
@@ -925,7 +928,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
     protected Object getConvertedValue(FacesContext context,
                                        Object newSubmittedValue) throws ConverterException {
         Renderer renderer = getRenderer(context);
-        Object newValue = null;
+        Object newValue;
 
         if (renderer != null) {
             newValue = renderer.getConvertedValue(context, this,
@@ -985,7 +988,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
         // If our value is valid, enforce the required property if present
         if (isValid() && isRequired() && isEmpty(newValue)) {
             String requiredMessageStr = getRequiredMessage();
-            FacesMessage message = null;
+            FacesMessage message;
             if (null != requiredMessageStr) {
                 message = new FacesMessage(FacesMessage.SEVERITY_ERROR,
                                            requiredMessageStr,
@@ -993,8 +996,8 @@ public class UIInput extends UIOutput implements EditableValueHolder {
             } else {
                 message =
                      MessageFactory.getMessage(context, REQUIRED_MESSAGE_ID,
-                          new Object[]{MessageFactory.getLabel(
-                               context, this)});
+                          MessageFactory.getLabel(
+                               context, this));
             }
             context.addMessage(getClientId(context), message);
             setValid(false);
@@ -1013,7 +1016,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
                         // If the validator throws an exception, we're
                         // invalid, and we need to add a message
                         setValid(false);
-                        FacesMessage message = null;
+                        FacesMessage message;
                         String validatorMessageString = getValidatorMessage();
 
                         if (null != validatorMessageString) {
@@ -1070,7 +1073,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
         }
     }
 
-    private boolean isEmpty(Object value) {
+    private static boolean isEmpty(Object value) {
 
         if (value == null) {
             return (true);
@@ -1082,7 +1085,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
                 return (true);
             }
         } else if (value instanceof List) {
-            if (0 == ((List) value).size()) {
+            if (((List) value).isEmpty()) {
                 return (true);
             }
         }
@@ -1111,6 +1114,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
             throw new NullPointerException();
         }
         if (validators == null) {
+            //noinspection CollectionWithoutInitialCapacity
             validators = new ArrayList<Validator>();
         }
         validators.add(validator);
@@ -1126,10 +1130,9 @@ public class UIInput extends UIOutput implements EditableValueHolder {
     public Validator[] getValidators() {
 
         if (validators == null) {
-            return (new Validator[0]);
+            return EMPTY_VALIDATOR;
         } else {
-            return ((Validator[]) validators.toArray
-                 (new Validator[validators.size()]));
+            return (validators.toArray(new Validator[validators.size()]));
         }
 
     }
@@ -1240,8 +1243,8 @@ public class UIInput extends UIOutput implements EditableValueHolder {
         valid = ((Boolean) values[10]).booleanValue();
         immediate = ((Boolean) values[11]).booleanValue();
         immediateSet = ((Boolean) values[12]).booleanValue();
-        List<Validator> restoredValidators = null;
-        Iterator<Validator> iter = null;
+        List<Validator> restoredValidators;
+        Iterator<Validator> iter;
 
         if (null != (restoredValidators = TypedCollections.dynamicallyCastList((List)
              restoreAttachedState(context, values[13]), Validator.class))) {
@@ -1271,7 +1274,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
             return null;
         }
 
-        Class converterType = null;
+        Class converterType;
         try {
             converterType = valueExpression.getType(context.getELContext());
         }
@@ -1299,7 +1302,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
 
     private void addConversionErrorMessage(FacesContext context,
                                            ConverterException ce, Object value) {
-        FacesMessage message = null;
+        FacesMessage message;
         String converterMessageString = getConverterMessage();
         if (null != converterMessageString) {
             message = new FacesMessage(FacesMessage.SEVERITY_ERROR,

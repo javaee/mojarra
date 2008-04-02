@@ -1,5 +1,5 @@
 /*
- * $Id: ActionSource2.java,v 1.2 2005/08/22 22:07:53 ofung Exp $
+ * $Id: ActionSource2.java,v 1.3 2007/01/29 07:56:10 rlubke Exp $
  */
 
 /*
@@ -30,8 +30,6 @@
 package javax.faces.component;
 
 import javax.el.MethodExpression;
-import javax.faces.context.FacesContext;
-import javax.faces.event.ActionEvent;
 import javax.faces.event.ActionListener;
 
 

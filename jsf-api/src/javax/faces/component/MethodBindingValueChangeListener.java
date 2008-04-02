@@ -1,5 +1,5 @@
 /*
- * $Id: MethodBindingValueChangeListener.java,v 1.4 2006/06/06 19:59:47 rlubke Exp $
+ * $Id: MethodBindingValueChangeListener.java,v 1.5 2007/01/29 07:56:03 rlubke Exp $
  */
 
 /*
@@ -136,7 +136,7 @@ class MethodBindingValueChangeListener extends MethodBindingAdapterBase implemen
 	    String className = stateStruct[1].toString();
 	    MethodBinding result = null;
 	    
-	    Class toRestoreClass = null;
+	    Class toRestoreClass;
 	    if (null != className) {
 		try {
 		    toRestoreClass = loadClass(className, this);

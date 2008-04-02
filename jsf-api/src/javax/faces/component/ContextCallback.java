@@ -2,7 +2,7 @@
  * ComponentCallback.java
  *
  * Created on February 9, 2006, 12:58 PM
- * $Id: ContextCallback.java,v 1.2 2006/02/13 16:30:34 edburns Exp $
+ * $Id: ContextCallback.java,v 1.3 2007/01/29 07:56:07 rlubke Exp $
  */
 
 /*
@@ -32,7 +32,6 @@
 
 package javax.faces.component;
 
-import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
 
 /**

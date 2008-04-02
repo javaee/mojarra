@@ -1,5 +1,5 @@
 /*
- * $Id: MethodBindingValidator.java,v 1.3 2006/06/06 19:59:47 rlubke Exp $
+ * $Id: MethodBindingValidator.java,v 1.4 2007/01/29 07:56:08 rlubke Exp $
  */
 
 /*
@@ -34,11 +34,6 @@ import javax.faces.validator.ValidatorException;
 
 import javax.faces.el.MethodBinding;
 import javax.faces.el.EvaluationException;
-import javax.faces.el.MethodNotFoundException;
-import javax.faces.context.FacesContext;
-import javax.faces.component.UIComponent;
-import javax.faces.application.FacesMessage;
-
 import javax.faces.context.FacesContext;
 
 /**
@@ -142,7 +137,7 @@ class MethodBindingValidator extends MethodBindingAdapterBase implements Validat
 	    String className = stateStruct[1].toString();
 	    MethodBinding result = null;
 	    
-	    Class toRestoreClass = null;
+	    Class toRestoreClass;
 	    if (null != className) {
 		try {
 		    toRestoreClass = loadClass(className, this);

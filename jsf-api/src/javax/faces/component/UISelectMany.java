@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectMany.java,v 1.60 2006/12/17 07:19:11 rlubke Exp $
+ * $Id: UISelectMany.java,v 1.61 2007/01/29 07:56:08 rlubke Exp $
  */
 
 /*
@@ -302,13 +302,13 @@ public class UISelectMany extends UIInput {
             return (true);
         } else if ((previous != null) && (value == null)) {
             return (true);
-        } else if ((previous == null) && (value == null)) {
+        } else if ((previous == null)) {
             return (false);
         }
 
         boolean valueChanged = false;
-        Object oldarray[] = null;
-        Object newarray[] = null;
+        Object oldarray[];
+        Object newarray[];
 
         // The arrays may be arrays of primitives;  for simplicity,
         // perform the boxing here.
@@ -341,8 +341,8 @@ public class UISelectMany extends UIInput {
         // to find out the values changed are not. Since we cannot assume
         // the browser will send the elements in the same order everytime,
         // it will not suffice to just compare the element position and position.
-        int count1 = 0;
-        int count2= 0;
+        int count1;
+        int count2;
         for ( int i= 0; i < oldarray.length; ++i ) {
             count1 = countElementOccurrence(oldarray[i], oldarray);
             count2 = countElementOccurrence(oldarray[i], newarray);
@@ -363,7 +363,7 @@ public class UISelectMany extends UIInput {
      * @param element object whose occurrance is to be counted in the array.
      * @param array object representing the old value of this component.
      */
-    private int countElementOccurrence(Object element, Object[] array) {
+    private static int countElementOccurrence(Object element, Object[] array) {
 
         int count = 0;
         for ( int i= 0; i < array.length; ++i ) {
@@ -385,7 +385,7 @@ public class UISelectMany extends UIInput {
      * @return an Object array, or null if the incoming value is not
      * in fact an array at all.
      */
-    private Object[] toObjectArray(Object primitiveArray) {
+    private static Object[] toObjectArray(Object primitiveArray) {
         if (primitiveArray == null) {
             throw new NullPointerException();
         }
@@ -461,7 +461,7 @@ public class UISelectMany extends UIInput {
         if (!found) {
             FacesMessage message =
                 MessageFactory.getMessage(context, INVALID_MESSAGE_ID,
-                    new Object[] {MessageFactory.getLabel(context, this)});            
+                     MessageFactory.getLabel(context, this));
             context.addMessage(getClientId(context), message);
             setValid(false);
         }
@@ -494,7 +494,7 @@ public class UISelectMany extends UIInput {
             } else {
                 //Coerce the item value type before comparing values.
                 Class type = value.getClass();
-                Object newValue = null;
+                Object newValue;
                 try {
                 newValue = getFacesContext().getApplication().
                     getExpressionFactory().coerceToType(item.getValue(), type);

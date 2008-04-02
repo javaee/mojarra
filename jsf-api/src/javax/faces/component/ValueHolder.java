@@ -1,5 +1,5 @@
 /*
- * $Id: ValueHolder.java,v 1.18 2005/08/22 22:07:59 ofung Exp $
+ * $Id: ValueHolder.java,v 1.19 2007/01/29 07:56:02 rlubke Exp $
  */
 
 /*
@@ -30,7 +30,6 @@
 package javax.faces.component;
 
 
-import javax.faces.application.Application;
 import javax.faces.convert.Converter;
 import javax.el.ValueExpression;
 

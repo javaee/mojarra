@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectOne.java,v 1.53 2006/12/17 07:19:11 rlubke Exp $
+ * $Id: UISelectOne.java,v 1.54 2007/01/29 07:56:08 rlubke Exp $
  */
 
 /*
@@ -140,7 +140,7 @@ public class UISelectOne extends UIInput {
         if (!found) {
             FacesMessage message =
                 MessageFactory.getMessage(context, INVALID_MESSAGE_ID,
-                    new Object[] {MessageFactory.getLabel(context, this)});            
+                     MessageFactory.getLabel(context, this));
             context.addMessage(getClientId(context), message);
             setValid(false);
         }
@@ -173,7 +173,7 @@ public class UISelectOne extends UIInput {
             } else {
                 //Coerce the item value type before comparing values.
                 Class type = value.getClass();
-                Object newValue = null;
+                Object newValue;
                 try {
                     newValue = getFacesContext().getApplication().
                         getExpressionFactory().coerceToType(item.getValue(), type);

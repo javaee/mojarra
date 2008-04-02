@@ -1,5 +1,5 @@
 /*
- * $Id: SelectItemsIterator.java,v 1.15 2006/09/01 01:22:16 tony_robertson Exp $
+ * $Id: SelectItemsIterator.java,v 1.16 2007/01/29 07:56:05 rlubke Exp $
  */
 
 /*
@@ -143,7 +143,7 @@ final class SelectItemsIterator implements Iterator<SelectItem> {
                 items = TypedCollections.dynamicallyCastList((List) value, SelectItem.class).iterator();
                 return (next());
             } else if (value instanceof Map) {
-                List<SelectItem> list = new ArrayList<SelectItem>();
+                List<SelectItem> list = new ArrayList<SelectItem>(((Map) value).size());
                 for (Iterator keys = ((Map) value).keySet().iterator();
                     keys.hasNext(); ) {
 

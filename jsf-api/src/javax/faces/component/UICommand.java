@@ -1,5 +1,5 @@
 /*
- * $Id: UICommand.java,v 1.76 2006/06/05 21:14:25 rlubke Exp $
+ * $Id: UICommand.java,v 1.77 2007/01/29 07:56:12 rlubke Exp $
  */
 
 /*
@@ -130,12 +130,12 @@ public class UICommand extends UIComponentBase
      */
     public MethodBinding getAction() {
 	MethodBinding result = null;
-	MethodExpression me = null;
+	MethodExpression me;
 
 	if (null != (me = getActionExpression())) {
 	    // if the MethodExpression is an instance of our private
 	    // wrapper class.
-	    if (me.getClass() == MethodExpressionMethodBindingAdapter.class) {
+	    if (me.getClass().equals(MethodExpressionMethodBindingAdapter.class)) {
 		result = ((MethodExpressionMethodBindingAdapter)me).getWrapped();
 	    }
 	    else {
@@ -153,7 +153,7 @@ public class UICommand extends UIComponentBase
      * @deprecated This has been replaced by {@link #setActionExpression(javax.el.MethodExpression)}.
      */
     public void setAction(MethodBinding action) {
-	MethodExpressionMethodBindingAdapter adapter = null;
+	MethodExpressionMethodBindingAdapter adapter;
 	if (null != action) {
 	    adapter = new MethodExpressionMethodBindingAdapter(action);
 	    setActionExpression(adapter);

@@ -1,5 +1,5 @@
 /*
- * $Id: UIViewRoot.java,v 1.47 2006/08/25 09:50:16 tony_robertson Exp $
+ * $Id: UIViewRoot.java,v 1.48 2007/01/29 07:56:08 rlubke Exp $
  */
 
 /*
@@ -200,7 +200,7 @@ public class UIViewRoot extends UIComponentBase {
      */
     public String getRenderKitId() {
 
-        String result = null;
+        String result;
         if (null != renderKitId) {
             result = this.renderKitId;
         } else {
@@ -334,6 +334,7 @@ public class UIViewRoot extends UIComponentBase {
 
     public void addPhaseListener(PhaseListener newPhaseListener) {
         if (null == phaseListeners) {
+            //noinspection CollectionWithoutInitialCapacity
             phaseListeners = new ArrayList<PhaseListener>();
         }
         phaseListeners.add(newPhaseListener);
@@ -347,7 +348,7 @@ public class UIViewRoot extends UIComponentBase {
      * <strong>NOT</strong> part of the state that is saved and restored
      * for this component.</p>
      */
-    private transient List<List<FacesEvent>> events = null;
+    private List<List<FacesEvent>> events = null;
 
 
     /**
@@ -366,12 +367,11 @@ public class UIViewRoot extends UIComponentBase {
         if (event == null) {
             throw new NullPointerException();
         }
-        int
-              i = 0,
-              len = 0;
+        int i;
+        int len = PhaseId.VALUES.size();
         // We are a UIViewRoot, so no need to check for the ISE
         if (events == null) {
-            List<List<FacesEvent>> events = new ArrayList<List<FacesEvent>>(len = PhaseId.VALUES.size());
+            List<List<FacesEvent>> events = new ArrayList<List<FacesEvent>>(len);
             for (i = 0; i < len; i++) {
                 events.add(new ArrayList<FacesEvent>(5));
             }
@@ -388,17 +388,16 @@ public class UIViewRoot extends UIComponentBase {
      * @param phaseId {@link PhaseId} of the current phase
      */
     private void broadcastEvents(FacesContext context, PhaseId phaseId) {
-        List<FacesEvent> eventsForPhaseId = null;
 
         if (null == events) {
             // no events have been queued
             return;
         }
-        boolean
-              hasMoreAnyPhaseEvents = true,
-              hasMoreCurrentPhaseEvents = true;
+        boolean hasMoreAnyPhaseEvents;
+        boolean hasMoreCurrentPhaseEvents;
 
-        eventsForPhaseId = events.get(PhaseId.ANY_PHASE.getOrdinal());
+        List<FacesEvent> eventsForPhaseId =
+             events.get(PhaseId.ANY_PHASE.getOrdinal());
 
         // keep iterating till we have no more events to broadcast.
         // This is necessary for events that cause other events to be
@@ -596,7 +595,7 @@ public class UIViewRoot extends UIComponentBase {
         }
         if (null != phaseListeners) {
             Iterator<PhaseListener> iter = phaseListeners.iterator();
-            PhaseListener curListener = null;
+            PhaseListener curListener;
             while (iter.hasNext()) {
                 curListener = iter.next();
                 if (phaseId == curListener.getPhaseId() ||
@@ -618,8 +617,9 @@ public class UIViewRoot extends UIComponentBase {
         }
     }
 
-    private PhaseEvent createPhaseEvent(FacesContext context,
-                                        PhaseId phaseId) throws FacesException {
+    private static PhaseEvent createPhaseEvent(FacesContext context,
+                                               PhaseId phaseId)
+    throws FacesException {
 
         if (lifecycle == null) {
             LifecycleFactory lifecycleFactory = (LifecycleFactory)
@@ -855,9 +855,9 @@ public class UIViewRoot extends UIComponentBase {
      *
      * @return Locale instance cosntructed from the expression.
      */
-    private Locale getLocaleFromString(String localeExpr) {
+    private static Locale getLocaleFromString(String localeExpr) {
         Locale result = Locale.getDefault();
-        if (localeExpr.indexOf("_") == -1 || localeExpr.indexOf("-") == -1) {
+        if (localeExpr.indexOf('_') == -1 || localeExpr.indexOf('-') == -1) {
             // expression has just language code in it. make sure the 
             // expression contains exactly 2 characters.
             if (localeExpr.length() == 2) {

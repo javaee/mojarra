@@ -1,5 +1,5 @@
 /*
- * $Id: ActionSource.java,v 1.14 2005/12/05 16:42:42 edburns Exp $
+ * $Id: ActionSource.java,v 1.15 2007/01/29 07:56:13 rlubke Exp $
  */
 
 /*
@@ -30,7 +30,6 @@
 package javax.faces.component;
 
 
-import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.ActionListener;
 import javax.faces.el.MethodBinding;
