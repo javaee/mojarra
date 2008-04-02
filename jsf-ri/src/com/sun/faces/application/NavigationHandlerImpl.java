@@ -1,5 +1,5 @@
 /*
- * $Id: NavigationHandlerImpl.java,v 1.15 2003/08/25 15:18:35 eburns Exp $
+ * $Id: NavigationHandlerImpl.java,v 1.16 2003/09/08 03:26:44 craigmcc Exp $
  */
 
 /*
@@ -105,10 +105,13 @@ public class NavigationHandlerImpl extends NavigationHandler {
 
     public void handleNavigation(FacesContext context, String actionRef, 
         String outcome) {
-        if (context == null || outcome == null) {
+        if (context == null) {
             throw new NullPointerException(
                     Util.getExceptionMessage(
                             Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        }
+        if (outcome == null) {
+          return; // Explicitly remain on the current view
         }
         String newViewId = getViewId(context, actionRef, outcome);
         if (newViewId != null) {
