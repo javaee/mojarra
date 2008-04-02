@@ -9903,14 +9903,14 @@
       <description>
         Flag indicating that characters that are sensitive
         in HTML and XML markup must be escaped.  If omitted, this
-        flag is assumed to be "false".
+        flag is assumed to be "true".
         </description>
       <display-name>Escape Characters</display-name>
       <icon/>
       <property-name>escape</property-name>
       <property-class>boolean</property-class>
       <property-extension>
-        <default-value>false</default-value>
+        <default-value>true</default-value>
       </property-extension>
     </property>
 
@@ -19878,14 +19878,14 @@
         <description>
         Flag indicating that characters that are sensitive
         in HTML and XML markup must be escaped.  If omitted, this
-        flag is assumed to be "false".
+        flag is assumed to be "true".
         </description>
         <display-name>Escape Characters</display-name>
         <icon/>
         <attribute-name>escape</attribute-name>
         <attribute-class>boolean</attribute-class>
         <attribute-extension>
-          <default-value>false</default-value>
+          <default-value>true</default-value>
         </attribute-extension>
       </attribute>
 
