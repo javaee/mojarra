@@ -25,28 +25,21 @@
 
 package com.sun.faces.lifecycle;
 
+import com.sun.faces.application.ApplicationAssociate;
+import com.sun.faces.util.Util;
+import com.sun.faces.el.ELUtils;
+
 import javax.el.CompositeELResolver;
-import javax.el.ELResolver;
+import javax.faces.FactoryFinder;
 import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseEvent;
 import javax.faces.event.PhaseId;
 import javax.faces.event.PhaseListener;
-import javax.faces.lifecycle.LifecycleFactory;
 import javax.faces.lifecycle.Lifecycle;
-import javax.faces.FactoryFinder;
-
-import java.util.List;
+import javax.faces.lifecycle.LifecycleFactory;
 import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import com.sun.faces.application.ApplicationAssociate;
-import com.sun.faces.el.FacesResourceBundleELResolver;
-import com.sun.faces.el.ImplicitObjectELResolverForJsp;
-import com.sun.faces.el.ManagedBeanELResolver;
-import com.sun.faces.el.PropertyResolverChainWrapper;
-import com.sun.faces.el.VariableResolverChainWrapper;
-import com.sun.faces.util.Util;
 
 /**
  * <p>This class is used to register the JSF <code>ELResolver</code>
@@ -66,8 +59,8 @@ public class ELResolverInitPhaseListener implements PhaseListener {
     private static Logger LOGGER = Util.getLogger(Util.FACES_LOGGER
                                                   + Util.LIFECYCLE_LOGGER);
 
-    boolean preInitCompleted;
-    boolean postInitCompleted;
+    private boolean preInitCompleted;
+    private boolean postInitCompleted;
 
     /**
      * <p>Handle a notification that the processing for a particular
@@ -150,47 +143,15 @@ public class ELResolverInitPhaseListener implements PhaseListener {
             }
             return;
         }
-        compositeELResolverForJsp.add(new ImplicitObjectELResolverForJsp());
-        compositeELResolverForJsp.add(new ManagedBeanELResolver());
-        compositeELResolverForJsp.add(new FacesResourceBundleELResolver());
 
-        // add ELResolvers from faces-config.xml
-        List<ELResolver> elResolversFromFacesConfig =
-              appAssociate.getELResolversFromFacesConfig();
-        if (elResolversFromFacesConfig != null) {
-            for (ELResolver resolver : elResolversFromFacesConfig) {
-                compositeELResolverForJsp.add(resolver);
-            }
-        }
+        ELUtils.buildJSPResolver(compositeELResolverForJsp, appAssociate);
 
-        // register legacy VariableResolver if any.
-        if (appAssociate.getLegacyVariableResolver() != null) {
-            compositeELResolverForJsp.add(new VariableResolverChainWrapper(
-                  appAssociate.getLegacyVariableResolver()));
-        } else if (appAssociate.getLegacyVRChainHead() != null) {
-            compositeELResolverForJsp.add(new VariableResolverChainWrapper(
-                  appAssociate.getLegacyVRChainHead()));
-        }
+        // somewhat of a hack, but since we're here, trigger the creation
+        // of the FacesResolvers as well by calling Application.getELResolver()
+        // to avoid a sync block on that method.
+        context.getApplication().getELResolver();
 
-        // add legacy PropertyResolvers if any
-        if (appAssociate.getLegacyPropertyResolver() != null) {
-            compositeELResolverForJsp.add(new PropertyResolverChainWrapper(
-                  appAssociate.getLegacyPropertyResolver()));
-        } else if (appAssociate.getLegacyPRChainHead() != null) {
-            compositeELResolverForJsp.add(new PropertyResolverChainWrapper(
-                  appAssociate.getLegacyPRChainHead()));
-        }
-
-        // add ELResolvers added via Application.addELResolver()
-        List<ELResolver> elResolversFromApplication =
-              appAssociate.getApplicationELResolvers();
-        if (elResolversFromApplication != null) {
-            for (ELResolver resolver : elResolversFromApplication) {
-                compositeELResolverForJsp.add(resolver);
-            }
-        }
-
-        if (LOGGER.isLoggable(Level.INFO)) {
+        if (LOGGER.isLoggable(Level.FINE)) {
             LOGGER.log(Level.FINE,
                        "jsf.lifecycle.initphaselistener.resolvers_registered",
                        new Object[] { appAssociate.getContextName() });

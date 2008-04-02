@@ -1,5 +1,5 @@
 /*
- * $Id: ManagedBeanFactoryImpl.java,v 1.17 2007/02/13 04:55:50 rlubke Exp $
+ * $Id: ManagedBeanFactoryImpl.java,v 1.18 2007/02/27 23:10:25 rlubke Exp $
  */
 
 /*
@@ -49,6 +49,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.sun.faces.RIConstants;
+import com.sun.faces.el.ELUtils;
 import com.sun.faces.application.ApplicationAssociate;
 import com.sun.faces.config.beans.DescriptionBean;
 import com.sun.faces.config.beans.ListEntriesBean;
@@ -500,7 +501,7 @@ public class ManagedBeanFactoryImpl extends ManagedBeanFactory {
             strValue = valuesFromConfig[i];
 
             // set our value local variable
-            if (Util.isVBExpression(strValue)) {
+            if (isVBExpression(strValue)) {
                 value = evaluateValueExpressionGet(strValue);
             } else if (null == strValue) {
                 value = null;
@@ -550,7 +551,7 @@ public class ManagedBeanFactoryImpl extends ManagedBeanFactory {
             strKey = curEntry.getKey();
             strValue = curEntry.getValue();
 
-            if (Util.isVBExpression(strKey)) {
+            if (isVBExpression(strKey)) {
                 key = evaluateValueExpressionGet(strKey);
             } else if (null == strKey) {
                 key = null;
@@ -559,7 +560,7 @@ public class ManagedBeanFactoryImpl extends ManagedBeanFactory {
                                                              keyClass);
             }
 
-            if (Util.isVBExpression(strValue)) {
+            if (isVBExpression(strValue)) {
                 value = evaluateValueExpressionGet(strValue);
             } else if (null == strValue) {
                 value = null;
@@ -631,7 +632,7 @@ public class ManagedBeanFactoryImpl extends ManagedBeanFactory {
                         }
 
                         strValue = properties[i].getValue();
-                        if (Util.isVBExpression(strValue)) {
+                        if (isVBExpression(strValue)) {
                             value = evaluateValueExpressionGet(strValue);
                         } else if (null == strValue &&
                             properties[i].isNullValue()) {
@@ -996,7 +997,7 @@ public class ManagedBeanFactoryImpl extends ManagedBeanFactory {
                     MessageUtils.INVALID_SCOPE_LIFESPAN_ERROR_MESSAGE_ID, obj));
         }
 
-        ValueExpression ve = Util.getValueExpression(value);
+        ValueExpression ve = ELUtils.getValueExpression(value);
         if (ve != null) {
             try {
                 result = 
@@ -1023,7 +1024,7 @@ public class ManagedBeanFactoryImpl extends ManagedBeanFactory {
     private boolean hasValidLifespan(String value) throws EvaluationException, ReferenceSyntaxException {
 	Scope valueScope = null;
 
-	if (Util.isMixedVBExpression(value)) {
+	if (isMixedVBExpression(value)) {
 	    valueScope = getNarrowestScopeFromExpression(value);
 	}
 	else {
@@ -1065,7 +1066,7 @@ public class ManagedBeanFactoryImpl extends ManagedBeanFactory {
     @SuppressWarnings("deprecation")
     private Scope getScopeForSingleExpression(String value) throws ReferenceSyntaxException, EvaluationException {
 	String [] firstSegment = new String[1];
-        Scope valueScope = Util.getScope(value, firstSegment);
+        Scope valueScope = ELUtils.getScope(value, firstSegment);
 	
 	if (null == valueScope) {
 	    // Perhaps the bean hasn't been created yet.  See what its
@@ -1089,7 +1090,7 @@ public class ManagedBeanFactoryImpl extends ManagedBeanFactory {
     private Scope getNarrowestScopeFromExpression(String expression) throws ReferenceSyntaxException {
 	// break the argument expression up into its component
 	// expressions, ignoring literals.
-	List expressions = Util.getExpressionsFromString(expression);
+	List expressions = ELUtils.getExpressionsFromString(expression);
 	Iterator iter = expressions.iterator();
 	int 
 	    shortestScope = Scope.NONE.ordinal(),
@@ -1159,4 +1160,38 @@ public class ManagedBeanFactoryImpl extends ManagedBeanFactory {
         ((UIComponent) component).getAttributes().put(propName, propValue);
     }
 
+    /*
+    * Determine whether String is a value binding expression or not.
+    */
+    public static boolean isVBExpression(String expression) {
+
+        if (null == expression) {
+            return false;
+        }
+        int start = expression.indexOf("#{");
+
+        //check to see if attribute has an expression
+        if ((expression.indexOf("#{") != -1) &&
+            (start < expression.indexOf('}'))) {
+            return true;
+        }
+        return false;
+
+    }/*
+     * Determine whether String is a mixed value binding expression or not.
+     */
+    public static boolean isMixedVBExpression(String expression) {
+
+        if (null == expression) {
+            return false;
+        }
+
+        // if it doesn't start and end with delimiters
+        if (!(expression.startsWith("#{") && expression.endsWith("}"))) {
+            // see if it has some inside.
+            return isVBExpression(expression);
+        }
+        return false;
+
+    }
 }

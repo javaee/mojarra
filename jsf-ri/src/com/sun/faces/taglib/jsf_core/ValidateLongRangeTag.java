@@ -1,5 +1,5 @@
 /*
- * $Id: ValidateLongRangeTag.java,v 1.17 2006/03/29 23:03:52 rlubke Exp $
+ * $Id: ValidateLongRangeTag.java,v 1.18 2007/02/27 23:10:23 rlubke Exp $
  */
 
 /*
@@ -39,7 +39,7 @@ import javax.faces.validator.LongRangeValidator;
 import javax.faces.validator.Validator;
 import javax.servlet.jsp.JspException;
 
-import com.sun.faces.util.Util;
+import com.sun.faces.el.ELUtils;
 
 /**
  * ValidateLongRangeTag is the tag handler class for
@@ -134,7 +134,7 @@ public class ValidateLongRangeTag extends MaxMinValidatorTag {
         if (minimumExpression != null) {
             if (!minimumExpression.isLiteralText()) {
                 minimum = ((Number)
-                              Util.evaluateValueExpression(minimumExpression,
+                              ELUtils.evaluateValueExpression(minimumExpression,
                                   context)).longValue();
             } else {
                 minimum =
@@ -145,7 +145,7 @@ public class ValidateLongRangeTag extends MaxMinValidatorTag {
         if (maximumExpression != null) {
             if (!maximumExpression.isLiteralText()) {
                 maximum = ((Number)
-                              Util.evaluateValueExpression(maximumExpression,
+                              ELUtils.evaluateValueExpression(maximumExpression,
                                   context)).longValue();
             } else {
                 maximum =

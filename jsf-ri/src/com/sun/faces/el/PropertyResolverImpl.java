@@ -1,5 +1,5 @@
 /*
- * $Id: PropertyResolverImpl.java,v 1.29 2007/02/22 01:06:59 rlubke Exp $
+ * $Id: PropertyResolverImpl.java,v 1.30 2007/02/27 23:10:23 rlubke Exp $
  */
 
 /*
@@ -7,30 +7,29 @@
  * of the Common Development and Distribution License
  * (the License). You may not use this file except in
  * compliance with the License.
- * 
+ *
  * You can obtain a copy of the License at
  * https://javaserverfaces.dev.java.net/CDDL.html or
- * legal/CDDLv1.0.txt. 
+ * legal/CDDLv1.0.txt.
  * See the License for the specific language governing
  * permission and limitations under the License.
- * 
+ *
  * When distributing Covered Code, include this CDDL
  * Header Notice in each file and include the License file
- * at legal/CDDLv1.0.txt.    
+ * at legal/CDDLv1.0.txt.
  * If applicable, add the following below the CDDL Header,
  * with the fields enclosed by brackets [] replaced by
  * your own identifying information:
  * "Portions Copyrighted [year] [name of copyright owner]"
- * 
+ *
  * [Name of File] [ver.__] [Date]
- * 
+ *
  * Copyright 2005 Sun Microsystems Inc. All Rights Reserved
  */
 
 package com.sun.faces.el;
 
 import javax.el.ELException;
-import javax.el.ELResolver;
 import javax.faces.context.FacesContext;
 import javax.faces.el.EvaluationException;
 import javax.faces.el.PropertyNotFoundException;
@@ -49,19 +48,23 @@ import com.sun.faces.util.MessageUtils;
 @SuppressWarnings("deprecation")
 public class PropertyResolverImpl extends PropertyResolver {
 
-    private boolean disabled;
+
+    private PropertyResolver delegate;
+
+
+    // ------------------------------------------- Methods from PropertyResolver
+
 
     // Specified by javax.faces.el.PropertyResolver.getType(Object,int)
     public Class getType(Object base, int index)
-        throws EvaluationException, PropertyNotFoundException {
+        throws EvaluationException, PropertyNotFoundException{
 
-        if (disabled) {
-            FacesContext context = FacesContext.getCurrentInstance();
-            context.getELContext().setPropertyResolved(false);
-            return null;
-        }
         // validates base != null and index >= 0
         assertInput(base, index);
+
+        if (delegate != null) {
+            return delegate.getType(base, index);
+        }
 
         Class<? extends Object> type = base.getClass();
         try {
@@ -74,31 +77,32 @@ public class PropertyResolverImpl extends PropertyResolver {
             } else {
                 throw new PropertyNotFoundException(MessageUtils.getExceptionMessageString(
                         MessageUtils.EL_PROPERTY_TYPE_ERROR_ID,
-                        new Object[]{base}));
+                        base));
             }
         } catch (ArrayIndexOutOfBoundsException aioobe) {
             throw new PropertyNotFoundException(MessageUtils.getExceptionMessageString(
                         MessageUtils.EL_SIZE_OUT_OF_BOUNDS_ERROR_ID,
-                        new Object[]{base,new Integer(index),
-                                     new Integer(Array.getLength(base))}));
+                        base,
+                        index,
+                        Array.getLength(base)));
         } catch (IndexOutOfBoundsException ioobe) {
            throw new PropertyNotFoundException(MessageUtils.getExceptionMessageString(
                         MessageUtils.EL_SIZE_OUT_OF_BOUNDS_ERROR_ID,
-                        new Object[]{base,new Integer(index),
-                                     new Integer(((List)base).size())}));
+                        base,
+                        index,
+                        ((List)base).size()));
         }
     }
 
     // Specified by javax.faces.el.PropertyResolver.getType(Object,String)
     public Class getType(Object base, Object property) {
 
-        if (disabled) {
-            FacesContext context = FacesContext.getCurrentInstance();
-            context.getELContext().setPropertyResolved(false);
-            return null;
+        assertInput(base, property);
+
+        if (delegate != null) {
+            return delegate.getType(base, property);
         }
 
-        assertInput(base, property);
         Class result = null;
         try {
             FacesContext context = FacesContext.getCurrentInstance();
@@ -114,15 +118,13 @@ public class PropertyResolverImpl extends PropertyResolver {
     // Specified by javax.faces.el.PropertyResolver.getValue(Object,int)
     public Object getValue(Object base, int index) {
 
-        if (disabled) {
-            FacesContext context = FacesContext.getCurrentInstance();
-            context.getELContext().setPropertyResolved(false);
-            return null;
-        }
-
         // validates base and index
         if (base == null) {
             return null;
+        }
+
+        if (delegate != null) {
+            return delegate.getValue(base, index);
         }
 
         if (base.getClass().isArray()) {
@@ -140,7 +142,7 @@ public class PropertyResolverImpl extends PropertyResolver {
         } else {
             throw new PropertyNotFoundException(MessageUtils.getExceptionMessageString(
                         MessageUtils.EL_PROPERTY_TYPE_ERROR_ID,
-                        new Object[]{base}));
+                        base));
         }
 
     }
@@ -148,10 +150,8 @@ public class PropertyResolverImpl extends PropertyResolver {
     // Specified by javax.faces.el.PropertyResolver.getValue(Object,String)
     public Object getValue(Object base, Object property) {
 
-        if (disabled) {
-            FacesContext context = FacesContext.getCurrentInstance();
-            context.getELContext().setPropertyResolved(false);
-            return null;
+        if (delegate != null) {
+            return delegate.getValue(base, property);
         }
 
         Object result = null;
@@ -169,31 +169,27 @@ public class PropertyResolverImpl extends PropertyResolver {
     // Specified by javax.faces.el.PropertyResolver.isReadOnly(Object,int)
     public boolean isReadOnly(Object base, int index) {
 
-        if (disabled) {
-            FacesContext context = FacesContext.getCurrentInstance();
-            context.getELContext().setPropertyResolved(false);
-            return false;
-        }
-
         // validate input
         assertInput(base, index);
+
+        if (delegate != null) {
+            return delegate.isReadOnly(base, index);
+        }
 
         if (base instanceof List || base.getClass().isArray()) {
             return false;
         } else {
             throw new PropertyNotFoundException(MessageUtils.getExceptionMessageString(
                         MessageUtils.EL_PROPERTY_TYPE_ERROR_ID,
-                        new Object[]{base}));
+                        base));
         }
     }
 
     // Specified by javax.faces.el.PropertyResolver.isReadOnly(Object,String)
     public boolean isReadOnly(Object base, Object property) {
 
-        if (disabled) {
-            FacesContext context = FacesContext.getCurrentInstance();
-            context.getELContext().setPropertyResolved(false);
-            return false;
+        if (delegate != null) {
+            return delegate.isReadOnly(base, property);
         }
 
         boolean result = false;
@@ -209,14 +205,13 @@ public class PropertyResolverImpl extends PropertyResolver {
     // Specified by javax.faces.el.PropertyResolver.setValue(Object,int,Object)
     public void setValue(Object base, int index, Object value) {
 
-        if (disabled) {
-            FacesContext context = FacesContext.getCurrentInstance();
-            context.getELContext().setPropertyResolved(false);
-            return;
-        }
-
         // validate input
         assertInput(base, index);
+
+        if (delegate != null) {
+            delegate.setValue(base, index, value);
+        }
+        
         FacesContext context = FacesContext.getCurrentInstance();
         Class<? extends Object> type = base.getClass();
         if (type.isArray()) {
@@ -228,8 +223,9 @@ public class PropertyResolverImpl extends PropertyResolver {
             catch (ArrayIndexOutOfBoundsException aioobe) {
                 throw new PropertyNotFoundException(MessageUtils.getExceptionMessageString(
                         MessageUtils.EL_SIZE_OUT_OF_BOUNDS_ERROR_ID,
-                        new Object[]{base,new Integer(index),
-                                     new Integer(Array.getLength(base))}));
+                        base,
+                        index,
+                        Array.getLength(base)));
             }
         } else if (base instanceof List) {
             try {
@@ -238,13 +234,14 @@ public class PropertyResolverImpl extends PropertyResolver {
             } catch (IndexOutOfBoundsException ioobe) {
                 throw new PropertyNotFoundException(MessageUtils.getExceptionMessageString(
                         MessageUtils.EL_SIZE_OUT_OF_BOUNDS_ERROR_ID,
-                        new Object[]{base,new Integer(index),
-                                     new Integer(((List)base).size())}));
+                        base,
+                        index,
+                        ((List)base).size()));
             }
         } else {
            throw new PropertyNotFoundException(MessageUtils.getExceptionMessageString(
                         MessageUtils.EL_PROPERTY_TYPE_ERROR_ID,
-                        new Object[]{base}));
+                        base));
         }
     }
 
@@ -252,10 +249,8 @@ public class PropertyResolverImpl extends PropertyResolver {
     // javax.faces.el.PropertyResolver.setValue(Object,String,Object)
     public void setValue(Object base, Object property, Object value) {
 
-        if (disabled) {
-            FacesContext context = FacesContext.getCurrentInstance();
-            context.getELContext().setPropertyResolved(false);
-            return;
+        if (delegate != null) {
+            delegate.setValue(base, property, value);
         }
 
         try {
@@ -271,8 +266,14 @@ public class PropertyResolverImpl extends PropertyResolver {
         }
     }
 
-    public void disable() {
-        disabled = true;   
+
+    // ---------------------------------------------------------- Public Methods
+
+
+    public void setDelegate(PropertyResolver delegate) {
+
+        this.delegate = delegate;
+
     }
 
     protected static void assertInput(Object base, Object property)

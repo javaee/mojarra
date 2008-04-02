@@ -233,7 +233,7 @@ public class StateManagerImpl extends StateManager {
         
             ExternalContext externalContext = context.getExternalContext();
             Object sessionObj = externalContext.getSession(true);
-            Map<String, Object> sessionMap = Util.getSessionMap(context);
+            Map<String, Object> sessionMap = externalContext.getSessionMap();
 
 
             synchronized (sessionObj) {

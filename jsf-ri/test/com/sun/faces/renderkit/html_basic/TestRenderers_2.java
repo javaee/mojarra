@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_2.java,v 1.96 2007/01/30 02:32:36 rlubke Exp $
+ * $Id: TestRenderers_2.java,v 1.97 2007/02/27 23:10:24 rlubke Exp $
  */
 
 /*
@@ -33,7 +33,7 @@ package com.sun.faces.renderkit.html_basic;
 
 import com.sun.faces.cactus.JspFacesTestCase;
 import com.sun.faces.RIConstants;
-import com.sun.faces.TestBean;
+import com.sun.faces.el.ELUtils;
 import com.sun.faces.util.Util;
 import org.apache.cactus.WebRequest;
 
@@ -67,7 +67,7 @@ import java.util.Locale;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_2.java,v 1.96 2007/01/30 02:32:36 rlubke Exp $
+ * @version $Id: TestRenderers_2.java,v 1.97 2007/02/27 23:10:24 rlubke Exp $
  */
 
 public class TestRenderers_2 extends JspFacesTestCase {
@@ -495,11 +495,11 @@ public class TestRenderers_2 extends JspFacesTestCase {
         img.getAttributes().put("usemap", "usemap");
         root.getChildren().add(img);
         com.sun.faces.cactus.TestBean testBean = (com.sun.faces.cactus.TestBean)
-            (Util.getValueExpression("#{TestBean}")).getValue(getFacesContext().getELContext());
+            (ELUtils.getValueExpression("#{TestBean}")).getValue(getFacesContext().getELContext());
         assertTrue(null != testBean); // set in FacesTestCaseService
         testBean.setImagePath("/foo/modelReferenceImage.gif");
         img.setValueExpression("value",
-                            Util.getValueExpression("#{TestBean.imagePath}"));
+                            ELUtils.getValueExpression("#{TestBean.imagePath}"));
 
         imageRenderer.encodeBegin(getFacesContext(), img);
         imageRenderer.encodeEnd(getFacesContext(), img);

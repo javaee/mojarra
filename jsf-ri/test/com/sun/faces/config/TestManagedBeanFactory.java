@@ -1,5 +1,5 @@
 /*
- * $Id: TestManagedBeanFactory.java,v 1.32 2006/05/17 17:31:32 rlubke Exp $
+ * $Id: TestManagedBeanFactory.java,v 1.33 2007/02/27 23:10:18 rlubke Exp $
  */
 
 /*
@@ -31,6 +31,7 @@ package com.sun.faces.config;
 
 import com.sun.faces.cactus.ServletFacesTestCase;
 import com.sun.faces.TestBean;
+import com.sun.faces.el.ELUtils;
 import com.sun.faces.config.beans.ListEntriesBean;
 import com.sun.faces.config.beans.ManagedBeanBean;
 import com.sun.faces.config.beans.ManagedPropertyBean;
@@ -44,7 +45,6 @@ import javax.faces.FacesException;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
-import com.sun.faces.util.Util;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -428,7 +428,7 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
         getFacesContext().getExternalContext().getSessionMap().put(
             "TestRefBean", testBean);
 
-        ValueExpression valueExpression = Util.getValueExpression("#{TestRefBean.one}");
+        ValueExpression valueExpression = ELUtils.getValueExpression("#{TestRefBean.one}");
         valueExpression.setValue(getFacesContext().getELContext(), "one");
 
         bean = new ManagedBeanBean();
@@ -467,7 +467,7 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
             "TestRefBean", testBean);
 
         ValueExpression valueExpression =
-            Util.getValueExpression("#{TestRefBean.one}");
+            ELUtils.getValueExpression("#{TestRefBean.one}");
         valueExpression.setValue(getFacesContext().getELContext(), "one");
 
         bean = new ManagedBeanBean();
@@ -497,7 +497,7 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
         getFacesContext().getExternalContext().getRequestMap().put(
             "TestRefBean", testBean);
 
-        valueExpression = Util.getValueExpression("#{TestRefBean.one}");
+        valueExpression = ELUtils.getValueExpression("#{TestRefBean.one}");
         valueExpression.setValue(getFacesContext().getELContext(), "one");
 
         bean = new ManagedBeanBean();
@@ -534,7 +534,7 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
         getFacesContext().getExternalContext().getSessionMap().put(
             "TestRefBean", testBean);
 
-        valueExpression = Util.getValueExpression("#{sessionScope.TestRefBean.one}");
+        valueExpression = ELUtils.getValueExpression("#{sessionScope.TestRefBean.one}");
         valueExpression.setValue(getFacesContext().getELContext(), "one");
 
         bean = new ManagedBeanBean();
@@ -572,7 +572,7 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
         getFacesContext().getExternalContext().getRequestMap().put(
             "TestRefBean", testBean);
 
-        ValueExpression valueExpression = Util.getValueExpression("#{TestRefBean.one}");
+        ValueExpression valueExpression = ELUtils.getValueExpression("#{TestRefBean.one}");
         valueExpression.setValue(getFacesContext().getELContext(), "one");
 
         bean = new ManagedBeanBean();
@@ -607,7 +607,7 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
         //  managed bean in none scope
         // this should pass
         ValueExpression valueExpression1 = 
-        Util.getValueExpression("#{testBean.customerBean.name}");
+        ELUtils.getValueExpression("#{testBean.customerBean.name}");
         exceptionThrown = false;
         try {
             valueExpression1.getValue(getFacesContext().getELContext());
@@ -620,20 +620,20 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
 
     public void testMixedBean() throws Exception {
         ValueExpression vb =
-            Util.getValueExpression(
+            ELUtils.getValueExpression(
                 "#{mixedBean}");
         TestBean bean = (TestBean) vb.getValue(getFacesContext().getELContext());
         assertEquals("mixed value Bobby Orr", bean.getProp());
 
         vb =
-            Util.getValueExpression(
+            ELUtils.getValueExpression(
                 "#{mixedBean.prop}");
         assertEquals(bean.getProp(), (String) vb.getValue(getFacesContext().getELContext()));
     } 
 
     public void testMixedBeanNegative() throws Exception {
         ValueExpression vb =
-            Util.getValueExpression(
+            ELUtils.getValueExpression(
                 "#{threeBeanSaladNegative}");
 	boolean exceptionThrown = false;
 	try {
@@ -649,14 +649,14 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
 
     public void testMixedBeanPositive() throws Exception {
         ValueExpression vb =
-            Util.getValueExpression(
+            ELUtils.getValueExpression(
                 "#{threeBeanSaladPositive}");
         TestBean bean = (TestBean) vb.getValue(getFacesContext().getELContext());
         assertEquals("request request session session none none", 
 		     bean.getProp());
 
         vb =
-            Util.getValueExpression(
+            ELUtils.getValueExpression(
                 "#{threeBeanSaladPositive.prop}");
         assertEquals(bean.getProp(), (String) vb.getValue(getFacesContext().getELContext()));
     } 
@@ -666,7 +666,7 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
         // constructor of this bean throws ann exception. Make sure the
         // exception is not swallowed.
         ValueExpression valueExpression1 = 
-        Util.getValueExpression("#{exceptionBean.one}");
+        ELUtils.getValueExpression("#{exceptionBean.one}");
         boolean exceptionThrown = false;
         try {
             valueExpression1.getValue(getFacesContext().getELContext());

@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationImpl.java,v 1.88 2007/02/24 05:24:00 rlubke Exp $
+ * $Id: ApplicationImpl.java,v 1.89 2007/02/27 23:10:19 rlubke Exp $
  */
 
 /*
@@ -29,17 +29,12 @@
 
 package com.sun.faces.application;
 
-import javax.el.ArrayELResolver;
-import javax.el.BeanELResolver;
 import javax.el.CompositeELResolver;
 import javax.el.ELContextListener;
 import javax.el.ELException;
 import javax.el.ELResolver;
 import javax.el.ExpressionFactory;
-import javax.el.ListELResolver;
-import javax.el.MapELResolver;
 import javax.el.MethodExpression;
-import javax.el.ResourceBundleELResolver;
 import javax.el.ValueExpression;
 import javax.faces.FacesException;
 import javax.faces.application.Application;
@@ -73,14 +68,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.text.MessageFormat;
 
+import com.sun.faces.el.ELUtils;
 import com.sun.faces.el.FacesCompositeELResolver;
-import com.sun.faces.el.FacesResourceBundleELResolver;
-import com.sun.faces.el.ImplicitObjectELResolver;
-import com.sun.faces.el.ManagedBeanELResolver;
-import com.sun.faces.el.PropertyResolverChainWrapper;
 import com.sun.faces.el.PropertyResolverImpl;
-import com.sun.faces.el.ScopedAttributeELResolver;
-import com.sun.faces.el.VariableResolverChainWrapper;
 import com.sun.faces.el.VariableResolverImpl;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.ReflectionUtils;
@@ -230,63 +220,21 @@ public class ApplicationImpl extends Application {
     }
 
     public ELResolver getELResolver() {
-        
-        if (compositeELResolver != null) {
-            return compositeELResolver;
-        }
-        compositeELResolver = 
-            new FacesCompositeELResolver(FacesCompositeELResolver.ELResolverChainType.Faces);    
-        compositeELResolver.add(new ImplicitObjectELResolver());
 
-        List<ELResolver> resolversFromConfig =
-             associate.getELResolversFromFacesConfig();
-        if (resolversFromConfig != null) {
-            for (ELResolver resolver : associate.getELResolversFromFacesConfig()) {
-                compositeELResolver.add(resolver);
-            }
-        }
-        // add legacy VariableResolvers if any.
-        
-        // wrap the head of the legacyVR in ELResolver and add it to the
-        // compositeELResolver.
-        if (associate.getLegacyVariableResolver() != null ) {
-            compositeELResolver.add(new VariableResolverChainWrapper(
-                    associate.getLegacyVariableResolver()));
-        } else if (associate.getLegacyVRChainHead() != null) {
-            compositeELResolver.add(new VariableResolverChainWrapper(
-                    associate.getLegacyVRChainHead()));   
-        }
-        
-        // add legacy PropertyResolvers if any
-        if (associate.getLegacyPropertyResolver() != null ) {
-            compositeELResolver.add(new PropertyResolverChainWrapper(
-                    associate.getLegacyPropertyResolver()));
-        } else if (associate.getLegacyPRChainHead() != null) {
-            compositeELResolver.add(new PropertyResolverChainWrapper(
-                    associate.getLegacyPRChainHead()));   
+        if (compositeELResolver == null) {
+            compositeELResolver =
+                 new FacesCompositeELResolver(
+                      FacesCompositeELResolver.ELResolverChainType.Faces);
+            ELUtils.buildFacesResolver(compositeELResolver, associate);
         }
 
-        if (elResolvers != null) {
-            for (ELResolver resolver : elResolvers) {
-                compositeELResolver.add(resolver);
-            }
-        }
-        
-        compositeELResolver.add(new ManagedBeanELResolver());
-        compositeELResolver.add(new ResourceBundleELResolver());
-        compositeELResolver.add(new FacesResourceBundleELResolver());
-        compositeELResolver.add(new MapELResolver());
-        compositeELResolver.add(new ListELResolver());
-        compositeELResolver.add(new ArrayELResolver());
-        compositeELResolver.add(new BeanELResolver());
-        compositeELResolver.add(new ScopedAttributeELResolver());
         return compositeELResolver;
+
     }
     
     public void addELResolver(ELResolver resolver) {
-        // Throw Illegal State Exception if  ELResolvers are added after 
-        // application initialization has completed. 
-        if (FacesContext.getCurrentInstance() != null) {
+
+        if (associate.hasRequestBeenServiced()) {
             throw new IllegalStateException(
                     MessageUtils.getExceptionMessageString(
                     MessageUtils.APPLICATION_INIT_COMPLETE_ERROR_ID));
@@ -440,9 +388,10 @@ public class ApplicationImpl extends Application {
             throw new NullPointerException(message);
         }
 
-        propertyResolver.disable();
+        propertyResolver.setDelegate(ELUtils.getDelegatePR(associate, true));
         associate.setLegacyPropertyResolver(resolver);
         propertyResolver = new PropertyResolverImpl();
+
 
         if (logger.isLoggable(Level.FINE)) {
             logger.fine(MessageFormat.format("set PropertyResolver Instance to ''{0}''", resolver.getClass().getName()));
@@ -521,7 +470,7 @@ public class ApplicationImpl extends Application {
             throw new NullPointerException(message);
         }
 
-        variableResolver.disable();
+        variableResolver.setDelegate(ELUtils.getDelegateVR(associate, true));
         associate.setLegacyVariableResolver(resolver);
         variableResolver = new VariableResolverImpl();
 

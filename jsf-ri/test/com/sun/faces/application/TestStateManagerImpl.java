@@ -1,6 +1,6 @@
 
 /*
- * $Id: TestStateManagerImpl.java,v 1.19 2007/01/30 02:32:35 rlubke Exp $
+ * $Id: TestStateManagerImpl.java,v 1.20 2007/02/27 23:10:21 rlubke Exp $
  */
 
 /*
@@ -304,7 +304,7 @@ public class TestStateManagerImpl extends ServletFacesTestCase {
         SerializedView viewState = wrapper.saveSerializedView(getFacesContext());
         
         // See that the Logical View and Actual View maps are correctly created
-        Map sessionMap = Util.getSessionMap(getFacesContext());
+        Map sessionMap = getFacesContext().getExternalContext().getSessionMap();
         assertTrue(sessionMap.containsKey(RIConstants.LOGICAL_VIEW_MAP));
         assertTrue(((Map)sessionMap.get(RIConstants.LOGICAL_VIEW_MAP)).containsKey("j_id1"));
         

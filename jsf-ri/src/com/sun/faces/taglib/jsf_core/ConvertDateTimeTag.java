@@ -1,5 +1,5 @@
 /*
- * $Id: ConvertDateTimeTag.java,v 1.24 2006/10/10 16:20:41 rlubke Exp $
+ * $Id: ConvertDateTimeTag.java,v 1.25 2007/02/27 23:10:22 rlubke Exp $
  */
 
 /*
@@ -45,13 +45,14 @@ import java.util.logging.Logger;
 
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
+import com.sun.faces.el.ELUtils;
 
 
 /**
  * <p>ConvertDateTimeTag is a ConverterTag implementation for
  * javax.faces.convert.DateTimeConverter</p>
  *
- * @version $Id: ConvertDateTimeTag.java,v 1.24 2006/10/10 16:20:41 rlubke Exp $
+ * @version $Id: ConvertDateTimeTag.java,v 1.25 2007/02/27 23:10:22 rlubke Exp $
  */
 
 public class ConvertDateTimeTag extends ConverterTag {
@@ -194,19 +195,19 @@ public class ConvertDateTimeTag extends ConverterTag {
 
         if (dateStyleExpression != null) {
             dateStyle = (String)
-            Util.evaluateValueExpression(dateStyleExpression, elContext);
+            ELUtils.evaluateValueExpression(dateStyleExpression, elContext);
         }
         if (patternExpression != null) {
             pattern = (String)
-            Util.evaluateValueExpression(patternExpression, elContext);
+            ELUtils.evaluateValueExpression(patternExpression, elContext);
         }
         if (timeStyleExpression != null) {
             timeStyle = (String)
-            Util.evaluateValueExpression(timeStyleExpression, elContext);
+            ELUtils.evaluateValueExpression(timeStyleExpression, elContext);
         }
         if (typeExpression != null) {
             type = (String)
-            Util.evaluateValueExpression(typeExpression, elContext);
+            ELUtils.evaluateValueExpression(typeExpression, elContext);
         } else {
             if (timeStyleExpression != null) {
                 if (dateStyleExpression != null) {
@@ -222,7 +223,7 @@ public class ConvertDateTimeTag extends ConverterTag {
             if (localeExpression.isLiteralText()) {
                 locale = getLocale(localeExpression.getExpressionString());
             } else {
-                Object loc = Util.evaluateValueExpression(localeExpression,
+                Object loc = ELUtils.evaluateValueExpression(localeExpression,
                                                           elContext);
                 if (loc != null) {
                     if (loc instanceof String) {
@@ -255,7 +256,7 @@ public class ConvertDateTimeTag extends ConverterTag {
                 TimeZone.getTimeZone(
                     timeZoneExpression.getExpressionString());
             } else {
-                Object tz = Util.evaluateValueExpression(timeZoneExpression,
+                Object tz = ELUtils.evaluateValueExpression(timeZoneExpression,
                                                          elContext);
                 if (tz != null) {
                     if (tz instanceof String) {

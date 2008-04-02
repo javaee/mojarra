@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.207 2007/02/07 22:08:11 rlubke Exp $
+ * $Id: Util.java,v 1.208 2007/02/27 23:10:19 rlubke Exp $
  */
 
 /*
@@ -77,7 +77,7 @@ import com.sun.faces.spi.ManagedBeanFactory.Scope;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.207 2007/02/07 22:08:11 rlubke Exp $
+ * @version $Id: Util.java,v 1.208 2007/02/27 23:10:19 rlubke Exp $
  */
 
 public class Util {
@@ -372,66 +372,6 @@ public class Util {
     }
 
 
-    public static Object evaluateValueExpression(ValueExpression expression,
-                                                 ELContext elContext) {
-           if (expression.isLiteralText()) {
-               return expression.getExpressionString();
-           } else {
-               return expression.getValue(elContext);
-           }
-       }
-
-
-    public static Object evaluateVBExpression(String expression) {
-        if (expression == null || (!isVBExpression(expression))) {
-            return expression;
-        }
-        FacesContext context = FacesContext.getCurrentInstance();
-        Object result =
-            getValueExpression(expression).getValue(context.getELContext());
-        return result;
-
-    }
-
-    @SuppressWarnings("deprecation")
-    public static ValueBinding getValueBinding(String valueRef) {
-        ValueBinding vb = null;
-        // Must parse the value to see if it contains more than
-        // one expression
-        FacesContext context = FacesContext.getCurrentInstance();
-        vb = context.getApplication().createValueBinding(valueRef);
-        return vb;
-    }
-
-    public static ValueExpression getValueExpression(String valueRef) {
-        ValueExpression ve = null;
-        // Must parse the value to see if it contains more than
-        // one expression
-        FacesContext context = FacesContext.getCurrentInstance();
-        ve = context.getApplication().getExpressionFactory().
-            createValueExpression(context.getELContext(), valueRef, 
-                Object.class);
-        return ve;
-    }    
-
-
-    /**
-     * This method will return a <code>SessionMap</code> for the current
-     * <code>FacesContext</code>.  If the <code>FacesContext</code> argument
-     * is null, then one is determined by <code>FacesContext.getCurrentInstance()</code>.
-     * The <code>SessionMap</code> will be created if it is null.
-     *
-     * @param context the FacesContext
-     * @return Map The <code>SessionMap</code>
-     */
-    public static Map<String,Object> getSessionMap(FacesContext context) {
-        if (context == null) {
-            context = FacesContext.getCurrentInstance();
-        }
-        return context.getExternalContext().getSessionMap();
-    }
-
-
     public static Converter getConverterForClass(Class converterClass,
                                                  FacesContext context) {
         if (converterClass == null) {
@@ -457,38 +397,6 @@ public class Util {
         } catch (Exception e) {
             return (null);
         }
-    }
-
-    /*
-     * Determine whether String is a value binding expression or not.
-     */
-    public static boolean isVBExpression(String expression) {
-        if (null == expression) {
-            return false;
-        }
-        int start = 0;
-        //check to see if attribute has an expression
-        if (((start = expression.indexOf("#{")) != -1) &&
-            (start < expression.indexOf('}'))) {
-            return true;
-        }
-        return false;
-    }
-
-
-    /*
-     * Determine whether String is a mixed value binding expression or not.
-     */
-    public static boolean isMixedVBExpression(String expression) {
-        if (null == expression) {
-            return false;
-        }
-        // if it doesn't start and end with delimiters
-        if (!(expression.startsWith("#{") && expression.endsWith("}"))) {
-            // see if it has some inside.
-            return isVBExpression(expression);
-        }
-        return false;
     }
 
 
@@ -677,28 +585,6 @@ public class Util {
         return result;
     }
 
-    @SuppressWarnings("deprecation")
-    public static String stripBracketsIfNecessary(String expression)
-        throws ReferenceSyntaxException {
-        assert (null != expression);
-        int len = 0;
-        // look for invalid expressions
-        if ('#' == expression.charAt(0)) {
-            if ('{' != expression.charAt(1)) {
-                throw new ReferenceSyntaxException(MessageUtils.getExceptionMessageString(
-                    MessageUtils.INVALID_EXPRESSION_ID,
-                    new Object[]{expression}));
-            }
-            if ('}' != expression.charAt((len = expression.length()) - 1)) {
-                throw new ReferenceSyntaxException(MessageUtils.getExceptionMessageString(
-                    MessageUtils.INVALID_EXPRESSION_ID,
-                    new Object[]{expression}));
-            }
-            expression = expression.substring(2, len - 1);
-        }
-        return expression;
-    }
-        
 
     public static void parameterNonNull(Object param) throws FacesException {
         if (null == param) {
@@ -712,155 +598,6 @@ public class Util {
         if (null == param || 0 == param.length()) {
             throw new FacesException(MessageUtils.getExceptionMessageString(MessageUtils.EMPTY_PARAMETER_ID));
         }
-    }
-
-    /**
-     * <p>This method is used by the ManagedBeanFactory to ensure that
-     * properties set by an expression point to an object with an
-     * accepted lifespan.</p>
-     *
-     * <p>get the scope of the expression. Return <code>null</code> if
-     * it isn't scoped</p> 
-     *
-     * <p>For example, the expression:
-     * <code>sessionScope.TestBean.one</code> should return "session" 
-     * as the scope.</p>
-     *
-     * @param valueBinding the expression
-     *
-     * @param outString an allocated String Array into which we put the
-     * first segment.
-     *
-     * @return the scope of the expression
-     */
-    @SuppressWarnings("deprecation")
-    public static Scope getScope(String valueBinding,
-				  String [] outString) throws ReferenceSyntaxException {
-        if (valueBinding == null || 0 == valueBinding.length()) {
-            return null;
-        }
-	valueBinding = stripBracketsIfNecessary(valueBinding);
-	
-        int segmentIndex = getFirstSegmentIndex(valueBinding);
-
-        //examine first segment and see if it is a scope
-        String identifier = valueBinding;
-
-        if (segmentIndex > 0) {
-            //get first segment designated by a "." or "["
-            identifier = valueBinding.substring(0, segmentIndex);            
-        }
-
-        //check to see if the identifier is a named scope.
-
-        FacesContext context = FacesContext.getCurrentInstance();
-        ExternalContext ec = context.getExternalContext();
-	
-	if (null != outString) {
-	    outString[0] = identifier;
-	}
-        if (identifier.equalsIgnoreCase(RIConstants.REQUEST_SCOPE)) {
-            return Scope.REQUEST;
-        }
-        if (identifier.equalsIgnoreCase(RIConstants.SESSION_SCOPE)) {
-            return Scope.SESSION;
-        }
-        if (identifier.equalsIgnoreCase(RIConstants.APPLICATION_SCOPE)) {
-            return Scope.APPLICATION;
-        }
-
-	// handle implicit objects
-        if (identifier.equalsIgnoreCase(RIConstants.INIT_PARAM_IMPLICIT_OBJ)) {
-	    return Scope.APPLICATION;
-        }	
-        if (identifier.equalsIgnoreCase(RIConstants.COOKIE_IMPLICIT_OBJ)) {
-	    return Scope.REQUEST;
-        }	
-        if (identifier.equalsIgnoreCase(RIConstants.FACES_CONTEXT_IMPLICIT_OBJ)) {
-	    return Scope.REQUEST;
-        }	
-        if (identifier.equalsIgnoreCase(RIConstants.HEADER_IMPLICIT_OBJ)) {
-	    return Scope.REQUEST;
-        }	
-        if (identifier.equalsIgnoreCase(RIConstants.HEADER_VALUES_IMPLICIT_OBJ)) {
-	    return Scope.REQUEST;
-        }
-        if (identifier.equalsIgnoreCase(RIConstants.PARAM_IMPLICIT_OBJ)) {
-	    return Scope.REQUEST;
-        }
-        if (identifier.equalsIgnoreCase(RIConstants.PARAM_VALUES_IMPLICIT_OBJ)) {
-	    return Scope.REQUEST;
-        }
-        if (identifier.equalsIgnoreCase(RIConstants.VIEW_IMPLICIT_OBJ)) {
-	    return Scope.REQUEST;
-        }
-
-        //No scope was provided in the expression so check for the 
-        //expression in all of the scopes. The expression is the first 
-        //segment.
-
-        if (ec.getRequestMap().get(identifier) != null) {
-            return Scope.REQUEST;
-        }
-        if (Util.getSessionMap(context).get(identifier) != null) {
-            return Scope.SESSION;
-        }
-        if (ec.getApplicationMap().get(identifier) != null) {
-            return Scope.APPLICATION;
-        }
-
-        //not present in any scope
-        return null;
-    }
-
-    /**
-     * @param expressionString the expression string, with delimiters
-     * intact.
-     *
-     * @return a List of expressions from the expressionString
-     */
-    @SuppressWarnings("deprecation")
-    public static List getExpressionsFromString(String expressionString) throws ReferenceSyntaxException {
-	if (null == expressionString) {
-	    return Collections.EMPTY_LIST;
-	}
-	List<String> result = new ArrayList<String>();
-	int i, j, len = expressionString.length(), cur = 0;
-	while (cur < len &&
-	       -1 != (i = expressionString.indexOf("#{", cur))) {
-	    if (-1 == (j = expressionString.indexOf("}", i + 2))) {
-		throw new ReferenceSyntaxException(MessageUtils.getExceptionMessageString(MessageUtils.INVALID_EXPRESSION_ID, new Object[]{expressionString}));
-	    }
-	    cur = j + 1;
-	    result.add(expressionString.substring(i, cur));
-	}
-	return result;
-    }
-
-    /**
-     * <p/>
-     * The the first segment of a String tokenized by a "." or "["
-     *
-     * @return index of the first occurrence of . or [
-     */
-    private static int getFirstSegmentIndex(String valueBinding) {
-        int segmentIndex = valueBinding.indexOf('.');
-        int bracketIndex = valueBinding.indexOf('[');
-
-        //there is no "." in the valueBinding so take the bracket value
-        if (segmentIndex < 0) {
-            segmentIndex = bracketIndex;
-        } else {
-            //if there is a bracket proceed
-            if (bracketIndex > 0) {
-                //if the bracket index is before the "." then
-                //get the bracket index
-                if (segmentIndex > bracketIndex) {
-                    segmentIndex = bracketIndex;
-                }
-            }
-        }
-        return segmentIndex;
     }
 
     /**

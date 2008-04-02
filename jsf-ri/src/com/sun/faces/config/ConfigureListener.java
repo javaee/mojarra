@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListener.java,v 1.95 2007/02/16 19:39:54 rlubke Exp $
+ * $Id: ConfigureListener.java,v 1.96 2007/02/27 23:10:25 rlubke Exp $
  */
 /*
  * The contents of this file are subject to the terms
@@ -108,7 +108,6 @@ import com.sun.faces.config.beans.ValidatorBean;
 import com.sun.faces.config.rules.FacesConfigRuleSet;
 import com.sun.faces.el.ChainAwareVariableResolver;
 import com.sun.faces.el.DummyPropertyResolverImpl;
-import com.sun.faces.el.DummyVariableResolverImpl;
 import com.sun.faces.el.FacesCompositeELResolver;
 import com.sun.faces.renderkit.JsfJsResourcePhaseListener;
 import com.sun.faces.renderkit.RenderKitUtils;
@@ -678,29 +677,17 @@ public class ConfigureListener implements ServletContextListener {
                 
         values = config.getVariableResolvers();
         if ((values != null) && (values.length > 0)) {
-            // initialize the prevInChain to DummyVariableResolver instance 
-            // to satisfy decorator pattern as well as satisfy the requirements 
-            // of unified EL. This resolver sets propertyResolved to false on
-            // invocation of its method, so that variable resolution can move
-            // further in the chain.
-            Object prevInChain = new DummyVariableResolverImpl();
+            Object prevInChain = new ChainAwareVariableResolver();
             for (int i = 0, len = values.length; i < len; i++) {
                 if (LOGGER.isLoggable(Level.FINER)) {
                     LOGGER.finer(MessageFormat.format("setVariableResolver({0})", values[i]));
                 }
-                // If this is the first custom VariableResolver in the chain,
-                // make sure to pass the ChainAwareVariableResolver to its ctor.
-                Object instance;
-                if (0 == i) {
-                    instance = Util.createInstance
-                            (values[i], VariableResolver.class, 
-                            new ChainAwareVariableResolver());
+                Object instance = Util.createInstance(values[i],
+                                                      VariableResolver.class,
+                                                      prevInChain);
+                if (instance != null) {
+                    prevInChain = instance;
                 }
-                else {
-                    instance = Util.createInstance
-                            (values[i], VariableResolver.class, prevInChain);
-                }
-                prevInChain = instance;
             }
             VariableResolver legacyVRChainHead = (VariableResolver) prevInChain;
             if (associate != null) {

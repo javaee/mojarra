@@ -1,5 +1,5 @@
 /*
- * $Id: ConvertNumberTag.java,v 1.17 2006/03/29 23:03:51 rlubke Exp $
+ * $Id: ConvertNumberTag.java,v 1.18 2007/02/27 23:10:22 rlubke Exp $
  */
 
 /*
@@ -39,13 +39,13 @@ import javax.faces.convert.Converter;
 import javax.faces.convert.NumberConverter;
 import javax.servlet.jsp.JspException;
 
-import com.sun.faces.util.Util;
+import com.sun.faces.el.ELUtils;
 
 /**
  * <p>ConvertNumberTag is a ConverterTag implementation for
  * javax.faces.convert.NumberConverter</p>
  *
- * @version $Id: ConvertNumberTag.java,v 1.17 2006/03/29 23:03:51 rlubke Exp $
+ * @version $Id: ConvertNumberTag.java,v 1.18 2007/02/27 23:10:22 rlubke Exp $
  */
 
 public class ConvertNumberTag extends ConverterTag {
@@ -255,22 +255,22 @@ public class ConvertNumberTag extends ConverterTag {
 
         if (currencyCodeExpression != null) {
             currencyCode = (String)
-            Util.evaluateValueExpression(currencyCodeExpression,
+            ELUtils.evaluateValueExpression(currencyCodeExpression,
                 elContext);
         }
         if (currencySymbolExpression != null) {
             currencySymbol = (String)
-            Util.evaluateValueExpression(currencySymbolExpression,
+            ELUtils.evaluateValueExpression(currencySymbolExpression,
                 elContext);
         }
         if (patternExpression != null) {
             pattern = (String)
-            Util.evaluateValueExpression(patternExpression,
+            ELUtils.evaluateValueExpression(patternExpression,
                 elContext);
         }
         if (typeExpression != null) {
             type = (String)
-            Util.evaluateValueExpression(typeExpression,
+            ELUtils.evaluateValueExpression(typeExpression,
                 elContext);
         }
         if (groupingUsedExpression != null) {
@@ -281,7 +281,7 @@ public class ConvertNumberTag extends ConverterTag {
                     booleanValue();
             } else {
                 groupingUsed = ((Boolean)
-                                   Util.evaluateValueExpression(groupingUsedExpression,
+                                   ELUtils.evaluateValueExpression(groupingUsedExpression,
                                        elContext)).booleanValue();
             }
         }
@@ -293,7 +293,7 @@ public class ConvertNumberTag extends ConverterTag {
                     booleanValue();
             } else {
                 integerOnly = ((Boolean)
-                                  Util.evaluateValueExpression(integerOnlyExpression,
+                                  ELUtils.evaluateValueExpression(integerOnlyExpression,
                                       elContext)).booleanValue();
             }
         }
@@ -305,7 +305,7 @@ public class ConvertNumberTag extends ConverterTag {
                     intValue();
             } else {
                 maxFractionDigits = ((Integer)
-                                        Util.evaluateValueExpression(maxFractionDigitsExpression,
+                                        ELUtils.evaluateValueExpression(maxFractionDigitsExpression,
                                             elContext)).intValue();
             }
         }
@@ -317,7 +317,7 @@ public class ConvertNumberTag extends ConverterTag {
                     intValue();
             } else {
                 maxIntegerDigits = ((Integer)
-                                       Util.evaluateValueExpression(maxIntegerDigitsExpression,
+                                       ELUtils.evaluateValueExpression(maxIntegerDigitsExpression,
                                            elContext)).intValue();
             }
         }
@@ -329,7 +329,7 @@ public class ConvertNumberTag extends ConverterTag {
                     intValue();
             } else {
                 minFractionDigits = ((Integer)
-                                        Util.evaluateValueExpression(minFractionDigitsExpression,
+                                        ELUtils.evaluateValueExpression(minFractionDigitsExpression,
                                             elContext)).intValue();
             }
         }
@@ -341,7 +341,7 @@ public class ConvertNumberTag extends ConverterTag {
                     intValue();
             } else {
                 minIntegerDigits = ((Integer)
-                                       Util.evaluateValueExpression(minIntegerDigitsExpression,
+                                       ELUtils.evaluateValueExpression(minIntegerDigitsExpression,
                                            elContext)).intValue();
             }
         }
@@ -351,7 +351,7 @@ public class ConvertNumberTag extends ConverterTag {
                     "");
             } else {
                 Locale loc = (Locale)
-                Util.evaluateValueExpression(localeExpression,
+                ELUtils.evaluateValueExpression(localeExpression,
                     elContext);
                 if (loc != null) {
                     locale = loc;

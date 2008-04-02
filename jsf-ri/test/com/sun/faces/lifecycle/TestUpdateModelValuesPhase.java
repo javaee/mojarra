@@ -1,5 +1,5 @@
 /*
- * $Id: TestUpdateModelValuesPhase.java,v 1.43 2007/01/30 02:32:16 rlubke Exp $
+ * $Id: TestUpdateModelValuesPhase.java,v 1.44 2007/02/27 23:10:18 rlubke Exp $
  */
 
 /*
@@ -32,9 +32,8 @@
 package com.sun.faces.lifecycle;
 
 import com.sun.faces.cactus.ServletFacesTestCase;
-import com.sun.faces.TestBean;
+import com.sun.faces.el.ELUtils;
 import com.sun.faces.util.Util;
-import org.apache.cactus.WebRequest;
 
 import javax.faces.component.UIForm;
 import javax.faces.component.UIInput;
@@ -46,7 +45,7 @@ import java.util.Locale;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestUpdateModelValuesPhase.java,v 1.43 2007/01/30 02:32:16 rlubke Exp $
+ * @version $Id: TestUpdateModelValuesPhase.java,v 1.44 2007/02/27 23:10:18 rlubke Exp $
  */
 
 public class TestUpdateModelValuesPhase extends ServletFacesTestCase {
@@ -106,21 +105,21 @@ public class TestUpdateModelValuesPhase extends ServletFacesTestCase {
         userName.setId("userName");
         userName.setValue("one");
         userName.setValueExpression("value",
-                                 Util.getValueExpression("#{TestBean.one}"));
+                                 ELUtils.getValueExpression("#{TestBean.one}"));
         userName.testSetValid(true);
         form.getChildren().add(userName);
         userName1 = new TestUIInput();
         userName1.setId("userName1");
         userName1.setValue("one");
         userName1.setValueExpression("value",
-                                  Util.getValueExpression("#{TestBean.one}"));
+                                  ELUtils.getValueExpression("#{TestBean.one}"));
         userName1.testSetValid(true);
         form.getChildren().add(userName1);
         userName2 = new TestUIInput();
         userName2.setId("userName2");
         userName2.setValue("one");
         userName2.setValueExpression("value",
-                                  Util.getValueExpression("#{TestBean.one}"));
+                                  ELUtils.getValueExpression("#{TestBean.one}"));
         userName2.testSetValid(true);
         form.getChildren().add(userName2);
 
@@ -162,27 +161,27 @@ public class TestUpdateModelValuesPhase extends ServletFacesTestCase {
         userName.setValue("one");
         userName.testSetValid(true);
         userName.setValueExpression("value",
-                                 Util.getValueExpression("#{TestBean.two}"));
+                                 ELUtils.getValueExpression("#{TestBean.two}"));
         form.getChildren().add(userName);
         userName1 = new TestUIInput();
         userName1.setId("userName1");
         userName1.setValue("one");
         userName1.testSetValid(true);
         userName1.setValueExpression("value",
-                                  Util.getValueExpression("#{TestBean.one}"));
+                                  ELUtils.getValueExpression("#{TestBean.one}"));
         form.getChildren().add(userName1);
         userName2 = new TestUIInput();
         userName2.setId("userName2");
         userName2.setValue("one");
         userName2.setValueExpression("value",
-                                  Util.getValueExpression("#{TestBean.one}"));
+                                  ELUtils.getValueExpression("#{TestBean.one}"));
         userName2.testSetValid(true);
         form.getChildren().add(userName2);
         userName3 = new TestUIInput();
         userName3.setId("userName3");
         userName3.setValue("four");
         userName3.setValueExpression("value",
-                                  Util.getValueExpression("#{TestBean.four}"));
+                                  ELUtils.getValueExpression("#{TestBean.four}"));
         userName3.testSetValid(true);
         form.getChildren().add(userName3);
 

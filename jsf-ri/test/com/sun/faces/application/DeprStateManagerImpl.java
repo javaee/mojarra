@@ -1,5 +1,5 @@
 /* 
- * $Id: DeprStateManagerImpl.java,v 1.7 2006/05/17 19:00:52 rlubke Exp $ 
+ * $Id: DeprStateManagerImpl.java,v 1.8 2007/02/27 23:10:21 rlubke Exp $ 
  */ 
 
 
@@ -58,7 +58,7 @@ import javax.faces.component.NamingContainer;
  * <B>DeprStateManagerImpl</B> is a test class which implements
  * deprecated methods only. 
  *
- * @version $Id: DeprStateManagerImpl.java,v 1.7 2006/05/17 19:00:52 rlubke Exp $
+ * @version $Id: DeprStateManagerImpl.java,v 1.8 2007/02/27 23:10:21 rlubke Exp $
  */
 public class DeprStateManagerImpl extends StateManager {
 
@@ -126,7 +126,7 @@ public class DeprStateManagerImpl extends StateManager {
                 actualMapSize = getNumberOfViewsInLogicalViewParameter(context);
             
             Object stateArray[] = { treeStructure, componentState };
-            Map sessionMap = Util.getSessionMap(context);
+            Map sessionMap = context.getExternalContext().getSessionMap();
             
  	    synchronized (this) {
                 if (null == (logicalMap = (LRUMap) sessionMap.get(RIConstants.LOGICAL_VIEW_MAP))) {

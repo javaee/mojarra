@@ -1,5 +1,5 @@
 /*
- * $Id: LoadBundleTag.java,v 1.15 2006/05/30 20:08:32 rlubke Exp $
+ * $Id: LoadBundleTag.java,v 1.16 2007/02/27 23:10:22 rlubke Exp $
  */
 
 /*
@@ -45,6 +45,7 @@ import javax.servlet.jsp.tagext.TagSupport;
 
 import com.sun.faces.util.Util;
 import com.sun.faces.util.MessageUtils;
+import com.sun.faces.el.ELUtils;
 
 /**
  * <p>Tag action that loads the specified ResourceBundle as a Map into
@@ -110,7 +111,7 @@ public class LoadBundleTag extends TagSupport {
         String basename;
 
         basename = (String)
-            Util.evaluateValueExpression(basenameExpression,
+            ELUtils.evaluateValueExpression(basenameExpression,
                                          context.getELContext());
 
 

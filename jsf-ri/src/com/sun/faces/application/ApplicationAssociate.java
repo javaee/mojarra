@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationAssociate.java,v 1.38 2007/02/24 05:24:00 rlubke Exp $
+ * $Id: ApplicationAssociate.java,v 1.39 2007/02/27 23:10:19 rlubke Exp $
  */
 
 /*
@@ -193,6 +193,12 @@ public class ApplicationAssociate {
     applicationMap.remove(ASSOCIATE_KEY);
     }
 
+    /**
+     * This method is called by <code>ConfigureListener</code> and will
+     * contain any <code>VariableResolvers</code> defined within
+     * faces-config configuration files.
+     * @param resolver
+     */
     @SuppressWarnings("deprecation")
     public void setLegacyVRChainHead(VariableResolver resolver) {
         this.legacyVRChainHead = resolver;
@@ -203,6 +209,12 @@ public class ApplicationAssociate {
         return legacyVRChainHead;
     }
 
+    /**
+     * This method is called by <code>ConfigureListener</code> and will
+     * contain any <code>PropertyResolvers</code> defined within
+     * faces-config configuration files.
+     * @param resolver
+     */
     @SuppressWarnings("deprecation")
     public void setLegacyPRChainHead(PropertyResolver resolver) {
         this.legacyPRChainHead = resolver;
@@ -290,10 +302,18 @@ public class ApplicationAssociate {
     }
 
 
+    /**
+     * Called by application code to indicate we've processed the
+     * first request to the application.
+     */
     public void setRequestServiced() {
         this.requestServiced = true;
     }
 
+    /**
+     * @return <code>true</code> if we've processed a request, otherwise
+     *  <code>false</code>
+     */
     public boolean hasRequestBeenServiced() {
         return requestServiced;
     }
@@ -505,7 +525,8 @@ public class ApplicationAssociate {
                     applicationMap.put(managedBeanName, bean);
                 }
             } else {
-                Map<String,Object> sessionMap = Util.getSessionMap(context);
+                Map<String,Object> sessionMap =
+                     context.getExternalContext().getSessionMap();
                 synchronized (sessionMap) {
                     try {
                         bean = managedBean.newInstance(context);

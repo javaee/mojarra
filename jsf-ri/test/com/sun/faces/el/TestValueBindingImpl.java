@@ -1,8 +1,8 @@
 /*
 <<<<<<< TestValueBindingImpl.java
- * $Id: TestValueBindingImpl.java,v 1.43 2007/01/30 02:32:27 rlubke Exp $
+ * $Id: TestValueBindingImpl.java,v 1.44 2007/02/27 23:10:21 rlubke Exp $
 =======
- * $Id: TestValueBindingImpl.java,v 1.43 2007/01/30 02:32:27 rlubke Exp $
+ * $Id: TestValueBindingImpl.java,v 1.44 2007/02/27 23:10:21 rlubke Exp $
 >>>>>>> 1.32.18.5
  */
 
@@ -56,7 +56,6 @@ import javax.faces.el.ValueBinding;
 import javax.servlet.http.HttpServletRequest;
 
 import java.io.Serializable;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Locale;
@@ -619,71 +618,71 @@ public class TestValueBindingImpl extends ServletFacesTestCase
                 "TestApplicationBean", testBean);
 
         valueBinding = this.create("TestApplicationBean");
-        assertEquals(Scope.APPLICATION, Util.getScope("TestApplicationBean", null));
+        assertEquals(Scope.APPLICATION, ELUtils.getScope("TestApplicationBean", null));
 
         valueBinding = this.create("TestApplicationBean.one");
-        assertEquals(Scope.APPLICATION, Util.getScope("TestApplicationBean.one",
+        assertEquals(Scope.APPLICATION, ELUtils.getScope("TestApplicationBean.one",
                 null));
 
         valueBinding = this.create("TestApplicationBean.inner.two");
-        assertEquals(Scope.APPLICATION, Util.getScope(
+        assertEquals(Scope.APPLICATION, ELUtils.getScope(
                 "TestApplicationBean.inner.two", null));
 
         valueBinding = this.create("applicationScope.TestApplicationBean");
-        assertEquals(Scope.APPLICATION, Util.getScope(
+        assertEquals(Scope.APPLICATION, ELUtils.getScope(
                 "applicationScope.TestApplicationBean", null));
         valueBinding = this
                 .create("applicationScope.TestApplicationBean.inner.two");
-        assertEquals(Scope.APPLICATION, Util.getScope(
+        assertEquals(Scope.APPLICATION, ELUtils.getScope(
                 "applicationScope.TestApplicationBean.inner.two", null));
 
         getFacesContext().getExternalContext().getSessionMap().put(
                 "TestSessionBean", testBean);
         valueBinding = this.create("TestSessionBean");
-        assertEquals(Scope.SESSION, Util.getScope("TestSessionBean", null));
+        assertEquals(Scope.SESSION, ELUtils.getScope("TestSessionBean", null));
 
         valueBinding = this.create("TestSessionBean.one");
-        assertEquals(Scope.SESSION, Util.getScope("TestSessionBean.one", null));
+        assertEquals(Scope.SESSION, ELUtils.getScope("TestSessionBean.one", null));
 
         valueBinding = this.create("TestSessionBean.inner.two");
-        assertEquals(Scope.SESSION, Util
-                .getScope("TestSessionBean.inner.two", null));
+        assertEquals(Scope.SESSION, ELUtils
+             .getScope("TestSessionBean.inner.two", null));
 
         valueBinding = this.create("sessionScope.TestSessionBean");
-        assertEquals(Scope.SESSION, Util.getScope("sessionScope.TestSessionBean",
+        assertEquals(Scope.SESSION, ELUtils.getScope("sessionScope.TestSessionBean",
                 null));
 
         valueBinding = this.create("sessionScope.TestSessionBean.inner.two");
-        assertEquals(Scope.SESSION, Util.getScope(
+        assertEquals(Scope.SESSION, ELUtils.getScope(
                 "sessionScope.TestSessionBean.inner.two", null));
 
         getFacesContext().getExternalContext().getRequestMap().put(
                 "TestRequestBean", testBean);
         valueBinding = this.create("TestRequestBean");
-        assertEquals(Scope.REQUEST, Util.getScope("TestRequestBean", null));
+        assertEquals(Scope.REQUEST, ELUtils.getScope("TestRequestBean", null));
 
         valueBinding = this.create("TestRequestBean.one");
-        assertEquals(Scope.REQUEST, Util.getScope("TestRequestBean.one", null));
+        assertEquals(Scope.REQUEST, ELUtils.getScope("TestRequestBean.one", null));
 
         valueBinding = this.create("TestRequestBean.inner.two");
-        assertEquals(Scope.REQUEST, Util
-                .getScope("TestRequestBean.inner.two", null));
+        assertEquals(Scope.REQUEST, ELUtils
+             .getScope("TestRequestBean.inner.two", null));
 
         valueBinding = this.create("requestScope.TestRequestBean");
-        assertEquals(Scope.REQUEST, Util.getScope("requestScope.TestRequestBean",
+        assertEquals(Scope.REQUEST, ELUtils.getScope("requestScope.TestRequestBean",
                 null));
 
         valueBinding = this.create("requestScope.TestRequestBean.inner.two");
-        assertEquals(Scope.REQUEST, Util.getScope(
+        assertEquals(Scope.REQUEST, ELUtils.getScope(
                 "requestScope.TestRequestBean.inner.two", null));
 
         valueBinding = this.create("TestNoneBean");
-        assertEquals(null, Util.getScope("TestNoneBean", null));
+        assertEquals(null, ELUtils.getScope("TestNoneBean", null));
 
         valueBinding = this.create("TestNoneBean.one");
-        assertEquals(null, Util.getScope("TestNoneBean.one", null));
+        assertEquals(null, ELUtils.getScope("TestNoneBean.one", null));
         valueBinding = this.create("TestNoneBean.inner.two");
-        assertEquals(null, Util.getScope("TestNoneBean.inner.two", null));
+        assertEquals(null, ELUtils.getScope("TestNoneBean.inner.two", null));
 
     }
 

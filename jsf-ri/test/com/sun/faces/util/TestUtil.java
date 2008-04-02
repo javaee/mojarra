@@ -1,5 +1,5 @@
 /*
- * $Id: TestUtil.java,v 1.31 2006/03/29 23:05:02 rlubke Exp $
+ * $Id: TestUtil.java,v 1.32 2007/02/27 23:10:25 rlubke Exp $
  */
 
 /*
@@ -59,7 +59,7 @@ import com.sun.faces.renderkit.RenderKitUtils;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestUtil.java,v 1.31 2006/03/29 23:05:02 rlubke Exp $
+ * @version $Id: TestUtil.java,v 1.32 2007/02/27 23:10:25 rlubke Exp $
  */
 
 public class TestUtil extends ServletFacesTestCase {
@@ -277,29 +277,7 @@ public class TestUtil extends ServletFacesTestCase {
         } catch (Throwable e) {
             assertTrue(false);
         }
-    }
-
-
-    /**
-     * This method tests the <code>Util.getSessionMap</code> method.
-     */
-    public void testGetSessionMap() {
-        // Test with null FacesContext
-        //
-        Map sessionMap = Util.getSessionMap(null);
-        assertTrue(sessionMap != null);
-
-        // Test with FacesContext
-        //
-        sessionMap = Util.getSessionMap(getFacesContext());
-        assertTrue(sessionMap != null);
-
-        // Test with no session
-        //
-        session.invalidate();
-        sessionMap = Util.getSessionMap(getFacesContext());
-        assertTrue(sessionMap != null);
-    }
+    }    
 
 
 } // end of class TestUtil
