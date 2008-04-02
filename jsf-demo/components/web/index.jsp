@@ -29,6 +29,32 @@ Faces technology.</p>
 
 <tr>
 
+<td>Image Map
+</td>
+
+<td><a href="ShowSource.jsp?filename=/imagemap.jsp"><img src="images/code.gif" width="24" height="24" border="0"></a>
+</td>
+
+<td>
+<a href="ShowSource.jsp?filename=/src/components/taglib/MapTag.java">components/taglib/MapTag.java</a><br>
+<a href="ShowSource.jsp?filename=/src/components/taglib/AreaTag.java">components/taglib/AreaTag.java</a><br>
+<a href="ShowSource.jsp?filename=/src/components/taglib/ImageTag.java">components/taglib/ImageTag.java</a><br>
+<a href="ShowSource.jsp?filename=/src/components/components/UIArea.java">components/components/UIArea.java</a><br>
+<a href="ShowSource.jsp?filename=/src/components/components/UIImage.java">components/components/UIImage.java</a><br>
+<a href="ShowSource.jsp?filename=/src/components/components/UIMap.java">components/components/UIMap.java</a><br>
+<a href="ShowSource.jsp?filename=/src/components/model/ImageArea.java">components/model/ImageArea.java</a><br>
+<a href="ShowSource.jsp?filename=/src/components/renderkit/AreaRenderer.java">components/renderkit/AreaRenderer.java</a><br>
+
+</td>
+
+<td><a href="faces/imagemap.jsp"><img src="images/execute.gif" width="24" height="24" border="0"></a>
+</td>
+
+</tr>
+
+
+<tr>
+
 <td>Menu or Tree
 </td>
 
@@ -95,32 +121,6 @@ Faces technology.</p>
 </td>
 
 </tr>
-
-<tr>
-
-<td>Image Map
-</td>
-
-<td><a href="ShowSource.jsp?filename=/imagemap.jsp"><img src="images/code.gif" width="24" height="24" border="0"></a>
-</td>
-
-<td>
-<a href="ShowSource.jsp?filename=/src/components/taglib/MapTag.java">components/taglib/MapTag.java</a><br>
-<a href="ShowSource.jsp?filename=/src/components/taglib/AreaTag.java">components/taglib/AreaTag.java</a><br>
-<a href="ShowSource.jsp?filename=/src/components/taglib/ImageTag.java">components/taglib/ImageTag.java</a><br>
-<a href="ShowSource.jsp?filename=/src/components/components/UIArea.java">components/components/UIArea.java</a><br>
-<a href="ShowSource.jsp?filename=/src/components/components/UIImage.java">components/components/UIImage.java</a><br>
-<a href="ShowSource.jsp?filename=/src/components/components/UIMap.java">components/components/UIMap.java</a><br>
-<a href="ShowSource.jsp?filename=/src/components/model/ImageArea.java">components/model/ImageArea.java</a><br>
-<a href="ShowSource.jsp?filename=/src/components/renderkit/AreaRenderer.java">components/renderkit/AreaRenderer.java</a><br>
-
-</td>
-
-<td><a href="faces/imagemap.jsp"><img src="images/execute.gif" width="24" height="24" border="0"></a>
-</td>
-
-</tr>
-
 
 </table>
 
