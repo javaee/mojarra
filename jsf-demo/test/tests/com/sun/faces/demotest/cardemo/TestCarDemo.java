@@ -1,5 +1,5 @@
 /*
- * $Id: TestCarDemo.java,v 1.3 2004/01/29 15:51:23 eburns Exp $
+ * $Id: TestCarDemo.java,v 1.4 2004/01/29 16:38:11 eburns Exp $
  */
 
 /*
@@ -19,9 +19,16 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Collection;
 import java.util.ResourceBundle;
+import java.util.HashMap;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
+/**
+ * <p>Assumptions: the app is localized for four locales, English,
+ * German, French, Spanish.</p>
+ *
+ */
 
 public class TestCarDemo extends HtmlUnitTestCase {
 
@@ -32,10 +39,25 @@ public class TestCarDemo extends HtmlUnitTestCase {
     }
 
     protected ResourceBundle resources = null;
+    protected String [] carBundleNames = {
+	"carstore.bundles.Jalopy",
+	"carstore.bundles.Luxury",
+	"carstore.bundles.Roadster",
+	"carstore.bundles.SUV"
+    };
+    protected ResourceBundle [] carBundles = null;
+
 
 
     // PENDING: find a way to cause the WebClient's Accept_Charset
     // header to be set so we can test the locale calculation algorithm.
+
+    /**
+     * <p>Load the main page.  Assumptions: there are exactly four
+     * buttons, in a certain order, to select each locale.  For each
+     * button, press it, and call doStoreFront() on the result.</p>
+     *
+     */
 
     public void testCarDemo() throws Exception {
 
@@ -44,7 +66,7 @@ public class TestCarDemo extends HtmlUnitTestCase {
 	List buttons = getAllElementsOfGivenClass(page, null, 
 						  HtmlSubmitInput.class);
 	HtmlSubmitInput button = null;
-	int i = 0;
+	int i, j = 0;
 	Locale [] locales = {
 	    Locale.ENGLISH,
 	    Locale.GERMAN,
@@ -55,6 +77,13 @@ public class TestCarDemo extends HtmlUnitTestCase {
 	for (i = 0; i < locales.length; i++) {
 	    resources = ResourceBundle.getBundle("carstore.bundles.Resources",
 						 locales[i]);
+	    carBundles = 
+		new ResourceBundle[carBundleNames.length];
+	    for (j = 0; j < carBundleNames.length; j++) {
+		carBundles[j] = 
+		    ResourceBundle.getBundle(carBundleNames[j], locales[i]);
+	    }
+	    
 	    button = (HtmlSubmitInput) buttons.get(i);
 	    if (log.isTraceEnabled()) {
 		log.trace("Running test for language: " + button.asText());
@@ -62,33 +91,68 @@ public class TestCarDemo extends HtmlUnitTestCase {
 	    doStoreFront((HtmlPage) button.click());
 	}
     }
+
+    /**
+     *
+     * <p>Assumptions: there are exactly four buttons on this page, one
+     * for each car model.</p>
+     * 
+     * <p>Verify that all of the expected cars have their descriptions
+     * on the page.</p>
+     * 
+     *
+     * <p>Verify that the text of the "more" button is properly
+     * localized.</p>
+     *
+     *
+     */ 
     
     public void doStoreFront(HtmlPage storeFront) throws Exception {
-	HtmlForm form = null;
-	HtmlInput input = null;
-	String moreButton = null;
+	HtmlSubmitInput button = null;
+	HtmlTableDataCell cell = null;
+	String 
+	    description = null,
+	    moreButton = null;
 	Iterator iter = null;
+	boolean found = false;
+	int i;
 
 	assertNotNull(storeFront);
-	// check that there are four buttons
-	List forms = storeFront.getAllForms();
-	assertEquals(1, forms.size());
-	
-	form = (HtmlForm) forms.get(0);
 
-	List inputs = getAllElementsOfGivenClass(form, null, HtmlInput.class);
-	iter = inputs.iterator();
+	List
+	    cells = getAllElementsOfGivenClass(storeFront, null, 
+					       HtmlTableDataCell.class),
+	    buttons = getAllElementsOfGivenClass(storeFront, null, 
+						 HtmlSubmitInput.class);
+
+	// verify the expected descriptions are present
+
+	for (i = 0; i < carBundles.length; i++) {
+	    iter = cells.iterator();
+	    description = carBundles[i].getString("description");
+	    while (iter.hasNext()) {
+		cell = (HtmlTableDataCell) iter.next();
+		if (-1 != cell.asText().trim().indexOf(description)) {
+		    if (log.isTraceEnabled()) {
+			log.trace("Found description " + description + ".");
+		    }
+		    found = true;
+		    break;
+		}
+	    }
+	}
+	assertTrue("Did not find description: " + description, found);
+
+	iter = buttons.iterator();
 	moreButton = resources.getString("moreButton");
 	while (iter.hasNext()) {
-	    input = (HtmlInput) iter.next();
-	    if (input instanceof HtmlSubmitInput) {
-		assertTrue(-1 != 
-			   input.asText().trim().indexOf(moreButton.trim()));
-		if (log.isTraceEnabled()) {
-		    log.trace("Button text of " + moreButton + " confirmed.");
-		}
-		doCarDetail((HtmlPage) input.click());
+	    button = (HtmlSubmitInput) iter.next();
+	    assertTrue(-1 != 
+		       button.asText().trim().indexOf(moreButton.trim()));
+	    if (log.isTraceEnabled()) {
+		log.trace("Button text of " + moreButton + " confirmed.");
 	    }
+	    doCarDetail((HtmlPage) button.click());
 	}
 	
     }
