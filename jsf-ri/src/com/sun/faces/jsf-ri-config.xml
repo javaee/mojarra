@@ -763,6 +763,14 @@
       <summary xml:lang="fr">Validator Not Found for identifier: ''{0}''.</summary>
     </message>
 
+    <message>
+      <message-id>com.sun.faces.ENCODING_ERROR</message-id>
+      <message-class>javax.faces.application.MessageImpl</message-class>
+      <summary xml:lang="en">Unrecognized Character Encoding.</summary>
+      <summary xml:lang="de">Unrecognized Character Encoding.</summary>
+      <summary xml:lang="es">Unrecognized Character Encoding.</summary>
+      <summary xml:lang="fr">Unrecognized Character Encoding.</summary>
+    </message>
   </message-resources>
 
   <!-- Standard Validators -->
@@ -787,7 +795,7 @@
   <!-- standard renderkit -->
   <render-kit>
     <render-kit-id>DEFAULT</render-kit-id>
-    <render-kit-class>com.sun.faces.renderkit.html_basic.HtmlBasicRenderKit</render-kit-class>
+    <render-kit-class>com.sun.faces.renderkit.RenderKitImpl</render-kit-class>
     <renderer>
       <renderer-type>Button</renderer-type>
       <renderer-class>com.sun.faces.renderkit.html_basic.ButtonRenderer</renderer-class>

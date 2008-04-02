@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.68 2003/07/29 18:23:32 jvisvanathan Exp $
+ * $Id: Util.java,v 1.69 2003/08/04 21:54:52 rkitain Exp $
  */
 
 /*
@@ -56,7 +56,7 @@ import java.util.StringTokenizer;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.68 2003/07/29 18:23:32 jvisvanathan Exp $
+ * @version $Id: Util.java,v 1.69 2003/08/04 21:54:52 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -228,6 +228,9 @@ public class Util extends Object
 
    public static final String CANT_LOAD_CLASS_ERROR_MESSAGE_ID =
          "com.sun.faces.CANT_INSTANTIATE_CLASS";
+
+   public static final String ENCODING_ERROR_MESSAGE_ID =
+         "com.sun.faces.ENCODING_ERROR";
 
 // README - make sure to add the message identifier constant
 // (ex: Util.CONVERSION_ERROR_MESSAGE_ID) and the number of substitution

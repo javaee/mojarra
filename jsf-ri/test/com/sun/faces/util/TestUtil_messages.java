@@ -1,5 +1,5 @@
 /*
- * $Id: TestUtil_messages.java,v 1.10 2003/06/25 06:29:58 rkitain Exp $
+ * $Id: TestUtil_messages.java,v 1.11 2003/08/04 21:54:56 rkitain Exp $
  */
 
 /*
@@ -25,7 +25,7 @@ import java.util.Properties;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestUtil_messages.java,v 1.10 2003/06/25 06:29:58 rkitain Exp $
+ * @version $Id: TestUtil_messages.java,v 1.11 2003/08/04 21:54:56 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -98,7 +98,8 @@ public class TestUtil_messages extends ServletFacesTestCase {
         {Util.CANT_CONVERT_VALUE_ERROR_MESSAGE_ID, "2"},
         {Util.INVALID_SCOPE_LIFESPAN_ERROR_MESSAGE_ID, "1"},
         {Util.CONVERTER_NOT_FOUND_ERROR_MESSAGE_ID, "1"},
-        {Util.VALIDATOR_NOT_FOUND_ERROR_MESSAGE_ID, "1"}
+        {Util.VALIDATOR_NOT_FOUND_ERROR_MESSAGE_ID, "1"},
+        {Util.ENCODING_ERROR_MESSAGE_ID, "0"}
         
     };
 
