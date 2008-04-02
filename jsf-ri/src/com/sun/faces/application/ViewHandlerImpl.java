@@ -1,5 +1,5 @@
 /* 
- * $Id: ViewHandlerImpl.java,v 1.62 2006/01/11 15:28:03 rlubke Exp $ 
+ * $Id: ViewHandlerImpl.java,v 1.63 2006/01/19 17:47:04 edburns Exp $ 
  */ 
 
 
@@ -66,7 +66,7 @@ import com.sun.faces.util.MessageUtils;
 /**
  * <B>ViewHandlerImpl</B> is the default implementation class for ViewHandler.
  *
- * @version $Id: ViewHandlerImpl.java,v 1.62 2006/01/11 15:28:03 rlubke Exp $
+ * @version $Id: ViewHandlerImpl.java,v 1.63 2006/01/19 17:47:04 edburns Exp $
  * @see javax.faces.application.ViewHandler
  */
 public class ViewHandlerImpl extends ViewHandler {
@@ -120,71 +120,73 @@ public class ViewHandlerImpl extends ViewHandler {
 
 
     public void renderView(FacesContext context,
-                           UIViewRoot viewToRender) throws IOException,
+            UIViewRoot viewToRender) throws IOException,
             FacesException {
-
+        
         // suppress rendering if "rendered" property on the component is
-        // false 
+        // false
         if (!viewToRender.isRendered()) {
             return;
         }
-
+        
         try {
             executePageToBuildView(context, viewToRender);
         } catch (IOException e) {
             throw new FacesException(e);
         }
-
+        
         if (logger.isLoggable(Level.FINE)) {
             logger.log(Level.FINE, "Completed building view for : \n" +
-                                   viewToRender.getViewId());
+                    viewToRender.getViewId());
         }
-
-    // set up the ResponseWriter
-
+        
+        // set up the ResponseWriter
+        
         RenderKitFactory renderFactory = (RenderKitFactory)
         FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
         RenderKit renderKit =
-        renderFactory.getRenderKit(context, viewToRender.getRenderKitId());
+                renderFactory.getRenderKit(context, viewToRender.getRenderKitId());
         ExternalContext extContext = context.getExternalContext();
         ServletRequest request = (ServletRequest) extContext.getRequest();
         ServletResponse response = (ServletResponse) extContext.getResponse();
-
+        
         ResponseWriter oldWriter = context.getResponseWriter();
         StringWriter strWriter = new StringWriter();
         ResponseWriter newWriter = null;
-    if (null != oldWriter) {
+        if (null != oldWriter) {
             newWriter = oldWriter.cloneWithWriter(strWriter);
-    }
-    else {
-           newWriter = renderKit.createResponseWriter(strWriter, null,
-                                                      request.getCharacterEncoding());
-    }
+        } else {
+            newWriter = renderKit.createResponseWriter(strWriter, null,
+                    request.getCharacterEncoding());
+            newWriter = renderKit.createResponseWriter(strWriter, null,
+                    request.getCharacterEncoding());
+            
+        }
         context.setResponseWriter(newWriter);
-
-    newWriter.startDocument();
-
+        
+        newWriter.startDocument();
+        
         doRenderView(context, viewToRender);
-
-    newWriter.endDocument();
-
+        
+        newWriter.endDocument();
+        
         // replace markers in the body content and write it to response.
         ResponseWriter responseWriter = null;
         if (null != oldWriter) {
-        responseWriter = oldWriter.cloneWithWriter(response.getWriter());
+            responseWriter = oldWriter.cloneWithWriter(response.getWriter());
         } else {
-        responseWriter = renderKit.createResponseWriter(response.getWriter(),
-                                                        null, request.getCharacterEncoding());
-    }
+            responseWriter = renderKit.createResponseWriter(response.getWriter(),
+                    null, request.getCharacterEncoding());
+        }
         context.setResponseWriter(responseWriter);
-
+        
         String bodyContent = strWriter.getBuffer().toString();
         replaceMarkers(bodyContent, context);
-
+        
         if (null != oldWriter) {
             context.setResponseWriter(oldWriter);
         }
-
+        
         // write any AFTER_VIEW_CONTENT to the response
         Object content = extContext.getRequestMap().get(AFTER_VIEW_CONTENT);
         assert(null != content);
@@ -195,12 +197,12 @@ public class ViewHandlerImpl extends ViewHandler {
         } else {
             assert(false);
         }
-
+        
         response.flushBuffer(); // PENDING(edburns): necessary?
-
+        
         // remove the AFTER_VIEW_CONTENT from the view root
         extContext.getRequestMap().remove(AFTER_VIEW_CONTENT);
-
+        
         // PENDING (visvan) do we need this any more since we save the tree
         // after encode ??
        /* if (!context.getExternalContext().getRequestMap().containsKey(RIConstants.SAVED_STATE)) {
