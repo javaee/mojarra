@@ -36,6 +36,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.jar.JarEntry;
 import java.util.jar.JarInputStream;
 import java.util.jar.JarOutputStream;
@@ -49,6 +50,7 @@ import java.util.regex.Pattern;
 public class GlassfishUpdater {
     
     private static final String ASADMIN_NAME = "asadmin";
+    private static final String BACKUP_SUFFIX = "jsfbak";
     
     /** Creates a new instance of GlassfishUpdater */
     private GlassfishUpdater() {
@@ -122,9 +124,15 @@ public class GlassfishUpdater {
     }
     
     public static void stripJsfFromJavaEEJar(File libDir) throws IOException {
+        if (!javaEEJarHasJsfClasses(libDir)) {
+            return;
+        }
+        
         File javaEEJarCopy = new File(libDir, "javaee.jar.copy"),
             javaEEJar =  new File (libDir, "javaee.jar"),
-            javaEEJarOrig = new File(libDir, "javaee_jar.orig");
+            javaEEJarOrig = new File(libDir, getBackupFilename(libDir,
+                "javaee.jar"));
+        javaEEJarCopy.delete();
         JarInputStream origJarStream = new JarInputStream(new FileInputStream(javaEEJar));
         JarOutputStream copyJarStream = new JarOutputStream(new FileOutputStream(javaEEJarCopy));
         JarEntry newEntry = null, cur = null;
@@ -152,13 +160,40 @@ public class GlassfishUpdater {
                 
     }
     
+    public static boolean javaEEJarHasJsfClasses(File libDir) throws IOException {
+        boolean result = false;
+        File javaEEJar =  new File (libDir, "javaee.jar");
+        JarInputStream origJarStream = new JarInputStream(new FileInputStream(javaEEJar));
+        JarEntry newEntry = null, cur = null;
+        Pattern pat = Pattern.compile(".*javax.faces.*");
+        Matcher mat = null;
+        byte[] buf = new byte[1024];
+        int n = 0;        
+        while (null != (cur = origJarStream.getNextJarEntry())) {
+            mat = pat.matcher(cur.getName());
+            // If the current entry does not include javax.faces...
+            if (mat.matches()) {
+                result = true;
+            }
+        }
+        origJarStream.close();
+        return result;
+    }
+    
     public static void unpackJsfJarsToLib(File libDir) throws IOException {
         InputStream is = Thread.currentThread().getContextClassLoader().
                 getResourceAsStream("jsf-api.jar");
-        File jsfApi = new File(libDir, "jsf-api.jar"),
+        File 
+             jsfApiCopy = new File(libDir, getBackupFilename(libDir,
+                "jsf-api.jar")),
+             jsfApi = new File(libDir, "jsf-api.jar"),
+             jsfImplCopy = new File(libDir, getBackupFilename(libDir,
+                "jsf-impl.jar")),
              jsfImpl = new File(libDir, "jsf-impl.jar");
-        jsfApi.delete();
-        jsfImpl.delete();
+        jsfApiCopy.delete();
+        jsfImplCopy.delete();
+        jsfApi.renameTo(jsfApiCopy);
+        jsfImpl.renameTo(jsfImplCopy);
         FileOutputStream fos = new FileOutputStream(jsfApi);
         int n = 0;
         while (-1 != (n = is.read())) {
@@ -174,6 +209,44 @@ public class GlassfishUpdater {
         }
         is.close();
         fos.close();
+    }
+    
+    private static String getBackupFilename(File libDir, String filename) {
+       File [] files = libDir.listFiles();
+       Pattern pat = Pattern.compile(".*" + BACKUP_SUFFIX + "[0-9]*");
+       Matcher mat = null;
+       ArrayList<File> backupFiles = new ArrayList<File>();
+       for (File cur : files) {
+           mat = pat.matcher(cur.getName());
+           // If the current entry is a backup file...
+           if (mat.matches()) {
+               // add it to the list.
+               backupFiles.add(cur);
+           }
+       }
+       int i = 1;
+       int curInt = 0;
+       String curSuffix = null, curName = null;
+       if (0 < backupFiles.size()) {
+           // Find the highest backup number and go one more.
+           for (File cur : backupFiles) {
+               curName = cur.getName();
+               curSuffix = curName.substring(curName.indexOf(BACKUP_SUFFIX));
+               if (BACKUP_SUFFIX.length() < curSuffix.length()) {
+                   
+                   curInt = Integer.valueOf(curSuffix.
+                           substring(BACKUP_SUFFIX.length())).intValue();
+                   if (i == curInt) {
+                       i = curInt + 1;
+                   }
+                   else if (i < curInt) { 
+                       i = curInt;
+                   }
+               }
+           }
+       }
+       
+       return filename + BACKUP_SUFFIX + i;
     }
     
 }
