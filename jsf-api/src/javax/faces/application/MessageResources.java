@@ -1,5 +1,5 @@
 /*
- * $Id: MessageResources.java,v 1.1 2003/07/16 23:11:00 craigmcc Exp $
+ * $Id: MessageResources.java,v 1.2 2003/09/09 21:15:27 craigmcc Exp $
  */
 
 /*
@@ -31,12 +31,14 @@ import javax.faces.context.FacesContext;
  * that to construct (if necessary) and return a {@link Message} instance
  * whose <code>detail</code> and <code>summary</code> properties have been
  * localized for the specified locale.  If no localized text for the specified
- * locale is available, fallback text in a default language may be returned
- * instead.  If a <code>getMessage()</code> variant that includes
+ * locale is available, fallback text in the language specified by the
+ * default Locale for the underlying JVM may be returned instead.</p>
+ *
+ * <p>For the <code>getMessage()</code> variants that include
  * substitution parameters, the summary and detail localized text Strings are
- * used as a pattern string for <code>java.text.MessageResources()</code>,
- * whose <code>format(String,Object[])</code> method is used to perform the
- * actual substitution.</p>
+ * used as a pattern string for a <code>java.text.MessageResources</code>
+ * instance, whose <code>format(String,Object[])</code> method is used to
+ * perform the actual substitution.</p>
  */
 
 public abstract class MessageResources {
@@ -61,7 +63,8 @@ public abstract class MessageResources {
     public static final String FACES_IMPL_MESSAGES =
         "javax.faces.context.FACES_IMPL_MESSAGES";
 
-    
+
+    // ---------------------------------------------------------- Public Methods
 
 
     /**

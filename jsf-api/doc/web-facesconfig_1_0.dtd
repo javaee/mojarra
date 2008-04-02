@@ -13,7 +13,7 @@
      "-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.0//EN"
      "http://java.sun.com/dtd/web-facesconfig_1_0.dtd">
 
-    $Id: web-facesconfig_1_0.dtd,v 1.10 2003/09/04 23:37:08 eburns Exp $
+    $Id: web-facesconfig_1_0.dtd,v 1.11 2003/09/09 21:15:26 craigmcc Exp $
 
 -->
 
@@ -435,7 +435,9 @@
 <!--
     The "detail" element contains the detail error message text
     for the parent "message" element, optionally flagged with a language
-    code using the "xml:lang" attribute.
+    code using the "xml:lang" attribute.  If no "xml:lang" attribute is
+    present, this text should be assumed to be in the language
+    specified by the default Locale for the underlying JVM.
 -->
 <!ELEMENT detail          (#PCDATA)>
 <!ATTLIST detail          xml:lang        %Language;      #IMPLIED>
@@ -717,7 +719,9 @@
 <!--
     The "summary" element contains the summary error message text
     for the parent "message" element, optionally flagged with a language
-    code using the "xml:lang" attribute.
+    code using the "xml:lang" attribute.  If no "xml:lang" attribute is
+    present, this text should be assumed to be in the language
+    specified by the default Locale for the underlying JVM.
 -->
 <!ELEMENT summary         (#PCDATA)>
 <!ATTLIST summary         xml:lang        %Language;      #IMPLIED>
