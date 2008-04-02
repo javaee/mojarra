@@ -125,6 +125,8 @@
     <target name="build.java.net" 
             depends="prepare.build.java.net">
 
+        <antcall target="build.glassfish.updater.jar" />
+
         <installerBuilder
               classFile="${dist.dir}/javaserverfaces_binary.class"
               licenseFile="${LICENSEFILE}"
@@ -228,6 +230,12 @@
                                    fromFile="${dist.dir}/javaserverfaces_source.class"
                                    fileDescription="Nightly source snapshot. Run 'java -cp . javaserverfaces_source' to install"
                                    overwrite="yes"/>
+
+                    <javaNetUpload projectName="javaserverfaces"
+                                   toFile="/nightly/jsf-glassfish-updater.jar"
+                                   fromFile="${dist.dir}/jsf-glassfish-updater-${impl.version}.jar"
+                                   fileDescription="Installer for updating an existing glassfish binary with a new JSF implementation. Run 'java -jar jsf-glassfish-updater.jar PATH_TO_GLASSFISH_INSTALL_DIRECTORY' to install."
+                                   overwrite="yes"/>
                 </sequential>
             </then>
             <else>
@@ -304,6 +312,26 @@
               classFile="${dist.dir}/javaserverfaces_samples.class"
               licenseFile="${LICENSEFILE}"
               zipFile="${basedir}/jsf-samples.zip"/>
+    </target>
+
+    <target name="build.glassfish.updater.jar">
+      <mkdir dir="${dist.dir}" />
+
+      <ant dir="jsf-api" target="tools.javac" inheritAll="false" />
+     <jar destfile="${dist.dir}/jsf-glassfish-updater-${impl.version}.jar">
+        <fileset dir="${basedir}/jsf-tools/build/classes"
+                 includes="com/sun/faces/tools/GlassfishUpdater.class" />
+        <fileset dir="${basedir}/jsf-api/build/lib/"
+                 includes="jsf-api.jar" />
+        <fileset dir="${basedir}/jsf-ri/build/lib/"
+                 includes="jsf-impl.jar" />
+        <fileset dir="${basedir}/legal/jsf-cddl"
+                 includes="CDDLv1.0.txt" />
+        <manifest>
+          <attribute name="Main-Class" 
+                     value="com.sun.faces.tools.GlassfishUpdater" />
+        </manifest>
+      </jar>
     </target>
 
 
