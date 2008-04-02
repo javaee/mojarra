@@ -1,5 +1,5 @@
 /*
- * $Id: ValueHolderSupport.java,v 1.1 2003/09/18 22:27:46 craigmcc Exp $
+ * $Id: ValueHolderSupport.java,v 1.2 2003/09/19 00:57:06 craigmcc Exp $
  */
 
 /*
@@ -48,7 +48,8 @@ import javax.faces.el.ValueBinding;
  * and restored as part of the state of your component class.</p>
  */
 
-public class ValueHolderSupport implements StateHolder, ValueHolder {
+public class ValueHolderSupport
+    implements StateHolderWithBackReference, ValueHolder {
 
 
     // ------------------------------------------------------------ Constructors
@@ -218,8 +219,19 @@ public class ValueHolderSupport implements StateHolder, ValueHolder {
     public void restoreState(FacesContext context, Object state)
         throws IOException {
 
-        // PENDING(craigmc) - The "component" ivar is still not restored!!!
+        throw new UnsupportedOperationException();
 
+    }
+
+
+    public void restoreState(FacesContext context, Object state,
+                             UIComponent component)
+        throws IOException {
+
+        // Restore component reference from parameter
+        this.component = component;
+
+        // Restore other state information from saved state
         Object values[] = (Object[]) state;
         List[] converterList = (List[])
             context.getApplication().getViewHandler().getStateManager().

@@ -1,5 +1,5 @@
 /*
- * $Id: UICommandBaseTestCase.java,v 1.14 2003/09/15 20:17:37 eburns Exp $
+ * $Id: UICommandBaseTestCase.java,v 1.15 2003/09/19 00:57:14 craigmcc Exp $
  */
 
 /*
@@ -16,6 +16,7 @@ import java.util.List;
 import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UICommand;
+import javax.faces.component.ValueHolder;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.ActionListener;
 import javax.faces.event.PhaseId;
@@ -422,6 +423,15 @@ public class UICommandBaseTestCase extends ValueHolderTestCaseBase {
 
 
     // -------------------------------------------------------- Support Methods
+
+    protected ValueHolder createValueHolder() {
+
+        UIComponent component = new UICommandSub();
+        component.setRendererType(null);
+        return ((ValueHolder) component);
+
+    }
+
 
     boolean propertiesAreEqual(FacesContext context,
 			       UIComponent comp1,

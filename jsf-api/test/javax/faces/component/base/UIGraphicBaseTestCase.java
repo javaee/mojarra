@@ -1,5 +1,5 @@
 /*
- * $Id: UIGraphicBaseTestCase.java,v 1.4 2003/09/15 20:17:39 eburns Exp $
+ * $Id: UIGraphicBaseTestCase.java,v 1.5 2003/09/19 00:57:15 craigmcc Exp $
  */
 
 /*
@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.util.Iterator;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIGraphic;
+import javax.faces.component.ValueHolder;
 import junit.framework.TestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -180,6 +181,15 @@ public class UIGraphicBaseTestCase extends ValueHolderTestCaseBase {
 	testParent.getChildren().add(postSave);
         postSave.restoreState(facesContext, state);
 	assertTrue(propertiesAreEqual(facesContext, preSave, postSave));
+
+    }
+
+
+    protected ValueHolder createValueHolder() {
+
+        UIComponent component = new UIGraphicBase();
+        component.setRendererType(null);
+        return ((ValueHolder) component);
 
     }
 

@@ -1,5 +1,5 @@
 /*
- * $Id: UIGraphicBase.java,v 1.8 2003/09/18 00:53:44 eburns Exp $
+ * $Id: UIGraphicBase.java,v 1.9 2003/09/19 00:57:08 craigmcc Exp $
  */
 
 /*
@@ -18,6 +18,7 @@ import javax.faces.component.Repeater;
 import javax.faces.component.RepeaterSupport;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIGraphic;
+import javax.faces.component.ValueHolderSupport;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.el.ValueBinding;
@@ -47,26 +48,30 @@ public class UIGraphicBase extends UIComponentBase implements UIGraphic {
     }
 
 
-    // -------------------------------------------------------------- Properties
+    // ------------------------------------------------------ Instance Variables
 
 
     /**
-     * <p>The {@link Converter} (if any)
-     * that is registered for this {@link UIComponent}.</p>
+     * <p>The {@link ValueHolderSupport} instance to which we delegate
+     * our {@link ValueHolder} implementation processing.</p>
      */
-    private Converter converter = null;
+    private ValueHolderSupport support = new ValueHolderSupport(this);
+
+
+
+    // -------------------------------------------------------------- Properties
 
 
     public Converter getConverter() {
 
-        return (this.converter);
+        return (support.getConverter());
 
     }
 
 
     public void setConverter(Converter converter) {
 
-        this.converter = converter;
+        support.setConverter(converter);
 
     }
 
@@ -85,61 +90,30 @@ public class UIGraphicBase extends UIComponentBase implements UIGraphic {
     }
 
 
-    /**
-     * <p>The local value of this {@link UIComponent} (if any).</p>
-     */
-    private Object value = null;
-
-
     public Object getValue() {
 
-        Repeater repeater = RepeaterSupport.findParentRepeater(this);
-        if (repeater != null) {
-            if (repeater.getRowIndex() > 0) {
-                return (repeater.getChildValue(this));
-            } else {
-                return (this.value);
-            }
-        } else {
-            return (this.value);
-        }
+        return (support.getValue());
 
     }
 
 
     public void setValue(Object value) {
 
-        Repeater repeater = RepeaterSupport.findParentRepeater(this);
-        if (repeater != null) {
-            if (repeater.getRowIndex() > 0) {
-                repeater.setChildValue(this, value);
-            } else {
-                this.value = value;
-            }
-        } else {
-            this.value = value;
-        }
+        support.setValue(value);
 
     }
 
 
-    /**
-     * <p>The value reference expression for this {@link UIComponent}
-     * (if any).</p>
-     */
-    private String valueRef = null;
-
-
     public String getValueRef() {
 
-        return (this.valueRef);
+        return (support.getValueRef());
 
     }
 
 
     public void setValueRef(String valueRef) {
 
-        this.valueRef = valueRef;
+        support.setValueRef(valueRef);
 
     }
 
@@ -149,20 +123,7 @@ public class UIGraphicBase extends UIComponentBase implements UIGraphic {
 
     public Object currentValue(FacesContext context) {
 
-        if (context == null) {
-            throw new NullPointerException();
-        }
-        Object value = getValue();
-        if (value != null) {
-            return (value);
-        }
-        String valueRef = getValueRef();
-        if (valueRef != null) {
-            Application application = context.getApplication();
-            ValueBinding binding = application.getValueBinding(valueRef);
-            return (binding.getValue(context));
-        }
-        return (null);
+        return (support.currentValue(context));
 
     }
 
@@ -172,17 +133,15 @@ public class UIGraphicBase extends UIComponentBase implements UIGraphic {
 
     public Object saveState(FacesContext context) {
 
-        Object values[] = new Object[4];
+        Object values[] = new Object[2];
         values[0] = super.saveState(context);
-        List[] converterList = new List[1];
-        List theConverter = new ArrayList(1);
-        theConverter.add(converter);
-        converterList[0] = theConverter;
+        List[] supportList = new List[1];
+        List theSupport = new ArrayList(1);
+        theSupport.add(support);
+        supportList[0] = theSupport;
         values[1] =
             context.getApplication().getViewHandler().getStateManager().
-            getAttachedObjectState(context, this, "converter", converterList);
-        values[2] = value;
-        values[3] = valueRef;
+            getAttachedObjectState(context, this, "support", supportList);
         return (values);
 
     }
@@ -193,18 +152,15 @@ public class UIGraphicBase extends UIComponentBase implements UIGraphic {
 
         Object values[] = (Object[]) state;
         super.restoreState(context, values[0]);
-        List[] converterList = (List[])
+        List[] supportList = (List[])
             context.getApplication().getViewHandler().getStateManager().
             restoreAttachedObjectState(context, values[1], null, this);
-        // PENDING(craigmcc) - it shouldn't be this hard to restore converters
-	if (converterList != null) {
-            List theConverter = converterList[0];
-            if ((theConverter != null) && (theConverter.size() > 0)) {
-                converter = (Converter) theConverter.get(0);
+	if (supportList != null) {
+            List theSupport = supportList[0];
+            if ((theSupport != null) && (theSupport.size() > 0)) {
+                support = (ValueHolderSupport) theSupport.get(0);
             }
 	}
-        value = values[2];
-        valueRef = (String) values[3];
 
     }
 

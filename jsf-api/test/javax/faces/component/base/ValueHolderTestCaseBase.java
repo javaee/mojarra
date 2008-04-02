@@ -1,5 +1,5 @@
 /*
- * $Id: ValueHolderTestCaseBase.java,v 1.4 2003/09/16 23:23:47 craigmcc Exp $
+ * $Id: ValueHolderTestCaseBase.java,v 1.5 2003/09/19 00:57:17 craigmcc Exp $
  */
 
 /*
@@ -20,6 +20,7 @@ import javax.faces.component.ValueHolder;
 import javax.faces.convert.Converter;
 import javax.faces.convert.ConverterException;
 import javax.faces.convert.LongConverter;
+import javax.faces.convert.NumberConverter;
 import javax.faces.convert.ShortConverter;
 import javax.faces.TestUtil;
 import junit.framework.TestCase;
@@ -283,6 +284,99 @@ public abstract class ValueHolderTestCaseBase extends UIComponentBaseTestCase {
 	assertTrue(propertiesAreEqual(facesContext, preSave, postSave));
 
     }
+
+
+    // Special save/restore test for components implementing ValueHolderBase
+    public void testValueHolderBase() throws Exception {
+
+        UIComponent testParent = new TestComponentNamingContainer("root");
+        ValueHolder
+            preSave = null,
+            postSave = null;
+        Object state = null;
+
+        // Create and populate test component
+        preSave = createValueHolder();
+        preSave.setConverter(createNumberConverter());
+        preSave.setValue("foo");
+        preSave.setValueRef("bar.baz");
+
+        // Save and restore state
+        testParent.getChildren().clear();
+        testParent.getChildren().add(preSave);
+        state = ((StateHolder) preSave).saveState(facesContext);
+        testParent.getChildren().clear();
+        postSave = createValueHolder();
+        testParent.getChildren().add(postSave);
+        ((StateHolder) postSave).restoreState(facesContext, state);
+
+        // Validate the results
+        checkValueHolders(preSave, postSave);
+        checkNumberConverters((NumberConverter) preSave.getConverter(),
+                              (NumberConverter) postSave.getConverter());
+
+    }
+
+
+    protected NumberConverter createNumberConverter() {
+
+        NumberConverter nc = new NumberConverter();
+        nc.setCurrencyCode("USD");
+        nc.setCurrencySymbol("$");
+        nc.setGroupingUsed(false);
+        nc.setIntegerOnly(true);
+        nc.setMaxFractionDigits(2);
+        nc.setMaxIntegerDigits(10);
+        nc.setMinFractionDigits(2);
+        nc.setMinIntegerDigits(5);
+        nc.setType("currency");
+        return (nc);
+
+    }
+
+
+    // Create and return a new component of the type being tested
+    // (must implement ValueHolder and StateHolder, and return
+    // null for rendererType)
+    protected ValueHolder createValueHolder() {
+
+        UIComponent component = new UIOutputBase();
+        component.setRendererType(null);
+        return ((ValueHolder) component);
+
+    }
+
+
+    protected void checkNumberConverters(NumberConverter nc1,
+                               NumberConverter nc2) {
+
+        assertNotNull(nc1);
+        assertNotNull(nc2);
+        assertEquals(nc1.getCurrencyCode(), nc2.getCurrencyCode());
+        assertEquals(nc1.getCurrencySymbol(), nc2.getCurrencySymbol());
+        assertEquals(nc1.isGroupingUsed(), nc2.isGroupingUsed());
+        assertEquals(nc1.isIntegerOnly(), nc2.isIntegerOnly());
+        assertEquals(nc1.getMaxFractionDigits(), nc2.getMaxFractionDigits());
+        assertEquals(nc1.getMaxIntegerDigits(), nc2.getMaxIntegerDigits());
+        assertEquals(nc1.getMinFractionDigits(), nc2.getMinFractionDigits());
+        assertEquals(nc1.getMinIntegerDigits(), nc2.getMinIntegerDigits());
+        assertEquals(nc1.getParseLocale(), nc2.getParseLocale());
+        assertEquals(nc1.getPattern(), nc2.getPattern());
+        assertEquals(nc1.getType(), nc2.getType());
+
+    }
+
+
+    protected void checkValueHolders(ValueHolder vh1,
+                                     ValueHolder vh2) {
+
+        assertNotNull(vh1);
+        assertNotNull(vh2);
+        assertEquals(vh1.getValue(), vh2.getValue());
+        assertEquals(vh1.getValueRef(), vh2.getValueRef());
+
+    }
+
 
     boolean propertiesAreEqual(FacesContext context,
 			       UIComponent comp1,

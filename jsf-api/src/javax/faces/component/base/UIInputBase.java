@@ -1,5 +1,5 @@
 /*
- * $Id: UIInputBase.java,v 1.9 2003/09/18 00:53:44 eburns Exp $
+ * $Id: UIInputBase.java,v 1.10 2003/09/19 00:57:08 craigmcc Exp $
  */
 
 /*
@@ -10,8 +10,11 @@
 package javax.faces.component.base;
 
 
+import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import javax.faces.FacesException;
 import javax.faces.application.Application;
 import javax.faces.application.Message;
@@ -25,11 +28,6 @@ import javax.faces.event.PhaseId;
 import javax.faces.event.ValueChangedEvent;
 import javax.faces.event.ValueChangedListener;
 import javax.faces.validator.Validator;
-
-import java.io.IOException;
-import java.io.Serializable;
-import java.util.List;
-
 
 
 /**

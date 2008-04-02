@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectBooleanBaseTestCase.java,v 1.2 2003/07/26 17:55:25 craigmcc Exp $
+ * $Id: UISelectBooleanBaseTestCase.java,v 1.3 2003/09/19 00:57:16 craigmcc Exp $
  */
 
 /*
@@ -15,6 +15,7 @@ import java.util.Iterator;
 import java.util.List;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UISelectBoolean;
+import javax.faces.component.ValueHolder;
 import junit.framework.TestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -130,6 +131,16 @@ public class UISelectBooleanBaseTestCase extends UIInputBaseTestCase {
         assertTrue(!selectBoolean.isSelected());
 
     }
+
+
+    protected ValueHolder createValueHolder() {
+
+        UIComponent component = new UISelectBooleanBase();
+        component.setRendererType(null);
+        return ((ValueHolder) component);
+
+    }
+
 
 
 

@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectOneBaseTestCase.java,v 1.4 2003/08/28 21:17:27 craigmcc Exp $
+ * $Id: UISelectOneBaseTestCase.java,v 1.5 2003/09/19 00:57:17 craigmcc Exp $
  */
 
 /*
@@ -15,6 +15,7 @@ import java.util.Iterator;
 import java.util.List;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UISelectOne;
+import javax.faces.component.ValueHolder;
 import junit.framework.TestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -115,6 +116,16 @@ public class UISelectOneBaseTestCase extends UIInputBaseTestCase {
         assertTrue(!selectOne.isValid());
 
     }
+
+
+    protected ValueHolder createValueHolder() {
+
+        UIComponent component = new UISelectOneBase();
+        component.setRendererType(null);
+        return ((ValueHolder) component);
+
+    }
+
 
 
 }

@@ -1,5 +1,5 @@
 /*
- * $Id: UIDataTestCase.java,v 1.3 2003/09/15 20:17:35 eburns Exp $
+ * $Id: UIDataTestCase.java,v 1.4 2003/09/19 00:57:13 craigmcc Exp $
  */
 
 /*
@@ -237,6 +237,15 @@ public class UIDataTestCase extends ValueHolderTestCaseBase {
 	testParent.getChildren().add(postSave);
         postSave.restoreState(facesContext, state);
 	assertTrue(propertiesAreEqual(facesContext, preSave, postSave));
+
+    }
+
+
+    protected ValueHolder createValueHolder() {
+
+        UIComponent component = new UIData();
+        component.setRendererType(null);
+        return ((ValueHolder) component);
 
     }
 

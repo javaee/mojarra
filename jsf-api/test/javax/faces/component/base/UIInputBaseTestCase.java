@@ -1,5 +1,5 @@
 /*
- * $Id: UIInputBaseTestCase.java,v 1.8 2003/09/15 20:17:39 eburns Exp $
+ * $Id: UIInputBaseTestCase.java,v 1.9 2003/09/19 00:57:15 craigmcc Exp $
  */
 
 /*
@@ -15,6 +15,7 @@ import java.util.Iterator;
 import java.util.List;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
+import javax.faces.component.ValueHolder;
 import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseId;
 import javax.faces.event.ValueChangedEvent;
@@ -481,6 +482,16 @@ public class UIInputBaseTestCase extends UIOutputBaseTestCase {
 	assertTrue(validatorsAreEqual(facesContext, preSave, postSave));
     }    
  
+
+    protected ValueHolder createValueHolder() {
+
+        UIComponent component = new UIInputBase();
+        component.setRendererType(null);
+        return ((ValueHolder) component);
+
+    }
+
+
     boolean propertiesAreEqual(FacesContext context,
 			       UIComponent comp1,
 			       UIComponent comp2) {

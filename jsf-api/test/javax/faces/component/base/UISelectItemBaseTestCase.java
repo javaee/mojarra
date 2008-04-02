@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectItemBaseTestCase.java,v 1.6 2003/09/15 20:17:40 eburns Exp $
+ * $Id: UISelectItemBaseTestCase.java,v 1.7 2003/09/19 00:57:16 craigmcc Exp $
  */
 
 /*
@@ -15,6 +15,7 @@ import java.util.Iterator;
 import java.util.List;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UISelectItem;
+import javax.faces.component.ValueHolder;
 import javax.faces.context.FacesContext;
 import javax.faces.TestUtil;
 import junit.framework.TestCase;
@@ -232,6 +233,16 @@ public class UISelectItemBaseTestCase extends ValueHolderTestCaseBase {
     }
      
     // -------------------------------------------------------- Support Methods
+
+
+    protected ValueHolder createValueHolder() {
+
+        UIComponent component = new UISelectItemBase();
+        component.setRendererType(null);
+        return ((ValueHolder) component);
+
+    }
+
 
     protected boolean propertiesAreEqual(FacesContext context,
 					 UIComponent comp1,

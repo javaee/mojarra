@@ -1,5 +1,5 @@
 /*
- * $Id: UIOutputBaseTestCase.java,v 1.10 2003/09/15 20:17:39 eburns Exp $
+ * $Id: UIOutputBaseTestCase.java,v 1.11 2003/09/19 00:57:16 craigmcc Exp $
  */
 
 /*
@@ -16,6 +16,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIOutput;
 import javax.faces.component.StateHolder;
+import javax.faces.component.ValueHolder;
 import javax.faces.convert.Converter;
 import javax.faces.convert.ConverterException;
 import javax.faces.convert.LongConverter;
@@ -173,6 +174,17 @@ public class UIOutputBaseTestCase extends ValueHolderTestCaseBase {
 	assertTrue(propertiesAreEqual(facesContext, preSave, postSave));
 
     }
+
+
+
+    protected ValueHolder createValueHolder() {
+
+        UIComponent component = new UIOutputBase();
+        component.setRendererType(null);
+        return ((ValueHolder) component);
+
+    }
+
 
     boolean propertiesAreEqual(FacesContext context,
 			       UIComponent comp1,

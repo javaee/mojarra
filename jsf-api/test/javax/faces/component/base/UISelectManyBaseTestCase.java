@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectManyBaseTestCase.java,v 1.3 2003/08/28 21:08:57 craigmcc Exp $
+ * $Id: UISelectManyBaseTestCase.java,v 1.4 2003/09/19 00:57:17 craigmcc Exp $
  */
 
 /*
@@ -15,6 +15,7 @@ import java.util.Iterator;
 import java.util.List;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UISelectMany;
+import javax.faces.component.ValueHolder;
 import junit.framework.TestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -163,6 +164,15 @@ public class UISelectManyBaseTestCase extends UIInputBaseTestCase {
         selectMany.setValue(new Object[] { "bar", "bop"});
         selectMany.validate(facesContext);
         assertTrue(!selectMany.isValid());
+
+    }
+
+
+    protected ValueHolder createValueHolder() {
+
+        UIComponent component = new UISelectManyBase();
+        component.setRendererType(null);
+        return ((ValueHolder) component);
 
     }
 

@@ -130,6 +130,14 @@ public class UIData extends UIComponentBase
 
 
     /**
+     * <p>The {@link ValueHolderSupport} instance to which we delegate
+     * our {@link ValueHolder} implementation processing.</p>
+     */
+    private ValueHolderSupport support = new ValueHolderSupport(this);
+
+
+
+    /**
      * <p>The request scope attribute under which the data object for the
      * current row will be exposed when iterating.</p>
      */
@@ -140,23 +148,16 @@ public class UIData extends UIComponentBase
     // -------------------------------------------------------------- Properties
 
 
-    /**
-     * <p>The converter {@link Converter} (if any)
-     * that is registered for this {@link UIComponent}.</p>
-     */
-    private Converter converter = null;
-
-
     public Converter getConverter() {
 
-        return (this.converter);
+        return (support.getConverter());
 
     }
 
 
     public void setConverter(Converter converter) {
 
-        this.converter = converter;
+        support.setConverter(converter);
 
     }
 
@@ -253,53 +254,30 @@ public class UIData extends UIComponentBase
     }
 
 
-    /**
-     * <p>The local value of this {@link UIComponent} (if any).</p>
-     */
-    private Object value = null;
-
-
     public Object getValue() {
 
-        Repeater repeater = RepeaterSupport.findParentRepeater(this);
-        if (repeater != null) {
-            return (repeater.getChildValue(this));
-        } else {
-            return (this.value);
-        }
+        return (support.getValue());
 
     }
 
 
     public void setValue(Object value) {
 
-        Repeater repeater = RepeaterSupport.findParentRepeater(this);
-        if (repeater != null) {
-            repeater.setChildValue(this, value);
-        } else {
-            this.value = value;
-        }
+        support.setValue(value);
 
     }
 
 
-    /**
-     * <p>The value reference expression for this {@link UIComponent}
-     * (if any).</p>
-     */
-    private String valueRef = null;
-
-
     public String getValueRef() {
 
-        return (this.valueRef);
+        return (support.getValueRef());
 
     }
 
 
     public void setValueRef(String valueRef) {
 
-        this.valueRef = valueRef;
+        support.setValueRef(valueRef);
 
     }
 
@@ -450,15 +428,15 @@ public class UIData extends UIComponentBase
 
     public Object saveState(FacesContext context) {
 
-        Object values[] = new Object[8];
+        Object values[] = new Object[6];
         values[0] = super.saveState(context);
-        List[] converterList = new List[1];
-        List theConverter = new ArrayList(1);
-        theConverter.add(converter);
-        converterList[0] = theConverter;
+        List[] supportList = new List[1];
+        List theSupport = new ArrayList(1);
+        theSupport.add(support);
+        supportList[0] = theSupport;
         values[1] =
             context.getApplication().getViewHandler().getStateManager().
-            getAttachedObjectState(context, this, "converter", converterList);
+            getAttachedObjectState(context, this, "support", supportList);
         values[2] = new Integer(first);
         List[] repeaterList = new List[1];
         List theRepeater = new ArrayList(1);
@@ -468,9 +446,7 @@ public class UIData extends UIComponentBase
             context.getApplication().getViewHandler().getStateManager().
             getAttachedObjectState(context, this, "repeater", repeaterList);
         values[4] = new Integer(rows);
-        values[5] = value;
-        values[6] = valueRef;
-        values[7] = var;
+        values[5] = var;
         return (values);
 
     }
@@ -481,13 +457,13 @@ public class UIData extends UIComponentBase
 
         Object values[] = (Object[]) state;
         super.restoreState(context, values[0]);
-        List[] converterList = (List[])
+        List[] supportList = (List[])
             context.getApplication().getViewHandler().getStateManager().
             restoreAttachedObjectState(context, values[1], null, this);
-	if (converterList != null) {
-            List theConverter = converterList[0];
-            if ((theConverter != null) && (theConverter.size() > 0)) {
-                converter = (Converter) theConverter.get(0);
+	if (supportList != null) {
+            List theSupport = supportList[0];
+            if ((theSupport != null) && (theSupport.size() > 0)) {
+                support = (ValueHolderSupport) theSupport.get(0);
             }
 	}
         first = ((Integer) values[2]).intValue();
@@ -501,9 +477,7 @@ public class UIData extends UIComponentBase
             }
 	}
         rows = ((Integer) values[4]).intValue();
-        value = values[5];
-        valueRef = (String) values[6];
-        var = (String) values[7];
+        var = (String) values[5];
 
     }
 
@@ -513,20 +487,7 @@ public class UIData extends UIComponentBase
 
     public Object currentValue(FacesContext context) {
 
-        if (context == null) {
-            throw new NullPointerException();
-        }
-        Object value = getValue();
-        if (value != null) {
-            return (value);
-        }
-        String valueRef = getValueRef();
-        if (valueRef != null) {
-            Application application = context.getApplication();
-            ValueBinding binding = application.getValueBinding(valueRef);
-            return (binding.getValue(context));
-        }
-        return (null);
+        return (support.currentValue(context));
 
     }
 
