@@ -5,7 +5,7 @@
 
 
 /**
- * $Id: SelectMany_CheckboxListTag.java,v 1.9 2003/09/08 20:10:16 jvisvanathan Exp $
+ * $Id: SelectMany_CheckboxListTag.java,v 1.10 2003/09/24 23:17:26 horwat Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -83,7 +83,7 @@ public class SelectMany_CheckboxListTag extends FacesTag
 	UISelectMany uiSelectMany = (UISelectMany) component;
 	
         if (null != layout) {
-	    uiSelectMany.setAttribute("layout", layout);
+	    uiSelectMany.getAttributes().put("layout", layout);
 	}
     }
     

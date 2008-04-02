@@ -4,7 +4,7 @@
  */
 
 /*
- * $Id: MenuRenderer.java,v 1.27 2003/09/23 17:23:11 eburns Exp $
+ * $Id: MenuRenderer.java,v 1.28 2003/09/24 23:16:44 horwat Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -82,8 +82,7 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
     // Methods From Renderer
     //
 
-    public void decode(FacesContext context, UIComponent component)
-        throws IOException {
+    public void decode(FacesContext context, UIComponent component) {
         if (context == null || component == null) {
             throw new NullPointerException(
                 Util.getExceptionMessage(
@@ -347,11 +346,11 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
         Assert.assert_it(writer != null );
         
 	String styleClass = null;
-        if (null != (styleClass = (String) component.getAttribute("styleClass"))) {
+        if (null != (styleClass = (String) component.getAttributes().get("styleClass"))) {
 	    writer.writeAttribute("class", styleClass, "styleClass");
 	    writer.startElement("span", component);
 	} else if (null != (styleClass = 
-	    (String) component.getAttribute("styleClass"))) {
+	    (String) component.getAttributes().get("styleClass"))) {
 	    writer.writeAttribute("class", styleClass, "styleClass");
 	    writer.startElement("span", component);
 	}
@@ -451,11 +450,11 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
     protected int getDisplaySize(int itemCount, UIComponent component) {
         // if size is not specified default to 1.
         itemCount = 1;
-        if (null != component.getAttribute("size")) {
-            Integer size = Integer.valueOf((String)component.getAttribute("size"));
+        if (null != component.getAttributes().get("size")) {
+            Integer size = Integer.valueOf((String)component.getAttributes().get("size"));
             itemCount = size.intValue();
         } else {
-             component.setAttribute("size", String.valueOf(itemCount));
+             component.getAttributes().put("size", String.valueOf(itemCount));
         }     
         return itemCount;
     }

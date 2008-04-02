@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.91 2003/09/18 15:02:09 rlubke Exp $
+ * $Id: Util.java,v 1.92 2003/09/24 23:17:38 horwat Exp $
  */
 
 /*
@@ -61,7 +61,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.91 2003/09/18 15:02:09 rlubke Exp $
+ * @version $Id: Util.java,v 1.92 2003/09/24 23:17:38 horwat Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -675,7 +675,7 @@ private Util()
 	ParameterCheck.nonNull(component);
 	
 	// verify our component has the proper attributes for bundle.
-	if (null != (bundleName = (String)component.getAttribute(bundleAttr))){
+	if (null != (bundleName = (String)component.getAttributes().get(bundleAttr))){
 	    // verify there is a Locale for this localizationContext
 	    javax.servlet.jsp.jstl.fmt.LocalizationContext locCtx = null;
 	    if (null != (locCtx = 
@@ -706,7 +706,7 @@ private Util()
         int i = 0, len = booleanPassthruAttributes.length;
 	String value = null;
         for (i = 0; i < len; i++) {
-            value = (String)component.getAttribute(booleanPassthruAttributes[i]);
+            value = (String)component.getAttributes().get(booleanPassthruAttributes[i]);
 	    if (value != null && Boolean.valueOf(value).booleanValue()) {
 		//PENDING(rogerk) will revisit "null" param soon..
 		writer.writeAttribute(booleanPassthruAttributes[i], new Boolean("true"), null);
@@ -729,7 +729,7 @@ private Util()
         int i = 0, len = passthruAttributes.length;
 	String value = null;
 	for (i = 0; i < len; i++) {
-            value = (String)component.getAttribute(passthruAttributes[i]);
+            value = (String)component.getAttributes().get(passthruAttributes[i]);
 	    if (value != null) {
 		//PENDING(rogerk) will revisit "null" param soon..
 		writer.writeAttribute(passthruAttributes[i], value, null);
@@ -883,7 +883,7 @@ private Util()
     public static boolean componentIsDisabledOnReadonly(UIComponent component) {
 	Object disabledOrReadonly = null;
 	boolean result = false;
-	if (null != (disabledOrReadonly = component.getAttribute("disabled"))){
+	if (null != (disabledOrReadonly = component.getAttributes().get("disabled"))){
 	    if (disabledOrReadonly instanceof String) {
 		result = ((String)disabledOrReadonly).equalsIgnoreCase("true");
 	    }
@@ -892,7 +892,7 @@ private Util()
 	    }
 	}
 	if ((result == false) &&
-	    null != (disabledOrReadonly = component.getAttribute("readonly"))){
+	    null != (disabledOrReadonly = component.getAttributes().get("readonly"))){
 	    if (disabledOrReadonly instanceof String) {
 		result = ((String)disabledOrReadonly).equalsIgnoreCase("true");
 	    }

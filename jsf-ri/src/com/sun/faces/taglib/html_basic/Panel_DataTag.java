@@ -1,5 +1,5 @@
 /*
- * $Id: Panel_DataTag.java,v 1.10 2003/09/05 14:34:47 rkitain Exp $
+ * $Id: Panel_DataTag.java,v 1.11 2003/09/24 23:17:20 horwat Exp $
  */
 
 /*
@@ -67,7 +67,7 @@ public class Panel_DataTag extends FacesTag {
     protected void overrideProperties(UIComponent component) {
         super.overrideProperties(component);
         if (var != null) {
-            component.setAttribute("var", var);
+            component.getAttributes().put("var", var);
         }
     }
 

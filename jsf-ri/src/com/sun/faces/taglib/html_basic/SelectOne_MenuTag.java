@@ -5,7 +5,7 @@
 
 
 /**
- * $Id: SelectOne_MenuTag.java,v 1.10 2003/09/08 20:10:16 jvisvanathan Exp $
+ * $Id: SelectOne_MenuTag.java,v 1.11 2003/09/24 23:17:28 horwat Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -89,13 +89,13 @@ public class SelectOne_MenuTag extends FacesTag
         super.overrideProperties(component);
 
         if (null != size) {
-            component.setAttribute("size", size);
+            component.getAttributes().put("size", size);
         }
         if (null != onselect) {
-            component.setAttribute("onselect", onselect);
+            component.getAttributes().put("onselect", onselect);
         }
         if (null != onchange) {
-            component.setAttribute("onchange", onchange);
+            component.getAttributes().put("onchange", onchange);
         }
     }
 

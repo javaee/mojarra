@@ -1,5 +1,5 @@
 /*
- * $Id: LabelRenderer.java,v 1.16 2003/09/08 20:10:09 jvisvanathan Exp $
+ * $Id: LabelRenderer.java,v 1.17 2003/09/24 23:16:40 horwat Exp $
  */
 
 /*
@@ -33,7 +33,7 @@ import javax.servlet.ServletResponse;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: LabelRenderer.java,v 1.16 2003/09/08 20:10:09 jvisvanathan Exp $
+ * @version $Id: LabelRenderer.java,v 1.17 2003/09/24 23:16:40 horwat Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -96,7 +96,7 @@ public class LabelRenderer extends HtmlBasicRenderer {
         writer = context.getResponseWriter();
         Assert.assert_it(writer != null );
 
-	forValue = (String) component.getAttribute("for");
+	forValue = (String) component.getAttributes().get("for");
 	Assert.assert_it(null != forValue);
 
 	writer.startElement("label", component);
@@ -105,7 +105,7 @@ public class LabelRenderer extends HtmlBasicRenderer {
         Util.renderPassThruAttributes(writer, component);
 
 	if (null != (styleClass = (String) 
-		     component.getAttribute("styleClass"))) {
+		     component.getAttributes().get("styleClass"))) {
 	    writer.writeAttribute("class", styleClass, "styleClass");
 	}
         writer.writeText("\n", null);

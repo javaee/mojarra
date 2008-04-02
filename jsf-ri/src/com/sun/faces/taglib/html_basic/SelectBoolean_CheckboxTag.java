@@ -1,5 +1,5 @@
 /*
- * $Id: SelectBoolean_CheckboxTag.java,v 1.45 2003/09/05 14:34:47 rkitain Exp $
+ * $Id: SelectBoolean_CheckboxTag.java,v 1.46 2003/09/24 23:17:25 horwat Exp $
  */
 
 /*
@@ -75,19 +75,19 @@ public class SelectBoolean_CheckboxTag extends FacesTag
         } 
        
         if (null != size) {
-	    checkbox.setAttribute("size", size);
+	    checkbox.getAttributes().put("size", size);
 	}
         if (null != readonly) {
-	    checkbox.setAttribute("readonly", readonly);
+	    checkbox.getAttributes().put("readonly", readonly);
 	}
         if (null != alt) {
-	    checkbox.setAttribute("alt", alt);
+	    checkbox.getAttributes().put("alt", alt);
 	}
         if (null != onselect) {
-	    checkbox.setAttribute("onselect", onselect);
+	    checkbox.getAttributes().put("onselect", onselect);
 	}
         if (null != onchange) {
-	    checkbox.setAttribute("onchange", onchange);
+	    checkbox.getAttributes().put("onchange", onchange);
 	}
     }
     

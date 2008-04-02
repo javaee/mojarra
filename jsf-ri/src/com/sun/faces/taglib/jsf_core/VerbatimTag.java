@@ -1,5 +1,5 @@
 /*
- * $Id: VerbatimTag.java,v 1.2 2003/09/05 18:57:02 eburns Exp $
+ * $Id: VerbatimTag.java,v 1.3 2003/09/24 23:17:37 horwat Exp $
  */
 
 /*
@@ -44,7 +44,7 @@ public class VerbatimTag extends UIComponentBodyTag {
 
     protected void overrideProperties(UIComponent component) {
 	super.overrideProperties(component);
-	component.setAttribute("escape", escape ? Boolean.TRUE : Boolean.FALSE);
+	component.getAttributes().put("escape", escape ? Boolean.TRUE : Boolean.FALSE);
     }    
 
     /**

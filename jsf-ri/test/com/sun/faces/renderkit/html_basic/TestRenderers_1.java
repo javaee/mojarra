@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_1.java,v 1.41 2003/09/12 18:31:55 eburns Exp $
+ * $Id: TestRenderers_1.java,v 1.42 2003/09/24 23:17:40 horwat Exp $
  */
 
 /*
@@ -51,7 +51,7 @@ import com.sun.faces.renderkit.html_basic.RadioRenderer;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_1.java,v 1.41 2003/09/12 18:31:55 eburns Exp $
+ * @version $Id: TestRenderers_1.java,v 1.42 2003/09/24 23:17:40 horwat Exp $
  * 
  *
  */
@@ -177,8 +177,8 @@ public class TestRenderers_1 extends JspFacesTestCase
         UICommand uiCommand = new UICommandBase();
         uiCommand.setId("labelLink1");
         uiCommand.setValue("PASSED");
-        uiCommand.setAttribute(RIConstants.BUNDLE_ATTR, "Messages");
-        uiCommand.setAttribute("key", "failed.key");
+        uiCommand.getAttributes().put(RIConstants.BUNDLE_ATTR, "Messages");
+        uiCommand.getAttributes().put("key", "failed.key");
         uiCommand.setValueRef("TestBean.modelLabel");
         root.getChildren().add(uiCommand);
         System.out.println("Testing label lookup from local value...");
@@ -190,8 +190,8 @@ public class TestRenderers_1 extends JspFacesTestCase
         // is pulled from the model
         uiCommand = new UICommandBase();
         uiCommand.setId("labelLink2");
-        uiCommand.setAttribute(RIConstants.BUNDLE_ATTR, "Messages");
-        uiCommand.setAttribute("key", "failed.key");
+        uiCommand.getAttributes().put(RIConstants.BUNDLE_ATTR, "Messages");
+        uiCommand.getAttributes().put("key", "failed.key");
         uiCommand.setValueRef("TestBean.modelLabel");
         root.getChildren().add(uiCommand);
         System.out.println("Testing label lookup from model...");
@@ -203,8 +203,8 @@ public class TestRenderers_1 extends JspFacesTestCase
         // specified ResourceBundle using the key
         uiCommand = new UICommandBase();
         uiCommand.setId("labelLink3");
-        uiCommand.setAttribute(RIConstants.BUNDLE_ATTR, "Messages");
-        uiCommand.setAttribute("key", "passed.key");
+        uiCommand.getAttributes().put(RIConstants.BUNDLE_ATTR, "Messages");
+        uiCommand.getAttributes().put("key", "passed.key");
         root.getChildren().add(uiCommand);
         System.out.println("Testing label lookup from ResourceBundle...");
         hyperlinkRenderer.encodeBegin(getFacesContext(), uiCommand);
@@ -214,8 +214,8 @@ public class TestRenderers_1 extends JspFacesTestCase
         // All lookup methods fail, test of hyperlink should be empty
         uiCommand = new UICommandBase();
         uiCommand.setId("labelLink4");
-        uiCommand.setAttribute(RIConstants.BUNDLE_ATTR, "Messages");
-        uiCommand.setAttribute("key", "non.key");
+        uiCommand.getAttributes().put(RIConstants.BUNDLE_ATTR, "Messages");
+        uiCommand.getAttributes().put("key", "non.key");
         uiCommand.setValueRef("NonBean.label");
         root.getChildren().add(uiCommand);
         System.out.println("Testing empty label...");
@@ -226,7 +226,7 @@ public class TestRenderers_1 extends JspFacesTestCase
         // Test hyperlink as image
         uiCommand = new UICommandBase();
         uiCommand.setId("hyperlinkImage");
-        uiCommand.setAttribute("image", "duke.gif");
+        uiCommand.getAttributes().put("image", "duke.gif");
         uiCommand.setValue("SHOUD NOT BE HERE");
         root.getChildren().add(uiCommand);
         System.out.println("Testing hyperlink as image");
@@ -237,8 +237,8 @@ public class TestRenderers_1 extends JspFacesTestCase
         // Test hyperlink as image with image specified in resource bundle
         uiCommand = new UICommandBase();
         uiCommand.setId("hyperlinkImage2");
-        uiCommand.setAttribute("imageKey", "image.key");
-        uiCommand.setAttribute(RIConstants.BUNDLE_ATTR, "Messages");
+        uiCommand.getAttributes().put("imageKey", "image.key");
+        uiCommand.getAttributes().put(RIConstants.BUNDLE_ATTR, "Messages");
         root.getChildren().add(uiCommand);
         System.out.println("Testing hyperlink image via resource lookup");
         hyperlinkRenderer.encodeBegin(getFacesContext(), uiCommand);
@@ -298,7 +298,7 @@ public class TestRenderers_1 extends JspFacesTestCase
         
 	// test that our form number is correct.
 	Integer formNumber = (Integer)
-	    uiForm.getAttribute(RIConstants.FORM_NUMBER_ATTR);
+	    uiForm.getAttributes().get(RIConstants.FORM_NUMBER_ATTR);
 	assertTrue(null != formNumber);
 	assertTrue(formNumber.intValue() == expectedFormNumber);
     }
@@ -314,8 +314,8 @@ public class TestRenderers_1 extends JspFacesTestCase
         // Test <Button> element rendering
         uiCommand = new UICommandBase();
         uiCommand.setId("imageButton");
-        uiCommand.setAttribute("image", "duke.gif");
-        uiCommand.setAttribute("type", "submit");
+        uiCommand.getAttributes().put("image", "duke.gif");
+        uiCommand.getAttributes().put("type", "submit");
         uiCommand.setValue("SHOUD NOT BE HERE");
         root.getChildren().add(uiCommand);
         System.out.println("Testing encode (<button> rendering) method");
@@ -327,8 +327,8 @@ public class TestRenderers_1 extends JspFacesTestCase
         // Test button as image with image specified in resource bundle
         uiCommand = new UICommandBase();
         uiCommand.setId("imageButton2");
-        uiCommand.setAttribute("imageKey", "image.key");
-        uiCommand.setAttribute(RIConstants.BUNDLE_ATTR, "Messages");
+        uiCommand.getAttributes().put("imageKey", "image.key");
+        uiCommand.getAttributes().put(RIConstants.BUNDLE_ATTR, "Messages");
         root.getChildren().add(uiCommand);
         System.out.println("Testing hyperlink image via resource lookup");
         buttonRenderer.encodeBegin(getFacesContext(), uiCommand);
@@ -340,10 +340,10 @@ public class TestRenderers_1 extends JspFacesTestCase
         // make sure that valueRef is returned and no others.
         uiCommand = new UICommandBase();
         uiCommand.setId("labelButton1");
-        uiCommand.setAttribute("type", "submit");
+        uiCommand.getAttributes().put("type", "submit");
         uiCommand.setValue("PASSED");
-        uiCommand.setAttribute(RIConstants.BUNDLE_ATTR, "Messages");
-        uiCommand.setAttribute("key", "failed.key");
+        uiCommand.getAttributes().put(RIConstants.BUNDLE_ATTR, "Messages");
+        uiCommand.getAttributes().put("key", "failed.key");
         uiCommand.setValueRef("TestBean.modelLabel");
         root.getChildren().add(uiCommand);
         System.out.println("Testing label lookup from local value...");
@@ -355,9 +355,9 @@ public class TestRenderers_1 extends JspFacesTestCase
         // is pulled from the model
         uiCommand = new UICommandBase();
         uiCommand.setId("labelButton2");
-        uiCommand.setAttribute("type", "reset");
-        uiCommand.setAttribute(RIConstants.BUNDLE_ATTR, "Messages");
-        uiCommand.setAttribute("key", "failed.key");
+        uiCommand.getAttributes().put("type", "reset");
+        uiCommand.getAttributes().put(RIConstants.BUNDLE_ATTR, "Messages");
+        uiCommand.getAttributes().put("key", "failed.key");
         uiCommand.setValueRef("TestBean.modelLabel");
         root.getChildren().add(uiCommand);
         System.out.println("Testing label lookup from model...");
@@ -369,9 +369,9 @@ public class TestRenderers_1 extends JspFacesTestCase
         // specified ResourceBundle using the key
         uiCommand = new UICommandBase();
         uiCommand.setId("labelButton3");
-        uiCommand.setAttribute("type", "submit");
-        uiCommand.setAttribute(RIConstants.BUNDLE_ATTR, "Messages");
-        uiCommand.setAttribute("key", "passed.key");
+        uiCommand.getAttributes().put("type", "submit");
+        uiCommand.getAttributes().put(RIConstants.BUNDLE_ATTR, "Messages");
+        uiCommand.getAttributes().put("key", "passed.key");
         root.getChildren().add(uiCommand);
         System.out.println("Testing label lookup from ResourceBundle...");
         buttonRenderer.encodeBegin(getFacesContext(), uiCommand);
@@ -381,10 +381,10 @@ public class TestRenderers_1 extends JspFacesTestCase
         // All lookup methods fail, the value attribute should be empty
         uiCommand = new UICommandBase();
         uiCommand.setId("labelButton4");
-        uiCommand.setAttribute("type", "reset");
+        uiCommand.getAttributes().put("type", "reset");
         uiCommand.setValueRef("NonBean.label");
-        uiCommand.setAttribute(RIConstants.BUNDLE_ATTR, "Messages");
-        uiCommand.setAttribute("key", "non.key");
+        uiCommand.getAttributes().put(RIConstants.BUNDLE_ATTR, "Messages");
+        uiCommand.getAttributes().put("key", "non.key");
         root.getChildren().add(uiCommand);
         System.out.println("Testing empty label...");
         buttonRenderer.encodeBegin(getFacesContext(), uiCommand);

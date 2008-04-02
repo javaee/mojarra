@@ -1,5 +1,5 @@
 /*
- * $Id: SelectOne_ListboxTag.java,v 1.8 2003/08/15 19:15:19 rlubke Exp $
+ * $Id: SelectOne_ListboxTag.java,v 1.9 2003/09/24 23:17:27 horwat Exp $
  */
 
 /*
@@ -77,8 +77,8 @@ public class SelectOne_ListboxTag extends FacesTag
 
 	// This makes sure the no more SelectItems get added to this
 	// selectOne instance.
-	component.setAttribute(RIConstants.SELECTITEMS_CONFIGURED, 
-			       RIConstants.SELECTITEMS_CONFIGURED);
+	component.getAttributes().put(RIConstants.SELECTITEMS_CONFIGURED, 
+			              RIConstants.SELECTITEMS_CONFIGURED);
 	int rc = super.doEndTag();
 	return rc;
     }
@@ -87,13 +87,13 @@ public class SelectOne_ListboxTag extends FacesTag
 	super.overrideProperties(component);
 	
         if (null != size) {
-	    component.setAttribute("size", size);
+	    component.getAttributes().put("size", size);
 	}
         if (null != onselect) {
-	    component.setAttribute("onselect", onselect);
+	    component.getAttributes().put("onselect", onselect);
 	}
         if (null != onchange) {
-	    component.setAttribute("onchange", onchange);
+	    component.getAttributes().put("onchange", onchange);
 	}
     }
 

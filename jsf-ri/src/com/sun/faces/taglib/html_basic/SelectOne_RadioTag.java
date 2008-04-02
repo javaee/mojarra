@@ -1,5 +1,5 @@
 /*
- * $Id: SelectOne_RadioTag.java,v 1.28 2003/09/05 14:34:48 rkitain Exp $
+ * $Id: SelectOne_RadioTag.java,v 1.29 2003/09/24 23:17:28 horwat Exp $
  */
 
 /*
@@ -84,10 +84,10 @@ public class SelectOne_RadioTag extends SelectOne_ListboxTag
 	UISelectOne uiSelectOne = (UISelectOne) component;
 	
         if (null != layout) {
-	    uiSelectOne.setAttribute("layout", layout);
+	    uiSelectOne.getAttributes().put("layout", layout);
 	}
         if (null != border) {
-	    uiSelectOne.setAttribute("border", layout);
+	    uiSelectOne.getAttributes().put("border", layout);
 	}
     }
     //

@@ -1,5 +1,5 @@
 /*
- * $Id: Input_TextAreaTag.java,v 1.10 2003/09/05 14:34:46 rkitain Exp $
+ * $Id: Input_TextAreaTag.java,v 1.11 2003/09/24 23:17:16 horwat Exp $
  */
 
 /*
@@ -66,10 +66,10 @@ public class Input_TextAreaTag extends Input_TextTag
 	UIInput inputTextArea = (UIInput) component;
 	
 	if (null != rows) {
-	    inputTextArea.setAttribute("rows", rows);
+	    inputTextArea.getAttributes().put("rows", rows);
 	}
 	if (null != cols) {
-	    inputTextArea.setAttribute("cols", cols);
+	    inputTextArea.getAttributes().put("cols", cols);
 	}
     }
     //

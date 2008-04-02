@@ -1,5 +1,5 @@
 /*
- * $Id: BaseCommandRenderer.java,v 1.2 2003/08/27 22:52:56 eburns Exp $
+ * $Id: BaseCommandRenderer.java,v 1.3 2003/09/24 23:16:27 horwat Exp $
  */
 
 /*
@@ -34,7 +34,7 @@ public abstract class BaseCommandRenderer extends HtmlBasicRenderer {
      */
     protected String getImageSrc(FacesContext context,
                                  UIComponent component) {
-        String result = (String) component.getAttribute("image");
+        String result = (String) component.getAttributes().get("image");
 
         if (result == null) {
             try {

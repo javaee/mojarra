@@ -4,7 +4,7 @@
  */
 
 /**
- * $Id: TestRenderers_3.java,v 1.23 2003/09/09 19:04:00 jvisvanathan Exp $
+ * $Id: TestRenderers_3.java,v 1.24 2003/09/24 23:17:42 horwat Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -54,7 +54,7 @@ import com.sun.faces.JspFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_3.java,v 1.23 2003/09/09 19:04:00 jvisvanathan Exp $
+ * @version $Id: TestRenderers_3.java,v 1.24 2003/09/24 23:17:42 horwat Exp $
  * 
  *
  */
@@ -312,7 +312,7 @@ public class TestRenderers_3 extends JspFacesTestCase {
         input1.setId("myInputDateHidden");
         Converter converter = application.createConverter("DateTime");
         input1.setConverter(converter);
-	input1.setAttribute("dateStyle", "medium");
+	input1.getAttributes().put("dateStyle", "medium");
         root.getChildren().add(input1);
         HiddenRenderer hiddenRenderer = new HiddenRenderer();
         

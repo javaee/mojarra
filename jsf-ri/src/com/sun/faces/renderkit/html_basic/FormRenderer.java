@@ -1,5 +1,5 @@
 /*
- * $Id: FormRenderer.java,v 1.59 2003/09/24 19:49:23 rkitain Exp $
+ * $Id: FormRenderer.java,v 1.60 2003/09/24 23:16:34 horwat Exp $
  */
 
 /*
@@ -30,7 +30,7 @@ import org.mozilla.util.Assert;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: FormRenderer.java,v 1.59 2003/09/24 19:49:23 rkitain Exp $
+ * @version $Id: FormRenderer.java,v 1.60 2003/09/24 23:16:34 horwat Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -112,7 +112,7 @@ public class FormRenderer extends HtmlBasicRenderer {
 	writer.writeAttribute("method", "post", null);
 	writer.writeAttribute("action", getActionStr(context), null);
         if (null != (styleClass = (String) 
-		     component.getAttribute("styleClass"))) {
+		     component.getAttributes().get("styleClass"))) {
             writer.writeAttribute("class", styleClass, "styleClass");
 	}
 
@@ -140,7 +140,7 @@ public class FormRenderer extends HtmlBasicRenderer {
 		     requestMap.get(RIConstants.FORM_NUMBER_ATTR))) {
 	    numForms = formsInt.intValue();
 	}
-	component.setAttribute(RIConstants.FORM_NUMBER_ATTR, 
+	component.getAttributes().put(RIConstants.FORM_NUMBER_ATTR, 
 	    formsInt = new Integer(numForms));
 	requestMap.put(RIConstants.FORM_NUMBER_ATTR, 
             formsInt = new Integer(++numForms));

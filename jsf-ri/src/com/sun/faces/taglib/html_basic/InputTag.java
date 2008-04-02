@@ -1,5 +1,5 @@
 /*
- * $Id: InputTag.java,v 1.11 2003/09/08 20:10:12 jvisvanathan Exp $
+ * $Id: InputTag.java,v 1.12 2003/09/24 23:17:14 horwat Exp $
  */
 
 /*
@@ -69,22 +69,22 @@ public abstract class InputTag extends FacesTag
 	UIInput input = (UIInput) component;
 
         if (null != readonly) {
-	    input.setAttribute("readonly", readonly);
+	    input.getAttributes().put("readonly", readonly);
 	}
 	if (null != size) {
-	    input.setAttribute("size", size);
+	    input.getAttributes().put("size", size);
 	}
 	if (null != maxlength) {
-	    input.setAttribute("maxlength", maxlength);
+	    input.getAttributes().put("maxlength", maxlength);
 	}
 	if (null != alt) {
-	    input.setAttribute("alt", alt);
+	    input.getAttributes().put("alt", alt);
 	}
         if (null != onselect) {
-	    input.setAttribute("onselect", onselect);
+	    input.getAttributes().put("onselect", onselect);
 	}
 	if (null != onchange) {
-	    input.setAttribute("onchange", onchange);
+	    input.getAttributes().put("onchange", onchange);
 	}
         input.setRequired(required);
     }

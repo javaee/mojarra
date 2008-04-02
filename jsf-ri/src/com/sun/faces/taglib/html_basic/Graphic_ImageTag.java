@@ -1,5 +1,5 @@
 /*
- * $Id: Graphic_ImageTag.java,v 1.10 2003/09/05 14:34:45 rkitain Exp $
+ * $Id: Graphic_ImageTag.java,v 1.11 2003/09/24 23:17:13 horwat Exp $
  */
 
 /*
@@ -81,10 +81,10 @@ public class Graphic_ImageTag extends FacesTag
 	    graphic.setURL(url);
 	}
         if (usemap != null) {
-            component.setAttribute("usemap", usemap);
+            component.getAttributes().put("usemap", usemap);
         }
         if (ismap != null) {
-            component.setAttribute("ismap", ismap);
+            component.getAttributes().put("ismap", ismap);
         }
     }
     

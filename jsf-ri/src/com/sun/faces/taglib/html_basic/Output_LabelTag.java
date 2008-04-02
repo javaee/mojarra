@@ -1,5 +1,5 @@
 /*
- * $Id: Output_LabelTag.java,v 1.10 2003/09/08 20:10:13 jvisvanathan Exp $
+ * $Id: Output_LabelTag.java,v 1.11 2003/09/24 23:17:19 horwat Exp $
  */
 
 /*
@@ -75,7 +75,7 @@ public class Output_LabelTag extends FacesTag
 	    // PENDING(edburns): We should do something more intelligent
 	    // here.  For now, however, we'll just store what we get
 	    // from JSP.
-	    component.setAttribute("for",forValue);
+	    component.getAttributes().put("for",forValue);
 	}
     }
     

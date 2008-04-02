@@ -1,5 +1,5 @@
 /*
- * $Id: ApplyRequestValuesPhase.java,v 1.11 2003/08/22 16:49:28 eburns Exp $
+ * $Id: ApplyRequestValuesPhase.java,v 1.12 2003/09/24 23:16:24 horwat Exp $
  */
 
 /*
@@ -25,7 +25,7 @@ import java.io.IOException;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: ApplyRequestValuesPhase.java,v 1.11 2003/08/22 16:49:28 eburns Exp $
+ * @version $Id: ApplyRequestValuesPhase.java,v 1.12 2003/09/24 23:16:24 horwat Exp $
  * 
  */
 
@@ -74,8 +74,9 @@ public class ApplyRequestValuesPhase extends Phase {
 
         try {
             component.processDecodes(facesContext);
-        } catch (IOException e) {
+        } catch (RuntimeException re) {
             facesContext.renderResponse();
+            throw re;
         }
     }
 

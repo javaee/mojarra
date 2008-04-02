@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_2.java,v 1.57 2003/09/09 20:45:58 rkitain Exp $
+ * $Id: TestRenderers_2.java,v 1.58 2003/09/24 23:17:41 horwat Exp $
  */
 
 /*
@@ -59,7 +59,7 @@ import com.sun.faces.TestBean;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_2.java,v 1.57 2003/09/09 20:45:58 rkitain Exp $
+ * @version $Id: TestRenderers_2.java,v 1.58 2003/09/24 23:17:41 horwat Exp $
  * 
  *
  */
@@ -254,13 +254,13 @@ public class TestRenderers_2 extends JspFacesTestCase
         // test decode method with checkbox disabled.
         System.out.println("    Testing decode method - parameter (yes)");
         selectBoolean.setId("mycheckboxDisabled");
-        selectBoolean.setAttribute("disabled", "true");
+        selectBoolean.getAttributes().put("disabled", "true");
         selectBoolean.setValue(Boolean.TRUE);
         checkboxRenderer.decode(getFacesContext(), selectBoolean);
         val = (Boolean)selectBoolean.getValue();
         // make sure the value wasn't set to false. Bug id  4883159
         assertTrue(val.booleanValue());
-        selectBoolean.setAttribute("disabled", null);
+        selectBoolean.getAttributes().put("disabled", null);
         
         // test encode method
         System.out.println("    Testing encode method - rendering checked");
@@ -492,7 +492,7 @@ public class TestRenderers_2 extends JspFacesTestCase
         writer = new StringWriter();
         htmlWriter = new HtmlResponseWriter(writer, "text/html", "ISO-8859-1");
         getFacesContext().setResponseWriter(htmlWriter);
-        output.setAttribute("for", "");
+        output.getAttributes().put("for", "");
         errorsRenderer.encodeBegin(getFacesContext(), output);
         errorsRenderer.encodeEnd(getFacesContext(), output);
         
@@ -519,7 +519,7 @@ public class TestRenderers_2 extends JspFacesTestCase
         getFacesContext().addMessage(input, 
             new MessageImpl(1, "error message summary_1", "error message detail_1"));
                 
-        output.setAttribute("for", "errorInput");
+        output.getAttributes().put("for", "errorInput");
         errorsRenderer.encodeBegin(getFacesContext(), output);
         errorsRenderer.encodeEnd(getFacesContext(), output);
         
@@ -552,7 +552,7 @@ public class TestRenderers_2 extends JspFacesTestCase
         getFacesContext().addMessage(input1,
             new MessageImpl(1, "error message summary_2", "error message detail_2"));
                 
-        output.setAttribute("for", "errorInput1");
+        output.getAttributes().put("for", "errorInput1");
         errorsRenderer.encodeBegin(getFacesContext(), output);
         errorsRenderer.encodeEnd(getFacesContext(), output);
 
@@ -595,7 +595,7 @@ public class TestRenderers_2 extends JspFacesTestCase
         getFacesContext().addMessage(input2,
                 new MessageImpl(1, "error message summary_3", "error message detail_3"));
 
-        output.setAttribute("for", "errorInput2");
+        output.getAttributes().put("for", "errorInput2");
         errorsRenderer.encodeBegin(getFacesContext(), output);
         errorsRenderer.encodeEnd(getFacesContext(), output);
 
@@ -633,7 +633,7 @@ public class TestRenderers_2 extends JspFacesTestCase
         getFacesContext().addMessage(input3,
             new MessageImpl(1, "error message summary_4", "error message detail_4"));
         
-        output.setAttribute("for", "errorInput3");
+        output.getAttributes().put("for", "errorInput3");
         errorsRenderer.encodeBegin(getFacesContext(), output);
         errorsRenderer.encodeEnd(getFacesContext(), output);
 
@@ -671,7 +671,7 @@ public class TestRenderers_2 extends JspFacesTestCase
         getFacesContext().addMessage(input4,
             new MessageImpl(1, "error message summary_5", "error message detail_5"));
         
-        output.setAttribute("for", "errorInput4");
+        output.getAttributes().put("for", "errorInput4");
         errorsRenderer.encodeBegin(getFacesContext(), output);
         errorsRenderer.encodeEnd(getFacesContext(), output);
 

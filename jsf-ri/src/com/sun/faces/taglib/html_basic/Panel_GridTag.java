@@ -1,5 +1,5 @@
 /*
- * $Id: Panel_GridTag.java,v 1.12 2003/09/08 20:10:14 jvisvanathan Exp $
+ * $Id: Panel_GridTag.java,v 1.13 2003/09/24 23:17:21 horwat Exp $
  */
 
 /*
@@ -96,46 +96,46 @@ public class Panel_GridTag extends FacesTag {
     protected void overrideProperties(UIComponent component) {
         super.overrideProperties(component);
         if (columnClasses != null) {
-            component.setAttribute("columnClasses", columnClasses);
+            component.getAttributes().put("columnClasses", columnClasses);
         }
-	component.setAttribute("columns", new Integer(columns));
+	component.getAttributes().put("columns", new Integer(columns));
         if (footerClass != null) {
-            component.setAttribute("footerClass", footerClass);
+            component.getAttributes().put("footerClass", footerClass);
         }
         if (headerClass != null) {
-            component.setAttribute("headerClass", headerClass);
+            component.getAttributes().put("headerClass", headerClass);
         }
         if (panelClass != null) {
-            component.setAttribute("panelClass", panelClass);
+            component.getAttributes().put("panelClass", panelClass);
         }
         if (rowClasses != null) {
-            component.setAttribute("rowClasses", rowClasses);
+            component.getAttributes().put("rowClasses", rowClasses);
         }
         
         // set HTML 4.0 attributes if any
         if (summary != null) {
-            component.setAttribute("summary", summary);
+            component.getAttributes().put("summary", summary);
         }
         if (width != null) {
-            component.setAttribute("width", width);
+            component.getAttributes().put("width", width);
         }
         if (bgcolor != null) {
-            component.setAttribute("bgcolor", bgcolor);
+            component.getAttributes().put("bgcolor", bgcolor);
         }
         if (frame != null) {
-            component.setAttribute("frame", frame);
+            component.getAttributes().put("frame", frame);
         }
         if (rules != null) {
-            component.setAttribute("rules", rules);
+            component.getAttributes().put("rules", rules);
         }
         if (border != null) {
-            component.setAttribute("border", border);
+            component.getAttributes().put("border", border);
         }
         if (cellspacing != null) {
-            component.setAttribute("cellspacing", cellspacing);
+            component.getAttributes().put("cellspacing", cellspacing);
         }
         if (cellpadding != null) {
-            component.setAttribute("cellpadding", cellpadding);
+            component.getAttributes().put("cellpadding", cellpadding);
         }
     }
 

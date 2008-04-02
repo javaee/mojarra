@@ -1,5 +1,5 @@
 /*
- * $Id: Command_ButtonTag.java,v 1.43 2003/09/09 01:01:06 horwat Exp $
+ * $Id: Command_ButtonTag.java,v 1.44 2003/09/24 23:17:07 horwat Exp $
  */
 
 /*
@@ -84,7 +84,7 @@ public class Command_ButtonTag extends FacesTag
 	}
 
         if (null != type) {
-            button.setAttribute("type", type);
+            button.getAttributes().put("type", type);
         }
 
         if (null != value) {
@@ -92,7 +92,7 @@ public class Command_ButtonTag extends FacesTag
         }
 
         if (null != image) {
-            button.setAttribute("image", image);
+            button.getAttributes().put("image", image);
         }
 
 	button.setImmediate(immediate);

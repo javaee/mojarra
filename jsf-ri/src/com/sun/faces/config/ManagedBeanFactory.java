@@ -1,5 +1,5 @@
 /*
- * $Id: ManagedBeanFactory.java,v 1.6 2003/08/19 14:50:52 rlubke Exp $
+ * $Id: ManagedBeanFactory.java,v 1.7 2003/09/24 23:16:22 horwat Exp $
  */
 
 /*
@@ -311,7 +311,7 @@ public class ManagedBeanFactory extends Object {
      */
     public void setComponentAttribute(Object component, String propName,
         Object propValue) {
-        ((UIComponent)component).setAttribute(propName, propValue);
+        ((UIComponent)component).getAttributes().put(propName, propValue);
     }
 
 }

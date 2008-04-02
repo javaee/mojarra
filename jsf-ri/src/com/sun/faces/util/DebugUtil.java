@@ -1,5 +1,5 @@
 /*
- * $Id: DebugUtil.java,v 1.14 2003/09/08 20:10:20 jvisvanathan Exp $
+ * $Id: DebugUtil.java,v 1.15 2003/09/24 23:17:37 horwat Exp $
  */
 
 /*
@@ -25,7 +25,7 @@ import java.io.PrintStream;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: DebugUtil.java,v 1.14 2003/09/08 20:10:20 jvisvanathan Exp $
+ * @version $Id: DebugUtil.java,v 1.15 2003/09/24 23:17:37 horwat Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -150,11 +150,11 @@ public static void printTree(UIComponent root, PrintStream out)
     } else {
         indentPrintln(out, "value= " + value );
 	
-	Iterator it = root.getAttributeNames();
+	Iterator it = root.getAttributes().keySet().iterator();
 	if (it != null) {
 	    while (it.hasNext()) {
 		String attrValue = null, attrName = (String)it.next();
-		Object attrObj = root.getAttribute(attrName);
+		Object attrObj = root.getAttributes().get(attrName);
 		
 		if (!(attrValue instanceof String)) {
 		    // chop off the address since we don't want to print

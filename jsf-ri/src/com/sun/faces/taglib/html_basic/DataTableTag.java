@@ -1,5 +1,5 @@
 /*
- * $Id: DataTableTag.java,v 1.2 2003/09/11 15:27:30 craigmcc Exp $
+ * $Id: DataTableTag.java,v 1.3 2003/09/24 23:17:10 horwat Exp $
  */
 
 /*
@@ -155,25 +155,25 @@ public class DataTableTag extends FacesTag {
         super.overrideProperties(component);
         UIData data = (UIData) component;
         if (columnClasses != null) {
-            component.setAttribute("columnClasses", columnClasses);
+            component.getAttributes().put("columnClasses", columnClasses);
         }
         if (first >= 0) {
             data.setFirst(first);
         }
         if (footerClass != null) {
-            component.setAttribute("footerClass", footerClass);
+            component.getAttributes().put("footerClass", footerClass);
         }
         if (headerClass != null) {
-            component.setAttribute("headerClass", headerClass);
+            component.getAttributes().put("headerClass", headerClass);
         }
         if (rowClasses != null) {
-            component.setAttribute("rowClasses", rowClasses);
+            component.getAttributes().put("rowClasses", rowClasses);
         }
         if (rows >= 0) {
             data.setRows(rows);
         }
         if (styleClass != null) {
-            component.setAttribute("styleClass", styleClass);
+            component.getAttributes().put("styleClass", styleClass);
         }
 	if (value != null) {
 	    data.setValue(value);

@@ -1,5 +1,5 @@
 /*
- * $Id: HyperlinkRenderer.java,v 1.60 2003/09/22 21:17:24 rkitain Exp $
+ * $Id: HyperlinkRenderer.java,v 1.61 2003/09/24 23:16:37 horwat Exp $
  */
 
 /*
@@ -36,7 +36,7 @@ import org.mozilla.util.Assert;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HyperlinkRenderer.java,v 1.60 2003/09/22 21:17:24 rkitain Exp $
+ * @version $Id: HyperlinkRenderer.java,v 1.61 2003/09/24 23:16:37 horwat Exp $
  */
 
 public class HyperlinkRenderer extends BaseCommandRenderer {
@@ -76,8 +76,7 @@ public class HyperlinkRenderer extends BaseCommandRenderer {
     // Methods From Renderer
     //
 
-    public void decode(FacesContext context, UIComponent component)
-            throws IOException {
+    public void decode(FacesContext context, UIComponent component) {
 	if (context == null || component == null) {
 	    throw new NullPointerException(Util.getExceptionMessage(
 				    Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
@@ -123,7 +122,7 @@ public class HyperlinkRenderer extends BaseCommandRenderer {
 	    return 0;
 	}
 	Integer formsInt = (Integer)
-	    form.getAttribute(RIConstants.FORM_NUMBER_ATTR);
+	    form.getAttributes().get(RIConstants.FORM_NUMBER_ATTR);
 	Assert.assert_it(null != formsInt);
 	return formsInt.intValue();
     }
@@ -175,7 +174,7 @@ public class HyperlinkRenderer extends BaseCommandRenderer {
 
         //handle css style class
 	String styleClass = (String)
-            command.getAttribute("styleClass");
+            command.getAttributes().get("styleClass");
 	if (styleClass != null) {
             writer.writeAttribute("class", styleClass, "styleClass");
         }

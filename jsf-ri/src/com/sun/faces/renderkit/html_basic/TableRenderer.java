@@ -1,5 +1,5 @@
 /*
- * $Id: TableRenderer.java,v 1.2 2003/09/11 15:27:28 craigmcc Exp $
+ * $Id: TableRenderer.java,v 1.3 2003/09/24 23:16:51 horwat Exp $
  */
 
 /*
@@ -81,7 +81,7 @@ public class TableRenderer extends HtmlBasicRenderer {
 	// Render the beginning of the table
 	ResponseWriter writer = context.getResponseWriter();
         writer.startElement("table", data);
-	String styleClass = (String) data.getAttribute("styleClass");
+	String styleClass = (String) data.getAttributes().get("styleClass");
 	if (styleClass != null) {
             writer.writeAttribute("class", styleClass, "styleClass");
 	}
@@ -92,7 +92,7 @@ public class TableRenderer extends HtmlBasicRenderer {
 	// Render the header facet (if any)
 	UIComponent header = (UIComponent) data.getFacets().get("header");
 	if (header != null) {
-	    String headerClass = (String) data.getAttribute("headerClass");
+	    String headerClass = (String) data.getAttributes().get("headerClass");
             writer.startElement("tr", header);
             writer.startElement("td", header);
             writer.writeAttribute("colspan", "" + getColumnCount(data), null);
@@ -122,8 +122,8 @@ public class TableRenderer extends HtmlBasicRenderer {
 	UIData data = (UIData) component;
 
         // Set up variables we will need
-        String footerClass = (String) data.getAttribute("footerClass");
-        String headerClass = (String) data.getAttribute("headerClass");
+        String footerClass = (String) data.getAttributes().get("footerClass");
+        String headerClass = (String) data.getAttributes().get("headerClass");
         String columnClasses[] = getColumnClasses(data);
         int columnStyle = 0;
         int columnStyles = columnClasses.length;
@@ -294,7 +294,7 @@ public class TableRenderer extends HtmlBasicRenderer {
 	ResponseWriter writer = context.getResponseWriter();
 	UIComponent footer = (UIComponent) data.getFacets().get("footer");
 	if (footer != null) {
-	    String footerClass = (String) data.getAttribute("footerClass");
+	    String footerClass = (String) data.getAttributes().get("footerClass");
             writer.startElement("tr", footer);
             writer.startElement("td", footer);
             writer.writeAttribute("colspan", "" + getColumnCount(data), null);
@@ -349,7 +349,7 @@ public class TableRenderer extends HtmlBasicRenderer {
      */
     private String[] getColumnClasses(UIData data) {
 
-        String values = (String) data.getAttribute("columnClasses");
+        String values = (String) data.getAttributes().get("columnClasses");
         if (values == null) {
             return (new String[0]);
         }
@@ -401,7 +401,7 @@ public class TableRenderer extends HtmlBasicRenderer {
      */
     private String[] getRowClasses(UIData data) {
 
-        String values = (String) data.getAttribute("rowClasses");
+        String values = (String) data.getAttributes().get("rowClasses");
         if (values == null) {
             return (new String[0]);
         }

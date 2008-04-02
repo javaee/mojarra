@@ -1,5 +1,5 @@
 /*
- * $Id: RadioRenderer.java,v 1.49 2003/09/04 19:52:18 rkitain Exp $
+ * $Id: RadioRenderer.java,v 1.50 2003/09/24 23:16:47 horwat Exp $
  */
 
 /*
@@ -103,11 +103,11 @@ public class RadioRenderer extends HtmlBasicInputRenderer {
             return;
         }
         
-        if (null != (alignStr = (String) uiSelectOne.getAttribute("layout"))) {
+        if (null != (alignStr = (String) uiSelectOne.getAttributes().get("layout"))) {
 	    alignVertical = alignStr.equalsIgnoreCase("PAGE_DIRECTION") ? 
 		true : false;
 	}
-	if (null != (borderStr = (String) uiSelectOne.getAttribute("border"))){
+	if (null != (borderStr = (String) uiSelectOne.getAttributes().get("border"))){
 	    try {
 		border = Integer.valueOf(borderStr).intValue();
 	    }
@@ -116,7 +116,7 @@ public class RadioRenderer extends HtmlBasicInputRenderer {
 	    }
 	}
 	if (null != (styleClass = (String) 
-		     component.getAttribute("styleClass"))) {
+		     component.getAttributes().get("styleClass"))) {
 	    writer.startElement("span", component);
 	    writer.writeAttribute("class", styleClass, "styleClass");
 	}

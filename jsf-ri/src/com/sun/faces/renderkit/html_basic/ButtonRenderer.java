@@ -1,5 +1,5 @@
 /*
- * $Id: ButtonRenderer.java,v 1.60 2003/09/04 18:04:30 rlubke Exp $
+ * $Id: ButtonRenderer.java,v 1.61 2003/09/24 23:16:28 horwat Exp $
  */
 
 /*
@@ -30,7 +30,7 @@ import org.mozilla.util.Assert;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ButtonRenderer.java,v 1.60 2003/09/04 18:04:30 rlubke Exp $
+ * @version $Id: ButtonRenderer.java,v 1.61 2003/09/24 23:16:28 horwat Exp $
  *
  */
 
@@ -81,8 +81,7 @@ public class ButtonRenderer extends BaseCommandRenderer {
     // Methods From Renderer
     //
 
-    public void decode(FacesContext context, UIComponent component) 
-            throws IOException {
+    public void decode(FacesContext context, UIComponent component) {
 	if (context == null || component == null) {
 	    throw new NullPointerException(Util.getExceptionMessage(
 				    Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
@@ -110,7 +109,7 @@ public class ButtonRenderer extends BaseCommandRenderer {
             }
         }
 
-        String type = (String) component.getAttribute("type");
+        String type = (String) component.getAttributes().get("type");
         if ((type != null) && (type.toLowerCase().equals("reset")) ) {
             return;
         }
@@ -133,12 +132,12 @@ public class ButtonRenderer extends BaseCommandRenderer {
         }
         
         // Which button type (SUBMIT, RESET, or BUTTON) should we generate?
-        String type = (String) component.getAttribute("type");
+        String type = (String) component.getAttributes().get("type");
 	    String styleClass = null;
         if (type == null) {
             type = "submit";
 	    // This is needed in the decode method
-	    component.setAttribute("type", type);
+	    component.getAttributes().put("type", type);
         }
 
         ResponseWriter writer = context.getResponseWriter();
@@ -162,7 +161,7 @@ public class ButtonRenderer extends BaseCommandRenderer {
         Util.renderBooleanPassThruAttributes(writer, component);
 
         if (null != (styleClass = (String) 
-            component.getAttribute("styleClass"))) {
+            component.getAttributes().get("styleClass"))) {
             writer.writeAttribute("class", styleClass, "styleClass");
 	}
         writer.endElement("input");

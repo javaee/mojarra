@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderer.java,v 1.55 2003/09/11 23:12:58 eburns Exp $
+ * $Id: HtmlBasicRenderer.java,v 1.56 2003/09/24 23:16:36 horwat Exp $
  */
 
 /*
@@ -155,15 +155,15 @@ public abstract class HtmlBasicRenderer extends Renderer {
 	ParameterCheck.nonNull(component);
 	ParameterCheck.nonNull(keyAttr);
 
-        key = (String) component.getAttribute(keyAttr);
-        bundleName = (String)component.getAttribute(RIConstants.BUNDLE_ATTR);
+        key = (String) component.getAttributes().get(keyAttr);
+        bundleName = (String)component.getAttributes().get(RIConstants.BUNDLE_ATTR);
 
         // if the bundleName is null for this component, it might have
         // been set on the root component.
         if ( bundleName == null ) {
             UIComponent root = context.getViewRoot();
             Assert.assert_it(root != null);
-            bundleName = (String)root.getAttribute(RIConstants.BUNDLE_ATTR);
+            bundleName = (String)root.getAttributes().get(RIConstants.BUNDLE_ATTR);
         }
 	// verify our component has the proper attributes for key and bundle.
 	if (null == key || null == bundleName) {
@@ -191,8 +191,7 @@ public abstract class HtmlBasicRenderer extends Renderer {
 	return bundle.getString(key);
     }
     
-    public void decode(FacesContext context, UIComponent component) 
-            throws IOException {
+    public void decode(FacesContext context, UIComponent component) {
 
         Object convertedValue = null;
        

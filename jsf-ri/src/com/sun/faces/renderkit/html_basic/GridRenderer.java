@@ -1,5 +1,5 @@
 /*
- * $Id: GridRenderer.java,v 1.17 2003/09/04 19:52:16 rkitain Exp $
+ * $Id: GridRenderer.java,v 1.18 2003/09/24 23:16:35 horwat Exp $
  */
 
 /*
@@ -28,7 +28,7 @@ import org.mozilla.util.Assert;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: GridRenderer.java,v 1.17 2003/09/04 19:52:16 rkitain Exp $
+ * @version $Id: GridRenderer.java,v 1.18 2003/09/24 23:16:35 horwat Exp $
  *  
  */
 
@@ -84,7 +84,7 @@ public class GridRenderer extends HtmlBasicRenderer {
         if (!component.isRendered()) {
             return;
         }
-        String styleClass = (String) component.getAttribute("styleClass");
+        String styleClass = (String) component.getAttributes().get("styleClass");
         
         // Render the beginning of this panel
         ResponseWriter writer = context.getResponseWriter();
@@ -116,8 +116,8 @@ public class GridRenderer extends HtmlBasicRenderer {
         ResponseWriter writer = context.getResponseWriter();
         Assert.assert_it(writer != null );
 
-        String footerClass = (String) component.getAttribute("footerClass");
-        String headerClass = (String) component.getAttribute("headerClass");
+        String footerClass = (String) component.getAttributes().get("footerClass");
+        String headerClass = (String) component.getAttributes().get("headerClass");
         int columns = getColumns(component);
         String columnClasses[] = getColumnClasses(component);
         int columnStyle = 0;
@@ -258,7 +258,7 @@ public class GridRenderer extends HtmlBasicRenderer {
     * may not have a stylesheet
     */
     private String[] getColumnClasses(UIComponent component) {
-        String values = (String) component.getAttribute("columnClasses");
+        String values = (String) component.getAttributes().get("columnClasses");
         if (values == null) {
             return (new String[0]);
         }
@@ -284,7 +284,7 @@ public class GridRenderer extends HtmlBasicRenderer {
      */
     private int getColumns(UIComponent component) {
         int count;
-        Object value = component.getAttribute("columns");
+        Object value = component.getAttributes().get("columns");
         if ((value != null) && (value instanceof Integer)) {
             count = ((Integer) value).intValue();
         } else {
@@ -302,7 +302,7 @@ public class GridRenderer extends HtmlBasicRenderer {
     * may not have a stylesheet
     */
     private String[] getRowClasses(UIComponent component) {
-        String values = (String) component.getAttribute("rowClasses");
+        String values = (String) component.getAttributes().get("rowClasses");
         if (values == null) {
             return (new String[0]);
         }

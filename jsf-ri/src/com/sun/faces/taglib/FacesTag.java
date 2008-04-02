@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTag.java,v 1.49 2003/09/08 20:10:11 jvisvanathan Exp $
+ * $Id: FacesTag.java,v 1.50 2003/09/24 23:17:04 horwat Exp $
  */
 
 /*
@@ -30,7 +30,7 @@ import javax.servlet.jsp.JspException;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: FacesTag.java,v 1.49 2003/09/08 20:10:11 jvisvanathan Exp $ 
+ * @version $Id: FacesTag.java,v 1.50 2003/09/24 23:17:04 horwat Exp $ 
  */
 
 public abstract class FacesTag extends javax.faces.webapp.UIComponentTag
@@ -728,97 +728,97 @@ protected void overrideProperties(UIComponent component)
     }    
 
     if (null != key) {
-	component.setAttribute("key", key);
+	component.getAttributes().put("key", key);
     }
     if (null != imageKey) {
-	component.setAttribute("imageKey", imageKey);
+	component.getAttributes().put("imageKey", imageKey);
     }
     if (null != bundle) {
-	component.setAttribute(RIConstants.BUNDLE_ATTR, bundle);
+	component.getAttributes().put(RIConstants.BUNDLE_ATTR, bundle);
     }
     if (null != formatPattern) {
-	component.setAttribute("formatPattern", formatPattern);
+	component.getAttributes().put("formatPattern", formatPattern);
     }
     if (null != dateStyle) {
-	component.setAttribute("dateStyle", dateStyle);
+	component.getAttributes().put("dateStyle", dateStyle);
     }
     if (null != timeStyle) {
-	component.setAttribute("timeStyle", timeStyle);
+	component.getAttributes().put("timeStyle", timeStyle);
     }
     if (null != timezone) {
-	component.setAttribute("timezone", timezone);
+	component.getAttributes().put("timezone", timezone);
     }
 
     // HTML 4.0 event handlers common to most BODY-content elements.
     if (null != onclick) {
-	component.setAttribute("onclick", onclick);
+	component.getAttributes().put("onclick", onclick);
     }
     if (null != ondblclick) {
-	component.setAttribute("ondblclick", ondblclick);
+	component.getAttributes().put("ondblclick", ondblclick);
     }
 
     if (null != onkeydown) {
-	component.setAttribute("onkeydown", onkeydown);
+	component.getAttributes().put("onkeydown", onkeydown);
     }
     if (null != onkeypress) {
-	component.setAttribute("onkeypress", onkeypress);
+	component.getAttributes().put("onkeypress", onkeypress);
     }
     if (null != onkeyup) {
-	component.setAttribute("onkeyup", onkeyup);
+	component.getAttributes().put("onkeyup", onkeyup);
     }
     if (null != onmousedown) {
-	component.setAttribute("onmousedown", onmousedown);
+	component.getAttributes().put("onmousedown", onmousedown);
     }
     if (null != onmousemove) {
-	component.setAttribute("onmousemove", onmousemove);
+	component.getAttributes().put("onmousemove", onmousemove);
     }
     if (null != onmouseout) {
-	component.setAttribute("onmouseout", onmouseout);
+	component.getAttributes().put("onmouseout", onmouseout);
     }
     if (null != onmouseover) {
-	component.setAttribute("onmouseover", onmouseover);
+	component.getAttributes().put("onmouseover", onmouseover);
     }
     if (null != onmouseup) {
-	component.setAttribute("onmouseup", onmouseup);
+	component.getAttributes().put("onmouseup", onmouseup);
     }
     if (null != onfocus) {
-        component.setAttribute("onfocus", onfocus); 
+        component.getAttributes().put("onfocus", onfocus); 
     }
     if (null != onblur) {
-        component.setAttribute("onblur", onblur);
+        component.getAttributes().put("onblur", onblur);
     }
     
     // common HTML 4.0 attributes.
     // PENDING (visvan) id attribute clashes with faces id attribute
     if (null != title) {
-        component.setAttribute("title", title);
+        component.getAttributes().put("title", title);
     }
     if (null != disabled) {
-	component.setAttribute("disabled", disabled);
+	component.getAttributes().put("disabled", disabled);
     }
     if (null != tabindex) {
-	component.setAttribute("tabindex", tabindex);
+	component.getAttributes().put("tabindex", tabindex);
     }
     if (null != accesskey) {
-	component.setAttribute("accesskey", accesskey);
+	component.getAttributes().put("accesskey", accesskey);
     }
     if (null != lang) {
-	component.setAttribute("lang", lang);
+	component.getAttributes().put("lang", lang);
     }
     if (null != dir) {
-	component.setAttribute("dir", dir);
+	component.getAttributes().put("dir", dir);
     }
     if (null != style) {
-        component.setAttribute("style", style);
+        component.getAttributes().put("style", style);
     }
     if (null != styleClass) {
-        component.setAttribute("styleClass", styleClass);
+        component.getAttributes().put("styleClass", styleClass);
     }   
     if (null != dateStyle) {
-	component.setAttribute("dateStyle", dateStyle);
+	component.getAttributes().put("dateStyle", dateStyle);
     }
     if (null != timeStyle) {
-	component.setAttribute("timeStyle", timeStyle);
+	component.getAttributes().put("timeStyle", timeStyle);
     }
   
 }

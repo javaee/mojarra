@@ -5,7 +5,7 @@
 
 
 /**
- * $Id: SelectManyCheckboxListRenderer.java,v 1.15 2003/09/04 19:52:18 rkitain Exp $
+ * $Id: SelectManyCheckboxListRenderer.java,v 1.16 2003/09/24 23:16:50 horwat Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -83,7 +83,7 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
 
         String classStr;
 
-        if (null != (layoutStr = (String) component.getAttribute("layout"))) {
+        if (null != (layoutStr = (String) component.getAttributes().get("layout"))) {
             layoutVertical = layoutStr.equalsIgnoreCase("PAGE_DIRECTION") ? true : false;
         }
 

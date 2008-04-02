@@ -1,5 +1,5 @@
 /*
- * $Id: FormTag.java,v 1.47 2003/09/13 12:58:50 eburns Exp $
+ * $Id: FormTag.java,v 1.48 2003/09/24 23:17:11 horwat Exp $
  */
 
 /*
@@ -93,36 +93,36 @@ public class FormTag extends FacesTag
                 // in every tag.
                 FacesContext context = FacesContext.getCurrentInstance();
                 UIComponent root = context.getViewRoot();
-                root.setAttribute(RIConstants.BUNDLE_ATTR, bundle);    
+                root.getAttributes().put(RIConstants.BUNDLE_ATTR, bundle);    
             }
-            component.setAttribute("name", formName);
+            component.getAttributes().put("name", formName);
         }
         
         // action, method, enctype, acceptcharset, accept, target, onsubmit, 
         // onreset
         if (onsubmit != null ) {
-            component.setAttribute("onsubmit", onsubmit); 
+            component.getAttributes().put("onsubmit", onsubmit); 
         }
         if (onreset != null ) {
-            component.setAttribute("onreset", onreset); 
+            component.getAttributes().put("onreset", onreset); 
         }
         if (action != null ) {
-            component.setAttribute("action", action); 
+            component.getAttributes().put("action", action); 
         }
         if (method != null ) {
-            component.setAttribute("method", method); 
+            component.getAttributes().put("method", method); 
         }
         if (enctype != null ) {
-            component.setAttribute("enctype", enctype); 
+            component.getAttributes().put("enctype", enctype); 
         }
         if (accept != null ) {
-            component.setAttribute("accept", accept); 
+            component.getAttributes().put("accept", accept); 
         }
         if (target != null ) {
-            component.setAttribute("target", target); 
+            component.getAttributes().put("target", target); 
         }
         if (acceptcharset != null ) {
-            component.setAttribute("acceptcharset", acceptcharset); 
+            component.getAttributes().put("acceptcharset", acceptcharset); 
         }        
     }
 

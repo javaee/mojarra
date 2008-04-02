@@ -1,5 +1,5 @@
 /*
- * $Id: Output_ErrorsTag.java,v 1.13 2003/09/05 14:34:47 rkitain Exp $
+ * $Id: Output_ErrorsTag.java,v 1.14 2003/09/24 23:17:18 horwat Exp $
  */
 
 /*
@@ -81,10 +81,10 @@ public class Output_ErrorsTag extends FacesTag {
         super.overrideProperties(component);
         UIOutput output = (UIOutput) component;
         if (null != forValue) {
-            component.setAttribute("for", forValue);
+            component.getAttributes().put("for", forValue);
         }
         if (null != color) {
-            component.setAttribute("color", color);
+            component.getAttributes().put("color", color);
         }
     }
     //

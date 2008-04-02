@@ -1,5 +1,5 @@
 /*
- * $Id: ErrorsRenderer.java,v 1.23 2003/09/04 19:52:15 rkitain Exp $
+ * $Id: ErrorsRenderer.java,v 1.24 2003/09/24 23:16:32 horwat Exp $
  */
 
 /*
@@ -29,7 +29,7 @@ import java.util.List;
  *
  * <p><B>ErrorsRenderer</B> handles rendering for the Output_ErrorsTag<p>. 
  *
- * @version $Id: ErrorsRenderer.java,v 1.23 2003/09/04 19:52:15 rkitain Exp $*
+ * @version $Id: ErrorsRenderer.java,v 1.24 2003/09/24 23:16:32 horwat Exp $*
  */
 
 public class ErrorsRenderer extends HtmlBasicRenderer {
@@ -115,7 +115,7 @@ public class ErrorsRenderer extends HtmlBasicRenderer {
         //    not associated with any component returned
         // 3. no "for" expression - all messages returned.
         // 
-        String forComponent = (String)component.getAttribute("for");
+        String forComponent = (String)component.getAttributes().get("for");
         if (null != forComponent) {
           
             if (forComponent.length() == 0) {
@@ -163,7 +163,7 @@ public class ErrorsRenderer extends HtmlBasicRenderer {
         }
         Assert.assert_it(null != messageIter);
 
-        String color = (String)component.getAttribute("color");
+        String color = (String)component.getAttributes().get("color");
         if (null == color) {
             color = "RED";
         }
@@ -176,7 +176,7 @@ public class ErrorsRenderer extends HtmlBasicRenderer {
             wroteIt = true;
         }
 	if (null != (styleClass = (String) 
-		     component.getAttribute("styleClass"))) {
+		     component.getAttributes().get("styleClass"))) {
             writer.startElement("span", component);
 	    writer.writeAttribute("class", styleClass, "styleClass");
 	}
