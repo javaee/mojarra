@@ -1,5 +1,5 @@
 /*
- * $Id: PropertyResolverChainWrapper.java,v 1.2 2005/05/16 20:16:19 rlubke Exp $
+ * $Id: PropertyResolverChainWrapper.java,v 1.3 2005/05/18 17:33:44 jayashri Exp $
  */
 /*
  * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
@@ -16,6 +16,7 @@ import javax.el.ELException;
 import javax.el.ELResolver;
 import javax.faces.el.EvaluationException;
 import javax.faces.el.PropertyResolver;
+import javax.faces.context.FacesContext;
 
 public class PropertyResolverChainWrapper extends ELResolver {
 
@@ -33,9 +34,12 @@ public class PropertyResolverChainWrapper extends ELResolver {
         context.setPropertyResolved(true);
         Object result = null;
 
+        FacesContext facesContext = (FacesContext) 
+            context.getContext(FacesContext.class);
         if (base instanceof List || base.getClass().isArray()) {
-            int index = 
-                ELSupport.coerceToNumber(property, Integer.class).intValue();
+            Object indexObj = facesContext.getApplication().getExpressionFactory().
+                    coerceToType(property, Integer.class);
+            int index = ((Integer)indexObj).intValue();
             try {
                 result = legacyPR.getValue(base, index);
             } catch (EvaluationException ex) {
@@ -67,10 +71,13 @@ public class PropertyResolverChainWrapper extends ELResolver {
 
         context.setPropertyResolved(true);
         Class result = null;
-
+        
         if (base instanceof List || base.getClass().isArray()) {
-            int index = 
-                ELSupport.coerceToNumber(property, Integer.class).intValue();
+            FacesContext facesContext = (FacesContext) 
+                context.getContext(FacesContext.class);
+            Object indexObj = facesContext.getApplication().getExpressionFactory().
+                    coerceToType(property, Integer.class);
+            int index = ((Integer)indexObj).intValue();
             try {
                 result = legacyPR.getType(base, index);
             } catch (EvaluationException ex) {
@@ -102,8 +109,11 @@ public class PropertyResolverChainWrapper extends ELResolver {
         context.setPropertyResolved(true);
 
         if (base instanceof List || base.getClass().isArray()) {
-            int index = 
-                ELSupport.coerceToNumber(property, Integer.class).intValue();            
+            FacesContext facesContext = (FacesContext) 
+            context.getContext(FacesContext.class);
+            Object indexObj = facesContext.getApplication().getExpressionFactory().
+                    coerceToType(property, Integer.class);
+            int index = ((Integer)indexObj).intValue();            
             try {
                 legacyPR.setValue(base, index, val);
             } catch (EvaluationException ex) {
@@ -129,8 +139,11 @@ public class PropertyResolverChainWrapper extends ELResolver {
         boolean result = false;
 
         if (base instanceof List || base.getClass().isArray()) {
-            int index = 
-                ELSupport.coerceToNumber(property, Integer.class).intValue();
+            FacesContext facesContext = (FacesContext) 
+            context.getContext(FacesContext.class);
+            Object indexObj = facesContext.getApplication().getExpressionFactory().
+                    coerceToType(property, Integer.class);
+            int index = ((Integer)indexObj).intValue();
             try {
                 result = legacyPR.isReadOnly(base, index);
             } catch (EvaluationException ex) {

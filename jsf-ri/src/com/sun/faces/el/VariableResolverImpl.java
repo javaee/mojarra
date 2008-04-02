@@ -1,5 +1,5 @@
 /*
- * $Id: VariableResolverImpl.java,v 1.22 2005/05/05 20:51:24 edburns Exp $
+ * $Id: VariableResolverImpl.java,v 1.23 2005/05/18 17:33:46 jayashri Exp $
  */
 
 /*
@@ -12,7 +12,7 @@ package com.sun.faces.el;
 import java.util.Arrays;
 
 import com.sun.faces.application.ApplicationAssociate;
-import com.sun.faces.el.impl.ELConstants;
+import com.sun.faces.el.ELConstants;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

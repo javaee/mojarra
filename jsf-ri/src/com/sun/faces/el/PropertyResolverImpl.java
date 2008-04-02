@@ -1,5 +1,5 @@
 /*
- * $Id: PropertyResolverImpl.java,v 1.16 2005/05/05 20:51:23 edburns Exp $
+ * $Id: PropertyResolverImpl.java,v 1.17 2005/05/18 17:33:44 jayashri Exp $
  */
 
 /*
@@ -19,7 +19,6 @@ import javax.faces.el.EvaluationException;
 import javax.faces.el.PropertyNotFoundException;
 import javax.faces.el.PropertyResolver;
 
-import com.sun.faces.el.impl.ELSupport;
 import com.sun.faces.util.Util;
 
 /**
@@ -52,17 +51,20 @@ public class PropertyResolverImpl extends PropertyResolver {
                 Object value = ((List) base).get(index);
                 return (value != null) ? value.getClass() : null;
             } else {
-                throw new EvaluationException(ELSupport.msg(
-                        "el.error.property.array.type", base));
+                throw new PropertyNotFoundException(Util.getExceptionMessageString(
+                        Util.EL_PROPERTY_TYPE_ERROR_ID,
+                        new Object[]{base}));
             }
         } catch (ArrayIndexOutOfBoundsException aioobe) {
-            throw new PropertyNotFoundException(ELSupport.msg(
-                    "el.error.property.array.outofbounds.size", base,
-                    "" + index, "" + Array.getLength(base)));
+            throw new PropertyNotFoundException(Util.getExceptionMessageString(
+                        Util.EL_SIZE_OUT_OF_BOUNDS_ERROR_ID,
+                        new Object[]{base,new Integer(index), 
+                                new Integer(Array.getLength(base))}));
         } catch (IndexOutOfBoundsException ioobe) {
-            throw new PropertyNotFoundException(ELSupport.msg(
-                    "el.error.property.array.outofbounds.size", base,
-                    "" + index, "" + ((List) base).size()));
+           throw new PropertyNotFoundException(Util.getExceptionMessageString(
+                        Util.EL_SIZE_OUT_OF_BOUNDS_ERROR_ID,
+                        new Object[]{base,new Integer(index), 
+                                new Integer(((List)base).size())}));
         }
     }
 
@@ -102,8 +104,9 @@ public class PropertyResolverImpl extends PropertyResolver {
                 return null;
             }
         } else {
-            throw new EvaluationException(ELSupport.msg(
-                    "el.error.property.array.type", base));
+            throw new PropertyNotFoundException(Util.getExceptionMessageString(
+                        Util.EL_PROPERTY_TYPE_ERROR_ID,
+                        new Object[]{base}));
         }
         
     }
@@ -131,8 +134,9 @@ public class PropertyResolverImpl extends PropertyResolver {
         if (base instanceof List || base.getClass().isArray()) {
             return false;
         } else {
-            throw new EvaluationException(ELSupport.msg(
-                    "el.error.property.array.type", base));
+            throw new PropertyNotFoundException(Util.getExceptionMessageString(
+                        Util.EL_PROPERTY_TYPE_ERROR_ID,
+                        new Object[]{base}));
         }  
     }
 
@@ -153,29 +157,33 @@ public class PropertyResolverImpl extends PropertyResolver {
         
         // validate input
         assertInput(base, index);
-
+        FacesContext context = FacesContext.getCurrentInstance();
         Class type = base.getClass();
         if (type.isArray()) {
             try {
-                Array.set(base, index, ELSupport.coerceToType(value, type
+                Array.set(base, index, (context.getApplication().
+                    getExpressionFactory()).coerceToType(value, type
                         .getComponentType()));
             }
             catch (ArrayIndexOutOfBoundsException aioobe) {
-                throw new PropertyNotFoundException(ELSupport.msg(
-                        "el.error.property.array.outofbounds.size", base, ""
-                                + index, "" + Array.getLength(base)));
+                throw new PropertyNotFoundException(Util.getExceptionMessageString(
+                        Util.EL_SIZE_OUT_OF_BOUNDS_ERROR_ID,
+                        new Object[]{base,new Integer(index), 
+                                new Integer(Array.getLength(base))}));
             }
         } else if (base instanceof List) {
             try {
                 ((List) base).set(index, value);
             } catch (IndexOutOfBoundsException ioobe) {
-                throw new PropertyNotFoundException(ELSupport.msg(
-                        "el.error.property.array.outofbounds.size", base, ""
-                                + index, "" + ((List) base).size()));
+                throw new PropertyNotFoundException(Util.getExceptionMessageString(
+                        Util.EL_SIZE_OUT_OF_BOUNDS_ERROR_ID,
+                        new Object[]{base,new Integer(index), 
+                                new Integer(((List)base).size())}));
             }
         } else {
-            throw new EvaluationException(ELSupport.msg(
-                    "el.error.property.array.type", base));
+           throw new PropertyNotFoundException(Util.getExceptionMessageString(
+                        Util.EL_PROPERTY_TYPE_ERROR_ID,
+                        new Object[]{base}));
         }
     }
 
@@ -214,8 +222,9 @@ public class PropertyResolverImpl extends PropertyResolver {
             throw new PropertyNotFoundException(message);
         }
         if (index < 0) {
-            throw new PropertyNotFoundException(ELSupport.msg(
-                    "el.error.property.array.outofbounds", base, "" + index));
+            throw new PropertyNotFoundException(Util.getExceptionMessageString(
+                        Util.EL_OUT_OF_BOUNDS_ERROR_ID,
+                        new Object[]{base, new Integer(index)}));
         }
     }
 }

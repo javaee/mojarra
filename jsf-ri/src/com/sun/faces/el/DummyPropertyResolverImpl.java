@@ -1,5 +1,5 @@
 /*
- * $Id: DummyPropertyResolverImpl.java,v 1.1 2005/05/05 20:51:21 edburns Exp $
+ * $Id: DummyPropertyResolverImpl.java,v 1.2 2005/05/18 17:33:43 jayashri Exp $
  */
 
 /*
@@ -8,8 +8,6 @@
  */
 
 package com.sun.faces.el;
-
-import com.sun.faces.el.impl.ELSupport;
 
 import javax.faces.el.EvaluationException;
 import javax.faces.el.PropertyNotFoundException;
