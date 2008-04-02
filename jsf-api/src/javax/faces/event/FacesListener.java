@@ -1,5 +1,5 @@
 /*
- * $Id: FacesListener.java,v 1.2 2003/01/16 20:24:20 craigmcc Exp $
+ * $Id: FacesListener.java,v 1.3 2003/01/18 01:58:57 craigmcc Exp $
  */
 
 /*
@@ -10,6 +10,7 @@
 package javax.faces.event;
 
 
+import java.io.Serializable;
 import java.util.EventListener;
 
 
@@ -19,7 +20,7 @@ import java.util.EventListener;
  * {@link FacesEvent} event types must extend this interface.</p>
  */
 
-public interface FacesListener extends EventListener {
+public interface FacesListener extends EventListener, Serializable {
 
 
     /**
