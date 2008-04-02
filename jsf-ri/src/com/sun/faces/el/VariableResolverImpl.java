@@ -1,5 +1,5 @@
 /*
- * $Id: VariableResolverImpl.java,v 1.10 2003/08/19 19:31:07 rlubke Exp $
+ * $Id: VariableResolverImpl.java,v 1.11 2003/08/22 20:01:04 rlubke Exp $
  */
 
 /*
@@ -60,6 +60,8 @@ public class VariableResolverImpl extends VariableResolver {
             return (ec.getRequestMap());
         } else if ("sessionScope".equals(name)) {
             return (Util.getSessionMap(context));
+        } else if ("view".equals(name)) {
+            return (context.getViewRoot());
         } else {
 	    // do the scoped lookup thing
             Object value = null;

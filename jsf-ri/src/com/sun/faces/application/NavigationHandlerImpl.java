@@ -1,5 +1,5 @@
 /*
- * $Id: NavigationHandlerImpl.java,v 1.12 2003/08/22 16:49:39 eburns Exp $
+ * $Id: NavigationHandlerImpl.java,v 1.13 2003/08/22 20:01:03 rlubke Exp $
  */
 
 /*
@@ -10,6 +10,7 @@
 package com.sun.faces.application;
 
 import com.sun.faces.config.ConfigNavigationCase;
+import com.sun.faces.util.Util;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -20,6 +21,7 @@ import java.util.Map;
 import java.util.TreeSet;
 
 import javax.faces.FactoryFinder;
+import javax.faces.component.UIViewRoot;
 import javax.faces.application.NavigationHandler;
 import javax.faces.context.FacesContext;
 
@@ -99,7 +101,16 @@ public class NavigationHandlerImpl extends NavigationHandler {
      */
 
     public void handleNavigation(FacesContext context, String actionRef, String outcome) {
-        // PENDING (rlubke) PROVIDE IMPLEMENTATION
+        if (context == null || outcome == null) {
+            throw new NullPointerException(
+                    Util.getExceptionMessage(
+                            Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        }
+        
+        String newViewId = getViewId(context, actionRef, outcome);
+        if (newViewId != null) {
+            context.getViewRoot().setViewId(newViewId);           
+        }
     }
     
     /**
