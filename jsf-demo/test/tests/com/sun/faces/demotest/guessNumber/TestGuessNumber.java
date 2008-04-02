@@ -1,5 +1,5 @@
 /*
- * $Id: TestGuessNumber.java,v 1.11 2004/05/12 18:47:38 ofung Exp $
+ * $Id: TestGuessNumber.java,v 1.12 2004/11/09 17:37:50 rlubke Exp $
  */
 
 /*
@@ -68,7 +68,7 @@ public class TestGuessNumber extends HtmlUnitTestCase {
         int numberFound = 0;
         
         // loop through the range of valid guesses
-        for (int i = 0; i < 11; i++) {
+        for (int i = 1; i < 11; i++) {
 
             assertTrue(greetingPage.getTitleText().equals("Hello"));
             for (Iterator iter = greetingPage.getAllHtmlChildElements(); iter.hasNext();) {
@@ -170,7 +170,7 @@ public class TestGuessNumber extends HtmlUnitTestCase {
 
         for (Iterator iter = resultPage.getAllHtmlChildElements(); iter.hasNext();) {
             HtmlElement element = (HtmlElement) iter.next();
-            if (element.asText().trim().equals("Sorry, null is incorrect.")) {
+            if (element.asText().trim().equals("Sorry, 0 is incorrect. Try a larger number.")) {
                 numberFound++;
                 System.out.println("Incorrect guess 'null'.");
                 break;
