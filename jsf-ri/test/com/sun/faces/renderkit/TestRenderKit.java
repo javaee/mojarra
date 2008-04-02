@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderKit.java,v 1.11 2004/01/27 21:06:09 eburns Exp $
+ * $Id: TestRenderKit.java,v 1.12 2004/01/30 07:02:13 rkitain Exp $
  */
 
 /*
@@ -14,6 +14,7 @@ package com.sun.faces.renderkit;
 import com.sun.faces.renderkit.html_basic.FormRenderer;
 import com.sun.faces.renderkit.html_basic.TextRenderer;
 
+import java.io.Writer;
 import java.util.Iterator;
 
 import javax.faces.component.UIOutput;
@@ -46,7 +47,7 @@ import java.io.ByteArrayOutputStream;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderKit.java,v 1.11 2004/01/27 21:06:09 eburns Exp $
+ * @version $Id: TestRenderKit.java,v 1.12 2004/01/30 07:02:13 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -185,6 +186,40 @@ public static final String CORRECT_OUTPUT_FILENAME =
         } catch (IOException ioe) {
             ; // ignore
         }        
+    }
+
+    public void testCreateResponseWriter() throws Exception {
+
+        RenderKitFactory renderKitFactory = (RenderKitFactory)
+            FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
+        RenderKit renderKit = renderKitFactory.getRenderKit(getFacesContext(),
+						  RenderKitFactory.HTML_BASIC_RENDER_KIT);
+	boolean exceptionThrown = false;
+        try {
+            renderKit.createResponseWriter(new Writer() {
+                public void close() throws IOException {
+                }
+                public void flush() throws IOException {
+                }
+                public void write(char cbuf) throws IOException {
+                }
+                public void write(char[] cbuf, int off,
+                    int len) throws IOException {
+                }
+                public void write(int c) throws IOException {
+                }
+                public void write(String str) throws IOException {
+                }
+                public void write(String str, int off,
+                    int len) throws IOException {
+                }
+            }, null, "foo");
+
+	} catch (IllegalArgumentException iae) {
+	    exceptionThrown = true;
+	}
+
+	assertTrue(exceptionThrown);
     }
 
 } // end of class TestRenderKit

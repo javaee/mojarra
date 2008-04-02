@@ -1,5 +1,5 @@
 /*
- * $Id: TestHtmlResponseWriter.java,v 1.8 2004/01/27 21:06:10 eburns Exp $
+ * $Id: TestHtmlResponseWriter.java,v 1.9 2004/01/30 07:02:13 rkitain Exp $
  */
 
 /*
@@ -38,7 +38,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestHtmlResponseWriter.java,v 1.8 2004/01/27 21:06:10 eburns Exp $
+ * @version $Id: TestHtmlResponseWriter.java,v 1.9 2004/01/30 07:02:13 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -109,7 +109,7 @@ import com.sun.faces.util.Util;
 	boolean exceptionThrown = false;
 	try {
 	    writer = renderKit.createResponseWriter(sw, "text/html", "foobar");
-	} catch (FacesException e) {
+	} catch (IllegalArgumentException e) {
 	    exceptionThrown = true;
 	}
 	assertTrue(exceptionThrown);
