@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.36 2003/01/17 00:26:47 craigmcc Exp $
+ * $Id: UIComponentBase.java,v 1.37 2003/01/17 00:34:24 craigmcc Exp $
  */
 
 /*
@@ -1470,6 +1470,10 @@ public abstract class UIComponentBase implements UIComponent {
      *     of this component, in the order they would be returned
      *     by a call to <code>getChildren()</code>.</li>
      * <li>Call the <code>decode()</code> method of this component.</li>
+     * <li>If the <code>valid</code> property of this {@link UIComponent}
+     *     is now <code>false</code>, call
+     *     <code>FacesContext.renderResponse()</code>
+     *     to transfer control at the end of the current phase.</li>
      * </ul>
      *
      * @param context {@link FacesContext} for the request we are processing
@@ -1493,6 +1497,9 @@ public abstract class UIComponentBase implements UIComponent {
 
         // Process this component itself
         decode(context);
+        if (!isValid()) {
+            context.renderResponse();
+        }
 
     }
 
