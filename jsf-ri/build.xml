@@ -333,7 +333,7 @@
   </target>
 
   <target name="wspack" depends="dist.binary" >
-    <copy todir="${wspack.home}/jsf-${version}">
+    <copy todir="${wspack.home}">
       <fileset dir="${dist.home}"/>
     </copy>
   </target>
