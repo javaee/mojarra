@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContextImpl.java,v 1.32 2003/02/22 03:17:20 eburns Exp $
+ * $Id: FacesContextImpl.java,v 1.33 2003/02/22 03:54:36 eburns Exp $
  */
 
 /*
@@ -469,6 +469,8 @@ public class FacesContextImpl extends FacesContext
         applicationHandler = null;
         renderResponse = false;
         responseComplete = false;
+	// Make sure to clear our ThreadLocal instance.
+	setCurrentInstance(null);
     }
 
     public void renderResponse() {
