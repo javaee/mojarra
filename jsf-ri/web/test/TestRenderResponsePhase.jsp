@@ -250,6 +250,17 @@
       </TR>
 
       <TR>
+        <TD>
+             <h:outputLabel id="labe15" for="checkbox5" style="position: absolute; left: 96px; top: 168px">
+                 <h:outputText id="outputlabel5" value="LabelBeforeForComponent"/>
+              </h:outputLabel>
+              <h:selectBooleanCheckbox  id="checkbox5" rendered="true"
+                   styleClass="selectbooleanClass" />
+	</TD>
+
+      </TR>
+
+      <TR>
 
 	<TD>
 

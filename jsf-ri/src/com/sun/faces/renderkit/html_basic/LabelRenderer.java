@@ -1,5 +1,5 @@
 /*
- * $Id: LabelRenderer.java,v 1.29 2004/03/31 18:48:37 eburns Exp $
+ * $Id: LabelRenderer.java,v 1.30 2004/03/31 23:49:20 jvisvanathan Exp $
  */
 
 /*
@@ -16,6 +16,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import javax.faces.component.UIComponent;
+import javax.faces.component.NamingContainer;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 
@@ -94,16 +95,17 @@ public class LabelRenderer extends HtmlBasicRenderer {
         Util.doAssert(writer != null);
 
         UIComponent forComponent = null;
+        String forClientId = null;
         forValue = (String) component.getAttributes().get("for");
         if ( forValue != null ) {
             forComponent = getForComponent(context, forValue, component);
             if (forComponent == null ) {
-                if (log.isErrorEnabled()) {
-                    log.error(Util.getExceptionMessageString(
-                        Util.COMPONENT_NOT_FOUND_ERROR_MESSAGE_ID,
-                        new Object[]{forValue}));
-                }
-                return;
+                // it could that the component hasn't been created yet. So
+                // construct the clientId for component.
+                forClientId = getForComponentClientId(component, context, 
+                        forValue);
+            } else {
+                forClientId = forComponent.getClientId(context);   
             }
         }
         
@@ -112,8 +114,7 @@ public class LabelRenderer extends HtmlBasicRenderer {
         component.getAttributes().put(RENDER_END_ELEMENT, "yes");
         writer.startElement("label", component);
         writeIdAttributeIfNecessary(context, writer, component);
-        if ( forComponent != null ) {
-            String forClientId = forComponent.getClientId(context);
+        if ( forClientId != null ) {
             writer.writeAttribute("for", forClientId, "for");
         }
 
@@ -153,6 +154,43 @@ public class LabelRenderer extends HtmlBasicRenderer {
         if (log.isTraceEnabled()) {
             log.trace("End encoding component " + component.getId());
         }
+    }
+    
+    /**
+     * Builds and returns the clientId of the component that is
+     * represented by the forValue. Since the component has not been created
+     * yet, invoking <code>getClientId(context)</code> is not possible.
+     *
+     * @param component UIComponent that represents the label
+     * @param context FacesContext for this request
+     * @param forValue String representing the "id" of the component
+     *        that this label represents.
+     * @return String clientId of the component represented by the forValue.
+     */
+    protected String getForComponentClientId(UIComponent component, 
+            FacesContext context, String forValue) {
+        String result = null;
+        // ASSUMPTION: The component for which this acts as the label
+        // as well ths label component are part of the same form.
+        // locate the nearest NamingContainer and get its clientId.
+        UIComponent parent = component.getParent();
+        while (parent != null) {
+            if (parent instanceof NamingContainer) {
+                break;
+            }
+            parent = parent.getParent();
+        }
+        if (parent == null) {
+            if (log.isErrorEnabled()) {
+                log.error("component " + component.getId() +
+                          " must be enclosed inside a form ");
+            }
+            return result;
+        }
+        String parentClientId = parent.getClientId(context);
+        // prepend the clientId of the nearest container to the forValue.
+        result = parentClientId + NamingContainer.SEPARATOR_CHAR + forValue;
+        return result;
     }
 
     // The testcase for this class is TestRenderResponsePhase.java
