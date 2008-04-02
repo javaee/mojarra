@@ -1,5 +1,5 @@
 /*
- * $Id: ViewHandler.java,v 1.15 2003/10/07 19:59:53 rlubke Exp $
+ * $Id: ViewHandler.java,v 1.16 2003/10/08 18:16:58 rlubke Exp $
  */
 
 /*
@@ -191,8 +191,10 @@ public interface ViewHandler {
      * If the mapping is an extension mapping, replace the extension 
      * in the <code>viewId</code> with the extension of the appropriate mapping.
      * If the <code>viewId</code> has no extension, append the appropriate
-     * mapping.  The default implementation expects the argument 
-     * <code>viewId</code> to be a context relative path, starting 
+     * mapping.  It should be noted that if the deployment descriptor
+     * contains multiple suffix mappings, the mapping used in the replacement
+     * is implementation dependent. The default implementation expects the 
+     * argument <code>viewId</code> to be a context relative path, starting 
      * with '<code>/</code>'.  If this is not the case, the default 
      * implementation throws <code>IllegalArgumentException</code>.</p>
      *
