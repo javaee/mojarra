@@ -1,5 +1,5 @@
 /*
- * $Id: DebugUtil.java,v 1.23 2004/02/26 20:33:27 eburns Exp $
+ * $Id: DebugUtil.java,v 1.24 2005/03/10 20:21:28 edburns Exp $
  */
 
 /*
@@ -137,7 +137,7 @@ public class DebugUtil extends Object {
                     String attrValue = null, attrName = (String) it.next();
                     Object attrObj = root.getAttributes().get(attrName);
 
-                    if (!(attrValue instanceof String)) {
+                    if (!(attrValue instanceof String) && null != attrObj) {
                         // chop off the address since we don't want to print
                         // out anything that'll vary from invocation to
                         // invocation
