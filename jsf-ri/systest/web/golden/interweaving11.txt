@@ -9,24 +9,33 @@
       <title>interweaving11</title>   
   </head>
   <body>
-    <form id="j_id_id17" name="j_id_id17" method="post" action="/jsf-systest/faces/interweaving11.jsp;jsessionid=70ba0938b3e2b0663a3309083dbf" enctype="application/x-www-form-urlencoded">
+    <form id="j_id_id17" name="j_id_id17" method="post" action="/jsf-systest/faces/interweaving11.jsp;jsessionid=19b35531ccf17bffd5dd89af0ba7" enctype="application/x-www-form-urlencoded">
 
 <script type="text/javascript" language="Javascript">
 <!--
-    document.getElementById('j_id_id17').addParams = function(paramValuePairs) {
+for (var f = 0; f < document.forms.length; f++) {
+    var form = document.forms[f];
+    form.deleteParams = function() {
         var addedParams = this.addedParams;
         if (addedParams != null) {
             for (var i = 0; i < addedParams.length; i++) {
-                for (var p = 0; p < this.elements.length; p++) {
-                    var element = this.elements[p];
-                    if (addedParams[i] == elements[p].name) {
-                        this.removeChild(element);
-                        break;
-                    }
-                }
+                this.removeChild(addedParams[i]);
             }
         }
-        addedParams = new Array();
+        this.addedParams = null;
+    }
+    var oldOnSubmit = form.onsubmit
+    if (oldOnSubmit == null) {
+        form.onsubmit = form.deleteParams
+    } else {
+        form.onsubmit = function() {
+            form.deleteParams();
+            oldOnSubmit();
+        }
+    }
+    form.addParams = function(paramValuePairs) {
+        this.deleteParams();
+        var addedParams = new Array();
         this.addedParams = addedParams;
         var params = paramValuePairs.split(',');
         for (var i = 0, ii = 0; i < params.length; i++, ii++) {
@@ -35,10 +44,11 @@
             param.name = params[i];
             param.value = params[i + 1];
             this.appendChild(param);
-            addedParams[ii] = params[i]
+            addedParams[ii] = param
             i = i + 1;
         }
     }
+}
 //-->
 </script>
 <a href="#" onclick="document.forms['j_id_id17'].addParams('j_id_id17:j_id_id21,j_id_id17:j_id_id21,param,value'); document.forms['j_id_id17'].submit(); return false;">one</a>

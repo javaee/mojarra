@@ -10,24 +10,33 @@
 </head>
 <body>
     
-    <form id="form01" name="form01" method="post" action="/jsf-systest/faces/taglib/commandLink_test.jsp;jsessionid=70d6fd67fbf5a07b12b65aa300d4" enctype="application/x-www-form-urlencoded">
+    <form id="form01" name="form01" method="post" action="/jsf-systest/faces/taglib/commandLink_test.jsp;jsessionid=19cb1835ea665064cd0232dbbaa8" enctype="application/x-www-form-urlencoded">
 
 <script type="text/javascript" language="Javascript">
 <!--
-    document.getElementById('form01').addParams = function(paramValuePairs) {
+for (var f = 0; f < document.forms.length; f++) {
+    var form = document.forms[f];
+    form.deleteParams = function() {
         var addedParams = this.addedParams;
         if (addedParams != null) {
             for (var i = 0; i < addedParams.length; i++) {
-                for (var p = 0; p < this.elements.length; p++) {
-                    var element = this.elements[p];
-                    if (addedParams[i] == elements[p].name) {
-                        this.removeChild(element);
-                        break;
-                    }
-                }
+                this.removeChild(addedParams[i]);
             }
         }
-        addedParams = new Array();
+        this.addedParams = null;
+    }
+    var oldOnSubmit = form.onsubmit
+    if (oldOnSubmit == null) {
+        form.onsubmit = form.deleteParams
+    } else {
+        form.onsubmit = function() {
+            form.deleteParams();
+            oldOnSubmit();
+        }
+    }
+    form.addParams = function(paramValuePairs) {
+        this.deleteParams();
+        var addedParams = new Array();
         this.addedParams = addedParams;
         var params = paramValuePairs.split(',');
         for (var i = 0, ii = 0; i < params.length; i++, ii++) {
@@ -36,13 +45,14 @@
             param.name = params[i];
             param.value = params[i + 1];
             this.appendChild(param);
-            addedParams[ii] = params[i]
+            addedParams[ii] = param
             i = i + 1;
         }
     }
+}
 //-->
 </script>
-<a id="form01:hyperlink01" href="#" onclick="document.forms['form01'].addParams('form01:hyperlink01,form01:hyperlink01'); document.forms['form01'].submit(); return false;">My Link</a><a id="form01:hyperlink02" href="#" onclick="document.forms['form01'].addParams('form01:hyperlink02,form01:hyperlink02'); document.forms['form01'].submit(); return false;">This is a String property</a><a id="form01:hyperlink03" href="#" onclick="document.forms['form01'].addParams('form01:hyperlink03,form01:hyperlink03'); document.forms['form01'].submit(); return false;">RES-BUNDLE LINK</a><a id="form01:hyperlink04" href="#" onclick="document.forms['form01'].addParams('form01:hyperlink04,form01:hyperlink04'); document.forms['form01'].submit(); return false;"><img src="duke.gif" /></a><a id="form01:hyperlink05" href="#" onclick="document.forms['form01'].addParams('form01:hyperlink05,form01:hyperlink05'); document.forms['form01'].submit(); return false;"><img src="resbundle_image.gif;jsessionid=70d6fd67fbf5a07b12b65aa300d4" /></a><a id="form01:hyperlink06" href="#" onclick="document.forms['form01'].addParams('form01:hyperlink06,form01:hyperlink06,param1,value1'); document.forms['form01'].submit(); return false;">Paramter Link</a><input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="j_id231:j_id232" /><input type="hidden" name="form01" value="form01" /></form>
+<a id="form01:hyperlink01" href="#" onclick="document.forms['form01'].addParams('form01:hyperlink01,form01:hyperlink01'); document.forms['form01'].submit(); return false;">My Link</a><a id="form01:hyperlink02" href="#" onclick="document.forms['form01'].addParams('form01:hyperlink02,form01:hyperlink02'); document.forms['form01'].submit(); return false;">This is a String property</a><a id="form01:hyperlink03" href="#" onclick="document.forms['form01'].addParams('form01:hyperlink03,form01:hyperlink03'); document.forms['form01'].submit(); return false;">RES-BUNDLE LINK</a><a id="form01:hyperlink04" href="#" onclick="document.forms['form01'].addParams('form01:hyperlink04,form01:hyperlink04'); document.forms['form01'].submit(); return false;"><img src="duke.gif" /></a><a id="form01:hyperlink05" href="#" onclick="document.forms['form01'].addParams('form01:hyperlink05,form01:hyperlink05'); document.forms['form01'].submit(); return false;"><img src="resbundle_image.gif;jsessionid=19cb1835ea665064cd0232dbbaa8" /></a><a id="form01:hyperlink06" href="#" onclick="document.forms['form01'].addParams('form01:hyperlink06,form01:hyperlink06,param1,value1'); document.forms['form01'].submit(); return false;">Paramter Link</a><input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="j_id231:j_id232" /><input type="hidden" name="form01" value="form01" /></form>
 </body>
 </html>
 

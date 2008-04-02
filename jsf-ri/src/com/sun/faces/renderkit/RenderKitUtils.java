@@ -180,7 +180,44 @@ public class RenderKitUtils {
      * Example: text/html </p>
      */
     private final static String CONTENT_TYPE_SUBTYPE_DELIMITER = "/";
-
+    
+    private final static String FORM_INIT_JS =
+        "\nfor (var f = 0; f < document.forms.length; f++) {"
+          + "\n    var form = document.forms[f];"
+          + "\n    form.deleteParams = function() {"      
+          + "\n        var addedParams = this.addedParams;"
+          + "\n        if (addedParams != null) {"        
+          + "\n            for (var i = 0; i < addedParams.length; i++) {"
+          + "\n                this.removeChild(addedParams[i]);"
+          + "\n            }"
+          + "\n        }"
+          + "\n        this.addedParams = null;"
+          + "\n    }"        
+          + "\n    var oldOnSubmit = form.onsubmit"
+          + "\n    if (oldOnSubmit == null) {"       
+          + "\n        form.onsubmit = form.deleteParams"
+          + "\n    } else {"      
+          + "\n        form.onsubmit = function() {"
+          + "\n            form.deleteParams();"
+          + "\n            oldOnSubmit();"       
+          + "\n        }"
+          + "\n    }"
+          + "\n    form.addParams = function(paramValuePairs) {"
+          + "\n        this.deleteParams();"
+          + "\n        var addedParams = new Array();"
+          + "\n        this.addedParams = addedParams;"
+          + "\n        var params = paramValuePairs.split(',');"
+          + "\n        for (var i = 0, ii = 0; i < params.length; i++, ii++) {"        
+          + "\n            var param = document.createElement(\"input\");"
+          + "\n            param.type = \"hidden\";"
+          + "\n            param.name = params[i];"
+          + "\n            param.value = params[i + 1];"
+          + "\n            this.appendChild(param);"
+          + "\n            addedParams[ii] = param"
+          + "\n            i = i + 1;"
+          + "\n        }"
+          + "\n    }"
+          + "\n}";
 
     // ------------------------------------------------------------ Constructors
 
@@ -842,12 +879,10 @@ public class RenderKitUtils {
     /**
      * <p>Renders the Javascript necessary to add and remove request
      * parameters to the current form.</p>
-     * @param formClientId the client ID of the form
      * @param writer the <code>ResponseWriter</code>
      * @throws java.io.IOException if an error occurs writing to the response
      */
-    public static void renderAddParamToFormJavaScript(String formClientId,
-                                                      ResponseWriter writer) 
+    public static void renderFormInitScript(ResponseWriter writer) 
     throws IOException {
         
         boolean isXhtml = 
@@ -862,42 +897,9 @@ public class RenderKitUtils {
         } else {
             writer.write("\n<!--");
         }
-        writer.write("\n    var form = document.getElementById('");
-        writer.write(formClientId);
-        writer.write("');");
-        writer.write("\n    form.deleteParams = function() {");      
-        writer.write("\n        var addedParams = this.addedParams;");
-        writer.write("\n        if (addedParams != null) {");        
-        writer.write("\n            for (var i = 0; i < addedParams.length; i++) {");
-        writer.write("\n                this.removeChild(addedParams[i]);");
-        writer.write("\n            }");
-        writer.write("\n        }");
-        writer.write("\n        this.addedParams = null;");
-        writer.write("\n    }");        
-        writer.write("\n    var oldOnSubmit = form.onsubmit");
-        writer.write("\n    if (oldOnSubmit == null) {");       
-        writer.write("\n        form.onsubmit = form.deleteParams");
-        writer.write("\n    } else {");      
-        writer.write("\n        form.onsubmit = function() {");
-        writer.write("\n            form.deleteParams();");
-        writer.write("\n            oldOnSubmit();");       
-        writer.write("\n        }");
-        writer.write("\n    }");
-        writer.write("\n    form.addParams = function(paramValuePairs) {");
-        writer.write("\n        this.deleteParams();");
-        writer.write("\n        var addedParams = new Array();");
-        writer.write("\n        this.addedParams = addedParams;");
-        writer.write("\n        var params = paramValuePairs.split(',');");
-        writer.write("\n        for (var i = 0, ii = 0; i < params.length; i++, ii++) {");        
-        writer.write("\n            var param = document.createElement(\"input\");");
-        writer.write("\n            param.type = \"hidden\";");
-        writer.write("\n            param.name = params[i];");
-        writer.write("\n            param.value = params[i + 1];");
-        writer.write("\n            this.appendChild(param);");
-        writer.write("\n            addedParams[ii] = param");
-        writer.write("\n            i = i + 1;");
-        writer.write("\n        }");
-        writer.write("\n    }");       
+        
+        writer.write(FORM_INIT_JS);
+        
         if (isXhtml) {
             writer.write("\n//]]>\n");            
         } else {

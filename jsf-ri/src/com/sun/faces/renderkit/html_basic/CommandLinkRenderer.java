@@ -1,5 +1,5 @@
 /*
- * $Id: CommandLinkRenderer.java,v 1.52 2006/07/25 21:06:03 rlubke Exp $
+ * $Id: CommandLinkRenderer.java,v 1.53 2006/07/31 23:07:00 rlubke Exp $
  */
 
 /*
@@ -39,8 +39,6 @@ import javax.faces.context.ResponseWriter;
 import javax.faces.event.ActionEvent;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.logging.Level;
 
 import com.sun.faces.RIConstants;
@@ -158,11 +156,11 @@ public class CommandLinkRenderer extends LinkRenderer {
         if (componentDisabled || formClientId == null) {
             renderAsDisabled(context, command);
         } else {
-            if (!hasScriptBeenRendered(context, formClientId)) {
+            if (!hasScriptBeenRendered(context)) {
                 RenderKitUtils
-                      .renderAddParamToFormJavaScript(formClientId,
-                                                      context.getResponseWriter());
-                setScriptAsRendered(context, formClientId);
+                      .renderFormInitScript(
+                            context.getResponseWriter());
+                setScriptAsRendered(context);
             }
             renderAsActive(context, command);
         }
@@ -378,39 +376,28 @@ public class CommandLinkRenderer extends LinkRenderer {
 
 
     /**
-     * @param context the <code>FacesContext</code> for the current request
-     * @param formClientId the client ID of the form
+     * @param context the <code>FacesContext</code> for the current request    
      * @return <code>true</code> If the <code>add/remove</code> javascript
      *  has been rendered, otherwise <code>false</code>
      */
-    private static boolean hasScriptBeenRendered(FacesContext context,
-                                                 String formClientId) {
+    private static boolean hasScriptBeenRendered(FacesContext context) {
 
-        Map scriptState = (Map)
-              context.getExternalContext().getRequestMap()
-                    .get(SCRIPT_STATE);
-        return (scriptState != null && scriptState.containsKey(formClientId));
+        return (context.getExternalContext().getRequestMap()
+              .get(SCRIPT_STATE) != null);
 
     }
 
     /**
      * <p>Set a flag to indicate that the <code>add/remove</code> javascript
      *  has been rendered for the current form.
-     * @param context the <code>FacesContext</code> of the current request
-     * @param formClientId the form client ID
+     * @param context the <code>FacesContext</code> of the current request    
      */
     @SuppressWarnings("unchecked")
-    private static void setScriptAsRendered(FacesContext context,
-                                            String formClientId) {
-        
-        Map requestMap = context.getExternalContext().getRequestMap();
-        Map scriptState = (Map) requestMap.get(SCRIPT_STATE);
-        if (scriptState == null) {
-            scriptState = new HashMap(2, 1.0f);
-            requestMap.put(SCRIPT_STATE, scriptState);
-        }
-        scriptState.put(formClientId, Boolean.TRUE);
-        
+    private static void setScriptAsRendered(FacesContext context) {
+
+        context.getExternalContext().getRequestMap()
+              .put(SCRIPT_STATE, Boolean.TRUE);
+
     }
 
 
