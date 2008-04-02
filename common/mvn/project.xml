@@ -31,9 +31,9 @@
     <groupId>javax.faces</groupId>
     <!-- a short but descriptive name for the project -->
     <name>Sun's JSF Implementation</name>
-    <!-- The version of the project under development, e.g.
-       1.1, 1.2, 2.0-SNAPSHOT -->
-    <currentVersion>${impl.version}-SNAPSHOT</currentVersion>
+    <!-- PENDING(edburns): figure out how to pull this from common.xml
+         ${impl.version} -->
+    <currentVersion>1.2-b12-SNAPSHOT</currentVersion>
     <!-- details about the organization that 'owns' the project -->
     <organization>
         <name>Sun Microsystems Inc</name>

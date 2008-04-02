@@ -22,7 +22,7 @@
 -->
 
 
-<project default="build"
+<project default="jsf-api:build"
     xmlns:maven="jelly:maven"
     xmlns:j="jelly:core"
     xmlns:define="jelly:define"
@@ -32,16 +32,24 @@
   <property file="${user.home}/build.properties"/>
   <property file="../build.properties"/>
 
-  <goal name="build">
+  <goal name="jsf-api:build">
 
     <ant:ant target="main">
     </ant:ant>
   </goal>
 
-  <goal name="clean">
+  <goal name="jsf-api:clean">
 
     <ant:ant target="clean">
     </ant:ant>
+    <delete dir="target" />
+  </goal>
+
+  <goal name="java:compile">
+    <attainGoal name="jsf-api:build" />
+    <mkdir dir="target/classes" />
+    <unjar dest="target/classes" overwrite="true"
+           src="build/lib/jsf-api.jar" />
   </goal>
 
 </project>
