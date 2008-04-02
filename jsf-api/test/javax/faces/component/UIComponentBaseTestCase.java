@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBaseTestCase.java,v 1.3 2003/01/16 20:48:01 craigmcc Exp $
+ * $Id: UIComponentBaseTestCase.java,v 1.4 2003/01/17 01:12:01 eburns Exp $
  */
 
 /*
@@ -104,9 +104,9 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
         UIComponent facet1 = new TestComponent("f1");
         UIComponent facet2 = new TestComponent("f2");
         UIComponent facet3 = new TestComponent("f3");
-        component.addFacet(facet1);
-        component.addFacet(facet2);
-        component.addFacet(facet3);
+        component.addFacet("f1", facet1);
+        component.addFacet("f2", facet2);
+        component.addFacet("f3", facet3);
         checkFacetCount(component, 3);
         UIComponent child1 = new TestComponent("c1");
         UIComponent child2 = new TestComponent("c2");

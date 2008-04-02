@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.66 2003/01/17 00:34:24 craigmcc Exp $
+ * $Id: UIComponent.java,v 1.67 2003/01/17 01:11:58 eburns Exp $
  */
 
 /*
@@ -407,18 +407,18 @@ public interface UIComponent extends Serializable {
 
 
     /**
-     * <p>Add the specified <code>UIComponent</code> as a facet associated
-     * with the name specified by its <code>componentId</code>, replacing
-     * any previous facet with that name.</p>
+     * <p>Add the specified <code>UIComponent</code> as a facet
+     * associated with the name specified by the <code>facetName</code>
+     * argument, replacing any previous facet with that name.</p>
      *
+     * @param facetName The name of this facet
      * @param facet The new facet {@link UIComponent}
      *
-     * @exception IllegalArgumentException if the specified <code>facet</code>
-     *  has a <code>componentId</code> that is <code>null</code>
-     * @exception NullPointerException if <code>facet</code>
-     *  is <code>null</code>
+     * @exception NullPointerException if the either of the
+     * <code>facetName</code> or <code>facet</code> arguments are
+     * <code>null</code>.
      */
-    public void addFacet(UIComponent facet);
+    public void addFacet(String facetName, UIComponent facet);
 
 
     /**

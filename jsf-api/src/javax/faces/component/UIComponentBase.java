@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.37 2003/01/17 00:34:24 craigmcc Exp $
+ * $Id: UIComponentBase.java,v 1.38 2003/01/17 01:11:58 eburns Exp $
  */
 
 /*
@@ -937,26 +937,12 @@ public abstract class UIComponentBase implements UIComponent {
 
     }
 
+    public void addFacet(String facetName, UIComponent facet) {
 
-    /**
-     * <p>Add the specified <code>UIComponent</code> as a facet associated
-     * with the name specified by its <code>componentId</code>, replacing
-     * any previous facet with that name.</p>
-     *
-     * @param facet The new facet {@link UIComponent}
-     *
-     * @exception IllegalArgumentException if the specified <code>facet</code>
-     *  has a <code>componentId</code> that is <code>null</code>
-     * @exception NullPointerException if <code>facet</code>
-     *  is <code>null</code>
-     */
-    public void addFacet(UIComponent facet) {
-
-        String name = facet.getComponentId(); // Will throw NPE if null
-        if (name == null) {
+        if (null == facet || null == facetName) {
             throw new NullPointerException();
         }
-        getFacets().put(name, facet);
+        getFacets().put(facetName, facet);
 
     }
 

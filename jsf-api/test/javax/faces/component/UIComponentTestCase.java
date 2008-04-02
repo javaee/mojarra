@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTestCase.java,v 1.19 2003/01/16 20:48:01 craigmcc Exp $
+ * $Id: UIComponentTestCase.java,v 1.20 2003/01/17 01:12:02 eburns Exp $
  */
 
 /*
@@ -461,18 +461,18 @@ public class UIComponentTestCase extends TestCase {
         UIComponent test1 = new TestComponent("test1");
         UIComponent test2 = new TestComponent("test2");
         UIComponent test3 = new TestComponent("test3");
-        UIComponent test4 = new TestComponent("test3"); // Same component id
+        UIComponent test3dup = new TestComponent("test3"); // Same component id
         UIComponent facet = null;
 
         // Review initial conditions
         checkFacetCount(component, 0);
 
         // Add facets one at a time and check the count
-        component.addFacet(test1);
+        component.addFacet("test1", test1);
         checkFacetCount(component, 1);
-        component.addFacet(test2);
+        component.addFacet("test2", test2);
         checkFacetCount(component, 2);
-        component.addFacet(test3);
+        component.addFacet("test3", test3);
         checkFacetCount(component, 3);
 
         // All added facets must be individually retrievable
@@ -484,14 +484,16 @@ public class UIComponentTestCase extends TestCase {
         assertEquals("test3 returned", test3, facet);
 
         // Replace an existing facet
-        component.addFacet(test4);
+
+        component.addFacet("test3", test3dup);
+	// Note that this doesn't throw any exception
         checkFacetCount(component, 3);
         facet = component.getFacet("test1");
         assertEquals("test1 returned", test1, facet);
         facet = component.getFacet("test2");
         assertEquals("test2 returned", test2, facet);
         facet = component.getFacet("test3");
-        assertEquals("test4 returned", test4, facet);
+        assertEquals("test3dup returned", test3dup, facet);
 
         // Remove a facet
         component.removeFacet("test2");
@@ -501,7 +503,7 @@ public class UIComponentTestCase extends TestCase {
         facet = component.getFacet("test2");
         assertNull("test2 not returned", facet);
         facet = component.getFacet("test3");
-        assertEquals("test4 returned", test4, facet);
+        assertEquals("test3dup returned", test3dup, facet);
 
         // Clear all facets
         component.clearFacets();
@@ -754,11 +756,11 @@ public class UIComponentTestCase extends TestCase {
         assertTrue((kidItr.hasNext()) == false);
 
         // Add facets and children one at a time.
-        testComponent.addFacet(facet1);
+        testComponent.addFacet("facet1", facet1);
         testComponent.addChild(child1);
-        testComponent.addFacet(facet2);
+        testComponent.addFacet("facet2", facet2);
         testComponent.addChild(child2);
-        testComponent.addFacet(facet3);
+        testComponent.addFacet("facet3", facet3);
         testComponent.addChild(child3);
 
         // make sure the facets and children are returned in the correct order.
