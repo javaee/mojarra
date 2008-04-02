@@ -1,0 +1,130 @@
+<html>
+  <head>
+    <title>
+        Sample Apps Readme
+    </title>
+    <link rel="stylesheet" type="text/css" href="style/default.css"/>
+  </head>
+
+  <body>
+    <h1>JavaServer<sup><font size="-2">TM</font></sup> Faces<br>
+        Sample Applications</h1>
+    <center>
+      <b>Specification Version:</b> 1.0 EA4<br />
+      <b>Reference Implementation (RI) Version:</b> 1.0 EA4<br />
+    </center>
+
+	This release of JavaServer Faces technology includes these four examples:
+ <blockquote>
+      <dl>
+        <dt><b>cardemo</b></dt>  <dd>An online car store.  This application is a proof-of-concept
+	that demonstrates JavaServer Faces can be used to build big, robust Web applications.</dd> 
+        <dd>&nbsp;</dd>
+	<dt><b>components</b></dt><dd> A set of custom components.  This application shows how to
+	build various custom components with JavaServer Faces technology.</dd>
+        <dd>&nbsp;</dd>
+	<dt><b>guessNumber</b></dt><dd> Duke is thinking of a number.  Can you guess it?  
+	The simplest application, which shows a small set of standard components,     
+	page navigation, and validation.</dd>
+	<dd>&nbsp;</dd> 
+	<dt><b>non-jsp</b></dt><dd> A simple application without JSP pages.  This application
+	demonstrates that you can build JavaServer Faces applications that don't use JSP pages.</dd>        
+	use JSP pages.</dd>
+	<dd>&nbsp;</dd>
+	</dt>
+	</dl> 
+
+	<h3>Running the Sample Applications  </h3>
+	The JWSDP 1.2 is set up so that all of the sample applications are
+	automatically deployed once you start your server.  To run one of the
+	applications:
+	<ol>
+	<li>Start your server.</li>
+	<li>Point your browser to <tt>http://localhost:8080</tt>.</li>
+	<li>Locate the heading, JSF Samples on the page that opens.</li>
+	<li>Click the link, located under the heading JSF Samples, 
+	corresponding to the example you want to run.</li>
+	</ol>
+
+	<h3>Building and Running the Sample Apps With Ant</h3>
+    In order to run one of the sample applications using the supplied Ant 
+    build.xml files, simply follow these steps after you've installed
+    the Java Web Services Developer Pack, v. 1.2:
+
+    <ol>
+      <li><p>On a system running the Solaris or Linux operating system, go to the 
+	<code>&lt;JWSDP_HOME&gt;/bin</code> directory and execute 
+the <code>catalina.sh</code> script to bring up the Java WSDP.  On a system 
+running Microsoft Windows, from the Start menu, select Programs, 
+Java(tm) Web Services Developer Pack 1.2, and Start Tomcat.</li>
+<li>Once the server 
+is up and running, point your browser to <code>http://localhost:8080</code>, 
+the default port at which the process is running.  The page that is displayed 
+contains links to several sample programs and administration tools.</li>
+<li>Click on one of the links to run the corresponding example.
+</li>    
+</ol>
+
+	<a name="manual">
+    <h3>Building and Running the Sample Apps Manually</h3>
+    It is also possible to build each of the sample apps manually rather 
+    than use the supplied Ant build.xml files.  For example, to build and
+    run <tt>example/cardemo</tt>, follow these steps:
+     
+    <blockquote>
+      <h5>For Solaris/Linux:</h5>
+      Note: the specific details for each sample app may differ
+      <blockquote>
+        <ol>
+          <li><tt>% export JAVA_HOME=&lt;<i>your J2SE installation directory</i>&gt;</tt></li>
+          <li><tt>% export JWSDP_HOME=&lt;<i>your JWSDP1.1 installation directory</i>&gt;</tt></li>
+          <li><tt>% export JAXB_HOME=$JWSDP_HOME/jaxb-1.0</tt></li>    
+          <li><tt>% export JAXB_LIBS=$JAXB_HOME/lib</tt></li>    
+          <li><tt>% export JAXP_LIBS=$JWSDP_HOME/jaxp-1.2.2/lib</tt></li>    
+          <li><tt>% export JWSDP_LIBS=$JWSDP_HOME/jwsdp-shared/lib</tt></li>    
+          <li><tt>% export PATH=$JAXB_HOME/bin:$JWSDP_HOME/jwsdp-shared/bin:$PATH</tt></li>    
+          <li><tt>% cd $JAXB_HOME/examples/users-guide/SampleApp1</tt></li>    
+          <li><tt>% $JAXB_HOME/bin/xjc.sh po.xsd -p primer.po</tt></li>    
+          <li><tt>% export CLASSPATH=$JAXB_LIBS/jaxb-api.jar:$JAXB_LIBS/jaxb-ri.jar:$JAXB_LIBS/jaxb-xjc.jar: 
+                    $JAXB_LIBS/jaxb-libs.jar:$JAXP_LIBS/jaxp-api.jar:$JAXP_LIBS/endorsed/xercesImpl.jar: 
+                    $JAXP_LIBS/endorsed/xalan.jar:$JAXP_LIBS/endorsed/sax.jar:$JAXP_LIBS/endorsed/dom.jar:
+                    $JWSDP_LIBS/jax-qname.jar:$JWSDP_LIBS/namespace.jar:.</tt>
+                    <br>
+                    <i>Be sure to enter the above command on a single line.</i>
+                    </li>    
+          <li><tt>% $JAVA_HOME/bin/javac Main.java primer/po/*.java primer/po/impl/*.java</tt></li>    
+          <li><tt>% $JAVA_HOME/bin/java Main</tt></li>
+        </ol>
+      </blockquote>
+
+      <h5>For WindowsNT/2000/XP:</h5>
+      Note: the specific details for each sample app may differ
+      <blockquote>
+        <ol>
+          <li><tt>&gt; set JAVA_HOME=&lt;<i>your J2SE installation directory</i>&gt;</tt></li>    
+          <li><tt>&gt; set JWSDP_HOME=&lt;<i>your JWSDP1.1 installation directory</i>&gt;</tt></li>
+          <li><tt>&gt; set JAXB_HOME=%JWSDP_HOME%\jaxb-1.0</tt></li>    
+          <li><tt>&gt; set JAXB_LIBS=%JAXB_HOME%\lib</tt></li>    
+          <li><tt>&gt; set JAXP_LIBS=%JWSDP_HOME%\jaxp-1.2.2\lib</tt></li>    
+          <li><tt>&gt; set JWSDP_LIBS=%JWSDP_HOME%\jwsdp-shared\lib</tt></li>    
+          <li><tt>&gt; set PATH=%JAXB_HOME%\bin;%JWSDP_HOME%\jwsdp-shared\bin;%PATH%</tt></li>    
+          <li><tt>&gt; cd %JAXB_HOME%\examples\users-guide\SampleApp1</tt></li>    
+          <li><tt>&gt; %JAXB_HOME%\bin\xjc po.xsd -p primer.po</tt></li>    
+          <li><tt>&gt; set CLASSPATH=%JAXB_LIBS%\jaxb-api.jar;%JAXB_LIBS%\jaxb-ri.jar;%JAXB_LIBS%\jaxb-xjc.jar; 
+                       %JAXB_LIBS%\jaxb-libs.jar;%JAXP_LIBS%\jaxb-api.jar;%JAXP_LIBS%\endorsed\xercesImpl.jar; 
+                       %JAXP_LIBS%\endorsed\xalan.jar;%JAXP_LIBS%\endorsed\sax.jar;%JAXP_LIBS%\endorsed\dom.jar;
+                       %JWSDP_LIBS%\jax-qname.jar;%JWSDP_LIBS%\namespace.jar;.</tt>
+                       <br>
+                       <i>Be sure to enter the above command on a single line.</i>
+                       </li>    
+          <li><tt>&gt; %JAVA_HOME%\bin\javac Main.java primer\po\*.java primer\po\impl\*.java</tt></li>    
+          <li><tt>&gt; %JAVA_HOME%\bin\java Main</tt></li>    
+        </ol>
+      </blockquote>
+    </blockquote>
+
+
+
+     </body>
+</html>
+    
