@@ -73,41 +73,15 @@
 <issue>
   <id>Listeners-3</id>
   <originator>Craig</originator>
-  <summary>Review Event Listener Architecture</summary>
+  <summary>See JSFA7 in Scarab</summary>
   <description>
-    <p>Need to review how the event listener mechanism is currently
-    architected in light of real world component development.  In
-    particular:</p>
-    <ul>
-    <li>Registering listeners on a receiving component (versus globally).</li>
-    <li>Directing events to a particular component (versus a global
-        "this thing happened" approach).</li>
-    </ul>
-
-    <p>Additional note from Hans (09/13):  Should we really define the
-    add/clear/get/removeRequestEventHandler methods on UIComponent?  It seems
-    like we want strongly typed events (as we say we do in the overview),
-    more specific component types should instead declare a set of methods
-    for things like "ValueUpdatedEventHandler" (or Listener) to advertise
-    that they generate (<em>Spec Lead edit - or consume</em>) a particular
-    event type (along the lines defined by the JavaBeans spec).</p>
-
-    <p>Additional notes from Joe (09/11):</p>
-    <ul>
-    <li>Should we subclass FacesEvent as RequestEvent and ApplicationEvent
-        for type safety at the appropriate event listeners?</li>
-    <li>Do we need to define an order of event delivery (such as form events
-        before command events at the application level?</li>
-    </ul>
-
-    <p>See Also:  [StandardComponentEvents-38], [EventProcessingPhases-39].</p>
   </description>
   <resolution>
-    <p><em>04 Sep 2002</em> - Craig to present writeup to EG.</p>
+    <a href="http://tokyo.betaversion.org:8080/issues/id/JSFA7">JSFA7</a> in Scarab.
   </resolution>
-  <status>OPEN</status>
-  <status-date>04 Sep 2002</status-date>
-  <priority>3</priority>
+  <status></status>
+  <status-date></status-date>
+  <priority></priority>
   <effort></effort>
 </issue>
 
@@ -242,20 +216,16 @@ moved to
 <issue>
   <id>TreeCreation-9</id>
   <originator>Jeff</originator>
-  <summary>Component Tree Creation in Render Response</summary>
+  <summary>See JSFA8 in Scarab.</summary>
   <description>
-    <p>Our current design uses a pass through <em>Render Response</em> to
-    initially create the component tree in most cases, which makes for
-    interesting design decisions on some complex rendering scenarios.  It
-    would be useful to re-investigate creating the component tree from a
-    static analysis of the JSP page source.</p>
+<a href="http://tokyo.betaversion.org:8080/issues/id/JSFA8">JSFA8</a> in Scarab
   </description>
   <resolution>
     
   </resolution>
-  <status>OPEN</status>
-  <status-date>04 Sep 2002</status-date>
-  <priority>3</priority>
+  <status></status>
+  <status-date></status-date>
+  <priority></priority>
   <effort></effort>
 </issue>
 
@@ -281,46 +251,15 @@ moved to
 <issue>
   <id>ApplicationHandler-11</id>
   <originator>Public</originator>
-  <summary>Rethink ApplicationHandler</summary>
+  <summary>JSFA10 in Scarab</summary>
   <description>
-    <p>Please rethink this ApplicationHandler business.  Application
-    handlers are going to wind up having a processEvent method that's
-    a huge switch statement that switches off the event type and forces
-    casting, thereby committing three Cardinal OO sins.  Another huge
-    drawback to this design is that the application handler accesses
-    tree ids directly, which will increase the maintenance burden if you
-    happen to change the name of a JSP page that the application handler
-    forwards to.</p>
-
-    <p>Additional notes from Hans (09/13):</p>
-    <ul>
-    <li>Is the "stop immediately" approach (returning Phase.GOTO_RENDER)
-        sufficient?  What if we really do want to ensure that all the
-        queued application events are handled?</li>
-    <li>Is there any guaranteed ordering of application event processing
-        that clever apps can use to get around the current restrictions?</li>
-    <li>We also need to incorporate some level of navigation support.  The
-        application will probably deal with this as the return value from
-        the application event handler, so incorporate it in this issue.</li>
-    </ul>
-
-    <p>Additional notes from Joe (09/11):</p>
-    <ul>
-    <li>Part of the "navigation handler" functionality should be using the
-        return value from the application event handler to select the new
-        response tree id, instead of the app calling setResponseTree()
-        directly (although there might be cases where the app still wants
-        to do that, these should be the exception).</li>
-    <li>See Joe's additional design remarks on this in his comments on
-        Section 6.3 in the message entitled "comments on 0902 specification
-        draft" dated 09/11/2002.</li>
-    </ul>
+<a href="http://tokyo.betaversion.org:8080/issues/id/JSFA10">JSFA10</a> in Scarab.
   </description>
   <resolution>
     
   </resolution>
-  <status>OPEN</status>
-  <status-date>04 Sep 2002</status-date>
+  <status></status>
+  <status-date> Sep 2002</status-date>
   <priority>1</priority>
   <effort>Small</effort>
 </issue>
@@ -536,21 +475,16 @@ moved to
 <issue>
   <id>EventTypes-19</id>
   <originator>EG</originator>
-  <summary>Both FormEvent and CommandEvent?</summary>
+  <summary>See JSFA7 in Scarab</summary>
   <description>
-    <p>The current APIs have both CommandEvent (passes the command name)
-    and FormEvent (subclasses CommandEvent and adds the form name).  Do we
-    need both?  It would seem that command event is required in any case
-    (so that an application can distinguish which submit button was used).
-    Does FormEvent add enough value to make it worth keeping?</p>
   </description>
   <resolution>
-    
+    <a href="http://tokyo.betaversion.org:8080/issues/id/JSFA7">JSFA7</a> in Scarab.
   </resolution>
-  <status>OPEN</status>
-  <status-date>06 Sep 2002</status-date>
-  <priority>2</priority>
-  <effort>Small</effort>
+  <status></status>
+  <status-date></status-date>
+  <priority></priority>
+  <effort></effort>
 </issue>
 
 
@@ -859,21 +793,15 @@ moved to
 <issue>
   <id>HandlersModifyTree-33</id>
   <originator>Hans</originator>
-  <summary>Should request event handlers be allowed to modify the
-           component tree</summary>
+  <summary>See JSFA7 in Scarab</summary>
   <description>
-    <p>I have argued that this will cause confusion, and that
-    event handlers and other code should instead just set component
-    properties and leave it up to the component to respond to this by
-    adding/removing child components, remove itself (or make itself
-    invisible/not rendered as Jeff and Adam suggest), and that only the
-    application should be allowed to switch to a new response tree.</p>
   </description>
   <resolution>
+    <a href="http://tokyo.betaversion.org:8080/issues/id/JSFA7">JSFA7</a> in Scarab.
   </resolution>
-  <status>OPEN</status>
-  <status-date>12 Sep 2002</status-date>
-  <priority>3</priority>
+  <status></status>
+  <status-date></status-date>
+  <priority></priority>
   <effort></effort>
 </issue>
 
@@ -881,21 +809,15 @@ moved to
 <issue>
   <id>HandlersSelectTree-34</id>
   <originator>Hans</originator>
-  <summary>Should request event handlers be allowed to select a new
-           response tree identifier?</summary>
+  <summary>See JSFA7 in Scarab</summary>
   <description>
-    <p>I have argued that this will cause confusion, and that
-    event handlers and other code should instead just set component
-    properties and leave it up to the component to respond to this by
-    adding/removing child components, remove itself (or make itself
-    invisible/not rendered as Jeff and Adam suggest), and that only the
-    application should be allowed to switch to a new response tree.</p>
   </description>
   <resolution>
+    <a href="http://tokyo.betaversion.org:8080/issues/id/JSFA7">JSFA7</a> in Scarab.
   </resolution>
-  <status>OPEN</status>
-  <status-date>12 Sep 2002</status-date>
-  <priority>3</priority>
+  <status></status>
+  <status-date></status-date>
+  <priority></priority>
   <effort></effort>
 </issue>
 
@@ -982,22 +904,15 @@ moved to
 <issue>
   <id>StandardComponentEvents-38</id>
   <originator>Hans</originator>
-  <summary>Should standard UI components generate events?</summary>
+  <summary>See JSFA7 in Scarab</summary>
   <description>
-    <p>It's been suggested that some of them should at least generate
-    "value changed" when a new value is detected in decode() or setValue().
-    I've also suggested that "invalid value" events are posted during
-    validation, to make it possible to handle this case in an event
-    handler (implying that error messages are displayed, and making it
-    more flexible at the same time.</p>
-
-    <p>See Also:  [Listeners-3], [EventProcessingPhases-39].</p>
   </description>
   <resolution>
+    <a href="http://tokyo.betaversion.org:8080/issues/id/JSFA7">JSFA7</a> in Scarab.
   </resolution>
-  <status>OPEN</status>
-  <status-date>12 Sep 2002</status-date>
-  <priority>3</priority>
+  <status></status>
+  <status-date></status-date>
+  <priority></priority>
   <effort></effort>
 </issue>
 
