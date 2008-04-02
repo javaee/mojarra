@@ -26,7 +26,7 @@
 
 package carstore;
 
-import components.components.AreaSelectedEvent;
+import com.sun.javaee.blueprints.components.ui.components.AreaSelectedEvent;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 

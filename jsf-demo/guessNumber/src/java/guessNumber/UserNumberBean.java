@@ -35,6 +35,7 @@ import javax.faces.validator.ValidatorException;
 import java.util.Random;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.ValueChangeEvent;
+import javax.faces.model.SelectItem;
 
 
 public class UserNumberBean {
@@ -71,15 +72,15 @@ public class UserNumberBean {
             return "Yay! You got it!";
         } else if (userNumber == null) {
             return "Sorry, " + userNumber +
-                    " is incorrect. Try a larger number.";    
+                   " is incorrect. Try a larger number.";
         } else {
             int num = userNumber.intValue();
             if (num > randomInt.intValue()) {
                 return "Sorry, " + userNumber +
-                    " is incorrect. Try a smaller number.";
+                       " is incorrect. Try a smaller number.";
             } else {
                 return "Sorry, " + userNumber +
-                    " is incorrect. Try a larger number.";
+                       " is incorrect. Try a larger number.";
             }
         }
     }
@@ -189,7 +190,7 @@ public class UserNumberBean {
                 throw new ValidatorException(
                     MessageFactory.getMessage
                     (context, LongRangeValidator.TYPE_MESSAGE_ID,
-                    new Object[]{MessageFactory.getLabel(context, component)}));
+                     new Object[]{MessageFactory.getLabel(context, component)}));
             }
         }
 
@@ -206,38 +207,5 @@ public class UserNumberBean {
         }
 
     }
-
-    /**
-     * Holds value of property items.
-     */
-    private List items;
-
-    /**
-     * Getter for property items.
-     * @return Value of property items.
-     */
-    public List getItems() {
-        if (null == items) {
-            items = new ArrayList();
-            items.add(new Integer(1));
-            items.add(new Integer(2));
-        }
-
-        return this.items;
-    }
-
-    /**
-     * Setter for property items.
-     * @param items New value of property items.
-     */
-    public void setItems(List items) {
-
-        this.items = items;
-    }
-    
-    public void processValueChange(ValueChangeEvent e) throws AbortProcessingException {
-        System.out.println("value changed");
-    }
-
 
 }

@@ -96,7 +96,6 @@
   
   <target name="clean">
   
-    <delete dir="${basedir}/lib"/> 
     <delete file="jsf-${version}.zip"/>
     <delete    dir="${dist.home}"/>
     <delete dir="${basedir}/test/build"/>
@@ -237,7 +236,7 @@
             file="${basedir}/webtier-sample/build/webtier-sample.war"/>
     <echo> copy the demo-components.jar </echo>
     <copy todir="${dist.home}/samples" 
-     file="${basedir}/components/build/jsf-components/WEB-INF/lib/demo-components.jar"/>
+     file="${basedir}/lib/ui.jar"/>
   </target>
 
   <target name="copyDemoSource" depends="copyJars"> 
@@ -383,7 +382,7 @@
     <ant dir="${basedir}/components" inheritAll="false">
     </ant>
     <copy todir="${basedir}/lib"
-          file="components/build/jsf-components/WEB-INF/lib/demo-components.jar"/>
+          file="components/build/jsf-components/WEB-INF/lib/ui.jar"/>
     <ant dir="${basedir}/carstore" inheritAll="false">
     </ant>
     <ant dir="${basedir}/helloDuke" inheritAll="false">

@@ -27,9 +27,9 @@
 
 <!-- =========== FULL CONFIGURATION FILE ================================== -->
 
-<faces-config xmlns="http://java.sun.com/xml/ns/j2ee"
+<faces-config xmlns="http://java.sun.com/xml/ns/javaee"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-facesconfig_1_2.xsd"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_1_2.xsd"
     version="1.2">
 
   <application>
@@ -78,13 +78,13 @@
   <managed-bean>
     <description>
       Causes the default VariableResolver implementation to instantiate the 
-      managed bean, NA of the class, components.model.ImageArea in application 
+      managed bean, NA of the class, ImageArea in application 
       scope if the bean does not already exist in any scope and initialize the
       shape, alt, and coords properties with the values specified by the
       managed-property elements.
     </description>
     <managed-bean-name> NA </managed-bean-name>
-    <managed-bean-class> components.model.ImageArea </managed-bean-class>
+    <managed-bean-class>com.sun.javaee.blueprints.components.ui.model.ImageArea</managed-bean-class>
     <managed-bean-scope> application </managed-bean-scope>
     <managed-property>
       <description>
@@ -117,13 +117,13 @@
   <managed-bean>
     <description>
       Causes the default VariableResolver implementation to instantiate the 
-      managed bean, SA of the class, components.model.ImageArea in application 
+      managed bean, SA of the class, ImageArea in application 
       scope if the bean does not already exist in any scope and initialize the
       shape, alt, and coords properties with the values specified by the
       managed-property elements.
     </description>
     <managed-bean-name>SA</managed-bean-name>
-    <managed-bean-class>components.model.ImageArea</managed-bean-class>
+    <managed-bean-class>com.sun.javaee.blueprints.components.ui.model.ImageArea</managed-bean-class>
     <managed-bean-scope>application</managed-bean-scope>
     <managed-property>
       <description>
@@ -156,13 +156,13 @@
   <managed-bean>
     <description>
       Causes the default VariableResolver implementation to instantiate the 
-      managed bean, gerA of the class, components.model.ImageArea in application 
+      managed bean, gerA of the class, ImageArea in application 
       scope if the bean does not already exist in any scope and initialize the
       shape, alt, and coords properties with the values specified by the
       managed-property elements.
     </description>
     <managed-bean-name> gerA </managed-bean-name>
-    <managed-bean-class> components.model.ImageArea </managed-bean-class>
+    <managed-bean-class>com.sun.javaee.blueprints.components.ui.model.ImageArea</managed-bean-class>
     <managed-bean-scope> application </managed-bean-scope>
     <managed-property>
       <description>
@@ -195,13 +195,13 @@
   <managed-bean>
     <description>
       Causes the default VariableResolver implementation to instantiate the 
-      managed bean, fraA of the class, components.model.ImageArea in application 
+      managed bean, fraA of the class, ImageArea in application 
       scope if the bean does not already exist in any scope and initialize the
       shape, alt, and coords properties with the values specified by the
       managed-property elements.
     </description>
     <managed-bean-name> fraA </managed-bean-name>
-    <managed-bean-class> components.model.ImageArea </managed-bean-class>
+    <managed-bean-class>com.sun.javaee.blueprints.components.ui.model.ImageArea</managed-bean-class>
     <managed-bean-scope> application </managed-bean-scope>
     <managed-property>
         <description>
