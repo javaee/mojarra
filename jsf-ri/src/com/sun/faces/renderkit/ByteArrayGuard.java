@@ -1,5 +1,5 @@
 /*
- * $Id: ByteArrayGuard.java,v 1.11 2006/03/29 23:03:46 rlubke Exp $
+ * $Id: ByteArrayGuard.java,v 1.12 2006/04/05 17:53:42 rlubke Exp $
  */
 
 /*
@@ -36,7 +36,6 @@ import javax.crypto.spec.DESedeKeySpec;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import javax.faces.FacesException;
-import javax.naming.InitialContext;
 
 import java.io.IOException;
 import java.security.Key;
@@ -46,7 +45,6 @@ import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.sun.faces.RIConstants;
 import com.sun.faces.util.Util;
 
 /**
@@ -65,9 +63,7 @@ public final class ByteArrayGuard {
             Util.getLogger(Util.FACES_LOGGER + Util.RENDERKIT_LOGGER);
     private static final int DEFAULT_IV_LENGTH = 8;        
     private static final int DEFAULT_KEY_LENGTH = 24;
-    private static final int DEFAULT_MAC_LENGTH = 20;    
-    
-    private static ByteArrayGuard byteArrayGuard;
+    private static final int DEFAULT_MAC_LENGTH = 20;            
     
     private final Object decLock = new Object();      
     private final Object encLock = new Object();    
@@ -91,81 +87,69 @@ public final class ByteArrayGuard {
      * <code>keyLength</code>, <code>macLength</code>, <code>ivLength</code>.
      * @param keyLength the length of the key used for encryption
      * @param macLength the length of the message authentication used 
-     * @param ivLength length of the initialization vector used by the block cipher      
+     * @param ivLength length of the initialization vector used by the block cipher   
+     * @param password the password to seed the encryption 
      */
-    private ByteArrayGuard(int keyLength, int macLength, int ivLength) {
+    private ByteArrayGuard(int keyLength, 
+                           int macLength, 
+                           int ivLength, 
+                           String password) {
 
         this.keyLength = keyLength;
         this.macLength = macLength;
         this.ivLength = ivLength;
 
-        if (PASSWORD_KEY == null) {
-            InitialContext iContext = null;
+        if (password != null) {
+            if (logger.isLoggable(Level.FINE)) {
+                logger.log(Level.FINE,
+                           "Client state saving encryption enabled.");
+            }
+            PASSWORD_KEY = convertPasswordToKey(password.getBytes());
             try {
-                iContext = new InitialContext();
-                String password = (String) iContext
-                      .lookup(RIConstants.CLIENT_STATE_ENC_PASSWORD_ENTRY_NAME);
-                if (password != null) {                   
-                    if (logger.isLoggable(Level.FINE)) {
-                        logger.log(Level.FINE,
-                                   "Client state saving encryption enabled.");
-                    }
-                    PASSWORD_KEY = convertPasswordToKey(password.getBytes());
-                    try {
-                        prng = SecureRandom.getInstance("SHA1PRNG");
-                        keygen = SecretKeyFactory.getInstance("DESede");                       
-                        encryptCipher =
-                              getBlockCipherForEncryption(PASSWORD_KEY);
-                        iVector = encryptCipher.getIV();                      
-                        decryptCipher =
-                              getBlockCipherForDecryption(PASSWORD_KEY,
-                                                          iVector);                        
-                    } catch (Exception e) {
-                        if (logger.isLoggable(Level.SEVERE)) {
-                            logger.log(Level.SEVERE,
-                                       "Unexpected exception initializing encryption."
-                                       + "  No encryption will be performed.",
-                                       e);
-                        }
-                        PASSWORD_KEY = null;
-                        keygen = null;                       
-                        encryptCipher = null;
-                        decryptCipher = null;
-                        iVector = null;
-                        prng = null;                        
-                    }
+                prng = SecureRandom.getInstance("SHA1PRNG");
+                keygen = SecretKeyFactory.getInstance("DESede");
+                encryptCipher =
+                      getBlockCipherForEncryption(PASSWORD_KEY);
+                iVector = encryptCipher.getIV();
+                decryptCipher =
+                      getBlockCipherForDecryption(PASSWORD_KEY,
+                                                  iVector);
+            } catch (Exception e) {
+                if (logger.isLoggable(Level.SEVERE)) {
+                    logger.log(Level.SEVERE,
+                               "Unexpected exception initializing encryption."
+                               + "  No encryption will be performed.",
+                               e);
                 }
-            } catch (Exception ne) {
-                // i18n
-                if (logger.isLoggable(Level.FINE)) {
-                    logger.log(Level.FINE,
-                               "Client state saving encryption disabled.",
-                               ne);
-                }
-            } finally {
-                if (iContext != null) {
-                    try {
-                        iContext.close();
-                    } catch (Exception e) {}
-                }
-            }           
-        }
-
+                PASSWORD_KEY = null;
+                keygen = null;
+                encryptCipher = null;
+                decryptCipher = null;
+                iVector = null;
+                prng = null;
+            }
+        }       
     }
 
 
     // ---------------------------------------------------------- Public Methods
 
 
-    public static synchronized ByteArrayGuard getInstance() {
+    public static ByteArrayGuard newInstance() {
+        
+       return new ByteArrayGuard(DEFAULT_KEY_LENGTH,
+                                 DEFAULT_MAC_LENGTH,
+                                 DEFAULT_IV_LENGTH,
+                                 null);
+        
+    }
 
-        if (byteArrayGuard == null) {
-            byteArrayGuard = new ByteArrayGuard(DEFAULT_KEY_LENGTH,
-                             DEFAULT_MAC_LENGTH,
-                             DEFAULT_IV_LENGTH);
-        }
-        return byteArrayGuard;
-
+    
+    public static ByteArrayGuard newInstance(String password) {
+        return new ByteArrayGuard(DEFAULT_KEY_LENGTH,
+                                  DEFAULT_MAC_LENGTH,
+                                  DEFAULT_IV_LENGTH,
+                                  password);
     }
 
 

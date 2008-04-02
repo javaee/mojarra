@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListener.java,v 1.69 2006/03/29 23:03:43 rlubke Exp $
+ * $Id: ConfigureListener.java,v 1.70 2006/04/05 17:53:43 rlubke Exp $
  */
 /*
  * The contents of this file are subject to the terms
@@ -103,6 +103,8 @@ import com.sun.faces.el.DummyVariableResolverImpl;
 import com.sun.faces.util.Util;
 import com.sun.faces.util.MessageUtils;
 
+import com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
+
 import com.sun.org.apache.commons.digester.Digester;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
@@ -113,7 +115,6 @@ import org.xml.sax.helpers.DefaultHandler;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
@@ -222,7 +223,9 @@ public class ConfigureListener implements ServletRequestListener,
      * qualified Java class name to a ManagedBeanFactory.</p>
      */
     protected static final String MANAGED_BEAN_FACTORY_DECORATOR_CLASS =
-        RIConstants.FACES_PREFIX + "managedBeanFactoryDecoratorClass";        
+        RIConstants.FACES_PREFIX + "managedBeanFactoryDecoratorClass";    
+    
+    protected WebConfiguration webConfig;
 
     /**
      * <p>All known factory names.</p>
@@ -285,6 +288,7 @@ public class ConfigureListener implements ServletRequestListener,
     // flag to disable web.xml scanning completely - to be used
     // by subclasses of ConfigureListener.
     private boolean shouldScanWebXml = true;
+   
     
     // ------------------------------------------ ServletContextListener Methods
 
@@ -366,6 +370,7 @@ public class ConfigureListener implements ServletRequestListener,
 
     public void contextInitialized(ServletContextEvent sce) {
         ServletContext context = sce.getServletContext();
+        webConfig = WebConfiguration.getInstance(context);
         Digester digester = null;
         boolean initialized = false;
         
@@ -386,8 +391,9 @@ public class ConfigureListener implements ServletRequestListener,
             // Check to see if the FacesServlet is present in the
             // web.xml.   If it is, perform faces configuration as normal,
             // otherwise, simply return.
-            if (shouldScanWebXml && 
-                !isFeatureEnabled(context, FORCE_LOAD_CONFIG)) {                
+            if (shouldScanWebXml &&
+                !isFeatureEnabled(BooleanWebContextInitParameter.ForceLoadFacesConfigFiles))
+            {
                 WebXmlProcessor processor = new WebXmlProcessor(context);
                 if (!processor.isFacesServletPresent()) {
                     if (LOGGER.isLoggable(Level.FINE)) {
@@ -404,7 +410,7 @@ public class ConfigureListener implements ServletRequestListener,
                                 +
                                 " processing configuration.");
                 }
-            }
+            }                       
 
             // Prepare local variables we will need
             FacesConfigBean fcb = new FacesConfigBean();            
@@ -424,7 +430,7 @@ public class ConfigureListener implements ServletRequestListener,
 
             // see if we need to disable our TLValidator
             Util.setHtmlTLVActive(
-                  isFeatureEnabled(context, ENABLE_HTML_TLV));
+                  isFeatureEnabled(BooleanWebContextInitParameter.EnableHtmlTagLibraryValidator));
 
             URL url = null;
             if (LOGGER.isLoggable(Level.FINE)) {
@@ -441,7 +447,7 @@ public class ConfigureListener implements ServletRequestListener,
             }
 
             // Step 1, configure a Digester instance we can use
-            digester = digester(isFeatureEnabled(context, VALIDATE_XML));
+            digester = digester(isFeatureEnabled(BooleanWebContextInitParameter.ValidateFacesConfigFiles));
             
             // Step 2, parse the RI configuration resource
             url = Util.getCurrentLoader(this).getResource(JSF_RI_CONFIG);
@@ -538,7 +544,7 @@ public class ConfigureListener implements ServletRequestListener,
             // Step 7, verify that all the configured factories are available
             // and optionall that configured objects can be created
             verifyFactories();
-            if (isFeatureEnabled(context, VERIFY_OBJECTS)) {
+            if (isFeatureEnabled(BooleanWebContextInitParameter.VerifyFacesConfigObjects)) {
                 verifyObjects(context, fcb);
             }
             // Step 8, register FacesCompositeELResolver and ELContextListener with
@@ -565,9 +571,8 @@ public class ConfigureListener implements ServletRequestListener,
 
 
     public void contextDestroyed(ServletContextEvent sce) {
-
-        try {
-            ServletContext context = sce.getServletContext();
+        ServletContext context = sce.getServletContext();
+        try {            
             if (LOGGER.isLoggable(Level.FINE)) {
                 LOGGER.fine("contextDestroyed("
                             + context.getServletContextName()
@@ -593,7 +598,8 @@ public class ConfigureListener implements ServletRequestListener,
             // Release the initialization mark on this web application
             release();
         } finally {
-            tlsExternalContext.set(null);
+            tlsExternalContext.set(null);    
+            WebConfiguration.clear(context);
         }
 
     }
@@ -1508,8 +1514,7 @@ public class ConfigureListener implements ServletRequestListener,
     
     private JSFVersionTracker getJSFVersionTracker() {
         // If the feature is disabled...
-        if (isFeatureEnabled(getExternalContextDuringInitialize().getContext(),
-                DISABLE_VERSION_TRACKING)) {
+        if (isFeatureEnabled(BooleanWebContextInitParameter.DisableArtifactVersioning)) {
             // make sure the tracker is released.
             versionTracker = null;
             return null;
@@ -1778,23 +1783,8 @@ public class ConfigureListener implements ServletRequestListener,
      * @return <code>true</code> if the feature in question is enabled, otherwise
      *  <code>false</code>
      */
-    protected boolean isFeatureEnabled(Object obj, String paramName) {
-        ServletContext context = (ServletContext) obj;
-        String paramValue = context.getInitParameter(paramName);
-        if (paramValue != null) {
-            paramValue = paramValue.trim();
-            if (!(paramValue.equals("true")) &&
-                !(paramValue.equals("false"))) {
-
-                if (LOGGER.isLoggable(Level.WARNING)) {
-                    LOGGER.warning(MessageUtils.getExceptionMessageString(
-                        MessageUtils.INVALID_INIT_PARAM_ERROR_MESSAGE_ID,
-                        new Object[] { paramValue, paramName }));
-                }
-            }
-        }
-
-        return Boolean.valueOf(paramValue);
+    protected boolean isFeatureEnabled(BooleanWebContextInitParameter param) {
+        return webConfig.getBooleanContextInitParameter(param);      
     }
 
     private String getServletContextIdentifier(ServletContext context) {

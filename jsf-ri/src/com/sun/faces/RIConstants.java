@@ -1,5 +1,5 @@
 /*
- * $Id: RIConstants.java,v 1.81 2006/03/29 23:03:41 rlubke Exp $
+ * $Id: RIConstants.java,v 1.82 2006/04/05 17:53:43 rlubke Exp $
  */
 
 /*
@@ -75,10 +75,7 @@ public class RIConstants {
     public static final String ACTUAL_VIEW_MAP = FACES_PREFIX +
         "actualViewMap";
 
-    public static final String SAVED_STATE = FACES_PREFIX + "savedState";
-    
-    public static final String CLIENT_STATE_ENC_PASSWORD_ENTRY_NAME = 
-          "java:comp/env/" + FACES_PREFIX + "ClientStateSavingPassword";
+    public static final String SAVED_STATE = FACES_PREFIX + "savedState";       
 
 
     /**
@@ -108,10 +105,7 @@ public class RIConstants {
         FACES_PREFIX + "IMMUTABLE";
 
     public static final String ONE_TIME_INITIALIZATION_ATTR =
-        FACES_PREFIX + "OneTimeInitialization";
-
-    public static final String PREFER_XHTML = 
-	FACES_PREFIX + "PreferXHTML";
+        FACES_PREFIX + "OneTimeInitialization";    
 
     public static final String CONTENT_TYPE_IS_XHTML = 
 	FACES_PREFIX + "ContentTypeIsXHTML";

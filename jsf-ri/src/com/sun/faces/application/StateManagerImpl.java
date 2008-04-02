@@ -1,5 +1,5 @@
 /* 
- * $Id: StateManagerImpl.java,v 1.45 2006/03/29 23:03:42 rlubke Exp $ 
+ * $Id: StateManagerImpl.java,v 1.46 2006/04/05 17:53:44 rlubke Exp $ 
  */
 
 /*
@@ -49,6 +49,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.sun.faces.RIConstants;
+import com.sun.faces.config.WebConfiguration;
+import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
 import com.sun.faces.renderkit.RenderKitUtils;
 import com.sun.faces.util.LRUMap;
 import com.sun.faces.util.MessageUtils;
@@ -59,7 +61,7 @@ import com.sun.faces.util.Util;
  * <B>StateManagerImpl</B> is the default implementation class for
  * StateManager.
  *
- * @version $Id: StateManagerImpl.java,v 1.45 2006/03/29 23:03:42 rlubke Exp $
+ * @version $Id: StateManagerImpl.java,v 1.46 2006/04/05 17:53:44 rlubke Exp $
  * @see javax.faces.application.ViewHandler
  */
 public class StateManagerImpl extends StateManager {
@@ -67,17 +69,7 @@ public class StateManagerImpl extends StateManager {
 
     // Log instance for this class
     private static final Logger LOGGER = 
-          Util.getLogger(Util.FACES_LOGGER + Util.APPLICATION_LOGGER);
-
-    private static final String NUMBER_OF_VIEWS_IN_LOGICAL_VIEW_IN_SESSION =
-          RIConstants.FACES_PREFIX
-            + "NUMBER_OF_VIEWS_IN_LOGICAL_VIEW_IN_SESSION";
-
-    private static final String NUMBER_OF_VIEWS_IN_SESSION =
-          RIConstants.FACES_PREFIX + "NUMBER_OF_VIEWS_IN_SESSION";
-    private static final int DEFAULT_NUMBER_OF_VIEWS_IN_LOGICAL_VIEW_IN_SESSION =
-          15;
-    private static final int DEFAULT_NUMBER_OF_VIEWS_IN_SESSION = 15;
+          Util.getLogger(Util.FACES_LOGGER + Util.APPLICATION_LOGGER);   
 
     /**
      * Keyed by renderKitId, this Map contains a boolean that
@@ -507,25 +499,30 @@ public class StateManagerImpl extends StateManager {
         if (noOfViewsInLogicalView != 0) {
             return noOfViewsInLogicalView;
         }
-        noOfViewsInLogicalView =
-              DEFAULT_NUMBER_OF_VIEWS_IN_LOGICAL_VIEW_IN_SESSION;
-        String noOfViewsStr = context.getExternalContext().
-              getInitParameter(NUMBER_OF_VIEWS_IN_LOGICAL_VIEW_IN_SESSION);
-        if (noOfViewsStr != null) {
-            try {
-                noOfViewsInLogicalView =
-                      Integer.valueOf(noOfViewsStr).intValue();
-            } catch (NumberFormatException nfe) {
-                if (LOGGER.isLoggable(Level.FINE)) {
+        WebConfiguration webConfig = 
+              WebConfiguration.getInstance(context.getExternalContext());
+        String noOfViewsStr = webConfig
+              .getContextInitParameter(WebContextInitParameter.NumberOfLogicalViews);
+        String defaultValue =
+              WebContextInitParameter.NumberOfLogicalViews.getDefaultValue();
+        try {
+            noOfViewsInLogicalView = Integer.valueOf(noOfViewsStr);
+        } catch (NumberFormatException nfe) {
+            if (LOGGER.isLoggable(Level.FINE)) {
                     LOGGER.fine("Error parsing the servetInitParameter "
                                 +
-                                NUMBER_OF_VIEWS_IN_LOGICAL_VIEW_IN_SESSION
+                                WebContextInitParameter.NumberOfLogicalViews.getQualifiedName() 
                                 + ". Using default "
                                 +
                                 noOfViewsInLogicalView);
-                }
             }
-        }
+            try {
+                noOfViewsInLogicalView = Integer.valueOf(defaultValue);
+            } catch (NumberFormatException ne) {
+                // won't occur
+            }
+        }        
+       
         return noOfViewsInLogicalView;
 
     }
@@ -537,28 +534,35 @@ public class StateManagerImpl extends StateManager {
      * returns <code>DEFAULT_NUMBER_OF_VIEWS_IN_SESSION</code>.
      */
     protected int getNumberOfViewsParameter(FacesContext context) {
-
+        
         if (noOfViews != 0) {
             return noOfViews;
         }
-        noOfViews = DEFAULT_NUMBER_OF_VIEWS_IN_SESSION;
-        String noOfViewsStr = context.getExternalContext().
-              getInitParameter(NUMBER_OF_VIEWS_IN_SESSION);
-        if (noOfViewsStr != null) {
-            try {
-                noOfViews = Integer.valueOf(noOfViewsStr).intValue();
-            } catch (NumberFormatException nfe) {
-                if (LOGGER.isLoggable(Level.FINE)) {
+        WebConfiguration webConfig = 
+              WebConfiguration.getInstance(context.getExternalContext());
+        String noOfViewsStr = webConfig
+              .getContextInitParameter(WebContextInitParameter.NumberOfViews);
+        String defaultValue =
+              WebContextInitParameter.NumberOfViews.getDefaultValue();
+        try {
+            noOfViews = Integer.valueOf(noOfViewsStr);
+        } catch (NumberFormatException nfe) {
+            if (LOGGER.isLoggable(Level.FINE)) {
                     LOGGER.fine("Error parsing the servetInitParameter "
                                 +
-                                NUMBER_OF_VIEWS_IN_SESSION
+                                WebContextInitParameter.NumberOfViews.getQualifiedName() 
                                 + ". Using default "
                                 +
                                 noOfViews);
-                }
             }
-        }
-        return noOfViews;
+            try {
+                noOfViews = Integer.valueOf(defaultValue);
+            } catch (NumberFormatException ne) {
+                // won't occur
+            }
+        }        
+       
+        return noOfViews;        
 
     }
 

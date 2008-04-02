@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKitImpl.java,v 1.36 2006/03/29 23:03:46 rlubke Exp $
+ * $Id: RenderKitImpl.java,v 1.37 2006/04/05 17:53:43 rlubke Exp $
  */
 
 /*
@@ -32,6 +32,8 @@
 package com.sun.faces.renderkit;
 
 import com.sun.faces.RIConstants;
+import com.sun.faces.config.WebConfiguration;
+import com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
 import com.sun.faces.renderkit.html_basic.HtmlResponseWriter;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
@@ -49,14 +51,13 @@ import java.io.Writer;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
-import java.util.logging.Level;
 
 /**
  * <B>RenderKitImpl</B> is a class ...
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: RenderKitImpl.java,v 1.36 2006/03/29 23:03:46 rlubke Exp $
+ * @version $Id: RenderKitImpl.java,v 1.37 2006/04/05 17:53:43 rlubke Exp $
  */
 
 public class RenderKitImpl extends RenderKit {
@@ -98,15 +99,14 @@ public class RenderKitImpl extends RenderKit {
     private HashMap<String,HashMap<Object,Renderer>> rendererFamilies;
 
     private ResponseStateManager responseStateManager = null;
-
-    private boolean preferXhtml = false;
+    private Boolean preferXHTML;
 //
 // Constructors and Initializers    
 //
 
     public RenderKitImpl() {
         super();
-	rendererFamilies = new HashMap<String, HashMap<Object,Renderer>>();
+    rendererFamilies = new HashMap<String, HashMap<Object,Renderer>>();
     }
 
 
@@ -128,17 +128,17 @@ public class RenderKitImpl extends RenderKit {
             String message = MessageUtils.getExceptionMessageString
                 (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
             message = message + " family " + family + " rendererType " +
-                rendererType + " renderer " + renderer;
+                      rendererType + " renderer " + renderer;
             throw new NullPointerException(message);
-                
+
         }
-	HashMap<Object,Renderer> renderers = null;
+    HashMap<Object,Renderer> renderers = null;
 
         synchronized (rendererFamilies) {
-	    // PENDING(edburns): generics would be nice here.
-	    if (null == (renderers = rendererFamilies.get(family))) {
-		rendererFamilies.put(family, renderers = new HashMap<Object, Renderer>());
-	    }
+        // PENDING(edburns): generics would be nice here.
+        if (null == (renderers = rendererFamilies.get(family))) {
+        rendererFamilies.put(family, renderers = new HashMap<Object, Renderer>());
+        }
             renderers.put(rendererType, renderer);
         }
     }
@@ -150,19 +150,19 @@ public class RenderKitImpl extends RenderKit {
             String message = MessageUtils.getExceptionMessageString
                 (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
             message = message + " family " + family + " rendererType " +
-                rendererType;
+                      rendererType;
             throw new NullPointerException(message);
         }
 
         assert (rendererFamilies != null);
 
-	HashMap<Object,Renderer> renderers = null;
+    HashMap<Object,Renderer> renderers = null;
         Renderer renderer = null;
 
-	if (null != (renderers = rendererFamilies.get(family))) {
-	    renderer = renderers.get(rendererType);
-	}
-	
+    if (null != (renderers = rendererFamilies.get(family))) {
+        renderer = renderers.get(rendererType);
+    }
+
         return renderer;
     }
 
@@ -175,51 +175,43 @@ public class RenderKitImpl extends RenderKit {
     }
 
 
-    public ResponseWriter createResponseWriter(Writer writer, 
-					       String desiredContentTypeList,
+    public ResponseWriter createResponseWriter(Writer writer,
+                                               String desiredContentTypeList,
                                                String characterEncoding) {
         if (writer == null) {
             return null;
         }
         String contentType = null;
         boolean contentTypeNullFromResponse = false;
-	FacesContext context = FacesContext.getCurrentInstance();
-        
-        String [] supportedTypes = 
-            { HTML_CONTENT_TYPE, XHTML_CONTENT_TYPE, 
+    FacesContext context = FacesContext.getCurrentInstance();
+
+        String [] supportedTypes =
+            { HTML_CONTENT_TYPE, XHTML_CONTENT_TYPE,
               APPLICATION_XML_CONTENT_TYPE, TEXT_XML_CONTENT_TYPE };
 
-        // Step 0: Determine if we have a preference for XHTML
-        String preferXhtmlParam = context.getExternalContext().getInitParameter(
-            RIConstants.PREFER_XHTML);
-        if (null != preferXhtmlParam) {
-            if (!(preferXhtmlParam.equals("true")) &&
-                !(preferXhtmlParam.equals("false"))) {
-                if (logger.isLoggable(Level.WARNING)) {
-                    logger.warning(MessageUtils.getExceptionMessageString(
-                        MessageUtils.INVALID_INIT_PARAM_ERROR_MESSAGE_ID,
-                        new Object[] { preferXhtmlParam, RIConstants.PREFER_XHTML }));
-                }
-            }
-            preferXhtml = Boolean.valueOf(preferXhtmlParam);
+        // Step 0: Determine if we have a preference for XHTML   
+        if (preferXHTML == null) {
+            preferXHTML =
+              WebConfiguration.getInstance(context.getExternalContext())
+                    .getBooleanContextInitParameter(BooleanWebContextInitParameter.PreferXHTMLContentType);
         }
 
         // Step 1: Check the content type passed into this method 
         if (null != desiredContentTypeList) {
-            contentType = findMatch(context, desiredContentTypeList, supportedTypes); 
+            contentType = findMatch(context, desiredContentTypeList, supportedTypes);
         }
 
         // Step 2: Check the response content type
-	if (null == desiredContentTypeList) {
-	    desiredContentTypeList = 
+    if (null == desiredContentTypeList) {
+        desiredContentTypeList =
                     context.getExternalContext().getResponseContentType();
             if (null != desiredContentTypeList) {
-                contentType = findMatch(context, desiredContentTypeList, supportedTypes); 
+                contentType = findMatch(context, desiredContentTypeList, supportedTypes);
                 if (null == contentType) {
                     contentTypeNullFromResponse = true;
                 }
             }
-	}
+    }
 
         // Step 3: Check the Accept Header content type
         // Evaluate the accept header in accordance with HTTP specification - 
@@ -239,15 +231,15 @@ public class RenderKitImpl extends RenderKit {
                 }
                 desiredContentTypeList = buff.toString();
             }
-            
+
             if (null != desiredContentTypeList) {
-                String supportedTypeString = 
+                String supportedTypeString =
                     HTML_CONTENT_TYPE + ',' + XHTML_CONTENT_TYPE + ',' +
                     APPLICATION_XML_CONTENT_TYPE + ',' + TEXT_XML_CONTENT_TYPE;
                 desiredContentTypeList = RenderKitUtils.determineContentType(
-                    desiredContentTypeList, supportedTypeString); 
-	        if (null != desiredContentTypeList) {
-                    contentType = findMatch(context, desiredContentTypeList, supportedTypes); 
+                    desiredContentTypeList, supportedTypeString);
+            if (null != desiredContentTypeList) {
+                    contentType = findMatch(context, desiredContentTypeList, supportedTypes);
                 }
             }
         }
@@ -256,7 +248,7 @@ public class RenderKitImpl extends RenderKit {
         if (null == desiredContentTypeList ||
             desiredContentTypeList.equals(ALL_MEDIA)) {
             Map<String,Object> requestMap = context.getExternalContext().getRequestMap();
-            if (preferXhtml) {
+            if (preferXHTML) {
                 contentType = XHTML_CONTENT_TYPE;
                 requestMap.put(RIConstants.CONTENT_TYPE_IS_XHTML, Boolean.TRUE);
             } else {
@@ -265,10 +257,10 @@ public class RenderKitImpl extends RenderKit {
             }
         }
 
-	if (null == contentType) {
+    if (null == contentType) {
             throw new IllegalArgumentException(MessageUtils.getExceptionMessageString(
                 MessageUtils.CONTENT_TYPE_ERROR_MESSAGE_ID));
-	}
+    }
 
         if (characterEncoding == null) {
             characterEncoding = CHAR_ENCODING;
@@ -276,7 +268,7 @@ public class RenderKitImpl extends RenderKit {
 
         return new HtmlResponseWriter(writer, contentType, characterEncoding);
     }
-    
+
     private String[] contentTypeSplit(String contentTypeString) {
         String [] result = contentTypeString.split(",");
         for (int i = 0; i < result.length; i++) {
@@ -295,10 +287,10 @@ public class RenderKitImpl extends RenderKit {
         String contentType = null;
 
         Map<String,Object> requestMap = context.getExternalContext().getRequestMap();
-                                                                                                                         
+
         String [] desiredTypes = contentTypeSplit(desiredContentTypeList);
         String curContentType = null, curDesiredType = null;
-                                                                                                                         
+
         // For each entry in the desiredTypes array, look for a match in
         // the supportedTypes array
         for (int i = 0; i < desiredTypes.length; i++) {
@@ -307,7 +299,7 @@ public class RenderKitImpl extends RenderKit {
                 curContentType = supportedTypes[j].trim();
                 if (-1 != curDesiredType.indexOf(curContentType)) {
                     if (-1 != curContentType.indexOf(HTML_CONTENT_TYPE)) {
-                        if (preferXhtml) {
+                        if (preferXHTML) {
                             contentType = XHTML_CONTENT_TYPE;
                             requestMap.put(RIConstants.CONTENT_TYPE_IS_XHTML, Boolean.TRUE);
                         } else {
@@ -358,7 +350,7 @@ public class RenderKitImpl extends RenderKit {
                 output.close();
             }
         };
-    }       
+    }
     // The test for this class is in TestRenderKit.java
 
 } // end of class RenderKitImpl

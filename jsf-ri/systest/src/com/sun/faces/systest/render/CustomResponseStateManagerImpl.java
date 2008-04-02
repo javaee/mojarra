@@ -1,5 +1,5 @@
 /*
- * $Id: CustomResponseStateManagerImpl.java,v 1.8 2006/03/29 23:04:02 rlubke Exp $
+ * $Id: CustomResponseStateManagerImpl.java,v 1.9 2006/04/05 17:53:44 rlubke Exp $
  */
 
 /*
@@ -91,7 +91,7 @@ public class CustomResponseStateManagerImpl extends ResponseStateManager {
 
     public CustomResponseStateManagerImpl() {
         super();
-        byteArrayGuard = ByteArrayGuard.getInstance();
+        byteArrayGuard = ByteArrayGuard.newInstance();
     }
 
 

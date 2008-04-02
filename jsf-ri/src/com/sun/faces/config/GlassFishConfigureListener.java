@@ -1,5 +1,5 @@
 /*
- * $Id: GlassFishConfigureListener.java,v 1.4 2006/03/29 23:03:43 rlubke Exp $
+ * $Id: GlassFishConfigureListener.java,v 1.5 2006/04/05 17:53:43 rlubke Exp $
  */
 /*
  * The contents of this file are subject to the terms
@@ -28,6 +28,8 @@
 
 package com.sun.faces.config;
 
+import com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
+
 import javax.servlet.ServletContextEvent;
 
 /**
@@ -51,11 +53,8 @@ public class GlassFishConfigureListener extends ConfigureListener {
      * Because of EE 5 requirements, we force XML validation.
      */
     @Override 
-    protected boolean isFeatureEnabled(Object obj, String paramName) {
-        if (VALIDATE_XML.equals(paramName)) {
-            return true;
-        } else {
-            return super.isFeatureEnabled(obj, paramName);
-        }
+    protected boolean isFeatureEnabled(BooleanWebContextInitParameter param) {
+        return BooleanWebContextInitParameter.ValidateFacesConfigFiles
+              .equals(param) || super.isFeatureEnabled(param);
     }
 }

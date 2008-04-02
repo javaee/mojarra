@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigFileTestCase.java,v 1.74 2006/03/29 23:04:42 rlubke Exp $
+ * $Id: ConfigFileTestCase.java,v 1.75 2006/04/05 17:53:44 rlubke Exp $
  */
 
 /*
@@ -30,10 +30,14 @@
 package com.sun.faces.config;
 
 import com.sun.faces.cactus.ServletFacesTestCase;
+import com.sun.faces.cactus.TestingUtil;
 import com.sun.faces.application.ApplicationAssociate;
 import com.sun.faces.application.ApplicationImpl;
 import com.sun.faces.config.beans.FacesConfigBean;
+import com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
 import com.sun.faces.util.Util;
+import com.sun.faces.util.TestUtil;
+
 import org.apache.cactus.WebRequest;
 import com.sun.org.apache.commons.digester.Digester;
 
@@ -68,8 +72,16 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
     List mappings;
     ConfigParser parser = new ConfigParser();
 
-    public static class ConfigParser extends ConfigureListener {
+    public class ConfigParser extends ConfigureListener {
         public void parseFromStr(ServletContext context, String str) throws Exception {
+            if (webConfig == null) { 
+                webConfig = (WebConfiguration) 
+                      TestingUtil.invokePrivateMethod("getInstance",
+                                                       new Class[]{ServletContext.class},
+                                                       new Object[]{context},
+                                                       WebConfiguration.class,
+                                                       null);               
+            }
             Digester digester = null;
             URL url = null;
             FacesConfigBean fcb =
@@ -77,7 +89,8 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
             fcb.getApplication().clearResourceBundles();
 
             // Step 1, configure a Digester instance we can use
-            digester = digester(isFeatureEnabled(context, VALIDATE_XML));
+            digester = 
+                  digester(true);
 
             url = context.getResource(str);
             //url = new URL(url, str);

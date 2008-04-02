@@ -1,5 +1,5 @@
 /*
- * $Id: ResponseStateManagerImpl.java,v 1.30 2006/03/29 23:03:47 rlubke Exp $
+ * $Id: ResponseStateManagerImpl.java,v 1.31 2006/04/05 17:53:42 rlubke Exp $
  */
 
 /*
@@ -49,6 +49,9 @@ import javax.faces.FacesException;
 
 import com.sun.faces.util.Base64;
 import com.sun.faces.util.Util;
+import com.sun.faces.config.WebConfiguration;
+import com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
+import com.sun.faces.config.WebConfiguration.WebEnvironmentEntry;
 
 import java.util.logging.Logger;
 import java.util.logging.Level;
@@ -68,9 +71,7 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
             Util.getLogger(Util.FACES_LOGGER + Util.RENDERKIT_LOGGER);
     private static final String FACES_VIEW_STATE =
         "com.sun.faces.FACES_VIEW_STATE";
-    
-     private static final String COMPRESS_STATE_PARAM =
-        "com.sun.faces.COMPRESS_STATE";
+        
     //
     // Class Variables
     //
@@ -78,7 +79,7 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
     //
     // Instance Variables
     //
-    private Boolean compressStateSet = null;
+    private Boolean compressState = null;
     private ByteArrayGuard byteArrayGuard = null;
     
     //
@@ -95,7 +96,11 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
     public ResponseStateManagerImpl() {
 
         super();
-        byteArrayGuard = ByteArrayGuard.getInstance();
+        WebConfiguration webConfig = WebConfiguration.getInstance();
+        assert (webConfig != null);
+        byteArrayGuard = ByteArrayGuard
+              .newInstance(webConfig.getEnvironmentEntry(
+                    WebEnvironmentEntry.ClientStateSavingPassword));
 
     }
 
@@ -269,17 +274,14 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
 
     private boolean isCompressStateSet(FacesContext context) {
 
-	if (null != compressStateSet) {
-	    return compressStateSet;
-	}
-	compressStateSet = Boolean.TRUE;
-
-        String compressStateParam = context.getExternalContext().
-            getInitParameter(COMPRESS_STATE_PARAM);
-        if (compressStateParam != null){
-	    compressStateSet = Boolean.valueOf(compressStateParam);
+        if (null != compressState) {
+            return compressState;
         }
-	return compressStateSet;
+        compressState = WebConfiguration
+              .getInstance(context.getExternalContext())
+              .getBooleanContextInitParameter(BooleanWebContextInitParameter.CompressViewState);
+
+        return compressState;
 
     }
 
