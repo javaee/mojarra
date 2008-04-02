@@ -7,7 +7,7 @@ package com.sun.faces;
 
 import org.mozilla.util.Assert;
 
-import com.sun.faces.convert.NumberConverter;
+import javax.faces.convert.NumberConverter;
 
 public class TestConverter extends NumberConverter
 {
