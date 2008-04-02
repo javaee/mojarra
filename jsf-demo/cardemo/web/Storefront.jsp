@@ -10,8 +10,8 @@
 	<TITLE>Welcome to CarDemo</TITLE>
 </HEAD>
     <%@ taglib uri="http://java.sun.com/jstl/fmt" prefix="fmt" %>
-    <%@ taglib uri="http://java.sun.com/j2ee/html_basic/" prefix="h" %>
-    <%@ taglib uri="http://java.sun.com/jsf/core/" prefix="f" %>
+    <%@ taglib uri="http://java.sun.com/jsf/html_basic" prefix="h" %>
+    <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
 
 <BODY BGCOLOR="white">
 

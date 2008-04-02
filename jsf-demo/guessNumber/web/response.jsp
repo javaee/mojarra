@@ -38,8 +38,8 @@
 
 <HTML>
     <HEAD> <title>Guess The Number</title> </HEAD>
-    <%@ taglib uri="http://java.sun.com/j2ee/html_basic/" prefix="h" %>
-    <%@ taglib uri="http://java.sun.com/jsf/core/" prefix="f" %>
+    <%@ taglib uri="http://java.sun.com/jsf/html_basic" prefix="h" %>
+    <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
     <body bgcolor="white">
     <h:graphic_image id="wave_img" url="/wave.med.gif" />
     <f:use_faces>
