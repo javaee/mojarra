@@ -13,18 +13,12 @@
 
 
              <td>
-                 <h:selectone_radio id="shipType" layout="LINE_DIRECTION" value="nextDay" >
-
-                <h:selectitem itemValue="nextDay" itemLabel="Next Day"
-                      tabindex="30" title="Next day shipment"/>
-
-                <h:selectitem itemValue="nextWeek" itemLabel="Next Week" 
-                   title="Next week shipment" tabindex="40" />
-
-                <h:selectitem itemValue="nextMonth" itemLabel="Next Month"
-                        tabindex="50" title="Next month shipment"/>
-
-              </h:selectone_radio>
+                 <h:selectone_radio id="shipType" layout="LINE_DIRECTION" 
+                    value="nextDay" tabindex="30" title="shipType">
+                <f:selectitem itemValue="nextDay" itemLabel="Next Day"/>
+                <f:selectitem itemValue="nextWeek" itemLabel="Next Week" />
+                <f:selectitem itemValue="nextMonth" itemLabel="Next Month"/>
+                </h:selectone_radio>
 
              </td>
 
@@ -41,9 +35,9 @@
 
              <td>
                 <h:selectone_radio id="verticalRadio" layout="PAGE_DIRECTION" border="1" >
-                 <h:selectitem itemValue="nextDay" itemLabel="Next Day"/>
-                <h:selectitem itemValue="nextWeek" itemLabel="Next Week"  />
-                <h:selectitem itemValue="nextMonth" itemLabel="Next Month" />
+                 <f:selectitem itemValue="nextDay" itemLabel="Next Day"/>
+                <f:selectitem itemValue="nextWeek" itemLabel="Next Week"  />
+                <f:selectitem itemValue="nextMonth" itemLabel="Next Month" />
 
                 </h:selectone_radio>
 
@@ -62,13 +56,11 @@
              <td>
                  <h:selectone_radio id="radioFromModel"
                        valueRef="LoginBean.currentOption"
+                       title="options come from model"
                        layout="LINE_DIRECTION" >
 
-                <h:selectitems id="radioOptions"
-                                   title="options come from model"
-                                   valueRef="LoginBean.options"/>
-
-              </h:selectone_radio>
+                 <f:selectitems id="radioOptions" valueRef="LoginBean.options"/>
+                </h:selectone_radio>
 
              </td>
 
@@ -86,13 +78,11 @@
              <td>
                  <h:selectone_radio id="radioLongOptions"
                        valueRef="LoginBean.currentLongOption"
+                       title="options come from model"
                        layout="LINE_DIRECTION">
                  
-                <h:selectitems id="longItemOptions"
-                                   title="options come from model"
-                                   valueRef="LoginBean.longList"/>
-
-              </h:selectone_radio>
+                <f:selectitems id="longItemOptions" valueRef="LoginBean.longList"/>
+                </h:selectone_radio>
 
              </td>
 
@@ -103,7 +93,7 @@
 	         <td><h:selectone_radio id="oneLongradiomodel"
                             valueRef="LoginBean.currentBooleanOption">
                            
-		         <h:selectitems id="oneRadiomodelitems"
+		         <f:selectitems id="oneRadiomodelitems"
 				valueRef="LoginBean.booleanList" />
 		    </h:selectone_radio></td>
 	   </tr>

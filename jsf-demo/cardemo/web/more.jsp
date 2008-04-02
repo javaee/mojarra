@@ -152,7 +152,7 @@
                 <h:selectone_menu  id="currentEngine"
                      valueRef="CarServer.currentEngineOption">
                      <f:valuechanged_listener type="cardemo.PackageValueChanged" />
-                    <h:selectitems  
+                    <f:selectitems  
                         valueRef="CarServer.engineOption"/>
                 </h:selectone_menu>    
                 </FONT></P></BLOCKQUOTE>
@@ -165,7 +165,7 @@
                 <h:selectone_radio  id="currentBrake"
                     valueRef="CarServer.currentBrakeOption">
                     <f:valuechanged_listener type="cardemo.PackageValueChanged" />
-                    <h:selectitems  
+                    <f:selectitems  
                         valueRef="CarServer.brakeOption"/>
                 </h:selectone_radio>
                 </FONT></P></BLOCKQUOTE>
@@ -182,7 +182,7 @@
                 <h:selectone_menu  id="currentSuspension"
                     valueRef="CarServer.currentSuspensionOption">
                      <f:valuechanged_listener type="cardemo.PackageValueChanged" />
-                    <h:selectitems  
+                    <f:selectitems  
                         valueRef="CarServer.suspensionOption"/>
                 </h:selectone_menu>
                 </FONT></P> </BLOCKQUOTE>
@@ -197,7 +197,7 @@
                 <h:selectone_radio  id="currentSpeaker"
                     valueRef="CarServer.currentSpeakerOption" >
                     <f:valuechanged_listener type="cardemo.PackageValueChanged" />
-                   <h:selectitems  
+                   <f:selectitems  
                         valueRef="CarServer.speakerOption"/>
                 </h:selectone_radio>
                 </FONT></P> </BLOCKQUOTE>
@@ -213,7 +213,7 @@
                 <h:selectone_radio  id="currentAudio"
                     valueRef="CarServer.currentAudioOption">
                      <f:valuechanged_listener type="cardemo.PackageValueChanged" />
-                    <h:selectitems  
+                    <f:selectitems  
                         valueRef="CarServer.audioOption"/>
                 </h:selectone_radio>
                 </FONT></P> 
@@ -229,7 +229,7 @@
                 <h:selectone_menu  id="currentTransmission"
                     valueRef="CarServer.currentTransmissionOption">
                      <f:valuechanged_listener type="cardemo.PackageValueChanged" />
-                    <h:selectitems  
+                    <f:selectitems  
                         valueRef="CarServer.transmissionOption"/>
                 </h:selectone_menu>
                 </FONT></P> </BLOCKQUOTE>

@@ -76,7 +76,7 @@
                                 <td valign="top"> <font face="Arial, Helvetica">
                                     <h:selectone_menu id="title" 
                                                        valueRef="CustomerBean.currentTitle">
-                                        <h:selectitems valueRef="CustomerBean.titleOptions" />
+                                        <f:selectitems valueRef="CustomerBean.titleOptions" />
                                     </h:selectone_menu></font></td>
                               </tr>
                               <tr> 
@@ -121,59 +121,59 @@
                                 <td valign="top"> <font face="Arial, Helvetica">
       <h:selectone_menu  valueRef="CustomerBean.state" value="CA">
 
-		<h:selectitem  itemValue="AL" itemLabel="AL" />
-		<h:selectitem  itemValue="AK" itemLabel="AK"/>
-		<h:selectitem  itemValue="AZ" itemLabel="AZ"/>
-		<h:selectitem  itemValue="AR" itemLabel="AR"/>
-		<h:selectitem  itemValue="CA" itemLabel="CA"/>
-		<h:selectitem  itemValue="CO" itemLabel="CO"/>
-		<h:selectitem  itemValue="CT" itemLabel="CT"/>
-		<h:selectitem  itemValue="DE" itemLabel="DE"/>
-		<h:selectitem  itemValue="FL" itemLabel="FL"/>
-		<h:selectitem  itemValue="GA" itemLabel="GA"/>
+		<f:selectitem  itemValue="AL" itemLabel="AL" />
+		<f:selectitem  itemValue="AK" itemLabel="AK"/>
+		<f:selectitem  itemValue="AZ" itemLabel="AZ"/>
+		<f:selectitem  itemValue="AR" itemLabel="AR"/>
+		<f:selectitem  itemValue="CA" itemLabel="CA"/>
+		<f:selectitem  itemValue="CO" itemLabel="CO"/>
+		<f:selectitem  itemValue="CT" itemLabel="CT"/>
+		<f:selectitem  itemValue="DE" itemLabel="DE"/>
+		<f:selectitem  itemValue="FL" itemLabel="FL"/>
+		<f:selectitem  itemValue="GA" itemLabel="GA"/>
 
-		<h:selectitem  itemValue="HI" itemLabel="HI"/>
-		<h:selectitem  itemValue="ID" itemLabel="ID"/>
-		<h:selectitem  itemValue="IL" itemLabel="IL"/>
-		<h:selectitem  itemValue="IN" itemLabel="IN"/>
-		<h:selectitem  itemValue="IA" itemLabel="IA"/>
-		<h:selectitem  itemValue="KS" itemLabel="KS"/>
-		<h:selectitem  itemValue="KY" itemLabel="KY"/>
-		<h:selectitem  itemValue="LA" itemLabel="LA"/>
-		<h:selectitem  itemValue="ME" itemLabel="ME"/>
-		<h:selectitem  itemValue="MD" itemLabel="MD"/>
+		<f:selectitem  itemValue="HI" itemLabel="HI"/>
+		<f:selectitem  itemValue="ID" itemLabel="ID"/>
+		<f:selectitem  itemValue="IL" itemLabel="IL"/>
+		<f:selectitem  itemValue="IN" itemLabel="IN"/>
+		<f:selectitem  itemValue="IA" itemLabel="IA"/>
+		<f:selectitem  itemValue="KS" itemLabel="KS"/>
+		<f:selectitem  itemValue="KY" itemLabel="KY"/>
+		<f:selectitem  itemValue="LA" itemLabel="LA"/>
+		<f:selectitem  itemValue="ME" itemLabel="ME"/>
+		<f:selectitem  itemValue="MD" itemLabel="MD"/>
 
-		<h:selectitem  itemValue="MA" itemLabel="MA"/>
-		<h:selectitem  itemValue="MI" itemLabel="MI"/>
-		<h:selectitem  itemValue="MN" itemLabel="MN"/>
-		<h:selectitem  itemValue="MO" itemLabel="MO"/>
-		<h:selectitem  itemValue="MT" itemLabel="MT"/>
-		<h:selectitem  itemValue="NE" itemLabel="NE"/>
-		<h:selectitem  itemValue="NV" itemLabel="NV"/>
-		<h:selectitem  itemValue="NH" itemLabel="NH"/>
-		<h:selectitem  itemValue="NJ" itemLabel="NJ"/>
-		<h:selectitem  itemValue="NM" itemLabel="NM"/>
+		<f:selectitem  itemValue="MA" itemLabel="MA"/>
+		<f:selectitem  itemValue="MI" itemLabel="MI"/>
+		<f:selectitem  itemValue="MN" itemLabel="MN"/>
+		<f:selectitem  itemValue="MO" itemLabel="MO"/>
+		<f:selectitem  itemValue="MT" itemLabel="MT"/>
+		<f:selectitem  itemValue="NE" itemLabel="NE"/>
+		<f:selectitem  itemValue="NV" itemLabel="NV"/>
+		<f:selectitem  itemValue="NH" itemLabel="NH"/>
+		<f:selectitem  itemValue="NJ" itemLabel="NJ"/>
+		<f:selectitem  itemValue="NM" itemLabel="NM"/>
 
-		<h:selectitem  itemValue="MY" itemLabel="MY"/>
-		<h:selectitem  itemValue="NC" itemLabel="NC"/>
-		<h:selectitem  itemValue="ND" itemLabel="ND"/>
-		<h:selectitem  itemValue="OH" itemLabel="OH"/>
-		<h:selectitem  itemValue="OK" itemLabel="OK"/>
-		<h:selectitem  itemValue="OR" itemLabel="OR"/>
-		<h:selectitem  itemValue="PA" itemLabel="PA"/>
-		<h:selectitem  itemValue="RI" itemLabel="RI"/>
-		<h:selectitem  itemValue="SC" itemLabel="SC"/>
-		<h:selectitem  itemValue="SD" itemLabel="SD"/>
+		<f:selectitem  itemValue="MY" itemLabel="MY"/>
+		<f:selectitem  itemValue="NC" itemLabel="NC"/>
+		<f:selectitem  itemValue="ND" itemLabel="ND"/>
+		<f:selectitem  itemValue="OH" itemLabel="OH"/>
+		<f:selectitem  itemValue="OK" itemLabel="OK"/>
+		<f:selectitem  itemValue="OR" itemLabel="OR"/>
+		<f:selectitem  itemValue="PA" itemLabel="PA"/>
+		<f:selectitem  itemValue="RI" itemLabel="RI"/>
+		<f:selectitem  itemValue="SC" itemLabel="SC"/>
+		<f:selectitem  itemValue="SD" itemLabel="SD"/>
 
-		<h:selectitem  itemValue="TN" itemLabel="TN"/>
-		<h:selectitem  itemValue="TX" itemLabel="TX"/>
-		<h:selectitem  itemValue="UT" itemLabel="UT"/>
-		<h:selectitem  itemValue="VT" itemLabel="VT"/>
-		<h:selectitem  itemValue="VA" itemLabel="VA"/>
-		<h:selectitem  itemValue="WA" itemLabel="WA"/>
-		<h:selectitem  itemValue="WV" itemLabel="WV"/>
-		<h:selectitem  itemValue="WI" itemLabel="WI"/>
-		<h:selectitem  itemValue="WY" itemLabel="WY"/>
+		<f:selectitem  itemValue="TN" itemLabel="TN"/>
+		<f:selectitem  itemValue="TX" itemLabel="TX"/>
+		<f:selectitem  itemValue="UT" itemLabel="UT"/>
+		<f:selectitem  itemValue="VT" itemLabel="VT"/>
+		<f:selectitem  itemValue="VA" itemLabel="VA"/>
+		<f:selectitem  itemValue="WA" itemLabel="WA"/>
+		<f:selectitem  itemValue="WV" itemLabel="WV"/>
+		<f:selectitem  itemValue="WI" itemLabel="WI"/>
+		<f:selectitem  itemValue="WY" itemLabel="WY"/>
 
 	      </h:selectone_menu></font></td>
                               </tr>
@@ -209,28 +209,28 @@
       <h:output_text  key="monthLabel" bundle="carDemoBundle" /></font></td>
                                 <td valign="top"> <font face="Arial, Helvetica">
     <h:selectone_menu  valueRef="CustomerBean.month">
-        <h:selectitem itemValue="01" itemLabel="01"/>
-        <h:selectitem itemValue="02" itemLabel="02"/>
-        <h:selectitem itemValue="03" itemLabel="03"/>
-        <h:selectitem itemValue="04" itemLabel="04"/>
-        <h:selectitem itemValue="05" itemLabel="05"/>
-        <h:selectitem itemValue="06" itemLabel="06"/>
-        <h:selectitem itemValue="07" itemLabel="07"/>
-        <h:selectitem itemValue="08" itemLabel="08"/>
-        <h:selectitem itemValue="09" itemLabel="09"/>
-        <h:selectitem itemValue="10" itemLabel="10"/>
-        <h:selectitem itemValue="11" itemLabel="11"/>
-        <h:selectitem itemValue="12" itemLabel="12"/>
+        <f:selectitem itemValue="01" itemLabel="01"/>
+        <f:selectitem itemValue="02" itemLabel="02"/>
+        <f:selectitem itemValue="03" itemLabel="03"/>
+        <f:selectitem itemValue="04" itemLabel="04"/>
+        <f:selectitem itemValue="05" itemLabel="05"/>
+        <f:selectitem itemValue="06" itemLabel="06"/>
+        <f:selectitem itemValue="07" itemLabel="07"/>
+        <f:selectitem itemValue="08" itemLabel="08"/>
+        <f:selectitem itemValue="09" itemLabel="09"/>
+        <f:selectitem itemValue="10" itemLabel="10"/>
+        <f:selectitem itemValue="11" itemLabel="11"/>
+        <f:selectitem itemValue="12" itemLabel="12"/>
     </h:selectone_menu>
 
 <h:selectone_menu  valueRef="CustomerBean.year" >
-        <h:selectitem itemValue="2002" itemLabel="2002"/>
-        <h:selectitem itemValue="2003" itemLabel="2003"/>
-        <h:selectitem itemValue="2004" itemLabel="2004"/>
-        <h:selectitem itemValue="2005" itemLabel="2005"/>
-        <h:selectitem itemValue="2006" itemLabel="2006"/>
-        <h:selectitem itemValue="2007" itemLabel="2007"/>
-        <h:selectitem itemValue="2008" itemLabel="2008"/>
+        <f:selectitem itemValue="2002" itemLabel="2002"/>
+        <f:selectitem itemValue="2003" itemLabel="2003"/>
+        <f:selectitem itemValue="2004" itemLabel="2004"/>
+        <f:selectitem itemValue="2005" itemLabel="2005"/>
+        <f:selectitem itemValue="2006" itemLabel="2006"/>
+        <f:selectitem itemValue="2007" itemLabel="2007"/>
+        <f:selectitem itemValue="2008" itemLabel="2008"/>
     </h:selectone_menu><br>
       </font></td>
                               </tr>
