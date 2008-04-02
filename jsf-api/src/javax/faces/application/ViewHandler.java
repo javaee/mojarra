@@ -1,5 +1,5 @@
 /*
- * $Id: ViewHandler.java,v 1.17 2003/10/17 00:16:10 jvisvanathan Exp $
+ * $Id: ViewHandler.java,v 1.18 2003/10/17 20:47:21 rlubke Exp $
  */
 
 /*
@@ -81,7 +81,7 @@ public interface ViewHandler {
      *
      * <p>The default implementation of <code>renderView</code> must
      * use <code>HttpServletRequest.getServletPath()</code> in 
-     * conjunction with the one or more<code>url-pattern<code> mappings obtained 
+     * conjunction with the one or more<code>url-pattern</code> mappings obtained 
      * from the deployment descriptor for this web application to determine 
      * which mapping was used to invoke the 
      * {@link javax.faces.webapp.FacesServlet} If a prefix mapping was used, 
@@ -226,6 +226,9 @@ public interface ViewHandler {
      * handler uses the locale from the incoming UIViewRoot.
      *
      * @param context {@link FacesContext} for the current request
+     * 
+     * @exception NullPointerException if <code>context</code> is 
+     *  <code>null</code>
      */
      public Locale calculateLocale(FacesContext context);
 

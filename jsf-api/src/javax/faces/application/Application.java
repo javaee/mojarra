@@ -1,5 +1,5 @@
 /*
- * $Id: Application.java,v 1.14 2003/10/15 22:09:54 rlubke Exp $
+ * $Id: Application.java,v 1.15 2003/10/17 20:47:21 rlubke Exp $
  */
 
 /*
@@ -413,11 +413,7 @@ public abstract class Application {
     /**
      *
      * <p>Make it so the argument <code>newLocale</code> is returned the
-     * next time {@link #getDefaultLocale} is called.</p>
-     *
-     * @exception NullPointerException if the argument
-     * <code>newLocale</code> is <code>null</code>.
-     *
+     * next time {@link #getDefaultLocale} is called.</p>     
      */
 
     public abstract void setDefaultLocale(Locale newLocale);
