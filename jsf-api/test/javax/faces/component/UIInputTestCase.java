@@ -1,5 +1,5 @@
 /*
- * $Id: UIInputTestCase.java,v 1.10 2003/06/20 23:28:51 craigmcc Exp $
+ * $Id: UIInputTestCase.java,v 1.11 2003/06/21 01:05:42 craigmcc Exp $
  */
 
 /*
@@ -131,33 +131,6 @@ private class UIInputNamingContainer extends UIInput implements NamingContainer 
         } catch (NullPointerException e) {
             ; // Expected result
         }
-
-    }
-
-
-    /**
-     * Test the state of an unmodified test component.
-     */
-    public void testUnmodifiedComponent() {
-
-	super.testUnmodifiedComponent();
-	checkValidatorCount(component, 0);
-
-    }
-
-
-    /**
-     * Validator Queue.
-     */
-    public void testValidatorQueue() {
-
-        checkValidatorCount(component, 0);
-        ((UIInput) component).addValidator(new TestValidator());
-        checkValidatorCount(component, 1);
-        ((UIInput) component).addValidator(new TestValidator());
-        checkValidatorCount(component, 2);
-        ((UIInput) component).clearValidators();
-        checkValidatorCount(component, 0);
 
     }
 
@@ -412,26 +385,6 @@ private class UIInputNamingContainer extends UIInput implements NamingContainer 
         
     }    
     
-
-    /**
-     * Validate that the specified number of validators are present.
-     *
-     * @param component Component being tested
-     * @param count Expected number of validators
-     */
-    protected void checkValidatorCount(UIComponent component, int count) {
-
-        int results = 0;
-        Iterator validators = ((UIInput) component).getValidators();
-        assertNotNull("validators", validators);
-        while (validators.hasNext()) {
-            Validator validator = (Validator) validators.next();
-            results++;
-        }
-        assertEquals("validator count", count, results);
-
-    }
-
 
     protected int getListenerIndex(UIInput input,
             TestValueChangedListener listener) {

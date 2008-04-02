@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.82 2003/06/20 23:58:53 craigmcc Exp $
+ * $Id: UIComponent.java,v 1.83 2003/06/21 01:05:40 craigmcc Exp $
  */
 
 /*
@@ -225,7 +225,7 @@ public interface UIComponent extends Serializable {
      *     based on the success or failure of decoding a new local value for
      *     this component.</li>
      * <li>During the <em>Process Validations</em> phase, set to
-     *     <code>false</code> by <code>processValidations()</code> if any
+     *     <code>false</code> by <code>processValidators()</code> if any
      *     call to a <code>validate()</code> method returned
      *     <code>false</code>.</li>
      * <li>During the <em>Update Model Values</em> phase, set to
@@ -669,22 +669,11 @@ public interface UIComponent extends Serializable {
      * <li>Call the <code>processValidators()</code> method of all facets
      *     and children of this {@link UIComponent}, in the order determined
      *     by a call to <code>getFacetsAndChildren()</code>.</li>
-     * <li>If the current component is not {@link UIInput} or a subclass
-     *     of {@link UIInput}, skip the remaining steps.</li>
-     * <li>If the <code>valid</code> property of this component is
-     *     currently <code>true</code>:
-     *     <ul>
-     *     <li>Call the <code>validate()</code> method of each
-     *         {@link Validator} registered for this {@link UIComponent}.</li>
-     *     <li>Call the <code>validate()</code> method of this component.</li>
-     *     <li>Set the <code>valid</code> property of this component
-     *         to the result returned from the <code>validate()</code>
-     *         method.</li>
-     *     </ul></li>
-     * <li>If the <code>valid</code> property of this {@link UIComponent}
-     *     is now <code>false</code>, call
-     *     <code>FacesContext.renderResponse()</code>
-     *     to transfer control at the end of the current phase.</li>
+     * <li>If the current component is an {@link UIInput}, call its
+     *     <code>validate()</code> method.</li>
+     * <li>If the <code>isValid()</code> method of this component returns
+     *     <code>false</code>, call the <code>renderResponse()</code> method
+     *     on the {@link FacesContext} instance for this request.</li>
      * </ul>
      *
      * @param context {@link FacesContext} for the request we are processing

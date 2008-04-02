@@ -1,5 +1,5 @@
 /*
- * $Id: UIInput.java,v 1.21 2003/06/21 00:44:25 craigmcc Exp $
+ * $Id: UIInput.java,v 1.22 2003/06/21 01:05:41 craigmcc Exp $
  */
 
 /*
@@ -209,9 +209,27 @@ public class UIInput extends UIOutput {
 
 
     /**
-     * <p>Perform validations and, if validation is successful, and the
-     * local value is different from the previous value, queue
-     * a {@link ValueChangedEvent} to be processed later.</p>
+     * <p>Perform the following algorithm to validate the local value of
+     * this {@link UIInput}.</p>
+     * <ul>
+     * <li>Save the current local value (if any) in the <code>previous</code>
+     *     property.</li>
+     * <li>If the <code>valid</code> property on this component is already
+     *     <code>false</code> take no further action.
+     * <li>Call the <code>validate()</code> method of each
+     *     {@link Validator} registered for this {@link UIInput}.</li>
+     * <li>If the <code>valid</code> property of this component is still
+     *     <code>true</code>, and if the local value is different from
+     *     the previous value of this component, fire a
+     *     {@link ValueChangedEvent} to be broadcast to all interested
+     *     listeners.</li>
+     * </ul>
+     *
+     * <p>Application components subclassing {@link UIInput} that wish to
+     * perform validation with logic embedded in the component should perform
+     * their own correctness checks, and then call the
+     * <code>super.validate()</code> method to perform the standard
+     * processing described above.</p>
      *
      * @param context The {@link FacesContext} for the current request
      *
@@ -228,35 +246,44 @@ public class UIInput extends UIOutput {
         Object previous = getPrevious();
         setPrevious(null);
 
-        // Determine whether a value change has actually occurred
-        Object value = getValue();
-        boolean changed;
-        if (previous != null && value != null &&
-            previous.equals(value)) {
-            // no change has occurred
-            changed = false;
-        } else if (previous == null) {
-            // if the value is going from null to non-null, a change 
-            // has occurred
-            changed = (value != null);
-        } else /* if (previous != null) */ {
-            // if the value is going from non-null
-            if (value == null) {
-                // to null, no change has occurred.
-                changed = false;
-            // if previous and current values are not null, compare values.
-            } else if (compareValues(previous, value)) {
-                // value change has occurred
-                changed = true;
-            } else {
-                // value change has not occurred
-                changed = false;
-            }
-        }
+	// If our value is valid, call all external validators
+	if (isValid() && (this.validators != null)) {
+	    Iterator validators = this.validators.iterator();
+	    while (validators.hasNext()) {
+		Validator validator = (Validator) validators.next();
+		validator.validate(context, this);
+	    }
+	}
 
-        // Queue a ValueChangedEvent if appropriate
-        if (changed) {
-            fireValueChangedEvent(context, previous, value);
+	// If our value is valid, emit a ValueChangedEvent if appropriate
+	if (isValid()) {
+	    Object value = getValue();
+	    boolean changed;
+	    if (previous != null && value != null &&
+		previous.equals(value)) {
+		// no change has occurred
+		changed = false;
+	    } else if (previous == null) {
+		// if the value is going from null to non-null, a change 
+		// has occurred
+		changed = (value != null);
+	    } else /* if (previous != null) */ {
+		// if the value is going from non-null
+		if (value == null) {
+		    // to null, no change has occurred.
+		    changed = false;
+		    // if previous and current values are not null, compare values.
+		} else if (compareValues(previous, value)) {
+		    // value change has occurred
+		    changed = true;
+		} else {
+		    // value change has not occurred
+		    changed = false;
+		}
+	    }
+	    if (changed) {
+		fireValueChangedEvent(context, previous, value);
+	    }
         }
 
     }
@@ -287,32 +314,6 @@ public class UIInput extends UIOutput {
             validators = new ArrayList();
         }
         validators.add(validator);
-
-    }
-
-
-    /**
-     * <p>Clear any {@link Validator}s that have been registered for
-     * processing by this component.</p>
-     */
-    public void clearValidators() {
-
-        validators = null;
-
-    }
-
-
-    /**
-     * <p>Return an <code>Iterator</code> over the {@link Validator}s
-     * associated with this {@link UIInput}.</p>
-     */
-    public Iterator getValidators() {
-
-        if (validators != null) {
-            return (validators.iterator());
-        } else {
-            return (Collections.EMPTY_LIST.iterator());
-        }
 
     }
 

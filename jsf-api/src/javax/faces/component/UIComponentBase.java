@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.54 2003/06/20 23:58:53 craigmcc Exp $
+ * $Id: UIComponentBase.java,v 1.55 2003/06/21 01:05:40 craigmcc Exp $
  */
 
 /*
@@ -898,20 +898,12 @@ public abstract class UIComponentBase implements UIComponent {
             kid.processValidators(context);
         }
 
-	// Skip validation processing for this component unless we are a UIInput
-	if (!(this instanceof UIInput)) {
-	    return;
+	// Validate this component itself
+	if (this instanceof UIInput) {
+	    ((UIInput) this).validate(context);
 	}
 
-        // Process this component itself
-        if (isValid()) {
-            Iterator validators = ((UIInput) this).getValidators();
-            while (validators.hasNext()) {
-                Validator validator = (Validator) validators.next();
-                validator.validate(context, (UIInput) this);
-            }
-            ((UIInput) this).validate(context);
-        }
+	// Advance to Render Response if this component is not valid
         if (!isValid()) {
             context.renderResponse();
         }
