@@ -333,13 +333,14 @@ java -Xmx256m -jar ${dependency.base.dir}/glassfish-installer-v1_ur1-p01-b02.jar
         </condition>
         <condition property="isLinux" value="Linux">
             <and>
-            <os family="unix"/>
+                <os family="unix"/>
                 <not>
-                <os name="SunOS"/>
-                <os name="Max OS X"/>
-            </not>
+                    <os name="SunOS"/>
+                </not>
+                <not>
+                    <os name="Max OS X"/>
+                </not>
             </and>
-
         </condition>
     </target>
 
