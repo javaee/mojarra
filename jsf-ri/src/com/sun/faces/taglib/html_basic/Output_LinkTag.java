@@ -1,5 +1,5 @@
 /*
- * $Id: Output_LinkTag.java,v 1.1 2003/10/28 21:00:35 eburns Exp $
+ * $Id: Output_LinkTag.java,v 1.2 2003/11/09 05:42:03 eburns Exp $
  */
 
 /*
@@ -74,25 +74,67 @@ public class Output_LinkTag extends BaseComponentBodyTag
 	UIOutput link = (UIOutput) component;
         // set HTML 4. attributes.
         if (shape != null) {
-            link.getAttributes().put("shape", shape);
+	    if (isValueReference(shape)) {
+		link.setValueBinding("shape", 
+				     Util.getValueBinding(shape));
+	    }
+	    else {
+		link.getAttributes().put("shape", shape);
+	    }
         }
         if (coords != null) {
-            link.getAttributes().put("coords", coords);
+	    if (isValueReference(coords)) {
+		link.setValueBinding("coords", 
+				     Util.getValueBinding(coords));
+	    }
+	    else {
+		link.getAttributes().put("coords", coords);
+	    }
         }
         if (rel != null) {
-            link.getAttributes().put("rel", rel);
+	    if (isValueReference(rel)) {
+		link.setValueBinding("rel", 
+				     Util.getValueBinding(rel));
+	    }
+	    else {
+		link.getAttributes().put("rel", rel);
+	    }
         }
         if (rev != null) {
-            link.getAttributes().put("rev", rev);
+	    if (isValueReference(rev)) {
+		link.setValueBinding("rev", 
+				     Util.getValueBinding(rev));
+	    }
+	    else {
+		link.getAttributes().put("rev", rev);
+	    }
         }
         if (hreflang != null) {
-            link.getAttributes().put("hreflang", hreflang);
+	    if (isValueReference(hreflang)) {
+		link.setValueBinding("hreflang", 
+				     Util.getValueBinding(hreflang));
+	    }
+	    else {
+		link.getAttributes().put("hreflang", hreflang);
+	    }
         }
         if (charset != null) {
-            link.getAttributes().put("charset", charset);
+	    if (isValueReference(charset)) {
+		link.setValueBinding("charset", 
+				     Util.getValueBinding(charset));
+	    }
+	    else {
+		link.getAttributes().put("charset", charset);
+	    }
         }
         if (type != null) {
-            link.getAttributes().put("type", type);
+	    if (isValueReference(type)) {
+		link.setValueBinding("type", 
+				     Util.getValueBinding(type));
+	    }
+	    else {
+		link.getAttributes().put("type", type);
+	    }
         }
     }
 

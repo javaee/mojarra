@@ -1,5 +1,5 @@
 /*
- * $Id: Command_LinkTag.java,v 1.3 2003/10/28 21:00:33 eburns Exp $
+ * $Id: Command_LinkTag.java,v 1.4 2003/11/09 05:42:03 eburns Exp $
  */
 
 /*
@@ -14,6 +14,7 @@ import org.mozilla.util.ParameterCheck;
 
 import javax.faces.component.UIComponent;
 import javax.faces.component.UICommand;
+import javax.faces.el.ValueBinding;
 import javax.servlet.jsp.JspException;
 
 import com.sun.faces.taglib.BaseComponentBodyTag;
@@ -42,10 +43,8 @@ public class Command_LinkTag extends BaseComponentBodyTag
 
     // Attribute Instance Variables
     protected String commandname = null;
-    protected String commandname_ = null;
     protected String actionRef = null;
-    protected String actionRef_ = null;
-    protected boolean immediate = false;
+    protected String immediate = null;
 
     
     // Relationship Instance Variables
@@ -64,14 +63,14 @@ public class Command_LinkTag extends BaseComponentBodyTag
 
     public void setCommandName(String newCommandname) {
         ParameterCheck.nonNull(newCommandname);
-        commandname_ = newCommandname;
+        commandname = newCommandname;
     }
  
     public void setActionRef(String newActionRef) {
-        actionRef_ = newActionRef;
+        actionRef = newActionRef;
     }
 
-    public void setImmediate(boolean newImmediate) {
+    public void setImmediate(String newImmediate) {
         immediate = newImmediate;
     }
 
@@ -95,58 +94,99 @@ public class Command_LinkTag extends BaseComponentBodyTag
 	    link.setActionRef(actionRef);
 	}
         if (action != null ) {
-	    link.setAction(action);
+	    if (isValueReference(action)) {
+		link.setValueBinding("action", Util.getValueBinding(action));
+	    }
+	    else {
+		link.setAction(action);
+	    }
 	}
         if (value != null) {
-            link.setValue(value);
+	    if (isValueReference(value)) {
+		link.setValueBinding("value", Util.getValueBinding(value));
+	    }
+	    else {
+		link.setValue(value);
+	    }
         }
-	link.setImmediate(immediate);
+	if (immediate != null) {
+	    if (isValueReference(immediate)) {
+		link.setValueBinding("immediate", 
+				     Util.getValueBinding(immediate));
+	    }
+	    else {
+		link.setImmediate(Boolean.getBoolean(immediate));
+	    }
+	}
         // set HTML 4. attributes.
         if (shape != null) {
-            link.getAttributes().put("shape", shape);
+	    if (isValueReference(shape)) {
+		link.setValueBinding("shape", 
+				     Util.getValueBinding(shape));
+	    }
+	    else {
+		link.getAttributes().put("shape", shape);
+	    }
         }
         if (coords != null) {
-            link.getAttributes().put("coords", coords);
+	    if (isValueReference(coords)) {
+		link.setValueBinding("coords", 
+				     Util.getValueBinding(coords));
+	    }
+	    else {
+		link.getAttributes().put("coords", coords);
+	    }
         }
         if (rel != null) {
-            link.getAttributes().put("rel", rel);
+	    if (isValueReference(rel)) {
+		link.setValueBinding("rel", 
+				     Util.getValueBinding(rel));
+	    }
+	    else {
+		link.getAttributes().put("rel", rel);
+	    }
         }
         if (rev != null) {
-            link.getAttributes().put("rev", rev);
+	    if (isValueReference(rev)) {
+		link.setValueBinding("rev", 
+				     Util.getValueBinding(rev));
+	    }
+	    else {
+		link.getAttributes().put("rev", rev);
+	    }
         }
         if (hreflang != null) {
-            link.getAttributes().put("hreflang", hreflang);
+	    if (isValueReference(hreflang)) {
+		link.setValueBinding("hreflang", 
+				     Util.getValueBinding(hreflang));
+	    }
+	    else {
+		link.getAttributes().put("hreflang", hreflang);
+	    }
         }
         if (charset != null) {
-            link.getAttributes().put("charset", charset);
+	    if (isValueReference(charset)) {
+		link.setValueBinding("charset", 
+				     Util.getValueBinding(charset));
+	    }
+	    else {
+		link.getAttributes().put("charset", charset);
+	    }
         }
         if (type != null) {
-            link.getAttributes().put("type", type);
+	    if (isValueReference(type)) {
+		link.setValueBinding("type", 
+				     Util.getValueBinding(type));
+	    }
+	    else {
+		link.getAttributes().put("type", type);
+	    }
         }
     }
 
-    /* Evaluates expressions as necessary */
-    protected void evaluateExpressions() throws JspException {
-	super.evaluateExpressions();
-        if (commandname_ != null) {
-            commandname = Util.evaluateElExpression(commandname_, pageContext);
-        }
-        if (actionRef_ != null) {
-            actionRef = Util.evaluateElExpression(actionRef_, pageContext);
-        }
-    }
-    
     //
     // Methods from TagSupport
     // 
-
-    public int doStartTag() throws JspException {
-        // evaluate any expressions that we were passed
-        evaluateExpressions();
-
-        // chain to the parent implementation
-        return super.doStartTag();
-    }
 
     public int doEndTag() throws JspException {
 	String content = null;     

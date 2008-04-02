@@ -231,7 +231,7 @@ must exist.  This is necessary for the MessageFactory class.
     <!-- Run javac through everything -->
     <javac srcdir="${source.home}:${build.generate}"
            destdir="${build.home}/classes"
-           excludes="com/sun/faces/taglib/html_basic/**.*"
+           excludesfile="${basedir}/roger-remove.txt"
              debug="${compile.debug}"
        deprecation="${compile.deprecation}"
           optimize="${compile.optimize}">
