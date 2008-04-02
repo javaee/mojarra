@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContext.java,v 1.48 2003/09/22 16:34:04 eburns Exp $
+ * $Id: FacesContext.java,v 1.49 2003/09/22 17:16:32 eburns Exp $
  */
 
 /*
@@ -47,6 +47,9 @@ public abstract class FacesContext {
     /**
      * <p>Return the {@link Application} instance associated with this
      * web application.</p>
+     *
+     * @exception IllegalStateException if this method is called more than
+     *  once without a call to <code>release()</code> in between.
      */
     public abstract Application getApplication();
 
@@ -55,6 +58,9 @@ public abstract class FacesContext {
      * <p>Return an <code>Iterator</code> over the {@link UIComponent}s for
      * which at least one {@link Message} has been queued.  If there are no
      * such components, an empty <code>Iterator</code> is returned.</p>
+     *
+     * @exception IllegalStateException if this method is called more than
+     *  once without a call to <code>release()</code> in between.
      */
     public abstract Iterator getComponentsWithMessages();
 
@@ -74,6 +80,9 @@ public abstract class FacesContext {
      *
      * <p>If no events have been queued, an empty <code>Iterator</code>
      * must be returned.
+     *
+     * @exception IllegalStateException if this method is called more than
+     *  once without a call to <code>release()</code> in between.
      */
     public abstract Iterator getFacesEvents();
 
@@ -90,6 +99,9 @@ public abstract class FacesContext {
      * set, the default Locale for our servlet container will be used.</p>
      *
      * @param locale The new localization Locale
+     *
+     * @exception IllegalStateException if this method is called more than
+     *  once without a call to <code>release()</code> in between.
      */
     public abstract void setLocale(Locale locale);
 
@@ -99,6 +111,9 @@ public abstract class FacesContext {
      * that has been queued, whether or not they are associated with any
      * specific {@link UIComponent}.  If no such messages have been queued,
      * return a value less than <code>Message.SEVERITY_INFO</code>.</p>
+     *
+     * @exception IllegalStateException if this method is called more than
+     *  once without a call to <code>release()</code> in between.
      */
     public abstract int getMaximumSeverity();
 
@@ -108,6 +123,9 @@ public abstract class FacesContext {
      * been queued, whether or not they are associated with any specific
      * {@link UIComponent}.  If no such messages have been queued, return an
      * empty <code>Iterator</code>.</p>
+     *
+     * @exception IllegalStateException if this method is called more than
+     *  once without a call to <code>release()</code> in between.
      */
     public abstract Iterator getMessages();
 
@@ -124,6 +142,9 @@ public abstract class FacesContext {
      * @param component The {@link UIComponent} for which messages are
      *  requested, or <code>null</code> for messages not associated with
      *  any component
+     *
+     * @exception IllegalStateException if this method is called more than
+     *  once without a call to <code>release()</code> in between.
      */
     public abstract Iterator getMessages(UIComponent component);
 
@@ -131,6 +152,9 @@ public abstract class FacesContext {
     /**
      * <p>Return <code>true</code> if the <code>renderResponse()</code>
      * method has been called for the current request.</p>
+     *
+     * @exception IllegalStateException if this method is called more than
+     *  once without a call to <code>release()</code> in between.
      */
     public abstract boolean getRenderResponse();
 
@@ -138,6 +162,9 @@ public abstract class FacesContext {
     /**
      * <p>Return <code>true</code> if the <code>responseComplete()</code>
      * method has been called for the current request.</p>
+     *
+     * @exception IllegalStateException if this method is called more than
+     *  once without a call to <code>release()</code> in between.
      */
     public abstract boolean getResponseComplete();
 
@@ -147,6 +174,9 @@ public abstract class FacesContext {
      * direct their binary output.  Within a given response, components
      * can use either the ResponseStream or the ResponseWriter,
      * but not both.
+     *
+     * @exception IllegalStateException if this method is called more than
+     *  once without a call to <code>release()</code> in between.
      */
     public abstract ResponseStream getResponseStream();
 
@@ -159,6 +189,9 @@ public abstract class FacesContext {
      *
      * @exception NullPointerException if <code>responseStream</code>
      *  is <code>null</code>
+     *
+     * @exception IllegalStateException if this method is called more than
+     *  once without a call to <code>release()</code> in between.
      */
     public abstract void setResponseStream(ResponseStream responseStream);
 
@@ -168,6 +201,9 @@ public abstract class FacesContext {
      * direct their character-based output.  Within a given response,
      * components can use either the ResponseStream or the ResponseWriter,
      * but not both.
+     *
+     * @exception IllegalStateException if this method is called more than
+     *  once without a call to <code>release()</code> in between.
      */
     public abstract ResponseWriter getResponseWriter();
 
@@ -180,12 +216,18 @@ public abstract class FacesContext {
      *
      * @exception NullPointerException if <code>responseWriter</code>
      *  is <code>null</code>
+     *
+     * @exception IllegalStateException if this method is called more than
+     *  once without a call to <code>release()</code> in between.
      */
     public abstract void setResponseWriter(ResponseWriter responseWriter);
 
     /**
      * <p>Return the root component that is associated with the this request.
      * </p>
+     *
+     * @exception IllegalStateException if this method is called more than
+     *  once without a call to <code>release()</code> in between.
      */
     public abstract UIViewRoot getViewRoot();
 
@@ -199,7 +241,7 @@ public abstract class FacesContext {
      * @param root The new component {@link UIViewRoot} component
      *
      * @exception IllegalStateException if this method is called more than
-     *  once without a call to <code>release()</code> in beween
+     *  once without a call to <code>release()</code> in between.
      * @exception NullPointerException if <code>root</code>
      *  is <code>null</code>
      */
@@ -218,6 +260,9 @@ public abstract class FacesContext {
      *
      * @exception NullPointerException if <code>event</code>
      *  is <code>null</code>
+     *
+     * @exception IllegalStateException if this method is called more than
+     *  once without a call to <code>release()</code> in between.
      */
     public abstract void addFacesEvent(FacesEvent event);
 
@@ -235,15 +280,23 @@ public abstract class FacesContext {
      *
      * @exception NullPointerException if <code>message</code>
      *  is <code>null</code>
+     *
+     * @exception IllegalStateException if this method is called more than
+     *  once without a call to <code>release()</code> in between.
      */
     public abstract void addMessage(UIComponent component, Message message);
 
 
     /**
-     * <p>Release any resources associated with this <code>FacesContext</code>
-     * instance.  Faces implementations may choose to pool instances in the
-     * associated {@link FacesContextFactory} to avoid repeated object creation
-     * and garbage collection.</p>
+     * <p>Release any resources associated with this
+     * <code>FacesContext</code> instance.  Faces implementations may
+     * choose to pool instances in the associated {@link
+     * FacesContextFactory} to avoid repeated object creation and
+     * garbage collection.  After <code>release()</code> is called on a
+     * <code>FacesContext</code> instance (until the
+     * <code>FacesContext</code> instance has been recycled by the
+     * implementation for re-use), calling any other methods will cause
+     * an <code>IllegalStateException</code> to be thrown.</p>
      */
     public abstract void release();
 
@@ -253,6 +306,9 @@ public abstract class FacesContext {
      * current phase of the request processing lifecycle has been completed,
      * control should be passed to the <em>Render Response</em> phase,
      * bypassing any phases that have not been executed yet.</p>
+     *
+     * @exception IllegalStateException if this method is called more than
+     *  once without a call to <code>release()</code> in between.
      */
     public abstract void renderResponse();
 
@@ -262,8 +318,16 @@ public abstract class FacesContext {
      * for this request has already been generated (such as an HTTP redirect),
      * and that the request processing lifecycle should be terminated as soon
      * as the current phase is completed.</p>
+     *
+     * @exception IllegalStateException if this method is called more than
+     *  once without a call to <code>release()</code> in between.
      */
     public abstract void responseComplete();
+
+    /**
+     * <p>Return the {@link ExternalContext} instance for this
+     * <code>FacesContext</code> instance.</p>
+     */
 
     public abstract ExternalContext getExternalContext();
 
@@ -301,7 +365,7 @@ public abstract class FacesContext {
      *  is <code>null</code>
      */
     protected static void setCurrentInstance(FacesContext context) {
-	if (null = context) {
+	if (null == context) {
 	    throw new NullPointerException();
 	}
 
