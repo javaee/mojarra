@@ -562,9 +562,11 @@ public class RenderKitUtils {
      *
      * @param accept The client accept String
      * @param serverSupportedTypes The types that the server supports
+     * @param preferredType The preferred content type if another type is found
+     *        with the same highest quality factor.
      * @return The content type <code>String</code>
      */
-    public static String determineContentType(String accept, String serverSupportedTypes) {
+    public static String determineContentType(String accept, String serverSupportedTypes, String preferredType) {
         String contentType = null;
                                                                                                                          
         if (null == accept || null == serverSupportedTypes) {
@@ -573,7 +575,8 @@ public class RenderKitUtils {
                                                                                                                          
         String[][] clientContentTypes = buildTypeArrayFromString(accept);
         String[][] serverContentTypes = buildTypeArrayFromString(serverSupportedTypes);
-        String[][] matchedInfo = findMatch(clientContentTypes, serverContentTypes);
+        String[][] preferredContentType = buildTypeArrayFromString(preferredType);
+        String[][] matchedInfo = findMatch(clientContentTypes, serverContentTypes, preferredContentType);
                                                                                                                          
         // if best match exits and best match is not some wildcard,
         // return best match
@@ -740,10 +743,12 @@ public class RenderKitUtils {
      * information for the client built from @{link #buildTypeArrayFromString}. 
      * @param serverSupportedContentTypes An <code>array</code> of accept <code>String</code>
      * information for the server supported types built from @{link #buildTypeArrayFromString}. 
+     * @param preferredContentType An <code>array</code> of preferred content type information.
      * @return An <code>array</code> containing the parts of the preferred content type for the
      * client.  The information is stored as outlined in @{link #buildTypeArrayFromString}. 
      */
-    private static String[][] findMatch(String[][] clientContentTypes, String[][] serverSupportedContentTypes) {
+    private static String[][] findMatch(String[][] clientContentTypes, String[][] serverSupportedContentTypes,
+        String[][] preferredContentType) {
         // client/server array index variables
         int cidx = 0;
         int sidx = 0;
@@ -810,8 +815,23 @@ public class RenderKitUtils {
                 }
             }
         }
-        // return object
+
+        // First, determine if we have a type that has the highest quality factor that
+        // also matches the preferred type (if there is one):
         String[][] match = new String[1][3];
+        if (preferredContentType[0][0] != null) {
+            for (int i=0; i<=resultidx; i++) {
+                if ((Double.parseDouble(results[i][0]) == highestQFactor) &&
+                    results[i][1].equals(preferredContentType[0][1]) &&
+                    results[i][2].equals(preferredContentType[0][2])) {
+                    match[0][0] = results[i][0];
+                    match[0][1] = results[i][1];
+                    match[0][2] = results[i][2];
+                    return match;
+                }
+            }
+        }
+                
         match[0][0] = results[idx][0];
         match[0][1] = results[idx][1];
         match[0][2] = results[idx][2];

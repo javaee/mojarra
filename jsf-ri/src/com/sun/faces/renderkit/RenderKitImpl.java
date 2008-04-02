@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKitImpl.java,v 1.37 2006/04/05 17:53:43 rlubke Exp $
+ * $Id: RenderKitImpl.java,v 1.38 2006/05/10 01:27:00 rogerk Exp $
  */
 
 /*
@@ -57,7 +57,7 @@ import java.util.logging.Logger;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: RenderKitImpl.java,v 1.37 2006/04/05 17:53:43 rlubke Exp $
+ * @version $Id: RenderKitImpl.java,v 1.38 2006/05/10 01:27:00 rogerk Exp $
  */
 
 public class RenderKitImpl extends RenderKit {
@@ -236,9 +236,14 @@ public class RenderKitImpl extends RenderKit {
                 String supportedTypeString =
                     HTML_CONTENT_TYPE + ',' + XHTML_CONTENT_TYPE + ',' +
                     APPLICATION_XML_CONTENT_TYPE + ',' + TEXT_XML_CONTENT_TYPE;
-                desiredContentTypeList = RenderKitUtils.determineContentType(
-                    desiredContentTypeList, supportedTypeString);
-            if (null != desiredContentTypeList) {
+                if (preferXHTML) {
+                    desiredContentTypeList = RenderKitUtils.determineContentType(
+                        desiredContentTypeList, supportedTypeString, XHTML_CONTENT_TYPE);
+                } else {
+                    desiredContentTypeList = RenderKitUtils.determineContentType(
+                        desiredContentTypeList, supportedTypeString, null);
+                }
+                if (null != desiredContentTypeList) {
                     contentType = findMatch(context, desiredContentTypeList, supportedTypes);
                 }
             }
@@ -248,19 +253,14 @@ public class RenderKitImpl extends RenderKit {
         if (null == desiredContentTypeList ||
             desiredContentTypeList.equals(ALL_MEDIA)) {
             Map<String,Object> requestMap = context.getExternalContext().getRequestMap();
-            if (preferXHTML) {
-                contentType = XHTML_CONTENT_TYPE;
-                requestMap.put(RIConstants.CONTENT_TYPE_IS_XHTML, Boolean.TRUE);
-            } else {
-                contentType = HTML_CONTENT_TYPE;
-                requestMap.put(RIConstants.CONTENT_TYPE_IS_HTML, Boolean.TRUE);
-            }
+            contentType = HTML_CONTENT_TYPE;
+            requestMap.put(RIConstants.CONTENT_TYPE_IS_HTML, Boolean.TRUE);
         }
 
-    if (null == contentType) {
+        if (null == contentType) {
             throw new IllegalArgumentException(MessageUtils.getExceptionMessageString(
                 MessageUtils.CONTENT_TYPE_ERROR_MESSAGE_ID));
-    }
+        }
 
         if (characterEncoding == null) {
             characterEncoding = CHAR_ENCODING;

@@ -1,5 +1,5 @@
 /*
- * $Id: TestContentTypes.java,v 1.3 2006/03/29 23:04:59 rlubke Exp $
+ * $Id: TestContentTypes.java,v 1.4 2006/05/10 01:27:02 rogerk Exp $
  */
                                                                                                                    
 /*
@@ -57,7 +57,7 @@ public class TestContentTypes extends ServletFacesTestCase {
         String clientContentType = getFacesContext().getExternalContext().getRequestHeaderMap().get("Accept");
         String serverSupportedContentTypes = "text/html, text/plain";
         String contentType = RenderKitUtils.determineContentType(
-            clientContentType, serverSupportedContentTypes);
+            clientContentType, serverSupportedContentTypes, null);
         assertEquals(contentType, "text/html");
     }
 
@@ -71,7 +71,7 @@ public class TestContentTypes extends ServletFacesTestCase {
         String clientContentType = getFacesContext().getExternalContext().getRequestHeaderMap().get("Accept");
         String serverSupportedContentTypes = "text/x-dvi, text/plain";
         String contentType = RenderKitUtils.determineContentType(
-            clientContentType, serverSupportedContentTypes);
+            clientContentType, serverSupportedContentTypes, null);
         assertEquals(contentType, "text/x-dvi");
     }
 
@@ -85,7 +85,7 @@ public class TestContentTypes extends ServletFacesTestCase {
         String clientContentType = getFacesContext().getExternalContext().getRequestHeaderMap().get("Accept");
         String serverSupportedContentTypes = "text/html, text/html;level=1";
         String contentType = RenderKitUtils.determineContentType(
-            clientContentType, serverSupportedContentTypes);
+            clientContentType, serverSupportedContentTypes, null);
         assertEquals(contentType, "text/html;level=1");
     }
  
@@ -100,7 +100,31 @@ public class TestContentTypes extends ServletFacesTestCase {
         String clientContentType = getFacesContext().getExternalContext().getRequestHeaderMap().get("Accept");
         String serverSupportedContentTypes = "text/html, text/html;level=1, text/html;level=2";
         String contentType = RenderKitUtils.determineContentType(
-            clientContentType, serverSupportedContentTypes);
+            clientContentType, serverSupportedContentTypes, null);
         assertEquals(contentType, "text/html;level=2");
+    }
+
+    public void beginAccept5(WebRequest theRequest) {
+        theRequest.addHeader("Accept", "text/html, application/xhtml+xml");
+    }
+
+    public void testAccept5() throws Exception {
+        String clientContentType = getFacesContext().getExternalContext().getRequestHeaderMap().get("Accept");
+        String serverSupportedContentTypes = "text/html, application/xhtml+xml";
+        String contentType = RenderKitUtils.determineContentType(
+            clientContentType, serverSupportedContentTypes, "application/xhtml+xml");
+        assertEquals(contentType, "application/xhtml+xml");
+    }
+
+    public void beginAccept6(WebRequest theRequest) {
+        theRequest.addHeader("Accept", "text/html, application/xhtml+xml; q=0.5");
+    }
+
+    public void testAccept6() throws Exception {
+        String clientContentType = getFacesContext().getExternalContext().getRequestHeaderMap().get("Accept");
+        String serverSupportedContentTypes = "text/html, application/xhtml+xml";
+        String contentType = RenderKitUtils.determineContentType(
+            clientContentType, serverSupportedContentTypes, "application/xhtml+xml");
+        assertEquals(contentType, "text/html");
     }
 }
