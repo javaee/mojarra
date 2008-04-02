@@ -54,7 +54,7 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
       it?</h2>
 
         <h:graphicImage id="waveImg" url="/wave.med.gif" />
-  	<h:inputText id="userNo" value="#{UserNumberBean.userNumber}"
+  	<h:inputText id="userNo" label="User Number" value="#{UserNumberBean.userNumber}"
                       validator="#{UserNumberBean.validate}"/>          
 	 <h:commandButton id="submit" action="success" value="Submit" />
          <p />

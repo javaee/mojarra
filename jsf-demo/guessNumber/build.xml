@@ -63,6 +63,7 @@
     <pathelement location="${jsf-api.jar}"/>
     <pathelement location="${jsf-impl.jar}"/>
     <pathelement location="${jstl.jar}"/>
+    <pathelement location="${el-api.jar}"/>
     <pathelement location="${build}/${example}/WEB-INF/classes"/>
     <pathelement location="${servlet.jar}"/>
   </path>

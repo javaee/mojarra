@@ -1,5 +1,5 @@
 /*
- * $Id: MessageFactory.java,v 1.3 2005/05/13 11:41:12 rogerk Exp $
+ * $Id: MessageFactory.java,v 1.4 2005/05/13 12:02:56 rogerk Exp $
  */
  
 /*
@@ -52,6 +52,7 @@ import java.util.Iterator;
 import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.MissingResourceException;
+import javax.el.ValueExpression;
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.application.Application;
@@ -59,7 +60,6 @@ import javax.faces.application.ApplicationFactory;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
-import javax.faces.el.ValueBinding;
 import javax.faces.FacesException;
 import java.text.MessageFormat;
 import java.io.IOException;
@@ -245,7 +245,7 @@ public class MessageFactory extends Object
         UIComponent component) {
         Object o = component.getAttributes().get("label");
         if (o == null) {
-            o = component.getValueBinding("label");
+            o = component.getValueExpression("label");
         }
         // Use the "clientId" if there was no label specified.
         if (o == null) {
@@ -290,7 +290,7 @@ public class MessageFactory extends Object
             Locale locale,
             String messageFormat,
             String detailMessageFormat,
-            // array of parameters, both Strings and ValueBindings
+            // array of parameters, both Strings and ValueExpressions
             Object[] parameters) {
 
             super(messageFormat, detailMessageFormat);
@@ -318,11 +318,11 @@ public class MessageFactory extends Object
             if (parameters != null) {
                 for (int i = 0; i < parameters.length; i++) {
                     Object o = parameters[i];
-                    if (o instanceof ValueBinding) {
+                    if (o instanceof ValueExpression) {
                         if (context == null) {
                             context = FacesContext.getCurrentInstance();
                         }
-                        o = ((ValueBinding) o).getValue(context);
+                        o = ((ValueExpression) o).getValue(context.getELContext());
                     }
                     // to avoid 'null' appearing in message
                     if (o == null) {
