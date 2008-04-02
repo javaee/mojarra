@@ -185,7 +185,7 @@
                                 <td valign="top"> <font face="Arial, Helvetica">
       <h:input_text id="zip"  
 			valueRef="CustomerBean.zip"
-                        size="5">
+                        size="10">
            <f:validate_required />
           <cd:format_validator formatPatterns="99999|99999-9999|### ###"/> 
        </h:input_text>
