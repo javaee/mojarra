@@ -383,19 +383,7 @@
                          includes="javax/faces/FactoryFinderTestCase2.class"/>
             </tests>
         </jsf.junit>
-    </target>
-
-    <target name="test.ConfigFile" depends="build.test.dir">
-        <echo message="Running Configuration File tests ..."/>
-        <jsf.junit test-results-dir="${api.test.results.dir}"
-                   classpath-refid="test.classpath"
-                   assert.classes="${assertion.classes}">
-            <tests>
-                <fileset dir="${build.test.dir}"
-                         includes="javax/faces/webapp/ConfigFileTestCase.class"/>
-            </tests>
-        </jsf.junit>
-    </target>
+    </target>   
 
     <target name="test.PhaseId" depends="build.test.dir">
         <echo message="Running PhaseId tests ..."/>
@@ -463,8 +451,11 @@
         <jsf.junit test-results-dir="${api.test.results.dir}"
                    classpath-refid="test.classpath"
                    assert.classes="${assertion.classes}">
+            <custom-sysproperties>
+                <sysproperty key="base.dir" value="${basedir}/build"/>
+            </custom-sysproperties>
             <tests>
-                <fileset dir="${build.test.dir}"
+            <fileset dir="${build.test.dir}"
                          includes="javax/faces/webapp/*TestCase.class"
                          excludes="javax/faces/webapp/UIComponentTagTestCase.class"/>
             </tests>

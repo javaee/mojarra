@@ -1,5 +1,5 @@
 /*
- * $Id: ToolsUtil.java,v 1.5 2005/12/14 22:28:03 rlubke Exp $
+ * $Id: ToolsUtil.java,v 1.6 2005/12/15 00:02:37 rlubke Exp $
  */
 
 /*
@@ -48,7 +48,10 @@ public class ToolsUtil {
     
     public static final String RULES_LOGGER = ".config.rules";
     
-    public static final String GENERATE_LOGGER = ".config.generate";      
+    public static final String GENERATE_LOGGER = ".config.generate";   
+    
+    public static final String FACES_LOG_STRINGS = 
+            "com.sun.faces.LogStrings";
 
     public static final String TOOLS_LOG_STRINGS = 
             "com.sun.faces.ToolsLogStrings";
@@ -111,7 +114,7 @@ public class ToolsUtil {
     } // END getMessage
     
     public static Logger getLogger( String loggerName ) {
-        return Logger.getLogger(loggerName, TOOLS_LOG_STRINGS );
+        return Logger.getLogger(loggerName, FACES_LOG_STRINGS );
     }
     
 
