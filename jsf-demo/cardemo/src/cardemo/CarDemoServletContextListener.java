@@ -1,5 +1,5 @@
 /*
- * $Id: CarDemoServletContextListener.java,v 1.7 2003/03/27 19:43:27 jvisvanathan Exp $
+ * $Id: CarDemoServletContextListener.java,v 1.8 2003/04/08 00:40:51 jvisvanathan Exp $
  */
 /*
  * Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
@@ -50,7 +50,6 @@ import javax.servlet.ServletContextEvent;
 import javax.faces.FactoryFinder;
 import javax.faces.lifecycle.LifecycleFactory;
 import javax.faces.lifecycle.Lifecycle;
-import javax.faces.lifecycle.ApplicationHandler;
 import javax.faces.convert.ConverterFactory;
 
 import com.sun.faces.context.MessageResourcesImpl;
@@ -122,13 +121,13 @@ public class CarDemoServletContextListener implements ServletContextListener
 		rkFactory.getRenderKit(RenderKitFactory.DEFAULT_RENDER_KIT);
 	defaultRenderKit.addRenderer("Area", new AreaRenderer());
 
-        ApplicationHandler handler = new CarDemoApplicationHandler();
         LifecycleFactory factory = (LifecycleFactory)
             FactoryFinder.getFactory(FactoryFinder.LIFECYCLE_FACTORY);
         Lifecycle lifecycle =
             factory.getLifecycle(LifecycleFactory.DEFAULT_LIFECYCLE); 
         // PENDING will be fixed when required RI changes for ApplicationImpl
         // is done.
+        // ApplicationHandler handler = new CarDemoApplicationHandler();
         // lifecycle.setApplicationHandler(handler); 
 
         // register CreditCardConverter

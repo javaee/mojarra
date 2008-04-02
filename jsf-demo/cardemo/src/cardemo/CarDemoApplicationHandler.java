@@ -1,5 +1,5 @@
 /*
- * $Id: CarDemoApplicationHandler.java,v 1.8 2003/03/27 19:43:27 jvisvanathan Exp $
+ * $Id: CarDemoApplicationHandler.java,v 1.9 2003/04/08 00:40:51 jvisvanathan Exp $
  */
 /*
  * Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
@@ -50,10 +50,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.tree.Tree;
 import javax.faces.tree.TreeFactory;
 import javax.faces.FactoryFinder;
-import javax.faces.lifecycle.ApplicationHandler;
-import javax.faces.event.FormEvent;
 import javax.faces.event.FacesEvent;
-import javax.faces.event.CommandEvent;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -72,12 +69,13 @@ import org.mozilla.util.ParameterCheck;
 import com.sun.faces.RIConstants;
 import com.sun.faces.util.Util;
 
-public class CarDemoApplicationHandler implements ApplicationHandler{
+public class CarDemoApplicationHandler  {
     
     public boolean processEvent(FacesContext context, FacesEvent facesEvent) {
         
-        
-        if (!(facesEvent instanceof FormEvent) &&
+      // PENDING (visvan) commented out to get a clean compile. Will be
+      // fixed as part of NavigationHandler changes.  
+      /*  if (!(facesEvent instanceof FormEvent) &&
         !(facesEvent instanceof CommandEvent)) {
             return true;
         }
@@ -157,8 +155,8 @@ public class CarDemoApplicationHandler implements ApplicationHandler{
             FactoryFinder.getFactory(FactoryFinder.TREE_FACTORY);
             Assert.assert_it(null != treeFactory);
             context.setTree(treeFactory.getTree(context,treeId));
-        }
+        } */
         
-        return returnValue;
+        return false;
     }
 }

@@ -1,5 +1,5 @@
 /*
- * $Id: ComponentsSetupListener.java,v 1.9 2003/02/21 23:44:54 ofung Exp $
+ * $Id: ComponentsSetupListener.java,v 1.10 2003/04/08 00:40:54 jvisvanathan Exp $
  */
 /*
  * Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
@@ -46,7 +46,6 @@ import javax.servlet.ServletContextEvent;
 import javax.faces.FactoryFinder;
 import javax.faces.lifecycle.LifecycleFactory;
 import javax.faces.lifecycle.Lifecycle;
-import javax.faces.lifecycle.ApplicationHandler;
 
 import javax.faces.FactoryFinder;
 import javax.faces.render.RenderKit;

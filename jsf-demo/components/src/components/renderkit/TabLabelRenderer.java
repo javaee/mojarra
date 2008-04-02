@@ -1,5 +1,5 @@
 /*
- * $Id: TabLabelRenderer.java,v 1.5 2003/03/27 19:43:35 jvisvanathan Exp $
+ * $Id: TabLabelRenderer.java,v 1.6 2003/04/08 00:40:55 jvisvanathan Exp $
  */
 
 /*
@@ -56,7 +56,6 @@ import javax.faces.component.UIForm;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.event.FacesEvent;
-import javax.faces.event.FormEvent;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -73,7 +72,7 @@ import org.apache.commons.beanutils.ConversionException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TabLabelRenderer.java,v 1.5 2003/03/27 19:43:35 jvisvanathan Exp $
+ * @version $Id: TabLabelRenderer.java,v 1.6 2003/04/08 00:40:55 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo

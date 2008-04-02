@@ -58,6 +58,7 @@
   <!-- Required jobs for making this self-contained -->
   <property name="servlet.jar"
             value="${tomcat.home}/common/lib/servlet.jar"/>
+  <property name="catalina-ant.jar" value="${tomcat.home}/server/lib/catalina-ant.jar"/>
   <property name="jsp.jar" value="" />
   <property name="commons-beanutils.jar"
             value="${jsf-demo.lib}/commons-beanutils.jar"/>
@@ -93,6 +94,10 @@
     <pathelement location="${build}/WEB-INF/classes"/>
     <pathelement location="${servlet.jar}"/>
     <pathelement location="${jsp.jar}" />
+  </path>
+
+  <path id="catalina-ant.classpath">
+    <pathelement location="${catalina-ant.jar}"/>
   </path>
 
   <target name="clean" >
@@ -179,10 +184,18 @@
     <copy todir="${build}/WEB-INF/lib" file="${demo-components.jar}"/>
   </target>
   
-  <taskdef name="list" classname="org.apache.catalina.ant.ListTask"/>	
-  <taskdef name="install" classname="org.apache.catalina.ant.InstallTask"/>
-  <taskdef name="reload" classname="org.apache.catalina.ant.ReloadTask"/>
-  <taskdef name="remove" classname="org.apache.catalina.ant.RemoveTask"/>	
+  <taskdef  name="install"  classname="org.apache.catalina.ant.InstallTask">
+      <classpath refid="catalina-ant.classpath" />
+  </taskdef>
+  <taskdef  name="list"     classname="org.apache.catalina.ant.ListTask">
+      <classpath refid="catalina-ant.classpath" />
+  </taskdef>
+  <taskdef  name="reload"   classname="org.apache.catalina.ant.ReloadTask">
+      <classpath refid="catalina-ant.classpath" />
+  </taskdef>
+  <taskdef  name="remove"   classname="org.apache.catalina.ant.RemoveTask">
+      <classpath refid="catalina-ant.classpath" />
+  </taskdef>
 
   <!-- Executable Targets -->
 
