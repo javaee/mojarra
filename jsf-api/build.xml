@@ -618,15 +618,19 @@
         <!-- Create the binary distribution -->
         <zip destfile="${dist.dir}/${name}-${impl.version}.zip">
             <zipfileset dir="${build.dir}"
-                        includes="lib/** javadocs/**"
+                        includes="lib/**"
                         prefix="${name}-${impl.version}"/>
         </zip>
 
         <!-- Create the javadocs distribution -->
         <zip destfile="${dist.dir}/${name}-javadocs-${impl.version}.zip">
             <zipfileset dir="${build.dir}"
-                        includes="javadocs/** renderkitdocs/**"
+                        includes="javadocs/**"
                         prefix="${name}-${impl.version}"/>
+            <zipfileset dir="${build.dir}/generate"
+                        includes="facesdoc/**"
+                        prefix="${name}-${impl.version}"/>
+
         </zip>
 
 

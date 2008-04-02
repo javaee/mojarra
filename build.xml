@@ -36,6 +36,7 @@
     <property environment="myenv"/>
     <import file="${jsf.build.home}/common/ant/common.xml"/>
     <property name="tasks.home" value="${myenv.TASKS_HOME}"/>
+    <property name="dist.dir" value="${basedir}/dist"/>
 
 
     <property name="LICENSEFILE"
@@ -62,18 +63,12 @@
 
     <target name="clean"
             description="Clean build and distribution directories">
-        <delete file="${basedir}/javaserverfaces_binary.zip"/>
-        <delete file="${basedir}/javaserverfaces_binary.class"/>
-        <delete file="${basedir}/javaserverfaces_source.zip"/>
-        <delete file="${basedir}/javaserverfaces_source.class"/>
         <delete file="jsf-portlet.zip"/>
         <delete file="jsf-portlet_source.zip"/>
-        <delete file="javaserverfaces_portlet.class"/>
-        <delete file="javaserverfaces_portlet_source.class"/>
         <delete dir="${portlet.dir}/dist"/>
         <delete file="jsf-samples.zip"/>
-        <delete file="${basedir}/javaserverfaces_samples.class"/>
         <delete dir="${basedir}/build"/>
+        <delete dir="${dist.dir}"/>
         <call.modules target="clean"/>        
     </target>  
     
@@ -88,7 +83,7 @@
 
     <!-- Create the source distribution -->
     <target name="jsf.source">
-        <zip destfile="${basedir}/javaserverfaces_source.zip">
+        <zip destfile="${dist.dir}/javaserverfaces_source.zip">
 
             <zipfileset dir="${basedir}"
                         excludes="**/CVS/**, **/build/**, **/dist/**, **/www/**, **/jsf-portlet/**,
@@ -97,11 +92,10 @@
         </zip>
     </target>
 
-
-    <target name="build.java.net" 
-            description="Build distribution files"
-            depends="main">
+   <target name="prepare.build.java.net" description="Build distribution files"
+           depends="main">
         
+        <mkdir dir="${dist.dir}" />
 
         <ant dir="${demo.dir}" 
              antfile="build.xml"
@@ -109,21 +103,39 @@
              inheritAll="false"/>
 
         <copy file="${demo.dir}/jsf-${impl.version}.zip"
-              tofile="${basedir}/javaserverfaces_binary.zip"/>
+              tofile="${dist.dir}/javaserverfaces_binary.zip"/>
 
         <delete file="${demo.dir}/jsf-${impl.version}.zip"/>
 
         <ant target="jsf.source"/>
 
-        <installerBuilder
-              classFile="javaserverfaces_binary.class"
-              licenseFile="${LICENSEFILE}"
-              zipFile="${basedir}/javaserverfaces_binary.zip"/>
+   </target>
+
+   <target name="build.javadocs.dist" depends="prepare.build.java.net">
+
+        <!-- Create the javadocs distribution -->
+        <zip destfile="${dist.dir}/jsf-javadocs-${impl.version}.zip">
+            <zipfileset dir="${demo.dir}/dist"
+                        includes="javadocs/**,renderkitdocs/**,tlddocs/**"
+                        prefix="jsf-${impl.version}"/>
+        </zip>
+
+  </target>
+
+    <target name="build.java.net" 
+            depends="prepare.build.java.net">
 
         <installerBuilder
-              classFile="javaserverfaces_source.class"
+              classFile="${dist.dir}/javaserverfaces_binary.class"
               licenseFile="${LICENSEFILE}"
-              zipFile="${basedir}/javaserverfaces_source.zip"/>
+              zipFile="${dist.dir}/javaserverfaces_binary.zip"/>
+
+        <installerBuilder
+              classFile="${dist.dir}/javaserverfaces_source.class"
+              licenseFile="${LICENSEFILE}"
+              zipFile="${dist.dir}/javaserverfaces_source.zip">
+        </installerBuilder>
+
     </target>
 
     <!-- 
@@ -139,8 +151,8 @@
 
         <delete file="jsf-portlet.zip"/>
         <delete file="jsf-portlet_source.zip"/>
-        <delete file="javaserverfaces_portlet.class"/>
-        <delete file="javaserverfaces_portlet_source.class"/>
+        <delete file="${dist.dir}/javaserverfaces_portlet.class"/>
+        <delete file="${dist.dir}/javaserverfaces_portlet_source.class"/>
         <delete dir="${portlet.dir}/dist"/>
         <delete dir="${portlet.dir}/build"/>
 
@@ -151,7 +163,7 @@
         </zip>
 
         <installerBuilder
-              classFile="javaserverfaces_portlet_source.class"
+              classFile="${dist.dir}/javaserverfaces_portlet_source.class"
               licenseFile="${LICENSEFILE}"
               zipFile="${basedir}/jsf-portlet_source.zip"/>
 
@@ -181,7 +193,7 @@
         </zip>
 
         <installerBuilder
-              classFile="javaserverfaces_portlet.class"
+              classFile="${dist.dir}/javaserverfaces_portlet.class"
               licenseFile="${LICENSEFILE}"
               zipFile="${basedir}/jsf-portlet.zip"/>
 
@@ -289,7 +301,7 @@
         <delete dir="samples"/>
 
         <installerBuilder
-              classFile="javaserverfaces_samples.class"
+              classFile="${dist.dir}/javaserverfaces_samples.class"
               licenseFile="${LICENSEFILE}"
               zipFile="${basedir}/jsf-samples.zip"/>
     </target>
