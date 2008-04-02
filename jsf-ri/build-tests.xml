@@ -84,7 +84,7 @@
       <pathelement location="${cactus.jar}"/>
       <pathelement location="${httpclient.jar}"/>
       <pathelement location="${aspectjrt.jar}"/>
-      <pathelement location="${jsf-api.jar}"/>
+      <pathelement location="${jsf.api.jar}"/>
       <pathelement location="${commons-beanutils.jar}"/>
       <pathelement location="${commons-collections.jar}"/>
       <pathelement location="${commons-digester.jar}"/>
@@ -166,7 +166,7 @@
         <copy file="${commons-collections.jar}" todir="${out.test.dir}/lib"/>
         <copy file="${commons-digester.jar}" todir="${out.test.dir}/lib"/>
         <copy file="${commons-logging.jar}" todir="${out.test.dir}/lib"/>
-        <copy file="${jsf-api.jar}" todir="${out.test.dir}/lib"/>
+        <copy file="${jsf.api.jar}" todir="${out.test.dir}/lib"/>
         <copy file="${jstl.jar}" todir="${out.test.dir}/lib"/>
         <copy file="${standard.jar}" todir="${out.test.dir}/lib"/>
         <copy file="${basedir}/build/lib/jsf-ri.jar" todir="${out.test.dir}/lib"/>
