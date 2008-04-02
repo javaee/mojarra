@@ -61,8 +61,8 @@
     <zip     destfile="${basedir}/javaserverfaces_source.zip">
     
       <zipfileset dir="${basedir}"  
-          excludes="**/CVS/**, **/build/**, **/dist/**"
-          prefix="javaserverfaces_sources"/>
+          excludes="**/CVS/**, **/build/**, **/dist/**, **/www/**, **/jsf-portlet/**,
+          **/jsf-demo/**" prefix="javaserverfaces_sources"/>
          
     </zip>
   </target>
@@ -116,10 +116,22 @@
     </taskdef>
   
     <delete file="jsf-portlet.zip" />
-    <delete file="jsf-portlet.class"/>
+    <delete file="jsf-portlet_source.zip" />
+    <delete file="javaserverfaces_portlet.class"/>
     <delete dir="${jsf-portlet.home}/dist" />
     <delete dir="${jsf-portlet.home}/build" />
     
+    <zip     destfile="${basedir}/jsf-portlet_source.zip">
+        <zipfileset dir="${basedir}/jsf-portlet"  
+          excludes="**/CVS/**, **/build/**, **/dist/**"
+          prefix="jsf-portlet_sources"/>
+    </zip>
+     
+     <installerBuilder
+          classFile="javaserverfaces_portlet_source.class"
+          licenseFile="${basedir}/jrl_1_3.txt"
+          zipFile="${basedir}/jsf-portlet_source.zip" />
+             
     <ant dir="${jsf-portlet.home}" inheritall="false" target="main"/>
     <copy file="${jsf-portlet.home}/LICENSE.txt"
          todir="${jsf-portlet.home}/dist/jsf-portlet" />
