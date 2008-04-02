@@ -225,19 +225,15 @@
     <!-- base target of sorts to avoid duplication -->     
     <target name="test.invoker">                       
         <!-- remove the application if it already exists -->
-<!--
         <antcall target="safe.remove">
             <param name="context.path" value="${context.path}"/>
         </antcall>
--->
         
         <!-- install the application -->
-<!--
         <antcall target="install">
             <param name="context.path" value="${context.path}"/>
             <param name="demo.path" value="${demo.path}"/>
         </antcall>  
--->
         
         <!-- run the tests for the application -->
         <antcall target="run.tests">
@@ -259,10 +255,8 @@
 <!--        <antcall target="run.mapping-extension.tests"/>   
             <antcall target="run.mapping-prefix.tests"/>    -->
         <antcall target="run.cardemo.tests"/>    
-<!--
         <antcall target="run.guessNumber.tests"/>    
         <antcall target="run.components.tests"/>    
--->
     </target>
 
     <!-- Unit test configuration for mapping tests -->            
@@ -300,7 +294,7 @@
         
         <antcall target="test.invoker">
             <param name="context.path" value="${cardemo.context.path}"/>
-            <param name="demo.path" value="${basedir}/cardemo/build/jsf-cardemo"/>
+            <param name="demo.path" value="${basedir}/carstore/build/jsf-cardemo"/>
             <param name="demo.name" value="cardemo"/>                        
         </antcall> 
         <touch file="${build}/cardemo.last-testrun"/>

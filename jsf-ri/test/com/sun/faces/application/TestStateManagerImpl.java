@@ -1,5 +1,5 @@
 /*
- * $Id: TestStateManagerImpl.java,v 1.5 2004/01/27 21:05:51 eburns Exp $
+ * $Id: TestStateManagerImpl.java,v 1.6 2004/01/29 03:43:38 eburns Exp $
  */
 
 /*
@@ -51,7 +51,7 @@ public class TestStateManagerImpl extends ServletFacesTestCase {
     // Verify saveSerializedView() throws IllegalStateException
     // if duplicate component id's are detected on non-transient 
     // components.
-    public void testDuplicateIdDetection() throws Exception {
+    public void testDuplicateIdDetectionServer() throws Exception {
 
         UIViewRoot root = null;
         
@@ -101,7 +101,7 @@ public class TestStateManagerImpl extends ServletFacesTestCase {
         
         context.setViewRoot(root);
         
-        StateManagerImpl stateManager = new StateManagerImpl();
+        StateManagerImpl stateManager = (StateManagerImpl) context.getApplication().getStateManager();
         
         boolean exceptionThrown = false;
         try {
@@ -195,6 +195,17 @@ public class TestStateManagerImpl extends ServletFacesTestCase {
             exceptionThrown = true;
         }
         assertTrue(exceptionThrown);
+    }
+
+    public void testDuplicateIdDetectionClient() throws Exception {
+	StateManagerImpl wrapper = 
+	    new StateManagerImpl() {
+		public boolean isSavingStateInClient(FacesContext context) {
+		    return true;
+		}
+	    };
+	getFacesContext().getApplication().setStateManager(wrapper);
+	testDuplicateIdDetectionServer();
     }
     
     public void testRemoveViewFromSession() {

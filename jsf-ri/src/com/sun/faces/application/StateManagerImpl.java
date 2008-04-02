@@ -1,5 +1,5 @@
 /* 
- * $Id: StateManagerImpl.java,v 1.14 2004/01/27 21:04:02 eburns Exp $ 
+ * $Id: StateManagerImpl.java,v 1.15 2004/01/29 03:43:38 eburns Exp $ 
  */ 
 
 
@@ -36,7 +36,7 @@ import org.apache.commons.logging.LogFactory;
 /** 
  * <B>StateManagerImpl</B> is the default implementation class for
  * StateManager.
- * @version $Id: StateManagerImpl.java,v 1.14 2004/01/27 21:04:02 eburns Exp $ 
+ * @version $Id: StateManagerImpl.java,v 1.15 2004/01/29 03:43:38 eburns Exp $ 
  * 
  * @see javax.faces.application.ViewHandler 
  * 
@@ -166,7 +166,7 @@ public class StateManagerImpl extends StateManager  {
         UIComponent viewRoot = context.getViewRoot();
         if (!(viewRoot.isTransient())) {
             structRoot = new TreeStructure(viewRoot);
-            buildTreeStructureToSave(context, viewRoot, structRoot);
+            buildTreeStructureToSave(context, viewRoot, structRoot, null);
         }
         return structRoot;
     }
@@ -306,12 +306,15 @@ public class StateManagerImpl extends StateManager  {
      */
     public void  buildTreeStructureToSave(FacesContext context,
 					  UIComponent component, 
-            TreeStructure treeStructure) {
+					  TreeStructure treeStructure,
+					  Set componentIds) {
         // traverse the component hierarchy and save the tree structure 
         // information for every component.
         
         // Set for catching duplicate IDs
-        Set componentIds = new HashSet();
+	if (null == componentIds) {
+	    componentIds = new HashSet();
+	}
         
         // save the structure info of the children of the component 
         // being processed.
@@ -337,7 +340,8 @@ public class StateManagerImpl extends StateManager  {
             if (!kid.isTransient()) {                                               
                 TreeStructure treeStructureChild = new TreeStructure(kid);
                 treeStructure.addChild(treeStructureChild);
-                buildTreeStructureToSave(context, kid, treeStructureChild);
+                buildTreeStructureToSave(context, kid, treeStructureChild, 
+					 componentIds);
             }
         }
 
@@ -369,7 +373,8 @@ public class StateManagerImpl extends StateManager  {
                 treeStructure.addFacet(facetName, treeStructureFacet);
                 // process children of facet.
                 buildTreeStructureToSave(context, 
-					 facetComponent, treeStructureFacet);
+					 facetComponent, treeStructureFacet, 
+					 componentIds);
             }
         }
     }
