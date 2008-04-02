@@ -1,5 +1,5 @@
 /*
- * $Id: TestReconstituteComponentTreePhase.java,v 1.4 2003/05/14 20:00:09 rkitain Exp $
+ * $Id: TestReconstituteComponentTreePhase.java,v 1.5 2003/05/21 18:46:29 rkitain Exp $
  */
 
 /*
@@ -47,7 +47,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestReconstituteComponentTreePhase.java,v 1.4 2003/05/14 20:00:09 rkitain Exp $
+ * @version $Id: TestReconstituteComponentTreePhase.java,v 1.5 2003/05/21 18:46:29 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -220,6 +220,8 @@ public void testRegisterListeners() {
             TEST_URI);
     assertTrue(requestTree != null);
 
+    getFacesContext().setTree(requestTree);
+
     HttpSession session = (HttpSession) 
         getFacesContext().getExternalContext().getSession(false);
     session.setAttribute(RIConstants.FACES_TREE, requestTree);
@@ -254,6 +256,8 @@ public void testRegisterListeners() {
     requestTree = new SimpleTreeImpl(getFacesContext(), root, 
             TEST_URI);
     assertTrue(requestTree != null);
+
+    getFacesContext().setTree(requestTree);
 
     session = (HttpSession) 
         getFacesContext().getExternalContext().getSession(false);
