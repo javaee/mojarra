@@ -157,6 +157,7 @@
                    debug="${compile.debug}"
                    deprecation="${compile.deprecation}"
                    source="1.5"
+                   target="1.5"
                    includes="@{includes}"
                    excludes="@{excludes}">
                 <classpath/>
