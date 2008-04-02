@@ -8,7 +8,7 @@
 
     <h1>UIGraphic</h1>
 
-    <h3>$Id: UIGraphic.jsp,v 1.6 2002/10/04 23:44:14 eburns Exp $</h3>
+    <h3>$Id: UIGraphic.jsp,v 1.7 2002/11/01 00:35:49 jvisvanathan Exp $</h3>
 
     <%@ taglib uri="http://java.sun.com/jsf/core/" prefix="f" %>
     <%@ taglib uri="http://java.sun.com/jstl/fmt" prefix="fmt" %>
@@ -21,7 +21,7 @@
                         value="duke.gif"/> 
      </jsp:useBean>
 
-     <f:usefaces>  
+     <f:use_faces>  
 
        <p>Form is rendered after this.</p>
      
@@ -52,7 +52,7 @@
 
        </h:form>
 
-     </f:usefaces>   
+     </f:use_faces>   
 
 
   </body>

@@ -77,7 +77,7 @@
   </tag>
 
   <tag>
-    <name>usefaces</name>
+    <name>use_faces</name>
     <tagclass>com.sun.faces.taglib.jsf_core.UseFacesTag</tagclass>
     <bodycontent>JSP</bodycontent>
   </tag>

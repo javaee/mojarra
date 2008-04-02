@@ -33,7 +33,7 @@
     <BODY>
         <H3> JSF Basic Components Test Page </H3>
 
-<f:usefaces>
+<f:use_faces>
 <h:form formName="basicForm" id="basicForm">
 
   <TABLE BORDER="1">
@@ -439,13 +439,13 @@
 
 <h:input_hidden id = "basicHidden" converter="number"
                   value="48%" >
-                     <f:attribute name="numberStyle" value="percent "/>
+                     <f:attribute name="numberStyle" value="percent" />
               </h:input_hidden>
 
   <TABLE>
 
 </h:form>
-</f:usefaces>
+</f:use_faces>
 
     </BODY>
 </HTML>

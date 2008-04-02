@@ -14,13 +14,13 @@
     <H3> JSF Basic Components Test Page </H3>
     <hr>
 
-      <f:usefaces>
+      <f:use_faces>
         <h:form id='basicForm' formName='basicForm'>
 
             <h:output_text id='hello_label' text='Login Failed' />
              <P></P>
 
         </h:form>
-       </f:usefaces>
+       </f:use_faces>
 
 </HTML>

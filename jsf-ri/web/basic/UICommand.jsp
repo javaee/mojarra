@@ -8,7 +8,7 @@
 
     <h1>UICommand</h1>
 
-    <h3>$Id: UICommand.jsp,v 1.5 2002/10/03 18:13:28 rkitain Exp $</h3>
+    <h3>$Id: UICommand.jsp,v 1.6 2002/11/01 00:35:49 jvisvanathan Exp $</h3>
 
     <%@ taglib uri="http://java.sun.com/jsf/core/" prefix="f" %>
     <%@ taglib uri="http://java.sun.com/jstl/fmt" prefix="fmt" %>
@@ -17,7 +17,7 @@
      <fmt:setBundle basename="basic.Resources" scope="session" 
                     var="basicBundle"/>
 
-     <f:usefaces>  
+     <f:use_faces>  
 
        <p>Form is rendered after this.</p>
      
@@ -48,7 +48,7 @@
 
        </h:form>
 
-     </f:usefaces>   
+     </f:use_faces>   
 
 
   </body>

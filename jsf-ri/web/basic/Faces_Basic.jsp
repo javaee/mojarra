@@ -21,7 +21,7 @@
 	<jsp:useBean id="LoginBean" class="basic.LoginBean" scope="session" />
 
 
-       <f:usefaces>  
+       <f:use_faces>  
         <h:form id="basicForm" formName="basicForm" >
 
             <table> 
@@ -413,14 +413,13 @@
                 <h:selectitem itemValue="9" itemLabel="Gordie Howe" /> 
                 <h:selectitem itemValue="2" itemLabel="Brad Park" /> 
             </h:selectone_menu> </TD>
-        <TD> <h:input_hidden id = "basicHidden" converter="number"
-                  value="48%" >
-                     <f:attribute name="numberStyle" value="percent "/>
+        <TD> <h:input_hidden id="basicHidden" converter="number" value="48%">
+                     <f:attribute name="numberStyle" value="percent" />
               </h:input_hidden> </TD>
       </TR>
 
     </TABLE>
    </h:form>
-   </f:usefaces>
+   </f:use_faces>
 
 </HTML>

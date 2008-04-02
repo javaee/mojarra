@@ -8,7 +8,7 @@
 
     <h1>UIOutput</h1>
 
-    <h3>$Id: UIOutput.jsp,v 1.4 2002/10/03 18:13:28 rkitain Exp $</h3>
+    <h3>$Id: UIOutput.jsp,v 1.5 2002/11/01 00:35:50 jvisvanathan Exp $</h3>
 
     <%@ taglib uri="http://java.sun.com/jsf/core/" prefix="f" %>
     <%@ taglib uri="http://java.sun.com/jstl/fmt" prefix="fmt" %>
@@ -19,7 +19,7 @@
 
      <jsp:useBean id="LoginBean" class="basic.LoginBean" scope="session" />
 
-     <f:usefaces>  
+     <f:use_faces>  
 
        <p>Form is rendered after this.</p>
      
@@ -70,7 +70,7 @@
 
        </h:form>
 
-     </f:usefaces>   
+     </f:use_faces>   
 
 
   </body>

@@ -14,7 +14,7 @@
       <jsp:useBean id="LoginBean" class="basic.LoginBean" scope="session" />
 
 
-      <f:usefaces>
+      <f:use_faces>
         <h:form id="welcomeForm" formName="welcomeForm" >
 
              <p>
@@ -32,5 +32,5 @@
              </h:command_button>
 </P>
       </h:form>
-     </f:usefaces>
+     </f:use_faces>
 </HTML>

@@ -20,7 +20,7 @@
 
        <jsp:useBean id="LoginBean" class="basic.LoginBean" scope="session" />
 
-       <f:usefaces>  
+       <f:use_faces>  
         <h:form id="numberForm" formName="numberForm" >
 
             <table>
@@ -135,6 +135,6 @@
           </table>
 
         </h:form>
-       </f:usefaces>
+       </f:use_faces>
 
 </HTML>

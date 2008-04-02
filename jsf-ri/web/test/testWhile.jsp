@@ -16,11 +16,11 @@
 the tree navigation mechanism.  Test using getNextStart() inside while
 loop.</P>
 
-  <f:usefaces>
+  <f:use_faces>
   <h:form id="1" >
 
             <h:output_text id="5"  text="5" />
   </h:form>
-</f:usefaces>
+</f:use_faces>
 
 </HTML>

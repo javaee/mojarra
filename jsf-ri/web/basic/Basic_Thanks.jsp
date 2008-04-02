@@ -12,7 +12,7 @@
     <H3> Basic Components Thank You Page </H3>
     <hr>
 
-       <f:usefaces>
+       <f:use_faces>
         <h:form id="basicForm" formName="basicForm" >
 
             <table> 
@@ -31,5 +31,5 @@
 
 
         </h:form>
-     </f:usefaces>
+     </f:use_faces>
 </HTML>

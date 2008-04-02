@@ -17,7 +17,7 @@
 	    scope="session" var="basicBundle"/>
 
        <jsp:useBean id="LoginBean" class="basic.LoginBean" scope="session" />
-       <f:usefaces>  
+       <f:use_faces>  
         <h:form id="converterForm" formName="converterForm" >
 
             <h4><i> Store Values To Model:</i> <h4>
@@ -224,5 +224,5 @@
             </tr>
           </table>
         </h:form>
-       </f:usefaces>
+       </f:use_faces>
 </HTML>
