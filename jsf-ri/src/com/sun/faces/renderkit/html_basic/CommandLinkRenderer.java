@@ -1,5 +1,5 @@
 /*
- * $Id: CommandLinkRenderer.java,v 1.20 2004/05/12 01:32:57 jvisvanathan Exp $
+ * $Id: CommandLinkRenderer.java,v 1.21 2004/05/12 04:35:05 eburns Exp $
  */
 
 /*
@@ -12,12 +12,15 @@
 package com.sun.faces.renderkit.html_basic;
 
 import com.sun.faces.util.Util;
+import com.sun.faces.RIConstants;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import javax.faces.component.UICommand;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIForm;
+import javax.faces.component.UIViewRoot;
+import javax.faces.component.NamingContainer;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.event.ActionEvent;
@@ -92,17 +95,14 @@ public class CommandLinkRenderer extends HtmlBasicRenderer {
             }
             return;
         } 
-
-        // Was our command the one that caused this submission?  we don'
-        // have to worry about getting the value from request parameter
-        // because we just need to know if this command caused the
-        // submission. We can get the command name by calling
-        // currentValue. This way we can get around the IE bug.
-        String clientId = command.getClientId(context);
+	
+        String 
+	    clientId = command.getClientId(context),
+	    paramName = getHiddenFieldName(context, command);
         Map requestParameterMap = context.getExternalContext()
             .getRequestParameterMap();
-        String value = (String) requestParameterMap.get(clientId);
-        if (value == null || value.equals("")) {
+        String value = (String) requestParameterMap.get(paramName);
+        if (value == null || value.equals("") || !clientId.equals(value)) {
             return;
         }
         ActionEvent actionEvent = new ActionEvent(component);
@@ -129,6 +129,15 @@ public class CommandLinkRenderer extends HtmlBasicRenderer {
         }
         return (UIForm) parent;
     }
+
+    protected String getHiddenFieldName(FacesContext context, 
+					UICommand command) {
+	UIForm uiform = getMyForm(context, command);
+	String formClientId = uiform.getClientId(context);
+	return (formClientId + NamingContainer.SEPARATOR_CHAR + 
+		UIViewRoot.UNIQUE_ID_PREFIX + "cl");
+    }
+
 
 
     public boolean getRendersChildren() {
@@ -194,7 +203,7 @@ public class CommandLinkRenderer extends HtmlBasicRenderer {
         sb.append(formClientId);
         sb.append("'");
         sb.append("]['");
-        sb.append(clientId);
+        sb.append(getHiddenFieldName(context, command));
         sb.append("'].value='");
         sb.append(clientId);
         sb.append("';");
@@ -305,8 +314,20 @@ public class CommandLinkRenderer extends HtmlBasicRenderer {
 
         //Handle hidden fields
 
-        //hidden clientId field
-        FormRenderer.addNeededHiddenField(context, clientId);
+        //Only need one hidden field for the link itself per form.
+	if (!context.getExternalContext().getRequestMap().
+	    containsKey(RIConstants.HAS_ONE_OR_MORE_COMMAND_LINKS)) {
+	    FormRenderer.addNeededHiddenField(context, 
+					      getHiddenFieldName(context, 
+								 command));
+	    context.getExternalContext().getRequestMap().
+		put(RIConstants.HAS_ONE_OR_MORE_COMMAND_LINKS, 
+		    RIConstants.HAS_ONE_OR_MORE_COMMAND_LINKS);
+	}
+
+	// PENDING(edburns): not sure if the JSFA59 back button problem
+	// manifests itself with param children as well...
+
         // get UIParameter children...
         Param paramList[] = getParamList(context, command);
         for (int i = 0; i < paramList.length; i++) {

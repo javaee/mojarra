@@ -1,5 +1,5 @@
 /*
- * $Id: RIConstants.java,v 1.63 2004/05/04 19:55:00 rlubke Exp $
+ * $Id: RIConstants.java,v 1.64 2004/05/12 04:35:04 eburns Exp $
  */
 
 /*
@@ -94,6 +94,9 @@ public class RIConstants {
 
     public static final String ONE_TIME_INITIALIZATION_ATTR =
         FACES_PREFIX + "OneTimeInitialization";
+
+    public static final String HAS_ONE_OR_MORE_COMMAND_LINKS = FACES_PREFIX +
+	"hasOneOrMoreCommandLinks";
 
     public static final String APPLICATION = "application";
     public static final String APPLICATION_SCOPE = "applicationScope";

@@ -1,5 +1,5 @@
 /*
- * $Id: MethodRefTestCase.java,v 1.9 2004/04/26 16:37:40 jvisvanathan Exp $
+ * $Id: MethodRefTestCase.java,v 1.10 2004/05/12 04:35:06 eburns Exp $
  */
 
 /*
@@ -24,6 +24,7 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import javax.faces.component.NamingContainer;
+import javax.faces.component.UIViewRoot;
 
 
 /**
@@ -105,7 +106,8 @@ public class MethodRefTestCase extends AbstractTestCase {
         // page = (HtmlPage) link.click(); // htmlunit 1.2.3 bug
         page =
             getPage(
-                "/faces/methodref01.jsp?form:button2=form:button2&form=form");
+                "/faces/methodref01.jsp?form:" + UIViewRoot.UNIQUE_ID_PREFIX + 
+		"cl"+ "=form:button2&form=form");
         assertNotNull(page);
         form = getFormById(page, "form");
         input = (HtmlTextInput)

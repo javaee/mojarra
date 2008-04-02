@@ -15,7 +15,7 @@
 
 
   
-<form id="basicForm" method="post" action="/test/faces/TestRenderResponsePhase.jsp;jsessionid=7EEA5B242E40745D56E33063B709E93E" class="formClass" accept-charset="some-charset" accept="html,wml" enctype="application/x-www-form-urlencoded" title="basicForm">
+<form id="basicForm" method="post" action="/test/faces/TestRenderResponsePhase.jsp;jsessionid=E1F9E58967091DA82C87E62B743AA5DB" class="formClass" accept-charset="some-charset" accept="html,wml" enctype="application/x-www-form-urlencoded" title="basicForm">
 
 
   <TABLE BORDER="1">
@@ -98,7 +98,7 @@
 	      
                  
                 
-              <a id="basicForm:link" href="#" onclick="document.forms['basicForm']['basicForm:link'].value='basicForm:link'; document.forms['basicForm'].submit(); return false;" class="hyperlinkClass">link text with localized outputMessage with &euro;</a>
+              <a id="basicForm:link" href="#" onclick="document.forms['basicForm']['basicForm:_idcl'].value='basicForm:link'; document.forms['basicForm'].submit(); return false;" class="hyperlinkClass">link text with localized outputMessage with &euro;</a>
 
 	</TD>
 
@@ -108,7 +108,7 @@
 
 	<TD>
 
-	      <a id="basicForm:linkWithValue1" href="#" onclick="document.forms['basicForm']['basicForm:linkWithValue1'].value='basicForm:linkWithValue1'; document.forms['basicForm'].submit(); return false;" class="hyperlinkClass">link text</a>
+	      <a id="basicForm:linkWithValue1" href="#" onclick="document.forms['basicForm']['basicForm:_idcl'].value='basicForm:linkWithValue1'; document.forms['basicForm'].submit(); return false;" class="hyperlinkClass">link text</a>
 	</TD>
 
       </TR>
@@ -119,7 +119,7 @@
 
 	      
                   
-              <a id="basicForm:linkWithValue2" href="#" onclick="document.forms['basicForm']['basicForm:linkWithValue2'].value='basicForm:linkWithValue2'; document.forms['basicForm'].submit(); return false;" class="hyperlinkClass">link textwith some text</a>   
+              <a id="basicForm:linkWithValue2" href="#" onclick="document.forms['basicForm']['basicForm:_idcl'].value='basicForm:linkWithValue2'; document.forms['basicForm'].submit(); return false;" class="hyperlinkClass">link textwith some text</a>   
 	</TD>
 
       </TR>
@@ -130,12 +130,12 @@
 
 	      
                 
-              <a id="basicForm:imageLink" href="#" style="someStyle" onclick="document.forms['basicForm']['basicForm:imageLink'].value='basicForm:imageLink'; document.forms['basicForm'].submit(); return false;"><img src="duke.gif;jsessionid=7EEA5B242E40745D56E33063B709E93E" alt="" /></a>
+              <a id="basicForm:imageLink" href="#" style="someStyle" onclick="document.forms['basicForm']['basicForm:_idcl'].value='basicForm:imageLink'; document.forms['basicForm'].submit(); return false;"><img src="duke.gif;jsessionid=E1F9E58967091DA82C87E62B743AA5DB" alt="" /></a>
 
 	</TD>
 
         <TD> 
-            <img id="basicForm:graphicImage" src="/test/duke.gif;jsessionid=7EEA5B242E40745D56E33063B709E93E" style="someStyle" usemap="#map1" ismap="ismap" alt="" /> 
+            <img id="basicForm:graphicImage" src="/test/duke.gif;jsessionid=E1F9E58967091DA82C87E62B743AA5DB" style="someStyle" usemap="#map1" ismap="ismap" alt="" /> 
         </TD>
 
       </TR>
@@ -143,7 +143,7 @@
       <TR>
         <TD>
             
-            <a id="basicForm:commandLink" href="#" onclick="document.forms['basicForm']['basicForm:commandLink'].value='basicForm:commandLink'; document.forms['basicForm'].submit(); return false;" class="hyperlinkClass">link text</a>
+            <a id="basicForm:commandLink" href="#" onclick="document.forms['basicForm']['basicForm:_idcl'].value='basicForm:commandLink'; document.forms['basicForm'].submit(); return false;" class="hyperlinkClass">link text</a>
        </TD>
       </TR>
 
@@ -153,13 +153,13 @@
               
               
               
-            <a id="basicForm:commandParamLink" href="#" onclick="document.forms['basicForm']['basicForm:commandParamLink'].value='basicForm:commandParamLink';document.forms['basicForm']['name'].value='horwat';document.forms['basicForm']['value'].value='password'; document.forms['basicForm'].submit(); return false;" class="hyperlinkClass">link text</a>
+            <a id="basicForm:commandParamLink" href="#" onclick="document.forms['basicForm']['basicForm:_idcl'].value='basicForm:commandParamLink';document.forms['basicForm']['name'].value='horwat';document.forms['basicForm']['value'].value='password'; document.forms['basicForm'].submit(); return false;" class="hyperlinkClass">link text</a>
         </TD>
       </TR>
 
       <TR>
         <TD>
-            <a id="basicForm:hrefLink" href="#" onclick="document.forms['basicForm']['basicForm:hrefLink'].value='basicForm:hrefLink'; document.forms['basicForm'].submit(); return false;"><img src="duke.gif"></a>
+            <a id="basicForm:hrefLink" href="#" onclick="document.forms['basicForm']['basicForm:_idcl'].value='basicForm:hrefLink'; document.forms['basicForm'].submit(); return false;"><img src="duke.gif"></a>
         </TD>
       </TR>
 
@@ -169,7 +169,7 @@
               
               
               
-            <a id="basicForm:hrefParamLink" href="#" onclick="document.forms['basicForm']['basicForm:hrefParamLink'].value='basicForm:hrefParamLink';document.forms['basicForm']['name'].value='horwat';document.forms['basicForm']['value'].value='password'; document.forms['basicForm'].submit(); return false;"><img src="duke.gif;jsessionid=7EEA5B242E40745D56E33063B709E93E" alt="" /></a>
+            <a id="basicForm:hrefParamLink" href="#" onclick="document.forms['basicForm']['basicForm:_idcl'].value='basicForm:hrefParamLink';document.forms['basicForm']['name'].value='horwat';document.forms['basicForm']['value'].value='password'; document.forms['basicForm'].submit(); return false;"><img src="duke.gif;jsessionid=E1F9E58967091DA82C87E62B743AA5DB" alt="" /></a>
         </TD>
       </TR>
 
@@ -177,7 +177,7 @@
 
 	<TD>
 
-	      <a id="basicForm:outputLink" href="test.html;jsessionid=7EEA5B242E40745D56E33063B709E93E" class="hyperlinkClass">output link text</a>
+	      <a id="basicForm:outputLink" href="test.html;jsessionid=E1F9E58967091DA82C87E62B743AA5DB" class="hyperlinkClass">output link text</a>
 
 	</TD>
 
@@ -189,12 +189,12 @@
 
 	      
                 
-              <a id="basicForm:output_imageLink" href="test.html;jsessionid=7EEA5B242E40745D56E33063B709E93E" style="position: absolute; left: 96px; top: 168px"><img src="duke.gif;jsessionid=7EEA5B242E40745D56E33063B709E93E" alt="" /></a>
+              <a id="basicForm:output_imageLink" href="test.html;jsessionid=E1F9E58967091DA82C87E62B743AA5DB" style="position: absolute; left: 96px; top: 168px"><img src="duke.gif;jsessionid=E1F9E58967091DA82C87E62B743AA5DB" alt="" /></a>
 
 	</TD>
 
         <TD> 
-            <img id="basicForm:output_graphicImage" src="/test/duke.gif;jsessionid=7EEA5B242E40745D56E33063B709E93E" usemap="#map1" ismap="ismap" alt="" /> 
+            <img id="basicForm:output_graphicImage" src="/test/duke.gif;jsessionid=E1F9E58967091DA82C87E62B743AA5DB" usemap="#map1" ismap="ismap" alt="" /> 
         </TD>
 
       </TR>
@@ -202,7 +202,7 @@
       <TR>
         <TD>
             
-            <a id="basicForm:output_commandLink" href="test.html;jsessionid=7EEA5B242E40745D56E33063B709E93E" style="position: absolute; left: 96px; top: 168px" class="hyperlinkClass">link text</a>
+            <a id="basicForm:output_commandLink" href="test.html;jsessionid=E1F9E58967091DA82C87E62B743AA5DB" style="position: absolute; left: 96px; top: 168px" class="hyperlinkClass">link text</a>
        </TD>
       </TR>
 
@@ -212,13 +212,13 @@
               
               
               
-            <a id="basicForm:output_commandParamLink" href="test.html;jsessionid=7EEA5B242E40745D56E33063B709E93E?name=horwat&value=password" class="hyperlinkClass">link text</a>
+            <a id="basicForm:output_commandParamLink" href="test.html;jsessionid=E1F9E58967091DA82C87E62B743AA5DB?name=horwat&value=password" class="hyperlinkClass">link text</a>
         </TD>
       </TR>
 
       <TR>
         <TD>
-            <a id="basicForm:output_hrefLink" href="test.html;jsessionid=7EEA5B242E40745D56E33063B709E93E"><img src="duke.gif"></a>
+            <a id="basicForm:output_hrefLink" href="test.html;jsessionid=E1F9E58967091DA82C87E62B743AA5DB"><img src="duke.gif"></a>
         </TD>
       </TR>
 
@@ -228,7 +228,7 @@
               
               
               
-            <a id="basicForm:output_hrefParamLink" href="test.html;jsessionid=7EEA5B242E40745D56E33063B709E93E?name=horwat&value=password"><img src="duke.gif;jsessionid=7EEA5B242E40745D56E33063B709E93E" alt="" /></a>
+            <a id="basicForm:output_hrefParamLink" href="test.html;jsessionid=E1F9E58967091DA82C87E62B743AA5DB?name=horwat&value=password"><img src="duke.gif;jsessionid=E1F9E58967091DA82C87E62B743AA5DB" alt="" /></a>
         </TD>
       </TR>
 
@@ -841,7 +841,7 @@ see the <i>angle brackets</i> on this text
 
 <span title="output text with title">should be spanned</span>
 
-<input type="hidden" name="basicForm" value="basicForm" /><input type="hidden" name="basicForm:hrefLink" /><input type="hidden" name="basicForm:imageLink" /><input type="hidden" name="basicForm:linkWithValue1" /><input type="hidden" name="value" /><input type="hidden" name="basicForm:commandParamLink" /><input type="hidden" name="basicForm:linkWithValue2" /><input type="hidden" name="basicForm:link" /><input type="hidden" name="basicForm:hrefParamLink" /><input type="hidden" name="name" /><input type="hidden" name="basicForm:commandLink" /></form>
+<input type="hidden" name="basicForm" value="basicForm" /><input type="hidden" name="value" /><input type="hidden" name="basicForm:_idcl" /><input type="hidden" name="name" /></form>
 
 
     </BODY>

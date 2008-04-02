@@ -1093,19 +1093,44 @@
       <description><p>Render an HTML "a" anchor element that acts like a
       form submit button when clicked.</p>
 
+      <p>General Behaviour</p>
+
+      <p>Both the encode and decode behavior require the ability to get
+      the id/name for a hidden field whose value is set by the
+      JavaScript form submit.  This name must be constructed as
+      follows:</p>
+
+      <ul>
+
+      <li><p>Get the clientId for the form of which this component is a
+      child.</p></li>
+
+      <li><p>Append
+      <code>NamingContainer.SEPARATOR_CHAR</code>.</p></li>
+
+      <li><p>Append a constant string that is the same for all command
+      link components in the tree.</p></li>
+
+      </ul>
+
+      <p>In the following text, this String is called
+      hiddenFieldName.</p>
+
       <p>Decode Behavior</p>
 
       <ul>
 
       <p>Obtain the "clientId" property of the component.  Obtain the
       <code>Map</code> from the "requestParameterMap" property of the
-      <code>ExternalContext</code>.  If the <code>Map</code> contains no
-      entry, or an empty String entry, under the key that is the value
-      of the "clientId" property, return immediately.  If there is an
-      entry, create a new <code>javax.faces.event.ActionEvent</code>
-      instance around the component and call
-      <code>queueActionEvent()</code> on the component, passing the
-      event.</p>
+      <code>ExternalContext</code>.  Derive hiddenFieldName as above.
+      Get the entry in the <code>Map</code> under the key that is the
+      hiddenFieldName.  If the there is no entry, or the entry is the
+      empty String, or the entry is not equal to the value of the
+      "clientId" property, return immediately.  If there is an entry,
+      and its value is equal to the value of the "clientId" property,
+      create a new <code>javax.faces.event.ActionEvent</code> instance
+      around the component and call <code>queueActionEvent()</code> on
+      the component, passing the event.</p>
 
       </ul>
 
@@ -1119,22 +1144,28 @@
       javascript that is functionally equivalent to the following as the value 
       of the "onclick" attribute:</p>
 
-      <p><code>document.forms['CLIENT_ID']['CLIENT_ID'].value='CLIENT_ID';
+      <p><code>document.forms['CLIENT_ID']['hiddenFieldName'].value='CLIENT_ID';
       document.forms['CLIENT_ID']['PARAM1_NAME'].value='PARAM1_VALUE';
       document.forms['CLIENT_ID']['PARAM2_NAME'].value='PARAM2_VALUE';
       return false;</code></p>
 
-      <p>document.forms['CLIENT_ID'].submit()" where CLIENT_ID is the
-      clientId of the UICommand component, PARAM*_NAME and PARAM*_VALUE
-      are the names and values, respectively, of any nested UIParameter
-      children.  The name and the value must be URLEncoded.  If the
-      "styleClass" attribute is specified, render its value as the value
-      of the "class" attribute.  Render any non-UIParameter children as
-      normal inside of the "a" element.  These will appear as the link
-      text.  Allow the form renderer to output an "input" element of
-      "type" "hidden" for each of the nested UIParameter children,
-      taking the name property (but not the value) from each one in
-      turn.</p>
+      <p>document.forms['CLIENT_ID'].submit()" where hiddenFieldName is
+      as described above, CLIENT_ID is the clientId of the UICommand
+      component, PARAM*_NAME and PARAM*_VALUE are the names and values,
+      respectively, of any nested UIParameter children.  The name and
+      the value must be URLEncoded.  If the "styleClass" attribute is
+      specified, render its value as the value of the "class" attribute.
+      Render any non-UIParameter children as normal inside of the "a"
+      element.  These will appear as the link text.  Allow the form
+      renderer to output a single "input" element (for the entire page,
+      regardless of how many command link components are in the page) of
+      "type" "hidden" whose "name" is the value of hiddenFieldName, and
+      which must not have a "value" attribute.  Multiple occurrences of
+      command link components in the tree should not cause multiple
+      hiddenFieldName hidden fields.  Allow the form renderer to output
+      an "input" element of "type" "hidden" for each of the nested
+      UIParameter children, taking the name property (but not the value)
+      from each one in turn.</p>
 
       </ul>
       </description>
