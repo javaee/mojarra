@@ -1,5 +1,5 @@
 /*
- * $Id: HiddenRenderer.java,v 1.3 2003/01/24 18:23:41 rkitain Exp $
+ * $Id: HiddenRenderer.java,v 1.4 2003/01/24 21:42:41 rkitain Exp $
  */
 
 /*
@@ -40,14 +40,14 @@ import com.sun.faces.RIConstants;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HiddenRenderer.java,v 1.3 2003/01/24 18:23:41 rkitain Exp $
+ * @version $Id: HiddenRenderer.java,v 1.4 2003/01/24 21:42:41 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
  *
  */
 
-public class HiddenRenderer extends HtmlBasicRenderer {
+public class HiddenRenderer extends HtmlBasicInputRenderer {
     //
     // Protected Constants
     //
@@ -121,11 +121,6 @@ public class HiddenRenderer extends HtmlBasicRenderer {
             throw new NullPointerException(Util.getExceptionMessage(
                 Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
-    }
-
-    public void setPreviousValue(UIComponent component, Object value) {
-        // component should be UIInput only.. 
-        component.setAttribute(UIInput.PREVIOUS_VALUE, value);
     }
 
     protected void getEndTextToRender(FacesContext context, 

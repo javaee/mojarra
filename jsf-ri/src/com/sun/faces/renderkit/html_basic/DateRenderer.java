@@ -1,5 +1,5 @@
 /*
- * $Id: DateRenderer.java,v 1.13 2003/01/24 18:23:41 rkitain Exp $
+ * $Id: DateRenderer.java,v 1.14 2003/01/24 21:42:41 rkitain Exp $
  */
 
 /*
@@ -47,14 +47,14 @@ import com.sun.faces.RIConstants;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: DateRenderer.java,v 1.13 2003/01/24 18:23:41 rkitain Exp $
+ * @version $Id: DateRenderer.java,v 1.14 2003/01/24 21:42:41 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
  *
  */
 
-public class DateRenderer extends HtmlBasicRenderer {
+public class DateRenderer extends HtmlBasicInputRenderer {
     //
     // Protected Constants
     //
@@ -178,13 +178,6 @@ public class DateRenderer extends HtmlBasicRenderer {
     public void encodeChildren(FacesContext context, UIComponent component) {
         if (context == null || component == null) {
             throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
-        }
-    }
-
-    public void setPreviousValue(UIComponent component, Object value) {
-        // component could be UIInput *or* UIOutput..
-        if (component.getComponentType().equals(UIInput.TYPE)) {
-            component.setAttribute(UIInput.PREVIOUS_VALUE, value);
         }
     }
 

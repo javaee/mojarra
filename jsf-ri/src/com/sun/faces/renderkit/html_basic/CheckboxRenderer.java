@@ -1,5 +1,5 @@
 /*
- * $Id: CheckboxRenderer.java,v 1.40 2003/01/24 18:23:40 rkitain Exp $
+ * $Id: CheckboxRenderer.java,v 1.41 2003/01/24 21:42:41 rkitain Exp $
  *
  */
 
@@ -40,14 +40,14 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: CheckboxRenderer.java,v 1.40 2003/01/24 18:23:40 rkitain Exp $
+ * @version $Id: CheckboxRenderer.java,v 1.41 2003/01/24 21:42:41 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
  *
  */
 
-public class CheckboxRenderer extends HtmlBasicRenderer {
+public class CheckboxRenderer extends HtmlBasicInputRenderer {
     //
     // Protected Constants
     //
@@ -169,13 +169,6 @@ public class CheckboxRenderer extends HtmlBasicRenderer {
 
     }
 
-    public void setPreviousValue(UIComponent component, Object value) {
-        // UISelectBoolean is inherited from UIInput;
-        if (component.getComponentType().equals(UISelectBoolean.TYPE)) {
-            component.setAttribute(UIInput.PREVIOUS_VALUE, value);
-        }
-    }
-    
     protected void getEndTextToRender(FacesContext context, UIComponent component,
             String currentValue, StringBuffer buffer ) {
  

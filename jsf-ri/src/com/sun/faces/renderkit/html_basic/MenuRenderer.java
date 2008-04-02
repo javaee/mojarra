@@ -1,5 +1,5 @@
 /*
- * $Id: MenuRenderer.java,v 1.7 2003/01/24 18:23:41 rkitain Exp $
+ * $Id: MenuRenderer.java,v 1.8 2003/01/24 21:42:42 rkitain Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -33,14 +33,14 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: MenuRenderer.java,v 1.7 2003/01/24 18:23:41 rkitain Exp $
+ * @version $Id: MenuRenderer.java,v 1.8 2003/01/24 21:42:42 rkitain Exp $
  * 
  * @see Blah
  * @see Bloo
  *
  */
 
-public class MenuRenderer extends HtmlBasicRenderer {
+public class MenuRenderer extends HtmlBasicInputRenderer {
     //
     // Protected Constants
     //
@@ -129,14 +129,6 @@ public class MenuRenderer extends HtmlBasicRenderer {
             throw new NullPointerException(
                 Util.getExceptionMessage(
                     Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
-        }
-    }
-
-    public void setPreviousValue(UIComponent component, Object value) {
-        // component could be UISelectOne *or* UISelectMany
-        if (component.getComponentType().equals(UISelectOne.TYPE) ||
-            component.getComponentType().equals(UISelectMany.TYPE)) {
-           component.setAttribute(UIInput.PREVIOUS_VALUE, value);
         }
     }
 

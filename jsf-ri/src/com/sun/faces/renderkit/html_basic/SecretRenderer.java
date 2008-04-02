@@ -1,5 +1,5 @@
 /*
- * $Id: SecretRenderer.java,v 1.37 2003/01/24 18:23:41 rkitain Exp $
+ * $Id: SecretRenderer.java,v 1.38 2003/01/24 21:42:42 rkitain Exp $
  */
 
 /*
@@ -35,14 +35,14 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: SecretRenderer.java,v 1.37 2003/01/24 18:23:41 rkitain Exp $
+ * @version $Id: SecretRenderer.java,v 1.38 2003/01/24 21:42:42 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
  *
  */
 
-public class SecretRenderer extends HtmlBasicRenderer {
+public class SecretRenderer extends HtmlBasicInputRenderer {
     //
     // Protected Constants
     //
@@ -115,11 +115,6 @@ public class SecretRenderer extends HtmlBasicRenderer {
         if (context == null || component == null) {
             throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
-    }
-
-    public void setPreviousValue(UIComponent component, Object value) {
-        // component should be UIInput only..
-        component.setAttribute(UIInput.PREVIOUS_VALUE, value);
     }
 
     protected void getEndTextToRender(FacesContext context, 
