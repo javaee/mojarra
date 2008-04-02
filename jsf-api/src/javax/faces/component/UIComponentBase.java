@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.145 2007/01/29 20:15:16 rlubke Exp $
+ * $Id: UIComponentBase.java,v 1.146 2007/01/29 22:18:34 rlubke Exp $
  */
 
 /*
@@ -44,7 +44,6 @@ import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.io.IOException;
-import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.AbstractCollection;
@@ -1496,7 +1495,7 @@ public abstract class UIComponentBase extends UIComponent {
     //     has a nice side effect in state saving since we no
     //     longer need to duplicate the map, we just provide the
     //     private 'attributes' map directly to the state saving process.
-    private class AttributesMap implements Map<String, Object>, Serializable {
+    private class AttributesMap implements Map<String, Object> {
         
         private Map<String, Object> attributes;
         private UIComponent component;

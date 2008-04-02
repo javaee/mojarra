@@ -1,5 +1,5 @@
 /*
- * $Id: StateHolderSaver.java,v 1.14 2007/01/29 07:56:03 rlubke Exp $
+ * $Id: StateHolderSaver.java,v 1.15 2007/01/29 22:18:34 rlubke Exp $
  */
 
 /*
@@ -36,12 +36,12 @@ import java.io.Serializable;
 /**
  * <p>Helper class for saving and restoring attached objects.</p>
  */
-class StateHolderSaver extends Object implements Serializable {
+class StateHolderSaver implements Serializable {
 
     private static final long serialVersionUID = 6470180891722042701L;
 
     private String className = null;
-    private Object savedState = null;
+    private Serializable savedState = null;
 
     public StateHolderSaver(FacesContext context, Object toSave) {
 	className = toSave.getClass().getName();
@@ -49,13 +49,13 @@ class StateHolderSaver extends Object implements Serializable {
         if (toSave instanceof StateHolder) {
             // do not save an attached object that is marked transient.
             if (!((StateHolder)toSave).isTransient()) {
-                savedState = ((StateHolder)toSave).saveState(context);
+                savedState = (Serializable) ((StateHolder)toSave).saveState(context);
             } else {
                 className = null;
             }
         }
 	else if (toSave instanceof Serializable) {
-	    savedState = toSave;
+	    savedState = (Serializable) toSave;
 	    className = null;
 	}
     }
