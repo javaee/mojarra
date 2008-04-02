@@ -1,5 +1,5 @@
 /*
- * $Id: TestLifecycleImpl_initial.java,v 1.14 2003/08/27 18:52:05 eburns Exp $
+ * $Id: TestLifecycleImpl_initial.java,v 1.15 2003/08/28 23:29:08 eburns Exp $
  */
 
 /*
@@ -27,7 +27,7 @@ import com.sun.faces.JspFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestLifecycleImpl_initial.java,v 1.14 2003/08/27 18:52:05 eburns Exp $
+ * @version $Id: TestLifecycleImpl_initial.java,v 1.15 2003/08/28 23:29:08 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -47,7 +47,7 @@ public String getExpectedOutputFilename() {
 }
 
 public static final String ignore[] = {
-"    <form id=\"helloForm\" method=\"post\" action=\"/test/faces/greeting.jsp;jsessionid=A89063F419CA37AE37D28E1D7D462FF1\">"
+    "    <form id=\"helloForm\" method=\"post\" action=\"/test/faces/greeting.jsp;jsessionid=32BE15780E2BF96D2E146C75A9CF0440\">"
 };
 
 public String [] getLinesToIgnore() {
