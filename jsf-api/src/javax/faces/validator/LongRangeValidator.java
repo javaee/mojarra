@@ -1,5 +1,5 @@
 /*
- * $Id: LongRangeValidator.java,v 1.25 2003/10/30 20:30:18 eburns Exp $
+ * $Id: LongRangeValidator.java,v 1.26 2003/10/30 21:57:51 craigmcc Exp $
  */
 
 /*
@@ -10,6 +10,7 @@
 package javax.faces.validator;
 
 
+import javax.faces.application.FacesMessage;
 import javax.faces.component.StateHolder;
 import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
@@ -46,7 +47,7 @@ public class LongRangeValidator implements Validator, StateHolder {
 
 
     /**
-     * <p>The message identifier of the {@link Message} to be created if
+     * <p>The message identifier of the {@link FacesMessage} to be created if
      * the maximum value check fails.  The message format string for this
      * message may optionally include a <code>{0}</code> placeholder, which
      * will be replaced by the configured maximum value.</p>
@@ -56,7 +57,7 @@ public class LongRangeValidator implements Validator, StateHolder {
 
 
     /**
-     * <p>The message identifier of the {@link Message} to be created if
+     * <p>The message identifier of the {@link FacesMessage} to be created if
      * the minimum value check fails.  The message format string for this
      * message may optionally include a <code>{0}</code> placeholder, which
      * will be replaced by the configured minimum value.</p>
@@ -66,7 +67,7 @@ public class LongRangeValidator implements Validator, StateHolder {
 
 
     /**
-     * <p>The message identifier of the {@link Message} to be created if
+     * <p>The message identifier of the {@link FacesMessage} to be created if
      * the current value of this component is not of the correct type.
      */
     public static final String TYPE_MESSAGE_ID =

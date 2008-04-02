@@ -1,5 +1,5 @@
 /*
- * $Id: DoubleRangeValidator.java,v 1.30 2003/10/30 20:30:17 eburns Exp $
+ * $Id: DoubleRangeValidator.java,v 1.31 2003/10/30 21:57:51 craigmcc Exp $
  */
 
 /*
@@ -10,6 +10,7 @@
 package javax.faces.validator;
 
 
+import javax.faces.application.FacesMessage;
 import javax.faces.component.StateHolder;
 import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
@@ -46,27 +47,28 @@ public class DoubleRangeValidator implements Validator, StateHolder {
 
 
     /**
-     * <p>The message identifier of the {@link Message} to be created if
-     * the maximum value check fails.  The message format string for this
-     * message may optionally include a <code>{0}</code> placeholder, which
-     * will be replaced by the configured maximum value.</p>
+     * <p>The message identifier of the {@link FacesMessage}
+     * to be created if the maximum value check fails.  The message format
+     * string for this message may optionally include a <code>{0}</code>
+     * placeholder, which will be replaced by the configured maximum value.</p>
      */
     public static final String MAXIMUM_MESSAGE_ID =
         "javax.faces.validator.DoubleRangeValidator.MAXIMUM";
 
     /**
-     * <p>The message identifier of the {@link Message} to be created if
-     * the minimum value check fails.  The message format string for this
-     * message may optionally include a <code>{0}</code> placeholder, which
-     * will be replaced by the configured minimum value.</p>
+     * <p>The message identifier of the {@link FacesMessage}
+     * to be created if the minimum value check fails.  The message format
+     * string for this message may optionally include a <code>{0}</code>
+     * placeholder, which will be replaced by the configured minimum value.</p>
      */
     public static final String MINIMUM_MESSAGE_ID =
         "javax.faces.validator.DoubleRangeValidator.MINIMUM";
 
 
     /**
-     * <p>The message identifier of the {@link Message} to be created if
-     * the current value of this component is not of the correct type.
+     * <p>The message identifier of the {@link FacesMessage}
+     * to be created if the current value of this component is not of the
+     * correct type.</p>
      */
     public static final String TYPE_MESSAGE_ID =
         "javax.faces.validator.DoubleRangeValidator.TYPE";

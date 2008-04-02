@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectMany.java,v 1.35 2003/10/30 20:30:14 eburns Exp $
+ * $Id: UISelectMany.java,v 1.36 2003/10/30 21:57:49 craigmcc Exp $
  */
 
 /*
@@ -83,7 +83,7 @@ public class UISelectMany extends UIInput {
 
     /**
      * <p>The message identifier of the
-     * {@link javax.faces.application.Message} to be created if
+     * {@link javax.faces.application.FacesMessage} to be created if
      * a value not matching the available options is specified.
      */
     public static final String INVALID_MESSAGE_ID =

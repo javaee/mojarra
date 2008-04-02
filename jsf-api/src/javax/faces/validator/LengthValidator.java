@@ -1,5 +1,5 @@
 /*
- * $Id: LengthValidator.java,v 1.30 2003/10/30 20:30:17 eburns Exp $
+ * $Id: LengthValidator.java,v 1.31 2003/10/30 21:57:51 craigmcc Exp $
  */
 
 /*
@@ -10,6 +10,7 @@
 package javax.faces.validator;
 
 
+import javax.faces.application.FacesMessage;
 import javax.faces.component.StateHolder;
 import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
@@ -43,7 +44,7 @@ public class LengthValidator implements Validator, StateHolder {
 
 
     /**
-     * <p>The message identifier of the {@link Message} to be created if
+     * <p>The message identifier of the {@link FacesMessage} to be created if
      * the maximum length check fails.  The message format string for this
      * message may optionally include a <code>{0}</code> placeholder, which
      * will be replaced by the configured maximum length.</p>
@@ -53,7 +54,7 @@ public class LengthValidator implements Validator, StateHolder {
 
 
     /**
-     * <p>The message identifier of the {@link Message} to be created if
+     * <p>The message identifier of the {@link FacesMessage} to be created if
      * the minimum length check fails.  The message format string for this
      * message may optionally include a <code>{0}</code> placeholder, which
      * will be replaced by the configured minimum length.</p>
