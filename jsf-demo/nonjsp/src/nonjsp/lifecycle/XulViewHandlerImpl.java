@@ -1,5 +1,5 @@
 /* 
- * $Id: XulViewHandlerImpl.java,v 1.7 2003/07/29 23:38:44 horwat Exp $ 
+ * $Id: XulViewHandlerImpl.java,v 1.8 2003/08/08 19:17:35 rkitain Exp $ 
  */ 
 
 
@@ -60,6 +60,7 @@ import javax.faces.FactoryFinder;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIOutput;
 import javax.faces.context.FacesContext; 
+import javax.faces.context.ResponseWriter; 
 import javax.faces.lifecycle.ViewHandler; 
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
@@ -77,7 +78,7 @@ import org.apache.commons.logging.LogFactory;
 /** 
  * <B>XulViewHandlerImpl</B> is the Xul non-JSP ViewHandler implementation
  *
- * @version $Id: XulViewHandlerImpl.java,v 1.7 2003/07/29 23:38:44 horwat Exp $ 
+ * @version $Id: XulViewHandlerImpl.java,v 1.8 2003/08/08 19:17:35 rkitain Exp $ 
  * 
  * @see javax.faces.lifecycle.ViewHandler 
  * 
@@ -131,29 +132,32 @@ public class XulViewHandlerImpl implements ViewHandler {
     // Create the header components for this page
     public void createHeader(FacesContext context) throws IOException {
 
-        UIOutput header = new UIOutput();
-        header.setComponentId("header");
-        StringBuffer sb = new StringBuffer("<html>\n");
-        sb.append("<head>\n");
-        sb.append("<title>");
-        sb.append(context.getExternalContext().getRequestContextPath());
-        sb.append("</title>\n");
-        sb.append("</head>\n");
-        sb.append("<body>\n");
-        header.setValue(sb.toString());
-        renderResponse(context, header);
+        ResponseWriter writer = context.getResponseWriter();
+
+        writer.startElement("html");
+        writer.writeText('\n');
+        writer.startElement("head");
+        writer.writeText('\n');
+        writer.startElement("title");
+        writer.writeText(context.getExternalContext().getRequestContextPath());
+        writer.endElement("title");
+        writer.writeText('\n');
+        writer.endElement("head");
+        writer.writeText('\n');
+        writer.startElement("body");
+        writer.writeText('\n');
     }
 
 
     // Create the footer components for this page
     public void createFooter(FacesContext context) throws IOException {
 
-        UIOutput footer = new UIOutput();
-        footer.setComponentId("footer");
-        StringBuffer sb = new StringBuffer("</body>\n");
-        sb.append("</html>\n");
-        footer.setValue(sb.toString());
-        renderResponse(context, footer);
+        ResponseWriter writer = context.getResponseWriter();
+
+        writer.endElement("body");
+        writer.writeText('\n');
+        writer.endElement("html");
+        writer.writeText('\n');
     }
 
     // Render the response content for the completed page

@@ -1,5 +1,5 @@
 /*
- * $Id: BuildComponentFromTagImpl.java,v 1.4 2003/04/12 01:26:01 rkitain Exp $
+ * $Id: BuildComponentFromTagImpl.java,v 1.5 2003/08/08 19:17:37 rkitain Exp $
  */
 
 /*
@@ -51,6 +51,7 @@ import java.lang.reflect.Method;
 
 import org.apache.commons.beanutils.PropertyUtils;
 
+import javax.faces.component.UICommand;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UISelectOne;
 import javax.faces.component.SelectItem;
@@ -75,7 +76,7 @@ import org.apache.commons.logging.LogFactory;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: BuildComponentFromTagImpl.java,v 1.4 2003/04/12 01:26:01 rkitain Exp $
+ * @version $Id: BuildComponentFromTagImpl.java,v 1.5 2003/08/08 19:17:37 rkitain Exp $
  * 
  * @see	com.sun.faces.tree.BuildComponentFromTagImpl
  *
@@ -204,7 +205,8 @@ public class BuildComponentFromTagImpl extends Object
             attrName.equals("required") || 
             attrName.equals("format") ||
             attrName.equals("rangeMaximum") ||
-            attrName.equals("lengthMaximum")) {
+            attrName.equals("lengthMaximum") ||
+            attrName.equals("label")) {
 	    result = true;
         }
         return result;
@@ -251,6 +253,9 @@ public class BuildComponentFromTagImpl extends Object
             } catch (SecurityException e) {
                 log.trace("handleSpecialAttr: " + e);
             }
+        } else if ((child instanceof UICommand) && attrName.equals("label")) {
+            ((UICommand)child).setValue(attrValue);
+            return;
         }
 
         Object [] args = { attrValue };
