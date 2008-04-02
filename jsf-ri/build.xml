@@ -516,6 +516,31 @@
 
   </target>
 
+  <!-- 
+       =================================================================== 
+         Issues list
+       =================================================================== 
+  -->
+  <target name="issues"
+   description="Generate outstanding issues list">
+    <style basedir="docs"
+           destdir="${build.home}"
+         extension=".html"
+             style="docs/ri-issues-summary.xsl"
+          includes="ri-issues.xml"/>
+    <move     file="${build.home}/ri-issues.html"
+            tofile="${build.home}/ri-issues-summary.html"/>
+    <style basedir="docs"
+           destdir="${build.home}"
+         extension=".html"
+             style="docs/ri-issues-detail.xsl"
+          includes="ri-issues.xml"/>
+    <move     file="${build.home}/ri-issues.html"
+            tofile="${build.home}/ri-issues-detail.html"/>
+  </target>
+
+
+
   <target name="main" depends="prepare,compile,jars"/>
 
 </project>

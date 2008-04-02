@@ -1,0 +1,266 @@
+<?xml version="1.0"?>
+
+<!-- Informal DTD for contents of "issue" subelements:
+
+  id                Unique issue identifier
+  originator        EG member (or public comment) that originated the issue
+  summary           Summary one-line description
+  description       Full (multiline) description of the issue
+  resolution        Full (multiline) description of resolution
+  status            OPEN, CLOSED, LATER
+  priority          low, medium, high
+  date              Date on which status was last changed
+
+-->
+
+<issues>
+
+<page-descriptor>
+This file is a dumping ground for open issues and ideas for the
+JavaServer Faces RI.  This is a very loose format file.  This file
+tracks things that are not being tracked in bugtraq.
+</page-descriptor>
+
+
+<issue>
+  <id>XHTML_Support-1</id>
+  <originator>Craig</originator>
+  <summary>Cause the RenderKit to generate XHTML</summary>
+  <description>
+    <pre>
+
+  * XHTML support: Craig would like to see a config param for generating
+    XHTML.  Another way to do it is to have a separate RenderKit.  We
+    would do this by subclassing HtmlBasicRenderKit.
+
+Note on the difference between XHTML and HTML4.0
+
+My understanding of the difference is that the only four things you need 
+to worry about are:
+
+* Document type headers at the top of the output page.  (We need
+  to pick which dialect of XHTML to generate, of course).
+
+* Rendering all element names and attribute names in lower case
+  (XHTML is case sensitive because XML is; HTML is not).  This
+  is of course legal HTML as well.
+
+* No attribute minimization -- instead of writing
+        &lt;option value="foo" selected&gt;
+  you have to write
+        &lt;option value="foo" selected="selected"&gt;
+  which is also legal in HTML, so it's not really a special case
+  either (the Struts tags do this, for example).
+
+* Rendering the trailing "/" on elements with no closing tag.
+  (the one case where the output syntax has to change).
+
+In all other respects, the output should be identical.
+
+    </pre>
+  </description>
+  <resolution>
+  </resolution>
+  <status>OPEN</status>
+  <priority>low</priority>
+  <status-date>20020726</status-date>
+</issue>
+
+<issue>
+  <id>Autogenerate_Taglib-2</id>
+  <originator>edburns</originator>
+  <summary>Generate the html_basic.tld from the RenderKit description</summary>
+  <description>
+<pre>
+
+  * Autogeneration of taglib:
+
+    &gt;On 12 August 16:39:55, Craig R. McClanahan wrote:
+    &gt;
+    &gt;&gt;Render-independent attributes (i.e. those defined by the component 
+    &gt;&gt;itself) can be introspected based on the property getters and setters of 
+    &gt;&gt;the component classes themselves.
+    &gt;&gt;
+    &gt;
+    &gt;Is there any tool out there that can give me attribute descriptors for
+    &gt;an arbitrary class?
+    &gt;
+    &gt;Ed
+    &gt;
+    If you call 
+    java.beans.Introspector.getBeanInfo(clazz).getPropertyDescriptors() you 
+    will get back a set of things very similar to our AttributeDescriptors.
+
+    In the RI, you might let commons-beanutils do this for you 
+    (PropertyUtils.getPropertyDescriptors()) since it's a prerequisite for 
+    Digester et. al. anyway.
+
+
+</pre>
+  </description>
+  <resolution>
+  </resolution>
+  <status>open</status>
+  <priority>medium</priority>
+  <status-date>20020821</status-date>
+</issue>
+
+<issue>
+  <id>Hyperlink_Renderer-3</id>
+  <originator>craigmcc</originator>
+  <summary>Hyperlink Renderer issues: should it be a command or not?</summary>
+  <description>
+<pre>
+
+   When I am in Faces_Basic page and I click on "Link to Thank You
+   page", I am not able to get to Basic_Thanks.jsp. Instead
+   Faces_Basic.jsp gets redisplayed with validation errors.  I thought
+   about why it might fail. When we click on the link, we reconstitute
+   Faces_Basic.jsp and it goes through different phases including
+   validation phase where we accumulate errors due to empty values. (
+   Because we clicked on the link). Since we had errors we directly go
+   to render response skipping Invoke Applications phase, where the
+   ResponseTree gets set to Basic_Thanks.jsp.
+   
+   So I think moving hyperlink processing from app handler (Invoke
+   Application Phase) to decode method (ApplyRequestValuesPhase) might
+   solve the problem provided we directly go to render phase from
+   ApplyRequestValues.
+   
+   Since decode method returns void, as an interim solution for
+   hyperlink may be after processing ApplyRequestValuesPhase, we could
+   check if request tree is not the same as response tree, we could jump
+   to render phase skipping validation and updateModel etc. Just
+   thinking aloud, I am not sure if this is the solution.
+
+</pre>
+  </description>
+  <resolution>
+  </resolution>
+  <status></status>
+  <priority>medium</priority>
+  <status-date>20020606</status-date>
+</issue>
+
+<issue>
+  <id>Diagnostic_Information-4</id>
+  <originator></originator>
+  <summary>Give better diagnostic information.</summary>
+  <description>
+
+<pre>
+  * Give better diagnostic information when the faces author has made an
+    error in their implementation of a faces app.
+
+    For example, if you define a bean for a RadioGroup that doesn't take a
+    collection for the value of its model property, you're hosed.
+
+    Another example is when you're trying to get the onCompletion thing
+    working.  If you don't specify the command attribute you're hosed.
+</pre>
+
+  </description>
+  <resolution>
+  </resolution>
+  <status></status>
+  <priority>medium</priority>
+  <status-date>20011111</status-date>
+</issue>
+
+<issue>
+  <id>build.xml_cleanup-5</id>
+  <originator>edburns</originator>
+  <summary>clean up build files</summary>
+  <description>add a target to verify all dependent jars are found
+  </description>
+  <resolution>
+  </resolution>
+  <status></status>
+  <priority>low</priority>
+  <status-date>20020110</status-date>
+</issue>
+
+<issue>
+  <id>Encrypt_query_string-6</id>
+  <originator>edburns</originator>
+  <summary>Encrypt the query string and such so it can't be mined for private information.</summary>
+  <description>Investigate encrypting the query string for security reasons.
+    Possibly from servlet API.
+  </description>
+  <resolution>
+  </resolution>
+  <status></status>
+  <priority>medium</priority>
+  <status-date>20020524</status-date>
+</issue>
+
+<issue>
+  <id>Code_Cleanup-7</id>
+  <originator>edburns</originator>
+  <summary>Code Cleanup Issues</summary>
+  <description>
+
+<pre>
+
+  * Include JavaDoc comments for methods (at least public).  At bare
+    minimum, the comment should use @see to refer to the corresponding
+    API method Javadoc comment.
+
+  * don't have formal arguments [1] that are exactly the same is ivars.
+    example: "this.foo = newFoo;" instead of "this.foo = foo;" 
+
+  * Don't have variables that only differ by plurality, for example:
+
+   rendererTabel and renderersTable.  Instead, have 
+
+   renderersByRendererType and renderersByComponentType.
+
+   * if you have ivars that are only accessed during one part of the
+     lifetime of an instance, and you must have one instance that has
+     multiple phases in its lifetime, name them distinctly.  For
+     example, the HtmlBasicRenderKit has two phases in its lifetime:
+     1. the parsing phase, and 2. the phase when it's ready to service
+     request from clients.  Any ivars that are used exclusively in the
+     parsing phase should be named appropriately, for example:
+
+     private ArrayList renderers 
+
+     should be
+
+     private ArrayList parse_renderersForCurrentComponent
+
+     Note that I've also named the ivar more descriptively.
+
+   * If you have two methods that do the same thing, but have different
+     signatures, call one from the other, rather than having both access 
+     the data structure. (see HtmlBasicRenderKit.java)
+
+</pre>
+
+  </description>
+  <resolution>
+  </resolution>
+  <status></status>
+  <priority></priority>
+  <status-date></status-date>
+</issue>
+
+
+
+<!-- template issue
+<issue>
+  <id></id>
+  <originator></originator>
+  <summary></summary>
+  <description>
+  </description>
+  <resolution>
+  </resolution>
+  <status></status>
+  <priority></priority>
+  <status-date></status-date>
+</issue>
+
+-->
+
+</issues>
