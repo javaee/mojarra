@@ -1,5 +1,5 @@
 /*
- * $Id: PropertyResolverChainWrapper.java,v 1.8 2006/03/29 23:03:44 rlubke Exp $
+ * $Id: PropertyResolverChainWrapper.java,v 1.9 2006/05/17 17:31:29 rlubke Exp $
  */
 /*
  * The contents of this file are subject to the terms
@@ -28,26 +28,29 @@
 
 package com.sun.faces.el;
 
-import java.util.Iterator;
-import java.util.List;
-import java.beans.FeatureDescriptor;
-
 import javax.el.ELContext;
 import javax.el.ELException;
 import javax.el.ELResolver;
+import javax.faces.context.FacesContext;
 import javax.faces.el.EvaluationException;
 import javax.faces.el.PropertyResolver;
-import javax.faces.context.FacesContext;
+
+import java.beans.FeatureDescriptor;
+import java.util.Iterator;
+import java.util.List;
 
 public class PropertyResolverChainWrapper extends ELResolver {
 
+    @SuppressWarnings("Deprecation")
     private PropertyResolver legacyPR = null;
     
+    @SuppressWarnings("Deprecation")
     public PropertyResolverChainWrapper(PropertyResolver propertyResolver) {
         this.legacyPR = propertyResolver;
     }
 
     @Override
+    @SuppressWarnings("Deprecation")
     public Object getValue(ELContext context, Object base, Object property) 
         throws ELException {
         if (base == null || property == null) {
@@ -82,6 +85,7 @@ public class PropertyResolverChainWrapper extends ELResolver {
     }
 
     @Override
+    @SuppressWarnings("Deprecation")
     public Class getType(ELContext context, Object base, Object property) 
         throws ELException {
         if (base == null || property == null) {
@@ -117,6 +121,7 @@ public class PropertyResolverChainWrapper extends ELResolver {
     }
 
     @Override
+    @SuppressWarnings("Deprecation")
     public void  setValue(ELContext context, Object base, Object property,
         Object val) throws ELException {
         if (base == null || property == null) {
@@ -148,6 +153,7 @@ public class PropertyResolverChainWrapper extends ELResolver {
     }
 
     @Override
+    @SuppressWarnings("Deprecation")
     public boolean isReadOnly(ELContext context, Object base, Object property) 
         throws ELException {
         if (base == null || property == null) {

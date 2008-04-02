@@ -1,5 +1,5 @@
 /* 
- * $Id: StateManagerImpl.java,v 1.46 2006/04/05 17:53:44 rlubke Exp $ 
+ * $Id: StateManagerImpl.java,v 1.47 2006/05/17 17:31:28 rlubke Exp $ 
  */
 
 /*
@@ -61,7 +61,7 @@ import com.sun.faces.util.Util;
  * <B>StateManagerImpl</B> is the default implementation class for
  * StateManager.
  *
- * @version $Id: StateManagerImpl.java,v 1.46 2006/04/05 17:53:44 rlubke Exp $
+ * @version $Id: StateManagerImpl.java,v 1.47 2006/05/17 17:31:28 rlubke Exp $
  * @see javax.faces.application.ViewHandler
  */
 public class StateManagerImpl extends StateManager {
@@ -200,7 +200,7 @@ public class StateManagerImpl extends StateManager {
     }
 
 
-    @SuppressWarnings("deprecation")
+    @SuppressWarnings("Deprecation")
     public UIViewRoot restoreView(FacesContext context, String viewId,
                                   String renderKitId) {
 
@@ -320,7 +320,7 @@ public class StateManagerImpl extends StateManager {
     }
 
 
-    @SuppressWarnings("deprecation")
+    @SuppressWarnings("Deprecation")
     public SerializedView saveSerializedView(FacesContext context)
           throws IllegalStateException {
 
@@ -419,7 +419,7 @@ public class StateManagerImpl extends StateManager {
     }
 
 
-    @SuppressWarnings("deprecation")
+    @SuppressWarnings("Deprecation")
     public void writeState(FacesContext context, SerializedView state)
           throws IOException {
 
@@ -481,7 +481,7 @@ public class StateManagerImpl extends StateManager {
     }
 
 
-    @SuppressWarnings("deprecation")
+    @SuppressWarnings("Deprecation")
     protected Object getComponentStateToSave(FacesContext context) {
 
         return context.getViewRoot().processSaveState(context);
@@ -567,7 +567,7 @@ public class StateManagerImpl extends StateManager {
     }
 
 
-    @SuppressWarnings("deprecation")
+    @SuppressWarnings("Deprecation")
     protected Object getTreeStructureToSave(FacesContext context) {
 
         TreeStructure structRoot = null;
@@ -581,7 +581,7 @@ public class StateManagerImpl extends StateManager {
     }
 
 
-    @SuppressWarnings("deprecation")
+    @SuppressWarnings("Deprecation")
     protected void restoreComponentState(FacesContext context,
                                          UIViewRoot root, String renderKitId) {
 
@@ -613,7 +613,7 @@ public class StateManagerImpl extends StateManager {
      * Returns the <code> UIViewRoot</code> corresponding the
      * <code> viewId </code> by restoring the view structure and state.
      */
-    @SuppressWarnings("deprecation")
+    @SuppressWarnings("Deprecation")
     protected UIViewRoot restoreSerializedView(FacesContext context,
                                                SerializedView sv,
                                                String viewId) {
@@ -640,7 +640,7 @@ public class StateManagerImpl extends StateManager {
     }
 
 
-    @SuppressWarnings("deprecation")
+    @SuppressWarnings("Deprecation")
     protected UIViewRoot restoreTreeStructure(FacesContext context,
                                               String viewId,
                                               String renderKitId) {

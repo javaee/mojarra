@@ -1,5 +1,5 @@
 /*
- * $Id: VariableResolverChainWrapper.java,v 1.7 2006/05/03 14:49:22 edburns Exp $
+ * $Id: VariableResolverChainWrapper.java,v 1.8 2006/05/17 17:31:29 rlubke Exp $
  */
 /*
  * The contents of this file are subject to the terms
@@ -28,25 +28,26 @@
 
 package com.sun.faces.el;
 
-import java.util.Iterator;
-import java.beans.FeatureDescriptor;
-
-import javax.faces.context.FacesContext;
-import javax.faces.el.VariableResolver;
-import javax.faces.el.EvaluationException;
-
-import javax.el.ELException;
-import javax.el.PropertyNotFoundException;
 import javax.el.ELContext;
+import javax.el.ELException;
 import javax.el.ELResolver;
+import javax.el.PropertyNotFoundException;
+import javax.faces.context.FacesContext;
+import javax.faces.el.EvaluationException;
+import javax.faces.el.VariableResolver;
+
+import java.beans.FeatureDescriptor;
+import java.util.Iterator;
+import java.util.Map;
 
 import com.sun.faces.util.MessageUtils;
-import java.util.Map;
 
 public class VariableResolverChainWrapper extends ELResolver {
     
+    @SuppressWarnings("Deprecation")
     private VariableResolver legacyVR = null;
 
+    @SuppressWarnings("Deprecation")
     public VariableResolverChainWrapper(VariableResolver variableResolver) {
         this.legacyVR = variableResolver;
     }
@@ -60,6 +61,7 @@ public class VariableResolverChainWrapper extends ELResolver {
     private static final String REENTRANT_GUARD = "com.sun.faces.LegacyVariableResolver";
 
     @Override
+    @SuppressWarnings("Deprecation")
     public Object getValue(ELContext context, Object base, Object property)
         throws ELException {
 

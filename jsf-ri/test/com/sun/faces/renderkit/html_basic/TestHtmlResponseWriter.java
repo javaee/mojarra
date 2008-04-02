@@ -1,5 +1,5 @@
 /*
- * $Id: TestHtmlResponseWriter.java,v 1.20 2006/03/29 23:05:01 rlubke Exp $
+ * $Id: TestHtmlResponseWriter.java,v 1.21 2006/05/17 17:31:32 rlubke Exp $
  */
 
 /*
@@ -31,12 +31,9 @@
 
 package com.sun.faces.renderkit.html_basic;
 
-import com.sun.faces.cactus.ServletFacesTestCase;
-import junit.framework.TestCase;
-import org.apache.cactus.ServletTestCase;
-
 import javax.faces.FactoryFinder;
 import javax.faces.component.UIInput;
+import javax.faces.component.UIOutput;
 import javax.faces.context.ResponseWriter;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
@@ -44,12 +41,14 @@ import javax.faces.render.RenderKitFactory;
 import java.io.IOException;
 import java.io.StringWriter;
 
+import com.sun.faces.cactus.ServletFacesTestCase;
+
 /**
  * <B>TestHtmlResponseWriter.java</B> is a class ...
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestHtmlResponseWriter.java,v 1.20 2006/03/29 23:05:01 rlubke Exp $
+ * @version $Id: TestHtmlResponseWriter.java,v 1.21 2006/05/17 17:31:32 rlubke Exp $
  */
 
 public class TestHtmlResponseWriter extends ServletFacesTestCase // ServletTestCase
@@ -230,6 +229,28 @@ public class TestHtmlResponseWriter extends ServletFacesTestCase // ServletTestC
             assertTrue(
                 sw.toString().equals("<foo player=" +
                                      "\"javascript:Bobby Orr\""));
+        } catch (IOException e) {
+            assertTrue(false);
+        }
+    }
+    
+    
+    public void testWriteCdata() {
+        sw = new StringWriter();
+        try {
+            writer = renderKit.createResponseWriter(sw, "text/html", "ISO-8859-1");
+            writer.startElement("cdata", new UIOutput());
+            // should be ignored
+            writer.writeAttribute("id", "value", "id");
+            // should be ignored
+            writer.writeURIAttribute("id", "value", "id");
+            // should be ignored
+            writer.writeComment("comment");
+            // should be present in the StringWriter
+            writer.writeText("Text between the cdata section", null);            
+            writer.endElement("cdata");
+            assertTrue(
+                  sw.toString().equals("<![CDATA[Text between the cdata section]]>"));
         } catch (IOException e) {
             assertTrue(false);
         }

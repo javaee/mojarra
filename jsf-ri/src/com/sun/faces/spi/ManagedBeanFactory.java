@@ -1,5 +1,5 @@
 /*
- * $Id: ManagedBeanFactory.java,v 1.4 2006/03/29 23:03:49 rlubke Exp $
+ * $Id: ManagedBeanFactory.java,v 1.5 2006/05/17 17:31:30 rlubke Exp $
  */
 
 /*
@@ -160,22 +160,12 @@ public abstract class ManagedBeanFactory {
     
     public abstract Map<String, ManagedBeanFactory> getManagedBeanFactoryMap();
 
+
     /**
-     * Return all methods of this ManageBean that are marked with
-     * the <code>PostConstruct</code> annotation.
-     * 
-     * @return all <code>PostConstruct</code> methods or a zero-length
-     *  array if no such methods are found.
+     * @return <code>true</code> if the managed bean instance created
+     * by this factory is a candidate for resource injection otherwise,
+     * returns <code>false</code>
      */
-    public abstract Method[] getPostConstructMethods();
-    
-    /**
-     * Return all methods of this ManageBean that are marked with
-     * the <code>PreDestroy</code> annotation.
-     * 
-     * @return all <code>PostDestroy</code> methods or a zero-length
-     *  array if no such methods are found.
-     */
-    public abstract Method[] getPreDestroyMethods();
+    public abstract boolean isInjectable();
     
 }

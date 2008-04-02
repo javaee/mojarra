@@ -1,5 +1,5 @@
 /*
- * $Id: PropertyResolverImpl.java,v 1.23 2006/03/29 23:03:44 rlubke Exp $
+ * $Id: PropertyResolverImpl.java,v 1.24 2006/05/17 17:31:29 rlubke Exp $
  */
 
 /*
@@ -29,15 +29,15 @@
 
 package com.sun.faces.el;
 
-import java.lang.reflect.Array;
-import java.util.List;
-
 import javax.el.ELException;
 import javax.el.ELResolver;
 import javax.faces.context.FacesContext;
 import javax.faces.el.EvaluationException;
 import javax.faces.el.PropertyNotFoundException;
 import javax.faces.el.PropertyResolver;
+
+import java.lang.reflect.Array;
+import java.util.List;
 
 import com.sun.faces.util.MessageUtils;
 
@@ -46,7 +46,7 @@ import com.sun.faces.util.MessageUtils;
  * Concrete implementation of <code>PropertyResolver</code>.
  * </p>
  */
-
+@SuppressWarnings("Deprecation")
 public class PropertyResolverImpl extends PropertyResolver {
 
     private ELResolver elResolver = null;

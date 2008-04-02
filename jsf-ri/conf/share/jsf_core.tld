@@ -73,6 +73,12 @@
  <listener>
      <listener-class>|CONFIG_LISTEN_CLASS|</listener-class>
  </listener>
+   
+    <!-- Listener implementation to handle web application lifecycle
+         events -->
+    <listener>
+        <listener-class>com.sun.faces.application.WebappLifecycleListener</listener-class>
+    </listener>
 
 
     <!-- ========== Tag Descriptions ========================================= -->

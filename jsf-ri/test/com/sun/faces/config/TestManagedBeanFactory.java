@@ -1,5 +1,5 @@
 /*
- * $Id: TestManagedBeanFactory.java,v 1.31 2006/03/29 23:04:46 rlubke Exp $
+ * $Id: TestManagedBeanFactory.java,v 1.32 2006/05/17 17:31:32 rlubke Exp $
  */
 
 /*
@@ -41,6 +41,8 @@ import com.sun.faces.spi.ManagedBeanFactory.Scope;
 import javax.el.ValueExpression;
 
 import javax.faces.FacesException;
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 
 import com.sun.faces.util.Util;
 import java.util.ArrayList;
@@ -676,6 +678,21 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
         assertTrue(exceptionThrown);
         
     }
+    
+    public void testIsInjectable() throws Exception {
+        bean = new ManagedBeanBean();
+        bean.setManagedBeanClass(beanName);
+        bean.setManagedBeanScope("session");
+
+        mbf = new ManagedBeanFactoryImpl(bean);
+        assertTrue(!mbf.isInjectable());
+        
+        bean = new ManagedBeanBean();
+        bean.setManagedBeanClass("com.sun.faces.config.TestManagedBeanFactory$InjectionBean");
+        bean.setManagedBeanScope("request");
+        mbf = new ManagedBeanFactoryImpl(bean);
+        assertTrue(mbf.isInjectable());
+    }
 	
     /************* PENDING(edburns): rewrite to exercise new edge case
      * detection.
@@ -768,5 +785,26 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
      }
      ***********/
     
+      public static class InjectionBean {
 
+        private boolean initCalled;
+        private boolean destroyCalled;
+
+        @PostConstruct void init() {
+            initCalled = true;
+        }
+
+        @PreDestroy void destroy() {
+            destroyCalled = true;
+        }
+
+        public boolean getInit() {
+            return initCalled;
+        }
+
+        public boolean getDestroy() {
+            return destroyCalled;
+        }
+
+    } // END ProtectedBean
 }

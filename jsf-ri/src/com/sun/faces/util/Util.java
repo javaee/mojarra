@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.189 2006/03/29 23:03:53 rlubke Exp $
+ * $Id: Util.java,v 1.190 2006/05/17 17:31:31 rlubke Exp $
  */
 
 /*
@@ -52,10 +52,8 @@ import javax.faces.lifecycle.LifecycleFactory;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
 import javax.servlet.ServletContext;
-import javax.servlet.jsp.jstl.fmt.LocalizationContext;
 
 import java.beans.FeatureDescriptor;
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -66,8 +64,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.StringTokenizer;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -80,7 +76,7 @@ import com.sun.faces.spi.ManagedBeanFactory.Scope;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.189 2006/03/29 23:03:53 rlubke Exp $
+ * @version $Id: Util.java,v 1.190 2006/05/17 17:31:31 rlubke Exp $
  */
 
 public class Util {
@@ -299,67 +295,7 @@ public class Util {
         }
         applicationMap.put(RIConstants.HAS_REQUIRED_CLASSES_ATTR, Boolean.TRUE);
     }
-
-
-    /**
-     * Return a Locale instance using the following algorithm: <P>
-     * <p/>
-     * <UL>
-     * <p/>
-     * <LI>
-     * <p/>
-     * If this component instance has an attribute named "bundle",
-     * interpret it as a model reference to a LocalizationContext
-     * instance accessible via FacesContext.getModelValue().
-     * <p/>
-     * </LI>
-     * <p/>
-     * <LI>
-     * <p/>
-     * If FacesContext.getModelValue() returns a LocalizationContext
-     * instance, return its Locale.
-     * <p/>
-     * </LI>
-     * <p/>
-     * <LI>
-     * <p/>
-     * If FacesContext.getModelValue() doesn't return a
-     * LocalizationContext, return the FacesContext's Locale.
-     * <p/>
-     * </LI>
-     * <p/>
-     * </UL>
-     */
-
-    public static Locale
-        getLocaleFromContextOrComponent(FacesContext context,
-                                        UIComponent component) {
-        Locale result = null;
-        String bundleName = null;
-        String bundleAttr = "bundle";
-
-        Util.parameterNonNull(context);
-        Util.parameterNonNull(component);
-
-        // verify our component has the proper attributes for bundle.
-        if (null !=
-            (bundleName = (String) component.getAttributes().get(bundleAttr))) {
-            // verify there is a Locale for this localizationContext
-            LocalizationContext locCtx = null;
-            if (null != (locCtx =
-                (javax.servlet.jsp.jstl.fmt.LocalizationContext)
-                (Util.getValueExpression(bundleName)).
-                getValue(context.getELContext()))) {
-                result = locCtx.getLocale();
-                assert (null != result);
-            }
-        }
-        if (null == result) {
-            result = context.getViewRoot().getLocale();
-        }
-
-        return result;
-    }
+   
     
     /**
      * <p>If the FacesContext has a UIViewRoot, and this UIViewRoot has a Locale,
@@ -431,7 +367,7 @@ public class Util {
 
     }
 
-
+    @SuppressWarnings("Deprecation")
     public static ValueBinding getValueBinding(String valueRef) {
         ValueBinding vb = null;
         // Must parse the value to see if it contains more than
@@ -744,7 +680,7 @@ public class Util {
         return result;
     }
 
-
+    @SuppressWarnings("Deprecation")
     public static String stripBracketsIfNecessary(String expression)
         throws ReferenceSyntaxException {
         assert (null != expression);
@@ -804,6 +740,7 @@ public class Util {
      *
      * @return the scope of the expression
      */
+    @SuppressWarnings("Deprecation")
     public static Scope getScope(String valueBinding,
 				  String [] outString) throws ReferenceSyntaxException {
         if (valueBinding == null || 0 == valueBinding.length()) {
@@ -889,7 +826,7 @@ public class Util {
      *
      * @return a List of expressions from the expressionString
      */
-
+    @SuppressWarnings("Deprecation")
     public static List getExpressionsFromString(String expressionString) throws ReferenceSyntaxException {
 	if (null == expressionString) {
 	    return Collections.EMPTY_LIST;

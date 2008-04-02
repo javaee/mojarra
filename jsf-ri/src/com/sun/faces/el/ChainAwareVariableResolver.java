@@ -1,5 +1,5 @@
 /*
- * $Id: ChainAwareVariableResolver.java,v 1.1 2006/05/03 14:49:22 edburns Exp $
+ * $Id: ChainAwareVariableResolver.java,v 1.2 2006/05/17 17:31:29 rlubke Exp $
  */
 
 /*
@@ -29,14 +29,14 @@
 
 package com.sun.faces.el;
 
-import com.sun.faces.RIConstants;
+import javax.el.ELResolver;
+import javax.el.ValueExpression;
 import javax.faces.context.FacesContext;
 import javax.faces.el.EvaluationException;
 import javax.faces.el.VariableResolver;
 
+import com.sun.faces.RIConstants;
 import com.sun.faces.el.FacesCompositeELResolver.ELResolverChainType;
-import javax.el.ELResolver;
-import javax.el.ValueExpression;
 
 /**
  * <p> This special VariableResolver serves as the "original"
@@ -61,6 +61,7 @@ import javax.el.ValueExpression;
  * be used.</p>
  */
 
+@SuppressWarnings("Deprecation")
 public class ChainAwareVariableResolver extends VariableResolver {
 
     public ChainAwareVariableResolver() {

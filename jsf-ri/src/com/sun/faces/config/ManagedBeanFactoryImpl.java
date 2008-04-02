@@ -1,5 +1,5 @@
 /*
- * $Id: ManagedBeanFactoryImpl.java,v 1.10 2006/03/29 23:03:43 rlubke Exp $
+ * $Id: ManagedBeanFactoryImpl.java,v 1.11 2006/05/17 17:31:29 rlubke Exp $
  */
 
 /*
@@ -29,17 +29,6 @@
 
 package com.sun.faces.config;
 
-import java.lang.reflect.Array;
-import java.lang.reflect.Method;
-import java.lang.annotation.Annotation;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import javax.el.ValueExpression;
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
@@ -48,17 +37,29 @@ import javax.faces.el.EvaluationException;
 import javax.faces.el.PropertyNotFoundException;
 import javax.faces.el.ReferenceSyntaxException;
 
+import java.lang.reflect.Array;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import com.sun.faces.RIConstants;
+import com.sun.faces.application.ApplicationAssociate;
 import com.sun.faces.config.beans.DescriptionBean;
 import com.sun.faces.config.beans.ListEntriesBean;
 import com.sun.faces.config.beans.ManagedBeanBean;
 import com.sun.faces.config.beans.ManagedPropertyBean;
 import com.sun.faces.config.beans.MapEntriesBean;
 import com.sun.faces.config.beans.MapEntryBean;
+import com.sun.faces.spi.InjectionProviderException;
 import com.sun.faces.spi.ManagedBeanFactory;
-import com.sun.faces.util.Util;
 import com.sun.faces.util.MessageUtils;
-
+import com.sun.faces.util.Util;
 import com.sun.org.apache.commons.beanutils.PropertyUtils;
 
 /**
@@ -107,42 +108,10 @@ public class ManagedBeanFactoryImpl extends ManagedBeanFactory {
     /**
      * This managed-property is a simple property
      */
-    private final static byte TYPE_IS_SIMPLE = 3;
-    
-    private static final Method[] EMPTY_METHODS = new Method[0];
+    private final static byte TYPE_IS_SIMPLE = 3;    
     
     private static final String MANAGED_BEAN_CREATED_STACK = 
         RIConstants.FACES_PREFIX + "managedBeanStack";
-
-    private static enum Annotations {
-        POST_CONSTRUCT("javax.annotation.PostConstruct"),
-        PRE_DESTROY("javax.annotation.PreDestroy");
-        
-        Annotations(String annotationClassName) {                    
-            ClassLoader loader = Thread.currentThread().getContextClassLoader();            
-            if (loader != null) {
-                try {
-                    annotationClass = 
-                          loader.loadClass(annotationClassName); 
-                    if (!annotationClass.isAnnotation()) {
-                        annotationClass = null;                        
-                    }
-                } catch (ClassNotFoundException cne) {
-                    if (LOGGER.isLoggable(Level.INFO)) {
-                        LOGGER.log(Level.INFO,
-                                   "jsf.util_no_annotation_processed",
-                                   annotationClassName);
-                    }
-                }
-            }
-        }
-                
-        private Class annotationClass;
-
-        public Class getAnnotationClass() {
-            return annotationClass;
-        }                       
-    }
 
     /**
      * <p>The <code>Log</code> instance for this class.</p>
@@ -150,9 +119,7 @@ public class ManagedBeanFactoryImpl extends ManagedBeanFactory {
     private static final Logger LOGGER = Util.getLogger(Util.FACES_LOGGER 
             + Util.CONFIG_LOGGER);
 
-
-    private Method[] postConstructMethods = null;
-    private Method[] preDestroyMethods = null;
+    private boolean injectable;   
     
     // Attribute Instance Variables
 
@@ -180,27 +147,19 @@ public class ManagedBeanFactoryImpl extends ManagedBeanFactory {
         //ManagedBeanBean clone method implemented to return deep copy
         this.managedBean = managedBean; // (ManagedBeanBean) managedBean.clone();
         //set the scope
-        scope = getScopeFromString(managedBean.getManagedBeanScope());
-        
-        // try to get the managedbean class
-        Class<?> managedBeanClass = this.getManagedBeanClass();
-        if (managedBeanClass != null) {
-            postConstructMethods = 
-                  getMethodsWithAnnotation(managedBeanClass,
-                                           Annotations.POST_CONSTRUCT);
-            preDestroyMethods = 
-                  getMethodsWithAnnotation(managedBeanClass,
-                                           Annotations.PRE_DESTROY);    
-        }                
+        scope = getScopeFromString(managedBean.getManagedBeanScope()); 
+        injectable = scanForAnnotations();
     }
 
-    public Method[] getPostConstructMethods() {
-        return postConstructMethods;
-    }
 
-    public Method[] getPreDestroyMethods() {
-        return preDestroyMethods;
-    }
+    /**
+     * @return <code>true</code> if the managed bean instance created
+     *         by this factory is a candidate for resource injection otherwise,
+     *         returns <code>false</code>
+     */
+    public boolean isInjectable() {
+        return injectable;
+    }    
 
     private Scope getScopeFromString(String scopeString) {
         Scope result = Scope.NONE;
@@ -308,12 +267,7 @@ public class ManagedBeanFactoryImpl extends ManagedBeanFactory {
                     getClass().getClassLoader();
             }
             bean = java.beans.Beans.instantiate(loader,
-                                                managedBean.getManagedBeanClass());
-            FacesInjectionManager manager = 
-                    FacesInjectionManager.getInjectionManager();
-            if (manager != null) {
-                manager.injectInstance(bean);    
-            }
+                                                managedBean.getManagedBeanClass());            
         } catch (Exception ex) {
             Object[] obj = new Object[2];
             obj[0] = managedBean.getManagedBeanClass();
@@ -349,6 +303,15 @@ public class ManagedBeanFactoryImpl extends ManagedBeanFactory {
                     assert (false);
                     break;
             }
+            
+            // inject after properties have been set
+            if (injectable) {
+                ApplicationAssociate associate = 
+                    ApplicationAssociate.getInstance(
+                          context.getExternalContext());
+                associate.getInjectionProvider().inject(bean);
+            }
+            
         } catch (FacesException fe) {
             throw fe;
         } catch (ClassNotFoundException cnfe) {
@@ -358,6 +321,8 @@ public class ManagedBeanFactoryImpl extends ManagedBeanFactory {
                 MessageUtils.getExceptionMessageString(
                     MessageUtils.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, obj),
                 cnfe);
+        } catch (InjectionProviderException ipe) {
+            throw new FacesException(ipe.getCause());
         }
         beanList.remove(managedBean.getManagedBeanName());
         return bean;
@@ -1040,7 +1005,7 @@ public class ManagedBeanFactoryImpl extends ManagedBeanFactory {
         return result;
     }
 
-
+    @SuppressWarnings("Deprecation")
     private boolean hasValidLifespan(String value) throws EvaluationException, ReferenceSyntaxException {
 	Scope valueScope = null;
 
@@ -1083,6 +1048,7 @@ public class ManagedBeanFactoryImpl extends ManagedBeanFactory {
         return false;
     }
 
+    @SuppressWarnings("Deprecation")
     private Scope getScopeForSingleExpression(String value) throws ReferenceSyntaxException, EvaluationException {
 	String [] firstSegment = new String[1];
         Scope valueScope = Util.getScope(value, firstSegment);
@@ -1105,6 +1071,7 @@ public class ManagedBeanFactoryImpl extends ManagedBeanFactory {
 	return valueScope;
     }
 
+    @SuppressWarnings("Deprecation")
     private Scope getNarrowestScopeFromExpression(String expression) throws ReferenceSyntaxException {
 	// break the argument expression up into its component
 	// expressions, ignoring literals.
@@ -1143,41 +1110,31 @@ public class ManagedBeanFactoryImpl extends ManagedBeanFactory {
 	return result;
     }
     
-    /**
-     * Returns a List of Methods on the instance referenced by argument
-     * <code>obj</code> that are annotated with the annotation
-     * referenced by argument <code>annoClass</code>.  If none are
-     * found, returns the empty list.
-     *
-     * @param clazz the class for which to inspect for annotated methods
-     *@param annotation the <code>Annotation</code> of interest
-     */
-    private static Method[] getMethodsWithAnnotation(Class clazz,
-                                                     Annotations annotation) {
-        List<Method> list = null;      
-        if (null != clazz) {
-            Class<? extends Annotation> annoClass = annotation.getAnnotationClass();
-            if (annoClass == null) {
-                return EMPTY_METHODS;
-            }
-           
-            Method[] methods = clazz.getMethods();
-
-            for (Method method : methods) {
-                if (null != method.getAnnotation(annoClass)) {                   
-                    if (null == list) {
-                        list = new ArrayList<Method>();
+    // scan methods and fields for annotations
+    private boolean scanForAnnotations() {
+        Class<?> clazz = getManagedBeanClass();
+        if (clazz != null) {
+            while (clazz != Object.class) {
+                Field[] fields = clazz.getDeclaredFields();
+                for (Field field : fields) {
+                    if (field.getAnnotations().length > 0) {
+                        return true;
                     }
-                    list.add(method);
                 }
+
+                Method[] methods = clazz.getDeclaredMethods();
+                for (Method method : methods) {
+                    if (method.getDeclaredAnnotations().length > 0) {
+                        return true;
+                    }
+                }
+
+                clazz = clazz.getSuperclass();
             }
         }
-        if (null == list) {
-            return EMPTY_METHODS;
-        }
-        return list.toArray(new Method[list.size()]);
-    }
 
+        return false;
+    }
 
     /**
      * Sets the passed in property name and value as an attribute on

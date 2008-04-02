@@ -220,7 +220,9 @@
                 <sysproperty key="cactus.contextURL"
                              value="http://${container.host}:${container.port}/test"/>
             </custom-sysproperties>
-            <suite>               
+            <suite>    
+                <test todir="${impl.test.results.dir}"
+                      name="com.sun.faces.application.TestInjection"/>
                 <test todir="${impl.test.results.dir}"
                       name="com.sun.faces.application.TestActionListenerImpl"/>
                 <test todir="${impl.test.results.dir}"

@@ -1,5 +1,5 @@
 /*
- * $Id: ConstantMethodBinding.java,v 1.8 2006/03/29 23:03:53 rlubke Exp $
+ * $Id: ConstantMethodBinding.java,v 1.9 2006/05/17 17:31:31 rlubke Exp $
  */
 
 /*
@@ -33,6 +33,7 @@ import javax.faces.component.StateHolder;
 import javax.faces.context.FacesContext;
 import javax.faces.el.MethodBinding;
 
+@SuppressWarnings("Deprecation")
 public class ConstantMethodBinding extends MethodBinding
     implements StateHolder {
 

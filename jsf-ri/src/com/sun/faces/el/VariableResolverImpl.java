@@ -1,5 +1,5 @@
 /*
- * $Id: VariableResolverImpl.java,v 1.28 2006/03/29 23:03:45 rlubke Exp $
+ * $Id: VariableResolverImpl.java,v 1.29 2006/05/17 17:31:29 rlubke Exp $
  */
 
 /*
@@ -43,7 +43,7 @@ import com.sun.faces.util.MessageUtils;
  * Concrete implementation of <code>VariableResolver</code>.
  * </p>
  */
-
+@SuppressWarnings("Deprecation")
 public class VariableResolverImpl extends VariableResolver {
 
     private ELResolver elResolver = null;

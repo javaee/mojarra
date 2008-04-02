@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationAssociate.java,v 1.29 2006/05/11 18:48:04 rlubke Exp $
+ * $Id: ApplicationAssociate.java,v 1.30 2006/05/17 17:31:27 rlubke Exp $
  */
 
 /*
@@ -40,8 +40,6 @@ import javax.faces.el.PropertyResolver;
 import javax.faces.el.VariableResolver;
 import javax.servlet.ServletContext;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -58,6 +56,9 @@ import com.sun.faces.RIConstants;
 import com.sun.faces.config.ConfigureListener;
 import com.sun.faces.config.beans.ResourceBundleBean;
 import com.sun.faces.spi.ManagedBeanFactory;
+import com.sun.faces.spi.InjectionProviderFactory;
+import com.sun.faces.spi.InjectionProvider;
+import com.sun.faces.spi.InjectionProviderException;
 import com.sun.faces.spi.ManagedBeanFactory.Scope;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
@@ -76,55 +77,20 @@ import com.sun.faces.util.Util;
 public class ApplicationAssociate {
 
     // Log instance for this class
-    private static final Logger LOGGER = Util.getLogger(Util.FACES_LOGGER 
-            + Util.APPLICATION_LOGGER);
-    
+    private static final Logger LOGGER = Util.getLogger(Util.FACES_LOGGER
+                                                        + Util.APPLICATION_LOGGER);
+
     private static final String APPLICATION_IMPL_ATTR_NAME = RIConstants.FACES_PREFIX +
-             "ApplicationImpl";
+                                                             "ApplicationImpl";
 
     private ApplicationImpl app = null;
-    
+
     //
     // This map stores "managed bean name" | "managed bean factory"
     // mappings.
     //
     private Map<String, ManagedBeanFactory> managedBeanFactoriesMap = null;
-    
-    /**
-     * Simple struct encapsulating a managed bean instance with its list 
-     * of PreDestroy methods.
-     */
-    private static class ManagedBeanPreDestroyStruct {
-        private Object bean = null;
-        private Method[] preDestroys = null;
-        ManagedBeanPreDestroyStruct(Object bean, Method[] preDestroys) {
-            this.bean = bean;
-            this.preDestroys = preDestroys;
-        }
-        
-        Object getBean() {
-            return bean;
-        }
-        
-        Method[] getPreDestroys() {
-            return preDestroys;
-        }
-        
-        void clear() {
-            this.bean = null;
-            this.preDestroys = null;
-        }
-    }
-    
-    /**
-     * An array of size four (one for each scope) of Maps.  Each Map maps from
-     * managedBeanName to an instance of ManagedBeanPreDestroyStruct.
-     */
-    
-    private Map<String, ManagedBeanPreDestroyStruct> preDestroyMethods[] = null;
 
-    // These maps stores "navigation rule" mappings.
-    //
 
     /**
      * Overall Map containing <code>from-view-id</code> key and
@@ -137,12 +103,6 @@ public class ApplicationAssociate {
     private Map<String,List<ConfigNavigationCase>> caseListMap = null;
 
     /**
-     * The List that contains the <code>ConfigNavigationCase</code>
-     * objects for a <code>from-view-id</code>.
-     */
-    private List<ConfigNavigationCase> caseList = null;
-
-    /**
      * The List that contains all view identifier strings ending in an
      * asterisk "*".  The entries are stored without the trailing
      * asterisk.
@@ -152,28 +112,30 @@ public class ApplicationAssociate {
     // Flag indicating that a response has been rendered.
     private boolean responseRendered = false;
 
-    private static final String ASSOCIATE_KEY = RIConstants.FACES_PREFIX + 
-        "ApplicationAssociate";
+    private static final String ASSOCIATE_KEY = RIConstants.FACES_PREFIX +
+                                                "ApplicationAssociate";
 
     private List<ELResolver> elResolversFromFacesConfig = null;
-    
-    @SuppressWarnings("deprecation")
+
+    @SuppressWarnings("Deprecation")
     private VariableResolver legacyVRChainHead = null;
-    
-    @SuppressWarnings("deprecation")
+
+    @SuppressWarnings("Deprecation")
     private PropertyResolver legacyPRChainHead = null;
     private ExpressionFactory expressionFactory = null;
-    
-    @SuppressWarnings("deprecation")
+
+    @SuppressWarnings("Deprecation")
     private PropertyResolver legacyPropertyResolver = null;
-    
-    @SuppressWarnings("deprecation")
+
+    @SuppressWarnings("Deprecation")
     private VariableResolver legacyVariableResolver = null;
     private CompositeELResolver facesELResolverForJsp = null;
 
+    private InjectionProvider injectionProvider;
+
     public ApplicationAssociate(ApplicationImpl appImpl) {
-	app = appImpl;
-        
+    app = appImpl;
+
         ExternalContext externalContext;
         if (null == (externalContext =
                      ConfigureListener.getExternalContextDuringInitialize())) {
@@ -188,33 +150,26 @@ public class ApplicationAssociate {
                     MessageUtils.APPLICATION_ASSOCIATE_EXISTS_ID));
         }
         externalContext.getApplicationMap().put(APPLICATION_IMPL_ATTR_NAME,
-                appImpl);
+                                                appImpl);
         externalContext.getApplicationMap().put(ASSOCIATE_KEY, this);
-        managedBeanFactoriesMap = new HashMap<String, ManagedBeanFactory>();
-        preDestroyMethods = new Map[4];
-        preDestroyMethods[Scope.REQUEST.ordinal()] = 
-                new HashMap<String, ManagedBeanPreDestroyStruct>();
-        preDestroyMethods[Scope.SESSION.ordinal()] = 
-                new HashMap<String, ManagedBeanPreDestroyStruct>();
-        preDestroyMethods[Scope.APPLICATION.ordinal()] = 
-                new HashMap<String, ManagedBeanPreDestroyStruct>();
+        managedBeanFactoriesMap = new HashMap<String, ManagedBeanFactory>();       
         caseListMap = new HashMap<String,List<ConfigNavigationCase>>();
         wildcardMatchList = new TreeSet<String>(new SortIt());
+        injectionProvider = InjectionProviderFactory.createInstance();
+    }
 
-    }
-    
-    public static ApplicationAssociate getInstance(ExternalContext 
+    public static ApplicationAssociate getInstance(ExternalContext
         externalContext) {
-        Map applicationMap = externalContext.getApplicationMap();    
-	return ((ApplicationAssociate) 
-		applicationMap.get(ASSOCIATE_KEY));
+        Map applicationMap = externalContext.getApplicationMap();
+    return ((ApplicationAssociate)
+        applicationMap.get(ASSOCIATE_KEY));
     }
-    
+
     public static ApplicationAssociate getInstance(ServletContext context) {
         return (ApplicationAssociate) context.getAttribute(ASSOCIATE_KEY);
     }
-    
-    public static void clearInstance(ExternalContext 
+
+    public static void clearInstance(ExternalContext
         externalContext) {
         Map applicationMap = externalContext.getApplicationMap();
         ApplicationAssociate me = (ApplicationAssociate) applicationMap.get(ASSOCIATE_KEY);
@@ -223,93 +178,97 @@ public class ApplicationAssociate {
                 me.resourceBundles.clear();
             }
         }
-	applicationMap.remove(ASSOCIATE_KEY);
+    applicationMap.remove(ASSOCIATE_KEY);
     }
 
-    @SuppressWarnings("deprecation")
+    @SuppressWarnings("Deprecation")
     public void setLegacyVRChainHead(VariableResolver resolver) {
-        this.legacyVRChainHead = resolver;   
+        this.legacyVRChainHead = resolver;
     }
-    
-    @SuppressWarnings("deprecation")
+
+    @SuppressWarnings("Deprecation")
     public VariableResolver getLegacyVRChainHead() {
         return legacyVRChainHead;
     }
-    
-    @SuppressWarnings("deprecation")
+
+    @SuppressWarnings("Deprecation")
     public void setLegacyPRChainHead(PropertyResolver resolver) {
-        this.legacyPRChainHead = resolver;   
+        this.legacyPRChainHead = resolver;
     }
-     
-    @SuppressWarnings("deprecation")
+
+    @SuppressWarnings("Deprecation")
     public PropertyResolver getLegacyPRChainHead() {
         return legacyPRChainHead;
     }
-    
+
     public CompositeELResolver getFacesELResolverForJsp() {
         return facesELResolverForJsp;
     }
-        
+
     public void setFacesELResolverForJsp(CompositeELResolver celr) {
         facesELResolverForJsp = celr;
     }
-    
+
     public void setELResolversFromFacesConfig(List<ELResolver> resolvers) {
         this.elResolversFromFacesConfig = resolvers;
     }
-     
+
     public List<ELResolver> geELResolversFromFacesConfig() {
          return elResolversFromFacesConfig;
     }
-    
+
     public void setExpressionFactory(ExpressionFactory expressionFactory) {
         this.expressionFactory = expressionFactory;
     }
-    
+
     public ExpressionFactory getExpressionFactory() {
         return this.expressionFactory;
     }
-    
+
     public List<ELResolver> getApplicationELResolvers() {
         return app.getApplicationELResolvers();
     }
     
+    public InjectionProvider getInjectionProvider() {
+        return injectionProvider;
+    }
+
     /**
      * Maintains the PropertyResolver called through 
      * Application.setPropertyResolver()
      */
-    @SuppressWarnings("deprecation")
+    @SuppressWarnings("Deprecation")
     public void setLegacyPropertyResolver(PropertyResolver resolver){
         this.legacyPropertyResolver = resolver;
     }
-    
+
      /**
      * Returns the PropertyResolver called through 
      * Application.getPropertyResolver()
      */
-     @SuppressWarnings("deprecation")
+     @SuppressWarnings("Deprecation")
     public PropertyResolver getLegacyPropertyResolver(){
         return legacyPropertyResolver;
     }
-    
+
     /**
      * Maintains the PropertyResolver called through 
      * Application.setVariableResolver()
      */
-    @SuppressWarnings("deprecation")
+    @SuppressWarnings("Deprecation")
     public void setLegacyVariableResolver(VariableResolver resolver){
         this.legacyVariableResolver = resolver;
     }
-    
+
     /**
      * Returns the VariableResolver called through 
      * Application.getVariableResolver()
      */
-    @SuppressWarnings("deprecation")
+    @SuppressWarnings("Deprecation")
     public VariableResolver getLegacyVariableResolver(){
         return legacyVariableResolver;
     }
-    
+
 
     /**
      * Add a navigation case to the internal case list.  If a case list
@@ -328,7 +287,7 @@ public class ApplicationAssociate {
 
         String fromViewId = navigationCase.getFromViewId();
         synchronized (this) {
-            caseList = caseListMap.get(fromViewId);
+            List<ConfigNavigationCase> caseList = caseListMap.get(fromViewId);
             if (caseList == null) {
                 caseList = new ArrayList<ConfigNavigationCase>();
                 caseList.add(navigationCase);
@@ -387,9 +346,9 @@ public class ApplicationAssociate {
     public TreeSet<String> getNavigationWildCardList() {
         return wildcardMatchList;
     }
-    
+
     public ResourceBundle getResourceBundle(FacesContext context,
-            String var) {
+                                            String var) {
         UIViewRoot root = null;
         // Start out with the default locale
         Locale locale = null, defaultLocale = Locale.getDefault();
@@ -406,7 +365,7 @@ public class ApplicationAssociate {
         ResourceBundleBean bean = resourceBundles.get(var);
         String baseName = null;
         ResourceBundle result = null;
-        
+
         if (null != bean) {
             baseName = bean.getBasename();
             if (null != baseName) {
@@ -420,15 +379,15 @@ public class ApplicationAssociate {
         // PENDING(edburns): should cache these based on var/Locale pair for performance
         return result;
     }
-    
+
     /**
      * keys: <var> element from faces-config<p>
      *
      * values: ResourceBundleBean instances.
      */
-    
+
     Map<String,ResourceBundleBean> resourceBundles = new HashMap<String, ResourceBundleBean>();
-    
+
     public void addResourceBundleBean(String var, ResourceBundleBean bean) {
         resourceBundles.put(var, bean);
     }
@@ -436,7 +395,7 @@ public class ApplicationAssociate {
     public Map<String,ResourceBundleBean> getResourceBundleBeanMap() {
         return resourceBundles;
     }
-    
+
     /**
      * <p>Adds a new mapping of managed bean name to a managed bean
      * factory instance.</p>
@@ -448,13 +407,13 @@ public class ApplicationAssociate {
     synchronized public void addManagedBeanFactory(String managedBeanName,
                                                    ManagedBeanFactory factory) {
         managedBeanFactoriesMap.put(managedBeanName, factory);
-	factory.setManagedBeanFactoryMap(managedBeanFactoriesMap);
+    factory.setManagedBeanFactoryMap(managedBeanFactoriesMap);
         if (LOGGER.isLoggable(Level.FINE)) {
-            LOGGER.log(Level.FINE, "Added managedBeanFactory " + factory + 
-                    " for" + managedBeanName);
+            LOGGER.log(Level.FINE, "Added managedBeanFactory " + factory +
+                                   " for" + managedBeanName);
         }
     }
-    
+
     public Map<String,ManagedBeanFactory> getManagedBeanFactoryMap() {
         return managedBeanFactoriesMap;
     }
@@ -474,7 +433,7 @@ public class ApplicationAssociate {
      *                                   could not be created.
      */
     public Object createAndMaybeStoreManagedBeans(FacesContext context,
-        String managedBeanName) throws FacesException {
+                                                  String managedBeanName) throws FacesException {
         ManagedBeanFactory managedBean = managedBeanFactoriesMap.get(managedBeanName);
         if (managedBean == null) {
             if (LOGGER.isLoggable(Level.FINE)) {
@@ -482,77 +441,72 @@ public class ApplicationAssociate {
             }
             return null;
         }
-        
+
         Object bean = null;
         Scope scope = managedBean.getScope();
-        
+
         boolean
             scopeIsApplication = false,
             scopeIsSession = false,
             scopeIsRequest = false;
 
-        if ((scopeIsApplication = (scope == Scope.APPLICATION)) || 
+        if ((scopeIsApplication = (scope == Scope.APPLICATION)) ||
             (scopeIsSession = (scope == Scope.SESSION))) {
             if (scopeIsApplication) {
                 Map<String,Object> applicationMap = context.getExternalContext().
                         getApplicationMap();
                 synchronized (applicationMap) {
                     try {
-                        bean = managedBean.newInstance(context);
-                        handlePostConstruct(managedBean, bean);
+                        bean = managedBean.newInstance(context);                        
                         if (LOGGER.isLoggable(Level.FINE)) {
-                            LOGGER.fine("Created application scoped bean " + 
-                                    managedBeanName + " successfully ");
+                            LOGGER.fine("Created application scoped bean " +
+                                        managedBeanName + " successfully ");
                         }
                     } catch (Exception ex) {
                         Object[] params = {managedBeanName};
                         if (LOGGER.isLoggable(Level.SEVERE)) {
-                            LOGGER.log(Level.SEVERE, 
-                                    "jsf.managed_bean_creation_error", params);
+                            LOGGER.log(Level.SEVERE,
+                                       "jsf.managed_bean_creation_error", params);
                         }
                         throw new FacesException(ex);
                     }
                     //add bean to appropriate scope
                     applicationMap.put(managedBeanName, bean);
-                } 
+                }
             } else {
                 Map<String,Object> sessionMap = Util.getSessionMap(context);
                 synchronized (sessionMap) {
                     try {
-                        bean = managedBean.newInstance(context);
-                        handlePostConstruct(managedBean, bean);
+                        bean = managedBean.newInstance(context);                       
                         if (LOGGER.isLoggable(Level.FINE)) {
-                            LOGGER.fine("Created session scoped bean " 
-                                    + managedBeanName + " successfully ");
+                            LOGGER.fine("Created session scoped bean "
+                                        + managedBeanName + " successfully ");
                         }
                     } catch (Exception ex) {
                         Object[] params = {managedBeanName};
                         if (LOGGER.isLoggable(Level.SEVERE)) {
-                            LOGGER.log(Level.SEVERE, 
-                                    "jsf.managed_bean_creation_error", params);
+                            LOGGER.log(Level.SEVERE,
+                                       "jsf.managed_bean_creation_error", params);
                         }
                         throw new FacesException(ex);
                     }
                     //add bean to appropriate scope
                     sessionMap.put(managedBeanName, bean);
                 }
-            }              
+            }
         } else {
             scopeIsRequest = (scope == Scope.REQUEST);
             try {
-                bean = managedBean.newInstance(context);
-                if (scopeIsRequest) {
-                    handlePostConstruct(managedBean, bean);
-                }
+                bean = managedBean.newInstance(context);               
                 if (LOGGER.isLoggable(Level.FINE)) {
-                    LOGGER.log(Level.FINE, "Created bean " + managedBeanName + 
-                              " successfully ");
+                    LOGGER.log(Level.FINE, "Created bean " + managedBeanName +
+                                           " successfully ");
                 }
             } catch (Exception ex) {
                 Object[] params = {managedBeanName};
                 if (LOGGER.isLoggable(Level.SEVERE)) {
-                    LOGGER.log(Level.SEVERE, 
-                            "jsf.managed_bean_creation_error", params);
+                    LOGGER.log(Level.SEVERE,
+                               "jsf.managed_bean_creation_error", params);
                 }
                 throw new FacesException(ex);
             }
@@ -571,151 +525,48 @@ public class ApplicationAssociate {
     }
 
     boolean isResponseRendered() {
-	return responseRendered;
+    return responseRendered;
     }
+    
 
     /**
-     * <p>Called from {@link #createAndMaybeStoreManagedBeans}.
-     * For each method in the postConstruct list, invoke it.  
-     * For each method for each non NONE scoped bean in the
-     * preDestroyList, add to the preDestroyMethods array in 
-     * the proper scope.</p>
-     *
-     * @param mbFactory the <code>ManagedBeanFactory</code> used to create
-     *  <code>bean</code>
-     *
-     * @param bean the actual managed bean instance.  Injection must
-     * have already been performed.
-     */
-
-    private void handlePostConstruct(ManagedBeanFactory mbFactory, Object bean) 
-    throws IllegalAccessException,
-           IllegalArgumentException,
-           InvocationTargetException {
-        
-        assert(null != mbFactory && null != bean);
-        Scope scope = mbFactory.getScope();
-        for (Method method : mbFactory.getPostConstructMethods()) {
-            method.invoke(bean);
-        }
-        // We can't call @PreDestroy on NONE scoped beans.
-        Method[] preDestroys = mbFactory.getPreDestroyMethods();
-        if (preDestroys.length > 0 && scope != Scope.NONE) {
-            
-            preDestroyMethods[scope.ordinal()].put(
-                  mbFactory.getManagedBeanBean().getManagedBeanName(), 
-                  new ManagedBeanPreDestroyStruct(bean, preDestroys));
-        }
-        
-    }
-
-    /**
-     * <p>Called from ExternalContextImpl, in the Map implementations
-     * for request, session, and application maps, from the remove() and
-     * clear() implementations in those maps.  Leverage the data stored
-     * by the required previous invocation of {@link
-     * #handlePostConstruct} to discover and invoke any postDestroy
-     * annotated methods.  If argument <code>beanName</code> is null,
-     * all managed-bean entries in argument <code>scope</code> have
-     * their PreDestroy annotated methods invoked.  Otherwise, only the
-     * managed bean named by argument <code>beanName</code> has its
-     * PreDestroy annotated methods called.</p>
+     * <p>Attempts to look up a ManagedBeanFactory from the 
+     * managedBeanFactoriesMap.  If not </code>null</code> and
+     * <code>ManagedBeanFactory.isInjectable()</code> returns true,
+     * pass <code>bean</code> to <code>InjectionProvider.invokePreDestr
      *
      * @param beanName the name of the bean for which to call PreDestroy
      * annotated methods.  If <code>null</code>, all beans in argument
      * <code>scope</code> have their PreDestroy annotated methods
      * called.
+     * 
+     * @param bean the target bean associated with <code>beanName</code>
      *
      * @param scope the managed bean scope in which to look for the bean
      * or beans.
-     */ 
-    
-    public void handlePreDestroy(String beanName, Scope scope) throws
-	IllegalAccessException,
-	IllegalArgumentException,
-	InvocationTargetException {
-	// Get the pre-populated map for this Scope
-        Map<String, ManagedBeanPreDestroyStruct> destroyMap =
-	    preDestroyMethods[scope.ordinal()];
-        // If we have no beans in the map, just return;
-        if (destroyMap.isEmpty()) {
-            return;
-        }
-        // If we have no beanName, invoke all the preDestroy methods for
-        // all the managed-beans in the argument scope.
-        if (null == beanName) {
-            if (scope != Scope.REQUEST) {
-                synchronized(scope) {
-		    invokePreDestroyAndRemoveFromMap(destroyMap);
-                }
-            } 
-	    else {
-                assert(scope == Scope.REQUEST);
-		invokePreDestroyAndRemoveFromMap(destroyMap);
-            }
-	} 
-	else {
-	    // Otherwise, only invoke the preDestroy methods for the
-	    // argument beanName in the argument scope.
-	    ManagedBeanPreDestroyStruct struct = destroyMap.get(beanName);
-	    if (null != struct) {
-		if (scope != Scope.REQUEST) {
-		    synchronized(scope) {
-			for (Method method : struct.getPreDestroys()) {
-			    method.invoke(struct.getBean());
-			}
-			
-			struct.clear();
-			destroyMap.remove(beanName);
-		    }
-		}
-		else {
-		    assert(scope == Scope.REQUEST);
-		    for (Method method : struct.getPreDestroys()) {
-			method.invoke(struct.getBean());
-		    }
-		    
-		    struct.clear();
-		    destroyMap.remove(beanName);
-		}
-	    } // if null != struct
-	}
-    }
+     */
 
-    private void invokePreDestroyAndRemoveFromMap(Map<String, ManagedBeanPreDestroyStruct> destroyMap) throws
-	IllegalAccessException,
-	IllegalArgumentException,
-	InvocationTargetException {
-	ArrayList<String> names = new ArrayList(destroyMap.size());
-	// Go through the entries once and invoke the
-	// annotated methods
-	for (Map.Entry<String, ManagedBeanPreDestroyStruct> entry :
-		 destroyMap.entrySet()) {
-	    for (Method method : entry.getValue().getPreDestroys()) {
-		method.invoke(entry.getValue().getBean());
-	    }
-	    names.add(entry.getKey());	    
-	    entry.getValue().clear();
-	}
-        
-	// Go through the entries again, and remove them from
-	// the map.
-	for (String name : names) {
-	    destroyMap.remove(name);
-	}
-    }
-	
-    
+    public void handlePreDestroy(String beanName, Object bean, Scope scope) {
+        ManagedBeanFactory factory = managedBeanFactoriesMap.get(beanName);
+        if (factory != null && factory.isInjectable()) {
+            try {
+                injectionProvider.invokePreDestroy(bean);
+            } catch (InjectionProviderException ipe) {
+                if (LOGGER.isLoggable(Level.SEVERE)) {
+                    LOGGER.log(Level.SEVERE, ipe.getMessage(), ipe);
+                }
+            }
+        }        
+    }   
+
     /**
      * This Comparator class will help sort the <code>ConfigNavigationCase</code> objects
      * based on their <code>fromViewId</code> properties in descending order -
      * largest string to smallest string.
      */
-    static class SortIt implements Comparator {
+    static class SortIt implements Comparator<String> {
 
-        public int compare(Object o1, Object o2) {
-            String fromViewId1 = (String) o1;
-            String fromViewId2 = (String) o2;
+        public int compare(String fromViewId1, String fromViewId2) {                     
             return -(fromViewId1.compareTo(fromViewId2));
         }
     }

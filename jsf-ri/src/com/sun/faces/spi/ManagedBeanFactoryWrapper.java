@@ -1,5 +1,5 @@
 /*
- * $Id: ManagedBeanFactoryWrapper.java,v 1.4 2006/03/29 23:03:49 rlubke Exp $
+ * $Id: ManagedBeanFactoryWrapper.java,v 1.5 2006/05/17 17:31:31 rlubke Exp $
  */
 
 /*
@@ -98,19 +98,11 @@ public abstract class ManagedBeanFactoryWrapper extends ManagedBeanFactory {
         return getWrapped().getManagedBeanFactoryMap();
     }
 
-    /**
-     * @see com.sun.faces.spi.ManagedBeanFactory#getPostConstructMethods()      
-     */
-    public Method[] getPostConstructMethods() {
-        return getWrapped().getPostConstructMethods();
-    }
 
     /**
-     * @see com.sun.faces.spi.ManagedBeanFactory#getPreDestroyMethods()       
+     * @see com.sun.faces.spi.ManagedBeanFactory#isInjectable() 
      */
-    public Method[] getPreDestroyMethods() {
-        return getWrapped().getPreDestroyMethods();
+    public boolean isInjectable() {
+        return getWrapped().isInjectable();
     }
-
-
 }

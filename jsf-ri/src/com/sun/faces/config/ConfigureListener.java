@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListener.java,v 1.72 2006/05/10 23:26:09 rlubke Exp $
+ * $Id: ConfigureListener.java,v 1.73 2006/05/17 17:31:28 rlubke Exp $
  */
 /*
  * The contents of this file are subject to the terms
@@ -28,26 +28,9 @@
 
 package com.sun.faces.config;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.StringReader;
-import java.io.UnsupportedEncodingException;
-import java.io.PrintWriter;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
-
 import javax.el.CompositeELResolver;
-import javax.el.ExpressionFactory;
 import javax.el.ELResolver;
+import javax.el.ExpressionFactory;
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.application.Application;
@@ -71,16 +54,39 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.jsp.JspApplicationContext;
 import javax.servlet.jsp.JspFactory;
-
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.StringReader;
+import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
+import java.util.SortedMap;
+import java.util.TreeMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import org.xml.sax.Attributes;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
+import org.xml.sax.helpers.DefaultHandler;
+
 import com.sun.faces.RIConstants;
-import com.sun.faces.io.FastStringWriter;
 import com.sun.faces.application.ApplicationAssociate;
 import com.sun.faces.application.ConfigNavigationCase;
-import com.sun.faces.spi.ManagedBeanFactory;
-import com.sun.faces.spi.ManagedBeanFactory.Scope;
+import com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
 import com.sun.faces.config.beans.ApplicationBean;
 import com.sun.faces.config.beans.ComponentBean;
 import com.sun.faces.config.beans.ConverterBean;
@@ -96,53 +102,21 @@ import com.sun.faces.config.beans.RendererBean;
 import com.sun.faces.config.beans.ResourceBundleBean;
 import com.sun.faces.config.beans.ValidatorBean;
 import com.sun.faces.config.rules.FacesConfigRuleSet;
-import com.sun.faces.el.FacesCompositeELResolver;
 import com.sun.faces.el.ChainAwareVariableResolver;
-
 import com.sun.faces.el.DummyPropertyResolverImpl;
 import com.sun.faces.el.DummyVariableResolverImpl;
-import com.sun.faces.util.Util;
+import com.sun.faces.el.FacesCompositeELResolver;
+import com.sun.faces.spi.ManagedBeanFactory;
 import com.sun.faces.util.MessageUtils;
-
-import com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
-import com.sun.faces.el.ChainAwareVariableResolver;
-
+import com.sun.faces.util.Util;
 import com.sun.org.apache.commons.digester.Digester;
-import org.xml.sax.Attributes;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
-import org.xml.sax.helpers.DefaultHandler;
-
-import java.util.logging.Logger;
-import java.util.logging.Level;
-import java.lang.reflect.InvocationTargetException;
-import java.util.SortedMap;
-import java.util.TreeMap;
-
-import javax.servlet.ServletRequestEvent;
-import javax.servlet.ServletRequestListener;
-import javax.servlet.ServletContextAttributeListener;
-import javax.servlet.ServletRequestAttributeListener;
-import javax.servlet.ServletRequestAttributeEvent;
-import javax.servlet.ServletContextAttributeEvent;
-import javax.servlet.http.HttpSessionEvent;
-import javax.servlet.http.HttpSessionListener;
-import javax.servlet.http.HttpSessionAttributeListener;
-import javax.servlet.http.HttpSessionBindingEvent;
-import javax.servlet.http.HttpSession;
 
 /**
  * <p>Parse all relevant JavaServer Faces configuration resources, and
  * configure the Reference Implementation runtime environment.</p>
  * <p/>
  */
-public class ConfigureListener implements ServletRequestListener,
-                                          HttpSessionListener,
-                                          ServletContextListener,
-                                          ServletRequestAttributeListener,
-                                          HttpSessionAttributeListener,
-                                          ServletContextAttributeListener {
+public class ConfigureListener implements ServletContextListener {
 
 
     // -------------------------------------------------------- Static Variables
@@ -324,51 +298,8 @@ public class ConfigureListener implements ServletRequestListener,
      */
 
     public static ExternalContext getExternalContextDuringInitialize() {
-	return (ExternalContext) tlsExternalContext.get();
-    }
-    
-    // 
-    // Methods from ServletRequestListener
-    //
-    
-    public void requestDestroyed(ServletRequestEvent sre) {
-        ApplicationAssociate associate = 
-                ApplicationAssociate.getInstance(sre.getServletContext());
-        if (null != associate) {
-            try {
-                associate.handlePreDestroy(null, Scope.REQUEST);
-            }
-            catch (Throwable e) {
-                LOGGER.info(e.getMessage());
-            }
-        }
-    }
-    
-    public void requestInitialized(ServletRequestEvent sre) {
-        
-    }
-    
-    //
-    // Methods from HttpSessionListener
-    //
-    
-    public void sessionCreated(HttpSessionEvent se) {
-        
-    }
-
-    public void sessionDestroyed(HttpSessionEvent se) {
-        ApplicationAssociate associate = 
-                ApplicationAssociate.getInstance(se.getSession().getServletContext());
-        if (null != associate) {
-            try {
-                associate.handlePreDestroy(null, Scope.SESSION);
-            }
-            catch (Throwable e) {
-                LOGGER.info(e.getMessage());
-            }
-        }
-    
-    }      
+	return tlsExternalContext.get();
+    }   
 
     public void contextInitialized(ServletContextEvent sce) {
         ServletContext context = sce.getServletContext();
@@ -588,17 +519,7 @@ public class ConfigureListener implements ServletRequestListener,
                 LOGGER.fine("contextDestroyed("
                             + context.getServletContextName()
                             + ')');
-            }
-            ApplicationAssociate associate =
-                  ApplicationAssociate.getInstance(sce.getServletContext());
-            if (null != associate) {
-                try {
-                    associate.handlePreDestroy(null, Scope.APPLICATION);
-                }
-                catch (Throwable e) {
-                    LOGGER.info(e.getMessage());
-                }
-            }
+            }           
 
             // Release any allocated application resources
             FactoryFinder.releaseFactories();
@@ -613,141 +534,11 @@ public class ConfigureListener implements ServletRequestListener,
             WebConfiguration.clear(context);
         }
 
-    }
-
-
-    // ----------------------------------- Methods from RequestAttributeListener
-
-    public void attributeAdded(ServletRequestAttributeEvent event) {
-        // we're not interested in this event
-    }
-
-    public void attributeRemoved(ServletRequestAttributeEvent event) {
-
-        handleAttributeEvent(event.getName(),
-                             event.getServletContext(),
-                             Scope.REQUEST);
-
-    }
-
-    public void attributeReplaced(ServletRequestAttributeEvent event) {
-
-        String attrName = event.getName();
-        Object newValue = event.getServletRequest().getAttribute(attrName);
-
-        // perhaps a bit paranoid, but since the javadocs are a bit vague,
-        // only handle the event if oldValue and newValue are not the
-        // exact same object
-        if (event.getValue() != newValue) {
-            handleAttributeEvent(attrName,
-                                 event.getServletContext(),
-                                 Scope.REQUEST);
-        }
-    }
-
-    // ------------------------------- Methods from HttpSessionAttributeListener
-
-    public void attributeAdded(HttpSessionBindingEvent event) {
-        // we're not interested in this event
-    }
-
-    public void attributeRemoved(HttpSessionBindingEvent event) {
-
-        handleAttributeEvent(event.getName(),
-                             event.getSession().getServletContext(),
-                             Scope.SESSION);
-
-    }
-
-    public void attributeReplaced(HttpSessionBindingEvent event) {
-
-        HttpSession session = event.getSession();
-        String attrName = event.getName();
-        Object newValue = session.getAttribute(attrName);
-
-        // perhaps a bit paranoid, but since the javadocs are a bit vague,
-        // only handle the event if oldValue and newValue are not the
-        // exact same object
-        if (event.getValue() != newValue) {
-            handleAttributeEvent(attrName,
-                                 session.getServletContext(),
-                                 Scope.SESSION);
-        }
-
-    }
-
-    // ---------------------------- Methods from ServletContextAttributeListener
-
-    public void attributeAdded(ServletContextAttributeEvent event) {
-        //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    public void attributeRemoved(ServletContextAttributeEvent event) {
-
-        handleAttributeEvent(event.getName(),
-                             event.getServletContext(),
-                             Scope.APPLICATION);
-
-    }
-
-    public void attributeReplaced(ServletContextAttributeEvent event) {
-
-        ServletContext context = event.getServletContext();
-        String attrName = event.getName();
-        Object newValue = context.getAttribute(attrName);
-
-        // perhaps a bit paranoid, but since the javadocs are a bit vague,
-        // only handle the event if oldValue and newValue are not the
-        // exact same object
-        if (event.getValue() != newValue) {
-            handleAttributeEvent(attrName,
-                                 context,
-                                 Scope.APPLICATION);
-        }
-
-    }
+    }    
 
     // --------------------------------------------------------- Private Methods
 
-    private static void handleAttributeEvent(String beanName,
-                                             ServletContext servletContext,
-                                             Scope scope) {
-
-        ApplicationAssociate associate =
-              ApplicationAssociate.getInstance(servletContext);
-        try {
-            if (associate != null) {
-                associate.handlePreDestroy(beanName, scope);
-            }                  
-        } catch (Exception e) {
-            String className = e.getClass().getName();            
-            String message = e.getMessage();
-            if (e instanceof InvocationTargetException) {
-                Throwable root =
-                      ((InvocationTargetException) e).getTargetException();
-                className = root.getClass().getName();
-                message = root.getMessage();                
-            }
-            if (message == null) {
-                message = "";
-            }
-            if (LOGGER.isLoggable(Level.INFO)) {
-                LOGGER.log(Level.INFO,
-                           "jsf.config.listener.predestroy.error",
-                           new Object[] {
-                                 className,
-                                 beanName,
-                                 scope,
-                                 message});
-            }
-            if (LOGGER.isLoggable(Level.FINE)) {
-                FastStringWriter writer = new FastStringWriter(128);
-                e.printStackTrace(new PrintWriter(writer));
-                LOGGER.fine(writer.toString());                
-            }
-        }
-
-    } // END handleAttributeEvent
+    
 
     /**
      * <p>Return the implementation-specific <code>Application</code>
@@ -1796,9 +1587,8 @@ public class ConfigureListener implements ServletRequestListener,
      * <p>Determines if a particular feature, configured via the web
      * deployment descriptor as a <code>true/false</code> value, is
      * enabled or not.</p>
-     * @param obj the <code>ServletContext</code> of the application, passed as an
-     * Object to allow usage given an ExternalContext.
-     * @param paramName the name of the context init paramName to check
+     * @param param the <code>BooleanWebContextInitParameter</code> 
+     *  of interest
      *
      * @return <code>true</code> if the feature in question is enabled, otherwise
      *  <code>false</code>

@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlResponseWriter.java,v 1.26 2006/03/29 23:03:48 rlubke Exp $
+ * $Id: HtmlResponseWriter.java,v 1.27 2006/05/17 17:31:30 rlubke Exp $
  */
 
 /*
@@ -29,9 +29,6 @@
 
 package com.sun.faces.renderkit.html_basic;
 
-import com.sun.faces.util.HtmlUtils;
-import com.sun.faces.util.MessageUtils;
-
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 import javax.faces.context.ResponseWriter;
@@ -39,6 +36,9 @@ import javax.faces.context.ResponseWriter;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
+
+import com.sun.faces.util.HtmlUtils;
+import com.sun.faces.util.MessageUtils;
 
 
 /**
@@ -68,7 +68,10 @@ public class HtmlResponseWriter extends ResponseWriter {
     // True when we shouldn't be escaping output (basically,
     // inside of <script> and <style> elements).
     //
-    private boolean dontEscape;        
+    private boolean dontEscape;    
+    
+    // flag to indicate we're writing a CDATA section
+    private boolean writingCdata;
 
     // Internal buffer used when outputting properly escaped information
     // using HtmlUtils class.
@@ -84,7 +87,7 @@ public class HtmlResponseWriter extends ResponseWriter {
      * @param writer      the <code>ResponseWriter</code>
      * @param contentType the content type.
      * @param encoding    the character encoding.
-     * @throws FacesException the encoding is not recognized.
+     * @throws javax.faces.FacesException the encoding is not recognized.
      */
     public HtmlResponseWriter(Writer writer, String contentType, String encoding)
         throws FacesException {
@@ -187,6 +190,15 @@ public class HtmlResponseWriter extends ResponseWriter {
                 "style".equalsIgnoreCase(name)) {
                 dontEscape = true;
             }
+        } else if ((firstChar == 'c')
+              || (firstChar == 'C')) {
+            if ("cdata".equalsIgnoreCase(name)) {
+                writingCdata = true;
+                dontEscape = true;
+                writer.write("<![CDATA[");
+                closeStart = false;
+                return;
+            }
         }
                         
         writer.write('<');
@@ -213,6 +225,15 @@ public class HtmlResponseWriter extends ResponseWriter {
 
         // always turn escaping back on once an element ends
         dontEscape = false;
+        char firstChar = name.charAt(0);
+        if ((firstChar == 'c')
+              || (firstChar == 'C')) {
+            if ("cdata".equalsIgnoreCase(name)) {             
+                writer.write("]]>");
+                writingCdata = false;
+                return;
+            }
+        }
         // See if we need to close the start of the last element
         if (closeStart) {
             boolean isEmptyElement = HtmlUtils.isEmptyElement(name);
@@ -257,6 +278,10 @@ public class HtmlResponseWriter extends ResponseWriter {
                 MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
         if ( value == null ) {
+            return;
+        }
+        
+        if (writingCdata) {
             return;
         }
 
@@ -314,6 +339,10 @@ public class HtmlResponseWriter extends ResponseWriter {
                 MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
         
+        if (writingCdata) {
+            return;
+        }
+        
         writer.write(' ');
         writer.write(name);
         writer.write("=\"");
@@ -348,6 +377,11 @@ public class HtmlResponseWriter extends ResponseWriter {
             throw new NullPointerException(MessageUtils.getExceptionMessageString(
                 MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
+        
+        if (writingCdata) {
+            return;
+        }
+        
         closeStartIfNecessary();
         // Don't include a trailing space after the '<!--'
         // or a leading space before the '-->' to support

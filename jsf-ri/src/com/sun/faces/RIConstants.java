@@ -1,5 +1,5 @@
 /*
- * $Id: RIConstants.java,v 1.84 2006/05/10 20:03:22 rogerk Exp $
+ * $Id: RIConstants.java,v 1.85 2006/05/17 17:31:27 rlubke Exp $
  */
 
 /*
@@ -82,12 +82,7 @@ public class RIConstants {
      * <p>Parser implementation for processing JSF reference expressions.</p>
      */
     public static final String FACES_RE_PARSER =
-        FACES_PREFIX + "el.impl.parser.ELParserImpl";
-
-    /**
-     * <p>String identifer for <em>bundle attribute.</em>.</p>
-     */
-    public static final String BUNDLE_ATTR = FACES_PREFIX + "bundle";
+        FACES_PREFIX + "el.impl.parser.ELParserImpl";    
 
     /**
      * <p>The name of the attribute in the ServletContext's attr set

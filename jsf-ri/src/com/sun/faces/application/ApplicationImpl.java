@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationImpl.java,v 1.76 2006/05/11 18:48:04 rlubke Exp $
+ * $Id: ApplicationImpl.java,v 1.77 2006/05/17 17:31:27 rlubke Exp $
  */
 
 /*
@@ -283,7 +283,7 @@ public class ApplicationImpl extends Application {
         elResolvers.add(resolver);
     }
     
-    public ArrayList getApplicationELResolvers() {
+    public List<ELResolver> getApplicationELResolvers() {
         return elResolvers;
     }
     
@@ -406,7 +406,7 @@ public class ApplicationImpl extends Application {
         }
     }
 
-
+    @SuppressWarnings("Deprecation")
     public PropertyResolver getPropertyResolver() {
         synchronized (this) {
             if (null == propertyResolver) {
@@ -424,6 +424,7 @@ public class ApplicationImpl extends Application {
         return associate.getResourceBundle(context, var);
     }
 
+    @SuppressWarnings("Deprecation")
     public void setPropertyResolver(PropertyResolver resolver) {
         // Throw Illegal State Exception if  a PropertyResolver is set after 
         // application initialization has completed. 
@@ -446,7 +447,7 @@ public class ApplicationImpl extends Application {
         }
     }
 
-
+    @SuppressWarnings("Deprecation")
     public MethodBinding createMethodBinding(String ref, Class params[]) {
         MethodExpression result = null;
         if (ref == null) {
@@ -478,7 +479,7 @@ public class ApplicationImpl extends Application {
         return (new MethodBindingMethodExpressionAdapter(result));
     }
 
-
+    @SuppressWarnings("Deprecation")
     public ValueBinding createValueBinding(String ref)
         throws ReferenceSyntaxException {
         if (ref == null) {
@@ -500,7 +501,7 @@ public class ApplicationImpl extends Application {
          return (new ValueBindingValueExpressionAdapter(result));
     }
 
-
+    @SuppressWarnings("Deprecation")
     public VariableResolver getVariableResolver() {
         synchronized (this) {
             if (null == variableResolver) {
@@ -510,7 +511,7 @@ public class ApplicationImpl extends Application {
         return variableResolver;
     }
 
-
+    @SuppressWarnings("Deprecation")
     public void setVariableResolver(VariableResolver resolver) {
         // Throw Illegal State Exception if VariableResolver is set after 
         // application initialization has completed. 
@@ -586,7 +587,7 @@ public class ApplicationImpl extends Application {
         return returnVal;
     }
 
-
+    @SuppressWarnings("Deprecation")
     public UIComponent createComponent(ValueBinding componentBinding,
                                        FacesContext context,
                                        String componentType)

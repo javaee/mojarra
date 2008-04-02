@@ -1,5 +1,5 @@
 /* 
- * $Id: ViewHandlerImpl.java,v 1.72 2006/05/10 00:24:50 rlubke Exp $ 
+ * $Id: ViewHandlerImpl.java,v 1.73 2006/05/17 17:31:28 rlubke Exp $ 
  */ 
 
 
@@ -68,7 +68,7 @@ import com.sun.faces.util.Util;
 /**
  * <B>ViewHandlerImpl</B> is the default implementation class for ViewHandler.
  *
- * @version $Id: ViewHandlerImpl.java,v 1.72 2006/05/10 00:24:50 rlubke Exp $
+ * @version $Id: ViewHandlerImpl.java,v 1.73 2006/05/17 17:31:28 rlubke Exp $
  * @see javax.faces.application.ViewHandler
  */
 public class ViewHandlerImpl extends ViewHandler {
@@ -889,6 +889,7 @@ public class ViewHandlerImpl extends ViewHandler {
         return convertedViewId;
     }
 
+    @SuppressWarnings("Deprecation")
      public void replaceMarkers(String content, FacesContext context) {
          SerializedView view = null;
          Object stateArray = null;
