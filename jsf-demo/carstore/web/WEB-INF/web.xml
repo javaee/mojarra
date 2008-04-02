@@ -39,6 +39,11 @@
     </context-param>
 
     <context-param>
+        <param-name>com.sun.faces.externalizeJavaScript</param-name>
+        <param-value>true</param-value>
+    </context-param>
+
+    <context-param>
         <description>
             Set this flag to true if you want the JavaServer Faces
             Reference Implementation to validate the XML in your
