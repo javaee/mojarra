@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderResponsePhase.java,v 1.50 2003/05/03 05:53:06 eburns Exp $
+ * $Id: TestRenderResponsePhase.java,v 1.51 2003/08/13 16:38:28 jvisvanathan Exp $
  */
 
 /*
@@ -22,7 +22,7 @@ import javax.faces.FactoryFinder;
 import javax.faces.context.FacesContext;
 import javax.faces.context.FacesContextFactory;
 import javax.faces.lifecycle.Lifecycle;
-import javax.faces.component.UIComponentBase;
+import javax.faces.component.UINamingContainer;
 import javax.faces.validator.Validator;
 
 import com.sun.faces.context.FacesContextImpl;
@@ -51,7 +51,7 @@ import javax.servlet.jsp.PageContext;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderResponsePhase.java,v 1.50 2003/05/03 05:53:06 eburns Exp $
+ * @version $Id: TestRenderResponsePhase.java,v 1.51 2003/08/13 16:38:28 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -71,10 +71,8 @@ public String getExpectedOutputFilename() {
 }
 
 public static final String ignore[] = {
-    "<form method=\"post\" action=\"/test/faces/TestRenderResponsePhase.jsp;jsessionid=0075F666805EA55C8ED800A4210EAC07\" class=\"formClass\"  title=\"basicForm\" accept=\"html,wml\" >",
-    "            <input type=\"image\" src=\"duke.gif;jsessionid=0075F666805EA55C8ED800A4210EAC07\" name=\"pushButton\" disabled >",
-    "            <input type=\"image\" src=\"duke.gif;jsessionid=0075F666805EA55C8ED800A4210EAC07\" name=\"imageOnlyButton\"> ",
-    "            <img id=\"graphicImage\" src=\"/test/duke.gif;jsessionid=0075F666805EA55C8ED800A4210EAC07\" usemap=\"#map1\"  ismap > "
+"<form id=\"basicForm\" method=\"post\" action=\"/test/faces/TestRenderResponsePhase.jsp;jsessionid=22BC1F9CE1138F9735110F43B21A0AC8\" class=\"formClass\" title=\"basicForm\" accept=\"html,wml\">",
+"            <img id=\"graphicImage\" src=\"/test/duke.gif;jsessionid=22BC1F9CE1138F9735110F43B21A0AC8\" usemap=\"#map1\" ismap> "
 };
     
 public String [] getLinesToIgnore() {
@@ -84,7 +82,8 @@ public String [] getLinesToIgnore() {
 public boolean sendResponseToFile() 
 {
     return true;
-}
+} 
+
 
 //
 // Class Variables
@@ -127,15 +126,16 @@ public void beginHtmlBasicRenderKit(WebRequest theRequest)
 public void testHtmlBasicRenderKit()
 {
     System.setProperty(RIConstants.DISABLE_RENDERERS, "");
-
+    
+    
     boolean result = false;
-    UIComponentBase root = null;
+    UINamingContainer root = null;
     String value = null;
     LifecycleImpl lifecycle = new LifecycleImpl();
     Phase renderResponse = new RenderResponsePhase(lifecycle);
-    root = new UIComponentBase() {
-	    public String getComponentType() { return "Root"; }
-	};
+    root = new UINamingContainer() {
+        public String getComponentType() { return "root"; }
+    };
     root.setComponentId("root");
  
     TreeFactory treeFactory = (TreeFactory)

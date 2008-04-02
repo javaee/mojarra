@@ -1,168 +1,54 @@
 <!--
- Copyright 2002 Sun Microsystems, Inc. All rights reserved.
- SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+ Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
+ 
+ Redistribution and use in source and binary forms, with or
+ without modification, are permitted provided that the following
+ conditions are met:
+ 
+ - Redistributions of source code must retain the above copyright
+   notice, this list of conditions and the following disclaimer.
+ 
+ - Redistribution in binary form must reproduce the above
+   copyright notice, this list of conditions and the following
+   disclaimer in the documentation and/or other materials
+   provided with the distribution.
+    
+ Neither the name of Sun Microsystems, Inc. or the names of
+ contributors may be used to endorse or promote products derived
+ from this software without specific prior written permission.
+  
+ This software is provided "AS IS," without a warranty of any
+ kind. ALL EXPRESS OR IMPLIED CONDITIONS, REPRESENTATIONS AND
+ WARRANTIES, INCLUDING ANY IMPLIED WARRANTY OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE OR NON-INFRINGEMENT, ARE HEREBY
+ EXCLUDED. SUN AND ITS LICENSORS SHALL NOT BE LIABLE FOR ANY
+ DAMAGES OR LIABILITIES SUFFERED BY LICENSEE AS A RESULT OF OR
+ RELATING TO USE, MODIFICATION OR DISTRIBUTION OF THIS SOFTWARE OR
+ ITS DERIVATIVES. IN NO EVENT WILL SUN OR ITS LICENSORS BE LIABLE
+ FOR ANY LOST REVENUE, PROFIT OR DATA, OR FOR DIRECT, INDIRECT,
+ SPECIAL, CONSEQUENTIAL, INCIDENTAL OR PUNITIVE DAMAGES, HOWEVER
+ CAUSED AND REGARDLESS OF THE THEORY OF LIABILITY, ARISING OUT OF
+ THE USE OF OR INABILITY TO USE THIS SOFTWARE, EVEN IF SUN HAS
+ BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
+  
+ You acknowledge that this software is not designed, licensed or
+ intended for use in the design, construction, operation or
+ maintenance of any nuclear facility.
 -->
 
 <HTML>
-    <HEAD> <TITLE> JSF Basic Components Test Page </TITLE> </HEAD>
+    <HEAD> <title>Hello</title> </HEAD>
     
-    <BODY>
-        <H3> JSF Basic Components Test Page </H3>
-
-<form method="post" action="%2Ftest%2Ffaces%2Fform%2FbasicForm;jsessionid=10C534D4240643A084E9A52123866093">
-  <TABLE BORDER="1">
-
-
-      <TR>
-
-	<TD>
-
-	      <input type="text" name="/basicForm/userName" value="Default_username">
-
-	</TD>
-
-      </TR>
-
-      <TR>
-
-	<TD>
-
-	      <input type="text" name="/basicForm/password" value="Default_password">
-
-	</TD>
-
-      </TR>
-
-      <TR>
-
-	<TD>
-
-	      <input type="submit" name="login">
-
-	</TD>
-
-      </TR>
-
-
-      <TR>
-
-	<TD>
-
-	      <input type="submit" name="login">
-
-	</TD>
-
-      </TR>
-
-      <TR>
-
-	<TD>
-
-	      <input type="submit">
-
-	</TD>
-
-      </TR>
-
-      <TR>
-
-	<TD>
-
-	      <input type="submit">
-
-	</TD>
-
-      </TR>
-
-      <TR>
-
-	<TD>
-
-	      Output Text
-
-	</TD>
-
-      </TR>
-
-      <TR>
-
-	<TD>
-
-	      <input type="checkbox" name="/basicForm/validUser" checked="checked">
-
-	</TD>
-
-      </TR>
-
-      <TR>
-
-	<TD>
-
-	      
-
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-
-	      <select name="/basicForm/appleQuantity"><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4" selected="selected">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option></select>
-
-              Option List
-
-	</TD>
-
-      </TR>
-
-      <TR>
-
-	<TD>
-
-	      
-
-		
-		
-		
-
-              <select name="/basicForm/shipType"><option value="nextDay">Next Day</option><option value="nextWeek" selected="selected">Next Week</option><option value="nextMonth">Next Month</option></select>
-
-	</TD>
-
-      </TR>
-
-      <TR>
-
-	<TD>
-		
-
-  		
-		
-		
-
-                <select name="/basicForm/verticalRadio"><option value="nextDay" selected="selected">Next Day</option><option value="nextWeek">Next Week</option><option value="nextMonth">Next Month</option></select>
-
-	</TD>
-
-      </TR>
-
-      <TR>
-
-	<TD>
-
-	      <input type="text" name="/basicForm/address" value="Hi There">
-
-	</TD>
-
-      </TR>
-
-  <TABLE>
-
-</form>
-
-    </BODY>
-</HTML>
+    
+    <body bgcolor="white">
+    <h2>Hi. My name is Duke.  I'm thinking of a number from 0 to 10.
+    Can you guess it?</h2>
+    
+    <form id="helloForm" method="post" action="/test/faces/greeting.jsp;jsessionid=4182E6CD240E5A9A295F7C904AEECC3E">
+
+  	<input type="text" name="userNo" value="NUMBER"> <BR>
+
+	 <input type="submit" name="submit" value="Submit">
+    </form>
+    
+</HTML>  

@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTestCaseService.java,v 1.24 2003/07/29 18:12:54 rlubke Exp $
+ * $Id: FacesTestCaseService.java,v 1.25 2003/08/13 16:38:27 jvisvanathan Exp $
  */
 
 /*
@@ -54,7 +54,7 @@ import org.apache.cactus.server.ServletContextWrapper;
  * <B>Lifetime And Scope</B> <P> Same as the JspTestCase or
  * ServletTestCase instance that uses it.
  *
- * @version $Id: FacesTestCaseService.java,v 1.24 2003/07/29 18:12:54 rlubke Exp $
+ * @version $Id: FacesTestCaseService.java,v 1.25 2003/08/13 16:38:27 jvisvanathan Exp $
  * 
  * @see	com.sun.faces.context.FacesContextFactoryImpl
  * @see	com.sun.faces.context.FacesContextImpl
@@ -125,18 +125,13 @@ public FacesContextFactory getFacesContextFactory()
 public void setUp()
 {
     HttpServletResponse response = null;
+    RIConstants.IS_UNIT_TEST_MODE = true;
+    
     Util.verifyFactoriesAndInitDefaultRenderKit(facesTestCase.getConfig().getServletContext());
     
     facesContextFactory = (FacesContextFactory) 
 	FactoryFinder.getFactory(FactoryFinder.FACES_CONTEXT_FACTORY);
     Assert.assert_it(null != facesContextFactory);
-
-    // See if the testcase wants to have its output sent to a file.
-    if (facesTestCase.sendResponseToFile()) {
-	response = new FileOutputResponseWrapper(facesTestCase.getResponse());
-    } else {
-	response = facesTestCase.getResponse();
-    }
 
     // Since we run using tomcat's deploy targets, we must obtain the
     // absolute path to where we are to write our output files.
@@ -145,7 +140,13 @@ public void setUp()
     
     Assert.assert_it(null != testRootDir);
     System.setProperty("testRootDir", testRootDir);
-
+    
+    // See if the testcase wants to have its output sent to a file.
+    if (facesTestCase.sendResponseToFile()) {
+        response = new FileOutputResponseWrapper(facesTestCase.getResponse());
+    } else {
+	response = facesTestCase.getResponse();
+    }
 
     LifecycleFactory factory = (LifecycleFactory)
 	FactoryFinder.getFactory(FactoryFinder.LIFECYCLE_FACTORY);
@@ -163,9 +164,8 @@ public void setUp()
         
     if (facesTestCase.sendWriterToFile()){
         ResponseWriter responseWriter = new FileOutputResponseWriter();
-	facesContext.setResponseWriter(responseWriter);
-    }    
-    
+        facesContext.setResponseWriter(responseWriter);
+    } 
     TestBean testBean = new TestBean();
     facesContext.getExternalContext().getSessionMap().put("TestBean", testBean);
     System.setProperty(RIConstants.DISABLE_RENDERERS, 
@@ -236,7 +236,7 @@ public boolean verifyExpectedOutput()
     }
     correctFileName = FileOutputResponseWriter.FACES_RESPONSE_ROOT +
 	facesTestCase.getExpectedOutputFilename();
-    
+   
     errorMessage = "File Comparison failed: diff -u " + outputFileName + " " + 
         correctFileName;
     
@@ -251,7 +251,7 @@ public boolean verifyExpectedOutput()
     }
     
     try {
-	result = cf.filesIdentical(outputFileName, correctFileName,ignoreList);
+        result = cf.filesIdentical(outputFileName, correctFileName,ignoreList);
     }
     catch (IOException e) {
 	System.out.println(e.getMessage());

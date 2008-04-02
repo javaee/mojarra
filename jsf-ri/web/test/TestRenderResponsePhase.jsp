@@ -62,12 +62,12 @@
                     <h:input_secret inputClass="secretClass" id="password1" />
 
                     <h:command_button id="submit1" type="SUBMIT"
-                        commandClass="commandClass" commandName="submit"
+                        commandClass="commandClass" 
                         label="Login" >
                     </h:command_button>
 
                     <h:command_button id="reset1" type="RESET" 
-                        commandName="reset" label="Reset">
+                        label="Reset">
                     </h:command_button>
 
                 </h:panel_grid>
@@ -104,7 +104,7 @@
 	<TD>
 
             <h:command_button id="pushButton" type="button"
-                commandName="push" disabled = "true" image="duke.gif">
+                 disabled = "true" image="duke.gif">
             </h:command_button>
 	</TD>
 
@@ -116,7 +116,7 @@
 	<TD>
 
             <h:command_button id="imageOnlyButton" type="submit"
-                commandName="login" image="duke.gif" rendered="true"> 
+                 image="duke.gif" rendered="true"> 
              </h:command_button>
 	</TD>
 
@@ -126,7 +126,7 @@
 
 	<TD>
 
-	      <h:command_hyperlink id="link" href="hello.html"
+	      <h:command_hyperlink id="link" 
                            commandClass="hyperlinkClass"
 				       label="link text"/>
 
@@ -138,7 +138,7 @@
 
 	<TD>
 
-	      <h:command_hyperlink id="imageLink" href="hello.html"
+	      <h:command_hyperlink id="imageLink" 
 				       image="duke.gif"/>
 
 	</TD>
@@ -151,7 +151,7 @@
 
       <TR>
         <TD>
-            <h:command_hyperlink id="commandLink" commandName="login"
+            <h:command_hyperlink id="commandLink" 
               commandClass="hyperlinkClass"
               label="link text"/>
        </TD>
@@ -159,7 +159,7 @@
 
       <TR>
         <TD>
-            <h:command_hyperlink id="commandParamLink" commandName="login"
+            <h:command_hyperlink id="commandParamLink" 
               commandClass="hyperlinkClass"
               label="link text">
               <f:parameter id="hlParam1" name="name" value="horwat"/>
@@ -170,14 +170,14 @@
 
       <TR>
         <TD>
-            <h:command_hyperlink id="hrefLink" href="hello.html"
+            <h:command_hyperlink id="hrefLink" 
               image="duke.gif"/>
         </TD>
       </TR>
 
       <TR>
         <TD>
-            <h:command_hyperlink id="hrefParamLink" href="hello.html"
+            <h:command_hyperlink id="hrefParamLink" 
               image="duke.gif">
               <f:parameter id="hlParam3" name="name" value="horwat"/>
               <f:parameter id="hlParam4" name="value" value="password"/>
@@ -220,7 +220,7 @@
                 <h:selectitem  itemValue="1" itemLabel="1" title="One"/>
                 <h:selectitem  itemValue="2" itemLabel="2" title="Two" />
                 <h:selectitem  itemValue="3" itemLabel="3" title="Three" />
-                <h:selectitem  itemValue="4" itemLabel="4" title="Four" selected="true"/>
+                <h:selectitem  itemValue="4" itemLabel="4" title="Four" />
                 <h:selectitem  itemValue="5" itemLabel="5" title="Five" />
                 <h:selectitem  itemValue="6" itemLabel="6" title="Six" />
                 <h:selectitem  itemValue="7" itemLabel="7" title="Seven" />
@@ -242,7 +242,7 @@
                 <h:selectitem itemValue="nextDay" itemLabel="Next Day"
                       tabindex="30" title="Next day shipment"/>
                 <h:selectitem itemValue="nextWeek" itemLabel="Next Week" title="Next week shipment"
-                                  tabindex="40" selected="true" />
+                                  tabindex="40" />
                 <h:selectitem itemValue="nextMonth" itemLabel="Next Month"
                         tabindex="50" title="Next month shipment"/>
 
@@ -259,7 +259,7 @@
                                             layout="PAGE_DIRECTION" border="1" >
 
                 <h:selectitem itemValue="nextDay" itemLabel="Next Day"
-                                  selected="true" />
+                                   />
                 <h:selectitem itemValue="nextWeek" itemLabel="Next Week"  />
                 <h:selectitem itemValue="nextMonth" itemLabel="Next Month" />
 
@@ -439,10 +439,10 @@
 						<h:selectitem itemValue="1" itemLabel="one" />
 						<h:selectitem itemValue="2" itemLabel="two" />
 						<h:selectitem itemValue="3" itemLabel="three" />
-						<h:selectitem itemValue="4" itemLabel="four" selected="true" />
+						<h:selectitem itemValue="4" itemLabel="four" />
 						<h:selectitem itemValue="5" itemLabel="five" />
 						<h:selectitem itemValue="6" itemLabel="six" />
-						<h:selectitem itemValue="7" itemLabel="seven" selected="true" />
+						<h:selectitem itemValue="7" itemLabel="seven" />
 						<h:selectitem itemValue="8" itemLabel="eight" />
 						<h:selectitem itemValue="9" itemLabel="nine" />
 					</h:selectmany_menu></TD>
@@ -456,10 +456,10 @@
 						<h:selectitem itemValue="1" itemLabel="one" />
 						<h:selectitem itemValue="2" itemLabel="two" />
 						<h:selectitem itemValue="3" itemLabel="three" />
-						<h:selectitem itemValue="4" itemLabel="four" selected="true" />
+						<h:selectitem itemValue="4" itemLabel="four" />
 						<h:selectitem itemValue="5" itemLabel="five" />
 						<h:selectitem itemValue="6" itemLabel="six" />
-						<h:selectitem itemValue="7" itemLabel="seven" selected="true" />
+						<h:selectitem itemValue="7" itemLabel="seven" />
 						<h:selectitem itemValue="8" itemLabel="eight" />
 						<h:selectitem itemValue="9" itemLabel="nine" />
 					</h:selectmany_listbox></TD>
@@ -472,10 +472,10 @@
 						<h:selectitem itemValue="1" itemLabel="one" />
 						<h:selectitem itemValue="2" itemLabel="two" />
 						<h:selectitem itemValue="3" itemLabel="three" />
-						<h:selectitem itemValue="4" itemLabel="four" selected="true" />
+						<h:selectitem itemValue="4" itemLabel="four" />
 						<h:selectitem itemValue="5" itemLabel="five" />
 						<h:selectitem itemValue="6" itemLabel="six" />
-						<h:selectitem itemValue="7" itemLabel="seven" selected="true" />
+						<h:selectitem itemValue="7" itemLabel="seven" />
 						<h:selectitem itemValue="8" itemLabel="eight" />
 						<h:selectitem itemValue="9" itemLabel="nine" />
 					</h:selectmany_checkboxlist></TD>

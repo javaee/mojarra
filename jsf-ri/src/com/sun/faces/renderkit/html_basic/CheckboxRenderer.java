@@ -1,5 +1,5 @@
 /*
- * $Id: CheckboxRenderer.java,v 1.50 2003/08/08 16:20:18 rkitain Exp $
+ * $Id: CheckboxRenderer.java,v 1.51 2003/08/13 16:38:26 jvisvanathan Exp $
  *
  */
 
@@ -42,7 +42,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: CheckboxRenderer.java,v 1.50 2003/08/08 16:20:18 rkitain Exp $
+ * @version $Id: CheckboxRenderer.java,v 1.51 2003/08/13 16:38:26 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -187,7 +187,7 @@ public class CheckboxRenderer extends HtmlBasicInputRenderer {
 	writer.writeAttribute("type", "checkbox");
 	writer.writeAttribute("name", component.getClientId(context)); 
 
-        if (currentValue.equals("true")) {
+        if (currentValue != null && currentValue.equals("true")) {
 	    writer.writeAttribute("checked", new Boolean("true"));
         }
         if (null != (selectbooleanClass = (String) 

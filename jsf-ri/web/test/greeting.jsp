@@ -38,17 +38,16 @@
 
 <HTML>
     <HEAD> <title>Hello</title> </HEAD>
-    
-    
+    <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
+    <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
     <body bgcolor="white">
     <h2>Hi. My name is Duke.  I'm thinking of a number from 0 to 10.
     Can you guess it?</h2>
-    
-    <form id="helloForm" method="post" action="/test/faces/greeting.jsp;jsessionid=4182E6CD240E5A9A295F7C904AEECC3E">
+    <f:use_faces>
+    <h:form id="helloForm" formName="helloForm" >
+  	<h:input_text id="userNo"  value="NUMBER" /> <BR>
 
-  	<input type="text" name="userNo" value="NUMBER"> <BR>
-
-	 <input type="submit" name="submit" value="Submit">
-    </form>
-    
+	 <h:command_button id="submit" label="Submit" />
+    </h:form>
+    </f:use_faces>
 </HTML>  
