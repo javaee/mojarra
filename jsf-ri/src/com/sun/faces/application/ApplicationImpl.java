@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationImpl.java,v 1.34 2003/11/07 23:11:30 rlubke Exp $
+ * $Id: ApplicationImpl.java,v 1.35 2003/11/13 04:46:03 craigmcc Exp $
  */
 
 /*
@@ -433,6 +433,7 @@ public class ApplicationImpl extends Application {
         }
         if (null == result || createOne) {
             result = this.createComponent(componentType);
+            componentRef.setValue(context, result);
         }
 
         return (UIComponent) result;
