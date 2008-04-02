@@ -1,10 +1,10 @@
-<?xml version="1.0"?>
+<?xml version='1.0' encoding='UTF-8'?>
 
 <!--
  Copyright 2003 Sun Microsystems, Inc. All rights reserved.
  SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 
- $Id: build-tests.xml,v 1.38 2004/01/20 15:19:51 eburns Exp $
+ $Id: build-tests.xml,v 1.39 2004/01/22 16:55:34 eburns Exp $
 -->
 
 
