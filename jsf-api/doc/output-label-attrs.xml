@@ -32,7 +32,7 @@
       <attribute-name>for</attribute-name>
       <attribute-class>java.lang.String</attribute-class>
       <attribute-extension>
-        <required>true</required>
+        <required>false</required>
       </attribute-extension>
     </attribute>
 

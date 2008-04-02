@@ -32,7 +32,7 @@
       <property-name>for</property-name>
       <property-class>java.lang.String</property-class>
       <property-extension>
-        <required>true</required>
+        <required>false</required>
       </property-extension>
     </property>
 
