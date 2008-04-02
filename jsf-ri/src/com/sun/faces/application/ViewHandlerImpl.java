@@ -1,5 +1,5 @@
 /* 
- * $Id: ViewHandlerImpl.java,v 1.23 2003/10/22 20:43:46 eburns Exp $ 
+ * $Id: ViewHandlerImpl.java,v 1.24 2003/10/22 22:17:38 eburns Exp $ 
  */ 
 
 
@@ -42,7 +42,7 @@ import java.util.Enumeration;
 
 /** 
  * <B>ViewHandlerImpl</B> is the default implementation class for ViewHandler. 
- * @version $Id: ViewHandlerImpl.java,v 1.23 2003/10/22 20:43:46 eburns Exp $ 
+ * @version $Id: ViewHandlerImpl.java,v 1.24 2003/10/22 22:17:38 eburns Exp $ 
  * 
  * @see javax.faces.application.ViewHandler 
  * 
@@ -176,14 +176,11 @@ public class ViewHandlerImpl extends Object
             } catch (IOException ioe) {
                 throw new FacesException(ioe);
             }           
-        } else {
-            viewRoot = getStateManager().restoreView(context, viewId);
+        } 
+	else {
+	    viewRoot = getStateManager().restoreView(context, viewId);
         }        
-        if ( viewRoot == null) {
-            viewRoot = createView(context,viewId);
-            context.renderResponse();
-        }
-        viewRoot.setViewId(viewId);
+	
 
 	// set the request character encoding 
 	HttpSession session = null;
@@ -241,7 +238,7 @@ public class ViewHandlerImpl extends Object
 	UIViewRoot result = new UIViewRoot();
 	result.setViewId(viewId);
 	// PENDING(): not sure if we should set the RenderKitId here.
-	// The UIViewRootBase ctor sets the renderKitId to the default
+	// The UIViewRoot ctor sets the renderKitId to the default
 	// one.
         // if there was no locale from the previous view, calculate the locale 
         // for this view.

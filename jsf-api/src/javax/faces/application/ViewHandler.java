@@ -1,5 +1,5 @@
 /*
- * $Id: ViewHandler.java,v 1.21 2003/10/22 05:19:56 eburns Exp $
+ * $Id: ViewHandler.java,v 1.22 2003/10/22 22:17:27 eburns Exp $
  */
 
 /*
@@ -143,13 +143,12 @@ public interface ViewHandler {
      *
      * <p>It is the caller's responsibility to make sure the returned
      * <code>UIViewRoot</code> is stored in the
-     * <code>FacesContext</code> as the new root.</p>
-     *
-     * <p>If this is an initial request - usually marked by a lack of
-     * available state for this view - <code>restoreView()</code> must
-     * call <code>FacesContext.renderResponse()</code> to cause the
-     * intervening phases between <em>Restore View</em> and <em>Render
-     * Response</em> to be skipped.<p>
+     * <code>FacesContext</code> as the new root.  If this is an initial
+     * request - indicated by <code>restoreView</code> method returning
+     * <code>null</code> the caller must call {@link #createView} then
+     * call {@link FacesContext#renderResponse} to cause the intervening
+     * phases between <em>Restore View</em> and <em>Render Response</em>
+     * to be skipped.<p>
      *
      * <p>Before returning the {@link UIViewRoot}, the default
      * implementation must attempt to set the character encoding for
@@ -175,6 +174,10 @@ public interface ViewHandler {
      * <p>Create an and return new {@link UIViewRoot} instance
      * initialized with information from the argument
      * <code>FacesContext</code> and <code>viewId</code>.</p>
+     *
+     * <p>The implementation must ensure that the argument
+     * <code>viewId</code> is passed to the {@link UIViewRoot#setViewId}
+     * for the restored view.</p>
      *
      * <p>This method must be called from {@link
      * NavigationHandler#handleNavigation}.</p>

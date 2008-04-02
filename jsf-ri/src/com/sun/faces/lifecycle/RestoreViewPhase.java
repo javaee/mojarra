@@ -1,5 +1,5 @@
 /*
- * $Id: RestoreViewPhase.java,v 1.8 2003/10/16 22:11:31 jvisvanathan Exp $
+ * $Id: RestoreViewPhase.java,v 1.9 2003/10/22 22:17:39 eburns Exp $
  */
 
 /*
@@ -39,7 +39,7 @@ import java.util.Map;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: RestoreViewPhase.java,v 1.8 2003/10/16 22:11:31 jvisvanathan Exp $
+ * @version $Id: RestoreViewPhase.java,v 1.9 2003/10/22 22:17:39 eburns Exp $
  * 
  */
 
@@ -148,9 +148,17 @@ public class RestoreViewPhase extends Phase {
             throw new FacesException(Util.getExceptionMessage(
                     Util.NULL_REQUEST_VIEW_ERROR_MESSAGE_ID));
         }
-        viewRoot = (Util.getViewHandler(facesContext)).
-                restoreView(facesContext, viewId);
-        Assert.assert_it(viewRoot != null);
+	
+	// try to restore the view
+	if (null == (viewRoot = (Util.getViewHandler(facesContext)).
+		     restoreView(facesContext, viewId))) {
+	    // if that fails, create one
+	    viewRoot = (Util.getViewHandler(facesContext)).
+                createView(facesContext, viewId);
+            facesContext.renderResponse();
+	}
+	Assert.assert_it(null != viewRoot);
+
         facesContext.setViewRoot(viewRoot);
         doPerComponentActions(facesContext, viewRoot);
     }    
