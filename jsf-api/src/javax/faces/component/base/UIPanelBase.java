@@ -1,5 +1,5 @@
 /*
- * $Id: UIPanelBase.java,v 1.4 2003/09/05 19:35:28 eburns Exp $
+ * $Id: UIPanelBase.java,v 1.5 2003/09/11 15:26:06 craigmcc Exp $
  */
 
 /*
@@ -14,6 +14,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.faces.application.Application;
+import javax.faces.component.Repeater;
+import javax.faces.component.RepeaterSupport;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIPanel;
 import javax.faces.context.FacesContext;
@@ -84,14 +86,32 @@ public class UIPanelBase extends UIOutputBase implements UIPanel {
 
     public Object getValue() {
 
-        return (this.value);
+        Repeater repeater = RepeaterSupport.findParentRepeater(this);
+        if (repeater != null) {
+            if (repeater.getRowIndex() > 0) {
+                return (repeater.getChildValue(this));
+            } else {
+                return (this.value);
+            }
+        } else {
+            return (this.value);
+        }
 
     }
 
 
     public void setValue(Object value) {
 
-        this.value = value;
+        Repeater repeater = RepeaterSupport.findParentRepeater(this);
+        if (repeater != null) {
+            if (repeater.getRowIndex() > 0) {
+                repeater.setChildValue(this, value);
+            } else {
+                this.value = value;
+            }
+        } else {
+            this.value = value;
+        }
 
     }
 

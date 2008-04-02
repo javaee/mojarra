@@ -1,5 +1,5 @@
 /*
- * $Id: UIInputBase.java,v 1.5 2003/08/27 00:56:51 craigmcc Exp $
+ * $Id: UIInputBase.java,v 1.6 2003/09/11 15:26:06 craigmcc Exp $
  */
 
 /*
@@ -16,6 +16,8 @@ import javax.faces.FacesException;
 import javax.faces.application.Application;
 import javax.faces.application.Message;
 import javax.faces.application.MessageResources;
+import javax.faces.component.Repeater;
+import javax.faces.component.RepeaterSupport;
 import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
 import javax.faces.el.ValueBinding;
@@ -65,7 +67,16 @@ public class UIInputBase extends UIOutputBase implements UIInput {
 
     public Object getPrevious() {
 
-        return (this.previous);
+        Repeater repeater = RepeaterSupport.findParentRepeater(this);
+        if (repeater != null) {
+            if (repeater.getRowIndex() > 0) {
+                return (repeater.getChildPrevious(this));
+            } else {
+                return (this.previous);
+            }
+        } else {
+            return (this.previous);
+        }
 
     }
 
@@ -73,6 +84,16 @@ public class UIInputBase extends UIOutputBase implements UIInput {
     public void setPrevious(Object previous) {
 
         this.previous = previous;
+        Repeater repeater = RepeaterSupport.findParentRepeater(this);
+        if (repeater != null) {
+            if (repeater.getRowIndex() > 0) {
+                repeater.setChildPrevious(this, previous);
+            } else {
+                this.previous = previous;
+            }
+        } else {
+            this.previous = previous;
+        }
 
     }
 
@@ -85,14 +106,14 @@ public class UIInputBase extends UIOutputBase implements UIInput {
 
     public boolean isRequired() {
 
-	return (this.required);
+        return (this.required);
 
     }
 
 
     public void setRequired(boolean required) {
 
-	this.required = required;
+        this.required = required;
 
     }
 
@@ -143,14 +164,32 @@ public class UIInputBase extends UIOutputBase implements UIInput {
 
     public boolean isValid() {
 
-	return (this.valid);
+        Repeater repeater = RepeaterSupport.findParentRepeater(this);
+        if (repeater != null) {
+            if (repeater.getRowIndex() > 0) {
+                return (repeater.isChildValid(this));
+            } else {
+                return (this.valid);
+            }
+        } else {
+            return (this.valid);
+        }
 
     }
 
 
     public void setValid(boolean valid) {
 
-	this.valid = valid;
+        Repeater repeater = RepeaterSupport.findParentRepeater(this);
+        if (repeater != null) {
+            if (repeater.getRowIndex() > 0) {
+                repeater.setChildValid(this, valid);
+            } else {
+                this.valid = valid;
+            }
+        } else {
+            this.valid = valid;
+        }
 
     }
 

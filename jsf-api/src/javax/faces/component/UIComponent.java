@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.91 2003/09/04 01:26:28 eburns Exp $
+ * $Id: UIComponent.java,v 1.92 2003/09/11 15:26:01 craigmcc Exp $
  */
 
 /*
@@ -19,6 +19,7 @@ import javax.faces.event.AbortProcessingException;
 import javax.faces.event.FacesEvent;
 import javax.faces.event.FacesListener;
 import javax.faces.event.PhaseId;
+import javax.faces.event.RepeaterEvent;
 import javax.faces.render.Renderer;
 
 
@@ -353,6 +354,20 @@ public interface UIComponent extends StateHolder {
      * <li>Listeners whose <code>getPhaseId()</code> method returns
      *     the <code>PhaseId</code> specified on this method call,
      *     in the order that they were registered.</li>
+     * </ul>
+     *
+     * <p>Before broadcasting, check to see if <code>event</code> is a
+     * {@link RepeaterEvent}.  If it is, take the following additional steps
+     * before notifying interested listeners:</p>
+     * <ul>
+     * <li>Locate the parent {@link Repeater} component, and call its
+     *     <code>setRowIndex()</code> method, using the <code>rowIndex</code>
+     *     property value from the {@link RepeaterEvent}.</li>
+     * <li>Use the return value from <code>getFacesEvent()</code> as the
+     *     event to be broadcast, rather than the <code>event</code> itself.
+     *     </ul>
+     * <li>After broadcasting is complete, restore the previous
+     *     <code>rowIndex</code> value on the parent {@link Repeater}.</li>
      * </ul>
      *
      * <p>After all interested listeners have been notified, return

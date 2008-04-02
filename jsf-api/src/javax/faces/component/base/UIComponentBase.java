@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.10 2003/09/05 01:01:21 craigmcc Exp $
+ * $Id: UIComponentBase.java,v 1.11 2003/09/11 15:26:05 craigmcc Exp $
  */
 
 /*
@@ -29,6 +29,8 @@ import java.util.WeakHashMap;
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.component.NamingContainer;
+import javax.faces.component.Repeater;
+import javax.faces.component.RepeaterSupport;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
@@ -36,6 +38,7 @@ import javax.faces.event.AbortProcessingException;
 import javax.faces.event.FacesEvent;
 import javax.faces.event.FacesListener;
 import javax.faces.event.PhaseId;
+import javax.faces.event.RepeaterEvent;
 import javax.faces.render.Renderer;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
@@ -253,9 +256,16 @@ public abstract class UIComponentBase implements UIComponent {
 
     public String getClientId(FacesContext context) {
 
+        // Locate our parent Repeater (if any)
+        Repeater repeater = RepeaterSupport.findParentRepeater(this);
+
 	// Return any previously calculated client identifier
         if (clientId != null) {
-            return (clientId);
+            if (repeater == null) {
+                return (clientId);
+            } else {
+                return (repeater.getChildClientId(context, clientId));
+            }
         }
 	NamingContainer closestContainer = null;
 	UIComponent containerComponent = this;
@@ -338,7 +348,12 @@ public abstract class UIComponentBase implements UIComponent {
 	    }
 	}
 		
-	return (clientId);
+        if (repeater == null) {
+            return (clientId);
+        } else {
+            return (repeater.getChildClientId(context, clientId));
+        }
+
     }
 
 
@@ -864,6 +879,16 @@ public abstract class UIComponentBase implements UIComponent {
             return (false);
         }
 
+        // Unwrap a RepeaterEvent and set row index if necessary
+        Repeater repeater = null;
+        int rowIndex = 0;
+        if (event instanceof RepeaterEvent) {
+            repeater = (Repeater) event.getComponent();
+            rowIndex = repeater.getRowIndex();
+            repeater.setRowIndex(((RepeaterEvent) event).getRowIndex());
+            event = ((RepeaterEvent) event).getFacesEvent();
+        }
+
         // Broadcast the event to interested listeners
         broadcast(event, listeners[PhaseId.ANY_PHASE.getOrdinal()]);
         broadcast(event, listeners[phaseId.getOrdinal()]);
@@ -882,6 +907,12 @@ public abstract class UIComponentBase implements UIComponent {
                 }
             }
         }
+
+        // Reposition Repeater (if necessary)
+        if (repeater != null) {
+            repeater.setRowIndex(rowIndex);
+        }
+
         return (false);
 
     }

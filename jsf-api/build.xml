@@ -204,7 +204,9 @@
                 test.UIComponent,
                 test.UIComponentBase,
                 test.UIComponentBaseState,
+                test.UIColumn,
                 test.UICommandBase,
+                test.UIData,
                 test.UIFormBase,
                 test.UIGraphicBase,
                 test.UIInputBase,
@@ -246,6 +248,16 @@
     </java>
   </target>
 
+  <target name="test.UIColumn" depends="build.test">
+    <echo message="Running UIColumn tests ..."/>
+    <java classname="${test.runner}" fork="yes"
+        failonerror="${test.failonerror}">
+      <jvmarg line="${debug.jvm.args}"/>
+      <arg value="javax.faces.component.UIColumnTestCase"/>
+      <classpath refid="test.classpath"/>
+    </java>
+  </target>
+
   <target name="test.UIComponent" depends="build.test">
     <echo message="Running UIComponent tests ..."/>
     <java classname="${test.runner}" fork="yes"
@@ -282,6 +294,16 @@
         failonerror="${test.failonerror}">
       <jvmarg line="${debug.jvm.args}"/>
       <arg value="javax.faces.component.base.UICommandBaseTestCase"/>
+      <classpath refid="test.classpath"/>
+    </java>
+  </target>
+
+  <target name="test.UIData" depends="build.test">
+    <echo message="Running UIData tests ..."/>
+    <java classname="${test.runner}" fork="yes"
+        failonerror="${test.failonerror}">
+      <jvmarg line="${debug.jvm.args}"/>
+      <arg value="javax.faces.component.UIDataTestCase"/>
       <classpath refid="test.classpath"/>
     </java>
   </target>
