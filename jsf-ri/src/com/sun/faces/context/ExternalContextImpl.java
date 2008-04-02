@@ -1,5 +1,5 @@
 /*
- * $Id: ExternalContextImpl.java,v 1.18 2003/12/17 15:13:34 rkitain Exp $
+ * $Id: ExternalContextImpl.java,v 1.19 2004/01/09 02:23:06 eburns Exp $
  */
 
 /*
@@ -44,7 +44,7 @@ import com.sun.faces.util.Util;
  * servlet implementation.
  *
  * @author Brendan Murray
- * @version $Id: ExternalContextImpl.java,v 1.18 2003/12/17 15:13:34 rkitain Exp $
+ * @version $Id: ExternalContextImpl.java,v 1.19 2004/01/09 02:23:06 eburns Exp $
  *
  */
 public class ExternalContextImpl extends ExternalContext {
@@ -128,7 +128,7 @@ public class ExternalContextImpl extends ExternalContext {
 
     public Map getSessionMap() {
         if (sessionMap == null)
-            sessionMap = new SessionMap((HttpSession) getSession(true));
+            sessionMap = new SessionMap((HttpServletRequest) request);
         return sessionMap;       
     }
 
@@ -439,17 +439,17 @@ class ApplicationMap extends BaseContextMap {
 } // END ApplicationMap
 
 class SessionMap extends BaseContextMap {
-    private HttpSession session = null;
+    private HttpServletRequest request = null;
 
-    SessionMap(HttpSession session) {
-        this.session = session;
+    SessionMap(HttpServletRequest request) {
+        this.request = request;
     }
 
     public Object get(Object key) {
         if (key == null) {
             throw new NullPointerException();
         }
-        return session.getAttribute(key.toString());
+        return getSession().getAttribute(key.toString());
     }
 
     public Object put(Object key, Object value) {
@@ -457,6 +457,7 @@ class SessionMap extends BaseContextMap {
             throw new NullPointerException();
         }
         String keyString = key.toString();
+        HttpSession session = getSession();
         Object result = session.getAttribute(keyString);
         session.setAttribute(keyString, value);
         return (result);
@@ -467,6 +468,7 @@ class SessionMap extends BaseContextMap {
             return null;
         }
         String keyString = key.toString();
+        HttpSession session = getSession();
         Object result = session.getAttribute(keyString);
         session.removeAttribute(keyString);
         return (result);
@@ -474,6 +476,7 @@ class SessionMap extends BaseContextMap {
 
     public Set entrySet() {
         Set entries = new HashSet();
+        HttpSession session = getSession();
         for (Enumeration e = session.getAttributeNames();
              e.hasMoreElements(); ) {
             String key = (String) e.nextElement();
@@ -487,6 +490,11 @@ class SessionMap extends BaseContextMap {
             return false;
         return super.equals(obj);
     }
+
+    private HttpSession getSession() {
+        return request.getSession(true);
+    }
+
 } // END SessionMap
 
 class RequestMap extends BaseContextMap {

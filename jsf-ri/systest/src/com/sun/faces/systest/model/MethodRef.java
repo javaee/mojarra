@@ -1,5 +1,5 @@
 /*
- * $Id: MethodRef.java,v 1.5 2003/12/22 19:29:33 eburns Exp $
+ * $Id: MethodRef.java,v 1.6 2004/01/09 02:23:08 eburns Exp $
  */
 
 /*
@@ -8,6 +8,8 @@
  */
 
 package com.sun.faces.systest.model;
+
+import javax.servlet.http.HttpSession;
 
 import javax.faces.event.ActionEvent;
 import javax.faces.event.ValueChangeEvent;
@@ -34,6 +36,15 @@ public class MethodRef extends Object {
 	setButtonPressedOutcome("button1 was pressed");
 	return null;
     }
+
+    public String invalidateSession() {
+         FacesContext fContext = FacesContext.getCurrentInstance();
+         HttpSession session = (HttpSession)
+            fContext.getExternalContext().getSession(true);
+         session.invalidate();
+         return null;
+    }
+
 
     public String button2Pressed() {
 	setButtonPressedOutcome("button2 was pressed");
