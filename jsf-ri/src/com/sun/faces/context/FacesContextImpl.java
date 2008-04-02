@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContextImpl.java,v 1.52 2003/09/24 18:25:17 rlubke Exp $
+ * $Id: FacesContextImpl.java,v 1.53 2003/09/26 17:17:57 rkitain Exp $
  */
 
 /*
@@ -224,6 +224,9 @@ public class FacesContextImpl extends FacesContext
         // if the component specified is null, return messages not associated
         // with a component, i.e. the global messages.
         if (component == null) {
+	    if (globalMessages == null) {
+	        return (Collections.EMPTY_LIST.iterator());
+	    }
             return globalMessages.iterator();
         } else {
             List list = (List) componentMessageLists.get(component);
