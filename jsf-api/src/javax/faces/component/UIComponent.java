@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.67 2003/01/17 01:11:58 eburns Exp $
+ * $Id: UIComponent.java,v 1.68 2003/01/17 02:00:37 craigmcc Exp $
  */
 
 /*
@@ -233,6 +233,14 @@ public interface UIComponent extends Serializable {
      * </ul>
      */
     public boolean isValid();
+
+
+    /**
+     * <p>Set the current validity state of this component.</p>
+     *
+     * @param valid The new validity state
+     */
+    public void setValid(boolean valid);
 
 
     /**
@@ -686,20 +694,15 @@ public interface UIComponent extends Serializable {
      * <em>Process Validations</em> phase of the request processing
      * lifecycle.  If errors are encountered, appropriate <code>Message</code>
      * instances should be added to the {@link FacesContext} for the current
-     * request.</p>
+     * request, and the <code>valid</code> property of this {@link UIComponent}
+     * should be set to <code>false</code>.</p>
      *
      * @param context FacesContext for the request we are processing
-     *
-     * @return <code>false</code> if the <code>valid</code> property
-     *  is <code>false</code>, indicating that a validation failure occurred
-     * @return <code>true</code> if all validations performed by this
-     *  method passed successfully, or <code>false</code> if one or more
-     *  validations performed by this method failed
      *
      * @exception NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
-    public boolean validate(FacesContext context);
+    public void validate(FacesContext context);
 
 
     // ----------------------------------------------- Lifecycle Phase Handlers
@@ -745,6 +748,8 @@ public interface UIComponent extends Serializable {
      * <li>If the <code>valid</code> property of this component is
      *     currently <code>true</code>:
      *     <ul>
+     *     <li>Call the <code>validate()</code> method of each
+     *         {@link Validator} registered for this {@link UIComponent}.</li>
      *     <li>Call the <code>validate()</code> method of this component.</li>
      *     <li>Set the <code>valid</code> property of this component
      *         to the result returned from the <code>validate()</code>
@@ -752,17 +757,12 @@ public interface UIComponent extends Serializable {
      *     </ul></li>
      * </ul>
      *
-     * <p>Return <code>false</code> if any <code>processValidators()</code>
-     * method call returned <code>false</code>, or if the <code>valid</code>
-     * property of this component is <code>false</code>.  Otherwise,
-     * return <code>true</code>.</p>
-     *
      * @param context {@link FacesContext} for the request we are processing
      *
      * @exception NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
-    public boolean processValidators(FacesContext context);
+    public void processValidators(FacesContext context);
 
 
     /**

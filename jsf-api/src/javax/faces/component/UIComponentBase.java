@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.38 2003/01/17 01:11:58 eburns Exp $
+ * $Id: UIComponentBase.java,v 1.39 2003/01/17 02:00:38 craigmcc Exp $
  */
 
 /*
@@ -480,14 +480,11 @@ public abstract class UIComponentBase implements UIComponent {
 
 
     /**
-     * <p>Define the value to be returned by the <code>isValid()</code>
-     * method.  This method should only be called from the
-     * <code>decode()</code> method of a {@link Renderer} instance to which
-     * decoding has been delegated for this component.</p>
+     * <p>Set the current validity state of this component.</p>
      *
-     * @param valid The new <code>valid</code> value
+     * @param valid The new validity state
      */
-    protected void setValid(boolean valid) {
+    public void setValid(boolean valid) {
 
         if (valid) {
             setAttribute("valid", Boolean.TRUE);
@@ -1403,39 +1400,19 @@ public abstract class UIComponentBase implements UIComponent {
      * <em>Process Validations</em> phase of the request processing
      * lifecycle.  If errors are encountered, appropriate <code>Message</code>
      * instances should be added to the {@link FacesContext} for the current
-     * request.</p>
-     *
-     * <p>The default implementation calls the <code>validate()</code>
-     * method of all {@link Validator} instances that have been registered
-     * on this component, and returns <code>false</code> if any of them
-     * returned <code>false</code>.</p>
+     * request, and the <code>valid</code> property of this {@link UIComponent}
+     * should be set to <code>false</code>.</p>
      *
      * @param context FacesContext for the request we are processing
-     *
-     * @return <code>false</code> if the <code>valid</code> property
-     *  is <code>false</code>, indicating that a validation failure occurred
-     * @return <code>true</code> if all validations performed by this
-     *  method passed successfully, or <code>false</code> if one or more
-     *  validations performed by this method failed
      *
      * @exception NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
-    public boolean validate(FacesContext context) {
+    public void validate(FacesContext context) {
 
         if (context == null) {
             throw new NullPointerException();
         }
-        boolean success = true;
-        Iterator validators = getValidators();
-        while (validators.hasNext()) {
-            Validator validator = (Validator) validators.next();
-            if (!validator.validate(context, this)) {
-                setValid(false);
-                success = false;
-            }
-        }
-        return (success);
 
     }
 
@@ -1474,7 +1451,7 @@ public abstract class UIComponentBase implements UIComponent {
             throw new NullPointerException();
         }
 
-        // process all facets and children of this component
+        // Process all facets and children of this component
         Iterator kids = getFacetsAndChildren();
         while (kids.hasNext()) {
             UIComponent kid = (UIComponent) kids.next();
@@ -1502,51 +1479,39 @@ public abstract class UIComponentBase implements UIComponent {
      * <li>If the <code>valid</code> property of this component is
      *     currently <code>true</code>:
      *     <ul>
+     *     <li>Call the <code>validate()</code> method of each
+     *         {@link Validator} registered for this {@link UIComponent}.</li>
      *     <li>Call the <code>validate()</code> method of this component.</li>
-     *     <li>Set the <code>valid</code> property of this component
-     *         to the result returned from the <code>validate()</code>
-     *         method.</li>
      *     </ul></li>
      * </ul>
-     *
-     * <p>Return <code>false</code> if any <code>processValidators()</code>
-     * method call returned <code>false</code>, or if the <code>valid</code>
-     * property of this component is <code>false</code>.  Otherwise,
-     * return <code>true</code>.</p>
      *
      * @param context {@link FacesContext} for the request we are processing
      *
      * @exception NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
-    public boolean processValidators(FacesContext context) {
+    public void processValidators(FacesContext context) {
 
         if (context == null) {
             throw new NullPointerException();
         }
-        boolean result = true;
 
         // Process all the facets and children of this component
         Iterator kids = getFacetsAndChildren();
         while (kids.hasNext()) {
             UIComponent kid = (UIComponent) kids.next();
-            if (!kid.processValidators(context)) {
-                result = false;
-            }
+            kid.processValidators(context);
         }
 
         // Process this component itself
         if (isValid()) {
-            if (!validate(context)) {
-                setValid(false);
-                result = false;
+            Iterator validators = getValidators();
+            while (validators.hasNext()) {
+                Validator validator = (Validator) validators.next();
+                validator.validate(context, this);
             }
-        } else {
-            result = false;
+            validate(context);
         }
-
-        // Return the final result
-        return (result);
 
     }
 
