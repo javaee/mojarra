@@ -8,21 +8,21 @@
 <optgroup label="group">	<option value="Green">Green</option>
 	<option value="Yellow">Yellow</option>
 </optgroup></select>
-<span class="styleClass"><table border="0">
+<table border="0" class="styleClass">
 	<tr>
 <td>
-<label for="myCheckboxlist"><input name="myCheckboxlist" id="myCheckboxlist" value="Red" type="checkbox" disabled="disabled" tabindex="5" title="title"> Red</input><span class="disabledClass"></span></label></td>
+<label for="myCheckboxlist" class="disabledClass"><input name="myCheckboxlist" id="myCheckboxlist" value="Red" type="checkbox" disabled="disabled" tabindex="5" title="title"> Red</input></label></td>
 <td>
-<label for="myCheckboxlist"><input name="myCheckboxlist" id="myCheckboxlist" value="Blue" type="checkbox"  checked tabindex="5" title="title"> Blue</input><span class="enabledClass"></span></label></td>
-<table border="0">
+<label for="myCheckboxlist" class="enabledClass"><input name="myCheckboxlist" id="myCheckboxlist" value="Blue" type="checkbox"  checked tabindex="5" title="title"> Blue</input></label></td>
+<table border="0" class="styleClass">
 	<tr>
 <td>
-<label for="myCheckboxlist"><input name="myCheckboxlist" id="myCheckboxlist" value="Green" type="checkbox" tabindex="5" title="title"> Green</input><span class="enabledClass"></span></label></td>
+<label for="myCheckboxlist" class="enabledClass"><input name="myCheckboxlist" id="myCheckboxlist" value="Green" type="checkbox" tabindex="5" title="title"> Green</input></label></td>
 <td>
-<label for="myCheckboxlist"><input name="myCheckboxlist" id="myCheckboxlist" value="Yellow" type="checkbox" tabindex="5" title="title"> Yellow</input><span class="enabledClass"></span></label></td>
+<label for="myCheckboxlist" class="enabledClass"><input name="myCheckboxlist" id="myCheckboxlist" value="Yellow" type="checkbox" tabindex="5" title="title"> Yellow</input></label></td>
 	</tr>
 </table>	</tr>
-</table></span>
+</table>
 <select id="myOnemenu" name="myOnemenu" size="1">	<option value="Red">Red</option>
 	<option value="Blue"  selected>Blue</option>
 	<option value="Green">Green</option>

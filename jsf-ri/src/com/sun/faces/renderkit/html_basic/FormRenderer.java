@@ -1,5 +1,5 @@
 /*
- * $Id: FormRenderer.java,v 1.67 2004/01/15 07:34:04 eburns Exp $
+ * $Id: FormRenderer.java,v 1.68 2004/01/17 01:21:38 jvisvanathan Exp $
  */
 
 /*
@@ -32,7 +32,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: FormRenderer.java,v 1.67 2004/01/15 07:34:04 eburns Exp $ 
+ * @version $Id: FormRenderer.java,v 1.68 2004/01/17 01:21:38 jvisvanathan Exp $ 
  */
 
 public class FormRenderer extends HtmlBasicRenderer {
@@ -116,32 +116,8 @@ public class FormRenderer extends HtmlBasicRenderer {
         Util.renderPassThruAttributes(writer, component);
         Util.renderBooleanPassThruAttributes(writer, component);
 	writer.writeText("\n", null);
-	updateFormNumber(context, component);
     }
 
-    /**
-
-    * This method keeps track of the number of forms in a page.  This is
-    * necessary for any renderer that needs to use Javascript, as in,
-    * document.forms[N].
-
-    */
-
-    protected int updateFormNumber(FacesContext context, 
-				   UIComponent component) {
-        Map requestMap = context.getExternalContext().getRequestMap();
-	int numForms = 0;
-	Integer formsInt = null;
-	// find out the current number of forms in the page.
-	if (null != (formsInt = (Integer) 
-		     requestMap.get(RIConstants.FORM_NUMBER_ATTR))) {
-	    numForms = formsInt.intValue();
-	}
-	requestMap.put(RIConstants.FORM_NUMBER_ATTR, 
-            formsInt = new Integer(++numForms));
-	return numForms;
-    }
-    
     /**
      * <p>Return the value to be rendered as the <code>action</code> attribute
      * of the form generated for this component.</p>

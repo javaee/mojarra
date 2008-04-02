@@ -96,7 +96,7 @@
 	      
                  
                 
-              <a id="basicForm:link" href="#" onclick="document.forms[0]['basicForm:link'].value='basicForm:link'; document.forms[0].submit()" class="hyperlinkClass">link text with localized outputMessage with &euro;</a>
+              <a id="basicForm:link" href="#" onclick="document.forms['basicForm']['basicForm:link'].value='basicForm:link'; document.forms['basicForm'].submit()" class="hyperlinkClass">link text with localized outputMessage with &euro;</a>
 
 	</TD>
 
@@ -108,7 +108,7 @@
 
 	      
                 
-              <a id="basicForm:imageLink" href="#" onclick="document.forms[0]['basicForm:imageLink'].value='basicForm:imageLink'; document.forms[0].submit()"><img id="basicForm:_id2" src="duke.gif" alt="" /></a>
+              <a id="basicForm:imageLink" href="#" onclick="document.forms['basicForm']['basicForm:imageLink'].value='basicForm:imageLink'; document.forms['basicForm'].submit()"><img id="basicForm:_id2" src="duke.gif" alt="" /></a>
 
 	</TD>
 
@@ -121,7 +121,7 @@
       <TR>
         <TD>
             
-            <a id="basicForm:commandLink" href="#" onclick="document.forms[0]['basicForm:commandLink'].value='basicForm:commandLink'; document.forms[0].submit()" class="hyperlinkClass">link text</a>
+            <a id="basicForm:commandLink" href="#" onclick="document.forms['basicForm']['basicForm:commandLink'].value='basicForm:commandLink'; document.forms['basicForm'].submit()" class="hyperlinkClass">link text</a>
        </TD>
       </TR>
 
@@ -131,13 +131,13 @@
               
               
               
-            <a id="basicForm:commandParamLink" href="#" onclick="document.forms[0]['basicForm:commandParamLink'].value='basicForm:commandParamLink';document.forms[0]['name'].value='horwat';document.forms[0]['value'].value='password'; document.forms[0].submit()" class="hyperlinkClass">link text</a>
+            <a id="basicForm:commandParamLink" href="#" onclick="document.forms['basicForm']['basicForm:commandParamLink'].value='basicForm:commandParamLink';document.forms['basicForm']['name'].value='horwat';document.forms['basicForm']['value'].value='password'; document.forms['basicForm'].submit()" class="hyperlinkClass">link text</a>
         </TD>
       </TR>
 
       <TR>
         <TD>
-            <a id="basicForm:hrefLink" href="#" onclick="document.forms[0]['basicForm:hrefLink'].value='basicForm:hrefLink'; document.forms[0].submit()"><img src="duke.gif"></a>
+            <a id="basicForm:hrefLink" href="#" onclick="document.forms['basicForm']['basicForm:hrefLink'].value='basicForm:hrefLink'; document.forms['basicForm'].submit()"><img src="duke.gif"></a>
         </TD>
       </TR>
 
@@ -147,7 +147,7 @@
               
               
               
-            <a id="basicForm:hrefParamLink" href="#" onclick="document.forms[0]['basicForm:hrefParamLink'].value='basicForm:hrefParamLink';document.forms[0]['name'].value='horwat';document.forms[0]['value'].value='password'; document.forms[0].submit()"><img id="basicForm:_id6" src="duke.gif" alt="" /></a>
+            <a id="basicForm:hrefParamLink" href="#" onclick="document.forms['basicForm']['basicForm:hrefParamLink'].value='basicForm:hrefParamLink';document.forms['basicForm']['name'].value='horwat';document.forms['basicForm']['value'].value='password'; document.forms['basicForm'].submit()"><img id="basicForm:_id6" src="duke.gif" alt="" /></a>
         </TD>
       </TR>
 
@@ -281,13 +281,16 @@
                 
                 
                  
-              <span class="styleClass"><table>
+              <table class="styleClass">
 	<tr>
-<td><input type="radio" name="basicForm:shipType" value="nextDay" accesskey="A" tabindex="3"> Next Day</input><span class="enabledClass"></span></td>
-<td><input type="radio" name="basicForm:shipType" value="nextWeek" accesskey="A" tabindex="3"> Next Week</input><span class="enabledClass"></span></td>
-<td><input type="radio" name="basicForm:shipType" value="nextMonth" accesskey="A" tabindex="3"> Next Month</input><span class="enabledClass"></span></td>
+<td>
+<label for="basicForm:shipType" class="enabledClass"><input type="radio" name="basicForm:shipType" value="nextDay" accesskey="A" tabindex="3"> Next Day</input></label></td>
+<td>
+<label for="basicForm:shipType" class="enabledClass"><input type="radio" name="basicForm:shipType" value="nextWeek" accesskey="A" tabindex="3"> Next Week</input></label></td>
+<td>
+<label for="basicForm:shipType" class="enabledClass"><input type="radio" name="basicForm:shipType" value="nextMonth" accesskey="A" tabindex="3"> Next Month</input></label></td>
 	</tr>
-</table></span>
+</table>
 
 	</TD>
 
@@ -304,13 +307,16 @@
 
            <table border="1">
 	<tr>
-<td><input type="radio" name="basicForm:verticalRadio" value="nextDay" border="1"> Next Day</input></td>
+<td>
+<label for="basicForm:verticalRadio"><input type="radio" name="basicForm:verticalRadio" value="nextDay" border="1"> Next Day</input></label></td>
 	</tr>
 	<tr>
-<td><input type="radio" name="basicForm:verticalRadio" value="nextWeek" border="1"> Next Week</input></td>
+<td>
+<label for="basicForm:verticalRadio"><input type="radio" name="basicForm:verticalRadio" value="nextWeek" border="1"> Next Week</input></label></td>
 	</tr>
 	<tr>
-<td><input type="radio" name="basicForm:verticalRadio" value="nextMonth" border="1"> Next Month</input></td>
+<td>
+<label for="basicForm:verticalRadio"><input type="radio" name="basicForm:verticalRadio" value="nextMonth" border="1"> Next Month</input></label></td>
 	</tr>
 </table>
 
@@ -552,30 +558,30 @@
 						
 						
 						
-					<span class="styleClass"><table border="0">
+					<table border="0" class="styleClass">
 	<tr>
 <td>
-<label for="basicForm:ManyApples3"><input name="basicForm:ManyApples3" id="basicForm:ManyApples3" value="0" type="checkbox" accesskey="A" tabindex="3"> zero</input><span class="enabledClass"></span></label></td>
+<label for="basicForm:ManyApples3" class="enabledClass"><input name="basicForm:ManyApples3" id="basicForm:ManyApples3" value="0" type="checkbox" accesskey="A" tabindex="3"> zero</input></label></td>
 <td>
-<label for="basicForm:ManyApples3"><input name="basicForm:ManyApples3" id="basicForm:ManyApples3" value="1" type="checkbox" accesskey="A" tabindex="3"> one</input><span class="enabledClass"></span></label></td>
+<label for="basicForm:ManyApples3" class="enabledClass"><input name="basicForm:ManyApples3" id="basicForm:ManyApples3" value="1" type="checkbox" accesskey="A" tabindex="3"> one</input></label></td>
 <td>
-<label for="basicForm:ManyApples3"><input name="basicForm:ManyApples3" id="basicForm:ManyApples3" value="2" type="checkbox" accesskey="A" tabindex="3"> two</input><span class="enabledClass"></span></label></td>
+<label for="basicForm:ManyApples3" class="enabledClass"><input name="basicForm:ManyApples3" id="basicForm:ManyApples3" value="2" type="checkbox" accesskey="A" tabindex="3"> two</input></label></td>
 <td>
-<label for="basicForm:ManyApples3"><input name="basicForm:ManyApples3" id="basicForm:ManyApples3" value="3" type="checkbox" accesskey="A" tabindex="3"> three</input><span class="enabledClass"></span></label></td>
+<label for="basicForm:ManyApples3" class="enabledClass"><input name="basicForm:ManyApples3" id="basicForm:ManyApples3" value="3" type="checkbox" accesskey="A" tabindex="3"> three</input></label></td>
 <td>
-<label for="basicForm:ManyApples3"><input name="basicForm:ManyApples3" id="basicForm:ManyApples3" value="4" type="checkbox" accesskey="A" tabindex="3"> four</input><span class="enabledClass"></span></label></td>
+<label for="basicForm:ManyApples3" class="enabledClass"><input name="basicForm:ManyApples3" id="basicForm:ManyApples3" value="4" type="checkbox" accesskey="A" tabindex="3"> four</input></label></td>
 <td>
-<label for="basicForm:ManyApples3"><input name="basicForm:ManyApples3" id="basicForm:ManyApples3" value="5" type="checkbox" accesskey="A" tabindex="3"> five</input><span class="enabledClass"></span></label></td>
+<label for="basicForm:ManyApples3" class="enabledClass"><input name="basicForm:ManyApples3" id="basicForm:ManyApples3" value="5" type="checkbox" accesskey="A" tabindex="3"> five</input></label></td>
 <td>
-<label for="basicForm:ManyApples3"><input name="basicForm:ManyApples3" id="basicForm:ManyApples3" value="6" type="checkbox" accesskey="A" tabindex="3"> six</input><span class="enabledClass"></span></label></td>
+<label for="basicForm:ManyApples3" class="enabledClass"><input name="basicForm:ManyApples3" id="basicForm:ManyApples3" value="6" type="checkbox" accesskey="A" tabindex="3"> six</input></label></td>
 <td>
-<label for="basicForm:ManyApples3"><input name="basicForm:ManyApples3" id="basicForm:ManyApples3" value="7" type="checkbox" accesskey="A" tabindex="3"> seven</input><span class="enabledClass"></span></label></td>
+<label for="basicForm:ManyApples3" class="enabledClass"><input name="basicForm:ManyApples3" id="basicForm:ManyApples3" value="7" type="checkbox" accesskey="A" tabindex="3"> seven</input></label></td>
 <td>
-<label for="basicForm:ManyApples3"><input name="basicForm:ManyApples3" id="basicForm:ManyApples3" value="8" type="checkbox" accesskey="A" tabindex="3"> eight</input><span class="enabledClass"></span></label></td>
+<label for="basicForm:ManyApples3" class="enabledClass"><input name="basicForm:ManyApples3" id="basicForm:ManyApples3" value="8" type="checkbox" accesskey="A" tabindex="3"> eight</input></label></td>
 <td>
-<label for="basicForm:ManyApples3"><input name="basicForm:ManyApples3" id="basicForm:ManyApples3" value="9" type="checkbox" accesskey="A" tabindex="3"> nine</input><span class="enabledClass"></span></label></td>
+<label for="basicForm:ManyApples3" class="enabledClass"><input name="basicForm:ManyApples3" id="basicForm:ManyApples3" value="9" type="checkbox" accesskey="A" tabindex="3"> nine</input></label></td>
 	</tr>
-</table></span></TD>
+</table></TD>
 </tr>
 
 <tr>

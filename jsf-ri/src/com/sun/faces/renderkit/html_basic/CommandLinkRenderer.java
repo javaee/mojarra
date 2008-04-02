@@ -1,5 +1,5 @@
 /*
- * $Id: CommandLinkRenderer.java,v 1.8 2004/01/16 18:15:19 horwat Exp $
+ * $Id: CommandLinkRenderer.java,v 1.9 2004/01/17 01:21:38 jvisvanathan Exp $
  */
 
 /*
@@ -36,7 +36,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: CommandLinkRenderer.java,v 1.8 2004/01/16 18:15:19 horwat Exp $
+ * @version $Id: CommandLinkRenderer.java,v 1.9 2004/01/17 01:21:38 jvisvanathan Exp $
  */
 
 public class CommandLinkRenderer extends HtmlBasicRenderer {
@@ -114,24 +114,6 @@ public class CommandLinkRenderer extends HtmlBasicRenderer {
 	return (UIForm) parent;
     }
 
-    protected int getMyFormNumber(FacesContext context, UIForm form) {
-	// If we don't have a form, return 0
-	if (null == form) {
-	    return 0;
-	}
-        Map requestMap = context.getExternalContext().getRequestMap();
-	int numForms = 0;
-	Integer formsInt = null;
-	// find out the current number of forms in the page.
-	if (null != (formsInt = (Integer) 
-		     requestMap.get(RIConstants.FORM_NUMBER_ATTR))) {
-	    numForms = formsInt.intValue();
-            // since the form index in the document starts from 0.
-            numForms--;
-	}
-	return numForms;
-    }
-
     public boolean getRendersChildren() {
 	return true;
     }
@@ -155,9 +137,10 @@ public class CommandLinkRenderer extends HtmlBasicRenderer {
 
 	clientId = command.getClientId(context);
 
-	int formNumber = getMyFormNumber(context,
-					 getMyForm(context, command));
-
+        UIForm uiform = getMyForm(context, command);
+        Util.doAssert( uiform != null );
+        String formClientId = uiform.getClientId(context);
+	
 	//Write Anchor attributes
 
         //make link act as if it's a button using javascript
@@ -170,9 +153,9 @@ public class CommandLinkRenderer extends HtmlBasicRenderer {
         Util.renderBooleanPassThruAttributes(writer, component);
 	sb = new StringBuffer();
 	sb.append("document.forms[");
-	sb.append("");
-	sb.append(formNumber);
-	sb.append("");
+	sb.append("'");
+	sb.append(formClientId);
+	sb.append("'");
 	sb.append("]['");
 	sb.append(clientId);
 	sb.append("'].value='");
@@ -180,9 +163,9 @@ public class CommandLinkRenderer extends HtmlBasicRenderer {
 	sb.append("';");
         for (int i = 0, len = paramList.length; i < len; i++) {
 	    sb.append("document.forms[");
-	    sb.append("");
-	    sb.append(formNumber);
-	    sb.append("");
+            sb.append("'");
+	    sb.append(formClientId);
+            sb.append("'");
 	    sb.append("]['");
 	    sb.append(paramList[i].getName());
 	    sb.append("'].value='");
@@ -190,9 +173,9 @@ public class CommandLinkRenderer extends HtmlBasicRenderer {
 	    sb.append("';");
 	}	    
 	sb.append(" document.forms[");
-	sb.append("");
-	sb.append(formNumber);
-	sb.append("");
+        sb.append("'");
+	sb.append(formClientId);
+	sb.append("'");
 	sb.append("].submit()");
 
         //If 'onclick' specified append 'return false' 
