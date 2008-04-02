@@ -1,5 +1,5 @@
 /*
- * $Id: ExternalContextImpl.java,v 1.2 2003/03/24 19:45:26 eburns Exp $
+ * $Id: ExternalContextImpl.java,v 1.3 2003/03/27 07:35:34 rkitain Exp $
  */
 
 /*
@@ -868,6 +868,10 @@ class InitParameterMap implements Map {
         }
         String keyString = key.toString();
         return servletContext.getInitParameter(keyString);
+    }
+
+    public int hashCode() {
+        throw new UnsupportedOperationException();
     }
 
     public boolean isEmpty() {
