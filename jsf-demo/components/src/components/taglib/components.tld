@@ -453,6 +453,160 @@
 
   </tag>
 
+  <tag>
+    <name>pane_tab</name>
+    <tag-class>components.taglib.PaneTabTag</tag-class>
+    <body-content>JSP</body-content>
+    <description>
+      Render an individual pane of a tabbed control.  This tag is only
+      valid when immediately nested in a pane_tabbed tag.
+    </description>
+
+    <attribute>
+      <name>id</name>
+      <required>true</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Component id of this component
+      </description>
+    </attribute>
+
+    <attribute>
+      <name>paneClass</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        CSS style class to use when rendering this component.
+      </description>
+    </attribute>
+
+    <attribute>
+      <name>selected</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Boolean attribute describing whether this pane should be the
+        initially selected one.  If no pane is marked as selected, the
+        first one will arbitrarily be chosen.
+      </description>
+    </attribute>
+  </tag>
+
+  <tag>
+    <name>pane_tablabel</name>
+    <tag-class>components.taglib.PaneTabLabelTag</tag-class>
+    <body-content>JSP</body-content>
+    <description>
+      Render an individual pane tab label of a tabbed control.  This
+      tag is only valid when immediately nested in a pane_tab tag.
+    </description>
+
+    <attribute>
+      <name>id</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Component id of this component
+      </description>
+    </attribute>
+
+    <attribute>
+      <name>label</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        label "text" for the face of this component
+      </description>
+    </attribute>
+
+    <attribute>
+      <name>image</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        image for the face of this component
+      </description>
+    </attribute>
+
+    <attribute>
+      <name>commandName</name>
+      <required>true</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        command name for this component
+      </description>
+    </attribute>
+
+    <attribute>
+      <name>paneTabLabelClass</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        CSS style class to use when rendering this component.
+      </description>
+    </attribute>
+  </tag>
+
+  <tag>
+    <name>pane_tabbed</name>
+    <tag-class>components.taglib.PaneTabbedTag</tag-class>
+    <body-content>JSP</body-content>
+    <description>
+      Render a tabbed control with immediately nested pane_tab tags
+      to represent each pane.
+    </description>
+
+    <attribute>
+      <name>contentClass</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        If present, specifies the CSS style class to be used when
+        rendering the content of the selected pane.
+      </description>
+    </attribute>
+
+    <attribute>
+      <name>id</name>
+      <required>true</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Component id of this component
+      </description>
+    </attribute>
+
+    <attribute>
+      <name>paneClass</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        If present, specifies the CSS style class to be used when
+        rendering the entire tabbed pane control.  Style classes
+        for the selected tab, unselected tabs, and the content data
+        support overriding these defaults in the usual CSS manner.
+      </description>
+    </attribute>
+
+    <attribute>
+      <name>selectedClass</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        If present, specifies the CSS style class to be used when
+        rendering the tab for the currently selected pane.
+      </description>
+    </attribute>
+
+    <attribute>
+      <name>unselectedClass</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        If present, specifies the CSS style class to be used when
+        rendering the tabs for panes that are not currently selected.
+      </description>
+    </attribute>
+  </tag>
 
 
 </taglib>
