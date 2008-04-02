@@ -1,5 +1,5 @@
 /*
- * $Id: SelectItem.java,v 1.15 2006/08/11 16:50:37 rogerk Exp $
+ * $Id: SelectItem.java,v 1.16 2007/01/29 22:17:39 rlubke Exp $
  */
 
 /*
@@ -166,6 +166,7 @@ public class SelectItem implements Serializable {
     private String description = null;
     private boolean disabled = false;
     private String label = null;
+    @SuppressWarnings({"NonSerializableFieldInSerializableClass"})
     private Object value = null;
 
 
