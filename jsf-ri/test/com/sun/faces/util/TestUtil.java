@@ -1,5 +1,5 @@
 /*
- * $Id: TestUtil.java,v 1.11 2003/09/24 23:17:44 horwat Exp $
+ * $Id: TestUtil.java,v 1.12 2003/09/25 16:36:44 rlubke Exp $
  */
 
 /*
@@ -38,7 +38,7 @@ import javax.servlet.ServletContext;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestUtil.java,v 1.11 2003/09/24 23:17:44 horwat Exp $
+ * @version $Id: TestUtil.java,v 1.12 2003/09/25 16:36:44 rlubke Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -100,8 +100,8 @@ public class TestUtil extends ServletFacesTestCase
 	    sw = new StringWriter();
 	    writer = renderKit.createResponseWriter(sw,"text/html", "ISO-8859-1");
 	    getFacesContext().setResponseWriter(writer);
-	    input.getAttributes().put("onblur", null);
-	    input.getAttributes().put("onchange", null);
+	    input.getAttributes().remove("onblur");
+	    input.getAttributes().remove("onchange");
 	    Util.renderPassThruAttributes(writer, input);
 	    assertTrue(0 == sw.toString().length());
 	} catch (IOException e) {
@@ -130,8 +130,8 @@ public class TestUtil extends ServletFacesTestCase
 	    sw = new StringWriter();
 	    writer = renderKit.createResponseWriter(sw, "text/html", "ISO-8859-1");
 	    getFacesContext().setResponseWriter(writer);
-	    input.getAttributes().put("disabled", null);
-	    input.getAttributes().put("readonly", null);
+	    input.getAttributes().remove("disabled");
+	    input.getAttributes().remove("readonly");
 	    Util.renderBooleanPassThruAttributes(writer, input);
 	    assertTrue(0 == sw.toString().length());
 	} catch (IOException e) {

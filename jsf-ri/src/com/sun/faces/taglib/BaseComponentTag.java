@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTag.java,v 1.50 2003/09/24 23:17:04 horwat Exp $
+ * $Id: BaseComponentTag.java,v 1.1 2003/09/25 16:36:26 rlubke Exp $
  */
 
 /*
@@ -7,7 +7,7 @@
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
-// FacesTag.java
+// BaseComponentTag.java
 
 package com.sun.faces.taglib;
 
@@ -22,25 +22,26 @@ import org.apache.commons.logging.LogFactory;
 import javax.faces.component.UIComponent;
 import javax.faces.component.ValueHolder;
 import javax.faces.convert.Converter;
+import javax.faces.webapp.UIComponentTag;
 import javax.servlet.jsp.JspException;
 
 /**
  *
- *  <B>FacesTag</B> is a base class for most tags in the Faces Tag
+ *  <B>BaseComponentTag</B> is a base class for most tags in the Faces Tag
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: FacesTag.java,v 1.50 2003/09/24 23:17:04 horwat Exp $ 
+ * @version $Id: BaseComponentTag.java,v 1.1 2003/09/25 16:36:26 rlubke Exp $ 
  */
 
-public abstract class FacesTag extends javax.faces.webapp.UIComponentTag
+public abstract class BaseComponentTag extends UIComponentTag
 {
     //
     // Protected Constants
     //
 
     // Log instance for this class
-    protected static Log log = LogFactory.getLog(FacesTag.class);
+    protected static Log log = LogFactory.getLog(BaseComponentTag.class);
 
     //
     // Class Variables
@@ -136,7 +137,7 @@ public abstract class FacesTag extends javax.faces.webapp.UIComponentTag
     // Constructors and Initializers    
     //
 
-    public FacesTag()
+    public BaseComponentTag()
     {
         super();
     }
@@ -661,8 +662,7 @@ public abstract class FacesTag extends javax.faces.webapp.UIComponentTag
     * double quotes.  WHAAAAT!
 
     */ 
-    public void setId(String newId) { 
-	int i = 0;
+    public void setId(String newId) { 	
 
 	if (-1 != newId.indexOf("\"")) {
 	    id = newId.substring(1, newId.length() - 1);
@@ -711,8 +711,7 @@ public abstract class FacesTag extends javax.faces.webapp.UIComponentTag
 
 protected void overrideProperties(UIComponent component) 
 {
-    super.overrideProperties(component);
-    String keyAttr = null;
+    super.overrideProperties(component);    
 
     if ( component instanceof ValueHolder ) {
         ValueHolder valueHolder = (ValueHolder)component;
@@ -877,4 +876,4 @@ public int doEndTag() throws JspException {
 
 	
 
-} // end of class FacesTag
+} // end of class BaseComponentTag

@@ -5,7 +5,7 @@
 
 
 /**
- * $Id: SelectOne_MenuTag.java,v 1.11 2003/09/24 23:17:28 horwat Exp $
+ * $Id: SelectOne_MenuTag.java,v 1.12 2003/09/25 16:36:33 rlubke Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -19,18 +19,16 @@
 package com.sun.faces.taglib.html_basic;
 
 import javax.faces.component.UIComponent;
-import javax.faces.component.UISelectMany;
-import javax.faces.component.UISelectOne;
 import javax.servlet.jsp.JspException;
 
-import com.sun.faces.taglib.FacesTag;
+import com.sun.faces.taglib.BaseComponentTag;
 
 /**
  * This class is the tag handler that evaluates the 
  * <code>selectone_menu</code> custom tag.
  */
 
-public class SelectOne_MenuTag extends FacesTag
+public class SelectOne_MenuTag extends BaseComponentTag
 {
     //
     // Protected Constants

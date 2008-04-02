@@ -1,5 +1,5 @@
 /*
- * $Id: ColumnTag.java,v 1.2 2003/09/11 15:27:29 craigmcc Exp $
+ * $Id: ColumnTag.java,v 1.3 2003/09/25 16:36:28 rlubke Exp $
  */
 
 /*
@@ -10,7 +10,7 @@
 package com.sun.faces.taglib.html_basic;
 
 
-import com.sun.faces.taglib.FacesTag;
+import com.sun.faces.taglib.BaseComponentTag;
 
 
 /**
@@ -18,7 +18,7 @@ import com.sun.faces.taglib.FacesTag;
  * custom tag.
  */
 
-public class ColumnTag extends FacesTag {
+public class ColumnTag extends BaseComponentTag {
 
 
     // -------------------------------------------------------------- Properties

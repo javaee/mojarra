@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_2.java,v 1.58 2003/09/24 23:17:41 horwat Exp $
+ * $Id: TestRenderers_2.java,v 1.59 2003/09/25 16:36:43 rlubke Exp $
  */
 
 /*
@@ -59,7 +59,7 @@ import com.sun.faces.TestBean;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_2.java,v 1.58 2003/09/24 23:17:41 horwat Exp $
+ * @version $Id: TestRenderers_2.java,v 1.59 2003/09/25 16:36:43 rlubke Exp $
  * 
  *
  */
@@ -260,7 +260,7 @@ public class TestRenderers_2 extends JspFacesTestCase
         val = (Boolean)selectBoolean.getValue();
         // make sure the value wasn't set to false. Bug id  4883159
         assertTrue(val.booleanValue());
-        selectBoolean.getAttributes().put("disabled", null);
+        selectBoolean.getAttributes().remove("disabled");
         
         // test encode method
         System.out.println("    Testing encode method - rendering checked");

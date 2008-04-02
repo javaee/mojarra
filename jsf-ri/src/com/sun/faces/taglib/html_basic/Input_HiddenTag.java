@@ -1,5 +1,5 @@
 /*
- * $Id: Input_HiddenTag.java,v 1.15 2003/08/29 16:03:27 rlubke Exp $
+ * $Id: Input_HiddenTag.java,v 1.16 2003/09/25 16:36:30 rlubke Exp $
  */
 
 /*
@@ -13,7 +13,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
 import javax.faces.convert.Converter;
 
-import com.sun.faces.taglib.FacesTag;
+import com.sun.faces.taglib.BaseComponentTag;
 
 
 /**
@@ -21,7 +21,7 @@ import com.sun.faces.taglib.FacesTag;
  * <code>input_hidden</code> custom tag.
  */
 
-public class Input_HiddenTag extends FacesTag
+public class Input_HiddenTag extends BaseComponentTag
 {
     //
     // Protected Constants

@@ -1,5 +1,5 @@
 /*
- * $Id: InputTag.java,v 1.12 2003/09/24 23:17:14 horwat Exp $
+ * $Id: InputTag.java,v 1.13 2003/09/25 16:36:30 rlubke Exp $
  */
 
 /*
@@ -12,14 +12,14 @@ package com.sun.faces.taglib.html_basic;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
 
-import com.sun.faces.taglib.FacesTag;
+import com.sun.faces.taglib.BaseComponentTag;
 
 
 /**
  * This class acts as the base class for input tags.
  */
 
-public abstract class InputTag extends FacesTag
+public abstract class InputTag extends BaseComponentTag
 {
     //
     // Protected Constants

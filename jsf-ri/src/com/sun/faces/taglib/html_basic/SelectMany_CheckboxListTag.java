@@ -5,7 +5,7 @@
 
 
 /**
- * $Id: SelectMany_CheckboxListTag.java,v 1.10 2003/09/24 23:17:26 horwat Exp $
+ * $Id: SelectMany_CheckboxListTag.java,v 1.11 2003/09/25 16:36:32 rlubke Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -19,14 +19,14 @@ import javax.servlet.jsp.JspException;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UISelectMany;
 
-import com.sun.faces.taglib.FacesTag;
+import com.sun.faces.taglib.BaseComponentTag;
 
 /**
  * This class is the tag handler that evaluates the 
  * <code>selectmany_checkboxlist</code> custom tag.
  */
 
-public class SelectMany_CheckboxListTag extends FacesTag
+public class SelectMany_CheckboxListTag extends BaseComponentTag
 {
     //
     // Protected Constants

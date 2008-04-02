@@ -1,5 +1,5 @@
 /*
- * $Id: SelectOne_ListboxTag.java,v 1.9 2003/09/24 23:17:27 horwat Exp $
+ * $Id: SelectOne_ListboxTag.java,v 1.10 2003/09/25 16:36:33 rlubke Exp $
  */
 
 /*
@@ -15,14 +15,14 @@ import javax.faces.component.UIComponent;
 import javax.faces.component.UISelectOne;
 
 import com.sun.faces.RIConstants;
-import com.sun.faces.taglib.FacesTag;
+import com.sun.faces.taglib.BaseComponentTag;
 
 /**
  * This class is the tag handler that evaluates the 
  * <code>selectmany_listbox</code> custom tag.
  */
 
-public class SelectOne_ListboxTag extends FacesTag
+public class SelectOne_ListboxTag extends BaseComponentTag
 {
     //
     // Protected Constants

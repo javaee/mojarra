@@ -1,5 +1,5 @@
 /*
- * $Id: Output_TextTag.java,v 1.49 2003/09/08 20:10:14 jvisvanathan Exp $
+ * $Id: Output_TextTag.java,v 1.50 2003/09/25 16:36:31 rlubke Exp $
  */
 
 /*
@@ -9,18 +9,14 @@
 
 package com.sun.faces.taglib.html_basic;
 
-import javax.faces.component.UIComponent;
-import javax.faces.component.UIOutput;
-import javax.faces.convert.Converter;
-
-import com.sun.faces.taglib.FacesTag;
+import com.sun.faces.taglib.BaseComponentTag;
 
 /**
  * This class is the tag handler that evaluates the 
  * <code>output_text</code> custom tag.
  */
 
-public class Output_TextTag extends FacesTag
+public class Output_TextTag extends BaseComponentTag
 {
     //
     // Protected Constants

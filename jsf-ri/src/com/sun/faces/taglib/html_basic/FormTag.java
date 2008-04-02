@@ -1,5 +1,5 @@
 /*
- * $Id: FormTag.java,v 1.48 2003/09/24 23:17:11 horwat Exp $
+ * $Id: FormTag.java,v 1.49 2003/09/25 16:36:29 rlubke Exp $
  */
 
 /*
@@ -9,23 +9,18 @@
 
 package com.sun.faces.taglib.html_basic;
 
-import java.io.IOException;
-import javax.servlet.jsp.JspException;
-
 import javax.faces.component.UIComponent;
-import javax.faces.component.UIForm;
 import javax.faces.context.FacesContext;
 
-import com.sun.faces.taglib.FacesTag;
+import com.sun.faces.taglib.BaseComponentTag;
 import com.sun.faces.RIConstants;
-import com.sun.faces.util.Util;
 
 
 /**
  * This class is the tag handler that evaluates the <code>form</code> custom tag.
  */
 
-public class FormTag extends FacesTag
+public class FormTag extends BaseComponentTag
 {
     //
     // Protected Constants
@@ -83,7 +78,7 @@ public class FormTag extends FacesTag
         if (formName != null) {
             // we set the bundle attribute on the root component here  
             // so that we don't set it again during postback. 
-            // This cannot be done in FacesTag since this is specific
+            // This cannot be done in BaseComponentTag since this is specific
             // to FormTag. Since formName is a required attribute,
             // we can be sure that these statements will be executed
             // the first time the tags are processed.

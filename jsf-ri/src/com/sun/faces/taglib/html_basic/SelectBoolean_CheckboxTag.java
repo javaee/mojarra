@@ -1,5 +1,5 @@
 /*
- * $Id: SelectBoolean_CheckboxTag.java,v 1.46 2003/09/24 23:17:25 horwat Exp $
+ * $Id: SelectBoolean_CheckboxTag.java,v 1.47 2003/09/25 16:36:32 rlubke Exp $
  */
 
 /*
@@ -12,14 +12,14 @@ package com.sun.faces.taglib.html_basic;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UISelectBoolean;
 
-import com.sun.faces.taglib.FacesTag;
+import com.sun.faces.taglib.BaseComponentTag;
 
 /**
  * This class is the tag handler that evaluates the 
  * <code>select_boolean</code> custom tag.
  */
 
-public class SelectBoolean_CheckboxTag extends FacesTag
+public class SelectBoolean_CheckboxTag extends BaseComponentTag
 {
     //
     // Protected Constants

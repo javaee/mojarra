@@ -1,5 +1,5 @@
 /*
- * $Id: Panel_GroupTag.java,v 1.9 2003/09/08 20:10:15 jvisvanathan Exp $
+ * $Id: Panel_GroupTag.java,v 1.10 2003/09/25 16:36:31 rlubke Exp $
  */
 
 /*
@@ -9,14 +9,13 @@
 
 package com.sun.faces.taglib.html_basic;
 
-import javax.faces.component.UIComponent;
-import com.sun.faces.taglib.FacesTag;
+import com.sun.faces.taglib.BaseComponentTag;
 
 /**
  * This class is the tag handler that evaluates the 
  * <code>panel_group</code> custom tag.
  */
-public class Panel_GroupTag extends FacesTag {
+public class Panel_GroupTag extends BaseComponentTag {
 
    //
     // Protected Constants

@@ -5,7 +5,7 @@
 
 
 /**
- * $Id: SelectMany_MenuTag.java,v 1.12 2003/09/24 23:17:27 horwat Exp $
+ * $Id: SelectMany_MenuTag.java,v 1.13 2003/09/25 16:36:32 rlubke Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -16,17 +16,16 @@
 package com.sun.faces.taglib.html_basic;
 
 import javax.faces.component.UIComponent;
-import javax.faces.component.UISelectMany;
 import javax.servlet.jsp.JspException;
 
-import com.sun.faces.taglib.FacesTag;
+import com.sun.faces.taglib.BaseComponentTag;
 
 /**
  * This class is the tag handler that evaluates the 
  * <code>selectmany_menu</code> custom tag.
  */
 
-public class SelectMany_MenuTag extends FacesTag
+public class SelectMany_MenuTag extends BaseComponentTag
 {
     //
     // Protected Constants

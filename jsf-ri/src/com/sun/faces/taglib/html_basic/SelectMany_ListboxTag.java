@@ -4,7 +4,7 @@
  */
 
 /**
- * $Id: SelectMany_ListboxTag.java,v 1.10 2003/09/08 20:10:16 jvisvanathan Exp $
+ * $Id: SelectMany_ListboxTag.java,v 1.11 2003/09/25 16:36:32 rlubke Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -15,16 +15,15 @@
 package com.sun.faces.taglib.html_basic;
 
 import javax.servlet.jsp.JspException;
-import javax.faces.component.UISelectMany;
 
-import com.sun.faces.taglib.FacesTag;
+import com.sun.faces.taglib.BaseComponentTag;
 
 /**
  * This class is the tag handler that evaluates the 
  * <code>selectmany_listbox</code> custom tag.
  */
 
-public class SelectMany_ListboxTag extends FacesTag
+public class SelectMany_ListboxTag extends BaseComponentTag
 {
     //
     // Protected Constants

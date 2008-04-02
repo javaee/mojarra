@@ -1,5 +1,5 @@
 /*
- * $Id: SelectOne_RadioTag.java,v 1.29 2003/09/24 23:17:28 horwat Exp $
+ * $Id: SelectOne_RadioTag.java,v 1.30 2003/09/25 16:36:33 rlubke Exp $
  */
 
 /*
@@ -9,12 +9,8 @@
 
 package com.sun.faces.taglib.html_basic;
 
-import javax.servlet.jsp.JspException;
-
 import javax.faces.component.UIComponent;
 import javax.faces.component.UISelectOne;
-
-import com.sun.faces.taglib.FacesTag;
 
 /**
  * This class is the tag handler that evaluates the 

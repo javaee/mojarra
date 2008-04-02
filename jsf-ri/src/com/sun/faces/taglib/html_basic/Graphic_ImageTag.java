@@ -1,5 +1,5 @@
 /*
- * $Id: Graphic_ImageTag.java,v 1.11 2003/09/24 23:17:13 horwat Exp $
+ * $Id: Graphic_ImageTag.java,v 1.12 2003/09/25 16:36:30 rlubke Exp $
  */
 
 /*
@@ -9,7 +9,7 @@
 
 package com.sun.faces.taglib.html_basic;
 
-import com.sun.faces.taglib.FacesTag;
+import com.sun.faces.taglib.BaseComponentTag;
 
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIGraphic;
@@ -20,7 +20,7 @@ import javax.faces.component.UIGraphic;
  * <code>graphic_image</code> custom tag.
  */
 
-public class Graphic_ImageTag extends FacesTag 
+public class Graphic_ImageTag extends BaseComponentTag 
 {
     //
     // Protected Constants

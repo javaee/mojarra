@@ -1,5 +1,5 @@
 /*
- * $Id: DataTableTag.java,v 1.3 2003/09/24 23:17:10 horwat Exp $
+ * $Id: DataTableTag.java,v 1.4 2003/09/25 16:36:29 rlubke Exp $
  */
 
 /*
@@ -43,7 +43,7 @@
 package com.sun.faces.taglib.html_basic;
 
 
-import com.sun.faces.taglib.FacesTag;
+import com.sun.faces.taglib.BaseComponentTag;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIData;
 
@@ -53,7 +53,7 @@ import javax.faces.component.UIData;
  * custom tag.
  */
 
-public class DataTableTag extends FacesTag {
+public class DataTableTag extends BaseComponentTag {
 
 
     // -------------------------------------------------------------- Properties

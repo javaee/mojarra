@@ -1,5 +1,5 @@
 /*
- * $Id: Output_MessageTag.java,v 1.12 2003/09/08 20:10:13 jvisvanathan Exp $
+ * $Id: Output_MessageTag.java,v 1.13 2003/09/25 16:36:31 rlubke Exp $
  */
 
 /*
@@ -9,16 +9,14 @@
 
 package com.sun.faces.taglib.html_basic;
 
-import javax.faces.component.UIComponent;
-
-import com.sun.faces.taglib.FacesTag;
+import com.sun.faces.taglib.BaseComponentTag;
 
 /**
  * This class is the tag handler that evaluates the 
  * <code>output_message</code> custom tag.
  */
 
-public class Output_MessageTag extends FacesTag
+public class Output_MessageTag extends BaseComponentTag
 {
     //
     // Protected Constants

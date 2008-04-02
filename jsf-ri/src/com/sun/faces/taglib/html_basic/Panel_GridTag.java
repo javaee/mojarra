@@ -1,5 +1,5 @@
 /*
- * $Id: Panel_GridTag.java,v 1.13 2003/09/24 23:17:21 horwat Exp $
+ * $Id: Panel_GridTag.java,v 1.14 2003/09/25 16:36:31 rlubke Exp $
  */
 
 /*
@@ -10,14 +10,14 @@
 package com.sun.faces.taglib.html_basic;
 
 import javax.faces.component.UIComponent;
-import com.sun.faces.taglib.FacesTag;
+import com.sun.faces.taglib.BaseComponentTag;
 
 /**
  * This class is the tag handler that evaluates the 
  * <code>panel_grid</code> custom tag.
  */
 
-public class Panel_GridTag extends FacesTag {
+public class Panel_GridTag extends BaseComponentTag {
 
     //
     // Protected Constants

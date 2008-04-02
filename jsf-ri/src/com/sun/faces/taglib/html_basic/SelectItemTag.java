@@ -1,5 +1,5 @@
 /*
- * $Id: SelectItemTag.java,v 1.20 2003/09/05 14:34:48 rkitain Exp $
+ * $Id: SelectItemTag.java,v 1.21 2003/09/25 16:36:32 rlubke Exp $
  */
 
 /*
@@ -11,14 +11,14 @@ package com.sun.faces.taglib.html_basic;
 
 import javax.faces.component.UIComponent;
 import javax.faces.component.UISelectItem;
-import com.sun.faces.taglib.FacesTag;
+import com.sun.faces.taglib.BaseComponentTag;
 
 /**
  * This class is the tag handler that evaluates the 
  * <code>selectitem</code> custom tag.
  */
 
-public class SelectItemTag extends FacesTag
+public class SelectItemTag extends BaseComponentTag
 {
     //
     // Protected Constants
@@ -82,7 +82,7 @@ public class SelectItemTag extends FacesTag
     }
     
     //
-    // Methods from FacesTag
+    // Methods from BaseComponentTag
     //
 
     protected void overrideProperties(UIComponent component) {

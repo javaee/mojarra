@@ -1,5 +1,5 @@
 /*
- * $Id: ParameterTag.java,v 1.8 2003/09/05 14:34:53 rkitain Exp $
+ * $Id: ParameterTag.java,v 1.9 2003/09/25 16:36:42 rlubke Exp $
  */
 
 /*
@@ -11,20 +11,12 @@
 
 package com.sun.faces.taglib.jsf_core;
 
-import com.sun.faces.taglib.FacesTag;
+import com.sun.faces.taglib.BaseComponentTag;
 
-import java.io.IOException;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIParameter;
-import javax.servlet.jsp.JspException;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.mozilla.util.Assert;
-import org.mozilla.util.ParameterCheck;
-
-
-public class ParameterTag extends FacesTag {
+public class ParameterTag extends BaseComponentTag {
 
 //
 // Protected Constants

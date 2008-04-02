@@ -1,5 +1,5 @@
 /*
- * $Id: Panel_DataTag.java,v 1.11 2003/09/24 23:17:20 horwat Exp $
+ * $Id: Panel_DataTag.java,v 1.12 2003/09/25 16:36:31 rlubke Exp $
  */
 
 /*
@@ -11,15 +11,14 @@ package com.sun.faces.taglib.html_basic;
 
 
 import javax.faces.component.UIComponent;
-import javax.faces.component.UIPanel;
-import com.sun.faces.taglib.FacesTag;
+import com.sun.faces.taglib.BaseComponentTag;
 
 /**
  * This class is the tag handler that evaluates the 
  * <code>panel_data</code> custom tag.
  */
 
-public class Panel_DataTag extends FacesTag {
+public class Panel_DataTag extends BaseComponentTag {
     
     //
     // Protected Constants

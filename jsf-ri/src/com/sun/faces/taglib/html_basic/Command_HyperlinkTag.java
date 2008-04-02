@@ -1,5 +1,5 @@
 /*
- * $Id: Command_HyperlinkTag.java,v 1.37 2003/09/24 23:17:08 horwat Exp $
+ * $Id: Command_HyperlinkTag.java,v 1.38 2003/09/25 16:36:28 rlubke Exp $
  */
 
 /*
@@ -15,7 +15,7 @@ import org.mozilla.util.ParameterCheck;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UICommand;
 
-import com.sun.faces.taglib.FacesTag;
+import com.sun.faces.taglib.BaseComponentTag;
 
 
 /**
@@ -23,7 +23,7 @@ import com.sun.faces.taglib.FacesTag;
  * <code>command_hyperlink</code> custom tag.
  */
 
-public class Command_HyperlinkTag extends FacesTag
+public class Command_HyperlinkTag extends BaseComponentTag
 {
     //
     // Protected Constants

@@ -1,5 +1,5 @@
 /*
- * $Id: Output_ErrorsTag.java,v 1.14 2003/09/24 23:17:18 horwat Exp $
+ * $Id: Output_ErrorsTag.java,v 1.15 2003/09/25 16:36:30 rlubke Exp $
  */
 
 /*
@@ -9,7 +9,7 @@
 
 package com.sun.faces.taglib.html_basic;
 
-import com.sun.faces.taglib.FacesTag;
+import com.sun.faces.taglib.BaseComponentTag;
 
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIOutput;
@@ -20,7 +20,7 @@ import javax.faces.component.UIOutput;
  *  attribute description.
  */
 
-public class Output_ErrorsTag extends FacesTag {
+public class Output_ErrorsTag extends BaseComponentTag {
 
     //
     // Protected Constants
@@ -78,8 +78,7 @@ public class Output_ErrorsTag extends FacesTag {
     }
 
     protected void overrideProperties(UIComponent component) {
-        super.overrideProperties(component);
-        UIOutput output = (UIOutput) component;
+        super.overrideProperties(component);       
         if (null != forValue) {
             component.getAttributes().put("for", forValue);
         }

@@ -1,5 +1,5 @@
 /*
- * $Id: Command_ButtonTag.java,v 1.44 2003/09/24 23:17:07 horwat Exp $
+ * $Id: Command_ButtonTag.java,v 1.45 2003/09/25 16:36:28 rlubke Exp $
  */
 
 /*
@@ -12,14 +12,14 @@ package com.sun.faces.taglib.html_basic;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UICommand;
 
-import com.sun.faces.taglib.FacesTag;
+import com.sun.faces.taglib.BaseComponentTag;
 
 /**
  * This class is the tag handler that evaluates the <code>command_button</code>
  * custom tag.
  */
 
-public class Command_ButtonTag extends FacesTag
+public class Command_ButtonTag extends BaseComponentTag
 {
     //
     // Protected Constants

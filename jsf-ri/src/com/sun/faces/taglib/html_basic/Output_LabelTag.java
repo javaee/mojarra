@@ -1,5 +1,5 @@
 /*
- * $Id: Output_LabelTag.java,v 1.11 2003/09/24 23:17:19 horwat Exp $
+ * $Id: Output_LabelTag.java,v 1.12 2003/09/25 16:36:30 rlubke Exp $
  */
 
 /*
@@ -11,14 +11,14 @@ package com.sun.faces.taglib.html_basic;
 
 import javax.faces.component.UIComponent;
 
-import com.sun.faces.taglib.FacesTag;
+import com.sun.faces.taglib.BaseComponentTag;
 
 /**
  * This class is the tag handler that evaluates the 
  * <code>output_label</code> custom tag.
  */
 
-public class Output_LabelTag extends FacesTag
+public class Output_LabelTag extends BaseComponentTag
 {
     //
     // Protected Constants

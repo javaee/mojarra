@@ -44,13 +44,13 @@
   }
 
   UIInput usernamecomponent = (UIInput)result;
-  String size = (String) usernamecomponent.getAttribute("size");
+  String size = (String) usernamecomponent.getAttributes().get("size");
   if ( !(size.equals("20"))) {
       System.out.println("/componentRef01.jsp FAILED - Invalid value for size attribute");
       return;
   } 
 
-  String maxlength = (String) usernamecomponent.getAttribute("maxlength");
+  String maxlength = (String) usernamecomponent.getAttributes().get("maxlength");
   if ( !(maxlength.equals("32"))) {
       System.out.println("/componentRef01.jsp FAILED - Invalid value for maxlength attribute");
       return;
