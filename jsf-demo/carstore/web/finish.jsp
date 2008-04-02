@@ -60,7 +60,7 @@
    headerClass="subtitlebig" styleClass="medium" columnClasses="subtitle,medium">
     <f:facet name="header">
        <h:output_message  value="#{bundle.thanksLabel}">
-          <f:parameter value="#{sessionScope.firstName}"/>
+          <f:param value="#{sessionScope.firstName}"/>
        </h:output_message>
     </f:facet>
   </h:panel_grid>

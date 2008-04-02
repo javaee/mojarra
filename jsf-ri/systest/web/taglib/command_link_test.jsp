@@ -3,7 +3,7 @@
    SUN PROPRIETARY/CONFIDENTIAL.  Use is subject license terms.
 --%>
 
-<%-- $Id: command_link_test.jsp,v 1.7 2004/01/15 07:34:08 eburns Exp $ --%>
+<%-- $Id: command_link_test.jsp,v 1.8 2004/01/22 14:57:38 eburns Exp $ --%>
 
 <html>
 <head>
@@ -22,7 +22,7 @@
         <h:command_link id="hyperlink04"><f:verbatim escape="false"><img src="duke.gif" /></f:verbatim></h:command_link>
         <h:command_link id="hyperlink05"><h:graphic_image value="#{messageResources.image_key}"/></h:command_link>
         <h:command_link id="hyperlink06"><f:verbatim>Paramter Link</f:verbatim>
-            <f:parameter name="param1" value="value1"/>
+            <f:param name="param1" value="value1"/>
         </h:command_link>
       </h:form>
     </f:view>

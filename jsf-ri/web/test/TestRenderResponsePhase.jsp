@@ -119,8 +119,8 @@
         <TD>
             <h:command_link id="commandParamLink" styleClass="hyperlinkClass">
               <f:verbatim>link text</f:verbatim>
-              <f:parameter id="hlParam1" name="name" value="horwat"/>
-              <f:parameter id="hlParam2" name="value" value="password"/>
+              <f:param id="hlParam1" name="name" value="horwat"/>
+              <f:param id="hlParam2" name="value" value="password"/>
             </h:command_link>
         </TD>
       </TR>
@@ -135,8 +135,8 @@
         <TD>
             <h:command_link id="hrefParamLink">
               <h:graphic_image url="duke.gif"/>
-              <f:parameter id="hlParam3" name="name" value="horwat"/>
-              <f:parameter id="hlParam4" name="value" value="password"/>
+              <f:param id="hlParam3" name="name" value="horwat"/>
+              <f:param id="hlParam4" name="value" value="password"/>
             </h:command_link>
         </TD>
       </TR>
@@ -178,8 +178,8 @@
         <TD>
             <h:output_link value="test.html" id="output_commandParamLink" styleClass="hyperlinkClass">
               <f:verbatim>link text</f:verbatim>
-              <f:parameter id="hlParam7" name="name" value="horwat"/>
-              <f:parameter id="hlParam8" name="value" value="password"/>
+              <f:param id="hlParam7" name="name" value="horwat"/>
+              <f:param id="hlParam8" name="value" value="password"/>
             </h:output_link>
         </TD>
       </TR>
@@ -194,8 +194,8 @@
         <TD>
             <h:output_link value="test.html" id="output_hrefParamLink">
               <h:graphic_image url="duke.gif"/>
-              <f:parameter id="hlParam5" name="name" value="horwat"/>
-              <f:parameter id="hlParam6" name="value" value="password"/>
+              <f:param id="hlParam5" name="name" value="horwat"/>
+              <f:param id="hlParam6" name="value" value="password"/>
             </h:output_link>
         </TD>
       </TR>
