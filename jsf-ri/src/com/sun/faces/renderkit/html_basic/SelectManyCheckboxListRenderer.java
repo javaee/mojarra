@@ -24,7 +24,7 @@
  */
 
 /**
- * $Id: SelectManyCheckboxListRenderer.java,v 1.51 2006/09/14 22:38:41 tony_robertson Exp $
+ * $Id: SelectManyCheckboxListRenderer.java,v 1.52 2006/12/14 22:30:43 rlubke Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -310,7 +310,15 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
         String itemLabel = curItem.getLabel();
         if (itemLabel != null) {
             writer.writeText(" ", component, null);
-            writer.writeText(itemLabel, component, "label");
+            if (!curItem.isEscape()) {
+                // It seems the ResponseWriter API should
+                // have a writeText() with a boolean property
+                // to determine if it content written should
+                // be escaped or not.
+                writer.write(itemLabel);
+            } else {
+                writer.writeText(itemLabel, component, "label");
+            }
         }
         writer.endElement("label");
         writer.endElement("td");

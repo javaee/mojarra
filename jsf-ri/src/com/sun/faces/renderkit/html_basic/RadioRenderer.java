@@ -1,5 +1,5 @@
 /*
- * $Id: RadioRenderer.java,v 1.80 2006/09/14 22:38:41 tony_robertson Exp $
+ * $Id: RadioRenderer.java,v 1.81 2006/12/14 22:30:43 rlubke Exp $
  */
 
 /*
@@ -149,7 +149,15 @@ public class RadioRenderer extends SelectManyCheckboxListRenderer {
         String itemLabel = curItem.getLabel();
         if (itemLabel != null) {
             writer.writeText(" ", component, null);
-            writer.writeText(itemLabel, component, "label");
+            if (!curItem.isEscape()) {
+                // It seems the ResponseWriter API should
+                // have a writeText() with a boolean property
+                // to determine if it content written should
+                // be escaped or not.
+                writer.write(itemLabel);
+            } else {
+                writer.writeText(itemLabel, component, "label");
+            }
         }
         writer.endElement("label");
         writer.endElement("td");

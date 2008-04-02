@@ -376,8 +376,8 @@
                 styleClass = "someStyleClass" style="someStyle" disabled="true">
 
                 <f:selectItem itemValue="nextDay" itemLabel="Next Day" itemDisabled="true"/>
-                <f:selectItem itemValue="nextWeek" itemLabel="Next Week" />
-                <f:selectItem itemValue="nextMonth" itemLabel="Next Month" />
+                <f:selectItem itemValue="nextWeek" itemLabel="<Next Week>" />
+                <f:selectItem itemValue="nextMonth" itemLabel="<Next Month>" escape="false"/>
                  
               </h:selectOneRadio>
 
@@ -657,8 +657,8 @@
                                                disabledClass="disabedClass"
                                                enabledClass="enabledClass"
                                                disabled="true">
-						<f:selectItem itemValue="1" itemLabel="one" />
-						<f:selectItem itemValue="2" itemLabel="two" />
+						<f:selectItem itemValue="1" itemLabel="<one>" />
+						<f:selectItem itemValue="2" itemLabel="<two>" escape="false"/>
 						<f:selectItem itemValue="3" itemLabel="three"/>
                                             </h:selectManyCheckbox></TD>
 </tr>
