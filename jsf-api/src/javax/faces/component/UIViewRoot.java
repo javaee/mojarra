@@ -1,5 +1,5 @@
 /*
- * $Id: UIViewRoot.java,v 1.37 2005/08/13 16:23:03 edburns Exp $
+ * $Id: UIViewRoot.java,v 1.38 2005/08/17 18:32:42 rogerk Exp $
  */
 
 /*
@@ -319,7 +319,7 @@ public class UIViewRoot extends UIComponentBase {
 	afterPhase = newAfterPhase;
     }
 
-    private List phaseListeners = null;
+    private List<PhaseListener> phaseListeners = null;
 
     public void removePhaseListener(PhaseListener toRemove) {
 	if (null != phaseListeners) {
@@ -329,7 +329,7 @@ public class UIViewRoot extends UIComponentBase {
 
     public void addPhaseListener(PhaseListener newPhaseListener) {
 	if (null == phaseListeners) {
-	    phaseListeners = new ArrayList();
+	    phaseListeners = new ArrayList<PhaseListener>();
 	}
 	phaseListeners.add(newPhaseListener);
     }
@@ -368,7 +368,7 @@ public class UIViewRoot extends UIComponentBase {
         if (events == null) {
 	    events = new List[len = PhaseId.VALUES.size()];
 	    for (i = 0; i < len; i++) {
-		events[i] = new ArrayList(5);
+		events[i] = new ArrayList<FacesEvent>(5);
 	    }
         }
         events[event.getPhaseId().getOrdinal()].add(event);
@@ -382,7 +382,7 @@ public class UIViewRoot extends UIComponentBase {
      * @param phaseId {@link PhaseId} of the current phase
      */
     private void broadcastEvents(FacesContext context, PhaseId phaseId) {
-	List eventsForPhaseId = null;
+	List<FacesEvent> eventsForPhaseId = null;
 
 	if (null == events) {
 	    // no events have been queued
@@ -405,7 +405,7 @@ public class UIViewRoot extends UIComponentBase {
 		// ConcurrentModificationException errors, so fake it
 		int cursor = 0;
 		while (cursor < eventsForPhaseId.size()) {
-		    FacesEvent event = (FacesEvent)
+		    FacesEvent event =
 			eventsForPhaseId.get(cursor);
 		    UIComponent source = event.getComponent();
                     try {
@@ -424,7 +424,7 @@ public class UIViewRoot extends UIComponentBase {
 		int cursor = 0;
 		while (cursor < eventsForPhaseId.size()) {
 		    FacesEvent event = 
-			(FacesEvent) eventsForPhaseId.get(cursor);
+			eventsForPhaseId.get(cursor);
 		    UIComponent source = event.getComponent();
                     try {
                         source.broadcast(event);
@@ -482,7 +482,7 @@ public class UIViewRoot extends UIComponentBase {
 	if (context.getRenderResponse() || context.getResponseComplete()) {
             if (events != null) {
                 for (int i=0; i<PhaseId.VALUES.size(); i++) {
-                    List eventList = events[i];
+                    List<FacesEvent> eventList = events[i];
                     if (eventList != null) {
                         eventList.clear();
                     }
@@ -582,10 +582,10 @@ public class UIViewRoot extends UIComponentBase {
 	    }
 	}
 	if (null != phaseListeners) {
-	    Iterator iter = phaseListeners.iterator();
+	    Iterator<PhaseListener> iter = phaseListeners.iterator();
 	    PhaseListener curListener = null;
 	    while (iter.hasNext()) {
-		curListener = (PhaseListener) iter.next();
+		curListener = iter.next();
 		if (phaseId == curListener.getPhaseId() ||
 		    PhaseId.ANY_PHASE == curListener.getPhaseId()) {
 		    try {
@@ -652,7 +652,7 @@ public class UIViewRoot extends UIComponentBase {
 	if (context.getRenderResponse() || context.getResponseComplete()) {
             if (events != null) {
                 for (int i=0; i<PhaseId.VALUES.size(); i++) {
-                    List eventList = events[i];
+                    List<FacesEvent> eventList = events[i];
                     if (eventList != null) {
                         eventList.clear();
                     }

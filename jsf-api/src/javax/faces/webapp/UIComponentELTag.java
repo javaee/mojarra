@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentELTag.java,v 1.1 2005/05/05 20:51:14 edburns Exp $
+ * $Id: UIComponentELTag.java,v 1.2 2005/08/17 18:32:45 rogerk Exp $
  */
 
 /*
@@ -11,25 +11,14 @@ package javax.faces.webapp;
 
 
 import java.io.IOException;
-import java.io.Writer;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
 
 import javax.el.ELException;
 import javax.el.ELContext;
 import javax.el.ValueExpression;
-import javax.faces.FactoryFinder;
 import javax.faces.FacesException;
 import javax.faces.application.Application;
 import javax.faces.component.UIComponent;
-import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
-import javax.faces.context.ResponseWriter;
-import javax.faces.render.RenderKit;
-import javax.faces.render.RenderKitFactory;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.Tag;

@@ -1,5 +1,5 @@
 /*
- * $Id: SelectItemsIterator.java,v 1.7 2005/05/19 17:02:51 rlubke Exp $
+ * $Id: SelectItemsIterator.java,v 1.8 2005/08/17 18:32:41 rogerk Exp $
  */
 
 /*
@@ -25,7 +25,7 @@ import javax.faces.model.SelectItem;
  * for a parent {@link UISelectMany} or {@link UISelectOne}.</p>
  */
 
-final class SelectItemsIterator implements Iterator {
+final class SelectItemsIterator implements Iterator<SelectItem> {
 
 
     // ------------------------------------------------------------ Constructors
@@ -51,13 +51,13 @@ final class SelectItemsIterator implements Iterator {
      * <p>Iterator over the SelectItem elements pointed at by a
      * <code>UISelectItems</code> component, or <code>null</code>.</p>
      */
-    private Iterator items = null;
+    private Iterator<SelectItem> items = null;
 
 
     /**
      * <p>Iterator over the children of the parent component.</p>
      */
-    private Iterator kids = null;
+    private Iterator<UIComponent> kids = null;
 
 
     // -------------------------------------------------------- Iterator Methods
@@ -85,7 +85,7 @@ final class SelectItemsIterator implements Iterator {
      *
      * @exception NoSuchElementException if there are no more elements
      */
-    public Object next() {
+    public SelectItem next() {
 
         if (!hasNext()) {
             throw new NoSuchElementException();
@@ -93,7 +93,7 @@ final class SelectItemsIterator implements Iterator {
         if (items != null) {
             return (items.next());
         }
-        UIComponent kid = (UIComponent) kids.next();
+        UIComponent kid = kids.next();
         if (kid instanceof UISelectItem) {
             UISelectItem ui = (UISelectItem) kid;
             SelectItem item = (SelectItem) ui.getValue();
@@ -108,15 +108,15 @@ final class SelectItemsIterator implements Iterator {
             UISelectItems ui = (UISelectItems) kid;
             Object value = ui.getValue();
             if (value instanceof SelectItem) {
-                return (value);
+                return ((SelectItem)value);
             } else if (value instanceof SelectItem[]) {
-                items = Arrays.asList((Object[]) value).iterator();
+                items = Arrays.asList((SelectItem[]) value).iterator();
                 return (next());
             } else if (value instanceof List) {
                 items = ((List) value).iterator();
                 return (next());
             } else if (value instanceof Map) {
-                List list = new ArrayList();
+                List<SelectItem> list = new ArrayList<SelectItem>();
                 for (Iterator keys = ((Map) value).keySet().iterator();
                     keys.hasNext(); ) {
 

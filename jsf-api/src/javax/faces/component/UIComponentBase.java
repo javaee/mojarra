@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.116 2005/08/15 15:59:16 edburns Exp $
+ * $Id: UIComponentBase.java,v 1.117 2005/08/17 18:32:41 rogerk Exp $
  */
 
 /*
@@ -782,9 +782,9 @@ public abstract class UIComponentBase extends UIComponent {
             return;
         }
 
-        Iterator iter = listeners.iterator();
+        Iterator<FacesListener> iter = listeners.iterator();
         while (iter.hasNext()) {
-            FacesListener listener = (FacesListener) iter.next();
+            FacesListener listener = iter.next();
             if (event.isAppropriateListener(listener)) {
                 event.processListener(listener);
             }
@@ -895,7 +895,7 @@ public abstract class UIComponentBase extends UIComponent {
      * <p>Our {@link javax.faces.event.FacesListener}s.  This data
      * structure is lazily instantiated as necessary.</p>
      */
-    private List listeners;
+    private List<FacesListener> listeners;
 
 
     /**
@@ -944,7 +944,7 @@ public abstract class UIComponentBase extends UIComponent {
             throw new NullPointerException();
         }
         if (listeners == null) {
-            listeners = new ArrayList();
+            listeners = new ArrayList<FacesListener>();
         }
         listeners.add(listener);
 
@@ -968,9 +968,9 @@ public abstract class UIComponentBase extends UIComponent {
         }
 
         List results = new ArrayList();
-	Iterator items = listeners.iterator();
+	Iterator<FacesListener> items = listeners.iterator();
 	while (items.hasNext()) {
-	    FacesListener item = (FacesListener) items.next();
+	    FacesListener item = items.next();
 	    if (clazz.isAssignableFrom(item.getClass())) {
 		results.add(item);
 	    }

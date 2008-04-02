@@ -1,5 +1,5 @@
 /*
- * $Id: UIInput.java,v 1.81 2005/07/26 14:09:28 edburns Exp $
+ * $Id: UIInput.java,v 1.82 2005/08/17 18:32:42 rogerk Exp $
  */
 
 /*
@@ -998,9 +998,9 @@ public class UIInput extends UIOutput implements EditableValueHolder {
 	// If our value is valid and not empty, call all validators
 	if (isValid() && !isEmpty(newValue)) {
 	    if (this.validators != null) {
-		Iterator validators = this.validators.iterator();
+		Iterator<Validator> validators = this.validators.iterator();
 		while (validators.hasNext()) {
-		    Validator validator = (Validator) validators.next();
+		    Validator validator = validators.next();
                     try { 
                         validator.validate(context, this, newValue);
                     }
@@ -1091,7 +1091,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
      * <p>The set of {@link Validator}s associated with this
      * <code>UIComponent</code>.</p>
      */
-    List validators = null;
+    List<Validator> validators = null;
 
 
     /**
@@ -1109,7 +1109,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
             throw new NullPointerException();
         }
         if (validators == null) {
-            validators = new ArrayList();
+            validators = new ArrayList<Validator>();
         }
         validators.add(validator);
 
@@ -1241,7 +1241,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
         immediate = ((Boolean) values[11]).booleanValue();
         immediateSet = ((Boolean) values[12]).booleanValue();
 	List restoredValidators = null;
-	Iterator iter = null;
+	Iterator<Validator> iter = null;
 
 	if (null != (restoredValidators = (List) 
 		     restoreAttachedState(context, values[13]))) {

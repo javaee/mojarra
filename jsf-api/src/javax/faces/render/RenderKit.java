@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKit.java,v 1.32 2004/12/20 15:19:06 edburns Exp $
+ * $Id: RenderKit.java,v 1.33 2005/08/17 18:32:44 rogerk Exp $
  */
 
 /*
@@ -10,7 +10,6 @@
 package javax.faces.render;
 
 
-import java.util.Iterator;
 import javax.faces.component.UIComponent;
 import javax.faces.context.ResponseWriter;
 import javax.faces.context.ResponseStream;

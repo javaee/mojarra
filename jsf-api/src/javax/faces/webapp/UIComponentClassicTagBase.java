@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentClassicTagBase.java,v 1.5 2005/08/15 18:58:32 jayashri Exp $
+ * $Id: UIComponentClassicTagBase.java,v 1.6 2005/08/17 18:32:45 rogerk Exp $
  */
 
 /*
@@ -201,7 +201,7 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
      * by nested {@link UIComponentTag}s while processing the current
      * request.</p>
      */
-    private List createdComponents = null;
+    private List<String> createdComponents = null;
 
 
     /**
@@ -445,9 +445,9 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
      */
     private UIComponent getChild(UIComponent component, String componentId) {
 
-        Iterator kids = component.getChildren().iterator();
+        Iterator<UIComponent> kids = component.getChildren().iterator();
         while (kids.hasNext()) {
-            UIComponent kid = (UIComponent) kids.next();
+            UIComponent kid = kids.next();
             if (componentId.equals(kid.getId())) {
                 return (kid);
             }
@@ -635,7 +635,7 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
     protected void addChild(UIComponent child) {
 
         if (createdComponents == null) {
-            createdComponents = new ArrayList();
+            createdComponents = new ArrayList<String>();
         }
         createdComponents.add(child.getId());
     }
@@ -705,9 +705,9 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
             if (createdComponents != null) {
 
                 // Components not in the new list need to be removed
-                Iterator olds = oldList.iterator();
+                Iterator<String> olds = oldList.iterator();
                 while (olds.hasNext()) {
-                    String old = (String) olds.next();
+                    String old = olds.next();
                     if (!createdComponents.contains(old)) {
                         UIComponent child = component.findComponent(old);
                         // if a component is marked transient, it would have 
@@ -723,9 +723,9 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
             } else {
 
                 // All old components need to be removed
-                Iterator olds = oldList.iterator();
+                Iterator<String> olds = oldList.iterator();
                 while (olds.hasNext()) {
-                    String old = (String) olds.next();
+                    String old = olds.next();
                     UIComponent child = component.findComponent(old);
                     component.getChildren().remove(child);
                 }
@@ -765,9 +765,9 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
             if (createdFacets != null) {
 
                 // Facets not in the new list need to be removed
-                Iterator olds = oldList.iterator();
+                Iterator<String> olds = oldList.iterator();
                 while (olds.hasNext()) {
-                    String old = (String) olds.next();
+                    String old = olds.next();
                     if (!createdFacets.contains(old)) {
                         component.getFacets().remove(old);
                     }
@@ -776,9 +776,9 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
             } else {
 
                 // All old facets need to be removed
-                Iterator olds = oldList.iterator();
+                Iterator<String> olds = oldList.iterator();
                 while (olds.hasNext()) {
-                    String old = (String) olds.next();
+                    String old = olds.next();
                     component.getFacets().remove(old);
                 }
 
@@ -1342,7 +1342,7 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
      * located by nested {@link UIComponentTag}s while processing the current
      * request.</p>
      */
-    protected List getCreatedComponents() {
+    protected List<String> getCreatedComponents() {
         return createdComponents;
     }
     
