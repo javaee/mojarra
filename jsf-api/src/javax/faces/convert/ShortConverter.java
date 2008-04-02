@@ -1,5 +1,5 @@
 /*
- * $Id: ShortConverter.java,v 1.1 2003/08/12 03:51:43 craigmcc Exp $
+ * $Id: ShortConverter.java,v 1.2 2003/08/12 17:39:16 craigmcc Exp $
  */
 
 /*
@@ -10,6 +10,7 @@
 package javax.faces.convert;
 
 
+import javax.faces.component.StateHolder;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
@@ -19,7 +20,10 @@ import javax.faces.context.FacesContext;
  * (and short primitive) values.</p>
  */
 
-public class ShortConverter implements Converter {
+public class ShortConverter implements Converter, StateHolder {
+
+
+    // ------------------------------------------------------- Converter Methods
 
 
     public Object getAsObject(FacesContext context, UIComponent component,
@@ -44,6 +48,31 @@ public class ShortConverter implements Converter {
             throw new ConverterException(e);
         }
 
+    }
+
+
+    // ----------------------------------------------------- StateHolder Methods
+
+
+    public Object getState(FacesContext context) {
+        return ("");
+    }
+
+
+    public void restoreState(FacesContext context, Object state) {
+    }
+
+
+    private boolean transientFlag = false;
+
+
+    public boolean isTransient() {
+        return (transientFlag);
+    }
+
+
+    public void setTransient(boolean transientFlag) {
+        this.transientFlag = transientFlag;
     }
 
 
