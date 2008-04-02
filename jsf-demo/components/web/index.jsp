@@ -89,7 +89,7 @@ Faces technology.</p>
 
 </td>
 
-<td><a href="faces/imagemap.jsp"><img src="images/execute.gif" width="24" height="24" border="0"></a>
+<td><a href="imagemap.jsf"><img src="images/execute.gif" width="24" height="24" border="0"></a>
 </td>
 
 </tr>
@@ -116,7 +116,7 @@ Faces technology.</p>
 
 </td>
 
-<td><a href="faces/menu.jsp"><img src="images/execute.gif" width="24" height="24" border="0"></a>
+<td><a href="menu.jsf"><img src="images/execute.gif" width="24" height="24" border="0"></a>
 </td>
 
 </tr>
@@ -135,7 +135,7 @@ Faces technology.</p>
 <a href="ShowSource.jsp?filename=/src/components/renderkit/ResultSetRenderer.java">components/renderkit/ResultSetRenderer.java</a><br>
 </td>
 
-<td><a href="faces/result-set.jsp"><img src="images/execute.gif" width="24" height="24" border="0"></a>
+<td><a href="result-set.jsf"><img src="images/execute.gif" width="24" height="24" border="0"></a>
 </td>
 
 </tr>
@@ -159,7 +159,7 @@ Faces technology.</p>
 <a href="ShowSource.jsp?filename=/src/components/renderkit/TabbedRenderer.java">components/renderkit/TabbedRenderer.java</a><br>
 </td>
 
-<td><a href="faces/tabbedpanes.jsp"><img src="images/execute.gif" width="24" height="24" border="0"></a>
+<td><a href="tabbedpanes.jsf"><img src="images/execute.gif" width="24" height="24" border="0"></a>
 </td>
 
 </tr>

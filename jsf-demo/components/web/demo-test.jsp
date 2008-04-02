@@ -54,7 +54,7 @@
             </tr>
 
           </TR>
-           <td> <a href='<%= request.getContextPath() + "/faces/menu.jsp" %>'>Back</a> </td>
+           <td> <a href='<%= request.getContextPath() + "/menu.jsf" %>'>Back</a> </td>
           </TR>
 
           </table>

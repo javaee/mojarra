@@ -51,19 +51,19 @@
       Node root = new Node("Menu 2", "Menu", null, null, false, true);
       graph = new Graph(root);
 
-      Node file = new Node("File", "File 2", "demo-test.jsp", null, true, true);
+      Node file = new Node("File", "File 2", "demo-test.jsf", null, true, true);
       root.addChild(file);
-      file.addChild(new Node("File-New", "New 2", "demo-test.jsp", null, true, false));
-      file.addChild(new Node("File-Open", "Open 2", "demo-test.jsp", null, true, false));
-      Node close = new Node("File-Close", "Close 2", "demo-test.jsp", null, false, false);
+      file.addChild(new Node("File-New", "New 2", "demo-test.jsf", null, true, false));
+      file.addChild(new Node("File-Open", "Open 2", "demo-test.jsf", null, true, false));
+      Node close = new Node("File-Close", "Close 2", "demo-test.jsf", null, false, false);
       file.addChild(close);
-      file.addChild(new Node("File-Exit", "Exit 2", "demo-test.jsp", null, true, false));
+      file.addChild(new Node("File-Exit", "Exit 2", "demo-test.jsf", null, true, false));
 
-      Node edit = new Node("Edit", "Edit 2", "demo-test.jsp", null, true, false);
+      Node edit = new Node("Edit", "Edit 2", "demo-test.jsf", null, true, false);
       root.addChild(edit);
-      edit.addChild(new Node("Edit-Cut", "Cut 2", "demo-test.jsp", null, true, false));
-      edit.addChild(new Node("Edit-Copy", "Copy 2","demo-test.jsp", null, true, false));
-      edit.addChild(new Node("Edit-Paste", "Paste 2", "demo-test.jsp", null, false, false));
+      edit.addChild(new Node("Edit-Cut", "Cut 2", "demo-test.jsf", null, true, false));
+      edit.addChild(new Node("Edit-Copy", "Copy 2","demo-test.jsf", null, true, false));
+      edit.addChild(new Node("Edit-Paste", "Paste 2", "demo-test.jsf", null, false, false));
 
       graph.setSelected(close);
       pageContext.setAttribute("graph2", graph, PageContext.SESSION_SCOPE);
@@ -77,19 +77,19 @@
       Node root = new Node("Menu 4", "Menu", null, null, false, true);
       graph = new Graph(root);
 
-      Node file = new Node("File", "File 4", "demo-test.jsp", null, true, true);
+      Node file = new Node("File", "File 4", "demo-test.jsf", null, true, true);
       root.addChild(file);
-      file.addChild(new Node("File-New", "New 4", "demo-test.jsp", null, true, false));
-      file.addChild(new Node("File-Open", "Open 4", "demo-test.jsp", null, true, false));
-      Node close = new Node("File-Close", "Close 4", "demo-test.jsp", null, false, false);
+      file.addChild(new Node("File-New", "New 4", "demo-test.jsf", null, true, false));
+      file.addChild(new Node("File-Open", "Open 4", "demo-test.jsf", null, true, false));
+      Node close = new Node("File-Close", "Close 4", "demo-test.jsf", null, false, false);
       file.addChild(close);
-      file.addChild(new Node("File-Exit", "Exit 4", "demo-test.jsp", null, true, false));
+      file.addChild(new Node("File-Exit", "Exit 4", "demo-test.jsf", null, true, false));
 
-      Node edit = new Node("Edit", "Edit 4", "demo-test.jsp", null, true, false);
+      Node edit = new Node("Edit", "Edit 4", "demo-test.jsf", null, true, false);
       root.addChild(edit);
-      edit.addChild(new Node("Edit-Cut", "Cut 4", "demo-test.jsp", null, true, false));
-      edit.addChild(new Node("Edit-Copy", "Copy 4","demo-test.jsp", null, true, false));
-      edit.addChild(new Node("Edit-Paste", "Paste 4", "demo-test.jsp", null, false, false));
+      edit.addChild(new Node("Edit-Cut", "Cut 4", "demo-test.jsf", null, true, false));
+      edit.addChild(new Node("Edit-Copy", "Copy 4","demo-test.jsf", null, true, false));
+      edit.addChild(new Node("Edit-Paste", "Paste 4", "demo-test.jsf", null, false, false));
 
       graph.setSelected(close);
       pageContext.setAttribute("graph4", graph, PageContext.SESSION_SCOPE);
@@ -120,15 +120,15 @@ Render graph as a menu bar (graph specified via JSP):<br>
       unselectedClass="tree-control-unselected">
     <d:graph_menunode  name="Menu" label="Menu 3" >
         <d:graph_menunode  name="File" label="File 3" expanded="true">
-            <d:graph_menunode  name="File-New" label="New 3" action="/faces/demo-test.jsp" />
-            <d:graph_menunode  name="File-Open" label="Open 3" action="/faces/demo-test.jsp" />
+            <d:graph_menunode  name="File-New" label="New 3" action="demo-test.jsf" />
+            <d:graph_menunode  name="File-Open" label="Open 3" action="demo-test.jsf" />
             <d:graph_menunode  name="File-Close" label="Close 3" enabled="false" />
-            <d:graph_menunode  name="File-Exit" label="Exit 3" action="/faces/demo-test.jsp" />
+            <d:graph_menunode  name="File-Exit" label="Exit 3" action="demo-test.jsf" />
         </d:graph_menunode>
 
        <d:graph_menunode  name="Edit" label="Edit 3" >
-           <d:graph_menunode  name="Edit-Cut" label="Cut 3" action="demo-test.jsp"/>
-           <d:graph_menunode  name="Edit-Copy" label="Copy 3" action="demo-test.jsp" />
+           <d:graph_menunode  name="Edit-Cut" label="Cut 3" action="demo-test.faces"/>
+           <d:graph_menunode  name="Edit-Copy" label="Copy 3" action="demo-test.faces" />
            <d:graph_menunode  name="Edit-Paste" label="Paste 3" enabled="false" />
        </d:graph_menunode>
    </d:graph_menunode>
@@ -149,22 +149,22 @@ Render graph as a tree control (graph specified via JSP):<br>
              icon="folder_16_pad.gif" enabled="false">
 
             <d:graph_treenode  name="File-New" label="New 5"
-                icon="folder_16_pad.gif" action="/faces/demo-test.jsp"/>
+                icon="folder_16_pad.gif" action="demo-test.jsf"/>
             <d:graph_treenode  name="File-Open" label="Open 5"
-                icon="folder_16_pad.gif" action="/faces/demo-test.jsp" />
+                icon="folder_16_pad.gif" action="/demo-test.jsf" />
             <d:graph_treenode  name="File-Close" label="Close 5" enabled="false"
                 icon="folder_16_pad.gif" />
             <d:graph_treenode  name="File-Exit" label="Exit 5"
-                icon="folder_16_pad.gif" action="/faces/demo-test.jsp" />
+                icon="folder_16_pad.gif" action="demo-test.jsf" />
        </d:graph_treenode>
 
        <d:graph_treenode  name="Edit" label="Edit 5" 
            icon="folder_16_pad.gif" expanded="true" enabled="false"> 
 
            <d:graph_treenode  name="Edit-Cut" label="Cut 5" 
-               icon="folder_16_pad.gif" action="demo-test.jsp"/>
+               icon="folder_16_pad.gif" action="demo-test.jsf"/>
            <d:graph_treenode  name="Edit-Copy" label="Copy 5"
-               icon="folder_16_pad.gif" action="demo-test.jsp" />
+               icon="folder_16_pad.gif" action="demo-test.jsf" />
            <d:graph_treenode  name="Edit-Paste" label="Paste 5" enabled="false" 
                icon="folder_16_pad.gif" />
        </d:graph_treenode>
