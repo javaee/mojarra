@@ -3108,8 +3108,10 @@
       "href" attribute.  Render javascript that is functionaly
       equivalent to the following as the value of the "onmousedown"
       attribute:
-      "document.forms[FORM_NUMBER]['CLIENT_ID'].value='CLIENT_ID';document.forms[0]['PARAM1_NAME'].value='PARAM1_VALUE';document.forms[0]['PARAM2_NAME'].value='PARAM2_VALUE';
-      document.forms[FORM_NUMBER].submit()" where FORM_NUMBER is the
+      "document.forms[FORM_NUMBER]['CLIENT_ID'].value='CLIENT_ID';
+       document.forms[0]['PARAM1_NAME'].value='PARAM1_VALUE';
+       document.forms[0]['PARAM2_NAME'].value='PARAM2_VALUE';
+       document.forms[FORM_NUMBER].submit()" where FORM_NUMBER is the
       number, starting at 0 of the form in which this link resides,
       CLIENT_ID is the clientId of the UICommand component, PARAM*_NAME
       and PARAM*_VALUE are the names and values, respectively, of any
