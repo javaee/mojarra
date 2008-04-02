@@ -1,5 +1,5 @@
 /*
- * $Id: TestComponents.java,v 1.6 2003/09/17 20:03:48 rkitain Exp $
+ * $Id: TestComponents.java,v 1.7 2003/09/17 20:37:32 rkitain Exp $
  */
 
 /*
@@ -98,6 +98,17 @@ public class TestComponents extends HtmlUnitTestCase {
 	page = executeResultSet(page, "10", "-2");
 	//stay on same page
 	page = executeResultSet(page, "10", "10");
+    }
+
+    public void testTabbedPane() throws Exception {
+        HtmlPage page = accessAppAndGetPage("faces/tabbedpanes.jsp");
+	assertNotNull(page);
+	//tab 1
+	page= executeTabbedPane(page, "JSPid1:id0");
+	//tab 2
+	page= executeTabbedPane(page, "JSPid1:id1");
+	//tab3 
+	page= executeTabbedPane(page, "JSPid1:id2");
     }
 
     protected HtmlPage executeTreeTest(HtmlPage page, 
@@ -227,6 +238,18 @@ public class TestComponents extends HtmlUnitTestCase {
 	    assertTrue(true);
 	}
 
+	return page;
+    }
+
+    protected HtmlPage executeTabbedPane(HtmlPage page, String buttonName) 
+        throws Exception {
+	HtmlForm form = (HtmlForm) page.getAllForms().get(0);     
+	assertNotNull(form);
+	HtmlInput button = (HtmlInput)form.getInputByName(buttonName);
+	page = (HtmlPage)button.click();
+	form = (HtmlForm) page.getAllForms().get(0);     
+	button = (HtmlInput)form.getInputByName(buttonName);
+        assertTrue(button.getClassAttribute().equals("tabbed-selected"));
 	return page;
     }
 
