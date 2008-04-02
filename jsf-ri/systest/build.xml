@@ -32,10 +32,10 @@
   <property name="build.home" value="${basedir}/build"/>
 
   <!-- The base directory for the JSF APIs -->
-  <property name="jsf.api.home" value ="${basedir}/../../jsf-api"/>
+  <property name="jsf-api.home" value ="${basedir}/../../jsf-api"/>
 
   <!-- The base directory for the JSF RI -->
-  <property name="jsf.ri.home" value ="${basedir}/.."/>
+  <property name="jsf-ri.home" value ="${basedir}/.."/>
 
   <!-- The base directory for system test sources -->
   <property name="source.home" value="${basedir}/src"/>
