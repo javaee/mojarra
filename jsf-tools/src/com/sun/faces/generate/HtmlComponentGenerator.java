@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlComponentGenerator.java,v 1.6 2004/02/04 23:46:34 ofung Exp $
+ * $Id: HtmlComponentGenerator.java,v 1.7 2004/05/12 03:08:49 rkitain Exp $
  */
 
 /*
@@ -19,6 +19,7 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.StringTokenizer;
 import org.apache.commons.digester.Digester;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -42,8 +43,10 @@ import com.sun.faces.config.beans.PropertyBean;
  *     copyright material for the top of each Java source file.</li>
  * <li><strong>--dir</strong> Absolute pathname to the directory into which
  *     generated Java source code will be created.</li>
- * <li><strong>--dtd</strong> Absolute pathname to a file containing the DTD
- *     used to validate the input configuration files.</li>
+ * <li><strong>--dtd</strong> Pipe delimited list of public identifiers and 
+ *     absolute pathnames to files containing the DTDs used to validate the 
+ *     input configuration files. PRECONDITION: The list is the sequence:
+ *     <public id>|<dtd path>|<public id>|<dtd path>...</li>
  * </ul>
  */
 
@@ -520,12 +523,25 @@ public class HtmlComponentGenerator extends AbstractGenerator {
             Map options = options(args);
             String dtd = (String) options.get("--dtd");
             if (log.isDebugEnabled()) {
-                log.debug("Configuring digester instance with DTD '" +
+                log.debug("Configuring digester instance with public identifiers and DTD '" +
                           dtd + "'");
             }
+	    StringTokenizer st = new StringTokenizer(dtd, "|");
+	    int arrayLen = st.countTokens();
+	    if (arrayLen == 0) {
+		// PENDING I18n
+		throw new Exception("No DTDs specified");
+	    }
+            String[] dtds = new String[arrayLen];
+	    int i=0;
+	    while (st.hasMoreTokens()) {
+	        dtds[i] = st.nextToken();
+		i++;
+	    }
+
             copyright((String) options.get("--copyright"));
             directories((String) options.get("--dir"));
-            Digester digester = digester(dtd, false, true, false);
+            Digester digester = digester(dtds, false, true, false);
             String config = (String) options.get("--config");
             if (log.isDebugEnabled()) {
                 log.debug("Parsing configuration file '" + config + "'");
@@ -538,7 +554,7 @@ public class HtmlComponentGenerator extends AbstractGenerator {
 
             // Generate concrete HTML component classes
             ComponentBean cbs[] = fcb.getComponents();
-            for (int i = 0; i < cbs.length; i++) {
+            for (i = 0; i < cbs.length; i++) {
                 String componentClass = cbs[i].getComponentClass();
                 if (componentClass.startsWith("javax.faces.component.html.")) {
                     cb = cbs[i];

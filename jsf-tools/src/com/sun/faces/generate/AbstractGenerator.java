@@ -1,5 +1,5 @@
 /*
- * $Id: AbstractGenerator.java,v 1.4 2004/05/11 18:56:27 rkitain Exp $
+ * $Id: AbstractGenerator.java,v 1.5 2004/05/12 03:08:49 rkitain Exp $
  */
 
 /*
@@ -202,7 +202,8 @@ public abstract class AbstractGenerator {
      * <p>Configure and return a <code>Digester</code> instance suitable for
      * use in the environment specified by our parameter flags.</p>
      *
-     * @param dtd Absolute pathname of the DTD to be registered (if any)
+     * @param dtd[] array of absolute pathnames of the DTDs to be registered (if any)
+     *  and their corresponding public identifiers
      * @param design Include rules suitable for design time use in a tool
      * @param generate Include rules suitable for generating component,
      *  renderer, and tag classes
@@ -210,7 +211,7 @@ public abstract class AbstractGenerator {
      *
      * @exception MalformedURLException if a URL cannot be formed correctly
      */
-    protected static Digester digester(String dtd, boolean design,
+    protected static Digester digester(String dtd[], boolean design,
                                        boolean generate, boolean runtime)
         throws MalformedURLException {
 
@@ -225,10 +226,15 @@ public abstract class AbstractGenerator {
         digester.addRuleSet(new FacesConfigRuleSet(design, generate, runtime));
 
         // Configure preregistered entities
-        if (dtd != null) {
-            digester.register
-              ("-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.1//EN",
-               (new File(dtd)).toURL().toString());
+	int i = 0;
+	while (dtd.length > 0) {
+            if (dtd[i] != null && dtd[i+1] != null) {
+                digester.register(dtd[i], (new File(dtd[i+1])).toURL().toString());
+	    }
+	    i += 2;
+	    if (i >= dtd.length) {
+	        break;
+	    }
         }
         return (digester);
 

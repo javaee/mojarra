@@ -207,7 +207,7 @@ necessary to generate required classes.
       <arg         value="--dir"/>
       <arg         value="${build.generate}"/>
       <arg         value="--dtd"/>
-      <arg         value="${jsf-api.dir}/doc/web-facesconfig_1_1.dtd"/>
+      <arg         value="-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.0//EN|${jsf-api.dir}/doc/web-facesconfig_1_0.dtd|-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.1//EN|${jsf-api.dir}/doc/web-facesconfig_1_1.dtd"/>
       <arg         value="--copyright"/>
       <arg         value="${basedir}/COPYRIGHT"/>
 
@@ -249,7 +249,7 @@ necessary to generate required classes.
       <arg         value="--dir"/>
       <arg         value="${build.generate}"/>
       <arg         value="--dtd"/>
-      <arg         value="${jsf-api.dir}/doc/web-facesconfig_1_1.dtd"/>
+      <arg         value="-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.0//EN|${jsf-api.dir}/doc/web-facesconfig_1_0.dtd|-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.1//EN|${jsf-api.dir}/doc/web-facesconfig_1_1.dtd"/>
       <arg         value="--copyright"/>
       <arg         value="${basedir}/COPYRIGHT"/>
       <arg         value="--tagdef"/>
@@ -419,7 +419,7 @@ necessary to generate required classes.
       <arg         value="--dir"/>
       <arg         value="${build.generate.facesdoc}"/>
       <arg         value="--dtd"/>
-      <arg         value="${jsf-api.dir}/doc/web-facesconfig_1_1.dtd"/>
+      <arg         value="-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.0//EN|${jsf-api.dir}/doc/web-facesconfig_1_0.dtd|-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.1//EN|${jsf-api.dir}/doc/web-facesconfig_1_1.dtd"/>
       <arg         value="--copyright"/>
       <arg         value="${basedir}/COPYRIGHT"/>
 

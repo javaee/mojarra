@@ -25,6 +25,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.SortedMap;
+import java.util.StringTokenizer;
 import java.util.TreeMap;
 
 import org.apache.commons.digester.Digester;
@@ -1191,12 +1192,24 @@ public class HtmlTaglibGenerator extends AbstractGenerator {
             Map options = options(args);
             String dtd = (String) options.get("--dtd");
             if (log.isDebugEnabled()) {
-                log.debug("Configuring digester instance with DTD '" +
+                log.debug("Configuring digester instance with public identifiers and DTD '" +
                           dtd + "'");
             }
+	    StringTokenizer st = new StringTokenizer(dtd, "|");
+	    int arrayLen = st.countTokens();
+	    if (arrayLen == 0) {
+		// PENDING I18n
+		throw new Exception("No DTDs specified");
+	    }
+            String[] dtds = new String[arrayLen];
+	    int i=0;
+	    while (st.hasMoreTokens()) {
+	        dtds[i] = st.nextToken();
+		i++;
+	    }
             copyright((String) options.get("--copyright"));
             directories((String) options.get("--tlddir"), false);
-            Digester digester = digester(dtd, false, true, false);
+            Digester digester = digester(dtds, false, true, false);
             String config = (String) options.get("--config");
 	    loadOptionalTags((String) options.get("--tagdef"));
             if (log.isDebugEnabled()) {

@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKitSpecificationGenerator.java,v 1.3 2004/02/04 23:46:35 ofung Exp $
+ * $Id: RenderKitSpecificationGenerator.java,v 1.4 2004/05/12 03:08:50 rkitain Exp $
  */
 
 /*
@@ -21,12 +21,13 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.BufferedInputStream;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.SortedMap;
+import java.util.StringTokenizer;
 import java.util.TreeMap;
-import java.util.Iterator;
 import java.net.URL;
 import java.net.URLConnection;
 
@@ -53,8 +54,10 @@ import com.sun.faces.config.beans.AttributeBean;
  *     file that will be parsed by the <code>parse()</code> method.</li>
  * <li><strong>--dir</strong> Absolute pathname to the directory into which
  *     generated HTML files will be created.</li>
- * <li><strong>--dtd</strong> Absolute pathname to a file containing the DTD
- *     used to validate the input configuration files.</li>
+ * <li><strong>--dtd</strong> Pipe delimited list of public identifiers and 
+ *     absolute pathnames to files containing the DTDs used to validate the 
+ *     input configuration files. PRECONDITION: The list is the sequence:
+ *     <public id>|<dtd path>|<public id>|<dtd path>...</li>
  * </ul>
  */
 
@@ -866,11 +869,23 @@ public class RenderKitSpecificationGenerator extends AbstractGenerator {
             Map options = options(args);
             String dtd = (String) options.get("--dtd");
             if (log.isDebugEnabled()) {
-                log.debug("Configuring digester instance with DTD '" +
+                log.debug("Configuring digester instance with public identifiers and DTD '" +
                           dtd + "'");
             }
+    	    StringTokenizer st = new StringTokenizer(dtd, "|");
+	    int arrayLen = st.countTokens();
+	    if (arrayLen == 0) {
+		// PENDING I18n
+		throw new Exception("No DTDs specified");
+	    }
+            String[] dtds = new String[arrayLen];
+	    int i=0;
+	    while (st.hasMoreTokens()) {
+	        dtds[i] = st.nextToken();
+		i++;
+	    }
             directories((String) options.get("--dir"));
-            Digester digester = digester(dtd, false, true, false);
+            Digester digester = digester(dtds, false, true, false);
             String config = (String) options.get("--config");
             if (log.isDebugEnabled()) {
                 log.debug("Parsing configuration file '" + config + "'");
