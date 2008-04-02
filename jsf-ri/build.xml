@@ -12,7 +12,7 @@
 
   <property name="Name" value="JSF RI"/>
   <property name="name" value="jsf-ri"/>
-  <property name="version" value="20020906"/>
+  <property name="version" value="20020909"/>
 
 <!-- ************ Per user local properties ******************************* -->
 
