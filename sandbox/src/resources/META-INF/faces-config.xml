@@ -42,7 +42,7 @@
         <render-kit-id>HTML_BASIC</render-kit-id>
         <render-kit-class>com.sun.faces.renderkit.RenderKitImpl</render-kit-class>
         <renderer>
-            <component-family>com.sun.faces.sandbox.AccessibleHtmlDataTable</component-family>
+            <component-family>javax.faces.Data</component-family>
             <renderer-type>com.sun.faces.sandbox.AccessibleTableRenderer</renderer-type>
             <renderer-class>com.sun.faces.sandbox.render.AccessibleTableRenderer</renderer-class>
         </renderer>

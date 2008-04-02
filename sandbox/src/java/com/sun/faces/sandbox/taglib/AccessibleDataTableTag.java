@@ -215,11 +215,11 @@ public final class AccessibleDataTableTag extends UIComponentELTag {
 
     // General Methods
     public String getRendererType() {
-        return "javax.faces.Table";
+        return "com.sun.faces.sandbox.AccessibleTableRenderer";
     }
 
     public String getComponentType() {
-        return "javax.faces.HtmlDataTable";
+        return "com.sun.faces.sandbox.AccessibleHtmlDataTable";
     }
 
     protected void setProperties(UIComponent component) {

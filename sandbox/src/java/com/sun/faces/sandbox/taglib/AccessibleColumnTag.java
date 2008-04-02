@@ -1,5 +1,5 @@
 /*
- * $Id: AccessibleColumnTag.java,v 1.1 2006/12/07 03:05:30 rlubke Exp $
+ * $Id: AccessibleColumnTag.java,v 1.2 2006/12/07 05:03:56 rlubke Exp $
  */
 
 /*
@@ -76,7 +76,7 @@ public class AccessibleColumnTag extends UIComponentELTag {
 
 
     public String getComponentType() {
-        return "javax.faces.Column";
+        return "com.sun.faces.sandbox.AccessibleHtmlColumn";
     }
 
 
