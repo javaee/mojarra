@@ -30,7 +30,7 @@
 <button id='data:4:command' value='command4'/>
 </column>
 <column id='data:4:inputColumn'>
-<text id='data:4:input' value='input4A'/>
+<text id='data:4:input' value='input4'/>
 </column>
 <column id='data:4:outputColumn'>
 <text id='data:4:output' value='output4'/>
@@ -44,7 +44,7 @@
 <button id='data:5:command' value='command6'/>
 </column>
 <column id='data:5:inputColumn'>
-<text id='data:5:input' value='input6B'/>
+<text id='data:5:input' value='input6'/>
 </column>
 <column id='data:5:outputColumn'>
 <text id='data:5:output' value='output6'/>

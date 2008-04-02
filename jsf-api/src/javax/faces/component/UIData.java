@@ -39,6 +39,8 @@
 package javax.faces.component;
 
 
+import java.io.IOException;
+import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.el.ValueBinding;
 import javax.faces.event.AbortProcessingException;
@@ -614,6 +616,30 @@ public class UIData extends UIComponentBase
 
 
     /**
+     * <p>In addition to the default behavior, ensure that any saved
+     * per-row state for our child input components is discarded
+     * unless it is needed to rerender the current page with errors.
+     *
+     * @param context FacesContext for the current request
+     *
+     * @exception IOException if an input/output error occurs while rendering
+     * @exception NullPointerException if <code>context</code>
+     *  is <code>null</code>
+     */
+    public void encodeBegin(FacesContext context) throws IOException {
+
+        
+        model = null; // Rre-evaluate even with server-side state saving
+        if (!keepSaved(context)) {
+            saved = new HashMap();
+        }
+        super.encodeBegin(context);
+
+    }
+
+
+
+    /**
      * <p>Override the default {@link UIComponentBase#processDecodes}
      * processing to perform the following steps.</p>
      * <ul>
@@ -655,6 +681,10 @@ public class UIData extends UIComponentBase
         if (!isRendered()) {
             return;
         }
+
+        model = null; // Re-evaluate even with server-side state saving
+        saved = new HashMap(); // We don't need saved state here
+
 	iterate(context, PhaseId.APPLY_REQUEST_VALUES);
 	decode(context);
 
@@ -871,6 +901,31 @@ public class UIData extends UIComponentBase
 
 	// Clean up after ourselves
 	setRowIndex(-1);
+
+    }
+
+
+    /**
+     * <p>Return <code>true</code> if we need to keep the saved per-child state
+     * information in order to display error messages.</p>
+     *
+     * @param context {@link FacesContext} for the current request
+     */
+    private boolean keepSaved(FacesContext context) {
+
+        Iterator clientIds = saved.keySet().iterator();
+        while (clientIds.hasNext()) {
+            String clientId = (String) clientIds.next();
+            Iterator messages = context.getMessages(clientId);
+            while (messages.hasNext()) {
+                FacesMessage message = (FacesMessage) messages.next();
+                if (message.getSeverity().compareTo(FacesMessage.SEVERITY_ERROR)
+                    >= 0) {
+                    return (true);
+                }
+            }
+        }
+        return (false);
 
     }
 
