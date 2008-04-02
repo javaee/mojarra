@@ -37,9 +37,8 @@
 <f:use_faces>
 <html>
 <head>
-  <link rel="stylesheet" type="text/css"
-       href='<%= request.getContextPath() + "/tree-control-test.css" %>'>
 <title>Demonstration Components - Menu</title>
+<d:stylesheet path="/tree-control-test.css"/>
 </head>
 <body bgcolor="white">
 

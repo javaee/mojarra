@@ -661,4 +661,36 @@
   </tag>
 
 
+  <tag>
+
+    <name>stylesheet</name>
+    <tag-class>components.taglib.StylesheetTag</tag-class>
+    <body-content>empty</body-content>
+    <description>
+      Renders an HTML link element to a CSS stylesheet (content type text/css)
+      at the context-relative path specified by the "path" attribute.
+    </description>
+
+    <attribute>
+      <name>id</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Component id of this component.
+      </description>
+    </attribute>
+
+    <attribute>
+      <name>path</name>
+      <required>true</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Context-relative path to a CSS stylesheet resource within this
+        webapp.  The path must start with a slash ("/") character.
+      </description>
+    </attribute>
+
+  </tag>
+
+
 </taglib>

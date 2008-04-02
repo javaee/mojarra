@@ -34,8 +34,7 @@
 <html>
 <head>
   <title>Result Set Example</title>
-  <link rel="stylesheet" type="text/css"
-       href='<%= request.getContextPath() + "/result-set.css" %>'>
+  <d:stylesheet path="/result-set.css"/>
 </head>
 <body bgcolor="white">
 

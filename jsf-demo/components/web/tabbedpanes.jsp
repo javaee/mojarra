@@ -21,8 +21,7 @@
 <html>
 <head>
   <title>Demonstration Components - Tabbed Panes</title>
-  <link rel="stylesheet" type="text/css"
-       href='<%= request.getContextPath() + "/stylesheet.css" %>'>
+  <d:stylesheet path="/stylesheet.css"/>
 </head>
 <body bgcolor="white">
 
