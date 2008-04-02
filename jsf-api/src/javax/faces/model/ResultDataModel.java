@@ -1,5 +1,5 @@
 /*
- * $Id: ResultDataModel.java,v 1.3 2003/10/15 02:02:15 craigmcc Exp $
+ * $Id: ResultDataModel.java,v 1.4 2003/10/15 20:43:00 craigmcc Exp $
  */
 
 /*
@@ -63,6 +63,17 @@ public class ResultDataModel extends DataModel {
 
 
     /**
+     * <p>Construct a new {@link ResultDataModel} with no specified
+     * wrapped data.</p>
+     */
+    public ResultDataModel() {
+
+        super();
+
+    }
+
+
+    /**
      * <p>Construct a new {@link ResultDataModel} wrapping the specified
      * <code>Result</code>.</p>
      *
@@ -73,10 +84,8 @@ public class ResultDataModel extends DataModel {
      */
     public ResultDataModel(Result result) {
 
-        if (result == null) {
-            throw new NullPointerException();
-        }
-        this.rows = result.getRows();
+        super();
+        setWrappedData(result);
 
     }
 
@@ -149,6 +158,21 @@ public class ResultDataModel extends DataModel {
                 ((DataModelListener) listeners.get(i)).rowSelected(event);
             }
         }
+
+    }
+
+
+    /**
+     * <p>Set the wrapped data for this {@link ResultDataModel} instance.</p>
+     *
+     * @param data The data to be wrapped
+     *
+     * @exception NullPointerException if <code>data</code>
+     *  is <code>null</code>
+     */
+    public void setWrappedData(Result data) {
+
+        this.rows = data.getRows();
 
     }
 

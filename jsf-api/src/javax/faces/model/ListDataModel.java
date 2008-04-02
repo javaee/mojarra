@@ -1,5 +1,5 @@
 /*
- * $Id: ListDataModel.java,v 1.3 2003/10/15 02:02:14 craigmcc Exp $
+ * $Id: ListDataModel.java,v 1.4 2003/10/15 20:42:59 craigmcc Exp $
  */
 
 /*
@@ -59,6 +59,17 @@ public class ListDataModel extends DataModel {
 
 
     /**
+     * <p>Construct a new {@link ListDataModel} with no specified
+     * wrapped data.</p>
+     */
+    public ListDataModel() {
+
+        super();
+
+    }
+
+
+    /**
      * <p>Construct a new {@link ListDataModel} wrapping the specified
      * <code>List</code>.</p>
      *
@@ -69,10 +80,8 @@ public class ListDataModel extends DataModel {
      */
     public ListDataModel(List list) {
 
-        if (list == null) {
-            throw new NullPointerException();
-        }
-        this.list = list;
+        super();
+        setWrappedData(list);
 
     }
 
@@ -144,6 +153,21 @@ public class ListDataModel extends DataModel {
                 ((DataModelListener) listeners.get(i)).rowSelected(event);
             }
         }
+
+    }
+
+
+    /**
+     * <p>Set the wrapped data for this {@link ListDataModel} instance.</p>
+     *
+     * @param data The data to be wrapped
+     *
+     * @exception NullPointerException if <code>data</code>
+     *  is <code>null</code>
+     */
+    public void setWrappedData(List data) {
+
+        this.list = data;
 
     }
 

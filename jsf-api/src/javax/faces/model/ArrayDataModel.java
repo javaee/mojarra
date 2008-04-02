@@ -1,5 +1,5 @@
 /*
- * $Id: ArrayDataModel.java,v 1.3 2003/10/15 02:02:14 craigmcc Exp $
+ * $Id: ArrayDataModel.java,v 1.4 2003/10/15 20:42:59 craigmcc Exp $
  */
 
 /*
@@ -58,6 +58,17 @@ public class ArrayDataModel extends DataModel {
 
 
     /**
+     * <p>Construct a new {@link ArrayDataModel} with no specified
+     * wrapped data.</p>
+     */
+    public ArrayDataModel() {
+
+        super();
+
+    }
+
+
+    /**
      * <p>Construct a new {@link ArrayDataModel} wrapping the specified
      * array.</p>
      *
@@ -68,10 +79,8 @@ public class ArrayDataModel extends DataModel {
      */
     public ArrayDataModel(Object array[]) {
 
-        if (array == null) {
-            throw new NullPointerException();
-        }
-        this.array = array;
+        super();
+        setWrappedData(array);
 
     }
 
@@ -143,6 +152,21 @@ public class ArrayDataModel extends DataModel {
                 ((DataModelListener) listeners.get(i)).rowSelected(event);
             }
         }
+
+    }
+
+
+    /**
+     * <p>Set the wrapped data for this {@link ArrayDataModel} instance.</p>
+     *
+     * @param data The data to be wrapped
+     *
+     * @exception NullPointerException if <code>data</code>
+     *  is <code>null</code>
+     */
+    public void setWrappedData(Object data[]) {
+
+        this.array = data;
 
     }
 

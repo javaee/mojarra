@@ -1,5 +1,5 @@
 /*
- * $Id: ResultSetDataModel.java,v 1.7 2003/10/15 19:36:24 craigmcc Exp $
+ * $Id: ResultSetDataModel.java,v 1.8 2003/10/15 20:43:00 craigmcc Exp $
  */
 
 /*
@@ -75,6 +75,17 @@ public class ResultSetDataModel extends DataModel {
 
 
     /**
+     * <p>Construct a new {@link ResultSetDataModel} with no specified
+     * wrapped data.</p>
+     */
+    public ResultSetDataModel() {
+
+        super();
+
+    }
+
+
+    /**
      * <p>Construct a new {@link ResultSetDataModel} wrapping the specified
      * <code>ResultSet</code>.</p>
      *
@@ -89,22 +100,8 @@ public class ResultSetDataModel extends DataModel {
      */
     public ResultSetDataModel(ResultSet resultSet) {
 
-        if (resultSet == null) {
-            throw new NullPointerException();
-        }
-        try {
-            if (ResultSet.TYPE_FORWARD_ONLY == resultSet.getType()) {
-                throw new IllegalArgumentException();
-            }
-        } catch (SQLException e) {
-            throw new IllegalArgumentException();
-        }
-        this.resultSet = resultSet;
-        try {
-            this.metadata = resultSet.getMetaData();
-        } catch (SQLException e) {
-            throw new FacesException(e);
-        }
+        super();
+        setWrappedData(resultSet);
 
     }
 
@@ -539,6 +536,40 @@ public class ResultSetDataModel extends DataModel {
 
         public void remove() {
             throw new UnsupportedOperationException();
+        }
+
+    }
+
+
+    /**
+     * <p>Set the wrapped data for this {@link ResultDataModel} instance.</p>
+     *
+     * @param data The data to be wrapped
+     *
+     * @exception FacesException if the specified result set cannot be
+     *  initialized
+     * @exception IllegalArgumentException if <code>resultSet</code> is of
+     *  type <code>ResultSet.TYPE_FORWARD_ONLY</code>
+     * @exception NullPointerException if <code>data</code>
+     *  is <code>null</code>
+     */
+    public void setWrappedData(ResultSet data) {
+
+        if (data == null) {
+            throw new NullPointerException();
+        }
+        try {
+            if (ResultSet.TYPE_FORWARD_ONLY == data.getType()) {
+                throw new IllegalArgumentException();
+            }
+        } catch (SQLException e) {
+            throw new IllegalArgumentException();
+        }
+        this.resultSet = data;
+        try {
+            this.metadata = data.getMetaData();
+        } catch (SQLException e) {
+            throw new FacesException(e);
         }
 
     }
