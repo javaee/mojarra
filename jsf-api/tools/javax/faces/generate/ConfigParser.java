@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigParser.java,v 1.5 2003/09/30 13:52:30 eburns Exp $
+ * $Id: ConfigParser.java,v 1.6 2003/10/09 15:41:53 eburns Exp $
  */
 
 /*
@@ -246,7 +246,7 @@ class ConfigParser extends Object {
 	    parser = newParser;
 	}
 	public void end(String namespace, String name) throws Exception {
-	    ConfigRenderKit cr = (ConfigRenderKit)digester.peek();
+	    ConfigRenderKit cr = (ConfigRenderKit) this.digester.peek();
 	    ConfigRenderer renderer = null;
 	    Map renderers = cr.getRenderers();
 	    List

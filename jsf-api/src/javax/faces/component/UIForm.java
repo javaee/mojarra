@@ -1,5 +1,5 @@
 /*
- * $Id: UIForm.java,v 1.35 2003/09/30 22:04:40 eburns Exp $
+ * $Id: UIForm.java,v 1.36 2003/10/09 15:41:51 eburns Exp $
  */
 
 /*
@@ -25,7 +25,7 @@ import javax.faces.context.FacesContext;
  * <code>setRendererType()</code> method.</p>
  */
 
-public class UIForm extends UIComponentBase {
+public class UIForm extends UIComponentBase implements NamingContainer {
 
 
     // ------------------------------------------------------------ Constructors
