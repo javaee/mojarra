@@ -1,5 +1,5 @@
 /*
- * $Id: ViewTag.java,v 1.7 2003/10/15 16:59:11 jvisvanathan Exp $
+ * $Id: ViewTag.java,v 1.8 2003/10/16 00:30:18 eburns Exp $
  */
 
 /*
@@ -17,6 +17,7 @@ import javax.faces.context.ResponseWriter;
 import javax.faces.application.StateManager;
 import javax.faces.webapp.UIComponentBodyTag;
 import javax.faces.application.StateManager.SerializedView;
+import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.ExternalContext;
 import javax.servlet.jsp.JspException;
@@ -24,6 +25,9 @@ import javax.servlet.jsp.tagext.BodyTag;
 import javax.servlet.jsp.tagext.BodyContent;
 import java.io.IOException;
 import java.util.Locale;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import javax.servlet.jsp.jstl.core.Config;
 
@@ -37,7 +41,7 @@ import org.mozilla.util.Assert;
  *  any renderers or attributes. It exists mainly to save the state of
  *  the response tree once all tags have been rendered.
  *
- * @version $Id: ViewTag.java,v 1.7 2003/10/15 16:59:11 jvisvanathan Exp $
+ * @version $Id: ViewTag.java,v 1.8 2003/10/16 00:30:18 eburns Exp $
  * 
  *
  */
@@ -52,11 +56,20 @@ public class ViewTag extends UIComponentBodyTag
     // Class Variables
     //
 
+    protected static Log log = LogFactory.getLog(ViewTag.class);
+
     //
     // Instance Variables
     //
 
     // Attribute Instance Variables
+
+    protected String locale_ = null; // store the un-evaluated expr
+    protected String locale = null; // store the evaluated expr
+
+    public void setLocale(String newLocale) {
+	locale_ = newLocale;
+    }
 
 
     // Relationship Instance Variables
@@ -91,7 +104,26 @@ public class ViewTag extends UIComponentBodyTag
     }
     
     public int doStartTag() throws JspException {
-        int rc = super.doStartTag();
+        int rc = 0;
+        try {        
+            evaluateExpressions();
+	    rc = super.doStartTag();
+        }
+        catch (JspException e) {
+	    if (log.isDebugEnabled()) {
+	        log.debug("Can't evaluate expression or leverage base class", 
+			  e);
+	    }
+	    throw e;
+        }
+        catch (Throwable t) {
+	    if (log.isDebugEnabled()) {
+	        log.debug("Can't evaluate expression or leverage base class", 
+			  t);
+	    }
+	    throw new JspException(t);
+        }
+	
         FacesContext facesContext = FacesContext.getCurrentInstance();
         Assert.assert_it(facesContext != null);
 	ResponseWriter writer = facesContext.getResponseWriter();
@@ -212,5 +244,23 @@ public class ViewTag extends UIComponentBodyTag
     protected int getDoEndValue() throws JspException {
         return (EVAL_PAGE);
     }
+
+    //
+    // Methods from Superclass
+    // 
+    protected void overrideProperties(UIComponent component) {
+        super.overrideProperties(component);
+	if (null != locale) {
+           ((UIViewRoot)component).setLocale(Util.getLocaleFromString(locale));
+	}
+    }
+
+
+    private void evaluateExpressions() throws JspException {
+        if (locale_ != null) {
+            locale = Util.evaluateElExpression(locale_, pageContext);
+        }
+    }
+
     
 } // end of class UseFacesTag

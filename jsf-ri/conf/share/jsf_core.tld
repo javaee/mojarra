@@ -89,6 +89,11 @@
     <tag-class>com.sun.faces.taglib.jsf_core.ViewTag</tag-class>
       <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
     <body-content>JSP</body-content>
+    <attribute>
+      <name>locale</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+    </attribute>
   </tag>
 
   <tag>

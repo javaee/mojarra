@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTag.java,v 1.19 2003/10/08 02:24:55 eburns Exp $
+ * $Id: UIComponentTag.java,v 1.20 2003/10/16 00:29:46 eburns Exp $
  */
 
 /*
@@ -83,6 +83,14 @@ public abstract class UIComponentTag implements Tag {
      */ 
     private static final String CURRENT_FACES_CONTEXT =
         "javax.faces.webapp.CURRENT_FACES_CONTEXT";
+
+    /**
+     * <p>The attribute name under which we will store the {@link UIViewRoot}
+     * for this request.</p>
+     */ 
+    private static final String CURRENT_VIEW_ROOT =
+        "javax.faces.webapp.CURRENT_VIEW_ROOT";
+
     
     
     // ------------------------------------------------------ Instance Variables
@@ -603,7 +611,16 @@ public abstract class UIComponentTag implements Tag {
         if (parentTag != null) {
             parentComponent = parentTag.getComponent();
         } else {
-            parentComponent = context.getViewRoot();
+	    // see if this is the first time this tag instance is trying
+	    // to be bound to the UIViewRoot
+	    if (null == (parentComponent = (UIComponent)
+			 pageContext.getAttribute(CURRENT_VIEW_ROOT,
+						  PageContext.REQUEST_SCOPE))){
+		parentComponent = context.getViewRoot();
+		pageContext.setAttribute(CURRENT_VIEW_ROOT, parentComponent,
+					 PageContext.REQUEST_SCOPE);
+		overrideProperties(parentComponent);
+	    }
             component = parentComponent;
             return (component);
         }

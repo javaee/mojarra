@@ -2359,6 +2359,14 @@
     <component-type>ViewRoot</component-type>
     <component-class>javax.faces.component.UIViewRoot</component-class>
     &base-props;
+    <property>
+      <display-name>Locale</display-name>
+      <icon></icon>
+      <property-name>locale</property-name>
+      <property-class>java.util.Locale</property-class>
+      <tag-attribute>yes</tag-attribute>
+    </property>
+
   </component>
 
   <!-- standard renderkit -->

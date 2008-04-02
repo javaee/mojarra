@@ -66,7 +66,7 @@
   }
 
   // Check message identifiers that should be present (fr_FR)
-  facesContext.setLocale(new Locale("fr", "FR"));
+  facesContext.getViewRoot().setLocale(new Locale("fr", "FR"));
   for (int i = 0; i < list.length; i++) {
     message = mr.getMessage(facesContext, list[i]);
     if (message == null) {
