@@ -1,5 +1,5 @@
 /*
- * $Id: ExternalContextImpl.java,v 1.42 2006/01/13 19:06:14 rogerk Exp $
+ * $Id: ExternalContextImpl.java,v 1.43 2006/01/13 20:31:46 rogerk Exp $
  */
 
 /*
@@ -76,7 +76,7 @@ import java.util.logging.Logger;
  * servlet implementation.
  *
  * @author Brendan Murray
- * @version $Id: ExternalContextImpl.java,v 1.42 2006/01/13 19:06:14 rogerk Exp $
+ * @version $Id: ExternalContextImpl.java,v 1.43 2006/01/13 20:31:46 rogerk Exp $
  */
 public class ExternalContextImpl extends ExternalContext {
 
@@ -1314,39 +1314,16 @@ class RequestHeaderValuesMap extends BaseContextMap {
     }
 
 
-    // Override of containsValue was necessary as Enumeration.equals(Enumeration)
-    // returned false.
     public boolean containsValue(Object value) {
-        if (value == null || !(value instanceof Enumeration)) {
+        if (value == null || !value.getClass().isArray()) {
             return false;
         }
-
-        int valHash = 0;
-        int valCount = 0;
-
-        // get sum of the hashcode for all elements for the
-        // input value.
-        Enumeration val = (Enumeration) value;
-        while (val.hasMoreElements()) {
-            valHash += val.nextElement().hashCode();
-            valCount++;
-        }
-
-        // For each Map.Entry within this instance, compute
-        // the hash for each value and compare against the
-        // sum computed above.  Ensure that the number of elements
-        // in each string array is the same as well.
-        for (Iterator i = entrySet().iterator(); i.hasNext();) {
-            int thisHash = 0;
-            int thisCount = 0;
-            Map.Entry entry = (Map.Entry) i.next();
-            String[] mapValues = (String[]) entry.getValue();
-
-            for (int j=0; j< mapValues.length; j++) {
-                thisHash += mapValues[j].hashCode();
-                thisCount++;
-            }
-            if (thisCount == valCount && thisHash == valHash) {
+                                                                                                                            
+        Set entrySet = entrySet();
+        for (Object anEntrySet : entrySet) {
+            Map.Entry entry = (Map.Entry) anEntrySet;
+            // values will be arrays
+            if (Arrays.equals((Object[]) value, (Object[]) entry.getValue())) {
                 return true;
             }
         }
