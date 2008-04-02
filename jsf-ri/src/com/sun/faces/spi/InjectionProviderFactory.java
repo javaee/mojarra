@@ -31,6 +31,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.sun.faces.RIConstants;
+import com.sun.faces.vendor.WebContainerInjectionProvider;
 import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
 import com.sun.faces.util.Util;
@@ -46,6 +47,9 @@ public class InjectionProviderFactory {
      */
     private static final InjectionProvider NOOP_PROVIDER =
           new NoopInjectionProvider();
+
+    private static final InjectionProvider GENERIC_WEB_PROVIDER =
+         new WebContainerInjectionProvider();
 
     /**
       * <p>The system property that will be checked for alternate
@@ -72,19 +76,26 @@ public class InjectionProviderFactory {
         
         InjectionProvider provider = getProviderInstance(providerClass);
 
-        if (provider.getClass() != NoopInjectionProvider.class) {
+        if (!NoopInjectionProvider.class.equals(provider.getClass())
+            && !WebContainerInjectionProvider.class.equals(provider.getClass())) {
             if (LOGGER.isLoggable(Level.FINE)) {
                 LOGGER.log(Level.FINE,
                            "jsf.spi.injection.provider_configured",
                            new Object[]{provider.getClass().getName()});
             }
+            return provider;
+        } else if (WebContainerInjectionProvider.class.equals(provider.getClass())) {
+            if (LOGGER.isLoggable(Level.INFO)) {
+                LOGGER.info("jsf.core.injection.provider_generic_web_configured");
+            }
+            return provider;
         } else {
             if (LOGGER.isLoggable(Level.WARNING)) {
                 LOGGER.log(Level.WARNING, "jsf.spi.injection.no_injection");
             }
+            return provider;
         }
-        return provider;
-        
+                
     }
     
 
@@ -94,7 +105,7 @@ public class InjectionProviderFactory {
             try {
                 Class<?> clazz = Util.loadClass(className, InjectionProviderFactory.class);
                 if (implementsInjectionProvider(clazz)) {
-                    provider = (InjectionProvider) clazz.newInstance();
+                    return (InjectionProvider) clazz.newInstance();
                 } else {
                     if (LOGGER.isLoggable(Level.SEVERE)) {
                         LOGGER.log(Level.SEVERE,
@@ -123,8 +134,25 @@ public class InjectionProviderFactory {
                     LOGGER.log(Level.SEVERE, "", iae);
                 }
             }
-        } 
-       
+        }
+
+        // We weren't able to find a configured provider - check
+        // to see if the PostConstruct and PreDestroy annotations
+        // are available.  If they are, then default to the
+        // WebContainerInjectionProvider, otherwise, use
+        // NoopInjectionProvider
+        if (NOOP_PROVIDER.equals(provider)) {
+            try {
+                if (Util.loadClass("javax.annotation.PostConstruct", null) != null
+                    && Util.loadClass("javax.annotation.PreDestroy", null) != null) {
+                    provider = GENERIC_WEB_PROVIDER;                
+                }
+            } catch (Exception e) {
+                // LOG MESSAGE
+                provider = NOOP_PROVIDER;
+            }
+        }
+
         return provider;
     }
 
