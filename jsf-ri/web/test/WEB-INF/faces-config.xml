@@ -275,8 +275,60 @@
       <value>mixed value #{SimpleBean.simpleProperty}</value>
     </managed-property>
   </managed-bean>
-   
-    
+
+  <managed-bean>
+    <description>
+      Will throw PropertyNotFoundException when accessed.
+    </description>
+    <managed-bean-name>threeBeanSaladNegative</managed-bean-name>
+    <managed-bean-class>com.sun.faces.TestBean</managed-bean-class>
+    <managed-bean-scope>application</managed-bean-scope>
+    <managed-property>
+      <property-name>prop</property-name>
+      <value>request #{tbsRequest.simpleProperty} session #{tbsSession.simpleProperty} none #{tbsNone.simpleProperty} </value>
+    </managed-property>
+  </managed-bean>
+
+  <managed-bean>
+    <managed-bean-name>threeBeanSaladPositive</managed-bean-name>
+    <managed-bean-class>com.sun.faces.TestBean</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+    <managed-property>
+      <property-name>prop</property-name>
+      <value>request #{tbsRequest.simpleProperty} session #{tbsSession.simpleProperty} none #{tbsNone.simpleProperty} </value>
+    </managed-property>
+  </managed-bean>
+
+  <managed-bean>
+    <managed-bean-name>tbsRequest</managed-bean-name>
+    <managed-bean-class>com.sun.faces.config.SimpleBean</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+    <managed-property>
+      <property-name>simpleProperty</property-name>
+      <value>request</value>
+    </managed-property>
+  </managed-bean>
+
+  <managed-bean>
+    <managed-bean-name>tbsSession</managed-bean-name>
+    <managed-bean-class>com.sun.faces.config.SimpleBean</managed-bean-class>
+    <managed-bean-scope>session</managed-bean-scope>
+    <managed-property>
+      <property-name>simpleProperty</property-name>
+      <value>session</value>
+    </managed-property>
+  </managed-bean>
+
+  <managed-bean>
+    <managed-bean-name>tbsNone</managed-bean-name>
+    <managed-bean-class>com.sun.faces.config.SimpleBean</managed-bean-class>
+    <managed-bean-scope>none</managed-bean-scope>
+    <managed-property>
+      <property-name>simpleProperty</property-name>
+      <value>none</value>
+    </managed-property>
+  </managed-bean>
+
   <managed-bean>
     <managed-bean-name>SimpleBean</managed-bean-name>
     <managed-bean-class>com.sun.faces.config.SimpleBean</managed-bean-class>

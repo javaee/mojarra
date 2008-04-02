@@ -1,5 +1,5 @@
 /*
- * $Id: TestValueBindingImpl.java,v 1.30 2004/04/07 17:52:50 rkitain Exp $
+ * $Id: TestValueBindingImpl.java,v 1.31 2004/04/27 17:25:13 eburns Exp $
  */
 
 /*
@@ -591,78 +591,78 @@ public class TestValueBindingImpl extends ServletFacesTestCase {
 
         valueBinding.setRef("TestApplicationBean");
         assertEquals("application",
-                     valueBinding.getScope("TestApplicationBean"));
+                     Util.getScope("TestApplicationBean", null));
 
         valueBinding.setRef("TestApplicationBean.one");
         assertEquals("application",
-                     valueBinding.getScope("TestApplicationBean.one"));
+                     Util.getScope("TestApplicationBean.one", null));
 
         valueBinding.setRef("TestApplicationBean.inner.two");
         assertEquals("application",
-                     valueBinding.getScope("TestApplicationBean.inner.two"));
+                     Util.getScope("TestApplicationBean.inner.two", null));
 
         valueBinding.setRef("applicationScope.TestApplicationBean");
         assertEquals("application",
-                     valueBinding.getScope(
-                         "applicationScope.TestApplicationBean"));
+                     Util.getScope(
+                         "applicationScope.TestApplicationBean", null));
         valueBinding.setRef("applicationScope.TestApplicationBean.inner.two");
         assertEquals("application",
-                     valueBinding.getScope(
-                         "applicationScope.TestApplicationBean.inner.two"));
+                     Util.getScope(
+                         "applicationScope.TestApplicationBean.inner.two", null));
 
         getFacesContext().getExternalContext().getSessionMap().
             put("TestSessionBean", testBean);
         valueBinding.setRef("TestSessionBean");
         assertEquals("session",
-                     valueBinding.getScope("TestSessionBean"));
+                     Util.getScope("TestSessionBean", null));
 
         valueBinding.setRef("TestSessionBean.one");
         assertEquals("session",
-                     valueBinding.getScope("TestSessionBean.one"));
+                     Util.getScope("TestSessionBean.one", null));
 
         valueBinding.setRef("TestSessionBean.inner.two");
         assertEquals("session",
-                     valueBinding.getScope("TestSessionBean.inner.two"));
+                     Util.getScope("TestSessionBean.inner.two", null));
 
         valueBinding.setRef("sessionScope.TestSessionBean");
         assertEquals("session",
-                     valueBinding.getScope("sessionScope.TestSessionBean"));
+                     Util.getScope("sessionScope.TestSessionBean", null));
 
         valueBinding.setRef("sessionScope.TestSessionBean.inner.two");
         assertEquals("session",
-                     valueBinding.getScope(
-                         "sessionScope.TestSessionBean.inner.two"));
+                     Util.getScope(
+                         "sessionScope.TestSessionBean.inner.two", null));
 
         getFacesContext().getExternalContext().getRequestMap().
             put("TestRequestBean", testBean);
         valueBinding.setRef("TestRequestBean");
         assertEquals("request",
-                     valueBinding.getScope("TestRequestBean"));
+                     Util.getScope("TestRequestBean", null));
 
         valueBinding.setRef("TestRequestBean.one");
         assertEquals("request",
-                     valueBinding.getScope("TestRequestBean.one"));
+                     Util.getScope("TestRequestBean.one", null));
 
         valueBinding.setRef("TestRequestBean.inner.two");
         assertEquals("request",
-                     valueBinding.getScope("TestRequestBean.inner.two"));
+                     Util.getScope("TestRequestBean.inner.two", null));
 
         valueBinding.setRef("requestScope.TestRequestBean");
         assertEquals("request",
-                     valueBinding.getScope("requestScope.TestRequestBean"));
+                     Util.getScope("requestScope.TestRequestBean", null));
 
         valueBinding.setRef("requestScope.TestRequestBean.inner.two");
         assertEquals("request",
-                     valueBinding.getScope(
-                         "requestScope.TestRequestBean.inner.two"));
+                     Util.getScope(
+                         "requestScope.TestRequestBean.inner.two", null));
 
         valueBinding.setRef("TestNoneBean");
-        assertNull(valueBinding.getScope("TestNoneBean"));
+        assertNull(Util.getScope("TestNoneBean", null));
 
         valueBinding.setRef("TestNoneBean.one");
-        assertNull(valueBinding.getScope("TestNoneBean.one"));
+        assertNull(Util.getScope("TestNoneBean.one", null));
         valueBinding.setRef("TestNoneBean.inner.two");
-        assertNull(valueBinding.getScope("TestNoneBean.inner.two"));
+        assertNull(Util.getScope("TestNoneBean.inner.two", null));
 
     }
 
@@ -674,19 +674,19 @@ public class TestValueBindingImpl extends ServletFacesTestCase {
 
         property = "[]";
         valueBinding.setRef(property);
-        assertNull(valueBinding.getScope(property));
+        assertNull(Util.getScope(property, null));
         property = "][";
-        assertNull(valueBinding.getScope(property));
+        assertNull(Util.getScope(property, null));
         property = "";
-        assertNull(valueBinding.getScope(property));
+        assertNull(Util.getScope(property, null));
         property = null;
-        assertNull(valueBinding.getScope(property));
+        assertNull(Util.getScope(property, null));
         property = "foo.sessionScope";
-        assertNull(valueBinding.getScope(property));
+        assertNull(Util.getScope(property, null));
         property = "sessionScope";
-        assertNull(valueBinding.getScope(property));
+        assertNull(Util.getScope(property, null));
         property = "sessionScope[";
-        assertNull(valueBinding.getScope(property));
+        assertNull(Util.getScope(property, null));
 
     }
 

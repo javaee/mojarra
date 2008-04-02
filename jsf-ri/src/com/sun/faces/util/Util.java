@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.134 2004/03/31 18:48:52 eburns Exp $
+ * $Id: Util.java,v 1.135 2004/04/27 17:25:07 eburns Exp $
  */
 
 /*
@@ -29,6 +29,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.component.UISelectItem;
 import javax.faces.component.UISelectItems;
 import javax.faces.context.FacesContext;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContextFactory;
 import javax.faces.context.ResponseWriter;
 import javax.faces.convert.Converter;
@@ -46,8 +47,10 @@ import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.Locale;
+import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 
@@ -56,7 +59,7 @@ import java.util.StringTokenizer;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.134 2004/03/31 18:48:52 eburns Exp $
+ * @version $Id: Util.java,v 1.135 2004/04/27 17:25:07 eburns Exp $
  */
 
 public class Util extends Object {
@@ -1324,5 +1327,181 @@ public class Util extends Object {
             throw new FacesException(getExceptionMessageString(EMPTY_PARAMETER_ID));
         }
     }
+
+    /**
+     * <p>This method is used by the ManagedBeanFactory to ensure that
+     * properties set by an expression point to an object with an
+     * accepted lifespan.</p>
+     *
+     * <p>get the scope of the expression. Return <code>null</code> if
+     * it isn't scoped</p> 
+     *
+     * <p>For example, the expression:
+     * <code>sessionScope.TestBean.one</code> should return "session" 
+     * as the scope.</p>
+     *
+     * @param valueBinding the expression
+     *
+     * @param outString an allocated String Array into which we put the
+     * first segment.
+     *
+     * @return the scope of the expression
+     */
+    public static String getScope(String valueBinding,
+				  String [] outString) throws ReferenceSyntaxException {
+        if (valueBinding == null || 0 == valueBinding.length()) {
+            return null;
+        }
+	valueBinding = stripBracketsIfNecessary(valueBinding);
+	
+        int segmentIndex = getFirstSegmentIndex(valueBinding);
+
+        //examine first segment and see if it is a scope
+        String identifier = valueBinding;
+        String expression = null;
+
+        if (segmentIndex > 0) {
+            //get first segment designated by a "." or "["
+            identifier = valueBinding.substring(0, segmentIndex);
+
+            //get second segment designated by a "." or "["
+            expression = valueBinding.substring(segmentIndex + 1);
+            segmentIndex = getFirstSegmentIndex(expression);
+
+            if (segmentIndex > 0) {
+                expression = expression.substring(0, segmentIndex);
+            }
+        }
+
+        //check to see if the identifier is a named scope. If it is check
+        //for the expression in that scope. The expression is the
+        //second segment.
+
+        FacesContext context = FacesContext.getCurrentInstance();
+        ExternalContext ec = context.getExternalContext();
+	
+	if (null != outString) {
+	    outString[0] = identifier;
+	}
+        if (identifier.equalsIgnoreCase(RIConstants.REQUEST_SCOPE)) {
+            if ((expression != null) &&
+                (ec.getRequestMap().get(expression) != null)) {
+                return RIConstants.REQUEST;
+            } else {
+                return null;
+            }
+        }
+        if (identifier.equalsIgnoreCase(RIConstants.SESSION_SCOPE)) {
+            if ((expression != null) &&
+                (Util.getSessionMap(context).get(expression) != null)) {
+                return RIConstants.SESSION;
+            } else {
+                return null;
+            }
+        }
+        if (identifier.equalsIgnoreCase(RIConstants.APPLICATION_SCOPE)) {
+            if ((expression != null) &&
+                (ec.getApplicationMap().get(expression) != null)) {
+                return RIConstants.APPLICATION;
+            } else {
+                return null;
+            }
+        }
+
+	// handle implicit objects
+        if (identifier.equalsIgnoreCase(RIConstants.COOKIE_IMPLICIT_OBJ)) {
+	    return RIConstants.APPLICATION;
+        }	
+        if (identifier.equalsIgnoreCase(RIConstants.INIT_PARAM_IMPLICIT_OBJ)) {
+	    return RIConstants.APPLICATION;
+        }	
+        if (identifier.equalsIgnoreCase(RIConstants.FACES_CONTEXT_IMPLICIT_OBJ)) {
+	    return RIConstants.REQUEST;
+        }	
+        if (identifier.equalsIgnoreCase(RIConstants.HEADER_IMPLICIT_OBJ)) {
+	    return RIConstants.REQUEST;
+        }	
+        if (identifier.equalsIgnoreCase(RIConstants.HEADER_VALUES_IMPLICIT_OBJ)) {
+	    return RIConstants.REQUEST;
+        }
+        if (identifier.equalsIgnoreCase(RIConstants.PARAM_IMPLICIT_OBJ)) {
+	    return RIConstants.REQUEST;
+        }
+        if (identifier.equalsIgnoreCase(RIConstants.PARAM_VALUES_IMPLICIT_OBJ)) {
+	    return RIConstants.REQUEST;
+        }
+        if (identifier.equalsIgnoreCase(RIConstants.VIEW_IMPLICIT_OBJ)) {
+	    return RIConstants.REQUEST;
+        }
+
+        //No scope was provided in the expression so check for the 
+        //expression in all of the scopes. The expression is the first 
+        //segment.
+
+        if (ec.getRequestMap().get(identifier) != null) {
+            return RIConstants.REQUEST;
+        }
+        if (Util.getSessionMap(context).get(identifier) != null) {
+            return RIConstants.SESSION;
+        }
+        if (ec.getApplicationMap().get(identifier) != null) {
+            return RIConstants.APPLICATION;
+        }
+
+        //not present in any scope
+        return null;
+    }
+
+    /**
+     * @result a List of expressions from the expressionString
+     *
+     * @param expressionString the expression string, with delimiters
+     * intact.
+     */
+
+    public static List getExpressionsFromString(String expressionString) throws ReferenceSyntaxException {
+	if (null == expressionString) {
+	    return Collections.EMPTY_LIST;
+	}
+	List result = new ArrayList();
+	int i, j, len = expressionString.length(), cur = 0;
+	while (cur < len && 
+	       -1 != (i = expressionString.indexOf("#{", cur))) {
+	    if (-1 == (j = expressionString.indexOf("}", i + 2))) {
+		throw new ReferenceSyntaxException(Util.getExceptionMessageString(Util.INVALID_EXPRESSION_ID, new Object[]{expressionString}));
+	    }
+	    cur = j + 1;
+	    result.add(expressionString.substring(i, cur));
+	}
+	return result;
+    }
+
+    /**
+     * <p/>
+     * The the first segment of a String tokenized by a "." or "["
+     *
+     * @return index of the first occurrence of . or [
+     */
+    private static int getFirstSegmentIndex(String valueBinding) {
+        int segmentIndex = valueBinding.indexOf(".");
+        int bracketIndex = valueBinding.indexOf("[");
+
+        //there is no "." in the valueBinding so take the bracket value
+        if (segmentIndex < 0) {
+            segmentIndex = bracketIndex;
+        } else {
+            //if there is a bracket proceed
+            if (bracketIndex > 0) {
+                //if the bracket index is before the "." then
+                //get the bracket index
+                if (segmentIndex > bracketIndex) {
+                    segmentIndex = bracketIndex;
+                }
+            }
+        }
+        return segmentIndex;
+    }
+
+
 
 } // end of class Util

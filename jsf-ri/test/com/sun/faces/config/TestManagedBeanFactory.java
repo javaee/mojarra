@@ -1,5 +1,5 @@
 /*
- * $Id: TestManagedBeanFactory.java,v 1.17 2004/04/26 16:37:43 jvisvanathan Exp $
+ * $Id: TestManagedBeanFactory.java,v 1.18 2004/04/27 17:25:11 eburns Exp $
  */
 
 /*
@@ -21,6 +21,7 @@ import com.sun.faces.el.ValueBindingImpl;
 
 import javax.faces.FacesException;
 import javax.faces.el.ValueBinding;
+import javax.faces.el.PropertyNotFoundException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -538,6 +539,38 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
                 "#{mixedBean.prop}");
         assertEquals(bean.getProp(), (String) vb.getValue(getFacesContext()));
     }
+
+    public void testMixedBeanNegative() throws Exception {
+        ValueBinding vb =
+            getFacesContext().getApplication().createValueBinding(
+                "#{threeBeanSaladNegative}");
+	boolean exceptionThrown = false;
+	try {
+	    TestBean bean = (TestBean) vb.getValue(getFacesContext());
+	    assertTrue(false);
+	}
+	catch (PropertyNotFoundException pnfe) {
+	    exceptionThrown = true;
+	}
+
+	assertTrue(exceptionThrown);
+    }
+
+    public void testMixedBeanPositive() throws Exception {
+        ValueBinding vb =
+            getFacesContext().getApplication().createValueBinding(
+                "#{threeBeanSaladPositive}");
+        TestBean bean = (TestBean) vb.getValue(getFacesContext());
+        assertEquals("request request session session none none", 
+		     bean.getProp());
+
+        vb =
+            getFacesContext().getApplication().createValueBinding(
+                "#{threeBeanSaladPositive.prop}");
+        assertEquals(bean.getProp(), (String) vb.getValue(getFacesContext()));
+    }
+
+
 	
     /************* PENDING(edburns): rewrite to exercise new edge case
      * detection.

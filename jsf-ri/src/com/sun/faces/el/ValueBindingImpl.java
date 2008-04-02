@@ -1,5 +1,5 @@
 /*
- * $Id: ValueBindingImpl.java,v 1.31 2004/03/31 18:48:29 eburns Exp $
+ * $Id: ValueBindingImpl.java,v 1.32 2004/04/27 17:25:06 eburns Exp $
  */
 
 /*
@@ -73,7 +73,6 @@ public class ValueBindingImpl extends ValueBinding implements StateHolder {
 
     protected Application application = null;
 
-    // PENDING (hans) This variable can be removed if getScope() is moved
     protected static Map applicationMap = null;
 
 //
@@ -340,130 +339,6 @@ public class ValueBindingImpl extends ValueBinding implements StateHolder {
     public String getExpressionString() {
         return "#{" + ref + "}";
     }
-
-
-    /**
-     * <p>PENDING (hans) This method should probably be moved to some
-     * other class or be declared in ValueBinding. It's used by the
-     * ManagedBeanFactory to ensure that properties set by an expression
-     * point to an object with an accepted lifespan.</p>
-     * <p/>
-     * <p>get the scope of the expression. Return <code>null</code>
-     * if it isn't scoped</p>
-     * <p/>
-     * <p>For example, the expression: <code>sessionScope.TestBean.one</code>
-     * should return "session" as the scope.</p>
-     *
-     * @return the scope of the expression
-     */
-    public String getScope(String valueBinding) {
-
-        // PENDING (visvan) this method shouldn't accept any argument. 
-        // This method should make use of "ref" which has already gone through
-        // the verification process. 
-        valueBinding = ref;
-        if (valueBinding == null) {
-            return null;
-        }
-
-        int segmentIndex = getFirstSegmentIndex(valueBinding);
-
-        //examine first segment and see if it is a scope
-        String identifier = valueBinding;
-        String expression = null;
-
-        if (segmentIndex > 0) {
-            //get first segment designated by a "." or "["
-            identifier = valueBinding.substring(0, segmentIndex);
-
-            //get second segment designated by a "." or "["
-            expression = valueBinding.substring(segmentIndex + 1);
-            segmentIndex = getFirstSegmentIndex(expression);
-
-            if (segmentIndex > 0) {
-                expression = expression.substring(0, segmentIndex);
-            }
-        }
-
-        //check to see if the identifier is a named scope. If it is check
-        //for the expression in that scope. The expression is the
-        //second segment.
-
-        FacesContext context = FacesContext.getCurrentInstance();
-        ExternalContext ec = context.getExternalContext();
-
-        if (identifier.equalsIgnoreCase(RIConstants.REQUEST_SCOPE)) {
-            if ((expression != null) &&
-                (ec.getRequestMap().get(expression) != null)) {
-                return RIConstants.REQUEST;
-            } else {
-                return null;
-            }
-        }
-        if (identifier.equalsIgnoreCase(RIConstants.SESSION_SCOPE)) {
-            if ((expression != null) &&
-                (Util.getSessionMap(context).get(expression) != null)) {
-                return RIConstants.SESSION;
-            } else {
-                return null;
-            }
-        }
-        if (identifier.equalsIgnoreCase(RIConstants.APPLICATION_SCOPE)) {
-            if ((expression != null) &&
-                (ec.getApplicationMap().get(expression) != null)) {
-                return RIConstants.APPLICATION;
-            } else {
-                return null;
-            }
-        }
-
-        //No scope was provided in the expression so check for the 
-        //expression in all of the scopes. The expression is the first 
-        //segment.
-
-        if (ec.getRequestMap().get(identifier) != null) {
-            return RIConstants.REQUEST;
-        }
-        if (Util.getSessionMap(context).get(identifier) != null) {
-            return RIConstants.SESSION;
-        }
-        if (ec.getApplicationMap().get(identifier) != null) {
-            return RIConstants.APPLICATION;
-        }
-
-        //not present in any scope
-        return null;
-    }
-
-
-    /**
-     * PENDING (hans) This method should move with the getScope()
-     * method.
-     * <p/>
-     * The the first segment of a String tokenized by a "." or "["
-     *
-     * @return index of the first occurrence of . or [
-     */
-    private int getFirstSegmentIndex(String valueBinding) {
-        int segmentIndex = valueBinding.indexOf(".");
-        int bracketIndex = valueBinding.indexOf("[");
-
-        //there is no "." in the valueBinding so take the bracket value
-        if (segmentIndex < 0) {
-            segmentIndex = bracketIndex;
-        } else {
-            //if there is a bracket proceed
-            if (bracketIndex > 0) {
-                //if the bracket index is before the "." then
-                //get the bracket index
-                if (segmentIndex > bracketIndex) {
-                    segmentIndex = bracketIndex;
-                }
-            }
-        }
-        return segmentIndex;
-    }
-
 
     /**
      * <p>Returns true if the profivided identifier is a reserved identifier,

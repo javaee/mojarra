@@ -1,5 +1,5 @@
 /*
- * $Id: RIConstants.java,v 1.61 2004/04/20 18:27:22 eburns Exp $
+ * $Id: RIConstants.java,v 1.62 2004/04/27 17:25:02 eburns Exp $
  */
 
 /*
@@ -102,6 +102,14 @@ public class RIConstants {
     public static final String REQUEST = "request";
     public static final String REQUEST_SCOPE = "requestScope";
     public static final String NONE = "NONE";
+    public static final String COOKIE_IMPLICIT_OBJ = "cookie";
+    public static final String FACES_CONTEXT_IMPLICIT_OBJ = "facesContext";
+    public static final String HEADER_IMPLICIT_OBJ = "header";
+    public static final String HEADER_VALUES_IMPLICIT_OBJ = "headerValues";
+    public static final String INIT_PARAM_IMPLICIT_OBJ = "initParam";
+    public static final String PARAM_IMPLICIT_OBJ = "param";
+    public static final String PARAM_VALUES_IMPLICIT_OBJ = "paramValues";
+    public static final String VIEW_IMPLICIT_OBJ = "view";
 
     public static boolean IS_UNIT_TEST_MODE = false;
 

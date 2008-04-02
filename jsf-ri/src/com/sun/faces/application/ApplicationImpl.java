@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationImpl.java,v 1.45 2004/03/31 18:48:21 eburns Exp $
+ * $Id: ApplicationImpl.java,v 1.46 2004/04/27 17:25:03 eburns Exp $
  */
 
 /*
@@ -767,6 +767,7 @@ public class ApplicationImpl extends Application {
     synchronized public void addManagedBeanFactory(String managedBeanName,
                                                    ManagedBeanFactory factory) {
         managedBeanFactoriesMap.put(managedBeanName, factory);
+	factory.setManagedBeanFactoryMap(managedBeanFactoriesMap);
         if (log.isTraceEnabled()) {
             log.trace("Added managedBeanFactory " + factory + " for" +
                       managedBeanName);

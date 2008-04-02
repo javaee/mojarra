@@ -4,7 +4,7 @@
  Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 
- $Id: build-tests.xml,v 1.50 2004/04/19 21:06:09 eburns Exp $
+ $Id: build-tests.xml,v 1.51 2004/04/27 17:25:08 eburns Exp $
 -->
 
 
@@ -339,6 +339,10 @@
          request="${context.path}/faces/managed02.jsp"
       outContent="/managed02.jsp PASSED" failonerror="${failonerror}"/>
 
+    <tester host="${host}" port="${port}" protocol="${protocol}"
+         request="${context.path}/faces/managed03.jsp"
+      status="500" failonerror="${failonerror}"/>
+
   </target>
 
 
@@ -436,8 +440,6 @@
     <tester host="${host}" port="${port}" protocol="${protocol}"
     	 request="${context.path}/faces/jsp/tlvTest01.jsp"
       status="200" failonerror="${failonerror}"/>
-
-
 
   </target>
   

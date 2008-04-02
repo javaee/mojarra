@@ -1,5 +1,5 @@
 /*
- * $Id: ManagedBeanFactory.java,v 1.18 2004/04/26 16:37:36 jvisvanathan Exp $
+ * $Id: ManagedBeanFactory.java,v 1.19 2004/04/27 17:25:05 eburns Exp $
  */
 
 /*
@@ -25,12 +25,16 @@ import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.el.PropertyNotFoundException;
+import javax.faces.el.EvaluationException;
+import javax.faces.el.ReferenceSyntaxException;
 import javax.faces.el.ValueBinding;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.HashMap;
+import java.util.Iterator;
 
 /**
  * This class clreates a managed bean instance. It has a contract with
@@ -42,6 +46,17 @@ import java.util.Map;
  * stores them in the appropriate scope.
  */
 public class ManagedBeanFactory extends Object {
+
+    //
+    // class variables
+    //
+
+    /**
+     * <p>Used to determine the shortest scope in a mixed valueBinding
+     * expression.</p>
+     */
+
+    private static Map scopeMap = null;
 
     //
     // Protected Constants
@@ -90,6 +105,15 @@ public class ManagedBeanFactory extends Object {
 
     // Relationship Instance Variables
 
+
+    /**
+     * <p>Setting this is part of the initialization contract for this
+     * class.  Not setting this is a vialotation of that contract.</p>
+     *
+     */
+
+    private Map managedBeanFactoryMap = null;
+
     //
     // Constructors and Initializers
     //
@@ -101,6 +125,12 @@ public class ManagedBeanFactory extends Object {
         this.managedBean = managedBean; // (ManagedBeanBean) managedBean.clone();
         //set the scope
         scope = managedBean.getManagedBeanScope();
+	if (null == scopeMap) {
+	    scopeMap = new HashMap();
+	    scopeMap.put(RIConstants.REQUEST, new Integer(1));
+	    scopeMap.put(RIConstants.SESSION, new Integer(2));
+	    scopeMap.put(RIConstants.APPLICATION, new Integer(3));
+	}
     }
 
 
@@ -112,6 +142,21 @@ public class ManagedBeanFactory extends Object {
             scope = managedBean.getManagedBeanScope();
         }
     }
+
+    public Map getManagedBeanFactoryMap() {
+	if (null == managedBeanFactoryMap) {
+            if (log.isDebugEnabled()) {
+                log.trace("Contract violation: ManagedBeanFactory must be initialized with managedBeanFactoryMap after instantiation.");
+            }
+	}
+
+	return managedBeanFactoryMap;
+    }
+
+    public void setManagedBeanFactoryMap(Map newManagedBeanFactoryMap) {
+	managedBeanFactoryMap = newManagedBeanFactoryMap;
+    }
+
 
 
     /**
@@ -848,11 +893,15 @@ public class ManagedBeanFactory extends Object {
     }
 
 
-    private boolean hasValidLifespan(String value) {
-        ValueBindingImpl binding = (ValueBindingImpl) Util.getValueBinding(
-            value);
+    private boolean hasValidLifespan(String value) throws EvaluationException, ReferenceSyntaxException {
+	String valueScope = null;
 
-        String valueScope = binding.getScope(value);
+	if (Util.isMixedVBExpression(value)) {
+	    valueScope = getNarrowestScopeFromExpression(value);
+	}
+	else {
+	    valueScope = getScopeForSingleExpression(value);
+	}
 
         //if the managed bean's scope is "none" but the scope of the
         //referenced object is not "none", scope is invalid
@@ -898,6 +947,70 @@ public class ManagedBeanFactory extends Object {
         //statements must be true.
         Util.doAssert(false);
         return false;
+    }
+
+    private String getScopeForSingleExpression(String value) throws ReferenceSyntaxException, EvaluationException {
+	String [] firstSegment = new String[1];
+        String valueScope = Util.getScope(value, firstSegment);
+	
+	if (null == valueScope) {
+	    // Perhaps the bean hasn't been created yet.  See what its
+	    // scope would be when it is created.
+	    ManagedBeanFactory otherFactory = null;
+	    if (null != firstSegment[0] &&
+		null != (otherFactory = (ManagedBeanFactory)
+			 getManagedBeanFactoryMap().get(firstSegment[0]))) {
+		valueScope = otherFactory.getScope();
+	    }
+	    else {
+		// we are referring to a bean that doesn't exist in the
+		// configuration file.
+		Object[] obj = new Object[1];
+		obj[0] = (null != firstSegment[0]) ? firstSegment[0] : value;
+		throw new EvaluationException(
+		      Util.getExceptionMessageString(
+			Util.NAMED_OBJECT_NOT_FOUND_ERROR_MESSAGE_ID, obj));
+	    }
+	}
+	return valueScope;
+    }
+
+    private String getNarrowestScopeFromExpression(String expression) throws ReferenceSyntaxException {
+	// break the argument expression up into its component
+	// expressions, ignoring literals.
+	List expressions = Util.getExpressionsFromString(expression);
+	Iterator iter = expressions.iterator();
+	Integer 
+	    shortestScope = null,
+	    currentScope = null;
+	String 
+	    scope = null,
+	    result = null;
+	
+	// loop over the expressions 
+	while (iter.hasNext()) {
+	    scope = getScopeForSingleExpression((String)iter.next());
+	    // don't consider none
+	    if (null == scope || scope.equalsIgnoreCase(RIConstants.NONE)) {
+		continue;
+	    }
+	    // look up the scope for the current expression in scopeMap
+	    currentScope = (Integer) scopeMap.get(scope);
+	    
+	    // if we have no basis for comparison
+	    if (null == shortestScope) {
+		shortestScope = currentScope;
+		result = scope;
+	    }
+	    else {
+		// we have a basis for comparison
+		if (currentScope.intValue() < shortestScope.intValue()) {
+		    shortestScope = currentScope;
+		    result = scope;
+		}
+	    }
+	}
+	return result;
     }
 
 

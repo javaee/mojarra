@@ -153,7 +153,7 @@
       <!-- Assume the type is java.util.List or java.lang.String[] -->
       <list-entries>
         <value>Thomas</value>
-        <value>#{someOtherBean.someName}</value>
+        <value>#{jsfSimple.simpleProperty}</value>
         <null-value/>
       </list-entries>
     </managed-property>
@@ -181,6 +181,45 @@
       </map-entries>
     </managed-property>
   </managed-bean>
+
+  <managed-bean>
+    <!-- Basic information about this bean -->
+    <description>
+      Pointed at from newCustomer.
+    </description>
+    <display-name>Claim Configuration</display-name>
+    <managed-bean-name>claimConfiguration</managed-bean-name>
+    <managed-bean-class>
+      com.sun.faces.config.ClaimConfiguration
+    </managed-bean-class>
+    <managed-bean-scope>session</managed-bean-scope>
+    <!-- Managed property initializations -->
+    <managed-property>
+      <property-name>waterDamageAmount</property-name>
+      <value>100.0</value>
+    </managed-property>
+
+  </managed-bean>
+
+  <managed-bean>
+    <!-- Basic information about this bean -->
+    <description>
+      Pointed at from newCustomer.
+    </description>
+    <display-name>SimpleBean</display-name>
+    <managed-bean-name>jsfSimple</managed-bean-name>
+    <managed-bean-class>
+      com.sun.faces.config.SimpleBean
+    </managed-bean-class>
+    <managed-bean-scope>session</managed-bean-scope>
+    <!-- Managed property initializations -->
+    <managed-property>
+      <property-name>simpleProperty</property-name>
+      <value>Hello</value>
+    </managed-property>
+
+  </managed-bean>
+
 
 
 </faces-config>

@@ -1,5 +1,5 @@
 /*
- * $Id: VariableResolverImpl.java,v 1.17 2004/02/26 20:32:40 eburns Exp $
+ * $Id: VariableResolverImpl.java,v 1.18 2004/04/27 17:25:06 eburns Exp $
  */
 
 /*
@@ -9,6 +9,7 @@
 
 package com.sun.faces.el;
 
+import com.sun.faces.RIConstants;
 
 import com.sun.faces.application.ApplicationImpl;
 import org.apache.commons.logging.Log;
@@ -42,27 +43,27 @@ public class VariableResolverImpl extends VariableResolver {
 
         ExternalContext ec = context.getExternalContext();
 
-        if ("applicationScope".equals(name)) {
+        if (RIConstants.APPLICATION_SCOPE.equals(name)) {
             return (ec.getApplicationMap());
-        } else if ("cookie".equals(name)) {
+        } else if (RIConstants.COOKIE_IMPLICIT_OBJ.equals(name)) {
             return (ec.getRequestCookieMap());
-        } else if ("facesContext".equals(name)) {
+        } else if (RIConstants.FACES_CONTEXT_IMPLICIT_OBJ.equals(name)){
             return (context);
-        } else if ("header".equals(name)) {
+        } else if (RIConstants.HEADER_IMPLICIT_OBJ.equals(name)) {
             return (ec.getRequestHeaderMap());
-        } else if ("headerValues".equals(name)) {
+        } else if (RIConstants.HEADER_VALUES_IMPLICIT_OBJ.equals(name)){
             return (ec.getRequestHeaderValuesMap());
-        } else if ("initParam".equals(name)) {
+        } else if (RIConstants.INIT_PARAM_IMPLICIT_OBJ.equals(name)) {
             return (ec.getInitParameterMap());
-        } else if ("param".equals(name)) {
+        } else if (RIConstants.PARAM_IMPLICIT_OBJ.equals(name)) {
             return (ec.getRequestParameterMap());
-        } else if ("paramValues".equals(name)) {
+        } else if (RIConstants.PARAM_VALUES_IMPLICIT_OBJ.equals(name)) {
             return (ec.getRequestParameterValuesMap());
-        } else if ("requestScope".equals(name)) {
+        } else if (RIConstants.REQUEST_SCOPE.equals(name)) {
             return (ec.getRequestMap());
-        } else if ("sessionScope".equals(name)) {
+        } else if (RIConstants.SESSION_SCOPE.equals(name)) {
             return (ec.getSessionMap());
-        } else if ("view".equals(name)) {
+        } else if (RIConstants.VIEW_IMPLICIT_OBJ.equals(name)) {
             return (context.getViewRoot());
         } else {
             // do the scoped lookup thing
