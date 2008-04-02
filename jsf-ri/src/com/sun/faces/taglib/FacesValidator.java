@@ -1,5 +1,5 @@
 /*
- * $Id: FacesValidator.java,v 1.5 2003/08/19 21:40:48 horwat Exp $
+ * $Id: FacesValidator.java,v 1.6 2003/10/07 20:59:43 jvisvanathan Exp $
  */
 
 /*
@@ -74,6 +74,16 @@ public abstract class FacesValidator extends TagLibraryValidator {
     // QName for JSTL iterator tag
     protected String JSTL_FORTOKENS_QN = ":forTokens";
     public String getJSTL_FORTOKENS_QN() { return JSTL_FORTOKENS_QN; }
+    
+    // QName for JSF Form tag
+    protected String JSF_FORM_QN = ":form";
+    public String getJSF_FORM_QN() { return JSF_FORM_QN; }
+    
+    // QName for JSF subview tag
+    protected String JSF_SUBVIEW_QN = ":subview";
+    public String getJSF_SUBVIEW_QN() { return JSF_SUBVIEW_QN; }
+    
+    
 
 
 
@@ -202,12 +212,14 @@ public abstract class FacesValidator extends TagLibraryValidator {
 		null != (qName = attrs.getQName(i))) {
 		if (qName.startsWith("xmlns:") && 7 <= qName.length()) {
 		    prefix = qName.substring(6);
-		    if (value.equals(JSF_CORE_URI)) {
-			JSF_CORE_PRE = prefix;
-		    }
+                    if (value.equals(JSF_CORE_URI)) {
+                        JSF_CORE_PRE = prefix;
+                        JSF_SUBVIEW_QN = JSF_CORE_PRE + JSF_SUBVIEW_QN;
+                    }
 		    else if (value.equals(JSF_HTML_URI)) {
 			JSF_HTML_PRE = prefix;
-		    }
+                        JSF_FORM_QN = JSF_HTML_PRE + JSF_FORM_QN;
+                    }
 		    else if (value.equals(JSTL_CORE_URI)) {
 			JSTL_CORE_PRE = prefix;
 			JSTL_IF_QN = JSTL_CORE_PRE + JSTL_IF_QN;

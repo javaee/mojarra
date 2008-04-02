@@ -1,0 +1,39 @@
+<!--
+ Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+-->
+
+
+
+
+
+
+<html>
+<head>
+<title>subview04</title>
+</head>
+<body>
+[A]
+
+
+
+subview04
+
+bar02<!--
+ Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+-->
+
+
+
+
+
+
+
+
+
+
+End test &lt;c:include&gt; with subview tag in including page
+</body>
+</html>
+

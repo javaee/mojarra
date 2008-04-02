@@ -92,6 +92,17 @@
   </tag>
 
   <tag>
+  <name>subview</name>
+  <tag-class>com.sun.faces.taglib.jsf_core.SubviewTag</tag-class>
+  <body-content>JSP</body-content>
+  <attribute>
+  <name>id</name>
+  <required>false</required>
+  <rtexprvalue>false</rtexprvalue>
+  </attribute>
+  </tag>
+
+  <tag>
     <name>validate_doublerange</name>
     <tag-class>com.sun.faces.taglib.jsf_core.ValidateDoubleRangeTag</tag-class>
       <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>

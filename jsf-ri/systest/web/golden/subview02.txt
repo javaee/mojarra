@@ -1,0 +1,51 @@
+<!--
+ Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+-->
+
+
+
+
+
+
+<html>
+<head>
+<title>subview02</title>
+</head>
+<body>
+Begin test &lt;c:import&gt; with subview tag in importing page
+
+foo02<!--
+ Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+-->
+
+
+
+
+
+
+
+
+
+
+subview02
+
+bar02<!--
+ Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+-->
+
+
+
+
+
+
+
+
+
+
+End test &lt;c:import&gt; with subview tag in importing page
+</body>
+</html>
+

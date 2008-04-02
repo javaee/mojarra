@@ -1,5 +1,5 @@
 /*
- * $Id: IdTagParserImpl.java,v 1.1 2003/08/19 21:40:51 horwat Exp $
+ * $Id: IdTagParserImpl.java,v 1.2 2003/10/07 20:59:44 jvisvanathan Exp $
  */
 
 /*
@@ -34,6 +34,7 @@ public class IdTagParserImpl implements TagParser {
     private StringBuffer requiresIdList;	// list of failing tags
     private boolean failed;
     private ValidatorInfo validatorInfo;
+    private boolean nestedInNamingContainer;
 
 
     //*********************************************************************
@@ -97,11 +98,14 @@ public class IdTagParserImpl implements TagParser {
         if (isJstlTag(validator, qn)) {
             requiresIdCount++;
         }
+        else if (isNamingContainerTag(validator, qn)) {
+            nestedInNamingContainer = true;
+        }
         else if ((validator.getJSF_HTML_PRE() != null) && 
                  (qn.startsWith(validator.getJSF_HTML_PRE())) &&
                  (requiresIdCount > 0) ) {
             //make sure that id is present in attributes
-            if (!hasIdAttribute(a)) {
+            if ((!(nestedInNamingContainer)) && (!hasIdAttribute(a))) {
                 //add to list of jsf tags for error report
                 failed = true;
                 requiresIdList.append(qn).append(' ');
@@ -113,7 +117,7 @@ public class IdTagParserImpl implements TagParser {
             if ((validator.getJSF_HTML_PRE() != null) &&
                 (qn.startsWith(validator.getJSF_HTML_PRE()) ||
                     qn.startsWith(validator.getJSF_CORE_PRE())) &&
-                (!hasIdAttribute(a)) ) {
+                (!hasIdAttribute(a)) && (!(nestedInNamingContainer))) {
 
                 //add to list of jsf tags for error report
                 failed = true;
@@ -141,6 +145,8 @@ public class IdTagParserImpl implements TagParser {
         if (isJstlTag(validator, qn)) {
             requiresIdCount--;
             siblingSatisfied = false;
+        } else if (isNamingContainerTag(validator, qn)) {
+            nestedInNamingContainer = false;
         }
     }
 
@@ -179,6 +185,29 @@ public class IdTagParserImpl implements TagParser {
             qn.equals(validator.getJSTL_FOREACH_QN()) ||
             qn.equals(validator.getJSTL_FORTOKENS_QN())) {
            return true;
+        }
+        return false;
+    }
+    
+    /**
+     * Check to make sure that the element is either a 
+     * form tag or a subview tag.
+     *
+     * @param validator Parent validator 
+     * @param qn Element to be checked.
+     *
+     * @return boolean True if JSF tag is form or subview
+     */
+    private boolean isNamingContainerTag(FacesValidator validator, String qn) {
+        
+        // PENDING (visvan) Handle custom implementations of NamingContainer.
+        // This requires the compiler to look up a fake Faces environment
+        // so that we can look up the component class based on what 
+        // getComponentType() returns to detect customer NamingContainer
+        // components.
+        if (qn.equals(validator.getJSF_FORM_QN()) || 
+            qn.equals(validator.getJSF_SUBVIEW_QN())) {
+            return true;
         }
         return false;
     }

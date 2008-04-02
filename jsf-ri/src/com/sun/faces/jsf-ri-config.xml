@@ -246,6 +246,11 @@
     <component-type>ViewRoot</component-type>
     <component-class>javax.faces.component.UIViewRoot</component-class>
   </component>
+  
+  <component>
+    <component-type>NamingContainer</component-type>
+    <component-class>javax.faces.component.UINamingContainer</component-class>
+  </component>
 
   <!-- standard converters -->
   <converter>

@@ -4,7 +4,7 @@
  Copyright 2003 Sun Microsystems, Inc. All rights reserved.
  SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 
- $Id: build-tests.xml,v 1.26 2003/10/07 20:16:11 horwat Exp $
+ $Id: build-tests.xml,v 1.27 2003/10/07 20:59:47 jvisvanathan Exp $
 -->
 
 
@@ -79,7 +79,8 @@
                 test.standard,
                 test.html.taglib,
                 test.verbatim,
-                test.phases
+                test.phases,
+                test.subview
                "/>
 
 <!-- non running tests 
@@ -416,5 +417,31 @@
          request="${context.path}/faces/phaseListener01.jsp?param=foo"
          outContent="/phaseListener01.jsp FAILED"/>
   </target>
+  <target name="test.subview"
+          description="Test subview tag">
 
+    <tester host="${host}" port="${port}" protocol="${protocol}"
+         request="${context.path}/faces/subview01.jsp"
+          golden="${golden.path}/subview01.txt"/>
+          
+    <tester host="${host}" port="${port}" protocol="${protocol}"
+         request="${context.path}/faces/subview02.jsp"
+         golden="${golden.path}/subview02.txt"/>
+         
+    <tester host="${host}" port="${port}" protocol="${protocol}"
+         request="${context.path}/faces/subview03.jsp"
+         golden="${golden.path}/subview03.txt"/>
+         
+    <tester host="${host}" port="${port}" protocol="${protocol}"
+         request="${context.path}/faces/subview04.jsp"
+         golden="${golden.path}/subview04.txt"/>
+         
+     <tester host="${host}" port="${port}" protocol="${protocol}"
+         request="${context.path}/faces/subview05.jsp"
+         golden="${golden.path}/subview05.txt"/>
+         
+     <tester host="${host}" port="${port}" protocol="${protocol}"
+         request="${context.path}/faces/subview06.jsp"
+         golden="${golden.path}/subview06.txt"/>
+  </target>
 </project>
