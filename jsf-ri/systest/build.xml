@@ -147,6 +147,15 @@
             path="${context.path}"/>
   </target>
 
+  <target name="safe.remove"
+          description="Remove cactus unit test webapp, don't fail on error">
+    <exec executable="ant.bat" os="Windows 2000" failonerror="false">
+      <arg line="-f build.xml -Dusername=${username} -Dpassword=${password} remove"/>
+    </exec>
+    <exec executable="ant" os="SunOS,Linux" failonerror="false">
+      <arg line="-f build.xml remove"/>
+    </exec>
+  </target>
 
   <target name="remove"
    description="Remove this webapp from Tomcat">
