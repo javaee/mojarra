@@ -10,7 +10,7 @@
 
     <xsd:annotation>
         <xsd:documentation>
-            $Id: web-facesconfig_1_2.xsd,v 1.3 2005/05/05 20:50:58 edburns Exp $
+            $Id: web-facesconfig_1_2.xsd,v 1.4 2005/06/09 18:42:37 edburns Exp $
         </xsd:documentation>
     </xsd:annotation>
 
@@ -753,7 +753,10 @@
                 affect the operation of the Converter.  Nested "property"
                 elements identify JavaBeans properties of the Converter
                 implementation class that may be configured to affect the
-                operation of the Converter.
+                operation of the Converter.  "attribute" and "property" 
+                elements are intended to allow component developers to 
+                more completely describe their components to tools and users.
+                These elements have no required runtime semantics.
 
             </xsd:documentation>
         </xsd:annotation>
@@ -1572,7 +1575,10 @@
                 affect the operation of the Validator.  Nested "property"
                 elements identify JavaBeans properties of the Validator
                 implementation class that may be configured to affect the
-                operation of the Validator.
+                operation of the Validator.  "attribute" and "property" 
+                elements are intended to allow component developers to 
+                more completely describe their components to tools and users.
+                These elements have no required runtime semantics.
 
             </xsd:documentation>
         </xsd:annotation>
