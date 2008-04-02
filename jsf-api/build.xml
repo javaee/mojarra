@@ -368,6 +368,17 @@
     </java>
   </target>
 
+  <target name="test.PhaseId" depends="build.test">
+    <echo message="Running PhaseId tests ..."/>
+    <java classname="${test.runner}" fork="yes"
+        failonerror="${test.failonerror}">
+      <jvmarg line="${debug.jvm.args}"/>
+      <arg value="javax.faces.event.PhaseIdTest"/>
+      <classpath refid="test.classpath"/>
+    </java>
+  </target>
+
+
 
   <!--
        ===================================================================

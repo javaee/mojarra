@@ -1,5 +1,5 @@
 /*
- * $Id: PhaseId.java,v 1.7 2003/03/13 01:12:20 craigmcc Exp $
+ * $Id: PhaseId.java,v 1.8 2003/05/13 19:54:07 eburns Exp $
  */
 
 /*
@@ -29,7 +29,8 @@ public class PhaseId implements Comparable {
     /**
      * <p>Private constructor to disable the creation of new instances.</p>
      */
-    private PhaseId() {
+    private PhaseId(String newPhaseName) {
+	phaseName = newPhaseName;
     }
 
 
@@ -40,6 +41,14 @@ public class PhaseId implements Comparable {
      * <p>The ordinal value assigned to this instance.</p>
      */
     private final int ordinal = nextOrdinal++;
+
+    /**
+
+    * <p>The (optional) name for this phase.</p>
+
+    */
+
+    private String phaseName = null;
 
 
     // --------------------------------------------------------- Public Methods
@@ -73,9 +82,11 @@ public class PhaseId implements Comparable {
      * <p>Return a String representation of this {@link PhaseId} instance.</p>
      */
     public String toString() {
-
-        return ("" + this.ordinal);
-
+	if (null == phaseName) {
+	    return ("" + this.ordinal);
+	}
+	
+	return ("" + this.phaseName + " " + this.ordinal);
     }
 
 
@@ -96,51 +107,57 @@ public class PhaseId implements Comparable {
     // backwards compatibility on serialized instances
 
 
+    public static final String ANY_PHASE_NAME = "ANY";
     /**
      * <p>Identifier that indicates an interest in events, on matter
      * which request processing phase is being performed.</p>
      */
-    public static final PhaseId ANY_PHASE = new PhaseId();
+    public static final PhaseId ANY_PHASE = new PhaseId(ANY_PHASE_NAME);
 
 
+    public static final String RECONSTITUTE_REQUEST_NAME = "RECONSTITUTE_REQUEST";
     /**
      * <p>Identifier that indicates an interest in events queued for
      * the <em>Reconstitute Request</em> phase of the request
      * processing lifecycle.</p>
      */
-    public static final PhaseId RECONSTITUTE_REQUEST = new PhaseId();
+    public static final PhaseId RECONSTITUTE_REQUEST = new PhaseId(RECONSTITUTE_REQUEST_NAME);
 
 
+    public static final String APPLY_REQUEST_VALUES_NAME = "APPLY_REQUEST_VALUES";
     /**
      * <p>Identifier that indicates an interest in events queued for
      * the <em>Apply Request Values</em> phase of the request
      * processing lifecycle.</p>
      */
-    public static final PhaseId APPLY_REQUEST_VALUES = new PhaseId();
+    public static final PhaseId APPLY_REQUEST_VALUES = new PhaseId(APPLY_REQUEST_VALUES_NAME);
 
 
+    public static final String PROCESS_VALIDATIONS_NAME = "PROCESS_VALIDATIONS";
     /**
      * <p>Identifier that indicates an interest in events queued for
      * the <em>Process Validations</em> phase of the request
      * processing lifecycle.</p>
      */
-    public static final PhaseId PROCESS_VALIDATIONS = new PhaseId();
+    public static final PhaseId PROCESS_VALIDATIONS = new PhaseId(PROCESS_VALIDATIONS_NAME);
 
 
+    public static final String UPDATE_MODEL_VALUES_NAME = "UPDATE_MODEL_VALUES";
     /**
      * <p>Identifier that indicates an interest in events queued for
      * the <em>Update Model Values</em> phase of the request
      * processing lifecycle.</p>
      */
-    public static final PhaseId UPDATE_MODEL_VALUES = new PhaseId();
+    public static final PhaseId UPDATE_MODEL_VALUES = new PhaseId(UPDATE_MODEL_VALUES_NAME);
 
 
+    public static final String INVOKE_APPLICATION_NAME = "INVOKE_APPLICATION";
     /**
      * <p>Identifier that indicates an interest in events queued for
      * the <em>Invoke Application</em> phase of the request
      * processing lifecycle.</p>
      */
-    public static final PhaseId INVOKE_APPLICATION = new PhaseId();
+    public static final PhaseId INVOKE_APPLICATION = new PhaseId(INVOKE_APPLICATION_NAME);
 
 
     /**
