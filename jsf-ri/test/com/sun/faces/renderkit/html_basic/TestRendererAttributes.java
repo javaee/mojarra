@@ -1,5 +1,5 @@
 /*
- * $Id: TestRendererAttributes.java,v 1.6 2003/02/20 22:50:05 ofung Exp $
+ * $Id: TestRendererAttributes.java,v 1.7 2003/03/15 05:43:44 rkitain Exp $
  */
 
 /*
@@ -24,6 +24,7 @@ import com.sun.faces.CompareFiles;
 import com.sun.faces.FileOutputResponseWrapper;
 
 import com.sun.faces.renderkit.html_basic.HtmlBasicRenderKit;
+import com.sun.faces.ServletFacesTestCase;
 
 import java.io.PrintStream;
 import java.io.FileOutputStream;
@@ -39,14 +40,14 @@ import junit.framework.TestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRendererAttributes.java,v 1.6 2003/02/20 22:50:05 ofung Exp $
+ * @version $Id: TestRendererAttributes.java,v 1.7 2003/03/15 05:43:44 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
  *
  */
 
-    public class TestRendererAttributes extends TestCase // ServletTestCase
+    public class TestRendererAttributes extends ServletFacesTestCase // ServletTestCase
 {
 //
 // Protected Constants
