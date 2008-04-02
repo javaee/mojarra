@@ -521,7 +521,7 @@
         <jsf.manifested.jar jarfile="${build.lib.dir}/${name}.jar"
                             basedir="${build.classes.dir}"
                             extension-name="javax.faces"
-                            includes="**/*.class"/>
+                            includes="**/*.class,**/LogStrings.properties"/>
 
     </target>
 

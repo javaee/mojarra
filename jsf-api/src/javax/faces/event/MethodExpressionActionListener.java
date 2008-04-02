@@ -1,5 +1,5 @@
 /*
- * $Id: MethodExpressionActionListener.java,v 1.3 2005/12/05 16:42:54 edburns Exp $
+ * $Id: MethodExpressionActionListener.java,v 1.4 2006/02/22 21:56:51 rlubke Exp $
  */
 
 /*
@@ -35,6 +35,11 @@ import javax.el.MethodExpression;
 import javax.faces.context.FacesContext;
 import javax.faces.component.StateHolder;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.io.StringWriter;
+import java.io.PrintWriter;
+
 /**
  * <p><strong>MethodExpressionActionListener</strong> is an {@link ActionListener} that
  * wraps a {@link MethodExpression}. When it receives a {@link ActionEvent}, it executes
@@ -44,9 +49,12 @@ import javax.faces.component.StateHolder;
 public class MethodExpressionActionListener implements ActionListener,
     StateHolder {
 
+    private static final Logger LOGGER =
+          Logger.getLogger("javax.faces.event", "javax.faces.LogStrings");
+    
 
     // ------------------------------------------------------ Instance Variables
-    
+
     private MethodExpression methodExpression = null;
     private boolean isTransient;
 
@@ -68,9 +76,9 @@ public class MethodExpressionActionListener implements ActionListener,
     /**
      * @throws NullPointerException {@inheritDoc}     
      * @throws AbortProcessingException {@inheritDoc}     
-     */ 
+     */
     public void processAction(ActionEvent actionEvent) throws AbortProcessingException {
-                         
+
         if (actionEvent == null) {
             throw new NullPointerException();
         }
@@ -79,6 +87,18 @@ public class MethodExpressionActionListener implements ActionListener,
             ELContext elContext = context.getELContext();
             methodExpression.invoke(elContext, new Object[] {actionEvent});
         } catch (ELException ee) {
+            if (LOGGER.isLoggable(Level.SEVERE)) {
+                LOGGER.log(Level.SEVERE,
+                           "severe.event.exception_invoking_processaction",
+                           new Object[]{
+                                 ee.getCause().getClass().getName(),
+                                 methodExpression.getExpressionString(),
+                                 actionEvent.getComponent().getId()
+                           });
+                StringWriter writer = new StringWriter(1024);
+                ee.getCause().printStackTrace(new PrintWriter(writer));
+                LOGGER.severe(writer.toString());
+            }
             throw new AbortProcessingException(ee.getMessage(), ee.getCause());
         }
     }
