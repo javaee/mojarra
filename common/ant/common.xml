@@ -148,6 +148,10 @@
                    default=""/>
         <attribute name="excludes"
                    default=""/>
+        <attribute name="source"
+                   default="1.5"/>
+        <attribute name="target"
+                   default="1.5"/>
         <element name="classpath"
                  implicit="true"
                  optional="yes"/>
@@ -156,8 +160,8 @@
                    destdir="@{destdir}"
                    debug="${compile.debug}"
                    deprecation="${compile.deprecation}"
-                   source="1.5"
-                   target="1.5"
+                   source="@{source}"
+                   target="@{target}"
                    includes="@{includes}"
                    excludes="@{excludes}">
                 <classpath/>
