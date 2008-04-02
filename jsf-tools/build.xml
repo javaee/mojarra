@@ -28,7 +28,6 @@
   <property name="src.dir"          value="${basedir}/src"/>
   <property name="dist.dir"         value="${basedir}/dist"/>
   <property name="jsf-api.dir"      value="${basedir}/../jsf-api"/>
-  <property name="fop.dir"          value="${tomcat.home}/../fop-0.20.5"/>
   <property name="standard-html-renderkit"      
                                     value="${jsf-api.dir}/doc/standard-html-renderkit.xml"/>
   <property name="jsf-ri.dir"       value="${basedir}/../jsf-ri"/>
@@ -313,13 +312,9 @@ necessary to generate required classes.
 
     <style style="doc/standard-html-renderkit-specification.xsl"
           in="${build.classes}/standard-html-renderkit.xml"
-          out="${build.generate}/standard-html-renderkit-specification.fo">
+          out="${build.generate}/standard-html-renderkit-specification.html">
       <xmlcatalog refid="standard-renderkit" />
     </style>
-
-    <fop messagelevel="debug" 
-        fofile="${build.generate}/standard-html-renderkit-specification.fo"
-        outfile="${build.generate}/standard-html-renderkit-specification.pdf" />
 
     <style style="doc/catalog.xsl"
           in="doc/record-catalog.xml"
@@ -376,14 +371,5 @@ necessary to generate required classes.
     </zip>
 
   </target>
-
-<taskdef name="fop" 
-         classname="org.apache.fop.tools.anttasks.Fop">
-         <classpath>
-            <pathelement location="${fop.dir}/build/fop.jar"/>
-            <pathelement location="${fop.dir}/lib/avalon-framework-cvs-20020806.jar"/>
-            <pathelement location="${fop.dir}/lib/batik.jar"/>
-         </classpath>
-</taskdef>
 
 </project>

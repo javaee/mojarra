@@ -2,54 +2,46 @@
 <xsl:stylesheet version="1.0"
 xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
-<xsl:output method="xml"/>
+<xsl:output method="html"/>
 
 <xsl:template match="/">
-  <fo:root xmlns:fo="http://www.w3.org/1999/XSL/Format">
-    <fo:layout-master-set>
-      <fo:simple-page-master master-name="content"
-	page-width="210mm" page-height="297mm">
-	<fo:region-body/>
-      </fo:simple-page-master>
-    </fo:layout-master-set>
-    <fo:page-sequence master-reference="content">
-      <fo:flow flow-name="xsl-region-body">
-	<fo:table border-width="0.5pt" border-color="black">
-	  <fo:table-column column-width="30mm"/>
-	  <fo:table-column column-width="100mm"/>
-	  <fo:table-body>
-	    <fo:table-row>
-	      <fo:table-cell>
-		<fo:block>renderer-type</fo:block>
-	      </fo:table-cell>
-	      <fo:table-cell>
-		<fo:block>description</fo:block>
-	      </fo:table-cell>
-	    </fo:table-row>
+<html>
 
-            <xsl:for-each select="render-kit/renderer">
-	    <fo:table-row>
-	      <fo:table-cell>
-		<fo:block><xsl:value-of select="renderer-type"/></fo:block>
-	      </fo:table-cell>
-	      <fo:table-cell>
-		<fo:block><xsl:value-of select="description"/></fo:block>
-	      </fo:table-cell>
-	    </fo:table-row>
-	    <fo:table-row>
-	      <fo:table-cell>
-		<fo:block>__</fo:block>
-	      </fo:table-cell>
-	      <fo:table-cell>
-		<fo:block>__</fo:block>
-	      </fo:table-cell>
-	    </fo:table-row>
-            </xsl:for-each>
-	  </fo:table-body>
-	</fo:table>
-      </fo:flow>
-    </fo:page-sequence>
-  </fo:root>
+<head>
+
+<title>JavaServer Faces 1.0 Standard HTML RenderKit Specification</title>
+
+</head>
+
+<body>
+
+  <table border="1">
+
+    <tr>
+
+      <th>renderer-type</th>
+
+      <th>description</th>
+
+    </tr>
+
+    <xsl:for-each select="render-kit/renderer">
+
+      <tr>
+
+	<td><xsl:value-of select="renderer-type"/></td>
+
+	<td><xsl:value-of select="description"/></td>
+
+      </tr>
+
+    </xsl:for-each>
+
+  </table>
+
+</body>
+
+</html>
 
 </xsl:template>
 
