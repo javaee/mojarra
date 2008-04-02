@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentClassicTagBase.java,v 1.16 2006/03/22 20:49:58 edburns Exp $
+ * $Id: UIComponentClassicTagBase.java,v 1.17 2006/03/23 22:17:28 rlubke Exp $
  */
 
 /*
@@ -1324,25 +1324,24 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
      */
 
     protected String getFacesJspId() {
-	if (null == facesJspId) {
-	    if (null != jspId) {
-		facesJspId = UNIQUE_ID_PREFIX + jspId;
-                // if this tag happens to be nested within <c:forEach>, jspId
-                // will be the same for each iteration. So it is
-                // transformed into a unique "id" by appending a counter which 
-                // gets stored in request scope with jspId as the key for use
-                // during the next iteration.
-                if (isDuplicateId(facesJspId)) {
-                    facesJspId = generateIdForIteratorChild(facesJspId);
+        if (null == facesJspId) {
+            if (null != jspId) {
+                facesJspId = UNIQUE_ID_PREFIX + jspId;
+                // if this tag happens to be nested within <c:forEach> or we're
+                // the target of an include, jspId will be the same for each
+                //  iteration. So it is transformed into a unique "id" by 
+                // appending a counter which gets stored in request scope
+                // with jspId as the key for use during the next iteration.  
+                if (isDuplicateId(facesJspId) || isIncludedOrForwarded()) {
+                    facesJspId = generateIncrementedId(facesJspId);
                 } 
-            }
-            else {
+            } else {
                 // jspId will be null if we're running in a container
                 // that doesn't support JspIdConsumer
                 facesJspId = context.getViewRoot().createUniqueId();
             }
-	}
-	return facesJspId;
+        }
+        return facesJspId;
     }
     
     /**
@@ -1381,7 +1380,7 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
      *
      * @return String <code>id</code> with a counter appended to it.
      */
-    private String generateIdForIteratorChild (String componentId) {
+    private String generateIncrementedId (String componentId) {
         Map requestMap = getFacesContext().getExternalContext().getRequestMap();
         Integer serialNum = (Integer) requestMap.get(componentId);
         if (null == serialNum) {
@@ -1418,7 +1417,7 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
             // iteration.
             if (isDuplicateId(this.id)) {
                 if (isNestedInIterator) {
-                    this.id = generateIdForIteratorChild(this.id);
+                    this.id = generateIncrementedId(this.id);
                 } else {
                     throw new JspException("Duplicate Id Found:"+this.id);
                 }
