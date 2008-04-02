@@ -42,6 +42,8 @@
 <HEAD>
 	<META HTTP-EQUIV="Content-Type" CONTENT="text/html;CHARSET=iso-8859-1">
 	<TITLE>Welcome to CarDemo</TITLE>
+        <link rel="stylesheet" type="text/css"
+            href='<%= request.getContextPath() + "/stylesheet.css" %>'>
 </HEAD>
     <%@ taglib uri="http://java.sun.com/jstl/fmt" prefix="fmt" %>
     <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
@@ -75,7 +77,8 @@
         <TABLE BORDER="0" CELLPADDING="0" CELLSPACING="6" WIDTH="660" BGCOLOR="white">
         <TR>
             <TD WIDTH="50%" VALIGN="TOP">
-            <h:graphic_image  url="/150x126_Jalopy.jpg" />
+            <h:graphic_image  graphicClass="alignLeft" url="/150x126_Jalopy.jpg" />
+            <BR>
             <B><FONT SIZE="4" COLOR="#330066" FACE="Arial, Helvetica">
             <h:output_text key="car1Title" bundle="carDemoBundle" /> 
 
@@ -87,6 +90,7 @@
             </TD>
             <TD WIDTH="50%" VALIGN="TOP" BGCOLOR="white">
             <h:graphic_image  url="/150x126_Roadster.jpg" />
+            <BR>
             <B><FONT SIZE="4" COLOR="#330066" FACE="Arial, Helvetica">
             <h:output_text  key="car2Title" bundle="carDemoBundle" />
 
@@ -106,6 +110,7 @@
         <TR>
             <TD WIDTH="50%" VALIGN="TOP" BGCOLOR="white">
             <h:graphic_image  url="/150x126_Luxury.jpg" />
+            <BR>
             <B> <FONT SIZE="4" COLOR="#330066"FACE="Arial, Helvetica">
             <h:output_text  key="car3Title" bundle="carDemoBundle"  />
 
@@ -119,6 +124,7 @@
             </TD>
             <TD WIDTH="50%" VALIGN="TOP" BGCOLOR="white">
             <h:graphic_image  url="/150x126_SUV.jpg" />
+            <BR>
             <B> <FONT SIZE="4" COLOR="#330066" FACE="Arial, Helvetica">
             <h:output_text  key="car4Title" bundle="carDemoBundle"  />
 

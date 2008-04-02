@@ -42,6 +42,8 @@
 <head>
    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
    <title>CarDemo</title>
+   <link rel="stylesheet" type="text/css"
+            href='<%= request.getContextPath() + "/stylesheet.css" %>'>
 </head>
 
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
@@ -70,111 +72,80 @@
 </FONT></B>
 
 
-<FONT FACE="Arial, Helvetica"><BR>
-<h:output_text  key="buyTitle" bundle="carDemoBundle"/> <BR>
+<h:panel_grid id="choicesPanel" columns="2" footerClass="subtitle"
+   headerClass="subtitlebig" panelClass="medium" columnClasses="subtitle,medium">
 
+<f:facet name="header">
+    <h:panel_group>
+        <h:output_text  key="buyTitle" bundle="carDemoBundle"/>
+    </h:panel_group>
+ </f:facet>
 
+    <h:output_text key="Engine" bundle="carDemoBundle" />
 
+    <h:output_text modelReference="CurrentOptionServer.currentEngineOption"  />
 
-</FONT>
-<TABLE><TR><TD>
-<P><B><FONT COLOR="#93B629" FACE="Arial, Helvetica">
-<h:output_text key="Engine" bundle="carDemoBundle" /></FONT></B></P>
-<BLOCKQUOTE>
-<P><FONT FACE="Arial, Helvetica">
-<h:output_text 	
-			modelReference="CurrentOptionServer.currentEngineOption"  />
+    <h:output_text key="Brakes" bundle="carDemoBundle" />
 
-</BLOCKQUOTE>
-<TD>
-<P><B><FONT COLOR="#93B629" FACE="Arial, Helvetica">
-<h:output_text key="Brakes" bundle="carDemoBundle" /></FONT></B>
-<FONT FACE="Arial, Helvetica"></FONT></P>
-<BLOCKQUOTE>
-<P><FONT FACE="Arial, Helvetica">
-<h:output_text  modelReference="CurrentOptionServer.currentBrakeOption" />
-</FONT></P> 
-</BLOCKQUOTE>
-</TD></TR>
+    <h:output_text  modelReference="CurrentOptionServer.currentBrakeOption" />
+
+    <h:output_text  key="Suspension" bundle="carDemoBundle" />
+
+    <h:output_text  modelReference="CurrentOptionServer.currentSuspensionOption" />
+
+    <h:output_text  key="Speakers" bundle="carDemoBundle" />
+
+    <h:output_text  modelReference="CurrentOptionServer.currentSpeakerOption" />
+
+    <h:output_text  key="Audio" bundle="carDemoBundle" />
+
+    <h:output_text  modelReference="CurrentOptionServer.currentAudioOption" />
+
+    <h:output_text  key="Transmission" bundle="carDemoBundle" />
+
+    <h:output_text  modelReference="CurrentOptionServer.currentTransmissionOption" />
+
+    <h:output_text  key="sunroofLabel" bundle="carDemoBundle"  />
+
+    <h:output_text  modelReference="CurrentOptionServer.sunRoof" />
+
+    <h:output_text  key="cruiseLabel" bundle="carDemoBundle"  />
+
+    <h:output_text  modelReference="CurrentOptionServer.cruiseControl" />
+
+    <h:output_text key="keylessLabel" bundle="carDemoBundle"  />
+
+    <h:output_text  modelReference="CurrentOptionServer.keylessEntry" />
+
+    <h:output_text  key="securityLabel" bundle="carDemoBundle"  />
+
+    <h:output_text  modelReference="CurrentOptionServer.securitySystem" />
+
+    <h:output_text  key="skiRackLabel" bundle="carDemoBundle"  />
+
+    <h:output_text  modelReference="CurrentOptionServer.skiRack" />
+
+    <h:output_text  key="towPkgLabel" bundle="carDemoBundle"  />
+
+    <h:output_text  modelReference="CurrentOptionServer.towPackage" />
+
+    <h:output_text  key="gpsLabel" bundle="carDemoBundle"  />
+
+    <h:output_text  modelReference="CurrentOptionServer.gps" />
+    
+  <f:facet name="footer">
+     <h:panel_group>
+        <h:output_text  key="yourPriceLabel" bundle="carDemoBundle"  />
+        &nbsp;
+        <h:output_text  modelReference="CurrentOptionServer.carCurrentPrice" />
+     </h:panel_group>
+  </f:facet>
+
+</h:panel_grid>
+
+<TABLE ALIGN=RIGHT>
 <TR>
 <TD>
-<P><B><FONT COLOR="#93B629" FACE="Arial, Helvetica">
-<h:output_text  key="Suspension" bundle="carDemoBundle" /></FONT></B>
-<FONT FACE="Arial, Helvetica"></FONT></P>
-<BLOCKQUOTE>
-<P><FONT FACE="Arial, Helvetica">
-<h:output_text  modelReference="CurrentOptionServer.currentSuspensionOption" />
-</FONT></P> 
-</BLOCKQUOTE>
-</TD>
-<TD>
-<P><B><FONT COLOR="#93B629" FACE="Arial, Helvetica">
-<h:output_text  key="Speakers" bundle="carDemoBundle" /></FONT></B>
-<FONT FACE="Arial, Helvetica"></FONT></P>
-<BLOCKQUOTE>
-<P><FONT FACE="Arial, Helvetica">
-<h:output_text  modelReference="CurrentOptionServer.currentSpeakerOption" /></FONT></P> 
-</BLOCKQUOTE>
-</TD></TR>
-<TR><TD>
-<P><B><FONT COLOR="#93B629" FACE="Arial, Helvetica">
-<h:output_text  key="Audio" bundle="carDemoBundle" /></FONT></B>
-<FONT FACE="Arial, Helvetica"></FONT></P>
-<BLOCKQUOTE>
-<P><FONT FACE="Arial, Helvetica">
-<h:output_text  modelReference="CurrentOptionServer.currentAudioOption" /></FONT></P> 
-</BLOCKQUOTE>
-</TD>
-<TD>
-<P><B><FONT COLOR="#93B629" FACE="Arial, Helvetica">
-<h:output_text  key="Transmission" bundle="carDemoBundle" /></FONT></B>
-<FONT FACE="Arial, Helvetica"></FONT></P>
-<BLOCKQUOTE>
-<P><FONT FACE="Arial, Helvetica">
-<h:output_text  modelReference="CurrentOptionServer.currentTransmissionOption" /></FONT></P> 
-</BLOCKQUOTE>
-</TD></TR>
-<TR><TD>
-<P><B><FONT COLOR="#93B629" FACE="Arial, Helvetica">
-<h:output_text key="OtherOptions" bundle="carDemoBundle"  /></FONT></B>
-<FONT FACE="Arial, Helvetica"></FONT></P>
-<BLOCKQUOTE>
-</TD></TR></TABLE>
-<TABLE>
-<P><FONT FACE="Arial, Helvetica">
-<TR><TD>
-<h:output_text  key="sunroofLabel" bundle="carDemoBundle"  />
-</TD><TD>
-<h:output_text  modelReference="CurrentOptionServer.sunRoof" /></FONT></P></TD></TR>
-<TR><TD>
-<h:output_text  key="cruiseLabel" bundle="carDemoBundle"  />
-</TD><TD>
-<h:output_text  modelReference="CurrentOptionServer.cruiseControl" /></FONT></P></TD></TR>
-<TR><TD>
-<h:output_text key="keylessLabel" bundle="carDemoBundle"  />
-</TD><TD>
-<h:output_text  modelReference="CurrentOptionServer.keylessEntry" /></FONT></P></TD></TR>
-<TR><TD><h:output_text  key="securityLabel" bundle="carDemoBundle"  />
-</TD><TD>
-<h:output_text  modelReference="CurrentOptionServer.securitySystem" /></FONT></P></TD></TR>
-<TR><TD>
-<h:output_text  key="skiRackLabel" bundle="carDemoBundle"  />
-</TD><TD>
-<h:output_text  modelReference="CurrentOptionServer.skiRack" /></FONT></P></TD></TR>
-<TR><TD>
-<h:output_text  key="towPkgLabel" bundle="carDemoBundle"  />
-</TD><TD>
-<h:output_text  modelReference="CurrentOptionServer.towPackage" /></FONT></P></TD></TR>
-<TR><TD>
-<h:output_text  key="gpsLabel" bundle="carDemoBundle"  />
-</TD><TD>
-<h:output_text  modelReference="CurrentOptionServer.gps" /></FONT></P></TD></TR>
-</TD></TR></TABLE>
-</FONT></P> 
-</BLOCKQUOTE>
-<TABLE ALIGN=RIGHT>
-<TR><TD>
-</TD><TD>
 <P>
 <h:command_button  key="configureButton" bundle="carDemoBundle"
 				     commandName="more" />

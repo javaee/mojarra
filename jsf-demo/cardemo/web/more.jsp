@@ -78,6 +78,7 @@
             <TD WIDTH="100%">
             <h:graphic_image  
                 modelReference="CurrentOptionServer.carImage" />
+                <BR>
             <B> <FONT SIZE="4" COLOR="#330066" FACE="Arial, Helvetica">
             <h:output_text  
                 modelReference="CurrentOptionServer.carTitle" 

@@ -42,6 +42,8 @@
 <head>
    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
    <title>Customer Details</title>
+   <link rel="stylesheet" type="text/css"
+            href='<%= request.getContextPath() + "/stylesheet.css" %>'>
     
     <%@ taglib uri="http://java.sun.com/jstl/fmt" prefix="fmt" %>
     <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
