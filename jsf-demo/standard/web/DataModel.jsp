@@ -3,14 +3,12 @@
  SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 -->
 
-<%-- $Id: DataModel.jsp,v 1.6 2003/12/17 15:19:59 rkitain Exp $ --%>
+<%-- $Id: DataModel.jsp,v 1.7 2004/01/10 01:21:05 horwat Exp $ --%>
 
 <%@ page import="standard.CustomerBean" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="java.util.List" %>
-<%@ taglib uri="http://java.sun.com/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsf/core"  prefix="f" %>
-<%@ taglib uri="http://java.sun.com/jstl/fmt"  prefix="fmt" %>
 <%@ taglib uri="http://java.sun.com/jsf/html"  prefix="h" %>
 
 <f:view>

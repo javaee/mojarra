@@ -3,11 +3,9 @@
  SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 -->
 
-<%-- $Id: repeater.jsp,v 1.3 2003/12/24 20:45:21 craigmcc Exp $ --%>
+<%-- $Id: repeater.jsp,v 1.4 2004/01/10 01:21:03 horwat Exp $ --%>
 
-<%@ taglib uri="http://java.sun.com/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsf/core"  prefix="f" %>
-<%@ taglib uri="http://java.sun.com/jstl/fmt"  prefix="fmt" %>
 <%@ taglib uri="http://java.sun.com/jsf/html"  prefix="h" %>
 <%@ taglib uri="http://java.sun.com/jsf/demo/components" prefix="d" %>
 
