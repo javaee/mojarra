@@ -1,5 +1,5 @@
 /*
- * $Id: TestCarDemo.java,v 1.13 2006/03/08 01:52:31 rlubke Exp $
+ * $Id: TestCarDemo.java,v 1.14 2006/09/15 17:19:19 rlubke Exp $
  */
 
 /*
@@ -80,14 +80,8 @@ public class TestCarDemo extends HtmlUnitTestCase {
      * button, press it, and call doStoreFront() on the result.</p>
      */
 
-    public void testCarDemo() throws Exception {
-
-        // for each of the language links run the test
-        HtmlPage page = (HtmlPage) getInitialPage();
-        List buttons = getAllElementsOfGivenClass(page, null,
-                                                  HtmlSubmitInput.class);
-        HtmlSubmitInput button = null;
-        int i, j = 0;
+    public void testCarDemo() throws Exception {       
+       
         Locale[] locales = {
               Locale.ENGLISH,
               Locale.GERMAN,
@@ -95,17 +89,21 @@ public class TestCarDemo extends HtmlUnitTestCase {
               new Locale("es", "")
         };
 
-        for (i = 0; i < locales.length; i++) {
+        for (int i = 0; i < locales.length; i++) {
             resources = ResourceBundle.getBundle("carstore.bundles.Resources",
                                                  locales[i]);
             carBundles =
                   new ResourceBundle[carBundleNames.length];
-            for (j = 0; j < carBundleNames.length; j++) {
+            for (int j = 0; j < carBundleNames.length; j++) {
                 carBundles[j] =
                       ResourceBundle.getBundle(carBundleNames[j], locales[i]);
             }
 
-            button = (HtmlSubmitInput) buttons.get(i);
+            HtmlSubmitInput button =
+                  (HtmlSubmitInput) getAllElementsOfGivenClass(((HtmlPage) getInitialPage()),
+                                                               null,
+                                                               HtmlSubmitInput.class)
+                        .get(i);
             if (LOGGER.isLoggable(Level.FINE)) {
                 LOGGER.fine("Running test for language: " + button.asText());
             }

@@ -2,7 +2,7 @@
  * JSFVersionTracker
  *
  * Created on February 15, 2006, 11:41 AM
- * $Id: JSFVersionTracker.java,v 1.7 2006/09/05 22:52:31 rlubke Exp $
+ * $Id: JSFVersionTracker.java,v 1.8 2006/09/15 17:19:18 rlubke Exp $
  */
 
 /*
@@ -62,8 +62,8 @@ href="https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=14
 on this.</p>
 
 <p>During startup time, this classes is accessed via a
-<code>ThreadLocal</code> variable exposed via the {@link
-getCurrentInstance} method.</p>
+<code>ThreadLocal</code> variable exposed via the {@link #getCurrentInstance} 
+ method.</p>
 
           </li>
 
@@ -222,10 +222,10 @@ public class JSFVersionTracker {
      * 
      * <p>This method takes no action if version tracking is disabled.</p>
      *
-     * <p>See {@link DigesterFactory#JsfEntityResolver#resolveEntity</p>
+     * <p>See {@link DigesterFactory#JsfEntityResolver#resolveEntity}</p>
      *
-     * @param the grammar to push.  This will be something like
-     * web_facesconfig_1_1.dtd.
+     * @param grammar - the grammar to push.  This will be something like
+     *  web_facesconfig_1_1.dtd.
      *
      */
 
@@ -293,7 +293,7 @@ public class JSFVersionTracker {
         return DEFAULT_VERSION;
     }
 
-    public final class Version implements Comparable {
+    public static final class Version implements Comparable {
         /**
          * Holds value of property majorVersion.
          */

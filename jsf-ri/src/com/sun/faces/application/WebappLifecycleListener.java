@@ -28,13 +28,13 @@ package com.sun.faces.application;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextAttributeEvent;
 import javax.servlet.ServletContextAttributeListener;
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
+import javax.servlet.ServletRequest;
 import javax.servlet.ServletRequestAttributeEvent;
 import javax.servlet.ServletRequestAttributeListener;
 import javax.servlet.ServletRequestEvent;
 import javax.servlet.ServletRequestListener;
-import javax.servlet.ServletContextListener;
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSessionAttributeListener;
 import javax.servlet.http.HttpSessionBindingEvent;
@@ -42,10 +42,9 @@ import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
 
 import java.io.PrintWriter;
-import java.lang.reflect.InvocationTargetException;
+import java.util.Enumeration;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.Enumeration;
 
 import com.sun.faces.io.FastStringWriter;
 import com.sun.faces.spi.ManagedBeanFactory.Scope;
@@ -227,13 +226,7 @@ public class WebappLifecycleListener implements ServletRequestListener,
             }
         } catch (Exception e) {
             String className = e.getClass().getName();
-            String message = e.getMessage();
-            if (e instanceof InvocationTargetException) {
-                Throwable root =
-                      ((InvocationTargetException) e).getTargetException();
-                className = root.getClass().getName();
-                message = root.getMessage();
-            }
+            String message = e.getMessage();            
             if (message == null) {
                 message = "";
             }

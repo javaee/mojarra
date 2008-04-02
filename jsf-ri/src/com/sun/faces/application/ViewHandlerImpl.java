@@ -1,5 +1,5 @@
 /* 
- * $Id: ViewHandlerImpl.java,v 1.84 2006/09/14 22:38:39 tony_robertson Exp $ 
+ * $Id: ViewHandlerImpl.java,v 1.85 2006/09/15 17:19:18 rlubke Exp $ 
  */ 
 
 
@@ -68,7 +68,7 @@ import com.sun.faces.util.Util;
 /**
  * <B>ViewHandlerImpl</B> is the default implementation class for ViewHandler.
  *
- * @version $Id: ViewHandlerImpl.java,v 1.84 2006/09/14 22:38:39 tony_robertson Exp $
+ * @version $Id: ViewHandlerImpl.java,v 1.85 2006/09/15 17:19:18 rlubke Exp $
  * @see javax.faces.application.ViewHandler
  */
 public class ViewHandlerImpl extends ViewHandler {
@@ -186,14 +186,17 @@ public class ViewHandlerImpl extends ViewHandler {
             logger.fine("Size of response for view '" + viewToRender + "':" 
                         + strWriter.length());
         }
-        strWriter.flushToWriter(responseWriter);
+        
+        // flush directly to the response
+        strWriter.flushToWriter(response.getWriter());
                         
         if (null != oldWriter) {
             context.setResponseWriter(oldWriter);
         }
         
         // write any AFTER_VIEW_CONTENT to the response
-        Object content = extContext.getRequestMap().get(AFTER_VIEW_CONTENT);
+        // side effect: AFTER_VIEW_CONTENT removed
+        Object content = extContext.getRequestMap().remove(AFTER_VIEW_CONTENT);
         assert(null != content);
         if (content instanceof char[]) {            
             response.getWriter().write((char[]) content);
@@ -203,10 +206,7 @@ public class ViewHandlerImpl extends ViewHandler {
             assert(false);
         }
         
-        response.flushBuffer(); 
-        
-        // remove the AFTER_VIEW_CONTENT from the view root
-        extContext.getRequestMap().remove(AFTER_VIEW_CONTENT);
+        response.flushBuffer();                
                
     }
 
@@ -233,12 +233,11 @@ public class ViewHandlerImpl extends ViewHandler {
      */
 
     private void doRenderView(FacesContext context,
-                              UIViewRoot viewToRender) throws IOException,
-            FacesException {
-    ExternalContext extContext = context.getExternalContext();
+                              UIViewRoot viewToRender) 
+    throws IOException, FacesException {   
 
     ApplicationAssociate associate =
-        ApplicationAssociate.getInstance(extContext);
+        ApplicationAssociate.getInstance(context.getExternalContext());
 
         if (null != associate) {
             associate.responseRendered();

@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.137 2006/08/25 09:50:15 tony_robertson Exp $
+ * $Id: UIComponentBase.java,v 1.138 2006/09/15 17:19:17 rlubke Exp $
  */
 
 /*
@@ -159,7 +159,7 @@ public abstract class UIComponentBase extends UIComponent {
      *
      * @throws FacesException if an introspection exception occurs
      */
-    private PropertyDescriptor getPropertyDescriptor(String name) {
+    PropertyDescriptor getPropertyDescriptor(String name) {
         if (pdMap != null) {
             return (pdMap.get(name));
         }
@@ -196,7 +196,7 @@ public abstract class UIComponentBase extends UIComponent {
     public Map<String, Object> getAttributes() {
 
         if (attributes == null) {
-            attributes = new AttributesMap();
+            attributes = new AttributesMap(this);
         }
         return (attributes);
 
@@ -255,24 +255,6 @@ public abstract class UIComponentBase extends UIComponent {
 
     }
 
-    /**
-     * {@inheritDoc}
-     * @since 1.2
-     * @throws NullPointerException {@inheritDoc}
-     */ 
-    public ValueExpression getValueExpression(String name) {
-        return super.getValueExpression(name);
-    }
-
-    /**
-     * {@inheritDoc}
-     * @since 1.2
-     * @throws IllegalArgumentException {@inheritDoc}
-     * @throws NullPointerException {@inheritDoc}
-     */ 
-    public void setValueExpression(String name, ValueExpression binding) {
-        super.setValueExpression(name, binding);
-    }
     
     // -------------------------------------------------------------- Properties
 
@@ -481,7 +463,7 @@ public abstract class UIComponentBase extends UIComponent {
     public List<UIComponent> getChildren() {
 
         if (children == null) {
-            children = new ChildrenList();
+            children = new ChildrenList(this);
         }
         return (children);
 
@@ -693,7 +675,7 @@ public abstract class UIComponentBase extends UIComponent {
     public Map<String, UIComponent> getFacets() {
 
         if (facets == null) {
-            facets = new FacetsMap();
+            facets = new FacetsMap(this);
         }
         return (facets);
 
@@ -1268,9 +1250,11 @@ public abstract class UIComponentBase extends UIComponent {
         values = (Object[]) state;
         // we need to get the map that knows how to handle attribute/property 
         // transparency before we restore its values.        
-        if ( values[0] != null ) {
-            attributes = new AttributesMap(
-                TypedCollections.dynamicallyCastMap((Map) values[0], String.class, Object.class));
+        if (values[0] != null) {
+            attributes = new AttributesMap(this,
+                                           TypedCollections.dynamicallyCastMap((Map) values[0],
+                                                                               String.class,
+                                                                               Object.class));
         }
         bindings = restoreBindingsState(context, values[1]);
         clientId = (String) values[2];
@@ -1504,12 +1488,17 @@ public abstract class UIComponentBase extends UIComponent {
     private class AttributesMap implements Map<String, Object>, Serializable {
         
         private Map<String, Object> attributes;
+        private UIComponent component;
         
         // -------------------------------------------------------- Constructors
         
-        private AttributesMap() { }
+        private AttributesMap(UIComponent component) {
+            this.component = component;
+        }
         
-        private AttributesMap(Map<String,Object> attributes) {
+        private AttributesMap(UIComponent component,
+                              Map<String,Object> attributes) {
+            this(component);
             this.attributes = attributes;            
         }
 
@@ -1540,7 +1529,7 @@ public abstract class UIComponentBase extends UIComponent {
                     Method readMethod = pd.getReadMethod();
                     if (readMethod != null) {
                         return (readMethod.invoke
-                                (UIComponentBase.this, empty));
+                                (component, empty));
                     } else {
                         throw new IllegalArgumentException(key);
                     }
@@ -1556,11 +1545,9 @@ public abstract class UIComponentBase extends UIComponent {
                 }
             }
             ValueExpression ve = getValueExpression(key);
-            if (ve != null) {
-                Object result = null;
+            if (ve != null) {              
                 try {
-                    result = ve.getValue(getFacesContext().getELContext());
-                    return result;
+                    return ve.getValue(getFacesContext().getELContext());                  
                 }
                 catch (ELException e) {
                     throw new FacesException(e);
@@ -1573,23 +1560,21 @@ public abstract class UIComponentBase extends UIComponent {
             if (keyValue == null) {
                 throw new NullPointerException();
             }
-
-            String key = keyValue.toString();
+          
             PropertyDescriptor pd =
-                getPropertyDescriptor(key);
+                getPropertyDescriptor(keyValue);
             if (pd != null) {
                 try {
                     Object result = null;
                     Method readMethod = pd.getReadMethod();
                     if (readMethod != null) {
                         result = readMethod.invoke
-                            (UIComponentBase.this, empty);
+                            (component, empty);
                     }
                     Method writeMethod = pd.getWriteMethod();
                     if (writeMethod != null) {
                         writeMethod.invoke
-                            (UIComponentBase.this,
-                             new Object[] { value });
+                            (component, value);
                     } else {
                         throw new IllegalArgumentException();
                     }
@@ -1607,7 +1592,7 @@ public abstract class UIComponentBase extends UIComponent {
                 if (attributes == null) {
                     initMap();
                 }
-                return (attributes.put(key, value));
+                return (attributes.put(keyValue, value));
             }
         }
 
@@ -1737,6 +1722,12 @@ public abstract class UIComponentBase extends UIComponent {
     // required by UIComponent.getChildren()
     private class ChildrenList extends ArrayList<UIComponent> {
 
+        private UIComponent component;
+        
+        public ChildrenList(UIComponent component) {
+            this.component = component;   
+        }
+        
         public void add(int index, UIComponent element) {
             if (element == null) {
                 throw new NullPointerException();
@@ -1744,7 +1735,7 @@ public abstract class UIComponentBase extends UIComponent {
                 throw new IndexOutOfBoundsException();
             } else {
                 eraseParent(element);
-                element.setParent(UIComponentBase.this);
+                element.setParent(component);
                 super.add(index, element);
             }
         }
@@ -1754,7 +1745,7 @@ public abstract class UIComponentBase extends UIComponent {
                 throw new NullPointerException();
             } else {
                 eraseParent(element);
-                element.setParent(UIComponentBase.this);
+                element.setParent(component);
                 return (super.add(element));
             }
         }
@@ -1869,7 +1860,7 @@ public abstract class UIComponentBase extends UIComponent {
                 UIComponent previous =
                     (UIComponent) get(index);
                 previous.setParent(null);
-                element.setParent(UIComponentBase.this);
+                element.setParent(component);
                 super.set(index, element);
                 return (previous);
             }
@@ -2023,6 +2014,12 @@ public abstract class UIComponentBase extends UIComponent {
     // required by UIComponent.getFacets()
     private class FacetsMap extends HashMap<String, UIComponent> {
 
+        UIComponent component;
+        
+        public FacetsMap(UIComponent component) {
+            this.component = component;
+        }
+        
         public void clear() {
             Iterator<String> keys = keySet().iterator();
             while (keys.hasNext()) {
@@ -2052,7 +2049,7 @@ public abstract class UIComponentBase extends UIComponent {
                 previous.setParent(null);
             }
             eraseParent(value);
-            value.setParent(UIComponentBase.this);
+            value.setParent(component);
             return (super.put(key, value));
         }
 

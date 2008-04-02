@@ -197,7 +197,7 @@ public class RenderKitUtils {
      * <p>JavaScript to be rendered when a commandLink is used.
      * This may be expaned to include other uses.</p>
      */
-    private static String SUN_JSF_JS = null;        
+    private static volatile String SUN_JSF_JS = null;        
                           
     
     protected static final Logger LOGGER = 
@@ -1024,7 +1024,7 @@ public class RenderKitUtils {
         if (SUN_JSF_JS == null) {
             synchronized (XHTML_ATTR_PREFIX) {
                 if (SUN_JSF_JS == null) {
-                    InputStream input = null;
+                    BufferedReader reader = null;
                     try {
                         URL url = Util.getCurrentLoader(null)
                               .getResource("com/sun/faces/sunjsf.js");
@@ -1034,10 +1034,9 @@ public class RenderKitUtils {
                         }
                         URLConnection conn = url.openConnection();
                         conn.setUseCaches(false);
-                        input = conn.getInputStream();
-                        BufferedReader reader =
-                              new BufferedReader(
-                                    new InputStreamReader(input));
+                        InputStream input = conn.getInputStream();
+                        reader = new BufferedReader(
+                                    new InputStreamReader(input));                        
                         StringBuilder builder = new StringBuilder(128);
                         builder.append('\n');
                         for (String line = reader.readLine();
@@ -1068,9 +1067,9 @@ public class RenderKitUtils {
                                    "jsf.renderkit.resstatemgr.clientbuf_not_integer",
                                    ioe);
                     } finally {
-                        if (input != null) {
+                        if (reader != null) {
                             try {
-                                input.close();
+                                reader.close();
                             } catch (IOException ioe) {
                                 // ignore                    
                             }

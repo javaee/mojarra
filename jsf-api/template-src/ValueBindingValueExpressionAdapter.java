@@ -1,5 +1,5 @@
 /*
- * $Id: ValueBindingValueExpressionAdapter.java,v 1.4 2006/08/09 18:26:04 rlubke Exp $
+ * $Id: ValueBindingValueExpressionAdapter.java,v 1.5 2006/09/15 17:19:18 rlubke Exp $
  */
 
 /*
@@ -231,7 +231,7 @@ import javax.el.ELException;
             return true;
         }
         
-        if (other instanceof ValueExpressionValueBindingAdapter) {
+        if (other instanceof ValueBindingValueExpressionAdapter) {
             ValueExpression expr = 
                 ((ValueBindingValueExpressionAdapter) other).getWrapped();
             return (valueExpression.equals(expr));
