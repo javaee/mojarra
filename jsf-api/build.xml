@@ -175,12 +175,12 @@ jsf-api.jar.
 
     <ant dir="${jsf-tools.dir}" inheritall="false" target="clean.generated"/>
 
-    <ant dir="${jsf-tools.dir}" inheritall="false" target="main"/>
+    <ant dir="${jsf-tools.dir}" inheritall="false" target="generate"/>
 
     <copy todir="${build.generate}">
 
       <fileset dir="${jsf-tools.dir}/build/generate">
-        <include name="**/*.*"/>
+        <include name="javax/**/*.*"/>
       </fileset>
     </copy>
 
