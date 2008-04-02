@@ -1,5 +1,5 @@
 /*
- * $Id: IdTagParserImpl.java,v 1.9 2004/12/02 18:42:24 rogerk Exp $
+ * $Id: IdTagParserImpl.java,v 1.10 2005/05/25 18:06:42 jayashri Exp $
  */
 
 /*
@@ -180,9 +180,7 @@ public class IdTagParserImpl implements TagParser {
      */
     private boolean isJstlTag(FacesValidator validator, String ns, String ln) {
         if (ns.equals(RIConstants.JSTL_NAMESPACE)) {
-            if (ln.equals(validator.getJSTL_IF_LN()) ||
-                ln.equals(validator.getJSTL_CHOOSE_LN()) ||
-                ln.equals(validator.getJSTL_FOREACH_LN()) ||
+                if( ln.equals(validator.getJSTL_FOREACH_LN()) ||
                 ln.equals(validator.getJSTL_FORTOKENS_LN())) {
                 return true;
             }

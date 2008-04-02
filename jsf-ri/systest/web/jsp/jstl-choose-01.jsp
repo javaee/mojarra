@@ -17,16 +17,16 @@
 <h:outputText value="[1]"/>
 <c:choose>
   <c:when test="${param.choose == 'a'}">
-    <h:outputText id="comp2a" value="[2a]"/>
-    <h:outputText id="comp2z" value="[2z]"/>
+    <h:outputText  value="[2a]"/>
+    <h:outputText  value="[2z]"/>
   </c:when>
   <c:when test="${param.choose == 'b'}">
-    <h:outputText id="comp2b" value="[2b]"/>
-    <h:outputText id="comp2y" value="[2y]"/>
+    <h:outputText value="[2b]"/>
+    <h:outputText  value="[2y]"/>
   </c:when>
   <c:otherwise>
-    <h:outputText id="comp2c" value="[2c]"/>
-    <h:outputText id="comp2x" value="[2x]"/>
+    <h:outputText  value="[2c]"/>
+    <h:outputText  value="[2x]"/>
   </c:otherwise>
 </c:choose>
 <h:outputText value="[3]"/>

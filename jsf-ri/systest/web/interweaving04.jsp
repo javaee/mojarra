@@ -8,14 +8,21 @@
 <%@ taglib prefix="f" uri="http://java.sun.com/jsf/core" %>
 <%@ taglib prefix="h" uri="http://java.sun.com/jsf/html" %>
 
+<%
+    pageContext.setAttribute("cond", Boolean.TRUE,
+                             PageContext.REQUEST_SCOPE);
+ 
+%>
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <f:view>
 <html>
 <head>
-<title>jstl-if test without "id"</title>
+<title>jstl-if-without-id</title>
 </head>
 <body>
 <h:outputText value="[First]"/>
-<c:if test="${param.cond}">
+<c:if test="${requestScope.cond}">
   <h:outputText value="[Second]"/>
 </c:if>
 <h:outputText value="[Third]"/>

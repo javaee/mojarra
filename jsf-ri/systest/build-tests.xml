@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 
 <!--
- $Id: build-tests.xml,v 1.79 2005/05/23 14:38:36 rlubke Exp $
+ $Id: build-tests.xml,v 1.80 2005/05/25 18:06:42 jayashri Exp $
 -->
 
 <!--
@@ -74,6 +74,7 @@
    description="Execute all tests against installed application"
        depends="test.init,
                 test.config,
+                test.interweaving,
                 test.listener,
                 test.duplicateIds,
                 test.renderkit,
@@ -452,7 +453,7 @@
 
     <tester host="${host}" port="${port}" protocol="${protocol}"
          request="${context.path}/faces/TestCoreValidatorIfFail.jsp"
-      status="500" failonerror="${failonerror}"/>
+      status="200" failonerror="${failonerror}"/>
 
     <tester host="${host}" port="${port}" protocol="${protocol}"
          request="${context.path}/faces/TestCoreValidatorIfSucceed.jsp"
@@ -734,7 +735,8 @@
          request="${context.path}/faces/subview04.jsp"
          recordGolden="${local.golden.path}/subview04.txt"
          golden="${golden.path}/subview04.txt" failonerror="${failonerror}"/>
-      <!-- c:forEach tests
+
+     <!-- PENDING(visvan) c:forEach tests.
      <tester host="${host}" port="${port}" protocol="${protocol}"
          request="${context.path}/faces/subview05.jsp"
          recordGolden="${local.golden.path}/subview05.txt"
@@ -745,6 +747,35 @@
          recordGolden="${local.golden.path}/subview06.txt"
          golden="${golden.path}/subview06.txt" failonerror="${failonerror}"/> -->
 
+  </target>
+  
+  <target name="test.interweaving"
+          description="Test interweaving">
+
+    <tester host="${host}" port="${port}" protocol="${protocol}"
+         request="${context.path}/faces/interweaving01.jsp"
+          recordGolden="${local.golden.path}/interweaving01.txt"
+          golden="${golden.path}/interweaving01.txt" failonerror="${failonerror}"/>
+          
+    <tester host="${host}" port="${port}" protocol="${protocol}"
+         request="${context.path}/faces/interweaving02.jsp"
+         recordGolden="${local.golden.path}/interweaving02.txt"
+         golden="${golden.path}/interweaving02.txt" failonerror="${failonerror}"/>
+         
+    <tester host="${host}" port="${port}" protocol="${protocol}"
+         request="${context.path}/faces/interweaving03.jsp"
+         recordGolden="${local.golden.path}/interweaving03.txt"
+         golden="${golden.path}/interweaving03.txt" failonerror="${failonerror}"/>
+         
+    <tester host="${host}" port="${port}" protocol="${protocol}"
+         request="${context.path}/faces/interweaving04.jsp"
+         recordGolden="${local.golden.path}/interweaving04.txt"
+         golden="${golden.path}/interweaving04.txt" failonerror="${failonerror}"/>
+         
+    <tester host="${host}" port="${port}" protocol="${protocol}"
+         request="${context.path}/faces/interweaving05.jsp"
+         recordGolden="${local.golden.path}/interweaving05.txt"
+         golden="${golden.path}/interweaving05.txt" failonerror="${failonerror}"/>
   </target>
 
 </project>
