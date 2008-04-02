@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigListener.java,v 1.17 2003/09/12 19:48:43 rkitain Exp $
+ * $Id: ConfigListener.java,v 1.18 2003/09/13 01:57:16 rkitain Exp $
  */
 /*
  * Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
@@ -77,14 +77,14 @@ public class ConfigListener implements ServletContextListener
     //
     // Class Variables
     //
-    private static Set loaders = new HashSet();
+    private static Set loaders = null;
 
     //
     // Instance Variables
     //
     private ConfigParser configParser = null;
     private ClassLoader loader = null;
-
+    private Object lock = new Object();
 
     // Attribute Instance Variables
 
@@ -114,7 +114,7 @@ public class ConfigListener implements ServletContextListener
     {
 	// If this method has already executed for this webapp...
 	//
-	ClassLoader loader = Thread.currentThread().getContextClassLoader();
+	loader = Thread.currentThread().getContextClassLoader();
 	if (loader == null) {
             loader = this.getClass().getClassLoader();
 	}
@@ -212,11 +212,7 @@ public class ConfigListener implements ServletContextListener
 
     public void contextDestroyed(ServletContextEvent e) {  
         e.getServletContext().removeAttribute(RIConstants.CONFIG_ATTR);
-	if (loader != null) {
-	    synchronized(loaders) {
-	        loaders.remove(loader);
-            }
-	}
+	loaders = null;
         if (log.isTraceEnabled()) {
 	    log.trace("CONTEXT DESTROYED CALLED...");
         }
@@ -345,7 +341,10 @@ public class ConfigListener implements ServletContextListener
 	if (loader == null) {
 	    return false;
 	}
-	synchronized(loaders) {
+	synchronized(lock) {
+	    if (loaders == null) {
+	        loaders = new HashSet();
+	    }
 	    if (!loaders.contains(loader)) {
 	        loaders.add(loader);
 		if (log.isTraceEnabled()) {
