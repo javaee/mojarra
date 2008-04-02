@@ -1,5 +1,5 @@
 /*
- * $Id: ValueHolder.java,v 1.3 2003/09/30 14:35:02 rlubke Exp $
+ * $Id: ValueHolder.java,v 1.4 2003/09/30 17:05:01 craigmcc Exp $
  */
 
 /*
@@ -101,9 +101,9 @@ public interface ValueHolder {
      * @param context {@link FacesContext} within which to evaluate the value
      *  reference expression, if necessary
      *
-     * @throws EvaluationException if a problem occurs evaluating
+     * @exception EvaluationException if a problem occurs evaluating
      *  the value reference expression
-     * @throws NullPointerException if <code>context</code>
+     * @exception NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
     public Object currentValue(FacesContext context);

@@ -1,5 +1,5 @@
 /*
- * $Id: UIViewRoot.java,v 1.6 2003/09/30 14:35:02 rlubke Exp $
+ * $Id: UIViewRoot.java,v 1.7 2003/09/30 17:05:01 craigmcc Exp $
  */
 
 /*
@@ -267,9 +267,9 @@ public class UIViewRoot extends UIComponentBase implements NamingContainer {
     // ------------------------------------------------- NamingContainer Methods
 
     /**
-     * @throws IllegalArgumentException {@inheritDoc}
-     * @throws IllegalStateException {@inheritDoc}
-     * @throws NullPointerException {@inheritDoc}     
+     * @exception IllegalArgumentException {@inheritDoc}
+     * @exception IllegalStateException {@inheritDoc}
+     * @exception NullPointerException {@inheritDoc}     
      */ 
     public void addComponentToNamespace(UIComponent namedComponent) {
 
@@ -278,7 +278,7 @@ public class UIViewRoot extends UIComponentBase implements NamingContainer {
     }
 
     /**
-     * @throws IllegalArgumentException {@inheritDoc}
+     * @exception IllegalArgumentException {@inheritDoc}
      * @exception NullPointerException {@inheritDoc}
      */ 
     public UIComponent findComponentInNamespace(String name) {
@@ -295,8 +295,8 @@ public class UIViewRoot extends UIComponentBase implements NamingContainer {
     }
 
     /**
-     * @throws IllegalArgumentException {@inheritDoc}
-     * @throws NullPointerException {@inheritDoc}     
+     * @exception IllegalArgumentException {@inheritDoc}
+     * @exception NullPointerException {@inheritDoc}     
      */ 
     public void removeComponentFromNamespace(UIComponent namedComponent) {
 

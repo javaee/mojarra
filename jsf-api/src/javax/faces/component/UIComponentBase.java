@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.64 2003/09/30 14:34:59 rlubke Exp $
+ * $Id: UIComponentBase.java,v 1.65 2003/09/30 17:04:58 craigmcc Exp $
  */
 
 /*
@@ -256,7 +256,7 @@ public abstract class UIComponentBase extends UIComponent {
 
     
     /**
-     * @throws NullPointerException {@inheritDoc}
+     * @exception NullPointerException {@inheritDoc}
      */ 
     public String getClientId(FacesContext context) {
 
@@ -388,8 +388,8 @@ public abstract class UIComponentBase extends UIComponent {
     }
 
     /**
-     * @throws IllegalArgumentException {@inheritDoc}
-     * @throws IllegalStateException {@inheritDoc}    
+     * @exception IllegalArgumentException {@inheritDoc}
+     * @exception IllegalStateException {@inheritDoc}    
      */ 
     public void setId(String id) {
 
@@ -802,7 +802,7 @@ public abstract class UIComponentBase extends UIComponent {
     }
 
     /**
-     * @throws NullPointerException {@inheritDoc}
+     * @exception NullPointerException {@inheritDoc}
      */ 
     public UIComponent findComponent(String expr) {
 
@@ -957,9 +957,9 @@ public abstract class UIComponentBase extends UIComponent {
 
 
     /**
-     * @throws IllegalArgumentException {@inheritDoc}
-     * @throws IllegalStateException {@inheritDoc}
-     * @throws NullPointerException {@inheritDoc}  
+     * @exception IllegalArgumentException {@inheritDoc}
+     * @exception IllegalStateException {@inheritDoc}
+     * @exception NullPointerException {@inheritDoc}  
      */ 
     public boolean broadcast(FacesEvent event, PhaseId phaseId)
         throws AbortProcessingException {
@@ -1055,7 +1055,7 @@ public abstract class UIComponentBase extends UIComponent {
     }
 
     /**
-     * @throws NullPointerException {@inheritDoc}     
+     * @exception NullPointerException {@inheritDoc}     
      */ 
     public void decode(FacesContext context) {
 
@@ -1073,7 +1073,7 @@ public abstract class UIComponentBase extends UIComponent {
     }
 
     /**
-     * @throws NullPointerException {@inheritDoc}   
+     * @exception NullPointerException {@inheritDoc}   
      */ 
     public void encodeBegin(FacesContext context) throws IOException {
 
@@ -1088,7 +1088,7 @@ public abstract class UIComponentBase extends UIComponent {
     }
 
     /**
-     * @throws NullPointerException {@inheritDoc}     
+     * @exception NullPointerException {@inheritDoc}     
      */ 
     public void encodeChildren(FacesContext context) throws IOException {
 
@@ -1103,7 +1103,7 @@ public abstract class UIComponentBase extends UIComponent {
     }
 
     /**
-     * @throws NullPointerException {@inheritDoc}   
+     * @exception NullPointerException {@inheritDoc}   
      */ 
     public void encodeEnd(FacesContext context) throws IOException {
 
@@ -1211,7 +1211,7 @@ public abstract class UIComponentBase extends UIComponent {
     }
 
     /**
-     * @throws IllegalStateException {@inheritDoc}
+     * @exception IllegalStateException {@inheritDoc}
      * @exception NullPointerException {@inheritDoc}  
      */ 
     public void queueEvent(FacesEvent event) {
@@ -1232,7 +1232,7 @@ public abstract class UIComponentBase extends UIComponent {
     // ------------------------------------------------ Lifecycle Phase Handlers
 
     /**
-     * @throws NullPointerException {@inheritDoc}     
+     * @exception NullPointerException {@inheritDoc}     
      */ 
     public void processDecodes(FacesContext context) {
 
@@ -1259,7 +1259,7 @@ public abstract class UIComponentBase extends UIComponent {
     }
 
     /**
-     * @throws NullPointerException {@inheritDoc}    
+     * @exception NullPointerException {@inheritDoc}    
      */ 
     public void processValidators(FacesContext context) {
 
@@ -1297,7 +1297,7 @@ public abstract class UIComponentBase extends UIComponent {
 
 
     /**
-     * @throws NullPointerException {@inheritDoc}     
+     * @exception NullPointerException {@inheritDoc}     
      */ 
     public void processUpdates(FacesContext context) {
 
@@ -1334,7 +1334,7 @@ public abstract class UIComponentBase extends UIComponent {
     private static final int CHILD_STATE = 1;
 
     /**
-     * @throws NullPointerException {@inheritDoc}         
+     * @exception NullPointerException {@inheritDoc}         
      */ 
     public Object processSaveState(FacesContext context) {
 	
@@ -1386,7 +1386,7 @@ public abstract class UIComponentBase extends UIComponent {
     
 
     /**
-     * @throws NullPointerException {@inheritDoc}     
+     * @exception NullPointerException {@inheritDoc}     
      */ 
     public void processRestoreState(FacesContext context,
 				    Object state) {

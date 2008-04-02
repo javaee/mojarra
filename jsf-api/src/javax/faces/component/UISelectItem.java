@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectItem.java,v 1.18 2003/09/30 14:35:01 rlubke Exp $
+ * $Id: UISelectItem.java,v 1.19 2003/09/30 17:05:00 craigmcc Exp $
  */
 
 /*
@@ -199,8 +199,8 @@ public class UISelectItem extends UIComponentBase implements ValueHolder {
     // ----------------------------------------------------- ValueHolder Methods
 
     /**
-     * @throws EvaluationException {@inheritDoc}
-     * @throws NullPointerException {@inheritDoc}  
+     * @exception EvaluationException {@inheritDoc}
+     * @exception NullPointerException {@inheritDoc}  
      */
     public Object currentValue(FacesContext context) {
 

@@ -330,7 +330,7 @@ public class UIData extends UIComponentBase
     // -------------------------------------------------------- Repeater Methods
 
     /**
-     * @throws NullPointerException {@inheritDoc}  
+     * @exception NullPointerException {@inheritDoc}  
      */ 
     public String getChildClientId(FacesContext context,
 				   String childClientId) {
@@ -340,7 +340,7 @@ public class UIData extends UIComponentBase
     }
 
     /**
-     * @throws NullPointerException {@inheritDoc}
+     * @exception NullPointerException {@inheritDoc}
      */ 
     public Object getChildPrevious(UIComponent component) {
 
@@ -349,7 +349,7 @@ public class UIData extends UIComponentBase
     }
 
     /**
-     * @throws NullPointerException {@inheritDoc}     
+     * @exception NullPointerException {@inheritDoc}     
      */ 
     public void setChildPrevious(UIComponent component, Object value) {
 
@@ -372,7 +372,7 @@ public class UIData extends UIComponentBase
     }
 
     /**
-     * @throws NullPointerException {@inheritDoc}     
+     * @exception NullPointerException {@inheritDoc}     
      */ 
     public Object getChildValue(UIComponent component) {
 
@@ -381,7 +381,7 @@ public class UIData extends UIComponentBase
     }
 
     /**
-     * @throws NullPointerException {@inheritDoc}    
+     * @exception NullPointerException {@inheritDoc}    
      */ 
     public void setChildValue(UIComponent component, Object value) {
 
@@ -489,8 +489,8 @@ public class UIData extends UIComponentBase
     // ----------------------------------------------------- ValueHolder Methods
 
     /**
-     * @throws EvaluationException {@inheritDoc}
-     * @throws NullPointerException {@inheritDoc}     
+     * @exception EvaluationException {@inheritDoc}
+     * @exception NullPointerException {@inheritDoc}     
      */ 
     public Object currentValue(FacesContext context) {
 
@@ -581,7 +581,7 @@ public class UIData extends UIComponentBase
     }
 
     /**
-     * @throws NullPointerException {@inheritDoc}     
+     * @exception NullPointerException {@inheritDoc}     
      */ 
     public void processDecodes(FacesContext context) {
 
@@ -594,7 +594,7 @@ public class UIData extends UIComponentBase
     }
 
     /**
-     * @throws NullPointerException {@inheritDoc}     
+     * @exception NullPointerException {@inheritDoc}     
      */ 
     public void processValidators(FacesContext context) {
 
@@ -610,7 +610,7 @@ public class UIData extends UIComponentBase
     }
 
     /**
-     * @throws NullPointerException {@inheritDoc}     
+     * @exception NullPointerException {@inheritDoc}     
      */ 
     public void processUpdates(FacesContext context) {
 

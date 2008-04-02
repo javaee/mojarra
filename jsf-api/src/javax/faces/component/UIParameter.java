@@ -1,5 +1,5 @@
 /*
- * $Id: UIParameter.java,v 1.10 2003/09/30 14:35:01 rlubke Exp $
+ * $Id: UIParameter.java,v 1.11 2003/09/30 17:05:00 craigmcc Exp $
  */
 
 /*
@@ -143,8 +143,8 @@ public class UIParameter extends UIComponentBase implements ValueHolder {
     // ----------------------------------------------------- ValueHolder Methods
 
     /**
-     * @throws EvaluationException {@inheritDoc}
-     * @throws NullPointerException {@inheritDoc}  
+     * @exception EvaluationException {@inheritDoc}
+     * @exception NullPointerException {@inheritDoc}  
      */
     public Object currentValue(FacesContext context) {
 

@@ -1,5 +1,5 @@
 /*
- * $Id: ArrayDataModel.java,v 1.3 2003/09/30 14:34:58 rlubke Exp $
+ * $Id: ArrayDataModel.java,v 1.4 2003/09/30 17:04:58 craigmcc Exp $
  */
 
 /*
@@ -103,8 +103,8 @@ class ArrayDataModel implements DataModel {
     // ------------------------------------------------------- Lifecycle Methods
 
     /**
-     * @throws FacesException {@inheritDoc}
-     * @throws IllegalStateException {@inheritDoc}
+     * @exception FacesException {@inheritDoc}
+     * @exception IllegalStateException {@inheritDoc}
      */ 
     public void close() {
 
@@ -124,8 +124,8 @@ class ArrayDataModel implements DataModel {
     }
 
     /**
-     * @throws FacesException {@inheritDoc}
-     * @throws IllegalStateException {@inheritDoc}
+     * @exception FacesException {@inheritDoc}
+     * @exception IllegalStateException {@inheritDoc}
      */ 
     public void open() throws FacesException {
 
@@ -155,7 +155,7 @@ class ArrayDataModel implements DataModel {
     }
 
     /**
-     * @throws IllegalStateException {@inheritDoc}     
+     * @exception IllegalStateException {@inheritDoc}     
      */ 
     public int getRowCount() {
 
@@ -167,8 +167,8 @@ class ArrayDataModel implements DataModel {
     }
 
     /**
-     * @throws IllegalArgumentException {@inheritDoc}
-     * @throws IllegalStateException {@inheritDoc}     
+     * @exception IllegalArgumentException {@inheritDoc}
+     * @exception IllegalStateException {@inheritDoc}     
      */ 
     public Object getRowData() {
 
@@ -187,7 +187,7 @@ class ArrayDataModel implements DataModel {
     }
 
     /**
-     * @throws IllegalStateException {@inheritDoc}     
+     * @exception IllegalStateException {@inheritDoc}     
      */ 
     public int getRowIndex() {
 
@@ -199,9 +199,9 @@ class ArrayDataModel implements DataModel {
     }
 
     /**
-     * @throws IllegalArgumentException {@inheritDoc}
-     * @throws IllegalStateException {@inheritDoc}
-     * @throws FacesException {@inheritDoc}     
+     * @exception IllegalArgumentException {@inheritDoc}
+     * @exception IllegalStateException {@inheritDoc}
+     * @exception FacesException {@inheritDoc}     
      */ 
     public void setRowIndex(int rowIndex) {
 
@@ -228,7 +228,7 @@ class ArrayDataModel implements DataModel {
     // --------------------------------------------- Event Listener Registration
 
     /**
-     * @throws NullPointerException {@inheritDoc}     
+     * @exception NullPointerException {@inheritDoc}     
      */ 
     public void addDataModelListener(DataModelListener listener) {
 
@@ -243,7 +243,7 @@ class ArrayDataModel implements DataModel {
     }
 
     /**
-     * @throws NullPointerException {@inheritDoc}     
+     * @exception NullPointerException {@inheritDoc}     
      */ 
     public void removeDataModelListener(DataModelListener listener) {
 

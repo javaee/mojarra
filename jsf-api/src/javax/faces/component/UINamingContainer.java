@@ -1,5 +1,5 @@
 /*
- * $Id: UINamingContainer.java,v 1.8 2003/09/30 14:35:01 rlubke Exp $
+ * $Id: UINamingContainer.java,v 1.9 2003/09/30 17:05:00 craigmcc Exp $
  */
 
 /*
@@ -46,9 +46,9 @@ public class UINamingContainer extends UIComponentBase
     // ------------------------------------------------- NamingContainer Methods
 
     /**
-     * @throws IllegalArgumentException {@inheritDoc}
-     * @throws IllegalStateException {@inheritDoc}
-     * @throws NullPointerException {@inheritDoc}     
+     * @exception IllegalArgumentException {@inheritDoc}
+     * @exception IllegalStateException {@inheritDoc}
+     * @exception NullPointerException {@inheritDoc}     
      */ 
     public void addComponentToNamespace(UIComponent namedComponent) {
 
@@ -57,7 +57,7 @@ public class UINamingContainer extends UIComponentBase
     }
 
     /**
-     * @throws IllegalArgumentException {@inheritDoc}
+     * @exception IllegalArgumentException {@inheritDoc}
      * @exception NullPointerException {@inheritDoc}
      */ 
     public UIComponent findComponentInNamespace(String name) {
@@ -74,8 +74,8 @@ public class UINamingContainer extends UIComponentBase
     }
 
     /**
-     * @throws IllegalArgumentException {@inheritDoc}
-     * @throws NullPointerException {@inheritDoc}     
+     * @exception IllegalArgumentException {@inheritDoc}
+     * @exception NullPointerException {@inheritDoc}     
      */ 
     public void removeComponentFromNamespace(UIComponent namedComponent) {
 

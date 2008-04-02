@@ -1,5 +1,5 @@
 /*
- * $Id: UIForm.java,v 1.33 2003/09/30 14:35:00 rlubke Exp $
+ * $Id: UIForm.java,v 1.34 2003/09/30 17:04:59 craigmcc Exp $
  */
 
 /*
@@ -109,7 +109,7 @@ public class UIForm extends UIComponentBase implements NamingContainer {
      * necessary to allow the <code>submitted</code> property to be
      * correctly set.</p>
      *
-     * @throws NullPointerException {@inheritDoc}
+     * @exception NullPointerException {@inheritDoc}
      */
     public void processDecodes(FacesContext context) {
 
@@ -135,7 +135,7 @@ public class UIForm extends UIComponentBase implements NamingContainer {
      * the children of this <code>UIForm</code> instance are only
      * processed if {@link #isSubmitted} returns <code>true</code>.</p>
      * 
-     * @throws NullPointerException {@inheritDoc}
+     * @exception NullPointerException {@inheritDoc}
      */
     public void processValidators(FacesContext context) {
 
@@ -161,7 +161,7 @@ public class UIForm extends UIComponentBase implements NamingContainer {
      * children of this <code>UIForm</code> instance are only processed
      * if {@link #isSubmitted} returns <code>true</code>.</p>
      * 
-     * @throws NullPointerException {@inheritDoc}
+     * @exception NullPointerException {@inheritDoc}
      */
     public void processUpdates(FacesContext context) {
 
@@ -185,8 +185,8 @@ public class UIForm extends UIComponentBase implements NamingContainer {
     // ------------------------------------------------- NamingContainer Methods
 
     /**
-     * @throws IllegalArgumentException {@inheritDoc}
-     * @throws IllegalStateException {@inheritDoc}
+     * @exception IllegalArgumentException {@inheritDoc}
+     * @exception IllegalStateException {@inheritDoc}
      * @exception NullPointerException {@inheritDoc}     
      */ 
     public void addComponentToNamespace(UIComponent namedComponent) {
@@ -196,7 +196,7 @@ public class UIForm extends UIComponentBase implements NamingContainer {
     }
 
     /**
-     * @throws IllegalArgumentException {@inheritDoc}
+     * @exception IllegalArgumentException {@inheritDoc}
      * @exception NullPointerException {@inheritDoc}    
      */ 
     public UIComponent findComponentInNamespace(String name) {
@@ -213,7 +213,7 @@ public class UIForm extends UIComponentBase implements NamingContainer {
     }
 
     /**
-     * @throws IllegalArgumentException {@inheritDoc}
+     * @exception IllegalArgumentException {@inheritDoc}
      * @exception NullPointerException {@inheritDoc}
      */ 
     public void removeComponentFromNamespace(UIComponent namedComponent) {

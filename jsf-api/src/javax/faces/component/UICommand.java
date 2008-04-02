@@ -1,5 +1,5 @@
 /*
- * $Id: UICommand.java,v 1.43 2003/09/30 14:34:58 rlubke Exp $
+ * $Id: UICommand.java,v 1.44 2003/09/30 17:04:58 craigmcc Exp $
  */
 
 /*
@@ -10,6 +10,7 @@
 package javax.faces.component;
 
 
+import javax.faces.application.Action;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.event.ActionEvent;
@@ -188,7 +189,7 @@ public class UICommand extends UIComponentBase
     // ---------------------------------------------------- ActionSource Methods
 
     /** 
-     * @throws NullPointerException {@inheritDoc}
+     * @exception NullPointerException {@inheritDoc}
      */ 
     public void addActionListener(ActionListener listener) {
 
@@ -197,7 +198,7 @@ public class UICommand extends UIComponentBase
     }
 
     /**
-     * @throws NullPointerException {@inheritDoc}
+     * @exception NullPointerException {@inheritDoc}
      */ 
     public void removeActionListener(ActionListener listener) {
 
@@ -209,8 +210,8 @@ public class UICommand extends UIComponentBase
     // ----------------------------------------------------- ValueHolder Methods
 
     /**
-     * @throws EvaluationException {@inheritDoc}
-     * @throws NullPointerException {@inheritDoc}
+     * @exception EvaluationException {@inheritDoc}
+     * @exception NullPointerException {@inheritDoc}
      */ 
     public Object currentValue(FacesContext context) {
 

@@ -1,5 +1,5 @@
 /*
- * $Id: UIOutput.java,v 1.31 2003/09/30 14:35:01 rlubke Exp $
+ * $Id: UIOutput.java,v 1.32 2003/09/30 17:05:00 craigmcc Exp $
  */
 
 /*
@@ -129,8 +129,8 @@ public class UIOutput extends UIComponentBase implements ValueHolder {
     // ----------------------------------------------------- ValueHolder Methods
 
     /**
-     * @throws EvaluationException {@inheritDoc}
-     * @throws NullPointerException {@inheritDoc}  
+     * @exception EvaluationException {@inheritDoc}
+     * @exception NullPointerException {@inheritDoc}  
      */ 
     public Object currentValue(FacesContext context) {
 
