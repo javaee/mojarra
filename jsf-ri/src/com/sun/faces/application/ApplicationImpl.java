@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationImpl.java,v 1.86 2007/02/05 04:04:37 rlubke Exp $
+ * $Id: ApplicationImpl.java,v 1.87 2007/02/22 01:06:59 rlubke Exp $
  */
 
 /*
@@ -109,8 +109,8 @@ public class ApplicationImpl extends Application {
 
     private volatile ActionListener actionListener = null;
     private volatile NavigationHandler navigationHandler = null;
-    private volatile PropertyResolver propertyResolver = null;
-    private volatile VariableResolver variableResolver = null;
+    private volatile PropertyResolverImpl propertyResolver = null;
+    private volatile VariableResolverImpl variableResolver = null;
     private volatile ViewHandler viewHandler = null;
     private volatile StateManager stateManager = null;
     private volatile ArrayList<Locale> supportedLocales = null;
@@ -439,11 +439,13 @@ public class ApplicationImpl extends Application {
                 (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "resolver");
             throw new NullPointerException(message);
         }
-        synchronized (this) {
-            associate.setLegacyPropertyResolver(resolver); 
-        }
+
+        propertyResolver.disable();
+        associate.setLegacyPropertyResolver(resolver);
+        propertyResolver = new PropertyResolverImpl();
+
         if (logger.isLoggable(Level.FINE)) {
-            logger.fine(MessageFormat.format("set PropertyResolver Instance to ''{0}''", propertyResolver.getClass().getName()));
+            logger.fine(MessageFormat.format("set PropertyResolver Instance to ''{0}''", resolver.getClass().getName()));
         }
     }
 
@@ -517,9 +519,11 @@ public class ApplicationImpl extends Application {
                 (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "resolver");
             throw new NullPointerException(message);
         }
-        synchronized (this) {
-            associate.setLegacyVariableResolver(resolver); 
-        }
+
+        variableResolver.disable();
+        associate.setLegacyVariableResolver(resolver);
+        variableResolver = new VariableResolverImpl();
+
         if (logger.isLoggable(Level.FINE)) {
             logger.fine(MessageFormat.format("set VariableResolver Instance to ''{0}''",
                                              variableResolver.getClass().getName()));

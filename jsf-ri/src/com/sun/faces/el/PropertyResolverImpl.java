@@ -1,5 +1,5 @@
 /*
- * $Id: PropertyResolverImpl.java,v 1.28 2006/11/15 23:19:18 rlubke Exp $
+ * $Id: PropertyResolverImpl.java,v 1.29 2007/02/22 01:06:59 rlubke Exp $
  */
 
 /*
@@ -49,9 +49,17 @@ import com.sun.faces.util.MessageUtils;
 @SuppressWarnings("deprecation")
 public class PropertyResolverImpl extends PropertyResolver {
 
+    private boolean disabled;
+
     // Specified by javax.faces.el.PropertyResolver.getType(Object,int)
     public Class getType(Object base, int index)
-        throws EvaluationException, PropertyNotFoundException{
+        throws EvaluationException, PropertyNotFoundException {
+
+        if (disabled) {
+            FacesContext context = FacesContext.getCurrentInstance();
+            context.getELContext().setPropertyResolved(false);
+            return null;
+        }
         // validates base != null and index >= 0
         assertInput(base, index);
 
@@ -83,6 +91,13 @@ public class PropertyResolverImpl extends PropertyResolver {
 
     // Specified by javax.faces.el.PropertyResolver.getType(Object,String)
     public Class getType(Object base, Object property) {
+
+        if (disabled) {
+            FacesContext context = FacesContext.getCurrentInstance();
+            context.getELContext().setPropertyResolved(false);
+            return null;
+        }
+
         assertInput(base, property);
         Class result = null;
         try {
@@ -98,6 +113,13 @@ public class PropertyResolverImpl extends PropertyResolver {
 
     // Specified by javax.faces.el.PropertyResolver.getValue(Object,int)
     public Object getValue(Object base, int index) {
+
+        if (disabled) {
+            FacesContext context = FacesContext.getCurrentInstance();
+            context.getELContext().setPropertyResolved(false);
+            return null;
+        }
+
         // validates base and index
         if (base == null) {
             return null;
@@ -125,6 +147,13 @@ public class PropertyResolverImpl extends PropertyResolver {
 
     // Specified by javax.faces.el.PropertyResolver.getValue(Object,String)
     public Object getValue(Object base, Object property) {
+
+        if (disabled) {
+            FacesContext context = FacesContext.getCurrentInstance();
+            context.getELContext().setPropertyResolved(false);
+            return null;
+        }
+
         Object result = null;
         try {
             FacesContext context = FacesContext.getCurrentInstance();
@@ -139,6 +168,13 @@ public class PropertyResolverImpl extends PropertyResolver {
 
     // Specified by javax.faces.el.PropertyResolver.isReadOnly(Object,int)
     public boolean isReadOnly(Object base, int index) {
+
+        if (disabled) {
+            FacesContext context = FacesContext.getCurrentInstance();
+            context.getELContext().setPropertyResolved(false);
+            return false;
+        }
+
         // validate input
         assertInput(base, index);
 
@@ -153,6 +189,13 @@ public class PropertyResolverImpl extends PropertyResolver {
 
     // Specified by javax.faces.el.PropertyResolver.isReadOnly(Object,String)
     public boolean isReadOnly(Object base, Object property) {
+
+        if (disabled) {
+            FacesContext context = FacesContext.getCurrentInstance();
+            context.getELContext().setPropertyResolved(false);
+            return false;
+        }
+
         boolean result = false;
         try {
             FacesContext context = FacesContext.getCurrentInstance();
@@ -165,6 +208,12 @@ public class PropertyResolverImpl extends PropertyResolver {
 
     // Specified by javax.faces.el.PropertyResolver.setValue(Object,int,Object)
     public void setValue(Object base, int index, Object value) {
+
+        if (disabled) {
+            FacesContext context = FacesContext.getCurrentInstance();
+            context.getELContext().setPropertyResolved(false);
+            return;
+        }
 
         // validate input
         assertInput(base, index);
@@ -202,6 +251,13 @@ public class PropertyResolverImpl extends PropertyResolver {
     // Specified by
     // javax.faces.el.PropertyResolver.setValue(Object,String,Object)
     public void setValue(Object base, Object property, Object value) {
+
+        if (disabled) {
+            FacesContext context = FacesContext.getCurrentInstance();
+            context.getELContext().setPropertyResolved(false);
+            return;
+        }
+
         try {
             FacesContext context = FacesContext.getCurrentInstance();
             context.getApplication().getELResolver().setValue(context.getELContext(), base,property, value);
@@ -213,6 +269,10 @@ public class PropertyResolverImpl extends PropertyResolver {
         catch (ELException elex) {
             throw new EvaluationException(elex);
         }
+    }
+
+    public void disable() {
+        disabled = true;   
     }
 
     protected static void assertInput(Object base, Object property)

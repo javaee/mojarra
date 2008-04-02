@@ -1,5 +1,5 @@
 /*
- * $Id: VariableResolverImpl.java,v 1.32 2006/11/15 23:19:18 rlubke Exp $
+ * $Id: VariableResolverImpl.java,v 1.33 2007/02/22 01:06:59 rlubke Exp $
  */
 
 /*
@@ -46,13 +46,17 @@ import com.sun.faces.util.MessageUtils;
 @SuppressWarnings("deprecation")
 public class VariableResolverImpl extends VariableResolver {
 
-    //
-    // Relationship Instance Variables
-    // 
+    private boolean disabled;
 
     // Specified by javax.faces.el.VariableResolver.resolveVariable()
     public Object resolveVariable(FacesContext context, String name)
             throws EvaluationException {
+
+        if (disabled) {
+            context.getELContext().setPropertyResolved(false);
+            return null;            
+        }
+
         Object result = null;
         if (context == null) {
             String message = MessageUtils.getExceptionMessageString
@@ -71,5 +75,9 @@ public class VariableResolverImpl extends VariableResolver {
             throw new EvaluationException(elex);
         }
         return result;
+    }
+
+    public void disable() {
+        disabled = true;
     }
 }
