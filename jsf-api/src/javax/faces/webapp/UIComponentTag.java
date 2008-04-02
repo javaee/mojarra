@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTag.java,v 1.29 2003/11/11 05:33:04 craigmcc Exp $
+ * $Id: UIComponentTag.java,v 1.30 2003/11/11 22:59:16 craigmcc Exp $
  */
 
 /*
@@ -71,6 +71,7 @@ public abstract class UIComponentTag implements Tag {
     private static final String JSP_CREATED_FACET_NAMES =
         "javax.faces.webapp.FACET_NAMES";
     
+
     /**
      * <p>The attribute name under which we will store all {@link UIComponent}
      * IDs of the current translation unit.</p>
@@ -762,16 +763,31 @@ public abstract class UIComponentTag implements Tag {
 
     /**
      * <p>Return <code>true</code> if rendering should be suppressed because
-     * our component is a facet, or some parent component has been configured
-     * with <code>getRendersChildren()</code> as true.</p>
+     * of any of the follow reasons.</p>
+     * <ul>
+     * <li>The component is a facet (whose rendering, if any), is always
+     *     the responsibility of the owing component.</li>
+     * <li>The component has its <code>rendered</code> property set
+     *     to <code>false</code>.</li>
+     * <li>The component is a child of a parent whose
+     *     <code>rendersChildren</code> is <code>true</code>.</li>
+     * <li>The component is a child of a parent whose <code>rendered</code>
+     *     property is <code>false</code>.</li>
+     * </ul>
      */
     protected boolean isSuppressed() {
 
         if (getFacetName() != null) {
             return (true);
         }
+        if (!component.isRendered()) {
+            return (true);
+        }
         UIComponent component = this.component.getParent();
         while (component != null) {
+            if (!component.isRendered()) {
+                return (true);
+            }
             if (component.getRendersChildren()) {
                 return (true);
             }

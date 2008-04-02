@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTagTestCase.java,v 1.19 2003/11/11 05:33:05 craigmcc Exp $
+ * $Id: UIComponentTagTestCase.java,v 1.20 2003/11/11 22:59:17 craigmcc Exp $
  */
 
 /*
@@ -204,13 +204,13 @@ public class UIComponentTagTestCase extends TagTestCaseBase {
         configure("C1", "C2", false, false);
 
         render();
-        assertEquals("/bA/bB1/eB1/bC1/eC1/bC2/eC2/bB3/eB3/eA", text());
+        assertEquals("/bA/bB1/eB1/bB3/eB3/eA", text());
         assertEquals("/ROOT/A-a/B1-b1/B2-b2/C1-c1/C2-c2/B3-b3", tree());
         verifyB2();
 
         reset();
         render();
-        assertEquals("/bA/bB1/eB1/bC1/eC1/bC2/eC2/bB3/eB3/eA", text());
+        assertEquals("/bA/bB1/eB1/bB3/eB3/eA", text());
         assertEquals("/ROOT/A-a/B1-b1/B2-b2/C1-c1/C2-c2/B3-b3", tree());
         verifyB2();
 
