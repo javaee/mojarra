@@ -96,7 +96,7 @@
   <tag>
 
     <name>attribute</name>
-    <tag-class>javax.faces.webapp.AttributeTag</tag-class>
+    <tag-class>com.sun.faces.taglib.jsf_core.AttributeTag</tag-class>
     <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
     <body-content>empty</body-content>
     <description>

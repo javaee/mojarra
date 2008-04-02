@@ -10,9 +10,18 @@
     <h1>f:attribute</h1>
 
 <f:view>
+    <p>
     <h:outputText value="This Should Be Red">
       <f:attribute name="style" value="color: red" />
     </h:outputText>
+    </p>
+
+    <p>
+    <h:outputText>
+       <f:attribute name="value" value="#{test2.stringProperty}" />
+    </h:outputText>
+    </p>
+
 </f:view>
 
   </body>
