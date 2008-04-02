@@ -1,5 +1,5 @@
 /* 
- * $Id: ViewHandlerImpl.java,v 1.95 2007/01/09 05:33:50 rlubke Exp $
+ * $Id: ViewHandlerImpl.java,v 1.96 2007/01/26 17:15:38 rlubke Exp $
  */
 
 
@@ -68,7 +68,7 @@ import com.sun.faces.util.Util;
 /**
  * <B>ViewHandlerImpl</B> is the default implementation class for ViewHandler.
  *
- * @version $Id: ViewHandlerImpl.java,v 1.95 2007/01/09 05:33:50 rlubke Exp $
+ * @version $Id: ViewHandlerImpl.java,v 1.96 2007/01/26 17:15:38 rlubke Exp $
  * @see javax.faces.application.ViewHandler
  */
 public class ViewHandlerImpl extends ViewHandler {
@@ -155,14 +155,17 @@ public class ViewHandlerImpl extends ViewHandler {
         }
 
 
-        WriteBehindStringWriter strWriter = 
-              new WriteBehindStringWriter(context, bufSize);
+        WriteBehindStateWriter stateWriter =
+              new WriteBehindStateWriter(response.getWriter(),
+                                         context,
+                                         bufSize);
         ResponseWriter newWriter;
         if (null != oldWriter) {
-            newWriter = oldWriter.cloneWithWriter(strWriter);
+            newWriter = oldWriter.cloneWithWriter(stateWriter);
         } else {
-            newWriter = renderKit.createResponseWriter(strWriter, null,
-                    request.getCharacterEncoding());            
+            newWriter = renderKit.createResponseWriter(stateWriter,
+                                                       null,
+                                                       request.getCharacterEncoding());
         }
         context.setResponseWriter(newWriter);
         
@@ -173,22 +176,14 @@ public class ViewHandlerImpl extends ViewHandler {
         newWriter.endDocument();
         
         // replace markers in the body content and write it to response.
-
-        ResponseWriter responseWriter;
-        if (null != oldWriter) {
-            responseWriter = oldWriter.cloneWithWriter(response.getWriter());
-        } else {
-            responseWriter = newWriter.cloneWithWriter(response.getWriter());
-        }
-        context.setResponseWriter(responseWriter);
-        
-        if (logger.isLoggable(Level.FINE)) {
-            logger.fine("Size of response for view '" + viewToRender + "':" 
-                        + strWriter.length());
-        }
         
         // flush directly to the response
-        strWriter.flushToWriter(response.getWriter());
+        if (stateWriter.stateWritten()) {
+            stateWriter.flushToWriter();
+        }
+
+        // clear the ThreadLocal reference.
+        stateWriter.release();
                         
         if (null != oldWriter) {
             context.setResponseWriter(oldWriter);
@@ -555,7 +550,7 @@ public class ViewHandlerImpl extends ViewHandler {
                 // locales is "en-UK", even though its language matches
                 // that of the preferred locale, we must ignore it.
                 if (pref.getLanguage().equals(supportedLocale.getLanguage()) &&
-                    supportedLocale.getCountry().equals("")) {
+                     supportedLocale.getCountry().length() == 0) {
                     result = supportedLocale;
                 }
             }
@@ -574,7 +569,7 @@ public class ViewHandlerImpl extends ViewHandler {
                     // locales is "en-UK", even though its language matches
                     // that of the preferred locale, we must ignore it.
                     if (pref.getLanguage().equals(defaultLocale.getLanguage()) &&
-                        defaultLocale.getCountry().equals("")) {
+                         defaultLocale.getCountry().length() == 0) {
                         result = defaultLocale;
                     }
                 }
@@ -597,6 +592,10 @@ public class ViewHandlerImpl extends ViewHandler {
                         context.getViewRoot().getViewId());
         }
 
+        WriteBehindStateWriter writer = WriteBehindStateWriter.getCurrentInstance();
+        if (writer != null) {
+            writer.writingState();
+        }
         context.getResponseWriter().write(RIConstants.SAVESTATE_FIELD_MARKER);
         if (logger.isLoggable(Level.FINE)) {
             logger.fine("End writing marker for viewId " +
@@ -652,7 +651,7 @@ public class ViewHandlerImpl extends ViewHandler {
         }
 
         // Deal with extension mapping
-        int period = viewId.lastIndexOf(".");
+        int period = viewId.lastIndexOf('.');
         if (period < 0) {
             return (contextPath + viewId + mapping);
         } else if (!viewId.endsWith(mapping)) {
@@ -769,37 +768,99 @@ public class ViewHandlerImpl extends ViewHandler {
     // ----------------------------------------------------------- Inner Classes
 
     /**
-     * <p>Handles writing the response from the dispatched request
-     * and replaces any state markers with the actual
-     * state supplied by the <code>StateManager</code>.
+     * Thanks to the Facelets folks for some of the concepts incorporated
+     * into this class.
      */
-    private static final class WriteBehindStringWriter extends FastStringWriter {
-                        
+    private static final class WriteBehindStateWriter extends Writer {
         // length of the state marker
-        private static final int STATE_MARKER_LEN = 
+        private static final int STATE_MARKER_LEN =
               RIConstants.SAVESTATE_FIELD_MARKER.length();
-                        
-        // the context for the current request
-        private final FacesContext context;
-        
-        // char buffer
-        private final char[] buf;
-        
-        // buffer length
-        private final int bufSize;        
-        
 
-        /**
-         * <p>Create a new <code>WriteBehindStringWriter</code> for the current
-         * request with an initial capacity.</p>
-         * @param context the <code>FacesContext</code> for the current request
-         * @param initialCapcity the StringBuilder's initial capacity
-         */
-        public WriteBehindStringWriter(FacesContext context, int initialCapcity) {
-            super(initialCapcity);         
-            this.context = context;      
-            bufSize = initialCapcity;
-            buf = new char[bufSize];
+        private static final ThreadLocal<WriteBehindStateWriter> CUR_WRITER =
+             new ThreadLocal<WriteBehindStateWriter>();
+        private Writer out;
+        private Writer orig;
+        private FastStringWriter fWriter;
+        private boolean stateWritten;
+        private int bufSize;
+        private char[] buf;
+        private FacesContext context;
+
+
+        // -------------------------------------------------------- Constructors
+
+
+        public WriteBehindStateWriter(Writer out, FacesContext context, int bufSize) {
+            this.out = out;
+            this.orig = out;
+            this.context = context;
+            this.bufSize = bufSize;
+            this.buf = new char[bufSize];
+            CUR_WRITER.set(this);
+        }
+
+
+        // ------------------------------------------------- Methods from Writer
+
+
+
+        public void write(int c) throws IOException {
+            out.write(c);
+        }
+
+
+        public void write(char cbuf[]) throws IOException {
+            out.write(cbuf);
+        }
+
+
+        public void write(String str) throws IOException {
+            out.write(str);
+        }
+
+
+        public void write(String str, int off, int len) throws IOException {
+            out.write(str, off, len);
+        }
+
+
+        public void write(char cbuf[], int off, int len) throws IOException {
+            out.write(cbuf, off, len);
+        }
+
+
+        public void flush() throws IOException {
+            // no-op
+        }
+
+
+        public void close() throws IOException {
+           // no-op
+        }
+
+
+        // ------------------------------------------------------ Public Methods
+
+
+        public static WriteBehindStateWriter getCurrentInstance() {
+            return CUR_WRITER.get();
+        }
+
+
+        public void release() {
+            CUR_WRITER.set(null);
+        }
+
+
+        public void writingState() {
+            if (!stateWritten) {
+                this.stateWritten = true;
+                out = fWriter = new FastStringWriter(1024);
+            }
+        }
+
+        public boolean stateWritten() {
+            return stateWritten;
         }
 
         /**
@@ -808,11 +869,11 @@ public class ViewHandlerImpl extends ViewHandler {
          * @param writer where to write
          * @throws IOException if an error occurs
          */
-        public void flushToWriter(Writer writer) throws IOException {
+        public void flushToWriter() throws IOException {
             // Save the state to a new instance of StringWriter to
             // avoid multiple serialization steps if the view contains
             // multiple forms.
-            StateManager stateManager = Util.getStateManager(context);            
+            StateManager stateManager = Util.getStateManager(context);
             ResponseWriter origWriter = context.getResponseWriter();
             FastStringWriter state =
                   new FastStringWriter((stateManager.isSavingStateInClient(
@@ -820,31 +881,31 @@ public class ViewHandlerImpl extends ViewHandler {
             context.setResponseWriter(origWriter.cloneWithWriter(state));
             stateManager.writeState(context, stateManager.saveView(context));
             context.setResponseWriter(origWriter);
-            
+            StringBuilder builder = fWriter.getBuffer();
             // begin writing...
             int totalLen = builder.length();
             StringBuilder stateBuilder = state.getBuffer();
             int stateLen = stateBuilder.length();
             int pos = 0;
-            int tildeIdx = getNextDelimiterIndex(pos);
+            int tildeIdx = getNextDelimiterIndex(builder, pos);
             while (pos < totalLen) {
                 if (tildeIdx != -1) {
                     if (tildeIdx > pos && (tildeIdx - pos) > bufSize) {
-                        // theres enough content before the first ~ 
+                        // theres enough content before the first ~
                         // to fill the entire buffer
                         builder.getChars(pos, (pos + bufSize), buf, 0);
-                        writer.write(buf);
+                        orig.write(buf);
                         pos += bufSize;
                     } else {
                         // write all content up to the first '~'
                         builder.getChars(pos, tildeIdx, buf, 0);
                         int len = (tildeIdx - pos);
-                        writer.write(buf, 0, len);                       
+                        orig.write(buf, 0, len);
                         // now check to see if the state saving string is
-                        // at the begining of pos, if so, write our 
-                        // state out.                               
+                        // at the begining of pos, if so, write our
+                        // state out.
                         if (builder.indexOf(
-                              RIConstants.SAVESTATE_FIELD_MARKER, 
+                              RIConstants.SAVESTATE_FIELD_MARKER,
                               pos) == tildeIdx) {
                             // buf is effectively zero'd out at this point
                             int statePos = 0;
@@ -855,27 +916,28 @@ public class ViewHandlerImpl extends ViewHandler {
                                                           (statePos + bufSize),
                                                           buf,
                                                           0);
-                                    writer.write(buf);
+                                    orig.write(buf);
                                     statePos += bufSize;
                                 } else {
                                     int slen = (stateLen - statePos);
                                     stateBuilder.getChars(statePos,
                                                           stateLen,
                                                           buf,
-                                                          0); 
-                                    writer.write(buf, 0, slen);
+                                                          0);
+                                    orig.write(buf, 0, slen);
                                     statePos += slen;
                                 }
-                                
+
                             }
                              // push us past the last '~' at the end of the marker
                             pos += (len + STATE_MARKER_LEN);
-                            tildeIdx = getNextDelimiterIndex(pos);
+                            tildeIdx = getNextDelimiterIndex(builder, pos);
                         } else {
                             pos = tildeIdx;
-                            tildeIdx = getNextDelimiterIndex(tildeIdx + 1);
+                            tildeIdx = getNextDelimiterIndex(builder,
+                                                             tildeIdx + 1);
 
-                        }                        
+                        }
                     }
                 } else {
                     // we've written all of the state field markers.
@@ -883,38 +945,26 @@ public class ViewHandlerImpl extends ViewHandler {
                     if (totalLen - pos > bufSize) {
                         // there's enough content to fill the buffer
                         builder.getChars(pos, (pos + bufSize), buf, 0);
-                        writer.write(buf);
+                        orig.write(buf);
                         pos += bufSize;
                     } else {
                         // we're near the end of the response
                         builder.getChars(pos, totalLen, buf, 0);
                         int len = (totalLen - pos);
-                        writer.write(buf, 0, len);
-                        pos += (len + 1);                      
+                        orig.write(buf, 0, len);
+                        pos += (len + 1);
                     }
                 }
             }
         }
 
-        /**         
-         * @return return the length of the underlying 
-         * <code>StringBuilder</code>.
-         */
-        public int length() {
-            return builder.length();
+        private static int getNextDelimiterIndex(StringBuilder builder,
+                                                 int offset) {
+            return builder.indexOf(RIConstants.SAVESTATE_FIELD_DELIMITER,
+                                   offset);
         }
 
-        /**
-         * <p>Get the next `~' from the StringBuilder.</p>
-         * @param offset the offset from where to search from
-         * @return the index of the first '~' from the specified
-         *  offset
-         */
-        private int getNextDelimiterIndex(int offset) {
-            return builder.indexOf(RIConstants.SAVESTATE_FIELD_DELIMITER, 
-                                   offset);            
-        }
-        
-       
     }
+
+
 }

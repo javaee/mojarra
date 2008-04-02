@@ -18,7 +18,7 @@
  * your own identifying information:
  * "Portions Copyrighted [year] [name of copyright owner]"
  * 
- * [WebConfiguration] [$Id: WebConfiguration.java,v 1.16 2006/11/15 23:19:17 rlubke Exp $] [Apr 2, 2006]
+ * [WebConfiguration] [$Id: WebConfiguration.java,v 1.17 2007/01/26 17:15:38 rlubke Exp $] [Apr 2, 2006]
  * 
  * Copyright 2006 Sun Microsystems Inc. All Rights Reserved
  */
@@ -555,7 +555,7 @@ public class WebConfiguration {
         ),
         ResponseBufferSize(
               "com.sun.faces.responseBufferSize",
-              "4096"
+              "1024"
         ),
         ClientStateWriteBufferSize(
               "com.sun.faces.clientStateWriteBufferSize",
@@ -703,6 +703,10 @@ public class WebConfiguration {
         EnableJSStyleHiding(
             "com.sun.faces.enableJSStyleHiding",
              false
+        ),
+        WriteStateAtFormEnd(
+            "com.sun.faces.writeStateAtFormEnd",
+            true
         );
 
         private BooleanWebContextInitParameter alternate;

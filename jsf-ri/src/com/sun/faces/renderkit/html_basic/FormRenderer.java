@@ -1,5 +1,5 @@
 /*
- * $Id: FormRenderer.java,v 1.100 2006/09/01 17:30:56 rlubke Exp $
+ * $Id: FormRenderer.java,v 1.101 2007/01/26 17:15:37 rlubke Exp $
  */
 
 /*
@@ -42,10 +42,26 @@ import java.util.logging.Level;
 
 import com.sun.faces.renderkit.RenderKitUtils;
 import com.sun.faces.util.MessageUtils;
+import com.sun.faces.config.WebConfiguration;
+import com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
 
 /** <B>FormRenderer</B> is a class that renders a <code>UIForm<code> as a Form. */
 
 public class FormRenderer extends HtmlBasicRenderer {
+
+    private boolean writeStateAtEnd;
+
+
+    // ------------------------------------------------------------ Constructors
+
+
+    public FormRenderer() {
+        WebConfiguration webConfig = WebConfiguration.getInstance();
+        writeStateAtEnd =
+             webConfig.getBooleanContextInitParameter(
+                  BooleanWebContextInitParameter.WriteStateAtFormEnd);
+
+    }
 
     // ---------------------------------------------------------- Public Methods
 
@@ -138,10 +154,10 @@ public class FormRenderer extends HtmlBasicRenderer {
         writer.endElement("input");
         writer.write('\n');
 
-        // FIX 382
-        // Write out the state marker *before* rendering any children
-        context.getApplication().getViewHandler().writeState(context);
-        writer.write('\n');
+        if (!writeStateAtEnd) {
+            context.getApplication().getViewHandler().writeState(context);
+            writer.write('\n');
+        }
 
     }
 
@@ -173,6 +189,9 @@ public class FormRenderer extends HtmlBasicRenderer {
         // Render the end tag for form
         ResponseWriter writer = context.getResponseWriter();
         assert(writer != null);
+        if (writeStateAtEnd) {
+            context.getApplication().getViewHandler().writeState(context);
+        }
         writer.writeText("\n", component, null);
         writer.endElement("form");
 

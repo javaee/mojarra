@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentClassicTagBase.java,v 1.28 2007/01/19 14:44:31 jdlee Exp $
+ * $Id: UIComponentClassicTagBase.java,v 1.29 2007/01/26 17:15:37 rlubke Exp $
  */
 
 /*
@@ -1109,8 +1109,21 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
         String clientId = null;
         if (this.id != null) {
             clientId = component.getClientId(context);
-            if (componentIds.get(clientId) == this)
+              UIComponentClassicTagBase temp = (UIComponentClassicTagBase)
+                 componentIds.get(clientId);
+            // According to the JavaDocs for JspIdConsumer tag handlers
+            // that implement this interface are not to be pooled, however
+            // due to a bug in Jasper this is not the case.
+            // Because of this, two tags with the same ID within the same
+            // naming container will not be detected as duplicates.  So
+            // in order to ensure we detect it, if the instance is the same,
+            // verify the JSP IDs are different.  If they are, then continue,
+            // if they aren't, then we're dealing with EVAL_BODY_AGAIN (see
+            // below)
+            if (temp == this
+                 && !this.getFacesJspId().equals(temp.getFacesJspId())) {
                 tagInstance = this;
+            }
         }
 
         // If we have a tag instance, then, most likely, a tag handler
