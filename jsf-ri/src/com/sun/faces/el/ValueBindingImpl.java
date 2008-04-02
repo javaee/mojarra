@@ -1,5 +1,5 @@
 /*
- * $Id: ValueBindingImpl.java,v 1.2 2003/03/27 21:21:16 eburns Exp $
+ * $Id: ValueBindingImpl.java,v 1.3 2003/03/31 21:13:25 rkitain Exp $
  */
 
 /*
@@ -52,8 +52,7 @@ public class ValueBindingImpl extends ValueBinding
 // Constructors and Initializers    
 //
 
-    public ValueBindingImpl(FacesContext facesContext, 
-			    VariableResolverImpl newVar, 
+    public ValueBindingImpl(VariableResolverImpl newVar, 
 			    PropertyResolver newProp) {
 	ParameterCheck.nonNull(newVar);
 	ParameterCheck.nonNull(newProp);
@@ -62,8 +61,9 @@ public class ValueBindingImpl extends ValueBinding
 	newVar.setPropertyResolver(propertyResolver);
 	
 	if (null == applicationMap) {
+//PENDING(rogerk)getCurrentinstance() performance considerations.
 	    applicationMap = 
-		facesContext.getExternalContext().getApplicationMap();
+		FacesContext.getCurrentInstance().getExternalContext().getApplicationMap();
 	}
 	Assert.assert_it(null != applicationMap);
     }
