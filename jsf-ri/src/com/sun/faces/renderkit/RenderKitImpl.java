@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKitImpl.java,v 1.43 2006/08/03 02:04:21 rlubke Exp $
+ * $Id: RenderKitImpl.java,v 1.44 2006/08/03 02:35:56 rlubke Exp $
  */
 
 /*
@@ -56,7 +56,7 @@ import com.sun.faces.util.Util;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: RenderKitImpl.java,v 1.43 2006/08/03 02:04:21 rlubke Exp $
+ * @version $Id: RenderKitImpl.java,v 1.44 2006/08/03 02:35:56 rlubke Exp $
  */
 
 public class RenderKitImpl extends RenderKit {
@@ -88,7 +88,8 @@ public class RenderKitImpl extends RenderKit {
 
     public RenderKitImpl() {
         super();
-    rendererFamilies = new HashMap<String, HashMap<Object,Renderer>>();
+        rendererFamilies =  
+            new HashMap<String, HashMap<Object,Renderer>>();
     }
     
 
