@@ -13,12 +13,12 @@
 
 
              <td>
-                 <h:selectoneRadio id="shipType" layout="LINE_DIRECTION" 
+                 <h:selectOneRadio id="shipType" layout="LINE_DIRECTION" 
                     value="nextDay" tabindex="30" title="shipType">
                 <f:selectItem itemValue="nextDay" itemLabel="Next Day"/>
                 <f:selectItem itemValue="nextWeek" itemLabel="Next Week" />
                 <f:selectItem itemValue="nextMonth" itemLabel="Next Month"/>
-                </h:selectoneRadio>
+                </h:selectOneRadio>
 
              </td>
 
@@ -34,12 +34,12 @@
 
 
              <td>
-                <h:selectoneRadio id="verticalRadio" layout="pageDirection" border="1" >
+                <h:selectOneRadio id="verticalRadio" layout="pageDirection" border="1" >
                   <f:selectItem itemValue="nextDay" itemLabel="Next Day"/>
                   <f:selectItem itemValue="nextWeek" itemLabel="Next Week"  />
                   <f:selectItem itemValue="nextMonth" itemLabel="Next Month" />
 
-                </h:selectoneRadio>
+                </h:selectOneRadio>
 
              </td>
 
@@ -54,13 +54,13 @@
 
 
              <td>
-                 <h:selectoneRadio id="radioFromModel"
+                 <h:selectOneRadio id="radioFromModel"
                        value="#{LoginBean.currentOption}"
                        title="options come from model"
                        layout="LINE_DIRECTION" >
 
                  <f:selectItems id="radioOptions" value="#{LoginBean.options}"/>
-                </h:selectoneRadio>
+                </h:selectOneRadio>
 
              </td>
 
@@ -76,13 +76,13 @@
 
 
              <td>
-                 <h:selectoneRadio id="radioLongOptions"
+                 <h:selectOneRadio id="radioLongOptions"
                        value="#{LoginBean.currentLongOption}"
                        title="options come from model"
                        layout="LINE_DIRECTION">
                  
                 <f:selectItems id="longItemOptions" value="#{LoginBean.longList}"/>
-                </h:selectoneRadio>
+                </h:selectOneRadio>
 
              </td>
 
@@ -90,12 +90,12 @@
 
             <tr>
 	         <td>Single-select radiomodel - modelType Boolean:</td>
-	         <td><h:selectoneRadio id="oneLongradiomodel"
+	         <td><h:selectOneRadio id="oneLongradiomodel"
                             value="#{LoginBean.currentBooleanOption}">
                            
 		         <f:selectItems id="oneRadiomodelitems"
 				value="#{LoginBean.booleanList}" />
-		    </h:selectoneRadio></td>
+		    </h:selectOneRadio></td>
 	   </tr>
 
            <tr>
@@ -107,13 +107,13 @@
 
 
              <td>
-                 <h:selectoneRadio id="radioFromModelGroup"
+                 <h:selectOneRadio id="radioFromModelGroup"
                        value="#{LoginBean.currentOption}"
                        title="options come from model"
                        layout="LINE_DIRECTION" >
 
                  <f:selectItems id="radioOptionsGroup" value="#{LoginBean.optionsGroup}"/>
-                </h:selectoneRadio>
+                </h:selectOneRadio>
 
              </td>
 

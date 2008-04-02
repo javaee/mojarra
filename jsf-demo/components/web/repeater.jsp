@@ -3,7 +3,7 @@
  SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 -->
 
-<%-- $Id: repeater.jsp,v 1.7 2004/01/27 21:31:26 eburns Exp $ --%>
+<%-- $Id: repeater.jsp,v 1.8 2004/01/30 05:24:56 craigmcc Exp $ --%>
 
 <%@ taglib uri="http://java.sun.com/jsf/core"  prefix="f" %>
 <%@ taglib uri="http://java.sun.com/jsf/html"  prefix="h" %>
@@ -32,11 +32,11 @@
 
     <h:column>
       <%-- Visible checkbox for selection --%>
-      <h:selectbooleanCheckbox
+      <h:selectBooleanCheckbox
                            id="checked"
                       binding="#{RepeaterBean.checked}"/>
       <%-- Invisible checkbox for "created" flag --%>
-      <h:selectbooleanCheckbox
+      <h:selectBooleanCheckbox
                            id="created"
                       binding="#{RepeaterBean.created}"
                      rendered="false"/>

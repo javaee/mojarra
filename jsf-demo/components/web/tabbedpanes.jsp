@@ -98,20 +98,20 @@ Powered by Faces components:
     </h:panelGroup>
     <h:panelGroup>
       <h:commandButton value="button"/>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-      <h:selectbooleanCheckbox value="true"/>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-      <h:selectoneRadio layout="pageDirection" border="1" value="nextMonth">
+      <h:selectBooleanCheckbox value="true"/>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+      <h:selectOneRadio layout="pageDirection" border="1" value="nextMonth">
         <f:selectItem itemValue="nextDay" itemLabel="Next Day"/>
         <f:selectItem itemValue="nextWeek" itemLabel="Next Week"  />
         <f:selectItem itemValue="nextMonth" itemLabel="Next Month" />
-      </h:selectoneRadio>
-      <h:selectoneListbox id="appleQuantity" title="Select Quantity"
+      </h:selectOneRadio>
+      <h:selectOneListbox id="appleQuantity" title="Select Quantity"
         tabindex="20" value="4" >
         <f:selectItem  disabled="true" itemValue="0" itemLabel="0"/>
         <f:selectItem  itemValue="1" itemLabel="One" />
         <f:selectItem  itemValue="2" itemLabel="Two" />
         <f:selectItem  itemValue="3" itemLabel="Three" />
         <f:selectItem  itemValue="4" itemLabel="Four" />
-      </h:selectoneListbox>
+      </h:selectOneListbox>
     </h:panelGroup>
 
   </d:pane_tab>

@@ -66,9 +66,9 @@
      headerClass="subtitlebig" styleClass="medium" columnClasses="medium">
 
     <h:outputText value="#{bundle.titleLabel}" />
-    <h:selectoneMenu id="title" value="#{customer.currentTitle}">
+    <h:selectOneMenu id="title" value="#{customer.currentTitle}">
         <f:selectItems value="#{customer.titleOptions}" />
-    </h:selectoneMenu>
+    </h:selectOneMenu>
     <h:outputText value=""/>
 
     <h:outputText value="#{bundle.firstLabel}" />
@@ -96,7 +96,7 @@
     <h:outputText value=""/>
 
     <h:outputText value="#{bundle.stateLabel}" />
-    <h:selectoneMenu  value="#{customer.state}" >
+    <h:selectOneMenu  value="#{customer.state}" >
 
 		<f:selectItem  itemValue="AL" itemLabel="AL" />
 		<f:selectItem  itemValue="AK" itemLabel="AK"/>
@@ -151,7 +151,7 @@
 		<f:selectItem  itemValue="WV" itemLabel="WV"/>
 		<f:selectItem  itemValue="WI" itemLabel="WI"/>
 		<f:selectItem  itemValue="WY" itemLabel="WY"/>
-    </h:selectoneMenu>
+    </h:selectOneMenu>
     <h:outputText value=""/>
 
     <h:outputText  value="#{bundle.zipLabel}" />
@@ -173,7 +173,7 @@
     <h:outputText  value="#{bundle.monthLabel}" />
     <h:panelGrid id="monthYearPanel" columns="2" footerClass="medium"
             headerClass="medium" styleClass="medium" columnClasses="medium">
-      <h:selectoneMenu  value="#{customer.month}">
+      <h:selectOneMenu  value="#{customer.month}">
         <f:selectItem itemValue="01" itemLabel="01"/>
         <f:selectItem itemValue="02" itemLabel="02"/>
         <f:selectItem itemValue="03" itemLabel="03"/>
@@ -186,9 +186,9 @@
         <f:selectItem itemValue="10" itemLabel="10"/>
         <f:selectItem itemValue="11" itemLabel="11"/>
         <f:selectItem itemValue="12" itemLabel="12"/>
-    </h:selectoneMenu>
+    </h:selectOneMenu>
 
-      <h:selectoneMenu  value="#{customer.year}" >
+      <h:selectOneMenu  value="#{customer.year}" >
         <f:selectItem itemValue="2002" itemLabel="2002"/>
         <f:selectItem itemValue="2003" itemLabel="2003"/>
         <f:selectItem itemValue="2004" itemLabel="2004"/>
@@ -196,7 +196,7 @@
         <f:selectItem itemValue="2006" itemLabel="2006"/>
         <f:selectItem itemValue="2007" itemLabel="2007"/>
         <f:selectItem itemValue="2008" itemLabel="2008"/>
-    </h:selectoneMenu>
+    </h:selectOneMenu>
     </h:panelGrid>
     <h:outputText value=""/>
 

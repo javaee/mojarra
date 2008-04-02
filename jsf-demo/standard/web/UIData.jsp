@@ -3,7 +3,7 @@
  SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 -->
 
-<%-- $Id: UIData.jsp,v 1.15 2004/01/27 21:31:42 eburns Exp $ --%>
+<%-- $Id: UIData.jsp,v 1.16 2004/01/30 05:24:58 craigmcc Exp $ --%>
 
 <%@ page import="standard.CustomerBean" %>
 <%@ page import="java.util.ArrayList" %>
@@ -78,11 +78,11 @@
 
     <h:column>
       <%-- Visible checkbox for selection --%>
-      <h:selectbooleanCheckbox
+      <h:selectBooleanCheckbox
                            id="checked"
                       binding="#{UIDataBean.checked}"/>
       <%-- Invisible checkbox for "created" flag --%>
-      <h:selectbooleanCheckbox
+      <h:selectBooleanCheckbox
                            id="created"
                       binding="#{UIDataBean.created}"
                      rendered="false"/>

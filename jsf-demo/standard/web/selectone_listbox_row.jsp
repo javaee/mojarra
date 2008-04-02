@@ -13,11 +13,11 @@
 
              <td>
 <%-- PENDING: accesskey not recognized
-                 <h:selectoneListbox id="appleQuantity" 
+                 <h:selectOneListbox id="appleQuantity" 
                      title="Select Quantity"
                      accesskey="N" tabindex="20" >
 --%>
-                 <h:selectoneListbox id="appleQuantity" 
+                 <h:selectOneListbox id="appleQuantity" 
                      title="Select Quantity"
                      tabindex="20" >
 
@@ -32,7 +32,7 @@
                 <f:selectItem  itemValue="8" itemLabel="8" />
                 <f:selectItem  itemValue="9" itemLabel="9" />
 
-              </h:selectoneListbox>
+              </h:selectOneListbox>
 
              </td>
 
@@ -48,13 +48,13 @@
 
 
              <td>
-                <h:selectoneListbox id="Listbox"
+                <h:selectOneListbox id="Listbox"
                              value="#{LoginBean.currentOption}">
 
                 <f:selectItems id="listboxOptions"
                                    value="#{LoginBean.options}"/>
 
-              </h:selectoneListbox>
+              </h:selectOneListbox>
 
              </td>
 
@@ -70,13 +70,13 @@
 
 
              <td>
-                <h:selectoneListbox id="longListbox" 
+                <h:selectOneListbox id="longListbox" 
                              value="#{LoginBean.currentLongOption}">
                     
                 <f:selectItems id="listboxLongOptions"
                                    value="#{LoginBean.longList}"/>
 
-              </h:selectoneListbox>
+              </h:selectOneListbox>
 
              </td>
 

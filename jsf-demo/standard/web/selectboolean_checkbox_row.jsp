@@ -15,7 +15,7 @@
 
              <td>
 
-               <h:selectbooleanCheckbox id="checkbox1" 
+               <h:selectBooleanCheckbox id="checkbox1" 
                                  value="#{LoginBean.validUser}"
                                  disabled="true"
                                  accesskey="C" 
@@ -41,7 +41,7 @@
 
              <td>
 
-               <h:selectbooleanCheckbox id="checkbox3"
+               <h:selectBooleanCheckbox id="checkbox3"
                                  value="#{LoginBean.validUser}"
                                  accesskey="C" 
                                title="checkbox with valueRef " />
@@ -73,7 +73,7 @@
 
              <td>
 
-               <h:selectbooleanCheckbox id="checkbox4"
+               <h:selectBooleanCheckbox id="checkbox4"
                                  accesskey="C" 
                                title="checkbox with label from JSP" />
 
