@@ -1,5 +1,5 @@
 /*
- * $Id: ResultSetRenderer.java,v 1.6 2003/08/25 21:39:36 craigmcc Exp $
+ * $Id: ResultSetRenderer.java,v 1.7 2003/09/17 19:04:20 eburns Exp $
  */
 
 /*
@@ -77,7 +77,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ResultSetRenderer.java,v 1.6 2003/08/25 21:39:36 craigmcc Exp $
+ * @version $Id: ResultSetRenderer.java,v 1.7 2003/09/17 19:04:20 eburns Exp $
  *  
  */
 
@@ -474,7 +474,7 @@ public class ResultSetRenderer extends BaseRenderer {
 
     public ResultSetControls newResultSetScroller(UIComponent newPanel,
 						  UIComponent newData) {
-	return new ResultSetControls(newPanel, newData, this);
+	return new ResultSetControls();
     }
 }
 

@@ -1,5 +1,5 @@
 /*
- * $Id: ResultSetControls.java,v 1.10 2003/09/16 00:30:35 jvisvanathan Exp $
+ * $Id: ResultSetControls.java,v 1.11 2003/09/17 19:04:20 eburns Exp $
  */
 
 /*
@@ -51,6 +51,7 @@ import java.util.Map;
 
 import javax.faces.component.UIOutput;
 import javax.faces.component.UIForm;
+import javax.faces.component.UIPanel;
 import javax.faces.component.UIComponent;
 import javax.faces.component.base.UIInputBase;
 import javax.faces.context.FacesContext;
@@ -64,7 +65,7 @@ import java.util.MissingResourceException;
  *
  * 
  *
- * @version $Id: ResultSetControls.java,v 1.10 2003/09/16 00:30:35 jvisvanathan Exp $
+ * @version $Id: ResultSetControls.java,v 1.11 2003/09/17 19:04:20 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -112,26 +113,13 @@ public class ResultSetControls extends UIInputBase {
 
 // Relationship Instance Variables
 
-    protected UIComponent yourPanel = null;
-    protected UIComponent yourData = null;
-    protected ResultSetRenderer yourListRenderer = null;
-
 //
 // Constructors and Initializers    
 //
 public ResultSetControls() {
     
     super();
-}
-
-public ResultSetControls(UIComponent newPanel, UIComponent newData,
-			     ResultSetRenderer newListRenderer)
-{
-    super();
-    // ParameterCheck.nonNull();
-    yourPanel = newPanel;
-    yourData = newData;
-    yourListRenderer = newListRenderer;
+    this.setRendererType("ResultSet");
 }
 
 //
@@ -142,8 +130,13 @@ public ResultSetControls(UIComponent newPanel, UIComponent newData,
 // General Methods
 //
 
+    public UIPanel getPanel() {
+	return (UIPanel) this.getParent();
+    }
 
-
+    public UIComponent getData() {
+	return (UIComponent) this.getPanel().getChildren().get(0);
+    }
 //
 // Methods from UIComponent
 //
@@ -159,7 +152,7 @@ public ResultSetControls(UIComponent newPanel, UIComponent newData,
     public void decode(FacesContext context)
         throws IOException {
 	String 
-	    clientId = yourPanel.getClientId(context),
+	    clientId = getPanel().getClientId(context),
 	    curPage = null,
 	    action = null;
 	int 
@@ -187,7 +180,7 @@ public ResultSetControls(UIComponent newPanel, UIComponent newData,
 		currentPage = actionInt;
 		break;
 	    }
-	    yourPanel.setAttribute(CURRENT_PAGE_ATTR, 
+	    getPanel().setAttribute(CURRENT_PAGE_ATTR, 
 				   new Integer(currentPage));
 	} 
     }
@@ -204,7 +197,7 @@ public ResultSetControls(UIComponent newPanel, UIComponent newData,
 	// PENDING(edburns): make this CSSable
 	int currentPage = getCurrentPage();
 	int totalPages = getTotalPages(context);
-	String clientId = yourPanel.getClientId(context);
+	String clientId = getPanel().getClientId(context);
 	writer.write("<table border=\"0\" cellpadding=\"0\" align=\"center\">");
 	writer.write("<tr align=\"center\" valign=\"top\">");
 	writer.write("<td><font size=\"-1\">Result&nbsp;Page:&nbsp;</font></td>");
@@ -310,13 +303,13 @@ public ResultSetControls(UIComponent newPanel, UIComponent newData,
 
 	// render the facet pertaining to this widget type in the NORTH
 	// and WEST cases.
-        if (null != (facet = (UIComponent) yourPanel.getFacets().get(facetName))) {
+        if (null != (facet = (UIComponent) getPanel().getFacets().get(facetName))) {
 	    // If we're rendering a "go to the Nth page" link
 	    if (isPageNumber) {
 		// See if the user specified an orientation
 		String facetO;
 		if (null != (facetO = (String)
-			     yourPanel.getAttribute(FACET_MARKUP_ORIENTATION_ATTR))) {
+			     getPanel().getAttribute(FACET_MARKUP_ORIENTATION_ATTR))) {
 		    facetOrientation = facetO;
 		    // verify that the orientation is valid
 		    if (!(facetOrientation.equalsIgnoreCase(ResultSetRenderer.NORTH) || facetOrientation.equalsIgnoreCase(ResultSetRenderer.SOUTH) || facetOrientation.equalsIgnoreCase(ResultSetRenderer.EAST) || facetOrientation.equalsIgnoreCase(ResultSetRenderer.WEST))) {
@@ -344,9 +337,9 @@ public ResultSetControls(UIComponent newPanel, UIComponent newData,
 	
 	// output the link text
 	try {
-	    if (null != (localLinkText = 
-			 yourListRenderer.getKeyAndLookupInBundle(context,
-								  yourPanel,
+	    if (null != (localLinkText = ((ResultSetRenderer)
+			 getRenderer(context)).getKeyAndLookupInBundle(context,
+								  getPanel(),
 								  linkText))) {
 		linkText = localLinkText;
 	    }
@@ -429,7 +422,7 @@ public ResultSetControls(UIComponent newPanel, UIComponent newData,
     // store in our own attr?
 
     protected UIForm getPanelForm(FacesContext context) {
-        UIComponent parent = yourPanel.getParent();
+        UIComponent parent = getPanel().getParent();
         while (parent != null) {
             if (parent instanceof UIForm) {
                 break;
@@ -455,7 +448,7 @@ public ResultSetControls(UIComponent newPanel, UIComponent newData,
 	    rowsPerPage = getRowsPerPage(),
 	    totalRows = 0,
 	    result = 0;
-        Object value = ((UIOutput)yourData).currentValue(context);
+        Object value = ((UIOutput)getData()).currentValue(context);
         if (value instanceof List) {
 	    totalRows = ((List)value).size();
 	}
@@ -473,7 +466,7 @@ public ResultSetControls(UIComponent newPanel, UIComponent newData,
     int getRowsPerPage() {
 	int result = 10;
 	// Set from JSP or programmatically.
-	Integer currentPage = (Integer) yourPanel.getAttribute(ROWS_PER_PAGE_ATTR);
+	Integer currentPage = (Integer) getPanel().getAttribute(ROWS_PER_PAGE_ATTR);
 	if (null != currentPage) {
 	    result = currentPage.intValue();
 	}
@@ -483,7 +476,7 @@ public ResultSetControls(UIComponent newPanel, UIComponent newData,
     int getCurrentPage() {
 	int result = 1;
 	// Set in decode()
-	Integer currentPage=(Integer)yourPanel.getAttribute(CURRENT_PAGE_ATTR);
+	Integer currentPage=(Integer)getPanel().getAttribute(CURRENT_PAGE_ATTR);
 	if (null != currentPage) {
 	    result = currentPage.intValue();
 	}
