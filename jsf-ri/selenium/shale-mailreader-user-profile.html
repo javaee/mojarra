@@ -1,0 +1,584 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>shale-mailreader-user-profile</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">shale-mailreader-user-profile</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>/shale-mailreader/</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTitle</td>
+	<td>MailReader Demonstration Application</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTitle</td>
+	<td>MailReader Demonstration Application</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td>MailReader Demonstration Application Options</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td>Register with the MailReader Demonstration Application</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td>Log on to the MailReader Demonstration Application</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Register with the MailReader Demonstration Application</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTitle</td>
+	<td>Register for the MailReader Demonstration Application</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td>Enter Registration Information</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td>Username:</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td>Password:</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td>(Repeat) Password:</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td>Full Name:</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td>From Address:</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td>Reply To Address:</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>registration:username</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>registration:password</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>registration:password2</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>registration:fullName</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>registration:fromAddress</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>registration:replyToAddress</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>registration:cancel</td>
+	<td>Cancel</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>registration:reset</td>
+	<td>Reset</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>registration:submit</td>
+	<td>Save</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>registration:username</td>
+	<td>rlubke</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>registration:password</td>
+	<td>password</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>registration:password2</td>
+	<td>pass</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>registration:fullName</td>
+	<td>Ryan Lubke</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>registration:fromAddress</td>
+	<td>Ryan.Lubke@Sun.COM</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>registration:replyToAddress</td>
+	<td>Ryan.Lubke@Sun.COM</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>registration:submit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTitle</td>
+	<td>Register for the MailReader Demonstration Application</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td>Password values do not match</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>registration:password</td>
+	<td>password</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>registration:password2</td>
+	<td>password</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>registration:submit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTitle</td>
+	<td>MailReader Demonstration Application - Main Menu</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td>Main Menu Options for rlubke</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td>Edit your user registration profile</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td>Log off MailReader Demonstration Application</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=Log off MailReader Demonstration Application</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTitle</td>
+	<td>MailReader Demonstration Application</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td>Log on to the MailReader Demonstration Application</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td>Register with the MailReader Demonstration Application</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td>MailReader Demonstration Application Options</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Log on to the MailReader Demonstration Application</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTitle</td>
+	<td>MailReader Demonstration Application - Logon</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>logon:username</td>
+	<td>rlubke</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>logon:password</td>
+	<td>password</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>logon:submit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTitle</td>
+	<td>MailReader Demonstration Application - Main Menu</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td>Main Menu Options for rlubke</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td>Edit your user registration profile</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td>Log off MailReader Demonstration Application</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Edit your user registration profile</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTitle</td>
+	<td>Edit Registration for the MailReader Demonstration Application</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td>Host</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td>Name</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td>User</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td>Name</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td>Server</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td>Type</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td>Auto</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td>Action</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>registration:create</td>
+	<td>Add New</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>registration:create</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTitle</td>
+	<td>Create New Mail Subscription</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td>Create New Mail Subscription</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td>Username:</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td>rlubke</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td>Mail Server:</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>subscription:host</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td>Mail Username:</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>subscription:username</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td>Mail Password:</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>subscription:password</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td>Server Type:</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>subscription:type</td>
+	<td>imap</td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td>Auto Connect:</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>subscription:autoConnect</td>
+	<td>off</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>subscription:save</td>
+	<td>Save</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>subscription:reset</td>
+	<td>Reset</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>subscription:cancel</td>
+	<td>Cancel</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>subscription:host</td>
+	<td>bur2-mail.east.sun.com</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>subscription:username</td>
+	<td>rlubke</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>subscription:password</td>
+	<td>password</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>subscription:save</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTitle</td>
+	<td>Edit Registration for the MailReader Demonstration Application</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td>bur2-mail.east.sun.com</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td>rlubke</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td>imap</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td>false</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>registration:table:0:edit</td>
+	<td>Edit</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>registration:table:0:delete</td>
+	<td>Delete</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>registration:table:0:edit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTitle</td>
+	<td>Edit Existing Mail Subscription</td>
+	<td></td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>subscription:type</td>
+	<td>label=POP3 Protocol</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>subscription:autoConnect</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>subscription:save</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTitle</td>
+	<td>Edit Registration for the MailReader Demonstration Application</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td>pop3</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td>true</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td>rlubke</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td>bur2-mail.east.sun.com</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>registration:table:0:delete</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTitle</td>
+	<td>Delete Existing Mail Subscription</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>subscription:confirm</td>
+	<td>Confirm</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>subscription:confirm</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTitle</td>
+	<td>Edit Registration for the MailReader Demonstration Application</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>registration:submit</td>
+	<td>Save</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>registration:submit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTitle</td>
+	<td>MailReader Demonstration Application - Main Menu</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=Log off MailReader Demonstration Application</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTitle</td>
+	<td>MailReader Demonstration Application</td>
+	<td></td>
+</tr>
+
+</tbody></table>
+</body>
+</html>
