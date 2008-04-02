@@ -1,0 +1,40 @@
+<?xml encoding='UTF-8'?>
+
+<!--
+ Copyright 2003-2004 Sun Microsystems, Inc. All rights reserved.
+ SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+-->
+
+<!-- ========== UIForm Properties ========================================== -->
+
+
+<!-- template
+
+      <property>
+        <description>
+        </description>
+        <display-name></display-name>
+        <icon></icon>
+        <property-name></property-name>
+        <property-class>java.lang.String</property-class>
+      </property>
+
+-->
+
+      &uicomponent-props;
+
+      <property>
+        <description>
+          Flag indicating whether or not this form was the one submitted by
+          the user.  If this flag is not set, child input components are not
+          processed.
+        </description>
+        <display-name>Submitted Flag</display-name>
+        <icon></icon>
+        <property-name>submitted</property-name>
+        <property-class>boolean</property-class>
+        <property-extension>
+          <tag-attribute>false</tag-attribute>
+        </property-extension>
+      </property>
+

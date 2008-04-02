@@ -77,6 +77,16 @@ public class UIColumn extends UIComponentBase {
     }
 
   
+    // -------------------------------------------------------------- Properties
+
+
+    public String getFamily() {
+
+        return (COMPONENT_FAMILY);
+
+    }
+
+
     /**
      * <p>Return the footer facet of the column (if any).  A convenience
      * method for <code>getFacet("footer")</code>.</p>

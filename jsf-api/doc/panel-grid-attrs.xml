@@ -1,0 +1,35 @@
+<?xml encoding='UTF-8'?>
+
+<!--
+ Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+-->
+
+
+<!-- ========== Panel+Grid Attributes ====================================== -->
+
+
+<!-- template
+
+      <attribute>
+        <description>
+        </description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name></attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+-->
+
+    <attribute>
+      <description>
+        The number of columns to render before
+        starting a new row.
+      </description>
+      <display-name>Columns</display-name>
+      <icon></icon>
+      <attribute-name>columns</attribute-name>
+      <attribute-class>int</attribute-class>
+    </attribute>
+

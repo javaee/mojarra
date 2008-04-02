@@ -1,5 +1,5 @@
 /*
- * $Id: UIInput.java,v 1.66 2004/01/26 20:48:54 craigmcc Exp $
+ * $Id: UIInput.java,v 1.67 2004/01/27 20:29:18 craigmcc Exp $
  */
 
 /*
@@ -124,12 +124,19 @@ public class UIInput extends UIOutput implements EditableValueHolder {
     public UIInput() {
 
         super();
-        setRendererType("Text");
+        setRendererType("javax.faces.Text");
 
     }
 
 
     // -------------------------------------------------------------- Properties
+
+
+    public String getFamily() {
+
+        return (COMPONENT_FAMILY);
+
+    }
 
 
     /**

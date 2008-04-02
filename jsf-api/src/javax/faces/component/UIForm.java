@@ -1,5 +1,5 @@
 /*
- * $Id: UIForm.java,v 1.39 2004/01/21 19:23:14 craigmcc Exp $
+ * $Id: UIForm.java,v 1.40 2004/01/27 20:29:17 craigmcc Exp $
  */
 
 /*
@@ -53,14 +53,22 @@ public class UIForm extends UIComponentBase implements NamingContainer {
     public UIForm() {
 
         super();
-        setRendererType("Form");
+        setRendererType("javax.faces.Form");
 
     }
 
 
     // ------------------------------------------------------ Instance Variables
 
+
     // -------------------------------------------------------------- Properties
+
+
+    public String getFamily() {
+
+        return (COMPONENT_FAMILY);
+
+    }
 
 
     /**

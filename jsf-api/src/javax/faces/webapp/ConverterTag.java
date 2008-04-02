@@ -1,5 +1,5 @@
 /*
- * $Id: ConverterTag.java,v 1.7 2004/01/10 03:16:37 eburns Exp $
+ * $Id: ConverterTag.java,v 1.8 2004/01/27 20:29:58 craigmcc Exp $
  */
 
 /*

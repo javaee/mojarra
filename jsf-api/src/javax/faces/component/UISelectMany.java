@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectMany.java,v 1.43 2004/01/21 19:23:17 craigmcc Exp $
+ * $Id: UISelectMany.java,v 1.44 2004/01/27 20:29:20 craigmcc Exp $
  */
 
 /*
@@ -112,12 +112,19 @@ public class UISelectMany extends UIInput {
     public UISelectMany() {
 
         super();
-        setRendererType("Listbox");
+        setRendererType("javax.faces.Listbox");
 
     }
 
 
     // -------------------------------------------------------------- Properties
+
+
+    public String getFamily() {
+
+        return (COMPONENT_FAMILY);
+
+    }
 
 
     /**

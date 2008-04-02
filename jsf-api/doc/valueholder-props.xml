@@ -1,0 +1,74 @@
+<?xml encoding='UTF-8'?>
+
+<!--
+ Copyright 2003-2004 Sun Microsystems, Inc. All rights reserved.
+ SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+-->
+
+<!-- ========== ValueHolder Properties ===================================== -->
+
+
+<!-- template
+
+      <property>
+        <description>
+        </description>
+        <display-name></display-name>
+        <icon></icon>
+        <property-name></property-name>
+        <property-class>java.lang.String</property-class>
+      </property>
+
+-->
+
+      <property>
+        <description>
+          Converter instance registered with this component.
+        </description>
+        <display-name>Converter</display-name>
+        <icon></icon>
+        <property-name>converter</property-name>
+        <property-class>javax.faces.convert.Converter</property-class>
+      </property>
+
+      <property>
+        <description>
+          For output components, this is the same as the "value" property.
+          For input components, this is the most recently user-entered
+          value, which will be pushed to the application data model during
+          Update Model Values phase, if a value binding is present for the
+          "value" property.
+        </description>
+        <display-name>Local Value</display-name>
+        <icon></icon>
+        <property-name>localValue</property-name>
+        <property-class>java.lang.Object</property-class>
+        <property-extension>
+          <tag-attribute>false</tag-attribute>
+        </property-extension>
+      </property>
+
+      <property>
+        <description>
+          The current value of this component.
+        </description>
+        <display-name>Value</display-name>
+        <icon></icon>
+        <property-name>value</property-name>
+        <property-class>java.lang.Object</property-class>
+      </property>
+
+      <property>
+        <description>
+          Flag indicating whether or not any required conversion or validation
+          on this component value has been performed successfully.
+        </description>
+        <display-name>Valid Flag</display-name>
+        <icon></icon>
+        <property-name>valid</property-name>
+        <property-class>valid</property-class>
+        <property-extension>
+          <tag-attribute>false</tag-attribute>
+        </property-extension>
+      </property>
+

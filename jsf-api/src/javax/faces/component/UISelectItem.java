@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectItem.java,v 1.31 2004/01/21 19:23:16 craigmcc Exp $
+ * $Id: UISelectItem.java,v 1.32 2004/01/27 20:29:20 craigmcc Exp $
  */
 
 /*
@@ -77,6 +77,13 @@ public class UISelectItem extends UIComponentBase {
 
 
     // -------------------------------------------------------------- Properties
+
+
+    public String getFamily() {
+
+        return (COMPONENT_FAMILY);
+
+    }
 
 
     /**

@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTag.java,v 1.39 2004/01/26 20:49:01 craigmcc Exp $
+ * $Id: UIComponentTag.java,v 1.40 2004/01/27 20:29:59 craigmcc Exp $
  */
 
 /*

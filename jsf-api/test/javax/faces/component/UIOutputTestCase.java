@@ -1,5 +1,5 @@
 /*
- * $Id: UIOutputTestCase.java,v 1.17 2004/01/08 21:21:20 eburns Exp $
+ * $Id: UIOutputTestCase.java,v 1.18 2004/01/27 20:30:09 craigmcc Exp $
  */
 
 /*
@@ -53,8 +53,9 @@ public class UIOutputTestCase extends ValueHolderTestCaseBase {
     public void setUp() {
         super.setUp();
         component = new UIOutput();
+        expectedFamily = UIOutput.COMPONENT_FAMILY;
         expectedId = null;
-        expectedRendererType = "Text";
+        expectedRendererType = "javax.faces.Text";
     }
 
 

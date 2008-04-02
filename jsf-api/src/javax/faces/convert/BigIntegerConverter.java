@@ -1,5 +1,5 @@
 /*
- * $Id: BigIntegerConverter.java,v 1.4 2004/01/21 19:23:24 craigmcc Exp $
+ * $Id: BigIntegerConverter.java,v 1.5 2004/01/27 20:29:35 craigmcc Exp $
  */
 
 /*

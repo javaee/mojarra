@@ -1,5 +1,5 @@
 /*
- * $Id: UIInputTestCase.java,v 1.30 2004/01/16 17:51:11 horwat Exp $
+ * $Id: UIInputTestCase.java,v 1.31 2004/01/27 20:30:08 craigmcc Exp $
  */
 
 /*
@@ -57,7 +57,8 @@ public class UIInputTestCase extends UIOutputTestCase {
     public void setUp() {
         super.setUp();
         component = new UIInput();
-        expectedRendererType = "Text";
+        expectedFamily = UIInput.COMPONENT_FAMILY;
+        expectedRendererType = "javax.faces.Text";
     }
 
     

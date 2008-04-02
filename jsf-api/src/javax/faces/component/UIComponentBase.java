@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.94 2004/01/20 03:22:21 eburns Exp $
+ * $Id: UIComponentBase.java,v 1.95 2004/01/27 20:29:16 craigmcc Exp $
  */
 
 /*
@@ -1389,7 +1389,7 @@ public abstract class UIComponentBase extends UIComponent {
                 FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
             RenderKit renderKit = rkFactory.getRenderKit
                 (context, context.getViewRoot().getRenderKitId());
-            return (renderKit.getRenderer(rendererType));
+            return (renderKit.getRenderer(getFamily(), rendererType));
         } else {
             return (null);
         }

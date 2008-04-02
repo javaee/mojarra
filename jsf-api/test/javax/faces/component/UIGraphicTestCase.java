@@ -1,5 +1,5 @@
 /*
- * $Id: UIGraphicTestCase.java,v 1.16 2004/01/08 21:21:20 eburns Exp $
+ * $Id: UIGraphicTestCase.java,v 1.17 2004/01/27 20:30:08 craigmcc Exp $
  */
 
 /*
@@ -44,8 +44,9 @@ public class UIGraphicTestCase extends UIComponentBaseTestCase {
     public void setUp() {
         super.setUp();
         component = new UIGraphic();
+        expectedFamily = UIGraphic.COMPONENT_FAMILY;
         expectedId = null;
-        expectedRendererType = "Image";
+        expectedRendererType = "javax.faces.Image";
     }
 
 
@@ -81,16 +82,16 @@ public class UIGraphicTestCase extends UIComponentBaseTestCase {
         component.getAttributes().put("value", null);
         assertNull(graphic.getValue());
 
-        assertEquals(graphic.getURL(),
-                     (String) graphic.getAttributes().get("URL"));
-        graphic.setURL("foo");
-        assertEquals("foo", (String) graphic.getAttributes().get("URL"));
-        graphic.setURL(null);
-        assertNull((String) graphic.getAttributes().get("URL"));
-        graphic.getAttributes().put("URL", "bar");
-        assertEquals("bar", graphic.getURL());
-        graphic.getAttributes().put("URL", null);
-        assertNull(graphic.getURL());
+        assertEquals(graphic.getUrl(),
+                     (String) graphic.getAttributes().get("url"));
+        graphic.setUrl("foo");
+        assertEquals("foo", (String) graphic.getAttributes().get("url"));
+        graphic.setUrl(null);
+        assertNull((String) graphic.getAttributes().get("url"));
+        graphic.getAttributes().put("url", "bar");
+        assertEquals("bar", graphic.getUrl());
+        graphic.getAttributes().put("url", null);
+        assertNull(graphic.getUrl());
 
     }
 
@@ -106,7 +107,7 @@ public class UIGraphicTestCase extends UIComponentBaseTestCase {
         UIGraphic graphic = (UIGraphic) component;
 
         assertNull("no value", graphic.getValue());
-        assertNull("no url", graphic.getURL());
+        assertNull("no url", graphic.getUrl());
 
     }
 
@@ -133,15 +134,15 @@ public class UIGraphicTestCase extends UIComponentBaseTestCase {
         graphic.setValue(null);
         assertNull("erased value", graphic.getValue());
 
-        // Test transparency between "value" and "Url" properties
-        graphic.setURL("foo");
+        // Test transparency between "value" and "url" properties
+        graphic.setUrl("foo");
         assertEquals("foo", (String) graphic.getValue());
-        graphic.setURL(null);
+        graphic.setUrl(null);
         assertNull(graphic.getValue());
         graphic.setValue("bar");
-        assertEquals("bar", graphic.getURL());
+        assertEquals("bar", graphic.getUrl());
         graphic.setValue(null);
-        assertNull(graphic.getURL());
+        assertNull(graphic.getUrl());
 
     }
 

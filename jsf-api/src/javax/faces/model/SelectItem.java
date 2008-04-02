@@ -1,5 +1,5 @@
 /*
- * $Id: SelectItem.java,v 1.4 2004/01/15 06:03:36 eburns Exp $
+ * $Id: SelectItem.java,v 1.5 2004/01/27 20:29:49 craigmcc Exp $
  */
 
 /*

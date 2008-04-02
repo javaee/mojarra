@@ -1,5 +1,5 @@
 /*
- * $Id: DoubleRangeValidator.java,v 1.35 2004/01/21 19:23:31 craigmcc Exp $
+ * $Id: DoubleRangeValidator.java,v 1.36 2004/01/27 20:29:55 craigmcc Exp $
  */
 
 /*

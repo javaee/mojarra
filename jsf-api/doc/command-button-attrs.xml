@@ -1,0 +1,69 @@
+<?xml encoding='UTF-8'?>
+
+<!--
+ Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+-->
+
+
+<!-- ========== Command+Button Attributes ================================== -->
+
+
+<!-- template
+
+      <attribute>
+        <description>
+        </description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name></attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+-->
+
+    <attribute>
+      <description>
+        Alternate textual description of the
+        element rendered by this component.
+      </description>
+      <display-name>Alternate Text</display-name>
+      <icon></icon>
+      <attribute-name>alt</attribute-name>
+      <attribute-class>java.lang.String</attribute-class>
+      <attribute-extension>
+        <pass-through>true</pass-through>
+      </attribute-extension>
+    </attribute>
+
+    <attribute>
+      <description>
+        Absolute or relative URL of the image
+        to be displayed for this button.  If
+        specified, this "input" element will be
+        of type "image".  Otherwise, it will be
+        of the type specified by the "type"
+        property with a label specified by the
+        "value" property.
+      </description>
+      <display-name>Image URL</display-name>
+      <icon></icon>
+      <attribute-name>image</attribute-name>
+      <attribute-class>java.lang.String</attribute-class>
+    </attribute>
+
+    <attribute>
+      <description>
+         Type of button to create.  Valid values are "submit" and
+         "reset".  If not specified, or not a valid value, the default
+         value is "submit".
+      </description>
+      <display-name>Button Type</display-name>
+      <icon></icon>
+      <attribute-name>type</attribute-name>
+      <attribute-class>java.lang.String</attribute-class>
+      <attribute-extension>
+        <default-value>"submit"</default-value>
+      </attribute-extension>
+    </attribute>
+

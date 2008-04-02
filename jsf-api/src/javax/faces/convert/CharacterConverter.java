@@ -1,5 +1,5 @@
 /*
- * $Id: CharacterConverter.java,v 1.8 2004/01/21 19:23:25 craigmcc Exp $
+ * $Id: CharacterConverter.java,v 1.9 2004/01/27 20:29:36 craigmcc Exp $
  */
 
 /*

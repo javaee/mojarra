@@ -1,0 +1,45 @@
+<?xml encoding='UTF-8'?>
+
+<!--
+ Copyright 2003-2004 Sun Microsystems, Inc. All rights reserved.
+ SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+-->
+
+<!-- ========== UIParameter Properties ===================================== -->
+
+
+<!-- template
+
+      <property>
+        <description>
+        </description>
+        <display-name></display-name>
+        <icon></icon>
+        <property-name></property-name>
+        <property-class>java.lang.String</property-class>
+      </property>
+
+-->
+
+      &uicomponent-props;
+
+      <property>
+        <description>
+          Name of the parameter associated with this component.
+        </description>
+        <display-name>Property Name</display-name>
+        <icon></icon>
+        <property-name>name</property-name>
+        <property-class>java.lang.String</property-class>
+      </property>
+
+      <property>
+        <description>
+          Value of the parameter associated with this component.
+        </description>
+        <display-name>Property Value</display-name>
+        <icon></icon>
+        <property-name>value</property-name>
+        <property-class>java.lang.Object</property-class>
+      </property>
+

@@ -1,5 +1,5 @@
 /*
- * $Id: MockObjectsTestCase.java,v 1.3 2004/01/20 04:51:37 eburns Exp $
+ * $Id: MockObjectsTestCase.java,v 1.4 2004/01/27 20:30:21 craigmcc Exp $
  */
 
 /*

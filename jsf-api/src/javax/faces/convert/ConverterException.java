@@ -1,5 +1,5 @@
 /*
- * $Id: ConverterException.java,v 1.5 2004/01/06 14:52:15 rkitain Exp $
+ * $Id: ConverterException.java,v 1.6 2004/01/27 20:29:36 craigmcc Exp $
  */
 
 /*

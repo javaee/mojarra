@@ -1,0 +1,107 @@
+<?xml encoding='UTF-8'?>
+
+<!--
+ Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+-->
+
+
+<!-- ========== Graphic+Image Properties =================================== -->
+
+
+<!-- template
+
+      <property>
+        <description>
+        </description>
+        <display-name></display-name>
+        <icon></icon>
+        <property-name></property-name>
+        <property-class>java.lang.String</property-class>
+      </property>
+
+-->
+
+    <property>
+      <description>
+        Alternate textual description of the
+        element rendered by this component.
+      </description>
+      <display-name>Alternate Text</display-name>
+      <icon></icon>
+      <property-name>alt</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+      </property-extension>
+    </property>
+
+    <property>
+      <description>
+        Override for the height of this image.
+      </description>
+      <display-name>Image Height</display-name>
+      <icon></icon>
+      <property-name>height</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+      </property-extension>
+    </property>
+
+    <property>
+      <description>
+        Flag indicating that this image is to be
+        used as a server side image map.  Such an image
+        must be enclosed within a hyperlink ("a").
+      </description>
+      <display-name>Image Map Flag</display-name>
+      <icon></icon>
+      <property-name>ismap</property-name>
+      <property-class>boolean</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+      </property-extension>
+    </property>
+
+    <property>
+      <description>
+        URI to a long description of the image
+        represented by this element.
+      </description>
+      <display-name>Long Description</display-name>
+      <icon></icon>
+      <property-name>longdesc</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+      </property-extension>
+    </property>
+
+    <property>
+      <description>
+        The name of a client side image map (an HTML "map"
+        element) for which this element provides the image.
+      </description>
+      <display-name>Use Image Map</display-name>
+      <icon></icon>
+      <property-name>usemap</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+      </property-extension>
+    </property>
+
+    <property>
+      <description>
+        Override for the width of this image.
+      </description>
+      <display-name>Image Width</display-name>
+      <icon></icon>
+      <property-name>width</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+      </property-extension>
+    </property>
+

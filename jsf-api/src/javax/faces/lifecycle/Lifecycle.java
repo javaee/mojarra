@@ -1,5 +1,5 @@
 /*
- * $Id: Lifecycle.java,v 1.26 2004/01/16 21:30:14 craigmcc Exp $
+ * $Id: Lifecycle.java,v 1.27 2004/01/27 20:29:46 craigmcc Exp $
  */
 
 /*

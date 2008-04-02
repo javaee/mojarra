@@ -1,5 +1,5 @@
 /*
- * $Id: UIParameter.java,v 1.23 2004/01/26 20:48:56 craigmcc Exp $
+ * $Id: UIParameter.java,v 1.24 2004/01/27 20:29:19 craigmcc Exp $
  */
 
 /*
@@ -74,6 +74,13 @@ public class UIParameter extends UIComponentBase {
 
 
     // -------------------------------------------------------------- Properties
+
+
+    public String getFamily() {
+
+        return (COMPONENT_FAMILY);
+
+    }
 
 
     /**

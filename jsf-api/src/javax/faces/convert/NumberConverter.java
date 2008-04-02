@@ -1,5 +1,5 @@
 /*
- * $Id: NumberConverter.java,v 1.16 2004/01/21 19:23:27 craigmcc Exp $
+ * $Id: NumberConverter.java,v 1.17 2004/01/27 20:29:37 craigmcc Exp $
  */
 
 /*

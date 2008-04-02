@@ -1,5 +1,5 @@
 /*
- * $Id: StateManager.java,v 1.30 2004/01/21 03:50:25 eburns Exp $
+ * $Id: StateManager.java,v 1.31 2004/01/27 20:29:11 craigmcc Exp $
  */
 
 /*

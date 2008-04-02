@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectBoolean.java,v 1.31 2004/01/21 19:23:16 craigmcc Exp $
+ * $Id: UISelectBoolean.java,v 1.32 2004/01/27 20:29:20 craigmcc Exp $
  */
 
 /*
@@ -48,12 +48,19 @@ public class UISelectBoolean extends UIInput {
     public UISelectBoolean() {
 
         super();
-        setRendererType("Checkbox");
+        setRendererType("javax.faces.Checkbox");
 
     }
 
 
     // -------------------------------------------------------------- Properties
+
+
+    public String getFamily() {
+
+        return (COMPONENT_FAMILY);
+
+    }
 
 
     /**

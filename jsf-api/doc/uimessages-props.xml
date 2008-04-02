@@ -1,0 +1,68 @@
+<?xml encoding='UTF-8'?>
+
+<!--
+ Copyright 2003-2004 Sun Microsystems, Inc. All rights reserved.
+ SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+-->
+
+<!-- ========== UIMessages Properties ====================================== -->
+
+
+<!-- template
+
+      <property>
+        <description>
+        </description>
+        <display-name></display-name>
+        <icon></icon>
+        <property-name></property-name>
+        <property-class>java.lang.String</property-class>
+      </property>
+
+-->
+
+      &uicomponent-props;
+
+      <property>
+        <description>
+          Flag indicating that only global messages (that is, messages not
+          associated with any client identifier) are to be displayed.
+          Default value is "false".
+        </description>
+        <display-name>Global Only</display-name>
+        <icon></icon>
+        <property-name>globalOnly</property-name>
+        <property-class>boolean</property-class>
+        <property-extension>
+          <default-value>false</default-value>
+        </property-extension>
+      </property>
+
+      <property>
+        <description>
+          Flag indicating whether the summary portion of displayed messages
+          should be included.  Default value is "false".
+        </description>
+        <display-name>Show Detail</display-name>
+        <icon></icon>
+        <property-name>showDetail</property-name>
+        <property-class>boolean</property-class>
+        <property-extension>
+          <default-value>false</default-value>
+        </property-extension>
+      </property>
+
+      <property>
+        <description>
+          Flag indicating whether the summary portion of displayed messages
+          should be included.  Default value is "true".
+        </description>
+        <display-name>Show Summary</display-name>
+        <icon></icon>
+        <property-name>showSummary</property-name>
+        <property-class>boolean</property-class>
+        <property-extension>
+          <default-value>true</default-value>
+        </property-extension>
+      </property>
+

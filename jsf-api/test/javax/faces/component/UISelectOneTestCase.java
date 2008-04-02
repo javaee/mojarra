@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectOneTestCase.java,v 1.17 2004/01/08 21:21:21 eburns Exp $
+ * $Id: UISelectOneTestCase.java,v 1.18 2004/01/27 20:30:10 craigmcc Exp $
  */
 
 /*
@@ -47,7 +47,8 @@ public class UISelectOneTestCase extends UIInputTestCase {
     public void setUp() {
         super.setUp();
         component = new UISelectOne();
-        expectedRendererType = "Menu";
+        expectedFamily = UISelectOne.COMPONENT_FAMILY;
+        expectedRendererType = "javax.faces.Menu";
     }
 
     

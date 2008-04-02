@@ -1,5 +1,5 @@
 /*
- * $Id: UIDataTestCase.java,v 1.35 2004/01/20 04:51:35 eburns Exp $
+ * $Id: UIDataTestCase.java,v 1.36 2004/01/27 20:30:07 craigmcc Exp $
  */
 
 /*
@@ -69,8 +69,9 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
     public void setUp() {
         super.setUp();
         component = new UIData();
+        expectedFamily = UIData.COMPONENT_FAMILY;
         expectedId = null;
-        expectedRendererType = "Table";
+        expectedRendererType = "javax.faces.Table";
         expectedRendersChildren = true;
         beans = new ArrayList();
         for (int i = 0; i < 10; i++) {
@@ -1171,9 +1172,14 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
         RenderKit renderKit =
             renderKitFactory.getRenderKit(facesContext,
 					  RenderKitFactory.HTML_BASIC_RENDER_KIT);
-        renderKit.addRenderer("Button", new ButtonRenderer());
-        renderKit.addRenderer("Table", new TableRenderer());
-        renderKit.addRenderer("Text", new TextRenderer());
+        renderKit.addRenderer(UICommand.COMPONENT_FAMILY, 
+			      "javax.faces.Button", new ButtonRenderer());
+        renderKit.addRenderer(UIData.COMPONENT_FAMILY, 
+			      "javax.faces.Table", new TableRenderer());
+        renderKit.addRenderer(UIInput.COMPONENT_FAMILY, 
+			      "javax.faces.Text", new TextRenderer());
+        renderKit.addRenderer(UIOutput.COMPONENT_FAMILY, 
+			      "javax.faces.Text", new TextRenderer());
 
     }
 

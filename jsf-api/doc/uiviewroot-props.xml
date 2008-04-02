@@ -1,0 +1,64 @@
+<?xml encoding='UTF-8'?>
+
+<!--
+ Copyright 2003-2004 Sun Microsystems, Inc. All rights reserved.
+ SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+-->
+
+<!-- ========== UIViewRoot Properties ====================================== -->
+
+
+<!-- template
+
+      <property>
+        <description>
+        </description>
+        <display-name></display-name>
+        <icon></icon>
+        <property-name></property-name>
+        <property-class>java.lang.String</property-class>
+      </property>
+
+-->
+
+      &uicomponent-props;
+
+      <property>
+        <description>
+          Locale to be used in localizing the rendered output of this view.
+        </description>
+        <display-name>Locale</display-name>
+        <icon></icon>
+        <property-name>locale</property-name>
+        <property-class>java.util.Locale</property-class>
+        <property-extension>
+          <tag-attribute>false</tag-attribute>
+        </property-extension>
+      </property>
+
+      <property>
+        <description>
+          Identifier of the RenderKit being used to display this view.
+        </description>
+        <display-name>Render Kit Id</display-name>
+        <icon></icon>
+        <property-name>renderKitId</property-name>
+        <property-class>java.lang.String</property-class>
+        <property-extension>
+          <tag-attribute>false</tag-attribute>
+        </property-extension>
+      </property>
+
+      <property>
+        <description>
+          Identifier of the view represented by this component tree.
+        </description>
+        <display-name>View Id</display-name>
+        <icon></icon>
+        <property-name>viewId</property-name>
+        <property-class>java.lang.String</property-class>
+        <property-extension>
+          <tag-attribute>false</tag-attribute>
+        </property-extension>
+      </property>
+

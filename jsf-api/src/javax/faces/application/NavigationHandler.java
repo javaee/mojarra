@@ -1,5 +1,5 @@
 /*
- * $Id: NavigationHandler.java,v 1.9 2004/01/26 20:48:52 craigmcc Exp $
+ * $Id: NavigationHandler.java,v 1.10 2004/01/27 20:29:10 craigmcc Exp $
  */
 
 /*

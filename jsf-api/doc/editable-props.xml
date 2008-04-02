@@ -1,0 +1,90 @@
+<?xml encoding='UTF-8'?>
+
+<!--
+ Copyright 2003-2004 Sun Microsystems, Inc. All rights reserved.
+ SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+-->
+
+<!-- ========== EditableValueHolder Properties ============================= -->
+
+
+<!-- template
+
+      <property>
+        <description>
+        </description>
+        <display-name></display-name>
+        <icon></icon>
+        <property-name></property-name>
+        <property-class>java.lang.String</property-class>
+      </property>
+
+-->
+
+      <property>
+        <description>
+          Flag indicating whether the "localValue" property
+          of this component has been set.  This property is
+          reset automatically when the "value" propertyis set.
+        </description>
+        <display-name>Local Value Set</display-name>
+        <icon></icon>
+        <property-name>localValueSet</property-name>
+        <property-class>boolean</property-class>
+        <property-extension>
+          <tag-attribute>false</tag-attribute>
+        </property-extension>
+      </property>
+
+      <property>
+        <description>
+          Flag indicating that the user is required to provide a submitted
+          value for this input component.
+        </description>
+        <display-name>Required Flag</display-name>
+        <icon></icon>
+        <property-name>required</property-name>
+        <property-class>boolean</property-class>
+      </property>
+
+      <property>
+        <description>
+          The value submitted for this input component by the user, prior to
+          any required conversion or validation.
+        </description>
+        <display-name>Submitted Value</display-name>
+        <icon></icon>
+        <property-name>submittedValue</property-name>
+        <property-class>java.lang.Object</property-class>
+        <property-extension>
+          <tag-attribute>false</tag-attribute>
+        </property-extension>
+      </property>
+
+      <property>
+        <description>
+          MethodBinding representing a validator method that will be called
+          during Process Validations to perform correctness checks on the
+          value of this component.  The expression must evaluate to a public
+          method that takes FacesContext, UIComponent, and Object parameters,
+          with a return type of void.
+        </description>
+        <display-name>Validator</display-name>
+        <icon></icon>
+        <property-name>validator</property-name>
+        <property-class>javax.faces.el.MethodBinding</property-class>
+      </property>
+
+      <property>
+        <description>
+          MethodBinding representing a value change listener method that will be
+          notified when a new value has been set for this input component.  The
+          expression must evaluate to a public method that takes a
+          ValueChangeEvent parameter, with a return type of void.
+        </description>
+        <display-name>Value Change Listener</display-name>
+        <icon></icon>
+        <property-name>valueChangeListener</property-name>
+        <property-class>javax.faces.e.MethodBinding</property-class>
+      </property>
+

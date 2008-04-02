@@ -5,94 +5,160 @@
  SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 -->
 
+
+<!-- ========== Event Properties =========================================== -->
+
+
 <!-- template
 
       <property>
-        <description></description>
+        <description>
+        </description>
         <display-name></display-name>
         <icon></icon>
         <property-name></property-name>
         <property-class>java.lang.String</property-class>
       </property>
+
 -->
 
       <property>
-        <description>Javascript code that is executed when a pointer button was clicked</description>
-        <display-name></display-name>
+        <description>
+          Javascript code executed when a pointer button is
+          clicked over this element.
+        </description>
+        <display-name>Button Click Script</display-name>
         <icon></icon>
         <property-name>onclick</property-name>
         <property-class>java.lang.String</property-class>
+        <property-extension>
+          <pass-through>true</pass-through>
+        </property-extension>
       </property>
 
       <property>
-        <description>Javascript code that is executed when a pointer button was double clicked</description>
-        <display-name></display-name>
+        <description>
+          Javascript code executed when a pointer button is
+          double clicked over this element.
+        </description>
+        <display-name>Double Click Script</display-name>
         <icon></icon>
         <property-name>ondblclick</property-name>
         <property-class>java.lang.String</property-class>
+        <property-extension>
+          <pass-through>true</pass-through>
+        </property-extension>
       </property>
 
       <property>
-        <description>Javascript code that is executed when a pointer button is pressed down on this control.</description>
-        <display-name></display-name>
+        <description>
+          Javascript code executed when a pointer button is
+          pressed down over this element.
+        </description>
+        <display-name>Mouse Down Script</display-name>
         <icon></icon>
         <property-name>onmousedown</property-name>
         <property-class>java.lang.String</property-class>
+        <property-extension>
+          <pass-through>true</pass-through>
+        </property-extension>
       </property>
 
       <property>
-        <description>Javascript code that is executed when a pointer button is released on this control.</description>
-        <display-name></display-name>
+        <description>
+          Javascript code executed when a pointer button is
+          released over this element.
+        </description>
+        <display-name>Mouse Up Script</display-name>
         <icon></icon>
         <property-name>onmouseup</property-name>
         <property-class>java.lang.String</property-class>
+        <property-extension>
+          <pass-through>true</pass-through>
+        </property-extension>
       </property>
 
       <property>
-        <description>Javascript code that is executed when a pointer button is move over this control.</description>
-        <display-name></display-name>
+        <description>
+          Javascript code executed when a pointer button is
+          moved onto this element.
+        </description>
+        <display-name>Mouse Over Script</display-name>
         <icon></icon>
         <property-name>onmouseover</property-name>
         <property-class>java.lang.String</property-class>
+        <property-extension>
+          <pass-through>true</pass-through>
+        </property-extension>
       </property>
 
       <property>
-        <description>Javascript code that is executed when a pointer button is moved within this control.</description>
-        <display-name></display-name>
+        <description>
+          Javascript code executed when a pointer button is
+          moved within this element.
+        </description>
+        <display-name>Mouse Move Script</display-name>
         <icon></icon>
         <property-name>onmousemove</property-name>
         <property-class>java.lang.String</property-class>
+        <property-extension>
+          <pass-through>true</pass-through>
+        </property-extension>
       </property>
 
       <property>
-        <description>Javascript code that is executed when a pointer button is moved away from this control.</description>
-        <display-name></display-name>
+        <description>
+          Javascript code executed when a pointer button is
+          moved away from this element.
+        </description>
+        <display-name>Mouse Out Script</display-name>
         <icon></icon>
         <property-name>onmouseout</property-name>
         <property-class>java.lang.String</property-class>
+        <property-extension>
+          <pass-through>true</pass-through>
+        </property-extension>
       </property>
 
       <property>
-        <description>Javascript code that is executed when a key was pressed and released</description>
-        <display-name></display-name>
+        <description>
+          Javascript code executed when a key is
+          pressed and released over this element.
+        </description>
+        <display-name>Key Press Script</display-name>
         <icon></icon>
         <property-name>onkeypress</property-name>
         <property-class>java.lang.String</property-class>
+        <property-extension>
+          <pass-through>true</pass-through>
+        </property-extension>
       </property>
 
       <property>
-        <description>Javascript code that is executed when a key was pressed down</description>
-        <display-name></display-name>
+        <description>
+          Javascript code executed when a key is
+          pressed down over this element.
+        </description>
+        <display-name>Key Down Script</display-name>
         <icon></icon>
         <property-name>onkeydown</property-name>
         <property-class>java.lang.String</property-class>
+        <property-extension>
+          <pass-through>true</pass-through>
+        </property-extension>
       </property>
 
       <property>
-        <description>Javascript code that is executed when a key was released</description>
-        <display-name></display-name>
+        <description>
+          Javascript code executed when a key is
+          released over this element.
+        </description>
+        <display-name>Key Up Script</display-name>
         <icon></icon>
         <property-name>onkeyup</property-name>
         <property-class>java.lang.String</property-class>
+        <property-extension>
+          <pass-through>true</pass-through>
+        </property-extension>
       </property>
 

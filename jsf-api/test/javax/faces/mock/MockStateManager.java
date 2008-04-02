@@ -1,5 +1,5 @@
 /*
- * $Id: MockStateManager.java,v 1.3 2004/01/21 03:50:29 eburns Exp $
+ * $Id: MockStateManager.java,v 1.4 2004/01/27 20:30:21 craigmcc Exp $
  */
 
 /*

@@ -1,5 +1,5 @@
 /*
- * $Id: UIViewRoot.java,v 1.23 2004/01/22 22:19:43 craigmcc Exp $
+ * $Id: UIViewRoot.java,v 1.24 2004/01/27 20:29:21 craigmcc Exp $
  */
 
 /*
@@ -71,9 +71,21 @@ public class UIViewRoot extends UIComponentBase {
 
 
     // ------------------------------------------------------ Instance Variables
+
     private int lastId = 0;
 
+
     // -------------------------------------------------------------- Properties
+
+
+    // -------------------------------------------------------------- Properties
+
+
+    public String getFamily() {
+
+        return (COMPONENT_FAMILY);
+
+    }
 
 
     /**

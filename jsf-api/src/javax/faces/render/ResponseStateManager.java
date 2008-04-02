@@ -1,5 +1,5 @@
 /*
- * $Id: ResponseStateManager.java,v 1.10 2004/01/15 23:13:27 eburns Exp $
+ * $Id: ResponseStateManager.java,v 1.11 2004/01/27 20:29:53 craigmcc Exp $
  */
 
 /*

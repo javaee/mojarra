@@ -1,0 +1,35 @@
+<?xml encoding='UTF-8'?>
+
+<!--
+ Copyright 2003-2004 Sun Microsystems, Inc. All rights reserved.
+ SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+-->
+
+<!-- ========== UISelectItem Properties ==================================== -->
+
+
+<!-- template
+
+      <property>
+        <description>
+        </description>
+        <display-name></display-name>
+        <icon></icon>
+        <property-name></property-name>
+        <property-class>java.lang.String</property-class>
+      </property>
+
+-->
+
+      &uicomponent-props;
+
+      <property>
+        <description>
+          The current value of this component.
+        </description>
+        <display-name>Value</display-name>
+        <icon></icon>
+        <property-name>value</property-name>
+        <property-class>java.lang.Object</property-class>
+      </property>
+

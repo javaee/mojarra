@@ -1,5 +1,5 @@
 /*
- * $Id: UIParameterTestCase.java,v 1.15 2004/01/08 21:21:20 eburns Exp $
+ * $Id: UIParameterTestCase.java,v 1.16 2004/01/27 20:30:09 craigmcc Exp $
  */
 
 /*
@@ -46,6 +46,7 @@ public class UIParameterTestCase extends UIComponentBaseTestCase {
     public void setUp() {
         super.setUp();
         component = new UIParameter();
+        expectedFamily = UIParameter.COMPONENT_FAMILY;
         expectedId = null;
         expectedRendererType = null;
     }

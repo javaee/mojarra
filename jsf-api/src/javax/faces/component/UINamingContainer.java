@@ -1,5 +1,5 @@
 /*
- * $Id: UINamingContainer.java,v 1.13 2004/01/21 19:23:15 craigmcc Exp $
+ * $Id: UINamingContainer.java,v 1.14 2004/01/27 20:29:19 craigmcc Exp $
  */
 
 /*
@@ -50,4 +50,15 @@ public class UINamingContainer extends UIComponentBase
         setRendererType(null);
 
     }
+
+    // -------------------------------------------------------------- Properties
+
+
+    public String getFamily() {
+
+        return (COMPONENT_FAMILY);
+
+    }
+
+
 }

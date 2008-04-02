@@ -1,5 +1,5 @@
 /*
- * $Id: UICommandTestCase.java,v 1.26 2004/01/20 04:51:34 eburns Exp $
+ * $Id: UICommandTestCase.java,v 1.27 2004/01/27 20:30:05 craigmcc Exp $
  */
 
 /*
@@ -62,8 +62,9 @@ public class UICommandTestCase extends UIComponentBaseTestCase {
     public void setUp() {
         super.setUp();
         component = new UICommand();
+        expectedFamily = UICommand.COMPONENT_FAMILY;
         expectedId = null;
-        expectedRendererType = "Button";
+        expectedRendererType = "javax.faces.Button";
     }
 
     
@@ -90,7 +91,8 @@ public class UICommandTestCase extends UIComponentBaseTestCase {
         RenderKit renderKit =
             renderKitFactory.getRenderKit(facesContext, 
 					  RenderKitFactory.HTML_BASIC_RENDER_KIT);
-        renderKit.addRenderer("Button", new ButtonRenderer());
+        renderKit.addRenderer(UICommand.COMPONENT_FAMILY, 
+			      "javax.faces.Button", new ButtonRenderer());
         UIViewRoot root = new UIViewRoot();
         root.getChildren().add(component);
         UICommand command = (UICommand) component;

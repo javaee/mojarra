@@ -1,0 +1,63 @@
+<?xml encoding='UTF-8'?>
+
+<!--
+ Copyright 2003-2004 Sun Microsystems, Inc. All rights reserved.
+ SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+-->
+
+<!-- ========== ActionSource Properties ==================================== -->
+
+
+<!-- template
+
+      <property>
+        <description>
+        </description>
+        <display-name></display-name>
+        <icon></icon>
+        <property-name></property-name>
+        <property-class>java.lang.String</property-class>
+      </property>
+
+-->
+
+      <property>
+        <description>
+          MethodBinding representing the application action to invoke when
+          this component is activated by the user.  The expression must
+          evaluate to a public method that takes no parameters, and returns
+          a String (the logical outcome) which is passed to the
+          NavigationHandler for this application.
+        </description>
+        <display-name>Application Action</display-name>
+        <icon></icon>
+        <property-name>action</property-name>
+        <property-class>javax.faces.el.MethodBinding</property-class>
+      </property>
+
+      <property>
+        <description>
+          MethodBinding representing an action listener method that will be
+          notified when this component is activated by the user.  The
+          expression must evaluate to a public method that takes an
+          ActionEvent parameter, with a return type of void.
+        </description>
+        <display-name>Action Listener</display-name>
+        <icon></icon>
+        <property-name>actionListener</property-name>
+        <property-class>javax.faces.el.MethodBinding</property-class>
+      </property>
+
+      <property>
+        <description>
+          Flag indicating that, if this component is activated by the user,
+          notifications should be delivered to interested listeners and actions
+          immediately (that is, during Apply Request Values phase) rather than
+          waiting until Invoke Application phase.
+        </description>
+        <display-name>Immediate Action</display-name>
+        <icon></icon>
+        <property-name>immediate</property-name>
+        <property-class>boolean</property-class>
+      </property>
+

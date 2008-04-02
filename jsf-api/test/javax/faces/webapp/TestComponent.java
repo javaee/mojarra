@@ -1,5 +1,5 @@
 /*
- * $Id: TestComponent.java,v 1.5 2003/12/17 15:11:32 rkitain Exp $
+ * $Id: TestComponent.java,v 1.6 2004/01/27 20:30:27 craigmcc Exp $
  */
 
 /*
@@ -29,6 +29,11 @@ public class TestComponent extends UIComponentBase {
     public TestComponent(String id) {
         super();
         setId(id);
+    }
+
+
+    public String getFamily() {
+        return ("Test");
     }
 
 

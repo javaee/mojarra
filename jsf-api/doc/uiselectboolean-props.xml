@@ -1,0 +1,39 @@
+<?xml encoding='UTF-8'?>
+
+<!--
+ Copyright 2003-2004 Sun Microsystems, Inc. All rights reserved.
+ SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+-->
+
+<!-- ========== UISelectBoolean Properties ================================= -->
+
+
+<!-- template
+
+      <property>
+        <description>
+        </description>
+        <display-name></display-name>
+        <icon></icon>
+        <property-name></property-name>
+        <property-class>java.lang.String</property-class>
+      </property>
+
+-->
+
+      &uiinput-props;
+
+      <property>
+        <description>
+          Flag indicating whether the user has selected this component.
+          This is an alias for the "value" property.
+        </description>
+        <display-name>Selected Flag</display-name>
+        <icon></icon>
+        <property-name>selected</property-name>
+        <property-class>boolean</property-class>
+        <property-extension>
+          <tag-attribute>false</tag-attribute>
+        </property-extension>
+      </property>
+

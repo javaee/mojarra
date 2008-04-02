@@ -1,5 +1,5 @@
 /*
- * $Id: UIPanelTestCase.java,v 1.15 2004/01/14 17:12:56 eburns Exp $
+ * $Id: UIPanelTestCase.java,v 1.16 2004/01/27 20:30:09 craigmcc Exp $
  */
 
 /*
@@ -46,6 +46,7 @@ public class UIPanelTestCase extends UIComponentBaseTestCase {
     public void setUp() {
         super.setUp();
         component = new UIPanel();
+        expectedFamily = UIPanel.COMPONENT_FAMILY;
         expectedId = null;
         expectedRendererType = null;
         expectedRendersChildren = false;

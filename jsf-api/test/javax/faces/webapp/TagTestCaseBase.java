@@ -1,5 +1,5 @@
 /*
- * $Id: TagTestCaseBase.java,v 1.3 2004/01/20 04:51:38 eburns Exp $
+ * $Id: TagTestCaseBase.java,v 1.4 2004/01/27 20:30:27 craigmcc Exp $
  */
 
 /*

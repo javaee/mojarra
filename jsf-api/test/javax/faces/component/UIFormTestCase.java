@@ -1,5 +1,5 @@
 /*
- * $Id: UIFormTestCase.java,v 1.7 2003/09/25 07:46:08 craigmcc Exp $
+ * $Id: UIFormTestCase.java,v 1.8 2004/01/27 20:30:08 craigmcc Exp $
  */
 
 /*
@@ -46,8 +46,9 @@ public class UIFormTestCase extends UIComponentBaseTestCase {
     public void setUp() {
         super.setUp();
         component = new UIForm();
+        expectedFamily = UIForm.COMPONENT_FAMILY;
         expectedId = null;
-        expectedRendererType = "Form";
+        expectedRendererType = "javax.faces.Form";
     }
 
 

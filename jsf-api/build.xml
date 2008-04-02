@@ -51,6 +51,7 @@
   <property name="build.dir"        value="build"/>
   <property name="build.classes"    value="${build.dir}/classes"/>
   <property name="build.lib"        value="${build.dir}/lib"/>
+  <property name="build.temp"       value="${build.dir}/temp"/>
   <property name="build.test"       value="${build.dir}/test"/>
   <property name="build.generate"   value="${build.dir}/generate"/>
   <property name="build.javadocs"   value="${build.dir}/javadocs"/>
@@ -118,6 +119,39 @@
                file="${jsf-tools.dir}/build.xml"/>
   </target>
 
+  <target name="attributes"
+   description="Recreate attributes include files from property include files"
+       depends="prepare">
+
+    <!-- Copy just the properties files we wish to convert -->
+    <copy            todir="${doc.dir}"
+                 overwrite="true">
+      <mapper         type="glob"
+                      from="*-props.xml"
+                        to="*-attrs.xml"/>
+      <fileset         dir="${doc.dir}">
+        <include      name="*-props.xml"/>
+        <exclude      name="actionsource-props.xml"/>
+        <exclude      name="editable-props.xml"/>
+        <exclude      name="valueholder-props.xml"/>
+        <exclude      name="ui*-props.xml"/>
+      </fileset>
+    </copy>
+
+    <!-- Replace "property" with "attribute" in relevant cases -->
+    <replace           dir="${doc.dir}"
+                   summary="true">
+      <include        name="*-attrs.xml"/>
+      <replacefilter token="&lt;property"
+                     value="&lt;attribute"/>
+      <replacefilter token="&lt;/property"
+                     value="&lt;/attribute"/>
+      <replacefilter token="Properties"
+                     value="Attributes"/>
+    </replace>
+
+  </target>
+
   <target name="verify.tools.property" unless="jsf-tools">
 
 <fail>
@@ -175,7 +209,7 @@ jsf-api.jar.
 
     <ant dir="${jsf-tools.dir}" inheritall="false" target="clean.generated"/>
 
-    <ant dir="${jsf-tools.dir}" inheritall="false" target="generate"/>
+    <ant dir="${jsf-tools.dir}" inheritall="false" target="generate.html"/>
 
     <copy todir="${build.generate}">
 

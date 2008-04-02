@@ -1,5 +1,5 @@
 /*
- * $Id: FacesMessage.java,v 1.7 2004/01/19 06:26:52 craigmcc Exp $
+ * $Id: FacesMessage.java,v 1.8 2004/01/27 20:29:10 craigmcc Exp $
  */
 
 /*

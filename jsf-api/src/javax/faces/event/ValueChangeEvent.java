@@ -1,5 +1,5 @@
 /*
- * $Id: ValueChangeEvent.java,v 1.3 2004/01/15 07:34:02 eburns Exp $
+ * $Id: ValueChangeEvent.java,v 1.4 2004/01/27 20:29:45 craigmcc Exp $
  */
 
 /*

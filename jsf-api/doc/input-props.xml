@@ -1,0 +1,82 @@
+<?xml encoding='UTF-8'?>
+
+<!--
+ Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+-->
+
+
+<!-- ========== Input Properties =========================================== -->
+
+
+<!-- template
+
+      <property>
+        <description>
+        </description>
+        <display-name></display-name>
+        <icon></icon>
+        <property-name></property-name>
+        <property-class>java.lang.String</property-class>
+      </property>
+
+-->
+
+      <property>
+        <description>
+          Flag indicating that this element must never
+          receive focus or be included in a subsequent
+          submit.
+        </description>
+        <display-name>Disabled Flag</display-name>
+        <icon></icon>
+        <property-name>disabled</property-name>
+        <property-class>boolean</property-class>
+        <property-extension>
+          <pass-through>true</pass-through>
+        </property-extension>
+      </property>
+
+      <property>
+        <description>
+          Javascript code executed when this element loses focus
+          and its value has been modified since gaining focus.
+        </description>
+        <display-name>Input Change Script</display-name>
+        <icon></icon>
+        <property-name>onchange</property-name>
+        <property-class>java.lang.String</property-class>
+        <property-extension>
+          <pass-through>true</pass-through>
+        </property-extension>
+      </property>
+
+      <property>
+        <description>
+          Javascript code executed when text within this
+          element is selected by the user.
+        </description>
+        <display-name>Text Select Script</display-name>
+        <icon></icon>
+        <property-name>onselect</property-name>
+        <property-class>java.lang.String</property-class>
+        <property-extension>
+          <pass-through>true</pass-through>
+        </property-extension>
+      </property>
+
+      <property>
+        <description>
+          Flag indicating that this component will prohibit
+          changes by the user.  The element may receive focus
+          unless it has also been disabled.
+        </description>
+        <display-name>Read Only Flag</display-name>
+        <icon></icon>
+        <property-name>readonly</property-name>
+        <property-class>boolean</property-class>
+        <property-extension>
+          <pass-through>true</pass-through>
+        </property-extension>
+      </property>
+

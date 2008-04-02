@@ -1,5 +1,5 @@
 /*
- * $Id: MockLifecycle.java,v 1.4 2004/01/16 21:30:16 craigmcc Exp $
+ * $Id: MockLifecycle.java,v 1.5 2004/01/27 20:30:20 craigmcc Exp $
  */
 
 /*

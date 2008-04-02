@@ -1,0 +1,110 @@
+<?xml encoding='UTF-8'?>
+
+<!--
+ Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+-->
+
+
+<!-- ========== Form+Form Attributes ======================================= -->
+
+
+<!-- template
+
+      <attribute>
+        <description>
+        </description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name></attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+-->
+
+    <attribute>
+      <description>
+        List of content types that a server processing this form
+        will handle correctly
+      </description>
+      <display-name>Content Type</display-name>
+      <icon></icon>
+      <attribute-name>accept</attribute-name>
+      <attribute-class>java.lang.String</attribute-class>
+      <attribute-extension>
+        <pass-through>true</pass-through>
+      </attribute-extension>
+    </attribute>
+
+    <attribute>
+      <description>
+        List of character encodings for input data
+        that are accepted by the server processing
+        this form.
+      </description>
+      <display-name>Character Set</display-name>
+      <icon></icon>
+      <attribute-name>acceptcharset</attribute-name>
+      <attribute-class>java.lang.String</attribute-class>
+      <attribute-extension>
+        <pass-through>true</pass-through>
+      </attribute-extension>
+    </attribute>
+
+    <attribute>
+      <description>
+        Content type used to submit the form to the server.  If not
+        specified, the default value is
+        "application/x-www-form-urlencoded".
+      </description>
+      <display-name>Encoding Type</display-name>
+      <icon></icon>
+      <attribute-name>enctype</attribute-name>
+      <attribute-class>java.lang.String</attribute-class>
+      <attribute-extension>
+        <default-value>"application/x-www-form-urlencoded"</default-value>
+        <pass-through>true</pass-through>
+      </attribute-extension>
+    </attribute>
+
+    <attribute>
+      <description>
+        Javascript code executed when this form is reset.
+      </description>
+      <display-name>Form Reset Script</display-name>
+      <icon></icon>
+      <attribute-name>onreset</attribute-name>
+      <attribute-class>java.lang.String</attribute-class>
+      <attribute-extension>
+        <pass-through>true</pass-through>
+      </attribute-extension>
+    </attribute>
+
+    <attribute>
+      <description>
+        Javascript code executed when this form is submitted.
+      </description>
+      <display-name>Form Submit Script</display-name>
+      <icon></icon>
+      <attribute-name>onsubmit</attribute-name>
+      <attribute-class>java.lang.String</attribute-class>
+      <attribute-extension>
+        <pass-through>true</pass-through>
+      </attribute-extension>
+    </attribute>
+
+    <attribute>
+      <description>
+        Name of a frame where the response
+        retrieved after this form submit is to
+        be displayed.
+      </description>
+      <display-name>Target Frame</display-name>
+      <icon></icon>
+      <attribute-name>target</attribute-name>
+      <attribute-class>java.lang.String</attribute-class>
+      <attribute-extension>
+        <pass-through>true</pass-through>
+      </attribute-extension>
+    </attribute>
+

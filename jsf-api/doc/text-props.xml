@@ -1,0 +1,66 @@
+<?xml encoding='UTF-8'?>
+
+<!--
+ Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+-->
+
+
+<!-- ========== Text Properties ============================================ -->
+
+
+<!-- template
+
+      <property>
+        <description>
+        </description>
+        <display-name></display-name>
+        <icon></icon>
+        <property-name></property-name>
+        <property-class>java.lang.String</property-class>
+      </property>
+
+-->
+
+      <property>
+        <description>
+          Alternate textual description of the
+          element rendered by this component.
+        </description>
+        <display-name>Alternate Text</display-name>
+        <icon></icon>
+        <property-name>alt</property-name>
+        <property-class>java.lang.String</property-class>
+        <property-extension>
+          <pass-through>true</pass-through>
+        </property-extension>
+      </property>
+
+      <property>
+        <description>
+          The maximum number of characters that may
+          be entered in this field.
+        </description>
+        <display-name>Maximum Length</display-name>
+        <icon></icon>
+        <property-name>maxlength</property-name>
+        <property-class>int</property-class>
+        <property-extension>
+          <pass-through>true</pass-through>
+        </property-extension>
+      </property>
+
+      <property>
+        <description>
+          The number of characters used to determine
+          the width of this field.
+        </description>
+        <display-name>Field Width</display-name>
+        <icon></icon>
+        <property-name>size</property-name>
+        <property-class>int</property-class>
+        <property-extension>
+          <pass-through>true</pass-through>
+        </property-extension>
+      </property>
+

@@ -1,5 +1,5 @@
 /*
- * $Id: UIMessage.java,v 1.10 2004/01/21 19:23:14 craigmcc Exp $
+ * $Id: UIMessage.java,v 1.11 2004/01/27 20:29:18 craigmcc Exp $
  */
 
 /*
@@ -49,7 +49,7 @@ public class UIMessage extends UIComponentBase {
     public UIMessage() {
 
         super();
-        setRendererType("Message");
+        setRendererType("javax.faces.Message");
 
     }
 
@@ -58,13 +58,20 @@ public class UIMessage extends UIComponentBase {
 
 
     private String forVal = null;
-    private boolean showDetail = false;
+    private boolean showDetail = true;
     private boolean showDetailSet = false;
-    private boolean showSummary = true;
+    private boolean showSummary = false;
     private boolean showSummarySet = false;
 
 
     // -------------------------------------------------------------- Properties
+
+
+    public String getFamily() {
+
+        return (COMPONENT_FAMILY);
+
+    }
 
 
     /**

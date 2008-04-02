@@ -1,0 +1,168 @@
+<?xml encoding='UTF-8'?>
+
+<!--
+ Copyright 2003-2004 Sun Microsystems, Inc. All rights reserved.
+ SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+-->
+
+<!-- ========== UIComponent Properties ===================================== -->
+
+
+<!-- template
+
+      <property>
+        <description>
+        </description>
+        <display-name></display-name>
+        <icon></icon>
+        <property-name></property-name>
+        <property-class>java.lang.String</property-class>
+      </property>
+
+-->
+
+      <property>
+        <description>
+          A mutable Map of the attributes associated with
+          this component, keyed by attribute name.
+        </description>
+        <display-name>Attributes Map</display-name>
+        <icon></icon>
+        <property-name>attributes</property-name>
+        <property-class>java.util.Map</property-class>
+        <property-extension>
+          <tag-attribute>false</tag-attribute>
+          <read-only>true</read-only>
+        </property-extension>
+      </property>
+
+      <property>
+        <description>
+          The number of child components associated with
+          this component.
+        </description>
+        <display-name>Child Component Count</display-name>
+        <icon></icon>
+        <property-name>childCount</property-name>
+        <property-class>int</property-class>
+        <property-extension>
+          <tag-attribute>false</tag-attribute>
+          <read-only>true</read-only>
+        </property-extension>
+      </property>
+
+      <property>
+        <description>
+          A mutable List of the child components associated with
+          this component.
+        </description>
+        <display-name>Child Component List</display-name>
+        <icon></icon>
+        <property-name>children</property-name>
+        <property-class>java.util.List</property-class>
+        <property-extension>
+          <tag-attribute>false</tag-attribute>
+          <read-only>true</read-only>
+        </property-extension>
+      </property>
+
+      <property>
+        <description>
+          A mutable Map of the facets associated with
+          this component, keyed by facet name.
+        </description>
+        <display-name>Attributes Map</display-name>
+        <icon></icon>
+        <property-name>facets</property-name>
+        <property-class>java.util.Map</property-class>
+        <property-extension>
+          <tag-attribute>false</tag-attribute>
+          <read-only>true</read-only>
+        </property-extension>
+      </property>
+
+      <property>
+        <description>
+          The component family to which this component belongs.  This property
+          is used to select an appropriate Renderer.
+        </description>
+        <display-name>Component Family</display-name>
+        <icon></icon>
+        <property-name>family</property-name>
+        <property-class>java.lang.String</property-class>
+        <property-extension>
+          <tag-attribute>false</tag-attribute>
+          <read-only>true</read-only>
+        </property-extension>
+      </property>
+
+      <property>
+        <description>
+          The component identifier for this component.  This value must be
+          unique within the closest parent component that is a naming
+          container.
+        </description>
+        <display-name>Component Identifier</display-name>
+        <icon></icon>
+        <property-name>id</property-name>
+        <property-class>java.lang.String</property-class>
+      </property>
+
+      <property>
+        <description>
+          The parent component for this component.  On the root component
+          in the component tree (which must be of type UIViewRoot), this
+          property is null.
+        </description>
+        <display-name>Parent Component</display-name>
+        <icon></icon>
+        <property-name>parent</property-name>
+        <property-class>javax.faces.component.UIComponent</property-class>
+        <property-extension>
+          <tag-attribute>false</tag-attribute>
+          <read-only>true</read-only>
+        </property-extension>
+      </property>
+
+      <property>
+        <description>
+          Flag indicating whether or not this component should be rendered
+          (during Render Response Phase), or processed on any subsequent
+          form submit.
+        </description>
+        <display-name>Rendered Flag</display-name>
+        <icon></icon>
+        <property-name>rendered</property-name>
+        <property-class>boolean</property-class>
+      </property>
+
+      <property>
+        <description>
+          Identifier used (in conjunction with the "family" property) to
+          select an appropriate Renderer to encode and decode this component.
+        </description>
+        <display-name>Renderer Type</display-name>
+        <icon></icon>
+        <property-name>rendererType</property-name>
+        <property-class>java.lang.String</property-class>
+        <property-extension>
+          <tag-attribute>false</tag-attribute>
+        </property-extension>
+      </property>
+
+      <property>
+        <description>
+          Flag indicating whether or not this component takes responsibility
+          for rendering its own children.  This decision is normally delegated
+          to the associated Renderer, if there is one.
+        </description>
+        <display-name>rendersChildren</display-name>
+        <icon></icon>
+        <property-name>rendersChildren</property-name>
+        <property-class>boolean</property-class>
+        <property-extension>
+          <tag-attribute>false</tag-attribute>
+          <read-only>true</read-only>
+        </property-extension>
+      </property>
+

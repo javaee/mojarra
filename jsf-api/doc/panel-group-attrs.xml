@@ -1,0 +1,51 @@
+<?xml encoding='UTF-8'?>
+
+<!--
+ Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+-->
+
+
+<!-- ========== Panel+Grid Propertys ====================================== -->
+
+
+<!-- template
+
+      <attribute>
+        <description>
+        </description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name></attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+-->
+
+      <attribute>
+	<description>
+          CSS style(s) to be applied when this component is rendered.
+        </description>
+	<display-name>CSS Styles</display-name>
+	<icon></icon>
+	<attribute-name>style</attribute-name>
+	<attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+        </attribute-extension>
+      </attribute>
+
+      <attribute>
+        <description>
+          Space-separated list of CSS style class(es) to be applied when
+          this element is rendered.  This value must be passed through
+          as the "class" property on generated markup.
+        </description>
+        <display-name>CSS Style Classes</display-name>
+        <icon></icon>
+        <attribute-name>styleClass</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>false</pass-through>
+        </attribute-extension>
+      </attribute>

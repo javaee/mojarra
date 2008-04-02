@@ -13,7 +13,7 @@
      "-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.0//EN"
      "http://java.sun.com/dtd/web-facesconfig_1_0.dtd">
 
-    $Id: web-facesconfig_1_0.dtd,v 1.28 2004/01/21 03:50:22 eburns Exp $
+    $Id: web-facesconfig_1_0.dtd,v 1.29 2004/01/27 20:28:40 craigmcc Exp $
 
 -->
 
@@ -22,7 +22,7 @@
 
 
 <!--
-    An "Action" is a String that represents a method reference
+    An "Action" is a String that represents a method binding
     expression that points at a method with no arguments that returns a
     String.  It must be bracketed with "#{}", for example,
     "#{cardemo.buyCar}".
@@ -219,7 +219,7 @@
     The "managed-bean" element represents a JavaBean, of a particular class,
     that will be dynamically instantiated at runtime (by the default
     VariableResolver implementation) if it is referenced as the first element
-    of a value reference expression, and no corresponding bean can be
+    of a value binding expression, and no corresponding bean can be
     identified in any scope.  In addition to the creation of the managed bean,
     and the optional storing of it into the specified scope, the nested
     managed-property elements can be used to initialize the contents of
@@ -319,46 +319,22 @@
 
 <!--
     The "renderer" element represents a concrete Renderer implementation
-    class that should be registered under the specified type identifier,
-    in the RenderKit associated with the parent render-kit element.  Renderer
-    types must be unique within the RenderKit associated with the parent
+    class that should be registered under the specified component family
+    and renderer type identifiers, in the RenderKit associated with the
+    parent "render-kit" element.  Combinations of component family and renderer
+    type must be unique within the RenderKit associated with the parent
     "render-kit" element.
 
     Nested "attribute" elements identify generic component attributes that
-    are recognized by this renderer.  Nested "supported-component-type" and
-    "supported-component-class" elements identify supported component classes,
-    by their type identifiers or the implementation class name, respectively,
-    that are supported by this Renderer.
+    are recognized by this renderer.
 -->
-<!ELEMENT renderer        (description*, display-name*, icon*, renderer-type, renderer-class, attribute*, supported-component-type*, supported-component-class*, renderer-extension*)>
+<!ELEMENT renderer        (description*, display-name*, icon*, component-family, renderer-type, renderer-class, attribute*, renderer-extension*)>
 
 <!-- 
     Extension element for renderer.  May contain implementation
     specific content.
 -->
 <!ELEMENT renderer-extension ANY>
-
-<!--
-    The "supported-component-class" element identifies a component class that
-    is supported by the surrounding renderer, and the renderer attribute names
-    that are relevant for this component class.  If no "attribute-name"
-    subelements are listed, names from all of the "attribute" declarations for
-    the surrounding renderer shall be assumed.
--->
-<!ELEMENT supported-component-class (component-class, attribute-name*)>
-    
-
-
-<!--
-    The "supported-component-type" element identifies a component type that
-    is supported by the surrounding renderer, and the renderer attribute names
-    that are relevant for this component type.  If no "attribute-name"
-    subelements are listed, names from all of the "attribute" declarations for
-    the surrounding renderer shall be assumed.
--->
-<!ELEMENT supported-component-type (component-type, attribute-name*)>
-    
-
 
 <!--
     The "validator" element represents a concrete Validator implementation
@@ -427,6 +403,13 @@
 
 
 <!--
+    The "component-family" element represents the component family for
+    which the Renderer represented by the parent "renderer" element will be
+    used.
+-->
+<!ELEMENT component-family (#PCDATA)>
+
+<!--
     The "component-type" element represents the name under which the
     corresponding UIComponent class should be registered.
 -->
@@ -483,7 +466,7 @@
     it is nested in, optionally flagged with a language code using the
     "xml:lang" attribute.
 -->
-<!ELEMENT description     (#PCDATA)>
+<!ELEMENT description     ANY>
 <!ATTLIST description     xml:lang        %Language;      #IMPLIED>
 
 
@@ -685,7 +668,7 @@ registered on the Lifecycle. It must be of type "ClassName".
 <!--
     The "property-resolver" element contains the fully qualified class name
     of the concrete PropertyResolver implementation class that will be used
-    during the processing of value reference expressions.
+    during the processing of value binding expressions.
     It must be of type "ClassName".
 -->
 <!ELEMENT property-resolver (#PCDATA)>
@@ -740,7 +723,7 @@ registered on the Lifecycle. It must be of type "ClassName".
 <!ELEMENT render-kit-factory (#PCDATA)>
 
 <!--
-    The "renderer-type" element represents an identifier for the
+    The "renderer-type" element represents a renderer type identifier for the
     Renderer represented by the parent "renderer" element.
 -->
 <!ELEMENT renderer-type   (#PCDATA)>
@@ -787,7 +770,7 @@ registered on the Lifecycle. It must be of type "ClassName".
 <!--
     The "value" element is the String representation of a literal
     value to which a scalar managed property will be set, or a value
-    reference expression ("#{...}") that will be used to calculate the
+    binding expression ("#{...}") that will be used to calculate the
     required value.  It will be converted as specified for the actual
     property type.
 -->
@@ -807,7 +790,7 @@ registered on the Lifecycle. It must be of type "ClassName".
 <!--
     The "variable-resolver" element contains the fully qualified class name
     of the concrete VariableResolver implementation class that will be used
-    during the processing of value reference expressions.
+    during the processing of value binding expressions.
     It must be of type "ClassName".
 -->
 <!ELEMENT variable-resolver (#PCDATA)>
@@ -826,13 +809,14 @@ registered on the Lifecycle. It must be of type "ClassName".
 <!ATTLIST component                         id ID #IMPLIED>
 <!ATTLIST component-class                   id ID #IMPLIED>
 <!ATTLIST component-extension               id ID #IMPLIED>
+<!ATTLIST component-family                  id ID #IMPLIED>
 <!ATTLIST component-type                    id ID #IMPLIED>
 <!ATTLIST converter                         id ID #IMPLIED>
 <!ATTLIST converter-class                   id ID #IMPLIED>
 <!ATTLIST converter-for-class               id ID #IMPLIED>
 <!ATTLIST converter-id                      id ID #IMPLIED>
-<!ATTLIST default-render-kit-id             id ID #IMPLIED>
 <!ATTLIST default-locale                    id ID #IMPLIED>
+<!ATTLIST default-render-kit-id             id ID #IMPLIED>
 <!ATTLIST default-value                     id ID #IMPLIED>
 <!ATTLIST description                       id ID #IMPLIED>
 <!ATTLIST display-name                      id ID #IMPLIED>
@@ -883,8 +867,6 @@ registered on the Lifecycle. It must be of type "ClassName".
 <!ATTLIST small-icon                        id ID #IMPLIED>
 <!ATTLIST state-manager                     id ID #IMPLIED>
 <!ATTLIST suggested-value                   id ID #IMPLIED>
-<!ATTLIST supported-component-class         id ID #IMPLIED>
-<!ATTLIST supported-component-type          id ID #IMPLIED>
 <!ATTLIST supported-locale                  id ID #IMPLIED>
 <!ATTLIST to-view-id                        id ID #IMPLIED>
 <!ATTLIST validator                         id ID #IMPLIED>

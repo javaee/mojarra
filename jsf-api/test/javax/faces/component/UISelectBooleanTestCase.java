@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectBooleanTestCase.java,v 1.14 2004/01/08 21:21:21 eburns Exp $
+ * $Id: UISelectBooleanTestCase.java,v 1.15 2004/01/27 20:30:10 craigmcc Exp $
  */
 
 /*
@@ -47,7 +47,8 @@ public class UISelectBooleanTestCase extends UIInputTestCase {
     public void setUp() {
         super.setUp();
         component = new UISelectBoolean();
-        expectedRendererType = "Checkbox";
+        expectedFamily = UISelectBoolean.COMPONENT_FAMILY;
+        expectedRendererType = "javax.faces.Checkbox";
     }
 
     

@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectManyTestCase.java,v 1.19 2004/01/08 21:21:21 eburns Exp $
+ * $Id: UISelectManyTestCase.java,v 1.20 2004/01/27 20:30:10 craigmcc Exp $
  */
 
 /*
@@ -47,7 +47,8 @@ public class UISelectManyTestCase extends UIInputTestCase {
     public void setUp() {
         super.setUp();
         component = new UISelectMany();
-        expectedRendererType = "Listbox";
+        expectedFamily = UISelectMany.COMPONENT_FAMILY;
+        expectedRendererType = "javax.faces.Listbox";
     }
 
     

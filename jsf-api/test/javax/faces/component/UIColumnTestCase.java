@@ -1,5 +1,5 @@
 /*
- * $Id: UIColumnTestCase.java,v 1.7 2003/10/09 22:58:11 craigmcc Exp $
+ * $Id: UIColumnTestCase.java,v 1.8 2004/01/27 20:30:04 craigmcc Exp $
  */
 
 /*
@@ -45,6 +45,7 @@ public class UIColumnTestCase extends UIComponentBaseTestCase {
     public void setUp() {
         super.setUp();
         component = new UIColumn();
+        expectedFamily = UIColumn.COMPONENT_FAMILY;
         expectedId = null;
         expectedRendererType = null;
     }

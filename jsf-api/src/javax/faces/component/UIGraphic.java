@@ -1,5 +1,5 @@
 /*
- * $Id: UIGraphic.java,v 1.33 2004/01/21 19:23:14 craigmcc Exp $
+ * $Id: UIGraphic.java,v 1.34 2004/01/27 20:29:17 craigmcc Exp $
  */
 
 /*
@@ -54,7 +54,7 @@ public class UIGraphic extends UIComponentBase {
     public UIGraphic() {
 
         super();
-        setRendererType("Image");
+        setRendererType("javax.faces.Image");
 
     }
 
@@ -68,11 +68,18 @@ public class UIGraphic extends UIComponentBase {
     // -------------------------------------------------------------- Properties
 
 
+    public String getFamily() {
+
+        return (COMPONENT_FAMILY);
+
+    }
+
+
     /**
      * <p>Return the image URL for this {@link UIGraphic}.  This method is a
      * typesafe alias for <code>getValue()</code>.</p>
      */
-    public String getURL() {
+    public String getUrl() {
 
         return ((String) getValue());
 
@@ -85,7 +92,7 @@ public class UIGraphic extends UIComponentBase {
      *
      * @param url The new image URL
      */
-    public void setURL(String url) {
+    public void setUrl(String url) {
 
         setValue(url);
 

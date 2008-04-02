@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTestCase.java,v 1.40 2003/12/17 15:11:12 rkitain Exp $
+ * $Id: UIComponentTestCase.java,v 1.41 2004/01/27 20:30:06 craigmcc Exp $
  */
 
 /*
@@ -43,6 +43,9 @@ public class UIComponentTestCase extends TestCase {
     // The set of attribute names expected on a pristine component instance
     protected String expectedAttributes[] = null;
 
+    // The expected component family on a pristine component instance
+    protected String expectedFamily = null;
+
     // The expected component identifier on a pristine component instance
     protected String expectedId = null;
 
@@ -72,6 +75,7 @@ public class UIComponentTestCase extends TestCase {
     public void setUp() {
 
         expectedAttributes = new String[0];
+        expectedFamily = "Test";
         expectedId = "test";
         expectedRendered = true;
         expectedRendererType = null;
@@ -94,6 +98,7 @@ public class UIComponentTestCase extends TestCase {
 
         component = null;
         expectedAttributes = null;
+        expectedFamily = null;
         expectedId = null;
         expectedRendered = true;
         expectedRendererType = null;
@@ -744,6 +749,8 @@ public class UIComponentTestCase extends TestCase {
         }
 
         // Validate properties
+        assertEquals("expected family",
+                     expectedFamily, component.getFamily());
         assertEquals("expected id",
                      expectedId, component.getId());
         assertNull("no parent", component.getParent());

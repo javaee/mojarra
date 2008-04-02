@@ -1,0 +1,144 @@
+<?xml encoding='UTF-8'?>
+
+<!--
+ Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+-->
+
+
+<!-- ========== Link Properties ============================================ -->
+
+
+<!-- template
+
+      <property>
+        <description>
+        </description>
+        <display-name></display-name>
+        <icon></icon>
+        <property-name></property-name>
+        <property-class>java.lang.String</property-class>
+      </property>
+
+-->
+
+      <property>
+        <description>
+          The character encoding of the resource designated
+          by this hyperlink.
+        </description>
+        <display-name>Character Set</display-name>
+        <icon></icon>
+        <property-name>charset</property-name>
+        <property-class>java.lang.String</property-class>
+        <property-extension>
+          <pass-through>true</pass-through>
+        </property-extension>
+      </property>
+
+      <property>
+        <description>
+          The position and shape of the hot spot on the screen
+          (for use in client-side image maps).
+        </description>
+        <display-name>Coordinates</display-name>
+        <icon></icon>
+        <property-name>coords</property-name>
+        <property-class>java.lang.String</property-class>
+        <property-extension>
+          <pass-through>true</pass-through>
+        </property-extension>
+      </property>
+
+      <property>
+        <description>
+          The language code of the resource designated
+          by this hyperlink.
+        </description>
+        <display-name>Language</display-name>
+        <icon></icon>
+        <property-name>hreflang</property-name>
+        <property-class>java.lang.String</property-class>
+        <property-extension>
+          <pass-through>true</pass-through>
+        </property-extension>
+      </property>
+
+      <property>
+        <description>
+          The relationship from the current document
+          to the anchor specified by this hyperlink.
+          The value of this attribute is a space-separated
+          list of link types.  
+        </description>
+        <display-name>Relationship</display-name>
+        <icon></icon>
+        <property-name>rel</property-name>
+        <property-class>java.lang.String</property-class>
+        <property-extension>
+          <pass-through>true</pass-through>
+        </property-extension>
+      </property>
+
+      <property>
+        <description>
+          A reverse link from the anchor specified
+          by this hyperlink to the current document.
+          The value of this attribute is a space-separated
+          list of link types.  
+        </description>
+        <display-name>Reverse Link</display-name>
+        <icon></icon>
+        <property-name>rev</property-name>
+        <property-class>java.lang.String</property-class>
+        <property-extension>
+          <pass-through>true</pass-through>
+        </property-extension>
+      </property>
+
+      <property>
+        <description>
+          The shape of the hot spot on the screen
+          (for use in client-side image maps).  Valid
+          values are:  default (entire region); rect
+          (rectangular region); circle (circular region);
+          and poly (polygonal region).
+        </description>
+        <display-name>Shape</display-name>
+        <icon></icon>
+        <property-name>shape</property-name>
+        <property-class>java.lang.String</property-class>
+        <property-extension>
+          <pass-through>true</pass-through>
+        </property-extension>
+      </property>
+
+      <property>
+        <description>
+          Name of a frame where the resource
+          retrieved via this hyperlink is to
+          be displayed.
+        </description>
+        <display-name>Target Frame</display-name>
+        <icon></icon>
+        <property-name>target</property-name>
+        <property-class>java.lang.String</property-class>
+        <property-extension>
+          <pass-through>true</pass-through>
+        </property-extension>
+      </property>
+
+      <property>
+        <description>
+          The content type of the resource designated
+          by this hyperlink.
+        </description>
+        <display-name>Content Type</display-name>
+        <icon></icon>
+        <property-name>type</property-name>
+        <property-class>java.lang.String</property-class>
+        <property-extension>
+          <pass-through>true</pass-through>
+        </property-extension>
+      </property>
+

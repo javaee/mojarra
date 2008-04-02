@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectOne.java,v 1.37 2004/01/21 19:23:17 craigmcc Exp $
+ * $Id: UISelectOne.java,v 1.38 2004/01/27 20:29:21 craigmcc Exp $
  */
 
 /*
@@ -68,7 +68,17 @@ public class UISelectOne extends UIInput {
     public UISelectOne() {
 
         super();
-        setRendererType("Menu");
+        setRendererType("javax.faces.Menu");
+
+    }
+
+
+    // -------------------------------------------------------------- Properties
+
+
+    public String getFamily() {
+
+        return (COMPONENT_FAMILY);
 
     }
 

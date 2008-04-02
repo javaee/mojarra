@@ -5,29 +5,48 @@
  SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 -->
 
+
+<!-- ========== I18N Properties ============================================ -->
+
+
 <!-- template
 
       <property>
-        <description></description>
+        <description>
+        </description>
         <display-name></display-name>
         <icon></icon>
         <property-name></property-name>
         <property-class>java.lang.String</property-class>
       </property>
+
 -->
 
       <property>
-        <description>language code</description>
-        <display-name></display-name>
-        <icon></icon>
-        <property-name>lang</property-name>
-        <property-class>java.lang.String</property-class>
-      </property>
-
-      <property>
-        <description>direction for weak/neutral text</description>
-        <display-name></display-name>
+        <description>
+          Direction indication for text that does not inherit directionality.
+          Valid values are "LTR" (left-to-right) and "RTL" (right-to-left).
+        </description>
+        <display-name>Direction</display-name>
         <icon></icon>
         <property-name>dir</property-name>
         <property-class>java.lang.String</property-class>
+        <property-extension>
+          <pass-through>true</pass-through>
+        </property-extension>
       </property>
+
+      <property>
+        <description>
+          Code describing the language used in the generated markup
+          for this component.
+        </description>
+        <display-name>Language Code</display-name>
+        <icon></icon>
+        <property-name>lang</property-name>
+        <property-class>java.lang.String</property-class>
+        <property-extension>
+          <pass-through>true</pass-through>
+        </property-extension>
+      </property>
+

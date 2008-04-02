@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.122 2004/01/20 00:50:46 craigmcc Exp $
+ * $Id: UIComponent.java,v 1.123 2004/01/27 20:29:16 craigmcc Exp $
  */
 
 /*
@@ -137,6 +137,15 @@ public abstract class UIComponent implements StateHolder {
      *  is <code>null</code>
      */
     public abstract String getClientId(FacesContext context);
+
+
+    /**
+     * <p>Return the identifier of the component family to which this
+     * component belongs.  This identifier, in conjunction with the value
+     * of the <code>rendererType</code> property, may be used to select
+     * the appropriate {@link Renderer} for this component instance.</p>
+     */
+    public abstract String getFamily();
 
 
     /**

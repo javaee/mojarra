@@ -1,5 +1,5 @@
 /*
- * $Id: ResultSetDataModel.java,v 1.20 2004/01/26 20:49:00 craigmcc Exp $
+ * $Id: ResultSetDataModel.java,v 1.21 2004/01/27 20:29:48 craigmcc Exp $
  */
 
 /*

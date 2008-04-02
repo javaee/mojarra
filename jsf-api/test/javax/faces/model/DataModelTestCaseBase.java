@@ -1,5 +1,5 @@
 /*
- * $Id: DataModelTestCaseBase.java,v 1.7 2004/01/23 04:07:04 craigmcc Exp $
+ * $Id: DataModelTestCaseBase.java,v 1.8 2004/01/27 20:30:25 craigmcc Exp $
  */
 
 /*

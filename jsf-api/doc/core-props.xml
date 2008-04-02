@@ -5,38 +5,62 @@
  SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 -->
 
+
+<!-- ========== Core Properties ============================================ -->
+
+
 <!-- template
 
       <property>
-        <description></description>
+        <description>
+        </description>
         <display-name></display-name>
         <icon></icon>
         <property-name></property-name>
         <property-class>java.lang.String</property-class>
       </property>
+
 -->
 
       <property>
-        <description>CSS style class</description>
-        <display-name></display-name>
-        <icon></icon>
-        <property-name>styleClass</property-name>
-        <property-class>java.lang.String</property-class>
-      </property>
-
-      <property>
-	<description>CSS style</description>
-	<display-name></display-name>
+	<description>
+          CSS style(s) to be applied when this component is rendered.
+        </description>
+	<display-name>CSS Styles</display-name>
 	<icon></icon>
 	<property-name>style</property-name>
 	<property-class>java.lang.String</property-class>
+        <property-extension>
+          <pass-through>true</pass-through>
+        </property-extension>
       </property>
 
       <property>
-        <description>advisory title</description>
-        <display-name></display-name>
+        <description>
+          Space-separated list of CSS style class(es) to be applied when
+          this element is rendered.  This value must be passed through
+          as the "class" attribute on generated markup.
+        </description>
+        <display-name>CSS Style Classes</display-name>
+        <icon></icon>
+        <property-name>styleClass</property-name>
+        <property-class>java.lang.String</property-class>
+        <property-extension>
+          <pass-through>false</pass-through>
+        </property-extension>
+      </property>
+
+      <property>
+        <description>
+          Advisory title information about markup elements generated
+          for this component.
+        </description>
+        <display-name>Advisory Title</display-name>
         <icon></icon>
         <property-name>title</property-name>
         <property-class>java.lang.String</property-class>
+        <property-extension>
+          <pass-through>true</pass-through>
+        </property-extension>
       </property>
 

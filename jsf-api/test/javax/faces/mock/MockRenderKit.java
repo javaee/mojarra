@@ -1,5 +1,5 @@
 /*
- * $Id: MockRenderKit.java,v 1.11 2004/01/14 17:12:57 eburns Exp $
+ * $Id: MockRenderKit.java,v 1.12 2004/01/27 20:30:21 craigmcc Exp $
  */
 
 /*
@@ -15,6 +15,9 @@ import java.util.Iterator;
 import java.util.Map;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
+import javax.faces.component.UIData;
+import javax.faces.component.UIOutput;
+import javax.faces.component.UIPanel;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.context.ResponseStream;
@@ -29,29 +32,38 @@ import java.io.IOException;
 public class MockRenderKit extends RenderKit {
 
     public MockRenderKit() {
-        addRenderer("TestRenderer", new TestRenderer());
-        addRenderer("Panel", new TestRenderer(true));
-        addRenderer("Grid", new TestRenderer(true));
-        addRenderer("Table", new TestRenderer(true));
+        addRenderer(UIData.COMPONENT_FAMILY, 
+		    "javax.faces.Table", new TestRenderer(true));
+	addRenderer(UIInput.COMPONENT_FAMILY, 
+		    "TestRenderer", new TestRenderer());
+        addRenderer(UIInput.COMPONENT_FAMILY, 
+		    "javax.faces.Text", new TestRenderer());
+	addRenderer(UIOutput.COMPONENT_FAMILY, 
+		    "TestRenderer", new TestRenderer());
+        addRenderer(UIOutput.COMPONENT_FAMILY, 
+		    "javax.faces.Text", new TestRenderer());
+        addRenderer(UIPanel.COMPONENT_FAMILY, 
+		    "javax.faces.Grid", new TestRenderer(true));
     }
 
 
     private Map renderers = new HashMap();
 
 
-    public void addRenderer(String rendererType, Renderer renderer) {
-        if ((rendererType == null) || (renderer == null)) {
+    public void addRenderer(String family, String rendererType,
+                            Renderer renderer) {
+        if ((family == null) || (rendererType == null) || (renderer == null)) {
             throw new NullPointerException();
         }
-        renderers.put(rendererType, renderer);
+        renderers.put(family + "|" + rendererType, renderer);
     }
 
 
-    public Renderer getRenderer(String rendererType) {
-        if (rendererType == null) {
+    public Renderer getRenderer(String family, String rendererType) {
+        if ((family == null) || (rendererType == null)) {
             throw new NullPointerException();
         }
-        return ((Renderer) renderers.get(rendererType));
+        return ((Renderer) renderers.get(family + "|" + rendererType));
     }
 
 

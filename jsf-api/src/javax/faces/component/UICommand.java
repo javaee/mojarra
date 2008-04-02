@@ -1,5 +1,5 @@
 /*
- * $Id: UICommand.java,v 1.65 2004/01/21 19:23:12 craigmcc Exp $
+ * $Id: UICommand.java,v 1.66 2004/01/27 20:29:15 craigmcc Exp $
  */
 
 /*
@@ -83,7 +83,8 @@ public class UICommand extends UIComponentBase
     public UICommand() {
 
         super();
-        setRendererType("Button");
+        setRendererType("javax.faces.Button");
+
     }
 
 
@@ -91,6 +92,16 @@ public class UICommand extends UIComponentBase
 
 
     private Object value = null;
+
+
+    // -------------------------------------------------------------- Properties
+
+
+    public String getFamily() {
+
+        return (COMPONENT_FAMILY);
+
+    }
 
 
     // ------------------------------------------------- ActionSource Properties

@@ -1,5 +1,5 @@
 /*
- * $Id: UIOutput.java,v 1.45 2004/01/26 20:48:55 craigmcc Exp $
+ * $Id: UIOutput.java,v 1.46 2004/01/27 20:29:19 craigmcc Exp $
  */
 
 /*
@@ -81,7 +81,7 @@ public class UIOutput extends UIComponentBase
     public UIOutput() {
 
         super();
-        setRendererType("Text");
+        setRendererType("javax.faces.Text");
 
     }
 
@@ -94,7 +94,17 @@ public class UIOutput extends UIComponentBase
 
 
 
-    // --------------------------------------- ConvertableValueHolder Properties
+    // -------------------------------------------------------------- Properties
+
+
+    public String getFamily() {
+
+        return (COMPONENT_FAMILY);
+
+    }
+
+
+    // --------------------------------------- ConvertibleValueHolder Properties
 
 
     public Converter getConverter() {

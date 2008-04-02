@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKit.java,v 1.26 2004/01/27 07:57:08 eburns Exp $
+ * $Id: RenderKit.java,v 1.27 2004/01/27 20:29:52 craigmcc Exp $
  */
 
 /*
@@ -50,32 +50,37 @@ public abstract class RenderKit {
 
     /**
      * <p>Register the specified {@link Renderer} instance, associated with the
-     * specified <code>rendererType</code>, to the set of
-     * {@link Renderer}s registered with this {@link RenderKit}, replacing
-     * any previously registered {@link Renderer} for this identifier.
+     * specified component <code>family</code> and <code>rendererType</code>,
+     * to the set of {@link Renderer}s registered with this {@link RenderKit},
+     * replacing any previously registered {@link Renderer} for this
+     * combination of identifiers.</p>
      *
+     * @param family Component family of the {@link Renderer} to register
      * @param rendererType Renderer type of the {@link Renderer} to register
      * @param renderer {@link Renderer} instance we are registering
      *
-     * @exception NullPointerException if <code>rendererType</code> or
-     *  <code>renderer</code> is null
+     * @exception NullPointerException if <code>family</code> or
+     *  <code>rendererType</code> or <code>renderer</code> is null
      */
-    public abstract void addRenderer(String rendererType, Renderer renderer);
+    public abstract void addRenderer(String family, String rendererType,
+                                     Renderer renderer);
 
 
     /**
      * <p>Return the {@link Renderer} instance most recently registered for
-     * the specified <code>rendererType</code>, if any; otherwise, return
-     * <code>null</code>.  The set of available renderer types is
-     * available via the <code>getRendererTypes()</code> method.</p>
+     * the specified component <code>family</code> and
+     * <code>rendererType</code>, if any; otherwise, return
+     * <code>null</code>.</p>
      *
+     * @param family Component family of the requested
+     *  {@link Renderer} instance
      * @param rendererType Renderer type of the requested
      *  {@link Renderer} instance
      *
-     * @exception NullPointerException if <code>rendererType</code>
-     *  is <code>null</code>
+     * @exception NullPointerException if <code>family</code> or
+     *  <code>rendererType</code> is <code>null</code>
      */
-    public abstract Renderer getRenderer(String rendererType);
+    public abstract Renderer getRenderer(String family, String rendererType);
 
 
     /**

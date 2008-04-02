@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectItemTestCase.java,v 1.9 2004/01/08 21:21:21 eburns Exp $
+ * $Id: UISelectItemTestCase.java,v 1.10 2004/01/27 20:30:10 craigmcc Exp $
  */
 
 /*
@@ -50,6 +50,7 @@ public class UISelectItemTestCase extends UIComponentBaseTestCase {
     public void setUp() {
         super.setUp();
         component = new UISelectItem();
+        expectedFamily = UISelectItem.COMPONENT_FAMILY;
         expectedId = null;
         expectedRendererType = null;
     }

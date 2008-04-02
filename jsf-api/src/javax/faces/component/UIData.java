@@ -110,7 +110,7 @@ public class UIData extends UIComponentBase
     public UIData() {
 
         super();
-        setRendererType("Table");
+        setRendererType("javax.faces.Table");
 
     }
 
@@ -173,6 +173,13 @@ public class UIData extends UIComponentBase
 
 
     // -------------------------------------------------------------- Properties
+
+
+    public String getFamily() {
+
+        return (COMPONENT_FAMILY);
+
+    }
 
 
     /**

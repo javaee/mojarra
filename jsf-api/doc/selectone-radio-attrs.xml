@@ -1,0 +1,74 @@
+<?xml encoding='UTF-8'?>
+
+<!--
+ Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+-->
+
+
+<!-- ========== SelectOne+Radio Attributes ================================= -->
+
+
+<!-- template
+
+      <attribute>
+        <description>
+        </description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name></attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+-->
+
+      <attribute>
+        <description>
+          Width (in pixels) of the border to be drawn
+          around the table containing the options list.
+        </description>
+        <display-name>Table Border</display-name>
+        <icon></icon>
+        <attribute-name>border</attribute-name>
+        <attribute-class>int</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+        </attribute-extension>
+      </attribute>
+
+      <attribute>
+        <description>
+          CSS style class to apply to the rendered label
+          on disabled options.
+        </description>
+        <display-name>Disabled Label Class</display-name>
+        <icon></icon>
+        <attribute-name>disabledClass</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+      
+      <attribute>
+        <description>
+          CSS style class to apply to the rendered label
+          on enabled options.
+        </description>
+        <display-name>Enabled Label Class</display-name>
+        <icon></icon>
+        <attribute-name>enabledClass</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+      
+      <attribute>
+        <description>
+          Orientation of the options list to be created.
+          Valid values are PAGE_DIRECTION (list is laid
+          out vertically), or LINE_DIRECTION (list is
+          laid out horizontally).  If not specified, the
+          default value is LINE_DIRECTION.
+        </description>
+        <display-name>Layout</display-name>
+        <icon></icon>
+        <attribute-name>layout</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+

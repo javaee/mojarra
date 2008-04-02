@@ -1,5 +1,5 @@
 /*
- * $Id: UIPanel.java,v 1.26 2004/01/21 19:23:15 craigmcc Exp $
+ * $Id: UIPanel.java,v 1.27 2004/01/27 20:29:19 craigmcc Exp $
  */
 
 /*
@@ -52,5 +52,16 @@ public class UIPanel extends UIComponentBase {
         setRendererType(null);
 
     }
+
+
+    // -------------------------------------------------- UIComponent Properties
+
+
+    public String getFamily() {
+
+        return (COMPONENT_FAMILY);
+
+    }
+
 
 }

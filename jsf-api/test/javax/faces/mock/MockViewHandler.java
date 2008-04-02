@@ -1,5 +1,5 @@
 /*
- * $Id: MockViewHandler.java,v 1.21 2004/01/21 03:50:29 eburns Exp $
+ * $Id: MockViewHandler.java,v 1.22 2004/01/27 20:30:21 craigmcc Exp $
  */
 
 /*

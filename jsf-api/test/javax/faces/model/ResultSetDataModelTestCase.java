@@ -1,5 +1,5 @@
 /*
- * $Id: ResultSetDataModelTestCase.java,v 1.3 2004/01/26 06:49:42 craigmcc Exp $
+ * $Id: ResultSetDataModelTestCase.java,v 1.4 2004/01/27 20:30:25 craigmcc Exp $
  */
 
 /*

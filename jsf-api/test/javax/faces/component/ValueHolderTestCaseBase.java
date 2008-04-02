@@ -1,5 +1,5 @@
 /*
- * $Id: ValueHolderTestCaseBase.java,v 1.7 2004/01/15 06:03:41 eburns Exp $
+ * $Id: ValueHolderTestCaseBase.java,v 1.8 2004/01/27 20:30:11 craigmcc Exp $
  */
 
 /*

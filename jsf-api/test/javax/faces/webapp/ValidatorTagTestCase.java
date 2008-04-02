@@ -1,5 +1,5 @@
 /*
- * $Id: ValidatorTagTestCase.java,v 1.3 2004/01/08 21:21:28 eburns Exp $
+ * $Id: ValidatorTagTestCase.java,v 1.4 2004/01/27 20:30:28 craigmcc Exp $
  */
 
 /*

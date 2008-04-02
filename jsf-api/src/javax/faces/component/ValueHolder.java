@@ -1,5 +1,5 @@
 /*
- * $Id: ValueHolder.java,v 1.12 2004/01/26 20:48:56 craigmcc Exp $
+ * $Id: ValueHolder.java,v 1.13 2004/01/27 20:29:22 craigmcc Exp $
  */
 
 /*
