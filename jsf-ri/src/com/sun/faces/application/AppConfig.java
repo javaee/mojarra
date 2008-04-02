@@ -1,5 +1,5 @@
 /*
- * $Id: AppConfig.java,v 1.5 2003/05/05 15:19:00 rkitain Exp $
+ * $Id: AppConfig.java,v 1.6 2003/05/08 18:54:22 jvisvanathan Exp $
  */
 
 /*
@@ -38,7 +38,7 @@ import com.sun.faces.context.MessageResourcesImpl;
  *  <p>AppConfig is a helper class to the ApplicationImpl that serves as
  *  a shim between it and the config system.</p>
  *
- * @version $Id: AppConfig.java,v 1.5 2003/05/05 15:19:00 rkitain Exp $
+ * @version $Id: AppConfig.java,v 1.6 2003/05/08 18:54:22 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -277,7 +277,7 @@ public AppConfig(Application application)
         } 
 
 	// if not found, we have to create one.
-        MessageResourcesImpl result = null;
+        MessageResources result = null;
 	ConfigMessageResources configMessageResources = null;
 	
 	if (null == (configMessageResources = (ConfigMessageResources)
@@ -285,14 +285,16 @@ public AppConfig(Application application)
 	    //PENDING(edburns): i18n
 	    throw new FacesException();
 	}
-	result = (MessageResourcesImpl) 
+	result = (MessageResources) 
 	    this.newThing(configMessageResources.getMessageResourcesClass());
 
 	if (messageResourcesId.equals(MessageResources.FACES_API_MESSAGES)) {
-	    result.init(messageResourcesId, JSF_API_RESOURCE_FILENAME);
+	    ((MessageResourcesImpl)result).init(messageResourcesId, 
+                    JSF_API_RESOURCE_FILENAME);
 	}
 	else if (messageResourcesId.equals(MessageResources.FACES_IMPL_MESSAGES)) {
-	    result.init(messageResourcesId, JSF_RI_RESOURCE_FILENAME);
+	    ((MessageResourcesImpl)result).init(messageResourcesId, 
+                    JSF_RI_RESOURCE_FILENAME);
 	}
 	else {
 	    // we don't initialize it, just return it un-initialized.
