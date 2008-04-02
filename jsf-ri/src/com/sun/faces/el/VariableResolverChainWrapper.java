@@ -1,5 +1,5 @@
 /*
- * $Id: VariableResolverChainWrapper.java,v 1.3 2006/01/11 15:28:06 rlubke Exp $
+ * $Id: VariableResolverChainWrapper.java,v 1.4 2006/02/16 22:07:25 rlubke Exp $
  */
 /*
  * The contents of this file are subject to the terms
@@ -29,6 +29,7 @@
 package com.sun.faces.el;
 
 import java.util.Iterator;
+import java.beans.FeatureDescriptor;
 
 import javax.faces.context.FacesContext;
 import javax.faces.el.VariableResolver;
@@ -42,13 +43,14 @@ import javax.el.ELResolver;
 import com.sun.faces.util.MessageUtils;
 
 public class VariableResolverChainWrapper extends ELResolver {
-
+    
     private VariableResolver legacyVR = null;
 
-    public VariableResolverChainWrapper( VariableResolver variableResolver) {
+    public VariableResolverChainWrapper(VariableResolver variableResolver) {
         this.legacyVR = variableResolver;
     }
 
+    @Override
     public Object getValue(ELContext context, Object base, Object property)
         throws ELException {
 
@@ -62,12 +64,13 @@ public class VariableResolverChainWrapper extends ELResolver {
             throw new PropertyNotFoundException(message);
         }
         Object result = null;
-        context.setPropertyResolved(true);
+        
         FacesContext facesContext = (FacesContext)
             context.getContext(FacesContext.class);
         try {
             result = legacyVR.resolveVariable(facesContext,
                                               (String)property);
+            context.setPropertyResolved(result != null);           
         } catch (EvaluationException ex) {
             context.setPropertyResolved(false);
             throw new ELException(ex);
@@ -75,18 +78,20 @@ public class VariableResolverChainWrapper extends ELResolver {
         return result;
     }
 
-
+    @Override
     public Class getType(ELContext context, Object base, Object property)
         throws ELException {
 
         Object result = null;
         result = getValue(context, base, property);
+        context.setPropertyResolved(result != null);
         if (result != null) {
             return result.getClass();
         }
         return null;
     }
 
+    @Override
     public void  setValue(ELContext context, Object base, Object property,
                           Object val) throws ELException {
     if (null == base && null == property) {
@@ -94,6 +99,7 @@ public class VariableResolverChainWrapper extends ELResolver {
     }
     }
 
+    @Override
     public boolean isReadOnly(ELContext context, Object base, Object property)
         throws ELException {
         if (null == base && null == property) {
@@ -102,11 +108,13 @@ public class VariableResolverChainWrapper extends ELResolver {
         return false;
     }
 
-
-    public Iterator getFeatureDescriptors(ELContext context, Object base) {
+    @Override
+    public Iterator<FeatureDescriptor> getFeatureDescriptors(ELContext context, 
+                                                             Object base) {
         return null;
     }
 
+    @Override
     public Class getCommonPropertyType(ELContext context, Object base) {
         if ( base == null ) {
             return String.class;
