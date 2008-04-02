@@ -1,5 +1,5 @@
 /*
- * $Id: TreeFactory.java,v 1.10 2002/09/20 00:24:14 craigmcc Exp $
+ * $Id: TreeFactory.java,v 1.11 2002/09/20 21:51:30 craigmcc Exp $
  */
 
 /*
@@ -41,6 +41,8 @@ public abstract class TreeFactory {
      *
      * @exception FacesException if a {@link Tree} cannot be
      *  constructed for the specified parameters
+     * @exception NullPointerException if <code>context</code> or
+     *  <code>treeId</code> is null
      */
     public abstract Tree getTree(ServletContext context,
                                  String treeId) throws FacesException;
