@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.83 2003/11/07 18:55:29 craigmcc Exp $
+ * $Id: UIComponentBase.java,v 1.84 2003/11/14 22:56:03 rlubke Exp $
  */
 
 /*
@@ -986,6 +986,11 @@ public abstract class UIComponentBase extends UIComponent {
         if ((event == null) || (phaseId == null)) {
             throw new NullPointerException();
         }
+        
+        if (PhaseId.ANY_PHASE.equals(phaseId)) {
+            throw new IllegalStateException();
+        }
+        
         if (listeners == null) {
             return (false);
         }
