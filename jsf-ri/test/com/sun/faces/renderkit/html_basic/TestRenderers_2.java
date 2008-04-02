@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_2.java,v 1.42 2003/04/01 19:25:44 jvisvanathan Exp $
+ * $Id: TestRenderers_2.java,v 1.43 2003/04/08 17:46:16 jvisvanathan Exp $
  */
 
 /*
@@ -54,7 +54,7 @@ import com.sun.faces.TestBean;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_2.java,v 1.42 2003/04/01 19:25:44 jvisvanathan Exp $
+ * @version $Id: TestRenderers_2.java,v 1.43 2003/04/08 17:46:16 jvisvanathan Exp $
  * 
  *
  */
@@ -987,7 +987,9 @@ public class TestRenderers_2 extends JspFacesTestCase
         dateRenderer.encodeEnd(getFacesContext(), output);
         getFacesContext().getResponseWriter().write("\n");
         getFacesContext().getResponseWriter().flush();
-	assertTrue(!output.isValid());
+        // decode() simply sets valid to true for UIOutput components. 
+        // So valid will never be false.
+	assertTrue(output.isValid());
 	
     }
     

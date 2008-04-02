@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderer.java,v 1.36 2003/04/04 22:47:28 eburns Exp $
+ * $Id: HtmlBasicRenderer.java,v 1.37 2003/04/08 17:46:14 jvisvanathan Exp $
  */
 
 /*
@@ -349,7 +349,7 @@ public abstract class HtmlBasicRenderer extends Renderer {
      * renderers that need to peform type conversion.
      */
     public Object getConvertedValue(FacesContext context, UIComponent component,
-            String newValue) throws IOException {
+            String newValue) throws ConverterException {
        return newValue;            
     }         
     

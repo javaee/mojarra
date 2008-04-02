@@ -1,5 +1,5 @@
 /*
- * $Id: ReconstituteComponentTreePhase.java,v 1.5 2003/03/28 18:34:07 horwat Exp $
+ * $Id: ReconstituteComponentTreePhase.java,v 1.6 2003/04/08 17:46:12 jvisvanathan Exp $
  */
 
 /*
@@ -48,7 +48,7 @@ import org.apache.commons.logging.LogFactory;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: ReconstituteComponentTreePhase.java,v 1.5 2003/03/28 18:34:07 horwat Exp $
+ * @version $Id: ReconstituteComponentTreePhase.java,v 1.6 2003/04/08 17:46:12 jvisvanathan Exp $
  * 
  */
 
@@ -149,7 +149,7 @@ public void restoreTreeFromPage(FacesContext facesContext) {
     }
    
     // reconstitute tree from page. 
-    Map requestMap = facesContext.getExternalContext().getRequestMap();
+    Map requestMap = facesContext.getExternalContext().getRequestParameterMap();
     String treeId = (String)requestMap.get("javax.servlet.include.path_info");
     if (treeId == null) {
         treeId = facesContext.getExternalContext().getRequestPathInfo();
@@ -161,7 +161,8 @@ public void restoreTreeFromPage(FacesContext facesContext) {
     } else {    
         byte[] bytes  = Base64.decode(treeRootString.getBytes());
         try {
-            ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(bytes));
+            ObjectInputStream ois = new ObjectInputStream(
+                    new ByteArrayInputStream(bytes));
             requestTree = (Tree) ois.readObject();
             locale = (Locale) ois.readObject();
             ois.close();
@@ -249,7 +250,15 @@ protected void registerActionListeners(UIComponent uic) {
         registerActionListeners((UIComponent) kids.next());
     }
     if (uic instanceof UICommand) {
-        ((UICommand)uic).addActionListener(actionListener);
+      
+        // register actionlistener if it has not been registered already
+        // PENDING (visvan) This could cause a problem because the components
+        // are exposed to applications. Instead move this logic to the root
+        // component.
+        if ( (uic.getAttribute("com.sun.faces.ActionListener")) == null ) {
+            ((UICommand)uic).addActionListener(actionListener);
+            uic.setAttribute("com.sun.faces.ActionListener", Boolean.TRUE);
+        }     
     }
 }
 

@@ -1,5 +1,5 @@
 /*
- * $Id: DateRenderer.java,v 1.21 2003/03/21 23:24:00 rkitain Exp $
+ * $Id: DateRenderer.java,v 1.22 2003/04/08 17:46:13 jvisvanathan Exp $
  */
 
 /*
@@ -51,7 +51,7 @@ import com.sun.faces.RIConstants;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: DateRenderer.java,v 1.21 2003/03/21 23:24:00 rkitain Exp $
+ * @version $Id: DateRenderer.java,v 1.22 2003/04/08 17:46:13 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -208,7 +208,7 @@ public class DateRenderer extends HtmlBasicInputRenderer {
 	    buffer.append("\"");
 	    // deal with HTML 4.0 LABEL element
 	    buffer.append(" id=\"");
-	    buffer.append(component.getComponentId());
+	    buffer.append(component.getClientId(context));
 	    buffer.append("\"");
 	    // render default text specified
 	    if ( currentValue != null ) {

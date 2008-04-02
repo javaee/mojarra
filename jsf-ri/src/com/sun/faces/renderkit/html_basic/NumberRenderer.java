@@ -1,5 +1,5 @@
 /*
- * $Id: NumberRenderer.java,v 1.20 2003/03/21 23:24:02 rkitain Exp $
+ * $Id: NumberRenderer.java,v 1.21 2003/04/08 17:46:15 jvisvanathan Exp $
  */
 
 /*
@@ -49,7 +49,7 @@ import java.text.ParseException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: NumberRenderer.java,v 1.20 2003/03/21 23:24:02 rkitain Exp $
+ * @version $Id: NumberRenderer.java,v 1.21 2003/04/08 17:46:15 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -213,7 +213,7 @@ public class NumberRenderer extends HtmlBasicInputRenderer {
 	    buffer.append("\"");
 	    // deal with HTML 4.0 LABEL element
 	    buffer.append(" id=\"");
-	    buffer.append(component.getComponentId());
+	    buffer.append(component.getClientId(context));
 	    buffer.append("\"");
 	    
 	    // render default text specified
