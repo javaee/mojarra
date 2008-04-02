@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderResponsePhase.java,v 1.35 2002/10/11 17:55:04 rkitain Exp $
+ * $Id: TestRenderResponsePhase.java,v 1.36 2002/10/14 19:26:21 rkitain Exp $
  */
 
 /*
@@ -51,7 +51,7 @@ import javax.servlet.jsp.PageContext;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderResponsePhase.java,v 1.35 2002/10/11 17:55:04 rkitain Exp $
+ * @version $Id: TestRenderResponsePhase.java,v 1.36 2002/10/14 19:26:21 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -71,9 +71,12 @@ public String getExpectedOutputFilename() {
 }
 
 public static final String ignore[] = {
-    "<FORM METHOD=\"post\" ACTION=\"/test/faces/TestRenderResponsePhase.jsp;jsessionid=72ACD5F4497810A18D442A6D06ED1813\">",
+    "<FORM METHOD=\"post\" ACTION=\"/test/faces/TestRenderResponsePhase.jsp;jsessionid=D38D7E728762EE5434EA9A4846CB9B67\">",
     "                 <img src=\"/test/duke.gif;jsessionid=884241010348B244D954B77358716144\">",
-    "                 <img src=\"/test/duke.gif;jsessionid=884241010348B244D954B77358716144\" class=\"buttonImage1\">"
+    "                 <img src=\"/test/duke.gif;jsessionid=884241010348B244D954B77358716144\" class=\"buttonImage1\">",
+    "                 <input type=\"image\" src=\"duke.gif;jsessionid=D38D7E728762EE5434EA9A4846CB9B67\" name=\"/basicForm/pushButton\" disabled >",
+    "                 <input type=\"image\" src=\"duke.gif;jsessionid=D38D7E728762EE5434EA9A4846CB9B67\" name=\"/basicForm/imageOnlyButton\">",
+
 };
     
 public String [] getLinesToIgnore() {
