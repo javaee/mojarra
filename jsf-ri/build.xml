@@ -574,7 +574,7 @@ must exist.  This is necessary for the MessageFactory class.
          Create the jars
        =================================================================== 
   -->
-  <target name="jars" depends="compile">
+  <target name="jars" depends="compile,create.runtime.config">
     <echo message="${build.classes}" />
     <jar jarfile="${build.home}/lib/${name}.jar" 
          basedir="${build.classes}" > 
@@ -648,6 +648,30 @@ must exist.  This is necessary for the MessageFactory class.
 
 
   <target name="main" depends="jars,copy.to.tck"/>
+
+  <target name="create.runtime.config">
+      <xslt in="${build.home}/classes/com/sun/faces/standard-html-renderkit.xml"
+            out="merged.xml" 
+            style="conf/xslt/merge-config.xsl">
+          <xmlcatalog id="facesDTDs">
+             <dtd publicId="-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.1//EN"
+                  location="${build.home}/classes/com/sun/faces/web-facesconfig_1_1.dtd"/>
+             <dtd publicId="-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.0//EN"
+                  location="${build.home}/classes/com/sun/faces/web-facesconfig_1_0.dtd"/>
+          </xmlcatalog>
+      </xslt>
+      <xslt in="merged.xml"
+            out="${build.home}/classes/com/sun/faces/jsf-ri-runtime.xml" 
+            style="conf/xslt/prune-tool-data.xsl">
+          <xmlcatalog id="facesDTDs">
+             <dtd publicId="-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.1//EN"
+                  location="${build.home}/classes/com/sun/faces/web-facesconfig_1_1.dtd"/>
+             <dtd publicId="-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.0//EN"
+                  location="${build.home}/classes/com/sun/faces/web-facesconfig_1_0.dtd"/>
+          </xmlcatalog>
+      </xslt>
+<!--      <delete file="${basedir}/merged.xml"/> -->
+  </target>
 
   <!--
        ===================================================================

@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListener.java,v 1.24 2004/07/26 21:12:44 rlubke Exp $
+ * $Id: ConfigureListener.java,v 1.25 2004/08/17 17:05:21 rlubke Exp $
  */
 /*
  * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
@@ -90,14 +90,7 @@ public class ConfigureListener implements ServletContextListener {
      * <p>The path to the RI main configuration file.</p>
      */
     protected static final String JSF_RI_CONFIG =
-            "com/sun/faces/jsf-ri-config.xml";
-
-
-    /**
-     * <p>The path to the RI standard HTML renderkit configuration file.</p>
-     */
-    protected static final String JSF_RI_STANDARD =
-            "com/sun/faces/standard-html-renderkit.xml";
+            "com/sun/faces/jsf-ri-runtime.xml";    
 
     /**
      * <p>The resource path for faces-config files included in the
@@ -280,11 +273,7 @@ public class ConfigureListener implements ServletContextListener {
         url = Util.getCurrentLoader(this).getResource(JSF_RI_CONFIG);
         parse(digester, url, fcb);
 
-        // Step 3, parse the Standard HTML RenderKit
-        url = Util.getCurrentLoader(this).getResource(JSF_RI_STANDARD);
-        parse(digester, url, fcb);
-
-        // Step 4, parse any "/META-INF/faces-config.xml" resources
+        // Step 3, parse any "/META-INF/faces-config.xml" resources
         Iterator resources;
         try {
             List list = new LinkedList();
@@ -312,7 +301,7 @@ public class ConfigureListener implements ServletContextListener {
             parse(digester, url, fcb);
         }
 
-        // Step 5, parse any context-relative resources specified in
+        // Step 4, parse any context-relative resources specified in
         // the web application deployment descriptor
         String paths =
             context.getInitParameter(FacesServlet.CONFIG_FILES_ATTR);
@@ -328,13 +317,13 @@ public class ConfigureListener implements ServletContextListener {
             }
         }
 
-        // Step 6, parse "/WEB-INF/faces-config.xml" if it exists
+        // Step 5, parse "/WEB-INF/faces-config.xml" if it exists
         url = getContextURLForPath(context, WEB_INF_RESOURCE);
         if (url != null) {
             parse(digester, url, fcb);
         }
 
-        // Step 7, use the accumulated configuration beans to configure the RI
+        // Step 6, use the accumulated configuration beans to configure the RI
         try {
             configure(context, fcb);
         } catch (FacesException e) {
@@ -346,7 +335,7 @@ public class ConfigureListener implements ServletContextListener {
         } 
 
      
-        // Step 8, verify that all the configured factories are available
+        // Step 7, verify that all the configured factories are available
         // and optionall that configured objects can be created
         verifyFactories();
         if (isFeatureEnabled(context, VERIFY_OBJECTS)) {
