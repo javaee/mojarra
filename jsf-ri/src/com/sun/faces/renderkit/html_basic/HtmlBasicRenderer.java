@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderer.java,v 1.23 2003/02/14 01:14:43 craigmcc Exp $
+ * $Id: HtmlBasicRenderer.java,v 1.24 2003/02/14 14:42:26 rkitain Exp $
  */
 
 /*
@@ -419,12 +419,29 @@ public abstract class HtmlBasicRenderer extends Renderer {
 	    return result;
 	}
 
+        Object facetParent = null;
+
 	NamingContainer closestContainer = null;
 	UIComponent containerComponent = component;
-	
+
+        // check if its a facet (facets are not containers)
+        // this also checks if we start off with nested facets
+        facetParent = containerComponent.getAttribute(
+            UIComponent.FACET_PARENT_ATTR);
+        while (facetParent != null) {
+            containerComponent = (UIComponent) facetParent;
+            facetParent = containerComponent.getAttribute(
+                UIComponent.FACET_PARENT_ATTR);
+        }
+
 	// Search for an ancestor that is a naming container
 	while (null != (containerComponent = 
 			containerComponent.getParent())) {
+            facetParent = containerComponent.getAttribute(
+                UIComponent.FACET_PARENT_ATTR);
+            if (facetParent != null) {
+                containerComponent = (UIComponent) facetParent;
+            }
 	    if (containerComponent instanceof NamingContainer) {
 		closestContainer = (NamingContainer) containerComponent;
 		break;
