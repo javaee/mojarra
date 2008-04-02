@@ -4,17 +4,14 @@
 package com.sun.faces.sandbox.taglib;
 
 import javax.faces.component.UIComponent;
-import javax.faces.el.ValueBinding;
-import javax.faces.webapp.UIComponentTag;
 
 import com.sun.faces.sandbox.component.MultiFileUpload;
-import com.sun.faces.sandbox.util.Util;
 
 /**
  * @author lee
  *
  */
-public class MultiFileUploadTag extends UIComponentTag{
+public class MultiFileUploadTag extends UISandboxComponentTag {
     protected String type;
     protected String fileHolder;
     protected String destinationUrl;
@@ -25,15 +22,18 @@ public class MultiFileUploadTag extends UIComponentTag{
     protected String height;
     protected String width;
 
-    @Override
-    public String getComponentType() {
-        return MultiFileUpload.COMPONENT_TYPE;
-    }
+    @Override public String getComponentType() { return MultiFileUpload.COMPONENT_TYPE; }
+    @Override public String getRendererType() { return MultiFileUpload.RENDERER_TYPE; }
 
-    @Override
-    public String getRendererType() {
-        return MultiFileUpload.RENDERER_TYPE;
-    }
+    public void setButtonText(String buttonText)         { this.buttonText = buttonText; }
+    public void setDestinationUrl(String destinationUrl) { this.destinationUrl = destinationUrl; }
+    public void setFileFilter(String fileFilter)         { this.fileFilter = fileFilter; }
+    public void setFileHolder(String fileHolder)         { this.fileHolder = fileHolder; }
+    public void setHeight(String height)                 { this.height = height; }
+    public void setMaxFileSize(String maxFileSize)       { this.maxFileSize = maxFileSize; }
+    public void setStartDir(String startDir)             { this.startDir = startDir; }
+    public void setType(String type)                     { this.type = type; }
+    public void setWidth(String width)                   { this.width = width; }
 
     protected void setProperties(UIComponent component) {
         super.setProperties(component);
@@ -44,113 +44,14 @@ public class MultiFileUploadTag extends UIComponentTag{
             throw new IllegalStateException("Component " + component.toString() + " not expected type.  Expected: com.sun.faces.sandbox.component.MultiFileUpload.  Perhaps you're missing a tag?");
         }
 
-        if (type != null) {
-            if (isValueReference(type)) {
-                ValueBinding vb = Util.getValueBinding(type);
-                upload.setValueBinding("type", vb);
-            } else {
-                upload.setType(type);
-            }
-        }
-        if (fileHolder != null) {
-            if (isValueReference(fileHolder)) {
-                ValueBinding vb = Util.getValueBinding(fileHolder);
-                upload.setValueBinding("fileHolder", vb);
-            } else {
-                throw new IllegalStateException("The value for 'fileHolder' must be a ValueBinding.");
-            }
-        }
-        if (destinationUrl  != null) {
-            if (isValueReference(destinationUrl )) {
-                ValueBinding vb = Util.getValueBinding(destinationUrl );
-                upload.setValueBinding("destinationUrl", vb);
-            } else {
-                upload.setDestinationUrl(destinationUrl );
-            }
-        }
-        if (fileFilter != null) {
-            if (isValueReference(fileFilter)) {
-                ValueBinding vb = Util.getValueBinding(fileFilter);
-                upload.setValueBinding("fileFilter", vb);
-            } else {
-                upload.setFileFilter(fileFilter);
-            }
-        }
-        if (maxFileSize != null) {
-            if (isValueReference(maxFileSize)) {
-                ValueBinding vb = Util.getValueBinding(maxFileSize);
-                upload.setValueBinding("maxFileSize", vb);
-            } else {
-                upload.setMaxFileSize(maxFileSize);
-            }
-        }
-        if (startDir != null) {
-            if (isValueReference(startDir)) {
-                ValueBinding vb = Util.getValueBinding(startDir);
-                upload.setValueBinding("startDir", vb);
-            } else {
-                upload.setStartDir(startDir);
-            }
-        }
-        if (buttonText != null) {
-            if (isValueReference(buttonText)) {
-                ValueBinding vb = Util.getValueBinding(buttonText);
-                upload.setValueBinding("buttonText", vb);
-            } else {
-                upload.setButtonText(buttonText);
-            }
-        }
-        if (height != null) {
-            if (isValueReference(type)) {
-                ValueBinding vb = Util.getValueBinding(height);
-                upload.setValueBinding("height", vb);
-            } else {
-                upload.setHeight(height);
-            }
-        }
-        if (width != null) {
-            if (isValueReference(width)) {
-                ValueBinding vb = Util.getValueBinding(type);
-                upload.setValueBinding("width", vb);
-            } else {
-                upload.setWidth(width);
-            }
-        }
-    }
-
-    public void setButtonText(String buttonText) {
-        this.buttonText = buttonText;
-    }
-
-    public void setDestinationUrl(String destinationUrl) {
-        this.destinationUrl = destinationUrl;
-    }
-
-    public void setFileFilter(String fileFilter) {
-        this.fileFilter = fileFilter;
-    }
-
-    public void setFileHolder(String fileHolder) {
-        this.fileHolder = fileHolder;
-    }
-
-    public void setHeight(String height) {
-        this.height = height;
-    }
-
-    public void setMaxFileSize(String maxFileSize) {
-        this.maxFileSize = maxFileSize;
-    }
-
-    public void setStartDir(String startDir) {
-        this.startDir = startDir;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public void setWidth(String width) {
-        this.width = width;
+        setStringProperty(upload, "type", type);
+        setValueBinding(upload, "fileHolder", fileHolder);
+        setStringProperty(upload, "destinationUrl", destinationUrl );
+        setStringProperty(upload, "fileFilter", fileFilter);
+        setStringProperty(upload, "maxFileSize", maxFileSize);
+        setStringProperty(upload, "startDir", startDir);
+        setStringProperty(upload, "buttonText", buttonText);
+        setStringProperty(upload, "height", height);
+        setStringProperty(upload, "width", width);
     }
 }

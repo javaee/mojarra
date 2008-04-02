@@ -13,11 +13,6 @@ public class YuiMenu extends YuiMenuBase {
     public static final String COMPONENT_TYPE = "com.sun.faces.sandbox.YuiMenu";
     public static final String RENDERER_TYPE = "com.sun.faces.sandbox.YuiMenuRenderer";
 
-    public YuiMenu() {
-        setRendererType(RENDERER_TYPE);
-    }
-    
-    public String getFamily() {
-        return COMPONENT_TYPE;
-    }
+    public YuiMenu()          { setRendererType(RENDERER_TYPE); }
+    public String getFamily() { return COMPONENT_TYPE; }
 }

@@ -23,17 +23,28 @@ import javax.faces.el.ValueBinding;
  */
 public class FileDownload extends UIOutput {
     public static final String COMPONENT_TYPE = "com.sun.faces.sandbox.FileDownload";
-    public static final String RENDERER_TYPE = "com.sun.faces.sandbox.FileDownloadRenderer";
     public static final String DOWNLOAD_URI = "Sandbox___Download";
     public static final String METHOD_DOWNLOAD = "download";
     public static final String METHOD_INLINE = "inline";
+    public static final String RENDERER_TYPE = "com.sun.faces.sandbox.FileDownloadRenderer";
     public static final String REQUEST_PARAM = "componentId";
     private Object[] _state = null;
     /**
-     * 
+     * This property is the data of the actual object to be rendered/downloaded.
+     */
+    protected Object data;
+    /**
+     * The name of the file to be sent to the client
      */
     protected String fileName;
+    /**
+     * The height of the object to be rendered for method="inline"
+     */
     protected String height;
+    /**
+     * If true, the object is rendered as the source of an iframe.  If false,
+     * and &lt;object&gt; tag is rendered
+     */
     protected Boolean iframe;
     /**
      * This property determines the method with which the object is delivered to 
@@ -43,33 +54,25 @@ public class FileDownload extends UIOutput {
      * click to download the object.
      */
     protected String method;
-    
     /**
      * The user will need to supply the mime type for the download.
      */
     protected String mimeType;
-    protected String text;
     /**
-     * This property is the data of the actual object to be rendered/downloaded.
+     * The text to be rendered as the link label if method="download"
      */
-    protected Object data;
-    protected String width;
-    
+    protected String text;
     /**
      * If set, this property will cause an EL variable, by the name of <code>urlVar</code>
      * to be added to the ELContext for the duration of the component rendering (i.e.,
      * it will only be available to child components).
      */
     protected String urlVar = "downloadUrl";
+    /**
+     * The width of the object to be rendered for method="inline"
+     */
+    protected String width;
     
-    public String getUrlVar() {
-        return urlVar;
-    }
-
-    public void setUrlVar(String urlVar) {
-        this.urlVar = urlVar;
-    }
-
     public FileDownload() {
         setRendererType(RENDERER_TYPE);
     }
@@ -77,68 +80,26 @@ public class FileDownload extends UIOutput {
     public String getFamily() {
         return COMPONENT_TYPE;
     }
-    
-    public String getFileName() {
-        if (null != this.fileName) {
-            return this.fileName;
-        }
-        ValueBinding _vb = getValueBinding("fileName");
-        return (_vb != null) ? (String) _vb.getValue(getFacesContext()) : null;
-    }
 
-    public String getHeight() {
-        if (null != this.height) {
-            return this.height;
-        }
-        ValueBinding _vb = getValueBinding("height");
-        return (_vb != null) ? (String) _vb.getValue(getFacesContext()) : null;
-    }
-
+    public Object getData()     { return ComponentHelper.getValue(this, "data", data); }
+    public String getFileName() { return ComponentHelper.getValue(this, "fileName", fileName); }
+    public String getHeight()   { return ComponentHelper.getValue(this, "height", height); }
+    public Boolean getIframe()  { return ComponentHelper.getValue(this, "iframe", iframe); }
+    public String getMethod()   { return ComponentHelper.getValue(this, "method", method); }
+    public String getMimeType() { return ComponentHelper.getValue(this, "mimeType", mimeType); }
+    public String getText()     { return ComponentHelper.getValue(this, "text", text); }
+    public String getUrlVar()   { return urlVar; }
+    public String getWidth()    { return ComponentHelper.getValue(this, "width", width); }
     
-    public Boolean getIframe() {
-        if (null != this.iframe) {
-            return this.iframe;
-        }
-        ValueBinding _vb = getValueBinding("iframe");
-        return (_vb != null) ? (Boolean) _vb.getValue(getFacesContext()) : null;
-    }
-    public String getMethod() {
-        if (null != this.method) {
-            return this.method;
-        }
-        ValueBinding _vb = getValueBinding("method");
-        return (_vb != null) ? (String) _vb.getValue(getFacesContext()) : null;
-    }
-    
-    public String getMimeType() {
-        if (null != this.mimeType) {
-            return this.mimeType;
-        }
-        ValueBinding _vb = getValueBinding("mimeType");
-        return (_vb != null) ? (String) _vb.getValue(getFacesContext()) : null;
-    }
-    public String getText() {
-        if (null != this.text) {
-            return this.text;
-        }
-        ValueBinding _vb = getValueBinding("text");
-        return (_vb != null) ? (String) _vb.getValue(getFacesContext()) : null;
-    }
-    
-    public Object getData() {
-        if (null != this.data) {
-            return this.data;
-        }
-        ValueBinding _vb = getValueBinding("data");
-        return (_vb != null) ? (Object) _vb.getValue(getFacesContext()) : null;
-    }
-    public String getWidth() {
-        if (null != this.width) {
-            return this.width;
-        }
-        ValueBinding _vb = getValueBinding("width");
-        return (_vb != null) ? (String) _vb.getValue(getFacesContext()) : null;
-    }
+    public void setData(Object data)         { this.data = data; }
+    public void setFileName(String fileName) { this.fileName = fileName; }
+    public void setHeight(String height)     { this.height = height; }
+    public void setIframe(Boolean iframe)    { this.iframe = iframe; }
+    public void setMethod(String method)     { this.method = method; }
+    public void setMimeType(String mimeType) { this.mimeType = mimeType; }
+    public void setText(String text)         { this.text = text; }
+    public void setUrlVar(String urlVar)     { this.urlVar = urlVar; }
+    public void setWidth(String width)       { this.width = width; }
 
     public void restoreState(FacesContext _context, Object _state) {
         this._state = (Object[]) _state;
@@ -168,37 +129,5 @@ public class FileDownload extends UIOutput {
         _state[8] = text;
         
         return _state;
-    }
-
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
-    }
-
-    public void setHeight(String height) {
-        this.height = height;
-    }
-
-    public void setIframe(Boolean iframe) {
-        this.iframe = iframe;
-    }
-
-    public void setMethod(String method) {
-        this.method = method;
-    }
-
-    public void setMimeType(String mimeType) {
-        this.mimeType = mimeType;
-    }
-
-    public void setText(String text) {
-        this.text = text;
-    }
-
-    public void setData(Object data) {
-        this.data = data;
-    }
-
-    public void setWidth(String width) {
-        this.width = width;
     }
 }

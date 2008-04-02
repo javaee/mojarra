@@ -5,11 +5,10 @@ package com.sun.faces.sandbox.render;
 
 import java.io.IOException;
 
-import javax.el.ELContext;
-import javax.el.ELResolver;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
+import javax.faces.el.ValueBinding;
 import javax.faces.render.Renderer;
 import javax.servlet.http.HttpServletRequest;
 
@@ -21,8 +20,8 @@ import com.sun.faces.sandbox.util.Util;
  *
  */
 public class FileDownloadRenderer extends Renderer {
-    protected ELResolver elResolver;
-    protected ELContext elContext;
+//    protected ELResolver elResolver;
+//    protected ELContext elContext;
     protected Object oldBinding = null;
 
     @Override
@@ -40,22 +39,27 @@ public class FileDownloadRenderer extends Renderer {
         if ((dl.getUrlVar() != null) || (comp.getChildCount() > 0)){
             setElValue(context, dl);
         }
-        if (FileDownload.METHOD_DOWNLOAD.equals(dl.getMethod()) || (comp.getChildCount() == 0)) {
+        if (FileDownload.METHOD_DOWNLOAD.equals(dl.getMethod())) { // || (comp.getChildCount() == 0)) {
             renderLink(context, dl);
         }
     }
     
     protected void setElValue(FacesContext context, FileDownload comp) {
-        this.elContext = context.getELContext();
-        this.elResolver = elContext.getELResolver();
-        oldBinding = this.elResolver.getValue(elContext, null, comp.getUrlVar());
-        elResolver.setValue(elContext, null, comp.getUrlVar(), generateUri(context, comp));
+//        this.elContext = context.getELContext();
+//        this.elResolver = elContext.getELResolver();
+//        oldBinding = this.elResolver.getValue(elContext, null, comp.getUrlVar());
+//        elResolver.setValue(elContext, null, comp.getUrlVar(), generateUri(context, comp));
+        ValueBinding vb = Util.getValueBinding("#{"+comp.getUrlVar()+"}");
+        vb.setValue(context, generateUri(context, comp));
+        
     }
     
     protected void resetElValue(FacesContext context, FileDownload comp) {
-        if (elResolver != null) {
-            elResolver.setValue(elContext, null, comp.getUrlVar(), oldBinding);
-        }
+        ValueBinding vb = Util.getValueBinding("#{"+comp.getUrlVar()+"}");
+        vb.setValue(context, null);
+//        if (elResolver != null) {
+//            elResolver.setValue(elContext, null, comp.getUrlVar(), oldBinding);
+//        }
     }
 
     @Override
@@ -85,15 +89,17 @@ public class FileDownloadRenderer extends Renderer {
         if (Boolean.TRUE.equals(comp.getIframe())) {
             writer.startElement("iframe", comp);
             writer.writeAttribute("src", uri, "src");
-            writer.writeAttribute("width", width, "width");
-            writer.writeAttribute("height", height, "height");
+//            writer.writeAttribute("width", width, "width");
+//            writer.writeAttribute("height", height, "height");
+            Util.renderPassThruAttributes(writer, comp);
             writer.endElement("iframe");
         } else {
             writer.startElement("object", comp);
             writer.writeAttribute("data", uri, "data");
             writer.writeAttribute("type", comp.getMimeType(), "type");
-            writer.writeAttribute("width", width, "width");
-            writer.writeAttribute("height", height, "height");
+//            writer.writeAttribute("width", width, "width");
+//            writer.writeAttribute("height", height, "height");
+            Util.renderPassThruAttributes(writer, comp);
             writer.endElement("object");
         }
     }
@@ -103,6 +109,7 @@ public class FileDownloadRenderer extends Renderer {
 
         writer.startElement("a", comp);
         writer.writeAttribute("href", generateUri(context, comp), "data");
+        Util.renderPassThruAttributes(writer, comp);
         if (comp.getChildCount() > 0) {
             //
         } else {

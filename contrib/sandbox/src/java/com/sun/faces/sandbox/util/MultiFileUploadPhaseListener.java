@@ -38,13 +38,14 @@ public class MultiFileUploadPhaseListener implements PhaseListener {
             HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
             String uri = request.getRequestURI();
             if ((uri != null) && (uri.indexOf(MultiFileUpload.JARS_URI) > -1)){
+                InputStream is = null;
                 try {
                     String fileName = uri.substring(uri.lastIndexOf(MultiFileUpload.JARS_URI))
                         .substring(MultiFileUpload.JARS_URI.length());
                     int index = fileName.indexOf(".jar");
                     fileName = "/META-INF/static/" + fileName.substring(0, index+4);
                     HttpServletResponse response = (HttpServletResponse) context.getExternalContext().getResponse();
-                    InputStream is = getClass().getResourceAsStream(fileName);
+                    is = getClass().getResourceAsStream(fileName);
                     OutputStream os = response.getOutputStream();
 
                     response.setContentType("application/x-java-applet");
@@ -58,10 +59,18 @@ public class MultiFileUploadPhaseListener implements PhaseListener {
                         }
                     }
                     is.close();
-                    context.responseComplete();
                     os.flush();
+                    context.responseComplete();
                 } catch (IOException ioe) {
-                    System.err.println(ioe.getMessage());
+                    if (is != null) {
+                        try {
+                            is.close();
+                        } catch (Exception ex) {
+                            //
+                        }
+                    }
+                } catch (Throwable t) {
+                    System.err.println(t.getMessage());
                 }
             }
         }

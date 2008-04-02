@@ -6,7 +6,6 @@ package com.sun.faces.sandbox.taglib;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.el.MethodBinding;
-import javax.faces.event.ValueChangeEvent;
 import javax.faces.webapp.UIComponentTag;
 
 import com.sun.faces.sandbox.util.Util;
@@ -18,43 +17,82 @@ import com.sun.faces.sandbox.util.Util;
 public abstract class UISandboxComponentTag extends UIComponentTag {
     protected void setStringProperty(UIComponent component, String attributeName,
             String attributeValue) {
+        setStringProperty(component, attributeName, attributeValue, false);
+    }
+
+    protected void setStringProperty(UIComponent component, String attributeName,
+            String attributeValue, boolean mustBeValueBinding) {
         if (attributeValue != null) {
             if (isValueReference(attributeValue)) {
                 component.setValueBinding(attributeName,
                         Util.getValueBinding(attributeValue));
             }
             else {
-                component.getAttributes().put(attributeName, attributeValue);
+                if (mustBeValueBinding) {
+                    throw new IllegalStateException("The value for '" + attributeName + "' must be a ValueBinding.");   
+                } else {
+                    component.getAttributes().put(attributeName, attributeValue);
+                }
             }
         }
+    }
+
+    protected void setIntegerProperty(UIComponent component, String attributeName,
+            String attributeValue) {
+        setStringProperty(component, attributeName, attributeValue, false);
     }
 
     protected void setIntegerProperty(UIComponent component,
-            String attributeName, String attributeValue) {
+            String attributeName, String attributeValue, boolean mustBeValueBinding) {
         if (attributeValue != null) {
             if (isValueReference(attributeValue)) {
                 component.setValueBinding(attributeName,
                         Util.getValueBinding(attributeValue));
             }
             else {
-                component.getAttributes().put(attributeName,
-                        Integer.valueOf(attributeValue));
+                if (mustBeValueBinding) {
+                    throw new IllegalStateException("The value for '" + attributeName + "' must be a ValueBinding.");   
+                } else {
+                    component.getAttributes().put(attributeName,
+                            Integer.valueOf(attributeValue));
+                }
             }
         }
     }
 
+    protected void setBooleanProperty(UIComponent component, String attributeName,
+            String attributeValue) {
+        setStringProperty(component, attributeName, attributeValue, false);
+    }
+
     protected void setBooleanProperty(UIComponent component,
-            String attributeName, String attributeValue) {
+            String attributeName, String attributeValue, boolean mustBeValueBinding) {
         if (attributeValue != null) {
             if (isValueReference(attributeValue)) {
                 component.setValueBinding(attributeName,
                         Util.getValueBinding(attributeValue));
             }
             else {
-                component.getAttributes().put(attributeName,
-                        Boolean.valueOf(attributeValue));
+                if (mustBeValueBinding) {
+                    throw new IllegalStateException("The value for '" + attributeName + "' must be a ValueBinding.");   
+                } else {
+                    component.getAttributes().put(attributeName,
+                            Boolean.valueOf(attributeValue));
+                }
             }
         }
+    }
+
+    protected void setValueBinding(UIComponent component, String attributeName, String attributeValue) {
+        if (attributeValue != null) {
+            if (isValueReference(attributeValue)) {
+                component.setValueBinding(attributeName,
+                        Util.getValueBinding(attributeValue));
+            }
+            else {
+                throw new IllegalStateException("The value for '" + attributeName + "' must be a ValueBinding.");   
+            }
+        }    
     }
 
     protected MethodBinding createMethodBinding(UIComponent component,

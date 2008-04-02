@@ -6,7 +6,7 @@ YAHOO.widget.Calendar.prototype.IMG_ROOT = '%%%BASE_URL%%%/yui/assets';
 YAHOO.widget.Calendar.prototype.NAV_ARROW_LEFT = '%%%BASE_URL%%%/yui/assets/callt.gif';
 YAHOO.widget.Calendar.prototype.NAV_ARROW_RIGHT = '%%%BASE_URL%%%/yui/assets/calrt.gif';
 
-RISANDBOX.calendar = function(divId, trigger, clientId, startMonth, selectedDate, multiSelect, showWeekdays,
+RISANDBOX.Calendar = function(divId, trigger, clientId, startMonth, selectedDate, multiSelect, showWeekdays,
         startWeekday, showWeekHeader, showWeekFooter, hideBlankWeeks) {
     this.divId = divId;
     this.clientId = clientId;
@@ -41,7 +41,7 @@ RISANDBOX.calendar = function(divId, trigger, clientId, startMonth, selectedDate
     YAHOO.util.Event.addListener(trigger, "click", this.show, this, true);
 }
 
-RISANDBOX.calendar.prototype.show = function() {
+RISANDBOX.Calendar.prototype.show = function() {
     if (this.hidden == true) {
         this.calendar.show();
         this.hidden = false;

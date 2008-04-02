@@ -47,9 +47,11 @@ public class MultiFileUploadRenderer extends Renderer {
             
         for (String dep : MultiFileUpload.DEP_JARS) {
             deps.append(sep)
+//                .append(Util.generateStaticUri(dep)
                 .append (Util.getAppBaseUrl(context))
                 .append(MultiFileUpload.JARS_URI)
-                .append(generateUri (context, dep));
+                .append(generateUri (context, dep)
+                        );
             sep = ",";
         }
         

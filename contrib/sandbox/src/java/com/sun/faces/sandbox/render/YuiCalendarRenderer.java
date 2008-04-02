@@ -82,7 +82,7 @@ public class YuiCalendarRenderer extends HtmlBasicRenderer {//Renderer {
             date = new Date();
         }
 
-        String javaScript = String.format("new RISANDBOX.calendar('%sContainer','%sTrigger','%s','%s','%s',%s,%s,%s,%s,%s);",
+        String javaScript = String.format("new RISANDBOX.Calendar('%sContainer','%sTrigger','%s','%s','%s',%s,%s,%s,%s,%s);",
                 component.getId(), component.getId(), clientId,
                 (date != null) ? new SimpleDateFormat("MM/yyyy").format(date) : "null",
                 (date != null) ? new SimpleDateFormat("MM/dd/yyyy").format(date) : "null",

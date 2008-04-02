@@ -10,13 +10,6 @@ import com.sun.faces.sandbox.component.YuiMenuBar;
  *
  */
 public class YuiMenuBarTag extends YuiMenuTagBase {
-    @Override
-    public String getComponentType() {
-        return YuiMenuBar.COMPONENT_TYPE;
-    }
-
-    @Override
-    public String getRendererType() {
-        return YuiMenuBar.RENDERER_TYPE;
-    }
+    @Override public String getComponentType() { return YuiMenuBar.COMPONENT_TYPE; }
+    @Override public String getRendererType()  { return YuiMenuBar.RENDERER_TYPE; }
 }
