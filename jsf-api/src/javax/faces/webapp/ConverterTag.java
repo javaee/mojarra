@@ -1,5 +1,5 @@
 /*
- * $Id: ConverterTag.java,v 1.19 2005/12/05 16:43:04 edburns Exp $
+ * $Id: ConverterTag.java,v 1.20 2006/08/17 20:32:48 rogerk Exp $
  */
 
 /*
@@ -137,7 +137,8 @@ public class ConverterTag extends TagSupport {
      * class, and register it with the {@link UIComponent} instance associated
      * with our most immediately surrounding {@link UIComponentTag} instance, if
      * the {@link UIComponent} instance was created by this execution of the
-     * containing JSP page.</p>
+     * containing JSP page.  If the <code>localValue</code> of the 
+     * {@link UIComponent} is a String, attempt to convert it.</p>
      *
      * @throws JspException if a JSP error occurs
      */
