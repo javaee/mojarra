@@ -420,7 +420,7 @@
 
   <tag>
 
-    <name>parameter</name>
+    <name>param</name>
     <tag-class>com.sun.faces.taglib.jsf_core.ParameterTag</tag-class>
     <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
     <body-content>JSP</body-content>
