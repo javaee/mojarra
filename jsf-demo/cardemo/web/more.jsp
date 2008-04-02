@@ -151,7 +151,7 @@
                 <BLOCKQUOTE><P><FONT FACE="Arial, Helvetica">
                 <h:selectone_menu  id="currentEngine"
                      valueRef="CarServer.currentEngineOption">
-                     <f:valuechanged_listener type="cardemo.PackageValueChanged" />
+                     <f:valuechange_listener type="cardemo.PackageValueChanged" />
                     <f:selectitems  
                         valueRef="CarServer.engineOption"/>
                 </h:selectone_menu>    
@@ -164,7 +164,7 @@
                 <BLOCKQUOTE><P><FONT FACE="Arial, Helvetica">
                 <h:selectone_radio  id="currentBrake"
                     valueRef="CarServer.currentBrakeOption">
-                    <f:valuechanged_listener type="cardemo.PackageValueChanged" />
+                    <f:valuechange_listener type="cardemo.PackageValueChanged" />
                     <f:selectitems  
                         valueRef="CarServer.brakeOption"/>
                 </h:selectone_radio>
@@ -181,7 +181,7 @@
                 <BLOCKQUOTE><P><FONT FACE="Arial, Helvetica">
                 <h:selectone_menu  id="currentSuspension"
                     valueRef="CarServer.currentSuspensionOption">
-                     <f:valuechanged_listener type="cardemo.PackageValueChanged" />
+                     <f:valuechange_listener type="cardemo.PackageValueChanged" />
                     <f:selectitems  
                         valueRef="CarServer.suspensionOption"/>
                 </h:selectone_menu>
@@ -196,7 +196,7 @@
                 <BLOCKQUOTE><P><FONT FACE="Arial, Helvetica">
                 <h:selectone_radio  id="currentSpeaker"
                     valueRef="CarServer.currentSpeakerOption" >
-                    <f:valuechanged_listener type="cardemo.PackageValueChanged" />
+                    <f:valuechange_listener type="cardemo.PackageValueChanged" />
                    <f:selectitems  
                         valueRef="CarServer.speakerOption"/>
                 </h:selectone_radio>
@@ -212,7 +212,7 @@
                 <BLOCKQUOTE> <P><FONT FACE="Arial, Helvetica">
                 <h:selectone_radio  id="currentAudio"
                     valueRef="CarServer.currentAudioOption">
-                     <f:valuechanged_listener type="cardemo.PackageValueChanged" />
+                     <f:valuechange_listener type="cardemo.PackageValueChanged" />
                     <f:selectitems  
                         valueRef="CarServer.audioOption"/>
                 </h:selectone_radio>
@@ -228,7 +228,7 @@
                 <BLOCKQUOTE> <P><FONT FACE="Arial, Helvetica">
                 <h:selectone_menu  id="currentTransmission"
                     valueRef="CarServer.currentTransmissionOption">
-                     <f:valuechanged_listener type="cardemo.PackageValueChanged" />
+                     <f:valuechange_listener type="cardemo.PackageValueChanged" />
                     <f:selectitems  
                         valueRef="CarServer.transmissionOption"/>
                 </h:selectone_menu>
@@ -253,7 +253,7 @@
                 <TD> 
                 <h:selectboolean_checkbox id="sunroof" title="Sunroof" 
                     alt="Sunroof" valueRef="CarServer.currentPackage.sunRoofSelected">
-                     <f:valuechanged_listener type="cardemo.PackageValueChanged" />
+                     <f:valuechange_listener type="cardemo.PackageValueChanged" />
                  </h:selectboolean_checkbox>    
                 </TD>																		
                 <TD>
@@ -263,7 +263,7 @@
                 <h:selectboolean_checkbox id="cruisecontrol" 
                     title="Cruise Control"  
                     valueRef="CarServer.currentPackage.cruiseControlSelected" >
-                     <f:valuechanged_listener type="cardemo.PackageValueChanged" />
+                     <f:valuechange_listener type="cardemo.PackageValueChanged" />
                  </h:selectboolean_checkbox>
 
                 </TD>
@@ -274,7 +274,7 @@
                 <h:selectboolean_checkbox id="keylessentry" 
                     title="Keyless Entry"  alt="Keyless Entry"
                     valueRef="CarServer.currentPackage.keylessEntrySelected" >
-                     <f:valuechanged_listener type="cardemo.PackageValueChanged" />
+                     <f:valuechange_listener type="cardemo.PackageValueChanged" />
                  </h:selectboolean_checkbox>
 
                 </TD>
@@ -287,7 +287,7 @@
                 <h:selectboolean_checkbox id="securitySystem"
                     title="Security System"  alt="Security System"
                     valueRef="CarServer.currentPackage.securitySystemSelected" >
-                     <f:valuechanged_listener type="cardemo.PackageValueChanged" />
+                     <f:valuechange_listener type="cardemo.PackageValueChanged" />
                  </h:selectboolean_checkbox>
 
                 </TD>
@@ -298,7 +298,7 @@
                 <h:selectboolean_checkbox id="skirack" title="Ski Rack"  
                     alt="Ski Rack" valueRef="CarServer.currentPackage.skiRackSelected"
                      >
-                     <f:valuechanged_listener type="cardemo.PackageValueChanged" />
+                     <f:valuechange_listener type="cardemo.PackageValueChanged" />
                  </h:selectboolean_checkbox>
                 </TD>
                 <TD>
@@ -308,7 +308,7 @@
                 <h:selectboolean_checkbox id="towPackage" title="Tow Package"  
                     alt="Tow Package" 
                     valueRef="CarServer.currentPackage.towPackageSelected" >
-                     <f:valuechanged_listener type="cardemo.PackageValueChanged" />
+                     <f:valuechange_listener type="cardemo.PackageValueChanged" />
                  </h:selectboolean_checkbox>
 
                 </TD>
@@ -320,7 +320,7 @@
                 <TD>
                 <h:selectboolean_checkbox id="gps" title="GPS" alt="GPS"
                     valueRef="CarServer.currentPackage.gpsSelected"  >
-                     <f:valuechanged_listener type="cardemo.PackageValueChanged" />
+                     <f:valuechange_listener type="cardemo.PackageValueChanged" />
                  </h:selectboolean_checkbox>
                 </FONT> 
                 </TD>

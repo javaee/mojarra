@@ -97,12 +97,10 @@
     
     <locale-config>
         <default-locale>en_US</default-locale>
-        <supported-locale>
-            <locale>ps_PS</locale> <!-- Palestinians -->
-            <locale>fr_FR</locale> <!-- French -->
-            <locale>de_DE</locale> <!-- German -->
-            <locale>en</locale> <!-- English -->
-        </supported-locale>
+        <supported-locale>ps_PS</supported-locale>
+        <supported-locale>fr_FR</supported-locale>
+        <supported-locale>de_DE</supported-locale>
+        <supported-locale>en</supported-locale>
     </locale-config>
   </application>
 

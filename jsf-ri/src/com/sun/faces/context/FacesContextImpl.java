@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContextImpl.java,v 1.59 2003/10/30 20:30:30 eburns Exp $
+ * $Id: FacesContextImpl.java,v 1.60 2003/10/31 01:12:12 eburns Exp $
  */
 
 /*
@@ -158,7 +158,7 @@ public class FacesContextImpl extends FacesContext
 	Severity result = null;
         
         if (null == componentMessageLists) {
-             return FacesMessage.SEVERITY_INFO;
+	    return null;
         }
 	    // Get an Iterator over the ArrayList instances
         List messages = getMergedMessageLists();

@@ -15,6 +15,12 @@
 
   <application>
     <message-bundle>cardemo.CardemoMessages</message-bundle>
+    <locale-config>
+      <default-locale>en</default-locale>
+      <supported-locale>de</supported-locale>
+      <supported-locale>fr</supported-locale>
+      <supported-locale>es</supported-locale>
+    </locale-config>
   </application>
 
    <!-- Validator -->

@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigParser.java,v 1.45 2003/10/30 16:14:14 eburns Exp $
+ * $Id: ConfigParser.java,v 1.46 2003/10/31 01:12:11 eburns Exp $
  */
 
 /*
@@ -325,7 +325,7 @@ public class ConfigParser {
                                "setVariableResolver", 0);
         digester.addCallMethod(prefix+"/locale-config/default-locale",
                                "setDefaultLocale", 0);
-        digester.addCallMethod(prefix+"/locale-config/supported-locale/locale",
+        digester.addCallMethod(prefix+"/locale-config/supported-locale",
                                "addSupportedLocale", 0);
 
 	//

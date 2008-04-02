@@ -17,12 +17,10 @@
 
     <locale-config>
       <default-locale>aoeuhoentuhtnhtnhoaenhnhu</default-locale>
-      <supported-locales>
-        <locale>ps_PS-at-pq-wp</locale> 
-        <locale>tg-AF-oe-12</locale> 
-        <locale>12-34</locale> 
-        <locale>12-</locale> 
-      </supported-locales>
+      <supported-locale>ps_PS-at-pq-wp</supported-locale> 
+      <supported-locale>tg-AF-oe-12</supported-locale> 
+      <supported-locale>12-34</supported-locale> 
+      <supported-locale>12-</supported-locale> 
     </locale-config>
 
   </application>

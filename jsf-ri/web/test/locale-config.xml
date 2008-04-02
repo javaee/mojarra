@@ -17,12 +17,10 @@
 
     <locale-config>
       <default-locale>ps_PS</default-locale>
-      <supported-locales>
-        <locale>ps_PS</locale> <!-- Palestinians -->
-        <locale>tg-AF</locale> <!-- Tajiks in Afghanistan -->
-        <locale>tk_IQ</locale> <!-- Turkmens in Iraq  -->
-        <locale>en_US</locale> <!-- Americans in U.S. -->
-      </supported-locales>
+        <supported-locale>ps_PS</supported-locale>
+        <supported-locale>tg-AF</supported-locale>
+        <supported-locale>tk_IQ</supported-locale>
+        <supported-locale>en_US</supported-locale>
     </locale-config>
 
   </application>

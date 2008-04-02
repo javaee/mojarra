@@ -13,7 +13,7 @@
      "-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.0//EN"
      "http://java.sun.com/dtd/web-facesconfig_1_0.dtd">
 
-    $Id: web-facesconfig_1_0.dtd,v 1.22 2003/10/30 16:13:47 eburns Exp $
+    $Id: web-facesconfig_1_0.dtd,v 1.23 2003/10/31 01:12:09 eburns Exp $
 
 -->
 
@@ -541,14 +541,6 @@
 <!ELEMENT lifecycle-factory (#PCDATA)>
 
 <!--
-     The "locale" element specifies a locale.  It must be specified as
-     :language:[_:country:[_:variant:]] without the colons, for example
-     "ja_JP_SJIS".  The separators between the segments may be '-' or
-     '_'.
--->
-<!ELEMENT locale (#PCDATA)>
-
-<!--
     The "managed-bean-class" element represents the fully qualified class
     name of the Java class that will be used to instantiate a new instance
     if creation of the specified managed bean is requested.  It must be of
@@ -711,10 +703,14 @@ registered on the Lifecycle. It must be of type "ClassName".
 <!ELEMENT small-icon      (#PCDATA)>
 
 <!--
-     The "supported-locales" element allows authors to declare which
+     The "supported-locale" element allows authors to declare which
      locales are supported in this application instance.
+
+     It must be specified as :language:[_:country:[_:variant:]] without
+     the colons, for example "ja_JP_SJIS".  The separators between the
+     segments may be '-' or '_'.
 -->
-<!ELEMENT supported-locales (locale*)>
+<!ELEMENT supported-locale (#PCDATA)>
 
 <!--
     The "tag-attribute" element states that the property or attribute in

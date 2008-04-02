@@ -11,6 +11,15 @@
 
 <faces-config>
 
+  <application>
+    <locale-config>
+      <default-locale>en</default-locale>
+      <supported-locale>de</supported-locale>
+      <supported-locale>fr</supported-locale>
+      <supported-locale>es</supported-locale>
+    </locale-config>
+  </application>
+
   <navigation-rule>
     <description>
         The decision rule used by the NavigationHandler to
