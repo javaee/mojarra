@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectOneTestCase.java,v 1.12 2003/10/19 21:13:10 craigmcc Exp $
+ * $Id: UISelectOneTestCase.java,v 1.13 2003/10/27 04:10:10 craigmcc Exp $
  */
 
 /*
@@ -131,6 +131,17 @@ public class UISelectOneTestCase extends UIInputTestCase {
         UIComponent component = new UISelectOne();
         component.setRendererType(null);
         return (component);
+    }
+
+
+    protected void setupNewValue(UIInput input) {
+
+        input.setValue("foo");
+        UISelectItem si = new UISelectItem();
+        si.setItemValue("foo");
+        si.setItemLabel("foo label");
+        input.getChildren().add(si);
+
     }
 
 

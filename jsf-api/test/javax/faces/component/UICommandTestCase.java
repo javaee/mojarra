@@ -1,5 +1,5 @@
 /*
- * $Id: UICommandTestCase.java,v 1.14 2003/10/09 22:58:11 craigmcc Exp $
+ * $Id: UICommandTestCase.java,v 1.15 2003/10/27 04:10:09 craigmcc Exp $
  */
 
 /*
@@ -11,8 +11,11 @@ package javax.faces.component;
 
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import javax.faces.FactoryFinder;
 import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UICommand;
@@ -21,6 +24,10 @@ import javax.faces.event.ActionEvent;
 import javax.faces.event.ActionListener;
 import javax.faces.event.PhaseId;
 import javax.faces.TestUtil;
+import javax.faces.mock.MockExternalContext;
+import javax.faces.render.Renderer;
+import javax.faces.render.RenderKit;
+import javax.faces.render.RenderKitFactory;
 import junit.framework.TestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -72,6 +79,35 @@ public class UICommandTestCase extends ValueHolderTestCaseBase {
     // ------------------------------------------------- Individual Test Methods
 
 
+    // Test order of action listener calls with actionListenerRef also
+    public void testActionOrder() throws Exception {
+
+        RenderKitFactory renderKitFactory = (RenderKitFactory)
+            FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
+        RenderKit renderKit =
+            renderKitFactory.getRenderKit(RenderKitFactory.DEFAULT_RENDER_KIT);
+        renderKit.addRenderer("Button", new ButtonRenderer());
+        UIViewRoot root = new UIViewRoot();
+        root.getChildren().add(component);
+        UICommand command = (UICommand) component;
+        command.setId("command");
+        command.addActionListener(new TestCommandActionListener("l1"));
+        command.addActionListener(new TestCommandActionListener("l2"));
+        command.setActionListenerRef("l3.processAction");
+        command.setImmediate(true);
+        request.setAttribute("l3", new TestCommandActionListener("l3"));
+        Map map = new HashMap();
+        map.put(command.getClientId(facesContext), "");
+        MockExternalContext econtext =
+            (MockExternalContext) facesContext.getExternalContext();
+        econtext.setRequestParameterMap(map);
+        TestCommandActionListener.trace(null);
+        root.processDecodes(facesContext);
+        assertEquals("/l1/l2/l3", TestCommandActionListener.trace());
+
+    }
+
+
     // Test attribute-property transparency
     public void testAttributesTransparency() {
 
@@ -88,6 +124,17 @@ public class UICommandTestCase extends ValueHolderTestCaseBase {
         assertEquals("bar", command.getAction());
         command.getAttributes().put("action", null);
         assertNull(command.getAction());
+
+        assertEquals(command.getActionListenerRef(),
+                     (String) command.getAttributes().get("actionListenerRef"));
+        command.setActionListenerRef("foo");
+        assertEquals("foo", (String) command.getAttributes().get("actionListenerRef"));
+        command.setActionListenerRef(null);
+        assertNull((String) command.getAttributes().get("actionListenerRef"));
+        command.getAttributes().put("actionListenerRef", "bar");
+        assertEquals("bar", command.getActionListenerRef());
+        command.getAttributes().put("actionListenerRef", null);
+        assertNull(command.getActionListenerRef());
 
         assertEquals(command.getActionRef(),
                      (String) command.getAttributes().get("actionRef"));
@@ -259,6 +306,7 @@ public class UICommandTestCase extends ValueHolderTestCaseBase {
         UICommand command = (UICommand) component;
 
         assertNull("no action", command.getAction());
+        assertNull("no actionListenerRef", command.getActionListenerRef());
         assertNull("no actionRef", command.getActionRef());
 
     }
@@ -283,6 +331,11 @@ public class UICommandTestCase extends ValueHolderTestCaseBase {
         assertEquals("foo", command.getAction());
         command.setAction(null);
         assertNull(command.getAction());
+
+        command.setActionListenerRef("foo");
+        assertEquals("foo", command.getActionListenerRef());
+        command.setActionListenerRef(null);
+        assertNull(command.getActionListenerRef());
 
         command.setActionRef("foo");
         assertEquals("foo", command.getActionRef());
@@ -334,6 +387,7 @@ public class UICommandTestCase extends ValueHolderTestCaseBase {
         UICommand c1 = (UICommand) comp1;
         UICommand c2 = (UICommand) comp2;
         assertEquals(c1.getAction(), c2.getAction());
+        assertEquals(c1.getActionListenerRef(), c2.getActionListenerRef());
         assertEquals(c1.getActionRef(), c2.getActionRef());
     }
 
@@ -351,6 +405,7 @@ public class UICommandTestCase extends ValueHolderTestCaseBase {
         super.populateComponent(component);
         UICommand c = (UICommand) component;
         c.setAction("foo");
+        c.setActionListenerRef("baz.bop");
         c.setActionRef("bar");
     }
 
@@ -398,5 +453,58 @@ public class UICommandTestCase extends ValueHolderTestCaseBase {
 	    return listeners;
 	}
     }
+
+    // --------------------------------------------------------- Private Classes
+
+
+    // "Button" Renderer
+    class ButtonRenderer extends Renderer {
+
+        public void decode(FacesContext context, UIComponent component) {
+
+            if ((context == null) || (component == null)) {
+                throw new NullPointerException();
+            }
+
+            if (!(component instanceof ActionSource)) {
+                return;
+            }
+            String clientId = component.getClientId(context);
+            Map params = context.getExternalContext().getRequestParameterMap();
+            if (params.containsKey(clientId)) {
+                component.queueEvent(new ActionEvent(component));
+            }
+
+        }
+
+        public void encodeBegin(FacesContext context, UIComponent component)
+            throws IOException {
+
+            if ((context == null) || (component == null)) {
+                throw new NullPointerException();
+            }
+
+        }
+
+        public void encodeChildren(FacesContext context, UIComponent component)
+            throws IOException {
+
+            if ((context == null) || (component == null)) {
+                throw new NullPointerException();
+            }
+
+        }
+
+        public void encodeEnd(FacesContext context, UIComponent component)
+            throws IOException {
+
+            if ((context == null) || (component == null)) {
+                throw new NullPointerException();
+            }
+
+        }
+
+    }
+
 
 }

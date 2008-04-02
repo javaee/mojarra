@@ -1,5 +1,5 @@
 /*
- * $Id: NavigationHandler.java,v 1.6 2003/08/26 21:50:01 craigmcc Exp $
+ * $Id: NavigationHandler.java,v 1.7 2003/10/27 04:09:56 craigmcc Exp $
  */
 
 /*
@@ -15,7 +15,7 @@ import javax.faces.context.FacesContext;
 
 /**
  * <p>A <strong>NavigationHandler</strong> is passed the outcome string
- * returned by an {@link Action} invoked for this application, and will
+ * returned by an application action invoked for this application, and will
  * use this (along with related state information) to choose the view to
  * be displayed next.</p>
  *
@@ -37,14 +37,14 @@ public abstract class NavigationHandler {
     /**
      * <p>Perform navigation processing based on the state information
      * in the specified {@link FacesContext}, plus the outcome string
-     * returned by an executed {@link Action}.</p>
+     * returned by an executed application action.</p>
      *
      * @param context The {@link FacesContext} for the current request
      * @param actionRef The action reference expression that was evaluated
      *  to retrieve the specified outcome, or <code>null</code> if the
      *  outcome was acquired by some other means
-     * @param outcome The logical outcome returned by a previous {@link Action}
-     *  (which may be <code>null</code>)
+     * @param outcome The logical outcome returned by a previous invoked
+     *  application action (which may be <code>null</code>)
      *
      * @exception NullPointerException if <code>context</code>
      *  is <code>null</code>

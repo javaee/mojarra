@@ -1,5 +1,5 @@
 /*
- * $Id: Application.java,v 1.17 2003/10/25 22:08:47 craigmcc Exp $
+ * $Id: Application.java,v 1.18 2003/10/27 04:09:56 craigmcc Exp $
  */
 
 /*
@@ -126,7 +126,7 @@ public abstract class Application {
 
     /**
      * <p>Return the {@link NavigationHandler} instance that will be passed
-     * the outcome returned by any invoked {@link Action} for this
+     * the outcome returned by any invoked application action for this
      * web application.  The default implementation must provide the behavior
      * described in the {@link NavigationHandler} class description.</p>
      */
@@ -135,7 +135,7 @@ public abstract class Application {
 
     /**
      * <p>Set the {@link NavigationHandler} instance that will be passed
-     * the outcome returned by any invoked {@link Action} for this
+     * the outcome returned by any invoked application action for this
      * web application.</p>
      *
      * @param handler The new {@link NavigationHandler} instance

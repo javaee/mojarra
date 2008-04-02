@@ -1,5 +1,5 @@
 /*
- * $Id: UIDataTestCase.java,v 1.15 2003/10/22 23:59:01 craigmcc Exp $
+ * $Id: UIDataTestCase.java,v 1.16 2003/10/27 04:10:09 craigmcc Exp $
  */
 
 /*
@@ -380,7 +380,7 @@ public class UIDataTestCase extends ValueHolderTestCaseBase {
         // Simulate the Request Processing Lifecycle
         TestDataActionListener.trace(null);
         TestDataValidator.trace(null);
-        TestDataValueChangedListener.trace(null);
+        TestDataValueChangeListener.trace(null);
         UIViewRoot root = (UIViewRoot) data.getParent();
 
         //   APPLY REQUEST VALUES
@@ -389,7 +389,7 @@ public class UIDataTestCase extends ValueHolderTestCaseBase {
                      "/data:7:command",
                      TestDataActionListener.trace());
         assertEquals("", TestDataValidator.trace());
-        assertEquals("", TestDataValueChangedListener.trace());
+        assertEquals("", TestDataValueChangeListener.trace());
         checkMessages(0);
 
         //   PERFORM VALIDATIONS
@@ -405,7 +405,7 @@ public class UIDataTestCase extends ValueHolderTestCaseBase {
                      TestDataValidator.trace());
         assertEquals("/data:4:input/input4/input4A" +
                      "/data:6:input/input6/input6B",
-                     TestDataValueChangedListener.trace());
+                     TestDataValueChangeListener.trace());
         checkModelInputs(before);
         checkMessages(0);
 
@@ -422,7 +422,7 @@ public class UIDataTestCase extends ValueHolderTestCaseBase {
                      TestDataValidator.trace());
         assertEquals("/data:4:input/input4/input4A" +
                      "/data:6:input/input6/input6B",
-                     TestDataValueChangedListener.trace());
+                     TestDataValueChangeListener.trace());
         checkModelInputs(after);
         checkMessages(0);
 
@@ -532,14 +532,14 @@ public class UIDataTestCase extends ValueHolderTestCaseBase {
         // Simulate the Request Processing Lifecycle
         TestDataActionListener.trace(null);
         TestDataValidator.trace(null);
-        TestDataValueChangedListener.trace(null);
+        TestDataValueChangeListener.trace(null);
         UIViewRoot root = (UIViewRoot) data.getParent();
 
         //   APPLY REQUEST VALUES
         root.processDecodes(facesContext);
         assertEquals("", TestDataActionListener.trace());
         assertEquals("", TestDataValidator.trace());
-        assertEquals("", TestDataValueChangedListener.trace());
+        assertEquals("", TestDataValueChangeListener.trace());
         checkMessages(0);
 
         //   PERFORM VALIDATIONS
@@ -553,7 +553,7 @@ public class UIDataTestCase extends ValueHolderTestCaseBase {
                      TestDataValidator.trace());
         assertEquals("/data:3:input/input3/input3A" +
                      "/data:7:input/input7/input7B",
-                     TestDataValueChangedListener.trace());
+                     TestDataValueChangeListener.trace());
         checkModelInputs(before);
         checkMessages(2);
 
@@ -818,7 +818,7 @@ public class UIDataTestCase extends ValueHolderTestCaseBase {
         column.getChildren().add(input);
         data.getChildren().add(column);
         input.addValidator(new TestDataValidator());
-        input.addValueChangedListener(new TestDataValueChangedListener());
+        input.addValueChangeListener(new TestDataValueChangeListener());
 
         column = new UIColumn();
         column.setId("outputColumn");
@@ -1071,7 +1071,7 @@ public class UIDataTestCase extends ValueHolderTestCaseBase {
             String clientId = input.getClientId(context);
             // System.err.println("decode(" + clientId + ")");
 
-            // Save the previous value for future ValueChangedEvent handling
+            // Save the previous value for future ValueChangeEvent handling
             input.setPrevious(input.currentValue(context));
 
             // Decode incoming request parameters

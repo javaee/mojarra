@@ -1,5 +1,5 @@
 /*
- * $Id: TestValueChangedListener.java,v 1.5 2003/09/25 07:46:06 craigmcc Exp $
+ * $Id: TestValueChangeListener.java,v 1.1 2003/10/27 04:10:08 craigmcc Exp $
  */
 
 /*
@@ -10,16 +10,16 @@
 package javax.faces.component;
 
 
-import javax.faces.event.ValueChangedEvent;
-import javax.faces.event.ValueChangedListener;
+import javax.faces.event.ValueChangeEvent;
+import javax.faces.event.ValueChangeListener;
 import javax.faces.event.PhaseId;
 import javax.faces.context.FacesContext;
 
 /**
- * <p>Test {@link ValueChangedListener} implementation.</p>
+ * <p>Test {@link ValueChangeListener} implementation.</p>
  */
 
-public class TestValueChangedListener implements ValueChangedListener, StateHolder {
+public class TestValueChangeListener implements ValueChangeListener, StateHolder {
 
     // ------------------------------------------------------------ Constructors
 
@@ -27,17 +27,17 @@ public class TestValueChangedListener implements ValueChangedListener, StateHold
      *
      * Called from state system.
      */
-    public TestValueChangedListener() {
+    public TestValueChangeListener() {
     }
 
 
-    public TestValueChangedListener(String id, PhaseId phaseId) {
+    public TestValueChangeListener(String id, PhaseId phaseId) {
         this.id = id;
         this.phaseId = phaseId;
     }
 
 
-    public TestValueChangedListener(String id) {
+    public TestValueChangeListener(String id) {
         this(id, PhaseId.ANY_PHASE);
     }
 
@@ -57,7 +57,7 @@ public class TestValueChangedListener implements ValueChangedListener, StateHold
         return (this.phaseId);
     }
 
-    public void processValueChanged(ValueChangedEvent event) {
+    public void processValueChange(ValueChangeEvent event) {
         trace(getId());
     }
 
@@ -86,10 +86,10 @@ public class TestValueChangedListener implements ValueChangedListener, StateHold
     // this needs to be named differently because other test methods
     // rely on the standard equal method.
     public boolean isEqual(Object otherObj) {
-	if (!(otherObj instanceof TestValueChangedListener)) {
+	if (!(otherObj instanceof TestValueChangeListener)) {
 	    return false;
 	}
-	TestValueChangedListener other = (TestValueChangedListener) otherObj;
+	TestValueChangeListener other = (TestValueChangeListener) otherObj;
 	if ((null != id && null == other.id) ||
 	    (null == id && null != other.id)) {
 	    return false;

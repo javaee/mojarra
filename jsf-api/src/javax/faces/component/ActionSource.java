@@ -1,5 +1,5 @@
 /*
- * $Id: ActionSource.java,v 1.2 2003/09/16 23:23:44 craigmcc Exp $
+ * $Id: ActionSource.java,v 1.3 2003/10/27 04:09:58 craigmcc Exp $
  */
 
 /*
@@ -10,7 +10,6 @@
 package javax.faces.component;
 
 
-import javax.faces.application.Action;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.ActionListener;
@@ -21,7 +20,7 @@ import javax.faces.event.ActionListener;
  * <p><strong>ActionSource</strong> is an interface that may be implemented
  * by any concrete {@link UIComponent} that wishes to be a source of
  * {@link ActionEvent}s, including the ability to invoke application
- * {@link Action}s via the default {@link ActionListener} mechanim.</p>
+ * actions via the default {@link ActionListener} mechanim.</p>
  */
 
 public interface ActionSource {
@@ -47,8 +46,37 @@ public interface ActionSource {
 
 
     /**
-     * <p>Return the <em>action reference expression</em> pointing at the
-     * {@link Action} to be invoked, if this {@link UIComponent}
+     * <p>Return a <em>method reference expression</em> pointing at an
+     * action listener method to be invoked, if this {@link UIComponent}
+     * is activated by the user, during the <em>Apply Request Values</em>
+     * or <em>Invoke Application</em> phase of the request processing
+     * lifecycle, depending upon the value of the <code>immediate</code>
+     * property.</p>
+     */
+    public String getActionListenerRef();
+
+
+    /**
+     * <p>Set a <em>method reference expression</em> pointing at an
+     * action listener method to be invoked, if this {@link UICompoenent}
+     * is activated by the user, during the <em>Apply Request Values</em>
+     * or <em>Invoke Application</em> phase of the request processing
+     * lifecycle, depending upon the value of the <code>immmediate</code>
+     * property.</p>
+     *
+     * <p>Any method referenced by such an expression must be public, with
+     * a return type of <code>void</code>, and accept a singe parameter of
+     * type <code>ActionEvent</code>.</p>
+     *
+     * @param actionListenerRef The new method reference expression
+     */
+    public void setActionListenerRef(String actionListenerRef);
+
+
+
+    /**
+     * <p>Return a <em>method reference expression</em> pointing at the
+     * application action to be invoked, if this {@link UIComponent}
      * is activated by the user, during the <em>Apply Request Values</em>
      * or <em>Invoke Application</em> phase of the request processing
      * lifecycle, depending on the value of the <code>immediate</code>
@@ -58,14 +86,17 @@ public interface ActionSource {
 
 
     /**
-     * <p>Set the <em>action reference expression</em> pointing at the
-     * {@link Action} to be invoked, if this {@link UIComponent}
+     * <p>Set a <em>method reference expression</em> pointing at the
+     * appication action to be invoked, if this {@link UIComponent}
      * is activated by the user, during the <em>Apply Request Values</em>
      * or <em>Invoke Application</em> phase of the request processing
      * lifecycle, depending on the value of the <code>immediate</code>
      * property.</p>
      *
-     * @param actionRef The new action reference
+     * <p>Any method referenced by such an expression must be public, with
+     * a return type of <code>String</code>, and accept no parameters.</p>
+     *
+     * @param actionRef The new method reference expression
      */
     public void setActionRef(String actionRef);
 

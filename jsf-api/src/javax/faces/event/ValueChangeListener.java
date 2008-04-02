@@ -1,5 +1,5 @@
 /*
- * $Id: ValueChangedListener.java,v 1.4 2003/02/20 22:46:29 ofung Exp $
+ * $Id: ValueChangeListener.java,v 1.1 2003/10/27 04:10:03 craigmcc Exp $
  */
 
 /*
@@ -14,26 +14,26 @@ import javax.faces.component.UIComponent;
 
 
 /**
- * <p>A listener interface for receiving {@link ValueChangedEvent}s.  A class
+ * <p>A listener interface for receiving {@link ValueChangeEvent}s.  A class
  * that is interested in receiving such events implements this interface, and
  * then registers itself with the source {@link UIComponent} of interest, by
- * calling <code>addValueChangedListener()</code>.</p>
+ * calling <code>addValueChangeListener()</code>.</p>
  */
 
-public interface ValueChangedListener extends FacesListener {
+public interface ValueChangeListener extends FacesListener {
 
 
     /**
      * <p>Invoked when the value change described by the specified
-     * {@link ValueChangedEvent} occurs.</p>
+     * {@link ValueChangeEvent} occurs.</p>
      *
-     * @param event The {@link ValueChangedEvent} that has occurred
+     * @param event The {@link ValueChangeEvent} that has occurred
      *
      * @exception AbortProcessingException Signal the JavaServer Faces
      *  implementation that no further processing on the current event
      *  should be performed
      */
-    public void processValueChanged(ValueChangedEvent event)
+    public void processValueChange(ValueChangeEvent event)
         throws AbortProcessingException;
 
 

@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectManyTestCase.java,v 1.14 2003/10/19 21:13:09 craigmcc Exp $
+ * $Id: UISelectManyTestCase.java,v 1.15 2003/10/27 04:10:10 craigmcc Exp $
  */
 
 /*
@@ -181,6 +181,17 @@ public class UISelectManyTestCase extends UIInputTestCase {
         UIComponent component = new UISelectMany();
         component.setRendererType(null);
         return (component);
+    }
+
+
+    protected void setupNewValue(UIInput input) {
+
+        input.setValue(new Object[] { "foo" });
+        UISelectItem si = new UISelectItem();
+        si.setItemValue("foo");
+        si.setItemLabel("foo label");
+        input.getChildren().add(si);
+
     }
 
 

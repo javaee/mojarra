@@ -1,5 +1,5 @@
 /*
- * $Id: ValueChangedEvent.java,v 1.7 2003/09/30 17:37:45 rlubke Exp $
+ * $Id: ValueChangeEvent.java,v 1.1 2003/10/27 04:10:02 craigmcc Exp $
  */
 
 /*
@@ -14,13 +14,13 @@ import javax.faces.component.UIComponent;
 
 
 /**
- * <p>A {@link ValueChangedEvent} is a notification that the local value of
- * the source component has been changed as a result of user interface
+ * <p>A {@link ValueChangeEvent} is a notification that the local value of
+ * the source component has been change as a result of user interface
  * activity.  It is not fired unless validation of the new value was
  * completed successfully.</p>
  */
 
-public class ValueChangedEvent extends FacesEvent {
+public class ValueChangeEvent extends FacesEvent {
 
 
     // ------------------------------------------------------------ Constructors
@@ -37,7 +37,7 @@ public class ValueChangedEvent extends FacesEvent {
      * @exception IllegalArgumentException if <code>component</code> is
      *  <code>null</code>
      */
-    public ValueChangedEvent(UIComponent component,
+    public ValueChangeEvent(UIComponent component,
                              Object oldValue, Object newValue) {
 
         super(component);
@@ -89,7 +89,7 @@ public class ValueChangedEvent extends FacesEvent {
 
     public boolean isAppropriateListener(FacesListener listener) {
 
-        return (listener instanceof ValueChangedListener);
+        return (listener instanceof ValueChangeListener);
 
     }
 
@@ -98,7 +98,7 @@ public class ValueChangedEvent extends FacesEvent {
      */ 
     public void processListener(FacesListener listener) {
 
-        ((ValueChangedListener) listener).processValueChanged(this);
+        ((ValueChangeListener) listener).processValueChange(this);
 
     }
 

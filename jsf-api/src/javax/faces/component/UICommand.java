@@ -1,5 +1,5 @@
 /*
- * $Id: UICommand.java,v 1.47 2003/10/25 00:34:37 craigmcc Exp $
+ * $Id: UICommand.java,v 1.48 2003/10/27 04:09:58 craigmcc Exp $
  */
 
 /*
@@ -10,7 +10,6 @@
 package javax.faces.component;
 
 
-import javax.faces.application.Action;
 import javax.faces.application.Application;
 import javax.faces.context.FacesContext;
 import javax.faces.el.ValueBinding;
@@ -88,6 +87,26 @@ public class UICommand extends UIComponentBase
     public void setAction(String action) {
 
         this.action = action;
+
+    }
+
+
+    /**
+     * <p>The action listener reference.</p>
+     */
+    private String actionListenerRef = null;
+
+
+    public String getActionListenerRef() {
+
+        return (this.actionListenerRef);
+
+    }
+
+
+    public void setActionListenerRef(String actionListenerRef) {
+
+        this.actionListenerRef = actionListenerRef;
 
     }
 
@@ -223,13 +242,14 @@ public class UICommand extends UIComponentBase
 
         removeDefaultActionListener(context);
 
-        Object values[] = new Object[6];
+        Object values[] = new Object[7];
         values[0] = super.saveState(context);
         values[1] = action;
-        values[2] = actionRef;
-        values[3] = immediate ? Boolean.TRUE : Boolean.FALSE;
-        values[4] = value;
-        values[5] = valueRef;
+        values[2] = actionListenerRef;
+        values[3] = actionRef;
+        values[4] = immediate ? Boolean.TRUE : Boolean.FALSE;
+        values[5] = value;
+        values[6] = valueRef;
 
         addDefaultActionListener(context);
         return (values);
@@ -244,10 +264,11 @@ public class UICommand extends UIComponentBase
         Object values[] = (Object[]) state;
         super.restoreState(context, values[0]);
         action = (String) values[1];
-        actionRef = (String) values[2];
-        immediate = ((Boolean) values[3]).booleanValue();
-        value = values[4];
-        valueRef = (String) values[5];
+        actionListenerRef = (String) values[2];
+        actionRef = (String) values[3];
+        immediate = ((Boolean) values[4]).booleanValue();
+        value = values[5];
+        valueRef = (String) values[6];
 
         addDefaultActionListener(context);
 

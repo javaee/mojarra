@@ -1,5 +1,5 @@
 /*
- * $Id: TestValueChangedListenerWithBackReference.java,v 1.1 2003/09/25 07:46:06 craigmcc Exp $
+ * $Id: TestValueChangeListenerWithBackReference.java,v 1.1 2003/10/27 04:10:08 craigmcc Exp $
  */
 
 /*
@@ -15,10 +15,10 @@ import javax.faces.event.PhaseId;
 import javax.faces.TestUtil;
 
 /**
- * <p>Test {@link ValueChangedListener} implementation.</p>
+ * <p>Test {@link ValueChangeListener} implementation.</p>
  */
 
-public class TestValueChangedListenerWithBackReference extends TestValueChangedListener implements StateHolder {
+public class TestValueChangeListenerWithBackReference extends TestValueChangeListener implements StateHolder {
 
     // ------------------------------------------------------------ Constructors
 
@@ -26,11 +26,11 @@ public class TestValueChangedListenerWithBackReference extends TestValueChangedL
      *
      * Called from state system.
      */
-    public TestValueChangedListenerWithBackReference() {
+    public TestValueChangeListenerWithBackReference() {
     }
 
 
-    public TestValueChangedListenerWithBackReference(String id, 
+    public TestValueChangeListenerWithBackReference(String id, 
 						     PhaseId phaseId, 
 						     UIComponent yourComponent) {
 	super(id, phaseId);
@@ -38,7 +38,7 @@ public class TestValueChangedListenerWithBackReference extends TestValueChangedL
     }
 
 
-    public TestValueChangedListenerWithBackReference(String id) {
+    public TestValueChangeListenerWithBackReference(String id) {
         super(id, PhaseId.ANY_PHASE);
     }
 
@@ -48,11 +48,11 @@ public class TestValueChangedListenerWithBackReference extends TestValueChangedL
     // this needs to be named differently because other test methods
     // rely on the standard equal method.
     public boolean isEqual(Object otherObj) {
-	if (!(otherObj instanceof TestValueChangedListenerWithBackReference)) {
+	if (!(otherObj instanceof TestValueChangeListenerWithBackReference)) {
 	    return false;
 	}
-	TestValueChangedListenerWithBackReference other = 
-	    (TestValueChangedListenerWithBackReference) otherObj;
+	TestValueChangeListenerWithBackReference other = 
+	    (TestValueChangeListenerWithBackReference) otherObj;
 	
 	boolean 
 	    superIsEqual = super.isEqual(otherObj),

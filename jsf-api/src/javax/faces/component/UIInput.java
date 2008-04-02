@@ -1,5 +1,5 @@
 /*
- * $Id: UIInput.java,v 1.37 2003/10/21 05:37:45 craigmcc Exp $
+ * $Id: UIInput.java,v 1.38 2003/10/27 04:09:59 craigmcc Exp $
  */
 
 /*
@@ -10,15 +10,17 @@
 package javax.faces.component;
 
 
+import java.lang.reflect.InvocationTargetException;
 import javax.faces.FacesException;
 import javax.faces.application.Application;
 import javax.faces.application.Message;
 import javax.faces.application.MessageResources;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
+import javax.faces.el.MethodBinding;
 import javax.faces.el.ValueBinding;
-import javax.faces.event.ValueChangedEvent;
-import javax.faces.event.ValueChangedListener;
+import javax.faces.event.ValueChangeEvent;
+import javax.faces.event.ValueChangeListener;
 import javax.faces.render.Renderer;
 import javax.faces.validator.Validator;
 
@@ -83,12 +85,12 @@ import java.util.List;
  * <p>When the <code>validate()</code> method of this {@link UIInput}
  * detects that a value change has actually occurred, and that all validations
  * have been successfully passed, it will queue a
- * {@link ValueChangedEvent}.  Later on, the <code>broadcast()</code>
+ * {@link ValueChangeEvent}.  Later on, the <code>broadcast()</code>
  * method will ensure that this event is broadcast to all interested
  * listeners.</p>
  *
  * <p>By default, the <code>rendererType</code> property must be set to
- * "<code>Text</code>".  This value can be changed by calling the
+ * "<code>Text</code>".  This value can be change by calling the
  * <code>setRendererType()</code> method.</p>
  */
 
@@ -185,6 +187,76 @@ public class UIInput extends UIOutput {
     }
 
 
+    private String validateRef = null;
+
+
+    /**
+     * <p>Return a <em>method reference expression</em> pointing at a
+     * method that will be called during <em>Process Validations</em>
+     * phase of the request processing lifecycle, to validate the current
+     * value of this component.</p>
+     */
+    public String getValidateRef() {
+
+        return (this.validateRef);
+
+    }
+
+
+    /**
+     * <p>Set a <em>method reference expression</em> pointing at a
+     * method that will be called during <em>Process Validations</em>
+     * phase of the request processing lifecycle, to validate the current
+     * value of this component.</p>
+     *
+     * <p>Any method referenced by such an expression must be public, with
+     * a return type of <code>void</code>, and accept parameters of type
+     * {@link FacesContext} and {@link UIInput}.</p>
+     *
+     * @param validateRef The new method reference expression
+     */
+    public void setValidateRef(String validateRef) {
+
+        this.validateRef = validateRef;
+
+    }
+
+
+    private String valueChangeListenerRef = null;
+
+
+    /**
+     * <p>Return a <em>method reference expression</em> pointing at a
+     * method that will be called during <em>Process Validations</em>
+     * phase of he request processing lifecycle, after any registered
+     * {@link ValueChangeListener}s have been notified of a value change.</p>
+     */
+    public String getValueChangeListenerRef() {
+
+        return (this.valueChangeListenerRef);
+
+    }
+
+
+    /**
+     * <p>Set a <em>method reference expression</em> pointing at a
+     * method that will be called during <em>Process Validations</em>
+     * phase of he request processing lifecycle, after any registered
+     * {@link ValueChangeListener}s have been notified of a value change.</p>
+     *
+     * <p>Any such method referenced by such an expression must be public,
+     * with a return type of <code>void</code>, and accept a parameter of
+     * type <code>ValueChangeEvent</code>.</p>
+     *
+     * @param valueChangeListenerRef The new method reference expression
+     */
+    public void setValueChangeListenerRef(String valueChangeListenerRef) {
+
+        this.valueChangeListenerRef = valueChangeListenerRef;
+
+    }
+
+
     // ----------------------------------------------------- UIComponent Methods
 
 
@@ -260,6 +332,10 @@ public class UIInput extends UIOutput {
     // ------------------------------------------------------ Validation Methods
 
 
+    private Class validateParams[] =
+    { FacesContext.class, UIInput.class };
+
+
     /**
      * <p>Perform the following algorithm to validate the local value of
      * this {@link UIInput}.</p>
@@ -281,11 +357,12 @@ public class UIInput extends UIOutput {
      * <li>If the <code>valid</code> property on this component is still
      *     <code>true</code>, and the local value is not empty, call the
      *     <code>validate()</code> method of each {@link Validator}
-     *     registered for this {@link UIInput}.</li>
+     *     registered for this {@link UIInput}, followed by the method
+     *     pointed at by the <code>validateRef</code> property (if any).</li>
      * <li>If the <code>valid</code> property of this component is still
      *     <code>true</code>, and if the local value is different from
      *     the previous value of this component, fire a
-     *     {@link ValueChangedEvent} to be broadcast to all interested
+     *     {@link ValueChangeEvent} to be broadcast to all interested
      *     listeners.</li>
      * </ul>
      *
@@ -320,20 +397,32 @@ public class UIInput extends UIOutput {
 	    setValid(false);
 	}
 
-	// If our value is valid and not empty, call all external validators
+	// If our value is valid and not empty, call all validators
 	if (isValid() && !isEmpty() && (this.validators != null)) {
 	    Iterator validators = this.validators.iterator();
 	    while (validators.hasNext()) {
 		Validator validator = (Validator) validators.next();
 		validator.validate(context, this);
 	    }
+            String validateRef = getValidateRef();
+            if (!(validateRef == null)) {
+                MethodBinding mb =
+                    context.getApplication().getMethodBinding
+                    (validateRef, validateParams);
+                try {
+                    mb.invoke(context,
+                              new Object[] { context, this });
+                } catch (InvocationTargetException e) {
+                    throw new FacesException(e.getTargetException());
+                }
+            }
 	}
 
-	// If our value is valid, emit a ValueChangedEvent if appropriate
+	// If our value is valid, emit a ValueChangeEvent if appropriate
 	if (isValid()) {
 	    Object value = getValue();
             if (compareValues(previous, value)) {
-                queueEvent(new ValueChangedEvent(this, previous, value));
+                queueEvent(new ValueChangeEvent(this, previous, value));
             }
         }
 
@@ -424,15 +513,15 @@ public class UIInput extends UIOutput {
 
 
     /**
-     * <p>Add a new {@link ValueChangedListener} to the set of listeners
-     * interested in being notified when {@link ValueChangedEvent}s occur.</p>
+     * <p>Add a new {@link ValueChangeListener} to the set of listeners
+     * interested in being notified when {@link ValueChangeEvent}s occur.</p>
      *
-     * @param listener The {@link ValueChangedListener} to be added
+     * @param listener The {@link ValueChangeListener} to be added
      *
      * @exception NullPointerException if <code>listener</code>
      *  is <code>null</code>
      */
-    public void addValueChangedListener(ValueChangedListener listener) {
+    public void addValueChangeListener(ValueChangeListener listener) {
 
         addFacesListener(listener);
 
@@ -440,16 +529,16 @@ public class UIInput extends UIOutput {
 
 
     /**
-     * <p>Remove an existing {@link ValueChangedListener} (if any) from the
+     * <p>Remove an existing {@link ValueChangeListener} (if any) from the
      * set of listeners interested in being notified when
-     * {@link ValueChangedEvent}s occur.</p>
+     * {@link ValueChangeEvent}s occur.</p>
      *
-     * @param listener The {@link ValueChangedListener} to be removed
+     * @param listener The {@link ValueChangeListener} to be removed
      *
      * @exception NullPointerException if <code>listener</code>
      *  is <code>null</code>
      */
-    public void removeValueChangedListener(ValueChangedListener listener) {
+    public void removeValueChangeListener(ValueChangeListener listener) {
 
         removeFacesListener(listener);
 
@@ -461,11 +550,13 @@ public class UIInput extends UIOutput {
 
     public Object saveState(FacesContext context) {
 
-        Object values[] = new Object[4];
+        Object values[] = new Object[6];
         values[0] = super.saveState(context);
         values[1] = required ? Boolean.TRUE : Boolean.FALSE;
         values[2] = previous;
         values[3] = saveAttachedState(context, validators);
+        values[4] = validateRef;
+        values[5] = valueChangeListenerRef;
         return (values);
 
     }
@@ -496,6 +587,10 @@ public class UIInput extends UIOutput {
 		validators = restoredValidators;
 	    }
 	}
+
+        validateRef = (String) values[4];
+        valueChangeListenerRef = (String) values[5];
+
     }
 
 

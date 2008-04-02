@@ -1,5 +1,5 @@
 /*
- * $Id: TestDataValueChangedListener.java,v 1.1 2003/10/22 23:23:52 craigmcc Exp $
+ * $Id: TestDataValueChangeListener.java,v 1.1 2003/10/27 04:10:06 craigmcc Exp $
  */
 
 /*
@@ -10,23 +10,23 @@
 package javax.faces.component;
 
 
-import javax.faces.event.ValueChangedEvent;
-import javax.faces.event.ValueChangedListener;
+import javax.faces.event.ValueChangeEvent;
+import javax.faces.event.ValueChangeListener;
 import javax.faces.event.PhaseId;
 import javax.faces.context.FacesContext;
 
 
 /**
- * <p>Test {@link ValueChangedListener} implementation.</p>
+ * <p>Test {@link ValueChangeListener} implementation.</p>
  */
 
-public class TestDataValueChangedListener implements ValueChangedListener {
+public class TestDataValueChangeListener implements ValueChangeListener {
 
 
     // ------------------------------------------------------------ Constructors
 
 
-    public TestDataValueChangedListener() {
+    public TestDataValueChangeListener() {
     }
 
 
@@ -38,7 +38,7 @@ public class TestDataValueChangedListener implements ValueChangedListener {
     }
 
 
-    public void processValueChanged(ValueChangedEvent event) {
+    public void processValueChange(ValueChangeEvent event) {
         trace(event.getComponent().getClientId
               (FacesContext.getCurrentInstance()));
         Object oldValue = event.getOldValue();
