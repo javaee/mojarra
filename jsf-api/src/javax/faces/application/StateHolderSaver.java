@@ -1,5 +1,5 @@
 /*
- * $Id: StateHolderSaver.java,v 1.5 2003/09/16 23:12:23 eburns Exp $
+ * $Id: StateHolderSaver.java,v 1.6 2003/09/18 00:49:43 eburns Exp $
  */
 
 /*
@@ -10,7 +10,9 @@
 package javax.faces.application;
 
 import javax.faces.context.FacesContext;
+import javax.faces.component.UIComponent;
 import javax.faces.component.StateHolder;
+import javax.faces.component.StateHolderWithBackReference;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -47,7 +49,8 @@ public class StateHolderSaver extends Object implements Serializable {
      * @return the restored {@link StateHolder} instance.
      */
 
-    public Object restore(FacesContext context) throws IOException {
+    public Object restore(FacesContext context, 
+			  UIComponent toAttachTo) throws IOException {
         Object result = null;
         Class toRestoreClass = null;
         if ( className == null) {
@@ -73,11 +76,17 @@ public class StateHolderSaver extends Object implements Serializable {
             }
         }
 
-        if (null != result && null != savedState && 
-            result instanceof StateHolder) {
-            // don't need to check transient, since that was done on
-            // the saving side.
-            ((StateHolder)result).restoreState(context, savedState);
+        if (null != result && null != savedState) {
+	    if (result instanceof StateHolderWithBackReference) {
+		((StateHolderWithBackReference)result).restoreState(context, 
+								    savedState,
+								    toAttachTo);
+	    }
+	    else if (result instanceof StateHolder) {
+		// don't need to check transient, since that was done on
+		// the saving side.
+		((StateHolder)result).restoreState(context, savedState);
+	    }
         }
         return result;
     }

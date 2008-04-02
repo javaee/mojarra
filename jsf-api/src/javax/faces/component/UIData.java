@@ -483,7 +483,7 @@ public class UIData extends UIComponentBase
         super.restoreState(context, values[0]);
         List[] converterList = (List[])
             context.getApplication().getViewHandler().getStateManager().
-            restoreAttachedObjectState(context, values[1], null);
+            restoreAttachedObjectState(context, values[1], null, this);
 	if (converterList != null) {
             List theConverter = converterList[0];
             if ((theConverter != null) && (theConverter.size() > 0)) {
@@ -493,7 +493,7 @@ public class UIData extends UIComponentBase
         first = ((Integer) values[2]).intValue();
         List[] repeaterList = (List[])
             context.getApplication().getViewHandler().getStateManager().
-            restoreAttachedObjectState(context, values[3], null);
+            restoreAttachedObjectState(context, values[3], null, this);
 	if (repeaterList != null) {
             List theRepeater = repeaterList[0];
             if ((theRepeater != null) && (theRepeater.size() > 0)) {

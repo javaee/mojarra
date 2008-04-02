@@ -1,5 +1,5 @@
 /*
- * $Id: StateManager.java,v 1.18 2003/09/16 16:48:02 eburns Exp $
+ * $Id: StateManager.java,v 1.19 2003/09/18 00:49:43 eburns Exp $
  */
 
 /*
@@ -543,12 +543,25 @@ public abstract class StateManager {
      *
      * </ul>
      *
+     * @param context the {@link FacesContext} for this request
+     *
+     * @param stateObj the opaque object returned from {@link
+     * #getAttachedObjectState}
+     *
+     * @param currentList the currently attached objects.  May be
+     * <code>null</code>.
+     *
+     * @param toAttachTo the {@link UIComponent} to which these attached
+     * objects were attached.
+     *
      * @exception NullPointerException if context is null.
      *
      */
     
     public List [] restoreAttachedObjectState(FacesContext context,
-            Object stateObj, List[] currentList) throws IOException {
+					      Object stateObj, 
+					      List[] currentList, 
+					      UIComponent toAttachTo) throws IOException {
 	if (null == stateObj) {
 	    return null;
 	}
@@ -592,7 +605,8 @@ public abstract class StateManager {
                 // create the attachedObjects for this List
                 for (j = 0; j < innerLen; j++) {
                     if (null != innerArray[j]) {
-                        curAttachedObject = innerArray[j].restore(context);
+                        curAttachedObject = innerArray[j].restore(context, 
+								  toAttachTo);
                         if (null != curAttachedObject) {
                             curList.add(curAttachedObject);
                         }
