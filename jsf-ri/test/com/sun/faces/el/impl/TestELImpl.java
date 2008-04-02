@@ -291,9 +291,9 @@ public class TestELImpl extends ServletFacesTestCase
         evaluateTest("#{pbean2.value}", "got the value");
         evaluateTest("#{pbean3.value}", "got the value");
         evaluateTest("#{pbean4.value}", "got the value");
-        evaluateTestFailure("#{pbean5.value}");
+        evaluateTest("#{pbean5.value}", "got the value");
         evaluateTest("#{pbean6.value}", "got the value");
-        evaluateTestFailure("#{pbean7.value}");
+        evaluateTest("#{pbean7.value}", "got the value");
 
         /* test reserved words as identifiers */
         evaluateTestFailure("#{and}");

@@ -159,13 +159,13 @@ public class TestUnifiedELImpl extends ServletFacesTestCase
         evaluateTest("${3 != 3}", Boolean.FALSE);
 
         // PENDING (visvan) check with Kinman/Jacob
-        /* relationals between booleans 
+        /* relationals between booleans */
         evaluateTestFailure("${false < true}");
         evaluateTestFailure("${false > true}");
         evaluateTest("${true >= true}", Boolean.TRUE);
         evaluateTest("${true <= true}", Boolean.TRUE);
         evaluateTest("${true == true}", Boolean.TRUE);
-        evaluateTest("${true != true}", Boolean.FALSE); */
+        evaluateTest("${true != true}", Boolean.FALSE);
 
         /* looking up objects in scopes */
         evaluateTest("${requestScope.val1b}", "request-scoped1");
@@ -288,9 +288,9 @@ public class TestUnifiedELImpl extends ServletFacesTestCase
         evaluateTest("${pbean2.value}", "got the value");
         evaluateTest("${pbean3.value}", "got the value");
         evaluateTest("${pbean4.value}", "got the value");
-        evaluateTestFailure("${pbean5.value}");
+        evaluateTest("${pbean5.value}", "got the value");
         evaluateTest("${pbean6.value}", "got the value");
-        evaluateTestFailure("${pbean7.value}");
+        evaluateTest("${pbean7.value}", "got the value");
 
         /* test reserved words as identifiers */
         evaluateTestFailure("${and}");
