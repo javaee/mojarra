@@ -493,6 +493,16 @@ must exist.  This is necessary for the MessageFactory class.
          Create the jars
        =================================================================== 
   -->
+<target name="update-manifest-info">
+    <jar jarfile="${build.home}/lib/${name}.jar" update="true"> 
+        <manifest>
+          <section name = "${jar-name}">
+            <attribute name="Implementation-Version" value="${i-version}"/>
+          </section>
+        </manifest>
+    </jar>
+</target>
+
   <target name="jars" depends="compile,create.runtime.config">
     <echo message="${build.classes}" />
     <jar jarfile="${build.home}/lib/${name}.jar" 
@@ -507,7 +517,54 @@ must exist.  This is necessary for the MessageFactory class.
           <attribute name="Extension-Name" value="com.sun.faces"/>
         </manifest>
     </jar>
+    <antcall target="get-update-manifest-info">
+             <param name="jar-name" value="commons-beanutils"/>
+             <param name="jar-file" value="${commons-beanutils.jar}"/> 
+    </antcall>
+    <antcall target="get-update-manifest-info">
+             <param name="jar-name" value="commons-collections"/>
+             <param name="jar-file" value="${commons-collections.jar}"/> 
+    </antcall>
+    <antcall target="get-update-manifest-info">
+             <param name="jar-name" value="commons-digester"/>
+             <param name="jar-file" value="${commons-digester.jar}"/> 
+    </antcall>
+    <antcall target="get-update-manifest-info">
+             <param name="jar-name" value="commons-logging"/>
+             <param name="jar-file" value="${commons-logging.jar}"/> 
+    </antcall>
+  </target>
 
+  <target name="get-update-manifest-info">
+          <mkdir dir="${build.home}/work" />
+          <unzip dest="${build.home}/work">
+                 <patternset>
+                   <include name="**/MANIFEST.MF"/>
+                 </patternset>
+                 <fileset file="${jar-file}"/>
+          </unzip>
+          <loadproperties srcFile="${build.home}/work/META-INF/MANIFEST.MF">
+                 <filterchain>
+                  <linecontains>
+                    <contains value="Implementation-Version"/>
+                  </linecontains>
+                 </filterchain>
+          </loadproperties>
+          <antcall target="update-manifest-info">
+                   <param name="${jar-name}" value="${Implementation-Version}"/>
+                   <param name="i-version" value="${Implementation-Version}"/>
+          </antcall>
+          <delete dir="${build.home}/work" />
+  </target>
+
+  <target name="update-manifest-info">
+          <jar jarfile="${build.home}/lib/${name}.jar" update="true"> 
+               <manifest>
+                 <section name = "${jar-name}">
+                          <attribute name="Implementation-Version" value="${i-version}"/>
+                 </section>
+               </manifest>
+          </jar>
   </target>
 
   <!--
