@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigListener.java,v 1.24 2003/12/17 15:13:29 rkitain Exp $
+ * $Id: ConfigListener.java,v 1.25 2004/01/22 00:06:11 rkitain Exp $
  */
 /*
  * Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
@@ -58,6 +58,7 @@ import java.util.StringTokenizer;
 import java.util.List;
 
 import javax.faces.FacesException;
+import javax.faces.webapp.FacesServlet;
 
 import javax.servlet.ServletContextListener;
 import javax.servlet.ServletContextEvent;
@@ -186,7 +187,7 @@ public class ConfigListener implements ServletContextListener
 	// Step 3. If the init parameter exists, load the config from
 	// there
 	if (null != (initParamFileList = 
-		     servletContext.getInitParameter(RIConstants.CONFIG_FILES_INITPARAM))) {
+		     servletContext.getInitParameter(FacesServlet.CONFIG_FILES_ATTR))) {
 	    StringTokenizer toker = new StringTokenizer(initParamFileList, 
 							",");
 	    String cur;

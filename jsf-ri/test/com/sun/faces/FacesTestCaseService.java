@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTestCaseService.java,v 1.32 2003/12/17 15:14:57 rkitain Exp $
+ * $Id: FacesTestCaseService.java,v 1.33 2004/01/22 00:06:12 rkitain Exp $
  */
 
 /*
@@ -27,6 +27,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.context.FacesContextFactory;
 import javax.faces.component.UICommand;
 import javax.faces.component.UIViewRoot;
+import javax.faces.webapp.FacesServlet;
 import javax.servlet.jsp.PageContext;
 
 import com.sun.faces.util.Util;
@@ -55,7 +56,7 @@ import org.apache.cactus.server.ServletContextWrapper;
  * <B>Lifetime And Scope</B> <P> Same as the JspTestCase or
  * ServletTestCase instance that uses it.
  *
- * @version $Id: FacesTestCaseService.java,v 1.32 2003/12/17 15:14:57 rkitain Exp $
+ * @version $Id: FacesTestCaseService.java,v 1.33 2004/01/22 00:06:12 rkitain Exp $
  * 
  * @see	com.sun.faces.context.FacesContextFactoryImpl
  * @see	com.sun.faces.context.FacesContextImpl
@@ -198,7 +199,7 @@ public void setUp()
     // make sure this gets called once per ServletContext instance.
     if (null == 
 	(facesTestCase.getConfig().getServletContext().
-	 getAttribute(RIConstants.CONFIG_ATTR))) {
+	 getAttribute(FacesServlet.CONFIG_FILES_ATTR))) {
 	
 	configListener.contextInitialized(e);
     }
@@ -430,7 +431,7 @@ public void loadFromInitParam(String paramValue) {
     final String paramVal = paramValue;
     
     // clear out the attr that was set in the servletcontext attr set.
-    facesTestCase.getConfig().getServletContext().removeAttribute(RIConstants.CONFIG_ATTR);
+    facesTestCase.getConfig().getServletContext().removeAttribute(FacesServlet.CONFIG_FILES_ATTR);
     // clear out the renderKit factory
     FactoryFinder.releaseFactories();
     
@@ -442,7 +443,7 @@ public void loadFromInitParam(String paramValue) {
 	new ServletContextWrapper(facesTestCase.getConfig().getServletContext()) {
 	    public String getInitParameter(String theName) {
 		if (null != theName &&
-		    theName.equals(RIConstants.CONFIG_FILES_INITPARAM)) {
+		    theName.equals(FacesServlet.CONFIG_FILES_ATTR)) {
 		    return paramVal;
 		}
 		return super.getInitParameter(theName);
