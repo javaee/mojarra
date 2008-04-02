@@ -1,5 +1,5 @@
 /*
- * $Id: UpdateModelValuesPhase.java,v 1.24 2003/08/22 16:49:29 eburns Exp $
+ * $Id: UpdateModelValuesPhase.java,v 1.25 2003/09/08 20:10:08 jvisvanathan Exp $
  */
 
 /*
@@ -23,7 +23,7 @@ import javax.faces.FacesException;
 import javax.faces.event.PhaseId;
 import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
-import javax.faces.component.UIOutput;
+import javax.faces.component.ValueHolder;
 
 import java.util.Iterator;
 
@@ -33,7 +33,7 @@ import java.util.Iterator;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: UpdateModelValuesPhase.java,v 1.24 2003/08/22 16:49:29 eburns Exp $
+ * @version $Id: UpdateModelValuesPhase.java,v 1.25 2003/09/08 20:10:08 jvisvanathan Exp $
  * 
  */
 
@@ -89,11 +89,11 @@ public void execute(FacesContext facesContext) throws FacesException
         component.processUpdates(facesContext);
     } catch (Throwable e) {
         Object[] params = new Object[3];
-        UIOutput uiOutput = null;
-        if ( component instanceof UIOutput) {
-            uiOutput= (UIOutput) component;
-            params[0] = uiOutput.getValue();
-            params[1] = uiOutput.getValueRef();
+        ValueHolder valueHolder = null;
+        if ( component instanceof ValueHolder) {
+            valueHolder= (ValueHolder) component;
+            params[0] = valueHolder.getValue();
+            params[1] = valueHolder.getValueRef();
         }  
         params[2] = e.getMessage();
         MessageResources resources = Util.getMessageResources();

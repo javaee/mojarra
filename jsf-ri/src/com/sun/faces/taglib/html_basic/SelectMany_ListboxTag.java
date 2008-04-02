@@ -4,7 +4,7 @@
  */
 
 /**
- * $Id: SelectMany_ListboxTag.java,v 1.9 2003/08/15 19:15:18 rlubke Exp $
+ * $Id: SelectMany_ListboxTag.java,v 1.10 2003/09/08 20:10:16 jvisvanathan Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -75,7 +75,6 @@ public class SelectMany_ListboxTag extends FacesTag
     // 
 
     public int doEndTag() throws JspException {
-        UISelectMany component = (UISelectMany) getComponent();
         int rc = super.doEndTag();
         return rc;
     }

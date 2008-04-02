@@ -1,5 +1,5 @@
 /*
- * $Id: Output_MessageTag.java,v 1.11 2003/08/15 19:15:13 rlubke Exp $
+ * $Id: Output_MessageTag.java,v 1.12 2003/09/08 20:10:13 jvisvanathan Exp $
  */
 
 /*
@@ -10,7 +10,6 @@
 package com.sun.faces.taglib.html_basic;
 
 import javax.faces.component.UIComponent;
-import javax.faces.component.UIOutput;
 
 import com.sun.faces.taglib.FacesTag;
 

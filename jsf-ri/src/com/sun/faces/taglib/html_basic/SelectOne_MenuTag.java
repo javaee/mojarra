@@ -5,7 +5,7 @@
 
 
 /**
- * $Id: SelectOne_MenuTag.java,v 1.9 2003/08/15 19:15:19 rlubke Exp $
+ * $Id: SelectOne_MenuTag.java,v 1.10 2003/09/08 20:10:16 jvisvanathan Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -81,8 +81,7 @@ public class SelectOne_MenuTag extends FacesTag
     // 
 
     public int doEndTag() throws JspException {
-	UISelectOne component = (UISelectOne) getComponent();
-	int rc = super.doEndTag();
+        int rc = super.doEndTag();
 	return rc;
     }
 

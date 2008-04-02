@@ -5,7 +5,7 @@
 
 
 /**
- * $Id: SelectMany_CheckboxListTag.java,v 1.8 2003/09/03 19:51:37 rkitain Exp $
+ * $Id: SelectMany_CheckboxListTag.java,v 1.9 2003/09/08 20:10:16 jvisvanathan Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -93,7 +93,6 @@ public class SelectMany_CheckboxListTag extends FacesTag
     // 
 
     public int doEndTag() throws JspException {
-        UISelectMany component = (UISelectMany) getComponent();
         int rc = super.doEndTag();
         return rc;
     }

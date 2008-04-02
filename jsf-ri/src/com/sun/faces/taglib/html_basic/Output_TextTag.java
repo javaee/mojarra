@@ -1,5 +1,5 @@
 /*
- * $Id: Output_TextTag.java,v 1.48 2003/08/29 16:03:28 rlubke Exp $
+ * $Id: Output_TextTag.java,v 1.49 2003/09/08 20:10:14 jvisvanathan Exp $
  */
 
 /*
@@ -36,8 +36,6 @@ public class Output_TextTag extends FacesTag
 
     // Attribute Instance Variables
 
-    private Converter converter = null;
-
     // Relationship Instance Variables
 
     //
@@ -56,10 +54,7 @@ public class Output_TextTag extends FacesTag
     // 
     // Accessors
     //
-    public void setConverter(Converter converter) {
-        this.converter = converter;
-    }
-
+    
     //
     // General Methods
     //
@@ -71,14 +66,6 @@ public class Output_TextTag extends FacesTag
         return "Output"; 
     }
 
-    protected void overrideProperties(UIComponent component) {
-	super.overrideProperties(component);
-	UIOutput textOutput = (UIOutput) component;
-        if (converter != null) {
-            textOutput.setConverter(converter);
-        }
-    }
-    
     //
     // Methods from TagSupport
     // 

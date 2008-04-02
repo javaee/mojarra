@@ -1,5 +1,5 @@
 /*
- * $Id: InputTag.java,v 1.10 2003/09/05 14:34:46 rkitain Exp $
+ * $Id: InputTag.java,v 1.11 2003/09/08 20:10:12 jvisvanathan Exp $
  */
 
 /*
@@ -35,7 +35,7 @@ public abstract class InputTag extends FacesTag
 
     // Attribute Instance Variables
     protected String label = null;
-
+    protected boolean required = false;
     // Relationship Instance Variables
 
     //
@@ -50,6 +50,10 @@ public abstract class InputTag extends FacesTag
     // 
     // Accessors
     //
+    
+     public void setRequired(boolean newVal) {
+	required = newVal;
+    }
 
     public void setLabel(String newLabel)
     {
@@ -82,6 +86,7 @@ public abstract class InputTag extends FacesTag
 	if (null != onchange) {
 	    input.setAttribute("onchange", onchange);
 	}
+        input.setRequired(required);
     }
 
     public String getComponentType() { return "Input"; }

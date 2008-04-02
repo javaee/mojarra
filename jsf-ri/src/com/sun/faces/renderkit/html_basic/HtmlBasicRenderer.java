@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderer.java,v 1.53 2003/08/29 17:46:42 eburns Exp $
+ * $Id: HtmlBasicRenderer.java,v 1.54 2003/09/08 20:10:09 jvisvanathan Exp $
  */
 
 /*
@@ -21,7 +21,7 @@ import java.util.NoSuchElementException;
 import javax.faces.FactoryFinder;
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
-import javax.faces.component.UIOutput;
+import javax.faces.component.ValueHolder;
 import javax.faces.component.UIInput;
 import javax.faces.component.NamingContainer;
 import javax.faces.application.ApplicationFactory;
@@ -112,11 +112,11 @@ public abstract class HtmlBasicRenderer extends Renderer {
     public void addConversionErrorMessage( FacesContext facesContext, 
             UIComponent comp, String errorMessage ) {
         Object[] params = new Object[3];
-        UIOutput uiOutput = null;
-        if ( comp instanceof UIOutput) {
-            uiOutput= (UIOutput) comp;
-            params[0] = uiOutput.getValue();
-            params[1] = uiOutput.getValueRef();
+        ValueHolder valueHolder = null;
+        if ( comp instanceof ValueHolder) {
+            valueHolder= (ValueHolder) comp;
+            params[0] = valueHolder.getValue();
+            params[1] = valueHolder.getValueRef();
         }
         params[2] = errorMessage; 
         MessageResources resources = Util.getMessageResources();
@@ -293,12 +293,12 @@ public abstract class HtmlBasicRenderer extends Renderer {
      */
     protected String getCurrentValue(FacesContext context,UIComponent component) {
         
-        UIOutput uiOutput = null;
-        if ( component instanceof UIOutput) {
-            uiOutput= (UIOutput) component;
+        ValueHolder valueHolder = null;
+        if ( component instanceof ValueHolder) {
+            valueHolder= (ValueHolder) component;
         }
         String currentValue = null;
-        Object currentObj = uiOutput.currentValue(context);
+        Object currentObj = valueHolder.currentValue(context);
         if ( currentObj != null) {
             currentValue = getFormattedValue(context, component, currentObj);
         } 
@@ -412,7 +412,7 @@ public abstract class HtmlBasicRenderer extends Renderer {
          String result = null;
         // formatting is supported only for components that support value and 
         // valueRef attributes.
-        if ( !(component instanceof UIOutput) ){
+        if ( !(component instanceof ValueHolder) ){
              if ( currentValue != null) {
                  result= currentValue.toString();
              } 
@@ -424,13 +424,13 @@ public abstract class HtmlBasicRenderer extends Renderer {
             return ((String)currentValue);
         }
          
-        String valueRef = ((UIOutput)component).getValueRef();
+        String valueRef = ((ValueHolder)component).getValueRef();
         Converter converter = null;
 
         // If there is a converter attribute, use it to to ask application
         // instance for a converter with this identifer.
        
-        converter = ((UIOutput)component).getConverter();
+        converter = ((ValueHolder)component).getConverter();
        
         // if value is null and no converter attribute is specified, then
         // return a zero length String.

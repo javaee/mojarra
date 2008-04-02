@@ -291,7 +291,6 @@
             <test name="com.sun.faces.application.TestApplicationImpl"/>
             <test name="com.sun.faces.application.TestApplicationImpl_Config"/>
             <test name="com.sun.faces.application.TestMessageResourcesImpl"/>
-            <test name="com.sun.faces.application.TestNavigationHandler"/>
             <test name="com.sun.faces.config.ConfigFileTestCase"/>
             <test name="com.sun.faces.config.TestManagedBeanFactory"/>
             <test name="com.sun.faces.context.TestExternalContextImpl"/>
@@ -324,6 +323,7 @@
             <test name="com.sun.faces.taglib.jsf_core.TestValidatorTags"/>
             <test name="com.sun.faces.util.TestUtil"/>
             <test name="com.sun.faces.util.TestUtil_messages"/>
+            <test name="com.sun.faces.lifecycle.TestRenderResponsePhase"/> 
 
             <!-- To run the following tests, uncomment
                  following tests and set javax.faces.STATE_SAVING_METHOD 
@@ -332,10 +332,10 @@
                  well 
             <test name="com.sun.faces.lifecycle.TestSaveStateInPage"/>
             <test name="com.sun.faces.lifecycle.TestRestoreViewFromPage"/> -->
-<!-- non-running tests
-            <test name="com.sun.faces.lifecycle.TestRenderResponsePhase"/>
+            <!-- non-running tests
+            <test name="com.sun.faces.application.TestNavigationHandler"/>
             <test name="com.sun.faces.renderkit.html_basic.TestRenderers_3"/>
--->
+            -->
 
         </junit>
 

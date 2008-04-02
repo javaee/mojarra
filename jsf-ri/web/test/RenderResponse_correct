@@ -19,7 +19,7 @@
         <H3> JSF Basic Components Test Page </H3>
 
 
-<form id="basicForm" method="post" action="/test/faces/TestRenderResponsePhase.jsp;jsessionid=0E65BB38792A576EE35C891C4A72118D" class="formClass" title="basicForm" accept="html,wml">
+<form id="basicForm" method="post" action="/test/faces/TestRenderResponsePhase.jsp;jsessionid=12B18D7E0736928C1955F1894930A921" class="formClass" title="basicForm" accept="html,wml">
 
 
   <TABLE BORDER="1">
@@ -153,7 +153,7 @@
 	</TD>
 
         <TD> 
-            <img id="basicForm_graphicImage" src="/test/duke.gif;jsessionid=0E65BB38792A576EE35C891C4A72118D" usemap="#map1" ismap> 
+            <img id="basicForm_graphicImage" src="/test/duke.gif;jsessionid=12B18D7E0736928C1955F1894930A921" usemap="#map1" ismap> 
         </TD>
 
       </TR>
@@ -204,7 +204,7 @@
 
 	<TD>
 
-            <input type="checkbox" name="basicForm_id0" class="selectbooleanClass">
+            <input type="checkbox" name="basicForm_JSPid2" class="selectbooleanClass">
 	</TD>
 
       </TR>
@@ -226,7 +226,7 @@
                 
                 
 
-               class="selectoneClass"<span><select name="basicForm_id1" accesskey="N" size="10" tabindex="20" title="Select Quantity">	<option value="0" disabled>0</option>
+               class="selectoneClass"<span><select name="basicForm_JSPid3" accesskey="N" size="10" tabindex="20" title="Select Quantity">	<option value="0" disabled>0</option>
 	<option value="1" title="One">1</option>
 	<option value="2" title="Two">2</option>
 	<option value="3" title="Three">3</option>
@@ -296,7 +296,7 @@
 
 	<TD>
                 
-             class="inputClass"<span><input type="text" name="basicForm_id2" value="Wed, Jul 10, 1996"></span>
+             class="inputClass"<span><input type="text" name="basicForm_JSPid20" value="Wed, Jul 10, 1996"></span>
 	</TD>
 
       </TR>
@@ -484,7 +484,7 @@
 						
 						
 						
-					<select name="basicForm_id3" multiple size="10">	<option value="0">zero</option>
+					<select name="basicForm_JSPid31" multiple size="10">	<option value="0">zero</option>
 	<option value="1">one</option>
 	<option value="2">two</option>
 	<option value="3">three</option>
@@ -510,21 +510,21 @@
 						
 						
 					 class="selectmanyClass"<span>
-<label for="basicForm.id4"><input name="basicForm_ManyApples3" id="basicForm.id4" value="0" type="checkbox">zero</label>
-<label for="basicForm.id5"><input name="basicForm_ManyApples3" id="basicForm.id5" value="1" type="checkbox">one</label>
-<label for="basicForm.id6"><input name="basicForm_ManyApples3" id="basicForm.id6" value="2" type="checkbox">two</label>
-<label for="basicForm.id7"><input name="basicForm_ManyApples3" id="basicForm.id7" value="3" type="checkbox">three</label>
-<label for="basicForm.id8"><input name="basicForm_ManyApples3" id="basicForm.id8" value="4" type="checkbox">four</label>
-<label for="basicForm.id9"><input name="basicForm_ManyApples3" id="basicForm.id9" value="5" type="checkbox">five</label>
-<label for="basicForm.id10"><input name="basicForm_ManyApples3" id="basicForm.id10" value="6" type="checkbox">six</label>
-<label for="basicForm.id11"><input name="basicForm_ManyApples3" id="basicForm.id11" value="7" type="checkbox">seven</label>
-<label for="basicForm.id12"><input name="basicForm_ManyApples3" id="basicForm.id12" value="8" type="checkbox">eight</label>
-<label for="basicForm.id13"><input name="basicForm_ManyApples3" id="basicForm.id13" value="9" type="checkbox">nine</label></TD>
+<label for="basicForm.JSPid42"><input name="basicForm_ManyApples3" id="basicForm.JSPid42" value="0" type="checkbox">zero</label>
+<label for="basicForm.JSPid43"><input name="basicForm_ManyApples3" id="basicForm.JSPid43" value="1" type="checkbox">one</label>
+<label for="basicForm.JSPid44"><input name="basicForm_ManyApples3" id="basicForm.JSPid44" value="2" type="checkbox">two</label>
+<label for="basicForm.JSPid45"><input name="basicForm_ManyApples3" id="basicForm.JSPid45" value="3" type="checkbox">three</label>
+<label for="basicForm.JSPid46"><input name="basicForm_ManyApples3" id="basicForm.JSPid46" value="4" type="checkbox">four</label>
+<label for="basicForm.JSPid47"><input name="basicForm_ManyApples3" id="basicForm.JSPid47" value="5" type="checkbox">five</label>
+<label for="basicForm.JSPid48"><input name="basicForm_ManyApples3" id="basicForm.JSPid48" value="6" type="checkbox">six</label>
+<label for="basicForm.JSPid49"><input name="basicForm_ManyApples3" id="basicForm.JSPid49" value="7" type="checkbox">seven</label>
+<label for="basicForm.JSPid50"><input name="basicForm_ManyApples3" id="basicForm.JSPid50" value="8" type="checkbox">eight</label>
+<label for="basicForm.JSPid51"><input name="basicForm_ManyApples3" id="basicForm.JSPid51" value="9" type="checkbox">nine</label></TD>
 </tr>
 
 
     
-<input type="hidden" name="basicForm_id14" value="48%">
+<input type="hidden" name="basicForm_JSPid52" value="48%">
 
   <TABLE>
 

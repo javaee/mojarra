@@ -1,5 +1,5 @@
 /*
- * $Id: LabelRenderer.java,v 1.15 2003/09/04 19:52:17 rkitain Exp $
+ * $Id: LabelRenderer.java,v 1.16 2003/09/08 20:10:09 jvisvanathan Exp $
  */
 
 /*
@@ -16,7 +16,6 @@ import com.sun.faces.util.Util;
 import java.io.IOException;
 
 import javax.faces.component.UIComponent;
-import javax.faces.component.UIOutput;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 
@@ -34,7 +33,7 @@ import javax.servlet.ServletResponse;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: LabelRenderer.java,v 1.15 2003/09/04 19:52:17 rkitain Exp $
+ * @version $Id: LabelRenderer.java,v 1.16 2003/09/08 20:10:09 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo

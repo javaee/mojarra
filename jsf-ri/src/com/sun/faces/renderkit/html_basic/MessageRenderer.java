@@ -1,5 +1,5 @@
 /*
- * $Id: MessageRenderer.java,v 1.26 2003/09/05 18:56:58 eburns Exp $
+ * $Id: MessageRenderer.java,v 1.27 2003/09/08 20:10:09 jvisvanathan Exp $
  */
 
 /*
@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import javax.faces.component.UIComponent;
-import javax.faces.component.UIOutput;
 import javax.faces.component.ValueHolder;
 import javax.faces.component.UIParameter;
 import javax.faces.context.ResponseWriter;
@@ -33,7 +32,7 @@ import org.mozilla.util.Assert;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: MessageRenderer.java,v 1.26 2003/09/05 18:56:58 eburns Exp $
+ * @version $Id: MessageRenderer.java,v 1.27 2003/09/08 20:10:09 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -96,7 +95,6 @@ public class MessageRenderer extends HtmlBasicRenderer {
         throws IOException {
         String currentValue = null;
 	String styleClass = null;
-        UIOutput output = null;
         
         if (context == null || component == null) {
             throw new NullPointerException(Util.getExceptionMessage(
@@ -111,7 +109,7 @@ public class MessageRenderer extends HtmlBasicRenderer {
         if (!component.isRendered()) {
             return;
         }
-        Object currentObj = ((UIOutput)component).currentValue(context);
+        Object currentObj = ((ValueHolder)component).currentValue(context);
         if ( currentObj != null) {
             if (currentObj instanceof String) {
                 currentValue = (String)currentObj;

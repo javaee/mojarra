@@ -1,5 +1,5 @@
 /*
- * $Id: Panel_GroupTag.java,v 1.8 2003/08/15 19:15:16 rlubke Exp $
+ * $Id: Panel_GroupTag.java,v 1.9 2003/09/08 20:10:15 jvisvanathan Exp $
  */
 
 /*
@@ -10,7 +10,6 @@
 package com.sun.faces.taglib.html_basic;
 
 import javax.faces.component.UIComponent;
-import javax.faces.component.UIPanel;
 import com.sun.faces.taglib.FacesTag;
 
 /**

@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTag.java,v 1.48 2003/09/05 14:34:44 rkitain Exp $
+ * $Id: FacesTag.java,v 1.49 2003/09/08 20:10:11 jvisvanathan Exp $
  */
 
 /*
@@ -20,8 +20,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import javax.faces.component.UIComponent;
-import javax.faces.component.UIInput;
-import javax.faces.component.UIOutput;
+import javax.faces.component.ValueHolder;
 import javax.faces.convert.Converter;
 import javax.servlet.jsp.JspException;
 
@@ -31,7 +30,7 @@ import javax.servlet.jsp.JspException;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: FacesTag.java,v 1.48 2003/09/05 14:34:44 rkitain Exp $ 
+ * @version $Id: FacesTag.java,v 1.49 2003/09/08 20:10:11 jvisvanathan Exp $ 
  */
 
 public abstract class FacesTag extends javax.faces.webapp.UIComponentTag
@@ -52,8 +51,6 @@ public abstract class FacesTag extends javax.faces.webapp.UIComponentTag
     //
 
     // Attribute Instance Variables
-
-    protected boolean required = false;
     protected String key = null;
     protected String imageKey = null;
     protected String bundle = null;
@@ -151,10 +148,6 @@ public abstract class FacesTag extends javax.faces.webapp.UIComponentTag
     // 
     // Accessors
     //
-    public void setRequired(boolean newVal) {
-	required = newVal;
-    }
-
     public void setValueRef(String newValueRef)
     {
 	valueRef = newValueRef;
@@ -721,25 +714,18 @@ protected void overrideProperties(UIComponent component)
     super.overrideProperties(component);
     String keyAttr = null;
 
-    if ( component instanceof UIOutput ) {
-        UIOutput output = (UIOutput)component;
+    if ( component instanceof ValueHolder ) {
+        ValueHolder valueHolder = (ValueHolder)component;
         if (null != valueRef) {
-            output.setValueRef(valueRef);
+            valueHolder.setValueRef(valueRef);
         }    
 	if (null != value) {
-	    output.setValue(value);
+	    valueHolder.setValue(value);
 	}
         if (null != converter) {           
-            output.setConverter(converter);
+            valueHolder.setConverter(converter);
         }
     }    
-
-    // PENDING(edburns): move this into a class that is the superclass
-    // of *all* tags that have components that are UIInput.
-
-    if (component instanceof UIInput) {
-	((UIInput)component).setRequired(required);
-    }
 
     if (null != key) {
 	component.setAttribute("key", key);

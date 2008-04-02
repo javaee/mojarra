@@ -1,5 +1,5 @@
 /*
- * $Id: DebugUtil.java,v 1.13 2003/08/19 19:31:33 rlubke Exp $
+ * $Id: DebugUtil.java,v 1.14 2003/09/08 20:10:20 jvisvanathan Exp $
  */
 
 /*
@@ -12,7 +12,7 @@ package com.sun.faces.util;
 // DebugUtil.java
 
 import javax.faces.component.UIComponent;
-import javax.faces.component.UIOutput;
+import javax.faces.component.ValueHolder;
 import javax.faces.model.SelectItem;
 
 import java.util.Iterator;
@@ -25,7 +25,7 @@ import java.io.PrintStream;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: DebugUtil.java,v 1.13 2003/08/19 19:31:33 rlubke Exp $
+ * @version $Id: DebugUtil.java,v 1.14 2003/09/08 20:10:20 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -123,11 +123,11 @@ public static void printTree(UIComponent root, PrintStream out)
 */
     indentPrintln(out, "id:"+root.getId());
 
-    if ( root instanceof UIOutput) {
-        UIOutput uiOutput = (UIOutput) root;
-        value = uiOutput.getValue();
-        if (uiOutput.getValueRef() != null) {
-	    indentPrintln(out, "valueReference: "+ uiOutput.getValueRef());
+    if ( root instanceof ValueHolder) {
+        ValueHolder valueHolder = (ValueHolder) root;
+        value = valueHolder.getValue();
+        if (valueHolder.getValueRef() != null) {
+	    indentPrintln(out, "valueReference: "+ valueHolder.getValueRef());
         }
     }
     

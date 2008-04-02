@@ -4,7 +4,7 @@
  Copyright 2003 Sun Microsystems, Inc. All rights reserved.
  SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 
- $Id: build-tests.xml,v 1.21 2003/09/05 18:57:03 eburns Exp $
+ $Id: build-tests.xml,v 1.22 2003/09/08 20:10:21 jvisvanathan Exp $
 -->
 
 
@@ -366,8 +366,8 @@
           description="Test the Verbatim tag">
       <echo message="Testing verbatim..."/>
       <tester host="${host}" port="${port}" protocol="${protocol}"
-              request="${context.path}/faces/verbatim_test.jsp"/>
-
+              request="${context.path}/faces/verbatim_test.jsp"
+              golden="${golden.path}/verbatim_test.txt"/>
       <echo message="Testing verbatim..."/>
   </target>
 

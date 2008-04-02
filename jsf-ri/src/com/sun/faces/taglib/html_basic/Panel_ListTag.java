@@ -1,5 +1,5 @@
 /*
- * $Id: Panel_ListTag.java,v 1.10 2003/09/05 14:34:47 rkitain Exp $
+ * $Id: Panel_ListTag.java,v 1.11 2003/09/08 20:10:15 jvisvanathan Exp $
  */
 
 /*
@@ -10,7 +10,6 @@
 package com.sun.faces.taglib.html_basic;
 
 import javax.faces.component.UIComponent;
-import javax.faces.component.UIPanel;
 import com.sun.faces.taglib.FacesTag;
 import javax.servlet.jsp.JspException;
 
