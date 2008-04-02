@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationFactoryImpl.java,v 1.15 2006/09/14 22:38:39 tony_robertson Exp $
+ * $Id: ApplicationFactoryImpl.java,v 1.16 2007/02/05 04:04:36 rlubke Exp $
  */
 
 /*
@@ -34,6 +34,7 @@ import com.sun.faces.util.MessageUtils;
 
 import java.util.logging.Logger;
 import java.util.logging.Level;
+import java.text.MessageFormat;
 
 import javax.faces.application.Application;
 import javax.faces.application.ApplicationFactory;
@@ -95,7 +96,8 @@ public class ApplicationFactoryImpl extends ApplicationFactory {
         if (application == null) {
             application = new ApplicationImpl();
             if (logger.isLoggable(Level.FINE)) {
-                logger.fine("Created Application instance " + application);
+                logger.fine(MessageFormat.format("Created Application instance ''{0}''",
+                                                 application));
             }
         }
         return application;
@@ -117,7 +119,8 @@ public class ApplicationFactoryImpl extends ApplicationFactory {
 
         this.application = application;
         if (logger.isLoggable(Level.FINE)) {
-            logger.fine("set Application Instance to " + application);
+            logger.fine(MessageFormat.format("set Application Instance to ''{0}''", 
+                                             application.getClass().getName()));
         }
     }
 }

@@ -171,8 +171,8 @@ public class ConverterPropertyEditorFactory {
                 Class<?> templateTargetClass = tc.getTargetClass();
                 loadTemplateBytes();
                 classNameConstant = findConstant(getVMClassName(templateClass));
-                classNameRefConstant = findConstant("L"
-                    + getVMClassName(templateClass) + ";");
+                classNameRefConstant = findConstant(
+                     new StringBuilder(64).append('L').append(getVMClassName(templateClass)).append(';').toString());
                 targetClassConstant = findConstant(getVMClassName(templateTargetClass));
             } catch (Exception e) {
                 // ignore
@@ -397,7 +397,7 @@ public class ConverterPropertyEditorFactory {
             String targetClassName) {
             return replaceInTemplate(new Utf8InfoReplacement(classNameConstant,
                 newClassName), new Utf8InfoReplacement(classNameRefConstant,
-                "L" + newClassName + ";"), new Utf8InfoReplacement(
+                 new StringBuilder(32).append('L').append(newClassName).append(';').toString()), new Utf8InfoReplacement(
                 targetClassConstant, targetClassName));
         }
     }
@@ -441,7 +441,8 @@ public class ConverterPropertyEditorFactory {
             // First, check if the class has already been loaded
             Class c = findLoadedClass(name);
             // Otherwise check if myLoader is able to load it ...
-            if (c == null && myLoader != null && myLoader != targetLoader) {
+            //noinspection ObjectEquality
+            if ((c == null) && (myLoader != null) && (myLoader != targetLoader)) {
                 try {
                     c = myLoader.loadClass(name);
                 } catch (ClassNotFoundException e2) {
@@ -570,9 +571,10 @@ public class ConverterPropertyEditorFactory {
             if (classLoaderCache == null) {
                 // Use a WeakHashMap so as not to prevent the class loaders from
                 // being garbage collected.
+                //noinspection CollectionWithoutInitialCapacity
                 classLoaderCache = new WeakHashMap<ClassLoader, WeakReference<DisposableClassLoader>>();
             }
-            DisposableClassLoader loader = null;
+            DisposableClassLoader loader;
             WeakReference<DisposableClassLoader> loaderRef = classLoaderCache
                 .get(targetClass.getClassLoader());
             if (loaderRef == null || (loader = loaderRef.get()) == null) {

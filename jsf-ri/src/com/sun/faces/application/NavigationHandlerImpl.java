@@ -1,5 +1,5 @@
 /*
- * $Id: NavigationHandlerImpl.java,v 1.52 2006/11/15 23:19:16 rlubke Exp $
+ * $Id: NavigationHandlerImpl.java,v 1.53 2007/02/05 04:04:37 rlubke Exp $
  */
 
 /*
@@ -314,7 +314,7 @@ public class NavigationHandlerImpl extends NavigationHandler {
 
             // Append the trailing "*" so we can do our map lookup;
 
-            String wcFromViewId = fromViewId + '*';
+            String wcFromViewId = new StringBuilder(32).append(fromViewId).append('*').toString();
             List<ConfigNavigationCase> caseList = caseListMap.get(wcFromViewId);
 
             if (caseList == null) {

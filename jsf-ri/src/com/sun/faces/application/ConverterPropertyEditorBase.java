@@ -155,9 +155,9 @@ public abstract class ConverterPropertyEditorBase extends PropertyEditorSupport 
 
     private void addConversionErrorMessage(FacesContext context,
         UIComponent component, ConverterException ce, Object value) {
-        FacesMessage message = null;
         String converterMessageString = null;
-        UIInput input = null;
+        FacesMessage message;
+        UIInput input;
         if (component instanceof UIInput) {
             input = (UIInput) component;
             converterMessageString = input.getConverterMessage();

@@ -196,7 +196,7 @@ public class StateManagerImpl extends StateManager {
         }
 
         // honor the requirement to check for id uniqueness
-        checkIdUniqueness(context, viewRoot, new HashSet<String>());
+        checkIdUniqueness(context, viewRoot, new HashSet<String>(viewRoot.getChildCount() << 1));
 
 
         if (LOGGER.isLoggable(Level.FINE)) {

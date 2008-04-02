@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationAssociate.java,v 1.36 2006/12/06 23:33:54 youngm Exp $
+ * $Id: ApplicationAssociate.java,v 1.37 2007/02/05 04:04:36 rlubke Exp $
  */
 
 /*
@@ -51,6 +51,7 @@ import java.util.ResourceBundle;
 import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.text.MessageFormat;
 
 import com.sun.faces.RIConstants;
 import com.sun.faces.config.ConfigureListener;
@@ -154,7 +155,9 @@ public class ApplicationAssociate {
         externalContext.getApplicationMap().put(APPLICATION_IMPL_ATTR_NAME,
                                                 appImpl);
         externalContext.getApplicationMap().put(ASSOCIATE_KEY, this);
+        //noinspection CollectionWithoutInitialCapacity
         managedBeanFactoriesMap = new HashMap<String, ManagedBeanFactory>();
+        //noinspection CollectionWithoutInitialCapacity
         caseListMap = new HashMap<String,List<ConfigNavigationCase>>();
         wildcardMatchList = new TreeSet<String>(new SortIt());
         injectionProvider = InjectionProviderFactory.createInstance(externalContext);
@@ -221,7 +224,7 @@ public class ApplicationAssociate {
         this.elResolversFromFacesConfig = resolvers;
     }
 
-    public List<ELResolver> geELResolversFromFacesConfig() {
+    public List<ELResolver> getELResolversFromFacesConfig() {
          return elResolversFromFacesConfig;
     }
 
@@ -302,37 +305,37 @@ public class ApplicationAssociate {
     public void addNavigationCase(ConfigNavigationCase navigationCase) {
 
         String fromViewId = navigationCase.getFromViewId();
-        synchronized (this) {
-            List<ConfigNavigationCase> caseList = caseListMap.get(fromViewId);
-            if (caseList == null) {
-                caseList = new ArrayList<ConfigNavigationCase>();
-                caseList.add(navigationCase);
-                caseListMap.put(fromViewId, caseList);
-            } else {
-                String key = navigationCase.getKey();
-                boolean foundIt = false;
-                for (int i = 0; i < caseList.size(); i++) {
-                    ConfigNavigationCase navCase = caseList.get(i);
-                    // if there already is a case existing for the
-                    // fromviewid/fromaction.fromoutcome combination,
-                    // replace it ...  (last one wins).
-                    //
-                    if (key.equals(navCase.getKey())) {
-                        caseList.set(i, navigationCase);
-                        foundIt = true;
-                        break;
-                    }
-                }
-                if (!foundIt) {
-                    caseList.add(navigationCase);
+        List<ConfigNavigationCase> caseList = caseListMap.get(fromViewId);
+        if (caseList == null) {
+            //noinspection CollectionWithoutInitialCapacity
+            caseList = new ArrayList<ConfigNavigationCase>();
+            caseList.add(navigationCase);
+            caseListMap.put(fromViewId, caseList);
+        } else {
+            String key = navigationCase.getKey();
+            boolean foundIt = false;
+            for (int i = 0; i < caseList.size(); i++) {
+                ConfigNavigationCase navCase = caseList.get(i);
+                // if there already is a case existing for the
+                // fromviewid/fromaction.fromoutcome combination,
+                // replace it ...  (last one wins).
+                //
+                if (key.equals(navCase.getKey())) {
+                    caseList.set(i, navigationCase);
+                    foundIt = true;
+                    break;
                 }
             }
-            if (fromViewId.endsWith("*")) {
-                fromViewId =
-                    fromViewId.substring(0, fromViewId.lastIndexOf("*"));
-                wildcardMatchList.add(fromViewId);
+            if (!foundIt) {
+                caseList.add(navigationCase);
             }
         }
+        if (fromViewId.endsWith("*")) {
+            fromViewId =
+                 fromViewId.substring(0, fromViewId.lastIndexOf('*'));
+            wildcardMatchList.add(fromViewId);
+        }
+
     }
 
 
@@ -368,9 +371,10 @@ public class ApplicationAssociate {
         if (!resourceBundles.containsKey(var)) {
             return null;
         }
-        UIViewRoot root = null;
+        UIViewRoot root;
         // Start out with the default locale
-        Locale locale = null, defaultLocale = Locale.getDefault();
+        Locale locale;
+        Locale defaultLocale = Locale.getDefault();
         locale = defaultLocale;
         // See if this FacesContext has a ViewRoot
         if (null != (root = context.getViewRoot())) {
@@ -382,11 +386,10 @@ public class ApplicationAssociate {
         }
         assert(null != locale);
         ResourceBundleBean bean = resourceBundles.get(var);
-        String baseName = null;
         ResourceBundle result = null;
 
         if (null != bean) {
-            baseName = bean.getBasename();
+            String baseName = bean.getBasename();
             if (null != baseName) {
                 result =
                     ResourceBundle.getBundle(baseName,
@@ -405,6 +408,7 @@ public class ApplicationAssociate {
      * values: ResourceBundleBean instances.
      */
 
+    @SuppressWarnings({"CollectionWithoutInitialCapacity"})
     Map<String,ResourceBundleBean> resourceBundles = new HashMap<String, ResourceBundleBean>();
 
     public void addResourceBundleBean(String var, ResourceBundleBean bean) {
@@ -428,8 +432,9 @@ public class ApplicationAssociate {
         managedBeanFactoriesMap.put(managedBeanName, factory);
     factory.setManagedBeanFactoryMap(managedBeanFactoriesMap);
         if (LOGGER.isLoggable(Level.FINE)) {
-            LOGGER.log(Level.FINE, "Added managedBeanFactory " + factory +
-                                   " for" + managedBeanName);
+            LOGGER.log(Level.FINE, MessageFormat.format("Added managedBeanFactory {0} for {1}",
+                                                        factory,
+                                                        managedBeanName));
         }
     }
 
@@ -461,12 +466,11 @@ public class ApplicationAssociate {
             return null;
         }
 
-        Object bean = null;
+        Object bean;
         Scope scope = managedBean.getScope();
 
-        boolean
-            scopeIsApplication = false,
-            scopeIsRequest = false;
+        boolean scopeIsApplication;
+        boolean scopeIsRequest;
 
         if ((scopeIsApplication = (scope == Scope.APPLICATION)) ||
             ((scope == Scope.SESSION))) {
@@ -477,8 +481,7 @@ public class ApplicationAssociate {
                     try {
                         bean = managedBean.newInstance(context);
                         if (LOGGER.isLoggable(Level.FINE)) {
-                            LOGGER.fine("Created application scoped bean " +
-                                        managedBeanName + " successfully ");
+                            LOGGER.fine(MessageFormat.format("Created application scoped bean {0} successfully ", managedBeanName));
                         }
                     } catch (Exception ex) {
                         Object[] params = {managedBeanName};
@@ -497,8 +500,7 @@ public class ApplicationAssociate {
                     try {
                         bean = managedBean.newInstance(context);
                         if (LOGGER.isLoggable(Level.FINE)) {
-                            LOGGER.fine("Created session scoped bean "
-                                        + managedBeanName + " successfully ");
+                            LOGGER.fine(MessageFormat.format("Created session scoped bean {0} successfully ", managedBeanName));
                         }
                     } catch (Exception ex) {
                         Object[] params = {managedBeanName};
@@ -517,8 +519,7 @@ public class ApplicationAssociate {
             try {
                 bean = managedBean.newInstance(context);
                 if (LOGGER.isLoggable(Level.FINE)) {
-                    LOGGER.log(Level.FINE, "Created bean " + managedBeanName +
-                                           " successfully ");
+                    LOGGER.log(Level.FINE, MessageFormat.format("Created bean {0} successfully ", managedBeanName));
                 }
             } catch (Exception ex) {
                 Object[] params = {managedBeanName};
@@ -538,7 +539,7 @@ public class ApplicationAssociate {
     }
 
     // This is called by ViewHandlerImpl.renderView().
-    synchronized void responseRendered() {
+    void responseRendered() {
         responseRendered = true;
     }
 

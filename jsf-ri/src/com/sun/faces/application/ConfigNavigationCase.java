@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigNavigationCase.java,v 1.9 2006/09/05 22:52:31 rlubke Exp $
+ * $Id: ConfigNavigationCase.java,v 1.10 2007/02/05 04:04:37 rlubke Exp $
  */
 
 /*
@@ -111,7 +111,7 @@ public class ConfigNavigationCase {
 
 
     public String toString() {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder(64);
         sb.append("FROM VIEW ID:").append(getFromViewId());
         sb.append("\nFROM ACTION:").append(getFromAction());
         sb.append("\nFROM OUTCOME:").append(getFromOutcome());

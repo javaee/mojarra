@@ -138,6 +138,7 @@ public class WebappLifecycleListener implements ServletRequestListener,
         // perhaps a bit paranoid, but since the javadocs are a bit vague,
         // only handle the event if oldValue and newValue are not the
         // exact same object
+        //noinspection ObjectEquality
         if (event.getValue() != newValue) {
             handleAttributeEvent(attrName,
                                  event.getValue(),
@@ -172,6 +173,7 @@ public class WebappLifecycleListener implements ServletRequestListener,
         // perhaps a bit paranoid, but since the javadocs are a bit vague,
         // only handle the event if oldValue and newValue are not the
         // exact same object
+        //noinspection ObjectEquality
         if (event.getValue() != newValue) {
             handleAttributeEvent(attrName,
                                  event.getValue(),
@@ -207,6 +209,7 @@ public class WebappLifecycleListener implements ServletRequestListener,
         // perhaps a bit paranoid, but since the javadocs are a bit vague,
         // only handle the event if oldValue and newValue are not the
         // exact same object
+        //noinspection ObjectEquality
         if (event.getValue() != newValue) {
             handleAttributeEvent(attrName,
                                  event.getValue(),
