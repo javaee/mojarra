@@ -1,5 +1,5 @@
 /*
- * $Id: TestLifecycleImpl.java,v 1.29 2004/04/07 17:52:53 rkitain Exp $
+ * $Id: TestLifecycleImpl.java,v 1.30 2004/10/29 19:48:39 edburns Exp $
  */
 
 /*
@@ -30,7 +30,7 @@ import javax.servlet.http.HttpSession;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestLifecycleImpl.java,v 1.29 2004/04/07 17:52:53 rkitain Exp $
+ * @version $Id: TestLifecycleImpl.java,v 1.30 2004/10/29 19:48:39 edburns Exp $
  */
 
 public class TestLifecycleImpl extends JspFacesTestCase {
@@ -291,6 +291,125 @@ public class TestLifecycleImpl extends JspFacesTestCase {
 
     }
 
+    public void beginBeforeListenerException(WebRequest theRequest) {
+        initWebRequest(theRequest);
+    }
+
+
+    public void testBeforeListenerException() {
+        assertTrue(null != sharedListener);
+
+        LifecycleImpl life = getSharedLifecycleImpl();
+        int [] phaseCalledA = new int[LifecycleFactoryImpl.LAST_PHASE + 1];
+	int [] phaseCalledB = new int[LifecycleFactoryImpl.LAST_PHASE + 1];
+	int [] phaseCalledC = new int[LifecycleFactoryImpl.LAST_PHASE + 1];
+        int i;
+        for (i = 1; i < phaseCalledA.length; i++) {
+            phaseCalledA[i] = 0;
+            phaseCalledB[i] = 0;
+            phaseCalledC[i] = 0;
+        }
+
+
+        life.removePhaseListener(sharedListener);
+
+	PhaseListenerImpl 
+	    a = new PhaseListenerImpl(phaseCalledA, 
+				      PhaseId.APPLY_REQUEST_VALUES,
+				      PhaseId.PROCESS_VALIDATIONS),
+	    b = new PhaseListenerImpl(phaseCalledB, 
+				      PhaseId.APPLY_REQUEST_VALUES,
+				      PhaseId.PROCESS_VALIDATIONS),
+	    c = new PhaseListenerImpl(phaseCalledC, 
+				      PhaseId.APPLY_REQUEST_VALUES,
+				      PhaseId.PROCESS_VALIDATIONS);
+	b.setThrowExceptionOnBefore(true);
+        life.addPhaseListener(a);
+        life.addPhaseListener(b);
+        life.addPhaseListener(c);
+
+        try {
+            life.execute(getFacesContext());
+            life.render(getFacesContext());
+        } catch (Throwable e) {
+            e.printStackTrace();
+            assertTrue(e.getMessage(), false);
+        }
+
+	// verify before and after for "a" were called.
+	assertEquals(2, 
+		     phaseCalledA[PhaseId.APPLY_REQUEST_VALUES.getOrdinal()]);
+	// verify before for "b" was called, but the after was not
+	assertEquals(1, 
+		     phaseCalledB[PhaseId.APPLY_REQUEST_VALUES.getOrdinal()]);
+	// verify that neither before nor after for "c" were called
+	assertEquals(0, 
+		     phaseCalledC[PhaseId.APPLY_REQUEST_VALUES.getOrdinal()]);
+
+        life.removePhaseListener(a);
+        life.removePhaseListener(b);
+        life.removePhaseListener(c);
+    }
+
+    public void beginAfterListenerException(WebRequest theRequest) {
+        initWebRequest(theRequest);
+    }
+
+    public void testAfterListenerException() {
+        assertTrue(null != sharedListener);
+
+        LifecycleImpl life = getSharedLifecycleImpl();
+        int [] phaseCalledA = new int[LifecycleFactoryImpl.LAST_PHASE + 1];
+	int [] phaseCalledB = new int[LifecycleFactoryImpl.LAST_PHASE + 1];
+	int [] phaseCalledC = new int[LifecycleFactoryImpl.LAST_PHASE + 1];
+        int i;
+        for (i = 1; i < phaseCalledA.length; i++) {
+            phaseCalledA[i] = 0;
+            phaseCalledB[i] = 0;
+            phaseCalledC[i] = 0;
+        }
+
+
+        life.removePhaseListener(sharedListener);
+
+	PhaseListenerImpl 
+	    a = new PhaseListenerImpl(phaseCalledA, 
+				      PhaseId.APPLY_REQUEST_VALUES,
+				      PhaseId.PROCESS_VALIDATIONS),
+	    b = new PhaseListenerImpl(phaseCalledB, 
+				      PhaseId.APPLY_REQUEST_VALUES,
+				      PhaseId.PROCESS_VALIDATIONS),
+	    c = new PhaseListenerImpl(phaseCalledC, 
+				      PhaseId.APPLY_REQUEST_VALUES,
+				      PhaseId.PROCESS_VALIDATIONS);
+	b.setThrowExceptionOnAfter(true);
+        life.addPhaseListener(a);
+        life.addPhaseListener(b);
+        life.addPhaseListener(c);
+
+        try {
+            life.execute(getFacesContext());
+            life.render(getFacesContext());
+        } catch (Throwable e) {
+            e.printStackTrace();
+            assertTrue(e.getMessage(), false);
+        }
+
+	// verify before and after for "a" were called.
+	assertEquals(1, 
+		     phaseCalledA[PhaseId.APPLY_REQUEST_VALUES.getOrdinal()]);
+	// verify before for "b" was called, but the after was not
+	assertEquals(2, 
+		     phaseCalledB[PhaseId.APPLY_REQUEST_VALUES.getOrdinal()]);
+	// verify that neither before nor after for "c" were called
+	assertEquals(2, 
+		     phaseCalledC[PhaseId.APPLY_REQUEST_VALUES.getOrdinal()]);
+
+        life.removePhaseListener(a);
+        life.removePhaseListener(b);
+        life.removePhaseListener(c);
+    }
+
 
     class PhaseListenerImpl implements PhaseListener {
 
@@ -303,6 +422,18 @@ public class TestLifecycleImpl extends JspFacesTestCase {
             return phaseCalled;
         }
 
+	boolean throwExceptionOnBefore = false;
+	boolean throwExceptionOnAfter = false;
+
+	public void setThrowExceptionOnBefore(boolean newValue) {
+	    throwExceptionOnBefore = newValue;
+	}
+
+	public void setThrowExceptionOnAfter(boolean newValue) {
+	    throwExceptionOnAfter = newValue;
+	}
+	    
+
 
         public PhaseListenerImpl(int[] newPhaseCalled, PhaseId newPhaseId, PhaseId yourCallRenderResponseBeforeThisPhase) {
             phaseCalled = newPhaseCalled;
@@ -311,12 +442,14 @@ public class TestLifecycleImpl extends JspFacesTestCase {
                 yourCallRenderResponseBeforeThisPhase;
         }
 
-
         public void afterPhase(PhaseEvent event) {
             phaseCalled[event.getPhaseId().getOrdinal()] =
                 phaseCalled[event.getPhaseId().getOrdinal()] + 1;
+	    if (throwExceptionOnAfter) {
+		throw new IllegalStateException("throwing exception on after " +
+						event.getPhaseId().toString());
+	    }
         }
-
 
         public void beforePhase(PhaseEvent event) {
             phaseCalled[event.getPhaseId().getOrdinal()] =
@@ -324,6 +457,11 @@ public class TestLifecycleImpl extends JspFacesTestCase {
             if (callRenderResponseBeforeThisPhase == event.getPhaseId()) {
                 FacesContext.getCurrentInstance().renderResponse();
             }
+	    if (throwExceptionOnBefore) {
+		throw new IllegalStateException("throwing exception on before " +
+						event.getPhaseId().toString());
+	    }
+
         }
 
 

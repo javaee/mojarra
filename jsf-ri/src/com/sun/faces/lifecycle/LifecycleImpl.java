@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleImpl.java,v 1.45 2004/03/31 18:48:30 eburns Exp $
+ * $Id: LifecycleImpl.java,v 1.46 2004/10/29 19:48:38 edburns Exp $
  */
 
 /*
@@ -181,38 +181,66 @@ public class LifecycleImpl extends Lifecycle {
             log.trace("phase(" + phaseId.toString() + "," + context + ")");
         }
 
-        // Notify the "beforePhase" method of interested listeners (ascending)
-        synchronized (listeners) {
-            if (listeners.size() > 0) {
-                PhaseEvent event = new PhaseEvent(context, phaseId, this);
-                for (int i = 0; i < listeners.size(); i++) {
-                    PhaseListener listener = (PhaseListener) listeners.get(i);
-                    if (phaseId.equals(listener.getPhaseId()) ||
-                        PhaseId.ANY_PHASE.equals(listener.getPhaseId())) {
-                        listener.beforePhase(event);
-                    }
-                }
-            }
-        }
+	int 
+	    i = 0,
+	    maxBefore = 0;
 
-        // Execute this phase itself (if still needed)
-        if (!skipping(phaseId, context)) {
-            phase.execute(context);
-        }
-
-        // Notify the "afterPhase" method of interested listeners (descending)
-        synchronized (listeners) {
-            if (listeners.size() > 0) {
-                PhaseEvent event = new PhaseEvent(context, phaseId, this);
-                for (int i = listeners.size() - 1; i >= 0; i--) {
-                    PhaseListener listener = (PhaseListener) listeners.get(i);
-                    if (phaseId.equals(listener.getPhaseId()) ||
-                        PhaseId.ANY_PHASE.equals(listener.getPhaseId())) {
-                        listener.afterPhase(event);
-                    }
-                }
-            }
-        }
+	try {
+	    // Notify the "beforePhase" method of interested listeners
+	    // (ascending)
+	    synchronized (listeners) {
+		if (listeners.size() > 0) {
+		    PhaseEvent event = new PhaseEvent(context, phaseId, this);
+		    for (i = 0; i < listeners.size(); i++) {
+			PhaseListener listener = (PhaseListener) listeners.get(i);
+			if (phaseId.equals(listener.getPhaseId()) ||
+			    PhaseId.ANY_PHASE.equals(listener.getPhaseId())) {
+			    listener.beforePhase(event);
+			}
+			maxBefore = i;
+		    }
+		}
+	    }
+	}
+	catch (Throwable e) {
+	    if (log.isTraceEnabled()) {
+		log.trace("phase(" + phaseId.toString() + "," + context + 
+			  ") threw exception: " + e + " " + e.getMessage() +
+			  "\n" + Util.getStackTraceString(e));
+	    }
+	}
+	    
+	try {   
+	    // Execute this phase itself (if still needed)
+	    if (!skipping(phaseId, context)) {
+		phase.execute(context);
+	    }
+	}
+	finally {
+	    try {
+		// Notify the "afterPhase" method of interested listeners
+		// (descending)
+		synchronized (listeners) {
+		    if (listeners.size() > 0) {
+			PhaseEvent event = new PhaseEvent(context, phaseId, this);
+			for (i = maxBefore; i >= 0; i--) {
+			    PhaseListener listener = (PhaseListener) listeners.get(i);
+			    if (phaseId.equals(listener.getPhaseId()) ||
+				PhaseId.ANY_PHASE.equals(listener.getPhaseId())) {
+				listener.afterPhase(event);
+			    }
+			}
+		    }
+		}
+	    }
+	    catch (Throwable e) {
+		if (log.isTraceEnabled()) {
+		    log.trace("phase(" + phaseId.toString() + "," + context + 
+			      ") threw exception: " + e + " " + e.getMessage() +
+			      "\n" + Util.getStackTraceString(e));
+		}
+	    }
+	}
 
     }
 

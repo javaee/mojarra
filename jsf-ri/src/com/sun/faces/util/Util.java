@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.144 2004/10/12 14:39:55 rlubke Exp $
+ * $Id: Util.java,v 1.145 2004/10/29 19:48:39 edburns Exp $
  */
 
 /*
@@ -59,7 +59,7 @@ import java.util.StringTokenizer;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.144 2004/10/12 14:39:55 rlubke Exp $
+ * @version $Id: Util.java,v 1.145 2004/10/29 19:48:39 edburns Exp $
  */
 
 public class Util extends Object {
@@ -1453,6 +1453,29 @@ public class Util extends Object {
             }
         }
         return segmentIndex;
+    }
+
+    /**
+     * <p>Leverage the Throwable.getStackTrace() method to produce a
+     * String version of the stack trace, with a "\n" before each
+     * line.</p>
+     *
+     * @return the String representation ofthe stack trace obtained by
+     * calling getStackTrace() on the passed in exception.  If null is
+     * passed in, we return the empty String.
+     */ 
+
+    public static String getStackTraceString(Throwable e) {
+	if (null == e) {
+	    return "";
+	}
+	
+	StackTraceElement stacks[] = e.getStackTrace();
+	StringBuffer sb = new StringBuffer();
+	for (int i = 0; i < stacks.length; i++) {
+	    sb.append(stacks[i].toString() + "\n");
+	}
+	return sb.toString();
     }
 
 
