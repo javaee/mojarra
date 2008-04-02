@@ -366,11 +366,13 @@
     <copy file="${jsf-ri.home}/LICENSE.txt" todir="${dist.home}"/>
     <copy file="${jsf-ri.home}/LICENSE-APACHE.txt" todir="${dist.home}"/>
     <copy file="${jsf-ri.home}/THIRDPARTYLICENSEREADME.txt" todir="${dist.home}"/>
-    <copy file="${jsf-api.dtd}" todir="${dist.home}/lib"/>
     <copy file="${commons-beanutils.jar}" todir="${dist.home}/lib"/>
     <copy file="${commons-collections.jar}" todir="${dist.home}/lib"/>
     <copy file="${commons-digester.jar}" todir="${dist.home}/lib"/>
     <copy file="${commons-logging.jar}" todir="${dist.home}/lib"/>
+    <copy todir="${dist.home}/lib">
+      <fileset dir="${jsf-api.home}/build/lib" includes="*.dtd"/>
+    </copy>
     <copy todir="${dist.home}/metadata">
       <fileset dir="${jsf-api.home}/doc"/>
       <fileset dir="${jsf-ri.home}/src/com/sun/faces" includes="standard-html-renderkit.xml"/>
