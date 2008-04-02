@@ -1,5 +1,5 @@
 /*
- * $Id: UIGraphic.java,v 1.27 2003/11/06 15:39:43 eburns Exp $
+ * $Id: UIGraphic.java,v 1.28 2003/11/08 01:15:23 craigmcc Exp $
  */
 
 /*
@@ -48,7 +48,6 @@ public class UIGraphic extends UIComponentBase implements ValueHolder {
 
 
     private Object value = null;
-    private String valueRef = null;
 
 
     // -------------------------------------------------------------- Properties
@@ -81,9 +80,24 @@ public class UIGraphic extends UIComponentBase implements ValueHolder {
     // -------------------------------------------------- ValueHolder Properties
 
 
+    public Object getLocalValue() {
+
+	return (this.value);
+
+    }
+
+
     public Object getValue() {
 
-        return (this.value);
+	if (this.value != null) {
+	    return (this.value);
+	}
+	ValueBinding vb = getValueBinding("value");
+	if (vb != null) {
+	    return (vb.getValue(getFacesContext()));
+	} else {
+	    return (null);
+	}
 
     }
 
@@ -97,56 +111,14 @@ public class UIGraphic extends UIComponentBase implements ValueHolder {
 
 
 
-    public String getValueRef() {
-
-        return (this.valueRef);
-
-    }
-
-
-    public void setValueRef(String valueRef) {
-
-        this.valueRef = valueRef;
-
-    }
-
-
-    // ----------------------------------------------------- ValueHolder Methods
-
-
-    /**
-     * @exception EvaluationException {@inheritDoc}
-     * @exception NullPointerException {@inheritDoc}
-     */ 
-    public Object currentValue(FacesContext context) {
-
-        if (context == null) {
-            throw new NullPointerException();
-        }
-        Object value = getValue();
-        if (value != null) {
-            return (value);
-        }
-        String valueRef = getValueRef();
-        if (valueRef != null) {
-            Application application = context.getApplication();
-            ValueBinding binding = application.getValueBinding(valueRef);
-            return (binding.getValue(context));
-        }
-        return (null);
-
-    }
-
-
     // ----------------------------------------------------- StateHolder Methods
 
 
     public Object saveState(FacesContext context) {
 
-        Object values[] = new Object[3];
+        Object values[] = new Object[2];
         values[0] = super.saveState(context);
         values[1] = value;
-        values[2] = valueRef;
         return (values);
 
     }
@@ -157,7 +129,6 @@ public class UIGraphic extends UIComponentBase implements ValueHolder {
         Object values[] = (Object[]) state;
         super.restoreState(context, values[0]);
         value = values[1];
-        valueRef = (String) values[2];
 
     }
 

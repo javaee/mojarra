@@ -1,5 +1,5 @@
 /*
- * $Id: UIGraphicTestCase.java,v 1.12 2003/11/05 03:42:25 eburns Exp $
+ * $Id: UIGraphicTestCase.java,v 1.13 2003/11/08 01:15:37 craigmcc Exp $
  */
 
 /*
@@ -118,6 +118,29 @@ public class UIGraphicTestCase extends ValueHolderTestCaseBase {
         assertEquals("bar", graphic.getUrl());
         graphic.setValue(null);
         assertNull(graphic.getUrl());
+
+    }
+
+
+    public void testValueBindings() {
+
+	super.testValueBindings();
+	UIGraphic test = (UIGraphic) component;
+
+	// "value" property
+	request.setAttribute("foo", "bar");
+	test.setValue(null);
+	assertNull(test.getValue());
+	test.setValueBinding("value", application.getValueBinding("#{foo}"));
+	assertNotNull(test.getValueBinding("value"));
+	assertEquals("bar", test.getValue());
+	test.setValue("baz");
+	assertEquals("baz", test.getValue());
+	test.setValue(null);
+	assertEquals("bar", test.getValue());
+	test.setValueBinding("value", null);
+	assertNull(test.getValueBinding("value"));
+	assertNull(test.getValue());
 
     }
 

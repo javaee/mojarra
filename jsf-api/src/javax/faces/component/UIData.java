@@ -65,7 +65,7 @@ import javax.faces.model.ScalarDataModel;
  * <p><strong>UIData</strong> is a {@link UIComponent} that supports
  * data binding to a collection of data objects represented by a
  * {@link DataModel} instance, which is the current value of this component
- * itself (typically established via the <code>valueRef</code> property).
+ * itself (typically established via a {@link ValueBinding}.
  * During iterative processing over the rows of data in the data model,
  * the object for the current row is exposed as a request attribute
  * under the key specified by the <code>var</code> property.</p>
@@ -119,7 +119,7 @@ public class UIData extends UIComponentBase
      * <p>The zero-relative index of the current row number, or -1 for
      * no current row association.</p>
      */
-    private int rowIndex = 0;
+    private int rowIndex = -1;
     private boolean rowIndexSet = false;
 
 
@@ -145,13 +145,6 @@ public class UIData extends UIComponentBase
      * <p>The local value of this {@link UIComponent}.</p>
      */
     private Object value = null;
-
-
-    /**
-     * <p>The value reference expression pointing at the associated
-     * model data for this {@link UIComponent}.</p>
-     */
-    private String valueRef = null;
 
 
     /**
@@ -347,7 +340,9 @@ public class UIData extends UIComponentBase
     public void setRowIndex(int rowIndex) {
 
         // Save current state for the previous row index
-        saveDescendantState();
+	if (this.rowIndex >= 0) {
+	    saveDescendantState();
+	}
 
         // Update to the new row index
         int previous = this.rowIndex;
@@ -454,7 +449,7 @@ public class UIData extends UIComponentBase
 
     public Object saveState(FacesContext context) {
 
-        Object values[] = new Object[11];
+        Object values[] = new Object[10];
         values[0] = super.saveState(context);
         values[1] = new Integer(first);
 	values[2] = firstSet ? Boolean.TRUE : Boolean.FALSE;
@@ -464,8 +459,7 @@ public class UIData extends UIComponentBase
 	values[6] = rowsSet ? Boolean.TRUE : Boolean.FALSE;
         values[7] = saved;
         values[8] = value;
-        values[9] = valueRef;
-        values[10] = var;
+        values[9] = var;
         return (values);
 
     }
@@ -483,8 +477,7 @@ public class UIData extends UIComponentBase
 	rowsSet = ((Boolean) values[6]).booleanValue();
         saved = (Map) values[7];
         value = values[8];
-        valueRef = (String) values[9];
-        var = (String) values[10];
+        var = (String) values[9];
 
     }
 
@@ -492,9 +485,24 @@ public class UIData extends UIComponentBase
     // -------------------------------------------------- ValueHolder Properties
 
 
+    public Object getLocalValue() {
+
+	return (this.value);
+
+    }
+
+
     public Object getValue() {
 
-        return (this.value);
+	if (this.value != null) {
+	    return (this.value);
+	}
+	ValueBinding vb = getValueBinding("value");
+	if (vb != null) {
+	    return (vb.getValue(getFacesContext()));
+	} else {
+	    return (null);
+	}
 
     }
 
@@ -502,47 +510,6 @@ public class UIData extends UIComponentBase
     public void setValue(Object value) {
 
         this.value = value;
-
-    }
-
-
-    public String getValueRef() {
-
-        return (this.valueRef);
-
-    }
-
-
-    public void setValueRef(String valueRef) {
-
-        this.valueRef = valueRef;
-
-    }
-
-
-    // ----------------------------------------------------- ValueHolder Methods
-
-
-    /**
-     * @exception EvaluationException {@inheritDoc}
-     * @exception NullPointerException {@inheritDoc}  
-     */
-    public Object currentValue(FacesContext context) {
-
-        if (context == null) {
-            throw new NullPointerException();
-        }
-        Object value = getValue();
-        if (value != null) {
-            return (value);
-        }
-        String valueRef = getValueRef();
-        if (valueRef != null) {
-            Application application = context.getApplication();
-            ValueBinding binding = application.getValueBinding(valueRef);
-            return (binding.getValue(context));
-        }
-        return (null);
 
     }
 
@@ -702,8 +669,7 @@ public class UIData extends UIComponentBase
         }
 
         // Synthesize a DataModel around our current value if possible
-	FacesContext context = FacesContext.getCurrentInstance();
-        Object current = currentValue(context);
+        Object current = getValue();
         if (current == null) {
             this.model = new ListDataModel(Collections.EMPTY_LIST);
         } else if (current instanceof DataModel) {
@@ -902,7 +868,7 @@ public class UIData extends UIComponentBase
                 state = new SavedState();
                 saved.put(clientId, state);
             }
-            state.setValue(((ValueHolder) component).getValue());
+            state.setValue(((ValueHolder) component).getLocalValue());
             if (component instanceof ConvertibleValueHolder) {
                 state.setValid(((ConvertibleValueHolder) component).isValid());
             }

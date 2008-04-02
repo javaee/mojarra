@@ -1,5 +1,5 @@
 /*
- * $Id: UIDataTestCase.java,v 1.20 2003/11/07 18:55:37 craigmcc Exp $
+ * $Id: UIDataTestCase.java,v 1.21 2003/11/08 01:15:36 craigmcc Exp $
  */
 
 /*
@@ -166,7 +166,7 @@ public class UIDataTestCase extends ValueHolderTestCaseBase {
         setupModel();
         assertEquals("correct first", 3, data.getFirst());
         assertEquals("correct rowCount", beans.size(), data.getRowCount());
-        assertEquals("correct rowIndex", 0, data.getRowIndex());
+        assertEquals("correct rowIndex", -1, data.getRowIndex());
         assertEquals("correct rows", 5, data.getRows());
         assertTrue("correct value", model == (DataModel) data.getValue());
 
@@ -597,6 +597,21 @@ public class UIDataTestCase extends ValueHolderTestCaseBase {
 	assertEquals(10, test.getRows());
 	assertNotNull(test.getValueBinding("rows"));
 
+	// "value" property
+	request.setAttribute("foo", "bar");
+	test.setValue(null);
+	assertNull(test.getValue());
+	test.setValueBinding("value", application.getValueBinding("#{foo}"));
+	assertNotNull(test.getValueBinding("value"));
+	assertEquals("bar", test.getValue());
+	test.setValue("baz");
+	assertEquals("baz", test.getValue());
+	test.setValue(null);
+	assertEquals("bar", test.getValue());
+	test.setValueBinding("value", null);
+	assertNull(test.getValueBinding("value"));
+	assertNull(test.getValue());
+
 	// "var" property
 	request.setAttribute("foo", "bar");
 	test.setVar(null);
@@ -844,7 +859,8 @@ public class UIDataTestCase extends ValueHolderTestCaseBase {
         column.getFacets().put("footer", label);
         command = new UICommand();
         command.setId("command");
-        command.setValueRef("foo.command");
+        command.setValueBinding("value",
+				application.getValueBinding("#{foo.command}"));
         column.getChildren().add(command);
         data.getChildren().add(column);
         command.addActionListener(new TestDataActionListener());
@@ -861,7 +877,8 @@ public class UIDataTestCase extends ValueHolderTestCaseBase {
         column.getFacets().put("footer", label);
         input = new UIInput();
         input.setId("input");
-        input.setValueRef("foo.input");
+        input.setValueBinding("value",
+			      application.getValueBinding("#{foo.input}"));
         column.getChildren().add(input);
         data.getChildren().add(column);
         input.addValidator(new TestDataValidator());
@@ -879,7 +896,8 @@ public class UIDataTestCase extends ValueHolderTestCaseBase {
         column.getFacets().put("footer", label);
         output = new UIOutput();
         output.setId("output");
-        output.setValueRef("foo.output");
+        output.setValueBinding("value",
+			       application.getValueBinding("#{foo.output}"));
         column.getChildren().add(output);
         data.getChildren().add(column);
 
@@ -918,7 +936,7 @@ public class UIDataTestCase extends ValueHolderTestCaseBase {
             ResponseWriter writer = context.getResponseWriter();
             writer.write
                 ("<button id='" + component.getClientId(context) + "' value='" +
-                 ((ValueHolder) component).currentValue(context) + "'/>\n");
+                 ((ValueHolder) component).getValue() + "'/>\n");
 
         }
 
@@ -1118,7 +1136,7 @@ public class UIDataTestCase extends ValueHolderTestCaseBase {
             // System.err.println("decode(" + clientId + ")");
 
             // Save the previous value for future ValueChangeEvent handling
-            input.setPrevious(input.currentValue(context));
+            input.setPrevious(input.getValue());
 
             // Decode incoming request parameters
             Map params = context.getExternalContext().getRequestParameterMap();
@@ -1139,7 +1157,7 @@ public class UIDataTestCase extends ValueHolderTestCaseBase {
             ResponseWriter writer = context.getResponseWriter();
             writer.write
                 ("<text id='" + component.getClientId(context) + "' value='" +
-                 ((ValueHolder) component).currentValue(context) + "'/>\n");
+                 ((ValueHolder) component).getValue() + "'/>\n");
 
         }
 

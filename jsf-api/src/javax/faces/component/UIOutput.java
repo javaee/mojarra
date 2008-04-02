@@ -1,5 +1,5 @@
 /*
- * $Id: UIOutput.java,v 1.39 2003/11/07 18:55:31 craigmcc Exp $
+ * $Id: UIOutput.java,v 1.40 2003/11/08 01:15:25 craigmcc Exp $
  */
 
 /*
@@ -77,7 +77,6 @@ public class UIOutput extends UIComponentBase
     private Converter converter = null;
     private boolean valid = true;
     private Object value = null;
-    private String valueRef = null;
 
 
 
@@ -120,9 +119,24 @@ public class UIOutput extends UIComponentBase
     }
 
 
+    public Object getLocalValue() {
+
+	return (this.value);
+
+    }
+
+
     public Object getValue() {
 
-        return (this.value);
+	if (this.value != null) {
+	    return (this.value);
+	}
+	ValueBinding vb = getValueBinding("value");
+	if (vb != null) {
+	    return (vb.getValue(getFacesContext()));
+	} else {
+	    return (null);
+	}
 
     }
 
@@ -134,57 +148,16 @@ public class UIOutput extends UIComponentBase
     }
 
 
-    public String getValueRef() {
-
-        return (this.valueRef);
-
-    }
-
-
-    public void setValueRef(String valueRef) {
-
-        this.valueRef = valueRef;
-
-    }
-
-
-    // ----------------------------------------------------- ValueHolder Methods
-
-    /**
-     * @exception EvaluationException {@inheritDoc}
-     * @exception NullPointerException {@inheritDoc}  
-     */ 
-    public Object currentValue(FacesContext context) {
-
-        if (context == null) {
-            throw new NullPointerException();
-        }
-        Object value = getValue();
-        if (value != null) {
-            return (value);
-        }
-        String valueRef = getValueRef();
-        if (valueRef != null) {
-            Application application = context.getApplication();
-            ValueBinding binding = application.getValueBinding(valueRef);
-            return (binding.getValue(context));
-        }
-        return (null);
-
-    }
-
-
     // ----------------------------------------------------- StateHolder Methods
 
 
     public Object saveState(FacesContext context) {
 
-        Object values[] = new Object[5];
+        Object values[] = new Object[4];
         values[0] = super.saveState(context);
         values[1] = saveAttachedState(context, converter);
         values[2] = this.valid ? Boolean.TRUE : Boolean.FALSE;
         values[3] = value;
-        values[4] = valueRef;
         return (values);
 
     }
@@ -197,7 +170,6 @@ public class UIOutput extends UIComponentBase
         converter = (Converter) restoreAttachedState(context, values[1]);
         valid = ((Boolean) values[2]).booleanValue();
         value = values[3];
-        valueRef = (String) values[4];
 
     }
 

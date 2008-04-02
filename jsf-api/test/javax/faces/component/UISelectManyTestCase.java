@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectManyTestCase.java,v 1.15 2003/10/27 04:10:10 craigmcc Exp $
+ * $Id: UISelectManyTestCase.java,v 1.16 2003/11/08 01:15:41 craigmcc Exp $
  */
 
 /*
@@ -169,6 +169,29 @@ public class UISelectManyTestCase extends UIInputTestCase {
         selectMany.setRendererType(null); // We don't have any renderers
         selectMany.validate(facesContext);
         assertTrue(!selectMany.isValid());
+
+    }
+
+
+    public void testValueBindings() {
+
+	super.testValueBindings();
+	UISelectMany test = (UISelectMany) component;
+
+	// "value" property
+	request.setAttribute("foo", "bar");
+	test.setValue(null);
+	assertNull(test.getValue());
+	test.setValueBinding("value", application.getValueBinding("#{foo}"));
+	assertNotNull(test.getValueBinding("value"));
+	assertEquals("bar", test.getValue());
+	test.setValue("baz");
+	assertEquals("baz", test.getValue());
+	test.setValue(null);
+	assertEquals("bar", test.getValue());
+	test.setValueBinding("value", null);
+	assertNull(test.getValueBinding("value"));
+	assertNull(test.getValue());
 
     }
 

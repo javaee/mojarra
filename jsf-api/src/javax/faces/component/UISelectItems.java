@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectItems.java,v 1.19 2003/11/06 15:39:45 eburns Exp $
+ * $Id: UISelectItems.java,v 1.20 2003/11/08 01:15:27 craigmcc Exp $
  */
 
 /*
@@ -23,7 +23,7 @@ import javax.faces.model.SelectItem;
  * causes the addition of one or more {@link SelectItem} instances to the
  * list of available options in the parent component.  The
  * <code>value</code> of this component (set either directly, or acquired
- * indirectly via the <code>valueRef</code> property, can be of any
+ * indirectly a {@link ValueBinding}, can be of any
  * of the following types:</p>
  * <ul>
  * <li><em>Single instance of {@link SelectItem}</em> - This instance is
@@ -66,15 +66,29 @@ public class UISelectItems extends UIComponentBase implements ValueHolder {
 
 
     private Object value = null;
-    private String valueRef = null;
 
 
     // -------------------------------------------------- ValueHolder Properties
 
 
+    public Object getLocalValue() {
+
+	return (this.value);
+
+    }
+
+
     public Object getValue() {
 
-        return (this.value);
+	if (this.value != null) {
+	    return (this.value);
+	}
+	ValueBinding vb = getValueBinding("value");
+	if (vb != null) {
+	    return (vb.getValue(getFacesContext()));
+	} else {
+	    return (null);
+	}
 
     }
 
@@ -86,55 +100,14 @@ public class UISelectItems extends UIComponentBase implements ValueHolder {
     }
 
 
-    public String getValueRef() {
-
-        return (this.valueRef);
-
-    }
-
-
-    public void setValueRef(String valueRef) {
-
-        this.valueRef = valueRef;
-
-    }
-
-
-    // ----------------------------------------------------- ValueHolder Methods
-
-    /**
-     * @exception EvaluationException {@inheritDoc}
-     * @exception NullPointerException {@inheritDoc}  
-     */
-    public Object currentValue(FacesContext context) {
-
-        if (context == null) {
-            throw new NullPointerException();
-        }
-        Object value = getValue();
-        if (value != null) {
-            return (value);
-        }
-        String valueRef = getValueRef();
-        if (valueRef != null) {
-            Application application = context.getApplication();
-            ValueBinding binding = application.getValueBinding(valueRef);
-            return (binding.getValue(context));
-        }
-        return (null);
-
-    }
-
-
     // ----------------------------------------------------- StateHolder Methods
 
 
     public Object saveState(FacesContext context) {
 
-        Object values[] = new Object[3];
+        Object values[] = new Object[2];
         values[0] = super.saveState(context);
         values[1] = value;
-        values[2] = valueRef;
         return (values);
 
     }
@@ -145,7 +118,6 @@ public class UISelectItems extends UIComponentBase implements ValueHolder {
         Object values[] = (Object[]) state;
         super.restoreState(context, values[0]);
         value = values[1];
-        valueRef = (String) values[2];
 
     }
 

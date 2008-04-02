@@ -1,5 +1,5 @@
 /*
- * $Id: UIInput.java,v 1.46 2003/11/07 18:55:30 craigmcc Exp $
+ * $Id: UIInput.java,v 1.47 2003/11/08 01:15:23 craigmcc Exp $
  */
 
 /*
@@ -55,16 +55,16 @@ import java.util.List;
  *     <li>A String[] array if there was more than one value.</li>
  *     <li>A <code>null</code> if there was no value.</li>
  *     </ul></li>
- * <li>If there is no <code>valueRef</code> AND there is no non-null
- *     <code>Converter</code>, exit (no conversion is required).</li>
+ * <li>If there is no {@link ValueBinding} for <code>value</code> AND there is
+ *     no non-null <code>Converter</code>, exit (no conversion is required).
+ *     </li>
  * <li>Locate a {@link Converter} (if any) to se for the conversion,
  *     as follows:
  *     <ul>
  *     <li>If <code>getConverter()</code> returns a non-null {@link Converter},
  *         use that one; otherwise</li>
- *     <li>If <code>getValueRef()</code> returns a non-null value reference
- *         expression, use it to construct a <code>ValueBinding</code>, and
- *         call <code>getType()</code> on it.  Based on the results:
+ *     <li>If a value binding for <code>value</code> exists, call
+ *         <code>getType()</code> on it.  based on results:
  *         <ul>
  *         <li>If this call returns <code>null</code>, assume the output type
  *             is <code>String</code> and perform no conversion.</li>
@@ -329,15 +329,10 @@ public class UIInput extends UIOutput {
      * <ul>
      * <li>If the <code>valid</code> property of this component is
      *     <code>false</code>, take no further action.</li>
-     * <li>If the <code>valueRef</code> property of this component
-     *     is <code>null</code>, take no further action.</li>
-     * <li>Retrieve the {@link javax.faces.application.Application} instance
-     *     for this web application.</ul>
-     * <li>Ask it for a {@link javax.faces.el.ValueBinding} for the
-     *     <code>valueRef</code> expression.</li>
-     * <li>Use the <code>setValue()</code> method of the
-     *     {@link javax.faces.el.ValueBinding} to update the value that the
-     *     value reference expression points at.</li>
+     * <li>If no {@link ValueBinding} for <code>value</code> exists,
+     *     take no further action.</li>
+     * <li>Call <code>setValue()</code> method of the {@link ValueBinding}
+     *      to update the value that the {@link ValueBinding} points at.</li>
      * <li>If the <code>setValue()</code> method returns successfully:
      *     <ul>
      *     <li>Clear the local value of this {@link UIInput}.</li>
@@ -355,8 +350,6 @@ public class UIInput extends UIOutput {
      *
      * @param context {@link FacesContext} for the request we are processing
      *
-     * @exception IllegalArgumentException if the <code>valueRef</code>
-     *  property has invalid syntax for an expression
      * @exception NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
@@ -368,26 +361,23 @@ public class UIInput extends UIOutput {
         if (!isValid()) {
             return;
         }
-        String valueRef = getValueRef();
-        if (valueRef == null) {
-            return;
-        }
-        try {
-	    Application application = context.getApplication();
-            ValueBinding binding = application.getValueBinding(valueRef);
-            binding.setValue(context, getValue());
-            setValue(null);
-            return;
-        } catch (FacesException e) {
-            setValid(false);
-            throw e;
-        } catch (IllegalArgumentException e) {
-            setValid(false);
-            throw e;
-        } catch (Exception e) {
-            setValid(false);
-            throw new FacesException(e);
-        }
+	ValueBinding vb = getValueBinding("value");
+	if (vb != null) {
+	    try {
+		vb.setValue(context, getValue());
+		setValue(null);
+		return;
+	    } catch (FacesException e) {
+		setValid(false);
+		throw e;
+	    } catch (IllegalArgumentException e) {
+		setValid(false);
+		throw e;
+	    } catch (Exception e) {
+		setValid(false);
+		throw new FacesException(e);
+	    }
+	}
 
     }
 

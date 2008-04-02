@@ -1,5 +1,5 @@
 /*
- * $Id: ValueHolderTestCaseBase.java,v 1.4 2003/10/09 22:58:15 craigmcc Exp $
+ * $Id: ValueHolderTestCaseBase.java,v 1.5 2003/11/08 01:15:42 craigmcc Exp $
  */
 
 /*
@@ -84,65 +84,6 @@ public abstract class ValueHolderTestCaseBase extends UIComponentBaseTestCase {
         component.getAttributes().put("value", null);
         assertNull(vh.getValue());
 
-        assertEquals(vh.getValueRef(),
-                     (String) component.getAttributes().get("valueRef"));
-        vh.setValueRef("foo");
-        assertEquals("foo", (String) component.getAttributes().get("valueRef"));
-        vh.setValueRef(null);
-        assertNull((String) component.getAttributes().get("valueRef"));
-        component.getAttributes().put("valueRef", "bar");
-        assertEquals("bar", vh.getValueRef());
-        component.getAttributes().put("valueRef", null);
-        assertNull(vh.getValueRef());
-
-    }
-
-
-    // Test currentValue method
-    public void testCurrentValue() {
-
-        // Validate initial conditions
-        ValueHolder vh = (ValueHolder) component;
-        assertNull(vh.getValue());
-        assertNull(vh.getValueRef());
-
-        // Retrieve a local value
-        vh.setValue("localValue");
-        assertEquals("localValue", vh.currentValue(facesContext));
-        vh.setValue(null);
-
-        // Retrieve an application initialization parameter
-        /* PENDING(craigmcc) - MockExternalContext support
-        vh.setValueRef("initParam.appParamName");
-        assertEquals("appParamValue", vh.currentValue(facesContext));
-        assertNull(vh.getValue());
-        vh.setValueRef(null);
-        */
-
-        // Retrieve an application scope attribute
-        /* PENDING(craigmcc) - MockExternalContext support
-        vh.setValueRef("applicationScope.appScopeName");
-        assertEquals("appScopeValue", vh.currentValue(facesContext));
-        assertNull(vh.getValue());
-        vh.setValueRef(null);
-        */
-
-        // Retrieve a request scope attribute
-        /* PENDING(craigmcc) - MockExternalContext support
-        vh.setValueRef("requestScope.reqScopeName");
-        assertEquals("reqScopeValue", vh.currentValue(facesContext));
-        assertNull(vh.getValue());
-        vh.setValueRef(null);
-        */
-
-        // Retrieve a session scope attribute
-        /* PENDING(craigmcc) - MockExternalContext support
-        vh.setValueRef("sessionScope.sesScopeName");
-        assertEquals("sesScopeValue", vh.currentValue(facesContext));
-        assertNull(vh.getValue());
-        vh.setValueRef(null);
-        */
-
     }
 
 
@@ -159,7 +100,6 @@ public abstract class ValueHolderTestCaseBase extends UIComponentBaseTestCase {
 
         // Validate properties
         assertNull("no value", vh.getValue());
-        assertNull("no valueRef", vh.getValueRef());
 
     }
 
@@ -186,13 +126,6 @@ public abstract class ValueHolderTestCaseBase extends UIComponentBaseTestCase {
         vh.setValue(null);
         assertNull("erased value", vh.getValue());
 
-        // valueRef
-        vh.setValueRef("customer.name");
-        assertEquals("expected valueRef",
-                     "customer.name", vh.getValueRef());
-        vh.setValueRef(null);
-        assertNull("erased valueRef", vh.getValueRef());
-
     }
 
 
@@ -206,7 +139,6 @@ public abstract class ValueHolderTestCaseBase extends UIComponentBaseTestCase {
         ValueHolder vh1 = (ValueHolder) comp1;
         ValueHolder vh2 = (ValueHolder) comp2;
         assertEquals(vh1.getValue(), vh2.getValue());
-        assertEquals(vh1.getValueRef(), vh2.getValueRef());
 
     }
 
@@ -217,7 +149,6 @@ public abstract class ValueHolderTestCaseBase extends UIComponentBaseTestCase {
         super.populateComponent(component);
         ValueHolder vh = (ValueHolder) component;
         vh.setValue("component value");
-        vh.setValueRef("component.value.ref");
 
     }
 

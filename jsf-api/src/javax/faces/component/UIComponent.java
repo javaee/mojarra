@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.116 2003/11/07 18:55:29 craigmcc Exp $
+ * $Id: UIComponent.java,v 1.117 2003/11/08 01:15:21 craigmcc Exp $
  */
 
 /*
@@ -504,7 +504,7 @@ public abstract class UIComponent implements StateHolder {
      * utilized to reproduce the incorrect input.  If the conversion was
      * successful, or if there was no previous call to <code>decode()</code>,
      * the value to be displayed should be acquired by calling
-     * <code>currentValue()</code>, and rendering the value as appropriate.
+     * <code>getValue()</code>, and rendering the value as appropriate.
      * </p>
      *
      * @param context {@link FacesContext} for the response we are creating

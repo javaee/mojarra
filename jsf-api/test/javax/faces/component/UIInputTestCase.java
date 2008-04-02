@@ -1,5 +1,5 @@
 /*
- * $Id: UIInputTestCase.java,v 1.21 2003/11/07 18:55:37 craigmcc Exp $
+ * $Id: UIInputTestCase.java,v 1.22 2003/11/08 01:15:38 craigmcc Exp $
  */
 
 /*
@@ -330,6 +330,7 @@ public class UIInputTestCase extends UIOutputTestCase {
 
 	super.testValueBindings();
 	UIInput test = (UIInput) component;
+
 	// "required" property
 	request.setAttribute("foo", Boolean.FALSE);
 	boolean initial = test.isRequired();
@@ -343,6 +344,21 @@ public class UIInputTestCase extends UIOutputTestCase {
 	test.setRequired(initial);
 	assertEquals(initial, test.isRequired());
 	assertNotNull(test.getValueBinding("required"));
+
+	// "value" property
+	request.setAttribute("foo", "bar");
+	test.setValue(null);
+	assertNull(test.getValue());
+	test.setValueBinding("value", application.getValueBinding("#{foo}"));
+	assertNotNull(test.getValueBinding("value"));
+	assertEquals("bar", test.getValue());
+	test.setValue("baz");
+	assertEquals("baz", test.getValue());
+	test.setValue(null);
+	assertEquals("bar", test.getValue());
+	test.setValueBinding("value", null);
+	assertNull(test.getValueBinding("value"));
+	assertNull(test.getValue());
 
     }
 

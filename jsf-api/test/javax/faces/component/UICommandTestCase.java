@@ -1,5 +1,5 @@
 /*
- * $Id: UICommandTestCase.java,v 1.18 2003/11/07 18:55:36 craigmcc Exp $
+ * $Id: UICommandTestCase.java,v 1.19 2003/11/08 01:15:35 craigmcc Exp $
  */
 
 /*
@@ -369,6 +369,21 @@ public class UICommandTestCase extends ValueHolderTestCaseBase {
 	test.setImmediate(initial);
 	assertEquals(initial, test.isImmediate());
 	assertNotNull(test.getValueBinding("immediate"));
+
+	// "value" property
+	request.setAttribute("foo", "bar");
+	test.setValue(null);
+	assertNull(test.getValue());
+	test.setValueBinding("value", application.getValueBinding("#{foo}"));
+	assertNotNull(test.getValueBinding("value"));
+	assertEquals("bar", test.getValue());
+	test.setValue("baz");
+	assertEquals("baz", test.getValue());
+	test.setValue(null);
+	assertEquals("bar", test.getValue());
+	test.setValueBinding("value", null);
+	assertNull(test.getValueBinding("value"));
+	assertNull(test.getValue());
 
     }
 

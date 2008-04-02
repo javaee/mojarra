@@ -1,5 +1,5 @@
 /*
- * $Id: SelectItemsIterator.java,v 1.1 2003/09/25 07:50:00 craigmcc Exp $
+ * $Id: SelectItemsIterator.java,v 1.2 2003/11/08 01:15:20 craigmcc Exp $
  */
 
 /*
@@ -101,8 +101,7 @@ final class SelectItemsIterator implements Iterator {
         UIComponent kid = (UIComponent) kids.next();
         if (kid instanceof UISelectItem) {
             UISelectItem ui = (UISelectItem) kid;
-            SelectItem item = (SelectItem)
-                ui.currentValue(FacesContext.getCurrentInstance());
+            SelectItem item = (SelectItem) ui.getValue();
             if (item == null) {
                 item = new SelectItem(ui.getItemValue(),
                                       ui.getItemLabel(),
@@ -111,8 +110,7 @@ final class SelectItemsIterator implements Iterator {
             return (item);
         } else if (kid instanceof UISelectItems) {
             UISelectItems ui = (UISelectItems) kid;
-            Object value =
-                ui.currentValue(FacesContext.getCurrentInstance());
+            Object value = ui.getValue();
             if (value instanceof SelectItem) {
                 return (value);
             } else if (value instanceof SelectItem[]) {

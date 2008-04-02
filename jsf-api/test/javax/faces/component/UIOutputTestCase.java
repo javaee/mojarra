@@ -1,5 +1,5 @@
 /*
- * $Id: UIOutputTestCase.java,v 1.14 2003/11/07 18:55:38 craigmcc Exp $
+ * $Id: UIOutputTestCase.java,v 1.15 2003/11/08 01:15:39 craigmcc Exp $
  */
 
 /*
@@ -134,6 +134,21 @@ public class UIOutputTestCase extends ConvertibleValueHolderTestCaseBase {
 	test.setValueBinding("converter", null);
 	assertNull(test.getValueBinding("converter"));
 	assertNull(test.getConverter());
+
+	// "value" property
+	request.setAttribute("foo", "bar");
+	test.setValue(null);
+	assertNull(test.getValue());
+	test.setValueBinding("value", application.getValueBinding("#{foo}"));
+	assertNotNull(test.getValueBinding("value"));
+	assertEquals("bar", test.getValue());
+	test.setValue("baz");
+	assertEquals("baz", test.getValue());
+	test.setValue(null);
+	assertEquals("bar", test.getValue());
+	test.setValueBinding("value", null);
+	assertNull(test.getValueBinding("value"));
+	assertNull(test.getValue());
 
     }
 

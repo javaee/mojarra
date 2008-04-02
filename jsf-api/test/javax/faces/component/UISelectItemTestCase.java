@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectItemTestCase.java,v 1.6 2003/11/07 18:55:38 craigmcc Exp $
+ * $Id: UISelectItemTestCase.java,v 1.7 2003/11/08 01:15:40 craigmcc Exp $
  */
 
 /*
@@ -206,6 +206,21 @@ public class UISelectItemTestCase extends ValueHolderTestCaseBase {
 	test.setValueBinding("itemValue", null);
 	assertNull(test.getValueBinding("itemValue"));
 	assertNull(test.getItemValue());
+
+	// "value" property
+	request.setAttribute("foo", "bar");
+	test.setValue(null);
+	assertNull(test.getValue());
+	test.setValueBinding("value", application.getValueBinding("#{foo}"));
+	assertNotNull(test.getValueBinding("value"));
+	assertEquals("bar", test.getValue());
+	test.setValue("baz");
+	assertEquals("baz", test.getValue());
+	test.setValue(null);
+	assertEquals("bar", test.getValue());
+	test.setValueBinding("value", null);
+	assertNull(test.getValueBinding("value"));
+	assertNull(test.getValue());
 
     }
 

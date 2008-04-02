@@ -1,5 +1,5 @@
 /*
- * $Id: UIParameter.java,v 1.17 2003/11/07 18:55:31 craigmcc Exp $
+ * $Id: UIParameter.java,v 1.18 2003/11/08 01:15:26 craigmcc Exp $
  */
 
 /*
@@ -21,13 +21,13 @@ import javax.faces.el.ValueBinding;
  * an optionally named configuration parameter for a parent component.</p>
  *
  * <p>Parent components should retrieve the value of a parameter by calling
- * <code>currentValue()</code>.  In this way, the parameter value can be set
+ * <code>getValue()</code>.  In this way, the parameter value can be set
  * directly on the component (via <code>setValue()</code>), or retrieved
  * indirectly via the value reference expression.</p>
  *
  * <p>In some scenarios, it is necessary to provide a parameter name, in
  * addition to the parameter value that is accessible via the
- * <code>currentValue()</code> method.
+ * <code>getValue()</code> method.
  * {@link javax.faces.render.Renderer}s that support parameter names on their
  * nested {@link UIParameter} child components should document
  * their use of this property.</p>
@@ -56,7 +56,6 @@ public class UIParameter extends UIComponentBase implements ValueHolder {
 
     private String name = null;
     private Object value = null;
-    private String valueRef = null;
 
 
     // -------------------------------------------------------------- Properties
@@ -96,9 +95,24 @@ public class UIParameter extends UIComponentBase implements ValueHolder {
     // -------------------------------------------------- ValueHolder Properties
 
 
+    public Object getLocalValue() {
+
+	return (this.value);
+
+    }
+
+
     public Object getValue() {
 
-        return (this.value);
+	if (this.value != null) {
+	    return (this.value);
+	}
+	ValueBinding vb = getValueBinding("value");
+	if (vb != null) {
+	    return (vb.getValue(getFacesContext()));
+	} else {
+	    return (null);
+	}
 
     }
 
@@ -110,57 +124,15 @@ public class UIParameter extends UIComponentBase implements ValueHolder {
     }
 
 
-    public String getValueRef() {
-
-        return (this.valueRef);
-
-    }
-
-
-    public void setValueRef(String valueRef) {
-
-        this.valueRef = valueRef;
-
-    }
-
-
-    // ----------------------------------------------------- ValueHolder Methods
-
-
-    /**
-     * @exception EvaluationException {@inheritDoc}
-     * @exception NullPointerException {@inheritDoc}  
-     */
-    public Object currentValue(FacesContext context) {
-
-        if (context == null) {
-            throw new NullPointerException();
-        }
-        Object value = getValue();
-        if (value != null) {
-            return (value);
-        }
-        String valueRef = getValueRef();
-        if (valueRef != null) {
-            Application application = context.getApplication();
-            ValueBinding binding = application.getValueBinding(valueRef);
-            return (binding.getValue(context));
-        }
-        return (null);
-
-    }
-
-
     // ----------------------------------------------------- StateHolder Methods
 
 
     public Object saveState(FacesContext context) {
 
-        Object values[] = new Object[4];
+        Object values[] = new Object[3];
         values[0] = super.saveState(context);
         values[1] = name;
         values[2] = value;
-        values[3] = valueRef;
         return (values);
 
     }
@@ -172,7 +144,6 @@ public class UIParameter extends UIComponentBase implements ValueHolder {
         super.restoreState(context, values[0]);
         name = (String) values[1];
         value = values[2];
-        valueRef = (String) values[3];
 
     }
 

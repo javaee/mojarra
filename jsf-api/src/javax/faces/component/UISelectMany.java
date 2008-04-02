@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectMany.java,v 1.36 2003/10/30 21:57:49 craigmcc Exp $
+ * $Id: UISelectMany.java,v 1.37 2003/11/08 01:15:27 craigmcc Exp $
  */
 
 /*
@@ -12,6 +12,7 @@ package javax.faces.component;
 
 import java.util.Iterator;
 import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
 import javax.faces.model.SelectItem;
 
 
@@ -43,12 +44,11 @@ import javax.faces.model.SelectItem;
  * <p>If the component has an attached <code>Converter</code>, use
  * it.</p>
  *
- * <p>If not, look at the <code>valueRef</code>.  If there is a
- * <code>valueRef</code>, look at it's type.  <strong>The
- * <code>valueRef</code> for a <code>UISelectMany</code> component must
- * point to something that is an array or a <code>java.util.List</code>
- * of <code>String</code>s.</strong> If the type is an array type, use
- * {@link
+ * <p>If not, look for a {@link ValueBinding} for <code>value</code> (if any).
+ * If there is a {@link ValueBinding}, call <code>getType()</code>.
+ * <strong>The {@link ValueBinding} must point to something that is
+ * an array or a <code>List</code> of <code>String</code>s.</strong>
+ * If the type is an array type, use {@link
  * javax.faces.application.Application#createConverter(java.lang.Class)}
  * passing the <code>Class</code> instance for the element type of the
  * array.  If the type is <code>java.util.List</code>, assume the
@@ -64,12 +64,12 @@ import javax.faces.model.SelectItem;
  *
  * <p>Use the <code>Converter</code> to convert each element in the
  * values array from the request to the proper type.  If the component
- * has a <code>valueRef</code>, create an array of the expected type to
- * hold the converted values.  If the component does not have a
- * <code>valueRef</code> create an array of <code>Object</code>.  Store
- * the created array as the local value of the component, set the
- * components <code>valid</code> state to <code>true</code> and
- * return.</p>
+ * has a {@link ValueBinding} for <code>value</code>, create an array
+ * of the expected type to hold the converted values.  If the component
+ * does not have a {@link ValueBinding} for <code>value</code>, create
+ * an array of type <code>Object</code>.  Store the created array
+ * as the local value of the component, set the component's <code>valid</code>
+ * state to <code>true</code> and return.</p>
  *
  * </ul>
  *

@@ -1,5 +1,5 @@
 /*
- * $Id: UIPanelTestCase.java,v 1.11 2003/10/09 22:58:13 craigmcc Exp $
+ * $Id: UIPanelTestCase.java,v 1.12 2003/11/08 01:15:39 craigmcc Exp $
  */
 
 /*
@@ -91,6 +91,29 @@ public class UIPanelTestCase extends ValueHolderTestCaseBase {
 
         super.testPropertiesValid();
         UIPanel panel = (UIPanel) component;
+
+    }
+
+
+    public void testValueBindings() {
+
+	super.testValueBindings();
+	UIPanel test = (UIPanel) component;
+
+	// "value" property
+	request.setAttribute("foo", "bar");
+	test.setValue(null);
+	assertNull(test.getValue());
+	test.setValueBinding("value", application.getValueBinding("#{foo}"));
+	assertNotNull(test.getValueBinding("value"));
+	assertEquals("bar", test.getValue());
+	test.setValue("baz");
+	assertEquals("baz", test.getValue());
+	test.setValue(null);
+	assertEquals("bar", test.getValue());
+	test.setValueBinding("value", null);
+	assertNull(test.getValueBinding("value"));
+	assertNull(test.getValue());
 
     }
 

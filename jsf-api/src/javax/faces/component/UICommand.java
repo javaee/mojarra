@@ -1,5 +1,5 @@
 /*
- * $Id: UICommand.java,v 1.53 2003/11/07 18:55:28 craigmcc Exp $
+ * $Id: UICommand.java,v 1.54 2003/11/08 01:15:21 craigmcc Exp $
  */
 
 /*
@@ -71,7 +71,6 @@ public class UICommand extends UIComponentBase
 
 
     private Object value = null;
-    private String valueRef = null;
 
 
     // ------------------------------------------------- ActionSource Properties
@@ -186,9 +185,24 @@ public class UICommand extends UIComponentBase
     // -------------------------------------------------- ValueHolder Properties
 
 
+    public Object getLocalValue() {
+
+	return (this.value);
+
+    }
+
+
     public Object getValue() {
 
-        return (this.value);
+	if (this.value != null) {
+	    return (this.value);
+	}
+	ValueBinding vb = getValueBinding("value");
+	if (vb != null) {
+	    return (vb.getValue(getFacesContext()));
+	} else {
+	    return (null);
+	}
 
     }
 
@@ -196,20 +210,6 @@ public class UICommand extends UIComponentBase
     public void setValue(Object value) {
 
         this.value = value;
-
-    }
-
-
-    public String getValueRef() {
-
-        return (this.valueRef);
-
-    }
-
-
-    public void setValueRef(String valueRef) {
-
-        this.valueRef = valueRef;
 
     }
 
@@ -250,32 +250,6 @@ public class UICommand extends UIComponentBase
     }
 
 
-    // ----------------------------------------------------- ValueHolder Methods
-
-    /**
-     * @exception EvaluationException {@inheritDoc}
-     * @exception NullPointerException {@inheritDoc}
-     */ 
-    public Object currentValue(FacesContext context) {
-
-        if (context == null) {
-            throw new NullPointerException();
-        }
-        Object value = getValue();
-        if (value != null) {
-            return (value);
-        }
-        String valueRef = getValueRef();
-        if (valueRef != null) {
-            Application application = context.getApplication();
-            ValueBinding binding = application.getValueBinding(valueRef);
-            return (binding.getValue(context));
-        }
-        return (null);
-
-    }
-
-
     // ----------------------------------------------------- StateHolder Methods
 
 
@@ -283,7 +257,7 @@ public class UICommand extends UIComponentBase
 
         removeDefaultActionListener(context);
 
-        Object values[] = new Object[8];
+        Object values[] = new Object[7];
         values[0] = super.saveState(context);
         values[1] = action;
         values[2] = actionListenerRef;
@@ -291,7 +265,6 @@ public class UICommand extends UIComponentBase
         values[4] = immediate ? Boolean.TRUE : Boolean.FALSE;
         values[5] = immediateSet ? Boolean.TRUE : Boolean.FALSE;
         values[6] = value;
-        values[7] = valueRef;
 
         addDefaultActionListener(context);
         return (values);
@@ -310,7 +283,6 @@ public class UICommand extends UIComponentBase
         immediate = ((Boolean) values[4]).booleanValue();
         immediateSet = ((Boolean) values[5]).booleanValue();
         value = values[6];
-        valueRef = (String) values[7];
 
         addDefaultActionListener(context);
 
