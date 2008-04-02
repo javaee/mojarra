@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListener.java,v 1.86 2006/09/19 21:13:30 jdlee Exp $
+ * $Id: ConfigureListener.java,v 1.87 2006/11/06 19:59:15 rlubke Exp $
  */
 /*
  * The contents of this file are subject to the terms
@@ -464,8 +464,8 @@ public class ConfigureListener implements ServletContextListener {
             }
                   
             tlsExternalContext.set(null);          
-            if (LOGGER.isLoggable(Level.INFO)) {
-                LOGGER.log(Level.INFO,
+            if (LOGGER.isLoggable(Level.FINE)) {
+                LOGGER.log(Level.FINE,
                            "jsf.config.listener.version.complete",
                            getServletContextIdentifier(context));
             }
