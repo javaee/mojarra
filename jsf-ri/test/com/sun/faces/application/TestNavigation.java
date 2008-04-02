@@ -1,5 +1,5 @@
 /*
- * $Id: TestNavigation.java,v 1.4 2003/05/05 15:24:14 rkitain Exp $
+ * $Id: TestNavigation.java,v 1.5 2003/05/06 03:29:30 eburns Exp $
  */
 
 /*
@@ -24,6 +24,7 @@ import javax.faces.application.Action;
 import javax.faces.component.UICommand;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import javax.faces.FactoryFinder;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContext;
@@ -41,7 +42,7 @@ import com.sun.faces.ServletFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestNavigation.java,v 1.4 2003/05/05 15:24:14 rkitain Exp $
+ * @version $Id: TestNavigation.java,v 1.5 2003/05/06 03:29:30 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -85,6 +86,9 @@ public class TestNavigation extends ServletFacesTestCase
 //
     private void loadConfigFile() {
         config.getServletContext().removeAttribute(RIConstants.CONFIG_ATTR);
+	// clear out the renderKit factory
+	FactoryFinder.releaseFactories();
+
         final String paramVal = "WEB-INF/faces-navigation.xml";
 
         // work around a bug in cactus where calling
