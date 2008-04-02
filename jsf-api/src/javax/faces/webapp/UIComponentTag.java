@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTag.java,v 1.14 2003/08/22 14:03:23 eburns Exp $
+ * $Id: UIComponentTag.java,v 1.15 2003/08/29 00:09:22 craigmcc Exp $
  */
 
 /*
@@ -12,8 +12,10 @@ package javax.faces.webapp;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.HashMap;
+import java.util.List;
 import javax.faces.FactoryFinder;
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
@@ -31,7 +33,7 @@ import javax.servlet.jsp.tagext.Tag;
 
 
 /**
- * <p><strong>UIComponentTag</strong> is the base class for all JSP custom
+ * <p>{@link UIComponentTag} is the base class for all JSP custom
  * actions that correspond to user interface components in a page that is
  * rendered by JavaServer Faces.  Tags that need to process their tag bodies
  * should subclass {@link UIComponentBodyTag} instead.</p>
@@ -40,13 +42,37 @@ import javax.servlet.jsp.tagext.Tag;
 public abstract class UIComponentTag implements Tag {
 
 
-    // ----------------------------------------------------- Instance Variables
+    // ------------------------------------------------------ Manifest Constants
 
 
     /**
-     * <p>The current index into the children of this tag's component.</p>
+     * <p>The page scope attribute under which an <code>Integer</code> value
+     * describing the number of child identifiers that have been created
+     * so far on this page.</p>
      */
-    private int childIndex = 0;
+    private static final String AUTO_ID_INDEX_PAGE_ATTR =
+        "javax.faces.webapp.AUTO_INDEX";
+
+
+    /**
+     * <p>The {@link UIComponent} attribute under which we will store a
+     * <code>List</code> of the component identifiers of child components
+     * created on the previous generation of this page (if any).</p>
+     */
+    private static final String JSP_CREATED_COMPONENT_IDS =
+        "javax.faces.webapp.COMPONENT_IDS";
+
+
+    /**
+     * <p>The {@link UIComponent} attribute under which we will store a
+     * <code>List</code> of the facet names of facets created on the previous
+     * generation of this page (if any).
+     */
+    private static final String JSP_CREATED_FACET_NAMES =
+        "javax.faces.webapp.FACET_NAMES";
+
+
+    // ------------------------------------------------------ Instance Variables
 
 
     /**
@@ -68,6 +94,21 @@ public abstract class UIComponentTag implements Tag {
      * <code>findComponent()</code> method was called.</p>
      */
     private boolean created = false;
+
+
+    /**
+     * <p>The <code>Lst</code> of {@link UIComponent} ids created or located
+     * by nested {@link UIComponentTag}s while processing the current
+     * request.</p>
+     */
+    private List createdComponents = null;
+
+
+    /**
+     * <p>The <code>List</code> of facet names created or located by nested
+     * {@link UIComponentTag}s while processing the current request.</p>
+     */
+    private List createdFacets = null;
 
 
     /**
@@ -252,13 +293,13 @@ public abstract class UIComponentTag implements Tag {
      *     <code>JspWriter</code> for the current page.</li>
      * <li>Locate the component (in the view) corresponding
      *     to this tag, creating a new one if necesary.</li>
-     * <li>Override the attributes of the associated component with values
-     *     set in our custom tag attributes, if values for the corresponding
-     *     attributes are <strong>NOT</strong> already set on the component.
-     *     </li>
-     * <li>Push this component onto the stack of components corresponding to
-     *     nested component tags for the current response, creating the stack
-     *     if necessary.</li>
+     * <li>If this {@link UIComponentTag} is nested within the body of
+     *     another {@link UIComponentTag}, call its <code>addChild</code>
+     *     method to save the component identifier for the {@link UIComponent}
+     *     that corresponds to this {@link UIComponentTag}.</li>
+     * <li>Call <code>findComponent()</code> to locate the {@link UIComponent}
+     *     instance associated wth this {@link UIComponentTag}, creating a new
+     *     one if necessary.</li>
      * <li>Call the <code>encodeBegin()</code> method of the component,
      *     unless rendering is suppressed or our component renders its
      *     own children.</li>
@@ -283,9 +324,19 @@ public abstract class UIComponentTag implements Tag {
         // Set up the ResponseWriter as needed
         setupResponseWriter();
 
-        // Locate and configure the component that corresponds to this tag
-        childIndex = 0;
+        // Locate the UIComponent associated with this UIComponentTag,
+        // creating one if necessary
         component = findComponent(context);
+
+        // Add to parent's list of created components or facets if needed
+        UIComponentTag parentTag = getParentUIComponentTag();
+        if (parentTag != null) {
+            if (getFacetName() == null) {
+                parentTag.addChild(component);
+            } else {
+                parentTag.addFacet(getFacetName());
+            }
+        }
 
         // Render the beginning of the component associated with this tag
         try {
@@ -309,6 +360,20 @@ public abstract class UIComponentTag implements Tag {
      * with this tag (via the <code>id</code> attribute), by following these
      * steps.</p>
      * <ul>
+     * <li>Retrieve from the {@link UIComponent} the set of component ids
+     *     of child components created by {@link UIComponentTag} instances
+     *     the last time this page was processed (if any).  Compare it to
+     *     the list of children created during this page processing pass,
+     *     and remove all children present in the old list but not the new.
+     *     Save the new list as a component attribute so that it gets saved
+     *     as part of the component's state.</li>
+     * <li>Retrieve from the {@link UIComponent} the set of facet names
+     *     of facets created by {@link UIComponentTag} instances the last
+     *     time this page was processed (if any).  Compare it to
+     *     the list of facets created during this page processing pass,
+     *     and remove all facets present in the old list but not the new.
+     *     Save the new list as a component attribute so that it gets saved
+     *     as part of the component's state.</li>
      * <li>If the <code>rendersChildren</code> property of this component is
      *     <code>true</code>, call the <code>encodeBegin()</code> method
      *     of this component.
@@ -329,6 +394,10 @@ public abstract class UIComponentTag implements Tag {
      */
     public int doEndTag() throws JspException {
 
+        // Remove old children and facets as needed
+        removeOldChildren();
+        removeOldFacets();
+
         // Render the children (if needed) and  end of the component
         // associated with this tag
         try {
@@ -347,7 +416,6 @@ public abstract class UIComponentTag implements Tag {
         }
 
         // Return the appropriate control value
-        childIndex = 0;
         created = false;
         return (getDoEndValue());
 
@@ -422,134 +490,82 @@ public abstract class UIComponentTag implements Tag {
 
 
     /**
-     * <p>Find and return the {@link UIComponent}, from the view, that
-     * corresponds to this tag handler instance.  If there is no such
-     * {@link UIComponent}, perform the following algorithm to create
-     * one that can be returned:</p>
-     * <ul>
-     * <li>If this tag has no <code>componentRef</code> attribute value,
-     *     call <code>Application.createComponent(String)</code>,
-     *     passing the result of calling <code>getComponentType()</code> on
-     *     this tag instance.</li>
-     * <li>If this tag has a <code>componentRef</code> attribute value,
-     *     call <code>Application.createComponent(String, FacesContext,
-     *     String)</code>, passing a {@link ValueBinding} based on the
-     *     <code>componentRef</code> attribute value, the {@link FacesContext}
-     *     for the current request, and the result of calling
-     *     <code>getComponentType() on this tag instance.</li>
-     * <li>After the component instance has been created by either of the
-     *     above mechanisms, call <code>overrideProperties()</code> to copy
-     *     values from the attributes of this tag instance to the corresponding
-     *     attributes and properties of the component instance.</li>
-     * </ul>
+     * <p>Find and return the {@link UIComponent}, from the component
+     * tree, that corresponds to this tag handler instance.  If there
+     * is no such {@link UIComponent}, create one by calling
+     * <code>createComponent()</code> or <code>createFacet()</code>,
+     * and add it as a child or facet of the {@link UIComponent} associated
+     * with our nearest enclosing {@link UIComponentTag}.  The process for
+     * locating or creating the component is:
+     * <ol>
+     * <li>If we have previously located this component, return it.</li>
+     * <li>Locate the parent component by looking for a parent
+     *     {@link UIComponentTag} instance, and ask it for its component.
+     *     If there is no parent {@link UIComponentTag} instance, this tag
+     *     represents the root component, so get it from the current
+     *     <code>Tree</code> and return it.</li>
+     * <li>If this {@link UIComponentTag} instance has the
+     *     <code>facetName</code> attribute set, ask the parent
+     *     {@link UIComponent} for a facet with this name.  If not found,
+     *     create one, call <code>overrideProperties() with the new
+     *     component as a parameter, and register it under this name.  In either
+     *     case, return the facet {@link UIComponent}.</li>
+     * <li>Determine the component id to be assigned to the new
+     *     component, as follows:  if this {@link UIComponentTag} has
+     *     an <code>id</code> attribute set, use that value; otherwise,
+     *     generate an identifier that is guaranteed to be the same for
+     *     this {@link UIComponent} every time this page is processed
+     *     (i.e. one based on the location of all {@link UIComponentTag}
+     *     instances without an <code>id</code> attribute set).</li>
+     * <li>Ask the parent {@link UIComponent} for a child this identifier.
+     *     If not found, create one, call <code>overrideProperties()</code>
+     *     with the new component as a parameter, and register it as a child
+     *     with this identifier.  In either
+     *     case, return the child {@link UIComponent}.</li>
+     * </ol>
      */
     protected UIComponent findComponent(FacesContext context)
 	throws JspException {
 
-        // Have we already found the relevant component?
+        // Step 1 -- Have we already found the relevant component?
         if (component != null) {
             return (component);
         }
 
-        // Identify the component that is, or will be, our parent
+        // Step 2 -- Identify the component that is, or will be, our parent
         UIComponentTag parentTag = getParentUIComponentTag();
         UIComponent parentComponent = null;
-        boolean thisTagIsRoot = false;
-	boolean parentCreated = false;
         if (parentTag != null) {
             parentComponent = parentTag.getComponent();
-            parentCreated = parentTag.getCreated();
         } else {
-	    // If there is no parent tag, this tag must be the root.
-	    thisTagIsRoot = true;
             parentComponent = context.getViewRoot();
-            parentCreated = parentComponent.getChildren().size() < 1;
-        }
-
-        // Case 1 -- Our parent was just created, so we must do so also
-        if (parentCreated) {
-
-	    if (thisTagIsRoot) {
-		component = parentComponent;
-	    }
-	    else {
-		// Create a new component instance
-		try {
-		    Application application = context.getApplication();
-		    ValueBinding binding = null;
-		    if (this.componentRef != null) {
-			binding = application.getValueBinding(componentRef);
-			component = application.createComponent
-			    (binding, context, getComponentType());
-			overrideProperties(component);
-			binding.setValue(context, component);
-		    } else {
-			component =
-			    application.createComponent(getComponentType());
-			overrideProperties(component);
-		    }
-		}
-		catch (FacesException e) {
-		    throw new JspException(e);
-		}
-	    }
-            created = true;
-
-            // Add it as a facet or a child
-            String facetName = getFacetName();
-	    // protect from adding us to ourself
-	    if (parentComponent != component) {
-		if (facetName != null) {
-		    parentComponent.getFacets().put(facetName, component);
-		} else {
-		    parentComponent.getChildren().add(component);
-		}
-	    }
-
-            // Return the newly created component
+            component = parentComponent;
             return (component);
-
         }
 
-        // Case 2 -- Our parent was not created, so locate ourself
+        // Step 3 -- Create or return a facet with the specified name (if any)
         String facetName = getFacetName();
         if (facetName != null) {
-
-            // Case 2A -- Look up facet by name
             component = (UIComponent)
                 parentComponent.getFacets().get(facetName);
-            // PENDING - what if it's not there?
-
-        } else {
-
-            // Case 2B -- Look up child by position
-            if (parentTag != null) {
-		component = (UIComponent)
-		    parentComponent.getChildren().
-                    get(parentTag.getChildIndex());
-                parentTag.incrementChildIndex();
-            } else {
-		// The only case where parentTag == null is the root
-		// tag, therefore, the component is the rootComponent.
-                component = context.getViewRoot();
+            if (component == null) {
+                component = createFacet(context, parentComponent, facetName);
             }
-            // PENDING - what if it's not there?
-
+            return (component);
         }
 
-        // Return the located component
+        // Step 4 -- Calculate the component identifier for this component
+        String newId = this.id;
+        if (newId == null) {
+            newId = createId();
+        }
+
+        // Step 5 -- Create or return a child with the specified id
+        component = getChild(parentComponent, newId);
+        if (component == null) {
+            component = createChild(context, parentComponent, newId);
+        }
         return (component);
-
-    }
-
-
-    /**
-     * <p>Return the current index into the children of this tag's
-     * corresponding {@link UIComponent}.</p>
-     */
-    protected int getChildIndex() {
-
-        return (this.childIndex);
 
     }
 
@@ -620,16 +636,6 @@ public abstract class UIComponentTag implements Tag {
     
 
     /**
-     * <p>Increment the index into the children of this tag's component.</p>
-     */
-    protected void incrementChildIndex() {
-
-        childIndex++;
-
-    }
-
-
-    /**
      * <p>Return <code>true</code> if rendering should be suppressed because
      * our component is a facet, or some parent component has been configured
      * with <code>getRendersChildren()</code> as true.</p>
@@ -654,7 +660,7 @@ public abstract class UIComponentTag implements Tag {
     /**
      * <p>Override properties and attributes of the specified component,
      * if the corresponding properties of this tag handler instance were
-     * explicitly set.  This method will be called <strong>ONLY</strong>
+     * explicitly set.  This method must be called <strong>ONLY</strong>
      * if the specified {@link UIComponent} was in fact created during
      * the execution of this tag handler instance, and this call will occur
      * <strong>BEFORE</strong> the {@link UIComponent} is added to
@@ -724,7 +730,8 @@ public abstract class UIComponentTag implements Tag {
 	    RenderKitFactory renderFactory = (RenderKitFactory)
 		FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
 	    RenderKit renderKit = 
-		renderFactory.getRenderKit(context.getViewRoot().getRenderKitId());
+		renderFactory.getRenderKit
+                (context.getViewRoot().getRenderKitId());
 	    ServletResponse response = (ServletResponse)
 		context.getExternalContext().getResponse();
             writer = 
@@ -753,10 +760,254 @@ public abstract class UIComponentTag implements Tag {
 			pageContext.getOut().write(str, off, len);
 		    }
 		},
-					    null,
-					    response.getCharacterEncoding());
+                                               null,
+                                               response.getCharacterEncoding());
             context.setResponseWriter(writer);
         }
+
+    }
+
+
+    // --------------------------------------------------------- Private Methods
+
+
+    /**
+     * <p>Add the component identifier of the specified {@link UIComponent}
+     * to the list of component identifiers created or located by nested
+     * {@link UIComponentTag}s processing this request.</p>
+     *
+     * @param child New child whose identifier should be added
+     */
+    private void addChild(UIComponent child) {
+
+        if (createdComponents == null) {
+            createdComponents = new ArrayList();
+        }
+        createdComponents.add(child.getId());
+
+    }
+
+
+    /**
+     * <p>Add the facet name of the specified facet to the list of
+     * facet names created or located by nested {@link UIComponentTag}s
+     * processing this request.</p>
+     *
+     * @param name Facet name to be added
+     */
+    private void addFacet(String name) {
+
+        if (createdFacets == null) {
+            createdFacets = new ArrayList();
+        }
+        createdFacets.add(name);
+
+    }
+
+
+    /**
+     * <p>Create and return a new child component of the type returned by
+     * calling <code>getComponentType()</code>.  If this {@link UIComponentTag}
+     * has a non-null <code>componentType</code> attribute, this is done by
+     * calling calling <code>getValue()</code> on a {@link ValueBinding} created
+     * for the <code>componentRef</code> attribute's value.  If this returns
+     * <code>null</code>, or there is no <code>componentRef</code> attribute
+     * value, a new component is created and returned.</p>
+     *
+     * @param context {@link FacesContext} for the current request
+     * @param parent Parent {@link UIComponent} for the new child
+     * @param componentId Component identifier for the new child,
+     *  or <code>null</code> for no explicit identifier
+     */
+    private UIComponent createChild(FacesContext context, UIComponent parent,
+                                    String componentId) {
+
+        UIComponent component = null;
+        Application application = context.getApplication();
+        if (componentRef != null) {
+            ValueBinding binding = application.getValueBinding(componentRef);
+            component = application.createComponent(binding, context,
+                                                    getComponentType());
+        } else {
+            component = application.createComponent(getComponentType());
+        }
+        overrideProperties(component);
+        component.setId(componentId);
+        UIComponentTag parentTag = getParentUIComponentTag();
+        parent.getChildren().add(parentTag.getIndex(), component);
+        created = true;
+        return (component);
+
+    }
+
+
+
+    /**
+     * <p>Create and return a new facet of the type returned by
+     * calling <code>getComponentType()</code>.</p>
+     *
+     * @param context {@link FacesContext} for the current request
+     * @param parent Parent {@link UIComponent} of the new facet
+     * @param name Name of the new facet
+     */
+    private UIComponent createFacet(FacesContext context, UIComponent parent,
+                                    String name) {
+
+        UIComponent component =
+            context.getApplication().createComponent(getComponentType());
+        overrideProperties(component);
+        parent.getFacets().put(name, component);
+        created = true;
+        return (component);
+
+    }
+
+
+    /**
+     * <p>Generate and return a component identifier that includes a sequence
+     * number reflecting the number of identifiers generated for this
+     * particular page.</p>
+     */
+    private String createId() {
+
+        Integer index =
+            (Integer) pageContext.getAttribute(AUTO_ID_INDEX_PAGE_ATTR);
+        if (index == null) {
+            index = new Integer(0);
+        }
+        index = new Integer(index.intValue() + 1);
+        pageContext.setAttribute(AUTO_ID_INDEX_PAGE_ATTR, index);
+        return ("JSPid" + index);
+
+    }
+
+
+    /**
+     * <p>Return a child with the specified component id from the specified
+     * component, if any; otherwise, return <code>null</code>.</p>
+     *
+     * @param component {@link UIComponent} to be searched
+     * @param componentId Component id to search for
+     */
+    private UIComponent getChild(UIComponent component, String componentId) {
+
+        Iterator kids = component.getChildren().iterator();
+        while (kids.hasNext()) {
+            UIComponent kid = (UIComponent) kids.next();
+            if (componentId.equals(kid.getId())) {
+                return (kid);
+            }
+        }
+        return (null);
+
+    }
+
+
+    /**
+     * <p>Return the child list index to use for a new component to be created
+     * by a nested {@link UIComponentTag} instance.</p>
+     */
+    private int getIndex() {
+
+        if (createdComponents != null) {
+            return (createdComponents.size());
+        } else {
+            return (0);
+        }
+
+    }
+
+
+    /**
+     * <p>Retrieve from the {@link UIComponent} corresponding to this tag
+     * handler the list of all child component ids created by
+     * {@link UIComponentTag} instances the previous time this tree was
+     * rendered.  Compare it to the list of children created during this
+     * page processing pass, and remove all children present on the old list
+     * but not in the new list.  Save the list as a {@link UIComponent}
+     * attribute so that it gets saved as part of the component's state.</p>
+     */
+    private void removeOldChildren() {
+
+        // Remove old children that are no longer present
+        List oldList = (List) component.getAttribute(JSP_CREATED_COMPONENT_IDS);
+        if (oldList != null) {
+
+            if (createdComponents != null) {
+
+                // Components not in the new list need to be removed
+                Iterator olds = oldList.iterator();
+                while (olds.hasNext()) {
+                    String old = (String) olds.next();
+                    if (!createdComponents.contains(old)) {
+                        UIComponent child = component.findComponent(old);
+                        component.getChildren().remove(child);
+                    }
+                }
+
+            } else {
+
+                // All old components need to be removed
+                Iterator olds = oldList.iterator();
+                while (olds.hasNext()) {
+                    String old = (String) olds.next();
+                    UIComponent child = component.findComponent(old);
+                    component.getChildren().remove(child);
+                }
+
+            }
+
+        }
+
+        // Save the current list as a component attribute
+        component.setAttribute(JSP_CREATED_COMPONENT_IDS, createdComponents);
+        createdComponents = null;
+
+    }
+
+
+    /**
+     * <p>Retrieve from the {@link UIComponent} corresponding to this tag
+     * handler the list of all facet names created by {@link UIComponentTag}
+     * instances the previous time this tree was rendered.  Compare it to the
+     * list of facets created during this page processing pass, and remove
+     * all facets present on the old list but not in the new list.  Save the
+     * list as a {@link UIComponent} attribute so that it gets saved as part
+     * of the component's state.</p>
+     */
+    private void removeOldFacets() {
+
+        // Remove old facets that are no longer present
+        List oldList = (List) component.getAttribute(JSP_CREATED_FACET_NAMES);
+        if (oldList != null) {
+
+            if (createdFacets != null) {
+
+                // Facets not in the new list need to be removed
+                Iterator olds = oldList.iterator();
+                while (olds.hasNext()) {
+                    String old = (String) olds.next();
+                    if (!createdFacets.contains(old)) {
+                        component.getFacets().remove(old);
+                    }
+                }
+
+            } else {
+
+                // All old facets need to be removed
+                Iterator olds = oldList.iterator();
+                while (olds.hasNext()) {
+                    String old = (String) olds.next();
+                    component.getFacets().remove(old);
+                }
+
+            }
+
+        }
+
+        // Save the current list as a component attribute
+        component.setAttribute(JSP_CREATED_FACET_NAMES, createdFacets);
+        createdFacets = null;
 
     }
 

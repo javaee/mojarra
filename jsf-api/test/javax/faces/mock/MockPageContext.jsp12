@@ -1,5 +1,5 @@
 /*
- * $Id: MockPageContext.jsp12,v 1.1 2003/04/29 18:13:07 eburns Exp $
+ * $Id: MockPageContext.jsp12,v 1.2 2003/08/29 00:09:23 craigmcc Exp $
  */
 
 /*
@@ -45,6 +45,13 @@ public class MockPageContext extends PageContext {
 
 
     // ---------------------------------------------------- PageContext Methods
+
+
+    public void clearPageScope() {
+
+        attributes.clear();
+
+    }
 
 
     public Object findAttribute(String name) {

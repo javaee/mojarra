@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTagTestCase.java,v 1.9 2003/08/22 14:03:31 eburns Exp $
+ * $Id: UIComponentTagTestCase.java,v 1.10 2003/08/29 00:09:25 craigmcc Exp $
  */
 
 /*
@@ -21,7 +21,6 @@ import javax.faces.application.Application;
 import javax.faces.application.ApplicationFactory;
 import javax.faces.component.NamingContainer;
 import javax.faces.component.UIComponent;
-import javax.faces.component.UIViewRoot;
 import javax.faces.component.base.UIViewRootBase;
 import javax.faces.context.FacesContext;
 import javax.faces.event.FacesEvent;
@@ -197,14 +196,14 @@ public class UIComponentTagTestCase extends TestCase {
         configure(null, null, true, false);
 
         render();
-        assertEquals("/bA/bB1/eB1/bB2/b/e/b/e/eB2/bB3/eB3/eA", text());
-        assertEquals("//A-a/B1-b1/B2-b2/-c1/-c2/B3-b3", tree());
+        assertEquals("/bA/bB1/eB1/bB2/bJSPid1/eJSPid1/bJSPid2/eJSPid2/eB2/bB3/eB3/eA", text());
+        assertEquals("//A-a/B1-b1/B2-b2/JSPid1-c1/JSPid2-c2/B3-b3", tree());
         verifyB2();
 
         reset();
         render();
-        assertEquals("/bA/bB1/eB1/bB2/b/e/b/e/eB2/bB3/eB3/eA", text());
-        assertEquals("//A-a/B1-b1/B2-b2/-c1/-c2/B3-b3", tree());
+        assertEquals("/bA/bB1/eB1/bB2/bJSPid1/eJSPid1/bJSPid2/eJSPid2/eB2/bB3/eB3/eA", text());
+        assertEquals("//A-a/B1-b1/B2-b2/JSPid1-c1/JSPid2-c2/B3-b3", tree());
         verifyB2();
 
     }
@@ -217,14 +216,14 @@ public class UIComponentTagTestCase extends TestCase {
         configure(null, "C2", true, false);
 
         render();
-        assertEquals("/bA/bB1/eB1/bB2/b/e/bC2/eC2/eB2/bB3/eB3/eA", text());
-        assertEquals("//A-a/B1-b1/B2-b2/-c1/C2-c2/B3-b3", tree());
+        assertEquals("/bA/bB1/eB1/bB2/bJSPid1/eJSPid1/bC2/eC2/eB2/bB3/eB3/eA", text());
+        assertEquals("//A-a/B1-b1/B2-b2/JSPid1-c1/C2-c2/B3-b3", tree());
         verifyB2();
 
         reset();
         render();
-        assertEquals("/bA/bB1/eB1/bB2/b/e/bC2/eC2/eB2/bB3/eB3/eA", text());
-        assertEquals("//A-a/B1-b1/B2-b2/-c1/C2-c2/B3-b3", tree());
+        assertEquals("/bA/bB1/eB1/bB2/bJSPid1/eJSPid1/bC2/eC2/eB2/bB3/eB3/eA", text());
+        assertEquals("//A-a/B1-b1/B2-b2/JSPid1-c1/C2-c2/B3-b3", tree());
         verifyB2();
 
     }
@@ -237,14 +236,14 @@ public class UIComponentTagTestCase extends TestCase {
         configure("C1", null, true, false);
 
         render();
-        assertEquals("/bA/bB1/eB1/bB2/bC1/eC1/b/e/eB2/bB3/eB3/eA", text());
-        assertEquals("//A-a/B1-b1/B2-b2/C1-c1/-c2/B3-b3", tree());
+        assertEquals("/bA/bB1/eB1/bB2/bC1/eC1/bJSPid1/eJSPid1/eB2/bB3/eB3/eA", text());
+        assertEquals("//A-a/B1-b1/B2-b2/C1-c1/JSPid1-c2/B3-b3", tree());
         verifyB2();
 
         reset();
         render();
-        assertEquals("/bA/bB1/eB1/bB2/bC1/eC1/b/e/eB2/bB3/eB3/eA", text());
-        assertEquals("//A-a/B1-b1/B2-b2/C1-c1/-c2/B3-b3", tree());
+        assertEquals("/bA/bB1/eB1/bB2/bC1/eC1/bJSPid1/eJSPid1/eB2/bB3/eB3/eA", text());
+        assertEquals("//A-a/B1-b1/B2-b2/C1-c1/JSPid1-c2/B3-b3", tree());
         verifyB2();
 
     }
@@ -329,13 +328,13 @@ public class UIComponentTagTestCase extends TestCase {
         add(null, new TestTag(null, "a"));
 
         render();
-        assertEquals("/b/e", text());
-        assertEquals("//-a", tree());
+        assertEquals("/bJSPid1/eJSPid1", text());
+        assertEquals("//JSPid1-a", tree());
 
         reset();
         render();
-        assertEquals("/b/e", text());
-        assertEquals("//-a", tree());
+        assertEquals("/bJSPid1/eJSPid1", text());
+        assertEquals("//JSPid1-a", tree());
 
     }
 
@@ -450,6 +449,7 @@ public class UIComponentTagTestCase extends TestCase {
     // Reset the output buffer in our fake writer
     protected void reset() throws IOException {
 
+        pageContext.clearPageScope();
         MockJspWriter writer = (MockJspWriter) pageContext.getOut();
         writer.clearBuffer();
 
