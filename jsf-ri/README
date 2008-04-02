@@ -371,7 +371,7 @@ Known Issues With This Release
 
 * The standard renderer docs specify "accesskey" as an attribute
   of the "select" family of components, which is not in accordance
-  with the HTML specification.  "accesskey" will be removed 
+  with the HTML specification.  "accesskey" will be deprecated 
   from the "select" family of components in the next release.
    
 
