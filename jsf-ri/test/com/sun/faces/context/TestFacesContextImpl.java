@@ -1,5 +1,5 @@
 /*
- * $Id: TestFacesContextImpl.java,v 1.17 2003/01/21 23:23:22 rkitain Exp $
+ * $Id: TestFacesContextImpl.java,v 1.18 2003/01/22 20:06:02 rkitain Exp $
  */
 
 /*
@@ -54,7 +54,7 @@ import com.sun.faces.ServletFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestFacesContextImpl.java,v 1.17 2003/01/21 23:23:22 rkitain Exp $
+ * @version $Id: TestFacesContextImpl.java,v 1.18 2003/01/22 20:06:02 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -246,6 +246,21 @@ public void testFacesEvents()
     iter = getFacesContext().getFacesEvents();
     assertTrue(iter.hasNext());
 
+}
+
+public void testRenderingControls() {
+    System.out.println("Testing renderResponse()");
+    getFacesContext().renderResponse();
+    assertTrue(((FacesContextImpl)getFacesContext()).getRenderResponse());
+    System.out.println("Testing responseComplete()");
+    getFacesContext().responseComplete();
+    assertTrue(((FacesContextImpl)getFacesContext()).getResponseComplete());
+}
+
+public void testCurrentInstance() {
+    System.out.println("Testing getCurrentInstance()");
+    FacesContext context = getFacesContext();
+    assertTrue(context == context.getCurrentInstance());
 }
 
 private int getCount() {
