@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleFactory.java,v 1.8 2002/06/14 00:00:06 craigmcc Exp $
+ * $Id: LifecycleFactory.java,v 1.9 2002/09/20 00:24:10 craigmcc Exp $
  */
 
 /*
@@ -15,24 +15,20 @@ import javax.faces.FacesException;     // FIXME - subpackage?
 
 /**
  * <p><strong>LifecycleFactory</strong> is a factory object that creates
- * and returns {@link Lifecycle} instances.  Implementations of
- * JavaServer Faces MUST provide at least a default implementation of
- * {@link Lifecycle}.  Advanced implementations MAY provide additional
- * instances (keyed by lifecycle identifiers) for performing different types of
+ * (if needed) and returns {@link Lifecycle} instances.  Implementations of
+ * JavaServer Faces must provide at least a default implementation of
+ * {@link Lifecycle}.  Advanced implementations (or external third party
+ * libraries) MAY provide additional {@link Lifecycle} implementations
+ * (keyed by lifecycle identifiers) for performing different types of
  * request processing on a per-request basis.</p>
  *
- * <p>There shall be one <code>LifecycleFactory</code> instance per web
+ * <p>There must be one <code>LifecycleFactory</code> instance per web
  * application that is utilizing JavaServer Faces.  This instance can be
  * acquired, in a portable manner, by calling:</p>
  * <pre>
  *   LifecycleFactory factory = (LifecycleFactory)
  *    FactoryFinder.getFactory(FactoryFinder.LIFECYCLE_FACTORY);
  * </pre>
- *
- * <p>A <code>LifecycleFactory</code> instance MUST return the same
- * {@link Lifecycle} instance for all calls to the
- * <code>getLifecycle()</code> method with the same lifecycle identifier
- * value, from within the same web application.</p>
  */
 
 public abstract class LifecycleFactory {
@@ -53,13 +49,11 @@ public abstract class LifecycleFactory {
      * available throughout the remaining lifetime of this web application.
      * </p>
      *
-     * @param lifecycleId Lifecycle identifier under which the new
-     *  {@link Lifecycle} instance should be registered
-     * @param lifecycle The {@link Lifecycle} instance that is
-     *  being registered
+     * @param lifecycleId Identifier of the new {@link Lifecycle}
+     * @param lifecycle {@link Lifecycle} instance that we are registering
      *
-     * @exception IllegalArgumentException if <code>lifecycleId</code>
-     *  is already registered in this <code>LifecycleFactory</code>
+     * @exception IllegalArgumentException if a {@link Lifecycle} with the
+     *  specified <code>lifecycleId</code> has already been registered
      * @exception NullPointerException if <code>lifecycleId</code>
      *  or <code>lifecycle</code> is <code>null</code>
      */
@@ -73,21 +67,24 @@ public abstract class LifecycleFactory {
      * lifecycle identifiers is available via the
      * <code>getLifecycleIds()</code> method.</p>
      *
+     * <p>Each call to <code>getLifecycle()</code> for the same
+     * <code>lifecycleId</code>, from within the same web application,
+     * must return the same {@link Lifecycle} instance.</p>
+     *
      * @param lifecycleId Lifecycle identifier of the requested
      *  {@link Lifecycle} instance
      *
-     * @exception FacesException if a {@link Lifecycle} instance cannot be
-     *  constructed
+     * @exception IllegalArgumentException if no {@link Lifecycle} instance
+     *  can be returned for the specified identifier
      * @exception NullPointerException if <code>lifecycleId</code>
      *  is <code>null</code>
      */
-    public abstract Lifecycle getLifecycle(String lifecycleId)
-        throws FacesException;
+    public abstract Lifecycle getLifecycle(String lifecycleId);
 
 
     /**
      * <p>Return an <code>Iterator</code> over the set of lifecycle
-     * identifiers supported by this factory.  This set MUST include
+     * identifiers supported by this factory.  This set must include
      * the value specified by <code>LifecycleFactory.DEFAULT_LIFECYCLE</code>.
      * </p>
      */

@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKit.java,v 1.10 2002/09/19 23:35:06 craigmcc Exp $
+ * $Id: RenderKit.java,v 1.11 2002/09/20 00:24:12 craigmcc Exp $
  */
 
 /*
@@ -15,20 +15,20 @@ import javax.faces.component.UIComponent;
 
 
 /**
- * <p>A <strong>RenderKit</strong> represents a collection of
+ * <p><strong>RenderKit</strong> represents a collection of
  * {@link Renderer} instances that, together, know how to render
  * JavaServer Faces {@link UIComponent} instances for a specific
  * client.  Typically, <code>RenderKit</code>s are specialized for
  * some combination of client device type, markup language, and/or
  * user <code>Locale</code>.  A <code>RenderKit</code> also acts as
- * a Factory for associated {@link Renderer} objects, which perform the
+ * a Factory for associated {@link Renderer} instances, which perform the
  * actual rendering process for each component.</p>
  *
  * <p>A typical JavaServer Faces implementation will configure one or more
  * <code>RenderKit</code> instances at web application startup.  They are
  * made available through calls to the <code>getRenderKit()</code> methods
- * of {@link RenderKitFactory}.  At least one <code>RenderKit</code>
- * implementation must be provided as the default.</p>
+ * of {@link RenderKitFactory}.  Because <code>RenderKit</code> instances
+ * are shared, they must be implemented in a thread-safe manner.</p>
  */
 
 public abstract class RenderKit {

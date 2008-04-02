@@ -1,5 +1,5 @@
 /*
- * $Id: TreeFactory.java,v 1.9 2002/07/26 19:02:40 craigmcc Exp $
+ * $Id: TreeFactory.java,v 1.10 2002/09/20 00:24:14 craigmcc Exp $
  */
 
 /*
@@ -18,7 +18,7 @@ import javax.servlet.ServletContext;
  * <p><strong>TreeFactory</strong> is a factory object that creates and
  * returns new {@link Tree} instances.</p>
  *
- * <p>There shall be one <code>TreeFactory</code> instance per web
+ * <p>There must be one <code>TreeFactory</code> instance per web
  * application that is utilizing JavaServer Faces.  This instance can be
  * acquired, in a portable manner, by calling:</p>
  * <pre>
@@ -31,9 +31,9 @@ public abstract class TreeFactory {
 
 
     /**
-     * <p>Construct and return a {@link Tree} that is initialized with a
-     * root node, and whose <code>renderKitId</code> property is initialized
-     * to the identifier of the default <code>RenderKit</code>.</p>
+     * <p>Create (if needed) and return a {@link Tree} that is initialized
+     * with a root node, and whose <code>renderKitId</code> property is
+     * initialized to the identifier of the default <code>RenderKit</code>.</p>
      *
      * @param context ServletContext for this web application
      * @param treeId Tree identifier of the tree to be constructed and

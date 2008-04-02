@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContext.java,v 1.30 2002/08/05 03:11:57 craigmcc Exp $
+ * $Id: FacesContext.java,v 1.31 2002/09/20 00:24:05 craigmcc Exp $
  */
 
 /*
@@ -36,7 +36,7 @@ import javax.servlet.http.HttpSession;
  * instance associated with the current web application.  The instance
  * remains active until its <code>release()</code> method is called, after
  * which no further references to this instance are allowed.  While a
- * <code>FacesContext</code> instance is active, it MUST NOT be referenced
+ * <code>FacesContext</code> instance is active, it must not be referenced
  * from any thread other than the one upon which the servlet container
  * executing this web application utilizes for the processing of this request.
  * </p>

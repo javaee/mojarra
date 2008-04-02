@@ -1,5 +1,5 @@
 /*
- * $Id: Tree.java,v 1.4 2002/07/26 03:44:24 craigmcc Exp $
+ * $Id: Tree.java,v 1.5 2002/09/20 00:24:13 craigmcc Exp $
  */
 
 /*
@@ -16,7 +16,7 @@ import javax.faces.render.RenderKit;
 
 
 /**
- * <p>A <strong>Tree</strong> is a container for a tree of {@link UIComponent}
+ * <p><strong>Tree</strong> is a container for a tree of {@link UIComponent}
  * nodes rooted at a root node, along with associated metadata about those
  * {@link UIComponent}s.  Trees have unique identifiers, which associate
  * them with metadata information that can be acquired from external sources,

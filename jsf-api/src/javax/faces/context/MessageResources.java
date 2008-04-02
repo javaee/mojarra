@@ -1,5 +1,5 @@
 /*
- * $Id: MessageResources.java,v 1.1 2002/06/14 00:00:50 craigmcc Exp $
+ * $Id: MessageResources.java,v 1.2 2002/09/20 00:24:06 craigmcc Exp $
  */
 
 /*
@@ -19,9 +19,7 @@ package javax.faces.context;
  * <p>An instance of <code>MessageResources</code> is created by calling the
  * <code>getMessageResources()</code> method of
  * {@link MessageResourcesFactory}, for a specified message resources
- * identifier.  Subsequent calls to <code>getMessageResources()</code>
- * will return the same instance (i.e. it is a per-web-application
- * Singleton).  Because this instance is shared across multiple requests,
+ * identifier.  Because this instance is shared across multiple requests,
  * it must be implemented in a thread-safe manner.</p>
  */
 

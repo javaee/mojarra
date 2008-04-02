@@ -1,5 +1,5 @@
 /*
- * $Id: MessageResourcesFactory.java,v 1.1 2002/06/14 00:00:50 craigmcc Exp $
+ * $Id: MessageResourcesFactory.java,v 1.2 2002/09/20 00:24:06 craigmcc Exp $
  */
 
 /*
@@ -16,10 +16,8 @@ import javax.faces.FacesException;
 
 /**
  * <p><strong>MessageResourcesFactory</strong> is a Factory object that creates
- * (if necessary) and returns {@link MessageResources} instances.
- * Each {@link MessageResources} instance is identified by a unique
- * <code>messageResourcesId</code> identifier.  Implementations of
- * JavaServer Faces MUST return {@link MessageResources} instances for the
+ * (if needed) and returns {@link MessageResources} instances.  Implementations
+ * of JavaServer Faces must provide {@link MessageResources} instances for the
  * following standard message resources identifiers:</p>
  * <ul>
  * <li><strong>MessageResourcesFactory.FACES_API_MESSAGES</strong> - Messages
@@ -31,13 +29,8 @@ import javax.faces.FacesException;
  *     implementation being utilized.</li>
  * </ul>
  *
- * <p>Additional {@link MessageResources} implementations can be registered
- * at any time, via a call to <code>addMessageResources()</code>, by
- * the application, by the JavaServer Faces implementation, or by component
- * libraries and/or <code>RenderKit</code>s utilized by the application.</p>
- *
- * <p>There shall be one <code>MessageResourcesFactory</code> instance per
- * web application that is utilizing JavaServer Faces.  This instance can be
+ * <p>There must be one <code>MessageResourcesFactory</code> instance per web
+ * application that is utilizing JavaServer Faces.  This instance can be
  * acquired, in a portable manner, by calling:</p>
  * <pre>
  *   MessageResourcesFactory factory = (MessageResourcesFactory)
@@ -80,10 +73,9 @@ public abstract class MessageResourcesFactory {
      * available throughout the remaining lifetime of this web application.
      * </p>
      *
-     * @param messageResourcesId Message resources identifier under which
-     *  the new {@link MessageResources} instance should be registered
-     * @param messageResources The {@link MessageResources} instance that
-     *  is being registered
+     * @param messageResourcesId Identifier of the new {@link MessageResources}
+     * @param messageResources {@link MessageResources} instance that
+     *  we are registering
      *
      * @exception IllegalArgumentException if <code>messageResourcesId</code>
      *  is already registered in this <code>MessageResourcesFactory</code>
@@ -95,31 +87,31 @@ public abstract class MessageResourcesFactory {
 
 
     /**
-     * <p>Create (if necessary) and return a {@link MessageResources}
-     * instance for the specified message resources identifier.  All requests
-     * for the same message resources identifier, from the same web
-     * application, must return the same {@link MessageResources} instance.
-     * </p>
+     * <p>Create (if needed) and return a {@link MessageResources} instance
+     * for the specified message resources identifier.  The set of available
+     * message resources identifiers is available via the
+     * <code>getMessageResourcesIds()</code> method.</p>
      *
-     * @param messageResourcesId Identifier of the {@link MessageResources}
-     *  instance to be returned
+     * <p>Each call to <code>getMessageResources()</code> for the same
+     * <code>messageResourcesId</code>, from within the same web application,
+     * must return the same <code>MessageResources</code> instance.</p>
      *
-     * @exception FacesException if the requested {@link MessageResources}
-     *  instance cannot be created for some reason
-     * @exception IllegalArgumentException if the specified
-     *  <code>messageResourcesId</code> is not supported by this
-     *  <code>MessageResourcesFactory</code>
+     * @param messageResourcesId Identifier of the requested
+     *  {@link MessageResources} instance
+     *
+     * @exception IllegalArgumentException if no {@link MessageResources}
+     *  instance can be returned for the specified identifier
      * @exception NullPointerException if <code>messageResourcesId</code>
      *  is <code>null</code>
      */
     public abstract MessageResources getMessageResources
-        (String messageResourcesId) throws FacesException;
+        (String messageResourcesId);
 
 
     /**
      * <p>Return an <code>Iterator</code> over the set of message resource
      * identifiers supported by this factory.  This <code>Iterator</code>
-     * MUST include the standard identifiers described above.</p>
+     * must include the standard identifiers described above.</p>
      */
     public abstract Iterator getMessageResourcesIds();
 

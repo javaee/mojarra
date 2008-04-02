@@ -1,5 +1,5 @@
 /*
- * $Id: FactoryFinder.java,v 1.11 2002/08/31 19:51:28 craigmcc Exp $
+ * $Id: FactoryFinder.java,v 1.12 2002/09/20 00:24:03 craigmcc Exp $
  */
 
 /*
@@ -48,7 +48,7 @@ import java.util.Properties;
  * Faces implementation is included within the web application or is made
  * visible through the container's facilities for shared libraries.</p>
  *
- * <p>Factory implementation classes MUST include a zero-arguments
+ * <p>Factory implementation classes must include a zero-arguments
  * constructor in order to be successfully instantiated.</p>
  */
 
