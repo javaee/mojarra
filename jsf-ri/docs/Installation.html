@@ -5,17 +5,17 @@
  content="text/html; charset=iso-8859-1">
   <meta name="GENERATOR"
  content="Mozilla/4.79C-CCK-MCD  [en] (X11; U; SunOS 5.8 sun4u) [Netscape]">
-  <title>JavaServer Faces 1.0 Beta Installallation Instructions</title>
+  <title>JavaServer Faces 1.0 FCS Installallation Instructions</title>
   <link rel="stylesheet" type="text/css" href="style/default.css">
 </head>
 <body style="background-color: rgb(255, 255, 255);">
 <center>
-<h1>JavaServer<sup><font size="-1">TM</font></sup> Faces 1.0 Beta<br>
+<h1>JavaServer<sup><font size="-1">TM</font></sup> Faces 1.0 FCS<br>
 Installation Instructions</h1>
 </center>
 <hr>
 <br>
-<a name="14145"></a>Revised:12/15/2003
+<a name="14145"></a>Revised: 20040205
 <p><a name="13552"></a>Please refer to the <a
  href="http://java.sun.com/j2ee/javaserverfaces/docs/ReleaseNotes.html">Release
 Notes</a>, located in your download bundle, for information regarding
@@ -50,14 +50,14 @@ location of your
 Java WSDP installation.</li>
   <li>Download the <a
  href="http://java.sun.com/j2ee/javaserverfaces/download.html">JavaServer
-Faces Beta ZIP file</a>.</li>
+Faces 1.0 ZIP file</a>.</li>
   <li>Archive or remove the the old JavaServer Faces EA3 release
 located in <code>JWSDP_HOME/jsf</code><br>
   </li>
-  <li>Unzip the JavaServer Faces Beta ZIP file into <code>JWSDP_HOME</code>
+  <li>Unzip the JavaServer Faces 1.0 ZIP file into <code>JWSDP_HOME</code>
 and rename the base directory to "<code>jsf</code>"<br>
   </li>
-  <li>You should now have the contents of the JavaServer Faces Beta
+  <li>You should now have the contents of the JavaServer Faces 1.0
 release in your <code>JWSDP_HOME/jsf</code> directory<br>
   </li>
   <li>If you have previously run JavaServer Faces applications, you
@@ -75,9 +75,9 @@ applications.
 <h1><a name="Running_the_Examples_in_JWSDP"></a>Running the Examples in
 JWSDP<br>
 </h1>
-To run one of the examples,
+To run one of the samples,
 <ol>
-  <li>Copy the desired WAR file from the example directory of the
+  <li>Copy the desired WAR file from the samples directory of the
 JavaServer
 Faces installation
 to <tt>JWSDP_HOME/webapps</tt>.<br>
@@ -107,11 +107,11 @@ web server:<br clear="all">
     <br>
   </li>
   <li>You can find a page containing links to the JavaServer Faces
-example programs on your default server port:</li>
+sample programs on your default server port:</li>
 </ol>
 <div style="margin-left: 40px;"><code>http://localhost:8080</code><br>
 <br>
-You can also run each example individually by specifing the name of the
+You can also run each sample individually by specifing the name of the
 war file in your web browser:<br>
 </div>
 <div style="margin-left: 40px;"><tt><br>
@@ -125,13 +125,13 @@ you enter if you are running the cardemo:<br>
 <br>
 <tt>http://localhost:8080/jsf-cardemo/</tt>
 </div>
-<p style="margin-left: 40px;">Please note that the examples
+<p style="margin-left: 40px;">Please note that the samples
 are provided as a proof-of-concept rather than a best-practices guide
 for writing JavaServer Faces applications.
 </p>
 <h1><a name="Building_and_Running_the_Examples"></a>Building and
 Running the Examples</h1>
-<p>To build one of the examples, you need to run its <tt>
+<p>To build one of the samples, you need to run its <tt>
 build.xml</tt> file using <tt>
 Ant</tt>
 , which is a portable make tool.<br>
@@ -144,7 +144,7 @@ builds the WAR file, it packages all the files from the <tt>
 build</tt> directory into the WAR file while preserving the directory
 structure contained in the <tt>
 build</tt> directory</p>
-<p>To build the examples you first need to enter some paths
+<p>To build the samples you first need to enter some paths
 in the build.properties file:</p>
 <ol>
   <li>Make sure you have the necessary preconditions as listed in the <a
@@ -155,19 +155,19 @@ in the build.properties file:</p>
 your machine.<br>
   </li>
   <li>Copy <code>build.properties.sample</code> to <code>build.properties</code> and edit accordingly for your system. </li>
-  <li>Go to the directory of the example you want to build. </li>
+  <li>Go to the directory of the sample you want to build. </li>
 </ol>
-<p>To build an example WAR file and deploy it:</p>
+<p>To build a sample WAR file and deploy it:</p>
 <ol>
-  <li>Go to the directory of the example you want to build. </li>
+  <li>Go to the directory of the sample you want to build. </li>
   <li>At the command line, run the default<tt></tt> target:
     <pre>	ant</pre>
   </li>
-  <li>The war file of the example you just built will be placed in the <code>JWSDP_HOME/jsf/samples</code>
+  <li>The war file of the sample you just built will be placed in the <code>JWSDP_HOME/jsf/samples</code>
 directory.</li>
   <li>In JWSDP 1.3 your application will be automatically deployed.</li>
 <ul>
-  <li>JWSDP 1.3 includes an XML file for each example application
+  <li>JWSDP 1.3 includes an XML file for each sample application
 in the <tt>JWSDP_HOME/conf/Catalina/localhost</tt> directory. This
 file causes that application to be automatically deployed when you
 start Tomcat. <br>
@@ -191,7 +191,7 @@ URL:
   </li>
 </ol>
 <div style="margin-left: 40px;">In JWSDP, you can also find a page
-containing links to the JavaServer Faces examples on your default
+containing links to the JavaServer Faces samples on your default
 server port:<br>
 <pre>	http://localhost:8080</pre>
 <br>
@@ -211,7 +211,7 @@ container</h1>
 <ol>
   <li>Download the <a
  href="http://java.sun.com/j2ee/javaserverfaces/download.html">JavaServer
-Faces Beta ZIP file</a></li>
+Faces 1.0 ZIP file</a></li>
   <li>Unzip the Zip file</li>
   <li>Copy <code>build.properties.sample</code> file to <code>build.properties</code>
 and edit accordingly for your system configuration.</li>
@@ -287,7 +287,7 @@ Commons</a><br>
 Taglibs</a><br>
       </li>
       <li>You should use JSTL 1.1 in a container that supports JSP 2.0. If your container does not support JSP 2.0 then use JSTL 1.0.x.</li>
-      <li>The JavaServer Faces standalone examples contain JSTL 1.1 implementation jars.</li>
+      <li>The JavaServer Faces standalone samples contain JSTL 1.1 implementation jars.</li>
     </ul>
     <li><code>standard.jar</code></li>
     <ul>
@@ -296,7 +296,7 @@ Taglibs</a><br>
 Taglibs</a><br>
       </li>
       <li>You should use JSTL 1.1 in a container that supports JSP 2.0. If your container does not support JSP 2.0 then use JSTL 1.0.x.</li>
-      <li>The JavaServer Faces standalone examples contain JSTL 1.1 implementation jars.</li>
+      <li>The JavaServer Faces standalone samples contain JSTL 1.1 implementation jars.</li>
     </ul>
     <li><code>servlet.jar</code></li>
     <ul>
@@ -316,9 +316,9 @@ and Running the Examples</a> section <br>
   </li>
 </ol>
 <div style="margin-left: 40px;">You will need to rebuild each of the
-JavaServer Faces example applications with
+JavaServer Faces sample applications with
 the <code>build.standalone</code> property set to "<code>true</code>"
-so that each example's web archive includes all of the jar file
+so that each sample's web archive includes all of the jar file
 dependencies. This step is not necessary in a JWSDP container since all
 the jar dependencies that JavaServer Faces requires are already part of
 the container.<br>
@@ -326,7 +326,7 @@ the container.<br>
 Note: the <a
  href="#Building_and_Running_the_Examples">Building
 and Running the Examples</a> section makes reference to <code>JWSDP_HOME</code>,
-substitute your container's home directory for <code>JWSDP_HOME</code>. You will also need to manually deploy the example war files into your container's <code>webapps</code> directory<br>
+substitute your container's home directory for <code>JWSDP_HOME</code>. You will also need to manually deploy the sample war files into your container's <code>webapps</code> directory<br>
 </div>
 <ol>
   <ul>
