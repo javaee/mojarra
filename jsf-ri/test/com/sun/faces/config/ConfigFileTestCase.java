@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigFileTestCase.java,v 1.19 2003/07/08 15:38:43 eburns Exp $
+ * $Id: ConfigFileTestCase.java,v 1.20 2003/07/22 19:51:13 rkitain Exp $
  */
 
 /*
@@ -10,6 +10,7 @@
 package com.sun.faces.config;
 
 import com.sun.faces.application.ApplicationImpl;
+import com.sun.faces.context.MessageResourcesImpl;
 import com.sun.faces.tree.SimpleTreeImpl;
 import com.sun.faces.el.ValueBindingImpl;
 import com.sun.faces.RIConstants;
@@ -79,9 +80,6 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
         ApplicationFactory aFactory = (ApplicationFactory)FactoryFinder.getFactory(
         FactoryFinder.APPLICATION_FACTORY);
         ApplicationImpl application = (ApplicationImpl)aFactory.getApplication();
-	ConfigBase yourBase = application.getAppConfig().getConfigBase();
-	ConfigMessageResources messageResources = null;
-	ConfigMessage message = null;
 	Map 
 	    messageResourcesMap = null,
 	    messagesMap = null;
@@ -105,29 +103,25 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
 	};
 	Iterator messageIter = null;
 
-	assertTrue(null != (messageResourcesMap = 
-			    yourBase.getMessageResources()));
-	assertTrue(null != (messageResources = (ConfigMessageResources)
-			    messageResourcesMap.get(MessageResources.FACES_API_MESSAGES)));
-	assertTrue(null != (messagesMap = messageResources.getMessages()));
-	assertTrue(null != (messageIter = messagesMap.keySet().iterator()));
-	assertTrue(isSubset(apiMessages, messageIter));
-	assertTrue(null != (messageResources = (ConfigMessageResources)
-			    messageResourcesMap.get(MessageResources.FACES_IMPL_MESSAGES)));
-	
-	
+	assertTrue(null != (application.getMessageResources(MessageResources.FACES_API_MESSAGES))); 
+	assertTrue(null != (application.getMessageResources(MessageResources.FACES_IMPL_MESSAGES))); 
+
+	MessageResourcesImpl mr = (MessageResourcesImpl)application.getMessageResources(MessageResources.FACES_API_MESSAGES);
+	for (int i=0; i<apiMessages.length; i++) {
+            Object[] params = new Object[1];
+	    assertTrue(null != mr.getMessage(apiMessages[i], params));
+	}
     }
 
 
-    protected ConfigBase parseConfig(ConfigParser cp,
+    protected void parseConfig(ConfigParser cp,
                                      String resource,
                                      ServletContext context)
         throws Exception {
 
         InputStream stream = context.getResourceAsStream(resource);
         assertTrue(null != stream);
-        return (cp.parseConfig(stream));
-
+        cp.parseConfig(stream);
     }
 
 
@@ -138,7 +132,7 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
         ApplicationFactory aFactory = (ApplicationFactory)FactoryFinder.getFactory(
         FactoryFinder.APPLICATION_FACTORY);
         ApplicationImpl application = (ApplicationImpl)aFactory.getApplication();
-        ConfigBase base = parseConfig(cp, "/WEB-INF/faces-config.xml",
+        parseConfig(cp, "/WEB-INF/faces-config.xml",
                            config.getServletContext());
 
         // <application>
@@ -204,9 +198,8 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
 
     public void testEmpty() throws Exception {
         ConfigParser cp = new ConfigParser(config.getServletContext());
-        ConfigBase base = parseConfig(cp, "/WEB-INF/faces-config-empty.xml",
+        parseConfig(cp, "/WEB-INF/faces-config-empty.xml",
                            config.getServletContext());
-	assertTrue(null != base);
     }
 
     // Assert that create and stored managed bean is the same as specified in the 
@@ -215,7 +208,7 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
     public void testConfigManagedBeanFactory() throws Exception {
 
         ConfigParser cp = new ConfigParser(config.getServletContext());
-        ConfigBase base = parseConfig(cp, "/WEB-INF/faces-config.xml",
+        parseConfig(cp, "/WEB-INF/faces-config.xml",
                            config.getServletContext());
 
         ApplicationFactory aFactory = (ApplicationFactory)FactoryFinder.getFactory(
@@ -248,7 +241,7 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
 
     public void testNavigationCase() throws Exception {
         ConfigParser cp = new ConfigParser(config.getServletContext());
-        ConfigBase base = parseConfig(cp, "/WEB-INF/faces-config.xml",
+        parseConfig(cp, "/WEB-INF/faces-config.xml",
                             config.getServletContext());
         ApplicationFactory aFactory = 
             (ApplicationFactory)FactoryFinder.getFactory(
