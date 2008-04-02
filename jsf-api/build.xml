@@ -56,6 +56,7 @@
   <property name="build.mifdocs"    value="${build.dir}/mifdocs"/>
   <property name="javadoc.private"  value="false"/>
   <property name="javadoc.protected"  value="true"/>
+  <property name="jsf-ri.dir"         value="${basedir}/../jsf-ri"/>
 
 
   <!-- Default value for debugging arguments is no.  Override in
@@ -104,8 +105,16 @@
     <mkdir dir="${build.lib}"/>
   </target>
 
-  <target name="prepare.generate" depends="prepare">
+  <target name="prepare.generate" 
+          depends="prepare,set.standard-html-renderkit.property">
     <mkdir dir="${build.generate}"/>
+  </target>
+
+  <target name="set.standard-html-renderkit.property" 
+          unless="standard-html-renderkit">
+    <available property="standard-html-renderkit-impl" 
+          value="${jsf-ri.dir}/conf/share/standard-html-renderkit-impl.xml"
+          file="${jsf-ri.dir}/conf/share/standard-html-renderkit-impl.xml"/>
   </target>
 
 
