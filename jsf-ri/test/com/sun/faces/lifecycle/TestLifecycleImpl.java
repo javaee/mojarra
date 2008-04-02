@@ -1,5 +1,5 @@
 /*
- * $Id: TestLifecycleImpl.java,v 1.31 2004/11/09 04:19:29 jhook Exp $
+ * $Id: TestLifecycleImpl.java,v 1.32 2004/11/09 15:42:39 rlubke Exp $
  */
 
 /*
@@ -30,7 +30,7 @@ import javax.servlet.http.HttpSession;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestLifecycleImpl.java,v 1.31 2004/11/09 04:19:29 jhook Exp $
+ * @version $Id: TestLifecycleImpl.java,v 1.32 2004/11/09 15:42:39 rlubke Exp $
  */
 
 public class TestLifecycleImpl extends JspFacesTestCase {
@@ -340,10 +340,10 @@ public class TestLifecycleImpl extends JspFacesTestCase {
 	assertEquals(2, 
 		     phaseCalledA[PhaseId.APPLY_REQUEST_VALUES.getOrdinal()]);
 	// verify before for "b" was called, but the after was not
-	assertEquals(2, 
+	assertEquals(1, 
 		     phaseCalledB[PhaseId.APPLY_REQUEST_VALUES.getOrdinal()]);
 	// verify that neither before nor after for "c" were called
-	assertEquals(2, 
+	assertEquals(0, 
 		     phaseCalledC[PhaseId.APPLY_REQUEST_VALUES.getOrdinal()]);
 
         life.removePhaseListener(a);
@@ -396,7 +396,7 @@ public class TestLifecycleImpl extends JspFacesTestCase {
         }
 
 	// verify before and after for "a" were called.
-	assertEquals(2, 
+	assertEquals(1, 
 		     phaseCalledA[PhaseId.APPLY_REQUEST_VALUES.getOrdinal()]);
 	// verify before for "b" was called, but the after was not
 	assertEquals(2, 
