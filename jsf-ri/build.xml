@@ -12,7 +12,7 @@
 
   <property name="Name" value="JSF RI"/>
   <property name="name" value="jsf-ri"/>
-  <property name="version" value="20020910"/>
+  <property name="version" value="20021001"/>
 
 <!-- ************ Per user local properties ******************************* -->
 
@@ -345,6 +345,10 @@
 
     <copy todir="${dist.home}/example/guessNumber">
       <fileset dir="${jsf.demo.home}/guessNumber"/>
+    </copy>
+
+    <copy todir="${dist.home}/example/cardemo">
+      <fileset dir="${jsf.demo.home}/cardemo"/>
     </copy>
 
     <!-- create the zip file -->
