@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_2.java,v 1.88 2005/05/09 22:12:19 edburns Exp $
+ * $Id: TestRenderers_2.java,v 1.89 2005/07/19 21:35:47 rlubke Exp $
  */
 
 /*
@@ -46,7 +46,7 @@ import java.io.StringWriter;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_2.java,v 1.88 2005/05/09 22:12:19 edburns Exp $
+ * @version $Id: TestRenderers_2.java,v 1.89 2005/07/19 21:35:47 rlubke Exp $
  */
 
 public class TestRenderers_2 extends JspFacesTestCase {
@@ -1222,9 +1222,9 @@ public class TestRenderers_2 extends JspFacesTestCase {
         result = writer.toString();
 
         //Verify <ul> with id/style/class
-        //Verify <li> with class;span containing tool tip
+        //Verify <li> with class;span containing tool tip      
         assertTrue(
-            result.indexOf("<ul id=\"myMessage_4\" class=\"styleClass\" style=\"style\"><li class=\"errorClass\"><span title=\"global message summary_2\">") != -1);
+            result.indexOf("<ul id=\"myMessage_4\" class=\"styleClass\" style=\"style\"><li class=\"infoClass\"><span title=\"global message summary_0\">") != -1);
         try {
             writer.close();
         } catch (IOException ioe) {
