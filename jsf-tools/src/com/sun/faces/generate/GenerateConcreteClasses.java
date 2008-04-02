@@ -1,5 +1,5 @@
 /*
- * $Id: GenerateConcreteClasses.java,v 1.6 2003/11/09 22:32:25 eburns Exp $
+ * $Id: GenerateConcreteClasses.java,v 1.7 2003/11/18 14:36:02 rlubke Exp $
  */
 
 /*
@@ -74,7 +74,7 @@ public class GenerateConcreteClasses extends GenerateBase {
      * <p>use the value of the component class as the name of the class
      * to generate.</p>
      *
-     * <p>call {@link generateClass}, passing the class name, and the
+     * <p>call {@link #generateClass}, passing the class name, and the
      * renderer type</p>
      *
      * </ul>
@@ -210,9 +210,15 @@ public class GenerateConcreteClasses extends GenerateBase {
 	// imports
 	result.append("import javax.faces.context.FacesContext;\n");
 	result.append("import javax.faces.el.ValueBinding;\n");
-	result.append("import java.io.IOException;\n");
+	result.append("import java.io.IOException;\n\n");
 	
 	// class declaration
+    result.append("/**\n");
+    result.append(" * <p>The default <code>rendererType</code> for this class\n");
+    result.append(" * is set to <code>").append(rendererType).append("</code>.");
+    result.append("  This value can be changed by\n * calling the {@link");
+    result.append(" #setRendererType} method.</p>\n");
+    result.append(" */\n");
 	result.append("public class " + destClass + 
 		      " extends " + fullyQualifiedSrcClass + 
 		      " {\n\n");
@@ -251,6 +257,14 @@ public class GenerateConcreteClasses extends GenerateBase {
 	    result.append(";\n");
 
 	    // setter
+        result.append("\n  /**\n");
+        result.append("   * <p>Sets the value of the <code>");
+        result.append(attrName).append("</code> property.</p>\n");
+        result.append("   *\n");
+        result.append("   * @param ").append(ivar);
+        result.append(" the new value for the <code>").append(attrName);
+        result.append("</code> property\n");
+        result.append("   */\n");
 	    result.append("  public void set" + 
 			  Character.toUpperCase(attrName.charAt(0)) +
 			  attrName.substring(1) + "(" + 
@@ -268,6 +282,10 @@ public class GenerateConcreteClasses extends GenerateBase {
 		getOrIs = get;
 	    }
 	    // getter
+        result.append("\n  /**\n");
+        result.append("   * <p>Returns the value of the <code>");
+        result.append(attrName).append("</code> property.</p>\n");
+        result.append("   */\n");
 	    result.append("  public " + attrClass + " " + getOrIs + 
 			  Character.toUpperCase(attrName.charAt(0)) +
 			  attrName.substring(1) + "() {\n");
