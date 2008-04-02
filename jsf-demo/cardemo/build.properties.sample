@@ -38,12 +38,27 @@
 
 # Make these values be correct on your system, then rename to
 # build.properties.  On win32, make sure to preserve the \\ syntax
-# for escaping backslashes.    
+# for escaping backslashes.  
 
-jsf.home = <your_JSF_workspace_directory>
-tomcat.home = <your_directory>/<your_deployment_environment>
-standard.jar=<location of your JSTL standard.jar>
-servlet.jar=<location of your servlet23.jar>
-jstl.jar=<location of your JSTL jstl.jar>
+tomcat.home=<path to tomcat or jwsdp installation>
+commons-logging.jar=${tomcat.home}/jwsdp-shared/lib/commons-logging.jar
+commons-digester.jar=${tomcat.home}/server/lib/commons-digester.jar
+commons-beanutils.jar=${tomcat.home}/server/lib/commons-beanutils.jar
+commons-collections.jar=${tomcat.home}/common/lib/commons-collections.jar
+xerces.jar=${tomcat.home}/jaxp-1.2.2/lib/endorsed/xercesImpl.jar
+jstl.jar=${tomcat.home}/jstl-1.0.3/standard/lib/jstl.jar
+standard.jar=${tomcat.home}/jstl-1.0.3/standard/lib/standard.jar
+
+# Set the following only if you are building with JWSDP1.2.x
+# or TOMCAT 5.x 
+#jsp.jar=${tomcat.home}/common/lib/jsp-api.jar
+#servlet.jar=${tomcat.home}/common/lib/servlet-api.jar  
+
 username=<your management tool username>
 password=<your management tool password>
+
+# By default, all the dependent libraries are bundled with every sample app.
+# To bundle only the libraries that are not in the JWSDP1.2,
+# comment build.standalone property and uncomment build.wspack property
+build.standalone=true
+#build.wspack=true

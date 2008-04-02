@@ -44,57 +44,37 @@
 # modules that the jsf-demo depends on.  Copy this file to "build.properties"
 # in the top-level source directory, and customize it as needed.
 #
-# $Id: build.properties.sample,v 1.4 2003/02/21 23:44:17 ofung Exp $
+# $Id: build.properties.sample,v 1.5 2003/04/03 18:35:49 jvisvanathan Exp $
 # -----------------------------------------------------------------------------
 
+# Make these values be correct on your system, then rename to
+# build.properties.  On win32, make sure to preserve the \\ syntax
+# for escaping backslashes.  
 
-# ----- Compile Control Flags -----
+tomcat.home=<path to tomcat or jwsdp installation>
+commons-logging.jar=${tomcat.home}/jwsdp-shared/lib/commons-logging.jar
+commons-digester.jar=${tomcat.home}/server/lib/commons-digester.jar
+commons-beanutils.jar=${tomcat.home}/server/lib/commons-beanutils.jar
+commons-collections.jar=${tomcat.home}/common/lib/commons-collections.jar
+xerces.jar=${tomcat.home}/jaxp-1.2.2/lib/endorsed/xercesImpl.jar
+jstl.jar=${tomcat.home}/jstl-1.0.3/standard/lib/jstl.jar
+standard.jar=${tomcat.home}/jstl-1.0.3/standard/lib/standard.jar
 
+# Set the following only if you are building with JWSDP1.2.x
+# or TOMCAT 5.x 
+#jsp.jar=${tomcat.home}/common/lib/jsp-api.jar
+#servlet.jar=${tomcat.home}/common/lib/servlet-api.jar  
 
-# ----- Build Control Flags -----
-
-
-# ----- Run Control Flags -----
-
-
-# ----- Default Paths for Dependent Packages -----
-
-base.path=/usr/local
-jsf.base.path=${base.path}
-
-
-# --------------------------------------------------
-#		 REQUIRED LIBRARIES
-# --------------------------------------------------
-
-
-# ----- JSF API -----
-jsf.api.home=${jsf.base.path}/jsf-api
-
-# ----- JSF RI -----
-jsf.ri.home=${jsf.base.path}/jsf-ri
-
-# ----- Servlet 2.3 API -----
-servlet.jar=${jsf.ri.home}/lib/servlet.jar
-
-# ----- Jakarta JSTL, version 1.0 or later -----
-jstl.home=${base.path}/jakarta-taglibs/standard-1.0.2
-jstl.lib=${jstl.home}/lib
-jstl.jar=${jstl.lib}/jstl.jar
-standard.jar=${jstl.lib}/standard.jar
-
-jstl.loc=http://jakarta.apache.org/builds/jakarta-taglibs/releases/standard/jakarta-taglibs-standard-1.0.2.tar.gz
-
+# By default, all the dependent libraries are bundled with every sample app.
+# To bundle only the libraries that are not in the JWSDP1.2,
+# comment build.standalone property and uncomment build.wspack property
+build.standalone=true
+#build.wspack=true
 
 # --------------------------------------------------
-#		 OPTIONAL LIBRARIES
+#   PROPERTIES FOR JWSDP 1.2 NIGHTLY BUILDS
 # --------------------------------------------------
+# 
+#jsf-api.jar=<location of jsf-api.jar>
+#jsf-ri.jar=<location of jsf-ri.jar>
 
-
-# --------------------------------------------------
-#		 RUN-TIME COMPONENTS
-# --------------------------------------------------
-
-#Management tool username and password. Used in Tomcat integration targets.
-username=tomcat
-password=tomcat

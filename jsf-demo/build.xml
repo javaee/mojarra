@@ -59,34 +59,33 @@
   <!-- The base directory for compilation targets -->
   <property name="build.home" value="${basedir}/build"/>
 
+  <!-- The base directory for demo apps -->
+  <property name="jsf-demo.home" value="."/>
+
+  <property name="jsf.build.home" value="../jsf-ri/build" />
   <!-- The base directory for the JSF API and RI -->
   <property name="jsf.api.home" value ="../jsf-api"/>
   <property name="jsf.ri.home" value ="../jsf-ri"/>
 
   <!-- dependent jars -->
-  <property name="commons-beanutils.jar" 
-            value="${jsf.ri.home}/lib/commons-beanutils.jar" />
-  <property name="commons-logging.jar" 
-            value="${jsf.ri.home}/lib/commons-logging.jar" />
-  <property name="commons-digester.jar" 
-            value="${jsf.ri.home}/lib/commons-digester.jar" />
-  <property name="commons-collections.jar" 
-            value="${jsf.ri.home}/lib/commons-collections.jar" />
-  <property name="jstl_el.jar" 
+  <property name="servlet.jar" value="${tomcat.home}/common/lib/servlet.jar"/>
+
+  <property name="jstl_el.jar"
             value="${jsf.ri.home}/lib/jstl_el.jar" />
-  <property name="jsf-api.jar" 
+  <property name="jsf-api.jar"
             value="${jsf.api.home}/build/lib/jsf-api.jar" />
-  <property name="jsf-ri.jar" 
-            value="${jsf.ri.home}/build/lib/jsf-ri.jar" />
+  <property name="jsf-ri.jar"
+            value="${jsf.ri.home}/lib/jsf-ri.jar" />
+
   <property name="webapp" value="demo" />
 
-  <target name="call.clean">
-    
+  <target name="clean">
+  
+    <delete dir="${jsf-demo.home}/lib"/> 
     <ant target="clean" dir="templateDemo"/>
 
-    <ant target="clean" dir="helloDuke"/>
-
     <ant target="clean" dir="guessNumber"/>
+    <ant target="clean" dir="helloDuke"/>
 
     <ant target="clean" dir="components"/>
 
@@ -95,7 +94,6 @@
     <ant target="clean" dir="nonjsp"/>
 
     <ant target="clean" dir="imageMapRender"/>
-
 
   </target>
 
@@ -169,73 +167,33 @@
 
   </target>
 
-  <target name="copyJarsToDemo">
-
-    <mkdir dir="${demoDir}/web/WEB-INF/lib"/>
-    <copy todir="${demoDir}/web/WEB-INF/lib" file="${commons-beanutils.jar}" />
-    <copy todir="${demoDir}/web/WEB-INF/lib" file="${commons-logging.jar}" />
-    <copy todir="${demoDir}/web/WEB-INF/lib" file="${commons-digester.jar}" />
-    <copy todir="${demoDir}/web/WEB-INF/lib" file="${commons-collections.jar}" />
-    <copy todir="${demoDir}/web/WEB-INF/lib" file="${jstl_el.jar}" />
-    <copy todir="${demoDir}/web/WEB-INF/lib" file="${jsf-api.jar}" />
-    <copy todir="${demoDir}/web/WEB-INF/lib" file="${jsf-ri.jar}" />
-    <copy todir="${demoDir}/web/WEB-INF/lib" file="${standard.jar}" />
-    <copy todir="${demoDir}/web/WEB-INF/lib" file="${jstl.jar}" />
-
+  <target name="prepare.build" >
+      <mkdir dir="${jsf-demo.home}/lib"/>
   </target>
 
-  <target name="deleteJarsFromDemo">
-
-    <delete file="${demoDir}/web/WEB-INF/lib/commons-beanutils.jar" />
-    <delete file="${demoDir}/web/WEB-INF/lib/commons-logging.jar" />
-    <delete file="${demoDir}/web/WEB-INF/lib/commons-digester.jar" />
-    <delete file="${demoDir}/web/WEB-INF/lib/commons-collections.jar" />
-    <delete file="${demoDir}/web/WEB-INF/lib/jstl_el.jar" />
-    <delete file="${demoDir}/web/WEB-INF/lib/jsf-api.jar" />
-    <delete file="${demoDir}/web/WEB-INF/lib/jsf-ri.jar" />
-    <delete file="${demoDir}/web/WEB-INF/lib/standard.jar" />
-    <delete file="${demoDir}/web/WEB-INF/lib/jstl.jar" />
-
+  <target name="copyJars" depends="prepare.build" if="build.standalone">
+    <copy todir="${jsf-demo.home}/lib" file="${commons-beanutils.jar}" />
+    <copy todir="${jsf-demo.home}/lib" file="${commons-logging.jar}" />
+    <copy todir="${jsf-demo.home}/lib" file="${commons-digester.jar}" />
+    <copy todir="${jsf-demo.home}/lib" file="${commons-collections.jar}" />
+    <copy todir="${jsf-demo.home}/lib" file="${jstl_el.jar}" />
+    <copy todir="${jsf-demo.home}/lib" file="${jsf-api.jar}" />
+    <copy todir="${jsf-demo.home}/lib" file="${jsf-ri.jar}" />
+    <copy todir="${jsf-demo.home}/lib" file="${standard.jar}" />
+    <copy todir="${jsf-demo.home}/lib" file="${jstl.jar}" />
   </target>
 
-
-
-  <target name="build-all" depends="verifyPreconditions,copyJarsToDemos">
+  <target name="build-all" depends="prepare.build,copyJars">
 
     <ant inheritAll="false" dir="${basedir}/components"/>
-    <copy todir="cardemo/web/WEB-INF/lib" 
+    <copy todir="${jsf-demo.home}/lib"
           file="components/build/${webapp}/WEB-INF/lib/demo-components.jar"/>
-    <copy todir="imageMapRender/web/WEB-INF/lib" 
-          file="components/build/${webapp}/WEB-INF/lib/demo-components.jar"/>
+    <ant inheritAll="false" dir="${basedir}/cardemo"/>
     <ant inheritAll="false" dir="${basedir}/helloDuke"/>
     <ant inheritAll="false" dir="${basedir}/guessNumber"/>
-    <ant inheritAll="false" dir="${basedir}/cardemo"/>
     <ant inheritAll="false" dir="${basedir}/imageMapRender"/>
     <ant inheritAll="false" dir="${basedir}/nonjsp"/>
 
-  </target>
-
-  <target name="verifyPreconditions">
-
-    <antcall target="checkRequiredFile">
-       <param name="file" value="${standard.jar}"/>
-       <param name="fail.message" value="${standard.jar} must exist."/>
-    </antcall>
-
-    <antcall target="checkRequiredFile">
-       <param name="file" value="${jstl.jar}"/>
-       <param name="fail.message" value="${jstl.jar} must exist."/>
-    </antcall>
-
-  </target>
-
-  <target name="checkRequiredFile">
-    <available file="${file}" property="requirement.satisfied"/>
-    <antcall target="checkRequired.fail"/>
-  </target>
-
-  <target name="checkRequired.fail" unless="requirement.satisfied">
-    <fail message="${fail.message}"/>
   </target>
 
 </project>

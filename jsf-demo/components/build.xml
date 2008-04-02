@@ -50,37 +50,46 @@
   <property name="webapp" value="demo" />
   <property name="build"   value="${basedir}/build" />
 
+  <!-- The base directory for demo apps -->
+  <property name="jsf-demo.lib" value="../lib"/> 
+
   <!-- Configure properties to access the Manager application -->
   <property name="url"      value="http://localhost:8080/manager"/>
 
   <!-- Required jars for making this self-contained -->
-  <property name="servlet23.jar" 
-            value="${tomcat.home}/common/lib/servlet.jar"/>
-  <property name="commons-beanutils.jar" 
-            value="web/WEB-INF/lib/commons-beanutils.jar"/>
-  <property name="commons-collections.jar"
-    	    value="web/WEB-INF/lib/commons-collections.jar"/>
+  <property name="servlet.jar" value="${tomcat.home}/common/lib/servlet.jar"/>
+  <property name="jsp.jar" value="" />
+  <property name="commons-beanutils.jar"
+            value="${jsf-demo.lib}/commons-beanutils.jar"/>
+  <property name="commoncollections.jar"
+            value="${jsf-demo.lib}/commons-collections.jar"/>
+  <property name="commons-logging.jar"
+            value="${jsf-demo.lib}/commons-logging.jar"/>
+  <property name="commons-digester.jar"
+            value="${jsf-demo.lib}/commons-digester.jar"/>
+  <property name="jstl.jar"
+            value="${jsf-demo.lib}/jstl.jar"/>
+  <property name="standard.jar"
+            value="${jsf-demo.lib}/standard.jar"/>
+  <property name="jsf-api.jar"
+            value="${jsf-demo.lib}/jsf-api.jar" />
+  <property name="jsf-ri.jar"
+            value="${jsf-demo.lib}/jsf-ri.jar" />
   <property name="jstl_el.jar"
-    	    value="web/WEB-INF/lib/jstl_el.jar"/>
-  <property name="commons-logging.jar" 
-            value="web/WEB-INF/lib/commons-logging.jar"/>
-  <property name="commons-digester.jar" 
-            value="web/WEB-INF/lib/commons-digester.jar"/>
-  <property name="jsf-api.jar" 
-            value="web/WEB-INF/lib/jsf-api.jar"/>
-  <property name="jsf-ri.jar" 
-            value="web/WEB-INF/lib/jsf-ri.jar"/>
-  <property name="jstl.jar" 
-            value="web/WEB-INF/lib/jstl.jar"/>
-  <property name="standard.jar" 
-            value="web/WEB-INF/lib/standard.jar"/>
+            value="${jsf-demo.lib}/jstl_el.jar"/>
 
   <path id="classpath">
-    <fileset dir="${build}/${webapp}/WEB-INF/lib" includes="*.jar" 
-             excludes="**/jsf-ri.jar"/>
-    <pathelement location="${build}/classes"/>
-    <pathelement location="${servlet23.jar}"/>
+    <pathelement location="${commons-beanutils.jar}"/>
+    <pathelement location="${commons-collections.jar}"/>
+    <pathelement location="${commons-digester.jar}"/>
+    <pathelement location="${commons-logging.jar}"/>
+    <pathelement location="${jsf-api.jar}"/>
+    <pathelement location="${jstl.jar}"/>
     <pathelement location="${standard.jar}"/>
+    <pathelement location="${jstl_el.jar}"/>
+    <pathelement location="${build}/WEB-INF/classes"/>
+    <pathelement location="${servlet.jar}"/>
+    <pathelement location="${jsp.jar}"/> 
   </path>
 
 
@@ -92,7 +101,7 @@
   <target name="verifyPreconditions">
 
     <antcall target="checkRequiredFile">
-       <param name="file" value="${servlet23.jar}"/>
+       <param name="file" value="${servlet.jar}"/>
        <param name="fail.message" value="A jar file containing the Servlet 2.3 and JSP1.2 classes is required to compile components.  Please define the property servlet23.jar in your build.properties file and ensure that the file exists."/>
     </antcall>
 
@@ -151,16 +160,23 @@
     <mkdir dir="${build}/classes/${webapp}" />
     <mkdir dir="${build}/classes/${example}" />
     <mkdir dir="${build}/classes/${example}/META-INF" />
-    <mkdir dir="${build}/${webapp}/WEB-INF/lib" />
     <mkdir dir="${build}/${webapp}/src/components" />
+    <mkdir dir="${build}/WEB-INF" />
+    <mkdir dir="${build}/${webapp}/WEB-INF/lib" />
     <mkdir dir="${build}/${webapp}/WEB-INF/classes" />
-    <copy todir="${build}/${webapp}/WEB-INF/lib" >
-      <fileset dir="${basedir}/web/WEB-INF/lib">
-        <include name="*.jar"/>
-      </fileset>
-    </copy>
   </target>
-  
+
+  <target name="copyJars" depends="prepare" if="build.standalone">
+    <copy todir="${build}/WEB-INF/lib" file="${commons-beanutils.jar}" />
+    <copy todir="${build}/WEB-INF/lib" file="${commons-collections.jar}" />
+    <copy todir="${build}/WEB-INF/lib" file="${commons-logging.jar}" />
+    <copy todir="${build}/WEB-INF/lib" file="${commons-digester.jar}" />
+    <copy todir="${build}/WEB-INF/lib" file="${jsf-api.jar}" />
+    <copy todir="${build}/WEB-INF/lib" file="${jstl_el.jar}" />
+    <copy todir="${build}/WEB-INF/lib" file="${jstl.jar}" />
+    <copy todir="${build}/WEB-INF/lib" file="${standard.jar}" />
+  </target>
+
   <taskdef name="list" classname="org.apache.catalina.ant.ListTask"/>	
   <taskdef name="install"  classname="org.apache.catalina.ant.InstallTask"/>
   <taskdef name="reload"   classname="org.apache.catalina.ant.ReloadTask"/>
@@ -189,7 +205,7 @@
           path="${context.path}"/>
   </target>
 
-  <target name="build" depends="prepare" 
+  <target name="build" depends="copyJars" 
      description="Compile Java files for components, not webapp." >
     <javac debug="on" srcdir="src" destdir="${build}/classes/${example}">
         <include name="components/**" />
@@ -236,9 +252,12 @@
     <jar jarfile="${build}/${example}.war" 
 	 basedir="${build}/${webapp}"/>
 
+    <jar jarfile="${build}/${webapp}/WEB-INF/lib/demo-${example}.jar"
+         basedir="${build}/classes/${example}"/>
 
-
-  </target>	
+    <jar jarfile="${build}/${example}.war"
+         basedir="${build}/${webapp}"/>
+  </target>
 
   <target name="checkRequiredFile">
     <available file="${file}" property="requirement.satisfied"/>

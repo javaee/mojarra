@@ -52,32 +52,46 @@
   <!-- Configure properties to access the Manager application -->
   <property name="url"      value="http://localhost:8080/manager"/>
 
-  <!-- Required jars for making this self-contained -->
-  <property name="commons-beanutils.jar" 
-            value="web/WEB-INF/lib/commons-beanutils.jar"/>
+  <!-- Location dependent jars -->
+  <property name="jsf-demo.lib" value="../lib"/>
+
+  <!-- Required jobs for making this self-contained -->
+  <property name="servlet.jar"
+            value="${tomcat.home}/common/lib/servlet.jar"/>
+  <property name="jsp.jar" value="" />
+  <property name="commons-beanutils.jar"
+            value="${jsf-demo.lib}/commons-beanutils.jar"/>
   <property name="commons-collections.jar"
-    	    value="web/WEB-INF/lib/commons-collections.jar"/>
+            value="${jsf-demo.lib}/commons-collections.jar"/>
   <property name="jstl_el.jar"
-    	    value="web/WEB-INF/lib/jstl_el.jar"/>
-  <property name="commons-logging.jar" 
-            value="web/WEB-INF/lib/commons-logging.jar"/>
-  <property name="commons-digester.jar" 
-            value="web/WEB-INF/lib/commons-digester.jar"/>
-  <property name="jsf-api.jar" 
-            value="web/WEB-INF/lib/jsf-api.jar"/>
-  <property name="jsf-ri.jar" 
-            value="web/WEB-INF/lib/jsf-ri.jar"/>
-  <property name="jstl.jar" 
-            value="web/WEB-INF/lib/jstl.jar"/>
-  <property name="standard.jar" 
-            value="web/WEB-INF/lib/standard.jar"/>
+            value="${jsf-demo.lib}/jstl_el.jar"/>
+  <property name="commons-logging.jar"
+            value="${jsf-demo.lib}/commons-logging.jar"/>
+  <property name="commons-digester.jar"
+            value="${jsf-demo.lib}/commons-digester.jar"/>
+  <property name="jstl.jar"
+            value="${jsf-demo.lib}/jstl.jar"/>
+  <property name="standard.jar"
+            value="${jsf-demo.lib}/standard.jar"/>
+  <property name="jsf-api.jar"
+            value="${jsf-demo.lib}/jsf-api.jar" />
+  <property name="jsf-ri.jar"
+            value="${jsf-demo.lib}/jsf-ri.jar" />
 
   <path id="classpath">
-    <fileset dir="${build}/WEB-INF/lib" includes="*.jar" />
+    <pathelement location="${commons-beanutils.jar}"/>
+    <pathelement location="${commons-collections.jar}"/>
+    <pathelement location="${commons-digester.jar}"/>
+    <pathelement location="${commons-logging.jar}"/>
+    <pathelement location="${jsf-api.jar}"/>
+    <pathelement location="${jsf-ri.jar}"/>
+    <pathelement location="${demo-components.jar}"/>
+    <pathelement location="${jstl.jar}"/>
+    <pathelement location="${jstl_el.jar}"/>
     <pathelement location="${build}/WEB-INF/classes"/>
     <pathelement location="${servlet.jar}"/>
+    <pathelement location="${jsp.jar}" />
   </path>
-
 
   <target name="clean" >
     <delete dir="${build}" />
@@ -144,11 +158,19 @@
     <mkdir dir="${build}/WEB-INF" />
     <mkdir dir="${build}/WEB-INF/classes" />
     <mkdir dir="${build}/WEB-INF/lib" />
-    <copy todir="${build}/WEB-INF/lib" >
-      <fileset dir="${basedir}/web/WEB-INF/lib">
-        <include name="*.jar"/>
-      </fileset>
-    </copy>
+  </target>
+
+   <target name="copyJars" depends="prepare" if="build.standalone">
+    <copy todir="${build}/WEB-INF/lib" file="${demo-components.jar}"/>
+    <copy todir="${build}/WEB-INF/lib" file="${commons-beanutils.jar}" />
+    <copy todir="${build}/WEB-INF/lib" file="${commons-collections.jar}" />
+    <copy todir="${build}/WEB-INF/lib" file="${commons-logging.jar}" />
+    <copy todir="${build}/WEB-INF/lib" file="${commons-digester.jar}" />
+    <copy todir="${build}/WEB-INF/lib" file="${jsf-api.jar}" />
+    <copy todir="${build}/WEB-INF/lib" file="${jsf-ri.jar}" />
+    <copy todir="${build}/WEB-INF/lib" file="${jstl_el.jar}" />
+    <copy todir="${build}/WEB-INF/lib" file="${jstl.jar}" />
+    <copy todir="${build}/WEB-INF/lib" file="${standard.jar}" />
   </target>
   
   <taskdef name="list" classname="org.apache.catalina.ant.ListTask"/>	
@@ -179,7 +201,7 @@
           path="${context.path}"/>
   </target>
 
-  <target name="build" depends="prepare" 
+  <target name="build" depends="copyJars" 
      description="Compile Java files and copy static files." >
     <javac srcdir="src" destdir="${build}/WEB-INF/classes">
     	<include name="**/*.java" />
