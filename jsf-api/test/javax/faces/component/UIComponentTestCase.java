@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTestCase.java,v 1.15 2002/12/17 23:30:58 eburns Exp $
+ * $Id: UIComponentTestCase.java,v 1.16 2003/01/07 19:55:25 jvisvanathan Exp $
  */
 
 /*
@@ -12,6 +12,7 @@ package javax.faces.component;
 
 import java.io.IOException;
 import java.util.Iterator;
+import java.util.Collections;
 import javax.faces.context.FacesContext;
 import javax.faces.event.FacesEvent;
 import javax.faces.event.RequestEventHandler;
@@ -769,6 +770,62 @@ public class UIComponentTestCase extends TestCase {
         }
         assertEquals("validator count", count, results);
 
+    }
+    
+    /**
+     * Test <code>getChildrenAndFacets()</code> method. Make sure the 
+     * facets are returned first followed by children in the order 
+     * they are stored in the child list.
+     */
+    public void testGetChildrenAndFacets() {
+
+        UIComponent testComponent = new TestComponentNamingContainer();
+        UIComponent facet1 = new TestComponent("facet1");
+        UIComponent facet2 = new TestComponent("facet2");
+        UIComponent facet3 = new TestComponent("facet3");
+
+        UIComponent child1 = new TestComponent("child1");
+        UIComponent child2 = new TestComponent("child2");
+        UIComponent child3 = new TestComponent("child3");
+        UIComponent child = null;
+
+        // Review initial conditions.
+        // make sure the itertaor is empty before any children or facet is
+        // added.
+        Iterator kidItr = null;
+        kidItr = testComponent.getChildrenAndFacets();
+        assertTrue((kidItr.hasNext()) == false);
+
+        // Add facets and children one at a time.
+        testComponent.addFacet(facet1);
+        testComponent.addChild(child1);
+        testComponent.addFacet(facet2);
+        testComponent.addChild(child2);
+        testComponent.addFacet(facet3);
+        testComponent.addChild(child3);
+
+        // make sure the facets and children are returned in the correct order.
+        kidItr = testComponent.getChildrenAndFacets();
+        child = (UIComponent) kidItr.next();
+        assertTrue(child.equals(facet3) || child.equals(facet2) ||
+                child.equals(facet1));
+
+        child = (UIComponent) kidItr.next();
+        assertTrue(child.equals(facet3) || child.equals(facet2) ||
+                child.equals(facet1));
+
+        child = (UIComponent) kidItr.next();
+        assertTrue(child.equals(facet3) || child.equals(facet2) ||
+                child.equals(facet1));
+
+        child = (UIComponent) kidItr.next();
+        assertTrue(child.equals(child1));
+
+        child = (UIComponent) kidItr.next();
+        assertTrue(child.equals(child2));
+
+        child = (UIComponent) kidItr.next();
+        assertTrue(child.equals(child3));
     }
 
 

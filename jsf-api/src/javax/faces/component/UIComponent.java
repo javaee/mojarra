@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.59 2002/12/23 22:59:35 eburns Exp $
+ * $Id: UIComponent.java,v 1.60 2003/01/07 19:55:23 jvisvanathan Exp $
  */
 
 /*
@@ -458,8 +458,18 @@ public interface UIComponent extends Serializable {
      *  is <code>null</code>
      */
     public void removeFacet(String name);
-
-
+    
+    /**
+     * <p>Return an <code>Iterator</code> over the facet followed by child
+     * <code>UIComponent</code>s of this <code>UIComponent</code>.
+     * Facets are returned in an undefined order, followed by
+     * all the children in the order they are stored in the child list. If this
+     * component has no facets or children, an empty <code>Iterator</code>
+     * is returned.</p>
+     */
+    public Iterator getChildrenAndFacets();
+    
+    
     // ------------------------------------------ Request Event Handler Methods
 
 

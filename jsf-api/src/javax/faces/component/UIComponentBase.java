@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.30 2002/12/17 23:30:52 eburns Exp $
+ * $Id: UIComponentBase.java,v 1.31 2003/01/07 19:55:24 jvisvanathan Exp $
  */
 
 /*
@@ -1024,6 +1024,37 @@ public abstract class UIComponentBase implements UIComponent {
         }
 
     }
+    
+    /**
+     * <p>Return an <code>Iterator</code> over the facet followed by child
+     * <code>UIComponent</code>s of this <code>UIComponent</code>.
+     * Facets are returned in an undefined order, followed by
+     * all the children in the order they are stored in the child list. If this
+     * component has no facets or children, an empty <code>Iterator</code>
+     * is returned.</p>
+     */
+    public Iterator getChildrenAndFacets() {
+
+        ArrayList childrenAndFacets = new ArrayList();
+        if ( facets != null ) {
+            Iterator facetsItr = (getFacets().keySet()).iterator();
+            while ( facetsItr.hasNext()) {
+                UIComponent kid = (UIComponent)facets.get(facetsItr.next());
+                childrenAndFacets.add(kid);
+            }
+        }
+        if (getChildCount() > 0 ) {
+           Iterator kidsItr = getChildList().iterator();
+            while ( kidsItr.hasNext()) {
+                childrenAndFacets.add(kidsItr.next());
+            }
+        }
+        if ( childrenAndFacets.size() == 0 ) {
+            return (Collections.EMPTY_LIST.iterator());
+        } else {
+            return childrenAndFacets.iterator();
+        }
+    }
 
 
     // ------------------------------------------ Request Event Handler Methods
@@ -1472,11 +1503,8 @@ public abstract class UIComponentBase implements UIComponent {
      * component, and this component itself, as follows.</p>
      * <ul>
      * <li>Call the <code>processDecodes()</code> method of all facets
-     *     of this component, in the order their names would be
-     *     returned by a call to <code>getFacetNames()</code>.</li>
-     * <li>Call the <code>processDecodes() method of all children
-     *     of this component, in the order they would be returned
-     *     by a call to <code>getChildren()</code>.</li>
+     *     and children of this component, in the order determined by
+     *     a call to <code>getChildrenAndFacets()</code>.</li>
      * <li>Call the <code>decode()</code> method of this component.</li>
      * </ul>
      *
@@ -1497,17 +1525,8 @@ public abstract class UIComponentBase implements UIComponent {
         }
         boolean result = true;
 
-        // Process all facets of this component
-        Iterator names = getFacetNames();
-        while (names.hasNext()) {
-            String name = (String) names.next();
-            if (!getFacet(name).processDecodes(context)) {
-                result = false;
-            }
-        }
-
-        // Process all children of this component
-        Iterator kids = getChildren();
+        // process all facets and children of this component
+        Iterator kids = getChildrenAndFacets();
         while (kids.hasNext()) {
             UIComponent kid = (UIComponent) kids.next();
             if (!kid.processDecodes(context)) {
@@ -1533,11 +1552,8 @@ public abstract class UIComponentBase implements UIComponent {
      * component, and this component itself, as follows.</p>
      * <ul>
      * <li>Call the <code>processEvents()</code> method of all facets
-     *     of this component, in the order their names would be
-     *     returned by a call to <code>getFacetNames()</code>.</li>
-     * <li>Call the <code>processEvents()</code> method of all children
-     *     of this component, in the order they would be returned
-     *     by a call to <code>getChildren()</code>.</li>
+     *     and children of this component, in the order determined
+     *     by a call to <code>getChildrenAndFacets()</code>.</li>
      * <li>For each event queued to this component:
      *     <ul>
      *     <li>Call the <code>processEvent()</code> method of each registered
@@ -1563,17 +1579,8 @@ public abstract class UIComponentBase implements UIComponent {
         }
         boolean result = true;
 
-        // Process all facets of this component
-        Iterator names = getFacetNames();
-        while (names.hasNext()) {
-            String name = (String) names.next();
-            if (!getFacet(name).processEvents(context)) {
-                result = false;
-            }
-        }
-
-        // Process all children of this component
-        Iterator kids = getChildren();
+        // Process all facets and children of this component
+        Iterator kids = getChildrenAndFacets();
         while (kids.hasNext()) {
             UIComponent kid = (UIComponent) kids.next();
             if (!kid.processEvents(context)) {
@@ -1613,11 +1620,8 @@ public abstract class UIComponentBase implements UIComponent {
      * component, and this component itself, as follows.</p>
      * <ul>
      * <li>Call the <code>processValidators()</code> method of all facets
-     *     of this component, in the order their names would be
-     *     returned by a call to <code>getFacetNames()</code>.</li>
-     * <li>Call the <code>processValidators()</code> method of all
-     *     children of this component, in the order they would be
-     *     returned by a call to <code>getChildren()</code>.</li>
+     *     and children of this component, in the order determined
+     *     by a call to <code>getChildrenAndFacets()</code>.</li>
      * <li>If the <code>valid</code> property of this component is
      *     currently <code>true</code>:
      *     <ul>
@@ -1647,17 +1651,8 @@ public abstract class UIComponentBase implements UIComponent {
         }
         boolean result = true;
 
-        // Process all facets of this component
-        Iterator names = getFacetNames();
-        while (names.hasNext()) {
-            String name = (String) names.next();
-            if (!getFacet(name).processValidators(context)) {
-                result = false;
-            }
-        }
-
-        // Process all children of this component
-        Iterator kids = getChildren();
+        // Process all the facets and children of this component
+        Iterator kids = getChildrenAndFacets();
         while (kids.hasNext()) {
             UIComponent kid = (UIComponent) kids.next();
             if (!kid.processValidators(context)) {
@@ -1696,11 +1691,8 @@ public abstract class UIComponentBase implements UIComponent {
      * component, and this component itself, as follows.</p>
      * <ul>
      * <li>Call the <code>processUpdates()</code> method of all facets
-     *     of this component, in the order their names would be
-     *     returned by a call to <code>getFacetNames()</code>.</li>
-     * <li>Call the <code>processUpdates()</code> method of all
-     *     children of this component, in the order they would be
-     *     returned by a call to <code>getChildren()</code>.</li>
+     *     and children of this component, in the order determined
+     *     by a call to <code>getChildrenAndFacets()</code>.</li>
      * <li>Call the <code>updateModel()</code> method of this component.</li>
      * </ul>
      *
@@ -1720,17 +1712,8 @@ public abstract class UIComponentBase implements UIComponent {
         }
         boolean result = true;
 
-        // Process all facets of this component
-        Iterator names = getFacetNames();
-        while (names.hasNext()) {
-            String name = (String) names.next();
-            if (!getFacet(name).processUpdates(context)) {
-                result = false;
-            }
-        }
-
-        // Process all children of this component
-        Iterator kids = getChildren();
+        // Process all facets and children of this component
+        Iterator kids = getChildrenAndFacets();
         while (kids.hasNext()) {
             UIComponent kid = (UIComponent) kids.next();
             if (!kid.processUpdates(context)) {
