@@ -8,6 +8,15 @@ value=null
   attr=rendererType : FormRenderer
   attr=parent : com.sun.faces.tree.SimpleTreeImpl
   attr=value : basicForm
+    ===>Type:javax.faces.component.UIInput
+    id:userName
+    value=JSF
+    attr=javax.faces.validator.LengthValidator.MINIMUM : 6
+    attr=javax.faces.validator.LengthValidator.MAXIMUM : 10
+    attr=componentId : userName
+    attr=rendererType : TextRenderer
+    attr=parent : javax.faces.component.UIForm
+    attr=value : JSF
     ===>Type:javax.faces.component.UICommand
     id:link
     value=null
@@ -58,9 +67,10 @@ value=null
       attr=itemValue : 9
     ===>Type:javax.faces.component.UISelectMany
     id:ManyApples
-    value=[Ljava.lang.Object;@18cb3a
+    value=[Ljava.lang.Object;@54d66b
     attr=componentId : ManyApples
-    attr=rendererType : SelectManyMenuRenderer
+    attr=rendererType : MenuRenderer
+    attr=size : 1
     attr=parent : javax.faces.component.UIForm
     attr=value : [Ljava.lang.Object;
       ===>Type:javax.faces.component.UISelectItem

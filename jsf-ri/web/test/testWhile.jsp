@@ -5,8 +5,10 @@
 
 <HTML>
     <HEAD> <TITLE> JSF Basic Components Test Page </TITLE> </HEAD>
+
     <%@ taglib uri="http://java.sun.com/jsf/core/" prefix="f" %>
-    <%@ taglib uri="http://java.sun.com/j2ee/html_basic/" prefix="faces" %>
+    <%@ taglib uri="http://java.sun.com/j2ee/html_basic/" prefix="h" %>
+
     <H3> JSF Tree Test </H3>
     <hr>
 
@@ -15,10 +17,10 @@ the tree navigation mechanism.  Test using getNextStart() inside while
 loop.</P>
 
   <f:usefaces>
-  <faces:form id="1" >
+  <h:form id="1" >
 
-            <faces:output_text id="5"  text="5" />
-
-  </faces:form>
+            <h:output_text id="5"  text="5" />
+  </h:form>
 </f:usefaces>
+
 </HTML>

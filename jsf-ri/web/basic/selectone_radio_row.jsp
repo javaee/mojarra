@@ -2,24 +2,24 @@
 
              <td>
 
-                 <faces:output_text id="shipmentLabel" 
+                 <h:output_text id="shipmentLabel" 
                      value="Radio with hard-coded options laid out horizontally" />
              </td>
 
 
              <td>
-                 <faces:selectone_radio id="shipType" layout="LINE_DIRECTION" >
+                 <h:selectone_radio id="shipType" layout="LINE_DIRECTION" >
 
-                <faces:selectitem itemValue="nextDay" itemLabel="Next Day"
+                <h:selectitem itemValue="nextDay" itemLabel="Next Day"
                       tabindex="30" title="Next day shipment"/>
 
-                <faces:selectitem itemValue="nextWeek" itemLabel="Next Week" 
+                <h:selectitem itemValue="nextWeek" itemLabel="Next Week" 
                    title="Next week shipment" tabindex="40" selected="true" />
 
-                <faces:selectitem itemValue="nextMonth" itemLabel="Next Month"
+                <h:selectitem itemValue="nextMonth" itemLabel="Next Month"
                         tabindex="50" title="Next month shipment"/>
 
-              </faces:selectone_radio>
+              </h:selectone_radio>
 
              </td>
 
@@ -28,20 +28,20 @@
             <tr>
 
              <td>
-                 <faces:output_text id="verticalLabel" 
+                 <h:output_text id="verticalLabel" 
                      value="Radio with hard-coded options laid out vertically" />
 
              </td>
 
 
              <td>
-                <faces:selectone_radio id="verticalRadio" layout="PAGE_DIRECTION" border="1" >
-                 <faces:selectitem itemValue="nextDay" itemLabel="Next Day"
+                <h:selectone_radio id="verticalRadio" layout="PAGE_DIRECTION" border="1" >
+                 <h:selectitem itemValue="nextDay" itemLabel="Next Day"
                                   selected="true" />
-                <faces:selectitem itemValue="nextWeek" itemLabel="Next Week"  />
-                <faces:selectitem itemValue="nextMonth" itemLabel="Next Month" />
+                <h:selectitem itemValue="nextWeek" itemLabel="Next Week"  />
+                <h:selectitem itemValue="nextMonth" itemLabel="Next Month" />
 
-                </faces:selectone_radio>
+                </h:selectone_radio>
 
              </td>
 
@@ -50,21 +50,21 @@
              <tr>
 
              <td>
-                 <faces:output_text id="modelLabel" value="Radio with options from model " />
+                 <h:output_text id="modelLabel" value="Radio with options from model " />
 
              </td>
 
 
              <td>
-                 <faces:selectone_radio id="radioFromModel"
+                 <h:selectone_radio id="radioFromModel"
                        modelReference="LoginBean.currentOption"
                        layout="LINE_DIRECTION" >
 
-                <faces:selectitems id="listboxOptions"
+                <h:selectitems id="listboxOptions"
                                    title="options come from model"
                                    modelReference="LoginBean.options"/>
 
-              </faces:selectone_radio>
+              </h:selectone_radio>
 
              </td>
 

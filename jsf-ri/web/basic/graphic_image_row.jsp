@@ -2,14 +2,14 @@
 
              <td>
 
-               <faces:output_text id="output_graphic1_label" 
+               <h:output_text id="output_graphic1_label" 
                      value="output_graphic with hard coded image"/>
 
              </td>
 
              <td>
 
-               <faces:graphic_image id="output_graphic1" url="/duke.gif" 
+               <h:graphic_image id="output_graphic1" url="/duke.gif" 
 	                            alt="output_graphic with hard coded image"
                                   title="output_graphic with hard coded image"
                            />
@@ -22,14 +22,14 @@
 
              <td>
 
-               <faces:output_text id="output_graphic2_label" 
+               <h:output_text id="output_graphic2_label" 
                      value="output_graphic with localized image"/>
 
              </td>
 
              <td>
 
-               <faces:graphic_image id="output_graphic2" key="imageurl"
+               <h:graphic_image id="output_graphic2" key="imageurl"
                                     bundle="basicBundle"
 	                            alt="output_graphic with localized image"
                                   title="output_graphic with localized image"

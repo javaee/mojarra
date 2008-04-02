@@ -8,11 +8,11 @@
 
     <h1>UISelectBoolean</h1>
 
-    <h3>$Id: UISelectBoolean.jsp,v 1.3 2002/09/20 00:59:54 eburns Exp $</h3>
+    <h3>$Id: UISelectBoolean.jsp,v 1.4 2002/09/20 21:14:44 jvisvanathan Exp $</h3>
 
     <%@ taglib uri="http://java.sun.com/jsf/core/" prefix="f" %>
     <%@ taglib uri="http://java.sun.com/jstl/fmt" prefix="fmt" %>
-    <%@ taglib uri="http://java.sun.com/j2ee/html_basic/" prefix="faces" %>
+    <%@ taglib uri="http://java.sun.com/j2ee/html_basic/" prefix="h" %>
 
      <fmt:setBundle basename="basic.Resources" scope="session" 
                     var="basicBundle"/>
@@ -22,14 +22,14 @@
 
        <p>Form is rendered after this.</p>
      
-       <faces:form id="standardRenderKitForm" 
+       <h:form id="standardRenderKitForm" 
                    formName="standardRenderKitForm">
 
-         <faces:command_button id="standardRenderKitSubmit" 
+         <h:command_button id="standardRenderKitSubmit" 
                       commandName="standardRenderKitSubmit">
-             <faces:output_text id="stdRenderKitLabel" key="standardRenderKitSubmitLabel"
+             <h:output_text id="stdRenderKitLabel" key="standardRenderKitSubmitLabel"
                       bundle="basicBundle" />
-         </faces:command_button>
+         </h:command_button>
 
          <table width="100%" border="1" cellpadding="3" cellspacing="3">
 
@@ -41,13 +41,13 @@
 
          </table>
 
-         <faces:command_button id="standardRenderKitSubmit" 
+         <h:command_button id="standardRenderKitSubmit" 
                       commandName="standardRenderKitSubmit">
-             <faces:output_text id="stdRenderKitLabel" key="standardRenderKitSubmitLabel"
+             <h:output_text id="stdRenderKitLabel" key="standardRenderKitSubmitLabel"
                       bundle="basicBundle" />
-         </faces:command_button>
+         </h:command_button>
 
-       </faces:form>
+       </h:form>
 
      </f:usefaces>   
 

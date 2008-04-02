@@ -2,7 +2,7 @@
 
              <td>
 
-               <faces:output_text id="input_time1_label" 
+               <h:output_text id="input_time1_label" 
                      value="input_time MEDIUM readonly"/>
 
              </td>
@@ -10,7 +10,7 @@
 
              <td>
 
-               <faces:input_time id="input_time1" timeStyle="MEDIUM"
+               <h:input_time id="input_time1" timeStyle="MEDIUM"
                                  value="10:00:01 PM" 
                                  readonly="true"
 
@@ -28,7 +28,7 @@
 
              <td>
 
-               <faces:output_text id="input_time2_label" 
+               <h:output_text id="input_time2_label" 
                      value="input_time LONG "/>
 
              </td>
@@ -36,7 +36,7 @@
 
              <td>
 
-               <faces:input_time id="input_time2" 
+               <h:input_time id="input_time2" 
                                  timeStyle="LONG"
                                  value="9:57:00 AM PST"
                                  alt="input_time LONG"
@@ -46,7 +46,7 @@
 
 	      <td>
 
-		<faces:output_errors id="input_time2_errors" 
+		<h:output_errors id="input_time2_errors" 
 		        compoundId="/standardRenderKitForm/input_time2" />
 
 	      </td>

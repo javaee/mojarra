@@ -5,19 +5,32 @@
 
 <HTML>
     <HEAD> <TITLE> JSF Basic Components Test Page </TITLE> </HEAD>
+
     <%@ taglib uri="http://java.sun.com/jsf/core/" prefix="f" %>
-    <%@ taglib uri="http://java.sun.com/j2ee/html_basic/" prefix="faces" %>
+    <%@ taglib uri="http://java.sun.com/j2ee/html_basic/" prefix="h" %>
+
     <BODY>
         <H3> JSF Basic Components Test Page </H3>
+
 <f:usefaces>
-<faces:form formName="basicForm" id="basicForm">
+<h:form formName="basicForm" id="basicForm">
+
   <TABLE BORDER="1">
 
       <TR>
+      <td>
+                    <h:input_text id="userName" 
+                                     value="JavaServerFaces" >
+		     <f:validate_length minimum="6" maximum="10"/>
+		     <f:validate_required/>
+                   </h:input_text>
+
+              </td>
+
 
 	<TD>
 
-	      <faces:command_hyperlink id="link" target="hello.html"
+	      <h:command_hyperlink id="link" target="hello.html"
                            commandClass="hyperlinkClass"
 				       label="link text"/>
 
@@ -29,7 +42,7 @@
 
 	<TD>
 
-            <faces:selectboolean_checkbox id="validUser" 
+            <h:selectboolean_checkbox id="validUser" 
                    selectbooleanClass="selectbooleanClass"/>
 	</TD>
 
@@ -39,31 +52,32 @@
 
 	<TD>
 
-	     <faces:selectone_listbox id="appleQuantity" size="6"
+	     <h:selectone_listbox id="appleQuantity" 
                      title="Select Quantity"
                      accesskey="N" tabindex="20" >
 
-                <faces:selectitem  disabled="true" itemValue="0" itemLabel="0"/>
-                <faces:selectitem  itemValue="4" itemLabel="4" title="Four" selected="true"/>
-                <faces:selectitem  itemValue="9" itemLabel="9" title="nine" />
+                <h:selectitem  disabled="true" itemValue="0" itemLabel="0"/>
+                <h:selectitem  itemValue="4" itemLabel="4" title="Four" selected="true"/>
+                <h:selectitem  itemValue="9" itemLabel="9" title="nine" />
 
-              </faces:selectone_listbox>
+              </h:selectone_listbox>
 
 	</TD>
 
       </TR>
 
-					<TD><faces:selectmany_menu id="ManyApples">
-						<faces:selectitem itemValue="4" itemLabel="four" selected="true" />
-						<faces:selectitem itemValue="6" itemLabel="six" />
-						<faces:selectitem itemValue="7" itemLabel="seven" selected="true" />
-					</faces:selectmany_menu></TD>
+					<TD><h:selectmany_menu id="ManyApples">
+						<h:selectitem itemValue="4" itemLabel="four" selected="true" />
+						<h:selectitem itemValue="6" itemLabel="six" />
+						<h:selectitem itemValue="7" itemLabel="seven" selected="true" />
+					</h:selectmany_menu></TD>
 
 </tr>
 
   </TABLE>
 
-</faces:form>
+</h:form>
 </f:usefaces>
+
     </BODY>
 </HTML>

@@ -4,14 +4,14 @@
 
              <td>
 
-               <faces:output_text id="command_hyperlink1_label" 
+               <h:output_text id="command_hyperlink1_label" 
                      value="command_hyperlink to internal page"/>
 
              </td>
 
              <td>
 
-	       <faces:command_hyperlink id="command_hyperlink1" 
+	       <h:command_hyperlink id="command_hyperlink1" 
                   target="/faces/Basic_Thanks.jsp"
                   commandName="thankyoulink" label="Link to Thank You page"
                                                 key="linkLabel" 
@@ -26,14 +26,14 @@
 
              <td>
 
-               <faces:output_text id="command_hyperlink2_label" 
+               <h:output_text id="command_hyperlink2_label" 
                      value="command_hyperlink to external page"/>
 
              </td>
 
              <td>
 
-	      <faces:command_hyperlink id="imageLink" 
+	      <h:command_hyperlink id="imageLink" 
                       target="/basic/index.html" label="link to external page"/>
 
 

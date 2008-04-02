@@ -11,12 +11,16 @@
 
 <HTML>
     <HEAD> <TITLE> JSF Basic Components Test Page </TITLE> </HEAD>
+
     
     
+
     <BODY>
         <H3> JSF Basic Components Test Page </H3>
 
-<FORM METHOD="post" ACTION="/test/faces/TestRenderResponsePhase.jsp;jsessionid=47536EEA6F32573A9B9DA214DE031A73">
+
+<FORM METHOD="post" ACTION="/test/faces/TestRenderResponsePhase.jsp;jsessionid=884241010348B244D954B77358716144">
+
   <TABLE BORDER="1">
 
       <tr>
@@ -118,7 +122,7 @@
 
             <button id="/basicForm/pushButton" name="/basicForm/pushButton" type="button" value="button" disabled >
                  This is a push button 
-                 <img src="/test/duke.gif;jsessionid=47536EEA6F32573A9B9DA214DE031A73">
+                 <img src="/test/duke.gif;jsessionid=884241010348B244D954B77358716144">
                  <!-- this isn't valid HTML, but it works for our label case -->
                  <label for="/basicForm/pushButton"  accesskey="Z" lang="en_US" lang="en_US" style="12pt"  class="outputClass" >
 
@@ -136,7 +140,7 @@
 	<TD>
 
             <button id="/basicForm/imageOnlyButton" name="/basicForm/imageOnlyButton" type="submit" value="submit">
-                 <img src="/test/duke.gif;jsessionid=47536EEA6F32573A9B9DA214DE031A73" class="buttonImage1">
+                 <img src="/test/duke.gif;jsessionid=884241010348B244D954B77358716144" class="buttonImage1">
              </button>
 
 	</TD>
@@ -473,6 +477,7 @@
   <TABLE>
 
 </FORM>
+
 
     </BODY>
 </HTML>

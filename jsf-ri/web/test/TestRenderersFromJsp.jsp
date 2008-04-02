@@ -5,33 +5,39 @@
 
 <HTML>
     <HEAD> <TITLE> JSF Basic Components Test Page </TITLE> </HEAD>
+
+    <%@ taglib uri="http://java.sun.com/j2ee/html_basic/" prefix="h" %>
+
     <%@ taglib uri="http://java.sun.com/jsf/core/" prefix="f" %>
-    <%@ taglib uri="http://java.sun.com/j2ee/html_basic/" prefix="faces" %>
+
     <BODY>
         <H3> JSF Basic Components Test Page </H3>
 
+
        <f:usefaces>
-        <faces:form id="/basicForm">
+        <h:form id="/basicForm">
 
-            <faces:textentry_input id="userName" />
+            <h:textentry_input id="userName" />
 
-            <faces:command_button id="login" />
+            <h:command_button id="login" />
 
-	    <!-- <faces:command_hyperlink id="/basicForm/login" /> -->
+	    <!-- <h:command_hyperlink id="/basicForm/login" /> -->
 
-            <faces:output_text id="userLabel" />
+            <h:output_text id="userLabel" />
 
-            <faces:selectboolean_checkbox id="validUser" />
+            <h:selectboolean_checkbox id="validUser" />
 
-            <faces:selectone_listbox id="appleQuantity" />
+            <h:selectone_listbox id="appleQuantity" />
 
-            <faces:selectone_radio id="shipType" />
+            <h:selectone_radio id="shipType" />
 
-            <faces:textentry_secret id="password" />
+            <h:textentry_secret id="password" />
 
-            <faces:textentry_textarea id="address" />
+            <h:textentry_textarea id="address" />
 
-        </faces:form>
+
+        </h:form>
        </f:usefaces>
+
     </BODY>
 </HTML>
