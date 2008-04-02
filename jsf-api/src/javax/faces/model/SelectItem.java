@@ -1,5 +1,5 @@
 /*
- * $Id: SelectItem.java,v 1.8 2004/06/01 22:14:26 rogerk Exp $
+ * $Id: SelectItem.java,v 1.9 2005/03/22 22:38:08 edburns Exp $
  */
 
 /*
@@ -225,14 +225,9 @@ public class SelectItem implements Serializable {
      *
      * @param value The new value
      *
-     * @exception NullPointerException if <code>value</code> is
-     *  <code>null</code>
      */
     public void setValue(Object value) {
 
-        if (value == null) {
-            throw new NullPointerException();
-        }
         this.value = value;
 
     }
