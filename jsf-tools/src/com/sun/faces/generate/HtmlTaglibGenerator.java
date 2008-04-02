@@ -1207,7 +1207,7 @@ public class HtmlTaglibGenerator extends AbstractGenerator {
 		dtds = new String[4];
 		dtds[0] = "-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.0//EN";
 		dtds[1] = ((URL)cl.getResource("META-INF/web-facesconfig_1_0.dtd")).toString();
-		dtds[2] = "-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.1//EN|";
+		dtds[2] = "-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.1//EN";
 		dtds[3] = ((URL) cl.getResource("META-INF/web-facesconfig_1_1.dtd")).toString();
 		
 	    }
