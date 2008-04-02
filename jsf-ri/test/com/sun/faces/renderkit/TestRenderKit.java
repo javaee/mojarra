@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderKit.java,v 1.21 2006/01/13 22:16:55 rogerk Exp $
+ * $Id: TestRenderKit.java,v 1.22 2006/02/01 18:24:07 rogerk Exp $
  */
 
 /*
@@ -44,6 +44,8 @@ import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
 import javax.faces.render.Renderer;
 
+import javax.servlet.ServletResponse;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.StringWriter;
@@ -55,7 +57,7 @@ import org.apache.cactus.WebRequest;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderKit.java,v 1.21 2006/01/13 22:16:55 rogerk Exp $
+ * @version $Id: TestRenderKit.java,v 1.22 2006/02/01 18:24:07 rogerk Exp $
  */
 
 public class TestRenderKit extends ServletFacesTestCase {
@@ -328,5 +330,21 @@ public class TestRenderKit extends ServletFacesTestCase {
         writer = renderKit.createResponseWriter(new StringWriter(), null, "ISO-8859-1");
         assertEquals(writer.getContentType(), "text/html");
     }
+
+    // Response has unsupported content type..
+    public void testCreateResponseWriter5() throws Exception {
+        ((ServletResponse)getFacesContext().getExternalContext().getResponse()).setContentType("image/png");
+        RenderKitFactory renderKitFactory = (RenderKitFactory)
+            FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
+        RenderKit renderKit = renderKitFactory.getRenderKit(getFacesContext(),
+                                                            RenderKitFactory.HTML_BASIC_RENDER_KIT);
+        ResponseWriter writer = null;
+                                                                                                                         
+        // see that the proper content type is picked up based on the
+        // accept header
+        writer = renderKit.createResponseWriter(new StringWriter(), null, "ISO-8859-1");
+        assertEquals(writer.getContentType(), "text/html");
+    }
+
 
 } // end of class TestRenderKit

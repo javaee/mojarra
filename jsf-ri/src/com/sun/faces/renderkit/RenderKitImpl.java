@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKitImpl.java,v 1.32 2006/01/13 22:16:54 rogerk Exp $
+ * $Id: RenderKitImpl.java,v 1.33 2006/02/01 18:24:07 rogerk Exp $
  */
 
 /*
@@ -53,7 +53,7 @@ import java.util.Map;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: RenderKitImpl.java,v 1.32 2006/01/13 22:16:54 rogerk Exp $
+ * @version $Id: RenderKitImpl.java,v 1.33 2006/02/01 18:24:07 rogerk Exp $
  */
 
 public class RenderKitImpl extends RenderKit {
@@ -173,31 +173,47 @@ public class RenderKitImpl extends RenderKit {
             return null;
         }
         String contentType = null;
+        boolean contentTypeNullFromResponse = false;
 	FacesContext context = FacesContext.getCurrentInstance();
         
         String [] supportedTypes = 
             { HTML_CONTENT_TYPE, XHTML_CONTENT_TYPE, 
               APPLICATION_XML_CONTENT_TYPE, TEXT_XML_CONTENT_TYPE };
-        String [] desiredTypes = null;
-        // Obtain the desired content type list
-	// first crack is the passed in list
+
+        // Step 1: Check the content type passed into this method 
+        if (null != desiredContentTypeList) {
+            contentType = findMatch(context, desiredContentTypeList, supportedTypes); 
+        }
+
+        // Step 2: Check the response content type
 	if (null == desiredContentTypeList) {
-	    // second crack is the response content type
 	    desiredContentTypeList = 
                     context.getExternalContext().getResponseContentType();
+            if (null != desiredContentTypeList) {
+                contentType = findMatch(context, desiredContentTypeList, supportedTypes); 
+                if (null == contentType) {
+                    contentTypeNullFromResponse = true;
+                }
+            }
 	}
-        // third crack is the Accept header.
+
+        // Step 3: Check the Accept Header content type
         // Evaluate the accept header in accordance with HTTP specification - 
         // Section 14.1
-        if (null == desiredContentTypeList) {
+        // Preconditions for this (1 or 2):
+        //  1. content type was not specified to begin with
+        //  2. an unsupported content type was retrieved from the response 
+        if (null == desiredContentTypeList || contentTypeNullFromResponse) {
             String[] typeArray = (String[])
                 context.getExternalContext().getRequestHeaderValuesMap().get("Accept");
             if (typeArray.length > 0) {
-                desiredContentTypeList = typeArray[0];
+                StringBuffer buff = new StringBuffer();
+                buff.append(typeArray[0]);
                 for (int i=1; i<typeArray.length; i++) {
-                    desiredContentTypeList += ',';
-                    desiredContentTypeList += typeArray[i];
+                    buff.append(',');
+                    buff.append(typeArray[i]);
                 }
+                desiredContentTypeList = buff.toString();
             }
             
             if (null != desiredContentTypeList) {
@@ -206,56 +222,21 @@ public class RenderKitImpl extends RenderKit {
                     APPLICATION_XML_CONTENT_TYPE + ',' + TEXT_XML_CONTENT_TYPE;
                 desiredContentTypeList = RenderKitUtils.determineContentType(
                     desiredContentTypeList, supportedTypeString); 
+	        if (null != desiredContentTypeList) {
+                    contentType = findMatch(context, desiredContentTypeList, supportedTypes); 
+                }
             }
         }
 
-        // fourth, default to text/html
+        // Step 4: Default to text/html
         if (null == desiredContentTypeList ||
             desiredContentTypeList.equals(ALL_MEDIA)) {
-            desiredContentTypeList = HTML_CONTENT_TYPE;
+            contentType = HTML_CONTENT_TYPE;
         }
-	if (null != desiredContentTypeList) {
-	    Map<String,Object> requestMap = context.getExternalContext().getRequestMap();
-	    
-	    desiredTypes = contentTypeSplit(desiredContentTypeList);
-	    String curContentType = null, curDesiredType = null;                       
-            
-            // For each entry in the desiredTypes array, look for a match in 
-            // the supportedTypes array
-	    for (int i = 0; i < desiredTypes.length; i++) {
-                curDesiredType = desiredTypes[i];
-                for (int j = 0; j < supportedTypes.length; j++) {
-                    curContentType = supportedTypes[j].trim();
-                    if (-1 != curDesiredType.indexOf(curContentType)) {
-                        if (-1 != curContentType.indexOf(HTML_CONTENT_TYPE)) {
-                            contentType = HTML_CONTENT_TYPE;
-                            requestMap.put(RIConstants.CONTENT_TYPE_IS_HTML,
-                                	   Boolean.TRUE);
-                        }
-                        else if (-1 != curContentType.indexOf(XHTML_CONTENT_TYPE) ||
-                                 -1 != curContentType.indexOf(APPLICATION_XML_CONTENT_TYPE) ||
-                                 -1 != curContentType.indexOf(TEXT_XML_CONTENT_TYPE)) {
-                            contentType = XHTML_CONTENT_TYPE;
-                            requestMap.put(RIConstants.CONTENT_TYPE_IS_XHTML,
-                                	   Boolean.TRUE);
-                        }        
-                        break;
-                    }
-                }
-                if (null != contentType) {
-                    break;
-                }
-	    }
-	    // If none of the contentTypes about which we know was in
-	    // desiredContentTypeList
-	    if (null == contentType) {
-                throw new IllegalArgumentException(MessageUtils.getExceptionMessageString(
-                    MessageUtils.CONTENT_TYPE_ERROR_MESSAGE_ID));
-	    }
-	}
-	else {
-	    // there was no argument contentType list, or Accept header
-	    contentType = HTML_CONTENT_TYPE;
+
+	if (null == contentType) {
+            throw new IllegalArgumentException(MessageUtils.getExceptionMessageString(
+                MessageUtils.CONTENT_TYPE_ERROR_MESSAGE_ID));
 	}
 
         if (characterEncoding == null) {
@@ -274,6 +255,43 @@ public class RenderKitImpl extends RenderKit {
             }
         }
         return result;
+    }
+
+    // Helper method that returns the content type if the desired content type is found in the
+    // array of supported types. 
+
+    private String findMatch(FacesContext context, String desiredContentTypeList, String[] supportedTypes) {
+        String contentType = null;
+
+        Map<String,Object> requestMap = context.getExternalContext().getRequestMap();
+                                                                                                                         
+        String [] desiredTypes = contentTypeSplit(desiredContentTypeList);
+        String curContentType = null, curDesiredType = null;
+                                                                                                                         
+        // For each entry in the desiredTypes array, look for a match in
+        // the supportedTypes array
+        for (int i = 0; i < desiredTypes.length; i++) {
+            curDesiredType = desiredTypes[i];
+            for (int j = 0; j < supportedTypes.length; j++) {
+                curContentType = supportedTypes[j].trim();
+                if (-1 != curDesiredType.indexOf(curContentType)) {
+                    if (-1 != curContentType.indexOf(HTML_CONTENT_TYPE)) {
+                        contentType = HTML_CONTENT_TYPE;
+                        requestMap.put(RIConstants.CONTENT_TYPE_IS_HTML, Boolean.TRUE);
+                    } else if (-1 != curContentType.indexOf(XHTML_CONTENT_TYPE) ||
+                               -1 != curContentType.indexOf(APPLICATION_XML_CONTENT_TYPE) ||
+                               -1 != curContentType.indexOf(TEXT_XML_CONTENT_TYPE)) {
+                        contentType = XHTML_CONTENT_TYPE;
+                        requestMap.put(RIConstants.CONTENT_TYPE_IS_XHTML, Boolean.TRUE);
+                    }
+                    break;
+                }
+            }
+            if (null != contentType) {
+                break;
+            }
+        }
+        return contentType;
     }
 
 
