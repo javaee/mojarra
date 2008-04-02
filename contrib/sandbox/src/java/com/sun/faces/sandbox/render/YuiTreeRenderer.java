@@ -15,6 +15,10 @@ import javax.faces.render.Renderer;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 import com.sun.faces.sandbox.component.YuiTree;
+import com.sun.faces.sandbox.model.HtmlNode;
+import com.sun.faces.sandbox.model.MenuNode;
+import com.sun.faces.sandbox.model.TextNode;
+import com.sun.faces.sandbox.model.TreeNode;
 import com.sun.faces.sandbox.util.Util;
 import com.sun.faces.sandbox.util.YuiConstants;
 
@@ -68,25 +72,24 @@ public class YuiTreeRenderer extends Renderer {
         renderJavascript(tree);
     }
     
-    protected String generateNodeScript(String parentNode, DefaultMutableTreeNode node) {
+    protected String generateNodeScript(String parentNode, TreeNode node) {
         StringBuilder ret = new StringBuilder();
-        Enumeration e = node.children();
         int count = 0;
         level++;
-        while (e.hasMoreElements()) {
-            DefaultMutableTreeNode child = (DefaultMutableTreeNode) e.nextElement();
-            Object obj = child.getUserObject();
+        for (TreeNode child : node.getChildren()) {
             String nodeName = "node_" + level + "_" + count;
-            if (obj != null) {
-                ret.append("var ")
-                    .append(nodeName)
-                    .append(" = new YAHOO.widget.TextNode(\"")
-                    .append (obj.toString())
-                    .append("\",")
-                    .append(parentNode)
-                    .append (",false);\n");
+            ret.append("var ")
+                .append(nodeName)
+                .append(" = new ");
+            if (child instanceof TextNode) {
+                ret.append(buildTextNodeCtor(child, parentNode));
+            } else if (child instanceof HtmlNode) {
+                ret.append(this.buildHtmlNodeCtor(child, parentNode));
+            } else if (child instanceof MenuNode) {
+                ret.append(this.buildMenuNodeCtor(child, parentNode));
             }
-            if (child.getChildCount() > 0) {
+            ret.append (";\n");
+            if (child.hasChildren()) {
                 ret.append(generateNodeScript(nodeName, child));
             }
             count++;
@@ -96,6 +99,21 @@ public class YuiTreeRenderer extends Renderer {
         return ret.toString();
     }
     
+    protected String buildTextNodeCtor(TreeNode node, String parentNode) {
+        return "YAHOO.widget.TextNode(\"" + node.getLabel() + "\", " +
+            parentNode + ",false)";
+    }
+    
+    protected String buildMenuNodeCtor(TreeNode node, String parentNode) {
+        return "YAHOO.widget.MenuNode({label: \"" + node.getLabel() + "\", href: \"" +
+            node.getContent() + "\"}, " + parentNode + ",false)";
+    }
+
+    protected String buildHtmlNodeCtor(TreeNode node, String parentNode) {
+        return "YAHOO.widget.HTMLNode(\"" + node.getContent() + "\", " +
+            parentNode + ",false, true)";
+    }
+
     private static void processChildren(Enumeration e) {
         level++;
         while (e.hasMoreElements()) {

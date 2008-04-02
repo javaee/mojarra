@@ -7,6 +7,8 @@ import javax.faces.component.UIOutput;
 import javax.faces.el.ValueBinding;
 import javax.swing.tree.DefaultMutableTreeNode;
 
+import com.sun.faces.sandbox.model.TreeNode;
+
 /**
  * @author lee
  *
@@ -14,8 +16,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 public class YuiTree extends UIOutput {
     public static String COMPONENT_TYPE = "com.sun.faces.sandbox.YuiTree";
     public static String RENDERER_TYPE  = "com.sun.faces.sandbox.YuiTreeRenderer";
-    
-    protected DefaultMutableTreeNode model;
+    TreeNode model;
     
     public YuiTree() {
         setRendererType(RENDERER_TYPE);
@@ -25,19 +26,19 @@ public class YuiTree extends UIOutput {
         return COMPONENT_TYPE;
     }
 
-    public DefaultMutableTreeNode getModel() {
+    public TreeNode getModel() {
         if (null != this.model) {
             return this.model;
         }
         ValueBinding _vb = getValueBinding("model");
         if (_vb != null) {
-            return (DefaultMutableTreeNode) _vb.getValue(getFacesContext());
+            return (TreeNode) _vb.getValue(getFacesContext());
         } else {
             return null;
         }
     }
 
-    public void setModel(DefaultMutableTreeNode model) {
+    public void setModel(TreeNode model) {
         this.model = model;
     }
 }
