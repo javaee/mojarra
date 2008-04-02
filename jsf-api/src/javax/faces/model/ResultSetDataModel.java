@@ -1,5 +1,5 @@
 /*
- * $Id: ResultSetDataModel.java,v 1.25 2004/04/08 16:41:10 eburns Exp $
+ * $Id: ResultSetDataModel.java,v 1.26 2004/04/08 20:17:26 eburns Exp $
  */
 
 /*
@@ -187,7 +187,7 @@ public class ResultSetDataModel extends DataModel {
      *     case-insensitive manner.  This case-insensitivity must be
      *     implemented using a case-insensitive <code>Comparator</code>,
      *     such as
-     *     <code>String.String.CASE_INSENSITIVE_ORDER</code>.</li>
+     *     <code>String.CASE_INSENSITIVE_ORDER</code>.</li>
 
      * <li>The following methods must throw
      *     <code>UnsupportedOperationException</code>:  <code>clear()</code>,
