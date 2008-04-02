@@ -1,5 +1,5 @@
 /*
- * $Id: NavigationHandlerImpl.java,v 1.10 2003/08/19 19:31:03 rlubke Exp $
+ * $Id: NavigationHandlerImpl.java,v 1.11 2003/08/19 20:04:46 rlubke Exp $
  */
 
 /*
@@ -101,6 +101,32 @@ public class NavigationHandlerImpl extends NavigationHandler {
     public void handleNavigation(FacesContext context, String actionRef, String outcome) {
         // PENDING (rlubke) PROVIDE IMPLEMENTATION
     }
+    
+    /**
+     * This method uses helper methods to determine the new <code>tree</code> identifier.
+     * Refer to section 7.4.2 of the specification for more details.
+     *
+     * @param context The Faces Context
+     * @param actionRef The action reference string
+     * @param outcome The outcome string
+     *
+     * @return The <code>tree</code> identifier. 
+     */
+     private String getTreeId(FacesContext context, String actionRef, String outcome) {
+        String nextTreeId = null;
+        String treeId = context.getRoot().getTreeId();
+        nextTreeId = findExactMatch(treeId, actionRef, outcome);
+      
+        if (nextTreeId == null) {
+            nextTreeId = findWildCardMatch(treeId, actionRef, outcome);        
+        }
+      
+        if (nextTreeId == null) {
+            nextTreeId = findDefaultMatch(actionRef, outcome);            
+        }
+        return nextTreeId;
+    }
+
 
     public void addNavigationCase(ConfigNavigationCase navigationCase) {
 
