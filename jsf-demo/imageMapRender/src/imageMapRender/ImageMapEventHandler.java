@@ -65,7 +65,7 @@ public class ImageMapEventHandler implements ActionListener {
     	localeTable.put("NAmericas", Locale.ENGLISH);
 	localeTable.put("SAmericas", new Locale("es","es"));
 	localeTable.put("Germany", Locale.GERMAN);
-	localeTable.put("Finland", new Locale("sv","fi"));
+	localeTable.put("Finland", new Locale("fi","fi"));
 	localeTable.put("France", Locale.FRENCH); 	
 
     }
