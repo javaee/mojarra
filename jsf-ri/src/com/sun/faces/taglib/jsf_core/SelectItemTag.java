@@ -1,5 +1,5 @@
 /*
- * $Id: SelectItemTag.java,v 1.5 2004/01/27 21:04:43 eburns Exp $
+ * $Id: SelectItemTag.java,v 1.6 2004/01/30 22:58:08 horwat Exp $
  */
 
 /*
@@ -128,6 +128,19 @@ public class SelectItemTag extends BaseComponentTag
 		selectItem.setItemDescription(description);
 	    }
 	}
+
+
+	if (null != super.disabled) {
+	    if (isValueReference(super.disabled)) {
+		selectItem.setValueBinding("disabled", 
+					   Util.getValueBinding(super.disabled));
+	    }
+	    else {
+		selectItem.setItemDisabled((Boolean.valueOf(super.disabled)).
+                                            booleanValue());
+	    }
+	}
+        
         
     }
 

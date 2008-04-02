@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.125 2004/01/30 22:35:37 eburns Exp $
+ * $Id: Util.java,v 1.126 2004/01/30 22:58:08 horwat Exp $
  */
 
 /*
@@ -70,7 +70,7 @@ import com.sun.faces.el.impl.JspVariableResolver;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.125 2004/01/30 22:35:37 eburns Exp $ 
+ * @version $Id: Util.java,v 1.126 2004/01/30 22:58:08 horwat Exp $ 
  */
 
 public class Util extends Object
@@ -594,7 +594,8 @@ private Util()
                     UISelectItem item = (UISelectItem) kid;
                     list.add(new SelectItem(item.getItemValue(),
                         item.getItemLabel(),
-                        item.getItemDescription()));
+                        item.getItemDescription(),
+                        item.isItemDisabled()));
                 } else if ( value instanceof SelectItem){
                     list.add(value);
                 } else {
