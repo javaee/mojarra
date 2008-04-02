@@ -205,7 +205,6 @@
 
         <javac srcdir="${src.test.dir}"
             destdir="${out.test.dir}/WEB-INF/classes"
-            excludes="com/sun/faces/config/TestConfigListener.java"
             debug="${compile.debug}"
             optimize="${compile.optimize}"
             source="1.4"
@@ -320,18 +319,14 @@
             <test todir="${test.results.dir}" name="com.sun.faces.application.TestStateManagerImpl"/>
             <test todir="${test.results.dir}" name="com.sun.faces.application.TestViewHandlerImpl"/>
             <test todir="${test.results.dir}" name="com.sun.faces.config.ConfigFileTestCase"/>
-<!-- PENDING: return to running, these need to be rewritten (not for 20050506 merge)
             <test todir="${test.results.dir}" name="com.sun.faces.config.TestConfigListener"/>
--->
             <test todir="${test.results.dir}" name="com.sun.faces.config.TestManagedBeanFactory"/>
             <test todir="${test.results.dir}" name="com.sun.faces.context.TestExternalContextImpl"/>
             <test todir="${test.results.dir}" name="com.sun.faces.context.TestFacesContextFactoryImpl"/>
             <test todir="${test.results.dir}" name="com.sun.faces.context.TestFacesContextImpl"/> 
             <test todir="${test.results.dir}" name="com.sun.faces.convert.TestConverters"/>
-<!-- PENDING return to running            
             <test todir="${test.results.dir}" name="com.sun.faces.el.impl.TestELImpl"/>
             <test todir="${test.results.dir}" name="com.sun.faces.el.impl.TestUnifiedELImpl"/>
---> 
             <test todir="${test.results.dir}" name="com.sun.faces.el.TestPropertyResolverImpl"/>
             <test todir="${test.results.dir}" name="com.sun.faces.el.TestValueBindingImpl"/> 
             <test todir="${test.results.dir}" name="com.sun.faces.el.TestValueExpressionImpl"/> 
@@ -344,9 +339,7 @@
             <test todir="${test.results.dir}" name="com.sun.faces.lifecycle.TestInvokeApplicationPhase"/>
             <test todir="${test.results.dir}" name="com.sun.faces.lifecycle.TestLifecycleFactoryImpl"/>
             <test todir="${test.results.dir}" name="com.sun.faces.lifecycle.TestLifecycleImpl"/> 
-<!-- PENDING return to running            
             <test todir="${test.results.dir}" name="com.sun.faces.lifecycle.TestLifecycleImpl_initial"/>
--->            
             <test todir="${test.results.dir}" name="com.sun.faces.lifecycle.TestPhase"/>
             <test todir="${test.results.dir}" name="com.sun.faces.lifecycle.TestProcessEvents"/>
             <test todir="${test.results.dir}" name="com.sun.faces.lifecycle.TestProcessValidationsPhase"/>
