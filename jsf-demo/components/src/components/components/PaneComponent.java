@@ -1,5 +1,5 @@
 /*
- * $Id: PaneComponent.java,v 1.4 2003/08/25 21:39:32 craigmcc Exp $
+ * $Id: PaneComponent.java,v 1.5 2003/08/27 21:56:03 rlubke Exp $
  */
 
 /*
@@ -67,8 +67,8 @@ public class PaneComponent extends UIComponentBase {
 
 
     private static Log log = LogFactory.getLog(PaneComponent.class);
-
-
+    
+    private boolean selected = false;
     protected List listeners[] = null;
 
 
@@ -87,19 +87,10 @@ public class PaneComponent extends UIComponentBase {
 
     // The currently selected state of this component
     public boolean isSelected() {
-        Boolean selected = (Boolean) getAttribute("selected");
-        if (selected != null) {
-            return (selected.booleanValue());
-        } else {
-            return (false);
-        }
+        return selected;
     }
     public void setSelected(boolean selected) {
-        if (selected) {
-            setAttribute("selected", Boolean.TRUE);
-        } else {
-            setAttribute("selected", null);
-        }
+        this.selected = selected;
     }
 
 

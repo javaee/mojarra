@@ -1,5 +1,5 @@
 /*
- * $Id: TabLabelRenderer.java,v 1.9 2003/08/25 21:39:36 craigmcc Exp $
+ * $Id: TabLabelRenderer.java,v 1.10 2003/08/27 21:56:04 rlubke Exp $
  */
 
 /*
@@ -72,7 +72,7 @@ import org.apache.commons.beanutils.ConversionException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TabLabelRenderer.java,v 1.9 2003/08/25 21:39:36 craigmcc Exp $
+ * @version $Id: TabLabelRenderer.java,v 1.10 2003/08/27 21:56:04 rlubke Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -236,8 +236,7 @@ public class TabLabelRenderer extends BaseRenderer {
         // set the "tab" component's "id" in the event...
 
         context.addFacesEvent
-            (new PaneSelectedEvent(component, tabComponent.getClientId(
-                context)));
+            (new PaneSelectedEvent(component, tabComponent.getId()));
 
 	return;
     }

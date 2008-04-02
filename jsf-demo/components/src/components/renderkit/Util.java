@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.7 2003/08/25 21:39:36 craigmcc Exp $
+ * $Id: Util.java,v 1.8 2003/08/27 21:56:04 rlubke Exp $
  */
 
 /*
@@ -78,7 +78,7 @@ import java.util.Locale;
  *  <B>Util</B> is a class which houses common functionality used by
  *     other classes.
  *
- * @version $Id: Util.java,v 1.7 2003/08/25 21:39:36 craigmcc Exp $
+ * @version $Id: Util.java,v 1.8 2003/08/27 21:56:04 rlubke Exp $
  * 
  */
 
@@ -148,7 +148,7 @@ public class Util extends Object
         "rows",
 	"size",
         "tabindex",
-        "class",
+        //"class",   PENDING(rlubke)  revisit this for JSFA105
         "title",
         "style",
         "width",
