@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectOne.java,v 1.44 2004/04/19 17:07:52 eburns Exp $
+ * $Id: UISelectOne.java,v 1.45 2004/04/20 02:03:58 eburns Exp $
  */
 
 /*
@@ -95,6 +95,8 @@ public class UISelectOne extends UIInput {
      * and set the <code>valid</code> property to <code>false</code>.</p>
      *
      * @param context The {@link FacesContext} for the current request
+     *
+     * @param value The converted value to test for membership.
      *
      * @exception NullPointerException if <code>context</code>
      *  is <code>null</code>

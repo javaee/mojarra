@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectMany.java,v 1.51 2004/04/02 21:35:50 eburns Exp $
+ * $Id: UISelectMany.java,v 1.52 2004/04/20 02:03:21 eburns Exp $
  */
 
 /*
@@ -342,6 +342,8 @@ public class UISelectMany extends UIInput {
      * and set the <code>valid</code> property to <code>false</code>.</p>
      *
      * @param context The {@link FacesContext} for the current request
+     *
+     * @param value The converted value to test for membership.
      *
      * @exception NullPointerException if <code>context</code>
      *  is <code>null</code>
