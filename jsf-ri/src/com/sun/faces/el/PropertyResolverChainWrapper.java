@@ -1,5 +1,5 @@
 /*
- * $Id: PropertyResolverChainWrapper.java,v 1.10 2006/05/30 20:46:41 rlubke Exp $
+ * $Id: PropertyResolverChainWrapper.java,v 1.11 2006/06/02 17:21:34 rlubke Exp $
  */
 /*
  * The contents of this file are subject to the terms
@@ -72,8 +72,7 @@ public class PropertyResolverChainWrapper extends ELResolver {
             }
         } else {
             try {
-                result = legacyPR.getValue(base, property);
-                context.setPropertyResolved(result != null);
+                result = legacyPR.getValue(base, property);               
             } catch (EvaluationException ex) {
                 context.setPropertyResolved(false);
                 throw new ELException(ex);
@@ -107,8 +106,7 @@ public class PropertyResolverChainWrapper extends ELResolver {
             }
         } else {
             try {
-                result = legacyPR.getType(base, property);
-                context.setPropertyResolved(result != null);
+                result = legacyPR.getType(base, property);                
             } catch (EvaluationException ex) {
                 context.setPropertyResolved(false);
                 throw new ELException(ex);
