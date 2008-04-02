@@ -1,5 +1,5 @@
 /*
- * $Id: TestConverters.java,v 1.38 2006/03/29 23:04:50 rlubke Exp $
+ * $Id: TestConverters.java,v 1.39 2006/08/07 21:08:49 rogerk Exp $
  */
 
 /*
@@ -59,7 +59,7 @@ import java.util.TimeZone;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestConverters.java,v 1.38 2006/03/29 23:04:50 rlubke Exp $
+ * @version $Id: TestConverters.java,v 1.39 2006/08/07 21:08:49 rogerk Exp $
  */
 
 public class TestConverters extends JspFacesTestCase {
@@ -130,6 +130,7 @@ public class TestConverters extends JspFacesTestCase {
             testBooleanConverter(root);
             testConverterInheritance(root);
             //assertTrue(verifyExpectedOutput());
+            testDoubleConverter(root);
         } catch (Throwable t) {
             t.printStackTrace();
             assertTrue(false);
@@ -771,6 +772,13 @@ public class TestConverters extends JspFacesTestCase {
         String str = converter.getAsString(getFacesContext(), text, obj);
         assertTrue(str.equals(stringToConvert));
 
+    }
+
+    public void testDoubleConverter(UIViewRoot root) throws ConverterException,
+        InstantiationException, IllegalAccessException, ClassNotFoundException {
+        System.out.println("Tesing DoubleConverter");
+        Converter converter = application.createConverter("javax.faces.Double");
+        assertNotNull(converter);
     }
 
 
