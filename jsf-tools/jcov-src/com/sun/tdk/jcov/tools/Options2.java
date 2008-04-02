@@ -1,7 +1,9 @@
-/**
- * @(#)Options2.java	1.6 03/01/17
- *
- * Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+/*
+ * @(#)Options2.java  1.6 03/01/17
+ */
+
+/*
+ * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
