@@ -1,5 +1,5 @@
 /*
- * $Id: ExternalContextImpl.java,v 1.4 2003/04/01 15:26:52 eburns Exp $
+ * $Id: ExternalContextImpl.java,v 1.5 2003/04/01 17:39:08 rkitain Exp $
  */
 
 /*
@@ -12,6 +12,8 @@ package com.sun.faces.context;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Collection;
 import java.util.Enumeration;
 import java.util.Iterator;
@@ -219,6 +221,16 @@ public class ExternalContextImpl extends ExternalContext {
 	 
     public InputStream getResourceAsStream(String path) {
         return servletContext.getResourceAsStream(path);
+    }
+
+    public URL getResource(String path) {
+        URL url = null;
+        try {
+            url = servletContext.getResource(path);
+        } catch (MalformedURLException e) {
+            return null;
+        }
+        return url;
     }
 
 

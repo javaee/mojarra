@@ -1,5 +1,5 @@
 /*
- * $Id: TestUtil_messages.java,v 1.2 2003/03/27 14:44:50 eburns Exp $
+ * $Id: TestUtil_messages.java,v 1.3 2003/04/01 17:39:16 rkitain Exp $
  */
 
 /*
@@ -25,7 +25,7 @@ import java.util.Properties;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestUtil_messages.java,v 1.2 2003/03/27 14:44:50 eburns Exp $
+ * @version $Id: TestUtil_messages.java,v 1.3 2003/04/01 17:39:16 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -85,7 +85,10 @@ public class TestUtil_messages extends ServletFacesTestCase {
         {Util.SAVING_STATE_ERROR_MESSAGE_ID, "2"},
         {Util.RENDERER_ALREADY_EXISTS_ERROR_MESSAGE_ID, "1"},
         {Util.RENDERER_NOT_FOUND_ERROR_MESSAGE_ID, "1"},
-        {Util.MAXIMUM_EVENTS_REACHED_ERROR_MESSAGE_ID, "1"}
+        {Util.MAXIMUM_EVENTS_REACHED_ERROR_MESSAGE_ID, "1"},
+        {Util.NO_ACTION_FROM_ACTIONREF_ERROR_MESSAGE_ID, "1"},
+        {Util.NULL_CONFIGURATION_ERROR_MESSAGE_ID, "0"}
+        
     };
 
 // Attribute Instance Variables

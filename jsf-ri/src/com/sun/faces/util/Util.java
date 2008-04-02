@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.51 2003/03/28 18:32:23 horwat Exp $
+ * $Id: Util.java,v 1.52 2003/04/01 17:39:12 rkitain Exp $
  */
 
 /*
@@ -56,7 +56,7 @@ import java.util.StringTokenizer;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.51 2003/03/28 18:32:23 horwat Exp $
+ * @version $Id: Util.java,v 1.52 2003/04/01 17:39:12 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -186,6 +186,12 @@ public class Util extends Object
 
    public static final String MAXIMUM_EVENTS_REACHED_ERROR_MESSAGE_ID =
          "com.sun.faces.MAXIMUM_EVENTS_REACHED";
+
+   public static final String NO_ACTION_FROM_ACTIONREF_ERROR_MESSAGE_ID = 
+        "com.sun.faces.NO_ACTION_FROM_ACTIONREF";
+
+   public static final String NULL_CONFIGURATION_ERROR_MESSAGE_ID = 
+        "com.sun.faces.NULL_CONFIGURATION";
 
 // README - make sure to add the message identifier constant
 // (ex: Util.CONVERSION_ERROR_MESSAGE_ID) and the number of substitution

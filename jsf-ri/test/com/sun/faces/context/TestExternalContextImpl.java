@@ -1,5 +1,5 @@
 /*
- * $Id: TestExternalContextImpl.java,v 1.2 2003/03/27 07:34:33 rkitain Exp $
+ * $Id: TestExternalContextImpl.java,v 1.3 2003/04/01 17:39:15 rkitain Exp $
  */
 
 /*
@@ -62,7 +62,7 @@ import com.sun.faces.ServletFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestExternalContextImpl.java,v 1.2 2003/03/27 07:34:33 rkitain Exp $
+ * @version $Id: TestExternalContextImpl.java,v 1.3 2003/04/01 17:39:15 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -156,6 +156,13 @@ public class TestExternalContextImpl extends ServletFacesTestCase
         assertTrue(null != ecImpl.getSessionMap());
         System.out.println("Testing getRequestMap not null...");
         assertTrue(null != ecImpl.getRequestMap());
+    }
+
+    public void testServletContext() {
+        getConfig().getServletContext().setAttribute("foo", "bar");
+        ServletContext sc = (ServletContext)getFacesContext().getExternalContext().getContext();
+        assertTrue(null != sc.getAttribute("foo"));
+        assertTrue(null != getFacesContext().getExternalContext().getApplicationMap().get("foo"));
     }
 
     public void testGetSession() {

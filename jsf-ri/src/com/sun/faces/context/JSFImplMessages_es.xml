@@ -163,5 +163,13 @@
       <detail>Maximum number of events ''{0}'' processed.</detail>
   </message>
 
+  <message messageId="com.sun.faces.NO_ACTION_FROM_ACTIONREF" severity="3" summary="Can''t get Action from Action Reference">
+      <detail>Can''t get Action from Action Reference: ''{0}'' .</detail>
+  </message>
+
+ <message messageId="com.sun.faces.NULL_CONFIGURATION" severity="3" summary="No Configuration loaded for the application.">
+     <detail>There is no Configuration loaded for the application.</detail>
+ </message>
+
 </messages>
 

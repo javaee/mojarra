@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleImpl.java,v 1.24 2003/03/24 19:45:31 eburns Exp $
+ * $Id: LifecycleImpl.java,v 1.25 2003/04/01 17:39:11 rkitain Exp $
  */
 
 /*
@@ -36,7 +36,7 @@ import java.util.HashMap;
  *  Lifecycle in the JSF RI. <P>
  *
  *
- * @version $Id: LifecycleImpl.java,v 1.24 2003/03/24 19:45:31 eburns Exp $
+ * @version $Id: LifecycleImpl.java,v 1.25 2003/04/01 17:39:11 rkitain Exp $
  * 
  * @see	javax.faces.lifecycle.Lifecycle
  *
@@ -194,6 +194,8 @@ public void execute(FacesContext context) throws FacesException
             processEvents(context, PhaseId.PROCESS_VALIDATIONS);
         } else if (phaseNumber == Phase.UPDATE_MODEL_VALUES) {
             processEvents(context, PhaseId.UPDATE_MODEL_VALUES);
+        } else if (phaseNumber == Phase.INVOKE_APPLICATION) {
+            processEvents(context, PhaseId.INVOKE_APPLICATION);
         }
 
         if (((FacesContextImpl)context).getResponseComplete()) {
