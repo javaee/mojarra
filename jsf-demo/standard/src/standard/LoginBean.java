@@ -1,5 +1,5 @@
 /*
- * $Id: LoginBean.java,v 1.1 2003/07/17 02:58:38 rlubke Exp $
+ * $Id: LoginBean.java,v 1.2 2003/07/30 16:49:27 jvisvanathan Exp $
  */
 
 /*
@@ -25,7 +25,18 @@ public class LoginBean {
         "coffee",
         "baked"
     };
-
+    
+    Long[] longOptions = {new Long(1001), new Long(1002),new Long(1003)};
+    Boolean booleanOptions[] = {new Boolean(true), new Boolean(false), 
+            new Boolean(false)};
+    
+    ArrayList longList = new ArrayList(3);
+    ArrayList booleanList = new ArrayList(3);
+    ArrayList stringList = new ArrayList(3);
+    ArrayList currentLongOptions = null;
+    Boolean currentBooleanOption = null;
+    Long currentLongOption = null;
+    
     private double doubleVal;
     private ArrayList options = null;
     private Object currentOption = defaultOptions[4];
@@ -62,6 +73,24 @@ public class LoginBean {
         currentOptions = new ArrayList(2);
         currentOptions.add(defaultOptions[3]);
         currentOptions.add(defaultOptions[4]);
+       
+        for (i = 0; i < longOptions.length; i++) {
+	    longList.add(new SelectItem(longOptions[i], 
+                    (longOptions[i].toString()), "longOption"));
+	}
+        
+        for (i = 0; i < booleanOptions.length; i++) {
+	    booleanList.add(new SelectItem(booleanOptions[i], 
+                    ("booleanOption" + i), "booleanOption"));
+	}
+	currentLongOptions = new ArrayList(2);
+	currentLongOptions.add(longOptions[0]);
+	currentLongOptions.add(longOptions[1]);
+        currentLongOption = longOptions[1];
+        currentBooleanOption = booleanOptions[0];
+        
+        System.out.println("Populated options");
+        
     }
 
     public void setUserName(String user_name) {
@@ -195,6 +224,26 @@ public class LoginBean {
         currentOption = newCurrentOption;
         System.out.println("set current option " + currentOption.toString());
     }
+    
+    public Boolean getCurrentBooleanOption() {
+        System.out.println("get currentBooleanOption " + currentBooleanOption.toString());
+        return currentBooleanOption;
+    }
+
+    public void setCurrentBooleanOption(Boolean newBooleanOption) {
+        currentBooleanOption = newBooleanOption;
+        System.out.println("set currentBooleanOption " + currentBooleanOption.toString());
+    }
+    
+    public Long getCurrentLongOption() {
+        System.out.println("get currentLongOption " + currentLongOption.toString());
+        return currentLongOption;
+    }
+
+    public void setCurrentLongOption(Long newLongOption) {
+        currentLongOption = newLongOption;
+        System.out.println("set currentLongOption " + currentLongOption.toString());
+    }
 
     public Object[] getCurrentOptions() {
         System.out.println("get current options");
@@ -213,6 +262,25 @@ public class LoginBean {
             currentOptions.add(newCurrentOptions[i]);
         }
         System.out.println("set current options");
+    }
+    
+    public Object[] getCurrentLongOptions() {
+        System.out.println("get currentLongOptions");
+        return currentLongOptions.toArray();
+    }
+
+    public void setCurrentLongOptions(Long[] newCurrentOptions) {
+        int len = 0;
+        if (null == newCurrentOptions ||
+            (len = newCurrentOptions.length) == 0) {
+            return;
+        }
+        currentOptions.clear();
+        currentOptions = new ArrayList(len);
+        for (int i = 0; i < len; i++) {
+            currentOptions.add(newCurrentOptions[i]);
+        }
+        System.out.println("set currentLongOptions");
     }
 
     public Date getDate() {
@@ -291,5 +359,21 @@ public class LoginBean {
 
     public void setCurrentShipment(String shipment) {
         currentShipment = shipment;
+    }
+    
+    public Collection getLongList() {
+        return longList;
+    }
+
+    public void setLongList(Collection newLongOptions) {
+        longList = new ArrayList(newLongOptions);
+    }
+    
+    public Collection getBooleanList() {
+        return booleanList;
+    }
+
+    public void setBooleanList(Collection newBooleanOptions) {
+        booleanList = new ArrayList(newBooleanOptions);
     }
 }

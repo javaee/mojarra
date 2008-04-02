@@ -20,7 +20,7 @@
                 <h:selectitem  itemValue="1" itemLabel="1" title="One" />
                 <h:selectitem  itemValue="2" itemLabel="2" title="Two" />
                 <h:selectitem  itemValue="3" itemLabel="3" title="Three" />
-                <h:selectitem  itemValue="4" itemLabel="4" title="Four" selected="true"/>
+                <h:selectitem  itemValue="4" itemLabel="4" title="Four" />
                 <h:selectitem  itemValue="5" itemLabel="5" title="Five" />
                 <h:selectitem  itemValue="6" itemLabel="6" title="Six" />
                 <h:selectitem  itemValue="7" itemLabel="7" title="Seven" />
@@ -48,6 +48,28 @@
 
                 <h:selectitems id="listboxOptions"
                                    valueRef="LoginBean.options"/>
+
+              </h:selectone_listbox>
+
+             </td>
+
+            </tr>
+
+            <tr>
+
+             <td>
+                 <h:output_text id="longoptionLabel"
+                   value="Listbox with options of the type java.lang.Long" />
+
+             </td>
+
+
+             <td>
+                <h:selectone_listbox id="longListbox" 
+                             valueRef="LoginBean.currentLongOption">
+                    
+                <h:selectitems id="listboxLongOptions"
+                                   valueRef="LoginBean.longList"/>
 
               </h:selectone_listbox>
 
