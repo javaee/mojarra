@@ -1,5 +1,5 @@
 /*
- * $Id: TestUpdateModelValuesPhase.java,v 1.30 2003/11/09 05:11:13 eburns Exp $
+ * $Id: TestUpdateModelValuesPhase.java,v 1.31 2003/11/09 21:46:59 eburns Exp $
  */
 
 /*
@@ -43,7 +43,7 @@ import com.sun.faces.util.DebugUtil;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestUpdateModelValuesPhase.java,v 1.30 2003/11/09 05:11:13 eburns Exp $
+ * @version $Id: TestUpdateModelValuesPhase.java,v 1.31 2003/11/09 21:46:59 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -134,7 +134,7 @@ public void testUpdateNormal()
     }
     assertTrue(!(getFacesContext().getRenderResponse()) &&
         !(getFacesContext().getResponseComplete()));
-    assertTrue(null == userName.getValue());
+    assertTrue(null == userName.getLocalValue());
     
     assertTrue(testBean.getOne().equals("one"));
     assertTrue(false == (getFacesContext().getMessages().hasNext()));
