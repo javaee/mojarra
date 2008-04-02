@@ -1,5 +1,5 @@
 /*
- * $Id: XmlXulRuleSet.java,v 1.4 2003/05/01 20:53:01 eburns Exp $
+ * $Id: XmlXulRuleSet.java,v 1.5 2003/08/27 23:49:46 horwat Exp $
  */
 
 /*
@@ -104,35 +104,25 @@ public class XmlXulRuleSet extends RuleSetBase {
 
         digester.addCallMethod("*/page-url", "setPageUrl", 0);
 
-        digester.addObjectCreate("*/window", "javax.faces.component.UIForm");
-        digester.addSetNext("*/window", "addChild", "javax.faces.component.UIComponent");
+        digester.addObjectCreate("*/window", "javax.faces.component.base.UIFormBase");
 
-        digester.addObjectCreate("*/label", "javax.faces.component.UIOutput");
-        digester.addSetNext("*/label", "addChild", "javax.faces.component.UIComponent");
+        digester.addObjectCreate("*/label", "javax.faces.component.base.UIOutputBase");
 
-        digester.addObjectCreate("*/textbox", "javax.faces.component.UIInput");
-        digester.addSetNext("*/textbox", "addChild", "javax.faces.component.UIComponent");
+        digester.addObjectCreate("*/textbox", "javax.faces.component.base.UIInputBase");
 
-        digester.addObjectCreate("*/checkbox", "javax.faces.component.UISelectBoolean");
-        digester.addSetNext("*/checkbox", "addChild", "javax.faces.component.UIComponent");
+        digester.addObjectCreate("*/checkbox", "javax.faces.component.base.UISelectBooleanBase");
 
-        digester.addObjectCreate("*/radiogroup", "javax.faces.component.UISelectOne");
-        digester.addSetNext("*/radiogroup", "addChild", "javax.faces.component.UIComponent");
+        digester.addObjectCreate("*/radiogroup", "javax.faces.component.base.UISelectOneBase");
 
-        digester.addObjectCreate("*/menupopup", "javax.faces.component.UISelectOne");
-        digester.addSetNext("*/menupopup", "addChild", "javax.faces.component.UIComponent");
+        digester.addObjectCreate("*/menupopup", "javax.faces.component.base.UISelectOneBase");
 
-        digester.addObjectCreate("*/link", "javax.faces.component.UICommand");
-        digester.addSetNext("*/link", "addChild", "javax.faces.component.UIComponent");
+        digester.addObjectCreate("*/link", "javax.faces.component.base.UICommandBase");
 
-        digester.addObjectCreate("*/button", "javax.faces.component.UICommand");
-        digester.addSetNext("*/button", "addChild", "javax.faces.component.UIComponent");
+        digester.addObjectCreate("*/button", "javax.faces.component.base.UICommandBase");
 
-        digester.addObjectCreate("*/image", "javax.faces.component.UIGraphic");
-        digester.addSetNext("*/image", "addChild", "javax.faces.component.UIComponent");
+        digester.addObjectCreate("*/image", "javax.faces.component.base.UIGraphicBase");
 
         digester.addFactoryCreate("*/uicomponent", new UIComponentFactory());
-        digester.addSetNext("*/uicomponent", "addChild", "javax.faces.component.UIComponent");
 
         ComponentRule cRule = new ComponentRule();
         cRule.setBuildComponent(buildComponent);
@@ -184,7 +174,7 @@ final class UIComponentFactory extends AbstractObjectCreationFactory {
             ia.getMessage());
         }
 
-        c.setComponentId(id);
+        c.setId(id);
         if ( c instanceof UIOutput) {
             ((UIOutput)c).setValue(value);
         }    
@@ -212,7 +202,7 @@ final class ComponentRule extends Rule {
     public void begin(Attributes attributes) throws Exception {
         UIComponent uic = (UIComponent)digester.peek();
         if (log.isTraceEnabled()) {
-            log.trace("component: " + uic.getComponentId());
+            log.trace("component: " + uic.getId());
         }
         AttributesImpl attrs = new AttributesImpl(attributes);
         for (int i=0; i<attrs.getLength(); i++) {
@@ -225,6 +215,21 @@ final class ComponentRule extends Rule {
         }
         bc.applyAttributesToComponentInstance(uic, attrs);
     }
+
+    /**
+     * This method is invoked when the end of the matched
+     * Xml element is encountered ;
+     *
+     * @param attributes The element's attribute list
+     */
+    public void end(String namespace, String name) {
+        //Get root element
+        UIComponent root = (UIComponent)digester.peek(digester.getCount() - 1);
+        UIComponent uic = (UIComponent)digester.peek();
+
+        root.getChildren().add(uic);
+    }
+
     
     public void setBuildComponent(BuildComponentFromTag bc) {
         this.bc = bc;
@@ -286,7 +291,7 @@ final class ActionRule extends Rule {
     public void begin(Attributes attributes) throws Exception {
         UIComponent uic = (UIComponent)digester.peek();
         if (log.isTraceEnabled()) {
-            log.trace("component: " + uic.getComponentId());
+            log.trace("component: " + uic.getId());
         }
 	AttributesImpl attrs = new AttributesImpl(attributes);
 

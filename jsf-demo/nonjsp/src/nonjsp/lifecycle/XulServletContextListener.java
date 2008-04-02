@@ -46,9 +46,11 @@ import javax.servlet.ServletContextEvent;
 
 import javax.faces.FactoryFinder;
 import javax.faces.context.FacesContextFactory;
-import javax.faces.lifecycle.LifecycleFactory;
-import javax.faces.lifecycle.Lifecycle;
-import javax.faces.lifecycle.ViewHandler;
+import javax.faces.application.ApplicationFactory;
+import javax.faces.application.Application;
+import javax.faces.application.ViewHandler;
+
+import nonjsp.application.XulViewHandlerImpl;
 
 /**
  *
@@ -58,7 +60,7 @@ import javax.faces.lifecycle.ViewHandler;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: XulServletContextListener.java,v 1.2 2003/02/21 23:45:55 ofung Exp $
+ * @version $Id: XulServletContextListener.java,v 1.3 2003/08/27 23:49:44 horwat Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -107,11 +109,11 @@ public class XulServletContextListener implements ServletContextListener
     {
         //Set the ViewHandler to the Xul implementation
         ViewHandler handler = new XulViewHandlerImpl();
-        LifecycleFactory factory = (LifecycleFactory)
-            FactoryFinder.getFactory(FactoryFinder.LIFECYCLE_FACTORY);
-        Lifecycle lifecycle =
-            factory.getLifecycle(LifecycleFactory.DEFAULT_LIFECYCLE);
-        lifecycle.setViewHandler(handler); 
+        ApplicationFactory factory = (ApplicationFactory)
+            FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
+        Application application =
+            factory.getApplication();
+        application.setViewHandler(handler); 
     }
 
     public void contextDestroyed(ServletContextEvent e)

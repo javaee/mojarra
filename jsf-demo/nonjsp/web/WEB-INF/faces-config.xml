@@ -13,11 +13,11 @@
 
 <faces-config>
     <navigation-rule>
-        <from-tree-id>/helloDuke.xul</from-tree-id>
+        <from-view-id>/helloDuke.xul</from-view-id>
             <!-- Navigation Rules -->
             <navigation-case>
                 <from-outcome>success</from-outcome>
-                <to-tree-id>/hi.xul</to-tree-id>
+                <to-view-id>/hi.xul</to-view-id>
             </navigation-case>
     </navigation-rule>
 </faces-config>

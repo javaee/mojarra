@@ -1,5 +1,5 @@
 /*
- * $Id: RIConstants.java,v 1.4 2003/08/26 18:35:01 horwat Exp $
+ * $Id: RIConstants.java,v 1.5 2003/08/27 23:49:49 horwat Exp $
  */
 
 /*
@@ -50,7 +50,7 @@ import javax.faces.render.RenderKitFactory;
  * Copy of com.sun.faces.RIConstants in order to remove
  * demo dependancy on RI.
  *
- * @version $Id: RIConstants.java,v 1.4 2003/08/26 18:35:01 horwat Exp $
+ * @version $Id: RIConstants.java,v 1.5 2003/08/27 23:49:49 horwat Exp $
  *
  * @see com.sun.faces.RIConstants
  *
@@ -81,8 +81,8 @@ public class RIConstants {
     public final static String INITIAL_REQUEST_NAME = "initialRequest";
     public final static String INITIAL_REQUEST_VALUE = "true";
     
-    public final static String FACES_TREE = "com.sun.faces.TREE";
-    public final static String REQUEST_LOCALE = "com.sun.faces.LOCALE";
+    public final static String FACES_VIEW = FACES_PREFIX + "VIEW";
+    public final static String REQUEST_LOCALE = FACES_PREFIX + "LOCALE";
    
     /**
 
@@ -92,9 +92,9 @@ public class RIConstants {
 
     */ 
 
-    public final static String SELECTITEMS_CONFIGURED = "com.sun.faces.SELECTITEMS_CONFIGURED";
+    public final static String SELECTITEMS_CONFIGURED = FACES_PREFIX + "SELECTITEMS_CONFIGURED";
 
-    public final static String IMPL_MESSAGES = "com.sun.faces.IMPL_MESSAGES";
+    public final static String IMPL_MESSAGES = FACES_PREFIX + "IMPL_MESSAGES";
 
     public static final String SAVESTATE_MARKER = FACES_PREFIX + "saveStateMarker";
     
@@ -148,6 +148,6 @@ public class RIConstants {
     /**
      * <p>String identifer for <em>bundle attribute.</em>.</p>
      */
-    public static final String BUNDLE_ATTR = "com.sun.faces.bundle";
+    public static final String BUNDLE_ATTR = FACES_PREFIX + "bundle";
 
 }
