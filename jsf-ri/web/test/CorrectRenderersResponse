@@ -28,13 +28,13 @@ com.sun.faces.saveStateFieldMarker<input type="hidden" name="formRenderer1" valu
 <input id="labelButton2" type="reset" name="labelButton2" value="model label" />
 <input id="labelButton3" type="submit" name="labelButton3" value="RES-BUNDLE PASSED" />
 <input id="labelButton4" type="reset" name="labelButton4" value="" />
-<a id="labelLink1" href="hrefValue;jsessionid=44AFF596AD877039C6F1F0C808C4497B">PASSED</a>
-<a id="labelLink2" href="hrefValue;jsessionid=44AFF596AD877039C6F1F0C808C4497B">model label</a>
-<a id="labelLink3" href="hrefValue;jsessionid=44AFF596AD877039C6F1F0C808C4497B">RES-BUNDLE PASSED</a>
-<a id="labelLink4" href="hrefValue;jsessionid=44AFF596AD877039C6F1F0C808C4497B" coords="coords" hreflang="hreflang" rel="rel" rev="rev" shape="shape"></a>
-<a id="linkImage" href="hrefValue;jsessionid=44AFF596AD877039C6F1F0C808C4497B"><img src="duke.gif;jsessionid=44AFF596AD877039C6F1F0C808C4497B" /></a>
-<a id="linkImage2" href="hrefValue;jsessionid=44AFF596AD877039C6F1F0C808C4497B"><img src="resduke.gif;jsessionid=44AFF596AD877039C6F1F0C808C4497B" /></a>
-<a id="paramLink" href="hrefValue;jsessionid=44AFF596AD877039C6F1F0C808C4497B?parameter1=param_value1&parameter2=param_value2"><img src="resduke.gif;jsessionid=44AFF596AD877039C6F1F0C808C4497B" /></a>
+<a id="labelLink1" name="labelLink1" href="hrefValue;jsessionid=44AFF596AD877039C6F1F0C808C4497B">PASSED</a>
+<a id="labelLink2" name="labelLink2" href="hrefValue;jsessionid=44AFF596AD877039C6F1F0C808C4497B">model label</a>
+<a id="labelLink3" name="labelLink3" href="hrefValue;jsessionid=44AFF596AD877039C6F1F0C808C4497B">RES-BUNDLE PASSED</a>
+<a id="labelLink4" name="labelLink4" href="hrefValue;jsessionid=44AFF596AD877039C6F1F0C808C4497B" coords="coords" hreflang="hreflang" rel="rel" rev="rev" shape="shape"></a>
+<a id="linkImage" name="linkImage" href="hrefValue;jsessionid=44AFF596AD877039C6F1F0C808C4497B"><img src="duke.gif;jsessionid=44AFF596AD877039C6F1F0C808C4497B" /></a>
+<a id="linkImage2" name="linkImage2" href="hrefValue;jsessionid=44AFF596AD877039C6F1F0C808C4497B"><img src="resduke.gif;jsessionid=44AFF596AD877039C6F1F0C808C4497B" /></a>
+<a id="paramLink" name="paramLink" href="hrefValue;jsessionid=44AFF596AD877039C6F1F0C808C4497B?parameter1=param_value1&parameter2=param_value2"><img src="resduke.gif;jsessionid=44AFF596AD877039C6F1F0C808C4497B" /></a>
 <a id="_id0:labelLink1" href="#" onclick="clearFormHiddenParams__id0('_id0');document.forms['_id0']['_id0:_idcl'].value='_id0:labelLink1'; document.forms['_id0'].submit(); return false;">PASSED</a><input type="hidden" name="_id0:_idcl" /><script type="text/javascript" language="Javascript"<!--
 
 function clearFormHiddenParams__id0(curFormName) {

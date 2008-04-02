@@ -1,5 +1,5 @@
 /*
- * $Id: OutputLinkRenderer.java,v 1.18 2005/05/16 20:16:29 rlubke Exp $
+ * $Id: OutputLinkRenderer.java,v 1.19 2005/06/08 19:45:05 edburns Exp $
  */
 
 /*
@@ -30,7 +30,7 @@ import org.apache.commons.logging.LogFactory;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: OutputLinkRenderer.java,v 1.18 2005/05/16 20:16:29 rlubke Exp $
+ * @version $Id: OutputLinkRenderer.java,v 1.19 2005/06/08 19:45:05 edburns Exp $
  */
 
 public class OutputLinkRenderer extends HtmlBasicRenderer {
@@ -127,8 +127,10 @@ public class OutputLinkRenderer extends HtmlBasicRenderer {
         ResponseWriter writer = context.getResponseWriter();
         assert (writer != null);
         writer.startElement("a", component);
-        writeIdAttributeIfNecessary(context, writer, component);
-
+        String writtenId = writeIdAttributeIfNecessary(context, writer, component);
+        if (null != writtenId) {
+            writer.writeAttribute("name", writtenId, "name");
+        }
         // render an empty value for href if it is not specified
         if (null == hrefVal || 0 == hrefVal.length()) {
             hrefVal = "";

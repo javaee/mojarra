@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderer.java,v 1.92 2005/05/16 20:16:27 rlubke Exp $
+ * $Id: HtmlBasicRenderer.java,v 1.93 2005/06/08 19:45:05 edburns Exp $
  */
 
 /*
@@ -490,13 +490,13 @@ public abstract class HtmlBasicRenderer extends Renderer {
     }
 
 
-    protected void writeIdAttributeIfNecessary(FacesContext context,
+    protected String writeIdAttributeIfNecessary(FacesContext context,
                                                ResponseWriter writer,
                                                UIComponent component) {
-        String id;
+        String id = null;
         if (shouldWriteIdAttribute(component)) {
             try {
-                writer.writeAttribute("id", component.getClientId(context),
+                writer.writeAttribute("id", id = component.getClientId(context),
                                       "id");
             } catch (IOException e) {
                 if (log.isDebugEnabled()) {
@@ -505,6 +505,7 @@ public abstract class HtmlBasicRenderer extends Renderer {
                 }
             }
         }
+        return id;
     }
 
 

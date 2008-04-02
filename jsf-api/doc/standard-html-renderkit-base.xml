@@ -1679,7 +1679,10 @@
       hand side.  The name and the value must be URLEncoded.  Each
       UIParameter instance is separeted by an ampersand, as dictated in
       the URL spec.  If the "styleClass" attribute is specified, render
-      its value as the value of the "class" attribute.]]>
+      its value as the value of the "class" attribute.  If the "id" attribute
+      is specified, follow the same steps as mentioned in the 
+      "<a href="renderkit-summary.html">General
+      Notes on Encoding</a>" regarding the "id" attribute for UIInput components.]]>
             </description>
             <component-family>javax.faces.Output</component-family>
             <renderer-type>javax.faces.Link</renderer-type>
