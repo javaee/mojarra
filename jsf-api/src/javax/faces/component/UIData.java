@@ -44,7 +44,6 @@ import javax.faces.model.ScalarDataModel;
 import javax.servlet.jsp.jstl.sql.Result;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.sql.ResultSet;
 import java.util.Collections;
 import java.util.HashMap;
@@ -119,7 +118,7 @@ public class UIData extends UIComponentBase
      * instantiated if requested.  This object is not part of the saved
      * and restored state of the component.</p>
      */
-    private transient DataModel model = null;
+    private DataModel model = null;
     
     
     /**
@@ -129,7 +128,7 @@ public class UIData extends UIComponentBase
      * this value is restored to the request map.
      */
     
-    private transient Object oldVar;
+    private Object oldVar;
 
 
     /**
@@ -154,6 +153,7 @@ public class UIData extends UIComponentBase
      * the <code>rowIndex</code> value of the parent, per-row state
      * information is actually preserved.</p>
      */
+    @SuppressWarnings({"CollectionWithoutInitialCapacity"})
     private Map<String,SavedState> saved = new HashMap<String,SavedState>();
 
 
@@ -192,7 +192,7 @@ public class UIData extends UIComponentBase
 	}
 	ValueExpression ve = getValueExpression("first");
 	if (ve != null) {
-	    Integer value = null;
+	    Integer value;
 	    try {
 		value = (Integer) ve.getValue(getFacesContext().getELContext());
 	    }
@@ -452,7 +452,7 @@ public class UIData extends UIComponentBase
 	}
 	ValueExpression ve = getValueExpression("rows");
 	if (ve != null) {
-	    Integer value = null;
+	    Integer value;
 	    try {
 		value = (Integer) ve.getValue(getFacesContext().getELContext());
 	    }
@@ -873,6 +873,7 @@ public class UIData extends UIComponentBase
 
 	setDataModel(null); // re-evaluate even with server-side state saving
         if (!keepSaved(context)) {
+            //noinspection CollectionWithoutInitialCapacity
             saved = new HashMap<String,SavedState>();
         }
         super.encodeBegin(context);
@@ -928,7 +929,8 @@ public class UIData extends UIComponentBase
 
 	setDataModel(null); // Re-evaluate even with server-side state saving
 	if (null == saved || !keepSaved(context)) {
-	    saved = new HashMap<String,SavedState>(); // We don't need saved state here
+        //noinspection CollectionWithoutInitialCapacity
+        saved = new HashMap<String,SavedState>(); // We don't need saved state here
 	}
 
 	iterate(context, PhaseId.APPLY_REQUEST_VALUES);
@@ -1129,8 +1131,7 @@ public class UIData extends UIComponentBase
 	setRowIndex(-1);
 	Iterator facets = getFacets().keySet().iterator();
 	while (facets.hasNext()) {
-	    UIComponent facet = (UIComponent)
-                getFacets().get(facets.next());
+	    UIComponent facet = getFacets().get(facets.next());
 	    if (phaseId == PhaseId.APPLY_REQUEST_VALUES) {
 		facet.processDecodes(context);
 	    } else if (phaseId == PhaseId.PROCESS_VALIDATIONS) {
@@ -1155,8 +1156,7 @@ public class UIData extends UIComponentBase
 	    }
 	    Iterator columnFacets = column.getFacets().keySet().iterator();
 	    while (columnFacets.hasNext()) {
-		UIComponent columnFacet = (UIComponent)
-		    column.getFacets().get(columnFacets.next());
+		UIComponent columnFacet = column.getFacets().get(columnFacets.next());
 		if (phaseId == PhaseId.APPLY_REQUEST_VALUES) {
 		    columnFacet.processDecodes(context);
 		} else if (phaseId == PhaseId.PROCESS_VALIDATIONS) {
@@ -1304,7 +1304,7 @@ public class UIData extends UIComponentBase
         if (component instanceof EditableValueHolder) {
             EditableValueHolder input = (EditableValueHolder) component;
             String clientId = component.getClientId(context);
-            SavedState state = (SavedState) saved.get(clientId);
+            SavedState state = saved.get(clientId);
             if (state == null) {
                 state = new SavedState();
             }
@@ -1364,7 +1364,7 @@ public class UIData extends UIComponentBase
         if (component instanceof EditableValueHolder) {
             EditableValueHolder input = (EditableValueHolder) component;
             String clientId = component.getClientId(context);
-            SavedState state = (SavedState) saved.get(clientId);
+            SavedState state = saved.get(clientId);
             if (state == null) {
                 state = new SavedState();
                 saved.put(clientId, state);
@@ -1397,11 +1397,9 @@ public class UIData extends UIComponentBase
 
 
 // Private class to represent saved state information
-class SavedState implements Serializable {
+class SavedState {
 
     private Object submittedValue;
-    private static final long serialVersionUID = 2920252657338389849L;
-
 
     Object getSubmittedValue() {
 	return (this.submittedValue);
