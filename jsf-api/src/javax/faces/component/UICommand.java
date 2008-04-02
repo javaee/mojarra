@@ -1,5 +1,5 @@
 /*
- * $Id: UICommand.java,v 1.60 2004/01/06 23:02:39 eburns Exp $
+ * $Id: UICommand.java,v 1.61 2004/01/08 21:21:09 eburns Exp $
  */
 
 /*
@@ -46,7 +46,7 @@ import java.util.List;
  */
 
 public class UICommand extends UIComponentBase
-    implements ActionSource, ValueHolder {
+    implements ActionSource {
 
 
     // ------------------------------------------------------------ Constructors
@@ -144,13 +144,6 @@ public class UICommand extends UIComponentBase
 
 
     // -------------------------------------------------- ValueHolder Properties
-
-
-    public Object getLocalValue() {
-
-	return (this.value);
-
-    }
 
 
     public Object getValue() {

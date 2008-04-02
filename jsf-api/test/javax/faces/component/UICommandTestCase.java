@@ -1,5 +1,5 @@
 /*
- * $Id: UICommandTestCase.java,v 1.21 2003/12/17 23:25:56 eburns Exp $
+ * $Id: UICommandTestCase.java,v 1.22 2004/01/08 21:21:18 eburns Exp $
  */
 
 /*
@@ -20,7 +20,6 @@ import javax.faces.application.Application;
 import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UICommand;
-import javax.faces.component.ValueHolder;
 import javax.faces.event.ActionEvent;
 import javax.faces.el.MethodBinding;
 import javax.faces.event.ActionListener;
@@ -39,7 +38,7 @@ import junit.framework.TestSuite;
  * <p>Unit tests for {@link UICommand}.</p>
  */
 
-public class UICommandTestCase extends ValueHolderTestCaseBase {
+public class UICommandTestCase extends UIComponentBaseTestCase {
 
 
     // ------------------------------------------------------------ Constructors
@@ -63,6 +62,7 @@ public class UICommandTestCase extends ValueHolderTestCaseBase {
     public void setUp() {
         super.setUp();
         component = new UICommand();
+        expectedId = null;
         expectedRendererType = "Button";
     }
 
@@ -122,6 +122,17 @@ public class UICommandTestCase extends ValueHolderTestCaseBase {
         UICommand command = (UICommand) component;
 	Application app = facesContext.getApplication();
 	MethodBinding methodBinding = null;
+
+        assertEquals(command.getValue(),
+                     (String) component.getAttributes().get("value"));
+        command.setValue("foo");
+        assertEquals("foo", (String) component.getAttributes().get("value"));
+        command.setValue(null);
+        assertNull((String) component.getAttributes().get("value"));
+        component.getAttributes().put("value", "bar");
+        assertEquals("bar", command.getValue());
+        component.getAttributes().put("value", null);
+        assertNull(command.getValue());
 
         assertEquals(command.getAction(),
                      (MethodBinding) command.getAttributes().get("action"));
@@ -268,12 +279,17 @@ public class UICommandTestCase extends ValueHolderTestCaseBase {
 
     }
 
+    // Suppress lifecycle tests since we do not have a renderer
+    public void testLifecycleManagement() {
+    }
+
     // Test a pristine UICommand instance
     public void testPristine() {
 
         super.testPristine();
         UICommand command = (UICommand) component;
 
+        assertNull("no value", command.getValue());
         assertNull("no action", command.getAction());
         assertNull("no actionListener", command.getActionListener());
 
@@ -295,6 +311,14 @@ public class UICommandTestCase extends ValueHolderTestCaseBase {
         super.testPropertiesValid();
         UICommand command = (UICommand) component;
 	Application app = facesContext.getApplication();
+
+        // value
+        command.setValue("foo.bar");
+        assertEquals("expected value",
+                     "foo.bar", command.getValue());
+        command.setValue(null);
+        assertNull("erased value", command.getValue());
+
 	MethodBinding methodBinding = null;
 
         command.setAction(methodBinding = 

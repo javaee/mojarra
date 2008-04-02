@@ -1,5 +1,5 @@
 /*
- * $Id: OutputLinkRenderer.java,v 1.3 2003/12/24 19:11:21 jvisvanathan Exp $
+ * $Id: OutputLinkRenderer.java,v 1.4 2004/01/08 21:21:33 eburns Exp $
  */
 
 /*
@@ -36,7 +36,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: OutputLinkRenderer.java,v 1.3 2003/12/24 19:11:21 jvisvanathan Exp $
+ * @version $Id: OutputLinkRenderer.java,v 1.4 2004/01/08 21:21:33 eburns Exp $
  */
 
 public class OutputLinkRenderer extends HtmlBasicRenderer {
@@ -88,6 +88,10 @@ public class OutputLinkRenderer extends HtmlBasicRenderer {
 	return true;
     }
 
+    protected Object getValue(UIComponent component) {
+        return ((UIOutput) component).getValue();
+    }
+
     private String clientId = null;
     public void encodeBegin(FacesContext context, UIComponent component)
         throws IOException {
@@ -99,12 +103,18 @@ public class OutputLinkRenderer extends HtmlBasicRenderer {
 	String hrefVal = getCurrentValue(context, component);
 
         // suppress rendering if "rendered" property on the output is
-        // false, or if we have no href.
-        if (!output.isRendered() || null == hrefVal || 0 == hrefVal.length()) {
+        // false
+        if (!output.isRendered()) {
             return;
         }
         ResponseWriter writer = context.getResponseWriter();
         Util.doAssert( writer != null );
+	writer.startElement("a", component);
+
+        // Go no further if  we have no href.
+        if (null == hrefVal || 0 == hrefVal.length()) {
+            return;
+        }
 
 	clientId = output.getClientId(context);
 
@@ -115,7 +125,6 @@ public class OutputLinkRenderer extends HtmlBasicRenderer {
 	int 
 	    i = 0,
 	    len = paramList.length;
-	writer.startElement("a", component);
 	sb = new StringBuffer();
 	sb.append(hrefVal);
 	if (0 < len) {

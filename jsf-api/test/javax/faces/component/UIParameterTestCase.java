@@ -1,5 +1,5 @@
 /*
- * $Id: UIParameterTestCase.java,v 1.14 2003/12/17 15:11:14 rkitain Exp $
+ * $Id: UIParameterTestCase.java,v 1.15 2004/01/08 21:21:20 eburns Exp $
  */
 
 /*
@@ -23,7 +23,7 @@ import junit.framework.TestSuite;
  * <p>Unit tests for {@link UIParameter}.</p>
  */
 
-public class UIParameterTestCase extends ValueHolderTestCaseBase {
+public class UIParameterTestCase extends UIComponentBaseTestCase {
 
 
     // ------------------------------------------------------------ Constructors
@@ -72,6 +72,17 @@ public class UIParameterTestCase extends ValueHolderTestCaseBase {
         super.testAttributesTransparency();
         UIParameter parameter = (UIParameter) component;
 
+        assertEquals(parameter.getValue(),
+                     (String) component.getAttributes().get("value"));
+        parameter.setValue("foo");
+        assertEquals("foo", (String) component.getAttributes().get("value"));
+        parameter.setValue(null);
+        assertNull((String) component.getAttributes().get("value"));
+        component.getAttributes().put("value", "bar");
+        assertEquals("bar", parameter.getValue());
+        component.getAttributes().put("value", null);
+        assertNull(parameter.getValue());
+
         assertEquals(parameter.getName(),
                      (String) parameter.getAttributes().get("name"));
         parameter.setName("foo");
@@ -85,6 +96,9 @@ public class UIParameterTestCase extends ValueHolderTestCaseBase {
 
     }
 
+    // Suppress lifecycle tests since we do not have a renderer
+    public void testLifecycleManagement() {
+    }
 
     // Test a pristine UIParameter instance
     public void testPristine() {
@@ -92,6 +106,7 @@ public class UIParameterTestCase extends ValueHolderTestCaseBase {
         super.testPristine();
         UIParameter parameter = (UIParameter) component;
 
+        assertNull("no value", parameter.getValue());
         assertNull("no name", parameter.getName());
 
     }
@@ -111,6 +126,13 @@ public class UIParameterTestCase extends ValueHolderTestCaseBase {
 
         super.testPropertiesValid();
         UIParameter parameter = (UIParameter) component;
+
+        // value
+        parameter.setValue("foo.bar");
+        assertEquals("expected value",
+                     "foo.bar", parameter.getValue());
+        parameter.setValue(null);
+        assertNull("erased value", parameter.getValue());
 
         parameter.setName("foo");
         assertEquals("foo", parameter.getName());

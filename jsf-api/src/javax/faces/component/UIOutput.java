@@ -1,5 +1,5 @@
 /*
- * $Id: UIOutput.java,v 1.40 2003/11/08 01:15:25 craigmcc Exp $
+ * $Id: UIOutput.java,v 1.41 2004/01/08 21:21:10 eburns Exp $
  */
 
 /*
@@ -53,7 +53,7 @@ import javax.faces.el.ValueBinding;
  */
 
 public class UIOutput extends UIComponentBase
-    implements ConvertibleValueHolder {
+    implements ValueHolder {
 
 
     // ------------------------------------------------------------ Constructors

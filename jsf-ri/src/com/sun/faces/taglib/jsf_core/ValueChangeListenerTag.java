@@ -1,5 +1,5 @@
 /*
- * $Id: ValueChangeListenerTag.java,v 1.2 2003/12/17 15:14:14 rkitain Exp $
+ * $Id: ValueChangeListenerTag.java,v 1.3 2004/01/08 21:21:38 eburns Exp $
  */
 
 /*
@@ -13,7 +13,7 @@ package com.sun.faces.taglib.jsf_core;
 import com.sun.faces.util.Util;
 
 import javax.faces.component.UIComponent;
-import javax.faces.component.UIInput;
+import javax.faces.component.EditableValueHolder;
 import javax.faces.component.UISelectBoolean;
 import javax.faces.component.UISelectOne;
 import javax.faces.component.UISelectMany;
@@ -114,8 +114,8 @@ public class ValueChangeListenerTag extends TagSupport {
         // We need to cast here because addValueChangeListener
         // method does not apply to al components (it is not a method on
         // UIComponent/UIComponentBase).
-        if (component instanceof UIInput) {
-            ((UIInput)component).addValueChangeListener(handler);
+        if (component instanceof EditableValueHolder) {
+            ((EditableValueHolder)component).addValueChangeListener(handler);
         }
         
         return (SKIP_BODY);

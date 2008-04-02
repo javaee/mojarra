@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectItemTestCase.java,v 1.8 2003/12/17 15:11:14 rkitain Exp $
+ * $Id: UISelectItemTestCase.java,v 1.9 2004/01/08 21:21:21 eburns Exp $
  */
 
 /*
@@ -15,8 +15,8 @@ import java.util.Iterator;
 import java.util.List;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UISelectItem;
-import javax.faces.component.ValueHolder;
 import javax.faces.context.FacesContext;
+import javax.faces.model.SelectItem;
 import javax.faces.TestUtil;
 import junit.framework.TestCase;
 import junit.framework.Test;
@@ -27,7 +27,7 @@ import junit.framework.TestSuite;
  * <p>Unit tests for {@link UISelectItem}.</p>
  */
 
-public class UISelectItemTestCase extends ValueHolderTestCaseBase {
+public class UISelectItemTestCase extends UIComponentBaseTestCase {
 
 
     // ------------------------------------------------------------ Constructors
@@ -50,6 +50,7 @@ public class UISelectItemTestCase extends ValueHolderTestCaseBase {
     public void setUp() {
         super.setUp();
         component = new UISelectItem();
+        expectedId = null;
         expectedRendererType = null;
     }
 
@@ -67,6 +68,9 @@ public class UISelectItemTestCase extends ValueHolderTestCaseBase {
 
 
     // ------------------------------------------------- Individual Test Methods
+    // Suppress lifecycle tests since we do not have a renderer
+    public void testLifecycleManagement() {
+    }
 
 
     // Test attribute-property transparency
@@ -74,6 +78,19 @@ public class UISelectItemTestCase extends ValueHolderTestCaseBase {
 
         super.testAttributesTransparency();
         UISelectItem selectItem = (UISelectItem) component;
+
+        assertEquals(selectItem.getValue(),
+                     component.getAttributes().get("value"));
+        SelectItem item = new SelectItem("foo");
+        selectItem.setValue(item);
+        assertEquals(item, component.getAttributes().get("value"));
+        selectItem.setValue(null);
+
+        assertNull(component.getAttributes().get("value"));
+        component.getAttributes().put("value", "bar");
+        assertEquals("bar", selectItem.getValue());
+        component.getAttributes().put("value", null);
+        assertNull(selectItem.getValue());
 
         assertEquals(selectItem.getItemDescription(),
                      (String) selectItem.getAttributes().get("itemDescription"));
@@ -117,6 +134,7 @@ public class UISelectItemTestCase extends ValueHolderTestCaseBase {
         super.testPristine();
         UISelectItem selectItem = (UISelectItem) component;
 
+        assertNull("no value", selectItem.getValue());
         assertNull("no itemDescription", selectItem.getItemDescription());
         assertNull("no itemLabel", selectItem.getItemLabel());
         assertNull("no itemValue", selectItem.getItemValue());
@@ -138,6 +156,14 @@ public class UISelectItemTestCase extends ValueHolderTestCaseBase {
 
         super.testPropertiesValid();
         UISelectItem selectItem = (UISelectItem) component;
+
+        // value
+        SelectItem item = new SelectItem("foo");
+        selectItem.setValue(item);
+        assertEquals("expected value",
+                     item, selectItem.getValue());
+        selectItem.setValue(null);
+        assertNull("erased value", selectItem.getValue());
 
         selectItem.setItemDescription("foo");
         assertEquals("foo", selectItem.getItemDescription());

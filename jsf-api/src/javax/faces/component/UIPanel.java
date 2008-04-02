@@ -1,5 +1,5 @@
 /*
- * $Id: UIPanel.java,v 1.22 2003/11/08 01:15:26 craigmcc Exp $
+ * $Id: UIPanel.java,v 1.23 2004/01/08 21:21:11 eburns Exp $
  */
 
 /*
@@ -21,7 +21,7 @@ import javax.faces.el.ValueBinding;
  * layout of its child components.</p>
  */
 
-public class UIPanel extends UIComponentBase implements ValueHolder {
+public class UIPanel extends UIComponentBase {
 
 
     // ------------------------------------------------------------ Constructors
@@ -39,12 +39,6 @@ public class UIPanel extends UIComponentBase implements ValueHolder {
     }
 
 
-    // ------------------------------------------------------ Instance Variables
-
-
-    private Object value = null;
-
-
     // -------------------------------------------------- UIComponent Properties
 
 
@@ -57,60 +51,4 @@ public class UIPanel extends UIComponentBase implements ValueHolder {
         return (true);
 
     }
-
-
-    // -------------------------------------------------- ValueHolder Properties
-
-
-    public Object getLocalValue() {
-
-	return (this.value);
-
-    }
-
-
-    public Object getValue() {
-
-	if (this.value != null) {
-	    return (this.value);
-	}
-	ValueBinding vb = getValueBinding("value");
-	if (vb != null) {
-	    return (vb.getValue(getFacesContext()));
-	} else {
-	    return (null);
-	}
-
-    }
-
-
-    public void setValue(Object value) {
-
-        this.value = value;
-
-    }
-
-
-    // ----------------------------------------------------- StateHolder Methods
-
-
-    public Object saveState(FacesContext context) {
-
-        Object values[] = new Object[2];
-        values[0] = super.saveState(context);
-        values[1] = value;
-        return (values);
-
-    }
-
-
-    public void restoreState(FacesContext context, Object state) {
-
-        Object values[] = (Object[]) state;
-        super.restoreState(context, values[0]);
-        value = values[1];
-
-    }
-
-
 }

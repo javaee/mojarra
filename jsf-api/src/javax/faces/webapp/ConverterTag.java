@@ -1,5 +1,5 @@
 /*
- * $Id: ConverterTag.java,v 1.5 2003/12/17 15:11:05 rkitain Exp $
+ * $Id: ConverterTag.java,v 1.6 2004/01/08 21:21:16 eburns Exp $
  */
 
 /*
@@ -10,7 +10,7 @@
 package javax.faces.webapp;
 
 
-import javax.faces.component.ConvertibleValueHolder;
+import javax.faces.component.ValueHolder;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
@@ -28,7 +28,7 @@ import javax.faces.FactoryFinder;
 /**
  * <p><strong>ConverterTag</strong> is a base class for all JSP custom actions
  * that create and register a <code>Converter</code> instance on the
- * {@link ConvertibleValueHolder} associated with our most immediate
+ * {@link ValueHolder} associated with our most immediate
  * surrounding instance of a tag whose implementation class is a subclass
  * of {@link UIComponentTag}.  To avoid creating duplicate instances when
  * a page is redisplayed, creation and registration of a {@link Converter}
@@ -107,7 +107,7 @@ public class ConverterTag extends TagSupport {
 
         // Create and register an instance with the appropriate component
         Converter converter = createConverter();
-        ((ConvertibleValueHolder) tag.getComponentInstance()).setConverter(converter);
+        ((ValueHolder) tag.getComponentInstance()).setConverter(converter);
         return (SKIP_BODY);
 
     }

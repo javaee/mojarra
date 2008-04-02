@@ -78,7 +78,7 @@ import java.util.Map;
  */
 
 public class UIData extends UIComponentBase
-    implements NamingContainer, ValueHolder {
+    implements NamingContainer {
 
 
     // ------------------------------------------------------------ Constructors
@@ -301,13 +301,13 @@ public class UIData extends UIComponentBase
      * {@link UIData} must maintain per-row information for each descendant
      * as follows:<p>
      * <ul>
-     * <li>If the descendant is an instance of <code>UIInput</code>, save
+     * <li>If the descendant is an instance of <code>EditableValueHolder</code>, save
      *     the state of its <code>localValue</code> property.</li>
-     * <li>If the descendant is an instance of <code>UIInput</code>,
+     * <li>If the descendant is an instance of <code>EditableValueHolder</code>,
      *     save the state of the <code>localValueSet</code> property.</li>
-     * <li>If the descendant is an instance of <code>UIInput</code>, save
+     * <li>If the descendant is an instance of <code>EditableValueHolder</code>, save
      *     the state of the <code>valid</code> property.</li>
-     * <li>If the descendant is an instance of <code>UIInput</code>,
+     * <li>If the descendant is an instance of <code>EditableValueHolder</code>,
      *     save the state of the <code>submittedValue</code> property.</li>
      * </ul>
      *
@@ -316,13 +316,13 @@ public class UIData extends UIComponentBase
      * current <code>rowIndex</code> and call setters for each descendant
      * as follows:</p>
      * <ul>
-     * <li>If the descendant is an instance of <code>UIInput</code>,
+     * <li>If the descendant is an instance of <code>EditableValueHolder</code>,
      *     restore the <code>value</code> property.</li>
-     * <li>If the descendant is an instance of <code>UIInput</code>,
+     * <li>If the descendant is an instance of <code>EditableValueHolder</code>,
      *     restore the state of the <code>localValueSet</code> property.</li>
-     * <li>If the descendant is an instance of <code>UIInput</code>,
+     * <li>If the descendant is an instance of <code>EditableValueHolder</code>,
      *     restore the state of the <code>valid</code> property.</li>
-     * <li>If the descendant is an instance of <code>UIInput</code>,
+     * <li>If the descendant is an instance of <code>EditableValueHolder</code>,
      *     restore the state of the <code>submittedValue</code> property.</li>
      * </ul>
      *
@@ -467,13 +467,6 @@ public class UIData extends UIComponentBase
 
 
     // -------------------------------------------------- ValueHolder Properties
-
-
-    public Object getLocalValue() {
-
-	return (this.value);
-
-    }
 
 
     public Object getValue() {
@@ -705,7 +698,7 @@ public class UIData extends UIComponentBase
             return;
         }
 	iterate(context, PhaseId.PROCESS_VALIDATIONS);
-        // This is not a UIInput, so no further processing is required
+        // This is not a EditableValueHolder, so no further processing is required
 
     }
 
@@ -749,7 +742,7 @@ public class UIData extends UIComponentBase
             return;
         }
 	iterate(context, PhaseId.UPDATE_MODEL_VALUES);
-        // This is not a UIInput, so no further processing is required
+        // This is not a EditableValueHolder, so no further processing is required
 
     }
 
@@ -910,10 +903,10 @@ public class UIData extends UIComponentBase
         String id = component.getId();
         component.setId(id); // Forces client id to be reset
 
-        // Restore state for this component (if it is a UIInput)
-        if (component instanceof UIInput) {
-            UIInput input = (UIInput) component;
-            String clientId = input.getClientId(context);
+        // Restore state for this component (if it is a EditableValueHolder)
+        if (component instanceof EditableValueHolder) {
+            EditableValueHolder input = (EditableValueHolder) component;
+            String clientId = component.getClientId(context);
             SavedState state = (SavedState) saved.get(clientId);
             if (state == null) {
                 state = new SavedState();
@@ -964,9 +957,9 @@ public class UIData extends UIComponentBase
     private void saveDescendantState(UIComponent component,
                                      FacesContext context) {
 
-        // Save state for this component (if it is a UIInput)
-        if (component instanceof UIInput) {
-            UIInput input = (UIInput) component;
+        // Save state for this component (if it is a EditableValueHolder)
+        if (component instanceof EditableValueHolder) {
+            EditableValueHolder input = (EditableValueHolder) component;
             String clientId = component.getClientId(context);
             SavedState state = (SavedState) saved.get(clientId);
             if (state == null) {

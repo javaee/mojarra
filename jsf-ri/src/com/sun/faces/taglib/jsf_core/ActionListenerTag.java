@@ -1,5 +1,5 @@
 /*
- * $Id: ActionListenerTag.java,v 1.9 2003/12/17 15:14:12 rkitain Exp $
+ * $Id: ActionListenerTag.java,v 1.10 2004/01/08 21:21:38 eburns Exp $
  */
 
 /*
@@ -12,7 +12,7 @@ package com.sun.faces.taglib.jsf_core;
 import com.sun.faces.util.Util;
 
 import javax.faces.component.UIComponent;
-import javax.faces.component.UICommand;
+import javax.faces.component.ActionSource;
 import javax.faces.event.ActionListener;
 import javax.faces.webapp.UIComponentTag;
 import javax.servlet.jsp.JspException;
@@ -108,10 +108,10 @@ public class ActionListenerTag extends TagSupport {
             throw new JspException(Util.getExceptionMessage(Util.NULL_COMPONENT_ERROR_MESSAGE_ID));
         }
 
-        //only apply to UICommand components
+        //only apply to ActionSource components
 
-        if (component instanceof UICommand) {
-            ((UICommand)component).addActionListener(handler);
+        if (component instanceof ActionSource) {
+            ((ActionSource)component).addActionListener(handler);
         }
 
         return (SKIP_BODY);

@@ -1,5 +1,5 @@
 /*
- * $Id: FacetTagTestCase.java,v 1.2 2003/12/17 15:11:31 rkitain Exp $
+ * $Id: FacetTagTestCase.java,v 1.3 2004/01/08 21:21:28 eburns Exp $
  */
 
 /*
@@ -19,7 +19,6 @@ import java.util.Map;
 import javax.faces.FactoryFinder;
 import javax.faces.application.Application;
 import javax.faces.application.ApplicationFactory;
-import javax.faces.component.ConvertibleValueHolder;
 import javax.faces.component.NamingContainer;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIOutput;

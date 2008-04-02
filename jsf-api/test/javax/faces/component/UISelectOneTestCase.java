@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectOneTestCase.java,v 1.16 2004/01/06 14:52:19 rkitain Exp $
+ * $Id: UISelectOneTestCase.java,v 1.17 2004/01/08 21:21:21 eburns Exp $
  */
 
 /*
@@ -15,7 +15,6 @@ import java.util.Iterator;
 import java.util.List;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UISelectOne;
-import javax.faces.component.ValueHolder;
 import junit.framework.TestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;

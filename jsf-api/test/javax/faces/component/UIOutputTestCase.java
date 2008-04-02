@@ -1,5 +1,5 @@
 /*
- * $Id: UIOutputTestCase.java,v 1.16 2003/12/17 15:11:13 rkitain Exp $
+ * $Id: UIOutputTestCase.java,v 1.17 2004/01/08 21:21:20 eburns Exp $
  */
 
 /*
@@ -16,7 +16,6 @@ import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIOutput;
 import javax.faces.component.StateHolder;
-import javax.faces.component.ValueHolder;
 import javax.faces.convert.Converter;
 import javax.faces.convert.ConverterException;
 import javax.faces.convert.LongConverter;
@@ -31,7 +30,7 @@ import junit.framework.TestSuite;
  * <p>Unit tests for {@link UIOutput}.</p>
  */
 
-public class UIOutputTestCase extends ConvertibleValueHolderTestCaseBase {
+public class UIOutputTestCase extends ValueHolderTestCaseBase {
 
 
     // ------------------------------------------------------------ Constructors

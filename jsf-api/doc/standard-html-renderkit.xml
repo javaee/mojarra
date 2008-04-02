@@ -1586,15 +1586,6 @@
     <property>
       <display-name></display-name>
       <icon></icon>
-      <property-name>value</property-name>
-      <property-class>java.lang.String</property-class>
-      <property-extension>
-        <tag-attribute>yes</tag-attribute>
-      </property-extension>
-    </property>
-    <property>
-      <display-name></display-name>
-      <icon></icon>
       <property-name>columns</property-name>
       <property-class>int</property-class>
       <property-extension>
@@ -1697,15 +1688,6 @@
     <component-type>PanelGroup</component-type>
     <component-class>javax.faces.component.html.HtmlPanelGroup</component-class>
     &base-props;
-    <property>
-      <display-name></display-name>
-      <icon></icon>
-      <property-name>value</property-name>
-      <property-class>java.lang.String</property-class>
-      <property-extension>
-        <tag-attribute>yes</tag-attribute>
-      </property-extension>
-    </property>
   </component>
 
   <component>

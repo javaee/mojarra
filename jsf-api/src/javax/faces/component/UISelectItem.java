@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectItem.java,v 1.27 2004/01/06 14:52:12 rkitain Exp $
+ * $Id: UISelectItem.java,v 1.28 2004/01/08 21:21:11 eburns Exp $
  */
 
 /*
@@ -34,7 +34,7 @@ import javax.faces.model.SelectItem;
  * </ul>
  */
 
-public class UISelectItem extends UIComponentBase implements ValueHolder {
+public class UISelectItem extends UIComponentBase {
 
 
     // ------------------------------------------------------------ Constructors
@@ -155,13 +155,6 @@ public class UISelectItem extends UIComponentBase implements ValueHolder {
 
 
     // -------------------------------------------------- ValueHolder Properties
-
-
-    public Object getLocalValue() {
-
-	return (this.value);
-
-    }
 
 
     public Object getValue() {

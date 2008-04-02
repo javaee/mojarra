@@ -1,5 +1,5 @@
 /*
- * $Id: UIPanelTestCase.java,v 1.13 2003/12/17 15:11:14 rkitain Exp $
+ * $Id: UIPanelTestCase.java,v 1.14 2004/01/08 21:21:20 eburns Exp $
  */
 
 /*
@@ -14,7 +14,6 @@ import java.io.IOException;
 import java.util.Iterator;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIPanel;
-import javax.faces.component.ValueHolder;
 import junit.framework.TestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -24,7 +23,7 @@ import junit.framework.TestSuite;
  * <p>Unit tests for {@link UIPanel}.</p>
  */
 
-public class UIPanelTestCase extends ValueHolderTestCaseBase {
+public class UIPanelTestCase extends UIComponentBaseTestCase {
 
 
     // ------------------------------------------------------------ Constructors
@@ -67,6 +66,9 @@ public class UIPanelTestCase extends ValueHolderTestCaseBase {
 
     // ------------------------------------------------- Individual Test Methods
 
+    // Suppress lifecycle tests since we do not have a renderer
+    public void testLifecycleManagement() {
+    }
 
     // Test a pristine UIPanel instance
     public void testPristine() {
@@ -100,20 +102,6 @@ public class UIPanelTestCase extends ValueHolderTestCaseBase {
 	super.testValueBindings();
 	UIPanel test = (UIPanel) component;
 
-	// "value" property
-	request.setAttribute("foo", "bar");
-	test.setValue(null);
-	assertNull(test.getValue());
-	test.setValueBinding("value", application.createValueBinding("#{foo}"));
-	assertNotNull(test.getValueBinding("value"));
-	assertEquals("bar", test.getValue());
-	test.setValue("baz");
-	assertEquals("baz", test.getValue());
-	test.setValue(null);
-	assertEquals("bar", test.getValue());
-	test.setValueBinding("value", null);
-	assertNull(test.getValueBinding("value"));
-	assertNull(test.getValue());
 
     }
 

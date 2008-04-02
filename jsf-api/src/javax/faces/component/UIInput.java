@@ -1,5 +1,5 @@
 /*
- * $Id: UIInput.java,v 1.57 2004/01/06 23:02:41 eburns Exp $
+ * $Id: UIInput.java,v 1.58 2004/01/08 21:21:10 eburns Exp $
  */
 
 /*
@@ -71,7 +71,7 @@ import java.util.List;
  * <code>setRendererType()</code> method.</p>
  */
 
-public class UIInput extends UIOutput {
+public class UIInput extends UIOutput implements EditableValueHolder {
 
 
     // ------------------------------------------------------ Manifest Constants

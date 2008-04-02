@@ -35,7 +35,6 @@ public class HtmlTaglibGenerator extends GenerateTagBase implements TaglibGenera
     // ConvertibleValueHolder;  This is used to determine if we generate ValueHolder
     // ConvertibleValueHolder code in "setProperties" method;
     //
-    private List valueHolderComponents;
     private List convertibleValueHolderComponents;
 
     // global defaults for html basic tld.  They should be read from config
@@ -48,18 +47,11 @@ public class HtmlTaglibGenerator extends GenerateTagBase implements TaglibGenera
     public static final String RTEXPRVALUE = "false";
 
     public HtmlTaglibGenerator() {
-        valueHolderComponents = new ArrayList();
-	valueHolderComponents.add("UICommand");
-	valueHolderComponents.add("UIData");
-	valueHolderComponents.add("UIGraphic");
-	valueHolderComponents.add("UIOutput");
-	valueHolderComponents.add("UIPanel");
-	valueHolderComponents.add("UIInput");
-	valueHolderComponents.add("UISelectMany");
-	valueHolderComponents.add("UISelectOne");
-	valueHolderComponents.add("UISelectBoolean");
 	convertibleValueHolderComponents = new ArrayList();
 	convertibleValueHolderComponents.add("UIOutput");
+	convertibleValueHolderComponents.add("UIInput");
+	convertibleValueHolderComponents.add("UISelectMany");
+	convertibleValueHolderComponents.add("UISelectOne");
 
 	valueBindingEnabledProperties = new ArrayList();
 	valueBindingEnabledProperties.add("immediate");
@@ -208,35 +200,19 @@ public class HtmlTaglibGenerator extends GenerateTagBase implements TaglibGenera
 	String component = "UI"+componentType;
 	result.append("        "+component+" "+componentType.toLowerCase()+
 	    " = (UI"+componentType+ ")component;\n\n");
-	if (valueHolderComponents.contains(component)) {
-	    result.append("        if (component instanceof ValueHolder) {\n");
-	    result.append("            if (value != null) {\n");
-	    result.append("                if (isValueReference(value)) {\n");
-	    result.append("                    ValueBinding vb = \n");
-	    result.append("                        Util.getValueBinding(value);\n");
-	    result.append("                    "+componentType.toLowerCase()+".setValueBinding(");
-	    result.append("\""+"value\", vb);\n"); 
-	    result.append("                } else {\n"); 
-	    result.append("                    ((ValueHolder)component).setValue(value);\n");
-	    result.append("                }\n");
-	    result.append("            }\n");
-	    result.append("        }\n\n");
-	}
 	if (convertibleValueHolderComponents.contains(component)) {
-	    result.append("        if (component instanceof ConvertibleValueHolder) {\n");
-	    result.append("            if (converter != null) {\n");
-	    result.append("                if (isValueReference(converter)) {\n");
+	    result.append("      if (converter != null) {\n");
+	    result.append("          if (isValueReference(converter)) {\n");
 	    result.append("                    ValueBinding vb = \n");
 	    result.append("                        Util.getValueBinding(converter);\n");
-	    result.append("                    "+componentType.toLowerCase()+".setValueBinding(");
+	    result.append("                "+componentType.toLowerCase()+".setValueBinding(");
 	    result.append("\""+"converter\", vb);\n"); 
-	    result.append("                } else {\n"); 
-	    result.append("                    Converter _converter = (Converter)Util.createInstance("+
+	    result.append("          } else {\n"); 
+	    result.append("              Converter _converter = (Converter)Util.createInstance("+
 	        "converter);\n");
-	    result.append("                    ((ConvertibleValueHolder)component).setConverter(_converter);\n");
-	    result.append("                }\n");
-	    result.append("            }\n");
-	    result.append("        }\n\n");
+	    result.append("              " + componentType.toLowerCase() + ".setConverter(_converter);\n");
+	    result.append("          }\n");
+	    result.append("      }\n\n");
 	}
 
 	Map generated = new HashMap();
@@ -280,33 +256,17 @@ public class HtmlTaglibGenerator extends GenerateTagBase implements TaglibGenera
 	String component = "UI"+componentType;
 	result.append("        "+component+" "+componentType.toLowerCase()+
 	    " = (UI"+componentType+ ")component;\n\n");
-	if (valueHolderComponents.contains(component)) {
-	    result.append("        if (component instanceof ValueHolder) {\n");
-	    result.append("            if (value != null) {\n");
-	    result.append("                if (isValueReference(value)) {\n");
-	    result.append("                    ValueBinding vb = \n");
-	    result.append("                        Util.getValueBinding(value);\n");
-	    result.append("                    "+componentType.toLowerCase()+".setValueBinding(");
-	    result.append("\""+"value\", vb);\n"); 
-	    result.append("                } else {\n"); 
-	    result.append("                    ((ValueHolder)component).setValue(value);\n");
-	    result.append("                }\n");
-	    result.append("            }\n");
-	    result.append("        }\n\n");
-	}
 	if (convertibleValueHolderComponents.contains(component)) {
-	    result.append("        if (component instanceof ConvertibleValueHolder) {\n");
-	    result.append("            if (converter != null) {\n");
-	    result.append("                if (isValueReference(converter)) {\n");
+	    result.append("        if (converter != null) {\n");
+	    result.append("            if (isValueReference(converter)) {\n");
 	    result.append("                    ValueBinding vb = \n");
 	    result.append("                        Util.getValueBinding(converter);\n");
-	    result.append("                    "+componentType.toLowerCase()+".setValueBinding(");
+	    result.append("                "+componentType.toLowerCase()+".setValueBinding(");
 	    result.append("\""+"converter\", vb);\n"); 
-	    result.append("                } else {\n"); 
-	    result.append("                    Converter _converter = (Converter)Util.createInstance("+
+	    result.append("            } else {\n"); 
+	    result.append("                Converter _converter = (Converter)Util.createInstance("+
 	        "converter);\n");
-	    result.append("                    ((ConvertibleValueHolder)component).setConverter(_converter);\n");
-	    result.append("                }\n");
+	    result.append("                "+componentType.toLowerCase()+".setConverter(_converter);\n");
 	    result.append("            }\n");
 	    result.append("        }\n\n");
 	}
@@ -579,8 +539,8 @@ public class HtmlTaglibGenerator extends GenerateTagBase implements TaglibGenera
 	    } else {
 	        if (attributeName.equals("id") || 
 		    attributeName.equals("binding") ||
-		    attributeName.equals("rendered") || attributeName.equals("converter") ||
-		    attributeName.equals("value") || attributeName.equals("valueRef")) {
+		    attributeName.equals("rendered") ||
+                    attributeName.equals("converter")) {
 		    continue;
 		}
 	        if (valueBindingEnabledProperties.contains(attributeName)) {
@@ -640,8 +600,7 @@ public class HtmlTaglibGenerator extends GenerateTagBase implements TaglibGenera
 	    }
 
 	    if (attributeName.equals("binding") || attributeName.equals("id") ||
-	        attributeName.equals("rendered") || attributeName.equals("converter") ||
-		attributeName.equals("value") || attributeName.equals("valueRef")) {
+	        attributeName.equals("rendered") || attributeName.equals("converter")) {
 		continue;
 	    }
 	    if (valueBindingEnabledProperties.contains(attributeName)) {

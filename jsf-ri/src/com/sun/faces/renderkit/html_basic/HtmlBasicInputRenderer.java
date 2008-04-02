@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicInputRenderer.java,v 1.16 2004/01/06 14:53:20 rkitain Exp $
+ * $Id: HtmlBasicInputRenderer.java,v 1.17 2004/01/08 21:21:31 eburns Exp $
  */
 
 /*
@@ -14,7 +14,6 @@ package com.sun.faces.renderkit.html_basic;
 import javax.faces.application.ApplicationFactory;
 import javax.faces.application.Application;
 import javax.faces.component.UIComponent;
-import javax.faces.component.ConvertibleValueHolder;
 import javax.faces.component.ValueHolder;
 import javax.faces.component.UIInput;
 import javax.faces.convert.Converter;
@@ -70,11 +69,19 @@ public abstract class HtmlBasicInputRenderer extends HtmlBasicRenderer {
         }
     }
 
+    protected Object getValue(UIComponent component) {
+        if (component instanceof ValueHolder ) {
+            return ((ValueHolder) component).getValue();
+        }
+
+        return null;
+    }
+
+
     public Object getConvertedValue(FacesContext context, UIComponent component,
             Object submittedValue) throws ConverterException {
         
         String newValue = (String) submittedValue;
-        ValueHolder valueHolder = (ValueHolder) component;
 	// if we have no local value, try to get the valueBinding.
 	ValueBinding valueBinding = component.getValueBinding("value");
         
@@ -83,8 +90,8 @@ public abstract class HtmlBasicInputRenderer extends HtmlBasicRenderer {
         // If there is a converter attribute, use it to to ask application
         // instance for a converter with this identifer.
         
-        if (component instanceof ConvertibleValueHolder) {
-            converter = ((ConvertibleValueHolder) component).getConverter();
+        if (component instanceof ValueHolder) {
+            converter = ((ValueHolder) component).getConverter();
         }
         
 	if (null == converter && null != valueBinding) {

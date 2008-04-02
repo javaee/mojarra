@@ -49,7 +49,6 @@ import java.util.Map;
 import java.util.Collections;
 
 import javax.faces.component.UIComponent;
-import javax.faces.component.ConvertibleValueHolder;
 import javax.faces.component.ValueHolder;
 import javax.faces.convert.Converter;
 import javax.faces.context.FacesContext;
@@ -144,9 +143,9 @@ public class CarCustomizer extends Object {
 
 	    // set the value
 	    // If the component can and does have a converter
-	    if (component instanceof ConvertibleValueHolder &&
+	    if (component instanceof ValueHolder &&
 		(null != (converter = 
-			 ((ConvertibleValueHolder)component).getConverter()))){
+			 ((ValueHolder)component).getConverter()))){
 		valueToSet = converter.getAsObject(context, component, 
 						   curSetting);
 	    }

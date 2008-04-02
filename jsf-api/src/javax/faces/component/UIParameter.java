@@ -1,5 +1,5 @@
 /*
- * $Id: UIParameter.java,v 1.18 2003/11/08 01:15:26 craigmcc Exp $
+ * $Id: UIParameter.java,v 1.19 2004/01/08 21:21:11 eburns Exp $
  */
 
 /*
@@ -33,7 +33,7 @@ import javax.faces.el.ValueBinding;
  * their use of this property.</p>
  */
 
-public class UIParameter extends UIComponentBase implements ValueHolder {
+public class UIParameter extends UIComponentBase {
 
 
     // ------------------------------------------------------------ Constructors
@@ -93,13 +93,6 @@ public class UIParameter extends UIComponentBase implements ValueHolder {
 
 
     // -------------------------------------------------- ValueHolder Properties
-
-
-    public Object getLocalValue() {
-
-	return (this.value);
-
-    }
 
 
     public Object getValue() {

@@ -1,5 +1,5 @@
 /*
- * $Id: SelectItemsTag.java,v 1.2 2003/12/17 15:14:14 rkitain Exp $
+ * $Id: SelectItemsTag.java,v 1.3 2004/01/08 21:21:38 eburns Exp $
  */
 
 /*
@@ -10,6 +10,8 @@
 package com.sun.faces.taglib.jsf_core;
 
 import javax.faces.component.UIComponent;
+import javax.faces.component.UISelectItems;
+import com.sun.faces.util.Util;
 import com.sun.faces.taglib.BaseComponentTag;
 
 /**
@@ -67,6 +69,16 @@ public class SelectItemsTag extends BaseComponentTag
     //
     protected void setProperties(UIComponent component) {
 	super.setProperties(component);
+	UISelectItems selectItems = (UISelectItems) component;
+	
+        if (null != value) {
+            if (isValueReference(value)) {
+                component.setValueBinding("value",
+                                          Util.getValueBinding(value));
+             } else {
+                 selectItems.setValue(value);
+             }
+	}
     }
 
 } // end of class SelectItemsTag

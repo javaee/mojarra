@@ -1,5 +1,5 @@
 /*
- * $Id: Output_LinkTag.java,v 1.3 2003/12/17 15:14:10 rkitain Exp $
+ * $Id: Output_LinkTag.java,v 1.4 2004/01/08 21:21:37 eburns Exp $
  */
 
 /*
@@ -73,6 +73,15 @@ public class Output_LinkTag extends BaseComponentBodyTag
 	super.setProperties(component);
 	UIOutput link = (UIOutput) component;
         // set HTML 4. attributes.
+        if (value != null) {
+	    if (isValueReference(value)) {
+		link.setValueBinding("value", Util.getValueBinding(value));
+	    }
+	    else {
+		link.setValue(value);
+	    }
+        }
+
         if (shape != null) {
 	    if (isValueReference(shape)) {
 		link.setValueBinding("shape", 

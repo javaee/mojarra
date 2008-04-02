@@ -1,5 +1,5 @@
 /*
- * $Id: UIGraphic.java,v 1.29 2003/11/11 00:02:31 eburns Exp $
+ * $Id: UIGraphic.java,v 1.30 2004/01/08 21:21:10 eburns Exp $
  */
 
 /*
@@ -26,7 +26,7 @@ import javax.faces.el.ValueBinding;
  * <code>setRendererType()</code> method.</p>
  */
 
-public class UIGraphic extends UIComponentBase implements ValueHolder {
+public class UIGraphic extends UIComponentBase {
 
 
     // ------------------------------------------------------------ Constructors
@@ -78,13 +78,6 @@ public class UIGraphic extends UIComponentBase implements ValueHolder {
 
 
     // -------------------------------------------------- ValueHolder Properties
-
-
-    public Object getLocalValue() {
-
-	return (this.value);
-
-    }
 
 
     public Object getValue() {

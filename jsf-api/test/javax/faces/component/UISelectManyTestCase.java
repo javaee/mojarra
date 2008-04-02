@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectManyTestCase.java,v 1.18 2004/01/06 14:52:18 rkitain Exp $
+ * $Id: UISelectManyTestCase.java,v 1.19 2004/01/08 21:21:21 eburns Exp $
  */
 
 /*
@@ -15,7 +15,6 @@ import java.util.Iterator;
 import java.util.List;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UISelectMany;
-import javax.faces.component.ValueHolder;
 import junit.framework.TestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;

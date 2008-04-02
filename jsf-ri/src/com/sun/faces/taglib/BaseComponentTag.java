@@ -1,5 +1,5 @@
 /*
- * $Id: BaseComponentTag.java,v 1.16 2003/12/17 15:14:07 rkitain Exp $
+ * $Id: BaseComponentTag.java,v 1.17 2004/01/08 21:21:36 eburns Exp $
  */
 
 /*
@@ -20,7 +20,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import javax.faces.component.UIComponent;
-import javax.faces.component.ConvertibleValueHolder;
 import javax.faces.component.ValueHolder;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
@@ -33,7 +32,7 @@ import javax.servlet.jsp.JspException;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: BaseComponentTag.java,v 1.16 2003/12/17 15:14:07 rkitain Exp $ 
+ * @version $Id: BaseComponentTag.java,v 1.17 2004/01/08 21:21:36 eburns Exp $ 
  */
 
 public abstract class BaseComponentTag extends UIComponentTag
@@ -141,7 +140,7 @@ public abstract class BaseComponentTag extends UIComponentTag
     protected String frame = null;
     protected String rules = null;
 
-    protected Converter converter = null;
+    protected String converter = null;
 
 
     // Relationship Instance Variables
@@ -163,7 +162,7 @@ public abstract class BaseComponentTag extends UIComponentTag
     // Accessors
     //
 
-    public void setConverter(Converter converter) {
+    public void setConverter(String converter) {
         this.converter = converter;
     }
 
@@ -668,21 +667,15 @@ public abstract class BaseComponentTag extends UIComponentTag
     protected void setProperties(UIComponent component) {
         super.setProperties(component);
 
-        if ( component instanceof ValueHolder ) {
-            ValueHolder valueHolder = (ValueHolder)component;
-            if (null != value) {
-                if (isValueReference(value)) {
-                    component.setValueBinding("value",
-                                              Util.getValueBinding(value));
+        if (component instanceof ValueHolder) {
+            if (converter != null) {
+                if (isValueReference(converter)) {
+                    component.setValueBinding("converter",
+                                           Util.getValueBinding(converter));
                 } else {
-                    valueHolder.setValue(value);
+                    Converter _converter = (Converter)Util.createInstance(converter);
+                    ((ValueHolder)component).setConverter(_converter);
                 }
-	    }
-        }	
-
-        if (component instanceof ConvertibleValueHolder) {
-            if (null != converter) {
-                ((ConvertibleValueHolder) component).setConverter(converter);
             }
         }
 

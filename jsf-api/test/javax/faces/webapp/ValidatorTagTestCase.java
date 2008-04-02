@@ -1,5 +1,5 @@
 /*
- * $Id: ValidatorTagTestCase.java,v 1.2 2003/12/17 15:11:33 rkitain Exp $
+ * $Id: ValidatorTagTestCase.java,v 1.3 2004/01/08 21:21:28 eburns Exp $
  */
 
 /*
@@ -19,10 +19,9 @@ import java.util.Map;
 import javax.faces.FactoryFinder;
 import javax.faces.application.Application;
 import javax.faces.application.ApplicationFactory;
-import javax.faces.component.ConvertibleValueHolder;
 import javax.faces.component.NamingContainer;
 import javax.faces.component.UIComponent;
-import javax.faces.component.UIInput;
+import javax.faces.component.EditableValueHolder;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 import javax.faces.event.FacesEvent;
@@ -141,12 +140,12 @@ public class ValidatorTagTestCase extends TagTestCaseBase {
 
         UIComponent component = ctag.getComponentInstance();
         assertNotNull(component);
-        assertEquals(0, ((UIInput) component).getValidators().length);
+        assertEquals(0, ((EditableValueHolder) component).getValidators().length);
         ValidatorTag tag = new ValidatorTag();
         tag.setValidatorId("Length");
         add(tag);
         tag.doStartTag();
-        Validator validator = ((UIInput) component).getValidators()[0];
+        Validator validator = ((EditableValueHolder) component).getValidators()[0];
         assertNotNull(validator);
         assertTrue(validator instanceof LengthValidator);
         tag.doEndTag();
@@ -159,13 +158,13 @@ public class ValidatorTagTestCase extends TagTestCaseBase {
 
         UIComponent component = ctag.getComponentInstance();
         assertNotNull(component);
-        assertEquals(0, ((UIInput) component).getValidators().length);
+        assertEquals(0, ((EditableValueHolder) component).getValidators().length);
         ValidatorTag tag = new ValidatorTag();
         tag.setValidatorId("#{foo}");
         request.setAttribute("foo", "Length");
         add(tag);
         tag.doStartTag();
-        Validator validator = ((UIInput) component).getValidators()[0];
+        Validator validator = ((EditableValueHolder) component).getValidators()[0];
         assertNotNull(validator);
         assertTrue(validator instanceof LengthValidator);
         tag.doEndTag();

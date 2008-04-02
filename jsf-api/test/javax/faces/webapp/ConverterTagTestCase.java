@@ -1,5 +1,5 @@
 /*
- * $Id: ConverterTagTestCase.java,v 1.2 2003/12/17 15:11:30 rkitain Exp $
+ * $Id: ConverterTagTestCase.java,v 1.3 2004/01/08 21:21:28 eburns Exp $
  */
 
 /*
@@ -19,7 +19,7 @@ import java.util.Map;
 import javax.faces.FactoryFinder;
 import javax.faces.application.Application;
 import javax.faces.application.ApplicationFactory;
-import javax.faces.component.ConvertibleValueHolder;
+import javax.faces.component.ValueHolder;
 import javax.faces.component.NamingContainer;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
@@ -141,12 +141,12 @@ public class ConverterTagTestCase extends TagTestCaseBase {
 
         UIComponent component = ctag.getComponentInstance();
         assertNotNull(component);
-        assertNull(((ConvertibleValueHolder) component).getConverter());
+        assertNull(((ValueHolder) component).getConverter());
         ConverterTag tag = new ConverterTag();
         tag.setConverterId("Integer");
         add(tag);
         tag.doStartTag();
-        Converter converter = ((ConvertibleValueHolder) component).getConverter();
+        Converter converter = ((ValueHolder) component).getConverter();
         assertNotNull(converter);
         assertTrue(converter instanceof IntegerConverter);
         tag.doEndTag();
@@ -158,13 +158,13 @@ public class ConverterTagTestCase extends TagTestCaseBase {
 
         UIComponent component = ctag.getComponentInstance();
         assertNotNull(component);
-        assertNull(((ConvertibleValueHolder) component).getConverter());
+        assertNull(((ValueHolder) component).getConverter());
         ConverterTag tag = new ConverterTag();
         tag.setConverterId("#{foo}");
         add(tag);
         request.setAttribute("foo", "Integer");
         tag.doStartTag();
-        Converter converter = ((ConvertibleValueHolder) component).getConverter();
+        Converter converter = ((ValueHolder) component).getConverter();
         assertNotNull(converter);
         assertTrue(converter instanceof IntegerConverter);
         tag.doEndTag();

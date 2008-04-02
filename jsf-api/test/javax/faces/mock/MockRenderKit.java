@@ -1,5 +1,5 @@
 /*
- * $Id: MockRenderKit.java,v 1.9 2004/01/06 14:52:21 rkitain Exp $
+ * $Id: MockRenderKit.java,v 1.10 2004/01/08 21:21:27 eburns Exp $
  */
 
 /*
@@ -15,7 +15,6 @@ import java.util.Iterator;
 import java.util.Map;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
-import javax.faces.component.ValueHolder;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.context.ResponseStream;
@@ -120,7 +119,7 @@ public class MockRenderKit extends RenderKit {
             ResponseWriter writer = context.getResponseWriter();
             writer.write
                 ("<text id='" + component.getClientId(context) + "' value='" +
-                 ((ValueHolder) component).getValue() + "'/>\n");
+                 component.getAttributes().get("value") + "'/>\n");
 
         }
 

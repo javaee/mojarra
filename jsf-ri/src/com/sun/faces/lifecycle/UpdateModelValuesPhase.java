@@ -1,5 +1,5 @@
 /*
- * $Id: UpdateModelValuesPhase.java,v 1.31 2003/12/17 15:13:44 rkitain Exp $
+ * $Id: UpdateModelValuesPhase.java,v 1.32 2004/01/08 21:21:29 eburns Exp $
  */
 
 /*
@@ -20,7 +20,6 @@ import javax.faces.FacesException;
 import javax.faces.event.PhaseId;
 import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
-import javax.faces.component.ValueHolder;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -94,13 +93,6 @@ public void execute(FacesContext facesContext)
 
     if (null != exceptionMessage) {
         Object[] params = new Object[3];
-        ValueHolder valueHolder = null;
-        if ( component instanceof ValueHolder) {
-            valueHolder= (ValueHolder) component;
-            params[0] = valueHolder.getValue();
-	    // PENDING(edburns): params[1] should be the VB expression.
-            params[1] = "expression";
-        }  
         params[2] = exceptionMessage;
         facesContext.addMessage(component.getClientId(facesContext), 
 	    MessageFactory.getMessage(facesContext,

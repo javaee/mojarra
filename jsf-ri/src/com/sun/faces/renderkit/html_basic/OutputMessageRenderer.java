@@ -1,5 +1,5 @@
 /*
- * $Id: OutputMessageRenderer.java,v 1.3 2003/12/17 15:13:56 rkitain Exp $
+ * $Id: OutputMessageRenderer.java,v 1.4 2004/01/08 21:21:33 eburns Exp $
  */
 
 /*
@@ -128,7 +128,7 @@ public class OutputMessageRenderer extends HtmlBasicRenderer {
                 continue;
             }
 
-            parameterList.add(((ValueHolder)kid).getValue());
+            parameterList.add(((UIParameter)kid).getValue());
         }
 
         String message = null;

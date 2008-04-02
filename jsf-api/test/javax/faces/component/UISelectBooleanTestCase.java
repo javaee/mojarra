@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectBooleanTestCase.java,v 1.13 2003/12/17 15:11:14 rkitain Exp $
+ * $Id: UISelectBooleanTestCase.java,v 1.14 2004/01/08 21:21:21 eburns Exp $
  */
 
 /*
@@ -15,7 +15,6 @@ import java.util.Iterator;
 import java.util.List;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UISelectBoolean;
-import javax.faces.component.ValueHolder;
 import junit.framework.TestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;

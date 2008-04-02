@@ -1,5 +1,5 @@
 /*
- * $Id: UIDataTestCase.java,v 1.29 2004/01/06 14:52:17 rkitain Exp $
+ * $Id: UIDataTestCase.java,v 1.30 2004/01/08 21:21:19 eburns Exp $
  */
 
 /*
@@ -46,7 +46,7 @@ import junit.framework.TestSuite;
  * <p>Unit tests for {@link UIData}.</p>
  */
 
-public class UIDataTestCase extends ValueHolderTestCaseBase {
+public class UIDataTestCase extends UIComponentBaseTestCase {
 
 
     // ------------------------------------------------------------ Constructors
@@ -125,6 +125,17 @@ public class UIDataTestCase extends ValueHolderTestCaseBase {
 
         super.testAttributesTransparency();
         UIData data = (UIData) component;
+
+        assertEquals(data.getValue(),
+                     (String) component.getAttributes().get("value"));
+        data.setValue("foo");
+        assertEquals("foo", (String) component.getAttributes().get("value"));
+        data.setValue(null);
+        assertNull((String) component.getAttributes().get("value"));
+        component.getAttributes().put("value", "bar");
+        assertEquals("bar", data.getValue());
+        component.getAttributes().put("value", null);
+        assertNull(data.getValue());
 
         data.setFirst(6);
         assertEquals(data.getFirst(),
@@ -300,6 +311,7 @@ public class UIDataTestCase extends ValueHolderTestCaseBase {
         super.testPristine();
         UIData data = (UIData) component;
 
+        assertNull("no value", data.getValue());
         assertEquals("no first", 0, data.getFirst());
         assertEquals("no rows", 0, data.getRows());
         assertNull("no var", data.getVar());
@@ -336,6 +348,12 @@ public class UIDataTestCase extends ValueHolderTestCaseBase {
         super.testPropertiesValid();
         UIData data = (UIData) component;
 
+        // value
+        data.setValue("foo.bar");
+        assertEquals("expected value",
+                     "foo.bar", data.getValue());
+        data.setValue(null);
+        assertNull("erased value", data.getValue());
         data.setFirst(0);
         data.setFirst(11);
         data.setRows(0);
@@ -1011,7 +1029,7 @@ public class UIDataTestCase extends ValueHolderTestCaseBase {
             ResponseWriter writer = context.getResponseWriter();
             writer.write
                 ("<button id='" + component.getClientId(context) + "' value='" +
-                 ((ValueHolder) component).getValue() + "'/>\n");
+                 ((UICommand) component).getValue() + "'/>\n");
 
         }
 
@@ -1234,7 +1252,7 @@ public class UIDataTestCase extends ValueHolderTestCaseBase {
                     value = input.getValue();
                 }
             } else {
-                value = ((ValueHolder) component).getValue();
+                value = ((UIOutput) component).getValue();
             }
         
             ResponseWriter writer = context.getResponseWriter();

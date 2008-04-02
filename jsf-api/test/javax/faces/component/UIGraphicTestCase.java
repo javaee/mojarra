@@ -1,5 +1,5 @@
 /*
- * $Id: UIGraphicTestCase.java,v 1.15 2003/12/17 15:11:13 rkitain Exp $
+ * $Id: UIGraphicTestCase.java,v 1.16 2004/01/08 21:21:20 eburns Exp $
  */
 
 /*
@@ -21,7 +21,7 @@ import junit.framework.TestSuite;
  * <p>Unit tests for {@link UIGraphic}.</p>
  */
 
-public class UIGraphicTestCase extends ValueHolderTestCaseBase {
+public class UIGraphicTestCase extends UIComponentBaseTestCase {
 
 
     // ------------------------------------------------------------ Constructors
@@ -44,6 +44,7 @@ public class UIGraphicTestCase extends ValueHolderTestCaseBase {
     public void setUp() {
         super.setUp();
         component = new UIGraphic();
+        expectedId = null;
         expectedRendererType = "Image";
     }
 
@@ -69,6 +70,17 @@ public class UIGraphicTestCase extends ValueHolderTestCaseBase {
         super.testAttributesTransparency();
         UIGraphic graphic = (UIGraphic) component;
 
+        assertEquals(graphic.getValue(),
+                     (String) component.getAttributes().get("value"));
+        graphic.setValue("foo");
+        assertEquals("foo", (String) component.getAttributes().get("value"));
+        graphic.setValue(null);
+        assertNull((String) component.getAttributes().get("value"));
+        component.getAttributes().put("value", "bar");
+        assertEquals("bar", graphic.getValue());
+        component.getAttributes().put("value", null);
+        assertNull(graphic.getValue());
+
         assertEquals(graphic.getURL(),
                      (String) graphic.getAttributes().get("URL"));
         graphic.setURL("foo");
@@ -83,12 +95,17 @@ public class UIGraphicTestCase extends ValueHolderTestCaseBase {
     }
 
 
+    // Suppress lifecycle tests since we do not have a renderer
+    public void testLifecycleManagement() {
+    }
+
     // Test a pristine UIGraphic instance
     public void testPristine() {
 
         super.testPristine();
         UIGraphic graphic = (UIGraphic) component;
 
+        assertNull("no value", graphic.getValue());
         assertNull("no url", graphic.getURL());
 
     }
@@ -108,6 +125,13 @@ public class UIGraphicTestCase extends ValueHolderTestCaseBase {
 
         super.testPropertiesValid();
         UIGraphic graphic = (UIGraphic) component;
+
+        // value
+        graphic.setValue("foo.bar");
+        assertEquals("expected value",
+                     "foo.bar", graphic.getValue());
+        graphic.setValue(null);
+        assertNull("erased value", graphic.getValue());
 
         // Test transparency between "value" and "Url" properties
         graphic.setURL("foo");

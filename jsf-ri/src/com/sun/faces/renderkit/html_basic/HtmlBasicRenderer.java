@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderer.java,v 1.72 2004/01/07 20:21:38 eburns Exp $
+ * $Id: HtmlBasicRenderer.java,v 1.73 2004/01/08 21:21:31 eburns Exp $
  */
 
 /*
@@ -24,9 +24,8 @@ import java.util.NoSuchElementException;
 import javax.faces.FactoryFinder;
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
-import javax.faces.component.ConvertibleValueHolder;
-import javax.faces.component.NamingContainer;
 import javax.faces.component.ValueHolder;
+import javax.faces.component.NamingContainer;
 import javax.faces.component.UIInput;
 import javax.faces.component.UIParameter;
 import javax.faces.component.NamingContainer;
@@ -41,9 +40,6 @@ import javax.faces.convert.ConverterException;
 
 import com.sun.faces.util.Util;
 
-
-import java.util.ResourceBundle;
-import java.util.MissingResourceException;
 import java.io.IOException;
 
 import org.apache.commons.logging.Log;
@@ -91,22 +87,6 @@ public abstract class HtmlBasicRenderer extends Renderer {
     //
     // Methods From Renderer
 
-    public void addConversionErrorMessage( FacesContext facesContext, 
-            UIComponent comp, String errorMessage ) {
-        Object[] params = new Object[3];
-        ValueHolder valueHolder = null;
-        if ( comp instanceof ValueHolder) {
-            valueHolder= (ValueHolder) comp;
-            params[0] = valueHolder.getValue();
-	    // PENDING(edburns): params[1] should be the VB expression.
-	    params[1] = "expression";
-        }
-        params[2] = errorMessage; 
-        facesContext.addMessage(comp.getClientId(facesContext), 
-				MessageFactory.getMessage(facesContext, 
-							  Util.CONVERSION_ERROR_MESSAGE_ID,params));
-    }
-
     public void addGenericErrorMessage(FacesContext facesContext,
 				       UIComponent component,
 				       String messageId, String param) {
@@ -116,57 +96,6 @@ public abstract class HtmlBasicRenderer extends Renderer {
 				MessageFactory.getMessage(facesContext, 
 							  messageId, params));
     }
-
-   /**
-    * Look up the attribute named keyAttr in the component's attr set.
-    * Use the result as a key into the resource bundle named by the
-    * model reference in the component's "bundle" attribute.
-    */
-    protected String getKeyAndLookupInBundle(FacesContext context,
-					     UIComponent component, 
-					     String keyAttr) throws MissingResourceException{
-	String key = null, bundleName = null;
-	ResourceBundle bundle = null;
-
-	Util.parameterNonNull(context);
-	Util.parameterNonNull(component);
-	Util.parameterNonNull(keyAttr);
-
-        key = (String) component.getAttributes().get(keyAttr);
-        bundleName = (String)component.getAttributes().get(RIConstants.BUNDLE_ATTR);
-
-        // if the bundleName is null for this component, it might have
-        // been set on the root component.
-        if ( bundleName == null ) {
-            UIComponent root = context.getViewRoot();
-            Util.doAssert(root != null);
-            bundleName = (String)root.getAttributes().get(RIConstants.BUNDLE_ATTR);
-        }
-	// verify our component has the proper attributes for key and bundle.
-	if (null == key || null == bundleName) {
-	    throw new MissingResourceException(Util.getExceptionMessage(
-                Util.MISSING_RESOURCE_ERROR_MESSAGE_ID),bundleName, key);
-	}
-	
-	// verify the required Class is loadable
-	try {
-	    Util.verifyRequiredClasses(context);
-	}  
-	catch (FacesException e) {
-	    Object [] params = { "javax.servlet.jsp.jstl.fmt.LocalizationContext" };
-	    throw new MissingResourceException(Util.getExceptionMessage(Util.MISSING_CLASS_ERROR_MESSAGE_ID, params), bundleName, key);
-	}
-	    
-	// verify there is a ResourceBundle in scoped namescape.
-	javax.servlet.jsp.jstl.fmt.LocalizationContext locCtx = null;
-	if (null == (locCtx = (javax.servlet.jsp.jstl.fmt.LocalizationContext) 
-            (Util.getValueBinding(bundleName)).getValue(context)) ||
-	    null == (bundle = locCtx.getResourceBundle())) {
-	    throw new MissingResourceException(Util.getExceptionMessage(Util.MISSING_RESOURCE_ERROR_MESSAGE_ID), bundleName, key);
-	}
-	
-	return bundle.getString(key);
-    } 
     
     public void decode(FacesContext context, UIComponent component) {
 
@@ -240,18 +169,21 @@ public abstract class HtmlBasicRenderer extends Renderer {
             }
         }
 
-        ValueHolder valueHolder = null;
-        if ( component instanceof ValueHolder) {
-            valueHolder= (ValueHolder) component;
-        }
         String currentValue = null;
-        Object currentObj = valueHolder.getValue();
+        Object currentObj = getValue(component);
         if ( currentObj != null) {
             currentValue = getFormattedValue(context, component, currentObj);
         } 
         return currentValue;
     }    
     
+    protected Object getValue(UIComponent component) {
+        // Make sure this method isn't being called except 
+        // from subclasses that override getValue()!
+        throw new UnsupportedOperationException();
+    }
+
+
     /**
      * Renderers override this method to write appropriate HTML content into
      * the buffer.
@@ -274,9 +206,10 @@ public abstract class HtmlBasicRenderer extends Renderer {
      */
     protected String getFormattedValue(FacesContext context, UIComponent component,
             Object currentValue ) throws ConverterException {
-         String result = null;
+
+        String result = null;
         // formatting is supported only for components that support
-        // value attributes.
+        // converting value attributes.
         if ( !(component instanceof ValueHolder) ){
              if ( currentValue != null) {
                  result= currentValue.toString();
@@ -294,8 +227,8 @@ public abstract class HtmlBasicRenderer extends Renderer {
         // If there is a converter attribute, use it to to ask application
         // instance for a converter with this identifer.
        
-        if (component instanceof ConvertibleValueHolder) {
-            converter = ((ConvertibleValueHolder)component).getConverter();
+        if (component instanceof ValueHolder) {
+            converter = ((ValueHolder)component).getConverter();
         }
        
         // if value is null and no converter attribute is specified, then

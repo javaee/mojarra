@@ -1,5 +1,5 @@
 /*
- * $Id: ValueHolderTestCaseBase.java,v 1.5 2003/11/08 01:15:42 craigmcc Exp $
+ * $Id: ValueHolderTestCaseBase.java,v 1.6 2004/01/08 21:21:22 eburns Exp $
  */
 
 /*
@@ -13,6 +13,11 @@ package javax.faces.component;
 import java.io.IOException;
 import java.util.Iterator;
 import javax.faces.context.FacesContext;
+import javax.faces.convert.Converter;
+import javax.faces.convert.ConverterException;
+import javax.faces.convert.LongConverter;
+import javax.faces.convert.NumberConverter;
+import javax.faces.convert.ShortConverter;
 import javax.faces.TestUtil;
 import junit.framework.TestCase;
 import junit.framework.Test;
@@ -20,8 +25,9 @@ import junit.framework.TestSuite;
 
 
 /**
- * <p>Unit tests for {@link ValueHolder}.  Any test case for a component
- * class that implements {@link ValueHolder} should extend this class.</p>
+ * <p>Unit tests for {@link ValueHolder}.  Any test case for a
+ * component class that implements {@link ValueHolder} should
+ * extend this class.</p>
  */
 
 public abstract class ValueHolderTestCaseBase extends UIComponentBaseTestCase {
@@ -84,6 +90,33 @@ public abstract class ValueHolderTestCaseBase extends UIComponentBaseTestCase {
         component.getAttributes().put("value", null);
         assertNull(vh.getValue());
 
+        assertEquals(vh.getConverter(),
+                     (String) component.getAttributes().get("converter"));
+        vh.setConverter(new LongConverter());
+        assertNotNull((Converter) component.getAttributes().get("converter"));
+        assertTrue(component.getAttributes().get("converter")
+                   instanceof LongConverter);
+        vh.setConverter(null);
+        assertNull(component.getAttributes().get("converter"));
+        component.getAttributes().put("converter", new ShortConverter());
+        assertNotNull(vh.getConverter());
+        assertTrue(vh.getConverter() instanceof ShortConverter);
+        component.getAttributes().put("converter", null);
+        assertNull(vh.getConverter());
+
+        assertEquals(vh.isValid(), true);
+        assertEquals(vh.isValid(),
+                     ((Boolean) component.getAttributes().get("valid")).
+                     booleanValue());
+        vh.setValid(false);
+        assertEquals(vh.isValid(),
+                     ((Boolean) component.getAttributes().get("valid")).
+                     booleanValue());
+        component.getAttributes().put("valid", Boolean.TRUE);
+        assertEquals(vh.isValid(),
+                     ((Boolean) component.getAttributes().get("valid")).
+                     booleanValue());
+
     }
 
 
@@ -100,6 +133,8 @@ public abstract class ValueHolderTestCaseBase extends UIComponentBaseTestCase {
 
         // Validate properties
         assertNull("no value", vh.getValue());
+        assertNull("no converter", vh.getConverter());
+        assertTrue("is valid", vh.isValid());
 
     }
 
@@ -126,10 +161,41 @@ public abstract class ValueHolderTestCaseBase extends UIComponentBaseTestCase {
         vh.setValue(null);
         assertNull("erased value", vh.getValue());
 
+        // converter
+        vh.setConverter(new LongConverter());
+        assertTrue("expected converter",
+                   vh.getConverter() instanceof LongConverter);
+        vh.setConverter(null);
+        assertNull("erased converter", vh.getConverter());
+
+        vh.setValid(false);
+        assertTrue(!vh.isValid());
+        vh.setValid(true);
+        assertTrue(vh.isValid());
+
     }
 
 
     // --------------------------------------------------------- Support Methods
+
+
+    // Check that the properties of the NumberConverters are equal
+    protected void checkNumberConverter(NumberConverter nc1,
+                                        NumberConverter nc2) {
+
+        assertEquals(nc1.getCurrencyCode(), nc2.getCurrencyCode());
+        assertEquals(nc1.getCurrencySymbol(), nc2.getCurrencySymbol());
+        assertEquals(nc1.isGroupingUsed(), nc2.isGroupingUsed());
+        assertEquals(nc1.isIntegerOnly(), nc2.isIntegerOnly());
+        assertEquals(nc1.getMaxFractionDigits(), nc2.getMaxFractionDigits());
+        assertEquals(nc1.getMaxIntegerDigits(), nc2.getMaxIntegerDigits());
+        assertEquals(nc1.getMinFractionDigits(), nc2.getMinFractionDigits());
+        assertEquals(nc1.getMinIntegerDigits(), nc2.getMinIntegerDigits());
+        assertEquals(nc1.getLocale(), nc2.getLocale());
+        assertEquals(nc1.getPattern(), nc2.getPattern());
+        assertEquals(nc1.getType(), nc2.getType());
+
+    }
 
 
     // Check that the properties on the specified components are equal
@@ -139,6 +205,9 @@ public abstract class ValueHolderTestCaseBase extends UIComponentBaseTestCase {
         ValueHolder vh1 = (ValueHolder) comp1;
         ValueHolder vh2 = (ValueHolder) comp2;
         assertEquals(vh1.getValue(), vh2.getValue());
+        checkNumberConverter((NumberConverter) vh1.getConverter(),
+                             (NumberConverter) vh2.getConverter());
+        assertEquals(vh1.isValid(), vh2.isValid());
 
     }
 
@@ -149,6 +218,46 @@ public abstract class ValueHolderTestCaseBase extends UIComponentBaseTestCase {
         super.populateComponent(component);
         ValueHolder vh = (ValueHolder) component;
         vh.setValue("component value");
+        vh.setConverter(createNumberConverter());
+        vh.setValid(false);
+
+    }
+
+
+    // Create and configure a NumberConverter
+    protected NumberConverter createNumberConverter() {
+
+        NumberConverter nc = new NumberConverter();
+        nc.setCurrencyCode("USD");
+        nc.setCurrencySymbol("$");
+        nc.setGroupingUsed(false);
+        nc.setIntegerOnly(true);
+        nc.setMaxFractionDigits(2);
+        nc.setMaxIntegerDigits(10);
+        nc.setMinFractionDigits(2);
+        nc.setMinIntegerDigits(5);
+        nc.setType("currency");
+        return (nc);
+
+    }
+
+
+    protected void checkNumberConverters(NumberConverter nc1,
+                               NumberConverter nc2) {
+
+        assertNotNull(nc1);
+        assertNotNull(nc2);
+        assertEquals(nc1.getCurrencyCode(), nc2.getCurrencyCode());
+        assertEquals(nc1.getCurrencySymbol(), nc2.getCurrencySymbol());
+        assertEquals(nc1.isGroupingUsed(), nc2.isGroupingUsed());
+        assertEquals(nc1.isIntegerOnly(), nc2.isIntegerOnly());
+        assertEquals(nc1.getMaxFractionDigits(), nc2.getMaxFractionDigits());
+        assertEquals(nc1.getMaxIntegerDigits(), nc2.getMaxIntegerDigits());
+        assertEquals(nc1.getMinFractionDigits(), nc2.getMinFractionDigits());
+        assertEquals(nc1.getMinIntegerDigits(), nc2.getMinIntegerDigits());
+        assertEquals(nc1.getLocale(), nc2.getLocale());
+        assertEquals(nc1.getPattern(), nc2.getPattern());
+        assertEquals(nc1.getType(), nc2.getType());
 
     }
 

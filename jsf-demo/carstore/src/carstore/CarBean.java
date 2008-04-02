@@ -42,7 +42,6 @@ package carstore;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
-import javax.faces.component.ConvertibleValueHolder;
 import javax.faces.component.ValueHolder;
 import javax.faces.component.UISelectItems;
 import javax.faces.convert.Converter;
@@ -291,13 +290,10 @@ public class CarBean extends Object {
 		    if (null != (component = (UIComponent) 
 				 CarBean.this.components.get(key))) {
 			// if this component can have a Converter
-			if (component instanceof ConvertibleValueHolder) {
-			    // try to get it
-			    converter = ((ConvertibleValueHolder)component).
-				getConverter();
-			}
-			// if this component can have a Value
 			if (component instanceof ValueHolder) {
+			    // try to get it
+			    converter = ((ValueHolder)component).
+				getConverter();
 			    result = ((ValueHolder)component).getValue();
 			}
 
@@ -405,22 +401,12 @@ public class CarBean extends Object {
 					    String componentType,
 					    String value, String valueType) {
 	Application application = context.getApplication();
-	ValueHolder valueHolder = null;
 	Converter converter = null;
 	UISelectItems items = null;
 
-	// make sure our component is a ValueHolder
-	if (component instanceof ValueHolder) {
-	    valueHolder = (ValueHolder) component;
-	}
-	else {
-	    // the component must be a ValueHolder
-	    return;
-	}
-
 	// if we need a converter, and can have a converter
 	if (!valueType.equals("java.lang.String") && 
-	    component instanceof ConvertibleValueHolder) {
+	    component instanceof ValueHolder) {
 	    // if so create it,
 	    try {
 		converter = 
@@ -434,7 +420,7 @@ public class CarBean extends Object {
 		throw new IllegalStateException(errMsg.getSummary());
 	    }
 	    // add it to our component,
-	    ((ConvertibleValueHolder)component).setConverter(converter);
+	    ((ValueHolder)component).setConverter(converter);
 	}
 	
 	// if this component is a SelectOne or SelectMany, take special action
@@ -450,11 +436,13 @@ public class CarBean extends Object {
 	else {
 	    // we have a single value
 	    if (null != converter) {
-		valueHolder.setValue(converter.getAsObject(context, component, 
-							   value));
+		component.getAttributes().put("value",
+					      converter.getAsObject(context, 
+								    component, 
+								    value));
 	    }
 	    else {
-		valueHolder.setValue(value);
+		component.getAttributes().put("value", value);
 	    }
 	}
     }
@@ -533,7 +521,7 @@ public class CarBean extends Object {
 	while (iter.hasNext()) {
 	    key = (String) iter.next();
 	    component = (UIComponent) getComponents().get(key);
-	    value = ((ValueHolder)component).getValue();
+	    value = component.getAttributes().get("value");
 	    if (null == value || (!(component instanceof UIInput))) {
 		continue;
 	    }
