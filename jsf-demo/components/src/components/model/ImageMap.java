@@ -1,22 +1,22 @@
 /*
  * Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or
  * without modification, are permitted provided that the following
  * conditions are met:
- * 
+ *
  * - Redistributions of source code must retain the above copyright
  *   notice, this list of conditions and the following disclaimer.
- * 
+ *
  * - Redistribution in binary form must reproduce the above
  *   copyright notice, this list of conditions and the following
  *   disclaimer in the documentation and/or other materials
  *   provided with the distribution.
- *    
+ *
  * Neither the name of Sun Microsystems, Inc. or the names of
  * contributors may be used to endorse or promote products derived
  * from this software without specific prior written permission.
- *  
+ *
  * This software is provided "AS IS," without a warranty of any
  * kind. ALL EXPRESS OR IMPLIED CONDITIONS, REPRESENTATIONS AND
  * WARRANTIES, INCLUDING ANY IMPLIED WARRANTY OF MERCHANTABILITY,
@@ -30,54 +30,30 @@
  * CAUSED AND REGARDLESS OF THE THEORY OF LIABILITY, ARISING OUT OF
  * THE USE OF OR INABILITY TO USE THIS SOFTWARE, EVEN IF SUN HAS
  * BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
- *  
+ *
  * You acknowledge that this software is not designed, licensed or
  * intended for use in the design, construction, operation or
  * maintenance of any nuclear facility.
  */
 
 
-package demo.model;
+package components.model;
 
 
 import components.components.AreaSelectedEvent;
-import components.components.AreaSelectedListener;
-import components.components.MapComponent;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-import javax.faces.component.UIComponent;
-import javax.faces.component.UIOutput;
 import javax.faces.context.FacesContext;
-import javax.faces.event.PhaseId;
-
+import javax.faces.event.ActionEvent;
 
 
 /**
- * <p>Handle changes in the currently selected area by switching the
- * request locale accordingly.</p>
+ * ImageMap is the "backing file" class for the image map application.
+ * It contains a method event handler that sets the locale from
+ * information in the <code>AreaSelectedEvent</code> event.
  */
-
-public class AreaSelectedHandler implements AreaSelectedListener {
-
-
-    // ------------------------------------------------------------ Constructors
-
-
-    /**
-     * <p>Construct a new instance of this event listener.</p>
-     */
-    public AreaSelectedHandler ( ) {
-
-        locales = new HashMap();
-    	locales.put("NAmerica", Locale.ENGLISH);
-	locales.put("SAmerica", new Locale("es","es"));
-	locales.put("Germany", Locale.GERMAN);
-	locales.put("Finland", new Locale("fi","fi"));
-	locales.put("France", Locale.FRENCH); 	
-
-    }
-
+public class ImageMap {
 
     // ------------------------------------------------------ Instance Variables
 
@@ -88,15 +64,18 @@ public class AreaSelectedHandler implements AreaSelectedListener {
      */
     private Map locales = null;
 
-
-    // -------------------------------------------- AreaSelectedListener Methods
-
+    // ------------------------------------------------------------ Constructors
 
     /**
-     * <p>Return the phase identifier for when we wish to process events.</p>
+     * <p>Construct a new instance of this image map.</p>
      */
-    public PhaseId getPhaseId() {
-        return (PhaseId.APPLY_REQUEST_VALUES);
+    public ImageMap( ) {
+        locales = new HashMap();
+        locales.put("NAmerica", Locale.ENGLISH);
+        locales.put("SAmerica", new Locale("es","es"));
+        locales.put("Germany", Locale.GERMAN);
+        locales.put("Finland", new Locale("fi","fi"));
+        locales.put("France", Locale.FRENCH);
     }
 
 
@@ -106,12 +85,17 @@ public class AreaSelectedHandler implements AreaSelectedListener {
      * @param event The {@link AreaSelectedEvent} that has occurred
      */
     public void processAreaSelected(AreaSelectedEvent event) {
-
         String current = event.getMapComponent().getCurrent();
         FacesContext context = FacesContext.getCurrentInstance();
         context.getViewRoot().setLocale((Locale) locales.get(current));
-
     }
 
-    
+    /**
+     * <p>Return an indication for navigation.  Application using this component,
+     * can refer to this method via an <code>actionRef</code> expression in their
+     * page, and set up the "outcome" (success) in their navigation rule.
+     */
+    public String status() {
+        return "success";
+    }
 }

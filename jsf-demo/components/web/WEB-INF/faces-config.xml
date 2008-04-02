@@ -15,6 +15,12 @@
   <!-- =================== Initialize Image Map Hotspot Data ============== -->
 
   <managed-bean>
+    <managed-bean-name>imageMap</managed-bean-name>
+    <managed-bean-class> components.model.ImageMap </managed-bean-class>
+    <managed-bean-scope> session </managed-bean-scope>
+  </managed-bean>
+
+  <managed-bean>
     <description>
       Causes the default VariableResolver implementation to instantiate the 
       managed bean, NA of the class, components.model.ImageArea in application 

@@ -40,9 +40,22 @@ package components.components;
 
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.util.Iterator;
+import java.util.List;
+
+import javax.faces.FacesException;
+import javax.faces.component.ActionSource;
 import javax.faces.component.UIComponentBase;
 import javax.faces.context.FacesContext;
-
+import javax.faces.el.MethodBinding;
+import javax.faces.el.ValueBinding;
+import javax.faces.event.AbortProcessingException;
+import javax.faces.event.ActionEvent;
+import javax.faces.event.ActionListener;
+import javax.faces.event.FacesEvent;
+import javax.faces.event.FacesListener;
+import javax.faces.event.PhaseId;
 
 /**
  * <p>{@link MapComponent} is a JavaServer Faces component that corresponds
@@ -54,7 +67,8 @@ import javax.faces.context.FacesContext;
  * which are fired whenever the current area is changed.</p>
  */
 
-public class MapComponent extends UIComponentBase {
+public class MapComponent extends UIComponentBase
+    implements ActionSource {
 
 
     // ------------------------------------------------------ Instance Variables
@@ -62,7 +76,22 @@ public class MapComponent extends UIComponentBase {
 
     private String current = null;
 
+    private String action = null;
+    private String actionListenerRef = null;
+    private String actionRef = null;
+    private boolean immediate = false;
+    private boolean immediateSet = false;
 
+
+
+    // --------------------------------------------------------------Constructors 
+
+    public MapComponent() {
+	super();
+        addDefaultActionListener(getFacesContext());
+    }
+
+    
     // -------------------------------------------------------------- Properties
 
 
@@ -99,29 +128,127 @@ public class MapComponent extends UIComponentBase {
 
     }
 
+    // -------------------------------------------------- Action Source Methods
 
-    // -------------------------------------------------- Event Listener Methods
+    public String getAction() {
+	if (this.action != null) {
+	    return (this.action);
+	}
+	ValueBinding vb = getValueBinding("action");
+	if (vb != null) {
+	    return ((String) vb.getValue(getFacesContext()));
+	} else {
+	    return (null);
+	}
+    }
+
+    public void setAction(String action) {
+        this.action = action;
+    }
+
+    public String getActionListenerRef() {
+        return (this.actionListenerRef);
+    }
 
 
-    /**
-     * <p>Register a new {@link AreaSelectedListener}.
-     *
-     * @param listener The listener to add
-     */
-    public void addAreaSelectedListener(AreaSelectedListener listener) {
+    public void setActionListenerRef(String actionListenerRef) {
+        this.actionListenerRef = actionListenerRef;
+    }
+
+    public String getActionRef() {
+        return (this.actionRef);
+    }
+
+    public void setActionRef(String actionRef) {
+        this.actionRef = actionRef;
+    }
+
+    public boolean isImmediate() {
+	if (this.immediateSet) {
+	    return (this.immediate);
+	}
+	ValueBinding vb = getValueBinding("immediate");
+	if (vb != null) {
+	    Boolean value = (Boolean) vb.getValue(getFacesContext());
+	    return (value.booleanValue());
+	} else {
+	    return (this.immediate);
+	}
+    }
+
+    public void setImmediate(boolean immediate) {
+	// if the immediate value is changing.
+	if (immediate != this.immediate) {
+	    FacesContext context = getFacesContext();
+	    // remove the current default action listener
+	    removeDefaultActionListener(context);
+	    this.immediate = immediate;
+	    addDefaultActionListener(context);
+	}
+	this.immediateSet = true;
+    }
+    
+    public void addActionListener(ActionListener listener) {
         addFacesListener(listener);
     }
 
+    public ActionListener[] getActionListeners() {
+        FacesListener fl[] = getFacesListeners(ActionListener.class);
+        ActionListener al[] = new ActionListener[fl.length];
+        for (int i = 0; i < fl.length; i++) {
+            al[i] = (ActionListener) fl[i];
+        }
+        return (al);
+    }
 
-    /**
-     * <p>Deregister an old {@link AreaSelectedListener}.
-     *
-     * @param listener The listener to remove
-     */
-    public void removeAreaSelectedListener(AreaSelectedListener listener) {
+    public void removeActionListener(ActionListener listener) {
         removeFacesListener(listener);
     }
 
+    // ----------------------------------------------------- Event Methods
+
+    private static Class signature[] = { AreaSelectedEvent.class };
+
+    /**
+     * Pass the {@link ActionEvent} being broadcast to the method referenced
+     * by <code>actionListenerRef</code> (if any).
+     *
+     * @param event {@link FacesEvent} to be broadcast
+     * @param phaseId {@link PhaseId} of the current phase of the
+     *  request processing lifecycle
+     *
+     * @exception AbortProcessingException Signal the JavaServer Faces
+     *  implementation that no further processing on the current event
+     *  should be performed
+     */
+    public boolean broadcast(FacesEvent event, PhaseId phaseId)
+        throws AbortProcessingException {
+
+        // Perform standard superclass processing
+        boolean returnValue = super.broadcast(event, phaseId);
+
+        // Notify the specified action listener method (if any)
+        String actionListenerRef = getActionListenerRef();
+        if (actionListenerRef != null) {
+            if ((isImmediate() &&
+                 phaseId.equals(PhaseId.APPLY_REQUEST_VALUES)) ||
+                (!isImmediate() &&
+                 phaseId.equals(PhaseId.INVOKE_APPLICATION))) {
+                FacesContext context = getFacesContext();
+                MethodBinding mb =
+                    context.getApplication().getMethodBinding
+                    (actionListenerRef, signature);
+                try {
+                    mb.invoke(context, new Object[] { event });
+                } catch (InvocationTargetException e) {
+                    throw new FacesException(e.getTargetException());
+                }
+            }
+        }
+
+        // Return the flag indicating future interest
+        return (returnValue);
+    }
 
 
     // ----------------------------------------------------- StateHolder Methods
@@ -133,9 +260,16 @@ public class MapComponent extends UIComponentBase {
      * @param context <code>FacesContext</code> for the current request
      */
     public Object saveState(FacesContext context) {
-        Object values[] = new Object[2];
+	removeDefaultActionListener(context);
+        Object values[] = new Object[7];
         values[0] = super.saveState(context);
         values[1] = current;
+        values[2] = action;
+        values[3] = actionListenerRef;
+        values[4] = actionRef;
+        values[5] = immediate ? Boolean.TRUE : Boolean.FALSE;
+        values[6] = immediateSet ? Boolean.TRUE : Boolean.FALSE;
+        addDefaultActionListener(context);
         return (values);
     }
 
@@ -149,10 +283,69 @@ public class MapComponent extends UIComponentBase {
      * @exception IOException if an input/output error occurs
      */
     public void restoreState(FacesContext context, Object state) {
+	removeDefaultActionListener(context);
         Object values[] = (Object[]) state;
         super.restoreState(context, values[0]);
         current = (String) values[1];
+        action = (String) values[2];
+        actionListenerRef = (String) values[3];
+        actionRef = (String) values[4];
+        immediate = ((Boolean) values[5]).booleanValue();
+        immediateSet = ((Boolean) values[6]).booleanValue();
+        addDefaultActionListener(context);
+    }
+    
+    // ----------------------------------------------------- Private Methods
+
+    // Add the default action listener
+    private void addDefaultActionListener(FacesContext context) {
+        ActionListener listener =
+            context.getApplication().getActionListener();
+        if (immediate) {
+            addActionListener(new WrapperActionListener(listener));
+        } else {
+            addActionListener(listener);
+        }
     }
 
+    // Remove the default action listener
+    private void removeDefaultActionListener(FacesContext context) {
+        if (immediate) {
+            if (listeners == null) {
+                return;
+            }
+            List list = listeners[PhaseId.APPLY_REQUEST_VALUES.getOrdinal()];
+            if (list == null) {
+                return;
+            }
+            Iterator items = list.iterator();
+            while (items.hasNext()) {
+                Object item = items.next();
+                if (item instanceof WrapperActionListener) {
+                    removeActionListener((ActionListener) item);
+                    return;
+                }
+            }
+        } else {
+            removeActionListener(context.getApplication().getActionListener());
+        }
+    }
 
+    // Wrapper for the default ActionListener that overrides getPhaseId()
+    // to return PhaseId.APPLY_REQUEST_VALUES, for "immediate" commands
+    private class WrapperActionListener implements ActionListener {
+        public WrapperActionListener(ActionListener wrapped) {
+            this.wrapped = wrapped;
+        }
+
+        private ActionListener wrapped;
+
+        public PhaseId getPhaseId() {
+            return (PhaseId.APPLY_REQUEST_VALUES);
+        }
+
+        public void processAction(ActionEvent event) {
+            wrapped.processAction(event);
+        }
+    }
 }

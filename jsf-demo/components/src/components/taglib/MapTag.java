@@ -41,6 +41,8 @@ package components.taglib;
 
 import components.components.MapComponent;
 import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
 import javax.faces.webapp.UIComponentTag;
 
 
@@ -57,6 +59,20 @@ public class MapTag extends UIComponentTag {
         this.current = current;
     }
 
+    private String actionListenerRef = null;
+    public void setActionListenerRef(String actionListenerRef) {
+        this.actionListenerRef = actionListenerRef;
+    }
+
+    private String immediate = null;
+    public void setImmediate(String immediate) {
+        this.immediate = immediate;
+    }
+
+    private String actionRef = null;
+    public void setActionRef(String actionRef) {
+        this.actionRef = actionRef;
+    }
 
     private String styleClass = null;
     public void setStyleClass(String styleClass) {
@@ -78,6 +94,7 @@ public class MapTag extends UIComponentTag {
         super.release();
         current = null;
         styleClass = null;
+        actionListenerRef = null;
     }
 
 
@@ -90,6 +107,21 @@ public class MapTag extends UIComponentTag {
         if (styleClass != null) {
             map.getAttributes().put("styleClass", styleClass);
         }
+
+        map.setActionListenerRef(actionListenerRef);
+        map.setActionRef(actionRef);
+
+        if (immediate != null) {
+            if (isValueReference(immediate)) {
+                ValueBinding vb = FacesContext.getCurrentInstance().getApplication().
+		    getValueBinding(immediate);
+                map.setValueBinding("immediate", vb);
+            } else {
+                boolean _immediate = new Boolean(immediate).booleanValue();
+                map.setImmediate(_immediate);
+            }
+        }
+	
     }
 
     

@@ -1,5 +1,5 @@
 /*
- * $Id: AreaSelectedEvent.java,v 1.2 2003/08/27 23:27:36 craigmcc Exp $
+ * $Id: AreaSelectedEvent.java,v 1.3 2003/11/18 21:16:39 rkitain Exp $
  */
 
 /*
@@ -43,18 +43,16 @@
 package components.components;
 
 
-import javax.faces.event.FacesEvent;
-import javax.faces.event.FacesListener;
+import javax.faces.event.ActionEvent;
 
 
 /**
- * <p>A {@link FacesEvent} indicating that the specified {@link AreaComponent}
+ * <p>An {@link ActionEvent} indicating that the specified {@link AreaComponent}
  * has just become the currently selected hotspot within the source
  * {@link MapComponent}.</p>
  */
 
-public class AreaSelectedEvent extends FacesEvent {
-
+public class AreaSelectedEvent extends ActionEvent {
 
     // ------------------------------------------------------------ Constructors
 
@@ -80,30 +78,4 @@ public class AreaSelectedEvent extends FacesEvent {
     public MapComponent getMapComponent() {
         return ((MapComponent) getComponent());
     }
-
-
-    // ------------------------------------------------------ FacesEvent Methods
-
-
-    /**
-     * <p>Return <code>true</code> if the specified listener is
-     * appropriate for this type of event.</p>
-     *
-     * @param listener {@link FacesListener} to be validated
-     */
-    public boolean isAppropriateListener(FacesListener listener) {
-        return (listener instanceof AreaSelectedListener);
-    }
-
-
-    /**
-     * <p>Forward this event to the specified listener.</p>
-     *
-     * @param listener {@link FacesListener} to receive this event
-     */
-    public void processListener(FacesListener listener) {
-        ((AreaSelectedListener) listener).processAreaSelected(this);
-    }
-
-
 }

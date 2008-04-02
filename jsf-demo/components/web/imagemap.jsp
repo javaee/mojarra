@@ -64,10 +64,9 @@
                    usemap="#worldMap"/>
 
       <d:map           id="worldMap"
+        actionListenerRef="imageMap.processAreaSelected"
+                immediate="true"
                   current="NAmericas">
-
-        <d:area_selected
-                     type="demo.model.AreaSelectedHandler"/>
 
         <d:area        id="NAmericas"
                  value="#{NA}"
