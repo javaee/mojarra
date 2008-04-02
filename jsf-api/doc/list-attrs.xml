@@ -25,8 +25,8 @@
     <attribute>
       <description>
         Orientation of the list to be created.  Valid values
-        are PAGE_DIRECTION (list is laid out vertically), or
-        LINE_DIRECTION (list is laid out horizontally).
+        are "pageDirection" (list is laid out vertically), or
+        "lineDirection" (list is laid out horizontally).
       </description>
       <display-name>Layout</display-name>
       <icon></icon>

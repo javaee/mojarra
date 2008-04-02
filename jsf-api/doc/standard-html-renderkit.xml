@@ -2104,7 +2104,7 @@
       as the value of the "class" attribute on the "span" element.
       Render a "table" element.  If the "border" attribute is specified,
       pass it thru.  If the "layout" attribute is specified, and its
-      value is "PAGE_DIRECTION", render the children elements
+      value is "pageDirection", render the children elements
       vertically, otherwise horizontally, in the table.  If any of the
       children are an instance of SelectItemGroup, render them as a
       nested table.  Render a "label" element with the "for" attribute
