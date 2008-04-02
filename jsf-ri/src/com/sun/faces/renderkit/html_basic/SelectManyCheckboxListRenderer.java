@@ -5,7 +5,7 @@
 
 
 /**
- * $Id: SelectManyCheckboxListRenderer.java,v 1.27 2004/01/31 02:08:42 jvisvanathan Exp $
+ * $Id: SelectManyCheckboxListRenderer.java,v 1.28 2004/02/01 18:53:02 jvisvanathan Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -122,12 +122,24 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
             // table.
 	    if ( curItem instanceof SelectItemGroup) {
                 // write out the label for the group.
-                writer.writeText("\n", null);
                 if ( curItem.getLabel() != null) {
+                    if (alignVertical) {
+                        writer.startElement("tr", component);
+                    }
+                    writer.startElement("td", component);
                     writer.writeText(curItem.getLabel(), "label");
-                    writer.writeText("\n", null);
+                    writer.endElement("td");
+                    if (alignVertical) {
+                        writer.endElement("tr");
+                    }
+	            
                 }
-                renderBeginText(component, 1, alignVertical, 
+                if (alignVertical) { 
+                    writer.startElement("tr", component);   
+                }
+                writer.startElement("td", component);
+                writer.writeText("\n", null);
+                renderBeginText(component, 0, alignVertical, 
                         context, false);
                 // render options of this group.
                 SelectItem[] itemsArray = 
@@ -137,10 +149,16 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
                             alignVertical);
                 }
                 renderEndText(component, alignVertical, context, false);
+                writer.endElement("td");
+                if (alignVertical) { 
+                    writer.endElement("tr");
+	            writer.writeText("\n", null);
+                }
             } else {
                 renderOption(context, component, curItem, alignVertical);
             }
         }
+       
         renderEndText(component, alignVertical, context, true);
     }
     
