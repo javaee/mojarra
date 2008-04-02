@@ -65,12 +65,14 @@
     <property name="io.version" value="1.2" />
     <property name="logging.version" value="1.1" />
     <property name="facelets.version" value="1.1.11" />
+    <property name="shale.remoting.version" value="1.0.4" />
     <property name="httpclient.jar" value="${sandbox.dependency.base.dir}/commons-httpclient-${httpclient.version}.jar"/>
     <property name="fileupload.jar" value="${sandbox.dependency.base.dir}/commons-fileupload-${fileupload.version}.jar"/>
     <property name="codec.jar" value="${sandbox.dependency.base.dir}/commons-codec-${codec.version}.jar"/>
     <property name="io.jar" value="${sandbox.dependency.base.dir}/commons-io-${io.version}.jar"/>
     <property name="logging.jar" value="${sandbox.dependency.base.dir}/commons-logging-${logging.version}.jar"/>
     <property name="facelets.jar" value="${sandbox.dependency.base.dir}/jsf-facelets-${facelets.version}.jar"/>
+    <property name="shale.remoting.jar" value="${sandbox.dependency.base.dir}/shale-remoting-${shale.remoting.version}.jar"/>
 
     <property name="name" value="jsf-ri-sandbox"/>
     <property name="sb.impl.version" value="0.1"/>
@@ -183,6 +185,17 @@
                      usetimestamp="true"/>
             </then>
         </if>
+        <!-- Shale Remoting -->
+        <if>
+            <not>
+                <available file="${shale.remoting.jar}" property="ignored"/>
+            </not>
+            <then>
+                <get src="${maven.mirror}/org/apache/shale/shale-remoting/${shale.remoting.version}/shale-remoting-${shale.remoting.version}.jar"
+                     dest="${shale.remoting.jar}"
+                     usetimestamp="true"/>
+            </then>
+        </if>
     </target>
 
     <target name="compile" depends="prepare" description="Just compile the classes">
@@ -223,8 +236,8 @@
             </classpath>
         </jsf.javac>
 
-        <copy toDir="${build.classes.dir}/META-INF">
-            <fileset dir="${resource.dir}/META-INF/" />
+        <copy toDir="${build.classes.dir}">
+            <fileset dir="${resource.dir}" />
         </copy>
         <copy file="${httpclient.jar}" todir="${dep.jar.dir}" />
         <copy file="${codec.jar}" todir="${dep.jar.dir}" />

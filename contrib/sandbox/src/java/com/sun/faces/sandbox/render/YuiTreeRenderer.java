@@ -5,12 +5,16 @@ package com.sun.faces.sandbox.render;
 
 import java.io.IOException;
 import java.io.StringWriter;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.render.Renderer;
+
+import org.apache.shale.remoting.Mechanism;
 
 import com.sun.faces.sandbox.component.YuiTree;
 import com.sun.faces.sandbox.component.YuiTreeNode;
@@ -33,8 +37,8 @@ public class YuiTreeRenderer extends Renderer {
     };
 
     private static final String cssIds[] = { 
-        YuiConstants.CSS_TREEVIEW,
-        YuiConstants.CSS_SANDBOX
+        YuiConstants.CSS_TREEVIEW
+//        YuiConstants.CSS_SANDBOX
     };
 
     public boolean getRendersChildren() {
@@ -67,11 +71,17 @@ public class YuiTreeRenderer extends Renderer {
         ResponseWriter writer = context.getResponseWriter();
 
         for (int i = 0; i < scriptIds.length; i++) {
-            Util.linkJavascript(writer, scriptIds[i]);
+            Util.getXhtmlHelper().linkJavascript(context, component,
+                    context.getResponseWriter(), Mechanism.CLASS_RESOURCE,
+                    scriptIds[i]);
         }
         for (int i = 0; i < cssIds.length; i++) {
-            Util.linkStyleSheet(writer, cssIds[i]);
+            Util.getXhtmlHelper().linkStylesheet(context, component,
+                    context.getResponseWriter(), Mechanism.CLASS_RESOURCE,
+                    cssIds[i]);
         }
+        
+        YuiRendererHelper.renderSandboxStylesheet(context, writer, tree);
         
         writer.startElement("div", tree);
         writer.writeAttribute("id", component.getId(), "id");

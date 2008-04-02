@@ -14,6 +14,8 @@ import javax.faces.convert.Converter;
 import javax.faces.convert.ConverterException;
 import javax.faces.convert.DateTimeConverter;
 
+import org.apache.shale.remoting.Mechanism;
+
 import com.sun.faces.sandbox.component.YuiCalendar;
 import com.sun.faces.sandbox.util.Util;
 import com.sun.faces.sandbox.util.YuiConstants;
@@ -41,10 +43,14 @@ public class YuiCalendarRenderer extends HtmlBasicRenderer {//Renderer {
     public void encodeBegin(FacesContext context, UIComponent component)
     throws IOException {
         for (int i = 0; i < scriptIds.length; i++) {
-            Util.linkJavascript(context.getResponseWriter(), scriptIds[i]);
+            Util.getXhtmlHelper().linkJavascript(context, component,
+                    context.getResponseWriter(), Mechanism.CLASS_RESOURCE,
+                    scriptIds[i]);
         }
         for (int i = 0; i < cssIds.length; i++) {
-            Util.linkStyleSheet(context.getResponseWriter(), cssIds[i]);
+            Util.getXhtmlHelper().linkStylesheet(context, component,
+                    context.getResponseWriter(), Mechanism.CLASS_RESOURCE,
+                    cssIds[i]);
         }
     }
 

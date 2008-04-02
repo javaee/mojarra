@@ -10,6 +10,8 @@ import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.render.Renderer;
 
+import org.apache.shale.remoting.Mechanism;
+
 import com.sun.faces.sandbox.component.YuiMenuBase;
 import com.sun.faces.sandbox.component.YuiMenuItem;
 import com.sun.faces.sandbox.util.Util;
@@ -24,19 +26,6 @@ import com.sun.faces.sandbox.util.YuiConstants;
  * @author Jason Lee
  *
  */
-/*
-    TODO:  Point images to bundled images, and not those off the internet:
-    YAHOO.widget.MenuItem.prototype.IMG_ROOT = "../../build/menu/assets/";
-    YAHOO.widget.MenuItem.prototype.SUBMENU_INDICATOR_IMAGE_PATH = "menuarorght8_nrm_1.gif";
-    YAHOO.widget.MenuItem.prototype.SELECTED_SUBMENU_INDICATOR_IMAGE_PATH = "menuarorght8_hov_1.gif";
-    YAHOO.widget.MenuItem.prototype.DISABLED_SUBMENU_INDICATOR_IMAGE_PATH = "menuarorght8_dim_1.gif";
-    YAHOO.widget.MenuItem.prototype.CHECKED_IMAGE_PATH = "menuchk8_nrm_1.gif";
-    YAHOO.widget.MenuItem.prototype.SELECTED_CHECKED_IMAGE_PATH = "menuchk8_hov_1.gif";
-    YAHOO.widget.MenuItem.prototype.DISABLED_CHECKED_IMAGE_PATH = "menuchk8_dim_1.gif";
-    YAHOO.widget.MenuBarItem.prototype.SUBMENU_INDICATOR_IMAGE_PATH = "menuarodwn8_nrm_1.gif";
-    YAHOO.widget.MenuBarItem.prototype.SELECTED_SUBMENU_INDICATOR_IMAGE_PATH = "menuarodwn8_hov_1.gif";
-    YAHOO.widget.MenuBarItem.prototype.DISABLED_SUBMENU_INDICATOR_IMAGE_PATH = "menuarodwn8_dim_1.gif";
- */ 
 public class YuiMenuRenderer extends Renderer {
     /**
      * This String array lists all of the JavaScript files needed by this component.
@@ -74,12 +63,17 @@ public class YuiMenuRenderer extends Renderer {
     @Override
     public void encodeBegin(FacesContext context, UIComponent component) throws IOException {
         for (int i = 0; i < scriptIds.length; i++) {
-            Util.linkJavascript(context.getResponseWriter(), scriptIds[i]);
+            Util.getXhtmlHelper().linkJavascript(context, component,
+                    context.getResponseWriter(), Mechanism.CLASS_RESOURCE,
+                    scriptIds[i]);
         }
-
         for (int i = 0; i < cssIds.length; i++) {
-            Util.linkStyleSheet(context.getResponseWriter(), cssIds[i]);
+            Util.getXhtmlHelper().linkStylesheet(context, component,
+                    context.getResponseWriter(), Mechanism.CLASS_RESOURCE,
+                    cssIds[i]);
         }
+        
+        YuiRendererHelper.renderSandboxJavaScript(context, context.getResponseWriter(), component);
     }
 
     /**

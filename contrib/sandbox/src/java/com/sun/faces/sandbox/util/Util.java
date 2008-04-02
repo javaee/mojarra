@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.6 2007/01/22 21:48:17 jdlee Exp $
+ * $Id: Util.java,v 1.7 2007/02/08 21:59:26 jdlee Exp $
  */
 
 /*
@@ -47,12 +47,15 @@ import javax.faces.el.ValueBinding;
 import javax.faces.render.Renderer;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.shale.remoting.Mechanism;
+import org.apache.shale.remoting.XhtmlHelper;
+
 /**
  * <B>Util</B> is a class ...
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.6 2007/01/22 21:48:17 jdlee Exp $
+ * @version $Id: Util.java,v 1.7 2007/02/08 21:59:26 jdlee Exp $
  */
 
 public class Util {      
@@ -129,6 +132,8 @@ public class Util {
          "usemap",
          "width"
     };
+    
+    protected static XhtmlHelper xhtmlHelper;
 
     public static boolean componentIsDisabledOnReadonly(UIComponent component) {
         Object disabledOrReadonly = null;
@@ -393,15 +398,15 @@ public class Util {
     }
 
 
-    public static void linkJavascript(ResponseWriter writer, String path) throws IOException {
+    public static void linkJavascript1(ResponseWriter writer, String path) throws IOException {
         // TODO:  Class.forName("some.shale.class"); useShaleStuff(); catch (ClassNotFound) {useOurStuff()}; 
-        writer.startElement("script", null);
-        writer.writeAttribute("type", "text/javascript", "type");
-        writer.writeAttribute("src", generateStaticUri(path), "src");
-        writer.endElement("script");
+//        writer.startElement("script", null);
+//        writer.writeAttribute("type", "text/javascript", "type");
+//        writer.writeAttribute("src", generateStaticUri(path), "src");
+//        writer.endElement("script");
     }
 
-    public static void linkStyleSheet(ResponseWriter writer, String path) throws IOException {
+    public static void linkStyleSheet1(ResponseWriter writer, String path) throws IOException {
         writer.startElement("link", null);
         writer.writeAttribute("rel", "stylesheet", "rel");
         writer.writeAttribute("type", "text/css", "type");
@@ -409,6 +414,13 @@ public class Util {
         writer.endElement("link");
     }
 
+    public static XhtmlHelper getXhtmlHelper() {
+        if (xhtmlHelper == null) {
+            xhtmlHelper = new XhtmlHelper();
+        }
+        
+        return xhtmlHelper;
+    }
 
     public static Class loadClass(String name,
                                   Object fallbackClass)
@@ -420,7 +432,7 @@ public class Util {
 
     public static void outputTemplate(Renderer renderer, String path, Map<String, String> fields) throws IOException {
         ResponseWriter writer = FacesContext.getCurrentInstance().getResponseWriter();
-        InputStream is = renderer.getClass().getResourceAsStream("/META-INF/" + path);
+        InputStream is = renderer.getClass().getResourceAsStream(path);
         if (is != null) {
             String template = readInString(is);
             

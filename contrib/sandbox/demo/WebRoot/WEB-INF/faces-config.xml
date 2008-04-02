@@ -4,10 +4,6 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_1_2.xsd"
 	version="1.2">
 
-  <application>
-    <view-handler>com.sun.facelets.FaceletViewHandler</view-handler>
-  </application>
-
     <managed-bean>
         <managed-bean-name>testBean</managed-bean-name>
         <managed-bean-class>com.sun.faces.sandbox.test.webapp.TestBean</managed-bean-class>
