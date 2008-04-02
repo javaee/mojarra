@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.36 2002/09/20 20:47:18 eburns Exp $
+ * $Id: Util.java,v 1.37 2002/09/30 20:49:56 rkitain Exp $
  */
 
 /*
@@ -50,7 +50,7 @@ import java.util.Locale;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.36 2002/09/20 20:47:18 eburns Exp $
+ * @version $Id: Util.java,v 1.37 2002/09/30 20:49:56 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -191,7 +191,6 @@ public class Util extends Object
 	"size",
         "tabindex",
         "class",
-        "lang",
         "title",
         "style",
         "width",
