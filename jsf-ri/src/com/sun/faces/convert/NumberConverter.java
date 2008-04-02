@@ -1,5 +1,5 @@
 /*
- * $Id: NumberConverter.java,v 1.5 2003/03/21 23:22:02 rkitain Exp $
+ * $Id: NumberConverter.java,v 1.6 2003/08/25 20:31:03 rkitain Exp $
  */
 
 /*
@@ -12,7 +12,6 @@ package com.sun.faces.convert;
 
 import com.sun.faces.RIConstants;
 import com.sun.faces.renderkit.FormatPool;
-import com.sun.faces.renderkit.html_basic.NumberRenderer;
 import com.sun.faces.util.Util;
 
 import java.io.IOException;

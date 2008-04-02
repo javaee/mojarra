@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_2.java,v 1.53 2003/08/25 15:37:48 rkitain Exp $
+ * $Id: TestRenderers_2.java,v 1.54 2003/08/25 20:31:04 rkitain Exp $
  */
 
 /*
@@ -12,16 +12,10 @@
 package com.sun.faces.renderkit.html_basic;
 
 import com.sun.faces.renderkit.html_basic.CheckboxRenderer;
-import com.sun.faces.renderkit.html_basic.NumberRenderer;
 import com.sun.faces.util.Util;
 
 import java.io.IOException;
 import java.util.Iterator;
-import java.util.Date;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.text.NumberFormat;
-import java.text.DecimalFormat;
 
 import javax.faces.FactoryFinder;
 import javax.faces.application.Application;
@@ -63,7 +57,7 @@ import com.sun.faces.TestBean;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_2.java,v 1.53 2003/08/25 15:37:48 rkitain Exp $
+ * @version $Id: TestRenderers_2.java,v 1.54 2003/08/25 20:31:04 rkitain Exp $
  * 
  *
  */
@@ -153,16 +147,6 @@ public class TestRenderers_2 extends JspFacesTestCase
         // for Text
         theRequest.addParameter("my_input_text", "text");
 
-        // for Text - NumberFormat
-        theRequest.addParameter("my_number", "47%");
-        theRequest.addParameter("my_number2", "1999.8769432");
-
-        theRequest.addParameter("my_input_date", DATE_STR);
-        theRequest.addParameter("my_input_date2", DATE_STR_LONG);
-        theRequest.addParameter("my_output_date", DATE_STR);
-        theRequest.addParameter("my_input_time", TIME_STR);
-        theRequest.addParameter("my_output_time", TIME_STR);
-        theRequest.addParameter("my_output_date2", DATE_STR_LONG);
         theRequest.addParameter("my_output_text", "text");
 
         theRequest.addParameter("my_textarea", "TextAreaRenderer");
@@ -192,24 +176,13 @@ public class TestRenderers_2 extends JspFacesTestCase
             testSecretRenderer(root);
             testInputTextRenderer(root);
             testOutputTextRenderer(root);
-	    testInputDateRenderer(root);
-	    testInputTimeRenderer(root);
-	    testInputDateTimeRendererWithPattern(root);
-            testOutputDateRenderer(root);
-            testOutputTimeRenderer(root);
-	    testOutputDateTimeRendererWithPattern(root);
             testTextAreaRenderer(root);
-            testInputNumberRenderer(root);
-	    testInputNumberRendererWithPattern(root);
-            testOutputNumberRenderer(root);
-	    testOutputNumberRendererWithPattern(root);
             testGraphicImageRenderer(root);
             // order in which the messages are output is indeterminant since
             // the messages are stored in a HashMap. so its difficult test
             // using the golden file approach.
             // testOutputErrorsRenderer(root);
             testOutputMessageRenderer(root);
-            testInputNumberRendererWithCharacter(root);
             getFacesContext().getResponseWriter().endDocument();
             assertTrue(verifyExpectedOutput());
         } catch (Throwable t) {
@@ -520,97 +493,6 @@ public class TestRenderers_2 extends JspFacesTestCase
         messageRenderer.encodeBegin(getFacesContext(), output);
         messageRenderer.encodeEnd(getFacesContext(), output);
     }
-        
-
-    public void testInputDateRenderer(UIComponent root) throws IOException {
-        System.out.println("Testing Input_DateRenderer");
-        UIInput input = new UIInputBase();
-        input.setValue(null);
-        input.setId("my_input_date");
-	input.setAttribute("dateStyle", "medium");
-        root.getChildren().add(input);
-
-        DateRenderer dateRenderer = new DateRenderer();
-	Date date = null;
-	DateFormat formatter = 
-	    DateFormat.getDateInstance(DateFormat.MEDIUM,
-				       getFacesContext().getLocale());
-	
-        // test decode method
-	
-        System.out.println("    Testing decode method...");
-
-        dateRenderer.decode(getFacesContext(), input);
-	date = (Date) input.getValue();
-	assertTrue(null != date);
-	assertTrue(DATE_STR.equals(formatter.format(date)));
-
-        // test encode method
-
-        System.out.println("    Testing encode method...");
-        dateRenderer.encodeBegin(getFacesContext(), input);
-        dateRenderer.encodeEnd(getFacesContext(), input);
-    }
-
-    public void testInputTimeRenderer(UIComponent root) throws IOException {
-        System.out.println("Testing Input_TimeRenderer");
-        UIInput input = new UIInputBase();
-        input.setValue(null);
-        input.setId("my_input_time");
-	input.setAttribute("timeStyle", "medium");
-        root.getChildren().add(input);
-
-        TimeRenderer timeRenderer = new TimeRenderer();
-	Date date = null;
-	DateFormat formatter = 
-	    DateFormat.getTimeInstance(DateFormat.MEDIUM,
-				       getFacesContext().getLocale());
-	
-        // test decode method
-	
-        System.out.println("    Testing decode method...");
-
-        timeRenderer.decode(getFacesContext(), input);
-	date = (Date) input.getValue();
-	assertTrue(null != date);
-	String what = formatter.format(date);
-	assertTrue(TIME_STR.equals(formatter.format(date)));
-
-        // test encode method
-
-        System.out.println("    Testing encode method...");
-        timeRenderer.encodeBegin(getFacesContext(), input);
-        timeRenderer.encodeEnd(getFacesContext(), input);
-    }
-
-    public void testInputDateTimeRendererWithPattern(UIComponent root) throws IOException {
-        System.out.println("Testing Input_DateRenderer With Pattern");
-	String formatPattern = "EEE, MMM d, yyyy G 'at' hh:mm:ss a";
-        UIInput input = new UIInputBase();
-        input.setValue(null);
-        input.setId("my_input_date2");
-	input.setAttribute("formatPattern", formatPattern);
-        root.getChildren().add(input);
-
-        DateTimeRenderer dateTimeRenderer = new DateTimeRenderer();
-	Date date = null;
-	SimpleDateFormat formatter = new SimpleDateFormat(formatPattern);
-	
-        // test decode method
-	
-        System.out.println("    Testing decode method...");
-
-        dateTimeRenderer.decode(getFacesContext(), input);
-	date = (Date) input.getValue();
-	assertTrue(null != date);
-	assertTrue(DATE_STR_LONG.equals(formatter.format(date)));
-
-        // test encode method
-
-        System.out.println("    Testing encode method...");
-        dateTimeRenderer.encodeBegin(getFacesContext(), input);
-        dateTimeRenderer.encodeEnd(getFacesContext(), input);
-    }
 
     public void testTextAreaRenderer(UIComponent root) throws IOException {
         System.out.println("Testing TextAreaRenderer");
@@ -635,206 +517,4 @@ public class TestRenderers_2 extends JspFacesTestCase
         getFacesContext().getResponseWriter().writeText("\n", null);
     }
     
-    public void testInputNumberRenderer(UIComponent root) throws IOException {
-        System.out.println("Testing NumberRenderer for UIInput ");
-        UIInput input = new UIInputBase();
-        input.setValue(null);
-        input.setId("my_number");
-	input.setAttribute("numberStyle", "percent");
-        root.getChildren().add(input);
-
-        NumberRenderer numberRenderer = new NumberRenderer();
-	Number number = null;
-	NumberFormat formatter = 
-	    NumberFormat.getPercentInstance(getFacesContext().getLocale());
-	
-        // test decode method
-	
-        System.out.println("    Testing decode method...");
-
-        numberRenderer.decode(getFacesContext(), input);
-	number = (Number) input.getValue();
-	assertTrue(null != number);
-	assertTrue(NUMBER_STR.equals(formatter.format(number)));
-
-        // test encode method
-
-        System.out.println("    Testing encode method...");
-        numberRenderer.encodeBegin(getFacesContext(), input);
-        numberRenderer.encodeEnd(getFacesContext(), input);
-    }
-    
-    public void testInputNumberRendererWithPattern(UIComponent root) 
-            throws IOException {
-        System.out.println("Testing NumberRenderer With Pattern for UIInput ");
-	String formatPattern = "####.000";
-        UIInput input = new UIInputBase();
-        input.setValue(null);
-        input.setId("my_number2");
-	input.setAttribute("formatPattern", formatPattern);
-        root.getChildren().add(input);
-
-        NumberRenderer numberRenderer = new NumberRenderer();
-	Number number = null;
-	DecimalFormat formatter = new DecimalFormat(formatPattern);
-	
-        // test decode method
-	
-        System.out.println("    Testing decode method...");
-
-        numberRenderer.decode(getFacesContext(), input);
-	number= (Number) input.getValue();
-	assertTrue(null != number);
-	assertTrue("1999.877".equals(formatter.format(number)));
-
-        // test encode method
-
-        System.out.println("    Testing encode method...");
-        numberRenderer.encodeBegin(getFacesContext(), input);
-        numberRenderer.encodeEnd(getFacesContext(), input);
-        getFacesContext().getResponseWriter().writeText("\n", null);
-    }    
-
-    public void testOutputNumberRenderer(UIComponent root) throws IOException {
-        System.out.println("Testing NumberRenderer for UIOutput");
-        UIOutput output = new UIOutputBase();
-        output.setValue(new Double(.99));
-        output.setId("my_number3");
-	output.setAttribute("numberStyle", "percent");
-        root.getChildren().add(output);
-
-        NumberRenderer numberRenderer = new NumberRenderer();
-	Number number = null;
-	NumberFormat formatter = 
-	    NumberFormat.getPercentInstance(getFacesContext().getLocale());
-	
-        // test encode method
-        System.out.println("    Testing encode method...");
-        numberRenderer.encodeBegin(getFacesContext(), output);
-        numberRenderer.encodeEnd(getFacesContext(), output);
-        getFacesContext().getResponseWriter().writeText("\n", null);
-    }
-    
-    public void testOutputNumberRendererWithPattern(UIComponent root) throws IOException {
-        System.out.println("Testing NumberRenderer With Pattern for UIOutput");
-	String formatPattern = "####.000";
-        UIOutput output = new UIOutputBase();
-        output.setValue(new Double(999));
-        output.setId("my_number4");
-	output.setAttribute("formatPattern", formatPattern);
-        root.getChildren().add(output);
-
-        NumberRenderer numberRenderer = new NumberRenderer();
-	Number number = null;
-	DecimalFormat formatter = new DecimalFormat(formatPattern);
-	
-        // test encode method
-        System.out.println("    Testing encode method...");
-        numberRenderer.encodeBegin(getFacesContext(), output);
-        numberRenderer.encodeEnd(getFacesContext(), output);
-        getFacesContext().getResponseWriter().writeText("\n", null);
-    }  
-
-
-    public void testOutputDateRenderer(UIComponent root) throws IOException {
-        System.out.println("Testing Output_DateRenderer");
-        UIOutput output = new UIOutputBase();
-        output.setId("my_output_date");
-	output.setAttribute("dateStyle", "medium");
-	output.setValue(DATE_STR);
-        root.getChildren().add(output);
-
-        DateRenderer dateRenderer = new DateRenderer();
-	Date date = null;
-	DateFormat formatter = 
-	    DateFormat.getDateInstance(DateFormat.MEDIUM,
-				       getFacesContext().getLocale());
-	
-        // test decode method
-	
-        System.out.println("    Testing decode method...");
-
-        dateRenderer.decode(getFacesContext(), output);
-
-        // test encode method
-
-        System.out.println("    Testing encode method...");
-        dateRenderer.encodeBegin(getFacesContext(), output);
-        dateRenderer.encodeEnd(getFacesContext(), output);
-    }
-
-    public void testOutputTimeRenderer(UIComponent root) throws IOException {
-        System.out.println("Testing Output_TimeRenderer");
-        UIOutput output = new UIOutputBase();
-        output.setId("my_output_time");
-	output.setAttribute("timeStyle", "medium");
-	output.setValue(TIME_STR);
-        root.getChildren().add(output);
-
-        TimeRenderer timeRenderer = new TimeRenderer();
-	Date date = null;
-	DateFormat formatter = 
-	    DateFormat.getTimeInstance(DateFormat.MEDIUM,
-				       getFacesContext().getLocale());
-	
-        // test decode method
-	
-        System.out.println("    Testing decode method...");
-
-        timeRenderer.decode(getFacesContext(), output);
-
-        // test encode method
-
-        System.out.println("    Testing encode method...");
-        timeRenderer.encodeBegin(getFacesContext(), output);
-        timeRenderer.encodeEnd(getFacesContext(), output);
-    }
-
-    public void testOutputDateTimeRendererWithPattern(UIComponent root) throws IOException {
-        System.out.println("Testing DateRenderer With Pattern");
-	String formatPattern = "EEE, MMM d, yyyy G 'at' hh:mm:ss a";
-        UIOutput output = new UIOutputBase();
-        output.setValue(DATE_STR_LONG);
-        output.setId("my_output_date2");
-	output.setAttribute("formatPattern", formatPattern);
-        root.getChildren().add(output);
-
-        DateTimeRenderer dateRenderer = new DateTimeRenderer();
-	Date date = null;
-	SimpleDateFormat formatter = new SimpleDateFormat(formatPattern);
-	
-        // test decode method
-	
-        System.out.println("    Testing decode method...");
-
-        dateRenderer.decode(getFacesContext(), output);
-
-        // test encode method
-
-        System.out.println("    Testing encode method...");
-        dateRenderer.encodeBegin(getFacesContext(), output);
-        dateRenderer.encodeEnd(getFacesContext(), output);
-
-	// testing encode with invalid date
-	output.setValue("invalidDate");
-        System.out.println("    Testing encode method...");
-        dateRenderer.encodeBegin(getFacesContext(), output);
-        dateRenderer.encodeEnd(getFacesContext(), output);
-        getFacesContext().getResponseWriter().writeText("\n", null);
-        // decode() simply sets valid to true for UIOutput components. 
-        // So valid will never be false.	
-    }
-    
-    public void testInputNumberRendererWithCharacter(UIComponent root) 
-            throws IOException {
-        System.out.println("Testing NumberRenderer With Character input ");
-	UIInput input = new UIInputBase();
-        char testchar='9';
-        input.setValue(new Character(testchar));
-        input.setId("my_character");
-	
-        NumberRenderer numberRenderer = new NumberRenderer();
-	String expectedStr = numberRenderer.getCurrentValue(getFacesContext(),input);
-        assertTrue(expectedStr.equals("9"));
-    } 
 } // end of class TestRenderers2_

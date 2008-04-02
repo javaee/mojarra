@@ -7,9 +7,5 @@
 	<option value="103">Long4</option>
 </select>
 <input type="password" name="my_secret" value="">
-<input type="text" name="my_input_text" value="text"><input type="text" name="my_input_date" id="my_input_date" value="Jan 12, 1952"><input type="text" name="my_input_time" id="my_input_time" value="12:31:31 PM"><input type="text" name="my_input_date2" id="my_input_date2" value="Sat, Jan 12, 1952 AD at 12:31:31 PM">Jan 12, 195212:31:31 PMSat, Jan 12, 1952 AD at 12:31:31 PMinvalidDate
-<textarea name="my_textarea">TextAreaRenderer</textarea>
-<input type="text" name="my_number" id="my_number" value="47%"><input type="text" name="my_number2" id="my_number2" value="1999.877">
-99%
-999.000
+<input type="text" name="my_input_text" value="text"><textarea name="my_textarea">TextAreaRenderer</textarea>
 <img id="my_graphic_image" src="/test/nonModelReferenceImage.gif;jsessionid=41647E428768CD64158970BF4CD4E59D"><img id="id0" src="/test/foo/modelReferenceImage.gif;jsessionid=41647E428768CD64158970BF4CD4E59D">My name is Bobby Orr

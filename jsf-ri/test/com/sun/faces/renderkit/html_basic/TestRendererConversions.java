@@ -1,5 +1,5 @@
 /*
- * $Id: TestRendererConversions.java,v 1.6 2003/08/22 17:27:43 rlubke Exp $
+ * $Id: TestRendererConversions.java,v 1.7 2003/08/25 20:31:04 rkitain Exp $
  */
 
 /*
@@ -36,7 +36,7 @@ import com.sun.faces.ServletFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRendererConversions.java,v 1.6 2003/08/22 17:27:43 rlubke Exp $
+ * @version $Id: TestRendererConversions.java,v 1.7 2003/08/25 20:31:04 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -110,38 +110,26 @@ public void testEmptyStrings()
 	    public String getComponentType() { return "root"; }
         };
     UIInput 
-	number = new UIInputBase(),
-	date = new UIInputBase(),
 	text = new UIInputBase(),
 	hidden = new UIInputBase(),
 	secret = new UIInputBase();
     
-    number.setId("number");
-    date.setId("date");
     text.setId("text");
     hidden.setId("hidden");
     secret.setId("secret");
     
-    number.setRendererType("Number");
-    date.setRendererType("Date");
     text.setRendererType("Text");
     hidden.setRendererType("Hidden");
     secret.setRendererType("Secret"); 
     
-    root.getChildren().add(number);
-    root.getChildren().add(date);
     root.getChildren().add(text);
     root.getChildren().add(hidden);
     root.getChildren().add(secret);
-    NumberRenderer numberRenderer = new NumberRenderer();
-    DateRenderer dateRenderer = new DateRenderer();
     TextRenderer textRenderer = new TextRenderer();
     HiddenRenderer hiddenRenderer = new HiddenRenderer();
     SecretRenderer secretRenderer = new SecretRenderer();
 
     try {
-	numberRenderer.decode(getFacesContext(), number);
-	dateRenderer.decode(getFacesContext(), date);
 	textRenderer.decode(getFacesContext(), text);
 	hiddenRenderer.decode(getFacesContext(), hidden);
 	secretRenderer.decode(getFacesContext(), secret);
@@ -149,8 +137,6 @@ public void testEmptyStrings()
     catch (Throwable e) {
         assertTrue(false);
     }
-    assertTrue(number.isValid());
-    assertTrue(date.isValid());
     assertTrue(text.isValid());
     assertTrue(hidden.isValid());
     assertTrue(secret.isValid());
@@ -170,40 +156,13 @@ public void testNulls()
 public void beginBadConversion(WebRequest theRequest)
 {
     theRequest.setURL("localhost:8080", null, null, TEST_URI, null);
-    theRequest.addParameter("number", "oeuoeu");
-    theRequest.addParameter("date", "oeuoeuoue");
 }
-
-    /**
-
-    * Test the built-in conversion for those renderers that have it.
-
-    */
 
 public void testBadConversion()
 {
     UIComponent root = new UINamingContainerBase() {
 	    public String getComponentType() { return "root"; }
         };
-    UIInput 
-	number = new UIInputBase(),
-	date = new UIInputBase();
-    root.getChildren().add(number);
-    root.getChildren().add(date);
-    NumberRenderer numberRenderer = new NumberRenderer();
-    DateRenderer dateRenderer = new DateRenderer();
-
-    number.setId("number");
-    date.setId("date");
-    try {
-	numberRenderer.decode(getFacesContext(), number);
-	dateRenderer.decode(getFacesContext(), date);
-    }
-    catch (Throwable e) {
-	assertTrue(false);
-    }
-    assertTrue(!number.isValid());
-    assertTrue(!date.isValid());
 }
 
 
