@@ -50,6 +50,7 @@
     <delete file="${basedir}/javaserverfaces_source.zip" />
     <delete file="${basedir}/javaserverfaces_source.class" />
     <delete file="jsf-portlet.zip" />
+    <delete file="jsf-portlet.class"/>
     <delete dir="{jsf-portlet.home}/dist" />
     <ant dir="${jsf-api.home}" target="clean" inheritAll="false" />
     <ant dir="${jsf-ri.home}" target="clean" inheritAll="false" />
@@ -90,7 +91,7 @@
           
   <installerBuilder
           classFile="javaserverfaces_source.class"
-          licenseFile="${installer.home}/jrl_1_3.txt"
+          licenseFile="${basedir}/jrl_1_3.txt"
           zipFile="${basedir}/javaserverfaces_source.zip" />
   </target>
   
@@ -108,11 +109,20 @@
       jsf-portlet is ${jsf-portlet.home}
     </echo>
     
+    <taskdef name="installerBuilder" classname="com.sun.tools.xjc.installer.builder.BuilderTask">
+     <classpath>
+         <fileset dir="${installer.home}" includes="*.jar"/>
+     </classpath>
+    </taskdef>
+  
     <delete file="jsf-portlet.zip" />
+    <delete file="jsf-portlet.class"/>
     <delete dir="${jsf-portlet.home}/dist" />
     <delete dir="${jsf-portlet.home}/build" />
     
     <ant dir="${jsf-portlet.home}" inheritall="false" target="main"/>
+    <copy file="${jsf-portlet.home}/LICENSE.txt"
+         todir="${jsf-portlet.home}/dist/jsf-portlet" />
     <copy file="${jsf-portlet.home}/portlet-lib/build/lib/jsf-portlet.jar"
          todir="${jsf-portlet.home}/dist/jsf-portlet/lib" />
     
@@ -130,6 +140,11 @@
       <fileset dir="${jsf-portlet.home}/dist"
                includes="jsf-portlet/**"/>
     </zip>
+    
+    <installerBuilder
+          classFile="javaserverfaces_portlet.class"
+          licenseFile="${jsf-portlet.home}/LICENSE.txt"
+          zipFile="${basedir}/jsf-portlet.zip" />
       
   </target>
   
