@@ -1,9 +1,9 @@
 /*
- * $Id: ConverterFactory.java,v 1.3 2002/10/08 17:03:34 craigmcc Exp $
+ * $Id: ConverterFactory.java,v 1.4 2003/02/13 00:18:11 craigmcc Exp $
  */
 
 /*
- * Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2002-2003 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -50,6 +50,47 @@ public abstract class ConverterFactory {
 
 
     /**
+     * <p>Register a new {@link Converter} instance that knows how to perform
+     * conversions to and from the specified object class.  This method may be
+     * called at any time, and makes the corresponding {@link Converter}
+     * instance available throughout the remaining lifetime of this web
+     * application.</p>
+     *
+     * @param clazz Class for which Object-to-String and String-to-Object
+     *  conversions are supported by this {@link Converter}
+     * @param converter {@link Converter} instance that we are registering
+     */
+    public abstract void addConverter(Class clazz, Converter converter);
+
+
+    /**
+     * <p>Create (if needed) and return a {@link Converter} instance that
+     * may be used to perform Object-to-String and String-to-Object conversions
+     * for objects of the specified class.  A search of the registered
+     * {@link Converters} is performed in the following order:</p>
+     * <ul>
+     * <li>An exact match on the original class.</li>
+     * <li>An exact match on the superclasses of this class, starting with
+     *     the immediate parent.</li>
+     * <li>An exact match for each interface directly implemented by the
+     *     original class.</li>
+     * <li>An exact match for each interface directly implemented by
+     *     superclasses of this class, starting with the immediate
+     *     parent.</li>
+     * </ul>
+     *
+     * <p>If a {@link Converter} is discovered during the search described
+     * above, it is returned; otherwise <code>null</code> is returned.</p>
+     *
+     * @param clazz Class for which a {@link Converter} is requested
+     *
+     * @exception NullPointerException if <code>clazz</code>
+     *  is <code>null</code>
+     */
+    public abstract Converter getConverter(Class clazz);
+
+
+    /**
      * <p>Create (if needed) and return a {@link Converter} instance that
      * may be used to perform Object-to-String and String-to-Object
      * conversions for web applications based on JavaServer Faces.  The
@@ -69,6 +110,13 @@ public abstract class ConverterFactory {
      *  is <code>null</code>
      */
     public abstract Converter getConverter(String converterId);
+
+
+    /**
+     * <p>Return an <code>Iterator</code> over the set of classes for
+     * which we have registered {@link Converter}s in this factory.</p>
+     */
+    public abstract Iterator getConverterClasses();
 
 
     /**

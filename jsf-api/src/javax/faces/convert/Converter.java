@@ -1,9 +1,9 @@
 /*
- * $Id: Converter.java,v 1.3 2003/02/03 22:57:49 craigmcc Exp $
+ * $Id: Converter.java,v 1.4 2003/02/13 00:18:10 craigmcc Exp $
  */
 
 /*
- * Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2002-2003 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
