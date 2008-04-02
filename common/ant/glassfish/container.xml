@@ -151,6 +151,12 @@ grant {
       <jar destfile="${dist.dir}/jsf-impl.jar" 
            basedir="${dist.dir}/tmp" />
 
+            <if>
+                <os family="windows"/>
+                <then>
+                   <container.stop/>
+                </then>
+            </if>
             <delete>
                 <fileset dir="${container.home}/lib" includes="jsf-*.jar"/>
             </delete>
@@ -159,10 +165,29 @@ grant {
             </jar>
             <copy todir="${container.home}/lib"
                   file="${dist.dir}/jsf-impl.jar"/>
+            <if>
+                <os family="windows"/>
+                <then>
+                   <container.start/>
+                </then>
+            </if>
             <delete dir="${dist.dir}/tmp" />
             <delete file="${dist.dir}/jsf-impl.jar" />
     </target>
     
+    <target name="container.start"
+            description="Start the GlassFish container">
+        <container.start/>
+    </target>
+    <target name="container.stop"
+            description="Stop the GlassFish container">
+        <container.stop/>
+    </target>
+    <target name="container.restart"
+            description="Stop the GlassFish container">
+        <container.start/>
+        <container.stop/>
+    </target>
     <macrodef name="container.start"
             description="Start the GlassFish container">
         <sequential>
