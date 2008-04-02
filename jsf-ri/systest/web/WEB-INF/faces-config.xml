@@ -38,6 +38,14 @@
         <converter-class>com.sun.faces.systest.model.SpecialConverter</converter-class>        
     </converter>
 
+    <managed-bean>
+        <managed-bean-name>enumbean</managed-bean-name>
+        <managed-bean-class>
+            com.sun.faces.systest.model.EnumBean
+        </managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
+    
   <managed-bean>
     <managed-bean-name>valueChangeListenerBean</managed-bean-name>
     <managed-bean-class>

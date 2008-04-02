@@ -1,5 +1,5 @@
 /*
- * $Id: EnumConverter.java,v 1.1 2006/03/07 21:02:45 edburns Exp $
+ * $Id: EnumConverter.java,v 1.2 2006/05/09 20:18:47 rlubke Exp $
  */
 
 /*
@@ -143,23 +143,20 @@ public class EnumConverter implements Converter, StateHolder {
         Object result = null;
         
         if(null != targetClass) {
-            Object enumConstants[] = targetClass.getEnumConstants();
-            String curName = null;
-            if (null != enumConstants) {
-                for (Object cur : enumConstants) {
-                    if (null != (curName = cur.toString())) {
-                        if (curName.equals(value)) {
-                            result = cur;
-                            break;
-                        }
-                    }
-                }
+            try {
+                result = Enum.valueOf(targetClass, value);
+            } catch (IllegalArgumentException iae) {
+                // ignore
             }
+           
             if (null == result) {
-                curName = (null != curName) ? curName : "";
-                throw new ConverterException(MessageFactory.getMessage(
-                        context, ENUM_ID, new Object[] {value, curName,
-                        MessageFactory.getLabel(context, component)}));
+                throw new ConverterException(
+                      MessageFactory.getMessage(context, 
+                                                ENUM_ID, 
+                                                value, 
+                                                value,
+                                                MessageFactory.getLabel(context, 
+                                                                        component)));
             }
         }
         return result;
@@ -191,21 +188,13 @@ public class EnumConverter implements Converter, StateHolder {
         // If the specified value is null, return a zero-length String
         if (value == null) {
             return "";
-        }
-        String result = null;
+        }       
         
-        if (null != targetClass) {
-            Object enumConstants[] = targetClass.getEnumConstants();
-            for (Object cur : enumConstants) {
-                if(value.equals(cur)) {
-                    result = cur.toString();
-                }
-            }
-        }
-
-	result = value.toString();
+        // given that we will return value.toString() no matter the outcome,
+        // just do it without any logic
         
-        return result;
+        return value.toString();       
+                
     }
     
     // ----------------------------------------------------------- StateHolder

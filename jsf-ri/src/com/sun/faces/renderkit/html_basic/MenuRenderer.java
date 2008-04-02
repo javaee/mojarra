@@ -24,7 +24,7 @@
  */
 
 /*
- * $Id: MenuRenderer.java,v 1.73 2006/04/27 17:39:15 rlubke Exp $
+ * $Id: MenuRenderer.java,v 1.74 2006/05/09 20:18:48 rlubke Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -35,13 +35,6 @@
 // MenuRenderer.java
 
 package com.sun.faces.renderkit.html_basic;
-
-import java.io.IOException;
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
 
 import javax.el.ValueExpression;
 import javax.faces.component.UIComponent;
@@ -54,12 +47,18 @@ import javax.faces.convert.ConverterException;
 import javax.faces.model.SelectItem;
 import javax.faces.model.SelectItemGroup;
 
+import java.io.IOException;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
+
 import com.sun.faces.RIConstants;
 import com.sun.faces.renderkit.RenderKitUtils;
-import com.sun.faces.util.Util;
 import com.sun.faces.util.MessageUtils;
-
-import java.util.logging.Level;
+import com.sun.faces.util.Util;
 
 /**
  * <B>MenuRenderer</B> is a class that renders the current value of
@@ -692,17 +691,33 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
                                     UIComponent component) {
         if (component instanceof UISelectMany) {
             UISelectMany select = (UISelectMany) component;
-            Object value = select.getValue();
-            if (value instanceof List)
-                return ((List) value).toArray();
+            Object value = select.getValue();            
+            if (value instanceof List) {
+                
+                List list = (List) value;
+                int size = list.size();
+                if (size > 0) {
+                    // get the type of the first element - Should
+                    // we assume that all elements of the List are
+                    // the same type?
+                    Class<?> type = list.get(0).getClass();
+                    return list.toArray((Object[]) Array
+                          .newInstance(list.get(0).getClass(),
+                                       size));
+                } else {                                        
+                    return ((List) value).toArray();
+                }
+            }
 
             return value;
         }
 
         UISelectOne select = (UISelectOne) component;
         Object returnObject;
-        if (null != (returnObject = select.getValue())) {
-            return new Object[]{returnObject};
+        if (null != (returnObject = select.getValue())) {            
+            Object ret = Array.newInstance(returnObject.getClass(), 1);
+            Array.set(ret, 0, returnObject);
+            return ret;
         }
         return null;
     }

@@ -1,5 +1,5 @@
 /*
- * $Id: ConverterTestCase.java,v 1.6 2006/03/29 23:03:55 rlubke Exp $
+ * $Id: ConverterTestCase.java,v 1.7 2006/05/09 20:18:48 rlubke Exp $
  */
 
 /*
@@ -206,8 +206,8 @@ public class ConverterTestCase extends AbstractTestCase {
 	HtmlSubmitInput button = (HtmlSubmitInput) list.get(0);
 	page = (HtmlPage) button.click();
         
-        assertTrue(-1 != page.asText().indexOf("suit: 'aoeuoeuoe' must be convertible to an enum. suit: 'aoeuoeuoe' must be convertible to an enum from the enum that contains the constant 'Spades'."));
-        assertTrue(-1 != page.asText().indexOf("color: 'aoeuoeuoe' must be convertible to an enum. color: 'aoeuoeuoe' must be convertible to an enum from the enum that contains the constant 'Orange'."));
+        assertTrue(-1 != page.asText().indexOf("suit: 'aoeuoeuoe' must be convertible to an enum. suit: 'aoeuoeuoe' must be convertible to an enum from the enum that contains the constant 'aoeuoeuoe'."));
+        assertTrue(-1 != page.asText().indexOf("color: 'aoeuoeuoe' must be convertible to an enum. color: 'aoeuoeuoe' must be convertible to an enum from the enum that contains the constant 'aoeuoeuoe'."));
 
         // Case 1, valid Suit, invalid color
 	list = getAllElementsOfGivenClass(page, null, 
@@ -220,7 +220,7 @@ public class ConverterTestCase extends AbstractTestCase {
 	page = (HtmlPage) button.click();
 
         assertTrue(-1 == page.asText().indexOf("suit:"));
-        assertTrue(-1 != page.asText().indexOf("color: 'aoeuoeuoe' must be convertible to an enum. color: 'aoeuoeuoe' must be convertible to an enum from the enum that contains the constant 'Orange'."));
+        assertTrue(-1 != page.asText().indexOf("color: 'aoeuoeuoe' must be convertible to an enum. color: 'aoeuoeuoe' must be convertible to an enum from the enum that contains the constant 'aoeuoeuoe'."));
         
         // Case 2, valid Suit, valid color
 	list = getAllElementsOfGivenClass(page, null, 
@@ -250,7 +250,7 @@ public class ConverterTestCase extends AbstractTestCase {
 	button = (HtmlSubmitInput) list.get(0);
 	page = (HtmlPage) button.click();
         
-        assertTrue(-1 != page.asText().indexOf("suit: 'aoeuoeuoe' must be convertible to an enum. suit: 'aoeuoeuoe' must be convertible to an enum from the enum that contains the constant 'Spades'."));
+        assertTrue(-1 != page.asText().indexOf("suit: 'aoeuoeuoe' must be convertible to an enum. suit: 'aoeuoeuoe' must be convertible to an enum from the enum that contains the constant 'aoeuoeuoe'."));
         assertTrue(-1 == page.asText().indexOf("color:"));        
         
 

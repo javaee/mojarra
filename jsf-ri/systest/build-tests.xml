@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 
 <!--
- $Id: build-tests.xml,v 1.114 2006/05/05 17:26:29 rlubke Exp $
+ $Id: build-tests.xml,v 1.115 2006/05/09 20:18:48 rlubke Exp $
 -->
 
 <!--
@@ -725,6 +725,15 @@
         <jsf.tester
               request="${context.path}/faces/standard/autocomplete.jsp"
               golden="${golden.path}/standard/autocomplete.txt"/>
+        
+        <jsf.junit context-path="${context.path}"
+                   classpath-refid="html.classpath"
+                   test-results-dir="${impl.test.results.dir}">
+            <tests>
+                <fileset dir="${basedir}/build/classes"
+                         includes="com/sun/faces/systest/SelectOneManyEnumTestCase.class"/>
+            </tests>
+        </jsf.junit>  
     </target>
 
     <target name="test.html.taglib"
