@@ -1,5 +1,5 @@
 /*
- * $Id: SelectOne_RadioTag.java,v 1.23 2003/05/02 17:37:49 eburns Exp $
+ * $Id: SelectOne_RadioTag.java,v 1.24 2003/06/27 22:29:34 rkitain Exp $
  */
 
 /*
@@ -31,7 +31,7 @@ import com.sun.faces.taglib.FacesTag;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: SelectOne_RadioTag.java,v 1.23 2003/05/02 17:37:49 eburns Exp $
+ * @version $Id: SelectOne_RadioTag.java,v 1.24 2003/06/27 22:29:34 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -108,10 +108,10 @@ public class SelectOne_RadioTag extends SelectOne_ListboxTag
 	super.overrideProperties(component);
 	UISelectOne uiSelectOne = (UISelectOne) component;
 	
-	if (null == uiSelectOne.getAttribute("layout")) {
+        if (null != getLayout()) {
 	    uiSelectOne.setAttribute("layout", getLayout());
 	}
-	if (null == uiSelectOne.getAttribute("border")) {
+        if (null != getBorder()) {
 	    uiSelectOne.setAttribute("border", getBorder());
 	}
     }

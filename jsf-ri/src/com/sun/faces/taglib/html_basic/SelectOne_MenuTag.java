@@ -5,7 +5,7 @@
 
 
 /**
- * $Id: SelectOne_MenuTag.java,v 1.5 2003/04/29 20:52:09 eburns Exp $
+ * $Id: SelectOne_MenuTag.java,v 1.6 2003/06/27 22:29:34 rkitain Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -31,7 +31,7 @@ import com.sun.faces.taglib.FacesTag;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: SelectOne_MenuTag.java,v 1.5 2003/04/29 20:52:09 eburns Exp $
+ * @version $Id: SelectOne_MenuTag.java,v 1.6 2003/06/27 22:29:34 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -101,13 +101,13 @@ public SelectOne_MenuTag()
     protected void overrideProperties(UIComponent component) {
         super.overrideProperties(component);
 
-        if (null == component.getAttribute("size")) {
+        if (null != getSize()) {
             component.setAttribute("size", getSize());
         }
-        if (null == component.getAttribute("onselect")) {
+        if (null != getOnselect()) {
             component.setAttribute("onselect", getOnselect());
         }
-        if (null == component.getAttribute("onchange")) {
+        if (null != getOnchange()) {
             component.setAttribute("onchange", getOnchange());
         }
     }

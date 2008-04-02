@@ -1,5 +1,5 @@
 /*
- * $Id: SelectOne_ListboxTag.java,v 1.4 2003/04/29 20:52:09 eburns Exp $
+ * $Id: SelectOne_ListboxTag.java,v 1.5 2003/06/27 22:29:34 rkitain Exp $
  */
 
 /*
@@ -32,7 +32,7 @@ import com.sun.faces.RIConstants;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: SelectOne_ListboxTag.java,v 1.4 2003/04/29 20:52:09 eburns Exp $
+ * @version $Id: SelectOne_ListboxTag.java,v 1.5 2003/06/27 22:29:34 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -103,13 +103,13 @@ public SelectOne_ListboxTag()
     protected void overrideProperties(UIComponent component) {
 	super.overrideProperties(component);
 	
-        if (null == component.getAttribute("size")) {
+        if (null != getSize()) {
 	    component.setAttribute("size", getSize());
 	}
-        if (null == component.getAttribute("onselect")) {
+        if (null != getOnselect()) {
 	    component.setAttribute("onselect", getOnselect());
 	}
-	if (null == component.getAttribute("onchange")) {
+        if (null != getOnchange()) {
 	    component.setAttribute("onchange", getOnchange());
 	}
     }
