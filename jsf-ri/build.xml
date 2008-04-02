@@ -30,6 +30,7 @@
   <property name="build.home" value="${basedir}/build"/>
 
   <property name="build.generate"   value="${build.home}/generate"/>
+  <property name="build.generate.tld"   value="${build.dir}/generate/conf/share"/>
 
   <!-- The base directory for the JSF APIs -->
   <property name="jsf-api.home" value ="../jsf-api"/>
@@ -166,6 +167,11 @@
     <unjar src="${mozutil.jar}" dest="${build.home}/classes"/>
   </target>
 
+  <target name="prepare.generate"
+          depends="prepare,set.tools.property,verify.tools.property">
+    <mkdir dir="${build.generate.tld}"/>
+  </target>
+
   <target name="set.tools.property" unless="jsf-tools">
     <available property="jsf-tools" value="${jsf-tools.dir}"
                file="${jsf-tools.dir}/build.xml"/>
@@ -192,6 +198,37 @@ must exist.  This is necessary for the MessageFactory class.
 
   </target>
 
+  <target name="check.taglib.generation.necessity" if="jsf-tools">
+    <uptodate property="skip.taglib.generation"
+              targetfile="${build.generate}/last-taglib-generation">
+       <srcfiles dir="${jsf-api.home}/doc">
+         <include name="*.xml"/>
+       </srcfiles>
+    </uptodate>
+  </target>
+
+  <target name="generate" depends="prepare.generate,check.taglib.generation.necessity"
+          if="jsf-tools" unless="skip.taglib.generation">
+    <echo>
+      jsf-tools is ${jsf-tools.dir}
+    </echo>
+
+    <ant dir="${jsf-tools.dir}" inheritall="false" target="clean.generated.taglib"/>
+
+    <ant dir="${jsf-tools.dir}" inheritall="false" target="generate.taglib"/>
+
+    <copy todir="${build.generate}">
+
+      <fileset dir="${jsf-tools.dir}/build/generate">
+        <include name="conf/**/*.*"/>
+        <include name="com/**/*.*"/>
+      </fileset>
+    </copy>
+
+    <touch file="${build.generate}/last-taglib-generation"/>
+
+  </target>
+
   <target name="compile" depends="prepare,copy.template.sources"
    description="Just compile the classes">
     <!-- Run javac through everything -->
@@ -200,8 +237,9 @@ must exist.  This is necessary for the MessageFactory class.
              debug="${compile.debug}"
        deprecation="${compile.deprecation}"
           optimize="${compile.optimize}">
-      <src path="${source.home}"/>
+      <src path="${source.home}"/> 
       <src path="${build.generate}"/>
+      <exclude name="com/sun/faces/taglib/**"/>
       <classpath refid="compile.classpath"/>
     </javac>
     <copy todir="${build.home}/classes">
@@ -212,6 +250,20 @@ must exist.  This is necessary for the MessageFactory class.
     </copy>
     <copy  file="${jsf-api.dtd}"
           todir="${build.home}/classes/com/sun/faces/config"/>
+
+    </target>
+
+  <target name="compile.generated" depends="compile, generate"
+   description="Just compile the classes">
+    <!-- Run javac through everything -->
+    <javac
+           destdir="${build.home}/classes"
+             debug="${compile.debug}"
+       deprecation="${compile.deprecation}"
+          optimize="${compile.optimize}">
+      <src path="${build.generate}"/>
+      <classpath refid="compile.classpath"/>
+    </javac>
 
     </target>
 
@@ -404,6 +456,6 @@ must exist.  This is necessary for the MessageFactory class.
    </target>
 
 
-  <target name="main" depends="prepare,compile,jars,copy.to.tck"/>
+  <target name="main" depends="prepare,generate,compile.generated,jars,copy.to.tck"/>
 
 </project>
