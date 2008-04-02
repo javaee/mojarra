@@ -1,5 +1,5 @@
 /*
- * $Id: StateHolder.java,v 1.9 2003/11/03 22:00:54 rlubke Exp $
+ * $Id: StateHolder.java,v 1.10 2003/11/04 17:13:55 eburns Exp $
  */
 
 /*
@@ -39,7 +39,9 @@ public interface StateHolder {
      * instances that implement StateHolder (such as a
      * <code>UIComponent</code> with event handlers, validators, etc.)
      * this method must call the {@link #saveState} method on all those
-     * instances as well.</p>
+     * instances as well.  <strong>This method must not save the state
+     * of children and facets.</strong> That is done via the {@link
+     * javax.faces.application.StateManager}</p>
      *
      * <p>The return from this method must be <code>Serializable</code></p>
      * 
