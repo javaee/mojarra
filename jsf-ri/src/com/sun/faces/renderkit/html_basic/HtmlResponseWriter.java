@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlResponseWriter.java,v 1.2 2003/08/04 21:54:50 rkitain Exp $
+ * $Id: HtmlResponseWriter.java,v 1.3 2003/08/12 15:26:39 rkitain Exp $
  */
 
 /*
@@ -166,7 +166,6 @@ public class HtmlResponseWriter extends ResponseWriter {
 
         // always turn escaping back on once an element ends
         dontEscape = false;
-      
         // See if we need to close the start of the last element
         if (closeStart) {
             boolean isEmptyElement = HtmlUtils.isEmptyElement(name);
@@ -217,7 +216,7 @@ public class HtmlResponseWriter extends ResponseWriter {
                 // Don't write anything for "false" booleans
             }
         } else {
-            writer.write(' ');
+            writer.write(" ");
             writer.write(name);
             writer.write("=\"");
             

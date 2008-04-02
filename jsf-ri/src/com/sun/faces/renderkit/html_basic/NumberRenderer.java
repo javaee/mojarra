@@ -1,5 +1,5 @@
 /*
- * $Id: NumberRenderer.java,v 1.23 2003/08/08 16:20:22 rkitain Exp $
+ * $Id: NumberRenderer.java,v 1.24 2003/08/12 15:26:39 rkitain Exp $
  */
 
 /*
@@ -46,7 +46,7 @@ import javax.servlet.ServletResponse;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: NumberRenderer.java,v 1.23 2003/08/08 16:20:22 rkitain Exp $
+ * @version $Id: NumberRenderer.java,v 1.24 2003/08/12 15:26:39 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -213,6 +213,7 @@ public class NumberRenderer extends HtmlBasicInputRenderer {
 
             Util.renderPassThruAttributes(writer, component);
             Util.renderBooleanPassThruAttributes(writer, component);
+	    writer.endElement("input");
 	}else {
 	    writer.writeText(currentValue);
         }  

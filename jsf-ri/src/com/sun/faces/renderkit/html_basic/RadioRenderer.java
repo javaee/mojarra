@@ -1,5 +1,5 @@
 /*
- * $Id: RadioRenderer.java,v 1.43 2003/08/08 16:20:23 rkitain Exp $
+ * $Id: RadioRenderer.java,v 1.44 2003/08/12 15:26:39 rkitain Exp $
  */
 
 /*
@@ -153,6 +153,8 @@ public class RadioRenderer extends HtmlBasicInputRenderer {
 
 	    Util.renderPassThruAttributes(writer, curItemWrapper.getUISelectItem());
 	    Util.renderBooleanPassThruAttributes(writer, curItemWrapper.getUISelectItem());
+
+	    writer.endElement("input");
 
             String itemLabel = curItem.getLabel();
             if (itemLabel != null) {

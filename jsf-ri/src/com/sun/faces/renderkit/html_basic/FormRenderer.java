@@ -1,5 +1,5 @@
 /*
- * $Id: FormRenderer.java,v 1.49 2003/08/08 16:20:20 rkitain Exp $
+ * $Id: FormRenderer.java,v 1.50 2003/08/12 15:26:38 rkitain Exp $
  */
 
 /*
@@ -40,7 +40,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: FormRenderer.java,v 1.49 2003/08/08 16:20:20 rkitain Exp $
+ * @version $Id: FormRenderer.java,v 1.50 2003/08/12 15:26:38 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -113,7 +113,7 @@ public class FormRenderer extends HtmlBasicRenderer {
 
         Util.renderPassThruAttributes(writer, component);
         Util.renderBooleanPassThruAttributes(writer, component);
-
+	writer.writeText('\n');
 	updateFormNumber(context, component);
     }
 

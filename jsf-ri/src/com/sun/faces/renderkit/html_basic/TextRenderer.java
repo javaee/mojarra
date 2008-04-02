@@ -1,5 +1,5 @@
 /*
- * $Id: TextRenderer.java,v 1.46 2003/08/08 16:20:23 rkitain Exp $
+ * $Id: TextRenderer.java,v 1.47 2003/08/12 15:26:40 rkitain Exp $
  */
 
 /*
@@ -107,6 +107,8 @@ public class TextRenderer extends HtmlBasicInputRenderer {
 
             Util.renderPassThruAttributes(writer, component);
             Util.renderBooleanPassThruAttributes(writer, component);
+
+	    writer.endElement("input");
 
         } else if (component instanceof UIOutput) {
             if (currentValue == null || currentValue == "") {

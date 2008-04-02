@@ -1,5 +1,5 @@
 /*
- * $Id: DateRenderer.java,v 1.24 2003/08/08 16:20:18 rkitain Exp $
+ * $Id: DateRenderer.java,v 1.25 2003/08/12 15:26:38 rkitain Exp $
  */
 
 /*
@@ -48,7 +48,7 @@ import javax.servlet.ServletResponse;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: DateRenderer.java,v 1.24 2003/08/08 16:20:18 rkitain Exp $
+ * @version $Id: DateRenderer.java,v 1.25 2003/08/12 15:26:38 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -207,6 +207,7 @@ public class DateRenderer extends HtmlBasicInputRenderer {
 
             Util.renderPassThruAttributes(writer, component);
             Util.renderBooleanPassThruAttributes(writer, component);
+	    writer.endElement("input");
 	} else {
 	    writer.writeText(currentValue);
         }  
