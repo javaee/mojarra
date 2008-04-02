@@ -1,5 +1,5 @@
 /*
- * $Id: ResultDataModel.java,v 1.12 2004/01/23 04:24:20 craigmcc Exp $
+ * $Id: ResultDataModel.java,v 1.13 2004/01/26 06:49:40 craigmcc Exp $
  */
 
 /*
@@ -107,7 +107,13 @@ public class ResultDataModel extends DataModel {
 
 
     /**
-     * @exception FacesException {@inheritDoc}
+     * <p>Return <code>true</code> if there is <code>wrappedData</code>
+     * available, and the current value of <code>rowIndex</code> is greater
+     * than or equal to zero, and less than the length of the array returned
+     * by calling <code>getRows()</code> on the underlying <code>Result</code>.
+     * Otherwise, return <code>false</code>.</p>
+     *
+     * @exception FacesException if an error occurs getting the row availability
      */ 
     public boolean isRowAvailable() {
 
@@ -123,8 +129,13 @@ public class ResultDataModel extends DataModel {
 
 
     /**
-     * @exception FacesException {@inheritDoc}     
-     */ 
+     * <p>If there is <code>wrappedData</code> available, return the
+     * length of the array returned by calling <code>getRows()</code>
+     * on the underlying <code>Result</code>.  If no <code>wrappedData</code>
+     * is available, return -1.</p>
+     *
+     * @exception FacesException if an error occurs getting the row count
+     */
     public int getRowCount() {
 
         if (result == null) {
@@ -136,9 +147,21 @@ public class ResultDataModel extends DataModel {
 
 
     /**
-     * @exception FacesException {@inheritDoc}     
-     * @exception IllegalArgumentException {@inheritDoc}     
-     */ 
+     * <p>If row data is available, return the <code>SortedMap</code> array
+     * element at the index specified by <code>rowIndex</code> of the
+     * array returned by calling <code>getRows()</code> on the underlying
+     * <code>Result</code>.  If no wrapped data is available,
+     * return <code>null</code>.</p>
+     *
+     * <p>Note that, if a non-<code>null</code> <code>Map</code> is returned
+     * by this method, it will contain the values of the columns for the
+     * current row, keyed by column name.  Column name comparisons must be
+     * performed in a case-insensitive manner.</p>
+     *
+     * @exception FacesException if an error occurs getting the row data
+     * @exception IllegalArgumentException if now row data is available
+     *  at the currently specified row index
+     */
     public Object getRowData() {
 
         if (result == null) {
@@ -203,7 +226,8 @@ public class ResultDataModel extends DataModel {
 
 
     /**
-     * @exception ClassCastException {@inheritDoc}
+     * @exception ClassCastException if <code>data</code> is
+     *  non-<code>null</code> and is not a <code>Result</code>
      */
     public void setWrappedData(Object data) {
 

@@ -1,5 +1,5 @@
 /*
- * $Id: ResultSetDataModel.java,v 1.18 2004/01/23 04:24:20 craigmcc Exp $
+ * $Id: ResultSetDataModel.java,v 1.19 2004/01/26 06:49:40 craigmcc Exp $
  */
 
 /*
@@ -126,7 +126,14 @@ public class ResultSetDataModel extends DataModel {
 
 
     /**
-     * @exception FacesException {@inheritDoc}
+     * <p>Return <code>true</code> if there is <code>wrappedData</code>
+     * available, and the result of calling <code>absolute()</code> on the
+     * underlying <code>ResultSet</code>, passing the current value of
+     * <code>rowIndex</code> plus one (to account for the fact that
+     * <code>ResultSet</code> uses one-relative indexing), returns
+     * <code>true</code>.  Otherwise, return <code>false</code>.</p>
+     *
+     * @exception FacesException if an error occurs getting the row availability
      */ 
     public boolean isRowAvailable() {
 
@@ -149,8 +156,13 @@ public class ResultSetDataModel extends DataModel {
 
 
     /**
-     * @exception FacesException {@inheritDoc}     
-     */ 
+     * <p>Return -1, since <code>ResultSet</code> does not provide a
+     * standard way to determine the number of available rows without
+     * scrolling through the entire <code>ResultSet</code>, and this can
+     * be very expensive if the number of rows is large.</p>
+     *
+     * @exception FacesException if an error occurs getting the row count
+     */
     public int getRowCount() {
 
 	return (-1);
@@ -159,8 +171,54 @@ public class ResultSetDataModel extends DataModel {
 
 
     /**
-     * @exception FacesException {@inheritDoc}     
-     * @exception IllegalArgumentException {@inheritDoc}     
+     * <p>If row data is available, return a <code>Map</code> representing
+     * the values of the columns for the row specified by <code>rowIndex</code>,
+     * keyed by the corresponding column names.  If no wrapped data is
+     * available, return <code>null</code>.</p>
+     *
+     * <p>If a non-<code>null</code> <code>Map</code> is returned, its behavior
+     * must correspond to the contract for a mutable <code>Map</code> as
+     * described in the JavaDocs for <code>AbstractMap</code>, with the
+     * following exceptions and specialized behavior:</p>
+     * <ul>
+     * <li>The <code>Map</code>, and any supporting objects it returns,
+     *     must perform all column name comparisons in a case-insensitive
+     *     manner.</li>
+     * <li>The following methods must throw
+     *     <code>UnsupportedOperationException</code>:  <code>clear()</code>,
+     *     <code>remove()</code>.</li>
+     * <li>The <code>entrySet()</code> method must return a <code>Set</code>
+     *     that has the following behavior:
+     *     <ul>
+     *     <li>Throw <code>UnsupportedOperationException</code> for any attempt
+     *         to add or remove entries from the <code>Set</code>, either
+     *         directly or indirectly through an <code>Iterator</code>
+     *         returned by the <code>Set</code>.</li>
+     *     <li>Updates to the <code>value</code> of an entry in this
+     *         <code>set</code> must write through to the corresponding
+     *         column value in the underlying <code>ResultSet</code>.</li>
+     *     </ul></li>
+     * <li>The <code>keySet()</code> method must return a <code>Set</code>
+     *     that throws <code>UnsupportedOperationException</code> on any
+     *     attempt to add or remove keys, either directly or through an
+     *     <code>Iterator</code> returned by the <code>Set</code>.</li>
+     * <li>The <code>put()</code> method must throw
+     *     <code>IllegalArgumentException</code> if a key value for which
+     *     <code>containsKey()</code> returns <code>false</code> is
+     *     specified.  However, if a key already present in the <code>Map</code>
+     *     is specified, the specified value must write through to the
+     *     corresponding column value in the underlying <code>ResultSet</code>.
+     *     </li>
+     * <li>The <code>values()</code> method must return a
+     *     <code>Collection</code> that throws
+     *     <code>UnsupportedOperationException</code> on any attempt to add
+     *     or remove values, either directly or through an <code>Iterator</code>
+     *     returned by the <code>Collection</code>.</li>
+     * </ul>
+     *
+     * @exception FacesException if an error occurs getting the row data
+     * @exception IllegalArgumentException if now row data is available
+     *  at the currently specified row index
      */ 
     public Object getRowData() {
 
@@ -169,17 +227,9 @@ public class ResultSetDataModel extends DataModel {
         } else if (!isRowAvailable()) {
             throw new IllegalArgumentException();
         }
-        // PENDING(craigmcc) - Spec required behavior of the Map we create
         try {
-            // NOTE:  isRowAvailable() positioned us already
-            TreeMap map = new TreeMap(String.CASE_INSENSITIVE_ORDER);
-            ResultSetMetaData metadata = getMetaData();
-            int n = metadata.getColumnCount();
-            for (int i = 1; i <= n; i++) {
-                String name = metadata.getColumnName(i);
-                map.put(name, resultSet.getObject(name));
-            }
-            return (map);
+            getMetaData();
+            return (new ResultSetMap(String.CASE_INSENSITIVE_ORDER));
         } catch (SQLException e) {
             throw new FacesException(e);
         }
@@ -311,17 +361,14 @@ public class ResultSetDataModel extends DataModel {
     // row index
     private class ResultSetMap extends TreeMap {
 
-        public ResultSetMap(Comparator comparator) {
+        public ResultSetMap(Comparator comparator) throws SQLException {
             super(comparator);
             index = ResultSetDataModel.this.index;
-            try {
-                resultSet.absolute(index + 1);
-                int n = metadata.getColumnCount();
-                for (int i = 1; i <= n; i++) {
-                    super.put(metadata.getColumnName(i), null);
-                }
-            } catch (SQLException e) {
-                throw new FacesException(e);
+            resultSet.absolute(index + 1);
+            int n = metadata.getColumnCount();
+            for (int i = 1; i <= n; i++) {
+                super.put(metadata.getColumnName(i),
+                          metadata.getColumnName(i));
             }
         }
 
@@ -359,15 +406,16 @@ public class ResultSetDataModel extends DataModel {
             if (!containsKey(key)) {
                 return (null);
             }
-            if (!(key instanceof String)) {
-                throw new IllegalArgumentException();
-            }
             try {
                 resultSet.absolute(index + 1);
-                return (resultSet.getObject((String) key));
+                return (resultSet.getObject((String) realKey(key)));
             } catch (SQLException e) {
                 throw new FacesException(e);
             }
+        }
+
+        public Set keySet() {
+            return (new ResultSetKeys(this));
         }
 
         public Object put(Object key, Object value) {
@@ -379,14 +427,14 @@ public class ResultSetDataModel extends DataModel {
             }
             try {
                 resultSet.absolute(index + 1);
-                Object previous = resultSet.getObject((String) key);
+                Object previous = resultSet.getObject((String) realKey(key));
                 if ((previous == null) && (value == null)) {
                     return (previous);
                 } else if ((previous != null) && (value != null) &&
-                           !previous.equals(value)) {
+                           previous.equals(value)) {
                     return (previous);
                 }
-                resultSet.updateObject((String) key, value);
+                resultSet.updateObject((String) realKey(key), value);
                 ResultSetDataModel.this.updated();
                 return (previous);
             } catch (SQLException e) {
@@ -409,6 +457,14 @@ public class ResultSetDataModel extends DataModel {
 
         public Collection values() {
             return (new ResultSetValues(this));
+        }
+
+        Object realKey(Object key) {
+            return (super.get(key));
+        }
+
+        Iterator realKeys() {
+            return (super.keySet().iterator());
         }
 
     }
@@ -442,6 +498,9 @@ public class ResultSetDataModel extends DataModel {
         public boolean contains(Object o) {
             if (o == null) {
                 throw new NullPointerException();
+            }
+            if (!(o instanceof Map.Entry)) {
+                return (false);
             }
             Map.Entry e = (Map.Entry) o;
             Object k = e.getKey();
@@ -580,6 +639,93 @@ public class ResultSetDataModel extends DataModel {
     }
 
 
+    // Private implementation of Set that implements the keySet() behavior
+    // for ResultSetMap
+    private class ResultSetKeys extends AbstractSet {
+
+        public ResultSetKeys(ResultSetMap map) {
+            this.map = map;
+        }
+
+        private ResultSetMap map;
+
+        // Adding keys is not allowed
+        public boolean add(Object o) {
+            throw new UnsupportedOperationException();
+        }
+
+        // Adding keys is not allowed
+        public boolean addAll(Collection c) {
+            throw new UnsupportedOperationException();
+        }
+
+        // Removing keys is not allowed
+        public void clear() {
+            throw new UnsupportedOperationException();
+        }
+
+        public boolean contains(Object o) {
+            return (map.containsKey(o));
+        }
+
+        public boolean isEmpty() {
+            return (map.isEmpty());
+        }
+
+        public Iterator iterator() {
+            return (new ResultSetKeysIterator(map));
+        }
+
+        // Removing keys is not allowed
+        public boolean remove(Object o) {
+            throw new UnsupportedOperationException();
+        }
+
+        // Removing keys is not allowed
+        public boolean removeAll(Collection c) {
+            throw new UnsupportedOperationException();
+        }
+
+        // Removing keys is not allowed
+        public boolean retainAll(Collection c) {
+            throw new UnsupportedOperationException();
+        }
+
+        public int size() {
+            return (map.size());
+        }
+
+    }
+
+
+    // Private implementation of Iterator that implements the iterator()
+    // behavior for the Set returned by keySet() from ResultSetMap
+    private class ResultSetKeysIterator implements Iterator {
+
+        public ResultSetKeysIterator(ResultSetMap map) {
+            this.map = map;
+            this.keys = map.realKeys();
+        }
+
+        private ResultSetMap map = null;
+        private Iterator keys = null;
+
+        public boolean hasNext() {
+            return (keys.hasNext());
+        }
+
+        public Object next() {
+            return (keys.next());
+        }
+
+        // Removing keys is not allowed
+        public void remove() {
+            throw new UnsupportedOperationException();
+        }
+
+    }
+
+
     // Private implementation of Collection that implements the behavior
     // for the Collection returned by values() from ResultSetMap
     private class ResultSetValues extends AbstractCollection {
@@ -590,6 +736,18 @@ public class ResultSetDataModel extends DataModel {
 
         private ResultSetMap map;
 
+        public boolean add(Object o) {
+            throw new UnsupportedOperationException();
+        }
+
+        public boolean addAll(Collection c) {
+            throw new UnsupportedOperationException();
+        }
+
+        public void clear() {
+            throw new UnsupportedOperationException();
+        }
+
         public boolean contains(Object value) {
             return (map.containsValue(value));
         }
@@ -598,6 +756,17 @@ public class ResultSetDataModel extends DataModel {
             return (new ResultSetValuesIterator(map));
         }
 
+        public boolean remove(Object o) {
+            throw new UnsupportedOperationException();
+        }
+
+        public boolean removeAll(Collection c) {
+            throw new UnsupportedOperationException();
+        }
+
+        public boolean retainAll(Collection c) {
+            throw new UnsupportedOperationException();
+        }
 
         public int size() {
             return (map.size());

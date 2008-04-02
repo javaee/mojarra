@@ -1,5 +1,5 @@
 /*
- * $Id: ListDataModel.java,v 1.12 2004/01/23 04:24:19 craigmcc Exp $
+ * $Id: ListDataModel.java,v 1.13 2004/01/26 06:49:40 craigmcc Exp $
  */
 
 /*
@@ -98,8 +98,13 @@ public class ListDataModel extends DataModel {
 
 
     /**
-     * @exception FacesException {@inheritDoc}
-     */ 
+     * <p>Return <code>true</code> if there is <code>wrappedData</code>
+     * available, and the current value of <code>rowIndex</code> is greater
+     * than or equal to zero, and less than the size of the list.  Otherwise,
+     * return <code>false</code>.</p>
+     *
+     * @exception FacesException if an error occurs getting the row availability
+     */
     public boolean isRowAvailable() {
 
         if (list == null) {
@@ -114,8 +119,12 @@ public class ListDataModel extends DataModel {
 
 
     /**
-     * @exception FacesException {@inheritDoc}     
-     */ 
+     * <p>If there is <code>wrappedData</code> available, return the
+     * length of the list.  If no <code>wrappedData</code> is available,
+     * return -1.</p>
+     *
+     * @exception FacesException if an error occurs getting the row count
+     */
     public int getRowCount() {
 
         if (list == null) {
@@ -127,9 +136,14 @@ public class ListDataModel extends DataModel {
 
 
     /**
-     * @exception FacesException {@inheritDoc}     
-     * @exception IllegalArgumentException {@inheritDoc}     
-     */ 
+     * <p>If row data is available, return the array element at the index
+     * specified by <code>rowIndex</code>.  If no wrapped data is available,
+     * return <code>null</code>.</p>
+     *
+     * @exception FacesException if an error occurs getting the row data
+     * @exception IllegalArgumentException if now row data is available
+     *  at the currently specified row index
+     */
     public Object getRowData() {
 
         if (list == null) {
@@ -194,7 +208,8 @@ public class ListDataModel extends DataModel {
 
 
     /**
-     * @exception ClassCastException {@inheritDoc}
+     * @exception ClassCastException if <code>data</code> is
+     *  non-<code>null</code> and is not a <code>List</code>
      */
     public void setWrappedData(Object data) {
 

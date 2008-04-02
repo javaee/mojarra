@@ -1,5 +1,5 @@
 /*
- * $Id: ArrayDataModel.java,v 1.12 2004/01/23 04:24:18 craigmcc Exp $
+ * $Id: ArrayDataModel.java,v 1.13 2004/01/26 06:49:39 craigmcc Exp $
  */
 
 /*
@@ -97,8 +97,13 @@ public class ArrayDataModel extends DataModel {
 
 
     /**
-     * @exception FacesException {@inheritDoc}
-     */ 
+     * <p>Return <code>true</code> if there is <code>wrappedData</code>
+     * available, and the current value of <code>rowIndex</code> is greater
+     * than or equal to zero, and less than the length of the array.  Otherwise,
+     * return <code>false</code>.</p>
+     *
+     * @exception FacesException if an error occurs getting the row availability
+     */
     public boolean isRowAvailable() {
 
         if (array == null) {
@@ -113,8 +118,12 @@ public class ArrayDataModel extends DataModel {
 
 
     /**
-     * @exception FacesException {@inheritDoc}     
-     */ 
+     * <p>If there is <code>wrappedData</code> available, return the
+     * length of the array.  If no <code>wrappedData</code> is available,
+     * return -1.</p>
+     *
+     * @exception FacesException if an error occurs getting the row count
+     */
     public int getRowCount() {
 
         if (array == null) {
@@ -126,9 +135,14 @@ public class ArrayDataModel extends DataModel {
 
 
     /**
-     * @exception FacesException {@inheritDoc}     
-     * @exception IllegalArgumentException {@inheritDoc}     
-     */ 
+     * <p>If row data is available, return the array element at the index
+     * specified by <code>rowIndex</code>.  If no wrapped data is available,
+     * return <code>null</code>.</p>
+     *
+     * @exception FacesException if an error occurs getting the row data
+     * @exception IllegalArgumentException if now row data is available
+     *  at the currently specified row index
+     */
     public Object getRowData() {
 
         if (array == null) {
@@ -193,7 +207,8 @@ public class ArrayDataModel extends DataModel {
 
 
     /**
-     * @exception ClassCastException {@inheritDoc}
+     * @exception ClassCastException if <code>data</code> is
+     *  non-<code>null</code> and is not an array of Java objects.
      */
     public void setWrappedData(Object data) {
 

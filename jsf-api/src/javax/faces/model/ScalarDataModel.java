@@ -1,5 +1,5 @@
 /*
- * $Id: ScalarDataModel.java,v 1.11 2004/01/23 04:24:20 craigmcc Exp $
+ * $Id: ScalarDataModel.java,v 1.12 2004/01/26 06:49:40 craigmcc Exp $
  */
 
 /*
@@ -98,8 +98,12 @@ public class ScalarDataModel extends DataModel {
 
 
     /**
-     * @exception FacesException {@inheritDoc}
-     */ 
+     * <p>Return <code>true</code> if there is <code>wrappedData</code>
+     * available, and the current value of <code>rowIndex</code> is zero.
+     * Otherwise, return <code>false</code>.</p>
+     *
+     * @exception FacesException if an error occurs getting the row availability
+     */
     public boolean isRowAvailable() {
 
         if (scalar == null) {
@@ -114,8 +118,11 @@ public class ScalarDataModel extends DataModel {
 
 
     /**
-     * @exception FacesException {@inheritDoc}     
-     */ 
+     * <p>If there is <code>wrappedData</code> available, return 1.
+     * If no <code>wrappedData</code> is available, return -1.</p>
+     *
+     * @exception FacesException if an error occurs getting the row count
+     */
     public int getRowCount() {
 
         if (scalar == null) {
@@ -127,9 +134,13 @@ public class ScalarDataModel extends DataModel {
 
 
     /**
-     * @exception FacesException {@inheritDoc}     
-     * @exception IllegalArgumentException {@inheritDoc}     
-     */ 
+     * <p>If wrapped data is available, return the wrapped data instance.
+     * Otherwise, return <code>null</code>.</p>
+     *
+     * @exception FacesException if an error occurs getting the row data
+     * @exception IllegalArgumentException if now row data is available
+     *  at the currently specified row index
+     */
     public Object getRowData() {
 
         if (scalar == null) {
