@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectManyTestCase.java,v 1.5 2003/01/23 03:30:07 jvisvanathan Exp $
+ * $Id: UISelectManyTestCase.java,v 1.6 2003/01/23 17:42:51 rkitain Exp $
  */
 
 /*
@@ -178,11 +178,12 @@ public class UISelectManyTestCase extends UISelectBaseTestCase {
         
         MockFacesContext facesContext = new MockFacesContext();
        
-        // case 1: previous value null, new value is {"one", "two", "three"};
+        // case 1: previous value null, new value is null;
         // make sure ValueChangedEvent is not fired if new value is same
         // as the old value.
         UISelectMany selectMany = (UISelectMany) component;
-        selectMany.previous = selectMany.currentValue(facesContext);
+        selectMany.setAttribute(UIInput.PREVIOUS_VALUE,
+            selectMany.currentValue(facesContext));
         selectMany.setValue(null);
         selectMany.validate(facesContext);
         // ValueChangedEvent should not be fired in this case since the value
@@ -190,11 +191,12 @@ public class UISelectManyTestCase extends UISelectBaseTestCase {
         Iterator eventsItr = facesContext.getFacesEvents();
         assertTrue(!(eventsItr.hasNext()));
         
-        // case 2: previous value null, new value is {"one", "two", "three"};
-        // make sure ValueChangedEvent is not fired if new value is same
-        // as the old value.
+        // case 2: previous value null, new value is {"one", "two", "one"};
+        // make sure ValueChangedEvent is fired if new value is different 
+        // from the old value.
         Object selectedValues[] = {"one", "two", "one"};
-        selectMany.previous = selectMany.currentValue(facesContext);
+        selectMany.setAttribute(UIInput.PREVIOUS_VALUE,
+            selectMany.currentValue(facesContext));
         selectMany.setValue(selectedValues);
         selectMany.validate(facesContext);
         
@@ -211,7 +213,8 @@ public class UISelectManyTestCase extends UISelectBaseTestCase {
         // create a new FacesContext make sure we don't have any events 
         // queued from previous test case.
         facesContext = new MockFacesContext();
-        selectMany.previous = selectMany.currentValue(facesContext);
+        selectMany.setAttribute(UIInput.PREVIOUS_VALUE,
+            selectMany.currentValue(facesContext));
         Object selectedValues2[] = {"one", "one", "two"};
         selectMany.setValue(selectedValues2);
         
@@ -222,7 +225,8 @@ public class UISelectManyTestCase extends UISelectBaseTestCase {
         
         // case 4: previous value {{"one", "one", "two"}
         // new value is {"one", "two", "two"}
-        selectMany.previous = selectMany.currentValue(facesContext);
+        selectMany.setAttribute(UIInput.PREVIOUS_VALUE,
+            selectMany.currentValue(facesContext));
         Object newValues[] = {"one", "two", "two"};
         selectMany.setValue(newValues);
         selectMany.validate(facesContext);
@@ -238,7 +242,8 @@ public class UISelectManyTestCase extends UISelectBaseTestCase {
         // case 5: previous value {"one", "two", "two"}
         // new value is {"one", "two", "two", "one"}
         facesContext = new MockFacesContext();
-        selectMany.previous = selectMany.currentValue(facesContext);
+        selectMany.setAttribute(UIInput.PREVIOUS_VALUE,
+            selectMany.currentValue(facesContext));
         Object newValues2[] = {"one", "two", "two", "one"};
         selectMany.setValue(newValues2);
         selectMany.validate(facesContext);

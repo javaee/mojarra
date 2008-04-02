@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectBooleanTestCase.java,v 1.4 2002/12/17 23:31:00 eburns Exp $
+ * $Id: UISelectBooleanTestCase.java,v 1.5 2003/01/23 17:42:51 rkitain Exp $
  */
 
 /*
@@ -12,6 +12,8 @@ package javax.faces.component;
 
 import java.util.Iterator;
 import javax.faces.event.FacesEvent;
+import javax.faces.event.ValueChangedEvent;
+import javax.faces.mock.MockFacesContext;
 import javax.faces.validator.Validator;
 import junit.framework.TestCase;
 import junit.framework.Test;
@@ -142,5 +144,55 @@ private class UISelectBooleanNamingContainer extends UISelectBoolean implements 
 
     }
 
+    public void testFireValueChangeEvents() {
 
+        MockFacesContext facesContext = new MockFacesContext();
+
+        // case 1: previous value null, new value is null;
+        // make sure ValueChangedEvent is not fired if new value is same
+        // as the old value.
+        UISelectBoolean selectBoolean = (UISelectBoolean) component;
+        selectBoolean.setAttribute(UIInput.PREVIOUS_VALUE,
+            selectBoolean.currentValue(facesContext));
+        selectBoolean.setValue(null);
+        selectBoolean.validate(facesContext);
+        // ValueChangedEvent should not be fired in this case since the value
+        // didn't change.
+        Iterator eventsItr = facesContext.getFacesEvents();
+        assertTrue(!(eventsItr.hasNext()));
+
+        // case 2: previous value null, new value is false;
+        // make sure ValueChangedEvent is fired if new value is different
+        // from the old value.
+        selectBoolean.setAttribute(UIInput.PREVIOUS_VALUE,
+            selectBoolean.currentValue(facesContext));
+        selectBoolean.setValue(Boolean.FALSE);
+        selectBoolean.validate(facesContext);
+
+        // ValueChangedEvent should be fired in this case since the value
+        // changed
+        eventsItr = facesContext.getFacesEvents();
+        assertTrue((eventsItr.hasNext()));
+        Object eventObj = eventsItr.next();
+        // make sure it is an instance of ValueChangedEvent
+        assertTrue(eventObj instanceof ValueChangedEvent);
+
+        // case 3: previous value false 
+        // new value is true 
+        // create a new FacesContext make sure we don't have any events
+        // queued from previous test case.
+        facesContext = new MockFacesContext();
+        selectBoolean.setAttribute(UIInput.PREVIOUS_VALUE,
+            selectBoolean.currentValue(facesContext));
+        selectBoolean.setValue(Boolean.TRUE);
+        selectBoolean.validate(facesContext);
+
+        // ValueChangedEvent should be fired in this case since the value
+        // changed
+        eventsItr = facesContext.getFacesEvents();
+        assertTrue((eventsItr.hasNext()));
+        eventObj = eventsItr.next();
+        // make sure it is an instance of ValueChangedEvent
+        assertTrue(eventObj instanceof ValueChangedEvent);
+    }
 }

@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectOne.java,v 1.21 2003/01/17 00:26:48 craigmcc Exp $
+ * $Id: UISelectOne.java,v 1.22 2003/01/23 17:42:49 rkitain Exp $
  */
 
 /*
@@ -91,7 +91,7 @@ public class UISelectOne extends UISelectBase {
         }
 
         // Delegate to our associated Renderer if needed
-        previous = getValue();
+        setAttribute(UIInput.PREVIOUS_VALUE, currentValue(context));
         if (getRendererType() != null) {
             super.decode(context);
             return;

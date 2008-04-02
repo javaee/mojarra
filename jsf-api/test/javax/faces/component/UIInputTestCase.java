@@ -1,5 +1,5 @@
 /*
- * $Id: UIInputTestCase.java,v 1.5 2003/01/23 03:30:06 jvisvanathan Exp $
+ * $Id: UIInputTestCase.java,v 1.6 2003/01/23 17:42:50 rkitain Exp $
  */
 
 /*
@@ -217,7 +217,8 @@ private class UIInputNamingContainer extends UIInput implements NamingContainer 
         // as the old value.
         UIInput input = (UIInput) component;
         input.setValue(null);
-        input.previous = input.currentValue(facesContext);
+        input.setAttribute(UIInput.PREVIOUS_VALUE,
+            input.currentValue(facesContext));
         input.validate(facesContext);
         
         // ValueChangedEvent should not be fired in this case since the value
@@ -227,7 +228,8 @@ private class UIInputNamingContainer extends UIInput implements NamingContainer 
         
         // case 2: previous value null
         // new value is "New Value"
-        input.previous = input.currentValue(facesContext);
+        input.setAttribute(UIInput.PREVIOUS_VALUE,
+            input.currentValue(facesContext));
         input.setValue("New Value");
         input.validate(facesContext);
         // make sure ValueChangedEvent was fired since the value changed
@@ -241,7 +243,8 @@ private class UIInputNamingContainer extends UIInput implements NamingContainer 
         // new value is "New Value"
         // create a new FacesContext make sure we don't have any events 
         // queued from previous test case.
-        input.previous = input.currentValue(facesContext);
+        input.setAttribute(UIInput.PREVIOUS_VALUE,
+            input.currentValue(facesContext));
         facesContext = new MockFacesContext();
         input.setValue("New Value");
         input.validate(facesContext);
@@ -253,7 +256,8 @@ private class UIInputNamingContainer extends UIInput implements NamingContainer 
         
         // case 3: previous value "New Value"
         // new value is "Another Value"
-        input.previous = input.currentValue(facesContext);
+        input.setAttribute(UIInput.PREVIOUS_VALUE,
+            input.currentValue(facesContext));
         input.setValue("Another Value");
         input.validate(facesContext);
         // make sure ValueChangedEvent was fired since the value changed

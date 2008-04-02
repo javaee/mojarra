@@ -1,5 +1,5 @@
 /*
- * $Id: UIInput.java,v 1.12 2003/01/23 03:30:05 jvisvanathan Exp $
+ * $Id: UIInput.java,v 1.13 2003/01/23 17:42:49 rkitain Exp $
  */
 
 /*
@@ -51,17 +51,14 @@ public class UIInput extends UIComponentBase {
      */
     public static final String TYPE = "javax.faces.component.UIInput";
 
-
-    // ----------------------------------------------------- Instance Variables
-
-
     /**
-     * <p>The previous local value of this {@link UIInput}, saved during
-     * <code>decode()</code> processing and used during <code>validate()</code>
-     * processing to determine whether a {@link ValueChangedEvent} should
-     * be queued.</p>
+     * The symbolic name for the attribute name used to store the previous
+     * local value of this {@link UIInput}, saved during
+     * <code>decode()</code> processing and used during
+     * <code>validate()</code> processing to determine whether a {@link
+     * ValueChangedEvent} should be queued.
      */
-    protected transient Object previous = null;
+    public static final String PREVIOUS_VALUE = "javax.faces.component.PreviousValue";
 
 
     // ------------------------------------------------------------- Properties
@@ -96,7 +93,7 @@ public class UIInput extends UIComponentBase {
         }
 
         // Delegate to our associated Renderer if needed
-        previous = currentValue(context);
+        setAttribute(UIInput.PREVIOUS_VALUE, currentValue(context));
         if (getRendererType() != null) {
             super.decode(context);
             return;
@@ -168,8 +165,8 @@ public class UIInput extends UIComponentBase {
         }
 
         // Save and reset the previous value for this component
-        Object previous = this.previous;
-        this.previous = null;
+        Object previous = getAttribute(UIInput.PREVIOUS_VALUE);
+        setAttribute(UIInput.PREVIOUS_VALUE, null);
 
         // Determine whether a value change has actually occurred
         Object value = getValue();
