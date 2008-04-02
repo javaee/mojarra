@@ -12,7 +12,7 @@
 
   <property name="Name" value="JavaServer Faces RI"/>
   <property name="name" value="jsf-ri"/>
-  <property name="version" value="jsf-ri_EA4"/>
+  <property name="version" value="20030610"/>
 
 <!-- ************ Per user local properties ******************************* -->
 
@@ -31,9 +31,6 @@
 
   <!-- The base directory for the JSF APIs -->
   <property name="jsf.api.home" value ="../jsf-api"/>
-
-  <!-- The base directory for the JSF DEMOs -->
-  <property name="jsf.demo.home" value ="../jsf-demo"/>
 
   <!-- The base directory for distribution targets -->
   <property name="dist.home" value="${basedir}/dist"/>
@@ -202,160 +199,8 @@
     <delete  dir="${tomcat.home}/jsf-${version}/lib" />
   </target>
 
-  <target name="create.source.bundle" depends="clean">
-
-    <mkdir dir="${dist.home}"/>
-    <copy todir="${dist.home}/jsf-api">
-        <fileset dir="${jsf.api.home}"/>
-    </copy>
-    <copy todir="${dist.home}/jsf-ri">
-        <fileset dir="${basedir}"/>
-    </copy>
-
-    <!-- create the zip file -->
-    <zip zipfile="jsf-${version}_src.zip" basedir="${dist.home}" />
-
-  </target>
-
   <target name="all" depends="clean,prepare,compile,build.basic.war"
    description="Clean and compile all components"/>
-
-  <target name="copydocs" 
-          description="Copy necessary files from docs directory to dist.home">
-    <mkdir dir="${dist.home}"/>
-    <mkdir dir="${dist.home}/docs"/>
-    <mkdir dir="${dist.home}/docs/style"/>
-    <copy todir="${dist.home}/docs">
-      <fileset dir="${basedir}/docs"
-               includes="index.html,samples.html,ReleaseNotes.html"/>
-      <fileset dir="${basedir}" includes="README"/>
-    </copy>
-    <copy todir="${dist.home}/docs/style">
-      <fileset dir="${basedir}/docs/style" includes="default.css"/>
-    </copy>
-    
-  </target>
-
-  <target name="api.javadocs" unless="build.wspack">
-
-    <echo> Build the API Javadocs </echo>
-    <ant dir="${jsf.api.home}" 
-         antfile="${jsf.api.home}/build.xml" target="javadocs"/>
-    <echo> Copy the API Javadocs to the dist </echo>
-    <copy todir="${dist.home}/javadocs">
-      <fileset dir="${jsf.api.home}/build/javadocs"/>
-    </copy>
-
-  </target>
-
-  <target name="prepare.dist" depends="jars">
-    <mkdir dir="${dist.home}"/>
-    <mkdir dir="${dist.home}/samples"/>
-
-    <echo> Handle the top level files </echo>
-    <copy file="README" todir="${dist.home}"/>
-<!-- PENDING(edburrns): don't copy these for wspack
-    <copy file="LICENSE.html" todir="${dist.home}"/>
-    <copy file="LICENSE-APACHE.txt" todir="${dist.home}"/>
--->
-    <copy file="LICENSE-MOZILLA.txt" todir="${dist.home}"/>
-    <copy file="${jsf.api.dtd}" todir="${dist.home}/lib"/>
-
-    <antcall target="api.javadocs"/>
-    <antcall target="copydocs"/>
-   </target>
-
-   
-    <target name="copyJars" depends="prepare.dist" if="build.standalone">
-    <echo> copy the necessary libs </echo>
-    <copy file="${commons-beanutils.jar}" todir="${dist.home}/lib"/>
-    <copy file="${commons-collections.jar}" todir="${dist.home}/lib"/>
-    <copy file="${commons-digester.jar}" todir="${dist.home}/lib"/>
-    <copy file="${commons-logging.jar}" todir="${dist.home}/lib"/>
-    <copy file="${jstl.jar}" todir="${dist.home}/lib"/>
-    <copy file="${standard.jar}" todir="${dist.home}/lib"/>
-    <copy file="${jsf.api.jar}" todir="${dist.home}/lib"/>
-    <copy file="${build.home}/lib/${name}.jar" todir="${dist.home}/lib"/>
-    <copy file="${conf.share.dir}/html_basic.tld" todir="${dist.home}/lib"/>
-    <copy file="${conf.share.dir}/jsf_core.tld" todir="${dist.home}/lib"/>
-  </target>
-
-  <target name="wspack.copyJars" depends="prepare.dist" if="build.wspack">
-    <echo> copy the necessary libs </echo>
-    <copy file="${jsf.api.jar}" todir="${dist.home}/lib"/>
-    <copy file="${build.home}/lib/${name}.jar" todir="${dist.home}/lib"/>
-    <copy file="${conf.share.dir}/html_basic.tld" todir="${dist.home}/lib"/>
-    <copy file="${conf.share.dir}/jsf_core.tld" todir="${dist.home}/lib"/>
-  </target>
-
-  <target name="dist.binary" depends="dist.source, wspack.dist.source" >
-    <echo> Build the demos from the jsf-demo repository </echo>
-    <ant dir="${jsf.demo.home}" target="build-all"
-         antfile="${jsf.demo.home}/build.xml" />
-    <echo> copy the sample war files to the zip area </echo>
-    <copy todir="${dist.home}/samples" 
-          file="${jsf.demo.home}/components/build/jsf-components.war"/>
-    <copy todir="${dist.home}/samples"
-          file="${jsf.demo.home}/cardemo/build/jsf-cardemo.war"/>
-    <copy todir="${dist.home}/samples" 
-          file="${jsf.demo.home}/guessNumber/build/jsf-guessNumber.war"/>
-    <copy todir="${dist.home}/samples" 
-          file="${jsf.demo.home}/nonjsp/dist/jsf-nonjsp.war"/> 
-    <echo> copy the demo-components.jar </echo>
-    <copy todir="${dist.home}/samples" 
-     file="${jsf.demo.home}/components/build/demo/WEB-INF/lib/demo-components.jar"/>
-  </target>
-
-  <target name="dist.source" depends="copyJars" if="build.standalone">
-    <echo> prepare to copy the demo source </echo>
-    <ant dir="${jsf.demo.home}" 
-         antfile="${jsf.demo.home}/build.xml" target="clean"/>
-    <ant dir="${jsf.demo.home}"
-         antfile="${jsf.demo.home}/build.xml" target="copyJars"/>
-    <ant target="copyDemoSource" />
-  </target>
-
-  <target name="wspack.dist.source" depends="wspack.copyJars" if="build.wspack">
-
-    <echo> prepare to copy the demo source </echo>
-    <ant dir="${jsf.demo.home}" 
-         antfile="${jsf.demo.home}/build.xml" target="clean"/>
-    <ant target="copyDemoSource" />
-  </target>
-
-  <target name="copyDemoSource">
-    <echo> copy the necessary samples </echo>
-
-    <copy todir="${dist.home}/samples/guessNumber" includeEmptyDirs="false">
-      <fileset dir="${jsf.demo.home}/guessNumber" excludes="build.xml,wspack-build.xml"/>
-    </copy>
-    <copy file="${jsf.demo.home}/guessNumber/wspack-build.xml"
-          tofile="${dist.home}/samples/guessNumber/build.xml" />
-
-    <copy todir="${dist.home}/samples/cardemo" includeEmptyDirs="false">
-      <fileset dir="${jsf.demo.home}/cardemo"
-               excludes="**/build.properties.crashtest,**/crashtest.xml,**/testdriver.jar,build.xml,wspack-build.xml"/>
-    </copy>
-    <copy file="${jsf.demo.home}/cardemo/wspack-build.xml"
-          tofile="${dist.home}/samples/cardemo/build.xml" />
-
-    <copy todir="${dist.home}/samples/nonjsp" includeEmptyDirs="false">
-      <fileset dir="${jsf.demo.home}/nonjsp" excludes="build.xml,wspack-build.xml"/>
-    </copy>
-    <copy file="${jsf.demo.home}/nonjsp/wspack-build.xml"
-          tofile="${dist.home}/samples/nonjsp/build.xml" />
-
-    <copy todir="${dist.home}/samples/components" includeEmptyDirs="false">
-      <fileset dir="${jsf.demo.home}/components" excludes="build.xml,wspack-build.xml"/>
-    </copy>
-    <copy file="${jsf.demo.home}/components/wspack-build.xml"
-          tofile="${dist.home}/samples/components/build.xml" />
-
-    <copy file="${jsf.demo.home}/build.properties.sample"
-          todir="${dist.home}/samples" />
-
-
-  </target>
 
   <!-- Create the source distribution -->
   <target name="ri.source">
@@ -376,39 +221,18 @@
   </target>
 
 
-  <target name="dist" depends="dist.binary">
-    <echo> create the zip file </echo>
-    <move todir="${basedir}/jsf-${version}">
-      <fileset dir="dist"/>
-    </move>
-    <zip zipfile="jsf-${version}.zip">
-      <fileset dir="${basedir}"
-               includes="jsf-${version}/**"/>
+  <target name="dist" depends="jars" description="Build distribution files">
+    <mkdir dir="${dist.home}"/>
+
+    <!-- Create the binary distribution -->
+    <zip     destfile="${dist.home}/jsf-ri-${version}.zip">
+      <zipfileset dir="${build.home}"
+             includes="lib/**"
+               prefix="jsf-ri-${version}"/>
     </zip>
-    <move todir="dist">
-      <fileset dir="${basedir}/jsf-${version}"/>
-    </move>
 
-  </target>
-
-  <target name="wspack" depends="dist.binary" >
-    <copy todir="${wspack.home}">
-      <fileset dir="${dist.home}"/>
-    </copy>
-  </target>
-
-  <target name="javadocs" 
-          description="Create the API documentation">
-    <javadoc packagenames="com.sun.*"
-             sourcepath="${source.home}"
-             destdir="${build.home}/javadocs"
-             author="false"
-             version="false"
-             windowtitle="${Name} Generated Documentation"
-             doctitle="${Name}"
-             bottom="Copyright &#169; 2001 Sun Microsystems, Inc. All Rights Reserved.">
-        <classpath refid="compile.classpath"/>
-    </javadoc>
+    <antcall target="ri.source"/>
+    
   </target>
 
     <target name="compile.test" depends="prepare,compile"
@@ -434,6 +258,7 @@
      description="Run unit tests requiring cactus">
         <ant antfile="build-tests.xml" target="execute.cactus.tests"/>
     </target>
+
 
     <!-- builds"basic" sample app -->
     <target name="build.basic.war" depends="prepare,compile,jars,compile.basic.sample" >
@@ -510,22 +335,6 @@
     </jar>
 
   </target>
-
-  <!--
-       ===================================================================
-        This target copies the JSF libraries under ${jwsdp.home}. This 
-        target simulates JWSDP 1.2 distribution environment.
-       ===================================================================
-  -->
-  <target name="wspack.jars" depends="jars">
-    <mkdir dir="${tomcat.home}/jsf"/>
-    <mkdir dir="${tomcat.home}/jsf/lib"/>
-
-    <copy file="${build.home}/lib/${name}.jar" todir="${tomcat.home}/jsf/lib"/>
-    <copy file="${jsf.api.jar}" todir="${tomcat.home}/jsf/lib"/>
-
-  </target>
-
 
 <!--
        ===================================================================
