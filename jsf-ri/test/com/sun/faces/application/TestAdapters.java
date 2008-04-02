@@ -102,7 +102,7 @@ public class TestAdapters extends ServletFacesTestCase {
         // Phase 1
         //   - validate NPEs are thrown as expected
         try {
-            meAdapter.getMethodInfo(null);
+            meAdapter.getMethodInfo("a");
             assertTrue(false);
         } catch (Exception e) {
             if (!(e instanceof NullPointerException)) {
