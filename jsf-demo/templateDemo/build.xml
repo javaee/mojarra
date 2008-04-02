@@ -191,7 +191,7 @@
 
   <target name="build" depends="copyJars" 
      description="Compile Java files and copy static files." >
-    <javac srcdir="src" destdir="${build}/${example}/WEB-INF/classes">
+    <javac srcdir="src/java" destdir="${build}/${example}/WEB-INF/classes">
     	<include name="**/*.java" />
      <classpath refid="classpath"/>
     </javac>
