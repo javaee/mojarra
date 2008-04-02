@@ -23,6 +23,13 @@
     <render-kit-factory>com.sun.faces.systest.lifecycle.RenderKitFactoryWrapper</render-kit-factory>
   </factory>
 
+  <managed-bean>
+    <managed-bean-name>valueChangeListenerBean</managed-bean-name>
+    <managed-bean-class>
+      com.sun.faces.systest.model.ValueChangeListenerBean
+    </managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+  </managed-bean>
 
   <!-- Managed Bean #1, No Property Overrides -->
   <managed-bean>
