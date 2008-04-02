@@ -1,5 +1,5 @@
 /*
- * $Id: NumberConverter.java,v 1.9 2003/10/15 18:11:37 eburns Exp $
+ * $Id: NumberConverter.java,v 1.10 2003/10/20 02:45:59 eburns Exp $
  */
 
 /*
@@ -34,7 +34,7 @@ import javax.faces.context.FacesContext;
  *     whitespace before proceedng.</li>
  * <li>If the <code>parseLocale</code> property is not null,
  *     use that <code>Locale</code> for managing parsing.  Otherwise, use the
- *     <code>Locale</code> from the <code>FacesContext</code>.</li>
+ *     <code>Locale</code> from the <code>UIViewRoot</code>.</li>
  * <li>If a <code>pattern</code> has been specified, its syntax must conform
  *     the rules specified by <code>java.text.DecimalFormat</code>.  Such
  *     a pattern will be used to parse, and the <code>type</code> property

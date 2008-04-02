@@ -1,5 +1,5 @@
 /*
- * $Id: Converter.java,v 1.8 2003/09/25 19:27:18 rlubke Exp $
+ * $Id: Converter.java,v 1.9 2003/10/20 02:45:59 eburns Exp $
  */
 
 /*
@@ -25,6 +25,13 @@ import javax.faces.context.FacesContext;
  * constructor.  In addition, if the {@link Converter} class wishes to have
  * configuration property values saved and restored with the component tree,
  * the implementation must also implement {@link StateHolder}.</p>
+ *
+ * <p>If any <code>Converter</code> implementation requires a
+ * <code>java.util.Locale</code> to perform its job, it must obtain that
+ * <code>Locale</code> from the {@link javax.faces.component.UIViewRoot}
+ * of the current {@link FacesContext}, unless the
+ * <code>Converter</code> maintains its own <code>Locale</code> as part
+ * of its state.</p>
  */
 
 public interface Converter {
