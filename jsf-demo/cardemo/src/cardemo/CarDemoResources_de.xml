@@ -4,8 +4,8 @@
 -->
 
 <messages>
-  <message messageId="cardemo.CreditCardValidator.Invalid_Characters" severity="2" summary="Invalid Credit Card Number(en deutch)">
-  	<detail>Credit Card can only accept characters between {0} and {1}(en deutch)</detail>
+  <message messageId="cardemo.CreditCardValidator.Invalid_Characters" severity="2" summary="Ungueltige Kreditkartennummer">
+  	<detail>Kreditkarte akzeptiert nur Zeichen im Bereich zwischen {0} und {1}</detail>
   </message>
 </messages>
 
