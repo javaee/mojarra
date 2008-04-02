@@ -1,5 +1,5 @@
 /*
- * $Id: Application.java,v 1.33 2005/06/09 13:38:28 edburns Exp $
+ * $Id: Application.java,v 1.34 2005/06/17 15:26:14 edburns Exp $
  */
 
 /*
@@ -240,6 +240,11 @@ public abstract class Application {
      * <code>PropertyResolver</code> chain, replacing any existing value
      * that was set from the application configuration resources.</p>
      *
+     *  <p>It is illegal to call this method after
+     * the application has received any requests from the client.  If an
+     * attempt is made to register a listener after that time it must have
+     * no effect. </p>
+     *
      * @param resolver The new {@link PropertyResolver} instance
      *
      * @exception NullPointerException if <code>resolver</code>
@@ -285,6 +290,11 @@ public abstract class Application {
      * <code>VariableResolver</code> chain, replacing any existing value
      * that was set from the application configuration resources.</p>
      *
+     *  <p>It is illegal to call this method after
+     * the application has received any requests from the client.  If an
+     * attempt is made to register a listener after that time it must have 
+     * no effect.</p>
+     *
      * @param resolver The new {@link VariableResolver} instance
      *
      * @exception NullPointerException if <code>resolver</code>
@@ -312,7 +322,7 @@ public abstract class Application {
      *  <p>It is illegal to register an <code>ELResolver</code> after
      * the application has received any requests from the client.  If an
      * attempt is made to register a listener after that time, an
-     * <code>IllegalStateException</code> is thrown. This restriction is
+     * <code>IllegalStateException</code> must be thrown. This restriction is
      * in place to allow the JSP container to optimize for the common
      * case where no additional <code>ELResolver</code>s are in the
      * chain, aside from the standard ones. It is permissible to add
