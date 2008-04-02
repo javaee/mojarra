@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.95 2003/10/03 17:43:33 rlubke Exp $
+ * $Id: Util.java,v 1.96 2003/10/06 19:28:58 rkitain Exp $
  */
 
 /*
@@ -12,9 +12,10 @@
 package com.sun.faces.util;
 
 import com.sun.faces.RIConstants;
+import com.sun.faces.application.MessageResourcesImpl;
 import com.sun.faces.el.impl.ExpressionEvaluator;
 import com.sun.faces.el.impl.ExpressionEvaluatorImpl;
-import com.sun.faces.application.MessageResourcesImpl;
+import com.sun.faces.renderkit.RenderKitImpl;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -27,11 +28,11 @@ import java.io.StringReader;
 
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
-import javax.faces.model.SelectItem;
 import javax.faces.application.Application;
 import javax.faces.application.ApplicationFactory;
 import javax.faces.application.Message;
 import javax.faces.application.MessageResources;
+import javax.faces.application.ViewHandler;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UISelectItem;
 import javax.faces.component.UISelectItems;
@@ -40,12 +41,12 @@ import javax.faces.context.FacesContextFactory;
 import javax.faces.context.ResponseWriter;
 import javax.faces.convert.Converter;
 import javax.faces.el.ValueBinding;
-import javax.faces.lifecycle.LifecycleFactory;
 import javax.faces.lifecycle.Lifecycle;
-import javax.faces.application.ViewHandler;
-import javax.faces.webapp.FacesServlet;
-import javax.faces.render.RenderKitFactory;
+import javax.faces.lifecycle.LifecycleFactory;
+import javax.faces.model.SelectItem;
 import javax.faces.render.RenderKit;
+import javax.faces.render.RenderKitFactory;
+import javax.faces.webapp.FacesServlet;
 
 import javax.faces.render.ResponseStateManager;
 import javax.faces.application.StateManager;
@@ -63,7 +64,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.95 2003/10/03 17:43:33 rlubke Exp $
+ * @version $Id: Util.java,v 1.96 2003/10/06 19:28:58 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -485,8 +486,15 @@ private Util()
 	Assert.assert_it(null != applicationFactory);
 
 	defaultRenderKit = 
-	    renderKitFactory.getRenderKit(RIConstants.DEFAULT_RENDER_KIT);
-	Assert.assert_it(null != defaultRenderKit);
+	    renderKitFactory.getRenderKit(RenderKitFactory.DEFAULT_RENDER_KIT);
+	if (defaultRenderKit == null) {
+	    // create default renderkit if doesn't exist
+	    //
+	    defaultRenderKit = new RenderKitImpl();
+	    renderKitFactory.addRenderKit(RenderKitFactory.DEFAULT_RENDER_KIT,
+	        defaultRenderKit);
+	}
+	
 	context.setAttribute(RIConstants.DEFAULT_RENDER_KIT, 
 			     defaultRenderKit);
 
@@ -876,7 +884,7 @@ private Util()
 
 	if (context.getViewRoot() == null || 
 	    (renderKitId = context.getViewRoot().getRenderKitId()) == null) {
-            renderKitId = RIConstants.DEFAULT_RENDER_KIT;
+            renderKitId = RenderKitFactory.DEFAULT_RENDER_KIT;
 	}
 	Assert.assert_it(null != renderKitId);
 
