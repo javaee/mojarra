@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationImpl.java,v 1.83 2006/09/14 22:38:39 tony_robertson Exp $
+ * $Id: ApplicationImpl.java,v 1.84 2006/11/14 17:50:13 rlubke Exp $
  */
 
 /*
@@ -570,7 +570,7 @@ public class ApplicationImpl extends Application {
         } catch (Exception ex) {     
             if (logger.isLoggable(Level.WARNING)) {
                 logger.log(Level.WARNING, 
-                        "jsf.cannot_instantiate_component_error", ex);
+                        "jsf.cannot_instantiate_component_error", componentType);                
             }
             throw new FacesException(ex);
         }
