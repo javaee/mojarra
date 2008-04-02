@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>javax.faces</groupId>
+  <artifactId>jsf-api</artifactId>
+  <version>1.2_04-SNAPSHOT</version>
+  <description>This is the master POM file for Sun's Implementation of
+  the JSF 1.2 Specification.</description>
+  <url>http://java.sun.com/javaee/javaserverfaces/</url>
+  <issueManagement>
+    <system>issueZilla</system>
+    <url>https://javaserverfaces-spec-public.dev.java.net/servlets/ProjectIssues</url>
+  </issueManagement>
+  <mailingLists>
+    <mailingList>
+      <name>JSF 1.2 Specification Comments</name>
+      <post>jsr-252-comments@jcp.org</post>
+    </mailingList>
+    <mailingList>
+      <name>Sun's JavaServer Faces Implementation Dev List</name>
+      <post>dev@javaserverfaces.dev.java.net</post>
+      <archive>https://javaserverfaces.dev.java.net/servlets/SummarizeList?listName=dev</archive>
+    </mailingList>
+  </mailingLists>
+  <developers>
+    <developer>
+      <id>edburns</id>
+      <name>Ed Burns</name>
+      <email>ed.burns@sun.com</email>
+      <organization>Sun Microsystems, Inc.</organization>
+      <roles>
+        <role>project-owner</role>
+      </roles>
+      <timezone>-6</timezone>
+    </developer>
+    <developer>
+      <id>rlubke</id>
+      <name>Ryan Lubke</name>
+      <email>Ryan.Lubke@sun.com</email>
+      <organization>Sun Microsystems Inc</organization>
+      <roles>
+        <role>project-owner</role>
+      </roles>
+      <timezone>-9</timezone>
+    </developer>
+    <developer>
+      <id>rogerk</id>
+      <name>Roger.Kitain</name>
+      <email>Roger.Kitain@sun.com</email>
+      <organization>Sun Microsystems Inc</organization>
+      <roles>
+        <role>project-owner</role>
+      </roles>
+      <timezone>-6</timezone>
+    </developer>
+  </developers>
+  <contributors>
+    <contributor>
+      <name>Craig McClanahan</name>
+    </contributor>
+    <contributor>
+      <name>Deepak Gothe</name>
+    </contributor>
+    <contributor>
+      <name>Gregory Murray</name>
+    </contributor>
+    <contributor>
+      <name>Justyna Horwat</name>
+    </contributor>
+    <contributor>
+      <name>Jayashri Visvanathan</name>
+    </contributor>
+    <contributor>
+      <name>Jennifer Ball</name>
+    </contributor>
+    <contributor>
+      <name>Jacob Hookom</name>
+    </contributor>
+    <contributor>
+      <name>Raj Premkumar</name>
+    </contributor>
+    <contributor>
+      <name>Stan Silvert</name>
+    </contributor>
+    <contributor>
+      <name>Mike Youngstrom</name>
+    </contributor>
+  </contributors>
+  <licenses>
+    <license>
+      <name>COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) Version 1.0</name>
+      <url>http://www.opensource.org/licenses/cddl1.php</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+  <organization>
+    <name>Sun Microsystems, Inc</name>
+    <url>http://www.sun.com/</url>
+  </organization>
+  <dependencies>
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>servlet-api</artifactId>
+      <version>2.5</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>javax.servlet.jsp</groupId>
+      <artifactId>jsp-api</artifactId>
+      <version>2.1</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>jstl</groupId>
+      <artifactId>jstl</artifactId>
+      <version>1.2</version>
+      <scope>provided</scope>
+    </dependency>
+  </dependencies>
+</project>
