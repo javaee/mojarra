@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlResponseWriter.java,v 1.36 2006/10/13 19:01:00 rlubke Exp $
+ * $Id: HtmlResponseWriter.java,v 1.37 2006/10/23 22:04:11 rlubke Exp $
  */
 
 /*
@@ -630,6 +630,10 @@ public class HtmlResponseWriter extends ResponseWriter {
             return;
         }
 
+        if (name.equalsIgnoreCase("src") && isScriptOrStyle()) {
+            scriptOrStyleSrc = true;
+        }
+
         writer.write(' ');
         writer.write(name);
         writer.write("=\"");
@@ -659,22 +663,23 @@ public class HtmlResponseWriter extends ResponseWriter {
         if (closeStart) {
             writer.write('>');
             closeStart = false;
-        }
-        if (isScriptOrStyle() && !scriptOrStyleSrc) {
-            isScript = false;
-            isStyle = false;
-            isXhtml = getContentType().equals(
-                RIConstants.XHTML_CONTENT_TYPE);
-            if (isXhtml) {
-                if (isScript) {
-                    writer.write("\n//<![CDATA[");
+            if (isScriptOrStyle() && !scriptOrStyleSrc) {
+                isScript = false;
+                isStyle = false;
+                isXhtml = getContentType().equals(
+                     RIConstants.XHTML_CONTENT_TYPE);
+                if (isXhtml) {
+                    if (isScript) {
+                        writer.write("\n//<![CDATA[\n");
+                    } else {
+                        writer.write("\n<![CDATA[\n");
+                    }
                 } else {
-                    writer.write("\n<![CDATA[");
+                    writer.write("\n<!--\n");
                 }
-            } else {
-                writer.write("\n<!--");
             }
         }
+
     }
 
 

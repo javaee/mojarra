@@ -972,8 +972,7 @@ public class RenderKitUtils {
     public static char[] compressJS(String JSString) {
 
         BufferedReader reader = new BufferedReader(new StringReader(JSString));
-        StringWriter writer = new StringWriter(1024);   
-        writer.write('\n');
+        StringWriter writer = new StringWriter(1024);          
         try {
             for (String line = reader.readLine();
                  line != null;
@@ -1038,8 +1037,7 @@ public class RenderKitUtils {
                         InputStream input = conn.getInputStream();
                         reader = new BufferedReader(
                                     new InputStreamReader(input));                        
-                        StringBuilder builder = new StringBuilder(128);
-                        builder.append('\n');
+                        StringBuilder builder = new StringBuilder(128);                       
                         for (String line = reader.readLine();
                              line != null;
                              line = reader.readLine()) {

@@ -1,5 +1,5 @@
 /*
- * $Id: TestHtmlResponseWriter.java,v 1.23 2006/10/13 19:01:00 rlubke Exp $
+ * $Id: TestHtmlResponseWriter.java,v 1.24 2006/10/23 22:04:11 rlubke Exp $
  */
 
 /*
@@ -48,7 +48,7 @@ import com.sun.faces.cactus.ServletFacesTestCase;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestHtmlResponseWriter.java,v 1.23 2006/10/13 19:01:00 rlubke Exp $
+ * @version $Id: TestHtmlResponseWriter.java,v 1.24 2006/10/23 22:04:11 rlubke Exp $
  */
 
 public class TestHtmlResponseWriter extends ServletFacesTestCase // ServletTestCase
@@ -273,7 +273,7 @@ public class TestHtmlResponseWriter extends ServletFacesTestCase // ServletTestC
         ResponseWriter xmlWriter = renderKit.createResponseWriter(swx, "application/xhtml+xml", "UTF-8");
         UIOutput output = new UIOutput();
         writer.startElement("script", output);
-        writer.writeAttribute("src", "http://foo.net/some.js", "src");
+        writer.writeURIAttribute("src", "http://foo.net/some.js", "src");
         writer.writeAttribute("type", "text/javascript", "type");
         writer.writeAttribute("language", "Javascript", "language");
         writer.endElement("script");
