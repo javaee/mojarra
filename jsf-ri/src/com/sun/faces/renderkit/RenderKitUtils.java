@@ -359,7 +359,8 @@ public class RenderKitUtils {
                             new Object[] {
                                   "UISelectItem/UISelectItems",
                                   component.getFamily(),
-                                  component.getId()}));
+                                  component.getId(),
+                                  value != null ? value.getClass().getName() : "null"}));
                 }
             }
         }

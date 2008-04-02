@@ -1,5 +1,5 @@
 /*
- * $Id: TestUtil_messages.java,v 1.57 2006/09/19 21:13:32 jdlee Exp $
+ * $Id: TestUtil_messages.java,v 1.58 2006/10/20 17:27:26 jdlee Exp $
  */
 
 /*
@@ -43,7 +43,7 @@ import com.sun.faces.cactus.ServletFacesTestCase;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestUtil_messages.java,v 1.57 2006/09/19 21:13:32 jdlee Exp $
+ * @version $Id: TestUtil_messages.java,v 1.58 2006/10/20 17:27:26 jdlee Exp $
  */
 
 public class TestUtil_messages extends ServletFacesTestCase {
@@ -146,7 +146,7 @@ public class TestUtil_messages extends ServletFacesTestCase {
         {MessageUtils.EVAL_ATTR_UNEXPECTED_TYPE, "3"},
         {MessageUtils.RESTORE_VIEW_ERROR_MESSAGE_ID, "1"},
         {MessageUtils.VALUE_NOT_SELECT_ITEM_ID, "2"},
-        {MessageUtils.CHILD_NOT_OF_EXPECTED_TYPE_ID, "3"},
+        {MessageUtils.CHILD_NOT_OF_EXPECTED_TYPE_ID, "4"},
         {MessageUtils.COMMAND_LINK_NO_FORM_MESSAGE_ID, "0"},
         {MessageUtils.FACES_CONTEXT_NOT_FOUND_ID, "0"},
         {MessageUtils.NOT_NESTED_IN_TYPE_TAG_ERROR_MESSAGE_ID, "2"},
