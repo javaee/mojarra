@@ -1,5 +1,5 @@
 /*
- * $Id: MessageRenderer.java,v 1.37 2003/11/11 06:45:04 horwat Exp $
+ * $Id: MessageRenderer.java,v 1.38 2003/11/13 05:20:37 eburns Exp $
  */
 
 /*
@@ -125,6 +125,10 @@ public class MessageRenderer extends HtmlBasicRenderer {
 	    detail = null,
             severityStyle = null,
             severityStyleClass = null;
+	boolean 
+	    showSummary = ((UIMessage)component).isShowSummary(),
+	    showDetail =  ((UIMessage)component).isShowDetail();
+
 	// make sure we have a non-null value for summary and
 	// detail.
 	summary = (null != (summary = curMessage.getSummary())) ? 
@@ -213,9 +217,7 @@ public class MessageRenderer extends HtmlBasicRenderer {
         }
 
         boolean wroteTooltip = false;
-        if (((UIMessage)component).isShowDetail() && 
-            ((UIMessage)component).isShowSummary() &&
-            isTooltip) {
+        if (showSummary && showDetail && isTooltip) {
 
             if (!wroteSpan) {
                  writer.startElement("span", component);
@@ -228,12 +230,14 @@ public class MessageRenderer extends HtmlBasicRenderer {
             writer.closeStartTag(component);
         }
 
-        if (!wroteTooltip) {
+        if (!wroteTooltip && showSummary) {
             writer.writeText("\t", null);
             writer.writeText(summary, null);
             writer.writeText(" ", null);
         }
-	writer.writeText(detail, null);
+	if (showDetail) {
+	    writer.writeText(detail, null);
+	}
 
 	if (wroteSpan || wroteTooltip) {
             writer.endElement("span");

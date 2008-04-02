@@ -1,5 +1,5 @@
 /*
- * $Id: MessagesRenderer.java,v 1.5 2003/11/11 06:45:04 horwat Exp $
+ * $Id: MessagesRenderer.java,v 1.6 2003/11/13 05:20:37 eburns Exp $
  */
 
 /*
@@ -73,10 +73,20 @@ public class MessagesRenderer extends HtmlBasicRenderer {
         writer = context.getResponseWriter();
         Assert.assert_it(writer != null );
 
-        String clientId = (String)component.getAttributes().get("for");
-        //"for" attribute optional for Messages
+	String clientId = null;
+
+	// if no clientId was included
+	if (null == (clientId = (String)component.getAttributes().get("for"))){
+	    // and the author explicitly only wants global messages
+	    if (((UIMessages)component).isGlobalOnly()) {
+		// make it so only global messages get displayed.
+		clientId = "";
+	    }
+	}
+
+	//"for" attribute optional for Messages
 	messageIter = getMessageIter(context, clientId, component);
-        Assert.assert_it(messageIter != null);
+	Assert.assert_it(messageIter != null);
 
         String layout = (String) component.getAttributes().get("layout");
 	boolean wroteTable = false;
@@ -96,6 +106,10 @@ public class MessagesRenderer extends HtmlBasicRenderer {
 		detail = null,
                 severityStyle = null,
                 severityStyleClass = null;
+	    boolean 
+		showSummary = ((UIMessages)component).isShowSummary(),
+		showDetail =  ((UIMessages)component).isShowDetail();
+	    
 	    // make sure we have a non-null value for summary and
 	    // detail.
 	    summary = (null != (summary = curMessage.getSummary())) ? 
@@ -179,9 +193,7 @@ public class MessagesRenderer extends HtmlBasicRenderer {
             }
 
             boolean wroteTooltip = false;
-            if (((UIMessages)component).isShowDetail() && 
-                ((UIMessages)component).isShowSummary() &&
-                isTooltip) {
+            if (showSummary && showDetail && isTooltip) {
 
                 if (!wroteSpan) {
                      writer.startElement("span", component);
@@ -194,12 +206,14 @@ public class MessagesRenderer extends HtmlBasicRenderer {
                 writer.closeStartTag(component);
             }
 
-            if (!wroteTooltip) {
+            if (!wroteTooltip && showSummary) {
 	        writer.writeText("\t", null);
 	        writer.writeText(summary, null);
 	        writer.writeText(" ", null);
             }
-	    writer.writeText(detail, null);
+	    if (showDetail) {
+		writer.writeText(detail, null);
+	    }
 
 	    if (wroteSpan || wroteTooltip) {
                 writer.endElement("span");

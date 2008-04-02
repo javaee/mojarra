@@ -1,5 +1,5 @@
 /*
- * $Id: UIMessages.java,v 1.4 2003/11/09 16:52:21 eburns Exp $
+ * $Id: UIMessages.java,v 1.5 2003/11/13 05:20:36 eburns Exp $
  */
 
 /*
@@ -43,7 +43,7 @@ public class UIMessages extends UIComponentBase {
 
 
     private String forVal = null;
-    private boolean globalOnly = true;
+    private boolean globalOnly = false;
     private boolean globalOnlySet = false;
     private boolean showDetail = false;
     private boolean showDetailSet = false;

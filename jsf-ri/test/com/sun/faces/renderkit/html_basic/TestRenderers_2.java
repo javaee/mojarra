@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_2.java,v 1.72 2003/11/11 06:45:02 horwat Exp $
+ * $Id: TestRenderers_2.java,v 1.73 2003/11/13 05:20:39 eburns Exp $
  */
 
 /*
@@ -50,7 +50,7 @@ import com.sun.faces.TestBean;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_2.java,v 1.72 2003/11/11 06:45:02 horwat Exp $
+ * @version $Id: TestRenderers_2.java,v 1.73 2003/11/13 05:20:39 eburns Exp $
  * 
  *
  */
@@ -508,6 +508,8 @@ public class TestRenderers_2 extends JspFacesTestCase
         message = new UIMessage();
         message.setId("myMessage_1");
         message.setFor("myMessage_1");
+        message.setShowDetail(true);
+        message.setShowSummary(true);
         root.getChildren().add(message);
 
         writer = new StringWriter();
@@ -545,6 +547,8 @@ public class TestRenderers_2 extends JspFacesTestCase
         message = new UIMessage();
         message.setId("myMessage_2");
         message.setFor("myMessage_2");
+        message.setShowDetail(true);
+        message.setShowSummary(true);
         root.getChildren().add(message);
 
         writer = new StringWriter();
@@ -582,6 +586,8 @@ public class TestRenderers_2 extends JspFacesTestCase
         message = new UIMessage();
         message.setId("myMessage_3");
         message.setFor("myMessage_3");
+        message.setShowDetail(true);
+        message.setShowSummary(true);
         root.getChildren().add(message);
 
 
@@ -711,6 +717,135 @@ public class TestRenderers_2 extends JspFacesTestCase
             ; // ignore
         }
 
+	//
+	// test showSummary(false) works
+	// 
+
+        root.getChildren().remove(message);
+        message = new UIMessage();
+        message.setId("myMessage_6");
+        message.setFor("myMessage_6");
+        root.getChildren().add(message);
+
+        writer = new StringWriter();
+        htmlWriter = new HtmlResponseWriter(writer, "text/html", "ISO-8859-1");
+        getFacesContext().setResponseWriter(htmlWriter);
+
+        messageRenderer = new MessageRenderer();
+
+        //set tooltip criteria to true
+	message.getAttributes().put("tooltip", new Boolean(true));
+        message.setShowDetail(true);
+        message.setShowSummary(false);
+
+        // populate facescontext with some errors
+        getFacesContext().addMessage(message.getFor(),
+            new FacesMessage(FacesMessage.SEVERITY_FATAL,
+            "global message summary_6", "global message detail_6"));
+
+        // test encode method
+
+        messageRenderer.encodeBegin(getFacesContext(), message);
+        messageRenderer.encodeEnd(getFacesContext(), message);
+
+        result = writer.toString();
+
+	// should not contain summary.
+        assertTrue(-1 != result.indexOf("global message detail_6"));
+        assertEquals(-1, result.indexOf("global message summary_6"));
+
+        try {
+            writer.close();
+        } catch (IOException ioe) {
+            ; // ignore
+        }
+
+	//
+	// test showDetail(false) works
+	// 
+
+        root.getChildren().remove(message);
+        message = new UIMessage();
+        message.setId("myMessage_6");
+        message.setFor("myMessage_6");
+        root.getChildren().add(message);
+
+        writer = new StringWriter();
+        htmlWriter = new HtmlResponseWriter(writer, "text/html", "ISO-8859-1");
+        getFacesContext().setResponseWriter(htmlWriter);
+
+        messageRenderer = new MessageRenderer();
+
+        //set tooltip criteria to true
+	message.getAttributes().put("tooltip", new Boolean(true));
+        message.setShowDetail(false);
+        message.setShowSummary(true);
+
+        // populate facescontext with some errors
+        getFacesContext().addMessage(message.getFor(),
+            new FacesMessage(FacesMessage.SEVERITY_FATAL,
+            "global message summary_6", "global message detail_6"));
+
+        // test encode method
+
+        messageRenderer.encodeBegin(getFacesContext(), message);
+        messageRenderer.encodeEnd(getFacesContext(), message);
+
+        result = writer.toString();
+
+	// should not contain detail.
+        assertEquals(-1, result.indexOf("global message detail_6"));
+        assertTrue(-1 != result.indexOf("global message summary_6"));
+
+        try {
+            writer.close();
+        } catch (IOException ioe) {
+            ; // ignore
+        }
+
+	//
+	// test showDetail(false), showSummary(false) works
+	// 
+
+        root.getChildren().remove(message);
+        message = new UIMessage();
+        message.setId("myMessage_6");
+        message.setFor("myMessage_6");
+        root.getChildren().add(message);
+
+        writer = new StringWriter();
+        htmlWriter = new HtmlResponseWriter(writer, "text/html", "ISO-8859-1");
+        getFacesContext().setResponseWriter(htmlWriter);
+
+        messageRenderer = new MessageRenderer();
+
+        //set tooltip criteria to true
+	message.getAttributes().put("tooltip", new Boolean(true));
+        message.setShowDetail(false);
+        message.setShowSummary(false);
+
+        // populate facescontext with some errors
+        getFacesContext().addMessage(message.getFor(),
+            new FacesMessage(FacesMessage.SEVERITY_FATAL,
+            "global message summary_6", "global message detail_6"));
+
+        // test encode method
+
+        messageRenderer.encodeBegin(getFacesContext(), message);
+        messageRenderer.encodeEnd(getFacesContext(), message);
+
+        result = writer.toString();
+
+	// should not contain detail.
+        assertEquals(-1, result.indexOf("global message detail_6"));
+        assertEquals(-1, result.indexOf("global message summary_6"));
+
+        try {
+            writer.close();
+        } catch (IOException ioe) {
+            ; // ignore
+        }
+
         // restore the original ResponseWriter
         getFacesContext().setResponseWriter(originalWriter);
         getFacesContext().setViewRoot(originalRoot);
@@ -765,6 +900,8 @@ public class TestRenderers_2 extends JspFacesTestCase
         messages = new UIMessages();
         messages.setId("myMessage_1");
         messages.setFor("myMessage_1");
+        messages.setShowDetail(true);
+        messages.setShowSummary(true);
         root.getChildren().add(messages);
 
         writer = new StringWriter();
@@ -810,6 +947,8 @@ public class TestRenderers_2 extends JspFacesTestCase
         messages = new UIMessages();
         messages.setId("myMessage_2");
         messages.setFor("myMessage_2");
+        messages.setShowDetail(true);
+        messages.setShowSummary(true);
         root.getChildren().add(messages);
 
         writer = new StringWriter();
@@ -856,6 +995,8 @@ public class TestRenderers_2 extends JspFacesTestCase
         messages = new UIMessages();
         messages.setId("myMessage_3");
         messages.setFor("myMessage_3");
+        messages.setShowDetail(true);
+        messages.setShowSummary(true);
         root.getChildren().add(messages);
 
 
@@ -1009,6 +1150,59 @@ public class TestRenderers_2 extends JspFacesTestCase
         } catch (IOException ioe) {
             ; // ignore
         }
+
+        root.getChildren().remove(messages);
+        messages = new UIMessages();
+        messages.setId("myMessage_6");
+        messages.setFor("myMessage_6");
+        root.getChildren().add(messages);
+
+        writer = new StringWriter();
+        htmlWriter = new HtmlResponseWriter(writer, "text/html", "ISO-8859-1");
+        getFacesContext().setResponseWriter(htmlWriter);
+
+        messagesRenderer = new MessagesRenderer();
+
+        //add a styleClass so span is rendered
+	messages.getAttributes().put("styleClass", "styleClass");
+	messages.getAttributes().put("style", "style");
+
+        //set tooltip criteria to false
+	messages.getAttributes().put("tooltip", new Boolean(false));
+        messages.setShowDetail(false);
+        messages.setShowSummary(true);
+
+        //Set layout to table
+	messages.getAttributes().put("layout", "table");
+
+        // populate facescontext with some errors
+        getFacesContext().addMessage(messages.getFor(),
+            new FacesMessage(FacesMessage.SEVERITY_FATAL,
+            "global message summary_6.0", "global message detail_6.0"));
+        getFacesContext().addMessage(messages.getFor(),
+            new FacesMessage(FacesMessage.SEVERITY_FATAL,
+            "global message summary_6.1", "global message detail_6.1"));
+        getFacesContext().addMessage(messages.getFor(),
+            new FacesMessage(FacesMessage.SEVERITY_FATAL,
+            "global message summary_6.2", "global message detail_6.2"));
+
+        // test encode method
+
+        messagesRenderer.encodeBegin(getFacesContext(), messages);
+        messagesRenderer.encodeEnd(getFacesContext(), messages);
+
+        result = writer.toString();
+
+	assertTrue(-1 == result.indexOf("detail"));
+	assertTrue(-1 != result.indexOf("summary"));
+
+        try {
+            writer.close();
+        } catch (IOException ioe) {
+            ; // ignore
+        }
+
+
 
         // restore the original ResponseWriter
         getFacesContext().setResponseWriter(originalWriter);
