@@ -1,5 +1,5 @@
 /*
- * $Id: CoreValidator.java,v 1.1 2003/02/03 23:04:34 edburns Exp $
+ * $Id: CoreValidator.java,v 1.2 2003/02/18 18:05:40 craigmcc Exp $
  */
 
 /*
@@ -125,8 +125,7 @@ public class CoreValidator extends FacesValidator {
             if (isJstlTag(qn)) {
                 requiresIdCount++;
             }
-            else if ( (qn.startsWith(JSF_HTML_PRE) || 
-                       qn.startsWith(JSF_CORE_PRE)) && 
+            else if ( qn.startsWith(JSF_HTML_PRE) &&
                        (requiresIdCount > 0) ) {
                 //make sure that id is present in attributes
                 if (!hasIdAttribute(a)) {
