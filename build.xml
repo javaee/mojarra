@@ -56,7 +56,7 @@
    description="Clean build and distribution directories">
     <delete file="${basedir}/javaserverfaces_binary_${version}.zip" />
     <delete file="${basedir}/javaserverfaces_source_${version}.zip" />
-    <delete file="${basedir}/javaserverfaces_source_${version}_class" />
+    <delete file="${basedir}/javaserverfaces_source_${version}.class" />
   </target>
 
   <!-- Create the source distribution -->
@@ -94,7 +94,7 @@
   <ant target="jsf.source" />
   
   <installerBuilder
-          classFile="javaserverfaces_source_${version}_class"
+          classFile="javaserverfaces_source_${version}.class"
           licenseFile="${installer.home}/jrl_1_3.txt"
           zipFile="${basedir}/javaserverfaces_source_${version}.zip" />
   </target>
