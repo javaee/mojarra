@@ -83,10 +83,7 @@
         <copy todir="${build}/${example}/WEB-INF">
             <fileset dir="web/WEB-INF">
                 <include name="*.xml"/>
-            </fileset>
-            <fileset dir="web/WEB-INF">
-                <include name="**/*.jspf"/>
-            </fileset>
+            </fileset>          
         </copy>
 
         <copy todir="${build}/${example}/">
