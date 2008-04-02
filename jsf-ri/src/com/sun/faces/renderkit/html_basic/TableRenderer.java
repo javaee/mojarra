@@ -1,5 +1,5 @@
 /*
- * $Id: TableRenderer.java,v 1.13 2004/01/14 17:13:04 eburns Exp $
+ * $Id: TableRenderer.java,v 1.14 2004/01/16 23:48:58 horwat Exp $
  */
 
 /*
@@ -92,7 +92,7 @@ public class TableRenderer extends HtmlBasicRenderer {
 
 	// Render the header facet (if any)
 	UIComponent header = (UIComponent) data.getFacet("header");
-	if (header != null) {
+	if ((header != null) && header.isRendered()) {
 	    String headerClass = (String) data.getAttributes().get("headerClass");
 	    writer.startElement("thead", header);
             writer.startElement("tr", header);
@@ -154,7 +154,7 @@ public class TableRenderer extends HtmlBasicRenderer {
 	    }
             writer.startElement("td", kid);
 	    facet = (UIComponent) kid.getFacet("header");
-	    if (facet != null) {
+	    if ((facet != null) && facet.isRendered()) {
 		encodeRecursive(context, facet);
 	    }
             writer.endElement("td");
@@ -254,7 +254,7 @@ public class TableRenderer extends HtmlBasicRenderer {
 	    }
             writer.startElement("td", kid);
 	    facet = (UIComponent) kid.getFacet("footer");
-	    if (facet != null) {
+	    if ((facet != null) && facet.isRendered()){
 		encodeRecursive(context, facet);
 	    }
             writer.endElement("td");
@@ -282,7 +282,7 @@ public class TableRenderer extends HtmlBasicRenderer {
 	// Render the footer facet (if any)
 	ResponseWriter writer = context.getResponseWriter();
 	UIComponent footer = (UIComponent) data.getFacet("footer");
-	if (footer != null) {
+	if ((footer != null) && footer.isRendered()) {
 	    String footerClass = (String) data.getAttributes().get("footerClass");
 	    writer.startElement("tfoot", component);
             writer.startElement("tr", footer);
