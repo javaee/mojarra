@@ -551,7 +551,16 @@ public class HtmlTaglibGenerator extends AbstractGenerator {
                     writer.fwrite("}\n");
                 }
             } else {
+		if (ivar.equals("actionExpression")) {
+		    writer.fwrite("if (null == action && null != actionExpression) {\n");
+		    writer.indent();
+		}
                 writer.fwrite(comp + ".set" + capPropName + "(" + ivar + ");\n");
+		if (ivar.equals("actionExpression")) {
+		    writer.outdent();
+		    writer.fwrite("}\n");
+		}
+
             }
         }
 
