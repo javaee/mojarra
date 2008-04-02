@@ -1,5 +1,5 @@
 /*
- * $Id: TestTag.java,v 1.2 2003/04/29 18:52:03 eburns Exp $
+ * $Id: TestTag.java,v 1.3 2003/09/23 04:38:59 craigmcc Exp $
  */
 
 /*
@@ -14,7 +14,7 @@ import javax.faces.component.UIComponent;
 
 
 // Test UIComponent Tag
-public class TestTag extends FacesTag {
+public class TestTag extends UIComponentTag {
 
     public TestTag() {
         super();
