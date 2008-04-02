@@ -1,5 +1,5 @@
 /*
- * $Id: TestComponents.java,v 1.19 2005/12/14 22:27:50 rlubke Exp $
+ * $Id: TestComponents.java,v 1.20 2006/03/07 08:23:24 srinivas635 Exp $
  */
 
 /*
@@ -74,7 +74,7 @@ public class TestComponents extends HtmlUnitTestCase {
         String onClick = null;
         ScriptResult result = null;
         mapPage = accessAppAndGetPage("imagemap.faces");
-        form = (HtmlForm) mapPage.getAllForms().get(0);
+        form = (HtmlForm) mapPage.getForms().get(0);
         map = (HtmlMap) form.getHtmlElementsByTagName("map").get(0);
 
         for (int i = 0, len = welcomeTexts.length; i < len; i++) {
@@ -137,7 +137,7 @@ public class TestComponents extends HtmlUnitTestCase {
     protected HtmlPage executeTreeTest(HtmlPage page,
                                        String treeNum) throws Exception {
         HtmlAnchor anchor = null;
-        HtmlForm form = (HtmlForm) page.getAllForms().get(0);
+        HtmlForm form = (HtmlForm) page.getForms().get(0);
         assertNotNull(form);
         HtmlHiddenInput hidden = null;
 
@@ -226,7 +226,7 @@ public class TestComponents extends HtmlUnitTestCase {
     protected HtmlPage executeResultSet(HtmlPage page, String currentListNum,
                                         String newListNum) throws Exception {
         HtmlAnchor anchor = null;
-        HtmlForm form = (HtmlForm) page.getAllForms().get(0);
+        HtmlForm form = (HtmlForm) page.getForms().get(0);
         assertNotNull(form);
         HtmlHiddenInput hidden1, hidden2 = null;
         // verify that clicking on the <newListNum> link causes the
@@ -267,11 +267,11 @@ public class TestComponents extends HtmlUnitTestCase {
 
     protected HtmlPage executeTabbedPane(HtmlPage page, String buttonName)
           throws Exception {
-        HtmlForm form = (HtmlForm) page.getAllForms().get(0);
+        HtmlForm form = (HtmlForm) page.getForms().get(0);
         assertNotNull(form);
         HtmlInput button = (HtmlInput) form.getInputByName(buttonName);
         page = (HtmlPage) button.click();
-        form = (HtmlForm) page.getAllForms().get(0);
+        form = (HtmlForm) page.getForms().get(0);
         button = (HtmlInput) form.getInputByName(buttonName);
         assertTrue(button.getClassAttribute().equals("tabbed-selected"));
         return page;
