@@ -1,5 +1,5 @@
 /*
- * $Id: StringRangeValidator.java,v 1.6 2002/08/29 05:52:33 craigmcc Exp $
+ * $Id: StringRangeValidator.java,v 1.7 2002/09/20 02:43:36 craigmcc Exp $
  */
 
 /*
@@ -83,7 +83,10 @@ public class StringRangeValidator extends ValidatorBase {
      * <p>Construct a {@link Validator} with the specified preconfigured
      * limit.</p>
      *
-     * @param maximum Maximum value to allow
+     * @param maximum Maximum value to allow (if any)
+     *
+     * @exception NullPointerException if a specified limit
+     *  is <code>null</code>
      */
     public StringRangeValidator(String maximum) {
 
@@ -99,6 +102,11 @@ public class StringRangeValidator extends ValidatorBase {
      *
      * @param maximum Maximum value to allow
      * @param minimum Minimum value to allow
+     *
+     * @exception IllegalArgumentException if a specified maximum value is
+     *  less than a specified minimum value
+     * @exception NullPointerException if a specified limit
+     *  is <code>null</code>
      */
     public StringRangeValidator(String maximum, String minimum) {
 
@@ -134,11 +142,23 @@ public class StringRangeValidator extends ValidatorBase {
      * <p>Set the maximum value to be enforced by this {@link Validator}.</p>
      *
      * @param maximum The new maximum value
+     *
+     * @exception IllegalArgumentException if a specified maximum value is
+     *  less than a specified minimum value
+     * @exception NullPointerException if <code>maximum</code>
+     *  is <code>null</code>
      */
     public void setMaximum(String maximum) {
 
+        if (maximum == null) {
+            throw new NullPointerException();
+        }
         this.maximum = maximum;
         this.maximumSet = true;
+        if (this.minimumSet &&
+            (this.minimum.compareTo(this.maximum) > 0)) {
+            throw new IllegalArgumentException();
+        }
 
     }
 
@@ -181,11 +201,23 @@ public class StringRangeValidator extends ValidatorBase {
      * <p>Set the minimum value to be enforced by this {@link Validator}.</p>
      *
      * @param minimum The new minimum value
+     *
+     * @exception IllegalArgumentException if a specified maximum value is
+     *  less than a specified minimum value
+     * @exception NullPointerException if <code>minimum</code>
+     *  is <code>null</code>
      */
     public void setMinimum(String minimum) {
 
+        if (minimum == null) {
+            throw new NullPointerException();
+        }
         this.minimum = minimum;
         this.minimumSet = true;
+        if (this.maximumSet &&
+            (this.minimum.compareTo(this.maximum) > 0)) {
+            throw new IllegalArgumentException();
+        }
 
     }
 

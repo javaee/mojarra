@@ -1,5 +1,5 @@
 /*
- * $Id: LongRangeValidator.java,v 1.3 2002/08/29 05:52:33 craigmcc Exp $
+ * $Id: LongRangeValidator.java,v 1.4 2002/09/20 02:43:36 craigmcc Exp $
  */
 
 /*
@@ -109,6 +109,9 @@ public class LongRangeValidator extends ValidatorBase {
      *
      * @param maximum Maximum value to allow
      * @param minimum Minimum value to allow
+     *
+     * @exception IllegalArgumentException if a specified maximum value is
+     *  less than a specified minimum value
      */
     public LongRangeValidator(long maximum, long minimum) {
 
@@ -144,11 +147,17 @@ public class LongRangeValidator extends ValidatorBase {
      * <p>Set the maximum value to be enforced by this {@link Validator}.</p>
      *
      * @param maximum The new maximum value
+     *
+     * @exception IllegalArgumentException if a specified maximum value is
+     *  less than a specified minimum value
      */
     public void setMaximum(long maximum) {
 
         this.maximum = maximum;
         this.maximumSet = true;
+        if (this.minimumSet && (this.minimum > this.maximum)) {
+            throw new IllegalArgumentException();
+        }
 
     }
 
@@ -191,11 +200,17 @@ public class LongRangeValidator extends ValidatorBase {
      * <p>Set the minimum value to be enforced by this {@link Validator}.</p>
      *
      * @param minimum The new minimum value
+     *
+     * @exception IllegalArgumentException if a specified maximum value is
+     *  less than a specified minimum value
      */
     public void setMinimum(long minimum) {
 
         this.minimum = minimum;
         this.minimumSet = true;
+        if (this.maximumSet && (this.minimum > this.maximum)) {
+            throw new IllegalArgumentException();
+        }
 
     }
 

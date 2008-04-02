@@ -1,5 +1,5 @@
 /*
- * $Id: LengthValidator.java,v 1.9 2002/08/29 05:52:33 craigmcc Exp $
+ * $Id: LengthValidator.java,v 1.10 2002/09/20 02:43:36 craigmcc Exp $
  */
 
 /*
@@ -99,6 +99,9 @@ public class LengthValidator extends ValidatorBase {
      *
      * @param maximum Maximum value to allow
      * @param minimum Minimum value to allow
+     *
+     * @exception IllegalArgumentException if a specified maximum value is
+     *  less than a specified minimum value
      */
     public LengthValidator(int maximum, int minimum) {
 
@@ -134,11 +137,17 @@ public class LengthValidator extends ValidatorBase {
      * <p>Set the maximum length to be enforced by this {@link Validator}.</p>
      *
      * @param maximum The new maximum value
+     *
+     * @exception IllegalArgumentException if a specified maximum value is
+     *  less than a specified minimum value
      */
     public void setMaximum(int maximum) {
 
         this.maximum = maximum;
         this.maximumSet = true;
+        if (this.minimumSet && (this.minimum > this.maximum)) {
+            throw new IllegalArgumentException();
+        }
 
     }
 
@@ -181,11 +190,17 @@ public class LengthValidator extends ValidatorBase {
      * <p>Set the minimum length to be enforced by this {@link Validator}.</p>
      *
      * @param minimum The new minimum value
+     *
+     * @exception IllegalArgumentException if a specified maximum value is
+     *  less than a specified minimum value
      */
     public void setMinimum(int minimum) {
 
         this.minimum = minimum;
         this.minimumSet = true;
+        if (this.maximumSet && (this.minimum > this.maximum)) {
+            throw new IllegalArgumentException();
+        }
 
     }
 
