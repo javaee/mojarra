@@ -1,5 +1,5 @@
 /*
- * $Id: JstlIntegrationTestCase.java,v 1.6 2003/10/08 22:30:07 craigmcc Exp $
+ * $Id: JstlIntegrationTestCase.java,v 1.7 2003/10/24 17:34:23 eburns Exp $
  */
 
 /*
@@ -859,22 +859,6 @@ public class JstlIntegrationTestCase extends AbstractTestCase {
                      "jstl-import-04", page.getTitleText());
         assertEquals("Correct body element",
                      "[1] [2c][2x] [3]", getBodyText(page));
-
-    }
-
-
-    // Return the form with the specified "id" from the specified page
-    // (HtmlPage.getFormByName() looks at "name" instead)
-    private HtmlForm getFormById(HtmlPage page, String id) {
-
-        Iterator forms = page.getAllForms().iterator();
-        while (forms.hasNext()) {
-            HtmlForm form = (HtmlForm) forms.next();
-            if (id.equals(form.getAttributeValue("id"))) {
-                return (form);
-            }
-        }
-        return (null);
 
     }
 

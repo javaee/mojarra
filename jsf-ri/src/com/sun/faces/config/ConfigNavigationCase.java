@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigNavigationCase.java,v 1.2 2003/08/22 16:49:41 eburns Exp $
+ * $Id: ConfigNavigationCase.java,v 1.3 2003/10/24 17:34:19 eburns Exp $
  */
 
 /*
@@ -55,12 +55,21 @@ public class ConfigNavigationCase {
         this.toViewId = toViewId;
     }
 
+    protected String redirect = null;
+    public boolean hasRedirect() {
+	return null != redirect;
+    }
+    public void setRedirect(String redirect) {
+	this.redirect = redirect;
+    }
+
     public String toString() {
         StringBuffer sb = new StringBuffer();
         sb.append("FROM VIEW ID:"+getFromViewId());
         sb.append("\nFROM ACTION REF:"+getFromActionRef());
         sb.append("\nFROM OUTCOME:"+getFromOutcome());
         sb.append("\nTO VIEW ID:"+getToViewId());
+	sb.append("\nREDIRECT:"+hasRedirect());
         return sb.toString();
     }
 }

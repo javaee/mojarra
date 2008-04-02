@@ -227,4 +227,18 @@
     <managed-bean-scope>request</managed-bean-scope>
   </managed-bean>
 
+  <navigation-rule>
+    <from-view-id>/redirect.jsp</from-view-id>
+    <navigation-case>
+      <description>If the action or ActionRef returns "success", goto
+      redirect1.jsp</description> 
+      <display-name>The Generic Rule</display-name> 
+      <from-outcome>success</from-outcome>
+      <to-view-id>/redirect1.jsp</to-view-id>
+      <redirect/>
+    </navigation-case>
+  </navigation-rule>
+
+  
+
 </faces-config>

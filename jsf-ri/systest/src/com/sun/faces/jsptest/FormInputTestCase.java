@@ -1,5 +1,5 @@
 /*
- * $Id: FormInputTestCase.java,v 1.2 2003/10/02 22:34:54 craigmcc Exp $
+ * $Id: FormInputTestCase.java,v 1.3 2003/10/24 17:34:23 eburns Exp $
  */
 
 /*
@@ -206,22 +206,6 @@ public class FormInputTestCase extends AbstractTestCase {
             assertEquals("field '" + formInput02_names[i] + "' value",
                          expected[i], input.getValueAttribute());
         }
-
-    }
-
-
-    // Return the form with the specified "id" from the specified page
-    // (HtmlPage.getFormByName() looks at "name" instead)
-    private HtmlForm getFormById(HtmlPage page, String id) {
-
-        Iterator forms = page.getAllForms().iterator();
-        while (forms.hasNext()) {
-            HtmlForm form = (HtmlForm) forms.next();
-            if (id.equals(form.getAttributeValue("id"))) {
-                return (form);
-            }
-        }
-        return (null);
 
     }
 

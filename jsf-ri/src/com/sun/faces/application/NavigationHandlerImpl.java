@@ -1,5 +1,5 @@
 /*
- * $Id: NavigationHandlerImpl.java,v 1.19 2003/10/23 03:44:47 eburns Exp $
+ * $Id: NavigationHandlerImpl.java,v 1.20 2003/10/24 17:34:19 eburns Exp $
  */
 
 /*
@@ -11,6 +11,8 @@ package com.sun.faces.application;
 
 import com.sun.faces.config.ConfigNavigationCase;
 import com.sun.faces.util.Util;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -21,11 +23,15 @@ import java.util.Map;
 import java.util.TreeSet;
 
 import javax.faces.FactoryFinder;
+import javax.faces.FacesException;
 import javax.faces.component.UIViewRoot;
 import javax.faces.application.NavigationHandler;
 import javax.faces.application.ViewHandler;
 import javax.faces.context.FacesContext;
+import javax.faces.context.ExternalContext;
 import javax.faces.component.UIViewRoot;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.mozilla.util.Assert;
 
@@ -40,6 +46,9 @@ public class NavigationHandlerImpl extends NavigationHandler {
     //
     // Protected Constants
     //
+
+    private static final Log log = 
+	LogFactory.getLog(NavigationHandlerImpl.class);
 
     //
     // Class Variables
@@ -112,12 +121,35 @@ public class NavigationHandlerImpl extends NavigationHandler {
         if (outcome == null) {
           return; // Explicitly remain on the current view
         }
-        String newViewId = getViewId(context, actionRef, outcome);
-        if (newViewId != null) {
+	CaseStruct caseStruct = getViewId(context, actionRef, outcome);
+	ExternalContext extContext = context.getExternalContext();
+        if (caseStruct != null) {
 	    ViewHandler viewHandler = Util.getViewHandler(context);
 	    Assert.assert_it(null != viewHandler);
-	    UIViewRoot newRoot = viewHandler.createView(context, newViewId);
-	    context.setViewRoot(newRoot);
+	    
+	    if (caseStruct.navCase.hasRedirect()) {
+		// perform a 302 redirect.
+		HttpServletResponse response = 
+		    (HttpServletResponse) extContext.getResponse();
+		String newPath = extContext.getRequestContextPath() + "/" + 
+		    viewHandler.getViewIdPath(context, caseStruct.viewId);
+		try {
+		    response.sendRedirect(newPath);
+		}
+		catch (java.io.IOException ioe) {
+		    String message = "Redirect to " + newPath + " failed.";
+		    if (log.isErrorEnabled()) {
+			log.error(message);
+		    }
+		    throw new FacesException(message, ioe);
+		}
+		context.responseComplete();
+	    }
+	    else {
+		UIViewRoot newRoot = viewHandler.createView(context, 
+							    caseStruct.viewId);
+		context.setViewRoot(newRoot);
+	    }
         }
     }
    
@@ -131,19 +163,21 @@ public class NavigationHandlerImpl extends NavigationHandler {
      *
      * @return The <code>view</code> identifier. 
      */
-     private String getViewId(FacesContext context, String actionRef, String outcome) {
+     private CaseStruct getViewId(FacesContext context, String actionRef, String outcome) {
         String nextViewId = null;
         String viewId = context.getViewRoot().getViewId();
-        nextViewId = findExactMatch(viewId, actionRef, outcome);
+	CaseStruct caseStruct = null;
+
+        caseStruct = findExactMatch(viewId, actionRef, outcome);
       
-        if (nextViewId == null) {
-            nextViewId = findWildCardMatch(viewId, actionRef, outcome);        
+        if (caseStruct == null) {
+            caseStruct = findWildCardMatch(viewId, actionRef, outcome);        
         }
       
-        if (nextViewId == null) {
-            nextViewId = findDefaultMatch(actionRef, outcome);            
+        if (caseStruct == null) {
+            caseStruct = findDefaultMatch(actionRef, outcome);            
         }
-        return nextViewId;
+        return caseStruct;
     }
 
 
@@ -183,7 +217,8 @@ public class NavigationHandlerImpl extends NavigationHandler {
      * @return The <code>view</code> identifier.
      */
 
-    private String findExactMatch(String viewId, String actionRef, String outcome) {
+    private CaseStruct findExactMatch(String viewId, String actionRef, 
+				      String outcome) {
         String returnViewId = null;
 
         Assert.assert_it(null != caseListMap);
@@ -202,9 +237,7 @@ public class NavigationHandlerImpl extends NavigationHandler {
         // 4) elements where both from-action-ref and from-outcome are null
 
 
-        returnViewId = determineViewFromActionRefOutcome(caseList, actionRef, outcome);
-
-        return returnViewId;
+        return determineViewFromActionRefOutcome(caseList, actionRef, outcome);
     }
 
     /**
@@ -219,8 +252,8 @@ public class NavigationHandlerImpl extends NavigationHandler {
      * @return The <code>view</code> identifier.
      */
 
-    private String findWildCardMatch(String viewId, String actionRef, String outcome) {
-        String returnViewId = null;
+    private CaseStruct findWildCardMatch(String viewId, String actionRef, String outcome) {
+	CaseStruct result = null;
 
         Assert.assert_it(null != wildcardMatchList);
 
@@ -252,12 +285,13 @@ public class NavigationHandlerImpl extends NavigationHandler {
             // 3) elements specifying only from-action-ref
             // 4) elements where both from-action-ref and from-outcome are null
 
-            returnViewId = determineViewFromActionRefOutcome(caseList, actionRef, outcome);
-            if (returnViewId != null) {
+            result = determineViewFromActionRefOutcome(caseList, actionRef, 
+						       outcome);
+            if (result != null) {
                 break;
             }
         } 
-        return returnViewId;
+        return result;
     }
 
     /**
@@ -271,7 +305,7 @@ public class NavigationHandlerImpl extends NavigationHandler {
      * @return The <code>view</code> identifier.
      */
 
-    private String findDefaultMatch(String actionRef, String outcome) {
+    private CaseStruct findDefaultMatch(String actionRef, String outcome) {
         String returnViewId = null;
 
         Assert.assert_it(null != caseListMap);
@@ -288,8 +322,7 @@ public class NavigationHandlerImpl extends NavigationHandler {
         // 3) elements specifying only from-action-ref
         // 4) elements where both from-action-ref and from-outcome are null
 
-        returnViewId = determineViewFromActionRefOutcome(caseList, actionRef, outcome);
-        return returnViewId;
+        return determineViewFromActionRefOutcome(caseList, actionRef, outcome);
     }
         
     /**
@@ -303,13 +336,12 @@ public class NavigationHandlerImpl extends NavigationHandler {
      * @return The <code>view</code> identifier.
      */
      
-    private String determineViewFromActionRefOutcome(List caseList, String actionRef, String outcome) {
-
-        String returnViewId = null;
+    private CaseStruct determineViewFromActionRefOutcome(List caseList, String actionRef, String outcome) {
 
         String fromActionRef = null;
         String fromOutcome = null;
         String toViewId = null;
+	CaseStruct result = new CaseStruct();
         for (int i = 0; i < caseList.size(); i++) {
             ConfigNavigationCase cnc = (ConfigNavigationCase) caseList.get(i);
             fromActionRef = cnc.getFromActionRef();
@@ -317,7 +349,9 @@ public class NavigationHandlerImpl extends NavigationHandler {
             toViewId = cnc.getToViewId();
             if ((fromActionRef != null) && (fromOutcome != null)) {
                 if ((fromActionRef.equals(actionRef)) && (fromOutcome.equals(outcome))) {
-                    return toViewId;
+		    result.viewId = toViewId;
+		    result.navCase = cnc;
+		    return result;
                 }
             }
         }
@@ -329,7 +363,9 @@ public class NavigationHandlerImpl extends NavigationHandler {
             toViewId = cnc.getToViewId();
             if ((fromActionRef == null) && (fromOutcome != null)) {
                 if (fromOutcome.equals(outcome)) {
-                    return toViewId;
+		    result.viewId = toViewId;
+		    result.navCase = cnc;
+		    return result;
                 }
             }
         }
@@ -341,7 +377,9 @@ public class NavigationHandlerImpl extends NavigationHandler {
             toViewId = cnc.getToViewId();
             if ((fromActionRef != null) && (fromOutcome == null)) {
                 if (fromActionRef.equals(actionRef)) {
-                    return toViewId;
+		    result.viewId = toViewId;
+		    result.navCase = cnc;
+		    return result;
                 }
             }
         }
@@ -352,11 +390,13 @@ public class NavigationHandlerImpl extends NavigationHandler {
             fromOutcome = cnc.getFromOutcome();
             toViewId = cnc.getToViewId();
             if ((fromActionRef == null) && (fromOutcome == null)) {
-                return toViewId;
+		result.viewId = toViewId;
+		result.navCase = cnc;
+		return result;
             }
         }
 
-        return returnViewId;
+        return null;
     }
 
     /**
@@ -372,5 +412,9 @@ public class NavigationHandlerImpl extends NavigationHandler {
         }
     }
 
+    class CaseStruct {
+	String viewId;
+	ConfigNavigationCase navCase;
+    }
 
 }

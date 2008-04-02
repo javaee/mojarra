@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigParser.java,v 1.43 2003/10/14 23:44:49 eburns Exp $
+ * $Id: ConfigParser.java,v 1.44 2003/10/24 17:34:20 eburns Exp $
  */
 
 /*
@@ -664,6 +664,7 @@ public class ConfigParser {
         digester.addCallMethod(prefix + "/from-action-ref", "setFromActionRef", 0);
         digester.addCallMethod(prefix + "/from-outcome", "setFromOutcome", 0);
         digester.addCallMethod(prefix + "/to-view-id", "setToViewId", 0);
+        digester.addCallMethod(prefix + "/redirect", "setRedirect", 0);
 
         // This custom rule will....
         //

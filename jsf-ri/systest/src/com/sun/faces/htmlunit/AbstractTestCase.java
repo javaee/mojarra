@@ -1,5 +1,5 @@
 /*
- * $Id: AbstractTestCase.java,v 1.3 2003/10/21 03:56:30 eburns Exp $
+ * $Id: AbstractTestCase.java,v 1.4 2003/10/24 17:34:22 eburns Exp $
  */
 
 /*
@@ -15,6 +15,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlBody;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.gargoylesoftware.htmlunit.html.HtmlForm;
 import java.net.URL;
 import java.util.Iterator;
 import junit.framework.Test;
@@ -271,6 +272,23 @@ public abstract class AbstractTestCase extends TestCase {
 
     }
     */
+
+    // Return the form with the specified "id" from the specified page
+    // (HtmlPage.getFormByName() looks at "name" instead)
+    protected HtmlForm getFormById(HtmlPage page, String id) {
+	
+        Iterator forms = page.getAllForms().iterator();
+        while (forms.hasNext()) {
+            HtmlForm form = (HtmlForm) forms.next();
+            if (id.equals(form.getAttributeValue("id"))) {
+                return (form);
+            }
+        }
+        return (null);
+	
+    }
+
+
 
 
 }
