@@ -173,6 +173,14 @@
     <mkdir dir="${build.home}/WEB-INF/classes"/>
     <mkdir dir="${build.home}/WEB-INF/lib"/>
 
+    <!-- Copy static webapp content -->
+    <copy todir="${build.home}">
+      <fileset dir="${web.home}"/>
+    </copy>
+
+  </target>
+
+  <target name="libraries" depends="prepare" unless="jwsdp.deploy">
     <!-- Copy required libraries -->
     <copy file="${commons-beanutils.jar}" todir="${build.home}/WEB-INF/lib"/>
     <copy file="${commons-collections.jar}" todir="${build.home}/WEB-INF/lib"/>
@@ -182,16 +190,10 @@
     <copy file="${standard.jar}" todir="${build.home}/WEB-INF/lib"/>
     <copy file="${jsf.api.jar}" todir="${build.home}/WEB-INF/lib"/>
     <copy file="${jsf.ri.jar}" todir="${build.home}/WEB-INF/lib"/>
-
-    <!-- Copy static webapp content -->
-    <copy todir="${build.home}">
-      <fileset dir="${web.home}"/>
-    </copy>
-
   </target>
 
 
-  <target name="compile" depends="prepare"
+  <target name="compile" depends="libraries"
    description="Just compile the classes">
     <!-- Run javac through everything -->
     <javac  srcdir="${source.home}"
