@@ -1,5 +1,5 @@
 /*
- * $Id: CommandLinkRenderer.java,v 1.32 2005/06/09 22:37:47 jayashri Exp $
+ * $Id: CommandLinkRenderer.java,v 1.33 2005/07/18 22:49:03 jayashri Exp $
  */
 
 /*
@@ -385,11 +385,12 @@ public class CommandLinkRenderer extends HtmlBasicRenderer {
 	String formName = myForm.getClientId(context);
 	writer.startElement("script", component);
 	writer.writeAttribute("type", "text/javascript", "type");
-	writer.writeAttribute("language", "Javascript", "language");
-	writer.write("<!--\n");
+	writer.writeAttribute("language", "Javascript", "language");	
 	if (isXHTML) {
-	    writer.write("<![CDATA[\n");
-	}
+	    writer.write("//<![CDATA[\n");
+	} else {
+            writer.write("<!--\n");
+        }
 	writer.write("\nfunction ");
 	String functionName = (CLEAR_HIDDEN_FIELD_FN_NAME + "_" + formName.replace(NamingContainer.SEPARATOR_CHAR, '_')); 
 	writer.write(functionName);
@@ -414,9 +415,10 @@ public class CommandLinkRenderer extends HtmlBasicRenderer {
 	writer.write("\n}\n");
 
 	if (isXHTML) {
-	    writer.write("]]>\n");
-	}
-	writer.write("//-->\n");
+	    writer.write("//]]>\n");
+	} else {
+	    writer.write("//-->\n");
+        }
 	writer.endElement("script");
 
 	// say that we've already rendered the script for this form

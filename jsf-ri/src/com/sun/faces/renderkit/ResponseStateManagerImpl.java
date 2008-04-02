@@ -1,5 +1,5 @@
 /*
- * $Id: ResponseStateManagerImpl.java,v 1.22 2005/06/23 15:31:33 rlubke Exp $
+ * $Id: ResponseStateManagerImpl.java,v 1.23 2005/07/18 22:49:03 jayashri Exp $
  */
 
 /*
@@ -25,6 +25,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.render.RenderKitFactory;
 import javax.faces.render.ResponseStateManager;
+import javax.faces.FacesException;
 
 import com.sun.faces.util.Base64;
 import com.sun.faces.util.Util;
@@ -153,10 +154,13 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
 		ois.close();
 	    } catch (java.io.OptionalDataException ode) {
 		logger.log(Level.SEVERE, ode.getMessage(), ode);
+                throw new FacesException(ode);
 	    } catch (java.lang.ClassNotFoundException cnfe) {
                 logger.log(Level.SEVERE,cnfe.getMessage(), cnfe);
+                throw new FacesException(cnfe);
 	    } catch (java.io.IOException iox) {
 		logger.log(Level.SEVERE,iox.getMessage(), iox);
+                throw new FacesException(iox);
 	    }
 	}
 	else {
