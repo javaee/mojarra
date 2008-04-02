@@ -1,5 +1,5 @@
 /*
- * $Id: TestApplicationFactoryImpl.java,v 1.11 2006/03/29 23:04:38 rlubke Exp $
+ * $Id: TestApplicationFactoryImpl.java,v 1.12 2007/03/13 04:15:05 rlubke Exp $
  */
 
 /*
@@ -41,7 +41,7 @@ import javax.faces.application.Application;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestApplicationFactoryImpl.java,v 1.11 2006/03/29 23:04:38 rlubke Exp $
+ * @version $Id: TestApplicationFactoryImpl.java,v 1.12 2007/03/13 04:15:05 rlubke Exp $
  */
 
 public class TestApplicationFactoryImpl extends JspFacesTestCase {
@@ -85,10 +85,8 @@ public class TestApplicationFactoryImpl extends JspFacesTestCase {
 
     public void testFactory() {
         applicationFactory = new ApplicationFactoryImpl();
-	com.sun.faces.config.StoreServletContext storeSC = 
-	    new com.sun.faces.config.StoreServletContext();
-	storeSC.setServletContext(config.getServletContext());
-	ApplicationAssociate.clearInstance(storeSC.getServletContextWrapper());
+
+        ApplicationAssociate.clearInstance(getFacesContext().getExternalContext());
 
 
         // 1. Verify "getApplication" returns the same Application instance
@@ -101,7 +99,7 @@ public class TestApplicationFactoryImpl extends JspFacesTestCase {
         // 2. Verify "setApplication" adds instances.. /
         //    and "getApplication" returns the same instance
         //
-	ApplicationAssociate.clearInstance(storeSC.getServletContextWrapper());
+	ApplicationAssociate.clearInstance(getFacesContext().getExternalContext());
         Application application3 = new ApplicationImpl();
         applicationFactory.setApplication(application3);
         Application application4 = applicationFactory.getApplication();
@@ -111,10 +109,7 @@ public class TestApplicationFactoryImpl extends JspFacesTestCase {
 
     public void testSpecCompliance() {
         applicationFactory = new ApplicationFactoryImpl();
-	com.sun.faces.config.StoreServletContext storeSC = 
-	    new com.sun.faces.config.StoreServletContext();
-	storeSC.setServletContext(config.getServletContext());
-	ApplicationAssociate.clearInstance(storeSC.getServletContextWrapper());
+	ApplicationAssociate.clearInstance(getFacesContext().getExternalContext());
 
         assertTrue(null != applicationFactory.getApplication());
     }
