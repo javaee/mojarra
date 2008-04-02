@@ -1,5 +1,5 @@
 /*
- * $Id: TestManagedBeanFactory.java,v 1.6 2003/05/10 00:43:06 horwat Exp $
+ * $Id: TestManagedBeanFactory.java,v 1.7 2003/05/12 20:14:00 eburns Exp $
  */
 
 /*
@@ -124,7 +124,7 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
         cmbp = new ConfigManagedBeanProperty();
         cmbp.setPropertyName("boolProp");
         cmbpv = new ConfigManagedBeanPropertyValue();
-        cmbpv.setValue(Boolean.toString(testBoolean));
+        cmbpv.setValue((new Boolean(testBoolean)).toString());
         cmbp.setValue(cmbpv);
         cmb.addProperty(cmbp); 
 
@@ -140,7 +140,7 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
         cmbp = new ConfigManagedBeanProperty();
         cmbp.setPropertyName("charProp");
         cmbpv = new ConfigManagedBeanPropertyValue();
-        cmbpv.setValue(Character.toString(testChar));
+        cmbpv.setValue((new Character(testChar)).toString());
         cmbp.setValue(cmbpv);
         cmb.addProperty(cmbp); 
 
