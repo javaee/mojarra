@@ -1,5 +1,5 @@
 /*
- * $Id: ConverterTag.java,v 1.1 2003/08/15 17:23:49 craigmcc Exp $
+ * $Id: ConverterTag.java,v 1.2 2003/09/12 16:25:23 craigmcc Exp $
  */
 
 /*
@@ -11,7 +11,8 @@ package javax.faces.webapp;
 
 
 import javax.faces.component.UIComponent;
-import javax.faces.component.UIOutput;
+import javax.faces.component.ValueHolder;
+import javax.faces.component.ValueHolder;
 import javax.faces.convert.Converter;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.Tag;
@@ -26,7 +27,7 @@ import javax.faces.FactoryFinder;
 /**
  * <p><strong>ConverterTag</strong> is a base class for all JSP custom actions
  * that create and register a <code>Converter</code> instance on the
- * {@link UIOutput} associated with our most immediate surrounding instance
+ * {@link ValueHolder} associated with our most immediate surrounding instance
  * of a tag whose implementation class is a subclass of {@link UIComponentTag}.
  * To avoid creating duplicate instances when a page is redisplayed,
  * creation and registration of a {@link Converter} occurs
@@ -89,23 +90,20 @@ public class ConverterTag extends TagSupport {
     public int doStartTag() throws JspException {
 
         // Locate our parent UIComponentTag
-        Tag tag = getParent();
-        while ((tag != null) && !(tag instanceof UIComponentTag)) {
-            tag = tag.getParent();
-        }
+        UIComponentTag tag =
+            UIComponentTag.getParentUIComponentTag(pageContext);
         if (tag == null) { // PENDING - i18n
             throw new JspException("Not nested in a UIComponentTag");
         }
-        UIComponentTag facesTag = (UIComponentTag) tag;
 
         // Nothing to do unless this tag created a component
-        if (!facesTag.getCreated()) {
+        if (!tag.getCreated()) {
             return (SKIP_BODY);
         }
 
         // Create and register an instance with the appropriate component
         Converter converter = createConverter();
-        ((UIOutput) facesTag.getComponent()).setConverter(converter);
+        ((ValueHolder) tag.getComponent()).setConverter(converter);
         return (SKIP_BODY);
 
     }

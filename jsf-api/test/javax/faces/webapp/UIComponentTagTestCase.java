@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTagTestCase.java,v 1.11 2003/09/02 03:13:03 eburns Exp $
+ * $Id: UIComponentTagTestCase.java,v 1.12 2003/09/12 16:25:26 craigmcc Exp $
  */
 
 /*
@@ -28,6 +28,7 @@ import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
 import javax.faces.validator.Validator;
 import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.Tag;
 import junit.framework.TestCase;
 import junit.framework.Test;
@@ -454,6 +455,8 @@ public class UIComponentTagTestCase extends TestCase {
     protected void reset() throws IOException {
 
         pageContext.clearPageScope();
+        pageContext.removeAttribute("javax.faces.webapp.AUTO_INDEX",
+                                    PageContext.REQUEST_SCOPE);
         MockJspWriter writer = (MockJspWriter) pageContext.getOut();
         writer.clearBuffer();
 

@@ -1,5 +1,5 @@
 /*
- * $Id: ValidatorTag.java,v 1.10 2003/08/15 17:23:50 craigmcc Exp $
+ * $Id: ValidatorTag.java,v 1.11 2003/09/12 16:25:24 craigmcc Exp $
  */
 
 /*
@@ -88,23 +88,20 @@ public class ValidatorTag extends TagSupport {
     public int doStartTag() throws JspException {
 
         // Locate our parent UIComponentTag
-        Tag tag = getParent();
-        while ((tag != null) && !(tag instanceof UIComponentTag)) {
-            tag = tag.getParent();
-        }
+        UIComponentTag tag =
+            UIComponentTag.getParentUIComponentTag(pageContext);
         if (tag == null) { // PENDING - i18n
             throw new JspException("Not nested in a UIComponentTag");
         }
-        UIComponentTag facesTag = (UIComponentTag) tag;
 
         // Nothing to do unless this tag created a component
-        if (!facesTag.getCreated()) {
+        if (!tag.getCreated()) {
             return (SKIP_BODY);
         }
 
         // Create and register an instance with the appropriate component
         Validator validator = createValidator();
-        ((UIInput) facesTag.getComponent()).addValidator(validator);
+        ((UIInput) tag.getComponent()).addValidator(validator);
         return (SKIP_BODY);
 
     }

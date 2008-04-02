@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTag.java,v 1.15 2003/08/29 00:09:22 craigmcc Exp $
+ * $Id: UIComponentTag.java,v 1.16 2003/09/12 16:25:23 craigmcc Exp $
  */
 
 /*
@@ -46,12 +46,20 @@ public abstract class UIComponentTag implements Tag {
 
 
     /**
-     * <p>The page scope attribute under which an <code>Integer</code> value
+     * <p>The request scope attribute under which an <code>Integer</code> value
      * describing the number of child identifiers that have been created
      * so far on this page.</p>
      */
     private static final String AUTO_ID_INDEX_PAGE_ATTR =
         "javax.faces.webapp.AUTO_INDEX";
+
+
+    /**
+     * <p>The request scope attribute under which a component tag stack
+     * for the current request will be maintained.</p>
+     */
+    private static final String COMPONENT_TAG_STACK_ATTR =
+        "javax.faes.webapp.COMPONENT_TAG_STACK";
 
 
     /**
@@ -232,6 +240,25 @@ public abstract class UIComponentTag implements Tag {
 
 
     /**
+     * <p>Locate and return the nearest enclosing {@link UIComponentTag} if any;
+     * otherwise, return <code>null</code>.</p>
+     *
+     * @param context <code>PageContext</code> for the current page
+     */
+    public static UIComponentTag getParentUIComponentTag(PageContext context) {
+
+        List list = (List) context.getAttribute(COMPONENT_TAG_STACK_ATTR,
+                                                PageContext.REQUEST_SCOPE);
+        if (list != null) {
+            return ((UIComponentTag) list.get(list.size() - 1));
+        } else {
+            return (null);
+        }
+
+    }
+    
+
+    /**
      * <p>Return the <code>rendererType</code> property that selects the
      * <code>Renderer</code> to be used for encoding this component, or
      * <code>null</code> to ask the component to render itself directly.
@@ -329,7 +356,7 @@ public abstract class UIComponentTag implements Tag {
         component = findComponent(context);
 
         // Add to parent's list of created components or facets if needed
-        UIComponentTag parentTag = getParentUIComponentTag();
+        UIComponentTag parentTag = getParentUIComponentTag(pageContext);
         if (parentTag != null) {
             if (getFacetName() == null) {
                 parentTag.addChild(component);
@@ -350,6 +377,7 @@ public abstract class UIComponentTag implements Tag {
         }
 
         // Return the appropriate control value
+        pushUIComponentTag();
         return (getDoStartValue());
 
     }
@@ -395,6 +423,7 @@ public abstract class UIComponentTag implements Tag {
     public int doEndTag() throws JspException {
 
         // Remove old children and facets as needed
+        popUIComponentTag();
         removeOldChildren();
         removeOldFacets();
 
@@ -438,7 +467,7 @@ public abstract class UIComponentTag implements Tag {
     }
 
 
-    // ------------------------------------------------------ Protected Methods
+    // ------------------------------------------------------- Protected Methods
 
 
     /**
@@ -533,7 +562,7 @@ public abstract class UIComponentTag implements Tag {
         }
 
         // Step 2 -- Identify the component that is, or will be, our parent
-        UIComponentTag parentTag = getParentUIComponentTag();
+        UIComponentTag parentTag = getParentUIComponentTag(pageContext);
         UIComponent parentComponent = null;
         if (parentTag != null) {
             parentComponent = parentTag.getComponent();
@@ -616,24 +645,6 @@ public abstract class UIComponentTag implements Tag {
 
     }
 
-
-    /**
-     * <p>Locate and return the nearest enclosing {@link UIComponentTag} if any;
-     * otherwise, return <code>null</code>.</p>
-     */
-    protected UIComponentTag getParentUIComponentTag() {
-
-        Tag tag = getParent();
-        while (tag != null) {
-            if (tag instanceof UIComponentTag) {
-                return ((UIComponentTag) tag);
-            }
-            tag = tag.getParent();
-        }
-        return (null);
-
-    }
-    
 
     /**
      * <p>Return <code>true</code> if rendering should be suppressed because
@@ -740,9 +751,10 @@ public abstract class UIComponentTag implements Tag {
 			pageContext.getOut().close();
 		    }
 		    public void flush() throws IOException {
-			pageContext.getOut().flush();
+                        // PENDING(craigmcc) - causes problems with includes
+			// pageContext.getOut().flush();
 		    }
-		    public void write(char cbuf) throws IOException {
+                    public void write(char cbuf) throws IOException {
 			pageContext.getOut().write(cbuf);
 		    }
 		    public void write(char[] cbuf, int off, 
@@ -833,7 +845,7 @@ public abstract class UIComponentTag implements Tag {
         }
         overrideProperties(component);
         component.setId(componentId);
-        UIComponentTag parentTag = getParentUIComponentTag();
+        UIComponentTag parentTag = getParentUIComponentTag(pageContext);
         parent.getChildren().add(parentTag.getIndex(), component);
         created = true;
         return (component);
@@ -871,12 +883,15 @@ public abstract class UIComponentTag implements Tag {
     private String createId() {
 
         Integer index =
-            (Integer) pageContext.getAttribute(AUTO_ID_INDEX_PAGE_ATTR);
+            (Integer) pageContext.getAttribute(AUTO_ID_INDEX_PAGE_ATTR,
+                                               PageContext.REQUEST_SCOPE);
         if (index == null) {
             index = new Integer(0);
         }
         index = new Integer(index.intValue() + 1);
-        pageContext.setAttribute(AUTO_ID_INDEX_PAGE_ATTR, index);
+        pageContext.setAttribute(AUTO_ID_INDEX_PAGE_ATTR,
+                                 index,
+                                 PageContext.REQUEST_SCOPE);
         return ("JSPid" + index);
 
     }
@@ -914,6 +929,43 @@ public abstract class UIComponentTag implements Tag {
         } else {
             return (0);
         }
+
+    }
+
+
+    /**
+     * <p>Pop the top {@link UIComponentTag} instance off of our component tag
+     * stack, deleting the stack if this was the last entry.</p>
+     */
+    private void popUIComponentTag() {
+
+        List list = (List) pageContext.getAttribute(COMPONENT_TAG_STACK_ATTR,
+                                                    PageContext.REQUEST_SCOPE);
+        if (list != null) {
+            list.remove(list.size() - 1);
+            if (list.size() < 1) {
+                pageContext.removeAttribute(COMPONENT_TAG_STACK_ATTR,
+                                            PageContext.REQUEST_SCOPE);
+            }
+        }
+
+    }
+
+
+    /**
+     * <p>Push the specified {@link UIComponentTag} instance onto our component
+     * tag stack, creating a stack if necessary.</p>
+     */
+    private void pushUIComponentTag() {
+
+        List list = (List) pageContext.getAttribute(COMPONENT_TAG_STACK_ATTR,
+                                                    PageContext.REQUEST_SCOPE);
+        if (list == null) {
+            list = new ArrayList();
+            pageContext.setAttribute(COMPONENT_TAG_STACK_ATTR, list,
+                                     PageContext.REQUEST_SCOPE);
+        }
+        list.add(this);
 
     }
 

@@ -73,7 +73,7 @@ public class RepeaterSupport implements Serializable {
      * <p>The default character used to separate components of generated
      * client identifiers.</p>
      */
-    private static final char SEPARATOR = ':';
+    private static final char SEPARATOR = '_';
 
 
     // ------------------------------------------------------------ Constructors
