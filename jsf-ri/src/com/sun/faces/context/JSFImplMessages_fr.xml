@@ -1,0 +1,112 @@
+<!--
+ Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+-->
+
+<messages>
+  <message messageId="MSG0001" severity="1" summary="{0} n'est pas un nombre valide.">
+  	<detail>Veuillez entrer un nombre valide.</detail>
+  </message>
+  <message messageId="MSG0002" severity="2" summary="{0} n'est pas une date valide." >
+      <detail>Veuillez entrer la date avec le format mm/jj/aa.</detail>
+  </message>
+  <message messageId="MSG0003" severity="3" summary="Le champ {0} ne peut etre vide." />
+  <message messageId="MSG0004" severity="2" summary="{0} d&#233;passe les limites permises." >
+      <detail>La valeur sp&#233;cifi&#233;e doit &#234;tre entre  {1} et {2}.</detail>
+  </message>
+  <message messageId="MSG0005" severity="4" summary="Erreur de conversion." >
+      <detail>Erreur de conversion quand la valeur {0} for model {1} : Exception: [2].</detail>
+  </message>
+  <message messageId="com.sun.faces.TYPECONVERSION_ERROR" severity="4" summary="Erreur de conversion." >
+      <detail>Erreur de conversion quand la valeur {0} est commise pour le mod&#232;le {1} : Exception: [2].</detail>
+  </message>
+
+  <message messageId="com.sun.faces.MODELUPDATE_ERROR" severity="4" summary="Erreur lors de la mise &#224; jour du mod&#232;le." >
+      <detail>Erreur lors de la mise &#224; jour de la valeur {0} pour le mod&#232;le {1} : Exception: [2].</detail>
+  </message>
+
+  <message messageId="com.sun.faces.FACES_CONTEXT_CONSTRUCTION_ERROR" severity="1" summary="Erreur lors de la construction." >
+      <detail>Ne peut cr&#233;er le FacesContext. Un ou plusieurs param&#232;tres peuvent &#234;tre nuls.</detail>
+  </message>
+
+  <message messageId="com.sun.faces.NULL_COMPONENT_ERROR" severity="1" summary="Erreur lors de la construction." >
+      <detail>L'argument pour la composante est nul.</detail>
+  </message>
+
+  <message messageId="com.sun.faces.NULL_REQUEST_TREE_ERROR" severity="1" summary="Erreur dans les arguments." >
+      <detail>L'argument requestTree est nul.</detail>
+  </message>
+
+  <message messageId="com.sun.faces.NULL_RESPONSE_TREE_ERROR" severity="1" summary="Erreur dans les arguments." >
+      <detail>L'argument responseTree est nul.</detail>
+  </message>
+
+  <message messageId="com.sun.faces.REQUEST_TREE_ALREADY_SET_ERROR" severity="1" summary="Erreur d'&#233;tat." >
+      <detail>requestTree a d&#233;j&#224; &#233;t&#233; sp&#233;cifi&#233; pour cette requete.</detail>
+  </message>
+
+  <message messageId="com.sun.faces.NULL_MESSAGE_ERROR" severity="1" summary="Erreur dans les arguments." >
+      <detail>Le param&#232;tre Message ne peut &#234;tre nul.</detail>
+  </message>
+
+  <message messageId="com.sun.faces.NULL_PARAMETERS_ERROR" severity="1" summary="Erreur dans les arguments." >
+      <detail>Un ou plusieurs param&#232;tres peuvent &#234;tre nuls.</detail>
+  </message>
+
+  <message messageId="com.sun.faces.NAMED_OBJECT_NOT_FOUND_ERROR" severity="1" summary="Erreur dans l'expression." >
+      <detail>Object nomm&#233; '{0}' ne peut &#234;tre trouv&#233;.</detail>
+  </message>
+
+  <message messageId="com.sun.faces.NULL_RESPONSE_STREAM_ERROR" severity="1" summary="Erreur dans les arguments." >
+      <detail>L'argument responseStream est nul.</detail>
+  </message>
+
+  <message messageId="com.sun.faces.NULL_RESPONSE_WRITER_ERROR" severity="1" summary="Erreur dans les arguments." >
+      <detail>L'argument responseWriter est nul.</detail>
+  </message>
+
+  <message messageId="com.sun.faces.NULL_EVENT_ERROR" severity="1" summary="Erreur dans les arguments." >
+      <detail>L'argument event est nul.</detail>
+  </message>
+
+  <message messageId="com.sun.faces.NULL_HANDLER_ERROR" severity="1" summary="Erreur dans les arguments." >
+      <detail>L'argument handler est nul.</detail>
+  </message>
+
+  <message messageId="com.sun.faces.NULL_CONTEXT_ERROR" severity="1" summary="Erreur dans les arguments." >
+      <detail>L'argument context est nul.</detail>
+  </message>
+
+  <message messageId="com.sun.faces.NULL_LOCALE_ERROR" severity="1" summary="Erreur dans les arguments." >
+      <detail>L'argument locale est nul.</detail>
+  </message>
+
+  <message messageId="com.sun.faces.SUPPORTS_COMPONENT_ERROR" severity="1" summary="Erreur dans les arguments." >
+      <detail>Composantes de type '{0}' ne sont pas support&#233;es par ce renderer.</detail>
+  </message>
+
+   <message messageId="com.sun.faces.MISSING_RESOURCE_ERROR" severity="3" summary="La ressource ne peut &#234;tre trouv&#233;e." >
+      <detail>Ne peut obtenir ResourceBundle.</detail>
+  </message>
+
+  <message messageId="com.sun.faces.MISSING_CLASS_ERROR" severity="1" summary="Une classe ne peut &#234;tre trouv&#233;e." >
+      <detail>Ne peut charger la classe '{0}'.</detail>
+  </message>
+
+  <message messageId="com.sun.faces.COMPONENT_NOT_FOUND_ERROR" severity="3" summary="La composante ne peut &#234;tre trouv&#233;e.">
+      <detail>Ne peut trouver une composante pour l'identificateur: '{0}'.</detail>
+  </message>
+
+  <message messageId="com.sun.faces.LIFECYCLE_ID_ALREADY_ADDED" severity="3" summary="LifecycleId a d&#233;j&#224; &#233;t&#233; ajout&#233;.">
+      <detail>LifecycleId '{0}' a d&#233;j&#224; &#233;t&#233; ajout&#233;.</detail>
+  </message>
+
+  <message messageId="com.sun.faces.ILLEGAL_MODEL_REFERENCE" severity="3" summary="Mod&#232;le de r&#233;f&#233;rence illegal.">
+      <detail>L'expression '{0}' du mod&#232;le de r&#233;f&#233;rence est ill&#233;gale dans ce contexte.</detail>
+  </message>
+
+  <message messageId="com.sun.faces.ATTRIBUTE_NOT_SUPORTED" severity="3" summary="L'attribut n'est pas support&#233;">
+      <detail>L'attribut '{0}' n'est pas support&#233; pour la composante de type '{1}'.</detail>
+  </message>
+</messages>
+

@@ -1,0 +1,112 @@
+<!--
+ Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+-->
+
+<messages>
+  <message messageId="MSG0001" severity="1" summary="{0} no es v&#225;lido numero.">
+  	<detail>Por favor entra un numero valible.</detail>
+  </message>
+  <message messageId="MSG0002" severity="2" summary="{0} no es una fecha valida." >
+      <detail>Por favor entra fecha en formato de mm/dd/aa.</detail>
+  </message>
+  <message messageId="MSG0003" severity="3" summary="{0} el espacio no puede esta el blanco." />
+  <message messageId="MSG0004" severity="2" summary="{0} es afuera del rango." >
+      <detail>El valor debe de ser en medio {1} y {2}.</detail>
+  </message>
+  <message messageId="MSG0005" severity="4" summary="Error de conversio." >
+      <detail>Error  de conversion en el valor puesto {0} del modelo {1}: excepci&#243;n de: [2]</detail>
+  </message>
+  <message messageId="com.sun.faces.TYPECONVERSION_ERROR" severity="4" summary="Error de conversio." >
+      <detail>Error  de conversion en el valor puesto {0} del modelo {1}: excepci&#243;n de: [2]</detail>
+  </message>
+
+  <message messageId="com.sun.faces.MODELUPDATE_ERROR" severity="4" summary="Fallo de poner al d&#237;da del modelo." >
+      <detail>Error de poner al d&#237;da valor {0} para modelo {1} : excepci&#243;n de: [2].</detail>
+  </message>
+
+  <message messageId="com.sun.faces.FACES_CONTEXT_CONSTRUCTION_ERROR" severity="1" summary="Error de construcci&#243;n." >
+      <detail>No puede creer FacesContext.  Uno o mas de algunos parametros requerida esta nulo.</detail>
+  </message>
+
+  <message messageId="com.sun.faces.NULL_COMPONENT_ERROR" severity="1" summary="Error de construcci&#243;n." >
+      <detail>Argumento componente es nulo.</detail>
+  </message>
+
+  <message messageId="com.sun.faces.NULL_REQUEST_TREE_ERROR" severity="1" summary="Error de argumento." >
+      <detail>Argumento requestTree es nulo.</detail>
+  </message>
+
+  <message messageId="com.sun.faces.NULL_RESPONSE_TREE_ERROR" severity="1" summary="Error de argumento." >
+      <detail>Argumento responseTree es nulo.</detail>
+  </message>
+
+  <message messageId="com.sun.faces.REQUEST_TREE_ALREADY_SET_ERROR" severity="1" summary="Error de Estado." >
+      <detail>requestTree fue establacida para esta petici&#243;n.</detail>
+  </message>
+
+  <message messageId="com.sun.faces.NULL_MESSAGE_ERROR" severity="1" summary="Error de argumento." >
+      <detail>Parametro de mesaje no puede esta nulo.</detail>
+  </message>
+
+  <message messageId="com.sun.faces.NULL_PARAMETERS_ERROR" severity="1" summary="Error de argumento." >
+      <detail>Uno o m&#225;s par&#225;metros pueden estan nulos.</detail>
+  </message>
+
+  <message messageId="com.sun.faces.NAMED_OBJECT_NOT_FOUND_ERROR" severity="1" summary="Error de expresi&#243;n." >
+      <detail>Objeto Nombrado: '{0}' no encontrado.</detail>
+  </message>
+
+  <message messageId="com.sun.faces.NULL_RESPONSE_STREAM_ERROR" severity="1" summary="Error de argumento." >
+      <detail>responseStream argumento es nulo.</detail>
+  </message>
+
+  <message messageId="com.sun.faces.NULL_RESPONSE_WRITER_ERROR" severity="1" summary="Error de argumento." >
+      <detail>responseWriter argumento es nulo.</detail>
+  </message>
+
+  <message messageId="com.sun.faces.NULL_EVENT_ERROR" severity="1" summary="Error de argumento." >
+      <detail>argumento suceso es nulo.</detail>
+  </message>
+
+  <message messageId="com.sun.faces.NULL_HANDLER_ERROR" severity="1" summary="Error de argumento." >
+      <detail>argumento manipulador es nulo.</detail>
+  </message>
+
+  <message messageId="com.sun.faces.NULL_CONTEXT_ERROR" severity="1" summary="Error de argumento." >
+      <detail>argumento contexto es nulo.</detail>
+  </message>
+
+  <message messageId="com.sun.faces.NULL_LOCALE_ERROR" severity="1" summary="Error de argumento." >
+      <detail>argumento sitio es nulo.</detail>
+  </message>
+
+  <message messageId="com.sun.faces.SUPPORTS_COMPONENT_ERROR" severity="1" summary="Error de argumento." >
+      <detail>Tipo de componente: '{0}' no es mantenida para esta renderer.</detail>
+  </message>
+
+   <message messageId="com.sun.faces.MISSING_RESOURCE_ERROR" severity="3" summary="recurso perdido." >
+      <detail>No puede conseguir ResourceBundle.</detail>
+  </message>
+
+  <message messageId="com.sun.faces.MISSING_CLASS_ERROR" severity="1" summary="Clase perdida." >
+      <detail>No puede cargar clase '{0}'.</detail>
+  </message>
+
+  <message messageId="com.sun.faces.COMPONENT_NOT_FOUND_ERROR" severity="3" summary="componente no encontrado.">
+      <detail>No puedo encontrar componente para identificador: '{0}'.</detail>
+  </message>
+
+  <message messageId="com.sun.faces.LIFECYCLE_ID_ALREADY_ADDED" severity="3" summary="LifecycleId ya esta agregada.">
+      <detail>Lifecylce id '{0}' ya hacido agregada.</detail>
+  </message>
+
+  <message messageId="com.sun.faces.ILLEGAL_MODEL_REFERENCE" severity="3" summary="Ilegal Referencia de Modelo.">
+      <detail>Expresi&#243;n de ModelReference '{0}' en esto contexto es ilegal.</detail>
+  </message>
+
+  <message messageId="com.sun.faces.ATTRIBUTE_NOT_SUPORTED" severity="3" summary="Atributo no es apoyado">
+      <detail>Atributo '{0}' no es apoyado para el tipo de componente '{1}'.</detail>
+  </message>
+</messages>
+

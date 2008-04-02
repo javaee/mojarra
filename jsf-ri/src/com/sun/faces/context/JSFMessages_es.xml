@@ -1,0 +1,82 @@
+<!--
+ Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+-->
+
+<messages>
+  <message messageId="javax.faces.validator.DoubleRangeValidator.LIMIT" 
+           severity="1" summary="Error de Validaci&#243;n." >
+      <detail>No puede ser convertido specificado atributo al proprio tipo.</detail>
+  </message>
+  <message messageId="javax.faces.validator.DoubleRangeValidator.MAXIMUM" 
+           severity="1" summary="Error de Validaci&#243;n." >
+      <detail>Valor es m&#225;s grande de valor de m&#225;ximo permitido: {0}.</detail>
+  </message>
+  <message messageId="javax.faces.validator.DoubleRangeValidator.MINIMUM" 
+           severity="1" summary="Error de Validaci&#243;n." >
+      <detail>Valor is menos de valor de m&#237;nimo permitido: {0}.</detail>
+  </message>
+  <message messageId="javax.faces.validator.DoubleRangeValidator.TYPE" 
+           severity="1" summary="Error de Validaci&#243;n." >
+      <detail>Valor no es correcto tipo.</detail>
+  </message>
+
+  <message messageId="javax.faces.validator.LengthValidator.LIMIT" 
+           severity="1" summary="Error de Validaci&#243;n." >
+      <detail>No puede ser convertido specificado atributo al proprio tipo.</detail>
+  </message>
+  <message messageId="javax.faces.validator.LengthValidator.MAXIMUM" 
+           severity="1" summary="Error de Validaci&#243;n." >
+      <detail>Valor es m&#225;s grande de valor de m&#225;ximo permitido: {0}.</detail>
+  </message>
+  <message messageId="javax.faces.validator.LengthValidator.MINIMUM" 
+           severity="1" summary="Error de Validaci&#243;n." >
+      <detail>Valor is menos de valor de m&#237;nimo permitido: {0}.</detail>
+  </message>
+
+  <message messageId="javax.faces.validator.RequiredValidator.FAILED" 
+           severity="1" summary="Error de Validaci&#243;n." >
+      <detail>Valor es necesario.</detail>
+  </message>
+
+  <message messageId="javax.faces.validator.LongRangeValidator.LIMIT" 
+           severity="1" summary="Error de Validaci&#243;n." >
+      <detail>No puede ser convertido specificado atributo al proprio tipo.</detail>
+  </message>
+  <message messageId="javax.faces.validator.LongRangeValidator.MAXIMUM" 
+           severity="1" summary="Error de Validaci&#243;n." >
+      <detail>Valor es m&#225;s grande de valor de m&#225;ximo permitido: {0}.</detail>
+  </message>
+  <message messageId="javax.faces.validator.LongRangeValidator.MINIMUM" 
+           severity="1" summary="Error de Validaci&#243;n." >
+      <detail>Valor is menos de valor de m&#237;nimo permitido: {0}.</detail>
+  </message>
+  <message messageId="javax.faces.validator.LongRangeValidator.TYPE" 
+           severity="1" summary="Error de Validaci&#243;n." >
+      <detail>Valor no es correcto tipo.</detail>
+  </message>
+
+  <message messageId="javax.faces.validator.StringRangeValidator.LIMIT" 
+           severity="1" summary="Error de Validaci&#243;n." >
+      <detail>No puede ser convertido specificado atributo al proprio tipo.</detail>
+  </message>
+  <message messageId="javax.faces.validator.StringRangeValidator.MAXIMUM" 
+           severity="1" summary="Error de Validaci&#243;n." >
+      <detail>Valor es m&#225;s grande de valor de m&#225;ximo permitido: {0}.</detail>
+  </message>
+  <message messageId="javax.faces.validator.StringRangeValidator.MINIMUM" 
+           severity="1" summary="Error de Validaci&#243;n." >
+      <detail>Valor is menos de valor de m&#237;nimo permitido: {0}.</detail>
+  </message>
+  <message messageId="javax.faces.validator.StringRangeValidator.TYPE" 
+           severity="1" summary="Error de Validaci&#243;n." >
+      <detail>Valor no es correcto tipo.</detail>
+  </message>
+
+  <message messageId="javax.faces.validator.RequiredValidator.FAILED" 
+           severity="1" summary="Error de Validaci&#243;n." >
+      <detail>Valor es necesario.</detail>
+  </message>
+
+</messages>
+
