@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.56 2003/06/21 04:49:18 craigmcc Exp $
+ * $Id: UIComponentBase.java,v 1.57 2003/07/15 00:03:20 craigmcc Exp $
  */
 
 /*
@@ -154,6 +154,7 @@ public abstract class UIComponentBase implements UIComponent {
 
     public String getClientId(FacesContext context) {
 
+	// Return any previously calculated client identifier
         if (clientId != null) {
             return (clientId);
         }
@@ -165,7 +166,6 @@ public abstract class UIComponentBase implements UIComponent {
 	    // let the Renderer define the client id
 	    Renderer renderer = getRenderer(context);
             clientId = renderer.getClientId(context, this);
-	    componentId = clientId;
 
         } else {
 
@@ -189,17 +189,14 @@ public abstract class UIComponentBase implements UIComponent {
 	    
 	    if (null != closestContainer) {
 
-		// If there is no componentId, generate one and store it
+		// If there is no componentId, ask our naming container
 		if (componentId == null) {
-		    // Don't call setComponentId() because it checks for
-		    // uniqueness.  No need.
-                    clientId = closestContainer.generateClientId();
-                    componentId = clientId;
+		    clientId = closestContainer.generateClientId();
 		} else {
                     clientId = componentId;
                 }
 
-		// build the client side id
+		// build up the client side id
 		containerComponent = (UIComponent) closestContainer;
 
 		// If this is the root naming container, break
