@@ -354,7 +354,7 @@ java -Xmx256m -jar ${dependency.base.dir}/${glassfish.installer.jar} -console < 
         </if>
         <if>
             <not>
-                <available file="${dependency.base.dir}/jetty=${jetty.version}.zip" property="ignored"/>
+                <available file="${dependency.base.dir}/jetty-${jetty.version}.zip" property="ignored"/>
             </not>
             <then>
                 <get src="http://dist.codehaus.org/jetty/jetty-${jetty.version}.zip"
