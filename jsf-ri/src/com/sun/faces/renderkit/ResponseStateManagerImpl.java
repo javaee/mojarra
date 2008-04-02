@@ -1,5 +1,5 @@
 /*
- * $Id: ResponseStateManagerImpl.java,v 1.27 2005/08/26 15:27:11 rlubke Exp $
+ * $Id: ResponseStateManagerImpl.java,v 1.28 2006/01/06 15:42:15 rlubke Exp $
  */
 
 /*
@@ -93,8 +93,10 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
     //
 
     public ResponseStateManagerImpl() {
+
         super();
-        byteArrayGuard = new ByteArrayGuard();
+        byteArrayGuard = ByteArrayGuard.getInstance();
+
     }
 
 
@@ -109,7 +111,7 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
     //
     // Methods From ResponseStateManager
     //
-
+    @SuppressWarnings("deprecation")
     public Object getComponentStateToRestore(FacesContext context) {
 
         // requestMap is a local variable so we don't need to synchronize
@@ -118,19 +120,29 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
         // null out the temporary attribute, since we don't need it anymore.
         requestMap.remove(FACES_VIEW_STATE);
         return state;
+
     }
+
 
     public boolean isPostback(FacesContext context) {
+
         return context.getExternalContext().getRequestParameterMap().
                     containsKey(ResponseStateManager.VIEW_STATE_PARAM);
+
     }
 
+
     public Object getState(FacesContext context, String viewId) {
+
         return ( super.getState(context, viewId) );
+
     }
-    
+
+
+    @SuppressWarnings("deprecation")
     public Object getTreeStructureToRestore(FacesContext context,
                                             String treeId) {
+
 	StateManager stateManager = Util.getStateManager(context);
         
 	Map<String,String> requestParamMap = context.getExternalContext()
@@ -151,7 +163,7 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
 	    boolean compress = isCompressStateSet(context);
            
 	    try {
-                 byte[] bytes = byteArrayGuard.decrypt(context,
+                 byte[] bytes = byteArrayGuard.decrypt(
                     (Base64.decode(viewString.getBytes())));
 		bis = new ByteArrayInputStream(bytes);
 		if (isCompressStateSet(context)) {
@@ -190,13 +202,11 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
 	    structure = viewString;
 	}
 	return structure;
+
     }
 
-    public void writeState(FacesContext context, Object state) 
-        throws IOException {
-        super.writeState(context, state);
-    }
-    
+
+    @SuppressWarnings("deprecation")
     public void writeState(FacesContext context, SerializedView view)
         throws IOException {
         
@@ -230,9 +240,8 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
 	    if (compress) {
 		zos.close();
 	    }
-            byte[] securedata = byteArrayGuard.encrypt(context, 
-                    bos.toByteArray());
-	    bos.close();
+            byte[] securedata = byteArrayGuard.encrypt(bos.toByteArray());
+        bos.close();
 	    String valueToWrite = (new String(Base64.encode(securedata), 
 					      "ISO-8859-1"));
 	    writer.writeAttribute("value", 
@@ -254,9 +263,12 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
             writer.writeAttribute("value", RenderKitFactory.HTML_BASIC_RENDER_KIT, "value");
             writer.endElement("input");
         }
+
     }
-    
-    public boolean isCompressStateSet(FacesContext context) {
+
+
+    private boolean isCompressStateSet(FacesContext context) {
+
 	if (null != compressStateSet) {
 	    return compressStateSet;
 	}
@@ -268,8 +280,8 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
 	    compressStateSet = Boolean.valueOf(compressStateParam);
         }
 	return compressStateSet;
-    }
 
+    }
 
 } // end of class ResponseStateManagerImpl
 

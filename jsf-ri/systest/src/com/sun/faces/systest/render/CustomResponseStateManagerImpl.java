@@ -1,5 +1,5 @@
 /*
- * $Id: CustomResponseStateManagerImpl.java,v 1.4 2005/08/22 22:10:44 ofung Exp $
+ * $Id: CustomResponseStateManagerImpl.java,v 1.5 2006/01/06 15:42:16 rlubke Exp $
  */
 
 /*
@@ -30,7 +30,6 @@
 
 package com.sun.faces.systest.render;
 
-import com.sun.faces.RIConstants;
 import com.sun.faces.renderkit.ByteArrayGuard;
 import com.sun.faces.util.Base64;
 import com.sun.faces.util.Util;
@@ -40,7 +39,6 @@ import org.apache.commons.logging.LogFactory;
 import javax.faces.application.StateManager.SerializedView;
 import javax.faces.application.StateManager;
 import javax.faces.context.FacesContext;
-import javax.faces.render.RenderKitFactory;
 import javax.faces.render.ResponseStateManager;
 
 import java.io.ByteArrayInputStream;
@@ -93,7 +91,7 @@ public class CustomResponseStateManagerImpl extends ResponseStateManager {
 
     public CustomResponseStateManagerImpl() {
         super();
-        byteArrayGuard = new ByteArrayGuard();
+        byteArrayGuard = ByteArrayGuard.getInstance();
     }
 
 
@@ -153,8 +151,8 @@ public class CustomResponseStateManagerImpl extends ResponseStateManager {
 	    boolean compress = isCompressStateSet(context);
 	   
 	    try {
-                 byte[] bytes = byteArrayGuard.decrypt(context,
-                    (Base64.decode(viewString.getBytes())));
+                 byte[] bytes = byteArrayGuard.decrypt(
+                       (Base64.decode(viewString.getBytes())));
 		bis = new ByteArrayInputStream(bytes);
 		if (isCompressStateSet(context)) {
 		    if (log.isDebugEnabled()) {
@@ -232,8 +230,8 @@ public class CustomResponseStateManagerImpl extends ResponseStateManager {
 	    if (compress) {
 		zos.close();
 	    }
-            byte[] securedata = byteArrayGuard.encrypt(context, 
-                    bos.toByteArray());
+            byte[] securedata = byteArrayGuard.encrypt(
+                  bos.toByteArray());
 	    bos.close();
 	    
 	    hiddenField = " <input type=\"hidden\" name=\""

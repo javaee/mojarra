@@ -1,5 +1,5 @@
 /*
- * $Id: RIConstants.java,v 1.77 2005/08/26 15:26:56 rlubke Exp $
+ * $Id: RIConstants.java,v 1.78 2006/01/06 15:42:15 rlubke Exp $
  */
 
 /*
@@ -76,6 +76,9 @@ public class RIConstants {
         "actualViewMap";
 
     public static final String SAVED_STATE = FACES_PREFIX + "savedState";
+    
+    public static final String CLIENT_STATE_ENC_PASSWORD_ENTRY_NAME = 
+          "java:comp/env/" + FACES_PREFIX + "ClientStateSavingPassword";
 
 
     /**
