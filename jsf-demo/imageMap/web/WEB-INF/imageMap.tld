@@ -78,7 +78,7 @@
         <rtexprvalue>false</rtexprvalue>
       </attribute>
       <attribute>
-        <name>modelReference</name>
+        <name>valueRef</name>
         <required>true</required>
         <rtexprvalue>false</rtexprvalue>
       </attribute>

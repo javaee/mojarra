@@ -81,7 +81,7 @@ Powered by Faces components:
 
     <h:panel_group>
       <h:output_text value="This is the first pane with the date set to:"/>
-      <h:output_date dateStyle="MEDIUM" modelReference="date"/>
+      <h:output_date dateStyle="MEDIUM" valueRef="date"/>
     </h:panel_group>
 
   </d:pane_tab>

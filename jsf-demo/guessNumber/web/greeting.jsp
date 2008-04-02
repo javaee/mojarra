@@ -48,13 +48,13 @@
     <f:use_faces>
     <h:form id="helloForm" formName="helloForm" >
   	<h:input_number id="userNo" numberStyle="NUMBER"
-   				modelReference="UserNumberBean.userNumber">
+   				valueRef="UserNumberBean.userNumber">
 	        <f:validate_longrange minimum="0" maximum="10" />
 
          </h:input_number> 
 	 <h:command_button id="submit" label="Submit" commandName="submit" />
          <p>
-	 <h:output_errors id="errors1" clientId="userNo"/>
+	 <h:output_errors id="errors1" for="userNo"/>
     </h:form>
     </f:use_faces>
 </HTML>  

@@ -56,7 +56,7 @@
 
 <jsp:useBean id="CustomerBean" class="cardemo.CustomerBean" scope="session" />
 <f:use_faces>
-<h:form  formName="CustomerForm" modelReference="CustomerBean" >
+<h:form  formName="CustomerForm" valueRef="CustomerBean" >
 <table border="0" width="660" bgcolor="#4f4f72">
     <tbody>
       <tr> 
@@ -75,16 +75,16 @@
                                 <h:output_text  key="titleLabel" bundle="carDemoBundle" /></font></td>
                                 <td valign="top"> <font face="Arial, Helvetica">
                                     <h:selectone_menu id="title">
-                                        <h:selectitem  itemValue="mr" modelReference="CustomerBean.mr" selected="true"/>
-                        		<h:selectitem  itemValue="mrs" modelReference="CustomerBean.mrs" />
-                        		<h:selectitem  itemValue="ms" modelReference="CustomerBean.ms" />
+                                        <h:selectitem  itemValue="mr" valueRef="CustomerBean.mr" selected="true"/>
+                        		<h:selectitem  itemValue="mrs" valueRef="CustomerBean.mrs" />
+                        		<h:selectitem  itemValue="ms" valueRef="CustomerBean.ms" />
                                     </h:selectone_menu></font></td>
                               </tr>
                               <tr> 
                                 <td valign="top" align="right"><font face="Arial, Helvetica"> 
                                 <h:output_text key="firstLabel" bundle="carDemoBundle" /></font></td>
                                 <td valign="top"> <font face="Arial, Helvetica">
-      <h:input_text  modelReference="CustomerBean.firstName" > 
+      <h:input_text  valueRef="CustomerBean.firstName" > 
       </h:input_text></font></td>
                               </tr>
                               <tr> 
@@ -92,36 +92,36 @@
       <h:output_text 	key="middleLabel" bundle="carDemoBundle" /></font></td>
                                 <td valign="top"> <font face="Arial, Helvetica">
         <h:input_text id="middleInitial" size="1" maxlength="1" 
-            modelReference="CustomerBean.middleInitial" > 
+            valueRef="CustomerBean.middleInitial" > 
             <f:validate_stringrange minimum="A" maximum="z"/> 
         </h:input_text>
-        <h:output_errors  clientId="middleInitial"/> 
+        <h:output_errors  for="middleInitial"/> 
         </font></td>
                               </tr>
                               <tr> 
                                 <td valign="top" align="right"><font face="Arial, Helvetica"> 
       <h:output_text 	key="lastLabel" bundle="carDemoBundle" /></font></td>
                                 <td valign="top"> <font face="Arial, Helvetica">
-      <h:input_text  modelReference="CustomerBean.lastName" >
+      <h:input_text  valueRef="CustomerBean.lastName" >
       </h:input_text></font></td>
                               </tr>
                               <tr> 
                                 <td valign="top" align="right"><font face="Arial, Helvetica"> 
       <h:output_text 	 key="mailingLabel" bundle="carDemoBundle"/></font></td>
                                 <td valign="top"> <font face="Arial, Helvetica">
-      <h:input_text  modelReference="CustomerBean.mailingAddress" /></font></td>
+      <h:input_text  valueRef="CustomerBean.mailingAddress" /></font></td>
                               </tr>
                               <tr> 
                                 <td valign="top" align="right"><font face="Arial, Helvetica">
       <h:output_text 	 key="cityLabel" bundle="carDemoBundle" /></font></td>
                                 <td valign="top"> <font face="Arial, Helvetica">
-      <h:input_text  modelReference="CustomerBean.city" /></font></td>
+      <h:input_text  valueRef="CustomerBean.city" /></font></td>
                               </tr>
                               <tr> 
                                 <td valign="top" align="right"><font face="Arial, Helvetica">
       <h:output_text 	key="stateLabel" bundle="carDemoBundle" /></font></td>
                                 <td valign="top"> <font face="Arial, Helvetica">
-      <h:selectone_menu  modelReference="CustomerBean.state" >
+      <h:selectone_menu  valueRef="CustomerBean.state" >
 
 		<h:selectitem  itemValue="AL" itemLabel="AL" selected="true" />
 		<h:selectitem  itemValue="AK" itemLabel="AK"/>
@@ -184,11 +184,11 @@
       <h:output_text  key="zipLabel" bundle="carDemoBundle" /></font></td>
                                 <td valign="top"> <font face="Arial, Helvetica">
       <h:input_number id="zip"  formatPattern="#####"
-			modelReference="CustomerBean.zip"
+			valueRef="CustomerBean.zip"
                         size="5">
         <f:validate_longrange minimum="10000" maximum="99999" /> 
       </h:input_number>
-      <h:output_errors  clientId="zip" />    
+      <h:output_errors  for="zip" />    
             </font></td>
                               </tr>
                               <tr> </tr>
@@ -206,13 +206,13 @@
           <cd:creditcard_validator maximumChar="9" minimumChar="0" />
           
       </h:input_text>
-      <h:output_errors  clientId="ccno"/> </font></td>
+      <h:output_errors  for="ccno"/> </font></td>
                               </tr>
                               <tr> 
                                 <td valign="top" align="right"><font face="Arial, Helvetica"> 
       <h:output_text  key="monthLabel" bundle="carDemoBundle" /></font></td>
                                 <td valign="top"> <font face="Arial, Helvetica">
-    <h:selectone_menu  modelReference="CustomerBean.month">
+    <h:selectone_menu  valueRef="CustomerBean.month">
         <h:selectitem itemValue="01" itemLabel="01"/>
         <h:selectitem itemValue="02" itemLabel="02"/>
         <h:selectitem itemValue="03" itemLabel="03"/>
@@ -227,7 +227,7 @@
         <h:selectitem itemValue="12" itemLabel="12"/>
     </h:selectone_menu>
 
-<h:selectone_menu  modelReference="CustomerBean.year" >
+<h:selectone_menu  valueRef="CustomerBean.year" >
         <h:selectitem itemValue="2002" itemLabel="2002"/>
         <h:selectitem itemValue="2003" itemLabel="2003"/>
         <h:selectitem itemValue="2004" itemLabel="2004"/>

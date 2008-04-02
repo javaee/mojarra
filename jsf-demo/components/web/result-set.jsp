@@ -126,15 +126,15 @@ Rendered via Faces components:
                   <!-- List Data -->
 
                   <h:panel_data var="customer"
-                       modelReference="list">
+                       valueRef="list">
                     <h:output_text id="accountId1"
-                       modelReference="customer.accountId"/>
+                       valueRef="customer.accountId"/>
                     <h:output_text id="name1"
-                       modelReference="customer.name"/>
+                       valueRef="customer.name"/>
                     <h:output_text id="symbol1"
-                       modelReference="customer.symbol"/>
+                       valueRef="customer.symbol"/>
                     <h:output_text id="totalSales1"
-                       modelReference="customer.totalSales"/>
+                       valueRef="customer.totalSales"/>
                   </h:panel_data>
 
                  <!-- d:panel_list may only have one child: d:panel_data -->

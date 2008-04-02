@@ -51,7 +51,7 @@
 <body bgcolor="#FFFFFF">
 <f:use_faces>  
 
-<h:form  formName="carStoreForm" modelReference="CurrentOptionServer" >
+<h:form  formName="carStoreForm" valueRef="CurrentOptionServer" >
 
 <TABLE BORDER="0" WIDTH="660" BGCOLOR="#4F4F72">
 <tr NOSAVE>
@@ -67,7 +67,7 @@
 
 <tr>
 <td WIDTH="100%"><b><font face="Arial, Helvetica"><FONT SIZE="4" COLOR="#330066" FACE="Arial, Helvetica">
-<h:output_text  modelReference="CurrentOptionServer.carTitle" />
+<h:output_text  valueRef="CurrentOptionServer.carTitle" />
 </FONT></B>
 
 
@@ -82,61 +82,61 @@
 
     <h:output_text key="Engine" bundle="carDemoBundle" />
 
-    <h:output_text modelReference="CurrentOptionServer.currentEngineOption"  />
+    <h:output_text valueRef="CurrentOptionServer.currentEngineOption"  />
 
     <h:output_text key="Brakes" bundle="carDemoBundle" />
 
-    <h:output_text  modelReference="CurrentOptionServer.currentBrakeOption" />
+    <h:output_text  valueRef="CurrentOptionServer.currentBrakeOption" />
 
     <h:output_text  key="Suspension" bundle="carDemoBundle" />
 
-    <h:output_text  modelReference="CurrentOptionServer.currentSuspensionOption" />
+    <h:output_text  valueRef="CurrentOptionServer.currentSuspensionOption" />
 
     <h:output_text  key="Speakers" bundle="carDemoBundle" />
 
-    <h:output_text  modelReference="CurrentOptionServer.currentSpeakerOption" />
+    <h:output_text  valueRef="CurrentOptionServer.currentSpeakerOption" />
 
     <h:output_text  key="Audio" bundle="carDemoBundle" />
 
-    <h:output_text  modelReference="CurrentOptionServer.currentAudioOption" />
+    <h:output_text  valueRef="CurrentOptionServer.currentAudioOption" />
 
     <h:output_text  key="Transmission" bundle="carDemoBundle" />
 
-    <h:output_text  modelReference="CurrentOptionServer.currentTransmissionOption" />
+    <h:output_text  valueRef="CurrentOptionServer.currentTransmissionOption" />
 
     <h:output_text  key="sunroofLabel" bundle="carDemoBundle"  />
 
-    <h:output_text  modelReference="CurrentOptionServer.sunRoof" />
+    <h:output_text  valueRef="CurrentOptionServer.sunRoof" />
 
     <h:output_text  key="cruiseLabel" bundle="carDemoBundle"  />
 
-    <h:output_text  modelReference="CurrentOptionServer.cruiseControl" />
+    <h:output_text  valueRef="CurrentOptionServer.cruiseControl" />
 
     <h:output_text key="keylessLabel" bundle="carDemoBundle"  />
 
-    <h:output_text  modelReference="CurrentOptionServer.keylessEntry" />
+    <h:output_text  valueRef="CurrentOptionServer.keylessEntry" />
 
     <h:output_text  key="securityLabel" bundle="carDemoBundle"  />
 
-    <h:output_text  modelReference="CurrentOptionServer.securitySystem" />
+    <h:output_text  valueRef="CurrentOptionServer.securitySystem" />
 
     <h:output_text  key="skiRackLabel" bundle="carDemoBundle"  />
 
-    <h:output_text  modelReference="CurrentOptionServer.skiRack" />
+    <h:output_text  valueRef="CurrentOptionServer.skiRack" />
 
     <h:output_text  key="towPkgLabel" bundle="carDemoBundle"  />
 
-    <h:output_text  modelReference="CurrentOptionServer.towPackage" />
+    <h:output_text  valueRef="CurrentOptionServer.towPackage" />
 
     <h:output_text  key="gpsLabel" bundle="carDemoBundle"  />
 
-    <h:output_text  modelReference="CurrentOptionServer.gps" />
+    <h:output_text  valueRef="CurrentOptionServer.gps" />
     
   <f:facet name="footer">
      <h:panel_group>
         <h:output_text  key="yourPriceLabel" bundle="carDemoBundle"  />
         &nbsp;
-        <h:output_text  modelReference="CurrentOptionServer.packagePrice" />
+        <h:output_text  valueRef="CurrentOptionServer.packagePrice" />
      </h:panel_group>
   </f:facet>
 

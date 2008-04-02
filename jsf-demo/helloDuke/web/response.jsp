@@ -44,7 +44,7 @@
     <f:use_faces>
     <h:form id="responseform" formName="responseform">
     <h2>Hi, <h:output_text id="userLabel"
-			   modelReference="UserNameBean.userName" /> </h2>
+			   valueRef="UserNameBean.userName" /> </h2>
 	 <h:command_button id="back" label="Back" commandName="back" />
          <p>
     </h:form>

@@ -47,7 +47,7 @@
     <f:use_faces>
     <h:form id="helloForm" formName="helloForm" >
   	<h:input_text id="username"
-			modelReference="UserNameBean.userName"/>
+			valueRef="UserNameBean.userName"/>
   	<h:command_button id="submit" label="Submit" commandName="submit" />
     </h:form>
     </f:use_faces>

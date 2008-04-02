@@ -83,7 +83,7 @@
 <h:form formName="menuForm" >
 
 Render graph as a menu bar(graph retreived from model):<br>
-<d:graph_menubar id="menu2" modelReference="sessionScope.graph" 
+<d:graph_menubar id="menu2" valueRef="sessionScope.graph" 
     selectedClass="tree-control-selected"
     unselectedClass="tree-control-unselected" />
 
@@ -109,7 +109,7 @@ Render graph as a menu bar(graph specified via JSP):<br>
 
 <hr>
 Render graph as a tree control (graph retreived from model):<br>
-<d:graph_menutree id="menu4" modelReference="graph" graphClass="tree-control"
+<d:graph_menutree id="menu4" valueRef="graph" graphClass="tree-control"
      selectedClass="tree-control-selected" 
      unselectedClass="tree-control-unselected" />
 <hr>
@@ -192,7 +192,7 @@ td>
 
 <h3>Described From Model</h3>
 
-<p>The <code>graph_menubar</code> tag refers to a <code>Graph</code> model component through the <code>modelReference</code> attribute.  The <code>Graph</code> model component consists of multiple <code>Node</code> components.  Each <code>Node</code> component describes an item on the menu bar.</p>
+<p>The <code>graph_menubar</code> tag refers to a <code>Graph</code> model component through the <code>valueRef</code> attribute.  The <code>Graph</code> model component consists of multiple <code>Node</code> components.  Each <code>Node</code> component describes an item on the menu bar.</p>
 
 <h2>Tree Control</h2>
 
@@ -204,7 +204,7 @@ td>
 
 <h3>Described From Model</h3>
 
-<p>The <code>graph_menutree</code> tag refers to a <code>Graph</code> model component through the <code>modelReference</code> attribute.  The <code>Graph</code> model component consists of multiple <code>Node</code> components.  Each <code>Node</code> component describes an item in the tree.</p>
+<p>The <code>graph_menutree</code> tag refers to a <code>Graph</code> model component through the <code>valueRef</code> attribute.  The <code>Graph</code> model component consists of multiple <code>Node</code> components.  Each <code>Node</code> component describes an item in the tree.</p>
 
  
 <hr>

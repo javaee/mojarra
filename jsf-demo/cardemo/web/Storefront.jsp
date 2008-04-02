@@ -61,7 +61,7 @@
 
 <f:use_faces>  
 
-<h:form  formName="carStoreForm" modelReference="CurrentOptionServer" >
+<h:form  formName="carStoreForm" valueRef="CurrentOptionServer" >
   
 <P>
 <TABLE BORDER="0" WIDTH="660" BGCOLOR="#4F4F72">
