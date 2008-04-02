@@ -12,7 +12,7 @@
 
   <property name="Name" value="JavaServer Faces RI"/>
   <property name="name" value="jsf-impl"/>
-  <property name="version" value="20040117"/>
+  <property name="version" value="20040120"/>
 
 <!-- ************ Per user local properties ******************************* -->
 
