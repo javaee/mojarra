@@ -4,7 +4,7 @@
  */
 
 /*
- * $Id: MenuRenderer.java,v 1.40 2004/01/27 21:04:26 eburns Exp $
+ * $Id: MenuRenderer.java,v 1.41 2004/02/03 02:43:59 rkitain Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -93,9 +93,16 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
                     Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
 
+        if (log.isTraceEnabled()) {
+            log.trace("Begin decoding component " + component.getId());
+        }    
         // If the component is disabled, do not change the value of the
         // component, since its state cannot be changed.
         if (Util.componentIsDisabledOnReadonly(component)) {
+            if (log.isTraceEnabled()) {
+                log.trace("No decoding necessary since the component " +
+                    component.getId() + " is disabled");
+            }
             return;
         } 
 
@@ -104,6 +111,9 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
         // currently we assume the model type to be of type string or 
         // convertible to string and localised by the application.
         if (component instanceof UISelectMany) {
+            if (log.isTraceEnabled()) {
+                log.trace("Component is UISelectMany");
+            }
             Map requestParameterValuesMap = context.getExternalContext().
                 getRequestParameterValuesMap();
 	    if (requestParameterValuesMap.containsKey(clientId)) {
@@ -343,9 +353,18 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
                     Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
         
+        if (log.isTraceEnabled()) {
+            log.trace("End encoding component " + component.getId());
+        }    
         // suppress rendering if "rendered" property on the component is
         // false.
         if (!component.isRendered()) {
+            if (log.isTraceEnabled()) {
+                log.trace("End encoding component "
+                + component.getId() + " since " +
+                "rendered attribute is set to false ");
+            }
+
             return;
         }    
           
@@ -367,6 +386,9 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
     //
     void renderSelect ( FacesContext context, 
         UIComponent component) throws IOException {
+        if (log.isTraceEnabled()) {
+            log.trace("Rendering 'select'");
+        }    
         
 	ResponseWriter writer = context.getResponseWriter();
         Util.doAssert(writer != null );
@@ -382,6 +404,10 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
 	// the component's "size" attribute accordingly;  The "size"
 	// attribute will be rendered as one of the "pass thru" attributes
 	int itemCount = getOptionNumber(context, component);
+
+        if (log.isTraceEnabled()) {
+            log.trace("Rendering "+itemCount+" options");
+        }    
 
         // If "size" is *not* set explicitly, we have to default it correctly
         Object size = component.getAttributes().get("size");

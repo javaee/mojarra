@@ -1,5 +1,5 @@
 /*
- * $Id: OutputMessageRenderer.java,v 1.8 2004/02/03 01:27:29 craigmcc Exp $
+ * $Id: OutputMessageRenderer.java,v 1.9 2004/02/03 02:43:59 rkitain Exp $
  */
 
 /*
@@ -24,7 +24,8 @@ import javax.faces.component.UIParameter;
 import javax.faces.context.ResponseWriter;
 import javax.faces.context.FacesContext;
 
-import com.sun.faces.util.Util;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  *
@@ -38,6 +39,8 @@ public class OutputMessageRenderer extends HtmlBasicRenderer {
     //
     // Protected Constants
     //
+    // Log instance for this class
+    protected static Log log = LogFactory.getLog(OutputMessageRenderer.class);
 
     //
     // Class Variables
@@ -91,6 +94,9 @@ public class OutputMessageRenderer extends HtmlBasicRenderer {
             throw new NullPointerException(Util.getExceptionMessage(
                     Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
+        if (log.isTraceEnabled()) {
+            log.trace("End encoding component " + component.getId());
+        }
         String 
 	    currentValue = null,
 	    style = (String) component.getAttributes().get("style"),
@@ -102,6 +108,11 @@ public class OutputMessageRenderer extends HtmlBasicRenderer {
         // suppress rendering if "rendered" property on the component is
         // false.
         if (!component.isRendered()) {
+            if (log.isTraceEnabled()) {
+                log.trace("End encoding component "
+                + component.getId() + " since " +
+                "rendered attribute is set to false ");
+            }
             return;
         }
         Object currentObj = ((ValueHolder)component).getValue();
@@ -130,18 +141,23 @@ public class OutputMessageRenderer extends HtmlBasicRenderer {
             parameterList.add(((UIParameter)kid).getValue());
         }
 
-        // If at least one substitution parameter was specified,
-        // use the string as a MessageFormat instance.
         String message = null;
-        if (parameterList.size() > 0) {
-            message = MessageFormat.format
-                (currentValue, parameterList.toArray
-                 (new Object[parameterList.size()]));
+
+        //PENDING(rogerk) if string contains "{" char and enclosing "}"
+        // two char positions later (ex: "{0}") assume it has
+        // something like "{0}", in which case do the message format.
+
+        int i = 0;
+        if ((-1 != (i = currentValue.indexOf('{'))) && 
+            (currentValue.charAt(i + 2) == '}') && 
+            (parameterList.size() > 0)) {
+            Object[] params = parameterList.toArray();
+            message = MessageFormat.format(currentValue, params);
         } else {
             message = currentValue;
         }
-
 	boolean wroteSpan = false;
+                
 	if (null != styleClass || null != style || 
 	    Util.hasPassThruAttributes(component) ||
 	    shouldWriteIdAttribute(component)) {
@@ -155,24 +171,7 @@ public class OutputMessageRenderer extends HtmlBasicRenderer {
 	    Util.renderPassThruAttributes(writer, component);
 	    Util.renderBooleanPassThruAttributes(writer, component);
 	}
-        Boolean escape = Boolean.TRUE;
-        Object val = component.getAttributes().get("escape");
-        if (val != null) {
-            if (val instanceof Boolean) {
-                escape = (Boolean) val;
-            } else if (val instanceof String) {
-                try {
-                    escape = Boolean.valueOf((String) val);
-                }
-                catch (Throwable e) {
-                }
-            }
-        }
-        if (escape.booleanValue()) {
-            writer.writeText(message, "value");
-        } else {
-            writer.write(message);
-        }
+        writer.writeText(message, null);
 	if (wroteSpan) {
 	    writer.endElement("span");
 	}

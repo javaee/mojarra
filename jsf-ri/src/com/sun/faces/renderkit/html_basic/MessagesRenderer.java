@@ -1,5 +1,5 @@
 /*
- * $Id: MessagesRenderer.java,v 1.10 2004/01/27 21:04:26 eburns Exp $
+ * $Id: MessagesRenderer.java,v 1.11 2004/02/03 02:43:59 rkitain Exp $
  */
 
 /*
@@ -65,9 +65,17 @@ public class MessagesRenderer extends HtmlBasicRenderer {
                     Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
        
+        if (log.isTraceEnabled()) {
+            log.trace("End encoding component " + component.getId());
+        }
         // suppress rendering if "rendered" property on the component is
         // false.
         if (!component.isRendered()) {
+	    if (log.isTraceEnabled()) {
+                log.trace("End encoding component "
+                + component.getId() + " since " +
+                "rendered attribute is set to false ");
+            }	
             return;
         }
         writer = context.getResponseWriter();

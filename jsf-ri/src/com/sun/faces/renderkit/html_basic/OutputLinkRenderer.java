@@ -1,5 +1,5 @@
 /*
- * $Id: OutputLinkRenderer.java,v 1.8 2004/01/27 21:04:27 eburns Exp $
+ * $Id: OutputLinkRenderer.java,v 1.9 2004/02/03 02:43:59 rkitain Exp $
  */
 
 /*
@@ -27,7 +27,8 @@ import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.event.ActionEvent;
 
-import com.sun.faces.util.Util;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 
 /**
@@ -36,13 +37,16 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: OutputLinkRenderer.java,v 1.8 2004/01/27 21:04:27 eburns Exp $
+ * @version $Id: OutputLinkRenderer.java,v 1.9 2004/02/03 02:43:59 rkitain Exp $
  */
 
 public class OutputLinkRenderer extends HtmlBasicRenderer {
     //
     // Protected Constants
     //
+    // Log instance for this class
+    protected static Log log = LogFactory.getLog(OutputLinkRenderer.class);
+
     // Separator character
 
     //
@@ -98,6 +102,9 @@ public class OutputLinkRenderer extends HtmlBasicRenderer {
         if (context == null || component == null) {
             throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
+        if (log.isTraceEnabled()) {
+            log.trace("Begin encoding component " + component.getId());
+        }
 
 	UIOutput output = (UIOutput) component;
 	String hrefVal = getCurrentValue(context, component);
@@ -105,6 +112,11 @@ public class OutputLinkRenderer extends HtmlBasicRenderer {
         // suppress rendering if "rendered" property on the output is
         // false
         if (!output.isRendered()) {
+            if (log.isTraceEnabled()) {
+                log.trace("End encoding component "
+                + component.getId() + " since " +
+                "rendered attribute is set to false ");
+            }
             return;
         }
         ResponseWriter writer = context.getResponseWriter();
@@ -160,9 +172,17 @@ public class OutputLinkRenderer extends HtmlBasicRenderer {
         if (context == null || component == null) {
             throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
+        if (log.isTraceEnabled()) {
+            log.trace("Begin encoding children " + component.getId());
+        }
         // suppress rendering if "rendered" property on the component is
         // false.
         if (!component.isRendered()) {
+            if (log.isTraceEnabled()) {
+                log.trace("End encoding component "
+                + component.getId() + " since " +
+                "rendered attribute is set to false ");
+            }
             return;
         }
 	Iterator kids = component.getChildren().iterator();
@@ -183,9 +203,17 @@ public class OutputLinkRenderer extends HtmlBasicRenderer {
             throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
 
+        if (log.isTraceEnabled()) {
+            log.trace("End encoding " + component.getId());
+        }
         // suppress rendering if "rendered" property on the component is
         // false.
         if (!component.isRendered()) {
+            if (log.isTraceEnabled()) {
+                log.trace("End encoding component "
+                + component.getId() + " since " +
+                "rendered attribute is set to false ");
+            }
             return;
         }
         ResponseWriter writer = context.getResponseWriter();
