@@ -65,12 +65,32 @@
                 key="currentCarPriceLabel"/>
             <BR> <BR>
             <h:command_button  commandName="buy" label="Buy" />
+            <BR> <BR>
             </TD></FONT></TD>
         </TR>
         <TR>
             <TD WIDTH="100%" BGCOLOR="white"><B><FONT SIZE="4" COLOR="#330066" FACE="Arial, Helvetica">
             <h:output_text   value="Options and Packages" />
             </FONT></B></TD>
+        </TR>
+        <TR>
+            <TD WIDTH="100%" BGCOLOR="white"><B><FONT SIZE="3" COLOR="#330066" FACE="Arial, Helvetica">
+            <h:output_text value="Package:" />
+            </FONT></B>
+            <h:command_button id="standard" commandName="standard"
+                label="Standard" >
+                <f:action_listener type="cardemo.PackageAction" />
+            </h:command_button>
+            <h:command_button id="performance" commandName="performance"
+                label="Performance" >
+                <f:action_listener type="cardemo.PackageAction" />
+            </h:command_button>
+            <h:command_button id="deluxe" commandName="deluxe"
+                label="Deluxe" >
+                <f:action_listener type="cardemo.PackageAction" />
+            </h:command_button>
+            <BR> <BR>
+            </TD>
         </TR>
         <TR>
             <TD WIDTH="100%"><BLOCKQUOTE>
@@ -203,7 +223,7 @@
             </TR>
             <TR>
                 <TD> 
-                <h:selectboolean_checkbox 
+                <h:selectboolean_checkbox id="securitySystem" 
                     title="Security System"  alt="Security System"
                     modelReference="CurrentOptionServer.securitySystem"
                     key="securityLabel" />
@@ -220,7 +240,7 @@
                 <h:output_label  for="skiRack" >Ski Rack</h:output_label> 
                 </TD>
                 <TD>
-                <h:selectboolean_checkbox  title="Tow Package"  
+                <h:selectboolean_checkbox id="towPackage" title="Tow Package"  
                     alt="Tow Package" 
                     modelReference="CurrentOptionServer.towPackage"
                     key="towPkgLabel" />
@@ -231,7 +251,7 @@
             </TR>
             <TR>
                 <TD>
-                <h:selectboolean_checkbox  title="GPS" alt="GPS"
+                <h:selectboolean_checkbox id="gps" title="GPS" alt="GPS"
                     modelReference="CurrentOptionServer.gps" key="gpsLabel" />
                 </FONT> 
                 </TD>
