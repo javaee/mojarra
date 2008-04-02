@@ -1,5 +1,5 @@
  /*
- * $Id: FacesContextImpl.java,v 1.82 2006/06/19 19:38:51 youngm Exp $
+ * $Id: FacesContextImpl.java,v 1.83 2006/08/02 21:06:23 rlubke Exp $
  */
 
 /*
@@ -29,7 +29,6 @@
 
 package com.sun.faces.context;
 
-import com.sun.faces.RIConstants;
 import javax.el.ELContext;
 import javax.faces.FactoryFinder;
 import javax.faces.application.Application;
@@ -55,10 +54,10 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
+import com.sun.faces.RIConstants;
 import com.sun.faces.el.ELContextImpl;
-import com.sun.faces.util.Util;
 import com.sun.faces.util.MessageUtils;
+import com.sun.faces.util.Util;
 
  public class FacesContextImpl extends FacesContext {
 
@@ -272,6 +271,10 @@ import com.sun.faces.util.MessageUtils;
              return (null);
          }
          String renderKitId = vr.getRenderKitId();
+         
+         if (renderKitId == null) {
+             return null;
+         }
 
          if (renderKitId.equals(lastRkId)) {
              return lastRk;

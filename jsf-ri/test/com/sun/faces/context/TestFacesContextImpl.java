@@ -1,5 +1,5 @@
 /*
- * $Id: TestFacesContextImpl.java,v 1.52 2006/03/29 23:04:49 rlubke Exp $
+ * $Id: TestFacesContextImpl.java,v 1.53 2006/08/02 21:06:23 rlubke Exp $
  */
 
 /*
@@ -36,12 +36,15 @@ import com.sun.faces.lifecycle.LifecycleImpl;
 import com.sun.faces.util.Util;
 
 import javax.faces.application.FacesMessage;
+import javax.faces.application.Application;
 import javax.faces.component.UICommand;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseStream;
 import javax.faces.context.ResponseWriter;
+import javax.faces.render.RenderKit;
+import javax.faces.render.RenderKitFactory;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -57,7 +60,7 @@ import java.util.ArrayList;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestFacesContextImpl.java,v 1.52 2006/03/29 23:04:49 rlubke Exp $
+ * @version $Id: TestFacesContextImpl.java,v 1.53 2006/08/02 21:06:23 rlubke Exp $
  */
 
 public class TestFacesContextImpl extends ServletFacesTestCase {
@@ -415,6 +418,34 @@ public class TestFacesContextImpl extends ServletFacesTestCase {
         assertTrue(exceptionThrown);
 
         // remainder of FacesContext methods are tested in TCK
+    }
+    
+    
+    public void testGetRenderKid() {
+        FacesContext orig = FacesContext.getCurrentInstance();
+        FacesContext context = new FacesContextImpl(orig.getExternalContext(),
+                                                    new LifecycleImpl());
+        Application application = context.getApplication();
+        UIViewRoot root = (UIViewRoot) 
+              application.createComponent(UIViewRoot.COMPONENT_TYPE);
+        
+        // if no UIViewRoot then null should be returned
+        assertTrue(context.getRenderKit() == null);
+        
+        // if UIViewRoot is present but has no RenderKitID, null
+        // should be rendered
+        context.setViewRoot(root);
+        assertTrue(context.getRenderKit() == null);
+        
+        // UIViewRoot is present, and has an ID for a non existent
+        // RenderKit - null should be returned
+        root.setRenderKitId("nosuchkit");
+        assertTrue(context.getRenderKit() == null);
+        
+        // UIViewRoot with valid RenderKit id should return a RenderKit
+        root.setRenderKitId(RenderKitFactory.HTML_BASIC_RENDER_KIT);
+        assertTrue(context.getRenderKit() != null);
+        
     }
 
 
