@@ -1,5 +1,5 @@
 /*
- * $Id: UIInput.java,v 1.41 2003/10/30 20:30:13 eburns Exp $
+ * $Id: UIInput.java,v 1.42 2003/10/30 23:04:53 craigmcc Exp $
  */
 
 /*
@@ -20,6 +20,7 @@ import javax.faces.el.MethodBinding;
 import javax.faces.el.ValueBinding;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.FacesEvent;
+import javax.faces.event.FacesListener;
 import javax.faces.event.PhaseId;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.event.ValueChangeListener;
@@ -543,6 +544,23 @@ public class UIInput extends UIOutput {
 
 
     /**
+     * <p>Return the set of registered {@link Validator}s for this
+     * {@link UIInput} instance.  If there are no registered validators,
+     * a zero-length array is returned.</p>
+     */
+    public Validator[] getValidators() {
+
+        if (validators == null) {
+            return (new Validator[0]);
+        } else {
+            return ((Validator[]) validators.toArray
+                    (new Validator[validators.size()]));
+        }
+
+    }
+
+
+    /**
      * <p>Remove a {@link Validator} instance from the set associated with
      * this {@link UIInput}, if it was previously associated.
      * Otherwise, do nothing.</p>
@@ -573,6 +591,23 @@ public class UIInput extends UIOutput {
     public void addValueChangeListener(ValueChangeListener listener) {
 
         addFacesListener(listener);
+
+    }
+
+
+    /**
+     * <p>Return the set of registered {@link ValueChangeListener}s for this
+     * {@link UIInput} instance.  If there are no registered listeners,
+     * a zero-length array is returned.</p>
+     */
+    public ValueChangeListener[] getValueChangeListeners() {
+
+        FacesListener fl[] = getFacesListeners(ValueChangeListener.class);
+        ValueChangeListener vcl[] = new ValueChangeListener[fl.length];
+        for (int i = 0; i < fl.length; i++) {
+            vcl[i] = (ValueChangeListener) fl[i];
+        }
+        return (vcl);
 
     }
 

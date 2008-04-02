@@ -1,5 +1,5 @@
 /*
- * $Id: UICommand.java,v 1.49 2003/10/27 20:08:24 craigmcc Exp $
+ * $Id: UICommand.java,v 1.50 2003/10/30 23:04:52 craigmcc Exp $
  */
 
 /*
@@ -20,6 +20,7 @@ import javax.faces.event.AbortProcessingException;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.ActionListener;
 import javax.faces.event.FacesEvent;
+import javax.faces.event.FacesListener;
 import javax.faces.event.PhaseId;
 import javax.faces.render.Renderer;
 
@@ -203,6 +204,20 @@ public class UICommand extends UIComponentBase
         addFacesListener(listener);
 
     }
+
+
+    public ActionListener[] getActionListeners() {
+
+        FacesListener fl[] = getFacesListeners(ActionListener.class);
+        ActionListener al[] = new ActionListener[fl.length];
+        for (int i = 0; i < fl.length; i++) {
+            al[i] = (ActionListener) fl[i];
+        }
+        return (al);
+
+    }
+
+
 
     /**
      * @exception NullPointerException {@inheritDoc}

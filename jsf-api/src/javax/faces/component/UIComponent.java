@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.109 2003/10/24 18:55:42 eburns Exp $
+ * $Id: UIComponent.java,v 1.110 2003/10/30 23:04:52 craigmcc Exp $
  */
 
 /*
@@ -517,6 +517,22 @@ public abstract class UIComponent implements StateHolder {
      *  is <code>null</code>
      */
     protected abstract void addFacesListener(FacesListener listener);
+
+
+    /**
+     * <p>Return the set of registered {@link FacesListener}s that are
+     * instances of the specified class.  If there are no such registered
+     * listeners, a zero-length array is returned.</p>
+     *
+     * @param clazz Class that must be implemented by a {@link FacesListener}
+     *  for it to be returned
+     *
+     * @exception IllegalArgumentException if <code>class</code> is not,
+     *  and does not implement, {@link FacesListener}
+     * @exception NullPointerException if <code>clazz</code>
+     *  is <code>null</code>
+     */
+    protected abstract FacesListener[] getFacesListeners(Class clazz);
 
 
     /**

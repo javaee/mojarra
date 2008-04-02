@@ -1,5 +1,5 @@
 /*
- * $Id: UIInputTestCase.java,v 1.18 2003/10/27 04:10:09 craigmcc Exp $
+ * $Id: UIInputTestCase.java,v 1.19 2003/10/30 23:04:58 craigmcc Exp $
  */
 
 /*
@@ -13,18 +13,18 @@ package javax.faces.component;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
+import javax.faces.TestUtil;
 import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseId;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.event.ValueChangeListener;
-import junit.framework.TestCase;
-import junit.framework.Test;
-import junit.framework.TestSuite;
-
+import javax.faces.validator.Validator;
 import javax.faces.validator.DoubleRangeValidator;
 import javax.faces.validator.LengthValidator;
 import javax.faces.validator.LongRangeValidator;
-import javax.faces.TestUtil;
+import junit.framework.TestCase;
+import junit.framework.Test;
+import junit.framework.TestSuite;
 
 
 /**
@@ -235,7 +235,6 @@ public class UIInputTestCase extends UIOutputTestCase {
 
         TestInput input = new TestInput();
         TestValueChangeListener listener = null;
-        List lists[] = null;
 
         input.addValueChangeListener
             (new TestValueChangeListener("ARV0", PhaseId.APPLY_REQUEST_VALUES));
@@ -248,52 +247,11 @@ public class UIInputTestCase extends UIOutputTestCase {
         input.addValueChangeListener
             (new TestValueChangeListener("PV2", PhaseId.PROCESS_VALIDATIONS));
 
-        /* PENDING(craigmcc) - listeners are no longer accessible
-        lists = input.getListeners();
-        assertEquals(PhaseId.VALUES.size(), lists.length);
-        for (int i = 0; i < lists.length; i++) {
-            if (i == PhaseId.APPLY_REQUEST_VALUES.getOrdinal()) {
-                assertEquals(2, lists[i].size());
-                listener = (TestValueChangeListener) lists[i].get(0);
-                assertEquals("ARV0", listener.getId());
-                listener = (TestValueChangeListener) lists[i].get(1);
-                assertEquals("ARV1", listener.getId());
-            } else if (i == PhaseId.PROCESS_VALIDATIONS.getOrdinal()) {
-                assertEquals(3, lists[i].size());
-                listener = (TestValueChangeListener) lists[i].get(0);
-                assertEquals("PV0", listener.getId());
-                listener = (TestValueChangeListener) lists[i].get(1);
-                assertEquals("PV1", listener.getId());
-                listener = (TestValueChangeListener) lists[i].get(2);
-                assertEquals("PV2", listener.getId());
-            } else {
-                assertNull(lists[i]);
-            }
-        }
-
-        input.removeValueChangeListener
-            ((ValueChangeListener) lists[PhaseId.APPLY_REQUEST_VALUES.getOrdinal()].get(0));
-        input.removeValueChangeListener
-            ((ValueChangeListener) lists[PhaseId.PROCESS_VALIDATIONS.getOrdinal()].get(1));
-
-        lists = input.getListeners();
-        assertEquals(PhaseId.VALUES.size(), lists.length);
-        for (int i = 0; i < lists.length; i++) {
-            if (i == PhaseId.APPLY_REQUEST_VALUES.getOrdinal()) {
-                assertEquals(1, lists[i].size());
-                listener = (TestValueChangeListener) lists[i].get(0);
-                assertEquals("ARV1", listener.getId());
-            } else if (i == PhaseId.PROCESS_VALIDATIONS.getOrdinal()) {
-                assertEquals(2, lists[i].size());
-                listener = (TestValueChangeListener) lists[i].get(0);
-                assertEquals("PV0", listener.getId());
-                listener = (TestValueChangeListener) lists[i].get(1);
-                assertEquals("PV2", listener.getId());
-            } else {
-                assertNull(lists[i]);
-            }
-        }
-        */
+        ValueChangeListener listeners[] = input.getValueChangeListeners();
+        assertEquals(5, listeners.length);
+        input.removeValueChangeListener(listeners[2]);
+        listeners = input.getValueChangeListeners();
+        assertEquals(4, listeners.length);
 
     }
 
@@ -421,42 +379,19 @@ public class UIInputTestCase extends UIOutputTestCase {
 
 
     protected boolean listenersAreEqual(FacesContext context,
-					UIInputSub comp1,
-					UIInputSub comp2) {
+					UIInput comp1,
+					UIInput comp2) {
 
-	List [] list1 = comp1.getListeners();
-	List [] list2 = comp2.getListeners();
-	// make sure they're either both null or both non-null
-	if ((null == list1 && null != list2) ||
-	    (null != list1 && null == list2)) {
-	    return false;
-	}
-	if (null == list1) {
-	    return true;
-	}
-	int i = 0, j = 0, outerLen = list1.length, innerLen = 0;
-	boolean result = true;
-	if (outerLen != list2.length) {
-	    return false;
-	}
-	for (i = 0; i < outerLen; i++) {
-	    if ((null == list1[i] && null != list2[i]) ||
-		(null != list1[i] && null == list2[i])) {
-		return false;
-	    }
-	    else if (null != list1[i]) {
-		if (list1[i].size() != (innerLen = list2[i].size())) {
-		    return false;
-		}
-		for (j = 0; j < innerLen; j++) {
-		    result = ((TestValueChangeListener)list1[i].get(j)).isEqual(list2[i].get(j));
-		    if (!result) {
-			return false;
-		    }
-		}
-	    }
-	}
+        ValueChangeListener list1[] = comp1.getValueChangeListeners();
+        ValueChangeListener list2[] = comp2.getValueChangeListeners();
+        assertNotNull(list1);
+        assertNotNull(list2);
+        assertEquals(list1.length, list2.length);
+        for (int i = 0; i < list1.length; i++) {
+            assertTrue(list1[i].getClass() == list2[i].getClass());
+        }
 	return true;
+
     }
 
 
@@ -468,39 +403,19 @@ public class UIInputTestCase extends UIOutputTestCase {
 
 
     protected boolean validatorsAreEqual(FacesContext context,
-					UIInputSub comp1,
-					UIInputSub comp2) {
-	Iterator iter = null;
-	int i = 0;
-	if (!((null == comp1.getValidators() && null == comp2.getValidators())||
-	      (null != comp1.getValidators() && null != comp2.getValidators()))) {
-	    return false;
-	}
-	if (null != comp1.getValidators()) {
-	    iter = comp1.getValidators().iterator();
-	    while (iter.hasNext()) {
-		if (!comp2.getValidators().get(i++).equals(iter.next())) {
-		    return false;
-		}
-	    }
-	    i = 0;
-	    iter = comp2.getValidators().iterator();
-	    while (iter.hasNext()) {
-		if (!comp1.getValidators().get(i++).equals(iter.next())) {
-		    return false;
-		}
-	    }
-	}
-	return true;
-    }
+					UIInput comp1,
+					UIInput comp2) {
 
-    public static class UIInputSub extends UIInput {
-	public List[] getListeners() { 
-	    return listeners;
-	}
-	public List getValidators() {
-	    return validators;
-	}
+        Validator list1[] = comp1.getValidators();
+        Validator list2[] = comp2.getValidators();
+        assertNotNull(list1);
+        assertNotNull(list2);
+        assertEquals(list1.length, list2.length);
+        for (int i = 0; i < list1.length; i++) {
+            assertTrue(list1[i].getClass() == list2[i].getClass());
+        }
+        return (true);
+
     }
 
 

@@ -1,5 +1,5 @@
 /*
- * $Id: MockLifecycle.java,v 1.2 2003/07/28 22:22:33 eburns Exp $
+ * $Id: MockLifecycle.java,v 1.3 2003/10/30 23:04:59 craigmcc Exp $
  */
 
 /*
@@ -33,6 +33,10 @@ public class MockLifecycle extends Lifecycle {
         throw new UnsupportedOperationException();
     }
 
+
+    public PhaseListener[] getPhaseListeners() {
+        throw new UnsupportedOperationException();
+    }
 
     public void removePhaseListener(PhaseListener listener) {
         throw new UnsupportedOperationException();

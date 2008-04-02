@@ -1,5 +1,5 @@
 /*
- * $Id: Lifecycle.java,v 1.24 2003/07/28 22:18:58 eburns Exp $
+ * $Id: Lifecycle.java,v 1.25 2003/10/30 23:04:57 craigmcc Exp $
  */
 
 /*
@@ -32,7 +32,7 @@ import javax.faces.event.PhaseListener;
 public abstract class Lifecycle {
 
 
-    // --------------------------------------------------------- Public Methods
+    // ---------------------------------------------------------- Public Methods
 
 
     /**
@@ -65,6 +65,14 @@ public abstract class Lifecycle {
      *  is <code>null</code>
      */
     public abstract void execute(FacesContext context) throws FacesException;
+
+
+    /**
+     * <p>Return the set of registered {@link PhaseListener}s for this
+     * {@link Lifecycle} instance.  If there are no registered listeners,
+     * a zero-length array is returned.</p>
+     */
+    public abstract PhaseListener[] getPhaseListeners();
 
 
     /**

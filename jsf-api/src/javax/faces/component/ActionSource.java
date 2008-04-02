@@ -1,5 +1,5 @@
 /*
- * $Id: ActionSource.java,v 1.4 2003/10/27 15:03:13 rlubke Exp $
+ * $Id: ActionSource.java,v 1.5 2003/10/30 23:04:52 craigmcc Exp $
  */
 
 /*
@@ -133,6 +133,14 @@ public interface ActionSource {
      *  is <code>null</code>
      */
     public void addActionListener(ActionListener listener);
+
+
+    /**
+     * <p>Return the set of registered {@link ActionListener}s for this
+     * {@link ActionSource} instance.  If there are no registered listeners,
+     * a zero-length array is returned.</p>
+     */
+    public abstract ActionListener[] getActionListeners();
 
 
     /**

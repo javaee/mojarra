@@ -1,5 +1,5 @@
 /*
- * $Id: UICommandTestCase.java,v 1.15 2003/10/27 04:10:09 craigmcc Exp $
+ * $Id: UICommandTestCase.java,v 1.16 2003/10/30 23:04:57 craigmcc Exp $
  */
 
 /*
@@ -236,7 +236,6 @@ public class UICommandTestCase extends ValueHolderTestCaseBase {
 
         TestCommand command = new TestCommand();
         TestActionListener listener = null;
-        List lists[] = null;
 
         command.addActionListener
             (new TestActionListener("ARV0", PhaseId.APPLY_REQUEST_VALUES));
@@ -249,52 +248,11 @@ public class UICommandTestCase extends ValueHolderTestCaseBase {
         command.addActionListener
             (new TestActionListener("PV2", PhaseId.PROCESS_VALIDATIONS));
 
-        /* PENDING(craigmcc) - listeners are no longer accessible
-        lists = command.getListeners();
-        assertEquals(PhaseId.VALUES.size(), lists.length);
-        for (int i = 0; i < lists.length; i++) {
-            if (i == PhaseId.APPLY_REQUEST_VALUES.getOrdinal()) {
-                assertEquals(2, lists[i].size());
-                listener = (TestActionListener) lists[i].get(0);
-                assertEquals("ARV0", listener.getId());
-                listener = (TestActionListener) lists[i].get(1);
-                assertEquals("ARV1", listener.getId());
-            } else if (i == PhaseId.PROCESS_VALIDATIONS.getOrdinal()) {
-                assertEquals(3, lists[i].size());
-                listener = (TestActionListener) lists[i].get(0);
-                assertEquals("PV0", listener.getId());
-                listener = (TestActionListener) lists[i].get(1);
-                assertEquals("PV1", listener.getId());
-                listener = (TestActionListener) lists[i].get(2);
-                assertEquals("PV2", listener.getId());
-            } else {
-                assertNull(lists[i]);
-            }
-        }
-
-        command.removeActionListener
-            ((ActionListener) lists[PhaseId.APPLY_REQUEST_VALUES.getOrdinal()].get(0));
-        command.removeActionListener
-            ((ActionListener) lists[PhaseId.PROCESS_VALIDATIONS.getOrdinal()].get(1));
-
-        lists = command.getListeners();
-        assertEquals(PhaseId.VALUES.size(), lists.length);
-        for (int i = 0; i < lists.length; i++) {
-            if (i == PhaseId.APPLY_REQUEST_VALUES.getOrdinal()) {
-                assertEquals(1, lists[i].size());
-                listener = (TestActionListener) lists[i].get(0);
-                assertEquals("ARV1", listener.getId());
-            } else if (i == PhaseId.PROCESS_VALIDATIONS.getOrdinal()) {
-                assertEquals(2, lists[i].size());
-                listener = (TestActionListener) lists[i].get(0);
-                assertEquals("PV0", listener.getId());
-                listener = (TestActionListener) lists[i].get(1);
-                assertEquals("PV2", listener.getId());
-            } else {
-                assertNull(lists[i]);
-            }
-        }
-        */
+        ActionListener listeners[] = command.getActionListeners();
+        assertEquals(6, listeners.length); // Count the default one
+        command.removeActionListener(listeners[2]);
+        listeners = command.getActionListeners();
+        assertEquals(5, listeners.length);
 
     }
 

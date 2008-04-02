@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.75 2003/10/28 04:29:48 eburns Exp $
+ * $Id: UIComponentBase.java,v 1.76 2003/10/30 23:04:53 craigmcc Exp $
  */
 
 /*
@@ -1097,6 +1097,41 @@ public abstract class UIComponentBase extends UIComponent {
             listeners[ordinal] = new ArrayList();
         }
         listeners[ordinal].add(listener);
+
+    }
+
+
+    /**
+     * @exception IllegalArgumentException {@inheritDoc}
+     * @exception NullPointerException {@inheritDoc}  
+     */ 
+    protected FacesListener[] getFacesListeners(Class clazz) {
+
+        if (clazz == null) {
+            throw new NullPointerException();
+        }
+        if (!FacesListener.class.isAssignableFrom(clazz)) {
+            throw new IllegalArgumentException();
+        }
+        if (listeners == null) {
+            return (new FacesListener[0]);
+        }
+
+        List results = new ArrayList();
+        for (int i = 0; i < listeners.length; i++) {
+            if (listeners[i] == null) {
+                continue;
+            }
+            Iterator items = listeners[i].iterator();
+            while (items.hasNext()) {
+                FacesListener item = (FacesListener) items.next();
+                if (clazz.isAssignableFrom(item.getClass())) {
+                    results.add(item);
+                }
+            }
+        }
+        return ((FacesListener[]) results.toArray
+                (new FacesListener[results.size()]));
 
     }
 
