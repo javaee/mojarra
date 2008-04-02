@@ -6,7 +6,7 @@
 # modules that the jsf-api depends on.  Copy this file to "build.properties"
 # in the top-level source directory, and customize it as needed.
 #
-# $Id: build.properties.sample,v 1.2 2003/02/12 00:56:24 craigmcc Exp $
+# $Id: build.properties.sample,v 1.3 2003/04/03 19:35:53 jvisvanathan Exp $
 # -----------------------------------------------------------------------------
 
 
@@ -41,15 +41,22 @@ mifdoclet.jar=${mifdoclet.home}/lib/mifdoclet.jar
 
 
 # --------------------------------------------------
+#                REQUIRED LIBRARIES TO BUILD
+# --------------------------------------------------
+tomcat.home=<path to tomcat or jwsdp installation>
+
+# Set the following only if you are building with JWSDP1.2.x 
+# or TOMCAT 5.x
+#jsp.jar=${tomcat.home}/common/lib/jsp-api.jar
+#servlet.jar=${tomcat.home}/common/lib/servlet-api.jar
+
+# --------------------------------------------------
 #		 REQUIRED LIBRARIES TO RUN UNIT TESTS
 # --------------------------------------------------
 
-jsf.ri.home=<path to jsf-ri>
-jsf-ri.jar=${jsf.ri.home}/build/lib/jsf-ri.jar
-
-commons-logging.jar=${jsf.ri.home}/lib/commons-logging.jar
-commons-digester.jar=${jsf.ri.home}/lib/commons-digester.jar
-commons-collections.jar=${jsf.ri.home}/lib/commons-collections.jar
-commons-beanutils.jar=${jsf.ri.home}/lib/commons-beanutils.jar
-xerces.jar=${jsf.ri.home}/lib/xerces.jar
-
+jsf-ri.jar=<path to jaf-ri.jar>
+commons-logging.jar=${tomcat.home}/jwsdp-shared/lib/commons-logging.jar
+commons-digester.jar=${tomcat.home}/server/lib/commons-digester.jar
+commons-beanutils.jar=${tomcat.home}/server/lib/commons-beanutils.jar
+commons-collections.jar=${tomcat.home}/common/lib/commons-collections.jar
+xerces.jar=${tomcat.home}/jaxp-1.2.2/lib/endorsed/xercesImpl.jar

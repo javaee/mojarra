@@ -30,7 +30,8 @@
   <property name="dist.dir"         value="${basedir}/dist"/>
 
   <property name="junit.jar"        value="${lib.home}/junit.jar"/>
-  <property name="servlet.jar"      value="${lib.home}/servlet.jar"/>
+  <property name="servlet.jar"      value="${tomcat.home}/common/lib/servlet.jar"/>
+  <property name="jsp.jar"          value="" />
 
   <property name="build.dir"        value="build"/>
   <property name="build.classes"    value="${build.dir}/classes"/>
@@ -47,6 +48,7 @@
   <path id="compile.classpath">
     <pathelement location="${build.classes}"/>
     <pathelement location="${servlet.jar}"/>
+    <pathelement location="${jsp.jar}"/>
   </path>
 
   <path id="test.classpath">
@@ -55,6 +57,7 @@
     <pathelement location="${junit.jar}"/>
     <pathelement location="${jsf-ri.jar}"/>
     <pathelement location="${servlet.jar}"/>
+    <pathelement location="${jsp.jar}"/>
     <pathelement location="${commons-logging.jar}"/>
     <pathelement location="${commons-digester.jar}"/>
     <pathelement location="${commons-collections.jar}"/>
