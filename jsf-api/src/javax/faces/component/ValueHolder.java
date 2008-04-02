@@ -1,5 +1,5 @@
 /*
- * $Id: ValueHolder.java,v 1.5 2003/10/09 19:18:12 craigmcc Exp $
+ * $Id: ValueHolder.java,v 1.6 2003/10/27 15:03:13 rlubke Exp $
  */
 
 /*
@@ -21,7 +21,7 @@ import javax.faces.el.ValueBinding;
  * value, as well as access data in the model tier via a <em>value
  * reference expression</em>.  If the component wishes to support conversion
  * between String and the model tier data's native data type, it should
- * implement {@link ConvertableValueHolder} instead.</p>
+ * implement {@link ConvertibleValueHolder} instead.</p>
  */
 
 public interface ValueHolder {

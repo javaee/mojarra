@@ -1,5 +1,5 @@
 /*
- * $Id: ActionSource.java,v 1.3 2003/10/27 04:09:58 craigmcc Exp $
+ * $Id: ActionSource.java,v 1.4 2003/10/27 15:03:13 rlubke Exp $
  */
 
 /*
@@ -58,7 +58,7 @@ public interface ActionSource {
 
     /**
      * <p>Set a <em>method reference expression</em> pointing at an
-     * action listener method to be invoked, if this {@link UICompoenent}
+     * action listener method to be invoked, if this {@link UIComponent}
      * is activated by the user, during the <em>Apply Request Values</em>
      * or <em>Invoke Application</em> phase of the request processing
      * lifecycle, depending upon the value of the <code>immmediate</code>
