@@ -1,5 +1,5 @@
 /*
- * $Id: ActionListenerImpl.java,v 1.2 2003/04/03 18:27:49 rkitain Exp $
+ * $Id: ActionListenerImpl.java,v 1.3 2003/04/08 23:31:23 rkitain Exp $
  */
 
 /*
@@ -87,15 +87,14 @@ public class ActionListenerImpl implements ActionListener {
                     } catch (PropertyNotFoundException e) {
                     }
                 }
+                if (null == action || !(action instanceof Action)) {
+                    Object[] obj = new Object[1];
+                    obj[0] = actionRef;
+                    throw new IllegalArgumentException(Util.getExceptionMessage(
+                        Util.NO_ACTION_FROM_ACTIONREF_ERROR_MESSAGE_ID, obj));
+                }
+                outcome = ((Action)action).invoke();
             }
-            if (null == action || !(action instanceof Action)) {
-                Object[] obj = new Object[1];
-                obj[0] = actionRef;
-                throw new IllegalArgumentException(Util.getExceptionMessage(
-                    Util.NO_ACTION_FROM_ACTIONREF_ERROR_MESSAGE_ID, obj));
-            }
- 
-            outcome = ((Action)action).invoke();
         }
             
 
