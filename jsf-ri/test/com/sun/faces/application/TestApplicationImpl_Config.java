@@ -1,5 +1,5 @@
 /*
- * $Id: TestApplicationImpl_Config.java,v 1.28 2004/01/05 23:14:28 eburns Exp $
+ * $Id: TestApplicationImpl_Config.java,v 1.29 2004/01/21 03:50:39 eburns Exp $
  */
 
 /*
@@ -57,7 +57,7 @@ import java.util.Locale;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestApplicationImpl_Config.java,v 1.28 2004/01/05 23:14:28 eburns Exp $
+ * @version $Id: TestApplicationImpl_Config.java,v 1.29 2004/01/21 03:50:39 eburns Exp $
  */
 
 public class TestApplicationImpl_Config extends ServletFacesTestCase {
@@ -455,6 +455,7 @@ public class TestApplicationImpl_Config extends ServletFacesTestCase {
 	assertTrue(null != (stateManager = 
 			    application.getStateManager()));
 	assertTrue(stateManager instanceof javax.faces.application.StateManager);
+	assertEquals("WackyRenderKit", application.getDefaultRenderKitId());
     }
 
     public void testLocaleConfigPositive() {

@@ -1,5 +1,5 @@
 /*
- * $Id: ViewHandler.java,v 1.33 2004/01/20 19:17:16 craigmcc Exp $
+ * $Id: ViewHandler.java,v 1.34 2004/01/21 03:50:26 eburns Exp $
  */
 
 /*
@@ -33,7 +33,7 @@ import javax.faces.render.RenderKitFactory;
  * <code>ViewHandler</code> interacts the {@link StateManager}. </p>
  */
 
-public interface ViewHandler {
+public abstract class ViewHandler {
 
 
     // ------------------------------------------------------ Manifest Constants
@@ -78,7 +78,7 @@ public interface ViewHandler {
      * @exception NullPointerException if <code>context</code> is 
      *  <code>null</code>
      */
-     public Locale calculateLocale(FacesContext context);
+     public abstract Locale calculateLocale(FacesContext context);
 
 
     /** 
@@ -90,7 +90,7 @@ public interface ViewHandler {
      * @exception NullPointerException if <code>context</code> is 
      *  <code>null</code>
      */
-    public String calculateRenderKitId(FacesContext context);
+    public abstract String calculateRenderKitId(FacesContext context);
 
 
     /**
@@ -110,7 +110,7 @@ public interface ViewHandler {
      * @exception NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
-    public UIViewRoot createView(FacesContext context, String viewId);
+    public abstract UIViewRoot createView(FacesContext context, String viewId);
 
 
     /**
@@ -126,7 +126,7 @@ public interface ViewHandler {
      * @exception NullPointerException if <code>context</code> or
      * <code>viewId</code> is <code>null</code>.
      */
-    public String getViewIdPath(FacesContext context, String viewId);
+    public abstract String getViewIdPath(FacesContext context, String viewId);
 
 
     /**
@@ -142,7 +142,7 @@ public interface ViewHandler {
      * <code>viewToRender</code> is <code>null</code>
      * @exception FacesException if a servlet error occurs
      */
-    public void renderView(FacesContext context, UIViewRoot viewToRender)
+    public abstract void renderView(FacesContext context, UIViewRoot viewToRender)
         throws IOException, FacesException;
 
 
@@ -161,7 +161,7 @@ public interface ViewHandler {
      *  is <code>null</code>
      * @exception FacesException if a servlet error occurs
      */
-    public UIViewRoot restoreView(FacesContext context, String viewId);
+    public abstract UIViewRoot restoreView(FacesContext context, String viewId);
 
 
     /**
@@ -176,7 +176,7 @@ public interface ViewHandler {
      * @exception NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
-    public void writeState(FacesContext context) throws IOException;
+    public abstract void writeState(FacesContext context) throws IOException;
 
 
 }

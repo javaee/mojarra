@@ -1,5 +1,5 @@
 /*
- * $Id: MockStateManager.java,v 1.2 2004/01/20 19:17:19 craigmcc Exp $
+ * $Id: MockStateManager.java,v 1.3 2004/01/21 03:50:29 eburns Exp $
  */
 
 /*
@@ -25,7 +25,8 @@ public class MockStateManager extends StateManager {
         return null;
     }
   
-    public UIViewRoot restoreView(FacesContext context, String viewId)
+    public UIViewRoot restoreView(FacesContext context, String viewId, 
+				  String renderKitId)
     { return null; }
 	
     public SerializedView saveSerializedView(FacesContext context) {
@@ -37,11 +38,11 @@ public class MockStateManager extends StateManager {
     }
 
     protected UIViewRoot restoreTreeStructure(FacesContext context, 
-                                              String viewId) {
+                                              String viewId, String renderKitId) {
         return null;
     }
 	
-    protected void restoreComponentState(FacesContext context, UIViewRoot root)
+    protected void restoreComponentState(FacesContext context, UIViewRoot root, String renderKitId)
     {}
 
 }

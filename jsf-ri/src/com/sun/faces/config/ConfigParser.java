@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigParser.java,v 1.50 2004/01/05 23:14:22 eburns Exp $
+ * $Id: ConfigParser.java,v 1.51 2004/01/21 03:50:36 eburns Exp $
  */
 
 /*
@@ -356,6 +356,8 @@ public class ConfigParser {
                                "setPropertyResolver", 0);
         digester.addCallMethod(prefix+"/variable-resolver",
                                "setVariableResolver", 0);
+        digester.addCallMethod(prefix+"/default-render-kit-id",
+                               "setDefaultRenderKitId", 0);
         digester.addCallMethod(prefix+"/locale-config/default-locale",
                                "setDefaultLocale", 0);
         digester.addCallMethod(prefix+"/locale-config/supported-locale",
@@ -989,8 +991,13 @@ final class ApplicationRule extends Rule {
 	    application.setStateManager((StateManager)returnObject);
 	}
 
-	String localeStr = null;
+	String 
+	    renderKitIdStr = null,
+	    localeStr = null;
 	Iterator iter = null;
+	if (null !=  (renderKitIdStr = ca.getDefaultRenderKitId())) {
+	    application.setDefaultRenderKitId(renderKitIdStr);
+	}
 	if (null !=  (localeStr = ca.getDefaultLocale())) {
 	    application.setDefaultLocale(Util.getLocaleFromString(localeStr));
 	}

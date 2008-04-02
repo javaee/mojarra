@@ -1,5 +1,5 @@
 /* 
- * $Id: StateManagerImpl.java,v 1.11 2004/01/05 23:14:21 eburns Exp $ 
+ * $Id: StateManagerImpl.java,v 1.12 2004/01/21 03:50:33 eburns Exp $ 
  */ 
 
 
@@ -35,7 +35,7 @@ import org.apache.commons.logging.LogFactory;
 /** 
  * <B>StateManagerImpl</B> is the default implementation class for
  * StateManager.
- * @version $Id: StateManagerImpl.java,v 1.11 2004/01/05 23:14:21 eburns Exp $ 
+ * @version $Id: StateManagerImpl.java,v 1.12 2004/01/21 03:50:33 eburns Exp $ 
  * 
  * @see javax.faces.application.ViewHandler 
  * 
@@ -43,7 +43,7 @@ import org.apache.commons.logging.LogFactory;
 public class StateManagerImpl extends StateManager  { 
     
     private static final Log log = LogFactory.getLog(StateManagerImpl.class);
-    
+
     public SerializedView saveSerializedView(FacesContext context) {
 	SerializedView result = null;
         
@@ -152,15 +152,21 @@ public class StateManagerImpl extends StateManager  {
     }
     
     
-    public UIViewRoot restoreView(FacesContext context, String viewId) {
+    public UIViewRoot restoreView(FacesContext context, String viewId,
+				  String renderKitId) {
+	if (null == renderKitId) {
+	    // PENDING(edburns): i18n
+	    throw new IllegalArgumentException();
+	}
+
         UIViewRoot viewRoot = null;
         if (isSavingStateInClient(context)) {
             if (log.isDebugEnabled()) {
                 log.debug("Begin restoring view from response " + viewId);
             }
-            viewRoot = restoreTreeStructure(context, viewId);
+            viewRoot = restoreTreeStructure(context, viewId, renderKitId);
             if (viewRoot != null) {
-                 restoreComponentState(context, viewRoot);
+                 restoreComponentState(context, viewRoot, renderKitId);
             } else {
                 if (log.isDebugEnabled()) {
                     log.debug("Possibly a new request. Tree structure could not be restored for " 
@@ -185,17 +191,26 @@ public class StateManagerImpl extends StateManager  {
     }
 
     protected void restoreComponentState(FacesContext context, 
-            UIViewRoot root) {
-        Object state = (Util.getResponseStateManager(context)).
+            UIViewRoot root, String renderKitId) {
+	if (null == renderKitId) {
+	    // PENDING(edburns): i18n
+	    throw new IllegalArgumentException();
+	}
+        Object state = (Util.getResponseStateManager(context, renderKitId)).
                 getComponentStateToRestore(context);
 	root.processRestoreState(context, state);
     }
    
     protected UIViewRoot restoreTreeStructure(FacesContext context, 
-             String viewId) {
+             String viewId, String renderKitId) {
+	if (null == renderKitId) {
+	    // PENDING(edburns): i18n
+	    throw new IllegalArgumentException();
+	}
         UIComponent viewRoot = null;
         TreeStructure structRoot = null;
-        structRoot =  (TreeStructure)((Util.getResponseStateManager(context)).
+        structRoot =  (TreeStructure)((Util.getResponseStateManager(context, 
+								    renderKitId)).
                 getTreeStructureToRestore(context, viewId));
         if ( structRoot == null) {
             return null;
@@ -208,7 +223,8 @@ public class StateManagerImpl extends StateManager  {
     public void writeState(FacesContext context, SerializedView state) throws IOException {
 	// only call thru on client case.
 	if (isSavingStateInClient(context)) {
-	    Util.getResponseStateManager(context).writeState(context, state);
+	    Util.getResponseStateManager(context, 
+					 context.getViewRoot().getRenderKitId()).writeState(context, state);
 	}
     }
     

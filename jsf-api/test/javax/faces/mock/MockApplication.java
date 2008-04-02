@@ -1,5 +1,5 @@
 /*
- * $Id: MockApplication.java,v 1.17 2003/12/22 23:25:44 eburns Exp $
+ * $Id: MockApplication.java,v 1.18 2004/01/21 03:50:29 eburns Exp $
  */
 
 /*
@@ -247,5 +247,11 @@ public class MockApplication extends Application {
     public void setDefaultLocale(Locale newLocale) {
     }
 
+    public String getDefaultRenderKitId() { 
+	return null;
+    }
+
+    public void setDefaultRenderKitId(String renderKitId) {
+    }
 
 }

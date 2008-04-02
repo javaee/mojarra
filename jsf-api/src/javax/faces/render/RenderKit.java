@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKit.java,v 1.24 2003/09/29 23:39:53 craigmcc Exp $
+ * $Id: RenderKit.java,v 1.25 2004/01/21 03:50:28 eburns Exp $
  */
 
 /*
@@ -28,17 +28,23 @@ import java.io.OutputStream;
  * a Factory for associated {@link Renderer} instances, which perform the
  * actual rendering process for each component.</p>
  *
- * <p>A typical JavaServer Faces implementation will configure one or more
- * {@link RenderKit} instances at web application startup.  They are
- * made available through calls to the <code>getRenderKit()</code> methods
- * of {@link RenderKitFactory}.  Because {@link RenderKit} instances
- * are shared, they must be implemented in a thread-safe manner.</p>
+ * <p>A typical JavaServer Faces implementation will configure one or
+ * more {@link RenderKit} instances at web application startup.  They
+ * are made available through calls to the <code>getRenderKit()</code>
+ * methods of {@link RenderKitFactory}.  Because {@link RenderKit}
+ * instances are shared, they must be implemented in a thread-safe
+ * manner.  Due to limitations in the current specification having
+ * multiple <code>RenderKit</code> instances at play in the same
+ * application requires a custom {@link
+ * javax.faces.application.ViewHandler} instance that is aware of how to
+ * deal with this case.  This limitation will be lifted in a future
+ * version of the spec.</p>
  *
  * <p>The <code>RenderKit</code> instance must also vend a {@link
  * ResponseStateManager} instance, which is used in the process of
  * saving and restoring tree structure and state.</p>
  */
-
+    // PENDING(edburns): remove limitation
 public abstract class RenderKit {
 
 

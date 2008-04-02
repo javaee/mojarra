@@ -1,5 +1,5 @@
 /* 
- * $Id: XulViewHandlerImpl.java,v 1.15 2004/01/20 04:51:57 eburns Exp $ 
+ * $Id: XulViewHandlerImpl.java,v 1.16 2004/01/21 03:50:41 eburns Exp $ 
  */ 
 
 
@@ -83,12 +83,12 @@ import javax.servlet.ServletRequest;
 /** 
  * <B>XulViewHandlerImpl</B> is the Xul non-JSP ViewHandler implementation
  *
- * @version $Id: XulViewHandlerImpl.java,v 1.15 2004/01/20 04:51:57 eburns Exp $ 
+ * @version $Id: XulViewHandlerImpl.java,v 1.16 2004/01/21 03:50:41 eburns Exp $ 
  * 
  * @see javax.faces.application.ViewHandler 
  * 
  */ 
-public class XulViewHandlerImpl implements ViewHandler { 
+public class XulViewHandlerImpl extends ViewHandler { 
 
     // Log instance for this class
     protected static Log log = LogFactory.getLog(XulViewHandlerImpl.class);

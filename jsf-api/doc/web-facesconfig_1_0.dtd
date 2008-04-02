@@ -13,7 +13,7 @@
      "-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.0//EN"
      "http://java.sun.com/dtd/web-facesconfig_1_0.dtd">
 
-    $Id: web-facesconfig_1_0.dtd,v 1.27 2003/12/23 19:57:33 eburns Exp $
+    $Id: web-facesconfig_1_0.dtd,v 1.28 2004/01/21 03:50:22 eburns Exp $
 
 -->
 
@@ -126,12 +126,12 @@
 
 <!--
     The "application" element provides a mechanism to define the various
-    per-application-singleton implementation classes for a particular web
+    per-application-singleton implementation artifacts for a particular web
     application that is utilizing JavaServer Faces.  For nested elements
     that are not specified, the JSF implementation must provide a suitable
     default.
 -->
-<!ELEMENT application     ((action-listener|message-bundle|navigation-handler|view-handler|state-manager|property-resolver|variable-resolver|locale-config)*)>
+<!ELEMENT application     ((action-listener|default-render-kit-id|message-bundle|navigation-handler|view-handler|state-manager|property-resolver|variable-resolver|locale-config)*)>
 
 
 <!--
@@ -454,6 +454,12 @@
     corresponding Converter class should be registered.
 -->
 <!ELEMENT converter-id    (#PCDATA)>
+
+<!--
+    The "default-render-kit-id" element allows the application to define
+    a renderkit to be used other than the standard one. 
+-->
+<!ELEMENT default-render-kit-id   (#PCDATA)>
 
 <!--
      The "default-locale" element declares the default locale for this
@@ -825,6 +831,7 @@ registered on the Lifecycle. It must be of type "ClassName".
 <!ATTLIST converter-class                   id ID #IMPLIED>
 <!ATTLIST converter-for-class               id ID #IMPLIED>
 <!ATTLIST converter-id                      id ID #IMPLIED>
+<!ATTLIST default-render-kit-id             id ID #IMPLIED>
 <!ATTLIST default-locale                    id ID #IMPLIED>
 <!ATTLIST default-value                     id ID #IMPLIED>
 <!ATTLIST description                       id ID #IMPLIED>

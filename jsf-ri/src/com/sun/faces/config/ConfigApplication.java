@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigApplication.java,v 1.6 2003/12/22 23:25:51 eburns Exp $
+ * $Id: ConfigApplication.java,v 1.7 2004/01/21 03:50:35 eburns Exp $
  */
 
 /*
@@ -87,6 +87,16 @@ public class ConfigApplication {
     public String getDefaultLocale() {
 	return defaultLocale;
     }
+
+    protected String defaultRenderKitId = null;
+    public void setDefaultRenderKitId(String newDefaultRenderKitId) {
+	defaultRenderKitId = newDefaultRenderKitId;
+    }
+    
+    public String getDefaultRenderKitId() {
+	return defaultRenderKitId;
+    }
+
 
     protected ArrayList supportedLocales;
     public void addSupportedLocale(String localeToAdd) {

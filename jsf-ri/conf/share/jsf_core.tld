@@ -854,16 +854,6 @@
       </description>
     </attribute>
 
-    <attribute>
-      <name>renderKitId</name>
-      <required>false</required>
-      <rtexprvalue>false</rtexprvalue>
-      <description>
-        Render kit identifier of the RenderKit to use
-        when formatting this page.
-      </description>
-    </attribute>
-
   </tag>
 
 

@@ -1,5 +1,5 @@
 /*
- * $Id: ViewTag.java,v 1.17 2004/01/21 01:13:09 craigmcc Exp $
+ * $Id: ViewTag.java,v 1.18 2004/01/21 03:50:37 eburns Exp $
  */
 
 /*
@@ -45,7 +45,7 @@ import com.sun.faces.util.Util;
  *  any renderers or attributes. It exists mainly to save the state of
  *  the response tree once all tags have been rendered.
  *
- * @version $Id: ViewTag.java,v 1.17 2004/01/21 01:13:09 craigmcc Exp $
+ * @version $Id: ViewTag.java,v 1.18 2004/01/21 03:50:37 eburns Exp $
  * 
  *
  */
@@ -72,12 +72,6 @@ public class ViewTag extends UIComponentBodyTag
     public void setLocale(String newLocale) {
 	locale = newLocale;
     }
-
-    protected String renderKitId = null;
-    public void setRenderKitId(String newRenderKitId) {
-	renderKitId = newRenderKitId;
-    }
-
 
     // Relationship Instance Variables
 
@@ -294,16 +288,6 @@ public class ViewTag extends UIComponentBodyTag
 	    // is created based on the locale.
 	    Config.set((ServletRequest) getFacesContext().getExternalContext().getRequest(), 
 		       Config.FMT_LOCALE, viewLocale);
-        }
-
-        if (null != renderKitId) {
-            if (isValueReference(renderKitId)) {
-                component.setValueBinding("renderKitId",
-					  vb = Util.getValueBinding(renderKitId));
-                renderKitId = (String) vb.getValue(FacesContext.getCurrentInstance());
-            }
-            
-            ((UIViewRoot)component).setRenderKitId(renderKitId);
         }
 
     }

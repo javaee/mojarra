@@ -1,5 +1,5 @@
 /* 
- * $Id: ViewHandlerImpl.java,v 1.31 2004/01/21 01:12:47 craigmcc Exp $ 
+ * $Id: ViewHandlerImpl.java,v 1.32 2004/01/21 03:50:34 eburns Exp $ 
  */ 
 
 
@@ -46,13 +46,12 @@ import java.util.Map;
 
 /** 
  * <B>ViewHandlerImpl</B> is the default implementation class for ViewHandler. 
- * @version $Id: ViewHandlerImpl.java,v 1.31 2004/01/21 01:12:47 craigmcc Exp $ 
+ * @version $Id: ViewHandlerImpl.java,v 1.32 2004/01/21 03:50:34 eburns Exp $ 
  * 
  * @see javax.faces.application.ViewHandler 
  * 
  */ 
-public class ViewHandlerImpl extends Object
-        implements ViewHandler { 
+public class ViewHandlerImpl extends ViewHandler { 
     
     // 
     // Private/Protected Constants
@@ -238,7 +237,14 @@ public class ViewHandlerImpl extends Object
             }           
         } 
 	else {
-	    viewRoot = Util.getStateManager(context).restoreView(context, viewId);
+	    // this is necessary to allow decorated impls.
+	    ViewHandler outerViewHandler = 
+		context.getApplication().getViewHandler();
+	    String renderKitId = 
+		outerViewHandler.calculateRenderKitId(context);
+	    viewRoot = Util.getStateManager(context).restoreView(context, 
+								 viewId, 
+								 renderKitId);
         }        
 	
         return viewRoot;
@@ -270,7 +276,7 @@ public class ViewHandlerImpl extends Object
         // if there was no locale from the previous view, calculate the locale 
         // for this view.
         if (locale == null) {
-            locale = calculateLocale(context);
+            locale = context.getApplication().getViewHandler().calculateLocale(context);
             if (log.isDebugEnabled()) {
                 log.debug("Locale for this view as determined by calculateLocale " 
                         + locale.toString());
@@ -282,7 +288,7 @@ public class ViewHandlerImpl extends Object
         }
 
         if (renderKitId == null) {
-            renderKitId = calculateRenderKitId(context);
+            renderKitId = context.getApplication().getViewHandler().calculateRenderKitId(context);
             if (log.isDebugEnabled()) {
                 log.debug("RenderKitId for this view as determined by calculateRenderKitId " 
                         + renderKitId);
@@ -336,8 +342,13 @@ public class ViewHandlerImpl extends Object
             throw new NullPointerException(Util.getExceptionMessage(
                 Util.NULL_CONTEXT_ERROR_MESSAGE_ID));
         }
-        
-        return RenderKitFactory.HTML_BASIC_RENDER_KIT;
+	String result = null;
+
+	if (null == 
+	    (result = context.getApplication().getDefaultRenderKitId())) {
+	    result = RenderKitFactory.HTML_BASIC_RENDER_KIT;
+	}
+	return result;
     }
 
 

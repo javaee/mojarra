@@ -1,5 +1,5 @@
 /*
- * $Id: MockViewHandler.java,v 1.20 2004/01/20 19:17:19 craigmcc Exp $
+ * $Id: MockViewHandler.java,v 1.21 2004/01/21 03:50:29 eburns Exp $
  */
 
 /*
@@ -18,7 +18,7 @@ import javax.faces.application.ViewHandler;
 import javax.faces.application.StateManager;
 import javax.faces.render.RenderKitFactory;
 
-public class MockViewHandler extends Object implements ViewHandler {
+public class MockViewHandler extends ViewHandler {
 
     protected StateManager stateManager = null;
 
@@ -46,7 +46,7 @@ public class MockViewHandler extends Object implements ViewHandler {
 		    protected Object getComponentStateToSave(FacesContext context) {
 			return null;
 		    }
-		    public UIViewRoot restoreView(FacesContext context, String viewId) { return null; }
+		    public UIViewRoot restoreView(FacesContext context, String viewId, String renderKitId) { return null; }
 		    public SerializedView saveSerializedView(FacesContext context) {
 			return null;
 		    }
@@ -56,10 +56,10 @@ public class MockViewHandler extends Object implements ViewHandler {
                     }
 
 		    protected UIViewRoot restoreTreeStructure(FacesContext context, 
-							   String viewId) {
+							   String viewId, String renderKitId) {
 			return null;
 		    }
-		    protected void restoreComponentState(FacesContext context, UIViewRoot root) {}
+		    protected void restoreComponentState(FacesContext context, UIViewRoot root, String renderKitId) {}
 		};
 	}
 	return stateManager;

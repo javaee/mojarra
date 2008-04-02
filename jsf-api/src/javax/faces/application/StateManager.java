@@ -1,5 +1,5 @@
 /*
- * $Id: StateManager.java,v 1.29 2004/01/20 19:17:15 craigmcc Exp $
+ * $Id: StateManager.java,v 1.30 2004/01/21 03:50:25 eburns Exp $
  */
 
 /*
@@ -204,8 +204,14 @@ public abstract class StateManager {
      *
      * @param context {@link FacesContext} for the current request
      * @param viewId View identifier of the view to be restored
+     * @param renderKitId the renderKitId used to render this response.
+     * Must not be <code>null</code>.
+     *
+     * @exception IllegalArgumentException if <code>renderKitId</code>
+     * is <code>null</code>.
      */
-    public abstract UIViewRoot restoreView(FacesContext context, String viewId);
+    public abstract UIViewRoot restoreView(FacesContext context, String viewId,
+					   String renderKitId);
 
 
     /**
@@ -220,9 +226,14 @@ public abstract class StateManager {
      *
      * @param context {@link FacesContext} for the current request
      * @param viewId View identifier of the view to be restored
+     * @param renderKitId the renderKitId used to render this response.
+     * Must not be <code>null</code>.
+     *
+     * @exception IllegalArgumentException if <code>renderKitId</code>
+     * is <code>null</code>.
      */
     protected abstract UIViewRoot restoreTreeStructure
-	(FacesContext context, String viewId);
+	(FacesContext context, String viewId, String renderKitId);
 
 
     /**
@@ -237,9 +248,14 @@ public abstract class StateManager {
      * @param context {@link FacesContext} for the current request
      * @param viewRoot {@link UIViewRoot} returned by a previous call
      *  to <code>restoreTreeStructure()</code>
+     * @param renderKitId the renderKitId used to render this response.
+     * Must not be <code>null</code>.
+     *
+     * @exception IllegalArgumentException if <code>renderKitId</code>
+     * is <code>null</code>.
      */
     protected abstract void restoreComponentState
-	(FacesContext context, UIViewRoot viewRoot);
+	(FacesContext context, UIViewRoot viewRoot, String renderKitId);
 
 
 

@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationImpl.java,v 1.38 2004/01/06 04:28:24 eburns Exp $
+ * $Id: ApplicationImpl.java,v 1.39 2004/01/21 03:50:32 eburns Exp $
  */
 
 /*
@@ -642,6 +642,17 @@ public class ApplicationImpl extends Application {
             log.trace("set defaultLocale " + defaultLocale); 
         }
     }
+
+    protected String defaultRenderKitId = null;
+    public String getDefaultRenderKitId() { 
+	return defaultRenderKitId;
+    }
+
+    public void setDefaultRenderKitId(String renderKitId) {
+	defaultRenderKitId = renderKitId;
+    }
+
+
     
     public void addValidator(String validatorId, String validatorClass) {
         if (validatorId == null || validatorClass == null) {

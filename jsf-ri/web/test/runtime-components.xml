@@ -19,6 +19,7 @@
     <property-resolver>com.sun.faces.application.PropertyResolverTestImpl</property-resolver>
     <variable-resolver>com.sun.faces.application.VariableResolverTestImpl</variable-resolver>
     <view-handler>com.sun.faces.application.ViewHandlerTestImpl</view-handler>
+    <default-render-kit-id>WackyRenderKit</default-render-kit-id>
   </application>
 
 </faces-config>

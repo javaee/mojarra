@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.122 2004/01/20 04:51:45 eburns Exp $
+ * $Id: Util.java,v 1.123 2004/01/21 03:50:38 eburns Exp $
  */
 
 /*
@@ -70,7 +70,7 @@ import com.sun.faces.el.impl.JspVariableResolver;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.122 2004/01/20 04:51:45 eburns Exp $ 
+ * @version $Id: Util.java,v 1.123 2004/01/21 03:50:38 eburns Exp $ 
  */
 
 public class Util extends Object
@@ -971,20 +971,15 @@ private Util()
     }
 
     public static ResponseStateManager getResponseStateManager(
-            FacesContext context) throws FacesException {
+            FacesContext context, String renderKitId) throws FacesException {
 	RenderKit renderKit = null;
 	RenderKitFactory renderKitFactory = null;
-	String renderKitId = null;
 	ResponseStateManager result = null;
 
 	renderKitFactory = (RenderKitFactory)
 	    FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
 	Util.doAssert(null != renderKitFactory);
 
-	if (context.getViewRoot() == null || 
-	    (renderKitId = context.getViewRoot().getRenderKitId()) == null) {
-            renderKitId = RenderKitFactory.HTML_BASIC_RENDER_KIT;
-	}
 	Util.doAssert(null != renderKitId);
 
 	renderKit = renderKitFactory.getRenderKit(context, renderKitId);

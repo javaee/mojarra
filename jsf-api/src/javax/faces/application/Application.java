@@ -1,5 +1,5 @@
 /*
- * $Id: Application.java,v 1.24 2004/01/20 19:17:15 craigmcc Exp $
+ * $Id: Application.java,v 1.25 2004/01/21 03:50:23 eburns Exp $
  */
 
 /*
@@ -131,6 +131,29 @@ public abstract class Application {
      *  is <code>null</code>
      */
     public abstract void setDefaultLocale(Locale locale);
+
+    /**
+     * <p>Return the <code>render-kit-id</code> to be used for rendering
+     * this application, or <code>null</code> if {@link
+     * javax.faces.render.RenderKitFactory#HTML_BASIC_RENDER_KIT} should
+     * be used.</p>
+     */
+    public abstract String getDefaultRenderKitId();
+
+    /**
+     * <p>Set the <code>render-kit-id</code> to be used to render this
+     * application.  Unless the client has provided a custom {@link
+     * ViewHandler} that is aware of allowing multiple {@link
+     * javax.faces.render.RenderKit} instances to be used in the same
+     * application, this method must only be called by the configuration
+     * system during application startup.  It must not be called
+     * dynamically during the runtime of the application.  This is a
+     * limitation of the current specification and may be lifted in a
+     * future release.</p>
+     */
+    // PENDING(edburns): remove limitation
+    public abstract void setDefaultRenderKitId(String renderKitId);
+	
 
 
     /**
