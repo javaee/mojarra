@@ -28,13 +28,18 @@ Major changes/features in this release:
   New Event model as in section JSF.3.3
 
   This is the biggest change since the previous release.  This change is
-  too big to cover in detail in the README.  Please read the appropriate
-  spec section.
+  too big to cover in detail in the README.  Two important aspects are:
+  we now have "ValueChangedEvents" and there is only one tree, not
+  separate request and response trees as before.  Please read the
+  appropriate spec section.
 
   Related API classes and interfaces
 
     javax.faces.event.AbortProcessingException
     javax.faces.event.ActionEvent
+    javax.faces.event.CommandEvent
+    javax.faces.event.FacesEvent
+    javax.faces.event.FormEvent
     javax.faces.event.ActionListener
     javax.faces.event.ApplicationEvent
     javax.faces.event.FacesListener
@@ -42,6 +47,10 @@ Major changes/features in this release:
     javax.faces.event.ValueChangedListener
     javax.faces.event.PhaseId
     javax.faces.context.FacesContext
+    javax.faces.component.UICommand
+    javax.faces.component.UIComponent
+    javax.faces.component.UIComponentBas
+    javax.faces.tree.Tree
 
   Related RI classes and interfaces
 
@@ -62,43 +71,54 @@ Major changes/features in this release:
     com.sun.faces.lifecycle.HandleRequestEventsPhase
 
 
-* [ComponentNamespace-10] Flat namespace changes.  Component identifiers
-  are no longer required in all cases.  When using JSF from JSP,
-  component identifiers are only required when interacting with JSTL.
-  See Section JSF 3.1.2 in the spec.  We have a tag library validator to
-  enforce this rule.
+* [ComponentNamespace-10] Flat namespace changes.  The compoundId
+  property has gone away, in its place we have getClientId().  Component
+  identifiers are no longer required in all cases.  When using JSF from
+  JSP, component identifiers are only required when interacting with
+  JSTL. See Section JSF 3.1.2 in the spec.  We have a tag library
+  validator to enforce this rule.
 
   Every component can be named by a component identifier, which must be
   unique among the components that share a common naming container
   parent in a component tree. 
 
+
   The root of the component tree must be a NamingContainer.
 
   Related API classes and interfaces
 
-  javax.faces.component.NamingContainer
+    javax.faces.component.NamingContainer
 
-    An interface defining what it means to be a NaminingContainer
+      An interface defining what it means to be a NaminingContainer
 
-  javax.faces.component.NamingContainerSupport
+    javax.faces.component.NamingContainerSupport
 
-    The implementation of that interface
+      The implementation of that interface
 
-  javax.faces.component.UINamingContainer
+    javax.faces.component.UINamingContainer
 
-    A UIComponent that implements NamingContainer, used as the root of
-    the tree
+      A UIComponent that implements NamingContainer, used as the root of
+      the tree
+
+    javax.faces.render.Renderer
+
+      Account for removal of getComponentId().
 
   Related RI classes and interfaces
 
-  com.sun.faces.taglib.FacesValidator
+    com.sun.faces.taglib.FacesValidator
 
-    Base class for Faces TLV
+      Base class for Faces TLV
 
-  com.sun.faces.taglib.jsf_core.CoreValidator
+    com.sun.faces.taglib.jsf_core.CoreValidator
 
-    Enforces the rule that components must have ids if they are
-    intermixed with certain JSTL tags.
+      Enforces the rule that components must have ids if they are
+      intermixed with certain JSTL tags.
+
+    com.sun.faces.component.UIComponent
+    com.sun.faces.component.UIComponentBase
+
+      Changes for getClientId().
 
 * [NamedChild-4] Support for component facets.  
 
@@ -125,6 +145,11 @@ Major changes/features in this release:
     javax.faces.webapp.FacesTag
 
       Contains some Facet specific logic.
+
+    javax.faces.component.UIComponent
+    javax.faces.component.UIComponentBase
+
+      Support for facets and children
 
   Related RI classes and interfaces
 
@@ -158,8 +183,18 @@ Major changes/features in this release:
       processUpdates().  These methods all call getFacetsAndChildren()
       so that Facets are processed first, then children.
 
+    javax.faces.webapp.FacesTag
+    javax.faces.webapp.FacetTag
+
+     Support for facets.
+
 * [VisibleProperty-27] Add support for the "rendered" property, which is
   leveraged during encode/decode.  See section JSF 3.1.12 of the spec.
+
+  Related API classes and interfaces
+
+    javax.faces.component.UIComponent
+    javax.faces.component.UIComponentBase
 
   All of the Renderers must check this property:
 
@@ -220,6 +255,9 @@ Major changes/features in this release:
     javax.faces.convert.ConverterException
     javax.faces.convert.Converter
     javax.faces.convert.ConverterFactory
+    javax.faces.component.UIComponent
+    javax.faces.component.UIComponentBase
+    javax.faces.FactoryFinder
 
   Related RI classes and interfaces
 
@@ -322,6 +360,22 @@ Major changes/features in this release:
     com.sun.faces.taglib.jsf_core.ValidateRequiredTag
     com.sun.faces.taglib.jsf_core.ValidateStringRangeTag
     com.sun.faces.taglib.jsf_core.ValueChangedListenerTag
+
+* Deprecated APIs
+
+  These will be REMOVED before the spec becomes final.
+
+  javax.faces.context.FacesContext.addApplicationEvent()
+  javax.faces.context.FacesContext.getApplicationEvents()
+  javax.faces.context.FacesContext.getApplicationEventsCount()
+  javax.faces.context.FacesContext.getApplicationHandler()
+  javax.faces.event.CommandEvent
+  javax.faces.event.FormEvent
+  javax.faces.lifecycle.ApplicationHandler
+  javax.faces.lifecycle.Lifecycle.getApplicationHandler()
+  javax.faces.lifecycle.Lifecycle.setApplicationHandler()
+  javax.faces.lifecycle.Lifecycle.executePhase()
+  javax.faces.lifecycle.Phase
 
 Known Issues With This Release
 ==============================
