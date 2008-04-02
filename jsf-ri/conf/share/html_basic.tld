@@ -26,12 +26,9 @@
   </description>
 
   <!-- ============== Tag Library Validator ============= -->
-
-  <!-- This TLV verifies that a Faces tag has an ID if it is a
-	child or sibling of a JSTL conditional or iterator tag  -->
   <validator>
     <validator-class>
-      com.sun.faces.taglib.FacesValidator
+      com.sun.faces.taglib.html_basic.HtmlBasicValidator
     </validator-class>
   </validator>
 

@@ -28,7 +28,7 @@
        child or sibling of a JSTL conditional or iterator tag  -->
   <validator>
     <validator-class>
-      com.sun.faces.taglib.FacesValidator
+      com.sun.faces.taglib.jsf_core.CoreValidator
     </validator-class>
   </validator>
 

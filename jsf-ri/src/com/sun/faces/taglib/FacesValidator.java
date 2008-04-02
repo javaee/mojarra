@@ -1,5 +1,5 @@
 /*
- * $Id: FacesValidator.java,v 1.1 2003/01/31 01:09:01 horwat Exp $
+ * $Id: FacesValidator.java,v 1.2 2003/02/03 23:04:33 edburns Exp $
  */
 
 /*
@@ -21,46 +21,20 @@ import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 /**
- * <p>A TagLibrary Validator class to allow a TLD to mandate that
- * JSF tag must have an id if it is a child or sibling of a JSTL
- * conditional or iteration tag</p>
+ * <p>Base class for all faces TLVs</p>
  *
  * @author Justyna Horwat
+ * @author Ed Burns
  */
-public class FacesValidator extends TagLibraryValidator {
+public abstract class FacesValidator extends TagLibraryValidator {
 
     //*********************************************************************
     // Constants
 
-    // QName for JSTL conditional tag
-    private final String JSTL_IF_QN = "c:if";
-
-    // QName for JSTL conditional tag
-    private final String JSTL_CHOOSE_QN = "c:choose";
-
-    // QName for JSTL iterator tag
-    private final String JSTL_FOREACH_QN = "c:forEach";
-
-    // QName for JSTL iterator tag
-    private final String JSTL_FORTOKENS_QN = "c:forTokens";
-
-    // Prefix for JSF HTML tags 
-    private final String JSF_HTML_PRE = "h:";
-
-    // Prefix for JSF CORE tags 
-    private final String JSF_CORE_PRE = "f:";
-
-    // Separator character
-    private final char SPACE = ' ';
-
     //*********************************************************************
     // Validation and configuration state (protected)
 
-    private boolean failed;			// did the page fail?
-
-    private boolean siblingSatisfied;		// is there a JSF sibling?
-    private int requiresIdCount;		// nested count
-    private StringBuffer requiresIdList;	// list of failing tags
+    protected boolean failed;			// did the page fail?
 
     //*********************************************************************
     // Constructor and lifecycle management
@@ -70,17 +44,17 @@ public class FacesValidator extends TagLibraryValidator {
         init();
     }
 
-    private void init() {
+    protected void init() {
         failed = false;
-        siblingSatisfied = true;
-        requiresIdCount = 0;
-        requiresIdList = new StringBuffer();
     }
 
     public void release() {
 	super.release();
         init();
     }
+
+    protected abstract DefaultHandler getSAXHandler();
+    protected abstract String getFailureMessage(String prefix, String uri);
 
     //*********************************************************************
     // Validation entry point
@@ -98,10 +72,11 @@ public class FacesValidator extends TagLibraryValidator {
      */
     public synchronized ValidationMessage[] validate(
             String prefix, String uri, PageData page) {
+	ValidationMessage[] result = null;
 	try {
 
             // get a handler
-            DefaultHandler h = new FacesValidatorHandler();
+            DefaultHandler h = getSAXHandler();
 
 	    // parse the page
 	    SAXParserFactory f = SAXParserFactory.newInstance();
@@ -111,24 +86,23 @@ public class FacesValidator extends TagLibraryValidator {
 
             //on validation failure generate error message
 	    if (failed) {
- 	        return vmFromString(
-                    "The following JSF tags are required to contain IDs: '" + 
-                    requiresIdList.toString() +
-	            "' according to the TLV in taglib prefix: '" + 
-                    prefix + ":' with URI: (" + uri + ")");
+ 	        result = vmFromString(getFailureMessage(prefix, uri));
             }
             else {
                 //success
-                return null;
+                result = null;
             }
 
 	} catch (SAXException ex) {
-            return vmFromString(ex.toString());
+            result = vmFromString(ex.toString());
 	} catch (ParserConfigurationException ex) {
-            return vmFromString(ex.toString());
+            result = vmFromString(ex.toString());
 	} catch (IOException ex) {
-            return vmFromString(ex.toString());
+            result = vmFromString(ex.toString());
 	}
+	// Make sure all resources are released
+	this.release();
+	return result;
     }
 
 
@@ -148,109 +122,4 @@ public class FacesValidator extends TagLibraryValidator {
 	};
     }
 
-    //*********************************************************************
-    // SAX handler
-
-    /**
-     * The handler that provides the base of the TLV implementation. 
-     */
-    private class FacesValidatorHandler extends DefaultHandler {
-
-        /**
-         * Parse the starting element. If it is a specific JSTL tag
-         * make sure that the nested JSF tags have IDs. 
-         *
-         * @param ns Element name space.
-         * @param ln Element local name.
-         * @param qn Element QName.
-         * @param a Element's Attribute list.
-         *
-         */
-	public void startElement(
-                String ns, String ln, String qn, Attributes a) {
-
-            if (isJstlTag(qn)) {
-                requiresIdCount++;
-            }
-            else if ( (qn.startsWith(JSF_HTML_PRE) || 
-                       qn.startsWith(JSF_CORE_PRE)) && 
-                       (requiresIdCount > 0) ) {
-                //make sure that id is present in attributes
-                if (!hasIdAttribute(a)) {
-                    //add to list of jsf tags for error report
-                    failed = true;
-                    requiresIdList.append(qn).append(SPACE);
-                }
-            }
-            else if ((requiresIdCount == 0) && (!siblingSatisfied)) {
-                //make sure jsf sibling has an id
-                if ( (qn.startsWith(JSF_HTML_PRE) ||
-                      qn.startsWith(JSF_CORE_PRE)) &&
-                      (!hasIdAttribute(a)) ) {
-                    //add to list of jsf tags for error report
-                    failed = true;
-                    requiresIdList.append(qn).append(SPACE);
-                }
-                siblingSatisfied = true;
-            }
-            else if (requiresIdCount == 0) {
-                // sibling is a non-JSF tag
-                // JSF tags no longer need id's
-                siblingSatisfied = true;
-            }
-
-        }
-
-        /**
-         * Parse the ending element. If it is a specific JSTL tag
-         * make sure that the nested count is decreased.
-         *
-         * @param ln Element local name.
-         * @param qn Element QName.
-         * @param a Element's Attribute list.
-         *
-         */
-	public void endElement(String ns, String ln, String qn) {
-
-            if (isJstlTag(qn)) {
-                requiresIdCount--;
-                siblingSatisfied = false;
-            }
-        }
-
-        /**
-         * Check element to make sure that the id attribute is
-         * present.
-         *
-         * @param a Attribute list
-         *
-         * @return boolean True if id attribute found."id"
-         */
-        private boolean hasIdAttribute(Attributes a) {
-	    for (int i = 0; i < a.getLength(); i++) {
-                if (a.getQName(i).equals("id")) {
-                    return true;
-                }
-	    }
-            return false;
-        }
-
-        /**
-         * Check to make sure that the element is either a 
-         * conditional or iterator JSTL tag.
-         *
-         * @param qn Element to be checked.
-         *
-         * @return boolean True if JSTL tag is iterator or conditional
-         */
-        private boolean isJstlTag(String qn) {
-            if (qn.equals(JSTL_IF_QN) || 
-                qn.equals(JSTL_CHOOSE_QN) ||
-                qn.equals(JSTL_FOREACH_QN) ||
-                qn.equals(JSTL_FORTOKENS_QN)) {
-               return true;
-            }
-            return false;
-        }
-    }
 }

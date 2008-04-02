@@ -167,6 +167,8 @@
         <copy file="${commons.digester.jar}" todir="${out.test.dir}/lib"/>
         <copy file="${commons.logging.jar}" todir="${out.test.dir}/lib"/>
         <copy file="${jsf-api.jar}" todir="${out.test.dir}/lib"/>
+        <copy file="${jstl.jar}" todir="${out.test.dir}/lib"/>
+        <copy file="${standard.jar}" todir="${out.test.dir}/lib"/>
         <copy file="${basedir}/build/lib/jsf-ri.jar" todir="${out.test.dir}/lib"/>
 
         <war warfile="${out.test.dir}/test.war"
@@ -328,6 +330,7 @@
             <test name="com.sun.faces.convert.TestConverterFactory"/>
             <test name="com.sun.faces.convert.TestConverters"/>
             <test name="javax.faces.validator.RequiredValidatorTestCase"/>
+            <test name="com.sun.faces.taglib.html_basic.TestHtmlBasicValidator"/>
             <!-- To run the following tests, comment last 3 tests, uncomment
                  following tests and set saveStateInClient property in 
                  conf/test/web.xml to true 
@@ -337,6 +340,7 @@
 
 
 <!-- put non-running testcases here
+            <test name="com.sun.faces.taglib.jsf_core.TestCoreValidator"/>
             <test name="com.sun.faces.lifecycle.TestViewHandlerImpl"/>
             <test name="com.sun.faces.lifecycle.TestLifecycleImpl"/>
             <test name="com.sun.faces.lifecycle.TestLifecycleImpl_initial"/>
