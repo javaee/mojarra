@@ -1,6 +1,6 @@
 /* 
- * $Id: ViewHandlerImpl.java,v 1.90 2006/10/18 17:11:58 rlubke Exp $ 
- */ 
+ * $Id: ViewHandlerImpl.java,v 1.91 2006/10/23 15:38:16 rlubke Exp $
+ */
 
 
 /*
@@ -8,28 +8,28 @@
  * of the Common Development and Distribution License
  * (the License). You may not use this file except in
  * compliance with the License.
- * 
+ *
  * You can obtain a copy of the License at
  * https://javaserverfaces.dev.java.net/CDDL.html or
- * legal/CDDLv1.0.txt. 
+ * legal/CDDLv1.0.txt.
  * See the License for the specific language governing
  * permission and limitations under the License.
- * 
+ *
  * When distributing Covered Code, include this CDDL
  * Header Notice in each file and include the License file
- * at legal/CDDLv1.0.txt.    
+ * at legal/CDDLv1.0.txt.
  * If applicable, add the following below the CDDL Header,
  * with the fields enclosed by brackets [] replaced by
  * your own identifying information:
  * "Portions Copyrighted [year] [name of copyright owner]"
- * 
+ *
  * [Name of File] [ver.__] [Date]
- * 
+ *
  * Copyright 2005 Sun Microsystems Inc. All Rights Reserved
  */
 
 
-// ViewHandlerImpl.java 
+// ViewHandlerImpl.java
 
 package com.sun.faces.application;
 
@@ -46,7 +46,6 @@ import javax.faces.render.RenderKitFactory;
 import javax.faces.render.ResponseStateManager;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.jsp.jstl.core.Config;
 
@@ -69,7 +68,7 @@ import com.sun.faces.util.Util;
 /**
  * <B>ViewHandlerImpl</B> is the default implementation class for ViewHandler.
  *
- * @version $Id: ViewHandlerImpl.java,v 1.90 2006/10/18 17:11:58 rlubke Exp $
+ * @version $Id: ViewHandlerImpl.java,v 1.91 2006/10/23 15:38:16 rlubke Exp $
  * @see javax.faces.application.ViewHandler
  */
 public class ViewHandlerImpl extends ViewHandler {
@@ -79,7 +78,7 @@ public class ViewHandlerImpl extends ViewHandler {
                                                   + Util.APPLICATION_LOGGER);
 
     private static final String AFTER_VIEW_CONTENT = RIConstants.FACES_PREFIX+
-                                                     "AFTER_VIEW_CONTENT";    
+                                                     "AFTER_VIEW_CONTENT";
 
     //
     // Relationship Instance Variables
@@ -90,8 +89,6 @@ public class ViewHandlerImpl extends ViewHandler {
      * or, if that isn't defined, the value of <code>DEFAULT_SUFFIX</code>
      */
     private String contextDefaultSuffix;
-
-    private ServletContext servletContext;
     private int bufSize = -1;
 
     public ViewHandlerImpl() {
@@ -104,31 +101,16 @@ public class ViewHandlerImpl extends ViewHandler {
     public void renderView(FacesContext context,
             UIViewRoot viewToRender) throws IOException,
             FacesException {
-        
+
         // suppress rendering if "rendered" property on the component is
         // false
         if (!viewToRender.isRendered()) {
             return;
         }
-        
+
         ExternalContext extContext = context.getExternalContext();
         ServletRequest request = (ServletRequest) extContext.getRequest();
         ServletResponse response = (ServletResponse) extContext.getResponse();
-        if (servletContext == null) {
-            servletContext = (ServletContext) extContext.getContext();
-        }
-        if (Util.isPrefixMapped(Util.getFacesMapping(context))) {
-            // if an image has been requested of the ViewHandler,
-            // set responseComplete() to terminate the remainder of
-            // the lifecycle and return null;
-            String viewId = viewToRender.getViewId();
-            String mimeType = servletContext.getMimeType(viewId);
-            if (mimeType != null && mimeType.startsWith("image")) {
-                context.responseComplete();
-                extContext.dispatch(viewId);
-                return;
-            }
-        }
         
         try {
             if (executePageToBuildView(context, viewToRender)) {
