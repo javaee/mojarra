@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTag.java,v 1.6 2003/07/15 00:33:10 craigmcc Exp $
+ * $Id: UIComponentTag.java,v 1.7 2003/07/18 21:42:29 eburns Exp $
  */
 
 /*
@@ -11,6 +11,7 @@ package javax.faces.webapp;
 
 
 import java.io.IOException;
+import java.io.Writer;
 import java.util.Iterator;
 import java.util.HashMap;
 import javax.faces.FactoryFinder;
@@ -19,10 +20,13 @@ import javax.faces.component.UIComponent;
 import javax.faces.component.NamingContainer;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
+import javax.faces.render.RenderKitFactory;
+import javax.faces.render.RenderKit;
 import javax.faces.el.ValueBinding;
 import javax.faces.tree.Tree;
 import javax.faces.application.Application;
 import javax.servlet.jsp.JspException;
+import javax.servlet.ServletResponse;
 import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.Tag;
 
@@ -715,9 +719,41 @@ public abstract class UIComponentTag implements Tag {
     protected void setupResponseWriter() {
 
         ResponseWriter writer = context.getResponseWriter();
-        if ((writer == null) ||
-            !(writer instanceof JspResponseWriter)) {
-            writer = new JspResponseWriter(pageContext);
+        if (writer == null) {
+	    RenderKitFactory renderFactory = (RenderKitFactory)
+		FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
+	    RenderKit renderKit = 
+		renderFactory.getRenderKit(context.getTree().getRenderKitId());
+	    ServletResponse response = (ServletResponse)
+		context.getExternalContext().getResponse();
+            writer = 
+		renderKit.getResponseWriter(response.getContentType(),
+					    response.getCharacterEncoding(),
+					    new Writer() {
+		    public void close() throws IOException {
+			pageContext.getOut().close();
+		    }
+		    public void flush() throws IOException {
+			pageContext.getOut().flush();
+		    }
+		    public void write(char cbuf) throws IOException {
+			pageContext.getOut().write(cbuf);
+		    }
+		    public void write(char[] cbuf, int off, 
+				      int len) throws IOException {
+			pageContext.getOut().write(cbuf, off, len);
+		    }
+		    public void write(int c) throws IOException {
+			pageContext.getOut().write(c);
+		    }
+		    public void write(String str) throws IOException {
+			pageContext.getOut().write(str);
+		    }
+		    public void write(String str, int off, 
+				      int len) throws IOException {
+			pageContext.getOut().write(str, off, len);
+		    }
+		});
             context.setResponseWriter(writer);
         }
 

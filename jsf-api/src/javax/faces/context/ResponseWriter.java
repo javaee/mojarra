@@ -1,5 +1,5 @@
 /*
- * $Id: ResponseWriter.java,v 1.4 2003/02/20 22:46:22 ofung Exp $
+ * $Id: ResponseWriter.java,v 1.5 2003/07/18 21:42:26 eburns Exp $
  */
 
 /*
@@ -21,10 +21,30 @@ import java.io.Writer;
  * <code>java.io>Writer</code>, this class provides utility methods
  * that are useful in producing elements and attributes for markup languages
  * like HTML and XML.</p>
+ *
+ *
  */
 
 public abstract class ResponseWriter extends Writer {
 
+    /**
+     * @return the MIME content type for this ResponseWriter.  Please see
+     * <a href="http://www.iana.org/assignments/media-types/">the
+     * IANA</a> for a list of mime-types.
+     *
+
+     */
+    public abstract String getContentType();
+
+    /**
+     * @return the character encoding, such as "ISO-8859-1" for this
+     * ResponseWriter.  Please see <a
+     * href="http://www.iana.org/assignments/character-sets">the
+     * IANA</a> for a list of character encodings.
+     *
+     */
+
+    public abstract String getCharacterEncoding();
 
     /**
      * <p>Write whatever text should begin a response.</p>
@@ -43,6 +63,13 @@ public abstract class ResponseWriter extends Writer {
      */
     public abstract void endDocument() throws IOException;
 
+    /**
+     * Flushes any ouput buffered by the output method to the
+     * underlying Writer or OutputStream.  This method
+     * will not flush the underlying writer or output stream;  it
+     * simply clears any values buffered by the OutputMethod.
+     */
+    public abstract void flush() throws IOException;
 
     /**
      * <p>Write the start of an element, up to and including the
@@ -124,6 +151,9 @@ public abstract class ResponseWriter extends Writer {
      * that has been created by a call to <code>startElement()</code>,
      * that element will be closed first.</p>
      *
+     * <p>All angle bracket occurrences in the argument must be escaped
+     * using the &amp;gt; &amp;lt; syntax.</p>
+     *
      * @param comment Text content of the comment
      *
      * @exception IOException if an input/output error occurs
@@ -139,6 +169,9 @@ public abstract class ResponseWriter extends Writer {
      * that has been created by a call to <code>startElement()</code>,
      * that element will be closed first.</p>
      *
+     * <p>All angle bracket occurrences in the argument must be escaped
+     * using the &amp;gt; &amp;lt; syntax.</p>
+     *
      * @param text Text to be written
      *
      * @exception IOException if an input/output error occurs
@@ -153,6 +186,9 @@ public abstract class ResponseWriter extends Writer {
      * is an open element that has been created by a call to
      * <code>startElement()</code>, that element will be closed first.</p>
      *
+     * <p>All angle bracket occurrences in the argument must be escaped
+     * using the &amp;gt; &amp;lt; syntax.</p>
+     *
      * @param text Text to be written
      *
      * @exception IOException if an input/output error occurs
@@ -166,6 +202,9 @@ public abstract class ResponseWriter extends Writer {
      * If there is an open element that has been created by a call to
      * <code>startElement()</code>, that element will be closed first.</p>
      * </p>
+     *
+     * <p>All angle bracket occurrences in the argument must be escaped
+     * using the &amp;gt; &amp;lt; syntax.</p>
      *
      * @param text Text to be written
      *
@@ -182,6 +221,9 @@ public abstract class ResponseWriter extends Writer {
      * created by a call to <code>startElement()</code>, that element
      * will be closed first.</p>
      *
+     * <p>All angle bracket occurrences in the argument must be escaped
+     * using the &amp;gt; &amp;lt; syntax.</p>
+     *
      * @param text Text to be written
      * @param off Starting offset (zero-relative)
      * @param len Number of characters to be written
@@ -195,5 +237,10 @@ public abstract class ResponseWriter extends Writer {
     public abstract void writeText(char text[], int off, int len)
         throws IOException;
 
+    /**
+     * Creates a new instance of this ResponseWriter, using a different
+     * Writer.
+     */
+    public abstract ResponseWriter cloneWithWriter(Writer writer);
 
 }

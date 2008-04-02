@@ -18,7 +18,7 @@
 
   <property name="Name"             value="JavaServer Faces API"/>
   <property name="name"             value="jsf-api"/>
-  <property name="version"          value="20030707"/>
+  <property name="version"          value="20030718"/>
 
   <property name="debug"            value="true" />
   <property name="deprecation"      value="false" />
@@ -519,6 +519,14 @@
              includes="lib/** javadocs/**"
                prefix="jsf-api-${version}"/>
     </zip>
+
+    <!-- Create the javadocs distribution -->
+    <zip     destfile="${dist.dir}/jsf-api-javadocs-${version}.zip">
+      <zipfileset dir="${build.dir}"
+             includes="javadocs/**"
+               prefix="jsf-api-${version}"/>
+    </zip>
+
 
     <!-- Create the source distribution -->
     <zip     destfile="${dist.dir}/jsf-api-src-${version}.zip">
