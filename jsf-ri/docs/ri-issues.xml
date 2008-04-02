@@ -265,6 +265,20 @@ dependency on JSTL. Is this ok ?
   <status-date>20021121</status-date>
 </issue>
 
+<issue>
+  <id>ELDependencies-9</id>
+  <originator>edburns</originator>
+  <summary>leverage commons-el to remove our custom EL code</summary>
+  <description>Currently, sun.faces.context.EvaluationContext uses hacked code from our custom jstl_el.jar.  I'd like to replace that with code from <a href="http://jakarta.apache.org/builds/jakarta-commons/nightly/commons-el/">Jan Luege</a>.
+  </description>
+  <resolution>
+  </resolution>
+  <status>OPEN</status>
+  <priority>2</priority>
+  <status-date>20030110</status-date>
+</issue>
+
+
 <!-- template issue
 <issue>
   <id></id>
