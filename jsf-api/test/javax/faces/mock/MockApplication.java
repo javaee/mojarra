@@ -1,5 +1,5 @@
 /*
- * $Id: MockApplication.java,v 1.2 2003/04/29 18:51:59 eburns Exp $
+ * $Id: MockApplication.java,v 1.3 2003/07/07 20:49:26 eburns Exp $
  */
 
 /*
@@ -19,6 +19,7 @@ import javax.faces.application.NavigationHandler;
 import javax.faces.component.UIComponent;
 import javax.faces.convert.Converter;
 import javax.faces.context.MessageResources;
+import javax.faces.context.FacesContext;
 import javax.faces.el.PropertyResolver;
 import javax.faces.el.ValueBinding;
 import javax.faces.el.VariableResolver;
@@ -87,6 +88,12 @@ public class MockApplication extends Application {
         } catch (Exception e) {
             throw new FacesException(e);
         }
+    }
+    public UIComponent getComponent(ValueBinding componentRef,
+                                    FacesContext context,
+                                    String componentType)
+                                    throws FacesException {
+	throw new FacesException(new UnsupportedOperationException());
     }
     public Iterator getComponentTypes() {
         return (components.keySet().iterator());

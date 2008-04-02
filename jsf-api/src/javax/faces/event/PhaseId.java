@@ -1,5 +1,5 @@
 /*
- * $Id: PhaseId.java,v 1.8 2003/05/13 19:54:07 eburns Exp $
+ * $Id: PhaseId.java,v 1.9 2003/07/07 20:49:24 eburns Exp $
  */
 
 /*
@@ -159,6 +159,14 @@ public class PhaseId implements Comparable {
      */
     public static final PhaseId INVOKE_APPLICATION = new PhaseId(INVOKE_APPLICATION_NAME);
 
+    public static final String RENDER_RESPONSE_NAME = "RENDER_RESPONSE";
+    /**
+     * <p>Identifier for the <em>Render Response</em> phase of the
+     * request processing lifecycle.</p>
+     */
+    public static final PhaseId RENDER_RESPONSE = new PhaseId(RENDER_RESPONSE_NAME);
+
+
 
     /**
      * <p>Array of all defined values, ascending order of ordinal value.
@@ -167,7 +175,7 @@ public class PhaseId implements Comparable {
      */
     private static final PhaseId[] values =
     { ANY_PHASE, RECONSTITUTE_REQUEST, APPLY_REQUEST_VALUES,
-      PROCESS_VALIDATIONS, UPDATE_MODEL_VALUES, INVOKE_APPLICATION };
+      PROCESS_VALIDATIONS, UPDATE_MODEL_VALUES, INVOKE_APPLICATION, RENDER_RESPONSE };
 
 
     /**

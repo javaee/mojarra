@@ -1,5 +1,5 @@
 /*
- * $Id: PhaseListener.java,v 1.1 2003/06/21 03:23:41 craigmcc Exp $
+ * $Id: PhaseListener.java,v 1.2 2003/07/07 20:49:24 eburns Exp $
  */
 
 /*
@@ -24,7 +24,7 @@ public interface PhaseListener extends EventListener, Serializable {
 
 
     /**
-     * <p>Hande a notification that the processing for a particular
+     * <p>Handle a notification that the processing for a particular
      * phase has just been completed.</p>
      */
     public void afterPhase(PhaseEvent event);

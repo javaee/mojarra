@@ -1,5 +1,5 @@
 /*
- * $Id: Lifecycle.java,v 1.22 2003/06/21 03:23:42 craigmcc Exp $
+ * $Id: Lifecycle.java,v 1.23 2003/07/07 20:49:26 eburns Exp $
  */
 
 /*
@@ -100,6 +100,8 @@ public abstract class Lifecycle {
      * listener instance has been registered, no action is taken.</p>
      *
      * @param listener The {@link PhaseListener} to be deregistered
+     * @exception NullPointerException if <code>listener</code>
+     *  is <code>null</code>
      */
     public abstract void removePhaseListener(PhaseListener listener);
 
