@@ -1,5 +1,5 @@
 /*
- * $Id: ViewHandler.java,v 1.7 2003/08/22 14:32:09 eburns Exp $
+ * $Id: ViewHandler.java,v 1.8 2003/08/25 15:06:27 eburns Exp $
  */
 
 /*
@@ -99,6 +99,21 @@ public interface ViewHandler {
      * @exception FacesException if a servlet error occurs
      */
     public UIViewRoot restoreView(FacesContext context, String viewId);
+
+    /**
+     * <p>Create an and return new {@link UIViewRoot} instance
+     * initialized with information from the argument
+     * <code>FacesContext</code> and <code>viewId</code>.</p>
+     *
+     * <p>This method must be called from {@link
+     * NavigationHandler#handleNavigation}.</p>
+     *
+     * <p>PENDING(edburns): do we formalize that the renderkitId should
+     * be set into the ViewRoot here?</p>
+     *
+     */
+
+    public UIViewRoot createView(FacesContext context, String viewId);
 
     /**
      * @return the {@link StateManager} instance for this
