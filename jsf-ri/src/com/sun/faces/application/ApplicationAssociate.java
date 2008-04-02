@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationAssociate.java,v 1.6 2004/11/23 19:26:52 rlubke Exp $
+ * $Id: ApplicationAssociate.java,v 1.7 2004/11/30 21:36:56 rlubke Exp $
  */
 
 /*
@@ -80,21 +80,25 @@ public class ApplicationAssociate extends Object {
     private boolean responseRendered = false;
 
     private static final String ASSOCIATE_KEY = RIConstants.FACES_PREFIX + 
-	"ApplicationAssociate";
+        "ApplicationAssociate";
 
 
-    public ApplicationAssociate() {	
-	ExternalContext externalContext = null;
-	if (null == (externalContext = 
-		     ConfigureListener.getExternalContextDuringInitialize())) {
-	    // PENDING I18N
-	    throw new IllegalStateException("ApplicationAssociate ctor not called in same callstack as ConfigureListener.contextInitialized()");
-	}
-	// PENDING I18N
-	if (null != externalContext.getApplicationMap().get(ASSOCIATE_KEY)) {
-	    throw new IllegalStateException("ApplicationAssociate already exists for this webapp");
-	}
-	externalContext.getApplicationMap().put(ASSOCIATE_KEY, this);
+    public ApplicationAssociate() {
+        
+        ExternalContext externalContext;
+        if (null == (externalContext =
+                     ConfigureListener.getExternalContextDuringInitialize())) {
+            throw new IllegalStateException(
+                Util.getExceptionMessageString(
+                    Util.APPLICATION_ASSOCIATE_CTOR_WRONG_CALLSTACK_ID));
+        }
+
+        if (null != externalContext.getApplicationMap().get(ASSOCIATE_KEY)) {
+            throw new IllegalStateException(
+                Util.getExceptionMessageString(
+                    Util.APPLICATION_ASSOCIATE_EXISTS_ID));
+        }
+        externalContext.getApplicationMap().put(ASSOCIATE_KEY, this);
         managedBeanFactoriesMap = new HashMap();
         caseListMap = new HashMap();
         wildcardMatchList = new TreeSet(new SortIt());
@@ -239,14 +243,13 @@ public class ApplicationAssociate extends Object {
             return null;
         }
         
-        Object bean = null;
+        Object bean;
         try {
             bean = managedBean.newInstance(context);
             if (log.isDebugEnabled()) {
                 log.debug("Created bean " + managedBeanName + " successfully ");
             }
         } catch (Exception ex) {
-            Object[] params = {ex.getMessage()};
             if (log.isErrorEnabled()) {
                 log.error("Managedbean " + managedBeanName + 
                     " could not be created " + ex.getMessage(), ex);

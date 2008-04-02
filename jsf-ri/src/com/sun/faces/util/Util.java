@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.147 2004/11/23 19:26:54 rlubke Exp $
+ * $Id: Util.java,v 1.148 2004/11/30 21:36:56 rlubke Exp $
  */
 
 /*
@@ -40,6 +40,7 @@ import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
 import javax.faces.render.ResponseStateManager;
 import javax.servlet.ServletContext;
+import javax.servlet.jsp.jstl.fmt.LocalizationContext;
 
 import java.io.IOException;
 import java.lang.reflect.Constructor;
@@ -57,7 +58,7 @@ import java.util.StringTokenizer;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.147 2004/11/23 19:26:54 rlubke Exp $
+ * @version $Id: Util.java,v 1.148 2004/11/30 21:36:56 rlubke Exp $
  */
 
 public class Util extends Object {
@@ -292,6 +293,12 @@ public class Util extends Object {
     
     public static final String MANAGED_BEAN_TYPE_CONVERSION_ERROR_ID =
         "com.sun.faces.MANAGED_BEAN_TYPE_CONVERSION_ERROR";
+    
+    public static final String APPLICATION_ASSOCIATE_CTOR_WRONG_CALLSTACK_ID = 
+        "com.sun.faces.APPLICATION_ASSOCIATE_CTOR_WRONG_CALLSTACK";
+    
+    public static final String APPLICATION_ASSOCIATE_EXISTS_ID =
+        "com.sun.faces.APPLICATION_ASSOCIATE_EXISTS";
 
 
 // README - make sure to add the message identifier constant
@@ -672,7 +679,8 @@ public class Util extends Object {
         getLocaleFromContextOrComponent(FacesContext context,
                                         UIComponent component) {
         Locale result = null;
-        String bundleName = null, bundleAttr = "bundle";
+        String bundleName = null;
+        String bundleAttr = "bundle";
 
         Util.parameterNonNull(context);
         Util.parameterNonNull(component);
@@ -681,12 +689,10 @@ public class Util extends Object {
         if (null !=
             (bundleName = (String) component.getAttributes().get(bundleAttr))) {
             // verify there is a Locale for this localizationContext
-            javax.servlet.jsp.jstl.fmt.LocalizationContext locCtx = null;
-            if (null != (locCtx =
-                (javax.servlet.jsp.jstl.fmt.LocalizationContext)
-                (Util.getValueBinding(bundleName)).getValue(context))) {
+            LocalizationContext locCtx = (LocalizationContext)
+                Util.getValueBinding(bundleName).getValue(context);
+            if (locCtx != null) {
                 result = locCtx.getLocale();
-                assert (null != result);
             }
         }
         if (null == result) {
@@ -715,10 +721,9 @@ public class Util extends Object {
         if (null == attrs) {
             return false;
         }
-        int i = 0;
         Object attrVal;
         String empty = "";
-        for (i = 0; i < passthruAttributes.length; i++) {
+        for (int i = 0; i < passthruAttributes.length; i++) {
             if (null != (attrVal = attrs.get(passthruAttributes[i]))
                 &&
                 !empty.equals(attrVal)) {
@@ -727,7 +732,7 @@ public class Util extends Object {
             }
         }
         if (!result) {
-            for (i = 0; i < booleanPassthruAttributes.length; i++) {
+            for (int i = 0; i < booleanPassthruAttributes.length; i++) {
                 if (null !=
                     (attrVal = attrs.get(booleanPassthruAttributes[i]))
                     &&
@@ -761,15 +766,14 @@ public class Util extends Object {
         assert (null != writer);
         assert (null != component);
 
-        int i = 0, len = booleanPassthruAttributes.length, j,
-            jLen = (null != excludes ? excludes.length : 0);
-        Object value = null;
+        Object value;
         boolean result;
-        boolean skip = false;
-        for (i = 0; i < len; i++) {
+        boolean skip;
+
+        for (int i = 0, len = booleanPassthruAttributes.length; i < len; i++) {
             skip = false;
             if (null != excludes) {
-                for (j = 0; j < jLen; j++) {
+                for (int j = 0, jLen = excludes.length; j < jLen; j++) {
                     if (null != excludes[j] &&
                         excludes[j].equals(booleanPassthruAttributes[i])) {
                         skip = true;
@@ -827,14 +831,12 @@ public class Util extends Object {
         assert (null != writer);
         assert (null != component);
 
-        int i = 0, len = passthruAttributes.length, j,
-            jLen = (null != excludes ? excludes.length : 0);
-        Object value = null;
-        boolean skip = false;
-        for (i = 0; i < len; i++) {
+        Object value;
+        boolean skip;
+        for (int i = 0, len = passthruAttributes.length; i < len; i++) {
             skip = false;
             if (null != excludes) {
-                for (j = 0; j < jLen; j++) {
+                for (int j = 0, jLen = excludes.length; j < jLen; j++) {
                     if (null != excludes[j] &&
                         excludes[j].equals(passthruAttributes[i])) {
                         skip = true;
@@ -1069,21 +1071,19 @@ public class Util extends Object {
 
     public static ResponseStateManager getResponseStateManager(FacesContext context, String renderKitId)
         throws FacesException {
-        RenderKit renderKit = null;
-        RenderKitFactory renderKitFactory = null;
-        ResponseStateManager result = null;
 
-        renderKitFactory = (RenderKitFactory)
+        assert (null != renderKitId);
+        assert (null != context);
+
+        RenderKitFactory renderKitFactory = (RenderKitFactory)
             FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
         assert (null != renderKitFactory);
 
-        assert (null != renderKitId);
-
-        renderKit = renderKitFactory.getRenderKit(context, renderKitId);
+        RenderKit renderKit = renderKitFactory.getRenderKit(context, renderKitId);
         assert (null != renderKit);
 
-        result = renderKit.getResponseStateManager();
-        return result;
+        return renderKit.getResponseStateManager();
+
     }
 
 
@@ -1263,7 +1263,6 @@ public class Util extends Object {
     public static String stripBracketsIfNecessary(String expression)
         throws ReferenceSyntaxException {
         assert (null != expression);
-        int len = 0;
         // look for invalid expressions
         if ('#' == expression.charAt(0)) {
             if ('{' != expression.charAt(1)) {
@@ -1271,6 +1270,8 @@ public class Util extends Object {
                     Util.INVALID_EXPRESSION_ID,
                     new Object[]{expression}));
             }
+
+            int len;
             if ('}' != expression.charAt((len = expression.length()) - 1)) {
                 throw new ReferenceSyntaxException(Util.getExceptionMessageString(
                     Util.INVALID_EXPRESSION_ID,
@@ -1411,7 +1412,7 @@ public class Util extends Object {
 	}
 	List result = new ArrayList();
 	int i, j, len = expressionString.length(), cur = 0;
-	while (cur < len && 
+	while (cur < len &&
 	       -1 != (i = expressionString.indexOf("#{", cur))) {
 	    if (-1 == (j = expressionString.indexOf("}", i + 2))) {
 		throw new ReferenceSyntaxException(Util.getExceptionMessageString(Util.INVALID_EXPRESSION_ID, new Object[]{expressionString}));
@@ -1463,7 +1464,7 @@ public class Util extends Object {
 	    return "";
 	}
 	
-	StackTraceElement stacks[] = e.getStackTrace();
+	StackTraceElement[] stacks = e.getStackTrace();
 	StringBuffer sb = new StringBuffer();
 	for (int i = 0; i < stacks.length; i++) {
 	    sb.append(stacks[i].toString() + "\n");

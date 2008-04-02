@@ -1,5 +1,5 @@
 /*
- * $Id: CoreValidator.java,v 1.12 2004/10/12 14:39:54 rlubke Exp $
+ * $Id: CoreValidator.java,v 1.13 2004/11/30 21:36:56 rlubke Exp $
  */
 
 /*
@@ -11,7 +11,6 @@ package com.sun.faces.taglib.jsf_core;
 
 import com.sun.faces.taglib.FacesValidator;
 import com.sun.faces.taglib.ValidatorInfo;
-import com.sun.faces.util.Util;
 import org.xml.sax.Attributes;
 import org.xml.sax.helpers.DefaultHandler;
 
@@ -86,8 +85,7 @@ public class CoreValidator extends FacesValidator {
      * @param uri    Tag library uri
      */
     protected String getFailureMessage(String prefix, String uri) {
-        // we should only get called if this Validator failed
-        assert (failed);
+        // we should only get called if this Validator failed        
         StringBuffer result = new StringBuffer();
 
         if (idTagParser.hasFailed()) {
@@ -112,7 +110,7 @@ public class CoreValidator extends FacesValidator {
          * @param ns Element name space.
          * @param ln Element local name.
          * @param qn Element QName.
-         * @param a  Element's Attribute list.
+         * @param attrs  Element's Attribute list.
          */
         public void startElement(String ns,
                                  String ln,
@@ -136,9 +134,9 @@ public class CoreValidator extends FacesValidator {
          * <p>Parse the ending element. If it is a specific JSTL tag
          * make sure that the nested count is decreased.</p>
          *
+         * @param ns Element name space.
          * @param ln Element local name.
          * @param qn Element QName.
-         * @param a  Element's Attribute list.
          */
         public void endElement(String ns, String ln, String qn) {
             validatorInfo.setQName(qn);

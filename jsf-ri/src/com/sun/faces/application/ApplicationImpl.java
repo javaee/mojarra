@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationImpl.java,v 1.55 2004/11/23 19:26:53 rlubke Exp $
+ * $Id: ApplicationImpl.java,v 1.56 2004/11/30 21:36:56 rlubke Exp $
  */
 
 /*
@@ -251,7 +251,7 @@ public class ApplicationImpl extends Application {
     }
 
 
-    public MethodBinding createMethodBinding(String ref, Class params[]) {
+    public MethodBinding createMethodBinding(String ref, Class[] params) {
 
         return this.methodBindingFactory.createMethodBinding(ref, params);
 
