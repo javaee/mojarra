@@ -1,5 +1,5 @@
 /*
- * $Id: IdTagParserImpl.java,v 1.14 2006/03/29 23:03:51 rlubke Exp $
+ * $Id: IdTagParserImpl.java,v 1.15 2006/09/05 23:42:06 rlubke Exp $
  */
 
 /*
@@ -29,14 +29,15 @@
 
 package com.sun.faces.taglib.jsf_core;
 
+import java.text.MessageFormat;
+import java.util.ResourceBundle;
+
+import org.xml.sax.Attributes;
+
 import com.sun.faces.RIConstants;
 import com.sun.faces.taglib.FacesValidator;
 import com.sun.faces.taglib.TagParser;
 import com.sun.faces.taglib.ValidatorInfo;
-import org.xml.sax.Attributes;
-
-import java.text.MessageFormat;
-import java.util.ResourceBundle;
 
 
 /**
@@ -77,7 +78,7 @@ public class IdTagParserImpl implements TagParser {
      * <p>Set the validator info object that has the current tag
      * information</p>
      *
-     * @param ValidatorInfo object with current tag info
+     * @param validatorInfo object with current tag info
      */
     public void setValidatorInfo(ValidatorInfo validatorInfo) {
         this.validatorInfo = validatorInfo;

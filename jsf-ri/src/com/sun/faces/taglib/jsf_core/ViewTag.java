@@ -1,5 +1,5 @@
 /*
- * $Id: ViewTag.java,v 1.43 2006/03/29 23:03:53 rlubke Exp $
+ * $Id: ViewTag.java,v 1.44 2006/09/05 23:42:06 rlubke Exp $
  */
 
 /*
@@ -29,18 +29,15 @@
 
 package com.sun.faces.taglib.jsf_core;
 
-import java.io.IOException;
-import java.util.Locale;
-
-import javax.el.ELException;
 import javax.el.ELContext;
-import javax.el.ValueExpression;
+import javax.el.ELException;
 import javax.el.MethodExpression;
+import javax.el.ValueExpression;
 import javax.faces.FacesException;
 import javax.faces.application.ViewHandler;
 import javax.faces.component.UIComponent;
-import javax.faces.component.UIViewRoot;
 import javax.faces.component.UIOutput;
+import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 import javax.faces.render.RenderKitFactory;
 import javax.faces.webapp.UIComponentELTag;
@@ -50,12 +47,14 @@ import javax.servlet.jsp.jstl.core.Config;
 import javax.servlet.jsp.tagext.BodyContent;
 import javax.servlet.jsp.tagext.BodyTag;
 
-import java.util.logging.Logger;
+import java.io.IOException;
+import java.util.Locale;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import com.sun.faces.application.ViewHandlerResponseWrapper;
-import com.sun.faces.util.Util;
 import com.sun.faces.util.MessageUtils;
+import com.sun.faces.util.Util;
 
 /**
  * All JSF component tags must be nested within a f:view tag.  This tag
@@ -63,7 +62,7 @@ import com.sun.faces.util.MessageUtils;
  * Renderer. It exists mainly to provide a guarantee that all faces
  * components reside inside of this tag.
  *
- * @version $Id: ViewTag.java,v 1.43 2006/03/29 23:03:53 rlubke Exp $
+ * @version $Id: ViewTag.java,v 1.44 2006/09/05 23:42:06 rlubke Exp $
  */
 
 public class ViewTag extends UIComponentELTag {
@@ -198,7 +197,7 @@ public class ViewTag extends UIComponentELTag {
     /**
      * <p>Examine the body content of this tag.  If it is
      * non-<code>null</code>, non-zero length, and not an HTML comment,
-     * call {@link createVerbatimComponent}.</p>
+     * call {@link javax.faces.webapp.UIComponentClassicTagBase#createVerbatimComponent()}.</p>
      *
      * <p>Set the value of the verbatim component to be
      * <code>content</code>.</p>

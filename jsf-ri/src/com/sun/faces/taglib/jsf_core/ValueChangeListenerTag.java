@@ -1,5 +1,5 @@
 /*
- * $Id: ValueChangeListenerTag.java,v 1.23 2006/08/24 12:00:12 rogerk Exp $
+ * $Id: ValueChangeListenerTag.java,v 1.24 2006/09/05 23:42:05 rlubke Exp $
  */
 
 /*
@@ -37,21 +37,20 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeListener;
 import javax.faces.webapp.UIComponentClassicTagBase;
-import javax.faces.webapp.UIComponentTag;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.TagSupport;
 
-import com.sun.faces.util.Util;
-import com.sun.faces.util.MessageUtils;
-
-import java.util.logging.Logger;
 import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import com.sun.faces.util.MessageUtils;
+import com.sun.faces.util.Util;
 
 /**
  * <p>Tag implementation that creates a {@link ValueChangeListener} instance
  * and registers it on the {@link UIComponent} associated with our most
  * immediate surrounding instance of a tag whose implementation class
- * is a subclass of {@link UIComponentTag}.  This tag creates no output to the
+ * is a subclass of {@link UIComponentClassicTagBase}.  This tag creates no output to the
  * page currently being created.</p>
  * <p/>
  * <p>This class may be used directly to implement a generic event handler
@@ -122,7 +121,7 @@ public class ValueChangeListenerTag extends TagSupport {
     /**
      * <p>Create a new instance of the specified {@link ValueChangeListener}
      * class, and register it with the {@link UIComponent} instance associated
-     * with our most immediately surrounding {@link UIComponentTag} instance, if
+     * with our most immediately surrounding {@link UIComponentClassicTagBase} instance, if
      * the {@link UIComponent} instance was created by this execution of the
      * containing JSP page.</p>
      *

@@ -1,5 +1,5 @@
 /*
- * $Id: ActionListenerTag.java,v 1.30 2006/09/05 23:29:27 rlubke Exp $
+ * $Id: ActionListenerTag.java,v 1.31 2006/09/05 23:42:06 rlubke Exp $
  */
 
 /*
@@ -37,7 +37,6 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ActionListener;
 import javax.faces.webapp.UIComponentClassicTagBase;
 import javax.faces.webapp.UIComponentELTag;
-import javax.faces.webapp.UIComponentTag;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.TagSupport;
 
@@ -52,7 +51,7 @@ import com.sun.faces.util.Util;
  * <p>Tag implementation that creates a {@link ActionListener} instance
  * and registers it on the {@link UIComponent} associated with our most
  * immediate surrounding instance of a tag whose implementation class
- * is a subclass of {@link UIComponentTag}.  This tag creates no output to
+ * is a subclass of {@link UIComponentClassicTagBase}.  This tag creates no output to
  * the page currently being created.</p>
  * <p/>
  * <p>This class may be used directly to implement a generic event handler

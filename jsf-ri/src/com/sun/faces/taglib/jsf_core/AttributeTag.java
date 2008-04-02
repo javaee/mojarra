@@ -1,5 +1,5 @@
 /*
- * $Id: AttributeTag.java,v 1.8 2006/05/30 20:08:32 rlubke Exp $
+ * $Id: AttributeTag.java,v 1.9 2006/09/05 23:42:06 rlubke Exp $
  */
 
 /*
@@ -100,7 +100,7 @@ public class AttributeTag extends TagSupport {
     /**
      * <p>Register the specified attribute name and value with the
      * {@link UIComponent} instance associated with our most immediately
-     * surrounding {@link UIComponentTagBase} instance, if this
+     * surrounding {@link UIComponentClassicTagBase} instance, if this
      * {@link UIComponent} does not already have a value for the
      * specified attribute name.</p>
      *

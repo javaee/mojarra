@@ -1,5 +1,5 @@
 /*
- * $Id: SetPropertyActionListenerTag.java,v 1.6 2006/05/10 23:26:09 rlubke Exp $
+ * $Id: SetPropertyActionListenerTag.java,v 1.7 2006/09/05 23:42:05 rlubke Exp $
  */
 
 /*
@@ -48,7 +48,7 @@ import com.sun.faces.util.Util;
  * <p>Tag implementation that creates a special {@link ActionListener} instance
  * and registers it on the {@link ActionSource} associated with our most
  * immediate surrounding instance of a tag whose implementation class
- * is a subclass of {@link UIComponentTag}.  This tag creates no output to
+ * is a subclass of {@link UIComponentClassicTagBase}.  This tag creates no output to
  * the page currently being created.</p>
  * <p/>
  * <p>The ActionListener instance created and installed by this tag has the 
@@ -120,7 +120,7 @@ public class SetPropertyActionListenerTag extends TagSupport {
     /**
      * <p>Create a new instance of the {@link ActionListener}
      * class, and register it with the {@link UIComponent} instance associated
-     * with our most immediately surrounding {@link UIComponentTagBase}
+     * with our most immediately surrounding {@link UIComponentClassicTagBase}
      * instance.  The behavior of the {@link ActionListener} must conform 
      * to the class description.</p>
      *

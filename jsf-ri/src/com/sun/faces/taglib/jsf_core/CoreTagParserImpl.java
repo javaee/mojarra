@@ -1,5 +1,5 @@
 /*
- * $Id: CoreTagParserImpl.java,v 1.4 2006/03/29 23:03:51 rlubke Exp $
+ * $Id: CoreTagParserImpl.java,v 1.5 2006/09/05 23:42:06 rlubke Exp $
  */
 
 /*
@@ -29,13 +29,14 @@
 
 package com.sun.faces.taglib.jsf_core;
 
+import java.text.MessageFormat;
+import java.util.ResourceBundle;
+
+import org.xml.sax.Attributes;
+
 import com.sun.faces.RIConstants;
 import com.sun.faces.taglib.TagParser;
 import com.sun.faces.taglib.ValidatorInfo;
-import org.xml.sax.Attributes;
-
-import java.text.MessageFormat;
-import java.util.ResourceBundle;
 
 /**
  * <p> Parses the command tag attributes and verifies that the required
@@ -67,7 +68,7 @@ public class CoreTagParserImpl implements TagParser {
      * <p>Set the validator info object that has the current tag
      * information</p>
      *
-     * @param ValidatorInfo object with current tag info
+     * @param validatorInfo object with current tag info
      */
     public void setValidatorInfo(ValidatorInfo validatorInfo) {
         this.validatorInfo = validatorInfo;

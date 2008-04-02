@@ -1,5 +1,5 @@
 /*
- * $Id: PhaseListenerTag.java,v 1.8 2006/08/24 12:00:12 rogerk Exp $
+ * $Id: PhaseListenerTag.java,v 1.9 2006/09/05 23:42:06 rlubke Exp $
  */
 
 /*
@@ -29,20 +29,19 @@
 
 package com.sun.faces.taglib.jsf_core;
 
-import com.sun.faces.util.Util;
-import com.sun.faces.util.MessageUtils;
-
+import javax.el.ELException;
+import javax.el.ValueExpression;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseListener;
 import javax.faces.webapp.UIComponentELTag;
 import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.tagext.TagSupport;
 import javax.servlet.jsp.tagext.Tag;
+import javax.servlet.jsp.tagext.TagSupport;
 
-import javax.el.ValueExpression;
-import javax.el.ELException;
+import com.sun.faces.util.MessageUtils;
+import com.sun.faces.util.Util;
 
 /**
  * <p>Tag implementation that creates a {@link PhaseListener} instance
@@ -99,7 +98,7 @@ public class PhaseListenerTag extends TagSupport {
     /**
      * <p>Create a new instance of the specified {@link PhaseListener}
      * class, and register it with the {@link UIComponent} instance associated
-     * with our most immediately surrounding {@link UIComponentTag} instance, if
+     * with our most immediately surrounding {@link UIComponentELTag} instance, if
      * the {@link UIComponent} instance was created by this execution of the
      * containing JSP page.</p>
      *
