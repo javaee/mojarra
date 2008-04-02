@@ -94,6 +94,7 @@
           CSS style class to use when rendering this component.
         </description>
         <attribute-name>styleClass</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
       </attribute>
       <component-class>components.components.AreaComponent</component-class>
     </renderer>
@@ -109,6 +110,7 @@
           CSS style class to use when rendering this component.
         </description>
         <attribute-name>styleClass</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
       </attribute>
       <component-class>components.components.MapComponent</component-class>
     </renderer>
