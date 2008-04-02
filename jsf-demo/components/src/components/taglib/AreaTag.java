@@ -54,6 +54,7 @@ public class AreaTag extends FacesTag
 
 // Attribute Instance Variables
 
+    public String onclick = null;
     public String onmouseover = null;
     public String onmouseout = null;
 
@@ -67,6 +68,14 @@ public AreaTag()
 // 
 // Accessor methods for the <code>area</code> tag attributes
 //
+    public String getOnclickover() {
+        return onclick;
+    }
+
+    public void setOnclick(String newonclick) {
+        onclick = newonclick;
+    }
+
     public String getOnmouseover() {
         return onmouseover;
     }
@@ -91,10 +100,12 @@ public AreaTag()
 	public void overrideProperties(UIComponent component) {
 		super.overrideProperties(component);
 		UIArea areaComp = (UIArea)component;
+		if(areaComp.getAttribute("onclick") == null)
+			areaComp.setAttribute("onclick", onclick);
 		if(areaComp.getAttribute("onmouseover") == null)
-			areaComp.setAttribute("onmouseover", getOnmouseover());
+			areaComp.setAttribute("onmouseover", onmouseover);
 		if(areaComp.getAttribute("onmouseout") == null)
-			areaComp.setAttribute("onmouseout", getOnmouseout());
+			areaComp.setAttribute("onmouseout", onmouseout);
 		}
 // Gets the renderer associated with this component    
     	public String getRendererType() { return "Area"; } 

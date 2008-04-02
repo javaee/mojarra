@@ -1,5 +1,5 @@
 /*
- * $Id: GraphMenuTreeTag.java,v 1.2 2003/02/21 23:45:01 ofung Exp $
+ * $Id: GraphMenuTreeTag.java,v 1.3 2003/03/27 18:21:16 horwat Exp $
  */
 
 /*
@@ -56,6 +56,7 @@ import javax.faces.context.FacesContext;
  */
 public class GraphMenuTreeTag extends FacesTag {
 
+    protected String action_listener = null;
     protected String graphClass = null;
     protected String selectedClass = null;
     protected String unselectedClass = null;
@@ -69,6 +70,17 @@ public class GraphMenuTreeTag extends FacesTag {
         return ("MenuTree");
     }
     
+    /**
+     * Optional listener to handle tree expansion and contraction events
+     */
+    public String getAction_listener() {
+	return (this.action_listener);
+    }
+
+    public void setAction_listener(String action_listener) {
+	this.action_listener = action_listener;
+    }
+
     /**
      * The CSS style <code>class</code> to be applied to the text
      * of selected nodes.
@@ -108,6 +120,10 @@ public class GraphMenuTreeTag extends FacesTag {
     protected void overrideProperties(UIComponent component) {
         super.overrideProperties(component);
        
+        if ((action_listener != null) &&
+            (component.getAttribute("action_listener") == null)) {
+            component.setAttribute("action_listener", action_listener);
+        }
         if ((graphClass != null) &&
             (component.getAttribute("graphClass") == null)) {
             component.setAttribute("graphClass", graphClass);
