@@ -1,5 +1,5 @@
 /*
- * $Id: UIViewRoot.java,v 1.32 2004/11/18 15:07:37 edburns Exp $
+ * $Id: UIViewRoot.java,v 1.33 2005/03/18 14:52:07 rogerk Exp $
  */
 
 /*
@@ -428,7 +428,8 @@ public class UIViewRoot extends UIComponentBase {
      * behavior to broadcast any queued events after the default
      * processing has been completed and to clear out any events
      * for later phases if the event processing for this phase caused {@link
-     * FacesContext#renderResponse} to be called.</p>
+     * FacesContext#renderResponse} or {@link FacesContext#responseComplete}
+     * to be called.</p>
      *
      * @param context {@link FacesContext} for the request we are processing
      *
@@ -444,9 +445,19 @@ public class UIViewRoot extends UIComponentBase {
         super.processDecodes(context);
         broadcastEvents(context, PhaseId.APPLY_REQUEST_VALUES);
 	// clear out the events if we're skipping to render-response
-	if (context.getRenderResponse()) {
-	    events = null;
+        // or if there is a response complete signal.
+	if (context.getRenderResponse() || context.getResponseComplete()) {
+            if (events != null) {
+                for (int i=0; i<PhaseId.VALUES.size(); i++) {
+                    List eventList = events[i];
+                    if (eventList != null) {
+                        eventList.clear();
+                    }
+                }
+                events = null;
+            }
 	}
+        
 	// avoid creating the PhaseEvent if possible by doing redundant
 	// null checks.
 	if (null != beforePhase || null != phaseListeners) {
@@ -578,7 +589,8 @@ public class UIViewRoot extends UIComponentBase {
      * behavior to broadcast any queued events after the default
      * processing has been completed and to clear out any events
      * for later phases if the event processing for this phase caused {@link
-     * FacesContext#renderResponse} to be called.</p>
+     * FacesContext#renderResponse} or {@link FacesContext#responseComplete}
+     * to be called.</p>
      *
      * @param context {@link FacesContext} for the request we are processing
      *
@@ -594,9 +606,19 @@ public class UIViewRoot extends UIComponentBase {
 
         super.processValidators(context);
         broadcastEvents(context, PhaseId.PROCESS_VALIDATIONS);
-	// clear out the events if we're skipping to render-response
-	if (context.getRenderResponse()) {
-	    events = null;
+
+        // clear out the events if we're skipping to render-response
+        // or if there is a response complete signal.
+        if (context.getRenderResponse() || context.getResponseComplete()) {
+            if (events != null) {
+                for (int i=0; i<PhaseId.VALUES.size(); i++) {
+                    List eventList = events[i];
+                    if (eventList != null) {
+                        eventList.clear();
+                    }
+                }
+                events = null;
+            }
 	}
 
 	// avoid creating the PhaseEvent if possible by doing redundant
@@ -609,7 +631,10 @@ public class UIViewRoot extends UIComponentBase {
 
     /**
      * <p>Override the default {@link UIComponentBase} behavior to broadcast
-     * any queued events after the default processing has been completed.</p>
+     * any queued events after the default processing has been completed
+     * and to clear out any events for later phases if the event processing 
+     * for this phase caused {@link FacesContext#renderResponse} or 
+     * {@link FacesContext#responseComplete} to be called.</p>
      *
      * @param context {@link FacesContext} for the request we are processing
      *
@@ -626,6 +651,20 @@ public class UIViewRoot extends UIComponentBase {
         super.processUpdates(context);
         broadcastEvents(context, PhaseId.UPDATE_MODEL_VALUES);
 
+        // clear out the events if we're skipping to render-response
+        // or if there is a response complete signal.
+        if (context.getRenderResponse() || context.getResponseComplete()) {
+            if (events != null) {
+                for (int i=0; i<PhaseId.VALUES.size(); i++) {
+                    List eventList = events[i];
+                    if (eventList != null) {
+                        eventList.clear();
+                    }
+                }
+                events = null;
+            }
+	}
+      
 	// avoid creating the PhaseEvent if possible by doing redundant
 	// null checks.
 	if (null != beforePhase || null != phaseListeners) {
@@ -636,7 +675,10 @@ public class UIViewRoot extends UIComponentBase {
 
     /**
      * <p>Broadcast any events that have been queued for the <em>Invoke
-     * Application</em> phase of the request processing lifecycle.</p>
+     * Application</em> phase of the request processing lifecycle
+     * and to clear out any events for later phases if the event processing 
+     * for this phase caused {@link FacesContext#renderResponse} or 
+     * {@link FacesContext#responseComplete} to be called.</p>
      *
      * @param context {@link FacesContext} for the request we are processing
      *
@@ -652,6 +694,20 @@ public class UIViewRoot extends UIComponentBase {
 
         // NOTE - no tree walk is performed; this is a UIViewRoot-only operation
         broadcastEvents(context, PhaseId.INVOKE_APPLICATION);
+
+        // clear out the events if we're skipping to render-response
+        // or if there is a response complete signal.
+        if (context.getRenderResponse() || context.getResponseComplete()) {
+            if (events != null) {
+                for (int i=0; i<PhaseId.VALUES.size(); i++) {
+                    List eventList = events[i];
+                    if (eventList != null) {
+                        eventList.clear();
+                    }
+                }
+                events = null;
+            }
+	}
 
 	// avoid creating the PhaseEvent if possible by doing redundant
 	// null checks.

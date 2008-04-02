@@ -1,5 +1,5 @@
 /*
- * $Id: MockFacesContext.java,v 1.20 2004/02/26 20:31:51 eburns Exp $
+ * $Id: MockFacesContext.java,v 1.21 2005/03/18 14:52:08 rogerk Exp $
  */
 
 /*
@@ -141,12 +141,17 @@ public class MockFacesContext extends FacesContext {
     public boolean getRenderResponse() {
         return (this.renderResponse);
     }
-
+    public void setRenderResponse(boolean renderResponse) {
+        this.renderResponse = renderResponse;
+    }
 
     // responseComplete
     private boolean responseComplete = false;
     public boolean getResponseComplete() {
         return (this.responseComplete);
+    }
+    public void setResponseComplete(boolean responseComplete) {
+        this.responseComplete = responseComplete;
     }
 
 

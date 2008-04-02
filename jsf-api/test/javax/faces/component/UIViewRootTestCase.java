@@ -1,5 +1,5 @@
 /*
- * $Id: UIViewRootTestCase.java,v 1.17 2004/11/18 14:11:05 edburns Exp $
+ * $Id: UIViewRootTestCase.java,v 1.18 2005/03/18 14:52:07 rogerk Exp $
  */
 
 /*
@@ -10,6 +10,7 @@
 package javax.faces.component;
 
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -341,6 +342,200 @@ public class UIViewRootTestCase extends UIComponentBaseTestCase {
 	assertTrue(phaseListener.isAfterPhaseCalled());
 	
     }
+
+    // Test Events List Clearing
+    public void testEventsListClear() {
+        UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
+        TestEvent event1, event2, event3, event4 = null;
+        event1 = new TestEvent(root, "1");
+        event1.setPhaseId(PhaseId.APPLY_REQUEST_VALUES);
+        root.queueEvent(event1);
+        event2 = new TestEvent(root, "2");
+        event2.setPhaseId(PhaseId.PROCESS_VALIDATIONS);
+        root.queueEvent(event2);
+        event3 = new TestEvent(root, "3");
+        event3.setPhaseId(PhaseId.UPDATE_MODEL_VALUES);
+        root.queueEvent(event3);
+        event4 = new TestEvent(root, "4");
+        event4.setPhaseId(PhaseId.INVOKE_APPLICATION);
+        root.queueEvent(event4);
+        final Field fields[] = UIViewRoot.class.getDeclaredFields();
+        Field field = null;
+        List[] events = null;
+        for (int i = 0; i < fields.length; ++i) {
+            if ("events".equals(fields[i].getName())) {
+                field = fields[i];
+                field.setAccessible(true);
+                try {
+                    events = (List[])field.get(root);
+                } catch (Exception e) {
+                    assertTrue(false);
+                }
+                break;
+            }
+        }
+        // CASE: renderReponse not set; responseComplete not set;
+        // check for existence of events before processDecodes
+        List applyEvents = events[PhaseId.APPLY_REQUEST_VALUES.getOrdinal()];
+        assertTrue(1 == applyEvents.size());
+        List valEvents = events[PhaseId.PROCESS_VALIDATIONS.getOrdinal()];
+        assertTrue(1 == valEvents.size());
+        List updateEvents = events[PhaseId.UPDATE_MODEL_VALUES.getOrdinal()];
+        assertTrue(1 == updateEvents.size());
+        List appEvents = events[PhaseId.INVOKE_APPLICATION.getOrdinal()];
+        assertTrue(1 == appEvents.size());
+        root.processDecodes(facesContext);
+        // there should be no events
+        applyEvents = events[PhaseId.APPLY_REQUEST_VALUES.getOrdinal()];
+        assertTrue(0 == applyEvents.size());
+        // there should be one event
+        valEvents = events[PhaseId.PROCESS_VALIDATIONS.getOrdinal()];
+        assertTrue(1 == valEvents.size());
+        updateEvents = events[PhaseId.UPDATE_MODEL_VALUES.getOrdinal()];
+        assertTrue(1 == updateEvents.size());
+        appEvents = events[PhaseId.INVOKE_APPLICATION.getOrdinal()];
+        assertTrue(1 == appEvents.size());
+                                                                                     
+        // requeue apply request event
+        root.queueEvent(event1);
+        // CASE: renderReponse set;
+        // check for existence of events before processValidators
+        applyEvents = events[PhaseId.APPLY_REQUEST_VALUES.getOrdinal()];
+        assertTrue(1 == applyEvents.size());
+        valEvents = events[PhaseId.PROCESS_VALIDATIONS.getOrdinal()];
+        assertTrue(1 == valEvents.size());
+        updateEvents = events[PhaseId.UPDATE_MODEL_VALUES.getOrdinal()];
+        assertTrue(1 == updateEvents.size());
+        appEvents = events[PhaseId.INVOKE_APPLICATION.getOrdinal()];
+        assertTrue(1 == appEvents.size());
+        facesContext.renderResponse();
+        root.processValidators(facesContext);
+        // there should be no events
+        applyEvents = events[PhaseId.APPLY_REQUEST_VALUES.getOrdinal()];
+        assertTrue(0 == applyEvents.size());
+        valEvents = events[PhaseId.PROCESS_VALIDATIONS.getOrdinal()];
+        assertTrue(0 == valEvents.size());
+        updateEvents = events[PhaseId.UPDATE_MODEL_VALUES.getOrdinal()];
+        assertTrue(0 == updateEvents.size());
+        appEvents = events[PhaseId.INVOKE_APPLICATION.getOrdinal()];
+        assertTrue(0 == appEvents.size());
+
+        // reset FacesContext
+        facesContext.setRenderResponse(false);
+        facesContext.setResponseComplete(false);
+        // requeue all events
+        root.queueEvent(event1);
+        root.queueEvent(event2);
+        root.queueEvent(event3);
+        root.queueEvent(event4);
+        try {
+            events = (List[])field.get(root);
+        } catch (Exception e) {
+            assertTrue(false);
+        }
+        // CASE: response set;
+        // check for existence of events before processValidators
+        applyEvents = events[PhaseId.APPLY_REQUEST_VALUES.getOrdinal()];
+        assertTrue(1 == applyEvents.size());
+        valEvents = events[PhaseId.PROCESS_VALIDATIONS.getOrdinal()];
+        assertTrue(1 == valEvents.size());
+        updateEvents = events[PhaseId.UPDATE_MODEL_VALUES.getOrdinal()];
+        assertTrue(1 == updateEvents.size());
+        appEvents = events[PhaseId.INVOKE_APPLICATION.getOrdinal()];
+        assertTrue(1 == appEvents.size());
+        facesContext.renderResponse();
+        root.processValidators(facesContext);
+        // there should be no events
+        applyEvents = events[PhaseId.APPLY_REQUEST_VALUES.getOrdinal()];
+        assertTrue(0 == applyEvents.size());
+        valEvents = events[PhaseId.PROCESS_VALIDATIONS.getOrdinal()];
+        assertTrue(0 == valEvents.size());
+        updateEvents = events[PhaseId.UPDATE_MODEL_VALUES.getOrdinal()];
+        assertTrue(0 == updateEvents.size());
+        appEvents = events[PhaseId.INVOKE_APPLICATION.getOrdinal()];
+        assertTrue(0 == appEvents.size());
+
+        // reset FacesContext
+        facesContext.setRenderResponse(false);
+        facesContext.setResponseComplete(false);
+        // requeue all events
+        root.queueEvent(event1);
+        root.queueEvent(event2);
+        root.queueEvent(event3);
+        root.queueEvent(event4);
+        try {
+            events = (List[])field.get(root);
+        } catch (Exception e) {
+            assertTrue(false);
+        }
+        // CASE: response complete;
+        // check for existence of events before processUpdates
+        applyEvents = events[PhaseId.APPLY_REQUEST_VALUES.getOrdinal()];
+        assertTrue(1 == applyEvents.size());
+        valEvents = events[PhaseId.PROCESS_VALIDATIONS.getOrdinal()];
+        assertTrue(1 == valEvents.size());
+        updateEvents = events[PhaseId.UPDATE_MODEL_VALUES.getOrdinal()];
+        assertTrue(1 == updateEvents.size());
+        appEvents = events[PhaseId.INVOKE_APPLICATION.getOrdinal()];
+        assertTrue(1 == appEvents.size());
+        facesContext.responseComplete();
+        root.processUpdates(facesContext);
+        // there should be no events
+        applyEvents = events[PhaseId.APPLY_REQUEST_VALUES.getOrdinal()];
+        assertTrue(0 == applyEvents.size());
+        valEvents = events[PhaseId.PROCESS_VALIDATIONS.getOrdinal()];
+        assertTrue(0 == valEvents.size());
+        updateEvents = events[PhaseId.UPDATE_MODEL_VALUES.getOrdinal()];
+        assertTrue(0 == updateEvents.size());
+        appEvents = events[PhaseId.INVOKE_APPLICATION.getOrdinal()];
+        assertTrue(0 == appEvents.size());
+
+        // reset FacesContext
+        facesContext.setRenderResponse(false);
+        facesContext.setResponseComplete(false);
+        // requeue all events
+        root.queueEvent(event1);
+        root.queueEvent(event2);
+        root.queueEvent(event3);
+        root.queueEvent(event4);
+        try {
+            events = (List[])field.get(root);
+        } catch (Exception e) {
+            assertTrue(false);
+        }
+        // CASE: response complete;
+        // check for existence of events before processApplication
+        applyEvents = events[PhaseId.APPLY_REQUEST_VALUES.getOrdinal()];
+        assertTrue(1 == applyEvents.size());
+        valEvents = events[PhaseId.PROCESS_VALIDATIONS.getOrdinal()];
+        assertTrue(1 == valEvents.size());
+        updateEvents = events[PhaseId.UPDATE_MODEL_VALUES.getOrdinal()];
+        assertTrue(1 == updateEvents.size());
+        appEvents = events[PhaseId.INVOKE_APPLICATION.getOrdinal()];
+        assertTrue(1 == appEvents.size());
+        facesContext.responseComplete();
+        root.processApplication(facesContext);
+        // there should be no events
+        applyEvents = events[PhaseId.APPLY_REQUEST_VALUES.getOrdinal()];
+        assertTrue(0 == applyEvents.size());
+        valEvents = events[PhaseId.PROCESS_VALIDATIONS.getOrdinal()];
+        assertTrue(0 == valEvents.size());
+        updateEvents = events[PhaseId.UPDATE_MODEL_VALUES.getOrdinal()];
+        assertTrue(0 == updateEvents.size());
+        appEvents = events[PhaseId.INVOKE_APPLICATION.getOrdinal()];
+        assertTrue(0 == appEvents.size());
+                                                                                     
+        //finally, get the internal events list one more time
+        //to make sure it is null
+        try {
+            events = (List[])field.get(root);
+        } catch (Exception e) {
+            assertTrue(false);
+        }
+        assertTrue(events == null);
+    }
+                                                                             
+
 
     private void callRightLifecycleMethodGivenPhaseId(UIViewRoot root,
 						      PhaseId phaseId) throws Exception {
