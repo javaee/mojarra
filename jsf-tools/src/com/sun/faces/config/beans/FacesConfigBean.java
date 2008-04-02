@@ -1,5 +1,5 @@
 /*
- * $Id: FacesConfigBean.java,v 1.3 2004/02/04 23:46:07 ofung Exp $
+ * $Id: FacesConfigBean.java,v 1.4 2005/07/27 21:59:14 edburns Exp $
  */
 
 /*
@@ -8,14 +8,12 @@
  */
 
 package com.sun.faces.config.beans;
-
-
-import java.util.ArrayList;
-import java.util.List;
+import com.sun.faces.util.ToolsUtil;
 import java.util.Map;
 import java.util.TreeMap;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 
 
 /**
@@ -25,7 +23,8 @@ import org.apache.commons.logging.LogFactory;
 public class FacesConfigBean {
 
 
-    private static final Log log = LogFactory.getLog(FacesConfigBean.class);
+    private static final Logger logger = ToolsUtil.getLogger(ToolsUtil.FACES_LOGGER +
+            ToolsUtil.BEANS_LOGGER);
 
 
     // -------------------------------------------------------------- Properties
@@ -56,8 +55,8 @@ public class FacesConfigBean {
 
 
     public void addComponent(ComponentBean descriptor) {
-        if (log.isDebugEnabled()) {
-            log.debug("addComponent(" + descriptor.getComponentType() + ")");
+        if (logger.isLoggable(Level.FINE)) {
+            logger.log(Level.FINE, "addComponent(" + descriptor.getComponentType() + ")");
         }
         components.put(descriptor.getComponentType(), descriptor);
     }
@@ -88,14 +87,14 @@ public class FacesConfigBean {
 
     public void addConverter(ConverterBean descriptor) {
         if (descriptor.getConverterId() != null) {
-            if (log.isDebugEnabled()) {
-                log.debug("addConverterById(" +
+            if (logger.isLoggable(Level.FINE)) {
+                logger.log(Level.FINE, "addConverterById(" +
                           descriptor.getConverterId() + ")");
             }
             convertersById.put(descriptor.getConverterId(), descriptor);
         } else {
-            if (log.isDebugEnabled()) {
-                log.debug("addConverterByClass(" +
+            if (logger.isLoggable(Level.FINE)) {
+                logger.log(Level.FINE, "addConverterByClass(" +
                           descriptor.getConverterForClass() + ")");
             }
             convertersByClass.put(descriptor.getConverterForClass(),
@@ -142,8 +141,8 @@ public class FacesConfigBean {
 
 
     public void addManagedBean(ManagedBeanBean descriptor) {
-        if (log.isDebugEnabled()) {
-            log.debug("addManagedBean(" +
+        if (logger.isLoggable(Level.FINE)) {
+            logger.log(Level.FINE, "addManagedBean(" +
                       descriptor.getManagedBeanName() + ")");
         }
         managedBeans.put(descriptor.getManagedBeanName(), descriptor);
@@ -173,8 +172,8 @@ public class FacesConfigBean {
 
 
     public void addNavigationRule(NavigationRuleBean descriptor) {
-        if (log.isDebugEnabled()) {
-            log.debug("addNavigationRule(" + descriptor.getFromViewId() + ")");
+        if (logger.isLoggable(Level.FINE)) {
+            logger.log(Level.FINE, "addNavigationRule(" + descriptor.getFromViewId() + ")");
         }
         navigationRules.put(descriptor.getFromViewId(), descriptor);
     }
@@ -205,8 +204,8 @@ public class FacesConfigBean {
 
 
     public void addReferencedBean(ReferencedBeanBean descriptor) {
-        if (log.isDebugEnabled()) {
-            log.debug("addReferencedBean(" +
+        if (logger.isLoggable(Level.FINE)) {
+            logger.log(Level.FINE, "addReferencedBean(" +
                       descriptor.getReferencedBeanName() + ")");
         }
         referencedBeans.put(descriptor.getReferencedBeanName(), descriptor);
@@ -236,8 +235,8 @@ public class FacesConfigBean {
 
 
     public void addRenderKit(RenderKitBean descriptor) {
-        if (log.isDebugEnabled()) {
-            log.debug("addRenderKit(" + descriptor.getRenderKitId() + ")");
+        if (logger.isLoggable(Level.FINE)) {
+            logger.log(Level.FINE, "addRenderKit(" + descriptor.getRenderKitId() + ")");
         }
         renderKits.put(descriptor.getRenderKitId(), descriptor);
     }
@@ -266,8 +265,8 @@ public class FacesConfigBean {
 
 
     public void addValidator(ValidatorBean descriptor) {
-        if (log.isDebugEnabled()) {
-            log.debug("addValidator(" + descriptor.getValidatorId() + ")");
+        if (logger.isLoggable(Level.FINE)) {
+            logger.log(Level.FINE, "addValidator(" + descriptor.getValidatorId() + ")");
         }
         validators.put(descriptor.getValidatorId(), descriptor);
     }

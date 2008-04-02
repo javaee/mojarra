@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKitBean.java,v 1.3 2004/02/04 23:46:09 ofung Exp $
+ * $Id: RenderKitBean.java,v 1.4 2005/07/27 21:59:14 edburns Exp $
  */
 
 /*
@@ -10,10 +10,12 @@
 package com.sun.faces.config.beans;
 
 
+import com.sun.faces.util.ToolsUtil;
 import java.util.Map;
 import java.util.TreeMap;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 
 
 /**
@@ -23,7 +25,8 @@ import org.apache.commons.logging.LogFactory;
 public class RenderKitBean extends FeatureBean {
 
 
-    private static final Log log = LogFactory.getLog(RenderKitBean.class);
+    private static final Logger logger = ToolsUtil.getLogger(ToolsUtil.FACES_LOGGER +
+            ToolsUtil.BEANS_LOGGER);
 
 
     // -------------------------------------------------------------- Properties
@@ -49,8 +52,8 @@ public class RenderKitBean extends FeatureBean {
 
 
     public void addRenderer(RendererBean descriptor) {
-        if (log.isDebugEnabled()) {
-            log.debug("addRenderer(" +
+        if (logger.isLoggable(Level.FINE)) {
+            logger.log(Level.FINE, "addRenderer(" +
                       descriptor.getComponentFamily() + "," +
                       descriptor.getRendererType() + ")");
         }

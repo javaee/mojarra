@@ -21,9 +21,10 @@ import com.sun.faces.config.beans.DescriptionBean;
 import com.sun.faces.config.beans.FacesConfigBean;
 import com.sun.faces.config.beans.PropertyBean;
 import com.sun.faces.config.beans.RendererBean;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import com.sun.faces.generate.AbstractGenerator.CodeWriter;
+import com.sun.faces.util.ToolsUtil;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * This class generates tag handler class code that is special to the
@@ -34,7 +35,8 @@ public class HtmlTaglibGenerator extends AbstractGenerator {
     // -------------------------------------------------------- Static Variables
     
     // Log instance for this class
-    private static Log log = LogFactory.getLog(HtmlTaglibGenerator.class);
+    private static final Logger logger = Logger.getLogger(ToolsUtil.FACES_LOGGER +
+            ToolsUtil.GENERATE_LOGGER, ToolsUtil.TOOLS_LOG_STRINGS);    
 
     // The Writer for each component class to be generated
     protected CodeWriter writer;
@@ -742,8 +744,8 @@ public class HtmlTaglibGenerator extends AbstractGenerator {
                         "Could not determine tag class name");
                 }
 
-                if (log.isInfoEnabled()) {
-                    log.info("Generating " + tagClassName + "...");
+                if (logger.isLoggable(Level.INFO)) {
+                    logger.log(Level.INFO, "Generating " + tagClassName + "...");
                 }
 
 

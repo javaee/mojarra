@@ -1,5 +1,5 @@
 /*
- * $Id: FacesConfigRuleSet.java,v 1.8 2005/07/19 19:33:20 edburns Exp $
+ * $Id: FacesConfigRuleSet.java,v 1.9 2005/07/27 21:59:14 edburns Exp $
  */
 
 /*
@@ -10,10 +10,12 @@
 package com.sun.faces.config.rules;
 
 
+import com.sun.faces.util.ToolsUtil;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.apache.commons.digester.Digester;
 import org.apache.commons.digester.RuleSetBase;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+
 
 
 /**
@@ -52,7 +54,8 @@ public class FacesConfigRuleSet extends RuleSetBase {
     // ------------------------------------------------------ Instance Variables
 
 
-    private static final Log log = LogFactory.getLog(FacesConfigRuleSet.class);
+    private static final Logger logger = ToolsUtil.getLogger(ToolsUtil.FACES_LOGGER +
+            ToolsUtil.RULES_LOGGER);    
 
     private boolean design = false;
     private boolean generate = false;
@@ -394,7 +397,7 @@ public class FacesConfigRuleSet extends RuleSetBase {
                 (prefix + "/description",
                  new DescriptionTextRule());
         } catch (Exception e) {
-            log.error("Cannot configure DescriptionTextRule for pattern '" +
+            logger.log(Level.SEVERE, "Cannot configure DescriptionTextRule for pattern '" +
                       prefix + "/description" + "'", e);
             throw new IllegalStateException
                 ("Cannot configure DescriptionTextRule for pattern '" +

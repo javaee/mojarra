@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlComponentGenerator.java,v 1.14 2005/05/17 14:58:52 rlubke Exp $
+ * $Id: HtmlComponentGenerator.java,v 1.15 2005/07/27 21:59:15 edburns Exp $
  */
 
 /*
@@ -19,9 +19,10 @@ import com.sun.faces.config.beans.ComponentBean;
 import com.sun.faces.config.beans.DescriptionBean;
 import com.sun.faces.config.beans.FacesConfigBean;
 import com.sun.faces.config.beans.PropertyBean;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import com.sun.faces.generate.AbstractGenerator.CodeWriter;
+import com.sun.faces.util.ToolsUtil;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 /**
@@ -48,9 +49,8 @@ public class HtmlComponentGenerator extends AbstractGenerator {
     // -------------------------------------------------------- Static Variables
 
 
-    private static final Log log =
-        LogFactory.getLog(HtmlComponentGenerator.class);
-
+    private static final Logger logger = Logger.getLogger(ToolsUtil.FACES_LOGGER +
+            ToolsUtil.GENERATE_LOGGER, ToolsUtil.TOOLS_LOG_STRINGS);    
 
     // The component configuration bean for the component class to be generated
     private ComponentBean cb;
@@ -117,8 +117,8 @@ public class HtmlComponentGenerator extends AbstractGenerator {
             if (componentClass.startsWith(compPackage)) {
                 cb = cbs[i];
 
-                 if (log.isInfoEnabled()) {
-                    log.info("Generating concrete HTML component class " +
+                 if (logger.isLoggable(Level.INFO)) {
+                    logger.log(Level.INFO, "Generating concrete HTML component class " +
                         cb.getComponentClass());
                  }
 
@@ -250,14 +250,14 @@ public class HtmlComponentGenerator extends AbstractGenerator {
             // Should we generate this property?
             PropertyBean pb = pbs[i];
             if (base.getProperty(pb.getPropertyName()) != null) {
-                if (log.isTraceEnabled()) {
-                    log.trace("Skipping base class property '" +
+                if (logger.isLoggable(Level.FINER)) {
+                    logger.log(Level.FINER, "Skipping base class property '" +
                         pb.getPropertyName() + "'");
                 }
                 continue;
             }
-            if (log.isDebugEnabled()) {
-                log.debug("Generating property variable/getter/setter for '" +
+            if (logger.isLoggable(Level.FINE)) {
+                logger.log(Level.FINE, "Generating property variable/getter/setter for '" +
                     pb.getPropertyName() + "'");
             }
             properties.add(pb);

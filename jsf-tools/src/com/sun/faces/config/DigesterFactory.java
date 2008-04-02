@@ -2,15 +2,14 @@
  * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  *
- * $Id: DigesterFactory.java,v 1.4 2005/03/15 20:54:30 edburns Exp $
+ * $Id: DigesterFactory.java,v 1.5 2005/07/27 21:59:13 edburns Exp $
  */
 
 
 package com.sun.faces.config;
 
+import com.sun.faces.util.ToolsUtil;
 import org.apache.commons.digester.Digester;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXNotRecognizedException;
@@ -21,6 +20,8 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import java.net.URL;
 import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * <p>A simple factory to hide <code>Digester</code> configuration
@@ -28,8 +29,9 @@ import java.util.HashMap;
  */
 public class DigesterFactory {
 
-    private static final Log LOG = LogFactory.getLog(DigesterFactory.class);
-
+    private static final Logger logger = ToolsUtil.getLogger(ToolsUtil.FACES_LOGGER +
+            ToolsUtil.CONFIG_LOGGER);    
+    
     /**
      * <p><code>Xerces</code> specific feature to enable both
      * DTD and Schema validation.</p>
@@ -145,8 +147,8 @@ public class DigesterFactory {
 
         if (validating) {
 
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("Attempting to configure Digester to perform" +
+            if (logger.isLoggable(Level.FINE)) {
+                logger.log(Level.FINE, "Attempting to configure Digester to perform" +
                     " document validation.");
             }
 
@@ -162,8 +164,8 @@ public class DigesterFactory {
                 digester.setValidating(true);
             } catch (SAXNotSupportedException e) {
 
-                if (LOG.isWarnEnabled()) {
-                    LOG.warn("Attempt to set supported feature on XMLReader, " +
+                if (logger.isLoggable(Level.WARNING)) {
+                    logger.log(Level.WARNING, "Attempt to set supported feature on XMLReader, " +
                         "but the value provided was not accepted.  " +
                         "Validation will be disabledb.");
                 }
@@ -172,8 +174,8 @@ public class DigesterFactory {
 
             } catch (SAXNotRecognizedException e) {
 
-                if (LOG.isWarnEnabled()) {
-                    LOG.warn("Attempt to set unsupported feature on XMLReader" +
+                if (logger.isLoggable(Level.WARNING)) {
+                    logger.log(Level.WARNING, "Attempt to set unsupported feature on XMLReader" +
                         " necessary for validation.  Validation will be" +
                         "disabled.");
                 }
@@ -182,8 +184,8 @@ public class DigesterFactory {
 
             } catch (ParserConfigurationException e) {
 
-                if (LOG.isWarnEnabled()) {
-                    LOG.warn("Digester unable to configure underlying parser." +
+                if (logger.isLoggable(Level.WARNING)) {
+                    logger.log(Level.WARNING, "Digester unable to configure underlying parser." +
                         "  Validation will be disabled.");
                 }
 
@@ -253,8 +255,8 @@ public class DigesterFactory {
             for (int i = 0; i < DTD_SCHEMA_INFO.length; i++) {
                 URL url = this.getClass().getResource(DTD_SCHEMA_INFO[i][1]);
                 if (url == null) {
-                    if (LOG.isWarnEnabled()) {
-                        LOG.warn("Unable to locate local resource '" +
+                    if (logger.isLoggable(Level.WARNING)) {
+                        logger.log(Level.WARNING, "Unable to locate local resource '" +
                             DTD_SCHEMA_INFO[i][1] + "'.  Standard entity " +
                             "resolution will be used when request are present" +
                             " for '" + DTD_SCHEMA_INFO[i][0] + '\'');
@@ -306,8 +308,8 @@ public class DigesterFactory {
                 // we don't have a registered mapping, so defer to our
                 // superclass for resolution
 
-                if (LOG.isDebugEnabled()) {
-                    LOG.debug("Unknown entity, deferring to superclass.");
+                if (logger.isLoggable(Level.FINE)) {
+                    logger.log(Level.FINE, "Unknown entity, deferring to superclass.");
                 }
 		try {
 		    source = super.resolveEntity(publicId, systemId);
@@ -321,8 +323,8 @@ public class DigesterFactory {
                 try {
                     source = new InputSource(new URL(entityURL).openStream());
                 } catch (Exception e) {
-                    if (LOG.isWarnEnabled()) {
-                        LOG.warn("Unable to create InputSource for URL '" +
+                    if (logger.isLoggable(Level.WARNING)) {
+                        logger.log(Level.WARNING, "Unable to create InputSource for URL '" +
                             entityURL + "'");
                     }
                    

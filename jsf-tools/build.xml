@@ -218,6 +218,9 @@ necessary to generate required classes.
       <classpath refid="compile.classpath" />
       <classpath refid="run.classpath" />
     </javac>
+    <copy todir="${build.classes}">
+        <fileset dir="${jsf-ri.dir}/src" includes="**/*.properties"/>
+    </copy>    
 
     <echo file="${build.classes}/com/sun/faces/whaat" message="cosby" />
 
