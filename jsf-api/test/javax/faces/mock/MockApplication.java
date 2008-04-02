@@ -1,5 +1,5 @@
 /*
- * $Id: MockApplication.java,v 1.12 2003/10/15 02:03:26 eburns Exp $
+ * $Id: MockApplication.java,v 1.13 2003/10/21 23:58:22 craigmcc Exp $
  */
 
 /*
@@ -25,7 +25,9 @@ import javax.faces.component.UIComponent;
 import javax.faces.component.UISelectMany;
 import javax.faces.component.UISelectOne;
 import javax.faces.convert.Converter;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.faces.el.PropertyNotFoundException;
 import javax.faces.el.PropertyResolver;
 import javax.faces.el.ValueBinding;
 import javax.faces.el.VariableResolver;
@@ -100,6 +102,9 @@ public class MockApplication extends Application {
 
     private PropertyResolver propertyResolver = null;
     public PropertyResolver getPropertyResolver() {
+        if (propertyResolver == null) {
+            propertyResolver = new MockPropertyResolver();
+        }
         return (this.propertyResolver);
     }
     public void setPropertyResolver(PropertyResolver propertyResolver) {
@@ -108,12 +113,19 @@ public class MockApplication extends Application {
 
 
     public ValueBinding getValueBinding(String ref) {
-        throw new UnsupportedOperationException();
+        if (ref == null) {
+            throw new NullPointerException();
+        } else {
+            return (new MockValueBinding(this, ref));
+        }
     }
 
 
     private VariableResolver variableResolver = null;
     public VariableResolver getVariableResolver() {
+        if (variableResolver == null) {
+            variableResolver = new MockVariableResolver();
+        }
         return (this.variableResolver);
     }
     public void setVariableResolver(VariableResolver variableResolver) {
@@ -229,8 +241,6 @@ public class MockApplication extends Application {
 
     public void setDefaultLocale(Locale newLocale) {
     }
-
-
 
 
 }

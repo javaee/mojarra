@@ -43,6 +43,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.sql.ResultSet;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -134,7 +135,7 @@ public class UIData extends UIComponentBase
      * the <code>rowIndex</code> value of the parent, per-row state
      * information is actually preserved.</p>
      */
-    private Map saved = null;
+    private Map saved = new HashMap();
 
 
     /**
@@ -225,7 +226,7 @@ public class UIData extends UIComponentBase
 
     public int getRowIndex() {
 
-        return (this.getRowIndex());
+        return (this.rowIndex);
 
     }
 
@@ -466,25 +467,34 @@ public class UIData extends UIComponentBase
     // ----------------------------------------------------- UIComponent Methods
 
 
+    private transient String baseClientId = null;
+
+
     /**
      * <p>Return a client identifier for this component that includes the
-     * current value of the <code>rowIndex</code> property.  This implies
-     * that multiple calls to <code>getClientId()</code> may return different
-     * results, but ensures that child components can themselves will generate
+     * current value of the <code>rowIndex</code> property, if it is not
+     * set to -1.  This implies that multiple calls to
+     * <code>getClientId()</code> may return different results,
+     * but ensures that child components can themselves will generate
      * row-specific client identifiers (since {@link UIData} is a
      * {@link NamingContainer}).</p>
      *
      * @exception NullPointerExcepton if <code>context</code>
      *  is <code>null</code>
      */
-    public String getCientId(FacesContext context) {
+    public String getClientId(FacesContext context) {
 
         if (context == null) {
             throw new NullPointerException();
         }
-        return (super.getClientId(context) +
-                NamingContainer.SEPARATOR_CHAR +
-                rowIndex);
+        if (baseClientId == null) {
+            baseClientId = super.getClientId(context);
+        }
+        if (rowIndex >= 0) {
+            return (baseClientId + NamingContainer.SEPARATOR_CHAR + rowIndex);
+        } else {
+            return (baseClientId);
+        }
 
     }
 

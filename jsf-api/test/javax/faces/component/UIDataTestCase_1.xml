@@ -1,0 +1,75 @@
+<table id='data'>
+<column-header id='data:commandHeader'>
+<text id='data:commandHeader' value='Command Header'/>
+</column-header>
+<column-header id='data:inputHeader'>
+<text id='data:inputHeader' value='Input Header'/>
+</column-header>
+<column-header id='data:outputHeader'>
+<text id='data:outputHeader' value='Output Header'/>
+</column-header>
+<table-row rowId='3'>
+<column id='data:3:commandColumn'>
+<button id='data:3:command' value='command3'/>
+</column>
+<column id='data:3:inputColumn'>
+<text id='data:3:input' value='input3'/>
+</column>
+<column id='data:3:outputColumn'>
+<text id='data:3:output' value='output3'/>
+</column>
+</table-row>
+<table-row rowId='4'>
+<column id='data:4:commandColumn'>
+<button id='data:4:command' value='command4'/>
+</column>
+<column id='data:4:inputColumn'>
+<text id='data:4:input' value='input4'/>
+</column>
+<column id='data:4:outputColumn'>
+<text id='data:4:output' value='output4'/>
+</column>
+</table-row>
+<table-row rowId='5'>
+<column id='data:5:commandColumn'>
+<button id='data:5:command' value='command5'/>
+</column>
+<column id='data:5:inputColumn'>
+<text id='data:5:input' value='input5'/>
+</column>
+<column id='data:5:outputColumn'>
+<text id='data:5:output' value='output5'/>
+</column>
+</table-row>
+<table-row rowId='6'>
+<column id='data:6:commandColumn'>
+<button id='data:6:command' value='command6'/>
+</column>
+<column id='data:6:inputColumn'>
+<text id='data:6:input' value='input6'/>
+</column>
+<column id='data:6:outputColumn'>
+<text id='data:6:output' value='output6'/>
+</column>
+</table-row>
+<table-row rowId='7'>
+<column id='data:7:commandColumn'>
+<button id='data:7:command' value='command7'/>
+</column>
+<column id='data:7:inputColumn'>
+<text id='data:7:input' value='input7'/>
+</column>
+<column id='data:7:outputColumn'>
+<text id='data:7:output' value='output7'/>
+</column>
+</table-row>
+<column-footer id='data:commandFooter'>
+<text id='data:commandFooter' value='Command Footer'/>
+</column-footer>
+<column-footer id='data:inputFooter'>
+<text id='data:inputFooter' value='Input Footer'/>
+</column-footer>
+<column-footer id='data:outputFooter'>
+<text id='data:outputFooter' value='Output Footer'/>
+</column-footer>
+</table>

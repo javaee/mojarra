@@ -1,5 +1,5 @@
 /*
- * $Id: MockRenderKit.java,v 1.6 2003/09/29 23:39:55 craigmcc Exp $
+ * $Id: MockRenderKit.java,v 1.7 2003/10/21 23:58:22 craigmcc Exp $
  */
 
 /*
@@ -34,12 +34,7 @@ public class MockRenderKit extends RenderKit {
         if ((rendererType == null) || (renderer == null)) {
             throw new NullPointerException();
         }
-        synchronized (renderers) {
-            if (renderers.containsKey(rendererType)) {
-                throw new IllegalArgumentException();
-            }
-            renderers.put(rendererType, renderer);
-        }
+        renderers.put(rendererType, renderer);
     }
 
 
@@ -47,13 +42,7 @@ public class MockRenderKit extends RenderKit {
         if (rendererType == null) {
             throw new NullPointerException();
         }
-        synchronized (renderers) {
-            Renderer renderer = (Renderer) renderers.get(rendererType);
-            if (renderer == null) {
-                throw new IllegalArgumentException(rendererType);
-            }
-            return (renderer);
-        }
+        return ((Renderer) renderers.get(rendererType));
     }
 
 

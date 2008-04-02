@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBaseTestCase.java,v 1.15 2003/10/21 05:37:49 craigmcc Exp $
+ * $Id: UIComponentBaseTestCase.java,v 1.16 2003/10/21 23:58:19 craigmcc Exp $
  */
 
 /*
@@ -651,8 +651,8 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
         component.getAttributes().put("foo", "foo value");
         component.getAttributes().put("bar", "bar value");
         component.setComponentRef("foo.bar");
-        component.getClientId(facesContext); // Forces evaluation
         component.setId("componentId");
+        component.getClientId(facesContext); // Forces evaluation
         component.setRendered(false);
         component.setRendererType(null); // Since we have no renderers
 

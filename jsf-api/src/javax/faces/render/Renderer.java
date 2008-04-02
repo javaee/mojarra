@@ -1,5 +1,5 @@
 /*
- * $Id: Renderer.java,v 1.23 2003/09/30 22:04:43 eburns Exp $
+ * $Id: Renderer.java,v 1.24 2003/10/21 23:58:18 craigmcc Exp $
  */
 
 /*
@@ -147,7 +147,7 @@ public abstract class Renderer {
      * <p>Convert the component generated client id to a form suitable
      * for transmission to the client.</p>
      *
-     * <p>The default implementation must just return the argument
+     * <p>The default implementation returns the argument
      * <code>clientId</code> unchanged.</p>
      *
      * @param context {@link FacesContext} for the current request
@@ -157,8 +157,14 @@ public abstract class Renderer {
      * @exception NullPointerException if <code>context</code>
      *  or <code>clientId</code> is <code>null</code>
      */ 
-    public abstract String convertClientId(FacesContext context,
-					   String clientId);
+    public String convertClientId(FacesContext context, String clientId) {
+
+        if ((context == null) || (clientId == null)) {
+            throw new NullPointerException();
+        }
+        return (clientId);
+
+    }
 
 
 }
