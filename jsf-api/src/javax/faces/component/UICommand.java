@@ -1,5 +1,5 @@
 /*
- * $Id: UICommand.java,v 1.58 2003/12/23 19:18:39 jvisvanathan Exp $
+ * $Id: UICommand.java,v 1.59 2003/12/24 23:10:20 craigmcc Exp $
  */
 
 /*
@@ -260,27 +260,18 @@ public class UICommand extends UIComponentBase
      * @exception AbortProcessingException Signal the JavaServer Faces
      *  implementation that no further processing on the current event
      *  should be performed
-     * @exception IllegalArgumentException if the implementation class
-     *  of this {@link FacesEvent} is not supported by this component
      * @exception NullPointerException if <code>event</code> is
      * <code>null</code>
      */
     public void broadcast(FacesEvent event) throws AbortProcessingException {
 
-        if (!(event instanceof ActionEvent)) {
-            throw new IllegalArgumentException();
-        }
-        
         // Perform standard superclass processing
         super.broadcast(event);
 
         // Notify the specified action listener method (if any)
-        MethodBinding mb = getActionListener();
-        if (mb != null) {
-            if ((isImmediate() &&
-                 event.getPhaseId().equals(PhaseId.APPLY_REQUEST_VALUES)) ||
-                (!isImmediate() &&
-                 event.getPhaseId().equals(PhaseId.INVOKE_APPLICATION))) {
+        if (event instanceof ActionEvent) {
+            MethodBinding mb = getActionListener();
+            if (mb != null) {
                 FacesContext context = getFacesContext();
                 mb.invoke(context, new Object[] { event });
             }

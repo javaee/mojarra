@@ -1,5 +1,5 @@
 /*
- * $Id: UIInput.java,v 1.53 2003/12/23 19:18:40 jvisvanathan Exp $
+ * $Id: UIInput.java,v 1.54 2003/12/24 23:10:20 craigmcc Exp $
  */
 
 /*
@@ -288,26 +288,22 @@ public class UIInput extends UIOutput {
      * @exception AbortProcessingException Signal the JavaServer Faces
      *  implementation that no further processing on the current event
      *  should be performed
-     * @exception IllegalArgumentException if the implementation class
-     *  of this {@link FacesEvent} is not supported by this component
      * @exception NullPointerException if <code>event</code> is
      * <code>null</code>
      */
     public void broadcast(FacesEvent event)
         throws AbortProcessingException {
 
-        if (!(event instanceof ValueChangeEvent)) {
-            throw new IllegalArgumentException();
-        }
         // Perform standard superclass processing
         super.broadcast(event);
 
         // Notify the specified value change listener method (if any)
-        MethodBinding valueChangeMethod = getValueChangeListener();
-        if ((valueChangeMethod != null) &&
-            event.getPhaseId().equals(PhaseId.PROCESS_VALIDATIONS)) {
-            FacesContext context = getFacesContext();
-            valueChangeMethod.invoke(context, new Object[] { event });
+        if (event instanceof ValueChangeEvent) {
+            MethodBinding valueChangeMethod = getValueChangeListener();
+            if (valueChangeMethod != null) {
+                FacesContext context = getFacesContext();
+                valueChangeMethod.invoke(context, new Object[] { event });
+            }
         }
 
     }
