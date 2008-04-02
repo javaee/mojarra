@@ -1,5 +1,5 @@
 /*
- * $Id: TestFacesContextImpl.java,v 1.32 2003/08/22 17:27:36 rlubke Exp $
+ * $Id: TestFacesContextImpl.java,v 1.33 2003/09/18 19:10:31 rkitain Exp $
  */
 
 /*
@@ -10,6 +10,11 @@
 // TestFacesContextImpl.java
 
 package com.sun.faces.context;
+
+import com.sun.faces.RIConstants;
+import com.sun.faces.ServletFacesTestCase;
+import com.sun.faces.context.FacesContextImpl;
+import com.sun.faces.lifecycle.LifecycleImpl;
 
 import org.mozilla.util.Assert;
 import org.mozilla.util.Debug;
@@ -25,31 +30,32 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletContext;
 import com.sun.faces.context.FacesContextImpl;
 
-import javax.faces.component.UICommand;
-import javax.faces.component.UIForm;
-import javax.faces.component.UIInput;
-import javax.faces.component.UIViewRoot;
-import javax.faces.component.UIComponent;
-import javax.faces.component.base.UIFormBase;
-import javax.faces.component.base.UIInputBase;
-import javax.faces.component.base.UICommandBase;
-import javax.faces.component.base.UIViewRootBase;
-
-import javax.faces.event.FacesEvent;
-import javax.faces.event.FacesListener;
-import javax.faces.FacesException;
-import javax.faces.context.ResponseWriter;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Writer;
-import java.io.IOException;
-import javax.faces.context.ResponseStream;
-import com.sun.faces.RIConstants;
-import javax.faces.render.RenderKit;
 import java.util.Collections;
 import java.util.Locale;
 import java.util.Iterator;
 
-import com.sun.faces.ServletFacesTestCase;
+import javax.faces.component.UICommand;
+import javax.faces.component.UIComponent;
+import javax.faces.component.UIForm;
+import javax.faces.component.UIInput;
+import javax.faces.component.UIViewRoot;
+import javax.faces.component.base.UICommandBase;
+import javax.faces.component.base.UIFormBase;
+import javax.faces.component.base.UIInputBase;
+import javax.faces.component.base.UIViewRootBase;
+import javax.faces.context.ResponseWriter;
+import javax.faces.context.ResponseStream;
+import javax.faces.event.FacesEvent;
+import javax.faces.event.FacesListener;
+import javax.faces.FacesException;
+import javax.faces.render.RenderKit;
+
+import org.mozilla.util.Assert;
+import org.mozilla.util.Debug;
+import org.mozilla.util.ParameterCheck;
 
 /**
  *
@@ -57,7 +63,7 @@ import com.sun.faces.ServletFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestFacesContextImpl.java,v 1.32 2003/08/22 17:27:36 rlubke Exp $
+ * @version $Id: TestFacesContextImpl.java,v 1.33 2003/09/18 19:10:31 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -100,6 +106,37 @@ public class TestFacesContextImpl extends ServletFacesTestCase
 // General Methods
 //
 
+public void testConstructor() {
+    ExternalContextImpl ecImpl = 
+        new ExternalContextImpl(getConfig().getServletContext(),
+            getRequest(), getResponse());
+    LifecycleImpl lifeImpl = new LifecycleImpl();
+    try {
+        FacesContextImpl fImpl = new FacesContextImpl(null, null);
+	assertTrue(false);
+    } catch (NullPointerException npe) {
+        assertTrue(true);
+    }
+    try {
+        FacesContextImpl fImpl = new FacesContextImpl(ecImpl, null);
+	assertTrue(false);
+    } catch (NullPointerException npe) {
+        assertTrue(true);
+    }
+    try {
+        FacesContextImpl fImpl = new FacesContextImpl(null, lifeImpl);
+	assertTrue(false);
+    } catch (NullPointerException npe) {
+        assertTrue(true);
+    }
+    try {
+        FacesContextImpl fImpl = new FacesContextImpl(ecImpl, lifeImpl);
+	assertTrue(true);
+    } catch (Exception e) {
+        assertTrue(false);
+    }
+}
+        
 public void testAccessors() 
 {
     boolean result = false;

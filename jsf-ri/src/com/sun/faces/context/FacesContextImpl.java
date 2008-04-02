@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContextImpl.java,v 1.48 2003/09/18 15:42:26 eburns Exp $
+ * $Id: FacesContextImpl.java,v 1.49 2003/09/18 19:10:30 rkitain Exp $
  */
 
 /*
@@ -9,11 +9,13 @@
 
 package com.sun.faces.context;
 
+import com.sun.faces.RIConstants;
+import com.sun.faces.util.Util;
 
-import java.util.Iterator;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
@@ -39,12 +41,6 @@ import javax.faces.lifecycle.Lifecycle;
 import org.apache.commons.collections.CursorableLinkedList;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
-import org.mozilla.util.ParameterCheck;
-
-import com.sun.faces.RIConstants;
-import com.sun.faces.util.Util;
-
 import org.mozilla.util.Assert;
 
 public class FacesContextImpl extends FacesContext
@@ -99,22 +95,16 @@ public class FacesContextImpl extends FacesContext
     public FacesContextImpl() {
     }
 
-    public FacesContextImpl(ExternalContext ec, Lifecycle lifecycle)
-        throws FacesException {
-        
-        try {
-            ParameterCheck.nonNull(ec);
-            ParameterCheck.nonNull(lifecycle);
-        } catch (Exception e ) {
-            throw new FacesException(Util.getExceptionMessage(Util.FACES_CONTEXT_CONSTRUCTION_ERROR_MESSAGE_ID));
-        }
-        
+    public FacesContextImpl(ExternalContext ec, Lifecycle lifecycle) {
+	if (null == ec || null == lifecycle) {
+            throw new NullPointerException
+                (Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+	}
         this.externalContext = ec;
         this.locale = externalContext.getRequestLocale();
          
         this.viewHandler = this.getApplication().getViewHandler();
         setCurrentInstance(this);
-        
     }
 
     //
