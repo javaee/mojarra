@@ -65,9 +65,7 @@
   <property name="javadoc.protected"  value="true"/>
   <property name="jsf-tools.dir"    value="${basedir}/../jsf-tools"/>
   <property name="jsf-tck.dir"      value="${basedir}/../jsf-tck"/>
-  <property name="include.el-api.in.javadocs"      value="true"/>
-
-
+ 
   <!-- Default value for debugging arguments is no.  Override in
        build.properties -->
   <property name="debug.jvm.args" value=""/>
