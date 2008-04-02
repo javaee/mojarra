@@ -1,5 +1,5 @@
 /*
- * $Id: ViewTag.java,v 1.27 2004/10/12 14:39:54 rlubke Exp $
+ * $Id: ViewTag.java,v 1.28 2004/11/23 19:26:53 rlubke Exp $
  */
 
 /*
@@ -40,7 +40,7 @@ import java.util.Locale;
  * any renderers or attributes. It exists mainly to save the state of
  * the response tree once all tags have been rendered.
  *
- * @version $Id: ViewTag.java,v 1.27 2004/10/12 14:39:54 rlubke Exp $
+ * @version $Id: ViewTag.java,v 1.28 2004/11/23 19:26:53 rlubke Exp $
  */
 
 public class ViewTag extends UIComponentBodyTag {
@@ -237,8 +237,7 @@ public class ViewTag extends UIComponentBodyTag {
     /**
      * This should never get called for PageTag.
      */
-    public String getComponentType() {
-        assert (false);
+    public String getComponentType() {        
         throw new IllegalStateException();
     }
 

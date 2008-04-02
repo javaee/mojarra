@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationImpl.java,v 1.54 2004/11/09 04:21:05 jhook Exp $
+ * $Id: ApplicationImpl.java,v 1.55 2004/11/23 19:26:53 rlubke Exp $
  */
 
 /*
@@ -9,13 +9,13 @@
 
 package com.sun.faces.application;
 
-import com.sun.faces.el.MethodBindingFactory;
-import com.sun.faces.el.PropertyResolverImpl;
-import com.sun.faces.el.ValueBindingFactory;
-import com.sun.faces.el.VariableResolverImpl;
-import com.sun.faces.util.Util;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Locale;
+import java.util.Map;
 
 import javax.faces.FacesException;
 import javax.faces.application.Application;
@@ -33,13 +33,14 @@ import javax.faces.el.VariableResolver;
 import javax.faces.event.ActionListener;
 import javax.faces.validator.Validator;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Locale;
-import java.util.Map;
+import com.sun.faces.el.MethodBindingFactory;
+import com.sun.faces.el.PropertyResolverImpl;
+import com.sun.faces.el.ValueBindingFactory;
+import com.sun.faces.el.VariableResolverImpl;
+import com.sun.faces.util.Util;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 
 /**
@@ -91,7 +92,7 @@ public class ApplicationImpl extends Application {
      */
     public ApplicationImpl() {
         super();
-	associate = new ApplicationAssociate(this);
+	associate = new ApplicationAssociate();
         valueBindingMap = new HashMap();
         componentMap = new HashMap();
         converterIdMap = new HashMap();
@@ -657,8 +658,7 @@ public class ApplicationImpl extends Application {
      * @return The new object instance.
      */
     protected Object newThing(Object key, Map map) {
-        assert (key != null);
-        assert (map != null);
+        assert (key != null && map != null);
         assert (key instanceof String || key instanceof Class);
 
         Object result = null;

@@ -1,5 +1,5 @@
 /*
- * $Id: TestUtil_messages.java,v 1.35 2004/07/26 21:12:46 rlubke Exp $
+ * $Id: TestUtil_messages.java,v 1.36 2004/11/23 19:26:55 rlubke Exp $
  */
 
 /*
@@ -11,11 +11,11 @@
 
 package com.sun.faces.util;
 
-import com.sun.faces.ServletFacesTestCase;
+import java.util.Locale;
 
 import javax.faces.component.UIViewRoot;
 
-import java.util.Locale;
+import com.sun.faces.ServletFacesTestCase;
 
 
 /**
@@ -23,7 +23,7 @@ import java.util.Locale;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestUtil_messages.java,v 1.35 2004/07/26 21:12:46 rlubke Exp $
+ * @version $Id: TestUtil_messages.java,v 1.36 2004/11/23 19:26:55 rlubke Exp $
  */
 
 public class TestUtil_messages extends ServletFacesTestCase {
@@ -111,7 +111,23 @@ public class TestUtil_messages extends ServletFacesTestCase {
         {Util.ASSERTION_FAILED_ID, "0"},
         {Util.OBJECT_CREATION_ERROR_ID, "0"},
         {Util.CYCLIC_REFERENCE_ERROR_ID, "1"},
-        {Util.NO_DTD_FOUND_ERROR_ID, "2"}
+        {Util.NO_DTD_FOUND_ERROR_ID, "2"},
+        {Util.MANAGED_BEAN_CANNOT_SET_LIST_ARRAY_PROPERTY_ID, "2"},
+        {Util.MANAGED_BEAN_EXISTING_VALUE_NOT_LIST_ID, "2"},
+        {Util.MANAGED_BEAN_CANNOT_SET_MAP_PROPERTY_ID, "2"},
+        {Util.MANAGED_BEAN_TYPE_CONVERSION_ERROR_ID, "4"},
+    };
+
+    private String[][] toolsMessageInfo = {
+        {ToolsUtil.MANAGED_BEAN_AS_LIST_CONFIG_ERROR_ID, "1"},
+        {ToolsUtil.MANAGED_BEAN_AS_MAP_CONFIG_ERROR_ID, "1"},
+        {ToolsUtil.MANAGED_BEAN_NO_MANAGED_BEAN_CLASS_ID, "1"},
+        {ToolsUtil.MANAGED_BEAN_NO_MANAGED_BEAN_NAME_ID, "2"},
+        {ToolsUtil.MANAGED_BEAN_NO_MANAGED_BEAN_SCOPE_ID, "1"},
+        {ToolsUtil.MANAGED_BEAN_INVALID_SCOPE_ID, "2"},
+        {ToolsUtil.MANAGED_BEAN_LIST_PROPERTY_CONFIG_ERROR_ID, "2"},
+        {ToolsUtil.MANAGED_BEAN_MAP_PROPERTY_CONFIG_ERROR_ID, "2"},
+        {ToolsUtil.MANAGED_BEAN_PROPERTY_CONFIG_ERROR_ID, "2"},
     };
 
 // Attribute Instance Variables
@@ -179,10 +195,43 @@ public class TestUtil_messages extends ServletFacesTestCase {
     }
 
 
+    public void testVerifyToolsMessages() {
+        System.out.println("Verifying ToolsUtil messages");
+        verifyParamsInToolsMessages(toolsMessageInfo);
+    }
+
+    private void verifyParamsInToolsMessages(String[][] messageInfo) {
+        int numParams = 0;
+
+        for (int i = 0; i < messageInfo.length; i++) {
+            System.out.println("Testing message: " + messageInfo[i][0]);
+            try {
+                numParams = Integer.parseInt(messageInfo[i][1]);
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid param number specifier!");
+                assertTrue(false);
+            }
+            if (numParams == 0) {
+                String message = ToolsUtil.getMessage(messageInfo[i][0]);
+                assertTrue(message != null);
+            } else if (numParams > 0) {
+                Object[] params = generateParams(numParams);
+                String message = ToolsUtil.getMessage(messageInfo[i][0],
+                                                      params);
+                assertTrue(message != null);
+                for (int j = 0; j < params.length; j++) {
+                    assertTrue(message.indexOf((String) params[j]) != -1);
+                }
+            }
+        }
+    }
+
+
     private void verifyParamsInMessages(String[][] messageInfo) {
         int numParams = 0;
 
         for (int i = 0; i < messageInfo.length; i++) {
+            System.out.println("Testing message: " + messageInfo[i][0]);
             try {
                 numParams = Integer.parseInt(messageInfo[i][1]);
             } catch (NumberFormatException e) {

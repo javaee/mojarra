@@ -1,5 +1,5 @@
 /*
- * $Id: ManagedPropertyRule.java,v 1.3 2004/02/04 23:46:22 ofung Exp $
+ * $Id: ManagedPropertyRule.java,v 1.4 2004/11/23 19:26:56 rlubke Exp $
  */
 
 /*
@@ -10,10 +10,11 @@
 package com.sun.faces.config.rules;
 
 
-import org.apache.commons.digester.Rule;
-import org.xml.sax.Attributes;
-import com.sun.faces.config.beans.ManagedPropertyBean;
 import com.sun.faces.config.beans.ManagedBeanBean;
+import com.sun.faces.config.beans.ManagedPropertyBean;
+import com.sun.faces.util.ToolsUtil;
+
+import org.xml.sax.Attributes;
 
 
 /**
@@ -47,9 +48,8 @@ public class ManagedPropertyRule extends FeatureRule {
     public void begin(String namespace, String name,
                       Attributes attributes) throws Exception {
 
-        ManagedBeanBean mbb = null;
         try {
-            mbb = (ManagedBeanBean) digester.peek();
+            ManagedBeanBean mbb = (ManagedBeanBean) digester.peek();
         } catch (Exception e) {
             throw new IllegalStateException
                 ("No parent ManagedBeanBean on object stack");
@@ -97,7 +97,7 @@ public class ManagedPropertyRule extends FeatureRule {
      */
     public void end(String namespace, String name) throws Exception {
 
-        ManagedPropertyBean top = null;
+        ManagedPropertyBean top;
         try {
             top = (ManagedPropertyBean) digester.pop();
         } catch (Exception e) {
@@ -105,6 +105,9 @@ public class ManagedPropertyRule extends FeatureRule {
                                             CLASS_NAME + " instance");
         }
         ManagedBeanBean mbb = (ManagedBeanBean) digester.peek();
+
+        validate(mbb.getManagedBeanName(), top);
+
         ManagedPropertyBean old =
             mbb.getManagedProperty(top.getPropertyName());
         if (old == null) {
@@ -183,7 +186,7 @@ public class ManagedPropertyRule extends FeatureRule {
     static void mergeManagedProperties(ManagedBeanBean top,
                                        ManagedBeanBean old) {
 
-        ManagedPropertyBean mpb[] = top.getManagedProperties();
+        ManagedPropertyBean[] mpb = top.getManagedProperties();
         for (int i = 0; i < mpb.length; i++) {
             ManagedPropertyBean mpbo =
                 old.getManagedProperty(mpb[i].getPropertyName());
@@ -195,6 +198,63 @@ public class ManagedPropertyRule extends FeatureRule {
         }
 
     }
+
+
+    // --------------------------------------------------------- Private Methods
+
+    private void validate(String managedBeanName,
+                          ManagedPropertyBean property) {
+
+        String managedPropertyName = property.getPropertyName();
+        if (managedPropertyName == null || managedPropertyName.length() == 0) {
+            throw new IllegalStateException(
+                ToolsUtil.getMessage(
+                    ToolsUtil.MANAGED_BEAN_NO_MANAGED_PROPERTY_NAME_ID,
+                    new Object[] { managedBeanName } ));
+        }
+
+        // managed-property instances that have list-entries must
+        // not have value or map-entries.  It is a configuration
+        // error if they do.
+        if (property.getListEntries() != null) {
+            if (property.getMapEntries() != null ||
+                property.getValue() != null || property.isNullValue()) {
+
+                throw new IllegalStateException (
+                    ToolsUtil.getMessage(
+                        ToolsUtil.MANAGED_BEAN_LIST_PROPERTY_CONFIG_ERROR_ID,
+                        new Object[] { managedBeanName,
+                                      managedPropertyName }));
+            }
+        }
+
+        // managed-property instances that have map-entries, must
+        // not have value or list-entries.  It is a configuration
+        // error if they do.
+        if (property.getMapEntries() != null) {
+            if (property.getValue() != null || property.isNullValue()) {
+                throw new IllegalStateException (
+                    ToolsUtil.getMessage(
+                        ToolsUtil.MANAGED_BEAN_MAP_PROPERTY_CONFIG_ERROR_ID,
+                        new Object[] { managedBeanName,
+                                      managedPropertyName }));
+            }
+        }
+
+        // If the managed property has no list or map entries, nor
+        // any defined value or configured as a null value, then an error
+        // will be raised
+        if (property.getListEntries() == null &&
+            property.getMapEntries() == null &&
+            property.getValue() == null && !property.isNullValue()) {
+           throw new IllegalStateException (
+                    ToolsUtil.getMessage(
+                        ToolsUtil.MANAGED_BEAN_PROPERTY_CONFIG_ERROR_ID,
+                        new Object[] { managedBeanName,
+                                      managedPropertyName }));
+        }
+
+    } // END validate
 
 
 }

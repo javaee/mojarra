@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationAssociate.java,v 1.5 2004/11/09 17:36:16 rlubke Exp $
+ * $Id: ApplicationAssociate.java,v 1.6 2004/11/23 19:26:52 rlubke Exp $
  */
 
 /*
@@ -9,17 +9,6 @@
 
 package com.sun.faces.application;
 
-import com.sun.faces.RIConstants;
-import com.sun.faces.config.ConfigureListener;
-import com.sun.faces.config.ManagedBeanFactory;
-import com.sun.faces.util.Util;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
-import javax.faces.FacesException;
-import javax.faces.context.ExternalContext;
-import javax.faces.context.FacesContext;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -27,6 +16,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeSet;
+
+import javax.faces.FacesException;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
+
+import com.sun.faces.RIConstants;
+import com.sun.faces.config.ConfigureListener;
+import com.sun.faces.config.ManagedBeanFactory;
+import com.sun.faces.util.Util;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  * <p>Break out the things that are associated with the Application, but
@@ -42,8 +43,6 @@ import java.util.TreeSet;
 public class ApplicationAssociate extends Object {
 
     protected static Log log = LogFactory.getLog(ApplicationImpl.class);
-
-    private ApplicationImpl app = null;
 
     //
     // This map stores "managed bean name" | "managed bean factory"
@@ -84,8 +83,7 @@ public class ApplicationAssociate extends Object {
 	"ApplicationAssociate";
 
 
-    public ApplicationAssociate(ApplicationImpl appImpl) {
-	app = appImpl;
+    public ApplicationAssociate() {	
 	ExternalContext externalContext = null;
 	if (null == (externalContext = 
 		     ConfigureListener.getExternalContextDuringInitialize())) {
@@ -257,8 +255,7 @@ public class ApplicationAssociate extends Object {
         }
         //add bean to appropriate scope
         String scope = managedBean.getScope();
-        //scope cannot be null
-        assert (null != scope);
+        
         if (log.isTraceEnabled()) {
             log.trace("Storing " + managedBeanName + " in scope " + scope);
         }

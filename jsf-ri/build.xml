@@ -247,6 +247,7 @@ must exist.  This is necessary for the MessageFactory class.
         <include name="com/sun/faces/config/DigesterFactory.java"/>
         <include name="com/sun/faces/config/beans/*.java"/>
         <include name="com/sun/faces/config/rules/*.java"/>
+        <include name="com/sun/faces/util/*.java"/>
       </fileset>
 
       <!-- Copy the generated tag classes and TLD -->
@@ -381,6 +382,7 @@ must exist.  This is necessary for the MessageFactory class.
 
     <copy todir="${build.classes}">
         <fileset dir="${source.home}" includes="**/*.properties"/>
+        <fileset dir="${jsf-tools.dir}/src" includes="**/*.properties"/>
     </copy>    
 
     <copy todir="${build.classes}/com/sun/faces">

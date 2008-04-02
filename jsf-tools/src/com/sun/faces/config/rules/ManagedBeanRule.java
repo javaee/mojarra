@@ -1,5 +1,5 @@
 /*
- * $Id: ManagedBeanRule.java,v 1.3 2004/02/04 23:46:22 ofung Exp $
+ * $Id: ManagedBeanRule.java,v 1.4 2004/11/23 19:26:55 rlubke Exp $
  */
 
 /*
@@ -10,10 +10,14 @@
 package com.sun.faces.config.rules;
 
 
-import org.apache.commons.digester.Rule;
-import org.xml.sax.Attributes;
+import java.util.Arrays;
+
 import com.sun.faces.config.beans.FacesConfigBean;
 import com.sun.faces.config.beans.ManagedBeanBean;
+import com.sun.faces.util.ToolsUtil;
+
+import org.xml.sax.Attributes;
+import org.xml.sax.Locator;
 
 
 /**
@@ -25,6 +29,14 @@ public class ManagedBeanRule extends FeatureRule {
 
     private static final String CLASS_NAME =
         "com.sun.faces.config.beans.ManagedBeanBean";
+
+    private static final String[] SCOPES = {
+        "none", "application", "session", "request"
+    };
+
+    static {
+        Arrays.sort(SCOPES);
+    }
 
 
     // ------------------------------------------------------------ Rule Methods
@@ -46,10 +58,9 @@ public class ManagedBeanRule extends FeatureRule {
      */
     public void begin(String namespace, String name,
                       Attributes attributes) throws Exception {
-
-        FacesConfigBean fcb = null;
+        
         try {
-            fcb = (FacesConfigBean) digester.peek();
+            FacesConfigBean fcb = (FacesConfigBean) digester.peek();
         } catch (Exception e) {
             throw new IllegalStateException
                 ("No parent FacesConfigBean on object stack");
@@ -97,13 +108,16 @@ public class ManagedBeanRule extends FeatureRule {
      */
     public void end(String namespace, String name) throws Exception {
 
-        ManagedBeanBean top = null;
+        ManagedBeanBean top;
         try {
             top = (ManagedBeanBean) digester.pop();
         } catch (Exception e) {
             throw new IllegalStateException("Popped object is not a " +
                                             CLASS_NAME + " instance");
         }
+
+        validate(top);
+
         FacesConfigBean fcb = (FacesConfigBean) digester.peek();
         ManagedBeanBean old = fcb.getManagedBean(top.getManagedBeanName());
         if (old == null) {
@@ -173,6 +187,75 @@ public class ManagedBeanRule extends FeatureRule {
         MapEntriesRule.mergeMapEntries(top, old);
 
     }
+
+
+    // --------------------------------------------------------- Private Methods
+
+    /**
+     * <p>Provides simple sanity checks.</p>
+     * @param bean the <code>ManagedBeanBean</code> instance to validate
+     */
+    private void validate(ManagedBeanBean bean) {
+
+        String val = bean.getManagedBeanName();
+        if (val == null || val.length() == 0) {
+            Locator locator = digester.getDocumentLocator();
+            String documentName = "UNKNOWN";
+            String lineNumber = "UNKNWOWN";
+
+            if (locator != null) {
+                documentName = locator.getSystemId();
+                lineNumber = Integer.toString(locator.getLineNumber());
+            }
+
+            throw new IllegalStateException(ToolsUtil.getMessage(
+                ToolsUtil.MANAGED_BEAN_NO_MANAGED_BEAN_NAME_ID,
+                new Object[]{documentName, lineNumber}));
+        }
+
+        val = bean.getManagedBeanClass();
+        if (val == null || val.length() == 0) {
+            throw new IllegalStateException(ToolsUtil.getMessage(
+                ToolsUtil.MANAGED_BEAN_NO_MANAGED_BEAN_CLASS_ID,
+                new Object[]{ bean.getManagedBeanName() }));
+        }
+
+        val = bean.getManagedBeanScope();
+        if (val == null || val.length() == 0) {
+            throw new IllegalStateException(ToolsUtil.getMessage(
+                ToolsUtil.MANAGED_BEAN_NO_MANAGED_BEAN_SCOPE_ID,
+                new Object[]{ bean.getManagedBeanName() }));
+        }
+
+        if (Arrays.binarySearch(SCOPES, val) < 0) {
+            throw new IllegalStateException(ToolsUtil.getMessage(
+                ToolsUtil.MANAGED_BEAN_INVALID_SCOPE_ID,
+                new Object[]{ val, bean.getManagedBeanName() }));
+        }
+
+        // - if the managed bean is itself a List, make sure it has no
+        //   map entries or managed properties
+        // - if the managed bean is itself a Map, make sure it has no
+        //   managed properties
+        if (bean.getListEntries() != null) {
+            if (bean.getMapEntries() != null ||
+                bean.getManagedProperties().length != 0) {
+                throw new IllegalStateException (
+                    ToolsUtil.getMessage(
+                        ToolsUtil.MANAGED_BEAN_AS_LIST_CONFIG_ERROR_ID,
+                        new Object[]{ bean.getManagedBeanName() }));
+            }
+        } else if (bean.getMapEntries() != null) {
+            if (bean.getManagedProperties().length != 0) {
+                throw new IllegalStateException (
+                    ToolsUtil.getMessage(
+                        ToolsUtil.MANAGED_BEAN_AS_MAP_CONFIG_ERROR_ID,
+                        new Object[]{ bean.getManagedBeanName() }));
+            }
+        }
+
+    } // END validate
+
 
 
 }

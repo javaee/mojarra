@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.146 2004/11/09 04:21:20 jhook Exp $
+ * $Id: Util.java,v 1.147 2004/11/23 19:26:54 rlubke Exp $
  */
 
 /*
@@ -57,7 +57,7 @@ import java.util.StringTokenizer;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.146 2004/11/09 04:21:20 jhook Exp $
+ * @version $Id: Util.java,v 1.147 2004/11/23 19:26:54 rlubke Exp $
  */
 
 public class Util extends Object {
@@ -279,7 +279,19 @@ public class Util extends Object {
         "com.sun.faces.CYCLIC_REFERENCE_ERROR";
     
     public static final String NO_DTD_FOUND_ERROR_ID =
-        "com.sun.faces.NO_DTD_FOUND_ERROR";
+        "com.sun.faces.NO_DTD_FOUND_ERROR";          
+    
+    public static final String MANAGED_BEAN_CANNOT_SET_LIST_ARRAY_PROPERTY_ID = 
+        "com.sun.faces.MANAGED_BEAN_CANNOT_SET_LIST_ARRAY_PROPERTY";
+    
+    public static final String MANAGED_BEAN_EXISTING_VALUE_NOT_LIST_ID =
+        "com.sun.faces.MANAGED_BEAN_EXISTING_VALUE_NOT_LIST";
+
+    public static final String MANAGED_BEAN_CANNOT_SET_MAP_PROPERTY_ID =
+        "com.sun.faces.MANAGED_BEAN_CANNOT_SET_MAP_PROPERTY";
+    
+    public static final String MANAGED_BEAN_TYPE_CONVERSION_ERROR_ID =
+        "com.sun.faces.MANAGED_BEAN_TYPE_CONVERSION_ERROR";
 
 
 // README - make sure to add the message identifier constant
