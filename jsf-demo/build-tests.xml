@@ -66,6 +66,7 @@
 
     <path id="run.classpath">
         <path refid="htmlunit.runtime.classpath"/>
+        <pathelement location="${build}/classes"/>
         <!-- Include this to have access to the ResourceBundles for carstore -->
         <pathelement location="${basedir}/carstore/src"/>
     </path>
@@ -94,9 +95,9 @@
         <attribute name="demo-war"/>
         <sequential>
             <undeploy.artifact artifact="@{demo-war}"
-                               artifact-name="@{demo-name}"/>
+                               appName="@{demo-name}"/>
             <deploy.artifact artifact="@{demo-war}"
-                             artifact-name="@{demo-name}"/>
+                               appName="@{demo-name}"/>
             <jsf.junit context-path="@{context-path}"
                        classpath-refid="run.classpath"
                        test-results-dir="${test.results.dir}">
@@ -107,7 +108,7 @@
                 </tests>
             </jsf.junit>
             <undeploy.artifact artifact="@{demo-war}"
-                               artifact-name="@{demo-name}"/>
+                               appName="@{demo-name}"/>
         </sequential>
     </macrodef>
 
