@@ -1,5 +1,5 @@
 /*
- * $Id: ResourceBundleRule.java,v 1.2 2005/08/22 22:12:23 ofung Exp $
+ * $Id: ResourceBundleRule.java,v 1.3 2006/05/26 01:10:40 rlubke Exp $
  */
 
 /*
@@ -28,10 +28,11 @@
  */
 
 package com.sun.faces.config.rules;
-import com.sun.faces.config.beans.ApplicationBean;
+
 import org.xml.sax.Attributes;
+
+import com.sun.faces.config.beans.ApplicationBean;
 import com.sun.faces.config.beans.ResourceBundleBean;
-import com.sun.faces.config.beans.FacesConfigBean;
 
 
 /**
@@ -65,7 +66,8 @@ public class ResourceBundleRule extends FeatureRule {
     public void begin(String namespace, String name,
                       Attributes attributes) throws Exception {
 
-        assert (digester.peek() instanceof FacesConfigBean);
+        assert digester.peek()instanceof ApplicationBean 
+              : "Assertion Error: Expected ApplicationBean to be at the top of the stack";
         
         if (digester.getLogger().isDebugEnabled()) {
             digester.getLogger().debug("[ResourceBundleRule]{" +

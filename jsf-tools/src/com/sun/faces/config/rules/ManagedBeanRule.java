@@ -1,5 +1,5 @@
 /*
- * $Id: ManagedBeanRule.java,v 1.6 2005/08/22 22:12:21 ofung Exp $
+ * $Id: ManagedBeanRule.java,v 1.7 2006/05/26 01:10:39 rlubke Exp $
  */
 
 /*
@@ -32,12 +32,12 @@ package com.sun.faces.config.rules;
 
 import java.util.Arrays;
 
+import org.xml.sax.Attributes;
+import org.xml.sax.Locator;
+
 import com.sun.faces.config.beans.FacesConfigBean;
 import com.sun.faces.config.beans.ManagedBeanBean;
 import com.sun.faces.util.ToolsUtil;
-
-import org.xml.sax.Attributes;
-import org.xml.sax.Locator;
 
 
 /**
@@ -79,12 +79,9 @@ public class ManagedBeanRule extends FeatureRule {
     public void begin(String namespace, String name,
                       Attributes attributes) throws Exception {
         
-        try {
-            FacesConfigBean fcb = (FacesConfigBean) digester.peek();
-        } catch (Exception e) {
-            throw new IllegalStateException
-                ("No parent FacesConfigBean on object stack");
-        }
+        assert digester.peek() instanceof FacesConfigBean
+              : "Assertion Error: Expected FacesConfigBean to be at the top of the stack";
+       
         if (digester.getLogger().isDebugEnabled()) {
             digester.getLogger().debug("[ManagedBeanRule]{" +
                                        digester.getMatch() +

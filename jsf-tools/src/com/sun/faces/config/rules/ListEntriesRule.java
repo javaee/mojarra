@@ -1,5 +1,5 @@
 /*
- * $Id: ListEntriesRule.java,v 1.7 2006/03/06 16:40:34 rlubke Exp $
+ * $Id: ListEntriesRule.java,v 1.8 2006/05/26 01:10:39 rlubke Exp $
  */
 
 /*
@@ -30,10 +30,11 @@
 package com.sun.faces.config.rules;
 
 
-import com.sun.org.apache.commons.digester.Rule;
 import org.xml.sax.Attributes;
+
 import com.sun.faces.config.beans.ListEntriesBean;
 import com.sun.faces.config.beans.ListEntriesHolder;
+import com.sun.org.apache.commons.digester.Rule;
 
 
 /**
@@ -67,7 +68,8 @@ public class ListEntriesRule extends Rule {
     public void begin(String namespace, String name,
                       Attributes attributes) throws Exception {
 
-        assert (digester.peek() instanceof ListEntriesHolder);
+        assert digester.peek() instanceof ListEntriesHolder
+              : "Assertion Error: Expected ListEntriesHolder to be at the top of the stack";
       
         if (digester.getLogger().isDebugEnabled()) {
             digester.getLogger().debug("[ListEntriesRule]{" +

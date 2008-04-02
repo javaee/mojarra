@@ -1,5 +1,5 @@
 /*
- * $Id: FeatureRule.java,v 1.5 2006/03/06 16:40:33 rlubke Exp $
+ * $Id: FeatureRule.java,v 1.6 2006/05/26 01:10:39 rlubke Exp $
  */
 
 /*
@@ -30,12 +30,11 @@
 package com.sun.faces.config.rules;
 
 
-import com.sun.org.apache.commons.digester.Rule;
-import org.xml.sax.Attributes;
 import com.sun.faces.config.beans.DescriptionBean;
 import com.sun.faces.config.beans.DisplayNameBean;
 import com.sun.faces.config.beans.FeatureBean;
 import com.sun.faces.config.beans.IconBean;
+import com.sun.org.apache.commons.digester.Rule;
 
 
 /**

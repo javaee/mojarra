@@ -1,5 +1,5 @@
 /*
- * $Id: DescriptionTextRule.java,v 1.6 2006/03/06 16:40:33 rlubke Exp $
+ * $Id: DescriptionTextRule.java,v 1.7 2006/05/26 01:10:38 rlubke Exp $
  */
 
 /*
@@ -30,13 +30,13 @@
 package com.sun.faces.config.rules;
 
 
-import com.sun.org.apache.commons.digester.NodeCreateRule;
-import com.sun.org.apache.commons.digester.Rule;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.Attributes;
+
 import com.sun.faces.config.beans.DescriptionBean;
+import com.sun.org.apache.commons.digester.NodeCreateRule;
 
 
 /**
@@ -84,8 +84,9 @@ public class DescriptionTextRule extends NodeCreateRule {
      */
     public void begin(String namespace, String name,
                       Attributes attributes) throws Exception {
-
-        assert (digester.peek() instanceof DescriptionBean);        
+        
+        assert digester.peek() instanceof DescriptionBean
+              : "Assertion Error: Expected DescriptionBean to be at the top of the stack";
 
         // Perform our standard superclass processing
         if (digester.getLogger().isDebugEnabled()) {

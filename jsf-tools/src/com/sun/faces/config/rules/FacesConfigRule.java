@@ -1,5 +1,5 @@
 /*
- * $Id: FacesConfigRule.java,v 1.5 2006/03/06 16:40:33 rlubke Exp $
+ * $Id: FacesConfigRule.java,v 1.6 2006/05/26 01:10:38 rlubke Exp $
  */
 
 /*
@@ -30,9 +30,10 @@
 package com.sun.faces.config.rules;
 
 
+import org.xml.sax.Attributes;
+
 import com.sun.faces.config.beans.FacesConfigBean;
 import com.sun.org.apache.commons.digester.Rule;
-import org.xml.sax.Attributes;
 
 
 /**

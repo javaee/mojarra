@@ -1,5 +1,5 @@
 /*
- * $Id: LocaleConfigRule.java,v 1.5 2006/03/06 16:40:34 rlubke Exp $
+ * $Id: LocaleConfigRule.java,v 1.6 2006/05/26 01:10:39 rlubke Exp $
  */
 
 /*
@@ -30,10 +30,11 @@
 package com.sun.faces.config.rules;
 
 
-import com.sun.org.apache.commons.digester.Rule;
 import org.xml.sax.Attributes;
+
 import com.sun.faces.config.beans.ApplicationBean;
 import com.sun.faces.config.beans.LocaleConfigBean;
+import com.sun.org.apache.commons.digester.Rule;
 
 
 /**
@@ -67,6 +68,7 @@ public class LocaleConfigRule extends Rule {
     public void begin(String namespace, String name,
                       Attributes attributes) throws Exception {
 
+        
         ApplicationBean ab = null;
         try {
             ab = (ApplicationBean) digester.peek();

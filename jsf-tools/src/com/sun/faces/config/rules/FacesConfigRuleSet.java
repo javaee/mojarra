@@ -1,5 +1,5 @@
 /*
- * $Id: FacesConfigRuleSet.java,v 1.12 2006/03/06 16:40:33 rlubke Exp $
+ * $Id: FacesConfigRuleSet.java,v 1.13 2006/05/26 01:10:38 rlubke Exp $
  */
 
 /*
@@ -30,12 +30,12 @@
 package com.sun.faces.config.rules;
 
 
-import com.sun.faces.util.ToolsUtil;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import com.sun.faces.util.ToolsUtil;
 import com.sun.org.apache.commons.digester.Digester;
 import com.sun.org.apache.commons.digester.RuleSetBase;
-
 
 
 /**

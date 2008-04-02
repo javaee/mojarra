@@ -1,5 +1,5 @@
 /*
- * $Id: ReferencedBeanRule.java,v 1.7 2006/03/06 16:40:36 rlubke Exp $
+ * $Id: ReferencedBeanRule.java,v 1.8 2006/05/26 01:10:40 rlubke Exp $
  */
 
 /*
@@ -30,8 +30,8 @@
 package com.sun.faces.config.rules;
 
 
-import com.sun.org.apache.commons.digester.Rule;
 import org.xml.sax.Attributes;
+
 import com.sun.faces.config.beans.FacesConfigBean;
 import com.sun.faces.config.beans.ReferencedBeanBean;
 
@@ -66,8 +66,9 @@ public class ReferencedBeanRule extends FeatureRule {
      */
     public void begin(String namespace, String name,
                       Attributes attributes) throws Exception {
-
-        assert(digester.peek() instanceof FacesConfigBean);
+      
+        assert digester.peek() instanceof FacesConfigBean
+              : "Assertion Error: Expected FacesConfigBean to be at the top of the stack";
                 
         if (digester.getLogger().isDebugEnabled()) {
             digester.getLogger().debug("[ReferencedBeanRule]{" +

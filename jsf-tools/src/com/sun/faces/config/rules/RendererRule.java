@@ -1,5 +1,5 @@
 /*
- * $Id: RendererRule.java,v 1.8 2006/03/06 16:40:36 rlubke Exp $
+ * $Id: RendererRule.java,v 1.9 2006/05/26 01:10:40 rlubke Exp $
  */
 
 /*
@@ -30,10 +30,10 @@
 package com.sun.faces.config.rules;
 
 
-import com.sun.org.apache.commons.digester.Rule;
 import org.xml.sax.Attributes;
-import com.sun.faces.config.beans.RendererBean;
+
 import com.sun.faces.config.beans.RenderKitBean;
+import com.sun.faces.config.beans.RendererBean;
 
 
 /**
@@ -66,8 +66,9 @@ public class RendererRule extends FeatureRule {
      */
     public void begin(String namespace, String name,
                       Attributes attributes) throws Exception {
-
-        assert (digester.peek() instanceof RenderKitBean);
+        
+        assert digester.peek() instanceof RenderKitBean
+              : "Assertion Error: Expected RenderKitBean to be at the top of the stack";
         
         if (digester.getLogger().isDebugEnabled()) {
             digester.getLogger().debug("[RendererRule]{" +

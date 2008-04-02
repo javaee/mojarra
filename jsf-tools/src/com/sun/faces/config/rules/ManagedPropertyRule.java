@@ -1,5 +1,5 @@
 /*
- * $Id: ManagedPropertyRule.java,v 1.6 2005/08/22 22:12:21 ofung Exp $
+ * $Id: ManagedPropertyRule.java,v 1.7 2006/05/26 01:10:39 rlubke Exp $
  */
 
 /*
@@ -30,11 +30,11 @@
 package com.sun.faces.config.rules;
 
 
+import org.xml.sax.Attributes;
+
 import com.sun.faces.config.beans.ManagedBeanBean;
 import com.sun.faces.config.beans.ManagedPropertyBean;
 import com.sun.faces.util.ToolsUtil;
-
-import org.xml.sax.Attributes;
 
 
 /**
@@ -68,12 +68,9 @@ public class ManagedPropertyRule extends FeatureRule {
     public void begin(String namespace, String name,
                       Attributes attributes) throws Exception {
 
-        try {
-            ManagedBeanBean mbb = (ManagedBeanBean) digester.peek();
-        } catch (Exception e) {
-            throw new IllegalStateException
-                ("No parent ManagedBeanBean on object stack");
-        }
+        assert digester.peek() instanceof ManagedBeanBean
+              : "Assertion Error: Expected ManagedBeanBean to be at the top of the stack";
+       
         if (digester.getLogger().isDebugEnabled()) {
             digester.getLogger().debug("[ManagedPropertyRule]{" +
                                        digester.getMatch() +

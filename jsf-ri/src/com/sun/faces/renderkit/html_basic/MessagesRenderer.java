@@ -1,5 +1,5 @@
 /*
- * $Id: MessagesRenderer.java,v 1.29 2006/05/18 23:07:54 rlubke Exp $
+ * $Id: MessagesRenderer.java,v 1.30 2006/05/26 01:10:37 rlubke Exp $
  */
 
 /*
@@ -160,8 +160,9 @@ public class MessagesRenderer extends HtmlBasicRenderer {
             // detail.
             summary = (null != (summary = curMessage.getSummary())) ?
                 summary : "";
+            // Default to summary if we have no detail
             detail = (null != (detail = curMessage.getDetail())) ?
-                detail : "";
+                detail : summary;
 
 
             if (curMessage.getSeverity() == FacesMessage.SEVERITY_INFO) {
