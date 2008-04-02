@@ -419,16 +419,16 @@ public class UIData extends UIComponentBase
 
         // Clear or expose the current row data as a request scope attribute
         if (var != null) {
-            Map<String,Object> requestMap =
-                getFacesContext().getExternalContext().getRequestMap();
+            Map<String, Object> requestMap =
+                 getFacesContext().getExternalContext().getRequestMap();
             if (rowIndex == -1) {
                 oldVar = requestMap.remove(var);
             } else if (isRowAvailable()) {
-		requestMap.put(var, getRowData());
-	    } else {
-		requestMap.remove(var);
+                requestMap.put(var, getRowData());
+            } else {
+                requestMap.remove(var);
                 if (null != oldVar) {
-                    requestMap.put("var", oldVar);
+                    requestMap.put(var, oldVar);
                     oldVar = null;
                 }
             }
