@@ -11,8 +11,8 @@
         <title>Select{One,Many}ListBox Size Attribute Test</title>        
     </head>
     <body>
-        <select name="j_id_id16" size="5">	<option value="val1">val1</option>
-</select><select name="j_id_id21" multiple="multiple" size="5">	<option value="val1">val1</option>
+        <select id="j_id_id16" name="j_id_id16" size="5">	<option value="val1">val1</option>
+</select><select id="j_id_id21" name="j_id_id21" multiple="multiple" size="5">	<option value="val1">val1</option>
 </select>
     </body>
 </html>

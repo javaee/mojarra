@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 
 <!--
- $Id: build-tests.xml,v 1.122 2006/08/25 19:37:52 rogerk Exp $
+ $Id: build-tests.xml,v 1.123 2006/08/28 14:17:32 rogerk Exp $
 -->
 
 <!--
@@ -1030,10 +1030,12 @@
     <target name="test.regressions">
         <jsf.tester
             request="${context.path}/faces/regression/AreaTextRowsAttrTest.jsp"
-            golden="${golden.path}/regression/AreaTextRowsAttrTest.txt"/>
+            golden="${golden.path}/regression/AreaTextRowsAttrTest.txt"
+            recordGolden="${local.golden.path}/regression/AreaTextRowsAttrTest.txt"/>
         <jsf.tester
             request="${context.path}/faces/regression/SelectOneManySizeAttrTest.jsp"
-            golden="${golden.path}/regression/SelectOneManySizeAttrTest.txt"/>
+            golden="${golden.path}/regression/SelectOneManySizeAttrTest.txt"
+            recordGolden="${local.golden.path}/regression/SelectOneManySizeAttrTest.txt"/>
         <jsf.tester
             ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
             request="${context.path}/faces/regression/InjectUserDefJS.jsp"

@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderer.java,v 1.112 2006/07/27 22:03:40 rlubke Exp $
+ * $Id: HtmlBasicRenderer.java,v 1.113 2006/08/28 14:17:32 rogerk Exp $
  */
 
 /*
@@ -547,8 +547,14 @@ public abstract class HtmlBasicRenderer extends Renderer {
      */
     protected boolean shouldWriteIdAttribute(UIComponent component) {
         String id;
-        return (null != (id = component.getId()) &&
-            !id.startsWith(UIViewRoot.UNIQUE_ID_PREFIX));
+        if (component instanceof UIInput) {
+            return true;
+        }
+        if (null != (id = component.getId()) &&
+            !id.startsWith(UIViewRoot.UNIQUE_ID_PREFIX)) {
+            return true;
+        }
+        return false;
     }
 
 
