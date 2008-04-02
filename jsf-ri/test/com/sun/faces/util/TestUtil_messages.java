@@ -1,5 +1,5 @@
 /*
- * $Id: TestUtil_messages.java,v 1.18 2003/09/03 18:53:42 rlubke Exp $
+ * $Id: TestUtil_messages.java,v 1.19 2003/09/11 21:22:26 rkitain Exp $
  */
 
 /*
@@ -24,7 +24,7 @@ import java.util.Locale;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestUtil_messages.java,v 1.18 2003/09/03 18:53:42 rlubke Exp $
+ * @version $Id: TestUtil_messages.java,v 1.19 2003/09/11 21:22:26 rkitain Exp $
  */
 
 public class TestUtil_messages extends ServletFacesTestCase {
@@ -78,7 +78,6 @@ public class TestUtil_messages extends ServletFacesTestCase {
         {Util.NOT_NESTED_IN_FACES_TAG_ERROR_MESSAGE_ID, "1"},
         {Util.NULL_BODY_CONTENT_ERROR_MESSAGE_ID, "1"},
         {Util.SAVING_STATE_ERROR_MESSAGE_ID, "2"},
-        {Util.RENDERER_ALREADY_EXISTS_ERROR_MESSAGE_ID, "1"},
         {Util.RENDERER_NOT_FOUND_ERROR_MESSAGE_ID, "1"},
         {Util.MAXIMUM_EVENTS_REACHED_ERROR_MESSAGE_ID, "1"},
         {Util.NO_ACTION_FROM_ACTIONREF_ERROR_MESSAGE_ID, "1"},
