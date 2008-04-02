@@ -144,8 +144,7 @@
     <td>
 
                    <h:input_text id="required2" value="required">
-                     <f:validator 
-	                type="javax.faces.validator.RequiredValidator"/>
+                     <f:validator id="Required"/>
                    </h:input_text>
 
     </td>

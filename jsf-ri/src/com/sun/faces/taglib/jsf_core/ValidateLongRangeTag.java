@@ -1,5 +1,5 @@
 /*
- * $Id: ValidateLongRangeTag.java,v 1.2 2003/02/20 22:49:33 ofung Exp $
+ * $Id: ValidateLongRangeTag.java,v 1.3 2003/05/20 23:08:01 jvisvanathan Exp $
  */
 
 /*
@@ -25,7 +25,7 @@ import javax.servlet.jsp.JspException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ValidateLongRangeTag.java,v 1.2 2003/02/20 22:49:33 ofung Exp $
+ * @version $Id: ValidateLongRangeTag.java,v 1.3 2003/05/20 23:08:01 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -61,7 +61,7 @@ public class ValidateLongRangeTag extends MaxMinValidatorTag
 public ValidateLongRangeTag()
 {
     super();
-    super.setType("javax.faces.validator.LongRangeValidator");
+    super.setId("LongRange");
 }
 
 //
