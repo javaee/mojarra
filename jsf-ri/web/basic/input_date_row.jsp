@@ -52,7 +52,7 @@
 	      <td>
 
 		<h:output_errors id="input_date2_errors" 
-			  clientId="input_date2" />
+			  for="input_date2" />
 
 	      </td>
 
@@ -82,7 +82,7 @@
 	      <td>
 
 		<h:output_errors id="input_date3_errors" 
-			  clientId="input_date3" />
+			  for="input_date3" />
 
 	      </td>
 
@@ -113,7 +113,7 @@
 	      <td>
 
 		<h:output_errors id="input_date4_errors" 
-			  clientId="input_date4" />
+			  for="input_date4" />
 
 	      </td>
 

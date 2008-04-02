@@ -51,7 +51,7 @@
 	      <td>
 
 		<h:output_errors id="input_secret2_errors" 
-			  clientId="input_secret2" />
+			  for="input_secret2" />
 
 	      </td>
 
@@ -81,7 +81,7 @@
 	      <td>
 
 		<h:output_errors id="input_secret3_errors" 
-			  clientId="input_secret3" />
+			  for="input_secret3" />
 
 	      </td>
 
@@ -112,7 +112,7 @@
 	      <td>
 
 		<h:output_errors id="input_secret4_errors" 
-			  clientId="input_secret4" />
+			  for="input_secret4" />
 
 	      </td>
 

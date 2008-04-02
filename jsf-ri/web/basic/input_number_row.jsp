@@ -27,7 +27,7 @@
              <td>
 
              <h:output_errors id="input_number1_errors"
-                          clientId="input_number1" />
+                          for="input_number1" />
 
              </td>
             </tr>
@@ -53,7 +53,7 @@
 	      <td>
 
 		<h:output_errors id="input_number2_errors" 
-			  clientId="input_number2" />
+			  for="input_number2" />
 
 	      </td>
 
@@ -82,7 +82,7 @@
 	      <td>
 
 		<h:output_errors id="input_number3_errors" 
-			  clientId="input_number3" />
+			  for="input_number3" />
 
 	      </td>
 
@@ -111,7 +111,7 @@
 	      <td>
 
 		<h:output_errors id="input_number4_errors" 
-			  clientId="input_number4" />
+			  for="input_number4" />
 
 	      </td>
 
@@ -122,7 +122,7 @@
              <td>
 
                <h:output_text id="input_number5_label"
-                     value="input_number integer with modelReference"/>
+                     value="input_number integer with valueRef"/>
 
              </td>
 
@@ -132,16 +132,16 @@
                <h:input_number id="input_number5" numberStyle="integer"
                                  value="9"
                                  size="2" maxlength="10"
-                                 modelReference="LoginBean.char"
-                                 alt="input_number integer with modelReference"
+                                 valueRef="LoginBean.char"
+                                 alt="input_number integer with valueRef"
                                  accesskey="d"
-                               title="input_number integer with modelReference" />
+                               title="input_number integer with valueRef" />
              </td>
 
               <td>
 
                 <h:output_errors id="input_number5_errors"
-                          clientId="input_number5" />
+                          for="input_number5" />
 
               </td>
 

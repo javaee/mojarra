@@ -36,7 +36,7 @@
              <td>
 
                <h:output_text id="checkbox3_label_model"
-                     value="checkbox with modelReference "/>
+                     value="checkbox with valueRef "/>
 
              </td>
 
@@ -45,22 +45,22 @@
 
                <h:selectboolean_checkbox id="checkbox3"
                                  checked="true"
-                                 modelReference="LoginBean.validUser"
+                                 valueRef="LoginBean.validUser"
                                  size="10"
                                  alt="checkbox"
                                  accesskey="C" 
-                               title="checkbox with modelReference " />
+                               title="checkbox with valueRef " />
 
                                 <h:output_text
                                       id="checkbox_label_model"
-                           value="checkbox with modelReference"/>
+                           value="checkbox with valueRef"/>
 
              </td>
 
              <td>
 
                 <h:output_errors id="checkbox3_errors"
-                          clientId="checkbox3" />
+                          for="checkbox3" />
 
               </td
 

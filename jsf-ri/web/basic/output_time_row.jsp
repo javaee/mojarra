@@ -16,7 +16,7 @@
              <td>
 
                <h:output_time id="output_time1" timeStyle="medium"
-                         modelReference="LoginBean.date"/>
+                         valueRef="LoginBean.date"/>
 
 
              </td>
@@ -37,14 +37,14 @@
 
                <h:output_time id="output_time2" 
                                  timeStyle="long"
-                         modelReference="LoginBean.date"/>
+                         valueRef="LoginBean.date"/>
 
              </td>
 
 	      <td>
 
 		<h:output_errors id="output_time2_errors" 
-		        clientId="output_time2" />
+		        for="output_time2" />
 
 	      </td>
 

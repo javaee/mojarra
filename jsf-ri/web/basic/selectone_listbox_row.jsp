@@ -44,10 +44,10 @@
 
              <td>
                 <h:selectone_listbox id="Listbox"
-                             modelReference="LoginBean.currentOption">
+                             valueRef="LoginBean.currentOption">
 
                 <h:selectitems id="listboxOptions"
-                                   modelReference="LoginBean.options"/>
+                                   valueRef="LoginBean.options"/>
 
               </h:selectone_listbox>
 

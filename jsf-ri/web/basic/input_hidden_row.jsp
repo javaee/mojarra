@@ -7,28 +7,28 @@
               <td><b><h:output_text id="dateconvertLabel"
                          value="Date [MMM DD, YYYY Format]: " /></b></td>
               <td><h:input_hidden id="datetextHidden" 
-                      modelReference="LoginBean.date"
+                      valueRef="LoginBean.date"
                       converter="date"/></td>
               <td><h:output_errors id="dateErr"
-                      clientId="datetextHidden"/> </td>
+                      for="datetextHidden"/> </td>
             </tr>
             <tr>
               <td><b><h:output_text id="timeconvertLabel"
                          value="Time [HH:MI:SS (AM/PM) Format]: " /></b></td>
               <td><h:input_hidden id="timetextHidden" 
-                      modelReference="LoginBean.time"
+                      valueRef="LoginBean.time"
                       converter="time"/></td>
               <td><h:output_errors id="timeErr"
-                      clientId="timetextHidden"/> </td>
+                      for="timetextHidden"/> </td>
             </tr>
             <tr>
               <td><b><h:output_text id="datetimeconvertLabel"
                          value="Date/Time [MMM DD, YYYY HH:MI:SS (AM/PM) Format]: " /></b></td>
               <td><h:input_hidden id="datetimetextHidden" 
-                      modelReference="LoginBean.dateTime"
+                      valueRef="LoginBean.dateTime"
                       converter="datetime"/></td>
               <td><h:output_errors id="datetimeErr"
-                      clientId="datetimetextHidden"/> </td>
+                      for="datetimetextHidden"/> </td>
             </tr>
             <tr>
               <td><b><h:output_text id="boolconvertLabel"
@@ -41,7 +41,7 @@
                            value="Currency Format:"/></b></td>
                 <td>
                     <h:input_hidden id="currencyinputHidden"
-                        modelReference="LoginBean.double"
+                        valueRef="LoginBean.double"
                         converter="number">
                         <f:attribute name="numberStyle" value="currency"/>
                     </h:input_hidden>

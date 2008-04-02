@@ -1,5 +1,5 @@
 /*
- * $Id: Command_ButtonTag.java,v 1.32 2003/02/20 22:49:15 ofung Exp $
+ * $Id: Command_ButtonTag.java,v 1.33 2003/03/21 18:28:46 jvisvanathan Exp $
  */
 
 /*
@@ -31,7 +31,7 @@ import com.sun.faces.taglib.FacesTag;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: Command_ButtonTag.java,v 1.32 2003/02/20 22:49:15 ofung Exp $
+ * @version $Id: Command_ButtonTag.java,v 1.33 2003/03/21 18:28:46 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -57,7 +57,9 @@ public class Command_ButtonTag extends FacesTag
     protected String commandname = null;
     protected String label = null;
     protected String image = null;
-
+    protected String actionRef = null;
+    protected String action = null;
+    
     // Relationship Instance Variables
 
     //
@@ -83,7 +85,22 @@ public class Command_ButtonTag extends FacesTag
 	commandname = newCommandname;
     }
 
+    public void setActionRef(String newActionRef) {
+        actionRef = newActionRef;
+    }
 
+    public String getActionRef() {
+        return actionRef;
+    }
+    
+    public void setAction(String newAction) {
+        action = newAction;
+    }
+
+    public String getAction() {
+        return action;
+    }
+    
     public void setType(String buttonType) {
         type = buttonType;
     }
@@ -119,6 +136,13 @@ public class Command_ButtonTag extends FacesTag
 	if (null == button.getCommandName()) {
 	    button.setCommandName(getCommandName());
 	}
+        if (null == button.getActionRef() && actionRef != null ) {
+	    button.setActionRef(actionRef);
+	}
+        if (null == button.getAction() && action != null ) {
+	    button.setAction(action);
+	}
+        
 	if (null == button.getAttribute("type")) {
             button.setAttribute("type", getType());
         }

@@ -1,5 +1,5 @@
 /*
- * $Id: Command_HyperlinkTag.java,v 1.26 2003/02/20 22:49:15 ofung Exp $
+ * $Id: Command_HyperlinkTag.java,v 1.27 2003/03/21 18:28:46 jvisvanathan Exp $
  */
 
 /*
@@ -31,7 +31,7 @@ import com.sun.faces.taglib.FacesTag;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: Command_HyperlinkTag.java,v 1.26 2003/02/20 22:49:15 ofung Exp $
+ * @version $Id: Command_HyperlinkTag.java,v 1.27 2003/03/21 18:28:46 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -58,7 +58,9 @@ public class Command_HyperlinkTag extends FacesTag
     protected String label = null;
     protected String commandname = null;
     protected String image = null;
-
+    protected String actionRef = null;
+    protected String action = null;
+    
     // Relationship Instance Variables
 
     //
@@ -103,6 +105,22 @@ public class Command_HyperlinkTag extends FacesTag
     public String getImage() {
         return image;
     }
+    
+    public void setActionRef(String newActionRef) {
+        actionRef = newActionRef;
+    }
+
+    public String getActionRef() {
+        return actionRef;
+    }
+    
+    public void setAction(String newAction) {
+        action = newAction;
+    }
+
+    public String getAction() {
+        return action;
+    }
 
 //
 // General Methods
@@ -119,6 +137,12 @@ public class Command_HyperlinkTag extends FacesTag
 	UICommand link = (UICommand) component;
         if (null == link.getCommandName()) {
 	    link.setCommandName(getCommandName());
+	}
+        if (null == link.getActionRef() && actionRef != null ) {
+	    link.setActionRef(actionRef);
+	}
+        if (null == link.getAction() && action != null ) {
+	    link.setAction(action);
 	}
         if (null == component.getAttribute("label")) {
             component.setAttribute("label", getLabel());

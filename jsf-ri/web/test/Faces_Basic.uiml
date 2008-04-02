@@ -69,7 +69,7 @@
       
       <part id="appleQuantity" class="UISelectOne">
         <style>
-            <property name="modelReference">${UserBean.items}</property>
+            <property name="valueRef">${UserBean.items}</property>
             <property name="label">0</property>
             <property name="value">0.00</property>
             <property name="label">1</property>
@@ -95,7 +95,7 @@
       
       <part id="shipType" class="UISelectOne">
         <style>
-            <property name="modelReference">${ShipTypeBean.shipType}</property>
+            <property name="valueRef">${ShipTypeBean.shipType}</property>
             <property name="label">Next Day</property>
             <property name="value">nextDay"</property>
             <property name="label">Next Week</property>

@@ -17,6 +17,6 @@
 					<td>Single-select menumodel:</td>
 					<td><h:selectone_menu id="one_menumodel" size="3">
 						<h:selectitems id="one_menumodelitems"
-							modelReference="LoginBean.options" />
+							valueRef="LoginBean.options" />
 					</h:selectone_menu></td>
 				</tr>

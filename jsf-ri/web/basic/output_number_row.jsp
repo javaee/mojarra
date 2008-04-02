@@ -16,13 +16,13 @@
              <td>
 
                <h:output_number id="output_number1" numberStyle="number"
-                               modelReference="LoginBean.floater"/>
+                               valueRef="LoginBean.floater"/>
 
              </td>
              <td>
 
              <h:output_errors id="output_number1_errors"
-                          clientId="output_number1" />
+                          for="output_number1" />
 
              </td>
             </tr>
@@ -40,13 +40,13 @@
              <td>
 
                <h:output_number id="output_number2" numberStyle="currency"
-                          modelReference="LoginBean.floater"/>
+                          valueRef="LoginBean.floater"/>
              </td>
 
 	      <td>
 
 		<h:output_errors id="output_number2_errors" 
-			  clientId="output_number2" />
+			  for="output_number2" />
 
 	      </td>
 
@@ -65,14 +65,14 @@
              <td>
 
                <h:output_number id="output_number3" numberStyle="percent"
-                          modelReference="LoginBean.floater" />
+                          valueRef="LoginBean.floater" />
 
              </td>
 
 	      <td>
 
 		<h:output_errors id="output_number3_errors" 
-			  clientId="output_number3" />
+			  for="output_number3" />
 
 	      </td>
 
@@ -91,13 +91,13 @@
              <td>
 
                <h:output_number id="output_number4" formatPattern="####" 
-                         modelReference="LoginBean.floater" />
+                         valueRef="LoginBean.floater" />
              </td>
 
 	      <td>
 
 		<h:output_errors id="output_number4_errors" 
-			  clientId="output_number4" />
+			  for="output_number4" />
 
 	      </td>
 
@@ -108,7 +108,7 @@
              <td>
 
                <h:output_text id="output_number5_label"
-                     value="output_number integer with modelReference"/>
+                     value="output_number integer with valueRef"/>
 
              </td>
 
@@ -116,13 +116,13 @@
              <td>
 
                <h:output_number id="output_number5" numberStyle="integer"
-                                 modelReference="${LoginBean.char}" />
+                                 valueRef="${LoginBean.char}" />
              </td>
 
               <td>
 
                 <h:output_errors id="output_number5_errors"
-                          clientId="output_number5" />
+                          for="output_number5" />
 
               </td>
 

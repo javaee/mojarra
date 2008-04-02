@@ -16,7 +16,7 @@
              <td>
 
                <h:output_date id="output_date3" dateStyle="short"
-                                     modelReference="LoginBean.date"/>
+                                     valueRef="LoginBean.date"/>
 
 
              </td>
@@ -24,7 +24,7 @@
 	      <td>
 
 		<h:output_errors id="output_date3_errors" 
-			  clientId="output_date3" />
+			  for="output_date3" />
 
 	      </td>
 
@@ -44,7 +44,7 @@
              <td>
 
                <h:output_date id="output_date1" dateStyle="medium"
-                               modelReference="LoginBean.date"/>
+                               valueRef="LoginBean.date"/>
 
 
              </td>
@@ -64,7 +64,7 @@
              <td>
 
                <h:output_date id="output_date4" dateStyle="long" 
-                               modelReference="LoginBean.date"/>
+                               valueRef="LoginBean.date"/>
 
 
              </td>
@@ -72,7 +72,7 @@
 	      <td>
 
 		<h:output_errors id="output_date4_errors" 
-			  clientId="output_date4" />
+			  for="output_date4" />
 
 	      </td>
 
@@ -91,7 +91,7 @@
              <td>
 
                <h:output_date id="output_date2" dateStyle="full"
-                                  modelReference="LoginBean.date"/>
+                                  valueRef="LoginBean.date"/>
 
 
              </td>
@@ -99,7 +99,7 @@
 	      <td>
 
 		<h:output_errors id="output_date2_errors" 
-			  clientId="output_date2" />
+			  for="output_date2" />
 
 	      </td>
 

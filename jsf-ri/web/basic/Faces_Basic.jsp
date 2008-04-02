@@ -52,14 +52,14 @@
               <td> <h:output_text id="userLabel" key="usernameLabel" /> </td>
               <td> 
                    <h:input_text id="userName" 
-                                     modelReference="LoginBean.userName">
+                                     valueRef="LoginBean.userName">
 		     <f:validate_length minimum="6" maximum="10"/>
 		     <f:validate_required/>
                    </h:input_text>
 
               </td>
 
-            <td> <h:output_errors id="err1" clientId="userName" /> </td>
+            <td> <h:output_errors id="err1" for="userName" /> </td>
 
             </tr>
 
@@ -74,7 +74,7 @@
 
                </td>
 
-            <td> <h:output_errors id="err2" clientId="password"/> </td>
+            <td> <h:output_errors id="err2" for="password"/> </td>
 
              </tr>
 
@@ -91,7 +91,7 @@
 
                </td>
 
--              <td> <h:output_errors id="err3" clientId="double"/> </td>
+-              <td> <h:output_errors id="err3" for="double"/> </td>
 
 
              </tr>
@@ -110,7 +110,7 @@
 
                </td>
 
-              <td> <h:output_errors id="err4" clientId="integer"/> </td>
+              <td> <h:output_errors id="err4" for="integer"/> </td>
 
 
              </tr>
@@ -121,14 +121,14 @@
                <td> 
 
                     <h:input_text size="1" id="string" 
-                                  modelReference="LoginBean.string"> 
+                                  valueRef="LoginBean.string"> 
 
 		     <f:validate_stringrange maximum="f" minimum="a"/>
                     </h:input_text>
 
                </td>
 
-              <td> <h:output_errors id="err5" clientId="string"/> </td>
+              <td> <h:output_errors id="err5" for="string"/> </td>
 
 
              </tr>
@@ -142,7 +142,7 @@
 
               <tr>
              <td> <h:selectboolean_checkbox rendered="true"
-                       modelReference="LoginBean.validUser"/> 
+                       valueRef="LoginBean.validUser"/> 
                   <h:output_text id="checkLabel" 
                                      key="validUserLabel" />
 
@@ -198,10 +198,10 @@
          <TD>
 
 	      <h:selectone_listbox id="Listbox" 
-                             modelReference="LoginBean.currentOption">
+                             valueRef="LoginBean.currentOption">
 
 		<h:selectitems id="listboxOptions"
-                                   modelReference="LoginBean.options"/>
+                                   valueRef="LoginBean.options"/>
 
                 <f:valuechanged_listener type="basic.ValueChange"/>
 
@@ -265,12 +265,12 @@
 
 	<TD>
             <h:selectone_radio id="verticalRadio" 
-             modelReference="LoginBean.currentShipment" 
+             valueRef="LoginBean.currentShipment" 
              layout="PAGE_DIRECTION" border="1" >
 
-                <h:selectitem modelReference="LoginBean.nextDay" />
-                <h:selectitem modelReference="LoginBean.nextWeek" />
-                <h:selectitem modelReference="LoginBean.nextMonth" />
+                <h:selectitem valueRef="LoginBean.nextDay" />
+                <h:selectitem valueRef="LoginBean.nextWeek" />
+                <h:selectitem valueRef="LoginBean.nextMonth" />
 
                 </h:selectone_radio>
                 <h:output_text id="verticalLabel" value="Radio laid out vertically" />
@@ -283,12 +283,12 @@
 	<TD>
 
 	      <h:selectone_radio id="radioFromModel" 
-                       modelReference="LoginBean.currentOption"
+                       valueRef="LoginBean.currentOption"
                        layout="LINE_DIRECTION" >
 
 		<h:selectitems id="listboxOptions"
                                    title="options come from model" 
-                                   modelReference="LoginBean.options"/>
+                                   valueRef="LoginBean.options"/>
 
               </h:selectone_radio>
               <h:output_text id="modelLabel" value="Above options come from model " />
@@ -363,7 +363,7 @@
         <TD>Multi-select menu with model:</TD>
         <TD><h:selectmany_menu id="menumodel" size="3">
                 <h:selectitems id="menumodelitems"
-                    modelReference="LoginBean.options" />
+                    valueRef="LoginBean.options" />
             </h:selectmany_menu></TD>
       </TR>
       <TR>
@@ -384,9 +384,9 @@
       <TR>
         <TD>Multi-select listbox with model:</TD>
         <TD><h:selectmany_listbox id="listmodel"
-                modelReference="LoginBean.currentOptions">
+                valueRef="LoginBean.currentOptions">
                 <h:selectitems id="listmodelitems"
-                    modelReference="LoginBean.options" />
+                    valueRef="LoginBean.options" />
             </h:selectmany_listbox></TD>
       </TR>
       <TR>
@@ -407,9 +407,9 @@
       <TR>
         <TD>Multi-select checkbox with model:</TD>
         <TD><h:selectmany_checkboxlist id="checklistmodel"
-                modelReference="LoginBean.currentOptions">
+                valueRef="LoginBean.currentOptions">
                 <h:selectitems id="checklistmodelitems"
-                    modelReference="LoginBean.options" />
+                    valueRef="LoginBean.options" />
             </h:selectmany_checkboxlist></TD>
       </TR>
       <TR>

@@ -26,121 +26,121 @@
               <td><b><h:output_text id="secretdateconvert"
                          value="(secret) Date [MMM DD, YYYY Format]: " /></b></td>
               <td><h:input_secret id="secretdatetext" 
-                      modelReference="LoginBean.date"
+                      valueRef="LoginBean.date"
                       converter="date"/></td>
               <td><h:output_errors id="secretdateerr"
-                      clientId="secretdatetext"/> </td>
+                      for="secretdatetext"/> </td>
             </tr>
             <tr>
               <td><b><h:output_text id="dateconvert"
                          value="Date [MMM DD, YYYY Format]: " /></b></td>
               <td><h:input_text id="datetext" 
-                      modelReference="LoginBean.date"
+                      valueRef="LoginBean.date"
                       converter="date"/></td>
               <td><h:output_errors id="dateerr"
-                      clientId="datetext"/> </td>
+                      for="datetext"/> </td>
             </tr>
             <tr>
               <td><b><h:output_text id="timeconvert"
                          value="Time [HH:MI:SS (AM/PM) Format]: " /></b></td>
               <td><h:input_text id="timetext" 
-                      modelReference="LoginBean.time"
+                      valueRef="LoginBean.time"
                       converter="time"/></td>
               <td><h:output_errors id="timeerr"
-                      clientId="timetext"/> </td>
+                      for="timetext"/> </td>
             </tr>
             <tr>
               <td><b><h:output_text id="datetimeconvert"
                          value="Date/Time [MMM DD, YYYY HH:MI:SS (AM/PM) Format]: " /></b></td>
               <td><h:input_text id="datetimetext" 
-                      modelReference="LoginBean.dateTime"
+                      valueRef="LoginBean.dateTime"
                       converter="datetime"/></td>
               <td><h:output_errors id="datetimeerr"
-                      clientId="datetimetext"/> </td>
+                      for="datetimetext"/> </td>
             </tr>
             <tr>
               <td><b><h:output_text id="boolconvert"
                          value="Boolean [true/false]: " /></b></td>
               <td><h:input_text id="booltext" 
-                      modelReference="LoginBean.validUser"
+                      valueRef="LoginBean.validUser"
                       converter="boolean"/></td>
             </tr>
             <tr>
               <td><b><h:output_text id="byteLabel" value="Byte" /></b></td>
               <td>
                    <h:input_text id="byteInput"
-                       modelReference="LoginBean.byte"
+                       valueRef="LoginBean.byte"
                        converter="number">
                        <f:attribute name="numberStyle" value="integer"/>
                     </h:input_text>
               </td>
               <td> <h:output_errors id="errByte"
-                       clientId="byteInput"/> </td>
+                       for="byteInput"/> </td>
             </tr>
             <tr>
               <td><b><h:output_text id="doubleLabel" 
                          value="Double" /></b></td>
               <td>
                    <h:input_text id="doubleInput"
-                       modelReference="LoginBean.double"
+                       valueRef="LoginBean.double"
                        converter="number">
                        <f:attribute name="numberStyle" value="number"/>
                     </h:input_text>
               </td>
               <td> <h:output_errors id="errDouble"
-                       clientId="doubleInput"/> </td>
+                       for="doubleInput"/> </td>
              </tr>
             <tr>
               <td><b><h:output_text id="floatLabel" 
                          value="Float" /></b></td>
               <td>
                    <h:input_text id="floatInput"
-                       modelReference="LoginBean.float"
+                       valueRef="LoginBean.float"
                        converter="number">
                        <f:attribute name="numberStyle" value="number"/>
                     </h:input_text>
               </td>
               <td> <h:output_errors id="errFloat"
-                       clientId="floatInput"/> </td>
+                       for="floatInput"/> </td>
             </tr>
             <tr>
               <td><b><h:output_text id="intLabel" 
                          value="Int" /></b></td>
               <td>
                    <h:input_text id="intInput"
-                       modelReference="LoginBean.int"
+                       valueRef="LoginBean.int"
                        converter="number">
                        <f:attribute name="numberStyle" value="integer"/>
                     </h:input_text>
               </td>
               <td> <h:output_errors id="errInt"
-                       clientId="intInput"/> </td>
+                       for="intInput"/> </td>
             </tr>
             <tr>
               <td><b><h:output_text id="longLabel" 
                          value="Long" /></b></td>
               <td>
                    <h:input_text id="longInput"
-                       modelReference="LoginBean.long"
+                       valueRef="LoginBean.long"
                        converter="number">
                        <f:attribute name="numberStyle" value="number"/>
                     </h:input_text>
               </td>
               <td> <h:output_errors id="errLong"
-                       clientId="longInput"/> </td>
+                       for="longInput"/> </td>
             </tr>
             <tr>
               <td><b><h:output_text id="shortLabel" 
                          value="Short" /></b></td>
               <td>
                    <h:input_text id="shortInput"
-                       modelReference="LoginBean.short"
+                       valueRef="LoginBean.short"
                        converter="number">
                        <f:attribute name="numberStyle" value="number"/>
                     </h:input_text>
               </td>
               <td> <h:output_errors id="errShort"
-                       clientId="shortInput"/> </td>
+                       for="shortInput"/> </td>
             </tr>
             </table
             <p>
@@ -151,7 +151,7 @@
                            value="Date [LONG Format]:"/></b></td>
                 <td>
                     <h:output_text id="dateOutput"
-                        modelReference="LoginBean.date"
+                        valueRef="LoginBean.date"
                         converter="date">
                         <f:attribute name="dateStyle" value="long"/>
                     </h:output_text>
@@ -162,7 +162,7 @@
                            value="Time [long Format]:"/></b></td>
                 <td>
                     <h:output_text id="timeOutput"
-                        modelReference="LoginBean.time"
+                        valueRef="LoginBean.time"
                         converter="time">
                         <f:attribute name="timeStyle" value="long"/>
                     </h:output_text>
@@ -173,7 +173,7 @@
                            value="Currency Format:"/></b></td>
                 <td>
                     <h:output_text id="currencyOutput"
-                        modelReference="LoginBean.double"
+                        valueRef="LoginBean.double"
                         converter="number">
                         <f:attribute name="numberStyle" value="currency"/>
                     </h:output_text>
@@ -184,7 +184,7 @@
                            value="Percent Format:"/></b></td>
                 <td>
                     <h:output_text id="percentOutput"
-                        modelReference="LoginBean.double"
+                        valueRef="LoginBean.double"
                         converter="number">
                         <f:attribute name="numberStyle" value="percent"/>
                     </h:output_text>
@@ -195,7 +195,7 @@
                            value="Pattern Format [####]:"/></b></td>
                 <td>
                     <h:output_text id="patternOutput"
-                        modelReference="LoginBean.double"
+                        valueRef="LoginBean.double"
                         converter="number">
                         <f:attribute name="formatPattern" value="####"/>
                     </h:output_text>
@@ -206,7 +206,7 @@
                            value="Pattern Format [##,##]:"/></b></td>
                 <td>
                     <h:output_text id="patternOutput1"
-                        modelReference="LoginBean.double"
+                        valueRef="LoginBean.double"
                         converter="number">
                         <f:attribute name="formatPattern" value="##,##"/>
                     </h:output_text>

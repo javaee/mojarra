@@ -65,63 +65,63 @@
               <td> <h:output_text id="byteLabel" value="BYTE" /> </td>
               <td>
                    <h:input_number id="byteInput" numberStyle="integer"
-                        modelReference="LoginBean.byte"/>
+                        valueRef="LoginBean.byte"/>
               </td>
-              <td> <h:output_errors id="errByte" clientId="byteInput"/> </td>
+              <td> <h:output_errors id="errByte" for="byteInput"/> </td>
              </tr>
 
              <tr>
               <td> <h:output_text id="doubleLabel" value="DOUBLE" /> </td>
               <td>
                    <h:input_number id="doubleInput" numberStyle="number"
-                        modelReference="LoginBean.double"/>
+                        valueRef="LoginBean.double"/>
               </td>
-              <td> <h:output_errors id="errDouble" clientId="doubleInput"/> </td>
+              <td> <h:output_errors id="errDouble" for="doubleInput"/> </td>
              </tr>
 
              <tr>
               <td> <h:output_text id="floatLabel" value="FLOAT" /> </td>
               <td>
                    <h:input_number id="floatInput" numberStyle="number"
-                        modelReference="LoginBean.float"/>
+                        valueRef="LoginBean.float"/>
               </td>
-              <td> <h:output_errors id="errFloat" clientId="floatInput"/> </td>
+              <td> <h:output_errors id="errFloat" for="floatInput"/> </td>
              </tr>
 
              <tr>
               <td> <h:output_text id="intLabel" value="integer" /> </td>
               <td>
                    <h:input_number id="intInput" numberStyle="integer"
-                        modelReference="LoginBean.int"/>
+                        valueRef="LoginBean.int"/>
               </td>
-              <td> <h:output_errors id="errInt" clientId="intInput"/> </td>
+              <td> <h:output_errors id="errInt" for="intInput"/> </td>
              </tr>
 
              <tr>
               <td> <h:output_text id="longLabel" value="LONG" /> </td>
               <td>
                    <h:input_number id="longInput" numberStyle="number"
-                        modelReference="LoginBean.long"/>
+                        valueRef="LoginBean.long"/>
               </td>
-              <td> <h:output_errors id="errLong" clientId="longInput"/> </td>
+              <td> <h:output_errors id="errLong" for="longInput"/> </td>
              </tr>
 
               <tr>
               <td> <h:output_text id="shortLabel" value="SHORT" /> </td>
               <td>
                    <h:input_number id="shortInput" numberStyle="number"
-                        modelReference="LoginBean.short"/>
+                        valueRef="LoginBean.short"/>
               </td>
-              <td> <h:output_errors id="errShort" clientId="shortInput"/> </td>
+              <td> <h:output_errors id="errShort" for="shortInput"/> </td>
              </tr>
 
              <tr>
               <td> <h:output_text id="charLabel" value="CHARACTER" /> </td>
               <td>
                    <h:input_number id="charInput" numberStyle="integer"
-                        modelReference="LoginBean.char"/>
+                        valueRef="LoginBean.char"/>
               </td>
-              <td> <h:output_errors id="errChar" clientId="charInput"/> </td>
+              <td> <h:output_errors id="errChar" for="charInput"/> </td>
              </tr>
 
             <tr>

@@ -39,15 +39,15 @@
                   <!-- List Data -->
 
                   <h:panel_data    id="listData1" var="customer"
-                       modelReference="ListBean">
+                       valueRef="ListBean">
                     <h:output_text id="accountId1"
-                       modelReference="customer.accountId"/>
+                       valueRef="customer.accountId"/>
                     <h:output_text id="name1"
-                       modelReference="customer.name"/>
+                       valueRef="customer.name"/>
                     <h:output_text id="symbol1"
-                       modelReference="customer.symbol"/>
+                       valueRef="customer.symbol"/>
                     <h:output_text id="totalSales1"
-                       modelReference="customer.totalSales"/>
+                       valueRef="customer.totalSales"/>
                   </h:panel_data>
 
                  </h:panel_list> 
@@ -89,15 +89,15 @@
                   <!-- List Data -->
 
                   <h:panel_data    id="listData2" var="customer"
-                       modelReference="ListBean">
+                       valueRef="ListBean">
                     <h:output_text id="accountId2"
-                       modelReference="customer.accountId"/>
+                       valueRef="customer.accountId"/>
                     <h:output_text id="name2"
-                       modelReference="customer.name"/>
+                       valueRef="customer.name"/>
                     <h:output_text id="symbol2"
-                       modelReference="customer.symbol"/>
+                       valueRef="customer.symbol"/>
                     <h:output_text id="totalSales2"
-                       modelReference="customer.totalSales"/>
+                       valueRef="customer.totalSales"/>
                   </h:panel_data>
 
                   <!-- Footers -->

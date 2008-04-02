@@ -22,6 +22,6 @@
 					<td>Multi-select menumodel:</td>
 					<td><h:selectmany_menu id="menumodel" size="3">
 						<h:selectitems id="menumodelitems"
-							modelReference="LoginBean.options" />
+							valueRef="LoginBean.options" />
 					</h:selectmany_menu></td>
 				</tr>

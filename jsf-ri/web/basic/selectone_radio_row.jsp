@@ -62,12 +62,12 @@
 
              <td>
                  <h:selectone_radio id="radioFromModel"
-                       modelReference="LoginBean.currentOption"
+                       valueRef="LoginBean.currentOption"
                        layout="LINE_DIRECTION" >
 
                 <h:selectitems id="listboxOptions"
                                    title="options come from model"
-                                   modelReference="LoginBean.options"/>
+                                   valueRef="LoginBean.options"/>
 
               </h:selectone_radio>
 

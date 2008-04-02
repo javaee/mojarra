@@ -17,14 +17,14 @@
 
                <h:output_datetime id="output_datetime2" 
                             formatPattern="EEE, MMM d, yyyy G 'at' hh:mm:ss a"
-                               modelReference="LoginBean.date"/>
+                               valueRef="LoginBean.date"/>
 
              </td>
 
 	      <td>
 
 		<h:output_errors id="output_datetime2_errors" 
-		        clientId="output_datetime2" />
+		        for="output_datetime2" />
 
 	      </td>
 
@@ -44,14 +44,14 @@
 
                <h:output_datetime id="output_datetime3" 
                     dateStyle="short" timeStyle="full"
-                               modelReference="LoginBean.date"/>
+                               valueRef="LoginBean.date"/>
 
              </td>
 
 	      <td>
 
 		<h:output_errors id="output_datetime3_errors" 
-		        clientId="output_datetime2" />
+		        for="output_datetime2" />
 
 	      </td>
 

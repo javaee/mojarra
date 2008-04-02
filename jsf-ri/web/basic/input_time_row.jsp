@@ -52,7 +52,7 @@
 	      <td>
 
 		<h:output_errors id="input_time2_errors" 
-		        clientId="input_time2" />
+		        for="input_time2" />
 
 	      </td>
 

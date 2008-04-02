@@ -1,5 +1,5 @@
 /*
- * $Id: NumberConverter.java,v 1.3 2003/03/19 21:16:29 jvisvanathan Exp $
+ * $Id: NumberConverter.java,v 1.4 2003/03/21 18:28:43 jvisvanathan Exp $
  */
 
 /*
@@ -61,7 +61,7 @@ public class NumberConverter implements Converter {
             throw new ConverterException(pe.getMessage());
         }
 
-        // if modelReference is null, store value as Number.
+        // if valueRef is null, store value as Number.
        if ( component instanceof UIInput) {
             valueRef = ((UIInput)component).getValueRef();
         }

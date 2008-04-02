@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTag.java,v 1.30 2003/02/20 22:49:13 ofung Exp $
+ * $Id: FacesTag.java,v 1.31 2003/03/21 18:28:45 jvisvanathan Exp $
  */
 
 /*
@@ -36,7 +36,7 @@ import com.sun.faces.RIConstants;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: FacesTag.java,v 1.30 2003/02/20 22:49:13 ofung Exp $
+ * @version $Id: FacesTag.java,v 1.31 2003/03/21 18:28:45 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -45,125 +45,136 @@ import com.sun.faces.RIConstants;
 
 public abstract class FacesTag extends javax.faces.webapp.FacesTag
 {
-//
-// Protected Constants
-//
+    //
+    // Protected Constants
+    //
 
-//
-// Class Variables
-//
+    //
+    // Class Variables
+    //
 
-//
-// Instance Variables
-//
+    //
+    // Instance Variables
+    //
 
-// Attribute Instance Variables
+    // Attribute Instance Variables
 
-protected String key = null;
-protected String imageKey = null;
-protected String bundle = null;
-protected String formatStyle = null;
-protected String dateStyle = null;
-protected String timeStyle = null;
-protected String timezone = null;
-protected String formatPattern = null;
+    protected String key = null;
+    protected String imageKey = null;
+    protected String bundle = null;
+    protected String formatStyle = null;
+    protected String dateStyle = null;
+    protected String timeStyle = null;
+    protected String timezone = null;
+    protected String formatPattern = null;
 
-protected String accept = null;
-protected String acceptcharset = null;
-protected String accesskey = null;
-protected String action = null;
-protected String alt = null;
-protected String charset = null;
-protected String checked = null;
-protected String commandClass = null;
-protected String graphicClass = null;
-protected String inputClass = null;
-protected String outputClass = null;
-protected String formClass = null;
-protected String selectbooleanClass = null;
-protected String selectmanyClass = null;
-protected String selectoneClass = null;
-protected String selectitemClass = null;
-protected String selectitemsClass = null;
-protected String cols = null;
-protected String coords = null;
-protected String dir = null;
-protected String disabled = null;
-protected String enctype = null;
-protected String htmlFor = null;
-protected String height = null;
-protected String href = null;
-protected String hreflang = null;
-protected String hspace = null;
-protected String ismap = null;
-protected String label = null;
-protected String lang = null;
-protected String longdesc = null;
-protected String maxlength = null;
-protected String method = null;
-protected String multiple = null;
-protected String name = null;
-protected String onblur = null;
-protected String onchange = null;
-protected String onclick = null;
-protected String ondblclick = null;
-protected String onfocus = null;
-protected String onkeydown = null;
-protected String onkeypress = null;
-protected String onkeyup = null;
-protected String onmousedown = null;
-protected String onmousemove = null;
-protected String onmouseout = null;
-protected String onmouseover = null;
-protected String onmouseup = null;
-protected String onreset = null;
-protected String onselect = null;
-protected String onsubmit = null;
-protected String readonly = null;
-protected String rel = null;
-protected String rev = null;
-protected String rows = null;
-protected String selected = null;
-protected String shape = null;
-protected String size = null;
-protected String src = null;
-protected String style = null;
-protected String tabindex = null;
-protected String target = null;
-protected String title = null;
-protected String type = null;
-protected String usemap = null;
-protected String value = null;
+    protected String accept = null;
+    protected String acceptcharset = null;
+    protected String accesskey = null;
+    protected String action = null;
+    protected String alt = null;
+    protected String charset = null;
+    protected String checked = null;
+    protected String commandClass = null;
+    protected String graphicClass = null;
+    protected String inputClass = null;
+    protected String outputClass = null;
+    protected String formClass = null;
+    protected String selectbooleanClass = null;
+    protected String selectmanyClass = null;
+    protected String selectoneClass = null;
+    protected String selectitemClass = null;
+    protected String selectitemsClass = null;
+    protected String cols = null;
+    protected String coords = null;
+    protected String dir = null;
+    protected String disabled = null;
+    protected String enctype = null;
+    protected String htmlFor = null;
+    protected String height = null;
+    protected String href = null;
+    protected String hreflang = null;
+    protected String hspace = null;
+    protected String ismap = null;
+    protected String label = null;
+    protected String lang = null;
+    protected String longdesc = null;
+    protected String maxlength = null;
+    protected String method = null;
+    protected String multiple = null;
+    protected String name = null;
+    protected String onblur = null;
+    protected String onchange = null;
+    protected String onclick = null;
+    protected String ondblclick = null;
+    protected String onfocus = null;
+    protected String onkeydown = null;
+    protected String onkeypress = null;
+    protected String onkeyup = null;
+    protected String onmousedown = null;
+    protected String onmousemove = null;
+    protected String onmouseout = null;
+    protected String onmouseover = null;
+    protected String onmouseup = null;
+    protected String onreset = null;
+    protected String onselect = null;
+    protected String onsubmit = null;
+    protected String readonly = null;
+    protected String rel = null;
+    protected String rev = null;
+    protected String rows = null;
+    protected String selected = null;
+    protected String shape = null;
+    protected String size = null;
+    protected String src = null;
+    protected String style = null;
+    protected String tabindex = null;
+    protected String target = null;
+    protected String title = null;
+    protected String type = null;
+    protected String usemap = null;
+    protected String value = null;
 
-// HTML 4.0 table attributes
-protected String summary = null;
-protected String width = null;
-protected String bgcolor = null;
-protected String frame = null;
-protected String rules = null;
-protected String border = null;
-protected String cellspacing = null;
-protected String cellpadding = null;
+    // HTML 4.0 table attributes
+    protected String summary = null;
+    protected String width = null;
+    protected String bgcolor = null;
+    protected String frame = null;
+    protected String rules = null;
+    protected String border = null;
+    protected String cellspacing = null;
+    protected String cellpadding = null;
 
- // Relationship Instance Variables
+    protected String valueRef = null;
 
-//
-// Constructors and Initializers    
-//
+     // Relationship Instance Variables
 
-public FacesTag()
-{
-    super();
-}
+    //
+    // Constructors and Initializers    
+    //
 
-//
-// Class methods
-//
+    public FacesTag()
+    {
+        super();
+    }
 
-// 
-// Accessors
-//
+    //
+    // Class methods
+    //
 
+    // 
+    // Accessors
+    //
+    public String getValueRef()
+    {
+	return valueRef;
+    }
+    
+    public void setValueRef(String newValueRef)
+    {
+	valueRef = newValueRef;
+    }
+  
     public String getKey()
     {
 	return key;
@@ -1163,6 +1174,12 @@ protected void overrideProperties(UIComponent component)
     super.overrideProperties(component);
     String keyAttr = null;
 
+    if ( valueRef != null && component instanceof UIOutput ) {
+        UIOutput output = (UIOutput)component;
+        if ( output.getValueRef() != null ) {
+            output.setValueRef(valueRef);
+        }    
+    }    
     if (null == component.getAttribute("key")) {
 	component.setAttribute("key", getKey());
     }

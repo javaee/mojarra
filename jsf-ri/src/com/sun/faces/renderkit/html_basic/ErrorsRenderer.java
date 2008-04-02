@@ -1,5 +1,5 @@
 /*
- * $Id: ErrorsRenderer.java,v 1.9 2003/03/19 21:16:33 jvisvanathan Exp $
+ * $Id: ErrorsRenderer.java,v 1.10 2003/03/21 18:28:44 jvisvanathan Exp $
  */
 
 /*
@@ -37,7 +37,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ErrorsRenderer.java,v 1.9 2003/03/19 21:16:33 jvisvanathan Exp $
+ * @version $Id: ErrorsRenderer.java,v 1.10 2003/03/21 18:28:44 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -125,26 +125,26 @@ public class ErrorsRenderer extends HtmlBasicRenderer {
         writer = context.getResponseWriter();
         Assert.assert_it(writer != null );
         
-        // Attempt to use the clientId expression to locate 
+        // Attempt to use the "for" attribute to locate 
         // messages.  Threee possible scenarios here:
-        // 1. valid clientId expression - messages returned
-        //    for valid component identified by clientId expression.
-        // 2. zero length clientId expression - global errors
+        // 1. valid "for" attribute - messages returned
+        //    for valid component identified by "for" expression.
+        // 2. zero length "for" expression - global errors
         //    not associated with any component returned
-        // 3. no clientId expression - all messages returned.
+        // 3. no "for" expression - all messages returned.
         // 
-        String clientId = (String)component.getClientId(context);
-        if (null != clientId) {
-            if (clientId.length() == 0) {
+        String forComponent = (String)component.getAttribute("for");
+        if (null != forComponent) {
+            if (forComponent.length() == 0) {
                 messageIter = context.getMessages(null);
             } else {
                 UIComponent root = context.getTree().getRoot();
                 Assert.assert_it(null != root);
                 UIComponent comp = null;
                 try {
-                    comp = root.findComponent(clientId);
+                    comp = root.findComponent(forComponent);
                 } catch (Throwable t) {
-                    Object[] params = {clientId};
+                    Object[] params = {forComponent};
                     throw new RuntimeException(Util.getExceptionMessage(
                         Util.COMPONENT_NOT_FOUND_ERROR_MESSAGE_ID, params));
                 }

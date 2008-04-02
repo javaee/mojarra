@@ -51,7 +51,7 @@
 	      <td>
 
 		<h:output_errors id="input_text2_errors" 
-			  clientId="input_text2" />
+			  for="input_text2" />
 
 	      </td>
 
@@ -81,7 +81,7 @@
 	      <td>
 
 		<h:output_errors id="input_text3_errors" 
-			  clientId="input_text3" />
+			  for="input_text3" />
 
 	      </td>
 
@@ -112,7 +112,7 @@
 	      <td>
 
 		<h:output_errors id="input_text4_errors" 
-			  clientId="input_text4" />
+			  for="input_text4" />
 
 	      </td>
 

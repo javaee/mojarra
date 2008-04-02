@@ -1,5 +1,5 @@
 /*
- * $Id: Output_ErrorsTag.java,v 1.6 2003/03/19 21:16:40 jvisvanathan Exp $
+ * $Id: Output_ErrorsTag.java,v 1.7 2003/03/21 18:28:47 jvisvanathan Exp $
  */
 
 /*
@@ -28,7 +28,7 @@ import javax.faces.component.UIOutput;
 
  *
 
- * @version $Id: Output_ErrorsTag.java,v 1.6 2003/03/19 21:16:40 jvisvanathan Exp $
+ * @version $Id: Output_ErrorsTag.java,v 1.7 2003/03/21 18:28:47 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -37,47 +37,49 @@ import javax.faces.component.UIOutput;
 
 public class Output_ErrorsTag extends FacesTag {
 
-//
-// Protected Constants
-//
+    //
+    // Protected Constants
+    //
 
-//
-// Class Variables
-//
+    //
+    // Class Variables
+    //
 
-//
-// Instance Variables
-//
+    //
+    // Instance Variables
+    //
 
-// Attribute Instance Variables
+    // Attribute Instance Variables
 
-    protected String clientId = null;
+    protected String forValue = null;
     protected String color = null;
 
-// Relationship Instance Variables
+    // Relationship Instance Variables
 
-//
-// Constructors and Initializers    
-//
+    //
+    // Constructors and Initializers    
+    //
 
     public Output_ErrorsTag() {
         super();
     }
 
-//
-// Class methods
-//
+    //
+    // Class methods
+    //
 
-//
-// Accessors
-//
+    //
+    // Accessors
+    //
 
-    public String getClientId() {
-        return clientId;
+    public String getFor()
+    {
+        return forValue;
     }
 
-    public void setClientId(String newClientId) {
-        clientId = newClientId;
+    public void setFor(String newForValue)
+    {
+        forValue = newForValue;
     }
 
 
@@ -89,9 +91,9 @@ public class Output_ErrorsTag extends FacesTag {
         color = newColor;
     }
 
-//
-// General Methods
-//
+    //
+    // General Methods
+    //
 
     public String getLocalRendererType() {return "Errors"; }
 
@@ -102,18 +104,16 @@ public class Output_ErrorsTag extends FacesTag {
     protected void overrideProperties(UIComponent component) {
         super.overrideProperties(component);
         UIOutput output = (UIOutput) component;
-        // PENDING (visvan) change "clientId" attribute to "for" along
-        // with other tld changes.
-        if (null == component.getAttribute("for") && null != getClientId()) {
-            component.setAttribute("for", getClientId());
+        if (null == component.getAttribute("for") && null != forValue) {
+            component.setAttribute("for", forValue);
         }
         if (null == component.getAttribute("color")) {
             component.setAttribute("color", getColor());
         }
     }
-//
-// Methods from TagSupport
-//
+    //
+    // Methods from TagSupport
+    //
 
 
 } // end of class Output_ErrorsTag

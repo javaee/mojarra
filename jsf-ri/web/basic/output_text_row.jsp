@@ -16,7 +16,7 @@
              <td>
 
                <h:output_text id="output_text1" 
-                       modelReference="LoginBean.userName"/>
+                       valueRef="LoginBean.userName"/>
 
 
              </td>
@@ -37,7 +37,7 @@
 
                <h:output_text id="output_text0" 
                        outputClass="output_text0"
-                       modelReference="LoginBean.userName"/>
+                       valueRef="LoginBean.userName"/>
 
 
              </td>
@@ -66,7 +66,7 @@
 	      <td>
 
 		<h:output_errors id="output_text2_errors" 
-			  clientId="output_text2" />
+			  for="output_text2" />
 
 	      </td>
 

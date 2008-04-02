@@ -27,7 +27,7 @@
 	      <td>
 
 		<h:output_errors id="input_datetime2_errors" 
-		        clientId="input_datetime2" />
+		        for="input_datetime2" />
 
 	      </td>
 

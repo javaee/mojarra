@@ -73,12 +73,12 @@
               <h:output_text id="text3" value="Username:"/>
 
             <h:input_text id="username2"
-              modelReference="LoginBean.userName"/>
+              valueRef="LoginBean.userName"/>
 
              <h:output_text id="text4" value="Password:"/>
 
             <h:input_secret id="password2"
-                modelReference="LoginBean.password"/>
+                valueRef="LoginBean.password"/>
 
             <h:command_button id="submit2" type="SUBMIT"
                 commandName="submit" label="Login">
