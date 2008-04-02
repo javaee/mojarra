@@ -140,9 +140,8 @@ grant {
         <echo message="PENDING - Please implement"/>
     </target>
 
-    <macrodef name="container.deploy"
+    <target name="container.deploy"
               description="Deploy the JSF Implementation artifacts to the target container.">
-        <sequential>
             <delete>
                 <fileset dir="${container.home}/lib" includes="jsf-*.jar"/>
             </delete>
@@ -151,8 +150,7 @@ grant {
             </jar>
             <copy todir="${container.home}/lib"
                   file="${impl.dir}/build/lib/jsf-impl.jar"/>
-        </sequential>
-    </macrodef>
+    </target>
     
     <macrodef name="container.start"
             description="Start the GlassFish container">

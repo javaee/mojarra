@@ -1,5 +1,5 @@
 /*
- * $Id: GridRenderer.java,v 1.39 2006/01/11 15:28:07 rlubke Exp $
+ * $Id: GridRenderer.java,v 1.40 2006/02/02 16:53:20 rlubke Exp $
  */
 
 /*
@@ -127,6 +127,25 @@ public class GridRenderer extends HtmlBasicRenderer {
         }
         RenderKitUtils.renderPassThruAttributes(context, writer, component);
         writer.writeText("\n", null);
+        
+        // render the caption facet (if present)
+        UIComponent caption = getFacet(component, "caption");
+        if (caption != null) {
+            String captionClass = (String)
+                component.getAttributes().get("captionClass");
+            String captionStyle = (String)
+                component.getAttributes().get("captionStyle");
+            writer.startElement("caption", component);
+            if (captionClass != null) {
+                writer.writeAttribute("class", captionClass, "captionClass");                
+            }
+            if (captionStyle != null) {
+                writer.writeAttribute("style", captionStyle, "captionStyle");
+            }
+            encodeRecursive(context, caption);
+            writer.endElement("caption");
+        }
+        
 
         // Render the header facet (if any)
         UIComponent header = getFacet(component, "header");

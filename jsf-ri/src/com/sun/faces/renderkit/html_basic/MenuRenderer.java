@@ -24,7 +24,7 @@
  */
 
 /*
- * $Id: MenuRenderer.java,v 1.66 2006/01/11 15:28:09 rlubke Exp $
+ * $Id: MenuRenderer.java,v 1.67 2006/02/02 16:53:20 rlubke Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -495,8 +495,7 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
                                                 writer, 
                                                 component);                
         RenderKitUtils.renderXHTMLStyleBooleanAttributes(writer,
-                                                         component,
-                                                         new String[] { "disabled" });
+                                                         component);
         // Now, render the "options" portion...
         renderOptions(context, component);
 

@@ -286,7 +286,7 @@ escape&lt;p&gt;this markup&lt;/p&gt;<span id="basicForm:outputlabel8">andsometex
 
         <TD>
 
-             <select name="basicForm:_id_id326" class="selectoneClass" size="1" style="someStyle" tabindex="20" title="Select Quantity">	<option value="0" class="dclass">0</option>
+             <select name="basicForm:_id_id326" class="selectoneClass" size="1" style="someStyle" tabindex="20" title="Select Quantity" disabled="disabled">	<option value="0" class="dclass">0</option>
 	<option value="1" class="dclass">1</option>
 	<option value="2" class="dclass">2</option>
 	<option value="3" class="dclass">3</option>
@@ -501,7 +501,7 @@ escape&lt;p&gt;this markup&lt;/p&gt;<span id="basicForm:outputlabel8">andsometex
 
 <tr>
 					<TD>Multi-select listbox:</TD>
-					<TD><select name="basicForm:_id_id555" multiple="multiple" size="10" style="someStyle">	<option value="0" class="dclass">zero</option>
+					<TD><select name="basicForm:_id_id555" multiple="multiple" size="10" style="someStyle" disabled="disabled"> <option value="0" class="dclass">zero</option>
 	<option value="1" class="dclass">one</option>
 	<option value="2" class="dclass">two</option>
 	<option value="3" class="dclass">three</option>

@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleImpl.java,v 1.58 2006/01/11 15:28:06 rlubke Exp $
+ * $Id: LifecycleImpl.java,v 1.59 2006/02/02 16:53:20 rlubke Exp $
  */
 
 /*
@@ -174,8 +174,10 @@ public class LifecycleImpl extends Lifecycle {
             logger.fine("addPhaseListener(" + listener.getPhaseId().toString()
                       + "," + listener);
         }
-        synchronized (listeners) {
-            listeners.add(listener);
+        synchronized (this.listeners) {
+            ArrayList temp = (ArrayList) this.listeners.clone();
+            temp.add(listener);
+            this.listeners = temp;
         }
 
     }

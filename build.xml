@@ -83,7 +83,7 @@
     <target name="test.with.container.refresh" 
             description="Stop the target container, deploy the build artifacts, restart the container and test">
         <container.stop/>
-        <container.deploy/>
+        <antcall target="container.deploy"/>
         <container.start/>
         <call.modules target="test"/>
     </target>
