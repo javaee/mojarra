@@ -398,6 +398,10 @@
   
   <target name="checkRequired.fail" unless="requirement.satisfied">
     <fail message="${fail.message}"/>
-  </target>      
+  </target>    
+  
+  <target name="test.appserver" depends="main">
+       <ant target="test.appserver" antfile="build-tests.xml"/>
+  </target>
 
 </project>
