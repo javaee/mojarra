@@ -46,7 +46,7 @@ public class HtmlTaglibGenerator extends GenerateTagBase implements TaglibGenera
     public static final String TEICLASS = "com.sun.faces.taglib.FacesTagExtraInfo";
     public static final String BODYCONTENT = "JSP";
     public static final String REQUIRED = "false";
-    public static final String RTEXPRVALUE = "true";
+    public static final String RTEXPRVALUE = "false";
 
     public HtmlTaglibGenerator() {
         valueHolderComponents = new ArrayList();
