@@ -1,5 +1,5 @@
 /*
- * $Id: HyperlinkRenderer.java,v 1.35 2003/02/07 00:18:09 eburns Exp $
+ * $Id: HyperlinkRenderer.java,v 1.36 2003/02/08 01:21:43 eburns Exp $
  */
 
 /*
@@ -46,7 +46,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HyperlinkRenderer.java,v 1.35 2003/02/07 00:18:09 eburns Exp $
+ * @version $Id: HyperlinkRenderer.java,v 1.36 2003/02/08 01:21:43 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -266,7 +266,7 @@ public class HyperlinkRenderer extends HtmlBasicRenderer {
 
 	int formNumber = getMyFormNumber(context, 
 					 getMyForm(context, command));
-	writer.write("#\" onclick=\"document.forms[" + formNumber + "]." + 
+	writer.write("#\" onmousedown=\"document.forms[" + formNumber + "]." + 
 		     clientId + ".value='" + commandName + 
 		     "'; document.forms[" + formNumber + "].submit()\">");
 	if (null != (linkText = getLinkText(context, command))) {
