@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 
 <!--
- $Id: build-tests.xml,v 1.78 2005/05/21 00:01:04 jayashri Exp $
+ $Id: build-tests.xml,v 1.79 2005/05/23 14:38:36 rlubke Exp $
 -->
 
 <!--
@@ -86,6 +86,7 @@
                 test.converter02,
                 test.converter03,
                 test.converter04,
+                test.converter05,
                 test.validator,
                 test.validator01,
                 test.validator02,
@@ -546,7 +547,14 @@
          status="200" failonerror="${failonerror}"/>
   </target>
 
-  <target name="test.validator"
+    <target name="test.converter05">
+    <tester host="${host}" port="${port}" protocol="${protocol}"
+        request="${context.path}/faces/converter05.jsp"
+        recordGolden="${local.golden.path}/standard/converter05.txt"
+        golden="${golden.path}/standard/converter05.txt" failonerror="${failonerror}"/>
+  </target>
+
+    <target name="test.validator"
    description="Test Validator creation facility">
 
     <!-- Test validator creation -->

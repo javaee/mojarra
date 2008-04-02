@@ -1,5 +1,5 @@
 /*
- * $Id: ConvertDateTimeTag.java,v 1.16 2005/05/19 13:26:59 rlubke Exp $
+ * $Id: ConvertDateTimeTag.java,v 1.17 2005/05/23 14:38:33 rlubke Exp $
  */
 
 /*
@@ -11,6 +11,8 @@ package com.sun.faces.taglib.jsf_core;
 
 import java.util.Locale;
 import java.util.TimeZone;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import javax.el.ELContext;
 import javax.el.ValueExpression;
@@ -18,6 +20,7 @@ import javax.el.ExpressionFactory;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.DateTimeConverter;
+import javax.faces.FacesException;
 import javax.servlet.jsp.JspException;
 
 import com.sun.faces.util.Util;
@@ -27,13 +30,16 @@ import com.sun.faces.util.Util;
  * <p>ConvertDateTimeTag is a ConverterTag implementation for
  * javax.faces.convert.DateTimeConverter</p>
  *
- * @version $Id: ConvertDateTimeTag.java,v 1.16 2005/05/19 13:26:59 rlubke Exp $
+ * @version $Id: ConvertDateTimeTag.java,v 1.17 2005/05/23 14:38:33 rlubke Exp $
  */
 
 public class ConvertDateTimeTag extends ConverterTag {
 
     private static final long serialVersionUID = -5815655767093677438L;
     private static ValueExpression CONVERTER_ID_EXPR = null;
+    // Log instance for this class
+    private static final Logger logger = Util.getLogger(Util.FACES_LOGGER);
+
 
     //
     // Instance Variables
@@ -195,11 +201,28 @@ public class ConvertDateTimeTag extends ConverterTag {
                 locale =
                 new Locale(localeExpression.getExpressionString(), "");
             } else {
-                Locale loc = (Locale)
-                Util.evaluateValueExpression(localeExpression,
+                Object loc = Util.evaluateValueExpression(localeExpression,
                     elContext);
                 if (loc != null) {
-                    locale = loc;
+                    if (loc instanceof String) {
+                        locale = new Locale((String) loc, "");
+                    } else if (loc instanceof Locale) {
+                        locale = (Locale) loc;
+                    } else {
+                        Object[] params = {
+                            "locale",
+                            "java.lang.String or java.util.Locale",
+                            loc.getClass().getName()
+                        };
+                        if (logger.isLoggable(Level.SEVERE)) {
+                            logger.log(Level.SEVERE,
+                                "jsf.core.tags.eval_result_not_expected_type",
+                                params);
+                        }
+                        throw new FacesException(
+                            Util.getExceptionMessageString(
+                                Util.EVAL_ATTR_UNEXPECTED_TYPE, params));
+                    }
                 } else {
                     locale = facesContext.getViewRoot().getLocale();
                 }
@@ -211,9 +234,29 @@ public class ConvertDateTimeTag extends ConverterTag {
                 TimeZone.getTimeZone(
                     timeZoneExpression.getExpressionString());
             } else {
-                timeZone = (TimeZone)
-                Util.evaluateValueExpression(timeZoneExpression,
+                Object tz = Util.evaluateValueExpression(timeZoneExpression,
                     elContext);
+                if (tz != null) {
+                    if (tz instanceof String) {
+                        timeZone = TimeZone.getTimeZone((String) tz);
+                    } else if (tz instanceof TimeZone) {
+                        timeZone = (TimeZone) tz;
+                    } else {
+                        Object[] params = {
+                            "timeZone",
+                            "java.lang.String or java.util.TimeZone",
+                            tz.getClass().getName()
+                        };
+                        if (logger.isLoggable(Level.SEVERE)) {
+                            logger.log(Level.SEVERE,
+                                "jsf.core.tags.eval_result_not_expected_type",
+                                params);
+                        }
+                        throw new FacesException(
+                            Util.getExceptionMessageString(
+                                Util.EVAL_ATTR_UNEXPECTED_TYPE, params));                    
+                    }
+                } 
             }
         }
     }

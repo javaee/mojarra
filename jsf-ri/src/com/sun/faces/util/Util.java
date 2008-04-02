@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.160 2005/05/18 17:34:08 jayashri Exp $
+ * $Id: Util.java,v 1.161 2005/05/23 14:38:34 rlubke Exp $
  */
 
 /*
@@ -63,7 +63,7 @@ import java.text.MessageFormat;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.160 2005/05/18 17:34:08 jayashri Exp $
+ * @version $Id: Util.java,v 1.161 2005/05/23 14:38:34 rlubke Exp $
  */
 
 public class Util extends Object {
@@ -333,6 +333,9 @@ public class Util extends Object {
             "com.sun.faces.PROPERTY_TYPE_ERROR";
     public static final String EL_SIZE_OUT_OF_BOUNDS_ERROR_ID = 
             "com.sun.faces.SIZE_OUT_OF_BOUNDS_ERROR";
+
+    public static final String EVAL_ATTR_UNEXPECTED_TYPE =
+        "com.sun.faces.EVAL_ATTR_UNEXPECTED_TYPE";
     
 // README - make sure to add the message identifier constant
 // (ex: Util.CONVERSION_ERROR_MESSAGE_ID) and the number of substitution

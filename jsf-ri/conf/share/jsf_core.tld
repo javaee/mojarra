@@ -168,7 +168,7 @@
             <name>locale</name>
             <required>false</required>
             <deferred-value>
-                <type>java.util.Locale</type>
+                <type>java.lang.Object</type>
             </deferred-value>
         </attribute>
 
@@ -207,7 +207,7 @@
             </description>
             <name>timeZone</name>
             <deferred-value>
-                <type>java.util.TimeZone</type>
+                <type>java.lang.Object</type>
             </deferred-value>
         </attribute>
 
