@@ -40,7 +40,7 @@
 
              <td><basic:textentry_input_valuechange id="custom">
 
-                   <faces:eventhandler className="basic.EventHandler"/>
+                   <faces:eventhandler type="basic.EventHandler"/>
 
                  </basic:textentry_input_valuechange>
                  
@@ -55,8 +55,8 @@
                    <faces:input_text id="userName" modelReference="${LoginBean.userName}"
                        value="joebob" >
 
-		     <faces:validator className="javax.faces.validator.LengthValidator"/>
-		     <faces:validator className="javax.faces.validator.RequiredValidator"/>
+		     <faces:validator type="javax.faces.validator.LengthValidator"/>
+		     <faces:validator type="javax.faces.validator.RequiredValidator"/>
 		     <faces:attribute 
                          name="javax.faces.validator.LengthValidator.MINIMUM"
                          value="6"/>
@@ -80,8 +80,8 @@
 
                     <faces:input_secret id="password"> 
 
-		     <faces:validator className="javax.faces.validator.LengthValidator"/>
-		     <faces:validator className="javax.faces.validator.RequiredValidator"/>
+		     <faces:validator type="javax.faces.validator.LengthValidator"/>
+		     <faces:validator type="javax.faces.validator.RequiredValidator"/>
 		     <faces:attribute 
                          name="javax.faces.validator.LengthValidator.MINIMUM"
                          value="6"/>
@@ -107,7 +107,7 @@
                     <faces:input_number id="double">
 
 		     <faces:validator 
-                       className="javax.faces.validator.DoubleRangeValidator"/>
+                       type="javax.faces.validator.DoubleRangeValidator"/>
 
 		     <faces:attribute 
                          name="javax.faces.validator.DoubleRangeValidator.MINIMUM"
@@ -135,7 +135,7 @@
                     <faces:input_number id="integer">
 
 		     <faces:validator 
-                       className="javax.faces.validator.LongRangeValidator"/>
+                       type="javax.faces.validator.LongRangeValidator"/>
 
 		     <faces:attribute 
                          name="javax.faces.validator.LongRangeValidator.MINIMUM"
@@ -164,7 +164,7 @@
                                   modelReference="${LoginBean.string}"> 
 
 		     <faces:validator 
-                       className="javax.faces.validator.StringRangeValidator"/>
+                       type="javax.faces.validator.StringRangeValidator"/>
 
 		     <faces:attribute 
                          name="javax.faces.validator.StringRangeValidator.MINIMUM"
