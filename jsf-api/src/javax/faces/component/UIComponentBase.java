@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.126 2006/02/09 20:03:10 rlubke Exp $
+ * $Id: UIComponentBase.java,v 1.127 2006/02/10 16:02:08 edburns Exp $
  */
 
 /*
@@ -689,6 +689,37 @@ public abstract class UIComponentBase extends UIComponent {
         
         return (result);
 
+    }
+
+    /**
+     * {@inheritDoc}
+     * @since 1.2
+     * @throws NullPointerException {@inheritDoc}
+     * @throws FacesException {@inheritDoc}
+     *
+     */ 
+    public boolean invokeOnComponent(FacesContext context, String clientId, 
+				     ContextCallback callback) 
+	throws FacesException {
+	boolean found = false;        
+	if (clientId.equals(this.getClientId(context))) {
+	    try {
+		callback.invokeContextCallback(context, this);
+		return true;
+	    }
+	    catch (Exception e) {
+		throw new FacesException(e);
+	    }
+	} 
+	else {
+	    Iterator<UIComponent> itr = this.getFacetsAndChildren();
+
+	    while (itr.hasNext() & !found) {
+		found = itr.next().invokeOnComponent(context, clientId, 
+						     callback);
+	    }
+	}
+	return found;
     }
 
 

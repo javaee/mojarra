@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBaseTestCase.java,v 1.33 2005/10/19 19:51:11 edburns Exp $
+ * $Id: UIComponentBaseTestCase.java,v 1.34 2006/02/10 16:02:08 edburns Exp $
  */
 
 /*
@@ -30,7 +30,6 @@
 package javax.faces.component;
 import java.util.Iterator;
 import java.lang.reflect.InvocationTargetException;
-import java.util.List;
 import javax.faces.FactoryFinder;
 import javax.faces.application.ApplicationFactory;
 import javax.faces.application.FacesMessage;
@@ -47,6 +46,11 @@ import com.sun.faces.mock.MockRenderKit;
 import com.sun.faces.mock.MockServletConfig;
 import com.sun.faces.mock.MockServletContext;
 import com.sun.faces.mock.MockValueBinding;
+import java.util.HashMap;
+import java.util.Map;
+import javax.faces.FacesException;
+import javax.faces.component.UIComponentTestCase;
+import javax.faces.context.FacesContext;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
 import javax.faces.validator.ValidatorException;
@@ -983,32 +987,325 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
         
     }
         
-    public void testChildrenAddAll() throws Exception {
-        TestComponent rootComponent = new TestComponent();
-        TestComponent
-                child1 = new TestComponent("child1"),
-                child2 = new TestComponent("child2"),
-                child3 = new TestComponent("child3"),
-                child4 = new TestComponent("child4"),
-                child5 = new TestComponent("child5"),
-                child6 = new TestComponent("child6");
+    private Object foundComponent = null;
+    
+    /**
+     *
+     * <p>Build a tree with the following layout.</p>
+     * <code><pre>
+     * root: id: root
+     * 
+     *   form1: id: form1
+     * 
+     *     panel1: id: panel
+     * 
+     *       input1: id: input1
+     * 
+     *       input2: id: input2
+     * 
+     *   form2: id: form2
+     * 
+     *     panel2: id: panel
+     * 
+     *       input3: id: input1
+     * 
+     *       input4: id: input2
+     * </pre></code>
+     * 
+     * @return a Map<String, UIComponent>.  The key is the string before the
+     * first : in the above layout.  The value is the component instance.
+     * Note that the keys in the map are <b>not</b> the ids.
+     */    
+    
+    private Map<String, UIComponent> setupInvokeOnComponentTree() {
+        UIViewRoot root = new UIViewRoot();
+        UIForm form1 = new UIForm();
+        UIPanel panel1 = new UIPanel();
+        UIInput input1 = new UIInput();
+        UIInput input2 = new UIInput();
+        UIForm form2 = new UIForm();
+        UIPanel panel2 = new UIPanel();
+        UIInput input3 = new UIInput();
+        UIInput input4 = new UIInput();
+
+        root.setId("root");
+        form1.setId("form1");
+        panel1.setId("panel");
+        input1.setId("input1");
+        input2.setId("input2");
+
+        form2.setId("form2");
+        panel2.setId("panel");
+        input3.setId("input1");
+        input4.setId("input2");
         
-        List children = rootComponent.getChildren();
-        children.add(child1);
-        children.add(child2);
-        children.add(child3);
-        children.add(child4);
-        children.add(child5);
-        children.add(child6);
+        root.getChildren().add(form1);
+        form1.getChildren().add(panel1);
+        panel1.getChildren().add(input1);
+        panel1.getChildren().add(input2);
+
+        root.getChildren().add(form2);
+        form2.getChildren().add(panel2);
+        panel2.getChildren().add(input3);
+        panel2.getChildren().add(input4);
+        Map<String, UIComponent> result = new HashMap<String,UIComponent>();
+        result.put("root", root);
+        result.put("form1", form1);
+        result.put("panel1", panel1);
+        result.put("input1", input1);
+        result.put("input2", input2);
+        result.put("form2", form2);
+        result.put("panel2", panel2);
+        result.put("input3", input3);
+        result.put("input4", input4);
+
+        return result;
+    }
+    
         
-        assertEquals(6, children.size());
+    public void testInvokeOnComponentPositive() throws Exception {
+
+        Map<String, UIComponent> tree = setupInvokeOnComponentTree();
         
-        TestComponent otherRoot = new TestComponent("otherRoot");
-        otherRoot.getChildren().addAll(children);
+        UIViewRoot root = (UIViewRoot) tree.get("root");
+        UIInput input1 = (UIInput) tree.get("input1");
+
+        foundComponent = null;
+        boolean result = false;
+
+        result = root.invokeOnComponent(facesContext, 
+                input1.getClientId(facesContext),
+                new ContextCallback() {
+            public void invokeContextCallback(FacesContext context, UIComponent component) {
+                foundComponent = component;
+            }});
+        assertEquals(input1, foundComponent);
+        assertTrue(result);
+
+    }
+    
+    public void testInvokeOnComponentNegative() throws Exception {
+        Map<String, UIComponent> tree = setupInvokeOnComponentTree();
         
-        assertEquals(0, children.size());
-        assertEquals(6, otherRoot.getChildren().size());
+        UIViewRoot root = (UIViewRoot) tree.get("root");
+        UIInput input4 = (UIInput) tree.get("input4");
+
+        foundComponent = null;
+        boolean result = false;
+
+        // Negative case 1, not found component.
+        result = root.invokeOnComponent(facesContext, 
+                "form:input7",
+                new ContextCallback() {
+            public void invokeContextCallback(FacesContext context, UIComponent component) {
+                foundComponent = component;
+            }});
+        assertNull(foundComponent);
+        assertTrue(!result);
+        
+        // Negative case 2A, callback throws exception with found component
+        foundComponent = null;
+        result = false;
+        boolean exceptionThrown = false;
+        try {
+            result = root.invokeOnComponent(facesContext,
+                    "form2:input2",
+                    new ContextCallback() {
+                public void invokeContextCallback(FacesContext context, UIComponent component) {
+                    foundComponent = component;
+                    // When else am I going to get the chance to throw this exception?
+                    throw new IllegalStateException();
+                }});
+        } catch (FacesException e) {
+            assertTrue(e.getCause() instanceof IllegalStateException);
+            exceptionThrown = true;
+        }
+        assertTrue(exceptionThrown);
+        assertEquals(foundComponent, input4);
+        assertTrue(!result);
+        
+        // Negative case 2B, callback throws exception with not found component
+        foundComponent = null;
+        result = false;
+        exceptionThrown = false;
+        try {
+            result = root.invokeOnComponent(facesContext,
+                    "form2:input6",
+                    new ContextCallback() {
+                public void invokeContextCallback(FacesContext context, UIComponent component) {
+                    foundComponent = component;
+                    // When else am I going to get the chance to throw this exception?
+                    throw new IllegalStateException();
+                }});
+        } catch (FacesException e) {
+            assertTrue(e.getCause() instanceof IllegalStateException);
+            exceptionThrown = true;
+        }
+        assertTrue(!exceptionThrown);
+        assertNull(foundComponent);
+        assertTrue(!result);
+        
         
     }
+    
+    public void testInvokeOnComponentWithPrependId() throws Exception {
+        Map<String, UIComponent> tree = setupInvokeOnComponentTree();
+        
+        UIViewRoot root = (UIViewRoot) tree.get("root");
+        UIForm truePrependIdForm = (UIForm) tree.get("form1");
+        UIForm falsePrependIdForm = (UIForm) tree.get("form2");
+        UIInput truePrependIdInput = (UIInput) tree.get("input2");
+        UIInput falsePrependIdInput = (UIInput) tree.get("input3");
+        
+        truePrependIdForm.setPrependId(true);
+        falsePrependIdForm.setPrependId(false);
+
+        foundComponent = null;
+        boolean result = false;
+        boolean exceptionThrown = false;
+
+        // Case 1, positive find with prependId == true
+        result = root.invokeOnComponent(facesContext, 
+                "form1:input2",
+                new ContextCallback() {
+            public void invokeContextCallback(FacesContext context, UIComponent component) {
+                foundComponent = component;
+            }});
+        assertEquals(truePrependIdInput, foundComponent);
+        assertTrue(result);
+        
+        // Case 2, negative find with prependId == true
+        foundComponent = null;
+        result = false;
+        
+        result = root.invokeOnComponent(facesContext, 
+                "form9:input5",
+                new ContextCallback() {
+            public void invokeContextCallback(FacesContext context, UIComponent component) {
+                foundComponent = component;
+            }});
+        assertNull(foundComponent);
+        assertTrue(!result);
+        
+        // Case 3, exception positive find with prependId == true
+        foundComponent = null;
+        result = false;
+        exceptionThrown = false;
+        try {
+
+            
+            result = root.invokeOnComponent(facesContext, 
+                    "form1:input2",
+                    new ContextCallback() {
+                public void invokeContextCallback(FacesContext context, UIComponent component) {
+                    foundComponent = component;
+                    throw new IllegalStateException();
+                }});
+        } 
+        catch (FacesException e) {
+            assertTrue(e.getCause() instanceof IllegalStateException);
+            exceptionThrown = true;
+        }
+        assertEquals(truePrependIdInput, foundComponent);
+        assertTrue(!result);
+        assertTrue(exceptionThrown);
+
+        // Case 4, exception negative find with prependId == true
+        foundComponent = null;
+        result = false;
+        exceptionThrown = false;
+        try {
+
+            
+            result = root.invokeOnComponent(facesContext, 
+                    "formFozzy:inputKermit",
+                    new ContextCallback() {
+                public void invokeContextCallback(FacesContext context, UIComponent component) {
+                    foundComponent = component;
+                    throw new IllegalStateException();
+                }});
+        } 
+        catch (FacesException e) {
+            assertTrue(e.getCause() instanceof IllegalStateException);
+            exceptionThrown = true;
+        }
+        assertNull(foundComponent);
+        assertTrue(!result);
+        assertTrue(!exceptionThrown);
+        
+        // Case 5, positive find with prependId == false
+        result = root.invokeOnComponent(facesContext, 
+                "input1",
+                new ContextCallback() {
+            public void invokeContextCallback(FacesContext context, UIComponent component) {
+                foundComponent = component;
+            }});
+        assertEquals(falsePrependIdInput, foundComponent);
+        assertTrue(result);
+
+        // Case 6, negative find with prependId == false
+        foundComponent = null;
+        result = false;
+        
+        result = root.invokeOnComponent(facesContext, 
+                "input99",
+                new ContextCallback() {
+            public void invokeContextCallback(FacesContext context, UIComponent component) {
+                foundComponent = component;
+            }});
+        assertNull(foundComponent);
+        assertTrue(!result);
+        
+        // Case 3, exception positive find with prependId == false
+        foundComponent = null;
+        result = false;
+        exceptionThrown = false;
+        try {
+
+            
+            result = root.invokeOnComponent(facesContext, 
+                    "input1",
+                    new ContextCallback() {
+                public void invokeContextCallback(FacesContext context, UIComponent component) {
+                    foundComponent = component;
+                    throw new IllegalStateException();
+                }});
+        } 
+        catch (FacesException e) {
+            assertTrue(e.getCause() instanceof IllegalStateException);
+            exceptionThrown = true;
+        }
+        assertEquals(falsePrependIdInput, foundComponent);
+        assertTrue(!result);
+        assertTrue(exceptionThrown);
+
+        // Case 4, exception negative find with prependId == false
+        foundComponent = null;
+        result = false;
+        exceptionThrown = false;
+        try {
+
+            
+            result = root.invokeOnComponent(facesContext, 
+                    "inputKermit",
+                    new ContextCallback() {
+                public void invokeContextCallback(FacesContext context, UIComponent component) {
+                    foundComponent = component;
+                    throw new IllegalStateException();
+                }});
+        } 
+        catch (FacesException e) {
+            assertTrue(e.getCause() instanceof IllegalStateException);
+            exceptionThrown = true;
+        }
+        assertNull(foundComponent);
+        assertTrue(!result);
+        assertTrue(!exceptionThrown);
+
+    
+    }
+
+    
+    
 
 }

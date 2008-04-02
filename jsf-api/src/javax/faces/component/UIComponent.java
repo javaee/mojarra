@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.140 2006/02/09 20:03:08 rlubke Exp $
+ * $Id: UIComponent.java,v 1.141 2006/02/10 16:02:08 edburns Exp $
  */
 
 /*
@@ -486,7 +486,79 @@ public abstract class UIComponent implements StateHolder {
      *  is <code>null</code>
      */
     public abstract UIComponent findComponent(String expr);
-
+    
+    /**
+     *
+     * <p>Starting at this component in the View hierarchy, search for a
+     * component with a <code>clientId</code> equal to the argument
+     * <code>clientId</code> and, if found, call the {@link
+     * ContextCallback#invokeContextCallback} method on the argument
+     * <code>callback</code>, passing the current {@link FacesContext}
+     * and the found component as arguments. This method is similar to
+     * {@link #findComponent} but it does not support the leading 
+     * {@link NamingContainer#SEPARATOR_CHAR} syntax for searching from the 
+     * root of the View.</p>
+     *
+     * <p>The default implementation will first check if
+     * <code>this.getClientId()</code> is equal to the argument
+     * <code>clientId</code>.  If so, call the {@link
+     * ContextCallback#invokeContextCallback} method on the argument callback,
+     * passing through the <code>FacesContext</code> argument and
+     * passing this as the component argument.  If an
+     * <code>Exception</code> is thrown by the callback, wrap it in a
+     * {@link FacesException} and re-throw it.  Otherwise, return
+     * <code>true</code>.</p>
+     *
+     * <p>Otherwise, for each component returned by {@link
+     * #getFacetsAndChildren}, call <code>invokeOnComponent()</code>
+     * passing the arguments to this method, in order.  The first time
+     * <code>invokeOnComponent()</code> returns true, abort traversing
+     * the rest of the <code>Iterator</code> and return
+     * <code>true</code>.</p>
+     *
+     * <p>When calling {@link ContextCallback#invokeContextCallback}
+     * the implementation of this method must guarantee that the state
+     * of the component passed to the callback correctly reflects the
+     * component's position in the View hierarchy with respect to any
+     * state found in the argument <code>clientId</code>.  For example,
+     * an iterating component such as {@link UIData} will need to set
+     * its row index to correctly reflect the argument
+     * <code>clientId</code> before finding the appropriate child
+     * component backed by the correct row.  When the callback returns,
+     * either normally or by throwing an <code>Exception</code> the
+     * implementation of this method must restore the state of the view
+     * to the way it was before invoking the callback.</p>
+     *
+     * <p>If none of the elements from {@link
+     * #getFacetsAndChildren} returned <code>true</code> from
+     * <code>invokeOnComponent()</code>, return <code>false</code>.</p>
+     *
+     * @since 1.2
+     *
+     * @param context the {@link FacesContext} for the current request
+     *
+     * @param clientId the client identifier of the component to be passed
+     * to the argument callback.
+     *
+     * @param callback an implementation of the Callback interface.
+     *
+     * @throws NullPointerException if any of the arguments are null
+     *
+     * @throws FacesException if the argument Callback throws an
+     * Exception, it is wrapped in a FacesException and re-thrown.
+     *
+     * @return true if the a component with the given clientId is found,
+     * the callback method was successfully invoked passing that component
+     * as an argument, and no Exception was thrown.  Returns false if no
+     * component with the given clientId is found.
+     *
+     */
+    
+    public boolean invokeOnComponent(FacesContext context, String clientId, 
+            ContextCallback callback) throws FacesException {
+        throw new UnsupportedOperationException();
+    }
+    
 
     // ------------------------------------------------ Facet Management Methods
 

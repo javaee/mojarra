@@ -1,5 +1,5 @@
 /*
- * $Id: UIViewRootTestCase.java,v 1.22 2005/10/19 19:51:12 edburns Exp $
+ * $Id: UIViewRootTestCase.java,v 1.23 2006/02/10 16:02:09 edburns Exp $
  */
 
 /*
@@ -716,9 +716,27 @@ public class UIViewRootTestCase extends UIComponentBaseTestCase {
         }
         root.processApplication(facesContext);
         assertEquals(expected, TestListener.trace());
-
+        
+    }
+    
+    // These overrides are necessary because our normal setup
+    // calls releaseFactories, which makes it impossible to get clientIds.
+    
+    public void testInvokeOnComponentPositive() throws Exception {
+        super.setUp();
+        super.testInvokeOnComponentPositive();
+    }
+    
+    public void testInvokeOnComponentNegative() throws Exception {
+        super.setUp();
+        super.testInvokeOnComponentNegative();
     }
 
+    public void testInvokeOnComponentWithPrependId() throws Exception {
+        super.setUp();
+        super.testInvokeOnComponentWithPrependId();
+    }
+    
 
     // Check that the properties on the specified components are equal
     protected void checkProperties(UIComponent comp1, UIComponent comp2) {
@@ -816,6 +834,7 @@ public class UIViewRootTestCase extends UIComponentBaseTestCase {
 	public boolean isProcessUpdatesCalled() { 
 	    return processUpdatesCalled; 
 	}
+        
 
     }
 
