@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.180 2005/12/02 17:45:37 rlubke Exp $
+ * $Id: Util.java,v 1.181 2006/01/09 20:47:44 rlubke Exp $
  */
 
 /*
@@ -89,7 +89,7 @@ import com.sun.faces.spi.ManagedBeanFactory.Scope;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.180 2005/12/02 17:45:37 rlubke Exp $
+ * @version $Id: Util.java,v 1.181 2006/01/09 20:47:44 rlubke Exp $
  */
 
 public class Util {
@@ -752,7 +752,7 @@ public class Util {
                     while (elements.hasNext()) {
                         Object element = elements.next();
                         if (SelectItem.class.isInstance(element)) {
-                            list.add((SelectItem) elements.next());
+                            list.add((SelectItem) element);
                         } else {
                             throw new IllegalArgumentException(
                                 Util.getExceptionMessageString(

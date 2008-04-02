@@ -1,5 +1,5 @@
 /*
- * $Id: ExternalContextImpl.java,v 1.39 2005/10/25 20:39:56 rlubke Exp $
+ * $Id: ExternalContextImpl.java,v 1.40 2006/01/09 20:47:43 rlubke Exp $
  */
 
 /*
@@ -46,6 +46,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
+import java.util.Arrays;
+import java.util.Map.Entry;
 
 import javax.faces.FacesException;
 import javax.faces.context.ExternalContext;
@@ -71,7 +73,7 @@ import java.util.logging.Logger;
  * servlet implementation.
  *
  * @author Brendan Murray
- * @version $Id: ExternalContextImpl.java,v 1.39 2005/10/25 20:39:56 rlubke Exp $
+ * @version $Id: ExternalContextImpl.java,v 1.40 2006/01/09 20:47:43 rlubke Exp $
  */
 public class ExternalContextImpl extends ExternalContext {
 
@@ -194,7 +196,7 @@ public class ExternalContextImpl extends ExternalContext {
 
     public Map<String,Object> getRequestMap() {
         if (requestMap == null) {
-            requestMap = new RequestMap(this.request, this);
+            requestMap = new RequestMap(this.request);
         }
         return requestMap;
     }
@@ -475,9 +477,9 @@ public class ExternalContextImpl extends ExternalContext {
 
 abstract class BaseContextMap extends AbstractMap {
 
-    private Set entrySet;
-    private Set keySet;
-    private Collection values;
+    private Set<? extends Object> entrySet;
+    private Set<? extends Object> keySet;
+    private Collection<? extends Object> values;
 
     // Supported by maps if overridden
     public void clear() {
@@ -490,7 +492,7 @@ abstract class BaseContextMap extends AbstractMap {
         throw new UnsupportedOperationException();
     }
 
-    public Set<?> entrySet() {
+    public Set<? extends Object> entrySet() {
         if (entrySet == null) {
             entrySet = new EntrySet();
         }
@@ -498,7 +500,7 @@ abstract class BaseContextMap extends AbstractMap {
         return entrySet;
     }
 
-    public Set<?> keySet() {
+    public Set<? extends Object> keySet() {
         if (keySet == null) {
             keySet = new KeySet();
         }
@@ -506,7 +508,7 @@ abstract class BaseContextMap extends AbstractMap {
         return keySet;
     }
 
-    public Collection<?> values() {
+    public Collection<? extends Object> values() {
         if (values == null) {
             values = new ValueCollection();
         }
@@ -929,13 +931,11 @@ class SessionMap extends BaseContextMap {
 
 class RequestMap extends BaseContextMap {
 
-    private final ServletRequest request;
-    private ExternalContext extContext = null;
+    private final ServletRequest request;    
 
 
-    RequestMap(ServletRequest request, ExternalContext extContext) {
-        this.request = request;
-        this.extContext = extContext;
+    RequestMap(ServletRequest request) {
+        this.request = request;     
     }
 
     public void clear() {
@@ -1113,19 +1113,57 @@ class RequestParameterValuesMap extends BaseContextMap {
     }
 
     public boolean equals(Object obj) {
+        
         if (obj == null || 
             !(obj.getClass() == ExternalContextImpl.theUnmodifiableMapClass)) {
             return false;
         }
-        return super.equals(obj);
+        Map objMap = (Map) obj;
+        Set thisKeySet = keySet();
+        Set objKeySet = keySet();
+        
+        if (!thisKeySet.equals(objKeySet)) {
+            return false;
+        } else {
+            for (Object key : thisKeySet) {
+                Object[] thisVal = (Object[]) this.get(key);
+                Object[] objVal = (Object[]) objMap.get(key);
+                if (!(Arrays.equals(thisVal, objVal))) {
+                    return false;
+                }
+            }
+        }
+        
+        return true;        
+        
     }
 
-     public int hashCode() {
+     public int hashCode() {        
         int hashCode = 7 * request.hashCode();
-        for (Iterator i = entrySet().iterator(); i.hasNext(); ) {
-            hashCode += i.next().hashCode();
-        }
+         for (Object o : entrySet()) {             
+             Map.Entry entry = (Map.Entry) o;             
+             hashCode += entry.getKey().hashCode();
+             hashCode +=
+                   (Arrays.hashCode((Object[]) entry.getValue()));
+         }
         return hashCode;
+    }
+
+    public boolean containsValue(Object value) {
+                
+        if (value == null || !value.getClass().isArray()) {
+            return false;
+        }
+        
+        Set entrySet = entrySet();
+        for (Object anEntrySet : entrySet) {
+            Map.Entry entry = (Map.Entry) anEntrySet;
+            // values will be arrays
+            if (Arrays.equals((Object[]) value, (Object[]) entry.getValue())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     // --------------------------------------------- Methods from BaseContextMap
