@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBaseTestCase.java,v 1.3 2003/07/27 00:48:30 craigmcc Exp $
+ * $Id: UIComponentBaseTestCase.java,v 1.4 2003/07/28 22:22:28 eburns Exp $
  */
 
 /*
@@ -15,6 +15,7 @@ import java.util.Iterator;
 import javax.faces.FactoryFinder;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIComponentTestCase;
+import javax.faces.component.base.UIPageBase;
 import javax.faces.context.FacesContext;
 import javax.faces.event.FacesEvent;
 import javax.faces.mock.MockExternalContext;
@@ -27,7 +28,7 @@ import javax.faces.mock.MockRenderKit;
 import javax.faces.mock.MockRenderKitFactory;
 import javax.faces.mock.MockServletConfig;
 import javax.faces.mock.MockServletContext;
-import javax.faces.mock.MockTree;
+import javax.faces.mock.MockApplication;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
 import javax.faces.validator.Validator;
@@ -93,7 +94,7 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
             new MockExternalContext(servletContext, request, response);
         lifecycle = new MockLifecycle();
         facesContext = new MockFacesContext(externalContext, lifecycle);
-        facesContext.setTree(new MockTree(new TestComponentNamingContainer()));
+        facesContext.setRoot(new UIPageBase("/treeId"));
         RenderKitFactory renderKitFactory = (RenderKitFactory)
             FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
         RenderKit renderKit = new MockRenderKit();
@@ -103,6 +104,7 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
         } catch (IllegalArgumentException e) {
             ;
         }
+	facesContext.setApplication(new MockApplication());
 
         // Set up the component under test
         super.setUp();
@@ -256,6 +258,73 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
         assertTrue(!kidItr.hasNext());
     }
 
+    public void testStateHolder() {
+        UIComponent testParent = new TestComponentNamingContainer("root");
+	UIComponent
+	    preSave = null,
+	    postSave = null;
+	Object state;
+
+	// test component with componentId and clientId
+	preSave = new TestComponent("componentId");
+	testParent.getChildren().add(preSave);
+	state = preSave.getState(facesContext);
+	assertTrue(null != state);
+	testParent.getChildren().clear();
+	
+	postSave = new TestComponent("componentId");
+	testParent.getChildren().add(postSave);
+	try {
+	    postSave.restoreState(facesContext, state);
+	}
+	catch (Throwable e) {
+	    assertTrue(false);
+	}
+	assertTrue(propertiesAreEqual(facesContext, preSave, postSave));
+
+	// test component with componentId, clientId and componentRef
+	testParent.getChildren().clear();
+	preSave = new TestComponent("componentId");
+	preSave.setComponentRef("blah");
+	testParent.getChildren().add(preSave);
+	state = preSave.getState(facesContext);
+	assertTrue(null != state);
+	testParent.getChildren().clear();
+	
+	postSave = new TestComponent("componentId");
+	testParent.getChildren().add(postSave);
+	try {
+	    postSave.restoreState(facesContext, state);
+	}
+	catch (Throwable e) {
+	    assertTrue(false);
+	}
+	assertTrue(propertiesAreEqual(facesContext, preSave, postSave));
+
+	// test component with componentId, clientId and componentRef
+	testParent.getChildren().clear();
+	preSave = new TestComponent("componentId");
+	preSave.setComponentRef("blah");
+	preSave.setRendered(false);
+	preSave.setTransient(true);
+	preSave.setAttribute("buckaroo", "perfectTommy");
+	preSave.setAttribute("reno", "nevada");
+	testParent.getChildren().add(preSave);
+	state = preSave.getState(facesContext);
+	assertTrue(null != state);
+	testParent.getChildren().clear();
+	
+	postSave = new TestComponent("componentId");
+	testParent.getChildren().add(postSave);
+	try {
+	    postSave.restoreState(facesContext, state);
+	}
+	catch (Throwable e) {
+	    assertTrue(false);
+	}
+	assertTrue(propertiesAreEqual(facesContext, preSave, postSave));
+
+    }
 
     // --------------------------------------------------------- Support Methods
 
@@ -301,6 +370,79 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
 	if (cmethod != null) {
 	    sb.append("/" + cmethod + "-" + id);
 	}
+
+    }
+
+    protected boolean propertiesAreEqual(FacesContext context,
+					 UIComponent comp1,
+					 UIComponent comp2) {
+	// if they're not both null, or not the same string
+	if (!((null == comp1.getClientId(context) && 
+	     null == comp2.getClientId(context)) ||
+	    (comp1.getClientId(context).equals(comp2.getClientId(context))))) {
+	    return false;
+	}
+	// if they're not both null, or not the same string
+	if (!((null == comp1.getId() && 
+	     null == comp2.getId()) ||
+	    (comp1.getId().equals(comp2.getId())))) {
+	    return false;
+	}
+	// if they're not both null, or not the same string
+	if (!((null == comp1.getComponentRef() && 
+	     null == comp2.getComponentRef()) ||
+	    (comp1.getComponentRef().equals(comp2.getComponentRef())))) {
+	    return false;
+	}
+	if (comp1.isRendered() != comp2.isRendered()) {
+	    return false;
+	}
+	// if they're not both null, or not the same string
+	if (!((null == comp1.getRendererType() && 
+	     null == comp2.getRendererType()) ||
+	    (comp1.getRendererType().equals(comp2.getRendererType())))) {
+	    return false;
+	}
+	if (comp1.isTransient() != comp2.isTransient()) {
+	    return false;
+	}
+	if (!attributesAreEqual(comp1, comp2)) {
+	    return false;
+	}
+	return true;
+    }
+
+    protected boolean attributesAreEqual(UIComponent comp1,
+					 UIComponent comp2) {
+	Iterator attrNames = comp1.getAttributeNames();
+	Object val1, val2;
+	String attrName = null;
+
+	// make sure every attribute in comp1 is the same in comp2
+	while (attrNames.hasNext()) {
+	    attrName = (String) attrNames.next();
+	    val1 = comp1.getAttribute(attrName);
+	    val2 = comp2.getAttribute(attrName);
+	    // if they're not both null, or not the same string
+	    if (!((null == val1 &&  null == val2) ||
+		  (val1.equals(val2)))) {
+		return false;
+	    }
+	}
+
+	attrNames = comp2.getAttributeNames();
+	// make sure every attribute in comp2 is the same in comp1
+	while (attrNames.hasNext()) {
+	    attrName = (String) attrNames.next();
+	    val1 = comp1.getAttribute(attrName);
+	    val2 = comp2.getAttribute(attrName);
+	    // if they're not both null, or not the same string
+	    if (!((null == val1 &&  null == val2) ||
+		  (val1.equals(val2)))) {
+		return false;
+	    }
+	}
+	return true;
 
     }
 

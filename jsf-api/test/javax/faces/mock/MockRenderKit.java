@@ -1,5 +1,5 @@
 /*
- * $Id: MockRenderKit.java,v 1.1 2003/07/20 00:41:45 craigmcc Exp $
+ * $Id: MockRenderKit.java,v 1.2 2003/07/28 22:22:34 eburns Exp $
  */
 
 /*
@@ -17,6 +17,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.ResponseWriter;
 import javax.faces.render.Renderer;
 import javax.faces.render.RenderKit;
+import javax.faces.render.ResponseStateManager;
 import java.io.Writer;
 
 
@@ -56,6 +57,10 @@ public class MockRenderKit extends RenderKit {
     public ResponseWriter getResponseWriter(Writer writer,
                                             String characterEncoding) {
         return new MockResponseWriter(writer, characterEncoding);
+    }
+
+    public ResponseStateManager getResponseStateManager() {
+	return null;
     }
 
 

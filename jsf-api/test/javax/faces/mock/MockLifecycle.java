@@ -1,5 +1,5 @@
 /*
- * $Id: MockLifecycle.java,v 1.1 2003/07/20 00:41:45 craigmcc Exp $
+ * $Id: MockLifecycle.java,v 1.2 2003/07/28 22:22:33 eburns Exp $
  */
 
 /*
@@ -13,26 +13,12 @@ import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseListener;
 import javax.faces.lifecycle.Lifecycle;
-import javax.faces.lifecycle.ViewHandler;
 
 
 public class MockLifecycle extends Lifecycle {
 
 
     // ------------------------------------------------------------- Properties
-
-
-    private ViewHandler viewHandler = null;
-
-
-    public ViewHandler getViewHandler() {
-        return (this.viewHandler);
-    }
-
-
-    public void setViewHandler(ViewHandler viewHandler) {
-        this.viewHandler = viewHandler;
-    }
 
 
     // --------------------------------------------------------- Public Methods

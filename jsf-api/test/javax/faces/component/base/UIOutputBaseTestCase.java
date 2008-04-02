@@ -1,5 +1,5 @@
 /*
- * $Id: UIOutputBaseTestCase.java,v 1.2 2003/07/26 17:55:23 craigmcc Exp $
+ * $Id: UIOutputBaseTestCase.java,v 1.3 2003/07/28 22:22:28 eburns Exp $
  */
 
 /*
@@ -12,6 +12,7 @@ package javax.faces.component.base;
 
 import java.io.IOException;
 import java.util.Iterator;
+import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIOutput;
 import junit.framework.TestCase;
@@ -214,6 +215,101 @@ public class UIOutputBaseTestCase extends UIComponentBaseTestCase {
 
     }
 
+    public void testStateHolder() {
+        UIComponent testParent = new TestComponentNamingContainer("root");
+	UIOutput
+	    preSave = null,
+	    postSave = null;
+	Object state = null;
+
+	// test output with no properties
+	testParent.getChildren().clear();
+	preSave = new UIOutputBase();
+	preSave.setId("output");
+	preSave.setRendererType(null); // necessary: we have no renderkit
+	testParent.getChildren().add(preSave);
+	state = preSave.getState(facesContext);
+	assertTrue(null != state);
+	testParent.getChildren().clear();
+	
+	postSave = new UIOutputBase();
+	testParent.getChildren().add(postSave);
+	try {
+	    postSave.restoreState(facesContext, state);
+	}
+	catch (Throwable e) {
+	    assertTrue(false);
+	}
+	assertTrue(propertiesAreEqual(facesContext, preSave, postSave));
+
+	// test output with valueRef
+	testParent.getChildren().clear();
+	preSave = new UIOutputBase();
+	preSave.setId("output");
+	preSave.setRendererType(null); // necessary: we have no renderkit
+	preSave.setValueRef("valueRefString");
+	testParent.getChildren().add(preSave);
+	state = preSave.getState(facesContext);
+	assertTrue(null != state);
+	testParent.getChildren().clear();
+	
+	postSave = new UIOutputBase();
+	testParent.getChildren().add(postSave);
+	try {
+	    postSave.restoreState(facesContext, state);
+	}
+	catch (Throwable e) {
+	    assertTrue(false);
+	}
+	assertTrue(propertiesAreEqual(facesContext, preSave, postSave));
+
+	// test output with valueRef and converter
+	testParent.getChildren().clear();
+	preSave = new UIOutputBase();
+	preSave.setId("output");
+	preSave.setRendererType(null); // necessary: we have no renderkit
+	preSave.setValueRef("valueRefString");
+	preSave.setConverter("buckaroo");
+	testParent.getChildren().add(preSave);
+	state = preSave.getState(facesContext);
+	assertTrue(null != state);
+	testParent.getChildren().clear();
+	
+	postSave = new UIOutputBase();
+	testParent.getChildren().add(postSave);
+	try {
+	    postSave.restoreState(facesContext, state);
+	}
+	catch (Throwable e) {
+	    assertTrue(false);
+	}
+	assertTrue(propertiesAreEqual(facesContext, preSave, postSave));
+
+
+    }
+
+    protected boolean propertiesAreEqual(FacesContext context,
+					 UIComponent comp1,
+					 UIComponent comp2) {
+	if (super.propertiesAreEqual(context, comp1, comp2)) {
+	    UIOutput 
+		output1 = (UIOutput) comp1,
+		output2 = (UIOutput) comp2;
+	    // if their not both null, or not the same string
+	    if (!((null == output1.getValueRef() && 
+		   null == output2.getValueRef()) ||
+		(output1.getValueRef().equals(output2.getValueRef())))) {
+		return false;
+	    }
+	    // if their not both null, or not the same string
+	    if (!((null == output1.getValue() && 
+		   null == output2.getValue()) ||
+		(output1.getValue().equals(output2.getValue())))) {
+		return false;
+	    }
+	}
+	return true;
+    }
 
 
 }

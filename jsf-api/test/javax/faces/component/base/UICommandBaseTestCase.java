@@ -1,5 +1,5 @@
 /*
- * $Id: UICommandBaseTestCase.java,v 1.3 2003/07/27 00:48:30 craigmcc Exp $
+ * $Id: UICommandBaseTestCase.java,v 1.4 2003/07/28 22:22:28 eburns Exp $
  */
 
 /*
@@ -13,6 +13,7 @@ package javax.faces.component.base;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
+import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UICommand;
 import javax.faces.event.ActionEvent;
@@ -170,7 +171,7 @@ public class UICommandBaseTestCase extends UIOutputBaseTestCase {
 
         // Fire events and evaluate results
         TestActionListener.trace(null);
-        assertTrue(command.broadcast(event, PhaseId.RECONSTITUTE_REQUEST));
+        assertTrue(command.broadcast(event, PhaseId.RESTORE_COMPONENT_TREE));
         assertTrue(command.broadcast(event, PhaseId.APPLY_REQUEST_VALUES));
         assertTrue(!command.broadcast(event, PhaseId.PROCESS_VALIDATIONS));
         assertTrue(!command.broadcast(event, PhaseId.UPDATE_MODEL_VALUES));
@@ -288,6 +289,168 @@ public class UICommandBaseTestCase extends UIOutputBaseTestCase {
 
     }
 
+    public void testStateHolder() {
+        UIComponent testParent = new TestComponentNamingContainer("root");
+	UICommandSub
+	    preSave = null,
+	    postSave = null;
+	Object state = null;
 
+	// test page with no attributes
+	testParent.getChildren().clear();
+	preSave = new UICommandSub();
+	preSave.setId("command");
+	preSave.setRendererType(null); // necessary: we have no renderkit
+	testParent.getChildren().add(preSave);
+	state = preSave.getState(facesContext);
+	assertTrue(null != state);
+	testParent.getChildren().clear();
+	
+	postSave = new UICommandSub();
+	postSave.setId("command");
+	testParent.getChildren().add(postSave);
+	try {
+	    postSave.restoreState(facesContext, state);
+	}
+	catch (Throwable e) {
+	    assertTrue(false);
+	}
+	assertTrue(propertiesAreEqual(facesContext, preSave, postSave));
+
+	// test page with action and actionRef
+	testParent.getChildren().clear();
+	preSave = new UICommandSub();
+	preSave.setId("command");
+	preSave.setRendererType(null); // necessary: we have no renderkit
+	preSave.setAction("action");
+	preSave.setActionRef("actionRef");
+	testParent.getChildren().add(preSave);
+	state = preSave.getState(facesContext);
+	assertTrue(null != state);
+	testParent.getChildren().clear();
+	
+	postSave = new UICommandSub();
+	postSave.setId("command");
+	testParent.getChildren().add(postSave);
+	try {
+	    postSave.restoreState(facesContext, state);
+	}
+	catch (Throwable e) {
+	    assertTrue(false);
+	}
+	assertTrue(propertiesAreEqual(facesContext, preSave, postSave));
+
+	// test page with action and actionRef, and listeners
+	testParent.getChildren().clear();
+	preSave = new UICommandSub();
+	preSave.setId("command");
+	preSave.setRendererType(null); // necessary: we have no renderkit
+	preSave.setAction("action");
+	preSave.setActionRef("actionRef");
+	testParent.getChildren().add(preSave);
+	preSave.addActionListener(new TestActionListener("ANY",
+							 PhaseId.ANY_PHASE));
+	preSave.addActionListener(new TestActionListener("APR0",
+							 PhaseId.APPLY_REQUEST_VALUES));
+	preSave.addActionListener(new TestActionListener("APR1",
+							 PhaseId.APPLY_REQUEST_VALUES));
+	preSave.addActionListener(new TestActionListener("UMV0",
+							 PhaseId.UPDATE_MODEL_VALUES));
+	preSave.addActionListener(new TestActionListener("UMV1",
+							 PhaseId.UPDATE_MODEL_VALUES));
+	preSave.addActionListener(new TestActionListener("UMV2",
+							 PhaseId.UPDATE_MODEL_VALUES));
+	state = preSave.getState(facesContext);
+	assertTrue(null != state);
+	testParent.getChildren().clear();
+	
+	postSave = new UICommandSub();
+	postSave.setId("command");
+	testParent.getChildren().add(postSave);
+	try {
+	    postSave.restoreState(facesContext, state);
+	}
+	catch (Throwable e) {
+	    assertTrue(false);
+	}
+	assertTrue(propertiesAreEqual(facesContext, preSave, postSave));
+
+    }
+
+    // -------------------------------------------------------- Support Methods
+
+    protected boolean propertiesAreEqual(FacesContext context,
+					 UIComponent comp1,
+					 UIComponent comp2) {
+	UICommandSub 
+	    command1 = (UICommandSub) comp1,
+	    command2 = (UICommandSub) comp2;
+	if (super.propertiesAreEqual(context, comp1, comp2)) {
+	    // if their not both null, or not the same string
+	    if (!((null == command1.getAction() && 
+		   null == command2.getAction()) ||
+		(command1.getAction().equals(command2.getAction())))) {
+		return false;
+	    }
+	    // if their not both null, or not the same string
+	    if (!((null == command1.getActionRef() && 
+		   null == command2.getActionRef()) ||
+		(command1.getActionRef().equals(command2.getActionRef())))) {
+		return false;
+	    }
+	    // if their not both null, or not the same string
+	    if (!((null == command1.getActionRef() && 
+		   null == command2.getActionRef()) ||
+		(command1.getActionRef().equals(command2.getActionRef())))) {
+		return false;
+	    }
+	    
+	}
+	return listenersAreEqual(context, command1, command2);
+    }
+
+    protected boolean listenersAreEqual(FacesContext context,
+					UICommandSub comp1,
+					UICommandSub comp2) {
+	List [] list1 = comp1.getListeners();
+	List [] list2 = comp2.getListeners();
+	// make sure they're either both null or both non-null
+	if ((null == list1 && null != list2) ||
+	    (null != list1 && null == list2)) {
+	    return false;
+	}
+	if (null == list1) {
+	    return true;
+	}
+	int i = 0, j = 0, outerLen = list1.length, innerLen = 0;
+	boolean result = true;
+	if (outerLen != list2.length) {
+	    return false;
+	}
+	for (i = 0; i < outerLen; i++) {
+	    if ((null == list1[i] && null != list2[i]) ||
+		(null != list1[i] && null == list2[i])) {
+		return false;
+	    }
+	    else if (null != list1[i]) {
+		if (list1[i].size() != (innerLen = list2[i].size())) {
+		    return false;
+		}
+		for (j = 0; j < innerLen; j++) {
+		    result = list1[i].get(j).equals(list2[i].get(j));
+		    if (!result) {
+			return false;
+		    }
+		}
+	    }
+	}
+	return true;
+    }
+
+    private class UICommandSub extends UICommandBase {
+	public List[] getListeners() { 
+	    return listeners;
+	}
+    }
 
 }

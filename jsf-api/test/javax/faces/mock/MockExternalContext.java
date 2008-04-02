@@ -1,5 +1,5 @@
 /*
- * $Id: MockExternalContext.java,v 1.2 2003/07/26 17:55:34 craigmcc Exp $
+ * $Id: MockExternalContext.java,v 1.3 2003/07/28 22:22:33 eburns Exp $
  */
 
 /*
@@ -142,6 +142,9 @@ public class MockExternalContext extends ExternalContext {
 
 
     public String getInitParameter(String name) {
+	if (name.equals(javax.faces.application.StateManager.STATE_SAVING_METHOD_PARAM_NAME)) {
+	    return null;
+	}
         throw new UnsupportedOperationException();
     }
 

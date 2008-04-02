@@ -1,5 +1,5 @@
 /*
- * $Id: MockFacesContext.java,v 1.9 2003/07/20 00:41:45 craigmcc Exp $
+ * $Id: MockFacesContext.java,v 1.10 2003/07/28 22:22:33 eburns Exp $
  */
 
 /*
@@ -13,6 +13,7 @@ package javax.faces.mock;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.lifecycle.Lifecycle;
+import javax.faces.application.Application;
 import com.sun.faces.context.FacesContextImpl;
 
 // Mock Object for FacesContext
@@ -29,5 +30,13 @@ public class MockFacesContext extends FacesContextImpl {
         setCurrentInstance(this);
     }
 
+    protected Application app = null;
+
+    public void setApplication(Application newApp) {
+	app = newApp;
+    }
+    public Application getApplication() {
+	return app;
+    }
 
 }

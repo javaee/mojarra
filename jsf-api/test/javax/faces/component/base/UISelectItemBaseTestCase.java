@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectItemBaseTestCase.java,v 1.2 2003/07/26 17:55:25 craigmcc Exp $
+ * $Id: UISelectItemBaseTestCase.java,v 1.3 2003/07/28 22:22:29 eburns Exp $
  */
 
 /*
@@ -15,6 +15,7 @@ import java.util.Iterator;
 import java.util.List;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UISelectItem;
+import javax.faces.context.FacesContext;
 import junit.framework.TestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -151,6 +152,112 @@ public class UISelectItemBaseTestCase extends UIOutputBaseTestCase {
         selectItem.setItemValue(null);
         assertNull(selectItem.getItemValue());
 
+    }
+
+    public void testStateHolder() {
+        UIComponent testParent = new TestComponentNamingContainer("root");
+	UISelectItem
+	    preSave = null,
+	    postSave = null;
+	Object state = null;
+
+	// test selectItem with nothing
+	testParent.getChildren().clear();
+	preSave = new UISelectItemBase();
+	preSave.setId("selectItem");
+	preSave.setRendererType(null); // necessary: we have no renderkit
+	testParent.getChildren().add(preSave);
+	state = preSave.getState(facesContext);
+	assertTrue(null != state);
+	testParent.getChildren().clear();
+	
+	postSave = new UISelectItemBase();
+	postSave.setId("selectItem");
+	testParent.getChildren().add(postSave);
+	try {
+	    postSave.restoreState(facesContext, state);
+	}
+	catch (Throwable e) {
+	    assertTrue(false);
+	}
+	assertTrue(propertiesAreEqual(facesContext, preSave, postSave));
+
+	// test selectItem with value only
+	testParent.getChildren().clear();
+	preSave = new UISelectItemBase();
+	preSave.setId("selectItem");
+	preSave.setRendererType(null); // necessary: we have no renderkit
+	preSave.setItemValue("value");
+	testParent.getChildren().add(preSave);
+	state = preSave.getState(facesContext);
+	assertTrue(null != state);
+	testParent.getChildren().clear();
+	
+	postSave = new UISelectItemBase();
+	postSave.setId("selectItem");
+	testParent.getChildren().add(postSave);
+	try {
+	    postSave.restoreState(facesContext, state);
+	}
+	catch (Throwable e) {
+	    assertTrue(false);
+	}
+	assertTrue(propertiesAreEqual(facesContext, preSave, postSave));
+
+	// test selectItem with the works
+	testParent.getChildren().clear();
+	preSave = new UISelectItemBase();
+	preSave.setId("selectItem");
+	preSave.setRendererType(null); // necessary: we have no renderkit
+	preSave.setItemDescription("description");
+	preSave.setItemLabel("label");
+	preSave.setItemValue("value");
+	testParent.getChildren().add(preSave);
+	state = preSave.getState(facesContext);
+	assertTrue(null != state);
+	testParent.getChildren().clear();
+	
+	postSave = new UISelectItemBase();
+	postSave.setId("selectItem");
+	testParent.getChildren().add(postSave);
+	try {
+	    postSave.restoreState(facesContext, state);
+	}
+	catch (Throwable e) {
+	    assertTrue(false);
+	}
+	assertTrue(propertiesAreEqual(facesContext, preSave, postSave));
+    }
+     
+    // -------------------------------------------------------- Support Methods
+
+    protected boolean propertiesAreEqual(FacesContext context,
+					 UIComponent comp1,
+					 UIComponent comp2) {
+	if (super.propertiesAreEqual(context, comp1, comp2)) {
+	    UISelectItem 
+		selectItem1 = (UISelectItem) comp1,
+		selectItem2 = (UISelectItem) comp2;
+	    // if their not both null, or not the same string
+	    if (!((null == selectItem1.getItemLabel() && 
+		   null == selectItem2.getItemLabel()) ||
+		(selectItem1.getItemLabel().equals(selectItem2.getItemLabel())))) {
+		return false;
+	    }
+	    // if their not both null, or not the same string
+	    if (!((null == selectItem1.getItemDescription() && 
+		   null == selectItem2.getItemDescription()) ||
+		(selectItem1.getItemDescription().equals(selectItem2.getItemDescription())))) {
+		return false;
+	    }
+	    // if their not both null, or not the same string
+	    if (!((null == selectItem1.getItemValue() && 
+		   null == selectItem2.getItemValue()) ||
+		(selectItem1.getItemValue().equals(selectItem2.getItemValue())))) {
+		return false;
+	    }
+	}
+	return true;
     }
 
 

@@ -1,5 +1,5 @@
 /*
- * $Id: MockApplication.java,v 1.4 2003/07/16 23:11:05 craigmcc Exp $
+ * $Id: MockApplication.java,v 1.5 2003/07/28 22:22:32 eburns Exp $
  */
 
 /*
@@ -17,6 +17,7 @@ import javax.faces.FacesException;
 import javax.faces.application.Application;
 import javax.faces.application.MessageResources;
 import javax.faces.application.NavigationHandler;
+import javax.faces.application.ViewHandler;
 import javax.faces.component.UIComponent;
 import javax.faces.convert.Converter;
 import javax.faces.context.FacesContext;
@@ -75,6 +76,16 @@ public class MockApplication extends Application {
         this.variableResolver = variableResolver;
     }
 
+    private ViewHandler viewHandler = null;
+    public ViewHandler getViewHandler() {
+	if (null == viewHandler) {
+	    viewHandler = new MockViewHandler();
+	}
+        return (this.viewHandler);
+    }
+    public void setViewHandler(ViewHandler viewHandler) {
+        this.viewHandler = viewHandler;
+    }
 
     private Map components = new HashMap();
     public void addComponent(String componentType, String componentClass) {
