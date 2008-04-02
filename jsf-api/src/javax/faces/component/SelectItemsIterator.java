@@ -1,5 +1,5 @@
 /*
- * $Id: SelectItemsIterator.java,v 1.2 2003/11/08 01:15:20 craigmcc Exp $
+ * $Id: SelectItemsIterator.java,v 1.3 2004/01/30 22:57:18 horwat Exp $
  */
 
 /*
@@ -105,7 +105,8 @@ final class SelectItemsIterator implements Iterator {
             if (item == null) {
                 item = new SelectItem(ui.getItemValue(),
                                       ui.getItemLabel(),
-                                      ui.getItemDescription());
+                                      ui.getItemDescription(),
+                                      ui.isItemDisabled());
             }
             return (item);
         } else if (kid instanceof UISelectItems) {

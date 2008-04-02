@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectItem.java,v 1.32 2004/01/27 20:29:20 craigmcc Exp $
+ * $Id: UISelectItem.java,v 1.33 2004/01/30 22:57:18 horwat Exp $
  */
 
 /*
@@ -29,8 +29,8 @@ import javax.faces.model.SelectItem;
  * <li>The associated {@link ValueBinding} points at a model data
  *     item of type {@link SelectItem}.</li>
  * <li>A new {@link SelectItem} instance is synthesized from the values
- *     of the <code>itemDescription</code>, <code>itemLabel</code>, and
- *     <code>itemValue</code> attributes.</li>
+ *     of the <code>itemDescription</code>, <code>itemDisabled</code>,
+ *     <code>itemLabel</code>, and <code>itemValue</code> attributes.</li>
  * </ul>
  */
 
@@ -71,6 +71,8 @@ public class UISelectItem extends UIComponentBase {
 
 
     private String itemDescription = null;
+    private boolean itemDisabled = false;
+    private boolean itemDisabledSet = false;
     private String itemLabel = null;
     private Object itemValue = null;
     private Object value = null;
@@ -115,6 +117,34 @@ public class UISelectItem extends UIComponentBase {
 
     }
 
+    /**
+     * <p>Return the disabled setting for this selection item.</p>
+     */
+    public boolean isItemDisabled() {
+
+	if (this.itemDisabledSet) {
+	    return (this.itemDisabled);
+	}
+	ValueBinding vb = getValueBinding("itemDisabled");
+	if (vb != null) {
+	    return (Boolean.TRUE.equals(vb.getValue(getFacesContext())));
+	} else {
+	    return (this.itemDisabled);
+	}
+
+    }
+
+    /**
+     * <p>Set the disabled value for this selection item.</p>
+     *
+     * @param itemDisabled The new disabled flag
+     */
+    public void setItemDisabled(boolean itemDisabled) {
+
+        this.itemDisabled = itemDisabled;
+        this.itemDisabledSet = true;
+
+    }
 
     /**
      * <p>Return the localized label for this selection item.</p>
@@ -214,12 +244,14 @@ public class UISelectItem extends UIComponentBase {
 
     public Object saveState(FacesContext context) {
 
-        Object values[] = new Object[5];
+        Object values[] = new Object[7];
         values[0] = super.saveState(context);
         values[1] = itemDescription;
-        values[2] = itemLabel;
-        values[3] = itemValue;
-        values[4] = value;
+        values[2] = itemDisabled ? Boolean.TRUE : Boolean.FALSE;
+        values[3] = itemDisabledSet ? Boolean.TRUE : Boolean.FALSE;
+        values[4] = itemLabel;
+        values[5] = itemValue;
+        values[6] = value;
         return (values);
 
     }
@@ -230,9 +262,11 @@ public class UISelectItem extends UIComponentBase {
         Object values[] = (Object[]) state;
         super.restoreState(context, values[0]);
         itemDescription = (String) values[1];
-        itemLabel = (String) values[2];
-        itemValue = values[3];
-        value = values[4];
+        itemDisabled = ((Boolean) values[2]).booleanValue();
+        itemDisabledSet = ((Boolean) values[3]).booleanValue();
+        itemLabel = (String) values[4];
+        itemValue = values[5];
+        value = values[6];
 
     }
 

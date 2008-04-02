@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectItemTestCase.java,v 1.10 2004/01/27 20:30:10 craigmcc Exp $
+ * $Id: UISelectItemTestCase.java,v 1.11 2004/01/30 22:57:19 horwat Exp $
  */
 
 /*
@@ -104,6 +104,20 @@ public class UISelectItemTestCase extends UIComponentBaseTestCase {
         selectItem.getAttributes().put("itemDescription", null);
         assertNull(selectItem.getItemDescription());
 
+        assertEquals(selectItem.isItemDisabled(),
+                     ((Boolean) selectItem.getAttributes().get("itemDisabled")).
+                      booleanValue());
+        selectItem.setItemDisabled(true);
+        assertTrue(((Boolean) selectItem.getAttributes().
+                   get("itemDisabled")).booleanValue());
+        selectItem.setItemDisabled(false);
+        assertFalse(((Boolean) selectItem.getAttributes().
+                    get("itemDisabled")).booleanValue());
+        selectItem.getAttributes().put("itemDisabled", Boolean.FALSE);
+        assertFalse(selectItem.isItemDisabled());
+        selectItem.getAttributes().put("itemDisabled", Boolean.TRUE);
+        assertTrue(selectItem.isItemDisabled());
+
         assertEquals(selectItem.getItemLabel(),
                      (String) selectItem.getAttributes().get("itemLabel"));
         selectItem.setItemLabel("foo");
@@ -137,6 +151,7 @@ public class UISelectItemTestCase extends UIComponentBaseTestCase {
 
         assertNull("no value", selectItem.getValue());
         assertNull("no itemDescription", selectItem.getItemDescription());
+        assertFalse("no itemDisabled", selectItem.isItemDisabled());
         assertNull("no itemLabel", selectItem.getItemLabel());
         assertNull("no itemValue", selectItem.getItemValue());
 
@@ -171,6 +186,11 @@ public class UISelectItemTestCase extends UIComponentBaseTestCase {
         selectItem.setItemDescription(null);
         assertNull(selectItem.getItemDescription());
 
+        selectItem.setItemDisabled(false);
+        assertFalse(selectItem.isItemDisabled());
+        selectItem.setItemDisabled(true);
+        assertTrue(selectItem.isItemDisabled());
+
         selectItem.setItemLabel("foo");
         assertEquals("foo", selectItem.getItemLabel());
         selectItem.setItemLabel(null);
@@ -203,6 +223,18 @@ public class UISelectItemTestCase extends UIComponentBaseTestCase {
 	test.setValueBinding("itemDescription", null);
 	assertNull(test.getValueBinding("itemDescription"));
 	assertNull(test.getItemDescription());
+
+	// "itemDisabled" property
+        assertFalse(test.isItemDisabled());
+	request.setAttribute("foo", Boolean.TRUE);
+	test.setValueBinding("itemDisabled", application.createValueBinding("#{foo}"));
+	assertNotNull(test.getValueBinding("itemDisabled"));
+	assertTrue(test.isItemDisabled());
+        test.setItemDisabled(false);
+        assertFalse(test.isItemDisabled());
+	test.setValueBinding("itemDisabled", null);
+	assertNull(test.getValueBinding("itemDisabled"));
+	assertFalse(test.isItemDisabled());
 
 	// "itemLabel" property
 	request.setAttribute("foo", "bar");
@@ -262,6 +294,7 @@ public class UISelectItemTestCase extends UIComponentBaseTestCase {
         UISelectItem si1 = (UISelectItem) comp1;
         UISelectItem si2 = (UISelectItem) comp2;
         assertEquals(si1.getItemDescription(), si2.getItemDescription());
+        assertEquals(si1.isItemDisabled(), si2.isItemDisabled());
         assertEquals(si1.getItemLabel(), si2.getItemLabel());
         assertEquals(si1.getItemValue(), si2.getItemValue());
 
