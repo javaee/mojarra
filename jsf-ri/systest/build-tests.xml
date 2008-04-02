@@ -4,7 +4,7 @@
  Copyright 2003 Sun Microsystems, Inc. All rights reserved.
  SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 
- $Id: build-tests.xml,v 1.43 2004/01/31 01:10:18 craigmcc Exp $
+ $Id: build-tests.xml,v 1.44 2004/01/31 02:19:27 eburns Exp $
 -->
 
 
@@ -57,6 +57,7 @@
   <!-- HtmlUnit client classpath -->
   <path id="html.classpath">
     <pathelement location="${junit.jar}"/>
+    <pathelement location="../src"/>
     <pathelement location="${basedir}/build/WEB-INF/classes"/>
     <fileset dir="${htmlunit.home}/lib" includes="*.jar"/>
   </path>
