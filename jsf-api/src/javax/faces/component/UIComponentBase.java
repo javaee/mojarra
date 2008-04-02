@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.113 2005/08/03 21:43:10 edburns Exp $
+ * $Id: UIComponentBase.java,v 1.114 2005/08/09 23:58:42 edburns Exp $
  */
 
 /*
@@ -734,11 +734,26 @@ public abstract class UIComponentBase extends UIComponent {
 
 
     public Iterator getFacetsAndChildren() {
-        
-        if (this.getChildCount() == 0 && this.getFacetCount() == 0) {
-            return EMPTY_ITERATOR;
+        Iterator result = null;
+        int childCount = this.getChildCount(), 
+                facetCount = this.getFacetCount();
+        // If there are neither facets nor children
+        if (0 == childCount && 0 == facetCount) {
+            result = EMPTY_ITERATOR;
         }
-        return new FacetsAndChildrenIterator(this);
+        // If there are only facets and no children
+        else if (0 == childCount) {
+            result = getFacets().values().iterator();
+        }
+        // If there are only children and no facets
+        else if (0 == facetCount) {
+            result = getChildren().iterator();
+        }
+        // If there are both children and facets
+        else {
+            result = new FacetsAndChildrenIterator(this);
+        }
+        return result;
     }
 
 
