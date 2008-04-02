@@ -1,5 +1,5 @@
 /*
- * $Id: MessageRenderer.java,v 1.66 2006/10/31 19:21:39 rlubke Exp $
+ * $Id: MessageRenderer.java,v 1.67 2006/11/16 22:59:30 rlubke Exp $
  */
 
 /*
@@ -263,6 +263,9 @@ public class MessageRenderer extends HtmlBasicRenderer {
                 writer.writeAttribute(RenderKitUtils.prefixAttribute(lang, writer),
                      lang,
                      "lang");
+            }
+            if (title != null) {
+                writer.writeAttribute("title", title, "title");
             }
 
         }
