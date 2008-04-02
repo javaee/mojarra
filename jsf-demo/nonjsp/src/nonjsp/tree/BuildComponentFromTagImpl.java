@@ -1,5 +1,5 @@
 /*
- * $Id: BuildComponentFromTagImpl.java,v 1.1 2003/02/13 23:34:26 horwat Exp $
+ * $Id: BuildComponentFromTagImpl.java,v 1.2 2003/02/15 01:29:04 eburns Exp $
  */
 
 /*
@@ -39,7 +39,7 @@ import nonjsp.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: BuildComponentFromTagImpl.java,v 1.1 2003/02/13 23:34:26 horwat Exp $
+ * @version $Id: BuildComponentFromTagImpl.java,v 1.2 2003/02/15 01:29:04 eburns Exp $
  * 
  * @see	com.sun.faces.tree.BuildComponentFromTagImpl
  *
@@ -139,7 +139,7 @@ public class BuildComponentFromTagImpl extends Object
             attrName = "componentId";
         }
 
-        if (attrName.equals(UIComponent.CONVERTER_ATTR)) {
+        if (attrName.equals("converter")) {
             attrName = "converterReference";
         }
 
