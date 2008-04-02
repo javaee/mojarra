@@ -49,6 +49,6 @@
   	<input type="text" name="helloForm:userNo" value="NUMBER" /> <BR>
 
 	 <input type="submit" name="helloForm:submit" value="Submit" />
-    </form>
+    <input type="hidden" name="helloForm" value="helloForm"></form>
     
 </HTML>  

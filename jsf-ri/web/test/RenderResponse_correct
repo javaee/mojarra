@@ -148,7 +148,7 @@
 
 	<TD>
 
-	      <a href="#" onmousedown="document.forms[0]['basicForm:imageLink'].value='basicForm:imageLink'; document.forms[0].submit()"><img src="duke.gif" /></a><input type="hidden" name="basicForm:imageLink" />
+	      <a href="#" onmousedown="document.forms[0]['basicForm:imageLink'].value='basicForm:imageLink'; document.forms[0].submit()"><img src="duke.gif" alt="" /></a><input type="hidden" name="basicForm:imageLink" />
 
 	</TD>
 
@@ -175,7 +175,7 @@
 
       <TR>
         <TD>
-            <a href="#" onmousedown="document.forms[0]['basicForm:hrefLink'].value='basicForm:hrefLink'; document.forms[0].submit()"><img src="duke.gif" /></a><input type="hidden" name="basicForm:hrefLink" />
+            <a href="#" onmousedown="document.forms[0]['basicForm:hrefLink'].value='basicForm:hrefLink'; document.forms[0].submit()"><img src="duke.gif" alt="" /></a><input type="hidden" name="basicForm:hrefLink" />
         </TD>
       </TR>
 
@@ -184,7 +184,7 @@
             <a href="#" onmousedown="document.forms[0]['basicForm:hrefParamLink'].value='basicForm:hrefParamLink'; document.forms[0].submit()"
               
               
-            ><img src="duke.gif" /></a><input type="hidden" name="basicForm:hrefParamLink" /><input type="hidden" name="name" value="horwat" /><input type="hidden" name="value" value="password" />
+            ><img src="duke.gif" alt="" /></a><input type="hidden" name="basicForm:hrefParamLink" /><input type="hidden" name="name" value="horwat" /><input type="hidden" name="value" value="password" />
         </TD>
       </TR>
 
@@ -528,7 +528,7 @@
 
   <TABLE>
 
-</form>
+<input type="hidden" name="basicForm" value="basicForm"></form>
 
 
     </BODY>
