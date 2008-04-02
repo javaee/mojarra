@@ -1,5 +1,5 @@
 /*
- * $Id: ELContextImpl.java,v 1.7 2006/03/29 23:03:44 rlubke Exp $
+ * $Id: ELContextImpl.java,v 1.8 2007/02/02 19:38:09 rlubke Exp $
  */
 
 /*
@@ -31,7 +31,11 @@ package com.sun.faces.el;
 import javax.el.ELContext;
 import javax.el.ELResolver;
 import javax.el.FunctionMapper;
+import javax.el.ValueExpression;
 import javax.el.VariableMapper;
+import java.util.Map;
+import java.util.HashMap;
+import java.lang.reflect.Method;
 
 /**
  * Concrete implementation of {@link javax.el.ELContext}.
@@ -42,9 +46,13 @@ import javax.el.VariableMapper;
  */
 public class ELContextImpl extends ELContext {
     
-    private FunctionMapper functionMapper;
+    private static FunctionMapper functionMapper = new NoopFunctionMapper();
     private VariableMapper variableMapper;
     private ELResolver resolver;
+
+
+    // ------------------------------------------------------------ Constructors
+
 
     /**
      * Constructs a new ELContext associated with the given ELResolver.
@@ -53,24 +61,56 @@ public class ELContextImpl extends ELContext {
         this.resolver = resolver;
     }
 
-    public void setFunctionMapper(FunctionMapper fnMapper) {
-        functionMapper = fnMapper;
-    }
 
-    public FunctionMapper getFunctionMapper() {
+    // -------------------------------------------------- Methods from ELContext
+
+
+    public FunctionMapper getFunctionMapper() {        
         return functionMapper;
     }
 
-    public void setVariableMapper(VariableMapper varMapper) {
-        variableMapper = varMapper;
-    }
-
     public VariableMapper getVariableMapper() {
+        if (variableMapper == null) {
+            variableMapper = new VariableMapperImpl();
+        }
         return variableMapper;
     }
 
     public ELResolver getELResolver() {
         return resolver;
+    }
+
+
+    // ----------------------------------------------------------- Inner Classes
+
+
+    private static class VariableMapperImpl extends VariableMapper {
+
+        private Map<String,ValueExpression> variables;
+
+        public VariableMapperImpl() {
+
+            //noinspection CollectionWithoutInitialCapacity
+            variables = new HashMap<String,ValueExpression>();
+
+        }
+
+        public ValueExpression resolveVariable(String s) {
+            return variables.get(s);
+        }
+
+        public ValueExpression setVariable(String s, ValueExpression valueExpression) {
+            return (variables.put(s, valueExpression));
+        }
+    }
+
+
+    private static class NoopFunctionMapper extends FunctionMapper {
+
+        public Method resolveFunction(String s, String s1) {
+            return null;
+        }
+
     }
 
 }
