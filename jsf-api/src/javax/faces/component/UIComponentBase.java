@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.51 2003/04/29 18:51:30 eburns Exp $
+ * $Id: UIComponentBase.java,v 1.52 2003/06/20 22:17:58 craigmcc Exp $
  */
 
 /*
@@ -163,13 +163,10 @@ public abstract class UIComponentBase implements UIComponent {
         if (rendererType != null) {
 
 	    // let the Renderer define the client id
-            RenderKitFactory rkFactory = (RenderKitFactory)
-                FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
-            RenderKit renderKit = rkFactory.getRenderKit
-                (context.getTree().getRenderKitId());
-            Renderer renderer = renderKit.getRenderer(rendererType);
+	    Renderer renderer = getRenderer(context);
             clientId = renderer.getClientId(context, this);
 	    componentId = clientId;
+
         } else {
 
 	    // we have to define the client id ourselves
@@ -845,12 +842,7 @@ public abstract class UIComponentBase implements UIComponent {
         }
         String rendererType = getRendererType();
         if (rendererType != null) {
-            RenderKitFactory rkFactory = (RenderKitFactory)
-                FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
-            RenderKit renderKit = rkFactory.getRenderKit
-                (context.getTree().getRenderKitId());
-            Renderer renderer = renderKit.getRenderer(rendererType);
-            renderer.decode(context, this);
+            getRenderer(context).decode(context, this);
         } else {
             setValid(true);
         }
@@ -864,12 +856,7 @@ public abstract class UIComponentBase implements UIComponent {
         }
         String rendererType = getRendererType();
         if (rendererType != null) {
-            RenderKitFactory rkFactory = (RenderKitFactory)
-                FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
-            RenderKit renderKit = rkFactory.getRenderKit
-                (context.getTree().getRenderKitId());
-            Renderer renderer = renderKit.getRenderer(rendererType);
-            renderer.encodeBegin(context, this);
+            getRenderer(context).encodeBegin(context, this);
         }
 
     }
@@ -881,12 +868,7 @@ public abstract class UIComponentBase implements UIComponent {
         }
         String rendererType = getRendererType();
         if (rendererType != null) {
-            RenderKitFactory rkFactory = (RenderKitFactory)
-                FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
-            RenderKit renderKit = rkFactory.getRenderKit
-                (context.getTree().getRenderKitId());
-            Renderer renderer = renderKit.getRenderer(rendererType);
-            renderer.encodeChildren(context, this);
+	    getRenderer(context).encodeChildren(context, this);
         }
 
     }
@@ -898,12 +880,7 @@ public abstract class UIComponentBase implements UIComponent {
         }
         String rendererType = getRendererType();
         if (rendererType != null) {
-            RenderKitFactory rkFactory = (RenderKitFactory)
-                FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
-            RenderKit renderKit = rkFactory.getRenderKit
-                (context.getTree().getRenderKitId());
-            Renderer renderer = renderKit.getRenderer(rendererType);
-            renderer.encodeEnd(context, this);
+	    getRenderer(context).encodeEnd(context, this);
         }
 
     }
@@ -1024,6 +1001,31 @@ public abstract class UIComponentBase implements UIComponent {
         if (!isValid()) {
             context.renderResponse();
         }
+
+    }
+
+
+    // ------------------------------------------------------- Protected Methods
+
+
+    /**
+     * <p>Return the {@link Renderer} instance associated with this
+     * {@link UIComponent}, if any; otherwise, return <code>null</code>.</p>
+     *
+     * @param context {@link FacesContext} for the current request
+     */
+    protected Renderer getRenderer(FacesContext context) {
+
+	String rendererType = getRendererType();
+	if (rendererType != null) {
+            RenderKitFactory rkFactory = (RenderKitFactory)
+                FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
+            RenderKit renderKit = rkFactory.getRenderKit
+                (context.getTree().getRenderKitId());
+            return (renderKit.getRenderer(rendererType));
+	} else {
+	    return (null);
+	}
 
     }
 
