@@ -1,5 +1,5 @@
 /*
- * $Id: GridRenderer.java,v 1.38 2005/08/26 15:27:13 rlubke Exp $
+ * $Id: GridRenderer.java,v 1.39 2006/01/11 15:28:07 rlubke Exp $
  */
 
 /*
@@ -38,7 +38,8 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 
-import com.sun.faces.util.Util;
+import com.sun.faces.util.MessageUtils;
+import com.sun.faces.renderkit.RenderKitUtils;
 
 import java.util.logging.Level;
 
@@ -95,8 +96,8 @@ public class GridRenderer extends HtmlBasicRenderer {
         throws IOException {
 
         if (context == null || component == null) {
-            throw new NullPointerException(Util.getExceptionMessageString(
-                Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+            throw new NullPointerException(MessageUtils.getExceptionMessageString(
+                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
 
         if (logger.isLoggable(Level.FINER)) {
@@ -124,7 +125,7 @@ public class GridRenderer extends HtmlBasicRenderer {
         if (styleClass != null) {
             writer.writeAttribute("class", styleClass, "styleClass");
         }
-        Util.renderPassThruAttributes(context, writer, component);
+        RenderKitUtils.renderPassThruAttributes(context, writer, component);
         writer.writeText("\n", null);
 
         // Render the header facet (if any)
@@ -179,8 +180,8 @@ public class GridRenderer extends HtmlBasicRenderer {
         throws IOException {
 
         if (context == null || component == null) {
-            throw new NullPointerException(Util.getExceptionMessageString(
-                Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+            throw new NullPointerException(MessageUtils.getExceptionMessageString(
+                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
         if (logger.isLoggable(Level.FINER)) {
             logger.log(Level.FINER,"Begin encoding children " + component.getId());
@@ -269,8 +270,8 @@ public class GridRenderer extends HtmlBasicRenderer {
         throws IOException {
 
         if (context == null || component == null) {
-            throw new NullPointerException(Util.getExceptionMessageString(
-                Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+            throw new NullPointerException(MessageUtils.getExceptionMessageString(
+                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
         // suppress rendering if "rendered" property on the component is
         // false.

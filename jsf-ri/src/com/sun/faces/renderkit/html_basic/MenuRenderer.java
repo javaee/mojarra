@@ -24,7 +24,7 @@
  */
 
 /*
- * $Id: MenuRenderer.java,v 1.65 2005/11/29 16:20:15 rlubke Exp $
+ * $Id: MenuRenderer.java,v 1.66 2006/01/11 15:28:09 rlubke Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -55,7 +55,9 @@ import javax.faces.model.SelectItem;
 import javax.faces.model.SelectItemGroup;
 
 import com.sun.faces.RIConstants;
+import com.sun.faces.renderkit.RenderKitUtils;
 import com.sun.faces.util.Util;
+import com.sun.faces.util.MessageUtils;
 
 import java.util.logging.Level;
 
@@ -105,8 +107,8 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
 
     public void decode(FacesContext context, UIComponent component) {
         if (context == null || component == null) {
-            throw new NullPointerException(Util.getExceptionMessageString(
-                Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+            throw new NullPointerException(MessageUtils.getExceptionMessageString(
+                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
         if (logger.isLoggable(Level.FINER)) {
             logger.log(Level.FINER,"Begin decoding component " + component.getId());
@@ -261,7 +263,7 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
 		valueExpression.getExpressionString()
 	    };
 	    throw new ConverterException
-		(Util.getExceptionMessage(Util.CONVERSION_ERROR_MESSAGE_ID,
+		(MessageUtils.getExceptionMessage(MessageUtils.CONVERSION_ERROR_MESSAGE_ID,
 					  params));
 	}
 
@@ -330,8 +332,8 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
 		    "null Converter"
 		};
 
-		throw new ConverterException(Util.getExceptionMessage(
-                  Util.CONVERSION_ERROR_MESSAGE_ID, params));
+		throw new ConverterException(MessageUtils.getExceptionMessage(
+                  MessageUtils.CONVERSION_ERROR_MESSAGE_ID, params));
             }
         }
 
@@ -415,8 +417,8 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
     public void encodeBegin(FacesContext context, UIComponent component)
         throws IOException {
         if (context == null || component == null) {
-            throw new NullPointerException(Util.getExceptionMessageString(
-                Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+            throw new NullPointerException(MessageUtils.getExceptionMessageString(
+                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
     }
 
@@ -424,8 +426,8 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
         throws IOException {
 
         if (context == null || component == null) {
-            throw new NullPointerException(Util.getExceptionMessageString(
-                Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+            throw new NullPointerException(MessageUtils.getExceptionMessageString(
+                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
 
         if (logger.isLoggable(Level.FINER)) {
@@ -489,14 +491,12 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
             writeDefaultSize(writer, itemCount);
         }
 
-	// PENDING(edburns): not sure about this.  Maybe take the one
-	// from wta-head?
-        Util.renderPassThruAttributes(context, writer, component);
-	// don't render disabled here, because it is dealt with in a
-	// special fashin further down the callstack.
-        Util.renderBooleanPassThruAttributes(writer, component, 
-					     new String [] {"disabled"});
-
+        RenderKitUtils.renderPassThruAttributes(context, 
+                                                writer, 
+                                                component);                
+        RenderKitUtils.renderXHTMLStyleBooleanAttributes(writer,
+                                                         component,
+                                                         new String[] { "disabled" });
         // Now, render the "options" portion...
         renderOptions(context, component);
 
@@ -505,7 +505,7 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
 
 
     int getOptionNumber(FacesContext context, UIComponent component) {
-        Iterator items = Util.getSelectItems(context, component);
+        Iterator items = RenderKitUtils.getSelectItems(context, component);
         int itemCount = 0;
         while (items.hasNext()) {
             itemCount++;
@@ -526,7 +526,7 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
         ResponseWriter writer = context.getResponseWriter();
         assert (writer != null);
 
-        Iterator items = Util.getSelectItems(context, component);
+        Iterator items = RenderKitUtils.getSelectItems(context, component);
         SelectItem curItem = null;
         while (items.hasNext()) {
             curItem = (SelectItem) items.next();

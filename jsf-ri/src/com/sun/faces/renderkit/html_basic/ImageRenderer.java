@@ -1,5 +1,5 @@
 /*
- * $Id: ImageRenderer.java,v 1.41 2005/09/28 01:26:17 jayashri Exp $
+ * $Id: ImageRenderer.java,v 1.42 2006/01/11 15:28:09 rlubke Exp $
  */
 
 /*
@@ -31,9 +31,10 @@
 
 package com.sun.faces.renderkit.html_basic;
 
-import com.sun.faces.util.Util;
+import com.sun.faces.util.MessageUtils;
 import com.sun.faces.RIConstants;
-import java.util.logging.Logger;
+import com.sun.faces.renderkit.RenderKitUtils;
+
 import java.util.logging.Level;
 
 import javax.faces.component.UIComponent;
@@ -47,7 +48,7 @@ import java.io.IOException;
  * <B>ImageRenderer</B> is a class that handles the rendering of the graphic
  * ImageTag
  *
- * @version $Id: ImageRenderer.java,v 1.41 2005/09/28 01:26:17 jayashri Exp $
+ * @version $Id: ImageRenderer.java,v 1.42 2006/01/11 15:28:09 rlubke Exp $
  */
 
 public class ImageRenderer extends HtmlBasicRenderer {
@@ -93,7 +94,7 @@ public class ImageRenderer extends HtmlBasicRenderer {
         throws IOException {
         if (context == null || component == null) {
             throw new NullPointerException(
-                Util.getExceptionMessageString(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
     }
 
@@ -105,7 +106,7 @@ public class ImageRenderer extends HtmlBasicRenderer {
 
         if (context == null || component == null) {
             throw new NullPointerException(
-                Util.getExceptionMessageString(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
 
         if (logger.isLoggable(Level.FINER)) {
@@ -135,8 +136,8 @@ public class ImageRenderer extends HtmlBasicRenderer {
 	    writer.writeAttribute("alt", "", "alt");
 	}
 
-        Util.renderPassThruAttributes(context, writer, component);
-        Util.renderBooleanPassThruAttributes(writer, component);
+        RenderKitUtils.renderPassThruAttributes(context, writer, component); 
+        RenderKitUtils.renderXHTMLStyleBooleanAttributes(writer, component);
         if (null != (styleClass = (String)
             component.getAttributes().get("styleClass"))) {
             writer.writeAttribute("class", styleClass, "styleClass");

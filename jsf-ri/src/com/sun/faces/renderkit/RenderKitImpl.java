@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKitImpl.java,v 1.30 2005/10/07 17:04:27 rogerk Exp $
+ * $Id: RenderKitImpl.java,v 1.31 2006/01/11 15:28:11 rlubke Exp $
  */
 
 /*
@@ -32,7 +32,7 @@
 package com.sun.faces.renderkit;
 
 import com.sun.faces.renderkit.html_basic.HtmlResponseWriter;
-import com.sun.faces.util.Util;
+import com.sun.faces.util.MessageUtils;
 import com.sun.faces.RIConstants;
 
 import javax.faces.context.ResponseStream;
@@ -53,7 +53,7 @@ import java.util.Map;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: RenderKitImpl.java,v 1.30 2005/10/07 17:04:27 rogerk Exp $
+ * @version $Id: RenderKitImpl.java,v 1.31 2006/01/11 15:28:11 rlubke Exp $
  */
 
 public class RenderKitImpl extends RenderKit {
@@ -116,8 +116,8 @@ public class RenderKitImpl extends RenderKit {
     public void addRenderer(String family, String rendererType,
                             Renderer renderer) {
         if (family == null || rendererType == null || renderer == null) {
-            String message = Util.getExceptionMessageString
-                (Util.NULL_PARAMETERS_ERROR_MESSAGE_ID);
+            String message = MessageUtils.getExceptionMessageString
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
             message = message + " family " + family + " rendererType " +
                 rendererType + " renderer " + renderer;
             throw new NullPointerException(message);
@@ -138,8 +138,8 @@ public class RenderKitImpl extends RenderKit {
     public Renderer getRenderer(String family, String rendererType) {
 
         if (rendererType == null || family == null) {
-            String message = Util.getExceptionMessageString
-                (Util.NULL_PARAMETERS_ERROR_MESSAGE_ID);
+            String message = MessageUtils.getExceptionMessageString
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
             message = message + " family " + family + " rendererType " +
                 rendererType;
             throw new NullPointerException(message);
@@ -234,8 +234,8 @@ public class RenderKitImpl extends RenderKit {
 	    // If none of the contentTypes about which we know was in
 	    // desiredContentTypeList
 	    if (null == contentType) {
-                throw new IllegalArgumentException(Util.getExceptionMessageString(
-                    Util.CONTENT_TYPE_ERROR_MESSAGE_ID));
+                throw new IllegalArgumentException(MessageUtils.getExceptionMessageString(
+                    MessageUtils.CONTENT_TYPE_ERROR_MESSAGE_ID));
 	    }
 	}
 	else {

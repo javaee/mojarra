@@ -1,5 +1,5 @@
 /* 
- * $Id: TestViewHandlerImpl.java,v 1.29 2005/10/19 19:51:29 edburns Exp $ 
+ * $Id: TestViewHandlerImpl.java,v 1.30 2006/01/11 15:28:16 rlubke Exp $ 
  */ 
 
 
@@ -39,6 +39,8 @@ import com.sun.faces.cactus.JspFacesTestCase;
 import com.sun.faces.context.ExternalContextImpl;
 import com.sun.faces.context.FacesContextImpl;
 import com.sun.faces.util.Util;
+import com.sun.faces.renderkit.RenderKitUtils;
+
 import org.apache.cactus.WebRequest;
 
 import javax.faces.FacesException;
@@ -63,8 +65,6 @@ import javax.servlet.http.HttpSession;
 
 import java.io.IOException;
 import java.io.StringWriter;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -74,7 +74,7 @@ import java.util.Map;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestViewHandlerImpl.java,v 1.29 2005/10/19 19:51:29 edburns Exp $
+ * @version $Id: TestViewHandlerImpl.java,v 1.30 2006/01/11 15:28:16 rlubke Exp $
  */
 
 
@@ -462,7 +462,7 @@ public class TestViewHandlerImpl extends JspFacesTestCase {
 	    stateManager.saveSerializedView(getFacesContext());
 	assertTrue(null != viewState);
 	try {
-	    RenderKit curKit = Util.getCurrentRenderKit(getFacesContext());
+	    RenderKit curKit = RenderKitUtils.getCurrentRenderKit(getFacesContext());
 	    StringWriter writer = new StringWriter();
 	    ResponseWriter responseWriter = 
 		curKit.createResponseWriter(writer, "text/html",

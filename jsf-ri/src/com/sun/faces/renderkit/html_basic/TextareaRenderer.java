@@ -1,5 +1,5 @@
 /*
- * $Id: TextareaRenderer.java,v 1.16 2005/08/22 22:10:22 ofung Exp $
+ * $Id: TextareaRenderer.java,v 1.17 2006/01/11 15:28:11 rlubke Exp $
  */
 
 /*
@@ -31,7 +31,8 @@
 
 package com.sun.faces.renderkit.html_basic;
 
-import com.sun.faces.util.Util;
+import com.sun.faces.util.MessageUtils;
+import com.sun.faces.renderkit.RenderKitUtils;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -88,7 +89,7 @@ public class TextareaRenderer extends HtmlBasicInputRenderer {
 
         if (context == null || component == null) {
             throw new NullPointerException(
-                Util.getExceptionMessageString(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
     }
 
@@ -110,8 +111,8 @@ public class TextareaRenderer extends HtmlBasicInputRenderer {
         }
 
 	// style is rendered as a passthru attribute
-        Util.renderPassThruAttributes(context, writer, component);
-        Util.renderBooleanPassThruAttributes(writer, component);
+        RenderKitUtils.renderPassThruAttributes(context, writer, component); 
+        RenderKitUtils.renderXHTMLStyleBooleanAttributes(writer, component);
 
         // render default text specified
         if (currentValue != null) {

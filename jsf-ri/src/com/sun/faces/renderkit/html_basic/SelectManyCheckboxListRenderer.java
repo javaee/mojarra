@@ -25,7 +25,7 @@
 
 
 /**
- * $Id: SelectManyCheckboxListRenderer.java,v 1.44 2005/11/01 16:40:23 rlubke Exp $
+ * $Id: SelectManyCheckboxListRenderer.java,v 1.45 2006/01/11 15:28:10 rlubke Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -38,6 +38,8 @@
 package com.sun.faces.renderkit.html_basic;
 
 import com.sun.faces.util.Util;
+import com.sun.faces.util.MessageUtils;
+import com.sun.faces.renderkit.RenderKitUtils;
 
 import javax.faces.component.NamingContainer;
 import javax.faces.component.UIComponent;
@@ -96,8 +98,8 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
         throws IOException {
 
         if (context == null || component == null) {
-            throw new NullPointerException(Util.getExceptionMessageString(
-                Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+            throw new NullPointerException(MessageUtils.getExceptionMessageString(
+                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
         
         // suppress rendering if "rendered" property on the component is
@@ -116,24 +118,15 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
 
         if (null !=
             (alignStr = (String) component.getAttributes().get("layout"))) {
-            alignVertical = alignStr.equalsIgnoreCase("pageDirection") ?
-                true : false;
+            alignVertical = alignStr.equalsIgnoreCase("pageDirection");
         }
         if (null != (borderObj = component.getAttributes().get("border"))) {
-            if (borderObj instanceof Integer) {
-                border = ((Integer) borderObj).intValue();
-            } else {
-                try {
-                    border = Integer.valueOf(borderObj.toString()).intValue();
-                } catch (Throwable e) {
-                    border = 0;
-                }
-            }
+            border = (Integer) borderObj;           
         }
 
         renderBeginText(component, border, alignVertical, context, true);
 
-        Iterator items = Util.getSelectItems(context, component);
+        Iterator items = RenderKitUtils.getSelectItems(context, component);
         SelectItem curItem = null;
         int idx = -1;
         while (items.hasNext()) {
@@ -213,8 +206,8 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
         writer.startElement("input", component);
         writer.writeAttribute("name", component.getClientId(context),
                               "clientId");
-        String idString = component.getClientId(context) + NamingContainer.SEPARATOR_CHAR + 
-            new Integer(itemNumber).toString(); 
+        String idString = component.getClientId(context) + NamingContainer.SEPARATOR_CHAR +
+                          Integer.toString(itemNumber); 
         writer.writeAttribute("id", idString, "id");
         String valueString = getFormattedValue(context, component,
                                                curItem.getValue());
@@ -259,10 +252,12 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
         // Apply HTML 4.x attributes specified on UISelectMany component to all 
         // items in the list except styleClass and style which are rendered as
         // attributes of outer most table.
-        Util.renderPassThruAttributes(context, writer, component,
-                                      new String[]{"style", "border"});
-        Util.renderBooleanPassThruAttributes(writer, component);
-       
+        RenderKitUtils.renderPassThruAttributes(context, 
+                                                writer, 
+                                                component,
+                                                new String[] { "border", "style" });
+        RenderKitUtils.renderXHTMLStyleBooleanAttributes(writer, component);
+
         writer.endElement("input");
         writer.startElement("label", component);
         writer.writeAttribute("for", idString, "for");
@@ -301,7 +296,7 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
         
         writer.startElement("table", component);
         if (border != Integer.MIN_VALUE) {
-            writer.writeAttribute("border", new Integer(border), "border");
+            writer.writeAttribute("border", border, "border");
         }
 
         // render style and styleclass attribute on the outer table instead of 

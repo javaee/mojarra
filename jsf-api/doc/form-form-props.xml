@@ -66,9 +66,6 @@
         <icon></icon>
         <property-name>acceptcharset</property-name>
         <property-class>java.lang.String</property-class>
-        <property-extension>
-            <pass-through>true</pass-through>
-        </property-extension>
     </property>
 
     <property>

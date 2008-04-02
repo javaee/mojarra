@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.181 2006/01/09 20:47:44 rlubke Exp $
+ * $Id: Util.java,v 1.182 2006/01/11 15:28:14 rlubke Exp $
  */
 
 /*
@@ -39,7 +39,6 @@ import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.application.Application;
 import javax.faces.application.ApplicationFactory;
-import javax.faces.application.FacesMessage;
 import javax.faces.application.StateManager;
 import javax.faces.application.ViewHandler;
 import javax.faces.component.UIComponent;
@@ -48,9 +47,7 @@ import javax.faces.component.UISelectItems;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.context.FacesContextFactory;
-import javax.faces.context.ResponseWriter;
 import javax.faces.convert.Converter;
-import javax.faces.el.MethodBinding;
 import javax.faces.el.ReferenceSyntaxException;
 import javax.el.ValueExpression;
 import javax.el.ELContext;
@@ -58,12 +55,10 @@ import javax.faces.lifecycle.LifecycleFactory;
 import javax.faces.model.SelectItem;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
-import javax.faces.render.ResponseStateManager;
 import javax.servlet.ServletContext;
 import javax.faces.el.ValueBinding;
 import javax.servlet.jsp.jstl.fmt.LocalizationContext;
 
-import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.lang.reflect.InvocationTargetException;
@@ -75,10 +70,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.StringTokenizer;
-import java.util.HashMap;
 import java.util.logging.Logger;
 import java.util.logging.Level;
-import java.text.MessageFormat;
 import javax.el.ELResolver;
 import javax.faces.component.UIViewRoot;
 
@@ -89,7 +82,7 @@ import com.sun.faces.spi.ManagedBeanFactory.Scope;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.181 2006/01/09 20:47:44 rlubke Exp $
+ * @version $Id: Util.java,v 1.182 2006/01/11 15:28:14 rlubke Exp $
  */
 
 public class Util {
@@ -103,11 +96,8 @@ public class Util {
             "com.sun.faces.LogStrings";        
     
     // Log instance for this class
-    private static Logger logger = getLogger(FACES_LOGGER);
-    
-    private static final String RENDER_KIT_IMPL_REQ = 
-          RIConstants.FACES_PREFIX + "renderKitImplForRequest";
-    
+    private static final Logger LOGGER = getLogger(FACES_LOGGER);
+
     // README - make sure to add the message identifier constant
     // (ex: Util.CONVERSION_ERROR_MESSAGE_ID) and the number of substitution
     // parameters to test/com/sun/faces/util/TestUtil_messages (see comment there).
@@ -119,356 +109,6 @@ public class Util {
     public static final String CONTEXT_LOGGER = ".context";
     public static final String CONFIG_LOGGER = ".config";
     public static final String LIFECYCLE_LOGGER = ".lifecycle";
-    
-    /**
-     * The message identifier of the {@link FacesMessage} to be created as
-     * a result of type conversion error.
-     */
-    public static final String CONVERSION_ERROR_MESSAGE_ID =
-        "com.sun.faces.TYPECONVERSION_ERROR";
-
-    /**
-     * The message identifier of the {@link FacesMessage} to be created if
-     * there is model update failure.
-     */
-    public static final String MODEL_UPDATE_ERROR_MESSAGE_ID =
-        "com.sun.faces.MODELUPDATE_ERROR";
-
-    public static final String FACES_CONTEXT_CONSTRUCTION_ERROR_MESSAGE_ID =
-        "com.sun.faces.FACES_CONTEXT_CONSTRUCTION_ERROR";
-
-    public static final String NULL_COMPONENT_ERROR_MESSAGE_ID =
-        "com.sun.faces.NULL_COMPONENT_ERROR";
-
-    public static final String NULL_REQUEST_VIEW_ERROR_MESSAGE_ID =
-        "com.sun.faces.NULL_REQUEST_VIEW_ERROR";
-
-    public static final String NULL_RESPONSE_VIEW_ERROR_MESSAGE_ID =
-        "com.sun.faces.NULL_RESPONSE_VIEW_ERROR";
-
-    public static final String REQUEST_VIEW_ALREADY_SET_ERROR_MESSAGE_ID =
-        "com.sun.faces.REQUEST_VIEW_ALREADY_SET_ERROR";
-
-    public static final String NULL_MESSAGE_ERROR_MESSAGE_ID =
-        "com.sun.faces.NULL_MESSAGE_ERROR";
-
-    public static final String NULL_PARAMETERS_ERROR_MESSAGE_ID =
-        "com.sun.faces.NULL_PARAMETERS_ERROR";
-
-    public static final String NAMED_OBJECT_NOT_FOUND_ERROR_MESSAGE_ID =
-        "com.sun.faces.NAMED_OBJECT_NOT_FOUND_ERROR";
-
-    public static final String NULL_RESPONSE_STREAM_ERROR_MESSAGE_ID =
-        "com.sun.faces.NULL_RESPONSE_STREAM_ERROR";
-
-    public static final String NULL_RESPONSE_WRITER_ERROR_MESSAGE_ID =
-        "com.sun.faces.NULL_RESPONSE_WRITER_ERROR";
-
-    public static final String NULL_EVENT_ERROR_MESSAGE_ID =
-        "com.sun.faces.NULL_EVENT_ERROR";
-
-    public static final String NULL_HANDLER_ERROR_MESSAGE_ID =
-        "com.sun.faces.NULL_HANDLER_ERROR";
-
-    public static final String NULL_CONTEXT_ERROR_MESSAGE_ID =
-        "com.sun.faces.NULL_CONTEXT_ERROR";
-
-    public static final String NULL_LOCALE_ERROR_MESSAGE_ID =
-        "com.sun.faces.NULL_LOCALE_ERROR";
-
-    public static final String SUPPORTS_COMPONENT_ERROR_MESSAGE_ID =
-        "com.sun.faces.SUPPORTS_COMPONENT_ERROR";
-
-    public static final String MISSING_RESOURCE_ERROR_MESSAGE_ID =
-        "com.sun.faces.MISSING_RESOURCE_ERROR";
-
-    public static final String MISSING_CLASS_ERROR_MESSAGE_ID =
-        "com.sun.faces.MISSING_CLASS_ERROR";
-    public static final String COMPONENT_NOT_FOUND_ERROR_MESSAGE_ID =
-        "com.sun.faces.COMPONENT_NOT_FOUND_ERROR";
-    public static final String LIFECYCLE_ID_ALREADY_ADDED_ID =
-        "com.sun.faces.LIFECYCLE_ID_ALREADY_ADDED";
-
-    public static final String LIFECYCLE_ID_NOT_FOUND_ERROR_MESSAGE_ID =
-        "com.sun.faces.LIFECYCLE_ID_NOT_FOUND";
-
-    public static final String PHASE_ID_OUT_OF_BOUNDS_ERROR_MESSAGE_ID =
-        "com.sun.faces.PHASE_ID_OUT_OF_BOUNDS";
-
-    public static final String CANT_CREATE_LIFECYCLE_ERROR_MESSAGE_ID =
-        "com.sun.faces.CANT_CREATE_LIFECYCLE_ERROR";
-
-    public static final String ILLEGAL_MODEL_REFERENCE_ID =
-        "com.sun.faces.ILLEGAL_MODEL_REFERENCE";
-
-    public static final String ATTRIBUTE_NOT_SUPORTED_ERROR_MESSAGE_ID =
-        "com.sun.faces.ATTRIBUTE_NOT_SUPORTED";
-
-    public static final String FILE_NOT_FOUND_ERROR_MESSAGE_ID =
-        "com.sun.faces.FILE_NOT_FOUND";
-
-    public static final String CANT_PARSE_FILE_ERROR_MESSAGE_ID =
-        "com.sun.faces.CANT_PARSE_FILE";
-
-    public static final String CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID =
-        "com.sun.faces.CANT_INSTANTIATE_CLASS";
-
-    public static final String ILLEGAL_CHARACTERS_ERROR_MESSAGE_ID =
-        "com.sun.faces.ILLEGAL_CHARACTERS_ERROR";
-
-    public static final String NOT_NESTED_IN_FACES_TAG_ERROR_MESSAGE_ID =
-        "com.sun.faces.NOT_NESTED_IN_FACES_TAG_ERROR";
-    
-    public static final String NOT_NESTED_IN_TYPE_TAG_ERROR_MESSAGE_ID =
-        "com.sun.faces.NOT_NESTED_IN_TYPE_TAG_ERROR";
-
-    public static final String NULL_BODY_CONTENT_ERROR_MESSAGE_ID =
-        "com.sun.faces.NULL_BODY_CONTENT_ERROR";
-
-    public static final String SAVING_STATE_ERROR_MESSAGE_ID =
-        "com.sun.faces.SAVING_STATE_ERROR";
-
-    public static final String RENDERER_NOT_FOUND_ERROR_MESSAGE_ID =
-        "com.sun.faces.RENDERER_NOT_FOUND";
-
-    public static final String MAXIMUM_EVENTS_REACHED_ERROR_MESSAGE_ID =
-        "com.sun.faces.MAXIMUM_EVENTS_REACHED";
-
-    public static final String NULL_CONFIGURATION_ERROR_MESSAGE_ID =
-        "com.sun.faces.NULL_CONFIGURATION";
-
-    public static final String ERROR_OPENING_FILE_ERROR_MESSAGE_ID =
-        "com.sun.faces.ERROR_OPENING_FILE";
-
-    public static final String ERROR_REGISTERING_DTD_ERROR_MESSAGE_ID =
-        "com.sun.faces.ERROR_REGISTERING_DTD";
-
-    public static final String INVALID_INIT_PARAM_ERROR_MESSAGE_ID =
-        "com.sun.faces.INVALID_INIT_PARAM";
-
-    public static final String ERROR_SETTING_BEAN_PROPERTY_ERROR_MESSAGE_ID =
-        "com.sun.faces.ERROR_SETTING_BEAN_PROPERTY";
-
-    public static final String ERROR_GETTING_VALUE_BINDING_ERROR_MESSAGE_ID =
-        "com.sun.faces.ERROR_GETTING_VALUE_BINDING";
-
-    public static final String ERROR_GETTING_VALUEREF_VALUE_ERROR_MESSAGE_ID =
-        "com.sun.faces.ERROR_GETTING_VALUEREF_VALUE";
-
-    public static final String CANT_INTROSPECT_CLASS_ERROR_MESSAGE_ID =
-        "com.sun.faces.CANT_INTROSPECT_CLASS";
-
-    public static final String CANT_CONVERT_VALUE_ERROR_MESSAGE_ID =
-        "com.sun.faces.CANT_CONVERT_VALUE";
-
-    public static final String INVALID_SCOPE_LIFESPAN_ERROR_MESSAGE_ID =
-        "com.sun.faces.INVALID_SCOPE_LIFESPAN";
-
-    public static final String CONVERTER_NOT_FOUND_ERROR_MESSAGE_ID =
-        "com.sun.faces.CONVERTER_NOT_FOUND_ERROR";
-
-    public static final String VALIDATOR_NOT_FOUND_ERROR_MESSAGE_ID =
-        "com.sun.faces.VALIDATOR_NOT_FOUND_ERROR";
-
-    public static final String CANT_LOAD_CLASS_ERROR_MESSAGE_ID =
-        "com.sun.faces.CANT_INSTANTIATE_CLASS";
-
-    public static final String ENCODING_ERROR_MESSAGE_ID =
-        "com.sun.faces.ENCODING_ERROR";
-
-    public static final String ILLEGAL_IDENTIFIER_LVALUE_MODE_ID =
-        "com.sun.faces.ILLEGAL_IDENTIFIER_LVALUE_MODE";
-
-    public static final String VALIDATION_ID_ERROR_ID =
-        "com.sun.faces.VALIDATION_ID_ERROR";
-
-    public static final String VALIDATION_EL_ERROR_ID =
-        "com.sun.faces.VALIDATION_EL_ERROR";
-
-    public static final String VALIDATION_COMMAND_ERROR_ID =
-        "com.sun.faces.VALIDATION_COMMAND_ERROR";
-
-    public static final String CONTENT_TYPE_ERROR_MESSAGE_ID =
-        "com.sun.faces.CONTENT_TYPE_ERROR";
-
-    public static final String COMPONENT_NOT_FOUND_IN_VIEW_WARNING_ID =
-        "com.sun.faces.COMPONENT_NOT_FOUND_IN_VIEW_WARNING";
-
-    public static final String ILLEGAL_ATTEMPT_SETTING_VIEWHANDLER_ID =
-        "com.sun.faces.ILLEGAL_ATTEMPT_SETTING_VIEWHANDLER";
-
-    public static final String ILLEGAL_ATTEMPT_SETTING_STATEMANAGER_ID =
-        "com.sun.faces.ILLEGAL_ATTEMPT_SETTING_STATEMANAGER";
-
-    public static final String INVALID_MESSAGE_SEVERITY_IN_CONFIG_ID =
-        "com.sun.faces.INVALID_MESSAGE_SEVERITY_IN_CONFIG";
-
-    public static final String CANT_CLOSE_INPUT_STREAM_ID =
-        "com.sun.faces.CANT_CLOSE_INPUT_STREAM";
-
-    public static final String DUPLICATE_COMPONENT_ID_ERROR_ID =
-        "com.sun.faces.DUPLICATE_COMPONENT_ID_ERROR";
-
-    public static final String FACES_SERVLET_MAPPING_CANNOT_BE_DETERMINED_ID =
-        "com.sun.faces.FACES_SERVLET_MAPPING_CANNOT_BE_DETERMINED";
-
-    public static final String ILLEGAL_VIEW_ID_ID =
-        "com.sun.faces.ILLEGAL_VIEW_ID";
-
-    public static final String INVALID_EXPRESSION_ID =
-        "com.sun.faces.INVALID_EXPRESSION";
-    public static final String NULL_FORVALUE_ID =
-        "com.sun.faces.NULL_FORVALUE";
-    public static final String EMPTY_PARAMETER_ID =
-        "com.sun.faces.EMPTY_PARAMETER";
-    public static final String ASSERTION_FAILED_ID =
-        "com.sun.faces.ASSERTION_FAILED";
-    public static final String OBJECT_CREATION_ERROR_ID =
-        "com.sun.faces.OBJECT_CREATION_ERROR";
-    public static final String CANT_CREATE_CLASS_ERROR_ID = 
-        "com.sun.faces.CANT_CREATE_CLASS_ERROR";
-    
-    public static final String CYCLIC_REFERENCE_ERROR_ID =
-        "com.sun.faces.CYCLIC_REFERENCE_ERROR";
-    
-    public static final String NO_DTD_FOUND_ERROR_ID =
-        "com.sun.faces.NO_DTD_FOUND_ERROR";          
-    
-    public static final String MANAGED_BEAN_CANNOT_SET_LIST_ARRAY_PROPERTY_ID = 
-        "com.sun.faces.MANAGED_BEAN_CANNOT_SET_LIST_ARRAY_PROPERTY";
-    
-    public static final String MANAGED_BEAN_EXISTING_VALUE_NOT_LIST_ID =
-        "com.sun.faces.MANAGED_BEAN_EXISTING_VALUE_NOT_LIST";
-
-    public static final String MANAGED_BEAN_CANNOT_SET_MAP_PROPERTY_ID =
-        "com.sun.faces.MANAGED_BEAN_CANNOT_SET_MAP_PROPERTY";
-    
-    public static final String MANAGED_BEAN_TYPE_CONVERSION_ERROR_ID =
-        "com.sun.faces.MANAGED_BEAN_TYPE_CONVERSION_ERROR";
-    
-    public static final String APPLICATION_ASSOCIATE_CTOR_WRONG_CALLSTACK_ID = 
-        "com.sun.faces.APPLICATION_ASSOCIATE_CTOR_WRONG_CALLSTACK";
-    
-    public static final String APPLICATION_ASSOCIATE_EXISTS_ID =
-        "com.sun.faces.APPLICATION_ASSOCIATE_EXISTS";
-
-    public static final String OBJECT_IS_READONLY =
-        "com.sun.faces.OBJECT_IS_READONLY";
-
-    public static final String APPLICATION_INIT_COMPLETE_ERROR_ID = 
-            "com.sun.faces.APPLICATION_INIT_COMPLETE_ERROR_ID";
-
-    public static final String INCORRECT_JSP_VERSION_ID = 
-            "com.sun.faces.INCORRECT_JSP_VERSION";
-    
-    public static final String EL_OUT_OF_BOUNDS_ERROR_ID = 
-            "com.sun.faces.OUT_OF_BOUNDS_ERROR";
-    public static final String EL_PROPERTY_TYPE_ERROR_ID = 
-            "com.sun.faces.PROPERTY_TYPE_ERROR";
-    public static final String EL_SIZE_OUT_OF_BOUNDS_ERROR_ID = 
-            "com.sun.faces.SIZE_OUT_OF_BOUNDS_ERROR";
-
-    public static final String EVAL_ATTR_UNEXPECTED_TYPE =
-        "com.sun.faces.EVAL_ATTR_UNEXPECTED_TYPE";
-    
-    public static final String RESTORE_VIEW_ERROR_MESSAGE_ID = 
-        "com.sun.faces.RESTORE_VIEW_ERROR";
-    
-    public static final String VALUE_NOT_SELECT_ITEM_ID =
-        "com.sun.faces.OPTION_NOT_SELECT_ITEM";
-    
-    public static final String CHILD_NOT_OF_EXPECTED_TYPE_ID = 
-        "com.sun.faces.CHILD_NOT_OF_EXPECTED_TYPE";
-    
-    public static final String COMMAND_LINK_NO_FORM_MESSAGE_ID =
-        "com.sun.faces.COMMAND_LINK_NO_FORM_MESSAGE";
-    
-// README - make sure to add the message identifier constant
-// (ex: Util.CONVERSION_ERROR_MESSAGE_ID) and the number of substitution
-// parameters to test/com/sun/faces/util/TestUtil_messages (see comment there).
-
-//
-// Class Variables
-//
-
-    /**
-     * This array contains attributes that have a boolean value in JSP,
-     * but have have no value in HTML.  For example "disabled" or
-     * "readonly". <P>
-     *
-     * @see #renderBooleanPassThruAttributes
-     */
-
-    private static String[] booleanPassthruAttributes = {
-        "disabled",
-        "readonly",
-        "ismap"
-    };
-
-    /**
-     * This array contains attributes whose value is just rendered
-     * straight to the content.  This array should only contain
-     * attributes that require no interpretation by the Renderer.  If an
-     * attribute requires interpretation by a Renderer, it should be
-     * removed from this array.<P>
-     *
-     * @see #renderPassThruAttributes
-     */
-    private static String[][] passthruAttributes = {
-        { "accept", null },
-        { "accesskey", null },
-        { "alt", null },
-        { "bgcolor", null },
-        { "border", null },
-        { "cellpadding", null },
-        { "cellspacing", null },
-        { "charset", null },
-        { "cols", null },
-        { "coords", null },
-        { "dir", null },
-        { "enctype", null },
-        { "frame", null },
-        { "height", null },
-        { "hreflang", null },
-        { "lang", "xml" },
-        { "longdesc", null },
-        { "maxlength", null },
-        { "onblur", null },
-        { "onchange", null },
-        { "onclick", null },
-        { "ondblclick", null },
-        { "onfocus", null },
-        { "onkeydown", null },
-        { "onkeypress", null },
-        { "onkeyup", null },
-        { "onload", null },
-        { "onmousedown", null },
-        { "onmousemove", null },
-        { "onmouseout", null },
-        { "onmouseover", null },
-        { "onmouseup", null },
-        { "onreset", null },
-        { "onselect", null },
-        { "onsubmit", null },
-        { "onunload", null },
-        { "rel", null },
-        { "rev", null },
-        { "rows", null },
-        { "rules", null },
-        { "shape", null },
-        { "size", null },
-        { "style", null },
-        { "summary", null },
-        { "tabindex", null },
-        { "target", null },
-        { "title", null },
-        { "usemap", null },
-        { "width", null }
-    };
-
-    //NOTE - "type" was deliberately skipped from the list of passthru
-    //attrs above All renderers that need this attribute should manually
-    //pass it.
 
     /**
      * Flag that, when true, enables special behavior in the RI to enable
@@ -554,46 +194,6 @@ public class Util {
 
 
     /**
-     * Called by the RI to get the IMPL_MESSAGES MessageFactory
-     * instance and get a message on it.
-     */
-
-    public static synchronized String getExceptionMessageString(String messageId,
-                                                          Object[] params) {
-        String result = null;
-
-        FacesMessage message = MessageFactory.getMessage(messageId, params);
-        if (null != message) {
-            result = message.getSummary();
-        }
-
-
-        if (null == result) {
-            result = "null MessageFactory";
-        } else {
-            if ( params != null) {
-                result = MessageFormat.format(result, params);
-            }
-        }
-        return result;
-    }
-
-
-    public static synchronized String getExceptionMessageString(String messageId) {
-        return Util.getExceptionMessageString(messageId, null);
-    }
-
-    public static synchronized FacesMessage getExceptionMessage(String messageId,
-								      Object[] params) {
-        return MessageFactory.getMessage(messageId, params);
-    }
-
-
-    public static synchronized FacesMessage getExceptionMessage(String messageId) {
-        return Util.getExceptionMessage(messageId, null);
-    }
-
-    /**
      * Verify the existence of all the factories needed by faces.  Create
      * and install the default RenderKit into the ServletContext. <P>
      *
@@ -677,8 +277,8 @@ public class Util {
             if (Boolean.FALSE == result) {
                 throw new
                     FacesException(
-                        Util.getExceptionMessageString(
-                            Util.MISSING_CLASS_ERROR_MESSAGE_ID, params));
+                        MessageUtils.getExceptionMessageString(
+                            MessageUtils.MISSING_CLASS_ERROR_MESSAGE_ID, params));
             } else {
                 // yes, and the check passed.
                 return;
@@ -695,99 +295,11 @@ public class Util {
             applicationMap.put(RIConstants.HAS_REQUIRED_CLASSES_ATTR,
                                Boolean.FALSE);
             throw new FacesException(
-                Util.getExceptionMessageString(Util.MISSING_CLASS_ERROR_MESSAGE_ID,
+                MessageUtils.getExceptionMessageString(MessageUtils.MISSING_CLASS_ERROR_MESSAGE_ID,
                                          params),
                 e);
         }
         applicationMap.put(RIConstants.HAS_REQUIRED_CLASSES_ATTR, Boolean.TRUE);
-    }
-
-
-    /**
-     * <p>Return an Iterator over {@link SelectItem} instances representing the
-     * available options for this component, assembled from the set of
-     * {@link UISelectItem} and/or {@link UISelectItems} components that are
-     * direct children of this component.  If there are no such children, a
-     * zero-length array is returned.</p>
-     *
-     * @param context The {@link FacesContext} for the current request.
-     *                If null, the UISelectItems behavior will not work.
-     * @throws NullPointerException if <code>context</code>
-     *                              is <code>null</code>
-     */
-    public static Iterator<SelectItem> getSelectItems(FacesContext context,
-                                                      UIComponent component) {
-
-        ArrayList<SelectItem> list = new ArrayList<SelectItem>();
-        for (UIComponent kid : component.getChildren()) {
-            if (kid instanceof UISelectItem) {
-                UISelectItem item = (UISelectItem) kid;
-                Object value = item.getValue();
-                if (value == null) {
-                    list.add(new SelectItem(item.getItemValue(),
-                                            item.getItemLabel(),
-                                            item.getItemDescription(),
-                                            item.isItemDisabled()));
-                } else if (value instanceof SelectItem) {
-                    list.add((SelectItem) value);
-                } else {
-                    throw new IllegalArgumentException(
-                        Util.getExceptionMessageString(
-                            Util.VALUE_NOT_SELECT_ITEM_ID,
-                            new Object[] { 
-                                  component.getId(),
-                                  value.getClass().getName() }));
-                }
-            } else if (kid instanceof UISelectItems && null != context) {
-                Object value = ((UISelectItems) kid).getValue();
-                if (value instanceof SelectItem) {
-                    list.add((SelectItem) value);
-                } else if (value instanceof SelectItem[]) {
-                    SelectItem[] items = (SelectItem[]) value;
-                    for (SelectItem item : items) {
-                        list.add(item);
-                    }
-                } else if (value instanceof Collection) {
-                    Iterator elements = ((Collection) value).iterator();                    
-                    while (elements.hasNext()) {
-                        Object element = elements.next();
-                        if (SelectItem.class.isInstance(element)) {
-                            list.add((SelectItem) element);
-                        } else {
-                            throw new IllegalArgumentException(
-                                Util.getExceptionMessageString(
-                                    Util.VALUE_NOT_SELECT_ITEM_ID,
-                                    new Object[] { 
-                                        component.getId(),
-                                        value.getClass().getName() }));
-                        }
-                    }
-                } else if (value instanceof Map) {
-                    Map optionMap = (Map) value;
-                    for (Iterator i = optionMap.entrySet().iterator(); 
-                          i.hasNext(); ) {
-                        Map.Entry entry = (Map.Entry) i.next();
-                        Object key = entry.getKey();
-                        Object val = entry.getValue();
-                        if (key == null || val == null) {
-                            continue;
-                        }
-                        list.add(new SelectItem(key.toString(), 
-                                                val.toString()));
-                    }                    
-                } else {
-                    throw new IllegalArgumentException(
-                          Util.getExceptionMessageString(
-                            Util.CHILD_NOT_OF_EXPECTED_TYPE_ID,
-                            new Object[] {
-                                  "UISelectItem/UISelectItems",
-                                  component.getFamily(),
-                                  component.getId()}));
-                }
-            }
-        }
-        return (list.iterator());
-
     }
 
 
@@ -868,223 +380,6 @@ public class Util {
             }
         }
         return result;
-    }
-
-
-    /**
-     * @return true if the component has any passthru attributes
-     */
-    // PENDING() it would be much more performant to have the tag be
-    // aware of the passthru attributes and have it set a
-    // "hasPassthruAttributes" attribute to true if the component has
-    // any.  
-
-    public static boolean hasPassThruAttributes(UIComponent component) {
-        if (null == component) {
-            return false;
-        }
-
-        boolean result = false;
-        Map<String,Object> attrs = component.getAttributes();
-        if (null == attrs) {
-            return false;
-        }
-        Object attrVal;
-        String empty = "";
-        for (int i = 0; i < passthruAttributes.length; i++) {
-            if (null != (attrVal = attrs.get(passthruAttributes[i][0]))
-                &&
-                !empty.equals(attrVal)) {
-                result = true;
-                break;
-            }
-        }
-        if (!result) {
-            for (int i = 0; i < booleanPassthruAttributes.length; i++) {
-                if (null !=
-                    (attrVal = attrs.get(booleanPassthruAttributes[i]))
-                    &&
-                    !empty.equals(attrVal)) {
-                    result = true;
-                    break;
-                }
-            }
-        }
-        return result;
-    }
-
-
-    public static void renderBooleanPassThruAttributes(ResponseWriter writer,
-                                                       UIComponent component)
-        throws IOException {
-        renderBooleanPassThruAttributes(writer, component, null);
-    }
-
-
-    /**
-     * Render any boolean "passthru" attributes.
-     * <P>
-     *
-     * @see passthruAttributes
-     */
-    public static void renderBooleanPassThruAttributes(ResponseWriter writer,
-                                                       UIComponent component,
-                                                       String[] excludes)
-        throws IOException {
-        assert (null != writer);
-        assert (null != component);
-
-        Object value;
-        boolean result;
-        boolean skip;
-
-        for (int i = 0, len = booleanPassthruAttributes.length; i < len; i++) {
-            skip = false;
-            if (null != excludes) {
-                for (int j = 0, jLen = excludes.length; j < jLen; j++) {
-                    if (null != excludes[j] &&
-                        excludes[j].equals(booleanPassthruAttributes[i])) {
-                        skip = true;
-                        break;
-                    }
-                }
-            }
-            if (skip) {
-                continue;
-            }
-
-            value =
-                component.getAttributes().get(booleanPassthruAttributes[i]);
-            if (value != null) {
-                if (value instanceof Boolean) {
-                    result = ((Boolean) value).booleanValue();
-                } else {
-                    if (!(value instanceof String)) {
-                        value = value.toString();
-                    }
-                    result = (Boolean.valueOf((String) value)).booleanValue();
-                }
-                //PENDING(rogerk) will revisit "null" param soon..
-                if (result) {
-                    // NOTE:  render things like readonly="readonly" here
-                    writer.writeAttribute(booleanPassthruAttributes[i],
-                                          result,
-                                          booleanPassthruAttributes[i]);
-                    // NOTE:  otherwise render nothing
-                }
-            }
-        }
-    }
-
-
-    public static void renderPassThruAttributes(FacesContext context, 
-						ResponseWriter writer,
-                                                UIComponent component)
-        throws IOException {
-        renderPassThruAttributes(context, writer, component, null);
-    }
-
-
-    /**
-     * Render any "passthru" attributes, where we simply just output the
-     * raw name and value of the attribute.  This method is aware of the
-     * set of HTML4 attributes that fall into this bucket.  Examples are
-     * all the javascript attributes, alt, rows, cols, etc.  <P>
-     *
-     * @see passthruAttributes
-     */
-    public static void renderPassThruAttributes(FacesContext context, 
-						ResponseWriter writer,
-                                                UIComponent component,
-                                                String[] excludes)
-        throws IOException {
-        assert (null != writer);
-        assert (null != component);
-
-        Object value;
-        boolean skip;
-        for (int i = 0, len = passthruAttributes.length; i < len; i++) {
-            skip = false;
-            if (null != excludes) {
-                for (int j = 0, jLen = excludes.length; j < jLen; j++) {
-                    if (null != excludes[j] &&
-                        excludes[j].equals(passthruAttributes[i][0])) {
-                        skip = true;
-                        break;
-                    }
-                }
-            }
-            if (skip) {
-                continue;
-            }
-
-            value = component.getAttributes().get(passthruAttributes[i][0]);
-            if (value != null && shouldRenderAttribute(value)) {
-                if (!(value instanceof String)) {
-                    value = value.toString();
-                }
-                //PENDING(rogerk) will revisit "null" param soon..
-		// if we have no XML prefix
-		if (null == passthruAttributes[i][1]) {
-		    writer.writeAttribute(passthruAttributes[i][0], value,
-					  passthruAttributes[i][0]);
-		}
-		else {
-		    if (null == context) {
-			context = FacesContext.getCurrentInstance();
-		    }
-		    // we have an XML prefix.  
-		    if (null != context && 
-			null != context.getExternalContext().getRequestMap().get(RIConstants.CONTENT_TYPE_IS_XHTML)) {
-			// if we're XHTML, write it out per
-			// http://www.w3.org/TR/xhtml1/#C_7
-			writer.writeAttribute(passthruAttributes[i][1] + ':' +
-					      passthruAttributes[i][0], value,
-					      passthruAttributes[i][0]);
-		    }
-		    writer.writeAttribute(passthruAttributes[i][0], value,
-					  passthruAttributes[i][0]);
-		}
-            }
-        }
-    }
-
-
-    /**
-     * @return true if and only if the argument
-     *         <code>attributeVal</code> is an instance of a wrapper for a
-     *         primitive type and its value is equal to the default value for
-     *         that type as given in the spec.
-     */
-
-    private static boolean shouldRenderAttribute(Object attributeVal) {
-        if (attributeVal instanceof Boolean &&
-            ((Boolean) attributeVal).booleanValue() ==
-            Boolean.FALSE.booleanValue()) {
-            return false;
-        } else if (attributeVal instanceof Integer &&
-            ((Integer) attributeVal).intValue() == Integer.MIN_VALUE) {
-            return false;
-        } else if (attributeVal instanceof Double &&
-            ((Double) attributeVal).doubleValue() == Double.MIN_VALUE) {
-            return false;
-        } else if (attributeVal instanceof Character &&
-            ((Character) attributeVal).charValue() == Character.MIN_VALUE) {
-            return false;
-        } else if (attributeVal instanceof Float &&
-            ((Float) attributeVal).floatValue() == Float.MIN_VALUE) {
-            return false;
-        } else if (attributeVal instanceof Short &&
-            ((Short) attributeVal).shortValue() == Short.MIN_VALUE) {
-            return false;
-        } else if (attributeVal instanceof Byte &&
-            ((Byte) attributeVal).byteValue() == Byte.MIN_VALUE) {
-            return false;
-        } else if (attributeVal instanceof Long &&
-            ((Long) attributeVal).longValue() == Long.MIN_VALUE) {
-            return false;
-        }
-        return true;
     }
 
 
@@ -1257,44 +552,6 @@ public class Util {
     }
 
 
-    public static ResponseStateManager getResponseStateManager(FacesContext context, String renderKitId)
-        throws FacesException {
-
-        assert (null != renderKitId);
-        assert (null != context);        
-
-        RenderKit renderKit = context.getRenderKit();        
-        if (renderKit == null) {
-            // check request scope for a RenderKitFactory implementation
-            Map<String,Object> requestMap = 
-                  context.getExternalContext().getRequestMap();
-            RenderKitFactory factory = (RenderKitFactory)
-                  requestMap.get(RENDER_KIT_IMPL_REQ);
-            if (factory != null) {
-                renderKit = factory.getRenderKit(context, renderKitId);
-            } else {
-                factory = (RenderKitFactory) 
-                      FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);                
-                if (factory == null) {
-                    throw new IllegalStateException();
-                } else {
-                    requestMap.put(RENDER_KIT_IMPL_REQ, factory);
-                }
-                renderKit = factory.getRenderKit(context, renderKitId);
-            }
-        }
-        return renderKit.getResponseStateManager();
-    }
-
-    public static RenderKit getCurrentRenderKit(FacesContext context) {
-	RenderKitFactory renderKitFactory = (RenderKitFactory)
-	    FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
-	RenderKit renderKit = 
-	    renderKitFactory.getRenderKit(context, 
-				      context.getViewRoot().getRenderKitId());
-	return renderKit;
-    }
-    
     public static boolean componentIsDisabled(UIComponent component) {
         Object disabled = null;
         boolean result = false;
@@ -1306,7 +563,7 @@ public class Util {
                 result = disabled.equals(Boolean.TRUE);
             }
         }
-        
+
         return result;
     }
 
@@ -1361,8 +618,8 @@ public class Util {
                             returnObject = construct.newInstance(parameters);
                         } catch (Exception ex) {
                             // OK - there's no adapter constructor
-                            if ( logger.isLoggable(Level.FINE)) {
-                                logger.log(Level.FINE, ex.getMessage(), ex);
+                            if ( LOGGER.isLoggable(Level.FINE)) {
+                                LOGGER.log(Level.FINE, ex.getMessage(), ex);
                             }
                         }
                     }
@@ -1374,10 +631,10 @@ public class Util {
             } catch (Exception e) {
                 Object[] params = new Object[1];
                 params[0] = className;                
-                String msg = Util.getExceptionMessageString(
-                    Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, params);
-                if ( logger.isLoggable(Level.FINE)) {
-                    logger.log(Level.FINE, msg, e);
+                String msg = MessageUtils.getExceptionMessageString(
+                    MessageUtils.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, params);
+                if ( LOGGER.isLoggable(Level.FINE)) {
+                    LOGGER.log(Level.FINE, msg, e);
                 }
             }
         }
@@ -1493,13 +750,13 @@ public class Util {
         // look for invalid expressions
         if ('#' == expression.charAt(0)) {
             if ('{' != expression.charAt(1)) {
-                throw new ReferenceSyntaxException(Util.getExceptionMessageString(
-                    Util.INVALID_EXPRESSION_ID,
+                throw new ReferenceSyntaxException(MessageUtils.getExceptionMessageString(
+                    MessageUtils.INVALID_EXPRESSION_ID,
                     new Object[]{expression}));
             }
             if ('}' != expression.charAt((len = expression.length()) - 1)) {
-                throw new ReferenceSyntaxException(Util.getExceptionMessageString(
-                    Util.INVALID_EXPRESSION_ID,
+                throw new ReferenceSyntaxException(MessageUtils.getExceptionMessageString(
+                    MessageUtils.INVALID_EXPRESSION_ID,
                     new Object[]{expression}));
             }
             expression = expression.substring(2, len - 1);
@@ -1515,14 +772,14 @@ public class Util {
     public static void parameterNonNull(Object param) throws FacesException {
         if (null == param) {
             throw new FacesException(
-                getExceptionMessageString(NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
     }
 
 
     public static void parameterNonEmpty(String param) throws FacesException {
         if (null == param || 0 == param.length()) {
-            throw new FacesException(getExceptionMessageString(EMPTY_PARAMETER_ID));
+            throw new FacesException(MessageUtils.getExceptionMessageString(MessageUtils.EMPTY_PARAMETER_ID));
         }
     }
 
@@ -1640,7 +897,7 @@ public class Util {
 	while (cur < len &&
 	       -1 != (i = expressionString.indexOf("#{", cur))) {
 	    if (-1 == (j = expressionString.indexOf("}", i + 2))) {
-		throw new ReferenceSyntaxException(Util.getExceptionMessageString(Util.INVALID_EXPRESSION_ID, new Object[]{expressionString}));
+		throw new ReferenceSyntaxException(MessageUtils.getExceptionMessageString(MessageUtils.INVALID_EXPRESSION_ID, new Object[]{expressionString}));
 	    }
 	    cur = j + 1;
 	    result.add(expressionString.substring(i, cur));

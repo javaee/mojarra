@@ -1,5 +1,5 @@
 /* 
- * $Id: StateManagerImpl.java,v 1.39 2005/12/15 23:40:28 rlubke Exp $ 
+ * $Id: StateManagerImpl.java,v 1.40 2006/01/11 15:28:03 rlubke Exp $ 
  */ 
 
 
@@ -34,9 +34,11 @@
 package com.sun.faces.application;
 
 import com.sun.faces.RIConstants;
+import com.sun.faces.renderkit.RenderKitUtils;
 import com.sun.faces.util.TreeStructure;
 import com.sun.faces.util.Util;
 import com.sun.faces.util.LRUMap;
+import com.sun.faces.util.MessageUtils;
 
 import javax.faces.application.StateManager;
 import javax.faces.component.UIComponent;
@@ -59,7 +61,7 @@ import javax.faces.component.NamingContainer;
  * <B>StateManagerImpl</B> is the default implementation class for
  * StateManager.
  *
- * @version $Id: StateManagerImpl.java,v 1.39 2005/12/15 23:40:28 rlubke Exp $
+ * @version $Id: StateManagerImpl.java,v 1.40 2006/01/11 15:28:03 rlubke Exp $
  * @see javax.faces.application.ViewHandler
  */
 public class StateManagerImpl extends StateManager {
@@ -204,8 +206,8 @@ public class StateManagerImpl extends StateManager {
                 if (logger.isLoggable(Level.SEVERE)) {
                     logger.log(Level.SEVERE,"jsf.duplicate_component_id_error",id);
                 }
-		throw new IllegalStateException(Util.getExceptionMessageString(
-                        Util.DUPLICATE_COMPONENT_ID_ERROR_ID,
+		throw new IllegalStateException(MessageUtils.getExceptionMessageString(
+                        MessageUtils.DUPLICATE_COMPONENT_ID_ERROR_ID,
                         new Object[]{id}));
 	    }
 
@@ -221,8 +223,8 @@ public class StateManagerImpl extends StateManager {
                 if (logger.isLoggable(Level.SEVERE)) {
                     logger.log(Level.SEVERE,"jsf.duplicate_component_id_error",id);
                 }
-		throw new IllegalStateException(Util.getExceptionMessageString(
-                        Util.DUPLICATE_COMPONENT_ID_ERROR_ID,
+		throw new IllegalStateException(MessageUtils.getExceptionMessageString(
+                        MessageUtils.DUPLICATE_COMPONENT_ID_ERROR_ID,
                         new Object[]{id}));
 	    }
 
@@ -251,8 +253,8 @@ public class StateManagerImpl extends StateManager {
     public UIViewRoot restoreView(FacesContext context, String viewId,
                                   String renderKitId) {
         if (null == renderKitId) {
-            String message = Util.getExceptionMessageString
-                (Util.NULL_PARAMETERS_ERROR_MESSAGE_ID);
+            String message = MessageUtils.getExceptionMessageString
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
             message = message + " renderKitId " + renderKitId;
             throw new IllegalArgumentException(message);
         }
@@ -281,7 +283,7 @@ public class StateManagerImpl extends StateManager {
             // The ResponseStateManager implementation may be using the new methods or
             // deprecated methods.  We need to know which one to call.
             Object id = null;
-            ResponseStateManager rsm = Util.getResponseStateManager(context, renderKitId);
+            ResponseStateManager rsm = RenderKitUtils.getResponseStateManager(context, renderKitId);
             if (hasDeclaredMethod(responseStateManagerInfo, renderKitId, rsm, "getState")) {
                 Object[] stateArray = (Object[])rsm.getState(context, viewId);
                 id = stateArray[0];
@@ -360,13 +362,13 @@ public class StateManagerImpl extends StateManager {
     protected void restoreComponentState(FacesContext context,
                                          UIViewRoot root, String renderKitId) {
         if (null == renderKitId) {
-            String message = Util.getExceptionMessageString
-                (Util.NULL_PARAMETERS_ERROR_MESSAGE_ID);
+            String message = MessageUtils.getExceptionMessageString
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
             message = message + " renderKitId " + renderKitId;
             throw new IllegalArgumentException(message);
         }
         Object state = null;
-        ResponseStateManager rsm = Util.getResponseStateManager(context, renderKitId);
+        ResponseStateManager rsm = RenderKitUtils.getResponseStateManager(context, renderKitId);
         if (hasDeclaredMethod(responseStateManagerInfo, renderKitId, rsm, "getState")) {
             Object[] stateArray = (Object[])rsm.getState(context, root.getViewId());
             state = stateArray[1];
@@ -380,14 +382,14 @@ public class StateManagerImpl extends StateManager {
     protected UIViewRoot restoreTreeStructure(FacesContext context,
                                               String viewId, String renderKitId) {
         if (null == renderKitId) {
-            String message = Util.getExceptionMessageString
-                (Util.NULL_PARAMETERS_ERROR_MESSAGE_ID);
+            String message = MessageUtils.getExceptionMessageString
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
             message = message + " renderKitId " + renderKitId;
             throw new IllegalArgumentException(message);
         }
         UIComponent viewRoot = null;
         TreeStructure structRoot = null;
-        ResponseStateManager rsm = Util.getResponseStateManager(context, renderKitId);
+        ResponseStateManager rsm = RenderKitUtils.getResponseStateManager(context, renderKitId);
         if (hasDeclaredMethod(responseStateManagerInfo, renderKitId, rsm, "getState")) {
             Object[] stateArray = (Object[])rsm.getState(context, viewId);
             structRoot = (TreeStructure)stateArray[0];
@@ -410,7 +412,7 @@ public class StateManagerImpl extends StateManager {
     public void writeState(FacesContext context, SerializedView state)
         throws IOException {
         String renderKitId = context.getViewRoot().getRenderKitId();
-        ResponseStateManager rsm = Util.getResponseStateManager(context, renderKitId);
+        ResponseStateManager rsm = RenderKitUtils.getResponseStateManager(context, renderKitId);
         if (hasDeclaredMethod(responseStateManagerInfo, renderKitId, rsm, "getState")) {
             Object[] stateArray = new Object[2];
             stateArray[0] = state.getStructure();
@@ -450,8 +452,8 @@ public class StateManagerImpl extends StateManager {
                 if (logger.isLoggable(Level.SEVERE)) {
                     logger.log(Level.SEVERE,"jsf.duplicate_component_id_error",id);
                 }
-		throw new IllegalStateException(Util.getExceptionMessageString(
-                        Util.DUPLICATE_COMPONENT_ID_ERROR_ID,
+		throw new IllegalStateException(MessageUtils.getExceptionMessageString(
+                        MessageUtils.DUPLICATE_COMPONENT_ID_ERROR_ID,
                         new Object[]{id}));
 	    }
             
@@ -480,8 +482,8 @@ public class StateManagerImpl extends StateManager {
                     logger.log(Level.SEVERE,"jsf.duplicate_component_id_error",
                             id);
                 }
-		throw new IllegalStateException(Util.getExceptionMessageString(
-                        Util.DUPLICATE_COMPONENT_ID_ERROR_ID,
+		throw new IllegalStateException(MessageUtils.getExceptionMessageString(
+                        MessageUtils.DUPLICATE_COMPONENT_ID_ERROR_ID,
                         new Object[]{id}));
 	    }
             

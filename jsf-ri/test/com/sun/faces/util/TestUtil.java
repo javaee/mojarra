@@ -1,5 +1,5 @@
 /*
- * $Id: TestUtil.java,v 1.27 2005/11/01 16:40:25 rlubke Exp $
+ * $Id: TestUtil.java,v 1.28 2006/01/11 15:28:17 rlubke Exp $
  */
 
 /*
@@ -32,6 +32,7 @@
 package com.sun.faces.util;
 
 import com.sun.faces.RIConstants;
+import com.sun.faces.renderkit.RenderKitUtils;
 import com.sun.faces.cactus.ServletFacesTestCase;
 
 import javax.faces.FactoryFinder;
@@ -51,7 +52,7 @@ import java.util.Map;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestUtil.java,v 1.27 2005/11/01 16:40:25 rlubke Exp $
+ * @version $Id: TestUtil.java,v 1.28 2006/01/11 15:28:17 rlubke Exp $
  */
 
 public class TestUtil extends ServletFacesTestCase {
@@ -111,7 +112,7 @@ public class TestUtil extends ServletFacesTestCase {
             input.getAttributes().put("notPresent", "notPresent");
             input.getAttributes().put("onblur", "javascript:f.blur()");
             input.getAttributes().put("onchange", "javascript:h.change()");
-            Util.renderPassThruAttributes(null, writer, input);
+            RenderKitUtils.renderPassThruAttributes(null, writer, input);
             String expectedResult = " onblur=\"javascript:f.blur()\" onchange=\"javascript:h.change()\"";
             assertEquals(expectedResult, sw.toString());
 
@@ -122,7 +123,7 @@ public class TestUtil extends ServletFacesTestCase {
             getFacesContext().setResponseWriter(writer);
             input.getAttributes().remove("onblur");
             input.getAttributes().remove("onchange");
-            Util.renderPassThruAttributes(null, writer, input);
+            RenderKitUtils.renderPassThruAttributes(null, writer, input);
             assertTrue(0 == sw.toString().length());
         } catch (IOException e) {
             assertTrue(false);
@@ -146,26 +147,17 @@ public class TestUtil extends ServletFacesTestCase {
             HtmlInputText input = new HtmlInputText();
             input.setId("testRenderPassthruAttributes");
             input.setSize(12);
-            Util.renderPassThruAttributes(null, writer, input);
+            RenderKitUtils.renderPassThruAttributes(null, writer, input);
             String expectedResult = " size=\"12\"";
             assertEquals(expectedResult, sw.toString());
-
-            sw = new StringWriter();
-            writer = renderKit.createResponseWriter(sw, "text/html",
-                                                    "ISO-8859-1");
-            input.setReadonly(true);
-            Util.renderBooleanPassThruAttributes(writer, input);
-            expectedResult = " readonly=\"readonly\"";
-            assertEquals(expectedResult, sw.toString());
-
-
+          
             // test that setting the values to the default value causes
             // the attributes to not be rendered.
             sw = new StringWriter();
             writer = renderKit.createResponseWriter(sw, "text/html",
                                                     "ISO-8859-1");
             input.setSize(Integer.MIN_VALUE);
-            Util.renderPassThruAttributes(null, writer, input);
+            RenderKitUtils.renderPassThruAttributes(null, writer, input);
             expectedResult = "";
             assertEquals(expectedResult, sw.toString());
 
@@ -173,7 +165,9 @@ public class TestUtil extends ServletFacesTestCase {
             writer = renderKit.createResponseWriter(sw, "text/html",
                                                     "ISO-8859-1");
             input.setReadonly(false);
-            Util.renderBooleanPassThruAttributes(writer, input);
+            RenderKitUtils.renderPassThruAttributes(getFacesContext(), 
+                                                    writer, 
+                                                    input);
             expectedResult = "";
             assertEquals(expectedResult, sw.toString());
 
@@ -201,7 +195,7 @@ public class TestUtil extends ServletFacesTestCase {
             input.setId("testBooleanRenderPassthruAttributes");
             input.getAttributes().put("disabled", "true");
             input.getAttributes().put("readonly", "false");
-            Util.renderBooleanPassThruAttributes(writer, input);
+            RenderKitUtils.renderXHTMLStyleBooleanAttributes(writer, input);
             String expectedResult = " disabled=\"disabled\"";
             assertEquals(expectedResult, sw.toString());
 
@@ -212,7 +206,7 @@ public class TestUtil extends ServletFacesTestCase {
             getFacesContext().setResponseWriter(writer);
             input.getAttributes().remove("disabled");
             input.getAttributes().remove("readonly");
-            Util.renderBooleanPassThruAttributes(writer, input);
+            RenderKitUtils.renderXHTMLStyleBooleanAttributes(writer, input);
             assertTrue(0 == sw.toString().length());
         } catch (IOException e) {
             assertTrue(false);

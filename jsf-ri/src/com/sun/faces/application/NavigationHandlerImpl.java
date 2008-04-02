@@ -1,5 +1,5 @@
 /*
- * $Id: NavigationHandlerImpl.java,v 1.43 2005/12/06 15:37:17 rlubke Exp $
+ * $Id: NavigationHandlerImpl.java,v 1.44 2006/01/11 15:28:02 rlubke Exp $
  */
 
 /*
@@ -46,6 +46,7 @@ import javax.faces.context.FacesContext;
 
 import com.sun.faces.config.ConfigureListener;
 import com.sun.faces.util.Util;
+import com.sun.faces.util.MessageUtils;
 
 /**
  * <p><strong>NavigationHandlerImpl</strong> is the class that implements
@@ -61,8 +62,8 @@ public class NavigationHandlerImpl extends NavigationHandler {
     //
 
     // Log instance for this class
-    private static Logger logger = Util.getLogger(Util.FACES_LOGGER 
-            + Util.APPLICATION_LOGGER);
+    private static Logger logger = Util.getLogger(Util.FACES_LOGGER
+                                                  + Util.APPLICATION_LOGGER);
 
     //
     // Class Variables
@@ -84,7 +85,7 @@ public class NavigationHandlerImpl extends NavigationHandler {
      * Flag indicating navigation cases properly consumed and available.
      */
     private boolean navigationConfigured;
-    
+
     /**
      * This constructor uses the current <code>Application</code>
      * instance to obtain the navigation mappings used to make
@@ -124,17 +125,17 @@ public class NavigationHandlerImpl extends NavigationHandler {
     public void handleNavigation(FacesContext context, String fromAction,
                                  String outcome) {
         if (context == null) {
-            String message = Util.getExceptionMessageString
-                (Util.NULL_PARAMETERS_ERROR_MESSAGE_ID);
+            String message = MessageUtils.getExceptionMessageString
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
             message = message + " context " + context;
             throw new NullPointerException(message);
         }
         if (outcome == null) {
            if (logger.isLoggable(Level.FINE)) {
-               logger.fine("No navigation rule found for outcome " 
-                       + outcome + "and viewId " + 
-                       context.getViewRoot().getViewId() +
-                       " Explicitly remain on the current view ");
+               logger.fine("No navigation rule found for outcome "
+                           + outcome + "and viewId " +
+                           context.getViewRoot().getViewId() +
+                           " Explicitly remain on the current view ");
             }
             return; // Explicitly remain on the current view
         }
@@ -151,14 +152,14 @@ public class NavigationHandlerImpl extends NavigationHandler {
                 try {
                     if (logger.isLoggable(Level.FINE)) {
                         logger.fine("Redirecting to path " + newPath
-                                  + " for outcome " + outcome +
-                                  "and viewId " + caseStruct.viewId);
+                                    + " for outcome " + outcome +
+                                    "and viewId " + caseStruct.viewId);
                     }
                     extContext.redirect(newPath);
                 } catch (java.io.IOException ioe) {
                     if (logger.isLoggable(Level.SEVERE)) {
                         logger.log(Level.SEVERE,"jsf.redirect_failed_error",
-                                newPath);
+                                   newPath);
                     }
                     throw new FacesException(ioe.getMessage(), ioe);
                 }
@@ -172,7 +173,7 @@ public class NavigationHandlerImpl extends NavigationHandler {
                 context.setViewRoot(newRoot);
                 if (logger.isLoggable(Level.FINE)) {
                     logger.fine("Set new view in FacesContext for " +
-                            caseStruct.viewId);
+                                caseStruct.viewId);
                 }
             }
         }
@@ -189,7 +190,7 @@ public class NavigationHandlerImpl extends NavigationHandler {
      * @return The <code>view</code> identifier.
      */
     private CaseStruct getViewId(FacesContext context, String fromAction,
-                                 String outcome) {        
+                                 String outcome) {
         String viewId = context.getViewRoot().getViewId();
         CaseStruct caseStruct;
 
@@ -202,15 +203,15 @@ public class NavigationHandlerImpl extends NavigationHandler {
         if (caseStruct == null) {
             caseStruct = findDefaultMatch(fromAction, outcome);
         }
-               
+
          if (caseStruct == null && logger.isLoggable(Level.WARNING)) {
-            if (fromAction == null) {            
-                logger.log(Level.WARNING, 
-                           "jsf.navigation.no_matching_outcome", 
-                           new Object[] {viewId, outcome});                
+            if (fromAction == null) {
+                logger.log(Level.WARNING,
+                           "jsf.navigation.no_matching_outcome",
+                           new Object[] {viewId, outcome});
             } else {
-                logger.log(Level.WARNING, 
-                           "jsf.navigation.no_matching_outcome_action", 
+                logger.log(Level.WARNING,
+                           "jsf.navigation.no_matching_outcome_action",
                            new Object[] {viewId, outcome, fromAction});
             }
         }
@@ -232,13 +233,13 @@ public class NavigationHandlerImpl extends NavigationHandler {
 
     private CaseStruct findExactMatch(String viewId,
                                       String fromAction,
-                                      String outcome) {        
+                                      String outcome) {
 
         // if the user has elected to replace the Application instance
         // entirely
         if (!navigationConfigured) {
             return null;
-        }          
+        }
 
         List<ConfigNavigationCase> caseList = caseListMap.get(viewId);
 
@@ -278,7 +279,7 @@ public class NavigationHandlerImpl extends NavigationHandler {
         // entirely
         if (!navigationConfigured) {
             return null;
-        }       
+        }
 
         for (String fromViewId : wildCardSet) {
             // See if the entire wildcard string (without the trailing "*" is
@@ -333,7 +334,7 @@ public class NavigationHandlerImpl extends NavigationHandler {
         // entirely
         if (!navigationConfigured) {
             return null;
-        }        
+        }
 
         List<ConfigNavigationCase> caseList = caseListMap.get("*");
 
@@ -361,13 +362,13 @@ public class NavigationHandlerImpl extends NavigationHandler {
      * @return The <code>view</code> identifier.
      */
 
-    
+
     private CaseStruct determineViewFromActionOutcome(List<ConfigNavigationCase> caseList,
                                                       String fromAction,
                                                       String outcome) {
-        
+
         CaseStruct result = new CaseStruct();
-        for (ConfigNavigationCase cnc : caseList) {           
+        for (ConfigNavigationCase cnc : caseList) {
             String cncFromAction = cnc.getFromAction();
             String fromOutcome = cnc.getFromOutcome();
             String toViewId = cnc.getToViewId();
@@ -379,7 +380,7 @@ public class NavigationHandlerImpl extends NavigationHandler {
                     return result;
                 }
             }
-            
+
              if ((cncFromAction == null) && (fromOutcome != null)) {
                 if (fromOutcome.equals(outcome)) {
                     result.viewId = toViewId;
@@ -387,7 +388,7 @@ public class NavigationHandlerImpl extends NavigationHandler {
                     return result;
                 }
             }
-            
+
             if ((cncFromAction != null) && (fromOutcome == null)) {
                 if (cncFromAction.equals(fromAction)) {
                     result.viewId = toViewId;
@@ -395,13 +396,13 @@ public class NavigationHandlerImpl extends NavigationHandler {
                     return result;
                 }
             }
-            
+
             if ((cncFromAction == null) && (fromOutcome == null)) {
                 result.viewId = toViewId;
                 result.navCase = cnc;
                 return result;
             }
-        }                 
+        }
 
         return null;
     }

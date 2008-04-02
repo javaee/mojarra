@@ -1,5 +1,5 @@
 /*
- * $Id: ImplicitObjectELResolver.java,v 1.6 2005/08/26 15:27:05 rlubke Exp $
+ * $Id: ImplicitObjectELResolver.java,v 1.7 2006/01/11 15:28:05 rlubke Exp $
  */
 /*
  * The contents of this file are subject to the terms
@@ -44,6 +44,7 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 
 import com.sun.faces.util.Util;
+import com.sun.faces.util.MessageUtils;
 
 public class ImplicitObjectELResolver extends ELResolver implements ELConstants{
 
@@ -55,7 +56,7 @@ public class ImplicitObjectELResolver extends ELResolver implements ELConstants{
     public ImplicitObjectELResolver() {
     }
 
-    public Object getValue(ELContext context,Object base, Object property) 
+    public Object getValue(ELContext context,Object base, Object property)
             throws ELException {
         // variable resolution is a special case of property resolution
         // where the base is null.
@@ -63,13 +64,13 @@ public class ImplicitObjectELResolver extends ELResolver implements ELConstants{
             return null;
         }
         if (property == null) {
-            String message = Util.getExceptionMessageString
-                (Util.NULL_PARAMETERS_ERROR_MESSAGE_ID);
+            String message = MessageUtils.getExceptionMessageString
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
             message = message + " base " + base + " property " + property;
             throw new PropertyNotFoundException(message);
         }
-      
-        FacesContext facesContext = 
+
+        FacesContext facesContext =
             (FacesContext) context.getContext(FacesContext.class);
         ExternalContext extCtx = facesContext.getExternalContext();
         int index = Arrays.binarySearch(IMPLICIT_OBJECTS, property);
@@ -126,61 +127,61 @@ public class ImplicitObjectELResolver extends ELResolver implements ELConstants{
     }
 
     public void  setValue(ELContext context, Object base, Object property,
-        Object val) throws ELException {
+                          Object val) throws ELException {
         if (base != null) {
             return;
         }
         if (property == null) {
-            String message = Util.getExceptionMessageString
-                (Util.NULL_PARAMETERS_ERROR_MESSAGE_ID);
+            String message = MessageUtils.getExceptionMessageString
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
             message = message + " base " + base + " property " + property;
             throw new PropertyNotFoundException(message);
         }
-        
+
         int index = Arrays.binarySearch(IMPLICIT_OBJECTS, property);
         if (index >= 0) {
             throw new PropertyNotWritableException((String)property);
         }
     }
 
-    public boolean isReadOnly(ELContext context, Object base, Object property) 
+    public boolean isReadOnly(ELContext context, Object base, Object property)
         throws ELException{
         if (base != null) {
             return false;
         }
         if (property == null) {
-            String message = Util.getExceptionMessageString
-                (Util.NULL_PARAMETERS_ERROR_MESSAGE_ID);
+            String message = MessageUtils.getExceptionMessageString
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
             message = message + " base " + base + " property " + property;
             throw new PropertyNotFoundException(message);
         }
-        
+
         int index = Arrays.binarySearch(IMPLICIT_OBJECTS, property);
         if (index >= 0) {
             context.setPropertyResolved(true);
             return true;
-        }                          
+        }
         return false;
     }
 
-    public Class getType(ELContext context, Object base, Object property) 
+    public Class getType(ELContext context, Object base, Object property)
         throws ELException {
         if (base != null) {
             return null;
         }
         if (property == null) {
-            String message = Util.getExceptionMessageString
-                (Util.NULL_PARAMETERS_ERROR_MESSAGE_ID);
+            String message = MessageUtils.getExceptionMessageString
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
             message = message + " base " + base + " property " + property;
             throw new PropertyNotFoundException(message);
         }
-        
+
         int index = Arrays.binarySearch(IMPLICIT_OBJECTS, property);
         if (index >= 0) {
             context.setPropertyResolved(true);
         }
         return null;
-    } 
+    }
 
     public Iterator getFeatureDescriptors(ELContext context, Object base) {
         if (base != null) {
@@ -188,36 +189,36 @@ public class ImplicitObjectELResolver extends ELResolver implements ELConstants{
         }
         ArrayList<FeatureDescriptor> list = new ArrayList<FeatureDescriptor>(14);
         list.add(Util.getFeatureDescriptor("application", "application",
-            "application",false, false, true, Object.class, Boolean.TRUE));
+                                           "application",false, false, true, Object.class, Boolean.TRUE));
         list.add(Util.getFeatureDescriptor("applicationScope", "applicationScope",
-            "applicationScope",false, false, true, Map.class, Boolean.TRUE));
+                                           "applicationScope",false, false, true, Map.class, Boolean.TRUE));
         list.add(Util.getFeatureDescriptor("cookie", "cookie",
-            "cookie",false, false, true, Map.class, Boolean.TRUE));
+                                           "cookie",false, false, true, Map.class, Boolean.TRUE));
         list.add(Util.getFeatureDescriptor("facesContext", "facesContext",
-            "facesContext",false, false, true, FacesContext.class, Boolean.TRUE));
+                                           "facesContext",false, false, true, FacesContext.class, Boolean.TRUE));
         list.add(Util.getFeatureDescriptor("view", "view",
-            "root",false, false, true, UIViewRoot.class, Boolean.TRUE));
+                                           "root",false, false, true, UIViewRoot.class, Boolean.TRUE));
         list.add(Util.getFeatureDescriptor("header", "header",
-            "header",false, false, true, Map.class, Boolean.TRUE));
+                                           "header",false, false, true, Map.class, Boolean.TRUE));
         list.add(Util.getFeatureDescriptor("headerValues", "headerValues",
-            "headerValues",false, false, true, Map.class, Boolean.TRUE));
+                                           "headerValues",false, false, true, Map.class, Boolean.TRUE));
         list.add(Util.getFeatureDescriptor("initParam", "initParam",
-            "initParam",false, false, true, Map.class, Boolean.TRUE));
+                                           "initParam",false, false, true, Map.class, Boolean.TRUE));
         list.add(Util.getFeatureDescriptor("param", "param",
-            "param",false, false, true, Map.class, Boolean.TRUE));
+                                           "param",false, false, true, Map.class, Boolean.TRUE));
         list.add(Util.getFeatureDescriptor("paramValues", "paramValues",
-            "paramValues",false, false, true, Map.class, Boolean.TRUE));
+                                           "paramValues",false, false, true, Map.class, Boolean.TRUE));
         list.add(Util.getFeatureDescriptor("request", "request",
-            "request",false, false, true, Object.class, Boolean.TRUE));
+                                           "request",false, false, true, Object.class, Boolean.TRUE));
         list.add(Util.getFeatureDescriptor("requestScope", "requestScope",
-            "requestScope",false, false, true, Map.class, Boolean.TRUE));
+                                           "requestScope",false, false, true, Map.class, Boolean.TRUE));
         list.add(Util.getFeatureDescriptor("session", "session",
-            "session",false, false, true, Object.class, Boolean.TRUE));
+                                           "session",false, false, true, Object.class, Boolean.TRUE));
         list.add(Util.getFeatureDescriptor("sessionScope", "sessionScope",
-            "sessionScope",false, false, true, Map.class, Boolean.TRUE));
-        
+                                           "sessionScope",false, false, true, Map.class, Boolean.TRUE));
+
         return list.iterator();
-       
+
     }
 
     public Class getCommonPropertyType(ELContext context, Object base) {
@@ -226,5 +227,5 @@ public class ImplicitObjectELResolver extends ELResolver implements ELConstants{
         }
         return String.class;
     }
-    
+
 }

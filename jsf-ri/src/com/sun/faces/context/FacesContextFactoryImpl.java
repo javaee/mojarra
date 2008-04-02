@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContextFactoryImpl.java,v 1.14 2005/08/22 22:10:11 ofung Exp $
+ * $Id: FacesContextFactoryImpl.java,v 1.15 2006/01/11 15:28:04 rlubke Exp $
  */
 
 /*
@@ -31,6 +31,7 @@ package com.sun.faces.context;
 
 import com.sun.faces.RIConstants;
 import com.sun.faces.util.Util;
+import com.sun.faces.util.MessageUtils;
 
 import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
@@ -90,8 +91,8 @@ public class FacesContextFactoryImpl extends FacesContextFactory {
             Util.parameterNonNull(lifecycle);
         } catch (Exception e) {
             throw new NullPointerException(
-                Util.getExceptionMessageString(
-                    Util.FACES_CONTEXT_CONSTRUCTION_ERROR_MESSAGE_ID));
+                MessageUtils.getExceptionMessageString(
+                    MessageUtils.FACES_CONTEXT_CONSTRUCTION_ERROR_MESSAGE_ID));
         }
 
         ServletContext ctx = (ServletContext) sc;

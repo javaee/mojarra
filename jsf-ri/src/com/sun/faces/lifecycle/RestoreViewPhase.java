@@ -1,5 +1,5 @@
 /*
- * $Id: RestoreViewPhase.java,v 1.29 2005/08/26 15:27:08 rlubke Exp $
+ * $Id: RestoreViewPhase.java,v 1.30 2006/01/11 15:28:06 rlubke Exp $
  */
 
 /*
@@ -46,6 +46,8 @@ import javax.faces.render.ResponseStateManager;
 import javax.servlet.http.HttpServletRequest;
 
 import com.sun.faces.util.Util;
+import com.sun.faces.util.MessageUtils;
+import com.sun.faces.renderkit.RenderKitUtils;
 
 import java.util.logging.Logger;
 import java.util.logging.Level;
@@ -54,7 +56,7 @@ import java.util.logging.Level;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: RestoreViewPhase.java,v 1.29 2005/08/26 15:27:08 rlubke Exp $
+ * @version $Id: RestoreViewPhase.java,v 1.30 2006/01/11 15:28:06 rlubke Exp $
  */
 
 public class RestoreViewPhase extends Phase {
@@ -111,8 +113,8 @@ public class RestoreViewPhase extends Phase {
             logger.fine("Entering RestoreViewPhase");
         }
         if (null == facesContext) {
-            throw new FacesException(Util.getExceptionMessageString(
-                Util.NULL_CONTEXT_ERROR_MESSAGE_ID));
+            throw new FacesException(MessageUtils.getExceptionMessageString(
+                MessageUtils.NULL_CONTEXT_ERROR_MESSAGE_ID));
         }
         
         Util.getViewHandler(facesContext).initView(facesContext);        
@@ -158,8 +160,8 @@ public class RestoreViewPhase extends Phase {
             if (logger.isLoggable(Level.WARNING)) {
                 logger.warning("viewId is null");
             }
-            throw new FacesException(Util.getExceptionMessageString(
-                Util.NULL_REQUEST_VIEW_ERROR_MESSAGE_ID));
+            throw new FacesException(MessageUtils.getExceptionMessageString(
+                MessageUtils.NULL_REQUEST_VIEW_ERROR_MESSAGE_ID));
         }
 
 	if (isPostback(facesContext)) {
@@ -167,8 +169,8 @@ public class RestoreViewPhase extends Phase {
 	    if (null == (viewRoot = (Util.getViewHandler(facesContext)).
 			 restoreView(facesContext, viewId))) {
                 Object[] params = {viewId};
-		throw new ViewExpiredException(Util.getExceptionMessageString(
-                    Util.RESTORE_VIEW_ERROR_MESSAGE_ID, params), viewId);
+		throw new ViewExpiredException(MessageUtils.getExceptionMessageString(
+                    MessageUtils.RESTORE_VIEW_ERROR_MESSAGE_ID, params), viewId);
 	    }
             if (logger.isLoggable(Level.FINE)) {
                 logger.fine("Postback: Restored view for " + viewId);
@@ -205,7 +207,7 @@ public class RestoreViewPhase extends Phase {
         String renderkitId = 
                 context.getApplication().getViewHandler().
                 calculateRenderKitId(context);
-        ResponseStateManager rsm = Util.getResponseStateManager(context,
+        ResponseStateManager rsm = RenderKitUtils.getResponseStateManager(context,
                 renderkitId);
         return rsm.isPostback(context);
     }

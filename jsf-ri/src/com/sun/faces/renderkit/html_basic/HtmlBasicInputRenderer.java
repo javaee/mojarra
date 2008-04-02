@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicInputRenderer.java,v 1.30 2005/08/22 22:10:19 ofung Exp $
+ * $Id: HtmlBasicInputRenderer.java,v 1.31 2006/01/11 15:28:08 rlubke Exp $
  */
 
 /*
@@ -41,9 +41,8 @@ import javax.faces.convert.Converter;
 import javax.faces.convert.ConverterException;
 
 import com.sun.faces.util.MessageFactory;
-import com.sun.faces.util.Util;
+import com.sun.faces.util.MessageUtils;
 
-import java.util.logging.Logger;
 import java.util.logging.Level;
 
 /**
@@ -190,7 +189,7 @@ public abstract class HtmlBasicInputRenderer extends HtmlBasicRenderer {
 	    };
 
             throw new ConverterException(MessageFactory.getMessage(
-                context, Util.CONVERSION_ERROR_MESSAGE_ID, params));
+                context, MessageUtils.CONVERSION_ERROR_MESSAGE_ID, params));
         }
     }
 } // end of class HtmlBasicInputRenderer

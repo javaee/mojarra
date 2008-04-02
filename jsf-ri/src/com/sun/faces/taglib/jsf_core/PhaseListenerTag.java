@@ -1,5 +1,5 @@
 /*
- * $Id: PhaseListenerTag.java,v 1.4 2005/08/22 22:10:25 ofung Exp $
+ * $Id: PhaseListenerTag.java,v 1.5 2006/01/11 15:28:12 rlubke Exp $
  */
 
 /*
@@ -30,6 +30,7 @@
 package com.sun.faces.taglib.jsf_core;
 
 import com.sun.faces.util.Util;
+import com.sun.faces.util.MessageUtils;
 
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
@@ -41,7 +42,6 @@ import javax.servlet.jsp.tagext.TagSupport;
 import javax.servlet.jsp.tagext.Tag;
 
 import javax.el.ValueExpression;
-import javax.el.MethodExpression;
 import javax.el.ELException;
 
 /**
@@ -124,8 +124,8 @@ public class PhaseListenerTag extends TagSupport {
         if (tag == null) {
             Object params [] = {this.getClass().getName()};
             throw new JspException(
-                Util.getExceptionMessageString(
-                    Util.NOT_NESTED_IN_FACES_TAG_ERROR_MESSAGE_ID, params));
+                MessageUtils.getExceptionMessageString(
+                    MessageUtils.NOT_NESTED_IN_FACES_TAG_ERROR_MESSAGE_ID, params));
         }
         
         // Nothing to do unless this tag created a component
@@ -136,7 +136,7 @@ public class PhaseListenerTag extends TagSupport {
         UIViewRoot viewRoot = (UIViewRoot) tag.getComponentInstance();
         if (viewRoot == null) {
             throw new JspException(
-                Util.getExceptionMessageString(Util.NULL_COMPONENT_ERROR_MESSAGE_ID));
+                MessageUtils.getExceptionMessageString(MessageUtils.NULL_COMPONENT_ERROR_MESSAGE_ID));
         }
         
         // If "binding" is set use it to create a listener instance.
@@ -182,8 +182,8 @@ public class PhaseListenerTag extends TagSupport {
             Object params [] = {"javax.faces.event.PhaseListener",
 				handlerError.getExpressionString()};
             throw new JspException(
-                Util.getExceptionMessageString(
-                    Util.CANT_CREATE_CLASS_ERROR_ID, params));
+                MessageUtils.getExceptionMessageString(
+                    MessageUtils.CANT_CREATE_CLASS_ERROR_ID, params));
         }
         
         // We need to cast here because addPhaseListener

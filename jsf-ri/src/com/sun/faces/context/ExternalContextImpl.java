@@ -1,5 +1,5 @@
 /*
- * $Id: ExternalContextImpl.java,v 1.40 2006/01/09 20:47:43 rlubke Exp $
+ * $Id: ExternalContextImpl.java,v 1.41 2006/01/11 15:28:04 rlubke Exp $
  */
 
 /*
@@ -47,7 +47,6 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.Arrays;
-import java.util.Map.Entry;
 
 import javax.faces.FacesException;
 import javax.faces.context.ExternalContext;
@@ -66,6 +65,8 @@ import javax.servlet.http.HttpSession;
 
 import com.sun.faces.RIConstants;
 import com.sun.faces.util.Util;
+import com.sun.faces.util.MessageUtils;
+
 import java.util.logging.Logger;
 
 /**
@@ -73,7 +74,7 @@ import java.util.logging.Logger;
  * servlet implementation.
  *
  * @author Brendan Murray
- * @version $Id: ExternalContextImpl.java,v 1.40 2006/01/09 20:47:43 rlubke Exp $
+ * @version $Id: ExternalContextImpl.java,v 1.41 2006/01/11 15:28:04 rlubke Exp $
  */
 public class ExternalContextImpl extends ExternalContext {
 
@@ -108,8 +109,8 @@ public class ExternalContextImpl extends ExternalContext {
             Util.parameterNonNull(response);
         } catch (Exception e) {
             throw new FacesException(
-                Util.getExceptionMessageString(
-                    Util.FACES_CONTEXT_CONSTRUCTION_ERROR_MESSAGE_ID));
+                MessageUtils.getExceptionMessageString(
+                    MessageUtils.FACES_CONTEXT_CONSTRUCTION_ERROR_MESSAGE_ID));
         }
 
         // Save references to our context, request, and response

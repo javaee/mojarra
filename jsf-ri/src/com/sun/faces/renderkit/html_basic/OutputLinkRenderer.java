@@ -1,5 +1,5 @@
 /*
- * $Id: OutputLinkRenderer.java,v 1.24 2005/10/14 20:33:33 rlubke Exp $
+ * $Id: OutputLinkRenderer.java,v 1.25 2006/01/11 15:28:10 rlubke Exp $
  */
 
 /*
@@ -39,7 +39,8 @@ import javax.faces.component.UIOutput;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 
-import com.sun.faces.util.Util;
+import com.sun.faces.util.MessageUtils;
+import com.sun.faces.renderkit.RenderKitUtils;
 
 import java.util.logging.Level;
 
@@ -49,7 +50,7 @@ import java.util.logging.Level;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: OutputLinkRenderer.java,v 1.24 2005/10/14 20:33:33 rlubke Exp $
+ * @version $Id: OutputLinkRenderer.java,v 1.25 2006/01/11 15:28:10 rlubke Exp $
  */
 
 public class OutputLinkRenderer extends LinkRenderer {
@@ -91,8 +92,8 @@ public class OutputLinkRenderer extends LinkRenderer {
 
     public void decode(FacesContext context, UIComponent component) {
         if (context == null || component == null) {
-            throw new NullPointerException(Util.getExceptionMessageString(
-                Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+            throw new NullPointerException(MessageUtils.getExceptionMessageString(
+                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
 
         // take no action, this is an Output component.
@@ -118,7 +119,7 @@ public class OutputLinkRenderer extends LinkRenderer {
         throws IOException {
         if (context == null || component == null) {
             throw new NullPointerException(
-                Util.getExceptionMessageString(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
         if (logger.isLoggable(Level.FINER)) {
             logger.log(Level.FINER,"Begin encoding component " + component.getId());
@@ -142,7 +143,7 @@ public class OutputLinkRenderer extends LinkRenderer {
         throws IOException {
         if (context == null || component == null) {
             throw new NullPointerException(
-                Util.getExceptionMessageString(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
         if (logger.isLoggable(Level.FINER)) {
             logger.log(Level.FINER,"Begin encoding children " + component.getId());
@@ -172,7 +173,7 @@ public class OutputLinkRenderer extends LinkRenderer {
         throws IOException {
         if (context == null || component == null) {
             throw new NullPointerException(
-                Util.getExceptionMessageString(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
                                                                                                                           
         if (logger.isLoggable(Level.FINER)) {
@@ -199,12 +200,9 @@ public class OutputLinkRenderer extends LinkRenderer {
         }
 
         if (componentDisabled) {
-            if (shouldWriteIdAttribute(component) ||
-                Util.hasPassThruAttributes(component) ||
-                (component.getAttributes().get("style") != null) ||
-                (component.getAttributes().get("styleClass") != null)) {
+            
                 writer.endElement("span");
-            }
+            
         } else {
             //Write Anchor inline elements
             //Done writing Anchor element
@@ -267,8 +265,8 @@ public class OutputLinkRenderer extends LinkRenderer {
                                  context.getExternalContext()
                                  .encodeResourceURL(sb.toString()),
                                  "href");
-        Util.renderPassThruAttributes(context, writer, component);
-        Util.renderBooleanPassThruAttributes(writer, component);
+        RenderKitUtils.renderPassThruAttributes(context, writer, component);
+        RenderKitUtils.renderXHTMLStyleBooleanAttributes(writer, component);
 
         writeCommonLinkAttributes(writer, component);
 

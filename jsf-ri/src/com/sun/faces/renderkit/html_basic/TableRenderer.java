@@ -1,5 +1,5 @@
 /*
- * $Id: TableRenderer.java,v 1.30 2005/09/30 20:30:56 rlubke Exp $
+ * $Id: TableRenderer.java,v 1.31 2006/01/11 15:28:10 rlubke Exp $
  */
 
 /*
@@ -30,7 +30,9 @@
 package com.sun.faces.renderkit.html_basic;
 
 
-import com.sun.faces.util.Util;
+import com.sun.faces.util.MessageUtils;
+import com.sun.faces.renderkit.RenderKitUtils;
+
 import java.util.logging.Level;
 
 import javax.faces.component.UIColumn;
@@ -59,8 +61,8 @@ public class TableRenderer extends HtmlBasicRenderer {
         throws IOException {
 
         if ((context == null) || (component == null)) {
-            throw new NullPointerException(Util.getExceptionMessageString(
-                Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+            throw new NullPointerException(MessageUtils.getExceptionMessageString(
+                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
         if (logger.isLoggable(Level.FINER)) {
             logger.log(Level.FINER,"Begin encoding component " + component.getId());
@@ -87,8 +89,8 @@ public class TableRenderer extends HtmlBasicRenderer {
         if (styleClass != null) {
             writer.writeAttribute("class", styleClass, "styleClass");
         }
-        Util.renderPassThruAttributes(context, writer, component,
-                                      new String[]{"rows"});
+        RenderKitUtils.renderPassThruAttributes(context, writer, component
+        );
         writer.writeText("\n", null);
         
         UIComponent caption = getFacet(data, "caption");
@@ -216,8 +218,8 @@ public class TableRenderer extends HtmlBasicRenderer {
         throws IOException {
 
         if ((context == null) || (component == null)) {
-            throw new NullPointerException(Util.getExceptionMessageString(
-                Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+            throw new NullPointerException(MessageUtils.getExceptionMessageString(
+                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
         if (logger.isLoggable(Level.FINER)) {
             logger.log(Level.FINER,"Begin encoding children " + component.getId());
@@ -325,8 +327,8 @@ public class TableRenderer extends HtmlBasicRenderer {
         throws IOException {
 
         if ((context == null) || (component == null)) {
-            throw new NullPointerException(Util.getExceptionMessageString(
-                Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+            throw new NullPointerException(MessageUtils.getExceptionMessageString(
+                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
         if (!component.isRendered()) {
             if (logger.isLoggable(Level.FINE)) {

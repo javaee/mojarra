@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleFactoryImpl.java,v 1.26 2005/08/26 15:27:07 rlubke Exp $
+ * $Id: LifecycleFactoryImpl.java,v 1.27 2006/01/11 15:28:06 rlubke Exp $
  */
 
 /*
@@ -40,6 +40,7 @@ import javax.faces.lifecycle.Lifecycle;
 import javax.faces.lifecycle.LifecycleFactory;
 
 import com.sun.faces.util.Util;
+import com.sun.faces.util.MessageUtils;
 
 import java.util.logging.Logger;
 import java.util.logging.Level;
@@ -48,7 +49,7 @@ import java.util.logging.Level;
  * <B>LifecycleFactoryImpl</B> is the stock implementation of Lifecycle
  * in the JSF RI. <P>
  *
- * @version $Id: LifecycleFactoryImpl.java,v 1.26 2005/08/26 15:27:07 rlubke Exp $
+ * @version $Id: LifecycleFactoryImpl.java,v 1.27 2006/01/11 15:28:06 rlubke Exp $
  * @see	javax.faces.lifecycle.LifecycleFactory
  */
 
@@ -129,13 +130,13 @@ public class LifecycleFactoryImpl extends LifecycleFactory {
         Object[] params = {lifecycleId};
         if (null == lifecycleId || null == phase) {
             throw new NullPointerException(
-                Util.getExceptionMessageString(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
 
         if (null ==
             (wrapper = lifecycleMap.get(lifecycleId))) {
-            message = Util.getExceptionMessageString(
-                Util.LIFECYCLE_ID_NOT_FOUND_ERROR_MESSAGE_ID,
+            message = MessageUtils.getExceptionMessageString(
+                MessageUtils.LIFECYCLE_ID_NOT_FOUND_ERROR_MESSAGE_ID,
                 params);
             if (logger.isLoggable(Level.WARNING)) {
                 logger.warning(message);
@@ -146,8 +147,8 @@ public class LifecycleFactoryImpl extends LifecycleFactory {
         assert (null != result);
 
         if (alreadyCreated(lifecycleId)) {
-            message = Util.getExceptionMessageString(
-                Util.LIFECYCLE_ID_ALREADY_ADDED_ID,
+            message = MessageUtils.getExceptionMessageString(
+                MessageUtils.LIFECYCLE_ID_ALREADY_ADDED_ID,
                 params);
             if (logger.isLoggable(Level.WARNING)) {
                 logger.warning(message);
@@ -158,8 +159,8 @@ public class LifecycleFactoryImpl extends LifecycleFactory {
         if (!((FIRST_PHASE <= phaseId) &&
             (phaseId <= LAST_PHASE))) {
             params = new Object[]{Integer.toString(phaseId)};
-            message = Util.getExceptionMessageString(
-                Util.PHASE_ID_OUT_OF_BOUNDS_ERROR_MESSAGE_ID,
+            message = MessageUtils.getExceptionMessageString(
+                MessageUtils.PHASE_ID_OUT_OF_BOUNDS_ERROR_MESSAGE_ID,
                 params);
             if (logger.isLoggable(Level.WARNING)) {
                 logger.warning(message);
@@ -176,16 +177,16 @@ public class LifecycleFactoryImpl extends LifecycleFactory {
     public void addLifecycle(String lifecycleId, Lifecycle lifecycle) {
         if (lifecycleId == null || lifecycle == null) {
             throw new NullPointerException(
-                Util.getExceptionMessageString(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
         if (null != lifecycleMap.get(lifecycleId)) {
             Object params[] = {lifecycleId};
             String message =
-                Util.getExceptionMessageString(Util.LIFECYCLE_ID_ALREADY_ADDED_ID,
+                MessageUtils.getExceptionMessageString(MessageUtils.LIFECYCLE_ID_ALREADY_ADDED_ID,
                                          params);
             if (logger.isLoggable(Level.WARNING)) {
-                logger.warning(Util.getExceptionMessageString(
-                        Util.LIFECYCLE_ID_ALREADY_ADDED_ID,params));
+                logger.warning(MessageUtils.getExceptionMessageString(
+                        MessageUtils.LIFECYCLE_ID_ALREADY_ADDED_ID,params));
             }
             throw new IllegalArgumentException(message);
         }
@@ -202,14 +203,14 @@ public class LifecycleFactoryImpl extends LifecycleFactory {
 
         if (null == lifecycleId) {
             throw new NullPointerException(
-                Util.getExceptionMessageString(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
 
         if (null == lifecycleMap.get(lifecycleId)) {
             Object[] params = {lifecycleId};
             String message =
-                Util.getExceptionMessageString(
-                    Util.CANT_CREATE_LIFECYCLE_ERROR_MESSAGE_ID,
+                MessageUtils.getExceptionMessageString(
+                    MessageUtils.CANT_CREATE_LIFECYCLE_ERROR_MESSAGE_ID,
                     params);
             if (logger.isLoggable(Level.WARNING)) {
                 logger.warning("LifecycleId " + lifecycleId + " does not exist");

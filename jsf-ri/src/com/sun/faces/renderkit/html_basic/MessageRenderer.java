@@ -1,5 +1,5 @@
 /*
- * $Id: MessageRenderer.java,v 1.54 2005/08/22 22:10:20 ofung Exp $
+ * $Id: MessageRenderer.java,v 1.55 2006/01/11 15:28:09 rlubke Exp $
  */
 
 /*
@@ -31,8 +31,9 @@
 
 package com.sun.faces.renderkit.html_basic;
 
-import com.sun.faces.util.Util;
-import java.util.logging.Logger;
+import com.sun.faces.util.MessageUtils;
+import com.sun.faces.renderkit.RenderKitUtils;
+
 import java.util.logging.Level;
 
 import javax.faces.application.FacesMessage;
@@ -79,7 +80,7 @@ public class MessageRenderer extends HtmlBasicRenderer {
         throws IOException {
         if (context == null || component == null) {
             throw new NullPointerException(
-                Util.getExceptionMessageString(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
         if (component instanceof UIOutput) {
             omRenderer.encodeBegin(context, component);
@@ -91,7 +92,7 @@ public class MessageRenderer extends HtmlBasicRenderer {
     public void encodeChildren(FacesContext context, UIComponent component) throws IOException {
         if (context == null || component == null) {
             throw new NullPointerException(
-                Util.getExceptionMessageString(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
         if (component instanceof UIOutput) {
             omRenderer.encodeChildren(context, component);
@@ -108,8 +109,8 @@ public class MessageRenderer extends HtmlBasicRenderer {
         ResponseWriter writer = null;
 
         if (context == null || component == null) {
-            throw new NullPointerException(Util.getExceptionMessageString(
-                Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+            throw new NullPointerException(MessageUtils.getExceptionMessageString(
+                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
 
         if (component instanceof UIOutput) {
@@ -223,7 +224,7 @@ public class MessageRenderer extends HtmlBasicRenderer {
 
         if (styleClass != null || style != null ||
             shouldWriteIdAttribute(component) || 
-	    Util.hasPassThruAttributes(component)) {
+	    RenderKitUtils.hasPassThruAttributes(component)) {
             writer.startElement("span", component);
             writeIdAttributeIfNecessary(context, writer, component);
 
@@ -232,7 +233,7 @@ public class MessageRenderer extends HtmlBasicRenderer {
                 writer.writeAttribute("class", styleClass, "styleClass");
             }
 	    // style is rendered as a passthru attribute
-	    Util.renderPassThruAttributes(context, writer, component);
+	    RenderKitUtils.renderPassThruAttributes(context, writer, component);
         }
 
         Object tooltip = component.getAttributes().get("tooltip");

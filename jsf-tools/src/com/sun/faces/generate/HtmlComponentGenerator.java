@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlComponentGenerator.java,v 1.17 2005/08/25 17:11:02 rlubke Exp $
+ * $Id: HtmlComponentGenerator.java,v 1.18 2006/01/11 15:28:17 rlubke Exp $
  */
 
 /*
@@ -85,6 +85,8 @@ public class HtmlComponentGenerator extends AbstractGenerator {
     private CodeWriter writer;
 
     private PropertyManager propManager;
+    
+    private boolean hasPassThroughAttributes;
 
 
     // ------------------------------------------------------------ Constructors
@@ -130,16 +132,17 @@ public class HtmlComponentGenerator extends AbstractGenerator {
             propManager.getProperty(PropertyManager.BASE_OUTPUT_DIR) +
             File.separatorChar + packagePath);
         ComponentBean[] cbs = configBean.getComponents();
-        for (int i = 0; i < cbs.length; i++) {
+        for (ComponentBean cb1 : cbs) {
 
-            String componentClass = cbs[i].getComponentClass();
+            String componentClass = cb1.getComponentClass();
             if (componentClass.startsWith(compPackage)) {
-                cb = cbs[i];
+                cb = cb1;
 
-                 if (logger.isLoggable(Level.INFO)) {
-                    logger.log(Level.INFO, "Generating concrete HTML component class " +
-                        cb.getComponentClass());
-                 }
+                if (logger.isLoggable(Level.INFO)) {
+                    logger.log(Level.INFO,
+                               "Generating concrete HTML component class " +
+                               cb.getComponentClass());
+                }
 
                 // Initialize all per-class static variables
                 properties = new ArrayList<PropertyBean>();
@@ -150,7 +153,7 @@ public class HtmlComponentGenerator extends AbstractGenerator {
 
                 String fileName = cb.getComponentClass();
                 fileName = fileName.substring(fileName.lastIndexOf('.') + 1) +
-                    ".java";
+                           ".java";
                 File file = new File(dir, fileName);
                 writer = new CodeWriter(new FileWriter(file));
                 // Generate the various portions of each class
@@ -192,6 +195,8 @@ public class HtmlComponentGenerator extends AbstractGenerator {
 
         // Generate the imports
         writer.writeImport("java.io.IOException");
+        writer.writeImport("java.util.List");
+        writer.writeImport("java.util.ArrayList");
         writer.write('\n');
         writer.writeImport("javax.faces.context.FacesContext");
         writer.writeImport("javax.el.MethodExpression");
@@ -230,9 +235,29 @@ public class HtmlComponentGenerator extends AbstractGenerator {
                                            null, false, false);
 
         writer.write("\n\n");
+        
+        // check to see if this component has any passthrough attributes        
+        PropertyBean[] pbs = cb.getProperties();
+        for (PropertyBean pb : pbs) {
+            if (pb.isPassThrough()) {
+                hasPassThroughAttributes = true;
+                break;
+            }
+            hasPassThroughAttributes = false;
+        }
+        
+        
+        writer.indent();
+
+        if (hasPassThroughAttributes) {
+            writer.writeBlockComment("Keep tabs on what passthrough "
+                                     + "attributes are to be rendered.");
+            writer.fwrite("private List passThroughList;");
+            writer.write("\n\n");
+        }
 
         // Generate the constructor
-        writer.indent();
+        
         writer.fwrite("public ");
         writer.write(shortName(cb.getComponentClass()));
         writer.write("() {\n");
@@ -243,6 +268,16 @@ public class HtmlComponentGenerator extends AbstractGenerator {
             writer.write(rendererType);
             writer.write("\");\n");
         }
+        if (hasPassThroughAttributes) {
+            for (PropertyBean p : pbs) {
+                if (p.isPassThrough() && p.getDefaultValue() != null) {
+                    writer.fwrite("setPassThroughAttribute(\"");
+                    writer.write(p.getPropertyName());
+                    writer.write("\");\n");
+                }
+            }
+        }
+       
         writer.outdent();
         writer.fwrite("}\n\n\n");
 
@@ -264,20 +299,20 @@ public class HtmlComponentGenerator extends AbstractGenerator {
 
         ComponentBean base = configBean.getComponent(cb.getBaseComponentType());
         PropertyBean[] pbs = cb.getProperties();
-        for (int i = 0; i < pbs.length; i++) {
+        for (PropertyBean pb : pbs) {
 
             // Should we generate this property?
-            PropertyBean pb = pbs[i];
             if (base.getProperty(pb.getPropertyName()) != null) {
                 if (logger.isLoggable(Level.FINER)) {
                     logger.log(Level.FINER, "Skipping base class property '" +
-                        pb.getPropertyName() + "'");
+                                            pb.getPropertyName() + "'");
                 }
                 continue;
             }
             if (logger.isLoggable(Level.FINE)) {
-                logger.log(Level.FINE, "Generating property variable/getter/setter for '" +
-                    pb.getPropertyName() + "'");
+                logger.log(Level.FINE,
+                           "Generating property variable/getter/setter for '" +
+                           pb.getPropertyName() + "'");
             }
             properties.add(pb);
             String type = pb.getPropertyClass();
@@ -303,10 +338,9 @@ public class HtmlComponentGenerator extends AbstractGenerator {
             }
             writer.write("\n");
 
-
             // Document getter method
             String description = "<p>Return the value of the <code>" +
-                pb.getPropertyName() + "</code> property.</p>";
+                                 pb.getPropertyName() + "</code> property.</p>";
             DescriptionBean db = pb.getDescription("");
             if (db != null) {
                 String temp = db.getDescription().trim();
@@ -341,7 +375,7 @@ public class HtmlComponentGenerator extends AbstractGenerator {
             writer.fwrite("return this.");
             writer.write(var);
             writer.write(";\n");
-             writer.outdent();
+            writer.outdent();
             writer.fwrite("}\n");
             writer.fwrite("ValueExpression _ve = getValueExpression(\"");
             writer.write(pb.getPropertyName());
@@ -350,7 +384,7 @@ public class HtmlComponentGenerator extends AbstractGenerator {
             writer.indent();
             if (primitive(type)) {
                 writer.fwrite(
-                    "Object _result = _ve.getValue(getFacesContext().getELContext());\n");
+                      "Object _result = _ve.getValue(getFacesContext().getELContext());\n");
                 writer.fwrite("if (_result == null) {\n");
                 writer.indent();
                 writer.fwrite("return ");
@@ -369,7 +403,8 @@ public class HtmlComponentGenerator extends AbstractGenerator {
             } else {
                 writer.fwrite("return (");
                 writer.write(type);
-                writer.write(") _ve.getValue(getFacesContext().getELContext());\n");
+                writer.write(
+                      ") _ve.getValue(getFacesContext().getELContext());\n");
             }
             writer.outdent();
             writer.fwrite("} else {\n");
@@ -387,8 +422,10 @@ public class HtmlComponentGenerator extends AbstractGenerator {
             writer.fwrite("}\n\n");
 
             // Generate the setter method
-            writer.writeJavadocComment("<p>Set the value of the <code>" +
-                pb.getPropertyName() + "</code> property.</p>\n");
+            writer.writeJavadocComment("<p>Set the value of the <code>"
+                                       +
+                                       pb.getPropertyName()
+                                       + "</code> property.</p>\n");
 
             writer.fwrite("public void set");
             writer.write(capitalize(pb.getPropertyName()));
@@ -407,6 +444,13 @@ public class HtmlComponentGenerator extends AbstractGenerator {
                 writer.fwrite("this.");
                 writer.write(var);
                 writer.write("_set = true;\n");
+            }
+            // Update Map if this setter was called and this
+            // was a passthrough attribute
+            if (hasPassThroughAttributes && pb.isPassThrough()) {
+                writer.fwrite("setPassThroughAttribute(\"");
+                writer.write(pb.getPropertyName());
+                writer.write("\");\n");
             }
             writer.outdent();
             writer.fwrite("}\n\n");
@@ -514,6 +558,24 @@ public class HtmlComponentGenerator extends AbstractGenerator {
         }
         writer.outdent();
         writer.fwrite("}\n\n\n");
+        
+        if (hasPassThroughAttributes) {
+            writer.fwrite("private void setPassThroughAttribute(String attribute) {\n");
+            writer.indent();
+            writer.fwrite("if (passThroughList == null) {\n");
+            writer.indent();
+            writer.fwrite("passThroughList = new ArrayList(8);\n");            
+            writer.fwrite("this.getAttributes().put(\"javax.faces.component.PassThroughAttributes\", passThroughList);\n");
+            writer.outdent();
+            writer.fwrite("}\n");
+            writer.fwrite("if (!passThroughList.contains(attribute)) {\n");
+            writer.indent();
+            writer.fwrite("passThroughList.add(attribute);\n");
+            writer.outdent();
+            writer.fwrite("}\n");           
+            writer.outdent();
+            writer.fwrite("}\n");            
+        }
 
         // Generate the ending of this class
         writer.outdent();

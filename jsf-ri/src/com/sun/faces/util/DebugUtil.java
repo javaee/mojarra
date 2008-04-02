@@ -1,5 +1,5 @@
 /*
- * $Id: DebugUtil.java,v 1.31 2005/08/26 15:27:19 rlubke Exp $
+ * $Id: DebugUtil.java,v 1.32 2006/01/11 15:28:14 rlubke Exp $
  */
 
 /*
@@ -41,6 +41,8 @@ import java.util.Iterator;
 import javax.faces.component.UIComponent;
 import javax.faces.component.ValueHolder;
 import javax.faces.model.SelectItem;
+
+import com.sun.faces.renderkit.RenderKitUtils;
 
 /**
  * <B>DebugUtil</B> is a class ...
@@ -116,8 +118,8 @@ public class DebugUtil {
             }
         }
     }
-    
-    
+
+
     private static void indentPrintln(Writer out, String str) {
         int i = 0;
 
@@ -129,7 +131,7 @@ public class DebugUtil {
             out.write(str + "\n");
         } catch (IOException ex) {}
     }
-    
+
     /**
      * Output of printTree() as a String. 
      * Useful when used with a Logger. For example:
@@ -140,7 +142,7 @@ public class DebugUtil {
         printTree(root, writer);
         return writer.toString();
     }
-    
+
     /**
      * Output of printTree() to a PrintStream. 
      * Usage:
@@ -151,17 +153,17 @@ public class DebugUtil {
         printTree(root, writer);
         writer.flush();
     }
-    
+
     public static void printTree(UIComponent root, Writer out) {
         if (null == root) {
             return;
         }
         int i = 0;
         Object value = null;
-        
+
 /* PENDING
-    indentPrintln(out, "===>Type:" + root.getComponentType());
- */
+   indentPrintln(out, "===>Type:" + root.getComponentType());
+*/
         indentPrintln(out, "id:" + root.getId());
         indentPrintln(out, "type:" + root.toString());
 
@@ -170,13 +172,13 @@ public class DebugUtil {
         int j = 0;
 
         if (root instanceof javax.faces.component.UISelectOne) {
-            items = Util.getSelectItems(null, root);
+            items = RenderKitUtils.getSelectItems(null, root);
             indentPrintln(out, " {");
             while (items.hasNext()) {
                 curItem = (SelectItem) items.next();
                 indentPrintln(out, "\t value=" + curItem.getValue() +
-                        " label=" + curItem.getLabel() + " description=" +
-                        curItem.getDescription());
+                                   " label=" + curItem.getLabel() + " description=" +
+                                   curItem.getDescription());
             }
             indentPrintln(out, " }");
         } else {
@@ -184,13 +186,13 @@ public class DebugUtil {
                 value = ((ValueHolder)root).getValue();
             }
             indentPrintln(out, "value= " + value);
-            
+
             Iterator<String> it = root.getAttributes().keySet().iterator();
             if (it != null) {
                 while (it.hasNext()) {
                     String attrValue = null, attrName = it.next();
                     Object attrObj = root.getAttributes().get(attrName);
-                    
+
                     if (null != attrObj) {
                         // chop off the address since we don't want to print
                         // out anything that'll vary from invocation to
@@ -205,20 +207,20 @@ public class DebugUtil {
                         } else {
                             doTruncate = true;
                         }
-                        
+
                         if (doTruncate) {
                             attrValue = attrValue.substring(0, at);
                         }
                     } else {
                         attrValue = (String) attrObj;
                     }
-                    
+
                     indentPrintln(out, "attr=" + attrName +
-                            " : " + attrValue);
+                                       " : " + attrValue);
                 }
             }
         }
-        
+
         curDepth++;
         Iterator<UIComponent> it = root.getChildren().iterator();
         Iterator<UIComponent> facets = root.getFacets().values().iterator();
@@ -232,8 +234,8 @@ public class DebugUtil {
         }
         curDepth--;
     }
-    
-    
+
+
     /**
      * Output of printTree() as a String. 
      * Useful when used with a Logger. For example:
@@ -244,7 +246,7 @@ public class DebugUtil {
         printTree(root, writer);
         return writer.toString();
     }
-    
+
     /**
      * Output of printTree() to a PrintStream. 
      * Usage:
@@ -255,24 +257,24 @@ public class DebugUtil {
         printTree(root, writer);
         writer.flush();
     }
-    
+
     public static void printTree(TreeStructure root, Writer out) {
         if (null == root) {
             return;
         }
         int i = 0;
         Object value = null;
-        
+
 /* PENDING
-    indentPrintln(out, "===>Type:" + root.getComponentType());
- */
+   indentPrintln(out, "===>Type:" + root.getComponentType());
+*/
         indentPrintln(out, "id:" + root.id);
         indentPrintln(out, "type:" + root.className);
-        
+
         Iterator items = null;
         SelectItem curItem = null;
         int j = 0;
-        
+
         curDepth++;
         if (null != root.children) {
             Iterator<TreeStructure> it = root.children.iterator();
@@ -282,7 +284,7 @@ public class DebugUtil {
         }
         curDepth--;
     }
-    
+
     public static void printTree(Object [] root, Writer out) {
         if (null == root) {
             indentPrintln(out, "null");
@@ -290,10 +292,10 @@ public class DebugUtil {
         }
         int i = 0;
         Object value = null;
-        
+
 /* PENDING
-    indentPrintln(out, "===>Type:" + root.getComponentType());
- */
+   indentPrintln(out, "===>Type:" + root.getComponentType());
+*/
         // drill down to the bottom of the first element in the array
         boolean foundBottom = false;
         Object state = null;
@@ -305,9 +307,9 @@ public class DebugUtil {
                 myState = (Object []) state;
             }
         }
-        
+
         indentPrintln(out, "type:" + myState[8]);
-        
+
         curDepth++;
         root = (Object []) root[1];
         for (i = 0; i < root.length; i++) {
@@ -318,6 +320,6 @@ public class DebugUtil {
 //
 // General Methods
 //
-    
-    
+
+
 } // end of class DebugUtil

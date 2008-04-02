@@ -1,5 +1,5 @@
 /*
- * $Id: TextRenderer.java,v 1.71 2005/08/22 22:10:22 ofung Exp $
+ * $Id: TextRenderer.java,v 1.72 2006/01/11 15:28:11 rlubke Exp $
  */
 
 /*
@@ -31,7 +31,8 @@
 
 package com.sun.faces.renderkit.html_basic;
 
-import com.sun.faces.util.Util;
+import com.sun.faces.util.MessageUtils;
+import com.sun.faces.renderkit.RenderKitUtils;
 
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
@@ -88,8 +89,8 @@ public class TextRenderer extends HtmlBasicInputRenderer {
     public void encodeBegin(FacesContext context, UIComponent component)
         throws IOException {
         if (context == null || component == null) {
-            throw new NullPointerException(Util.getExceptionMessageString(
-                Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+            throw new NullPointerException(MessageUtils.getExceptionMessageString(
+                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
     }
 
@@ -136,14 +137,14 @@ public class TextRenderer extends HtmlBasicInputRenderer {
             }
 
             // style is rendered as a passthur attribute
-            Util.renderPassThruAttributes(context, writer, component);
-            Util.renderBooleanPassThruAttributes(writer, component);
+            RenderKitUtils.renderPassThruAttributes(context, writer, component);
+            RenderKitUtils.renderXHTMLStyleBooleanAttributes(writer, component);
 
             writer.endElement("input");
 
         } else if (isOutput = (component instanceof UIOutput)) {
             if (null != styleClass || null != style ||
-                Util.hasPassThruAttributes(component) ||
+                RenderKitUtils.hasPassThruAttributes(component) ||
                 (shouldWriteIdAttribute = shouldWriteIdAttribute(component))) {
                 writer.startElement("span", component);
                 writeIdAttributeIfNecessary(context, writer, component);
@@ -151,8 +152,7 @@ public class TextRenderer extends HtmlBasicInputRenderer {
                     writer.writeAttribute("class", styleClass, "styleClass");
                 }
                 // style is rendered as a passthru attribute
-                Util.renderPassThruAttributes(context, writer, component);
-                Util.renderBooleanPassThruAttributes(writer, component);
+                RenderKitUtils.renderPassThruAttributes(context, writer, component);              
 
             }
             if (currentValue != null) {
@@ -177,7 +177,7 @@ public class TextRenderer extends HtmlBasicInputRenderer {
             }
         }
         if (isOutput && (null != styleClass || null != style ||
-            Util.hasPassThruAttributes(component) ||
+            RenderKitUtils.hasPassThruAttributes(component) ||
             shouldWriteIdAttribute)) {
             writer.endElement("span");
         }

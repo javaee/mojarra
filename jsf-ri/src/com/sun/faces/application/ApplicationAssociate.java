@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationAssociate.java,v 1.23 2005/11/03 19:18:20 rlubke Exp $
+ * $Id: ApplicationAssociate.java,v 1.24 2006/01/11 15:28:02 rlubke Exp $
  */
 
 /*
@@ -53,6 +53,8 @@ import com.sun.faces.spi.ManagedBeanFactory;
 import com.sun.faces.spi.ManagedBeanFactory.Scope;
 import com.sun.faces.config.beans.ResourceBundleBean;
 import com.sun.faces.util.Util;
+import com.sun.faces.util.MessageUtils;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Locale;
@@ -159,14 +161,14 @@ public class ApplicationAssociate {
         if (null == (externalContext =
                      ConfigureListener.getExternalContextDuringInitialize())) {
             throw new IllegalStateException(
-                Util.getExceptionMessageString(
-                    Util.APPLICATION_ASSOCIATE_CTOR_WRONG_CALLSTACK_ID));
+                MessageUtils.getExceptionMessageString(
+                    MessageUtils.APPLICATION_ASSOCIATE_CTOR_WRONG_CALLSTACK_ID));
         }
 
         if (null != externalContext.getApplicationMap().get(ASSOCIATE_KEY)) {
             throw new IllegalStateException(
-                Util.getExceptionMessageString(
-                    Util.APPLICATION_ASSOCIATE_EXISTS_ID));
+                MessageUtils.getExceptionMessageString(
+                    MessageUtils.APPLICATION_ASSOCIATE_EXISTS_ID));
         }
         externalContext.getApplicationMap().put(ASSOCIATE_KEY, this);
         managedBeanFactoriesMap = new HashMap<String, ManagedBeanFactory>();

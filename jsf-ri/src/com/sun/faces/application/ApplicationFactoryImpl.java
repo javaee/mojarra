@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationFactoryImpl.java,v 1.10 2005/08/22 22:10:08 ofung Exp $
+ * $Id: ApplicationFactoryImpl.java,v 1.11 2006/01/11 15:28:02 rlubke Exp $
  */
 
 /*
@@ -30,6 +30,8 @@
 package com.sun.faces.application;
 
 import com.sun.faces.util.Util;
+import com.sun.faces.util.MessageUtils;
+
 import java.util.logging.Logger;
 import java.util.logging.Level;
 
@@ -108,8 +110,8 @@ public class ApplicationFactoryImpl extends ApplicationFactory {
      */
     public void setApplication(Application application) {
         if (application == null) {
-            String message = Util.getExceptionMessageString
-                (Util.NULL_PARAMETERS_ERROR_MESSAGE_ID);
+            String message = MessageUtils.getExceptionMessageString
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
             message = message + " Application " + application;
             throw new NullPointerException(message);
         }

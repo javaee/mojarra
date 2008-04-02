@@ -1,5 +1,5 @@
 /*
- * $Id: TextRenderer.java,v 1.13 2005/11/29 16:20:16 rlubke Exp $
+ * $Id: TextRenderer.java,v 1.14 2006/01/11 15:28:15 rlubke Exp $
  */
 
 /*
@@ -36,6 +36,8 @@ import org.apache.commons.logging.LogFactory;
 
 import com.sun.faces.util.MessageFactory;
 import com.sun.faces.util.Util;
+import com.sun.faces.util.MessageUtils;
+import com.sun.faces.renderkit.RenderKitUtils;
 
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
@@ -100,8 +102,8 @@ public class TextRenderer extends Renderer {
     public void encodeBegin(FacesContext context, UIComponent component)
         throws IOException {
         if (context == null || component == null) {
-            throw new NullPointerException(Util.getExceptionMessageString(
-                Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+            throw new NullPointerException(MessageUtils.getExceptionMessageString(
+                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
     }
 
@@ -113,8 +115,8 @@ public class TextRenderer extends Renderer {
         String styleClass = null;
 
         if (context == null || component == null) {
-            throw new NullPointerException(Util.getExceptionMessageString(
-                Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+            throw new NullPointerException(MessageUtils.getExceptionMessageString(
+                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
 
         if (log.isTraceEnabled()) {
@@ -188,14 +190,14 @@ public class TextRenderer extends Renderer {
             }
 
             // style is rendered as a passthur attribute
-            Util.renderPassThruAttributes(context, writer, component);
-            Util.renderBooleanPassThruAttributes(writer, component);
+            RenderKitUtils.renderPassThruAttributes(context, writer, component);
+            RenderKitUtils.renderXHTMLStyleBooleanAttributes(writer, component);
 
             writer.endElement("input");
 
         } else if (isOutput = (component instanceof UIOutput)) {
             if (null != styleClass || null != style ||
-                Util.hasPassThruAttributes(component) ||
+                RenderKitUtils.hasPassThruAttributes(component) ||
                 (shouldWriteIdAttribute = shouldWriteIdAttribute(component))) {
                 writer.startElement("span", component);
                 writeIdAttributeIfNecessary(context, writer, component);
@@ -203,8 +205,8 @@ public class TextRenderer extends Renderer {
                     writer.writeAttribute("class", styleClass, "styleClass");
                 }
                 // style is rendered as a passthru attribute
-                Util.renderPassThruAttributes(context, writer, component);
-                Util.renderBooleanPassThruAttributes(writer, component);
+                RenderKitUtils.renderPassThruAttributes(context, writer, component);
+                RenderKitUtils.renderXHTMLStyleBooleanAttributes(writer, component);
 
             }
             if (currentValue != null) {
@@ -230,7 +232,7 @@ public class TextRenderer extends Renderer {
             }
         }
         if (isOutput && (null != styleClass || null != style ||
-            Util.hasPassThruAttributes(component) ||
+            RenderKitUtils.hasPassThruAttributes(component) ||
             shouldWriteIdAttribute)) {
             writer.endElement("span");
         }
@@ -310,7 +312,7 @@ public class TextRenderer extends Renderer {
 	    };
 	    
             throw new ConverterException(MessageFactory.getMessage(
-                context, Util.CONVERSION_ERROR_MESSAGE_ID, params));
+                context, MessageUtils.CONVERSION_ERROR_MESSAGE_ID, params));
         }
     }
     private boolean shouldWriteIdAttribute(UIComponent component) {

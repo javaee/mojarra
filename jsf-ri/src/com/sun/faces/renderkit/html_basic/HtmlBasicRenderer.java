@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderer.java,v 1.102 2005/11/29 16:20:14 rlubke Exp $
+ * $Id: HtmlBasicRenderer.java,v 1.103 2006/01/11 15:28:08 rlubke Exp $
  */
 
 /*
@@ -33,6 +33,7 @@ package com.sun.faces.renderkit.html_basic;
 
 import com.sun.faces.util.MessageFactory;
 import com.sun.faces.util.Util;
+import com.sun.faces.util.MessageUtils;
 import com.sun.faces.RIConstants;
 
 import javax.faces.component.NamingContainer;
@@ -123,8 +124,8 @@ public abstract class HtmlBasicRenderer extends Renderer {
     public void decode(FacesContext context, UIComponent component) {
 
         if (context == null || component == null) {
-            throw new NullPointerException(Util.getExceptionMessageString(
-                Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+            throw new NullPointerException(MessageUtils.getExceptionMessageString(
+                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
 
         if (logger.isLoggable(Level.FINER)) {
@@ -181,8 +182,8 @@ public abstract class HtmlBasicRenderer extends Renderer {
         ResponseWriter writer = null;       
 
         if (context == null || component == null) {
-            throw new NullPointerException(Util.getExceptionMessageString(
-                Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+            throw new NullPointerException(MessageUtils.getExceptionMessageString(
+                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
 
         if (logger.isLoggable(Level.FINER)) {
@@ -441,15 +442,15 @@ public abstract class HtmlBasicRenderer extends Renderer {
             }
         } catch (Throwable t) {
             Object[] params = {forComponent};
-            throw new RuntimeException(Util.getExceptionMessageString(
-                Util.COMPONENT_NOT_FOUND_ERROR_MESSAGE_ID, params));
+            throw new RuntimeException(MessageUtils.getExceptionMessageString(
+                MessageUtils.COMPONENT_NOT_FOUND_ERROR_MESSAGE_ID, params));
         }
         // log a message if we were unable to find the specified
         // component (probably a misconfigured 'for' attribute
         if (result == null) {
             if (logger.isLoggable(Level.WARNING)) {
-                 logger.warning(Util.getExceptionMessageString(
-                    Util.COMPONENT_NOT_FOUND_IN_VIEW_WARNING_ID,
+                 logger.warning(MessageUtils.getExceptionMessageString(
+                    MessageUtils.COMPONENT_NOT_FOUND_IN_VIEW_WARNING_ID,
                     new Object[]{forComponent}));
             }
         }

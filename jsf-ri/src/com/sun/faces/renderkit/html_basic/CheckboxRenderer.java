@@ -1,5 +1,5 @@
 /*
- * $Id: CheckboxRenderer.java,v 1.76 2005/10/18 00:27:05 rlubke Exp $
+ * $Id: CheckboxRenderer.java,v 1.77 2006/01/11 15:28:07 rlubke Exp $
  *
  */
 
@@ -41,6 +41,8 @@ import javax.faces.context.ResponseWriter;
 import javax.faces.convert.ConverterException;
 
 import com.sun.faces.util.Util;
+import com.sun.faces.util.MessageUtils;
+import com.sun.faces.renderkit.RenderKitUtils;
 
 import java.util.logging.Level;
 
@@ -92,8 +94,8 @@ public class CheckboxRenderer extends HtmlBasicInputRenderer {
     public void decode(FacesContext context, UIComponent component) {
        
         if (context == null || component == null) {
-            throw new NullPointerException(Util.getExceptionMessageString(
-                Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+            throw new NullPointerException(MessageUtils.getExceptionMessageString(
+                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
         if (logger.isLoggable(Level.FINER)) {
             logger.log(Level.FINER, 
@@ -155,7 +157,7 @@ public class CheckboxRenderer extends HtmlBasicInputRenderer {
         throws IOException {
         if (context == null || component == null) {
             throw new NullPointerException(
-                Util.getExceptionMessageString(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
     }
 
@@ -180,8 +182,8 @@ public class CheckboxRenderer extends HtmlBasicInputRenderer {
             component.getAttributes().get("styleClass"))) {
             writer.writeAttribute("class", styleClass, "styleClass");
         }
-        Util.renderPassThruAttributes(context, writer, component);
-        Util.renderBooleanPassThruAttributes(writer, component);
+        RenderKitUtils.renderPassThruAttributes(context, writer, component);
+        RenderKitUtils.renderXHTMLStyleBooleanAttributes(writer, component);
 
         writer.endElement("input");
     }

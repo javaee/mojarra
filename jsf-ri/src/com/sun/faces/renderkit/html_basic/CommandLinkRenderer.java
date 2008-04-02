@@ -1,5 +1,5 @@
 /*
- * $Id: CommandLinkRenderer.java,v 1.41 2005/11/22 18:48:33 rlubke Exp $
+ * $Id: CommandLinkRenderer.java,v 1.42 2006/01/11 15:28:07 rlubke Exp $
  */
 
 /*
@@ -45,7 +45,9 @@ import javax.faces.context.ResponseWriter;
 import javax.faces.event.ActionEvent;
 
 import com.sun.faces.RIConstants;
+import com.sun.faces.renderkit.RenderKitUtils;
 import com.sun.faces.util.Util;
+import com.sun.faces.util.MessageUtils;
 
 import java.util.logging.Level;
 
@@ -94,8 +96,8 @@ public class CommandLinkRenderer extends LinkRenderer {
     public void decode(FacesContext context, UIComponent component) {
 
         if (context == null || component == null) {
-            throw new NullPointerException(Util.getExceptionMessageString(
-                Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+            throw new NullPointerException(MessageUtils.getExceptionMessageString(
+                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
 
         if (logger.isLoggable(Level.FINER)) {
@@ -149,7 +151,7 @@ public class CommandLinkRenderer extends LinkRenderer {
 
         if (context == null || component == null) {
             throw new NullPointerException(
-                Util.getExceptionMessageString(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
         if (logger.isLoggable(Level.FINER)) {
             logger.log(Level.FINER,
@@ -197,7 +199,7 @@ public class CommandLinkRenderer extends LinkRenderer {
                                                                                                                         
         if (context == null || component == null) {
             throw new NullPointerException(
-                Util.getExceptionMessageString(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
         if (logger.isLoggable(Level.FINER)) {
             logger.log(Level.FINER,
@@ -230,7 +232,7 @@ public class CommandLinkRenderer extends LinkRenderer {
         throws IOException {
         if (context == null || component == null) {
             throw new NullPointerException(
-                Util.getExceptionMessageString(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
         UICommand command = (UICommand) component;
                                                                                                                         
@@ -249,8 +251,8 @@ public class CommandLinkRenderer extends LinkRenderer {
         
         String fieldName = getHiddenFieldName(context, component);
         if (fieldName == null) {
-            writer.write(Util.getExceptionMessageString(
-                  Util.COMMAND_LINK_NO_FORM_MESSAGE_ID));   
+            writer.write(MessageUtils.getExceptionMessageString(
+                  MessageUtils.COMMAND_LINK_NO_FORM_MESSAGE_ID));   
             writer.endElement("span");
             return;
         }
@@ -265,12 +267,9 @@ public class CommandLinkRenderer extends LinkRenderer {
         }
                                                                                                                          
         if (componentDisabled) {
-            if (shouldWriteIdAttribute(component) ||
-                Util.hasPassThruAttributes(component) ||
-                (component.getAttributes().get("style") != null) ||
-                (component.getAttributes().get("styleClass") != null)) {
+            
                 writer.endElement("span");
-            }
+           
             return;
         }
 
@@ -311,11 +310,10 @@ public class CommandLinkRenderer extends LinkRenderer {
         writer.startElement("a", command);
         writeIdAttributeIfNecessary(context, writer, command);
         writer.writeAttribute("href", "#", "href");
-        Util.renderPassThruAttributes(context, 
+        RenderKitUtils.renderPassThruAttributes(context, 
                                       writer, 
-                                      command,
-                                      new String[]{"onclick", "target"});
-        Util.renderBooleanPassThruAttributes(writer, command);
+                                      command);
+        RenderKitUtils.renderXHTMLStyleBooleanAttributes(writer, command);
 
         // render onclick
         String userOnclick = (String)command.getAttributes().get("onclick");

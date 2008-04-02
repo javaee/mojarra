@@ -1,5 +1,5 @@
 /*
- * $Id: RadioRenderer.java,v 1.74 2005/10/18 00:27:05 rlubke Exp $
+ * $Id: RadioRenderer.java,v 1.75 2006/01/11 15:28:10 rlubke Exp $
  */
 
 /*
@@ -32,6 +32,7 @@
 package com.sun.faces.renderkit.html_basic;
 
 import com.sun.faces.util.Util;
+import com.sun.faces.renderkit.RenderKitUtils;
 
 import javax.faces.component.NamingContainer;
 import javax.faces.component.UIComponent;
@@ -136,7 +137,7 @@ public class RadioRenderer extends SelectManyCheckboxListRenderer {
         writer.writeAttribute("name", component.getClientId(context),
                               "clientId");
         String idString = component.getClientId(context) + NamingContainer.SEPARATOR_CHAR +
-            new Integer(itemNumber).toString();
+                          Integer.toString(itemNumber);
         writer.writeAttribute("id", idString, "id");
 
         writer.writeAttribute("value", (getFormattedValue(context, component,
@@ -152,10 +153,13 @@ public class RadioRenderer extends SelectManyCheckboxListRenderer {
         // Apply HTML 4.x attributes specified on UISelectMany component to all 
         // items in the list except styleClass and style which are rendered as
         // attributes of outer most table.
-        Util.renderPassThruAttributes(context, writer, component,
-                                      new String[]{"style", "border"});
+        RenderKitUtils.renderPassThruAttributes(context, 
+                                                writer, 
+                                                component,
+                                                new String[] { "border", "style" });
+        RenderKitUtils.renderXHTMLStyleBooleanAttributes(writer, 
+                                                         component);
 
-        Util.renderBooleanPassThruAttributes(writer, component);
 
         writer.endElement("input");
         writer.startElement("label", component);

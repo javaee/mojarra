@@ -1,5 +1,5 @@
 /*
- * $Id: FormRenderer.java,v 1.92 2005/09/14 21:27:18 jayashri Exp $
+ * $Id: FormRenderer.java,v 1.93 2006/01/11 15:28:07 rlubke Exp $
  */
 
 /*
@@ -39,7 +39,8 @@ import javax.faces.component.UIForm;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 
-import com.sun.faces.util.Util;
+import com.sun.faces.util.MessageUtils;
+import com.sun.faces.renderkit.RenderKitUtils;
 
 import java.util.logging.Level;
 
@@ -114,8 +115,8 @@ public class FormRenderer extends HtmlBasicRenderer {
         String styleClass = null;
 
         if (context == null || component == null) {
-            throw new NullPointerException(Util.getExceptionMessageString(
-                Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+            throw new NullPointerException(MessageUtils.getExceptionMessageString(
+                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
         if (logger.isLoggable(Level.FINER)) {
             logger.log(Level.FINER, "Begin encoding component " +
@@ -152,8 +153,7 @@ public class FormRenderer extends HtmlBasicRenderer {
                     "acceptcharset");
         }
         
-        Util.renderPassThruAttributes(context, writer, component);
-        Util.renderBooleanPassThruAttributes(writer, component);
+        RenderKitUtils.renderPassThruAttributes(context, writer, component);     
         writer.writeText("\n", null);
     }
 
@@ -176,8 +176,8 @@ public class FormRenderer extends HtmlBasicRenderer {
     public void encodeEnd(FacesContext context, UIComponent component)
         throws IOException {
         if (context == null || component == null) {
-            throw new NullPointerException(Util.getExceptionMessageString(
-                Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+            throw new NullPointerException(MessageUtils.getExceptionMessageString(
+                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
         // suppress rendering if "rendered" property on the component is
         // false.

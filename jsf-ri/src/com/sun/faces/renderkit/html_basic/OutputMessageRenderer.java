@@ -1,5 +1,5 @@
 /*
- * $Id: OutputMessageRenderer.java,v 1.22 2005/08/26 15:27:16 rlubke Exp $
+ * $Id: OutputMessageRenderer.java,v 1.23 2006/01/11 15:28:10 rlubke Exp $
  */
 
 /*
@@ -31,7 +31,9 @@
 
 package com.sun.faces.renderkit.html_basic;
 
-import com.sun.faces.util.Util;
+import com.sun.faces.util.MessageUtils;
+import com.sun.faces.renderkit.RenderKitUtils;
+
 import java.util.logging.Level;
 
 import javax.faces.component.UIComponent;
@@ -93,7 +95,7 @@ public class OutputMessageRenderer extends HtmlBasicRenderer {
         throws IOException {
         if (context == null || component == null) {
             throw new NullPointerException(
-                Util.getExceptionMessageString(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
     }
 
@@ -101,8 +103,8 @@ public class OutputMessageRenderer extends HtmlBasicRenderer {
     public void encodeEnd(FacesContext context, UIComponent component)
         throws IOException {
         if (context == null || component == null) {
-            throw new NullPointerException(Util.getExceptionMessageString(
-                Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+            throw new NullPointerException(MessageUtils.getExceptionMessageString(
+                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
         if (logger.isLoggable(Level.FINER)) {
             logger.log(Level.FINER,"Begin encoding component " + component.getId());
@@ -167,7 +169,7 @@ public class OutputMessageRenderer extends HtmlBasicRenderer {
 
         boolean wroteSpan = false;
         if (null != styleClass || null != style ||
-            Util.hasPassThruAttributes(component) ||
+            RenderKitUtils.hasPassThruAttributes(component) ||
             shouldWriteIdAttribute(component)) {
             writer.startElement("span", component);
             writeIdAttributeIfNecessary(context, writer, component);
@@ -177,8 +179,7 @@ public class OutputMessageRenderer extends HtmlBasicRenderer {
                 writer.writeAttribute("class", styleClass, "styleClass");
             }
             // style is rendered as a passthru attribute
-            Util.renderPassThruAttributes(context, writer, component);
-            Util.renderBooleanPassThruAttributes(writer, component);
+            RenderKitUtils.renderPassThruAttributes(context, writer, component);            
         }
         Boolean escape = Boolean.TRUE;
         Object val = component.getAttributes().get("escape");

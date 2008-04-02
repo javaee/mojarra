@@ -1,5 +1,5 @@
 /*
- * $Id: ManagedBeanFactoryImpl.java,v 1.2 2005/08/26 15:27:03 rlubke Exp $
+ * $Id: ManagedBeanFactoryImpl.java,v 1.3 2006/01/11 15:28:03 rlubke Exp $
  */
 
 /*
@@ -55,6 +55,7 @@ import com.sun.faces.config.beans.MapEntriesBean;
 import com.sun.faces.config.beans.MapEntryBean;
 import com.sun.faces.spi.ManagedBeanFactory;
 import com.sun.faces.util.Util;
+import com.sun.faces.util.MessageUtils;
 
 import org.apache.commons.beanutils.PropertyUtils;
 
@@ -242,8 +243,8 @@ public class ManagedBeanFactoryImpl extends ManagedBeanFactory {
             Object[] obj = new Object[1];
             obj[0] = managedBean.getManagedBeanName();
             throw new FacesException(
-                Util.getExceptionMessageString(
-                    Util.CYCLIC_REFERENCE_ERROR_ID, obj)); 
+                MessageUtils.getExceptionMessageString(
+                    MessageUtils.CYCLIC_REFERENCE_ERROR_ID, obj)); 
         }
         
         //
@@ -267,8 +268,8 @@ public class ManagedBeanFactoryImpl extends ManagedBeanFactory {
             obj[0] = managedBean.getManagedBeanClass();
             obj[1] = managedBean.getManagedBeanName();
             throw new FacesException(
-                (Util.getExceptionMessageString(
-                    Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID,  obj) + ". " + 
+                (MessageUtils.getExceptionMessageString(
+                    MessageUtils.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID,  obj) + ". " + 
                     ex.getMessage()), ex);
         }
         // add the bean to the managed bean stack.
@@ -303,8 +304,8 @@ public class ManagedBeanFactoryImpl extends ManagedBeanFactory {
             Object[] obj = new Object[1];
             obj[0] = managedBean.getManagedBeanClass();
             throw new FacesException(
-                Util.getExceptionMessageString(
-                    Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, obj),
+                MessageUtils.getExceptionMessageString(
+                    MessageUtils.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, obj),
                 cnfe);
         }
         beanList.remove(managedBean.getManagedBeanName());
@@ -335,8 +336,8 @@ public class ManagedBeanFactoryImpl extends ManagedBeanFactory {
                 Object[] obj = new Object[1];
                 obj[0] = managedBean.getManagedBeanClass();
                 throw new FacesException(
-                    Util.getExceptionMessageString(
-                        Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, obj));
+                    MessageUtils.getExceptionMessageString(
+                        MessageUtils.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, obj));
             }
             result = TYPE_IS_LIST;
         }
@@ -352,8 +353,8 @@ public class ManagedBeanFactoryImpl extends ManagedBeanFactory {
                 Object[] obj = new Object[1];
                 obj[0] = managedBean.getManagedBeanClass();
                 throw new FacesException(
-                    Util.getExceptionMessageString(
-                        Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, obj));
+                    MessageUtils.getExceptionMessageString(
+                        MessageUtils.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, obj));
             }
             result = TYPE_IS_MAP;
         }
@@ -395,8 +396,8 @@ public class ManagedBeanFactoryImpl extends ManagedBeanFactory {
                 Object[] obj = new Object[1];
                 obj[0] = bean.getPropertyName();
                 throw new FacesException(
-                    Util.getExceptionMessageString(
-                        Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, obj));
+                    MessageUtils.getExceptionMessageString(
+                        MessageUtils.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, obj));
             }
             result = TYPE_IS_LIST;
         }
@@ -412,8 +413,8 @@ public class ManagedBeanFactoryImpl extends ManagedBeanFactory {
                 Object[] obj = new Object[1];
                 obj[0] = bean.getPropertyName();
                 throw new FacesException(
-                    Util.getExceptionMessageString(
-                        Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, obj));
+                    MessageUtils.getExceptionMessageString(
+                        MessageUtils.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, obj));
             }
             result = TYPE_IS_MAP;
         }
@@ -433,8 +434,8 @@ public class ManagedBeanFactoryImpl extends ManagedBeanFactory {
             Object[] obj = new Object[1];
             obj[0] = bean.getPropertyName();
             throw new FacesException(
-                Util.getExceptionMessageString(
-                    Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, obj));
+                MessageUtils.getExceptionMessageString(
+                    MessageUtils.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, obj));
         }
         return result;
     }
@@ -631,8 +632,8 @@ public class ManagedBeanFactoryImpl extends ManagedBeanFactory {
                     Object[] obj = new Object[1];
                     obj[0] = propertyName;
                     throw new FacesException(
-                        Util.getExceptionMessageString(
-                            Util.ERROR_SETTING_BEAN_PROPERTY_ERROR_MESSAGE_ID,
+                        MessageUtils.getExceptionMessageString(
+                            MessageUtils.ERROR_SETTING_BEAN_PROPERTY_ERROR_MESSAGE_ID,
                             obj),
                         ex);
                 }
@@ -704,8 +705,8 @@ public class ManagedBeanFactoryImpl extends ManagedBeanFactory {
         if (!getterIsArray) {
             if (null != propertyType &&
                 !java.util.List.class.isAssignableFrom(propertyType)) {
-                throw new FacesException(Util.getExceptionMessageString(
-                    Util.MANAGED_BEAN_CANNOT_SET_LIST_ARRAY_PROPERTY_ID,
+                throw new FacesException(MessageUtils.getExceptionMessageString(
+                    MessageUtils.MANAGED_BEAN_CANNOT_SET_LIST_ARRAY_PROPERTY_ID,
                     new Object[] { propertyName,
                                    managedBean.getManagedBeanName() }));
             }
@@ -729,8 +730,8 @@ public class ManagedBeanFactoryImpl extends ManagedBeanFactory {
                 // if what it returned was not a List
                 if (!(result instanceof List)) {
                     // throw an exception
-                    throw new FacesException(Util.getExceptionMessageString(
-                    Util.MANAGED_BEAN_EXISTING_VALUE_NOT_LIST_ID,
+                    throw new FacesException(MessageUtils.getExceptionMessageString(
+                    MessageUtils.MANAGED_BEAN_EXISTING_VALUE_NOT_LIST_ID,
                     new Object[] { propertyName,
                                    managedBean.getManagedBeanName() }));
                 }
@@ -836,8 +837,8 @@ public class ManagedBeanFactoryImpl extends ManagedBeanFactory {
 
         if (null != propertyType &&
             !java.util.Map.class.isAssignableFrom(propertyType)) {
-            throw new FacesException(Util.getExceptionMessageString(
-                    Util.MANAGED_BEAN_CANNOT_SET_MAP_PROPERTY_ID,
+            throw new FacesException(MessageUtils.getExceptionMessageString(
+                    MessageUtils.MANAGED_BEAN_CANNOT_SET_MAP_PROPERTY_ID,
                     new Object[] { propertyName,
                                    managedBean.getManagedBeanName() }));
         }
@@ -919,8 +920,8 @@ public class ManagedBeanFactoryImpl extends ManagedBeanFactory {
                 value = new Long(value.toString());
             } else if (valueType == String.class) {
             } else if (!valueType.isAssignableFrom(value.getClass())) {
-                throw new FacesException(Util.getExceptionMessageString(
-                    Util.MANAGED_BEAN_TYPE_CONVERSION_ERROR_ID,
+                throw new FacesException(MessageUtils.getExceptionMessageString(
+                    MessageUtils.MANAGED_BEAN_TYPE_CONVERSION_ERROR_ID,
                     new Object[] { value.toString(),
                                    value.getClass(),
                                    valueType,
@@ -944,8 +945,8 @@ public class ManagedBeanFactoryImpl extends ManagedBeanFactory {
             Object[] obj = new Object[1];
             obj[0] = value;
             throw new FacesException(
-                Util.getExceptionMessageString(
-                    Util.INVALID_SCOPE_LIFESPAN_ERROR_MESSAGE_ID, obj));
+                MessageUtils.getExceptionMessageString(
+                    MessageUtils.INVALID_SCOPE_LIFESPAN_ERROR_MESSAGE_ID, obj));
         }
 
         ValueExpression ve = Util.getValueExpression(value);
@@ -957,16 +958,16 @@ public class ManagedBeanFactoryImpl extends ManagedBeanFactory {
                 Object[] obj = new Object[1];
                 obj[0] = value;
                 throw new FacesException(
-                    Util.getExceptionMessageString(
-                        Util.ERROR_GETTING_VALUEREF_VALUE_ERROR_MESSAGE_ID,
+                    MessageUtils.getExceptionMessageString(
+                        MessageUtils.ERROR_GETTING_VALUEREF_VALUE_ERROR_MESSAGE_ID,
                         obj));
             }
         } else {
             Object[] obj = new Object[1];
             obj[0] = value;
             throw new FacesException(
-                Util.getExceptionMessageString(
-                    Util.ERROR_GETTING_VALUE_BINDING_ERROR_MESSAGE_ID, obj));
+                MessageUtils.getExceptionMessageString(
+                    MessageUtils.ERROR_GETTING_VALUE_BINDING_ERROR_MESSAGE_ID, obj));
         }
         return result;
     }

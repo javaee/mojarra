@@ -1,5 +1,5 @@
 /*
- * $Id: ValueChangeListenerTag.java,v 1.18 2005/08/22 22:10:28 ofung Exp $
+ * $Id: ValueChangeListenerTag.java,v 1.19 2006/01/11 15:28:12 rlubke Exp $
  */
 
 /*
@@ -42,6 +42,7 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.TagSupport;
 
 import com.sun.faces.util.Util;
+import com.sun.faces.util.MessageUtils;
 
 import java.util.logging.Logger;
 import java.util.logging.Level;
@@ -140,8 +141,8 @@ public class ValueChangeListenerTag extends TagSupport {
           //  Object[] params = {this.getClass().getName()};
 	    // PENDING(rogerk): do something with params
             throw new JspException(
-                Util.getExceptionMessageString(
-                    Util.NOT_NESTED_IN_FACES_TAG_ERROR_MESSAGE_ID));
+                MessageUtils.getExceptionMessageString(
+                    MessageUtils.NOT_NESTED_IN_FACES_TAG_ERROR_MESSAGE_ID));
         }
 
         // Nothing to do unless this tag created a component
@@ -152,13 +153,13 @@ public class ValueChangeListenerTag extends TagSupport {
         UIComponent component = tag.getComponentInstance();
         if (component == null) {
             throw new JspException(
-                Util.getExceptionMessageString(Util.NULL_COMPONENT_ERROR_MESSAGE_ID));
+                MessageUtils.getExceptionMessageString(MessageUtils.NULL_COMPONENT_ERROR_MESSAGE_ID));
         }
         if (!(component instanceof EditableValueHolder)) {
             Object[] params = {this.getClass().getName()};
             throw new JspException(
-                Util.getExceptionMessageString(
-                    Util.NOT_NESTED_IN_TYPE_TAG_ERROR_MESSAGE_ID, params));
+                MessageUtils.getExceptionMessageString(
+                    MessageUtils.NOT_NESTED_IN_TYPE_TAG_ERROR_MESSAGE_ID, params));
         }
         
         // If "binding" is set, use it to create a listener instance.

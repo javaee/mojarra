@@ -1,5 +1,5 @@
 /*
- * $Id: VariableResolverImpl.java,v 1.25 2005/08/22 22:10:13 ofung Exp $
+ * $Id: VariableResolverImpl.java,v 1.26 2006/01/11 15:28:06 rlubke Exp $
  */
 
 /*
@@ -29,21 +29,14 @@
 
 package com.sun.faces.el;
 
-import java.util.Arrays;
-
-import com.sun.faces.application.ApplicationAssociate;
-import com.sun.faces.el.ELConstants;
-
-import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.el.EvaluationException;
 import javax.faces.el.VariableResolver;
 
 import javax.el.ELResolver;
-import javax.el.ELContext;
 import javax.el.ELException;
 
-import com.sun.faces.util.Util;
+import com.sun.faces.util.MessageUtils;
 
 /**
  * <p>
@@ -52,13 +45,13 @@ import com.sun.faces.util.Util;
  */
 
 public class VariableResolverImpl extends VariableResolver {
-    
+
     private ELResolver elResolver = null;
 
     public VariableResolverImpl(ELResolver resolver ) {
         this.elResolver = resolver;
     }
-    
+
     //
     // Relationship Instance Variables
     // 
@@ -68,12 +61,12 @@ public class VariableResolverImpl extends VariableResolver {
             throws EvaluationException {
         Object result = null;
         if (context == null || name == null) {
-            String message = Util.getExceptionMessageString
-                (Util.NULL_PARAMETERS_ERROR_MESSAGE_ID);
+            String message = MessageUtils.getExceptionMessageString
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
             message = message + " context " + context + " name " + name;
             throw new NullPointerException(message);
         }
-        
+
         try {
             result = elResolver.getValue(context.getELContext(), null, name);
         } catch (ELException elex) {

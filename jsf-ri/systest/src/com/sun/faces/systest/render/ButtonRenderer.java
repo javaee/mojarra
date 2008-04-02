@@ -1,5 +1,5 @@
 /*
- * $Id: ButtonRenderer.java,v 1.3 2005/10/18 00:27:06 rlubke Exp $
+ * $Id: ButtonRenderer.java,v 1.4 2006/01/11 15:28:15 rlubke Exp $
  */
 
 /*
@@ -32,6 +32,9 @@
 package com.sun.faces.systest.render;
 
 import com.sun.faces.util.Util;
+import com.sun.faces.util.MessageUtils;
+import com.sun.faces.renderkit.RenderKitUtils;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -96,8 +99,8 @@ public class ButtonRenderer extends Renderer {
 
     public void decode(FacesContext context, UIComponent component) {
         if (context == null || component == null) {
-            throw new NullPointerException(Util.getExceptionMessageString(
-                Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+            throw new NullPointerException(MessageUtils.getExceptionMessageString(
+                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
         if (log.isTraceEnabled()) {
             log.trace("Begin decoding component " + component.getId());
@@ -151,8 +154,8 @@ public class ButtonRenderer extends Renderer {
     public void encodeBegin(FacesContext context, UIComponent component)
         throws IOException {
         if (context == null || component == null) {
-            throw new NullPointerException(Util.getExceptionMessageString(
-                Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+            throw new NullPointerException(MessageUtils.getExceptionMessageString(
+                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
         if (log.isTraceEnabled()) {
             log.trace("Begin encoding component " + component.getId());
@@ -221,9 +224,9 @@ public class ButtonRenderer extends Renderer {
         }
         writer.writeAttribute("onclick", sb.toString(), null);
 
-        Util.renderPassThruAttributes(context, writer, component, 
-				      new String[]{"onclick"});
-        Util.renderBooleanPassThruAttributes(writer, component);
+        RenderKitUtils.renderPassThruAttributes(context, writer, component
+        );
+        RenderKitUtils.renderXHTMLStyleBooleanAttributes(writer, component);
 
         if (null != (styleClass = (String)
             component.getAttributes().get("styleClass"))) {
@@ -238,8 +241,8 @@ public class ButtonRenderer extends Renderer {
     public void encodeEnd(FacesContext context, UIComponent component)
         throws IOException {
         if (context == null || component == null) {
-            throw new NullPointerException(Util.getExceptionMessageString(
-                Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+            throw new NullPointerException(MessageUtils.getExceptionMessageString(
+                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
     }
 

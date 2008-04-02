@@ -1,5 +1,5 @@
 /*
- * $Id: ManagedBeanELResolver.java,v 1.10 2005/08/26 15:27:06 rlubke Exp $
+ * $Id: ManagedBeanELResolver.java,v 1.11 2006/01/11 15:28:05 rlubke Exp $
  */
 /*
  * The contents of this file are subject to the terms
@@ -44,28 +44,28 @@ import javax.faces.context.FacesContext;
 import com.sun.faces.application.ApplicationAssociate;
 import com.sun.faces.config.ManagedBeanFactoryImpl;
 import com.sun.faces.config.beans.DescriptionBean;
-import com.sun.faces.config.beans.DisplayNameBean;
 import com.sun.faces.config.beans.ManagedBeanBean;
 import com.sun.faces.util.Util;
+import com.sun.faces.util.MessageUtils;
 
 public class ManagedBeanELResolver extends ELResolver {
 
     public ManagedBeanELResolver() {
     }
 
-    public Object getValue(ELContext context, Object base, Object property) 
+    public Object getValue(ELContext context, Object base, Object property)
         throws ELException {
         if (base != null) {
             return null;
         }
         if (property == null) {
-            String message = Util.getExceptionMessageString
-                (Util.NULL_PARAMETERS_ERROR_MESSAGE_ID);
+            String message = MessageUtils.getExceptionMessageString
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
             message = message + " base " + base + " property " + property;
             throw new PropertyNotFoundException(message);
         }
-        
-        Object result = null; 
+
+        Object result = null;
         FacesContext facesContext = (FacesContext)
             context.getContext(FacesContext.class);
         ExternalContext externalContext = facesContext.getExternalContext();
@@ -75,13 +75,13 @@ public class ManagedBeanELResolver extends ELResolver {
             || externalContext.getApplicationMap().containsKey(property)) {
             return null;
         }
-       
+
         // if it's a managed bean, try to create it
         ApplicationAssociate associate = ApplicationAssociate
                     .getInstance(facesContext.getExternalContext());
         if (null != associate) {
-            result = associate.createAndMaybeStoreManagedBeans(facesContext, 
-                ((String)property));
+            result = associate.createAndMaybeStoreManagedBeans(facesContext,
+                                                               ((String)property));
             if ( result != null) {
                 context.setPropertyResolved(true);
             }
@@ -90,12 +90,12 @@ public class ManagedBeanELResolver extends ELResolver {
     }
 
 
-    public Class getType(ELContext context, Object base, Object property) 
+    public Class getType(ELContext context, Object base, Object property)
         throws ELException {
 
         if (base == null && property == null) {
-            String message = Util.getExceptionMessageString
-                (Util.NULL_PARAMETERS_ERROR_MESSAGE_ID);
+            String message = MessageUtils.getExceptionMessageString
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
             message = message + " base " + base + " property " + property;
             throw new PropertyNotFoundException(message);
         }
@@ -105,25 +105,25 @@ public class ManagedBeanELResolver extends ELResolver {
     }
 
     public void  setValue(ELContext context, Object base, Object property,
-        Object val) throws ELException {
+                          Object val) throws ELException {
 
         if (base == null && property == null) {
-            String message = Util.getExceptionMessageString
-                (Util.NULL_PARAMETERS_ERROR_MESSAGE_ID);
+            String message = MessageUtils.getExceptionMessageString
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
             message = message + " base " + base + " property " + property;
             throw new PropertyNotFoundException(message);
         }
 
     }
 
-    public boolean isReadOnly(ELContext context, Object base, Object property) 
+    public boolean isReadOnly(ELContext context, Object base, Object property)
         throws ELException {
         if (base != null) {
             return false;
         }
         if (property == null) {
-            String message = Util.getExceptionMessageString
-                (Util.NULL_PARAMETERS_ERROR_MESSAGE_ID);
+            String message = MessageUtils.getExceptionMessageString
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
             message = message + " base " + base + " property " + property;
             throw new PropertyNotFoundException(message);
         }
@@ -132,16 +132,16 @@ public class ManagedBeanELResolver extends ELResolver {
     }
 
     public Iterator getFeatureDescriptors(ELContext context, Object base) {
-        
+
         if (base != null) {
             return null;
         }
 
         ArrayList<FeatureDescriptor> list = new ArrayList<FeatureDescriptor>();
-       
-        FacesContext facesContext = 
+
+        FacesContext facesContext =
             (FacesContext) context.getContext(FacesContext.class);
-        ApplicationAssociate associate = 
+        ApplicationAssociate associate =
             ApplicationAssociate.getInstance(facesContext.getExternalContext());
         Map mbMap = associate.getManagedBeanFactoryMap();
         if (mbMap == null) {
@@ -154,27 +154,27 @@ public class ManagedBeanELResolver extends ELResolver {
             ManagedBeanFactoryImpl managedBeanFactory = (ManagedBeanFactoryImpl)
                 entry.getValue();
             ManagedBeanBean managedBean = managedBeanFactory.getManagedBeanBean();
-            
+
             if ( managedBean != null) {
                 Locale curLocale = Util.getLocaleFromContextOrSystem(facesContext);
                 String locale = curLocale.toString();
-                DescriptionBean descBean = managedBean.getDescription(locale);                
+                DescriptionBean descBean = managedBean.getDescription(locale);
                 String desc = "";
                 descBean = (null != descBean) ? descBean :
-                    managedBean.getDescription("");
+                           managedBean.getDescription("");
                 if (null != descBean) {
                     // handle the case where the lang or xml:lang attributes
                     // are not specified on the description
                     desc = descBean.getDescription();
                 }
-                list.add(Util.getFeatureDescriptor(managedBeanName, 
-                    managedBeanName, desc, false, false, true,
-                    managedBeanFactory.getManagedBeanClass(), Boolean.TRUE));
+                list.add(Util.getFeatureDescriptor(managedBeanName,
+                                                   managedBeanName, desc, false, false, true,
+                                                   managedBeanFactory.getManagedBeanClass(), Boolean.TRUE));
             }
         }
         return list.iterator();
     }
-    
+
     public Class getCommonPropertyType(ELContext context, Object base) {
         if (base != null) {
             return null;

@@ -1,7 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<!-- DO NOT EDIT     DO NOT EDIT    DO NOT EDIT    DO NOT EDIT    DO NOT EDIT -->
-        
 <!--
  The contents of this file are subject to the terms
  of the Common Development and Distribution License
@@ -6259,9 +6256,6 @@
       <icon/>
       <property-name>acceptcharset</property-name>
       <property-class>java.lang.String</property-class>
-      <property-extension>
-        <pass-through>true</pass-through>
-      </property-extension>
     </property>
     <property>
       <description>
@@ -18849,9 +18843,10 @@
       identifier of the current view to the <code>getActionURL()</code>
       method of the <code>ViewHandler</code> for this application, then
       passing that String to the <code>encodeActionURL()</code> method
-      on the <code>ExternalContext</code>.  If the "styleClass"
-      attribute is specified, render its value as the value of the
-      "class" attribute.  Call <code>ViewHandler.writeState()</code>
+      on the <code>ExternalContext</code>.  The value of the acceptcharset
+      attribute must be rendered as the value of "accept-charset".
+      If the "styleClass" attribute is specified, render its value as the 
+      value of the "class" attribute.  Call <code>ViewHandler.writeState()</code>
       before the the close of the "form" element.  Render all the
       necessary hidden fields for all commandLink instances in the page
       just before the close of the "form" element.  Render a "name"
@@ -19091,9 +19086,6 @@
         <icon/>
         <attribute-name>acceptcharset</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
-        <attribute-extension>
-          <pass-through>true</pass-through>
-        </attribute-extension>
       </attribute>
       <attribute>
         <description>

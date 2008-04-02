@@ -1,5 +1,5 @@
 /*
- * $Id: FacesResourceBundleELResolver.java,v 1.3 2005/08/26 15:27:05 rlubke Exp $
+ * $Id: FacesResourceBundleELResolver.java,v 1.4 2006/01/11 15:28:05 rlubke Exp $
  */
 
 /*
@@ -33,6 +33,8 @@ import com.sun.faces.config.beans.DescriptionBean;
 import com.sun.faces.config.beans.DisplayNameBean;
 import com.sun.faces.config.beans.ResourceBundleBean;
 import com.sun.faces.util.Util;
+import com.sun.faces.util.MessageUtils;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Locale;
@@ -62,8 +64,8 @@ public class FacesResourceBundleELResolver extends ELResolver {
             return null;
         }
         if (null == base && null == property) {
-            String message = Util.getExceptionMessageString
-                (Util.NULL_PARAMETERS_ERROR_MESSAGE_ID);
+            String message = MessageUtils.getExceptionMessageString
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
             throw new PropertyNotFoundException(message);
         }
         ResourceBundle result = null;
@@ -89,8 +91,8 @@ public class FacesResourceBundleELResolver extends ELResolver {
         }
 
         if (null == base && null == property) {
-            String message = Util.getExceptionMessageString
-                (Util.NULL_PARAMETERS_ERROR_MESSAGE_ID);
+            String message = MessageUtils.getExceptionMessageString
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
             throw new PropertyNotFoundException(message);
         }
         
@@ -114,8 +116,8 @@ public class FacesResourceBundleELResolver extends ELResolver {
         String message = null;
 
         if (base == null && property == null) {
-            message = Util.getExceptionMessageString
-                (Util.NULL_PARAMETERS_ERROR_MESSAGE_ID);
+            message = MessageUtils.getExceptionMessageString
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
             message = message + " base " + base + " property " + property;
             throw new PropertyNotFoundException(message);
         }
@@ -128,8 +130,8 @@ public class FacesResourceBundleELResolver extends ELResolver {
         result = app.getResourceBundle(facesContext, property.toString());
         if (null != result) {
             context.setPropertyResolved(true);
-            message = Util.getExceptionMessageString
-                (Util.OBJECT_IS_READONLY);
+            message = MessageUtils.getExceptionMessageString
+                (MessageUtils.OBJECT_IS_READONLY);
             message = message + " base " + base + " property " + property;
             throw new PropertyNotWritableException(message);
         }        
@@ -143,8 +145,8 @@ public class FacesResourceBundleELResolver extends ELResolver {
             return false;
         }
         if (property == null) {
-            String message = Util.getExceptionMessageString
-                (Util.NULL_PARAMETERS_ERROR_MESSAGE_ID);
+            String message = MessageUtils.getExceptionMessageString
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
             message = message + " base " + base + " property " + property;
             throw new PropertyNotFoundException(message);
         }

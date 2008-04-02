@@ -1,5 +1,5 @@
 /*
- * $Id: FormRenderer.java,v 1.2 2005/08/22 22:10:45 ofung Exp $
+ * $Id: FormRenderer.java,v 1.3 2006/01/11 15:28:15 rlubke Exp $
  */
 
 /*
@@ -32,7 +32,9 @@
 package com.sun.faces.systest.render;
 
 import com.sun.faces.RIConstants;
-import com.sun.faces.util.Util;
+import com.sun.faces.renderkit.RenderKitUtils;
+import com.sun.faces.util.MessageUtils;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -125,8 +127,8 @@ public class FormRenderer extends Renderer {
         String styleClass = null;
 
         if (context == null || component == null) {
-            throw new NullPointerException(Util.getExceptionMessageString(
-                Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+            throw new NullPointerException(MessageUtils.getExceptionMessageString(
+                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
         if (log.isTraceEnabled()) {
             log.trace("Begin encoding component " +
@@ -161,8 +163,7 @@ public class FormRenderer extends Renderer {
                     "acceptcharset");
         }
         
-        Util.renderPassThruAttributes(context, writer, component);
-        Util.renderBooleanPassThruAttributes(writer, component);
+        RenderKitUtils.renderPassThruAttributes(context, writer, component);       
         writer.writeText("\n", null);
         
         // store the clientId of the form in request scope. This will be used
@@ -193,8 +194,8 @@ public class FormRenderer extends Renderer {
     public void encodeEnd(FacesContext context, UIComponent component)
         throws IOException {
         if (context == null || component == null) {
-            throw new NullPointerException(Util.getExceptionMessageString(
-                Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+            throw new NullPointerException(MessageUtils.getExceptionMessageString(
+                MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
         // suppress rendering if "rendered" property on the component is
         // false.

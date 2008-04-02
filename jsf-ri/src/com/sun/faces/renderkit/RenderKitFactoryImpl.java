@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKitFactoryImpl.java,v 1.23 2005/12/02 17:45:36 rlubke Exp $
+ * $Id: RenderKitFactoryImpl.java,v 1.24 2006/01/11 15:28:11 rlubke Exp $
  */
 
 /*
@@ -29,7 +29,7 @@
 
 package com.sun.faces.renderkit;
 
-import com.sun.faces.util.Util;
+import com.sun.faces.util.MessageUtils;
 
 import javax.faces.context.FacesContext;
 import javax.faces.render.RenderKit;
@@ -72,8 +72,8 @@ public class RenderKitFactoryImpl extends RenderKitFactory {
     public void addRenderKit(String renderKitId, RenderKit renderKit) {
 
         if (renderKitId == null || renderKit == null) {
-            String message = Util.getExceptionMessageString
-                (Util.NULL_PARAMETERS_ERROR_MESSAGE_ID);
+            String message = MessageUtils.getExceptionMessageString
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
             message = message + " renderKitId " + renderKitId + 
                 " renderKit " + renderKit;
             throw new NullPointerException(message);
@@ -88,8 +88,8 @@ public class RenderKitFactoryImpl extends RenderKitFactory {
     public RenderKit getRenderKit(FacesContext context, String renderKitId) {
 
         if (renderKitId == null) {
-            String message = Util.getExceptionMessageString
-                (Util.NULL_PARAMETERS_ERROR_MESSAGE_ID);
+            String message = MessageUtils.getExceptionMessageString
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
             message = message + " renderKitId " + renderKitId;
             throw new NullPointerException(message);
         }

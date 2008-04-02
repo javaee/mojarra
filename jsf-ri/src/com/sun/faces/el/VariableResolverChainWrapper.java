@@ -1,5 +1,5 @@
 /*
- * $Id: VariableResolverChainWrapper.java,v 1.2 2005/08/22 22:10:13 ofung Exp $
+ * $Id: VariableResolverChainWrapper.java,v 1.3 2006/01/11 15:28:06 rlubke Exp $
  */
 /*
  * The contents of this file are subject to the terms
@@ -28,52 +28,46 @@
 
 package com.sun.faces.el;
 
-import java.util.Arrays;
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.beans.FeatureDescriptor;
 
-import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.el.VariableResolver;
 import javax.faces.el.EvaluationException;
 
 import javax.el.ELException;
-import javax.el.PropertyNotWritableException;
 import javax.el.PropertyNotFoundException;
 import javax.el.ELContext;
 import javax.el.ELResolver;
 
-import com.sun.faces.el.ELConstants;
-import com.sun.faces.util.Util;
+import com.sun.faces.util.MessageUtils;
 
 public class VariableResolverChainWrapper extends ELResolver {
 
     private VariableResolver legacyVR = null;
-    
+
     public VariableResolverChainWrapper( VariableResolver variableResolver) {
         this.legacyVR = variableResolver;
     }
 
-    public Object getValue(ELContext context, Object base, Object property) 
+    public Object getValue(ELContext context, Object base, Object property)
         throws ELException {
-        
+
         if (base != null) {
             return null;
         }
         if ( base == null && property == null) {
-            String message = Util.getExceptionMessageString
-                (Util.NULL_PARAMETERS_ERROR_MESSAGE_ID);
+            String message = MessageUtils.getExceptionMessageString
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
             message = message + " base " + base + " property " + property;
             throw new PropertyNotFoundException(message);
         }
         Object result = null;
         context.setPropertyResolved(true);
-        FacesContext facesContext = (FacesContext) 
+        FacesContext facesContext = (FacesContext)
             context.getContext(FacesContext.class);
         try {
-            result = legacyVR.resolveVariable(facesContext, 
-                (String)property);
+            result = legacyVR.resolveVariable(facesContext,
+                                              (String)property);
         } catch (EvaluationException ex) {
             context.setPropertyResolved(false);
             throw new ELException(ex);
@@ -82,9 +76,9 @@ public class VariableResolverChainWrapper extends ELResolver {
     }
 
 
-    public Class getType(ELContext context, Object base, Object property) 
+    public Class getType(ELContext context, Object base, Object property)
         throws ELException {
-        
+
         Object result = null;
         result = getValue(context, base, property);
         if (result != null) {
@@ -94,21 +88,21 @@ public class VariableResolverChainWrapper extends ELResolver {
     }
 
     public void  setValue(ELContext context, Object base, Object property,
-        Object val) throws ELException {
-	if (null == base && null == property) {
-	    throw new PropertyNotFoundException();
-	}
+                          Object val) throws ELException {
+    if (null == base && null == property) {
+        throw new PropertyNotFoundException();
+    }
     }
 
-    public boolean isReadOnly(ELContext context, Object base, Object property) 
-        throws ELException {                      
+    public boolean isReadOnly(ELContext context, Object base, Object property)
+        throws ELException {
         if (null == base && null == property) {
-	    throw new PropertyNotFoundException();
-	}
+        throw new PropertyNotFoundException();
+    }
         return false;
     }
 
-  
+
     public Iterator getFeatureDescriptors(ELContext context, Object base) {
         return null;
     }

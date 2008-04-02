@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleImpl.java,v 1.57 2005/11/09 17:03:10 rlubke Exp $
+ * $Id: LifecycleImpl.java,v 1.58 2006/01/11 15:28:06 rlubke Exp $
  */
 
 /*
@@ -30,11 +30,12 @@
 package com.sun.faces.lifecycle;
 
 import com.sun.faces.util.Util;
+import com.sun.faces.util.MessageUtils;
+
 import java.util.logging.Logger;
 import java.util.logging.Level;
 
 import javax.faces.FacesException;
-import javax.faces.application.ViewExpiredException;
 import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseEvent;
 import javax.faces.event.PhaseId;
@@ -53,6 +54,7 @@ import com.sun.faces.el.PropertyResolverChainWrapper;
 import com.sun.faces.el.VariableResolverChainWrapper;
 import com.sun.faces.application.ApplicationAssociate;
 import com.sun.faces.el.FacesResourceBundleELResolver;
+import com.sun.faces.renderkit.RenderKitUtils;
 
 import javax.el.CompositeELResolver;
 import javax.el.ELResolver;
@@ -108,8 +110,8 @@ public class LifecycleImpl extends Lifecycle {
 
         if (context == null) {
             throw new NullPointerException
-                (Util.getExceptionMessageString
-                 (Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                (MessageUtils.getExceptionMessageString
+                 (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
 
         if (logger.isLoggable(Level.FINE)) {
@@ -145,8 +147,8 @@ public class LifecycleImpl extends Lifecycle {
 
         if (context == null) {
             throw new NullPointerException
-                (Util.getExceptionMessageString
-                 (Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                (MessageUtils.getExceptionMessageString
+                 (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
 
         if (logger.isLoggable(Level.FINE)) {
@@ -165,8 +167,8 @@ public class LifecycleImpl extends Lifecycle {
 
         if (listener == null) {
             throw new NullPointerException
-                (Util.getExceptionMessageString
-                 (Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                (MessageUtils.getExceptionMessageString
+                 (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
         if (logger.isLoggable(Level.FINE)) {
             logger.fine("addPhaseListener(" + listener.getPhaseId().toString()
@@ -195,8 +197,8 @@ public class LifecycleImpl extends Lifecycle {
 
         if (listener == null) {
             throw new NullPointerException
-                (Util.getExceptionMessageString
-                 (Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                (MessageUtils.getExceptionMessageString
+                 (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
         if (logger.isLoggable(Level.FINE)) {
             logger.fine("removePhaseListener(" +
@@ -324,7 +326,7 @@ public class LifecycleImpl extends Lifecycle {
         String renderkitId = 
                 context.getApplication().getViewHandler().
                 calculateRenderKitId(context);
-        ResponseStateManager rsm = Util.getResponseStateManager(context,
+        ResponseStateManager rsm = RenderKitUtils.getResponseStateManager(context,
                 renderkitId);
         boolean postback = rsm.isPostback(context); 
         if (postback) {

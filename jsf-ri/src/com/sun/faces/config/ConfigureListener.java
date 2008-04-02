@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListener.java,v 1.57 2005/12/08 22:00:01 rlubke Exp $
+ * $Id: ConfigureListener.java,v 1.58 2006/01/11 15:28:03 rlubke Exp $
  */
 /*
  * The contents of this file are subject to the terms
@@ -99,6 +99,7 @@ import com.sun.faces.el.FacesCompositeELResolver;
 import com.sun.faces.el.DummyPropertyResolverImpl;
 import com.sun.faces.el.DummyVariableResolverImpl;
 import com.sun.faces.util.Util;
+import com.sun.faces.util.MessageUtils;
 
 import org.apache.commons.digester.Digester;
 import org.xml.sax.Attributes;
@@ -1040,7 +1041,7 @@ public class ConfigureListener implements ServletRequestListener,
                 } catch (Exception e) {
                     Object [] args = { "phase-listener: " + listeners[i] };
                     String message =
-                        Util.getExceptionMessageString(Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID,  args);
+                        MessageUtils.getExceptionMessageString(MessageUtils.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID,  args);
                     logger.log(Level.SEVERE, message);
                     throw e;
                 }
@@ -1234,7 +1235,7 @@ public class ConfigureListener implements ServletRequestListener,
                         " renderer-type: " + config[i].getRendererType() + 
                         " renderer-class: " + config[i].getRendererClass() };
                 String message = 
-                        Util.getExceptionMessageString(Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID,  args);
+                        MessageUtils.getExceptionMessageString(MessageUtils.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID,  args);
                 logger.log(Level.SEVERE, message);
                 throw e;
             }
@@ -1281,7 +1282,7 @@ public class ConfigureListener implements ServletRequestListener,
                             config[i].getRenderKitId() +
                             " render-kit-class: " + config[i].getRenderKitClass() };
                     String message =
-                        Util.getExceptionMessageString(Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID,  args);
+                        MessageUtils.getExceptionMessageString(MessageUtils.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID,  args);
                     logger.log(Level.SEVERE, message);
                     throw e;
                             
@@ -1372,7 +1373,7 @@ public class ConfigureListener implements ServletRequestListener,
         catch (RuntimeException e) {
             Object [] args = { "Digester" };
             String message =
-                   Util.getExceptionMessageString(Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID,  args);
+                   MessageUtils.getExceptionMessageString(MessageUtils.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID,  args);
             logger.log(Level.SEVERE, message);
             throw e;
         }
@@ -1535,8 +1536,8 @@ public class ConfigureListener implements ServletRequestListener,
         if (!success) {
             String message;
             try {
-                message = Util.getExceptionMessageString
-                    (Util.OBJECT_CREATION_ERROR_ID,
+                message = MessageUtils.getExceptionMessageString
+                    (MessageUtils.OBJECT_CREATION_ERROR_ID,
                      new Object[]{});
             } catch (Exception ee) {
                 message = "One or more configured application objects " +
@@ -1594,8 +1595,8 @@ public class ConfigureListener implements ServletRequestListener,
             }
             String message = null;
             try {
-                message = Util.getExceptionMessageString
-                    (Util.CANT_PARSE_FILE_ERROR_MESSAGE_ID,
+                message = MessageUtils.getExceptionMessageString
+                    (MessageUtils.CANT_PARSE_FILE_ERROR_MESSAGE_ID,
                         new Object[]{url.toExternalForm(),
                                      ln,
                                      cn,
@@ -1638,8 +1639,8 @@ public class ConfigureListener implements ServletRequestListener,
                 !(paramValue.equals("false"))) {
 
                 if (logger.isLoggable(Level.WARNING)) {
-                    logger.warning(Util.getExceptionMessageString(
-                        Util.INVALID_INIT_PARAM_ERROR_MESSAGE_ID,
+                    logger.warning(MessageUtils.getExceptionMessageString(
+                        MessageUtils.INVALID_INIT_PARAM_ERROR_MESSAGE_ID,
                         new Object[] { paramValue, paramName }));
                 }
             }
@@ -1675,7 +1676,7 @@ public class ConfigureListener implements ServletRequestListener,
                 ServletContext.class });
         } catch (NoSuchMethodException nsme) {
             if (logger.isLoggable(Level.WARNING)) {
-                logger.warning(Util.getExceptionMessageString(Util.INCORRECT_JSP_VERSION_ID,
+                logger.warning(MessageUtils.getExceptionMessageString(MessageUtils.INCORRECT_JSP_VERSION_ID,
                 new Object [] { "getJspApplicationContext" }));
             }
             return false;

@@ -1,5 +1,5 @@
 /*
- * $Id: ImplicitObjectELResolverForJsp.java,v 1.6 2005/08/26 15:27:05 rlubke Exp $
+ * $Id: ImplicitObjectELResolverForJsp.java,v 1.7 2006/01/11 15:28:05 rlubke Exp $
  */
 /*
  * The contents of this file are subject to the terms
@@ -41,13 +41,14 @@ import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 
 import com.sun.faces.util.Util;
+import com.sun.faces.util.MessageUtils;
 
 public class ImplicitObjectELResolverForJsp extends ImplicitObjectELResolver {
 
     public ImplicitObjectELResolverForJsp() {
     }
 
-    public Object getValue(ELContext context,Object base, Object property) 
+    public Object getValue(ELContext context,Object base, Object property)
             throws ELException {
         // variable resolution is a special case of property resolution
         // where the base is null.
@@ -55,19 +56,19 @@ public class ImplicitObjectELResolverForJsp extends ImplicitObjectELResolver {
             return null;
         }
         if (property == null) {
-            String message = Util.getExceptionMessageString
-                (Util.NULL_PARAMETERS_ERROR_MESSAGE_ID);
+            String message = MessageUtils.getExceptionMessageString
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
             message = message + " base " + base + " property " + property;
             throw new PropertyNotFoundException(message);
         }
-      
-        FacesContext facesContext = 
+
+        FacesContext facesContext =
             (FacesContext)context.getContext(FacesContext.class);
-        
+
         int index = Arrays.binarySearch(IMPLICIT_OBJECTS, property);
         if (index < 0) {
             return null;
-        } 
+        }
         switch (index) {
             case FACES_CONTEXT:
                 context.setPropertyResolved(true);
@@ -78,27 +79,27 @@ public class ImplicitObjectELResolverForJsp extends ImplicitObjectELResolver {
             default:
                 return null;
         }
-       
+
     }
-        
-    public Class getType(ELContext context, Object base, Object property) 
+
+    public Class getType(ELContext context, Object base, Object property)
         throws ELException {
         if (base != null) {
             return null;
         }
         if (property == null) {
-            String message = Util.getExceptionMessageString
-                (Util.NULL_PARAMETERS_ERROR_MESSAGE_ID);
+            String message = MessageUtils.getExceptionMessageString
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
             message = message + " base " + base + " property " + property;
             throw new PropertyNotFoundException(message);
         }
-        
+
         int index = Arrays.binarySearch(IMPLICIT_OBJECTS, property);
         if (index < 0) {
             return null;
-        } 
+        }
         switch (index) {
-            case FACES_CONTEXT:                
+            case FACES_CONTEXT:
             case VIEW:
                 context.setPropertyResolved(true);
                 return null;
@@ -108,40 +109,40 @@ public class ImplicitObjectELResolverForJsp extends ImplicitObjectELResolver {
     }
 
     public void  setValue(ELContext context, Object base, Object property,
-        Object val) throws ELException {
+                          Object val) throws ELException {
         if (base != null) {
             return;
         }
         if (property == null) {
-            String message = Util.getExceptionMessageString
-                (Util.NULL_PARAMETERS_ERROR_MESSAGE_ID);
+            String message = MessageUtils.getExceptionMessageString
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
             message = message + " base " + base + " property " + property;
             throw new PropertyNotFoundException(message);
         }
-        
+
         int index = Arrays.binarySearch(IMPLICIT_OBJECTS, property);
         if (index < 0) {
             return;
-        } 
+        }
         switch (index) {
             case FACES_CONTEXT:
-                throw new PropertyNotWritableException(Util.getExceptionMessageString
-                (Util.OBJECT_IS_READONLY, new String[]{"facesContext"}));
+                throw new PropertyNotWritableException(MessageUtils.getExceptionMessageString
+                (MessageUtils.OBJECT_IS_READONLY, new String[]{"facesContext"}));
             case VIEW:
-                throw new PropertyNotWritableException(Util.getExceptionMessageString
-                (Util.OBJECT_IS_READONLY, new String[]{"view"}));
+                throw new PropertyNotWritableException(MessageUtils.getExceptionMessageString
+                (MessageUtils.OBJECT_IS_READONLY, new String[]{"view"}));
             default:
         }
     }
 
-    public boolean isReadOnly(ELContext context, Object base, Object property) 
+    public boolean isReadOnly(ELContext context, Object base, Object property)
         throws ELException {
         if (base != null) {
             return false;
         }
         if (property == null) {
-            String message = Util.getExceptionMessageString
-                (Util.NULL_PARAMETERS_ERROR_MESSAGE_ID);
+            String message = MessageUtils.getExceptionMessageString
+                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID);
             message = message + " base " + base + " property " + property;
             throw new PropertyNotFoundException(message);
         }
@@ -150,7 +151,7 @@ public class ImplicitObjectELResolverForJsp extends ImplicitObjectELResolver {
         int index = Arrays.binarySearch(IMPLICIT_OBJECTS, property);
         if (index < 0) {
             return false;
-        } 
+        }
         switch (index) {
             case FACES_CONTEXT:
                 context.setPropertyResolved(true);
@@ -167,14 +168,14 @@ public class ImplicitObjectELResolverForJsp extends ImplicitObjectELResolver {
         if (base != null) {
             return null;
         }
-       
+
         ArrayList<FeatureDescriptor> list = new ArrayList<FeatureDescriptor>(2);
         list.add(Util.getFeatureDescriptor("facesContext", "facesContext",
-        "facesContext",false, false, true, FacesContext.class, Boolean.TRUE));
+                                           "facesContext",false, false, true, FacesContext.class, Boolean.TRUE));
         list.add(Util.getFeatureDescriptor("view", "view",
-        "root",false, false, true, UIViewRoot.class, Boolean.TRUE));
+                                           "root",false, false, true, UIViewRoot.class, Boolean.TRUE));
         return list.iterator();
-       
+
     }
 
     public Class getCommonPropertyType(ELContext context, Object base) {
@@ -183,5 +184,5 @@ public class ImplicitObjectELResolverForJsp extends ImplicitObjectELResolver {
         }
         return String.class;
     }
-    
+
 }

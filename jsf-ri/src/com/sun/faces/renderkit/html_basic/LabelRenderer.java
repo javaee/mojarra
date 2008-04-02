@@ -1,5 +1,5 @@
 /*
- * $Id: LabelRenderer.java,v 1.39 2005/08/22 22:10:20 ofung Exp $
+ * $Id: LabelRenderer.java,v 1.40 2006/01/11 15:28:09 rlubke Exp $
  */
 
 /*
@@ -38,9 +38,9 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 
-import com.sun.faces.util.Util;
+import com.sun.faces.util.MessageUtils;
+import com.sun.faces.renderkit.RenderKitUtils;
 
-import java.util.logging.Logger;
 import java.util.logging.Level;
 
 /**
@@ -89,7 +89,7 @@ public class LabelRenderer extends HtmlBasicInputRenderer {
 
         if (context == null || component == null) {
             throw new NullPointerException(
-                Util.getExceptionMessageString(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
 
         if (logger.isLoggable(Level.FINER)) {
@@ -137,7 +137,7 @@ public class LabelRenderer extends HtmlBasicInputRenderer {
             writer.writeAttribute("for", forClientId, "for");
         }
 
-        Util.renderPassThruAttributes(context, writer, component);
+        RenderKitUtils.renderPassThruAttributes(context, writer, component);
         if (null != styleClass) {
             writer.writeAttribute("class", styleClass, "styleClass");
         }
@@ -179,7 +179,7 @@ public class LabelRenderer extends HtmlBasicInputRenderer {
 
         if (context == null || component == null) {
             throw new NullPointerException(
-                Util.getExceptionMessageString(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
         // render label end element if RENDER_END_ELEMENT is set.
         String render = (String) component.getAttributes().get(

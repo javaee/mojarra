@@ -1,5 +1,5 @@
 /*
- * $Id: ConvertDateTimeTag.java,v 1.20 2005/08/22 22:10:24 ofung Exp $
+ * $Id: ConvertDateTimeTag.java,v 1.21 2006/01/11 15:28:12 rlubke Exp $
  */
 
 /*
@@ -44,22 +44,23 @@ import javax.faces.FacesException;
 import javax.servlet.jsp.JspException;
 
 import com.sun.faces.util.Util;
+import com.sun.faces.util.MessageUtils;
 
 
 /**
  * <p>ConvertDateTimeTag is a ConverterTag implementation for
  * javax.faces.convert.DateTimeConverter</p>
  *
- * @version $Id: ConvertDateTimeTag.java,v 1.20 2005/08/22 22:10:24 ofung Exp $
+ * @version $Id: ConvertDateTimeTag.java,v 1.21 2006/01/11 15:28:12 rlubke Exp $
  */
 
 public class ConvertDateTimeTag extends ConverterTag {
 
     private static final long serialVersionUID = -5815655767093677438L;
     private static ValueExpression CONVERTER_ID_EXPR = null;
-    
+
     // Log instance for this class
-    private static final Logger logger = 
+    private static final Logger logger =
             Util.getLogger(Util.FACES_LOGGER + Util.TAGLIB_LOGGER);
 
     //
@@ -82,7 +83,7 @@ public class ConvertDateTimeTag extends ConverterTag {
 
 
     // Attribute Instance Variables
-    
+
     // Relationship Instance Variables
 
     //
@@ -223,7 +224,7 @@ public class ConvertDateTimeTag extends ConverterTag {
                 new Locale(localeExpression.getExpressionString(), "");
             } else {
                 Object loc = Util.evaluateValueExpression(localeExpression,
-                    elContext);
+                                                          elContext);
                 if (loc != null) {
                     if (loc instanceof String) {
                         locale = new Locale((String) loc, "");
@@ -237,12 +238,12 @@ public class ConvertDateTimeTag extends ConverterTag {
                         };
                         if (logger.isLoggable(Level.SEVERE)) {
                             logger.log(Level.SEVERE,
-                                "jsf.core.tags.eval_result_not_expected_type",
-                                params);
+                                       "jsf.core.tags.eval_result_not_expected_type",
+                                       params);
                         }
                         throw new FacesException(
-                            Util.getExceptionMessageString(
-                                Util.EVAL_ATTR_UNEXPECTED_TYPE, params));
+                            MessageUtils.getExceptionMessageString(
+                                MessageUtils.EVAL_ATTR_UNEXPECTED_TYPE, params));
                     }
                 } else {
                     locale = facesContext.getViewRoot().getLocale();
@@ -256,7 +257,7 @@ public class ConvertDateTimeTag extends ConverterTag {
                     timeZoneExpression.getExpressionString());
             } else {
                 Object tz = Util.evaluateValueExpression(timeZoneExpression,
-                    elContext);
+                                                         elContext);
                 if (tz != null) {
                     if (tz instanceof String) {
                         timeZone = TimeZone.getTimeZone((String) tz);
@@ -270,14 +271,14 @@ public class ConvertDateTimeTag extends ConverterTag {
                         };
                         if (logger.isLoggable(Level.SEVERE)) {
                             logger.log(Level.SEVERE,
-                                "jsf.core.tags.eval_result_not_expected_type",
-                                params);
+                                       "jsf.core.tags.eval_result_not_expected_type",
+                                       params);
                         }
                         throw new FacesException(
-                            Util.getExceptionMessageString(
-                                Util.EVAL_ATTR_UNEXPECTED_TYPE, params));                    
+                            MessageUtils.getExceptionMessageString(
+                                MessageUtils.EVAL_ATTR_UNEXPECTED_TYPE, params));
                     }
-                } 
+                }
             }
         }
     }
