@@ -1,5 +1,5 @@
 /*
- * $Id: FacetTag.java,v 1.7 2003/03/14 02:37:41 craigmcc Exp $
+ * $Id: FacetTag.java,v 1.8 2003/05/02 05:04:55 craigmcc Exp $
  */
 
 /*
@@ -19,7 +19,7 @@ import javax.servlet.jsp.tagext.TagSupport;
  * <code>facet</code> to the component associated with its parent.</p>
  *
  * <p>A <strong>FacetTag</strong> must have one and only one tag
- * child.  This child must be a {@link FacesTag} instance representing
+ * child.  This child must be a {@link UIComponentTag} instance representing
  * a single {@link javax.faces.component.UIComponent} instance.</p>
  */
 
@@ -41,7 +41,7 @@ public class FacetTag extends TagSupport {
 
     /**
      * The name of this facet.  This will be used as the facet name for
-     * our <code>FacesTag</code> child in our <code>FacesTag</code>
+     * our <code>UIComponentTag</code> child in our <code>UIComponentTag</code>
      * parent's facet list.
      */ 
     protected String name = null;

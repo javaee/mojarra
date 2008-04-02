@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTagTestCase.java,v 1.6 2003/05/02 04:23:46 craigmcc Exp $
+ * $Id: UIComponentTagTestCase.java,v 1.1 2003/05/02 05:05:00 craigmcc Exp $
  */
 
 /*
@@ -39,10 +39,10 @@ import javax.faces.mock.MockServletContext;
 
 
 /**
- * <p>Base unit tests for all FacesTag classes.</p>
+ * <p>Base unit tests for all UIComponentTag classes.</p>
  */
 
-public class FacesTagTestCase extends TestCase {
+public class UIComponentTagTestCase extends TestCase {
 
 
     // ----------------------------------------------------- Instance Variables
@@ -69,7 +69,7 @@ public class FacesTagTestCase extends TestCase {
      *
      * @param name Name of the test case
      */
-    public FacesTagTestCase(String name) {
+    public UIComponentTagTestCase(String name) {
 
         super(name);
 
@@ -112,7 +112,7 @@ public class FacesTagTestCase extends TestCase {
      */
     public static Test suite() {
 
-        return (new TestSuite(FacesTagTestCase.class));
+        return (new TestSuite(UIComponentTagTestCase.class));
 
     }
 
@@ -341,8 +341,8 @@ public class FacesTagTestCase extends TestCase {
     protected void configure(String id1, String id2,
                              boolean rendered, boolean children) {
 
-        FacesTag a = new TestTag("A", "a");
-        FacesTag b2 = new TestTag("B2", "b2");
+        UIComponentTag a = new TestTag("A", "a");
+        UIComponentTag b2 = new TestTag("B2", "b2");
         b2.setRendered(rendered);
         ((TestTag) b2).setRendersChildren(children);
         FacetTag f1 = new FacetTag();

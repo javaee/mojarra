@@ -1,5 +1,5 @@
 /*
- * $Id: AttributeTag.java,v 1.4 2003/02/20 22:46:43 ofung Exp $
+ * $Id: AttributeTag.java,v 1.5 2003/05/02 05:04:54 craigmcc Exp $
  */
 
 /*
@@ -73,7 +73,7 @@ public class AttributeTag extends TagSupport {
     /**
      * <p>Register the specified attribute name and value with the
      * {@link UIComponent} instance associated with our most immediately
-     * surrounding {@link FacesTag} instance, if this {@link UIComponent}
+     * surrounding {@link UIComponentTag} instance, if this {@link UIComponent}
      * does not already have a value for the specified attribute name.</p>
      *
      * @exception JspException if a JSP error occurs
@@ -82,17 +82,17 @@ public class AttributeTag extends TagSupport {
 
         // Locate the appropriate UIComponent instance
         Tag tag = getParent();
-        while ((tag != null) && !(tag instanceof FacesTag)) {
+        while ((tag != null) && !(tag instanceof UIComponentTag)) {
             tag = tag.getParent();
         }
         if (tag == null) { // FIXME - i18n
-            throw new JspException("Not nested in a FacesTag");
+            throw new JspException("Not nested in a UIComponentTag");
         }
 
         // Add this attribute if it is not already defined
-        UIComponent component = ((FacesTag) tag).getComponent();
+        UIComponent component = ((UIComponentTag) tag).getComponent();
         if (component == null) { // FIXME - i18n
-            throw new JspException("No component associated with FacesTag");
+            throw new JspException("No component associated with UIComponentTag");
         }
         if (component.getAttribute(name) == null) {
             component.setAttribute(name, value);

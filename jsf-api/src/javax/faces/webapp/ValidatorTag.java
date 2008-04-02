@@ -1,5 +1,5 @@
 /*
- * $Id: ValidatorTag.java,v 1.5 2003/02/20 22:46:45 ofung Exp $
+ * $Id: ValidatorTag.java,v 1.6 2003/05/02 05:04:55 craigmcc Exp $
  */
 
 /*
@@ -21,11 +21,11 @@ import javax.servlet.jsp.tagext.TagSupport;
  * <p><strong>ValidatorTag</strong> is a base class for all JSP custom actions
  * that create and register a <code>Validator</code> instance on the
  * {@link UIComponent} associated with our most immediate surrounding instance
- * of a tag whose implementation class is a subclass of {@link FacesTag}.
+ * of a tag whose implementation class is a subclass of {@link UIComponentTag}.
  * To avoid creating duplicate instances when a page is redisplayed,
  * creation and registration of a {@link Validator} occurs
  * <strong>only</strong> if the corresponding {@link UIComponent} was
- * created (by the owning {@link FacesTag}) during the execution of the
+ * created (by the owning {@link UIComponentTag}) during the execution of the
  * current page.</p>
  *
  * <p>This class may be used directly to implement a generic validator
@@ -76,7 +76,7 @@ public class ValidatorTag extends TagSupport {
     /**
      * <p>Create a new instance of the specified {@link Validator}
      * class, and register it with the {@link UIComponent} instance associated
-     * with our most immediately surrounding {@link FacesTag} instance, if
+     * with our most immediately surrounding {@link UIComponentTag} instance, if
      * the {@link UIComponent} instance was created by this execution of the
      * containing JSP page.</p>
      *
@@ -84,15 +84,15 @@ public class ValidatorTag extends TagSupport {
      */
     public int doStartTag() throws JspException {
 
-        // Locate our parent FacesTag
+        // Locate our parent UIComponentTag
         Tag tag = getParent();
-        while ((tag != null) && !(tag instanceof FacesTag)) {
+        while ((tag != null) && !(tag instanceof UIComponentTag)) {
             tag = tag.getParent();
         }
         if (tag == null) { // FIXME - i18n
-            throw new JspException("Not nested in a FacesTag");
+            throw new JspException("Not nested in a UIComponentTag");
         }
-        FacesTag facesTag = (FacesTag) tag;
+        UIComponentTag facesTag = (UIComponentTag) tag;
 
         // Nothing to do unless this tag created a component
         if (!facesTag.getCreated()) {

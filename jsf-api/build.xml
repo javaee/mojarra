@@ -197,7 +197,7 @@
                 test.UISelectOne,
                 test.UINamingContainer,
                 test.ConfigFile,
-                test.FacesTag">
+                test.UIComponentTag">
   </target>
 
   <target name="test.UIComponent" depends="build.test">
@@ -349,14 +349,14 @@
   </target>
 
 
-  <target name="test.FacesTag" depends="build.test">
-    <echo message="Running FacesTag tests ..."/>
+  <target name="test.UIComponentTag" depends="build.test">
+    <echo message="Running UIComponentTag tests ..."/>
     <java classname="${test.runner}" fork="yes"
         failonerror="${test.failonerror}">
       <jvmarg line="${debug.jvm.args}"/>
       <sysproperty key="javax.faces.application.ApplicationFactory"
                  value="javax.faces.mock.MockApplicationFactory"/>
-      <arg value="javax.faces.webapp.FacesTagTestCase"/>
+      <arg value="javax.faces.webapp.UIComponentTagTestCase"/>
       <classpath refid="test.classpath"/>
     </java>
   </target>
