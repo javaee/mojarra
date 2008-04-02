@@ -1,5 +1,5 @@
 /*
- * $Id: UICommand.java,v 1.36 2003/06/21 00:17:44 craigmcc Exp $
+ * $Id: UICommand.java,v 1.37 2003/07/20 01:05:17 craigmcc Exp $
  */
 
 /*
@@ -38,7 +38,7 @@ import javax.faces.event.PhaseId;
  * <code>setRendererType()</code> method.</p>
  */
 
-public class UICommand extends UIComponentBase {
+public class UICommand extends UIOutput {
 
 
     // ------------------------------------------------------- Static Variables
