@@ -885,7 +885,7 @@ public class UIData extends UIComponentBase
             this.model = (DataModel) current;
         } else if (current instanceof List) {
             this.model = new ListDataModel((List) current);
-        } else if (isObjectArray(current)) {
+        } else if (Object[].class.isAssignableFrom(current.getClass())) {
             this.model = new ArrayDataModel((Object[]) current);
         } else if (current instanceof ResultSet) {
             this.model = new ResultSetDataModel((ResultSet) current);
@@ -895,24 +895,6 @@ public class UIData extends UIComponentBase
             this.model = new ScalarDataModel(current);
         }
 	return (model);
-
-    }
-
-
-    /**
-     * <p>Return <code>true</code> if the specified object is an array
-     * of Objects.</p>
-     *
-     * @param current Object to be inspected
-     */
-    private boolean isObjectArray(Object current) {
-
-        Object array[] = new Object[0];
-        if (array.getClass().isAssignableFrom(current.getClass())) {
-            return (true);
-        } else {
-            return (false);
-        }
 
     }
 
