@@ -59,6 +59,8 @@
             value="web/WEB-INF/lib/commons-beanutils.jar"/>
   <property name="commons-collections.jar"
   	    value="web/WEB-INF/lib/commons-collections.jar"/>
+  <property name="jstl_el.jar"
+  	    value="web/WEB-INF/lib/jstl_el.jar"/>
   <property name="commons-logging.jar" 
             value="web/WEB-INF/lib/commons-logging.jar"/>
   <property name="commons-digester.jar" 
@@ -111,6 +113,11 @@
        <param name="fail.message" value="${commons-collections.jar} must exist."/>
     </antcall>
 
+    <antcall target="checkRequiredFile">
+       <param name="file" value="${jstl_el.jar}"/>
+       <param name="fail.message" value="${jstl_el.jar} must exist."/>
+    </antcall>
+    
     <antcall target="checkRequiredFile">
        <param name="file" value="${jsf-api.jar}"/>
        <param name="fail.message" value="${jsf-api.jar} must exist."/>

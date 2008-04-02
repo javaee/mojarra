@@ -39,6 +39,8 @@
             value="${jsf.ri.home}/lib/commons-digester.jar" />
   <property name="commons-collections.jar" 
             value="${jsf.ri.home}/lib/commons-collections.jar" />
+  <property name="jstl_el.jar" 
+            value="${jsf.ri.home}/lib/jstl_el.jar" />
   <property name="jsf-api.jar" 
             value="${jsf.api.home}/build/lib/jsf-api.jar" />
   <property name="jsf-ri.jar" 
@@ -101,6 +103,7 @@
     <copy todir="${demoDir}/web/WEB-INF/lib" file="${commons-logging.jar}" />
     <copy todir="${demoDir}/web/WEB-INF/lib" file="${commons-digester.jar}" />
     <copy todir="${demoDir}/web/WEB-INF/lib" file="${commons-collections.jar}" />
+    <copy todir="${demoDir}/web/WEB-INF/lib" file="${jstl_el.jar}" />
     <copy todir="${demoDir}/web/WEB-INF/lib" file="${jsf-api.jar}" />
     <copy todir="${demoDir}/web/WEB-INF/lib" file="${jsf-ri.jar}" />
     <copy todir="${demoDir}/web/WEB-INF/lib" file="${standard.jar}" />
@@ -114,6 +117,7 @@
     <delete file="${demoDir}/web/WEB-INF/lib/commons-logging.jar" />
     <delete file="${demoDir}/web/WEB-INF/lib/commons-digester.jar" />
     <delete file="${demoDir}/web/WEB-INF/lib/commons-collections.jar" />
+    <delete file="${demoDir}/web/WEB-INF/lib/jstl_el.jar" />
     <delete file="${demoDir}/web/WEB-INF/lib/jsf-api.jar" />
     <delete file="${demoDir}/web/WEB-INF/lib/jsf-ri.jar" />
     <delete file="${demoDir}/web/WEB-INF/lib/standard.jar" />
