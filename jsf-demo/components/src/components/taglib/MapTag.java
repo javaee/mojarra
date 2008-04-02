@@ -84,9 +84,9 @@ public class MapTag extends UIComponentTag {
     protected void overrideProperties(UIComponent component) {
         super.overrideProperties(component);
         MapComponent map = (MapComponent) component;
-        if (current != null) {
-            map.setCurrent(current);
-        }
+	//        if (current != null) {
+	//            map.setCurrent(current);
+	//        }
         if (styleClass != null) {
             map.getAttributes().put("styleClass", styleClass);
         }
