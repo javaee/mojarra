@@ -6,206 +6,215 @@
 -->
 
 <messages>
-  <message messageId="MSG0001" severity="1" summary="{0} is not a valid number.">
-  	<detail>Please re-enter a valid number.</detail>
-  </message>
-  <message messageId="MSG0002" severity="2" summary="{0} is not a valid date." >
-      <detail>Please re-enter date in mm/dd/yy format.</detail>
-  </message>
-  <message messageId="MSG0003" severity="3" summary="{0} field cannot be empty." />
-  <message messageId="MSG0004" severity="2" summary="{0} out of range." >
-      <detail>Value should be between {1} and {2}.</detail>
-  </message>
-  <message messageId="MSG0005" severity="4" summary="Conversion Error." >
-      <detail>Conversion error setting value {0} for model {1} : Exception: [2].</detail>
-  </message>
-  <message messageId="com.sun.faces.TYPECONVERSION_ERROR" severity="4" summary="Conversion Error." >
-      <detail>Conversion error setting value {0} for model {1} : Exception: [2].</detail>
+  <message messageId="MSG0001" 
+           severity="1" 
+           summary="''{0}'' is not a valid number.">
+    <detail>Please re-enter a valid number.</detail>
   </message>
 
-  <message messageId="com.sun.faces.MODELUPDATE_ERROR" severity="4" summary="Model Update failure." >
-      <detail>Error updating value {0} for model {1} : Exception: [2].</detail>
+  <message messageId="MSG0002" 
+           severity="2" 
+           summary="''{0}'' is not a valid date. Please re-enter date in mm/dd/yy format." />
+
+  <message messageId="MSG0003" 
+           severity="3" 
+           summary="''{0}'' field cannot be empty." />
+
+  <message messageId="MSG0004" 
+           severity="2" 
+           summary="''{0}'' out of range. Value should be between ''{1}'' and ''{2}''." />
+
+  <message messageId="MSG0005" 
+           severity="4" 
+           summary="Conversion Error setting value ''{0}'' for ''{1}''." />
+
+  <message messageId="com.sun.faces.TYPECONVERSION_ERROR" 
+           severity="4" 
+           summary="Conversion Error setting value ''{0}'' for ''{1}''." >
+    <detail>Conversion Error setting value ''{0}'' for model ''{1}'' : Exception: [2].</detail>
   </message>
 
-  <message messageId="com.sun.faces.FACES_CONTEXT_CONSTRUCTION_ERROR" severity="1" summary="Construction Error." >
-      <detail>Cannot create FacesContext.  One or more input paramters might be null.</detail>
+  <message messageId="com.sun.faces.MODELUPDATE_ERROR" 
+           severity="4" 
+           summary="Model Update failure for value ''{0}'' in model''{1}''." >
+    <detail>Error updating value ''{0}'' for model ''{1}'' : Exception: [2].</detail>
   </message>
 
-  <message messageId="com.sun.faces.NULL_COMPONENT_ERROR" severity="1" summary="Construction Error." >
-      <detail>Component argument is null.</detail>
-  </message>
+  <message messageId="com.sun.faces.FACES_CONTEXT_CONSTRUCTION_ERROR" 
+           severity="1" 
+           summary="Construction Error: One or more input parameters may be null." />
 
-  <message messageId="com.sun.faces.NULL_REQUEST_TREE_ERROR" severity="1" summary="Argument Error." >
-      <detail>requestTree argument is null.</detail>
-  </message>
+  <message messageId="com.sun.faces.NULL_COMPONENT_ERROR" 
+           severity="1" 
+           summary="Construction Error: Component argument is null." />
 
-  <message messageId="com.sun.faces.NULL_RESPONSE_TREE_ERROR" severity="1" summary="Argument Error." >
-      <detail>responseTree argument is null.</detail>
-  </message>
+  <message messageId="com.sun.faces.NULL_REQUEST_TREE_ERROR" 
+           severity="1" 
+           summary="Argument Error: RequestTree argument is null." />
 
-  <message messageId="com.sun.faces.REQUEST_TREE_ALREADY_SET_ERROR" severity="1" summary="State Error." >
-      <detail>requestTree has already been set for this request.</detail>
-  </message>
+  <message messageId="com.sun.faces.NULL_RESPONSE_TREE_ERROR" 
+           severity="1" 
+           summary="Argument Error: ResponseTree argument is null." />
 
-  <message messageId="com.sun.faces.NULL_MESSAGE_ERROR" severity="1" summary="Argument Error." >
-      <detail>Message parameter cannot be null.</detail>
-  </message>
+  <message messageId="com.sun.faces.REQUEST_TREE_ALREADY_SET_ERROR" 
+           severity="1" 
+           summary="State Error: RequestTree has already been set for this request." />
 
-  <message messageId="com.sun.faces.NULL_PARAMETERS_ERROR" severity="1" summary="Argument Error." >
-      <detail>One or more parameters could be null.</detail>
-  </message>
+  <message messageId="com.sun.faces.NULL_MESSAGE_ERROR" 
+           severity="1" 
+           summary="Argument Error: Message parameter cannot be null" />
 
-  <message messageId="com.sun.faces.NAMED_OBJECT_NOT_FOUND_ERROR" severity="1" summary="Expression Error." >
-      <detail>Named Object: ''{0}'' not found.</detail>
-  </message>
+  <message messageId="com.sun.faces.NULL_PARAMETERS_ERROR" 
+           severity="1" 
+           summary="Argument Error: One or more parameters are null." />
 
-  <message messageId="com.sun.faces.NULL_RESPONSE_STREAM_ERROR" severity="1" summary="Argument Error." >
-      <detail>responseStream argument is null.</detail>
-  </message>
+  <message messageId="com.sun.faces.NAMED_OBJECT_NOT_FOUND_ERROR" 
+           severity="1" 
+           summary="Expression Error: Named Object: ''{0}'' not found." />
 
-  <message messageId="com.sun.faces.NULL_RESPONSE_WRITER_ERROR" severity="1" summary="Argument Error." >
-      <detail>responseWriter argument is null.</detail>
-  </message>
+  <message messageId="com.sun.faces.NULL_RESPONSE_STREAM_ERROR" 
+           severity="1" 
+           summary="Argument Error: ResponseStream argument is null." />
 
-  <message messageId="com.sun.faces.NULL_EVENT_ERROR" severity="1" summary="Argument Error." >
-      <detail>event argument is null.</detail>
-  </message>
+  <message messageId="com.sun.faces.NULL_RESPONSE_WRITER_ERROR" 
+           severity="1" 
+           summary="Argument Error: ResponseWriter argument is null." />
 
-  <message messageId="com.sun.faces.NULL_HANDLER_ERROR" severity="1" summary="Argument Error." >
-      <detail>handler argument is null.</detail>
-  </message>
+  <message messageId="com.sun.faces.NULL_EVENT_ERROR" 
+           severity="1" 
+           summary="Argument Error: Event argument is null." />
 
-  <message messageId="com.sun.faces.NULL_CONTEXT_ERROR" severity="1" summary="Argument Error." >
-      <detail>context argument is null.</detail>
-  </message>
+  <message messageId="com.sun.faces.NULL_HANDLER_ERROR" 
+           severity="1" 
+           summary="Argument Error: Handler argument is null." />
 
-  <message messageId="com.sun.faces.NULL_LOCALE_ERROR" severity="1" summary="Argument Error." >
-      <detail>locale argument is null.</detail>
-  </message>
+  <message messageId="com.sun.faces.NULL_CONTEXT_ERROR" 
+           severity="1" 
+           summary="Argument Error: Context argument is null." />
 
-  <message messageId="com.sun.faces.SUPPORTS_COMPONENT_ERROR" severity="1" summary="Argument Error." >
-      <detail>Component Type: ''{0}'' is not supported for this renderer.</detail>
-  </message>
+  <message messageId="com.sun.faces.NULL_LOCALE_ERROR" 
+           severity="1" 
+           summary="Argument Error: Locale argument is null." />
 
-   <message messageId="com.sun.faces.MISSING_RESOURCE_ERROR" severity="3" summary="Missing Resource." >
-      <detail>Can''t get ResourceBundle.</detail>
-  </message>
+  <message messageId="com.sun.faces.SUPPORTS_COMPONENT_ERROR" 
+           severity="1" 
+           summary="Argument Error: ''{0}'' is not supported for this renderer." />
 
-  <message messageId="com.sun.faces.MISSING_CLASS_ERROR" severity="1" summary="Missing Class." >
-      <detail>Can''t load class ''{0}''.</detail>
-  </message>
+   <message messageId="com.sun.faces.MISSING_RESOURCE_ERROR" 
+            severity="3" 
+            summary="Missing Resource: Cann''t get ResourceBundle." />
 
-  <message messageId="com.sun.faces.COMPONENT_NOT_FOUND_ERROR" severity="3" summary="Component Not Found.">
-      <detail>Can''t find component for identifier: ''{0}''.</detail>
-  </message>
+  <message messageId="com.sun.faces.MISSING_CLASS_ERROR" 
+           severity="1" 
+           summary="Missing Class: Can''t load class ''{0}''." />
 
-  <message messageId="com.sun.faces.LIFECYCLE_ID_ALREADY_ADDED" severity="3" summary="LifecycleId already added.">
-      <detail>Lifecylce id ''{0}'' has already been added.</detail>
-  </message>
+  <message messageId="com.sun.faces.COMPONENT_NOT_FOUND_ERROR" 
+           severity="3" 
+           summary="Component Not Found for identifier: ''{0}''." />
 
-  <message messageId="com.sun.faces.LIFECYCLE_ID_NOT_FOUND" severity="3" summary="LifecycleId id not found.">
-      <detail>Lifecylce id ''{0}'' not found.</detail>
-  </message>
+  <message messageId="com.sun.faces.LIFECYCLE_ID_ALREADY_ADDED" 
+           severity="3" 
+           summary="LifecycleId already added for id: ''{0}''." />
 
-  <message messageId="com.sun.faces.PHASE_ID_OUT_OF_BOUNDS" severity="3" summary="Phase id out of bounds.">
-      <detail>PhaseId ''{0}'' out of bounds.</detail>
-  </message>
+  <message messageId="com.sun.faces.LIFECYCLE_ID_NOT_FOUND" 
+           severity="3" 
+           summary="LifecycleId not found for id ''{0}''." />
 
-  <message messageId="com.sun.faces.CANT_CREATE_LIFECYCLE_ERROR" severity="3" summary="Can''t create Lifecycle.">
-      <detail>Can''t create lifecycle for id ''{0}''.</detail>
-  </message>
+  <message messageId="com.sun.faces.PHASE_ID_OUT_OF_BOUNDS" 
+           severity="3" 
+           summary="PhaseId out of bounds for id: ''{0}''." />
 
-  <message messageId="com.sun.faces.ILLEGAL_MODEL_REFERENCE" severity="3" summary="Illegal Model Reference.">
-      <detail>ModelReference expression ''{0}'' is illegal in this context.</detail>
-  </message>
+  <message messageId="com.sun.faces.CANT_CREATE_LIFECYCLE_ERROR" 
+           severity="3" 
+           summary="Can''t create Lifecycle for id: ''{0}''." />
 
-  <message messageId="com.sun.faces.ATTRIBUTE_NOT_SUPORTED" severity="3" summary="Attribute not supported">
-      <detail>Attribute ''{0}'' is not supported for the component type ''{1}''.</detail>
-  </message>
+  <message messageId="com.sun.faces.ILLEGAL_MODEL_REFERENCE" 
+           severity="3" 
+           summary="Illegal Model Reference in this context for expression ''{0}''." />
 
-  <message messageId="com.sun.faces.FILE_NOT_FOUND" severity="3" summary="File Not Found">
-      <detail>File ''{0}'' not found.</detail>
-  </message>
+  <message messageId="com.sun.faces.ATTRIBUTE_NOT_SUPORTED" 
+           severity="3" 
+           summary="Attribute ''{0}'' not supported for component type ''{1}''." />
 
-  <message messageId="com.sun.faces.CANT_PARSE_FILE" severity="3" summary="Can''t parse file">
-      <detail>Can''t parse file ''{0}''.</detail>
-  </message>
+  <message messageId="com.sun.faces.FILE_NOT_FOUND" 
+           severity="3" 
+           summary="File Not Found for file: ''{0}''." />
 
-  <message messageId="com.sun.faces.CANT_INSTANTIATE_CLASS" severity="3" summary="Can''t instantiate class">
-      <detail>Can''t instantiate class ''{0}''.</detail>
-  </message>
+  <message messageId="com.sun.faces.CANT_PARSE_FILE" 
+           severity="3" summary="Can''t parse file: ''{0}''." />
 
-  <message messageId="com.sun.faces.ILLEGAL_CHARACTERS_ERROR" severity="3" summary="Characters not allowed">
-      <detail>Characters not allowed.</detail>
-  </message>
+  <message messageId="com.sun.faces.CANT_INSTANTIATE_CLASS" 
+           severity="3" 
+           summary="Can''t instantiate class: ''{0}''." />
 
-  <message messageId="com.sun.faces.NOT_NESTED_IN_FACES_TAG_ERROR" severity="3" summary="Not nested in a FacesTag">
-      <detail>Tag with handler class ''{0}'' not nested in a FacesTag.</detail>
-  </message>
+  <message messageId="com.sun.faces.ILLEGAL_CHARACTERS_ERROR" 
+           severity="3" 
+           summary="Characters not allowed." />
 
-  <message messageId="com.sun.faces.NULL_BODY_CONTENT_ERROR" severity="3" summary="BodyContent is null">
-      <detail>BodyContent of tag with handler class ''{0}'' is null.</detail>
-  </message>
+  <message messageId="com.sun.faces.NOT_NESTED_IN_FACES_TAG_ERROR" 
+           severity="3" 
+           summary="Not nested in a FacesTag Error for tag with handler class: ''{0}''." />
 
-  <message messageId="com.sun.faces.SAVING_STATE_ERROR" severity="3" summary="Error while saving state">
-      <detail>Error while saving state in ''{0}'': ''{1}''.</detail>
-  </message>
+  <message messageId="com.sun.faces.NULL_BODY_CONTENT_ERROR" 
+           severity="3" 
+           summary="BodyContent is null for tag with handler class: ''{0}''." />
 
-  <message messageId="com.sun.faces.RENDERER_ALREADY_EXISTS" severity="3" summary="Renderer for type already exists">
-      <detail>Renderer for type ''{0}'': already exists.</detail>
-  </message>
+  <message messageId="com.sun.faces.SAVING_STATE_ERROR" 
+           severity="3" 
+           summary="Error while saving state in ''{0}'': ''{1}''." />
 
-  <message messageId="com.sun.faces.RENDERER_NOT_FOUND" severity="3" summary="Renderer not found for Renderer type">
-      <detail>Renderer for type ''{0}'': not found.</detail>
-  </message>
+  <message messageId="com.sun.faces.RENDERER_ALREADY_EXISTS" 
+           severity="3" 
+           summary="Renderer for type ''{0}'' already exists." />
 
-  <message messageId="com.sun.faces.MAXIMUM_EVENTS_REACHED" severity="3" summary="Maximum number of events reached">
-      <detail>Maximum number of events ''{0}'' processed.</detail>
-  </message>
+  <message messageId="com.sun.faces.RENDERER_NOT_FOUND" 
+           severity="3" 
+           summary="Renderer not found for Renderer type: ''{0}''." />
 
-  <message messageId="com.sun.faces.NO_ACTION_FROM_ACTIONREF" severity="3" summary="Can''t get Action from Action Reference">
-      <detail>Can''t get Action from Action Reference: ''{0}'' .</detail>
-  </message>
+  <message messageId="com.sun.faces.MAXIMUM_EVENTS_REACHED" 
+           severity="3" 
+           summary="Maximum number of events ''{0}'' reached." />
 
- <message messageId="com.sun.faces.NULL_CONFIGURATION" severity="3" summary="No Configuration loaded for the application.">
-     <detail>There is no Configuration loaded for the application.</detail>
- </message>
+  <message messageId="com.sun.faces.NO_ACTION_FROM_ACTIONREF" 
+           severity="3" 
+           summary="Can''t get Action from Action Reference: ''{0}''." />
 
-  <message messageId="com.sun.faces.ERROR_OPENING_FILE" severity="3" summary="Can''t open configuration file">
-      <detail>Can''t open configuration file: ''{0}'' .</detail>
-  </message>
+  <message messageId="com.sun.faces.NULL_CONFIGURATION" 
+           severity="3" 
+           summary="No Configuration loaded for the application." />
 
-  <message messageId="com.sun.faces.ERROR_REGISTERING_DTD" severity="3" summary="Can''t register DTD">
-      <detail>Can''t register DTD: ''{0}'' .</detail>
-  </message>
+  <message messageId="com.sun.faces.ERROR_OPENING_FILE" 
+           severity="3" 
+           summary="Can''t open configuration file: ''{0}''." />
 
-  <message messageId="com.sun.faces.INVALID_INIT_PARAM" severity="3" summary="Invalid initialization parameter.">
-      <detail>''{0}'' inititialization parameter is not specified correctly.</detail>
-  </message>
+  <message messageId="com.sun.faces.ERROR_REGISTERING_DTD" 
+           severity="3" summary="Can''t register DTD: ''{0}''." />
 
-  <message messageId="com.sun.faces.ERROR_SETTING_BEAN_PROPERTY" severity="3" summary="Can''t set managed bean property">
-      <detail>Can''t managed bean property: ''{0}'' .</detail>
-  </message>
+  <message messageId="com.sun.faces.INVALID_INIT_PARAM" 
+           severity="3" summary="Invalid initialization parameter: ''{0}''." />
 
-  <message messageId="com.sun.faces.ERROR_GETTING_VALUE_BINDING" severity="3" summary="Can''t get ValueBinding">
-      <detail>Can''t get ValueBinding for value: ''{0}'' .</detail>
-  </message>
+  <message messageId="com.sun.faces.ERROR_SETTING_BEAN_PROPERTY" 
+           severity="3" 
+           summary="Can''t set managed bean property: ''{0}''." />
 
-  <message messageId="com.sun.faces.ERROR_GETTING_VALUEREF_VALUE" severity="3"
-summary="Can''t get value from value reference expression">
-      <detail>Can''t get value from value reference expression: ''{0}'' .</detail>
-  </message>
+  <message messageId="com.sun.faces.ERROR_GETTING_VALUE_BINDING" 
+           severity="3" 
+           summary="Can''t get ValueBinding for value: ''{0}''." />
 
-  <message messageId="com.sun.faces.CANT_INTROSPECT_CLASS" severity="3" summary="Can''t instrospect class">
-      <detail>Can''t introspect class: ''{0}'' .</detail>
-  </message>
+  <message messageId="com.sun.faces.ERROR_GETTING_VALUEREF_VALUE" 
+           severity="3" 
+           summary="Can''t get value from value reference expression: ''{0}''." />
 
-  <message messageId="com.sun.faces.CANT_CONVERT_VALUE" severity="3" summary="Can''t convert property value">
-      <detail>Can''t convert property: ''{0}'' to value type: ''{1}'' .</detail>
-  </message>
+  <message messageId="com.sun.faces.CANT_INTROSPECT_CLASS" 
+           severity="3" 
+           summary="Can''t instrospect class: ''{0}''." />
 
-  <message messageId="com.sun.faces.INVALID_SCOPE_LIFESPAN" severity="3" summary="The scope of the referenced object is shorter than the referring object">
-      <detail>The scope of the referenced object: ''{0}'' is shorter than the referring object .</detail>
-  </message>
+  <message messageId="com.sun.faces.CANT_CONVERT_VALUE" 
+           severity="3" 
+           summary="Can''t convert property: ''{0}'' to value type: ''{1}''." />
+
+  <message messageId="com.sun.faces.INVALID_SCOPE_LIFESPAN" 
+           severity="3" 
+           summary="The scope of the referenced object: ''{0}'' is shorter than the referring object" />
 </messages>
 

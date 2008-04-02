@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.62 2003/05/08 23:13:09 horwat Exp $
+ * $Id: Util.java,v 1.63 2003/05/14 20:48:46 horwat Exp $
  */
 
 /*
@@ -56,7 +56,7 @@ import java.util.StringTokenizer;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.62 2003/05/08 23:13:09 horwat Exp $
+ * @version $Id: Util.java,v 1.63 2003/05/14 20:48:46 horwat Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -385,7 +385,7 @@ private Util()
 	// getExceptionMessage().
 
 	if (null != resources) {
-	    result = resources.getMessage(messageId, params).getDetail();
+	    result = resources.getMessage(messageId, params).getSummary();
 	}
 	else {
 	    result = "null MessageResources";

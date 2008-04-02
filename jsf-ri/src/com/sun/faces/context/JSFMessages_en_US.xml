@@ -7,78 +7,72 @@
 
 <messages>
   <message messageId="javax.faces.validator.DoubleRangeValidator.LIMIT" 
-           severity="1" summary="Validation Error." >
-      <detail>Specified attribute cannot be converted to proper type.</detail>
-  </message>
+           severity="1" 
+           summary="Validation Error: Specified attribute cannot be converted to proper type." />
+
   <message messageId="javax.faces.validator.DoubleRangeValidator.MAXIMUM" 
-           severity="1" summary="Validation Error." >
-      <detail>Value is greater than allowable maximum of {0}.</detail>
-  </message>
+           severity="1" 
+           summary="Validation Error: Value is greater than allowable maximum of ''{0}''." />
+
   <message messageId="javax.faces.validator.DoubleRangeValidator.MINIMUM" 
-           severity="1" summary="Validation Error." >
-      <detail>Value is less than allowable minimum of {0}.</detail>
-  </message>
+           severity="1" 
+           summary="Validation Error: Value is less than allowable minimum of ''{0}''." />
+
   <message messageId="javax.faces.validator.DoubleRangeValidator.TYPE" 
-           severity="1" summary="Validation Error." >
-      <detail>Value is not of the correct type.</detail>
-  </message>
+           severity="1" 
+           summary="Validation Error: Value is not of the correct type." />
 
   <message messageId="javax.faces.validator.LengthValidator.LIMIT" 
-           severity="1" summary="Validation Error." >
-      <detail>Specified attribute cannot be converted to proper type.</detail>
-  </message>
+           severity="1" 
+           summary="Validation Error: Specified attribute cannot be converted to proper type." />
+
   <message messageId="javax.faces.validator.LengthValidator.MAXIMUM" 
-           severity="1" summary="Validation Error." >
-      <detail>Value is greater than allowable maximum of {0}.</detail>
-  </message>
+           severity="1" 
+           summary="Validation Error: Value is greater than allowable maximum of ''{0}''." />
+
   <message messageId="javax.faces.validator.LengthValidator.MINIMUM" 
-           severity="1" summary="Validation Error." >
-      <detail>Value is less than allowable minimum of {0}.</detail>
-  </message>
+           severity="1" 
+           summary="Validation Error: Value is less than allowable minimum of ''{0}''." />
 
   <message messageId="javax.faces.validator.RequiredValidator.FAILED" 
-           severity="1" summary="Validation Error." >
-      <detail>Value is required.</detail>
-  </message>
+           severity="1" 
+           summary="Validation Error: Value is required." />
 
   <message messageId="javax.faces.validator.LongRangeValidator.LIMIT" 
-           severity="1" summary="Validation Error." >
-      <detail>Specified attribute cannot be converted to proper type.</detail>
-  </message>
+           severity="1" 
+           summary="Validation Error: Specified attribute cannot be converted to proper type." />
+
   <message messageId="javax.faces.validator.LongRangeValidator.MAXIMUM" 
-           severity="1" summary="Validation Error." >
-      <detail>Value is greater than allowable maximum of {0}.</detail>
-  </message>
+           severity="1" 
+           summary="Validation Error: Value is greater than allowable maximum of ''{0}''." />
+
   <message messageId="javax.faces.validator.LongRangeValidator.MINIMUM" 
-           severity="1" summary="Validation Error." >
-      <detail>Value is less than allowable minimum of {0}.</detail>
-  </message>
+           severity="1" 
+           summary="Validation Error: Value is less than allowable minimum of ''{0}''." />
+
   <message messageId="javax.faces.validator.LongRangeValidator.TYPE" 
-           severity="1" summary="Validation Error." >
-      <detail>Value is not of the correct type.</detail>
-  </message>
+           severity="1" 
+           summary="Validation Error." />
 
   <message messageId="javax.faces.validator.StringRangeValidator.LIMIT" 
-           severity="1" summary="Validation Error." >
-      <detail>Specified attribute cannot be converted to proper type.</detail>
-  </message>
+           severity="1" 
+           summary="Validation Error: Specified attribute cannot be converted to proper type." />
+
   <message messageId="javax.faces.validator.StringRangeValidator.MAXIMUM" 
-           severity="1" summary="Validation Error." >
-      <detail>Value is greater than allowable maximum of {0}.</detail>
-  </message>
+           severity="1" 
+           summary="Validation Error: Value is greater than allowable maximum of ''{0}''." />
+
   <message messageId="javax.faces.validator.StringRangeValidator.MINIMUM" 
-           severity="1" summary="Validation Error." >
-      <detail>Value is less than allowable minimum of {0}.</detail>
-  </message>
+           severity="1" 
+           summary="Validation Error: Value is less than allowable minimum of ''{0}''." />
+
   <message messageId="javax.faces.validator.StringRangeValidator.TYPE" 
-           severity="1" summary="Validation Error." >
-      <detail>Value is not of the correct type.</detail>
-  </message>
+           severity="1" 
+           summary="Validation Error: Value is not of the correct type." />
 
   <message messageId="javax.faces.validator.RequiredValidator.FAILED" 
-           severity="1" summary="Validation Error." >
-      <detail>Value is required.</detail>
-  </message>
+           severity="1" 
+           summary="Validation Error: Value is required." />
 
 </messages>
 
