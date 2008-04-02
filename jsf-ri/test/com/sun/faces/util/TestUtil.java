@@ -1,5 +1,5 @@
 /*
- * $Id: TestUtil.java,v 1.5 2003/03/10 20:23:55 eburns Exp $
+ * $Id: TestUtil.java,v 1.6 2003/03/27 07:34:34 rkitain Exp $
  */
 
 /*
@@ -29,7 +29,7 @@ import javax.servlet.ServletContext;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestUtil.java,v 1.5 2003/03/10 20:23:55 eburns Exp $
+ * @version $Id: TestUtil.java,v 1.6 2003/03/27 07:34:34 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -105,7 +105,7 @@ public class TestUtil extends ServletFacesTestCase
     }
 
     public void testVerifyRequiredClasses() {
-	ServletContext servletContext = getFacesContext().getServletContext();
+	ServletContext servletContext = (ServletContext)getFacesContext().getExternalContext().getContext();
 	servletContext.removeAttribute(RIConstants.HAS_REQUIRED_CLASSES_ATTR);
 	try {
 	    Util.verifyRequiredClasses(getFacesContext());

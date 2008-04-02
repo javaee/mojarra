@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTestCaseService.java,v 1.11 2003/03/24 19:45:35 eburns Exp $
+ * $Id: FacesTestCaseService.java,v 1.12 2003/03/27 07:34:32 rkitain Exp $
  */
 
 /*
@@ -46,7 +46,7 @@ import java.io.IOException;
  * <B>Lifetime And Scope</B> <P> Same as the JspTestCase or
  * ServletTestCase instance that uses it.
  *
- * @version $Id: FacesTestCaseService.java,v 1.11 2003/03/24 19:45:35 eburns Exp $
+ * @version $Id: FacesTestCaseService.java,v 1.12 2003/03/27 07:34:32 rkitain Exp $
  * 
  * @see	com.sun.faces.context.FacesContextFactoryImpl
  * @see	com.sun.faces.context.FacesContextImpl
@@ -169,9 +169,11 @@ public void tearDown()
     Util.releaseFactoriesAndDefaultRenderKit(facesTestCase.getConfig().getServletContext());
     // make sure session is not null. It will null in case release
     // was invoked.
+    if (facesContext.getExternalContext() != null) {
     if ( facesContext.getExternalContext().getSession(true) != null ) {
         facesContext.getExternalContext().getSessionMap().remove("TestBean");
     }    
+    }
 }
 
 public boolean verifyExpectedOutput()

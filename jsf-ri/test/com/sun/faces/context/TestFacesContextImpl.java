@@ -1,5 +1,5 @@
 /*
- * $Id: TestFacesContextImpl.java,v 1.21 2003/02/22 03:17:21 eburns Exp $
+ * $Id: TestFacesContextImpl.java,v 1.22 2003/03/27 07:34:33 rkitain Exp $
  */
 
 /*
@@ -31,8 +31,6 @@ import javax.faces.component.UIForm;
 import javax.faces.component.UIInput;
 
 import javax.faces.event.FacesEvent;
-import javax.faces.event.CommandEvent;
-import javax.faces.event.FormEvent;
 import javax.faces.tree.Tree;
 import javax.faces.FacesException;
 import javax.faces.context.ResponseWriter;
@@ -54,7 +52,7 @@ import com.sun.faces.ServletFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestFacesContextImpl.java,v 1.21 2003/02/22 03:17:21 eburns Exp $
+ * @version $Id: TestFacesContextImpl.java,v 1.22 2003/03/27 07:34:33 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -105,29 +103,7 @@ public void testAccessors()
     ServletResponse resp = null;
     ServletContext sc = null;
     
-    req = getFacesContext().getServletRequest();
-    result = null != req;
-    System.out.println("Testing getRequest: " + result);
-    assertTrue(result);
-
-    resp = getFacesContext().getServletResponse();
-    result = null != resp;
-    System.out.println("Testing getResponse: " + result);
-    assertTrue(result);
-
-    sc = getFacesContext().getServletContext();
-    result = null != sc;
-    System.out.println("Testing getServletContext: " + result);
-    assertTrue(result);
-    
-    
-    HttpSession session = getFacesContext().getHttpSession();
-    result = null != session;
-    System.out.println("Testing getHttpSession: " + result);
-    assertTrue(result);
-    
-    assertTrue(getFacesContext().getApplicationHandler() == null);
-    assertTrue(getFacesContext().getViewHandler() != null );
+    assertTrue(((FacesContextImpl)getFacesContext()).getViewHandler() != null );
     
     Locale locale = getFacesContext().getLocale();
     result = null != locale;
@@ -158,7 +134,8 @@ public void testAccessors()
     ResponseWriter responseWriter = null;
     try {
         responseWriter = new 
-        ServletResponseWriter((getFacesContext().getServletResponse()).getWriter());
+        ServletResponseWriter(((ServletResponse)getFacesContext().getExternalContext().
+            getResponse()).getWriter());
     } catch ( Exception e ) {
         assertTrue(false);
     }    
@@ -175,36 +152,6 @@ public void testAccessors()
             assertTrue(false);
         }
     }
-}
-
-public void testApplicationEvents() {
-    
-    assertTrue(getFacesContext().getApplicationEventsCount() == 0);
-    
-    boolean gotException = false;
-    try {
-        getFacesContext().addApplicationEvent(null);
-    } catch (Exception e ) {
-        gotException = true;
-    }
-    assertTrue(gotException);
-    
-    System.out.println("Testing addApplicationEvent: " );
-    getFacesContext().addApplicationEvent(new CommandEvent(new UICommand(), 
-            "cmdName"));
-    getFacesContext().addApplicationEvent(new FormEvent(new UIForm(), "basicForm", 
-            "cmdName"));
-    
-    System.out.println("Testing getApplicationEventCount: " );
-    int size = getFacesContext().getApplicationEventsCount();
-    assertTrue (size ==2 );
-    
-    Iterator it = getFacesContext().getApplicationEvents();
-    FacesEvent event = (FacesEvent) it.next();
-    assertTrue(event instanceof CommandEvent);
-    
-    event = (FacesEvent) it.next();
-    assertTrue(event instanceof FormEvent);
 }
 
 public void testFacesEventsNull()
@@ -344,26 +291,12 @@ public void testMessageMethods() {
 public void testRelease() {
     System.out.println("Testing release method");
     getFacesContext().release();
-    
-    assertTrue(getFacesContext().getServletContext() == null);
-    assertTrue(getFacesContext().getServletRequest() == null);
-    assertTrue(getFacesContext().getServletResponse() == null);
-    assertTrue(getFacesContext().getHttpSession() == null);
     assertTrue(getFacesContext().getLocale() == null);
     assertTrue(getFacesContext().getTree() == null);
     assertTrue(getFacesContext().getResponseStream() == null);
     assertTrue(getFacesContext().getResponseWriter() == null);
-    Iterator it = getFacesContext().getApplicationEvents();
-    assertTrue( !it.hasNext());
-    assertTrue(getFacesContext().getViewHandler() == null);
-    assertTrue(getFacesContext().getApplicationHandler() == null);
+    assertTrue(((FacesContextImpl)getFacesContext()).getViewHandler() == null);
 }
-
-public void testCreateSessionWithSaveStateInitParamFalse() {
-    // If saveStateInClient is false, a session should be created.
-    assertTrue(null != getFacesContext().getHttpSession());
-}
-
 
 
 // Unit tests to update and retrieve values from model objects
