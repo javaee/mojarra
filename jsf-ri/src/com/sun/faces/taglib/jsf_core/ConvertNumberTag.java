@@ -1,5 +1,5 @@
 /*
- * $Id: ConvertNumberTag.java,v 1.11 2004/10/12 14:39:54 rlubke Exp $
+ * $Id: ConvertNumberTag.java,v 1.12 2004/12/20 21:26:35 rogerk Exp $
  */
 
 /*
@@ -22,7 +22,7 @@ import java.util.Locale;
  * <p>ConvertNumberTag is a ConverterTag implementation for
  * javax.faces.convert.NumberConverter</p>
  *
- * @version $Id: ConvertNumberTag.java,v 1.11 2004/10/12 14:39:54 rlubke Exp $
+ * @version $Id: ConvertNumberTag.java,v 1.12 2004/12/20 21:26:35 rogerk Exp $
  */
 
 public class ConvertNumberTag extends ConverterTag {
@@ -194,28 +194,29 @@ public class ConvertNumberTag extends ConverterTag {
         NumberConverter result = null;
 
         result = (NumberConverter) super.createConverter();
-        assert (null != result);
 
-        evaluateExpressions();
-        result.setCurrencyCode(currencyCode);
-        result.setCurrencySymbol(currencySymbol);
-        result.setGroupingUsed(groupingUsed);
-        result.setIntegerOnly(integerOnly);
-        if (maxFractionDigitsSpecified) {
-            result.setMaxFractionDigits(maxFractionDigits);
+	if (result != null) {
+            evaluateExpressions();
+            result.setCurrencyCode(currencyCode);
+            result.setCurrencySymbol(currencySymbol);
+            result.setGroupingUsed(groupingUsed);
+            result.setIntegerOnly(integerOnly);
+            if (maxFractionDigitsSpecified) {
+                result.setMaxFractionDigits(maxFractionDigits);
+            }
+            if (maxIntegerDigitsSpecified) {
+                result.setMaxIntegerDigits(maxIntegerDigits);
+            }
+            if (minFractionDigitsSpecified) {
+                result.setMinFractionDigits(minFractionDigits);
+            }
+            if (minIntegerDigitsSpecified) {
+                result.setMinIntegerDigits(minIntegerDigits);
+            }
+            result.setLocale(locale);
+            result.setPattern(pattern);
+            result.setType(type);
         }
-        if (maxIntegerDigitsSpecified) {
-            result.setMaxIntegerDigits(maxIntegerDigits);
-        }
-        if (minFractionDigitsSpecified) {
-            result.setMinFractionDigits(minFractionDigits);
-        }
-        if (minIntegerDigitsSpecified) {
-            result.setMinIntegerDigits(minIntegerDigits);
-        }
-        result.setLocale(locale);
-        result.setPattern(pattern);
-        result.setType(type);
 
         return result;
     }

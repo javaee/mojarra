@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 
 <!--
- $Id: build-tests.xml,v 1.9 2004/11/12 18:00:27 jayashri Exp $
+ $Id: build-tests.xml,v 1.10 2004/12/20 21:26:36 rogerk Exp $
 -->
 
 <!--
@@ -113,6 +113,17 @@
 
     </antcall>
 
+    <antcall target="test.webapp">
+      <param name="webapp.build.home" 
+             value="${basedir}/core-tags/build" />
+      <param name="webapp.web.home" 
+             value="${basedir}/core-tags/web" />
+      <param name="source.home" 
+             value="${basedir}/core-tags/src/java" />
+      <param name="context.path" value="/jsf-core-tags"/>
+      <param name="testcase" value="com/sun/faces/systest/CoreTagsTestCase.class"/>
+
+    </antcall>
 
   </target>
 

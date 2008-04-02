@@ -1,5 +1,5 @@
 /*
- * $Id: ActionListenerTag.java,v 1.17 2004/12/08 16:38:40 edburns Exp $
+ * $Id: ActionListenerTag.java,v 1.18 2004/12/20 21:26:35 rogerk Exp $
  */
 
 /*
@@ -19,6 +19,10 @@ import javax.faces.event.ActionListener;
 import javax.faces.webapp.UIComponentTag;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.TagSupport;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 
 
 /**
@@ -51,6 +55,8 @@ public class ActionListenerTag extends TagSupport {
 
     // ------------------------------------------------------------- Attributes
 
+
+    protected static Log log = LogFactory.getLog(ActionListenerTag.class);
 
     /**
      * <p>The fully qualified class name of the {@link ActionListener}
@@ -182,17 +188,21 @@ public class ActionListenerTag extends TagSupport {
             }
         }
        
-        if (handler == null) {
-            Object params [] = {"javax.faces.event.ActionListener",handlerError};
-            throw new JspException(
-                Util.getExceptionMessageString(
-                    Util.CANT_CREATE_CLASS_ERROR_ID, params));
-        }
-        
         // We need to cast here because addActionListener
         // method does not apply to all components (it is not a method on
         // UIComponent/UIComponentBase).
-        ((ActionSource)component).addActionListener(handler);
+        if (handler != null) {
+            ((ActionSource)component).addActionListener(handler);
+        } else {
+            if (log.isDebugEnabled()) {
+                if (binding_ == null && type_ == null) {
+                    log.debug("'handler' was not created because both 'binding' and 'type' were null.");
+                } else {
+                    log.debug("'handler' was not created.");
+                }
+            }
+        }
+
                
         return (SKIP_BODY);
 

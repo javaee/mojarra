@@ -242,6 +242,9 @@
       <param name="context.path" value="/jsf-nested-datatables"/>
     </antcall>
 
+    <antcall target="safe.remove.one">
+      <param name="context.path" value="/jsf-core-tags"/>
+    </antcall>
     
     <antcall target="install.one">
       <param name="webapp.build.home" 
@@ -309,6 +312,16 @@
 
     </antcall>
 
+    <antcall target="install.one">
+      <param name="webapp.build.home" 
+             value="${basedir}/core-tags/build" />
+      <param name="webapp.web.home" 
+             value="${basedir}/core-tags/web" />
+      <param name="source.home" 
+             value="${basedir}/core-tags/src/java" />
+      <param name="context.path" value="/jsf-core-tags"/>
+
+    </antcall>
 
   </target>
 
@@ -380,6 +393,16 @@
 
     </antcall>
 
+    <antcall target="reload.one">
+      <param name="webapp.build.home" 
+             value="${basedir}/core-tags/build" />
+      <param name="webapp.web.home" 
+             value="${basedir}/core-tags/web" />
+      <param name="source.home" 
+             value="${basedir}/core-tags/src/java" />
+      <param name="context.path" value="/jsf-core-tags"/>
+
+    </antcall>
   </target>
 
   <target name="remove">
@@ -400,6 +423,9 @@
     </antcall>
     <antcall target="safe.remove.one">
       <param name="context.path" value="/jsf-nested-datatables"/>
+    </antcall>
+    <antcall target="safe.remove.one">
+      <param name="context.path" value="/jsf-core-tags"/>
     </antcall>
   </target>
 
@@ -434,6 +460,7 @@
     <delete    dir="${basedir}/command-link-back-button/build"/>
     <delete    dir="${basedir}/unique-view-id/build"/>
     <delete    dir="${basedir}/nested-datatables/build"/>
+    <delete    dir="${basedir}/core-tags/build"/>
   </target>
    
 

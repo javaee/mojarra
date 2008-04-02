@@ -1,5 +1,5 @@
 /*
- * $Id: ValidateLengthTag.java,v 1.11 2004/10/12 14:39:54 rlubke Exp $
+ * $Id: ValidateLengthTag.java,v 1.12 2004/12/20 21:26:35 rogerk Exp $
  */
 
 /*
@@ -86,15 +86,16 @@ public class ValidateLengthTag extends MaxMinValidatorTag {
         LengthValidator result = null;
 
         result = (LengthValidator) super.createValidator();
-        assert (null != result);
 
-        evaluateExpressions();
-        if (maximumSet) {
-            result.setMaximum(maximum);
-        }
+        if (result != null) {
+            evaluateExpressions();
+            if (maximumSet) {
+                result.setMaximum(maximum);
+            }
 
-        if (minimumSet) {
-            result.setMinimum(minimum);
+            if (minimumSet) {
+                result.setMinimum(minimum);
+            }
         }
 
         return result;
