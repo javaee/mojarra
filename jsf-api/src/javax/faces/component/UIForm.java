@@ -1,5 +1,5 @@
 /*
- * $Id: UIForm.java,v 1.21 2003/01/17 02:18:08 craigmcc Exp $
+ * $Id: UIForm.java,v 1.22 2003/02/03 22:57:46 craigmcc Exp $
  */
 
 /*
@@ -27,7 +27,7 @@ import javax.servlet.http.HttpServletResponse;
  * submitted.</p>
  */
 
-public class UIForm extends UIComponentBase {
+public class UIForm extends UIOutput {
 
 
     // ------------------------------------------------------- Static Variables
@@ -39,21 +39,11 @@ public class UIForm extends UIComponentBase {
     public static final String TYPE = "javax.faces.component.UIForm";
 
 
-    // ------------------------------------------------------------- Properties
+    // ------------------------------------------------------------- Attributes
 
 
     /**
-     * <p>Return the component type of this <code>UIComponent</code>.</p>
-     */
-    public String getComponentType() {
-
-        return (TYPE);
-
-    }
-
-
-    /**
-     * <p>Return the form name associated with this form.</p>
+     * <p>Return the form name for this {@link UIForm}.</p>
      */
     public String getFormName() {
 
@@ -63,7 +53,7 @@ public class UIForm extends UIComponentBase {
 
 
     /**
-     * <p>Set the form name for this <code>UIForm</code>.</p>
+     * <p>Set the form name for this {@link UIForm}.</p>
      *
      * @param formName The new form name
      */
@@ -74,19 +64,19 @@ public class UIForm extends UIComponentBase {
     }
 
     
-    // ------------------------------------------- Lifecycle Processing Methods
+    // ------------------------------------------------------------- Properties
 
 
-    /**
-     * <p>Render the beginning of the current value of this component 
-     * if the value of the rendered attribute is <code>true</code>. </p>
-     *
-     * @param context FacesContext for the response we are creating
-     *
-     * @exception IOException if an input/output error occurs while rendering
-     * @exception NullPointerException if <code>context</code>
-     *  is <code>null</code>
-     */
+    public String getComponentType() {
+
+        return (TYPE);
+
+    }
+
+
+    // ---------------------------------------------------- UIComponent Methods
+
+
     public void encodeBegin(FacesContext context) throws IOException {
 
         if (context == null) {
@@ -113,16 +103,6 @@ public class UIForm extends UIComponentBase {
     }
 
 
-    /**
-     * <p>Render the ending of the current value of this component, 
-     * if the value of the rendered attribute is <code>true</code>. </p>
-     *
-     * @param context FacesContext for the response we are creating
-     *
-     * @exception IOException if an input/output error occurs while rendering
-     * @exception NullPointerException if <code>context</code>
-     *  is <code>null</code>
-     */
     public void encodeEnd(FacesContext context) throws IOException {
 
         if (context == null) {
@@ -143,25 +123,6 @@ public class UIForm extends UIComponentBase {
         // Render the ending of this form
         ResponseWriter writer = context.getResponseWriter();
         writer.write("</form>");
-
-    }
-
-
-    /**
-     * <p>Suppress model updates for this component.</p>
-     *
-     * @param context FacesContext for the request we are processing
-     *
-     * @exception IllegalArgumentException if the <code>modelReference</code>
-     *  property has invalid syntax for an expression
-     * @exception NullPointerException if <code>context</code>
-     *  is <code>null</code>
-     */
-    public void updateModel(FacesContext context) {
-
-        if (context == null) {
-            throw new NullPointerException();
-        }
 
     }
 

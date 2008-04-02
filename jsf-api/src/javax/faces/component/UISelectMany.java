@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectMany.java,v 1.22 2003/01/24 18:02:00 rkitain Exp $
+ * $Id: UISelectMany.java,v 1.23 2003/02/03 22:57:48 craigmcc Exp $
  */
 
 /*
@@ -19,9 +19,12 @@ import javax.faces.context.ResponseWriter;
 /**
  * <p><strong>UISelectMany</strong> is a {@link UIComponent} that represents
  * the user's choice of a zero or more items from among a discrete set of
- * available options.  The user can modify the selected value.  Optionally,
+ * available options.  The user can modify the selected values.  Optionally,
  * the component can be preconfigured with zero or more currently selected
- * items.  This component is generally rendered as a select box or a group of
+ * items, by storing them as an array in the <code>value</code> property of
+ * the component.</p>
+ *
+ * <p>This component is generally rendered as a select box or a group of
  * checkboxes.</p>
  */
 
@@ -40,9 +43,6 @@ public class UISelectMany extends UISelectBase {
     // ------------------------------------------------------------- Properties
 
 
-    /**
-     * <p>Return the component type of this <code>UIComponent</code>.</p>
-     */
     public String getComponentType() {
 
         return (TYPE);
@@ -51,7 +51,8 @@ public class UISelectMany extends UISelectBase {
 
 
     /**
-     * <p>Return the local value of the selected item's values.</p>
+     * <p>Return the currently selected items, or <code>null</code> if there
+     * are no currently selected items.</p>
      */
     public Object[] getSelectedValues() {
 
@@ -61,29 +62,21 @@ public class UISelectMany extends UISelectBase {
 
 
     /**
-     * <p>Set the local value of the selected item's values.</p>
+     * <p>Set the currently selected items, or <code>null</code> to indicate
+     * that there are no currently selected items.</p>
      *
-     * @param selectedValues The new selected item's value
+     * @param selectedItemss The new selected items (if any)
      */
-    public void setSelectedValues(Object selectedValues[]) {
+    public void setSelectedValues(Object selectedItems[]) {
 
-        setAttribute("value", selectedValues);
+        setAttribute("value", selectedItems);
 
     }
 
 
-    // ------------------------------------------- Lifecycle Processing Methods
+    // ---------------------------------------------------- UIComponent Methods
 
 
-    /**
-     * <p>Decode the new value of this component from the incoming request.</p>
-     *
-     * @param context FacesContext for the request we are processing
-     *
-     * @exception IOException if an input/output error occurs while reading
-     * @exception NullPointerException if <code>context</code>
-     *  is <code>null</code>
-     */
     public void decode(FacesContext context) throws IOException {
 
         if (context == null) {
@@ -106,16 +99,6 @@ public class UISelectMany extends UISelectBase {
     }
 
 
-    /**
-     * <p>Render the current value of this component if the value of 
-     * the rendered attribute is <code>true</code>. </p>
-     *
-     * @param context FacesContext for the response we are creating
-     *
-     * @exception IOException if an input/output error occurs while rendering
-     * @exception NullPointerException if <code>context</code>
-     *  is <code>null</code>
-     */
     public void encodeEnd(FacesContext context) throws IOException {
 
         if (context == null) {
@@ -164,14 +147,20 @@ public class UISelectMany extends UISelectBase {
 
     }
     
+
+    // ------------------------------------------------------ Protected Methods
+
+
     /**
-     * Returns <code>true</code> if the new value is different from the previous
-     * value. Value comparison shouldn't be sensitive to element order.
+     * <p>Return <code>true</code> if the new value is different from the
+     * previous value. Value comparison must not be sensitive to element order.
+     * </p>
      *
      * @param previous old value of this component
      * @param value new value of this component
      */
     protected boolean compareValues(Object previous, Object value) {
+
         boolean valueChanged = false;
         Object oldarray[] = null;
         Object newarray[] = null;
@@ -207,15 +196,22 @@ public class UISelectMany extends UISelectBase {
             }     
         }    
         return valueChanged;
+
     }    
+
     
+    // -------------------------------------------------------- Private Methods
+
+
     /**
-     * Returns the number of occurrances of a particular element in the
-     * array.
+     * <p>Return the number of occurrances of a particular element in the
+     * array.</p>
+     *
      * @param element object whose occurrance is to be counted in the array.
      * @param array object representing the old value of this component.
      */
     private int countElementOccurance(Object element, Object[] array) {
+
         int count = 0;
         for ( int i= 0; i < array.length; ++i ) {
             Object arrayElement = array[i];
@@ -226,5 +222,8 @@ public class UISelectMany extends UISelectBase {
             }
         }    
         return count;
+
     }    
+
+
 }

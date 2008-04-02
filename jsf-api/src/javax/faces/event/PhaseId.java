@@ -1,5 +1,5 @@
 /*
- * $Id: PhaseId.java,v 1.3 2003/01/22 19:12:12 craigmcc Exp $
+ * $Id: PhaseId.java,v 1.4 2003/02/03 22:57:49 craigmcc Exp $
  */
 
 /*
@@ -17,7 +17,7 @@ import java.util.List;
 
 /**
  * <p>Typesafe enumeration of the legal values that may be returned by the
- * <code>getPhase()</code> method of the {@link FacesListener} interface.
+ * <code>getPhaseId()</code> method of the {@link FacesListener} interface.
  */
 
 public class PhaseId {
@@ -28,8 +28,6 @@ public class PhaseId {
 
     /**
      * <p>Private constructor to disable the creation of new instances.</p>
-     *
-     * @param ordinal The ordinal value assigned to this instance
      */
     private PhaseId() {
     }

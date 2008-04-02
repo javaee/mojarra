@@ -1,5 +1,5 @@
 /*
- * $Id: UICommand.java,v 1.31 2003/01/17 02:18:07 craigmcc Exp $
+ * $Id: UICommand.java,v 1.32 2003/02/03 22:57:46 craigmcc Exp $
  */
 
 /*
@@ -33,10 +33,10 @@ import javax.servlet.http.HttpServletResponse;
  * typically rendered as a push button, a menu item, or a hyperlink.</p>
  *
  * <p>When the <code>decode()</code> method of this {@link UICommand}, or
- * its corresponding <code>Renderer</code>, detects that this control has
- * been activated, it will queue an {@link ActionEvent}.  Later on,
- * the <code>broadcast()</code> method will ensure that this event is
- * broadcast to all interested listeners.</p>
+ * its corresponding {@link javax.faces.render.Renderer}, detects that
+ * this control has been activated, it will queue an {@link ActionEvent}.
+ * Later on, the <code>broadcast()</code> method will ensure that this
+ * event is broadcast to all interested listeners.</p>
  */
 
 public class UICommand extends UIComponentBase {
@@ -51,11 +51,11 @@ public class UICommand extends UIComponentBase {
     public static final String TYPE = "javax.faces.component.UICommand";
 
 
-    // ------------------------------------------------------------- Properties
+    // ------------------------------------------------------------- Attributes
 
 
     /**
-     * <p>Return the command name associated with this command.</p>
+     * <p>Return the command name for this {@link UICommand}.</p>
      */
     public String getCommandName() {
 
@@ -65,7 +65,7 @@ public class UICommand extends UIComponentBase {
 
 
     /**
-     * <p>Set the command name for this <code>UICommand</code>.</p>
+     * <p>Set the command name for this {@link UICommand}.</p>
      *
      * @param commandName The new command name
      */
@@ -76,9 +76,9 @@ public class UICommand extends UIComponentBase {
     }
 
     
-    /**
-     * <p>Return the component type of this <code>UIComponent</code>.</p>
-     */
+    // ------------------------------------------------------------- Properties
+
+
     public String getComponentType() {
 
         return (TYPE);
@@ -86,7 +86,7 @@ public class UICommand extends UIComponentBase {
     }
 
 
-    // ------------------------------------------- Lifecycle Processing Methods
+    // ---------------------------------------------------- UIComponent Methods
 
 
     /**
@@ -95,7 +95,7 @@ public class UICommand extends UIComponentBase {
      * of the {@link UICommand} that caused the form to be submitted, if any.
      * </p>
      *
-     * @param context FacesContext for the request we are processing
+     * @param context {@link FacesContext} for the request we are processing
      *
      * @exception IOException if an input/output error occurs while reading
      * @exception NullPointerException if <code>context</code>
@@ -125,6 +125,8 @@ public class UICommand extends UIComponentBase {
         fireActionEvent(context);
 
         // Construct and enqueue a FormEvent for the application
+        // NOTE - this behavior will be removed when the deprecated
+        // (placeholder) ApplicationHandler functionality is revised
         String commandName = (String) currentValue(context);
         String formName = null;
         UIComponent parent = getParent();
@@ -144,16 +146,6 @@ public class UICommand extends UIComponentBase {
     }
 
 
-    /**
-     * <p>Render the current value of this component as an HTML submit
-     * button, if the value of the rendered attribute is <code>true</code>. </p>
-     *
-     * @param context FacesContext for the response we are creating
-     *
-     * @exception IOException if an input/output error occurs while rendering
-     * @exception NullPointerException if <code>context</code>
-     *  is <code>null</code>
-     */
     public void encodeEnd(FacesContext context) throws IOException {
 
         if (context == null) {
@@ -189,7 +181,7 @@ public class UICommand extends UIComponentBase {
 
 
     /**
-     * <p>Suppress model updates for this component.</p>
+     * <p>Override the default behavior and perform no model update.</p>
      *
      * @param context FacesContext for the request we are processing
      *

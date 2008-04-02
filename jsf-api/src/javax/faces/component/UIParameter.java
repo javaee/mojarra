@@ -1,9 +1,9 @@
 /*
- * $Id: UIParameter.java,v 1.2 2002/08/29 22:28:16 craigmcc Exp $
+ * $Id: UIParameter.java,v 1.3 2003/02/03 22:57:47 craigmcc Exp $
  */
 
 /*
- * Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2002-2003 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -16,8 +16,7 @@ import javax.faces.context.FacesContext;
 
 /**
  * <p><strong>UIParameter</strong> is a {@link UIComponent} that represents
- * an optionally named configuration parameter for a parent component.  It has
- * no <code>decode()</code> or <code>encode()</code> behavior of its own.</p>
+ * an optionally named configuration parameter for a parent component.</p>
  *
  * <p>Parent components should retrieve the value of a parameter by calling
  * <code>currentValue()</code>.  In this way, the parameter value can be set
@@ -26,8 +25,9 @@ import javax.faces.context.FacesContext;
  *
  * <p>In some scenarios, it is necessary to provide a parameter name, in
  * addition to the parameter value that is accessible via the
- * <code>currentValue()</code> method.  Renderers that support parameter names
- * on their nested <code>UIParameter</code> child components should document
+ * <code>currentValue()</code> method.
+ * {@link javax.faces.render.Renderer}s that support parameter names on their
+ * nested {@link UIParameter} child components should document
  * their use of this property.</p>
  */
 
@@ -43,17 +43,7 @@ public class UIParameter extends UIOutput {
     public static final String TYPE = "javax.faces.component.UIParameter";
 
 
-    // ------------------------------------------------------------- Properties
-
-
-    /**
-     * <p>Return the component type of this <code>UIComponent</code>.</p>
-     */
-    public String getComponentType() {
-
-        return (TYPE);
-
-    }
+    // ------------------------------------------------------------- Attributes
 
 
     /**
@@ -78,13 +68,35 @@ public class UIParameter extends UIOutput {
     }
 
 
-    // ------------------------------------------- Lifecycle Processing Methods
+    // ------------------------------------------------------------- Properties
+
+
+    public String getComponentType() {
+
+        return (TYPE);
+
+    }
 
 
     /**
-     * <p>Disable rendering of this component.</p>
+     * <p>Return <code>true</code> to indicate that no
+     * {@link javax.faces.render.Renderer} needs to be associated
+     * with this component.</p>
+     */
+    public boolean getRendersSelf() {
+
+        return (true);
+
+    }
+
+
+    // ---------------------------------------------------- UIComponent Methods
+
+
+    /**
+     * <p>Override the default behavior and perform no encoding.</p>
      *
-     * @param context FacesContext for the response we are creating
+     * @param context {@link FacesContext} for the response we are creating
      *
      * @exception IOException if an input/output error occurs while rendering
      * @exception NullPointerException if <code>context</code>
@@ -95,15 +107,14 @@ public class UIParameter extends UIOutput {
         if (context == null) {
             throw new NullPointerException();
         }
-        ; // No action required
 
     }
 
 
     /**
-     * <p>Disable rendering of this component.</p>
+     * <p>Override the default behavior and perform no encoding.</p>
      *
-     * @param context FacesContext for the response we are creating
+     * @param context {@link FacesContext} for the response we are creating
      *
      * @exception IOException if an input/output error occurs while rendering
      * @exception NullPointerException if <code>context</code>
@@ -114,15 +125,14 @@ public class UIParameter extends UIOutput {
         if (context == null) {
             throw new NullPointerException();
         }
-        ; // No action required
 
     }
 
 
     /**
-     * <p>Disable rendering of this component.</p>
+     * <p>Override the default behavior and perform no encoding.</p>
      *
-     * @param context FacesContext for the response we are creating
+     * @param context {@link FacesContext} for the response we are creating
      *
      * @exception IOException if an input/output error occurs while rendering
      * @exception NullPointerException if <code>context</code>
@@ -133,7 +143,6 @@ public class UIParameter extends UIOutput {
         if (context == null) {
             throw new NullPointerException();
         }
-        ; // No action required
 
     }
 

@@ -1,9 +1,9 @@
 /*
- * $Id: AttributeTag.java,v 1.2 2002/09/02 21:36:35 craigmcc Exp $
+ * $Id: AttributeTag.java,v 1.3 2003/02/03 22:57:51 craigmcc Exp $
  */
 
 /*
- * Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2002-2003 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -18,8 +18,9 @@ import javax.servlet.jsp.tagext.TagSupport;
 
 /**
  * <p>Tag implementation that adds an attribute with a specified name
- * and (String) value, if the component does not already contain such
- * an attribute.  This tag creates no output to the page currently
+ * and String value to the component whose tag it is nested inside,
+ * if the component does not already contain an attribute with the
+ * same name.  This tag creates no output to the page currently
  * being created.</p>
  */
 

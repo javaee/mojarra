@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectOne.java,v 1.22 2003/01/23 17:42:49 rkitain Exp $
+ * $Id: UISelectOne.java,v 1.23 2003/02/03 22:57:48 craigmcc Exp $
  */
 
 /*
@@ -20,8 +20,10 @@ import javax.faces.context.ResponseWriter;
  * <p><strong>UISelectOne</strong> is a {@link UIComponent} that represents
  * the user's choice of a single item from among a discrete set of
  * available options.  The user can modify the selected value.  Optionally,
- * the component can be preconfigured with a currently selected item.  This
- * component is generally rendered as a select box or a group of
+ * the component can be preconfigured with a currently selected item, by
+ * storing it as the <code>value</code> property of the component.</p>
+ *
+ * <p>This component is generally rendered as a select box or a group of
  * radio buttons.</p>
  */
 
@@ -40,9 +42,6 @@ public class UISelectOne extends UISelectBase {
     // ------------------------------------------------------------- Properties
 
 
-    /**
-     * <p>Return the component type of this <code>UIComponent</code>.</p>
-     */
     public String getComponentType() {
 
         return (TYPE);
@@ -51,7 +50,8 @@ public class UISelectOne extends UISelectBase {
 
 
     /**
-     * <p>Return the local value of the selected item's value.</p>
+     * <p>Return the currently selected item, or <code>null</code> if there
+     * is no currently selected item.</p>
      */
     public Object getSelectedValue() {
 
@@ -61,29 +61,21 @@ public class UISelectOne extends UISelectBase {
 
 
     /**
-     * <p>Set the local value of the selected item's value.</p>
+     * <p>Set the currently selected item, or <code>null</code> to indicate
+     * that there is no currently selected item.</p>
      *
-     * @param selectedValue The new selected item's value
+     * @param selectedItem The new selected item (if any)
      */
-    public void setSelectedValue(Object selectedValue) {
+    public void setSelectedValue(Object selectedItem) {
 
-        setAttribute("value", selectedValue);
+        setAttribute("value", selectedItem);
 
     }
 
 
-    // ------------------------------------------- Lifecycle Processing Methods
+    // ---------------------------------------------------- UIComponent Methods
 
 
-    /**
-     * <p>Decode the new value of this component from the incoming request.</p>
-     *
-     * @param context FacesContext for the request we are processing
-     *
-     * @exception IOException if an input/output error occurs while reading
-     * @exception NullPointerException if <code>context</code>
-     *  is <code>null</code>
-     */
     public void decode(FacesContext context) throws IOException {
 
         if (context == null) {
@@ -106,16 +98,6 @@ public class UISelectOne extends UISelectBase {
     }
 
 
-    /**
-     * <p>Render the current value of this component if the value of the 
-     * rendered attribute is <code>true</code>. </p>
-     *
-     * @param context FacesContext for the response we are creating
-     *
-     * @exception IOException if an input/output error occurs while rendering
-     * @exception NullPointerException if <code>context</code>
-     *  is <code>null</code>
-     */
     public void encodeEnd(FacesContext context) throws IOException {
 
         if (context == null) {

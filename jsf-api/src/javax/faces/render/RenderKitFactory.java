@@ -1,9 +1,9 @@
 /*
- * $Id: RenderKitFactory.java,v 1.11 2002/09/20 00:24:12 craigmcc Exp $
+ * $Id: RenderKitFactory.java,v 1.12 2003/02/03 22:57:50 craigmcc Exp $
  */
 
 /*
- * Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2002-2003 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -24,7 +24,7 @@ import javax.faces.context.FacesContext;
  * (keyed by render kit identifiers) for performing different types of
  * rendering for the same components.</p>
  *
- * <p>There must be one <code>RenderKitFactory</code> instance per web
+ * <p>There must be one {@link RenderKitFactory} instance per web
  * application that is utilizing JavaServer Faces.  This instance can be
  * acquired, in a portable manner, by calling:</p>
  * <pre>
@@ -46,7 +46,7 @@ public abstract class RenderKitFactory {
     /**
      * <p>Register a new {@link RenderKit} instance, associated with
      * the specified <code>renderKitId</code>, to be supported by this
-     * <code>RenderKitFactory</code>.  This method may be called at
+     * {@link RenderKitFactory}.  This method may be called at
      * any time, and makes the corresponding {@link RenderKit} instance
      * available throughout the remaining lifetime of this web application.
      * </p>

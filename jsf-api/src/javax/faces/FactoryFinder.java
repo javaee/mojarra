@@ -1,9 +1,9 @@
 /*
- * $Id: FactoryFinder.java,v 1.12 2002/09/20 00:24:03 craigmcc Exp $
+ * $Id: FactoryFinder.java,v 1.13 2003/02/03 22:57:45 craigmcc Exp $
  */
 
 /*
- * Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2002-2003 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -69,43 +69,48 @@ public final class FactoryFinder {
 
 
     /**
-     * The property name for the <code>ConverterFactory</code> class name.
+     * <p>The property name for the
+     * {@link javax.faces.convert.ConverterFactory} class name.</p>
      */
     public final static String CONVERTER_FACTORY =
         "javax.faces.convert.ConverterFactory";
 
 
     /**
-     * The property name for the <code>FacesContextFactory</code> class name.
+     * <p>The property name for the
+     * {@link javax.faces.context.FacesContextFactory} class name.</p>
      */
     public final static String FACES_CONTEXT_FACTORY =
         "javax.faces.context.FacesContextFactory";
 
 
     /**
-     * The property name for the <code>LifecycleFactory</code> class name.
+     * <p>The property name for the
+     * {@link javax.faces.lifecycle.LifecycleFactory} class name.</p>
      */
     public final static String LIFECYCLE_FACTORY =
         "javax.faces.lifecycle.LifecycleFactory";
 
 
     /**
-     * The property name for the <code>MessageResourcesFactory</code>
-     * clas name.
+     * <p>The property name for the
+     * {@link javax.faces.context.MessageResourcesFactory} class name.</p>
      */
     public final static String MESSAGE_RESOURCES_FACTORY =
         "javax.faces.context.MessageResourcesFactory";
 
 
     /**
-     * The property name for the <code>RenderKitFactory</code> class name.
+     * <p>The property name for the
+     * {@link javax.faces.render.RenderKitFactory} class name.</p>
      */
     public final static String RENDER_KIT_FACTORY =
         "javax.faces.render.RenderKitFactory";
 
 
     /**
-     * The property name for the <code>TreeFactory</code> class name.
+     * <p>The property name for the
+     * {@link javax.faces.tree.TreeFactory} class name.</p>
      */
     public final static String TREE_FACTORY =
         "javax.faces.tree.TreeFactory";

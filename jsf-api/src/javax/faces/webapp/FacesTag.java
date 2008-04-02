@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTag.java,v 1.31 2003/01/22 23:36:43 eburns Exp $
+ * $Id: FacesTag.java,v 1.32 2003/02/03 22:57:52 craigmcc Exp $
  */
 
 /*
@@ -33,7 +33,8 @@ import javax.servlet.jsp.tagext.TagSupport;
  * subclass {@link FacesBodyTag} instead.</p>
  *
  * <p>The <strong>id</strong> attribute of a <code>FacesTag</code> is used
- * to identify the corresponding component in the response component tree.
+ * to set the <code>componentId</code> property of the {@link UIComponent}
+ * associated with this tag.</p>
  * </p>
  */
 
@@ -414,9 +415,9 @@ public abstract class FacesTag extends TagSupport {
 	    
 	    while (!(child instanceof NamingContainer)) {
 		// If child is a facet
-		if (null != (facetParent = child.getAttribute(UIComponent.FACET_PARENT))){
-		    // Use the UIComponent.FACET_PARENT attribute to get the
-		    // UIComponent for which child is a facet.
+		if (null != (facetParent = child.getAttribute(UIComponent.FACET_PARENT_ATTR))){
+		    // Use the UIComponent.FACET_PARENT_ATTR attribute to get
+		    // the UIComponent for which child is a facet.
 		    child = (UIComponent) facetParent;
 		}
 		else {

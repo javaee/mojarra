@@ -1,9 +1,9 @@
 /*
- * $Id: ViewHandler.java,v 1.2 2002/07/16 21:56:38 craigmcc Exp $
+ * $Id: ViewHandler.java,v 1.3 2003/02/03 22:57:50 craigmcc Exp $
  */
 
 /*
- * Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2002-2003 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -31,8 +31,7 @@ import javax.servlet.ServletException;
  * This default instance will treat the <code>treeId</code> property of the
  * response component tree as a context-relative path (after prefixing it
  * with a slash), and will perform a <code>RequestDispatcher.forward()</code>
- * call to that path.  <strong>FIXME</strong> - This will need to be adjusted
- * as we refine exactly how rendering works.</p>
+ * call to that path.</p>
  */
 
 public interface ViewHandler {
@@ -43,7 +42,7 @@ public interface ViewHandler {
      * component tree to the <code>ServletResponse</code> associated with
      * the specified {@link FacesContext}.</p>
      *
-     * @param context FacesContext for the current request
+     * @param context {@link FacesContext} for the current request
      *
      * @exception IOException if an input/output error occurs
      * @exception NullPointerException if <code>context</code>

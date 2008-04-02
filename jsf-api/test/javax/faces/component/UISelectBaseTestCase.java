@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectBaseTestCase.java,v 1.2 2002/12/17 23:30:59 eburns Exp $
+ * $Id: UISelectBaseTestCase.java,v 1.3 2003/02/03 22:57:53 craigmcc Exp $
  */
 
 /*
@@ -628,7 +628,7 @@ public class UISelectBaseTestCase extends UIInputTestCase {
 	    one.setComponentId("shipType");
 	    component.addChild(one);
 	}
-	catch (IllegalArgumentException e) {
+	catch (IllegalStateException e) {
 	    exceptionThrown = true;
 	}
 	assertTrue(exceptionThrown);

@@ -1,5 +1,5 @@
 /*
- * $Id: UIOutput.java,v 1.21 2003/01/17 02:18:08 craigmcc Exp $
+ * $Id: UIOutput.java,v 1.22 2003/02/03 22:57:47 craigmcc Exp $
  */
 
 /*
@@ -20,7 +20,8 @@ import javax.faces.context.ResponseWriter;
  * output to the user.  The user cannot manipulate this component; it is
  * for display purposes only.  There are no restrictions on the data type
  * of the local value, or the object referenced by the model reference
- * expression (if any); however, individual <code>Renderer</code>s will
+ * expression (if any); however, individual
+ * {@link javax.faces.render.Renderer}s will
  * generally impose restrictions on the type of data they know how to
  * display.</p>
  */
@@ -40,9 +41,6 @@ public class UIOutput extends UIComponentBase {
     // ------------------------------------------------------------- Properties
 
 
-    /**
-     * <p>Return the component type of this <code>UIComponent</code>.</p>
-     */
     public String getComponentType() {
 
         return (TYPE);
@@ -50,16 +48,16 @@ public class UIOutput extends UIComponentBase {
     }
 
 
-    // ------------------------------------------- Lifecycle Processing Methods
+    // ---------------------------------------------------- UIComponent Methods
 
 
     /**
-     * <p>This component is output only, so just set the <code>valid</code>
-     * property to <code>true</code> and return.</p>
+     * <p>Set the <code>valid</code> property to <code>true</code>,
+     * and perform no decoding.</p>
      *
-     * @param context FacesContext for the request we are processing
+     * @param context {@link FacesContext} for the request we are processing
      *
-     * @exception IOException if an input/output error occurs while rendering
+     * @exception IOException if an input/output error occurs while reading
      * @exception NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
@@ -73,16 +71,6 @@ public class UIOutput extends UIComponentBase {
     }
 
 
-    /**
-     * <p>Render the current value of this component if the value of 
-     * the rendered attribute is <code>true</code>. </p>
-     *
-     * @param context FacesContext for the response we are creating
-     *
-     * @exception IOException if an input/output error occurs while rendering
-     * @exception NullPointerException if <code>context</code>
-     *  is <code>null</code>
-     */
     public void encodeEnd(FacesContext context) throws IOException {
 
         if (context == null) {
@@ -111,7 +99,7 @@ public class UIOutput extends UIComponentBase {
 
 
     /**
-     * <p>Suppress model updates for this component.</p>
+     * <p>Override the default behavior and perform no model update.</p>
      *
      * @param context FacesContext for the request we are processing
      *

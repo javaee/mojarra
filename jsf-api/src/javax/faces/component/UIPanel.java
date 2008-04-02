@@ -1,9 +1,9 @@
 /*
- * $Id: UIPanel.java,v 1.9 2003/01/17 01:11:58 eburns Exp $
+ * $Id: UIPanel.java,v 1.10 2003/02/03 22:57:47 craigmcc Exp $
  */
 
 /*
- * Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2002-2003 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -30,9 +30,6 @@ public class UIPanel extends UIOutput {
     // ------------------------------------------------------------- Properties
 
 
-    /**
-     * <p>Return the component type of this <code>UIComponent</code>.</p>
-     */
     public String getComponentType() {
 
         return (TYPE);
@@ -41,17 +38,14 @@ public class UIPanel extends UIOutput {
 
 
     /**
-     * <p>Return a flag indicating whether this component is responsible
-     * for rendering its child components.</p>
+     * <p>Return <code>true</code> to indicate that this component takes
+     * responsibility for rendering its children.</p>
      */
     public boolean getRendersChildren() {
 
         return (true);
 
     }
-
-
-    // ------------------------------------------- Lifecycle Processing Methods
 
 
 }

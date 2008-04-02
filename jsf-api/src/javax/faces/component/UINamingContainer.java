@@ -1,63 +1,70 @@
 /*
- * $Id: UINamingContainer.java,v 1.2 2002/12/17 23:30:52 eburns Exp $
+ * $Id: UINamingContainer.java,v 1.3 2003/02/03 22:57:47 craigmcc Exp $
  */
 
 /*
- * Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2002-2003 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
 package javax.faces.component;
 
-import java.util.HashMap;
+
+/**
+ * <p><strong>UINamingContainer</strong> is a convenience base class for
+ * components that wish to implement {@link NamingContainer} functionality.</p>
+ */
+
+public class UINamingContainer extends UIComponentBase
+    implements NamingContainer {
 
 
-public class UINamingContainer extends UIComponentBase implements NamingContainer {
+    // ------------------------------------------------------- Static Variables
 
-
-    // ------------------------------------------------------------- Attributes
 
     /**
-
-    * The NamingContainer implementation
-
-    */
-    private NamingContainer namespace = null;
-
-    public static final String TYPE = "javax.faces.component.UINamingContainer";
-
-    public UINamingContainer() {
-	namespace = new NamingContainerImpl(this);
-    }
-
-    // 
-    // Methods from UIComponentBase
-    //
-    
-    /**
-     * <p>Return the component type of this <code>UIComponent</code>.</p>
+     * The component type of this {@link UIComponent} subclass.
      */
+    public static final String TYPE =
+        "javax.faces.component.UINamingContainer";
+
+
+    // ----------------------------------------------------- Instance Variables
+
+
+    /**
+     * <p>The {@link NamingContainer} implementation that we delegate to
+     */
+    private NamingContainer namespace = new NamingContainerSupport();
+
+
+    // ------------------------------------------------------------- Properties
+
+
     public String getComponentType() {
 	
         return (TYPE);
 	
     }
     
-    //
-    // Methods from NamingContainer
-    //
+
+    // ------------------------------------------------ NamingContainer Methods
+
 
     public void addComponentToNamespace(UIComponent namedComponent) {
 	namespace.addComponentToNamespace(namedComponent);
     }
 
+
     public void removeComponentFromNamespace(UIComponent namedComponent) {
 	namespace.removeComponentFromNamespace(namedComponent);
     }
 
+
     public UIComponent findComponentInNamespace(String name) {
 	return namespace.findComponentInNamespace(name);
     }
+
 
     public synchronized String generateClientId() {
 	return namespace.generateClientId();

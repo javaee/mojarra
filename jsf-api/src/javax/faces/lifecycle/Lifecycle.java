@@ -1,9 +1,9 @@
 /*
- * $Id: Lifecycle.java,v 1.18 2002/09/21 23:46:00 craigmcc Exp $
+ * $Id: Lifecycle.java,v 1.19 2003/02/03 22:57:50 craigmcc Exp $
  */
 
 /*
- * Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2002-2003 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -17,26 +17,16 @@ import javax.faces.context.FacesContext;
 /**
  * <p><strong>Lifecycle</strong> is a state machine that manages the
  * processing of the entire lifecycle of a particular JavaServer Faces
- * request.  It is responsible for executing all {@link Phase}s that have
+ * request.  It is responsible for executing all of the phases that have
  * been defined by the JavaServer Faces Specification, in the specified
- * order, unless otherwise directed by the value returned by execution
- * of each {@link Phase}.</p>
+ * order, unless otherwise directed by activities that occurred during
+ * the execution of each phase.</p>
  *
  * <p>An instance of <code>Lifecycle</code> is created by calling the
  * <code>getLifecycle()</code> method of {@link LifecycleFactory}, for
  * a specified lifecycle identifier.  Because this instance is
  * shared across multiple simultaneous requests, it must be implemented
  * in a thread-safe manner.</p>
- *
- * <p><strong>FIXME</strong> - Ongoing EG discussion about whether a
- * JSF implementation must use the execute() method defined here, or may
- * use an adapter pattern to call <code>executePhase()</code> for each
- * phase individually.</p>
- *
- * <p><strong>FIXME</strong> - Do we really need defined phase identifiers
- * any more?  We will need them if we reintroduce registerBefore() and
- * registerAfter(), but that is probably not needed if the adapter pattern
- * is the one we end up with.</p>
  */
 
 public abstract class Lifecycle {
@@ -49,6 +39,10 @@ public abstract class Lifecycle {
      * <p>Return the {@link ApplicationHandler} instance that will be utilized
      * during the <em>Invoke Application</em> phase of the request processing
      * lifecycle.</p>
+     *
+     * @deprecated The current mechanism for handling application events is a
+     *  placeholder, and will be replaced in the next public release of
+     *  JavaServer Faces.
      */
     public abstract ApplicationHandler getApplicationHandler();
 
@@ -64,6 +58,10 @@ public abstract class Lifecycle {
      *  one request has been processed by this <code>Lifecycle</code> instance
      * @exception NullPointerException if <code>handler</code>
      *  is <code>null</code>
+     *
+     * @deprecated The current mechanism for handling application events is a
+     *  placeholder, and will be replaced in the next public release of
+     *  JavaServer Faces.
      */
     public abstract void setApplicationHandler(ApplicationHandler handler);
 
@@ -95,17 +93,18 @@ public abstract class Lifecycle {
 
 
     /**
-     * <p>Execute the {@link Phase}s registered for this <code>Lifecycle</code>
-     * instance, in the order required by the specification.  The execution
-     * of each individual {@link Phase} must be accomplished by calling the
-     * <code>executePhase()</code> method for that phase.</p>
+     * <p>Execute all of the phases of the request processing lifecycle,
+     * as described in the JavaServer Faces Specification, in the specified
+     * order.  The processing flow can be affected (by the application,
+     * by components, or by event listeners) by calls to the
+     * <code>renderResponse()</code> or <code>responseComplete()</code>
+     * methods of the {@link FacesContext} instance associated with
+     * the current request.</p>
      *
-     * @param context FacesContext for the current request being processed
+     * @param context FacesContext for the request to be processed
      *
-     * @exception IllegalStateException if a {@link Phase} returned an invalid
-     *  state change value from the <code>execute()</code> method
-     * @exception FacesException if a {@link Phase} threw such an exception
-     *  from its <code>execute()</code> method
+     * @exception FacesException if thrown during the execution of the
+     *  request processing lifecycle
      * @exception NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
@@ -127,6 +126,9 @@ public abstract class Lifecycle {
      *  state change value from the <code>execute()</code> method
      * @exception NullPointerException if <code>context</code> or
      *  <code>phase</code> is <code>null</code>
+     *
+     * @deprecated The {@link Phase} API will likely be removed in a future
+     *  version of JavaServer Faces.
      */
     public abstract int executePhase(FacesContext context, Phase phase)
         throws FacesException;

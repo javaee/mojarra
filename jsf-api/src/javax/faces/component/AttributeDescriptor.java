@@ -1,9 +1,9 @@
 /*
- * $Id: AttributeDescriptor.java,v 1.7 2002/07/26 19:02:35 craigmcc Exp $
+ * $Id: AttributeDescriptor.java,v 1.8 2003/02/03 22:57:45 craigmcc Exp $
  */
 
 /*
- * Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2002-2003 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -17,7 +17,7 @@ import javax.faces.validator.Validator;
 
 /**
  * <p>An <strong>AttributeDescriptor</strong> describes a single characteristic
- * of a <code>UIComponent</code> that might be of interest to other classes,
+ * of a {@link UIComponent} that might be of interest to other classes,
  * such as a {@link Validator} or a {@link Renderer}.  This information is
  * particularly useful in tools that wish to automate the creation of user
  * interfaces based on JavaServer Faces components.</p>

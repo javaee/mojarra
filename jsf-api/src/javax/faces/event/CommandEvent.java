@@ -1,9 +1,9 @@
 /*
- * $Id: CommandEvent.java,v 1.7 2003/01/21 20:37:14 eburns Exp $
+ * $Id: CommandEvent.java,v 1.8 2003/02/03 22:57:49 craigmcc Exp $
  */
 
 /*
- * Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2002-2003 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -20,6 +20,10 @@ import javax.faces.component.UIComponent;
  * It is queued to the application, for processing during the
  * <em>Invoke Application</em> phase of the request processing lifecycle.
  * </p>
+ *
+ * @deprecated The current mechanism for handling application events is a
+ *  placeholder, and will be replaced in the next public release of
+ *  JavaServer Faces.
  */
 
 public class CommandEvent extends ApplicationEvent {

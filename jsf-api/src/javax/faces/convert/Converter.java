@@ -1,5 +1,5 @@
 /*
- * $Id: Converter.java,v 1.2 2002/08/31 19:38:49 craigmcc Exp $
+ * $Id: Converter.java,v 1.3 2003/02/03 22:57:49 craigmcc Exp $
  */
 
 /*
@@ -10,6 +10,7 @@
 package javax.faces.convert;
 
 
+import java.io.Serializable;
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -19,18 +20,21 @@ import javax.faces.context.FacesContext;
  * <p><strong>Converter</strong> is an interface describing a Java class
  * that can perform Object-to-String and String-to-Object conversions
  * between model data objects and a String representation of those objects
- * that is suitable for rendering.  <code>Converter</code> instances are
- * shared, so they must be programmed in a thread-safe manner.</p>
+ * that is suitable for rendering.  {@link Converter} instances are
+ * shared, so they must be programmed in a thread-safe manner.  In addition,
+ * because {@link Converter}s are part of the saved and restored state of a
+ * component tree, classes that implement this interface must also
+ * be serializable.</p>
  */
 
-public interface Converter {
+public interface Converter extends Serializable {
 
 
     /**
      * <p>Convert the specified string value, which is associated with
      * the specified {@link UIComponent}, into a model data object that
-     * is appropriate for being stored during the <em>Update Model Values</em>
-     * phase of the request processing lifecycle.</p>
+     * is appropriate for being stored during the <em>Apply Request
+     * Values</em> phase of the request processing lifecycle.</p>
      *
      * @param context {@link FacesContext} for the request being processed
      * @param component {@link UIComponent} with which this model object

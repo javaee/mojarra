@@ -1,9 +1,9 @@
 /*
- * $Id: FacesBodyTag.java,v 1.3 2003/01/21 20:37:17 eburns Exp $
+ * $Id: FacesBodyTag.java,v 1.4 2003/02/03 22:57:51 craigmcc Exp $
  */
 
 /*
- * Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2002-2003 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -18,10 +18,8 @@ import javax.servlet.jsp.tagext.Tag;
 
 
 /**
- * <p><strong>FacesTag</strong> is a base class for all JSP custom actions
- * that correspond to user interface components in a page that is rendered by
- * JavaServer Faces.  Tags that need to process their tag bodies should
- * subclass {@link FacesBodyTag} instead.</p>
+ * <p><strong>FacesBodyTag</strong> is a base class for all JSP custom actions
+ * that need to process their tag bodies.</p>
  */
 
 public abstract class FacesBodyTag extends FacesTag implements BodyTag {

@@ -1,9 +1,9 @@
 /*
- * $Id: UISelectItem.java,v 1.10 2003/01/17 02:18:08 craigmcc Exp $
+ * $Id: UISelectItem.java,v 1.11 2003/02/03 22:57:47 craigmcc Exp $
  */
 
 /*
- * Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2002-2003 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -29,11 +29,9 @@ import javax.faces.context.FacesContext;
  *     of the <code>itemDescription</code>, <code>itemLabel</code>, and
  *     <code>itemValue</code> attributes.</li>
  * </ul>
- *
- * <p>This component has no decode or encode behavior of its own.</p>
  */
 
-public class UISelectItem extends UIComponentBase {
+public class UISelectItem extends UIOutput {
 
 
     // ------------------------------------------------------- Static Variables
@@ -117,9 +115,6 @@ public class UISelectItem extends UIComponentBase {
     // ------------------------------------------------------------- Properties
 
 
-    /**
-     * <p>Return the component type of this <code>UIComponent</code>.</p>
-     */
     public String getComponentType() {
 
         return (TYPE);
@@ -128,7 +123,9 @@ public class UISelectItem extends UIComponentBase {
 
 
     /**
-     * <p>Return the <code>rendersSelf</code> value for this component.</p>
+     * <p>Return <code>true</code> to indicate that no
+     * {@link javax.faces.render.Renderer} needs to be associated
+     * with this component.</p>
      */
     public boolean getRendersSelf() {
 
@@ -137,29 +134,13 @@ public class UISelectItem extends UIComponentBase {
     }
 
 
-    /**
-     * <p>Set the <code>valid</code> property to <code>true</code>.</p>
-     *
-     * @param context FacesContext for the request we are processing
-     *
-     * @exception IOException if an input/output error occurs while reading
-     * @exception NullPointerException if <code>context</code>
-     *  is <code>null</code>
-     */
-    public void decode(FacesContext context) throws IOException {
-
-        if (context == null) {
-            throw new NullPointerException();
-        }
-        setValid(true);
-
-    }
+    // ---------------------------------------------------- UIComponent Methods
 
 
     /**
-     * <p>Override the default behavior and take no action.</p>
+     * <p>Override the default behavior and perform no encoding.</p>
      *
-     * @param context FacesContext for the request we are processing
+     * @param context {@link FacesContext} for the request we are processing
      *
      * @exception IOException if an input/output error occurs while reading
      * @exception NullPointerException if <code>context</code>
@@ -171,15 +152,13 @@ public class UISelectItem extends UIComponentBase {
             throw new NullPointerException();
         }
 
-        // No encoding is performed
-
     }
 
 
     /**
-     * <p>Override the default behavior and take no action.</p>
+     * <p>Override the default behavior and perform no encoding.</p>
      *
-     * @param context FacesContext for the request we are processing
+     * @param context {@link FacesContext} for the request we are processing
      *
      * @exception IOException if an input/output error occurs while reading
      * @exception NullPointerException if <code>context</code>
@@ -191,42 +170,19 @@ public class UISelectItem extends UIComponentBase {
             throw new NullPointerException();
         }
 
-        // No encoding is performed
-
     }
 
 
     /**
-     * <p>Override the default behavior and take no action.</p>
+     * <p>Override the default behavior and perform no encoding.</p>
      *
-     * @param context FacesContext for the request we are processing
+     * @param context {@link FacesContext} for the request we are processing
      *
      * @exception IOException if an input/output error occurs while reading
      * @exception NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
     public void encodeEnd(FacesContext context) throws IOException {
-
-        if (context == null) {
-            throw new NullPointerException();
-        }
-
-        // No encoding is performed
-
-    }
-
-
-    /**
-     * <p>Suppress model updates for this component.</p>
-     *
-     * @param context FacesContext for the request we are processing
-     *
-     * @exception IllegalArgumentException if the <code>modelReference</code>
-     *  property has invalid syntax for an expression
-     * @exception NullPointerException if <code>context</code>
-     *  is <code>null</code>
-     */
-    public void updateModel(FacesContext context) {
 
         if (context == null) {
             throw new NullPointerException();

@@ -1,9 +1,9 @@
 /*
- * $Id: Phase.java,v 1.3 2002/06/12 21:51:27 craigmcc Exp $
+ * $Id: Phase.java,v 1.4 2003/02/03 22:57:50 craigmcc Exp $
  */
 
 /*
- * Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2002-2003 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -28,6 +28,9 @@ import javax.faces.context.FacesContext;
  * instance will be associated with exactly one {@link Lifecycle} instance,
  * but must be programmed in a thread-safe manner because it will be used
  * to process simultaneous requests on multiple threads.</p>
+ *
+ * @deprecated The {@link Phase} API will likely be removed in a future
+ *  version of JavaServer Faces.
  */
 
 public abstract class Phase {

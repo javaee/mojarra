@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectBoolean.java,v 1.23 2003/01/23 17:42:49 rkitain Exp $
+ * $Id: UISelectBoolean.java,v 1.24 2003/02/03 22:57:47 craigmcc Exp $
  */
 
 /*
@@ -24,20 +24,6 @@ import javax.faces.context.ResponseWriter;
 public class UISelectBoolean extends UIInput {
 
 
-    // ------------------------------------------------------------ Constructor
-
-
-    /**
-     * <p>Construct a new <code>UISelectBoolean</code> with a default
-     * <code>selected</code> property of <code>false</code>.</p>
-     */
-    public UISelectBoolean() {
-
-        super();
-
-    }
-
-
     // ------------------------------------------------------- Static Variables
 
 
@@ -47,17 +33,7 @@ public class UISelectBoolean extends UIInput {
     public static final String TYPE = "javax.faces.component.UISelectBoolean";
 
 
-    // ------------------------------------------------------------- Properties
-
-
-    /**
-     * <p>Return the component type of this <code>UIComponent</code>.</p>
-     */
-    public String getComponentType() {
-
-        return (TYPE);
-
-    }
+    // ------------------------------------------------------------- Attributes
 
 
     /**
@@ -91,18 +67,19 @@ public class UISelectBoolean extends UIInput {
     }
 
 
-    // ------------------------------------------- Lifecycle Processing Methods
+    // ------------------------------------------------------------- Properties
 
 
-    /**
-     * <p>Decode the new value of this component from the incoming request.</p>
-     *
-     * @param context FacesContext for the request we are processing
-     *
-     * @exception IOException if an input/output error occurs while reading
-     * @exception NullPointerException if <code>context</code>
-     *  is <code>null</code>
-     */
+    public String getComponentType() {
+
+        return (TYPE);
+
+    }
+
+
+    // ---------------------------------------------------- UIComponent Methods
+
+
     public void decode(FacesContext context) throws IOException {
 
         if (context == null) {
@@ -128,16 +105,6 @@ public class UISelectBoolean extends UIInput {
     }
 
 
-    /**
-     * <p>Render the current value of this component if the value of 
-     * the rendered attribute is <code>true</code>. </p>
-     *
-     * @param context FacesContext for the response we are creating
-     *
-     * @exception IOException if an input/output error occurs while rendering
-     * @exception NullPointerException if <code>context</code>
-     *  is <code>null</code>
-     */
     public void encodeEnd(FacesContext context) throws IOException {
 
         if (context == null) {

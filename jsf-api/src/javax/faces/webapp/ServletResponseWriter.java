@@ -1,9 +1,9 @@
 /*
- * $Id: ServletResponseWriter.java,v 1.2 2002/07/16 21:52:04 craigmcc Exp $
+ * $Id: ServletResponseWriter.java,v 1.3 2003/02/03 22:57:53 craigmcc Exp $
  */
 
 /*
- * Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2002-2003 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -19,8 +19,6 @@ import javax.faces.context.ResponseWriter;
  * <p><strong>ServletResponseWriter</strong> is a concrete implementation of
  * {@link ResponseWriter} that wraps a <code>PrintWriter</code> passed to its
  * constructor.</p>
- *
- * <p><strong>FIXME</strong> - Should this implementation be in jsf-api?</p>
  */
 
 public final class ServletResponseWriter extends ResponseWriterBase {

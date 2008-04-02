@@ -1,9 +1,9 @@
 /*
- * $Id: MessageResourcesFactory.java,v 1.2 2002/09/20 00:24:06 craigmcc Exp $
+ * $Id: MessageResourcesFactory.java,v 1.3 2003/02/03 22:57:49 craigmcc Exp $
  */
 
 /*
- * Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2002-2003 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -29,7 +29,7 @@ import javax.faces.FacesException;
  *     implementation being utilized.</li>
  * </ul>
  *
- * <p>There must be one <code>MessageResourcesFactory</code> instance per web
+ * <p>There must be one {@link MessageResourcesFactory} instance per web
  * application that is utilizing JavaServer Faces.  This instance can be
  * acquired, in a portable manner, by calling:</p>
  * <pre>
@@ -68,7 +68,7 @@ public abstract class MessageResourcesFactory {
     /**
      * <p>Register a new {@link MessageResources} instance, associated with
      * the specified <code>messageResourcesId</code>, to be supported by this
-     * <code>MessageResourcesFactory</code>.  This method may be called at
+     * {@link MessageResourcesFactory}.  This method may be called at
      * any time, and makes the corresponding {@link MessageResources} instance
      * available throughout the remaining lifetime of this web application.
      * </p>

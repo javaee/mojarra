@@ -1,9 +1,9 @@
 /*
- * $Id: ApplicationHandler.java,v 1.5 2002/07/26 19:02:38 craigmcc Exp $
+ * $Id: ApplicationHandler.java,v 1.6 2003/02/03 22:57:50 craigmcc Exp $
  */
 
 /*
- * Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2002-2003 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -26,6 +26,10 @@ import javax.faces.event.FacesEvent;
  * by calling the <code>setApplicationHandler()</code> method of the
  * {@link Lifecycle} instance used to process incoming requests, prior
  * to receiving the first request.</p>
+ *
+ * @deprecated The current mechanism for handling application events is a
+ *  placeholder, and will be replaced in the next public release of
+ *  JavaServer Faces.
  */
 
 public interface ApplicationHandler {
@@ -33,12 +37,10 @@ public interface ApplicationHandler {
 
     /**
      * <p>Process a command event that has been queued for the application.
-     * <strong>FIXME</strong> - does the application need to provide any
-     * feedback to the lifecycle state machine?  Return <code>true</code>
-     * if control should be transferred directly to the <em>Render
-     * Response</em> phase (bypassing any remaining application events that
-     * might have been queued), or <code>false</code> to process any
-     * remaining events normally.</p>
+     * Return <code>true</code> if control should be transferred directly
+     * to the <em>Render Response</em> phase (bypassing any remaining
+     * application events that might have been queued), or <code>false</code>
+     * to process any remaining events normally.</p>
      *
      * @param context FacesContext for the current request
      * @param event FacesEvent to be processed

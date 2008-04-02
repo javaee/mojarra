@@ -1,10 +1,9 @@
 /*
- * $Id: MessageImpl.java,v 1.5 2003/01/21 20:37:13 eburns Exp $
- * @author Gary Karasiuk <karasiuk@ca.ibm.com>
+ * $Id: MessageImpl.java,v 1.6 2003/02/03 22:57:48 craigmcc Exp $
  */
 
 /*
- * Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2002-2003 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 

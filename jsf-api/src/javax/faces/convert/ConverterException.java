@@ -1,9 +1,9 @@
 /*
- * $Id: ConverterException.java,v 1.1 2002/08/31 17:42:45 craigmcc Exp $
+ * $Id: ConverterException.java,v 1.2 2003/02/03 22:57:49 craigmcc Exp $
  */
 
 /*
- * Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2002-2003 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -20,10 +20,6 @@ import javax.faces.context.FacesContext;
  * <code>getAsObject()</code> or <code>getAsText()</code> method of a
  * {@link Converter}, to indicate that the requested conversion cannot
  * be performed.</p>
- *
- * <p><strong>FIXME</strong> - Do we want properties to reference the
- * component for which conversion failed, and/or the value that could
- * not be converted?</p>
  */
 
 public class ConverterException extends FacesException {

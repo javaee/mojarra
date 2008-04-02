@@ -1,9 +1,9 @@
 /*
- * $Id: JspResponseWriter.java,v 1.3 2002/08/07 23:31:16 craigmcc Exp $
+ * $Id: JspResponseWriter.java,v 1.4 2003/02/03 22:57:53 craigmcc Exp $
  */
 
 /*
- * Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2002-2003 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -20,8 +20,6 @@ import javax.servlet.jsp.PageContext;
  * <p><strong>JspResponseWriter</strong> is a concrete implementation of
  * {@link ResponseWriter} that wraps a <code>PageContext</code> passed to its
  * constructor.</p>
- *
- * <p><strong>FIXME</strong> - Should this implementation be in jsf-api?</p>
  */
 
 public final class JspResponseWriter extends ResponseWriterBase {

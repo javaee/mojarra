@@ -1,5 +1,5 @@
 /*
- * $Id: Validator.java,v 1.6 2003/01/17 01:47:01 craigmcc Exp $
+ * $Id: Validator.java,v 1.7 2003/02/03 22:57:51 craigmcc Exp $
  */
 
 /*
@@ -19,25 +19,28 @@ import javax.faces.context.Message;
 
 
 /**
- * <p>A <strong>Validator</strong> is a class that can perform validation
- * (correctness checks) on a {@link UIComponent}.  Zero or more
+ * <p>A <strong>Validator</strong> implementation is a class that can perform
+ * validation (correctness checks) on a {@link UIComponent}.  Zero or more
  * <code>Validator</code>s can be associated with each {@link UIComponent}
- * in the request tree, and are called during the <em>Process
- * Validations Phase</em>.</p>
+ * in the component tree, and are called during the <em>Process
+ * Validations</em> phase of the request processing lifecycle.</p>
  *
- * <p>Individual <code>Validator</code>s should examine the component that
+ * <p>Individual {@link Validator}s should examine the component that
  * they are passed, and add {@link Message} instances to the
  * {@link FacesContext} for the current request, documenting
  * any failures to conform to the required rules.  In general, such
  * messages should be associated with the {@link UIComponent} on which
  * the validation failure occurred.  In addition, the <code>valid</code>
  * property of the corresponding {@link UIComponent} should be set to
- * <code>false</code>.</p>
+ * <code>false</code> on validation failures.</p>
  *
- * <p>For maximum generality, <code>Validator</code> instances should be
+ * <p>For maximum generality, {@link Validator} instances may be
  * configurable based on properties of the {@link Validator} implementation
  * class.  For example, a range check {@link Validator} might support
- * configuration of the minimum and maximum values to be used.</p>
+ * configuration of the minimum and maximum values to be used.  In
+ * addition, because {@link Validator}s are part of the saved and restored
+ * state of a component tree, classes that implement this interface must also
+ * be serializable.</p>
  */
 
 public interface Validator extends Serializable {

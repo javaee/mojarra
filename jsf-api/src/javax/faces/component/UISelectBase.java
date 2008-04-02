@@ -1,9 +1,9 @@
 /*
- * $Id: UISelectBase.java,v 1.5 2002/12/17 23:30:52 eburns Exp $
+ * $Id: UISelectBase.java,v 1.6 2003/02/03 22:57:47 craigmcc Exp $
  */
 
 /*
- * Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2002-2003 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -29,18 +29,15 @@ import javax.faces.context.ResponseWriter;
 
 abstract class UISelectBase extends UIInput implements NamingContainer {
 
-    // ------------------------------------------------------------- Attributes
+
+    // ----------------------------------------------------- Instance Variables
+
 
     /**
+     * <p>The NamingContainer implementation that we delegate to.</p>
+     */
+    private NamingContainer namespace = new NamingContainerSupport();
 
-    * The NamingContainer implementation
-
-    */
-    private NamingContainer namespace = null;
-
-    public UISelectBase() {
-	namespace = new NamingContainerImpl(this);
-    }
 
     // ------------------------------------------------------ Protected Methods
 
@@ -196,24 +193,28 @@ abstract class UISelectBase extends UIInput implements NamingContainer {
 
     }
 
-    //
-    // Methods from NamingContainer
-    // 
+
+    // ------------------------------------------------ NamingContainer Methods
+
 
     public void addComponentToNamespace(UIComponent namedComponent) {
 	namespace.addComponentToNamespace(namedComponent);
     }
 
+
     public void removeComponentFromNamespace(UIComponent namedComponent) {
 	namespace.removeComponentFromNamespace(namedComponent);
     }
+
 
     public UIComponent findComponentInNamespace(String name) {
 	return namespace.findComponentInNamespace(name);
     }
 
+
     public synchronized String generateClientId() {
 	return namespace.generateClientId();
     }
+
 
 }

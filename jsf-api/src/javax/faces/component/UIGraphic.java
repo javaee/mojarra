@@ -1,9 +1,9 @@
 /*
- * $Id: UIGraphic.java,v 1.13 2002/12/03 23:02:01 jvisvanathan Exp $
+ * $Id: UIGraphic.java,v 1.14 2003/02/03 22:57:47 craigmcc Exp $
  */
 
 /*
- * Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2002-2003 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -35,21 +35,11 @@ public class UIGraphic extends UIOutput {
     public static final String TYPE = "javax.faces.component.UIGraphic";
 
 
-    // ------------------------------------------------------------- Properties
+    // ------------------------------------------------------------- Attributes
 
 
     /**
-     * <p>Return the component type of this <code>UIComponent</code>.</p>
-     */
-    public String getComponentType() {
-
-        return (TYPE);
-
-    }
-
-
-    /**
-     * <p>Return the local value of the image URL.</p>
+     * <p>Return the image URL for this {@link UIGraphic}.</p>
      */
     public String getURL() {
 
@@ -59,7 +49,7 @@ public class UIGraphic extends UIOutput {
 
 
     /**
-     * <p>Set the local value of the image URL.</p>
+     * <p>Set the image URL for this {@link UIGraphic}.</p>
      *
      * @param url The new image URL
      */
@@ -70,19 +60,19 @@ public class UIGraphic extends UIOutput {
     }
 
 
-    // ------------------------------------------- Lifecycle Processing Methods
+    // ------------------------------------------------------------- Properties
 
 
-    /**
-     * <p>Render the current value of this component if the value 
-     * of the rendered attribute is <code>true</code>. </p>
-     *
-     * @param context FacesContext for the response we are creating
-     *
-     * @exception IOException if an input/output error occurs while rendering
-     * @exception NullPointerException if <code>context</code>
-     *  is <code>null</code>
-     */
+    public String getComponentType() {
+
+        return (TYPE);
+
+    }
+
+
+    // ---------------------------------------------------- UIComponent Methods
+
+
     public void encodeEnd(FacesContext context) throws IOException {
 
         if (context == null) {
@@ -107,6 +97,9 @@ public class UIGraphic extends UIOutput {
         writer.write("\">");
 
     }
+
+
+    // -------------------------------------------------------- Private Methods
 
 
     /**

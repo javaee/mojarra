@@ -1,9 +1,9 @@
 /*
- * $Id: TreeFactory.java,v 1.12 2002/09/22 01:35:34 craigmcc Exp $
+ * $Id: TreeFactory.java,v 1.13 2003/02/03 22:57:51 craigmcc Exp $
  */
 
 /*
- * Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2002-2003 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -18,7 +18,7 @@ import javax.faces.context.FacesContext;
  * <p><strong>TreeFactory</strong> is a factory object that creates and
  * returns new {@link Tree} instances.</p>
  *
- * <p>There must be one <code>TreeFactory</code> instance per web
+ * <p>There must be one {@link TreeFactory} instance per web
  * application that is utilizing JavaServer Faces.  This instance can be
  * acquired, in a portable manner, by calling:</p>
  * <pre>
@@ -33,9 +33,10 @@ public abstract class TreeFactory {
     /**
      * <p>Create (if needed) and return a {@link Tree} that is initialized
      * with a root node, and whose <code>renderKitId</code> property is
-     * initialized to the identifier of the default <code>RenderKit</code>.</p>
+     * initialized to the identifier of the default
+     * {@link javax.faces.render.RenderKit}.</p>
      *
-     * @param context FacesContext for the current request
+     * @param context {@link FacesContext} for the current request
      * @param treeId Tree identifier of the tree to be constructed and
      *  returned
      *

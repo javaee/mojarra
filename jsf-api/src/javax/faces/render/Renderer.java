@@ -1,5 +1,5 @@
 /*
- * $Id: Renderer.java,v 1.15 2003/01/17 00:26:50 craigmcc Exp $
+ * $Id: Renderer.java,v 1.16 2003/02/03 22:57:50 craigmcc Exp $
  */
 
 /*
@@ -25,13 +25,11 @@ import javax.faces.context.FacesContext;
  * types (or classes), and advertises a set of render-dependent attributes
  * that it recognizes for each supported {@link UIComponent}.</p>
  *
- * <p>Families of <code>Renderer</code>s are packaged as a {@link RenderKit},
+ * <p>Families of {@link Renderer}s are packaged as a {@link RenderKit},
  * and together support the rendering of all of the {@link UIComponent}s in
- * the response tree associated with a {@link FacesContext}.  Within the set
- * of <code>Renderers</code> for a particular {@link RenderKit}, each must be
+ * the component tree associated with a {@link FacesContext}.  Within the set
+ * of {@link Renderer}s for a particular {@link RenderKit}, each must be
  * uniquely identified by the <code>rendererType</code> property.</p>
- *
- * <h3>Lifecycle</h3>
  *
  * <p>Individual {@link Renderer} instances will be instantiated as requested
  * during the rendering process, and will remain in existence for the
@@ -151,21 +149,26 @@ public abstract class Renderer {
      * <p>Decode the current state of the specified {@link UIComponent}
      * from the request contained in the specified {@link FacesContext},
      * and attempt to convert this state information into an object of
-     * the type required for this component.  If conversion is successful:
-     * </p>
+     * the type required for this component (optionally using the registered
+     * {@link javax.faces.convert.Converter} for this component,
+     * if there is one).</p>
+     *
+     * <p>If conversion is successful:</p>
      * <ul>
      * <li>Save the new local value of this component by calling
      *     <code>setValue()</code> and passing the new value.</li>
      * <li>Set the <code>value</code> property of this component
      *     to <code>true</code>.</li>
+     * </ul>
      *
      * <p>If conversion is not successful:</p>
      * <ul>
-     * <li>Save the state inforamtion (inside the component) in such a way
+     * <li>Save the state information (inside the component) in such a way
      *     that encoding can reproduce the previous input
      *     (even though it was syntactically or semantically incorrect).</li>
      * <li>Add an appropriate conversion failure error message by calling
-     *     <code>context.addMessage()</code>.</li>
+     *     <code>addMessage()</code> on the specified {@link FacesContext}.
+     *     </li>
      * <li>Set the <code>valid</code> property of this component
      *     to <code>false</code>.</li>
      * </ul>
@@ -180,7 +183,7 @@ public abstract class Renderer {
      *
      * @exception IOException if an input/output error occurs while decoding
      * @exception NullPointerException if <code>context</code>
-     *  or <code>component</code> is null
+     *  or <code>component</code> is <code>null</code>
      */
     public abstract void decode(FacesContext context, UIComponent component)
         throws IOException;
@@ -197,8 +200,8 @@ public abstract class Renderer {
      * acquired by calling <code>component.currentValue()</code>, and
      * rendering the value as appropriate.</p>
      *
-     * @param context FacesContext for the request we are processing
-     * @param component UIComponent to be rendered
+     * @param context {@link FacesContext} for the request we are processing
+     * @param component {@link UIComponent} to be rendered
      *
      * @exception IOException if an input/output error occurs while rendering
      * @exception NullPointerException if <code>context</code>
@@ -216,8 +219,8 @@ public abstract class Renderer {
      * if the <code>rendersChildren</code> property of this component
      * is <code>true</code>.</p>
      *
-     * @param context FacesContext for the response we are creating
-     * @param component UIComponent whose children are to be rendered
+     * @param context {@link FacesContext} for the response we are creating
+     * @param component {@link UIComponent} whose children are to be rendered
      *
      * @exception IOException if an input/output error occurs while rendering
      * @exception NullPointerException if <code>context</code>
@@ -234,8 +237,8 @@ public abstract class Renderer {
      * <code>encodeBegin()</code> to acquire the appropriate value
      * to be rendered.</p>
      *
-     * @param context FacesContext for the response we are creating
-     * @param component UIComponent whose children are to be rendered
+     * @param context {@link FacesContext} for the response we are creating
+     * @param component {@link UIComponent} to be rendered
      *
      * @exception IOException if an input/output error occurs while rendering
      * @exception NullPointerException if <code>context</code>
@@ -246,30 +249,25 @@ public abstract class Renderer {
         throws IOException;
 
     /**
-
-    * <p>Return the client-side id for the argument component.</p>
-
-    * <p>The purpose of this method is to give Renderers a chance to
-    * define, in a rendering specific way, the client side id for this
-    * component.  The client side id should be derived from the
-    * component id, if present.  </p>
-
-    * <p>Look up this component's "clientId" attribute.  If non-null,
-    * return it.  Get the component id for the argument
-    * <code>UIComponent</code>.  If null, generate one using the closest
-    * naming container that is an ancestor of this UIComponent, then set
-    * the generated id as the componentId of this UIComponent.  Prepend
-    * to the component id the component ids of each naming container up
-    * to, but not including, the root, separated by the
-    * UIComponent.SEPARATOR_CHAR.  In all cases, save the result as the
-    * value of the "clientId" attribute.</p>
-
-     * <p>This method must not return null.</p>
-
-    */ 
-
+     * <p>Return a client-side identifier for the argument component.</p>
+     *
+     * <p>If a client-side identifier has previously been generated for
+     * this component, and saved in the attribute named by
+     * <code>UIComponent.CLIENT_ID</code>,
+     * return that identifier value.  Otherwise, generate a new client-side
+     * identifier, save it in the attribute named by
+     * <code>UIComponent.CLIENT_ID</code> on the specified {@link UIComponent},
+     * and return it.</p>
+     *
+     * @param context {@link FacesContext} for the current request
+     * @param component {@link UIComponent} whose identifier is to be
+     *  returned
+     *
+     * @exception NullPointerException if <code>context</code>
+     *  or <code>component</code> is <code>null</code>
+     */ 
     public abstract String getClientId(FacesContext context,
-                                           UIComponent component);
+                                       UIComponent component);
 
 
 }

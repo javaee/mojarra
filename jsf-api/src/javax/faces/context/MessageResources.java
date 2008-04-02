@@ -1,9 +1,9 @@
 /*
- * $Id: MessageResources.java,v 1.2 2002/09/20 00:24:06 craigmcc Exp $
+ * $Id: MessageResources.java,v 1.3 2003/02/03 22:57:48 craigmcc Exp $
  */
 
 /*
- * Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2002-2003 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -29,7 +29,7 @@ public abstract class MessageResources {
     /**
      * <p>Return a localized {@link Message} instance corresponding to the
      * specified parameters, or <code>null</code> if the specified message
-     * identifier is not supported by the <code>MessageResources</code>
+     * identifier is not supported by the {@link MessageResources}
      * instance.</p>
      *
      * @param context The {@link FacesContext} associated with the request
@@ -45,7 +45,7 @@ public abstract class MessageResources {
     /**
      * <p>Return a localized {@link Message} instance corresponding to the
      * specified parameters, or <code>null</code> if the specified message
-     * identifier is not supported by the <code>MessageResources</code>
+     * identifier is not supported by the {@link MessageResources}
      * instance.</p>
      *
      * @param context The {@link FacesContext} associated with the request
@@ -63,7 +63,7 @@ public abstract class MessageResources {
     /**
      * <p>Return a localized {@link Message} instance corresponding to the
      * specified parameters, or <code>null</code> if the specified message
-     * identifier is not supported by the <code>MessageResources</code>
+     * identifier is not supported by the {@link MessageResources}
      * instance.</p>
      *
      * @param context The {@link FacesContext} associated with the request
@@ -81,7 +81,7 @@ public abstract class MessageResources {
     /**
      * <p>Return a localized {@link Message} instance corresponding to the
      * specified parameters, or <code>null</code> if the specified message
-     * identifier is not supported by the <code>MessageResources</code>
+     * identifier is not supported by the {@link MessageResources}
      * instance.</p>
      *
      * @param context The {@link FacesContext} associated with the request
@@ -100,7 +100,7 @@ public abstract class MessageResources {
     /**
      * <p>Return a localized {@link Message} instance corresponding to the
      * specified parameters, or <code>null</code> if the specified message
-     * identifier is not supported by the <code>MessageResources</code>
+     * identifier is not supported by the {@link MessageResources}
      * instance.</p>
      *
      * @param context The {@link FacesContext} associated with the request
@@ -121,7 +121,7 @@ public abstract class MessageResources {
     /**
      * <p>Return a localized {@link Message} instance corresponding to the
      * specified parameters, or <code>null</code> if the specified message
-     * identifier is not supported by the <code>MessageResources</code>
+     * identifier is not supported by the {@link MessageResources}
      * instance.</p>
      *
      * @param context The {@link FacesContext} associated with the request

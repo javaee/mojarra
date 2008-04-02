@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTestCase.java,v 1.21 2003/01/22 23:36:43 eburns Exp $
+ * $Id: UIComponentTestCase.java,v 1.22 2003/02/03 22:57:53 craigmcc Exp $
  */
 
 /*
@@ -132,16 +132,16 @@ public class UIComponentTestCase extends TestCase {
         // Duplicate component id - simple
         try {
             component.addChild(form1a);
-            fail("Should have thrown IllegalArgumentException");
-        } catch (IllegalArgumentException e) {
+            fail("Should have thrown IllegalStateException");
+        } catch (IllegalStateException e) {
             ; // Expected result
         }
 
         // Duplicate component id - indexed
         try {
             component.addChild(0, form1a);
-            fail("Should have thrown IllegalArgumentException");
-        } catch (IllegalArgumentException e) {
+            fail("Should have thrown IllegalStateException");
+        } catch (IllegalStateException e) {
             ; // Expected result
         }
 
@@ -610,7 +610,13 @@ public class UIComponentTestCase extends TestCase {
      */
     public void testRendersSelf() {
 
-        assertTrue("rendersSelf", !component.getRendersSelf());
+        if ((component instanceof UIParameter) ||
+            (component instanceof UISelectItem) ||
+            (component instanceof UISelectItems)) {
+            assertTrue("rendersSelf", component.getRendersSelf());
+        } else {
+            assertTrue("rendersSelf", !component.getRendersSelf());
+        }
 
     }
 

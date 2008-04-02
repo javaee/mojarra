@@ -1,10 +1,9 @@
 /*
- * $Id: Message.java,v 1.3 2002/07/26 22:04:52 craigmcc Exp $
- * @author Gary Karasiuk <karasiuk@ca.ibm.com>
+ * $Id: Message.java,v 1.4 2003/02/03 22:57:48 craigmcc Exp $
  */
 
 /*
- * Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2002-2003 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -14,7 +13,7 @@ package javax.faces.context;
 /**
  * <p><strong>Message</strong> represents a single validation (or other)
  * message, which is typically associated with a particular component in
- * the request component tree.</p>
+ * the component tree.</p>
  */
 
 public interface Message {
@@ -54,7 +53,7 @@ public interface Message {
 
 
     /**
-     * <p>Return the localized detail text for this <code>Message</code>
+     * <p>Return the localized detail text for this {@link Message}
      * (if any).  This should be additional text that can help the user
      * understand the context of the problem, and offer suggestions for
      * approaches to correcting it.</p>
@@ -63,13 +62,13 @@ public interface Message {
 
 
     /**
-     * <p>Return the severity level of this <code>Message</code>.</p>
+     * <p>Return the severity level of this {@link Message}.</p>
      */
     public int getSeverity();
 
 
     /**
-     * <p>Return the localized summary text for this <code>Message</code>.
+     * <p>Return the localized summary text for this {@link Message}.
      * This should be the text that would normally be displayed to a user
      * to identify the problem that needs to be corrected.</p>
      */

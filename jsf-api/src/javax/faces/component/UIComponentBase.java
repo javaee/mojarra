@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.42 2003/01/22 23:36:42 eburns Exp $
+ * $Id: UIComponentBase.java,v 1.43 2003/02/03 22:57:46 craigmcc Exp $
  */
 
 /*
@@ -33,7 +33,7 @@ import javax.faces.validator.Validator;
  * <p><strong>UIComponentBase</strong> is a convenience base class that
  * implements the default concrete behavior of all methods defined by
  * {@link UIComponent} except <code>getComponentType()</code>.
- * Concrete subclasses of <code>UIComponentBase</code> must implement the
+ * Concrete subclasses of {@link UIComponentBase} must implement the
  * <code>getComponentType()</code> method.  Component types are used to
  * select the appropriate {@link Renderer} to be used for decoding and
  * encoding, if the <code>rendererType</code> property is non-null.</p>
@@ -42,6 +42,12 @@ import javax.faces.validator.Validator;
  * return <code>false</code>.  Subclasses that wish to manage the rendering
  * of their children should override this method to return <code>true</code>
  * instead.</p>
+ *
+ * <p>By default, this class defines <code>getRendersSelf()</code> to
+ * return <code>false</code>.  Subclasses that have directly implemented
+ * decoding and encoding functionality, without the requirement for an
+ * associated {@link Renderer}, should override this method to return
+ * <code>true</code> instead.</p>
  */
 
 public abstract class UIComponentBase implements UIComponent {
@@ -162,16 +168,10 @@ public abstract class UIComponentBase implements UIComponent {
     // ------------------------------------------------------------- Properties
 
 
-    public String getComponentId() {
-
-        return ((String) getAttribute("componentId"));
-
-    }
-
     public String getClientId(FacesContext context) {
 	String result = null;
 
-	if (null != (result = (String) getAttribute("clientId"))) {
+	if (null != (result = (String) getAttribute(CLIENT_ID_ATTR))) {
 	    return result;
 	}
 
@@ -228,9 +228,17 @@ public abstract class UIComponentBase implements UIComponent {
 	if (null == result) {
 	    throw new NullPointerException();
 	}
-	setAttribute("clientId", result);
+	setAttribute(CLIENT_ID_ATTR, result);
 	return result;
     }
+
+
+    public String getComponentId() {
+
+        return ((String) getAttribute("componentId"));
+
+    }
+
 
     public void setComponentId(String componentId) {
 
@@ -240,7 +248,7 @@ public abstract class UIComponentBase implements UIComponent {
 	// Handle the case where we're re-naming a component
 	if (null != (currentId = getComponentId())) {
 	    maybeRemoveFromNearestNamingContainer(this);
-	    setAttribute("clientId", null);
+	    setAttribute(CLIENT_ID_ATTR, null);
 	}
 
         setAttribute("componentId", componentId);
@@ -250,7 +258,7 @@ public abstract class UIComponentBase implements UIComponent {
 	    // the namespace.
 	    maybeAddToNearestNamingContainer(this);
 	}
-	catch (IllegalArgumentException e) {
+	catch (IllegalStateException e) {
 	    // If we can't be added to the namespace, roll-back our
 	    // component-id
 	    setAttribute("componentId", null);
@@ -259,7 +267,9 @@ public abstract class UIComponentBase implements UIComponent {
 
     }
 
+
     public abstract String getComponentType();
+
 
     public String getModelReference() {
 
@@ -267,11 +277,13 @@ public abstract class UIComponentBase implements UIComponent {
 
     }
 
+
     public void setModelReference(String modelReference) {
 
         setAttribute("modelReference", modelReference);
 
     }
+
 
     public UIComponent getParent() {
 
@@ -320,11 +332,13 @@ public abstract class UIComponentBase implements UIComponent {
 
     }
 
+
     public void setRendererType(String rendererType) {
 
         setAttribute("rendererType", rendererType);
 
     }
+
 
     public boolean getRendersChildren() {
 
@@ -332,11 +346,13 @@ public abstract class UIComponentBase implements UIComponent {
 
     }
 
+
     public boolean getRendersSelf() {
 
         return (false);
 
     }
+
 
     public boolean isValid() {
 
@@ -351,11 +367,6 @@ public abstract class UIComponentBase implements UIComponent {
     }
 
 
-    /**
-     * <p>Set the current validity state of this component.</p>
-     *
-     * @param valid The new validity state
-     */
     public void setValid(boolean valid) {
 
         if (valid) {
@@ -373,11 +384,13 @@ public abstract class UIComponentBase implements UIComponent {
 
     }
 
+
     public void setValue(Object value) {
 
         setAttribute("value", value);
 
     }
+
 
     public Object currentValue(FacesContext context) {
 
@@ -417,30 +430,16 @@ public abstract class UIComponentBase implements UIComponent {
 
 
     /**
-
-    * <p>Verify that the argument UIComponent is safe to add to the tree.
-    * This is true if and only if:</p>
-
-    * 	<ul>
-
-	  <li><p>toAdd is non-null</p>
-	  </li>
-
-	  <li><p>toAdd has a null component id, or, if non-null, the
-	  component contains nothing but valid characters.</p></li>
-
-	</ul>
-
-     * @throws IllegalArgumentException if the argument UIComponent is
-     * null
-
-     * @throws IllegalArgumentException if the componentId of this
-     * component is non-null and contains invalid characters.
-
-
-    */
-   
+     * <p>Verify that the specified component id is safe to add to the tree.
+     * </p>
+     *
+     * @param componentId The proposed component id to check for validity
+     *
+     * @exception IllegalArgumentException if <code>componentId</code>
+     *  is <code>null</code> or contains invalid characters
+     */
     private void validateComponentId(String componentId) {
+
 	if (null == componentId) {
 	    return;
 	}
@@ -450,12 +449,14 @@ public abstract class UIComponentBase implements UIComponent {
 
     }
             
+
     /**
+     * <p>Find and return the closest naming container parent of the specified
+     * {@link UIComponent}.</p>
+     */
+    private static NamingContainer findClosestNamingContainer
+        (UIComponent start) {
 
-
-    */
-
-    private static NamingContainer findClosestNamingContainer(UIComponent start){
 	UIComponent cur = start;
 	NamingContainer closestContainer = null;
 
@@ -476,29 +477,30 @@ public abstract class UIComponentBase implements UIComponent {
 	return closestContainer;
     }
 
-    /**
 
-     * <p>If the component identifier of this UIComponent instance is
+    /**
+     * <p>If the component identifier of this {@link UIComponent} instance is
      * non-null, and contains all valid characters, find the closest
      * ancestor that is a naming container and try to add this component
-     * identifier to the namespace. <p>
-
-     * @return the closest ancestor to this UIComponent that is a naming
-     * container, if this UIComponent was successfully added to the
-     * namespace of that naming container, or null if no naming
-     * container is necessary.
-
-     * @param component the UIComponent instance to add
-
+     * identifier to the namespace.</p>
+     *
+     * @param component The component to be added
+     *
+     * @return the closest ancestor to the specified {@link UIComponent}
+     *  that is a naming container, if the specified {@link UIComponent} was
+     *  successfully added to the namespace of that naming container, or
+     *  <code>null</code> if no naming container is necessary.
+     *
      * @exception IllegalArgumentException if the component identifier
-     * of the new component is non-null, and is not unique in the
-     * namespace of the closest ancestor that is a naming container.
-
+     *  of the new component is non-null, and is not unique in the
+     *  namespace of the closest ancestor that is a naming container.
+     *
      * @exception IllegalArgumentException if the component identifier
      * of the new component is non-null, and contains non-valid chars.
-
      */
-    private NamingContainer maybeAddToNearestNamingContainer(UIComponent component) {
+    private NamingContainer maybeAddToNearestNamingContainer
+        (UIComponent component) {
+
 	String componentId = component.getComponentId();
 
 	if (null == componentId) {
@@ -517,21 +519,21 @@ public abstract class UIComponentBase implements UIComponent {
 	return closestContainer;
     }
 
+
     /**
+     * <p>If the componentId for this component is non-null, and is in the
+     * namespace of the nearest naming container, it is removed from that
+     * namespace.</p>
+     *
+     * @param component the {@link UIComponent} instance to remove from the
+     *  nearest naming container
+     *
+     * @return the {@link NamingContainer} from which this {@link UIComponent}
+     *  instance was removed, or null if no naming container is found.
+     */
+    private NamingContainer maybeRemoveFromNearestNamingContainer
+        (UIComponent component) {
 
-    * <p>If the componentId for this component is non-null, and is in the
-    * namespace of the nearest naming container, it is removed from that
-    * namespace.</p>
-
-    * @return the naming container from which this UIComponent instance
-    * was removed, or null if no naming container is found.
-
-    * @param component the UIComponent instance to remove from the
-    * nearest naming container.
-
-    */
-
-    private NamingContainer maybeRemoveFromNearestNamingContainer(UIComponent component) {
 	String componentId = component.getComponentId();
 
 	if (null == componentId) {
@@ -549,6 +551,7 @@ public abstract class UIComponentBase implements UIComponent {
 	}
 	return closestContainer;
     }
+
 
     /**
      * <p>Create (if necessary) and return an iterator over the child
@@ -587,6 +590,7 @@ public abstract class UIComponentBase implements UIComponent {
 
     }
 
+
     public void addChild(int index, UIComponent component) {
 	if (this == component) {
 	    throw new IllegalArgumentException();
@@ -606,6 +610,7 @@ public abstract class UIComponentBase implements UIComponent {
 
     }
 
+
     public void clearChildren() {
 
         if (!isChildrenAllocated()) {
@@ -615,11 +620,13 @@ public abstract class UIComponentBase implements UIComponent {
 
     }
 
+
     public boolean containsChild(UIComponent component) {
 
         return (component.getParent() == this);
 
     }
+
 
     public UIComponent findComponent(String expr) {
 
@@ -645,6 +652,7 @@ public abstract class UIComponentBase implements UIComponent {
 
     }
 
+
     public int getChildCount() {
 
         if (isChildrenAllocated()) {
@@ -654,6 +662,7 @@ public abstract class UIComponentBase implements UIComponent {
         }
 
     }
+
 
     public Iterator getChildren() {
 
@@ -727,7 +736,7 @@ public abstract class UIComponentBase implements UIComponent {
         if (null == facet || null == facetName) {
             throw new NullPointerException();
         }
-	facet.setAttribute(FACET_PARENT, this);
+	facet.setAttribute(FACET_PARENT_ATTR, this);
         getFacets().put(facetName, facet);
 
     }
@@ -735,7 +744,7 @@ public abstract class UIComponentBase implements UIComponent {
 
     public void clearFacets() {
 
-	// PENDING(edburns): do we need to clear the FACET_PARENT
+	// PENDING(edburns): do we need to clear the FACET_PARENT_ATTR
 	// attribute of each of the facets?  This would cost some time.
 
         facets = null;
@@ -771,7 +780,7 @@ public abstract class UIComponentBase implements UIComponent {
 	UIComponent facet = null;
         if (facets != null) {
 	    if (null != (facet = (UIComponent) facets.remove(name))) {
-		facet.setAttribute(FACET_PARENT, null);
+		facet.setAttribute(FACET_PARENT_ATTR, null);
 	    }
         }
 
@@ -1017,6 +1026,9 @@ public abstract class UIComponentBase implements UIComponent {
                 validator.validate(context, this);
             }
             validate(context);
+        }
+        if (!isValid()) {
+            context.renderResponse();
         }
 
     }

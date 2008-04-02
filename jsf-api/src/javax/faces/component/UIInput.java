@@ -1,5 +1,5 @@
 /*
- * $Id: UIInput.java,v 1.14 2003/01/24 18:02:00 rkitain Exp $
+ * $Id: UIInput.java,v 1.15 2003/02/03 22:57:47 craigmcc Exp $
  */
 
 /*
@@ -29,8 +29,8 @@ import javax.faces.event.ValueChangedListener;
  * subsequent request that need to be decoded.  There are no restrictions
  * on the data type of the local value, or the object referenced by the
  * model reference expression (if any); however, individual
- * <code>Renderer</code>s will generally impose restrictions on the type
- * of data they know how to display.</p>
+ * {@link javax.faces.render.Renderer}s will generally impose restrictions
+ * on the type of data they know how to display.</p>
  *
  * <p>When the <code>validate()</code> method of this {@link UIInput}
  * detects that a value change has actually occurred, and that all validations
@@ -58,15 +58,13 @@ public class UIInput extends UIComponentBase {
      * <code>validate()</code> processing to determine whether a {@link
      * ValueChangedEvent} should be queued.
      */
-    public static final String PREVIOUS_VALUE = "javax.faces.component.PreviousValue";
+    public static final String PREVIOUS_VALUE =
+        "javax.faces.component.PreviousValue";
 
 
     // ------------------------------------------------------------- Properties
 
 
-    /**
-     * <p>Return the component type of this <code>UIComponent</code>.</p>
-     */
     public String getComponentType() {
 
         return (TYPE);
@@ -74,18 +72,9 @@ public class UIInput extends UIComponentBase {
     }
 
 
-    // ------------------------------------------- Lifecycle Processing Methods
+    // ---------------------------------------------------- UIComponent Methods
 
 
-    /**
-     * <p>Decode the new value of this component from the incoming request.</p>
-     *
-     * @param context FacesContext for the request we are processing
-     *
-     * @exception IOException if an input/output error occurs while reading
-     * @exception NullPointerException if <code>context</code>
-     *  is <code>null</code>
-     */
     public void decode(FacesContext context) throws IOException {
 
         if (context == null) {
@@ -108,16 +97,6 @@ public class UIInput extends UIComponentBase {
     }
 
 
-    /**
-     * <p>Render the current value of this component if the value 
-     * of the rendered attribute is <code>true</code>. </p>
-     *
-     * @param context FacesContext for the response we are creating
-     *
-     * @exception IOException if an input/output error occurs while rendering
-     * @exception NullPointerException if <code>context</code>
-     *  is <code>null</code>
-     */
     public void encodeEnd(FacesContext context) throws IOException {
 
         if (context == null) {
@@ -201,16 +180,20 @@ public class UIInput extends UIComponentBase {
 
     }
     
+
     /**
-     * Returns <code>true</code> if the new value is different from the previous
-     * value.
+     * <p>Return <code>true</code> if the new value is different from the
+     * previous value.</p>
      *
      * @param previous old value of this component
      * @param value new value of this component
      */
     protected boolean compareValues(Object previous, Object value) {
+
         return (!(previous.equals(value)));
+
     }
+
 
     // ----------------------------------------------- Event Processing Methods
 

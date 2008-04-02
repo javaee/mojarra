@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContext.java,v 1.35 2003/01/16 23:27:36 craigmcc Exp $
+ * $Id: FacesContext.java,v 1.36 2003/02/03 22:57:48 craigmcc Exp $
  */
 
 /*
@@ -31,13 +31,13 @@ import javax.servlet.http.HttpSession;
  * and the rendering of the corresponding response.  It is passed to, and
  * potentially modified by, each phase of the request processing lifecycle.</p>
  *
- * <p>A <code>FacesContext</code> instance is associated with a particular
+ * <p>A {@link FacesContext} instance is associated with a particular
  * request at the beginning of request processing, by a call to the
  * <code>getFacesContext()</code> method of the {@link FacesContextFactory}
  * instance associated with the current web application.  The instance
  * remains active until its <code>release()</code> method is called, after
  * which no further references to this instance are allowed.  While a
- * <code>FacesContext</code> instance is active, it must not be referenced
+ * {@link FacesContext} instance is active, it must not be referenced
  * from any thread other than the one upon which the servlet container
  * executing this web application utilizes for the processing of this request.
  * </p>
@@ -51,7 +51,7 @@ public abstract class FacesContext {
 
     /**
      * <p>The name of the request attribute under which the
-     * <code>FacesContext</code> instance for the current request will
+     * {@link FacesContext} instance for the current request will
      * be stored.</p>
      */
     public static final String FACES_CONTEXT_ATTR =
@@ -66,6 +66,10 @@ public abstract class FacesContext {
      * for events that should be handled by the application during the
      * <em>Invoke Application</em> phase of the request processing
      * lifecycle.</p>
+     *
+     * @deprecated The current mechanism for handling application events is a
+     *  placeholder, and will be replaced in the next public release of
+     *  JavaServer Faces.
      */
     public abstract Iterator getApplicationEvents();
 
@@ -73,6 +77,10 @@ public abstract class FacesContext {
     /**
      * <p>Return the number of {@link ApplicationEvent}s that have been queued
      * tot he application, or zero if no such events have been queued.</p>
+     *
+     * @deprecated The current mechanism for handling application events is a
+     *  placeholder, and will be replaced in the next public release of
+     *  JavaServer Faces.
      */
     public abstract int getApplicationEventsCount();
 
@@ -81,6 +89,10 @@ public abstract class FacesContext {
      * <p>Return the {@link ApplicationHandler} instance to be utilized during
      * the <em>Invoke Application</em> phase of the request processing
      * lifecycle.</p>
+     *
+     * @deprecated The current mechanism for handling application events is a
+     *  placeholder, and will be replaced in the next public release of
+     *  JavaServer Faces.
      */
     public abstract ApplicationHandler getApplicationHandler();
 
@@ -235,7 +247,7 @@ public abstract class FacesContext {
 
 
     /**
-     * <p>Set the {@link Tree} that is associated with this request.
+     * <p>Set the component {@link Tree} that is associated with this request.
      * This method can only be called by the application handler (or a
      * class that the handler calls), and only during the <em>Invoke
      * Application</em> phase of the request processing lifecycle.</p>
@@ -270,6 +282,10 @@ public abstract class FacesContext {
      *
      * @exception NullPointerException if <code>event</code>
      *  is <code>null</code>
+     *
+     * @deprecated The current mechanism for handling application events is a
+     *  placeholder, and will be replaced in the next public release of
+     *  JavaServer Faces.
      */
     public abstract void addApplicationEvent(ApplicationEvent event);
 
