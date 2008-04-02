@@ -172,6 +172,16 @@
             <fileset dir="${basedir}/jsf-${impl.version}"/>
         </move>
 
+        <echo>Creating Special JAR for GlassFish</echo>
+        <mkdir dir="${basedir}/tmp"/>
+        <jsf.manifested.jar jarfile="${basedir}/tmp/jsf-impl.jar"
+                            basedir="${jsf.build.home}/jsf-ri/build/classes"
+                            extension-name="com.sun.faces"/>
+        <jar jarfile="glassfish-jsf-${impl.version}.jar">
+            <fileset dir="${basedir}/tmp" includes="jsf-impl.jar"/>
+            <fileset dir="${jsf.build.home}/jsf-api/build/lib" includes="jsf-api.jar"/>
+        </jar>             
+        <delete dir="${basedir}/tmp"/>
     </target>
 
 

@@ -113,7 +113,11 @@
 
         <copy file="${demo.dir}/jsf-${impl.version}.zip"
               tofile="${dist.dir}/javaserverfaces_binary.zip"/>
+       
+        <copy file="${demo.dir}/glassfish-jsf-${impl.version}.jar"
+              todir="${dist.dir}"/>
 
+        <delete file="${demo.dir}/glassfish-jsf-${impl.version}.jar"/>
         <delete file="${demo.dir}/jsf-${impl.version}.zip"/>
 
         <ant target="jsf.source"/>
