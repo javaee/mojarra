@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationImpl.java,v 1.33 2003/11/07 18:45:24 eburns Exp $
+ * $Id: ApplicationImpl.java,v 1.34 2003/11/07 23:11:30 rlubke Exp $
  */
 
 /*
@@ -305,7 +305,7 @@ public class ApplicationImpl extends Application {
             // the binding doesn't exist.  Check the syntax of the reference
             // expression.  If the expression is valid, this has the side
             // effect of caching the expression in the ExpressionEvaluator.
-	    ref = stripBracketsIfNecessary(ref);
+	    ref = Util.stripBracketsIfNecessary(ref);
             checkSyntax(ref);
             valueBinding = new ValueBindingImpl (this);
             ((ValueBindingImpl) valueBinding).setRef(ref);
@@ -760,27 +760,7 @@ public class ApplicationImpl extends Application {
         }
 
         return bean;
-    }
-
-    private String stripBracketsIfNecessary(String ref) throws ReferenceSyntaxException {            
-	Assert.assert_it(null != ref);
-	int len = 0;
-	// look for invalid refs
-	if ('#' == ref.charAt(0)) {
-	    if ('{' != ref.charAt(1)) {
-		throw new ReferenceSyntaxException(Util.getExceptionMessage(
-						Util.INVALID_EXPRESSION_ID,
-						new Object[] { ref }));
-	    }
-	    if ('}' != ref.charAt((len = ref.length()) - 1)) {
-		throw new ReferenceSyntaxException(Util.getExceptionMessage(
-						Util.INVALID_EXPRESSION_ID,
-						new Object[] { ref }));
-	    }
-	    ref = ref.substring(2, len - 1);
-	}
-	return ref;
-    }
+    }    
         
     private void checkSyntax(String ref) throws ReferenceSyntaxException { 
         try {                       

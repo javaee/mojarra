@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.111 2003/11/07 18:45:26 eburns Exp $
+ * $Id: Util.java,v 1.112 2003/11/07 23:11:31 rlubke Exp $
  */
 
 /*
@@ -38,6 +38,7 @@ import javax.faces.context.FacesContextFactory;
 import javax.faces.context.ResponseWriter;
 import javax.faces.convert.Converter;
 import javax.faces.el.ValueBinding;
+import javax.faces.el.ReferenceSyntaxException;
 import javax.faces.lifecycle.LifecycleFactory;
 import javax.faces.model.SelectItem;
 import javax.faces.render.RenderKit;
@@ -65,7 +66,7 @@ import com.sun.faces.el.impl.JspVariableResolver;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.111 2003/11/07 18:45:26 eburns Exp $ 
+ * @version $Id: Util.java,v 1.112 2003/11/07 23:11:31 rlubke Exp $ 
  */
 
 public class Util extends Object
@@ -1160,6 +1161,27 @@ private Util()
 	    }
 	}
 	return result;
+    }
+        
+    public static String stripBracketsIfNecessary(String expression)
+        throws ReferenceSyntaxException {
+        Assert.assert_it(null != expression);
+        int len = 0;
+        // look for invalid expressions
+        if ('#' == expression.charAt(0)) {
+            if ('{' != expression.charAt(1)) {
+                throw new ReferenceSyntaxException(Util.getExceptionMessage(
+                    Util.INVALID_EXPRESSION_ID,
+                    new Object[]{expression}));
+            }
+            if ('}' != expression.charAt((len = expression.length()) - 1)) {
+                throw new ReferenceSyntaxException(Util.getExceptionMessage(
+                    Util.INVALID_EXPRESSION_ID,
+                    new Object[]{expression}));
+            }
+            expression = expression.substring(2, len - 1);
+        }
+        return expression;
     }
     
     //
