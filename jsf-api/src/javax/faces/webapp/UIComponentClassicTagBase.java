@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentClassicTagBase.java,v 1.27 2006/11/03 20:44:41 rlubke Exp $
+ * $Id: UIComponentClassicTagBase.java,v 1.28 2007/01/19 14:44:31 jdlee Exp $
  */
 
 /*
@@ -773,8 +773,9 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
                         UIComponent child = component.findComponent(old);
                         // if a component is marked transient, it would have 
                         // been already removed from the child list, but the
-                        // oldList would still have it. So,unless findComponent
-                        // is successful, we don't have to call remove child.
+                        // oldList would still have it.  In addition, the component
+                        // might have manually been removed.  So, if findComponent
+                        // isn't successful, don't call remove child (it will NPE)
                         if ( child != null) {
                             component.getChildren().remove(child);
                         }
@@ -788,7 +789,9 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
                 while (olds.hasNext()) {
                     String old = olds.next();
                     UIComponent child = component.findComponent(old);
-                    component.getChildren().remove(child);
+                    if (child != null) {
+                        component.getChildren().remove(child);
+                    }
                 }
 
             }
