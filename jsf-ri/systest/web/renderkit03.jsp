@@ -33,7 +33,9 @@
 
     // Acquire a view
     UIViewRoot view = facesContext.getApplication().getViewHandler().restoreView(facesContext, "/renderkit03A.jsp");
-
+    if ( view == null)  {
+        view = facesContext.getApplication().getViewHandler().createView(facesContext, "/renderkit03A.jsp");
+    }
     // Set the "DEFAULT" renderkit Id
     view.setRenderKitId("CUSTOM");
     facesContext.setViewRoot(view);
