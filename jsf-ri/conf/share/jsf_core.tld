@@ -183,6 +183,23 @@
   </tag>
 
   <tag>
+    <name>loadBundle</name>
+    <tag-class>javax.faces.webapp.LoadBundleTag</tag-class>
+      <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
+    <body-content>JSP</body-content>
+    <attribute>
+      <name>basename</name>
+      <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>var</name>
+      <required>true</required>
+      <rtexprvalue>true</rtexprvalue>
+    </attribute>
+  </tag>
+
+  <tag>
       <name>valuechange_listener</name>
       <tag-class>com.sun.faces.taglib.jsf_core.ValueChangeListenerTag</tag-class>
       <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
