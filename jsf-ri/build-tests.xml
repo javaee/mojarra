@@ -341,8 +341,8 @@
             <test name="com.sun.faces.renderkit.html_basic.TestRenderers_1"/>
 <!--
             <test name="com.sun.faces.renderkit.html_basic.TestRenderers_2"/>
-            <test name="com.sun.faces.renderkit.html_basic.TestRenderers_3"/>
 -->
+            <test name="com.sun.faces.renderkit.html_basic.TestRenderers_3"/>
             <test name="com.sun.faces.renderkit.html_basic.TestRenderers_4"/>
             <test name="com.sun.faces.renderkit.TestRenderKit"/>
             <test name="com.sun.faces.renderkit.TestRenderKitFactory"/>
