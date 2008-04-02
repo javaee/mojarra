@@ -60,7 +60,7 @@
 
 	<TD>
 
-            <h:commandButton id="pushButton" type="button"
+            <h:commandButton id="pushButton" type="button" style="someStyle"
                  disabled = "true" image="duke.gif">
             </h:commandButton>
 	</TD>
@@ -96,14 +96,14 @@
 
 	<TD>
 
-	      <h:commandLink id="imageLink">
+	      <h:commandLink id="imageLink" style="someStyle">
                 <h:graphicImage url="duke.gif"/>
               </h:commandLink>
 
 	</TD>
 
         <TD> 
-            <h:graphicImage id="graphicImage" url="/duke.gif" ismap="true" usemap="#map1" /> 
+            <h:graphicImage id="graphicImage" style="someStyle" url="/duke.gif" ismap="true" usemap="#map1" /> 
         </TD>
 
       </TR>
@@ -155,7 +155,7 @@
 
 	<TD>
 
-	      <h:outputLink value="test.html"id="output_imageLink">
+	      <h:outputLink value="test.html"id="output_imageLink" style="position: absolute; left: 96px; top: 168px">
                 <h:graphicImage url="duke.gif"/>
               </h:outputLink>
 
@@ -169,7 +169,8 @@
 
       <TR>
         <TD>
-            <h:outputLink value="test.html" id="output_commandLink" styleClass="hyperlinkClass"><f:verbatim>link text</f:verbatim>
+            <h:outputLink value="test.html" id="output_commandLink" 
+                style="position: absolute; left: 96px; top: 168px" styleClass="hyperlinkClass"><f:verbatim>link text</f:verbatim>
             </h:outputLink>
        </TD>
       </TR>
@@ -206,7 +207,7 @@
 
 	<TD>
               
-             <h:outputText id="outputText" value="Output Text"/>
+             <h:outputText id="outputText" value="Output Text" style="someStyle"/>
             
               <h:outputText id="testvisible1" value="This should not be visible"
                                rendered="false" />
@@ -220,10 +221,29 @@
 
 	<TD>
             
-            <h:selectManyCheckbox  id="checkbox1" rendered="true"
+            <h:selectBooleanCheckbox  id="checkbox1" rendered="true"
                    styleClass="selectbooleanClass"/>
-             <h:outputLabel id="labe11" for="checkbox1">
-                        <h:outputText id="outputlabel" value="Checkbox"/>
+             <h:outputLabel id="labe11" style="position: absolute; left: 96px; top: 168px" for="checkbox1">
+                 <h:outputText id="outputlabel1" value="CheckboxAndLabelWithFor"/>
+              </h:outputLabel>
+	</TD>
+        </TR>
+
+        <TR>
+        <TD>
+             <h:outputLabel id="labe13" style="position: absolute; left: 96px; top: 168px">
+                <h:outputText id="outputlabel3" value="CheckboxAndLabelWithoutFor"/>
+                 <h:selectBooleanCheckbox  id="checkbox3" rendered="true"
+                   styleClass="selectbooleanClass"/>
+              </h:outputLabel>
+	</TD> 
+        </TR>
+        <TR>
+        <TD>
+             <h:outputLabel id="labe14" style="position: absolute; left: 96px; top: 168px">
+                <h:selectBooleanCheckbox  id="checkbox4" rendered="true"
+                   styleClass="selectbooleanClass"/>
+                 <h:outputText id="outputlabel4" value="CheckboxAndLabelWithoutFor"/>
               </h:outputLabel>
 	</TD>
 
@@ -234,7 +254,7 @@
 	<TD>
 
 	     <h:selectOneListbox styleClass="selectoneClass"
-                     title="Select Quantity"
+                     title="Select Quantity" style="someStyle"
                      tabindex="20" >
 
                 <f:selectItem  itemDisabled="true" itemValue="0" itemLabel="0"/>
@@ -261,7 +281,7 @@
 	    <h:selectOneRadio id="shipType" layout="LINE_DIRECTION" 
                 tabindex="3" disabledClass="disabledClass" 
                 enabledClass="enabledClass" accesskey="A" 
-                styleClass = "styleClass" disabled="true">
+                styleClass = "someStyleClass" style="someStyle" disabled="true">
 
                 <f:selectItem itemValue="nextDay" itemLabel="Next Day" itemDisabled="true"/>
                 <f:selectItem itemValue="nextWeek" itemLabel="Next Week" />
@@ -296,7 +316,7 @@
         <TD>Float: 
         </TD>
 
-	<TD><h:inputText value="3.1415">
+	<TD><h:inputText value="3.1415" style="someStyle">
                 <f:converter converterId="javax.faces.Float"/>
             </h:inputText>
 	</TD>
@@ -490,7 +510,7 @@
 
 <tr>
 					<TD>Multi-select menu:</TD>
-					<TD><h:selectManyMenu id="ManyApples" styleClass="selectmanyClass">
+					<TD><h:selectManyMenu id="ManyApples" styleClass="selectmanyClass" style="someStyle">
 						<f:selectItem itemValue="0" itemLabel="zero" />
 						<f:selectItem itemValue="1" itemLabel="one" />
 						<f:selectItem itemValue="2" itemLabel="two" />
@@ -507,7 +527,7 @@
 
 <tr>
 					<TD>Multi-select listbox:</TD>
-					<TD><h:selectManyListbox >
+					<TD><h:selectManyListbox style="someStyle">
 						<f:selectItem itemValue="0" itemLabel="zero" />
 						<f:selectItem itemValue="1" itemLabel="one" />
 						<f:selectItem itemValue="2" itemLabel="two" />
@@ -523,7 +543,7 @@
 
 <tr>
 					<TD><h:selectManyCheckbox id="ManyApples3" 
-                                                tabindex="3" disabledClass="disabledClass" 
+                                                tabindex="3" disabledClass="disabledClass" style="someStyle"
                                                 styleClass="styleClass" enabledClass="enabledClass" accesskey="A">>
 						<f:selectItem itemValue="0" itemLabel="zero" itemDisabled="true" />
 						<f:selectItem itemValue="1" itemLabel="one" />

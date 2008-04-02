@@ -1,5 +1,5 @@
 /*
- * $Id: RadioRenderer.java,v 1.64 2004/03/02 20:08:03 rkitain Exp $
+ * $Id: RadioRenderer.java,v 1.65 2004/03/11 22:29:23 jvisvanathan Exp $
  */
 
 /*
@@ -125,20 +125,11 @@ public class RadioRenderer extends SelectManyCheckboxListRenderer {
         if (curItem.isDisabled()) {
             writer.writeAttribute("disabled", "disabled", "disabled");
         }
-        // Apply HTML 4.x attributes specified on selectone component to all 
-        // items in the list except styleClass. styleClass has been rendered as
-        // an attribute of outer most table already, so temporarily null out the 
-        // attribute,so that it is not rendered again as a pass through attribute.
-        Object styleClass = null;
-        if (component.getAttributes().containsKey("styleClass")) {
-            styleClass = component.getAttributes().get("styleClass");
-            component.getAttributes().remove("styleClass");
-        }
-        Util.renderPassThruAttributes(writer, component);
+        // Apply HTML 4.x attributes specified on UISelectMany component to all 
+        // items in the list except styleClass and style which are rendered as
+        // attributes of outer most table.
+        Util.renderPassThruAttributes(writer, component, new String[]{"style"});
         Util.renderBooleanPassThruAttributes(writer, component);
-        if (styleClass != null) {
-            component.getAttributes().put("styleClass", styleClass);
-        }
 
         String itemLabel = curItem.getLabel();
         if (itemLabel != null) {

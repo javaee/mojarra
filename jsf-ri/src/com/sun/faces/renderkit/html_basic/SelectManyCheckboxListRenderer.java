@@ -5,7 +5,7 @@
 
 
 /**
- * $Id: SelectManyCheckboxListRenderer.java,v 1.32 2004/03/02 20:08:04 rkitain Exp $
+ * $Id: SelectManyCheckboxListRenderer.java,v 1.33 2004/03/11 22:29:24 jvisvanathan Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -119,7 +119,7 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
             // If we come across a group of options, render them as a nested
             // table.
             if (curItem instanceof SelectItemGroup) {
-// write out the label for the group.
+                // write out the label for the group.
                 if (curItem.getLabel() != null) {
                     if (alignVertical) {
                         writer.startElement("tr", component);
@@ -139,7 +139,7 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
                 writer.writeText("\n", null);
                 renderBeginText(component, 0, alignVertical,
                                 context, false);
-// render options of this group.
+                // render options of this group.
                 SelectItem[] itemsArray =
                     ((SelectItemGroup) curItem).getSelectItems();
                 for (int i = 0; i < itemsArray.length; ++i) {
@@ -225,21 +225,13 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
             writer.writeAttribute("disabled", "disabled", "disabled");
         }
 
-        // Apply HTML 4.x attributes specified on selectone component to all 
-        // items in the list except styleClass. styleClass has been rendered as
-        // an attribute of outer most table already, so temporarily null out the 
-        // attribute,so that it is not rendered again as a pass through attribute.
-        Object styleClass = null;
-        if (component.getAttributes().containsKey("styleClass")) {
-            styleClass = component.getAttributes().get("styleClass");
-            component.getAttributes().remove("styleClass");
-        }
-        Util.renderPassThruAttributes(writer, component);
+        // Apply HTML 4.x attributes specified on UISelectMany component to all 
+        // items in the list except styleClass and style which are rendered as
+        // attributes of outer most table.
+        Util.renderPassThruAttributes(writer, component,
+                                      new String[]{"style"});
         Util.renderBooleanPassThruAttributes(writer, component);
-        if (styleClass != null) {
-            component.getAttributes().put("styleClass", styleClass);
-        }
-
+       
         String itemLabel = curItem.getLabel();
         if (itemLabel != null) {
             writer.writeText(" ", null);
@@ -280,13 +272,17 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
             writer.writeAttribute("border", new Integer(border), "border");
         }
 
-        // render styleclass attribute on the outer table instead of rendering it
-        // as pass through attribute on every option in the list.
+        // render style and styleclass attribute on the outer table instead of 
+        // rendering it as pass through attribute on every option in the list.
         if (outerTable) {
             String styleClass = (String) component.getAttributes().get(
                 "styleClass");
+            String style= (String) component.getAttributes().get("style");
             if (styleClass != null) {
                 writer.writeAttribute("class", styleClass, "class");
+            }
+            if (style!= null) {
+                writer.writeAttribute("style", style, "style");
             }
         }
         writer.writeText("\n", null);

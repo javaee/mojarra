@@ -1,5 +1,5 @@
 /*
- * $Id: LabelRenderer.java,v 1.27 2004/02/26 20:32:58 eburns Exp $
+ * $Id: LabelRenderer.java,v 1.28 2004/03/11 22:29:23 jvisvanathan Exp $
  */
 
 /*
@@ -93,19 +93,18 @@ public class LabelRenderer extends HtmlBasicRenderer {
         writer = context.getResponseWriter();
         Util.doAssert(writer != null);
 
+        UIComponent forComponent = null;
         forValue = (String) component.getAttributes().get("for");
-        if (forValue == null) {
-            if (log.isErrorEnabled()) {
-                log.error(Util.getExceptionMessage(Util.NULL_FORVALUE_ID,
-                                                   new Object[]{forValue}));
+        if ( forValue != null ) {
+            forComponent = getForComponent(context, forValue, component);
+            if (forComponent == null ) {
+                if (log.isErrorEnabled()) {
+                    log.error(Util.getExceptionMessage(
+                        Util.COMPONENT_NOT_FOUND_ERROR_MESSAGE_ID,
+                        new Object[]{forValue}));
+                }
+                return;
             }
-            return;
-        }
-
-        UIComponent forComponent = getForComponent(context, forValue,
-                                                   component);
-        if (forComponent == null) {
-            return;
         }
         
         // set a temporary attribute on the component to indicate that
@@ -113,8 +112,10 @@ public class LabelRenderer extends HtmlBasicRenderer {
         component.getAttributes().put(RENDER_END_ELEMENT, "yes");
         writer.startElement("label", component);
         writeIdAttributeIfNecessary(context, writer, component);
-        String forClientId = forComponent.getClientId(context);
-        writer.writeAttribute("for", forClientId, "for");
+        if ( forComponent != null ) {
+            String forClientId = forComponent.getClientId(context);
+            writer.writeAttribute("for", forClientId, "for");
+        }
 
         Util.renderPassThruAttributes(writer, component);
         if (null != styleClass) {

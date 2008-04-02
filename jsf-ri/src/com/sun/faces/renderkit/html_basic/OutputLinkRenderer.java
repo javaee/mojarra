@@ -1,5 +1,5 @@
 /*
- * $Id: OutputLinkRenderer.java,v 1.13 2004/02/26 20:32:59 eburns Exp $
+ * $Id: OutputLinkRenderer.java,v 1.14 2004/03/11 22:29:23 jvisvanathan Exp $
  */
 
 /*
@@ -29,7 +29,7 @@ import java.util.Iterator;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: OutputLinkRenderer.java,v 1.13 2004/02/26 20:32:59 eburns Exp $
+ * @version $Id: OutputLinkRenderer.java,v 1.14 2004/03/11 22:29:23 jvisvanathan Exp $
  */
 
 public class OutputLinkRenderer extends HtmlBasicRenderer {
@@ -131,9 +131,9 @@ public class OutputLinkRenderer extends HtmlBasicRenderer {
         writer.startElement("a", component);
         writeIdAttributeIfNecessary(context, writer, component);
 
-        // Go no further if  we have no href.
+        // render an empty value for href if it is not specified
         if (null == hrefVal || 0 == hrefVal.length()) {
-            return;
+            hrefVal = "";
         }
 
         clientId = output.getClientId(context);
