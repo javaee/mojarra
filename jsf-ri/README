@@ -1,7 +1,7 @@
 This README documents the Sun Reference implementation (RI) for JSR 127,
 JavaServer (tm) Faces.
 
-jsf-api cvs tag for this implementation: JSF_API_20030930
+jsf-api cvs tag for this implementation: JSF_API_20030924B
 jsf-api-spec for this implementation: JSF_20030930.pdf
 
 Installation Notes
