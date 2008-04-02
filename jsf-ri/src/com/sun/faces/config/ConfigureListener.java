@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListener.java,v 1.65 2006/03/14 22:36:58 rlubke Exp $
+ * $Id: ConfigureListener.java,v 1.66 2006/03/15 01:37:48 rlubke Exp $
  */
 /*
  * The contents of this file are subject to the terms
@@ -387,6 +387,12 @@ public class ConfigureListener implements ServletRequestListener,
         ServletContext context = sce.getServletContext();
         Digester digester = null;
         boolean initialized = false;
+        
+        // store the servletContext instance in Thread local Storage.
+        // This enables our Application's ApplicationAssociate to locate
+        // it so it can store the ApplicationAssociate in the
+        // ServletContext.
+        tlsExternalContext.set(new ServletContextAdapter(context));
 
         try {
             
@@ -420,13 +426,7 @@ public class ConfigureListener implements ServletRequestListener,
             }
 
             // Prepare local variables we will need
-            FacesConfigBean fcb = new FacesConfigBean();
-
-            // store the servletContext instance in Thread local Storage.
-            // This enables our Application's ApplicationAssociate to locate
-            // it so it can store the ApplicationAssociate in the
-            // ServletContext.
-            tlsExternalContext.set(new ServletContextAdapter(context));
+            FacesConfigBean fcb = new FacesConfigBean();            
 
             // see if we're operating in the unit test environment
             try {
