@@ -1,5 +1,5 @@
 /*
- * $Id: ResponseStateManagerImpl.java,v 1.5 2003/10/15 16:59:10 jvisvanathan Exp $
+ * $Id: ResponseStateManagerImpl.java,v 1.6 2003/10/20 21:32:52 jvisvanathan Exp $
  */
 
 /*
@@ -125,11 +125,6 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
             // store the state object temporarily in request scope until it is
             // processed by getComponentStateToRestore which resets it.
             requestMap.put(FACES_VIEW_STATE, state);
-            Locale locale = (Locale) ois.readObject();
-            if ( locale != null) {
-                requestMap.put(RIConstants.FACES_VIEW_LOCALE, locale);
-                // context.getViewRoot().setLocale(locale);
-            }
             ois.close();
         } catch (java.io.OptionalDataException ode) {
             log.error(ode.getMessage(), ode);
@@ -144,14 +139,11 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
     public void writeState(FacesContext context, SerializedView view) throws IOException {
         ByteArrayOutputStream bos = null;
         String hiddenField = null; 
-        
-        Assert.assert_it(context.getViewRoot().getLocale() != null);
- 
+       
 	bos = new ByteArrayOutputStream();
 	ObjectOutput output = new ObjectOutputStream(bos);
 	output.writeObject(view.getStructure());
 	output.writeObject(view.getState());
-	output.writeObject(context.getViewRoot().getLocale());
 	
 	hiddenField = " <input type=\"hidden\" name=\"" 
 	    + RIConstants.FACES_VIEW +  "\"" + " value=\"" +

@@ -1,5 +1,5 @@
 /* 
- * $Id: StateManagerImpl.java,v 1.7 2003/10/16 22:11:30 jvisvanathan Exp $ 
+ * $Id: StateManagerImpl.java,v 1.8 2003/10/20 21:32:51 jvisvanathan Exp $ 
  */ 
 
 
@@ -33,7 +33,7 @@ import java.util.Set;
 /** 
  * <B>StateManagerImpl</B> is the default implementation class for
  * StateManager.
- * @version $Id: StateManagerImpl.java,v 1.7 2003/10/16 22:11:30 jvisvanathan Exp $ 
+ * @version $Id: StateManagerImpl.java,v 1.8 2003/10/20 21:32:51 jvisvanathan Exp $ 
  * 
  * @see javax.faces.application.ViewHandler 
  * 
@@ -55,9 +55,6 @@ public class StateManagerImpl extends StateManager  {
             removeTransientChildrenAndFacets(viewRoot, new HashSet());   
            
             Map sessionMap = Util.getSessionMap(context);
-            String localeKey = RIConstants.REQUEST_LOCALE + "." + 
-                    context.getViewRoot().getViewId();
-            sessionMap.put(localeKey, context.getViewRoot().getLocale());
             sessionMap.put(viewRoot.getViewId(), viewRoot); 
         } else {
 	    result = new SerializedView(getTreeStructureToSave(context),
@@ -143,14 +140,6 @@ public class StateManagerImpl extends StateManager  {
             // restore tree from session.
             Map sessionMap = Util.getSessionMap(context);
             viewRoot = (UIViewRoot) sessionMap.get(viewId);
-            if (viewRoot != null) {
-                // restore locale
-                String localeKey = RIConstants.REQUEST_LOCALE + "." + viewId;
-                Locale locale = (Locale) sessionMap.get(localeKey);
-                if (locale != null) {
-                    viewRoot.setLocale(locale);
-                }
-            }
         }
         return viewRoot;
     }
@@ -172,13 +161,6 @@ public class StateManagerImpl extends StateManager  {
             return null;
         }
         viewRoot = structRoot.createComponent();
-        // restore the locale.
-        Map requestMap = context.getExternalContext().getRequestMap();
-        Locale locale = (Locale)requestMap.get(RIConstants.FACES_VIEW_LOCALE);
-        if (locale != null ){
-            ((UIViewRoot)viewRoot).setLocale(locale);
-            requestMap.put(RIConstants.FACES_VIEW_LOCALE, null);
-        }
         restoreComponentTreeStructure(structRoot, viewRoot);
         return ((UIViewRoot) viewRoot);
     }

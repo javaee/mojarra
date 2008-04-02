@@ -1,5 +1,5 @@
 /*
- * $Id: TestRestoreViewPhase.java,v 1.8 2003/10/15 16:59:19 jvisvanathan Exp $
+ * $Id: TestRestoreViewPhase.java,v 1.9 2003/10/20 21:32:53 jvisvanathan Exp $
  */
 
 /*
@@ -42,7 +42,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRestoreViewPhase.java,v 1.8 2003/10/15 16:59:19 jvisvanathan Exp $
+ * @version $Id: TestRestoreViewPhase.java,v 1.9 2003/10/20 21:32:53 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -154,7 +154,7 @@ public void testReconstituteRequestSubmit()
     session.setAttribute(TEST_URI, root);
     // set a locale
     Locale locale = new Locale("France", "french");
-    session.setAttribute((RIConstants.REQUEST_LOCALE + "." + TEST_URI), locale);
+    root.setLocale(locale);
     
     Phase restoreView = new RestoreViewPhase();
 
