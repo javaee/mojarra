@@ -1,5 +1,5 @@
 /*
- * $Id: UIInput.java,v 1.10 2003/01/22 00:38:41 craigmcc Exp $
+ * $Id: UIInput.java,v 1.11 2003/01/22 04:50:42 craigmcc Exp $
  */
 
 /*
@@ -96,7 +96,7 @@ public class UIInput extends UIComponentBase {
         }
 
         // Delegate to our associated Renderer if needed
-        previous = getValue();
+        previous = currentValue(context);
         if (getRendererType() != null) {
             super.decode(context);
             return;
