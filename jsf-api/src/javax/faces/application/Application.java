@@ -1,5 +1,5 @@
 /*
- * $Id: Application.java,v 1.19 2003/10/30 16:13:48 eburns Exp $
+ * $Id: Application.java,v 1.20 2003/11/13 04:42:35 craigmcc Exp $
  */
 
 /*
@@ -270,8 +270,9 @@ public abstract class Application {
      * <p>Call the <code>getValue()</code> method on the specified
      * {@link ValueBinding}.  If it returns a {@link UIComponent} instance,
      * return it as the value of this method.  If it does not, instantiate
-     * and return a new {@link UIComponent} instance of the specified
-     * component type.</p>
+     * a new {@link UIComponent} instance of the specified component type,
+     * pass the new component to the <code>setValue()</code> method of the
+     * specified {@link ValueBinding}, and return it.</p>
      *
      * @param componentRef {@link ValueBinding} representing a component
      *  reference (typically specified by the <code>componentRef</code>
