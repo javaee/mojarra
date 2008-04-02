@@ -1,5 +1,5 @@
 /*
- * $Id: JspTLD21Generator.java,v 1.10 2006/05/22 14:58:13 rlubke Exp $
+ * $Id: JspTLD21Generator.java,v 1.11 2006/06/21 22:56:13 rlubke Exp $
  */
 
 /*
@@ -132,10 +132,12 @@ public class JspTLD21Generator extends JspTLDGenerator {
         String targetPackage =
             propManager.getProperty(PropertyManager.TARGET_PACKAGE);
 
-	for (Map.Entry entry : renderersByComponentFamily.entrySet()) {
+        for (Iterator<String> keyIter = renderersByComponentFamily.keySet().iterator();
+             keyIter.hasNext();) {
 
-            String componentFamily = (String)entry.getKey();
-            List<RendererBean> renderers = (List<RendererBean>) entry.getValue();
+            String componentFamily = keyIter.next();
+            List<RendererBean> renderers =
+            (List<RendererBean>) renderersByComponentFamily.get(componentFamily);
             for (Iterator<RendererBean> rendererIter = renderers.iterator();
                  rendererIter.hasNext();) {
 
@@ -251,7 +253,7 @@ public class JspTLD21Generator extends JspTLDGenerator {
                             writer.writeText(
                                 property.getMethodSignature());
                             writer.closeElement(2);
-                        } else if (property.isValueExpressionEnabled()) {
+                        } else {
                             // PENDING FIX ME
                             String type = property.getPropertyClass();
 //                            String wrapperType = (String)
@@ -263,11 +265,8 @@ public class JspTLD21Generator extends JspTLDGenerator {
                             writer.startElement("type");
                             writer.writeText(type);
                             writer.closeElement(2);
-                        } else {
-                            writer.startElement("type");
-                            writer.writeText(property.getPropertyClass());
-                            writer.closeElement();                       
                         }
+
                     } else {
                         writer.startElement("rtexprvalue");
                         writer.writeText(getRtexprvalue(tagName, propertyName));
