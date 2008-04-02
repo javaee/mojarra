@@ -1,5 +1,5 @@
 /*
- * $Id: TestManagedBeanFactory.java,v 1.4 2003/05/07 18:16:33 horwat Exp $
+ * $Id: TestManagedBeanFactory.java,v 1.5 2003/05/08 23:13:10 horwat Exp $
  */
 
 /*
@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.faces.context.FacesContext;
+import javax.faces.FacesException;
 
 import com.sun.faces.TestBean;
 import com.sun.faces.application.ApplicationImpl;
@@ -24,6 +25,8 @@ import com.sun.faces.config.ManagedBeanFactory;
 import com.sun.faces.el.ValueBindingImpl;
 
 import com.sun.faces.ServletFacesTestCase;
+
+
 
 /**
  * <p>Unit tests for Managed Bean Factory.</p>
@@ -291,5 +294,127 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
 
     }
 
+    public void testValueRefScope() throws Exception {
+        //Testing value ref scope
+
+        TestBean testBean = new TestBean();
+        boolean exceptionThrown = false;
+
+        //testing with:
+        //  valueref in application scope
+        //  managed bean in session scope
+        getFacesContext().getExternalContext().getApplicationMap().put("TestRefBean", testBean);
+
+        ValueBindingImpl valueBinding = 
+            new ValueBindingImpl(new ApplicationImpl());
+
+        valueBinding.setRef("TestRefBean.one");
+        valueBinding.setValue(getFacesContext(), "one");
+
+	cmb = new ConfigManagedBean();
+	cmb.setManagedBeanClass(beanName);
+	cmb.setManagedBeanScope("session");
+
+        cmbp = new ConfigManagedBeanProperty();
+        cmbp.setPropertyName("one");
+
+        cmbpv = new ConfigManagedBeanPropertyValue();
+        cmbpv.setValueCategory(ConfigManagedBeanPropertyValue.VALUE_REF);
+        cmbpv.setValue("TestRefBean.one");
+
+        cmbp.setValue(cmbpv);
+        cmb.addProperty(cmbp); 
+
+        mbf = new ManagedBeanFactory(cmb);
+
+        //testing with an application scope property set in a session scope bean
+        assertNotNull(testBean = (TestBean) mbf.newInstance());
+
+	//make sure bean instantiated properly. Get property back from bean.
+        assertTrue(testBean.getOne().equals("one"));
+
+        //make sure scope is stored properly
+        assertTrue(mbf.getScope().equals("session"));
+
+
+        //testing with:
+        //  valueref in request scope
+        //  managed bean in application scope
+        getFacesContext().getExternalContext().getRequestMap().put("TestRefBean", testBean);
+
+        valueBinding = new ValueBindingImpl(new ApplicationImpl());
+
+        valueBinding.setRef("TestRefBean.one");
+        valueBinding.setValue(getFacesContext(), "one");
+
+	cmb = new ConfigManagedBean();
+	cmb.setManagedBeanClass(beanName);
+	cmb.setManagedBeanScope("application");
+
+        cmbp = new ConfigManagedBeanProperty();
+        cmbp.setPropertyName("one");
+
+        cmbpv = new ConfigManagedBeanPropertyValue();
+        cmbpv.setValueCategory(ConfigManagedBeanPropertyValue.VALUE_REF);
+        cmbpv.setValue("TestRefBean.one");
+
+        cmbp.setValue(cmbpv);
+        cmb.addProperty(cmbp); 
+
+        mbf = new ManagedBeanFactory(cmb);
+
+	exceptionThrown = false ;
+        try {
+            mbf.newInstance();
+            fail("Should have thrown FacesException");
+        } catch (FacesException ex) {
+            exceptionThrown = true;
+        }
+        assertTrue(exceptionThrown);
+
+        //make sure scope is stored properly
+        assertTrue(mbf.getScope().equals("application"));
+
+        //cleanup
+        getFacesContext().getExternalContext().getRequestMap().remove("TestRefBean");
+
+        //testing with:
+        //  valueref in session scope
+        //  managed bean in no scope
+        getFacesContext().getExternalContext().getSessionMap().put("TestRefBean", testBean);
+
+        valueBinding = new ValueBindingImpl(new ApplicationImpl());
+
+        valueBinding.setRef("sessionScope.TestRefBean.one");
+        valueBinding.setValue(getFacesContext(), "one");
+
+	cmb = new ConfigManagedBean();
+	cmb.setManagedBeanClass(beanName);
+	cmb.setManagedBeanScope(null);
+
+        cmbp = new ConfigManagedBeanProperty();
+        cmbp.setPropertyName("one");
+
+        cmbpv = new ConfigManagedBeanPropertyValue();
+        cmbpv.setValueCategory(ConfigManagedBeanPropertyValue.VALUE_REF);
+        cmbpv.setValue("sessionScope.TestRefBean.one");
+
+        cmbp.setValue(cmbpv);
+        cmb.addProperty(cmbp); 
+
+        mbf = new ManagedBeanFactory(cmb);
+
+	exceptionThrown = false ;
+        try {
+            mbf.newInstance();
+            fail("Should have thrown FacesException");
+        } catch (FacesException ex) {
+            exceptionThrown = true;
+        }
+        assertTrue(exceptionThrown);
+
+        //make sure scope is stored properly
+        assertTrue(mbf.getScope() == null);
+    }
 
 }

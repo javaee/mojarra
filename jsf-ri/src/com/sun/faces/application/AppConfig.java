@@ -1,5 +1,5 @@
 /*
- * $Id: AppConfig.java,v 1.6 2003/05/08 18:54:22 jvisvanathan Exp $
+ * $Id: AppConfig.java,v 1.7 2003/05/08 23:13:03 horwat Exp $
  */
 
 /*
@@ -32,13 +32,14 @@ import com.sun.faces.config.ConfigMessageResources;
 import com.sun.faces.config.ConfigValidator;
 import com.sun.faces.util.Util;
 import com.sun.faces.context.MessageResourcesImpl;
+import com.sun.faces.RIConstants;
 
 /**
  *
  *  <p>AppConfig is a helper class to the ApplicationImpl that serves as
  *  a shim between it and the config system.</p>
  *
- * @version $Id: AppConfig.java,v 1.6 2003/05/08 18:54:22 jvisvanathan Exp $
+ * @version $Id: AppConfig.java,v 1.7 2003/05/08 23:13:03 horwat Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -50,9 +51,6 @@ public class AppConfig extends Object
 //
 // Protected Constants
 //
-    private static final String APPLICATION = "application";
-    private static final String SESSION = "session";
-    private static final String REQUEST = "request";
     private static final String JSF_API_RESOURCE_FILENAME = "com/sun/faces/context/JSFMessages";
 
     private static final String JSF_RI_RESOURCE_FILENAME = "com/sun/faces/context/JSFImplMessages";
@@ -135,15 +133,15 @@ public AppConfig(Application application)
         //scope cannot be null
         Assert.assert_it(null != scope);
 
-        if (scope.equalsIgnoreCase(APPLICATION)) {
+        if (scope.equalsIgnoreCase(RIConstants.APPLICATION)) {
             context.getExternalContext().
                 getApplicationMap().put(managedBeanName, bean);
         }
-        else if (scope.equalsIgnoreCase(SESSION)) {
+        else if (scope.equalsIgnoreCase(RIConstants.SESSION)) {
             context.getExternalContext().
                 getSessionMap().put(managedBeanName, bean);
         }
-        else if (scope.equalsIgnoreCase(REQUEST)) {
+        else if (scope.equalsIgnoreCase(RIConstants.REQUEST)) {
             context.getExternalContext().
                 getRequestMap().put(managedBeanName, bean);
         }

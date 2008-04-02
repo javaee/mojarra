@@ -1,5 +1,5 @@
 /*
- * $Id: RIConstants.java,v 1.35 2003/05/05 15:18:04 rkitain Exp $
+ * $Id: RIConstants.java,v 1.36 2003/05/08 23:13:02 horwat Exp $
  */
 
 /*
@@ -106,6 +106,13 @@ public class RIConstants {
 
     public static final String ONE_TIME_INITIALIZATION_ATTR = 
 	FACES_PREFIX + "OneTimeInitialization";
+
+    public static final String APPLICATION = "application";
+    public static final String APPLICATION_SCOPE = "applicationScope";
+    public static final String SESSION = "session";
+    public static final String SESSION_SCOPE = "sessionScope";
+    public static final String REQUEST = "request";
+    public static final String REQUEST_SCOPE = "requestScope";
 
 
 

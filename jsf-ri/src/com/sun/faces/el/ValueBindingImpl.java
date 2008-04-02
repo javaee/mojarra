@@ -1,5 +1,5 @@
 /*
- * $Id: ValueBindingImpl.java,v 1.9 2003/05/06 19:21:50 horwat Exp $
+ * $Id: ValueBindingImpl.java,v 1.10 2003/05/08 23:13:08 horwat Exp $
  */
 
 /*
@@ -15,6 +15,7 @@ import java.util.List;
 import javax.faces.el.ValueBinding;
 import javax.faces.el.PropertyNotFoundException;
 import javax.faces.context.FacesContext;
+import javax.faces.context.ExternalContext;
 import javax.faces.component.UIComponent;
 
 import org.mozilla.util.ParameterCheck;
@@ -382,5 +383,118 @@ public class ValueBindingImpl extends ValueBinding
 
 	return result;
     }
+
+    /**
+     * <p>get the scope of the expression. Return <code>null</code> 
+     * if it isn't scoped</p>
+     *
+     * <p>For example, the expression: <code>sessionScope.TestBean.one</code>
+     * should return "session" as the scope.</p>
+     *
+     * @return the scope of the expression
+     */
+    public String getScope(String valueRef) {
+
+        if (valueRef == null) {
+            return null;
+        }
+
+        int segmentIndex = getFirstSegmentIndex(valueRef);
+
+        //examine first segment and see if it is a scope
+        String identifier = valueRef;
+        String expression = null;
+
+        if (segmentIndex > 0 ) {
+            //get first segment designated by a "." or "["
+            identifier = valueRef.substring(0, segmentIndex);
+
+            //get second segment designated by a "." or "["
+            expression = valueRef.substring(segmentIndex + 1);
+            segmentIndex = getFirstSegmentIndex(expression);
+
+            if (segmentIndex > 0) {
+                expression = expression.substring(0, segmentIndex);
+            }
+        }
+
+        //check to see if the identifier is a named scope. If it is check
+        //for the expression in that scope. The expression is the
+        //second segment.
+
+        ExternalContext ec = FacesContext.getCurrentInstance().
+            getExternalContext();
+
+        if (identifier.equalsIgnoreCase(RIConstants.REQUEST_SCOPE)) {
+            if ((expression != null) && 
+                (ec.getRequestMap().get(expression) != null)) {
+                return RIConstants.REQUEST;
+            }
+            else {
+                return null;
+            }
+        }
+        if (identifier.equalsIgnoreCase(RIConstants.SESSION_SCOPE)) {
+            if ((expression != null) && 
+                (ec.getSessionMap().get(expression) != null)) {
+                return RIConstants.SESSION;
+            }
+            else {
+                return null;
+            }
+        }
+        if (identifier.equalsIgnoreCase(RIConstants.APPLICATION_SCOPE)) {
+            if ((expression != null) && 
+                (ec.getApplicationMap().get(expression) != null)) {
+                return RIConstants.APPLICATION;
+            }
+            else {
+                return null;
+            }
+        }
+
+        //No scope was provided in the expression so check for the 
+        //expression in all of the scopes. The expression is the first 
+        //segment.
+
+        if (ec.getRequestMap().get(identifier) != null) {
+            return RIConstants.REQUEST;
+        }
+        if (ec.getSessionMap().get(identifier) != null) {
+            return RIConstants.SESSION;
+        }
+        if (ec.getApplicationMap().get(identifier) != null) {
+            return RIConstants.APPLICATION;
+        }
+
+        //not present in any scope
+        return null;
+    }
+
+    /**
+     * The the first segment of a String tokenized by a "." or "["
+     *
+     * @return index of the first occurrence of . or [
+     */
+    private int getFirstSegmentIndex(String valueRef) {
+        int segmentIndex = valueRef.indexOf(".");
+        int bracketIndex = valueRef.indexOf("[");
+
+        //there is no "." in the valueRef so take the bracket value
+        if (segmentIndex < 0) {
+            segmentIndex = bracketIndex;
+        } else {
+            //if there is a bracket proceed
+            if (bracketIndex > 0) {
+                //if the bracket index is before the "." then
+                //get the bracket index
+                if (segmentIndex > bracketIndex) {
+                    segmentIndex = bracketIndex;
+            	 }
+            }
+        }
+        return segmentIndex;
+    }
+
 
 } // end of class ValueBindingImpl

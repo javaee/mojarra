@@ -1,5 +1,5 @@
 /*
- * $Id: ManagedBeanFactory.java,v 1.3 2003/05/04 21:39:38 horwat Exp $
+ * $Id: ManagedBeanFactory.java,v 1.4 2003/05/08 23:13:04 horwat Exp $
  */
 
 /*
@@ -18,7 +18,9 @@ import javax.faces.FacesException;
 import javax.faces.el.ValueBinding;
 import javax.faces.el.PropertyNotFoundException;
 
+import com.sun.faces.el.ValueBindingImpl;
 import com.sun.faces.util.Util;
+import com.sun.faces.RIConstants;
 
 import org.apache.commons.beanutils.PropertyUtils;
 
@@ -95,6 +97,9 @@ public class ManagedBeanFactory extends Object {
             throw new FacesException(Util.getExceptionMessage(Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, obj), ex);
         }
 
+        //set the scope
+        scope = managedBean.getManagedBeanScope();
+
         Map props = managedBean.getProperties();
         Iterator iter = props.keySet().iterator();
         ConfigManagedBeanProperty cmp = null;
@@ -110,14 +115,14 @@ public class ManagedBeanFactory extends Object {
                     cmpv = (ConfigManagedBeanPropertyValue)list.get(i);
 
                     //set the indexed property on the bean
-                    try {
-                        if (cmpv.getValueCategory() == 
-                            ConfigManagedBeanPropertyValue.VALUE_REF) {
-                            value = getValueRef((String)cmpv.getValue());
-                        } else {
-                            value = cmpv.getValue();
-                        }
+                    if (cmpv.getValueCategory() == 
+                        ConfigManagedBeanPropertyValue.VALUE_REF) {
+                        value = getValueRef((String)cmpv.getValue());
+                    } else {
+                        value = cmpv.getValue();
+                    }
 
+                    try {
                         // if it's a class type do not set it
                         if (cmpv.getValueCategory() != 
                             ConfigManagedBeanPropertyValue.VALUE_CLASS) {
@@ -140,14 +145,14 @@ public class ManagedBeanFactory extends Object {
                     cmpm = (ConfigManagedPropertyMap)list.get(i);
 
                     //set the mapped property on the bean
-                    try {
-                        if (cmpm.getValueCategory() == 
-                            ConfigManagedPropertyMap.VALUE_REF) {
-                            value = getValueRef((String)cmpm.getValue());
-                        } else {
-                            value = cmpm.getValue();
-                        }
+                    if (cmpm.getValueCategory() == 
+                        ConfigManagedPropertyMap.VALUE_REF) {
+                        value = getValueRef((String)cmpm.getValue());
+                    } else {
+                        value = cmpm.getValue();
+                    }
 
+                    try {
                         PropertyUtils.setMappedProperty(
                             bean, 
                              cmp.getPropertyName(), 
@@ -163,14 +168,14 @@ public class ManagedBeanFactory extends Object {
                 cmpv = (ConfigManagedBeanPropertyValue)cmp.getValue();
 
                 //find properties and set them on the bean
-                try {
-                    if (cmpv.getValueCategory() == 
-                        ConfigManagedBeanPropertyValue.VALUE_REF) {
-                        value = getValueRef((String)cmpv.getValue());
-                    } else {
-                        value = cmpv.getValue();
-                    }
+                if (cmpv.getValueCategory() == 
+                    ConfigManagedBeanPropertyValue.VALUE_REF) {
+                    value = getValueRef((String)cmpv.getValue());
+                } else {
+                    value = cmpv.getValue();
+                }
 
+                try {
                     // if it's a class type do not set it
                     if (cmpv.getValueCategory() != 
                         ConfigManagedBeanPropertyValue.VALUE_CLASS) {
@@ -188,9 +193,6 @@ public class ManagedBeanFactory extends Object {
 
         }
 
-        //set the scope
-        scope = managedBean.getManagedBeanScope();
-
         return bean;
     }
 
@@ -200,6 +202,12 @@ public class ManagedBeanFactory extends Object {
 
     private Object getValueRef(String value) throws FacesException {
         Object valueRef = null;
+
+        if (!hasValidLifespan(value)) {
+            Object[] obj = new Object[1];
+            obj[0] = value;
+            throw new FacesException(Util.getExceptionMessage(Util.INVALID_SCOPE_LIFESPAN_ERROR_MESSAGE_ID, obj));
+        }
 
         ValueBinding binding = Util.getValueBinding(value);
         if (binding != null) {
@@ -216,6 +224,56 @@ public class ManagedBeanFactory extends Object {
             throw new FacesException(Util.getExceptionMessage(Util.ERROR_GETTING_VALUE_BINDING_ERROR_MESSAGE_ID, obj));
         }
         return valueRef;
+    }
+
+    private boolean hasValidLifespan(String value) {
+        ValueBindingImpl binding = (ValueBindingImpl)Util.getValueBinding(value);
+
+        String valueScope = binding.getScope(value);
+
+        //if the managed bean's scope is "none" but the scope of the
+        //referenced object is not "none", scope is invalid
+        if (scope == null) {
+            if (valueScope != null) {
+                return false;
+            } 
+            return true;
+        }
+
+        //if the managed bean's scope is "request" it is able to refer
+        //to objects in any scope
+        if (scope.equalsIgnoreCase(RIConstants.REQUEST)) {
+            return true;
+        }
+
+        //if the managed bean's scope is "session" it is able to refer
+        //to objects in other "session", "application", or "none" scopes
+        if (scope.equalsIgnoreCase(RIConstants.SESSION)) {
+            if (valueScope != null) {
+                if (valueScope.equalsIgnoreCase(RIConstants.REQUEST)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        //if the managed bean's scope is "application" it is able to refer
+        //to objects in other "application", or "none" scopes
+        if (scope.equalsIgnoreCase(RIConstants.APPLICATION)) {
+            if (valueScope != null) {
+                if (valueScope.equalsIgnoreCase(RIConstants.REQUEST) ||
+                    valueScope.equalsIgnoreCase(RIConstants.SESSION)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        //the managed bean is required to be in either "request", "session",
+        //"application", or "none" scopes. One of the previous decision
+        //statements must be true.
+        org.mozilla.util.Assert.assert_it(false);
+        return false;
     }
 
 }

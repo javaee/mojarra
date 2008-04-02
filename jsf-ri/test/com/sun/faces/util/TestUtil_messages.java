@@ -1,5 +1,5 @@
 /*
- * $Id: TestUtil_messages.java,v 1.6 2003/05/04 21:39:46 horwat Exp $
+ * $Id: TestUtil_messages.java,v 1.7 2003/05/08 23:13:12 horwat Exp $
  */
 
 /*
@@ -25,7 +25,7 @@ import java.util.Properties;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestUtil_messages.java,v 1.6 2003/05/04 21:39:46 horwat Exp $
+ * @version $Id: TestUtil_messages.java,v 1.7 2003/05/08 23:13:12 horwat Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -95,7 +95,8 @@ public class TestUtil_messages extends ServletFacesTestCase {
         {Util.ERROR_GETTING_VALUE_BINDING_ERROR_MESSAGE_ID, "1"},
         {Util.ERROR_GETTING_VALUEREF_VALUE_ERROR_MESSAGE_ID, "1"},
         {Util.CANT_INTROSPECT_CLASS_ERROR_MESSAGE_ID, "1"},
-        {Util.CANT_CONVERT_VALUE_ERROR_MESSAGE_ID, "2"}
+        {Util.CANT_CONVERT_VALUE_ERROR_MESSAGE_ID, "2"},
+        {Util.INVALID_SCOPE_LIFESPAN_ERROR_MESSAGE_ID, "1"}
         
     };
 

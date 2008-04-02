@@ -202,5 +202,9 @@
   <message messageId="com.sun.faces.CANT_CONVERT_VALUE" severity="3" summary="Can''t convert property value">
       <detail>Can''t convert property: ''{0}'' to value type: ''{1}'' .</detail>
   </message>
+
+  <message messageId="com.sun.faces.INVALID_SCOPE_LIFESPAN" severity="3" summary="The scope of the referenced object is shorter than the referring object">
+      <detail>The scope of the referenced object: ''{0}'' is shorter than the referring object .</detail>
+  </message>
 </messages>
 

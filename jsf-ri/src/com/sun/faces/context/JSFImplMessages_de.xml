@@ -180,29 +180,34 @@
   <message messageId="com.sun.faces.ERROR_REGISTERING_DTD" severity="3" summary="Can''t register DTD">
       <detail>Can''t register DTD: ''{0}'' .</detail>
   </message>
+
   <message messageId="com.sun.faces.INVALID_INIT_PARAM" severity="3" summary="Invalid initialization parameter.">
       <detail>''{0}'' inititialization parameter is not specified correctly.</detail>
   </message>
 
   <message messageId="com.sun.faces.ERROR_SETTING_BEAN_PROPERTY" severity="3" summary="Can''t set managed bean property">
-		<detail>Can''t managed bean property: ''{0}'' .</detail>
+      <detail>Can''t managed bean property: ''{0}'' .</detail>
   </message>
 
   <message messageId="com.sun.faces.ERROR_GETTING_VALUE_BINDING" severity="3" summary="Can''t get ValueBinding">
-	<detail>Can''t get ValueBinding for value: ''{0}'' .</detail>
+      <detail>Can''t get ValueBinding for value: ''{0}'' .</detail>
   </message>
 
   <message messageId="com.sun.faces.ERROR_GETTING_VALUEREF_VALUE" severity="3"
 summary="Can''t get value from value reference expression">
-  	    <detail>Can''t get value from value reference expression: ''{0}'' .</detail>
+      <detail>Can''t get value from value reference expression: ''{0}'' .</detail>
   </message>
 
   <message messageId="com.sun.faces.CANT_INTROSPECT_CLASS" severity="3" summary="Can''t instrospect class">
-			<detail>Can''t introspect class: ''{0}'' .</detail>
+      <detail>Can''t introspect class: ''{0}'' .</detail>
   </message>
 
   <message messageId="com.sun.faces.CANT_CONVERT_VALUE" severity="3" summary="Can''t convert property value">
-  	<detail>Can''t convert property: ''{0}'' to value type: ''{1}'' .</detail>
+      <detail>Can''t convert property: ''{0}'' to value type: ''{1}'' .</detail>
+  </message>
+
+  <message messageId="com.sun.faces.INVALID_SCOPE_LIFESPAN" severity="3" summary="The scope of the referenced object is shorter than the referring object">
+      <detail>The scope of the referenced object: ''{0}'' is shorter than the referring object .</detail>
   </message>
 </messages>
 

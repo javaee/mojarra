@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.61 2003/05/06 03:24:11 eburns Exp $
+ * $Id: Util.java,v 1.62 2003/05/08 23:13:09 horwat Exp $
  */
 
 /*
@@ -56,7 +56,7 @@ import java.util.StringTokenizer;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.61 2003/05/06 03:24:11 eburns Exp $
+ * @version $Id: Util.java,v 1.62 2003/05/08 23:13:09 horwat Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -216,6 +216,9 @@ public class Util extends Object
 
    public static final String CANT_CONVERT_VALUE_ERROR_MESSAGE_ID = 
         "com.sun.faces.CANT_CONVERT_VALUE";
+
+   public static final String INVALID_SCOPE_LIFESPAN_ERROR_MESSAGE_ID =
+        "com.sun.faces.INVALID_SCOPE_LIFESPAN";
 
 // README - make sure to add the message identifier constant
 // (ex: Util.CONVERSION_ERROR_MESSAGE_ID) and the number of substitution
