@@ -1244,7 +1244,7 @@
     </property>
     <property>
       <description>
-          MethodBinding representing a validator method that will be called
+          MethodExpression representing a validator method that will be called
           during Process Validations to perform correctness checks on the
           value of this component.  The expression must evaluate to a public
           method that takes FacesContext, UIComponent, and Object parameters,
@@ -1262,7 +1262,7 @@
     </property>
     <property>
       <description>
-          MethodBinding representing a value change listener method that will be
+          MethodExpression representing a value change listener method that will be
           notified when a new value has been set for this input component.  The
           expression must evaluate to a public method that takes a
           ValueChangeEvent parameter, with a return type of void.
@@ -2586,7 +2586,7 @@
     </property>
     <property>
       <description>
-          MethodBinding representing a validator method that will be called
+          MethodExpression representing a validator method that will be called
           during Process Validations to perform correctness checks on the
           value of this component.  The expression must evaluate to a public
           method that takes FacesContext, UIComponent, and Object parameters,
@@ -2604,7 +2604,7 @@
     </property>
     <property>
       <description>
-          MethodBinding representing a value change listener method that will be
+          MethodExpression representing a value change listener method that will be
           notified when a new value has been set for this input component.  The
           expression must evaluate to a public method that takes a
           ValueChangeEvent parameter, with a return type of void.
@@ -3282,7 +3282,7 @@
     </property>
     <property>
       <description>
-          MethodBinding representing a validator method that will be called
+          MethodExpression representing a validator method that will be called
           during Process Validations to perform correctness checks on the
           value of this component.  The expression must evaluate to a public
           method that takes FacesContext, UIComponent, and Object parameters,
@@ -3300,7 +3300,7 @@
     </property>
     <property>
       <description>
-          MethodBinding representing a value change listener method that will be
+          MethodExpression representing a value change listener method that will be
           notified when a new value has been set for this input component.  The
           expression must evaluate to a public method that takes a
           ValueChangeEvent parameter, with a return type of void.
@@ -3625,7 +3625,7 @@
     </property>
     <property>
       <description>
-          MethodBinding representing a validator method that will be called
+          MethodExpression representing a validator method that will be called
           during Process Validations to perform correctness checks on the
           value of this component.  The expression must evaluate to a public
           method that takes FacesContext, UIComponent, and Object parameters,
@@ -3643,7 +3643,7 @@
     </property>
     <property>
       <description>
-          MethodBinding representing a value change listener method that will be
+          MethodExpression representing a value change listener method that will be
           notified when a new value has been set for this input component.  The
           expression must evaluate to a public method that takes a
           ValueChangeEvent parameter, with a return type of void.
@@ -7040,7 +7040,7 @@
     </property>
     <property>
       <description>
-          MethodBinding representing a validator method that will be called
+          MethodExpression representing a validator method that will be called
           during Process Validations to perform correctness checks on the
           value of this component.  The expression must evaluate to a public
           method that takes FacesContext, UIComponent, and Object parameters,
@@ -7058,7 +7058,7 @@
     </property>
     <property>
       <description>
-          MethodBinding representing a value change listener method that will be
+          MethodExpression representing a value change listener method that will be
           notified when a new value has been set for this input component.  The
           expression must evaluate to a public method that takes a
           ValueChangeEvent parameter, with a return type of void.
@@ -7377,7 +7377,7 @@
     </property>
     <property>
       <description>
-          MethodBinding representing a validator method that will be called
+          MethodExpression representing a validator method that will be called
           during Process Validations to perform correctness checks on the
           value of this component.  The expression must evaluate to a public
           method that takes FacesContext, UIComponent, and Object parameters,
@@ -7395,7 +7395,7 @@
     </property>
     <property>
       <description>
-          MethodBinding representing a value change listener method that will be
+          MethodExpression representing a value change listener method that will be
           notified when a new value has been set for this input component.  The
           expression must evaluate to a public method that takes a
           ValueChangeEvent parameter, with a return type of void.
@@ -8105,7 +8105,7 @@
     </property>
     <property>
       <description>
-          MethodBinding representing a validator method that will be called
+          MethodExpression representing a validator method that will be called
           during Process Validations to perform correctness checks on the
           value of this component.  The expression must evaluate to a public
           method that takes FacesContext, UIComponent, and Object parameters,
@@ -8123,7 +8123,7 @@
     </property>
     <property>
       <description>
-          MethodBinding representing a value change listener method that will be
+          MethodExpression representing a value change listener method that will be
           notified when a new value has been set for this input component.  The
           expression must evaluate to a public method that takes a
           ValueChangeEvent parameter, with a return type of void.
@@ -8817,7 +8817,7 @@
     </property>
     <property>
       <description>
-          MethodBinding representing a validator method that will be called
+          MethodExpression representing a validator method that will be called
           during Process Validations to perform correctness checks on the
           value of this component.  The expression must evaluate to a public
           method that takes FacesContext, UIComponent, and Object parameters,
@@ -8835,7 +8835,7 @@
     </property>
     <property>
       <description>
-          MethodBinding representing a value change listener method that will be
+          MethodExpression representing a value change listener method that will be
           notified when a new value has been set for this input component.  The
           expression must evaluate to a public method that takes a
           ValueChangeEvent parameter, with a return type of void.
@@ -12685,7 +12685,7 @@
     </property>
     <property>
       <description>
-          MethodBinding representing a validator method that will be called
+          MethodExpression representing a validator method that will be called
           during Process Validations to perform correctness checks on the
           value of this component.  The expression must evaluate to a public
           method that takes FacesContext, UIComponent, and Object parameters,
@@ -12703,7 +12703,7 @@
     </property>
     <property>
       <description>
-          MethodBinding representing a value change listener method that will be
+          MethodExpression representing a value change listener method that will be
           notified when a new value has been set for this input component.  The
           expression must evaluate to a public method that takes a
           ValueChangeEvent parameter, with a return type of void.
@@ -13357,7 +13357,7 @@
     </property>
     <property>
       <description>
-          MethodBinding representing a validator method that will be called
+          MethodExpression representing a validator method that will be called
           during Process Validations to perform correctness checks on the
           value of this component.  The expression must evaluate to a public
           method that takes FacesContext, UIComponent, and Object parameters,
@@ -13375,7 +13375,7 @@
     </property>
     <property>
       <description>
-          MethodBinding representing a value change listener method that will be
+          MethodExpression representing a value change listener method that will be
           notified when a new value has been set for this input component.  The
           expression must evaluate to a public method that takes a
           ValueChangeEvent parameter, with a return type of void.
@@ -14077,7 +14077,7 @@
     </property>
     <property>
       <description>
-          MethodBinding representing a validator method that will be called
+          MethodExpression representing a validator method that will be called
           during Process Validations to perform correctness checks on the
           value of this component.  The expression must evaluate to a public
           method that takes FacesContext, UIComponent, and Object parameters,
@@ -14095,7 +14095,7 @@
     </property>
     <property>
       <description>
-          MethodBinding representing a value change listener method that will be
+          MethodExpression representing a value change listener method that will be
           notified when a new value has been set for this input component.  The
           expression must evaluate to a public method that takes a
           ValueChangeEvent parameter, with a return type of void.
@@ -14781,7 +14781,7 @@
     </property>
     <property>
       <description>
-          MethodBinding representing a validator method that will be called
+          MethodExpression representing a validator method that will be called
           during Process Validations to perform correctness checks on the
           value of this component.  The expression must evaluate to a public
           method that takes FacesContext, UIComponent, and Object parameters,
@@ -14799,7 +14799,7 @@
     </property>
     <property>
       <description>
-          MethodBinding representing a value change listener method that will be
+          MethodExpression representing a value change listener method that will be
           notified when a new value has been set for this input component.  The
           expression must evaluate to a public method that takes a
           ValueChangeEvent parameter, with a return type of void.
@@ -15475,7 +15475,7 @@
     </property>
     <property>
       <description>
-          MethodBinding representing a validator method that will be called
+          MethodExpression representing a validator method that will be called
           during Process Validations to perform correctness checks on the
           value of this component.  The expression must evaluate to a public
           method that takes FacesContext, UIComponent, and Object parameters,
@@ -15493,7 +15493,7 @@
     </property>
     <property>
       <description>
-          MethodBinding representing a value change listener method that will be
+          MethodExpression representing a value change listener method that will be
           notified when a new value has been set for this input component.  The
           expression must evaluate to a public method that takes a
           ValueChangeEvent parameter, with a return type of void.
@@ -16166,7 +16166,7 @@
     </property>
     <property>
       <description>
-          MethodBinding representing a validator method that will be called
+          MethodExpression representing a validator method that will be called
           during Process Validations to perform correctness checks on the
           value of this component.  The expression must evaluate to a public
           method that takes FacesContext, UIComponent, and Object parameters,
@@ -16184,7 +16184,7 @@
     </property>
     <property>
       <description>
-          MethodBinding representing a value change listener method that will be
+          MethodExpression representing a value change listener method that will be
           notified when a new value has been set for this input component.  The
           expression must evaluate to a public method that takes a
           ValueChangeEvent parameter, with a return type of void.
@@ -16847,7 +16847,7 @@
     </property>
     <property>
       <description>
-          MethodBinding representing a validator method that will be called
+          MethodExpression representing a validator method that will be called
           during Process Validations to perform correctness checks on the
           value of this component.  The expression must evaluate to a public
           method that takes FacesContext, UIComponent, and Object parameters,
@@ -16865,7 +16865,7 @@
     </property>
     <property>
       <description>
-          MethodBinding representing a value change listener method that will be
+          MethodExpression representing a value change listener method that will be
           notified when a new value has been set for this input component.  The
           expression must evaluate to a public method that takes a
           ValueChangeEvent parameter, with a return type of void.
