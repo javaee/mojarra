@@ -942,7 +942,7 @@ public class RenderKitUtils {
                                                      Param[] params) {
 
         StringBuilder sb = new StringBuilder(256);    
-        sb.append("if(window.jsfcljs){window.jsfcljs(document.forms['");
+        sb.append("if(typeof jsfcljs == 'function'){jsfcljs(document.forms['");
         sb.append(formClientId);        
         sb.append("'],'");
         sb.append(commandClientId).append(',').append(commandClientId);

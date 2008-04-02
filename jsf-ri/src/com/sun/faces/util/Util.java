@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.195 2006/08/29 06:13:01 tony_robertson Exp $
+ * $Id: Util.java,v 1.196 2006/09/05 18:14:18 rlubke Exp $
  */
 
 /*
@@ -78,7 +78,7 @@ import com.sun.faces.spi.ManagedBeanFactory.Scope;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.195 2006/08/29 06:13:01 tony_robertson Exp $
+ * @version $Id: Util.java,v 1.196 2006/09/05 18:14:18 rlubke Exp $
  */
 
 public class Util {
@@ -521,16 +521,16 @@ public class Util {
         if (null !=
             (disabledOrReadonly = component.getAttributes().get("disabled"))) {
             if (disabledOrReadonly instanceof String) {
-                result = ((String) disabledOrReadonly).equalsIgnoreCase("true");
+                result = Boolean.valueOf((String) disabledOrReadonly);
             } else {
                 result = disabledOrReadonly.equals(Boolean.TRUE);
             }
         }
-        if ((result == false) &&
+        if ((!result) &&
             null !=
             (disabledOrReadonly = component.getAttributes().get("readonly"))) {
             if (disabledOrReadonly instanceof String) {
-                result = ((String) disabledOrReadonly).equalsIgnoreCase("true");
+                result = Boolean.valueOf((String) disabledOrReadonly);
             } else {
                 result = disabledOrReadonly.equals(Boolean.TRUE);
             }

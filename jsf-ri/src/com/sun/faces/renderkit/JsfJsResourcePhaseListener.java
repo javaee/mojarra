@@ -18,7 +18,7 @@
  * your own identifying information:
  * "Portions Copyrighted [year] [name of copyright owner]"
  * 
- * [JsfJsResourcePhaseListener] [$Id: JsfJsResourcePhaseListener.java,v 1.1 2006/08/30 17:42:50 rlubke Exp $]
+ * [JsfJsResourcePhaseListener] [$Id: JsfJsResourcePhaseListener.java,v 1.2 2006/09/05 18:14:18 rlubke Exp $]
  * 
  * Copyright 2005 Sun Microsystems Inc. All Rights Reserved
  */
@@ -76,6 +76,7 @@ public class JsfJsResourcePhaseListener implements PhaseListener {
             if (request.getRequestURI().contains(RIConstants.SUN_JSF_JS_URI)) {
                 HttpServletResponse response = (HttpServletResponse) context
                       .getExternalContext().getResponse();
+                response.addHeader("Cache-Control", "max-age=3600");
                 response.setContentType("text/javascript");
                 try {
                     RenderKitUtils.writeSunJS(context, response.getWriter());
