@@ -1,5 +1,5 @@
 /*
- * $Id: JspFacesTestCase.java,v 1.12 2004/02/26 20:33:59 eburns Exp $
+ * $Id: JspFacesTestCase.java,v 1.13 2005/06/21 00:55:22 jayashri Exp $
  */
 
 /*
@@ -27,7 +27,7 @@ import java.util.Iterator;
  * by cactus.  This class just delegates all method calls to
  * facesService.
  *
- * @version $Id: JspFacesTestCase.java,v 1.12 2004/02/26 20:33:59 eburns Exp $
+ * @version $Id: JspFacesTestCase.java,v 1.13 2005/06/21 00:55:22 jayashri Exp $
  * @see	#facesService
  */
 
@@ -179,6 +179,15 @@ public abstract class JspFacesTestCase extends JspTestCase
 
     public void loadFromInitParam(String paramValue) {
         facesService.loadFromInitParam(paramValue);
+    }
+    
+    private String testRootDir = null;
+    public String getTestRootDir() {
+        return testRootDir;
+    }
+    
+    public void setTestRootDir(String rootDir) {
+        this.testRootDir = rootDir;
     }
 
 } // end of class JspFacesTestCase

@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigFileTestCase.java,v 1.66 2005/05/06 22:02:05 edburns Exp $
+ * $Id: ConfigFileTestCase.java,v 1.67 2005/06/21 00:55:22 jayashri Exp $
  */
 
 /*
@@ -49,7 +49,8 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
     ConfigParser parser = new ConfigParser();
 
     public static class ConfigParser extends ConfigureListener {
-	public void parseFromStr(ServletContext context, String str) throws Exception {
+	public void parseFromStr(ServletContext context, String str, 
+                String testRootDir) throws Exception {
 	    Digester digester = null;
 	    URL url = null;
 	    FacesConfigBean fcb = 
@@ -58,7 +59,7 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
 	    // Step 1, configure a Digester instance we can use
 	    digester = digester(isFeatureEnabled(context, VALIDATE_XML));
 	    
-	    url = (new File(System.getProperty("testRootDir"))).toURL();
+	    url = (new File(testRootDir)).toURL();
 	    url = new URL(url, str);
 	    parse(digester, url, fcb);
 	    configure(context, fcb);
@@ -99,7 +100,8 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
     protected void parseConfig(String resource,
                                ServletContext context)
         throws Exception {
-	parser.parseFromStr(context, resource);
+        String testRootDir = getTestRootDir();
+	parser.parseFromStr(context, resource, testRootDir);
     }
 
 

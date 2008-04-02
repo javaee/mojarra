@@ -1,5 +1,5 @@
 /*
- * $Id: TestLifecycleImpl.java,v 1.35 2005/06/01 14:03:40 rlubke Exp $
+ * $Id: TestLifecycleImpl.java,v 1.36 2005/06/21 00:55:23 jayashri Exp $
  */
 
 /*
@@ -29,7 +29,7 @@ import org.apache.cactus.WebRequest;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestLifecycleImpl.java,v 1.35 2005/06/01 14:03:40 rlubke Exp $
+ * @version $Id: TestLifecycleImpl.java,v 1.36 2005/06/21 00:55:23 jayashri Exp $
  */
 
 public class TestLifecycleImpl extends JspFacesTestCase {
@@ -128,7 +128,7 @@ public class TestLifecycleImpl extends JspFacesTestCase {
     public void testAnyPhaseWithListenerAndValidationFailure() {
         LifecycleImpl life = getSharedLifecycleImpl();
         final int[] phaseCalled = new
-            int[LifecycleFactoryImpl.LAST_PHASE + 1];
+            int[PhaseId.RENDER_RESPONSE.getOrdinal() + 1];
         int i;
         for (i = 1; i < phaseCalled.length; i++) {
             phaseCalled[i] = 0;
@@ -171,7 +171,7 @@ public class TestLifecycleImpl extends JspFacesTestCase {
     public void testAnyPhaseWithListener() {
         LifecycleImpl life = getSharedLifecycleImpl();
         final int[] phaseCalled = new
-            int[LifecycleFactoryImpl.LAST_PHASE + 1];
+            int[PhaseId.RENDER_RESPONSE.getOrdinal() + 1];
         int i;
         for (i = 1; i < phaseCalled.length; i++) {
             phaseCalled[i] = 0;
@@ -234,7 +234,7 @@ public class TestLifecycleImpl extends JspFacesTestCase {
     public void testValidateWithListener() {
         LifecycleImpl life = getSharedLifecycleImpl();
         final int[] phaseCalled = new
-            int[LifecycleFactoryImpl.LAST_PHASE + 1];
+            int[PhaseId.RENDER_RESPONSE.getOrdinal() + 1];
         int i;
         for (i = 1; i < phaseCalled.length; i++) {
             phaseCalled[i] = 0;
@@ -305,9 +305,9 @@ public class TestLifecycleImpl extends JspFacesTestCase {
         assertTrue(null != sharedListener);
 
         LifecycleImpl life = getSharedLifecycleImpl();
-        int [] phaseCalledA = new int[LifecycleFactoryImpl.LAST_PHASE + 1];
-	int [] phaseCalledB = new int[LifecycleFactoryImpl.LAST_PHASE + 1];
-	int [] phaseCalledC = new int[LifecycleFactoryImpl.LAST_PHASE + 1];
+        int [] phaseCalledA = new int[PhaseId.RENDER_RESPONSE.getOrdinal() + 1];
+	int [] phaseCalledB = new int[PhaseId.RENDER_RESPONSE.getOrdinal() + 1];
+	int [] phaseCalledC = new int[PhaseId.RENDER_RESPONSE.getOrdinal() + 1];
         int i;
         for (i = 1; i < phaseCalledA.length; i++) {
             phaseCalledA[i] = 0;
@@ -364,9 +364,9 @@ public class TestLifecycleImpl extends JspFacesTestCase {
         assertTrue(null != sharedListener);
 
         LifecycleImpl life = getSharedLifecycleImpl();
-        int [] phaseCalledA = new int[LifecycleFactoryImpl.LAST_PHASE + 1];
-	int [] phaseCalledB = new int[LifecycleFactoryImpl.LAST_PHASE + 1];
-	int [] phaseCalledC = new int[LifecycleFactoryImpl.LAST_PHASE + 1];
+        int [] phaseCalledA = new int[PhaseId.RENDER_RESPONSE.getOrdinal() + 1];
+	int [] phaseCalledB = new int[PhaseId.RENDER_RESPONSE.getOrdinal() + 1];
+	int [] phaseCalledC = new int[PhaseId.RENDER_RESPONSE.getOrdinal() + 1];
         int i;
         for (i = 1; i < phaseCalledA.length; i++) {
             phaseCalledA[i] = 0;

@@ -31,6 +31,7 @@
 
   <!-- The base directory for compilation targets -->
   <property name="build.home" value="${basedir}/build"/>
+  <property name="dist.home" value="${basedir}/dist"/>
 
   <!-- The base directory for the JSF APIs -->
   <property name="jsf-api.home" value ="${basedir}/../../jsf-api"/>
@@ -193,7 +194,7 @@
     <mkdir dir="${build.home}/WEB-INF"/>
     <mkdir dir="${build.home}/WEB-INF/classes"/>
     <mkdir dir="${build.home}/WEB-INF/lib"/>
-
+    <mkdir dir="${dist.home}"/>
     <!-- Copy static webapp content -->
     <copy todir="${build.home}">
       <fileset dir="${web.home}"/>
@@ -210,7 +211,7 @@
     <copy file="${jstl.jar}" todir="${build.home}/WEB-INF/lib"/>
     <copy file="${standard.jar}" todir="${build.home}/WEB-INF/lib"/>
     <copy file="${jsf-api.jar}" todir="${build.home}/WEB-INF/lib"/>
-    <copy file="${jsf-impl.jar}" todir="${build.home}/WEB-INF/lib"/>
+    <copy file="${jsf-impl.jar}" todir="${build.home}/WEB-INF/lib"/> 
   </target>
 
 
@@ -250,11 +251,60 @@
 
   <target name="test" depends="compile"
    description="Execute all tests against installed /jsf-systest application">
-
     <ant antfile="build-tests.xml" target="test"/>
 
   </target>
+  
+  <target name="test.appserver" depends="compile, undeploy, deploy,test"
+   description="Execute all tests against installed /jsf-systest application" />
+   
+  <target description="Deploy web applications"  name="deploy.autodeploy"> 
 
+      <jar jarfile="${dist.home}/jsf-systest.war" basedir="${build.home}"/>
+       <copy file="${dist.home}/jsf-systest.war" 
+           todir="${tomcat.home}/domains/domain1/autodeploy}"/>        
+	<sleep seconds="30"/>
+        <ant antfile="build-tests.xml" target="test"/>
+  </target>
+  
+   <target name="deploy" depends="-check-os" >
+        <jar jarfile="${dist.home}/jsf-systest.war" basedir="${build.home}"/>
+        <exec executable="${exec.name}" failonerror="true">
+            <arg line="${exec.arg.1}"/>
+            <arg line="deploy"/>
+            <arg line="--user ${admin.user}"/>
+            <arg line="--password ${admin.password}"/>       
+            <arg line="--host ${admin.host}"/>
+            <arg line="--port ${admin.port}"/>            
+            <arg line="${dist.home}/jsf-systest.war"/>            
+        </exec>
+      
+    </target>
+    
+    <target name="undeploy" depends="-check-os">
+        <exec executable="${exec.name}">
+            <arg line="${exec.arg.1}"/>
+            <arg line="undeploy"/>
+            <arg line="--user ${admin.user}"/>
+            <arg line="--password ${admin.password}"/>       
+            <arg line="--host ${admin.host}"/>
+            <arg line="--port ${admin.port}"/>           
+            <arg line="jsf-systest"/>            
+        </exec>
+       
+    </target>
+   
+    <target name="-check-os">
+      <condition property="exec.name" value="cmd.exe">
+        <os family="windows"/>
+      </condition>
+      <condition property="exec.arg.1" value="/c ${tomcat.home}/bin/asadmin">
+        <os family="windows"/>
+      </condition>
+      <property name="exec.name" value="${tomcat.home}/bin/asadmin"/>
+      <property name="exec.arg.1" value=""/>
+    </target>
+    
   <target name="passthru" depends="compile"
    description="Convenience target to execute just one test.  Just change the nested traget attribute.">
 

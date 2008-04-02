@@ -1,5 +1,5 @@
 /*
- * $Id: FileOutputResponseWrapper.java,v 1.8 2004/02/26 20:33:59 eburns Exp $
+ * $Id: FileOutputResponseWrapper.java,v 1.9 2005/06/21 00:55:22 jayashri Exp $
  */
 
 /*
@@ -26,7 +26,7 @@ import java.io.PrintWriter;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: FileOutputResponseWrapper.java,v 1.8 2004/02/26 20:33:59 eburns Exp $
+ * @version $Id: FileOutputResponseWrapper.java,v 1.9 2005/06/21 00:55:22 jayashri Exp $
  */
 
 public class FileOutputResponseWrapper extends HttpServletResponseWrapper {
@@ -54,10 +54,11 @@ public class FileOutputResponseWrapper extends HttpServletResponseWrapper {
 // Constructors and Initializers    
 //
 
-    public FileOutputResponseWrapper(HttpServletResponse toWrap) {
+    public FileOutputResponseWrapper(HttpServletResponse toWrap, 
+            String testRootDir) {
         super(toWrap);
         try {
-            FileOutputResponseWriter.initializeFacesResponseRoot();
+            FileOutputResponseWriter.initializeFacesResponseRoot(testRootDir);
             File file = new File(FACES_RESPONSE_FILENAME);
             FileOutputStream fs = new FileOutputStream(file);
             out = new PrintWriter(fs);

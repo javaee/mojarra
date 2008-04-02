@@ -1,5 +1,5 @@
 /*
- * $Id: FileOutputResponseWriter.java,v 1.14 2004/10/12 14:39:56 rlubke Exp $
+ * $Id: FileOutputResponseWriter.java,v 1.15 2005/06/21 00:55:22 jayashri Exp $
  */
 
 /*
@@ -30,7 +30,7 @@ import java.io.Writer;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: FileOutputResponseWriter.java,v 1.14 2004/10/12 14:39:56 rlubke Exp $
+ * @version $Id: FileOutputResponseWriter.java,v 1.15 2005/06/21 00:55:22 jayashri Exp $
  */
 
 public class FileOutputResponseWriter extends ResponseWriter {
@@ -50,7 +50,6 @@ public class FileOutputResponseWriter extends ResponseWriter {
     public static String FACES_RESPONSE_ROOT = null;
     public static String RESPONSE_WRITER_FILENAME = "ResponseWriter.txt";
     protected HtmlResponseWriter writer = null;
-
 // Attribute Instance Variables
 
 
@@ -59,10 +58,10 @@ public class FileOutputResponseWriter extends ResponseWriter {
 //
 // Constructors and Initializers    
 //
-
-    public FileOutputResponseWriter() {
+  
+    public FileOutputResponseWriter(String rootDir) {
         try {
-            initializeFacesResponseRoot();
+            initializeFacesResponseRoot(rootDir);
             File file = new File(RESPONSE_WRITER_FILENAME);
             FileOutputStream fs = new FileOutputStream(file);
             out = new PrintWriter(fs);
@@ -77,15 +76,13 @@ public class FileOutputResponseWriter extends ResponseWriter {
 // Class methods
 //
 
-    public static void initializeFacesResponseRoot() {
+    public static void initializeFacesResponseRoot(String testRootDir) {
         if (null == FACES_RESPONSE_ROOT) {
-            String testRootDir;
-            // prepend the testRootDir to the RESPONSE_WRITER_FILENAME
-            testRootDir = System.getProperty("testRootDir");
             assert (null != testRootDir);
             FACES_RESPONSE_ROOT = testRootDir + "/";
             RESPONSE_WRITER_FILENAME =
                 FACES_RESPONSE_ROOT + RESPONSE_WRITER_FILENAME;
+            
             FileOutputResponseWrapper.FACES_RESPONSE_FILENAME =
                 FACES_RESPONSE_ROOT +
                 FileOutputResponseWrapper.FACES_RESPONSE_FILENAME;

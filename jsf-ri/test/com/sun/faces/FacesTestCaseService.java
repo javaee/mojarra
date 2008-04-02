@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTestCaseService.java,v 1.45 2005/06/06 18:04:48 edburns Exp $
+ * $Id: FacesTestCaseService.java,v 1.46 2005/06/21 00:55:22 jayashri Exp $
  */
 
 /*
@@ -48,7 +48,7 @@ import org.apache.cactus.server.ServletContextWrapper;
  * <B>Lifetime And Scope</B> <P> Same as the JspTestCase or
  * ServletTestCase instance that uses it.
  *
- * @version $Id: FacesTestCaseService.java,v 1.45 2005/06/06 18:04:48 edburns Exp $
+ * @version $Id: FacesTestCaseService.java,v 1.46 2005/06/21 00:55:22 jayashri Exp $
  * @see	com.sun.faces.context.FacesContextFactoryImpl
  * @see	com.sun.faces.context.FacesContextImpl
  */
@@ -152,12 +152,13 @@ public class FacesTestCaseService extends Object {
                 "testRootDir");
 
         assert (null != testRootDir);
-        System.setProperty("testRootDir", testRootDir);
-
+        facesTestCase.setTestRootDir(testRootDir);
+       
         // See if the testcase wants to have its output sent to a file.
         if (facesTestCase.sendResponseToFile()) {
             response =
-                new FileOutputResponseWrapper(facesTestCase.getResponse());
+                new FileOutputResponseWrapper(facesTestCase.getResponse(),
+                    testRootDir );
         } else {
             response = facesTestCase.getResponse();
         }
@@ -175,9 +176,9 @@ public class FacesTestCaseService extends Object {
                                                 facesTestCase.getRequest(),
                                                 response, lifecycle);
         assert (null != facesContext);
-
         if (facesTestCase.sendWriterToFile()) {
-            ResponseWriter responseWriter = new FileOutputResponseWriter();
+            ResponseWriter responseWriter = 
+                    new FileOutputResponseWriter(testRootDir);
             facesContext.setResponseWriter(responseWriter);
         }
         

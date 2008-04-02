@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTestCase.java,v 1.14 2004/02/26 20:33:58 eburns Exp $
+ * $Id: FacesTestCase.java,v 1.15 2005/06/21 00:55:22 jayashri Exp $
  */
 
 /*
@@ -54,5 +54,9 @@ public interface FacesTestCase {
 
 
     public boolean sendWriterToFile();
+    
+    public void setTestRootDir(String testRootDir);
+    
+    public String getTestRootDir();
 
 } // end of interface FacesTestCase

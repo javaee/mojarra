@@ -510,13 +510,119 @@
     <ant antfile="build-tests.xml" target="test"/>
 
   </target>
-
-  <target name="passthru" depends="compile"
+  
+   <target name="passthru" depends="compile"
    description="Convenience target to execute just one test.  Just change the nested traget attribute.">
 
     <ant antfile="build-tests.xml" target="test.standard"/>
 
   </target>
+  
+  <target name="test.appserver" depends="install.appserver"
+   description="Execute all tests against installed /jsf-* applications">
 
+    <ant antfile="build-tests.xml" target="test"/>
 
+  </target>
+  
+  <target name="install.appserver" depends="compile.base.sources"> 
+
+    <antcall target="install.one.appserver">
+      <param name="webapp.build.home" 
+             value="${basedir}/replace-application/build" />
+      <param name="webapp.web.home" 
+             value="${basedir}/replace-application/web" />
+      <param name="source.home" 
+             value="${basedir}/replace-application/src/java" />
+      <param name="context.path" value="/jsf-replace-application"/>
+
+    </antcall>
+
+    <antcall target="install.one.appserver">
+      <param name="webapp.build.home" 
+             value="${basedir}/replace-statemanager/build" />
+      <param name="webapp.web.home" 
+             value="${basedir}/replace-statemanager/web" />
+      <param name="source.home" 
+             value="${basedir}/replace-statemanager/src/java" />
+      <param name="context.path" value="/jsf-replace-statemanager"/>
+
+    </antcall>
+
+    <antcall target="install.one.appserver">
+      <param name="webapp.build.home" 
+             value="${basedir}/el-performance/build" />
+      <param name="webapp.web.home" 
+             value="${basedir}/el-performance/web" />
+      <param name="source.home" 
+             value="${basedir}/el-performance/src/java" />
+      <param name="context.path" value="/jsf-el-performance"/>
+
+    </antcall>
+
+    <antcall target="install.one.appserver">
+      <param name="webapp.build.home" 
+             value="${basedir}/command-link-redirect/build" />
+      <param name="webapp.web.home" 
+             value="${basedir}/command-link-redirect/web" />
+      <param name="source.home" 
+             value="${basedir}/command-link-redirect/src/java" />
+      <param name="context.path" value="/jsf-command-link-redirect"/>
+
+    </antcall>
+
+    <antcall target="install.one.appserver">
+      <param name="webapp.build.home" 
+             value="${basedir}/command-link-back-button/build" />
+      <param name="webapp.web.home" 
+             value="${basedir}/command-link-back-button/web" />
+      <param name="source.home" 
+             value="${basedir}/command-link-back-button/src/java" />
+      <param name="context.path" value="/jsf-command-link-back-button"/>
+
+    </antcall>
+
+    <antcall target="install.one.appserver">
+      <param name="webapp.build.home" 
+             value="${basedir}/nested-datatables/build" />
+      <param name="webapp.web.home" 
+             value="${basedir}/nested-datatables/web" />
+      <param name="source.home" 
+             value="${basedir}/nested-datatables/src/java" />
+      <param name="context.path" value="/jsf-nested-datatables"/>
+
+    </antcall>
+
+    <antcall target="install.one.appserver">
+      <param name="webapp.build.home" 
+             value="${basedir}/core-tags/build" />
+      <param name="webapp.web.home" 
+             value="${basedir}/core-tags/web" />
+      <param name="source.home" 
+             value="${basedir}/core-tags/src/java" />
+      <param name="context.path" value="/jsf-core-tags"/>
+
+    </antcall>
+
+    <antcall target="install.one.appserver">
+      <param name="webapp.build.home" 
+             value="${basedir}/replace-lifecycle/build" />
+      <param name="webapp.web.home" 
+             value="${basedir}/replace-lifecycle/web" />
+      <param name="source.home" 
+             value="${basedir}/replace-lifecycle/src/java" />
+      <param name="context.path" value="/jsf-replace-lifecycle"/>
+
+    </antcall>
+
+  </target>
+
+  <target name="install.one.appserver" depends="compile"
+   description="Install webapp on AppServer">
+    <delete file="${webapp.build.home}/${context.path}.war" /> 
+       <jar jarfile="${webapp.build.home}/${context.path}.war" basedir="${webapp.build.home}"/>
+       <copy file="${webapp.build.home}/${context.path}.war" 
+           todir="${tomcat.home}/domains/domain1/autodeploy"/>     
+           <sleep seconds="40"/>   
+  </target>
 </project>

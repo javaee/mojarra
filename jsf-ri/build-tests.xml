@@ -99,6 +99,8 @@
     
     <property name="username" value="tomcat"/>
     <property name="password" value="tomcat"/>
+    <property name="host" value="localhost"/>
+    <property name="port" value="8080"/>
 
     <property name="url"      value="http://localhost:8080/manager"/>
 
@@ -297,13 +299,13 @@
         Start the Cactus test using JUnit test runner.
 -->
     <target name="run.cactus.test">
-
         <junit printsummary="yes" haltonfailure="yes" haltonerror="yes" fork="yes">
+            <sysproperty key="cactus.contextURL"  value="http://${host}:${port}/test"/>
             <classpath>
                 <pathelement path="${java.class.path}"/>
                 <pathelement location="${out.test.dir}/WEB-INF/classes"/>
                 <!-- For cactus.properties -->
-                <pathelement location="${conf.test.dir}"/>
+                <pathelement location="${conf.test.dir}"/>                
             </classpath>
             <classpath refid="compile.classpath"/>
 
@@ -404,5 +406,52 @@
           <pathelement location="${catalina-ant.jar}" />
         </classpath>
     </taskdef>
+    
+    <target name="run.cactus.test.appserver" depends="prepare.test.webapp">
+      <antcall target="deploy"/>
+      <antcall target="run.cactus.test"/>
+    </target>
+    
+    <target name="-check-os">
+      <condition property="exec.name" value="cmd.exe">
+        <os family="windows"/>
+      </condition>
+      <condition property="exec.arg.1" value="/c ${tomcat.home}/bin/asadmin">
+        <os family="windows"/>
+      </condition>
+      <property name="exec.name" value="${tomcat.home}/bin/asadmin"/>
+      <property name="exec.arg.1" value=""/>
+    </target>
 
+    <target name="deploy.asadmin" depends="-check-os" >
+        <exec executable="${exec.name}" failonerror="true">
+            <arg line="${exec.arg.1}"/>
+            <arg line="deploy"/>
+            <arg line="--user ${admin.user}"/>
+            <arg line="--password ${admin.password}"/>       
+            <arg line="--host ${admin.host}"/>
+            <arg line="--port ${admin.port}"/>     
+            <arg line="${basedir}/${build.home}/test.war"/>            
+        </exec>       
+    </target>
+    
+    <target name="undeploy.asadmin" depends="-check-os">
+        <exec executable="${exec.name}">
+            <arg line="${exec.arg.1}"/>
+            <arg line="undeploy"/>
+            <arg line="--user ${admin.user}"/>
+            <arg line="--password ${admin.password}"/>       
+            <arg line="--host ${admin.host}"/>
+            <arg line="--port ${admin.port}"/>     
+            <arg line="test"/>            
+        </exec>
+        
+    </target>
+
+
+    <target description="Deploy web applications"  name="deploy">   
+       <copy file="${basedir}/${build.home}/test.war" 
+           todir="${tomcat.home}/domains/domain1/autodeploy"/>        
+	<sleep seconds="60"/> 
+  </target>
 </project>
