@@ -1,5 +1,5 @@
 /*
- * $Id: ExternalContext.java,v 1.6 2003/09/02 19:02:15 eburns Exp $
+ * $Id: ExternalContext.java,v 1.7 2003/09/11 15:56:10 craigmcc Exp $
  */
  
 /*
@@ -27,7 +27,7 @@ import javax.servlet.http.Cookie;
 * <p>This class allows the Faces API to be unaware of the nature of its
 * containing environment.  For example, this class allows Faces to run
 * in either a Servlet or a Portlet.  This class can be seen as an
-* extension of FacesContext.
+* extension of FacesContext.</p>
 
 * @author Brendan Murray
 * @author Ed Burns <ed.burns@sun.com>
@@ -36,6 +36,31 @@ import javax.servlet.http.Cookie;
 */
 public abstract class ExternalContext {
     
+
+    /**
+     * <p>String identifier for BASIC authentication.</p>
+     */
+    public static final String BASIC_AUTH = "BASIC";
+
+
+    /**
+     * <p>String identifier for CLIENT_CERT authentication.</p>
+     */
+    public static final String CLIENT_CERT_AUTH = "CLIENT_CERT";
+
+
+    /**
+     * <p>String identifier for DIGEST authentication.</p>
+     */
+    public static final String DIGEST_AUTH = "DIGEST";
+
+
+    /**
+     * <p>String identifier for FORM authentication.</p>
+     */
+    public static final String FORM_AUTH = "FORM";
+
+
     /**
      * @return the <code>HttpSession</code> instance for the session
      * associated with the current request (if any); otherwise, return
@@ -365,6 +390,45 @@ public abstract class ExternalContext {
     
     public abstract InputStream getResourceAsStream(String path);
     
+
+    /**
+     * <p>Return the name of the authentication scheme used to authenticate
+     * the current user.  If the current user is not authenticated,
+     * return <code>null</code> instead.  For standard authentication schemes,
+     * the returned value will match one of the following constants:
+     * <code>BASIC_AUTH</code>, <code>CLIENT_CERT_AUTH</code>,
+     * <code>DIGEST_AUTH</code>, or <code>FORM_AUTH</code>.</p>
+     */
+    public abstract String getAuthType();
+
+
+    /**
+     * <p>Return the login name of the current user, if any.  If the current
+     * user is not logged in, return <code>null</code> instead.</p>
+     */
+    public abstract String getRemoteUser();
+
+
+    /**
+     * <p>Return <code>true</code> if the current user has been logged in,
+     * and is included in the specified logical "role".  If the current user
+     * is not logged in, or is not included in the specified role, return
+     * <code>false</code> instead.</p>
+     *
+     * @param role Logical role name to be checked
+     */
+    public abstract boolean isUserInRole(String role);
+
+
+    /**
+     * <p>Return a <code>java.security.Principal</code> object containing
+     * the name of the currently authenticated user, if any.  If the current
+     * user has not been authenticated, return <code>null</code> instead.</p>
+     */
+    public abstract java.security.Principal getUserPrincipal();
+
+
+
     /**
      * <p>Force any URL that causes an action to work within a portal/portlet. 
      * This causes the URL to have the required redirection for the specific
