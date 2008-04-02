@@ -1,5 +1,5 @@
 /*
- * $Id: ViewHandler.java,v 1.39 2004/04/05 18:25:59 rkitain Exp $
+ * $Id: ViewHandler.java,v 1.40 2005/04/06 02:39:45 edburns Exp $
  */
 
 /*
@@ -83,8 +83,9 @@ public abstract class ViewHandler {
 
 
     /** 
-     * <p>Return an appropriate <code>renderKitId</code> for this
-     * and subsequent requests from the current client.</p>
+     * <p>Return an appropriate <code>renderKitId</code> for this and
+     * subsequent requests from the current client.  It is an error for
+     * this method to return <code>null</code>.</p>
      *
      * <p>The default return value is {@link
      * javax.faces.render.RenderKitFactory#HTML_BASIC_RENDER_KIT}.</p>

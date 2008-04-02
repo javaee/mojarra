@@ -1,5 +1,5 @@
 /*
- * $Id: RestoreViewPhase.java,v 1.19 2005/03/22 20:07:45 edburns Exp $
+ * $Id: RestoreViewPhase.java,v 1.20 2005/04/06 02:39:46 edburns Exp $
  */
 
 /*
@@ -35,7 +35,7 @@ import java.util.Map;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: RestoreViewPhase.java,v 1.19 2005/03/22 20:07:45 edburns Exp $
+ * @version $Id: RestoreViewPhase.java,v 1.20 2005/04/06 02:39:46 edburns Exp $
  */
 
 public class RestoreViewPhase extends Phase {
@@ -151,6 +151,16 @@ public class RestoreViewPhase extends Phase {
             throw new FacesException(Util.getExceptionMessageString(
                 Util.NULL_REQUEST_VIEW_ERROR_MESSAGE_ID));
         }
+
+	// PENDING(): replace this with the following
+
+	// Get the renderKitId by calling
+	// viewHandler.calculateRenderKitId().
+
+	// get that renderkit, and get its ResponseStateManager.
+
+	// call its isPostback() method, instead of the one defined
+	// here.
 
 	if (isPostback(facesContext)) {
 	    // try to restore the view

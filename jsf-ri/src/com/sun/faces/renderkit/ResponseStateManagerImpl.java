@@ -1,5 +1,5 @@
 /*
- * $Id: ResponseStateManagerImpl.java,v 1.14 2005/03/15 20:37:38 edburns Exp $
+ * $Id: ResponseStateManagerImpl.java,v 1.15 2005/04/06 02:39:47 edburns Exp $
  */
 
 /*
@@ -93,6 +93,11 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
         // null out the temporary attribute, since we don't need it anymore.
         requestMap.remove(FACES_VIEW_STATE);
         return state;
+    }
+
+    public boolean isPostback(FacesContext context) {
+	boolean result = context.getExternalContext().getRequestParameterMap().containsKey(RIConstants.FACES_VIEW);
+	return result;
     }
 
     public Object getTreeStructureToRestore(FacesContext context,

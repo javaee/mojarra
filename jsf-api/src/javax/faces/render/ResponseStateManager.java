@@ -1,5 +1,5 @@
 /*
- * $Id: ResponseStateManager.java,v 1.18 2005/03/18 22:12:50 edburns Exp $
+ * $Id: ResponseStateManager.java,v 1.19 2005/04/06 02:39:46 edburns Exp $
  */
 
 /*
@@ -176,6 +176,19 @@ public abstract class ResponseStateManager {
     public Object getComponentStateToRestore(FacesContext context) {
 	return null;
     }
+
+    /**
+     * <p>Return true if the current request is a postback.  This method
+     * is leveraged from the <i>Restore View Phase</i> to determine if
+     * {@link javax.faces.application.ViewHandler#restoreView} or {@link
+     * javax.faces.application.ViewHandler#createView} should be called.
+     * The default implementation must return <code>true</code> if this
+     * <code>ResponseStateManager</code> instance wrote out state on a
+     * previous request to which this request is a postback.</p>
+     *
+     */
+
+    public abstract boolean isPostback(FacesContext context);
 
 
 }
