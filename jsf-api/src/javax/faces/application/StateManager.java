@@ -1,5 +1,5 @@
 /*
- * $Id: StateManager.java,v 1.9 2003/08/22 14:32:08 eburns Exp $
+ * $Id: StateManager.java,v 1.10 2003/08/26 17:54:12 eburns Exp $
  */
 
 /*
@@ -114,15 +114,14 @@ public abstract class StateManager {
     /**
      * <p>This method causes the structure and state of the component
      * tree linked from the argument {@link FacesContext} to be
-     * collected, stored, and returned in a {@link SerializedView}
-     * Object.</p>
+     * collected, stored, and possibly returned in a {@link
+     * SerializedView} Object.</p>
      *
-     * <p>Implementations may override this method to provide their own
-     * state management mechanism.  The default implementation simply
-     * calls through to {@link #getTreeStructureToSave} and {@link
-     * #getComponentStateToSave} to obtain the tree structure and
-     * component state objects, which it wraps in a {@link
-     * SerializedView} Object to return.  </p>
+     * <p>The implementation must consult the
+     * <code>ServletContext</code> init parameter named as the value of
+     * the constant {@link #STATE_SAVING_METHOD_PARAM_NAME} to determine
+     * whether it should save the state in the response or on the
+     * server.</p>
      *
      * <p>In JSP applications, this method must be called from the
      * <code>doAfterBody()</code> method of the tag handler for the
@@ -133,13 +132,7 @@ public abstract class StateManager {
      *
      */
 
-    public SerializedView getSerializedView(FacesContext context) {
-	SerializedView result = null;
-
-	result = new SerializedView(getTreeStructureToSave(context),
-				    getComponentStateToSave(context));
-	return result;
-    }
+    public abstract SerializedView getSerializedView(FacesContext context);
 
 
     /**
