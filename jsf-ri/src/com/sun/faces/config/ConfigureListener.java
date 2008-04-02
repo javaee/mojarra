@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListener.java,v 1.90 2006/11/21 17:09:44 rlubke Exp $
+ * $Id: ConfigureListener.java,v 1.91 2006/11/22 09:09:17 rlubke Exp $
  */
 /*
  * The contents of this file are subject to the terms
@@ -266,6 +266,8 @@ public class ConfigureListener implements ServletContextListener {
     /**
      * <p>During the execution of {@link #contextInitialized}, this
      * method will return the ServletContext instance.</p>
+     * @return <code>ExternalContext</code> used specifically during
+     *  initialization
      */
 
     public static ExternalContext getExternalContextDuringInitialize() {
@@ -397,7 +399,7 @@ public class ConfigureListener implements ServletContextListener {
                 throw new FacesException(e);
             }
             // Load the sorted resources first:          
-            URL url = null;
+            URL url;
             for (Entry<String, URL> entry : sortedJarMap.entrySet()) {
                 url = entry.getValue();
                 parse(digester, url, fcb);
@@ -509,6 +511,8 @@ public class ConfigureListener implements ServletContextListener {
      * instance for this application.  You must <strong>NOT</strong>
      * call this method prior to configuring the appropriate
      * <code>ApplicationFactory</code> class.</p>
+     * @return the <code>Application</code> object for this web
+     *  application
      */
     private Application application() {
 
@@ -529,6 +533,7 @@ public class ConfigureListener implements ServletContextListener {
      * @param context <code>ServletContext</code> for this web application
      * @param config  <code>FacesConfigBean</code> that is the root of the
      *                tree of configuration information
+     * @throws Exception if an error occurs during the boostrap process
      */
     protected void configure(ServletContext context, FacesConfigBean config)
     throws Exception {
@@ -551,6 +556,7 @@ public class ConfigureListener implements ServletContextListener {
      *
      * @param config   <code>ApplicationBean</code> that contains our
      *                 configuration information
+     * @throws Exception if an error occurs configuring the Application instance
      */
     @SuppressWarnings("deprecation")
     private void configure(ApplicationBean config)
@@ -682,7 +688,7 @@ public class ConfigureListener implements ServletContextListener {
             // invocation of its method, so that variable resolution can move
             // further in the chain.
             Object prevInChain = new DummyVariableResolverImpl();
-            for (int i = 0, len = values.length; i < values.length; i++) {
+            for (int i = 0, len = values.length; i < len; i++) {
                 if (LOGGER.isLoggable(Level.FINER)) {
                     LOGGER.finer("setVariableResolver(" + values[i] + ')');
                 }
@@ -730,6 +736,8 @@ public class ConfigureListener implements ServletContextListener {
      *
      * @param config Array of <code>ComponentBean</code> that contains
      *               our configuration information
+     * @throws Exception if an error occurs configuring the application
+     *  components
      */
     private void configure(ComponentBean[] config) throws Exception {
 
@@ -756,6 +764,8 @@ public class ConfigureListener implements ServletContextListener {
      *
      * @param config Array of <code>ConverterBean</code> that contains
      *               our configuration information
+     * @throws Exception if an error occurs configuring the application
+     *  converters
      */
     private void configure(ConverterBean[] config) throws Exception {
        
@@ -804,6 +814,8 @@ public class ConfigureListener implements ServletContextListener {
      *
      * @param config <code>FactoryBean</code> that contains our
      *               configuration information
+     * @throws Exception if an error occurs configuring the application
+     *  factories
      */
     private void configure(FactoryBean config) throws Exception {
 
@@ -858,6 +870,8 @@ public class ConfigureListener implements ServletContextListener {
      * <p>Configure the lifecycle listeners for this application.</p>
      *
      * @param config <code>LifecycleBean</code> that contains our
+     * @throws Exception if an error occurs configuring the application's
+     *  Lifecycle
      */
     private void configure(LifecycleBean config) throws Exception {
 
@@ -903,6 +917,8 @@ public class ConfigureListener implements ServletContextListener {
      *
      * @param config <code>LocaleConfigBean</code> that contains our
      *               configuration information
+     * @throws Exception if an error occurs configuring the application
+     *  locales
      */
     private void configure(LocaleConfigBean config) throws Exception {
 
@@ -942,6 +958,8 @@ public class ConfigureListener implements ServletContextListener {
      *
      * @param config Array of <code>ManagedBeanBean</code> that contains
      *               our configuration information
+     * @throws Exception if an error occurs configuring the application
+     *  managed beans
      */ 
     private void configure(ManagedBeanBean[] config) throws Exception {
         
@@ -1038,6 +1056,8 @@ public class ConfigureListener implements ServletContextListener {
      * @param config Array of <code>RendererBean</code> that contains
      *               our configuration information
      * @param rk     RenderKit to be configured
+     * @throws Exception if an error occurs configuring the the renderers
+     *  for the specified RenderKit
      */
     private void configure(RendererBean[] config, RenderKit rk)
         throws Exception {
@@ -1081,6 +1101,8 @@ public class ConfigureListener implements ServletContextListener {
      *
      * @param config Array of <code>RenderKitBean</code> that contains
      *               our configuration information
+     * @throws Exception if an error occurs configuring the application
+     *  RenderKit
      */
     private void configure(RenderKitBean[] config) throws Exception {
 
@@ -1135,6 +1157,8 @@ public class ConfigureListener implements ServletContextListener {
      *
      * @param config Array of <code>ResourceBundleBean</code> that contains
      *               our configuration information
+     * @throws Exception if an error occurs configuring the application
+     *  ResourceBundle
      */
     private void configure(ResourceBundleBean[] config) throws Exception {
 
@@ -1168,6 +1192,8 @@ public class ConfigureListener implements ServletContextListener {
      *
      * @param config Array of <code>ValidatorBean</code> that contains
      *               our configuration information
+     * @throws Exception if an error occurs configuring the application
+     *  Validators
      */
     private void configure(ValidatorBean[] config) throws Exception {
 
@@ -1194,6 +1220,8 @@ public class ConfigureListener implements ServletContextListener {
      * parsing the runtime configuration information we need.</p>
      *
      * @param validateXml if true, validation is turned on during parsing.
+     * @return a <code>Digester<code> instance suitable for parsing
+     *  faces-config documents
      */
     protected Digester digester(boolean validateXml) {
 
@@ -1252,6 +1280,8 @@ public class ConfigureListener implements ServletContextListener {
      * <p>This is the single access point for accessing the
      * JSFVersionTracker instance during initialization.  It returns
      * null if the feature has been disabled via user configuration.</p>
+     * @return <code>JSFVersionTracker</code> that can be used to query
+     *  the version of application artifacts
      */ 
     
     private JSFVersionTracker getJSFVersionTracker() {
@@ -1292,6 +1322,8 @@ public class ConfigureListener implements ServletContextListener {
      * been initialized.  If it has not been initialized, also record
      * the initialization of this application until removed by a call to
      * <code>release()</code>.</p>
+     * @return <code>true</code> if this application has been initialized,
+     *  otherwise <code>false</code>
      */
     private boolean initialized() {
 
@@ -1494,7 +1526,6 @@ public class ConfigureListener implements ServletContextListener {
             if (null != tracker) {
                 tracker.endParse();
             }
-            stream = null;
         }
         
         
@@ -1873,9 +1904,8 @@ public class ConfigureListener implements ServletContextListener {
 
 
         public boolean equals(Object obj) {
-            if (obj == null || !(obj instanceof ApplicationMap))
-                return false;
-            return super.equals(obj);
+            return !(obj == null || !(obj instanceof ApplicationMap))
+                 && super.equals(obj);
         }
 
 
@@ -1943,7 +1973,7 @@ public class ConfigureListener implements ServletContextListener {
          * <p>Parse the web.xml for the current application and scan
          * for a FacesServlet entry, if found, set the
          * <code>facesServletPresent</code> property to true.
-         * @param context
+         * @param context the ServletContext instance for this application
          */
         private void scanForFacesServlet(ServletContext context) {
 
