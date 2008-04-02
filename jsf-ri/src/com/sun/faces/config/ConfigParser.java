@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigParser.java,v 1.16 2003/05/12 22:53:30 eburns Exp $
+ * $Id: ConfigParser.java,v 1.17 2003/05/18 20:54:45 eburns Exp $
  */
 
 /*
@@ -293,10 +293,18 @@ public class ConfigParser {
 
         digester.addObjectCreate(prefix, "com.sun.faces.config.ConfigMessage");
         digester.addSetNext(prefix, "addMessage", "com.sun.faces.config.ConfigMessage");
-        digester.addCallMethod(prefix + "/message-id",
-                               "setMessageId", 0);
-        digester.addCallMethod(prefix + "/message-class",
-                               "setMessageClass", 0);
+        digester.addCallMethod(prefix + "/message-id", "setMessageId", 0);
+        digester.addCallMethod(prefix + "/message-class","setMessageClass", 0);
+	digester.addCallMethod(prefix + "/summary", "addSummary", 2);
+	// From this attribute
+	digester.addCallParam(prefix + "/summary", 0, "xml:lang"); 
+	// From this element body
+	digester.addCallParam(prefix + "/summary", 1); 
+	digester.addCallMethod(prefix + "/detail", "addDetail", 2);
+	// From this attribute
+	digester.addCallParam(prefix + "/detail", 0, "xml:lang"); 
+	// From this element body
+	digester.addCallParam(prefix + "/detail", 1); 
     }
 
     // Configure the rules for a <property> element

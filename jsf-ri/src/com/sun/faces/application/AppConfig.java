@@ -1,5 +1,5 @@
 /*
- * $Id: AppConfig.java,v 1.8 2003/05/15 22:25:45 rkitain Exp $
+ * $Id: AppConfig.java,v 1.9 2003/05/18 20:54:43 eburns Exp $
  */
 
 /*
@@ -32,6 +32,7 @@ import com.sun.faces.config.ConfigMessageResources;
 import com.sun.faces.config.ConfigValidator;
 import com.sun.faces.util.Util;
 import com.sun.faces.context.MessageResourcesImpl;
+import com.sun.faces.context.AppMessageResourcesImpl;
 import com.sun.faces.RIConstants;
 
 /**
@@ -39,7 +40,7 @@ import com.sun.faces.RIConstants;
  *  <p>AppConfig is a helper class to the ApplicationImpl that serves as
  *  a shim between it and the config system.</p>
  *
- * @version $Id: AppConfig.java,v 1.8 2003/05/15 22:25:45 rkitain Exp $
+ * @version $Id: AppConfig.java,v 1.9 2003/05/18 20:54:43 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -276,26 +277,43 @@ public AppConfig(Application application)
 	// if not found, we have to create one.
         MessageResources result = null;
 	ConfigMessageResources configMessageResources = null;
+	String classId;
 	
 	if (null == (configMessageResources = (ConfigMessageResources)
 		     yourBase.getMessageResources().get(messageResourcesId))) {
 	    //PENDING(edburns): i18n
 	    throw new FacesException();
 	}
-	result = (MessageResources) 
-	    this.newThing(configMessageResources.getMessageResourcesClass());
+	// If we have a messageResourcesClass
+	if (null != (classId = 
+		     configMessageResources.getMessageResourcesClass())) {
+	    result = (MessageResources) this.newThing(classId);
 
-	if (messageResourcesId.equals(MessageResources.FACES_API_MESSAGES)) {
-	    ((MessageResourcesImpl)result).init(messageResourcesId, 
-                    JSF_API_RESOURCE_FILENAME);
-	}
-	else if (messageResourcesId.equals(MessageResources.FACES_IMPL_MESSAGES)) {
-	    ((MessageResourcesImpl)result).init(messageResourcesId, 
-                    JSF_RI_RESOURCE_FILENAME);
+	    // If the class is our own implementation class
+	    if (classId.equals(MessageResourcesImpl.class.getName())) {
+		// if the messageResourcesId is the faces_api_messages
+		if (messageResourcesId.
+		    equals(MessageResources.FACES_API_MESSAGES)) {
+		    ((MessageResourcesImpl)result).init(messageResourcesId, 
+		       				JSF_API_RESOURCE_FILENAME);
+		}
+		else if (messageResourcesId.
+			 equals(MessageResources.FACES_IMPL_MESSAGES)) {
+		    ((MessageResourcesImpl)result).init(messageResourcesId, 
+						     JSF_RI_RESOURCE_FILENAME);
+		}
+		else {
+		    // we don't initialize it, just return it un-initialized.
+		}
+	    }
 	}
 	else {
-	    // we don't initialize it, just return it un-initialized.
+	    // we don't have a messageResourcesClass, use
+	    // AppMessageResourcesImpl
+	    result = (MessageResources) 
+		new AppMessageResourcesImpl(configMessageResources);
 	}
+	    
 	
         synchronized ( messageResourcesList ) { 
             messageResourcesList.put(messageResourcesId, result);
