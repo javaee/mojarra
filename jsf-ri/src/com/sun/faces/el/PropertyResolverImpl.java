@@ -1,5 +1,5 @@
 /*
- * $Id: PropertyResolverImpl.java,v 1.30 2007/02/27 23:10:23 rlubke Exp $
+ * $Id: PropertyResolverImpl.java,v 1.31 2007/02/28 21:28:19 rlubke Exp $
  */
 
 /*
@@ -210,6 +210,7 @@ public class PropertyResolverImpl extends PropertyResolver {
 
         if (delegate != null) {
             delegate.setValue(base, index, value);
+            return;
         }
         
         FacesContext context = FacesContext.getCurrentInstance();
@@ -251,6 +252,7 @@ public class PropertyResolverImpl extends PropertyResolver {
 
         if (delegate != null) {
             delegate.setValue(base, property, value);
+            return;
         }
 
         try {
