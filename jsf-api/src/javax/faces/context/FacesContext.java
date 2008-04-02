@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContext.java,v 1.62 2005/05/05 20:51:05 edburns Exp $
+ * $Id: FacesContext.java,v 1.63 2005/07/14 15:47:02 edburns Exp $
  */
 
 /*
@@ -63,7 +63,8 @@ public abstract class FacesContext {
      * such client identifiers, an empty <code>Iterator</code> is returned.
      * If any messages have been queued that were not associated with any
      * specific client identifier, a <code>null</code> value will be included
-     * in the iterated values.</p>
+     * in the iterated values.  The elements in the <code>Iterator</code> must
+     * be returned in the order in which they were added with {@link #addMessage}.</p>
      *
      * @exception IllegalStateException if this method is called after
      *  this instance has been released
@@ -129,7 +130,9 @@ public abstract class FacesContext {
      * <p>Return an <code>Iterator</code> over the {@link javax.faces.application.FacesMessage}s
      * that have been queued, whether or not they are associated with any
      * specific client identifier.  If no such messages have been queued,
-     * return an empty <code>Iterator</code>.</p>
+     * return an empty <code>Iterator</code>.  The elements of the <code>Iterator</code>
+     * must be returned in the order in which they were added with calls to {@link 
+     * #addMessage}.</p>
      *
      * @exception IllegalStateException if this method is called after
      *  this instance has been released
@@ -144,7 +147,9 @@ public abstract class FacesContext {
      * {@link javax.faces.application.FacesMessage}s that have been queued that are not associated with
      * any specific client identifier (if <code>clientId</code> is
      * <code>null</code>).  If no such messages have been queued, return an
-     * empty <code>Iterator</code>.</p>
+     * empty <code>Iterator</code>.  The elements of the <code>Iterator</code>
+     * must be returned in the order in which they were added with calls to {@link 
+     * #addMessage}.</p>
      *
      * @param clientId The client identifier for which messages are
      *  requested, or <code>null</code> for messages not associated with
