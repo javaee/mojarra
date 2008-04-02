@@ -10,7 +10,7 @@
 
     <xsd:annotation>
         <xsd:documentation>
-            $Id: web-facesconfig_1_2.xsd,v 1.5 2005/06/17 12:29:11 edburns Exp $
+            $Id: web-facesconfig_1_2.xsd,v 1.6 2005/06/17 14:14:40 edburns Exp $
         </xsd:documentation>
     </xsd:annotation>
 
@@ -1880,7 +1880,7 @@
                 </xsd:annotation>
             </xsd:element>
             <xsd:element name="validator-extension"
-                         type="j2ee:faces-config-converter-validator-extensionType"
+                         type="j2ee:faces-config-validator-extensionType"
                          minOccurs="0"
                          maxOccurs="unbounded"/>
         </xsd:sequence>
