@@ -52,6 +52,6 @@ by the container.
 
 -->
 
-<jsp:forward page="chooseLocale.jsf" />
+<jsp:forward page="chooseLocale.faces" />
 </body>
 </html>

@@ -93,14 +93,14 @@
     <!-- 
 
          This mapping identifies a jsp page as having JSF content.  If a
-         request comes to the server for foo.jsf, the container will
+         request comes to the server for foo.faces, the container will
          send the request to the FacesServlet, which will expect a
          corresponding foo.jsp page to exist containing the content.
 
     -->
     <servlet-mapping>
         <servlet-name>Faces Servlet</servlet-name>
-        <url-pattern>*.jsf</url-pattern>
+        <url-pattern>*.faces</url-pattern>
     </servlet-mapping>
 
     <security-constraint>
