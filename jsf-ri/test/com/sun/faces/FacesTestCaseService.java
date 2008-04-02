@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTestCaseService.java,v 1.23 2003/07/23 16:32:19 rkitain Exp $
+ * $Id: FacesTestCaseService.java,v 1.24 2003/07/29 18:12:54 rlubke Exp $
  */
 
 /*
@@ -54,7 +54,7 @@ import org.apache.cactus.server.ServletContextWrapper;
  * <B>Lifetime And Scope</B> <P> Same as the JspTestCase or
  * ServletTestCase instance that uses it.
  *
- * @version $Id: FacesTestCaseService.java,v 1.23 2003/07/23 16:32:19 rkitain Exp $
+ * @version $Id: FacesTestCaseService.java,v 1.24 2003/07/29 18:12:54 rlubke Exp $
  * 
  * @see	com.sun.faces.context.FacesContextFactoryImpl
  * @see	com.sun.faces.context.FacesContextImpl
@@ -199,6 +199,7 @@ public void tearDown()
     ServletContextEvent e = 
 	new ServletContextEvent(facesTestCase.getConfig().getServletContext());
     configListener.contextDestroyed(e);
+    System.setProperty(RIConstants.DISABLE_RENDERERS, "");
     
     Util.releaseFactoriesAndDefaultRenderKit(facesTestCase.getConfig().getServletContext());
     // make sure session is not null. It will null in case release
