@@ -135,14 +135,14 @@
         <include name="*.jsp" />
       </fileset>
     </copy>
-    <copy todir="${build}/pictures">
+    <copy todir="${build}">
       <fileset dir="./pictures">
 	<include name="*.gif" />
 	<include name="*.jpg" />
 	<include name="*.jpeg" />
       </fileset>	
     </copy>
-    <copy todir="${build}/resources">
+    <copy todir="${build}/WEB-INF/classes/cardemo">
       <fileset dir="./resources">
         <include name="*properties" />
       </fileset>

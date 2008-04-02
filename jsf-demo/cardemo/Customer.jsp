@@ -24,7 +24,7 @@
 <h:form id="CustomerForm" formName="CustomerForm" modelReference="CustomerBean" >
 <TABLE BORDER="0" WIDTH="660" BGCOLOR="#4F4F72">
 <tr>
-<td VALIGN=TOP WIDTH="100%"><img SRC="/cardemo/pictures/cardemo.jpg" BORDER=0 height=60 width=660
+<td VALIGN=TOP WIDTH="100%"><img SRC="cardemo.jpg" BORDER=0 height=60 width=660
 align=BOTTOM></td>
 </tr>
 </table>
@@ -245,7 +245,8 @@ align=BOTTOM></td>
 				     commandName="finish"/>
 
 <hr WIDTH="100%">
-<p><img SRC="/cardemo/pictures/duke.gif" height=55 width=49 align=ABSCENTER> Thanks
+<p>
+<h:graphic_image id="duke" url="duke.gif" /> Thanks
 for stopping by.
 <br>
 </h:form>

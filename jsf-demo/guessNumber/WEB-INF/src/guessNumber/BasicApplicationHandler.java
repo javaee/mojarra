@@ -68,7 +68,7 @@ public class BasicApplicationHandler implements ApplicationHandler{
 
 	if (!(facesEvent instanceof FormEvent) &&
             !(facesEvent instanceof CommandEvent)) {
-	    return false;
+	    return true;
 	}
   
         boolean returnValue = false;
@@ -81,7 +81,7 @@ public class BasicApplicationHandler implements ApplicationHandler{
 	    } else if (formEvent.getCommandName().equals("back")) {
 	        treeId = "/greeting.jsp";
 	    }
-            returnValue = false;
+            returnValue = true;
         } else if (facesEvent instanceof CommandEvent) {
             CommandEvent commandEvent = (CommandEvent)facesEvent;
             UIComponent c = commandEvent.getComponent();
@@ -95,8 +95,7 @@ public class BasicApplicationHandler implements ApplicationHandler{
             TreeFactory treeFactory = (TreeFactory)
             FactoryFinder.getFactory(FactoryFinder.TREE_FACTORY);
             Assert.assert_it(null != treeFactory);
-            ServletContext sc = context.getServletContext();
-            context.setResponseTree(treeFactory.getTree(sc,treeId));
+            context.setResponseTree(treeFactory.getTree(context,treeId));
         }
 
         return returnValue;

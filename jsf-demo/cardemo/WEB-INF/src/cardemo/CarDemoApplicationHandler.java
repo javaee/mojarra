@@ -1,5 +1,5 @@
 /*
- * $Id: CarDemoApplicationHandler.java,v 1.1 2002/09/30 21:42:18 jball Exp $
+ * $Id: CarDemoApplicationHandler.java,v 1.2 2002/10/07 22:53:05 jball Exp $
  */
 
 /*
@@ -45,7 +45,7 @@ public class CarDemoApplicationHandler implements ApplicationHandler{
         
         if (!(facesEvent instanceof FormEvent) &&
         !(facesEvent instanceof CommandEvent)) {
-            return false;
+            return true;
         }
         
         boolean returnValue = false;
@@ -97,7 +97,7 @@ public class CarDemoApplicationHandler implements ApplicationHandler{
                 treeId = "/more.jsp";
             }
             
-            returnValue = false;
+            returnValue = true;
             
         }
         
@@ -115,8 +115,7 @@ public class CarDemoApplicationHandler implements ApplicationHandler{
             TreeFactory treeFactory = (TreeFactory)
             FactoryFinder.getFactory(FactoryFinder.TREE_FACTORY);
             Assert.assert_it(null != treeFactory);
-            ServletContext sc = context.getServletContext();
-            context.setResponseTree(treeFactory.getTree(sc,treeId));
+            context.setResponseTree(treeFactory.getTree(context,treeId));
         }
         
         return returnValue;

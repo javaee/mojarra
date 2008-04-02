@@ -29,10 +29,12 @@
 					<TD WIDTH="820">
 						<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0" WIDTH="100%" BGCOLOR="white">
 							<TR>
-								<TD WIDTH="100%" VALIGN="TOP"><IMG SRC="/cardemo/pictures/cardemo.jpg" WIDTH="660" HEIGHT="60" ALIGN="BOTTOM" BORDER="0"></TD>
+								<TD WIDTH="100%" VALIGN="TOP">
+								<h:graphic_image id="cardemo" url="cardemo.jpg" /></TD>
 							</TR>
 							<TR>
-								<TD WIDTH="100%"><IMG SRC="/cardemo/pictures/current.gif" ALIGN="LEFT" BORDER="0"><B>
+								<TD WIDTH="100%">
+								<h:graphic_image id="current_car" modelReference="CurrentOptionServer.carImage" /><B>
 								<FONT SIZE="4" COLOR="#330066" FACE="Arial, Helvetica">
 									<h:output_text id="carDetails"  
 											modelReference="CurrentOptionServer.carTitle" 

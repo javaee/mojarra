@@ -19,7 +19,10 @@
 	    basename="carDemo.Resources"
 	    scope="session" var="carDemoBundle"/>
 	<jsp:useBean id="CarServer" class="cardemo.CarServer" scope="session" />
-	<jsp:useBean id="CurrentOptionServer" class="cardemo.CurrentOptionServer" scope="session" />
+	<jsp:useBean id="CurrentOptionServer" class="cardemo.CurrentOptionServer" scope="session" >
+		<jsp:setProperty name="CurrentOptionServer" property="carImage" 
+			value="current.gif"/>
+	</jsp:useBean>
 
 <f:usefaces>  
 
@@ -31,11 +34,13 @@
 		<TD WIDTH="828">
 			<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0" WIDTH="100%">
 				<TR>
-					<TD WIDTH="820"><IMG SRC="/cardemo/pictures/cardemo.jpg" WIDTH="660" HEIGHT="60" ALIGN="BOTTOM" BORDER="0"><BR>
+					<TD WIDTH="820">
+					<h:graphic_image id="cardemo_img" url="cardemo.jpg" /><BR>
 						
 						<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="6" WIDTH="660" BGCOLOR="white">
 							<TR>
-								<TD WIDTH="50%" VALIGN="TOP"><IMG SRC="/cardemo/pictures/150x126_Jalopy.jpg" ALIGN="LEFT" BORDER="0"><B><FONT
+								<TD WIDTH="50%" VALIGN="TOP">
+								<h:graphic_image id="jalopy" url="150x126_Jalopy.jpg" /><B><FONT
 									SIZE="4" COLOR="#330066" FACE="Arial, Helvetica">
                                                                         <h:output_text 	id="car1title" 
 												modelReference="CarServer.car1Title"
@@ -54,7 +59,8 @@
 												commandName="more1"/>
 									
                                                                         </TD>
-								<TD WIDTH="50%" VALIGN="TOP" BGCOLOR="white"><IMG SRC="/cardemo/pictures/150x126_Roadster.jpg" ALIGN="LEFT" BORDER="0"><B><FONT SIZE="4" COLOR="#330066"
+								<TD WIDTH="50%" VALIGN="TOP" BGCOLOR="white">
+								<h:graphic_image id="roadster" url="150x126_Roadster.jpg" /><B><FONT SIZE="4" COLOR="#330066"
 									FACE="Arial, Helvetica">
 									<h:output_text 	id="car2Title"  
 												modelReference="CarServer.car2Title" 
@@ -81,7 +87,7 @@
 							</TR>
 							<TR>
 								<TD WIDTH="50%" VALIGN="TOP" BGCOLOR="white">
-								<IMG SRC="/cardemo/pictures/150x126_Luxury.jpg" ALIGN="LEFT" BORDER="0"><B>
+								<h:graphic_image id="luxury" url="150x126_Luxury.jpg" /><B>
 								<FONT SIZE="4" COLOR="#330066"FACE="Arial, Helvetica">
 								<h:output_text 	id="car3Title"  
 											modelReference="CarServer.car3Title" 
@@ -100,7 +106,7 @@
 											commandName="more3"/>
 								 </TD>
 								<TD WIDTH="50%" VALIGN="TOP" BGCOLOR="white">
-								<IMG SRC="/cardemo/pictures/150x126_SUV.jpg" ALIGN="LEFT" BORDER="0"><B>
+								<h:graphic_image id="suv" url="150x126_SUV.jpg" /><B>
 								<FONT SIZE="4" COLOR="#330066" FACE="Arial, Helvetica">
 								<h:output_text 	id="car4Title"  
 												modelReference="CarServer.car4Title"

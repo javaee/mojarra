@@ -1,5 +1,5 @@
 /*
- * $Id: CurrentOptionServer.java,v 1.1 2002/09/30 21:42:20 jball Exp $
+ * $Id: CurrentOptionServer.java,v 1.2 2002/10/07 22:53:05 jball Exp $
  */
 
 /*
@@ -23,6 +23,7 @@ import java.io.*;
 public class CurrentOptionServer extends Object {
     
     
+    protected String thisUrl = "/current.gif";
     protected int carId = 1;
     protected String carTitle = "You shouldn't see this title";
     protected String carDesc = "This description should never be seen. If it is, your properties files aren't being read.";
@@ -106,186 +107,72 @@ public class CurrentOptionServer extends Object {
     
     public void setCarId(int id) {
         
-        try {
-            
-            System.out.println("SetCarId called on id = " + id);
-            
-            FileInputStream iStream;
-            Properties carProps = new Properties();
-            
-            int data = 0;
-            File fin, fout;
-            FileInputStream fis;
-            FileOutputStream fos;
+        try {            
+            System.out.println("SetCarId called on id = " + id);            
+            Properties carProps = new Properties();            
+            InputStream in;
             
             // reload all properties based on car Id
             switch (id) {
                 
                 case 1:
                     // load car 1 data
-                    iStream = new FileInputStream(".." + File.separator + "webapps" + 
-                    File.separator + "cardemo" + File.separator + "resources" + 
-                    File.separator + "CarOptions1.properties");
-                    carProps.load(iStream);
-                    
-                    // nasty hack for missing UIGraphic component
-                    
-                    data = 0;
-                    fin = new File(".." + File.separator + "webapps" +
-                    File.separator + "cardemo" + File.separator +
-                    "pictures" + File.separator +
-                    "200x168_Jalopy.jpg");
-                    
-                    fout = new File(".." + File.separator + "webapps" +
-                    File.separator + "cardemo" + File.separator +
-                    "pictures" + File.separator + "current.gif");
-                    
-                    fis = null;
-                    fos = null;
-                    
-                    try {
-                        fis = new FileInputStream(fin);
-                        fos = new FileOutputStream(fout);
-                    } catch (FileNotFoundException ignored) {}
-                    
-                    try {
-                        
-                        while ((data=fis.read()) != -1  ) {
-                            fos.write(data);
-                        }
-                        
-                        fis.close();
-                        fos.close();
-                        
-                    } catch (IOException ignoredAsWell) {}
-                    
+                    String optionsOne = "cardemo/CarOptions1.properties";
+       		    try {
+       		       in = this.getClass().getClassLoader().getResourceAsStream(optionsOne);
+        	    } catch (Throwable t) {
+        	       throw new RuntimeException("Error Opening File:"+optionsOne);
+	            }
+		    carProps.load(in);
+                    setCarImage("200x168_Jalopy.jpg");
                     break;
                     
                 case 2:
                     // load car 2 data
-                    iStream = new FileInputStream(".." + File.separator + "webapps" + 
-                    File.separator + "cardemo" + File.separator + "resources" + 
-                    File.separator + "CarOptions2.properties");
-                    carProps.load(iStream);
-                    
-                    // nasty hack for missing UIGraphic component
-                    data = 0;
-                    fin = new File(".." + File.separator + "webapps" +
-                    File.separator + "cardemo" + File.separator +
-                    "pictures" + File.separator +
-                    "200x168_Roadster.jpg");
-                    
-                    fout = new File(".." + File.separator + "webapps" +
-                    File.separator + "cardemo" + File.separator +
-                    "pictures" + File.separator + "current.gif");
-                    
-                    fis = null;
-                    fos = null;
-                    
-                    try {
-                        fis = new FileInputStream(fin);
-                        fos = new FileOutputStream(fout);
-                    } catch (FileNotFoundException ignored) {}
-                    
-                    try {
-                        
-                        while ((data=fis.read()) != -1  ) {
-                            fos.write(data);
-                        }
-                        
-                        fis.close();
-                        fos.close();
-                        
-                    } catch (IOException ignoredAsWell) {}
-                    
+                    String optionsTwo = "cardemo/CarOptions2.properties";
+       		    try {
+       		       in = this.getClass().getClassLoader().getResourceAsStream(optionsTwo);
+        	    } catch (Throwable t) {
+        	       throw new RuntimeException("Error Opening File:"+optionsTwo);
+	            }
+		    carProps.load(in);
+                    setCarImage("200x168_Roadster.jpg");
                     break;
                     
                 case 3:
                     // load car 3 data
-                    iStream = new FileInputStream(".." + File.separator + "webapps" + 
-                    File.separator + "cardemo" + File.separator + "resources" + 
-                    File.separator + "CarOptions3.properties");
-                    carProps.load(iStream);
-                    
-                    // nasty hack for missing UIGraphic component
-                    data = 0;
-                    fin = new File(".." + File.separator + "webapps" +
-                    File.separator + "cardemo" + File.separator +
-                    "pictures" + File.separator +
-                    "200x168_Luxury.jpg");
-                    
-                    fout = new File(".." + File.separator + "webapps" +
-                    File.separator + "cardemo" + File.separator +
-                    "pictures" + File.separator + "current.gif");
-                    
-                    fis = null;
-                    fos = null;
-                    
-                    try {
-                        fis = new FileInputStream(fin);
-                        fos = new FileOutputStream(fout);
-                    } catch (FileNotFoundException ignored) {}
-                    
-                    try {
-                        
-                        while ((data=fis.read()) != -1  ) {
-                            fos.write(data);
-                        }
-                        
-                        fis.close();
-                        fos.close();
-                        
-                    } catch (IOException ignoredAsWell) {}
-                    
+                    String optionsThree = "cardemo/CarOptions3.properties";
+       		    try {
+       		       in = this.getClass().getClassLoader().getResourceAsStream(optionsThree);
+        	    } catch (Throwable t) {
+        	       throw new RuntimeException("Error Opening File:"+optionsThree);
+	            }
+		    carProps.load(in);
+                    setCarImage("200x168_Luxury.jpg");
                     break;
-                    
+                                        
                 case 4:
                     // load car 4 data
-                    iStream = new FileInputStream(".." + File.separator + "webapps" + 
-                    File.separator + "cardemo" + File.separator + "resources" + 
-                    File.separator + "CarOptions4.properties");
-                    carProps.load(iStream);
-                    
-                    // nasty hack for missing UIGraphic component
-                    data = 0;
-                    
-                    fin = new File(".." + File.separator + "webapps" +
-                    File.separator + "cardemo" + File.separator +
-                    "pictures" + File.separator +
-                    "200x168_SUV.jpg");
-                    
-                    fout = new File(".." + File.separator + "webapps" +
-                    File.separator + "cardemo" + File.separator +
-                    "pictures" + File.separator + "current.gif");
-                    
-                    fis = null;
-                    fos = null;
-                    
-                    try {
-                        fis = new FileInputStream(fin);
-                        fos = new FileOutputStream(fout);
-                    } catch (FileNotFoundException ignored) {}
-                    
-                    try {
-                        
-                        while ((data=fis.read()) != -1  ) {
-                            fos.write(data);
-                        }
-                        
-                        fis.close();
-                        fos.close();
-                        
-                    } catch (IOException ignoredAsWell) {}
-                    
+                    String optionsFour = "cardemo/CarOptions4.properties";
+       		    try {
+       		       in = this.getClass().getClassLoader().getResourceAsStream(optionsFour);
+        	    } catch (Throwable t) {
+        	       throw new RuntimeException("Error Opening File:"+optionsFour);
+	            }
+		    carProps.load(in);
+                    setCarImage("200x168_SUV.jpg");
                     break;
-                    
-                default:
+                                        
+
+                   default:
                     // this should never happen
-                    iStream = new FileInputStream(".." + File.separator + "webapps" + 
-                    File.separator + "cardemo" + File.separator + "resources" + 
-                    File.separator + "CarOptions1.properties");
-                    carProps.load(iStream);
-                    
+                    optionsOne = "cardemo/CarOptions1.properties";
+       		    try {
+       		       in = this.getClass().getClassLoader().getResourceAsStream(optionsOne);
+        	    } catch (Throwable t) {
+        	       throw new RuntimeException("Error Opening File:"+optionsOne);
+	            }
+                    carProps.load(in);
                     break;
             }
             
@@ -304,7 +191,15 @@ public class CurrentOptionServer extends Object {
     
     public int getCarId() {
         return carId;
-    }       
+    }      
+        
+    public void setCarImage(String url) {
+        thisUrl = url;
+    }
+
+    public String getCarImage() {
+        return thisUrl;
+    } 
     
     public void setCarTitle(String title) {
         carTitle = title;
