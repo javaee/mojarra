@@ -173,9 +173,9 @@
         <copy file="${shale.remoting.jar}" todir="${build.webinf.dir}/lib" />
         <copy file="${sandbox.dir}/build/lib/${name}-${sb.impl.version}.jar" todir="${build.webinf.dir}/lib" />
 
-        <war destfile="${dist.dir}/JsfRiSandboxDemo.war">
+        <jar destfile="${dist.dir}/JsfRiSandboxDemo.war">
             <fileset dir="${build.dir}"/>
-        </war>
+        </jar>
         <!--
         <copy file="${httpclient.jar}" todir="${dep.jar.dir}" />
         <copy file="${codec.jar}" todir="${dep.jar.dir}" />

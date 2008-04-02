@@ -41,7 +41,7 @@
     <!-- ******************* Structural ************************** -->
 
     <!-- The base directory for compilation targets -->
-    <property name="build.dir" value="build"/>
+    <property name="build.dir" value="${basedir}/build"/>
     <property name="build.classes.dir" value="${build.dir}/classes"/>
     <property name="build.generate.dir" value="${build.dir}/generate"/>
     <property name="build.applet.dir" value="${build.dir}/applet"/>
@@ -269,7 +269,7 @@
                         excludes="**/CVS/**"
                         prefix="jsf-ri-sandbox-src-${sb.impl.version}/src"/>
             <zipfileset dir="${basedir}"
-                        includes="conf/** web/**"
+                        includes="conf/** web/** build.xml"
                         prefix="jsf-ri-sandbox-src-${sb.impl.version}"/>
         </zip>
     </target>
@@ -349,6 +349,7 @@
 
         </zip>
         <antcall target="sandbox.source"/>
+        <ant dir="demo/" target="dist" inheritAll="false"/>
 
     </target>
     
@@ -440,6 +441,11 @@
                                    toFile="/RI Sandbox/jsf-ri-sandbox-src-0.1.zip"
                                    fromFile="${dist.dir}/jsf-ri-sandbox-src-0.1.zip"
                                    fileDescription="Nightly snapshot of the source bundle for the Sandbox components"
+                                   overwrite="yes"/>
+                    <javaNetUpload projectName="javaserverfaces"
+                                   toFile="/RI Sandbox/JsfRiSandboxDemo.war"
+                                   fromFile="demo/dist/JsfRiSandboxDemo.war"
+                                   fileDescription="An app demonstrating the Sandbox components"
                                    overwrite="yes"/>
                     <javaNetUpload projectName="javaserverfaces"
                                    toFile="/RI Sandbox/README"
