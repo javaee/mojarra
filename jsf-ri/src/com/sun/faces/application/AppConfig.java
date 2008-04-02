@@ -1,5 +1,5 @@
 /*
- * $Id: AppConfig.java,v 1.7 2003/05/08 23:13:03 horwat Exp $
+ * $Id: AppConfig.java,v 1.8 2003/05/15 22:25:45 rkitain Exp $
  */
 
 /*
@@ -39,7 +39,7 @@ import com.sun.faces.RIConstants;
  *  <p>AppConfig is a helper class to the ApplicationImpl that serves as
  *  a shim between it and the config system.</p>
  *
- * @version $Id: AppConfig.java,v 1.7 2003/05/08 23:13:03 horwat Exp $
+ * @version $Id: AppConfig.java,v 1.8 2003/05/15 22:25:45 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -138,8 +138,7 @@ public AppConfig(Application application)
                 getApplicationMap().put(managedBeanName, bean);
         }
         else if (scope.equalsIgnoreCase(RIConstants.SESSION)) {
-            context.getExternalContext().
-                getSessionMap().put(managedBeanName, bean);
+	    Util.getSessionMap(context).put(managedBeanName, bean);
         }
         else if (scope.equalsIgnoreCase(RIConstants.REQUEST)) {
             context.getExternalContext().

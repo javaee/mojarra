@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.63 2003/05/14 20:48:46 horwat Exp $
+ * $Id: Util.java,v 1.64 2003/05/15 22:25:49 rkitain Exp $
  */
 
 /*
@@ -56,7 +56,7 @@ import java.util.StringTokenizer;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.63 2003/05/14 20:48:46 horwat Exp $
+ * @version $Id: Util.java,v 1.64 2003/05/15 22:25:49 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -760,6 +760,27 @@ private Util()
         ValueBinding binding = application.getValueBinding(valueRef);
         return binding;
     }         
+
+    /**
+     * This method will return a <code>SessionMap</code> for the current
+     * <code>FacesContext</code>.  If the <code>FacesContext</code> argument
+     * is null, then one is determined by <code>FacesContext.getCurrentInstance()</code>.
+     * The <code>SessionMap</code> will be created if it is null.
+     * @param context the FacesContext
+     * @return Map The <code>SessionMap</code>
+     */
+    public static Map getSessionMap(FacesContext context) {
+        if (context == null) {
+	    context = FacesContext.getCurrentInstance();
+	}
+	Map sessionMap = context.getExternalContext().getSessionMap();
+	if (sessionMap == null) {
+	    context.getExternalContext().getSession(true);
+	    sessionMap = context.getExternalContext().getSessionMap();
+	    Assert.assert_it(sessionMap != null);
+        }
+	return sessionMap;
+    }
 
 //
 // General Methods

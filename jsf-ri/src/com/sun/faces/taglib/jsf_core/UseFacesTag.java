@@ -1,5 +1,5 @@
 /*
- * $Id: UseFacesTag.java,v 1.13 2003/05/03 04:08:45 eburns Exp $
+ * $Id: UseFacesTag.java,v 1.14 2003/05/15 22:25:48 rkitain Exp $
  */
 
 /*
@@ -45,7 +45,7 @@ import javax.servlet.jsp.tagext.BodyTag;
  *  any renderers or attributes. It exists mainly to save the state of
  *  the response tree once all tags have been rendered.
  *
- * @version $Id: UseFacesTag.java,v 1.13 2003/05/03 04:08:45 eburns Exp $
+ * @version $Id: UseFacesTag.java,v 1.14 2003/05/15 22:25:48 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -128,7 +128,7 @@ public class UseFacesTag extends UIComponentBodyTag
     
     protected void saveStateInSession(FacesContext facesContext) 
             throws JspException {
-        Map sessionMap = facesContext.getExternalContext().getSessionMap();
+        Map sessionMap = Util.getSessionMap(facesContext);
         sessionMap.put(RIConstants.REQUEST_LOCALE, facesContext.getLocale());
         sessionMap.put(RIConstants.FACES_TREE, facesContext.getTree() ); 
         // write buffered response to output. Since we are saving tree in session

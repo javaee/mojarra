@@ -1,5 +1,5 @@
 /*
- * $Id: ValueBindingImpl.java,v 1.10 2003/05/08 23:13:08 horwat Exp $
+ * $Id: ValueBindingImpl.java,v 1.11 2003/05/15 22:25:46 rkitain Exp $
  */
 
 /*
@@ -422,8 +422,8 @@ public class ValueBindingImpl extends ValueBinding
         //for the expression in that scope. The expression is the
         //second segment.
 
-        ExternalContext ec = FacesContext.getCurrentInstance().
-            getExternalContext();
+	FacesContext context = FacesContext.getCurrentInstance();
+        ExternalContext ec = context.getExternalContext();
 
         if (identifier.equalsIgnoreCase(RIConstants.REQUEST_SCOPE)) {
             if ((expression != null) && 
@@ -436,7 +436,7 @@ public class ValueBindingImpl extends ValueBinding
         }
         if (identifier.equalsIgnoreCase(RIConstants.SESSION_SCOPE)) {
             if ((expression != null) && 
-                (ec.getSessionMap().get(expression) != null)) {
+                (Util.getSessionMap(context).get(expression) != null)) {
                 return RIConstants.SESSION;
             }
             else {
@@ -460,7 +460,7 @@ public class ValueBindingImpl extends ValueBinding
         if (ec.getRequestMap().get(identifier) != null) {
             return RIConstants.REQUEST;
         }
-        if (ec.getSessionMap().get(identifier) != null) {
+        if (Util.getSessionMap(context).get(identifier) != null) {
             return RIConstants.SESSION;
         }
         if (ec.getApplicationMap().get(identifier) != null) {

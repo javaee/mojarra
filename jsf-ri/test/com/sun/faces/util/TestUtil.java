@@ -1,5 +1,5 @@
 /*
- * $Id: TestUtil.java,v 1.6 2003/03/27 07:34:34 rkitain Exp $
+ * $Id: TestUtil.java,v 1.7 2003/05/15 22:25:51 rkitain Exp $
  */
 
 /*
@@ -17,6 +17,8 @@ import org.mozilla.util.ParameterCheck;
 import com.sun.faces.ServletFacesTestCase;
 import com.sun.faces.RIConstants;
 
+import java.util.Map;
+
 import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
@@ -29,7 +31,7 @@ import javax.servlet.ServletContext;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestUtil.java,v 1.6 2003/03/27 07:34:34 rkitain Exp $
+ * @version $Id: TestUtil.java,v 1.7 2003/05/15 22:25:51 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -122,5 +124,26 @@ public class TestUtil extends ServletFacesTestCase
 	}
     }
 
+    /**
+     * This method tests the <code>Util.getSessionMap</code> method.
+     */
+    public void testGetSessionMap() {
+        // Test with null FacesContext
+	//
+	Map sessionMap = Util.getSessionMap(null);
+	assertTrue(sessionMap != null);
 
+	// Test with FacesContext
+	//
+	sessionMap = Util.getSessionMap(getFacesContext());
+	assertTrue(sessionMap != null);
+
+	// Test with no session
+	//
+	session.invalidate();
+	sessionMap = Util.getSessionMap(getFacesContext());
+	assertTrue(sessionMap != null);
+    }
+
+	
 } // end of class TestUtil

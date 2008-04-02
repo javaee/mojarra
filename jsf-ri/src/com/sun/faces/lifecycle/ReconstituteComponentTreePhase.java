@@ -1,5 +1,5 @@
 /*
- * $Id: ReconstituteComponentTreePhase.java,v 1.7 2003/05/14 19:59:13 rkitain Exp $
+ * $Id: ReconstituteComponentTreePhase.java,v 1.8 2003/05/15 22:25:48 rkitain Exp $
  */
 
 /*
@@ -48,7 +48,7 @@ import org.apache.commons.logging.LogFactory;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: ReconstituteComponentTreePhase.java,v 1.7 2003/05/14 19:59:13 rkitain Exp $
+ * @version $Id: ReconstituteComponentTreePhase.java,v 1.8 2003/05/15 22:25:48 rkitain Exp $
  * 
  */
 
@@ -194,7 +194,7 @@ protected void restoreTreeFromSession(FacesContext facesContext) {
     
     // PENDING(visvan) - will not deal with simultaneous requests
     // for the same session
-    Map sessionMap = facesContext.getExternalContext().getSessionMap();
+    Map sessionMap = Util.getSessionMap(facesContext);
 
     // Reconstitute or create the request tree
     Map requestMap = facesContext.getExternalContext().getRequestMap();
