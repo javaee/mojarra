@@ -496,6 +496,13 @@
     <property>
       <display-name></display-name>
       <icon></icon>
+      <property-name>value</property-name>
+      <property-class>java.lang.String</property-class>
+      <tag-attribute>yes</tag-attribute>
+    </property>
+    <property>
+      <display-name></display-name>
+      <icon></icon>
       <property-name>url</property-name>
       <property-class>java.lang.String</property-class>
       <tag-attribute>yes</tag-attribute>
@@ -2358,6 +2365,22 @@
     <renderer>
       <renderer-type>Group</renderer-type>
       <renderer-class>&group-renderer-class;</renderer-class>
+      <attribute>
+        <description>CSS style class</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>styleClass</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <attribute>
+	<description>CSS style</description>
+	<display-name></display-name>
+	<icon></icon>
+	<attribute-name>style</attribute-name>
+	<attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
       <supported-component-type>
         <component-type>PanelGroup</component-type>
       </supported-component-type>

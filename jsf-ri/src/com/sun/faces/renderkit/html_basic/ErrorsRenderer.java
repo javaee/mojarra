@@ -1,5 +1,5 @@
 /*
- * $Id: ErrorsRenderer.java,v 1.30 2003/10/30 20:30:32 eburns Exp $
+ * $Id: ErrorsRenderer.java,v 1.31 2003/11/03 21:44:03 eburns Exp $
  */
 
 /*
@@ -29,7 +29,7 @@ import java.util.List;
  *
  * <p><B>ErrorsRenderer</B> handles rendering for the Output_ErrorsTag<p>. 
  *
- * @version $Id: ErrorsRenderer.java,v 1.30 2003/10/30 20:30:32 eburns Exp $*
+ * @version $Id: ErrorsRenderer.java,v 1.31 2003/11/03 21:44:03 eburns Exp $*
  */
 
 public class ErrorsRenderer extends HtmlBasicRenderer {
@@ -168,8 +168,8 @@ public class ErrorsRenderer extends HtmlBasicRenderer {
             color = "RED";
         }
 	String 
-	    style = null,
-	    styleClass = null;
+	    style = (String) component.getAttributes().get("style"),
+	    styleClass = (String) component.getAttributes().get("styleClass");
         boolean wroteIt = false;
         if (messageIter.hasNext()) {
 	    writer.writeText("\n", null);
@@ -177,10 +177,7 @@ public class ErrorsRenderer extends HtmlBasicRenderer {
 	    writer.writeAttribute("color", color, "color");
             wroteIt = true;
         }
-	if ((null != (styleClass = (String) 
-		      component.getAttributes().get("styleClass"))) || 
-	    (null != (style = (String) 
-		      component.getAttributes().get("style"))))	{
+	if (null != styleClass || null != style) {
             writer.startElement("span", component);
 	    if (null != styleClass) {
 		writer.writeAttribute("class", styleClass, "styleClass");

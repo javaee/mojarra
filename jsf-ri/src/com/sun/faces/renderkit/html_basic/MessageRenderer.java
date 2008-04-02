@@ -1,5 +1,5 @@
 /*
- * $Id: MessageRenderer.java,v 1.29 2003/10/23 19:46:27 eburns Exp $
+ * $Id: MessageRenderer.java,v 1.30 2003/11/03 21:44:04 eburns Exp $
  */
 
 /*
@@ -32,7 +32,7 @@ import org.mozilla.util.Assert;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: MessageRenderer.java,v 1.29 2003/10/23 19:46:27 eburns Exp $
+ * @version $Id: MessageRenderer.java,v 1.30 2003/11/03 21:44:04 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -93,15 +93,14 @@ public class MessageRenderer extends HtmlBasicRenderer {
 
     public void encodeEnd(FacesContext context, UIComponent component) 
         throws IOException {
-        String 
-	    currentValue = null,
-	    style = null,
-	    styleClass = null;
-        
         if (context == null || component == null) {
             throw new NullPointerException(Util.getExceptionMessage(
                     Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
+        String 
+	    currentValue = null,
+	    style = (String) component.getAttributes().get("style"),
+	    styleClass = (String) component.getAttributes().get("styleClass");
 
         ResponseWriter writer = context.getResponseWriter();
         Assert.assert_it(writer != null );
@@ -163,10 +162,7 @@ public class MessageRenderer extends HtmlBasicRenderer {
             message = currentValue;
         }
                 
-	if ((null != (styleClass = (String) 
-		      component.getAttributes().get("styleClass"))) || 
-	    (null != (style = (String) 
-		      component.getAttributes().get("style"))))	{
+	if (null != styleClass || null != style) {
 	    writer.startElement("span", component);
 	    if (null != styleClass) {
 		writer.writeAttribute("class", styleClass, "styleClass");

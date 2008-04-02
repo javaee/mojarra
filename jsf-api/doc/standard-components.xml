@@ -152,6 +152,13 @@
     <property>
       <display-name></display-name>
       <icon></icon>
+      <property-name>value</property-name>
+      <property-class>java.lang.String</property-class>
+      <tag-attribute>yes</tag-attribute>
+    </property>
+    <property>
+      <display-name></display-name>
+      <icon></icon>
       <property-name>url</property-name>
       <property-class>java.lang.String</property-class>
       <tag-attribute>yes</tag-attribute>

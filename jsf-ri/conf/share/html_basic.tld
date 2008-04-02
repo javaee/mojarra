@@ -1391,6 +1391,11 @@
         <rtexprvalue>true</rtexprvalue>
       </attribute>
       <attribute>
+        <name>value</name>
+        <required>false</required>
+        <rtexprvalue>true</rtexprvalue>
+      </attribute>
+      <attribute>
       <name>rendered</name>
       <required>false</required>
       <rtexprvalue>true</rtexprvalue>
@@ -2466,6 +2471,16 @@
     </attribute>
     <attribute>
       <name>componentRef</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>style</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>styleClass</name>
       <required>false</required>
       <rtexprvalue>true</rtexprvalue>
     </attribute>

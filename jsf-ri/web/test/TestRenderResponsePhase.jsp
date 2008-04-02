@@ -512,6 +512,14 @@
 					</h:selectmany_checkboxlist></TD>
 </tr>
 
+<tr>
+<td>
+<h:panel_group style="color:red" styleClass="walleye">
+  <f:verbatim>style this text like a red walleye</f:verbatim>
+</h:panel_group>
+</td>
+</tr>
+
 <h:input_hidden value="48%" >
     <f:convert_number type="number"/>
 </h:input_hidden>

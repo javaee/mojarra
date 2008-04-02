@@ -1,5 +1,5 @@
 /*
- * $Id: GroupRenderer.java,v 1.10 2003/08/19 19:31:17 rlubke Exp $
+ * $Id: GroupRenderer.java,v 1.11 2003/11/03 21:44:03 eburns Exp $
  */
 
 /*
@@ -16,12 +16,13 @@ import java.util.Iterator;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
+import javax.faces.context.ResponseWriter;
 
 /**
  * Arbitrary grouping "renderer" that simply renders its children
  * recursively in the <code>encodeEnd()</code> method. 
  *
- * @version $Id: GroupRenderer.java,v 1.10 2003/08/19 19:31:17 rlubke Exp $
+ * @version $Id: GroupRenderer.java,v 1.11 2003/11/03 21:44:03 eburns Exp $
  *  
  */
 public class GroupRenderer extends HtmlBasicRenderer {
@@ -65,6 +66,26 @@ public class GroupRenderer extends HtmlBasicRenderer {
 
     public void encodeBegin(FacesContext context, UIComponent component)
         throws IOException {
+        // suppress rendering if "rendered" property on the component is
+        // false.
+        if (!component.isRendered()) {
+            return;
+        }
+	String 
+	    style = (String) component.getAttributes().get("style"),
+	    styleClass = (String) component.getAttributes().get("styleClass");
+	if (null != styleClass || null != style) {
+	    ResponseWriter writer = context.getResponseWriter();
+	    
+	    writer.startElement("span", component);
+	    if (null != styleClass) {
+		writer.writeAttribute("class", styleClass, "styleClass");
+	    }
+	    if (null != style) {
+		writer.writeAttribute("style", style, "style");
+	    }
+	    writer.closeStartTag(component);
+	}
     }
 
 
@@ -89,6 +110,17 @@ public class GroupRenderer extends HtmlBasicRenderer {
             UIComponent kid = (UIComponent) kids.next();
             encodeRecursive(context, kid);
         }
+	String 
+	    style = (String) component.getAttributes().get("style"),
+	    styleClass = (String) component.getAttributes().get("styleClass");
+	if (null != styleClass || null != style) {
+	    ResponseWriter writer = context.getResponseWriter();
+
+	    if (null != styleClass || null != style) {
+		writer.endElement("span");
+	    }
+	}
+
     }
 
     /**

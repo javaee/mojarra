@@ -1,5 +1,5 @@
 /*
- * $Id: TextRenderer.java,v 1.55 2003/11/03 18:09:00 eburns Exp $
+ * $Id: TextRenderer.java,v 1.56 2003/11/03 21:44:05 eburns Exp $
  */
 
 /*
@@ -89,7 +89,7 @@ public class TextRenderer extends HtmlBasicInputRenderer {
 	boolean isOutput = false;
 
 	String 
-	    style = null,
+	    style = (String) component.getAttributes().get("style"),
 	    styleClass = (String) component.getAttributes().get("styleClass");
         if (component instanceof UIInput) {
 	    writer.startElement("input", component);
@@ -111,9 +111,7 @@ public class TextRenderer extends HtmlBasicInputRenderer {
 	    writer.endElement("input");
 
         } else if (isOutput = (component instanceof UIOutput)) {
-	    if ((null != styleClass) || 
-		(null != (style = (String) 
-			  component.getAttributes().get("style"))))	{
+	    if (null != styleClass || null != style) {
 		writer.startElement("span", component);
 		if (null != styleClass) {
 		    writer.writeAttribute("class", styleClass, "styleClass");
