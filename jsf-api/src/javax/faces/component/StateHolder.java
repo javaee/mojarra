@@ -1,5 +1,5 @@
 /*
- * $Id: StateHolder.java,v 1.4 2003/08/21 15:26:05 eburns Exp $
+ * $Id: StateHolder.java,v 1.5 2003/09/15 20:17:19 eburns Exp $
  */
 
 /*
@@ -19,10 +19,10 @@ import javax.faces.context.FacesContext;
  * state between requests.</p>
  *
  * <p>An implementor <strong>must</strong> implement both {@link
- * #getState} and {@link #restoreState} methods in this class, since
+ * #saveState} and {@link #restoreState} methods in this class, since
  * these two methods have a tightly coupled contract between themselves.
  * In other words, if there is an ineritance hierarchy, it is not
- * permissable to have the {@link #getState} and {@link #restoreState}
+ * permissable to have the {@link #saveState} and {@link #restoreState}
  * methods reside at different levels of the hierarchy.</p>
  *
  * <p>An implementor must have a public no-args constructor.</p>
@@ -38,14 +38,14 @@ public interface StateHolder {
      * <p>If the class that implements this interface has references to
      * instances that implement StateHolder (such as a
      * <code>UIComponent</code> with event handlers, validators, etc.)
-     * this method must call the {@link #getState} method on all those
+     * this method must call the {@link #saveState} method on all those
      * instances as well.</p>
      *
      * <p>The return from this method must be <code>Serializable</code></p>
      *
      */
 
-    public Object getState(FacesContext context);
+    public Object saveState(FacesContext context);
 
     /**
      *

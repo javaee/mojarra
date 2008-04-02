@@ -1,5 +1,5 @@
 /*
- * $Id: UIInputBaseTestCase.java,v 1.7 2003/09/09 20:51:27 eburns Exp $
+ * $Id: UIInputBaseTestCase.java,v 1.8 2003/09/15 20:17:39 eburns Exp $
  */
 
 /*
@@ -349,7 +349,7 @@ public class UIInputBaseTestCase extends UIOutputBaseTestCase {
 	preSave.setId("input");
 	preSave.setRendererType(null); // necessary: we have no renderkit
 	testParent.getChildren().add(preSave);
-	state = preSave.getState(facesContext);
+	state = preSave.saveState(facesContext);
 	assertTrue(null != state);
 	testParent.getChildren().clear();
 	
@@ -372,7 +372,7 @@ public class UIInputBaseTestCase extends UIOutputBaseTestCase {
 	preSave.setPrevious("previous");
 	preSave.setValid(false);
 	testParent.getChildren().add(preSave);
-	state = preSave.getState(facesContext);
+	state = preSave.saveState(facesContext);
 	assertTrue(null != state);
 	testParent.getChildren().clear();
 	
@@ -408,7 +408,7 @@ public class UIInputBaseTestCase extends UIOutputBaseTestCase {
 								     PhaseId.UPDATE_MODEL_VALUES));
 	preSave.addValueChangedListener(new TestValueChangedListener("UMV2",
 								     PhaseId.UPDATE_MODEL_VALUES));
-	state = preSave.getState(facesContext);
+	state = preSave.saveState(facesContext);
 	assertTrue(null != state);
 	testParent.getChildren().clear();
 	
@@ -463,7 +463,7 @@ public class UIInputBaseTestCase extends UIOutputBaseTestCase {
 	stringVal.setMaximum("z");
 	preSave.addValidator(stringVal);
 
-	state = preSave.getState(facesContext);
+	state = preSave.saveState(facesContext);
 	assertTrue(null != state);
 	testParent.getChildren().clear();
 	

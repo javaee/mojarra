@@ -448,10 +448,10 @@ public class UIData extends UIComponentBase
     // ----------------------------------------------------- StateHolder Methods
 
 
-    public Object getState(FacesContext context) {
+    public Object saveState(FacesContext context) {
 
         Object values[] = new Object[8];
-        values[0] = super.getState(context);
+        values[0] = super.saveState(context);
         List[] converterList = new List[1];
         List theConverter = new ArrayList(1);
         theConverter.add(converter);

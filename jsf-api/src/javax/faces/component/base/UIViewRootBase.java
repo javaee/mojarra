@@ -1,5 +1,5 @@
 /*
- * $Id: UIViewRootBase.java,v 1.2 2003/08/27 00:56:52 craigmcc Exp $
+ * $Id: UIViewRootBase.java,v 1.3 2003/09/15 20:17:26 eburns Exp $
  */
 
 /*
@@ -51,10 +51,10 @@ public class UIViewRootBase extends UINamingContainerBase implements UIViewRoot 
     // ----------------------------------------------------- StateHolder Methods
 
 
-    public Object getState(FacesContext context) {
+    public Object saveState(FacesContext context) {
 
         Object values[] = new Object[3];
-        values[0] = super.getState(context);
+        values[0] = super.saveState(context);
         values[1] = renderKitId;
         values[2] = viewId;
         return (values);

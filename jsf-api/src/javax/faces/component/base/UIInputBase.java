@@ -1,5 +1,5 @@
 /*
- * $Id: UIInputBase.java,v 1.6 2003/09/11 15:26:06 craigmcc Exp $
+ * $Id: UIInputBase.java,v 1.7 2003/09/15 20:17:25 eburns Exp $
  */
 
 /*
@@ -319,10 +319,10 @@ public class UIInputBase extends UIOutputBase implements UIInput {
     // ----------------------------------------------------- StateHolder Methods
 
 
-    public Object getState(FacesContext context) {
+    public Object saveState(FacesContext context) {
 
         Object values[] = new Object[5];
-        values[0] = super.getState(context);
+        values[0] = super.saveState(context);
         values[1] = previous;
         values[2] = required ? Boolean.TRUE : Boolean.FALSE;
         values[3] = valid ? Boolean.TRUE : Boolean.FALSE;

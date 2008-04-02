@@ -1,5 +1,5 @@
 /*
- * $Id: StringRangeValidator.java,v 1.18 2003/08/13 22:29:52 craigmcc Exp $
+ * $Id: StringRangeValidator.java,v 1.19 2003/09/15 20:17:32 eburns Exp $
  */
 
 /*
@@ -280,7 +280,7 @@ public class StringRangeValidator implements Validator, StateHolder {
     // ----------------------------------------------------- StateHolder Methods
     
 
-    public Object getState(FacesContext context) {
+    public Object saveState(FacesContext context) {
 
         Object values[] = new Object[2];
         values[0] = maximum;

@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.93 2003/09/12 16:25:21 craigmcc Exp $
+ * $Id: UIComponent.java,v 1.94 2003/09/15 20:17:20 eburns Exp $
  */
 
 /*
@@ -618,11 +618,11 @@ public interface UIComponent extends StateHolder {
      * <li>consult the <code>transient</code> property of this
      * component.  If true, just return.</li>
      *
-     * <li>Call the <code>processGetState()</code> method of all
+     * <li>Call the <code>processSaveState()</code> method of all
      * facets and children of this {@link UIComponent} in the order
      * determined by a call to <code>getFacetsAndChildren()</code>.</li>
      *
-     * <li>Call the <code>getState()</code> method of this component.</li>
+     * <li>Call the <code>saveState()</code> method of this component.</li>
      *
      * <li>Encapsulate the child state and your state into a
      * Serializable Object and return it.</li> 
@@ -636,7 +636,7 @@ public interface UIComponent extends StateHolder {
      *  is <code>null</code>
      */
 
-    public Object processGetState(FacesContext context) throws IOException;
+    public Object processSaveState(FacesContext context);
 
     /**
      * <p>Perform the component tree processing required by the
@@ -659,6 +659,6 @@ public interface UIComponent extends StateHolder {
      *  is <code>null</code>
      */
 
-    public void processRestoreState(FacesContext context, Object state) throws IOException;
+    public void processRestoreState(FacesContext context, Object state);
 
 }

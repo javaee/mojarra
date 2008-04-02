@@ -1,5 +1,5 @@
 /*
- * $Id: StateManager.java,v 1.14 2003/09/13 12:57:43 eburns Exp $
+ * $Id: StateManager.java,v 1.15 2003/09/15 20:17:18 eburns Exp $
  */
 
 /*
@@ -65,7 +65,7 @@ import java.util.Iterator;
  *
  * 	<ul>
  *
- *	  <li>{@link #getSerializedView}
+ *	  <li>{@link #saveSerializedView}
  *	  </li>
  *
  *	  <li>{@link #writeState}
@@ -74,7 +74,7 @@ import java.util.Iterator;
  *	</ul>
  *
  *
- * <p>For state restoring, the {@link #getView} method in this class
+ * <p>For state restoring, the {@link #restoreView} method in this class
  * must be called from the <em>Restore View</em> phase of the
  * request processing lifecycle.</p>
  *
@@ -127,7 +127,7 @@ public abstract class StateManager {
      *
      */
 
-    public abstract SerializedView getSerializedView(FacesContext context);
+    public abstract SerializedView saveSerializedView(FacesContext context);
 
 
     /**
@@ -208,7 +208,7 @@ public abstract class StateManager {
     /**
      *
      * <p>This method causes the state that has been obtained from
-     * {@link StateManager#getSerializedView} to be actually saved in an
+     * {@link StateManager#saveSerializedView} to be actually saved in an
      * implementation dependent manner.</p>
      *
      * <p>The implementation must consult the
@@ -226,7 +226,7 @@ public abstract class StateManager {
      * <p>If the <code>ServletContext</code> init parameter directs the
      * state to be saved on the server, it must be done so such that it
      * can be retrieved using only the <code>viewId</code>.  This is
-     * necessary for the {@link #getView} method to work.</p>
+     * necessary for the {@link #restoreView} method to work.</p>
      *
      * <p>This method assumes the caller has positioned the {@link
      * javax.faces.context.ResponseWriter} at the correct place for the
@@ -247,7 +247,7 @@ public abstract class StateManager {
      * @param content the rendered content of this view.  
      *
      * @param state the state of the rendered view, obtained from
-     * {@link #getSerializedView}.
+     * {@link #saveSerializedView}.
      * @return Object response to be sent to client.
      *
      */
@@ -279,7 +279,7 @@ public abstract class StateManager {
      * <code>null</code> otherwise.
      */
 
-    public abstract UIViewRoot getView(FacesContext context, String viewId) throws IOException;
+    public abstract UIViewRoot restoreView(FacesContext context, String viewId);
 
     /**
      *

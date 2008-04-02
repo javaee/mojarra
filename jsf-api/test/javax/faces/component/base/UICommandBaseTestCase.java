@@ -1,5 +1,5 @@
 /*
- * $Id: UICommandBaseTestCase.java,v 1.13 2003/09/09 20:51:26 eburns Exp $
+ * $Id: UICommandBaseTestCase.java,v 1.14 2003/09/15 20:17:37 eburns Exp $
  */
 
 /*
@@ -304,7 +304,7 @@ public class UICommandBaseTestCase extends ValueHolderTestCaseBase {
 	preSave.setId("command");
 	preSave.setRendererType(null); // necessary: we have no renderkit
 	testParent.getChildren().add(preSave);
-	state = preSave.getState(facesContext);
+	state = preSave.saveState(facesContext);
 	assertTrue(null != state);
 	testParent.getChildren().clear();
 	
@@ -327,7 +327,7 @@ public class UICommandBaseTestCase extends ValueHolderTestCaseBase {
 	preSave.setAction("action");
 	preSave.setActionRef("actionRef");
 	testParent.getChildren().add(preSave);
-	state = preSave.getState(facesContext);
+	state = preSave.saveState(facesContext);
 	assertTrue(null != state);
 	testParent.getChildren().clear();
 	
@@ -357,7 +357,7 @@ public class UICommandBaseTestCase extends ValueHolderTestCaseBase {
 							 PhaseId.UPDATE_MODEL_VALUES));
 	preSave.addActionListener(new TestActionListener("UMV2",
 							 PhaseId.UPDATE_MODEL_VALUES));
-	state = preSave.getState(facesContext);
+	state = preSave.saveState(facesContext);
 	assertTrue(null != state);
 	testParent.getChildren().clear();
 	
@@ -376,7 +376,7 @@ public class UICommandBaseTestCase extends ValueHolderTestCaseBase {
 	preSave.setValueRef("valueRefString");
 	preSave.setConverter(new StateSavingConverter("testCase State"));
 	testParent.getChildren().add(preSave);
-	state = preSave.getState(facesContext);
+	state = preSave.saveState(facesContext);
 	assertTrue(null != state);
 	testParent.getChildren().clear();
 	

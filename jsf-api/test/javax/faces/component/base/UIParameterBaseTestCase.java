@@ -1,5 +1,5 @@
 /*
- * $Id: UIParameterBaseTestCase.java,v 1.4 2003/09/09 20:51:28 eburns Exp $
+ * $Id: UIParameterBaseTestCase.java,v 1.5 2003/09/15 20:17:39 eburns Exp $
  */
 
 /*
@@ -137,7 +137,7 @@ public class UIParameterBaseTestCase extends ValueHolderTestCaseBase {
 	preSave.setId("parameter");
 	preSave.setRendererType(null); // necessary: we have no renderkit
 	testParent.getChildren().add(preSave);
-	state = preSave.getState(facesContext);
+	state = preSave.saveState(facesContext);
 	assertTrue(null != state);
 	testParent.getChildren().clear();
 	
@@ -153,7 +153,7 @@ public class UIParameterBaseTestCase extends ValueHolderTestCaseBase {
 	preSave.setRendererType(null); // necessary: we have no renderkit
 	preSave.setValueRef("valueRefString");
 	testParent.getChildren().add(preSave);
-	state = preSave.getState(facesContext);
+	state = preSave.saveState(facesContext);
 	assertTrue(null != state);
 	testParent.getChildren().clear();
 	
@@ -170,7 +170,7 @@ public class UIParameterBaseTestCase extends ValueHolderTestCaseBase {
 	preSave.setValueRef("valueRefString");
 	preSave.setConverter(new StateSavingConverter("testCase State"));
 	testParent.getChildren().add(preSave);
-	state = preSave.getState(facesContext);
+	state = preSave.saveState(facesContext);
 	assertTrue(null != state);
 	testParent.getChildren().clear();
 	

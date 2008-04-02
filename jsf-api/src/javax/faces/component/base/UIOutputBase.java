@@ -1,5 +1,5 @@
 /*
- * $Id: UIOutputBase.java,v 1.9 2003/09/11 15:26:06 craigmcc Exp $
+ * $Id: UIOutputBase.java,v 1.10 2003/09/15 20:17:25 eburns Exp $
  */
 
 /*
@@ -159,10 +159,10 @@ public class UIOutputBase extends UIComponentBase implements UIOutput {
     // ----------------------------------------------------- StateHolder Methods
 
 
-    public Object getState(FacesContext context) {
+    public Object saveState(FacesContext context) {
 
         Object values[] = new Object[4];
-        values[0] = super.getState(context);
+        values[0] = super.saveState(context);
         List[] converterList = new List[1];
         List theConverter = new ArrayList(1);
         theConverter.add(converter);

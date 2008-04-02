@@ -1,5 +1,5 @@
 /*
- * $Id: TestValueChangedListener.java,v 1.3 2003/07/28 22:22:28 eburns Exp $
+ * $Id: TestValueChangedListener.java,v 1.4 2003/09/15 20:17:37 eburns Exp $
  */
 
 /*
@@ -110,7 +110,7 @@ public class TestValueChangedListener implements ValueChangedListener, StateHold
 
     public static final String SEP = "[sep]";
 
-    public Object getState(FacesContext context) {
+    public Object saveState(FacesContext context) {
 	return id + SEP + phaseId.getOrdinal();
     }
 

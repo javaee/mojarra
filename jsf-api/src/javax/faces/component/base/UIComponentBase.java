@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.13 2003/09/15 14:16:16 eburns Exp $
+ * $Id: UIComponentBase.java,v 1.14 2003/09/15 20:17:23 eburns Exp $
  */
 
 /*
@@ -1179,7 +1179,7 @@ public abstract class UIComponentBase implements UIComponent {
     private static final int MY_STATE = 0;
     private static final int CHILD_STATE = 1;
 
-    public Object processGetState(FacesContext context) throws IOException {
+    public Object processSaveState(FacesContext context) {
 
         if (context == null) {
             throw new NullPointerException();
@@ -1194,16 +1194,16 @@ public abstract class UIComponentBase implements UIComponent {
         Iterator kids = getFacetsAndChildren();
         while (kids.hasNext()) {
             UIComponent kid = (UIComponent) kids.next();
-	    childState[i++] = kid.processGetState(context);
+	    childState[i++] = kid.processSaveState(context);
         }
 
         // Process this component itself
-        stateStruct[MY_STATE] = getState(context);
+        stateStruct[MY_STATE] = saveState(context);
 	return stateStruct;
     }
 
     public void processRestoreState(FacesContext context, 
-				    Object state) throws IOException {
+				    Object state) {
 
         if (context == null) {
             throw new NullPointerException();
@@ -1221,8 +1221,12 @@ public abstract class UIComponentBase implements UIComponent {
         }
 
         // Process this component itself
-        restoreState(context, stateStruct[MY_STATE]);
-
+	try {
+	    restoreState(context, stateStruct[MY_STATE]);
+	}
+	catch (IOException ioe) {
+	    throw new FacesException(ioe);
+	}
     }
 
 
@@ -1255,7 +1259,7 @@ public abstract class UIComponentBase implements UIComponent {
     // ----------------------------------------------------- StateHolder Methods
 
 
-    public Object getState(FacesContext context) {
+    public Object saveState(FacesContext context) {
 
         Object values[] = new Object[8];
         values[0] = attributes;

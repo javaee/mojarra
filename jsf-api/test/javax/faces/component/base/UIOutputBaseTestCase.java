@@ -1,5 +1,5 @@
 /*
- * $Id: UIOutputBaseTestCase.java,v 1.9 2003/09/09 20:51:28 eburns Exp $
+ * $Id: UIOutputBaseTestCase.java,v 1.10 2003/09/15 20:17:39 eburns Exp $
  */
 
 /*
@@ -129,7 +129,7 @@ public class UIOutputBaseTestCase extends ValueHolderTestCaseBase {
 	preSave.setId("output");
 	preSave.setRendererType(null); // necessary: we have no renderkit
 	testParent.getChildren().add(preSave);
-	state = preSave.getState(facesContext);
+	state = preSave.saveState(facesContext);
 	assertTrue(null != state);
 	testParent.getChildren().clear();
 	
@@ -146,7 +146,7 @@ public class UIOutputBaseTestCase extends ValueHolderTestCaseBase {
 	preSave.setValueRef("valueRefString");
 	preSave.setValue(new Integer(1));
 	testParent.getChildren().add(preSave);
-	state = preSave.getState(facesContext);
+	state = preSave.saveState(facesContext);
 	assertTrue(null != state);
 	testParent.getChildren().clear();
 	
@@ -163,7 +163,7 @@ public class UIOutputBaseTestCase extends ValueHolderTestCaseBase {
 	preSave.setValueRef("valueRefString");
 	preSave.setConverter(new StateSavingConverter("testCase State"));
 	testParent.getChildren().add(preSave);
-	state = preSave.getState(facesContext);
+	state = preSave.saveState(facesContext);
 	assertTrue(null != state);
 	testParent.getChildren().clear();
 	
@@ -215,7 +215,7 @@ public static class StateSavingConverter extends Object implements Converter, St
 	    return this.getClass().getName();
 	}
 
-	public Object getState(FacesContext context) {
+	public Object saveState(FacesContext context) {
 	    return state;
 	}
 

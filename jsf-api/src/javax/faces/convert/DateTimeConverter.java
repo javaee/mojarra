@@ -1,5 +1,5 @@
 /*
- * $Id: DateTimeConverter.java,v 1.2 2003/08/15 17:23:46 craigmcc Exp $
+ * $Id: DateTimeConverter.java,v 1.3 2003/09/15 20:17:30 eburns Exp $
  */
 
 /*
@@ -407,7 +407,7 @@ public class DateTimeConverter implements Converter, StateHolder {
     // ----------------------------------------------------- StateHolder Methods
 
 
-    public Object getState(FacesContext context) {
+    public Object saveState(FacesContext context) {
 
         Object values[] = new Object[6];
         values[0] = dateStyle;

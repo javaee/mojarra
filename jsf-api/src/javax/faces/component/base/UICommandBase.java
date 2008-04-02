@@ -1,5 +1,5 @@
 /*
- * $Id: UICommandBase.java,v 1.12 2003/09/11 15:26:04 craigmcc Exp $
+ * $Id: UICommandBase.java,v 1.13 2003/09/15 20:17:22 eburns Exp $
  */
 
 /*
@@ -245,12 +245,12 @@ public class UICommandBase extends UIComponentBase implements UICommand {
     // ----------------------------------------------------- StateHolder Methods
 
 
-    public Object getState(FacesContext context) {
+    public Object saveState(FacesContext context) {
 
         removeDefaultActionListener(context);
 
         Object values[] = new Object[7];
-        values[0] = super.getState(context);
+        values[0] = super.saveState(context);
         values[1] = action;
         values[2] = actionRef;
         List[] converterList = new List[1];

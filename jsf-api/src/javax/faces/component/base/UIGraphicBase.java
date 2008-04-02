@@ -1,5 +1,5 @@
 /*
- * $Id: UIGraphicBase.java,v 1.5 2003/09/11 15:26:05 craigmcc Exp $
+ * $Id: UIGraphicBase.java,v 1.6 2003/09/15 20:17:24 eburns Exp $
  */
 
 /*
@@ -170,10 +170,10 @@ public class UIGraphicBase extends UIComponentBase implements UIGraphic {
     // ----------------------------------------------------- StateHolder Methods
 
 
-    public Object getState(FacesContext context) {
+    public Object saveState(FacesContext context) {
 
         Object values[] = new Object[4];
-        values[0] = super.getState(context);
+        values[0] = super.saveState(context);
         List[] converterList = new List[1];
         List theConverter = new ArrayList(1);
         theConverter.add(converter);

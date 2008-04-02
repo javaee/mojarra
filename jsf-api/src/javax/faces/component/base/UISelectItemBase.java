@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectItemBase.java,v 1.7 2003/09/11 15:26:06 craigmcc Exp $
+ * $Id: UISelectItemBase.java,v 1.8 2003/09/15 20:17:26 eburns Exp $
  */
 
 /*
@@ -216,10 +216,10 @@ public class UISelectItemBase extends UIOutputBase implements UISelectItem {
     // ----------------------------------------------------- StateHolder Methods
 
 
-    public Object getState(FacesContext context) {
+    public Object saveState(FacesContext context) {
 
         Object values[] = new Object[7];
-        values[0] = super.getState(context);
+        values[0] = super.saveState(context);
         List[] converterList = new List[1];
         List theConverter = new ArrayList(1);
         theConverter.add(converter);

@@ -1,5 +1,5 @@
 /*
- * $Id: MockViewHandler.java,v 1.11 2003/09/15 14:16:18 eburns Exp $
+ * $Id: MockViewHandler.java,v 1.12 2003/09/15 20:17:46 eburns Exp $
  */
 
 /*
@@ -47,8 +47,8 @@ public class MockViewHandler extends Object implements ViewHandler {
 		    protected Object getComponentStateToSave(FacesContext context) {
 			return null;
 		    }
-		    public UIViewRoot getView(FacesContext context, String viewId) throws IOException { return null; }
-		    public SerializedView getSerializedView(FacesContext context) {
+		    public UIViewRoot restoreView(FacesContext context, String viewId) { return null; }
+		    public SerializedView saveSerializedView(FacesContext context) {
 			return null;
 		    }
 

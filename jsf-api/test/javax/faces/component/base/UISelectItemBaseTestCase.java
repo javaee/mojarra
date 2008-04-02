@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectItemBaseTestCase.java,v 1.5 2003/09/09 20:51:28 eburns Exp $
+ * $Id: UISelectItemBaseTestCase.java,v 1.6 2003/09/15 20:17:40 eburns Exp $
  */
 
 /*
@@ -169,7 +169,7 @@ public class UISelectItemBaseTestCase extends ValueHolderTestCaseBase {
 	preSave.setId("selectItem");
 	preSave.setRendererType(null); // necessary: we have no renderkit
 	testParent.getChildren().add(preSave);
-	state = preSave.getState(facesContext);
+	state = preSave.saveState(facesContext);
 	assertTrue(null != state);
 	testParent.getChildren().clear();
 	
@@ -191,7 +191,7 @@ public class UISelectItemBaseTestCase extends ValueHolderTestCaseBase {
 	preSave.setRendererType(null); // necessary: we have no renderkit
 	preSave.setItemValue("value");
 	testParent.getChildren().add(preSave);
-	state = preSave.getState(facesContext);
+	state = preSave.saveState(facesContext);
 	assertTrue(null != state);
 	testParent.getChildren().clear();
 	
@@ -215,7 +215,7 @@ public class UISelectItemBaseTestCase extends ValueHolderTestCaseBase {
 	preSave.setItemLabel("label");
 	preSave.setItemValue("value");
 	testParent.getChildren().add(preSave);
-	state = preSave.getState(facesContext);
+	state = preSave.saveState(facesContext);
 	assertTrue(null != state);
 	testParent.getChildren().clear();
 	

@@ -1,5 +1,5 @@
 /*
- * $Id: DoubleRangeValidator.java,v 1.20 2003/08/13 22:29:51 craigmcc Exp $
+ * $Id: DoubleRangeValidator.java,v 1.21 2003/09/15 20:17:32 eburns Exp $
  */
 
 /*
@@ -272,7 +272,7 @@ public class DoubleRangeValidator implements Validator, StateHolder {
     // ----------------------------------------------------- StateHolder Methods
     
 
-    public Object getState(FacesContext context) {
+    public Object saveState(FacesContext context) {
 
         Object values[] = new Object[4];
         values[0] = new Double(maximum);

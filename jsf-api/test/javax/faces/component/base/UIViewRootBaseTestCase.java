@@ -1,5 +1,5 @@
 /*
- * $Id: UIViewRootBaseTestCase.java,v 1.2 2003/09/09 20:51:28 eburns Exp $
+ * $Id: UIViewRootBaseTestCase.java,v 1.3 2003/09/15 20:17:40 eburns Exp $
  */
 
 /*
@@ -90,7 +90,7 @@ public class UIViewRootBaseTestCase extends UIComponentBaseTestCase {
 	preSave.setId("page");
 	preSave.setRendererType(null); // necessary: we have no renderkit
 	testParent.getChildren().add(preSave);
-	state = preSave.getState(facesContext);
+	state = preSave.saveState(facesContext);
 	assertTrue(null != state);
 	testParent.getChildren().clear();
 	
@@ -113,7 +113,7 @@ public class UIViewRootBaseTestCase extends UIComponentBaseTestCase {
 	preSave.setRenderKitId("renderKitId");
 	preSave.setRendererType(null); // necessary: we have no renderkit
 	testParent.getChildren().add(preSave);
-	state = preSave.getState(facesContext);
+	state = preSave.saveState(facesContext);
 	assertTrue(null != state);
 	testParent.getChildren().clear();
 	

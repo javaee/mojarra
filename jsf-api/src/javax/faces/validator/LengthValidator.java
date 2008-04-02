@@ -1,5 +1,5 @@
 /*
- * $Id: LengthValidator.java,v 1.22 2003/08/13 22:29:51 craigmcc Exp $
+ * $Id: LengthValidator.java,v 1.23 2003/09/15 20:17:32 eburns Exp $
  */
 
 /*
@@ -257,7 +257,7 @@ public class LengthValidator implements Validator, StateHolder {
     // ----------------------------------------------------- StateHolder Methods
     
 
-    public Object getState(FacesContext context) {
+    public Object saveState(FacesContext context) {
 
         Object values[] = new Object[4];
         values[0] = new Integer(maximum);
