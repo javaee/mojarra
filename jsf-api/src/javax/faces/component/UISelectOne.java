@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectOne.java,v 1.27 2003/07/26 17:54:39 craigmcc Exp $
+ * $Id: UISelectOne.java,v 1.28 2003/08/28 21:08:52 craigmcc Exp $
  */
 
 /*
@@ -8,6 +8,9 @@
  */
 
 package javax.faces.component;
+
+
+import javax.faces.context.FacesContext;
 
 
 /**
@@ -26,6 +29,19 @@ package javax.faces.component;
  */
 
 public interface UISelectOne extends UIInput {
+
+
+    // ------------------------------------------------------ Manifest Constants
+
+
+    /**
+     * <p>The message identifier of the
+     * {@link javax.faces.application.Message} to be created if
+     * a value not matching the available options is specified.
+     */
+    public static final String INVALID_MESSAGE_ID =
+        "javax.faces.component.UISelectOne.INVALID";
+
 
 
     // -------------------------------------------------------------- Properties
@@ -47,6 +63,23 @@ public interface UISelectOne extends UIInput {
      * @param selectedValue The new selected value (if any)
      */
     public void setSelectedValue(Object selectedValue);
+
+
+    // ------------------------------------------------------ Validation Methods
+
+
+    /**
+     * <p>In addition to the standard validation behavior inherited from
+     * {@link UIInput}, ensure that any specified value is equal to one of
+     * the available options.  If it is not, enqueue an error message
+     * and set the <code>valid</code> property to <code>false</code>.</p>
+     *
+     * @param context The {@link FacesContext} for the current request
+     *
+     * @exception NullPointerException if <code>context</code>
+     *  is <code>null</code>
+     */
+    public void validate(FacesContext context);
 
 
 }

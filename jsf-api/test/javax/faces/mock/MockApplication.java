@@ -1,5 +1,5 @@
 /*
- * $Id: MockApplication.java,v 1.9 2003/08/27 22:34:03 craigmcc Exp $
+ * $Id: MockApplication.java,v 1.10 2003/08/28 21:08:59 craigmcc Exp $
  */
 
 /*
@@ -19,6 +19,8 @@ import javax.faces.application.MessageResources;
 import javax.faces.application.NavigationHandler;
 import javax.faces.application.ViewHandler;
 import javax.faces.component.UIComponent;
+import javax.faces.component.UISelectMany;
+import javax.faces.component.UISelectOne;
 import javax.faces.convert.Converter;
 import javax.faces.context.FacesContext;
 import javax.faces.el.PropertyResolver;
@@ -34,8 +36,15 @@ public class MockApplication extends Application {
 
 
     public MockApplication() {
-        addComponent("TestNamingContainer", "javax.faces.webapp.TestNamingContainer");
+        addComponent("TestNamingContainer",
+                     "javax.faces.webapp.TestNamingContainer");
         addComponent("TestComponent", "javax.faces.webapp.TestComponent");
+        MockMessageResources api = new MockMessageResources();
+        api.addMessage(UISelectMany.INVALID_MESSAGE_ID,
+                       "Invalid value(s) not in the option list");
+        api.addMessage(UISelectOne.INVALID_MESSAGE_ID,
+                       "Invalid value not in the option list");
+        messageResourcess.put(MessageResources.FACES_API_MESSAGES, api);
     }
 
 
@@ -174,16 +183,15 @@ public class MockApplication extends Application {
 
     private Map messageResourcess = new HashMap();
     public void addMessageResources(String messageResourcesId, String messageResourcesClass) {
-        messageResourcess.put(messageResourcesId, messageResourcesClass);
-    }
-    public MessageResources getMessageResources(String messageResourcesId) {
-        String messageResourcesClass = (String) messageResourcess.get(messageResourcesId);
         try {
             Class clazz = Class.forName(messageResourcesClass);
-            return ((MessageResources) clazz.newInstance());
+            messageResourcess.put(messageResourcesId, clazz.newInstance());
         } catch (Exception e) {
             throw new FacesException(e);
         }
+    }
+    public MessageResources getMessageResources(String messageResourcesId) {
+        return ((MessageResources) messageResourcess.get(messageResourcesId));
     }
     public Iterator getMessageResourcesIds() {
         return (messageResourcess.keySet().iterator());

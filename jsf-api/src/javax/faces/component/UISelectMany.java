@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectMany.java,v 1.28 2003/07/26 17:54:38 craigmcc Exp $
+ * $Id: UISelectMany.java,v 1.29 2003/08/28 21:08:52 craigmcc Exp $
  */
 
 /*
@@ -8,6 +8,9 @@
  */
 
 package javax.faces.component;
+
+
+import javax.faces.context.FacesContext;
 
 
 /**
@@ -29,6 +32,19 @@ package javax.faces.component;
 public interface UISelectMany extends UIInput {
 
 
+    // ------------------------------------------------------ Manifest Constants
+
+
+    /**
+     * <p>The message identifier of the
+     * {@link javax.faces.application.Message} to be created if
+     * a value not matching the available options is specified.
+     */
+    public static final String INVALID_MESSAGE_ID =
+        "javax.faces.component.UISelectMany.INVALID";
+
+
+
     // -------------------------------------------------------------- Properties
 
     /**
@@ -47,6 +63,23 @@ public interface UISelectMany extends UIInput {
      * @param selectedValues The new selected values (if any)
      */
     public void setSelectedValues(Object selectedValues[]);
+
+
+    // ------------------------------------------------------ Validation Methods
+
+
+    /**
+     * <p>In addition to the standard validation behavior inherited from
+     * {@link UIInput}, ensure that any specified values are equal to one of
+     * the available options.  If it is not, enqueue an error message
+     * and set the <code>valid</code> property to <code>false</code>.</p>
+     *
+     * @param context The {@link FacesContext} for the current request
+     *
+     * @exception NullPointerException if <code>context</code>
+     *  is <code>null</code>
+     */
+    public void validate(FacesContext context);
 
 
 }

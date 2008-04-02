@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectOneBaseTestCase.java,v 1.2 2003/07/26 17:55:26 craigmcc Exp $
+ * $Id: UISelectOneBaseTestCase.java,v 1.3 2003/08/28 21:08:57 craigmcc Exp $
  */
 
 /*
@@ -111,6 +111,29 @@ public class UISelectOneBaseTestCase extends UIInputBaseTestCase {
 
     }
 
+
+    // Test validation of value against the valid list
+    public void testValidation() throws Exception {
+
+        // Add valid options to the component under test
+        UISelectOne selectOne = (UISelectOne) component;
+        selectOne.getChildren().add(new UISelectItemSub("foo", null, null));
+        selectOne.getChildren().add(new UISelectItemSub("bar", null, null));
+        selectOne.getChildren().add(new UISelectItemSub("baz", null, null));
+
+        // Validate a value that is on the list
+        selectOne.setValid(true);
+        selectOne.setValue("bar");
+        selectOne.validate(facesContext);
+        assertTrue(selectOne.isValid());
+
+        // Validate a value that is not on the list
+        selectOne.setValid(true);
+        selectOne.setValue("bop");
+        selectOne.validate(facesContext);
+        assertTrue(!selectOne.isValid());
+
+    }
 
 
 }

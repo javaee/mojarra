@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectManyBaseTestCase.java,v 1.2 2003/07/26 17:55:26 craigmcc Exp $
+ * $Id: UISelectManyBaseTestCase.java,v 1.3 2003/08/28 21:08:57 craigmcc Exp $
  */
 
 /*
@@ -141,6 +141,30 @@ public class UISelectManyBaseTestCase extends UIInputBaseTestCase {
 
     }
 
+
+
+    // Test validation of value against the valid list
+    public void testValidation() throws Exception {
+
+        // Add valid options to the component under test
+        UISelectMany selectMany = (UISelectMany) component;
+        selectMany.getChildren().add(new UISelectItemSub("foo", null, null));
+        selectMany.getChildren().add(new UISelectItemSub("bar", null, null));
+        selectMany.getChildren().add(new UISelectItemSub("baz", null, null));
+
+        // Validate two values that are on the list
+        selectMany.setValid(true);
+        selectMany.setValue(new Object[] { "foo", "baz" });
+        selectMany.validate(facesContext);
+        assertTrue(selectMany.isValid());
+
+        // Validate one value on the list and one not on the list
+        selectMany.setValid(true);
+        selectMany.setValue(new Object[] { "bar", "bop"});
+        selectMany.validate(facesContext);
+        assertTrue(!selectMany.isValid());
+
+    }
 
 
 }

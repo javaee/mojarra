@@ -1,5 +1,5 @@
 /*
- * $Id: UIInput.java,v 1.28 2003/08/15 17:23:42 craigmcc Exp $
+ * $Id: UIInput.java,v 1.29 2003/08/28 21:08:51 craigmcc Exp $
  */
 
 /*
@@ -93,7 +93,7 @@ public interface UIInput extends UIOutput {
     /**
      * <p>The message identifier of the
      * {@link javax.faces.application.Message} to be created if
-     * this validation fails.</p>
+     * a required check fails.</p>
      */
     public static final String REQUIRED_MESSAGE_ID =
         "javax.faces.component.UIInput.REQUIRED";
