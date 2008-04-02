@@ -33,6 +33,7 @@ import javax.faces.component.UIViewRoot;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.render.ResponseStateManager;
+import javax.el.ValueExpression;
 
 import java.io.Externalizable;
 import java.io.IOException;
@@ -497,9 +498,9 @@ public class StateManagerImpl extends StateManager {
 
         return (ReflectionUtils.lookupMethod(
               instance.getClass(),
-                                             "getState",
-                                              FacesContext.class, 
-                                              String.class) != null);
+              "getState",
+              FacesContext.class,
+              String.class) != null);
 
     }
 
@@ -522,6 +523,13 @@ public class StateManagerImpl extends StateManager {
             c.setId(n.id);
             if (!n.trans) {
                 c.restoreState(ctx, n.state);
+            }
+            if (ctx.getExternalContext().getRequestMap()
+                  .get(RIConstants.DEFAULT_LIFECYCLE) != null) {
+                ValueExpression ve = c.getValueExpression("binding");
+                if (ve != null) {
+                    ve.setValue(ctx.getELContext(), c);
+                }
             }
             return c;
         } catch (Exception e) {
@@ -571,6 +579,8 @@ public class StateManagerImpl extends StateManager {
         UIComponent c;
         FacetNode fn;
         TreeNode tn;
+        ctx.getExternalContext().getRequestMap().put(RIConstants.DEFAULT_STATEMANAGER,
+                                                     Boolean.TRUE);
         for (int i = 0; i < tree.length; i++) {
             if (tree[i]instanceof FacetNode) {
                 fn = (FacetNode) tree[i];

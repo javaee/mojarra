@@ -1,5 +1,5 @@
 /*
- * $Id: RestoreViewPhase.java,v 1.39 2006/09/18 23:15:05 rlubke Exp $
+ * $Id: RestoreViewPhase.java,v 1.40 2006/09/20 17:50:21 rlubke Exp $
  */
 
 /*
@@ -54,12 +54,13 @@ import com.sun.faces.config.JSFVersionTracker.Version;
 import com.sun.faces.renderkit.RenderKitUtils;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
+import com.sun.faces.RIConstants;
 
 /**
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: RestoreViewPhase.java,v 1.39 2006/09/18 23:15:05 rlubke Exp $
+ * @version $Id: RestoreViewPhase.java,v 1.40 2006/09/20 17:50:21 rlubke Exp $
  */
 
 public class RestoreViewPhase extends Phase {
@@ -181,6 +182,14 @@ public class RestoreViewPhase extends Phase {
                                                    viewId);
                 }
             }
+            
+            // If our default state manager implementation didn't
+            // restore the view, then call doPerComponentActions
+            if (facesContext.getExternalContext().getRequestMap().get(
+                  RIConstants.DEFAULT_STATEMANAGER) == null) {
+                doPerComponentActions(facesContext, viewRoot);
+            }
+            
             if (logger.isLoggable(Level.FINE)) {
                 logger.fine("Postback: Restored view for " + viewId);
             }
@@ -196,7 +205,6 @@ public class RestoreViewPhase extends Phase {
         assert(null != viewRoot);
 
         facesContext.setViewRoot(viewRoot);
-        doPerComponentActions(facesContext, viewRoot);
 
         if (logger.isLoggable(Level.FINE)) {
             logger.fine("Exiting RestoreViewPhase");

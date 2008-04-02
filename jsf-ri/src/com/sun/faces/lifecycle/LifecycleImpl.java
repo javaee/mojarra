@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleImpl.java,v 1.68 2006/09/06 20:44:05 rlubke Exp $
+ * $Id: LifecycleImpl.java,v 1.69 2006/09/20 17:50:21 rlubke Exp $
  */
 
 /*
@@ -46,6 +46,7 @@ import java.util.logging.Logger;
 import com.sun.faces.renderkit.RenderKitUtils;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
+import com.sun.faces.RIConstants;
 
 /**
  * <p><b>LifecycleImpl</b> is the stock implementation of the standard
@@ -101,7 +102,10 @@ public class LifecycleImpl extends Lifecycle {
 
         if (LOGGER.isLoggable(Level.FINE)) {
             LOGGER.fine("execute(" + context + ")");
-        }                
+        }
+        
+        context.getExternalContext().getRequestMap().put(RIConstants.DEFAULT_LIFECYCLE,
+                                                         Boolean.TRUE);
         
         for (int i = 1; i < phases.length; i++) { // Skip ANY_PHASE placeholder
 

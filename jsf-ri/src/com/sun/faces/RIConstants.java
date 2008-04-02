@@ -1,5 +1,5 @@
 /*
- * $Id: RIConstants.java,v 1.89 2006/08/30 18:23:52 rlubke Exp $
+ * $Id: RIConstants.java,v 1.90 2006/09/20 17:50:20 rlubke Exp $
  */
 
 /*
@@ -122,6 +122,10 @@ public class RIConstants {
     public static final String ALL_MEDIA = "*/*";
     public static final String CHAR_ENCODING = "ISO-8859-1";
     public static final String SUN_JSF_JS_URI = "com_sun_faces_sunjsf.js";
+    public static final String DEFAULT_LIFECYCLE = 
+          FACES_PREFIX + "DefaultLifecycle";
+    public static final String DEFAULT_STATEMANAGER =
+          FACES_PREFIX + "DefaultStateManager";
 
 
     private RIConstants() {
