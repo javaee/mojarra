@@ -19,169 +19,6 @@
 </style>
 <body>
 
-<h2>New Features Added In This Release</h2>
-
-<p>
-    We've added five new context initialization parameters since
-    the release of 1.2
-</p>
-<table width="100%" cellpadding="5" style="font-size:small;border:1px solid; border-width:1px;">
-    <tr style=background-color:silver>
-        <th>
-            Paramter Name
-        </th>        
-        <th>
-            Description
-        </th>
-        <th>
-            Default Value
-        </th>
-    </tr>
-    <tr class="rb">
-        <td>
-            com.sun.faces.displayConfiguration
-        </td>
-        <td>
-            If <code>true</code> then all web configuration information 
-            (context initialization parameters and environment entries) will
-            be written to the log.  This is useful during development to
-            confirm your application is configured as expected.  Valid
-            values for this parameter are <code>true</code> and <code>false</code>
-        </td>
-        <td>
-            false
-        </td>
-    </tr>
-    <tr class="ra">
-        <td>
-            com.sun.faces.injectionProvider
-        </td>
-        <td>
-            This parameter specifies a class that implements the <a href="#injection">InjectionProvider</a>
-            SPI.  This implementation represents a hook the JSF implementation will use to provide
-            resource injection support.  See the documentation of the <a href="#injection">InjectionProvider</a> interface
-            for more details
-        </td>
-        <td>
-            NONE
-        </td>
-    </tr>
-    <tr class="rb">
-        <td>
-            com.sun.faces.serializationProvider
-        </td>
-        <td>
-            This parameter specifies a class that implements the <a href="#serialization">SerializationProvider</a>
-            SPI.  This implementation represents a hook the JSF implementation will use in order
-            to allow the use of alternate Serialization implementations.  See 
-            the documentation of the <a href="#serialization">SerializationProvider</a> interface
-            for more details
-        </td>
-        <td>
-            NONE
-        </td>
-    </tr>
-    <tr class="ra">
-        <td>
-            com.sun.faces.responseBufferSize
-        </td>
-        <td>
-            This parameter specifies the size, in bytes, of the buffer that is used to write
-            all generated content <em>exluding</em> state.
-        </td>
-        <td>
-            4096
-        </td>
-    </tr>
-    <tr class="rb">
-        <td>
-            com.sun.faces.clientStateWriteBufferSize
-        </td>
-        <td>
-            This parameter specifies the size, in bytes, of the buffer that is
-            used to write client state.  It should be noted, that the buffer
-            used is split - half is for raw bytes, the other half is for the
-            Base64 encoded characters of said bytes.  So, for example, if the
-            default, <code>8192</code>, is used, then <code>4096</code> of that is used for the bytes,
-            and the other <code>4096</code> is used for the Base64 encoded characters.
-        </td>
-        <td>
-            8192
-        </td>
-    </tr>
-</table>
-
-<br/>
-
-<p>
-    We've deprecated several context initialization parameters as well:
-</p>
-<table width="100%" cellpadding="5" style="font-size:small;border:1px solid; border-width:1px;">
-    <tr style=background-color:silver>
-        <th>
-            Paramter Name
-        </th>        
-        <th>
-            New Parameter Name
-        </th>
-        <th>
-            Default Value
-        </th>
-    </tr>
-    <tr class="rb">
-        <td>
-            com.sun.faces.NUMBER_OF_VIEWS_IN_SESSION
-        </td>
-        <td>
-            com.sun.faces.numberOfViewsInSession
-        </td>
-        <td>
-            15
-        </td>
-    </tr>
-    <tr class="ra">
-        <td>
-            com.sun.faces.NUMBER_OF_VIEWS_IN_LOGICAL_VIEW_IN_SESSION
-        </td>
-        <td>
-            com.sun.faces.numberOfLogicalViews
-        </td>
-        <td>
-            15
-        </td>
-    </tr>
-    <tr class="rb">
-        <td>
-            com.sun.faces.PreferXHTML
-        </td>
-        <td>
-            com.sun.faces.preferXHTML
-        </td>
-        <td>
-            false
-        </td>
-    </tr>
-    <tr class="ra">
-        <td>
-            com.sun.faces.COMPRESS_STATE
-        </td>
-        <td>
-            com.sun.faces.compressViewState
-        </td>
-        <td>
-            true
-        </td>
-    </tr>
- </table>
-<p>
-    If you're not familiar with the parameters above check the FAQ or 
-    Java EE 5 tutorial for details.  
-    <br/>
-    <em>NOTE:</em> The deprecated parameters will continue to work, but a message
-    will now be logged stating the deprecation as well as giving the name
-    of the associated non-deprecated parameter.
-</p>
-
 <h2>Issues Resolved In This Release</h2>
 <table width="100%" style="font-size:small;border:1px solid; border-width:1px;">
 <tr style="background-color:silver">
@@ -199,11 +36,11 @@
 
 <tr class="rb">
     <td>
-        <a href="https://javaserverfaces.dev.java.net/issues/show_bug.cgi?id=220">220</a>
+        <a href="https://javaserverfaces.dev.java.net/issues/show_bug.cgi?id=378">378</a>
     </td>
     <td class="red">DEFECT
     </td>
-    <td class="red">P5
+    <td class="red">P1
     </td>
     <td class="red">All
     </td>
@@ -214,35 +51,14 @@
     </td>
     <td class="red">FIXED
     </td>
-    <td class="red">NPE Thrown if RI's Faces-config not Found in Classpath
+    <td class="red">NPE from MethodbindingMethodExpressionAdapter.equals()
 
     </td>
 </tr>
+    
 <tr class="ra">
     <td>
-        <a href="https://javaserverfaces.dev.java.net/issues/show_bug.cgi?id=272">272</a>
-    </td>
-    <td class="red">DEFECT
-    </td>
-    <td class="red">P3
-
-    </td>
-    <td class="red">All
-    </td>
-    <td class="red">rogerk
-    </td>
-    <td class="red">RESOLVED
-    </td>
-
-    <td class="red">FIXED
-    </td>
-    <td class="red">Accept should prefer application/xml+xhtml over text/html wh
-    </td>
-</tr>
-<tr class="rb">
-    <td>
-        <a href="https://javaserverfaces.dev.java.net/issues/show_bug.cgi?id=293">293</a>
-
+        <a href="https://javaserverfaces.dev.java.net/issues/show_bug.cgi?id=375">375</a>
     </td>
     <td class="red">DEFECT
     </td>
@@ -257,35 +73,14 @@
     </td>
     <td class="red">FIXED
     </td>
-    <td class="red">View ID passed to ViewHandler.restoreView during RestoreView
+    <td class="red">output tags getting deleted after post-base of page with verbatim
 
     </td>
 </tr>
-<tr class="ra">
-    <td>
-        <a href="https://javaserverfaces.dev.java.net/issues/show_bug.cgi?id=294">294</a>
-    </td>
-    <td class="red">DEFECT
-    </td>
-    <td class="red">P4
-
-    </td>
-    <td class="red">Sun
-    </td>
-    <td class="red">rlubke
-    </td>
-    <td class="red">RESOLVED
-    </td>
-
-    <td class="red">FIXED
-    </td>
-    <td class="red">If a private managed bean method is annotated with @PostCons
-    </td>
-</tr>
+    
 <tr class="rb">
     <td>
-        <a href="https://javaserverfaces.dev.java.net/issues/show_bug.cgi?id=304">304</a>
-
+        <a href="https://javaserverfaces.dev.java.net/issues/show_bug.cgi?id=355">355</a>
     </td>
     <td class="red">DEFECT
     </td>
@@ -300,35 +95,14 @@
     </td>
     <td class="red">FIXED
     </td>
-    <td class="red">SelectOneMenu does not grab initial value from enums
+    <td class="red">h:message not getting error message for component
 
     </td>
 </tr>
+    
 <tr class="ra">
     <td>
-        <a href="https://javaserverfaces.dev.java.net/issues/show_bug.cgi?id=305">305</a>
-    </td>
-    <td class="red">DEFECT
-    </td>
-    <td class="red">P3
-
-    </td>
-    <td class="red">Sun
-    </td>
-    <td class="red">rlubke
-    </td>
-    <td class="red">RESOLVED
-    </td>
-
-    <td class="red">FIXED
-    </td>
-    <td class="red">h:commandLink with nested f:param and h:outputText nested wi
-    </td>
-</tr>
-<tr class="rb">
-    <td>
-        <a href="https://javaserverfaces.dev.java.net/issues/show_bug.cgi?id=308">308</a>
-
+        <a href="https://javaserverfaces.dev.java.net/issues/show_bug.cgi?id=364">364</a>
     </td>
     <td class="red">DEFECT
     </td>
@@ -343,121 +117,14 @@
     </td>
     <td class="red">FIXED
     </td>
-    <td class="red">Errors from ValueChangeListeners are swallowed
+    <td class="red">Incorrect parameter values submitted after non-linear navigation
 
     </td>
 </tr>
-<tr class="ra">
-    <td>
-        <a href="https://javaserverfaces.dev.java.net/issues/show_bug.cgi?id=310">310</a>
-    </td>
-    <td class="red">DEFECT
-    </td>
-    <td class="red">P2
 
-    </td>
-    <td class="red">All
-    </td>
-    <td class="red">rlubke
-    </td>
-    <td class="red">RESOLVED
-    </td>
-
-    <td class="red">FIXED
-    </td>
-    <td class="red">duplicate component id error
-    </td>
-</tr>
 <tr class="rb">
     <td>
-        <a href="https://javaserverfaces.dev.java.net/issues/show_bug.cgi?id=313">313</a>
-
-    </td>
-    <td class="red">DEFECT
-    </td>
-    <td class="red">P5
-    </td>
-    <td class="red">All
-    </td>
-
-    <td class="red">rlubke
-    </td>
-    <td class="red">RESOLVED
-    </td>
-    <td class="red">FIXED
-    </td>
-    <td class="red">NOT_NESTED_IN_TYPE_TAG_ERROR_MESSAGE_ID
-
-    </td>
-</tr>
-<tr class="ra">
-    <td>
-        <a href="https://javaserverfaces.dev.java.net/issues/show_bug.cgi?id=314">314</a>
-    </td>
-    <td class="red">DEFECT
-    </td>
-    <td class="red">P2
-
-    </td>
-    <td class="red">Sun
-    </td>
-    <td class="red">rlubke
-    </td>
-    <td class="red">RESOLVED
-    </td>
-
-    <td class="red">FIXED
-    </td>
-    <td class="red">Potential exists of useful error information being swallowed
-    </td>
-</tr>
-<tr class="rb">
-    <td>
-        <a href="https://javaserverfaces.dev.java.net/issues/show_bug.cgi?id=315">315</a>
-
-    </td>
-    <td class="red">DEFECT
-    </td>
-    <td class="red">P3
-    </td>
-    <td class="red">All
-    </td>
-
-    <td class="red">rogerk
-    </td>
-    <td class="red">RESOLVED
-    </td>
-    <td class="red">FIXED
-    </td>
-    <td class="red">Use ResponseWriter.getContentType
-
-    </td>
-</tr>
-<tr class="ra">
-    <td>
-        <a href="https://javaserverfaces.dev.java.net/issues/show_bug.cgi?id=320">320</a>
-    </td>
-    <td class="red">DEFECT
-    </td>
-    <td class="red">P3
-
-    </td>
-    <td class="red">All
-    </td>
-    <td class="red">rogerk
-    </td>
-    <td class="red">RESOLVED
-    </td>
-
-    <td class="red">FIXED
-    </td>
-    <td class="red">MenuRenderer loosing selected value
-    </td>
-</tr>
-<tr class="rb">
-    <td>
-        <a href="https://javaserverfaces.dev.java.net/issues/show_bug.cgi?id=323">323</a>
-
+        <a href="https://javaserverfaces.dev.java.net/issues/show_bug.cgi?id=368">368</a>
     </td>
     <td class="red">DEFECT
     </td>
@@ -472,57 +139,14 @@
     </td>
     <td class="red">FIXED
     </td>
-    <td class="red">Incorrect Logging
+    <td class="red">NPE when navigatine from PL before ViewRoot has been created
 
     </td>
 </tr>
-<tr class="rb">
-    <td>
-        <a href="https://javaserverfaces.dev.java.net/issues/show_bug.cgi?id=328">328</a>
 
-    </td>
-    <td class="red">DEFECT
-    </td>
-    <td class="red">P4
-    </td>
-    <td class="red">Sun
-    </td>
-
-    <td class="red">rlubke
-    </td>
-    <td class="red">RESOLVED
-    </td>
-    <td class="red">FIXED
-    </td>
-    <td class="red">If /WEB-INF/faces-config.xml is specified via the javax.face
-
-    </td>
-</tr>
 <tr class="ra">
     <td>
-        <a href="https://javaserverfaces.dev.java.net/issues/show_bug.cgi?id=329">329</a>
-    </td>
-    <td class="red">DEFECT
-    </td>
-    <td class="red">P3
-
-    </td>
-    <td class="red">All
-    </td>
-    <td class="red">rlubke
-    </td>
-    <td class="red">RESOLVED
-    </td>
-
-    <td class="red">FIXED
-    </td>
-    <td class="red">helloDuke doesn't work
-    </td>
-</tr>
-<tr class="rb">
-    <td>
-        <a href="https://javaserverfaces.dev.java.net/issues/show_bug.cgi?id=330">330</a>
-
+        <a href="https://javaserverfaces.dev.java.net/issues/show_bug.cgi?id=370">370</a>
     </td>
     <td class="red">DEFECT
     </td>
@@ -537,712 +161,35 @@
     </td>
     <td class="red">FIXED
     </td>
-    <td class="red">com.sun.faces.config.rules.ResourceBundleRule wrong assert +
-
-    </td>
-</tr>
-<tr class="ra">
-    <td>
-        <a href="https://javaserverfaces.dev.java.net/issues/show_bug.cgi?id=332">332</a>
-    </td>
-    <td class="red">DEFECT
-    </td>
-    <td class="red">P3
-
-    </td>
-    <td class="red">All
-    </td>
-    <td class="red">rlubke
-    </td>
-    <td class="red">RESOLVED
-    </td>
-
-    <td class="red">FIXED
-    </td>
-    <td class="red">Non-Glassfish build fails
-    </td>
-</tr>
-<tr class="rb">
-    <td>
-        <a href="https://javaserverfaces.dev.java.net/issues/show_bug.cgi?id=333">333</a>
-
-    </td>
-    <td class="red">DEFECT
-    </td>
-    <td class="red">P3
-    </td>
-    <td class="red">Macintos
-    </td>
-
-    <td class="red">rlubke
-    </td>
-    <td class="red">RESOLVED
-    </td>
-    <td class="red">FIXED
-    </td>
-    <td class="red">Apparent misuse of CopyOnWriteArrayList
-
-    </td>
-</tr>
-<tr class="ra">
-    <td>
-        <a href="https://javaserverfaces.dev.java.net/issues/show_bug.cgi?id=335">335</a>
-    </td>
-    <td class="red">DEFECT
-    </td>
-    <td class="red">P2
-
-    </td>
-    <td class="red">Sun
-    </td>
-    <td class="red">rlubke
-    </td>
-    <td class="red">RESOLVED
-    </td>
-
-    <td class="red">FIXED
-    </td>
-    <td class="red">PropertyResolverChainWrapper and VariableResolverChainWrappe
-    </td>
-</tr>
-<tr class="rb">
-    <td>
-        <a href="https://javaserverfaces.dev.java.net/issues/show_bug.cgi?id=336">336</a>
-
-    </td>
-    <td class="red">DEFECT
-    </td>
-    <td class="red">P3
-    </td>
-    <td class="red">All
-    </td>
-
-    <td class="red">rlubke
-    </td>
-    <td class="red">RESOLVED
-    </td>
-    <td class="red">FIXED
-    </td>
-    <td class="red">container.deploy
-
-    </td>
-</tr>
-<tr class="rb">
-    <td>
-        <a href="https://javaserverfaces.dev.java.net/issues/https://javaserverfaces.dev.java.net/issues/show_bug.cgi?id=337">337</a>
-
-    </td>
-    <td class="red">DEFECT
-    </td>
-    <td class="red">P2
-    </td>
-    <td class="red">All
-    </td>
-
-    <td class="red">rogerk
-    </td>
-    <td class="red">RESOLVED
-    </td>
-    <td class="red">FIXED
-    </td>
-    <td class="red">Variable Resolution System Fails..
-
-    </td>
-</tr>
-<tr class="ra">
-    <td>
-        <a href="https://javaserverfaces.dev.java.net/issues/https://javaserverfaces.dev.java.net/issues/show_bug.cgi?id=340">340</a>
-    </td>
-    <td class="red">DEFECT
-    </td>
-    <td class="red">P3
-
-    </td>
-    <td class="red">All
-    </td>
-    <td class="red">rogerk
-    </td>
-    <td class="red">RESOLVED
-    </td>
-
-    <td class="red">FIXED
-    </td>
-    <td class="red">Top Level Build Script: Nightly Upload Target file Names
-    </td>
-</tr>
-<tr class="rb">
-    <td>
-        <a href="https://javaserverfaces.dev.java.net/issues/https://javaserverfaces.dev.java.net/issues/show_bug.cgi?id=342">342</a>
-
-    </td>
-    <td class="red">DEFECT
-    </td>
-    <td class="red">P3
-    </td>
-    <td class="red">Sun
-    </td>
-
-    <td class="red">rlubke
-    </td>
-    <td class="red">RESOLVED
-    </td>
-    <td class="red">FIXED
-    </td>
-    <td class="red">Removal of ELResolverInitPhaseListener can cause exceptions
-
-    </td>
-</tr>
-<tr class="ra">
-    <td>
-        <a href="https://javaserverfaces.dev.java.net/issues/https://javaserverfaces.dev.java.net/issues/show_bug.cgi?id=350">350</a>
-
-    </td>
-    <td class="red">DEFECT
-    </td>
-    <td class="red">P3
-    </td>
-    <td class="red">ALL
-    </td>
-
-    <td class="red">rlubke
-    </td>
-    <td class="red">RESOLVED
-    </td>
-    <td class="red">FIXED
-    </td>
-    <td class="red">Listbox value is not converted when the target type is a List
-
-    </td>
-</tr>
-<tr class="rb">
-    <td>
-        <a href="https://javaserverfaces.dev.java.net/issues/https://javaserverfaces.dev.java.net/issues/show_bug.cgi?id=321">321</a>
-
-    </td>
-    <td class="red">DEFECT
-    </td>
-    <td class="red">P3
-    </td>
-    <td class="red">ALL
-    </td>
-
-    <td class="red">rlubke
-    </td>
-    <td class="red">RESOLVED
-    </td>
-    <td class="red">FIXED
-    </td>
-    <td class="red">DataTable var attribute incorrect in TLD
-
-    </td>
-</tr>
-<tr class="ra">
-    <td>
-        <a href="https://javaserverfaces.dev.java.net/issues/https://javaserverfaces.dev.java.net/issues/show_bug.cgi?id=351">351</a>
-
-    </td>
-    <td class="red">DEFECT
-    </td>
-    <td class="red">P3
-    </td>
-    <td class="red">ALL
-    </td>
-
-    <td class="red">rogerk
-    </td>
-    <td class="red">RESOLVED
-    </td>
-    <td class="red">FIXED
-    </td>
-    <td class="red">f:selectItem "value" Attr Exception
+    <td class="red">Presence of multiple FacesServlet mappings in same URL will
 
     </td>
 </tr>
 
 <tr class="rb">
     <td>
-        <a href="https://javaserverfaces.dev.java.net/issues/https://javaserverfaces.dev.java.net/issues/show_bug.cgi?id=356">356</a>
-
+        <a href="https://javaserverfaces.dev.java.net/issues/show_bug.cgi?id=369">369</a>
     </td>
-    <td class="red">DEFECT
-    </td>
-    <td class="red">P2
-    </td>
-    <td class="red">ALL
-    </td>
-
-    <td class="red">rlubke
-    </td>
-    <td class="red">RESOLVED
-    </td>
-    <td class="red">FIXED
-    </td>
-    <td class="red">Duplicate ID exception incorrectly thrown if a developer assigned
-
-    </td>
-</tr>
-
-
-<tr class="ra">
-    <td>
-        <a href="https://javaserverfaces.dev.java.net/issues/https://javaserverfaces.dev.java.net/issues/show_bug.cgi?id=357">357</a>
-
-    </td>
-    <td class="red">DEFECT
-    </td>
-    <td class="red">P3
-    </td>
-    <td class="red">ALL
-    </td>
-
-    <td class="red">rlubke
-    </td>
-    <td class="red">RESOLVED
-    </td>
-    <td class="red">FIXED
-    </td>
-    <td class="red">Using browser back button causes ClassCastException
-
-    </td>
-</tr>
-
-
-<!-- END DEFECTS -->
-
-<!-- BEGIN ENHANCEMENTS (purple) -->
-
-<tr class="ra">
-    <td>
-        <a href="https://javaserverfaces.dev.java.net/issues/show_bug.cgi?id=253">253</a>
-    </td>
-    <td class="purple">ENHANCEMENT
-    </td>
-    <td class="purple">P3
-
-    </td>
-    <td class="purple">All
-    </td>
-    <td class="purple">rlubke
-    </td>
-    <td class="purple">RESOLVED
-    </td>
-
-    <td class="purple">FIXED
-    </td>
-    <td class="purple">FacesMessages - Default Display?
-    </td>
-</tr>
-<tr class="rb">
-    <td>
-        <a href="https://javaserverfaces.dev.java.net/issues/show_bug.cgi?id=295">295</a>
-
-    </td>
-    <td class="purple">ENHANCEMENT
-    </td>
-    <td class="purple">P2
-    </td>
-    <td class="purple">Sun
-    </td>
-
-    <td class="purple">rlubke
-    </td>
-    <td class="purple">RESOLVED
-    </td>
-    <td class="purple">FIXED
-    </td>
-    <td class="purple">Provide a pluggable mechanism to allow ResourceInjection
-
-    </td>
-</tr>
-<tr class="ra">
-    <td>
-        <a href="https://javaserverfaces.dev.java.net/issues/show_bug.cgi?id=307">307</a>
-    </td>
-    <td class="purple">ENHANCEMENT
-    </td>
-    <td class="purple">P3
-
-    </td>
-    <td class="purple">Sun
-    </td>
-    <td class="purple">rlubke
-    </td>
-    <td class="purple">RESOLVED
-    </td>
-
-    <td class="purple">FIXED
-    </td>
-    <td class="purple">Duplicate ID exception message needs to be enhanced.
-    </td>
-</tr>
-
-<tr class="rb">
-    <td>
-        <a href="https://javaserverfaces.dev.java.net/issues/https://javaserverfaces.dev.java.net/issues/show_bug.cgi?id=338">338</a>
-
-    </td>
-    <td class="purple">ENHANCEMENT
-    </td>
-    <td class="purple">P3
-    </td>
-    <td class="purple">All
-    </td>
-
-    <td class="purple">youngm
-    </td>
-    <td class="purple">RESOLVED
-    </td>
-    <td class="purple">FIXED
-    </td>
-    <td class="purple">Add INFO log when a message is added to the Context
-
-    </td>
-</tr>
-<tr class="ra">
-    <td>
-        <a href="https://javaserverfaces.dev.java.net/issues/https://javaserverfaces.dev.java.net/issues/show_bug.cgi?id=339">339</a>
-    </td>
-    <td class="purple">ENHANCEMENT
-    </td>
-    <td class="purple">P3
-
-    </td>
-    <td class="purple">Sun
-    </td>
-    <td class="purple">rlubke
-    </td>
-    <td class="purple">RESOLVED
-    </td>
-
-    <td class="purple">FIXED
-    </td>
-    <td class="purple">AttributesMap needs to be more efficient
-    </td>
-</tr>
-
-<!-- END ENCHNACMENTS -->
-
-<!-- BEGIN FEATURES (blue) -->
-
-<tr class="rb">
-    <td>
-        <a href="https://javaserverfaces.dev.java.net/issues/show_bug.cgi?id=288">288</a>
-
-    </td>
-    <td class="blue">FEATURE
+    <td class="blue">ENHANCEMENT
     </td>
     <td class="blue">P3
-    </td>
-    <td class="blue">Sun
-    </td>
-
-    <td class="blue">rlubke
-    </td>
-    <td class="blue">RESOLVED
-    </td>
-    <td class="blue">FIXED
-    </td>
-    <td class="blue">Modify renderers to use ResponseWriter.writeText() that take
-
-    </td>
-</tr>
-<tr class="ra">
-    <td>
-        <a href="https://javaserverfaces.dev.java.net/issues/show_bug.cgi?id=311">311</a>
-    </td>
-    <td class="blue">FEATURE
-    </td>
-    <td class="blue">P3
-
     </td>
     <td class="blue">All
     </td>
+
     <td class="blue">rlubke
     </td>
     <td class="blue">RESOLVED
     </td>
-
     <td class="blue">FIXED
     </td>
-    <td class="blue">Print restored view with application FINEST logging enabled
-    </td>
-</tr>
-
-<!-- END FEATURES -->
-
-<!-- BEGIN TASKS (black) -->
-
-<tr class="rb">
-    <td>
-        <a href="https://javaserverfaces.dev.java.net/issues/show_bug.cgi?id=271">271</a>
-
-    </td>
-    <td class="black">TASK
-    </td>
-    <td class="black">P3
-    </td>
-    <td class="black">All
-    </td>
-
-    <td class="black">rlubke
-    </td>
-    <td class="black">RESOLVED
-    </td>
-    <td class="black">FIXED
-    </td>
-    <td class="black">Move JSP Registration out of the LifecycleImpl
+    <td class="blue">Dynamically creating hidden files for action components
 
     </td>
 </tr>
-<tr class="ra">
-    <td>
-        <a href="https://javaserverfaces.dev.java.net/issues/show_bug.cgi?id=276">276</a>
-    </td>
-    <td class="black">TASK
-    </td>
-    <td class="black">P3
-
-    </td>
-    <td class="black">All
-    </td>
-    <td class="black">rlubke
-    </td>
-    <td class="black">RESOLVED
-    </td>
-
-    <td class="black">FIXED
-    </td>
-    <td class="black">Accomodation for CDATA in ResponseWriter
-    </td>
-</tr>
-
-<!-- END TASKS -->
-
-<!-- BEGIN PATCHES (green) -->
-
-<tr class="rb">
-    <td>
-        <a href="https://javaserverfaces.dev.java.net/issues/show_bug.cgi?id=322">322</a>
-
-    </td>
-    <td class="green">PATCH
-    </td>
-    <td class="green">P3
-    </td>
-    <td class="green">Sun
-    </td>
-
-    <td class="green">rlubke
-    </td>
-    <td class="green">RESOLVED
-    </td>
-    <td class="green">FIXED
-    </td>
-    <td class="green">Clean up of NPE error messages and various other findbug fix
-
-    </td>
-</tr>
-<tr class="ra">
-    <td>
-        <a href="https://javaserverfaces.dev.java.net/issues/show_bug.cgi?id=325">325</a>
-    </td>
-    <td class="green">PATCH
-    </td>
-    <td class="green">P3
-
-    </td>
-    <td class="green">All
-    </td>
-    <td class="green">rlubke
-    </td>
-    <td class="green">RESOLVED
-    </td>
-
-    <td class="green">FIXEDD
-    </td>
-    <td class="green">FindBug-reported performance and code style changes
-    </td>
-</tr>
-
-<!-- END PATCHES -->
-
 
 </table>
 
-
-<h2>New Service Provider Interfaces (SPIs)</h2>
-<a name="injection"/>
-
-<table width="100%" style="font-size:small;border:1px solid; border-width:1px;">
-    <tr style=background-color:silver>
-       <th>InjectionProvider.java</th>
-    </tr>
-    <tr>
-       <td>        
-<pre style="font-size:medium;">
-<a name="l1"><span class="ln">1    </span></a><span class="s0">/* 
-<a name="l2"><span class="ln">2    </span></a> * The contents of this file are subject to the terms 
-<a name="l3"><span class="ln">3    </span></a> * of the Common Development and Distribution License 
-<a name="l4"><span class="ln">4    </span></a> * (the License). You may not use this file except in 
-<a name="l5"><span class="ln">5    </span></a> * compliance with the License. 
-<a name="l6"><span class="ln">6    </span></a> * 
-<a name="l7"><span class="ln">7    </span></a> * You can obtain a copy of the License at 
-<a name="l8"><span class="ln">8    </span></a> * https://javaserverfaces.dev.java.net/CDDL.html or 
-<a name="l9"><span class="ln">9    </span></a> * legal/CDDLv1.0.txt. 
-<a name="l10"><span class="ln">10   </span></a> * See the License for the specific language governing 
-<a name="l11"><span class="ln">11   </span></a> * permission and limitations under the License. 
-<a name="l12"><span class="ln">12   </span></a> * 
-<a name="l13"><span class="ln">13   </span></a> * When distributing Covered Code, include this CDDL 
-<a name="l14"><span class="ln">14   </span></a> * Header Notice in each file and include the License file 
-<a name="l15"><span class="ln">15   </span></a> * at legal/CDDLv1.0.txt. 
-<a name="l16"><span class="ln">16   </span></a> * If applicable, add the following below the CDDL Header, 
-<a name="l17"><span class="ln">17   </span></a> * with the fields enclosed by brackets [] replaced by 
-<a name="l18"><span class="ln">18   </span></a> * your own identifying information: 
-<a name="l19"><span class="ln">19   </span></a> * &quot;Portions Copyrighted [year] [name of copyright owner]&quot; 
-<a name="l20"><span class="ln">20   </span></a> * 
-<a name="l21"><span class="ln">21   </span></a> * [Name of File] [ver.__] [Date] 
-<a name="l22"><span class="ln">22   </span></a> * 
-<a name="l23"><span class="ln">23   </span></a> * Copyright 2006 Sun Microsystems Inc. All Rights Reserved 
-<a name="l24"><span class="ln">24   </span></a> */</span>
-<a name="l25"><span class="ln">25   </span></a> 
-<a name="l26"><span class="ln">26    </span></a><span class="s0">package </span><span class="s1">com.sun.faces.spi; 
-<a name="l27"><span class="ln">27   </span></a> 
-<a name="l28"><span class="ln">28    </span></a></span><span class="s2">/** 
-<a name="l29"><span class="ln">29   </span></a> * </span><span class="s3">&lt;p&gt;</span><span class="s2">This interface defines an integration point for Java EE vendors. 
-<a name="l30"><span class="ln">30   </span></a> * Each vendor will need to provide an implementation of this interface 
-<a name="l31"><span class="ln">31   </span></a> * which will provide the JSF implementation the necessary hooks to  
-<a name="l32"><span class="ln">32   </span></a> * perform resource injection.</span><span class="s3">&lt;/p&gt;  </span><span class="s2"> 
-<a name="l33"><span class="ln">33   </span></a> *  
-<a name="l34"><span class="ln">34   </span></a> * </span><span class="s3">&lt;p&gt;</span><span class="s2">The implementation of this interface *must* be thread-safe and must 
-<a name="l35"><span class="ln">35   </span></a> * have a no-arg constructor.</span><span class="s3">&lt;/p&gt;</span><span class="s2"> 
-<a name="l36"><span class="ln">36   </span></a> */</span><span class="s1"> 
-<a name="l37"><span class="ln">37   </span></a></span><span class="s0">public interface </span><span class="s1">InjectionProvider { 
-<a name="l38"><span class="ln">38   </span></a> 
-<a name="l39"><span class="ln">39   </span></a>    </span><span class="s2">/** 
-<a name="l40"><span class="ln">40   </span></a>     * </span><span class="s3">&lt;p&gt;</span><span class="s2">The implementation of this method must perform the following 
-<a name="l41"><span class="ln">41   </span></a>     * steps: 
-<a name="l42"><span class="ln">42   </span></a>     *    </span><span class="s3">&lt;ul&gt;</span><span class="s2"> 
-<a name="l43"><span class="ln">43   </span></a>     *        </span><span class="s3">&lt;li&gt;</span><span class="s2">Inject the supported resources per the Servlet 2.5 
-<a name="l44"><span class="ln">44   </span></a>     *           specification into the provided object</span><span class="s3">&lt;/li&gt;</span><span class="s2"> 
-<a name="l45"><span class="ln">45   </span></a>     *        </span><span class="s3">&lt;li&gt;</span><span class="s2">Inoke any method marked with the </span><span class="s3">&lt;code&gt;</span><span class="s2">@PostConstruct</span><span class="s3">&lt;/code&gt;</span><span class="s2"> 
-<a name="l46"><span class="ln">46   </span></a>     *          annotation (per the Common Annotations Specification)</span><span class="s3">&lt;/li&gt;</span><span class="s2"> 
-<a name="l47"><span class="ln">47   </span></a>     *    </span><span class="s3">&lt;/ul&gt;</span><span class="s2"> 
-<a name="l48"><span class="ln">48   </span></a>     * </span><span class="s3">&lt;/p&gt;</span><span class="s2"> 
-<a name="l49"><span class="ln">49   </span></a>     * </span><span class="s4">@param </span><span class="s2">managedBean the target managed bean 
-<a name="l50"><span class="ln">50   </span></a>     * </span><span class="s4">@throws </span><span class="s2">InjectionProviderException if an error occurs during  
-<a name="l51"><span class="ln">51   </span></a>     *  resource injection 
-<a name="l52"><span class="ln">52   </span></a>     */</span><span class="s1"> 
-<a name="l53"><span class="ln">53   </span></a>    </span><span class="s0">public void </span><span class="s1">inject(Object managedBean) </span><span class="s0">throws </span><span class="s1">InjectionProviderException; 
-<a name="l54"><span class="ln">54   </span></a> 
-<a name="l55"><span class="ln">55   </span></a>     
-<a name="l56"><span class="ln">56   </span></a>    </span><span class="s2">/** 
-<a name="l57"><span class="ln">57   </span></a>     * </span><span class="s3">&lt;p&gt;</span><span class="s2">The implemenation of this method must invoke any 
-<a name="l58"><span class="ln">58   </span></a>     * method marked with the </span><span class="s3">&lt;code&gt;</span><span class="s2">@PreDestroy</span><span class="s3">&lt;/code&gt; </span><span class="s2">annotation 
-<a name="l59"><span class="ln">59   </span></a>     * (per the Common Annotations Specification). 
-<a name="l60"><span class="ln">60   </span></a>     * </span><span class="s4">@param </span><span class="s2">managedBean the target managed bean 
-<a name="l61"><span class="ln">61   </span></a>     * </span><span class="s4">@throws </span><span class="s2">InjectionProviderException if an error occurs when invoking 
-<a name="l62"><span class="ln">62   </span></a>     *  the method annotated by the </span><span class="s3">&lt;code&gt;</span><span class="s2">@PreDestroy</span><span class="s3">&lt;/code&gt; </span><span class="s2">annotation 
-<a name="l63"><span class="ln">63   </span></a>     */</span><span class="s1"> 
-<a name="l64"><span class="ln">64   </span></a>    </span><span class="s0">public void </span><span class="s1">invokePreDestroy(Object managedBean)  
-<a name="l65"><span class="ln">65   </span></a>    </span><span class="s0">throws </span><span class="s1">InjectionProviderException; 
-<a name="l66"><span class="ln">66   </span></a>} 
-<a name="l67"><span class="ln">67   </span></a></span></pre>
-</td>
-</tr>
-</table>
-
-<a name="serialization"/>
-
-<table width="100%" style="font-size:small;border:1px solid; border-width:1px;">
-    <tr style=background-color:silver>
-       <th>SerializationProvider.java</th>
-    </tr>
-    <tr>
-       <td>        
-<pre style="font-size:medium;">
-<a name="ll1"><span class="ln">1    </span></a><span class="s0">/* 
-<a name="ll2"><span class="ln">2    </span></a> * The contents of this file are subject to the terms 
-<a name="ll3"><span class="ln">3    </span></a> * of the Common Development and Distribution License 
-<a name="ll4"><span class="ln">4    </span></a> * (the License). You may not use this file except in 
-<a name="ll5"><span class="ln">5    </span></a> * compliance with the License. 
-<a name="ll6"><span class="ln">6    </span></a> * 
-<a name="ll7"><span class="ln">7    </span></a> * You can obtain a copy of the License at 
-<a name="ll8"><span class="ln">8    </span></a> * https://javaserverfaces.dev.java.net/CDDL.html or 
-<a name="ll9"><span class="ln">9    </span></a> * legal/CDDLv1.0.txt. 
-<a name="ll10"><span class="ln">10   </span></a> * See the License for the specific language governing 
-<a name="ll11"><span class="ln">11   </span></a> * permission and limitations under the License. 
-<a name="ll12"><span class="ln">12   </span></a> * 
-<a name="ll13"><span class="ln">13   </span></a> * When distributing Covered Code, include this CDDL 
-<a name="ll14"><span class="ln">14   </span></a> * Header Notice in each file and include the License file 
-<a name="ll15"><span class="ln">15   </span></a> * at legal/CDDLv1.0.txt. 
-<a name="ll16"><span class="ln">16   </span></a> * If applicable, add the following below the CDDL Header, 
-<a name="ll17"><span class="ln">17   </span></a> * with the fields enclosed by brackets [] replaced by 
-<a name="ll18"><span class="ln">18   </span></a> * your own identifying information: 
-<a name="ll19"><span class="ln">19   </span></a> * &quot;Portions Copyrighted [year] [name of copyright owner]&quot; 
-<a name="ll20"><span class="ln">20   </span></a> * 
-<a name="ll21"><span class="ln">21   </span></a> * [Name of File] [ver.__] [Date] 
-<a name="ll22"><span class="ln">22   </span></a> * 
-<a name="ll23"><span class="ln">23   </span></a> * Copyright 2006 Sun Microsystems Inc. All Rights Reserved 
-<a name="ll24"><span class="ln">24   </span></a> */</span><span class="s1"> 
-<a name="ll25"><span class="ln">25   </span></a> 
-<a name="ll26"><span class="ln">26   </span></a></span><span class="s2">package </span><span class="s1">com.sun.faces.spi; 
-<a name="ll27"><span class="ln">27   </span></a> 
-<a name="ll28"><span class="ln">28   </span></a></span><span class="s2">import </span><span class="s1">java.io.ObjectInputStream; 
-<a name="ll29"><span class="ln">29   </span></a></span><span class="s2">import </span><span class="s1">java.io.InputStream; 
-<a name="ll30"><span class="ln">30   </span></a></span><span class="s2">import </span><span class="s1">java.io.ObjectOutputStream; 
-<a name="ll31"><span class="ln">31   </span></a></span><span class="s2">import </span><span class="s1">java.io.OutputStream; 
-<a name="ll32"><span class="ln">32   </span></a></span><span class="s2">import </span><span class="s1">java.io.IOException; 
-<a name="ll33"><span class="ln">33   </span></a> 
-<a name="ll34"><span class="ln">34   </span></a> 
-<a name="ll35"><span class="ln">35   </span></a></span><span class="s0">/** 
-<a name="ll36"><span class="ln">36   </span></a> * </span><span class="s3">&lt;p&gt;</span><span class="s0">This interface provides a mechanism to allow the use 
-<a name="ll37"><span class="ln">37   </span></a> * of alternate Java Serialization implementations.</span><span class="s3">&lt;/p&gt;</span><span class="s0"> 
-<a name="ll38"><span class="ln">38   </span></a> *  
-<a name="ll39"><span class="ln">39   </span></a> * </span><span class="s3">&lt;p&gt;</span><span class="s0">The implementation of this interface *must* be thread-safe and must 
-<a name="ll40"><span class="ln">40   </span></a> * have a no-arg constructor.</span><span class="s3">&lt;/p&gt;</span><span class="s0"> 
-<a name="ll41"><span class="ln">41   </span></a> */</span><span class="s1"> 
-<a name="ll42"><span class="ln">42   </span></a></span><span class="s2">public interface </span><span class="s1">SerializationProvider { 
-<a name="ll43"><span class="ln">43   </span></a> 
-<a name="ll44"><span class="ln">44   </span></a>    </span><span class="s0">/** 
-<a name="ll45"><span class="ln">45   </span></a>     * </span><span class="s3">&lt;p&gt;</span><span class="s0">Creates a new </span><span class="s3">&lt;code&gt;</span><span class="s0">ObjectInputStream</span><span class="s3">&lt;/code&gt; </span><span class="s0">wrapping the specified 
-<a name="ll46"><span class="ln">46   </span></a>     * </span><span class="s3">&lt;code&gt;</span><span class="s0">source</span><span class="s3">&lt;/code&gt;</span><span class="s0">.</span><span class="s3">&lt;/p&gt;</span><span class="s0"> 
-<a name="ll47"><span class="ln">47   </span></a>     *  
-<a name="ll48"><span class="ln">48   </span></a>     * </span><span class="s3">&lt;p&gt;</span><span class="s0">It's </span><span class="s3">&lt;em&gt;</span><span class="s0">extremely important</span><span class="s3">&lt;/em&gt; </span><span class="s0">that the ObjectInputStream 
-<a name="ll49"><span class="ln">49   </span></a>     * returned by this method extends the serialization implementation's ObjectInputStream  
-<a name="ll50"><span class="ln">50   </span></a>     * and overrides the {</span><span class="s4">@link </span><span class="s0">ObjectInputStream#resolveClass(java.io.ObjectStreamClass)} 
-<a name="ll51"><span class="ln">51   </span></a>     * of  to perform the following or the equivalent thereof:  
-<a name="ll52"><span class="ln">52   </span></a>     * </span><span class="s3">&lt;br&gt;</span><span class="s0"> 
-<a name="ll53"><span class="ln">53   </span></a>     * </span><span class="s3">&lt;pre&gt;</span><span class="s0"> 
-<a name="ll54"><span class="ln">54   </span></a>     *     return Class.forName(desc.getName(),true,  
-<a name="ll55"><span class="ln">55   </span></a>                Thread.currentThread().getContextClassLoader()); 
-<a name="ll56"><span class="ln">56   </span></a>     * </span><span class="s3">&lt;/pre&gt;</span><span class="s0"> 
-<a name="ll57"><span class="ln">57   </span></a>     * </span><span class="s3">&lt;br&gt;</span><span class="s0"> 
-<a name="ll58"><span class="ln">58   </span></a>     *  
-<a name="ll59"><span class="ln">59   </span></a>     * If this step isn't done, there may be problems when deserializing.</span><span class="s3">&lt;/p&gt;</span><span class="s0"> 
-<a name="ll60"><span class="ln">60   </span></a>     *  
-<a name="ll61"><span class="ln">61   </span></a>     * </span><span class="s4">@param </span><span class="s0">source the source stream from which to read the Object(s) 
-<a name="ll62"><span class="ln">62   </span></a>     *  from 
-<a name="ll63"><span class="ln">63   </span></a>     * </span><span class="s4">@return </span><span class="s0">an </span><span class="s3">&lt;code&gt;</span><span class="s0">ObjectInputStream</span><span class="s3">&lt;/code&gt;</span><span class="s0"> 
-<a name="ll64"><span class="ln">64   </span></a>     */</span><span class="s1"> 
-<a name="ll65"><span class="ln">65   </span></a>    </span><span class="s2">public </span><span class="s1">ObjectInputStream createObjectInputStream(InputStream source) 
-<a name="ll66"><span class="ln">66   </span></a>    </span><span class="s2">throws </span><span class="s1">IOException; 
-<a name="ll67"><span class="ln">67   </span></a> 
-<a name="ll68"><span class="ln">68   </span></a> 
-<a name="ll69"><span class="ln">69   </span></a>    </span><span class="s0">/** 
-<a name="ll70"><span class="ln">70   </span></a>     * </span><span class="s3">&lt;p&gt;</span><span class="s0">Creates a new </span><span class="s3">&lt;code&gt;</span><span class="s0">ObjectOutputStream</span><span class="s3">&lt;/code&gt; </span><span class="s0">wrapping the 
-<a name="ll71"><span class="ln">71   </span></a>     * specified </span><span class="s3">&lt;code&gt;</span><span class="s0">destination</span><span class="s3">&lt;/code&gt;</span><span class="s0">.</span><span class="s3">&lt;/p&gt;</span><span class="s0"> 
-<a name="ll72"><span class="ln">72   </span></a>     * </span><span class="s4">@param </span><span class="s0">destination the destination of the serialized Object(s) 
-<a name="ll73"><span class="ln">73   </span></a>     * </span><span class="s4">@return </span><span class="s0">an </span><span class="s3">&lt;code&gt;</span><span class="s0">ObjectOutputStream</span><span class="s3">&lt;/code&gt;</span><span class="s0"> 
-<a name="ll74"><span class="ln">74   </span></a>     */</span><span class="s1"> 
-<a name="ll75"><span class="ln">75   </span></a>    </span><span class="s2">public </span><span class="s1">ObjectOutputStream createObjectOutputStream(OutputStream destination) 
-<a name="ll76"><span class="ln">76   </span></a>    </span><span class="s2">throws </span><span class="s1">IOException; 
-<a name="ll77"><span class="ln">77   </span></a> 
-<a name="ll78"><span class="ln">78   </span></a> 
-<a name="ll79"><span class="ln">79   </span></a>} </span><span class="s0">// END SerializationProvider</span></pre>     
-
-</td>
-</tr>
-</table>
 
 </body>
 </html>
