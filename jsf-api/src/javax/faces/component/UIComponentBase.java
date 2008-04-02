@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.144 2007/01/29 17:56:34 rlubke Exp $
+ * $Id: UIComponentBase.java,v 1.145 2007/01/29 20:15:16 rlubke Exp $
  */
 
 /*
@@ -99,6 +99,7 @@ public abstract class UIComponentBase extends UIComponent {
      * container's class loader that is a parent to webapp class loaders,
      * references to the classes will eventually expire.</p>
      */
+    @SuppressWarnings({"CollectionWithoutInitialCapacity"})
     private static Map<Class<?>, Map<String, PropertyDescriptor>>
           descriptors =
           new WeakHashMap<Class<?>, Map<String, PropertyDescriptor>>();
@@ -1731,7 +1732,7 @@ public abstract class UIComponentBase extends UIComponent {
 
     // Private implementation of List that supports the functionality
     // required by UIComponent.getChildren()
-    private class ChildrenList extends ArrayList<UIComponent> {
+    private static class ChildrenList extends ArrayList<UIComponent> {
 
         private UIComponent component;
         
@@ -2022,7 +2023,7 @@ public abstract class UIComponentBase extends UIComponent {
 
     // Private implementation of Map that supports the functionality
     // required by UIComponent.getFacets()
-    private class FacetsMap extends HashMap<String, UIComponent> {
+    private static class FacetsMap extends HashMap<String, UIComponent> {
 
         UIComponent component;
         
@@ -2032,7 +2033,8 @@ public abstract class UIComponentBase extends UIComponent {
         
         public void clear() {
             Iterator<String> keys = keySet().iterator();
-            while (keys.hasNext()) {              
+            while (keys.hasNext()) {
+                keys.next();
                 keys.remove();
             }
             super.clear();
