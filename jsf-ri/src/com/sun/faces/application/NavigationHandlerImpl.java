@@ -1,5 +1,5 @@
 /*
- * $Id: NavigationHandlerImpl.java,v 1.6 2003/05/08 23:13:29 rkitain Exp $
+ * $Id: NavigationHandlerImpl.java,v 1.7 2003/05/10 00:54:26 rkitain Exp $
  */
 
 /*
@@ -27,6 +27,12 @@ import javax.faces.tree.TreeFactory;
 
 import org.mozilla.util.Assert;
 
+/**
+ * <p><strong>NavigationHandlerImpl</strong> is the class that implements
+ * default navigation handling. Refer to section 7.4.2 of the specification for 
+ * more details.
+ */
+ 
 public class NavigationHandlerImpl extends NavigationHandler {
 
     //
@@ -41,39 +47,54 @@ public class NavigationHandlerImpl extends NavigationHandler {
 
     private ConfigBase configBase = null;
 
-    // original list
+    /**
+     * The original (entire) list of navigation cases.
+     */
+
     private List navigationCases = null;
 
-    // overall Map containing from-tree-id key and ArrayList of ConfigNavigationCase 
-    // objects for that key; 
-    //
+    /**
+     * Overall Map containing <code>from-tree-id</code> key and <code>ArrayList</code>
+     *  of <code>ConfigNavigationCase</code> objects for that key; 
+     * The <code>from-tree-id</code> strings in this map will be stored as specified
+     * in the configuration file - some of them will have a trailing asterisk "*"
+     * signifying wild card, and some may be specified as an asterisk "*".
+     */ 
+
     private Map caseListMap = null;
 
-    // the ArrayList containing the ConfigNavigationCase objects for the from-tree-id
-    //
+    /**
+     * The List that contains the <code>ConfigNavigationCase</code> objects for a
+     * <code>from-tree-id</code>.
+     */ 
+
     private List caseList = null;
 
-    // wildcard list - contains tree id strings ending in "*"
-    //
+    /**
+     * The List that contains all tree identifier strings ending in an asterisk "*".
+     * The entries are stored without the trailing asterisk. 
+     */
+
     private List wildcardMatchList= null;
 
-
-    // Relationship Instance Variables
-
-    //
-    // Constructors and Initializers
-    //
 
     /**
      * Constructor 
      */
+
     public NavigationHandlerImpl() {
         super();
     }
 
-    // This method builds the search lists used to determine the
-    // new tree identifier.
-
+    /**
+     * This method gets all the navigation cases from the <code>ConfigBase</code>
+     * object, and builds the needed data structures used to facilitate the 
+     * search process.
+     *
+     * @param configBase The base configuration object after parsing the 
+     *        configuration file.
+     */
+ 
     public void initialize(ConfigBase configBase) {
         if (null == configBase) {
             throw new RuntimeException(Util.getExceptionMessage(Util.NULL_CONFIGURATION_ERROR_MESSAGE_ID));
@@ -82,10 +103,16 @@ public class NavigationHandlerImpl extends NavigationHandler {
         buildSearchLists();
     }
 
-    // This method uses helper methods to set the new tree identifier.
-    // If the new tree identifier could not be determined, then the original
-    // tree identifier is left alone;
- 
+    /**
+     * This method uses helper methods to set the new <code>tree</code> identifier;
+     * If the new <code>tree</code> identifier could not be determined, then the original
+     * <code>tree</code> identifier is left alone.
+     *
+     * @param context The Faces Context
+     * @param actionRef The action reference string
+     * @param outcome The outcome string
+     */
+
     public void handleNavigation(FacesContext context, String actionRef, String outcome) {
 
 
@@ -99,13 +126,17 @@ public class NavigationHandlerImpl extends NavigationHandler {
         }
     }
 
-    // This method uses helper methods to determine the new tree identifier:
-    // 1. By performing an exact match search with the current tree identifier;
-    // 2. If not found, then by searching any wild card patterns (ex: /log*)
-    // 3. And finally, if still not found, the match is performed against any
-    //    "from-tree-id" pattern of just an "*";
-    // If nothing turns up, then the current tree identifier will not change; 
- 
+    /**
+     * This method uses helper methods to determine the new <code>tree</code> identifier.
+     * Refer to section 7.4.2 of the specification for more details.
+     *
+     * @param context The Faces Context
+     * @param actionRef The action reference string
+     * @param outcome The outcome string
+     *
+     * @return The <code>tree</code> identifier. 
+     */
+
     private String getTreeId(FacesContext context, String actionRef, String outcome) {
         String nextTreeId = null;
         String treeId = context.getTree().getTreeId();
@@ -123,9 +154,18 @@ public class NavigationHandlerImpl extends NavigationHandler {
     }
 
         
-    // This method finds the List of cases for the current tree identifier;
-    // After the cases are found, then "from-action-ref" and "from-outcome" values
-    // are evaluated to determine the new tree identifier;  
+    /**
+     * This method finds the List of cases for the current <code>tree</code> identifier.
+     * After the cases are found, the <code>from-action-ref</code> and <code>from-outcome</code>
+     * values are evaluated to determine the new <code>tree</code> identifier.
+     * Refer to section 7.4.2 of the specification for more details.
+     *
+     * @param treeId  The current <code>tree</code> identifier.
+     * @param actionRef The action reference string.
+     * @param outcome The outcome string.
+     *
+     * @return The <code>tree</code> identifier.
+     */
 
     private String findExactMatch(String treeId, String actionRef, String outcome) {
         String returnTreeId = null;
@@ -151,10 +191,17 @@ public class NavigationHandlerImpl extends NavigationHandler {
         return returnTreeId;
     }
 
-    // This method traverses the wild card match List (containing "from-tree-id" strings)
-    // and finds the List of cases for each "from-tree-id"; After the cases are found,
-    // then "from-action-ref" and "from-outcome" values are evaluated to determine the
-    // new tree identifier; 
+    /**
+     * This method traverses the wild card match List (containing <code>from-tree-id</code>
+     * strings and finds the List of cases for each <code>from-tree-id</code> string.
+     * Refer to section 7.4.2 of the specification for more details.
+     *
+     * @param treeId  The current <code>tree</code> identifier.
+     * @param actionRef The action reference string.
+     * @param outcome The outcome string.
+     *
+     * @return The <code>tree</code> identifier.
+     */
 
     private String findWildCardMatch(String treeId, String actionRef, String outcome) {
         String returnTreeId = null;
@@ -196,9 +243,17 @@ public class NavigationHandlerImpl extends NavigationHandler {
         return returnTreeId;
     }
 
-    // This method will check the default match list;  Entries in this list have
-    // a fromTreeId of "*";
- 
+    /**
+     * This method will extract the cases for which a <code>from-tree-id</code> is
+     * an asterisk "*".
+     * Refer to section 7.4.2 of the specification for more details.
+     *
+     * @param actionRef The action reference string.
+     * @param outcome The outcome string.
+     *
+     * @return The <code>tree</code> identifier.
+     */
+
     private String findDefaultMatch(String actionRef, String outcome) {
         String returnTreeId = null;
 
@@ -220,9 +275,17 @@ public class NavigationHandlerImpl extends NavigationHandler {
         return returnTreeId;
     }
         
-    // This method will attempt to find the tree identifier based on action reference
-    // and outcome;
-
+    /**
+     * This method will attempt to find the <code>tree</code> identifier based on action reference
+     * and outcome.  Refer to section 7.4.2 of the specification for more details.
+     *
+     * @param caseList The list of navigation cases.
+     * @param actionRef The action reference string.
+     * @param outcome The outcome string.
+     *
+     * @return The <code>tree</code> identifier.
+     */
+     
     private String determineTreeFromActionRefOutcome(List caseList, String actionRef, String outcome) {
 
         String returnTreeId = null;
@@ -280,12 +343,17 @@ public class NavigationHandlerImpl extends NavigationHandler {
         return returnTreeId;
     }
 
-    // This method builds two search structures:
-    //     o case list Map - A Map containing all the "from-tree-id" values as 
-    //       the key, and a List of ConfigNavigationCase objects for that key; 
-    //     o wild card match list - A List of "from-tree-id" strings whose trailing
-    //       character is an "*"; The trailing "*" is removed just before it is added
-    //       to the list, and the List is sorted in descending order (longest -> shortest).
+    /**
+     * This method builds two search structures:
+     *     o case list Map - A Map containing all the <code>from-tree-id</code> values as
+     *       the key, and a List of <code>ConfigNavigationCase</code> objects for that key.
+     *     o wild card match list - A List of <code>from-tree-id</code> strings whose 
+     *       trailing character is an asterisk "*".  The trailing asterisk is removed just 
+     *       before it is added to the List, and the List is sorted in descending order
+     *       (longest -> shortest).
+     * The sorting facilitates the wild card pattern search.
+     * Refer to section 7.4.2 of the specification for more details. 
+     */
 
     private void buildSearchLists() {
         caseListMap = new HashMap();
@@ -321,10 +389,11 @@ public class NavigationHandlerImpl extends NavigationHandler {
         Collections.sort(wildcardMatchList, new SortIt());
     }
 
-    // This Comparator class will help sort the ConfigNavigationCase objects
-    // based on their "fromTreeId" properties in descending order - 
-    // largest string to smallest string.
-
+    /**
+     * This Comparator class will help sort the <code>ConfigNavigationCase</code> objects
+     * based on their <code>fromTreeId</code> properties in descending order -
+     * largest string to smallest string.
+     */
     class SortIt implements Comparator {
         public int compare(Object o1, Object o2) {
             String fromTreeId1 = (String)o1;
