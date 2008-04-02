@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigFileTestCase.java,v 1.2 2003/04/29 20:52:24 eburns Exp $
+ * $Id: ConfigFileTestCase.java,v 1.3 2003/04/30 19:05:20 rkitain Exp $
  */
 
 /*
@@ -93,10 +93,6 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
         assertNotNull(components);
         ConfigComponent ccomp1 = (ConfigComponent) components.get("Command");
         assertNotNull(ccomp1);
-        assertEquals("User Interface Command Component",
-                     ccomp1.getDescription());
-        assertEquals("User Interface Command",
-                     ccomp1.getDisplayName());
         assertEquals("Command",
                      ccomp1.getComponentType());
         assertEquals("javax.faces.component.UICommand",
@@ -112,14 +108,6 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
         assertNotNull(converters);
         ConfigConverter cc1 = (ConfigConverter) converters.get("First");
         assertNotNull(cc1);
-        assertEquals("First Converter Description",
-                     cc1.getDescription());
-        assertEquals("First Converter Display Name",
-                     cc1.getDisplayName());
-        assertEquals("firstConverter.gif",
-                     cc1.getLargeIcon());
-        assertEquals("firstConverter.jpg",
-                     cc1.getSmallIcon());
         assertEquals("First",
                      cc1.getConverterId());
         assertEquals("com.mycompany.MyFirstConverter",
@@ -128,12 +116,6 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
         ConfigAttribute cc1a1 =
             (ConfigAttribute) cc1.getAttributes().get("attr1");
         assertNotNull(cc1a1);
-        assertEquals("First Converter Attribute 1 Description",
-                     cc1a1.getDescription());
-        assertEquals("First Converter Attribute 1 Display Name",
-                     cc1a1.getDisplayName());
-        assertNull(cc1a1.getLargeIcon());
-        assertNull(cc1a1.getSmallIcon());
         assertEquals("attr1",
                      cc1a1.getAttributeName());
         assertEquals("java.lang.String",
@@ -141,14 +123,6 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
         assertEquals(0, cc1.getProperties().size());
         ConfigConverter cc2 = (ConfigConverter) converters.get("Second");
         assertNotNull(cc2);
-        assertEquals("Second Converter Description",
-                     cc2.getDescription());
-        assertEquals("Second Converter Display Name",
-                     cc2.getDisplayName());
-        assertEquals("secondConverter.gif",
-                     cc2.getLargeIcon());
-        assertEquals("secondConverter.jpg",
-                     cc2.getSmallIcon());
         assertEquals("Second",
                      cc2.getConverterId());
         assertEquals("com.mycompany.MySecondConverter",
@@ -158,12 +132,6 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
         ConfigProperty cc2p1 =
             (ConfigProperty) cc2.getProperties().get("prop1");
         assertNotNull(cc2p1);
-        assertEquals("Second Converter Property 1 Description",
-                     cc2p1.getDescription());
-        assertEquals("Second Converter Property 1 Display Name",
-                     cc2p1.getDisplayName());
-        assertNull(cc2p1.getLargeIcon());
-        assertNull(cc2p1.getSmallIcon());
         assertEquals("prop1",
                      cc2p1.getPropertyName());
         assertEquals("java.lang.String",
@@ -175,14 +143,6 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
         assertNotNull(validators);
         ConfigValidator cv1 = (ConfigValidator) validators.get("First");
         assertNotNull(cv1);
-        assertEquals("First Validator Description",
-                     cv1.getDescription());
-        assertEquals("First Validator Display Name",
-                     cv1.getDisplayName());
-        assertEquals("firstValidator.gif",
-                     cv1.getLargeIcon());
-        assertEquals("firstValidator.jpg",
-                     cv1.getSmallIcon());
         assertEquals("First",
                      cv1.getValidatorId());
         assertEquals("com.mycompany.MyFirstValidator",
@@ -191,12 +151,6 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
         ConfigAttribute cv1a1 =
             (ConfigAttribute) cv1.getAttributes().get("attr1");
         assertNotNull(cv1a1);
-        assertEquals("First Validator Attribute 1 Description",
-                     cv1a1.getDescription());
-        assertEquals("First Validator Attribute 1 Display Name",
-                     cv1a1.getDisplayName());
-        assertNull(cv1a1.getLargeIcon());
-        assertNull(cv1a1.getSmallIcon());
         assertEquals("attr1",
                      cv1a1.getAttributeName());
         assertEquals("java.lang.String",
@@ -204,14 +158,6 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
         assertEquals(0, cv1.getProperties().size());
         ConfigValidator cv2 = (ConfigValidator) validators.get("Second");
         assertNotNull(cv2);
-        assertEquals("Second Validator Description",
-                     cv2.getDescription());
-        assertEquals("Second Validator Display Name",
-                     cv2.getDisplayName());
-        assertEquals("secondValidator.gif",
-                     cv2.getLargeIcon());
-        assertEquals("secondValidator.jpg",
-                     cv2.getSmallIcon());
         assertEquals("Second",
                      cv2.getValidatorId());
         assertEquals("com.mycompany.MySecondValidator",
@@ -221,12 +167,6 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
         ConfigProperty cv2p1 =
             (ConfigProperty) cv2.getProperties().get("prop1");
         assertNotNull(cv2p1);
-        assertEquals("Second Validator Property 1 Description",
-                     cv2p1.getDescription());
-        assertEquals("Second Validator Property 1 Display Name",
-                     cv2p1.getDisplayName());
-        assertNull(cv2p1.getLargeIcon());
-        assertNull(cv2p1.getSmallIcon());
         assertEquals("prop1",
                      cv2p1.getPropertyName());
         assertEquals("java.lang.String",
