@@ -40,6 +40,9 @@
         
       </p>
 
+     <p>  This text is rendered.
+     </p>
+
     </body>
 
   </html>

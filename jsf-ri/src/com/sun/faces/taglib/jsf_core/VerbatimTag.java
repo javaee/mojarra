@@ -1,5 +1,5 @@
 /*
- * $Id: VerbatimTag.java,v 1.12 2005/05/05 20:51:27 edburns Exp $
+ * $Id: VerbatimTag.java,v 1.13 2005/06/17 15:18:47 edburns Exp $
  */
 
 /*
@@ -33,6 +33,21 @@ public class VerbatimTag extends UIComponentELTag {
         this.escape = escape;
     }
 
+    
+    /**
+     * Holds value of property rendered.
+     */
+    private ValueExpression rendered;
+
+    /**
+     * Setter for property rendered.
+     * @param rendered New value of property rendered.
+     */
+    public void setRendered(ValueExpression rendered) {
+
+        this.rendered = rendered;
+    }
+    
 
     // --------------------------------------------------------- Public Methods
 
@@ -51,9 +66,12 @@ public class VerbatimTag extends UIComponentELTag {
 
         super.setProperties(component);
         if (null != escape) {
-                component.setValueExpression("escape", escape);
+            component.setValueExpression("escape", escape);
         } else {
             component.getAttributes().put("escape", Boolean.FALSE);
+        }
+        if (null != rendered) {
+            component.setValueExpression("rendered", rendered);
         }
         component.setTransient(true);
 
@@ -77,6 +95,5 @@ public class VerbatimTag extends UIComponentELTag {
         return (getDoAfterBodyValue());
 
     }
-
 
 }

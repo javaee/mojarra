@@ -3,7 +3,7 @@
    SUN PROPRIETARY/CONFIDENTIAL.  Use is subject license terms.
 --%>
 
-<%-- $Id: verbatim_test.jsp,v 1.11 2004/05/13 01:06:08 jvisvanathan Exp $ --%>
+<%-- $Id: verbatim_test.jsp,v 1.12 2005/06/17 15:18:47 edburns Exp $ --%>
 
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
 
@@ -42,6 +42,10 @@
           The angle brackets MUST be escaped.
         </f:verbatim>
       </p>
+
+     <p><f:verbatim rendered="false">This text must not be rendered.
+        </f:verbatim>  This text is rendered.
+     </p>
 
     </body>
 
