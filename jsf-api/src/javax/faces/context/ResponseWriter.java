@@ -1,5 +1,5 @@
 /*
- * $Id: ResponseWriter.java,v 1.9 2003/08/18 22:45:24 eburns Exp $
+ * $Id: ResponseWriter.java,v 1.10 2003/08/28 23:12:24 craigmcc Exp $
  */
 
 /*
@@ -29,23 +29,31 @@ import javax.faces.component.UIComponent;
 
 public abstract class ResponseWriter extends Writer {
 
-    /**
-     * @return the content type, such as "text/html" for this
-     * ResponseWriter.  
-     *
-     */
 
+    /**
+     * <p>Return the content type (such as "text/html") for this
+     * {@link ResponseWriter}.</p>
+     */
     public abstract String getContentType();
 
-    /**
-     * @return the character encoding, such as "ISO-8859-1" for this
-     * ResponseWriter.  Please see <a
-     * href="http://www.iana.org/assignments/character-sets">the
-     * IANA</a> for a list of character encodings.
-     *
-     */
 
+    /**
+     * <p>Return the character encoding (such as "ISO-8859-1") for this
+     * {@link ResponseWriter}.  Please see <a
+     * href="http://www.iana.org/assignments/character-sets">the
+     * IANA</a> for a list of character encodings.</p>
+     */
     public abstract String getCharacterEncoding();
+
+
+    /**
+     * <p>Flush any ouput buffered by the output method to the
+     * underlying Writer or OutputStream.  This method
+     * will not flush the underlying Writer or OutputStream;  it
+     * simply clears any values buffered by this {@link ResponseWriter}.</p>
+     */
+    public abstract void flush() throws IOException;
+
 
     /**
      * <p>Write whatever text should begin a response.</p>
@@ -64,37 +72,29 @@ public abstract class ResponseWriter extends Writer {
      */
     public abstract void endDocument() throws IOException;
 
-    /**
-     * Flushes any ouput buffered by the output method to the
-     * underlying Writer or OutputStream.  This method
-     * will not flush the underlying writer or output stream;  it
-     * simply clears any values buffered by the OutputMethod.
-     */
-    public abstract void flush() throws IOException;
 
     /**
      * <p>Write the start of an element, up to and including the
      * element name.  Once this method has been called, clients can
-     * call <code>writeAttribute()</code> or <code>writeURIAttribute()</code>
-     * method to add attributes and corresponding values.  The starting
-     * element will be closed (that is, the trailing '>' character added)
+     * call the <code>writeAttribute()</code> or
+     * <code>writeURIAttribute()</code> methods to add attributes and
+     * corresponding values.  The starting element will be closed
+     * (that is, the trailing '>' character added)
      * on any subsequent call to <code>startElement()</code>,
      * <code>writeComment()</code>,
      * <code>writeText()</code>, <code>endElement()</code>, or
      * <code>endDocument()</code>.</p>
      *
      * @param name Name of the element to be started
-     *
-     * @param componentForElement May be <code>null</code>.  If
-     * non-<code>null</code>, must be the UIComponent instance to which
-     * this element corresponds.  
+     * @param component The {@link UIComponent} (if any) to which
+     *  this element corresponds
      *
      * @exception IOException if an input/output error occurs
      * @exception NullPointerException if <code>name</code>
      *  is <code>null</code>
      */
-    public abstract void startElement(String name, 
-				      UIComponent componentForElement) throws IOException;
+    public abstract void startElement(String name, UIComponent component)
+        throws IOException;
 
 
     /**
@@ -111,20 +111,18 @@ public abstract class ResponseWriter extends Writer {
 
 
     /**
-     * <p>Write an attribute name and corresponding value (after converting
-     * that text to a String if necessary), after escaping it properly.
+     * <p>Write an attribute name and corresponding value, after converting
+     * that text to a String (if necessary), and after performing any escaping
+     * appropriate for the markup language being rendered.
      * This method may only be called after a call to
      * <code>startElement()</code>, and before the opened element has been
      * closed.</p>
      *
      * @param name Attribute name to be added
-     *
      * @param value Attribute value to be added
-     *
-     * @param componentPropertyName May be <code>null</code>.  If
-     * non-<code>null</code>, this must be the name of the property on
-     * the {@link UIComponent} passed in to a previous call to {@link
-     * #startElement} to which this attribute corresponds.  
+     * @param property Name of the property or attribute (if any) of the
+     *  {@link UIComponent} associated with the containing element,
+     *  to which this generated attribute corresponds
      *
      * @exception IllegalStateException if this method is called when there
      *  is no currently open element
@@ -133,26 +131,23 @@ public abstract class ResponseWriter extends Writer {
      * <code>null</code>
      */
     public abstract void writeAttribute(String name, Object value, 
-					String componentPropertyName)
+					String property)
         throws IOException;
 
 
     /**
-     * <p>Write a URI attribute name and corresponding value (after converting
-     * that text to a String if necessary), after encoding it properly
-     * (for example, '%' encoded for HTML).
+     * <p>Write a URI attribute name and corresponding value, after converting
+     * that text to a String (if necessary), and after performing any encoding
+     * appropriate to the markup language being rendered.
      * This method may only be called after a call to
      * <code>startElement()</code>, and before the opened element has been
      * closed.</p>
      *
      * @param name Attribute name to be added
-     *
      * @param value Attribute value to be added
-     *
-     * @param componentPropertyName May be <code>null</code>.  If
-     * non-<code>null</code>, this must be the name of the property on
-     * the {@link UIComponent} passed in to a previous call to {@link
-     * #startElement} to which this attribute corresponds.  
+     * @param property Name of the property or attribute (if any) of the
+     *  {@link UIComponent} associated with the containing element,
+     *  to which this generated attribute corresponds
      *
      * @exception IllegalStateException if this method is called when there
      *  is no currently open element
@@ -161,18 +156,16 @@ public abstract class ResponseWriter extends Writer {
      * <code>null</code>
      */
     public abstract void writeURIAttribute(String name, Object value, 
-					   String componentPropertyName)
+					   String property)
         throws IOException;
 
 
     /**
      * <p>Write a comment containing the specified text, after converting
-     * that text to a String if necessary.  If there is an open element
-     * that has been created by a call to <code>startElement()</code>,
-     * that element will be closed first.</p>
-     *
-     * <p>All angle bracket occurrences in the argument must be escaped
-     * using the &amp;gt; &amp;lt; syntax.</p>
+     * that text to a String (if necessary), and after performing any escaping
+     * appropriate for the markup language being rendered.  If there is
+     * an open element that has been created by a call to
+     * <code>startElement()</code>, that element will be closed first.</p>
      *
      * @param comment Text content of the comment
      *
@@ -184,36 +177,30 @@ public abstract class ResponseWriter extends Writer {
 
 
     /**
-     * <p>Write an object (after converting it to a String, if necessary),
-     * after escaping it properly.  If there is an open element
-     * that has been created by a call to <code>startElement()</code>,
-     * that element will be closed first.</p>
-     *
-     * <p>All angle bracket occurrences in the argument must be escaped
-     * using the &amp;gt; &amp;lt; syntax.</p>
+     * <p>Write an object, after converting it to a String (if necessary),
+     * and after performing any escaping appropriate for the markup language
+     * being rendered.  If there is an open element that has been created
+     * by a call to <code>startElement()</code>, that element will be closed
+     * first.</p>
      *
      * @param text Text to be written
+     * @param property Name of the property or attribute (if any) of the
+     *  {@link UIComponent} associated with the containing element,
+     *  to which this generated text corresponds
      * 
-     * @param componentPropertyName May be <code>null</code>.  If
-     * non-<code>null</code>, this is the name of the property in the
-     * associated component to which this piece of text applies.
-     *
      * @exception IOException if an input/output error occurs
      * @exception NullPointerException if <code>text</code>
      *  is <code>null</code>
      */
-    public abstract void writeText(Object text, 
-				   String componentPropertyName) throws IOException;
+    public abstract void writeText(Object text, String property)
+        throws IOException;
 
 
     /**
-     * <p>Write text from a character array, after escaping it properly
-     * for this method.  If there is an open element that has been
-     * created by a call to <code>startElement()</code>, that element
-     * will be closed first.</p>
-     *
-     * <p>All angle bracket occurrences in the argument must be escaped
-     * using the &amp;gt; &amp;lt; syntax.</p>
+     * <p>Write text from a character array, after any performing any
+     * escaping appropriate for the markup language being rendered.
+     * If there is an open element that has been created by a call to
+     * <code>startElement()</code>, that element will be closed first.</p>
      *
      * @param text Text to be written
      * @param off Starting offset (zero-relative)
@@ -228,10 +215,14 @@ public abstract class ResponseWriter extends Writer {
     public abstract void writeText(char text[], int off, int len)
         throws IOException;
 
+
     /**
-     * Creates a new instance of this ResponseWriter, using a different
-     * Writer.
+     * <p>Create and return a new instance of this {@link ResponseWriter},
+     * using the specified <code>Writer</code> as the output destination.</p>
+     *
+     * @param writer The <code>Writer</code> that is the output destination
      */
     public abstract ResponseWriter cloneWithWriter(Writer writer);
+
 
 }
