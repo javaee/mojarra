@@ -3,7 +3,7 @@
  SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 -->
 
-<%-- $Id: UIOutput.jsp,v 1.1 2003/07/17 02:58:43 rlubke Exp $ --%>
+<%-- $Id: UIOutput.jsp,v 1.2 2003/08/19 21:36:50 horwat Exp $ --%>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
@@ -34,7 +34,7 @@
          <h:command_button id="standardRenderKitSubmit" 
              action="success"
              key="standardRenderKitSubmitLabel"
-             bundle="${standardBundle}">
+             bundle="standardBundle">
          </h:command_button>
 
          <table width="100%" border="1" cellpadding="3" cellspacing="3">
@@ -70,7 +70,7 @@
          <h:command_button id="standardRenderKitSubmit1" 
              action="success"
              key="standardRenderKitSubmitLabel"
-             bundle="${standardBundle}">
+             bundle="standardBundle">
          </h:command_button>
 
        </h:form>

@@ -116,7 +116,7 @@
              <td>
 
                <h:output_number id="output_number5" numberStyle="integer"
-                                 valueRef="${LoginBean.char}" />
+                                 valueRef="LoginBean.char" />
              </td>
 
               <td>
