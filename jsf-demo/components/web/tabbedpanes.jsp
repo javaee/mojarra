@@ -59,12 +59,11 @@
 <html>
 <head>
   <title>Demonstration Components - Tabbed Panes</title>
-  <d:stylesheet path="/stylesheet.css"/>
 </head>
 <body bgcolor="white">
 
 <h:form formName="tabbedForm" bundle="demoBundle">
-
+     <d:stylesheet path="/stylesheet.css"/>
 Powered by Faces components:
 
 <d:pane_tabbed id="tabcontrol"
@@ -122,9 +121,8 @@ Powered by Faces components:
       <d:pane_tablabel label="T a b 3" commandName="third"/>
     </f:facet>
 
-    <h:panel_group>
-      <jsp:include page="tabbedpanes3.jsp" flush="false"/>
-    </h:panel_group>
+    <!-- PENDING (visvan) need to get this working with jsp:include -->
+    <%@ include file="tabbedpanes3.jsp" %>
 
   </d:pane_tab>
 
