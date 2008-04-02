@@ -1,5 +1,5 @@
 /*
- * $Id: UIViewRoot.java,v 1.2 2003/09/25 07:50:06 craigmcc Exp $
+ * $Id: UIViewRoot.java,v 1.3 2003/09/25 07:56:14 craigmcc Exp $
  */
 
 /*
@@ -12,6 +12,7 @@ package javax.faces.component;
 
 import java.io.IOException;
 import javax.faces.context.FacesContext;
+import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
 
 

@@ -1,5 +1,5 @@
 /*
- * $Id: UIForm.java,v 1.31 2003/09/25 07:50:03 craigmcc Exp $
+ * $Id: UIForm.java,v 1.32 2003/09/25 07:56:13 craigmcc Exp $
  */
 
 /*
@@ -212,7 +212,7 @@ public class UIForm extends UIComponentBase implements NamingContainer {
 
 
     /**
-     * <p>Override {@link UIComponent.saveState} to call
+     * <p>Override <code>saveState()</code> to call
      * <code>setSubmitted(false)</code>.</p>
      */
     public Object saveState(FacesContext context) {

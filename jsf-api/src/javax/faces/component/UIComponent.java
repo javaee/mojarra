@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.99 2003/09/25 07:50:01 craigmcc Exp $
+ * $Id: UIComponent.java,v 1.100 2003/09/25 07:56:13 craigmcc Exp $
  */
 
 /*
@@ -31,11 +31,11 @@ import javax.faces.render.Renderer;
  * the entire content of the request or response.</p>
  *
  * <p>For the convenience of component developers,
- * {@link javax.faces.component.base.UIComponentBase} provides the default
+ * {@link UIComponentBase} provides the default
  * behavior that is specified for a {@link UIComponent}, and is the base class
  * for all of the concrete {@link UIComponent} "base" implementations.
  * Component writers are encouraged to subclass
- * {@link javax.faces.component.UIComponentBase}, instead of directly
+ * {@link UIComponentBase}, instead of directly
  * implementing this abstract class, to reduce the impact of any future changes
  * to the method signatures.</p>
  */
