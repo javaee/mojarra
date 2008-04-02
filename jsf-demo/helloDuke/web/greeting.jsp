@@ -49,7 +49,7 @@
   	<h:input_text id="username"
 			valueRef="UserNameBean.userName"/>
   	<h:command_button id="submit" action="success" label="Submit" 
-		          commandName="submit" />
+		          type="submit" />
     </h:form>
     </f:use_faces>
 </HTML>  

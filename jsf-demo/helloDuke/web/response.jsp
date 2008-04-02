@@ -46,7 +46,7 @@
     <h2>Hi, <h:output_text id="userLabel"
 			   valueRef="UserNameBean.userName" /> </h2>
 	 <h:command_button id="back" label="Back" action="success" 
-                           commandName="back" />
+                           />
          <p>
     </h:form>
     </f:use_faces>
