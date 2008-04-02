@@ -1,5 +1,5 @@
 /*
- * $Id: ValidateLengthTag.java,v 1.4 2003/12/17 15:14:14 rkitain Exp $
+ * $Id: ValidateLengthTag.java,v 1.5 2004/01/27 21:04:43 eburns Exp $
  */
 
 /*
@@ -54,7 +54,7 @@ protected int minimum = 0;
 public ValidateLengthTag()
 {
     super();
-    super.setValidatorId("Length");
+    super.setValidatorId("javax.faces.Length");
 }
 
 //

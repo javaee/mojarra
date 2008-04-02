@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigRenderKit.java,v 1.4 2004/01/20 04:51:44 eburns Exp $
+ * $Id: ConfigRenderKit.java,v 1.5 2004/01/27 21:04:08 eburns Exp $
  */
 
 /*

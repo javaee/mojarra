@@ -15,7 +15,7 @@
 
 
   
-<form id="basicForm" method="post" action="/test/faces/TestRenderResponsePhase.jsp;jsessionid=1D0B8E64B3EF6DD0CF6FD62695C0D516" class="formClass" title="basicForm" accept="html,wml">
+<form id="basicForm" method="post" action="/test/faces/TestRenderResponsePhase.jsp;jsessionid=48C4D526810CF3A1445F4DE3BF0B8D54" class="formClass" accept="html,wml" enctype="application/x-www-form-urlencoded" title="basicForm">
 
 
   <TABLE BORDER="1">
@@ -46,10 +46,10 @@
                     
                     
 
-                <table id="basicForm:logonPanel1" title="Grid with hardcoded data" border="1" cellspacing="3" cellpadding="3" summary="Grid with hardcoded data">
+                <table id="basicForm:logonPanel1" border="1" cellpadding="3" cellspacing="3" summary="Grid with hardcoded data" title="Grid with hardcoded data">
 <tbody>
 <tr>
-<td><span id="basicForm:formHeader2"><span id="basicForm:A2">Logon&amp;nbsp;</span><span id="basicForm:B2">Form</span></span></td>
+<td><span id="basicForm:formHeader2"><span id="basicForm:A2">Logon&nbsp;</span><span id="basicForm:B2">Form</span></span></td>
 <td><span id="basicForm:text1">Username:</span></td>
 </tr>
 <tr>
@@ -95,10 +95,7 @@
 
 	<TD>
 
-	      
-                 
-                
-              <a id="basicForm:link" href="#" onclick="document.forms['basicForm']['basicForm:link'].value='basicForm:link'; document.forms['basicForm'].submit()" class="hyperlinkClass">link text with localized outputMessage with &euro;</a>
+	      <a id="basicForm:link" href="#" onclick="document.forms['basicForm']['basicForm:link'].value='basicForm:link'; document.forms['basicForm'].submit()" class="hyperlinkClass">link text with localized outputMessage with &euro;</a>
 
 	</TD>
 
@@ -108,31 +105,24 @@
 
 	<TD>
 
-	      
-                
-              <a id="basicForm:imageLink" href="#" onclick="document.forms['basicForm']['basicForm:imageLink'].value='basicForm:imageLink'; document.forms['basicForm'].submit()"><img src="duke.gif;jsessionid=1D0B8E64B3EF6DD0CF6FD62695C0D516" alt="" /></a>
+	      <a id="basicForm:imageLink" href="#" onclick="document.forms['basicForm']['basicForm:imageLink'].value='basicForm:imageLink'; document.forms['basicForm'].submit()"><img src="duke.gif;jsessionid=48C4D526810CF3A1445F4DE3BF0B8D54" alt="" /></a>
 
 	</TD>
 
         <TD> 
-            <img id="basicForm:graphicImage" src="/test/duke.gif;jsessionid=1D0B8E64B3EF6DD0CF6FD62695C0D516" usemap="#map1" ismap="ismap" alt="" /> 
+            <img id="basicForm:graphicImage" src="/test/duke.gif;jsessionid=48C4D526810CF3A1445F4DE3BF0B8D54" usemap="#map1" ismap="ismap" alt="" /> 
         </TD>
 
       </TR>
 
       <TR>
         <TD>
-            
             <a id="basicForm:commandLink" href="#" onclick="document.forms['basicForm']['basicForm:commandLink'].value='basicForm:commandLink'; document.forms['basicForm'].submit()" class="hyperlinkClass">link text</a>
        </TD>
       </TR>
 
       <TR>
         <TD>
-            
-              
-              
-              
             <a id="basicForm:commandParamLink" href="#" onclick="document.forms['basicForm']['basicForm:commandParamLink'].value='basicForm:commandParamLink';document.forms['basicForm']['name'].value='horwat';document.forms['basicForm']['value'].value='password'; document.forms['basicForm'].submit()" class="hyperlinkClass">link text</a>
         </TD>
       </TR>
@@ -145,11 +135,7 @@
 
       <TR>
         <TD>
-            
-              
-              
-              
-            <a id="basicForm:hrefParamLink" href="#" onclick="document.forms['basicForm']['basicForm:hrefParamLink'].value='basicForm:hrefParamLink';document.forms['basicForm']['name'].value='horwat';document.forms['basicForm']['value'].value='password'; document.forms['basicForm'].submit()"><img src="duke.gif;jsessionid=1D0B8E64B3EF6DD0CF6FD62695C0D516" alt="" /></a>
+            <a id="basicForm:hrefParamLink" href="#" onclick="document.forms['basicForm']['basicForm:hrefParamLink'].value='basicForm:hrefParamLink';document.forms['basicForm']['name'].value='horwat';document.forms['basicForm']['value'].value='password'; document.forms['basicForm'].submit()"><img src="duke.gif;jsessionid=48C4D526810CF3A1445F4DE3BF0B8D54" alt="" /></a>
         </TD>
       </TR>
 
@@ -157,7 +143,7 @@
 
 	<TD>
 
-	      <a id="basicForm:output_link" href="test.html;jsessionid=1D0B8E64B3EF6DD0CF6FD62695C0D516" class="hyperlinkClass">output link text</a>
+	      <a id="basicForm:outputLink" href="test.html;jsessionid=48C4D526810CF3A1445F4DE3BF0B8D54" class="hyperlinkClass">output link text</a>
 
 	</TD>
 
@@ -167,48 +153,37 @@
 
 	<TD>
 
-	      
-                
-              <a id="basicForm:output_imageLink" href="test.html;jsessionid=1D0B8E64B3EF6DD0CF6FD62695C0D516"><img src="duke.gif;jsessionid=1D0B8E64B3EF6DD0CF6FD62695C0D516" alt="" /></a>
+	      <a id="basicForm:output_imageLink" href="test.html;jsessionid=48C4D526810CF3A1445F4DE3BF0B8D54"><img src="duke.gif;jsessionid=48C4D526810CF3A1445F4DE3BF0B8D54" alt="" /></a>
 
 	</TD>
 
         <TD> 
-            <img id="basicForm:output_graphicImage" src="/test/duke.gif;jsessionid=1D0B8E64B3EF6DD0CF6FD62695C0D516" usemap="#map1" ismap="ismap" alt="" /> 
+            <img id="basicForm:output_graphicImage" src="/test/duke.gif;jsessionid=48C4D526810CF3A1445F4DE3BF0B8D54" usemap="#map1" ismap="ismap" alt="" /> 
         </TD>
 
       </TR>
 
       <TR>
         <TD>
-            
-            <a id="basicForm:output_commandLink" href="test.html;jsessionid=1D0B8E64B3EF6DD0CF6FD62695C0D516" class="hyperlinkClass">link text</a>
+            <a id="basicForm:output_commandLink" href="test.html;jsessionid=48C4D526810CF3A1445F4DE3BF0B8D54" class="hyperlinkClass">link text</a>
        </TD>
       </TR>
 
       <TR>
         <TD>
-            
-              
-              
-              
-            <a id="basicForm:output_commandParamLink" href="test.html;jsessionid=1D0B8E64B3EF6DD0CF6FD62695C0D516?name=horwat&value=password" class="hyperlinkClass">link text</a>
+            <a id="basicForm:output_commandParamLink" href="test.html;jsessionid=48C4D526810CF3A1445F4DE3BF0B8D54?name=horwat&value=password" class="hyperlinkClass">link text</a>
         </TD>
       </TR>
 
       <TR>
         <TD>
-            <a id="basicForm:output_hrefLink" href="test.html;jsessionid=1D0B8E64B3EF6DD0CF6FD62695C0D516"><img src="duke.gif"></a>
+            <a id="basicForm:output_hrefLink" href="test.html;jsessionid=48C4D526810CF3A1445F4DE3BF0B8D54"><img src="duke.gif"></a>
         </TD>
       </TR>
 
       <TR>
         <TD>
-            
-              
-              
-              
-            <a id="basicForm:output_hrefParamLink" href="test.html;jsessionid=1D0B8E64B3EF6DD0CF6FD62695C0D516?name=horwat&value=password"><img src="duke.gif;jsessionid=1D0B8E64B3EF6DD0CF6FD62695C0D516" alt="" /></a>
+            <a id="basicForm:output_hrefParamLink" href="test.html;jsessionid=48C4D526810CF3A1445F4DE3BF0B8D54?name=horwat&value=password"><img src="duke.gif;jsessionid=48C4D526810CF3A1445F4DE3BF0B8D54" alt="" /></a>
         </TD>
       </TR>
 
@@ -231,7 +206,10 @@
 
 	<TD>
             
-            <input id="basicForm:checkbox1" type="checkbox" name="basicForm:checkbox1" class="selectbooleanClass" />
+            <table class="selectbooleanClass">
+	<tr>
+	</tr>
+</table>
              <label id="basicForm:labe11" for="basicForm:checkbox1">
 
                         <span id="basicForm:outputlabel">Checkbox</span>
@@ -560,7 +538,7 @@
 						
 						
 						
-					<table border="0" class="styleClass">
+					<table class="styleClass">
 	<tr>
 <td>
 <label for="basicForm:ManyApples3" class="enabledClass"><input name="basicForm:ManyApples3" value="0" type="checkbox" accesskey="A" tabindex="3"> zero</input></label></td>
@@ -608,7 +586,7 @@ text
 
 <tr><td>
 
-2. You should see the &lt;i&gt;angle brackets&lt;/i&gt; on this
+2. You should not see the <i>angle brackets</i> on this
 text
 
 </td>
@@ -710,11 +688,7 @@ see the <i>angle brackets</i> on this text
 
 
 
-    
 
-
-
-      
 
   <TABLE>
 

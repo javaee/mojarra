@@ -1,5 +1,5 @@
 /*
- * $Id: TestVariableResolverImpl.java,v 1.11 2003/12/17 15:15:19 rkitain Exp $
+ * $Id: TestVariableResolverImpl.java,v 1.12 2004/01/27 21:06:01 eburns Exp $
  */
 
 /*
@@ -16,7 +16,7 @@ import com.sun.faces.util.Util;
 
 
 import com.sun.faces.application.ApplicationImpl;
-import com.sun.faces.config.ConfigManagedBean;
+import com.sun.faces.config.beans.*;
 import com.sun.faces.config.ManagedBeanFactory;
 import com.sun.faces.ServletFacesTestCase;
 import com.sun.faces.TestBean;
@@ -38,7 +38,7 @@ import javax.faces.component.UIViewRoot;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestVariableResolverImpl.java,v 1.11 2003/12/17 15:15:19 rkitain Exp $
+ * @version $Id: TestVariableResolverImpl.java,v 1.12 2004/01/27 21:06:01 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -240,7 +240,7 @@ public class TestVariableResolverImpl extends ServletFacesTestCase
     public void testManagedBean() throws Exception {
         String beanName = "com.sun.faces.TestBean";
 
-        ConfigManagedBean cmb = new ConfigManagedBean();
+        ManagedBeanBean cmb = new ManagedBeanBean();
 
         cmb.setManagedBeanClass(beanName);
         cmb.setManagedBeanScope("session");

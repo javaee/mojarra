@@ -1,5 +1,5 @@
 /*
- * $Id: ValidateRequiredTag.java,v 1.5 2003/12/17 15:14:14 rkitain Exp $
+ * $Id: ValidateRequiredTag.java,v 1.6 2004/01/27 21:04:44 eburns Exp $
  */
 
 /*
@@ -26,7 +26,7 @@ import javax.servlet.jsp.JspException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ValidateRequiredTag.java,v 1.5 2003/12/17 15:14:14 rkitain Exp $
+ * @version $Id: ValidateRequiredTag.java,v 1.6 2004/01/27 21:04:44 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -59,7 +59,7 @@ public class ValidateRequiredTag extends ValidatorTag
 public ValidateRequiredTag()
 {
     super();
-    super.setValidatorId("Required");
+    super.setValidatorId("javax.faces.Required");
 }
 
 //

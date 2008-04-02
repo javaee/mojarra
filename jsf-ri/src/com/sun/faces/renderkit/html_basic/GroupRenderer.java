@@ -1,5 +1,5 @@
 /*
- * $Id: GroupRenderer.java,v 1.15 2004/01/20 03:04:09 craigmcc Exp $
+ * $Id: GroupRenderer.java,v 1.16 2004/01/27 21:04:24 eburns Exp $
  */
 
 /*
@@ -22,7 +22,7 @@ import javax.faces.context.ResponseWriter;
  * Arbitrary grouping "renderer" that simply renders its children
  * recursively in the <code>encodeEnd()</code> method. 
  *
- * @version $Id: GroupRenderer.java,v 1.15 2004/01/20 03:04:09 craigmcc Exp $
+ * @version $Id: GroupRenderer.java,v 1.16 2004/01/27 21:04:24 eburns Exp $
  *  
  */
 public class GroupRenderer extends HtmlBasicRenderer {

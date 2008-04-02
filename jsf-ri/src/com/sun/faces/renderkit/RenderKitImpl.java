@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKitImpl.java,v 1.14 2003/12/17 15:13:48 rkitain Exp $
+ * $Id: RenderKitImpl.java,v 1.15 2004/01/27 21:04:20 eburns Exp $
  */
 
 /*
@@ -48,7 +48,7 @@ import javax.faces.render.ResponseStateManager;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: RenderKitImpl.java,v 1.14 2003/12/17 15:13:48 rkitain Exp $
+ * @version $Id: RenderKitImpl.java,v 1.15 2004/01/27 21:04:20 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -83,7 +83,7 @@ public class RenderKitImpl extends RenderKit {
 
     */
 
-    private HashMap renderersByRendererType;
+    private HashMap renderers;
     private ResponseStateManager responseStateManager = null;
 //
 // Constructors and Initializers    
@@ -91,7 +91,7 @@ public class RenderKitImpl extends RenderKit {
 
     public RenderKitImpl() {
         super();
-        renderersByRendererType = new HashMap();
+        renderers = new HashMap();
     }
 
 
@@ -107,27 +107,31 @@ public class RenderKitImpl extends RenderKit {
     // Methods From RenderKit
     //
 
-    public void addRenderer(String rendererType, Renderer renderer) {
-        if (rendererType == null || renderer == null) {
+    public void addRenderer(String family, String rendererType,
+                            Renderer renderer) {
+        if (family == null || rendererType == null || renderer == null) {
             throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
 
-        synchronized(renderersByRendererType) {
-	    renderersByRendererType.put(rendererType, renderer);
+        synchronized(renderers) {
+	    renderers.put(family + "|" + rendererType, renderer);
         }
     }
 
-    public Renderer getRenderer(String rendererType) {
+    public Renderer getRenderer(String family, String rendererType) {
 
         if (rendererType == null) {
             throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
 
-        Util.doAssert(renderersByRendererType != null);
+        Util.doAssert(renderers != null);
 
         Renderer renderer = null;
-        synchronized(renderersByRendererType) {
-            renderer = (Renderer)renderersByRendererType.get(rendererType);
+        StringBuffer sb = new StringBuffer(family);
+        sb.append("|");
+        sb.append(rendererType);
+        synchronized(renderers) {
+            renderer = (Renderer)renderers.get(sb.toString());
         }
 
         return renderer;

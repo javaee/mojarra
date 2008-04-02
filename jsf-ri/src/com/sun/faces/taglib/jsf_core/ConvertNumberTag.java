@@ -1,5 +1,5 @@
 /*
- * $Id: ConvertNumberTag.java,v 1.5 2004/01/21 01:13:09 craigmcc Exp $
+ * $Id: ConvertNumberTag.java,v 1.6 2004/01/27 21:04:42 eburns Exp $
  */
 
 /*
@@ -24,7 +24,7 @@ import com.sun.faces.util.Util;
  * javax.faces.convert.NumberConverter</p>
  *
  *
- * @version $Id: ConvertNumberTag.java,v 1.5 2004/01/21 01:13:09 craigmcc Exp $
+ * @version $Id: ConvertNumberTag.java,v 1.6 2004/01/27 21:04:42 eburns Exp $
  * 
  */
 
@@ -77,7 +77,7 @@ public class ConvertNumberTag extends ConverterTag {
     //
     public ConvertNumberTag() {
         super();
-        super.setConverterId("Number");
+        super.setConverterId("javax.faces.Number");
         init();
     }
 

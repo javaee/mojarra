@@ -1,5 +1,5 @@
 /*
- * $Id: MessagesRenderer.java,v 1.9 2004/01/19 18:17:08 craigmcc Exp $
+ * $Id: MessagesRenderer.java,v 1.10 2004/01/27 21:04:26 eburns Exp $
  */
 
 /*

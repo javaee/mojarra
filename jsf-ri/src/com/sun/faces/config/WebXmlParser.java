@@ -1,5 +1,5 @@
 /*
- * $Id: WebXmlParser.java,v 1.3 2003/12/17 15:13:31 rkitain Exp $
+ * $Id: WebXmlParser.java,v 1.4 2004/01/27 21:04:09 eburns Exp $
  */
 
 /*
@@ -102,8 +102,8 @@ public class WebXmlParser extends Object {
 
         // No web.xml found. Don't try and parse.
         if (url == null) {
-            if (log.isErrorEnabled()) {
-                log.error("Missing web.xml file. Cannot parse.");
+            if (log.isDebugEnabled()) {
+                log.debug("Missing web.xml file. Cannot parse.");
             }            
             return servletMappings;
         }

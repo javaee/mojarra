@@ -1,5 +1,5 @@
 /*
- * $Id: ExternalContextImpl.java,v 1.20 2004/01/16 21:31:02 craigmcc Exp $
+ * $Id: ExternalContextImpl.java,v 1.21 2004/01/27 21:04:12 eburns Exp $
  */
 
 /*
@@ -46,7 +46,7 @@ import com.sun.faces.util.Util;
  * servlet implementation.
  *
  * @author Brendan Murray
- * @version $Id: ExternalContextImpl.java,v 1.20 2004/01/16 21:31:02 craigmcc Exp $
+ * @version $Id: ExternalContextImpl.java,v 1.21 2004/01/27 21:04:12 eburns Exp $
  *
  */
 public class ExternalContextImpl extends ExternalContext {

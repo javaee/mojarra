@@ -1,53 +1,42 @@
 
 
 
-<html>
-  <head>
-    <title>Test of the Verbatim Tag</title>
-    
-    
 
 
 
 
-  </head>
+
+  <html>
+
+    <head>
+      <title>Test of the Verbatim Tag</title>
+    </head>
+
+    <body>
+
+      <h1>Test of the Verbatim Tag</h1>
+
+      <p>
+        [DEFAULT]
+          This text <b>has angle brackets</b>.
+          The angle brackets MUST NOT be escaped.
+      </p>
+
+      <p>
+        [FALSE]
+          This text <b>has angle brackets</b>.
+          The angle brackets MUST NOT be escaped.
+      </p>
+
+      <p>
+        [TRUE]
+          This text &lt;b&gt;has angle brackets&lt;/b&gt;.
+          The angle brackets MUST be escaped.
+      </p>
+
+    </body>
+
+  </html>
 
 
 
-  <body>
-    <h1>Test of the Verbatim Tag</h1>
-
-<p>
-
-    This text must be echoed verbatim <B>INCLUDING</B> any
-    <I>MARKUP</I>.  The angle brackets must be un-escaped.
-
-</p>
-
-<p>
-
-    This text must be echoed verbatim
-    <B>INCLUDING</B> any <I>MARKUP</I>.  The angle brackets must be
-    un-escaped.
-
-</p>
-
-<p>
-
-    This text must be echoed verbatim
-    &lt;B&gt;INCLUDING&lt;/B&gt; any &lt;I&gt;MARKUP&lt;/I&gt;.  The angle brackets must be
-    escaped.
-
-    <p>This text&lt;b&gt;must be escaped&lt;/b&gt;</p>
-
-</p>
-
-
-
-
-    <hr>
-  </body>
-
-
-
-</html>

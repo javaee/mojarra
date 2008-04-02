@@ -1,5 +1,5 @@
 /*
- * $Id: ValidateDoubleRangeTag.java,v 1.4 2003/12/17 15:14:14 rkitain Exp $
+ * $Id: ValidateDoubleRangeTag.java,v 1.5 2004/01/27 21:04:43 eburns Exp $
  */
 
 /*
@@ -55,7 +55,7 @@ protected double minimum = 0;
 public ValidateDoubleRangeTag()
 {
     super();
-    super.setValidatorId("DoubleRange");
+    super.setValidatorId("javax.faces.DoubleRange");
 }
 
 //

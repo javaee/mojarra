@@ -13,15 +13,15 @@
 <title>subview02</title>
 </head>
 <body>
-<h:output_text value="Begin test <c:import> with subview tag in importing page"/>
+<h:outputText value="Begin test <c:import> with subview tag in importing page"/>
 <f:subview id="foo02">
 <c:import url="foo02.jsp"/>
 </f:subview>
-<h:output_text value="subview02"/>
+<h:outputText value="subview02"/>
 <f:subview id="bar02">
 <c:import url="bar02.jsp"/>
 </f:subview>
-<h:output_text value="End test <c:import> with subview tag in importing page"/>
+<h:outputText value="End test <c:import> with subview tag in importing page"/>
 </body>
 </html>
 </f:view>

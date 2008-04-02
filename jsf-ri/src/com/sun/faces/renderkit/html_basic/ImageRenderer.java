@@ -1,5 +1,5 @@
 /*
- * $Id: ImageRenderer.java,v 1.26 2004/01/25 02:08:01 jvisvanathan Exp $
+ * $Id: ImageRenderer.java,v 1.27 2004/01/27 21:04:25 eburns Exp $
  */
 
 /*
@@ -34,7 +34,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ImageRenderer.java,v 1.26 2004/01/25 02:08:01 jvisvanathan Exp $
+ * @version $Id: ImageRenderer.java,v 1.27 2004/01/27 21:04:25 eburns Exp $
  * 
  *
  */

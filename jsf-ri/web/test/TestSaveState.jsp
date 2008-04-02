@@ -19,18 +19,18 @@
 
       <TR>
       <td>
-                    <h:input_text id="userName" 
+                    <h:inputText id="userName" 
                                      value="JavaServerFaces" >
 		     <f:validateLength minimum="6" maximum="10"/>
 		     <f:validateRequired/>
-                   </h:input_text>
+                   </h:inputText>
 
               </td>
 
 
 	<TD>
 
-	      <h:command_link id="link" href="hello.html"
+	      <h:commandLink id="link" href="hello.html"
                            styleClass="hyperlinkClass"
 				       value="link text"/>
 
@@ -42,7 +42,7 @@
 
 	<TD>
 
-            <h:selectboolean_checkbox id="validUser" 
+            <h:selectmanyCheckbox id="validUser" 
                    styleClass="selectbooleanClass"/>
 	</TD>
 
@@ -52,7 +52,7 @@
 
 	<TD>
 
-	     <h:selectone_listbox id="appleQuantity" 
+	     <h:selectoneListbox id="appleQuantity" 
                      title="Select Quantity"
                      accesskey="N" tabindex="20" >
 
@@ -60,17 +60,17 @@
                 <h:selectitem  itemValue="4" itemLabel="4" title="Four" selected="true"/>
                 <h:selectitem  itemValue="9" itemLabel="9" title="nine" />
 
-              </h:selectone_listbox>
+              </h:selectoneListbox>
 
 	</TD>
 
       </TR>
 
-					<TD><h:selectmany_menu id="ManyApples">
+					<TD><h:selectmanyMenu id="ManyApples">
 						<h:selectitem itemValue="4" itemLabel="four" selected="true" />
 						<h:selectitem itemValue="6" itemLabel="six" />
 						<h:selectitem itemValue="7" itemLabel="seven" selected="true" />
-					</h:selectmany_menu></TD>
+					</h:selectmanyMenu></TD>
 
 </tr>
 

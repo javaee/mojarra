@@ -14,12 +14,61 @@
 
     // Initialize list of Renderer types
     //
+    String families[] = {
+      "javax.faces.Command",
+      "javax.faces.Command",
+      "javax.faces.Data",
+      "javax.faces.Form",
+      "javax.faces.Graphic",
+      "javax.faces.Input",
+      "javax.faces.Input",
+      "javax.faces.Input",
+      "javax.faces.Input",
+      "javax.faces.Message",
+      "javax.faces.Messages",
+      "javax.faces.Output",
+      "javax.faces.Output",
+      "javax.faces.Output",
+      "javax.faces.Output",
+      "javax.faces.Panel",
+      "javax.faces.Panel",
+      "javax.faces.SelectBoolean",
+      "javax.faces.SelectMany",
+      "javax.faces.SelectMany",
+      "javax.faces.SelectMany",
+      "javax.faces.SelectOne",
+      "javax.faces.SelectOne",
+      "javax.faces.SelectOne"
+    };
+
     String defaultList[] = {
-        "Button","Checkbox","Data","Date","DateTime","Errors",
-        "Form","Grid","Group","Hidden","Hyperlink","Image",
-        "Label","List","Listbox","Menu","Message","Number",
-        "Radio","Secret","SelectManyCheckbox","Textarea",
-        "Text","Time"};
+      "javax.faces.Button",
+      "javax.faces.Link",
+      "javax.faces.Table",
+      "javax.faces.Form",
+      "javax.faces.Image",
+      "javax.faces.Hidden",
+      "javax.faces.Secret",
+      "javax.faces.Text",
+      "javax.faces.Textarea",
+      "javax.faces.Message",
+      "javax.faces.Messages",
+      "javax.faces.Format",
+      "javax.faces.Label",
+      "javax.faces.Link",
+      "javax.faces.Text",
+      "javax.faces.Grid",
+      "javax.faces.Group",
+      "javax.faces.Checkbox",
+      "javax.faces.Checkbox",
+      "javax.faces.Listbox",
+      "javax.faces.Menu",
+      "javax.faces.Listbox",
+      "javax.faces.Menu",
+      "javax.faces.Radio"
+      };
+
+    String customFamilies[] = {"SysTest"};
     String customList[] = {"Text"};
 
     // Acquire RenderKits and check RenderKitId(s)
@@ -56,7 +105,7 @@
 	if (renderKitId.equals(RenderKitFactory.HTML_BASIC_RENDER_KIT)) {
 	    for (int i=0; i<defaultList.length; i++) {
 	        try {
-	            renderer = rKit.getRenderer(defaultList[i]);
+	            renderer = rKit.getRenderer(families[i], defaultList[i]);
 	        } catch (IllegalArgumentException ia) {
 	            out.println("/renderkit01.jsp FAILED - renderer not found for type:"+
 		        defaultList[i]+" in renderkit 'DEFAULT'");
@@ -66,7 +115,8 @@
 	} else if (renderKitId.equals("CUSTOM")) {
 	    for (int i=0; i<customList.length; i++) {
 	        try {
-	            renderer = rKit.getRenderer(customList[i]);
+	            renderer = rKit.getRenderer(customFamilies[i],
+                                                customList[i]);
 	        } catch (IllegalArgumentException ia) {
 	            out.println("/renderkit01.jsp FAILED - renderer not found for type:"+
 		        customList[i]+" in renderkit 'CUSTOM'");

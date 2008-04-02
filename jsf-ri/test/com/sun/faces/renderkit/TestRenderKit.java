@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderKit.java,v 1.10 2004/01/20 04:51:52 eburns Exp $
+ * $Id: TestRenderKit.java,v 1.11 2004/01/27 21:06:09 eburns Exp $
  */
 
 /*
@@ -46,7 +46,7 @@ import java.io.ByteArrayOutputStream;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderKit.java,v 1.10 2004/01/20 04:51:52 eburns Exp $
+ * @version $Id: TestRenderKit.java,v 1.11 2004/01/27 21:06:09 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -101,19 +101,19 @@ public static final String CORRECT_OUTPUT_FILENAME =
 
         // 1. Verify "getRenderer()" returns a Renderer instance
         //  
-        Renderer renderer = renderKit.getRenderer("Form");
+        Renderer renderer = renderKit.getRenderer("javax.faces.Form", "javax.faces.Form");
         assertTrue(renderer instanceof FormRenderer);
 
 	// 2. Verify "getRenderer()" returns null
 	// 
-	renderer = renderKit.getRenderer("Foo");
+	renderer = renderKit.getRenderer("Foo", "Bar");
 	assertTrue(renderer == null);
 
 	// 3. Verify NPE
 	//
 	boolean exceptionThrown = false;
 	try {
-	    renderer = renderKit.getRenderer(null);
+	    renderer = renderKit.getRenderer(null, null);
 	} catch (NullPointerException e) {
 	    exceptionThrown = true;
 	}
@@ -132,14 +132,14 @@ public static final String CORRECT_OUTPUT_FILENAME =
 	// Test to see if addRenderer replaces the renderer if given
 	// the same rendererType.
 	//
-        renderKit.addRenderer("Form", formRenderer);
-	assertTrue(renderKit.getRenderer("Form") instanceof FormRenderer);
-        renderKit.addRenderer("Form", textRenderer);
-	assertTrue(renderKit.getRenderer("Form") instanceof TextRenderer);
+        renderKit.addRenderer("Form", "Form", formRenderer);
+	assertTrue(renderKit.getRenderer("Form", "Form") instanceof FormRenderer);
+        renderKit.addRenderer("Form", "Form", textRenderer);
+	assertTrue(renderKit.getRenderer("Form", "Form") instanceof TextRenderer);
 
 	bool = false;
 	try {
-	    renderKit.addRenderer(null, formRenderer);
+	    renderKit.addRenderer("BlahFamily", null, formRenderer);
 	}
 	catch (NullPointerException e) {
 	    bool = true;
@@ -148,7 +148,16 @@ public static final String CORRECT_OUTPUT_FILENAME =
 
 	bool = false;
 	try {
-	    renderKit.addRenderer("BlahRenderer", null);
+	    renderKit.addRenderer(null, "BlahRenderer", formRenderer);
+	}
+	catch (NullPointerException e) {
+	    bool = true;
+	}
+	assertTrue(bool);
+	
+	bool = false;
+	try {
+	    renderKit.addRenderer("BlahFamily", "BlahRenderer", null);
 	}
 	catch (NullPointerException e) {
 	    bool = true;

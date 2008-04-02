@@ -15,14 +15,14 @@
   pageContext.setAttribute("ford", new String("harrison"), PageContext.REQUEST_SCOPE);
 %>
 
-<h1>TLV command_button, valid 'action' expression</h1>
+<h1>TLV commandButton, valid 'action' expression</h1>
 This page should Succeed.
 <br>
 <br>
 
 <f:view>
 
-  <h:command_button value="hello" action="#{ford.go}" />
+  <h:commandButton value="hello" action="#{ford.go}" />
 
 </f:view>
 

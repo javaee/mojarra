@@ -1,5 +1,5 @@
 /*
- * $Id: AdapterPropertyResolver.java,v 1.2 2004/01/10 05:43:59 eburns Exp $
+ * $Id: AdapterPropertyResolver.java,v 1.3 2004/01/27 21:05:46 eburns Exp $
  */
 
 /*

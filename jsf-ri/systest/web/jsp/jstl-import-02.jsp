@@ -9,11 +9,11 @@
 <title>jstl-import-02</title>
 </head>
 <body>
-<h:output_text value="[A]"/>
+<h:outputText value="[A]"/>
 <c:import url="jstl-import-02a.jsp"/>
-<h:output_text value="[C]"/>
+<h:outputText value="[C]"/>
 <c:import url="jstl-import-02b.jsp"/>
-<h:output_text value="[E]"/>
+<h:outputText value="[E]"/>
 </body>
 </html>
 </f:view>

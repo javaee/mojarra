@@ -4,7 +4,7 @@
  */
 
 /**
- * $Id: TestRenderers_4.java,v 1.11 2004/01/14 21:05:11 eburns Exp $
+ * $Id: TestRenderers_4.java,v 1.12 2004/01/27 21:06:13 eburns Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -38,7 +38,7 @@ import java.util.ArrayList;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_4.java,v 1.11 2004/01/14 21:05:11 eburns Exp $
+ * @version $Id: TestRenderers_4.java,v 1.12 2004/01/27 21:06:13 eburns Exp $
  * 
  *
  */
@@ -141,7 +141,7 @@ public class TestRenderers_4 extends JspFacesTestCase {
 	
 	headerGroup = new UIPanel();
 	headerGroup.setId("header");
-	headerGroup.setRendererType("Group");
+	headerGroup.setRendererType("javax.faces.Group");
 	header1 = new UIOutput();
 	header1.setValue("header1 ");
 	headerGroup.getChildren().add(header1);
@@ -152,7 +152,7 @@ public class TestRenderers_4 extends JspFacesTestCase {
 	
 	footerGroup = new UIPanel();
 	footerGroup.setId("footer");
-	footerGroup.setRendererType("Group");
+	footerGroup.setRendererType("javax.faces.Group");
 	footer1 = new UIOutput();
 	footer1.setValue("footer1 ");
 	footerGroup.getChildren().add(footer1);
@@ -201,7 +201,7 @@ public class TestRenderers_4 extends JspFacesTestCase {
 	headerGroup = new UIPanel();
 	headerGroup.setRendered(false);
 	headerGroup.setId("header");
-	headerGroup.setRendererType("Group");
+	headerGroup.setRendererType("javax.faces.Group");
 	header1 = new UIOutput();
 	header1.setValue("header1 ");
 	headerGroup.getChildren().add(header1);
@@ -212,7 +212,7 @@ public class TestRenderers_4 extends JspFacesTestCase {
 	
 	footerGroup = new UIPanel();
 	footerGroup.setId("footer");
-	footerGroup.setRendererType("Group");
+	footerGroup.setRendererType("javax.faces.Group");
 	footer1 = new UIOutput();
 	footer1.setValue("footer1 ");
 	footerGroup.getChildren().add(footer1);

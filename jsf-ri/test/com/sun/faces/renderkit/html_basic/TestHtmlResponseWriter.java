@@ -1,5 +1,5 @@
 /*
- * $Id: TestHtmlResponseWriter.java,v 1.7 2004/01/20 04:51:54 eburns Exp $
+ * $Id: TestHtmlResponseWriter.java,v 1.8 2004/01/27 21:06:10 eburns Exp $
  */
 
 /*
@@ -38,7 +38,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestHtmlResponseWriter.java,v 1.7 2004/01/20 04:51:54 eburns Exp $
+ * @version $Id: TestHtmlResponseWriter.java,v 1.8 2004/01/27 21:06:10 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo

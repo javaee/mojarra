@@ -12,7 +12,7 @@
 [1]
 <c:if test="${param.cond}">
   [2]
-  <h:output_text id="cond" value="[3]"/>
+  <h:outputText id="cond" value="[3]"/>
   [4]
 </c:if>
 [5]

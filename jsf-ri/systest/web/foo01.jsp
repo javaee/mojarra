@@ -8,5 +8,5 @@
 <%@ taglib prefix="h" uri="http://java.sun.com/jsf/html" %>
 
 <f:subview id="foo01">
-<h:output_text value="foo01"/>
+<h:outputText value="foo01"/>
 </f:subview>

@@ -1,5 +1,5 @@
 /*
- * $Id: SelectItemsTag.java,v 1.3 2004/01/08 21:21:38 eburns Exp $
+ * $Id: SelectItemsTag.java,v 1.4 2004/01/27 21:04:43 eburns Exp $
  */
 
 /*
@@ -61,7 +61,7 @@ public class SelectItemsTag extends BaseComponentTag
         return null; 
     }
     public String getComponentType() { 
-        return "SelectItems"; 
+        return "javax.faces.SelectItems"; 
     }
 
     //

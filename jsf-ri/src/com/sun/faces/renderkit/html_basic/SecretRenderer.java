@@ -1,5 +1,5 @@
 /*
- * $Id: SecretRenderer.java,v 1.50 2004/01/14 17:13:04 eburns Exp $
+ * $Id: SecretRenderer.java,v 1.51 2004/01/27 21:04:28 eburns Exp $
  */
 
 /*

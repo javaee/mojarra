@@ -11,7 +11,7 @@
 </head>
 <body>
 
-<h1>TLV command_button, invalid 'value' expression</h1>
+<h1>TLV commandButton, invalid 'value' expression</h1>
 This page should Fail.
 <br>
 <br>
@@ -19,7 +19,7 @@ This page should Fail.
 <f:view>
 
   <p>This command button has an invalid value expression</p>
-  <h:command_button value="hello" value="#{-3"/>
+  <h:commandButton value="hello" value="#{-3"/>
 
 </f:view>
 

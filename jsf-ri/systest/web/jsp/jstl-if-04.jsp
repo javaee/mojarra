@@ -12,14 +12,14 @@
 <body>
 [1]
 <c:if test="${param.cond}">
-  <h:output_text       id="other2"  value="[2]"/>
+  <h:outputText       id="other2"  value="[2]"/>
   [3]
   <s:children id="kids">
     <s:output_verbatim id="kids4a">[4a]</s:output_verbatim>
-    <h:output_text     id="kids4b" value="[4b]"/>
+    <h:outputText     id="kids4b" value="[4b]"/>
     <s:output_verbatim id="kids4c">[4c]</s:output_verbatim>
   </s:children>
-  <h:output_text       id="other5" value="[5]"/>
+  <h:outputText       id="other5" value="[5]"/>
   [6]
 </c:if>
 [7]

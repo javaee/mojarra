@@ -14,7 +14,7 @@
 
        <f:view>
         <h:form>
-	   <h:output_text value="Thank you" style="color: blue"/> 
+	   <h:outputText value="Thank you" style="color: blue"/> 
         </h:form>
      </f:view>
 </HTML>

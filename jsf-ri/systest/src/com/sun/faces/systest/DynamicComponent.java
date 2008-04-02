@@ -1,5 +1,5 @@
 /*
- * $Id: DynamicComponent.java,v 1.3 2003/10/02 22:34:56 craigmcc Exp $
+ * $Id: DynamicComponent.java,v 1.4 2004/01/27 21:04:54 eburns Exp $
  */
 
 /*
@@ -47,6 +47,8 @@ import javax.faces.context.ResponseWriter;
 public class DynamicComponent extends UIComponentBase {
 
 
+    public static final String COMPONENT_FAMILY = "Dynamic";
+
     // ------------------------------------------------------------ Constructors
 
 
@@ -62,6 +64,12 @@ public class DynamicComponent extends UIComponentBase {
 
 
     // ----------------------------------------------------- UIComponent Methods
+
+    public String getFamily() {
+
+        return (COMPONENT_FAMILY);
+
+    }
 
 
     public boolean getRendersChildren() { return (true); }
@@ -122,7 +130,7 @@ public class DynamicComponent extends UIComponentBase {
         } else if ("create".equals(mode)) {
             UIOutput output = new UIOutput();
             output.setId(id);
-            output.setRendererType("Text");
+            output.setRendererType("javax.faces.Text");
             output.setValue(value);
             getChildren().add(output);
         } else if ("delete".equals(mode)) {

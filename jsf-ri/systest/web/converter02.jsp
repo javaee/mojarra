@@ -8,5 +8,5 @@
    numConverter.setType("currency");
 %>
 <f:view>
-    <h:output_text id="id1" value="#{test1.doubleProperty}" converter="#{numConverter}" />
+    <h:outputText id="id1" value="#{test1.doubleProperty}" converter="#{numConverter}" />
 </f:view>

@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderer.java,v 1.76 2004/01/20 03:04:09 craigmcc Exp $
+ * $Id: HtmlBasicRenderer.java,v 1.77 2004/01/27 21:04:25 eburns Exp $
  */
 
 /*

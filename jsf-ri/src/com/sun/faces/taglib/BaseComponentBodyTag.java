@@ -1,5 +1,5 @@
 /*
- * $Id: BaseComponentBodyTag.java,v 1.2 2004/01/08 21:21:35 eburns Exp $
+ * $Id: BaseComponentBodyTag.java,v 1.3 2004/01/27 21:04:38 eburns Exp $
  */
 
 /*
@@ -34,7 +34,6 @@ import javax.servlet.jsp.tagext.BodyTag;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: BaseComponentBodyTag.java,v 1.2 2004/01/08 21:21:35 eburns Exp $ 
  */
 
 public abstract class BaseComponentBodyTag extends BaseComponentTag implements BodyTag

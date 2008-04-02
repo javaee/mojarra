@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationImpl.java,v 1.39 2004/01/21 03:50:32 eburns Exp $
+ * $Id: ApplicationImpl.java,v 1.40 2004/01/27 21:04:01 eburns Exp $
  */
 
 /*
@@ -40,7 +40,7 @@ import javax.faces.event.PhaseId;
 import javax.faces.validator.Validator;
 
 import com.sun.faces.RIConstants;
-import com.sun.faces.config.ConfigNavigationCase;
+import com.sun.faces.application.ConfigNavigationCase;
 import com.sun.faces.config.ManagedBeanFactory;
 import com.sun.faces.el.MethodBindingImpl;
 import com.sun.faces.el.PropertyResolverImpl;

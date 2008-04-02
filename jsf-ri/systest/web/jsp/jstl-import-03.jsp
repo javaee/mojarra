@@ -9,7 +9,7 @@
 <title>jstl-import-03</title>
 </head>
 <body>
-<h:output_text value="[1]"/>
+<h:outputText value="[1]"/>
 <c:choose>
   <c:when test="${param.choose == 'a'}">
     <c:import url="jstl-import-03a.jsp"/>
@@ -21,7 +21,7 @@
     <c:import url="jstl-import-03c.jsp"/>
   </c:otherwise>
 </c:choose>
-<h:output_text value="[3]"/>
+<h:outputText value="[3]"/>
 </body>
 </html>
 </f:view>

@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKitFactoryImpl.java,v 1.14 2003/12/17 23:26:03 eburns Exp $
+ * $Id: RenderKitFactoryImpl.java,v 1.15 2004/01/27 21:04:20 eburns Exp $
  */
 
 /*
@@ -51,6 +51,7 @@ public class RenderKitFactoryImpl extends RenderKitFactory {
     public RenderKitFactoryImpl() {
         super();
         renderKits = new HashMap();
+	addRenderKit(HTML_BASIC_RENDER_KIT, new RenderKitImpl());
     }
     
     public void addRenderKit(String renderKitId, RenderKit renderKit) {

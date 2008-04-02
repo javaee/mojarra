@@ -1,5 +1,5 @@
 /*
- * $Id: TestNavigationHandler.java,v 1.13 2003/12/17 15:15:05 rkitain Exp $
+ * $Id: TestNavigationHandler.java,v 1.14 2004/01/27 21:05:50 eburns Exp $
  */
 
 /*
@@ -12,8 +12,7 @@
 package com.sun.faces.application;
 
 import com.sun.faces.RIConstants;
-import com.sun.faces.config.ConfigListener;
-import com.sun.faces.config.ConfigNavigationCase;
+import com.sun.faces.application.ConfigNavigationCase;
 
 import com.sun.faces.util.DebugUtil;
 
@@ -38,10 +37,9 @@ import org.apache.commons.digester.CallMethodRule;
 import org.apache.commons.digester.CallParamRule;
 import com.sun.faces.util.Util;
 
-
-
-
 import com.sun.faces.ServletFacesTestCase;
+
+import com.sun.faces.util.DebugUtil;
 
 /**
  *
@@ -54,7 +52,7 @@ import com.sun.faces.ServletFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestNavigationHandler.java,v 1.13 2003/12/17 15:15:05 rkitain Exp $
+ * @version $Id: TestNavigationHandler.java,v 1.14 2004/01/27 21:05:50 eburns Exp $
  * 
  */
 
@@ -98,7 +96,7 @@ public class TestNavigationHandler extends ServletFacesTestCase
 // General Methods
 //
     private void loadConfigFile() {
-	loadFromInitParam("WEB-INF/faces-navigation.xml");
+	loadFromInitParam("/WEB-INF/faces-navigation.xml");
     }
 
     private void loadTestResultList() {
@@ -151,6 +149,7 @@ public class TestNavigationHandler extends ServletFacesTestCase
     }
 
     public void testNavigationHandler() {
+
         ApplicationFactory aFactory = 
 	    (ApplicationFactory)FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
         Application application = (ApplicationImpl) aFactory.getApplication();

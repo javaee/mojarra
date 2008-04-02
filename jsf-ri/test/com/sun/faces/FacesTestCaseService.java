@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTestCaseService.java,v 1.33 2004/01/22 00:06:12 rkitain Exp $
+ * $Id: FacesTestCaseService.java,v 1.34 2004/01/27 21:05:47 eburns Exp $
  */
 
 /*
@@ -32,7 +32,7 @@ import javax.servlet.jsp.PageContext;
 
 import com.sun.faces.util.Util;
 import com.sun.faces.RIConstants;
-import com.sun.faces.config.ConfigListener;
+import com.sun.faces.config.ConfigureListener;
 
 import com.sun.faces.util.Util;
 
@@ -56,7 +56,7 @@ import org.apache.cactus.server.ServletContextWrapper;
  * <B>Lifetime And Scope</B> <P> Same as the JspTestCase or
  * ServletTestCase instance that uses it.
  *
- * @version $Id: FacesTestCaseService.java,v 1.33 2004/01/22 00:06:12 rkitain Exp $
+ * @version $Id: FacesTestCaseService.java,v 1.34 2004/01/27 21:05:47 eburns Exp $
  * 
  * @see	com.sun.faces.context.FacesContextFactoryImpl
  * @see	com.sun.faces.context.FacesContextImpl
@@ -192,7 +192,7 @@ public void setUp()
 			   getRequestParameterMap().get(curName));
     }
 
-    ConfigListener configListener = new ConfigListener();
+    ConfigureListener configListener = new ConfigureListener();
     ServletContextEvent e = 
         new ServletContextEvent(facesTestCase.getConfig().getServletContext());
 
@@ -210,7 +210,7 @@ public void setUp()
 public void tearDown()
 {
     // make sure this gets called!
-    ConfigListener configListener = new ConfigListener();
+    ConfigureListener configListener = new ConfigureListener();
     ServletContextEvent e = 
 	new ServletContextEvent(facesTestCase.getConfig().getServletContext());
     configListener.contextDestroyed(e);
@@ -450,7 +450,7 @@ public void loadFromInitParam(String paramValue) {
 	    }
 	};
     
-    ConfigListener configListener = new ConfigListener();
+    ConfigureListener configListener = new ConfigureListener();
     ServletContextEvent e = 
 	new ServletContextEvent(sc);
     configListener.contextInitialized(e);

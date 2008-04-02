@@ -8,7 +8,7 @@
 <title>form-input-01</title>
 </head>
 <body>
-<h:output_text id="success" value="success"/>
+<h:outputText id="success" value="success"/>
 </body>
 </html>
 </f:view>

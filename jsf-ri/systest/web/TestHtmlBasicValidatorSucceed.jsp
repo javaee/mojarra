@@ -11,16 +11,16 @@
 </head>
 <body>
 
-<h1>TLV command_button, no lable or key</h1>
+<h1>TLV commandButton, no lable or key</h1>
 This page should Succeed.
 <br>
 <br>
 
 <f:view>
 
-  <h:command_button value="hello"/>
+  <h:commandButton value="hello"/>
 
-  <h:command_button value="hello"/>
+  <h:commandButton value="hello"/>
 
 </f:view>
 

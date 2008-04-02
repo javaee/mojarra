@@ -1,5 +1,5 @@
 /*
- * $Id: DebugUtil.java,v 1.19 2004/01/08 21:21:40 eburns Exp $
+ * $Id: DebugUtil.java,v 1.20 2004/01/27 21:04:50 eburns Exp $
  */
 
 /*
@@ -24,7 +24,6 @@ import java.io.PrintStream;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: DebugUtil.java,v 1.19 2004/01/08 21:21:40 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo

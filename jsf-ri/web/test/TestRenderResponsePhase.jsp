@@ -22,37 +22,37 @@
 
       <tr>
          <td>
-                 <h:panel_grid id="logonPanel1" columns="2"
+                 <h:panelGrid id="logonPanel1" columns="2"
                     border="1" cellpadding="3" cellspacing="3"
                      summary="Grid with hardcoded data"
                      title="Grid with hardcoded data" >
 
-                     <h:panel_group id="formHeader2">
-                        <h:output_text id="A2" value="Logon&nbsp;"/>
-                        <h:output_text id="B2" value="Form"/>
-                     </h:panel_group>
+                     <h:panelGroup id="formHeader2">
+                        <h:outputText id="A2" escape="false" value="Logon&nbsp;"/>
+                        <h:outputText id="B2" value="Form"/>
+                     </h:panelGroup>
 
                    
-                    <h:output_text id="text1" value="Username:"/>
+                    <h:outputText id="text1" value="Username:"/>
                    
-                    <h:input_text id="username1" styleClass="inputClass" value="JavaServerFaces" />
+                    <h:inputText id="username1" styleClass="inputClass" value="JavaServerFaces" />
 
-                    <h:input_text id="username2" styleClass="inputClass" value="JavaServerFaces" disabled="true" />
+                    <h:inputText id="username2" styleClass="inputClass" value="JavaServerFaces" disabled="true" />
 
-                    <h:output_text id="text2" styleClass="outputClass" value="Password:"/>
+                    <h:outputText id="text2" styleClass="outputClass" value="Password:"/>
 
-                    <h:input_secret styleClass="secretClass" id="password1" />
+                    <h:inputSecret styleClass="secretClass" id="password1" />
 
-                    <h:command_button id="submit1" type="SUBMIT"
+                    <h:commandButton id="submit1" type="SUBMIT"
                         styleClass="commandClass" 
                         value="Login" >
-                    </h:command_button>
+                    </h:commandButton>
 
-                    <h:command_button id="reset1" type="RESET" 
+                    <h:commandButton id="reset1" type="RESET" 
                         value="Reset">
-                    </h:command_button>
+                    </h:commandButton>
 
-                </h:panel_grid>
+                </h:panelGrid>
              </td>
            </tr>
 
@@ -60,9 +60,9 @@
 
 	<TD>
 
-            <h:command_button id="pushButton" type="button"
+            <h:commandButton id="pushButton" type="button"
                  disabled = "true" image="duke.gif">
-            </h:command_button>
+            </h:commandButton>
 	</TD>
 
       </TR>
@@ -72,9 +72,9 @@
 
 	<TD>
 
-            <h:command_button id="imageOnlyButton" type="submit"
+            <h:commandButton id="imageOnlyButton" type="submit"
                  image="duke.gif" rendered="true"> 
-             </h:command_button>
+             </h:commandButton>
 	</TD>
 
       </TR>
@@ -83,10 +83,10 @@
 
 	<TD>
 
-	      <h:command_link id="link" styleClass="hyperlinkClass">
+	      <h:commandLink id="link" styleClass="hyperlinkClass">
                 <f:verbatim>link text with localized output</f:verbatim> 
-                <h:output_text value="#{testMessages.euroMessage}" />
-              </h:command_link>
+                <h:outputText value="#{testMessages.euroMessage}" />
+              </h:commandLink>
 
 	</TD>
 
@@ -96,48 +96,48 @@
 
 	<TD>
 
-	      <h:command_link id="imageLink">
-                <h:graphic_image url="duke.gif"/>
-              </h:command_link>
+	      <h:commandLink id="imageLink">
+                <h:graphicImage url="duke.gif"/>
+              </h:commandLink>
 
 	</TD>
 
         <TD> 
-            <h:graphic_image id="graphicImage" url="/duke.gif" ismap="true" usemap="#map1" /> 
+            <h:graphicImage id="graphicImage" url="/duke.gif" ismap="true" usemap="#map1" /> 
         </TD>
 
       </TR>
 
       <TR>
         <TD>
-            <h:command_link id="commandLink" styleClass="hyperlinkClass"><f:verbatim>link text</f:verbatim>
-            </h:command_link>
+            <h:commandLink id="commandLink" styleClass="hyperlinkClass"><f:verbatim>link text</f:verbatim>
+            </h:commandLink>
        </TD>
       </TR>
 
       <TR>
         <TD>
-            <h:command_link id="commandParamLink" styleClass="hyperlinkClass">
+            <h:commandLink id="commandParamLink" styleClass="hyperlinkClass">
               <f:verbatim>link text</f:verbatim>
               <f:param id="hlParam1" name="name" value="horwat"/>
               <f:param id="hlParam2" name="value" value="password"/>
-            </h:command_link>
+            </h:commandLink>
         </TD>
       </TR>
 
       <TR>
         <TD>
-            <h:command_link id="hrefLink"><f:verbatim escape="false"><img src="duke.gif"></f:verbatim></h:command_link>
+            <h:commandLink id="hrefLink"><f:verbatim escape="false"><img src="duke.gif"></f:verbatim></h:commandLink>
         </TD>
       </TR>
 
       <TR>
         <TD>
-            <h:command_link id="hrefParamLink">
-              <h:graphic_image url="duke.gif"/>
+            <h:commandLink id="hrefParamLink">
+              <h:graphicImage url="duke.gif"/>
               <f:param id="hlParam3" name="name" value="horwat"/>
               <f:param id="hlParam4" name="value" value="password"/>
-            </h:command_link>
+            </h:commandLink>
         </TD>
       </TR>
 
@@ -145,7 +145,7 @@
 
 	<TD>
 
-	      <h:output_link value="test.html" id="output_link" styleClass="hyperlinkClass"><f:verbatim>output link text</f:verbatim></h:output_link>
+	      <h:outputLink value="test.html" id="outputLink" styleClass="hyperlinkClass"><f:verbatim>output link text</f:verbatim></h:outputLink>
 
 	</TD>
 
@@ -155,48 +155,48 @@
 
 	<TD>
 
-	      <h:output_link value="test.html"id="output_imageLink">
-                <h:graphic_image url="duke.gif"/>
-              </h:output_link>
+	      <h:outputLink value="test.html"id="output_imageLink">
+                <h:graphicImage url="duke.gif"/>
+              </h:outputLink>
 
 	</TD>
 
         <TD> 
-            <h:graphic_image id="output_graphicImage" url="/duke.gif" ismap="true" usemap="#map1" /> 
+            <h:graphicImage id="output_graphicImage" url="/duke.gif" ismap="true" usemap="#map1" /> 
         </TD>
 
       </TR>
 
       <TR>
         <TD>
-            <h:output_link value="test.html" id="output_commandLink" styleClass="hyperlinkClass"><f:verbatim>link text</f:verbatim>
-            </h:output_link>
+            <h:outputLink value="test.html" id="output_commandLink" styleClass="hyperlinkClass"><f:verbatim>link text</f:verbatim>
+            </h:outputLink>
        </TD>
       </TR>
 
       <TR>
         <TD>
-            <h:output_link value="test.html" id="output_commandParamLink" styleClass="hyperlinkClass">
+            <h:outputLink value="test.html" id="output_commandParamLink" styleClass="hyperlinkClass">
               <f:verbatim>link text</f:verbatim>
               <f:param id="hlParam7" name="name" value="horwat"/>
               <f:param id="hlParam8" name="value" value="password"/>
-            </h:output_link>
+            </h:outputLink>
         </TD>
       </TR>
 
       <TR>
         <TD>
-            <h:output_link value="test.html" id="output_hrefLink"><f:verbatim escape="false"><img src="duke.gif"></f:verbatim></h:output_link>
+            <h:outputLink value="test.html" id="output_hrefLink"><f:verbatim escape="false"><img src="duke.gif"></f:verbatim></h:outputLink>
         </TD>
       </TR>
 
       <TR>
         <TD>
-            <h:output_link value="test.html" id="output_hrefParamLink">
-              <h:graphic_image url="duke.gif"/>
+            <h:outputLink value="test.html" id="output_hrefParamLink">
+              <h:graphicImage url="duke.gif"/>
               <f:param id="hlParam5" name="name" value="horwat"/>
               <f:param id="hlParam6" name="value" value="password"/>
-            </h:output_link>
+            </h:outputLink>
         </TD>
       </TR>
 
@@ -206,11 +206,11 @@
 
 	<TD>
               
-             <h:output_text id="outputText" value="Output Text"/>
+             <h:outputText id="outputText" value="Output Text"/>
             
-              <h:output_text id="testvisible1" value="This should not be visible"
+              <h:outputText id="testvisible1" value="This should not be visible"
                                rendered="false" />
-              <h:graphic_image id="testvisible2" url="/duke.gif" rendered="false"  />
+              <h:graphicImage id="testvisible2" url="/duke.gif" rendered="false"  />
 
 	</TD>
 
@@ -220,11 +220,11 @@
 
 	<TD>
             
-            <h:selectboolean_checkbox  id="checkbox1" rendered="true"
+            <h:selectmanyCheckbox  id="checkbox1" rendered="true"
                    styleClass="selectbooleanClass"/>
-             <h:output_label id="labe11" for="checkbox1">
-                        <h:output_text id="outputlabel" value="Checkbox"/>
-              </h:output_label>
+             <h:outputLabel id="labe11" for="checkbox1">
+                        <h:outputText id="outputlabel" value="Checkbox"/>
+              </h:outputLabel>
 	</TD>
 
       </TR>
@@ -233,7 +233,7 @@
 
 	<TD>
 
-	     <h:selectone_listbox styleClass="selectoneClass"
+	     <h:selectoneListbox styleClass="selectoneClass"
                      title="Select Quantity"
                      tabindex="20" >
 
@@ -248,7 +248,7 @@
                 <f:selectItem  itemValue="8" itemLabel="8" />
                 <f:selectItem  itemValue="9" itemLabel="9" />
 
-              </h:selectone_listbox>
+              </h:selectoneListbox>
 
 	</TD>
 
@@ -258,7 +258,7 @@
 
 	<TD>
 
-	    <h:selectone_radio id="shipType" layout="LINE_DIRECTION" 
+	    <h:selectoneRadio id="shipType" layout="LINE_DIRECTION" 
                 tabindex="3" disabledClass="disabledClass" 
                 enabledClass="enabledClass" accesskey="A" 
                 styleClass = "styleClass">
@@ -267,7 +267,7 @@
                 <f:selectItem itemValue="nextWeek" itemLabel="Next Week" />
                 <f:selectItem itemValue="nextMonth" itemLabel="Next Month" />
                  
-              </h:selectone_radio>
+              </h:selectoneRadio>
 
 	</TD>
 
@@ -276,7 +276,7 @@
       <TR>
 
 	<TD>
-            <h:selectone_radio id="verticalRadio" 
+            <h:selectoneRadio id="verticalRadio" 
                                             layout="pageDirection" border="1" >
 
                 <f:selectItem itemValue="nextDay" itemLabel="Next Day"
@@ -285,7 +285,7 @@
                         disabled="false"/>
                 <f:selectItem itemValue="nextMonth" itemLabel="Next Month" />
 
-           </h:selectone_radio>
+           </h:selectoneRadio>
 
 	</TD>
 
@@ -296,9 +296,9 @@
         <TD>Float: 
         </TD>
 
-	<TD><h:input_text value="3.1415">
-                <f:converter converterId="Float"/>
-            </h:input_text>
+	<TD><h:inputText value="3.1415">
+                <f:converter converterId="javax.faces.Float"/>
+            </h:inputText>
 	</TD>
 
       </TR>
@@ -310,10 +310,10 @@
         <TD>Date: 
         </TD>
 
-	<TD><h:input_text value="July 10, 1996"
+	<TD><h:inputText value="July 10, 1996"
                               styleClass="inputClass">
                 <f:convertDateTime dateStyle="long"/>
-            </h:input_text>
+            </h:inputText>
 	</TD>
 
       </TR>
@@ -324,11 +324,11 @@
         <TD>Disabled Date: 
         </TD>
 
-	<TD><h:input_text id="date2" value="July 11, 1996"
+	<TD><h:inputText id="date2" value="July 11, 1996"
                          readonly="true"
                         size="3" maxlength="20" tabindex="1" accesskey="D">
                 <f:convertDateTime dateStyle="long"/>
-            </h:input_text>
+            </h:inputText>
 	</TD>
 
       </TR>
@@ -338,10 +338,10 @@
         <TD>DateTime: 
         </TD>
 
-	<TD><h:input_text id="date3" 
+	<TD><h:inputText id="date3" 
                           value="Wed, Jul 10, 1996 AD at 12:31:31 PM">
                 <f:convertDateTime pattern="EEE, MMM d, yyyy G 'at' hh:mm:ss a"/>
-            </h:input_text>
+            </h:inputText>
 	</TD>
 
       </TR>
@@ -349,22 +349,22 @@
 
       <tr>
           <td>
-            <h:input_text id="testPattern" 
+            <h:inputText id="testPattern" 
                         value="9999.98765" size="3" maxlength="20" 
                         styleClass="inputClass" 
                         tabindex="2" accesskey="D">
                <f:convertNumber pattern="####"/>
-            </h:input_text>
+            </h:inputText>
               </td>
 
       </tr>
 
       <tr>
-          <td> <h:output_text styleClass="outputClass" id="percentLabel" value="OUTPUT-PERCENT" /> </td>
+          <td> <h:outputText styleClass="outputClass" id="percentLabel" value="OUTPUT-PERCENT" /> </td>
               <td>
-                   <h:output_text id="testPercent" value="45%">
+                   <h:outputText id="testPercent" value="45%">
                        <f:convertNumber type="number" pattern="#%"/>
-                   </h:output_text>
+                   </h:outputText>
               </td>
       </tr>
 
@@ -373,10 +373,10 @@
         <TD>OutputDate: 
         </TD>
 
-	<TD><h:output_text id="date4" value="July 10, 1996"
+	<TD><h:outputText id="date4" value="July 10, 1996"
                               styleClass="outputClass" >
                 <f:convertDateTime dateStyle="long"/>
-            </h:output_text>
+            </h:outputText>
 	</TD>
 
       </TR>
@@ -386,10 +386,10 @@
         <TD>OutputDateTime: 
         </TD>
 
-	<TD><h:output_text id="date5" 
+	<TD><h:outputText id="date5" 
                           value="Wed, Jul 10, 1996 AD at 12:31:31 PM">
                 <f:convertDateTime pattern="EEE, MMM d, yyyy G 'at' hh:mm:ss a"/>
-            </h:output_text>
+            </h:outputText>
 	</TD>
 
       </TR>
@@ -399,10 +399,10 @@
         <TD>InputTime: 
         </TD>
 
-	<TD><h:input_text id="date6" 
+	<TD><h:inputText id="date6" 
                           value="12:31:31 PM">
                 <f:convertDateTime timeStyle="medium"/>
-            </h:input_text>
+            </h:inputText>
 	</TD>
 
       </TR>
@@ -412,10 +412,10 @@
         <TD>OutputTime: 
         </TD>
 
-	<TD><h:output_text id="date7" 
+	<TD><h:outputText id="date7" 
                           value="12:31:31 PM">
                 <f:convertDateTime timeStyle="medium"/>
-            </h:output_text>
+            </h:outputText>
 	</TD>
 
       </TR>
@@ -424,7 +424,7 @@
 
              <td>
 
-               <h:input_text id="inputDate1" 
+               <h:inputText id="inputDate1" 
                                  value="Jan 12, 1952" 
                                  readonly="true"
                                  size="10" maxlength="20"
@@ -432,7 +432,7 @@
                                  accesskey="D" 
                                title="input_date medium readonly">
                    <f:convertDateTime dateStyle="medium"/>
-                </h:input_text>
+                </h:inputText>
 
 
              </td>
@@ -443,12 +443,12 @@
 
              <td>
 
-               <h:input_text id="inputDate2" 
+               <h:inputText id="inputDate2" 
                                  value="Jan 12, 1952" 
                                  alt="input_date medium"
                                   title="input_date medium">
                    <f:convertDateTime dateStyle="medium"/>
-                </h:input_text>
+                </h:inputText>
 
              </td>
 
@@ -458,13 +458,13 @@
 
              <td>
 
-               <h:input_text id="inputDate3" 
+               <h:inputText id="inputDate3" 
                                  value="01/12/1952" 
                                  alt="input_date short"
                                   title="input_date short">
                    
                    <f:convertDateTime dateStyle="short"/>
-                </h:input_text>
+                </h:inputText>
 
              </td>
 
@@ -474,14 +474,14 @@
 
              <td>
 
-               <h:input_text id="inputDate4"  
+               <h:inputText id="inputDate4"  
                                  value="January 12, 1952" 
                                  size="20" maxlength="40"
                                  alt="input_date long"
                                  accesskey="d"
                                title="input_date long">
                    <f:convertDateTime dateStyle="long"/>
-                </h:input_text>
+                </h:inputText>
 
 
              </td>
@@ -490,7 +490,7 @@
 
 <tr>
 					<TD>Multi-select menu:</TD>
-					<TD><h:selectmany_menu id="ManyApples" styleClass="selectmanyClass">
+					<TD><h:selectmanyMenu id="ManyApples" styleClass="selectmanyClass">
 						<f:selectItem itemValue="0" itemLabel="zero" />
 						<f:selectItem itemValue="1" itemLabel="one" />
 						<f:selectItem itemValue="2" itemLabel="two" />
@@ -501,13 +501,13 @@
 						<f:selectItem itemValue="7" itemLabel="seven" />
 						<f:selectItem itemValue="8" itemLabel="eight" />
 						<f:selectItem itemValue="9" itemLabel="nine" />
-					</h:selectmany_menu></TD>
+					</h:selectmanyMenu></TD>
 
 </tr>
 
 <tr>
 					<TD>Multi-select listbox:</TD>
-					<TD><h:selectmany_listbox >
+					<TD><h:selectmanyListbox >
 						<f:selectItem itemValue="0" itemLabel="zero" />
 						<f:selectItem itemValue="1" itemLabel="one" />
 						<f:selectItem itemValue="2" itemLabel="two" />
@@ -518,11 +518,11 @@
 						<f:selectItem itemValue="7" itemLabel="seven" />
 						<f:selectItem itemValue="8" itemLabel="eight" />
 						<f:selectItem itemValue="9" itemLabel="nine" />
-					</h:selectmany_listbox></TD>
+					</h:selectmanyListbox></TD>
 </tr>
 
 <tr>
-					<TD><h:selectmany_checkboxlist id="ManyApples3" 
+					<TD><h:selectmanyCheckbox id="ManyApples3" 
                                                 tabindex="3" disabledClass="disabledClass" 
                                                 styleClass="styleClass" enabledClass="enabledClass" accesskey="A">>
 						<f:selectItem itemValue="0" itemLabel="zero" disabled="true" />
@@ -535,20 +535,20 @@
 						<f:selectItem itemValue="7" itemLabel="seven" />
 						<f:selectItem itemValue="8" itemLabel="eight" />
 						<f:selectItem itemValue="9" itemLabel="nine" />
-					</h:selectmany_checkboxlist></TD>
+					</h:selectmanyCheckbox></TD>
 </tr>
 
 <tr>
 <td>
-<h:panel_group style="color:red" styleClass="walleye">
+<h:panelGroup style="color:red" styleClass="walleye">
   <f:verbatim>style this text like a red walleye</f:verbatim>
-</h:panel_group>
+</h:panelGroup>
 </td>
 </tr>
 
-<h:input_hidden value="48%" >
+<h:inputHidden value="48%" >
     <f:convertNumber type="number" pattern="#%"/>
-</h:input_hidden>
+</h:inputHidden>
 
 <tr><td>
 
@@ -560,7 +560,7 @@ text</f:verbatim>
 
 <tr><td>
 
-<f:verbatim>2. You should see the <i>angle brackets</i> on this
+<f:verbatim>2. You should not see the <i>angle brackets</i> on this
 text</f:verbatim>
 
 </td>
@@ -592,70 +592,70 @@ brackets</i> on this text</f:verbatim>
 
 <tr><td>
 
-<h:output_text escape="true" value="6. You should see the <i>angle
-brackets</i> on this text"></h:output_text>
+<h:outputText escape="true" value="6. You should see the <i>angle
+brackets</i> on this text"></h:outputText>
 
 </td>
 </tr>
 
 <tr><td>
 
-<h:output_text id="value7" value="7. You should see the <i>angle brackets</i> on
-this text"></h:output_text>
+<h:outputText id="value7" value="7. You should see the <i>angle brackets</i> on
+this text"></h:outputText>
 
 </td>
 </tr>
 
 <tr><td>
 
-<h:output_text escape="false" value="8. You should not see the <i>angle
-brackets</i> on this text"></h:output_text>
+<h:outputText escape="false" value="8. You should not see the <i>angle
+brackets</i> on this text"></h:outputText>
 
 </td>
 </tr>
 
 <tr><td>
 
-<h:output_text escape="#{SimpleBean.trueValue}" value="9. You should see
-the <i>angle brackets</i> on this text"></h:output_text>
+<h:outputText escape="#{SimpleBean.trueValue}" value="9. You should see
+the <i>angle brackets</i> on this text"></h:outputText>
 
 </td>
 </tr>
 
 <tr><td>
 
-<h:output_text escape="#{SimpleBean.falseValue}" value="10. You should not
-see the <i>angle brackets</i> on this text"></h:output_text>
+<h:outputText escape="#{SimpleBean.falseValue}" value="10. You should not
+see the <i>angle brackets</i> on this text"></h:outputText>
 
 </td>
 </tr>
 
-<h:panel_grid>
+<h:panelGrid>
 <f:subview id="subview1" rendered="false">
-   <h:output_text value="This should not be rendered" />
+   <h:outputText value="This should not be rendered" />
 </f:subview>
-</h:panel_grid>
+</h:panelGrid>
 
-<h:panel_grid>
-<h:panel_group rendered="false">
-   <h:output_text value="This should not be rendered" />
-</h:panel_group>
-</h:panel_grid>
+<h:panelGrid>
+<h:panelGroup rendered="false">
+   <h:outputText value="This should not be rendered" />
+</h:panelGroup>
+</h:panelGrid>
 
-<h:data_table>
+<h:dataTable>
 <f:subview id="subview2" rendered="false">
-   <h:output_text value="This should not be rendered" />
+   <h:outputText value="This should not be rendered" />
 </f:subview>
-</h:data_table>
+</h:dataTable>
 
 
-<h:output_link value="test.html" rendered="false">
-    <h:graphic_image url="duke.gif"/>
-</h:output_link>
+<h:outputLink value="test.html" rendered="false">
+    <h:graphicImage url="duke.gif"/>
+</h:outputLink>
 
-<h:command_link rendered="false">
-      <h:output_text value="This should not be rendered" />
-</h:command_link>
+<h:commandLink rendered="false">
+      <h:outputText value="This should not be rendered" />
+</h:commandLink>
   <TABLE>
 
 </h:form>

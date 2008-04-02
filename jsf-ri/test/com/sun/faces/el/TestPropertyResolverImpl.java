@@ -1,5 +1,5 @@
 /*
- * $Id: TestPropertyResolverImpl.java,v 1.8 2004/01/10 05:44:00 eburns Exp $
+ * $Id: TestPropertyResolverImpl.java,v 1.9 2004/01/27 21:06:00 eburns Exp $
  */
 
 /*
@@ -38,7 +38,7 @@ import java.util.List;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestPropertyResolverImpl.java,v 1.8 2004/01/10 05:44:00 eburns Exp $
+ * @version $Id: TestPropertyResolverImpl.java,v 1.9 2004/01/27 21:06:00 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo

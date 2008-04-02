@@ -1,5 +1,5 @@
 /*
- * $Id: CommandLinkRenderer.java,v 1.9 2004/01/17 01:21:38 jvisvanathan Exp $
+ * $Id: CommandLinkRenderer.java,v 1.10 2004/01/27 21:04:23 eburns Exp $
  */
 
 /*
@@ -36,7 +36,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: CommandLinkRenderer.java,v 1.9 2004/01/17 01:21:38 jvisvanathan Exp $
+ * @version $Id: CommandLinkRenderer.java,v 1.10 2004/01/27 21:04:23 eburns Exp $
  */
 
 public class CommandLinkRenderer extends HtmlBasicRenderer {

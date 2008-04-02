@@ -15,7 +15,7 @@
   pageContext.setAttribute("ford", new String("harrison"), PageContext.REQUEST_SCOPE);
 %>
 
-<h1>TLV command_button, invalid 'binding' expression</h1>
+<h1>TLV commandButton, invalid 'binding' expression</h1>
 This page should Fail.
 <br>
 <br>
@@ -23,7 +23,7 @@ This page should Fail.
 <f:view>
 
   <p>This command button has an invalid component expression</p>
-  <h:command_button value="hello" binding=".ford"/>
+  <h:commandButton value="hello" binding=".ford"/>
 
 </f:view>
 

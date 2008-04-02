@@ -1,5 +1,5 @@
 /* 
- * $Id: StateManagerImpl.java,v 1.13 2004/01/22 20:13:43 jvisvanathan Exp $ 
+ * $Id: StateManagerImpl.java,v 1.14 2004/01/27 21:04:02 eburns Exp $ 
  */ 
 
 
@@ -36,7 +36,7 @@ import org.apache.commons.logging.LogFactory;
 /** 
  * <B>StateManagerImpl</B> is the default implementation class for
  * StateManager.
- * @version $Id: StateManagerImpl.java,v 1.13 2004/01/22 20:13:43 jvisvanathan Exp $ 
+ * @version $Id: StateManagerImpl.java,v 1.14 2004/01/27 21:04:02 eburns Exp $ 
  * 
  * @see javax.faces.application.ViewHandler 
  * 

@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_1.java,v 1.55 2004/01/25 02:08:03 jvisvanathan Exp $
+ * $Id: TestRenderers_1.java,v 1.56 2004/01/27 21:06:11 eburns Exp $
  */
 
 /*
@@ -55,7 +55,7 @@ import com.sun.faces.renderkit.html_basic.RadioRenderer;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_1.java,v 1.55 2004/01/25 02:08:03 jvisvanathan Exp $
+ * @version $Id: TestRenderers_1.java,v 1.56 2004/01/27 21:06:11 eburns Exp $
  * 
  *
  */

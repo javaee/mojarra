@@ -26,14 +26,14 @@
              value="arrayLabel_${s.index}"/>
       <c:set var="arrayProp" scope="request" value="arrayProp${s.index}"/>
       <tr>
-        <td><h:output_text id="#{arrayLabel}" value="#{arrayLabelValue}"/></td>
-        <td><h:input_text id="#{arrayProp}" value="#{val}"/></td>
+        <td><h:outputText id="#{arrayLabel}" value="#{arrayLabelValue}"/></td>
+        <td><h:inputText id="#{arrayProp}" value="#{val}"/></td>
       </tr>
     </c:forEach>
 
     <tr>
-      <td><h:command_button id="submit" type="submit" value="Submit"/></td>
-      <td><h:command_button id="reset"  type="reset"  value="Reset"/></td>
+      <td><h:commandButton id="submit" type="submit" value="Submit"/></td>
+      <td><h:commandButton id="reset"  type="reset"  value="Reset"/></td>
     </tr>
 
   </table>

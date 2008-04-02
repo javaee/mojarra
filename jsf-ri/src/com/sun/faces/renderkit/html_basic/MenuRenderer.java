@@ -4,7 +4,7 @@
  */
 
 /*
- * $Id: MenuRenderer.java,v 1.39 2004/01/14 17:13:03 eburns Exp $
+ * $Id: MenuRenderer.java,v 1.40 2004/01/27 21:04:26 eburns Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise

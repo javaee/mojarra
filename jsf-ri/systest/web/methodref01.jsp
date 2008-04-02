@@ -15,27 +15,27 @@
 
 	<hr>
 	<p>Press a button, see some text.</p>
-        <h:input_text readonly="true" id="buttonStatus" 
+        <h:inputText readonly="true" id="buttonStatus" 
                       value="#{methodRef.buttonPressedOutcome}"/>
-        <h:command_button id="button1" value="button1"
+        <h:commandButton id="button1" value="button1"
                            action="#{methodRef.button1Pressed}"/>
-        <h:command_link id="button2" action="#{methodRef.button2Pressed}">
-          <h:output_text value="button2"/>
-        </h:command_link>
-        <h:command_button id="button3" value="button3"
+        <h:commandLink id="button2" action="#{methodRef.button2Pressed}">
+          <h:outputText value="button2"/>
+        </h:commandLink>
+        <h:commandButton id="button3" value="button3"
                            actionListener="#{methodRef.button3Pressed}"/>
         <hr>
 	<p>the only valid value is batman</p>
-        <h:input_text id="toValidate" 
+        <h:inputText id="toValidate" 
                       validator="#{methodRef.validateInput}"/>
-        <h:command_button id="validate" value="validate"/>
+        <h:commandButton id="validate" value="validate"/>
         <h:message for="toValidate"/>
 
         <hr>
 	<p>test value change</p>
-        <h:input_text id="toChange" 
+        <h:inputText id="toChange" 
                       valueChangeListener="#{methodRef.valueChange}"/>
-        <h:command_button id="changeValue" value="changeValue"/>
+        <h:commandButton id="changeValue" value="changeValue"/>
       </h:form>
     </f:view>
 

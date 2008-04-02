@@ -9,7 +9,7 @@
 </head>
 <body>
 Dummy page to force resetting the component tree.
-<h:output_text id="dummy" value="DUMMY"/>
+<h:outputText id="dummy" value="DUMMY"/>
 </body>
 </html>
 </f:view>

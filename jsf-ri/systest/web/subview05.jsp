@@ -13,11 +13,11 @@
 <title>subview05</title>
 </head>
 <body>
-<h:output_text value="Begin test jsp:include with subview and iterator tag in included page"/>
+<h:outputText value="Begin test jsp:include with subview and iterator tag in included page"/>
 <br>
 <jsp:include page="subviewIterator01.jsp"/>
-<h:output_text value="Text from subview05.jsp"/>
-<h:output_text value="End test jsp:include with subview and iterator tag in included page"/>
+<h:outputText value="Text from subview05.jsp"/>
+<h:outputText value="End test jsp:include with subview and iterator tag in included page"/>
 </body>
 </html>
 </f:view>

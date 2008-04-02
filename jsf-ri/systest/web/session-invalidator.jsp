@@ -25,13 +25,13 @@
 
 	 <td>
 
-	    <h:output_text value="#{test3.stringProperty}" style="color: red"/>
+	    <h:outputText value="#{test3.stringProperty}" style="color: red"/>
 
 	 </td>
 
 	 <td>
 
-	   <h:command_button action="#{methodRef.invalidateSession}"
+	   <h:commandButton action="#{methodRef.invalidateSession}"
                           id="button1"
                           value="Press to invalidate session and redisplay" />
 

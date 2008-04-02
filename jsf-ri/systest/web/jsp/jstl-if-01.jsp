@@ -9,11 +9,11 @@
 <title>jstl-if-01</title>
 </head>
 <body>
-<h:output_text value="[First]"/>
+<h:outputText value="[First]"/>
 <c:if test="${param.cond}">
-  <h:output_text id="cond" value="[Second]"/>
+  <h:outputText id="cond" value="[Second]"/>
 </c:if>
-<h:output_text value="[Third]"/>
+<h:outputText value="[Third]"/>
 </body>
 </html>
 </f:view>

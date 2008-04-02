@@ -5,13 +5,13 @@
 
 <% try { %>
 <f:view>
-    <h:output_text id="output1"/>
-    <h:output_text />
-    <h:output_text>
+    <h:outputText id="output1"/>
+    <h:outputText />
+    <h:outputText>
        <f:facet name="facet1">
-           <h:output_text id="output1"/>
+           <h:outputText id="output1"/>
        </f:facet>
-    </h:output_text>
+    </h:outputText>
 </f:view>
 <% 
   } catch (JspException je) {

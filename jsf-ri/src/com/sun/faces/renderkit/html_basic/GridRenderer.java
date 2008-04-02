@@ -1,5 +1,5 @@
 /*
- * $Id: GridRenderer.java,v 1.26 2004/01/20 03:04:08 craigmcc Exp $
+ * $Id: GridRenderer.java,v 1.27 2004/01/27 21:04:23 eburns Exp $
  */
 
 /*
@@ -28,7 +28,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: GridRenderer.java,v 1.26 2004/01/20 03:04:08 craigmcc Exp $
+ * @version $Id: GridRenderer.java,v 1.27 2004/01/27 21:04:23 eburns Exp $
  *  
  */
 

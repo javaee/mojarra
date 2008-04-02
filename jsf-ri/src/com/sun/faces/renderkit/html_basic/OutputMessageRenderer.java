@@ -1,5 +1,5 @@
 /*
- * $Id: OutputMessageRenderer.java,v 1.5 2004/01/14 17:13:04 eburns Exp $
+ * $Id: OutputMessageRenderer.java,v 1.6 2004/01/27 21:04:27 eburns Exp $
  */
 
 /*
@@ -31,7 +31,6 @@ import com.sun.faces.util.Util;
  *  <B>OutputMessageRenderer</B> is a class that renderes UIOutput
  *
  *
- * @version $Id
  * 
  */
 

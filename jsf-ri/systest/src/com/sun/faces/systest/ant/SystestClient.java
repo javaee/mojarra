@@ -143,7 +143,7 @@ import java.util.Map;
  * </ul>
  *
  * @author Craig R. McClanahan
- * @version $Revision: 1.5 $ $Date: 2004/01/20 22:00:30 $
+ * @version $Revision: 1.6 $ $Date: 2004/01/27 21:04:55 $
  */
 
 public class SystestClient extends Task {
@@ -1162,6 +1162,7 @@ public class SystestClient extends Task {
                 String response = (String) saveResponse.get(i);
                 if (!validateIgnore(golden) && !golden.equals(response)) {
 		    response = stripJsessionidFromLine(response);
+		    golden = stripJsessionidFromLine(golden);
 		    if (!golden.equals(response)) {
 			ok = false;
 			break;

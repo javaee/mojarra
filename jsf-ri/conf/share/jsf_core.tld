@@ -53,7 +53,7 @@
         application including it is initialized by the container.
   -->
   <listener>
-    <listener-class>com.sun.faces.config.ConfigListener</listener-class>
+    <listener-class>com.sun.faces.config.ConfigureListener</listener-class>
   </listener>
 
 

@@ -9,22 +9,22 @@
 <title>jstl-choose-01</title>
 </head>
 <body>
-<h:output_text value="[1]"/>
+<h:outputText value="[1]"/>
 <c:choose>
   <c:when test="${param.choose == 'a'}">
-    <h:output_text id="comp2a" value="[2a]"/>
-    <h:output_text id="comp2z" value="[2z]"/>
+    <h:outputText id="comp2a" value="[2a]"/>
+    <h:outputText id="comp2z" value="[2z]"/>
   </c:when>
   <c:when test="${param.choose == 'b'}">
-    <h:output_text id="comp2b" value="[2b]"/>
-    <h:output_text id="comp2y" value="[2y]"/>
+    <h:outputText id="comp2b" value="[2b]"/>
+    <h:outputText id="comp2y" value="[2y]"/>
   </c:when>
   <c:otherwise>
-    <h:output_text id="comp2c" value="[2c]"/>
-    <h:output_text id="comp2x" value="[2x]"/>
+    <h:outputText id="comp2c" value="[2c]"/>
+    <h:outputText id="comp2x" value="[2x]"/>
   </c:otherwise>
 </c:choose>
-<h:output_text value="[3]"/>
+<h:outputText value="[3]"/>
 </body>
 </html>
 </f:view>

@@ -1,5 +1,5 @@
 /*
- * $Id: InvalidateSessionTestCase.java,v 1.1 2004/01/09 02:23:07 eburns Exp $
+ * $Id: InvalidateSessionTestCase.java,v 1.2 2004/01/27 21:04:53 eburns Exp $
  */
 
 /*

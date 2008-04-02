@@ -1,5 +1,5 @@
 /*
- * $Id: LabelRenderer.java,v 1.22 2004/01/14 17:13:03 eburns Exp $
+ * $Id: LabelRenderer.java,v 1.23 2004/01/27 21:04:26 eburns Exp $
  */
 
 /*

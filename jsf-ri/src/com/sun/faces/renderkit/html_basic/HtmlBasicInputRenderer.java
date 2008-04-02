@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicInputRenderer.java,v 1.17 2004/01/08 21:21:31 eburns Exp $
+ * $Id: HtmlBasicInputRenderer.java,v 1.18 2004/01/27 21:04:25 eburns Exp $
  */
 
 /*

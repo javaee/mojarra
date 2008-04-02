@@ -1,5 +1,5 @@
 /*
- * $Id: CheckboxRenderer.java,v 1.60 2004/01/14 17:13:01 eburns Exp $
+ * $Id: CheckboxRenderer.java,v 1.61 2004/01/27 21:04:22 eburns Exp $
  *
  */
 
@@ -42,7 +42,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: CheckboxRenderer.java,v 1.60 2004/01/14 17:13:01 eburns Exp $
+ * @version $Id: CheckboxRenderer.java,v 1.61 2004/01/27 21:04:22 eburns Exp $
  * 
  *
  */

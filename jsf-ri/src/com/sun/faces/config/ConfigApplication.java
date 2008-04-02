@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigApplication.java,v 1.7 2004/01/21 03:50:35 eburns Exp $
+ * $Id: ConfigApplication.java,v 1.8 2004/01/27 21:04:05 eburns Exp $
  */
 
 /*

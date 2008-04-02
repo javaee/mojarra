@@ -9,7 +9,7 @@
 <title>jsp-include-04</title>
 </head>
 <body>
-<h:output_text value="[1]"/>
+<h:outputText value="[1]"/>
 <c:choose>
   <c:when test="${param.choose == 'a'}">
     <jsp:include page="jstl-import-04a.jsp"/>
@@ -21,7 +21,7 @@
     <jsp:include page="jstl-import-04c.jsp"/>
   </c:otherwise>
 </c:choose>
-<h:output_text value="[3]"/>
+<h:outputText value="[3]"/>
 </body>
 </html>
 </f:view>

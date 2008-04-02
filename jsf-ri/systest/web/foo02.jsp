@@ -8,5 +8,5 @@
 <%@ taglib prefix="h" uri="http://java.sun.com/jsf/html" %>
 
 
-<h:output_text value="foo02"/>
+<h:outputText value="foo02"/>
 

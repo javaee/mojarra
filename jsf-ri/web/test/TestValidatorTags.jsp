@@ -22,11 +22,11 @@
 
     <td>
 
-                   <h:input_text id="outOfBounds1" value="3.1415">
+                   <h:inputText id="outOfBounds1" value="3.1415">
                        <f:convertNumber pattern="####"/>
                        <f:validateDoubleRange minimum="10.0" 
                                               maximum="10.5"/>
-                   </h:input_text>
+                   </h:inputText>
 
     </td>
 
@@ -37,11 +37,11 @@
 
     <td>
 
-                   <h:input_text id="inBounds1" value="10.25">
+                   <h:inputText id="inBounds1" value="10.25">
                      <f:convertNumber pattern="####"/>
                      <f:validateDoubleRange minimum="10.0" 
                                             maximum="10.5"/>
-                   </h:input_text>
+                   </h:inputText>
 
     </td>
 
@@ -52,9 +52,9 @@
 
     <td>
 
-                   <h:input_text id="outOfBounds2" value="fox">
+                   <h:inputText id="outOfBounds2" value="fox">
                      <f:validateLength minimum="10" maximum="11"/>
-                   </h:input_text>
+                   </h:inputText>
 
     </td>
 
@@ -65,9 +65,9 @@
 
     <td>
 
-                   <h:input_text id="inBounds2" value="alligator22">
+                   <h:inputText id="inBounds2" value="alligator22">
                      <f:validateLength minimum="10"  maximum="12"/>
-                   </h:input_text>
+                   </h:inputText>
 
     </td>
 
@@ -78,10 +78,10 @@
 
     <td>
 
-                   <h:input_text id="outOfBounds3" value="30000">
+                   <h:inputText id="outOfBounds3" value="30000">
                      <f:convertNumber  />
                      <f:validateLongRange minimum="100000" maximum="110000"/>
-                   </h:input_text>
+                   </h:inputText>
 
     </td>
 
@@ -92,10 +92,10 @@
 
     <td>
 
-                   <h:input_text id="inBounds3" value="1100">
+                   <h:inputText id="inBounds3" value="1100">
                      <f:convertNumber  />
                      <f:validateLongRange minimum="1000"  maximum="1200"/>
-                   </h:input_text>
+                   </h:inputText>
 
     </td>
 
@@ -106,7 +106,7 @@
 
     <td>
 
-                   <h:input_text id="required1" value="required" 
+                   <h:inputText id="required1" value="required" 
                                  required="true"/>
 
     </td>
@@ -118,7 +118,7 @@
 
     <td>
 
-                   <h:input_text id="required2" value="required" 
+                   <h:inputText id="required2" value="required" 
                                  required="true"/>
     </td>
 

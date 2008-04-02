@@ -24,7 +24,7 @@ This page should succeed.
     <c:set var="status" scope="request" value="${status}"/>
     <c:set var="id" scope="request" value="foo${status.index}"/>
     Array[<c:out value="${i}"/>]: 
-    <h:output_text id="#{id}" value="#{i}"/><br>
+    <h:outputText id="#{id}" value="#{i}"/><br>
   </c:forEach>
 
 </f:view>

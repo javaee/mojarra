@@ -12,7 +12,7 @@
 
   <property name="Name" value="JavaServer Faces RI"/>
   <property name="name" value="jsf-impl"/>
-  <property name="version" value="20040127"/>
+  <property name="version" value="20040127_JSFA131_BRANCH"/>
 
 <!-- ************ Per user local properties ******************************* -->
 
@@ -107,6 +107,21 @@
 
   <path id="catalina-ant.classpath">
     <pathelement location="${catalina-ant.jar}"/>
+  </path>
+
+  <path id="test.classpath">
+    <pathelement location="${build.home}/classes"/>
+    <pathelement location="${build.home}/test"/>
+    <pathelement location="${commons-beanutils.jar}"/>
+    <pathelement location="${commons-collections.jar}"/>
+    <pathelement location="${commons-digester.jar}"/>
+    <pathelement location="${commons-logging.jar}"/>
+    <pathelement location="${jsf-api.jar}"/>
+    <pathelement location="${jsp.jar}"/> 
+    <pathelement location="${jstl.jar}"/>
+    <pathelement location="${junit.jar}"/>
+    <pathelement location="${servlet.jar}"/>
+    <pathelement location="${standard.jar}"/>
   </path>
 
   <!-- Custom Tomcat Integration -->
@@ -212,16 +227,40 @@ must exist.  This is necessary for the MessageFactory class.
 
     <copy todir="${build.generate}">
 
+      <!-- Copy the configuration processing classes -->
+      <fileset dir="${jsf-tools.dir}/src">
+        <include name="com/sun/faces/config/beans/*.java"/>
+        <include name="com/sun/faces/config/rules/*.java"/>
+      </fileset>
+
+      <!-- Copy the generated tag classes and TLD -->
       <fileset dir="${jsf-tools.dir}/build/generate">
         <include name="conf/**/*.*"/>
         <include name="com/**/*.*"/>
-        <exclude name="com/sun/faces/taglib/html_basic/*_LinkTag.java"/>
       </fileset>
+  
     </copy>
 
     <touch file="${build.generate}/last-taglib-generation"/>
 
   </target>
+
+  <target         name="props"
+           description="Display resolved properties">
+
+    <echo      message="commons-beanutils.jar =   ${commons-beanutils.jar}"/>
+    <echo      message="commons-collections.jar = ${commons-collections.jar}"/>
+    <echo      message="commons-digester.jar =    ${commons-digester.jar}"/>
+    <echo      message="commons-logging.jar =     ${commons-logging.jar}"/>
+    <echo      message="jsf-api.jar =             ${jsf-api.jar}"/>
+    <echo      message="jsp.jar =                 ${jsp.jar}"/>
+    <echo      message="jstl.jar =                ${jstl.jar}"/>
+    <echo      message="junit.jar =               ${junit.jar}"/>
+    <echo      message="servlet.jar =             ${servlet.jar}"/>
+    <echo      message="standard.jar =            ${standard.jar}"/>
+
+  </target>
+
 
   <target name="compile" depends="prepare,generate,copy.template.sources"
    description="Just compile the classes">
@@ -240,8 +279,13 @@ must exist.  This is necessary for the MessageFactory class.
     <copy todir="${build.home}/classes">
         <fileset dir="${source.home}" includes="**/*.xml"/>
     </copy>
-    <copy  file="${jsf-api.dtd}"
-          todir="${build.home}/classes/com/sun/faces/config"/>
+
+    <copy todir="${build.home}/classes/com/sun/faces">
+        <fileset dir="${jsf-api.home}/doc">
+          <include name="*.dtd"/>
+          <include name="*.xml"/>
+        </fileset>
+    </copy>
 
     <copy file="${build.generate.tld}/html_basic.tld"
          toDir="${build.home}/classes/META-INF"/>
@@ -440,5 +484,114 @@ must exist.  This is necessary for the MessageFactory class.
 
 
   <target name="main" depends="jars,copy.to.tck"/>
+
+  <!--
+       ===================================================================
+         Temporary Testing Targets
+       ===================================================================
+  -->
+
+  <target name="test.compile"
+       depends="compile"
+   description="Compile standalone JUnit tests">
+
+      <mkdir             dir="${basedir}/build/test"/>
+
+      <javac          srcdir="${basedir}/test"
+                     destdir="${basedir}/build/test"
+                       debug="${compile.debug}"
+                    optimize="${compile.optimize}"
+                 deprecation="${compile.deprecation}">
+
+        <classpath     refid="test.classpath"/>
+
+        <!-- PENDING(craigmcc) -  "config" and "mock" subpackages only
+             until generators work again -->
+        <include        name="com/sun/faces/config/ConfigureListenerTestCase.java"/>
+        <include        name="com/sun/faces/config/TestComponent.java"/>
+        <include        name="com/sun/faces/config/TestConverter.java"/>
+        <include        name="com/sun/faces/config/TestRenderer.java"/>
+        <include        name="com/sun/faces/config/TestValidator.java"/>
+        <include        name="com/sun/faces/mock/*.java"/>
+
+    </javac>
+
+    <copy              todir="${basedir}/build/test">
+      <fileset           dir="${basedir}/test"
+                    includes="**/*.properties"/>
+    </copy>
+
+  </target>
+
+  <property name="log.impl"         value="org.apache.commons.logging.impl.SimpleLog"/>
+  <property name="log.level"        value="info"/> <!-- Unit test -->
+  <property name="log.digester"     value="info"/> <!-- Digester main -->
+  <property name="log.sax"          value="info"/> <!-- SAX events -->
+
+  <target name="prepare.config"
+       depends="jars"
+   description="Prepare pseudo-webapps for configuration testing">
+
+    <!-- Set up webapp "test-config-1" -->
+    <mkdir          dir="${build.home}/test-config-1"/>
+    <copy         todir="${build.home}/test-config-1">
+      <fileset      dir="web/test-config-1"/>
+    </copy>
+    <mkdir          dir="${build.home}/test-config-1/WEB-INF/classes"/>
+    <mkdir          dir="${build.home}/test-config-1/WEB-INF/lib"/>
+    <copy         todir="${build.home}/test-config-1/WEB-INF/lib"
+                   file="${jsf-api.jar}"/>
+    <copy         todir="${build.home}/test-config-1/WEB-INF/lib"
+                   file="${build.home}/lib/${name}.jar"/>
+
+    <!-- Set up webapp "test-config-2" by copying "test-config-1" ... -->
+    <mkdir          dir="${build.home}/test-config-2"/>
+    <copy         todir="${build.home}/test-config-2">
+      <fileset      dir="${build.home}/test-config-1"/>
+    </copy>
+    <!-- ... and adding a META-INF/faces-config.xml file in /WEB-INF/classes -->
+    <mkdir          dir="${build.home}/test-config-2/WEB-INF/classes/META-INF"/>
+    <copy        tofile="${build.home}/test-config-2/WEB-INF/classes/META-INF/faces-config.xml"
+                   file="${build.home}/test-config-2/WEB-INF/embed-config.xml"/>
+
+  </target>
+
+  <target name="test.config"
+       depends="prepare.config,test.compile"
+   description="Execute standalone JUnit tests on config subsystem">
+
+    <echo message="Running com.sun.faces.config tests ..."/>
+    <junit printSummary="no" fork="no"
+          haltonfailure="yes" haltonerror="yes">
+
+      <classpath  refid="test.classpath"/>
+      <formatter   type="plain"
+                usefile="false"/>
+
+      <sysproperty   key="basedir"
+                   value="${build.home}"/>
+
+      <sysproperty   key="java.endorsed.dirs"
+                   value="${tomcat.home}/jaxp/lib/endorsed"/>
+
+      <sysproperty   key="org.apache.commons.logging.Log"
+                   value="${log.impl}"/>
+      <sysproperty   key="org.apache.commons.logging.simplelog.defaultlog"
+                   value="info"/>
+      <sysproperty   key="org.apache.commons.logging.simplelog.log.com.sun.faces"
+                   value="${log.level}"/>
+      <sysproperty   key="org.apache.commons.logging.simplelog.log.org.apache.commons.digester.Digester"
+                   value="${log.digester}"/>
+      <sysproperty   key="org.apache.commons.logging.simplelog.log.org.apache.commons.digester.Digester.sax"
+                   value="${log.sax}"/>
+
+      <batchtest>
+        <fileset    dir="${basedir}/build/test"
+               includes="com/sun/faces/config/ConfigureListenerTestCase.class"/>
+      </batchtest>
+    </junit>
+
+  </target>
+
 
 </project>

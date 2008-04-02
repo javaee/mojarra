@@ -1,5 +1,5 @@
 /*
- * $Id: TestUtil.java,v 1.18 2004/01/20 04:51:56 eburns Exp $
+ * $Id: TestUtil.java,v 1.19 2004/01/27 21:06:16 eburns Exp $
  */
 
 /*
@@ -38,7 +38,7 @@ import javax.servlet.ServletContext;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestUtil.java,v 1.18 2004/01/20 04:51:56 eburns Exp $
+ * @version $Id: TestUtil.java,v 1.19 2004/01/27 21:06:16 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo

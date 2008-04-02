@@ -1,5 +1,5 @@
 /* 
- * $Id: TestViewHandlerImpl.java,v 1.8 2004/01/14 17:13:15 eburns Exp $ 
+ * $Id: TestViewHandlerImpl.java,v 1.9 2004/01/27 21:05:51 eburns Exp $ 
  */ 
 
 
@@ -51,7 +51,7 @@ import java.util.Locale;
  * 
  * <B>Lifetime And Scope</B> <P> 
  * 
- * @version $Id: TestViewHandlerImpl.java,v 1.8 2004/01/14 17:13:15 eburns Exp $  
+ * @version $Id: TestViewHandlerImpl.java,v 1.9 2004/01/27 21:05:51 eburns Exp $  
  */ 
 
 

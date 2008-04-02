@@ -1,5 +1,5 @@
 /*
- * $Id: TestLifecycleImpl.java,v 1.24 2004/01/16 21:31:06 craigmcc Exp $
+ * $Id: TestLifecycleImpl.java,v 1.25 2004/01/27 21:06:03 eburns Exp $
  */
 
 /*
@@ -41,7 +41,7 @@ import com.sun.faces.JspFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestLifecycleImpl.java,v 1.24 2004/01/16 21:31:06 craigmcc Exp $
+ * @version $Id: TestLifecycleImpl.java,v 1.25 2004/01/27 21:06:03 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo

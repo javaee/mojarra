@@ -1,5 +1,5 @@
 /*
- * $Id: TestValueBindingImpl.java,v 1.24 2004/01/10 05:44:00 eburns Exp $
+ * $Id: TestValueBindingImpl.java,v 1.25 2004/01/27 21:06:00 eburns Exp $
  */
 
 /*
@@ -50,7 +50,6 @@ import java.io.Serializable;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestValueBindingImpl.java,v 1.24 2004/01/10 05:44:00 eburns Exp $
  */
 
 public class TestValueBindingImpl extends ServletFacesTestCase

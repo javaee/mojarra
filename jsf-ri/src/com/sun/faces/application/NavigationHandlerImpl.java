@@ -1,5 +1,5 @@
 /*
- * $Id: NavigationHandlerImpl.java,v 1.23 2004/01/16 22:00:05 craigmcc Exp $
+ * $Id: NavigationHandlerImpl.java,v 1.24 2004/01/27 21:04:02 eburns Exp $
  */
 
 /*
@@ -10,7 +10,7 @@
 package com.sun.faces.application;
 
 import com.sun.faces.application.ApplicationImpl;
-import com.sun.faces.config.ConfigNavigationCase;
+import com.sun.faces.application.ConfigNavigationCase;
 import com.sun.faces.util.Util;
 
 import java.util.ArrayList;
@@ -343,7 +343,8 @@ public class NavigationHandlerImpl extends NavigationHandler {
             cncFromAction = cnc.getFromAction();
             fromOutcome = cnc.getFromOutcome();
             toViewId = cnc.getToViewId();
-            if ((cncFromAction == null) && (fromOutcome != null)) {
+            if (((cncFromAction == null) || (cncFromAction == "*"))
+		&& (fromOutcome != null)) {
                 if (fromOutcome.equals(outcome)) {
 		    result.viewId = toViewId;
 		    result.navCase = cnc;
@@ -357,7 +358,7 @@ public class NavigationHandlerImpl extends NavigationHandler {
             cncFromAction = cnc.getFromAction();
             fromOutcome = cnc.getFromOutcome();
             toViewId = cnc.getToViewId();
-            if ((cncFromAction != null) && (fromOutcome == null)) {
+            if ((cncFromAction != null) && (fromOutcome.equals("*"))) {
                 if (cncFromAction.equals(fromAction)) {
 		    result.viewId = toViewId;
 		    result.navCase = cnc;
@@ -371,7 +372,7 @@ public class NavigationHandlerImpl extends NavigationHandler {
             cncFromAction = cnc.getFromAction();
             fromOutcome = cnc.getFromOutcome();
             toViewId = cnc.getToViewId();
-            if ((cncFromAction == null) && (fromOutcome == null)) {
+            if ((cncFromAction.equals("*")) && (fromOutcome.equals("*"))) {
 		result.viewId = toViewId;
 		result.navCase = cnc;
 		return result;

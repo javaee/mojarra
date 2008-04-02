@@ -1,5 +1,5 @@
 /*
- * $Id: ViewTag.java,v 1.18 2004/01/21 03:50:37 eburns Exp $
+ * $Id: ViewTag.java,v 1.19 2004/01/27 21:04:44 eburns Exp $
  */
 
 /*
@@ -45,7 +45,7 @@ import com.sun.faces.util.Util;
  *  any renderers or attributes. It exists mainly to save the state of
  *  the response tree once all tags have been rendered.
  *
- * @version $Id: ViewTag.java,v 1.18 2004/01/21 03:50:37 eburns Exp $
+ * @version $Id: ViewTag.java,v 1.19 2004/01/27 21:04:44 eburns Exp $
  * 
  *
  */

@@ -1,5 +1,5 @@
 /*
- * $Id: TestApplicationImpl_Config.java,v 1.29 2004/01/21 03:50:39 eburns Exp $
+ * $Id: TestApplicationImpl_Config.java,v 1.30 2004/01/27 21:05:50 eburns Exp $
  */
 
 /*
@@ -57,13 +57,164 @@ import java.util.Locale;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestApplicationImpl_Config.java,v 1.29 2004/01/21 03:50:39 eburns Exp $
+ * @version $Id: TestApplicationImpl_Config.java,v 1.30 2004/01/27 21:05:50 eburns Exp $
  */
 
 public class TestApplicationImpl_Config extends ServletFacesTestCase {
 //
 // Protected Constants
 //
+
+	public static String standardComponentTypes[] = {
+	    "javax.faces.Column",
+	    "javax.faces.Command",
+	    "javax.faces.Data",
+	    "javax.faces.Form",
+	    "javax.faces.Graphic",
+	    "javax.faces.Input",
+	    "javax.faces.Message",
+	    "javax.faces.Messages",
+	    "javax.faces.NamingContainer",
+	    "javax.faces.Output",
+	    "javax.faces.Panel",
+	    "javax.faces.Parameter",
+	    "javax.faces.SelectBoolean",
+	    "javax.faces.SelectItem",
+	    "javax.faces.SelectItems",
+	    "javax.faces.SelectMany",
+	    "javax.faces.SelectOne",
+	    "javax.faces.ViewRoot",
+	    "javax.faces.HtmlCommandButton",
+	    "javax.faces.HtmlCommandLink",
+	    "javax.faces.HtmlDataTable",
+	    "javax.faces.HtmlForm",
+	    "javax.faces.HtmlGraphicImage",
+	    "javax.faces.HtmlInputHidden",
+	    "javax.faces.HtmlInputSecret",
+	    "javax.faces.HtmlInputText",
+	    "javax.faces.HtmlInputTextarea",
+	    "javax.faces.HtmlMessage",
+	    "javax.faces.HtmlMessages",
+	    "javax.faces.HtmlOutputFormat",
+	    "javax.faces.HtmlOutputLabel",
+	    "javax.faces.HtmlOutputLink",
+	    "javax.faces.HtmlOutputText",
+	    "javax.faces.HtmlPanelGrid",
+	    "javax.faces.HtmlPanelGroup",
+	    "javax.faces.HtmlSelectBooleanCheckbox",
+	    "javax.faces.HtmlSelectManyCheckbox",
+	    "javax.faces.HtmlSelectManyListbox",
+	    "javax.faces.HtmlSelectManyMenu",
+	    "javax.faces.HtmlSelectOneListbox",
+	    "javax.faces.HtmlSelectOneMenu",
+	    "javax.faces.HtmlSelectOneRadio"
+	};
+
+	public static Class standardComponentClasses[] = {
+	    javax.faces.component.UIColumn.class,
+	    javax.faces.component.UICommand.class,
+	    javax.faces.component.UIData.class,
+	    javax.faces.component.UIForm.class,
+	    javax.faces.component.UIGraphic.class,
+	    javax.faces.component.UIInput.class,
+	    javax.faces.component.UIMessage.class,
+	    javax.faces.component.UIMessages.class,
+	    javax.faces.component.UINamingContainer.class,
+	    javax.faces.component.UIOutput.class,
+	    javax.faces.component.UIPanel.class,
+	    javax.faces.component.UIParameter.class,
+	    javax.faces.component.UISelectBoolean.class,
+	    javax.faces.component.UISelectItem.class,
+	    javax.faces.component.UISelectItems.class,
+	    javax.faces.component.UISelectMany.class,
+	    javax.faces.component.UISelectOne.class,
+	    javax.faces.component.UIViewRoot.class,
+	    javax.faces.component.html.HtmlCommandButton.class,
+	    javax.faces.component.html.HtmlCommandLink.class,
+	    javax.faces.component.html.HtmlDataTable.class,
+	    javax.faces.component.html.HtmlForm.class,
+	    javax.faces.component.html.HtmlGraphicImage.class,
+	    javax.faces.component.html.HtmlInputHidden.class,
+	    javax.faces.component.html.HtmlInputSecret.class,
+	    javax.faces.component.html.HtmlInputText.class,
+	    javax.faces.component.html.HtmlInputTextarea.class,
+	    javax.faces.component.html.HtmlMessage.class,
+	    javax.faces.component.html.HtmlMessages.class,
+	    javax.faces.component.html.HtmlOutputFormat.class,
+	    javax.faces.component.html.HtmlOutputLabel.class,
+	    javax.faces.component.html.HtmlOutputLink.class,
+	    javax.faces.component.html.HtmlOutputText.class,
+	    javax.faces.component.html.HtmlPanelGrid.class,
+	    javax.faces.component.html.HtmlPanelGroup.class,
+	    javax.faces.component.html.HtmlSelectBooleanCheckbox.class,
+	    javax.faces.component.html.HtmlSelectManyCheckbox.class,
+	    javax.faces.component.html.HtmlSelectManyListbox.class,
+	    javax.faces.component.html.HtmlSelectManyMenu.class,
+	    javax.faces.component.html.HtmlSelectOneListbox.class,
+	    javax.faces.component.html.HtmlSelectOneMenu.class,
+	    javax.faces.component.html.HtmlSelectOneRadio.class
+	};
+
+	public static String standardConverterIds[] = {
+	    "javax.faces.BigDecimal",
+	    "javax.faces.BigInteger",
+	    "javax.faces.Boolean",
+	    "javax.faces.Byte",
+	    "javax.faces.Character",
+	    "javax.faces.DateTime",
+	    "javax.faces.Double",
+	    "javax.faces.Float",
+	    "javax.faces.Integer",
+	    "javax.faces.Long",
+	    "javax.faces.Number",
+	    "javax.faces.Short"
+	};
+	public static Class standardConverterClasses[] = {
+	    javax.faces.convert.BigDecimalConverter.class,
+	    javax.faces.convert.BigIntegerConverter.class,
+	    javax.faces.convert.BooleanConverter.class,
+	    javax.faces.convert.ByteConverter.class,
+	    javax.faces.convert.CharacterConverter.class,
+	    javax.faces.convert.DateTimeConverter.class,
+	    javax.faces.convert.DoubleConverter.class,
+	    javax.faces.convert.FloatConverter.class,
+	    javax.faces.convert.IntegerConverter.class,
+	    javax.faces.convert.LongConverter.class,
+	    javax.faces.convert.NumberConverter.class,
+	    javax.faces.convert.ShortConverter.class
+	};
+
+	public static Class standardConverterByIdClasses[] = {
+	    java.math.BigDecimal.class,
+	    java.math.BigInteger.class,
+	    java.lang.Boolean.class,
+	    java.lang.Byte.class,
+	    java.lang.Character.class,
+	    null,
+	    java.lang.Double.class,
+	    java.lang.Float.class,
+	    java.lang.Integer.class,
+	    java.lang.Long.class,
+	    null,
+	    java.lang.Short.class
+	};
+
+	public static Class standardConverterPrimitiveClasses[] = {
+	    null,
+	    null,
+	    java.lang.Boolean.TYPE,
+	    java.lang.Byte.TYPE,
+	    java.lang.Character.TYPE,
+	    null,
+	    java.lang.Double.TYPE,
+	    java.lang.Float.TYPE,
+	    java.lang.Integer.TYPE,
+	    java.lang.Long.TYPE,
+	    null,
+	    java.lang.Short.TYPE
+	};
+
+
 //
 // Class Variables
 //
@@ -122,46 +273,11 @@ public class TestApplicationImpl_Config extends ServletFacesTestCase {
 	assertTrue(newTestComponent != testComponent);
 
 	// built-in components
-	assertTrue(null != (uic = application.createComponent("CommandButton")));
-	assertTrue(uic instanceof HtmlCommandButton);
-	
-	assertTrue(null != (uic = application.createComponent("Form")));
-	assertTrue(uic instanceof UIForm);
-	
-	assertTrue(null != (uic = application.createComponent("GraphicImage")));
-	assertTrue(uic instanceof HtmlGraphicImage);
-	
-	assertTrue(null != (uic = application.createComponent("InputText")));
-	assertTrue(uic instanceof HtmlInputText);	
-	
-	assertTrue(null != (uic = application.createComponent("Output")));
-	assertTrue(uic instanceof UIOutput);
-	
-	assertTrue(null != (uic = application.createComponent("Panel")));
-	assertTrue(uic instanceof UIPanel);
-	
-	assertTrue(null != (uic = application.createComponent("Parameter")));
-	assertTrue(uic instanceof UIParameter);
-	
-
-	assertTrue(null != (uic = application.createComponent("SelectBooleanCheckbox")));
-	assertTrue(uic instanceof HtmlSelectBooleanCheckbox);
-	
-	assertTrue(null != (uic = application.createComponent("SelectItem")));
-	assertTrue(uic instanceof UISelectItem);
-	
-	assertTrue(null != (uic = application.createComponent("SelectItems")));
-	assertTrue(uic instanceof UISelectItems);
-	
-	assertTrue(null != (uic = application.createComponent("SelectManyListbox")));
-	assertTrue(uic instanceof HtmlSelectManyListbox);
-	
-	assertTrue(null != (uic = application.createComponent("SelectOneListbox")));
-	assertTrue(uic instanceof HtmlSelectOneListbox);
-        
-    assertTrue(null != (uic = application.createComponent("ViewRoot")));
-    assertTrue(uic instanceof UIViewRoot);
-	
+	for (int i = 0, len = standardComponentTypes.length; i < len; i++) {
+	    assertTrue(null != (uic = 
+				application.createComponent(standardComponentTypes[i])));
+	    assertTrue(standardComponentClasses[i].isAssignableFrom(uic.getClass()));
+	}
     }
 	
     public void testComponentNegative() {
@@ -193,43 +309,6 @@ public class TestApplicationImpl_Config extends ServletFacesTestCase {
     public void testGetComponentTypes() {
 	Iterator iter = application.getComponentTypes();
 	assertTrue(null != iter);
-	String standardComponentTypes[] = {
-	    "Column",
-	    "Command",
-	    "CommandButton",
-	    "CommandLink",
-	    "Data",
-	    "DataTable",
-	    "Form",
-	    "Graphic",
-	    "GraphicImage",
-	    "Input",
-	    "InputHidden",
-	    "InputSecret",
-	    "InputText",
-	    "InputTextarea",
-	    "Output",
-	    "OutputLabel",
-	    "OutputMessage",
-	    "OutputText",
-	    "Panel",
-	    "PanelGrid",
-	    "PanelGroup",
-	    "Parameter",
-	    "SelectBoolean",
-	    "SelectBooleanCheckbox",
-	    "SelectManyCheckboxList",
-	    "SelectManyListbox",
-	    "SelectManyMenu",
-	    "SelectOneListbox",
-	    "SelectOneMenu",
-	    "SelectOneRadio",
-	    "SelectItem",
-	    "SelectItems",
-	    "SelectMany",
-	    "SelectOne",
-	    "ViewRoot"	
-	};
 	
 	assertTrue(isSubset(standardComponentTypes, iter));
     }
@@ -251,73 +330,35 @@ public class TestApplicationImpl_Config extends ServletFacesTestCase {
 	// built-in components
 
 	// by-id
-	assertTrue(null != (conv = application.createConverter("DateTime")));
-	assertTrue(conv instanceof DateTimeConverter);
-
-	assertTrue(null != (conv = application.createConverter("Number")));
-	assertTrue(conv instanceof NumberConverter);
-
-	assertTrue(null != (conv = application.createConverter("Boolean")));
-	assertTrue(conv instanceof BooleanConverter);
-	
-	assertTrue(null != (conv = application.createConverter("Byte")));
-	assertTrue(conv instanceof ByteConverter);
-	
-	assertTrue(null != (conv = application.createConverter("Character")));
-	assertTrue(conv instanceof CharacterConverter);
-	
-	assertTrue(null != (conv = application.createConverter("Double")));
-	assertTrue(conv instanceof DoubleConverter);
-	
-	assertTrue(null != (conv = application.createConverter("Float")));
-	assertTrue(conv instanceof FloatConverter);
-	
-	assertTrue(null != (conv = application.createConverter("Integer")));
-	assertTrue(conv instanceof IntegerConverter);
-	
-	assertTrue(null != (conv = application.createConverter("Long")));
-	assertTrue(conv instanceof LongConverter);
-	
-	assertTrue(null != (conv = application.createConverter("Short")));
-	assertTrue(conv instanceof ShortConverter);
-
-	assertTrue(null != (conv = application.createConverter("BigInteger")));
-	assertTrue(conv instanceof BigIntegerConverter);
-
-	assertTrue(null != (conv = application.createConverter("BigDecimal")));
-	assertTrue(conv instanceof BigDecimalConverter);
+	for (int i = 0, len = standardConverterIds.length; i < len; i++) {
+	    assertTrue(null != (conv = 
+				application.createConverter(standardConverterIds[i])));
+	    assertTrue(standardConverterClasses[i].isAssignableFrom(conv.getClass()));
+	}
 
 	// by-class
-	assertTrue(null != (conv = application.createConverter(java.lang.Boolean.class)));
-	assertTrue(conv instanceof BooleanConverter);
-	
-	assertTrue(null != (conv = application.createConverter(java.lang.Byte.class)));
-	assertTrue(conv instanceof ByteConverter);
-	
-	assertTrue(null != (conv = application.createConverter(java.lang.Character.class)));
-	assertTrue(conv instanceof CharacterConverter);
-	
-	assertTrue(null != (conv = application.createConverter(java.lang.Double.class)));
-	assertTrue(conv instanceof DoubleConverter);
-	
-	assertTrue(null != (conv = application.createConverter(java.lang.Float.class)));
-	assertTrue(conv instanceof FloatConverter);
-	
-	assertTrue(null != (conv = application.createConverter(java.lang.Integer.class)));
-	assertTrue(conv instanceof IntegerConverter);
-	
-	assertTrue(null != (conv = application.createConverter(java.lang.Long.class)));
-	assertTrue(conv instanceof LongConverter);
-	
-	assertTrue(null != (conv = application.createConverter(java.lang.Short.class)));
-	assertTrue(conv instanceof ShortConverter);
+	for (int i = 0, len = standardConverterByIdClasses.length; i < len; i++) {
+	    // skip entries for which by-class registation doesn't make sense.
+	    if (null == standardConverterByIdClasses[i]) {
+		continue;
+	    }
+	    assertTrue("null != " + standardConverterByIdClasses[i].toString(),
+		       null != (conv = 
+				application.createConverter(standardConverterByIdClasses[i])));
+	    assertTrue(standardConverterClasses[i].isAssignableFrom(conv.getClass()));
+	}
 
-	assertTrue(null != (conv = application.createConverter(java.math.BigInteger.class)));
-	assertTrue(conv instanceof BigIntegerConverter);
+	// primitive classes
+	for (int i = 0, len = standardConverterPrimitiveClasses.length; i < len; i++) {
+	    if (null == standardConverterPrimitiveClasses[i]) {
+		continue;
+	    }
 
-	assertTrue(null != (conv = application.createConverter(java.math.BigDecimal.class)));
-	assertTrue(conv instanceof BigDecimalConverter);
-	
+	    assertTrue("null != " + standardConverterPrimitiveClasses[i].toString(),
+		       null != (conv = 
+				application.createConverter(standardConverterPrimitiveClasses[i])));
+	    assertTrue(standardConverterClasses[i].isAssignableFrom(conv.getClass()));
+	}
     }
 	
     public void testConverterNegative() {
@@ -349,10 +390,6 @@ public class TestApplicationImpl_Config extends ServletFacesTestCase {
     public void testGetConverterIds() {
 	Iterator iter = application.getConverterIds();
 	assertTrue(null != iter);
-	String standardConverterIds[] = {
-	    "DateTime",
-	    "Number"
-	};
 
 	assertTrue(isSubset(standardConverterIds, iter));
     }
@@ -372,11 +409,11 @@ public class TestApplicationImpl_Config extends ServletFacesTestCase {
 	assertTrue(newTestValidator != testValidator);
 
 	// test standard components
-	assertTrue(null != (val = application.createValidator("DoubleRange")));
+	assertTrue(null != (val = application.createValidator("javax.faces.DoubleRange")));
 	assertTrue(val instanceof Validator);
-	assertTrue(null != (val = application.createValidator("Length")));
+	assertTrue(null != (val = application.createValidator("javax.faces.Length")));
 	assertTrue(val instanceof Validator);
-	assertTrue(null != (val = application.createValidator("LongRange")));
+	assertTrue(null != (val = application.createValidator("javax.faces.LongRange")));
 	assertTrue(val instanceof Validator);
 
     }
@@ -411,16 +448,16 @@ public class TestApplicationImpl_Config extends ServletFacesTestCase {
 	Iterator iter = application.getValidatorIds();
 	assertTrue(null != iter);
 	String standardValidatorIds[] = {
-	    "DoubleRange",
-	    "Length",
-	    "LongRange"
+	    "javax.faces.DoubleRange",
+	    "javax.faces.Length",
+	    "javax.faces.LongRange"
 	};
 	
 	assertTrue(isSubset(standardValidatorIds, iter));
     }
 
     public void testUpdateRuntimeComponents() {
-	loadFromInitParam("runtime-components.xml");
+	loadFromInitParam("/runtime-components.xml");
         ApplicationFactory aFactory = 
 	    (ApplicationFactory)FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
         application = (ApplicationImpl) aFactory.getApplication();
@@ -455,11 +492,12 @@ public class TestApplicationImpl_Config extends ServletFacesTestCase {
 	assertTrue(null != (stateManager = 
 			    application.getStateManager()));
 	assertTrue(stateManager instanceof javax.faces.application.StateManager);
+	System.out.println("DEFAULT:"+application.getDefaultRenderKitId());
 	assertEquals("WackyRenderKit", application.getDefaultRenderKitId());
     }
 
     public void testLocaleConfigPositive() {
-	loadFromInitParam("locale-config.xml");
+	loadFromInitParam("/locale-config.xml");
         ApplicationFactory aFactory = 
 	    (ApplicationFactory)FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
         application = (ApplicationImpl) aFactory.getApplication();
@@ -472,60 +510,39 @@ public class TestApplicationImpl_Config extends ServletFacesTestCase {
 	assertEquals("US", locale.getCountry());
 
 	Iterator iter;
-
-	assertNotNull("Can't get supportedLocales from Application",
-		      iter = application.getSupportedLocales());
-
+	int j = 0, len = 0;
+	boolean found = false;
 	String [][] expected = {
-	    {"ps","PS"},
-	    {"fr","FR"},
 	    {"de","DE"},
-	    {"en","US"}
+	    {"en","US"},
+	    {"fr","FR"},
+	    {"ps","PS"}
 	};
-	int i = 0;
-	    
+	len = expected.length;
+
+	iter = application.getSupportedLocales();
+	System.out.println("actual supported locales: ");
 	while (iter.hasNext()) {
-	    locale = (Locale) iter.next();
-	    assertEquals("Supported locale " + i + " language not as expected",
-			 expected[i][0], locale.getLanguage());
-	    assertEquals("Supported locale " + i + " country not as expected",
-			 expected[i][0], locale.getLanguage());
-	    i++;
+	    System.out.println(iter.next().toString());
 	}
+	    
 
-    }
-
-    public void testLocaleConfigNegative() {
-	loadFromInitParam("locale-config1.xml");
-        ApplicationFactory aFactory = 
-	    (ApplicationFactory)FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
-        application = (ApplicationImpl) aFactory.getApplication();
-
-	Locale locale;
-	
-	assertEquals("default locale not the same as system default locale",
-		     Locale.getDefault(), application.getDefaultLocale());
-
-	Iterator iter;
-
-	assertNotNull("Can't get supportedLocales from Application",
-		      iter = application.getSupportedLocales());
-
-	String [][] expected = {
-	    {"ps","PS"},
-	    {"fr","FR"},
-	    {"de","DE"},
-	    {"en","US"}
-	};
-	int i = 0;
-	
-	while (iter.hasNext()) {
-	    locale = (Locale) iter.next();
-	    assertEquals("Supported locale " + i + " language not as expected",
-			 expected[i][0], locale.getLanguage());
-	    assertEquals("Supported locale " + i + " country not as expected",
-			 expected[i][0], locale.getLanguage());
-	    i++;
+	// test that the supported locales are a superset of the
+	// expected locales
+	for (j = 0; j < len; j++) {
+	    assertNotNull("Can't get supportedLocales from Application",
+			  iter = application.getSupportedLocales());
+	    found = false;
+	    while (iter.hasNext()) {
+		locale = (Locale) iter.next();
+		if (expected[j][0].equals(locale.getLanguage()) &&
+		    expected[j][1].equals(locale.getCountry())) {
+		    found = true;
+		}
+	    }
+	    assertTrue("Can't find expected locale " + expected[j][0] + "_" + 
+		       expected[j][1] + " in supported-locales list",
+		       found);
 	}
 
     }
@@ -533,7 +550,7 @@ public class TestApplicationImpl_Config extends ServletFacesTestCase {
     public void testLocaleConfigNegative2() {
 	boolean exceptionThrown = false;
 	try {
-	    loadFromInitParam("locale-config2.xml");
+	    loadFromInitParam("/locale-config2.xml");
 	}
 	catch (FacesException e) {
 	    exceptionThrown = true;

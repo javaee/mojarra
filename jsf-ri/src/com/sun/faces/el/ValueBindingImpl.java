@@ -1,9 +1,5 @@
 /*
-<<<<<<< variant A
- * $Id: ValueBindingImpl.java,v 1.25 2004/01/10 05:43:52 eburns Exp $
->>>>>>> variant B
- * $Id: ValueBindingImpl.java,v 1.25 2004/01/10 05:43:52 eburns Exp $
-======= end
+ * $Id: ValueBindingImpl.java,v 1.26 2004/01/27 21:04:13 eburns Exp $
  */
 
 /*

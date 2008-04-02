@@ -1,5 +1,5 @@
 /*
- * $Id: TestViewTag.java,v 1.5 2004/01/14 21:48:54 jvisvanathan Exp $
+ * $Id: TestViewTag.java,v 1.6 2004/01/27 21:06:15 eburns Exp $
  */
 
 /*
@@ -53,7 +53,7 @@ import javax.servlet.jsp.PageContext;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestViewTag.java,v 1.5 2004/01/14 21:48:54 jvisvanathan Exp $
+ * @version $Id: TestViewTag.java,v 1.6 2004/01/27 21:06:15 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo

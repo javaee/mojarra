@@ -4,7 +4,7 @@
  Copyright 2003 Sun Microsystems, Inc. All rights reserved.
  SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 
- $Id: build-tests.xml,v 1.41 2004/01/26 06:28:55 horwat Exp $
+ $Id: build-tests.xml,v 1.42 2004/01/27 21:04:52 eburns Exp $
 -->
 
 
@@ -502,26 +502,30 @@
 
   <target name="test.html.taglib"
           description="Test the HTML JSP Tags">
-      <echo message="Testing command_button..."/>
+      <echo message="Testing commandButton..."/>
       <tester host="${host}" port="${port}" protocol="${protocol}"
-              request="${context.path}/faces/taglib/command_button_test.jsp"
-              golden="${golden.path}/taglib/command_button_test.txt" failonerror="${failonerror}"
-              ignore="${ignore.path}/taglib/command_button_test.txt" />
+              request="${context.path}/faces/taglib/commandButton_test.jsp"
+              golden="${golden.path}/taglib/commandButton_test.txt" failonerror="${failonerror}"
+              ignore="${ignore.path}/taglib/commandButton_test.txt" />
 
-      <echo message="Testing command_link..."/>
+      <echo message="Testing commandLink..."/>
       <tester host="${host}" port="${port}" protocol="${protocol}"
-              request="${context.path}/faces/taglib/command_link_test.jsp"
-              golden="${golden.path}/taglib/command_link_test.txt" failonerror="${failonerror}"
-              ignore="${ignore.path}/taglib/command_link_test.txt" />
+              request="${context.path}/faces/taglib/commandLink_test.jsp"
+              golden="${golden.path}/taglib/commandLink_test.txt" failonerror="${failonerror}"
+              ignore="${ignore.path}/taglib/commandLink_test.txt" />
   </target>
 
   <target name="test.verbatim"
           description="Test the Verbatim tag">
       <echo message="Testing verbatim..."/>
       <tester host="${host}" port="${port}" protocol="${protocol}"
-              request="${context.path}/faces/verbatim_test.jsp"
-              golden="${golden.path}/verbatim_test.txt" failonerror="${failonerror}"/>
-      <echo message="Testing verbatim..."/>
+           request="${context.path}/faces/verbatim_test.jsp"
+            golden="${golden.path}/verbatim_test.txt"
+       failonerror="${failonerror}"/>
+      <tester host="${host}" port="${port}" protocol="${protocol}"
+           request="${context.path}/faces/escape_test.jsp"
+            golden="${golden.path}/escape_test.txt"
+       failonerror="${failonerror}"/>
   </target>
 
 

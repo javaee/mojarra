@@ -1,5 +1,5 @@
 /*
- * $Id: TestManagedBeanFactory.java,v 1.11 2003/12/17 15:15:10 rkitain Exp $
+ * $Id: TestManagedBeanFactory.java,v 1.12 2004/01/27 21:05:56 eburns Exp $
  */
 
 /*
@@ -17,10 +17,7 @@ import javax.faces.FacesException;
 
 import com.sun.faces.TestBean;
 import com.sun.faces.application.ApplicationImpl;
-import com.sun.faces.config.ConfigManagedBean;
-import com.sun.faces.config.ConfigManagedBeanProperty;
-import com.sun.faces.config.ConfigManagedBeanPropertyValue;
-import com.sun.faces.config.ConfigManagedPropertyMap;
+import com.sun.faces.config.beans.*;
 import com.sun.faces.config.ManagedBeanFactory;
 import com.sun.faces.el.ValueBindingImpl;
 
@@ -39,10 +36,11 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
 
     // ----------------------------------------------------- Instance Variables
 
-    ConfigManagedBean cmb;
-    ConfigManagedBeanProperty cmbp;
-    ConfigManagedBeanPropertyValue cmbpv;
-    ConfigManagedPropertyMap cmpm;
+    ManagedBeanBean bean;
+    ManagedPropertyBean property;
+    ListEntriesBean listEntries;
+    MapEntriesBean mapEntries;
+    MapEntryBean mapEntry;
     ManagedBeanFactory mbf;
     TestBean testBean;
 
@@ -78,31 +76,28 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
     // Test managed bean 
     public void testNoProperty() throws Exception {
         //Testing with no properties set
-	cmb = new ConfigManagedBean();
-	cmb.setManagedBeanClass(beanName);
-	cmb.setManagedBeanScope("session");
+	bean = new ManagedBeanBean();
+	bean.setManagedBeanClass(beanName);
+	bean.setManagedBeanScope("session");
 
-        mbf = new ManagedBeanFactory(cmb);
+        mbf = new ManagedBeanFactory(bean);
 
         assertNotNull(mbf.newInstance());
     }
 
     public void testSimpleProperty() throws Exception {
         //Testing simple property
-	cmb = new ConfigManagedBean();
-	cmb.setManagedBeanClass(beanName);
-	cmb.setManagedBeanScope("session");
+	bean = new ManagedBeanBean();
+	bean.setManagedBeanClass(beanName);
+	bean.setManagedBeanScope("session");
 
-        cmbp = new ConfigManagedBeanProperty();
-        cmbp.setPropertyName("one");
+        property = new ManagedPropertyBean();
+        property.setPropertyName("one");
+        property.setValue("one");
 
-        cmbpv = new ConfigManagedBeanPropertyValue();
-        cmbpv.setValue("one");
+        bean.addManagedProperty(property); 
 
-        cmbp.setValue(cmbpv);
-        cmb.addProperty(cmbp); 
-
-        mbf = new ManagedBeanFactory(cmb);
+        mbf = new ManagedBeanFactory(bean);
 
         //testing with a property set
         assertNotNull(testBean = (TestBean) mbf.newInstance());
@@ -116,83 +111,59 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
 
     public void testPrimitiveProperty() throws Exception {
         //Testing primitive properties
-        cmb = new ConfigManagedBean();
-        cmb.setManagedBeanClass(beanName);
-        cmb.setManagedBeanScope("session");
+        bean = new ManagedBeanBean();
+        bean.setManagedBeanClass(beanName);
+        bean.setManagedBeanScope("session");
 
         boolean testBoolean = true;
-        cmbp = new ConfigManagedBeanProperty();
-        cmbp.setPropertyName("boolProp");
-        cmbpv = new ConfigManagedBeanPropertyValue();
-        cmbpv.setValueCategory(ConfigManagedBeanPropertyValue.VALUE);
-        cmbpv.setValue((new Boolean(testBoolean)).toString());        
-        cmbp.setValue(cmbpv);
-        cmb.addProperty(cmbp); 
+        property = new ManagedPropertyBean();
+        property.setPropertyName("boolProp");
+        property.setValue((new Boolean(testBoolean)).toString());        
+        bean.addManagedProperty(property); 
 
         byte testByte = 100;
-        cmbp = new ConfigManagedBeanProperty();
-        cmbp.setPropertyName("byteProp");
-        cmbpv = new ConfigManagedBeanPropertyValue();
-        cmbpv.setValueCategory(ConfigManagedBeanPropertyValue.VALUE);
-        cmbpv.setValue(Byte.toString(testByte));       
-        cmbp.setValue(cmbpv);
-        cmb.addProperty(cmbp); 
+        property = new ManagedPropertyBean();
+        property.setPropertyName("byteProp");
+        property.setValue(Byte.toString(testByte));       
+        bean.addManagedProperty(property); 
 
         char testChar = 'z';
-        cmbp = new ConfigManagedBeanProperty();
-        cmbp.setPropertyName("charProp");
-        cmbpv = new ConfigManagedBeanPropertyValue();
-        cmbpv.setValueCategory(ConfigManagedBeanPropertyValue.VALUE);
-        cmbpv.setValue((new Character(testChar)).toString());      
-        cmbp.setValue(cmbpv);
-        cmb.addProperty(cmbp); 
+        property = new ManagedPropertyBean();
+        property.setPropertyName("charProp");
+        property.setValue((new Character(testChar)).toString());      
+        bean.addManagedProperty(property); 
 
         double testDouble = 11.278D;
-        cmbp = new ConfigManagedBeanProperty();
-        cmbp.setPropertyName("doubleProp");
-        cmbpv = new ConfigManagedBeanPropertyValue();
-        cmbpv.setValueCategory(ConfigManagedBeanPropertyValue.VALUE);
-        cmbpv.setValue(Double.toString(testDouble));        
-        cmbp.setValue(cmbpv);
-        cmb.addProperty(cmbp); 
+        property = new ManagedPropertyBean();
+        property.setPropertyName("doubleProp");
+        property.setValue(Double.toString(testDouble));        
+        bean.addManagedProperty(property); 
 
         float testFloat = 45.789F;
-        cmbp = new ConfigManagedBeanProperty();
-        cmbp.setPropertyName("floatProp");
-        cmbpv = new ConfigManagedBeanPropertyValue();
-        cmbpv.setValueCategory(ConfigManagedBeanPropertyValue.VALUE);
-        cmbpv.setValue(Float.toString(testFloat));        
-        cmbp.setValue(cmbpv);
-        cmb.addProperty(cmbp); 
+        property = new ManagedPropertyBean();
+        property.setPropertyName("floatProp");
+        property.setValue(Float.toString(testFloat));        
+        bean.addManagedProperty(property); 
 
         int testInt = 42;
-        cmbp = new ConfigManagedBeanProperty();
-        cmbp.setPropertyName("intProp");
-        cmbpv = new ConfigManagedBeanPropertyValue();
-        cmbpv.setValueCategory(ConfigManagedBeanPropertyValue.VALUE);
-        cmbpv.setValue(Integer.toString(testInt));        
-        cmbp.setValue(cmbpv);
-        cmb.addProperty(cmbp); 
+        property = new ManagedPropertyBean();
+        property.setPropertyName("intProp");
+        property.setValue(Integer.toString(testInt));        
+        bean.addManagedProperty(property); 
 
         long testLong = 3147893289L;
-        cmbp = new ConfigManagedBeanProperty();
-        cmbp.setPropertyName("longProp");
-        cmbpv = new ConfigManagedBeanPropertyValue();
-        cmbpv.setValueCategory(ConfigManagedBeanPropertyValue.VALUE);
-        cmbpv.setValue(Long.toString(testLong));        
-        cmbp.setValue(cmbpv);
-        cmb.addProperty(cmbp); 
+        property = new ManagedPropertyBean();
+        property.setPropertyName("longProp");
+        property.setValue(Long.toString(testLong));        
+        bean.addManagedProperty(property); 
 
         short testShort = 25432;
-        cmbp = new ConfigManagedBeanProperty();
-        cmbp.setPropertyName("shortProp");
-        cmbpv = new ConfigManagedBeanPropertyValue();
-        cmbpv.setValueCategory(ConfigManagedBeanPropertyValue.VALUE);
-        cmbpv.setValue(Short.toString(testShort));        
-        cmbp.setValue(cmbpv);
-        cmb.addProperty(cmbp); 
+        property = new ManagedPropertyBean();
+        property.setPropertyName("shortProp");
+        property.setValue(Short.toString(testShort));        
+        bean.addManagedProperty(property); 
 
-        mbf = new ManagedBeanFactory(cmb);
+        mbf = new ManagedBeanFactory(bean);
 
         //testing with a property set
         assertNotNull(testBean = (TestBean) mbf.newInstance());
@@ -213,26 +184,20 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
 
     public void testIndexProperty() throws Exception {
         //Testing indexed properties
-	cmb = new ConfigManagedBean();
-	cmb.setManagedBeanClass(beanName);
-	cmb.setManagedBeanScope("session");
+	bean = new ManagedBeanBean();
+	bean.setManagedBeanClass(beanName);
+	bean.setManagedBeanScope("session");
 
-        cmbp = new ConfigManagedBeanProperty();
-        cmbp.setPropertyName("indexProperties");
+        property = new ManagedPropertyBean();
+        property.setPropertyName("indexProperties");
+	listEntries = new ListEntriesBean();
+        listEntries.addValue("foo");
+        listEntries.addValue("bar");
+        property.setListEntries(listEntries);
 
-        cmbpv = new ConfigManagedBeanPropertyValue();
-        cmbpv.setValueCategory(ConfigManagedBeanPropertyValue.VALUE);
-        cmbpv.setValue("foo");
-        cmbp.addValue(cmbpv);
+        bean.addManagedProperty(property); 
 
-        cmbpv = new ConfigManagedBeanPropertyValue();
-        cmbpv.setValueCategory(ConfigManagedBeanPropertyValue.VALUE);
-        cmbpv.setValue("bar");
-        cmbp.addValue(cmbpv);
-
-        cmb.addProperty(cmbp); 
-
-        mbf = new ManagedBeanFactory(cmb);
+        mbf = new ManagedBeanFactory(bean);
 
         //testing with a property set
         assertNotNull(testBean = (TestBean) mbf.newInstance());
@@ -248,20 +213,22 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
 
     public void testMapProperty() throws Exception {
         //Testing mapped properties
-	cmb = new ConfigManagedBean();
-	cmb.setManagedBeanClass(beanName);
-	cmb.setManagedBeanScope("session");
+	bean = new ManagedBeanBean();
+	bean.setManagedBeanClass(beanName);
+	bean.setManagedBeanScope("session");
 
-        cmpm = new ConfigManagedPropertyMap();
-        cmpm.setKey("name");
-        cmpm.setValue("Justyna");
+        mapEntries = new MapEntriesBean();
+	mapEntry = new MapEntryBean();
+        mapEntry.setKey("name");
+        mapEntry.setValue("Justyna");
+	mapEntries.addMapEntry(mapEntry);
 
-        cmbp = new ConfigManagedBeanProperty();
-        cmbp.setPropertyName("mapProperty");
-        cmbp.addMapEntry(cmpm);
+        property = new ManagedPropertyBean();
+        property.setPropertyName("mapProperty");
+        property.setMapEntries(mapEntries);
 
-        cmb.addProperty(cmbp); 
-        mbf = new ManagedBeanFactory(cmb);
+        bean.addManagedProperty(property); 
+        mbf = new ManagedBeanFactory(bean);
 
         //testing with a property set
         assertNotNull(testBean = (TestBean) mbf.newInstance());
@@ -275,41 +242,21 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
         assertTrue(mbf.getScope().equals("session"));
     }
 
-    public void testNoBeanCreate() throws Exception {
-        cmb = new ConfigManagedBean();
-        cmb.setManagedBeanClass(beanName);
-        cmb.setManagedBeanCreate("false");
-
-        mbf = new ManagedBeanFactory(cmb);
-
-        //Testing no creation
-        assertNull(mbf.newInstance());
-    }
-
     public void testIndexTypeProperty() throws Exception {
 	//Testing indexed type properties
-        cmb = new ConfigManagedBean();
-        cmb.setManagedBeanClass(beanName);
-        cmb.setManagedBeanScope("session");
+        bean = new ManagedBeanBean();
+	property = new ManagedPropertyBean();
+        bean.setManagedBeanClass(beanName);
+        bean.setManagedBeanScope("session");
+	property.setPropertyName("indexIntegerProperties");
+	listEntries = new ListEntriesBean();
+	listEntries.setValueClass("java.lang.Integer");
+	listEntries.addValue("23");
+	property.setListEntries(listEntries);
 
-	cmbp = new ConfigManagedBeanProperty();
-	cmbp.setPropertyName("indexIntegerProperties");
+	bean.addManagedProperty(property);
 
-	cmbpv = new ConfigManagedBeanPropertyValue();
-	cmbpv.setValueCategory(ConfigManagedBeanPropertyValue.VALUE_CLASS);
-	cmbpv.setValue("java.lang.Integer");
-	cmbp.addValue(cmbpv);
-
-	cmbpv = new ConfigManagedBeanPropertyValue();
-    cmbpv.setValueCategory(ConfigManagedBeanPropertyValue.VALUE);
-    cmbpv.setType(Integer.class);
-	cmbpv.setValue("23");
-    cmbpv.convertValue();
-	cmbp.addValue(cmbpv);
-
-	cmb.addProperty(cmbp);
-
-	mbf = new ManagedBeanFactory(cmb);
+	mbf = new ManagedBeanFactory(bean);
 
 	//testing with a property set
 	assertNotNull(testBean = (TestBean) mbf.newInstance());
@@ -324,23 +271,25 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
 
     public void testMapTypeProperty() throws Exception {
         //Testing mapped properties type
-	cmb = new ConfigManagedBean();
-	cmb.setManagedBeanClass(beanName);
-	cmb.setManagedBeanScope("session");
+	bean = new ManagedBeanBean();
+	bean.setManagedBeanClass(beanName);
+	bean.setManagedBeanScope("session");
 
-        cmpm = new ConfigManagedPropertyMap();
-        cmpm.setValueCategory(ConfigManagedPropertyMap.VALUE);
-        cmpm.setKey("name");
-        cmpm.setValue("23");
+        mapEntries = new MapEntriesBean();
+        mapEntries.setKeyClass("java.lang.String");
+        mapEntries.setValueClass("java.lang.Integer");
 
-        cmbp = new ConfigManagedBeanProperty();
-        cmbp.setPropertyName("mapProperty");
-        cmbp.setMapKeyClass("java.lang.String");
-        cmbp.setMapValueClass("java.lang.Integer");
-        cmbp.addMapEntry(cmpm);
+	mapEntry = new MapEntryBean();
+        mapEntry.setKey("name");
+        mapEntry.setValue("23");
+	mapEntries.addMapEntry(mapEntry);
 
-        cmb.addProperty(cmbp); 
-        mbf = new ManagedBeanFactory(cmb);
+        property = new ManagedPropertyBean();
+        property.setPropertyName("mapProperty");
+	property.setMapEntries(mapEntries);
+
+        bean.addManagedProperty(property); 
+        mbf = new ManagedBeanFactory(bean);
 
         //testing with a property set
         assertNotNull(testBean = (TestBean) mbf.newInstance());
@@ -370,21 +319,16 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
         valueBinding.setRef("TestRefBean.one");
         valueBinding.setValue(getFacesContext(), "one");
 
-	cmb = new ConfigManagedBean();
-	cmb.setManagedBeanClass(beanName);
-	cmb.setManagedBeanScope("session");
+	bean = new ManagedBeanBean();
+	bean.setManagedBeanClass(beanName);
+	bean.setManagedBeanScope("session");
 
-        cmbp = new ConfigManagedBeanProperty();
-        cmbp.setPropertyName("one");
+        property = new ManagedPropertyBean();
+        property.setPropertyName("one");
+        property.setValue("#{TestRefBean.one}");
+        bean.addManagedProperty(property); 
 
-        cmbpv = new ConfigManagedBeanPropertyValue();
-        cmbpv.setValueCategory(ConfigManagedBeanPropertyValue.VALUE_BINDING);
-        cmbpv.setValue("#{TestRefBean.one}");
-
-        cmbp.setValue(cmbpv);
-        cmb.addProperty(cmbp); 
-
-        mbf = new ManagedBeanFactory(cmb);
+        mbf = new ManagedBeanFactory(bean);
 
         //testing with a property set
         assertNotNull(testBean = (TestBean) mbf.newInstance());
@@ -414,21 +358,16 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
         valueBinding.setRef("TestRefBean.one");
         valueBinding.setValue(getFacesContext(), "one");
 
-	cmb = new ConfigManagedBean();
-	cmb.setManagedBeanClass(beanName);
-	cmb.setManagedBeanScope("session");
+	bean = new ManagedBeanBean();
+	bean.setManagedBeanClass(beanName);
+	bean.setManagedBeanScope("session");
 
-        cmbp = new ConfigManagedBeanProperty();
-        cmbp.setPropertyName("one");
+        property = new ManagedPropertyBean();
+        property.setPropertyName("one");
+        property.setValue("#{TestRefBean.one}");
+        bean.addManagedProperty(property); 
 
-        cmbpv = new ConfigManagedBeanPropertyValue();
-        cmbpv.setValueCategory(ConfigManagedBeanPropertyValue.VALUE_BINDING);
-        cmbpv.setValue("#{TestRefBean.one}");
-
-        cmbp.setValue(cmbpv);
-        cmb.addProperty(cmbp); 
-
-        mbf = new ManagedBeanFactory(cmb);
+        mbf = new ManagedBeanFactory(bean);
 
         //testing with an application scope property set in a session scope bean
         assertNotNull(testBean = (TestBean) mbf.newInstance());
@@ -450,21 +389,17 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
         valueBinding.setRef("TestRefBean.one");
         valueBinding.setValue(getFacesContext(), "one");
 
-	cmb = new ConfigManagedBean();
-	cmb.setManagedBeanClass(beanName);
-	cmb.setManagedBeanScope("application");
+	bean = new ManagedBeanBean();
+	bean.setManagedBeanClass(beanName);
+	bean.setManagedBeanScope("application");
 
-        cmbp = new ConfigManagedBeanProperty();
-        cmbp.setPropertyName("one");
+        property = new ManagedPropertyBean();
+        property.setPropertyName("one");
+        property.setValue("#{TestRefBean.one}");
 
-        cmbpv = new ConfigManagedBeanPropertyValue();
-        cmbpv.setValueCategory(ConfigManagedBeanPropertyValue.VALUE_BINDING);
-        cmbpv.setValue("#{TestRefBean.one}");
+        bean.addManagedProperty(property); 
 
-        cmbp.setValue(cmbpv);
-        cmb.addProperty(cmbp); 
-
-        mbf = new ManagedBeanFactory(cmb);
+        mbf = new ManagedBeanFactory(bean);
 
 	exceptionThrown = false ;
         try {
@@ -491,21 +426,16 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
         valueBinding.setRef("sessionScope.TestRefBean.one");
         valueBinding.setValue(getFacesContext(), "one");
 
-	cmb = new ConfigManagedBean();
-	cmb.setManagedBeanClass(beanName);
-	cmb.setManagedBeanScope(null);
+	bean = new ManagedBeanBean();
+	bean.setManagedBeanClass(beanName);
+	bean.setManagedBeanScope(null);
 
-        cmbp = new ConfigManagedBeanProperty();
-        cmbp.setPropertyName("one");
+        property = new ManagedPropertyBean();
+        property.setPropertyName("one");
+        property.setValue("#{sessionScope.TestRefBean.one}");
+        bean.addManagedProperty(property); 
 
-        cmbpv = new ConfigManagedBeanPropertyValue();
-        cmbpv.setValueCategory(ConfigManagedBeanPropertyValue.VALUE_BINDING);
-        cmbpv.setValue("#{sessionScope.TestRefBean.one}");
-
-        cmbp.setValue(cmbpv);
-        cmb.addProperty(cmbp); 
-
-        mbf = new ManagedBeanFactory(cmb);
+        mbf = new ManagedBeanFactory(bean);
 
 	exceptionThrown = false ;
         try {
@@ -520,28 +450,31 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
         assertTrue(mbf.getScope() == null);
     }
     
+    /************* PENDING(edburns): rewrite to exercise new edge case
+     * detection.
     
     public void testInvalidPropertyConfiguration() throws Exception {
-        // If a ConfigManagedPropertyValue has a value that requires converstion from
-        // String (the default type) to another type, say Integer as an example,
-        // and the CMPV's value category isn't set to Value, conversion will not
-        // take place.  Thus, an error should occur when creating a new instanced
-        // of the managed bean.
+        // If a ConfigManagedPropertyValue has a value that requires
+        // converstion from String (the default type) to another type,
+        // say Integer as an example, and the CMPV's value category
+        // isn't set to Value, conversion will not take place.  Thus, an
+        // error should occur when creating a new instanced of the
+        // managed bean.
         
         // no value category set
-        cmb = new ConfigManagedBean();
-        cmb.setManagedBeanClass(beanName);
-        cmb.setManagedBeanScope("session");
+        bean = new ManagedBeanBean();
+        bean.setManagedBeanClass(beanName);
+        bean.setManagedBeanScope("session");
 
         boolean testBoolean = true;
-        cmbp = new ConfigManagedBeanProperty();
-        cmbp.setPropertyName("boolProp");
-        cmbpv = new ConfigManagedBeanPropertyValue();        
-        cmbpv.setValue((new Boolean(testBoolean)).toString());
-        cmbp.setValue(cmbpv);
-        cmb.addProperty(cmbp); 
+        property = new ManagedPropertyBean();
+        property.setPropertyName("boolProp");
+        propertyv = new ConfigManagedBeanPropertyValue();        
+        propertyv.setValue((new Boolean(testBoolean)).toString());
+        property.setValue(propertyv);
+        bean.addManagedProperty(property); 
         
-        mbf = new ManagedBeanFactory(cmb);
+        mbf = new ManagedBeanFactory(bean);
 
         boolean exceptionThrown = false;
         try {
@@ -553,19 +486,19 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
         
         
         // value category set to VALUE_BINDING
-        cmb = new ConfigManagedBean();
-        cmb.setManagedBeanClass(beanName);
-        cmb.setManagedBeanScope("session");
+        bean = new ManagedBeanBean();
+        bean.setManagedBeanClass(beanName);
+        bean.setManagedBeanScope("session");
       
-        cmbp = new ConfigManagedBeanProperty();
-        cmbp.setPropertyName("boolProp");
-        cmbpv = new ConfigManagedBeanPropertyValue();
-        cmbpv.setValueCategory(ConfigManagedBeanPropertyValue.VALUE_BINDING);
-        cmbpv.setValue((new Boolean(testBoolean)).toString());
-        cmbp.setValue(cmbpv);
-        cmb.addProperty(cmbp);
+        property = new ManagedPropertyBean();
+        property.setPropertyName("boolProp");
+        propertyv = new ConfigManagedBeanPropertyValue();
+        propertyv.setValueCategory(ConfigManagedBeanPropertyValue.VALUE_BINDING);
+        propertyv.setValue((new Boolean(testBoolean)).toString());
+        property.setValue(propertyv);
+        bean.addManagedProperty(property);
 
-        mbf = new ManagedBeanFactory(cmb);
+        mbf = new ManagedBeanFactory(bean);
 
         exceptionThrown = false;
         try {
@@ -579,31 +512,33 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
 
     public void testExceptions() throws Exception {
 
-	cmb = new ConfigManagedBean();
-	cmb.setManagedBeanClass("foo");
-	cmb.setManagedBeanScope("session");
+	bean = new ManagedBeanBean();
+	bean.setManagedBeanClass("foo");
+	bean.setManagedBeanScope("session");
 
-        cmbp = new ConfigManagedBeanProperty();
-        cmbp.setPropertyName("one");
+        property = new ManagedPropertyBean();
+        property.setPropertyName("one");
 
-        cmbpv = new ConfigManagedBeanPropertyValue();
-        cmbpv.setValue("one");
+        propertyv = new ConfigManagedBeanPropertyValue();
+        propertyv.setValue("one");
 
-        cmbp.setValue(cmbpv);
+        property.setValue(propertyv);
 	boolean exceptionThrown = false;
         try {
-            cmb.addProperty(cmbp); 
+            bean.addManagedProperty(property); 
 	} catch (FacesException fe) {
 	    exceptionThrown = true;
 	}
         assertTrue(exceptionThrown);
 	exceptionThrown = false;
 	try {
-	    cmbp = null;
-	    cmb.addProperty(cmbp);
+	    property = null;
+	    bean.addManagedProperty(property);
 	} catch (NullPointerException npe) {
 	    exceptionThrown = true;
 	}
         assertTrue(exceptionThrown);
     }
+    ***********/
+
 }

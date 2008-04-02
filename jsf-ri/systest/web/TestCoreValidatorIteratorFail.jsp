@@ -21,7 +21,7 @@ This page should FAIL.
 
   <c:forEach var="i" begin="0" end="3" varStatus="status">
     Array[<c:out value="${i}"/>]: 
-    <h:output_text value="NO ID"/><br>
+    <h:outputText value="NO ID"/><br>
   </c:forEach>
 
 </f:view>

@@ -3,61 +3,49 @@
    SUN PROPRIETARY/CONFIDENTIAL.  Use is subject license terms.
 --%>
 
-<%-- $Id: verbatim_test.jsp,v 1.5 2003/12/17 15:14:41 rkitain Exp $ --%>
-<html>
-  <head>
-    <title>Test of the Verbatim Tag</title>
-    <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
-    <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
-<%@ page import="javax.faces.context.FacesContext"%>
-<%
+<%-- $Id: verbatim_test.jsp,v 1.6 2004/01/27 21:05:05 eburns Exp $ --%>
 
-  String textToEscape = "This text<b>must be escaped</b>";
-  FacesContext.getCurrentInstance().getExternalContext().getRequestMap().put("textToEscape", textToEscape);  
-%>
-
-
-  </head>
+<%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
 
 <f:view>
 
-  <body>
-    <h1>Test of the Verbatim Tag</h1>
+  <html>
 
-<p>
+    <head>
+      <title>Test of the Verbatim Tag</title>
+    </head>
 
-    <f:verbatim escape="false">This text must be echoed verbatim <B>INCLUDING</B> any
-    <I>MARKUP</I>.  The angle brackets must be un-escaped.
-    </f:verbatim>
+    <body>
 
-</p>
+      <h1>Test of the Verbatim Tag</h1>
 
-<p>
+      <p>
+        <f:verbatim>
+          [DEFAULT]
+          This text <b>has angle brackets</b>.
+          The angle brackets MUST NOT be escaped.
+        </f:verbatim>
+      </p>
 
-    <f:verbatim escape="false">This text must be echoed verbatim
-    <B>INCLUDING</B> any <I>MARKUP</I>.  The angle brackets must be
-    un-escaped.
-    </f:verbatim>
+      <p>
+        <f:verbatim escape="false">
+          [FALSE]
+          This text <b>has angle brackets</b>.
+          The angle brackets MUST NOT be escaped.
+        </f:verbatim>
+      </p>
 
-</p>
+      <p>
+        <f:verbatim escape="true">
+          [TRUE]
+          This text <b>has angle brackets</b>.
+          The angle brackets MUST be escaped.
+        </f:verbatim>
+      </p>
 
-<p>
+    </body>
 
-    <f:verbatim escape="true">This text must be echoed verbatim
-    <B>INCLUDING</B> any <I>MARKUP</I>.  The angle brackets must be
-    escaped.
-    </f:verbatim>
-
-    <p><h:output_text value="#{textToEscape}"/></p>
-
-</p>
-
-
-
-
-    <hr>
-  </body>
+  </html>
 
 </f:view>
 
-</html>

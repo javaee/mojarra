@@ -18,8 +18,8 @@
 
 <tr>
 <td>Name:</td>
-<td><h:input_text value="Gilligan"/></td>
-<td><h:command_button value="submit"/></td>
+<td><h:inputText value="Gilligan"/></td>
+<td><h:commandButton value="submit"/></td>
 </tr>
 </table>
 

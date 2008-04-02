@@ -1,5 +1,5 @@
 /*
- * $Id: RIConstants.java,v 1.53 2004/01/22 00:06:10 rkitain Exp $
+ * $Id: RIConstants.java,v 1.54 2004/01/27 21:03:59 eburns Exp $
  */
 
 /*
@@ -56,6 +56,9 @@ public class RIConstants {
    
     public static final String JSF_RI_CONFIG = 
 	"com/sun/faces/jsf-ri-config.xml";
+
+    public static final String JSF_RI_STANDARD =
+        "com/sun/faces/standard-html-renderkit.xml";
 
     public final static String FORM_NUMBER_ATTR = FACES_PREFIX +
 	"FormNumber";

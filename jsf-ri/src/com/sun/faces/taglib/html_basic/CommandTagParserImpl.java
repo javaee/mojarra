@@ -1,5 +1,5 @@
 /*
- * $Id: CommandTagParserImpl.java,v 1.6 2003/12/17 15:14:09 rkitain Exp $
+ * $Id: CommandTagParserImpl.java,v 1.7 2004/01/27 21:04:40 eburns Exp $
  */
 
 /*
@@ -82,7 +82,7 @@ public class CommandTagParserImpl implements TagParser {
     public void parseStartElement() {
         String qn = validatorInfo.getQName();
 
-        if (-1 != (qn.indexOf("command_button"))) {
+        if (-1 != (qn.indexOf("commandButton"))) {
 	    handleCommandButton();
         }
     }
@@ -101,7 +101,7 @@ public class CommandTagParserImpl implements TagParser {
     /**
      * <p>set failed flag to true unless tag has a value attribute</p>.
      *
-     * <p>PRECONDITION: qn is a command_button</p>
+     * <p>PRECONDITION: qn is a commandButton</p>
      */
     private void handleCommandButton() {
         Attributes attrs = validatorInfo.getAttributes();

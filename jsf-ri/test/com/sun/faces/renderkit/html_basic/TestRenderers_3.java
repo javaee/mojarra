@@ -4,7 +4,7 @@
  */
 
 /**
- * $Id: TestRenderers_3.java,v 1.30 2004/01/06 14:53:28 rkitain Exp $
+ * $Id: TestRenderers_3.java,v 1.31 2004/01/27 21:06:12 eburns Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -49,7 +49,7 @@ import com.sun.faces.JspFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_3.java,v 1.30 2004/01/06 14:53:28 rkitain Exp $
+ * @version $Id: TestRenderers_3.java,v 1.31 2004/01/27 21:06:12 eburns Exp $
  * 
  *
  */
@@ -359,7 +359,7 @@ public class TestRenderers_3 extends JspFacesTestCase {
         UIInput input1 = new UIInput();
         input1.setValue(null);
         input1.setId("myInputDateHidden");
-        Converter converter = application.createConverter("DateTime");
+        Converter converter = application.createConverter("javax.faces.DateTime");
         input1.setConverter(converter);
 	input1.getAttributes().put("dateStyle", "medium");
         root.getChildren().add(input1);
@@ -390,7 +390,7 @@ public class TestRenderers_3 extends JspFacesTestCase {
         UIInput input2 = new UIInput();
         input2.setValue(null);
         input2.setId("myNumberHidden");
-        converter = application.createConverter("Number");
+        converter = application.createConverter("javax.faces.Number");
 	((NumberConverter)converter).setType("percent");
         input2.setConverter(converter);
         root.getChildren().add(input2);

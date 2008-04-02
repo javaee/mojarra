@@ -1,5 +1,5 @@
 /*
- * $Id: ButtonRenderer.java,v 1.69 2004/01/14 17:13:01 eburns Exp $
+ * $Id: ButtonRenderer.java,v 1.70 2004/01/27 21:04:22 eburns Exp $
  */
 
 /*
@@ -32,7 +32,6 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ButtonRenderer.java,v 1.69 2004/01/14 17:13:01 eburns Exp $
  *
  */
 

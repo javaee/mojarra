@@ -15,7 +15,7 @@
   pageContext.setAttribute("ford", new String("harrison"));
 %>
 
-<h1>TLV command_button, invalid 'id' expression</h1>
+<h1>TLV commandButton, invalid 'id' expression</h1>
 This page should Fail.
 <br>
 <br>
@@ -23,7 +23,7 @@ This page should Fail.
 <f:view>
 
   <p>This command button has an invalid id expression</p>
-  <h:command_button id="#{#{ford}}" value="hello" />
+  <h:commandButton id="#{#{ford}}" value="hello" />
 
 </f:view>
 

@@ -1,5 +1,5 @@
 /*
- * $Id: ConvertDateTimeTag.java,v 1.7 2004/01/21 01:13:08 craigmcc Exp $
+ * $Id: ConvertDateTimeTag.java,v 1.8 2004/01/27 21:04:42 eburns Exp $
  */
 
 /*
@@ -26,7 +26,7 @@ import com.sun.faces.util.Util;
  * <p>ConvertDateTimeTag is a ConverterTag implementation for 
  * javax.faces.convert.DateTimeConverter</p>
  *
- * @version $Id: ConvertDateTimeTag.java,v 1.7 2004/01/21 01:13:08 craigmcc Exp $
+ * @version $Id: ConvertDateTimeTag.java,v 1.8 2004/01/27 21:04:42 eburns Exp $
  * 
  */
 
@@ -64,7 +64,7 @@ public class ConvertDateTimeTag extends ConverterTag {
     //
     public ConvertDateTimeTag() {
         super();
-        super.setConverterId("DateTime");
+        super.setConverterId("javax.faces.DateTime");
         init();
     }
 

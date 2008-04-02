@@ -1,5 +1,5 @@
 /*
- * $Id: TestActionListenerImpl.java,v 1.16 2003/12/17 15:15:03 rkitain Exp $
+ * $Id: TestActionListenerImpl.java,v 1.17 2004/01/27 21:05:49 eburns Exp $
  */
 
 /*
@@ -13,7 +13,6 @@ package com.sun.faces.application;
 
 import com.sun.faces.RIConstants;
 import com.sun.faces.ServletFacesTestCase;
-import com.sun.faces.config.ConfigListener;
 import com.sun.faces.config.ConfigNavigationCase;
 import com.sun.faces.context.FacesContextImpl;
 
@@ -45,7 +44,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestActionListenerImpl.java,v 1.16 2003/12/17 15:15:03 rkitain Exp $
+ * @version $Id: TestActionListenerImpl.java,v 1.17 2004/01/27 21:05:49 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -94,7 +93,7 @@ public class TestActionListenerImpl extends ServletFacesTestCase
 //
 
     public void testProcessAction() {
-	loadFromInitParam("WEB-INF/faces-navigation.xml");
+	loadFromInitParam("/WEB-INF/faces-navigation.xml");
         FacesContext context = getFacesContext();
 
         System.out.println("Testing With Action Literal Set...");

@@ -19,7 +19,7 @@ loop.</P>
   <f:view>
   <h:form id="1" >
 
-            <h:output_text id="5"  text="5" />
+            <h:outputText id="5"  text="5" />
   </h:form>
 </f:view>
 

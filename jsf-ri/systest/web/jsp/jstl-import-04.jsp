@@ -4,7 +4,7 @@
 <%@ taglib prefix="h" uri="http://java.sun.com/jsf/html" %>
 
 <%--
-      NOTE: The included "output_text" component tags are from
+      NOTE: The included "outputText" component tags are from
       the systest tag library, not the standard html tag library,
       in order to bypass the normal requirement for an "id"
 --%>
@@ -16,7 +16,7 @@
 <title>jstl-import-04</title>
 </head>
 <body>
-<h:output_text value="[1]"/>
+<h:outputText value="[1]"/>
 <c:choose>
   <c:when test="${param.choose == 'a'}">
     <c:import url="jstl-import-04a.jsp"/>
@@ -28,7 +28,7 @@
     <c:import url="jstl-import-04c.jsp"/>
   </c:otherwise>
 </c:choose>
-<h:output_text value="[3]"/>
+<h:outputText value="[3]"/>
 </body>
 </html>
 </f:view>

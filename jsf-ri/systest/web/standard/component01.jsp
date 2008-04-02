@@ -16,7 +16,7 @@
   </head>
   <body>
       <f:view>
-          <h:input_text id="username" binding="#{usernamecomponent}" size="20"/> 
+          <h:inputText id="username" binding="#{usernamecomponent}" size="20"/> 
       </f:view>
   </body>
 </html>

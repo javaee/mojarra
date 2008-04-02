@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_2.java,v 1.77 2004/01/19 18:17:10 craigmcc Exp $
+ * $Id: TestRenderers_2.java,v 1.78 2004/01/27 21:06:12 eburns Exp $
  */
 
 /*
@@ -50,7 +50,7 @@ import com.sun.faces.TestBean;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_2.java,v 1.77 2004/01/19 18:17:10 craigmcc Exp $
+ * @version $Id: TestRenderers_2.java,v 1.78 2004/01/27 21:06:12 eburns Exp $
  * 
  *
  */
@@ -331,7 +331,7 @@ public class TestRenderers_2 extends JspFacesTestCase
         SelectItem[] selectItems = {item1, item2, item3, item4};
         uiSelectItems.setValue(selectItems);
 	uiSelectItems.setId("items");
-	Converter converter = application.createConverter("Number");
+	Converter converter = application.createConverter("javax.faces.Number");
 	selectOne.setConverter(converter);
         selectOne.getChildren().add(uiSelectItems);
         root.getChildren().add(selectOne);
@@ -441,7 +441,7 @@ public class TestRenderers_2 extends JspFacesTestCase
     public void testGraphicImageRenderer(UIComponent root) throws IOException {
         System.out.println("Testing GraphicImageRenderer");
         UIGraphic img = new UIGraphic();
-        img.setURL("/nonModelReferenceImage.gif");
+        img.setUrl("/nonModelReferenceImage.gif");
         img.setId("myGraphicImage");
         img.getAttributes().put("ismap", new Boolean(true));
         img.getAttributes().put("usemap", "usemap");

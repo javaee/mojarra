@@ -1,5 +1,5 @@
 /*
- * $Id: TextRenderer.java,v 1.60 2004/01/14 17:13:04 eburns Exp $
+ * $Id: TextRenderer.java,v 1.61 2004/01/27 21:04:29 eburns Exp $
  */
 
 /*

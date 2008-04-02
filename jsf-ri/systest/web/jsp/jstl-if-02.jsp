@@ -10,22 +10,22 @@
 <title>jstl-if-02</title>
 </head>
 <body>
-<h:output_text value="[First]"/>
+<h:outputText value="[First]"/>
 <c:if test="${param.component}">
   <s:facets id="comp" value="Second">
     <c:if test="${param.header}">
       <f:facet name="header">
-        <h:output_text id="head" value="Header"/>
+        <h:outputText id="head" value="Header"/>
       </f:facet>
     </c:if>
     <c:if test="${param.footer}">
       <f:facet name="footer">
-        <h:output_text id="foot" value="Footer"/>
+        <h:outputText id="foot" value="Footer"/>
       </f:facet>
     </c:if>
   </s:facets>
 </c:if>
-<h:output_text value="[Third]"/>
+<h:outputText value="[Third]"/>
 </body>
 </html>
 </f:view>

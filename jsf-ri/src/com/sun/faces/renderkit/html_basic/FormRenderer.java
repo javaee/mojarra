@@ -1,5 +1,5 @@
 /*
- * $Id: FormRenderer.java,v 1.69 2004/01/20 15:19:49 eburns Exp $
+ * $Id: FormRenderer.java,v 1.70 2004/01/27 21:04:23 eburns Exp $
  */
 
 /*
@@ -32,7 +32,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: FormRenderer.java,v 1.69 2004/01/20 15:19:49 eburns Exp $ 
+ * @version $Id: FormRenderer.java,v 1.70 2004/01/27 21:04:23 eburns Exp $ 
  */
 
 public class FormRenderer extends HtmlBasicRenderer {

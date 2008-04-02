@@ -42,7 +42,7 @@
 
 	<TD>
 
-	      <h:command_button id="login" value="Login" 
+	      <h:commandButton id="login" value="Login" 
 				    commandName="login"/>
 
 	</TD>
@@ -54,7 +54,7 @@
 
 	<TD>
 
-	      <h:command_button id="imageButton" image="duke.gif"
+	      <h:commandButton id="imageButton" image="duke.gif"
 				    commandName="login"/>
 
 	</TD>
@@ -65,7 +65,7 @@
 
 	<TD>
 
-	      <h:command_link id="link" href="hello.html"
+	      <h:commandLink id="link" href="hello.html"
 				       value="link text"/>
 
 	</TD>
@@ -76,7 +76,7 @@
 
 	<TD>
 
-	      <h:command_link id="imageLink" href="hello.html"
+	      <h:commandLink id="imageLink" href="hello.html"
 				       image="duke.gif"/>
 
 	</TD>
@@ -87,7 +87,7 @@
 
 	<TD>
 
-	      <h:output_text id="userLabel" text="Output Text" />
+	      <h:outputText id="userLabel" text="Output Text" />
 
 	</TD>
 
@@ -97,7 +97,7 @@
 
 	<TD>
 
-	      <h:selectboolean_checkbox id="validUser" label="Valid User"
+	      <h:selectmanyCheckbox id="validUser" label="Valid User"
 					    selected="true" />
 
 	</TD>
@@ -108,7 +108,7 @@
 
 	<TD>
 
-	      <h:selectone_listbox id="appleQuantity">
+	      <h:selectoneListbox id="appleQuantity">
 
 		<h:selectitem  value="0" label="0"/>
 		<h:selectitem  value="1" label="1"/>
@@ -121,7 +121,7 @@
 		<h:selectitem  value="8" label="8"/>
 		<h:selectitem  value="9" label="9"/>
 
-	      </h:selectone_listbox>
+	      </h:selectoneListbox>
 
               Option List
 
@@ -133,14 +133,14 @@
 
 	<TD>
 
-	      <h:selectone_radio id="shipType" align="horizontal">
+	      <h:selectoneRadio id="shipType" align="horizontal">
 
 		<h:selectitem value="nextDay" label="Next Day" />
 		<h:selectitem value="nextWeek" label="Next Week" 
                                   selected="true" />
 		<h:selectitem value="nextMonth" label="Next Month" />
 
-              </h:selectone_radio>
+              </h:selectoneRadio>
 
 	</TD>
 
@@ -149,7 +149,7 @@
       <TR>
 
 	<TD>
-		<h:selectone_radio id="verticalRadio" 
+		<h:selectoneRadio id="verticalRadio" 
                                             align="vertical" border="1" >
 
   		<h:selectitem value="nextDay" label="Next Day" 
@@ -157,7 +157,7 @@
 		<h:selectitem value="nextWeek" label="Next Week"  />
 		<h:selectitem value="nextMonth" label="Next Month" />
 
-                </h:selectone_radio>
+                </h:selectoneRadio>
 
 	</TD>
 

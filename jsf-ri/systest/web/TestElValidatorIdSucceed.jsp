@@ -17,14 +17,14 @@
   pageContext.setAttribute("last", new String("Ford"));
 %>
 
-<h1>TLV command_button, valid 'id' expression</h1>
+<h1>TLV commandButton, valid 'id' expression</h1>
 This page should Succeed.
 <br>
 <br>
 
 <f:view>
   <c:set var="temp" scope="request" value="${pageScope.first}${pageScope.last}"/>
-  <h:command_button id="temp" value="indiana" />
+  <h:commandButton id="temp" value="indiana" />
 
 </f:view>
 

@@ -1,5 +1,5 @@
 /*
- * $Id: ValidateLongRangeTag.java,v 1.4 2003/12/17 15:14:14 rkitain Exp $
+ * $Id: ValidateLongRangeTag.java,v 1.5 2004/01/27 21:04:44 eburns Exp $
  */
 
 /*
@@ -54,7 +54,7 @@ protected long minimum = 0;
 public ValidateLongRangeTag()
 {
     super();
-    super.setValidatorId("LongRange");
+    super.setValidatorId("javax.faces.LongRange");
 }
 
 //

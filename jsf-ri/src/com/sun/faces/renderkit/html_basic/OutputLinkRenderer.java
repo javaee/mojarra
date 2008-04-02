@@ -1,5 +1,5 @@
 /*
- * $Id: OutputLinkRenderer.java,v 1.7 2004/01/20 15:19:50 eburns Exp $
+ * $Id: OutputLinkRenderer.java,v 1.8 2004/01/27 21:04:27 eburns Exp $
  */
 
 /*
@@ -36,7 +36,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: OutputLinkRenderer.java,v 1.7 2004/01/20 15:19:50 eburns Exp $
+ * @version $Id: OutputLinkRenderer.java,v 1.8 2004/01/27 21:04:27 eburns Exp $
  */
 
 public class OutputLinkRenderer extends HtmlBasicRenderer {

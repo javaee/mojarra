@@ -1,5 +1,5 @@
 /*
- * $Id: VerbatimTag.java,v 1.5 2004/01/17 05:20:55 craigmcc Exp $
+ * $Id: VerbatimTag.java,v 1.6 2004/01/27 21:04:44 eburns Exp $
  */
 
 /*
@@ -33,37 +33,45 @@ public class VerbatimTag extends UIComponentBodyTag {
 
 
     public void setEscape(String escape) {
-
         this.escape = escape;
-
     }
 
 
     // --------------------------------------------------------- Public Methods
 
-    public String getRendererType() { return "Text"; }
-    public String getComponentType() { return "Output"; }
+
+    public String getRendererType() { return "javax.faces.Text"; }
+    public String getComponentType() { return "javax.faces.Output"; }
+
 
     protected void setProperties(UIComponent component) {
+
 	super.setProperties(component);
 	if (null != escape) {
 	    if (isValueReference(escape)) {
-		ValueBinding vb = FacesContext.getCurrentInstance().getApplication().createValueBinding(escape);
+		ValueBinding vb =
+                    FacesContext.getCurrentInstance().getApplication().
+                    createValueBinding(escape);
 		component.setValueBinding("escape", vb);
-	    }
-	    else {
+	    } else {
 		boolean _escape = new Boolean(escape).booleanValue();
-		component.getAttributes().put("escape", _escape ? Boolean.TRUE : Boolean.FALSE);
+		component.getAttributes().put
+                    ("escape", _escape ? Boolean.TRUE : Boolean.FALSE);
 	    }
-	}
+	} else {
+            component.getAttributes().put("escape", Boolean.FALSE);
+        }
 	component.setTransient(true);
+
     }    
+
 
     /**
      * <p>Set the local value of this component to reflect the nested
      * body content of this JSP tag.</p>
      */
     public int doAfterBody() throws JspException {
+
         if (getBodyContent() != null) {
             String value = getBodyContent().getString().trim();
             if (value != null) {
@@ -72,8 +80,8 @@ public class VerbatimTag extends UIComponentBodyTag {
             }
         }
         return (getDoAfterBodyValue());
-    }
 
+    }
 
 
 }

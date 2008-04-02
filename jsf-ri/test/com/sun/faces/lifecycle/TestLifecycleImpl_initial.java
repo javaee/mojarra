@@ -1,5 +1,5 @@
 /*
- * $Id: TestLifecycleImpl_initial.java,v 1.21 2004/01/16 21:31:07 craigmcc Exp $
+ * $Id: TestLifecycleImpl_initial.java,v 1.22 2004/01/27 21:06:04 eburns Exp $
  */
 
 /*
@@ -22,7 +22,7 @@ import javax.faces.FacesException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestLifecycleImpl_initial.java,v 1.21 2004/01/16 21:31:07 craigmcc Exp $ 
+ * @version $Id: TestLifecycleImpl_initial.java,v 1.22 2004/01/27 21:06:04 eburns Exp $ 
  */
 
 public class TestLifecycleImpl_initial extends JspFacesTestCase

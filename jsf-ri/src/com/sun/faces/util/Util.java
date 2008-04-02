@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.123 2004/01/21 03:50:38 eburns Exp $
+ * $Id: Util.java,v 1.124 2004/01/27 21:04:50 eburns Exp $
  */
 
 /*
@@ -70,7 +70,7 @@ import com.sun.faces.el.impl.JspVariableResolver;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.123 2004/01/21 03:50:38 eburns Exp $ 
+ * @version $Id: Util.java,v 1.124 2004/01/27 21:04:50 eburns Exp $ 
  */
 
 public class Util extends Object
@@ -329,10 +329,22 @@ public class Util extends Object
 
     */
     private static String passthruAttributes[] = {
+        "accept", 
+        "acceptcharset", 
 	"accesskey",
 	"alt",
+        "bgcolor",
+        "border",
+        "cellpadding",
+        "cellspacing",
+        "charset",
         "cols",
+        "coords",
+        "dir",
+        "enctype", 
+        "frame",
         "height",
+        "hreflang",
 	"lang",
 	"longdesc",
 	"maxlength",
@@ -354,33 +366,24 @@ public class Util extends Object
 	"onselect",
 	"onsubmit",
 	"onunload",
-        "rows",
-	"size",
-        "tabindex",
-	//        "class", // PENDING(edburns): revisit this for JSFA105
-        "title",
-        "style",
-        "width",
-        "dir",
-        "rules",
-        "frame",
-        "border",
-        "cellspacing",
-        "cellpadding",
-        "summary",
-        "bgcolor",
-        "usemap",
-        "enctype", 
-        "acceptcharset", 
-        "accept", 
-        "target", 
-        "onreset",
         "rel",
         "rev",
+        "rows",
+        "rules",
         "shape",
-        "coords",
-        "hreflang"
+	"size",
+        "style",
+        "summary",
+        "tabindex",
+        "target", 
+        "title",
+        "usemap",
+        "width"
     };
+
+    //NOTE - "type" was deliberately skipped from the list of passthru attrs above
+    //All renderers that need this attribute should manually pass it.
+    
 
 
 //
@@ -944,6 +947,9 @@ private Util()
      * Determine whether String is a value binding expression or not.
      */
     public static boolean isVBExpression(String expression) {
+	if (null == expression) {
+	    return false;
+	}
         //check to see if attribute has an expression
         if ((expression.indexOf("#{") != -1) &&
             (expression.indexOf("#{") < expression.indexOf('}'))) {

@@ -19,17 +19,17 @@
 
             <h:textentry_input id="userName" />
 
-            <h:command_button id="login" />
+            <h:commandButton id="login" />
 
-	    <!-- <h:command_link id="/basicForm/login" /> -->
+	    <!-- <h:commandLink id="/basicForm/login" /> -->
 
-            <h:output_text id="userLabel" />
+            <h:outputText id="userLabel" />
 
-            <h:selectboolean_checkbox id="validUser" />
+            <h:selectmanyCheckbox id="validUser" />
 
-            <h:selectone_listbox id="appleQuantity" />
+            <h:selectoneListbox id="appleQuantity" />
 
-            <h:selectone_radio id="shipType" />
+            <h:selectoneRadio id="shipType" />
 
             <h:textentry_secret id="password" />
 

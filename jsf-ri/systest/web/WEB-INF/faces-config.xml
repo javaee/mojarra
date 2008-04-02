@@ -118,7 +118,8 @@
     <render-kit-id>CUSTOM</render-kit-id>
     <render-kit-class>com.sun.faces.renderkit.RenderKitImpl</render-kit-class>
     <renderer>
-      <renderer-type>Text</renderer-type>
+      <component-family>javax.faces.Output</component-family>
+      <renderer-type>javax.faces.Text</renderer-type>
       <renderer-class>com.sun.faces.systest.render.TextRenderer</renderer-class>
     </renderer>
   </render-kit>

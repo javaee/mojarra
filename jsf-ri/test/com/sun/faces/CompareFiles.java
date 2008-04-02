@@ -1,5 +1,5 @@
 /*
- * $Id: CompareFiles.java,v 1.10 2004/01/25 02:08:03 jvisvanathan Exp $
+ * $Id: CompareFiles.java,v 1.11 2004/01/27 21:05:46 eburns Exp $
  */
 
 /*
@@ -67,6 +67,8 @@ public class CompareFiles {
 	// if one of the lines is null, but not the other
 	if (((null == newLine) && (null != oldLine)) ||
 	    ((null != newLine) && (null == oldLine))) {
+            System.out.println("1OLD=" + oldLine);
+            System.out.println("1NEW=" + newLine);
 	    same = false;
 	}
 
@@ -88,14 +90,18 @@ public class CompareFiles {
 		    // If we haven't found a match, then this mismatch is
 		    // important
 		    if (!foundMatch) {
+                        System.out.println("2OLD=" + oldLine);
+                        System.out.println("2NEW=" + newLine);
 			same = false;
 			break;
 		    }
 		}
 		else {
 		    newLine = stripJsessionidFromLine(newLine);
-                    oldLine = stripJsessionidFromLine(oldLine);
+		    oldLine = stripJsessionidFromLine(oldLine);
 		    if (!newLine.equals(oldLine)) {
+                        System.out.println("3OLD=" + oldLine);
+                        System.out.println("3NEW=" + newLine);
 			same = false;
 			break;
 		    }
@@ -108,6 +114,8 @@ public class CompareFiles {
 	    // if one of the lines is null, but not the other
 	    if (((null == newLine) && (null != oldLine)) ||
 		((null != newLine) && (null == oldLine))) {
+                System.out.println("4OLD=" + oldLine);
+                System.out.println("4NEW=" + newLine);
 		same = false;
 		break;
 	    }

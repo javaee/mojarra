@@ -2,7 +2,7 @@
 <%@ taglib prefix="h" uri="http://java.sun.com/jsf/html" %>
 <%-- <f:view> --%>
 <f:subview id="naming2a">
- <h:output_text value="[2a]"/>
- <h:output_text value="[2z]"/>
+ <h:outputText value="[2a]"/>
+ <h:outputText value="[2z]"/>
 </f:subview>
 <%-- </f:view> --%>

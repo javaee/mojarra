@@ -9,11 +9,11 @@
 <title>jsp-include-02</title>
 </head>
 <body>
-<h:output_text value="[A]"/>
+<h:outputText value="[A]"/>
 <jsp:include page="jstl-import-02a.jsp"/>
-<h:output_text value="[C]"/>
+<h:outputText value="[C]"/>
 <jsp:include page="jstl-import-02b.jsp"/>
-<h:output_text value="[E]"/>
+<h:outputText value="[E]"/>
 </body>
 </html>
 </f:view>

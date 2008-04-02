@@ -11,45 +11,45 @@
 
 <h:form id="formInput02_form">
 
-  <h:panel_grid columns="3">
+  <h:panelGrid columns="3">
 
-    <h:output_text value="booleanProperty"/>
-    <h:input_text id="booleanProperty" value="#{formInput02.booleanProperty}"/>
+    <h:outputText value="booleanProperty"/>
+    <h:inputText id="booleanProperty" value="#{formInput02.booleanProperty}"/>
     <h:message for="booleanProperty"/>
 
-    <h:output_text value="byteProperty"/>
-    <h:input_text id="byteProperty" value="#{formInput02.byteProperty}"/>
+    <h:outputText value="byteProperty"/>
+    <h:inputText id="byteProperty" value="#{formInput02.byteProperty}"/>
     <h:message for="byteProperty"/>
 
-    <h:output_text value="doubleProperty"/>
-    <h:input_text id="doubleProperty" value="#{formInput02.doubleProperty}"/>
+    <h:outputText value="doubleProperty"/>
+    <h:inputText id="doubleProperty" value="#{formInput02.doubleProperty}"/>
     <h:message for="doubleProperty"/>
 
-    <h:output_text value="floatProperty"/>
-    <h:input_text id="floatProperty" value="#{formInput02.floatProperty}"/>
+    <h:outputText value="floatProperty"/>
+    <h:inputText id="floatProperty" value="#{formInput02.floatProperty}"/>
     <h:message for="floatProperty"/>
 
-    <h:output_text value="intProperty"/>
-    <h:input_text id="intProperty" value="#{formInput02.intProperty}"/>
+    <h:outputText value="intProperty"/>
+    <h:inputText id="intProperty" value="#{formInput02.intProperty}"/>
     <h:message for="intProperty"/>
 
-    <h:output_text value="longProperty"/>
-    <h:input_text id="longProperty" value="#{formInput02.longProperty}"/>
+    <h:outputText value="longProperty"/>
+    <h:inputText id="longProperty" value="#{formInput02.longProperty}"/>
     <h:message for="longProperty"/>
 
-    <h:output_text value="shortProperty"/>
-    <h:input_text id="shortProperty" value="#{formInput02.shortProperty}"/>
+    <h:outputText value="shortProperty"/>
+    <h:inputText id="shortProperty" value="#{formInput02.shortProperty}"/>
     <h:message for="shortProperty"/>
 
-    <h:output_text value="stringProperty"/>
-    <h:input_text id="stringProperty" value="#{formInput02.stringProperty}"/>
+    <h:outputText value="stringProperty"/>
+    <h:inputText id="stringProperty" value="#{formInput02.stringProperty}"/>
     <h:message for="stringProperty"/>
 
-    <h:command_button id="submit" type="submit" value="Submit"/>
-    <h:command_button id="reset"  type="reset"  value="Reset"/>
-    <h:output_text value=""/>
+    <h:commandButton id="submit" type="submit" value="Submit"/>
+    <h:commandButton id="reset"  type="reset"  value="Reset"/>
+    <h:outputText value=""/>
 
-  </h:panel_grid>
+  </h:panelGrid>
 
 </h:form>
 

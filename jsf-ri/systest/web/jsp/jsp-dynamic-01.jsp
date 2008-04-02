@@ -9,9 +9,9 @@
 <title>jsp-dynamic-01</title>
 </head>
 <body>
-<h:output_text value="[A]"/>
+<h:outputText value="[A]"/>
 <s:dynamic id="dynamic"/>
-<h:output_text value="[Z]"/>
+<h:outputText value="[Z]"/>
 </body>
 </html>
 </f:view>

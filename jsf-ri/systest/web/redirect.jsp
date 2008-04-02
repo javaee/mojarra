@@ -5,9 +5,9 @@
 
        <f:view>  
          <h:form id="redirect">
-	   <h:output_text value="Label" /> 
+	   <h:outputText value="Label" /> 
 	   <p>
-	   <h:command_button id="submit" action="success" value="submit"/>
+	   <h:commandButton id="submit" action="success" value="submit"/>
          </h:form>
        </f:view>
 

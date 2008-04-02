@@ -1,5 +1,5 @@
 /*
- * $Id: HiddenRenderer.java,v 1.15 2004/01/15 07:34:05 eburns Exp $
+ * $Id: HiddenRenderer.java,v 1.16 2004/01/27 21:04:25 eburns Exp $
  */
 
 /*

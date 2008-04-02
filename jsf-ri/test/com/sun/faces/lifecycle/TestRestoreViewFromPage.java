@@ -1,5 +1,5 @@
 /*
- * $Id: TestRestoreViewFromPage.java,v 1.6 2004/01/20 04:51:50 eburns Exp $
+ * $Id: TestRestoreViewFromPage.java,v 1.7 2004/01/27 21:06:05 eburns Exp $
  */
 
 /*
@@ -40,7 +40,7 @@ import com.sun.faces.lifecycle.Phase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRestoreViewFromPage.java,v 1.6 2004/01/20 04:51:50 eburns Exp $
+ * @version $Id: TestRestoreViewFromPage.java,v 1.7 2004/01/27 21:06:05 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo

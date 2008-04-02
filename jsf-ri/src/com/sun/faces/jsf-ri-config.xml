@@ -8,1410 +8,168 @@
 <!DOCTYPE faces-config PUBLIC
   "-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.0//EN"
   "http://java.sun.com/dtd/web-facesconfig_1_0.dtd" [ 
-  <!ENTITY core-attrs SYSTEM "core-attrs.xml">
-  <!ENTITY events-attrs SYSTEM "events-attrs.xml">
-  <!ENTITY i18n-attrs SYSTEM "i18n-attrs.xml">
-  <!ELEMENT tag-attribute    (#PCDATA)>
 ]>
 
-<!-- =========== FULL CONFIGURATION FILE ================================== -->
+
+<!-- =========== RI CONFIGURATION FILE ===================================== -->
 
 <faces-config>
 
+
+  <!-- Configure Object Factories -->
+
   <factory>
-    <application-factory>com.sun.faces.application.ApplicationFactoryImpl</application-factory>
-    <faces-context-factory>com.sun.faces.context.FacesContextFactoryImpl</faces-context-factory>
-    <lifecycle-factory>com.sun.faces.lifecycle.LifecycleFactoryImpl</lifecycle-factory>
-    <render-kit-factory>com.sun.faces.renderkit.RenderKitFactoryImpl</render-kit-factory>
+    <application-factory>
+      com.sun.faces.application.ApplicationFactoryImpl
+    </application-factory>
+    <faces-context-factory>
+      com.sun.faces.context.FacesContextFactoryImpl
+    </faces-context-factory>
+    <lifecycle-factory>
+      com.sun.faces.lifecycle.LifecycleFactoryImpl
+    </lifecycle-factory>
+    <render-kit-factory>
+      com.sun.faces.renderkit.RenderKitFactoryImpl
+    </render-kit-factory>
   </factory>
 
 
-  <!-- Initial application element with partial values -->
+  <!-- Configure Application Objects -->
+
   <application>
-    <action-listener>com.sun.faces.application.ActionListenerImpl</action-listener>
-    <variable-resolver>com.sun.faces.el.VariableResolverImpl</variable-resolver>
-    <state-manager>com.sun.faces.application.StateManagerImpl</state-manager>
+    <action-listener>
+      com.sun.faces.application.ActionListenerImpl
+    </action-listener>
+    <navigation-handler>
+      com.sun.faces.application.NavigationHandlerImpl
+    </navigation-handler>
+    <property-resolver>
+      com.sun.faces.el.PropertyResolverImpl
+    </property-resolver>
+    <state-manager>
+      com.sun.faces.application.StateManagerImpl
+    </state-manager>
+    <variable-resolver>
+      com.sun.faces.el.VariableResolverImpl
+    </variable-resolver>
+    <view-handler>
+      com.sun.faces.application.ViewHandlerImpl
+    </view-handler>
   </application>
 
-  <!-- Standard Components -->
 
-  <component>
-    <component-type>Column</component-type>
-    <component-class>javax.faces.component.UIColumn</component-class>
-  </component>
+  <!-- Configure Standard By-Id Converters -->
 
-  <component>
-    <component-type>Command</component-type>
-    <component-class>javax.faces.component.UICommand</component-class>
-  </component>
-
-  <component>
-    <component-type>CommandButton</component-type>
-    <component-class>javax.faces.component.html.HtmlCommandButton</component-class>
-  </component>
-
-  <component>
-    <component-type>CommandLink</component-type>
-    <component-class>javax.faces.component.html.HtmlCommandLink</component-class>
-  </component>
-
-  <component>
-    <component-type>Data</component-type>
-    <component-class>javax.faces.component.UIData</component-class>
-  </component>
-
-  <component>
-    <component-type>DataTable</component-type>
-    <component-class>javax.faces.component.html.HtmlDataTable</component-class>
-  </component>
-
-  <component>
-    <component-type>Form</component-type>
-    <component-class>javax.faces.component.html.HtmlForm</component-class>
-  </component>
-
-  <component>
-    <component-type>Graphic</component-type>
-    <component-class>javax.faces.component.UIGraphic</component-class>
-  </component>
-
-  <component>
-    <component-type>GraphicImage</component-type>
-    <component-class>javax.faces.component.html.HtmlGraphicImage</component-class>
-  </component>
-
-  <component>
-    <component-type>Input</component-type>
-    <component-class>javax.faces.component.UIInput</component-class>
-  </component>
-
-  <component>
-    <component-type>InputHidden</component-type>
-    <component-class>javax.faces.component.html.HtmlInputHidden</component-class>
-  </component>
-
-  <component>
-    <component-type>InputSecret</component-type>
-    <component-class>javax.faces.component.html.HtmlInputSecret</component-class>
-  </component>
-
-  <component>
-    <component-type>InputText</component-type>
-    <component-class>javax.faces.component.html.HtmlInputText</component-class>
-  </component>
-
-  <component>
-    <component-type>InputTextarea</component-type>
-    <component-class>javax.faces.component.html.HtmlInputTextarea</component-class>
-  </component>
-
-  <component>
-    <component-type>Output</component-type>
-    <component-class>javax.faces.component.UIOutput</component-class>
-  </component>
-
-  <component>
-    <component-type>OutputLabel</component-type>
-    <component-class>javax.faces.component.html.HtmlOutputLabel</component-class>
-  </component>
-
-  <component>
-    <component-type>OutputLink</component-type>
-    <component-class>javax.faces.component.html.HtmlOutputLink</component-class>
-    <property>
-      <display-name></display-name>
-      <icon></icon>
-      <property-name>tabindex</property-name>
-      <property-class>int</property-class>
-      <property-extension>
-        <tag-attribute>yes</tag-attribute>
-      </property-extension>
-    </property>
-    <property>
-      <display-name></display-name>
-      <icon></icon>
-      <property-name>type</property-name>
-      <property-class>java.lang.String</property-class>
-      <property-extension>
-        <tag-attribute>yes</tag-attribute>
-      </property-extension>
-    </property>
-    <property>
-      <display-name></display-name>
-      <icon></icon>
-      <property-name>title</property-name>
-      <property-class>java.lang.String</property-class>
-      <property-extension>
-        <tag-attribute>yes</tag-attribute>
-      </property-extension>
-    </property>
-    <property>
-      <display-name></display-name>
-      <icon></icon>
-      <property-name>charset</property-name>
-      <property-class>java.lang.String</property-class>
-      <property-extension>
-        <tag-attribute>yes</tag-attribute>
-      </property-extension>
-    </property>
-    <property>
-      <display-name></display-name>
-      <icon></icon>
-      <property-name>styleClass</property-name>
-      <property-class>java.lang.String</property-class>
-      <property-extension>
-        <tag-attribute>yes</tag-attribute>
-      </property-extension>
-    </property>
-    <property>
-      <display-name></display-name>
-      <icon></icon>
-      <property-name>accessKey</property-name>
-      <property-class>java.lang.String</property-class>
-      <property-extension>
-        <tag-attribute>yes</tag-attribute>
-      </property-extension>
-    </property>
-    <property>
-      <display-name></display-name>
-      <icon></icon>
-      <property-name>onfocus</property-name>
-      <property-class>java.lang.String</property-class>
-      <property-extension>
-        <tag-attribute>yes</tag-attribute>
-      </property-extension>
-    </property>
-    <property>
-      <display-name></display-name>
-      <icon></icon>
-      <property-name>onblur</property-name>
-      <property-class>java.lang.String</property-class>
-      <property-extension>
-        <tag-attribute>yes</tag-attribute>
-      </property-extension>
-    </property>
-    <property>
-      <display-name></display-name>
-      <icon></icon>
-      <property-name>value</property-name>
-      <property-class>java.lang.String</property-class>
-      <property-extension>
-        <tag-attribute>yes</tag-attribute>
-      </property-extension>
-    </property>
-  </component>
-
-  <component>
-    <component-type>OutputMessage</component-type>
-    <component-class>javax.faces.component.html.HtmlOutputMessage</component-class>
-  </component>
-
-  <component>
-    <component-type>OutputText</component-type>
-    <component-class>javax.faces.component.html.HtmlOutputText</component-class>
-  </component>
-
-  <component>
-    <component-type>Panel</component-type>
-    <component-class>javax.faces.component.UIPanel</component-class>
-  </component>
-
-  <component>
-    <component-type>PanelGrid</component-type>
-    <component-class>javax.faces.component.html.HtmlPanelGrid</component-class>
-  </component>
-
-  <component>
-    <component-type>PanelGroup</component-type>
-    <component-class>javax.faces.component.html.HtmlPanelGroup</component-class>
-  </component>
-
-  <component>
-    <component-type>Parameter</component-type>
-    <component-class>javax.faces.component.UIParameter</component-class>
-  </component>
-
-  <component>
-    <component-type>SelectBoolean</component-type>
-    <component-class>javax.faces.component.UISelectBoolean</component-class>
-  </component>
-
-  <component>
-    <component-type>SelectBooleanCheckbox</component-type>
-    <component-class>javax.faces.component.html.HtmlSelectBooleanCheckbox</component-class>
-  </component>
-  <component>
-    <component-type>SelectManyCheckboxList</component-type>
-    <component-class>javax.faces.component.html.HtmlSelectManyCheckboxList</component-class>
-  </component>
-
-  <component>
-    <component-type>SelectManyListbox</component-type>
-    <component-class>javax.faces.component.html.HtmlSelectManyListbox</component-class>
-  </component>
-
-  <component>
-    <component-type>SelectManyMenu</component-type>
-    <component-class>javax.faces.component.html.HtmlSelectManyMenu</component-class>
-  </component>
-
-  <component>
-    <component-type>SelectOneListbox</component-type>
-    <component-class>javax.faces.component.html.HtmlSelectOneListbox</component-class>
-  </component>
-
-  <component>
-    <component-type>SelectOneMenu</component-type>
-    <component-class>javax.faces.component.html.HtmlSelectOneMenu</component-class>
-  </component>
-
-  <component>
-    <component-type>SelectOneRadio</component-type>
-    <component-class>javax.faces.component.html.HtmlSelectOneRadio</component-class>
-  </component>
-
-  <component>
-    <component-type>SelectItem</component-type>
-    <component-class>javax.faces.component.UISelectItem</component-class>
-  </component>
-
-  <component>
-    <component-type>SelectItems</component-type>
-    <component-class>javax.faces.component.UISelectItems</component-class>
-  </component>
-
-  <component>
-    <component-type>SelectMany</component-type>
-    <component-class>javax.faces.component.UISelectMany</component-class>
-  </component>
-
-  <component>
-    <component-type>SelectOne</component-type>
-    <component-class>javax.faces.component.UISelectOne</component-class>
-  </component>
-    
-  <component>
-    <component-type>ViewRoot</component-type>
-    <component-class>javax.faces.component.UIViewRoot</component-class>
-  </component>
-  
-  <component>
-    <component-type>NamingContainer</component-type>
-    <component-class>javax.faces.component.UINamingContainer</component-class>
-  </component>
-
-  <component>
-    <component-type>Message</component-type>
-    <component-class>javax.faces.component.html.HtmlMessage</component-class>
-  </component>
-
-  <component>
-    <component-type>Messages</component-type>
-    <component-class>javax.faces.component.html.HtmlMessages</component-class>
-  </component>  
-
-  <!-- standard converters -->
   <converter>
-      <converter-id>DateTime</converter-id>
-      <converter-class>javax.faces.convert.DateTimeConverter</converter-class>
+    <converter-id>javax.faces.BigDecimal</converter-id>
+    <converter-class>javax.faces.convert.BigDecimalConverter</converter-class>
   </converter>
   <converter>
-      <converter-id>Number</converter-id>
-      <converter-class>javax.faces.convert.NumberConverter</converter-class>
+    <converter-id>javax.faces.BigInteger</converter-id>
+    <converter-class>javax.faces.convert.BigIntegerConverter</converter-class>
   </converter>
   <converter>
-      <converter-id>Boolean</converter-id>
-      <converter-class>javax.faces.convert.BooleanConverter</converter-class>
+    <converter-id>javax.faces.Boolean</converter-id>
+    <converter-class>javax.faces.convert.BooleanConverter</converter-class>
   </converter>
   <converter>
-      <converter-id>Byte</converter-id>
-      <converter-class>javax.faces.convert.ByteConverter</converter-class>
+    <converter-id>javax.faces.Byte</converter-id>
+    <converter-class>javax.faces.convert.ByteConverter</converter-class>
   </converter>
   <converter>
-      <converter-id>Double</converter-id>
-      <converter-class>javax.faces.convert.DoubleConverter</converter-class>
+    <converter-id>javax.faces.Character</converter-id>
+    <converter-class>javax.faces.convert.CharacterConverter</converter-class>
   </converter>
   <converter>
-      <converter-id>Float</converter-id>
-      <converter-class>javax.faces.convert.FloatConverter</converter-class>
+    <converter-id>javax.faces.DateTime</converter-id>
+    <converter-class>javax.faces.convert.DateTimeConverter</converter-class>
   </converter>
   <converter>
-      <converter-id>Integer</converter-id>
-      <converter-class>javax.faces.convert.IntegerConverter</converter-class>
+    <converter-id>javax.faces.Double</converter-id>
+    <converter-class>javax.faces.convert.DoubleConverter</converter-class>
   </converter>
   <converter>
-      <converter-id>Character</converter-id>
-      <converter-class>javax.faces.convert.CharacterConverter</converter-class>
+    <converter-id>javax.faces.Float</converter-id>
+    <converter-class>javax.faces.convert.FloatConverter</converter-class>
   </converter>
   <converter>
-      <converter-id>Long</converter-id>
-      <converter-class>javax.faces.convert.LongConverter</converter-class>
+    <converter-id>javax.faces.Integer</converter-id>
+    <converter-class>javax.faces.convert.IntegerConverter</converter-class>
   </converter>
   <converter>
-      <converter-id>Short</converter-id>
-      <converter-class>javax.faces.convert.ShortConverter</converter-class>
+    <converter-id>javax.faces.Long</converter-id>
+    <converter-class>javax.faces.convert.LongConverter</converter-class>
   </converter>
   <converter>
-      <converter-id>BigInteger</converter-id>
-      <converter-class>javax.faces.convert.BigIntegerConverter</converter-class>
+    <converter-id>javax.faces.Number</converter-id>
+    <converter-class>javax.faces.convert.NumberConverter</converter-class>
   </converter>
   <converter>
-      <converter-id>BigDecimal</converter-id>
-      <converter-class>javax.faces.convert.BigDecimalConverter</converter-class>
-  </converter>
-  <converter>
-      <converter-for-class>java.lang.Boolean</converter-for-class>
-      <converter-class>javax.faces.convert.BooleanConverter</converter-class>
-  </converter>
-  <converter>
-      <converter-for-class>java.lang.Byte</converter-for-class>
-      <converter-class>javax.faces.convert.ByteConverter</converter-class>
-  </converter>
-  <converter>
-      <converter-for-class>java.lang.Double</converter-for-class>
-      <converter-class>javax.faces.convert.DoubleConverter</converter-class>
-  </converter>
-  <converter>
-      <converter-for-class>java.lang.Float</converter-for-class>
-      <converter-class>javax.faces.convert.FloatConverter</converter-class>
-  </converter>
-  <converter>
-      <converter-for-class>java.lang.Integer</converter-for-class>
-      <converter-class>javax.faces.convert.IntegerConverter</converter-class>
-  </converter>
-  <converter>
-      <converter-for-class>java.lang.Character</converter-for-class>
-      <converter-class>javax.faces.convert.CharacterConverter</converter-class>
-  </converter>
-  <converter>
-      <converter-for-class>java.lang.Long</converter-for-class>
-      <converter-class>javax.faces.convert.LongConverter</converter-class>
-  </converter>
-  <converter>
-      <converter-for-class>java.lang.Short</converter-for-class>
-      <converter-class>javax.faces.convert.ShortConverter</converter-class>
-  </converter>
-  <converter>
-      <converter-for-class>java.math.BigInteger</converter-for-class>
-      <converter-class>javax.faces.convert.BigIntegerConverter</converter-class>
-  </converter>
-  <converter>
-      <converter-for-class>java.math.BigDecimal</converter-for-class>
-      <converter-class>javax.faces.convert.BigDecimalConverter</converter-class>
+    <converter-id>javax.faces.Short</converter-id>
+    <converter-class>javax.faces.convert.ShortConverter</converter-class>
   </converter>
 
-  <!-- Standard Validators -->
+
+  <!-- Configure Standard By-Class Converters -->
+
+  <converter>
+    <converter-for-class>java.math.BigDecimal</converter-for-class>
+    <converter-class>javax.faces.convert.BigDecimalConverter</converter-class>
+  </converter>
+  <converter>
+    <converter-for-class>java.math.BigInteger</converter-for-class>
+    <converter-class>javax.faces.convert.BigIntegerConverter</converter-class>
+  </converter>
+  <converter>
+    <converter-for-class>java.lang.Boolean</converter-for-class>
+    <converter-class>javax.faces.convert.BooleanConverter</converter-class>
+  </converter>
+  <converter>
+    <converter-for-class>java.lang.Byte</converter-for-class>
+    <converter-class>javax.faces.convert.ByteConverter</converter-class>
+  </converter>
+  <converter>
+    <converter-for-class>java.lang.Character</converter-for-class>
+    <converter-class>javax.faces.convert.CharacterConverter</converter-class>
+  </converter>
+  <converter>
+    <converter-for-class>java.lang.Double</converter-for-class>
+    <converter-class>javax.faces.convert.DoubleConverter</converter-class>
+  </converter>
+  <converter>
+    <converter-for-class>java.lang.Float</converter-for-class>
+    <converter-class>javax.faces.convert.FloatConverter</converter-class>
+  </converter>
+  <converter>
+    <converter-for-class>java.lang.Integer</converter-for-class>
+    <converter-class>javax.faces.convert.IntegerConverter</converter-class>
+  </converter>
+  <converter>
+    <converter-for-class>java.lang.Long</converter-for-class>
+    <converter-class>javax.faces.convert.LongConverter</converter-class>
+  </converter>
+  <converter>
+    <converter-for-class>java.lang.Short</converter-for-class>
+    <converter-class>javax.faces.convert.ShortConverter</converter-class>
+  </converter>
+
+
+  <!-- Configure Standard Validators -->
 
   <validator>
-    <validator-id>DoubleRange</validator-id>
-    <validator-class>javax.faces.validator.DoubleRangeValidator</validator-class>
+    <validator-id>javax.faces.DoubleRange</validator-id>
+    <validator-class>
+      javax.faces.validator.DoubleRangeValidator
+  </validator-class>
   </validator>
   <validator>
-    <validator-id>Length</validator-id>
+    <validator-id>javax.faces.Length</validator-id>
     <validator-class>javax.faces.validator.LengthValidator</validator-class>
   </validator>
   <validator>
-    <validator-id>LongRange</validator-id>
+    <validator-id>javax.faces.LongRange</validator-id>
     <validator-class>javax.faces.validator.LongRangeValidator</validator-class>
   </validator>
 
-  <!-- standard renderkit -->
-  <render-kit>
-    <render-kit-id>HTML_BASIC</render-kit-id>
-    <render-kit-class>com.sun.faces.renderkit.RenderKitImpl</render-kit-class>
-
-    <renderer>
-      <renderer-type>Button</renderer-type>
-      <renderer-class>com.sun.faces.renderkit.html_basic.ButtonRenderer</renderer-class>
-      &core-attrs;
-      &events-attrs;
-      &i18n-attrs;
-      <attribute>
-        <description>what kind of widget is needed</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>type</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-      </attribute>
-
-      <attribute>
-        <description>unavailable in this context</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>disabled</attribute-name>
-        <attribute-class>boolean</attribute-class>
-      </attribute>
-
-      <attribute>
-        <description>specific to each type of field</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>size</attribute-name>
-        <attribute-class>int</attribute-class>
-      </attribute>
-
-      <attribute>
-        <description>short description</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>alt</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-      </attribute>
-
-      <attribute>
-        <description>position in tabbing order</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>tabindex</attribute-name>
-        <attribute-class>int</attribute-class>
-      </attribute>
-
-      <attribute>
-        <description>accessibility key character</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>accesskey</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-      </attribute>
-
-      <attribute>
-        <description>the element got the focus</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>onfocus</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-      </attribute>
-
-      <attribute>
-        <description>the element lost the focus</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>onblur</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-      </attribute>
-
-      <attribute>
-        <description>some text was selected</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>onselect</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-      </attribute>
-
-      <attribute>
-        <description>the element value was changed</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>onchange</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-      </attribute>
-
-      <supported-component-class>
-        <component-class>javax.faces.component.UICommand</component-class>
-      </supported-component-class>
-    </renderer>
-
-    <renderer>
-      <renderer-type>Checkbox</renderer-type>
-      <renderer-class>com.sun.faces.renderkit.html_basic.CheckboxRenderer</renderer-class>
-      &core-attrs;
-      &events-attrs;
-      &i18n-attrs;
-      <attribute>
-        <description>for radio buttons and check boxes</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>checked</attribute-name>
-        <attribute-class>boolean</attribute-class>
-      </attribute>
-
-      <attribute>
-        <description>unavailable in this context</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>disabled</attribute-name>
-        <attribute-class>boolean</attribute-class>
-      </attribute>
-
-      <attribute>
-        <description>specific to each type of field</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>size</attribute-name>
-        <attribute-class>int</attribute-class>
-      </attribute>
-
-      <attribute>
-        <description>position in tabbing order</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>tabindex</attribute-name>
-        <attribute-class>int</attribute-class>
-      </attribute>
-
-      <attribute>
-        <description>accessibility key character</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>accesskey</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-      </attribute>
-
-      <attribute>
-        <description>the element got the focus</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>onfocus</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-      </attribute>
-
-      <attribute>
-        <description>the element lost the focus</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>onblur</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-      </attribute>
-
-      <attribute>
-        <description>some text was selected</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>onselect</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-      </attribute>
-
-      <attribute>
-        <description>the element value was changed</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>onchange</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-      </attribute>
-
-      <supported-component-class>
-        <component-class>javax.faces.component.UISelectBoolean</component-class>
-      </supported-component-class>
-    </renderer>
-
-    <renderer>
-      <renderer-type>Form</renderer-type>
-      <renderer-class>com.sun.faces.renderkit.html_basic.FormRenderer</renderer-class>
-      &core-attrs;
-      &events-attrs;
-      &i18n-attrs;
-
-      <attribute>
-        <description>HTTP method used to submit the form</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>method</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-      </attribute>
-
-      <attribute>
-        <description>application/x-www-form-urlencoded</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>enctype</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-      </attribute>
-
-      <attribute>
-        <description>list of MIME types for file upload</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>accept</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-      </attribute>
-
-      <attribute>
-        <description>the form was submitted</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>onsubmit</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-      </attribute>
-
-      <attribute>
-        <description>the form was reset</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>onreset</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-      </attribute>
-
-      <attribute>
-        <description>list of supported charsets</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>acceptcharset</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-      </attribute>
-
-      <supported-component-class>
-        <component-class>javax.faces.component.UIForm</component-class>
-      </supported-component-class>
-    </renderer>
-
-    <renderer>
-      <renderer-type>Grid</renderer-type>
-      <renderer-class>com.sun.faces.renderkit.html_basic.GridRenderer</renderer-class>
-      <supported-component-class>
-        <component-class>javax.faces.component.UIPanel</component-class>
-      </supported-component-class>
-    </renderer>
-    <renderer>
-      <renderer-type>Group</renderer-type>
-      <renderer-class>com.sun.faces.renderkit.html_basic.GroupRenderer</renderer-class>
-      <supported-component-class>
-        <component-class>javax.faces.component.UIPanel</component-class>
-      </supported-component-class>
-    </renderer>
-
-    <renderer>
-      <renderer-type>Hidden</renderer-type>
-      <renderer-class>com.sun.faces.renderkit.html_basic.HiddenRenderer</renderer-class>
-      <supported-component-class>
-        <component-class>javax.faces.component.UIInput</component-class>
-      </supported-component-class>
-    </renderer>
-
-    <renderer>
-      <renderer-type>Link</renderer-type>
-      <renderer-class>com.sun.faces.renderkit.html_basic.LinkRenderer</renderer-class>
-      &core-attrs;
-      &events-attrs;
-      &i18n-attrs;
-      <attribute>
-        <description>char encoding of linked resource</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>charset</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-      </attribute>
-
-      <attribute>
-        <description>advisory content type</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>type</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-      </attribute>
-
-      <attribute>
-        <description>accessibility key character</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>accesskey</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-      </attribute>
-
-      <attribute>
-        <description>position in tabbing order</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>tabindex</attribute-name>
-        <attribute-class>int</attribute-class>
-      </attribute>
- 
-      <attribute>
-        <description>for use with client-side image maps</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>shape</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-      </attribute>
-      
-      <attribute>
-        <description>for use with client-side image maps</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>coords</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-      </attribute>
-      
-      <attribute>
-        <description>forward link types</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>rel</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-      </attribute>
-      
-      <attribute>
-        <description>reverse link types</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>rev</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-      </attribute>
-      
-       <attribute>
-        <description>language code</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>hreflang</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-      </attribute>
-      
-      <attribute>
-        <description>the element got the focus</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>onfocus</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-      </attribute>
-
-      <attribute>
-        <description>the element lost the focus</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>onblur</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-      </attribute>
-
-      <supported-component-type>
-        <component-type>CommandLink</component-type>
-      </supported-component-type>
-      <supported-component-type>
-        <component-type>OutputLink</component-type>
-      </supported-component-type>
-      <supported-component-class>
-        <component-class>javax.faces.component.html.HtmlCommandLink</component-class>
-      </supported-component-class>
-      <supported-component-class>
-        <component-class>javax.faces.component.html.HtmlOutputLink</component-class>
-      </supported-component-class>
-    </renderer>
-    <renderer>
-      <renderer-type>Image</renderer-type>
-      <renderer-class>com.sun.faces.renderkit.html_basic.ImageRenderer</renderer-class>
-      &core-attrs;
-      &events-attrs;
-      &i18n-attrs;
-      <attribute>
-        <description>short description</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>alt</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-      </attribute>
-
-      <attribute>
-        <description>link to long description (complements alt)</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>longdesc</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-      </attribute>
-
-      <attribute>
-        <description>override height</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>height</attribute-name>
-        <attribute-class>int</attribute-class>
-      </attribute>
-
-      <attribute>
-        <description>override width</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>width</attribute-name>
-        <attribute-class>int</attribute-class>
-      </attribute>
-
-      <supported-component-class>
-        <component-class>javax.faces.component.UIGraphic</component-class>
-      </supported-component-class>
-    </renderer>
-
-    <renderer>
-      <renderer-type>Label</renderer-type>
-      <renderer-class>com.sun.faces.renderkit.html_basic.LabelRenderer</renderer-class>
-      &core-attrs;
-      &events-attrs;
-      &i18n-attrs;
-      <attribute>
-        <description>matches field ID value</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>for</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-      </attribute>
-
-      <attribute>
-        <description>accessibility key character</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>accesskey</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-      </attribute>
-
-      <attribute>
-        <description>the element got the focus</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>onfocus</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-      </attribute>
-
-      <attribute>
-        <description>the element lost the focus</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>onblur</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-      </attribute>
-
-      <supported-component-class>
-        <component-class>javax.faces.component.UIOutput</component-class>
-      </supported-component-class>
-    </renderer>
-
-    <renderer>
-      <renderer-type>Listbox</renderer-type>
-      <renderer-class>com.sun.faces.renderkit.html_basic.ListboxRenderer</renderer-class>
-      &core-attrs;
-      &events-attrs;
-      &i18n-attrs;
-      
-      <attribute>
-        <description>rows visible</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>size</attribute-name>
-        <attribute-class>int</attribute-class>
-      </attribute>
-
-      <attribute>
-        <description>CSS style class to apply if the item is disabled</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>disabledClass</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-      </attribute>
-      
-      <attribute>
-        <description>CSS style class to apply if the item is enabled</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>enabledClass</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-      </attribute>
-
-      <attribute>
-        <description>position in tabbing order</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>tabindex</attribute-name>
-        <attribute-class>int</attribute-class>
-      </attribute>
-
-      <attribute>
-        <description>the element got the focus</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>onfocus</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-      </attribute>
-
-      <attribute>
-        <description>the element lost the focus</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>onblur</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-      </attribute>
-
-      <attribute>
-        <description>the element value was changed</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>onchange</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-      </attribute>
-
-      <supported-component-class>
-        <component-class>javax.faces.component.UISelectOne</component-class>
-      </supported-component-class>
-      <supported-component-class>
-        <component-class>javax.faces.component.UISelectMany</component-class>
-      </supported-component-class>
-    </renderer>
-
-    <renderer>
-      <renderer-type>Menu</renderer-type>
-      <renderer-class>com.sun.faces.renderkit.html_basic.MenuRenderer</renderer-class>
-      &core-attrs;
-      &events-attrs;
-      &i18n-attrs;
-      <attribute>
-        <description>CSS style class to apply if the item is disabled</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>disabledClass</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-      </attribute>
-      
-      <attribute>
-        <description>CSS style class to apply if the item is enabled</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>enabledClass</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-      </attribute>
-
-      <attribute>
-        <description>position in tabbing order</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>tabindex</attribute-name>
-        <attribute-class>int</attribute-class>
-      </attribute>
-
-      <attribute>
-        <description>the element got the focus</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>onfocus</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-      </attribute>
-
-      <attribute>
-        <description>the element lost the focus</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>onblur</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-      </attribute>
-
-      <attribute>
-        <description>the element value was changed</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>onchange</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-      </attribute>
-
-      <supported-component-class>
-        <component-class>javax.faces.component.UISelectOne</component-class>
-      </supported-component-class>
-      <supported-component-class>
-        <component-class>javax.faces.component.UISelectMany</component-class>
-      </supported-component-class>
-    </renderer>
-
-    <renderer>
-      <renderer-type>Message</renderer-type>
-      <renderer-class>com.sun.faces.renderkit.html_basic.MessageRenderer</renderer-class>
-      <!-- PENDING(edburns): make sure we render DIV and stuff the below
-           attrs there.  -->
-      &core-attrs;
-      &events-attrs;
-      &i18n-attrs;
-
-      <supported-component-class>
-        <component-class>javax.faces.component.UIMessage</component-class>
-      </supported-component-class>
-    </renderer>
-
-    <renderer>
-      <renderer-type>Messages</renderer-type>
-      <renderer-class>com.sun.faces.renderkit.html_basic.MessagesRenderer</renderer-class>
-      <!-- PENDING(edburns): make sure we render DIV and stuff the below
-           attrs there.  -->
-      &core-attrs;
-      &events-attrs;
-      &i18n-attrs;
-
-      <supported-component-class>
-        <component-class>javax.faces.component.UIMessages</component-class>
-      </supported-component-class>
-    </renderer>
-
-    <renderer>
-	<renderer-type>OutputMessage</renderer-type>
-	<renderer-class>com.sun.faces.renderkit.html_basic.OutputMessageRenderer</renderer-class>
-      <!-- PENDING(edburns): make sure we render DIV and stuff the below
-	   attrs there.	 -->
-	&core-attrs;
-	&events-attrs;
-	&i18n-attrs;
-
-	<supported-component-class>
-	<component-class>javax.faces.component.UIOutput</component-class>
-	</supported-component-class>
-    </renderer>
-
-    <renderer>
-      <renderer-type>Radio</renderer-type>
-      <renderer-class>com.sun.faces.renderkit.html_basic.RadioRenderer</renderer-class>
-      <!-- PENDING(edburns): make sure we render DIV and stuff the below
-           attrs there, as appropriate.  -->
-      &core-attrs;
-      &events-attrs;
-      &i18n-attrs;
-      <attribute>
-        <description>unavailable in this context</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>disabled</attribute-name>
-        <attribute-class>boolean</attribute-class>
-      </attribute>
-
-      <attribute>
-        <description>position in tabbing order</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>tabindex</attribute-name>
-        <attribute-class>int</attribute-class>
-      </attribute>
-
-      <attribute>
-        <description>the element got the focus</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>onfocus</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-      </attribute>
-
-      <attribute>
-        <description>the element lost the focus</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>onblur</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-      </attribute>
-
-      <attribute>
-        <description>the element value was changed</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>onchange</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-      </attribute>
-
-      <supported-component-class>
-        <component-class>javax.faces.component.UISelectOne</component-class>
-      </supported-component-class>
-    </renderer>
-    <renderer>
-      <renderer-type>Secret</renderer-type>
-      <renderer-class>com.sun.faces.renderkit.html_basic.SecretRenderer</renderer-class>
-      &core-attrs;
-      &events-attrs;
-      &i18n-attrs;
-      <attribute>
-        <description>for text and passwd</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>readonly</attribute-name>
-        <attribute-class>boolean</attribute-class>
-      </attribute>
-
-      <attribute>
-        <description>specific to each type of field</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>size</attribute-name>
-        <attribute-class>int</attribute-class>
-      </attribute>
-
-      <attribute>
-        <description>max chars for text fields</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>maxlength</attribute-name>
-        <attribute-class>int</attribute-class>
-      </attribute>
-
-      <attribute>
-        <description>position in tabbing order</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>tabindex</attribute-name>
-        <attribute-class>int</attribute-class>
-      </attribute>
-
-      <attribute>
-        <description>accessibility key character</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>accesskey</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-      </attribute>
-
-      <attribute>
-        <description>the element got the focus</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>onfocus</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-      </attribute>
-
-      <attribute>
-        <description>the element lost the focus</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>onblur</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-      </attribute>
-
-      <attribute>
-        <description>some text was selected</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>onselect</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-      </attribute>
-
-      <attribute>
-        <description>the element value was changed</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>onchange</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-      </attribute>
-
-      <supported-component-class>
-        <component-class>javax.faces.component.UIInput</component-class>
-      </supported-component-class>
-    </renderer>
-
-    <renderer>
-      <renderer-type>CheckboxList</renderer-type>
-      <renderer-class>com.sun.faces.renderkit.html_basic.SelectManyCheckboxListRenderer</renderer-class>
-
-      <!-- PENDING(edburns): this should probably be merged with the
-           Checkbox renderer -->
-
-    </renderer>
-    <renderer>
-      <renderer-type>Table</renderer-type>
-      <renderer-class>com.sun.faces.renderkit.html_basic.TableRenderer</renderer-class>
-      &core-attrs;
-      &events-attrs;
-      &i18n-attrs;
-      <attribute>
-        <description>CSS classes for formatting columns</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>columnClasses</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-      </attribute>
-
-      <attribute>
-        <description>CSS classes for formatting footers</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>footerClass</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-      </attribute>
-
-      <attribute>
-        <description>CSS classes for formatting headers</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>headerClass</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-      </attribute>
-
-      <attribute>
-        <description>CSS classes for formatting rows</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>rowClasses</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-      </attribute>
-
-      <supported-component-class>
-        <component-class>javax.faces.component.UIData</component-class>
-      </supported-component-class>
-    </renderer>
-
-    <renderer>
-      <renderer-type>Textarea</renderer-type>
-      <renderer-class>com.sun.faces.renderkit.html_basic.TextareaRenderer</renderer-class>
-      &core-attrs;
-      &events-attrs;
-      &i18n-attrs;
-      <attribute>
-        <description>number of rows</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>rows</attribute-name>
-        <attribute-class>int</attribute-class>
-      </attribute>
-
-      <attribute>
-        <description>number of columns</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>cols</attribute-name>
-        <attribute-class>int</attribute-class>
-      </attribute>
-
-      <attribute>
-        <description>unavailable in this context</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>disabled</attribute-name>
-        <attribute-class>boolean</attribute-class>
-      </attribute>
-
-      <attribute>
-        <description>uneditable</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>readonly</attribute-name>
-        <attribute-class>boolean</attribute-class>
-      </attribute>
-
-      <attribute>
-        <description>position in tabbing order</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>tabindex</attribute-name>
-        <attribute-class>int</attribute-class>
-      </attribute>
-
-      <attribute>
-        <description>accessibility key character</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>accesskey</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-      </attribute>
-
-      <attribute>
-        <description>the element got the focus</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>onfocus</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-      </attribute>
-
-      <attribute>
-        <description>the element lost the focus</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>onblur</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-      </attribute>
-
-      <attribute>
-        <description>some text was selected</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>onselect</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-      </attribute>
-
-      <attribute>
-        <description>the element value was changed</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>onchange</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-      </attribute>
-
-      <supported-component-class>
-        <component-class>javax.faces.component.UIInput</component-class>
-      </supported-component-class>
-    </renderer>
-
-    <renderer>
-      <renderer-type>Text</renderer-type>
-      <renderer-class>com.sun.faces.renderkit.html_basic.TextRenderer</renderer-class>
-      &core-attrs;
-      &events-attrs;
-      &i18n-attrs;
-      <attribute>
-        <description>for text and passwd</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>readonly</attribute-name>
-        <attribute-class>boolean</attribute-class>
-      </attribute>
-
-      <attribute>
-        <description>if true, this component becomes disabled</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>disabled</attribute-name>
-        <attribute-class>boolean</attribute-class>
-      </attribute>
-
-      <attribute>
-        <description>specific to each type of field</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>size</attribute-name>
-        <attribute-class>int</attribute-class>
-      </attribute>
-
-      <attribute>
-        <description>max chars for text fields</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>maxlength</attribute-name>
-        <attribute-class>int</attribute-class>
-      </attribute>
-
-      <attribute>
-        <description>position in tabbing order</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>tabindex</attribute-name>
-        <attribute-class>int</attribute-class>
-      </attribute>
-
-      <attribute>
-        <description>accessibility key character</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>accesskey</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-      </attribute>
-
-      <attribute>
-        <description>the element got the focus</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>onfocus</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-      </attribute>
-
-      <attribute>
-        <description>the element lost the focus</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>onblur</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-      </attribute>
-
-      <attribute>
-        <description>some text was selected</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>onselect</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-      </attribute>
-
-      <attribute>
-        <description>the element value was changed</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>onchange</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-      </attribute>
-
-      <supported-component-class>
-        <component-class>javax.faces.component.UIInput</component-class>
-      </supported-component-class>
-    </renderer>
-  </render-kit>
 
 </faces-config>

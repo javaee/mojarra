@@ -1,5 +1,5 @@
 /*
- * $Id: TestLoadBundleTag.java,v 1.4 2004/01/21 07:23:02 eburns Exp $
+ * $Id: TestLoadBundleTag.java,v 1.5 2004/01/27 21:06:15 eburns Exp $
  */
 
 /*
@@ -20,7 +20,7 @@ import javax.faces.component.UIViewRoot;
 
 /**
  *
- * @version $Id: TestLoadBundleTag.java,v 1.4 2004/01/21 07:23:02 eburns Exp $
+ * @version $Id: TestLoadBundleTag.java,v 1.5 2004/01/27 21:06:15 eburns Exp $
  * 
  *
  */

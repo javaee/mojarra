@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderKitFactory.java,v 1.10 2004/01/20 04:51:52 eburns Exp $
+ * $Id: TestRenderKitFactory.java,v 1.11 2004/01/27 21:06:09 eburns Exp $
  */
 
 /*
@@ -33,7 +33,7 @@ import com.sun.faces.ServletFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderKitFactory.java,v 1.10 2004/01/20 04:51:52 eburns Exp $
+ * @version $Id: TestRenderKitFactory.java,v 1.11 2004/01/27 21:06:09 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo

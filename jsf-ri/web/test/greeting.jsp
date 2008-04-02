@@ -45,9 +45,9 @@
     Can you guess it?</h2>
     <f:view>
     <h:form id="helloForm" >
-  	<h:input_text id="userNo"  value="NUMBER" /> <BR>
+  	<h:inputText id="userNo"  value="NUMBER" /> <BR>
 
-	 <h:command_button id="submit" value="Submit" />
+	 <h:commandButton id="submit" value="Submit" />
     </h:form>
     </f:view>
 </HTML>  

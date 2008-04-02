@@ -1,5 +1,5 @@
 /*
- * $Id: MethodRef.java,v 1.6 2004/01/09 02:23:08 eburns Exp $
+ * $Id: MethodRef.java,v 1.7 2004/01/27 21:04:56 eburns Exp $
  */
 
 /*

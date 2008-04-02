@@ -23,13 +23,13 @@
 
     <td>
 
-                   <h:input_text id="doubleRange" value="1000.0">
+                   <h:inputText id="doubleRange" value="1000.0">
                         <f:convertNumber type="number" integerOnly="false" 
                            maxFractionDigits="2" maxIntegerDigits="5" locale="en"
                            groupingUsed="true" />
                        <f:validateDoubleRange minimum="#{doubleMin}" 
                                              maximum="#{doubleMax}"/>
-                   </h:input_text>
+                   </h:inputText>
 
     </td>
 
@@ -39,23 +39,23 @@
   <tr>
 
     <td>
-         <h:input_text id="longRange" value="1000">
+         <h:inputText id="longRange" value="1000">
                      <f:convertNumber pattern="####" 
                            minFractionDigits="0" minIntegerDigits="2" />
                      <f:validateLongRange minimum="#{longMin}" 
                                            maximum="#{longMax}"/>
-         </h:input_text>
+         </h:inputText>
 
     </td>
 
-     <h:output_text id="outputNumber2" value="$123.45">
+     <h:outputText id="outputNumber2" value="$123.45">
                    <f:convertNumber type="currency" currencySymbol="$" />
-               </h:output_text>
+               </h:outputText>
 
-    <h:output_text id="outputDatetime3" value="7/10/96 12:31:31 PM PDT">
+    <h:outputText id="outputDatetime3" value="7/10/96 12:31:31 PM PDT">
        <f:convertDateTime type="both" timeStyle="full" dateStyle="short" 
             locale="en"/>
-    </h:output_text>
+    </h:outputText>
 
       
 
@@ -64,11 +64,11 @@
   <tr>
 
     <td>
-            <h:input_text id="intRange" value="NorthAmerica">
+            <h:inputText id="intRange" value="NorthAmerica">
                   
                      <f:validateLength minimum="#{intMin}" 
                                        maximum="#{intMax}"/>
-             </h:input_text>
+             </h:inputText>
 
     </td>
 

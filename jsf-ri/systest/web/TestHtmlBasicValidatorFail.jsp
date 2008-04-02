@@ -15,7 +15,7 @@
   pageContext.setAttribute("hello", new String("hello"), PageContext.REQUEST_SCOPE);
 %>
 
-<h1>TLV command_button, no lable or key</h1>
+<h1>TLV commandButton, no lable or key</h1>
 This page should FAIL.
 <br>
 <br>
@@ -23,9 +23,9 @@ This page should FAIL.
 <f:view>
 
   <p>This must have either a label or key attribute.</p>
-  <h:command_button>
-    <h:output_text value="#{hello}"/>
-  </h:command_button>
+  <h:commandButton>
+    <h:outputText value="#{hello}"/>
+  </h:commandButton>
 
 </f:view>
 

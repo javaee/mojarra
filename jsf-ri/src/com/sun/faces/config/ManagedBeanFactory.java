@@ -1,5 +1,5 @@
 /*
- * $Id: ManagedBeanFactory.java,v 1.11 2003/12/17 15:13:31 rkitain Exp $
+ * $Id: ManagedBeanFactory.java,v 1.12 2004/01/27 21:04:09 eburns Exp $
  */
 
 /*
@@ -27,14 +27,22 @@ import com.sun.faces.el.ValueBindingImpl;
 import com.sun.faces.util.Util;
 import com.sun.faces.RIConstants;
 
+import com.sun.faces.config.beans.ManagedBeanBean;
+import com.sun.faces.config.beans.ManagedPropertyBean;
+import com.sun.faces.config.beans.ListEntriesBean;
+import com.sun.faces.config.beans.MapEntriesBean;
+import com.sun.faces.config.beans.MapEntryBean;
+
 import org.apache.commons.beanutils.PropertyUtils;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  * This class clreates a managed bean instance. It has a contract with
- * the ConfigManagedBean class which is populated from the config file.
+ * the ManagedBeanBean class which is populated from the config file.
  * The bean instance is created lazily so a deep copy of the 
- * ConfigManagedBean is required.
+ * ManagedBeanBean is required.
  *
  * The Application implementation instantiated the beans as required and
  * stores them in the appropriate scope.
@@ -45,14 +53,47 @@ public class ManagedBeanFactory extends Object {
     //
     // Protected Constants
     //
+    
+    /**
+     * This managed-bean or managed-property is a List
+     */
+    private final static int TYPE_IS_LIST  = 0;
+
+    /**
+     * This managed-bean or managed-property is a Map
+     */
+    private final static int TYPE_IS_MAP  = 1;
+
+    /**
+     * This managed-bean is a bean
+     */
+    private final static int TYPE_IS_BEAN  = 2;
+
+    /**
+     * This managed-bean is a UIComponent
+     */
+    private final static int TYPE_IS_UICOMPONENT  = 3;
+
+    /**
+     * This managed-property is a simple property
+     */
+    private final static int TYPE_IS_SIMPLE  = 3;
 
     //
     // Class Variables
     //
-    ConfigManagedBean managedBean;
-    String scope;
+
+    /**
+     * <p>The <code>Log</code> instance for this class.</p>
+     */
+    private static Log log = LogFactory.getLog(ManagedBeanFactory.class);
+
+
 
     // Attribute Instance Variables
+
+    ManagedBeanBean managedBean;
+    String scope;
 
     // Relationship Instance Variables
 
@@ -62,17 +103,19 @@ public class ManagedBeanFactory extends Object {
     /**
      * Constructor 
      */
-    public ManagedBeanFactory(ConfigManagedBean managedBean) {
-        //ConfigManagedBean clone method implemented to return deep copy
-        this.managedBean = (ConfigManagedBean) managedBean.clone();
-        scope = null;
+    public ManagedBeanFactory(ManagedBeanBean managedBean) {
+        //ManagedBeanBean clone method implemented to return deep copy
+        this.managedBean = managedBean; // (ManagedBeanBean) managedBean.clone();
+	//set the scope
+	scope = managedBean.getManagedBeanScope();
     }
 
-    public void setConfigManagedBean(ConfigManagedBean newBean) {
+    public void setManagedBeanBean(ManagedBeanBean newBean) {
 	synchronized (this) {
-	    //ConfigManagedBean clone method implemented to return deep copy
-	    this.managedBean = (ConfigManagedBean) newBean.clone();
-	    scope = null;
+	    //ManagedBeanBean clone method implemented to return deep copy
+	    this.managedBean = managedBean; // (ManagedBeanBean) newBean.clone();
+	    //set the scope
+	    scope = managedBean.getManagedBeanScope();
 	}
     }
 
@@ -80,17 +123,14 @@ public class ManagedBeanFactory extends Object {
      * Attempt to instantiate the JavaBean and set its properties.
      */
     public Object newInstance() throws FacesException {
-        Object bean = null;
-        boolean isUIComponent = false;
-        
-        if (managedBean.getManagedBeanCreate() != null) {
-            if (managedBean.getManagedBeanCreate().equalsIgnoreCase("FALSE")) {
-                return bean;
-            }
-        }
+        Object 
+	    bean = null;
+	int 
+	    beanType = -1;
 
-        //need to instantiate bean
-
+	//
+	// instantiate the bean
+	//
         try {
             ClassLoader loader = Thread.currentThread().getContextClassLoader();
             if (loader == null) {
@@ -105,136 +145,366 @@ public class ManagedBeanFactory extends Object {
             throw new FacesException(Util.getExceptionMessage(Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, obj), ex);
         }
 
-        if ( bean instanceof UIComponent) {
-            isUIComponent = true;
-        }
-        //set the scope
-        scope = managedBean.getManagedBeanScope();
+	// populate the bean with its contents
+	try {
+	    // what kind of bean is this?
+	    switch (beanType = getBeanType(bean)) {
+	    case TYPE_IS_LIST:
+		copyListEntriesFromConfigToList(managedBean.getListEntries(), 
+						(List) bean);
+		break;
+	    case TYPE_IS_MAP:
+		copyMapEntriesFromConfigToMap(managedBean.getMapEntries(), 
+					      (Map) bean);
+		break;
+	    case TYPE_IS_UICOMPONENT:
+		// intentional fall-through
+	    case TYPE_IS_BEAN:
+		setPropertiesIntoBean(bean, beanType, managedBean);
+		break;
+	    default:
+		// notreached
+		Util.doAssert(false);
+		break;
+	    }
+	}
+	catch (FacesException fe) {
+	    throw fe;
+	}
+	catch (ClassNotFoundException cnfe) {
+	    Object[] obj = new Object[1];
+	    obj[0] = managedBean.getManagedBeanClass();
+	    throw new FacesException(Util.getExceptionMessage(Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, obj), cnfe);
+	}
+	
+        return bean;
+    }
 
-        Map props = managedBean.getProperties();
-        Iterator iter = props.keySet().iterator();
-        ConfigManagedBeanProperty cmp = null;
-        ConfigManagedBeanPropertyValue cmpv = null;
-        Object value;
+    /**
+     *	determine the nature of the bean
+     *
+     * @return the appropriate TYPE_IS_* constant
+     */
 
-	if (null != (cmp = managedBean.getListOrMap())) {
-	    // if a managed bean is a List or a Map, it may not have
-	    // properties.
-	    if (0 != props.size()) {
+    protected int getBeanType(Object bean) {
+	int result = -1;
+	ListEntriesBean listEntries = null;
+	MapEntriesBean mapEntries = null;
+
+	// is it a List?
+	if (null != (listEntries = managedBean.getListEntries())) {
+	    // managed-bean instances that are Lists, must not have
+	    // properties or map-entries.  It is a configuration error
+	    // if they do.
+	    if (null != managedBean.getMapEntries() ||
+		(null != managedBean.getManagedProperties() &&
+		 (managedBean.getManagedProperties().length > 0))) {
 		Object[] obj = new Object[1];
 		obj[0] = managedBean.getManagedBeanClass();
 		throw new FacesException(Util.getExceptionMessage(Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, obj));
 	    }
+	    result = TYPE_IS_LIST;
+	}
 
-	    if (cmp.hasValuesArray()) {
-		try {
-		    copyListEntriesFromConfigToList(cmp, (List) bean);
-		}
-		catch (ClassNotFoundException cnfe) {
-		    Object[] obj = new Object[1];
-		    obj[0] = managedBean.getManagedBeanClass();
-		    throw new FacesException(Util.getExceptionMessage(Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, obj), cnfe);
-		}
-	    } else if (cmp.hasMapEntries()) {
-		copyMapEntriesFromConfigToMap(cmp, (Map) bean);
+	// is it a Map?
+	if (null != (mapEntries = managedBean.getMapEntries())) {
+	    Util.doAssert(-1 == result);
+
+	    // managed-bean instances that are Maps, must not have
+	    // properties or list-entries.  It is a configuration error
+	    // if they do.
+	    if (null != managedBean.getListEntries() ||
+		(null != managedBean.getManagedProperties() &&
+		 (managedBean.getManagedProperties().length > 0))) {
+		Object[] obj = new Object[1];
+		obj[0] = managedBean.getManagedBeanClass();
+		throw new FacesException(Util.getExceptionMessage(Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, obj));
+	    }
+	    result = TYPE_IS_MAP;
+	}
+
+	if (TYPE_IS_LIST != result && TYPE_IS_MAP != result) {
+	    Util.doAssert(-1 == result);
+
+	    // if it's not a List or a Map, it must be a Bean
+	    if ( bean instanceof UIComponent) {
+		result = TYPE_IS_UICOMPONENT;
+	    }
+	    else {
+		result = TYPE_IS_BEAN;
 	    }
 	}
-        
-        while (iter.hasNext()) {
-            value = null;
-            cmp = (ConfigManagedBeanProperty)props.get(iter.next());
-            if (cmp.hasValuesArray()) {
-		Object arrayOrList = null;
-
-		try {
-		    arrayOrList = getArrayOrListToSetIntoBean(bean, cmp);
-		    PropertyUtils.setProperty(bean, cmp.getPropertyName(), 
-					      arrayOrList);
-		} 
-		catch (FacesException fe) {
-		    throw fe;
-		}
-		catch (Exception ex) {
-		    // if the property happens to be attribute on UIComponent
-		    // then bean introspection will fail.
-		    if ( isUIComponent) {
-			setComponentAttribute(bean, cmp.getPropertyName(), 
-					      value);  
-		    } else {
-			Object[] obj = new Object[1];
-			obj[0] = cmp.getPropertyName();
-			throw new FacesException(
-						 Util.getExceptionMessage(
-									  Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, obj), 
-						 ex);
-		    }
-		}
-		
-            } else if (cmp.hasMapEntries()) {
-		Map map = null;
-
-		try {
-		    map = getMapToSetIntoBean(bean, cmp);
-		    PropertyUtils.setProperty(bean, cmp.getPropertyName(), 
-					      map);
-		} 
-		catch (FacesException fe) {
-		    throw fe;
-		}
-		catch (Exception ex) {
-		    // if the property happens to be attribute on UIComponent
-		    // then bean introspection will fail.
-		    if ( isUIComponent) {
-			setComponentAttribute(bean, cmp.getPropertyName(), 
-					      value);  
-		    } else {
-			Object[] obj = new Object[1];
-			obj[0] = cmp.getPropertyName();
-			throw new FacesException(
-						 Util.getExceptionMessage(
-									  Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, obj), 
-						 ex);
-		    }
-		}
-
-            } else {
-		
-                cmpv = cmp.getValue();
-		
-                //find properties and set them on the bean
-                if (cmpv.getValueCategory() == 
-                    ConfigManagedBeanPropertyValue.VALUE_BINDING) {
-                    value = evaluateValueBindingGet((String)cmpv.getValue());
-                } else {
-                    value = cmpv.getValue();
-                }
-                try {
-                    // if it's a class type do not set it
-                    if (cmpv.getValueCategory() != 
-			
-                        ConfigManagedBeanPropertyValue.VALUE_CLASS) {
-                        PropertyUtils.setSimpleProperty(
-							bean, 
-							cmp.getPropertyName(), 
-							value);
-                    }
-                } catch (Exception ex) {
-                    if ( isUIComponent) {
-                        setComponentAttribute(bean, cmp.getPropertyName(), 
-					      value);
-                    } else {
-                        Object[] obj = new Object[1];
-                        obj[0] = cmp.getPropertyName();
-                        throw new FacesException(Util.getExceptionMessage(
-									  Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, obj), 
-						 ex);
-                    }
-                }
-            }
 	    
-        }
+	Util.doAssert(-1 != result);
+	return result;
+    }
+
+    /**
+     *	determine the nature of the property
+     *
+     * @return the appropriate TYPE_IS_* constant
+     */
+
+    protected int getPropertyType(ManagedPropertyBean bean) {
+	int result = -1;
+	ListEntriesBean listEntries = null;
+	MapEntriesBean mapEntries = null;
 	
-        return bean;
+	// is it a List?
+	if (null != (listEntries = bean.getListEntries())) {
+	    // managed-property instances that have list-entries must
+	    // not have value or map-entries.  It is a configuration
+	    // error if they do.
+	    if (null != bean.getMapEntries() || 
+		null != bean.getValue() || bean.isNullValue()) {
+		Object[] obj = new Object[1];
+		obj[0] = bean.getPropertyName();
+		throw new FacesException(Util.getExceptionMessage(Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, obj));
+	    }
+	    result = TYPE_IS_LIST;
+	}
+	
+	// is it a Map?
+	if (null != (mapEntries = bean.getMapEntries())) {
+	    Util.doAssert(-1 == result);
+	    
+	    // managed-property instances that have map-entries, must
+	    // not have value or list-entries.  It is a configuration
+	    // error if they do.
+	    if (null != bean.getListEntries() || 
+		null != bean.getValue() || bean.isNullValue()) {
+		Object[] obj = new Object[1];
+		obj[0] = bean.getPropertyName();
+		throw new FacesException(Util.getExceptionMessage(Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, obj));
+	    }
+	    result = TYPE_IS_MAP;
+	}
+
+	if (TYPE_IS_LIST != result && TYPE_IS_MAP != result) {
+	    Util.doAssert(-1 == result);
+	    
+	    if (null != bean.getValue() || bean.isNullValue()) {
+		result = TYPE_IS_SIMPLE;
+	    }
+	}
+	 
+	// if the managed-property doesn't have list-entries,
+	// map-entries, value, or null-value contents, this is a
+	// configuration error.  The DTD doesn't allow this anyway.
+	if (-1 == result && !bean.isNullValue()) {
+	    Object[] obj = new Object[1];
+	    obj[0] = bean.getPropertyName();
+	    throw new FacesException(Util.getExceptionMessage(Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, obj));
+	}
+	return result;
+    }
+
+    protected Class copyListEntriesFromConfigToList(ListEntriesBean listEntries,
+						    List valuesForBean) throws ClassNotFoundException {
+        String [] valuesFromConfig = listEntries.getValues();
+	Class valueClass = java.lang.String.class;
+	Object value = null;
+	String strValue = null;
+	int len = 0;
+	
+	if (0 == (len = valuesFromConfig.length)) {
+	    if (log.isTraceEnabled()) {
+		log.trace("zero length array");
+	    }
+	    return null;
+	}
+	
+	
+	// pull out the value-class
+	valueClass = 
+	    getValueClassConsideringPrimitives(listEntries.getValueClass());
+	
+	// go through the values from the config and copy them to the
+	// valuesForBean.
+	for (int i = 0; i < len; i++) {
+	    strValue = valuesFromConfig[i];
+
+	    // set our value local variable
+	    if (Util.isVBExpression(strValue)) {
+		value = evaluateValueBindingGet(strValue);
+	    } else if (null == strValue) {
+		value = null;
+	    }
+	    else {
+		value = strValue;
+	    }
+	    // convert the value if necessary
+	    value = getConvertedValueConsideringPrimitives(value, valueClass);
+	    
+	    valuesForBean.add(value);
+	}
+	return valueClass;
+    }
+
+    void copyMapEntriesFromConfigToMap(MapEntriesBean mapEntries, 
+				       Map result) throws ClassNotFoundException {
+	Object 
+	    key = null,
+	    value = null;
+	MapEntryBean [] valuesFromConfig = mapEntries.getMapEntries();
+	MapEntryBean curEntry = null;
+	Class 
+	    keyClass = java.lang.String.class,
+	    valueClass = java.lang.String.class;
+	String 
+	    strKey = null,
+	    strValue = null;
+
+	if (null == mapEntries || 0 == valuesFromConfig.length) {
+	    if (log.isTraceEnabled()) {
+		log.trace("null or zero length array");
+	    }
+	    return;
+	}
+
+	// pull out the key-class and value-class
+	keyClass = 
+	    getValueClassConsideringPrimitives(mapEntries.getKeyClass());
+	valueClass = 
+	    getValueClassConsideringPrimitives(mapEntries.getValueClass());
+	
+	for (int i = 0, len = valuesFromConfig.length; i < len; i++) {
+	    curEntry = valuesFromConfig[i];
+	    
+	    strKey = curEntry.getKey();
+	    strValue = curEntry.getValue();
+
+	    if (Util.isVBExpression(strKey)){
+		key = evaluateValueBindingGet(strKey);
+	    }
+	    else if (null == strKey) {
+		key = null;
+	    }
+	    else {
+		key = getConvertedValueConsideringPrimitives(strKey, 
+							     keyClass);
+	    }
+
+	    if (Util.isVBExpression(strValue)){
+		value = evaluateValueBindingGet(strValue);
+	    }
+	    else if (null == strValue) {
+		value = null;
+	    }
+	    else {
+		value = getConvertedValueConsideringPrimitives(strValue, 
+							       valueClass);
+	    }
+	    result.put(key, value);
+	}
+    }
+
+    protected void setPropertiesIntoBean(Object bean, 
+					 int beanType,
+					 ManagedBeanBean managedBean) {
+        Object 
+	    value = null;
+	String 
+	    propertyClass = null,
+	    propertyName = null,
+	    strValue = null;
+	int 
+	    propertyType = -1;
+	Class valueClass = null;
+	ManagedPropertyBean[] properties = managedBean.getManagedProperties();
+	
+	if (null == properties) {
+	    // a bean is allowed to have no properties
+	    return;
+	}
+	
+	// iterate over the properties and load each into the bean
+	for (int i = 0, len = properties.length; i < len; i++) {
+	    // skip null properties or properties without names
+	    if (null == properties[i] ||
+		null == (propertyName = properties[i].getPropertyName())) {
+		continue;
+	    }
+	    // determine what kind of property we have
+	    try {
+		// this switch statement sets the "value" local variable
+		// and tries to set it into the bean.
+		switch (propertyType = getPropertyType(properties[i])) {
+		case TYPE_IS_LIST:
+		    value = 
+			getArrayOrListToSetIntoBean(bean, properties[i]);
+		    PropertyUtils.setProperty(bean, propertyName, 
+					      value);
+		    break;
+		case TYPE_IS_MAP:
+		    value = getMapToSetIntoBean(bean, properties[i]);
+		    PropertyUtils.setProperty(bean, propertyName, 
+					      value);
+		    break;
+		case TYPE_IS_SIMPLE:
+		    // if the config bean has no managed-property-class
+		    // defined
+		    if (null == 
+			(propertyClass = properties[i].getPropertyClass())) {
+			// look at the bean property
+			if (null == 
+			    (valueClass = 
+			     PropertyUtils.getPropertyType(bean, 
+							   propertyName))) {
+			    // if the bean property class can't be
+			    // determined, use the fallback.
+			    valueClass = 
+				getValueClassConsideringPrimitives(propertyClass);
+			}
+		    }
+		    else {
+			// the config has a managed-property-class
+			// defined
+			valueClass = 
+			    getValueClassConsideringPrimitives(propertyClass);
+		    }
+		    
+		    strValue = properties[i].getValue();
+		    if (Util.isVBExpression(strValue)) {
+			value = evaluateValueBindingGet(strValue);
+		    } else if (null == strValue && 
+			       properties[i].isNullValue()) {
+			value = null;
+		    }
+		    else {
+			value = strValue;
+		    }
+		    // convert the value if necessary
+		    value = 
+			getConvertedValueConsideringPrimitives(value, 
+							       valueClass);
+		    PropertyUtils.setSimpleProperty(bean, 
+						    propertyName, 
+						    value);
+		    break;
+		default:
+		    Util.doAssert(false);
+		}
+	    }
+	    catch (FacesException fe) {
+		throw fe;
+	    }
+	    catch (Exception ex) {
+		// if the property happens to be attribute on
+		// UIComponent then bean introspection set will fail.
+		if (TYPE_IS_UICOMPONENT == beanType) {
+		    setComponentAttribute(bean, propertyName, value);  
+		} else {
+		    // then this is a real exception to rethrow
+		    Object[] obj = new Object[1];
+		    obj[0] = propertyName;
+		    throw new FacesException(
+					     Util.getExceptionMessage(
+								      Util.ERROR_SETTING_BEAN_PROPERTY_ERROR_MESSAGE_ID, obj), 
+					     ex);
+		}
+	    }
+	}
     }
 
     /**
@@ -272,7 +542,7 @@ public class ManagedBeanFactory extends Object {
      */
 
     private Object getArrayOrListToSetIntoBean(Object bean, 
-					       ConfigManagedBeanProperty cmp) throws Exception {
+					       ManagedPropertyBean property) throws Exception {
 	Object result = null;
 	boolean 
 	    getterIsNull = true,
@@ -284,28 +554,28 @@ public class ManagedBeanFactory extends Object {
 	    valueType = java.lang.String.class,
 	    propertyType = null;
 	Object value = null;
-	ConfigManagedBeanPropertyValue cmpv = null;
-	
+	String propertyName = property.getPropertyName();
+
 	try {
 	    // see if there is a getter
-	    result = PropertyUtils.getProperty(bean, cmp.getPropertyName());
+	    result = PropertyUtils.getProperty(bean, propertyName);
 	    getterIsNull = (null == result) ? true : false;
-
+	    
 	    propertyType = 
-		PropertyUtils.getPropertyType(bean, cmp.getPropertyName());
+		PropertyUtils.getPropertyType(bean, propertyName);
 	    getterIsArray = propertyType.isArray();
 	    
 	}
 	catch (NoSuchMethodException nsme) {
 	    // it's valid to not have a getter.
 	}
-
+	
 	// the property has to be either a List or Array
 	if (!getterIsArray) {
 	    if (null != propertyType && 
 		!java.util.List.class.isAssignableFrom(propertyType)) {
 		Object[] obj = new Object[1];
-		obj[0] = cmp.getPropertyName();
+		obj[0] = propertyName;
 		throw new FacesException(Util.getExceptionMessage(
 								  Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, 
 								  obj));
@@ -316,13 +586,14 @@ public class ManagedBeanFactory extends Object {
 	// Deal with the possibility of the getter returning existing
 	// values.
 	// 
-
+	
 	// if the getter returned non-null
 	if (!getterIsNull) {
 	    // if what it returned was an array
 	    if (getterIsArray) {
 		valuesForBean = new ArrayList();
 		for (int i = 0, len = Array.getLength(result); i < len; i++) {
+		    // add the existing values
 		    valuesForBean.add(Array.get(result, i));
 		}
 	    }
@@ -331,7 +602,7 @@ public class ManagedBeanFactory extends Object {
 		if (!(result instanceof List)) {
 		    // throw an exception
 		    Object[] obj = new Object[1];
-		    obj[0] = cmp.getPropertyName();
+		    obj[0] = propertyName;
 		    throw new FacesException(
 					     Util.getExceptionMessage(
 								      Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, obj));
@@ -344,11 +615,12 @@ public class ManagedBeanFactory extends Object {
 	    // getter returned null
 	    result = valuesForBean = new ArrayList();
 	}
-
+	
 	// at this point valuesForBean contains the existing values from
 	// the bean, or no values if the bean had no values.  In any
 	// case, we can proceed to add values from the config file.
-	valueType = copyListEntriesFromConfigToList(cmp, valuesForBean);
+	valueType = copyListEntriesFromConfigToList(property.getListEntries(), 
+						    valuesForBean);
 	
 	// at this point valuesForBean has the values to be set into the
 	// bean. 
@@ -386,47 +658,6 @@ public class ManagedBeanFactory extends Object {
 	return result;
     }
 
-    protected Class copyListEntriesFromConfigToList(ConfigManagedBeanProperty cmp,
-						    List valuesForBean) throws ClassNotFoundException {
-	List valuesFromConfig = cmp.getValues();
-	String valueClass = null;
-	Class valueType = java.lang.String.class;
-	Object value = null;
-	ConfigManagedBeanPropertyValue cmpv = 
-	    (ConfigManagedBeanPropertyValue)valuesFromConfig.get(0);
-	int start = 0;
-	
-	// pull out the value-class
-	if (cmpv.getValueCategory() == 
-	    ConfigManagedBeanPropertyValue.VALUE_CLASS) {
-	    valueClass = (String) cmpv.getValue();
-	    start = 1;
-	    valueType = getValueClassConsideringPrimitives(valueClass);
-	}
-	
-	// go through the values from the config and copy them to the
-	// valuesForBean.
-	for (int i = start, size = valuesFromConfig.size(); 
-	     i < size; i++) {
-	    cmpv = (ConfigManagedBeanPropertyValue)valuesFromConfig.get(i);
-	    if (cmpv.getValueCategory() == 
-		ConfigManagedBeanPropertyValue.VALUE_BINDING) {
-		value = evaluateValueBindingGet((String)cmpv.getValue());
-	    } else if (cmpv.getValueCategory() == 
-		       ConfigManagedBeanPropertyValue.NULL_VALUE) {
-		value = null;
-	    }
-	    else {
-		value = cmpv.getValue();
-	    }
-	    // convert the value if necessary
-	    value = getConvertedValueConsideringPrimitives(value, valueType);
-	    
-	    valuesForBean.add(value);
-	}
-	return valueType;
-    }
-
     /**
      *
      * <li><p>Call the property getter, if it exists.</p></li>
@@ -451,31 +682,29 @@ public class ManagedBeanFactory extends Object {
      *
      */
     private Map getMapToSetIntoBean(Object bean, 
-				    ConfigManagedBeanProperty cmp) throws Exception {
+				    ManagedPropertyBean property) throws Exception {
 	Map result = null;
 	boolean getterIsNull = true;
 	Class propertyType = null;
-	ConfigManagedPropertyMap cmpm = null;
 	List valuesFromConfig = null;
 	Object value = null;
+	String propertyName = property.getPropertyName();
 	
 	try {
 	    // see if there is a getter
-	    result = (Map) PropertyUtils.getProperty(bean, 
-						     cmp.getPropertyName());
+	    result = (Map) PropertyUtils.getProperty(bean, propertyName);
 	    getterIsNull = (null == result) ? true : false;
 	    
-	    propertyType = 
-		PropertyUtils.getPropertyType(bean, cmp.getPropertyName());
+	    propertyType = PropertyUtils.getPropertyType(bean, propertyName);
 	}
 	catch (NoSuchMethodException nsme) {
 	    // it's valid to not have a getter.
 	}
-
+	
 	if (null != propertyType &&
 	    !java.util.Map.class.isAssignableFrom(propertyType)) {
 	    Object[] obj = new Object[1];
-	    obj[0] = cmp.getPropertyName();
+	    obj[0] = propertyName;
 	    throw new FacesException(Util.getExceptionMessage(
 							      Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, 
 							      obj));
@@ -490,35 +719,15 @@ public class ManagedBeanFactory extends Object {
 	// bean, or no entries if the bean had no entries.  In any case,
 	// we can proceed to add values from the config file.
 	
-	copyMapEntriesFromConfigToMap(cmp, result);
+	copyMapEntriesFromConfigToMap(property.getMapEntries(), result);
 	
 	return result;
     }
     
-    void copyMapEntriesFromConfigToMap(ConfigManagedBeanProperty cmp, 
-				       Map result) {
-	Object value = null;
-	List valuesFromConfig = cmp.getMapEntries();
-	ConfigManagedPropertyMap cmpm = null;
 
-	for (int i = 0, len = valuesFromConfig.size(); i < len; i++) {
-	    cmpm = (ConfigManagedPropertyMap) valuesFromConfig.get(i);
-	    if (cmpm.getValueCategory() == ConfigManagedPropertyMap.VALUE_BINDING){
-		value = evaluateValueBindingGet((String)cmpm.getValue());
-	    }
-	    else if (cmpm.getValueCategory() == 
-		     ConfigManagedPropertyMap.NULL_VALUE) {
-		value = null;
-	    }
-	    else {
-		value = cmpm.getValue();
-	    }
-	    result.put(cmpm.getKey(), value);
-	}
-    }
 
     private Class getValueClassConsideringPrimitives(String valueClass) throws ClassNotFoundException {
-	Class valueType = null;
+	Class valueType = java.lang.String.class;
 	if (null != valueClass && 0 < valueClass.length()) {
 	    if (valueClass.equals(Boolean.TYPE.getName())) {
 		valueType = Boolean.TYPE;
