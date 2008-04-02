@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.19 2003/09/19 22:44:57 craigmcc Exp $
+ * $Id: UIComponentBase.java,v 1.20 2003/09/19 23:01:56 craigmcc Exp $
  */
 
 /*
@@ -620,7 +620,6 @@ public abstract class UIComponentBase implements UIComponent {
                             String id = child.getId();
                             validateId(id);
                             NamingContainer naming = getNamingContainer();
-                            validateMissing(naming, id);
                             UIComponent previous =
                                 (UIComponent) get(index);
                             previous.setParent(null);

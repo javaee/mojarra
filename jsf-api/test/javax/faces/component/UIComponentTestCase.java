@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTestCase.java,v 1.34 2003/09/19 22:08:32 craigmcc Exp $
+ * $Id: UIComponentTestCase.java,v 1.35 2003/09/19 23:01:58 craigmcc Exp $
  */
 
 /*
@@ -551,6 +551,27 @@ public class UIComponentTestCase extends TestCase {
         assertNull(comp4.getParent());
         assertNull(comp5.getParent());
         assertNull(comp6.getParent());
+
+    }
+
+
+    // Test replacing a child with a new one that has the same id
+    public void testChidrenReplace() {
+
+        TestComponent child1 = new TestComponent("child");
+        TestComponent child2 = new TestComponent("child");
+
+        checkChildCount(component, 0);
+        component.getChildren().add(child1);
+        checkChildCount(component, 1);
+        checkChildPresent(component, child1, 0);
+        checkChildMissing(component, child2);
+        component.getChildren().set(0, child2);
+        checkChildCount(component, 1);
+        checkChildMissing(component, child1);
+        checkChildPresent(component, child2, 0);
+        component.getChildren().clear();
+        checkChildCount(component, 0);
 
     }
 
