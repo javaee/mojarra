@@ -59,7 +59,7 @@
                 value="current.gif"/>
         </jsp:useBean>
 
-<f:use_faces>  
+<f:view>  
 
 <h:form  formName="carStoreForm">
   
@@ -170,7 +170,7 @@
 </TR>
 </TABLE>
 </h:form>
-</f:use_faces>
+</f:view>
 
 </BODY>
 

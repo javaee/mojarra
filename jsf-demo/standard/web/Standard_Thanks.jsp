@@ -13,7 +13,7 @@
     <H3> Standard RenderKit Thank You Page </H3>
     <hr>
 
-       <f:use_faces>
+       <f:view>
         <h:form id="standardForm" formName="standardForm" >
  
             <table> 
@@ -34,5 +34,5 @@
           </table>
 
         </h:form>
-     </f:use_faces>
+     </f:view>
 </HTML>

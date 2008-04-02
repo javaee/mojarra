@@ -49,7 +49,7 @@
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
 
 <body bgcolor="#FFFFFF">
-<f:use_faces>  
+<f:view>  
 
 <h:form  formName="carStoreForm" >
 
@@ -160,6 +160,6 @@
 </tr>
 </table>
 </h:form>
-</f:use_faces>
+</f:view>
 </body>
 </html>

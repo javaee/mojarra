@@ -3,7 +3,7 @@
  SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 -->
 
-<%-- $Id: UISelectBoolean.jsp,v 1.1 2003/07/17 02:58:44 rlubke Exp $ --%>
+<%-- $Id: UISelectBoolean.jsp,v 1.2 2003/08/25 16:37:16 jvisvanathan Exp $ --%>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
@@ -23,7 +23,7 @@
                     var="standardBundle"/>
 
      <jsp:useBean id="LoginBean" class="standard.LoginBean" scope="session" />
-     <f:use_faces>  
+     <f:view>  
 
        <p>Form is rendered after this.</p>
      
@@ -54,7 +54,7 @@
 
        </h:form>
 
-     </f:use_faces>   
+     </f:view>   
 
 
   </body>

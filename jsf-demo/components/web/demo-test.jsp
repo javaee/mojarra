@@ -45,7 +45,7 @@
     <H3> JavaServer Faces custom components test page </H3>
     <hr>
 
-       <f:use_faces>
+       <f:view>
         <h:form id="demotestForm" formName="demotestForm" >
 
             <table> 
@@ -61,5 +61,5 @@
 
 
         </h:form>
-     </f:use_faces>
+     </f:view>
 </HTML>

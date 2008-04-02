@@ -55,7 +55,7 @@
 	    scope="session" var="cardemoBundle"/>
 
 <jsp:useBean id="CustomerBean" class="cardemo.CustomerBean" scope="session" />
-<f:use_faces>
+<f:view>
 <h:form  formName="CustomerForm">
 <table border="0" width="660" bgcolor="#4f4f72">
     <tbody>
@@ -261,7 +261,7 @@
       </tr>
     </tbody>
   </table>
-</f:use_faces>
+</f:view>
 </body>
 </html>
 

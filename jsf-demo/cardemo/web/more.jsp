@@ -57,7 +57,7 @@
 
 <BODY BGCOLOR="white">
 
-<f:use_faces>
+<f:view>
 <h:form  formName="carStoreForm" >
 
 <P>
@@ -358,7 +358,7 @@
 </TR>
 </TABLE>
 </h:form>
-</f:use_faces>
+</f:view>
 </BODY>
 
 </HTML>

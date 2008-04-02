@@ -52,7 +52,7 @@
 	    basename="cardemo.Resources"
 	    scope="session" var="carDemoBundle"/>
 
-<f:use_faces>
+<f:view>
 <h:form  formName="thanksForm" >
 
 <body bgcolor="#FFFFFF">
@@ -83,5 +83,5 @@
   </table>
 </body>
 </h:form>
-</f:use_faces>
+</f:view>
 </html>

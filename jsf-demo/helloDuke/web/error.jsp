@@ -42,10 +42,10 @@
     <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
     <H3> JSF Basic Components Test Page </H3>
     <hr>
-      <f:use_faces>
+      <f:view>
         <h:form id="errorForm" formName="errorForm">
             <h:output_text id="hello_label" text="Login Failed" />
              <P></P>
         </h:form>
-       </f:use_faces>
+       </f:view>
 </HTML>

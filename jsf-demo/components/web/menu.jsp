@@ -72,7 +72,7 @@
 
 %>
 
-<f:use_faces>
+<f:view>
 <html>
 <head>
 <title>Demonstration Components - Menu</title>
@@ -214,4 +214,4 @@ td>
 
 </body>
 </html>
-</f:use_faces>
+</f:view>

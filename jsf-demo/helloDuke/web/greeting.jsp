@@ -43,7 +43,7 @@
     <body bgcolor="white">
     <h2>My name is Duke.  What is yours?</h2>
     <jsp:useBean id="UserNameBean" class="helloDuke.UserNameBean" scope="session" />
-    <f:use_faces>
+    <f:view>
     <h:form id="helloForm" formName="helloForm" >
         <h:graphic_image id="wave_img" url="/wave.med.gif" />
   	<h:input_text id="username"
@@ -51,5 +51,5 @@
   	<h:command_button id="submit" action="success" label="Submit" 
 		          type="submit" />
     </h:form>
-    </f:use_faces>
+    </f:view>
 </HTML>  

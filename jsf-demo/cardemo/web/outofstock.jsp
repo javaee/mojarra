@@ -46,7 +46,7 @@
 	    basename="cardemo.Resources"
 	    scope="session" var="carDemoBundle"/>
     <hr>
-    <f:use_faces>
+    <f:view>
     <h:form  formName="outofstockForm" >
         <p> <h:output_text id="stock_label" key="stockLabel" bundle="carDemoBundle"/>
         </p> 
@@ -57,5 +57,5 @@
                 commandName="buy" action="buy"/> </P>
              
     </h:form>
-    </f:use_faces>
+    </f:view>
 </HTML>

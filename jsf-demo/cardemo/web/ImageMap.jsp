@@ -53,7 +53,7 @@
 	    basename="cardemo.Resources"
 	    scope="session" var="carDemoBundle"/>
 
-<f:use_faces>
+<f:view>
 <h:form  formName="imageMapForm" >
     <table border="0" width="660" bgcolor="#4f4f72">
     <tbody>
@@ -86,5 +86,5 @@
                           </TABLE>
 
 </h:form>
-</f:use_faces>
+</f:view>
 </html>

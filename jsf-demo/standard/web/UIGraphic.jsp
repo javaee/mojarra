@@ -3,7 +3,7 @@
  SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 -->
 
-<%-- $Id: UIGraphic.jsp,v 1.1 2003/07/17 02:58:43 rlubke Exp $ --%>
+<%-- $Id: UIGraphic.jsp,v 1.2 2003/08/25 16:37:15 jvisvanathan Exp $ --%>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
@@ -26,7 +26,7 @@
                         value="duke.gif"/> 
      </jsp:useBean>
 
-     <f:use_faces>  
+     <f:view>  
 
        <p>Form is rendered after this.</p>
      
@@ -56,7 +56,7 @@
 
        </h:form>
 
-     </f:use_faces>   
+     </f:view>   
 
 
   </body>

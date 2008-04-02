@@ -47,7 +47,7 @@
      <fmt:setBundle
 	    basename="demo.model.Resources"
 	    scope="session" var="mapBundle"/>
-      <f:use_faces>
+      <f:view>
         <h:form id="mapForm" formName="mapForm" bundle="mapBundle" >
 
 	<table> 
@@ -89,4 +89,4 @@ causing the proper ResourceBundle lookup.</p>
 
 <hr>
 </HTML>
-</f:use_faces>
+</f:view>

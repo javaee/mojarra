@@ -48,10 +48,10 @@
 	    scope="session" var="carDemoBundle"/>
     <H3> JSF Basic Components Test Page </H3>
     <hr>
-    <f:use_faces>
+    <f:view>
     <h:form  formName="errorForm" >
 	<faces:output_text id="hello_label" key="errorLabel" bundle="carDemoBundle" />
              <P></P>
     </h:Form>
-    </f:use_faces>
+    </f:view>
 </HTML>

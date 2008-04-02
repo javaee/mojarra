@@ -55,7 +55,7 @@
 %>
 
 
-<f:use_faces>
+<f:view>
 <html>
 <head>
   <title>Demonstration Components - Tabbed Panes</title>
@@ -213,4 +213,4 @@ Powered by Faces components:
 </body>
 </html>
 
-</f:use_faces>
+</f:view>

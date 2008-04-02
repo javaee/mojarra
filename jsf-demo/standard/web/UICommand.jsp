@@ -3,7 +3,7 @@
  SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 -->
 
-<%-- $Id: UICommand.jsp,v 1.2 2003/08/11 23:26:42 eburns Exp $ --%>
+<%-- $Id: UICommand.jsp,v 1.3 2003/08/25 16:37:15 jvisvanathan Exp $ --%>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
@@ -22,7 +22,7 @@
      <fmt:setBundle basename="standard.Resources" scope="session"
                     var="standardBundle"/>
 
-     <f:use_faces>  
+     <f:view>  
 
        <p>Form is rendered after this.</p>
      
@@ -53,7 +53,7 @@
 
        </h:form>
 
-     </f:use_faces>   
+     </f:view>   
 
 
   </body>

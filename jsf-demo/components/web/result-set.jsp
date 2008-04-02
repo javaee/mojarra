@@ -68,7 +68,7 @@
 
 %>
 
-<f:use_faces>
+<f:view>
 <html>
 <head>
   <title>Result Set Example</title>
@@ -332,4 +332,4 @@ example of how to do this.</p>
 
 </body>
 </html>
-</f:use_faces>
+</f:view>
