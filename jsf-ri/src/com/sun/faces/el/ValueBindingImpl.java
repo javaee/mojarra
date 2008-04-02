@@ -1,5 +1,5 @@
 /*
- * $Id: ValueBindingImpl.java,v 1.34 2004/06/17 16:50:37 eburns Exp $
+ * $Id: ValueBindingImpl.java,v 1.35 2004/07/17 01:37:12 jayashri Exp $
  */
 
 /*
@@ -96,7 +96,7 @@ public class ValueBindingImpl extends ValueBinding implements StateHolder {
 	FacesContext facesContext = FacesContext.getCurrentInstance();
         this.application = application;
 	this.appAssociate = 
-	    ApplicationAssociate.getInstance(facesContext.getExternalContext().getContext());
+	    ApplicationAssociate.getInstance(facesContext.getExternalContext());
 	
         if (null == applicationMap) {
             applicationMap =

@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTestCaseService.java,v 1.39 2004/05/07 13:53:19 eburns Exp $
+ * $Id: FacesTestCaseService.java,v 1.40 2004/07/17 01:37:13 jayashri Exp $
  */
 
 /*
@@ -18,6 +18,7 @@ import org.apache.cactus.server.ServletContextWrapper;
 
 import javax.faces.FactoryFinder;
 import javax.faces.context.FacesContext;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContextFactory;
 import javax.faces.context.ResponseWriter;
 import javax.faces.lifecycle.Lifecycle;
@@ -35,6 +36,8 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Iterator;
 
+import com.sun.faces.RIConstants;
+
 
 /**
  * Subclasses of ServletTestCase and JspTestCase use an instance of this
@@ -46,7 +49,7 @@ import java.util.Iterator;
  * <B>Lifetime And Scope</B> <P> Same as the JspTestCase or
  * ServletTestCase instance that uses it.
  *
- * @version $Id: FacesTestCaseService.java,v 1.39 2004/05/07 13:53:19 eburns Exp $
+ * @version $Id: FacesTestCaseService.java,v 1.40 2004/07/17 01:37:13 jayashri Exp $
  * @see	com.sun.faces.context.FacesContextFactoryImpl
  * @see	com.sun.faces.context.FacesContextImpl
  */
@@ -135,7 +138,7 @@ public class FacesTestCaseService extends Object {
         FactoryFinder.setFactory(FactoryFinder.RENDER_KIT_FACTORY,
                                  "com.sun.faces.renderkit.RenderKitFactoryImpl");
 
-	ApplicationAssociate.clearInstance(facesTestCase.getConfig().getServletContext());
+	 ApplicationAssociate.clearInstance(storeSC.getServletContextWrapper());
         Util.verifyFactoriesAndInitDefaultRenderKit(
             facesTestCase.getConfig().getServletContext());
 
@@ -185,6 +188,7 @@ public class FacesTestCaseService extends Object {
             ResponseWriter responseWriter = new FileOutputResponseWriter();
             facesContext.setResponseWriter(responseWriter);
         }
+        
         TestBean testBean = new TestBean();
         facesContext.getExternalContext().getSessionMap().put("TestBean",
                                                               testBean);
@@ -219,14 +223,17 @@ public class FacesTestCaseService extends Object {
 
     public void tearDown() {
         // make sure this gets called!
+        if ( facesTestCase.getConfig().getServletContext() != null ) {
+            facesTestCase.getConfig().getServletContext()
+                .removeAttribute(RIConstants.HTML_BASIC_RENDER_KIT);
+        }
+        
         ConfigureListener configListener = new ConfigureListener();
         ServletContextEvent e =
             new ServletContextEvent(
                 facesTestCase.getConfig().getServletContext());
         configListener.contextDestroyed(e);
 
-        Util.releaseFactoriesAndDefaultRenderKit(
-            facesTestCase.getConfig().getServletContext());
         // make sure session is not null. It will null in case release
         // was invoked.
         try {
@@ -240,7 +247,7 @@ public class FacesTestCaseService extends Object {
         }
     }
 
-
+    
     public boolean verifyExpectedOutput() {
         boolean result = false;
         CompareFiles cf = new CompareFiles();
@@ -444,7 +451,7 @@ public class FacesTestCaseService extends Object {
         // clear out the attr that was set in the servletcontext attr set.
         facesTestCase.getConfig().getServletContext().removeAttribute(
             FacesServlet.CONFIG_FILES_ATTR);
-	ApplicationAssociate.clearInstance(facesTestCase.getConfig().getServletContext());
+	ApplicationAssociate.clearInstance(facesContext.getExternalContext());
         // clear out the renderKit factory
         FactoryFinder.releaseFactories();
 

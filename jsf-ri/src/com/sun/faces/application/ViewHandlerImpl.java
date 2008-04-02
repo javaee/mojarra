@@ -1,5 +1,5 @@
 /* 
- * $Id: ViewHandlerImpl.java,v 1.42 2004/07/14 21:30:53 rlubke Exp $ 
+ * $Id: ViewHandlerImpl.java,v 1.43 2004/07/17 01:37:12 jayashri Exp $ 
  */ 
 
 
@@ -41,7 +41,7 @@ import java.util.Map;
 /**
  * <B>ViewHandlerImpl</B> is the default implementation class for ViewHandler.
  *
- * @version $Id: ViewHandlerImpl.java,v 1.42 2004/07/14 21:30:53 rlubke Exp $
+ * @version $Id: ViewHandlerImpl.java,v 1.43 2004/07/17 01:37:12 jayashri Exp $
  * @see javax.faces.application.ViewHandler
  */
 public class ViewHandlerImpl extends ViewHandler {
@@ -101,7 +101,7 @@ public class ViewHandlerImpl extends ViewHandler {
             throw new NullPointerException(message);
         }
 	
-	ApplicationAssociate associate = ApplicationAssociate.getInstance(context.getExternalContext().getContext());
+	ApplicationAssociate associate = ApplicationAssociate.getInstance(context.getExternalContext());
 	
         if (null != associate) {
             associate.responseRendered();

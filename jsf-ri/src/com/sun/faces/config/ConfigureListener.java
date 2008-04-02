@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListener.java,v 1.21 2004/07/14 21:30:54 rlubke Exp $
+ * $Id: ConfigureListener.java,v 1.22 2004/07/17 01:37:12 jayashri Exp $
  */
 /*
  * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
@@ -53,7 +53,10 @@ import javax.faces.webapp.FacesServlet;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
+import javax.faces.context.ExternalContext;
 
+import java.util.Locale;
+import java.util.Map;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -109,13 +112,13 @@ public class ConfigureListener implements ServletContextListener {
      *
      */
 
-    private static ThreadLocal tlsServletContext = new ThreadLocal() {
+    private static ThreadLocal tlsExternalContext = new ThreadLocal() {
             protected Object initialValue() { return (null); }
         };
 
-    static ThreadLocal getThreadLocalServletContext() {
+    static ThreadLocal getThreadLocalExternalContext() {
         if (RIConstants.IS_UNIT_TEST_MODE) {
-	    return tlsServletContext;
+	    return tlsExternalContext;
 	}
 	return null;
     }
@@ -125,8 +128,8 @@ public class ConfigureListener implements ServletContextListener {
      * method will return the ServletContext instance.</p>
      */
 
-    public static ServletContext getServletContextDuringInitialize() {
-	return (ServletContext) tlsServletContext.get();
+    public static ExternalContext getExternalContextDuringInitialize() {
+	return (ExternalContext) tlsExternalContext.get();
     }
 
     public void contextInitialized(ServletContextEvent sce) {
@@ -139,7 +142,7 @@ public class ConfigureListener implements ServletContextListener {
 	// This enables our Application's ApplicationAssociate to locate
 	// it so it can store the ApplicationAssociate in the
 	// ServletContext.
-	tlsServletContext.set(context);
+	tlsExternalContext.set(new ServletContextAdapter(context));
 
 	// see if we're operating in the unit test environment
 	try {
@@ -331,11 +334,14 @@ public class ConfigureListener implements ServletContextListener {
         try {
             configure(context, fcb, mappings);
         } catch (FacesException e) {
+            e.printStackTrace();
             throw e;
         } catch (Exception e) {
+            e.printStackTrace();
             throw new FacesException(e);
-        }
+        } 
 
+     
         // Step 8, verify that all the configured factories are available
         // and optionall that configured objects can be created
         verifyFactories();
@@ -343,7 +349,7 @@ public class ConfigureListener implements ServletContextListener {
             verifyObjects(context, fcb);
         }
 
-	tlsServletContext.set(null);
+	tlsExternalContext.set(null);
     }
 
 
@@ -357,8 +363,9 @@ public class ConfigureListener implements ServletContextListener {
 
         // Release any allocated application resources
 	FactoryFinder.releaseFactories();
-	ApplicationAssociate.clearInstance(context);
-	tlsServletContext.set(null);
+        tlsExternalContext.set(new ServletContextAdapter(context));
+	ApplicationAssociate.clearInstance((ExternalContext)tlsExternalContext.get());
+	tlsExternalContext.set(null);
 
         // Release the initialization mark on this web application
         release(context);
@@ -796,7 +803,7 @@ public class ConfigureListener implements ServletContextListener {
         }
         Application application = application();
 	ApplicationAssociate associate = 
-	    ApplicationAssociate.getInstance(getServletContextDuringInitialize());
+	    ApplicationAssociate.getInstance(getExternalContextDuringInitialize());
 
 	if (null == associate) {
 	    return;
@@ -828,7 +835,7 @@ public class ConfigureListener implements ServletContextListener {
         }
         Application application = application();
 	ApplicationAssociate associate = 
-	    ApplicationAssociate.getInstance(getServletContextDuringInitialize());
+	    ApplicationAssociate.getInstance(getExternalContextDuringInitialize());
 	
 	if (null == associate) {
 	    return;
@@ -1306,6 +1313,226 @@ public class ConfigureListener implements ServletContextListener {
         }
 
     }
+    
+    public class ServletContextAdapter extends ExternalContext {
+        
+        private ServletContext servletContext = null;
+        private ApplicationMap applicationMap = null;
+        
+        public ServletContextAdapter(ServletContext sc) {
+            this.servletContext = sc;
+        }
+        
+        public void dispatch(String path) throws IOException {
+        }
+    
+        public String encodeActionURL(String url) {
+            return null;
+        }   
+
+        public String encodeNamespace(String name) {
+            return null;
+        }
+
+
+        public String encodeResourceURL(String url) {
+            return null;
+        }
+
+       public Map getApplicationMap() {
+            if (applicationMap == null) {
+                applicationMap = new ApplicationMap(servletContext);
+            }
+            return applicationMap;
+        }
+        
+        public String getAuthType() {
+            return null;
+        }
+
+        public Object getContext() {
+            return servletContext;
+        }
+
+        public String getInitParameter(String name) {
+            return null;
+        }
+
+        public Map getInitParameterMap() {
+            return null;
+        }
+
+        public String getRemoteUser() {
+            return null;
+        }
+
+
+        public Object getRequest() {
+            return null;
+        }
+
+        public String getRequestContextPath() {
+            return null;
+        }
+
+        public Map getRequestCookieMap() {
+            return null;
+        }
+
+        public Map getRequestHeaderMap() {
+            return null;
+        }
+
+
+        public Map getRequestHeaderValuesMap() {
+            return null;
+        }
+
+
+        public Locale getRequestLocale() {
+            return null;
+        }
+
+        public Iterator getRequestLocales() {
+            return null;
+        }
+
+
+
+        public Map getRequestMap() {
+            return null;
+        }
+
+
+        public Map getRequestParameterMap() {
+            return null;
+        }
+
+
+        public Iterator getRequestParameterNames() {
+            return null;
+        }
+
+
+        public Map getRequestParameterValuesMap() {
+            return null;
+        }
+
+
+        public String getRequestPathInfo() {
+            return null;
+        }
+
+
+        public String getRequestServletPath() {
+            return null;
+        }
+
+        public URL getResource(String path) throws MalformedURLException {
+            return null;
+        }
+
+
+        public InputStream getResourceAsStream(String path) {
+            return null;
+        }
+
+        public Set getResourcePaths(String path) {
+            return null;
+        }
+
+        public Object getResponse() {
+            return null;
+        }
+
+        public Object getSession(boolean create) {
+            return null;
+        }
+
+        public Map getSessionMap() {
+            return null;
+        }
+
+        public java.security.Principal getUserPrincipal() {
+            return null;
+        }
+        
+        public boolean isUserInRole(String role) {
+            return false;
+        }
+
+        public void log(String message) {
+        }
+        
+        public void log(String message, Throwable exception){
+        }
+        
+        public void redirect(String url) throws IOException {
+        }
+
+    }
+    
+    class ApplicationMap extends java.util.AbstractMap {
+
+        private ServletContext servletContext = null;
+
+        ApplicationMap(ServletContext servletContext) {
+            this.servletContext = servletContext;
+        }
+
+
+        public Object get(Object key) {
+            if (key == null) {
+                throw new NullPointerException();
+            }
+            return servletContext.getAttribute(key.toString());
+        }
+
+
+        public Object put(Object key, Object value) {
+            if (key == null) {
+                throw new NullPointerException();
+            }
+            String keyString = key.toString();
+            Object result = servletContext.getAttribute(keyString);
+            servletContext.setAttribute(keyString, value);
+            return (result);
+        }
+
+
+        public Object remove(Object key) {
+            if (key == null) {
+                return null;
+            }
+            String keyString = key.toString();
+            Object result = servletContext.getAttribute(keyString);
+            servletContext.removeAttribute(keyString);
+            return (result);
+        }
+
+
+        public Set entrySet() {
+           throw new UnsupportedOperationException();
+        }
+
+
+        public boolean equals(Object obj) {
+            if (obj == null || !(obj instanceof ApplicationMap))
+                return false;
+            return super.equals(obj);
+        }
+        
+        public void clear() {
+            throw new UnsupportedOperationException();
+        }
+
+        public void putAll(Map t) {
+            throw new UnsupportedOperationException();
+        }
+       
+
+    } // END ApplicationMap
 
 
 } 
+

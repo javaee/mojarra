@@ -1,5 +1,5 @@
 /*
- * $Id: VariableResolverImpl.java,v 1.19 2004/05/07 13:53:14 eburns Exp $
+ * $Id: VariableResolverImpl.java,v 1.20 2004/07/17 01:37:13 jayashri Exp $
  */
 
 /*
@@ -72,7 +72,7 @@ public class VariableResolverImpl extends VariableResolver {
                     if (null == (value = ec.getApplicationMap().get(name))) {
 // if it's a managed bean try and create it
 			ApplicationAssociate associate = 
-			    ApplicationAssociate.getInstance(context.getExternalContext().getContext());
+			    ApplicationAssociate.getInstance(context.getExternalContext());
 			
                         if (null != associate) {
                             value =

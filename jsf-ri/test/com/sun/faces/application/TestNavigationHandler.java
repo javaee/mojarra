@@ -1,5 +1,5 @@
 /*
- * $Id: TestNavigationHandler.java,v 1.20 2004/05/07 13:53:20 eburns Exp $
+ * $Id: TestNavigationHandler.java,v 1.21 2004/07/17 01:37:14 jayashri Exp $
  */
 
 /*
@@ -39,7 +39,7 @@ import java.util.Map;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestNavigationHandler.java,v 1.20 2004/05/07 13:53:20 eburns Exp $
+ * @version $Id: TestNavigationHandler.java,v 1.21 2004/07/17 01:37:14 jayashri Exp $
  */
 
 public class TestNavigationHandler extends ServletFacesTestCase {
@@ -210,7 +210,7 @@ public class TestNavigationHandler extends ServletFacesTestCase {
                 FactoryFinder.APPLICATION_FACTORY);
         Application application = aFactory.getApplication();
         assertTrue(application instanceof ApplicationImpl);
-	ApplicationAssociate associate = ApplicationAssociate.getInstance(config.getServletContext());
+	ApplicationAssociate associate = ApplicationAssociate.getInstance(getFacesContext().getExternalContext());
 	assertNotNull(associate);
 	
         Map caseListMap = associate.getNavigationCaseListMappings();

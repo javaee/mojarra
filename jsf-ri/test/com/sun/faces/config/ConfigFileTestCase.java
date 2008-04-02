@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigFileTestCase.java,v 1.60 2004/05/12 03:09:47 rkitain Exp $
+ * $Id: ConfigFileTestCase.java,v 1.61 2004/07/17 01:37:14 jayashri Exp $
  */
 
 /*
@@ -300,7 +300,7 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
             FactoryFinder.APPLICATION_FACTORY);
         ApplicationImpl application = (ApplicationImpl) aFactory.getApplication();
 
-	ApplicationAssociate associate = ApplicationAssociate.getInstance(config.getServletContext());
+	ApplicationAssociate associate = ApplicationAssociate.getInstance(getFacesContext().getExternalContext());
         Object bean = 
 	    associate.createAndMaybeStoreManagedBeans(getFacesContext(),
 						      "SimpleBean");
@@ -650,7 +650,7 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
         ApplicationFactory aFactory = (ApplicationFactory) FactoryFinder.getFactory(
             FactoryFinder.APPLICATION_FACTORY);
         ApplicationImpl application = (ApplicationImpl) aFactory.getApplication();
-	ApplicationAssociate associate = ApplicationAssociate.getInstance(config.getServletContext());
+	ApplicationAssociate associate = ApplicationAssociate.getInstance(getFacesContext().getExternalContext());
 
 	com.sun.faces.TestBean bean = (com.sun.faces.TestBean)
 	    associate.createAndMaybeStoreManagedBeans(getFacesContext(),

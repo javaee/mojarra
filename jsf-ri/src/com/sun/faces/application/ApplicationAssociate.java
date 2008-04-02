@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationAssociate.java,v 1.2 2004/05/11 21:35:23 eburns Exp $
+ * $Id: ApplicationAssociate.java,v 1.3 2004/07/17 01:37:11 jayashri Exp $
  */
 
 /*
@@ -22,9 +22,8 @@ import java.util.TreeSet;
 import java.util.Comparator;
 import java.util.Collections;
 
-import javax.servlet.ServletContext;
-
 import javax.faces.context.FacesContext;
+import javax.faces.context.ExternalContext;
 import javax.faces.FacesException;
 
 import com.sun.faces.config.ManagedBeanFactory;
@@ -96,17 +95,17 @@ public class ApplicationAssociate extends Object {
 
     public ApplicationAssociate(ApplicationImpl appImpl) {
 	app = appImpl;
-	ServletContext servletContext = null;
-	if (null == (servletContext = 
-		     ConfigureListener.getServletContextDuringInitialize())) {
+	ExternalContext externalContext = null;
+	if (null == (externalContext = 
+		     ConfigureListener.getExternalContextDuringInitialize())) {
 	    // PENDING I18N
 	    throw new IllegalStateException("ApplicationAssociate ctor not called in same callstack as ConfigureListener.contextInitialized()");
 	}
 	// PENDING I18N
-	if (null != servletContext.getAttribute(ASSOCIATE_KEY)) {
+	if (null != externalContext.getApplicationMap().get(ASSOCIATE_KEY)) {
 	    throw new IllegalStateException("ApplicationAssociate already exists for this webapp");
 	}
-	servletContext.setAttribute(ASSOCIATE_KEY, this);
+	externalContext.getApplicationMap().put(ASSOCIATE_KEY, this);
         managedBeanFactoriesMap = new HashMap();
         caseListMap = new HashMap();
         wildcardMatchList = new TreeSet(new SortIt());
@@ -114,13 +113,17 @@ public class ApplicationAssociate extends Object {
 	expressionInfoInstancePool = new InstancePool();
     }
     
-    public static ApplicationAssociate getInstance(Object servletContext) {
+    public static ApplicationAssociate getInstance(ExternalContext 
+        externalContext) {
+        Map applicationMap = externalContext.getApplicationMap();    
 	return ((ApplicationAssociate) 
-		((ServletContext)servletContext).getAttribute(ASSOCIATE_KEY));
+		applicationMap.get(ASSOCIATE_KEY));
     }
     
-    public static void clearInstance(Object servletContext) {
-	((ServletContext)servletContext).removeAttribute(ASSOCIATE_KEY);
+    public static void clearInstance(ExternalContext 
+        externalContext) {
+        Map applicationMap = externalContext.getApplicationMap();
+	applicationMap.remove(ASSOCIATE_KEY);
     }
 
     

@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.140 2004/06/04 20:48:02 eburns Exp $
+ * $Id: Util.java,v 1.141 2004/07/17 01:37:13 jayashri Exp $
  */
 
 /*
@@ -60,7 +60,7 @@ import java.util.StringTokenizer;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.140 2004/06/04 20:48:02 eburns Exp $
+ * @version $Id: Util.java,v 1.141 2004/07/17 01:37:13 jayashri Exp $
  */
 
 public class Util extends Object {
@@ -557,22 +557,6 @@ public class Util extends Object {
                 e);
         }
         applicationMap.put(RIConstants.HAS_REQUIRED_CLASSES_ATTR, Boolean.TRUE);
-    }
-
-
-    /**
-     * Release the factories and remove the default RenderKit from the
-     * ServletContext.
-     */
-
-    public static void releaseFactoriesAndDefaultRenderKit(ServletContext context)
-        throws FacesException {
-        FactoryFinder.releaseFactories();
-
-        Util.doAssert(null !=
-                      context.getAttribute(RIConstants.HTML_BASIC_RENDER_KIT));
-        context.removeAttribute(RIConstants.HTML_BASIC_RENDER_KIT);
-	ApplicationAssociate.clearInstance(context);
     }
 
 

@@ -1,5 +1,5 @@
 /*
- * $Id: TestVariableResolverImpl.java,v 1.17 2004/05/07 13:53:26 eburns Exp $
+ * $Id: TestVariableResolverImpl.java,v 1.18 2004/07/17 01:37:15 jayashri Exp $
  */
 
 /*
@@ -32,7 +32,7 @@ import javax.faces.el.VariableResolver;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestVariableResolverImpl.java,v 1.17 2004/05/07 13:53:26 eburns Exp $
+ * @version $Id: TestVariableResolverImpl.java,v 1.18 2004/07/17 01:37:15 jayashri Exp $
  */
 
 public class TestVariableResolverImpl extends ServletFacesTestCase {
@@ -258,7 +258,7 @@ public class TestVariableResolverImpl extends ServletFacesTestCase {
         ApplicationFactory aFactory = (ApplicationFactory) FactoryFinder.getFactory(
             FactoryFinder.APPLICATION_FACTORY);
         ApplicationImpl application = (ApplicationImpl) aFactory.getApplication();
-	ApplicationAssociate associate = ApplicationAssociate.getInstance(config.getServletContext());
+	ApplicationAssociate associate = ApplicationAssociate.getInstance(getFacesContext().getExternalContext());
 
         associate.addManagedBeanFactory(beanName, mbf);
 

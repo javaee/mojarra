@@ -1,5 +1,5 @@
 /*
- * $Id: NavigationHandlerImpl.java,v 1.33 2004/05/11 21:10:05 rkitain Exp $
+ * $Id: NavigationHandlerImpl.java,v 1.34 2004/07/17 01:37:12 jayashri Exp $
  */
 
 /*
@@ -73,7 +73,7 @@ public class NavigationHandlerImpl extends NavigationHandler {
             FactoryFinder.APPLICATION_FACTORY);
         aFactory.getApplication();
 	associate = 
-	    ApplicationAssociate.getInstance(ConfigureListener.getServletContextDuringInitialize());
+	    ApplicationAssociate.getInstance(ConfigureListener.getExternalContextDuringInitialize());
 
     }
 
