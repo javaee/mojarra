@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKitFactoryImpl.java,v 1.6 2002/11/14 20:49:54 rkitain Exp $
+ * $Id: RenderKitFactoryImpl.java,v 1.7 2003/02/14 18:35:28 eburns Exp $
  */
 
 /*
@@ -195,6 +195,7 @@ public class RenderKitFactoryImpl extends RenderKitFactory {
         Digester digester = new Digester();
         digester.setNamespaceAware(true);
         digester.setValidating(false);
+        digester.setUseContextClassLoader(true);
         digester.addCallMethod("renderkit-config/renderkit",
             "setRenderKitClass", 2);
         digester.addCallParam("renderkit-config/renderkit/renderkit-id", 0);

@@ -1,5 +1,5 @@
 /*
- * $Id: MessageResourcesImpl.java,v 1.6 2002/10/10 02:02:20 eburns Exp $
+ * $Id: MessageResourcesImpl.java,v 1.7 2003/02/14 18:35:27 eburns Exp $
  */
 
 /*
@@ -137,6 +137,7 @@ public class MessageResourcesImpl extends MessageResources
         
     private Digester initConfig() {
         Digester digester = new Digester();
+	digester.setUseContextClassLoader(true);
         digester.setNamespaceAware(true);
         digester.setValidating(false);
         

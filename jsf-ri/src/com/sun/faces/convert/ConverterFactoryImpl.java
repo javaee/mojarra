@@ -1,5 +1,5 @@
 /*
- * $Id: ConverterFactoryImpl.java,v 1.3 2003/02/13 21:55:37 craigmcc Exp $
+ * $Id: ConverterFactoryImpl.java,v 1.4 2003/02/14 18:35:27 eburns Exp $
  */
 
 /*
@@ -303,6 +303,7 @@ public class ConverterFactoryImpl extends ConverterFactory {
         Digester digester = new Digester();
         digester.setNamespaceAware(true);
         digester.setValidating(false);
+        digester.setUseContextClassLoader(true);
         digester.addCallMethod("converter-config/converter",
             "setConverterClass", 2);
         digester.addCallParam("converter-config/converter/converter-id", 0);

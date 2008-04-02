@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderKit.java,v 1.36 2002/09/08 20:45:43 eburns Exp $
+ * $Id: HtmlBasicRenderKit.java,v 1.37 2003/02/14 18:35:29 eburns Exp $
  */
 
 /*
@@ -45,7 +45,7 @@ import javax.faces.render.Renderer;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HtmlBasicRenderKit.java,v 1.36 2002/09/08 20:45:43 eburns Exp $
+ * @version $Id: HtmlBasicRenderKit.java,v 1.37 2003/02/14 18:35:29 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -185,6 +185,7 @@ public class HtmlBasicRenderKit extends RenderKit
 
         parser.setNamespaceAware(true);
         parser.setValidating(false);
+        parser.setUseContextClassLoader(true);
         parser.addCallMethod("*/component", "addRenderersToTable", 1);
         parser.addCallParam("*/component/type", 0);
         parser.addCallMethod("*/renderer", "createAndAccrueRenderer", 2);
