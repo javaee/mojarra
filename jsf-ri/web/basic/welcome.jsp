@@ -21,9 +21,9 @@
 
 
               <h:output_message id="userMsg" value="Welcome {0}.  Thanks for trying the {1} application." >
-                  <f:parameter id="param1" modelReference="LoginBean.userName"/>
+                  <f:parameter modelReference="LoginBean.userName"/>
 
-                  <f:parameter id="param2" value="Faces Basic"/>
+                  <f:parameter value="Faces Basic"/>
               </h:output_message>
 
 <P>
