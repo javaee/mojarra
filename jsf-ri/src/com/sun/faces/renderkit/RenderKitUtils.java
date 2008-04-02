@@ -959,14 +959,14 @@ public class RenderKitUtils {
                                                      Param[] params) {
 
         StringBuilder sb = new StringBuilder(64);    
-        sb.append("jsfcljs(document.forms['");
+        sb.append("return jsfcljs(document.forms['");
         sb.append(formClientId);        
         sb.append("'],'");
-        sb.append(commandClientId).append(",").append(commandClientId);
+        sb.append(commandClientId).append(',').append(commandClientId);
         for (Param param : params) {         
-            sb.append(",");
+            sb.append(',');
             sb.append(param.name);
-            sb.append(",");
+            sb.append(',');
             sb.append(param.value);            
         }          
         sb.append("','");

@@ -61,12 +61,12 @@ function jsfcljs(f, pvp, t) {
 };
 //-->
 </script>
-<a id="form01:Link1" href="#" onclick="jsfcljs(document.forms['form01'],'form01:Link1,form01:Link1,param1,value1,param2,value2','');">Link1</a><a id="form01:Link2" href="#" onclick="jsfcljs(document.forms['form01'],'form01:Link2,form01:Link2,param1,value1,param2,value2','');">Link2</a>
+<a id="form01:Link1" href="#" onclick="return jsfcljs(document.forms['form01'],'form01:Link1,form01:Link1,param1,value1,param2,value2','');">Link1</a><a id="form01:Link2" href="#" onclick="return jsfcljs(document.forms['form01'],'form01:Link2,form01:Link2,param1,value1,param2,value2','');">Link2</a>
 </form>
 <form id="form02" name="form02" method="post" action="/jsf-systest/faces/taglib/commandLink_multiform_test.jsp;jsessionid=ad905a9155c4d1bbb3cc1a433c53" enctype="application/x-www-form-urlencoded">
 <input type="hidden" name="form02" value="form02" />
 <input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="j_id235:j_id236" />
-<a id="form02:Link3" href="#" onclick="jsfcljs(document.forms['form02'],'form02:Link3,form02:Link3,param3,value3,param4,value4','');">Link3</a><a id="form02:Link4" href="#" onclick="jsfcljs(document.forms['form02'],'form02:Link4,form02:Link4','');">Link4</a>
+<a id="form02:Link3" href="#" onclick="return jsfcljs(document.forms['form02'],'form02:Link3,form02:Link3,param3,value3,param4,value4','');">Link3</a><a id="form02:Link4" href="#" onclick="return jsfcljs(document.forms['form02'],'form02:Link4,form02:Link4','');">Link4</a>
 </form>
   </body>
 </html>

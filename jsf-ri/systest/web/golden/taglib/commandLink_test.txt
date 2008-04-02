@@ -1,7 +1,3 @@
-
-
-
-
 <html>
 <head>
     
@@ -65,8 +61,7 @@ function jsfcljs(f, pvp, t) {
 };
 //-->
 </script>
-<a id="form01:hyperlink01" href="#" onclick="jsfcljs(document.forms['form01'],'form01:hyperlink01,form01:hyperlink01','');">My Link</a><a id="form01:hyperlink02" href="#" onclick="jsfcljs(document.forms['form01'],'form01:hyperlink02,form01:hyperlink02','');">This is a String property</a><a id="form01:hyperlink03" href="#" onclick="jsfcljs(document.forms['form01'],'form01:hyperlink03,form01:hyperlink03','');">RES-BUNDLE LINK</a><a id="form01:hyperlink04" href="#" onclick="jsfcljs(document.forms['form01'],'form01:hyperlink04,form01:hyperlink04','');"><img src="duke.gif" /></a><a id="form01:hyperlink05" href="#" onclick="jsfcljs(document.forms['form01'],'form01:hyperlink05,form01:hyperlink05','');"><img src="resbundle_image.gif;jsessionid=ad822f8450bb20bb7a838961e834" /></a><a id="form01:hyperlink06" href="#" onclick="jsfcljs(document.forms['form01'],'form01:hyperlink06,form01:hyperlink06,param1,value1','');">Paramter Link</a>
+<a id="form01:hyperlink01" href="#" onclick="return jsfcljs(document.forms['form01'],'form01:hyperlink01,form01:hyperlink01','');">My Link</a><a id="form01:hyperlink02" href="#" onclick="return jsfcljs(document.forms['form01'],'form01:hyperlink02,form01:hyperlink02','');">This is a String property</a><a id="form01:hyperlink03" href="#" onclick="return jsfcljs(document.forms['form01'],'form01:hyperlink03,form01:hyperlink03','');">RES-BUNDLE LINK</a><a id="form01:hyperlink04" href="#" onclick="return jsfcljs(document.forms['form01'],'form01:hyperlink04,form01:hyperlink04','');"><img src="duke.gif" /></a><a id="form01:hyperlink05" href="#" onclick="return jsfcljs(document.forms['form01'],'form01:hyperlink05,form01:hyperlink05','');"><img src="resbundle_image.gif;jsessionid=ad822f8450bb20bb7a838961e834" /></a><a id="form01:hyperlink06" href="#" onclick="return jsfcljs(document.forms['form01'],'form01:hyperlink06,form01:hyperlink06,param1,value1','');">Paramter Link</a>
 </form>
 </body>
 </html>
-

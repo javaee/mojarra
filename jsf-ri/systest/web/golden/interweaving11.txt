@@ -1,9 +1,3 @@
-
-
-
-
-
-
 <html>
   <head>
       <title>interweaving11</title>   
@@ -64,19 +58,18 @@ function jsfcljs(f, pvp, t) {
 };
 //-->
 </script>
-<a href="#" onclick="jsfcljs(document.forms['j_id_id17'],'j_id_id17:j_id_id21,j_id_id17:j_id_id21,param,value','');">one</a>
+<a href="#" onclick="return jsfcljs(document.forms['j_id_id17'],'j_id_id17:j_id_id21,j_id_id17:j_id_id21,param,value','');">one</a>
             
                 
                 </br>
             
-                <a href="#" onclick="jsfcljs(document.forms['j_id_id17'],'j_id_id17:j_id_id21j_id_1,j_id_id17:j_id_id21j_id_1,param,value','');">two</a>
+                <a href="#" onclick="return jsfcljs(document.forms['j_id_id17'],'j_id_id17:j_id_id21j_id_1,j_id_id17:j_id_id21j_id_1,param,value','');">two</a>
                 </br>
             
-                <a href="#" onclick="jsfcljs(document.forms['j_id_id17'],'j_id_id17:j_id_id21j_id_2,j_id_id17:j_id_id21j_id_2,param,value','');">three</a>
+                <a href="#" onclick="return jsfcljs(document.forms['j_id_id17'],'j_id_id17:j_id_id21j_id_2,j_id_id17:j_id_id21j_id_2,param,value','');">three</a>
                 </br>
             
         
 </form>
   </body>
 </html>
-
