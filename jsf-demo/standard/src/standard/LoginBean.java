@@ -1,5 +1,5 @@
 /*
- * $Id: LoginBean.java,v 1.8 2004/02/03 21:44:41 jvisvanathan Exp $
+ * $Id: LoginBean.java,v 1.9 2004/02/03 23:32:02 rkitain Exp $
  */
 
 /*
@@ -51,7 +51,7 @@ public class LoginBean {
     String[] currentStringOptions = null;
     Boolean currentBooleanOption = null;
   //  Long currentLongOption = null;
-    long currentLongOption;
+    long currentLongOption = 1002;
     
     private double doubleVal;
     private ArrayList options = null;
