@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderKit.java,v 1.12 2004/01/30 07:02:13 rkitain Exp $
+ * $Id: TestRenderKit.java,v 1.13 2004/01/30 16:40:16 rkitain Exp $
  */
 
 /*
@@ -47,7 +47,7 @@ import java.io.ByteArrayOutputStream;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderKit.java,v 1.12 2004/01/30 07:02:13 rkitain Exp $
+ * @version $Id: TestRenderKit.java,v 1.13 2004/01/30 16:40:16 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -194,7 +194,6 @@ public static final String CORRECT_OUTPUT_FILENAME =
             FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
         RenderKit renderKit = renderKitFactory.getRenderKit(getFacesContext(),
 						  RenderKitFactory.HTML_BASIC_RENDER_KIT);
-	boolean exceptionThrown = false;
         try {
             renderKit.createResponseWriter(new Writer() {
                 public void close() throws IOException {
@@ -215,11 +214,10 @@ public static final String CORRECT_OUTPUT_FILENAME =
                 }
             }, null, "foo");
 
-	} catch (IllegalArgumentException iae) {
-	    exceptionThrown = true;
-	}
+            fail("IllegalArgumentException Should Have Been Thrown!");
 
-	assertTrue(exceptionThrown);
+	} catch (IllegalArgumentException iae) {
+	}
     }
 
 } // end of class TestRenderKit

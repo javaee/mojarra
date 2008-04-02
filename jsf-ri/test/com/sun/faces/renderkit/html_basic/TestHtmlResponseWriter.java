@@ -1,5 +1,5 @@
 /*
- * $Id: TestHtmlResponseWriter.java,v 1.9 2004/01/30 07:02:13 rkitain Exp $
+ * $Id: TestHtmlResponseWriter.java,v 1.10 2004/01/30 16:40:17 rkitain Exp $
  */
 
 /*
@@ -38,7 +38,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestHtmlResponseWriter.java,v 1.9 2004/01/30 07:02:13 rkitain Exp $
+ * @version $Id: TestHtmlResponseWriter.java,v 1.10 2004/01/30 16:40:17 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -93,26 +93,22 @@ import com.sun.faces.util.Util;
         assertTrue(writer.getContentType().equals("text/html"));
 
 	// Test Invalid Encoding
-	boolean exceptionThrown = false;
 	try {
 	    writer = renderKit.createResponseWriter(sw, "foobar", "ISO-8859-1");
+            fail("IllegalArgumentException Should Have been Thrown!");
 	} catch (IllegalArgumentException e) {
-	    exceptionThrown = true;
 	}
-	assertTrue(exceptionThrown);
     }
 
     public void testEncoding() {
         assertTrue(writer.getCharacterEncoding().equals("ISO-8859-1"));
 
 	// Test Invalid Encoding
-	boolean exceptionThrown = false;
 	try {
 	    writer = renderKit.createResponseWriter(sw, "text/html", "foobar");
+            fail("IllegalArgumentException Should Have been Thrown!");
 	} catch (IllegalArgumentException e) {
-	    exceptionThrown = true;
 	}
-	assertTrue(exceptionThrown);
     }
 
     // Test "startElement method including the automatic closure of a
