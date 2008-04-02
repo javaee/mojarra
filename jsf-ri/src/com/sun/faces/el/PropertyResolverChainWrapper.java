@@ -1,5 +1,5 @@
 /*
- * $Id: PropertyResolverChainWrapper.java,v 1.9 2006/05/17 17:31:29 rlubke Exp $
+ * $Id: PropertyResolverChainWrapper.java,v 1.10 2006/05/30 20:46:41 rlubke Exp $
  */
 /*
  * The contents of this file are subject to the terms
@@ -57,7 +57,7 @@ public class PropertyResolverChainWrapper extends ELResolver {
             return null;
         }        
         Object result = null;
-
+        context.setPropertyResolved(true);
         FacesContext facesContext = (FacesContext) 
             context.getContext(FacesContext.class);
         if (base instanceof List || base.getClass().isArray()) {
@@ -65,8 +65,7 @@ public class PropertyResolverChainWrapper extends ELResolver {
                     coerceToType(property, Integer.class);
             int index = ((Integer)indexObj).intValue();
             try {
-                result = legacyPR.getValue(base, index);
-                context.setPropertyResolved(result != null);
+                result = legacyPR.getValue(base, index);                
             } catch (EvaluationException ex) {
                 context.setPropertyResolved(false);
                 throw new ELException(ex);
@@ -93,7 +92,7 @@ public class PropertyResolverChainWrapper extends ELResolver {
         }
         
         Class result = null;
-        
+        context.setPropertyResolved(true);
         if (base instanceof List || base.getClass().isArray()) {
             FacesContext facesContext = (FacesContext) 
                 context.getContext(FacesContext.class);
@@ -101,8 +100,7 @@ public class PropertyResolverChainWrapper extends ELResolver {
                     coerceToType(property, Integer.class);
             int index = ((Integer)indexObj).intValue();
             try {
-                result = legacyPR.getType(base, index);
-                context.setPropertyResolved(result != null);
+                result = legacyPR.getType(base, index);               
             } catch (EvaluationException ex) {
                 context.setPropertyResolved(false);
                 throw new ELException(ex);
@@ -160,7 +158,7 @@ public class PropertyResolverChainWrapper extends ELResolver {
             return false;
         }      
         boolean result = false;
-
+        context.setPropertyResolved(true);
         if (base instanceof List || base.getClass().isArray()) {
             FacesContext facesContext = (FacesContext) 
             context.getContext(FacesContext.class);

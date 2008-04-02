@@ -1,5 +1,5 @@
 /*
- * $Id: VariableResolverChainWrapper.java,v 1.9 2006/05/17 19:00:46 rlubke Exp $
+ * $Id: VariableResolverChainWrapper.java,v 1.10 2006/05/30 20:46:41 rlubke Exp $
  */
 /*
  * The contents of this file are subject to the terms
@@ -73,6 +73,7 @@ public class VariableResolverChainWrapper extends ELResolver {
                 (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "base and property"); // ?????
             throw new PropertyNotFoundException(message);
         }
+        context.setPropertyResolved(true);
         Object result = null;
         
         FacesContext facesContext = (FacesContext)
@@ -90,9 +91,7 @@ public class VariableResolverChainWrapper extends ELResolver {
             requestMap.put(REENTRANT_GUARD, REENTRANT_GUARD);
             
             result = legacyVR.resolveVariable(facesContext,
-                                              (String)property);
-            
-            context.setPropertyResolved(result != null);           
+                                              (String)property);                               
         } catch (EvaluationException ex) {
             context.setPropertyResolved(false);
             throw new ELException(ex);
