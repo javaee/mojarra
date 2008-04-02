@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContext.java,v 1.47 2003/08/22 14:03:17 eburns Exp $
+ * $Id: FacesContext.java,v 1.48 2003/09/22 16:34:04 eburns Exp $
  */
 
 /*
@@ -296,8 +296,14 @@ public abstract class FacesContext {
      * being processed by the current thread.</p>
      *
      * @param context The {@link FacesContext} instance for the current thread
+     *
+     * @exception NullPointerException if <code>context</code>
+     *  is <code>null</code>
      */
     protected static void setCurrentInstance(FacesContext context) {
+	if (null = context) {
+	    throw new NullPointerException();
+	}
 
         instance.set(context);
 
