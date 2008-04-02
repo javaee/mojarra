@@ -1,0 +1,132 @@
+<?xml version="1.0"?>
+
+<!--
+ Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+-->
+
+<!DOCTYPE faces-config PUBLIC
+  "-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.0//EN"
+  "http://java.sun.com/dtd/web-facesconfig_1_0.dtd">
+
+<faces-config>
+
+
+  <!-- =================== Initialize Image Map Hotspot Data ============== -->
+
+  <managed-bean>
+    <description>
+      The image map hot spot for North America.
+    </description>
+    <managed-bean-name> NA </managed-bean-name>
+    <managed-bean-class> components.model.ImageArea </managed-bean-class>
+    <managed-bean-scope> application </managed-bean-scope>
+    <managed-property>
+      <property-name>shape</property-name>
+      <value>poly</value>
+    </managed-property>
+    <managed-property>
+      <property-name>alt</property-name>
+      <value>NAmerica</value>
+    </managed-property>
+    <managed-property>
+      <property-name>coords</property-name>
+      <value>
+        6,15,6,28,2,30,6,34,13,28,17,28,25,35,25,44,37,45,45,46,45,48,48,49,48,44,60,35,55,21,48,16,6,15
+      </value>
+    </managed-property>
+  </managed-bean>
+
+  <managed-bean>
+    <description>
+      The image map hot spot for South America.
+    </description>
+    <managed-bean-name>SA</managed-bean-name>
+    <managed-bean-class>components.model.ImageArea</managed-bean-class>
+    <managed-bean-scope>application</managed-bean-scope>
+    <managed-property>
+      <property-name>shape</property-name>
+      <value>poly</value>
+    </managed-property>
+    <managed-property>
+      <property-name>alt</property-name>
+      <value>SAmerica</value>
+    </managed-property>
+    <managed-property>
+      <property-name>coords</property-name>
+      <value>
+        29,44,49,71,49,91,54,91,73,63,57,52,46,51,39,45
+      </value>
+    </managed-property>
+  </managed-bean>
+
+  <managed-bean>
+    <description>
+      The image map hot spot for Finland.
+    </description>
+    <managed-bean-name>finA</managed-bean-name>
+    <managed-bean-class>components.model.ImageArea</managed-bean-class>
+    <managed-bean-scope>application</managed-bean-scope>
+    <managed-property>
+      <property-name>shape</property-name>
+      <value>poly</value>
+    </managed-property>
+    <managed-property>
+      <property-name>alt</property-name>
+      <value>Finland</value>
+    </managed-property>
+    <managed-property>
+      <property-name>coords</property-name>
+      <value>
+        97,17,94,21,97,29,102,29,101,18,97,17
+      </value>
+    </managed-property>
+  </managed-bean>
+
+  <managed-bean>
+    <description>
+      The image map hot spot for Germany.
+    </description>
+    <managed-bean-name> gerA </managed-bean-name>
+    <managed-bean-class> components.model.ImageArea </managed-bean-class>
+    <managed-bean-scope> application </managed-bean-scope>
+    <managed-property>
+      <property-name>shape</property-name>
+      <value>poly</value>
+    </managed-property>
+    <managed-property>
+      <property-name>alt</property-name>
+      <value>Germany</value>
+    </managed-property>
+    <managed-property>
+      <property-name>coords</property-name>
+      <value>
+        90,28,96,28,96,39,90,39,90,28
+      </value>
+    </managed-property>
+  </managed-bean>
+
+  <managed-bean>
+    <description>
+      The image map hot spot for France.
+    </description>
+    <managed-bean-name> fraA </managed-bean-name>
+    <managed-bean-class> components.model.ImageArea </managed-bean-class>
+    <managed-bean-scope> application </managed-bean-scope>
+    <managed-property>
+      <property-name>shape</property-name>
+      <value>poly</value>
+    </managed-property>
+    <managed-property>
+      <property-name>alt</property-name>
+      <value>France</value>
+    </managed-property>
+    <managed-property>
+      <property-name>coords</property-name>
+      <value>
+        84,31,84,39,90,39,90,30,84,31
+      </value>
+    </managed-property>
+  </managed-bean>
+
+</faces-config>
