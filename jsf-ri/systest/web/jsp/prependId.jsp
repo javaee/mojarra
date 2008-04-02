@@ -20,37 +20,19 @@
 
   <h:form id="form1" prependId="false">
 
-    <h:panelGrid id="grid1" columns="1">
-
-      <h:outputText id="prependIdFalse" value="prependIdFalse" />
-
-    </h:panelGrid>
-
-    <h:commandButton value="submit" />
+      <h:outputText id="case1prependIdFalse" value="prependIdFalse" />
 
   </h:form>
 
   <h:form id="form2" prependId="true">
 
-    <h:panelGrid id="grid1" columns="1">
-
-      <h:outputText id="prependIdTrue" value="prependIdTrue" />
-
-    </h:panelGrid>
-
-    <h:commandButton value="submit" />
+      <h:outputText id="case1prependIdTrue" value="prependIdTrue" />
 
   </h:form>
 
   <h:form id="form3">
 
-    <h:panelGrid id="grid1" columns="1">
-
-      <h:outputText id="prependIdUnspecified" value="prependIdUnspecified" />
-
-    </h:panelGrid>
-
-    <h:commandButton value="submit" />
+      <h:outputText id="case1prependIdUnspecified" value="prependIdUnspecified" />
 
   </h:form>
 
@@ -59,37 +41,19 @@
 
   <h:form id="form4" prependId="#{prependIdBean.booleanProperty2}">
 
-    <h:panelGrid id="grid1" columns="1">
-
-      <h:outputText id="prependIdFalse" value="prependIdFalse" />
-
-    </h:panelGrid>
-
-    <h:commandButton value="submit" />
+      <h:outputText id="case2prependIdFalse" value="prependIdFalse" />
 
   </h:form>
 
   <h:form id="form5" prependId="#{prependIdBean.booleanProperty}">
 
-    <h:panelGrid id="grid1" columns="1">
-
-      <h:outputText id="prependIdTrue" value="prependIdTrue" />
-
-    </h:panelGrid>
-
-    <h:commandButton value="submit" />
+      <h:outputText id="case2prependIdTrue" value="prependIdTrue" />
 
   </h:form>
 
   <h:form id="form6">
 
-    <h:panelGrid id="grid1" columns="1">
-
-      <h:outputText id="prependIdUnspecified" value="prependIdUnspecified" />
-
-    </h:panelGrid>
-
-    <h:commandButton value="submit" />
+      <h:outputText id="case2prependIdUnspecified" value="prependIdUnspecified" />
 
   </h:form>
 
@@ -98,37 +62,19 @@
 
   <h:form prependId="false">
 
-    <h:panelGrid columns="1">
-
-      <h:outputText value="prependIdFalse" />
-
-    </h:panelGrid>
-
-    <h:commandButton value="submit" />
+      <h:inputText value="prependIdFalse" />
 
   </h:form>
 
   <h:form prependId="true">
 
-    <h:panelGrid columns="1">
-
-      <h:outputText value="prependIdTrue" />
-
-    </h:panelGrid>
-
-    <h:commandButton value="submit" />
+      <h:inputText value="prependIdTrue" />
 
   </h:form>
 
   <h:form>
 
-    <h:panelGrid columns="1">
-
-      <h:outputText value="prependIdUnspecified" />
-
-    </h:panelGrid>
-
-    <h:commandButton value="submit" />
+      <h:inputText value="prependIdUnspecified" />
 
   </h:form>
 
@@ -136,37 +82,19 @@
 
   <h:form prependId="#{prependIdBean.booleanProperty2}">
 
-    <h:panelGrid columns="1">
-
-      <h:outputText value="prependIdFalse" />
-
-    </h:panelGrid>
-
-    <h:commandButton value="submit" />
+      <h:inputText value="prependIdFalse" />
 
   </h:form>
 
   <h:form prependId="#{prependIdBean.booleanProperty}">
 
-    <h:panelGrid columns="1">
-
-      <h:outputText value="prependIdTrue" />
-
-    </h:panelGrid>
-
-    <h:commandButton value="submit" />
+      <h:inputText value="prependIdTrue" />
 
   </h:form>
 
   <h:form >
 
-    <h:panelGrid columns="1">
-
-      <h:outputText value="prependIdUnspecified" />
-
-    </h:panelGrid>
-
-    <h:commandButton value="submit" />
+      <h:inputText value="prependIdUnspecified" />
 
   </h:form>
 
