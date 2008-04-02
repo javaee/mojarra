@@ -50,6 +50,8 @@
     <pathelement location="${servlet23.jar}"/>
   </path>
 
+<!-- Deletes build directory and WAR file -->
+
   <target name="clean" depends="clean-dist">
     <delete dir="${build}" />
     <delete file="guessNumber.war" />
@@ -117,6 +119,7 @@
     </copy>
   </target>
 
+<!-- Compiles classes. Creates build directory and copies files to build. -->
   <target name="build-app" depends="prepare" 
      description="Compile app Java files and copy HTML and JSP pages" >
     <javac srcdir="${basedir}/WEB-INF/src" destdir="${build}/WEB-INF/classes">
@@ -138,6 +141,8 @@
     </copy>
 
   </target>
+
+<!-- Builds WAR file -->
 
   <target name="build-war" depends="build-app" >
     <jar jarfile="${basedir}/guessNumber.war"
