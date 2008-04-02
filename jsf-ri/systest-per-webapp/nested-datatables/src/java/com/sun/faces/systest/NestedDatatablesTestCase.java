@@ -1,5 +1,5 @@
 /*
- * $Id: NestedDatatablesTestCase.java,v 1.1 2004/06/17 20:13:33 eburns Exp $
+ * $Id: NestedDatatablesTestCase.java,v 1.2 2004/07/29 16:37:26 edburns Exp $
  */
 
 /*
@@ -146,4 +146,103 @@ public class NestedDatatablesTestCase extends AbstractTestCase {
 
     }
 
+    public void testInputFieldUpdate2() throws Exception {
+	HtmlPage page = getPage("/faces/nested.jsp");
+	List list;
+	int i;
+	char c, max;
+
+	HtmlSubmitInput button = null;
+	HtmlTextInput input = null;
+	list = getAllElementsOfGivenClass(page, null, 
+					  HtmlTextInput.class); 
+	// 
+	// submit values 1 thru list.size();
+	// 
+	for (i = 0; i < list.size(); i++) {
+	    ((HtmlTextInput)list.get(i)).setValueAttribute("" + i);
+	}
+
+	// find and press the "reload" button
+	page = pressReloadButton(page);
+
+	list = getAllElementsOfGivenClass(page, null, 
+					  HtmlTextInput.class); 
+	// verify they are correctly updated
+	for (i = 0; i < list.size(); i++) {
+	    assertEquals("" + i, 
+			 ((HtmlTextInput)list.get(i)).getValueAttribute());
+	}
+
+	// 
+	// submit values a thru (a + list.size())
+	// 
+
+	max = (char) ('a' + (char) list.size());
+	i = 0;
+
+	for (c = 'a'; c < max; c++) {
+	    ((HtmlTextInput)list.get(i++)).setValueAttribute("" + c);
+	}
+	
+	// find and press the "reload" button
+	page = pressReloadButton(page);
+
+	list = getAllElementsOfGivenClass(page, null, 
+					  HtmlTextInput.class); 
+	i = 0;
+	// verify they are correctly updated
+	for (c = 'a'; c < max; c++) {
+	    assertEquals("" + c, 
+			 ((HtmlTextInput)list.get(i++)).getValueAttribute());
+	}
+
+	// add some ports
+       
+	// press first add port button
+	page = pressAddPortButton(page, 0);
+
+	// change the port number
+	input = (HtmlTextInput) getNthInputContainingGivenId(page, 
+							     "portNumber", 0);
+	input.setValueAttribute("12");
+
+	page = pressReloadButton(page);
+
+	// verify that it is updated correctly.
+	input = (HtmlTextInput) getNthInputContainingGivenId(page, 
+							     "portNumber", 0);
+	assertEquals("12", input.getValueAttribute());
+
+	// press second add port button
+	page = pressAddPortButton(page, 1);
+
+	// verify that the last port input in the page doesn't the value
+	input = (HtmlTextInput) getNthFromLastInputContainingGivenId(page, 
+							     "portNumber", 0);
+	assertTrue(-1 == input.getValueAttribute().indexOf("12"));
+
+    }
+
+    private HtmlPage pressReloadButton(HtmlPage page) throws Exception {
+	HtmlSubmitInput button = null;
+	
+	button = (HtmlSubmitInput)getInputContainingGivenId(page, 
+							    "reload");
+	page = (HtmlPage) button.click();
+	return page;
+    }
+    
+    private HtmlPage pressAddPortButton(HtmlPage page, 
+					int whichButton) throws Exception {
+	HtmlSubmitInput button = null;
+	
+	button = (HtmlSubmitInput)getNthInputContainingGivenId(page, 
+							       "add-port",
+							       whichButton);
+	page = (HtmlPage) button.click();
+	return page;
+    }
+    
 }
+

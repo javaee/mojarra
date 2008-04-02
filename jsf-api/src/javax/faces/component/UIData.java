@@ -780,6 +780,9 @@ public class UIData extends UIComponentBase
         if (!isRendered()) {
             return;
         }
+	if (isNestedWithinUIData()) {
+	    model = null;
+	}
 	iterate(context, PhaseId.PROCESS_VALIDATIONS);
         // This is not a EditableValueHolder, so no further processing is required
 
@@ -826,6 +829,9 @@ public class UIData extends UIComponentBase
         if (!isRendered()) {
             return;
         }
+	if (isNestedWithinUIData()) {
+	    model = null;
+	}
 	iterate(context, PhaseId.UPDATE_MODEL_VALUES);
         // This is not a EditableValueHolder, so no further processing is required
 
@@ -1016,6 +1022,11 @@ public class UIData extends UIComponentBase
                 }
             }
         }
+        return (isNestedWithinUIData());
+
+    }
+
+    private boolean isNestedWithinUIData() {
 	UIComponent parent = this;
 	while (null != (parent = parent.getParent())) {
 	    if (parent instanceof UIData) {
@@ -1023,7 +1034,6 @@ public class UIData extends UIComponentBase
 	    }
 	}
         return (false);
-
     }
 
 

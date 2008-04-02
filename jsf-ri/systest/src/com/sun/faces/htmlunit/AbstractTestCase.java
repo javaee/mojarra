@@ -1,5 +1,5 @@
 /*
- * $Id: AbstractTestCase.java,v 1.8 2004/03/30 03:51:11 eburns Exp $
+ * $Id: AbstractTestCase.java,v 1.9 2004/07/29 16:37:26 edburns Exp $
  */
 
 /*
@@ -13,6 +13,7 @@ package com.sun.faces.htmlunit;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlBody;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
+import com.gargoylesoftware.htmlunit.html.HtmlInput;
 import com.gargoylesoftware.htmlunit.html.HtmlForm;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import junit.framework.Test;
@@ -315,6 +316,64 @@ public abstract class AbstractTestCase extends TestCase {
             }
         }
         return list;
+    }
+
+    protected HtmlInput getInputContainingGivenId(HtmlPage root,
+						  String id) {
+	List list;
+	int i;
+	HtmlInput result = null;
+	
+	list = getAllElementsOfGivenClass(root, null, HtmlInput.class); 
+	for (i = 0; i < list.size(); i++) {
+	    result = (HtmlInput) list.get(i);
+	    if (-1 != result.getIdAttribute().indexOf(id)) {
+		break;
+	    }
+	    result = null;
+	}
+	return result;
+	
+    }
+
+    protected HtmlInput getNthInputContainingGivenId(HtmlPage root,
+						     String id, 
+						     int whichInput) {
+	List list;
+	int i, hitCount = 0;
+	HtmlInput result = null;
+	
+	list = getAllElementsOfGivenClass(root, null, HtmlInput.class); 
+	for (i = 0; i < list.size(); i++) {
+	    result = (HtmlInput) list.get(i);
+	    if (-1 != result.getIdAttribute().indexOf(id) &&
+		hitCount++ == whichInput) {
+		break;
+	    }
+	    result = null;
+	}
+	return result;
+	
+    }
+
+    protected HtmlInput getNthFromLastInputContainingGivenId(HtmlPage root,
+							     String id, 
+							     int whichInput) {
+	List list;
+	int i, hitCount = 0;
+	HtmlInput result = null;
+	
+	list = getAllElementsOfGivenClass(root, null, HtmlInput.class); 
+	for (i = list.size() - 1; i >= 0; i--) {
+	    result = (HtmlInput) list.get(i);
+	    if (-1 != result.getIdAttribute().indexOf(id) &&
+		hitCount++ == whichInput) {
+		break;
+	    }
+	    result = null;
+	}
+	return result;
+	
     }
 
 

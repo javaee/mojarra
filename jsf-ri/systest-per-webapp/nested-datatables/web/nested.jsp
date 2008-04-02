@@ -8,7 +8,7 @@
       <title>Nested Tables</title>
     </head>
     <body>
-      <h:form>
+      <h:form id="form">
 	    <h:dataTable id="outer" value="#{testbean.services}" var="service">
 		  <h:column>
 		    <f:facet name="header">
@@ -30,7 +30,7 @@
 
 		    <h:dataTable id="inner" value="#{service.ports}" var="portNumber">
 		      <h:column>
-			    <h:inputText value="#{portNumber.portNumber}" size="5"/>
+			    <h:inputText id="portNumber" value="#{portNumber.portNumber}" size="5"/>
 			    <h:commandButton styleClass="command-multiple" immediate="false" action="#{testbean.deletePortNumber}" value="Delete"/>
 				    
                 <f:facet name="footer">
@@ -42,7 +42,7 @@
 		  </h:column>
 	    </h:dataTable>  
 <hr />
-          <h:commandButton value="reload" action="#{testbean.printTree}"/>
+          <h:commandButton id="reload" value="reload" action="#{testbean.printTree}"/>
       </h:form>
     </body>
   </html>
