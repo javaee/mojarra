@@ -1,5 +1,5 @@
 /*
- * $Id: ButtonRenderer.java,v 1.70 2004/01/27 21:04:22 eburns Exp $
+ * $Id: ButtonRenderer.java,v 1.71 2004/01/30 00:31:19 jvisvanathan Exp $
  */
 
 /*
@@ -25,20 +25,20 @@ import java.io.IOException;
 
 import com.sun.faces.util.Util;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
- *
- *  <B>ButtonRenderer</B> is a class ...
- *
- * <B>Lifetime And Scope</B> <P>
- *
- *
+ * <B>ButtonRenderer</B> is a class that renders the current value of 
+ * <code>UICommand<code> as a Button.
  */
 
 public class ButtonRenderer extends HtmlBasicRenderer {
     //
     // Protected Constants
     //
+    // Log instance for this class
+     protected static Log log = LogFactory.getLog(ButtonRenderer.class);
 
     //
     // Class Variables
@@ -83,11 +83,15 @@ public class ButtonRenderer extends HtmlBasicRenderer {
     //
 
     public void decode(FacesContext context, UIComponent component) {
+        if (log.isTraceEnabled()) {
+            log.trace("Begin decoding component " + 
+                component.getClientId(context));
+        }
 	if (context == null || component == null) {
 	    throw new NullPointerException(Util.getExceptionMessage(
 				    Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
-
+        
         // If the component is disabled, do not change the value of the
         // component, since its state cannot be changed.
         if (Util.componentIsDisabledOnReadonly(component)) {
@@ -114,14 +118,25 @@ public class ButtonRenderer extends HtmlBasicRenderer {
         if ((type != null) && (type.toLowerCase().equals("reset")) ) {
             return;
         }
-
-	component.queueEvent(new ActionEvent(component));
-
+        ActionEvent actionEvent = new ActionEvent(component);
+	component.queueEvent(actionEvent);
+        
+        if (log.isDebugEnabled()) {
+            log.debug("This command resulted in form submission " +
+                    " ActionEvent queued " + actionEvent);
+        }
+        if (log.isTraceEnabled()) {
+            log.trace("End decoding component " + clientId);
+        }
         return;
     }
     
     public void encodeBegin(FacesContext context, UIComponent component) 
              throws IOException  {
+        if (log.isTraceEnabled()) {
+            log.trace("Begin encoding component " + 
+                component.getClientId(context));
+        }
         if (context == null || component == null) {
             throw new NullPointerException(Util.getExceptionMessage(
                     Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
@@ -170,6 +185,10 @@ public class ButtonRenderer extends HtmlBasicRenderer {
             writer.writeAttribute("class", styleClass, "styleClass");
 	}
         writer.endElement("input");
+        if (log.isTraceEnabled()) {
+            log.trace("End encoding component " + 
+                    component.getClientId(context));
+        }
     }
     
     public void encodeChildren(FacesContext context, UIComponent component)

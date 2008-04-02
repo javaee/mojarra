@@ -1,5 +1,5 @@
 /*
- * $Id: GroupRenderer.java,v 1.16 2004/01/27 21:04:24 eburns Exp $
+ * $Id: GroupRenderer.java,v 1.17 2004/01/30 00:31:21 jvisvanathan Exp $
  */
 
 /*
@@ -18,11 +18,14 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 /**
  * Arbitrary grouping "renderer" that simply renders its children
  * recursively in the <code>encodeEnd()</code> method. 
  *
- * @version $Id: GroupRenderer.java,v 1.16 2004/01/27 21:04:24 eburns Exp $
+ * @version $Id: GroupRenderer.java,v 1.17 2004/01/30 00:31:21 jvisvanathan Exp $
  *  
  */
 public class GroupRenderer extends HtmlBasicRenderer {
@@ -30,6 +33,8 @@ public class GroupRenderer extends HtmlBasicRenderer {
     //
     // Protected Constants
     //
+    // Log instance for this class
+    protected static Log log = LogFactory.getLog(GroupRenderer.class);
 
     //
     // Class Variables
@@ -69,7 +74,10 @@ public class GroupRenderer extends HtmlBasicRenderer {
 
     public void encodeBegin(FacesContext context, UIComponent component)
         throws IOException {
-
+        if (log.isTraceEnabled()) {
+            log.trace("Begin encoding component " + 
+                component.getClientId(context));
+        }
         // suppress rendering if "rendered" property on the component is
         // false.
         if (!component.isRendered()) {
@@ -98,7 +106,10 @@ public class GroupRenderer extends HtmlBasicRenderer {
 
     public void encodeChildren(FacesContext context, UIComponent component)
         throws IOException {
-
+        if (log.isTraceEnabled()) {
+            log.trace("Begin encoding children " + 
+                    component.getClientId(context));
+        }
         // suppress rendering if "rendered" property on the component is
         // false.
         if (!component.isRendered()) {
@@ -110,6 +121,10 @@ public class GroupRenderer extends HtmlBasicRenderer {
 	while (kids.hasNext()) {
 	    encodeRecursive(context, (UIComponent) kids.next());
 	}
+        if (log.isTraceEnabled()) {
+            log.trace("End encoding children " + 
+                    component.getClientId(context));
+        }
 
     }
 
@@ -131,6 +146,10 @@ public class GroupRenderer extends HtmlBasicRenderer {
 	if (spanned(component)) {
 	    writer.endElement("span");
 	}
+        if (log.isTraceEnabled()) {
+            log.trace("End encoding component " + 
+                    component.getClientId(context));
+        }
 
     }
 

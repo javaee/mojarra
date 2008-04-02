@@ -1,5 +1,5 @@
 /*
- * $Id: FormRenderer.java,v 1.70 2004/01/27 21:04:23 eburns Exp $
+ * $Id: FormRenderer.java,v 1.71 2004/01/30 00:31:20 jvisvanathan Exp $
  */
 
 /*
@@ -26,20 +26,19 @@ import javax.faces.context.ResponseWriter;
 
 import com.sun.faces.util.Util;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 /**
- *
- *  <B>FormRenderer</B> is a class ...
- *
- * <B>Lifetime And Scope</B> <P>
- *
- * @version $Id: FormRenderer.java,v 1.70 2004/01/27 21:04:23 eburns Exp $ 
+ * <B>FormRenderer</B> is a class that renders a <code>UIForm<code> as a Form.
  */
 
 public class FormRenderer extends HtmlBasicRenderer {
     //
     // Protected Constants
     //
-
+    // Log instance for this class
+     protected static Log log = LogFactory.getLog(FormRenderer.class);
     //
     // Class Variables
     //
@@ -78,18 +77,28 @@ public class FormRenderer extends HtmlBasicRenderer {
 	// the indicator accordingly..
 	// 
         String clientId = component.getClientId(context);
+        if (log.isTraceEnabled()) {
+            log.trace("Begin decoding component " + clientId);
+        }
         Map requestParameterMap = context.getExternalContext().getRequestParameterMap();
         if (requestParameterMap.containsKey(clientId)) {
 	    ((UIForm)component).setSubmitted(true);
 	} else {
 	    ((UIForm)component).setSubmitted(false);
 	}
+        if (log.isTraceEnabled()) {
+            log.trace("End decoding component " + clientId);
+        }
     }
 
 
     public void encodeBegin(FacesContext context, UIComponent component) 
              throws IOException{
-        String styleClass = null;         
+        String styleClass = null;   
+        if (log.isTraceEnabled()) {
+            log.trace("Begin encoding component " + 
+                component.getClientId(context));
+        }
         if (context == null || component == null) {
             throw new NullPointerException(Util.getExceptionMessage(
                    Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
@@ -170,6 +179,10 @@ public class FormRenderer extends HtmlBasicRenderer {
         renderNeededHiddenFields(context, component);
 
         writer.endElement("form");
+        if (log.isTraceEnabled()) {
+            log.trace("End encoding component " + 
+                    component.getClientId(context));
+        }
     }
 
 

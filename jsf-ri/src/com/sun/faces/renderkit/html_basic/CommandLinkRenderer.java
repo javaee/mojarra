@@ -1,5 +1,5 @@
 /*
- * $Id: CommandLinkRenderer.java,v 1.10 2004/01/27 21:04:23 eburns Exp $
+ * $Id: CommandLinkRenderer.java,v 1.11 2004/01/30 00:31:20 jvisvanathan Exp $
  */
 
 /*
@@ -29,20 +29,21 @@ import javax.faces.event.ActionEvent;
 
 import com.sun.faces.util.Util;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
- *
- *  <B>CommandLinkRenderer</B> is a class ...
- *
- * <B>Lifetime And Scope</B> <P>
- *
- * @version $Id: CommandLinkRenderer.java,v 1.10 2004/01/27 21:04:23 eburns Exp $
+ * <B>CommandLinkRenderer</B> is a class that renders the current value of 
+ * <code>UICommand<code> as a HyperLink that acts like a Button.
  */
 
 public class CommandLinkRenderer extends HtmlBasicRenderer {
     //
     // Protected Constants
     //
+    // Log instance for this class
+     protected static Log log = LogFactory.getLog(CommandLinkRenderer.class);
+     
     // Separator character
 
     //
@@ -75,6 +76,10 @@ public class CommandLinkRenderer extends HtmlBasicRenderer {
     //
 
     public void decode(FacesContext context, UIComponent component) {
+        if (log.isTraceEnabled()) {
+            log.trace("Begin decoding component " + 
+                component.getClientId(context));
+        }
 	if (context == null || component == null) {
 	    throw new NullPointerException(Util.getExceptionMessage(
 				    Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
@@ -98,8 +103,16 @@ public class CommandLinkRenderer extends HtmlBasicRenderer {
         if (value == null || value.equals("")) {
             return;
         }
-
-	command.queueEvent(new ActionEvent(component));
+        ActionEvent actionEvent = new ActionEvent(component);
+	component.queueEvent(actionEvent);
+        
+        if (log.isDebugEnabled()) {
+            log.debug("This command resulted in form submission " +
+                    " ActionEvent queued " + actionEvent);
+        }
+        if (log.isTraceEnabled()) {
+            log.trace("End decoding component " + clientId);
+        }
 	return;
     }
 
@@ -121,6 +134,10 @@ public class CommandLinkRenderer extends HtmlBasicRenderer {
     private String clientId = null;
     public void encodeBegin(FacesContext context, UIComponent component)
         throws IOException {
+        if (log.isTraceEnabled()) {
+            log.trace("Begin encoding component " + 
+                component.getClientId(context));
+        }
         if (context == null || component == null) {
             throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
@@ -198,6 +215,10 @@ public class CommandLinkRenderer extends HtmlBasicRenderer {
 
     public void encodeChildren(FacesContext context, UIComponent component)
         throws IOException {
+        if (log.isTraceEnabled()) {
+            log.trace("Begin encoding children " + 
+                    component.getClientId(context));
+        }
         if (context == null || component == null) {
             throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
@@ -215,6 +236,10 @@ public class CommandLinkRenderer extends HtmlBasicRenderer {
 	    }
 	    kid.encodeEnd(context);
 	}
+        if (log.isTraceEnabled()) {
+            log.trace("End encoding children " + 
+                    component.getClientId(context));
+        }
     }
 
 
@@ -247,7 +272,10 @@ public class CommandLinkRenderer extends HtmlBasicRenderer {
         for (int i = 0; i < paramList.length; i++) {
             FormRenderer.addNeededHiddenField(context, paramList[i].getName());
         }
-
+        if (log.isTraceEnabled()) {
+            log.trace("End encoding component " + 
+                    component.getClientId(context));
+        }
 
 	return;
     }

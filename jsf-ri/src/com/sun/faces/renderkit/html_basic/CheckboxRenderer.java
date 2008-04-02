@@ -1,5 +1,5 @@
 /*
- * $Id: CheckboxRenderer.java,v 1.61 2004/01/27 21:04:22 eburns Exp $
+ * $Id: CheckboxRenderer.java,v 1.62 2004/01/30 00:31:19 jvisvanathan Exp $
  *
  */
 
@@ -33,24 +33,21 @@ import org.apache.commons.beanutils.ConvertUtils;
 
 import com.sun.faces.util.Util;
 
-
-
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
- *
- *  <B>CheckboxRenderer</B> is a class that handles the rendering of CheckBoxTag
- *
- * <B>Lifetime And Scope</B> <P>
- *
- * @version $Id: CheckboxRenderer.java,v 1.61 2004/01/27 21:04:22 eburns Exp $
- * 
- *
+ * <B>CheckboxRenderer</B> is a class that renders the current value of 
+ * <code>UISelectBoolean<code> as a checkbox.
  */
 
 public class CheckboxRenderer extends HtmlBasicInputRenderer {
+    
     //
     // Protected Constants
     //
+    // Log instance for this class
+    protected static Log log = LogFactory.getLog(CheckboxRenderer.class);
 
     //
     // Class Variables
@@ -89,6 +86,10 @@ public class CheckboxRenderer extends HtmlBasicInputRenderer {
 
         Object convertedValue = null;
 
+        if (log.isTraceEnabled()) {
+            log.trace("Begin decoding component " + 
+                component.getClientId(context));
+        }
         if (context == null || component == null) {
             throw new NullPointerException(Util.getExceptionMessage(
                     Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
@@ -121,6 +122,12 @@ public class CheckboxRenderer extends HtmlBasicInputRenderer {
         }
 
         setSubmittedValue(component, newValue);
+        if (log.isTraceEnabled()) {
+            log.trace("new value after decoding" + newValue);
+        }
+        if (log.isTraceEnabled()) {
+            log.trace("End decoding component " + clientId);
+        }
     }
 
     public Object getConvertedValue(FacesContext context, UIComponent component,

@@ -1,5 +1,5 @@
 /*
- * $Id: GridRenderer.java,v 1.27 2004/01/27 21:04:23 eburns Exp $
+ * $Id: GridRenderer.java,v 1.28 2004/01/30 00:31:20 jvisvanathan Exp $
  */
 
 /*
@@ -22,14 +22,12 @@ import javax.faces.context.ResponseWriter;
 
 import com.sun.faces.util.Util;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 /**
- *
- *  Render a <code>UIPanel</code> component in the proposed "Grid" style.
- *
- * <B>Lifetime And Scope</B> <P>
- *
- * @version $Id: GridRenderer.java,v 1.27 2004/01/27 21:04:23 eburns Exp $
- *  
+ * <B>GridRenderer</B> is a class that renders <code>UIPanel</code> component 
+ * as a "Grid".
  */
 
 public class GridRenderer extends HtmlBasicRenderer {
@@ -37,7 +35,9 @@ public class GridRenderer extends HtmlBasicRenderer {
     //
     // Protected Constants
     //
-
+    // Log instance for this class
+    protected static Log log = LogFactory.getLog(GridRenderer.class);
+    
     //
     // Class Variables
     //
@@ -77,7 +77,10 @@ public class GridRenderer extends HtmlBasicRenderer {
 
     public void encodeBegin(FacesContext context, UIComponent component)
         throws IOException {
-
+         if (log.isTraceEnabled()) {
+            log.trace("Begin encoding component " + 
+                component.getClientId(context));
+        }
         if (context == null || component == null) {
             throw new NullPointerException(Util.getExceptionMessage(
                     Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
@@ -151,7 +154,10 @@ public class GridRenderer extends HtmlBasicRenderer {
 
     public void encodeChildren(FacesContext context, UIComponent component)
         throws IOException {
-
+        if (log.isTraceEnabled()) {
+            log.trace("Begin encoding children " + 
+                    component.getClientId(context));
+        }
         if (context == null || component == null) {
             throw new NullPointerException(Util.getExceptionMessage(
                     Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
@@ -224,7 +230,10 @@ public class GridRenderer extends HtmlBasicRenderer {
         }
 	writer.endElement("tbody");
 	writer.writeText("\n", null);
-
+        if (log.isTraceEnabled()) {
+            log.trace("End encoding children " + 
+                    component.getClientId(context));
+        }
     }
 
 
@@ -244,6 +253,10 @@ public class GridRenderer extends HtmlBasicRenderer {
         ResponseWriter writer = context.getResponseWriter();
 	writer.endElement("table");
 	writer.writeText("\n", null);
+        if (log.isTraceEnabled()) {
+            log.trace("End encoding component " + 
+                    component.getClientId(context));
+        }
     }
 
    /**
