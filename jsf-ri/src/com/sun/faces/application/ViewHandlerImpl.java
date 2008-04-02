@@ -1,5 +1,5 @@
 /* 
- * $Id: ViewHandlerImpl.java,v 1.28 2004/01/15 21:34:02 eburns Exp $ 
+ * $Id: ViewHandlerImpl.java,v 1.29 2004/01/16 22:00:05 craigmcc Exp $ 
  */ 
 
 
@@ -36,16 +36,17 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.jsp.jstl.core.Config;
 
 import java.io.IOException;
-import java.util.Collections;
-import java.util.List;
 import java.util.ArrayList;
-import java.util.Locale;
-import java.util.Iterator;
+import java.util.Collections;
 import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 /** 
  * <B>ViewHandlerImpl</B> is the default implementation class for ViewHandler. 
- * @version $Id: ViewHandlerImpl.java,v 1.28 2004/01/15 21:34:02 eburns Exp $ 
+ * @version $Id: ViewHandlerImpl.java,v 1.29 2004/01/16 22:00:05 craigmcc Exp $ 
  * 
  * @see javax.faces.application.ViewHandler 
  * 
@@ -134,8 +135,13 @@ public class ViewHandlerImpl extends Object
         // picks up the locale from viewRoot. This attribute must be updated
         // before the JSTL setBundle tag is called because that is when the
         // new LocalizationContext object is created based on the locale.
-        Config.set((ServletRequest) context.getExternalContext().getRequest(), 
-                Config.FMT_LOCALE, context.getViewRoot().getLocale());
+	// PENDING: this only works for servlet based requests
+	if (context.getExternalContext().getRequest()
+	    instanceof ServletRequest) {
+	    Config.set((ServletRequest)
+		       context.getExternalContext().getRequest(), 
+		       Config.FMT_LOCALE, context.getViewRoot().getLocale());
+	}
         if (log.isTraceEnabled()) {
             log.trace("Before dispacthMessage to newViewId " + newViewId);
         }
@@ -158,14 +164,17 @@ public class ViewHandlerImpl extends Object
 	// set the request character encoding. NOTE! This MUST be done
 	// before any request praameter is accessed.
 	HttpSession session = null;
+	/*
 	HttpServletRequest request = 
 	    (HttpServletRequest) extContext.getRequest();
+	*/
+	Map headerMap = extContext.getRequestHeaderMap();
 	String 
 	    contentType = null,
 	    charEnc = null;
 
 	// look for a charset in the Content-Type header first.
-	if (null != (contentType = request.getHeader("Content-Type"))) {
+	if (null != (contentType = (String) headerMap.get("Content-Type"))) {
 	    // see if this header had a charset
 	    String charsetStr = "charset=";
 	    int 
@@ -181,8 +190,9 @@ public class ViewHandlerImpl extends Object
 	}
 	// failing that, look in the session for a previously saved one
 	if (null == charEnc) {
-	    if (null != (session=(HttpSession)extContext.getSession(false))) {
-		charEnc =(String) session.getAttribute(CHARACTER_ENCODING_KEY);
+	    if (null != extContext.getSession(false)) {
+		charEnc = (String) extContext.getSessionMap().get
+		    (CHARACTER_ENCODING_KEY);
 	    }
 	}
 	if (null != charEnc) {
@@ -190,7 +200,10 @@ public class ViewHandlerImpl extends Object
                 if (log.isTraceEnabled()) {
                     log.trace("set character encoding on request to " + charEnc);
                 }
-		request.setCharacterEncoding(charEnc);
+		Object request = extContext.getRequest();
+		if (request instanceof ServletRequest) {
+		    ((ServletRequest) request).setCharacterEncoding(charEnc);
+		}
 	    }
 	    catch (java.io.UnsupportedEncodingException uee) {
                 if (log.isErrorEnabled()) {
@@ -301,10 +314,9 @@ public class ViewHandlerImpl extends Object
         // determine the locales that are acceptable to the client based on the 
         // Accept-Language header and the find the best match among the 
         // supported locales specified by the client.
-        Enumeration enum = ((ServletRequest)
-                context.getExternalContext().getRequest()).getLocales();
-        while (enum.hasMoreElements()) {
-            Locale perf = (Locale) enum.nextElement();
+	Iterator locales = context.getExternalContext().getRequestLocales();
+        while (locales.hasNext()) {
+            Locale perf = (Locale) locales.next();
             result = findMatch(context, perf);
             if (result != null) {
                 break;

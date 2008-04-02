@@ -1,5 +1,5 @@
 /*
- * $Id: NavigationHandlerImpl.java,v 1.22 2004/01/08 20:22:32 jvisvanathan Exp $
+ * $Id: NavigationHandlerImpl.java,v 1.23 2004/01/16 22:00:05 craigmcc Exp $
  */
 
 /*
@@ -110,8 +110,6 @@ public class NavigationHandlerImpl extends NavigationHandler {
 	    
 	    if (caseStruct.navCase.hasRedirect()) {
 		// perform a 302 redirect.
-		HttpServletResponse response = 
-		    (HttpServletResponse) extContext.getResponse();
 		String newPath = extContext.getRequestContextPath() + 
 		    viewHandler.getViewIdPath(context, caseStruct.viewId);
 		try {
@@ -120,7 +118,7 @@ public class NavigationHandlerImpl extends NavigationHandler {
                             + " for outcome " + outcome + 
                             "and viewId " + caseStruct.viewId);
                     }
-		    response.sendRedirect(newPath);
+		    extContext.redirectMessage(newPath);
 		}
 		catch (java.io.IOException ioe) {
 		    String message = "Redirect to " + newPath + " failed.";
