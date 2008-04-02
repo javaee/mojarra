@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKitImpl.java,v 1.45 2006/08/03 17:06:23 rlubke Exp $
+ * $Id: RenderKitImpl.java,v 1.46 2006/08/03 18:58:34 rlubke Exp $
  */
 
 /*
@@ -56,7 +56,7 @@ import com.sun.faces.util.Util;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: RenderKitImpl.java,v 1.45 2006/08/03 17:06:23 rlubke Exp $
+ * @version $Id: RenderKitImpl.java,v 1.46 2006/08/03 18:58:34 rlubke Exp $
  */
 
 public class RenderKitImpl extends RenderKit {
@@ -81,9 +81,7 @@ public class RenderKitImpl extends RenderKit {
 
     private ResponseStateManager responseStateManager = null;
     private Boolean preferXHTML;
-//
-// Constructors and Initializers    
-//
+
 
     public RenderKitImpl() {
         super();
