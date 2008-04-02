@@ -1,11 +1,11 @@
 /*
- * $Id: TestDuplicateIds04.java,v 1.2 2004/05/06 19:29:01 eburns Exp $
+ * $Id: TestDuplicateIds04.java,v 1.3 2004/05/12 18:30:46 ofung Exp $
  */
 
 /*
  * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
-n */
+ */
 
 package com.sun.faces.systest;
 

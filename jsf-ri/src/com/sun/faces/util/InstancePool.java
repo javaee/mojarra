@@ -1,5 +1,10 @@
 /*
- * $Id: InstancePool.java,v 1.1 2004/05/11 21:35:26 eburns Exp $
+ * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
+ * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+ */
+
+/*
+ * $Id: InstancePool.java,v 1.2 2004/05/12 18:30:41 ofung Exp $
  */
 
 package com.sun.faces.util;

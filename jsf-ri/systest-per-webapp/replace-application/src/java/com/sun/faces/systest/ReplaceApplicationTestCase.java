@@ -1,11 +1,11 @@
 /*
- * $Id: ReplaceApplicationTestCase.java,v 1.1 2004/05/07 13:53:18 eburns Exp $
+ * $Id: ReplaceApplicationTestCase.java,v 1.2 2004/05/12 18:31:24 ofung Exp $
  */
 
 /*
  * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
-n */
+ */
 
 package com.sun.faces.systest;
 

@@ -1,9 +1,14 @@
+<!--
+ Copyright 2004 Sun Microsystems, Inc. All rights reserved.
+ SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+-->
+
 <%--
    Copyright 2004 Sun Microsystems, Inc.  All rights reserved.
    SUN PROPRIETARY/CONFIDENTIAL.  Use is subject license terms.
 --%>
 
-<%-- $Id: escape_test.jsp,v 1.5 2004/02/26 20:33:50 eburns Exp $ --%>
+<%-- $Id: escape_test.jsp,v 1.6 2004/05/12 18:30:52 ofung Exp $ --%>
 
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>

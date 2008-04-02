@@ -1,11 +1,11 @@
 /*
- * $Id: MissingViewTestCase.java,v 1.1 2004/04/29 16:37:12 eburns Exp $
+ * $Id: MissingViewTestCase.java,v 1.2 2004/05/12 18:30:43 ofung Exp $
  */
 
 /*
  * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
-n */
+ */
 
 package com.sun.faces.jsptest;
 

@@ -1,9 +1,14 @@
+<!--
+ Copyright 2004 Sun Microsystems, Inc. All rights reserved.
+ SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+-->
+
 <%--
    Copyright 2004 Sun Microsystems, Inc.  All rights reserved.
    SUN PROPRIETARY/CONFIDENTIAL.  Use is subject license terms.
 --%>
 
-<%-- $Id: commandButton_test.jsp,v 1.5 2004/02/26 20:33:54 eburns Exp $ --%>
+<%-- $Id: commandButton_test.jsp,v 1.6 2004/05/12 18:31:17 ofung Exp $ --%>
 <html>
 <head>
     <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>

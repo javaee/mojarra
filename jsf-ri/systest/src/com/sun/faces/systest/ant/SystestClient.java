@@ -1,3 +1,8 @@
+/*
+ * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
+ * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+ */
+
 /* ========================================================================= *
  *                                                                           *
  *                 The Apache Software License,  Version 1.1                 *
@@ -143,7 +148,7 @@ import java.util.Map;
  * </ul>
  *
  * @author Craig R. McClanahan
- * @version $Revision: 1.9 $ $Date: 2004/02/26 20:33:44 $
+ * @version $Revision: 1.10 $ $Date: 2004/05/12 18:30:47 $
  */
 
 public class SystestClient extends Task {

@@ -1,11 +1,11 @@
 /*
- * $Id: SelectComponentValueTestCase.java,v 1.2 2004/05/10 19:56:12 jvisvanathan Exp $
+ * $Id: SelectComponentValueTestCase.java,v 1.3 2004/05/12 18:30:44 ofung Exp $
  */
 
 /*
  * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
-n */
+ */
 
 package com.sun.faces.jsptest;
 
