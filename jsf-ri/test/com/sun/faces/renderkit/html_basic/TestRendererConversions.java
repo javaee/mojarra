@@ -1,5 +1,5 @@
 /*
- * $Id: TestRendererConversions.java,v 1.5 2003/08/22 16:51:50 eburns Exp $
+ * $Id: TestRendererConversions.java,v 1.6 2003/08/22 17:27:43 rlubke Exp $
  */
 
 /*
@@ -21,10 +21,10 @@ import javax.faces.FactoryFinder;
 import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
-import javax.faces.component.UIPage;
+import javax.faces.component.UIViewRoot;
 import javax.faces.component.base.UIInputBase;
 import javax.faces.component.base.UINamingContainerBase;
-import javax.faces.component.base.UIPageBase;
+import javax.faces.component.base.UIViewRootBase;
 
 import com.sun.faces.RIConstants;
 import com.sun.faces.ServletFacesTestCase;
@@ -36,7 +36,7 @@ import com.sun.faces.ServletFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRendererConversions.java,v 1.5 2003/08/22 16:51:50 eburns Exp $
+ * @version $Id: TestRendererConversions.java,v 1.6 2003/08/22 17:27:43 rlubke Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -94,7 +94,7 @@ public void beginEmptyStrings(WebRequest theRequest)
 
 public void setUp() {
     super.setUp();
-    UIPage page = new UIPageBase();
+    UIViewRoot page = new UIViewRootBase();
     page.setViewId("viewId");    
     getFacesContext().setViewRoot(page);
  }

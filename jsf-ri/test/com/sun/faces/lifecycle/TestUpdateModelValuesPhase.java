@@ -1,5 +1,5 @@
 /*
- * $Id: TestUpdateModelValuesPhase.java,v 1.24 2003/08/22 16:51:47 eburns Exp $
+ * $Id: TestUpdateModelValuesPhase.java,v 1.25 2003/08/22 17:27:40 rlubke Exp $
  */
 
 /*
@@ -24,9 +24,9 @@ import javax.faces.component.UIComponent;
 import javax.faces.component.UIForm;
 import javax.faces.component.UIInput;
 import javax.faces.component.UIOutput;
-import javax.faces.component.UIPage;
+import javax.faces.component.UIViewRoot;
 import javax.faces.component.base.UIFormBase;
-import javax.faces.component.base.UIPageBase;
+import javax.faces.component.base.UIViewRootBase;
 import javax.faces.component.base.UIInputBase;
 
 import com.sun.faces.lifecycle.Phase;
@@ -46,7 +46,7 @@ import com.sun.faces.util.DebugUtil;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestUpdateModelValuesPhase.java,v 1.24 2003/08/22 16:51:47 eburns Exp $
+ * @version $Id: TestUpdateModelValuesPhase.java,v 1.25 2003/08/22 17:27:40 rlubke Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -123,7 +123,7 @@ public void testUpdateNormal()
     userName2.testSetValid(true);
     form.getChildren().add(userName2);
 
-    UIPage page = new UIPageBase();
+    UIViewRoot page = new UIViewRootBase();
     page.setViewId("updateModel.xul");
     getFacesContext().setViewRoot(page);
     
@@ -169,7 +169,7 @@ public void testUpdateFailed()
     userName2.testSetValid(true);
     form.getChildren().add(userName2);
 
-    UIPage page = new UIPageBase();
+    UIViewRoot page = new UIViewRootBase();
     page.setViewId("updateModel.xul");
     getFacesContext().setViewRoot(page);
 

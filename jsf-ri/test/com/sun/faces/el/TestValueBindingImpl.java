@@ -1,5 +1,5 @@
 /*
- * $Id: TestValueBindingImpl.java,v 1.14 2003/08/22 16:50:36 eburns Exp $
+ * $Id: TestValueBindingImpl.java,v 1.15 2003/08/22 17:27:37 rlubke Exp $
  */
 
 /*
@@ -29,8 +29,8 @@ import javax.faces.el.PropertyNotFoundException;
 import javax.faces.el.ReferenceSyntaxException;
 import javax.faces.context.ExternalContext;
 import javax.faces.component.base.UINamingContainerBase;
-import javax.faces.component.base.UIPageBase;
-import javax.faces.component.UIPage;
+import javax.faces.component.base.UIViewRootBase;
+import javax.faces.component.UIViewRoot;
 import javax.servlet.http.HttpServletRequest;
 
 import java.util.Enumeration;
@@ -43,7 +43,7 @@ import java.util.HashMap;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestValueBindingImpl.java,v 1.14 2003/08/22 16:50:36 eburns Exp $
+ * @version $Id: TestValueBindingImpl.java,v 1.15 2003/08/22 17:27:37 rlubke Exp $
  */
 
 public class TestValueBindingImpl extends ServletFacesTestCase
@@ -445,7 +445,7 @@ public class TestValueBindingImpl extends ServletFacesTestCase
 
 	// tree
 	// create a dummy root for the tree.	
-    UIPage page = new UIPageBase();
+    UIViewRoot page = new UIViewRootBase();
     page.setId("root");
     page.setViewId("newTree");
 	getFacesContext().setViewRoot(page);
@@ -540,7 +540,7 @@ public class TestValueBindingImpl extends ServletFacesTestCase
 
 	// tree
 	// create a dummy root for the tree.
-	UIPage page = new UIPageBase();
+	UIViewRoot page = new UIViewRootBase();
     page.setId("root");
     page.setViewId("newTree");
 	getFacesContext().setViewRoot(page);

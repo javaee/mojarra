@@ -1,5 +1,5 @@
 /*
- * $Id: TestFacesContextImpl.java,v 1.31 2003/08/22 16:50:35 eburns Exp $
+ * $Id: TestFacesContextImpl.java,v 1.32 2003/08/22 17:27:36 rlubke Exp $
  */
 
 /*
@@ -28,12 +28,12 @@ import com.sun.faces.context.FacesContextImpl;
 import javax.faces.component.UICommand;
 import javax.faces.component.UIForm;
 import javax.faces.component.UIInput;
-import javax.faces.component.UIPage;
+import javax.faces.component.UIViewRoot;
 import javax.faces.component.UIComponent;
 import javax.faces.component.base.UIFormBase;
 import javax.faces.component.base.UIInputBase;
 import javax.faces.component.base.UICommandBase;
-import javax.faces.component.base.UIPageBase;
+import javax.faces.component.base.UIViewRootBase;
 
 import javax.faces.event.FacesEvent;
 import javax.faces.event.FacesListener;
@@ -57,7 +57,7 @@ import com.sun.faces.ServletFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestFacesContextImpl.java,v 1.31 2003/08/22 16:50:35 eburns Exp $
+ * @version $Id: TestFacesContextImpl.java,v 1.32 2003/08/22 17:27:36 rlubke Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -114,10 +114,10 @@ public void testAccessors()
     result = null != locale;
     System.out.println("Testing getLocale: " + result);
     assertTrue(result);
-    UIPage page = new UIPageBase();
+    UIViewRoot page = new UIViewRootBase();
     page.setViewId("viewId");
     getFacesContext().setViewRoot(page);
-    UIPage root = getFacesContext().getViewRoot();
+    UIViewRoot root = getFacesContext().getViewRoot();
     result = null != root;
     System.out.println("Testing getViewRoot: " + result);
     assertTrue(result);

@@ -1,5 +1,5 @@
 /* 
- * $Id: TestViewHandlerImpl.java,v 1.20 2003/08/22 16:51:47 eburns Exp $ 
+ * $Id: TestViewHandlerImpl.java,v 1.21 2003/08/22 17:27:40 rlubke Exp $ 
  */ 
 
 
@@ -28,7 +28,6 @@ import javax.faces.FactoryFinder;
 import javax.faces.context.FacesContext; 
 import javax.faces.context.FacesContextFactory; 
 import javax.faces.lifecycle.Lifecycle; 
-import javax.faces.component.UIComponentBase;
 import javax.faces.component.base.UIComponentBase;
 import javax.faces.component.base.UIViewRootBase;
 import javax.faces.validator.Validator; 
@@ -59,7 +58,7 @@ import javax.servlet.jsp.PageContext;
  * 
  * <B>Lifetime And Scope</B> <P> 
  * 
- * @version $Id: TestViewHandlerImpl.java,v 1.20 2003/08/22 16:51:47 eburns Exp $ 
+ * @version $Id: TestViewHandlerImpl.java,v 1.21 2003/08/22 17:27:40 rlubke Exp $ 
  * 
  * @see Blah 
  * @see Bloo 

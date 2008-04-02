@@ -1,5 +1,5 @@
 /*
- * $Id: TestPhase.java,v 1.5 2003/08/22 16:50:39 eburns Exp $
+ * $Id: TestPhase.java,v 1.6 2003/08/22 17:27:39 rlubke Exp $
  */
 
 /*
@@ -23,10 +23,10 @@ import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIForm;
 import javax.faces.component.UIInput;
-import javax.faces.component.UIPage;
+import javax.faces.component.UIViewRoot;
 import javax.faces.component.base.UIFormBase;
 import javax.faces.component.base.UIInputBase;
-import javax.faces.component.base.UIPageBase;
+import javax.faces.component.base.UIViewRootBase;
 
 import java.util.Iterator;
 
@@ -46,7 +46,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestPhase.java,v 1.5 2003/08/22 16:50:39 eburns Exp $
+ * @version $Id: TestPhase.java,v 1.6 2003/08/22 17:27:39 rlubke Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -119,7 +119,7 @@ public void testExecute()
     userName.setId("userName");
     root.getChildren().add(basicForm);
     basicForm.getChildren().add(userName);
-    UIPage page = new UIPageBase();
+    UIViewRoot page = new UIViewRootBase();
     page.setViewId("root");    
     getFacesContext().setViewRoot(page);
 

@@ -1,5 +1,5 @@
 /*
- * $Id: TestActionListenerImpl.java,v 1.11 2003/08/22 16:50:33 eburns Exp $
+ * $Id: TestActionListenerImpl.java,v 1.12 2003/08/22 17:27:33 rlubke Exp $
  */
 
 /*
@@ -23,9 +23,9 @@ import java.util.List;
 
 import javax.faces.application.Action;
 import javax.faces.component.UICommand;
-import javax.faces.component.UIPage;
+import javax.faces.component.UIViewRoot;
 import javax.faces.component.base.UICommandBase;
-import javax.faces.component.base.UIPageBase;
+import javax.faces.component.base.UIViewRootBase;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.FactoryFinder;
@@ -44,7 +44,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestActionListenerImpl.java,v 1.11 2003/08/22 16:50:33 eburns Exp $
+ * @version $Id: TestActionListenerImpl.java,v 1.12 2003/08/22 17:27:33 rlubke Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -100,7 +100,7 @@ public class TestActionListenerImpl extends ServletFacesTestCase
 
         UICommand command = new UICommandBase();
         command.setAction("loginRequired");
-        UIPage page = new UIPageBase();
+        UIViewRoot page = new UIViewRootBase();
         page.setViewId("/login.jsp");
         context.setViewRoot(page);
 
@@ -123,7 +123,7 @@ public class TestActionListenerImpl extends ServletFacesTestCase
         context.getExternalContext().getSessionMap().put("userBean", user);
         assertTrue(user == context.getExternalContext().getSessionMap().get("userBean"));
 
-        page = new UIPageBase();
+        page = new UIViewRootBase();
         page.setViewId("/login.jsp");
         context.setViewRoot(page);
 
@@ -140,7 +140,7 @@ public class TestActionListenerImpl extends ServletFacesTestCase
         boolean exceptionThrown = false;
 
         FacesContext context = FacesContext.getCurrentInstance();
-        UIPage page = new UIPageBase();
+        UIViewRoot page = new UIViewRootBase();
         page.setViewId("/login.jsp");
         context.setViewRoot(page);
         UserBean user = new UserBean();

@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_2.java,v 1.51 2003/08/22 16:51:51 eburns Exp $
+ * $Id: TestRenderers_2.java,v 1.52 2003/08/22 17:27:44 rlubke Exp $
  */
 
 /*
@@ -32,7 +32,7 @@ import javax.faces.component.UISelectBoolean;
 import javax.faces.component.UISelectOne;
 import javax.faces.component.UIGraphic;
 import javax.faces.component.UIInput;
-import javax.faces.component.UIPage;
+import javax.faces.component.UIViewRoot;
 import javax.faces.component.base.UISelectBooleanBase;
 import javax.faces.component.base.UICommandBase;
 import javax.faces.component.base.UISelectItemsBase;
@@ -42,7 +42,7 @@ import javax.faces.component.base.UIOutputBase;
 import javax.faces.component.base.UIGraphicBase;
 import javax.faces.component.base.UIParameterBase;
 import javax.faces.component.base.UINamingContainerBase;
-import javax.faces.component.base.UIPageBase;
+import javax.faces.component.base.UIViewRootBase;
 import javax.faces.FactoryFinder;
 import javax.faces.model.SelectItem;
 import javax.faces.context.FacesContext;
@@ -60,7 +60,7 @@ import com.sun.faces.TestBean;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_2.java,v 1.51 2003/08/22 16:51:51 eburns Exp $
+ * @version $Id: TestRenderers_2.java,v 1.52 2003/08/22 17:27:44 rlubke Exp $
  * 
  *
  */
@@ -120,7 +120,7 @@ public class TestRenderers_2 extends JspFacesTestCase
     //
     public void setUp() {
 	super.setUp();
-        UIPage page = new UIPageBase();
+        UIViewRoot page = new UIViewRootBase();
         page.setViewId("viewId");       
         getFacesContext().setViewRoot(page);
 	assertTrue(null != getFacesContext().getResponseWriter());

@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigFileTestCase.java,v 1.28 2003/08/22 16:50:34 eburns Exp $
+ * $Id: ConfigFileTestCase.java,v 1.29 2003/08/22 17:27:35 rlubke Exp $
  */
 
 /*
@@ -31,8 +31,8 @@ import javax.faces.FactoryFinder;
 import javax.faces.application.ApplicationFactory;
 import javax.faces.application.NavigationHandler;
 import javax.faces.component.UIComponent;
-import javax.faces.component.UIPage;
-import javax.faces.component.base.UIPageBase;
+import javax.faces.component.UIViewRoot;
+import javax.faces.component.base.UIViewRootBase;
 import javax.faces.application.MessageResources;
 import javax.faces.convert.Converter;
 import javax.faces.validator.Validator;
@@ -251,7 +251,7 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
                  FactoryFinder.APPLICATION_FACTORY);
         ApplicationImpl application = (ApplicationImpl)aFactory.getApplication(); 
 	NavigationHandler navHandler = application.getNavigationHandler();
-        UIPage page = new UIPageBase();
+        UIViewRoot page = new UIViewRootBase();
         page.setViewId("/login.jsp");
 	getFacesContext().setViewRoot(page);
         navHandler.handleNavigation(getFacesContext(), "UserBean.login",

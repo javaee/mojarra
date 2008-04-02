@@ -4,7 +4,7 @@
  */
 
 /**
- * $Id: TestRenderers_4.java,v 1.7 2003/08/22 16:51:52 eburns Exp $
+ * $Id: TestRenderers_4.java,v 1.8 2003/08/22 17:27:44 rlubke Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -23,12 +23,12 @@ import javax.faces.component.UICommand;
 import javax.faces.component.UIOutput;
 import javax.faces.component.UIComponent;
 import javax.faces.component.NamingContainer;
-import javax.faces.component.UIPage;
+import javax.faces.component.UIViewRoot;
 import javax.faces.component.base.UICommandBase;
 import javax.faces.component.base.UINamingContainerBase;
 import javax.faces.component.base.UIPanelBase;
 import javax.faces.component.base.UIOutputBase;
-import javax.faces.component.base.UIPageBase;
+import javax.faces.component.base.UIViewRootBase;
 import javax.faces.context.FacesContextFactory;
 
 import org.apache.cactus.WebRequest;
@@ -43,7 +43,7 @@ import java.util.ArrayList;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_4.java,v 1.7 2003/08/22 16:51:52 eburns Exp $
+ * @version $Id: TestRenderers_4.java,v 1.8 2003/08/22 17:27:44 rlubke Exp $
  * 
  *
  */
@@ -92,7 +92,7 @@ public class TestRenderers_4 extends JspFacesTestCase {
     //
     public void setUp() {
         super.setUp();
-        UIPage page = new UIPageBase();
+        UIViewRoot page = new UIViewRootBase();
         page.setViewId("viewId");       
         getFacesContext().setViewRoot(page);
         assertTrue(null != getFacesContext().getResponseWriter());

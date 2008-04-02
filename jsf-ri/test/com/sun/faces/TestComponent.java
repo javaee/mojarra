@@ -7,7 +7,7 @@ package com.sun.faces;
 
 import org.mozilla.util.Assert;
 
-import javax.faces.component.UIComponentBase;
+import javax.faces.component.base.UIComponentBase;
 
 public class TestComponent extends UIComponentBase
 {

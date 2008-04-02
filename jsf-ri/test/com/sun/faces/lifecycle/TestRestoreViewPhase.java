@@ -1,5 +1,5 @@
 /*
- * $Id: TestRestoreViewPhase.java,v 1.1 2003/08/22 16:49:32 eburns Exp $
+ * $Id: TestRestoreViewPhase.java,v 1.2 2003/08/22 17:27:40 rlubke Exp $
  */
 
 /*
@@ -27,12 +27,12 @@ import javax.faces.component.UIComponent;
 import javax.faces.component.UIForm;
 import javax.faces.component.UIInput;
 import javax.faces.component.UIPanel;
-import javax.faces.component.UIPage;
+import javax.faces.component.UIViewRoot;
 import javax.faces.component.base.UINamingContainerBase;
 import javax.faces.component.base.UIFormBase;
 import javax.faces.component.base.UIInputBase;
 import javax.faces.component.base.UIPanelBase;
-import javax.faces.component.base.UIPageBase;
+import javax.faces.component.base.UIViewRootBase;
 import javax.faces.component.base.UICommandBase;
 import javax.faces.event.PhaseId;
 import javax.servlet.http.HttpSession;
@@ -49,7 +49,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRestoreViewPhase.java,v 1.1 2003/08/22 16:49:32 eburns Exp $
+ * @version $Id: TestRestoreViewPhase.java,v 1.2 2003/08/22 17:27:40 rlubke Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -138,7 +138,7 @@ public void testReconstituteRequestSubmit()
 {    
     // precreate tree and set it in session and make sure the tree is
     // restored from session.      
-    UIPage root = new UIPageBase();
+    UIViewRoot root = new UIViewRootBase();
     root.setViewId(TEST_URI);
     
     UIForm basicForm = new UIFormBase();
@@ -196,7 +196,7 @@ public void testRegisterListeners() {
     // precreate tree and set it in session and make sure the tree is
     // restored from session.
    
-    UIPage root = new UIPageBase();
+    UIViewRoot root = new UIViewRootBase();
     root.setViewId(TEST_URI);
     
     UIForm basicForm = new UIFormBase();
@@ -236,7 +236,7 @@ public void testRegisterListeners() {
     // Now test with no facets... Listeners should still be registered on UICommand
     // components....
     // 
-    root = new UIPageBase();
+    root = new UIViewRootBase();
     root.setViewId(TEST_URI);
     basicForm = new UIFormBase();
     basicForm.setId("basicForm");

@@ -1,5 +1,5 @@
 /*
- * $Id: TestNavigationHandler.java,v 1.7 2003/08/22 16:50:33 eburns Exp $
+ * $Id: TestNavigationHandler.java,v 1.8 2003/08/22 17:27:33 rlubke Exp $
  */
 
 /*
@@ -28,8 +28,8 @@ import javax.faces.application.ApplicationFactory;
 import javax.faces.application.NavigationHandler;
 import javax.faces.context.FacesContext;
 import javax.faces.FactoryFinder;
-import javax.faces.component.UIPage;
-import javax.faces.component.base.UIPageBase;
+import javax.faces.component.UIViewRoot;
+import javax.faces.component.base.UIViewRootBase;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContext;
@@ -55,7 +55,7 @@ import com.sun.faces.ServletFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestNavigationHandler.java,v 1.7 2003/08/22 16:50:33 eburns Exp $
+ * @version $Id: TestNavigationHandler.java,v 1.8 2003/08/22 17:27:33 rlubke Exp $
  * 
  */
 
@@ -161,13 +161,13 @@ public class TestNavigationHandler extends ServletFacesTestCase
         FacesContext context = getFacesContext();
 
         String newViewId = null;
-        UIPage page = null;
+        UIViewRoot page = null;
         for (int i=0; i<testResultList.size(); i++) {
             TestResult testResult = (TestResult)testResultList.get(i);
             System.out.println("Testing from-view-id="+testResult.fromViewId+
                 " from-action-ref="+testResult.fromActionRef+
                 " from-outcome="+testResult.fromOutcome);
-            page = new UIPageBase();
+            page = new UIViewRootBase();
             page.setViewId(testResult.fromViewId);
             context.setViewRoot(page);
             navHandler.handleNavigation(

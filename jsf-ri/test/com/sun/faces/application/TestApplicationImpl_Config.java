@@ -1,5 +1,5 @@
 /*
- * $Id: TestApplicationImpl_Config.java,v 1.14 2003/08/21 15:02:31 rlubke Exp $
+ * $Id: TestApplicationImpl_Config.java,v 1.15 2003/08/22 17:27:33 rlubke Exp $
  */
 
 /*
@@ -52,7 +52,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestApplicationImpl_Config.java,v 1.14 2003/08/21 15:02:31 rlubke Exp $
+ * @version $Id: TestApplicationImpl_Config.java,v 1.15 2003/08/22 17:27:33 rlubke Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -157,8 +157,8 @@ public class TestApplicationImpl_Config extends ServletFacesTestCase {
 	assertTrue(null != (uic = application.getComponent("SelectOne")));
 	assertTrue(uic instanceof UISelectOne);
         
-    assertTrue(null != (uic = application.getComponent("Page")));
-    assertTrue(uic instanceof UIPage);
+    assertTrue(null != (uic = application.getComponent("ViewRoot")));
+    assertTrue(uic instanceof UIViewRoot);
 	
     }
 	

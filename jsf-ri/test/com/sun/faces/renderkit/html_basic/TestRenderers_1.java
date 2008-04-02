@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_1.java,v 1.36 2003/08/22 16:51:50 eburns Exp $
+ * $Id: TestRenderers_1.java,v 1.37 2003/08/22 17:27:43 rlubke Exp $
  */
 
 /*
@@ -24,9 +24,7 @@ import java.util.Map;
 import javax.faces.component.UIForm;
 import javax.faces.component.UICommand;
 import javax.faces.component.UISelectOne;
-import javax.faces.component.SelectItem;
 import javax.faces.component.UISelectItems;
-import javax.faces.component.UINamingContainer;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIParameter;
 import javax.faces.component.base.UIViewRootBase;
@@ -36,6 +34,7 @@ import javax.faces.component.base.UIFormBase;
 import javax.faces.component.base.UISelectOneBase;
 import javax.faces.component.base.UISelectItemsBase;
 import javax.faces.component.base.UINamingContainerBase;
+import javax.faces.model.SelectItem;
 import javax.servlet.jsp.jstl.fmt.LocalizationContext;
 import javax.servlet.jsp.jstl.core.Config;
 
@@ -52,7 +51,7 @@ import com.sun.faces.renderkit.html_basic.RadioRenderer;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_1.java,v 1.36 2003/08/22 16:51:50 eburns Exp $
+ * @version $Id: TestRenderers_1.java,v 1.37 2003/08/22 17:27:43 rlubke Exp $
  * 
  *
  */
@@ -99,7 +98,7 @@ public class TestRenderers_1 extends JspFacesTestCase
         super.setUp();
 
 	UIViewRootBase xmlView = new UIViewRootBase();
-	xmlView.setTreeId("viewId");
+	xmlView.setViewId("viewId");
 	getFacesContext().setViewRoot(xmlView);
         assertTrue(getFacesContext().getResponseWriter() != null);
      }     
@@ -275,7 +274,7 @@ public class TestRenderers_1 extends JspFacesTestCase
         System.out.println("Testing FormRenderer");
         UIForm uiForm = new UIFormBase();
         uiForm.setId("formRenderer" + expectedFormNumber);
-        uiForm.setFormName("basicForm");
+        //uiForm.setFormName("basicForm");
         root.getChildren().add(uiForm);
 
         FormRenderer formRenderer = new FormRenderer();
