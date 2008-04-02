@@ -1,5 +1,5 @@
 /*
- * $Id: ImplicitObjectELResolverForJsp.java,v 1.7 2006/01/11 15:28:05 rlubke Exp $
+ * $Id: ImplicitObjectELResolverForJsp.java,v 1.8 2006/01/13 19:19:16 rlubke Exp $
  */
 /*
  * The contents of this file are subject to the terms
@@ -127,10 +127,10 @@ public class ImplicitObjectELResolverForJsp extends ImplicitObjectELResolver {
         switch (index) {
             case FACES_CONTEXT:
                 throw new PropertyNotWritableException(MessageUtils.getExceptionMessageString
-                (MessageUtils.OBJECT_IS_READONLY, new String[]{"facesContext"}));
+                (MessageUtils.OBJECT_IS_READONLY, "facesContext"));
             case VIEW:
                 throw new PropertyNotWritableException(MessageUtils.getExceptionMessageString
-                (MessageUtils.OBJECT_IS_READONLY, new String[]{"view"}));
+                (MessageUtils.OBJECT_IS_READONLY, "view"));
             default:
         }
     }

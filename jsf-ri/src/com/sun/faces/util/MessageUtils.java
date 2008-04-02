@@ -226,22 +226,7 @@ public class MessageUtils {
 
 
     // ---------------------------------------------------------- Public Methods
-
-
-    /**
-     * <p>Creates a new <code>FacesMessage</code> instance using the
-     * specified #messageId.</p>
-     * 
-     * @param messageId the message ID
-     * @return a new <code>FacesMessage</code> based on the provided
-     *  <code>messageId</code>
-     */
-    public static synchronized FacesMessage getExceptionMessage(
-          String messageId) {
-
-        return getExceptionMessage(messageId, null);
-
-    }
+    
 
     /**
      * <p>Creates a new <code>FacesMessage</code> instance using the
@@ -254,27 +239,11 @@ public class MessageUtils {
      */
     public static synchronized FacesMessage getExceptionMessage(
           String messageId,
-          Object[] params) {
+          Object... params) {
 
         return MessageFactory.getMessage(messageId, params);
 
-    }
-
-
-    /**
-     * <p>Returns the localized message for the specified 
-     * #messageId.</p>
-     * 
-     * @param messageId the message ID
-     * @return the localized message for the specified 
-     *  <code>messageId</code>
-     */
-    public static synchronized String getExceptionMessageString(
-          String messageId) {
-
-        return getExceptionMessageString(messageId, null);
-
-    }
+    }    
 
 
     /**
@@ -288,7 +257,7 @@ public class MessageUtils {
      */
     public static synchronized String getExceptionMessageString(
           String messageId,
-          Object[] params) {
+          Object... params) {
 
         String result = null;
 

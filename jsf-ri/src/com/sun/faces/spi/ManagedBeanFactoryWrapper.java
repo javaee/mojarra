@@ -1,5 +1,5 @@
 /*
- * $Id: ManagedBeanFactoryWrapper.java,v 1.1 2005/08/24 16:13:34 edburns Exp $
+ * $Id: ManagedBeanFactoryWrapper.java,v 1.2 2006/01/13 19:19:19 rlubke Exp $
  */
 
 /*
@@ -31,6 +31,8 @@ package com.sun.faces.spi;
 
 import com.sun.faces.config.beans.ManagedBeanBean;
 import java.util.Map;
+import java.lang.reflect.Method;
+
 import javax.faces.context.FacesContext;
 
 /**
@@ -41,7 +43,7 @@ import javax.faces.context.FacesContext;
  * <code>ManagedBeanFactory</code> argument and stores it as an ivar,
  * returning it from the {@link #getWrapped} method.</p>
  * 
- * @author edburns
+ * @author edburns, rlubke
  */
 public abstract class ManagedBeanFactoryWrapper extends ManagedBeanFactory {
     
@@ -81,7 +83,7 @@ public abstract class ManagedBeanFactoryWrapper extends ManagedBeanFactory {
     }
     
     /**
-     * @see ManagedBeanFactory#setManagedFactoryMap
+     * @see ManagedBeanFactory#setManagedBeanFactoryMap(java.util.Map<java.lang.String,com.sun.faces.spi.ManagedBeanFactory>) 
      */
     
     public void setManagedBeanFactoryMap(Map<String, ManagedBeanFactory> others) {
@@ -89,11 +91,25 @@ public abstract class ManagedBeanFactoryWrapper extends ManagedBeanFactory {
     }
     
     /**
-     * @see ManagedBeanFactory#getManagedFactoryMap
+     * @see ManagedBeanFactory#getManagedBeanFactoryMap() 
      */
     
     public Map<String, ManagedBeanFactory> getManagedBeanFactoryMap() {
         return getWrapped().getManagedBeanFactoryMap();
+    }
+
+    /**
+     * @see com.sun.faces.spi.ManagedBeanFactory#getPostConstructMethods()      
+     */
+    public Method[] getPostConstructMethods() {
+        return getWrapped().getPostConstructMethods();
+    }
+
+    /**
+     * @see com.sun.faces.spi.ManagedBeanFactory#getPreDestroyMethods()       
+     */
+    public Method[] getPreDestroyMethods() {
+        return getWrapped().getPreDestroyMethods();
     }
 
 

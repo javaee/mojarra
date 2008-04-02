@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.182 2006/01/11 15:28:14 rlubke Exp $
+ * $Id: Util.java,v 1.183 2006/01/13 19:19:22 rlubke Exp $
  */
 
 /*
@@ -31,10 +31,9 @@
 
 package com.sun.faces.util;
 
-import com.sun.faces.RIConstants;
-import com.sun.faces.renderkit.RenderKitImpl;
-import java.beans.FeatureDescriptor;
-
+import javax.el.ELContext;
+import javax.el.ELResolver;
+import javax.el.ValueExpression;
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.application.Application;
@@ -42,39 +41,38 @@ import javax.faces.application.ApplicationFactory;
 import javax.faces.application.StateManager;
 import javax.faces.application.ViewHandler;
 import javax.faces.component.UIComponent;
-import javax.faces.component.UISelectItem;
-import javax.faces.component.UISelectItems;
+import javax.faces.component.UIViewRoot;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.context.FacesContextFactory;
 import javax.faces.convert.Converter;
 import javax.faces.el.ReferenceSyntaxException;
-import javax.el.ValueExpression;
-import javax.el.ELContext;
+import javax.faces.el.ValueBinding;
 import javax.faces.lifecycle.LifecycleFactory;
-import javax.faces.model.SelectItem;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
 import javax.servlet.ServletContext;
-import javax.faces.el.ValueBinding;
 import javax.servlet.jsp.jstl.fmt.LocalizationContext;
 
+import java.beans.FeatureDescriptor;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
-import java.lang.reflect.Method;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.StringTokenizer;
-import java.util.logging.Logger;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.logging.Level;
-import javax.el.ELResolver;
-import javax.faces.component.UIViewRoot;
+import java.util.logging.Logger;
 
+import com.sun.faces.RIConstants;
+import com.sun.faces.renderkit.RenderKitImpl;
 import com.sun.faces.spi.ManagedBeanFactory.Scope;
 
 /**
@@ -82,7 +80,7 @@ import com.sun.faces.spi.ManagedBeanFactory.Scope;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.182 2006/01/11 15:28:14 rlubke Exp $
+ * @version $Id: Util.java,v 1.183 2006/01/13 19:19:22 rlubke Exp $
  */
 
 public class Util {
@@ -108,7 +106,7 @@ public class Util {
     public static final String APPLICATION_LOGGER = ".application";
     public static final String CONTEXT_LOGGER = ".context";
     public static final String CONFIG_LOGGER = ".config";
-    public static final String LIFECYCLE_LOGGER = ".lifecycle";
+    public static final String LIFECYCLE_LOGGER = ".lifecycle";        
 
     /**
      * Flag that, when true, enables special behavior in the RI to enable
@@ -795,7 +793,7 @@ public class Util {
      * <code>sessionScope.TestBean.one</code> should return "session" 
      * as the scope.</p>
      *
-     * @param ValueExpression the expression
+     * @param valueBinding the expression
      *
      * @param outString an allocated String Array into which we put the
      * first segment.
@@ -1043,6 +1041,7 @@ public class Util {
         // Look for the presence of the method by method name.
         Class c = instance.getClass();
         Method[] methods = c.getDeclaredMethods();
+        
         for (int i = 0; i < methods.length; i++) {
             if (methods[i].getName().equals(methodName)) {
                 result = true;
@@ -1051,38 +1050,5 @@ public class Util {
         }
         return result;
     }
-
-    /**
-     * Returns a List of Methods on the instance referenced by argument
-     * <code>obj</code> that are annotated with the annotation
-     * referenced by argument <code>annoClass</code>.  If none are
-     * found, returns the empty list.
-     *
-     * @param the instance for which to inspect for annotated methods
-     *
-     * @param annoClass the Class of annotation to look for
-     */
     
-    public static List<Method> getMethodsWithAnnotation(Object obj, Class annoClass) {
-        List<Method> list = null;
-        Method [] methods = null;
-        if (null != obj) {
-            Class objClass = obj.getClass();
-            methods = objClass.getMethods();
-
-            for (int i = 0; i < methods.length; i++) {
-                if (null != methods[i].getAnnotation(annoClass)) {
-		    if (null == list) {
-			list = new ArrayList<Method>();
-		    }
-                    list.add(methods[i]);
-                }                
-            }
-        }       
-        if (null == list) {
-            list = Collections.EMPTY_LIST;
-        }
-        return list;
-    }
-
 } // end of class Util

@@ -1,5 +1,5 @@
 /*
- * $Id: ManagedBeanFactoryImpl.java,v 1.3 2006/01/11 15:28:03 rlubke Exp $
+ * $Id: ManagedBeanFactoryImpl.java,v 1.4 2006/01/13 19:19:15 rlubke Exp $
  */
 
 /*
@@ -30,6 +30,8 @@
 package com.sun.faces.config;
 
 import java.lang.reflect.Array;
+import java.lang.reflect.Method;
+import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -107,25 +109,55 @@ public class ManagedBeanFactoryImpl extends ManagedBeanFactory {
      */
     private final static byte TYPE_IS_SIMPLE = 3;
     
+    private static final Method[] EMPTY_METHODS = new Method[0];
+    
     private static final String MANAGED_BEAN_CREATED_STACK = 
         RIConstants.FACES_PREFIX + "managedBeanStack";
 
-    //
-    // Class Variables
-    //
+    private static enum Annotations {
+        POST_CONSTRUCT("javax.annotation.PostConstruct"),
+        PRE_DESTROY("javax.annotation.PreDestroy");
+        
+        Annotations(String annotationClassName) {                    
+            ClassLoader loader = Thread.currentThread().getContextClassLoader();            
+            if (loader != null) {
+                try {
+                    annotationClass = 
+                          loader.loadClass(annotationClassName); 
+                    if (!annotationClass.isAnnotation()) {
+                        annotationClass = null;                        
+                    }
+                } catch (ClassNotFoundException cne) {
+                    if (LOGGER.isLoggable(Level.INFO)) {
+                        LOGGER.log(Level.INFO,
+                                   "jsf.util_no_annotation_processed",
+                                   annotationClassName);
+                    }
+                }
+            }
+        }
+                
+        private Class annotationClass;
+
+        public Class getAnnotationClass() {
+            return annotationClass;
+        }                       
+    }
 
     /**
      * <p>The <code>Log</code> instance for this class.</p>
      */
-    private static Logger logger = Util.getLogger(Util.FACES_LOGGER 
+    private static final Logger LOGGER = Util.getLogger(Util.FACES_LOGGER 
             + Util.CONFIG_LOGGER);
 
 
-
+    private Method[] postConstructMethods = null;
+    private Method[] preDestroyMethods = null;
+    
     // Attribute Instance Variables
 
-    ManagedBeanBean managedBean;
-    Scope scope = Scope.NONE;
+    private ManagedBeanBean managedBean;
+    private Scope scope = Scope.NONE;    
 
     // Relationship Instance Variables
 
@@ -149,8 +181,31 @@ public class ManagedBeanFactoryImpl extends ManagedBeanFactory {
         this.managedBean = managedBean; // (ManagedBeanBean) managedBean.clone();
         //set the scope
         scope = getScopeFromString(managedBean.getManagedBeanScope());
+        
+        // try to get the managedbean class
+        try {
+            Class<?> managedBeanClass =
+                  Thread.currentThread().getContextClassLoader()
+                        .loadClass(managedBean.getManagedBeanClass());
+            postConstructMethods = 
+                  getMethodsWithAnnotation(managedBeanClass,
+                                           Annotations.POST_CONSTRUCT);
+            preDestroyMethods = 
+                  getMethodsWithAnnotation(managedBeanClass,
+                                           Annotations.PRE_DESTROY);
+        } catch (ClassNotFoundException cnfe) {
+            throw new FacesException(cnfe);
+        }
     }
-    
+
+    public Method[] getPostConstructMethods() {
+        return postConstructMethods;
+    }
+
+    public Method[] getPreDestroyMethods() {
+        return preDestroyMethods;
+    }
+
     private Scope getScopeFromString(String scopeString) {
         Scope result = Scope.NONE;
 	if (null != scopeString) {
@@ -183,8 +238,8 @@ public class ManagedBeanFactoryImpl extends ManagedBeanFactory {
 
     public Map<String,ManagedBeanFactory> getManagedBeanFactoryMap() {
 	if (null == managedBeanFactoryMap) {
-            if (logger.isLoggable(Level.INFO)) {
-                logger.info("Contract violation: ManagedBeanFactory must be initialized with managedBeanFactoryMap after instantiation.");
+            if (LOGGER.isLoggable(Level.INFO)) {
+                LOGGER.info("Contract violation: ManagedBeanFactory must be initialized with managedBeanFactoryMap after instantiation.");
             }
 	}
 
@@ -236,8 +291,8 @@ public class ManagedBeanFactoryImpl extends ManagedBeanFactory {
         }
         
         if ( beanList.contains(managedBean.getManagedBeanName())) {
-            if ( logger.isLoggable(Level.WARNING)) {
-                logger.warning("Possible cyclic reference to managedBean " + 
+            if ( LOGGER.isLoggable(Level.WARNING)) {
+                LOGGER.warning("Possible cyclic reference to managedBean " + 
                    managedBean.getManagedBeanName() + " ");
             }
             Object[] obj = new Object[1];
@@ -451,8 +506,8 @@ public class ManagedBeanFactoryImpl extends ManagedBeanFactory {
         int len = 0;
 
         if (0 == (len = valuesFromConfig.length)) {
-            if (logger.isLoggable(Level.FINE)) {
-                logger.fine("zero length array");
+            if (LOGGER.isLoggable(Level.FINE)) {
+                LOGGER.fine("zero length array");
             }
             return null;
         }
@@ -500,8 +555,8 @@ public class ManagedBeanFactoryImpl extends ManagedBeanFactory {
             strValue = null;
 
         if (null == mapEntries || 0 == valuesFromConfig.length) {
-            if (logger.isLoggable(Level.FINE)) {
-                logger.fine("null or zero length array");
+            if (LOGGER.isLoggable(Level.FINE)) {
+                LOGGER.fine("null or zero length array");
             }
             return;
         }
@@ -1083,6 +1138,41 @@ public class ManagedBeanFactoryImpl extends ManagedBeanFactory {
 	    }
 	}
 	return result;
+    }
+    
+    /**
+     * Returns a List of Methods on the instance referenced by argument
+     * <code>obj</code> that are annotated with the annotation
+     * referenced by argument <code>annoClass</code>.  If none are
+     * found, returns the empty list.
+     *
+     * @param clazz the class for which to inspect for annotated methods
+     *@param annotation the <code>Annotation</code> of interest
+     */
+    private static Method[] getMethodsWithAnnotation(Class clazz,
+                                                     Annotations annotation) {
+        List<Method> list = null;      
+        if (null != clazz) {
+            Class<? extends Annotation> annoClass = annotation.getAnnotationClass();
+            if (annoClass == null) {
+                return EMPTY_METHODS;
+            }
+           
+            Method[] methods = clazz.getMethods();
+
+            for (Method method : methods) {
+                if (null != method.getAnnotation(annoClass)) {                   
+                    if (null == list) {
+                        list = new ArrayList<Method>();
+                    }
+                    list.add(method);
+                }
+            }
+        }
+        if (null == list) {
+            return EMPTY_METHODS;
+        }
+        return list.toArray(new Method[list.size()]);
     }
 
 

@@ -1,5 +1,5 @@
 /*
- * $Id: ManagedBeanFactory.java,v 1.1 2005/08/24 16:13:34 edburns Exp $
+ * $Id: ManagedBeanFactory.java,v 1.2 2006/01/13 19:19:18 rlubke Exp $
  */
 
 /*
@@ -31,6 +31,8 @@ package com.sun.faces.spi;
 
 import com.sun.faces.config.beans.ManagedBeanBean;
 import java.util.Map;
+import java.lang.reflect.Method;
+
 import javax.faces.context.FacesContext;
 
 /**
@@ -102,16 +104,16 @@ public class NewManagedBeanFactory extends ManagedBeanFactoryWrapper {
  * into the managed bean creation lifecycle to provide a lifecycle
  * notification scheme.</p>
  *
- * @author edburns
+ * @author edburns, rlubke
  */
-public abstract class ManagedBeanFactory extends Object {
+public abstract class ManagedBeanFactory {
     
     public enum Scope {
         NONE, REQUEST, SESSION, APPLICATION
     }
 
     /**
-     * <p>Return the {@link #Scope} of the managed-bean created by this
+     * <p>Return the {@link Scope} of the managed-bean created by this
      * factory.</p>
      */ 
     
@@ -157,5 +159,23 @@ public abstract class ManagedBeanFactory extends Object {
      */
     
     public abstract Map<String, ManagedBeanFactory> getManagedBeanFactoryMap();
+
+    /**
+     * Return all methods of this ManageBean that are marked with
+     * the <code>PostConstruct</code> annotation.
+     * 
+     * @return all <code>PostConstruct</code> methods or a zero-length
+     *  array if no such methods are found.
+     */
+    public abstract Method[] getPostConstructMethods();
+    
+    /**
+     * Return all methods of this ManageBean that are marked with
+     * the <code>PreDestroy</code> annotation.
+     * 
+     * @return all <code>PostDestroy</code> methods or a zero-length
+     *  array if no such methods are found.
+     */
+    public abstract Method[] getPreDestroyMethods();
     
 }

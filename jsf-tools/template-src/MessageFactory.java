@@ -1,5 +1,5 @@
 /*
- * $Id: MessageFactory.java,v 1.10 2005/08/22 22:12:29 ofung Exp $
+ * $Id: MessageFactory.java,v 1.11 2006/01/13 19:19:32 rlubke Exp $
  */
 
 /*
@@ -58,47 +58,17 @@ import java.io.IOException;
  * <code>protection</code>.</p>
  */
 
-@protection@ class MessageFactory extends Object
-{
-    //
-    // Protected Constants
-    //
-
-    //
-    // Class Variables
-    //
-
-    //
-    // Instance Variables
-    //
-
-    // Attribute Instance Variables
-
-    // Relationship Instance Variables
-
-    //
-    // Constructors and Initializers    
-    //
+@protection@ class MessageFactory {
 
     private MessageFactory() {
     }
-
-    //
-    // Class methods
-    //
-
-    //
-    // General Methods
-    //
-    
+   
     /**
-
-    * This version of getMessage() is used in the RI for localizing RI
-    * specific messages.
-
-    */
-
-     @protection@ static FacesMessage getMessage(String messageId, Object params[]) {
+     * This version of getMessage() is used for localizing implementation
+     * specific messages.
+     */
+     @protection@ static FacesMessage getMessage(String messageId, 
+                                                 Object... params) {
         Locale locale = null;
         FacesContext context = FacesContext.getCurrentInstance();
         // context.getViewRoot() may not have been initialized at this point.
@@ -111,79 +81,80 @@ import java.io.IOException;
             locale = Locale.getDefault();
         }
         
-	return getMessage(locale, messageId, params);
+        return getMessage(locale, messageId, params);
     }
 
-     @protection@ static FacesMessage getMessage(Locale locale, String messageId, 
-					   Object params[]) {
-	FacesMessage result = null;
-	String 
-	    summary = null,
-	    detail = null,
-	    bundleName = null;
-	ResourceBundle bundle = null;
+     @protection@ static FacesMessage getMessage(Locale locale, 
+                                                 String messageId, 
+                                                 Object... params) {
+        FacesMessage result = null;
+        String summary = null;
+        String detail = null;
+        String bundleName = null;
+        ResourceBundle bundle = null;        
 
-	// see if we have a user-provided bundle
-	if (null != (bundleName = getApplication().getMessageBundle())) {
-	    if (null != 
-		(bundle = 
-		 ResourceBundle.getBundle(bundleName, locale,
-					  getCurrentLoader(bundleName)))) {
-		// see if we have a hit
-		try {
-		    summary = bundle.getString(messageId);
+        // see if we have a user-provided bundle
+        if (null != (bundleName = getApplication().getMessageBundle())) {
+            if (null != 
+                (bundle = 
+                    ResourceBundle.getBundle(bundleName, locale,
+                      getCurrentLoader(bundleName)))) {
+                // see if we have a hit
+                try {
+                    summary = bundle.getString(messageId);
                     detail = bundle.getString(messageId + "_detail");
-		}
-		catch (MissingResourceException e) {
-		}
-	    }
-	}
-	
-	// we couldn't find a summary in the user-provided bundle
-	if (null == summary) {
-	    // see if we have a summary in the app provided bundle
-	    bundle = ResourceBundle.getBundle(FacesMessage.FACES_MESSAGES, 
-					      locale,
-					      getCurrentLoader(bundleName));
-	    if (null == bundle) {
-		throw new NullPointerException();
-	    }
-	    // see if we have a hit
-	    try {
-		summary = bundle.getString(messageId);
+                }
+                catch (MissingResourceException e) {
+                }
+            }
+        }
+    
+        // we couldn't find a summary in the user-provided bundle
+        if (null == summary) {
+            // see if we have a summary in the app provided bundle
+            bundle = ResourceBundle.getBundle(FacesMessage.FACES_MESSAGES, 
+                                              locale,
+                                              getCurrentLoader(bundleName));
+            if (null == bundle) {
+                throw new NullPointerException();
+            }
+            // see if we have a hit
+            try {
+                summary = bundle.getString(messageId);
                 detail = bundle.getString(messageId + "_detail");
-	    }
-	    catch (MissingResourceException e) {
-	    }
-	}
-	
-	// we couldn't find a summary anywhere!  Return null
-	if (null == summary) {
-	    return null;
-	}
+            } catch (MissingResourceException e) {
+            }
+        }
+    
+        // we couldn't find a summary anywhere!  Return null
+        if (null == summary) {
+            return null;
+        }
 
-	if (null == summary || null == bundle) {
-            throw new NullPointerException(" summary " + summary + " bundle " + 
-                bundle);
-	}
-	// At this point, we have a summary and a bundle.
-        // 
+        if (null == summary || null == bundle) {
+            throw new NullPointerException(" summary " 
+                + summary 
+                + " bundle " 
+                + bundle);
+        }
+        // At this point, we have a summary and a bundle.        
         return (new BindingFacesMessage(locale, summary, detail, params));
     }
 
 
     //
     // Methods from MessageFactory
-    // 
-     @protection@ static FacesMessage getMessage(FacesContext context, String messageId) {
-        return getMessage(context, messageId, null);
-    }    
+    //      
     
-     @protection@ static FacesMessage getMessage(FacesContext context, String messageId,
-					   Object params[]) {
+    @protection@ static FacesMessage getMessage(FacesContext context, 
+                                                String messageId,
+                                                Object... params) {
+                                                
         if (context == null || messageId == null ) {
-            throw new NullPointerException(" context " + context + " messageId " + 
-                messageId);
+            throw new NullPointerException(" context " 
+                + context 
+                + " messageId " 
+                + messageId);
         }
         Locale locale = null;
         // viewRoot may not have been initialized at this point.
@@ -192,9 +163,11 @@ import java.io.IOException;
         } else {
             locale = Locale.getDefault();
         }
-	if (null == locale) {
-	    throw new NullPointerException(" locale " + locale);
-	}
+        
+        if (null == locale) {
+            throw new NullPointerException(" locale " + locale);
+        }
+        
         FacesMessage message = getMessage(locale, messageId, params);
         if (message != null) {
             return message;
@@ -202,35 +175,12 @@ import java.io.IOException;
         locale = Locale.getDefault();
         return (getMessage(locale, messageId, params));
     }  
-    
-     @protection@ static FacesMessage getMessage(FacesContext context, String messageId,
-                                       Object param0) {
-        return getMessage(context, messageId, new Object[]{param0});                                       
-    }                                       
-    
-     @protection@ static FacesMessage getMessage(FacesContext context, String messageId,
-                                       Object param0, Object param1) {
-         return getMessage(context, messageId, new Object[]{param0, param1});                                        
-    }                                       
-
-     @protection@ static FacesMessage getMessage(FacesContext context, String messageId,
-                                       Object param0, Object param1,
-                                       Object param2) {
-         return getMessage(context, messageId, 
-             new Object[]{param0, param1, param2});                                        
-    }                                       
-
-     @protection@ static FacesMessage getMessage(FacesContext context, String messageId,
-                                       Object param0, Object param1,
-                                       Object param2, Object param3) {
-         return getMessage(context, messageId, 
-                 new Object[]{param0, param1, param2, param3});                                        
-    }                                       
+                       
 
     // Gets the "label" property from the component.
-
     @protection@ static Object getLabel(FacesContext context, 
-        UIComponent component) {
+                                        UIComponent component) {
+                                        
         Object o = component.getAttributes().get("label");
         if (o == null || (o instanceof String && ((String) o).length() == 0)) {
             o = component.getValueBinding("label");
@@ -243,22 +193,22 @@ import java.io.IOException;
     }
 
     protected static Application getApplication() {
-	FacesContext context = FacesContext.getCurrentInstance();
-	if (context != null) {
-	    return (FacesContext.getCurrentInstance().getApplication());
-	}
-	ApplicationFactory afactory = (ApplicationFactory)
-	    FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
-	return (afactory.getApplication());
+        FacesContext context = FacesContext.getCurrentInstance();
+        if (context != null) {
+            return (FacesContext.getCurrentInstance().getApplication());
+        }
+        ApplicationFactory afactory = (ApplicationFactory)
+            FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
+        return (afactory.getApplication());
     }
 
     protected static ClassLoader getCurrentLoader(Object fallbackClass) {
         ClassLoader loader =
-	    Thread.currentThread().getContextClassLoader();
-	if (loader == null) {
-	    loader = fallbackClass.getClass().getClassLoader();
-	}
-	return loader;
+            Thread.currentThread().getContextClassLoader();
+        if (loader == null) {
+            loader = fallbackClass.getClass().getClassLoader();
+        }
+        return loader;
     }
 
     /**
@@ -347,4 +297,5 @@ import java.io.IOException;
         private Object[] parameters;
         private Object[] resolvedParameters;
     }
+    
 } // end of class MessageFactory
