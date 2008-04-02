@@ -29,7 +29,7 @@
 # This build.properties allows for the building of 
 # javaserverfaces-sources against Glassfish.
 #
-# $Id: build.properties.glassfish,v 1.6 2006/01/27 22:22:57 rlubke Exp $
+# $Id: build.properties.glassfish,v 1.7 2006/03/06 16:28:23 rogerk Exp $
 # -----------------------------------------------------------------------------
 
 # --------------------------------------------------
@@ -108,7 +108,7 @@ endorsed.dirs=
 # --------------------------------------------------
 dependency.base.dir=<SET TO BASE DIRECTORY>
 junit.home=${dependency.base.dir}/junit3.8.1
-htmlunit.home=${dependency.base.dir}/htmlunit-1.4
+htmlunit.home=${dependency.base.dir}/htmlunit-1.8
 cactus.home=${dependency.base.dir}/jakarta-cactus-13-1.7.1
 taglibdoc.home=${dependency.base.dir}/taglibrarydoc-1_3
 

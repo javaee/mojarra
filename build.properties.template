@@ -30,7 +30,7 @@
 # javaserverfaces-sources for your local environment.  It defines the location
 # of all external modules that the javaserverfaces-source project relies on.
 #
-# $Id: build.properties.template,v 1.1 2005/12/14 22:27:06 rlubke Exp $
+# $Id: build.properties.template,v 1.2 2006/03/06 16:28:23 rogerk Exp $
 # -----------------------------------------------------------------------------
 
 # --------------------------------------------------
@@ -86,7 +86,7 @@ endorsed.dirs=
 # --------------------------------------------------
 dependency.base.dir=
 junit.home=${dependency.base.dir}/junit3.8.1
-htmlunit.home=${dependency.base.dir}/htmlunit-1.4
+htmlunit.home=${dependency.base.dir}/htmlunit-1.8
 cactus.home=${dependency.base.dir}/jakarta-cactus-13-1.4.1
 taglibdoc.home=${dependency.base.dir}/taglibrarydoc-1_3
 
