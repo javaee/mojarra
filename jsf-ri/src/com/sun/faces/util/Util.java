@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.84 2003/09/04 21:15:09 jvisvanathan Exp $
+ * $Id: Util.java,v 1.85 2003/09/08 19:33:08 horwat Exp $
  */
 
 /*
@@ -60,7 +60,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.84 2003/09/04 21:15:09 jvisvanathan Exp $
+ * @version $Id: Util.java,v 1.85 2003/09/08 19:33:08 horwat Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -406,19 +406,6 @@ private Util()
 	    loader = fallbackClass.getClass().getClassLoader();
 	}
 	return loader.loadClass(name);
-    }
-
-    /**
-     * Generate a new identifier currently used to uniquely identify
-     * components.
-     */
-    public static synchronized String generateId() {
-        if (id == Long.MAX_VALUE) {
-            id = 0;
-        } else { 
-            id++;
-        }
-        return Long.toHexString(id);
     }
 
     /**
