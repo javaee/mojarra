@@ -13,7 +13,7 @@
 
     <h1>UIInput</h1>
 
-    <h3>$Id: UIInput.jsp,v 1.11 2003/02/20 22:50:15 ofung Exp $</h3>
+    <h3>$Id: UIInput.jsp,v 1.12 2003/04/15 19:26:51 rkitain Exp $</h3>
 
     <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
     <%@ taglib uri="http://java.sun.com/jstl/fmt" prefix="fmt" %>
@@ -32,7 +32,7 @@
                    formName="standardRenderKitForm">
 
          <h:command_button id="standardRenderKitSubmit" 
-             commandName="standardRenderKitSubmit"
+             commandName="standardRenderKitSubmit" action="success"
              key="standardRenderKitSubmitLabel"
              bundle="basicBundle"> 
          </h:command_button>
@@ -71,8 +71,8 @@
 
          </table>
 
-         <h:command_button id="standardRenderKitSubmit" 
-             commandName="standardRenderKitSubmit"
+         <h:command_button id="standardRenderKitSubmit1" 
+             commandName="standardRenderKitSubmit" action="success"
              key="standardRenderKitSubmitLabel"
              bundle="basicBundle"> 
          </h:command_button>

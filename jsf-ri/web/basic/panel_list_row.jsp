@@ -75,13 +75,13 @@
 
                   <f:facet name="header">
 		    <h:panel_group>
-		      <h:output_text id="accountIdHeading1"
+		      <h:output_text id="accountIdHeading2"
 				  value="Account Id"/>
-		      <h:output_text id="nameHeading1"
+		      <h:output_text id="nameHeading2"
 				  value="Customer Name"/>
-		      <h:output_text id="symbolHeading1"
+		      <h:output_text id="symbolHeading2"
 				  value="Symbol"/>
-		      <h:output_text id="totalSalesHeading1"
+		      <h:output_text id="totalSalesHeading2"
 				  value="Total Sales"/>
 		    </h:panel_group>
                   </f:facet>

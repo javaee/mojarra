@@ -28,7 +28,7 @@
 
 <P>
               <h:command_button id="back" commandName="back" type="submit"
-                  label="Back">
+                  label="Back" action="success">
              </h:command_button>
 </P>
       </h:form>

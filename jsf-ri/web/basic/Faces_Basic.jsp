@@ -173,7 +173,7 @@
 
 	<TD>
 
-	      <h:command_hyperlink commandName="login" 
+	      <h:command_hyperlink commandName="login" action="success" 
                                    label="Link that behaves like a button" />
 
 	</TD>
@@ -313,7 +313,7 @@
       <TR>
         <TD><h:output_text id="buttonlabel1" value="Button rendered with 'label' attribute:" />
             <h:command_button id="mybutton" label="Login"
-                commandName="login">
+                commandName="login" action="success">
                 <f:action_listener type="basic.Action"/>
             </h:command_button>
         </TD>
@@ -336,7 +336,7 @@
       <TR>
         <TD><h:output_text id="buttonlabel4" value="Submit Button rendered with label from resource:" /> 
             <h:command_button type="submit" 
-                commandName="login" key="loginButton" >
+                commandName="login" key="loginButton" action="success" >
             </h:command_button>
         </TD>
       </TR>

@@ -15,7 +15,7 @@
              <td>
 
                <h:command_button id="command_button1"  
-                   commandName="standardRenderKitSubmit"
+                   commandName="standardRenderKitSubmit" action="success" 
                    label="command_button with hard coded label">
                </h:command_button>
 
