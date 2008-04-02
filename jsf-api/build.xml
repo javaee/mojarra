@@ -671,6 +671,10 @@ jsf-api.jar.
        </fileset>
       <classpath refid="compile.classpath"/>
     </javadoc>
+    <copy todir="${build.javadocs}/javax/faces/component" 
+          file="${src.dir}/javax/faces/component/UIComponentHierarchy.jpg" />
+    <copy todir="${build.javadocs}/javax/faces/event" 
+          file="${src.dir}/javax/faces/event/EventHierarchy.jpg" />
   </target>
 
 
