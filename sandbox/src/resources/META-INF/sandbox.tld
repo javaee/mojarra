@@ -161,11 +161,8 @@
             dataTable
         </name>
         <tag-class>
-            com.sun.faces.taglib.html_basic.DataTableTag
+            com.sun.faces.sandbox.taglib.AccessibleDataTableTag
         </tag-class>
-        <tei-class>
-            com.sun.faces.taglib.FacesTagExtraInfo
-        </tei-class>
         <body-content>
             JSP
         </body-content>
@@ -830,11 +827,8 @@
             column
         </name>
         <tag-class>
-            com.sun.faces.taglib.html_basic.ColumnTag
+            com.sun.faces.sandbox.taglib.AccessibleColumnTag
         </tag-class>
-        <tei-class>
-            com.sun.faces.taglib.FacesTagExtraInfo
-        </tei-class>
         <body-content>
             JSP
         </body-content>
