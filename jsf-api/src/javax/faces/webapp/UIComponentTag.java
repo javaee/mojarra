@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTag.java,v 1.51 2004/08/31 19:50:19 edburns Exp $
+ * $Id: UIComponentTag.java,v 1.52 2004/10/13 21:11:12 jayashri Exp $
  */
 
 /*
@@ -692,39 +692,30 @@ public abstract class UIComponentTag implements Tag {
         if (parentTag != null) {
             parentComponent = parentTag.getComponentInstance();
         } else {
-	    //
 	    // Special case.  The component to be found is the
 	    // UIViewRoot.
-	    //
-
 	    // see if this is the first time this tag instance is trying
 	    // to be bound to the UIViewRoot
-	    if (null == (parentComponent = (UIComponent)
-			 pageContext.getAttribute(CURRENT_VIEW_ROOT,
-						  PageContext.REQUEST_SCOPE))){
-		parentComponent = context.getViewRoot();
-		pageContext.setAttribute(CURRENT_VIEW_ROOT, parentComponent,
-					 PageContext.REQUEST_SCOPE);
-		// Has this UIViewRoot instance had a tag bound to it
-		// before?
-		if (null == 
-		    parentComponent.getAttributes().get(CURRENT_VIEW_ROOT)) {
-		    // No it hasn't.
-		    
-		    // make sure setProperties() and setId() are called
-		    // once per UIViewRoot instance.
-		    setProperties(parentComponent);
-		    if (null != this.id) {
-			parentComponent.setId(this.id);
-		    }
-		    parentComponent.getAttributes().put(CURRENT_VIEW_ROOT, 
-							CURRENT_VIEW_ROOT);
-		}
-		else if (binding == null) {
-		    setProperties(parentComponent);
-		}
+	    parentComponent = context.getViewRoot();
+            // Has this UIViewRoot instance had a tag bound to it
+            // before?
+            if (null == 
+                parentComponent.getAttributes().get(CURRENT_VIEW_ROOT)) {
+                // No it hasn't.
 
-	    }
+                // make sure setProperties() and setId() are called
+                // once per UIViewRoot instance.
+                setProperties(parentComponent);
+                if (null != this.id) {
+                    parentComponent.setId(this.id);
+                }
+                parentComponent.getAttributes().put(CURRENT_VIEW_ROOT, 
+                                                    CURRENT_VIEW_ROOT);
+            }
+            else if (binding == null) {
+                setProperties(parentComponent);
+            }
+
 	    // this is not the first time this tag instance is trying to
 	    // be bound to this UIViewRoot, take no extra action.
 		
