@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKit.java,v 1.15 2003/07/18 21:42:26 eburns Exp $
+ * $Id: RenderKit.java,v 1.16 2003/07/19 04:52:58 eburns Exp $
  */
 
 /*
@@ -73,23 +73,18 @@ public abstract class RenderKit {
      * character encoding.</p>
      *
      * <p>Implementors are advised to consult the
-     * <code>getContentType()</code> and
-     * <code>getCharacterEncoding()</code> methods of class {@link
-     * javax.servlet.ServletResponse} to get the required values for the
-     * parameters for this method.  Since the <code>Writer</code> for
-     * this response will already have been obtained (due to it
-     * ultimately being passed to this method), we know that the content
-     * type and character encoding cannot change during the rendering of
-     * the response.</p>
+     * <code>getCharacterEncoding()</code> method of class {@link
+     * javax.servlet.ServletResponse} to get the required value for the
+     * characterEncoding for this method.  Since the <code>Writer</code>
+     * for this response will already have been obtained (due to it
+     * ultimately being passed to this method), we know that the
+     * character encoding cannot change during the rendering of the
+     * response.</p>
      *
      * @param writer the Writer around which this {@link ResponseWriter}
      * must be built.
      *
-     * @param contentType the mime type for the writer.  Please see <a
-     * href="http://www.iana.org/assignments/media-types/">the IANA</a>
-     * for a list of mime-types.
-     *
-     * @param the character encoding, such as "ISO-8859-1" for this
+     * @param characterEncoding such as "ISO-8859-1" for this
      * ResponseWriter.  Please see <a
      * href="http://www.iana.org/assignments/character-sets">the
      * IANA</a> for a list of character encodings.
@@ -98,7 +93,6 @@ public abstract class RenderKit {
      */
 
     public abstract ResponseWriter getResponseWriter(Writer writer,
-						     String contentType,
 						     String characterEncoding);
 
 }

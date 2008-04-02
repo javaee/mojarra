@@ -1,5 +1,5 @@
 /*
- * $Id: ResponseWriter.java,v 1.5 2003/07/18 21:42:26 eburns Exp $
+ * $Id: ResponseWriter.java,v 1.6 2003/07/19 04:52:57 eburns Exp $
  */
 
 /*
@@ -26,15 +26,6 @@ import java.io.Writer;
  */
 
 public abstract class ResponseWriter extends Writer {
-
-    /**
-     * @return the MIME content type for this ResponseWriter.  Please see
-     * <a href="http://www.iana.org/assignments/media-types/">the
-     * IANA</a> for a list of mime-types.
-     *
-
-     */
-    public abstract String getContentType();
 
     /**
      * @return the character encoding, such as "ISO-8859-1" for this
