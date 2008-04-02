@@ -1,5 +1,5 @@
 /*
- * $Id: ManagedBeanBean.java,v 1.3 2004/02/04 23:46:08 ofung Exp $
+ * $Id: ManagedBeanBean.java,v 1.4 2004/04/28 01:41:31 eburns Exp $
  */
 
 /*
@@ -10,8 +10,9 @@
 package com.sun.faces.config.beans;
 
 
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 
 /**
@@ -57,31 +58,59 @@ public class ManagedBeanBean extends FeatureBean
     // ------------------------------------------- ManagedPropertyHolder Methods
 
 
-    private Map managedProperties = new TreeMap();
+    private List managedProperties = new ArrayList();
 
 
     public void addManagedProperty(ManagedPropertyBean descriptor) {
-        managedProperties.put(descriptor.getPropertyName(), descriptor);
+        managedProperties.add(descriptor);
     }
 
 
     public ManagedPropertyBean getManagedProperty(String name) {
-        return ((ManagedPropertyBean) managedProperties.get(name));
+	Iterator iter = managedProperties.iterator();
+	ManagedPropertyBean cur = null;
+	String  curName = null;
+	while (iter.hasNext()) {
+	    cur = (ManagedPropertyBean) iter.next();
+	    if (null == cur) {
+		continue;
+	    }
+	    curName = cur.getPropertyName();
+	    // if the name is null, and we're looking for null
+	    if (null == curName && null == name) {
+		return cur;
+	    }
+	    // not a match
+	    if (null == curName || null == name) {
+		continue;
+	    }
+	    // guaranteed that both are non-null
+	    if (curName.equals(name)) {
+		return cur;
+	    }
+	}
+	    
+        return null;
     }
 
 
     public ManagedPropertyBean[] getManagedProperties() {
         ManagedPropertyBean results[] =
             new ManagedPropertyBean[managedProperties.size()];
-        return ((ManagedPropertyBean[]) managedProperties.values().
-                toArray(results));
+        return ((ManagedPropertyBean[]) managedProperties.toArray(results));
     }
 
 
     public void removeManagedProperty(ManagedPropertyBean descriptor) {
-        managedProperties.remove(descriptor.getPropertyName());
+	if (null == descriptor) {
+	    return;
+	}
+	ManagedPropertyBean toRemove = 
+	    getManagedProperty(descriptor.getPropertyName());
+	if (null != toRemove) {
+	    managedProperties.remove(toRemove);
+	}
     }
-
 
     // ------------------------------------------------ MapEntriesHolder Methods
 

@@ -188,6 +188,38 @@
     </managed-property>
   </managed-bean>
 
+  <managed-bean>
+    <managed-bean-name>propertyOrder</managed-bean-name>
+    <managed-bean-class>
+      com.sun.faces.systest.model.PropertyOrderBean
+    </managed-bean-class>
+    <managed-bean-scope>none</managed-bean-scope>
+    <managed-property>
+      <property-name>one</property-name>
+      <value>one</value>
+    </managed-property>
+    <managed-property>
+      <property-name>two</property-name>
+      <value>two</value>
+    </managed-property>
+    <managed-property>
+      <property-name>three</property-name>
+      <value>three</value>
+    </managed-property>
+    <managed-property>
+      <property-name>four</property-name>
+      <value>four</value>
+    </managed-property>
+    <managed-property>
+      <property-name>listProperty</property-name>
+      <list-entries>
+        <value>five</value>
+        <value>six</value>
+        <value>seven</value>
+        <value>eight</value>
+      </list-entries>
+    </managed-property>
+  </managed-bean>
 
   <navigation-rule>
     <from-view-id>/redirect.jsp</from-view-id>
