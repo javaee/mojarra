@@ -1,5 +1,5 @@
 /* 
- * $Id: XulViewHandlerImpl.java,v 1.19 2004/02/05 16:24:40 rlubke Exp $ 
+ * $Id: XulViewHandlerImpl.java,v 1.20 2004/04/07 17:53:35 rkitain Exp $ 
  */ 
 
 
@@ -78,7 +78,7 @@ import java.util.Map;
 /**
  * <B>XulViewHandlerImpl</B> is the Xul non-JSP ViewHandler implementation
  *
- * @version $Id: XulViewHandlerImpl.java,v 1.19 2004/02/05 16:24:40 rlubke Exp $ *
+ * @version $Id: XulViewHandlerImpl.java,v 1.20 2004/04/07 17:53:35 rkitain Exp $ *
  * @see javax.faces.application.ViewHandler
  */
 public class XulViewHandlerImpl extends ViewHandler {
@@ -172,6 +172,7 @@ public class XulViewHandlerImpl extends ViewHandler {
         RuleSetBase ruleSet = null;
 
         root = new UIViewRoot();
+	root.setRenderKitId(RenderKitFactory.HTML_BASIC_RENDER_KIT);
 
         if (null == viewId) {
             // PENDING(edburns): need name for default view
