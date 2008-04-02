@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationImpl.java,v 1.78 2006/05/17 19:00:44 rlubke Exp $
+ * $Id: ApplicationImpl.java,v 1.79 2006/08/11 20:15:48 edburns Exp $
  */
 
 /*
@@ -82,6 +82,8 @@ import com.sun.faces.el.VariableResolverChainWrapper;
 import com.sun.faces.el.VariableResolverImpl;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
+import java.beans.PropertyEditor;
+import java.beans.PropertyEditorManager;
 
 
 /**
@@ -670,10 +672,48 @@ public class ApplicationImpl extends Application {
         }
         
         converterTypeMap.put(targetClass, converterClass);
+        addPropertyEditorIfNecessary(targetClass, converterClass);
         
         if (logger.isLoggable(Level.FINE)) {
             logger.fine("added converter of class type " + converterClass);
         }
+    }
+    
+    private final String [] STANDARD_BY_TYPE_CONVERTER_CLASSES = {
+      "java.math.BigDecimal",
+      "java.lang.Boolean",
+      "java.lang.Byte",
+      "java.lang.Character",
+      "java.lang.Double",
+      "java.lang.Float",
+      "java.lang.Integer",
+      "java.lang.Long",
+      "java.lang.Short",
+      "java.lang.Enum"
+    };
+    
+    /**
+     * <p>To enable EL Coercion to use JSF Custom converters, this 
+     * method will call <code>PropertyEditorManager.registerEditor()</code>,
+     * passing the <code>ConverterPropertyEditor</code> class for the
+     * <code>targetClass</code> if the target class is not one of the standard
+     * by-type converter target classes.
+     */
+    
+    private void addPropertyEditorIfNecessary(Class targetClass, String converterClass) {
+        PropertyEditor editor = PropertyEditorManager.findEditor(targetClass);
+        if (null != editor) {
+            return;
+        }
+        String className = targetClass.getName();
+        // Don't add a PropertyEditor for the standard by-type converters.
+        for (String standardClass : STANDARD_BY_TYPE_CONVERTER_CLASSES) {
+            if (-1 != standardClass.indexOf(className)) {
+                return;
+            }
+        }
+        PropertyEditorManager.registerEditor(targetClass, 
+                ConverterPropertyEditor.class);
     }
 
 

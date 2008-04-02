@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 
 <!--
- $Id: build-tests.xml,v 1.29 2006/07/31 23:05:02 rlubke Exp $
+ $Id: build-tests.xml,v 1.30 2006/08/11 20:15:49 edburns Exp $
 -->
 
 <!--
@@ -53,7 +53,8 @@
                    jar-ordering,                  
                    replace-lifecycle,
                    string-converter,
-                   replace-variableresolver"/>
+                   replace-variableresolver,
+                   converter-property-editor"/>
 
     <!-- 
        EXCLUDED APPLICATIONS:
@@ -80,6 +81,8 @@
               value="com/sun/faces/systest/StringConverterTestCase.class"/>
     <property name="replace-variableresolver" 
               value="com/sun/faces/systest/ReplaceVariableResolverTestCase.class"/>
+    <property name="converter-property-editor" 
+              value="com/sun/faces/systest/ConverterPropertyEditorTestCase.class"/>
     
     <!--
         EXCLUDED APPLICATIONS:

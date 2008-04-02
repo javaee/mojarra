@@ -62,7 +62,8 @@
                    jar-ordering,                  
                    replace-lifecycle,
                    string-converter,
-                   replace-variableresolver"/>
+                   replace-variableresolver,
+                   converter-property-editor"/>
 
     <!-- 
        EXCLUDED APPLICATIONS:

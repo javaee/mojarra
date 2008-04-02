@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicInputRenderer.java,v 1.34 2006/03/29 23:03:48 rlubke Exp $
+ * $Id: HtmlBasicInputRenderer.java,v 1.35 2006/08/11 20:15:48 edburns Exp $
  */
 
 /*
@@ -31,6 +31,7 @@
 
 package com.sun.faces.renderkit.html_basic;
 
+import com.sun.faces.application.ConverterPropertyEditor;
 import javax.el.ValueExpression;
 import javax.faces.application.Application;
 import javax.faces.component.UIComponent;
@@ -42,6 +43,7 @@ import javax.faces.convert.ConverterException;
 
 import com.sun.faces.util.MessageFactory;
 import com.sun.faces.util.MessageUtils;
+import java.util.Map;
 
 import java.util.logging.Level;
 
@@ -115,7 +117,7 @@ public abstract class HtmlBasicInputRenderer extends HtmlBasicRenderer {
         String newValue = (String) submittedValue;
         // if we have no local value, try to get the valueExpression.
         ValueExpression valueExpression = component.getValueExpression("value");
-
+        Class converterType = null;
         Converter converter = null;
         Object result = null;
         // If there is a converter attribute, use it to to ask application
@@ -126,8 +128,8 @@ public abstract class HtmlBasicInputRenderer extends HtmlBasicRenderer {
         }
 
         if (null == converter && null != valueExpression) {
-            Class converterType = valueExpression.getType(context.getELContext());
-           // if converterType is null, assume the modelType is "String".
+            converterType = valueExpression.getType(context.getELContext());
+            // if converterType is null, assume the modelType is "String".
             if (converterType == null ||
                 converterType == Object.class) {
                 if (logger.isLoggable(Level.FINE)) {
@@ -137,6 +139,7 @@ public abstract class HtmlBasicInputRenderer extends HtmlBasicRenderer {
                 }
                 return newValue;
             }
+
             // If the converterType is a String, and we don't have a 
             // converter-for-class for java.lang.String, assume the type is 
             // "String".
@@ -185,6 +188,14 @@ public abstract class HtmlBasicInputRenderer extends HtmlBasicRenderer {
         }
 
         if (converter != null) {
+            // If the conversion eventually falls to needing to use EL type coercion,
+            // make sure our special ConverterPropertyEditor knows about this value.
+            Map<String, Object> requestMap = context.getExternalContext().getRequestMap();
+            requestMap.put(ConverterPropertyEditor.TARGET_CLASS_ATTRIBUTE_NAME, 
+                    converterType);
+            requestMap.put(ConverterPropertyEditor.TARGET_COMPONENT_ATTRIBUTE_NAME, 
+                    component);
+
             result = converter.getAsObject(context, component, newValue);
             return result;
         } else {
