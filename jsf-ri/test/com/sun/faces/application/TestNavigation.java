@@ -1,5 +1,5 @@
 /*
- * $Id: TestNavigation.java,v 1.2 2003/04/04 17:54:30 eburns Exp $
+ * $Id: TestNavigation.java,v 1.3 2003/04/08 18:08:47 rkitain Exp $
  */
 
 /*
@@ -34,7 +34,7 @@ import com.sun.faces.ServletFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestNavigation.java,v 1.2 2003/04/04 17:54:30 eburns Exp $
+ * @version $Id: TestNavigation.java,v 1.3 2003/04/08 18:08:47 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -80,10 +80,17 @@ public class TestNavigation extends ServletFacesTestCase
         FacesContext context = getFacesContext();
         NavigationHandlerImpl navHandler = new NavigationHandlerImpl();
         
+        System.out.println("Testing page!=null actionref!=null outcome!=null search...");
         context.setTree(new SimpleTreeImpl(context, "/login.jsp"));
         navHandler.handleNavigation(context, "UserBean", "success");
         String newTreeId = context.getTree().getTreeId();
         assertTrue(newTreeId.equals("/home.jsp"));
+
+        System.out.println("Testing page!=null actionref==null outcome!=null search...");
+        context.setTree(new SimpleTreeImpl(context, "/login.jsp"));
+        navHandler.handleNavigation(context, null, "failure");
+        newTreeId = context.getTree().getTreeId();
+        assertTrue(newTreeId.equals("/login-retry.jsp"));
     }
 
     public void testFromActionListener() {

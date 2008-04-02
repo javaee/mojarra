@@ -1,5 +1,5 @@
 /*
- * $Id: NavigationConfig.java,v 1.4 2003/04/04 22:47:24 eburns Exp $
+ * $Id: NavigationConfig.java,v 1.5 2003/04/08 18:08:45 rkitain Exp $
  */
 
 /*
@@ -137,38 +137,26 @@ public class NavigationConfig {
        return navigationList;
     }
 
-    public String getTreeIdByPageOutcome(String treeId, String outcome) {
-        String returnTree = null;
-        for (int i=0; i<navigationList.size(); i++) {
-            Navigation navigation = (Navigation)navigationList.get(i);
-            if (null != navigation.outcome && null != navigation.page &&
-                null == navigation.action) {
-                if (navigation.page.equals(treeId) && 
-		    navigation.outcome.equals(outcome)) {
-                    returnTree = navigation.select;
-                    break;
-                }
+    public String getTreeId(String treeId, String actionRef, String outcome) {
+        String returnTreeId = null;
+        for (int i = 0; i < navigationList.size(); i++) {
+            Navigation nav = (Navigation) navigationList.get(i);
+            if ((nav.page != null) && !nav.page.equals(treeId)) {
+                continue;  // This entry does not match on tree id
             }
-        }
-        return returnTree;
-    }
-
-    public String getTreeIdByPageActionOutcome(String treeId, String actionRef, String outcome) {
-        String returnTree = null;
-        for (int i=0; i<navigationList.size(); i++) {
-            Navigation navigation = (Navigation)navigationList.get(i);
-            if (null == navigation.page || null == navigation.action || 
-                null == navigation.outcome) {
-                continue;
-            } else if (navigation.page.equals(treeId) && navigation.action.equals(actionRef) &&
-                navigation.outcome.equals(outcome)) {
-                returnTree = navigation.select;
-                break;
+            if ((nav.action != null) && !nav.action.equals(actionRef)) {
+                continue;  // This entry does not match on actionRef
             }
-        }
-        return returnTree;
+            if ((nav.outcome != null) && !nav.outcome.equals(outcome)) {
+                continue;  // This entry does not match on outcome
+            }
+            // If we get here, the current entry matches on all relevant criteria
+            returnTreeId = nav.select;
+            break;
+        } 
+        return returnTreeId;
     }
-
+ 
     class Navigation extends Object {
 	public String page = null;
 	public String action = null;

@@ -1,5 +1,5 @@
 /*
- * $Id: NavigationHandlerImpl.java,v 1.3 2003/04/04 18:42:54 rkitain Exp $
+ * $Id: NavigationHandlerImpl.java,v 1.4 2003/04/08 18:08:46 rkitain Exp $
  */
 
 /*
@@ -56,15 +56,9 @@ public class NavigationHandlerImpl extends NavigationHandler {
             throw new RuntimeException(Util.getExceptionMessage(Util.NULL_CONFIGURATION_ERROR_MESSAGE_ID));
         }
 
-//PENDING(rogerk) Some initial cases;  Thee will be more when the spec is fleshed out;
-
         String newTreeId = null;
 
-        if (null == actionRef) {
-            newTreeId = navConfig.getTreeIdByPageOutcome(treeId, outcome);
-        } else { 
-            newTreeId = navConfig.getTreeIdByPageActionOutcome(treeId, actionRef, outcome);
-        }
+        newTreeId = navConfig.getTreeId(treeId, actionRef, outcome);
 
         if (newTreeId != null) {
             TreeFactory treeFactory = (TreeFactory)

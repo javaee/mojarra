@@ -1,5 +1,5 @@
 /*
- * $Id: TestActionListenerImpl.java,v 1.1 2003/04/04 18:42:55 rkitain Exp $
+ * $Id: TestActionListenerImpl.java,v 1.2 2003/04/08 18:08:47 rkitain Exp $
  */
 
 /*
@@ -25,7 +25,6 @@ import javax.faces.event.ActionEvent;
 import com.sun.faces.context.FacesContextImpl;
 import com.sun.faces.tree.SimpleTreeImpl;
 
-
 import com.sun.faces.ServletFacesTestCase;
 
 /**
@@ -34,7 +33,7 @@ import com.sun.faces.ServletFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestActionListenerImpl.java,v 1.1 2003/04/04 18:42:55 rkitain Exp $
+ * @version $Id: TestActionListenerImpl.java,v 1.2 2003/04/08 18:08:47 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -82,7 +81,6 @@ public class TestActionListenerImpl extends ServletFacesTestCase
     public void testProcessAction() {
         FacesContext context = getFacesContext();
 
-
         System.out.println("Testing With Action Literal Set...");
 
         UICommand command = new UICommand();
@@ -103,6 +101,7 @@ public class TestActionListenerImpl extends ServletFacesTestCase
         command = new UICommand();
         command.setAction("failure");
         command.setActionRef("UserBean");
+        context.setTree(new SimpleTreeImpl(context, "/login.jsp"));
 
         actionListener.processAction(actionEvent);
 
