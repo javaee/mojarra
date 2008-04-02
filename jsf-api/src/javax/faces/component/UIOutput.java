@@ -1,5 +1,5 @@
 /*
- * $Id: UIOutput.java,v 1.36 2003/10/25 00:50:41 craigmcc Exp $
+ * $Id: UIOutput.java,v 1.37 2003/11/06 15:39:44 eburns Exp $
  */
 
 /*
@@ -182,8 +182,7 @@ public class UIOutput extends UIComponentBase
     }
 
 
-    public void restoreState(FacesContext context, Object state)
-        throws IOException {
+    public void restoreState(FacesContext context, Object state) {
 
         Object values[] = (Object[]) state;
         super.restoreState(context, values[0]);

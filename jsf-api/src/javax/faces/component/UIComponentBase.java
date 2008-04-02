@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.79 2003/11/01 00:46:05 craigmcc Exp $
+ * $Id: UIComponentBase.java,v 1.80 2003/11/06 15:39:42 eburns Exp $
  */
 
 /*
@@ -1371,12 +1371,7 @@ public abstract class UIComponentBase extends UIComponent {
         Object [] childState = (Object []) stateStruct[CHILD_STATE];
         
         // Process this component itself
-        try {
-            restoreState(context, stateStruct[MY_STATE]);
-        }
-        catch (IOException ioe) {
-            throw new FacesException(ioe);
-        }
+	restoreState(context, stateStruct[MY_STATE]);
         
         int i = 0;
         
@@ -1455,8 +1450,7 @@ public abstract class UIComponentBase extends UIComponent {
     }
 
 
-    public void restoreState(FacesContext context, Object state)
-        throws IOException {
+    public void restoreState(FacesContext context, Object state) {
 
         Object values[] = (Object[]) state;
         // we need to get the map that knows how to handle attribute/property 

@@ -426,8 +426,7 @@ public class UIData extends UIComponentBase
     }
 
 
-    public void restoreState(FacesContext context, Object state)
-        throws IOException {
+    public void restoreState(FacesContext context, Object state) {
 
         Object values[] = (Object[]) state;
         super.restoreState(context, values[0]);

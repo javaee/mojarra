@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectItem.java,v 1.22 2003/10/25 00:34:38 craigmcc Exp $
+ * $Id: UISelectItem.java,v 1.23 2003/11/06 15:39:44 eburns Exp $
  */
 
 /*
@@ -205,8 +205,7 @@ public class UISelectItem extends UIComponentBase implements ValueHolder {
     }
 
 
-    public void restoreState(FacesContext context, Object state)
-        throws IOException {
+    public void restoreState(FacesContext context, Object state) {
 
         Object values[] = (Object[]) state;
         super.restoreState(context, values[0]);

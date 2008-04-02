@@ -1,5 +1,5 @@
 /*
- * $Id: StateHolderSaver.java,v 1.2 2003/10/06 18:34:17 eburns Exp $
+ * $Id: StateHolderSaver.java,v 1.3 2003/11/06 15:39:42 eburns Exp $
  */
 
 /*
@@ -76,14 +76,9 @@ public class StateHolderSaver extends Object implements Serializable {
 
         if (null != result && null != savedState &&
 	    result instanceof StateHolder) {
-	    try {
-		// don't need to check transient, since that was done on
-		// the saving side.
-		((StateHolder)result).restoreState(context, savedState);
-	    }
-	    catch (IOException ioe) {
-		throw new IllegalStateException(ioe.getMessage());
-	    }
+	    // don't need to check transient, since that was done on
+	    // the saving side.
+	    ((StateHolder)result).restoreState(context, savedState);
         }
         return result;
     }

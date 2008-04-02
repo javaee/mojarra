@@ -1,5 +1,5 @@
 /*
- * $Id: UIViewRoot.java,v 1.12 2003/10/24 17:45:33 rlubke Exp $
+ * $Id: UIViewRoot.java,v 1.13 2003/11/06 15:39:45 eburns Exp $
  */
 
 /*
@@ -313,8 +313,7 @@ public class UIViewRoot extends UIComponentBase {
     }
 
 
-    public void restoreState(FacesContext context, Object state)
-        throws IOException {
+    public void restoreState(FacesContext context, Object state) {
 
         Object values[] = (Object[]) state;
         super.restoreState(context, values[0]);

@@ -1,5 +1,5 @@
 /*
- * $Id: UICommand.java,v 1.50 2003/10/30 23:04:52 craigmcc Exp $
+ * $Id: UICommand.java,v 1.51 2003/11/06 15:39:42 eburns Exp $
  */
 
 /*
@@ -277,8 +277,7 @@ public class UICommand extends UIComponentBase
     }
 
 
-    public void restoreState(FacesContext context, Object state)
-        throws IOException {
+    public void restoreState(FacesContext context, Object state) {
         removeDefaultActionListener(context);
 
         Object values[] = (Object[]) state;

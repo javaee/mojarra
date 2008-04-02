@@ -1,5 +1,5 @@
 /*
- * $Id: UIInput.java,v 1.43 2003/10/31 21:40:18 eburns Exp $
+ * $Id: UIInput.java,v 1.44 2003/11/06 15:39:43 eburns Exp $
  */
 
 /*
@@ -648,8 +648,7 @@ public class UIInput extends UIOutput {
     }
 
 
-    public void restoreState(FacesContext context, Object state)
-        throws IOException {
+    public void restoreState(FacesContext context, Object state) {
 
         Object values[] = (Object[]) state;
         super.restoreState(context, values[0]);

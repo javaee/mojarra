@@ -1,5 +1,5 @@
 /*
- * $Id: StateHolder.java,v 1.10 2003/11/04 17:13:55 eburns Exp $
+ * $Id: StateHolder.java,v 1.11 2003/11/06 15:39:42 eburns Exp $
  */
 
 /*
@@ -8,8 +8,6 @@
  */
 
 package javax.faces.component;
-
-import java.io.IOException;
 
 import javax.faces.context.FacesContext;
 
@@ -65,7 +63,7 @@ public interface StateHolder {
      *  <code>state</code> are <code>null</code>
      */
 
-    public void restoreState(FacesContext context, Object state) throws IOException;
+    public void restoreState(FacesContext context, Object state);
 
     /**
      *

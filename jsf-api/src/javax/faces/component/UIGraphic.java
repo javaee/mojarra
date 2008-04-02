@@ -1,5 +1,5 @@
 /*
- * $Id: UIGraphic.java,v 1.26 2003/11/05 03:42:24 eburns Exp $
+ * $Id: UIGraphic.java,v 1.27 2003/11/06 15:39:43 eburns Exp $
  */
 
 /*
@@ -152,8 +152,7 @@ public class UIGraphic extends UIComponentBase implements ValueHolder {
     }
 
 
-    public void restoreState(FacesContext context, Object state)
-        throws IOException {
+    public void restoreState(FacesContext context, Object state) {
 
         Object values[] = (Object[]) state;
         super.restoreState(context, values[0]);
