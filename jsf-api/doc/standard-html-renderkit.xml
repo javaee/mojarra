@@ -1291,16 +1291,6 @@
       </property-extension>
     </property>
     <property>
-      <description>The clientId of the component for which to display messages.</description>
-      <display-name></display-name>
-      <icon></icon>
-      <property-name>for</property-name>
-      <property-class>java.lang.String</property-class>
-      <property-extension>
-        <tag-attribute>yes</tag-attribute>
-      </property-extension>
-    </property>
-    <property>
       <description>If false, the component must not display any summary, defaults to true.</description>
       <display-name></display-name>
       <icon></icon>
