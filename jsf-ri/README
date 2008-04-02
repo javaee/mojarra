@@ -350,6 +350,12 @@ well as logging for rest of the RI will be done in a future release.
 Known Issues With This Release
 ==============================
 
+* When saving state on the server, there is no way for the server to
+  know that a view has expired.  Thus, if the JSP page changes between
+  requests, it's possible there will be inconsistencies between the
+  restored tree and the JSP page.  Therefore, if you change the JSP
+  page, you need to re-start the browser so that the session is lost.
+
 * When deploying on a non-JWSDP container, you must include all the
   dependent jars in your webapp's WEB-INF/lib directory.  It's possible
   it may work without doing this, but this is not a supported
