@@ -1,5 +1,5 @@
 /*
- * $Id: RadioRenderer.java,v 1.67 2004/05/04 19:55:08 rlubke Exp $
+ * $Id: RadioRenderer.java,v 1.68 2004/07/28 20:36:16 rogerk Exp $
  */
 
 /*
@@ -126,7 +126,9 @@ public class RadioRenderer extends SelectManyCheckboxListRenderer {
         // Apply HTML 4.x attributes specified on UISelectMany component to all 
         // items in the list except styleClass and style which are rendered as
         // attributes of outer most table.
-        Util.renderPassThruAttributes(writer, component, new String[]{"style"});
+        Util.renderPassThruAttributes(writer, component,
+                                      new String[]{"style", "border"});
+
         Util.renderBooleanPassThruAttributes(writer, component);
 
         String itemLabel = curItem.getLabel();
