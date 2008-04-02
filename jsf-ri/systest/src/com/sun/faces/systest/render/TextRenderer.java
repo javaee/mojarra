@@ -1,5 +1,5 @@
 /*
- * $Id: TextRenderer.java,v 1.14 2006/01/11 15:28:15 rlubke Exp $
+ * $Id: TextRenderer.java,v 1.15 2006/03/15 20:10:33 rlubke Exp $
  */
 
 /*
@@ -31,8 +31,8 @@
 
 package com.sun.faces.systest.render;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import com.sun.org.apache.commons.logging.Log;
+import com.sun.org.apache.commons.logging.LogFactory;
 
 import com.sun.faces.util.MessageFactory;
 import com.sun.faces.util.Util;

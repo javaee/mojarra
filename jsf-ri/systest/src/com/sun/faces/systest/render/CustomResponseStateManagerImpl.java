@@ -1,5 +1,5 @@
 /*
- * $Id: CustomResponseStateManagerImpl.java,v 1.5 2006/01/06 15:42:16 rlubke Exp $
+ * $Id: CustomResponseStateManagerImpl.java,v 1.6 2006/03/15 20:10:33 rlubke Exp $
  */
 
 /*
@@ -33,8 +33,8 @@ package com.sun.faces.systest.render;
 import com.sun.faces.renderkit.ByteArrayGuard;
 import com.sun.faces.util.Base64;
 import com.sun.faces.util.Util;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import com.sun.org.apache.commons.logging.Log;
+import com.sun.org.apache.commons.logging.LogFactory;
 
 import javax.faces.application.StateManager.SerializedView;
 import javax.faces.application.StateManager;

@@ -1,5 +1,5 @@
 /*
- * $Id: FormRenderer.java,v 1.3 2006/01/11 15:28:15 rlubke Exp $
+ * $Id: FormRenderer.java,v 1.4 2006/03/15 20:10:33 rlubke Exp $
  */
 
 /*
@@ -35,8 +35,8 @@ import com.sun.faces.RIConstants;
 import com.sun.faces.renderkit.RenderKitUtils;
 import com.sun.faces.util.MessageUtils;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import com.sun.org.apache.commons.logging.Log;
+import com.sun.org.apache.commons.logging.LogFactory;
 
 import javax.faces.component.NamingContainer;
 import javax.faces.component.UIComponent;

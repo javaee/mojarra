@@ -83,8 +83,8 @@
 package com.sun.faces.systest.ant;
 
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import com.sun.org.apache.commons.logging.Log;
+import com.sun.org.apache.commons.logging.LogFactory;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
 
@@ -174,7 +174,7 @@ import java.util.Map;
  * </ul>
  *
  * @author Craig R. McClanahan
- * @version $Revision: 1.15 $ $Date: 2006/02/14 19:59:44 $
+ * @version $Revision: 1.16 $ $Date: 2006/03/15 20:10:34 $
  */
 
 public class SystestClient extends Task {

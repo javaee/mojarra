@@ -1,5 +1,5 @@
 /*
- * $Id: ButtonRenderer.java,v 1.4 2006/01/11 15:28:15 rlubke Exp $
+ * $Id: ButtonRenderer.java,v 1.5 2006/03/15 20:10:33 rlubke Exp $
  */
 
 /*
@@ -35,8 +35,8 @@ import com.sun.faces.util.Util;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.renderkit.RenderKitUtils;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import com.sun.org.apache.commons.logging.Log;
+import com.sun.org.apache.commons.logging.LogFactory;
 
 import javax.faces.component.NamingContainer;
 import javax.faces.component.UICommand;
