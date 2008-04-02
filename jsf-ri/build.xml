@@ -12,7 +12,7 @@
 
   <property name="Name" value="JavaServer Faces RI"/>
   <property name="name" value="jsf-ri"/>
-  <property name="version" value="20031103"/>
+  <property name="version" value="20031110_BETA_SCF"/>
 
 <!-- ************ Per user local properties ******************************* -->
 
@@ -332,6 +332,8 @@ must exist.  This is necessary for the MessageFactory class.
   </target>
 
   <target name="tlddocs">
+
+    <echo message="${build.home}"/>
 
     <java fork="true" jar="${tlddoc.jar}">
       <arg line="-d ${build.home}/tlddocs"/>

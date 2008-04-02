@@ -78,7 +78,7 @@
   
   <property name="Name" value="JSF Demos"/>
   <property name="name" value="jsf-demo"/>
-  <property name="version" value="20031103"/>
+  <property name="version" value="20031110_BETA_SCF"/>
   
   <property name="build.home" value="${basedir}/build"/>
 
@@ -328,7 +328,7 @@
     <echo> copy the necessary libs </echo>
     <copy file="${jsf-api.jar}" todir="${dist.home}/lib"/>
     <copy file="${jsf-ri.jar}" todir="${dist.home}/lib"/>
-    <copy file="${jsf-ri.home}/conf/share/html_basic.tld" todir="${dist.home}/lib"/>
+    <copy file="${jsf-ri.home}/build/generate/conf/share/html_basic.tld" todir="${dist.home}/lib"/>
     <copy file="${jsf-ri.home}/conf/share/jsf_core.tld" todir="${dist.home}/lib"/>
   </target>
 
@@ -388,7 +388,7 @@
   <target name="ri.tlddocs" >
 
     <echo> Build the RI TLDDocs </echo>
-    <ant dir="${jsf-ri.home}" 
+    <ant inheritAll="false" dir="${jsf-ri.home}" 
          antfile="${jsf-ri.home}/build.xml" target="tlddocs"/>
     <echo> Copy the RI Javadocs to the dist </echo>
     <copy todir="${dist.home}/tlddocs">

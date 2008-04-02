@@ -19,7 +19,7 @@
 
   <property name="Name"             value="JavaServer Faces API"/>
   <property name="name"             value="jsf-api"/>
-  <property name="version"          value="20031103"/>
+  <property name="version"          value="20031110_BETA_SCF"/>
 
   <property name="debug"            value="true" />
   <property name="deprecation"      value="false" />
