@@ -1,5 +1,5 @@
 /*
- * $Id: Lifecycle.java,v 1.21 2003/03/13 01:12:22 craigmcc Exp $
+ * $Id: Lifecycle.java,v 1.22 2003/06/21 03:23:42 craigmcc Exp $
  */
 
 /*
@@ -11,6 +11,7 @@ package javax.faces.lifecycle;
 
 import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
+import javax.faces.event.PhaseListener;
 
 
 /**
@@ -61,6 +62,19 @@ public abstract class Lifecycle {
 
 
     /**
+     * <p>Register a new {@link PhaseListener} instance that is interested in
+     * being notified before and after the processing for standard phases of
+     * the request processing lifecycle.</p>
+     *
+     * @param listener The {@link PhaseListener} to be registered
+     *
+     * @exception NullPointerException if <code>listener</code>
+     *  is <code>null</code>
+     */
+    public abstract void addPhaseListener(PhaseListener listener);
+
+
+    /**
      * <p>Execute all of the phases of the request processing lifecycle,
      * as described in the JavaServer Faces Specification, in the specified
      * order.  The processing flow can be affected (by the application,
@@ -77,6 +91,17 @@ public abstract class Lifecycle {
      *  is <code>null</code>
      */
     public abstract void execute(FacesContext context) throws FacesException;
+
+
+    /**
+     * <p>Deregister an existing {@link PhaseListener} instance that is no
+     * longer interested in being notified before and after the processing
+     * for standard phases of the request processing lifecycle.  If no such
+     * listener instance has been registered, no action is taken.</p>
+     *
+     * @param listener The {@link PhaseListener} to be deregistered
+     */
+    public abstract void removePhaseListener(PhaseListener listener);
 
 
 }
