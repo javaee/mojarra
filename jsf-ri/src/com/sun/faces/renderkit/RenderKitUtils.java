@@ -1030,7 +1030,8 @@ public class RenderKitUtils {
                               .getResource("com/sun/faces/sunjsf.js");
                         if (url == null) {
                             LOGGER.severe(
-                                  "jsf.renderkit.resstatemgr.clientbuf_not_integer");
+                                  "jsf.renderkit.util.cannot_load_js");
+                            return;
                         }
                         URLConnection conn = url.openConnection();
                         conn.setUseCaches(false);
