@@ -13,7 +13,7 @@
 
 
              <td>
-                 <h:selectone_radio id="shipType" layout="LINE_DIRECTION" >
+                 <h:selectone_radio id="shipType" layout="LINE_DIRECTION" value="nextDay" >
 
                 <h:selectitem itemValue="nextDay" itemLabel="Next Day"
                       tabindex="30" title="Next day shipment"/>

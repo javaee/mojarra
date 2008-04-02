@@ -92,24 +92,23 @@ Powered by Faces components:
     </f:facet>
 
     <h:panel_group>
-      <h:output_text value="Hi folks!  My name is 'Duke'.  Here's a sample of some of the components you can build:<p>"/>
+      <h:output_text value="Hi folks!  My name is 'Duke'.  Here's a sample of some of the components you can build:"/>
     </h:panel_group>
     <h:panel_group>
       <h:command_button label="button"/>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
       <h:selectboolean_checkbox checked="true" alt="checkbox"/>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-      <h:selectone_radio layout="PAGE_DIRECTION" border="1">
-        <h:selectitem itemValue="nextDay" itemLabel="Next Day" selected="true"/>
+      <h:selectone_radio layout="PAGE_DIRECTION" border="1" value="nextMonth">
+        <h:selectitem itemValue="nextDay" itemLabel="Next Day"/>
         <h:selectitem itemValue="nextWeek" itemLabel="Next Week"  />
         <h:selectitem itemValue="nextMonth" itemLabel="Next Month" />
       </h:selectone_radio>
       <h:selectone_listbox id="appleQuantity" title="Select Quantity"
-        accesskey="N" tabindex="20" >
+        accesskey="N" tabindex="20" value="4" >
         <h:selectitem  disabled="true" itemValue="0" itemLabel="0"/>
         <h:selectitem  itemValue="1" itemLabel="1" title="One" />
         <h:selectitem  itemValue="2" itemLabel="2" title="Two" />
         <h:selectitem  itemValue="3" itemLabel="3" title="Three" />
-        <h:selectitem  itemValue="4" itemLabel="4" title="Four" 
-           selected="true"/>
+        <h:selectitem  itemValue="4" itemLabel="4" title="Four" />
       </h:selectone_listbox>
     </h:panel_group>
 
