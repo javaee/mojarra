@@ -1,5 +1,5 @@
 /*
- * $Id: FacesMessage.java,v 1.10 2004/02/26 20:30:24 eburns Exp $
+ * $Id: FacesMessage.java,v 1.11 2005/03/11 21:05:22 edburns Exp $
  */
 
 /*
@@ -21,10 +21,10 @@ import java.util.HashMap;
 /**
  * <p><strong>FacesMessage</strong> represents a single validation (or
  * other) message, which is typically associated with a particular
- * component in the view.  A {@link FacesMessage} instance may be created
+ * component in the view.  A {@link javax.faces.application.FacesMessage} instance may be created
  * based on a specific <code>messageId</code>.  The specification defines
  * the set of <code>messageId</code>s for which there must be
- * {@link FacesMessage} instances.</p>
+ * {@link javax.faces.application.FacesMessage} instances.</p>
  *
  * <p>The implementation must take the following steps when creating
  * <code>FacesMessage</code> instances given a <code>messageId</code>:</p>
@@ -125,7 +125,7 @@ public class FacesMessage implements Serializable {
     
 
     /**
-     * <p>Immutable <code>List</code> of valid {@link FacesMessage.Severity}
+     * <p>Immutable <code>List</code> of valid {@link javax.faces.application.FacesMessage.Severity}
      * instances, in ascending order of their ordinal value.</p>
      */
     public static final List VALUES = 
@@ -141,7 +141,7 @@ public class FacesMessage implements Serializable {
     
 
     /**
-     * <p>Immutable <code>Map</code> of valid {@link FacesMessage.Severity}
+     * <p>Immutable <code>Map</code> of valid {@link javax.faces.application.FacesMessage.Severity}
      * instances, keyed by name.</p>
      */
     public final static Map VALUES_MAP = 
@@ -152,7 +152,7 @@ public class FacesMessage implements Serializable {
 
 
     /**
-     * <p>Construct a new {@link FacesMessage} with no initial
+     * <p>Construct a new {@link javax.faces.application.FacesMessage} with no initial
      * values. The severity is set to Severity.INFO.</p>
      */
     public FacesMessage() {
@@ -162,7 +162,7 @@ public class FacesMessage implements Serializable {
     }
 
     /**
-     * <p>Construct a new {@link FacesMessage} with just a summary.  The
+     * <p>Construct a new {@link javax.faces.application.FacesMessage} with just a summary.  The
      * detail is <code>null</code>, the severity is set to
      * <code>Severity.INFO</code>.</p>
      */
@@ -176,7 +176,7 @@ public class FacesMessage implements Serializable {
 
 
     /**
-     * <p>Construct a new {@link FacesMessage} with the specified initial
+     * <p>Construct a new {@link javax.faces.application.FacesMessage} with the specified initial
      * values.  The severity is set to Severity.INFO.</p>
      *
      * @param summary Localized summary message text
@@ -344,7 +344,7 @@ public class FacesMessage implements Serializable {
 
 
 	/**
-	 * <p>Compare this {@link FacesMessage.Severity} instance to the
+	 * <p>Compare this {@link javax.faces.application.FacesMessage.Severity} instance to the
 	 * specified one.  Returns a negative integer, zero, or a
 	 * positive integer if this object is less than, equal to, or
 	 * greater than the specified object.</p>

@@ -1,5 +1,5 @@
 /*
- * $Id: DoubleRangeValidator.java,v 1.44 2005/03/11 18:56:39 rogerk Exp $
+ * $Id: DoubleRangeValidator.java,v 1.45 2005/03/11 21:05:28 edburns Exp $
  */
 
 /*
@@ -32,7 +32,7 @@ import javax.faces.convert.Converter;
  *     has been configured on this {@link Validator}, check the component
  *     value against both limits.  If the component value is not within
  *     this specified range, throw a {@link ValidatorException} containing a
- *     {@link NOT_IN_RANGE_MESSAGE_ID} message.</li>
+ *     {@link #NOT_IN_RANGE_MESSAGE_ID} message.</li>
  * <li>If a <code>maximum</code> property has been configured on this
  *     {@link Validator}, check the component value against
  *     this limit.  If the component value is greater than the
@@ -67,7 +67,7 @@ public class DoubleRangeValidator implements Validator, StateHolder {
 
 
     /**
-     * <p>The message identifier of the {@link FacesMessage}
+     * <p>The message identifier of the {@link javax.faces.application.FacesMessage}
      * to be created if the maximum value check fails.  The message format
      * string for this message may optionally include the following
      * placeholders:
@@ -81,7 +81,7 @@ public class DoubleRangeValidator implements Validator, StateHolder {
         "javax.faces.validator.DoubleRangeValidator.MAXIMUM";
 
     /**
-     * <p>The message identifier of the {@link FacesMessage}
+     * <p>The message identifier of the {@link javax.faces.application.FacesMessage}
      * to be created if the minimum value check fails.  The message format
      * string for this message may optionally include the following
      * placeholders:
@@ -95,7 +95,7 @@ public class DoubleRangeValidator implements Validator, StateHolder {
         "javax.faces.validator.DoubleRangeValidator.MINIMUM";
 
     /**
-     * <p>The message identifier of the {@link FacesMessage} to be created if
+     * <p>The message identifier of the {@link javax.faces.application.FacesMessage} to be created if
      * the maximum or minimum value check fails, and both the maximum
      * and minimum values for this validator have been set.  The message
      * format string for this message may optionally include the following
@@ -111,7 +111,7 @@ public class DoubleRangeValidator implements Validator, StateHolder {
         "javax.faces.validator.DoubleRangeValidator.NOT_IN_RANGE";
 
     /**
-     * <p>The message identifier of the {@link FacesMessage}
+     * <p>The message identifier of the {@link javax.faces.application.FacesMessage}
      * to be created if the current value of this component is not of the
      * correct type.   The message format string for this message may 
      * optionally include a <code>{0}</code> placeholder that will be

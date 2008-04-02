@@ -1,5 +1,5 @@
 /*
- * $Id: BigDecimalConverter.java,v 1.8 2005/02/24 15:18:50 rogerk Exp $
+ * $Id: BigDecimalConverter.java,v 1.9 2005/03/11 21:05:24 edburns Exp $
  */
 
 /*
@@ -34,7 +34,7 @@ public class BigDecimalConverter implements Converter {
     public static final String CONVERTER_ID = "javax.faces.BigDecimal";
 
     /**
-     * <p>The message identifier of the {@link FacesMessage} to be created if
+     * <p>The message identifier of the {@link javax.faces.application.FacesMessage} to be created if
      * the conversion to <code>BigDecimal</code> fails.  The message format 
      * string for this message may optionally include the following 
      * placeholders:
@@ -49,7 +49,7 @@ public class BigDecimalConverter implements Converter {
         "javax.faces.converter.BigDecimalConverter.DECIMAL";
 
     /**
-     * <p>The message identifier of the {@link FacesMessage} to be created if
+     * <p>The message identifier of the {@link javax.faces.application.FacesMessage} to be created if
      *  the conversion of the <code>BigDecimal</code> value to 
      *  <code>String</code> fails.  The message format string for this message
      *  may optionally include the following placeholders:

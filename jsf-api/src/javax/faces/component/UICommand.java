@@ -1,5 +1,5 @@
 /*
- * $Id: UICommand.java,v 1.70 2005/03/10 21:39:14 jayashri Exp $
+ * $Id: UICommand.java,v 1.71 2005/03/11 21:05:22 edburns Exp $
  */
 
 /*
@@ -27,19 +27,20 @@ import javax.faces.event.PhaseId;
  * an application specific "command" or "action".  Such a component is
  * typically rendered as a push button, a menu item, or a hyperlink.</p>
  *
- * <p>When the <code>decode()</code> method of this {@link UICommand}, or
- * its corresponding {@link Renderer}, detects that this control has been
- * activated, it will queue an {@link ActionEvent}.
- * Later on, the <code>broadcast()</code> method will ensure that this
- * event is broadcast to all interested listeners.</p>
+ * <p>When the <code>decode()</code> method of this {@link UICommand},
+ * or its corresponding {@link javax.faces.render.Renderer}, detects
+ * that this control has been activated, it will queue an {@link
+ * ActionEvent}.  Later on, the <code>broadcast()</code> method will
+ * ensure that this event is broadcast to all interested listeners.</p>
  * 
  * <p>Listeners will be invoked in the following order:
  * <ol>
- *  <li>{@link ActionListener}s, in the order in which they were registered.
- *  <li>The "actionListener" {@link MethodBinding}
- *  <li>The default {@link ActionListener}, retrieved from the
- *      {@link Application} - and therefore, any attached "action"
- *      {@link MethodBinding}.
+ *  <li>{@link ActionListener}s, in the order in which they were
+ *  registered.</li>
+ *  <li>The "actionListener" {@link MethodBinding}</li>
+ *  <li>The default {@link ActionListener}, retrieved from the {@link
+ *  javax.faces.application.Application} - and therefore, any attached
+ *  "action" {@link MethodBinding}.</li>
  * </ol>
  * </p>
  * <p>By default, the <code>rendererType</code> property must be set to
@@ -272,7 +273,7 @@ public class UICommand extends UIComponentBase
      * processing, pass the {@link ActionEvent} being broadcast to the
      * method referenced by <code>actionListener</code> (if any),
      * and to the default {@link ActionListener} registered on the
-     * {@link Application}.</p>
+     * {@link javax.faces.application.Application}.</p>
      *
      * @param event {@link FacesEvent} to be broadcast
      *

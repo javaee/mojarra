@@ -1,5 +1,5 @@
 /*
- * $Id: Validator.java,v 1.25 2005/03/11 18:56:40 rogerk Exp $
+ * $Id: Validator.java,v 1.26 2005/03/11 21:05:28 edburns Exp $
  */
 
 /*
@@ -28,7 +28,7 @@ import javax.faces.application.FacesMessage;
  *
  * <p>Individual {@link Validator}s should examine the value and
  * component that they are passed, and throw a {@link ValidatorException}
- * containing a {@link FacesMessage}, documenting
+ * containing a {@link javax.faces.application.FacesMessage}, documenting
  * any failures to conform to the required rules.
  *
  * <p>For maximum generality, {@link Validator} instances may be
@@ -46,7 +46,7 @@ import javax.faces.application.FacesMessage;
 public interface Validator extends EventListener {
 
     /**
-     * <p>The message identifier of the {@link FacesMessage} to be created if
+     * <p>The message identifier of the {@link javax.faces.application.FacesMessage} to be created if
      * the maximum or minimum value check fails, and both the maximum
      * and minimum values for this validator have been set.  The message
      * format string for this message may optionally include a
@@ -63,7 +63,7 @@ public interface Validator extends EventListener {
      * <p>Perform the correctness checks implemented by this
      * {@link Validator} against the specified {@link UIComponent}.
      * If any violations are found, a {@link ValidatorException}
-     * will be thrown containing the {@link FacesMessage} describing
+     * will be thrown containing the {@link javax.faces.application.FacesMessage} describing
      * the failure.
      *
      * @param context FacesContext for the request we are processing

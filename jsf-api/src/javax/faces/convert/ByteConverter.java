@@ -1,5 +1,5 @@
 /*
- * $Id: ByteConverter.java,v 1.13 2005/02/24 15:18:50 rogerk Exp $
+ * $Id: ByteConverter.java,v 1.14 2005/03/11 21:05:25 edburns Exp $
  */
 
 /*
@@ -31,7 +31,7 @@ public class ByteConverter implements Converter {
     public static final String CONVERTER_ID = "javax.faces.Byte";
 
     /**
-     * <p>The message identifier of the {@link FacesMessage} to be created if
+     * <p>The message identifier of the {@link javax.faces.application.FacesMessage} to be created if
      * the conversion to <code>Byte</code> fails.  The message format
      * string for this message may optionally include the following
      * placeholders:
@@ -46,7 +46,7 @@ public class ByteConverter implements Converter {
         "javax.faces.converter.ByteConverter.BYTE";
                                                                                 
     /**
-     * <p>The message identifier of the {@link FacesMessage} to be created if
+     * <p>The message identifier of the {@link javax.faces.application.FacesMessage} to be created if
      *  the conversion of the <code>Byte</code> value to
      *  <code>String</code> fails.   The message format string for this message
      *  may optionally include the following placeholders:

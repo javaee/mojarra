@@ -1,5 +1,5 @@
 /*
- * $Id: BigIntegerConverter.java,v 1.8 2005/02/24 15:18:50 rogerk Exp $
+ * $Id: BigIntegerConverter.java,v 1.9 2005/03/11 21:05:25 edburns Exp $
  */
 
 /*
@@ -33,7 +33,7 @@ public class BigIntegerConverter implements Converter {
     public static final String CONVERTER_ID = "javax.faces.BigInteger";
 
     /**
-     * <p>The message identifier of the {@link FacesMessage} to be created if
+     * <p>The message identifier of the {@link javax.faces.application.FacesMessage} to be created if
      * the conversion to <code>BigInteger</code> fails.  The message format 
      * string for this message may optionally include the following 
      * placeholders:
@@ -48,7 +48,7 @@ public class BigIntegerConverter implements Converter {
         "javax.faces.converter.BigIntegerConverter.BIGINTEGER";
                                                                                 
     /**
-     * <p>The message identifier of the {@link FacesMessage} to be created if
+     * <p>The message identifier of the {@link javax.faces.application.FacesMessage} to be created if
      *  the conversion of the <code>BigInteger</code> value to
      *  <code>String</code> fails.   The message format string for this message
      *  may optionally include the following placeholders:

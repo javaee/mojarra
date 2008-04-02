@@ -1,5 +1,5 @@
 /*
- * $Id: BooleanConverter.java,v 1.14 2005/02/24 15:18:50 rogerk Exp $
+ * $Id: BooleanConverter.java,v 1.15 2005/03/11 21:05:25 edburns Exp $
  */
 
 /*
@@ -31,7 +31,7 @@ public class BooleanConverter implements Converter {
     public static final String CONVERTER_ID = "javax.faces.Boolean";
 
     /**
-     * <p>The message identifier of the {@link FacesMessage} to be created if
+     * <p>The message identifier of the {@link javax.faces.application.FacesMessage} to be created if
      * the conversion to <code>Boolean</code> fails.  The message format
      * string for this message may optionally include the following
      * placeholders:
@@ -45,7 +45,7 @@ public class BooleanConverter implements Converter {
         "javax.faces.converter.BooleanConverter.BOOLEAN";
                                                                                 
     /**
-     * <p>The message identifier of the {@link FacesMessage} to be created if
+     * <p>The message identifier of the {@link javax.faces.application.FacesMessage} to be created if
      *  the conversion of the <code>Boolean</code> value to
      *  <code>String</code> fails.   The message format string for this message
      *  may optionally include the following placeholders:

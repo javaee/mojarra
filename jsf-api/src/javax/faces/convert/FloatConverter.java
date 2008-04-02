@@ -1,5 +1,5 @@
 /*
- * $Id: FloatConverter.java,v 1.13 2005/02/24 15:18:52 rogerk Exp $
+ * $Id: FloatConverter.java,v 1.14 2005/03/11 21:05:26 edburns Exp $
  */
 
 /*
@@ -31,7 +31,7 @@ public class FloatConverter implements Converter {
     public static final String CONVERTER_ID = "javax.faces.Float";
 
     /**
-     * <p>The message identifier of the {@link FacesMessage} to be created if
+     * <p>The message identifier of the {@link javax.faces.application.FacesMessage} to be created if
      * the conversion to <code>Float</code> fails.  The message format
      * string for this message may optionally include the following
      * placeholders:
@@ -46,7 +46,7 @@ public class FloatConverter implements Converter {
         "javax.faces.converter.FloatConverter.FLOAT";
                                                                                 
     /**
-     * <p>The message identifier of the {@link FacesMessage} to be created if
+     * <p>The message identifier of the {@link javax.faces.application.FacesMessage} to be created if
      *  the conversion of the <code>Float</code> value to
      *  <code>String</code> fails.   The message format string for this message
      *  may optionally include the following placeholders:

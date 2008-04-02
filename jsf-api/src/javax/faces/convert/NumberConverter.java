@@ -1,5 +1,5 @@
 /*
- * $Id: NumberConverter.java,v 1.20 2005/02/24 15:18:52 rogerk Exp $
+ * $Id: NumberConverter.java,v 1.21 2005/03/11 21:05:27 edburns Exp $
  */
 
 /*
@@ -110,7 +110,7 @@ public class NumberConverter implements Converter, StateHolder {
     public static final String CONVERTER_ID = "javax.faces.Number";
 
     /**
-     * <p>The message identifier of the {@link FacesMessage} to be created if
+     * <p>The message identifier of the {@link javax.faces.application.FacesMessage} to be created if
      * the conversion to <code>Number</code> fails.  The message format
      * string for this message may optionally include the following
      * placeholders:
@@ -125,7 +125,7 @@ public class NumberConverter implements Converter, StateHolder {
         "javax.faces.converter.NumberConverter.CURRENCY";
 
     /**
-     * <p>The message identifier of the {@link FacesMessage} to be created if
+     * <p>The message identifier of the {@link javax.faces.application.FacesMessage} to be created if
      * the conversion to <code>Number</code> fails.  The message format
      * string for this message may optionally include the following
      * placeholders:
@@ -140,7 +140,7 @@ public class NumberConverter implements Converter, StateHolder {
         "javax.faces.converter.NumberConverter.NUMBER";
                                                                                 
     /**
-     * <p>The message identifier of the {@link FacesMessage} to be created if
+     * <p>The message identifier of the {@link javax.faces.application.FacesMessage} to be created if
      * the conversion to <code>Number</code> fails.  The message format
      * string for this message may optionally include the following
      * placeholders:
@@ -155,7 +155,7 @@ public class NumberConverter implements Converter, StateHolder {
         "javax.faces.converter.NumberConverter.PATTERN";
 
     /**
-     * <p>The message identifier of the {@link FacesMessage} to be created if
+     * <p>The message identifier of the {@link javax.faces.application.FacesMessage} to be created if
      * the conversion to <code>Number</code> fails.  The message format
      * string for this message may optionally include the following
      * placeholders:
@@ -170,7 +170,7 @@ public class NumberConverter implements Converter, StateHolder {
         "javax.faces.converter.NumberConverter.PERCENT";
 
     /**
-     * <p>The message identifier of the {@link FacesMessage} to be created if
+     * <p>The message identifier of the {@link javax.faces.application.FacesMessage} to be created if
      *  the conversion of the <code>Number</code> value to
      *  <code>String</code> fails.   The message format string for this message
      *  may optionally include the following placeholders:

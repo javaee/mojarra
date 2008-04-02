@@ -1,5 +1,5 @@
 /*
- * $Id: CharacterConverter.java,v 1.12 2005/02/24 15:18:50 rogerk Exp $
+ * $Id: CharacterConverter.java,v 1.13 2005/03/11 21:05:26 edburns Exp $
  */
 
 /*
@@ -31,7 +31,7 @@ public class CharacterConverter implements Converter {
     public static final String CONVERTER_ID = "javax.faces.Character";
 
     /**
-     * <p>The message identifier of the {@link FacesMessage} to be created if
+     * <p>The message identifier of the {@link javax.faces.application.FacesMessage} to be created if
      * the conversion to <code>Character</code> fails.  The message format
      * string for this message may optionally include the following
      * placeholders:
@@ -45,7 +45,7 @@ public class CharacterConverter implements Converter {
         "javax.faces.converter.CharacterConverter.CHARACTER";
                                                                                 
     /**
-     * <p>The message identifier of the {@link FacesMessage} to be created if
+     * <p>The message identifier of the {@link javax.faces.application.FacesMessage} to be created if
      *  the conversion of the <code>Character</code> value to
      *  <code>String</code> fails.   The message format string for this message
      *  may optionally include the following placeholders:

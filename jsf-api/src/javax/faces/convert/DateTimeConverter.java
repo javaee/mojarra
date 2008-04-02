@@ -1,5 +1,5 @@
 /*
- * $Id: DateTimeConverter.java,v 1.27 2005/02/24 15:18:50 rogerk Exp $
+ * $Id: DateTimeConverter.java,v 1.28 2005/03/11 21:05:26 edburns Exp $
  */
 
 /*
@@ -84,7 +84,7 @@ public class DateTimeConverter implements Converter, StateHolder {
     public static final String CONVERTER_ID = "javax.faces.DateTime";
 
     /**
-     * <p>The message identifier of the {@link FacesMessage} to be created if
+     * <p>The message identifier of the {@link javax.faces.application.FacesMessage} to be created if
      * the conversion to <code>Date</code> fails.  The message format
      * string for this message may optionally include the following
      * placeholders:
@@ -99,7 +99,7 @@ public class DateTimeConverter implements Converter, StateHolder {
         "javax.faces.converter.DateTimeConverter.DATE";
                                                                                 
     /**
-     * <p>The message identifier of the {@link FacesMessage} to be created if
+     * <p>The message identifier of the {@link javax.faces.application.FacesMessage} to be created if
      * the conversion to <code>Time</code> fails.  The message format
      * string for this message may optionally include the following
      * placeholders:
@@ -114,7 +114,7 @@ public class DateTimeConverter implements Converter, StateHolder {
         "javax.faces.converter.DateTimeConverter.TIME";
 
     /**
-     * <p>The message identifier of the {@link FacesMessage} to be created if
+     * <p>The message identifier of the {@link javax.faces.application.FacesMessage} to be created if
      * the conversion to <code>DateTime</code> fails.  The message format
      * string for this message may optionally include the following
      * placeholders:
@@ -129,7 +129,7 @@ public class DateTimeConverter implements Converter, StateHolder {
         "javax.faces.converter.DateTimeConverter.DATETIME";
 
     /**
-     * <p>The message identifier of the {@link FacesMessage} to be created if
+     * <p>The message identifier of the {@link javax.faces.application.FacesMessage} to be created if
      *  the conversion of the <code>DateTime</code> value to
      *  <code>String</code> fails.   The message format string for this message
      *  may optionally include the following placeholders:
