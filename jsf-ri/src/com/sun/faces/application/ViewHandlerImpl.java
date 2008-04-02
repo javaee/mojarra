@@ -1,5 +1,5 @@
 /* 
- * $Id: ViewHandlerImpl.java,v 1.47 2005/03/15 20:37:37 edburns Exp $ 
+ * $Id: ViewHandlerImpl.java,v 1.48 2005/03/17 16:10:44 edburns Exp $ 
  */ 
 
 
@@ -36,7 +36,7 @@ import java.util.Map;
 /**
  * <B>ViewHandlerImpl</B> is the default implementation class for ViewHandler.
  *
- * @version $Id: ViewHandlerImpl.java,v 1.47 2005/03/15 20:37:37 edburns Exp $
+ * @version $Id: ViewHandlerImpl.java,v 1.48 2005/03/17 16:10:44 edburns Exp $
  * @see javax.faces.application.ViewHandler
  */
 public class ViewHandlerImpl extends ViewHandler {
@@ -212,6 +212,11 @@ public class ViewHandlerImpl extends ViewHandler {
 	viewRoot = Util.getStateManager(context).restoreView(context,
 							     viewId,
 							     renderKitId);
+
+	if (log.isTraceEnabled()) {
+	    log.trace("Restored View Tree");
+	    log.trace(com.sun.faces.util.DebugUtil.printTree(viewRoot));
+	}
     
         return viewRoot;
     }

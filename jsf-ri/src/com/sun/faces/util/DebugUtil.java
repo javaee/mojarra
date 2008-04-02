@@ -1,5 +1,5 @@
 /*
- * $Id: DebugUtil.java,v 1.25 2005/03/10 20:29:46 edburns Exp $
+ * $Id: DebugUtil.java,v 1.26 2005/03/17 16:10:44 edburns Exp $
  */
 
 /*
@@ -16,6 +16,10 @@ import javax.faces.component.ValueHolder;
 import javax.faces.model.SelectItem;
 
 import java.io.PrintStream;
+import java.io.Writer;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.io.IOException;
 import java.util.Iterator;
 
 /**
@@ -86,29 +90,52 @@ public class DebugUtil extends Object {
             }
         }
     }
-
-
-    private static void indentPrintln(PrintStream out, String str) {
+    
+    
+    private static void indentPrintln(Writer out, String str) {
         int i = 0;
 
         // handle indentation
-        for (i = 0; i < curDepth; i++) {
-            out.print("  ");
-        }
-        out.print(str + "\n");
+        try {
+            for (i = 0; i < curDepth; i++) {
+                out.write("  ");
+            }
+            out.write(str + "\n");
+        } catch (IOException ex) {}
     }
-
-
+    
+    /**
+     * Output of printTree() as a String. 
+     * Useful when used with a Logger. For example:
+     *    logger.log(DebugUtil.printTree(root));
+     */
+    public static String printTree(UIComponent root) {
+        StringWriter writer = new StringWriter();
+        printTree(root, writer);
+        return writer.toString();
+    }
+    
+    /**
+     * Output of printTree() to a PrintStream. 
+     * Usage:
+     *    DebugUtil.printTree(root, System.out);
+     */
     public static void printTree(UIComponent root, PrintStream out) {
+        PrintWriter writer = new PrintWriter(out);
+        printTree(root, writer);
+        writer.flush();
+    }
+    
+    public static void printTree(UIComponent root, Writer out) {
         if (null == root) {
             return;
         }
         int i = 0;
         Object value = null;
-    
+        
 /* PENDING
     indentPrintln(out, "===>Type:" + root.getComponentType());
-*/
+ */
         indentPrintln(out, "id:" + root.getId());
         indentPrintln(out, "type:" + root.toString());
 
@@ -122,22 +149,22 @@ public class DebugUtil extends Object {
             while (items.hasNext()) {
                 curItem = (SelectItem) items.next();
                 indentPrintln(out, "\t value=" + curItem.getValue() +
-                                   " label=" + curItem.getLabel() + " description=" +
-                                   curItem.getDescription());
+                        " label=" + curItem.getLabel() + " description=" +
+                        curItem.getDescription());
             }
             indentPrintln(out, " }");
         } else {
-	    if (root instanceof ValueHolder) {
-		value = ((ValueHolder)root).getValue();
-	    }
+            if (root instanceof ValueHolder) {
+                value = ((ValueHolder)root).getValue();
+            }
             indentPrintln(out, "value= " + value);
-
+            
             Iterator it = root.getAttributes().keySet().iterator();
             if (it != null) {
                 while (it.hasNext()) {
                     String attrValue = null, attrName = (String) it.next();
                     Object attrObj = root.getAttributes().get(attrName);
-
+                    
                     if (!(attrValue instanceof String) && null != attrObj) {
                         // chop off the address since we don't want to print
                         // out anything that'll vary from invocation to
@@ -152,52 +179,74 @@ public class DebugUtil extends Object {
                         } else {
                             doTruncate = true;
                         }
-
+                        
                         if (doTruncate) {
                             attrValue = attrValue.substring(0, at);
                         }
                     } else {
                         attrValue = (String) attrObj;
                     }
-
+                    
                     indentPrintln(out, "attr=" + attrName +
-                                       " : " + attrValue);
+                            " : " + attrValue);
                 }
             }
         }
-
+        
         curDepth++;
         Iterator it = root.getChildren().iterator();
-	Iterator facets = root.getFacets().values().iterator();
-	// print all the facets of this component
-	while(facets.hasNext()) {
-	    printTree((UIComponent) facets.next(), out);
-	}
-	// print all the children of this component
+        Iterator facets = root.getFacets().values().iterator();
+        // print all the facets of this component
+        while(facets.hasNext()) {
+            printTree((UIComponent) facets.next(), out);
+        }
+        // print all the children of this component
         while (it.hasNext()) {
             printTree((UIComponent) it.next(), out);
         }
         curDepth--;
     }
-
-
+    
+    
+    /**
+     * Output of printTree() as a String. 
+     * Useful when used with a Logger. For example:
+     *    logger.log(DebugUtil.printTree(root));
+     */
+    public static String printTree(TreeStructure root) {
+        StringWriter writer = new StringWriter();
+        printTree(root, writer);
+        return writer.toString();
+    }
+    
+    /**
+     * Output of printTree() to a PrintStream. 
+     * Usage:
+     *    DebugUtil.printTree(root, System.out);
+     */
     public static void printTree(TreeStructure root, PrintStream out) {
+        PrintWriter writer = new PrintWriter(out);
+        printTree(root, writer);
+        writer.flush();
+    }
+    
+    public static void printTree(TreeStructure root, Writer out) {
         if (null == root) {
             return;
         }
         int i = 0;
         Object value = null;
-    
+        
 /* PENDING
     indentPrintln(out, "===>Type:" + root.getComponentType());
-*/
+ */
         indentPrintln(out, "id:" + root.id);
         indentPrintln(out, "type:" + root.className);
-
+        
         Iterator items = null;
         SelectItem curItem = null;
         int j = 0;
-
+        
         curDepth++;
         if (null != root.children) {
             Iterator it = root.children.iterator();
@@ -207,42 +256,42 @@ public class DebugUtil extends Object {
         }
         curDepth--;
     }
-
-    public static void printTree(Object [] root, PrintStream out) {
+    
+    public static void printTree(Object [] root, Writer out) {
         if (null == root) {
-	    indentPrintln(out, "null");
+            indentPrintln(out, "null");
             return;
         }
         int i = 0;
         Object value = null;
-    
+        
 /* PENDING
     indentPrintln(out, "===>Type:" + root.getComponentType());
-*/
-	// drill down to the bottom of the first element in the array
-	boolean foundBottom = false;
-	Object state = null;
-	Object [] myState = root;
-	while (!foundBottom) {
-	    state = myState[0];
-	    foundBottom = !state.getClass().isArray();
-	    if (!foundBottom) {
-		myState = (Object []) state;
-	    }
-	}
-
+ */
+        // drill down to the bottom of the first element in the array
+        boolean foundBottom = false;
+        Object state = null;
+        Object [] myState = root;
+        while (!foundBottom) {
+            state = myState[0];
+            foundBottom = !state.getClass().isArray();
+            if (!foundBottom) {
+                myState = (Object []) state;
+            }
+        }
+        
         indentPrintln(out, "type:" + myState[8]);
-
+        
         curDepth++;
-	root = (Object []) root[1];
-	for (i = 0; i < root.length; i++) {
-	    printTree((Object []) root[i], out);
-	}
+        root = (Object []) root[1];
+        for (i = 0; i < root.length; i++) {
+            printTree((Object []) root[i], out);
+        }
         curDepth--;
     }
 //
 // General Methods
 //
-
-
+    
+    
 } // end of class DebugUtil
