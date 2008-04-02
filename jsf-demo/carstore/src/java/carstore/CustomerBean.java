@@ -1,5 +1,5 @@
 /*
- * $Id: CustomerBean.java,v 1.2 2005/08/22 22:08:35 ofung Exp $
+ * $Id: CustomerBean.java,v 1.3 2006/03/09 01:17:29 rlubke Exp $
  */
 /*
  * The contents of this file are subject to the terms
@@ -35,18 +35,18 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.ResourceBundle;
 
-public class CustomerBean extends Object {
+public class CustomerBean {
 
 
-    String firstName = null;
-    String middleInitial = null;
-    String lastName = null;
-    String mailingAddress = null;
-    String city = null;
-    String state = null;
-    String zip = null;
-    String month = null;
-    String year = null;
+    private String firstName = null;
+    private String middleInitial = null;
+    private String lastName = null;
+    private String mailingAddress = null;
+    private String city = null;
+    private String state = null;
+    private String zip = null;
+    private String month = null;
+    private String year = null;
 
 
     public CustomerBean() {
@@ -54,14 +54,14 @@ public class CustomerBean extends Object {
     }
 
 
-    protected Collection titleOptions = null;
+    protected Collection<SelectItem> titleOptions = null;
 
 
     public Collection getTitleOptions() {
-        titleOptions = new ArrayList();
+        titleOptions = new ArrayList<SelectItem>(3);
         ResourceBundle rb = ResourceBundle.getBundle(
-            "carstore.bundles.Resources",
-            (FacesContext.getCurrentInstance().getViewRoot().getLocale()));
+              "carstore.bundles.Resources",
+              (FacesContext.getCurrentInstance().getViewRoot().getLocale()));
         String titleStr = (String) rb.getObject("mrLabel");
         titleOptions.add(new SelectItem(titleStr, titleStr,
                                         titleStr));
@@ -76,8 +76,8 @@ public class CustomerBean extends Object {
     }
 
 
-    public void setTitleOptions(Collection newOptions) {
-        titleOptions = new ArrayList(newOptions);
+    public void setTitleOptions(Collection<SelectItem> newOptions) {
+        titleOptions = new ArrayList<SelectItem>(newOptions);
     }
 
 

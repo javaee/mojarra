@@ -29,7 +29,7 @@
 # This build.properties allows for the building of 
 # javaserverfaces-sources against Glassfish.
 #
-# $Id: build.properties.glassfish,v 1.8 2006/03/07 19:09:17 rogerk Exp $
+# $Id: build.properties.glassfish,v 1.9 2006/03/09 01:17:33 rlubke Exp $
 # -----------------------------------------------------------------------------
 
 # --------------------------------------------------
@@ -41,6 +41,16 @@
 # were checked out into
 # --------------------------------------------------
 jsf.build.home=<SET CURRENT DIRECTORY>
+
+# --------------------------------------------------
+# Set the values for http.proxy.host and 
+# http.proxy.port if the build environment is
+# behind a firewall.  This is necessary in order
+# for the build system to download the required
+# dependencies.
+# --------------------------------------------------
+http.proxy.host=
+http.proxy.port=
 
 # --------------------------------------------------
 #    Container Name - a simple identifier which maps
@@ -92,25 +102,6 @@ compile.debug=true
 #    Java 'Endorsed' directory
 # --------------------------------------------------
 endorsed.dirs=
-
-# --------------------------------------------------
-#    Base library path
-#     - Base location where the following build
-#     - dependencies can be found
-#     JUnit 3.8.1 (http://www.junit.org)
-#     HtmlUnit 1.8 (http://htmlunit.sourceforge.net)
-#     Cactus 13-1.7.1 (http://jakarta.apache.org/cactus/)#    
-#     Taglibrarydoc 1.3 (https://taglibrarydoc.dev.java.net)
-#
-#     Install all of these dependencies into the directory
-#     referenced by dependency.base.dir and the build will 
-#     pick up the libraries automatically.
-# --------------------------------------------------
-dependency.base.dir=<SET TO BASE DIRECTORY>
-junit.home=${dependency.base.dir}/junit3.8.1
-htmlunit.home=${dependency.base.dir}/htmlunit-1.8
-cactus.home=${dependency.base.dir}/jakarta-cactus-13-1.7.1
-taglibdoc.home=${dependency.base.dir}/taglibrarydoc-1_3
 
 # --------------------------------------------------
 #    Web application packaging

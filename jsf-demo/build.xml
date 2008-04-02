@@ -246,7 +246,7 @@
     </target>
 
 
-    <target name="main" depends="prepare.build">
+    <target name="main" depends="update,prepare.build">
 
         <ant dir="${basedir}/components" inheritAll="false">
         </ant>

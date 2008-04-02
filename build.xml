@@ -57,6 +57,9 @@
                 <filelist dir="${impl.dir}">
                     <file name="build.xml"/>
                 </filelist>
+                <filelist dir="${demo.dir}">
+                    <file name="build.xml"/>
+                </filelist>
             </subant>
         </sequential>
     </macrodef>

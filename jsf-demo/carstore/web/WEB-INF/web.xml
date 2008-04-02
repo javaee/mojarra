@@ -28,7 +28,7 @@
 <web-app version="2.5"
          xmlns="http://java.sun.com/xml/ns/javaee"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" >
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
 
     <display-name>Car Store</display-name>
     <description>Buy a car.</description>
@@ -37,16 +37,16 @@
         <param-name>javax.faces.STATE_SAVING_METHOD</param-name>
         <param-value>client</param-value>
     </context-param>
-    
+
     <context-param>
         <description>
             Set this flag to true if you want the JavaServer Faces
             Reference Implementation to validate the XML in your
-            faces-config.xml resources against the DTD.  Default
+            faces-config.xml resources against the DTD. Default
             value is false.
         </description>
         <param-name>com.sun.faces.validateXml</param-name>
-        <param-value>true</param-value>        
+        <param-value>true</param-value>
     </context-param>
 
     <!--
@@ -63,14 +63,14 @@
             Default value is false.
         </description>
         <param-name>com.sun.faces.verifyObjects</param-name>
-        <param-value>false</param-value>        
+        <param-value>false</param-value>
     </context-param>
 
     <!-- Faces Servlet -->
     <servlet>
         <servlet-name>Faces Servlet</servlet-name>
         <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
-        <load-on-startup> 1 </load-on-startup>
+        <load-on-startup>1</load-on-startup>
     </servlet>
 
 
@@ -97,29 +97,29 @@
         <display-name>Restrict access to JSP pages</display-name>
         <web-resource-collection>
             <web-resource-name>
-		Restrict access to JSP pages
+                Restrict access to JSP pages
             </web-resource-name>
-	    <url-pattern>/bottomMatter.jsp</url-pattern>
-	    <url-pattern>/carDetail.jsp</url-pattern>
+            <url-pattern>/bottomMatter.jsp</url-pattern>
+            <url-pattern>/carDetail.jsp</url-pattern>
             <url-pattern>/chooseLocale.jsp</url-pattern>
             <url-pattern>/confirmChoices.jsp</url-pattern>
             <url-pattern>/customerInfo.jsp</url-pattern>
             <url-pattern>/finish.jsp</url-pattern>
             <url-pattern>/optionsPanel.jsp</url-pattern>
             <url-pattern>/storeFront.jsp</url-pattern>
-	</web-resource-collection>
+        </web-resource-collection>
         <auth-constraint>
             <description>
-               With no roles defined, no access granted
+                With no roles defined, no access granted
             </description>
         </auth-constraint>
     </security-constraint>
-    
+
     <!-- Enable encryption for client side state saving -->
     <env-entry>
-        <env-entry-name>com.sun.faces.ClientStateSavingPassword</env-entry-name>        
+        <env-entry-name>com.sun.faces.ClientStateSavingPassword</env-entry-name>
         <env-entry-type>java.lang.String</env-entry-type>
         <env-entry-value>password</env-entry-value>
-   </env-entry>
+    </env-entry>
 
 </web-app>

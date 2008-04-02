@@ -30,7 +30,6 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
 import java.util.logging.Level;
@@ -45,31 +44,31 @@ import com.sun.javaee.blueprints.components.ui.components.AreaSelectedEvent;
  * package name.  The <code>CarBean</code> instances in the model
  * <code>Map</code> are accessed from several pages, as described
  * below.</p>
- *
+ * <p/>
  * <p>Several pages in the application use this bean as the target of
  * method reference and value reference expressions.</p>
- *
+ * <p/>
  * <ul>
- *
+ * <p/>
  * <li><p>The "chooseLocale" page uses <code>actionListener</code>
  * attributes to point to the {@link #chooseLocaleFromMap} and {@link
  * #chooseLocaleFromLink} methods.</p></li>
- *
+ * <p/>
  * <li><p>The "storeFront" page uses value binding expressions to pull
  * information about four of the known car models in the store.</p></li>
- *
+ * <p/>
  * <li><p>The "carDetail" page uses value binding expressions to pull
  * information about the currently chosen model.  It also uses the
  * <code>action</code> attribute to convey the user's package
  * choices.</p></li>
- *
+ * <p/>
  * <li><p>The "confirmChoices" page uses value binding expressions to
  * pull the user's choices from the currently chosen model.</p></li>
- *
+ * <p/>
  * </ul>
  */
 
-public class CarStore extends Object {
+public class CarStore {
 
     private static final Logger LOGGER = Logger.getLogger("carstore");
 
@@ -82,8 +81,10 @@ public class CarStore extends Object {
     static final String DEFAULT_MODEL_PROPERTIES = CARSTORE_PREFIX +
                                                    ".bundles." + DEFAULT_MODEL;
 
-    static final String DEFAULT_PACKAGE_PROPERTIES = CARSTORE_PREFIX +
-                                                     ".bundles." + DEFAULT_PACKAGE;
+    static final String DEFAULT_PACKAGE_PROPERTIES = CARSTORE_PREFIX
+                                                     +
+                                                     ".bundles."
+                                                     + DEFAULT_PACKAGE;
 
     // 
     // Relationship Instance Variables
@@ -93,32 +94,30 @@ public class CarStore extends Object {
      * <p>The locales to be selected for each hotspot, keyed by the
      * alternate text for that area.</p>
      */
-    private Map locales = null;
+    private Map<String, Locale> locales = null;
 
-    /**
-     * <p>The currently selected car model.</p>
-     */
+    /** <p>The currently selected car model.</p> */
 
     private String currentModelName = DEFAULT_MODEL;
 
     /**
      * <p>The car models we offer.</p>
-     *
+     * <p/>
      * <p>Keys: Strings that happen to correspond to the name of the
      * packages.</p>
-     *
+     * <p/>
      * <p>Values: CarBean instances</p>
      */
-    private Map carModels = null;
+    private Map<String, CarBean> carModels = null;
 
     /**
      * <p>Keys: Strings that happen to correspond to the name of the
      * Properties file for the car (without the package prefix).</p>
-     *
+     * <p/>
      * <p>Values: CarBeanCustomizer instances</p>
      */
 
-    private Map carCustomizers = null;
+    private Map<String, CarCustomizer> carCustomizers = null;
 
 
     public CarStore() {
@@ -126,7 +125,7 @@ public class CarStore extends Object {
             LOGGER.fine("Creating main CarStore bean");
             LOGGER.fine("Populating locale map");
         }
-        locales = new HashMap();
+        locales = new HashMap<String, Locale>(4);
         locales.put("NAmerica", Locale.ENGLISH);
         locales.put("SAmerica", new Locale("es", "es"));
         locales.put("Germany", Locale.GERMAN);
@@ -141,7 +140,7 @@ public class CarStore extends Object {
         AreaSelectedEvent event = (AreaSelectedEvent) actionEvent;
         String current = event.getMapComponent().getCurrent();
         FacesContext context = FacesContext.getCurrentInstance();
-        context.getViewRoot().setLocale((Locale) locales.get(current));
+        context.getViewRoot().setLocale(locales.get(current));
         resetMaps();
     }
 
@@ -149,7 +148,7 @@ public class CarStore extends Object {
     public void chooseLocaleFromLink(ActionEvent event) {
         String current = event.getComponent().getId();
         FacesContext context = FacesContext.getCurrentInstance();
-        context.getViewRoot().setLocale((Locale) locales.get(current));
+        context.getViewRoot().setLocale(locales.get(current));
         resetMaps();
     }
 
@@ -173,19 +172,16 @@ public class CarStore extends Object {
 
 
     public void choosePackage(String packageName) {
-        CarCustomizer packageCustomizer =
-            (CarCustomizer) carCustomizers.get(packageName);
+        CarCustomizer packageCustomizer = carCustomizers.get(packageName);
         packageCustomizer.customizeCar(getCurrentModel());
         getCurrentModel().getCurrentPrice();
 
         // HERE IS WHERE WE UPDATE THE BUTTON STYLE!
-        String curName;
-        Iterator iter = carCustomizers.keySet().iterator();
+
         // go through all the available packages and set the button
         // style accordingly.
-        while (iter.hasNext()) {
-            curName = (String) iter.next();
-            packageCustomizer = (CarCustomizer) carCustomizers.get(curName);
+        for (String curName : carCustomizers.keySet()) {
+            packageCustomizer = carCustomizers.get(curName);
             if (curName.equals(packageName)) {
                 packageCustomizer.setButtonStyle("package-selected");
             } else {
@@ -232,14 +228,13 @@ public class CarStore extends Object {
     // 
 
     public CarBean getCurrentModel() {
-        CarBean result = (CarBean) carModels.get(getCurrentModelName());
-        return result;
+        return carModels.get(getCurrentModelName());
     }
 
 
     public Map getModels() {
         if (null == carModels) {
-            carModels = new HashMap();
+            carModels = new HashMap<String, CarBean>(4);
             if (LOGGER.isLoggable(Level.FINE)) {
                 LOGGER.fine("Populating carModel map");
             }
@@ -260,7 +255,7 @@ public class CarStore extends Object {
     public Map getCustomizers() {
         getModels();
         if (null == carCustomizers) {
-            carCustomizers = new HashMap();
+            carCustomizers = new HashMap<String, CarCustomizer>(4);
             if (LOGGER.isLoggable(Level.FINE)) {
                 LOGGER.fine("Populating carCustomizers map");
             }
@@ -279,8 +274,6 @@ public class CarStore extends Object {
         }
         return carCustomizers;
     }
-
-
 
     //
     // private methods
@@ -306,7 +299,7 @@ public class CarStore extends Object {
 
     static ClassLoader getCurrentLoader(Object fallbackClass) {
         ClassLoader loader =
-            Thread.currentThread().getContextClassLoader();
+              Thread.currentThread().getContextClassLoader();
         if (loader == null) {
             loader = fallbackClass.getClass().getClassLoader();
         }

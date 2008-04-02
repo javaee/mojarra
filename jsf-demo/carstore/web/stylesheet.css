@@ -24,133 +24,133 @@
  */
 
 body {
-	font-family: Arial, Helvetica, sans-serif;
-	font-size: 12px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
 }
 
 td {
-	font-family: Arial, Helvetica, sans-serif;
-	font-size: 12px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
 }
 
 th {
-	font-family: Arial, Helvetica, sans-serif;
-	font-size: 12px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
 }
 
 .bodystyle {
-	font-family: Arial, Helvetica, sans-serif;
-	font-size: 12px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
 }
 
 .small {
-	font-family: Arial, Helvetica, sans-serif;
-	font-size: 9px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 9px;
 }
 
 .medium {
-	font-family: Arial, Helvetica, sans-serif;
-	font-size: 12px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
 }
 
 .maintitle {
-	font-family: Arial, Helvetica, sans-serif;
-	font-size: 14px;
-	color: #330066;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    color: #330066;
 }
 
 .subtitle {
-	font-family: Arial, Helvetica, sans-serif;
-	font-size: 12px;
-	color: #93B629;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    color: #93B629;
 }
 
 .subtitlebig {
-	font-family: Arial, Helvetica, sans-serif;
-	font-size: 16px;
-	color: #93B629;
-        padding-top: 10;
-        padding-bottom: 10;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 16px;
+    color: #93B629;
+    padding-top: 10;
+    padding-bottom: 10;
 }
 
 .big {
-	font-family: Arial, Helvetica, sans-serif;
-	font-size: 16px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 16px;
 }
 
 .xbig {
-	font-family: Arial, Helvetica, sans-serif;
-	font-size: 24px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 24px;
 }
 
 .expanded {
-	font-family: Arial, Helvetica, sans-serif;
-	font-size: 12px;
-	line-height: 24px;
-	letter-spacing: 2px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    line-height: 24px;
+    letter-spacing: 2px;
 }
 
 .justified {
-	font-family: Arial, Helvetica, sans-serif;
-	text-align: justify;
+    font-family: Arial, Helvetica, sans-serif;
+    text-align: justify;
 }
 
 .footer {
-	font-family: "Times New Roman", Times, serif;
-	font-size: 9px;
-	color: #999999;
+    font-family: "Times New Roman", Times, serif;
+    font-size: 9px;
+    color: #999999;
 }
 
 .box1 {
-	padding: 3px;
-	border-width: medium;
-	border-style: solid;
-	border-color: #CCCCCC #666666 #666666 #CCCCCC;
+    padding: 3px;
+    border-width: medium;
+    border-style: solid;
+    border-color: #CCCCCC #666666 #666666 #CCCCCC;
 }
 
 .box2 {
-	font-style: italic;
-	word-spacing: 2pt;
-	padding: 3px;
-	border: 1px solid;
+    font-style: italic;
+    word-spacing: 2pt;
+    padding: 3px;
+    border: 1px solid;
 }
 
 .align-left {
-  text-align: left;
+    text-align: left;
 }
 
-.panel-background { 
-  background-color: #7171A5;
-  border: 5px outset #71A5A5;
-  border-collapse: collapse;
-  font-family: sans-serif;
-  font-size: 14pt;
-  padding: 10px;
+.panel-background {
+    background-color: #7171A5;
+    border: 5px outset #71A5A5;
+    border-collapse: collapse;
+    font-family: sans-serif;
+    font-size: 14pt;
+    padding: 10px;
 }
 
 .package-selected {
-  background-color: #93B629;
+    background-color: #93B629;
 }
 
 .package-unselected {
-  background-color: #C0C0C0;
+    background-color: #C0C0C0;
 }
 
 .option-unselected {
-  background-color: #FFFFFF;
+    background-color: #FFFFFF;
 }
 
-.top-table { 
-  padding: 0;
-  border: 0;
-  width: 660px;
+.top-table {
+    padding: 0;
+    border: 0;
+    width: 660px;
 }
 
-.storeFrontCar { 
-  padding: 0
-  border: 0
+.storeFrontCar {
+    padding: 0;    
+    border: 0;
 }
 
-.validationMessage { 
-  color: red;
+.validationMessage {
+    color: red;
 }

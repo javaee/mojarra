@@ -1,5 +1,5 @@
 /*
- * $Id: CreditCardConverter.java,v 1.2 2005/08/22 22:08:35 ofung Exp $
+ * $Id: CreditCardConverter.java,v 1.3 2006/03/09 01:17:29 rlubke Exp $
  */
 
 /*
@@ -53,80 +53,86 @@ public class CreditCardConverter implements Converter {
      * will be replaced by the object and value.</p>
      */
     public static final String CONVERSION_ERROR_MESSAGE_ID =
-        "carstore.Conversion_Error";
-
+          "carstore.Conversion_Error";
+    
 
     /**
-     * Parses the CreditCardNumber and strips any blanks or <oode>"-"</code>
-     * characters from it.
+     * <p>Parses the credit card number and strips any whitespace or 
+     * <code>"-"</code> characters from it.</p>
+     * @param context the <code>FacesContext</code> of the current request
+     * @param component the component associated with the value
+     * @param newValue the new value
+     * @return the credit card number less any whitespace or <code>"-"<code>
+     *  characters
+     * @throws ConverterException if the value cannot be converted
      */
-    public Object getAsObject(FacesContext context, UIComponent component,
+    public Object getAsObject(FacesContext context, 
+                              UIComponent component,
                               String newValue) throws ConverterException {
 
-        String convertedValue = null;
         if (newValue == null) {
             return newValue;
         }
         // Since this is only a String to String conversion, this conversion 
         // does not throw ConverterException.
-        convertedValue = newValue.trim();
-        if (((convertedValue.indexOf("-")) != -1) ||
-            ((convertedValue.indexOf(" ")) != -1)) {
+        String convertedValue = newValue.trim();
+        if (((convertedValue.indexOf('-')) != -1) ||
+            ((convertedValue.indexOf(' ')) != -1)) {
             char[] input = convertedValue.toCharArray();
-            StringBuffer buffer = new StringBuffer(50);
-            for (int i = 0; i < input.length; ++i) {
-                if (input[i] == '-' || input[i] == ' ') {
-                    continue;
-                } else {
-                    buffer.append(input[i]);
-                }
+            StringBuilder buffer = new StringBuilder(50);
+            for (char anInput : input) {
+                buffer.append(anInput);
             }
             convertedValue = buffer.toString();
         }
         // System.out.println("Converted value " + convertedValue);
         return convertedValue;
     }
-
-
+   
     /**
-     * Formats the value by inserting space after every four characters
+     * <p>Formats the value by inserting space after every four characters
      * for better readability if they don't already exist. In the process
-     * converts any <oode>"-"</code> characters into blanks for consistency.
+     * converts any <code>"-"</code> characters into blanks for consistency.</p>
+     * @param context the <code>FacesContext</code> of the current request
+     * @param component the component associated with the value
+     * @param value the value to convert
+     * @return a formatted credit card number
+     * @throws ConverterException if the value cannot be converted
      */
     public String getAsString(FacesContext context, UIComponent component,
                               Object value) throws ConverterException {
 
-        String inputVal = null;
         if (value == null) {
             return null;
         }
         // value must be of the type that can be cast to a String.
+        String inputVal = null;
         try {
             inputVal = (String) value;
         } catch (ClassCastException ce) {
             FacesMessage errMsg = MessageFactory.getMessage(
-                CONVERSION_ERROR_MESSAGE_ID,
-                (new Object[]{value, inputVal}));
+                  CONVERSION_ERROR_MESSAGE_ID,
+                  value,
+                  inputVal);
             throw new ConverterException(errMsg.getSummary());
         }
 
         // insert spaces after every four characters for better    
         // readability if it doesn't already exist.   
         char[] input = inputVal.toCharArray();
-        StringBuffer buffer = new StringBuffer(50);
+        StringBuilder buffer = new StringBuilder(50);
         for (int i = 0; i < input.length; ++i) {
             if ((i % 4) == 0 && i != 0) {
                 if (input[i] != ' ' || input[i] != '-') {
-                    buffer.append(" ");
+                    buffer.append(' ');
                     // if there any "-"'s convert them to blanks.
                 } else if (input[i] == '-') {
-                    buffer.append(" ");
+                    buffer.append(' ');
                 }
             }
             buffer.append(input[i]);
         }
-        String convertedValue = buffer.toString();
         // System.out.println("Formatted value " + convertedValue);
-        return convertedValue;
+        return buffer.toString();
     }
 }

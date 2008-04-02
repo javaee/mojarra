@@ -1,5 +1,5 @@
 /*
- * $Id: FormatValidator.java,v 1.2 2005/08/22 22:08:35 ofung Exp $
+ * $Id: FormatValidator.java,v 1.3 2006/03/09 01:17:29 rlubke Exp $
  */
 
 /*
@@ -29,6 +29,7 @@
 
 package carstore;
 
+import javax.el.ValueExpression;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.StateHolder;
 import javax.faces.component.UIComponent;
@@ -38,8 +39,6 @@ import javax.faces.validator.Validator;
 import javax.faces.validator.ValidatorException;
 
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.StringTokenizer;
 
 
 /**
@@ -63,7 +62,7 @@ import java.util.StringTokenizer;
  * in input value should be a number or  a letter.
  * <li> Any other character must match literally.
  * </ul> </ul>
- *
+ * <p/>
  * Validators have to be Serializable, so you can't maintain a reference to
  * a java.sql.Connection or javax.sql.DataSource inside this class in case
  * you need to hook upto the database or some other back end resource.
@@ -72,7 +71,6 @@ import java.util.StringTokenizer;
  */
 
 public class FormatValidator implements Validator, StateHolder {
-
 
     // ----------------------------------------------------- Manifest Constants
 
@@ -83,9 +81,9 @@ public class FormatValidator implements Validator, StateHolder {
      * will be replaced by list of format patterns.</p>
      */
     public static final String FORMAT_INVALID_MESSAGE_ID =
-        "carstore.Format_Invalid";
+          "carstore.Format_Invalid";
 
-    private ArrayList formatPatternsList = null;
+    private ArrayList<String> formatPatternsList;
 
 
     //
@@ -95,20 +93,6 @@ public class FormatValidator implements Validator, StateHolder {
         super();
     }
 
-
-    /**
-     * <p>Construct a FormatValidator with the specified formatPatterns
-     * String. </p>
-     *
-     * @param formatPatterns <code>|</code> separated String of format patterns
-     *                       that this validator must match against.
-     */
-    public FormatValidator(String formatPatterns) {
-        super();
-        this.formatPatterns = formatPatterns;
-        parseFormatPatterns();
-    }
-
     // 
     // General Methods
     //
@@ -116,13 +100,15 @@ public class FormatValidator implements Validator, StateHolder {
      * <code>|</code> separated String of format patterns
      * that this validator must match against.
      */
-    private String formatPatterns = null;
+    private ValueExpression formatPatterns = null;
 
+
+    /* <p>Return the format patterns that the validator supports. */
 
     /**
-     * <p>Return the format patterns that the validator supports.
+     * @return the configured format patterns
      */
-    public String getFormatPatterns() {
+    public ValueExpression getFormatPatterns() {
 
         return (this.formatPatterns);
 
@@ -135,7 +121,7 @@ public class FormatValidator implements Validator, StateHolder {
      * @param formatPatterns <code>|</code> separated String of format patterns
      *                       that this validator must match against.
      */
-    public void setFormatPatterns(String formatPatterns) {
+    public void setFormatPatterns(ValueExpression formatPatterns) {
 
         this.formatPatterns = formatPatterns;
         parseFormatPatterns();
@@ -147,19 +133,20 @@ public class FormatValidator implements Validator, StateHolder {
      * <code>ArrayList</code>. The delimiter must be "|".
      */
     public void parseFormatPatterns() {
-        if (formatPatterns == null || formatPatterns.length() == 0) {
+        String evalPatterns = (String)
+              formatPatterns
+                    .getValue(FacesContext.getCurrentInstance().getELContext());
+        if (evalPatterns == null || evalPatterns.length() == 0) {
             return;
         }
+        String[] patterns = evalPatterns.split("\\|");
         if (formatPatternsList != null) {
-            // formatPatterns have been parsed already.
             return;
         } else {
-            formatPatternsList = new ArrayList();
+            formatPatternsList = new ArrayList<String>(patterns.length);
         }
-        StringTokenizer st = new StringTokenizer(formatPatterns, "|");
-        while (st.hasMoreTokens()) {
-            String token = st.nextToken();
-            formatPatternsList.add(token);
+        for (String pattern : patterns) {
+            formatPatternsList.add(pattern);
         }
     }
 
@@ -170,7 +157,7 @@ public class FormatValidator implements Validator, StateHolder {
     public void validate(FacesContext context, UIComponent component,
                          Object toValidate) {
         boolean valid = false;
-        String value = null;
+        String value;
         if ((context == null) || (component == null)) {
             throw new NullPointerException();
         }
@@ -184,9 +171,8 @@ public class FormatValidator implements Validator, StateHolder {
 
         value = toValidate.toString();
         // validate the value against the list of valid patterns.
-        Iterator patternIt = formatPatternsList.iterator();
-        while (patternIt.hasNext()) {
-            valid = isFormatValid(((String) patternIt.next()), value);
+        for (String aFormatPatternsList : formatPatternsList) {
+            valid = isFormatValid((aFormatPatternsList), value);
             if (valid) {
                 break;
             }
@@ -194,16 +180,19 @@ public class FormatValidator implements Validator, StateHolder {
         if (!valid) {
             FacesMessage errMsg = MessageFactory.getMessage(context,
                                                             FORMAT_INVALID_MESSAGE_ID,
-                                                            (new Object[]{
-                                                                formatPatterns
-                                                            }));
+                                                            formatPatterns);
             throw new ValidatorException(errMsg);
         }
     }
 
 
+    /* Returns true if the value matches one of the valid patterns. */
+
     /**
-     * Returns true if the value matches one of the valid patterns.
+     * <p>Returns true if the value matches one of the valid patterns.</p>
+     * @param pattern the 'control' pattern
+     * @param value the value to match
+     * @return true if the value matches the pattern
      */
     protected boolean isFormatValid(String pattern, String value) {
         boolean valid = true;
@@ -266,8 +255,8 @@ public class FormatValidator implements Validator, StateHolder {
 
     public void restoreState(FacesContext context, Object state) {
         Object values[] = (Object[]) state;
-        formatPatterns = (String) values[0];
-        formatPatternsList = (ArrayList) values[1];
+        formatPatterns = (ValueExpression) values[0];
+        formatPatternsList = (ArrayList<String>) values[1];
     }
 
 

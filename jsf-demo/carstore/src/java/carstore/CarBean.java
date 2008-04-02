@@ -39,11 +39,11 @@ import javax.faces.model.SelectItem;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
-import java.util.StringTokenizer;
+import java.util.List;
+import java.util.Collection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -51,52 +51,52 @@ import java.util.logging.Logger;
  * <p>This bean encapsulates a car model, including pricing and package
  * choices.  The system allows the user to customize the properties of
  * this bean with the help of the {@link CarCustomizer}.</p>
- *
+ * <p/>
  * <h3>Data Access</h3>
- *
+ * <p/>
  * <p>This is the only bean in the system that has complicated access to
  * the persistent store of data.  In the present implementation, this
  * persistent store is in <code>ResourceBundle</code> instances.</p>
- *
+ * <p/>
  * <p>There are three data source <code>ResourceBundle</code> files
  * used:</p>
- *
- * 	<ol>
- *
- * 	  <li><p><code>&lt;ModelName&gt;</code></p>
- *
- *        <p>This contains the localized content for this model.  There
- *        is a variant of this file for each supported locale, for
- *        example, <code>Jalopy_de.properties</code></p>
- *
- *         </li>
- *
- * 	  <li><p><code>&lt;Common_properties&gt;</code></p>
- *
- *        <p>This contains the localized content common to all
- *        models.</p>
- *
- *         </li>
- *
- * 	  <li><p><code>&lt;ModelName_options&gt;</code></p>
- *
- *        <p>This contains the non-localized content for this model,
- *        including the non-localized options.  There is only one
- *        variant of this file for all locales for example,
- *        <code>Jalopy_options.properties</code></p>
- *
- *         </li>
- *
- *	</ol>
- *
+ * <p/>
+ * <ol>
+ * <p/>
+ * <li><p><code>&lt;ModelName&gt;</code></p>
+ * <p/>
+ * <p>This contains the localized content for this model.  There
+ * is a variant of this file for each supported locale, for
+ * example, <code>Jalopy_de.properties</code></p>
+ * <p/>
+ * </li>
+ * <p/>
+ * <li><p><code>&lt;Common_properties&gt;</code></p>
+ * <p/>
+ * <p>This contains the localized content common to all
+ * models.</p>
+ * <p/>
+ * </li>
+ * <p/>
+ * <li><p><code>&lt;ModelName_options&gt;</code></p>
+ * <p/>
+ * <p>This contains the non-localized content for this model,
+ * including the non-localized options.  There is only one
+ * variant of this file for all locales for example,
+ * <code>Jalopy_options.properties</code></p>
+ * <p/>
+ * </li>
+ * <p/>
+ * </ol>
+ * <p/>
  * <p>All files conform to the following convention:</p>
- *
+ * <p/>
  * <code><pre>
  * key
  * key_componentType
  * key_valueType
  * </pre></code>
- *
+ * <p/>
  * <p>Where <code>key</code> is the name of an attribute of this car.
  * For example, <code>basePrice</code>, or <code>description</code>.
  * <code>key_componentType</code> is the component type of the
@@ -105,7 +105,7 @@ import java.util.logging.Logger;
  * <code>key_valueType</code> is the data type of the value of the
  * <code>UIComponent</code>, for example <code>java.lang.Integer</code>.
  * For all non-String valueTypes.</p>
- *
+ * <p/>
  * <p>When the bean is instantiated, we load both of the above
  * properties files and iterate over the keys in each one.  For each
  * key, we look at the <code>componentType</code> and ask the
@@ -120,7 +120,7 @@ import java.util.logging.Logger;
  * the <code>value</code> of the <code>UIComponent</code> instance.</p>
  */
 
-public class CarBean extends Object {
+public class CarBean {
 
     private static final Logger LOGGER = Logger.getLogger("carstore");
 
@@ -131,22 +131,17 @@ public class CarBean extends Object {
      * placeholder, which will be replaced by the object and value.</p>
      */
     public static final String CONVERTER_ERROR_MESSAGE_ID =
-        "carstore.Converter_Error";
-
+          "carstore.Converter_Error";
 
     //
     // Relationship Instance Variables
     //
 
-    /**
-     * Localized labels
-     */
+    /** Localized labels */
 
     private ResourceBundle resources = null;
 
-    /**
-     * Price data
-     */
+    /** Price data */
     private ResourceBundle priceData = null;
 
     /**
@@ -154,14 +149,14 @@ public class CarBean extends Object {
      * for the attribute
      */
 
-    private Map components = null;
+    private Map<String, UIComponent> components = null;
 
     /**
      * Keys: String attribute name, such as engine. Values: String value
      * of the component named by key in our components Map.
      */
 
-    private Map attributes = null;
+    private Map<String,Object> attributes = null;
 
     // 
     // Constructors
@@ -180,23 +175,23 @@ public class CarBean extends Object {
     /**
      * <p>Initialize our components <code>Map</code> as described in the
      * class documentation.</p>
-     *
+     * <p/>
      * <p>Create a wrapper <code>Map</code> around the components
      * <code>Map</code> that exposes the String converted value of each
      * component.</p>
+     * 
+     * @param bundleName the resource bundle name
      */
-
     private void init(String bundleName) {
-        FacesContext context = FacesContext.getCurrentInstance();
-        ResourceBundle data = null;
-        Enumeration keys = null;
-        components = new HashMap();
+        FacesContext context = FacesContext.getCurrentInstance();       
+
+        components = new HashMap<String, UIComponent>();
 
         // load the labels
         resources =
-            ResourceBundle.getBundle(CarStore.CARSTORE_PREFIX +
-                                     ".bundles.Resources",
-                                     context.getViewRoot().getLocale());
+              ResourceBundle.getBundle(CarStore.CARSTORE_PREFIX +
+                                       ".bundles.Resources",
+                                       context.getViewRoot().getLocale());
 
         // load the prices
         priceData = ResourceBundle.getBundle(CarStore.CARSTORE_PREFIX +
@@ -206,11 +201,11 @@ public class CarBean extends Object {
         if (LOGGER.isLoggable(Level.FINE)) {
             LOGGER.fine("Loading bundle: " + bundleName + ".");
         }
-        data = ResourceBundle.getBundle(bundleName,
+        ResourceBundle data = ResourceBundle.getBundle(bundleName,
                                         context.getViewRoot().getLocale());
         if (LOGGER.isLoggable(Level.FINE)) {
             LOGGER.fine("Bundle " + bundleName +
-                      " loaded. Reading properties...");
+                        " loaded. Reading properties...");
         }
         initComponentsFromProperties(context, data);
         if (LOGGER.isLoggable(Level.FINE)) {
@@ -238,7 +233,7 @@ public class CarBean extends Object {
         data = ResourceBundle.getBundle(bundleName + "_options");
         if (LOGGER.isLoggable(Level.FINE)) {
             LOGGER.fine("Bundle " + bundleName +
-                      "_options loaded. Reading properties...");
+                        "_options loaded. Reading properties...");
         }
         initComponentsFromProperties(context, data);
         if (LOGGER.isLoggable(Level.FINE)) {
@@ -264,7 +259,7 @@ public class CarBean extends Object {
                 }
 
 
-                public java.util.Set entrySet() {
+                public java.util.Set<Map.Entry<String,Object>> entrySet() {
                     throw new UnsupportedOperationException();
                 }
 
@@ -275,13 +270,13 @@ public class CarBean extends Object {
 
 
                 public Object get(Object key) {
-                    UIComponent component = null;
+                    UIComponent component;
                     Converter converter = null;
                     Object result = null;
                     if (null == key) {
                         return null;
                     }
-                    if (null != (component = (UIComponent)
+                    if (null != (component = 
                         CarBean.this.components.get(key))) {
                         // if this component can have a Converter
                         if (component instanceof ValueHolder) {
@@ -317,7 +312,7 @@ public class CarBean extends Object {
                 }
 
 
-                public java.util.Set keySet() {
+                public java.util.Set<String> keySet() {
                     return CarBean.this.components.keySet();
                 }
 
@@ -342,15 +337,16 @@ public class CarBean extends Object {
                 }
 
 
-                public java.util.Collection values() {
-                    ArrayList result = new ArrayList();
-                    Iterator keys = keySet().iterator();
-                    while (keys.hasNext()) {
-                        result.add(get(keys.next()));
+                public Collection<Object> values() {
+                    ArrayList<Object> result = 
+                          new ArrayList<Object>(this.size());
+                    for (Object o : keySet()) {
+                        result.add(get(o));
                     }
                     return result;
                 }
             };
+
 
     }
 
@@ -358,40 +354,35 @@ public class CarBean extends Object {
     /**
      * <p>For each entry in data, create component and cause it to be
      * populated with values.</p>
+     * @param context the <code>FacesContext</code> for the current request
+     * @param data a ResourceBundle
      */
-
     private void initComponentsFromProperties(FacesContext context,
                                               ResourceBundle data) {
-        Application application = context.getApplication();
-        Enumeration keys = data.getKeys();
-        String
-            key = null,
-            value = null,
-            componentType = null,
-            valueType = null;
-        UIComponent component = null;
 
         // populate the map
-        while (keys.hasMoreElements()) {
-            key = (String) keys.nextElement();
+        for (Enumeration<String> keys = data.getKeys(); keys.hasMoreElements();) {
+
+            String key = keys.nextElement();
             if (key == null) {
                 continue;
             }
             // skip secondary keys.
-            if (-1 != key.indexOf("_")) {
+            if (key.contains("_")) {
                 continue;
             }
-            value = data.getString(key);
-            componentType = data.getString(key + "_componentType");
-            valueType = data.getString(key + "_valueType");
+            String value = data.getString(key);
+            String componentType = data.getString(key + "_componentType");
+            String valueType = data.getString(key + "_valueType");
             if (LOGGER.isLoggable(Level.FINE)) {
                 LOGGER.fine("populating map for " + key + "\n" +
-                          "\n\tvalue: " + value +
-                          "\n\tcomponentType: " + componentType +
-                          "\n\tvalueType: " + valueType);
+                            "\n\tvalue: " + value +
+                            "\n\tcomponentType: " + componentType +
+                            "\n\tvalueType: " + valueType);
             }
             // create the component for this componentType
-            component = application.createComponent(componentType);
+            UIComponent component =
+                  context.getApplication().createComponent(componentType);
             populateComponentWithValue(context, component, componentType,
                                        value, valueType);
             components.put(key, component);
@@ -403,41 +394,44 @@ public class CarBean extends Object {
      * <p>populate the argument component with values, being sensitive
      * to the possible multi-nature of the values, and to the type of
      * the values.</p>
+     * @param context the <code>FacesContext</code> for the current request
+     * @param component the <code>UIComponent</code> to populate
+     * @param componentType the component type
+     * @param value the value
+     * @param valueType the value type
      */
-
     private void populateComponentWithValue(FacesContext context,
                                             UIComponent component,
                                             String componentType,
-                                            String value, String valueType) {
+                                            String value, 
+                                            String valueType) {
         Application application = context.getApplication();
         Converter converter = null;
-        UISelectItems items = null;
 
         // if we need a converter, and can have a converter
-        if (!valueType.equals("java.lang.String") &&
+        if (!"java.lang.String".equals(valueType) &&
             component instanceof ValueHolder) {
             // if so create it,
             try {
                 converter =
-                    application.createConverter(CarStore.loadClass(valueType,
-                                                                   this));
+                      application.createConverter(CarStore.loadClass(valueType,
+                                                                     this));
+                // add it to our component,
+                ((ValueHolder) component).setConverter(converter);
             } catch (ClassNotFoundException cne) {
                 FacesMessage errMsg = MessageFactory.getMessage(
-                    CONVERTER_ERROR_MESSAGE_ID,
-                    (new Object[]{valueType}));
+                      CONVERTER_ERROR_MESSAGE_ID,
+                      valueType);
                 throw new IllegalStateException(errMsg.getSummary());
             }
-            // add it to our component,
-            ((ValueHolder) component).setConverter(converter);
+
         }
 
         // if this component is a SelectOne or SelectMany, take special action
         if (isMultiValue(componentType)) {
             // create a UISelectItems instance
-            items = new UISelectItems();
-            items.setValue(parseStringIntoArrayList(context, component,
-                                                    value, valueType,
-                                                    converter));
+            UISelectItems items = new UISelectItems();
+            items.setValue(parseStringIntoArrayList(value, converter));
             // add it to the component
             component.getChildren().add(items);
         } else {
@@ -451,11 +445,12 @@ public class CarBean extends Object {
                 component.getAttributes().put("value", value);
             }
         }
-    }
-
+    }   
 
     /**
-     * @return true if componentType starts with SelectMany or SelectOne
+     * Determines if the component type is a SelectMany or SelectOne.
+     * @param componentType the component type
+     * @return true of the componentType starts with SelectMany or SelectOne
      */
     private boolean isMultiValue(String componentType) {
         if (null == componentType) {
@@ -466,7 +461,7 @@ public class CarBean extends Object {
     }
 
 
-    /**
+    /*
      * Tokenizes the passed in String which is a comma separated string of
      * option values that serve as keys into the main resources file.
      * For example, optionStr could be "Disc,Drum", which corresponds to
@@ -474,26 +469,32 @@ public class CarBean extends Object {
      * and used as key into the main resource file to get the localized option
      * values and stored in the passed in ArrayList.
      */
-    public ArrayList parseStringIntoArrayList(FacesContext context,
-                                              UIComponent component,
-                                              String value,
-                                              String valueType,
-                                              Converter converter) {
-        ArrayList optionsList = null;
-        int i = 0;
-        Object optionValue = null;
-        String
-            optionKey = null,
-            optionLabel = null;
-        Map nonLocalizedOptionValues = null;
+
+    /**
+     * <p>Tokenizes the passed in String which is a comma separated string of
+     * option values that serve as keys into the main resources file.
+     * For example, optionStr could be "Disc,Drum", which corresponds to
+     * brake options available for the chosen car. This String is tokenized
+     * and used as key into the main resource file to get the localized option
+     * values and stored in the passed in ArrayList.</p>
+     *
+     * @param value a comma separated String of values
+     * @param converter currently ignored
+     * @return a <code>List</code> of <code>SelectItem</code> instances
+     *  parsed from <code>value</code>
+     */
+    public List<SelectItem> parseStringIntoArrayList(String value,
+                                         Converter converter) {
 
         if (value == null) {
             return null;
         }
-        StringTokenizer st = new StringTokenizer(value, ",");
-        optionsList = new ArrayList((st.countTokens()) + 1);
-        while (st.hasMoreTokens()) {
-            optionKey = st.nextToken();
+
+        String[] splitOptions = value.split(",");
+        ArrayList<SelectItem> optionsList =
+              new ArrayList<SelectItem>((splitOptions.length) + 1);
+        for (String optionKey : splitOptions) {
+            String optionLabel;
             try {
                 optionLabel = resources.getString(optionKey);
             } catch (MissingResourceException e) {
@@ -519,16 +520,14 @@ public class CarBean extends Object {
 
     public Integer getCurrentPrice() {
         // go through our options and try to get the prices
-        int sum = ((Integer) ((ValueHolder) getComponents().get("basePrice")).
-            getValue()).intValue();
-        Iterator iter = getComponents().keySet().iterator();
-        String key = null;
-        Object value = null;
-        UIComponent component = null;
-        while (iter.hasNext()) {
-            key = (String) iter.next();
-            component = (UIComponent) getComponents().get(key);
-            value = component.getAttributes().get("value");
+        int sum = (Integer) ((ValueHolder) getComponents().get("basePrice")).
+              getValue();
+
+        for (Object o : getComponents().keySet()) {
+
+            String key = (String) o;
+            UIComponent component = (UIComponent) getComponents().get(key);
+            Object value = component.getAttributes().get("value");
             if (null == value || (!(component instanceof UIInput))) {
                 continue;
             }
@@ -537,27 +536,28 @@ public class CarBean extends Object {
             if (value instanceof String) {
                 try {
                     sum +=
-                        Integer.valueOf(priceData.getString((String) value))
-                        .intValue();
+                          Integer.valueOf(priceData.getString((String) value));
                 } catch (NumberFormatException e) {
+                    // do nothing
                 }
             }
             // if the value is a Boolean, look up the price by name
             else if (value instanceof Boolean &&
-                     ((Boolean) value).booleanValue()) {
+                     (Boolean) value) {
                 try {
                     sum +=
-                        Integer.valueOf(priceData.getString(key)).intValue();
+                          Integer.valueOf(priceData.getString(key));
                 } catch (NumberFormatException e) {
+                    // do nothing
                 }
             } else if (value instanceof Number) {
                 sum += ((Number) value).intValue();
             }
         }
-        Integer result = new Integer(sum);
+        Integer result = sum;
         // store the new price into the component for currentPrice
         ((ValueHolder) getComponents().get("currentPrice")).
-            setValue(result);
+              setValue(result);
         return result;
     }
 
@@ -567,7 +567,7 @@ public class CarBean extends Object {
     }
 
 
-    public Map getAttributes() {
+    public Map<String,Object> getAttributes() {
         return attributes;
     }
 

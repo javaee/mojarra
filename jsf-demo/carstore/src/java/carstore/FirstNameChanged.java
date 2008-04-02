@@ -32,14 +32,14 @@ import javax.faces.event.PhaseId;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.event.ValueChangeListener;
 
-public class FirstNameChanged extends Object implements ValueChangeListener {
+public class FirstNameChanged implements ValueChangeListener {
 
     public void processValueChange(ValueChangeEvent event)
-        throws AbortProcessingException {
+          throws AbortProcessingException {
         if (null != event.getNewValue()) {
             FacesContext.getCurrentInstance().getExternalContext()
-                .getSessionMap()
-                .put("firstName", event.getNewValue());
+                  .getSessionMap()
+                  .put("firstName", event.getNewValue());
         }
     }
 

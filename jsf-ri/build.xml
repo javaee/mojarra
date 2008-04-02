@@ -410,7 +410,7 @@
         <delete dir="${build.classes.dir}/com/sun/org"/>
     </target>
 
-    <target name="main" depends="jars"/>
+    <target name="main" depends="update,jars"/>
 
     <target name="create.runtime.config">
         <xslt in="${build.dir}/classes/com/sun/faces/standard-html-renderkit.xml"

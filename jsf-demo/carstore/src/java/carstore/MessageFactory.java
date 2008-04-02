@@ -1,5 +1,5 @@
 /*
- * $Id: MessageFactory.java,v 1.2 2005/08/22 22:08:36 ofung Exp $
+ * $Id: MessageFactory.java,v 1.3 2006/03/09 01:17:30 rlubke Exp $
  */
 
 /*
@@ -43,41 +43,18 @@ import java.util.ResourceBundle;
  * <code>protection</code>.</p>
  */
 
-public class MessageFactory extends Object {
+public class MessageFactory {
 
-    //
-    // Protected Constants
-    //
+    private static final Object[] EMPTY_ARGS = new Object[0];
 
-    //
-    // Class Variables
-    //
-
-    //
-    // Instance Variables
-    //
-
-    // Attribute Instance Variables
-
-    // Relationship Instance Variables
-
-
-    //
-    // Constructors and Initializers    
-    //
 
     private MessageFactory() {
     }
 
-    //
-    // Class methods
-    //
 
-    //
-    // General Methods
-    //
-    
-    public static String substituteParams(Locale locale, String msgtext, Object params[]) {
+    public static String substituteParams(Locale locale,
+                                          String msgtext,
+                                          Object... params) {
         String localizedStr = null;
 
         if (params == null || msgtext == null) {
@@ -91,16 +68,17 @@ public class MessageFactory extends Object {
             localizedStr = b.toString();
         }
         return localizedStr;
-    }
-
+    }    
 
     /**
-     * This version of getMessage() is used in the RI for localizing RI
-     * specific messages.
+     * <p>This version of getMessage() is used by Sun's JSF implementation
+     * for localizing implementation specific messages
+     * @param messageId the message ID
+     * @param params substitution params
+     * @return a localized <code>FacesMessage</code>
      */
-
-    public static FacesMessage getMessage(String messageId, Object params[]) {
-        Locale locale = null;
+    public static FacesMessage getMessage(String messageId, Object... params) {
+        Locale locale;
         FacesContext context = FacesContext.getCurrentInstance();
         // context.getViewRoot() may not have been initialized at this point.
         if (context != null && context.getViewRoot() != null) {
@@ -116,25 +94,25 @@ public class MessageFactory extends Object {
     }
 
 
-    public static FacesMessage getMessage(Locale locale, String messageId,
-                                          Object params[]) {
-        FacesMessage result = null;
-        String
-            summary = null,
-            detail = null,
-            bundleName = null;
+    public static FacesMessage getMessage(Locale locale,
+                                          String messageId,
+                                          Object... params) {
+        String summary = null;
+        String detail = null;
+        String bundleName;
         ResourceBundle bundle = null;
 
         // see if we have a user-provided bundle
         if (null != (bundleName = getApplication().getMessageBundle())) {
             if (null !=
                 (bundle =
-                ResourceBundle.getBundle(bundleName, locale,
-                                         getCurrentLoader(bundleName)))) {
+                      ResourceBundle.getBundle(bundleName, locale,
+                                               getCurrentLoader(bundleName)))) {
                 // see if we have a hit
                 try {
                     summary = bundle.getString(messageId);
                 } catch (MissingResourceException e) {
+                    // log message
                 }
             }
         }
@@ -152,6 +130,7 @@ public class MessageFactory extends Object {
             try {
                 summary = bundle.getString(messageId);
             } catch (MissingResourceException e) {
+                // log message
             }
         }
 
@@ -171,6 +150,7 @@ public class MessageFactory extends Object {
                                       bundle.getString(messageId + "_detail"),
                                       params);
         } catch (MissingResourceException e) {
+            // log message
         }
 
         return (new FacesMessage(summary, detail));
@@ -180,20 +160,22 @@ public class MessageFactory extends Object {
     //
     // Methods from MessageFactory
     // 
-    public static FacesMessage getMessage(FacesContext context, String messageId) {
-        return getMessage(context, messageId, null);
+    public static FacesMessage getMessage(FacesContext context,
+                                          String messageId) {
+        return getMessage(context, messageId, EMPTY_ARGS);
     }
 
 
-    public static FacesMessage getMessage(FacesContext context, String messageId,
-                                          Object params[]) {
+    public static FacesMessage getMessage(FacesContext context,
+                                          String messageId,
+                                          Object... params) {
         if (context == null || messageId == null) {
             throw new NullPointerException(
-                "One or more parameters could be null");
+                  "One or more parameters could be null");
         }
-        Locale locale = null;
+        Locale locale;
         // viewRoot may not have been initialized at this point.
-        if (context != null && context.getViewRoot() != null) {
+        if (context.getViewRoot() != null) {
             locale = context.getViewRoot().getLocale();
         } else {
             locale = Locale.getDefault();
@@ -210,34 +192,6 @@ public class MessageFactory extends Object {
     }
 
 
-    public static FacesMessage getMessage(FacesContext context, String messageId,
-                                          Object param0) {
-        return getMessage(context, messageId, new Object[]{param0});
-    }
-
-
-    public static FacesMessage getMessage(FacesContext context, String messageId,
-                                          Object param0, Object param1) {
-        return getMessage(context, messageId, new Object[]{param0, param1});
-    }
-
-
-    public static FacesMessage getMessage(FacesContext context, String messageId,
-                                          Object param0, Object param1,
-                                          Object param2) {
-        return getMessage(context, messageId,
-                          new Object[]{param0, param1, param2});
-    }
-
-
-    public static FacesMessage getMessage(FacesContext context, String messageId,
-                                          Object param0, Object param1,
-                                          Object param2, Object param3) {
-        return getMessage(context, messageId,
-                          new Object[]{param0, param1, param2, param3});
-    }
-
-
     protected static Application getApplication() {
         return (FacesContext.getCurrentInstance().getApplication());
     }
@@ -245,7 +199,7 @@ public class MessageFactory extends Object {
 
     protected static ClassLoader getCurrentLoader(Object fallbackClass) {
         ClassLoader loader =
-            Thread.currentThread().getContextClassLoader();
+              Thread.currentThread().getContextClassLoader();
         if (loader == null) {
             loader = fallbackClass.getClass().getClassLoader();
         }

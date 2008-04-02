@@ -1,5 +1,5 @@
 /*
- * $Id: FormatValidatorTag.java,v 1.2 2005/08/22 22:08:36 ofung Exp $
+ * $Id: FormatValidatorTag.java,v 1.3 2006/03/09 01:17:30 rlubke Exp $
  */
 
 /*
@@ -30,8 +30,10 @@
 package carstore;
 
 
+import javax.el.ValueExpression;
+import javax.faces.context.FacesContext;
 import javax.faces.validator.Validator;
-import javax.faces.webapp.ValidatorTag;
+import javax.faces.webapp.ValidatorELTag;
 import javax.servlet.jsp.JspException;
 
 /**
@@ -39,59 +41,31 @@ import javax.servlet.jsp.JspException;
  * <code>format_validator</code>.
  */
 
-public class FormatValidatorTag extends ValidatorTag {
+public class FormatValidatorTag extends ValidatorELTag {
 
-    //
-    // Protected Constants
-    //
+    private static final String VALIDATOR_ID = "FormatValidator";
+    protected ValueExpression formatPatterns = null;
 
-    //
-    // Class Variables
-    //
-
-    //
-    // Instance Variables
-    //
-
-    // Attribute Instance Variables
-    protected String formatPatterns = null;
- 
-  
-    // Relationship Instance Variables
-
-    //
-    // Constructors and Initializers    
-    //
 
     public FormatValidatorTag() {
         super();
-        super.setValidatorId("FormatValidator");
     }
 
-    //
-    // Class methods
-    //
 
-    //
-    // General Methods
-    //
-
-    public String getFormatPatterns() {
+    public ValueExpression getFormatPatterns() {
         return formatPatterns;
     }
 
 
-    public void setFormatPatterns(String fmtPatterns) {
-        formatPatterns = fmtPatterns;
+    public void setFormatPatterns(ValueExpression formatPatterns) {
+        this.formatPatterns = formatPatterns;
     }
 
-    // 
-    // Methods from ValidatorTag
-    // 
-
     protected Validator createValidator() throws JspException {
-        FormatValidator result = null;
-        result = (FormatValidator) super.createValidator();
+        FormatValidator result =
+              (FormatValidator) FacesContext.getCurrentInstance()
+                    .getApplication()
+                    .createValidator(VALIDATOR_ID);
 
         result.setFormatPatterns(formatPatterns);
         return result;

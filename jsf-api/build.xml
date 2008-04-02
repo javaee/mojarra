@@ -624,7 +624,7 @@ javax.faces.level=ALL
            Main target
          ===================================================================
     -->
-    <target name="main" depends="jars"
+    <target name="main" depends="update,jars"
             description="Compile API classes and build JAR file"/>
 
     <!--

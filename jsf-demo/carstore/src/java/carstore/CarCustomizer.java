@@ -40,11 +40,11 @@ import java.util.logging.Logger;
 /**
  * <p>A helper class that customizes a CarBean for a set of options
  * in a package.</p>
- *
+ * <p/>
  * <p>This class reads its settings from a Properties file</p>
  */
 
-public class CarCustomizer extends Object {
+public class CarCustomizer {
 
     private static final Logger LOGGER = Logger.getLogger("carstore");
 
@@ -66,7 +66,6 @@ public class CarCustomizer extends Object {
 
 
     private void init(String bundleName) {
-        FacesContext context = FacesContext.getCurrentInstance();
 
         if (LOGGER.isLoggable(Level.FINE)) {
             LOGGER.fine("Loading bundle: " + bundleName + ".");
@@ -89,21 +88,19 @@ public class CarCustomizer extends Object {
 
 
     public void customizeCar(CarBean toCustomize) {
-        FacesContext context = FacesContext.getCurrentInstance();
-        Enumeration keys = bundle.getKeys();
-        String
-            key = null,
-            disabledStr = null,
-            curSetting = null;
-        Boolean disabled = null;
-        UIComponent component = null;
-        Converter converter = null;
-        Object valueToSet = null;
 
-        while (keys.hasMoreElements()) {
-            key = (String) keys.nextElement();
+        FacesContext context = FacesContext.getCurrentInstance();
+        String disabledStr;
+        String curSetting;
+        UIComponent component;
+        Converter converter;
+        Object valueToSet;
+
+        for (Enumeration keys = bundle.getKeys(); keys.hasMoreElements();) {
+
+            String key = (String) keys.nextElement();
             // skip null and secondary keys.
-            if (key == null || -1 != key.indexOf("_")) {
+            if (key == null || -1 != key.indexOf('_')) {
                 continue;
             }
             // skip null values
@@ -114,18 +111,19 @@ public class CarCustomizer extends Object {
             // skip null components
             if (null ==
                 (component =
-                (UIComponent) toCustomize.getComponents().get(key))) {
+                      (UIComponent) toCustomize.getComponents().get(key))) {
                 continue;
             }
 
             // handle the disabled setting, if necessary
-            disabled = null;
+            Boolean disabled = null;
             try {
                 if (null !=
                     (disabledStr = bundle.getString(key + "_disabled"))) {
                     disabled = Boolean.valueOf(disabledStr);
                 }
             } catch (Throwable e) {
+                // do nothing
             }
             if (null != disabled) {
                 component.getAttributes().put("disabled", disabled);
@@ -135,7 +133,7 @@ public class CarCustomizer extends Object {
             // If the component can and does have a converter
             if (component instanceof ValueHolder &&
                 (null != (converter =
-                ((ValueHolder) component).getConverter()))) {
+                      ((ValueHolder) component).getConverter()))) {
                 valueToSet = converter.getAsObject(context, component,
                                                    curSetting);
             } else {

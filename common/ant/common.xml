@@ -29,6 +29,8 @@
 
     <import
           file="${jsf.build.home}/common/ant/${container.name}/container.xml"/>
+    <import
+          file="${jsf.build.home}/common/ant/dependencies.xml"/>
     <taskdef resource="net/sf/antcontrib/antlib.xml">
         <classpath>
             <pathelement
