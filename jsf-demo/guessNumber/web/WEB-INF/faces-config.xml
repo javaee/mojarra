@@ -12,18 +12,18 @@
 <faces-config>
 
   <navigation-rule>
-    <from-tree-id>/greeting.jsp</from-tree-id>
+    <from-view-id>/greeting.jsp</from-view-id>
     <navigation-case>
       <from-outcome>success</from-outcome>
-      <to-tree-id>/response.jsp</to-tree-id>
+      <to-view-id>/response.jsp</to-view-id>
     </navigation-case>
   </navigation-rule>
 
   <navigation-rule>
-    <from-tree-id>/response.jsp</from-tree-id>
+    <from-view-id>/response.jsp</from-view-id>
     <navigation-case>
       <from-outcome>success</from-outcome>
-      <to-tree-id>/greeting.jsp</to-tree-id>
+      <to-view-id>/greeting.jsp</to-view-id>
     </navigation-case>
   </navigation-rule>
 

@@ -44,17 +44,17 @@
     <h2>Hi. My name is Duke.  I'm thinking of a number from 0 to 10.
     Can you guess it?</h2>
     <jsp:useBean id="UserNumberBean" class="guessNumber.UserNumberBean" scope="session" />
-    <f:use_faces>
+    <f:view>
     <h:form id="helloForm" formName="helloForm" >
         <h:graphic_image id="wave_img" url="/wave.med.gif" />
-  	<h:input_number id="userNo" numberStyle="NUMBER"
-   				valueRef="UserNumberBean.userNumber">
+  	<h:input_text id="userNo" valueRef="UserNumberBean.userNumber">
+                <f:convert_number />
 	        <f:validate_longrange minimum="0" maximum="10" />
 
-         </h:input_number> 
+         </h:input_text> 
 	 <h:command_button id="submit" action="success" label="Submit" />
          <p>
 	 <h:output_errors id="errors1" for="userNo"/>
     </h:form>
-    </f:use_faces>
+    </f:view>
 </HTML>  

@@ -41,7 +41,7 @@
     <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
     <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
     <body bgcolor="white">
-    <f:use_faces>
+    <f:view>
     <h:form id="responseForm" formName="responseForm" >
         <h:graphic_image id="wave_img" url="/wave.med.gif" />
     <h2><h:output_text id="result" 
@@ -49,5 +49,5 @@
     <h:command_button id="back" label="Back" action="success"/><p>
 
     </h:form>
-    </f:use_faces>
+    </f:view>
  </HTML>
