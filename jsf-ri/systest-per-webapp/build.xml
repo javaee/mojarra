@@ -91,6 +91,7 @@
     <pathelement location="${servlet.jar}"/>
     <pathelement location="${jsp.jar}"/> 
     <pathelement location="${jstl.jar}"/>
+    <pathelement location="${basedir}/../build/test/WEB-INF/classes"/>
     <fileset dir="${htmlunit.home}/lib" includes="*.jar"/>
   </path>
 
@@ -194,6 +195,9 @@
     <copy file="${jsf-impl.jar}" todir="${webapp.build.home}/WEB-INF/lib"/>
     <copy todir="${webapp.build.home}/WEB-INF/classes">
       <fileset dir="${basedir}/build/classes" />
+    </copy>
+    <copy todir="${webapp.build.home}/WEB-INF/classes">
+      <fileset dir="${basedir}/../build/test/WEB-INF/classes" />
     </copy>
   </target>
 
@@ -349,7 +353,6 @@
       <param name="context.path" value="/jsf-nested-datatables"/>
 
     </antcall>
-
 
   </target>
 

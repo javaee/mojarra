@@ -1,5 +1,5 @@
 /*
- * $Id: TestInstancePool_local.java,v 1.2 2004/06/01 16:58:51 eburns Exp $
+ * $Id: TestInstancePool_local.java,v 1.3 2004/10/14 22:08:52 edburns Exp $
  */
 
 /*
@@ -25,7 +25,7 @@ import java.util.BitSet;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestInstancePool_local.java,v 1.2 2004/06/01 16:58:51 eburns Exp $
+ * @version $Id: TestInstancePool_local.java,v 1.3 2004/10/14 22:08:52 edburns Exp $
  */
 
 public class TestInstancePool_local extends TestCase {
@@ -141,9 +141,11 @@ public class TestInstancePool_local extends TestCase {
 	int 
 	    i, 
 	    numToCheckout;
-	
+	boolean foundFailedThread = false;
 	Thread threads[] = new Thread[numThreads];
+	threadOutcomes = new Object[numThreads];
 	Runnable runnable = null;
+
 	for (i = 0; i < numThreads; i++) {
 	    numToCheckout = (Math.abs(random.nextInt()) % 14) + 1;
 	    switch(runnableType) {
@@ -161,48 +163,11 @@ public class TestInstancePool_local extends TestCase {
 	    // check out a random number from 1 - 15 of instances
 	    threads[i] = new Thread(runnable, "TestThread" + i);
 	}
-	
-	threadOutcomes = new Object[numThreads];
-	for (i = 0; i < numThreads; i++) {
-	    threadOutcomes[i] = null;
-	}
-	for (i = 0; i < numThreads; i++) {
-	    threads[i].start();
-	}
-	
-	BitSet printed = new BitSet(numThreads);
-	boolean foundFailedThread = false;
-	// wait for all threads to complete
-	while (true) {
-	    boolean foundIncompleteThread = false;
-	    for (i = 0; i < numThreads; i++) {
-		if (null == threadOutcomes[i]) {
-		    foundIncompleteThread = true;
-		    break;
-		}
-		else {
-		    // print out the outcome for this thread
-		    if (!printed.get(i)) {
-			printed.set(i);
-			System.out.print(threads[i].getName() + " outcome: ");
-			if (threadOutcomes[i] instanceof Exception) {
-			    foundFailedThread = true;
-			    System.out.println("Exception: " + 
-					       threadOutcomes[i] + " " + 
-					       ((Exception)threadOutcomes[i]).getMessage());
-			}
-			else {
-			    System.out.println(threadOutcomes[i].toString());
-			}
-			System.out.flush();
-		    }
-		}
-	    }
-	    if (!foundIncompleteThread) {
-		break;
-	    }
-	    Thread.sleep(1000);
-	}
+
+	MultiThreadTestRunner runner = 
+	    new MultiThreadTestRunner(threads, threadOutcomes);
+
+	foundFailedThread = runner.runThreadsAndOutputResults(System.out);
 	
 	return !foundFailedThread;
     }
