@@ -1,5 +1,5 @@
 /*
- * $Id: PaneTabTag.java,v 1.5 2003/09/25 17:48:12 horwat Exp $
+ * $Id: PaneTabTag.java,v 1.6 2003/11/03 22:03:37 eburns Exp $
  */
 
 /*
@@ -85,7 +85,8 @@ public class PaneTabTag extends UIComponentTag {
 
 
     protected void overrideProperties(UIComponent component) {
-
+	setOverride(false); // PENDING(edburns): fix this when we
+			    // resolve the override issue.
         super.overrideProperties(component);
 
         if (selectedSet) {
