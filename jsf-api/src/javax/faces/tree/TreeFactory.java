@@ -1,5 +1,5 @@
 /*
- * $Id: TreeFactory.java,v 1.11 2002/09/20 21:51:30 craigmcc Exp $
+ * $Id: TreeFactory.java,v 1.12 2002/09/22 01:35:34 craigmcc Exp $
  */
 
 /*
@@ -11,7 +11,7 @@ package javax.faces.tree;
 
 import java.util.Iterator;
 import javax.faces.FacesException;
-import javax.servlet.ServletContext;
+import javax.faces.context.FacesContext;
 
 
 /**
@@ -35,7 +35,7 @@ public abstract class TreeFactory {
      * with a root node, and whose <code>renderKitId</code> property is
      * initialized to the identifier of the default <code>RenderKit</code>.</p>
      *
-     * @param context ServletContext for this web application
+     * @param context FacesContext for the current request
      * @param treeId Tree identifier of the tree to be constructed and
      *  returned
      *
@@ -44,7 +44,7 @@ public abstract class TreeFactory {
      * @exception NullPointerException if <code>context</code> or
      *  <code>treeId</code> is null
      */
-    public abstract Tree getTree(ServletContext context,
+    public abstract Tree getTree(FacesContext context,
                                  String treeId) throws FacesException;
 
 

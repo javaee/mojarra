@@ -205,8 +205,12 @@
     <em>setting</em> as well as getting.  We're going to need to address
     the syntax and semantics of this no matter what JSP version we choose
     to depend on.</p>
+
+    <p>Futher, we have the opportunity to simplify the APIs somewhat by
+    using EL expressions for some common lookup scenarios such as resource
+    bundles (see Adam's mail threads for more  on this).
   </description>
-  <resolution>
+ <resolution>
     
   </resolution>
   <status>OPEN</status>
@@ -1359,7 +1363,11 @@
     (<code>context.addMessage()</code> instead of
     <code>context.getMessageList().addMessage()</code>), at the cost
     of lots of methods on FacesContext.</p>
-  </description>
+
+    <p>In addition, it may be appropriate to consider factoring <em>in</em>
+    method calls to eliminate the need for components and applications to
+    use factories to retrieve MessageResources and Converter instances.</p>
+\  </description>
   <resolution>
   </resolution>
   <status>OPEN</status>
