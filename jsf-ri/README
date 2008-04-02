@@ -1,8 +1,8 @@
 This README documents the Sun Reference implementation (RI) for JSR 127,
 JavaServer (tm) Faces.
 
-jsf-api cvs tag for this implementation: JSF_API_20020920B
-jsf-api-spec for this implementation: JSF_20020920.pdf
+jsf-api cvs tag for this implementation: JSF_API_20021218B
+jsf-api-spec for this implementation: JSF_20021223.pdf
 
 Installation Notes
 ==================
@@ -21,20 +21,36 @@ distribution in your WEB-INF/lib directory in your webapp.
 Major changes/features in this release:
 =======================================
 
-* command_button, render an <input> element instead of a
-  <button> as a concession to old browsers.
+* [ComponentNamespace-10] Flat namespace changes.  Component identifiers
+  are no longer required in all cases.  When using JSF from JSP,
+  component identifiers are only required when interacting with JSTL.
+  See Section JSF 3.1.2 in the spec.
 
-* Saving the tree can be done either in session (server) or in page by
-  turning off/on context parameter "saveStateInClient". Default is page. 
-  All objects referenced must be serializable if save state in page option 
-  is used.
+  Every component can be named by a component identifier, which must be
+  unique among the components that share a common naming container
+  parent in a component tree. 
 
-* Basic L10N support has been enabled by integrating with JSTL
-  <fmt:setBundle> tag. There is a dependency on jstl.jar and standard.jar
-  due to this feature.
+* [NamedChild-4] Support for component facets.  
 
-* We have most Standard RenderKit components implemented
+  An additional useful facility would be to define particular subordinate
+  components that have a specific role with respect to the owning
+  component, which is typically independent of the parent-child
+  relationship. An example might be a "data grid" control, where the
+  children represent the columns to be rendered in the grid. It is
+  useful to be able to identify a component that represents the column
+  header and/or footer, separate from the usual child collection that
+  represents the column data. To meet this requirement, JavaServer Faces
+  components offer support for facets, which represent a named
+  collection of subordinate (but non-child) components that are related
+  to the current component by virtue of a unique facet name that
+  represents the role that particular component plays.
 
+* [TraversalOrder-43] Change the way components are processed so they
+  honor the new Facet work.  In addition, add new UIComponent traversal
+  methods.
+
+* [VisibleProperty-27] Add support for the "rendered" property, which is
+  leveraged during encode/decode.  See section JSF 3.1.12 of the spec.
 
 Known Issues With This Release
 ==============================
