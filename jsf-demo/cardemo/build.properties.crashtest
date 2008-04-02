@@ -1,0 +1,8 @@
+# --------------------------------------------------
+#   PROPERTIES FOR CRASHTEST           
+# --------------------------------------------------
+
+host=localhost
+port=8080
+results.dir=/home/edburns/Projects/chaff/crashtest
+

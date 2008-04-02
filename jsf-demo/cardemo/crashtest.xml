@@ -1,0 +1,123 @@
+<project name="crashtest" default="main" basedir="." >
+
+   <property file="${user.home}/build.properties"/>  <!-- User local        -->
+   <property file="build.properties"/>               <!-- Component local   -->
+ 
+   <target name="build.cardemo">
+     <ant target="build.war" antfile="build.xml"/>
+   </target>
+
+   <target name="install.cardemo">
+
+     <ant target="install" antfile="build.xml"/>
+
+   </target>
+
+   <target name="setup" depends="build.cardemo,install.cardemo">
+	<echo message="Setting up CrashTest..." />
+	<property name="gf.dir" value="./resources/goldenfiles" />
+	<taskdef name="gtest" classname="org.apache.tomcat.task.GTest" classpath="./resources/testdriver.jar" />
+   </target>
+
+   <target name="teardown">
+	<echo message="Tearing Down CrashTest..." />
+      <ant target="remove" antfile="build.xml"/>
+   </target>
+
+   <target name="main" >
+	<antcall target="test" />
+   </target>
+
+   <target name="test" depends="runtest,teardown"/>
+
+   <target name="runtest" depends="setup" >
+        
+        <echo message="Host = ${host} and port = ${port}" />
+        
+      	<gtest request ="GET /jsf-cardemo/faces/ImageMap.jsp HTTP/1.0"
+            debug="0" host="${host}" port="${port}"
+            testSession="true"
+            append="false"
+            firstTask="true" resultFileName="${results.dir}/cardemo-test-results.xml"
+            returnCode="HTTP 1.1 200 OK"
+            testSuiteId="imagemap"
+            testSuiteName="ImageMap test"
+            testSuiteDescription=""
+            testId="imagemap"
+            testName="imagemap"
+            testDescription=""
+            testCaseId="ImageMap"
+            testCaseName="ImageMap"
+            testCaseDescription="Tests that cardemo ImageMap comes up ok"
+         />
+         
+         <gtest request ="GET /jsf-cardemo/faces/Storefront.jsp HTTP/1.0"
+            debug="0" host="${host}" port="${port}"
+            testSession="true"
+            resultFileName="${results.dir}/cardemo-test-results.xml"
+            returnCode="HTTP 1.1 200 OK"
+            testSuiteId="storefront"
+            testSuiteName="Storefront test"
+            testSuiteDescription=""
+            testId="storefront"
+            testName="storefront"
+            testDescription=""
+            testCaseId="Storefront"
+            testCaseName="Storefront"
+            testCaseDescription="Tests that cardemo Storefront comes up ok"
+         />
+         
+         <gtest request ="GET /jsf-cardemo/faces/more.jsp?id2=Buy HTTP/1.0"
+            debug="0" host="${host}" port="${port}"
+            testSession="true"
+            resultFileName="${results.dir}/cardemo-test-results.xml"
+            returnCode="HTTP 1.1 200 OK"
+            testSuiteId="buy"
+            testSuiteName="Buy test"
+            testSuiteDescription=""
+            testId="buy"
+            testName="buy"
+            testDescription=""
+            testCaseId="Buy"
+            testCaseName="Buy"
+            testCaseDescription="Tests that cardemo Buy comes up ok"
+         />
+         
+       <gtest request ="GET /jsf-cardemo/faces/buy.jsp?id1=Buy HTTP/1.0"
+            debug="0" host="${host}" port="${port}"
+            testSession="true"
+            resultFileName="${results.dir}/cardemo-test-results.xml"
+            returnCode="HTTP 1.1 200 OK"
+            testSuiteId="customer"
+            testSuiteName="Customer Test"
+            testSuiteDescription=""
+            testId="customer"
+            testName="customer"
+            testDescription=""
+            testCaseId="Customer"
+            testCaseName="Customer"
+            testCaseDescription="Tests that cardemo Customer page comes up ok"
+         />
+         
+        <gtest request ="GET /jsf-cardemo/faces/Customer.jsp?zip=95054&amp;ccno=1234123412341234&amp;id8=finish HTTP/1.0"
+            debug="0" host="${host}" port="${port}"
+            testSession="true"
+            lastTask="true"
+	    lastCase="true"
+	    lastTest="true"
+            resultFileName="${results.dir}/cardemo-test-results.xml"
+            returnCode="HTTP 1.1 200 OK"
+            testSuiteId="finish"
+            testSuiteName="Finish Test"
+            testSuiteDescription=""
+            testId="finish"
+            testName="finish"
+            testDescription=""
+            testCaseId="Finish"
+            testCaseName="Finish"
+            testCaseDescription="Tests that cardemo Thank you page comes up ok"
+         />
+               
+   </target>
+  </project>
+

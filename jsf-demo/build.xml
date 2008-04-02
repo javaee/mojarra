@@ -93,6 +93,61 @@
 
   </target>
 
+  <target name="test" depends="build-all">
+    <echo>
+Before running this target you must:
+
+  1. Stop tomcat.
+
+  2. run ant clean.wspack 
+
+  3. Start tomcat. 
+    </echo>
+
+    <ant target="test" antfile="cardemo/crashtest.xml" inheritAll="false"/>
+
+  </target>
+    
+
+  <target name="clean.wspack" depends="clean"
+          description="Clear jsf out from the wspack distribution, if present"
+          if="build.wspack">
+
+    <!-- remove the jsf directory from the pack -->
+    <delete dir="${tomcat.home}/jsf"/>
+
+    <!-- remove the work directories -->
+    <delete dir="${tomcat.home}/work/StandardEngine"/>
+    <delete dir="${tomcat.home}/work/Standard Engine"/>
+    <delete dir="${tomcat.home}/work/Catalina"/>
+
+    <!-- remove all incarnations of our sample apps from the pack -->
+
+    <!-- remove the jsf-*.xml descriptors from the pack's webapps -->
+    <delete>
+      <fileset dir="${tomcat.home}/webapps" includes="jsf-*.xml"/>
+    </delete>
+
+    <!-- delete the wars and expanded directories -->
+    <delete>
+      <fileset dir="${tomcat.home}/webapps">
+
+        <include name="*components*"/>
+        <include name="*cardemo*"/>
+        <include name="*helloDuke*"/>
+        <include name="*guessNumber*"/>
+        <include name="*nonJsp*"/>
+    
+      </fileset>
+    </delete>
+
+    <!-- Delete the logs -->
+    <delete>
+      <fileset dir="${tomcat.home}/logs" includes="*.txt"/>
+    </delete>
+
+  </target>
+
   <target name="prepare.build" >
       <mkdir dir="${jsf-demo.home}/lib"/>
   </target>
