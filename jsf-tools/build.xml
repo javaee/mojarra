@@ -15,6 +15,7 @@
 
   <property file="build.properties"/>                <!-- Component local   -->
   <property file="${user.home}/build.properties"/>   <!-- User local        -->
+  <property file="../build.properties"/>             <!-- Commons local     -->
 
   <property name="Name"             value="JavaServer Faces Tools"/>
   <property name="name"             value="jsf-tools"/>
