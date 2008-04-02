@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigFileTestCase.java,v 1.38 2003/10/02 06:50:10 jvisvanathan Exp $
+ * $Id: ConfigFileTestCase.java,v 1.39 2003/10/03 17:43:42 rlubke Exp $
  */
 
 /*
@@ -158,7 +158,7 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
         UIComponent command = application.createComponent("Command");
         assertNotNull(command);
         comp = null;
-        application.addComponent("fooType", "javax.faces.component.base.UICommandBase");
+        application.addComponent("fooType", "javax.faces.component.UICommand");
         comp = application.createComponent("fooType");
         assertNotNull(comp);
 

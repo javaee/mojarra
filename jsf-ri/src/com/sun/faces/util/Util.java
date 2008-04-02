@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.94 2003/10/02 00:40:03 jvisvanathan Exp $
+ * $Id: Util.java,v 1.95 2003/10/03 17:43:33 rlubke Exp $
  */
 
 /*
@@ -63,7 +63,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.94 2003/10/02 00:40:03 jvisvanathan Exp $
+ * @version $Id: Util.java,v 1.95 2003/10/03 17:43:33 rlubke Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -276,6 +276,9 @@ public class Util extends Object
 
    public static final String CANT_CLOSE_INPUT_STREAM_ID =
          "com.sun.faces.CANT_CLOSE_INPUT_STREAM";
+    
+   public static final String DUPLICATE_COMPONENT_ID_ERROR_ID = 
+         "com.sun.faces.DUPLICATE_COMPONENT_ID_ERROR";
 
 // README - make sure to add the message identifier constant
 // (ex: Util.CONVERSION_ERROR_MESSAGE_ID) and the number of substitution

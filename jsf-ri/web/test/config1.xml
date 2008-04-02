@@ -28,7 +28,7 @@
 
    <component>
      <component-type>tree</component-type>
-     <component-class>javax.faces.component.base.UICommandBase</component-class>
+     <component-class>javax.faces.component.UICommand</component-class>
    </component>
    <render-kit>
      <renderer>

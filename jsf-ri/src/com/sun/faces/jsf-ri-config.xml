@@ -40,7 +40,7 @@
 
   <component>
     <component-type>Command</component-type>
-    <component-class>javax.faces.component.base.UICommandBase</component-class>
+    <component-class>javax.faces.component.html.HtmlCommandButton</component-class>
   </component>
 
   <component>
@@ -50,67 +50,62 @@
 
   <component>
     <component-type>Form</component-type>
-    <component-class>javax.faces.component.base.UIFormBase</component-class>
+    <component-class>javax.faces.component.UIForm</component-class>
   </component>
 
   <component>
     <component-type>Graphic</component-type>
-    <component-class>javax.faces.component.base.UIGraphicBase</component-class>
+    <component-class>javax.faces.component.html.HtmlGraphicImage</component-class>
   </component>
 
   <component>
     <component-type>Input</component-type>
-    <component-class>javax.faces.component.base.UIInputBase</component-class>
-  </component>
-
-  <component>
-    <component-type>NamingContainer</component-type>
-    <component-class>javax.faces.component.base.UINamingContainerBase</component-class>
+    <component-class>javax.faces.component.html.HtmlInputText</component-class>
   </component>
 
   <component>
     <component-type>Output</component-type>
-    <component-class>javax.faces.component.base.UIOutputBase</component-class>
+    <component-class>javax.faces.component.UIOutput</component-class>
   </component>
 
   <component>
     <component-type>Panel</component-type>
-    <component-class>javax.faces.component.base.UIPanelBase</component-class>
+    <component-class>javax.faces.component.UIPanel</component-class>
   </component>
 
   <component>
     <component-type>Parameter</component-type>
-    <component-class>javax.faces.component.base.UIParameterBase</component-class>
+    <component-class>javax.faces.component.UIParameter</component-class>
   </component>
 
   <component>
     <component-type>SelectBoolean</component-type>
-    <component-class>javax.faces.component.base.UISelectBooleanBase</component-class>
+    <component-class>javax.faces.component.html.HtmlSelectBooleanCheckbox</component-class>
   </component>
 
   <component>
     <component-type>SelectItem</component-type>
-    <component-class>javax.faces.component.base.UISelectItemBase</component-class>
+    <component-class>javax.faces.component.UISelectItem</component-class>
   </component>
 
   <component>
     <component-type>SelectItems</component-type>
-    <component-class>javax.faces.component.base.UISelectItemsBase</component-class>
+    <component-class>javax.faces.component.UISelectItems</component-class>
   </component>
 
   <component>
     <component-type>SelectMany</component-type>
-    <component-class>javax.faces.component.base.UISelectManyBase</component-class>
+    <component-class>javax.faces.component.html.HtmlSelectManyListbox</component-class>
   </component>
 
   <component>
     <component-type>SelectOne</component-type>
-    <component-class>javax.faces.component.base.UISelectOneBase</component-class>
+    <component-class>javax.faces.component.html.HtmlSelectOneListbox</component-class>
   </component>
     
   <component>
     <component-type>ViewRoot</component-type>
-    <component-class>javax.faces.component.base.UIViewRootBase</component-class>
+    <component-class>javax.faces.component.UIViewRoot</component-class>
   </component>
 
   <!-- standard converters -->
@@ -878,6 +873,15 @@
         <summary xml:lang="de">Unable to close input stream.</summary>
         <summary xml:lang="fr">Unable to close input stream.</summary>
         <summary xml:lang="es">Unbale to close input stream.</summary>
+    </message>
+      
+    <message>
+        <message-id>com.sun.faces.DUPLICATE_COMPONENT_ID_ERROR</message-id>
+        <message-class>javax.faces.application.MessageImpl</message-class>
+        <summary xml:lang="en">Duplicate component ID ''{0}'' found in view.</summary>
+        <summary xml:lang="de">Duplicate component ID ''{0}'' found in view.</summary>
+        <summary xml:lang="fr">Duplicate component ID ''{0}'' found in view.</summary>
+        <summary xml:lang="es">Duplicate component ID ''{0}'' found in view.</summary>
     </message>
   </message-resources>
 

@@ -1,5 +1,5 @@
 /*
- * $Id: ViewTag.java,v 1.5 2003/09/15 20:23:09 eburns Exp $
+ * $Id: ViewTag.java,v 1.6 2003/10/03 17:43:32 rlubke Exp $
  */
 
 /*
@@ -14,7 +14,6 @@ import com.sun.faces.RIConstants;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.application.StateManager;
-import javax.faces.render.ResponseStateManager;
 import javax.faces.webapp.UIComponentBodyTag;
 import javax.faces.application.StateManager.SerializedView;
 import javax.servlet.jsp.JspException;
@@ -32,7 +31,7 @@ import org.mozilla.util.Assert;
  *  any renderers or attributes. It exists mainly to save the state of
  *  the response tree once all tags have been rendered.
  *
- * @version $Id: ViewTag.java,v 1.5 2003/09/15 20:23:09 eburns Exp $
+ * @version $Id: ViewTag.java,v 1.6 2003/10/03 17:43:32 rlubke Exp $
  * 
  *
  */
@@ -101,9 +100,7 @@ public class ViewTag extends UIComponentBodyTag
  
     public int doAfterBody() throws JspException {
 	BodyContent bodyContent = null;
-	String content = null;
-        Object treeStructure = null;
-        Object treeState = null;
+	String content = null;     
 	FacesContext context = FacesContext.getCurrentInstance();
 	ResponseWriter responseWriter = context.getResponseWriter();
 	StateManager stateManager = Util.getStateManager(context);
@@ -131,7 +128,13 @@ public class ViewTag extends UIComponentBodyTag
             }    
 	    content = bodyContent.getString();
 	    
-	    if (null == (view = stateManager.saveSerializedView(context))) {
+        try {
+            view = stateManager.saveSerializedView(context);
+        } catch (IllegalStateException ise) {
+            throw new JspException(ise);
+        }
+            
+	    if (view == null) {
 		getPreviousOut().write(content);
 	    }
 	    else {

@@ -4,7 +4,7 @@
  Copyright 2003 Sun Microsystems, Inc. All rights reserved.
  SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 
- $Id: build-tests.xml,v 1.23 2003/09/19 23:54:04 horwat Exp $
+ $Id: build-tests.xml,v 1.24 2003/10/03 17:43:34 rlubke Exp $
 -->
 
 
@@ -61,7 +61,8 @@
 
   <target name="test"
    description="Execute all tests against installed application"
-       depends="test.renderkit,
+       depends="test.duplicateIds,
+                test.renderkit,
                 test.hello,
                 test.external,
                 test.jsp,
@@ -82,6 +83,21 @@
                 test.phases
                "/>
 
+    <target name="test.duplicateIds"
+        description="Test duplicate ID detection">
+    
+        <tester host="${host}" port="${port}" protocol="${protocol}"
+            request="${context.path}/faces/duplicateIds01.jsp"
+             status="200"/>
+        
+        <tester host="${host}" port="${port}" protocol="${protocol}"
+            request="${context.path}/faces/duplicateIds02.jsp"
+             status="200"/>
+        
+        <tester host="${host}" port="${port}" protocol="${protocol}"
+            request="${context.path}/faces/duplicateIds03.jsp"
+             status="200"/>
+    </target>
 
   <target name="test.external"
    description="Test ExternalContext implementation issues">

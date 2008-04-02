@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderer.java,v 1.57 2003/10/02 00:39:58 jvisvanathan Exp $
+ * $Id: HtmlBasicRenderer.java,v 1.58 2003/10/03 17:43:31 rlubke Exp $
  */
 
 /*
@@ -313,55 +313,6 @@ public abstract class HtmlBasicRenderer extends Renderer {
             String currentValue) throws IOException {
         return;
     }
-   
-    public String getClientId(FacesContext context, UIComponent component){
-        // PENDING IMPLEMENTATION. This method needs to be replaced by
-        // the convertClientID() method below.
-        return null;
-/*	String clientId = null;
-	NamingContainer closestContainer = null;
-	UIComponent containerComponent = component;
-
-        // Search for an ancestor that is a naming container
-        while (null != (containerComponent = 
-                        containerComponent.getParent())) {
-            if (containerComponent instanceof NamingContainer) {
-                closestContainer = (NamingContainer) containerComponent;
-                break;
-            }
-        }
-
-        // If none is found, see if this is a naming container
-        if (null == closestContainer && component instanceof NamingContainer) {
-            closestContainer = (NamingContainer) component;
-        }
-
-        if (null != closestContainer) {
-
-            // If there is no componentId, generate one and store it
-            if (component.getId() == null) {
-                // Don't call setId() because it checks for
-                // uniqueness.  No need.
-                clientId = closestContainer.generateClientId();
-            } else {
-                clientId = component.getId();
-            }
-
-            // build the client side id
-            containerComponent = (UIComponent) closestContainer;
-
-            // If this is the root naming container, break
-            if (null != containerComponent.getParent()) {
-                clientId = containerComponent.getClientId(context) +
-                    NamingContainer.SEPARATOR_CHAR + clientId;
-            }
-        }
-
-        if (null == clientId) {
-	    throw new NullPointerException();
-	}
-	return (clientId); */
-    }
 
     /**
      * Renderers override this method to store the previous value
@@ -433,8 +384,7 @@ public abstract class HtmlBasicRenderer extends Renderer {
         }
     }
     
-      public String convertClientId(FacesContext context, String clientId) {
-          // PENDING IMPLEMENTATION
+      public String convertClientId(FacesContext context, String clientId) {          
           return clientId;
       }
 

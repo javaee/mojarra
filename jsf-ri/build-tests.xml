@@ -310,6 +310,7 @@
             <test name="com.sun.faces.application.TestApplicationImpl_Config"/>
             <test name="com.sun.faces.application.TestMessageResourcesImpl"/>
             <test name="com.sun.faces.application.TestNavigationHandler"/>
+            <test name="com.sun.faces.application.TestStateManagerImpl"/>
             <test name="com.sun.faces.application.TestViewHandlerImpl"/>
             <test name="com.sun.faces.config.ConfigFileTestCase"/>
             <test name="com.sun.faces.config.TestConfigListener"/>
