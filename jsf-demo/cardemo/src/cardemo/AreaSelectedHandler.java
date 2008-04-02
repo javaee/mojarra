@@ -110,12 +110,12 @@ public class AreaSelectedHandler implements AreaSelectedListener {
 	Locale curLocale = (Locale)locales.get(current);
 	if (curLocale != null) {
             FacesContext context = FacesContext.getCurrentInstance();
-            context.getViewRoot().setLocale(curLocale);
 	    String viewId = "/Storefront.jsp";
 	    UIViewRoot newView = new UIViewRoot();
 	    newView.setViewId(viewId);
+            newView.setLocale(curLocale);
 	    context.setViewRoot(newView);
-	}
+        }
     }
 
     
