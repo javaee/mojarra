@@ -1,5 +1,5 @@
 /*
- * $Id: FacesServlet.java,v 1.8 2002/07/11 18:10:49 craigmcc Exp $
+ * $Id: FacesServlet.java,v 1.9 2003/01/22 04:46:59 craigmcc Exp $
  */
 
 /*
@@ -171,7 +171,18 @@ public final class FacesServlet implements Servlet {
         try {
             lifecycle.execute(context);
         } catch (FacesException e) {
-            throw new ServletException(e.getMessage(), e);
+            Throwable t = ((FacesException) e).getCause();
+            if (t == null) {
+                throw new ServletException(e.getMessage(), e);
+            } else {
+                if (t instanceof ServletException) {
+                    Throwable u = ((ServletException) t).getRootCause();
+                    if (u != null) {
+                        t = u;
+                    }
+                }
+                throw new ServletException(t.getMessage(), t);
+            }
         }
 
         // Remove and release the FacesContext instance for this request
