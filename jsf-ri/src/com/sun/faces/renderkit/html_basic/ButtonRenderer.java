@@ -1,5 +1,5 @@
 /*
- * $Id: ButtonRenderer.java,v 1.92 2006/01/11 15:28:07 rlubke Exp $
+ * $Id: ButtonRenderer.java,v 1.93 2006/03/17 21:02:26 rlubke Exp $
  */
 
 /*
@@ -354,8 +354,8 @@ public class ButtonRenderer extends HtmlBasicRenderer {
 	    return null;
 	}
 	
-	result = CLEAR_HIDDEN_FIELD_FN_NAME +
-	    "_" + formClientId.replace(NamingContainer.SEPARATOR_CHAR, '_') +
+	result = Util.createValidECMAIdentifier(CLEAR_HIDDEN_FIELD_FN_NAME +
+	    '_' + formClientId.replace(NamingContainer.SEPARATOR_CHAR, '_')) +
 	    "(this.form.id);";
 	
 	return result;

@@ -1,5 +1,5 @@
 /*
- * $Id: CommandLinkRenderer.java,v 1.43 2006/03/17 01:03:50 rlubke Exp $
+ * $Id: CommandLinkRenderer.java,v 1.44 2006/03/17 21:02:27 rlubke Exp $
  */
 
 /*
@@ -334,9 +334,12 @@ public class CommandLinkRenderer extends LinkRenderer {
         
         // call the javascript function that clears the all the hidden field
         // parameters in the form.
-        sb.append(CLEAR_HIDDEN_FIELD_FN_NAME);
-        sb.append('_');
-        sb.append(formClientId.replace(NamingContainer.SEPARATOR_CHAR, '_'));
+        String functionName =
+              Util.createValidECMAIdentifier(CLEAR_HIDDEN_FIELD_FN_NAME
+                                             + '_'
+                                             + formClientId
+                    .replace(NamingContainer.SEPARATOR_CHAR, '_')); 
+        sb.append(functionName);
         sb.append("('");
         sb.append(formClientId);
         sb.append("');");
@@ -422,7 +425,11 @@ public class CommandLinkRenderer extends LinkRenderer {
             writer.write("<!--\n");
         }
 	writer.write("\nfunction ");
-	String functionName = (CLEAR_HIDDEN_FIELD_FN_NAME + "_" + formName.replace(NamingContainer.SEPARATOR_CHAR, '_')); 
+        String functionName =
+              Util.createValidECMAIdentifier(CLEAR_HIDDEN_FIELD_FN_NAME
+                                             + "_"
+                                             + formName
+                    .replace(NamingContainer.SEPARATOR_CHAR, '_')); 
 	writer.write(functionName);
 	writer.write("(curFormName) {");
 	writer.write("\n  var curForm = document.forms[curFormName];"); 
