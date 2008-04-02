@@ -1,5 +1,5 @@
 /*
- * $Id: TestHtmlResponseWriter.java,v 1.24 2006/10/23 22:04:11 rlubke Exp $
+ * $Id: TestHtmlResponseWriter.java,v 1.25 2006/11/13 01:40:58 rlubke Exp $
  */
 
 /*
@@ -48,7 +48,7 @@ import com.sun.faces.cactus.ServletFacesTestCase;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestHtmlResponseWriter.java,v 1.24 2006/10/23 22:04:11 rlubke Exp $
+ * @version $Id: TestHtmlResponseWriter.java,v 1.25 2006/11/13 01:40:58 rlubke Exp $
  */
 
 public class TestHtmlResponseWriter extends ServletFacesTestCase // ServletTestCase
@@ -289,6 +289,41 @@ public class TestHtmlResponseWriter extends ServletFacesTestCase // ServletTestC
         result = swx.toString();
         System.out.println(result);
         assertTrue((!result.contains("<[CDATA[") && !result.contains("]]>")));
+
+        sw = new StringWriter();
+        swx = new StringWriter();
+        writer = renderKit.createResponseWriter(sw, "text/html", "ISO-8859-1");
+        xmlWriter = renderKit.createResponseWriter(swx, "application/xhtml+xml", "UTF-8");
+        output = new UIOutput();
+        writer.startElement("script", output);
+        writer.writeAttribute("type", "text/javascript", "type");
+        writer.writeAttribute("language", "Javascript", "language");
+        writer.writeText("<!-- alert('foo') //-->", null);
+        writer.endElement("script");
+        result = sw.toString();
+        String expected = "<script type=\"text/javascript\" language=\"Javascript\">\n" +
+             "<!--\n" +
+             " alert('foo') \n" +
+             "//-->\n" +
+             "</script>";
+        System.out.println("1:" + result);
+        assertTrue(expected.equals(result));
+        
+
+        xmlWriter.startElement("script", output);
+        xmlWriter.writeAttribute("type", "text/javascript", "type");
+        xmlWriter.writeAttribute("language", "Javascript", "language");
+        xmlWriter.writeText("//<![CDATA[ alert('foo') //]]>", null);
+        xmlWriter.endElement("script");
+        result = swx.toString();
+        expected = "<script type=\"text/javascript\" language=\"Javascript\">\n" +
+             "//<![CDATA[\n" +
+             " alert('foo') \n" +
+             "//]]>\n" +
+             "</script>";
+        System.out.println("2:" + result);
+        assertTrue(expected.equals(result));
+
     }
 
     public void testWriteStyleElement() throws Exception {
@@ -332,6 +367,36 @@ public class TestHtmlResponseWriter extends ServletFacesTestCase // ServletTestC
         result = swx.toString();
         System.out.println(result);
         assertTrue((result.contains("<![CDATA[") && result.contains("]]>")));
+
+        sw = new StringWriter();
+        swx = new StringWriter();
+        writer = renderKit.createResponseWriter(sw, "text/html", "ISO-8859-1");
+        xmlWriter = renderKit.createResponseWriter(swx, "application/xhtml+xml", "UTF-8");
+        writer.startElement("style", output);
+        writer.writeAttribute("type", "text/css", "type");
+        writer.write("<!-- .h1 { color: red } //-->");
+        writer.endElement("style");
+        result = sw.toString();
+        System.out.println("3:" +result);
+        String expected = "<style type=\"text/css\">\n" +
+             "<!--\n" +
+             " .h1 { color: red } \n" +
+             "//-->\n" +
+             "</style>";
+        assertTrue(expected.equals(result));
+
+        xmlWriter.startElement("style", output);
+        xmlWriter.writeAttribute("type", "text/css", "type");
+        xmlWriter.write("<![CDATA[ .h1 { color: red } ]]>");
+        xmlWriter.endElement("style");
+        result = swx.toString();
+        System.out.println("4:" +result);
+        expected = "<style type=\"text/css\">\n" +
+             "<![CDATA[\n" +
+             " .h1 { color: red } \n" +
+             "]]>\n" +
+             "</style>";
+        assertTrue(expected.equals(result));
     }
 
 

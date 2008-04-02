@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlResponseWriter.java,v 1.38 2006/10/26 23:00:52 rlubke Exp $
+ * $Id: HtmlResponseWriter.java,v 1.39 2006/11/13 01:40:57 rlubke Exp $
  */
 
 /*
@@ -37,6 +37,7 @@ import java.io.IOException;
 import java.io.Writer;
 
 import com.sun.faces.RIConstants;
+import com.sun.faces.io.FastStringWriter;
 import com.sun.faces.util.HtmlUtils;
 import com.sun.faces.util.MessageUtils;
 
@@ -86,6 +87,9 @@ public class HtmlResponseWriter extends ResponseWriter {
 
     // flag to indicate if the content type is Xhtml
     private boolean isXhtml;
+
+    // HtmlResponseWriter to use when buffering is required
+    private Writer origWriter;
 
     // Internal buffer used when outputting properly escaped information
     // using HtmlUtils class.
@@ -222,6 +226,32 @@ public class HtmlResponseWriter extends ResponseWriter {
         isXhtml = getContentType().equals(
             RIConstants.XHTML_CONTENT_TYPE);
         if (isScriptOrStyle(name) && !scriptOrStyleSrc) {
+            String result = ((FastStringWriter) writer).getBuffer().toString();
+            writer = origWriter;
+            if (result != null) {
+                String trim = result.trim();
+                if (isXhtml) {
+                    if (isScript) {
+                        if (trim.startsWith("//<![CDATA[") && trim.endsWith("//]]>")) {
+                            writer.write(trim.substring(11, trim.length() - 5));
+                        } else {
+                            writer.write(result);
+                        }
+                    } else {
+                        if (trim.startsWith("<![CDATA[") && trim.endsWith("]]>")) {
+                            writer.write(trim.substring(9, trim.length() - 3));
+                        } else {
+                            writer.write(result);
+                        }
+                    }
+                } else {
+                    if (trim.startsWith("<!--") && trim.endsWith("//-->")) {
+                        writer.write(trim.substring(4, trim.length() - 5));
+                    } else {
+                        writer.write(result);
+                    }
+                }
+            }
             if (isXhtml) {
                 if (isScript) {
                     writer.write("\n//]]>\n");
@@ -664,7 +694,6 @@ public class HtmlResponseWriter extends ResponseWriter {
             writer.write('>');
             closeStart = false;
             if (isScriptOrStyle() && !scriptOrStyleSrc) {
-
                 isXhtml = getContentType().equals(
                      RIConstants.XHTML_CONTENT_TYPE);
                 if (isXhtml) {
@@ -676,6 +705,8 @@ public class HtmlResponseWriter extends ResponseWriter {
                 } else {
                     writer.write("\n<!--\n");
                 }
+                origWriter = writer;
+                writer = new FastStringWriter(1024);
                 isScript = false;
                 isStyle = false;
             }
