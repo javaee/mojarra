@@ -727,7 +727,7 @@
   </resolution>
   <status>OPEN</status>
   <status-date>09 Sep 2002</status-date>
-  <priority>1</priority>
+  <priority>2</priority>
   <effort>Large</effort>
 </issue>
 
@@ -940,7 +940,7 @@
   </resolution>
   <status>OPEN</status>
   <status-date>12 Sep 2002</status-date>
-  <priority>2</priority>
+  <priority>1</priority>
   <effort>Small</effort>
 </issue>
 
@@ -1063,7 +1063,7 @@
   </resolution>
   <status>OPEN</status>
   <status-date>12 Sep 2002</status-date>
-  <priority>2</priority>
+  <priority>1</priority>
   <effort>Small</effort>
 </issue>
 
@@ -1237,9 +1237,10 @@
     Component Model Catering for Visual and Non-Visual Interfaces."</p>
   </description>
   <resolution>
+    <p><em>21 Oct 2002</em> - Merge into [UsabilityRenames-59].</p>
   </resolution>
-  <status>OPEN</status>
-  <status-date>18 Sep 2002</status-date>
+  <status>CLOSED</status>
+  <status-date>21 Oct 2002</status-date>
   <priority>2</priority>
   <effort>Medium</effort>
 </issue>
@@ -1309,9 +1310,10 @@
     instead.  Should we switch?</p>
   </description>
   <resolution>
+    <p><em>21 Oct 2002</em> - Merged into [UsabilityRenames-59].</p>
   </resolution>
-  <status>OPEN</status>
-  <status-date>18 Sep 2002</status-date>
+  <status>CLOSED</status>
+  <status-date>21 Oct 2002</status-date>
   <priority>2</priority>
   <effort>Small</effort>
 </issue>
@@ -1557,10 +1559,12 @@
   </description>
   <resolution>
     <p><em>02 Oct 2002</em> - Consolidate [DecodeEncode-41] into this.</p>
+    <p><em>21 Oct 2002</em> - Merge in [NonVisual-46] and
+       [AbstractClassNames-49].</p>
   </resolution>
   <status>OPEN</status>
   <status-date>20 Sep 2002</status-date>
-  <priority>2</priority>
+  <priority>1</priority>
   <effort>Medium</effort>
 </issue>
 
