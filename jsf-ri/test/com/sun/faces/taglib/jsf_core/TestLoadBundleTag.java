@@ -1,5 +1,5 @@
 /*
- * $Id: TestLoadBundleTag.java,v 1.2 2003/12/17 15:15:44 rkitain Exp $
+ * $Id: TestLoadBundleTag.java,v 1.3 2004/01/21 06:55:27 horwat Exp $
  */
 
 /*
@@ -20,14 +20,8 @@ import javax.faces.component.UIViewRoot;
 
 /**
  *
- *  <B>TestLoadBundleTag.java</B> is a class ...
- *
- * <B>Lifetime And Scope</B> <P>
- *
- * @version $Id: TestLoadBundleTag.java,v 1.2 2003/12/17 15:15:44 rkitain Exp $
+ * @version $Id: TestLoadBundleTag.java,v 1.3 2004/01/21 06:55:27 horwat Exp $
  * 
- * @see	Blah
- * @see	Bloo
  *
  */
 
@@ -75,6 +69,71 @@ public class TestLoadBundleTag extends ServletFacesTestCase
 	assertEquals("Didn't get expected value", 
 		     ((Map)getFacesContext().getExternalContext().getRequestMap().get("messages")).get("john"),
 		     "bigboote");
+
+    }
+
+    //test out full Map contract implementation of LoadBundleTag
+    public void testLoadBundleMap() throws Exception {
+        boolean gotException = false;
+        Object key = "buckaroo";
+        Object value = "banzai";
+	getFacesContext().setViewRoot(new UIViewRoot());
+
+	LoadBundleTag tag = new LoadBundleTag();
+	tag.setBasename("com.sun.faces.TestMessages");
+	tag.setVar("messages");
+	tag.doStartTag();
+        Map testMap = (Map)getFacesContext().getExternalContext().getRequestMap().get("messages");
+
+	LoadBundleTag tag2 = new LoadBundleTag();
+	tag2.setBasename("com.sun.faces.TestMessages");
+	tag2.setVar("messages2");
+	tag2.doStartTag();
+        Map testMap2 = (Map)getFacesContext().getExternalContext().getRequestMap().get("messages2");
+
+        try {
+            testMap.clear();
+        } catch (UnsupportedOperationException ex) {
+            gotException = true;
+        }
+        assertTrue("Map.clear() should not be supported for immutable Map", gotException);
+        gotException = false;
+
+        assertTrue("key not in Map", testMap.containsKey(key));
+        assertTrue("value not in Map", testMap.containsValue(value));
+        assertTrue("entrySet not correct for Map", testMap.entrySet().equals(testMap2.entrySet()));
+        assertTrue("Same maps are not equal", testMap.equals(testMap2));
+        assertEquals("value not in Map", testMap.get(key), value);
+        //two equal sets should have same hashcode
+        assertTrue("HashCode not valid", testMap.hashCode() == testMap2.hashCode());
+        assertFalse("Map should not be empty", testMap.isEmpty());
+        assertTrue("keySet not valid", testMap.keySet().contains(key));
+        try {
+            testMap.put(key, value);
+        } catch (UnsupportedOperationException ex) {
+            gotException = true;
+        }
+        assertTrue("Map.put() should not be supported for immutable Map", gotException);
+        gotException = false;
+
+        try {
+            testMap.putAll(new java.util.HashMap());
+        } catch (UnsupportedOperationException ex) {
+            gotException = true;
+        }
+        assertTrue("Map.putAll() should not be supported for immutable Map", gotException);
+        gotException = false;
+
+        try {
+            testMap.remove(key);
+        } catch (UnsupportedOperationException ex) {
+            gotException = true;
+        }
+        assertTrue("Map.remove() should not be supported for immutable Map", gotException);
+        gotException = false;
+
+        assertTrue("Map size incorrect", testMap.size() == 4);
+        assertTrue("values from Map incorrect", testMap.values().contains(value));
 
     }
 

@@ -1,5 +1,5 @@
 /*
- * $Id: LoadBundleTag.java,v 1.2 2003/12/17 15:14:13 rkitain Exp $
+ * $Id: LoadBundleTag.java,v 1.3 2004/01/21 06:55:26 horwat Exp $
  */
 
 /*
@@ -17,10 +17,13 @@ import javax.servlet.jsp.tagext.Tag;
 import javax.servlet.jsp.tagext.TagSupport;
 
 import java.util.Map;
+import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.util.Enumeration;
 import java.util.MissingResourceException;
+import java.util.Set;
+import java.util.HashSet;
 
 /**
  * <p>Tag action that loads the specified ResourceBundle as a Map into
@@ -99,6 +102,9 @@ public class LoadBundleTag extends TagSupport {
 	
 	toStore = 
 	    new Map() {
+                // this is an immutable Map
+
+                // Do not need to implement for immutable Map
 		public void clear() { throw new UnsupportedOperationException(); }
 		public boolean containsKey(Object key) {
 		    boolean result = false;
@@ -121,11 +127,26 @@ public class LoadBundleTag extends TagSupport {
 		    }
 		    return result;
 		}
-		public java.util.Set entrySet() { 
-		    throw new UnsupportedOperationException(); 
+		public Set entrySet() { 
+                    HashMap mappings = new HashMap();
+                    Enumeration keys = bundle.getKeys();
+                    while(keys.hasMoreElements()) {
+                        Object key = keys.nextElement();
+                        Object value = bundle.getObject((String)key);
+                        mappings.put(key, value);
+                    }
+                    return mappings.entrySet();
 		}
-		public boolean equals(Object o) {
-		    throw new UnsupportedOperationException();
+		public boolean equals(Object obj) {
+                    if ((obj == null) || !(obj instanceof Map)) {
+                        return false;
+                    }
+
+                    if (entrySet().equals(((Map)obj).entrySet())) {
+                        return true;
+                    }
+
+                    return false;
 		}
 		public Object get(Object key) {
 		    if (null == key) {
@@ -140,18 +161,26 @@ public class LoadBundleTag extends TagSupport {
 		public boolean isEmpty() {
 		    boolean result = true;
 		    Enumeration keys = bundle.getKeys();
-		    result = keys.hasMoreElements();
+		    result = !keys.hasMoreElements();
 		    return result;
 		}
-		public java.util.Set keySet() { 
-		    throw new UnsupportedOperationException(); 
+		public Set keySet() { 
+                    Set keySet = new HashSet();
+                    Enumeration keys = bundle.getKeys();
+                    while(keys.hasMoreElements()) {
+                        keySet.add(keys.nextElement());
+                    }
+                    return keySet;
 		}
+                // Do not need to implement for immutable Map
 		public Object put(Object k, Object v) { 
 		    throw new UnsupportedOperationException(); 
 		}
+                // Do not need to implement for immutable Map
 		public void putAll(Map t) { 
 		    throw new UnsupportedOperationException(); 
 		}
+                // Do not need to implement for immutable Map
 		public Object remove(Object k) { 
 		    throw new UnsupportedOperationException(); 
 		}
