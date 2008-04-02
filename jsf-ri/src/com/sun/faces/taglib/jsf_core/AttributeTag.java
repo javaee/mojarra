@@ -1,5 +1,5 @@
 /*
- * $Id: AttributeTag.java,v 1.1 2005/01/07 16:43:13 edburns Exp $
+ * $Id: AttributeTag.java,v 1.2 2005/01/07 20:41:53 edburns Exp $
  */
 
 /*
@@ -118,6 +118,11 @@ public class AttributeTag extends TagSupport {
 	}
         return (SKIP_BODY);
 
+    }
+
+    public int doEndTag() throws JspException {
+	this.release();
+	return (EVAL_PAGE);
     }
 
 
