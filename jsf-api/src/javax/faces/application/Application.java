@@ -1,5 +1,5 @@
 /*
- * $Id: Application.java,v 1.25 2004/01/21 03:50:23 eburns Exp $
+ * $Id: Application.java,v 1.26 2004/01/26 19:00:30 craigmcc Exp $
  */
 
 /*
@@ -25,6 +25,7 @@ import javax.faces.el.ReferenceSyntaxException;
 import javax.faces.el.ValueBinding;
 import javax.faces.el.VariableResolver;
 import javax.faces.event.ActionListener;
+import javax.faces.render.RenderKit;
 import javax.faces.validator.Validator;
 
 
@@ -132,26 +133,24 @@ public abstract class Application {
      */
     public abstract void setDefaultLocale(Locale locale);
 
+
     /**
-     * <p>Return the <code>render-kit-id</code> to be used for rendering
-     * this application, or <code>null</code> if {@link
-     * javax.faces.render.RenderKitFactory#HTML_BASIC_RENDER_KIT} should
-     * be used.</p>
+     * <p>Return the <code>renderKitId</code> to be used for rendering
+     * this application.  If not explicitly set, <code>null</code> is
+     * returned.</p>
      */
     public abstract String getDefaultRenderKitId();
 
+
     /**
-     * <p>Set the <code>render-kit-id</code> to be used to render this
+     * <p>Set the <code>renderKitId</code> to be used to render this
      * application.  Unless the client has provided a custom {@link
-     * ViewHandler} that is aware of allowing multiple {@link
-     * javax.faces.render.RenderKit} instances to be used in the same
-     * application, this method must only be called by the configuration
-     * system during application startup.  It must not be called
-     * dynamically during the runtime of the application.  This is a
-     * limitation of the current specification and may be lifted in a
-     * future release.</p>
+     * ViewHandler} that supports the use of multiple {@link RenderKit}
+     * instances in the same application, this method must only be called
+     * at application startup, before any Faces requests have been
+     * processed.  This is a limitation of the current Specification,
+     * and may be lifted in a future release.</p>
      */
-    // PENDING(edburns): remove limitation
     public abstract void setDefaultRenderKitId(String renderKitId);
 	
 
