@@ -709,7 +709,7 @@
             </description>
             <name>value</name>
             <deferred-value>
-                <type>javax.faces.component.UIComponent</type>
+                <type>javax.faces.model.SelectItem</type>
             </deferred-value>
         </attribute>
 
@@ -756,7 +756,9 @@
                 information for these options.
             </description>
             <name>value</name>
-            <deferred-value/>
+            <deferred-value>
+                <type>java.lang.Object</type>
+            </deferred-value>
         </attribute>
 
     </tag>
