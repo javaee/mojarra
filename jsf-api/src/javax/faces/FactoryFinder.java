@@ -1,5 +1,5 @@
 /*
- * $Id: FactoryFinder.java,v 1.34 2007/01/29 22:24:55 rlubke Exp $
+ * $Id: FactoryFinder.java,v 1.35 2007/01/29 22:29:08 rlubke Exp $
  */
 
 /*
@@ -183,7 +183,7 @@ public final class FactoryFinder {
      * <p>The set of JavaServer Faces factory classes for which the factory
      * discovery mechanism is supported.</p>
      */
-    private static String[] factoryNames = {
+    private static final String[] FACTORY_NAMES = {
          APPLICATION_FACTORY,
          FACES_CONTEXT_FACTORY,
          LIFECYCLE_FACTORY,
@@ -191,7 +191,7 @@ public final class FactoryFinder {
     };
 
     /**
-     * <p>Map of Class instances for the our factoryNames.</p>
+     * <p>Map of Class instances for the our factory names.</p>
      */
 
     private static Map<String, Class> factoryClasses = null;
@@ -580,7 +580,7 @@ public final class FactoryFinder {
     private static Class getFactoryClass(ClassLoader classLoader,
                                          String factoryClassName) {
         if (null == factoryClasses) {
-            factoryClasses = new HashMap<String, Class>(factoryNames.length);
+            factoryClasses = new HashMap<String, Class>(FACTORY_NAMES.length);
             factoryClasses.put(APPLICATION_FACTORY,
                  javax.faces.application.ApplicationFactory.class);
             factoryClasses.put(FACES_CONTEXT_FACTORY,
@@ -620,8 +620,8 @@ public final class FactoryFinder {
             throw new NullPointerException();
         }
         boolean found = false;
-        for (int i = 0; i < factoryNames.length; i++) {
-            if (factoryName.equals(factoryNames[i])) {
+        for (int i = 0; i < FACTORY_NAMES.length; i++) {
+            if (factoryName.equals(FACTORY_NAMES[i])) {
                 found = true;
                 break;
             }
