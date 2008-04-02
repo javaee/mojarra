@@ -4,7 +4,7 @@
  */
 
 /*
- * $Id: MenuRenderer.java,v 1.13 2003/04/29 20:51:54 eburns Exp $
+ * $Id: MenuRenderer.java,v 1.14 2003/05/21 19:53:05 eburns Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -39,7 +39,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: MenuRenderer.java,v 1.13 2003/04/29 20:51:54 eburns Exp $
+ * @version $Id: MenuRenderer.java,v 1.14 2003/05/21 19:53:05 eburns Exp $
  * 
  * @see Blah
  * @see Bloo
@@ -172,7 +172,7 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
         // do not render size attribute. It will be rendered as part of
         // pass through attributes.
         buff.append(">");
-        buff.append(optionsBuffer);
+        buff.append(optionsBuffer.toString());
         buff.append("</select>");
     }
 
