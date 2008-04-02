@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListener.java,v 1.26 2004/10/29 00:56:38 rlubke Exp $
+ * $Id: ConfigureListener.java,v 1.27 2004/11/02 19:38:09 rlubke Exp $
  */
 /*
  * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
@@ -1208,7 +1208,7 @@ public class ConfigureListener implements ServletContextListener {
                 if (log.isWarnEnabled()) {
                     log.warn(Util.getExceptionMessageString(
                         Util.INVALID_INIT_PARAM_ERROR_MESSAGE_ID,
-                        new Object[] { paramValue, "validateXml" }));
+                        new Object[] { paramValue, paramName }));
                 }
             }
         }
