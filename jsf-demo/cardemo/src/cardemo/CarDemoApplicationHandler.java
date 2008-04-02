@@ -1,5 +1,5 @@
 /*
- * $Id: CarDemoApplicationHandler.java,v 1.1 2002/11/02 01:34:57 jball Exp $
+ * $Id: CarDemoApplicationHandler.java,v 1.2 2003/01/24 23:08:08 rkitain Exp $
  */
 
 /*
@@ -115,7 +115,7 @@ public class CarDemoApplicationHandler implements ApplicationHandler{
             TreeFactory treeFactory = (TreeFactory)
             FactoryFinder.getFactory(FactoryFinder.TREE_FACTORY);
             Assert.assert_it(null != treeFactory);
-            context.setResponseTree(treeFactory.getTree(context,treeId));
+            context.setTree(treeFactory.getTree(context,treeId));
         }
         
         return returnValue;
