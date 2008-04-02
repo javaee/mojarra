@@ -1,5 +1,5 @@
 /*
- * $Id: FormRenderer.java,v 1.99 2006/08/02 00:21:52 rlubke Exp $
+ * $Id: FormRenderer.java,v 1.100 2006/09/01 17:30:56 rlubke Exp $
  */
 
 /*
@@ -43,100 +43,67 @@ import java.util.logging.Level;
 import com.sun.faces.renderkit.RenderKitUtils;
 import com.sun.faces.util.MessageUtils;
 
-/**
- * <B>FormRenderer</B> is a class that renders a <code>UIForm<code> as a Form.
- */
+/** <B>FormRenderer</B> is a class that renders a <code>UIForm<code> as a Form. */
 
 public class FormRenderer extends HtmlBasicRenderer {
 
-    //
-    // Protected Constants
-    //
-    
-    //
-    // Class Variables
-    //
+    // ---------------------------------------------------------- Public Methods
 
-    //
-    // Instance Variables
-    //
-
-    // Attribute Instance Variables
-
-
-    // Relationship Instance Variables
-
-    //
-    // Constructors and Initializers    
-    //
-
-    public FormRenderer() {
-        super();
-    }
-
-    //
-    // Class methods
-    //
-
-    //
-    // General Methods
-    //
-
-    //
-    // Methods From Renderer
-    //
 
     public void decode(FacesContext context, UIComponent component) {
+
         // Was our form the one that was submitted?  If so, we need to set
         // the indicator accordingly..
         //
         String clientId = component.getClientId(context);
         if (logger.isLoggable(Level.FINER)) {
-            logger.log(Level.FINER, 
-                    "Begin decoding component " + component.getId());
+            logger.log(Level.FINER,
+                       "Begin decoding component " + component.getId());
         }
-        Map<String,String> requestParameterMap = context.getExternalContext()
-            .getRequestParameterMap();
+        Map<String, String> requestParameterMap = context.getExternalContext()
+              .getRequestParameterMap();
         if (requestParameterMap.containsKey(clientId)) {
             ((UIForm) component).setSubmitted(true);
         } else {
             ((UIForm) component).setSubmitted(false);
         }
-       if (logger.isLoggable(Level.FINER)) {
-            logger.log(Level.FINER, 
-                    "End decoding component " + component.getId());
+        if (logger.isLoggable(Level.FINER)) {
+            logger.log(Level.FINER,
+                       "End decoding component " + component.getId());
         }
+
     }
 
 
     public void encodeBegin(FacesContext context, UIComponent component)
-        throws IOException {
-        String styleClass = null;
+          throws IOException {
 
         if (context == null) {
             throw new NullPointerException(
-                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "context"));
+                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID,
+                                                         "context"));
         }
         if (component == null) {
             throw new NullPointerException(
-                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "component"));
+                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID,
+                                                         "component"));
         }
         if (logger.isLoggable(Level.FINER)) {
             logger.log(Level.FINER, "Begin encoding component " +
-                      component.getId());
+                                    component.getId());
         }
         // suppress rendering if "rendered" property on the component is
         // false.
         if (!component.isRendered()) {
             if (logger.isLoggable(Level.FINE)) {
-                 logger.fine("End encoding component " +
-                          component.getId() + " since " +
-                          "rendered attribute is set to false ");
+                logger.fine("End encoding component " +
+                            component.getId() + " since " +
+                            "rendered attribute is set to false ");
             }
             return;
         }
         ResponseWriter writer = context.getResponseWriter();
-        assert (writer != null);
+        assert(writer != null);
         String clientId = component.getClientId(context);
         // since method and action are rendered here they are not added
         // to the pass through attributes in Util class.
@@ -146,20 +113,21 @@ public class FormRenderer extends HtmlBasicRenderer {
         writer.writeAttribute("name", clientId, "name");
         writer.writeAttribute("method", "post", null);
         writer.writeAttribute("action", getActionStr(context), null);
-        if (null != (styleClass = (String)
-            component.getAttributes().get("styleClass"))) {
+        String styleClass =
+              (String) component.getAttributes().get("styleClass");
+        if (styleClass != null) {
             writer.writeAttribute("class", styleClass, "styleClass");
         }
-        String acceptcharset = null;
-        if (null != (acceptcharset = (String)
-            component.getAttributes().get("acceptcharset"))) {
-            writer.writeAttribute("accept-charset", acceptcharset, 
-                    "acceptcharset");
-        }               
-        
-        RenderKitUtils.renderPassThruAttributes(context, writer, component);        
+        String acceptcharset = (String)
+              component.getAttributes().get("acceptcharset");
+        if (acceptcharset != null) {
+            writer.writeAttribute("accept-charset", acceptcharset,
+                                  "acceptcharset");
+        }
+
+        RenderKitUtils.renderPassThruAttributes(context, writer, component);
         writer.writeText("\n", component, null);
-        
+
         // this hidden field will be checked in the decode method to
         // determine if this form has been submitted.         
         writer.startElement("input", component);
@@ -167,15 +135,55 @@ public class FormRenderer extends HtmlBasicRenderer {
         writer.writeAttribute("name", clientId,
                               "clientId");
         writer.writeAttribute("value", clientId, "value");
-        writer.endElement("input");        
+        writer.endElement("input");
         writer.write('\n');
-        
+
         // FIX 382
         // Write out the state marker *before* rendering any children
         context.getApplication().getViewHandler().writeState(context);
         writer.write('\n');
-                 
+
     }
+
+
+    public void encodeEnd(FacesContext context, UIComponent component)
+          throws IOException {
+
+        if (context == null) {
+            throw new NullPointerException(
+                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID,
+                                                         "context"));
+        }
+        if (component == null) {
+            throw new NullPointerException(
+                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID,
+                                                         "component"));
+        }
+        // suppress rendering if "rendered" property on the component is
+        // false.
+        if (!component.isRendered()) {
+            if (logger.isLoggable(Level.FINE)) {
+                logger.fine("End encoding component " +
+                            component.getId() + " since " +
+                            "rendered attribute is set to false ");
+            }
+            return;
+        }
+
+        // Render the end tag for form
+        ResponseWriter writer = context.getResponseWriter();
+        assert(writer != null);
+        writer.writeText("\n", component, null);
+        writer.endElement("form");
+
+        if (logger.isLoggable(Level.FINER)) {
+            logger.log(Level.FINER,
+                       "End encoding component " + component.getId());
+        }
+
+    }
+
+    // --------------------------------------------------------- Private Methods
 
 
     /**
@@ -185,44 +193,13 @@ public class FormRenderer extends HtmlBasicRenderer {
      * @param context FacesContext for the response we are creating
      */
     private String getActionStr(FacesContext context) {
+
         String viewId = context.getViewRoot().getViewId();
         String actionURL =
-            context.getApplication().getViewHandler().
-            getActionURL(context, viewId);
+              context.getApplication().getViewHandler().
+                    getActionURL(context, viewId);
         return (context.getExternalContext().encodeActionURL(actionURL));
-    }
 
-
-    public void encodeEnd(FacesContext context, UIComponent component)
-        throws IOException {
-        if (context == null) {
-            throw new NullPointerException(
-                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "context"));
-        }
-        if (component == null) {
-            throw new NullPointerException(
-                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "component"));
-        }
-        // suppress rendering if "rendered" property on the component is
-        // false.
-        if (!component.isRendered()) {
-            if (logger.isLoggable(Level.FINE)) {
-                 logger.fine("End encoding component " +
-                          component.getId() + " since " +
-                          "rendered attribute is set to false ");
-            }
-            return;
-        }        
-
-        // Render the end tag for form
-        ResponseWriter writer = context.getResponseWriter();
-        assert (writer != null);     
-        writer.writeText("\n", component, null);
-        writer.endElement("form");        
-               
-        if (logger.isLoggable(Level.FINER)) {
-            logger.log(Level.FINER, "End encoding component " + component.getId());
-        }
     }
 
 } // end of class FormRenderer

@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderer.java,v 1.114 2006/09/01 01:22:56 tony_robertson Exp $
+ * $Id: HtmlBasicRenderer.java,v 1.115 2006/09/01 17:30:54 rlubke Exp $
  */
 
 /*
@@ -64,51 +64,51 @@ import com.sun.faces.util.Util;
 
 public abstract class HtmlBasicRenderer extends Renderer {
 
-    //
-    // Protected Constants
-    //
 
-    //
-    // Class Variables
-    //
-    // Log instance for this class
-    protected static final Logger logger = 
-            Util.getLogger(Util.FACES_LOGGER + Util.RENDERKIT_LOGGER);
-   
-    //
-    // Instance Variables
-    //
+    public static final String CLEAR_HIDDEN_FIELD_FN_NAME =
+          "clearFormHiddenParams";
 
-    // Attribute Instance Variables
-
-    // Relationship Instance Variables
-
-    //
-    // Constructors and Initializers    
-    //
 
     public static final String SCRIPT_ELEMENT = "script";
     public static final String SCRIPT_LANGUAGE = "language";
-    public static final String SCRIPT_TYPE = "type";
     public static final String SCRIPT_LANGUAGE_JAVASCRIPT = "JavaScript";
+    public static final String SCRIPT_TYPE = "type";
 
-    public static final String CLEAR_HIDDEN_FIELD_FN_NAME = 
-         "clearFormHiddenParams";       
-      
+
+    // Log instance for this class
+    protected static final Logger logger =
+          Util.getLogger(Util.FACES_LOGGER + Util.RENDERKIT_LOGGER);
+
+    // ------------------------------------------------------------ Constructors
+
+
     public HtmlBasicRenderer() {
-        super();
-    }   
 
-    //
-    // Methods From Renderer
+        super();
+
+    }
+
+    // ---------------------------------------------------------- Public Methods
+
 
     public void addGenericErrorMessage(FacesContext facesContext,
                                        UIComponent component,
                                        String messageId, String param) {
+
         Object[] params = new Object[3];
         params[0] = param;
         facesContext.addMessage(component.getClientId(facesContext),
-            MessageFactory.getMessage(facesContext, messageId, params));
+                                MessageFactory.getMessage(facesContext,
+                                                          messageId,
+                                                          params));
+
+    }
+
+
+    public String convertClientId(FacesContext context, String clientId) {
+
+        return clientId;
+
     }
 
 
@@ -116,99 +116,148 @@ public abstract class HtmlBasicRenderer extends Renderer {
 
         if (context == null) {
             throw new NullPointerException(
-                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "context"));
+                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID,
+                                                         "context"));
         }
         if (component == null) {
             throw new NullPointerException(
-                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "component"));
+                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID,
+                                                         "component"));
         }
 
         if (logger.isLoggable(Level.FINER)) {
-            logger.log(Level.FINER, 
-                    "Begin decoding component " + component.getId());
+            logger.log(Level.FINER,
+                       "Begin decoding component " + component.getId());
         }
 
         if (!(component instanceof UIInput)) {
             // decode needs to be invoked only for components that are
             // instances or subclasses of UIInput.
             if (logger.isLoggable(Level.FINE)) {
-                 logger.fine("No decoding necessary since the component "
-                          + component.getId() +
-                          " is not an instance or a sub class of UIInput");
+                logger.fine("No decoding necessary since the component "
+                            + component.getId() +
+                            " is not an instance or a sub class of UIInput");
             }
             return;
-        }    
+        }
 
         // If the component is disabled, do not change the value of the
         // component, since its state cannot be changed.
         if (Util.componentIsDisabledOrReadonly(component)) {
             if (logger.isLoggable(Level.FINE)) {
-                 logger.fine("No decoding necessary since the component " +
-                          component.getId() + " is disabled");
+                logger.fine("No decoding necessary since the component " +
+                            component.getId() + " is disabled");
             }
             return;
         }
 
         String clientId = component.getClientId(context);
-        assert (clientId != null);
-        Map<String,String> requestMap = context.getExternalContext().getRequestParameterMap();
+        assert(clientId != null);
+        Map<String, String> requestMap =
+              context.getExternalContext().getRequestParameterMap();
         // Don't overwrite the value unless you have to!
         if (requestMap.containsKey(clientId)) {
             String newValue = requestMap.get(clientId);
             setSubmittedValue(component, newValue);
             if (logger.isLoggable(Level.FINE)) {
-                 logger.fine("new value after decoding" + newValue);
+                logger.fine("new value after decoding" + newValue);
             }
         }
         if (logger.isLoggable(Level.FINER)) {
-            logger.log(Level.FINER, 
-                    "End decoding component " + component.getId());
+            logger.log(Level.FINER,
+                       "End decoding component " + component.getId());
         }
+
     }
 
-    public boolean getRendersChildren() {
-	return true;
-    }
 
     public void encodeEnd(FacesContext context, UIComponent component)
-        throws IOException {
+          throws IOException {
 
         String currentValue = null;
-        ResponseWriter writer = null;       
+        ResponseWriter writer = null;
 
         if (context == null) {
             throw new NullPointerException(
-                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "context"));
+                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID,
+                                                         "context"));
         }
         if (component == null) {
             throw new NullPointerException(
-                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "component"));
+                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID,
+                                                         "component"));
         }
 
         if (logger.isLoggable(Level.FINER)) {
-            logger.log(Level.FINER, 
-                    "Begin encoding component " + component.getId());
-        } 
-        
+            logger.log(Level.FINER,
+                       "Begin encoding component " + component.getId());
+        }
+
         // suppress rendering if "rendered" property on the component is
         // false.
         if (!component.isRendered()) {
             if (logger.isLoggable(Level.FINE)) {
-                 logger.fine("End encoding component " + component.getId() +
-                          " since " +
-                          "rendered attribute is set to false ");
+                logger.fine("End encoding component " + component.getId() +
+                            " since " +
+                            "rendered attribute is set to false ");
             }
             return;
         }
 
         writer = context.getResponseWriter();
-        assert (writer != null);
+        assert(writer != null);
 
         currentValue = getCurrentValue(context, component);
         if (logger.isLoggable(Level.FINE)) {
             logger.log(Level.FINE, "Value to be rendered " + currentValue);
         }
         getEndTextToRender(context, component, currentValue);
+
+    }
+
+
+    public boolean getRendersChildren() {
+
+        return true;
+
+    }
+
+    // ------------------------------------------------------- Protected Methods
+
+
+    /**
+     * <p>Conditionally augment an id-reference value.</p>
+     * <p>If the <code>forValue</code> doesn't already include a generated
+     * suffix, but the id of the <code>fromComponent</code> does include a
+     * generated suffix, then append the suffix from the
+     * <code>fromComponent</code> to the <code>forValue</code>.
+     * Otherwise just return the <code>forValue</code> as is.</p>
+     *
+     * @param forValue      - the basic id-reference value.
+     * @param fromComponent - the component that holds the
+     *                      code>forValue</code>.
+     *
+     * @return the (possibly augmented) <code>forValue<code>.
+     */
+    protected String augmentIdReference(FacesContext context,
+                                        String forValue,
+                                        UIComponent fromComponent) {
+
+        int forSuffix = forValue.lastIndexOf(UIViewRoot.UNIQUE_ID_PREFIX);
+        if (forSuffix <= 0) {
+            // if the for-value doesn't already have a suffix present
+            String id = fromComponent.getId();
+            int idSuffix = id.lastIndexOf(UIViewRoot.UNIQUE_ID_PREFIX);
+            if (idSuffix > 0) {
+                // but the component's own id does have a suffix
+                logger.fine("Augmenting for attribute with " +
+                            id.substring(idSuffix) +
+                            " suffix from Id attribute");
+                forValue += id.substring(idSuffix);
+            }
+        }
+        return forValue;
+
     }
 
 
@@ -218,7 +267,7 @@ public abstract class HtmlBasicRenderer extends Renderer {
      * property is <code>true</code>.</p>
      */
     protected void encodeRecursive(FacesContext context, UIComponent component)
-        throws IOException {
+          throws IOException {
 
         // suppress rendering if "rendered" property on the component is
         // false.
@@ -238,8 +287,9 @@ public abstract class HtmlBasicRenderer extends Renderer {
             }
         }
         component.encodeEnd(context);
+
     }
-    
+
 
     /**
      * <p>Return an Iterator over the children of the specified
@@ -249,25 +299,25 @@ public abstract class HtmlBasicRenderer extends Renderer {
      * @param component <code>UIComponent</code> for which to extract children
      */
     protected Iterator<UIComponent> getChildren(UIComponent component) {
+
         int childCount = component.getChildCount();
         if (childCount > 0) {
             return new RenderedChildIterator(component
                   .getChildren().iterator());
         } else {
-        	List<UIComponent> empty = Collections.emptyList();
+            List<UIComponent> empty = Collections.emptyList();
             return empty.iterator();
         }
+
     }
-
-    
-
 
 
     /**
      * Gets value to be rendered and formats it if required. Sets to empty
      * string if value is null.
      */
-    protected String getCurrentValue(FacesContext context, UIComponent component) {
+    protected String getCurrentValue(FacesContext context,
+                                     UIComponent component) {
 
         if (component instanceof UIInput) {
             Object submittedValue = ((UIInput) component).getSubmittedValue();
@@ -282,13 +332,7 @@ public abstract class HtmlBasicRenderer extends Renderer {
             currentValue = getFormattedValue(context, component, currentObj);
         }
         return currentValue;
-    }
 
-
-    protected Object getValue(UIComponent component) {
-        // Make sure this method isn't being called except 
-        // from subclasses that override getValue()!
-        throw new UnsupportedOperationException();
     }
 
 
@@ -296,17 +340,88 @@ public abstract class HtmlBasicRenderer extends Renderer {
      * Renderers override this method to write appropriate HTML content into
      * the buffer.
      */
-    protected void getEndTextToRender(FacesContext context, UIComponent component,
+    protected void getEndTextToRender(FacesContext context,
+                                      UIComponent component,
                                       String currentValue) throws IOException {
+
         return;
+
     }
 
 
     /**
-     * Renderers override this method to store the previous value
-     * of the associated component.
+     * <p>Return the specified facet from the specified component, but
+     * <strong>only</strong> if its <code>rendered</code> property is
+     * set to <code>true</code>.
+     *
+     * @param component Component from which to return a facet
+     * @param name      Name of the desired facet
      */
-    protected void setSubmittedValue(UIComponent component, Object value) {
+    protected UIComponent getFacet(UIComponent component, String name) {
+
+        UIComponent facet = component.getFacet(name);
+        if ((facet != null) && !facet.isRendered()) {
+            facet = null;
+        }
+        return (facet);
+
+    }
+
+
+    /**
+     * Locates the component identified by <code>forComponent</code>
+     *
+     * @param forComponent - the component to search for
+     * @param component    - the starting point in which to begin the search
+     *
+     * @return the component with the the <code>id</code that matches
+     *         <code>forComponent</code> otheriwse null if no match is found.
+     */
+    protected UIComponent getForComponent(FacesContext context,
+                                          String forComponent,
+                                          UIComponent component) {
+
+        if (null == forComponent || forComponent.length() == 0) {
+            return null;
+        }
+
+        UIComponent result = null;
+        UIComponent currentParent = component;
+        try {
+            // Check the naming container of the current 
+            // component for component identified by
+            // 'forComponent'
+            while (currentParent != null) {
+                // If the current component is a NamingContainer,
+                // see if it contains what we're looking for.
+                result = currentParent.findComponent(forComponent);
+                if (result != null) {
+                    break;
+                }
+                // if not, start checking further up in the view
+                currentParent = currentParent.getParent();
+            }
+
+            // no hit from above, scan for a NamingContainer
+            // that contains the component we're looking for from the root.    
+            if (result == null) {
+                result =
+                      findUIComponentBelow(context.getViewRoot(), forComponent);
+            }
+        } catch (Exception e) {
+            // ignore - log the warning
+        }
+        // log a message if we were unable to find the specified
+        // component (probably a misconfigured 'for' attribute
+        if (result == null) {
+            if (logger.isLoggable(Level.WARNING)) {
+                logger.warning(MessageUtils.getExceptionMessageString(
+                      MessageUtils.COMPONENT_NOT_FOUND_IN_VIEW_WARNING_ID,
+                      new Object[]{forComponent}));
+            }
+        }
+        return result;
+
     }
 
 
@@ -314,9 +429,10 @@ public abstract class HtmlBasicRenderer extends Renderer {
      * Renderers override this method in case output value needs to be
      * formatted
      */
-    protected String getFormattedValue(FacesContext context, UIComponent component,
+    protected String getFormattedValue(FacesContext context,
+                                       UIComponent component,
                                        Object currentValue)
-        throws ConverterException {
+          throws ConverterException {
 
         String result = null;
         // formatting is supported only for components that support
@@ -333,7 +449,6 @@ public abstract class HtmlBasicRenderer extends Renderer {
         // If there is a converter attribute, use it to to ask application
         // instance for a converter with this identifer.
         converter = ((ValueHolder) component).getConverter();
-
 
         // if value is null and no converter attribute is specified, then
         // return a zero length String.
@@ -366,48 +481,10 @@ public abstract class HtmlBasicRenderer extends Renderer {
     }
 
 
-    public String convertClientId(FacesContext context, String clientId) {
-        return clientId;
-    }
-
-
-    /**
-     * <p>Conditionally augment an id-reference value.</p>
-     * <p>If the <code>forValue</code> doesn't already include a generated
-     * suffix, but the id of the <code>fromComponent</code> does include a
-     * generated suffix, then append the suffix from the
-     * <code>fromComponent</code> to the <code>forValue</code>.
-     * Otherwise just return the <code>forValue</code> as is.</p>
-     *
-     * @param forValue      - the basic id-reference value.
-     * @param fromComponent - the component that holds the
-     *                      code>forValue</code>.
-     *
-     * @return the (possibly augmented) <code>forValue<code>.
-     */
-    protected String augmentIdReference(FacesContext context,
-                                        String forValue,
-                                        UIComponent fromComponent) {
-        int forSuffix = forValue.lastIndexOf(UIViewRoot.UNIQUE_ID_PREFIX);
-        if (forSuffix <= 0) {
-            // if the for-value doesn't already have a suffix present
-            String id = fromComponent.getId();
-            int idSuffix = id.lastIndexOf(UIViewRoot.UNIQUE_ID_PREFIX);
-            if (idSuffix > 0) {
-                // but the component's own id does have a suffix
-                logger.fine("Augmenting for attribute with " +
-                            id.substring(idSuffix) +
-                            " suffix from Id attribute");
-                forValue += id.substring(idSuffix);
-            }
-        }
-        return forValue;
-    }
-
-
     protected Iterator getMessageIter(FacesContext context,
                                       String forComponent,
                                       UIComponent component) {
+
         Iterator messageIter = null;
         // Attempt to use the "for" attribute to locate 
         // messages.  Three possible scenarios here:
@@ -426,66 +503,98 @@ public abstract class HtmlBasicRenderer extends Renderer {
                     messageIter = Collections.EMPTY_LIST.iterator();
                 } else {
                     messageIter =
-                        context.getMessages(result.getClientId(context));
+                          context.getMessages(result.getClientId(context));
                 }
             }
         } else {
             messageIter = context.getMessages();
         }
         return messageIter;
+
     }
 
 
     /**
-     * Locates the component identified by <code>forComponent</code>
+     * @param command the command which may have parameters
      *
-     * @param forComponent - the component to search for
-     * @param component    - the starting point in which to begin the search
-     * @return the component with the the <code>id</code that matches
-     *         <code>forComponent</code> otheriwse null if no match is found.
+     * @return an array of parameters
      */
-    protected UIComponent getForComponent(FacesContext context,
-                                          String forComponent, UIComponent component) {
-        if (null == forComponent || forComponent.length() == 0) {
-            return null;
-        }
+    protected Param[] getParamList(UIComponent command) {
 
-        UIComponent result = null;
-        UIComponent currentParent = component;
-        try {
-            // Check the naming container of the current 
-            // component for component identified by
-            // 'forComponent'
-            while (currentParent != null) {
-                // If the current component is a NamingContainer,
-                // see if it contains what we're looking for.
-                result = currentParent.findComponent(forComponent);
-                if (result != null)
-                    break;
-                // if not, start checking further up in the view
-                currentParent = currentParent.getParent();
-            }                   
+        ArrayList<Param> parameterList = new ArrayList<Param>();
 
-            // no hit from above, scan for a NamingContainer
-            // that contains the component we're looking for from the root.    
-            if (result == null) {
-                result =
-                    findUIComponentBelow(context.getViewRoot(), forComponent);
-            }
-        } catch (Exception e) {
-           // ignore - log the warning
-        }
-        // log a message if we were unable to find the specified
-        // component (probably a misconfigured 'for' attribute
-        if (result == null) {
-            if (logger.isLoggable(Level.WARNING)) {
-                 logger.warning(MessageUtils.getExceptionMessageString(
-                    MessageUtils.COMPONENT_NOT_FOUND_IN_VIEW_WARNING_ID,
-                    new Object[]{forComponent}));
+        for (UIComponent kid : command.getChildren()) {
+            if (kid instanceof UIParameter) {
+                UIParameter uiParam = (UIParameter) kid;
+                Object value = uiParam.getValue();
+                Param param = new Param(uiParam.getName(),
+                                        (value == null ? null :
+                                         value.toString()));
+                parameterList.add(param);
             }
         }
-        return result;
+
+        return parameterList.toArray(new Param[parameterList.size()]);
+
     }
+
+
+    protected Object getValue(UIComponent component) {
+
+        // Make sure this method isn't being called except 
+        // from subclasses that override getValue()!
+        throw new UnsupportedOperationException();
+
+    }
+
+
+    /**
+     * Renderers override this method to store the previous value
+     * of the associated component.
+     */
+    protected void setSubmittedValue(UIComponent component, Object value) {
+    }
+
+
+    /** @return true if this renderer should render an id attribute. */
+    protected boolean shouldWriteIdAttribute(UIComponent component) {
+
+        String id;
+        if (component instanceof UIInput) {
+            return true;
+        }
+        if (null != (id = component.getId()) &&
+            !id.startsWith(UIViewRoot.UNIQUE_ID_PREFIX)) {
+            return true;
+        }
+        return false;
+
+    }
+
+
+    protected String writeIdAttributeIfNecessary(FacesContext context,
+                                                 ResponseWriter writer,
+                                                 UIComponent component) {
+
+        String id = null;
+        if (shouldWriteIdAttribute(component)) {
+            try {
+                writer.writeAttribute("id", id = component.getClientId(context),
+                                      "id");
+            } catch (IOException e) {
+                if (logger.isLoggable(Level.WARNING)) {
+                    String message = MessageUtils.getExceptionMessageString
+                          (MessageUtils.CANT_WRITE_ID_ATTRIBUTE_ERROR_MESSAGE_ID,
+                           e.getMessage());
+                    logger.warning(message);
+                }
+            }
+        }
+        return id;
+
+    }
+
+    // --------------------------------------------------------- Private Methods
 
 
     /**
@@ -495,10 +604,13 @@ public abstract class HtmlBasicRenderer extends Renderer {
      *
      * @param startPoint   - the starting point in which to begin the search
      * @param forComponent - the component to search for
+     *
      * @return the component with the the <code>id</code that matches
      *         <code>forComponent</code> otheriwse null if no match is found.
      */
-    private UIComponent findUIComponentBelow(UIComponent startPoint, String forComponent) {
+    private UIComponent findUIComponentBelow(UIComponent startPoint,
+                                             String forComponent) {
+
         UIComponent retComp = null;
         List<UIComponent> children = startPoint.getChildren();
         for (int i = 0, size = children.size(); i < size; i++) {
@@ -518,156 +630,90 @@ public abstract class HtmlBasicRenderer extends Renderer {
                 }
             }
 
-            if (retComp != null)
+            if (retComp != null) {
                 break;
+            }
         }
         return retComp;
-    }
-
-    /**
-     * <p>Return the specified facet from the specified component, but
-     * <strong>only</strong> if its <code>rendered</code> property is
-     * set to <code>true</code>.
-     *
-     * @param component Component from which to return a facet
-     * @param name      Name of the desired facet
-     */
-    protected UIComponent getFacet(UIComponent component, String name) {
-
-        UIComponent facet = component.getFacet(name);
-        if ((facet != null) && !facet.isRendered()) {
-            facet = null;
-        }
-        return (facet);
 
     }
 
 
     /**
-     * @return true if this renderer should render an id attribute.
-     */
-    protected boolean shouldWriteIdAttribute(UIComponent component) {
-        String id;
-        if (component instanceof UIInput) {
-            return true;
-        }
-        if (null != (id = component.getId()) &&
-            !id.startsWith(UIViewRoot.UNIQUE_ID_PREFIX)) {
-            return true;
-        }
-        return false;
-    }
-
-
-    protected String writeIdAttributeIfNecessary(FacesContext context,
-                                               ResponseWriter writer,
-                                               UIComponent component) {
-        String id = null;
-        if (shouldWriteIdAttribute(component)) {
-            try {
-                writer.writeAttribute("id", id = component.getClientId(context),
-                                      "id");
-            } catch (IOException e) {
-                if (logger.isLoggable(Level.WARNING)) {
-                	String message = MessageUtils.getExceptionMessageString
-                	    (MessageUtils.CANT_WRITE_ID_ATTRIBUTE_ERROR_MESSAGE_ID, e.getMessage());
-                	logger.warning(message);
-                }
-            }
-        }
-        return id;
-    }
-
-    /**
-     * @param command the command which may have parameters
-     * @return an array of parameters
-     */
-    protected Param[] getParamList(UIComponent command) {
-        
-        ArrayList<Param> parameterList = new ArrayList<Param>();
-
-        for (UIComponent kid : command.getChildren()) {
-            if (kid instanceof UIParameter) {
-                UIParameter uiParam = (UIParameter) kid;
-                Object value = uiParam.getValue();
-                Param param = new Param(uiParam.getName(),
-                                        (value == null ? null :
-                                         value.toString()));
-                parameterList.add(param);
-            }
-        }
-
-        return parameterList.toArray(new Param[parameterList.size()]);
-        
-    }
-
-    /**
-     * <p>Simple class to encapsulate the name and value of a 
+     * <p>Simple class to encapsulate the name and value of a
      * <code>UIParameeter</code>.
      */
     public static class Param {
-        
+
+
         public String name;
         public String value;
-        
+
+        // ------------------------------------------------------------ Constructors
+
+
         public Param(String name, String value) {
+
             this.name = name;
             this.value = value;
+
         }
+
     }
 
-
-
-   
-    
     /**
      * <p>This <code>Iterator</code> is used to Iterator over
      * children components that are set to be rendered.</p>
      */
-    private static class RenderedChildIterator implements Iterator<UIComponent> {
-        
+    private static class RenderedChildIterator
+          implements Iterator<UIComponent> {
+
+
         Iterator<UIComponent> childIterator;
-        boolean hasNext;
         UIComponent child;
-        
-        // -------------------------------------------------------- Constructors
-        
-        
+        boolean hasNext;
+
+        // ------------------------------------------------------------ Constructors
+
+
         private RenderedChildIterator(Iterator<UIComponent> childIterator) {
-            
+
             this.childIterator = childIterator;
             update();
-            
-        }
-        
-        
-        // ----------------------------------------------- Methods from Iterator
 
-
-        public void remove() {
-            
-            throw new UnsupportedOperationException();
-            
         }
+
+        // --------------------------------------------------- Methods From Iterator
 
         public boolean hasNext() {
-            
+
             return hasNext;
-            
+
         }
 
+
         public UIComponent next() {
-            
+
             if (!hasNext) {
                 throw new NoSuchElementException();
             }
             UIComponent temp = child;
-            update();                         
+            update();
             return temp;
-            
+
         }
-        
-        // ----------------------------------------------------- Private Methods
+
+        // ----------------------------------------------- Methods from Iterator
+
+
+        public void remove() {
+
+            throw new UnsupportedOperationException();
+
+        }
+
+        // --------------------------------------------------------- Private Methods
+
 
         /**
          * <p>Moves the internal pointer to the next renderable
@@ -688,6 +734,7 @@ public abstract class HtmlBasicRenderer extends Renderer {
             child = null;
 
         }
+
     }
 
 } // end of class HtmlBasicRenderer

@@ -1,5 +1,5 @@
 /*
- * $Id: RadioRenderer.java,v 1.78 2006/05/18 23:07:54 rlubke Exp $
+ * $Id: RadioRenderer.java,v 1.79 2006/09/01 17:30:55 rlubke Exp $
  */
 
 /*
@@ -51,48 +51,16 @@ import com.sun.faces.util.Util;
 
 public class RadioRenderer extends SelectManyCheckboxListRenderer {
 
-    //
-    // Protected Constants
-    //
-
-    //
-    // Class Variables
-    //
-
-    //
-    // Instance Variables
-    //
-
-    // Attribute Instance Variables
+    // ------------------------------------------------------- Protected Methods
 
 
-    // Relationship Instance Variables
-
-    //
-    // Constructors and Initializers    
-    //
-
-    public RadioRenderer() {
-        super();
-    }
-
-    //
-    // Class methods
-    //
-
-    //
-    // General Methods
-    //
-
-    //
-    // Methods From Renderer
-    //
     protected void renderOption(FacesContext context, UIComponent component,
-                                SelectItem curItem, boolean alignVertical, int itemNumber)
-        throws IOException {
+                                SelectItem curItem, boolean alignVertical,
+                                int itemNumber)
+          throws IOException {
 
         ResponseWriter writer = context.getResponseWriter();
-        assert (writer != null);
+        assert(writer != null);
 
         UISelectOne selectOne = (UISelectOne) component;
         Object curValue = selectOne.getSubmittedValue();
@@ -105,25 +73,25 @@ public class RadioRenderer extends SelectManyCheckboxListRenderer {
             writer.startElement("tr", component);
             writer.writeText("\n", component, null);
         }
-        
+
         Class type = String.class;
         if (curValue != null) {
             type = curValue.getClass();
-        } 
+        }
         Object itemValue = curItem.getValue();
         Object newValue = context.getApplication().getExpressionFactory().
-            coerceToType(itemValue, type);
-        
+              coerceToType(itemValue, type);
+
         // disable the radio button if the attribute is set.
         String labelClass = null;
         boolean componentDisabled = Util.componentIsDisabled(component);
-        
+
         if (componentDisabled || curItem.isDisabled()) {
             labelClass = (String) component.
-                getAttributes().get("disabledClass");
+                  getAttributes().get("disabledClass");
         } else {
             labelClass = (String) component.
-                getAttributes().get("enabledClass");
+                  getAttributes().get("enabledClass");
         }
         writer.startElement("td", component);
         writer.writeText("\n", component, null);
@@ -136,13 +104,16 @@ public class RadioRenderer extends SelectManyCheckboxListRenderer {
         }
         writer.writeAttribute("name", component.getClientId(context),
                               "clientId");
-        String idString = component.getClientId(context) + NamingContainer.SEPARATOR_CHAR +
-                          Integer.toString(itemNumber);
+        String idString =
+              component.getClientId(context) + NamingContainer.SEPARATOR_CHAR +
+              Integer.toString(itemNumber);
         writer.writeAttribute("id", idString, "id");
 
-        writer.writeAttribute("value", (getFormattedValue(context, component,
-                                                          curItem.getValue())), "value");
-        
+        writer.writeAttribute("value",
+                              (getFormattedValue(context, component,
+                                                 curItem.getValue())),
+                              "value");
+
         // Don't render the disabled attribute twice if the 'parent'
         // component is already marked disabled.
         if (!Util.componentIsDisabled(component)) {
@@ -153,11 +124,12 @@ public class RadioRenderer extends SelectManyCheckboxListRenderer {
         // Apply HTML 4.x attributes specified on UISelectMany component to all 
         // items in the list except styleClass and style which are rendered as
         // attributes of outer most table.
-        RenderKitUtils.renderPassThruAttributes(context, 
-                                                writer, 
+        RenderKitUtils.renderPassThruAttributes(context,
+                                                writer,
                                                 component,
-                                                new String[] { "border", "style" });
-        RenderKitUtils.renderXHTMLStyleBooleanAttributes(writer, 
+                                                new String[]{"border",
+                                                             "style"});
+        RenderKitUtils.renderXHTMLStyleBooleanAttributes(writer,
                                                          component);
 
 
@@ -182,6 +154,7 @@ public class RadioRenderer extends SelectManyCheckboxListRenderer {
             writer.endElement("tr");
             writer.writeText("\n", component, null);
         }
+
     }
 
 } // end of class RadioRenderer

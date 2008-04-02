@@ -1,5 +1,5 @@
 /*
- * $Id: TextRenderer.java,v 1.76 2006/05/18 23:07:55 rlubke Exp $
+ * $Id: TextRenderer.java,v 1.77 2006/09/01 17:30:53 rlubke Exp $
  */
 
 /*
@@ -49,69 +49,42 @@ import com.sun.faces.util.MessageUtils;
  */
 public class TextRenderer extends HtmlBasicInputRenderer {
 
-    //
-    // Protected Constants
-    //
+    // ---------------------------------------------------------- Public Methods
 
-    //
-    // Class Variables
-    //
-
-    //
-    // Instance Variables
-    //
-
-    // Attribute Instance Variables
-
-
-    // Relationship Instance Variables
-
-    //
-    // Constructors and Initializers    
-    //
-
-    public TextRenderer() {
-        super();
-    }
-
-    //
-    // Class methods
-    //
-
-    //
-    // General Methods
-    //
-
-    //
-    // Methods From Renderer
-    //
 
     public void encodeBegin(FacesContext context, UIComponent component)
-        throws IOException {
+          throws IOException {
+
         if (context == null) {
             throw new NullPointerException(
-                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "context"));
+                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID,
+                                                         "context"));
         }
         if (component == null) {
             throw new NullPointerException(
-                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "component"));
+                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID,
+                                                         "component"));
         }
+
     }
+
+    // ------------------------------------------------------- Protected Methods
 
 
     protected void getEndTextToRender(FacesContext context,
-                                      UIComponent component, String currentValue)
-        throws IOException {
+                                      UIComponent component,
+                                      String currentValue)
+          throws IOException {
 
         ResponseWriter writer = context.getResponseWriter();
-        assert (writer != null);
+        assert(writer != null);
         boolean
-            shouldWriteIdAttribute = false,
-            isOutput = false;
+              shouldWriteIdAttribute = false,
+              isOutput = false;
 
         String
-            style = (String) component.getAttributes().get("style"),
-            styleClass = (String) component.getAttributes().get("styleClass");
+              style = (String) component.getAttributes().get("style"),
+              styleClass = (String) component.getAttributes().get("styleClass");
         if (component instanceof UIInput) {
             writer.startElement("input", component);
             writeIdAttributeIfNecessary(context, writer, component);
@@ -120,7 +93,7 @@ public class TextRenderer extends HtmlBasicInputRenderer {
                                   "clientId");
 
             String autoComplete = (String)
-                component.getAttributes().get("autocomplete");
+                  component.getAttributes().get("autocomplete");
             if (autoComplete != null) {
                 // only output the autocomplete attribute if the value
                 // is 'off' since its lack of presence will be interpreted
@@ -156,7 +129,8 @@ public class TextRenderer extends HtmlBasicInputRenderer {
                     writer.writeAttribute("class", styleClass, "styleClass");
                 }
                 // style is rendered as a passthru attribute
-                RenderKitUtils.renderPassThruAttributes(context, writer, component);              
+                RenderKitUtils
+                      .renderPassThruAttributes(context, writer, component);
 
             }
             if (currentValue != null) {
@@ -168,23 +142,24 @@ public class TextRenderer extends HtmlBasicInputRenderer {
                     } else if (val instanceof String) {
                         try {
                             escape =
-                                Boolean.valueOf((String) val).booleanValue();
+                                  Boolean.valueOf((String) val).booleanValue();
                         } catch (Throwable e) {
                         }
                     }
                 }
                 if (escape) {
-                    writer.writeText(currentValue, component,  "value");
+                    writer.writeText(currentValue, component, "value");
                 } else {
                     writer.write(currentValue);
                 }
             }
         }
         if (isOutput && (null != styleClass || null != style ||
-            RenderKitUtils.hasPassThruAttributes(component) ||
-            shouldWriteIdAttribute)) {
+                         RenderKitUtils.hasPassThruAttributes(component) ||
+                         shouldWriteIdAttribute)) {
             writer.endElement("span");
         }
+
     }
 
     // The testcase for this class is TestRenderers_2.java

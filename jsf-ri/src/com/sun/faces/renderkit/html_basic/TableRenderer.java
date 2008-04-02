@@ -1,5 +1,5 @@
 /*
- * $Id: TableRenderer.java,v 1.36 2006/05/18 23:07:55 rlubke Exp $
+ * $Id: TableRenderer.java,v 1.37 2006/09/01 17:30:54 rlubke Exp $
  */
 
 /*
@@ -45,39 +45,38 @@ import java.util.logging.Level;
 import com.sun.faces.renderkit.RenderKitUtils;
 import com.sun.faces.util.MessageUtils;
 
-/**
- * <p>Render a {@link UIData} component as a two-dimensional table.</p>
- */
+/** <p>Render a {@link UIData} component as a two-dimensional table.</p> */
 
 public class TableRenderer extends HtmlBasicRenderer {
-  
-    public boolean getRendersChildren() {
-        return true;
-    }
+
+    // ---------------------------------------------------------- Public Methods
 
 
     public void encodeBegin(FacesContext context, UIComponent component)
-        throws IOException {
+          throws IOException {
 
         if (context == null) {
             throw new NullPointerException(
-                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "context"));
+                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID,
+                                                         "context"));
         }
         if (component == null) {
             throw new NullPointerException(
-                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "component"));
+                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID,
+                                                         "component"));
         }
         if (logger.isLoggable(Level.FINER)) {
-            logger.log(Level.FINER,"Begin encoding component " + component.getId());
+            logger.log(Level.FINER,
+                       "Begin encoding component " + component.getId());
         }
 
         // suppress rendering if "rendered" property on the component is
         // false.
         if (!component.isRendered()) {
             if (logger.isLoggable(Level.FINE)) {
-                 logger.fine("No encoding necessary " +
-                          component.getId() + " since " +
-                          "rendered attribute is set to false ");
+                logger.fine("No encoding necessary " +
+                            component.getId() + " since " +
+                            "rendered attribute is set to false ");
             }
             return;
         }
@@ -92,17 +91,18 @@ public class TableRenderer extends HtmlBasicRenderer {
         if (styleClass != null) {
             writer.writeAttribute("class", styleClass, "styleClass");
         }
-        RenderKitUtils.renderPassThruAttributes(context, 
-                                                writer, 
+        RenderKitUtils.renderPassThruAttributes(context,
+                                                writer,
                                                 component,
-                                                new String[] {"rows"});
+                                                new String[]{"rows"});
         writer.writeText("\n", component, null);
-        
+
         UIComponent caption = getFacet(data, "caption");
         if (caption != null) {
-            String captionClass = (String) data.getAttributes().get("captionClass");
+            String captionClass =
+                  (String) data.getAttributes().get("captionClass");
             String captionStyle = (String)
-                data.getAttributes().get("captionStyle");
+                  data.getAttributes().get("captionStyle");
             writer.startElement("caption", data);
             if (captionClass != null) {
                 writer.writeAttribute("class", captionClass, "captionClass");
@@ -120,7 +120,7 @@ public class TableRenderer extends HtmlBasicRenderer {
         String headerClass = (String) data.getAttributes().get("headerClass");
         if ((header != null) || (headerFacets > 0)) {
             writer.startElement("thead", data);
-            writer.writeText("\n", component,  null);
+            writer.writeText("\n", component, null);
         }
         if (header != null) {
             writer.startElement("tr", header);
@@ -133,20 +133,20 @@ public class TableRenderer extends HtmlBasicRenderer {
             encodeRecursive(context, header);
             writer.endElement("th");
             writer.endElement("tr");
-            writer.writeText("\n", component,  null);
+            writer.writeText("\n", component, null);
         }
         if (headerFacets > 0) {
             writer.startElement("tr", data);
-            writer.writeText("\n", component,  null);
+            writer.writeText("\n", component, null);
             Iterator<UIColumn> columns = getColumns(data);
             while (columns.hasNext()) {
                 UIColumn column = columns.next();
-                String columnHeaderClass = 
-                    (String) column.getAttributes().get("headerClass");
+                String columnHeaderClass =
+                      (String) column.getAttributes().get("headerClass");
                 writer.startElement("th", column);
                 if (columnHeaderClass != null) {
-                    writer.writeAttribute("class", columnHeaderClass, 
-                        "columnHeaderClass");
+                    writer.writeAttribute("class", columnHeaderClass,
+                                          "columnHeaderClass");
                 } else if (headerClass != null) {
                     writer.writeAttribute("class", headerClass, "headerClass");
                 }
@@ -156,14 +156,14 @@ public class TableRenderer extends HtmlBasicRenderer {
                     encodeRecursive(context, facet);
                 }
                 writer.endElement("th");
-                writer.writeText("\n", component,  null);
+                writer.writeText("\n", component, null);
             }
             writer.endElement("tr");
-            writer.writeText("\n", component,  null);
+            writer.writeText("\n", component, null);
         }
         if ((header != null) || (headerFacets > 0)) {
             writer.endElement("thead");
-            writer.writeText("\n", component,  null);
+            writer.writeText("\n", component, null);
         }
 
         // Render the footer facets (if any)
@@ -172,7 +172,7 @@ public class TableRenderer extends HtmlBasicRenderer {
         String footerClass = (String) data.getAttributes().get("footerClass");
         if ((footer != null) || (footerFacets > 0)) {
             writer.startElement("tfoot", data);
-            writer.writeText("\n", component,  null);
+            writer.writeText("\n", component, null);
         }
         if (footer != null) {
             writer.startElement("tr", footer);
@@ -184,20 +184,20 @@ public class TableRenderer extends HtmlBasicRenderer {
             encodeRecursive(context, footer);
             writer.endElement("td");
             writer.endElement("tr");
-            writer.writeText("\n", component,  null);
+            writer.writeText("\n", component, null);
         }
         if (footerFacets > 0) {
             writer.startElement("tr", data);
-            writer.writeText("\n", component,  null);
+            writer.writeText("\n", component, null);
             Iterator<UIColumn> columns = getColumns(data);
             while (columns.hasNext()) {
                 UIColumn column = columns.next();
-                String columnFooterClass = 
-                    (String) column.getAttributes().get("footerClass");
+                String columnFooterClass =
+                      (String) column.getAttributes().get("footerClass");
                 writer.startElement("td", column);
                 if (columnFooterClass != null) {
-                    writer.writeAttribute("class", columnFooterClass, 
-                        "columnFooterClass");
+                    writer.writeAttribute("class", columnFooterClass,
+                                          "columnFooterClass");
                 } else if (footerClass != null) {
                     writer.writeAttribute("class", footerClass, "footerClass");
                 }
@@ -206,38 +206,41 @@ public class TableRenderer extends HtmlBasicRenderer {
                     encodeRecursive(context, facet);
                 }
                 writer.endElement("td");
-                writer.writeText("\n", component,  null);
+                writer.writeText("\n", component, null);
             }
             writer.endElement("tr");
-            writer.writeText("\n", component,  null);
+            writer.writeText("\n", component, null);
         }
         if ((footer != null) || (footerFacets > 0)) {
             writer.endElement("tfoot");
-            writer.writeText("\n", component,  null);
+            writer.writeText("\n", component, null);
         }
 
     }
 
 
     public void encodeChildren(FacesContext context, UIComponent component)
-        throws IOException {
+          throws IOException {
 
         if (context == null) {
             throw new NullPointerException(
-                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "context"));
+                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID,
+                                                         "context"));
         }
         if (component == null) {
             throw new NullPointerException(
-                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "component"));
+                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID,
+                                                         "component"));
         }
         if (logger.isLoggable(Level.FINER)) {
-            logger.log(Level.FINER,"Begin encoding children " + component.getId());
+            logger.log(Level.FINER,
+                       "Begin encoding children " + component.getId());
         }
         if (!component.isRendered()) {
             if (logger.isLoggable(Level.FINE)) {
-                 logger.fine("No encoding necessary " +
-                          component.getId() + " since " +
-                          "rendered attribute is set to false ");
+                logger.fine("No encoding necessary " +
+                            component.getId() + " since " +
+                            "rendered attribute is set to false ");
             }
             return;
         }
@@ -260,7 +263,7 @@ public class TableRenderer extends HtmlBasicRenderer {
         int rowStyle = 0;
 
         writer.startElement("tbody", component);
-        writer.writeText("\n", component,  null);
+        writer.writeText("\n", component, null);
         while (true) {
 
             // Have we displayed the requested number of rows?
@@ -282,7 +285,7 @@ public class TableRenderer extends HtmlBasicRenderer {
                     rowStyle = 0;
                 }
             }
-            writer.writeText("\n", component,  null);
+            writer.writeText("\n", component, null);
 
             // Iterate over the child UIColumn components for each row
             columnStyle = 0;
@@ -311,43 +314,46 @@ public class TableRenderer extends HtmlBasicRenderer {
 
                 // Render the ending of this cell
                 writer.endElement("td");
-                writer.writeText("\n", component,  null);
+                writer.writeText("\n", component, null);
 
             }
 
             // Render the ending of this row
             writer.endElement("tr");
-            writer.writeText("\n", component,  null);
+            writer.writeText("\n", component, null);
 
         }
         writer.endElement("tbody");
-        writer.writeText("\n", component,  null);
+        writer.writeText("\n", component, null);
 
         // Clean up after ourselves
         data.setRowIndex(-1);
         if (logger.isLoggable(Level.FINER)) {
-            logger.log(Level.FINER,"End encoding children " +
-                      component.getId());
+            logger.log(Level.FINER, "End encoding children " +
+                                    component.getId());
         }
+
     }
 
 
     public void encodeEnd(FacesContext context, UIComponent component)
-        throws IOException {
+          throws IOException {
 
         if (context == null) {
             throw new NullPointerException(
-                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "context"));
+                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID,
+                                                         "context"));
         }
         if (component == null) {
             throw new NullPointerException(
-                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "component"));
+                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID,
+                                                         "component"));
         }
         if (!component.isRendered()) {
             if (logger.isLoggable(Level.FINE)) {
-                 logger.fine("No encoding necessary " +
-                          component.getId() + " since " +
-                          "rendered attribute is set to false ");
+                logger.fine("No encoding necessary " +
+                            component.getId() + " since " +
+                            "rendered attribute is set to false ");
             }
             return;
         }
@@ -357,13 +363,20 @@ public class TableRenderer extends HtmlBasicRenderer {
 
         // Render the ending of this table
         writer.endElement("table");
-        writer.writeText("\n", component,  null);
+        writer.writeText("\n", component, null);
         if (logger.isLoggable(Level.FINER)) {
-            logger.log(Level.FINER,"End encoding component " + component.getId());
+            logger.log(Level.FINER,
+                       "End encoding component " + component.getId());
         }
 
     }
 
+
+    public boolean getRendersChildren() {
+
+        return true;
+
+    }
 
     // --------------------------------------------------------- Private Methods
 
@@ -492,6 +505,5 @@ public class TableRenderer extends HtmlBasicRenderer {
         return (list.toArray(results));
 
     }
-
 
 }

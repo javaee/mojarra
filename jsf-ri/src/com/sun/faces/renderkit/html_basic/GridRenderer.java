@@ -1,5 +1,5 @@
 /*
- * $Id: GridRenderer.java,v 1.44 2006/05/18 23:07:54 rlubke Exp $
+ * $Id: GridRenderer.java,v 1.45 2006/09/01 17:30:54 rlubke Exp $
  */
 
 /*
@@ -49,98 +49,61 @@ import com.sun.faces.util.MessageUtils;
 
 public class GridRenderer extends HtmlBasicRenderer {
 
-    //
-    // Protected Constants
-    //
-    
-    //
-    // Class Variables
-    //
-
-    //
-    // Instance Variables
-    //
-
-    // Attribute Instance Variables
-
-
-    // Relationship Instance Variables
-
-    //
-    // Constructors and Initializers    
-    //
-
-    public GridRenderer() {
-        super();
-    }
-
-    //
-    // Class methods
-    //
-
-    //
-    // General Methods
-    //
-
-    //
-    // Methods From Renderer
-    //
-
-    public boolean getRendersChildren() {
-        return true;
-    }
+    // ---------------------------------------------------------- Public Methods
 
 
     public void encodeBegin(FacesContext context, UIComponent component)
-        throws IOException {
+          throws IOException {
 
         if (context == null) {
             throw new NullPointerException(
-                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "context"));
+                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID,
+                                                         "context"));
         }
         if (component == null) {
             throw new NullPointerException(
-                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "component"));
+                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID,
+                                                         "component"));
         }
 
         if (logger.isLoggable(Level.FINER)) {
             logger.log(Level.FINER, "Begin encoding component " +
-                      component.getId());
+                                    component.getId());
         }
-        
+
         // suppress rendering if "rendered" property on the component is
         // false.
         if (!component.isRendered()) {
             if (logger.isLoggable(Level.FINE)) {
-                 logger.fine("End encoding component "
-                          + component.getId() + " since " +
-                          "rendered attribute is set to false ");
+                logger.fine("End encoding component "
+                            + component.getId() + " since " +
+                            "rendered attribute is set to false ");
             }
             return;
         }
-        
+
         // Render the beginning of this panel
         ResponseWriter writer = context.getResponseWriter();
         writer.startElement("table", component);
         writeIdAttributeIfNecessary(context, writer, component);
         String styleClass =
-            (String) component.getAttributes().get("styleClass");
+              (String) component.getAttributes().get("styleClass");
         if (styleClass != null) {
             writer.writeAttribute("class", styleClass, "styleClass");
         }
         RenderKitUtils.renderPassThruAttributes(context, writer, component);
         writer.writeText("\n", component, null);
-        
+
         // render the caption facet (if present)
         UIComponent caption = getFacet(component, "caption");
         if (caption != null) {
             String captionClass = (String)
-                component.getAttributes().get("captionClass");
+                  component.getAttributes().get("captionClass");
             String captionStyle = (String)
-                component.getAttributes().get("captionStyle");
+                  component.getAttributes().get("captionStyle");
             writer.startElement("caption", component);
             if (captionClass != null) {
-                writer.writeAttribute("class", captionClass, "captionClass");                
+                writer.writeAttribute("class", captionClass, "captionClass");
             }
             if (captionStyle != null) {
                 writer.writeAttribute("style", captionStyle, "captionStyle");
@@ -148,12 +111,11 @@ public class GridRenderer extends HtmlBasicRenderer {
             encodeRecursive(context, caption);
             writer.endElement("caption");
         }
-        
 
         // Render the header facet (if any)
         UIComponent header = getFacet(component, "header");
         String headerClass =
-            (String) component.getAttributes().get("headerClass");
+              (String) component.getAttributes().get("headerClass");
         if (header != null) {
             writer.startElement("thead", component);
             writer.writeText("\n", component, null);
@@ -176,7 +138,7 @@ public class GridRenderer extends HtmlBasicRenderer {
         // Render the footer facet (if any)
         UIComponent footer = getFacet(component, "footer");
         String footerClass =
-            (String) component.getAttributes().get("footerClass");
+              (String) component.getAttributes().get("footerClass");
         if (footer != null) {
             writer.startElement("tfoot", component);
             writer.writeText("\n", component, null);
@@ -199,27 +161,30 @@ public class GridRenderer extends HtmlBasicRenderer {
 
 
     public void encodeChildren(FacesContext context, UIComponent component)
-        throws IOException {
+          throws IOException {
 
         if (context == null) {
             throw new NullPointerException(
-                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "context"));
+                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID,
+                                                         "context"));
         }
         if (component == null) {
             throw new NullPointerException(
-                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "component"));
+                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID,
+                                                         "component"));
         }
         if (logger.isLoggable(Level.FINER)) {
-            logger.log(Level.FINER,"Begin encoding children " + component.getId());
+            logger.log(Level.FINER,
+                       "Begin encoding children " + component.getId());
         }
 
         // suppress rendering if "rendered" property on the component is
         // false.
         if (!component.isRendered()) {
             if (logger.isLoggable(Level.FINE)) {
-                 logger.fine("End encoding component " +
-                          component.getId() + " since " +
-                          "rendered attribute is set to false ");
+                logger.fine("End encoding component " +
+                            component.getId() + " since " +
+                            "rendered attribute is set to false ");
             }
             return;
         }
@@ -233,7 +198,7 @@ public class GridRenderer extends HtmlBasicRenderer {
         String rowClasses[] = getRowClasses(component);
         int rowStyle = 0;
         int rowStyles = rowClasses.length;
-        boolean open = false;        
+        boolean open = false;
         Iterator<UIComponent> kids = null;
         int i = 0;
 
@@ -287,29 +252,33 @@ public class GridRenderer extends HtmlBasicRenderer {
         writer.endElement("tbody");
         writer.writeText("\n", component, null);
         if (logger.isLoggable(Level.FINER)) {
-            logger.log(Level.FINER,"End encoding children " + component.getId());
+            logger.log(Level.FINER,
+                       "End encoding children " + component.getId());
         }
+
     }
 
 
     public void encodeEnd(FacesContext context, UIComponent component)
-        throws IOException {
+          throws IOException {
 
         if (context == null) {
             throw new NullPointerException(
-                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "context"));
+                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID,
+                                                         "context"));
         }
         if (component == null) {
             throw new NullPointerException(
-                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "component"));
+                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID,
+                                                         "component"));
         }
         // suppress rendering if "rendered" property on the component is
         // false.
         if (!component.isRendered()) {
             if (logger.isLoggable(Level.FINE)) {
-                 logger.fine("End encoding component " +
-                          component.getId() + " since " +
-                          "rendered attribute is set to false ");
+                logger.fine("End encoding component " +
+                            component.getId() + " since " +
+                            "rendered attribute is set to false ");
             }
             return;
         }
@@ -318,9 +287,20 @@ public class GridRenderer extends HtmlBasicRenderer {
         writer.endElement("table");
         writer.writeText("\n", component, null);
         if (logger.isLoggable(Level.FINER)) {
-            logger.log(Level.FINER,"End encoding component " + component.getId());
+            logger.log(Level.FINER,
+                       "End encoding component " + component.getId());
         }
+
     }
+
+
+    public boolean getRendersChildren() {
+
+        return true;
+
+    }
+
+    // --------------------------------------------------------- Private Methods
 
 
     /**
@@ -329,6 +309,7 @@ public class GridRenderer extends HtmlBasicRenderer {
      * may not have a stylesheet
      */
     private String[] getColumnClasses(UIComponent component) {
+
         String values = (String) component.getAttributes().get("columnClasses");
         if (values == null) {
             return (new String[0]);
@@ -347,6 +328,7 @@ public class GridRenderer extends HtmlBasicRenderer {
         }
         String results[] = new String[list.size()];
         return (list.toArray(results));
+
     }
 
 
@@ -355,6 +337,7 @@ public class GridRenderer extends HtmlBasicRenderer {
      * specified to int if necessary.
      */
     private int getColumnCount(UIComponent component) {
+
         int count;
         Object value = component.getAttributes().get("columns");
         if ((value != null) && (value instanceof Integer)) {
@@ -366,6 +349,7 @@ public class GridRenderer extends HtmlBasicRenderer {
             count = 1;
         }
         return (count);
+
     }
 
 
@@ -375,6 +359,7 @@ public class GridRenderer extends HtmlBasicRenderer {
      * may not have a stylesheet
      */
     private String[] getRowClasses(UIComponent component) {
+
         String values = (String) component.getAttributes().get("rowClasses");
         if (values == null) {
             return (new String[0]);
@@ -393,7 +378,7 @@ public class GridRenderer extends HtmlBasicRenderer {
         }
         String results[] = new String[list.size()];
         return (list.toArray(results));
-    }
 
+    }
 
 }

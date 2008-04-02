@@ -1,5 +1,5 @@
 /*
- * $Id: SecretRenderer.java,v 1.64 2006/05/17 19:00:49 rlubke Exp $
+ * $Id: SecretRenderer.java,v 1.65 2006/09/01 17:30:55 rlubke Exp $
  */
 
 /*
@@ -31,14 +31,14 @@
 
 package com.sun.faces.renderkit.html_basic;
 
-import com.sun.faces.util.MessageUtils;
-import com.sun.faces.renderkit.RenderKitUtils;
-
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 
 import java.io.IOException;
+
+import com.sun.faces.renderkit.RenderKitUtils;
+import com.sun.faces.util.MessageUtils;
 
 /**
  * <B>SecretRenderer</B> is a class that renders the current value of
@@ -47,61 +47,35 @@ import java.io.IOException;
 
 public class SecretRenderer extends HtmlBasicInputRenderer {
 
-    //
-    // Protected Constants
-    //
+    // ---------------------------------------------------------- Public Methods
 
-    //
-    // Class Variables
-    //
-
-    //
-    // Instance Variables
-    //
-
-    // Attribute Instance Variables
-
-
-    // Relationship Instance Variables
-
-    //
-    // Constructors and Initializers    
-    //
-
-    public SecretRenderer() {
-        super();
-    }
-
-    //
-    // Class methods
-    //
-
-    //
-    // General Methods
-    //
-
-    //
-    // Methods From Renderer
-    //
 
     public void encodeBegin(FacesContext context, UIComponent component)
-        throws IOException {
+          throws IOException {
+
         if (context == null) {
             throw new NullPointerException(
-                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "context"));
+                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID,
+                                                         "context"));
         }
         if (component == null) {
             throw new NullPointerException(
-                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "component"));
+                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID,
+                                                         "component"));
         }
+
     }
+
+    // ------------------------------------------------------- Protected Methods
 
 
     protected void getEndTextToRender(FacesContext context,
-                                      UIComponent component, String currentValue)
-        throws IOException {
+                                      UIComponent component,
+                                      String currentValue)
+          throws IOException {
+
         ResponseWriter writer = context.getResponseWriter();
-        assert (writer != null);
+        assert(writer != null);
 
         String styleClass = null;
 
@@ -117,7 +91,7 @@ public class SecretRenderer extends HtmlBasicInputRenderer {
                               "clientId");
 
         String autoComplete = (String)
-            component.getAttributes().get("autocomplete");
+              component.getAttributes().get("autocomplete");
         if (autoComplete != null) {
             // only output the autocomplete attribute if the value
             // is 'off' since its lack of presence will be interpreted
@@ -138,11 +112,12 @@ public class SecretRenderer extends HtmlBasicInputRenderer {
         RenderKitUtils.renderXHTMLStyleBooleanAttributes(writer, component);
 
         if (null != (styleClass = (String)
-            component.getAttributes().get("styleClass"))) {
+              component.getAttributes().get("styleClass"))) {
             writer.writeAttribute("class", styleClass, "styleClass");
         }
 
         writer.endElement("input");
+
     }
 
 } // end of class SecretRenderer

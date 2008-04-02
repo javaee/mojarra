@@ -1,5 +1,5 @@
 /*
- * $Id: ImageRenderer.java,v 1.46 2006/05/17 19:00:48 rlubke Exp $
+ * $Id: ImageRenderer.java,v 1.47 2006/09/01 17:30:56 rlubke Exp $
  */
 
 /*
@@ -31,142 +31,121 @@
 
 package com.sun.faces.renderkit.html_basic;
 
-import com.sun.faces.util.MessageUtils;
-import com.sun.faces.RIConstants;
-import com.sun.faces.renderkit.RenderKitUtils;
-
-import java.util.logging.Level;
-
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIGraphic;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 
 import java.io.IOException;
+import java.util.logging.Level;
+
+import com.sun.faces.RIConstants;
+import com.sun.faces.renderkit.RenderKitUtils;
+import com.sun.faces.util.MessageUtils;
 
 /**
  * <B>ImageRenderer</B> is a class that handles the rendering of the graphic
  * ImageTag
  *
- * @version $Id: ImageRenderer.java,v 1.46 2006/05/17 19:00:48 rlubke Exp $
+ * @version $Id: ImageRenderer.java,v 1.47 2006/09/01 17:30:56 rlubke Exp $
  */
 
 public class ImageRenderer extends HtmlBasicRenderer {
 
-    //
-    // Protected Constants
-    //
-   
-    //
-    // Class Variables
-    //
+    // ---------------------------------------------------------- Public Methods
 
-    //
-    // Instance Variables
-    //
-
-    // Attribute Instance Variables
-
-
-    // Relationship Instance Variables
-
-    //
-    // Constructors and Initializers    
-    //
-
-    public ImageRenderer() {
-        super();
-    }
-
-    //
-    // Class methods
-    //
-
-    //
-    // General Methods
-    //
-
-    //
-    // Methods From Renderer
-    //
 
     public void encodeBegin(FacesContext context, UIComponent component)
-        throws IOException {
+          throws IOException {
+
         if (context == null) {
             throw new NullPointerException(
-                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "context"));
+                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID,
+                                                         "context"));
         }
         if (component == null) {
             throw new NullPointerException(
-                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "component"));
+                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID,
+                                                         "component"));
         }
+
     }
 
 
     public void encodeEnd(FacesContext context, UIComponent component)
-        throws IOException {
+          throws IOException {
+
         ResponseWriter writer = null;
         String styleClass = null;
 
         if (context == null) {
             throw new NullPointerException(
-                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "context"));
+                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID,
+                                                         "context"));
         }
         if (component == null) {
             throw new NullPointerException(
-                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "component"));
+                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID,
+                                                         "component"));
         }
 
         if (logger.isLoggable(Level.FINER)) {
-            logger.log(Level.FINER,"Begin encoding component " + component.getId());
+            logger.log(Level.FINER,
+                       "Begin encoding component " + component.getId());
         }
         // suppress rendering if "rendered" property on the component is
         // false.
         if (!component.isRendered()) {
             if (logger.isLoggable(Level.FINE)) {
-                 logger.fine("End encoding component " +
-                          component.getId() + " since " +
-                          "rendered attribute is set to false ");
+                logger.fine("End encoding component " +
+                            component.getId() + " since " +
+                            "rendered attribute is set to false ");
             }
             return;
         }
 
         writer = context.getResponseWriter();
-        assert (writer != null);
+        assert(writer != null);
 
         writer.startElement("img", component);
         writeIdAttributeIfNecessary(context, writer, component);
         writer.writeURIAttribute("src", src(context, component), "value");
-	// if we're writing XHTML and we have a null alt attribute
-	if (writer.getContentType().equals(RIConstants.XHTML_CONTENT_TYPE) && 
-	    null == component.getAttributes().get("alt")) {
-	    // write out an empty alt
-	    writer.writeAttribute("alt", "", "alt");
-	}
+        // if we're writing XHTML and we have a null alt attribute
+        if (writer.getContentType().equals(RIConstants.XHTML_CONTENT_TYPE) &&
+            null == component.getAttributes().get("alt")) {
+            // write out an empty alt
+            writer.writeAttribute("alt", "", "alt");
+        }
 
-        RenderKitUtils.renderPassThruAttributes(context, writer, component); 
+        RenderKitUtils.renderPassThruAttributes(context, writer, component);
         RenderKitUtils.renderXHTMLStyleBooleanAttributes(writer, component);
         if (null != (styleClass = (String)
-            component.getAttributes().get("styleClass"))) {
+              component.getAttributes().get("styleClass"))) {
             writer.writeAttribute("class", styleClass, "styleClass");
         }
         writer.endElement("img");
         if (logger.isLoggable(Level.FINER)) {
-            logger.log(Level.FINER,"End encoding component " + component.getId());
+            logger.log(Level.FINER,
+                       "End encoding component " + component.getId());
         }
+
     }
+
+    // --------------------------------------------------------- Private Methods
 
 
     private String src(FacesContext context, UIComponent component) {
+
         String value = (String) ((UIGraphic) component).getValue();
         if (value == null) {
             return "";
         }
         value = context.getApplication().getViewHandler().
-            getResourceURL(context, value);
+              getResourceURL(context, value);
         return (context.getExternalContext().encodeResourceURL(value));
+
     }
-    
+
     // The testcase for this class is TestRenderers_2.java 
 
 } // end of class ImageRenderer

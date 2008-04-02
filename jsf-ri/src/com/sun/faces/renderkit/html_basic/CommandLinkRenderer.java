@@ -1,5 +1,5 @@
 /*
- * $Id: CommandLinkRenderer.java,v 1.55 2006/08/07 23:13:26 rlubke Exp $
+ * $Id: CommandLinkRenderer.java,v 1.56 2006/09/01 17:30:53 rlubke Exp $
  */
 
 /*
@@ -52,9 +52,13 @@ import com.sun.faces.util.Util;
  */
 
 public class CommandLinkRenderer extends LinkRenderer {
-    
+
+
     private static final String SCRIPT_STATE = RIConstants.FACES_PREFIX +
-                                               "scriptState";     
+                                               "scriptState";
+
+    // ---------------------------------------------------------- Public Methods
+
 
     public void decode(FacesContext context, UIComponent component) {
 
@@ -82,8 +86,8 @@ public class CommandLinkRenderer extends LinkRenderer {
                             component.getId() + " is disabled");
             }
             return;
-        }       
-              
+        }
+
         String clientId = command.getClientId(context);
         if (!context.getExternalContext().getRequestParameterMap()
               .containsKey(clientId)) {
@@ -100,11 +104,9 @@ public class CommandLinkRenderer extends LinkRenderer {
             logger.log(Level.FINER,
                        "End decoding component " + component.getId());
         }
+
     }
 
-    public boolean getRendersChildren() {
-        return true;
-    }
 
     public void encodeBegin(FacesContext context, UIComponent component)
           throws IOException {
@@ -138,13 +140,10 @@ public class CommandLinkRenderer extends LinkRenderer {
         }
 
         boolean componentDisabled = false;
-        if (command.getAttributes().get("disabled") != null) {
-            if ((command.getAttributes().get("disabled"))
-                  .equals(Boolean.TRUE)) {
-                componentDisabled = true;
-            }
+        if (Boolean.TRUE.equals(command.getAttributes().get("disabled"))) {
+            componentDisabled = true;
         }
-        
+
         String formClientId = getFormClientId(component, context);
         if (formClientId == null) {
             if (logger.isLoggable(Level.WARNING)) {
@@ -167,6 +166,7 @@ public class CommandLinkRenderer extends LinkRenderer {
         }
 
     }
+
 
     public void encodeChildren(FacesContext context, UIComponent component)
           throws IOException {
@@ -206,10 +206,13 @@ public class CommandLinkRenderer extends LinkRenderer {
             logger.log(Level.FINER,
                        "End encoding children " + component.getId());
         }
+
     }
+
 
     public void encodeEnd(FacesContext context, UIComponent component)
           throws IOException {
+
         if (context == null) {
             throw new NullPointerException(
                   MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID,
@@ -246,11 +249,8 @@ public class CommandLinkRenderer extends LinkRenderer {
         //Write Anchor inline elements
 
         boolean componentDisabled = false;
-        if (component.getAttributes().get("disabled") != null) {
-            if ((component.getAttributes().get("disabled"))
-                  .equals(Boolean.TRUE)) {
-                componentDisabled = true;
-            }
+        if (Boolean.TRUE.equals(command.getAttributes().get("disabled"))) {
+            componentDisabled = true;
         }
 
         if (componentDisabled) {
@@ -261,19 +261,30 @@ public class CommandLinkRenderer extends LinkRenderer {
         }
 
         //Done writing Anchor element
-        writer.endElement("a");       
-         
+        writer.endElement("a");
+
         if (logger.isLoggable(Level.FINER)) {
             logger.log(Level.FINER,
                        "End encoding component " + component.getId());
         }
+
     }
+
+
+    public boolean getRendersChildren() {
+
+        return true;
+
+    }
+
+    // ------------------------------------------------------- Protected Methods
+
 
     protected void renderAsActive(FacesContext context, UIComponent command)
           throws IOException {
 
         ResponseWriter writer = context.getResponseWriter();
-        assert(writer != null);       
+        assert(writer != null);
         String formClientId = getFormClientId(command, context);
         if (formClientId == null) {
             if (logger.isLoggable(Level.WARNING)) {
@@ -281,7 +292,7 @@ public class CommandLinkRenderer extends LinkRenderer {
                                " must be enclosed inside a form ");
             }
             return;
-        }      
+        }
 
         //make link act as if it's a button using javascript        
         writer.startElement("a", command);
@@ -318,17 +329,17 @@ public class CommandLinkRenderer extends LinkRenderer {
         String commandClientId = command.getClientId(context);
         String target = (String) command.getAttributes().get("target");
         if (target != null) {
-            target = target.trim();          
+            target = target.trim();
         } else {
             target = "";
         }
-        
+
         sb.append(
               RenderKitUtils.getCommandLinkOnClickScript(formClientId,
-                                                       commandClientId,
-                                                       target, 
-                                                       params));       
-       
+                                                         commandClientId,
+                                                         target,
+                                                         params));
+
         // we need to finish wrapping the injected js then
         if (userSpecifiedOnclick) {
             sb.append("};return (a()==false) ? false : b();");
@@ -344,8 +355,61 @@ public class CommandLinkRenderer extends LinkRenderer {
 
     }
 
+    // --------------------------------------------------------- Private Methods
+
+
+    /**
+     * @param context the <code>FacesContext</code> for the current request
+     *
+     * @return <code>true</code> If the <code>add/remove</code> javascript
+     *         has been rendered, otherwise <code>false</code>
+     */
+    private static boolean hasScriptBeenRendered(FacesContext context) {
+
+        return (context.getExternalContext().getRequestMap()
+              .get(SCRIPT_STATE) != null);
+
+    }
+
+
+    /**
+     * <p>Set a flag to indicate that the <code>add/remove</code> javascript
+     * has been rendered for the current form.
+     *
+     * @param context the <code>FacesContext</code> of the current request
+     */
+    @SuppressWarnings("unchecked")
+    private static void setScriptAsRendered(FacesContext context) {
+
+        context.getExternalContext().getRequestMap()
+              .put(SCRIPT_STATE, Boolean.TRUE);
+
+    }
+
+
+    /**
+     * <p>Utility method to return the client ID of the parent form.</p>
+     *
+     * @param component typically a command component
+     * @param context   the <code>FacesContext</code> for the current request
+     *
+     * @return the client ID of the parent form, if any
+     */
+    private String getFormClientId(UIComponent component,
+                                   FacesContext context) {
+
+        UIForm form = getMyForm(component);
+        if (form != null) {
+            return form.getClientId(context);
+        }
+
+        return null;
+
+    }
+
 
     private UIForm getMyForm(UIComponent component) {
+
         UIComponent parent = component.getParent();
         while (parent != null) {
             if (parent instanceof UIForm) {
@@ -361,52 +425,7 @@ public class CommandLinkRenderer extends LinkRenderer {
         }
 
         return (UIForm) parent;
-    }
-
-
-    /**
-     * @param context the <code>FacesContext</code> for the current request    
-     * @return <code>true</code> If the <code>add/remove</code> javascript
-     *  has been rendered, otherwise <code>false</code>
-     */
-    private static boolean hasScriptBeenRendered(FacesContext context) {
-
-        return (context.getExternalContext().getRequestMap()
-              .get(SCRIPT_STATE) != null);
 
     }
-
-    /**
-     * <p>Set a flag to indicate that the <code>add/remove</code> javascript
-     *  has been rendered for the current form.
-     * @param context the <code>FacesContext</code> of the current request    
-     */
-    @SuppressWarnings("unchecked")
-    private static void setScriptAsRendered(FacesContext context) {
-
-        context.getExternalContext().getRequestMap()
-              .put(SCRIPT_STATE, Boolean.TRUE);
-
-    }
-
-
-    /**
-     * <p>Utility method to return the client ID of the parent form.</p>
-     * @param component typically a command component
-     * @param context the <code>FacesContext</code> for the current request
-     * @return the client ID of the parent form, if any
-     */
-    private String getFormClientId(UIComponent component,
-                                   FacesContext context) {
-        
-        UIForm form = getMyForm(component);
-        if (form != null) {
-            return form.getClientId(context);
-        }
-        
-        return null;
-        
-    }
-       
 
 } // end of class CommandLinkRenderer

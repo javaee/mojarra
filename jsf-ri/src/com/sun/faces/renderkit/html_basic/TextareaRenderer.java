@@ -1,5 +1,5 @@
 /*
- * $Id: TextareaRenderer.java,v 1.21 2006/05/18 23:07:55 rlubke Exp $
+ * $Id: TextareaRenderer.java,v 1.22 2006/09/01 17:30:55 rlubke Exp $
  */
 
 /*
@@ -47,63 +47,37 @@ import com.sun.faces.util.MessageUtils;
 
 public class TextareaRenderer extends HtmlBasicInputRenderer {
 
-    //
-    // Protected Constants
-    //
+    // ---------------------------------------------------------- Public Methods
 
-    //
-    // Class Variables
-    //
-
-    //
-    // Instance Variables
-    //
-
-    // Attribute Instance Variables
-
-
-    // Relationship Instance Variables
-
-    //
-    // Constructors and Initializers    
-    //
-
-    public TextareaRenderer() {
-        super();
-    }
-
-    //
-    // Class methods
-    //
-
-    //
-    // General Methods
-    //
-
-    //
-    // Methods From Renderer
-    //
 
     public void encodeBegin(FacesContext context, UIComponent component)
-        throws IOException {
+          throws IOException {
+
         if (context == null) {
             throw new NullPointerException(
-                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "context"));
+                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID,
+                                                         "context"));
         }
         if (component == null) {
             throw new NullPointerException(
-                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "component"));
+                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID,
+                                                         "component"));
         }
+
     }
 
+    // ------------------------------------------------------- Protected Methods
 
-    protected void getEndTextToRender(FacesContext context, UIComponent component,
+
+    protected void getEndTextToRender(FacesContext context,
+                                      UIComponent component,
                                       String currentValue) throws IOException {
 
         ResponseWriter writer = context.getResponseWriter();
-        assert (writer != null);
+        assert(writer != null);
 
-	String styleClass = (String)component.getAttributes().get("styleClass");
+        String styleClass =
+              (String) component.getAttributes().get("styleClass");
 
         writer.startElement("textarea", component);
         writeIdAttributeIfNecessary(context, writer, component);
@@ -113,8 +87,8 @@ public class TextareaRenderer extends HtmlBasicInputRenderer {
             writer.writeAttribute("class", styleClass, "styleClass");
         }
 
-	// style is rendered as a passthru attribute
-        RenderKitUtils.renderPassThruAttributes(context, writer, component); 
+        // style is rendered as a passthru attribute
+        RenderKitUtils.renderPassThruAttributes(context, writer, component);
         RenderKitUtils.renderXHTMLStyleBooleanAttributes(writer, component);
 
         // render default text specified
@@ -123,6 +97,7 @@ public class TextareaRenderer extends HtmlBasicInputRenderer {
         }
 
         writer.endElement("textarea");
+
     }
 
 } // end of class TextareaRenderer

@@ -1,5 +1,5 @@
 /*
- * $Id: GroupRenderer.java,v 1.31 2006/05/17 19:00:48 rlubke Exp $
+ * $Id: GroupRenderer.java,v 1.32 2006/09/01 17:30:55 rlubke Exp $
  */
 
 /*
@@ -29,88 +29,50 @@
 
 package com.sun.faces.renderkit.html_basic;
 
-import com.sun.faces.util.MessageUtils;
-
-import java.util.logging.Level;
-
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 
 import java.io.IOException;
 import java.util.Iterator;
+import java.util.logging.Level;
+
+import com.sun.faces.util.MessageUtils;
 
 /**
  * Arbitrary grouping "renderer" that simply renders its children
  * recursively in the <code>encodeEnd()</code> method.
  *
- * @version $Id: GroupRenderer.java,v 1.31 2006/05/17 19:00:48 rlubke Exp $
+ * @version $Id: GroupRenderer.java,v 1.32 2006/09/01 17:30:55 rlubke Exp $
  */
 public class GroupRenderer extends HtmlBasicRenderer {
 
-    //
-    // Protected Constants
-    //
-  
-    //
-    // Class Variables
-    //
-
-    //
-    // Instance Variables
-    //
-
-    // Attribute Instance Variables
-
-    // Relationship Instance Variables
-
-    //
-    // Constructors and Initializers    
-    //
-
-    public GroupRenderer() {
-        super();
-    }
-
-    //
-    // Class methods
-    //
-
-    //
-    // General Methods
-    //
-
-    //
-    // Methods From Renderer
-    //
-
-    public boolean getRendersChildren() {
-        return true;
-    }
+    // ---------------------------------------------------------- Public Methods
 
 
     public void encodeBegin(FacesContext context, UIComponent component)
-        throws IOException {
+          throws IOException {
+
         if (logger.isLoggable(Level.FINER)) {
-            logger.log(Level.FINER,"Begin encoding component " +
-                      component.getId());
+            logger.log(Level.FINER, "Begin encoding component " +
+                                    component.getId());
         }
         // suppress rendering if "rendered" property on the component is
         // false.
         if (!component.isRendered()) {
             if (logger.isLoggable(Level.FINE)) {
-                 logger.fine("End encoding component " +
-                          component.getId() + " since " +
-                          "rendered attribute is set to false ");
+                logger.fine("End encoding component " +
+                            component.getId() + " since " +
+                            "rendered attribute is set to false ");
             }
             return;
         }
 
         // Render a span around this group if necessary
         String
-            style = (String) component.getAttributes().get("style"),
-            styleClass = (String) component.getAttributes().get("styleClass"),
-            layout = (String) component.getAttributes().get("layout");
+              style = (String) component.getAttributes().get("style"),
+              styleClass = (String) component.getAttributes().get("styleClass"),
+              layout = (String) component.getAttributes().get("layout");
         ResponseWriter writer = context.getResponseWriter();
 
         if (divOrSpan(component)) {
@@ -132,17 +94,19 @@ public class GroupRenderer extends HtmlBasicRenderer {
 
 
     public void encodeChildren(FacesContext context, UIComponent component)
-        throws IOException {
-       if (logger.isLoggable(Level.FINER)) {
-            logger.log(Level.FINER, "Begin encoding children " + component.getId());
+          throws IOException {
+
+        if (logger.isLoggable(Level.FINER)) {
+            logger.log(Level.FINER,
+                       "Begin encoding children " + component.getId());
         }
         // suppress rendering if "rendered" property on the component is
         // false.
         if (!component.isRendered()) {
             if (logger.isLoggable(Level.FINE)) {
-                 logger.fine("End encoding component " +
-                          component.getId() + " since " +
-                          "rendered attribute is set to false ");
+                logger.fine("End encoding component " +
+                            component.getId() + " since " +
+                            "rendered attribute is set to false ");
             }
             return;
         }
@@ -153,36 +117,40 @@ public class GroupRenderer extends HtmlBasicRenderer {
             encodeRecursive(context, kids.next());
         }
         if (logger.isLoggable(Level.FINER)) {
-            logger.log(Level.FINER,"End encoding children " + component.getId());
+            logger.log(Level.FINER,
+                       "End encoding children " + component.getId());
         }
 
     }
 
 
     public void encodeEnd(FacesContext context, UIComponent component)
-        throws IOException {
+          throws IOException {
+
         if (context == null) {
             throw new NullPointerException(
-                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "context"));
+                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID,
+                                                         "context"));
         }
         if (component == null) {
             throw new NullPointerException(
-                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "component"));
+                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID,
+                                                         "component"));
         }
         // suppress rendering if "rendered" property on the component is
         // false.
         if (!component.isRendered()) {
             if (logger.isLoggable(Level.FINE)) {
-                 logger.fine("End encoding component " +
-                          component.getId() + " since " +
-                          "rendered attribute is set to false ");
+                logger.fine("End encoding component " +
+                            component.getId() + " since " +
+                            "rendered attribute is set to false ");
             }
             return;
         }
 
         // Close our span element if necessary
         ResponseWriter writer = context.getResponseWriter();
-        String layout = (String)component.getAttributes().get("layout");
+        String layout = (String) component.getAttributes().get("layout");
         if (divOrSpan(component)) {
             if ((layout != null) && (layout.equals("block"))) {
                 writer.endElement("div");
@@ -191,11 +159,20 @@ public class GroupRenderer extends HtmlBasicRenderer {
             }
         }
         if (logger.isLoggable(Level.FINER)) {
-            logger.log(Level.FINER,"End encoding component " +
-                      component.getId());
+            logger.log(Level.FINER, "End encoding component " +
+                                    component.getId());
         }
 
     }
+
+
+    public boolean getRendersChildren() {
+
+        return true;
+
+    }
+
+    // --------------------------------------------------------- Private Methods
 
 
     /**
@@ -204,6 +181,7 @@ public class GroupRenderer extends HtmlBasicRenderer {
      * @param component <code>UIComponent</code> for this group
      */
     private boolean divOrSpan(UIComponent component) {
+
         if (shouldWriteIdAttribute(component) ||
             (component.getAttributes().get("style") != null) ||
             (component.getAttributes().get("styleClass") != null)) {
@@ -213,6 +191,5 @@ public class GroupRenderer extends HtmlBasicRenderer {
         }
 
     }
-
 
 }

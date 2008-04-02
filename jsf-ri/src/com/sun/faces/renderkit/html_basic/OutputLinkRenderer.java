@@ -1,5 +1,5 @@
 /*
- * $Id: OutputLinkRenderer.java,v 1.29 2006/07/25 21:06:05 rlubke Exp $
+ * $Id: OutputLinkRenderer.java,v 1.30 2006/09/01 17:30:54 rlubke Exp $
  */
 
 /*
@@ -49,87 +49,53 @@ import com.sun.faces.util.MessageUtils;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: OutputLinkRenderer.java,v 1.29 2006/07/25 21:06:05 rlubke Exp $
+ * @version $Id: OutputLinkRenderer.java,v 1.30 2006/09/01 17:30:54 rlubke Exp $
  */
 
 public class OutputLinkRenderer extends LinkRenderer {
 
-    //
-    // Protected Constants
-    //
+    // ---------------------------------------------------------- Public Methods
 
-    // Separator character
-
-    //
-    // Class Variables
-    //
-
-    //
-    // Instance Variables
-    //
-
-    // Attribute Instance Variables
-
-
-    // Relationship Instance Variables
-
-    //
-    // Constructors and Initializers
-    //
-
-    //
-    // Class methods
-    //
-
-    //
-    // General Methods
-    //
-
-    //
-    // Methods From Renderer
-    //
 
     public void decode(FacesContext context, UIComponent component) {
+
         if (context == null) {
             throw new NullPointerException(
-                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "context"));
+                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID,
+                                                         "context"));
         }
         if (component == null) {
             throw new NullPointerException(
-                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "component"));
+                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID,
+                                                         "component"));
         }
 
         // take no action, this is an Output component.
         if (logger.isLoggable(Level.FINE)) {
-             logger.fine("No decoding necessary since the component "
-                      + component.getId() +
-                      " is not an instance or a sub class of UIInput");
-        }       
-    }
+            logger.fine("No decoding necessary since the component "
+                        + component.getId() +
+                        " is not an instance or a sub class of UIInput");
+        }
 
-
-    public boolean getRendersChildren() {
-        return true;
-    }
-
-
-    protected Object getValue(UIComponent component) {
-        return ((UIOutput) component).getValue();
     }
 
 
     public void encodeBegin(FacesContext context, UIComponent component)
-        throws IOException {
+          throws IOException {
+
         if (context == null) {
             throw new NullPointerException(
-                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "context"));
+                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID,
+                                                         "context"));
         }
         if (component == null) {
             throw new NullPointerException(
-                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "component"));
+                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID,
+                                                         "component"));
         }
         if (logger.isLoggable(Level.FINER)) {
-            logger.log(Level.FINER,"Begin encoding component " + component.getId());
+            logger.log(Level.FINER,
+                       "Begin encoding component " + component.getId());
         }
 
         UIOutput output = (UIOutput) component;
@@ -144,28 +110,34 @@ public class OutputLinkRenderer extends LinkRenderer {
         } else {
             renderAsActive(context, output);
         }
+
     }
 
+
     public void encodeChildren(FacesContext context, UIComponent component)
-        throws IOException {
+          throws IOException {
+
         if (context == null) {
             throw new NullPointerException(
-                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "context"));
+                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID,
+                                                         "context"));
         }
         if (component == null) {
             throw new NullPointerException(
-                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "component"));
+                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID,
+                                                         "component"));
         }
         if (logger.isLoggable(Level.FINER)) {
-            logger.log(Level.FINER,"Begin encoding children " + component.getId());
+            logger.log(Level.FINER,
+                       "Begin encoding children " + component.getId());
         }
         // suppress rendering if "rendered" property on the component is
         // false.
         if (!component.isRendered()) {
             if (logger.isLoggable(Level.FINE)) {
-                 logger.fine("End encoding component "
-                          + component.getId() + " since " +
-                          "rendered attribute is set to false ");
+                logger.fine("End encoding component "
+                            + component.getId() + " since " +
+                            "rendered attribute is set to false ");
             }
             return;
         }
@@ -178,77 +150,100 @@ public class OutputLinkRenderer extends LinkRenderer {
             }
             kid.encodeEnd(context);
         }
+
     }
 
+
     public void encodeEnd(FacesContext context, UIComponent component)
-        throws IOException {
+          throws IOException {
+
         if (context == null) {
             throw new NullPointerException(
-                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "context"));
+                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID,
+                                                         "context"));
         }
         if (component == null) {
             throw new NullPointerException(
-                MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "component"));
+                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID,
+                                                         "component"));
         }
-                                                                                                                          
+
         if (logger.isLoggable(Level.FINER)) {
-            logger.log(Level.FINER,"End encoding " + component.getId());
+            logger.log(Level.FINER, "End encoding " + component.getId());
         }
         // suppress rendering if "rendered" property on the component is
         // false.
         if (!component.isRendered()) {
-           if (logger.isLoggable(Level.FINE)) {
-                 logger.fine("End encoding component "
-                          + component.getId() + " since " +
-                          "rendered attribute is set to false ");
+            if (logger.isLoggable(Level.FINE)) {
+                logger.fine("End encoding component "
+                            + component.getId() + " since " +
+                            "rendered attribute is set to false ");
             }
             return;
         }
         ResponseWriter writer = context.getResponseWriter();
-        assert (writer != null);
-                                                                                                                          
+        assert(writer != null);
+
         boolean componentDisabled = false;
         if (component.getAttributes().get("disabled") != null) {
-            if ((component.getAttributes().get("disabled")).equals(Boolean.TRUE)) {
+            if ((component.getAttributes().get("disabled"))
+                  .equals(Boolean.TRUE)) {
                 componentDisabled = true;
             }
         }
 
         if (componentDisabled) {
-            
-                writer.endElement("span");
-            
+
+            writer.endElement("span");
+
         } else {
             //Write Anchor inline elements
             //Done writing Anchor element
             writer.endElement("a");
         }
-       
+
     }
 
-    
-    protected void renderAsActive(FacesContext context, UIComponent component) 
-    throws IOException {
- 
+
+    public boolean getRendersChildren() {
+
+        return true;
+
+    }
+
+    // ------------------------------------------------------- Protected Methods
+
+
+    protected Object getValue(UIComponent component) {
+
+        return ((UIOutput) component).getValue();
+
+    }
+
+
+    protected void renderAsActive(FacesContext context, UIComponent component)
+          throws IOException {
+
         String hrefVal = getCurrentValue(context, component);
         if (logger.isLoggable(Level.FINE)) {
-             logger.fine("Value to be rendered " + hrefVal);
+            logger.fine("Value to be rendered " + hrefVal);
         }
 
         // suppress rendering if "rendered" property on the output is
         // false
         if (!component.isRendered()) {
             if (logger.isLoggable(Level.FINE)) {
-                 logger.fine("End encoding component "
-                          + component.getId() + " since " +
-                          "rendered attribute is set to false ");
+                logger.fine("End encoding component "
+                            + component.getId() + " since " +
+                            "rendered attribute is set to false ");
             }
             return;
         }
         ResponseWriter writer = context.getResponseWriter();
-        assert (writer != null);
+        assert(writer != null);
         writer.startElement("a", component);
-        String writtenId = writeIdAttributeIfNecessary(context, writer, component);
+        String writtenId =
+              writeIdAttributeIfNecessary(context, writer, component);
         if (null != writtenId) {
             writer.writeAttribute("name", writtenId, "name");
         }
@@ -261,8 +256,8 @@ public class OutputLinkRenderer extends LinkRenderer {
 
         Param paramList[] = getParamList(component);
         int
-            i = 0,
-            len = paramList.length;
+              i = 0,
+              len = paramList.length;
         StringBuffer sb = new StringBuffer();
         sb.append(hrefVal);
         if (0 < len) {
@@ -278,7 +273,7 @@ public class OutputLinkRenderer extends LinkRenderer {
         }
         writer.writeURIAttribute("href",
                                  context.getExternalContext()
-                                 .encodeResourceURL(sb.toString()),
+                                       .encodeResourceURL(sb.toString()),
                                  "href");
         RenderKitUtils.renderPassThruAttributes(context, writer, component);
         RenderKitUtils.renderXHTMLStyleBooleanAttributes(writer, component);
@@ -286,6 +281,7 @@ public class OutputLinkRenderer extends LinkRenderer {
         writeCommonLinkAttributes(writer, component);
 
         writer.flush();
-    }   
+
+    }
 
 } // end of class OutputLinkRenderer
