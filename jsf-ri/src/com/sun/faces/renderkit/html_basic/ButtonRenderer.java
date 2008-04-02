@@ -1,5 +1,5 @@
 /*
- * $Id: ButtonRenderer.java,v 1.101 2006/09/01 17:30:54 rlubke Exp $
+ * $Id: ButtonRenderer.java,v 1.102 2007/02/08 19:53:35 rlubke Exp $
  */
 
 /*
@@ -143,11 +143,11 @@ public class ButtonRenderer extends HtmlBasicRenderer {
         // Which button type (SUBMIT, RESET, or BUTTON) should we generate?
         String type = (String) component.getAttributes().get("type");
         String styleClass;
-        if (type == null) {
+        if (type == null || (!"reset".equals(type) && !"submit".equals(type))) {
             type = "submit";
             // This is needed in the decode method
             component.getAttributes().put("type", type);
-        }
+        } 
 
         ResponseWriter writer = context.getResponseWriter();
         assert(writer != null);
@@ -166,7 +166,7 @@ public class ButtonRenderer extends HtmlBasicRenderer {
             writer.writeURIAttribute("src", src(context, imageSrc), "image");
             writer.writeAttribute("name", clientId, "clientId");
         } else {
-            writer.writeAttribute("type", type.toLowerCase(), "type");
+            writer.writeAttribute("type", type, "type");
             writer.writeAttribute("name", clientId, "clientId");
             writer.writeAttribute("value", label, "value");
         }

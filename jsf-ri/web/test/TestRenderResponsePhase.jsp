@@ -43,12 +43,12 @@
 
                     <h:inputSecret styleClass="secretClass" id="password1" />
 
-                    <h:commandButton id="submit1" type="SUBMIT"
+                    <h:commandButton id="submit1" type="submit"
                         styleClass="commandClass" 
                         value="Login" >
                     </h:commandButton>
 
-                    <h:commandButton id="reset1" type="RESET" 
+                    <h:commandButton id="reset1" type="reset" 
                         value="Reset">
                     </h:commandButton>
 
