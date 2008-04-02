@@ -1,5 +1,5 @@
 /*
- * $Id: TestNavigationHandler.java,v 1.23 2005/10/19 19:51:29 edburns Exp $
+ * $Id: TestNavigationHandler.java,v 1.24 2006/03/15 20:02:45 rlubke Exp $
  */
 
 /*
@@ -33,9 +33,9 @@ package com.sun.faces.application;
 
 import com.sun.faces.cactus.ServletFacesTestCase;
 import com.sun.faces.util.Util;
-import org.apache.commons.digester.CallMethodRule;
-import org.apache.commons.digester.CallParamRule;
-import org.apache.commons.digester.Digester;
+import com.sun.org.apache.commons.digester.CallMethodRule;
+import com.sun.org.apache.commons.digester.CallParamRule;
+import com.sun.org.apache.commons.digester.Digester;
 
 import javax.faces.FactoryFinder;
 import javax.faces.application.Application;
@@ -59,7 +59,7 @@ import java.util.Map;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestNavigationHandler.java,v 1.23 2005/10/19 19:51:29 edburns Exp $
+ * @version $Id: TestNavigationHandler.java,v 1.24 2006/03/15 20:02:45 rlubke Exp $
  */
 
 public class TestNavigationHandler extends ServletFacesTestCase {
