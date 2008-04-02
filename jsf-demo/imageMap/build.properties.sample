@@ -1,0 +1,10 @@
+# Make these values be correct on your system, then rename to
+# build.properties.  On win32, make sure to preserve the \\ syntax
+# for escaping backslashes.    
+
+jsf.home = <location of workspace>
+tomcat.home = <tomcat installation>
+standard.jar=<location of standard.jar>/standard.jar
+jstl.jar=<location of jstl.jar>/jstl.jar
+username=tomcat
+password=tomcat
