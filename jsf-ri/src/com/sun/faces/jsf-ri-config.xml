@@ -903,6 +903,107 @@
     <renderer>
       <renderer-type>Button</renderer-type>
       <renderer-class>com.sun.faces.renderkit.html_basic.ButtonRenderer</renderer-class>
+      <attribute>
+        <attribute-name>rendered</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+      <attribute>
+        <attribute-name>key</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+      <attribute>
+        <attribute-name>imageKey</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+     <attribute>
+       <attribute-name>bundle</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+     </attribute>
+      <attribute>
+        <attribute-name>image</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+      <attribute>
+       <attribute-name>type</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+     </attribute>    
+     <attribute>
+       <attribute-name>onclick</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+     </attribute>
+     <attribute>
+       <attribute-name>ondblclick</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+     </attribute>
+     <attribute>
+       <attribute-name>onkeydown</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+     </attribute>
+     <attribute>
+       <attribute-name>onkeypress</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+     </attribute>
+     <attribute>
+       <attribute-name>onkeyup</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+     </attribute>
+     <attribute>
+       <attribute-name>onmousedown</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+     </attribute>
+     <attribute>
+       <attribute-name>onmousemove</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+     </attribute>
+     <attribute>
+       <attribute-name>onmouseout</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+     </attribute>
+     <attribute>
+       <attribute-name>onmouseover</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+     </attribute>
+     <attribute>
+       <attribute-name>onmouseup</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+     </attribute>
+     <attribute>
+       <attribute-name>disabled</attribute-name>
+        <attribute-class>boolean</attribute-class>
+     </attribute>
+     <attribute>
+       <attribute-name>alt</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+     </attribute>
+     <attribute>
+       <attribute-name>lang</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+     </attribute>
+     <attribute>
+       <attribute-name>dir</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+     </attribute>
+     <attribute>
+       <attribute-name>tabindex</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+     </attribute>
+     <attribute>
+       <attribute-name>accesskey</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+     </attribute>
+     <attribute>
+       <attribute-name>styleClass</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+     </attribute>
+    <attribute>
+       <attribute-name>title</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+     </attribute>
+     <attribute>
+       <attribute-name>style</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+     </attribute>
+      <component-class>javax.faces.component.UICommand</component-class>
     </renderer>
     <renderer>
       <renderer-type>Checkbox</renderer-type>
@@ -935,6 +1036,15 @@
     <renderer>
       <renderer-type>Hyperlink</renderer-type>
       <renderer-class>com.sun.faces.renderkit.html_basic.HyperlinkRenderer</renderer-class>
+      <attribute>
+        <attribute-name>image</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+      <attribute>
+        <attribute-name>imageKey</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+      <component-class>javax.faces.component.UICommand</component-class>
     </renderer>
     <renderer>
       <renderer-type>Image</renderer-type>
