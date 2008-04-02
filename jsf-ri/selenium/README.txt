@@ -1,5 +1,5 @@
 #
-# $Id: README.txt,v 1.1 2006/03/30 22:11:02 rlubke Exp $
+# $Id: README.txt,v 1.2 2006/03/30 22:46:11 rlubke Exp $
 #
 
 What is Selenium?  Here is a direct quote from the Selenium web site [1]:
@@ -36,6 +36,13 @@ How do I run the tests?
           + shale-mailreader-user-profile.html
        * The shale-mailreader application *must* be redeployed
          before each subsequent test run
+     - shale-sql-browser
+       * download the shale-sql-browser application from
+         http://struts.apache.org and install it on GlassFish
+       * From the browser, load the Selenium IDE
+       * Load and run the tests in this order make sure the base URL
+         is set to localhost:8080 or whatever is appropriate
+           + shale-sql-browser.html
          
 TODO:
   - Add Selenium test cases for:
