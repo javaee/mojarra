@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderKit.java,v 1.4 2003/08/28 15:53:48 rlubke Exp $
+ * $Id: TestRenderKit.java,v 1.5 2003/09/11 21:21:45 rkitain Exp $
  */
 
 /*
@@ -12,6 +12,7 @@
 package com.sun.faces.renderkit;
 
 import com.sun.faces.renderkit.html_basic.FormRenderer;
+import com.sun.faces.renderkit.html_basic.TextRenderer;
 
 import java.util.Iterator;
 
@@ -45,7 +46,7 @@ import java.io.ByteArrayOutputStream;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderKit.java,v 1.4 2003/08/28 15:53:48 rlubke Exp $
+ * @version $Id: TestRenderKit.java,v 1.5 2003/09/11 21:21:45 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -106,17 +107,18 @@ public static final String CORRECT_OUTPUT_FILENAME =
     public void testAddRenderer() {
 	boolean bool = false;
 	FormRenderer formRenderer = new FormRenderer();
+	TextRenderer textRenderer = new TextRenderer();
 
         RenderKitFactory renderKitFactory = (RenderKitFactory)
             FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
         renderKit = renderKitFactory.getRenderKit("DEFAULT");
-	try {
-	    renderKit.addRenderer("Form", formRenderer);
-	}
-	catch (IllegalArgumentException e) {
-	    bool = true;
-	}
-	assertTrue(bool);
+	// Test to see if addRenderer replaces the renderer if given
+	// the same rendererType.
+	//
+        renderKit.addRenderer("Form", formRenderer);
+	assertTrue(renderKit.getRenderer("Form") instanceof FormRenderer);
+        renderKit.addRenderer("Form", textRenderer);
+	assertTrue(renderKit.getRenderer("Form") instanceof TextRenderer);
 
 	bool = false;
 	try {
