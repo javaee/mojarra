@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigFileTestCase.java,v 1.16 2003/06/13 22:16:56 eburns Exp $
+ * $Id: ConfigFileTestCase.java,v 1.17 2003/06/25 06:29:57 rkitain Exp $
  */
 
 /*
@@ -25,6 +25,9 @@ import java.util.Map;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContext;
+import javax.faces.component.UIComponent;
+import javax.faces.convert.Converter;
+import javax.faces.validator.Validator;
 import javax.faces.FactoryFinder;
 import javax.faces.application.ApplicationFactory;
 import javax.faces.context.MessageResources;
@@ -146,88 +149,60 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
 
         // <component>
 
-        Map components = base.getComponents();
-        assertNotNull(components);
-        ConfigComponent ccomp1 = (ConfigComponent) components.get("Command");
-        assertNotNull(ccomp1);
-        assertEquals("Command",
-                     ccomp1.getComponentType());
-        assertEquals("javax.faces.component.UICommand",
-                     ccomp1.getComponentClass());
-        assertNull(ccomp1.getLargeIcon());
-        assertNull(ccomp1.getSmallIcon());
-        assertEquals(0, ccomp1.getAttributes().size());
-        assertEquals(0, ccomp1.getProperties().size());
+        ApplicationFactory aFactory = (ApplicationFactory)FactoryFinder.getFactory(
+        FactoryFinder.APPLICATION_FACTORY);
+        ApplicationImpl application = (ApplicationImpl)aFactory.getApplication();
+        Iterator iter = application.getComponentTypes();
+        assertTrue(iter.hasNext());
+        String cType = null;
+        UIComponent comp = null;
+        while (iter.hasNext()) {
+            cType = (String)iter.next();
+            comp = application.getComponent(cType);
+            assertNotNull(comp);
+        }
+        UIComponent command = application.getComponent("Command");
+        assertNotNull(command);
+        comp = null;
+        application.addComponent("fooType", "javax.faces.component.UICommand");
+        comp = application.getComponent("fooType");
+        assertNotNull(comp);
 
         // <converter>
 
-        Map converters = base.getConverters();
-        assertNotNull(converters);
-        ConfigConverter cc1 = (ConfigConverter) converters.get("First");
-        assertNotNull(cc1);
-        assertEquals("First",
-                     cc1.getConverterId());
-        assertEquals("com.sun.faces.TestFirstConverter",
-                     cc1.getConverterClass());
-        assertEquals(1, cc1.getAttributes().size());
-        ConfigAttribute cc1a1 =
-            (ConfigAttribute) cc1.getAttributes().get("attr1");
-        assertNotNull(cc1a1);
-        assertEquals("attr1",
-                     cc1a1.getAttributeName());
-        assertEquals("java.lang.String",
-                     cc1a1.getAttributeClass());
-        assertEquals(0, cc1.getProperties().size());
-        ConfigConverter cc2 = (ConfigConverter) converters.get("Second");
-        assertNotNull(cc2);
-        assertEquals("Second",
-                     cc2.getConverterId());
-        assertEquals("com.sun.faces.TestSecondConverter",
-                     cc2.getConverterClass());
-        assertEquals(0, cc2.getAttributes().size());
-        assertEquals(1, cc2.getProperties().size());
-        ConfigProperty cc2p1 =
-            (ConfigProperty) cc2.getProperties().get("prop1");
-        assertNotNull(cc2p1);
-        assertEquals("prop1",
-                     cc2p1.getPropertyName());
-        assertEquals("java.lang.String",
-                     cc2p1.getPropertyClass());
+        iter = application.getConverterIds();
+        assertTrue(iter.hasNext());
+        String convId = null;
+        Converter conv = null;
+        while (iter.hasNext()) {
+            convId = (String)iter.next();
+            conv = application.getConverter(convId);
+            assertNotNull(conv);
+        }
+        Converter first = application.getConverter("First");
+        assertNotNull(first);
+        conv = null;
+        application.addConverter("fooId", "com.sun.faces.convert.DateConverter");
+        conv = application.getConverter("fooId");
+        assertNotNull(conv);
 
         // <validator>
 
-        Map validators = base.getValidators();
-        assertNotNull(validators);
-        ConfigValidator cv1 = (ConfigValidator) validators.get("First");
-        assertNotNull(cv1);
-        assertEquals("First",
-                     cv1.getValidatorId());
-        assertEquals("com.sun.faces.TestFirstValidator",
-                     cv1.getValidatorClass());
-        assertEquals(1, cv1.getAttributes().size());
-        ConfigAttribute cv1a1 =
-            (ConfigAttribute) cv1.getAttributes().get("attr1");
-        assertNotNull(cv1a1);
-        assertEquals("attr1",
-                     cv1a1.getAttributeName());
-        assertEquals("java.lang.String",
-                     cv1a1.getAttributeClass());
-        assertEquals(0, cv1.getProperties().size());
-        ConfigValidator cv2 = (ConfigValidator) validators.get("Second");
-        assertNotNull(cv2);
-        assertEquals("Second",
-                     cv2.getValidatorId());
-        assertEquals("com.sun.faces.TestSecondValidator",
-                     cv2.getValidatorClass());
-        assertEquals(0, cv2.getAttributes().size());
-        assertEquals(1, cv2.getProperties().size());
-        ConfigProperty cv2p1 =
-            (ConfigProperty) cv2.getProperties().get("prop1");
-        assertNotNull(cv2p1);
-        assertEquals("prop1",
-                     cv2p1.getPropertyName());
-        assertEquals("java.lang.String",
-                     cv2p1.getPropertyClass());
+        iter = application.getValidatorIds();
+        assertTrue(iter.hasNext());
+        String valId = null;
+        Validator val = null;
+        while (iter.hasNext()) {
+            valId = (String)iter.next();
+            val = application.getValidator(valId);
+            assertNotNull(val);
+        }
+        Validator second = application.getValidator("Second");
+        assertNotNull(second);
+        val = null;
+        application.addValidator("fooId", "javax.faces.validator.DoubleRangeValidator");
+        val = application.getValidator("fooId");
+        assertNotNull(val);
 
         // <managed-beans>
 
@@ -246,7 +221,7 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
 
         // Test Property Value , Values Array , Map Entries
 
-        Iterator iter = props.keySet().iterator();
+        iter = props.keySet().iterator();
         ConfigManagedBeanProperty cmp = null;
         ConfigManagedBeanPropertyValue cmpv = null;
         ConfigManagedPropertyMap cmpm = null;

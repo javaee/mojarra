@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationImpl.java,v 1.12 2003/05/05 15:19:00 rkitain Exp $
+ * $Id: ApplicationImpl.java,v 1.13 2003/06/25 06:29:50 rkitain Exp $
  */
 
 /*
@@ -11,6 +11,7 @@ package com.sun.faces.application;
 
 import java.util.Iterator;
 import java.util.HashMap;
+import java.util.Map;
 
 import javax.faces.application.Application;
 import javax.faces.component.UIComponent;
@@ -18,6 +19,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.context.MessageResources;
 import javax.faces.convert.Converter;
 import javax.faces.event.ActionListener;
+import javax.faces.el.PropertyNotFoundException;
 import javax.faces.el.PropertyResolver;
 import javax.faces.el.VariableResolver;
 import javax.faces.el.PropertyResolver;
@@ -28,6 +30,8 @@ import javax.faces.event.PhaseId;
 import javax.faces.validator.Validator;
 import javax.faces.FacesException;
 
+import com.sun.faces.RIConstants;
+import com.sun.faces.config.ManagedBeanFactory;
 import com.sun.faces.el.ValueBindingImpl;
 import com.sun.faces.el.PropertyResolverImpl;
 import com.sun.faces.el.VariableResolverImpl;
@@ -65,6 +69,11 @@ public class ApplicationImpl extends Application {
     private HashMap valueBindingMap;
     private AppConfig appConfig = null;
 
+    private HashMap componentMap;
+    private HashMap converterMap;
+    private HashMap validatorMap;
+    private HashMap managedBeanFactoriesMap;
+
 //
 // Constructors and Initializers
 //
@@ -75,6 +84,10 @@ public class ApplicationImpl extends Application {
     public ApplicationImpl () {
         super();
         valueBindingMap = new HashMap();
+	componentMap = new HashMap();
+	converterMap = new HashMap();
+	validatorMap = new HashMap();
+	managedBeanFactoriesMap = new HashMap();
 
         actionListener = new ActionListenerImpl();
         navigationHandler = new NavigationHandlerImpl();
@@ -222,7 +235,6 @@ public class ApplicationImpl extends Application {
             ((ValueBindingImpl)valueBinding).setRef(ref);
             valueBindingMap.put(ref, valueBinding);
         }
-
         return valueBinding;
     }
 
@@ -256,29 +268,177 @@ public class ApplicationImpl extends Application {
         this.variableResolver = resolver;
     }
 
+    /**
+     *<p>Register a new mapping of component type to the name of the 
+     * {@link UIComponent} class.  Subsequent calls to
+     * <code>getComponent()</code> will serve as a factory for {@link UIComponent}
+     *  instances.
+     *
+     * @param componentType The component type to be registered
+     * @param componentClass The fully qualified class name of the corresponding
+     *  {@link UIComponent} implementation
+     *
+     * @exception NullPointerException if <code>componentType</code> or
+     *  <code>componentClass</code> is <code>null</code>
+     */
     public void addComponent(String componentType, String componentClass) {
-	appConfig.addComponent(componentType, componentClass);
+	if (componentType == null || componentClass == null) {
+	    throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+	}
+	componentMap.put(componentType, componentClass);
     }
 
+    /**
+     * <p>Instantiate and return a new instance of {@link UIComponent} instance of the 
+     * class specified by a previous call to <code>addComponent()</code> for the
+     * specified component type.</p>
+     * 
+     * @param componentType The componentType that identifies the component instance
+     *  that will be created and returned.
+     *  
+     * @return {@link UIComponent} instance
+     *
+     * @exception FacesException if a {@link UIComponent} of the specified type cannot
+     *  be created.
+     * @exception NullPointerException if <code>componentType</code> is <code>null</code>.
+     */
     public UIComponent getComponent(String componentType) throws FacesException {
-        return appConfig.getComponent(componentType);
+	if (componentType == null) {
+	    throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+	}
+	UIComponent returnVal = (UIComponent)newThing(componentType, componentMap);
+	if (returnVal == null) {
+            Object[] params = {componentType};
+	    throw new FacesException(Util.getExceptionMessage(
+                Util.NAMED_OBJECT_NOT_FOUND_ERROR_MESSAGE_ID,params));
+	}
+	return returnVal;
     }
 
+    /**
+     * <p>Return an <code>Iterator</code> over the set of currently defined
+     * component types for this <code>Application</code>.</p>
+     *
+     * @return Iteration of component types.
+     */
     public Iterator getComponentTypes() {
-        return appConfig.getComponentTypes();
+	return componentMap.keySet().iterator();
     }
 
+    /**
+     *<p>Register a new mapping of converter id to the name of the 
+     * {@link Converter} class.  Subsequent calls to
+     * <code>getConverter()</code> will serve as a factory for {@link Converter}
+     *  instances.
+     *
+     * @param converterId The converter identifier to be registered
+     * @param converterClass The fully qualified class name of the corresponding
+     *  {@link Converter} implementation
+     *
+     * @exception NullPointerException if <code>converterId</code> or
+     *  <code>converterClass</code> is <code>null</code>
+     */
     public void addConverter(String converterId, String converterClass) {
-	appConfig.addConverter(converterId, converterClass);
+        if (converterId == null || converterClass == null) {
+	    throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+	}
+	converterMap.put(converterId, converterClass);
     }
 
+    /**
+     * <p>Instantiate and return a new instance of {@link Converter} instance of the 
+     * class specified by a previous call to <code>addConverter()</code> for the
+     * specified converter identifier.</p>
+     * 
+     * @param converterId The converterId that identifies the converter instance
+     *  that will be created and returned.
+     *  
+     * @return {@link Converter} instance.
+     *
+     * @exception FacesException if a {@link Converter} of the specified identifier
+     * cannot be created.
+     * @exception NullPointerException if <code>converterId</code> is <code>null</code>.
+     */
     public Converter getConverter(String converterId) throws FacesException {
-	return appConfig.getConverter(converterId);
+	if (converterId == null) {
+	    throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+	}
+	Converter returnVal = (Converter)newThing(converterId, converterMap);
+	if (returnVal == null) {
+            Object[] params = {converterId};
+	    throw new FacesException(Util.getExceptionMessage(
+                Util.NAMED_OBJECT_NOT_FOUND_ERROR_MESSAGE_ID,params));
+	}
+	return returnVal;
     }
 
+    /**
+     * <p>Return an <code>Iterator</code> over the set of currently defined
+     * converter identifiers for this <code>Application</code>.</p>
+     *
+     * @return Iteration of {@link Converter} identifiers.
+     */
     public Iterator getConverterIds() {
-        return appConfig.getConverterIds();
+        return converterMap.keySet().iterator();
     }
+
+    /**
+     *<p>Register a new mapping of validator id to the name of the 
+     * {@link Validator} class.  Subsequent calls to
+     * <code>getValidator()</code> will serve as a factory for {@link Validator}
+     *  instances.
+     *
+     * @param validatorId The validator identifier to be registered
+     * @param validatorClass The fully qualified class name of the corresponding
+     *  {@link Validator} implementation
+     *
+     * @exception NullPointerException if <code>validatorId</code> or
+     *  <code>validatorClass</code> is <code>null</code>
+     */
+    public void addValidator(String validatorId, String validatorClass) {
+        if (validatorId == null || validatorClass == null) {
+	    throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+	}
+	validatorMap.put(validatorId, validatorClass);
+    }
+
+    /**
+     * <p>Instantiate and return a new instance of {@link Validator} instance of the 
+     * class specified by a previous call to <code>addValidator()</code> for the
+     * specified validator identifier.</p>
+     * 
+     * @param validatorId The validatorId that identifies the validator instance
+     *  that will be created and returned.
+     *  
+     * @return {@link Validator} instance.
+     *
+     * @exception FacesException if a {@link Validator} of the specified identifier
+     * cannot be created.
+     * @exception NullPointerException if <code>validatorId</code> is <code>null</code>.
+     */
+    public Validator getValidator(String validatorId) throws FacesException {
+	if (validatorId == null) {
+	    throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+	}
+	Validator returnVal = (Validator)newThing(validatorId, validatorMap);
+	if (returnVal == null) {
+            Object[] params = {validatorId};
+	    throw new FacesException(Util.getExceptionMessage(
+                Util.NAMED_OBJECT_NOT_FOUND_ERROR_MESSAGE_ID,params));
+	}
+	return returnVal;
+    }
+
+    /**
+     * <p>Return an <code>Iterator</code> over the set of currently defined
+     * validator identifiers for this <code>Application</code>.</p>
+     *
+     * @return Iteration of {@link Validator} identifiers.
+     */
+    public Iterator getValidatorIds() {
+        return validatorMap.keySet().iterator();
+    }
+
 
     public void addMessageResources(String messageResourcesId, String messageResourcesClass) {
 	appConfig.addMessageResources(messageResourcesId, 
@@ -295,21 +455,74 @@ public class ApplicationImpl extends Application {
 	return appConfig.getMessageResourcesIds();
     }
 
-    public void addValidator(String validatorId, String validatorClass) {
-	appConfig.addValidator(validatorId, validatorClass);
-    }
-
-    public Validator getValidator(String validatorId) throws FacesException {
-	return appConfig.getValidator(validatorId);
-    }
-
-    public Iterator getValidatorIds() {
-	return appConfig.getValidatorIds();
-    }
-
     // 
     // Methods leveraged by the RI only
     //
+
+    /**
+     * Adds a new mapping of managed bean name to a managed bean
+     * factory instance.
+     *
+     * @param managedBeanName the name of the managed bean that will
+     *  be created by the managed bean factory instance.
+     * @param factory the managed bean factory instance.
+     */
+    public void addManagedBeanFactory(String managedBeanName,
+        ManagedBeanFactory factory) {
+        managedBeanFactoriesMap.put(managedBeanName, factory);
+    }
+
+    /**
+     * <p>PRECONDITIONS: the values in the Map are either Strings
+     * representing fully qualified java class names, or java.lang.Class
+     * instances.</p>
+     * <p>ALGORITHM: Look in the argument map for a value for the argument
+     * key.  If found, if the value is instanceof String, assume the String
+     * specifies a fully qualified java class name and obtain the
+     * java.lang.Class instance for that String using Util.loadClass().
+     * Replace the String instance in the argument map with the Class
+     * instance.  If the value is instanceof Class, proceed.  Assert that the
+     * value is either instanceof java.lang.Class or java.lang.String.</p>
+     * <p>Now that you have a java.lang.class, call its newInstance and
+     * return it as the result of this method.</p>
+     *
+     * @param key Used to look up the value in the <code>Map</code>.
+     * @param map The <code>Map</code> that will be searched.
+     *
+     * @return The new object instance.
+     */
+    protected Object newThing(String key, Map map) {
+        Assert.assert_it(key != null);
+        Assert.assert_it(map != null);
+
+        Object result = null;
+        Class clazz = null;
+        Object value = map.get(key);
+        if (value == null) {
+	    return null;
+        }
+        Assert.assert_it(value instanceof String || value instanceof Class);
+        if (value instanceof String) {
+	    try {
+                clazz = Util.loadClass((String)value, value);
+                Assert.assert_it(clazz != null);
+	        map.put(key, clazz);
+	    } catch (Throwable t) {
+                Object[] params = {t.getMessage()};
+	        throw new FacesException(Util.getExceptionMessage(Util.CANT_LOAD_CLASS_ERROR_MESSAGE_ID, params));
+	    }
+        } else {
+            clazz = (Class)value;
+        }
+
+        try {
+	    result = clazz.newInstance();
+        } catch (Throwable t) {
+            Object[] params = {clazz.getName()};
+            throw new FacesException(Util.getExceptionMessage(Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, params));
+        }
+        return result;
+    }
 
     public AppConfig getAppConfig() {
 	return appConfig;

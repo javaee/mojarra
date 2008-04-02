@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.64 2003/05/15 22:25:49 rkitain Exp $
+ * $Id: Util.java,v 1.65 2003/06/25 06:29:56 rkitain Exp $
  */
 
 /*
@@ -56,7 +56,7 @@ import java.util.StringTokenizer;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.64 2003/05/15 22:25:49 rkitain Exp $
+ * @version $Id: Util.java,v 1.65 2003/06/25 06:29:56 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -219,6 +219,15 @@ public class Util extends Object
 
    public static final String INVALID_SCOPE_LIFESPAN_ERROR_MESSAGE_ID =
         "com.sun.faces.INVALID_SCOPE_LIFESPAN";
+
+   public static final String CONVERTER_NOT_FOUND_ERROR_MESSAGE_ID =
+        "com.sun.faces.CONVERTER_NOT_FOUND_ERROR";
+
+   public static final String VALIDATOR_NOT_FOUND_ERROR_MESSAGE_ID =
+        "com.sun.faces.VALIDATOR_NOT_FOUND_ERROR";
+
+   public static final String CANT_LOAD_CLASS_ERROR_MESSAGE_ID =
+         "com.sun.faces.CANT_INSTANTIATE_CLASS";
 
 // README - make sure to add the message identifier constant
 // (ex: Util.CONVERSION_ERROR_MESSAGE_ID) and the number of substitution

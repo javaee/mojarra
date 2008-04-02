@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigBase.java,v 1.11 2003/05/20 20:57:10 eburns Exp $
+ * $Id: ConfigBase.java,v 1.12 2003/06/25 06:29:51 rkitain Exp $
  */
 
 /*
@@ -83,43 +83,6 @@ public class ConfigBase {
     }
 
 
-    // ------------------------------------------------------------ <component>
-
-
-    private Map components = null;
-    public void addComponent(ConfigComponent component) {
-        if (components == null) {
-            components = new HashMap();
-        }
-        components.put(component.getComponentType(), component);
-    }
-    public Map getComponents() {
-        if (components == null) {
-            return (Collections.EMPTY_MAP);
-        } else {
-            return (this.components);
-        }
-    }
-
-
-    // ------------------------------------------------------------ <converter>
-
-
-    private Map converters = null;
-    public void addConverter(ConfigConverter converter) {
-        if (converters == null) {
-            converters = new HashMap();
-        }
-        converters.put(converter.getConverterId(), converter);
-    }
-    public Map getConverters() {
-        if (converters == null) {
-            return (Collections.EMPTY_MAP);
-        } else {
-            return (this.converters);
-        }
-    }
-
     // ------------------------------------------------------------ <message-resources>
 
     private Map messageResources = null;
@@ -175,24 +138,6 @@ public class ConfigBase {
             return (Collections.EMPTY_MAP);
         } else {
             return (this.messageResources);
-        }
-    }
-
-    // ------------------------------------------------------------ <validator>
-
-
-    private Map validators = null;
-    public void addValidator(ConfigValidator validator) {
-        if (validators == null) {
-            validators = new HashMap();
-        }
-        validators.put(validator.getValidatorId(), validator);
-    }
-    public Map getValidators() {
-        if (validators == null) {
-            return (Collections.EMPTY_MAP);
-        } else {
-            return (this.validators);
         }
     }
 

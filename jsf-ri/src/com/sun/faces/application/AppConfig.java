@@ -1,5 +1,5 @@
 /*
- * $Id: AppConfig.java,v 1.9 2003/05/18 20:54:43 eburns Exp $
+ * $Id: AppConfig.java,v 1.10 2003/06/25 06:29:50 rkitain Exp $
  */
 
 /*
@@ -19,17 +19,11 @@ import java.util.Iterator;
 import javax.faces.application.Application;
 import javax.faces.context.FacesContext;
 import javax.faces.FacesException;
-import javax.faces.component.UIComponent;
-import javax.faces.convert.Converter;
 import javax.faces.context.MessageResources;
-import javax.faces.validator.Validator;
 import javax.faces.el.PropertyNotFoundException;
 import com.sun.faces.config.ManagedBeanFactory;
 import com.sun.faces.config.ConfigBase;
-import com.sun.faces.config.ConfigComponent;
-import com.sun.faces.config.ConfigConverter;
 import com.sun.faces.config.ConfigMessageResources;
-import com.sun.faces.config.ConfigValidator;
 import com.sun.faces.util.Util;
 import com.sun.faces.context.MessageResourcesImpl;
 import com.sun.faces.context.AppMessageResourcesImpl;
@@ -40,7 +34,7 @@ import com.sun.faces.RIConstants;
  *  <p>AppConfig is a helper class to the ApplicationImpl that serves as
  *  a shim between it and the config system.</p>
  *
- * @version $Id: AppConfig.java,v 1.9 2003/05/18 20:54:43 eburns Exp $
+ * @version $Id: AppConfig.java,v 1.10 2003/06/25 06:29:50 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -171,60 +165,6 @@ public AppConfig(Application application)
     // Package private methods
     // 
 
-    void addComponent(String componentType, String componentClass) {
-	ParameterCheck.nonNull(componentType);
-	ParameterCheck.nonNull(componentClass);
-	Assert.assert_it(null != yourBase);
-
-	ConfigComponent configComponent = new ConfigComponent();
-	configComponent.setComponentType(componentType);
-	configComponent.setComponentClass(componentClass);
-	yourBase.addComponent(configComponent);
-    }
-
-    UIComponent getComponent(String componentType) throws FacesException {
-	ParameterCheck.nonNull(componentType);
-	Assert.assert_it(null != yourBase);
-	
-	UIComponent result = null;
-	ConfigComponent configComponent = null;
-	if (null == (configComponent = (ConfigComponent)
-		     yourBase.getComponents().get(componentType))) {
-	    //PENDING(edburns): i18n
-	    throw new FacesException();
-	}
-	result = (UIComponent) 
-	    this.newThing(configComponent.getComponentClass());
-	return result;
-    }
-
-    void addConverter(String converterId, String converterClass) {
-	ParameterCheck.nonNull(converterId);
-	ParameterCheck.nonNull(converterClass);
-	Assert.assert_it(null != yourBase);
-
-	ConfigConverter configConverter = new ConfigConverter();
-	configConverter.setConverterId(converterId);
-	configConverter.setConverterClass(converterClass);
-	yourBase.addConverter(configConverter);
-    }
-
-    Converter getConverter(String converterId) throws FacesException {
-	ParameterCheck.nonNull(converterId);
-	Assert.assert_it(null != yourBase);
-	
-	Converter result = null;
-	ConfigConverter configConverter = null;
-	if (null == (configConverter = (ConfigConverter)
-		     yourBase.getConverters().get(converterId))) {
-	    //PENDING(edburns): i18n
-	    throw new FacesException();
-	}
-	result = (Converter) 
-	    this.newThing(configConverter.getConverterClass());
-	return result;
-    }
-    
     private Object newThing(String thingClassName) throws FacesException {
 	//PENDING(edburns): i18n
 	Class thingClass = null;
@@ -240,16 +180,6 @@ public AppConfig(Application application)
 	    throw new FacesException(e);
 	}
 	return result;
-    }
-
-    Iterator getComponentTypes() {
-	Assert.assert_it(null != yourBase);
-	return yourBase.getComponents().keySet().iterator();
-    }
-
-    Iterator getConverterIds() {
-	Assert.assert_it(null != yourBase);
-	return yourBase.getConverters().keySet().iterator();
     }
 
     void addMessageResources(String messageResourcesId, String messageResourcesClass) {
@@ -326,42 +256,6 @@ public AppConfig(Application application)
 	Assert.assert_it(null != yourBase);
 	return yourBase.getMessageResources().keySet().iterator();
     }
-
-    void addValidator(String validatorId, String validatorClass) {
-	ParameterCheck.nonNull(validatorId);
-	ParameterCheck.nonNull(validatorClass);
-	Assert.assert_it(null != yourBase);
-
-	ConfigValidator configValidator = new ConfigValidator();
-	configValidator.setValidatorId(validatorId);
-	configValidator.setValidatorClass(validatorClass);
-	yourBase.addValidator(configValidator);
-    }
-
-    Validator getValidator(String validatorId) 
-        throws FacesException {
-	ParameterCheck.nonNull(validatorId);
-	Assert.assert_it(null != yourBase);
-
-	Validator result = null;
-	ConfigValidator configValidator = null;
-	if (null == (configValidator = (ConfigValidator)
-		     yourBase.getValidators().get(validatorId))) {
-	    //PENDING(edburns): i18n
-	    throw new FacesException();
-	}
-	result = (Validator) 
-	    this.newThing(configValidator.getValidatorClass());
-	
-	return result;
-    }
-
-    Iterator getValidatorIds() { 
-	Assert.assert_it(null != yourBase);
-	return yourBase.getValidators().keySet().iterator();
-    }
-    
-    
 
 // The testcase for this class is com.sun.faces.application.TestAppConfig.java 
 // The testcase for this class is com.sun.faces.application.TestApplicationImpl_Config.java 

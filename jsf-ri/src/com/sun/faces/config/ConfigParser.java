@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigParser.java,v 1.17 2003/05/18 20:54:45 eburns Exp $
+ * $Id: ConfigParser.java,v 1.18 2003/06/25 06:29:51 rkitain Exp $
  */
 
 /*
@@ -229,32 +229,21 @@ public class ConfigParser {
     }
 
 
-    // Configure the rules for a <attribute> element
-    protected void configureRulesAttribute(Digester digester, String prefix) {
-
-        digester.addObjectCreate(prefix, "com.sun.faces.config.ConfigAttribute");
-        digester.addSetNext(prefix, "addAttribute", "com.sun.faces.config.ConfigAttribute");
-        digester.addCallMethod(prefix + "/attribute-name",
-                               "setAttributeName", 0);
-        digester.addCallMethod(prefix + "/attribute-class",
-                               "setAttributeClass", 0);
-
-    }
-
-
     // Configure the rules for a <component> element
     protected void configureRulesComponent(Digester digester) {
 
         String prefix = "faces-config/component";
 
         digester.addObjectCreate(prefix, "com.sun.faces.config.ConfigComponent");
-        digester.addSetNext(prefix, "addComponent", "com.sun.faces.config.ConfigComponent");
         digester.addCallMethod(prefix + "/component-type",
                                "setComponentType", 0);
         digester.addCallMethod(prefix + "/component-class",
                                "setComponentClass", 0);
-        configureRulesAttribute(digester, prefix + "/attribute");
-        configureRulesProperty(digester, prefix + "/property");
+
+        // This custom rule will add component info to the Application instance;
+        //
+        ComponentsRule cRule = new ComponentsRule();
+        digester.addRule(prefix, cRule);
 
     }
 
@@ -265,14 +254,33 @@ public class ConfigParser {
         String prefix = "faces-config/converter";
 
         digester.addObjectCreate(prefix, "com.sun.faces.config.ConfigConverter");
-        digester.addSetNext(prefix, "addConverter", "com.sun.faces.config.ConfigConverter");
         digester.addCallMethod(prefix + "/converter-id",
                                "setConverterId", 0);
         digester.addCallMethod(prefix + "/converter-class",
                                "setConverterClass", 0);
-        configureRulesAttribute(digester, prefix + "/attribute");
-        configureRulesProperty(digester, prefix + "/property");
 
+        // This custom rule will add converter info to the Application instance;
+        //
+        ConvertersRule cRule = new ConvertersRule();
+        digester.addRule(prefix, cRule);
+
+    }
+
+    // Configure the rules for a <validator> element
+    protected void configureRulesValidator(Digester digester) {
+
+        String prefix = "faces-config/validator";
+
+        digester.addObjectCreate(prefix, "com.sun.faces.config.ConfigValidator");
+        digester.addCallMethod(prefix + "/validator-id",
+                               "setValidatorId", 0);
+        digester.addCallMethod(prefix + "/validator-class",
+                               "setValidatorClass", 0);
+
+        // This custom rule will add validator info to the Application instance;
+        //
+        ValidatorsRule vRule = new ValidatorsRule();
+        digester.addRule(prefix, vRule);
     }
 
     // Configure the rules for a <message-resources> element
@@ -305,35 +313,6 @@ public class ConfigParser {
 	digester.addCallParam(prefix + "/detail", 0, "xml:lang"); 
 	// From this element body
 	digester.addCallParam(prefix + "/detail", 1); 
-    }
-
-    // Configure the rules for a <property> element
-    protected void configureRulesProperty(Digester digester, String prefix) {
-
-        digester.addObjectCreate(prefix, "com.sun.faces.config.ConfigProperty");
-        digester.addSetNext(prefix, "addProperty", "com.sun.faces.config.ConfigProperty");
-        digester.addCallMethod(prefix + "/property-name",
-                               "setPropertyName", 0);
-        digester.addCallMethod(prefix + "/property-class",
-                               "setPropertyClass", 0);
-
-    }
-
-
-    // Configure the rules for a <validator> element
-    protected void configureRulesValidator(Digester digester) {
-
-        String prefix = "faces-config/validator";
-
-        digester.addObjectCreate(prefix, "com.sun.faces.config.ConfigValidator");
-        digester.addSetNext(prefix, "addValidator", "com.sun.faces.config.ConfigValidator");
-        digester.addCallMethod(prefix + "/validator-id",
-                               "setValidatorId", 0);
-        digester.addCallMethod(prefix + "/validator-class",
-                               "setValidatorClass", 0);
-        configureRulesAttribute(digester, prefix + "/attribute");
-        configureRulesProperty(digester, prefix + "/property");
-
     }
 
     // Configure the rules for a <managed-bean> element
@@ -583,5 +562,47 @@ final class ConfigManagedPropertyMapNullRule extends Rule {
     public void begin(Attributes attributes) throws Exception {
         ConfigManagedPropertyMap cpm = (ConfigManagedPropertyMap)digester.peek();
         cpm.setValueCategory(ConfigManagedPropertyMap.NULL_VALUE);
+    }
+}
+
+final class ComponentsRule extends Rule {
+    public ComponentsRule() {
+        super();
+    }
+    public void end() throws Exception {
+        ConfigComponent cc = (ConfigComponent)digester.peek();
+        ApplicationFactory aFactory =
+           (ApplicationFactory)FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
+        ApplicationImpl application =
+           (ApplicationImpl)aFactory.getApplication();
+       application.addComponent(cc.getComponentType(), cc.getComponentClass());
+    }
+}
+
+final class ConvertersRule extends Rule {
+    public ConvertersRule() {
+       super();
+    }
+    public void end() throws Exception {
+        ConfigConverter cc = (ConfigConverter)digester.peek();
+        ApplicationFactory aFactory =
+           (ApplicationFactory)FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
+        ApplicationImpl application =
+           (ApplicationImpl)aFactory.getApplication();
+       application.addConverter(cc.getConverterId(), cc.getConverterClass());
+    }
+}
+
+final class ValidatorsRule extends Rule {
+    public ValidatorsRule() {
+       super();
+    }
+    public void end() throws Exception {
+        ConfigValidator cc = (ConfigValidator)digester.peek();
+        ApplicationFactory aFactory =
+           (ApplicationFactory)FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
+        ApplicationImpl application =
+           (ApplicationImpl)aFactory.getApplication();
+       application.addValidator(cc.getValidatorId(), cc.getValidatorClass());
     }
 }

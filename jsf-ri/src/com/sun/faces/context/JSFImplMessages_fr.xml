@@ -221,5 +221,13 @@
   <message messageId="com.sun.faces.INVALID_SCOPE_LIFESPAN" 
            severity="3" 
            summary="The scope of the referenced object: ''{0}'' is shorter than the referring object" />
+
+  <message messageId="com.sun.faces.CONVERTER_NOT_FOUND_ERROR"
+           severity="3"
+           summary="Converter Not Found for identifier: ''{0}''." />
+
+  <message messageId="com.sun.faces.VALIDATOR_NOT_FOUND_ERROR"
+           severity="3"
+           summary="Validator Not Found for identifier: ''{0}''." />
 </messages>
 
