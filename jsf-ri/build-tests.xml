@@ -165,7 +165,7 @@
 
         <javac srcdir="${src.test.dir}"
             destdir="${out.test.dir}/WEB-INF/classes"
-            includes="com/sun/faces/lifecycle/*.java,com/sun/faces/config/*.java,com/sun/faces/*.java,com/sun/faces/application/*.java,**/ConfigFileTestCase.java,com/sun/faces/lifecycle/TestRestoreViewPhase.java,**/TestConverters.java,com/sun/faces/util/*.java,com/sun/faces/renderkit/*.java,com/sun/faces/renderkit/html_basic/*.java"
+            includes="com/sun/faces/lifecycle/*.java,com/sun/faces/config/*.java,com/sun/faces/*.java,com/sun/faces/application/*.java,**/ConfigFileTestCase.java,com/sun/faces/lifecycle/TestRestoreViewPhase.java,**/TestConverters.java,com/sun/faces/util/*.java,com/sun/faces/renderkit/*.java,com/sun/faces/renderkit/html_basic/*.java,com/sun/faces/el/impl/*.java"
             debug="${compile.debug}"
             optimize="${compile.optimize}"
             deprecation="${compile.deprecation}">
@@ -282,6 +282,7 @@
             <test name="com.sun.faces.renderkit.html_basic.TestRendererConversions"/>
             <test name="com.sun.faces.util.TestUtil"/>
             <test name="com.sun.faces.util.TestUtil_messages"/>
+            <test name="com.sun.faces.el.impl.TestELImpl"/>
             
 <!--
             <test name="com.sun.faces.config.TestManagedBeanFactory"/>
@@ -293,7 +294,6 @@
             <test name="com.sun.faces.context.TestFacesContextFactoryImpl"/>
             <test name="com.sun.faces.context.TestFacesContextImpl"/>
             <test name="com.sun.faces.application.TestMessageResourcesImpl"/>
-            <test name="com.sun.faces.el.impl.TestELImpl"/>
             <test name="com.sun.faces.el.TestPropertyResolverImpl"/>
             <test name="com.sun.faces.el.TestValueBindingImpl"/>
             <test name="com.sun.faces.el.TestValueBindingImpl_Model"/>
