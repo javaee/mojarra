@@ -27,10 +27,8 @@
       
 <project name="JSF Common" basedir=".">
 
-    <import
-          file="${jsf.build.home}/common/ant/${container.name}/container.xml"/>
-    <import
-          file="${jsf.build.home}/common/ant/dependencies.xml"/>
+    <import file="${jsf.build.home}/common/ant/${container.name}/container.xml"/>
+    <import file="${jsf.build.home}/common/ant/dependencies.xml"/>
     <taskdef resource="net/sf/antcontrib/antlib.xml">
         <classpath>
             <pathelement
@@ -38,13 +36,10 @@
         </classpath>
     </taskdef>
 
-    <taskdef name="installerBuilder"
-             classname="org.jvnet.poormans_installer.builder.BuilderTask">
+    <taskdef name="installerBuilder" classname="org.jvnet.poormans_installer.builder.BuilderTask">
         <classpath>
-            <pathelement
-                  location="${jsf.build.home}/common/lib/installer-builder.jar"/>
-            <pathelement
-                  location="${jsf.build.home}/common/lib/sfx4j-1.0.jar"/>
+            <pathelement location="${jsf.build.home}/common/lib/installer-builder.jar"/>
+            <pathelement location="${jsf.build.home}/common/lib/sfx4j-1.0.jar"/>
         </classpath>
     </taskdef>
     
@@ -58,31 +53,21 @@
     <property name="impl.dir" value="${jsf.build.home}/jsf-ri"/>
     <property name="tools.dir" value="${jsf.build.home}/jsf-tools"/>    
     <property name="demo.dir" value="${jsf.build.home}/jsf-demo"/>
-    <property name="impl.test.results.dir"
-              value="${impl.dir}/testresults"/>
-    <property name="api.test.results.dir"
-              value="${api.dir}/testresults"/>
+    <property name="impl.test.results.dir" value="${impl.dir}/testresults"/>
+    <property name="api.test.results.dir" value="${api.dir}/testresults"/>
 
     <!-- Artifacts of interest -->
-    <property name="jsf-api.jar"
-              value="${api.dir}/build/lib/jsf-api.jar"/>
-    <property name="jsf-tools.jar"
-              value="${tools.dir}/build/lib/jsf-tools.jar"/>
-    <property name="jsf-impl.jar"
-              value="${impl.dir}/build/lib/jsf-impl.jar"/>   
-    <property name="jsf.test.jar"
-              value="${jsf.build.home}/lib/jsf-extensions-test-time.jar"/>    
-    <property name="installer.jar"
-              value="${jsf.build.home}/common/lib/installer-builder.jar"/>
-    <property name="javanettasks.jar"
-              value="${jsf.build.home}/common/lib/javanettasks-1.0.5.jar"/>
-    <property name="standard.renderkit.xml"
-              value="${api.dir}/doc/standard-html-renderkit.xml"/>
+    <property name="jsf-api.jar" value="${api.dir}/build/lib/jsf-api.jar"/>
+    <property name="jsf-tools.jar" value="${tools.dir}/build/lib/jsf-tools.jar"/>
+    <property name="jsf-impl.jar" value="${impl.dir}/build/lib/jsf-impl.jar"/>   
+    <property name="jsf.test.jar" value="${jsf.build.home}/lib/jsf-extensions-test-time.jar"/>    
+    <property name="installer.jar" value="${jsf.build.home}/common/lib/installer-builder.jar"/>
+    <property name="javanettasks.jar" value="${jsf.build.home}/common/lib/javanettasks-1.0.5.jar"/>
+    <property name="standard.renderkit.xml" value="${api.dir}/doc/standard-html-renderkit.xml"/>
 
     <!-- Version -->
     <property name="spec.version" value="1.2MR1"/>
-    <property name="impl.name"
-              value="Sun Microsystems JavaServer Faces Implementation"/>
+    <property name="impl.name" value="Sun Microsystems JavaServer Faces Implementation"/>
     <property name="build.number" value="${DSTAMP}"/>
     <property name="build.type" value="NIGHTLY"/>
     <property name="impl.version.number" value="1.2_04" />
@@ -99,7 +84,7 @@
 
     <!-- Test classpaths that are used in multiple places within the project -->
     <path id="junit.classpath">
-        <pathelement location="${junit.home}/junit.jar"/>
+        <pathelement location="${junit.jar}"/>
     </path>
 
     <path id="jsf.test.jar.classpath">
@@ -122,14 +107,12 @@
     <path id="cactus.compile.classpath">
         <path refid="junit.classpath"/>
         <fileset dir="${jsf.build.home}/lib" includes="cactus-*.jar"/>
-        <fileset dir="${cactus.home}/lib" includes="cactus-*.jar"
-                 excludes="*ant*.jar"/>
+        <fileset dir="${cactus.home}/lib" includes="cactus-*.jar" excludes="*ant*.jar"/>
     </path>            
 
     <path id="cactus.runtime.classpath">
         <path refid="junit.classpath"/>
-        <fileset dir="${cactus.home}/lib" includes="*.jar" 
-                 excludes="cactus-1.7.1.jar"/>
+        <fileset dir="${cactus.home}/lib" includes="*.jar"  excludes="cactus-1.7.1.jar"/>
         <fileset dir="${jsf.build.home}/lib" includes="cactus-*.jar"/>
     </path>
 
@@ -143,8 +126,7 @@
     </path>
     
     <path id="sun.commons.classpath">
-        <fileset dir="${jsf.build.home}/common/lib"
-                 includes="com-sun-commons*.jar"/>
+        <fileset dir="${jsf.build.home}/common/lib" includes="com-sun-commons*.jar"/>
     </path>
 
     <!-- Common Targets -->
@@ -153,17 +135,11 @@
     <macrodef name="jsf.javac">        
         <attribute name="srcdir"/>
         <attribute name="destdir"/>
-        <attribute name="includes"
-                   default=""/>
-        <attribute name="excludes"
-                   default=""/>
-        <attribute name="source"
-                   default="1.5"/>
-        <attribute name="target"
-                   default="1.5"/>
-        <element name="classpath"
-                 implicit="true"
-                 optional="yes"/>
+        <attribute name="includes" default=""/>
+        <attribute name="excludes" default=""/>
+        <attribute name="source" default="1.5"/>
+        <attribute name="target" default="1.5"/>
+        <element name="classpath" implicit="true" optional="yes"/>
         <sequential>           
             <javac srcdir="@{srcdir}"
                    destdir="@{destdir}"
@@ -185,12 +161,9 @@
         <attribute name="test-results-dir"/>
         <attribute name="assert.classes" default=""/>
         <attribute name="logging.config.file" default=""/>
-        <element name="tests"
-                 optional="true"/>
-        <element name="custom-sysproperties"
-                 optional="true"/>
-        <element name="suite"
-                 optional="true"/>
+        <element name="tests" optional="true"/>
+        <element name="custom-sysproperties" optional="true"/>
+        <element name="suite" optional="true"/>
         <sequential>
             <junit printsummary="yes"
                    fork="yes"

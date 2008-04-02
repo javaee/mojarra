@@ -36,8 +36,9 @@
            Maven java.net repository importer 1.2
     -->
 
-    <property name="dependency.base.dir" 
-              value="${jsf.build.home}/dependencies"/>
+    <property name="dependency.base.dir" value="${jsf.build.home}/dependencies"/>
+    <property name="dependency.jar.dir" value="${dependency.base.dir}/jars"/>
+	
     <property name="junit.version" value="3.8.1"/>
     <property name="htmlunit.version" value="1.8"/>
     <property name="cactus.version" value="13-1.7.1"/>
@@ -46,42 +47,35 @@
     <property name="jsp.api.version" value="2.1"/>
     <property name="jstl.api.version" value="1.2"/>
     <property name="annotation.api.version" value="1.0"/>
+	
+	<property name="maven2.mirror" value="http://mirrors.ibiblio.org/pub/mirrors/maven2"/>
+	<property name="java.net.maven" value="https://maven-repository.dev.java.net/nonav/repository/"/>
 
     <property name="maven.repository.importer.version" value="1.2"/>
 
-    <property name="junit.home"
-              value="${dependency.base.dir}/junit${junit.version}"/>
-    <property name="htmlunit.home"
-              value="${dependency.base.dir}/htmlunit-${htmlunit.version}"/>
-    <property name="cactus.home"
-              value="${dependency.base.dir}/jakarta-cactus-${cactus.version}"/>
-    <property name="taglibdoc.home"
-              value="${dependency.base.dir}/taglibrarydoc-${taglibdoc.version}"/>
-    <property name="maven.repository.importer.home"
-              value="${dependency.base.dir}/maven-repository-importer-${maven.repository.importer.version}"/>
-    <property name="servlet.home"
-              value="${dependency.base.dir}/servlet-${servlet.api.version}"/>
-    <property name="jsp.home"
-              value="${dependency.base.dir}/jsp-${jsp.api.version}"/>
-    <property name="jstl.home"
-              value="${dependency.base.dir}/jstl-${jstl.api.version}"/>
-    <property name="annotation.home"
-              value="${dependency.base.dir}/annotation-${annotation.api.version}"/>
+    <property name="junit.home" value="${dependency.base.dir}/junit${junit.version}"/>
+    <property name="htmlunit.home" value="${dependency.base.dir}/htmlunit-${htmlunit.version}"/>
+    <property name="cactus.home" value="${dependency.base.dir}/jakarta-cactus-${cactus.version}"/>
+    <property name="taglibdoc.home" value="${dependency.base.dir}/taglibrarydoc-${taglibdoc.version}"/>
+    <property name="maven.repository.importer.home" value="${dependency.base.dir}/maven-repository-importer-${maven.repository.importer.version}"/>
+    <property name="servlet.home" value="${dependency.base.dir}/servlet-${servlet.api.version}"/>
+    <property name="jsp.home" value="${dependency.base.dir}/jsp-${jsp.api.version}"/>
+    <property name="jstl.home" value="${dependency.base.dir}/jstl-${jstl.api.version}"/>
+    <property name="annotation.home" value="${dependency.base.dir}/annotation-${annotation.api.version}"/>
 
-    <property name="tlddoc.jar"
-              value="${taglibdoc.home}/tlddoc-${taglibdoc.version}.jar"/>
-    <property name="maven.repository.importer.jar"
-              value="${maven.repository.importer.home}/maven-repository-importer-${maven.repository.importer.version}.jar"/>
-    <property name="servlet.jar"
-              value="${servlet.home}/servlet-api-${servlet.api.version}.jar"/>
-    <property name="jsp.jar"
-              value="${jsp.home}/jsp-api-${jsp.api.version}.jar"/>
-    <property name="jstl.jar"
-              value="${jstl.home}/jstl-${jstl.api.version}.jar"/>
-    <property name="annotation.jar"
-              value="${annotation.home}/jsr250-api-${annotation.api.version}.jar"/>
+    <property name="junit.jar"                     value="${dependency.jar.dir}/junit-${junit.version}.jar"/>
+    <property name="htmlunit.jar"                  value="${dependency.jar.dir}/htmlunit-${htmlunit.version}.jar"/>
+    <property name="tlddoc.jar"                    value="${dependency.jar.dir}/tlddoc-${taglibdoc.version}.jar"/>
+    <property name="maven.repository.importer.jar" value="${dependency.jar.dir}/maven-repository-importer-${maven.repository.importer.version}.jar"/>
+    <property name="servlet.jar"                   value="${dependency.jar.dir}/servlet-api-${servlet.api.version}.jar"/>
+    <property name="jsp.jar"                       value="${dependency.jar.dir}/jsp-api-${jsp.api.version}.jar"/>
+    <property name="jstl.jar"                      value="${dependency.jar.dir}/jstl-${jstl.api.version}.jar"/>
+    <property name="annotation.jar"                value="${dependency.jar.dir}/jsr250-api-${annotation.api.version}.jar"/>
 
     <target name="update" description="Download project dependencies">
+        <mkdir dir="${dependency.base.dir}/downloads"/>
+    	<mkdir dir="${dependency.jar.dir}" />
+    	
         <!-- setup the proxy if necessary -->
         <if>
             <and>
@@ -94,29 +88,26 @@
             </then>
         </if>
 
-        <mkdir dir="${dependency.base.dir}/downloads"/>
-
         <!-- JUNIT -->
         <if>
             <not>
-                <available file="${junit.home}"
-                           property="ignored"/>
+                <available file="${junit.jar}" property="ignored"/>
             </not>
             <then>
-                <get src="http://easynews.dl.sourceforge.net/sourceforge/junit/junit${junit.version}.zip"
-                     dest="${dependency.base.dir}/downloads/junit${junit.version}.zip"
+                <get src="${maven2.mirror}/junit/junit/${junit.version}/junit-${junit.version}.jar"
+                     dest="${junit.jar}"
                      usetimestamp="true"/>
-                <unzip
-                      src="${dependency.base.dir}/downloads/junit${junit.version}.zip"
-                      dest="${dependency.base.dir}"/>
             </then>
         </if>
 
         <!-- HTMLUNIT -->
+    	<!-- 
+    	This one needs a ton of extras, so we have to do this one like this or
+    	add a bunch more deps.  Maybe another day... :)
+    	-->
         <if>
             <not>
-                <available file="${htmlunit.home}"
-                           property="ignored"/>
+                <available file="${htmlunit.home}" property="ignored"/>
             </not>
             <then>
                 <get src="http://easynews.dl.sourceforge.net/sourceforge/htmlunit/htmlunit-${htmlunit.version}.zip"
@@ -129,10 +120,10 @@
         </if>
 
         <!-- CACTUS -->
+    	<!-- Is this not in a maven repo somewhere? -->
         <if>
             <not>
-                <available file="${cactus.home}"
-                           property="ignored"/>
+                <available file="${cactus.home}" property="ignored"/>
             </not>
             <then>
                 <get src="http://archive.apache.org/dist/jakarta/cactus/binaries/jakarta-cactus-${cactus.version}.zip"
@@ -147,14 +138,11 @@
         <!-- TAGLIBDOC -->
         <if>
             <not>
-                <available file="${taglibdoc.home}"
-                           property="ignored"/>
+                <available file="${taglibdoc.jar}" property="ignored"/>
             </not>
             <then>
-                <mkdir
-                      dir="${taglibdoc.home}"/>
-                <get src="http://www.ibiblio.org/maven/taglibrarydoc/jars/tlddoc-${taglibdoc.version}.jar"
-                     dest="${taglibdoc.home}/tlddoc-${taglibdoc.version}.jar"
+                <get src="${maven2.mirror}/taglibrarydoc/tlddoc/${taglibdoc.version}/tlddoc-${taglibdoc.version}.jar"
+                     dest="${tlddoc.jar}"
                      usetimestamp="true"/>
 
             </then>
@@ -163,14 +151,11 @@
         <!-- MAVEN REPOSITORY IMPORTER -->
         <if>
             <not>
-                <available file="${maven.repository.importer.home}"
-                           property="ignored"/>
+                <available file="${maven.repository.importer.home}" property="ignored"/>
             </not>
             <then>
-                <mkdir
-                      dir="${maven.repository.importer.home}"/>
-                <get src="https://maven-repository.dev.java.net/nonav/repository/com.sun.wts.tools.mri/jars/maven-repository-importer-${maven.repository.importer.version}.jar"
-                     dest="${maven.repository.importer.home}/maven-repository-importer-${maven.repository.importer.version}.jar"
+                <get src="${java.net.maven}/com.sun.wts.tools.mri/jars/maven-repository-importer-${maven.repository.importer.version}.jar"
+                     dest="${maven.repository.importer.jar}"
                      usetimestamp="true"/>
 
             </then>
@@ -179,14 +164,11 @@
         <!-- SERVLET API -->
         <if>
             <not>
-                <available file="${servlet.jar}"
-                           property="ignored"/>
+                <available file="${servlet.jar}" property="ignored"/>
             </not>
             <then>
-                <mkdir
-                      dir="${servlet.home}"/>
-                <get src="https://maven-repository.dev.java.net/nonav/repository/javax.servlet/jars/servlet-api-${servlet.api.version}.jar"
-                     dest="${servlet.home}/servlet-api-${servlet.api.version}.jar"
+                <get src="${java.net.maven}/javax.servlet/jars/servlet-api-${servlet.api.version}.jar"
+                     dest="${servlet.jar}"
                      usetimestamp="true"/>
 
             </then>
@@ -195,14 +177,11 @@
         <!-- JSP API -->
         <if>
             <not>
-                <available file="${jsp.jar}"
-                           property="ignored"/>
+                <available file="${jsp.jar}" property="ignored"/>
             </not>
             <then>
-                <mkdir
-                      dir="${jsp.home}"/>
-                <get src="https://maven-repository.dev.java.net/nonav/repository/javax.servlet.jsp/jars/jsp-api-${jsp.api.version}.jar"
-                     dest="${jsp.home}/jsp-api-${jsp.api.version}.jar"
+                <get src="${java.net.maven}/javax.servlet.jsp/jars/jsp-api-${jsp.api.version}.jar"
+                     dest="${jsp.jar}"
                      usetimestamp="true"/>
 
             </then>
@@ -212,14 +191,11 @@
         <!-- JSTL API -->
         <if>
             <not>
-                <available file="${jstl.jar}"
-                           property="ignored"/>
+                <available file="${jstl.jar}" property="ignored"/>
             </not>
             <then>
-                <mkdir
-                      dir="${jstl.home}"/>
-                <get src="https://maven-repository.dev.java.net/nonav/repository/jstl/jars/jstl-${jstl.api.version}.jar"
-                     dest="${jstl.home}/jstl-${jstl.api.version}.jar"
+                <get src="${java.net.maven}/jstl/jars/jstl-${jstl.api.version}.jar"
+                     dest="${jstl.jar}"
                      usetimestamp="true"/>
 
             </then>
@@ -228,14 +204,11 @@
         <!-- ANNOTATION API -->
         <if>
             <not>
-                <available file="${annotation.jar}"
-                           property="ignored"/>
+                <available file="${annotation.jar}" property="ignored"/>
             </not>
             <then>
-                <mkdir
-                      dir="${annotation.home}"/>
-                <get src="https://maven-repository.dev.java.net/nonav/repository/javax.annotation/jars/jsr250-api-${annotation.api.version}.jar"
-                     dest="${annotation.home}/jsr250-api-${annotation.api.version}.jar"
+                <get src="${java.net.maven}/javax.annotation/jars/jsr250-api-${annotation.api.version}.jar"
+                     dest="${annotation.jar}"
                      usetimestamp="true"/>
 
             </then>
@@ -326,7 +299,10 @@ java -Xmx256m -jar ${dependency.base.dir}/glassfish-installer-v1_ur1-p01-b02.jar
             </and>
         </condition>
         <condition property="dl.os" value="WINNT">
-            <os name="Windows XP"/>
+        	<or>
+	            <os name="Windows XP"/>
+        		<os name="Windows 2000"/>
+    		</or>
         </condition>
         <condition property="dl.os" value="Darwin">
             <os name="Mac OS X"/>
