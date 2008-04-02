@@ -50,6 +50,9 @@
   <!-- The home directory for Ant -->
   <property name="ant.home" value="${basedir}/lib"/>
 
+  <!-- The base directory of the JSF TCK -->
+  <property name="jsf-tck.home" value="../jsf-tck"/>
+
 
   <!-- ************ Dependencies **** *************************************** -->
 
@@ -140,7 +143,7 @@
     <echo message="-------- ${Name} ${version} --------"/>
   </target>
 
-  <target name="prepare" depends="init"
+  <target name="prepare" depends="init,detect.tck"
    description="Prepare build directory">
     <mkdir dir="${build.home}"/>
     <mkdir dir="${build.home}/bin"/>
@@ -324,6 +327,23 @@
 
   </target>
 
+  <!--
+       ==================================================================
+          TCK related
+       ==================================================================
+  -->
+                                                                                
+  <target name="detect.tck" description="Detect the presence of the JSF TCK">
+      <available property="jsf.tck.present" file="${jsf-tck.home}" type="dir"/>
+  </target>
+                                                                                
+  <target name="copy.to.tck" description="Copy the jsf-ri.jar to TCK_HOME/weblib"
+          if="jsf.tck.present">
+      <copy file="${build.home}/lib/${name}.jar" todir="${jsf-tck.home}/weblib"
+            overwrite="true"/>
+  </target>
+
+
 <!--
        ===================================================================
          Tomcat integration targets
@@ -350,6 +370,6 @@
    </target>
 
 
-  <target name="main" depends="prepare,compile,jars"/>
+  <target name="main" depends="prepare,compile,jars,copy.to.tck"/>
 
 </project>
