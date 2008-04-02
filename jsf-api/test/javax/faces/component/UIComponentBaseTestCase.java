@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBaseTestCase.java,v 1.30 2005/08/11 18:19:57 edburns Exp $
+ * $Id: UIComponentBaseTestCase.java,v 1.31 2005/08/15 15:59:18 edburns Exp $
  */
 
 /*
@@ -340,6 +340,7 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
 
 	// generic attributes
 	request.setAttribute("foo", "bar");
+        Object result = test.getAttributes().get("childCount");
 	test.getAttributes().clear();
 	assertNull(test.getAttributes().get("baz"));
 	test.setValueBinding("baz", application.createValueBinding("#{foo}"));

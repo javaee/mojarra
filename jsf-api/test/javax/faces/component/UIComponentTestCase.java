@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTestCase.java,v 1.45 2004/02/26 20:31:30 eburns Exp $
+ * $Id: UIComponentTestCase.java,v 1.46 2005/08/15 15:59:18 edburns Exp $
  */
 
 /*
@@ -12,6 +12,7 @@ package javax.faces.component;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -19,15 +20,10 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
-import javax.faces.context.FacesContext;
-import javax.faces.event.FacesEvent;
-import javax.faces.validator.Validator;
 import junit.framework.TestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
-import javax.faces.mock.MockFacesContext;
-import javax.faces.mock.MockHttpServletRequest;
-import javax.faces.mock.MockServletContext;
+
 
 
 /**
@@ -60,7 +56,26 @@ public class UIComponentTestCase extends TestCase {
 
     // The expected rendersChildren on a pristine component instance
     protected boolean expectedRendersChildren = false;
-
+    
+    private Map.Entry<String, UIComponent> bogusEntry =
+            new Map.Entry<String, UIComponent>() {
+        public boolean equals(Object r) {
+            return false;
+        }
+        
+        public String getKey() { return "key"; }
+        
+        public int hashCode() {
+            return 0;
+        }
+        
+        public UIComponent getValue() { return null; }
+        
+        public UIComponent setValue(UIComponent value) {
+            return null;
+        }
+        
+    };    
 
     // ------------------------------------------------------------ Constructors
 
@@ -856,7 +871,7 @@ public class UIComponentTestCase extends TestCase {
         UIComponent facet4 = new TestComponent("facet4");
         UIComponent facet5 = new TestComponent("facet5");
         UIComponent facet6 = new TestComponent("facet6"); // Not normally added
-        Map preload = new HashMap();
+        Map preload = new HashMap<String, UIComponent>();
         preload.put("a", facet1);
         preload.put("b", facet2);
         preload.put("c", facet3);
@@ -869,7 +884,7 @@ public class UIComponentTestCase extends TestCase {
         facets.putAll(preload);
         entrySet = facets.entrySet();
         try {
-            entrySet.add(new TestComponent("facet0"));
+            entrySet.add(bogusEntry);
             fail("Should have thrown UnsupportedOperationExcepton");
         } catch (UnsupportedOperationException e) {
             ; // Expected result
@@ -1069,7 +1084,7 @@ public class UIComponentTestCase extends TestCase {
         facets.putAll(preload);
         keySet = facets.keySet();
         try {
-            keySet.add(new TestComponent("facet0"));
+            keySet.add("bogusEntry");
             fail("Should have thrown UnsupportedOperationExcepton");
         } catch (UnsupportedOperationException e) {
             ; // Expected result

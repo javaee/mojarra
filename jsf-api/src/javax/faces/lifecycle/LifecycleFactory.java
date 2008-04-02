@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleFactory.java,v 1.13 2004/02/26 20:31:05 eburns Exp $
+ * $Id: LifecycleFactory.java,v 1.14 2005/08/15 15:59:18 edburns Exp $
  */
 
 /*
@@ -88,7 +88,7 @@ public abstract class LifecycleFactory {
      * the value specified by <code>LifecycleFactory.DEFAULT_LIFECYCLE</code>.
      * </p>
      */
-    public abstract Iterator getLifecycleIds();
+    public abstract Iterator<String> getLifecycleIds();
 
 
 }

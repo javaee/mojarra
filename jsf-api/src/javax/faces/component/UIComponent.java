@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.132 2005/08/03 21:43:10 edburns Exp $
+ * $Id: UIComponent.java,v 1.133 2005/08/15 15:59:16 edburns Exp $
  */
 
 /*
@@ -21,7 +21,6 @@ import javax.faces.event.AbortProcessingException;
 import javax.faces.event.FacesEvent;
 import javax.faces.event.FacesListener;
 import javax.faces.render.Renderer;
-
 
 /**
  * <p><strong>UIComponent</strong> is the base class for all user interface
@@ -80,7 +79,7 @@ public abstract class UIComponent implements StateHolder {
      *     </ul></li>
      * </ul>
      */
-    public abstract Map getAttributes();
+    public abstract Map<String, Object> getAttributes();
 
 
     // ---------------------------------------------------------------- Bindings
@@ -371,7 +370,7 @@ public abstract class UIComponent implements StateHolder {
      *     <code>null</code>.</li>
      * </ul>
      */
-    public abstract List getChildren();
+    public abstract List<UIComponent> getChildren();
 
 
     /**
@@ -487,7 +486,7 @@ public abstract class UIComponent implements StateHolder {
      *     </ul></li>
      * </ul>
      */
-    public abstract Map getFacets();
+    public abstract Map<String, UIComponent> getFacets();
     
     /**
      * <p>Return the number of facet {@link UIComponent}s that are
@@ -519,7 +518,7 @@ public abstract class UIComponent implements StateHolder {
      * <p>The returned <code>Iterator</code> must not support the
      * <code>remove()</code> operation.</p>
      */
-    public abstract Iterator getFacetsAndChildren();
+    public abstract Iterator<UIComponent> getFacetsAndChildren();
     
     
     // -------------------------------------------- Lifecycle Processing Methods

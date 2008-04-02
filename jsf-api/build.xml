@@ -197,7 +197,7 @@ jsf-api.jar.
   <target name="compile" unless="old.compiler">
     <javac destdir="${build.classes}"
            debug="${debug}"
-           source="1.4"
+           source="1.5"
            deprecation="${deprecation}"
            optimize="${optimize}" >
       <src path="${src.dir}"/>
@@ -380,7 +380,7 @@ jsf-api.jar.
     <javac srcdir="${test.dir}"
            destdir="${build.test}"
            debug="${debug}"
-           source="1.4"
+           source="1.5"
            deprecation="${deprecation}"
            optimize="${optimize}" >
       <classpath refid="test.classpath" />

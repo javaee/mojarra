@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContext.java,v 1.63 2005/07/14 15:47:02 edburns Exp $
+ * $Id: FacesContext.java,v 1.64 2005/08/15 15:59:17 edburns Exp $
  */
 
 /*
@@ -69,7 +69,7 @@ public abstract class FacesContext {
      * @exception IllegalStateException if this method is called after
      *  this instance has been released
      */
-    public abstract Iterator getClientIdsWithMessages();
+    public abstract Iterator<String> getClientIdsWithMessages();
 
     /**
      * <p>Return the <code>ELContext</code> instance for this
@@ -137,7 +137,7 @@ public abstract class FacesContext {
      * @exception IllegalStateException if this method is called after
      *  this instance has been released
      */
-    public abstract Iterator getMessages();
+    public abstract Iterator<FacesMessage> getMessages();
 
 
     /**
@@ -158,7 +158,7 @@ public abstract class FacesContext {
      * @exception IllegalStateException if this method is called after
      *  this instance has been released
      */
-    public abstract Iterator getMessages(String clientId);
+    public abstract Iterator<FacesMessage> getMessages(String clientId);
 
 
     /**

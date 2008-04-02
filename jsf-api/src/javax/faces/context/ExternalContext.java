@@ -4,7 +4,7 @@
  */
 
 /*
- * $Id: ExternalContext.java,v 1.18 2005/05/02 12:49:54 edburns Exp $
+ * $Id: ExternalContext.java,v 1.19 2005/08/15 15:59:17 edburns Exp $
  */
  
 /*
@@ -191,7 +191,7 @@ public abstract class ExternalContext {
      * <code>getAttribute()</code>, <code>getAttributeNames()</code>,
      * <code>removeAttribute()</code>, and <code>setAttribute()</code>.</p>
      */
-    public abstract Map getApplicationMap();
+    public abstract Map<String, Object> getApplicationMap();
 
 
     /**
@@ -332,13 +332,13 @@ public abstract class ExternalContext {
      * map as described in the JavaDocs for <code>java.util.Map</code>.</p>
      *
      * <p><em>Servlet:</em> This must be the value returned by the
-     * <code>javax.servlet.ServletRequest</code> method
+     * <code>javax.servlet.http.HttpServletRequest</code> method
      * <code>getCookies()</code>, unless <code>null</code> was returned,
      * in which case this must be a zero-length array.</p>
      *
-     * <p><em>Portlet:</em> The must be a zero-length array.</p>
+     * <p><em>Portlet:</em> Ths must be an empty Map.</p>
      */
-    public abstract Map getRequestCookieMap();
+    public abstract Map<String, Object> getRequestCookieMap();
     
 
     /**
@@ -362,7 +362,7 @@ public abstract class ExternalContext {
      * by the portlet container, and additional properties provided by
      * the portlet container may also be included.</p>
      */
-    public abstract Map getRequestHeaderMap();
+    public abstract Map<String, String> getRequestHeaderMap();
     
 
     /**
@@ -386,7 +386,7 @@ public abstract class ExternalContext {
      * by the portlet container, and additional properties provided by
      * the portlet container may also be included.</p>
      */
-    public abstract Map getRequestHeaderValuesMap();
+    public abstract Map<String, String []> getRequestHeaderValuesMap();
     
 
     /**
@@ -417,7 +417,7 @@ public abstract class ExternalContext {
      * over the values returned by the <code>javax.portlet.PortletRequest</code>
      * method <code>getLocales()</code>.</p>
      */
-    public abstract Iterator getRequestLocales();
+    public abstract Iterator<Locale> getRequestLocales();
 
 
     /**
@@ -438,7 +438,7 @@ public abstract class ExternalContext {
      * <code>getAttribute()</code>, <code>getAttributeNames()</code>,
      * <code>removeAttribute()</code>, and <code>setAttribute()</code>.</p>
      */
-    public abstract Map getRequestMap();
+    public abstract Map<String, Object> getRequestMap();
 
 
     /**
@@ -457,7 +457,7 @@ public abstract class ExternalContext {
      * the <code>javax.portlet.PortletRequest</code> methods
      * <code>getParameter()</code> and <code>getParameterNames()</code>.</p>
      */
-    public abstract Map getRequestParameterMap();
+    public abstract Map<String, String> getRequestParameterMap();
     
 
     /**
@@ -472,7 +472,7 @@ public abstract class ExternalContext {
      * values returned by the <code>javax.portlet.PortletRequest</code>
      * method <code>getParameterNames()</code>.</p>
      */
-    public abstract Iterator getRequestParameterNames();
+    public abstract Iterator<String> getRequestParameterNames();
 
 
     /**
@@ -493,7 +493,7 @@ public abstract class ExternalContext {
      * <code>getParameterValues()</code> and
      * <code>getParameterNames()</code>.</p>
      */
-    public abstract Map getRequestParameterValuesMap();
+    public abstract Map<String, String []> getRequestParameterValuesMap();
     
 
     /**
@@ -602,8 +602,8 @@ public abstract class ExternalContext {
      * <code>javax.servlet.ServletContext</code> method
      * <code>getResourcePaths(path).</p>
      *
-     * <p><em>Servlet:</em> This must be the value returned by the
-     * <code>javax.servlet.ServletContext</code> method
+     * <p><em>Portlet:</em> This must be the value returned by the
+     * <code>javax.portlet.PortletContext</code> method
      * <code>getResourcePaths(path).</p>
      *
      * @param path Partial path used to match resources, which must
@@ -612,7 +612,7 @@ public abstract class ExternalContext {
      * @exception NullPointerException if <code>path</code>
      *  is <code>null</code>
      */
-    public abstract Set getResourcePaths(String path);
+    public abstract Set<String> getResourcePaths(String path);
 
 
     /**
@@ -686,7 +686,7 @@ public abstract class ExternalContext {
      * All session attribute access must occur in PORTLET_SCOPE scope
      * within the session.</p>
      */
-    public abstract Map getSessionMap();
+    public abstract Map<String, Object> getSessionMap();
 
 
     /**

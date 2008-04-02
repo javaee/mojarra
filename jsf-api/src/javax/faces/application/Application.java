@@ -1,5 +1,5 @@
 /*
- * $Id: Application.java,v 1.37 2005/08/09 21:54:55 edburns Exp $
+ * $Id: Application.java,v 1.38 2005/08/15 15:59:16 edburns Exp $
  */
 
 /*
@@ -581,7 +581,7 @@ public abstract class Application {
      * <p>Return an <code>Iterator</code> over the set of currently defined
      * component types for this <code>Application</code>.</p>
      */
-    public abstract Iterator getComponentTypes();
+    public abstract Iterator<String> getComponentTypes();
 
 
     /**
@@ -666,7 +666,7 @@ public abstract class Application {
      * <p>Return an <code>Iterator</code> over the set of currently registered
      * converter ids for this <code>Application</code>.</p>
      */
-    public abstract Iterator getConverterIds();
+    public abstract Iterator<String> getConverterIds();
 
     
     /**
@@ -674,7 +674,7 @@ public abstract class Application {
      * instances for which {@link Converter} classes have been explicitly
      * registered.</p>
      */
-    public abstract Iterator getConverterTypes();
+    public abstract Iterator<String> getConverterTypes();
 
     /**
      * <p>Return the {@link ExpressionFactory} instance for this
@@ -747,7 +747,7 @@ public abstract class Application {
      * <p>Return an <code>Iterator</code> over the supported
      * <code>Locale</code>s for this appication.</p>
      */ 
-    public abstract Iterator getSupportedLocales();
+    public abstract Iterator<Locale> getSupportedLocales();
 
 
     /**
@@ -761,7 +761,7 @@ public abstract class Application {
      * <code>newLocales</code> is <code>null</code>.
      *
      */ 
-    public abstract void setSupportedLocales(Collection locales);
+    public abstract void setSupportedLocales(Collection<Locale> locales);
 
     /**
      * <p>Provide a way for Faces applications to register an
@@ -855,7 +855,7 @@ public abstract class Application {
      * <p>Return an <code>Iterator</code> over the set of currently registered
      * validator ids for this <code>Application</code>.</p>
      */
-    public abstract Iterator getValidatorIds();
+    public abstract Iterator<String> getValidatorIds();
 
 
     /**

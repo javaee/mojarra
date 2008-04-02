@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.115 2005/08/11 18:19:56 edburns Exp $
+ * $Id: UIComponentBase.java,v 1.116 2005/08/15 15:59:16 edburns Exp $
  */
 
 /*
@@ -45,7 +45,6 @@ import javax.faces.event.FacesListener;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
 import javax.faces.render.Renderer;
-
 
 /**
  * <p><strong>UIComponentBase</strong> is a convenience base class that
@@ -153,10 +152,10 @@ public abstract class UIComponentBase extends UIComponent {
      * <p>The <code>Map</code> containing our attributes, keyed by
      * attribute name.</p>
      */
-    private Map attributes = null;
+    private Map<String,Object> attributes = null;
 
 
-    public Map getAttributes() {
+    public Map<String, Object> getAttributes() {
 
         if (attributes == null) {
             attributes = new AttributesMap();
@@ -257,7 +256,7 @@ public abstract class UIComponentBase extends UIComponent {
         if (binding != null) {
             if (!binding.isLiteralText()) {
                 if (bindings == null) {
-                    bindings = new HashMap();
+                    bindings = new HashMap<String, ValueExpression>();
                 }
                 bindings.put(name, binding);
             } else {
@@ -492,10 +491,10 @@ public abstract class UIComponentBase extends UIComponent {
     /*
      * <p>The <code>List</code> containing our child components.</p>
      */
-    private List children = null;
+    private List<UIComponent> children = null;
 
 
-    public List getChildren() {
+    public List<UIComponent> getChildren() {
 
         if (children == null) {
             children = new ChildrenList();
@@ -698,10 +697,10 @@ public abstract class UIComponentBase extends UIComponent {
     /*
      * <p>The <code>Map</code> containing our related facet components.</p>
      */
-    private Map facets = null;
+    private Map<String, UIComponent> facets = null;
 
 
-    public Map getFacets() {
+    public Map<String, UIComponent> getFacets() {
 
         if (facets == null) {
             facets = new FacetsMap();
@@ -734,8 +733,12 @@ public abstract class UIComponentBase extends UIComponent {
     }
 
 
-    public Iterator getFacetsAndChildren() {
-        Iterator result = null;
+    public Iterator<UIComponent> getFacetsAndChildren() {
+        List<String> l = new ArrayList<String>();
+        List<String> l2 = Collections.unmodifiableList(l);
+        Iterator<String> i = l2.iterator();
+        
+        Iterator<UIComponent> result = null;
         int childCount = this.getChildCount(), 
                 facetCount = this.getFacetCount();
         // If there are neither facets nor children
@@ -744,11 +747,15 @@ public abstract class UIComponentBase extends UIComponent {
         }
         // If there are only facets and no children
         else if (0 == childCount) {
-            result = Collections.unmodifiableCollection(getFacets().values()).iterator();
+            Collection<UIComponent> unmodifiable = 
+              Collections.unmodifiableCollection(getFacets().values());
+            result = unmodifiable.iterator();
         }
         // If there are only children and no facets
         else if (0 == facetCount) {
-            result = Collections.unmodifiableList(getChildren()).iterator();
+            List<UIComponent> unmodifiable = 
+              Collections.unmodifiableList(getChildren());
+            result = unmodifiable.iterator();
         }
         // If there are both children and facets
         else {
@@ -1271,7 +1278,7 @@ public abstract class UIComponentBase extends UIComponent {
         // any references maintained due to "attributes" being an inner class
         // is not saved.
         if ( attributes != null ) {
-            HashMap attributesCopy = new HashMap(attributes);
+            HashMap<String, Object> attributesCopy = new HashMap<String, Object>(attributes);
             values[0] = attributesCopy;
         }
         values[1] = saveBindingsState(context);
@@ -1294,11 +1301,11 @@ public abstract class UIComponentBase extends UIComponent {
         // transparency before we restore its values.
         attributes = getAttributes();
         if ( values[0] != null ) {
-            HashMap attributesCopy = (HashMap)values[0];
-            for (Iterator i = attributesCopy.entrySet().iterator();
-                 i.hasNext(); ) {
-                Map.Entry entry = (Map.Entry) i.next();
-                attributes.put(entry.getKey(), entry.getValue());
+            Map attributesCopy = (Map) values[0];
+            Iterator iter = attributesCopy.entrySet().iterator();
+            while (iter.hasNext()) {
+                Map.Entry entry = (Map.Entry) iter.next();
+                attributes.put((String) entry.getKey(), entry.getValue());
             }
         }
 	bindings = restoreBindingsState(context, values[1]);
@@ -1533,11 +1540,12 @@ public abstract class UIComponentBase extends UIComponent {
 
     // Private implementation of Map that supports the functionality
     // required by UIComponent.getFacets()
-    private class AttributesMap extends HashMap {
+    private class AttributesMap extends HashMap<String, Object> {
 
-        public boolean containsKey(Object key) {
+        public boolean containsKey(Object keyObj) {
+            String key = (String) keyObj;
             PropertyDescriptor pd =
-                getPropertyDescriptor((String) key);
+                getPropertyDescriptor(key);
             if (pd == null) {
                 return (super.containsKey(key));
             } else {
@@ -1545,13 +1553,13 @@ public abstract class UIComponentBase extends UIComponent {
             }
         }
 
-        public Object get(Object key) {
+        public Object get(Object keyObj) {
+            String key = (String) keyObj;
             if (key == null) {
                 throw new NullPointerException();
             }
-            String name = (String) key;
             PropertyDescriptor pd =
-                getPropertyDescriptor(name);
+                getPropertyDescriptor((String) key);
             if (pd != null) {
                 try {
                     Method readMethod = pd.getReadMethod();
@@ -1559,7 +1567,7 @@ public abstract class UIComponentBase extends UIComponent {
                         return (readMethod.invoke
                                 (UIComponentBase.this, empty));
                     } else {
-                        throw new IllegalArgumentException(name);
+                        throw new IllegalArgumentException(key);
                     }
                 } catch (IllegalAccessException e) {
                     throw new FacesException(e);
@@ -1567,10 +1575,10 @@ public abstract class UIComponentBase extends UIComponent {
                     throw new FacesException
                         (e.getTargetException());
                 }
-            } else if (super.containsKey(name)) {
+            } else if (super.containsKey(key)) {
                 return (super.get(key));
             }
-            ValueExpression ve = getValueExpression(name);
+            ValueExpression ve = getValueExpression(key);
             if (ve != null) {
 		Object result = null;
 		try {
@@ -1584,13 +1592,13 @@ public abstract class UIComponentBase extends UIComponent {
             return (null);
         }
 
-        public Object put(Object key, Object value) {
+        public Object put(String key, Object value) {
             if (key == null) {
                 throw new NullPointerException();
             }
-            String name = (String) key;
+
             PropertyDescriptor pd =
-                getPropertyDescriptor(name);
+                getPropertyDescriptor(key);
             if (pd != null) {
                 try {
                     Object result = null;
@@ -1622,25 +1630,25 @@ public abstract class UIComponentBase extends UIComponent {
             }
         }
 
-        public void putAll(Map map) {
+        public void putAll(Map<? extends String, ? extends Object> map) {
             if (map == null) {
                 throw new NullPointerException();
             }
-            for (Iterator i = map.entrySet().iterator(); i.hasNext(); ) {
-                Map.Entry entry = (Map.Entry) i.next();
+            
+            for (Map.Entry<? extends String, ? extends Object> entry : map.entrySet()) {
                 put(entry.getKey(), entry.getValue());
             }
         }
 
-        public Object remove(Object key) {
+        public Object remove(Object keyObj) {
+            String key = (String) keyObj;
             if (key == null) {
                 throw new NullPointerException();
             }
-            String name = (String) key;
             PropertyDescriptor pd =
-                getPropertyDescriptor(name);
+                getPropertyDescriptor(key);
             if (pd != null) {
-                throw new IllegalArgumentException(name);
+                throw new IllegalArgumentException(key);
             } else {
                 return (super.remove(key));
             }
@@ -1651,44 +1659,36 @@ public abstract class UIComponentBase extends UIComponent {
 
     // Private implementation of List that supports the functionality
     // required by UIComponent.getChildren()
-    private class ChildrenList extends ArrayList {
+    private class ChildrenList extends ArrayList<UIComponent> {
 
-        public void add(int index, Object element) {
+        public void add(int index, UIComponent element) {
             if (element == null) {
                 throw new NullPointerException();
-            } else if (!(element instanceof UIComponent)) {
-                throw new ClassCastException();
             } else if ((index < 0) || (index > size())) {
                 throw new IndexOutOfBoundsException();
             } else {
-                UIComponent child =
-                    (UIComponent) element;
-                eraseParent(child);
-                child.setParent(UIComponentBase.this);
-                super.add(index, child);
+                eraseParent(element);
+                element.setParent(UIComponentBase.this);
+                super.add(index, element);
             }
         }
 
-        public boolean add(Object element) {
+        public boolean add(UIComponent element) {
             if (element == null) {
                 throw new NullPointerException();
-            } else if (!(element instanceof UIComponent)) {
-                throw new ClassCastException();
             } else {
-                UIComponent child =
-                    (UIComponent) element;
-                eraseParent(child);
-                child.setParent(UIComponentBase.this);
+                eraseParent(element);
+                element.setParent(UIComponentBase.this);
                 return (super.add(element));
             }
         }
 
-        public boolean addAll(Collection collection) {
-            Iterator elements = (new ArrayList(collection)).iterator();
+        public boolean addAll(Collection<? extends UIComponent> collection) {
+            Iterator<UIComponent> elements =
+                (new ArrayList<UIComponent>(collection)).iterator();
             boolean changed = false;
             while (elements.hasNext()) {
-                UIComponent element =
-                    (UIComponent) elements.next();
+                UIComponent element = elements.next();
                 if (element == null) {
                     throw new NullPointerException();
                 } else {
@@ -1699,12 +1699,12 @@ public abstract class UIComponentBase extends UIComponent {
             return (changed);
         }
 
-        public boolean addAll(int index, Collection collection) {
-            Iterator elements = (new ArrayList(collection)).iterator();
+        public boolean addAll(int index, Collection<? extends UIComponent> collection) {
+            Iterator<UIComponent> elements =
+             (new ArrayList<UIComponent>(collection)).iterator();
             boolean changed = false;
             while (elements.hasNext()) {
-                UIComponent element =
-                    (UIComponent) elements.next();
+                UIComponent element = elements.next();
                 if (element == null) {
                     throw new NullPointerException();
                 } else {
@@ -1721,49 +1721,48 @@ public abstract class UIComponentBase extends UIComponent {
                 return;
             }
             for (int i = 0; i < n; i++) {
-                UIComponent child = (UIComponent) get(i);
+                UIComponent child = get(i);
                 child.setParent(null);
             }
             super.clear();
         }
 
-        public Iterator iterator() {
+        public Iterator<UIComponent> iterator() {
             return (new ChildrenListIterator(this));
         }
 
-        public ListIterator listIterator() {
+        public ListIterator<UIComponent> listIterator() {
             return (new ChildrenListIterator(this));
         }
 
-        public ListIterator listIterator(int index) {
+        public ListIterator<UIComponent> listIterator(int index) {
             return (new ChildrenListIterator(this, index));
         }
 
-        public Object remove(int index) {
-            UIComponent child = (UIComponent) get(index);
+        public UIComponent remove(int index) {
+            UIComponent child = get(index);
             super.remove(index);
             child.setParent(null);
             return (child);
         }
 
-        public boolean remove(Object element) {
+        public boolean remove(Object elementObj) {
+            UIComponent element = (UIComponent) elementObj;
             if (element == null) {
                 throw new NullPointerException();
-            } else if (!(element instanceof UIComponent)) {
-                return (false);
             }
+
             if (super.remove(element)) {
-                UIComponent child = (UIComponent) element;
-                child.setParent(null);
+                element.setParent(null);
                 return (true);
             } else {
                 return (false);
             }
         }
 
-        public boolean removeAll(Collection collection) {
+        public boolean removeAll(Collection<?> collection) {
             boolean result = false;
-            Iterator elements = collection.iterator();
+            Iterator<?> elements = collection.iterator();
             while (elements.hasNext()) {
                 if (remove(elements.next())) {
                     result = true;
@@ -1772,9 +1771,9 @@ public abstract class UIComponentBase extends UIComponent {
             return (result);
         }
 
-        public boolean retainAll(Collection collection) {
+        public boolean retainAll(Collection<?> collection) {
             boolean modified = false;
-            Iterator items = iterator();
+            Iterator<?> items = iterator();
             while (items.hasNext()) {
                 if (!collection.contains(items.next())) {
                     items.remove();
@@ -1784,21 +1783,17 @@ public abstract class UIComponentBase extends UIComponent {
             return (modified);
         }
 
-        public Object set(int index, Object element) {
+        public UIComponent set(int index, UIComponent element) {
             if (element == null) {
                 throw new NullPointerException();
-            } else if (!(element instanceof UIComponent)) {
-                throw new ClassCastException();
             } else if ((index < 0) || (index >= size())) {
                 throw new IndexOutOfBoundsException();
             } else {
-                UIComponent child =
-                    (UIComponent) element;
-                eraseParent(child);
+                eraseParent(element);
                 UIComponent previous =
                     (UIComponent) get(index);
                 previous.setParent(null);
-                child.setParent(UIComponentBase.this);
+                element.setParent(UIComponentBase.this);
                 super.set(index, element);
                 return (previous);
             }
@@ -1808,7 +1803,7 @@ public abstract class UIComponentBase extends UIComponent {
 
 
     // Private implementation of ListIterator for ChildrenList
-    private static class ChildrenListIterator implements ListIterator {
+    private static class ChildrenListIterator implements ListIterator<UIComponent> {
 
 
         public ChildrenListIterator(ChildrenList list) {
@@ -1836,9 +1831,9 @@ public abstract class UIComponentBase extends UIComponent {
             return (index < list.size());
         }
 
-        public Object next() {
+        public UIComponent next() {
             try {
-                Object o = list.get(index);
+                UIComponent o = list.get(index);
                 last = index++;
                 return (o);
             } catch (IndexOutOfBoundsException e) {
@@ -1859,7 +1854,7 @@ public abstract class UIComponentBase extends UIComponent {
 
         // ListIterator methods
 
-        public void add(Object o) {
+        public void add(UIComponent o) {
             last = -1;
             list.add(index++, o);
         }
@@ -1872,10 +1867,10 @@ public abstract class UIComponentBase extends UIComponent {
             return (index);
         }
 
-        public Object previous() {
+        public UIComponent previous() {
             try {
                 int current = index - 1;
-                Object o = list.get(current);
+                UIComponent o = list.get(current);
                 last = current;
                 index = current;
                 return (o);
@@ -1888,7 +1883,7 @@ public abstract class UIComponentBase extends UIComponent {
             return (index - 1);
         }
 
-        public void set(Object o) {
+        public void set(UIComponent o) {
             if (last == -1) {
                 throw new IllegalStateException();
             }
@@ -1899,9 +1894,9 @@ public abstract class UIComponentBase extends UIComponent {
 
 
     // Private implementation of Iterator for getFacetsAndChildren()
-    private final static class FacetsAndChildrenIterator implements Iterator {
+    private final static class FacetsAndChildrenIterator implements Iterator<UIComponent> {
         
-        private Iterator iterator;
+        private Iterator<UIComponent> iterator;
         private boolean childMode;
         private UIComponent c;
 
@@ -1936,7 +1931,7 @@ public abstract class UIComponentBase extends UIComponent {
             return this.iterator.hasNext();
         }
 
-        public Object next() {
+        public UIComponent next() {
             this.update();
             return this.iterator.next();
         }
@@ -1950,10 +1945,10 @@ public abstract class UIComponentBase extends UIComponent {
 
     // Private implementation of Map that supports the functionality
     // required by UIComponent.getFacets()
-    private class FacetsMap extends HashMap {
+    private class FacetsMap extends HashMap<String, UIComponent> {
 
         public void clear() {
-            Iterator keys = keySet().iterator();
+            Iterator<String> keys = keySet().iterator();
             while (keys.hasNext()) {
                 String key = (String) keys.next();
                 keys.remove();
@@ -1961,43 +1956,41 @@ public abstract class UIComponentBase extends UIComponent {
             super.clear();
         }
 
-        public Set entrySet() {
+        public Set<Map.Entry<String, UIComponent>> entrySet() {
             return (new FacetsMapEntrySet(this));
         }
 
-        public Set keySet() {
+        public Set<String> keySet() {
             return (new FacetsMapKeySet(this));
         }
 
-        public Object put(Object key, Object value) {
+        public UIComponent put(String key, UIComponent value) {
             if ((key == null) || (value == null)) {
                 throw new NullPointerException();
             } else if (!(key instanceof String) ||
                        !(value instanceof UIComponent)) {
                 throw new ClassCastException();
             }
-            UIComponent previous = (UIComponent) super.get(key);
+            UIComponent previous = super.get(key);
             if (previous != null) {
                 previous.setParent(null);
             }
-            UIComponent current = (UIComponent) value;
-            eraseParent(current);
-            current.setParent(UIComponentBase.this);
+            eraseParent(value);
+            value.setParent(UIComponentBase.this);
             return (super.put(key, value));
         }
 
-        public void putAll(Map map) {
+        public void putAll(Map<? extends String, ? extends UIComponent> map) {
             if (map == null) {
                 throw new NullPointerException();
             }            
-            for (Iterator i = map.entrySet().iterator(); i.hasNext(); ) {
-                Map.Entry entry = (Map.Entry) i.next();
+            for (Map.Entry<? extends String, ? extends UIComponent> entry : map.entrySet()) {
                 put(entry.getKey(), entry.getValue());
             }
         }
 
-        public Object remove(Object key) {
-            UIComponent previous = (UIComponent) get(key);
+        public UIComponent remove(Object key) {
+            UIComponent previous = get(key);
             if (previous != null) {
                 previous.setParent(null);
             }
@@ -2005,11 +1998,11 @@ public abstract class UIComponentBase extends UIComponent {
             return (previous);
         }
 
-        public Collection values() {
+        public Collection<UIComponent> values() {
             return (new FacetsMapValues(this));
         }
 
-        Iterator keySetIterator() {
+        Iterator<String> keySetIterator() {
             return ((new ArrayList(super.keySet())).iterator());
         }
 
@@ -2017,7 +2010,7 @@ public abstract class UIComponentBase extends UIComponent {
 
 
     // Private implementation of Set for FacetsMap.getEntrySet()
-    private static class FacetsMapEntrySet extends AbstractSet {
+    private static class FacetsMapEntrySet extends AbstractSet<Map.Entry<String, UIComponent>> {
 
         public FacetsMapEntrySet(FacetsMap map) {
             this.map = map;
@@ -2025,11 +2018,11 @@ public abstract class UIComponentBase extends UIComponent {
 
         private FacetsMap map = null;
 
-        public boolean add(Object o) {
+        public boolean add(Map.Entry<String, UIComponent> o) {
             throw new UnsupportedOperationException();
         }
 
-        public boolean add(Collection c) {
+        public boolean addAll(Collection<? extends Map.Entry<String,UIComponent>> c) {
             throw new UnsupportedOperationException();
         }
 
@@ -2061,7 +2054,7 @@ public abstract class UIComponentBase extends UIComponent {
             return (map.isEmpty());
         }
 
-        public Iterator iterator() {
+        public Iterator<Map.Entry<String, UIComponent>> iterator() {
             return (new FacetsMapEntrySetIterator(map));
         }
 
@@ -2112,15 +2105,15 @@ public abstract class UIComponentBase extends UIComponent {
 
 
     // Private implementation of Map.Entry for FacetsMapEntrySet
-    private static class FacetsMapEntrySetEntry implements Map.Entry {
+    private static class FacetsMapEntrySetEntry implements Map.Entry<String, UIComponent> {
 
-        public FacetsMapEntrySetEntry(FacetsMap map, Object key) {
+        public FacetsMapEntrySetEntry(FacetsMap map, String key) {
             this.map = map;
             this.key = key;
         }
 
         private FacetsMap map;
-        private Object key;
+        private String key;
 
         public boolean equals(Object o) {
             if (o == null) {
@@ -2139,7 +2132,7 @@ public abstract class UIComponentBase extends UIComponent {
                     return (false);
                 }
             }
-            Object v = map.get(key);
+            UIComponent v = map.get(key);
             if (v == null) {
                 if (e.getValue() != null) {
                     return (false);
@@ -2152,11 +2145,11 @@ public abstract class UIComponentBase extends UIComponent {
             return (true);
         }
 
-        public Object getKey() {
+        public String getKey() {
             return (key);
         }
 
-        public Object getValue() {
+        public UIComponent getValue() {
             return (map.get(key));
         }
 
@@ -2166,8 +2159,8 @@ public abstract class UIComponentBase extends UIComponent {
                     ((value == null) ? 0 : value.hashCode()));
         }
 
-        public Object setValue(Object value) {
-            Object previous = map.get(key);
+        public UIComponent setValue(UIComponent value) {
+            UIComponent previous = map.get(key);
             map.put(key, value);
             return (previous);
         }
@@ -2176,7 +2169,7 @@ public abstract class UIComponentBase extends UIComponent {
 
 
     // Private implementation of Set for FacetsMap.getEntrySet().iterator()
-    private static class FacetsMapEntrySetIterator implements Iterator {
+    private static class FacetsMapEntrySetIterator implements Iterator<Map.Entry<String, UIComponent>> {
 
         public FacetsMapEntrySetIterator(FacetsMap map) {
             this.map = map;
@@ -2184,14 +2177,14 @@ public abstract class UIComponentBase extends UIComponent {
         }
 
         private FacetsMap map = null;
-        private Iterator iterator = null;
-        private Object last = null;
+        private Iterator<String> iterator = null;
+        private Map.Entry<String, UIComponent> last = null;
 
         public boolean hasNext() {
             return (iterator.hasNext());
         }
 
-        public Object next() {
+        public Map.Entry<String, UIComponent> next() {
             last = new FacetsMapEntrySetEntry(map, iterator.next());
             return (last);
         }
@@ -2208,7 +2201,7 @@ public abstract class UIComponentBase extends UIComponent {
 
 
     // Private implementation of Set for FacetsMap.getKeySet()
-    private static class FacetsMapKeySet extends AbstractSet {
+    private static class FacetsMapKeySet extends AbstractSet<String> {
 
         public FacetsMapKeySet(FacetsMap map) {
             this.map = map;
@@ -2216,11 +2209,11 @@ public abstract class UIComponentBase extends UIComponent {
 
         private FacetsMap map = null;
 
-        public boolean add(Object o) {
+        public boolean add(String o) {
             throw new UnsupportedOperationException();
         }
 
-        public boolean add(Collection c) {
+        public boolean addAll(Collection<? extends String> c) {
             throw new UnsupportedOperationException();
         }
 
@@ -2246,7 +2239,7 @@ public abstract class UIComponentBase extends UIComponent {
             return (map.size() == 0);
         }
 
-        public Iterator iterator() {
+        public Iterator<String> iterator() {
             return (new FacetsMapKeySetIterator(map));
         }
 
@@ -2292,7 +2285,7 @@ public abstract class UIComponentBase extends UIComponent {
 
 
     // Private implementation of Set for FacetsMap.getKeySet().iterator()
-    private static class FacetsMapKeySetIterator implements Iterator {
+    private static class FacetsMapKeySetIterator implements Iterator<String> {
 
         public FacetsMapKeySetIterator(FacetsMap map) {
             this.map = map;
@@ -2300,14 +2293,14 @@ public abstract class UIComponentBase extends UIComponent {
         }
 
         private FacetsMap map = null;
-        private Iterator iterator = null;
-        private Object last = null;
+        private Iterator<String> iterator = null;
+        private String last = null;
 
         public boolean hasNext() {
             return (iterator.hasNext());
         }
 
-        public Object next() {
+        public String next() {
             last = iterator.next();
             return (last);
         }
@@ -2324,7 +2317,7 @@ public abstract class UIComponentBase extends UIComponent {
 
 
     // Private implementation of Collection for FacetsMap.values()
-    private static class FacetsMapValues extends AbstractCollection {
+    private static class FacetsMapValues extends AbstractCollection<UIComponent> {
 
         public FacetsMapValues(FacetsMap map) {
             this.map = map;
@@ -2332,7 +2325,7 @@ public abstract class UIComponentBase extends UIComponent {
 
         private FacetsMap map;
 
-        public boolean add(Object o) {
+        public boolean add(UIComponent o) {
             throw new UnsupportedOperationException();
         }
 
@@ -2348,7 +2341,7 @@ public abstract class UIComponentBase extends UIComponent {
             return (map.size() == 0);
         }
 
-        public Iterator iterator() {
+        public Iterator<UIComponent> iterator() {
             return (new FacetsMapValuesIterator(map));
         }
 
@@ -2361,7 +2354,7 @@ public abstract class UIComponentBase extends UIComponent {
 
 
     // Private implementation of Iterator for FacetsMap.values().iterator()
-    private static class FacetsMapValuesIterator implements Iterator {
+    private static class FacetsMapValuesIterator implements Iterator<UIComponent> {
 
         public FacetsMapValuesIterator(FacetsMap map) {
             this.map = map;
@@ -2369,14 +2362,14 @@ public abstract class UIComponentBase extends UIComponent {
         }
 
         private FacetsMap map = null;
-        private Iterator iterator = null;
+        private Iterator<String> iterator = null;
         private Object last = null;
 
         public boolean hasNext() {
             return (iterator.hasNext());
         }
 
-        public Object next() {
+        public UIComponent next() {
             last = iterator.next();
             return (map.get(last));
         }

@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKitFactory.java,v 1.19 2004/02/26 20:31:12 eburns Exp $
+ * $Id: RenderKitFactory.java,v 1.20 2005/08/15 15:59:18 edburns Exp $
  */
 
 /*
@@ -88,7 +88,7 @@ public abstract class RenderKitFactory {
      * the value specified by <code>RenderKitFactory.HTML_BASIC_RENDER_KIT</code>.
      * </p>
      */
-    public abstract Iterator getRenderKitIds();
+    public abstract Iterator<String> getRenderKitIds();
 
 
 }
