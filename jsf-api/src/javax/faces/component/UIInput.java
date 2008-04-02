@@ -1,5 +1,5 @@
 /*
- * $Id: UIInput.java,v 1.69 2004/02/26 20:30:32 eburns Exp $
+ * $Id: UIInput.java,v 1.70 2004/03/30 03:48:07 eburns Exp $
  */
 
 /*
@@ -811,10 +811,17 @@ public class UIInput extends UIOutput implements EditableValueHolder {
 	} else if ((value instanceof String) &&
 		   (((String) value).length() < 1)) {
 	    return (true);
-	} else {
-	    return (false);
+	} else if (value.getClass().isArray()) {
+	    if (0 == java.lang.reflect.Array.getLength(value)) {
+		return (true);
+	    }
 	}
-
+	else if (value instanceof List) {
+	    if (0 == ((List) value).size()) {
+		return (true);
+	    }
+	}
+	return (false);
     }
     
 
