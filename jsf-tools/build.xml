@@ -180,8 +180,10 @@ necessary to generate required classes.
                   unless="skip.generation">
 
     <generateComponents generatorConfig="${basedir}/conf/HtmlBasicTaglib12.properties"
-                        facesConfig="${build.temp}/standard-html-renderkit.xml">
+                        facesConfig="${build.temp}/standard-html-renderkit.xml"
+                        fork="true">
         <classpath refid="run.classpath" />
+        <sysproperty key="java.endorsed.dirs" value="${tomcat.home}/jaxp/lib/endorsed"/>
     </generateComponents>
 
   </target>
@@ -198,8 +200,10 @@ necessary to generate required classes.
     </copy>
   
     <generateTaglib generatorConfig="${basedir}/conf/HtmlBasicTaglib12.properties"
-                    facesConfig="${build.temp}/standard-html-renderkit.xml">
+                    facesConfig="${build.temp}/standard-html-renderkit.xml"
+                    fork="true">
         <classpath refid="run.classpath" />
+        <sysproperty key="java.endorsed.dirs" value="${tomcat.home}/jaxp/lib/endorsed"/>
     </generateTaglib>
 
   </target>
@@ -363,8 +367,10 @@ necessary to generate required classes.
                   unless="skip.generation">
 
       <generateRenderkitDocs generatorConfig="${basedir}/conf/HtmlBasicTaglib12.properties"
-                        facesConfig="${build.temp}/standard-html-renderkit.xml">
+                        facesConfig="${build.temp}/standard-html-renderkit.xml"
+                        fork="true">
         <classpath refid="run.classpath" />
+        <sysproperty key="java.endorsed.dirs" value="${tomcat.home}/jaxp/lib/endorsed"/>
       </generateRenderkitDocs>
 
     <touch file="${build.generate}/last-generation"/>
