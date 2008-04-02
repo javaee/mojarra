@@ -1,5 +1,5 @@
 /*
- * $Id: TestUtil_messages.java,v 1.11 2003/08/04 21:54:56 rkitain Exp $
+ * $Id: TestUtil_messages.java,v 1.12 2003/08/13 18:22:00 rlubke Exp $
  */
 
 /*
@@ -12,11 +12,10 @@
 package com.sun.faces.util;
 
 
-import com.sun.faces.RIConstants;
 import com.sun.faces.ServletFacesTestCase;
 
 import java.util.Locale;
-import java.util.Properties;
+
 
 
 /**
@@ -25,11 +24,7 @@ import java.util.Properties;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestUtil_messages.java,v 1.11 2003/08/04 21:54:56 rkitain Exp $
- * 
- * @see	Blah
- * @see	Bloo
- *
+ * @version $Id: TestUtil_messages.java,v 1.12 2003/08/13 18:22:00 rlubke Exp $
  */
 
 public class TestUtil_messages extends ServletFacesTestCase {
@@ -99,7 +94,8 @@ public class TestUtil_messages extends ServletFacesTestCase {
         {Util.INVALID_SCOPE_LIFESPAN_ERROR_MESSAGE_ID, "1"},
         {Util.CONVERTER_NOT_FOUND_ERROR_MESSAGE_ID, "1"},
         {Util.VALIDATOR_NOT_FOUND_ERROR_MESSAGE_ID, "1"},
-        {Util.ENCODING_ERROR_MESSAGE_ID, "0"}
+        {Util.ENCODING_ERROR_MESSAGE_ID, "0"},
+        {Util.ILLEGAL_IDENTIFIER_LVALUE_MODE, "1"}
         
     };
 

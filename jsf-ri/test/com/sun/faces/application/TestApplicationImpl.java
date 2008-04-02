@@ -1,5 +1,5 @@
 /*
- * $Id: TestApplicationImpl.java,v 1.4 2003/07/07 20:53:17 eburns Exp $
+ * $Id: TestApplicationImpl.java,v 1.5 2003/08/13 18:21:46 rlubke Exp $
  */
 
 /*
@@ -41,7 +41,7 @@ import com.sun.faces.TestComponent;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestApplicationImpl.java,v 1.4 2003/07/07 20:53:17 eburns Exp $
+ * @version $Id: TestApplicationImpl.java,v 1.5 2003/08/13 18:21:46 rlubke Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -203,14 +203,7 @@ public class TestApplicationImpl extends JspFacesTestCase {
             thrown = true;
         }
         assertTrue(thrown);
-
-        /*
-         * FIX_ME: syntax checking to be implemented
-         *
-
-        // 7. Verify ReferenceSyntax exception which occurs when attempting
-        //    to get a ValueBinding with an improper reference expression
-        //
+       
         thrown = false;
         try {
             application.getValueBinding("improper expression");
@@ -218,9 +211,6 @@ public class TestApplicationImpl extends JspFacesTestCase {
             thrown = true;
         }
         assertTrue(thrown);
-
-        */
-
     }
 
             

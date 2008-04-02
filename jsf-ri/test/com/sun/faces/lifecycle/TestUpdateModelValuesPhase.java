@@ -1,5 +1,5 @@
 /*
- * $Id: TestUpdateModelValuesPhase.java,v 1.20 2003/06/27 01:09:57 jvisvanathan Exp $
+ * $Id: TestUpdateModelValuesPhase.java,v 1.21 2003/08/13 18:21:59 rlubke Exp $
  */
 
 /*
@@ -46,7 +46,7 @@ import com.sun.faces.util.DebugUtil;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestUpdateModelValuesPhase.java,v 1.20 2003/06/27 01:09:57 jvisvanathan Exp $
+ * @version $Id: TestUpdateModelValuesPhase.java,v 1.21 2003/08/13 18:21:59 rlubke Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -155,7 +155,7 @@ public void testUpdateFailed()
     userName.setComponentId("userName");
     userName.setValue("one");
     userName.testSetValid(true);
-    userName.setValueRef("foobar");
+    userName.setValueRef("TestBean.two");
     form.addChild(userName);
     userName1 = new TestUIInput();
     userName1.setComponentId("userName1");
