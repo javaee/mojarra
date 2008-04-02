@@ -1,5 +1,5 @@
 /*
- * $Id: HyperlinkRenderer.java,v 1.49 2003/08/08 16:20:21 rkitain Exp $
+ * $Id: HyperlinkRenderer.java,v 1.50 2003/08/13 21:28:05 eburns Exp $
  */
 
 /*
@@ -35,7 +35,7 @@ import org.mozilla.util.Assert;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HyperlinkRenderer.java,v 1.49 2003/08/08 16:20:21 rkitain Exp $
+ * @version $Id: HyperlinkRenderer.java,v 1.50 2003/08/13 21:28:05 eburns Exp $
  */
 
 public class HyperlinkRenderer extends BaseCommandRenderer {
@@ -153,44 +153,6 @@ public class HyperlinkRenderer extends BaseCommandRenderer {
         ResponseWriter writer = context.getResponseWriter();
         Assert.assert_it( writer != null );
 
-        String commandName="";
-        // PENDING(visvan) FIX AFTER SUCCESSFUL RI COMPILATION
-        //commandName = command.getCommandName();
-
-	if (null != commandName) {
-	    handleCommandName(context, command, commandName);
-	}
-	return;
-    }
-
-    protected String getImageText(String image) {
-        StringBuffer buffer = new StringBuffer();
-        buffer.append(image);
-        return buffer.toString();
-    }
-
-    protected Param[] getParamList(FacesContext context, UIComponent command) {
-        ArrayList parameterList = new ArrayList();
-
-	Iterator kids = command.getChildren();
-	while (kids.hasNext()) {
-            UIComponent kid = (UIComponent) kids.next();
-
-            if (kid instanceof UIParameter) {
-                UIParameter uiParam = (UIParameter) kid;
-                Param param = new Param(uiParam.getName(),
-                    ((String)uiParam.currentValue(context)));
-                parameterList.add(param);
-            }
-	}
-
-        return (Param[]) parameterList.toArray(new Param[parameterList.size()]);
-    }
-
-    protected void handleCommandName(FacesContext context,
-				     UICommand command, String commandName)
-        throws IOException {
-        ResponseWriter writer = context.getResponseWriter();
 	String clientId = command.getClientId(context);
 
 	int formNumber = getMyFormNumber(context,
@@ -210,7 +172,7 @@ public class HyperlinkRenderer extends BaseCommandRenderer {
 	sb.append("].");
 	sb.append(clientId);
 	sb.append(".value='");
-	sb.append(commandName);
+	sb.append(clientId);
 	sb.append("'; document.forms[");
 	sb.append("");
 	sb.append(formNumber);
@@ -257,6 +219,33 @@ public class HyperlinkRenderer extends BaseCommandRenderer {
 	    writer.writeAttribute("value", (paramList[i]).getValue());
 	    writer.endElement("input");
         }
+
+
+	return;
+    }
+
+    protected String getImageText(String image) {
+        StringBuffer buffer = new StringBuffer();
+        buffer.append(image);
+        return buffer.toString();
+    }
+
+    protected Param[] getParamList(FacesContext context, UIComponent command) {
+        ArrayList parameterList = new ArrayList();
+
+	Iterator kids = command.getChildren();
+	while (kids.hasNext()) {
+            UIComponent kid = (UIComponent) kids.next();
+
+            if (kid instanceof UIParameter) {
+                UIParameter uiParam = (UIParameter) kid;
+                Param param = new Param(uiParam.getName(),
+                    ((String)uiParam.currentValue(context)));
+                parameterList.add(param);
+            }
+	}
+
+        return (Param[]) parameterList.toArray(new Param[parameterList.size()]);
     }
 
     //inner class to store parameter name and value pairs

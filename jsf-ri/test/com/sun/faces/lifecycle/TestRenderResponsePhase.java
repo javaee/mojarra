@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderResponsePhase.java,v 1.52 2003/08/13 21:06:42 rkitain Exp $
+ * $Id: TestRenderResponsePhase.java,v 1.53 2003/08/13 21:28:06 eburns Exp $
  */
 
 /*
@@ -50,7 +50,7 @@ import javax.servlet.jsp.PageContext;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderResponsePhase.java,v 1.52 2003/08/13 21:06:42 rkitain Exp $
+ * @version $Id: TestRenderResponsePhase.java,v 1.53 2003/08/13 21:28:06 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -70,8 +70,8 @@ public String getExpectedOutputFilename() {
 }
 
 public static final String ignore[] = {
-"<form id=\"basicForm\" method=\"post\" action=\"/test/faces/TestRenderResponsePhase.jsp;jsessionid=22BC1F9CE1138F9735110F43B21A0AC8\" class=\"formClass\" title=\"basicForm\" accept=\"html,wml\">",
-"            <img id=\"graphicImage\" src=\"/test/duke.gif;jsessionid=22BC1F9CE1138F9735110F43B21A0AC8\" usemap=\"#map1\" ismap> "
+    "<form id=\"basicForm\" method=\"post\" action=\"/test/faces/TestRenderResponsePhase.jsp;jsessionid=4F77D965C89220B57F988ED1419FC083\" class=\"formClass\" title=\"basicForm\" accept=\"html,wml\">",
+    "            <img id=\"graphicImage\" src=\"/test/duke.gif;jsessionid=4F77D965C89220B57F988ED1419FC083\" usemap=\"#map1\" ismap> "
 };
     
 public String [] getLinesToIgnore() {
