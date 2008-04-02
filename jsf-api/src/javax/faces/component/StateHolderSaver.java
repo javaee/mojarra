@@ -1,5 +1,5 @@
 /*
- * $Id: StateHolderSaver.java,v 1.3 2003/11/06 15:39:42 eburns Exp $
+ * $Id: StateHolderSaver.java,v 1.4 2004/01/15 21:33:57 eburns Exp $
  */
 
 /*
@@ -20,13 +20,8 @@ import java.io.Serializable;
 
 /**
  * <p>Helper class for saving and restoring attached objects.</p>
- *
- * <p>PENDING(edburns): move this to the component.base package, along
- * with the {get,restore}AttachedState() machinery.  Make it
- * package private again.</p>
- *
  */
-public class StateHolderSaver extends Object implements Serializable {
+class StateHolderSaver extends Object implements Serializable {
     protected String className = null;
     protected Object savedState = null;
 

@@ -1,5 +1,5 @@
 /* 
- * $Id: XulViewHandlerImpl.java,v 1.13 2003/12/22 23:26:03 eburns Exp $ 
+ * $Id: XulViewHandlerImpl.java,v 1.14 2004/01/15 21:34:04 eburns Exp $ 
  */ 
 
 
@@ -83,7 +83,7 @@ import javax.servlet.ServletRequest;
 /** 
  * <B>XulViewHandlerImpl</B> is the Xul non-JSP ViewHandler implementation
  *
- * @version $Id: XulViewHandlerImpl.java,v 1.13 2003/12/22 23:26:03 eburns Exp $ 
+ * @version $Id: XulViewHandlerImpl.java,v 1.14 2004/01/15 21:34:04 eburns Exp $ 
  * 
  * @see javax.faces.application.ViewHandler 
  * 
@@ -384,6 +384,10 @@ public class XulViewHandlerImpl implements ViewHandler {
             }
         }
         return result;
+    }
+
+    public String calculateRenderKitId(FacesContext context) {
+	return null;
     }
 
     /**

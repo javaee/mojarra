@@ -591,6 +591,16 @@
       </property-extension>
     </property>
 
+    <property>
+      <display-name>RenderKitId</display-name>
+      <icon></icon>
+      <property-name>renderKitId</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+      <tag-attribute>yes</tag-attribute>
+      </property-extension>
+    </property>
+
   </component>
 
   <!-- standard renderkit -->

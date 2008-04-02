@@ -1,5 +1,5 @@
 /*
- * $Id: ViewHandler.java,v 1.29 2004/01/15 06:03:16 eburns Exp $
+ * $Id: ViewHandler.java,v 1.30 2004/01/15 21:33:56 eburns Exp $
  */
 
 /*
@@ -14,6 +14,7 @@ import java.io.IOException;
 import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
 import javax.faces.component.UIViewRoot;
+import javax.faces.render.RenderKitFactory;
 
 
 /**
@@ -184,15 +185,13 @@ public interface ViewHandler {
      * <p>This method must be called from {@link
      * NavigationHandler#handleNavigation}.</p>
      *
-     * <p>PENDING(edburns): do we formalize that the renderkitId should
-     * be set into the ViewRoot here?</p>
-     *
-     * <p>The implementation must call {@link #calculateLocale} and
-     * store the result as the <code>Locale</code> of the newly created
-     * <code>UIViewRoot</code></p>
-     *
-     * <p>In all cases, the returned <code>UIViewRoot</code> must be set
-     * as the viewRoot of the {@link FacesContext}.</p>
+     * <p>If there is an existing <code>ViewRoot</code> available on the
+     * {@link FacesContext}, the implementation must copy its
+     * <code>locale</code> and <code>renderKitId</code> to this new view
+     * root.  If not, the implementation must call {@link
+     * #calculateLocale} and {@link calculateRenderKitId} and store the
+     * results as the <code>locale</code> and <code>renderKitId</code>,
+     * respectively, of the newly created <code>UIViewRoot</code></p>
      *
      * @exception NullPointerException if <code>context</code>
      *  is <code>null</code>
@@ -275,5 +274,25 @@ public interface ViewHandler {
      *  <code>null</code>
      */
      public Locale calculateLocale(FacesContext context);
+
+
+    /** 
+     * <p>Returns a renderKitId to use for the client.  The default
+     * implementation simply returns
+     * {@link RenderKitFactory#DEFAULT_RENDER_KIT}</p>
+     * 
+     * <p>This method is invoked by the default view handler on the first
+     * incoming JSF request. On any subsequent requests, the default view
+     * handler uses the renderKitId from the incoming UIViewRoot.</p>
+     *
+     * <p>The <code>ViewHandler</code> must call this method from the
+     * {@link #createView} method.</p>
+     *
+     * @param context {@link FacesContext} for the current request
+     * 
+     * @exception NullPointerException if <code>context</code> is 
+     *  <code>null</code>
+     */
+    public String calculateRenderKitId(FacesContext context);
 
 }

@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.90 2004/01/15 06:03:20 eburns Exp $
+ * $Id: UIComponentBase.java,v 1.91 2004/01/15 21:33:57 eburns Exp $
  */
 
 /*
@@ -1502,28 +1502,14 @@ public abstract class UIComponentBase extends UIComponent {
      * method implies the use of {@link #restoreAttachedState} to restore
      * the attached objects.</p>
      *
-     * <p>This method supports saving attached objects of the following
-     * type: <code>Object</code> and <code>List</code> of
-     * <code>Object</code>.</p>
-     *
-     * <p>Algorithm:</p>
-     *
-     * <ul>
-     *
-     * <p>If argument <code>attachedObject</code> is <code>null</code>
-     * return <code>null</code>.</p>
-     *
-     * <p>If the argument <code>attachedObject</code> is itself a
-     * <code>List</code>, create a new <code>List</code> and recursively
-     * fill it with one <code>StateHolderSaver</code> for each element in the
-     * argument <code>attachedObject</code> list.  Return the new
-     * <code>List</code>.</p>
-     *
-     * <p>Otherwise, create a <code>StateHolderSaver</code> instance
-     * around the argument <code>attachedObject</code> and return
-     * it.</p>
-     *
-     * </ul>
+     * <p>This method supports saving  attached objects of the following
+     * type: <code>Object</code>s,
+     * <code>null</code> values, and <code>Lists</code> of these
+     * objects.  If any contained objects are not <code>Lists</code>
+     * and do not implement {@link StateHolder}, they must have
+     * zero-argument public constructors.  The exact structure of the
+     * returned object is undefined and opaque, but will be serializable.
+     * </p>
      *
      * @param context the {@link FacesContext} for this request.
      *
@@ -1579,22 +1565,6 @@ public abstract class UIComponentBase extends UIComponent {
      * <p>This method supports restoring all attached objects types
      * supported by {@link #saveAttachedState}.</p>
      *
-     * <p>Algorithm:</p>
-     *
-     * <p>If the argument <code>stateObj</code> is <code>null</code>,
-     * return <code>null</code>.</p>
-     * 
-     * <p>If the argument <code>stateObj</code> is a <code>List</code>,
-     * create a new <code>List</code> to hold the result.  Treat each
-     * element of <code>stateObj</code> as a
-     * <code>StateHolderSaver</code> instance and call
-     * <code>restore</code> on it, saving the result to the result
-     * <code>List</code>, which is returned.</p>
-     *
-     * <p>If the argument <code>stateObj</code> is an instance of
-     * <code>StateHolderSaver</code> call <code>restore</code> on it and
-     * return the result.</p>
-     *
      * @param context the {@link FacesContext} for this request
      *
      * @param stateObj the opaque object returned from {@link
@@ -1602,8 +1572,8 @@ public abstract class UIComponentBase extends UIComponent {
      *
      * @exception NullPointerException if context is null.
      *
-     * @exception IllegalStateException if we don't have a
-     * <code>StateHolderSaver</code> instance where we expect one.
+     * @exception IllegalStateException if the object is not 
+     *   previously returned by {@link #saveAttachedState}.
      *
      */
     

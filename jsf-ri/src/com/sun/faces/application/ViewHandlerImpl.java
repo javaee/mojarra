@@ -1,5 +1,5 @@
 /* 
- * $Id: ViewHandlerImpl.java,v 1.27 2003/12/24 17:23:40 eburns Exp $ 
+ * $Id: ViewHandlerImpl.java,v 1.28 2004/01/15 21:34:02 eburns Exp $ 
  */ 
 
 
@@ -27,6 +27,7 @@ import javax.faces.application.ViewHandler;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ExternalContext;
+import javax.faces.render.RenderKitFactory;
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpServletRequest;
@@ -44,7 +45,7 @@ import java.util.Enumeration;
 
 /** 
  * <B>ViewHandlerImpl</B> is the default implementation class for ViewHandler. 
- * @version $Id: ViewHandlerImpl.java,v 1.27 2003/12/24 17:23:40 eburns Exp $ 
+ * @version $Id: ViewHandlerImpl.java,v 1.28 2004/01/15 21:34:02 eburns Exp $ 
  * 
  * @see javax.faces.application.ViewHandler 
  * 
@@ -240,11 +241,14 @@ public class ViewHandlerImpl extends Object
                 Util.NULL_CONTEXT_ERROR_MESSAGE_ID));
         }
         Locale locale = null;
+        String renderKitId = null;
+
         // use the locale from the previous view if is was one which will be
         // the case if this is called from NavigationHandler. There wouldn't be 
         // one for the initial case.
         if (context.getViewRoot() != null ) {
             locale = context.getViewRoot().getLocale();
+            renderKitId = context.getViewRoot().getRenderKitId();
         }
 	UIViewRoot result = new UIViewRoot();
 	result.setViewId(viewId);
@@ -267,7 +271,22 @@ public class ViewHandlerImpl extends Object
                 log.debug("Using locale from previous view " + locale.toString());
             }
         }
+
+        if (renderKitId == null) {
+            renderKitId = calculateRenderKitId(context);
+            if (log.isDebugEnabled()) {
+                log.debug("RenderKitId for this view as determined by calculateRenderKitId " 
+                        + renderKitId);
+            }
+        } else {
+            if (log.isDebugEnabled()) {
+                log.debug("Using renderKitId from previous view " + renderKitId);
+            }
+        }
+          
         result.setLocale(locale);
+        result.setRenderKitId(renderKitId);
+
 	return result;
     }
     
@@ -301,6 +320,18 @@ public class ViewHandlerImpl extends Object
         }
         return result;
     }
+
+
+    public String calculateRenderKitId(FacesContext context) {
+        
+        if (context == null) {
+            throw new NullPointerException(Util.getExceptionMessage(
+                Util.NULL_CONTEXT_ERROR_MESSAGE_ID));
+        }
+        
+        return RenderKitFactory.DEFAULT_RENDER_KIT;
+    }
+
 
     /**
      * Attempts to find a matching locale based on <code>perf></code> and 

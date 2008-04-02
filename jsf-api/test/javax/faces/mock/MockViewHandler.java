@@ -1,5 +1,5 @@
 /*
- * $Id: MockViewHandler.java,v 1.17 2003/12/22 23:25:45 eburns Exp $
+ * $Id: MockViewHandler.java,v 1.18 2004/01/15 21:34:00 eburns Exp $
  */
 
 /*
@@ -16,7 +16,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.component.UIViewRoot;
 import javax.faces.application.ViewHandler;
 import javax.faces.application.StateManager;
-
+import javax.faces.render.RenderKitFactory;
 
 public class MockViewHandler extends Object implements ViewHandler {
 
@@ -71,6 +71,10 @@ public class MockViewHandler extends Object implements ViewHandler {
 
     public Locale calculateLocale(FacesContext context) {
         return Locale.getDefault();
+    }
+
+    public String calculateRenderKitId(FacesContext context) {
+        return RenderKitFactory.DEFAULT_RENDER_KIT;
     }
 
 }
