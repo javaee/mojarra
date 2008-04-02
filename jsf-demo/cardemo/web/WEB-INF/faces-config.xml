@@ -13,44 +13,6 @@
 
 <faces-config>
 
-  <!-- Custom Components -->
-
-  <component>
-    <component-class>components.components.UIArea</component-class>
-    <component-type>Area</component-type>
-  </component>
-
-  <component>
-    <component-class>components.components.GraphComponent</component-class>
-    <component-type>Graph</component-type>
-  </component>
-
-  <component>
-    <component-class>components.components.UIMap</component-class>
-    <component-type>Map</component-type>
-  </component>
-
-  <component>
-    <component-class>components.components.PaneComponent</component-class>
-    <component-type>Pane</component-type>
-  </component>
-
-  <!-- Custom Renderers -->
-
-  <render-kit>
-    <render-kit-id>DEFAULT</render-kit-id>
-    <render-kit-class>com.sun.faces.renderkit.html_basic.HtmlBasicRenderKit</render-kit-class>
-    <renderer>
-      <renderer-type>StyleSheet</renderer-type>
-      <renderer-class>components.renderkit.StyleSheetRenderer</renderer-class>
-    </renderer>
-    <renderer>
-      <renderer-type>Area</renderer-type>
-      <renderer-class>components.renderkit.AreaRenderer</renderer-class>
-    </renderer>
-    
-  </render-kit>
-  
    <!-- Validator -->
   <validator>
     <description>CreditCardValidator Description</description>

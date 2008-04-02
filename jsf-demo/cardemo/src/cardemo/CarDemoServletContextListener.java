@@ -1,5 +1,5 @@
 /*
- * $Id: CarDemoServletContextListener.java,v 1.11 2003/05/04 03:21:37 jvisvanathan Exp $
+ * $Id: CarDemoServletContextListener.java,v 1.12 2003/05/06 02:06:57 eburns Exp $
  */
 /*
  * Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
@@ -113,13 +113,6 @@ public class CarDemoServletContextListener implements ServletContextListener
 
     public void contextInitialized(ServletContextEvent e) 
     {
-	RenderKitFactory rkFactory = (RenderKitFactory) FactoryFinder.
-         getFactory(FactoryFinder.RENDER_KIT_FACTORY);
-        RenderKit defaultRenderKit =
-                rkFactory.getRenderKit(RenderKitFactory.DEFAULT_RENDER_KIT);
-        
-        defaultRenderKit.addRenderer("Area", new AreaRenderer());
-       
         // following is  a simulation of business logic that would 
         // look up the hot spots of an image map from a 
         // map from a database, so that image maps could be rendered
