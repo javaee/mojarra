@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicInputRenderer.java,v 1.13 2003/11/09 05:11:04 eburns Exp $
+ * $Id: HtmlBasicInputRenderer.java,v 1.14 2003/11/20 01:35:17 eburns Exp $
  */
 
 /*
@@ -75,8 +75,7 @@ public abstract class HtmlBasicInputRenderer extends HtmlBasicRenderer {
         
         ValueHolder valueHolder = (ValueHolder) component;
 	// if we have no local value, try to get the valueBinding.
-	ValueBinding valueBinding = (null == valueHolder.getLocalValue()) ? 
-	    component.getValueBinding("value") : null;
+	ValueBinding valueBinding = component.getValueBinding("value");
         
         Converter converter = null;
         Object result = null;

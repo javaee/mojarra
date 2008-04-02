@@ -4,7 +4,7 @@
  */
 
 /*
- * $Id: MenuRenderer.java,v 1.33 2003/11/09 05:11:05 eburns Exp $
+ * $Id: MenuRenderer.java,v 1.34 2003/11/20 01:35:18 eburns Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -146,8 +146,7 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
     public void setSelectManyValue(FacesContext context, UISelectMany uiSelectMany,
             String[] newValues) throws ConverterException {
 	// if we have no local value, try to get the valueBinding.
-	ValueBinding valueBinding = (null == uiSelectMany.getLocalValue()) ? 
-	    uiSelectMany.getValueBinding("value") : null;
+	ValueBinding valueBinding = uiSelectMany.getValueBinding("value");
 
 	Object result = newValues; // default case, set local value
 	Class modelType = null;
