@@ -4,7 +4,7 @@
  Copyright 2003 Sun Microsystems, Inc. All rights reserved.
  SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 
- $Id: build-tests.xml,v 1.39 2004/01/22 16:55:34 eburns Exp $
+ $Id: build-tests.xml,v 1.40 2004/01/25 23:19:13 craigmcc Exp $
 -->
 
 
@@ -92,6 +92,9 @@
                 test.path,
                 test.methodRef
                "/>
+<!-- PENDING - add when bug 4983325 is fixed
+                test.valueBindingGet,
+-->
 
     <target name="test.duplicateIds"
         description="Test duplicate ID detection">
@@ -267,6 +270,46 @@
       </batchtest>
 
     </junit>
+
+  </target>
+
+  <target name="test.valueBindingGet"
+   description="Test ValueBinding.getValue() implementation">
+
+     <!-- ValueBinding Test #1 (Simple Bean Getter) -->
+    <tester host="${host}" port="${port}" protocol="${protocol}"
+         request="${context.path}/faces/valueBinding01.jsp"
+      outContent="/valueBinding01.jsp PASSED" failonerror="${failonerror}"/>
+
+    <!-- ValueBinding Test #2 (Simple String Property Getter) -->
+    <tester host="${host}" port="${port}" protocol="${protocol}"
+         request="${context.path}/faces/valueBinding02.jsp"
+      outContent="/valueBinding02.jsp PASSED" failonerror="${failonerror}"/>
+
+    <!-- ValueBinding Test #3 (Simple Integer Property Getter) -->
+    <tester host="${host}" port="${port}" protocol="${protocol}"
+         request="${context.path}/faces/valueBinding03.jsp"
+      outContent="/valueBinding03.jsp PASSED" failonerror="${failonerror}"/>
+
+    <!-- ValueBinding Test #4 (Simple Boolean Property Getter) -->
+    <tester host="${host}" port="${port}" protocol="${protocol}"
+         request="${context.path}/faces/valueBinding04.jsp"
+      outContent="/valueBinding04.jsp PASSED" failonerror="${failonerror}"/>
+
+    <!-- ValueBinding Test #5 (Simple Integer Expression Getter) -->
+    <tester host="${host}" port="${port}" protocol="${protocol}"
+         request="${context.path}/faces/valueBinding05.jsp"
+      outContent="/valueBinding05.jsp PASSED" failonerror="${failonerror}"/>
+
+    <!-- ValueBinding Test #6 (Simple Boolean Expression Getter) -->
+    <tester host="${host}" port="${port}" protocol="${protocol}"
+         request="${context.path}/faces/valueBinding06.jsp"
+      outContent="/valueBinding06.jsp PASSED" failonerror="${failonerror}"/>
+
+    <!-- ValueBinding Test #7 (Mixed Literal and Expression Getter) -->
+    <tester host="${host}" port="${port}" protocol="${protocol}"
+         request="${context.path}/faces/valueBinding07.jsp"
+      outContent="/valueBinding07.jsp PASSED" failonerror="${failonerror}"/>
 
   </target>
 
