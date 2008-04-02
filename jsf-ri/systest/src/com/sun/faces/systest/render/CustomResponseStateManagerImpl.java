@@ -1,5 +1,5 @@
 /*
- * $Id: CustomResponseStateManagerImpl.java,v 1.2 2005/05/02 19:27:11 edburns Exp $
+ * $Id: CustomResponseStateManagerImpl.java,v 1.3 2005/08/08 22:47:13 rogerk Exp $
  */
 
 /*
@@ -89,7 +89,19 @@ public class CustomResponseStateManagerImpl extends ResponseStateManager {
     // Methods From ResponseStateManager
     //
 
-    public Object getComponentStateToRestore(FacesContext context) {
+    public Object getState(FacesContext context, String viewId) {
+        Object stateArray[] = { getTreeStructure(context, viewId),
+                                getComponentState(context) };
+        return stateArray;
+    }
+
+    public boolean isPostback(FacesContext context) {
+	boolean result = context.getExternalContext().getRequestParameterMap().
+                containsKey(javax.faces.render.ResponseStateManager.VIEW_STATE_PARAM);
+	return result;
+    }
+
+    private Object getComponentState(FacesContext context) {
 
         // requestMap is a local variable so we don't need to synchronize
         Map requestMap = context.getExternalContext().getRequestMap();
@@ -99,13 +111,7 @@ public class CustomResponseStateManagerImpl extends ResponseStateManager {
         return state;
     }
 
-    public boolean isPostback(FacesContext context) {
-	boolean result = context.getExternalContext().getRequestParameterMap().
-                containsKey(javax.faces.render.ResponseStateManager.VIEW_STATE_PARAM);
-	return result;
-    }
-
-    public Object getTreeStructureToRestore(FacesContext context,
+    private Object getTreeStructure(FacesContext context,
                                             String treeId) {
 	StateManager stateManager = Util.getStateManager(context);
         
@@ -165,7 +171,22 @@ public class CustomResponseStateManagerImpl extends ResponseStateManager {
 	return structure;
     }
 
-    public void writeState(FacesContext context, SerializedView view)
+    public void writeState(FacesContext context,
+                           Object state) throws IOException {
+        SerializedView view = null;
+        if (state instanceof SerializedView) {
+            view = (SerializedView) state;
+        }
+        else {
+            Object[] stateArray = (Object[])state;
+            StateManager stateManager =
+                context.getApplication().getStateManager();
+            view = stateManager.new SerializedView(stateArray[0], null);
+        }
+        writeSerializedState(context, view);
+    }
+
+    private void writeSerializedState(FacesContext context, SerializedView view)
         throws IOException {
         String hiddenField = null;
 	StateManager stateManager = Util.getStateManager(context);
@@ -221,7 +242,7 @@ public class CustomResponseStateManagerImpl extends ResponseStateManager {
         }
     }
     
-    public boolean isCompressStateSet(FacesContext context) {
+    private boolean isCompressStateSet(FacesContext context) {
 	if (null != compressStateSet) {
 	    return compressStateSet.booleanValue();
 	}

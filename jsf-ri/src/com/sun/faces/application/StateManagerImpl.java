@@ -1,5 +1,5 @@
 /* 
- * $Id: StateManagerImpl.java,v 1.34 2005/07/20 00:34:07 rogerk Exp $ 
+ * $Id: StateManagerImpl.java,v 1.35 2005/08/08 22:47:13 rogerk Exp $ 
  */ 
 
 
@@ -23,8 +23,11 @@ import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.faces.render.ResponseStateManager;
 
 import java.io.IOException;
+import java.lang.reflect.Method;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
@@ -38,7 +41,7 @@ import javax.faces.component.NamingContainer;
  * <B>StateManagerImpl</B> is the default implementation class for
  * StateManager.
  *
- * @version $Id: StateManagerImpl.java,v 1.34 2005/07/20 00:34:07 rogerk Exp $
+ * @version $Id: StateManagerImpl.java,v 1.35 2005/08/08 22:47:13 rogerk Exp $
  * @see javax.faces.application.ViewHandler
  */
 public class StateManagerImpl extends StateManager {
@@ -62,6 +65,14 @@ public class StateManagerImpl extends StateManager {
      */
     int noOfViews = 0;
     int noOfViewsInLogicalView = 0;
+    
+    /**
+     * Keyed by renderKitId, this Map contains a boolean that
+     * indicates if the ResponseStateManager for the renderKitId
+     * has non-deprecated methods.  True indicates the presence
+     * of non-deprecated methods.
+     */
+    private HashMap responseStateManagerInfo = null;
     
     public SerializedView saveSerializedView(FacesContext context) 
         throws IllegalStateException{
@@ -247,8 +258,16 @@ public class StateManagerImpl extends StateManager {
             }
         } else {
             // restore tree from session.
-	    Object id = ((Util.getResponseStateManager(context, renderKitId)).
-			 getTreeStructureToRestore(context, viewId));
+            // The ResponseStateManager implementation may be using the new methods or
+            // deprecated methods.  We need to know which one to call.
+            Object id = null;
+            ResponseStateManager rsm = Util.getResponseStateManager(context, renderKitId);
+            if (hasDeclaredMethod(responseStateManagerInfo, renderKitId, rsm, "getState")) {
+                Object[] stateArray = (Object[])rsm.getState(context, viewId);
+                id = stateArray[0];
+            } else {
+	        id = rsm.getTreeStructureToRestore(context, viewId);
+            }
 
 	    if (null != id) {
 	        if (logger.isLoggable(Level.FINE)) {
@@ -326,8 +345,14 @@ public class StateManagerImpl extends StateManager {
             message = message + " renderKitId " + renderKitId;
             throw new IllegalArgumentException(message);
         }
-        Object state = (Util.getResponseStateManager(context, renderKitId)).
-            getComponentStateToRestore(context);
+        Object state = null;
+        ResponseStateManager rsm = Util.getResponseStateManager(context, renderKitId);
+        if (hasDeclaredMethod(responseStateManagerInfo, renderKitId, rsm, "getState")) {
+            Object[] stateArray = (Object[])rsm.getState(context, root.getViewId());
+            state = stateArray[1];
+        } else {
+	    state = rsm.getComponentStateToRestore(context);
+        }
         root.processRestoreState(context, state);
     }
 
@@ -342,9 +367,13 @@ public class StateManagerImpl extends StateManager {
         }
         UIComponent viewRoot = null;
         TreeStructure structRoot = null;
-        structRoot = (TreeStructure) ((Util.getResponseStateManager(context,
-                                                                    renderKitId)).
-            getTreeStructureToRestore(context, viewId));
+        ResponseStateManager rsm = Util.getResponseStateManager(context, renderKitId);
+        if (hasDeclaredMethod(responseStateManagerInfo, renderKitId, rsm, "getState")) {
+            Object[] stateArray = (Object[])rsm.getState(context, viewId);
+            structRoot = (TreeStructure)stateArray[0];
+        } else {
+            structRoot = (TreeStructure)rsm.getTreeStructureToRestore(context, viewId);
+        }
         if (structRoot == null) {
             return null;
         }
@@ -355,8 +384,16 @@ public class StateManagerImpl extends StateManager {
 
     public void writeState(FacesContext context, SerializedView state)
         throws IOException {
-	Util.getResponseStateManager(context,
-            context.getViewRoot().getRenderKitId()).writeState(context, state);
+        String renderKitId = context.getViewRoot().getRenderKitId();
+        ResponseStateManager rsm = Util.getResponseStateManager(context, renderKitId);
+        if (hasDeclaredMethod(responseStateManagerInfo, renderKitId, rsm, "getState")) {
+            Object[] stateArray = new Object[2];
+            stateArray[0] = state.getStructure();
+            stateArray[1] = state.getState();
+            rsm.writeState(context, stateArray);
+        } else {
+            rsm.writeState(context, state);
+        }
     }
 
     /**
@@ -544,6 +581,39 @@ public class StateManagerImpl extends StateManager {
         } 
         return noOfViewsInLogicalView;
     }
-    
 
+    /**
+     * Looks for the presence of a declared method (by name) in the specified class and returns
+     * a <code>boolean</code> outcome (true, if the method exists).
+     *
+     * @param resultMap A <code>Map</code> possibly containing the specified "key" argument, and the
+     *                   corresponding <code>Boolean</code> value indicating the outcome of
+     *                   the search.
+     * @param key The object that will be used for the lookup.  This key will also be stored in the 
+     *             <code>Map</code> with a corresponding <code>Boolean</code> value indicating
+     *             the result of the search.
+     * @param instance The instance of the class that will be used as the search domain.
+     * @param methodName The name of the method we are looking for.
+     */
+    private boolean hasDeclaredMethod(Map resultMap, Object key, Object instance, String methodName) {
+        boolean result = false;
+        if (resultMap == null) {
+            resultMap = new HashMap();
+        }
+        Boolean value = (Boolean)resultMap.get(key);
+        if (value != null) {
+            return value.booleanValue();
+        }
+        // Look for the presence of the method by method name.
+        Class c = instance.getClass();
+        Method[] methods = c.getDeclaredMethods();
+        for (int i = 0; i < methods.length; i++) {
+            if (methods[i].getName().equals(methodName)) {
+                result = true;
+                break;
+            }
+        }
+        resultMap.put(key, new Boolean(result));
+        return result;
+    }
 }
