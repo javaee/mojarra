@@ -1157,7 +1157,9 @@
         <attribute-class>java.lang.String</attribute-class>
       </attribute>
 
-      <component-class>javax.faces.component.UICommand</component-class>
+      <supported-component-class>
+        <component-class>javax.faces.component.UICommand</component-class>
+      </supported-component-class>
     </renderer>
 
     <renderer>
@@ -1238,13 +1240,17 @@
         <attribute-class>java.lang.String</attribute-class>
       </attribute>
 
-      <component-class>javax.faces.component.UISelectBoolean</component-class>
+      <supported-component-class>
+        <component-class>javax.faces.component.UISelectBoolean</component-class>
+      </supported-component-class>
     </renderer>
 
     <renderer>
       <renderer-type>Data</renderer-type>
       <renderer-class>com.sun.faces.renderkit.html_basic.DataRenderer</renderer-class>
-      <component-class>javax.faces.component.UIPanel</component-class>
+      <supported-component-class>
+        <component-class>javax.faces.component.UIPanel</component-class>
+      </supported-component-class>
     </renderer>
 
     <renderer>
@@ -1257,7 +1263,9 @@
       &events-attrs;
       &i18n-attrs;
 
-      <component-class>javax.faces.component.UIOutput</component-class>
+      <supported-component-class>
+        <component-class>javax.faces.component.UIOutput</component-class>
+      </supported-component-class>
     </renderer>
 
     <renderer>
@@ -1315,24 +1323,32 @@
         <attribute-class>java.lang.String</attribute-class>
       </attribute>
 
-      <component-class>javax.faces.component.UIForm</component-class>
+      <supported-component-class>
+        <component-class>javax.faces.component.UIForm</component-class>
+      </supported-component-class>
     </renderer>
 
     <renderer>
       <renderer-type>Grid</renderer-type>
       <renderer-class>com.sun.faces.renderkit.html_basic.GridRenderer</renderer-class>
-      <component-class>javax.faces.component.UIPanel</component-class>
+      <supported-component-class>
+        <component-class>javax.faces.component.UIPanel</component-class>
+      </supported-component-class>
     </renderer>
     <renderer>
       <renderer-type>Group</renderer-type>
       <renderer-class>com.sun.faces.renderkit.html_basic.GroupRenderer</renderer-class>
-      <component-class>javax.faces.component.UIPanel</component-class>
+      <supported-component-class>
+        <component-class>javax.faces.component.UIPanel</component-class>
+      </supported-component-class>
     </renderer>
 
     <renderer>
       <renderer-type>Hidden</renderer-type>
       <renderer-class>com.sun.faces.renderkit.html_basic.HiddenRenderer</renderer-class>
-      <component-class>javax.faces.component.UIInput</component-class>
+      <supported-component-class>
+        <component-class>javax.faces.component.UIInput</component-class>
+      </supported-component-class>
     </renderer>
 
     <renderer>
@@ -1397,7 +1413,9 @@
         <attribute-name>imageKey</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
       </attribute>
-      <component-class>javax.faces.component.UICommand</component-class>
+      <supported-component-class>
+        <component-class>javax.faces.component.UICommand</component-class>
+      </supported-component-class>
     </renderer>
 
     <renderer>
@@ -1438,7 +1456,9 @@
         <attribute-class>int</attribute-class>
       </attribute>
 
-      <component-class>javax.faces.component.UIGraphic</component-class>
+      <supported-component-class>
+        <component-class>javax.faces.component.UIGraphic</component-class>
+      </supported-component-class>
     </renderer>
 
     <renderer>
@@ -1479,13 +1499,17 @@
         <attribute-class>java.lang.String</attribute-class>
       </attribute>
 
-      <component-class>javax.faces.component.UIOutput</component-class>
+      <supported-component-class>
+        <component-class>javax.faces.component.UIOutput</component-class>
+      </supported-component-class>
     </renderer>
 
     <renderer>
       <renderer-type>List</renderer-type>
       <renderer-class>com.sun.faces.renderkit.html_basic.ListRenderer</renderer-class>
-      <component-class>javax.faces.component.UIPanel</component-class>
+      <supported-component-class>
+        <component-class>javax.faces.component.UIPanel</component-class>
+      </supported-component-class>
     </renderer>
     <renderer>
       <renderer-type>Listbox</renderer-type>
@@ -1541,8 +1565,12 @@
         <attribute-class>java.lang.String</attribute-class>
       </attribute>
 
-      <component-class>javax.faces.component.UISelectOne</component-class>
-      <component-class>javax.faces.component.UISelectMany</component-class>
+      <supported-component-class>
+        <component-class>javax.faces.component.UISelectOne</component-class>
+      </supported-component-class>
+      <supported-component-class>
+        <component-class>javax.faces.component.UISelectMany</component-class>
+      </supported-component-class>
     </renderer>
 
     <renderer>
@@ -1599,8 +1627,12 @@
         <attribute-class>java.lang.String</attribute-class>
       </attribute>
 
-      <component-class>javax.faces.component.UISelectOne</component-class>
-      <component-class>javax.faces.component.UISelectMany</component-class>
+      <supported-component-class>
+        <component-class>javax.faces.component.UISelectOne</component-class>
+      </supported-component-class>
+      <supported-component-class>
+        <component-class>javax.faces.component.UISelectMany</component-class>
+      </supported-component-class>
     </renderer>
 
     <renderer>
@@ -1612,7 +1644,9 @@
       &events-attrs;
       &i18n-attrs;
 
-      <component-class>javax.faces.component.UIOutput</component-class>
+      <supported-component-class>
+        <component-class>javax.faces.component.UIOutput</component-class>
+      </supported-component-class>
     </renderer>
 
     <renderer>
@@ -1663,7 +1697,9 @@
         <attribute-class>java.lang.String</attribute-class>
       </attribute>
 
-      <component-class>javax.faces.component.UISelectOne</component-class>
+      <supported-component-class>
+        <component-class>javax.faces.component.UISelectOne</component-class>
+      </supported-component-class>
     </renderer>
     <renderer>
       <renderer-type>Secret</renderer-type>
@@ -1743,7 +1779,9 @@
         <attribute-class>java.lang.String</attribute-class>
       </attribute>
 
-      <component-class>javax.faces.component.UIInput</component-class>
+      <supported-component-class>
+        <component-class>javax.faces.component.UIInput</component-class>
+      </supported-component-class>
     </renderer>
 
     <renderer>
@@ -1792,7 +1830,9 @@
         <attribute-class>java.lang.String</attribute-class>
       </attribute>
 
-      <component-class>javax.faces.component.UIData</component-class>
+      <supported-component-class>
+        <component-class>javax.faces.component.UIData</component-class>
+      </supported-component-class>
     </renderer>
 
     <renderer>
@@ -1881,7 +1921,9 @@
         <attribute-class>java.lang.String</attribute-class>
       </attribute>
 
-      <component-class>javax.faces.component.UIInput</component-class>
+      <supported-component-class>
+        <component-class>javax.faces.component.UIInput</component-class>
+      </supported-component-class>
     </renderer>
 
     <renderer>
@@ -1962,7 +2004,9 @@
         <attribute-class>java.lang.String</attribute-class>
       </attribute>
 
-      <component-class>javax.faces.component.UIInput</component-class>
+      <supported-component-class>
+        <component-class>javax.faces.component.UIInput</component-class>
+      </supported-component-class>
     </renderer>
   </render-kit>
 
