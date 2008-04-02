@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectBase.java,v 1.6 2003/02/03 22:57:47 craigmcc Exp $
+ * $Id: UISelectBase.java,v 1.7 2003/02/03 23:54:04 craigmcc Exp $
  */
 
 /*
@@ -61,10 +61,15 @@ abstract class UISelectBase extends UIInput implements NamingContainer {
         while (kids.hasNext()) {
             UIComponent kid = (UIComponent) kids.next();
             if (kid instanceof UISelectItem) {
-                UISelectItem item = (UISelectItem) kid;
-                list.add(new SelectItem(item.getItemValue(),
-                                        item.getItemLabel(),
-                                        item.getItemDescription()));
+                Object value = kid.currentValue(context);
+                if (value == null) {
+                    UISelectItem item = (UISelectItem) kid;
+                    list.add(new SelectItem(item.getItemValue(),
+                                            item.getItemLabel(),
+                                            item.getItemDescription()));
+                } else if (value instanceof SelectItem) {
+                    list.add(value);
+                }
             } else if (kid instanceof UISelectItems) {
                 Object value = kid.currentValue(context);
                 if (value instanceof SelectItem) {
