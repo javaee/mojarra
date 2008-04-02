@@ -59,26 +59,10 @@
   <target name="jsf.source">
     <zip     destfile="${basedir}/javaserverfaces_source.zip">
     
-      <zipfileset dir="${jsf-api.home}"
-               excludes="**/CVS/**, **/build/**"
-               prefix="jsf-api"/> 
-     
-      <zipfileset dir="${jsf-ri.home}"
-             excludes="**/CVS/**, **/build/**"
-               prefix="jsf-ri"/>
-               
-      <zipfileset dir="${jsf-tools.home}"
-             excludes="**/CVS/**, **/build/**"
-               prefix="jsf-tools"/>
-                       
-      <zipfileset dir="${jsf-portlet.home}"
-             excludes="**/CVS/**, **/build/**"
-               prefix="jsf-portlet"/>
-     
-      <zipfileset dir="${jsf-demo.home}"
-            excludes="**/CVS/**, **/build/**, **/dist/**"
-            prefix="jsf-demo"/>
-  
+      <zipfileset dir="${basedir}"  
+          excludes="**/CVS/**, **/build/**, **/dist/**"
+          prefix="javaserverfaces_sources"/>
+         
     </zip>
   </target>
 
