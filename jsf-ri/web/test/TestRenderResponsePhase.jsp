@@ -622,7 +622,7 @@
 </tr>
 
 <tr>
-					<TD><h:selectManyCheckbox id="ManyApples3" 
+					<TD><h:selectManyCheckbox id="ManyApples3" border="1" 
                                                 tabindex="3" disabledClass="disabledClass" style="someStyle"
                                                 styleClass="styleClass" enabledClass="enabledClass" accesskey="A">>
 						<f:selectItem itemValue="0" itemLabel="zero" itemDisabled="true" />
