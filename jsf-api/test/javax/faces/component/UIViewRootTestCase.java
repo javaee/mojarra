@@ -1,5 +1,5 @@
 /*
- * $Id: UIViewRootTestCase.java,v 1.13 2004/02/26 20:31:34 eburns Exp $
+ * $Id: UIViewRootTestCase.java,v 1.14 2004/04/05 18:26:01 rkitain Exp $
  */
 
 /*
@@ -157,6 +157,14 @@ public class UIViewRootTestCase extends UIComponentBaseTestCase {
 	assertEquals(Locale.CHINESE, root.getLocale());
 	root.setLocale(Locale.CANADA_FRENCH);
 	assertEquals(Locale.CANADA_FRENCH, root.getLocale());
+    }
+
+    public void testUninitializedInstance() throws Exception {
+	UIViewRoot root = new UIViewRoot();
+	assertEquals(javax.faces.render.RenderKitFactory.HTML_BASIC_RENDER_KIT,
+		     root.getRenderKitId());
+	assertEquals(Locale.getDefault(), root.getLocale());
+	
     }
 
 

@@ -1,5 +1,5 @@
 /*
- * $Id: UIViewRoot.java,v 1.26 2004/02/26 20:30:35 eburns Exp $
+ * $Id: UIViewRoot.java,v 1.27 2004/04/05 18:26:00 rkitain Exp $
  */
 
 /*
@@ -98,7 +98,8 @@ public class UIViewRoot extends UIComponentBase {
     /**
      * <p>Return the render kit identifier of the {@link RenderKit}
      * associated with this view.  Unless explicitly set, this will be the
-     * value defined by <code>RenderKitFactory.HTML_BASIC_RENDER_KIT</code>.</p>
+     * value defined by calling 
+     * {@link javax.faces.application.ViewHandler#calculateRenderKitId}.</p>
      */
     public String getRenderKitId() {
 
@@ -108,11 +109,12 @@ public class UIViewRoot extends UIComponentBase {
 	}
 	else {
 	    ValueBinding vb = getValueBinding("renderKitId");
+	    FacesContext context = getFacesContext();
 	    if (vb != null) {
-		result = (String) vb.getValue(getFacesContext());
+		result = (String) vb.getValue(context);
 	    } 
 	    else {
-                result = RenderKitFactory.HTML_BASIC_RENDER_KIT;
+	        result = context.getApplication().getViewHandler().calculateRenderKitId(context);
 	    }
 	}
 
@@ -421,7 +423,7 @@ public class UIViewRoot extends UIComponentBase {
 	}
 	else {
 	    ValueBinding vb = getValueBinding("locale");
-	    FacesContext context = FacesContext.getCurrentInstance();
+	    FacesContext context = getFacesContext();
 	    if (vb != null) {
                 Object resultLocale = vb.getValue(context);
 		if (null == resultLocale) {
