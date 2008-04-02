@@ -18,7 +18,7 @@
 
   <tlib-version>1.0</tlib-version>
   <jsp-version>1.2</jsp-version>
-  <short-name>JavaServerFaces Standard HTML RenderKit Tag Library</short-name>
+  <short-name>HTML Tags</short-name>
   <uri>http://java.sun.com/jsf/html</uri>
   <description>
     This tag library contains JavaServer Faces component tags for all
