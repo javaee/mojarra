@@ -1,5 +1,5 @@
 /*
- * $Id: CheckboxRenderer.java,v 1.42 2003/02/20 22:48:57 ofung Exp $
+ * $Id: CheckboxRenderer.java,v 1.43 2003/03/11 01:20:22 jvisvanathan Exp $
  *
  */
 
@@ -25,6 +25,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.render.Renderer;
 import javax.faces.FacesException;
+import javax.faces.convert.ConverterException;
 
 import org.apache.commons.beanutils.ConversionException;
 import org.apache.commons.beanutils.ConvertUtils;
@@ -40,7 +41,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: CheckboxRenderer.java,v 1.42 2003/02/20 22:48:57 ofung Exp $
+ * @version $Id: CheckboxRenderer.java,v 1.43 2003/03/11 01:20:22 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -110,7 +111,7 @@ public class CheckboxRenderer extends HtmlBasicInputRenderer {
                 Object convertedCurrentValue = 
                     getConvertedValue(context, component, (String)curValue);
                 setPreviousValue(component, convertedCurrentValue);
-            } catch (IOException e) {
+            } catch (ConverterException e) {
                 setPreviousValue(component, Boolean.FALSE);
             }
         }
@@ -120,9 +121,9 @@ public class CheckboxRenderer extends HtmlBasicInputRenderer {
         String newValue = context.getServletRequest().getParameter(clientId);
         try {
             convertedValue = getConvertedValue(context, component, newValue);
-        } catch (IOException ioe) {
+        } catch (ConverterException ce) {
             component.setValue(newValue);
-            addConversionErrorMessage(context, component, ioe.getMessage());
+            addConversionErrorMessage(context, component, ce.getMessage());
             component.setValid(false);
             return;
         }
@@ -138,7 +139,7 @@ public class CheckboxRenderer extends HtmlBasicInputRenderer {
     }
 
     public Object getConvertedValue(FacesContext context, UIComponent component,
-            String newValue) throws IOException {
+            String newValue) throws ConverterException {
      
         //if there was nothing sent in the request the checkbox wasn't checked..
         if (newValue == null) {

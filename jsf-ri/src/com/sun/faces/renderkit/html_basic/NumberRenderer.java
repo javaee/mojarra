@@ -1,5 +1,5 @@
 /*
- * $Id: NumberRenderer.java,v 1.17 2003/02/20 22:49:01 ofung Exp $
+ * $Id: NumberRenderer.java,v 1.18 2003/03/11 01:20:24 jvisvanathan Exp $
  */
 
 /*
@@ -27,6 +27,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
 import javax.faces.component.UIOutput;
 import javax.faces.FacesException;
+import javax.faces.convert.ConverterException;
 
 import org.mozilla.util.Assert;
 import org.mozilla.util.Debug;
@@ -46,7 +47,7 @@ import java.text.ParseException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: NumberRenderer.java,v 1.17 2003/02/20 22:49:01 ofung Exp $
+ * @version $Id: NumberRenderer.java,v 1.18 2003/03/11 01:20:24 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -99,7 +100,7 @@ public class NumberRenderer extends HtmlBasicInputRenderer {
     }
 
     public Object getConvertedValue(FacesContext context, UIComponent component,
-            String newValue) throws IOException {
+            String newValue) throws ConverterException {
 	
         Object convertedValue = null;
         Number parsedValue = null;
@@ -118,7 +119,7 @@ public class NumberRenderer extends HtmlBasicInputRenderer {
         try {
             parsedValue = formatPool.numberFormat_parse(context, component, newValue);
         } catch (ParseException pe ) {
-            throw new IOException(pe.getMessage());
+            throw new ConverterException(pe.getMessage());
         }
         
         // if modelReference is null, store value as Number.
@@ -130,7 +131,7 @@ public class NumberRenderer extends HtmlBasicInputRenderer {
         try {
             modelType = context.getModelType(modelRef);
 	} catch (FacesException fe ) {
-            throw new IOException(Util.getExceptionMessage(
+            throw new ConverterException(Util.getExceptionMessage(
                 Util.CONVERSION_ERROR_MESSAGE_ID));
 	}    
         Assert.assert_it(modelType != null);

@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicInputRenderer.java,v 1.3 2003/02/20 22:48:59 ofung Exp $
+ * $Id: HtmlBasicInputRenderer.java,v 1.4 2003/03/11 01:20:23 jvisvanathan Exp $
  */
 
 /*
@@ -74,15 +74,11 @@ public abstract class HtmlBasicInputRenderer extends HtmlBasicRenderer {
     }
 
     public Object getConvertedValue(FacesContext context, UIComponent component,
-            String newValue) throws IOException {
+            String newValue) throws ConverterException {
         Converter converter = getConverter(component);
 	Object result = null;
         if (converter != null) {
-            try {
-                result = converter.getAsObject(context, component, newValue);
-            } catch (ConverterException e) {
-                throw new IOException(e.getMessage());
-            }
+            result = converter.getAsObject(context, component, newValue);
         } else if ( null != newValue && 0 < newValue.length()) {
 	    result = newValue;
 	}

@@ -1,5 +1,5 @@
 /*
- * $Id: TestConverters.java,v 1.4 2003/02/20 22:49:54 ofung Exp $
+ * $Id: TestConverters.java,v 1.5 2003/03/11 01:20:26 jvisvanathan Exp $
  */
 
 /*
@@ -13,7 +13,6 @@ package com.sun.faces.convert;
 
 import com.sun.faces.convert.ConverterFactoryImpl;
 
-import java.io.IOException;
 import java.util.Iterator;
 import java.util.Date;
 import java.text.DateFormat;
@@ -33,6 +32,7 @@ import javax.faces.component.UISelectOne;
 import javax.faces.component.UIGraphic;
 import javax.faces.component.UIInput;
 import javax.faces.convert.Converter;
+import javax.faces.convert.ConverterException;
 import javax.faces.FactoryFinder;
 import javax.faces.context.FacesContext;
 import javax.faces.context.FacesContextFactory;
@@ -50,7 +50,7 @@ import com.sun.faces.JspFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestConverters.java,v 1.4 2003/02/20 22:49:54 ofung Exp $
+ * @version $Id: TestConverters.java,v 1.5 2003/03/11 01:20:26 jvisvanathan Exp $
  * 
  *
  */
@@ -119,7 +119,7 @@ public class TestConverters extends JspFacesTestCase
     // General Methods
     //
 
-    public void testDateConverter(UIComponent root) throws IOException {
+    public void testDateConverter(UIComponent root) throws ConverterException {
         System.out.println("Testing DateConverter");
         UIInput text = new UIInput();
         text.setComponentId("my_input_date");
@@ -160,7 +160,7 @@ public class TestConverters extends JspFacesTestCase
         assertTrue(str.equals(stringToConvert));
     }
 
-    public void testNumberConverter(UIComponent root) throws IOException {
+    public void testNumberConverter(UIComponent root) throws ConverterException {
         System.out.println("Tesing NumberConverter");
         UIInput text = new UIInput();
         text.setComponentId("my_input_number");
@@ -178,7 +178,7 @@ public class TestConverters extends JspFacesTestCase
 
     }
 
-    public void testBooleanConverter(UIComponent root) throws IOException {
+    public void testBooleanConverter(UIComponent root) throws ConverterException {
         System.out.println("Tesing BooleanConverter");
         UIInput text = new UIInput();
         text.setComponentId("my_input_boolean");

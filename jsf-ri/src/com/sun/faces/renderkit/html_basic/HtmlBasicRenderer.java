@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderer.java,v 1.29 2003/03/10 20:23:51 eburns Exp $
+ * $Id: HtmlBasicRenderer.java,v 1.30 2003/03/11 01:20:23 jvisvanathan Exp $
  */
 
 /*
@@ -308,7 +308,7 @@ public abstract class HtmlBasicRenderer extends Renderer {
                     getConvertedValue(context, component,
                     (String)curValue);
                 curValue = convertedCurrentValue;
-            } catch (IOException ioe) {
+            } catch (ConverterException ce) {
             }
         }
         setPreviousValue(component, curValue);
@@ -316,9 +316,9 @@ public abstract class HtmlBasicRenderer extends Renderer {
         String newValue = context.getServletRequest().getParameter(clientId);
         try {
             convertedValue = getConvertedValue(context, component, newValue);   
-        } catch (IOException ioe) {
+        } catch (ConverterException ce) {
             component.setValue(newValue);
-            addConversionErrorMessage(context, component, ioe.getMessage());
+            addConversionErrorMessage(context, component, ce.getMessage());
             component.setValid(false);
             return;
         }    
