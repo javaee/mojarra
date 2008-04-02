@@ -1,5 +1,5 @@
 /*
- * $Id: ExternalContextImpl.java,v 1.14 2003/09/05 18:56:56 eburns Exp $
+ * $Id: ExternalContextImpl.java,v 1.15 2003/09/11 19:00:56 eburns Exp $
  */
 
 /*
@@ -47,7 +47,7 @@ import com.sun.faces.util.Util;
  * servlet implementation.
  *
  * @author Brendan Murray
- * @version $Id: ExternalContextImpl.java,v 1.14 2003/09/05 18:56:56 eburns Exp $
+ * @version $Id: ExternalContextImpl.java,v 1.15 2003/09/11 19:00:56 eburns Exp $
  *
  */
 public class ExternalContextImpl extends ExternalContext {
@@ -316,6 +316,22 @@ public class ExternalContextImpl extends ExternalContext {
 
     public void log(String message, Throwable throwable) {
         servletContext.log(message, throwable);
+    }
+
+    public String getAuthType() {
+	return ((HttpServletRequest)request).getAuthType();
+    }
+
+    public String getRemoteUser() {
+	return ((HttpServletRequest)request).getRemoteUser();
+    }
+
+    public java.security.Principal getUserPrincipal() {
+	return ((HttpServletRequest)request).getUserPrincipal();
+    }
+
+    public boolean isUserInRole(String role) {
+	return ((HttpServletRequest)request).isUserInRole(role);
     }
 
 
