@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlComponentGenerator.java,v 1.18 2006/01/11 15:28:17 rlubke Exp $
+ * $Id: HtmlComponentGenerator.java,v 1.19 2006/03/28 21:12:51 rlubke Exp $
  */
 
 /*
@@ -247,14 +247,7 @@ public class HtmlComponentGenerator extends AbstractGenerator {
         }
         
         
-        writer.indent();
-
-        if (hasPassThroughAttributes) {
-            writer.writeBlockComment("Keep tabs on what passthrough "
-                                     + "attributes are to be rendered.");
-            writer.fwrite("private List passThroughList;");
-            writer.write("\n\n");
-        }
+        writer.indent();       
 
         // Generate the constructor
         
@@ -267,16 +260,7 @@ public class HtmlComponentGenerator extends AbstractGenerator {
             writer.fwrite("setRendererType(\"");
             writer.write(rendererType);
             writer.write("\");\n");
-        }
-        if (hasPassThroughAttributes) {
-            for (PropertyBean p : pbs) {
-                if (p.isPassThrough() && p.getDefaultValue() != null) {
-                    writer.fwrite("setPassThroughAttribute(\"");
-                    writer.write(p.getPropertyName());
-                    writer.write("\");\n");
-                }
-            }
-        }
+        }      
        
         writer.outdent();
         writer.fwrite("}\n\n\n");
@@ -445,13 +429,7 @@ public class HtmlComponentGenerator extends AbstractGenerator {
                 writer.write(var);
                 writer.write("_set = true;\n");
             }
-            // Update Map if this setter was called and this
-            // was a passthrough attribute
-            if (hasPassThroughAttributes && pb.isPassThrough()) {
-                writer.fwrite("setPassThroughAttribute(\"");
-                writer.write(pb.getPropertyName());
-                writer.write("\");\n");
-            }
+           
             writer.outdent();
             writer.fwrite("}\n\n");
 
@@ -558,25 +536,7 @@ public class HtmlComponentGenerator extends AbstractGenerator {
         }
         writer.outdent();
         writer.fwrite("}\n\n\n");
-        
-        if (hasPassThroughAttributes) {
-            writer.fwrite("private void setPassThroughAttribute(String attribute) {\n");
-            writer.indent();
-            writer.fwrite("if (passThroughList == null) {\n");
-            writer.indent();
-            writer.fwrite("passThroughList = new ArrayList(8);\n");            
-            writer.fwrite("this.getAttributes().put(\"javax.faces.component.PassThroughAttributes\", passThroughList);\n");
-            writer.outdent();
-            writer.fwrite("}\n");
-            writer.fwrite("if (!passThroughList.contains(attribute)) {\n");
-            writer.indent();
-            writer.fwrite("passThroughList.add(attribute);\n");
-            writer.outdent();
-            writer.fwrite("}\n");           
-            writer.outdent();
-            writer.fwrite("}\n");            
-        }
-
+               
         // Generate the ending of this class
         writer.outdent();
         writer.write("}\n");

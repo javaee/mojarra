@@ -9,6 +9,6 @@
 
   </head>
   <body>
-      <input id="username" type="text" name="username" maxlength="32" size="20" />
+      <input id="username" type="text" name="username" maxlength="32" onkeypress="attrValue" size="20" />
   </body>
 </html>

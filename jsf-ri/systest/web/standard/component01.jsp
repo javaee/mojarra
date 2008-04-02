@@ -12,11 +12,11 @@
 %>
  <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
  <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
-
+<% request.setAttribute("attrName", "attrValue"); %>
   </head>
   <body>
       <f:view>
-          <h:inputText id="username" binding="#{usernamecomponent}" size="20"/> 
+          <h:inputText id="username" binding="#{usernamecomponent}" size="20" onkeypress="#{requestScope.attrName}"/> 
       </f:view>
   </body>
 </html>

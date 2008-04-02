@@ -134,8 +134,7 @@ public class RenderKitUtils {
           "onsubmit",
           "onunload",
           "rel",
-          "rev",
-          "rows",
+          "rev",          
           "rules",
           "shape",
           "size",
@@ -365,26 +364,22 @@ public class RenderKitUtils {
     public static boolean hasPassThruAttributes(UIComponent component) {
 
         Map<String, Object> attrMap = component.getAttributes();
-        List<String> list = (List<String>) attrMap.get(PASSTHROUGH_LIST_ATTR);
-        if (list == null) {
-            // didn't find the passthrough list.  Scan the 
-            // Component attribute map and store any attributes found
-            // in a list for later use
-            Set<String> keySet = component.getAttributes().keySet();
-            String[] keys = keySet.toArray(new String[keySet.size()]);
-            Arrays.sort(keys);
-            for (String key : keys) {
-                if (Arrays.binarySearch(PASSTHROUGH_ATTRIBUTES, key) > -1) {
-                    if (list == null) {
-                        list = new ArrayList<String>(8);
-                        attrMap.put(PASSTHROUGH_LIST_ATTR, list);
-                    }
-                    list.add(key);
-                }
+
+        // didn't find the passthrough list.  Scan the 
+        // Component attribute map and store any attributes found
+        // in a list for later use
+        
+        boolean attrFound = false;
+        for (String attr : PASSTHROUGH_ATTRIBUTES) {
+            Object value = attrMap.get(attr);
+            attrFound = value != null;
+            if (attrFound) {
+                break;
             }
+
         }
 
-        return (list != null);
+        return (attrFound);
 
     }
 
@@ -448,14 +443,11 @@ public class RenderKitUtils {
         if (hasPassThruAttributes(component)) {
 
             Map<String, Object> attrMap = component.getAttributes();
-            List<String> passThroughList = (List<String>)
-                  attrMap.get(PASSTHROUGH_LIST_ATTR);
-            Collections.sort(passThroughList);
+           
             if (excludes.length > 0) {
                 Arrays.sort(excludes);
             }
-            for (int i = 0, size = passThroughList.size(); i < size; i++) {
-                String attrName = passThroughList.get(i);
+            for (String attrName : PASSTHROUGH_ATTRIBUTES) {                
                 if (excludes.length > 0
                     && Arrays.binarySearch(excludes, attrName) > -1) {
                     continue;
