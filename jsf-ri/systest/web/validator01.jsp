@@ -17,7 +17,7 @@
   appl.addValidator("Length", "com.sun.faces.systest.TestValidator");
 
   // try to retrieve our component from Application
-  Validator result = appl.getValidator("Length");
+  Validator result = appl.createValidator("Length");
   // report the result
   if (result == null || 
       !(result instanceof com.sun.faces.systest.TestValidator)) {

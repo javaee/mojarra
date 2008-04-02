@@ -12,7 +12,7 @@
   Application appl = afactory.getApplication();
 
   // try to retrieve our component from Application
-  UIComponent result = appl.getComponent("TestComponent");
+  UIComponent result = appl.createComponent("TestComponent");
   // report the result
   if (result == null || 
       !(result instanceof com.sun.faces.systest.TestComponent)) {

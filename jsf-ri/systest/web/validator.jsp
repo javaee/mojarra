@@ -12,7 +12,7 @@
   Application appl = afactory.getApplication();
 
   // try to retrieve our validator from Application
-  Validator result = appl.getValidator("TestValidator");
+  Validator result = appl.createValidator("TestValidator");
   // report the result
   if (result == null || 
       !(result instanceof com.sun.faces.systest.TestValidator)) {

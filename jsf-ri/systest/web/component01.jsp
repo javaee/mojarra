@@ -16,7 +16,7 @@
   appl.addComponent("Form", "com.sun.faces.systest.TestComponent");
 
   // try to retrieve our component from Application
-  UIComponent result = appl.getComponent("Form");
+  UIComponent result = appl.createComponent("Form");
   // report the result
   if (result == null || 
       !(result instanceof com.sun.faces.systest.TestComponent)) {

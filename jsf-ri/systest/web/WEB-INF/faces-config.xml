@@ -168,7 +168,7 @@
    <managed-bean>
       <managed-bean-name>usernamecomponent</managed-bean-name>
       <managed-bean-class>
-         javax.faces.component.UIInput
+         javax.faces.component.base.UIInputBase
       </managed-bean-class>
       <managed-bean-scope>request</managed-bean-scope>
       <managed-property>
