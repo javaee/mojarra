@@ -1,5 +1,5 @@
 /*
- * $Id: ChartBean.java,v 1.2 2005/08/22 22:08:58 ofung Exp $
+ * $Id: ChartBean.java,v 1.3 2005/10/26 21:37:11 edburns Exp $
  */
 
 /*
@@ -32,7 +32,7 @@ package demo.model;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import components.model.ChartItem;
+import com.sun.javaee.blueprints.components.ui.model.ChartItem;
 public class ChartBean {
 
     // Bar Chart Properties -------------------------

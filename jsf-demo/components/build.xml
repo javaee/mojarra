@@ -39,8 +39,12 @@
   <property name="webapp" value="jsf-components" />
   <property name="build"   value="${basedir}/build" />
 
+
   <!-- The base directory for demo apps -->
   <property name="jsf-demo.lib" value="../lib"/> 
+
+  <property name="ui.jar" value="${jsf-demo.lib}/ui.jar" />
+  <property name="ui-src.jar" value="${jsf-demo.lib}/ui-src.jar" />
 
   <!-- Configure properties to access the Manager application -->
   <property name="url"      value="http://localhost:8080/manager"/>
@@ -50,6 +54,7 @@
   </path>
 
   <path id="classpath">
+    <pathelement location="${ui.jar}"/>
     <pathelement location="${commons-beanutils.jar}"/>
     <pathelement location="${commons-collections.jar}"/>
     <pathelement location="${commons-digester.jar}"/>
@@ -139,8 +144,6 @@
     <mkdir dir="${build}/${webapp}" />
     <mkdir dir="${build}/classes" />
     <mkdir dir="${build}/classes/${webapp}" />
-    <mkdir dir="${build}/classes/components" />
-    <mkdir dir="${build}/classes/components/META-INF" />
     <mkdir dir="${build}/${webapp}/src/java/components" />
     <mkdir dir="${build}/${webapp}/src/java/demo" />
     <mkdir dir="${build}/${webapp}/WEB-INF/lib" />
@@ -198,23 +201,11 @@
      description="Compile Java files for components, not webapp." >
       <touch file="${build}/last-build"/>
 
-    <javac debug="true" srcdir="src/java" destdir="${build}/classes/components"
-           fork="true">
-	
-        <include name="components/**" />
-        <classpath refid="classpath"/>
-    </javac>
-    
-    <copy todir="${build}/classes/components/META-INF" 
-            file="src/java/components/taglib/components.tld"/>
-
+    <copy todir="${build}/${webapp}/WEB-INF/lib" file="${ui.jar}" />
     <javac debug="true" srcdir="src/java" fork="true" destdir="${build}/${webapp}/WEB-INF/classes">
          <include name="demo/**" />
          <classpath refid="classpath"/>
     </javac>
-
-    <!-- strip out the components -->
-    <delete dir="${build}/${webapp}/WEB-INF/classes/components" />
 
     <copy todir="${build}/${webapp}/WEB-INF">
       <fileset dir="web/WEB-INF"    >
@@ -229,16 +220,8 @@
       </fileset>
     </copy>
 
-
-    <!-- copy over the application configuration resource -->
-    <mkdir  dir="${build}/classes/components/META-INF"/>
-    <copy todir="${build}/classes/components/META-INF"
-           file="src/conf/faces-config.xml"/>
-
     <!-- copy the java source to the webapp for viewing by the user -->
-    <copy todir="${build}/${webapp}/src/java/components">
-      <fileset dir="src/java/components"/>
-    </copy>
+    <unjar dest="${build}/${webapp}/src/java/components" src="${ui-src.jar}"/>
     <copy todir="${build}/${webapp}/src/java/demo">
       <fileset dir="src/java/demo" 
                excludes="src/java/demo/model/CalendarBean.java"/>    
@@ -256,9 +239,6 @@
       </fileset>   
     </copy>
            
-    <jar jarfile="${build}/${webapp}/WEB-INF/lib/demo-components.jar" 
-	 basedir="${build}/classes/components"/>
-
     <jar jarfile="${build}/${example}.war" 
 	 basedir="${build}/${webapp}"/>
 

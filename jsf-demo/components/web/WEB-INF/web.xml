@@ -63,14 +63,6 @@
             Default value is false.
         </description>
   </context-param>
-  <context-param>
-    <param-name>com.sun.faces.managedBeanFactoryDecoratorClass</param-name>
-    <param-value>components.model.LifecycleManagedBeanFactory</param-value>
-  </context-param>
-  <!-- Faces Servlet -->
-  <listener>
-    <listener-class>components.model.LifecycleManagedBeanListener</listener-class>
-  </listener>
   <servlet>
     <servlet-name>Faces Servlet</servlet-name>
     <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
@@ -79,7 +71,7 @@
   <!-- Chart Servlet -->
   <servlet>
     <servlet-name>ChartServlet</servlet-name>
-    <servlet-class>components.renderkit.ChartServlet</servlet-class>
+    <servlet-class>com.sun.javaee.blueprints.components.ui.renderkit.ChartServlet</servlet-class>
   </servlet>
   <!-- Faces Servlet Mapping -->
   <servlet-mapping>

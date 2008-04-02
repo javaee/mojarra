@@ -23,13 +23,13 @@
  Copyright 2005 Sun Microsystems Inc. All Rights Reserved
 -->
 
-<%-- $Id: chart.jsp,v 1.7 2005/08/22 22:09:02 ofung Exp $ --%>
+<%-- $Id: chart.jsp,v 1.8 2005/10/26 21:37:12 edburns Exp $ --%>
 
 
 
 <%@ taglib uri="http://java.sun.com/jsf/core"  prefix="f" %>
 <%@ taglib uri="http://java.sun.com/jsf/html"  prefix="h" %>
-<%@ taglib uri="http://java.sun.com/jsf/demo/components" prefix="d" %>
+<%@ taglib uri="http://java.sun.com/blueprints/ee5/components/ui" prefix="d" %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <f:view>

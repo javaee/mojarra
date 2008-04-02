@@ -1,5 +1,5 @@
 /*
- * $Id: GraphBean.java,v 1.2 2005/08/22 22:08:58 ofung Exp $
+ * $Id: GraphBean.java,v 1.3 2005/10/26 21:37:11 edburns Exp $
  */
 
 /*
@@ -29,9 +29,9 @@
 
 package demo.model;
 
-import components.components.GraphComponent;
-import components.model.Graph;
-import components.model.Node;
+import com.sun.javaee.blueprints.components.ui.components.GraphComponent;
+import com.sun.javaee.blueprints.components.ui.model.Graph;
+import com.sun.javaee.blueprints.components.ui.model.Node;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 

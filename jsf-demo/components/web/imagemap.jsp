@@ -25,7 +25,7 @@
 
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
-<%@ taglib uri="http://java.sun.com/jsf/demo/components" prefix="d" %>
+<%@ taglib uri="http://java.sun.com/blueprints/ee5/components/ui" prefix="d" %>
 
 <f:view>
 
