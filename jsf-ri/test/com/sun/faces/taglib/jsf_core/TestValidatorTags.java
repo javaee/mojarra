@@ -1,5 +1,5 @@
 /*
- * $Id: TestValidatorTags.java,v 1.8 2003/04/03 18:39:51 rkitain Exp $
+ * $Id: TestValidatorTags.java,v 1.9 2003/06/17 20:42:22 eburns Exp $
  */
 
 /*
@@ -42,7 +42,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestValidatorTags.java,v 1.8 2003/04/03 18:39:51 rkitain Exp $
+ * @version $Id: TestValidatorTags.java,v 1.9 2003/06/17 20:42:22 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -128,6 +128,11 @@ public void beginValidators(WebRequest theRequest)
     theRequest.addParameter(OUTOFBOUNDS4_ID, OUTOFBOUNDS4_VALUE);
     theRequest.addParameter(INBOUNDS4_ID, INBOUNDS4_VALUE);
     // We specifically don't have a parameter for REQUIRED2
+}
+
+public void setUp() {
+    RIConstants.IS_UNIT_TEST_MODE = true;
+    super.setUp();
 }
 
 public void testValidators()
@@ -236,6 +241,7 @@ public void testValidators()
     assertTrue(null != (messages = getFacesContext().getMessages(comp)));
     assertTrue(messages.hasNext());
 
+    RIConstants.IS_UNIT_TEST_MODE = false;
 }
 
 

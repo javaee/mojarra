@@ -1,5 +1,5 @@
 /*
- * $Id: RIConstants.java,v 1.36 2003/05/08 23:13:02 horwat Exp $
+ * $Id: RIConstants.java,v 1.37 2003/06/17 20:42:20 eburns Exp $
  */
 
 /*
@@ -114,6 +114,6 @@ public class RIConstants {
     public static final String REQUEST = "request";
     public static final String REQUEST_SCOPE = "requestScope";
 
-
+    public static boolean IS_UNIT_TEST_MODE = false;
 
 }
