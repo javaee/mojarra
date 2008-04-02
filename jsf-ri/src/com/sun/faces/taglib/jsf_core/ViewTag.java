@@ -1,5 +1,5 @@
 /*
- * $Id: ViewTag.java,v 1.1 2003/08/23 00:39:13 jvisvanathan Exp $
+ * $Id: ViewTag.java,v 1.2 2003/08/27 19:33:16 jvisvanathan Exp $
  */
 
 /*
@@ -32,7 +32,7 @@ import org.mozilla.util.Assert;
  *  any renderers or attributes. It exists mainly to save the state of
  *  the response tree once all tags have been rendered.
  *
- * @version $Id: ViewTag.java,v 1.1 2003/08/23 00:39:13 jvisvanathan Exp $
+ * @version $Id: ViewTag.java,v 1.2 2003/08/27 19:33:16 jvisvanathan Exp $
  * 
  *
  */
@@ -129,7 +129,11 @@ public class ViewTag extends UIComponentBodyTag
 	    Assert.assert_it(stateManager != null);
             
             SerializedView view = stateManager.getSerializedView(facesContext);
-            stateManager.saveView(context, bodyContent.getReader(), view);
+            // If the state is going to be saved on the server, then view will
+            // be null.
+            if ( view != null) {
+                stateManager.saveView(context, bodyContent.getReader(), view);
+            }
             
             // for the saveStateInSession case, bodyContent is not altered.
             // write the buffered response along with the state information

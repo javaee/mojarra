@@ -1,5 +1,5 @@
 /* 
- * $Id: ViewHandlerImpl.java,v 1.5 2003/08/25 15:18:36 eburns Exp $ 
+ * $Id: ViewHandlerImpl.java,v 1.6 2003/08/27 19:33:15 jvisvanathan Exp $ 
  */ 
 
 
@@ -20,10 +20,12 @@ import java.io.IOException;
 import java.io.Reader;
 import java.util.Map;
 import java.util.Locale;
+import java.util.Iterator;
 
 import javax.faces.FacesException;
 import javax.faces.component.base.UIViewRootBase;
 import javax.faces.component.UIViewRoot;
+import javax.faces.component.UIComponent;
 import javax.faces.application.ViewHandler;
 import javax.faces.application.StateManager;
 import javax.faces.context.FacesContext;  
@@ -32,7 +34,7 @@ import javax.faces.application.StateManager.SerializedView;
 
 /** 
  * <B>ViewHandlerImpl</B> is the default implementation class for ViewHandler. 
- * @version $Id: ViewHandlerImpl.java,v 1.5 2003/08/25 15:18:36 eburns Exp $ 
+ * @version $Id: ViewHandlerImpl.java,v 1.6 2003/08/27 19:33:15 jvisvanathan Exp $ 
  * 
  * @see javax.faces.application.ViewHandler 
  * 
@@ -66,7 +68,6 @@ public class ViewHandlerImpl extends StateManager
                     Util.SAVING_STATE_ERROR_MESSAGE_ID, params));
         }
         if ( viewRoot == null) {
-            // PENDING (visvan) restoreView javadocs should be updated ???
             viewRoot = new UIViewRootBase();
             context.renderResponse();
         }
@@ -84,21 +85,64 @@ public class ViewHandlerImpl extends StateManager
 	return result;
     }
     
+    public SerializedView getSerializedView(FacesContext context) {
+	SerializedView result = null;
+        boolean isSaveStateInPage = Util.isSaveStateInPage(context);
+        if (!isSaveStateInPage) {
+            UIViewRoot viewRoot = context.getViewRoot();
+            if (viewRoot.isTransient()) {
+                return result;
+            }
+            // honor the transient property and remove children from the tree
+            // that are marked transient.
+            removeTransientChildrenAndFacets((UIComponent)viewRoot);   
+           
+            Map sessionMap = Util.getSessionMap(context);
+            String localeKey = RIConstants.REQUEST_LOCALE + "." + 
+                    context.getViewRoot().getViewId();
+            sessionMap.put(localeKey, context.getLocale());
+            sessionMap.put(viewRoot.getViewId(), viewRoot); 
+        } else {
+	    result = new SerializedView(getTreeStructureToSave(context),
+				    getComponentStateToSave(context));
+	}
+        return result;
+    }
+    
+    public void removeTransientChildrenAndFacets(UIComponent component) {
+        UIComponent kid = null;
+        // deal with children that are marked transient.
+        Iterator kids = component.getChildren().iterator();
+        while (kids.hasNext()) {
+            kid = (UIComponent) kids.next();
+            if (kid.isTransient()) {
+                kids.remove();
+            } else {
+                removeTransientChildrenAndFacets(kid);
+            }
+        }
+        // deal with facets that are marked transient.
+        kids = component.getFacets().values().iterator();
+        while (kids.hasNext()) {
+            kid = (UIComponent) kids.next();
+            if (kid.isTransient()) {
+                kids.remove();
+            } else {
+                removeTransientChildrenAndFacets(kid);
+            }
+            
+        }
+    }
+  
     protected Object getComponentStateToSave(FacesContext context){
         Object state = null;
         UIViewRoot viewRoot =  context.getViewRoot();
-        // PENDING (visvan) Just to get the save state system working,the first
-        // just saves the root in session, instead of saving state and structure
-        // separately.
-        boolean isSaveStateInPage = Util.isSaveStateInPage(context);
-        if (isSaveStateInPage) {
-            try {
-                state = viewRoot.processGetState(context);
-            } catch (IOException ioe) {
-                Object [] params = { ioe.getMessage() };
-                throw new FacesException(Util.getExceptionMessage(
-                        Util.SAVING_STATE_ERROR_MESSAGE_ID, params));
-            }
+        try {
+            state = viewRoot.processGetState(context);
+        } catch (IOException ioe) {
+            Object [] params = { ioe.getMessage() };
+            throw new FacesException(Util.getExceptionMessage(
+                    Util.SAVING_STATE_ERROR_MESSAGE_ID, params));
         }
         return state;
     }
@@ -123,17 +167,11 @@ public class ViewHandlerImpl extends StateManager
         } else {
             // restore tree from session.
             Map sessionMap = Util.getSessionMap(context);
-            // PENDING (visvan) next phase of state saving will restore the
-            // serialized state instead of the root which would then be 
-            // further processed to get the tree structure and treeState.
-            // similar to saveStateInPage ???
             viewRoot = (UIViewRoot) sessionMap.get(viewId);
             if (viewRoot != null) {
                 // restore locale
-                // PENDING (visvan) do we need to store locale based on viewId ?
-                // just like the tree ?
-                Locale locale = (Locale)
-                        sessionMap.get(RIConstants.REQUEST_LOCALE);
+                String localeKey = RIConstants.REQUEST_LOCALE + "." + viewId;
+                Locale locale = (Locale) sessionMap.get(localeKey);
                 if (locale != null) {
                     context.setLocale(locale);
                 }
@@ -157,24 +195,9 @@ public class ViewHandlerImpl extends StateManager
     
     public void saveView(FacesContext context, Reader content, 
             SerializedView state) {
-        // if the save state in session option is selected, no manipulation 
-        // is necessary.
-        boolean isSaveStateInPage = Util.isSaveStateInPage(context);
-        if (!isSaveStateInPage) {
-            Map sessionMap = Util.getSessionMap(context);
-            // does the locale need to be persisted based on tree Id ?
-            sessionMap.put(RIConstants.REQUEST_LOCALE, context.getLocale());
-            // PENDING (visvan) next phase of state saving will save the
-            // serialized state instead of the root.
-            sessionMap.put(context.getViewRoot().getViewId(), 
-                    context.getViewRoot()); 
-        } else {
-            // PENDING (visvan) implement saveStateInPage in the next phase
-            // of state saving.
-           /* Util.getResponseStateManager.writeState(content, 
+        /* Util.getResponseStateManager.writeState(content, 
                 context.getResponseWriter(),state.getStructure(), state.getState());
-            */
-        }
+        */
     }
     
     public void writeStateMarker(FacesContext context) throws IOException {

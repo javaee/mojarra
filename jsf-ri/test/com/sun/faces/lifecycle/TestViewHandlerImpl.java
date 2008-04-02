@@ -1,5 +1,5 @@
 /* 
- * $Id: TestViewHandlerImpl.java,v 1.22 2003/08/27 18:52:06 eburns Exp $ 
+ * $Id: TestViewHandlerImpl.java,v 1.23 2003/08/27 19:33:17 jvisvanathan Exp $ 
  */ 
 
 
@@ -32,6 +32,7 @@ import javax.faces.component.base.UIComponentBase;
 import javax.faces.component.base.UIViewRootBase;
 import javax.faces.validator.Validator; 
 import javax.servlet.ServletException;
+import javax.servlet.http.HttpSession;
 
 import com.sun.faces.JspFacesTestCase; 
 import com.sun.faces.FileOutputResponseWrapper; 
@@ -41,13 +42,17 @@ import com.sun.faces.CompareFiles;
 import com.sun.faces.TestBean;
 import com.sun.faces.application.ViewHandlerImpl;
 
+import javax.faces.component.UIComponent;
+import javax.faces.component.base.UIFormBase;
+import javax.faces.component.base.UIInputBase;
+import javax.faces.component.base.UIPanelBase;
+import javax.faces.component.base.UIViewRootBase;
+import javax.faces.component.UIViewRoot;
 
 import java.io.IOException; 
-
-
 import java.util.Iterator; 
 import java.util.ArrayList; 
-
+import java.util.Map;
 
 import javax.servlet.jsp.PageContext; 
 
@@ -58,7 +63,7 @@ import javax.servlet.jsp.PageContext;
  * 
  * <B>Lifetime And Scope</B> <P> 
  * 
- * @version $Id: TestViewHandlerImpl.java,v 1.22 2003/08/27 18:52:06 eburns Exp $ 
+ * @version $Id: TestViewHandlerImpl.java,v 1.23 2003/08/27 19:33:17 jvisvanathan Exp $ 
  * 
  * @see Blah 
  * @see Bloo 
@@ -166,6 +171,75 @@ public void testRender()
 
     assertTrue(verifyExpectedOutput()); 
 } 
+
+public void testTransient()
+{
+    
+    // precreate tree and set it in session and make sure the tree is
+    // restored from session.
+    getFacesContext().setViewRoot(null);
+    UIViewRoot root = new UIViewRootBase();
+    root.setViewId(TEST_URI);
+    
+    UIFormBase basicForm = new UIFormBase();
+    basicForm.setId("basicForm");
+    UIInputBase userName = new UIInputBase();
+    
+    userName.setId("userName");
+    userName.setTransient(true);
+    root.getChildren().add(basicForm);
+    basicForm.getChildren().add(userName);
+    
+    UIPanelBase panel1 = new UIPanelBase();
+    panel1.setId("panel1");
+    basicForm.getChildren().add(panel1);
+    
+    UIInputBase userName1 = new UIInputBase();
+    userName1.setId("userName1");
+    userName1.setTransient(true);
+    panel1.getChildren().add(userName1);
+    
+    UIInputBase userName2 = new UIInputBase();
+    userName2.setId("userName2");
+    panel1.getChildren().add(userName2);
+    
+    UIInputBase userName3 = new UIInputBase();
+    userName3.setTransient(true);
+    panel1.getFacets().put("userName3", userName3);
+    
+    UIInputBase userName4 = new UIInputBase();
+    panel1.getFacets().put("userName4",userName4);
+    
+    HttpSession session = (HttpSession) 
+        getFacesContext().getExternalContext().getSession(false);
+    session.setAttribute(TEST_URI, root);
+    
+    getFacesContext().setViewRoot(root);
+
+    ViewHandlerImpl viewHandler = new ViewHandlerImpl(); 
+    viewHandler.getStateManager().getSerializedView(getFacesContext());
+   
+    // make sure that the transient property is not persisted.
+    basicForm = (UIFormBase)(getFacesContext().getViewRoot()).findComponent("basicForm");
+    assertTrue(basicForm != null);
+    
+    userName = (UIInputBase)basicForm.findComponent("userName");
+//    assertTrue(userName == null);
+    
+    panel1 = (UIPanelBase)basicForm.findComponent("panel1");
+    assertTrue(panel1 != null);
+    
+    userName1 = (UIInputBase)panel1.findComponent("userName1");
+    assertTrue(userName1 == null);
+    
+    userName2 = (UIInputBase)panel1.findComponent("userName2");
+    assertTrue(userName2 != null);
+    
+    // make sure facets work correctly when marked transient.
+    Map facetList = panel1.getFacets();
+    assertTrue(!(facetList.containsKey("userName3")));
+    assertTrue(facetList.containsKey("userName4"));
+}
 
 
 } // end of class TestViewHandlerImpl 
