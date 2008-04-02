@@ -1,5 +1,5 @@
 /*
- * $Id: MapEntryRule.java,v 1.3 2004/02/04 23:46:22 ofung Exp $
+ * $Id: MapEntryRule.java,v 1.4 2005/06/23 16:10:31 rlubke Exp $
  */
 
 /*
@@ -47,13 +47,8 @@ public class MapEntryRule extends Rule {
     public void begin(String namespace, String name,
                       Attributes attributes) throws Exception {
 
-        MapEntriesBean mesb = null;
-        try {
-            mesb = (MapEntriesBean) digester.peek();
-        } catch (Exception e) {
-            throw new IllegalStateException
-                ("No parent MapEntriesBean on object stack");
-        }
+        assert (digester.peek() instanceof MapEntriesBean);
+        
         if (digester.getLogger().isDebugEnabled()) {
             digester.getLogger().debug("[MapEntryRule]{" +
                                        digester.getMatch() +

@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKitRule.java,v 1.3 2004/02/04 23:46:23 ofung Exp $
+ * $Id: RenderKitRule.java,v 1.4 2005/06/23 16:10:31 rlubke Exp $
  */
 
 /*
@@ -47,13 +47,8 @@ public class RenderKitRule extends FeatureRule {
     public void begin(String namespace, String name,
                       Attributes attributes) throws Exception {
 
-        FacesConfigBean fcb = null;
-        try {
-            fcb = (FacesConfigBean) digester.peek();
-        } catch (Exception e) {
-            throw new IllegalStateException
-                ("No parent FacesConfigBean on object stack");
-        }
+        assert (digester.peek() instanceof FacesConfigBean);
+        
         if (digester.getLogger().isDebugEnabled()) {
             digester.getLogger().debug("[RenderKitRule]{" +
                                        digester.getMatch() +
