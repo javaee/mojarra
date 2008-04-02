@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationAssociate.java,v 1.35 2006/10/03 21:18:20 rlubke Exp $
+ * $Id: ApplicationAssociate.java,v 1.36 2006/12/06 23:33:54 youngm Exp $
  */
 
 /*
@@ -7,23 +7,23 @@
  * of the Common Development and Distribution License
  * (the License). You may not use this file except in
  * compliance with the License.
- * 
+ *
  * You can obtain a copy of the License at
  * https://javaserverfaces.dev.java.net/CDDL.html or
- * legal/CDDLv1.0.txt. 
+ * legal/CDDLv1.0.txt.
  * See the License for the specific language governing
  * permission and limitations under the License.
- * 
+ *
  * When distributing Covered Code, include this CDDL
  * Header Notice in each file and include the License file
- * at legal/CDDLv1.0.txt.    
+ * at legal/CDDLv1.0.txt.
  * If applicable, add the following below the CDDL Header,
  * with the fields enclosed by brackets [] replaced by
  * your own identifying information:
  * "Portions Copyrighted [year] [name of copyright owner]"
- * 
+ *
  * [Name of File] [ver.__] [Date]
- * 
+ *
  * Copyright 2005 Sun Microsystems Inc. All Rights Reserved
  */
 
@@ -67,7 +67,7 @@ import com.sun.faces.util.Util;
  * <p>Break out the things that are associated with the Application, but
  * need to be present even when the user has replaced the Application
  * instance.</p>
- * 
+ *
  * <p>For example: the user replaces ApplicationFactory, and wants to
  * intercept calls to createValueExpression() and createMethodExpression() for
  * certain kinds of expressions, but allow the existing application to
@@ -132,7 +132,7 @@ public class ApplicationAssociate {
     private CompositeELResolver facesELResolverForJsp = null;
 
     private InjectionProvider injectionProvider;
-    
+
     private String contextName;
 
     public ApplicationAssociate(ApplicationImpl appImpl) {
@@ -154,7 +154,7 @@ public class ApplicationAssociate {
         externalContext.getApplicationMap().put(APPLICATION_IMPL_ATTR_NAME,
                                                 appImpl);
         externalContext.getApplicationMap().put(ASSOCIATE_KEY, this);
-        managedBeanFactoriesMap = new HashMap<String, ManagedBeanFactory>();       
+        managedBeanFactoriesMap = new HashMap<String, ManagedBeanFactory>();
         caseListMap = new HashMap<String,List<ConfigNavigationCase>>();
         wildcardMatchList = new TreeSet<String>(new SortIt());
         injectionProvider = InjectionProviderFactory.createInstance(externalContext);
@@ -162,12 +162,18 @@ public class ApplicationAssociate {
 
     public static ApplicationAssociate getInstance(ExternalContext
         externalContext) {
+    	if(externalContext == null) {
+    		return null;
+    	}
         Map applicationMap = externalContext.getApplicationMap();
     return ((ApplicationAssociate)
         applicationMap.get(ASSOCIATE_KEY));
     }
 
     public static ApplicationAssociate getInstance(ServletContext context) {
+    	if(context == null) {
+    		return null;
+    	}
         return (ApplicationAssociate) context.getAttribute(ASSOCIATE_KEY);
     }
 
@@ -230,21 +236,21 @@ public class ApplicationAssociate {
     public List<ELResolver> getApplicationELResolvers() {
         return app.getApplicationELResolvers();
     }
-    
+
     public InjectionProvider getInjectionProvider() {
         return injectionProvider;
     }
-    
+
     public void setContextName(String contextName) {
         this.contextName = contextName;
     }
-    
+
     public String getContextName() {
         return contextName;
     }
 
     /**
-     * Maintains the PropertyResolver called through 
+     * Maintains the PropertyResolver called through
      * Application.setPropertyResolver()
      */
     @SuppressWarnings("deprecation")
@@ -253,7 +259,7 @@ public class ApplicationAssociate {
     }
 
      /**
-     * Returns the PropertyResolver called through 
+     * Returns the PropertyResolver called through
      * Application.getPropertyResolver()
      */
      @SuppressWarnings("deprecation")
@@ -262,7 +268,7 @@ public class ApplicationAssociate {
     }
 
     /**
-     * Maintains the PropertyResolver called through 
+     * Maintains the PropertyResolver called through
      * Application.setVariableResolver()
      */
     @SuppressWarnings("deprecation")
@@ -271,7 +277,7 @@ public class ApplicationAssociate {
     }
 
     /**
-     * Returns the VariableResolver called through 
+     * Returns the VariableResolver called through
      * Application.getVariableResolver()
      */
     @SuppressWarnings("deprecation")
@@ -438,7 +444,7 @@ public class ApplicationAssociate {
      * with ManagedBeanFactoryImpl object keyed by the bean name.
      * Find the ManagedBeanFactoryImpl object and if it exists instantiate
      * the bean and store it in the appropriate scope, if any.</p>
-     * 
+     *
      * @param context         The Faces context.
      * @param managedBeanName The name identifying the managed bean.
      * @return The managed bean.
@@ -469,7 +475,7 @@ public class ApplicationAssociate {
                         getApplicationMap();
                 synchronized (applicationMap) {
                     try {
-                        bean = managedBean.newInstance(context);                        
+                        bean = managedBean.newInstance(context);
                         if (LOGGER.isLoggable(Level.FINE)) {
                             LOGGER.fine("Created application scoped bean " +
                                         managedBeanName + " successfully ");
@@ -489,7 +495,7 @@ public class ApplicationAssociate {
                 Map<String,Object> sessionMap = Util.getSessionMap(context);
                 synchronized (sessionMap) {
                     try {
-                        bean = managedBean.newInstance(context);                       
+                        bean = managedBean.newInstance(context);
                         if (LOGGER.isLoggable(Level.FINE)) {
                             LOGGER.fine("Created session scoped bean "
                                         + managedBeanName + " successfully ");
@@ -509,7 +515,7 @@ public class ApplicationAssociate {
         } else {
             scopeIsRequest = (scope == Scope.REQUEST);
             try {
-                bean = managedBean.newInstance(context);               
+                bean = managedBean.newInstance(context);
                 if (LOGGER.isLoggable(Level.FINE)) {
                     LOGGER.log(Level.FINE, "Created bean " + managedBeanName +
                                            " successfully ");
@@ -539,10 +545,10 @@ public class ApplicationAssociate {
     boolean isResponseRendered() {
     return responseRendered;
     }
-    
+
 
     /**
-     * <p>Attempts to look up a ManagedBeanFactory from the 
+     * <p>Attempts to look up a ManagedBeanFactory from the
      * managedBeanFactoriesMap.  If not </code>null</code> and
      * <code>ManagedBeanFactory.isInjectable()</code> returns true,
      * pass <code>bean</code> to <code>InjectionProvider.invokePreDestr
@@ -551,7 +557,7 @@ public class ApplicationAssociate {
      * annotated methods.  If <code>null</code>, all beans in argument
      * <code>scope</code> have their PreDestroy annotated methods
      * called.
-     * 
+     *
      * @param bean the target bean associated with <code>beanName</code>
      *
      * @param scope the managed bean scope in which to look for the bean
@@ -568,8 +574,8 @@ public class ApplicationAssociate {
                     LOGGER.log(Level.SEVERE, ipe.getMessage(), ipe);
                 }
             }
-        }        
-    }   
+        }
+    }
 
     /**
      * This Comparator class will help sort the <code>ConfigNavigationCase</code> objects
@@ -578,7 +584,7 @@ public class ApplicationAssociate {
      */
     static class SortIt implements Comparator<String> {
 
-        public int compare(String fromViewId1, String fromViewId2) {                     
+        public int compare(String fromViewId1, String fromViewId2) {
             return -(fromViewId1.compareTo(fromViewId2));
         }
     }
