@@ -26,4 +26,18 @@
             <renderer-type>com.sun.faces.sandbox.YuiCalendarRenderer</renderer-type>
         </component>
     </tag>
+    <tag>
+        <tag-name>download</tag-name>
+        <component>
+            <component-type>com.sun.faces.sandbox.FileDownload</component-type>
+            <renderer-type>com.sun.faces.sandbox.FileDownloadRenderer</renderer-type>
+        </component>
+    </tag>
+    <tag>
+        <tag-name>multiFileUpload</tag-name>
+        <component>
+            <component-type>ccom.sun.faces.sandbox.MultiFileUpload</component-type>
+            <renderer-type>com.sun.faces.sandbox.MultiFileUploadRenderer</renderer-type>
+        </component>
+    </tag>
 </facelet-taglib>

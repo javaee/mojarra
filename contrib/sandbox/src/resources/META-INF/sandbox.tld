@@ -1140,4 +1140,81 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.2//EN"
             </description>
         </attribute>
     </tag>
+    <!-- ******************************************************************* -->
+    <!-- Begin HtmlDownload tag attributes                                   -->
+    <!-- ******************************************************************* -->
+    <tag>
+        <description>Download an arbitrary binary object</description>
+        <name>download</name>
+        <tag-class>com.sun.faces.sandbox.taglib.DownloadTag</tag-class>
+        <body-content>JSP</body-content>
+        <attribute>
+            <name>id</name>
+            <required>false</required>
+            <rtexprvalue>false</rtexprvalue>
+            <description><![CDATA[ ]]></description>
+        </attribute>
+        <attribute>
+            <name>data</name>
+            <required>true</required>
+            <rtexprvalue>false</rtexprvalue>
+            <description><![CDATA[The current value of this component.]]></description>
+        </attribute>
+
+        <attribute>
+            <name>method</name>
+            <required>true</required>
+            <rtexprvalue>false</rtexprvalue>
+            <description><![CDATA[The method for displaying the object:  inline or download ]]></description>
+        </attribute>
+        <attribute>
+            <name>mimeType</name>
+            <required>true</required>
+            <rtexprvalue>false</rtexprvalue>
+            <description><![CDATA[The mime type of the object]]></description>
+        </attribute>
+        <attribute>
+            <name>fileName</name>
+            <required>false</required>
+            <rtexprvalue>false</rtexprvalue>
+            <description><![CDATA[The filename of the object; used only for method=download]]></description>
+        </attribute>
+
+        <attribute>
+            <name>width</name>
+            <required>false</required>
+            <rtexprvalue>false</rtexprvalue>
+            <description><![CDATA[The width of the object to displayed; used only for method=inline]]></description>
+        </attribute>
+        <attribute>
+            <name>height</name>
+            <required>false</required>
+            <rtexprvalue>false</rtexprvalue>
+            <description><![CDATA[The height of the object to be displayed; used only for method=inline]]></description>
+        </attribute>
+        <attribute>
+            <name>text</name>
+            <required>false</required>
+            <rtexprvalue>false</rtexprvalue>
+            <description><![CDATA[The text of the download link; used only for method=download]]></description>
+        </attribute>
+        <attribute>
+            <name>iframe</name>
+            <required>false</required>
+            <rtexprvalue>false</rtexprvalue>
+            <description><![CDATA[Whether or not to use asn iframe for displaying the object; used only for method=inline]]></description>
+        </attribute>
+    </tag>
+    <!-- ******************************************************************* -->
+    <!-- End FileDownload tag attributes                                     -->
+    <!-- ******************************************************************* -->
+    <!-- ******************************************************************* -->
+    <!-- Begin MultiFileUpload tag attributes                                -->
+    <!-- ******************************************************************* -->
+    
+    <!--  TODO                                                               -->
+    
+    <!-- ******************************************************************* -->
+    <!-- End MultiFileUpload tag attributes                                  -->
+    <!-- ******************************************************************* -->
 </taglib>

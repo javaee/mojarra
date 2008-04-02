@@ -43,6 +43,8 @@
     <!-- The base directory for compilation targets -->
     <property name="build.dir" value="build"/>
     <property name="build.classes.dir" value="${build.dir}/classes"/>
+    <property name="build.applet.dir" value="${build.dir}/applet"/>
+    <property name="dep.jar.dir" value="${build.classes.dir}/META-INF/jars/" />
 
     <!-- The base directory for distribution targets -->
     <property name="dist.dir" value="${basedir}/dist"/>
@@ -52,6 +54,20 @@
 
     <!-- The base resource directory -->
     <property name="resource.dir" value="${basedir}/src/resources"/>
+
+    <!-- Dependencies -->
+    <property name="sandbox.dependency.base.dir" value="${basedir}/dependencies"/>
+    <property name="httpclient.version" value="3.1-beta1" />
+    <property name="fileupload.version" value="1.1.1" />
+    <property name="codec.version" value="1.3" />
+    <property name="io.version" value="1.2" />
+    <property name="logging.version" value="1.1" />
+
+    <property name="httpclient.home" value="${sandbox.dependency.base.dir}/commons-httpclient-${httpclient.version}"/>
+    <property name="fileupload.home" value="${sandbox.dependency.base.dir}/commons-fileupload-${fileupload.version}"/>
+    <property name="codec.home" value="${sandbox.dependency.base.dir}/commons-codec-${codec.version}"/>
+    <property name="io.home" value="${sandbox.dependency.base.dir}/commons-io-${io.version}"/>
+    <property name="logging.home" value="${sandbox.dependency.base.dir}/commons-logging-${logging.version}"/>
 
     <property name="name" value="jsf-ri-sandbox"/>
     <property name="sb.impl.version" value="0.1"/>
@@ -75,25 +91,119 @@
 
     <target name="prepare" depends="init" description="Prepare build directory">
         <mkdir dir="${build.dir}"/>
+        <mkdir dir="${build.applet.dir}"/>
         <mkdir dir="${build.classes.dir}"/>
         <mkdir dir="${build.classes.dir}/META-INF"/>
         <mkdir dir="${build.dir}/javadocs"/>
         <mkdir dir="${build.dir}/tlddocs"/>
         <mkdir dir="${build.dir}/lib"/>       
+        <mkdir dir="${dep.jar.dir}"/>       
+    </target>
+
+    <target name="update" description="Download project dependencies">
+        <mkdir dir="${sandbox.dependency.base.dir}/downloads/"/>
+        <!-- setup the proxy if necessary -->
+        <if>
+            <and>
+                <length string="${http.proxy.host}" when="greater" length="0"/>
+                <length string="${http.proxy.port}" when="greater" length="0"/>
+            </and>
+            <then>
+                <setproxy proxyhost="${http.proxy.host}" proxyport="${http.proxy.port}"/>
+            </then>
+        </if>
+        <!-- httpclient -->
+        <if>
+            <not>
+                <available file="${httpclient.home}" property="ignored"/>
+            </not>
+            <then>
+                <get src="http://www.ibiblio.org/pub/mirrors/apache/jakarta/commons/httpclient/binary/commons-httpclient-${httpclient.version}.zip"
+                     dest="${sandbox.dependency.base.dir}/downloads/httpclient-${httpclient.version}.zip"
+                     usetimestamp="true"/>
+                <unzip src="${sandbox.dependency.base.dir}/downloads/httpclient-${httpclient.version}.zip" dest="${sandbox.dependency.base.dir}"/>
+            </then>
+        </if>
+        <!-- fileupload -->
+        <if>
+            <not>
+                <available file="${fileupload.home}" property="ignored"/>
+            </not>
+            <then>
+                <get src="http://www.ibiblio.org/pub/mirrors/apache/jakarta/commons/fileupload/binaries/commons-fileupload-${fileupload.version}.zip"
+                     dest="${sandbox.dependency.base.dir}/downloads/fileupload-${fileupload.version}.zip"
+                     usetimestamp="true"/>
+                <unzip src="${sandbox.dependency.base.dir}/downloads/fileupload-${fileupload.version}.zip" dest="${sandbox.dependency.base.dir}"/>
+            </then>
+        </if>
+        <!-- codec -->
+        <if>
+            <not>
+                <available file="${codec.home}" property="ignored"/>
+            </not>
+            <then>
+                <get src="http://www.ibiblio.org/pub/mirrors/apache/jakarta/commons/codec/binaries/commons-codec-${codec.version}.zip"
+                     dest="${sandbox.dependency.base.dir}/downloads/codec-${codec.version}.zip"
+                     usetimestamp="true"/>
+                <unzip src="${sandbox.dependency.base.dir}/downloads/codec-${codec.version}.zip" dest="${sandbox.dependency.base.dir}"/>
+            </then>
+        </if>
+        <!-- io -->
+        <if>
+            <not>
+                <available file="${io.home}" property="ignored"/>
+            </not>
+            <then>
+                <get src="http://www.ibiblio.org/pub/mirrors/apache/jakarta/commons/io/binaries/commons-io-${io.version}.zip"
+                     dest="${sandbox.dependency.base.dir}/downloads/io-${io.version}.zip"
+                     usetimestamp="true"/>
+                <unzip src="${sandbox.dependency.base.dir}/downloads/io-${io.version}.zip" dest="${sandbox.dependency.base.dir}"/>
+            </then>
+        </if>
+        <!-- logging -->
+        <if>
+            <not>
+                <available file="${logging.home}" property="ignored"/>
+            </not>
+            <then>
+                <get src="http://www.ibiblio.org/pub/mirrors/apache/jakarta/commons/logging/binaries/commons-logging-${logging.version}.zip"
+                     dest="${sandbox.dependency.base.dir}/downloads/logging-${logging.version}.zip"
+                     usetimestamp="true"/>
+                <unzip src="${sandbox.dependency.base.dir}/downloads/logging-${logging.version}.zip" dest="${sandbox.dependency.base.dir}"/>
+            </then>
+        </if>
     </target>
 
     <target name="compile" depends="prepare" description="Just compile the classes">
         <if>
             <equals arg1="${container.name}" arg2="glassfish"/>
             <then>
-                <property name="exclude.path" value=""/>
+                <property name="exclude.path" value="com/sun/faces/sandbox/web/**"/>
             </then>
             <else>
-                <property name="exclude.path" value="com/sun/faces/vendor/**"/>
+                <property name="exclude.path" value="com/sun/faces/vendor/**,com/sun/faces/sandbox/web/**"/>
             </else>
         </if>
 
+        <path id="sandbox.compile.classpath">
+            <fileset dir="${httpclient.home}" includes="*.jar"/>
+            <fileset dir="${fileupload.home}" includes="*.jar"/>
+            <fileset dir="${codec.home}" includes="*.jar"/>
+            <fileset dir="${io.home}" includes="*.jar"/>
+        </path>
+
         <!-- Run javac through everything -->
+        <jsf.javac srcdir="${source.dir}"
+                   destdir="${build.applet.dir}"
+                   includes="com/sun/faces/sandbox/web/"
+                   source="1.5"
+                   target="1.5">
+            <classpath>
+                <path refid="impl.compile.classpath"/>
+                <path refid="sandbox.compile.classpath"/>
+            </classpath>
+        </jsf.javac>
+
         <jsf.javac srcdir="${source.dir}"
                    destdir="${build.classes.dir}"
                    excludes="${exclude.path}"
@@ -101,12 +211,16 @@
                    target="1.5">
             <classpath>
                 <path refid="impl.compile.classpath"/>
+                <path refid="sandbox.compile.classpath"/>
             </classpath>
         </jsf.javac>
 
         <copy toDir="${build.classes.dir}/META-INF">
             <fileset dir="${resource.dir}/META-INF/" />
         </copy>
+        <copy file="${httpclient.home}/commons-httpclient-${httpclient.version}.jar" todir="${dep.jar.dir}" />
+        <copy file="${codec.home}/commons-codec-${codec.version}.jar" todir="${dep.jar.dir}" />
+        <copy file="${logging.home}/commons-logging-${logging.version}.jar" todir="${dep.jar.dir}" />
 
     </target>
 

@@ -134,4 +134,41 @@
             <renderer-class>com.sun.faces.sandbox.render.YuiBarRenderer</renderer-class>
         </renderer>    
     </render-kit>
+    <component>
+        <description></description>
+        <display-name>Download</display-name>
+        <component-type>com.sun.faces.sandbox.Download</component-type>
+        <component-class>com.sun.faces.sandbox.component.FileDownload</component-class>
+        <component-extension>
+            <renderer-type>com.sun.faces.sandbox.FileDownloadRenderer</renderer-type>
+        </component-extension>
+    </component>
+
+    <render-kit>
+        <description>Renderkit implementation for the Download component</description>
+        <renderer>
+            <component-family>com.sun.faces.sandbox.FileDownload</component-family>
+            <renderer-type>com.sun.faces.sandbox.FileDownloadRenderer</renderer-type>
+            <renderer-class>com.sun.faces.sandbox.render.FileDownloadRenderer</renderer-class>
+        </renderer>
+    </render-kit>
+    
+    <component>
+        <description></description>
+        <display-name>MultiFileUpload</display-name>
+        <component-type>com.sun.faces.sandbox.MultiFileUpload</component-type>
+        <component-class>com.sun.faces.sandbox.component.MultiFileUpload</component-class>
+        <component-extension>
+            <renderer-type>com.sun.faces.sandbox.MultiFileUploadRenderer</renderer-type>
+        </component-extension>
+    </component>
+
+    <render-kit>
+        <description>Renderkit implementation for the Download component</description>
+        <renderer>
+            <component-family>com.sun.faces.sandbox.MultiFileUpload</component-family>
+            <renderer-type>com.sun.faces.sandbox.MultiFileUploadRenderer</renderer-type>
+            <renderer-class>com.sun.faces.sandbox.render.MultiFileUploadRenderer</renderer-class>
+        </renderer>
+    </render-kit>
 </faces-config>

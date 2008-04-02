@@ -1,0 +1,10 @@
+<applet code="com.iecokc.faces.components.upload.multifile.applet.%%%APPLET_CLASS%%%" name="FaceLiftMultiFileUpload" 
+	archive="%%%DEPS%%%" width="%%%WIDTH%%%" height="%%%HEIGHT%%%">
+		<param name="type" value="application/x-java-applet;version=1.5"/>
+		<param name="url" value="%%%UPLOAD_URL%%%"/>
+		<param name="startdir" value="%%%START_DIR%%%"/>
+		<param name="buttonText" value="%%%BUTTON_TEXT%%%"/>
+		<param name="fileFilter" value="%%%FILE_FILTER%%%"/>
+		<param name="sessionId" value="%%%SESSION_ID%%%"/>
+	Java 5 or higher plugin required.
+</applet>
