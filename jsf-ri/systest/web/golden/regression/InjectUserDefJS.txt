@@ -1,0 +1,24 @@
+
+
+
+
+
+
+
+
+<html>
+    <head>
+        <title>User Defined JS Injection Test</title>        
+    </head>
+    <body>
+        <form id="j_id_id16" name="j_id_id16" method="post" action="/jsf-systest/faces/regression/InjectUserDefJS.jsp;jsessionid=57b1f1c144ee219395f91461791a5" enctype="application/x-www-form-urlencoded">
+<a href="#" onclick="var a=function(){alert('Are you sure?');};var b=function(){clearFormHiddenParams_j_id_id16('j_id_id16');document.forms['j_id_id16']['j_id_id16:j_idcl'].value='j_id_id16:j_id_id18'; document.forms['j_id_id16'].submit(); return false;};return (a()==false) ? false : b();">Link</a><input type="hidden" name="j_id_id16:j_idcl" /><script type="text/javascript" language="Javascript"><!--
+
+function clearFormHiddenParams_j_id_id16(curFormName) {
+  var curForm = document.forms[curFormName];
+ curForm.elements['j_id_id16:j_idcl'].value = null;
+}
+//-->
+</script><input type="submit" name="j_id_id16:j_id_id20" value="Button" onclick="clearFormHiddenParams_j_id_id16(this.form.id);alert('Are you sure?')" /><input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="j_id3:j_id4" /><input type="hidden" name="j_id_id16" value="j_id_id16" /></form>
+    </body>
+</html>
