@@ -43,13 +43,6 @@
     <property>
       <display-name></display-name>
       <icon></icon>
-      <property-name>required</property-name>
-      <property-class>boolean</property-class>
-      <tag-attribute>yes</tag-attribute>
-    </property>
-    <property>
-      <display-name></display-name>
-      <icon></icon>
       <property-name>actionRef</property-name>
       <property-class>java.lang.String</property-class>
       <tag-attribute>yes</tag-attribute>
@@ -227,13 +220,6 @@
     <property>
       <display-name></display-name>
       <icon></icon>
-      <property-name>required</property-name>
-      <property-class>boolean</property-class>
-      <tag-attribute>yes</tag-attribute>
-    </property>
-    <property>
-      <display-name></display-name>
-      <icon></icon>
       <property-name>value</property-name>
       <property-class>java.lang.String</property-class>
       <tag-attribute>yes</tag-attribute>
@@ -290,7 +276,7 @@
     <property>
       <display-name></display-name>
       <icon></icon>
-      <property-name>accessKey</property-name>
+      <property-name>accesskey</property-name>
       <property-class>java.lang.String</property-class>
       <tag-attribute>yes</tag-attribute>
     </property>
@@ -396,13 +382,6 @@
     <property>
       <display-name></display-name>
       <icon></icon>
-      <property-name>required</property-name>
-      <property-class>boolean</property-class>
-      <tag-attribute>yes</tag-attribute>
-    </property>
-    <property>
-      <display-name></display-name>
-      <icon></icon>
       <property-name>lang</property-name>
       <property-class>java.lang.String</property-class>
       <tag-attribute>yes</tag-attribute>
@@ -503,7 +482,7 @@
     <property>
       <display-name></display-name>
       <icon></icon>
-      <property-name>url</property-name>
+      <property-name>URL</property-name>
       <property-class>java.lang.String</property-class>
       <tag-attribute>yes</tag-attribute>
     </property>
@@ -1015,6 +994,27 @@
       <property-class>java.lang.String</property-class>
       <tag-attribute>yes</tag-attribute>
     </property>
+    <property>
+      <display-name></display-name>
+      <icon></icon>
+      <property-name>value</property-name>
+      <property-class>java.lang.String</property-class>
+      <tag-attribute>yes</tag-attribute>
+    </property>
+    <property>
+      <display-name></display-name>
+      <icon></icon>
+      <property-name>valueRef</property-name>
+      <property-class>java.lang.String</property-class>
+      <tag-attribute>yes</tag-attribute>
+    </property>
+    <property>
+      <display-name></display-name>
+      <icon></icon>
+      <property-name>converter</property-name>
+      <property-class>javax.faces.convert.Converter</property-class>
+      <tag-attribute>yes</tag-attribute>
+    </property>
   </component>
 
   <component>
@@ -1066,6 +1066,27 @@
       <property-class>java.lang.String</property-class>
       <tag-attribute>yes</tag-attribute>
     </property>
+    <property>
+      <display-name></display-name>
+      <icon></icon>
+      <property-name>value</property-name>
+      <property-class>java.lang.String</property-class>
+      <tag-attribute>yes</tag-attribute>
+    </property>
+    <property>
+      <display-name></display-name>
+      <icon></icon>
+      <property-name>valueRef</property-name>
+      <property-class>java.lang.String</property-class>
+      <tag-attribute>yes</tag-attribute>
+    </property>
+    <property>
+      <display-name></display-name>
+      <icon></icon>
+      <property-name>converter</property-name>
+      <property-class>javax.faces.convert.Converter</property-class>
+      <tag-attribute>yes</tag-attribute>
+    </property>
   </component>
 
   <component>
@@ -1112,7 +1133,7 @@
     <property>
       <display-name></display-name>
       <icon></icon>
-      <property-name>accessKey</property-name>
+      <property-name>accesskey</property-name>
       <property-class>java.lang.String</property-class>
       <tag-attribute>yes</tag-attribute>
     </property>
@@ -1144,6 +1165,13 @@
       <property-class>java.lang.String</property-class>
       <tag-attribute>yes</tag-attribute>
     </property>
+    <property>
+      <display-name></display-name>
+      <icon></icon>
+      <property-name>converter</property-name>
+      <property-class>javax.faces.convert.Converter</property-class>
+      <tag-attribute>yes</tag-attribute>
+    </property>
   </component>
 
   <component>
@@ -1162,6 +1190,13 @@
       <icon></icon>
       <property-name>value</property-name>
       <property-class>java.lang.String</property-class>
+      <tag-attribute>yes</tag-attribute>
+    </property>
+    <property>
+      <display-name></display-name>
+      <icon></icon>
+      <property-name>converter</property-name>
+      <property-class>javax.faces.convert.Converter</property-class>
       <tag-attribute>yes</tag-attribute>
     </property>
     <property>
@@ -1259,6 +1294,20 @@
     <property>
       <display-name></display-name>
       <icon></icon>
+      <property-name>valueRef</property-name>
+      <property-class>java.lang.String</property-class>
+      <tag-attribute>yes</tag-attribute>
+    </property>
+    <property>
+      <display-name></display-name>
+      <icon></icon>
+      <property-name>value</property-name>
+      <property-class>java.lang.String</property-class>
+      <tag-attribute>yes</tag-attribute>
+    </property>
+    <property>
+      <display-name></display-name>
+      <icon></icon>
       <property-name>columns</property-name>
       <property-class>int</property-class>
       <tag-attribute>yes</tag-attribute>
@@ -1339,6 +1388,20 @@
     <component-type>PanelGroup</component-type>
     <component-class>javax.faces.component.html.HtmlPanelGroup</component-class>
     &base-props;
+    <property>
+      <display-name></display-name>
+      <icon></icon>
+      <property-name>valueRef</property-name>
+      <property-class>java.lang.String</property-class>
+      <tag-attribute>yes</tag-attribute>
+    </property>
+    <property>
+      <display-name></display-name>
+      <icon></icon>
+      <property-name>value</property-name>
+      <property-class>java.lang.String</property-class>
+      <tag-attribute>yes</tag-attribute>
+    </property>
   </component>
 
   <component>
@@ -2136,7 +2199,13 @@
         <attribute-name>checked</attribute-name>
         <attribute-class>boolean</attribute-class>
       </attribute>
-
+      <attribute>
+        <description>for text and passwd</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>readonly</attribute-name>
+        <attribute-class>boolean</attribute-class>
+      </attribute>
       <attribute>
         <description>unavailable in this context</description>
         <display-name></display-name>
@@ -2144,7 +2213,13 @@
         <attribute-name>disabled</attribute-name>
         <attribute-class>boolean</attribute-class>
       </attribute>
-
+      <attribute>
+        <description>short description</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>alt</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
       <attribute>
         <description>specific to each type of field</description>
         <display-name></display-name>
@@ -2330,6 +2405,13 @@
         <attribute-name>acceptcharset</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
       </attribute>
+      <attribute>
+        <description></description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>target</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
 
       <!-- non-html renderer specific attributes -->
 
@@ -2352,7 +2434,86 @@
     <renderer>
       <renderer-type>Grid</renderer-type>
       <renderer-class>&grid-renderer-class;</renderer-class>
+      &core-attrs;
       &table-attrs;
+      &events-attrs;
+      <attribute>
+        <description>number of columns</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>columns</attribute-name>
+        <attribute-class>int</attribute-class>
+      </attribute>
+      <attribute>
+        <description>language code</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>lang</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+      <attribute>
+        <description>direction for weak/neutral text</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>dir</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+      <attribute>
+        <description></description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>summary</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+      <attribute>
+        <description></description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>bgcolor</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+      <attribute>
+        <description></description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>frame</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+      <attribute>
+        <description></description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>rules</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>     
+      <attribute>
+        <description>the border for the Grid</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>border</attribute-name>
+        <attribute-class>int</attribute-class>
+      </attribute>
+      <attribute>
+        <description></description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>cellspacing</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>     
+      <attribute>
+        <description></description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>cellpadding</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>     
+      <attribute>
+        <description>override width</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>width</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
 
       <supported-component-type>
         <component-type>PanelGrid</component-type>
@@ -2494,6 +2655,22 @@
         <attribute-class>java.lang.String</attribute-class>
       </attribute>
 
+      <attribute>
+        <description>the ResourceBundle key for localized images</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>imageKey</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>the path to the image for this link</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>image</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
       <supported-component-type>
         <component-type>CommandLink</component-type>
       </supported-component-type>
@@ -2562,6 +2739,29 @@
         <attribute-class>boolean</attribute-class>
       </attribute>
 
+      <attribute>
+        <description>the element lost the focus</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>onblur</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>the element value was changed</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>onchange</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>the element got the focus</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>onfocus</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
       <supported-component-type>
         <component-type>GraphicImage</component-type>
       </supported-component-type>
@@ -2648,10 +2848,26 @@
       </attribute>
 
       <attribute>
+        <description>some text was selected</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>onselect</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <attribute>
         <description>the element got the focus</description>
         <display-name></display-name>
         <icon></icon>
         <attribute-name>onfocus</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>unavailable in this context</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>name</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
       </attribute>
 
@@ -2739,6 +2955,22 @@
         <attribute-class>java.lang.String</attribute-class>
       </attribute>
 
+      <attribute>
+        <description>unavailable in this context</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>name</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>some text was selected</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>onselect</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
       <!-- non-html renderer specific attributes -->
 
       <attribute>
@@ -2769,8 +3001,20 @@
       <!-- PENDING(edburns): make sure we render DIV and stuff the below
            attrs there.  -->
       &core-attrs;
-      &events-attrs;
-      &i18n-attrs;
+      <attribute>
+        <description>the ResourceBundle key for localized text</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>key</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+      <attribute>
+        <description>the name of the ResourceBundle</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>bundle</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
 
       <supported-component-type>
         <component-type>OutputMessage</component-type>
@@ -2854,6 +3098,14 @@
         <attribute-class>int</attribute-class>
       </attribute>
 
+      <attribute>
+        <description>unavailable in this context</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>disabled</attribute-name>
+        <attribute-class>boolean</attribute-class>
+      </attribute>
+
      <supported-component-type>
        <component-type>SelectOneRadio</component-type>
      </supported-component-type>
@@ -2874,6 +3126,22 @@
         <icon></icon>
         <attribute-name>readonly</attribute-name>
         <attribute-class>boolean</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>unavailable in this context</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>disabled</attribute-name>
+        <attribute-class>boolean</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>short description</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>alt</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
       </attribute>
 
       <attribute>
@@ -2991,6 +3259,55 @@
         <attribute-name>enabledClass</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
       </attribute>
+
+      <attribute>
+        <description>unavailable in this context</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>disabled</attribute-name>
+        <attribute-class>boolean</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>the element got the focus</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>onfocus</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>the element value was changed</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>onchange</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>the element lost the focus</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>onblur</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>unavailable in this context</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>name</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>position in tabbing order</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>tabindex</attribute-name>
+        <attribute-class>int</attribute-class>
+      </attribute>
+
       <supported-component-type>
         <component-type>SelectManyCheckboxList</component-type>
       </supported-component-type>
@@ -3051,6 +3368,14 @@
         <icon></icon>
         <attribute-name>readonly</attribute-name>
         <attribute-class>boolean</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>short description</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>alt</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
       </attribute>
 
       <attribute>

@@ -9,6 +9,8 @@
   "-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.0//EN"
   "http://java.sun.com/dtd/web-facesconfig_1_0.dtd" [ 
   <!ENTITY core-attrs SYSTEM "core-attrs.xml">
+  <!ENTITY table-attrs SYSTEM "table-attrs.xml">
+  <!ENTITY i18n-attrs SYSTEM "i18n-attrs.xml">
   <!ENTITY events-attrs SYSTEM "events-attrs.xml">
   <!ENTITY base-props SYSTEM "base-props.xml">
   <!ENTITY events-props SYSTEM "events-props.xml">
@@ -159,7 +161,7 @@
     <property>
       <display-name></display-name>
       <icon></icon>
-      <property-name>url</property-name>
+      <property-name>URL</property-name>
       <property-class>java.lang.String</property-class>
       <tag-attribute>yes</tag-attribute>
     </property>
