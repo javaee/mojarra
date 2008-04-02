@@ -1,5 +1,5 @@
 /*
- * $Id: TestNavigationHandler.java,v 1.1 2003/05/08 23:13:32 rkitain Exp $
+ * $Id: TestNavigationHandler.java,v 1.2 2003/05/10 01:05:41 rkitain Exp $
  */
 
 /*
@@ -42,15 +42,17 @@ import com.sun.faces.ServletFacesTestCase;
 
 /**
  *
- *  <B>TestNavigationHandler</B> is a class ...
+ * This class test the <code>NavigationHandlerImpl</code> functionality.
+ * It uses two xml files:
+ *     1) faces-navigation.xml --> contains the navigation cases themselves.
+ *     2) navigation-cases.xml --> contains the test cases including expected
+ *        tree identifier outcomes for this test to validate against. 
+ * Both files exist under <code>web/test/WEB-INF</code>.
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestNavigationHandler.java,v 1.1 2003/05/08 23:13:32 rkitain Exp $
+ * @version $Id: TestNavigationHandler.java,v 1.2 2003/05/10 01:05:41 rkitain Exp $
  * 
- * @see	Blah
- * @see	Bloo
- *
  */
 
 public class TestNavigationHandler extends ServletFacesTestCase

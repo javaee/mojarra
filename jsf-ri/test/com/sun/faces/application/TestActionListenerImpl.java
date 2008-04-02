@@ -1,5 +1,5 @@
 /*
- * $Id: TestActionListenerImpl.java,v 1.5 2003/05/08 23:13:30 rkitain Exp $
+ * $Id: TestActionListenerImpl.java,v 1.6 2003/05/10 01:05:41 rkitain Exp $
  */
 
 /*
@@ -44,13 +44,18 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestActionListenerImpl.java,v 1.5 2003/05/08 23:13:30 rkitain Exp $
+ * @version $Id: TestActionListenerImpl.java,v 1.6 2003/05/10 01:05:41 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
  *
  */
 
+/**
+ * This class tests the <code>ActionListenerImpl</code> class
+ * functionality.  It uses the xml configuration file:
+ * <code>web/test/WEB-INF/faces-navigation.xml</code>.
+ */
 public class TestActionListenerImpl extends ServletFacesTestCase
 {
 //
