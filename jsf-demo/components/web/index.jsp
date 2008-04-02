@@ -11,6 +11,7 @@
 Links to demonstration components (JSP rendered):
 <ul>
 <li><a href="faces/menu.jsp">Menu</a></li>
+<li><a href="faces/result-set.jsp">Result Set</a></li>
 </ul>
 
 </body>

@@ -152,6 +152,7 @@
     <mkdir dir="${build}/classes/${example}" />
     <mkdir dir="${build}/classes/${example}/META-INF" />
     <mkdir dir="${build}/${webapp}/WEB-INF/lib" />
+    <mkdir dir="${build}/${webapp}/WEB-INF/classes" />
     <copy todir="${build}/${webapp}/WEB-INF/lib" >
       <fileset dir="${basedir}/web/WEB-INF/lib">
         <include name="*.jar"/>
@@ -196,7 +197,7 @@
     <copy todir="${build}/classes/${example}/META-INF" 
             file="src/components/taglib/components.tld"/>
 
-    <javac srcdir="src" destdir="${build}/classes/${webapp}">
+    <javac srcdir="src" destdir="${build}/${webapp}/WEB-INF/classes">
         <include name="demo/**" />
      <classpath refid="classpath"/>
     </javac>
