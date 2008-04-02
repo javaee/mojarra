@@ -1,5 +1,5 @@
 /*
- * $Id: ListDataModel.java,v 1.10 2004/01/20 03:22:23 eburns Exp $
+ * $Id: ListDataModel.java,v 1.11 2004/01/23 04:07:01 craigmcc Exp $
  */
 
 /*
@@ -200,10 +200,13 @@ public class ListDataModel extends DataModel {
 
         if (data == null) {
             list = null;
-            return;
+            setRowIndex(-1);
+        } else {
+            list = (List) data;
+            index = -1;
+            setRowIndex(0);
         }
-        list = (List) data;
-	setRowIndex(0);
+
     }
 
 

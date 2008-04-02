@@ -1,5 +1,5 @@
 /*
- * $Id: ResultSetDataModel.java,v 1.16 2004/01/20 03:22:23 eburns Exp $
+ * $Id: ResultSetDataModel.java,v 1.17 2004/01/23 04:07:01 craigmcc Exp $
  */
 
 /*
@@ -255,10 +255,15 @@ public class ResultSetDataModel extends DataModel {
     public void setWrappedData(Object data) {
 
         if (data == null) {
-            this.metadata = null;
+            metadata = null;
+            resultSet = null;
+            setRowIndex(-1);
+        } else {
+            metadata = null;
+            resultSet = (ResultSet) data;
+            index = -1;
+            setRowIndex(0);
         }
-        resultSet = (ResultSet) data;
-	setRowIndex(0);
     }
 
 

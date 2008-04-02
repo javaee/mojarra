@@ -1,5 +1,5 @@
 /*
- * $Id: ArrayDataModel.java,v 1.10 2004/01/20 03:22:22 eburns Exp $
+ * $Id: ArrayDataModel.java,v 1.11 2004/01/23 04:07:01 craigmcc Exp $
  */
 
 /*
@@ -199,10 +199,13 @@ public class ArrayDataModel extends DataModel {
 
         if (data == null) {
             array = null;
-            return;
+            setRowIndex(-1);
+        } else {
+            array = (Object[]) data;
+            index = -1;
+            setRowIndex(0);
         }
-        array = (Object[]) data;
-	setRowIndex(0);
+
     }
 
 

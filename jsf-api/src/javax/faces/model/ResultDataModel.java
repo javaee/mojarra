@@ -1,5 +1,5 @@
 /*
- * $Id: ResultDataModel.java,v 1.10 2004/01/20 03:22:23 eburns Exp $
+ * $Id: ResultDataModel.java,v 1.11 2004/01/23 04:07:01 craigmcc Exp $
  */
 
 /*
@@ -210,11 +210,14 @@ public class ResultDataModel extends DataModel {
         if (data == null) {
             result = null;
             rows = null;
-            return;
+            setRowIndex(-1);
+        } else {
+            result = (Result) data;
+            rows = result.getRows();
+            index = -1;
+            setRowIndex(0);
         }
-        result = (Result) data;
-        rows = result.getRows();
-	setRowIndex(0);
+
     }
 
 

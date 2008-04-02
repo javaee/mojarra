@@ -1,5 +1,5 @@
 /*
- * $Id: DataModelTestCaseBase.java,v 1.6 2003/10/20 20:26:04 craigmcc Exp $
+ * $Id: DataModelTestCaseBase.java,v 1.7 2004/01/23 04:07:04 craigmcc Exp $
  */
 
 /*
@@ -200,6 +200,20 @@ public abstract class DataModelTestCaseBase extends TestCase {
     }
 
 
+    // Test resetting the wrapped data (should trigger an event
+    public void testReset() throws Exception {
+
+        TestListener listener = new TestListener();
+        TestListener.trace(null);
+        model.addDataModelListener(listener);
+
+        assertEquals(0, model.getRowIndex());
+        model.setWrappedData(model.getWrappedData());
+        assertEquals("/0", TestListener.trace());
+
+    }
+
+
     // Test row available manipulations
     public void testRowAvailable() throws Exception {
 
@@ -292,6 +306,20 @@ public abstract class DataModelTestCaseBase extends TestCase {
         } catch (IllegalArgumentException e) {
             ; // Expected result
         }
+
+    }
+
+
+    // Test resetting the wrapped data to null
+    public void testWrapped() throws Exception {
+
+        model.setWrappedData(null);
+        assertTrue(!model.isRowAvailable());
+        assertEquals(-1, model.getRowCount());
+        assertNull(model.getRowData());
+        assertEquals(-1, model.getRowIndex());
+        assertNull(model.getWrappedData());
+
 
     }
 
