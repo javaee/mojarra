@@ -1,5 +1,5 @@
 /*
- * $Id: UIDataTestCase.java,v 1.39 2004/04/07 17:39:26 rkitain Exp $
+ * $Id: UIDataTestCase.java,v 1.40 2004/04/14 19:39:01 eburns Exp $
  */
 
 /*
@@ -870,6 +870,104 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
 
     }
 
+    public void testNestedTablesWithIds() throws Exception {
+	UIData 
+	    outer = (UIData) component,
+	    inner = new UIData();
+	List innerBeans = new ArrayList();
+        for (int i = 0; i < 3; i++) {
+            TestDataBean bean = new TestDataBean();
+            bean.setCommand("innerCommand" + i);
+            bean.setInput("innerInput" + i);
+            bean.setOutput("innerOutput" + i);
+            innerBeans.add(bean);
+        }
+	DataModel innerDataModel = new ListDataModel(innerBeans);
+
+	// set up the model for the outer table.
+	setupModel();
+
+	// set up the tree for the outer data table
+	UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
+	root.setRenderKitId(RenderKitFactory.HTML_BASIC_RENDER_KIT);
+	root.setViewId("/view");
+	facesContext.setViewRoot(root);
+	outer.setId("outerData");
+	root.getChildren().add(outer);
+
+	UIColumn column = new UIColumn();
+	column.setId("outerColumn");
+	outer.getChildren().add(column);
+
+
+	component = inner;
+	setupModel();
+	setupTree(column, true, true);
+
+	UIDataHeaderBean hb = new UIDataHeaderBean();
+	facesContext.getExternalContext().getRequestMap().
+	    put("hb", hb);
+
+	HashMap foo = new HashMap();
+	foo.put("input", "input");
+	foo.put("output", "output");
+	foo.put("component", "component");
+	request.setAttribute("foo", foo);
+	request.removeAttribute("foo");
+        setupRenderers();
+	
+	renderResponse();
+	checkResponse("/javax/faces/component/UIDataTestCase_9_withIds.xml");
+    }
+
+    public void testNestedTablesWithoutIds() throws Exception {
+	UIData 
+	    outer = (UIData) component,
+	    inner = new UIData();
+	List innerBeans = new ArrayList();
+        for (int i = 0; i < 3; i++) {
+            TestDataBean bean = new TestDataBean();
+            bean.setCommand("innerCommand" + i);
+            bean.setInput("innerInput" + i);
+            bean.setOutput("innerOutput" + i);
+            innerBeans.add(bean);
+        }
+	DataModel innerDataModel = new ListDataModel(innerBeans);
+
+	// set up the model for the outer table.
+	setupModel();
+
+	// set up the tree for the outer data table
+	UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
+	root.setRenderKitId(RenderKitFactory.HTML_BASIC_RENDER_KIT);
+	root.setViewId("/view");
+	facesContext.setViewRoot(root);
+	root.getChildren().add(outer);
+
+	UIColumn column = new UIColumn();
+	outer.getChildren().add(column);
+
+
+	component = inner;
+	setupModel();
+	setupTree(column, true, false);
+
+	UIDataHeaderBean hb = new UIDataHeaderBean();
+	facesContext.getExternalContext().getRequestMap().
+	    put("hb", hb);
+
+	HashMap foo = new HashMap();
+	foo.put("input", "input");
+	foo.put("output", "output");
+	foo.put("component", "component");
+	request.setAttribute("foo", foo);
+	request.removeAttribute("foo");
+        setupRenderers();
+	
+	renderResponse();
+	checkResponse("/javax/faces/component/UIDataTestCase_9_withoutIds.xml");
+    }
+
 
     public void testValueBindings() {
 
@@ -1188,14 +1286,28 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
     // labels==true - header facet of command and input contain labels
     // labels==false - header facet of command and input contain controls
     protected UICommand setupTree(boolean labels) throws Exception {
+	return setupTree(null, labels, true);
+    }
 
+    // Set up the component tree corresponding to the data model
+    // labels==true - header facet of command and input contain labels
+    // labels==false - header facet of command and input contain controls
+    // ids==true hard coded ids
+    // ids==false no ids
+    protected UICommand setupTree(UIComponent root, boolean labels, boolean ids) throws Exception {
+	
         // Attach our UIData to the view root
         UIData data = (UIData) component;
-        data.setId("data");
-        UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
-        root.setRenderKitId(RenderKitFactory.HTML_BASIC_RENDER_KIT);
-        root.setViewId("/view");
-        facesContext.setViewRoot(root);
+	if (ids) {
+	    data.setId("data");
+	}
+	if (null == root) {
+	    UIViewRoot viewRoot = facesContext.getApplication().getViewHandler().createView(facesContext, null);
+	    viewRoot.setRenderKitId(RenderKitFactory.HTML_BASIC_RENDER_KIT);
+	    viewRoot.setViewId("/view");
+	    facesContext.setViewRoot(viewRoot);
+	    root = viewRoot;
+	}
         root.getChildren().add(data);
 
         // Set up columns with facets and fields for each property
@@ -1209,15 +1321,21 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
 	UIInput hinput;
 
         column = new UIColumn();
-        column.setId("commandColumn");
+	if (ids) {
+	    column.setId("commandColumn");
+	}
 	if (labels) {
 	    label = new UIOutput();
-	    label.setId("commandHeader");
+	    if (ids) {
+		label.setId("commandHeader");
+	    }
 	    label.setValue("Command Header");
 	    column.getFacets().put("header", label);
 	} else {
 	    hcommand = new UICommand();
-	    hcommand.setId("hcommand");
+	    if (ids) {
+		hcommand.setId("hcommand");
+	    }
 	    hcommand.setImmediate(true);
 	    hcommand.setActionListener
 		(application.createMethodBinding
@@ -1227,11 +1345,15 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
 	    column.getFacets().put("header", hcommand);
 	}
         label = new UIOutput();
-        label.setId("commandFooter");
+	if (ids) {
+	    label.setId("commandFooter");
+	}
         label.setValue("Command Footer");
         column.getFacets().put("footer", label);
         command = new UICommand();
-        command.setId("command");
+	if (ids) {
+	    command.setId("command");
+	}
         command.setValueBinding("value",
 				application.createValueBinding("#{foo.command}"));
         column.getChildren().add(command);
@@ -1239,15 +1361,21 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
         command.addActionListener(new TestDataActionListener());
 
         column = new UIColumn();
-        column.setId("inputColumn");
+	if (ids) {
+	    column.setId("inputColumn");
+	}
 	if (labels) {
 	    label = new UIOutput();
-	    label.setId("inputHeader");
+	    if (ids) {
+		label.setId("inputHeader");
+	    }
 	    label.setValue("Input Header");
 	    column.getFacets().put("header", label);
 	} else {
 	    hinput = new UIInput();
-	    hinput.setId("hinput");
+	    if (ids) {
+		hinput.setId("hinput");
+	    }
 	    hinput.setValidator
 		(application.createMethodBinding
 		 ("#{hb.validate}",
@@ -1260,11 +1388,15 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
 	    column.getFacets().put("header", hinput);
 	}
         label = new UIOutput();
-        label.setId("inputFooter");
+	if (ids) {
+	    label.setId("inputFooter");
+	}
         label.setValue("Input Footer");
         column.getFacets().put("footer", label);
         input = new UIInput();
-        input.setId("input");
+	if (ids) {
+	    input.setId("input");
+	}
         input.setValueBinding("value",
 			      application.createValueBinding("#{foo.input}"));
         column.getChildren().add(input);
@@ -1273,34 +1405,50 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
         input.addValueChangeListener(new TestDataValueChangeListener());
 
         column = new UIColumn();
-        column.setId("outputColumn");
+	if (ids) {
+	    column.setId("outputColumn");
+	}
         label = new UIOutput();
-        label.setId("outputHeader");
+	if (ids) {
+	    label.setId("outputHeader");
+	}
         label.setValue("Output Header");
         column.getFacets().put("header", label);
         label = new UIOutput();
-        label.setId("outputFooter");
+	if (ids) {
+	    label.setId("outputFooter");
+	}
         label.setValue("Output Footer");
         column.getFacets().put("footer", label);
         output = new UIOutput();
-        output.setId("output");
+	if (ids) {
+	    output.setId("output");
+	}
         output.setValueBinding("value",
 			       application.createValueBinding("#{foo.output}"));
         column.getChildren().add(output);
         data.getChildren().add(column);
 
         column = new UIColumn();
-        column.setId("constantColumn");
+	if (ids) {
+	    column.setId("constantColumn");
+	}
         label = new UIOutput();
-        label.setId("constantHeader");
+	if (ids) {
+	    label.setId("constantHeader");
+	}
         label.setValue("Constant Header");
         column.getFacets().put("header", label);
         label = new UIOutput();
-        label.setId("constantFooter");
+	if (ids) {
+	    label.setId("constantFooter");
+	}
         label.setValue("Constant Footer");
         column.getFacets().put("footer", label);
         constant = new UIOutput();
-        constant.setId("constant");
+	if (ids) {
+	    constant.setId("constant");
+	}
         constant.setValue("Constant Value");
         column.getChildren().add(constant);
         data.getChildren().add(column);
@@ -1308,6 +1456,7 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
 	return command;
 
     }
+    
 
 
     // --------------------------------------------------------- Private Classes

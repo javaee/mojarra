@@ -582,9 +582,6 @@ public class UIData extends UIComponentBase
     // ----------------------------------------------------- UIComponent Methods
 
 
-    private transient String baseClientId = null;
-
-
     /**
      * <p>Set the {@link ValueBinding} used to calculate the value for the
      * specified attribute or property name, if any.  In addition, if a
@@ -632,9 +629,7 @@ public class UIData extends UIComponentBase
         if (context == null) {
             throw new NullPointerException();
         }
-        if (baseClientId == null) {
-            baseClientId = super.getClientId(context);
-        }
+	String baseClientId = super.getClientId(context);
         if (rowIndex >= 0) {
             return (baseClientId + NamingContainer.SEPARATOR_CHAR + rowIndex);
         } else {
