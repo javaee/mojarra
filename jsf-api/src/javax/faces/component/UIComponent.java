@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.90 2003/08/22 14:03:10 eburns Exp $
+ * $Id: UIComponent.java,v 1.91 2003/09/04 01:26:28 eburns Exp $
  */
 
 /*
@@ -49,7 +49,7 @@ public interface UIComponent extends StateHolder {
      * <p>The separator character used in component identifiers to demarcate
      * navigation to a child naming container.</p>
      */
-    public static final char SEPARATOR_CHAR = '.';
+    public static final char SEPARATOR_CHAR = '_';
 
 
     // ------------------------------------------------------------- Attributes
