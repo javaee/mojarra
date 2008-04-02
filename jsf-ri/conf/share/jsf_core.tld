@@ -522,7 +522,7 @@
             </description>
             <name>id</name>
             <required>false</required>
-            <rtexprvalue>false</rtexprvalue>
+            <rtexprvalue>true</rtexprvalue>
         </attribute>
 
         <attribute>
@@ -613,7 +613,7 @@
             </description>
             <name>id</name>
             <required>false</required>
-            <rtexprvalue>false</rtexprvalue>
+            <rtexprvalue>true</rtexprvalue>
         </attribute>
 
         <attribute>
@@ -705,7 +705,7 @@
             </description>
             <name>id</name>
             <required>false</required>
-            <rtexprvalue>false</rtexprvalue>
+            <rtexprvalue>true</rtexprvalue>
         </attribute>
 
         <attribute>
@@ -753,7 +753,7 @@
             </description>
             <name>id</name>
             <required>true</required>
-            <rtexprvalue>false</rtexprvalue>
+            <rtexprvalue>true</rtexprvalue>
         </attribute>
 
         <attribute>

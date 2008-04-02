@@ -1,5 +1,5 @@
 /*
- * $Id: JspTLD21Generator.java,v 1.2 2005/05/05 20:51:39 edburns Exp $
+ * $Id: JspTLD21Generator.java,v 1.3 2005/05/18 17:57:10 rlubke Exp $
  */
 
 /*
@@ -55,8 +55,18 @@ public class JspTLD21Generator extends JspTLDGenerator {
 
     // ------------------------------------------------------- Protected Methods
 
+    protected String getRtexprvalue(String tagName, String attributeName) {
 
-    /**
+        if ("id".equals(attributeName)) {        
+            return "true";
+        } else {
+            return super.getRtexprvalue(tagName, attributeName);
+        }
+
+    } // END getRtexprvalue
+
+
+        /**
      * The description element for this TLD.
      */
     protected void writeTldDescription() throws IOException {
