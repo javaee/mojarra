@@ -1,5 +1,5 @@
 /*
- * $Id: ResultSetControls.java,v 1.11 2003/09/17 19:04:20 eburns Exp $
+ * $Id: ResultSetControls.java,v 1.12 2003/09/18 18:53:04 jvisvanathan Exp $
  */
 
 /*
@@ -65,7 +65,7 @@ import java.util.MissingResourceException;
  *
  * 
  *
- * @version $Id: ResultSetControls.java,v 1.11 2003/09/17 19:04:20 eburns Exp $
+ * @version $Id: ResultSetControls.java,v 1.12 2003/09/18 18:53:04 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -319,8 +319,8 @@ public ResultSetControls() {
 	    }
 
 	    // output the facet as specified in facetOrientation
-	    if (facetOrientation == ResultSetRenderer.NORTH || 
-		facetOrientation == ResultSetRenderer.EAST) {
+	    if (facetOrientation.equalsIgnoreCase(ResultSetRenderer.NORTH) || 
+		facetOrientation.equalsIgnoreCase(ResultSetRenderer.EAST)) {
 		facet.encodeBegin(context);
 		if (facet.getRendersChildren()) {
 		    facet.encodeChildren(context);
@@ -329,7 +329,7 @@ public ResultSetControls() {
 	    }
 	    // The difference between NORTH and EAST is that NORTH
 	    // requires a <br>.
-	    if (facetOrientation == ResultSetRenderer.NORTH) {
+	    if (facetOrientation.equalsIgnoreCase(ResultSetRenderer.NORTH)) {
 		writer.startElement("br", null); // PENDING(craigmcc)
 		writer.endElement("br");
 	    }
@@ -360,14 +360,14 @@ public ResultSetControls() {
 
 	// output the facet in the EAST and SOUTH cases
 	if (null != facet) {
-	    if (facetOrientation == ResultSetRenderer.SOUTH) {
+	    if (facetOrientation.equalsIgnoreCase(ResultSetRenderer.SOUTH)) {
 		writer.startElement("br", null); // PENDING(craigmcc)
 		writer.endElement("br");
 	    }
 	    // The difference between SOUTH and WEST is that SOUTH
 	    // requires a <br>.
-	    if (facetOrientation == ResultSetRenderer.SOUTH || 
-		facetOrientation == ResultSetRenderer.WEST) {	    
+	    if (facetOrientation.equalsIgnoreCase(ResultSetRenderer.SOUTH) || 
+		facetOrientation.equalsIgnoreCase(ResultSetRenderer.WEST)) {	    
 		facet.encodeBegin(context);
 		if (facet.getRendersChildren()) {
 		    facet.encodeChildren(context);
