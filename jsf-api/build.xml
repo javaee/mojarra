@@ -39,7 +39,7 @@
 
   <property name="Name"             value="JavaServer Faces API"/>
   <property name="name"             value="jsf-api"/>
-  <property name="version"          value="1.2-b09"/>
+  <property name="version"          value="1.2-b10"/>
 
   <property name="debug"            value="true" />
   <property name="deprecation"      value="false" />
