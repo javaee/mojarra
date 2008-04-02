@@ -1,5 +1,5 @@
 /*
- * $Id: FacesIdTLV.java,v 1.1 2003/01/31 00:26:38 horwat Exp $
+ * $Id: FacesValidator.java,v 1.1 2003/01/31 01:09:01 horwat Exp $
  */
 
 /*
@@ -21,13 +21,13 @@ import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 /**
- * <p>A TagLibraryValidator class to allow a TLD to mandate that
+ * <p>A TagLibrary Validator class to allow a TLD to mandate that
  * JSF tag must have an id if it is a child or sibling of a JSTL
  * conditional or iteration tag</p>
  *
  * @author Justyna Horwat
  */
-public class FacesIdTLV extends TagLibraryValidator {
+public class FacesValidator extends TagLibraryValidator {
 
     //*********************************************************************
     // Constants
@@ -65,7 +65,7 @@ public class FacesIdTLV extends TagLibraryValidator {
     //*********************************************************************
     // Constructor and lifecycle management
 
-    public FacesIdTLV() {
+    public FacesValidator() {
         super();
         init();
     }
@@ -101,7 +101,7 @@ public class FacesIdTLV extends TagLibraryValidator {
 	try {
 
             // get a handler
-            DefaultHandler h = new FacesIdTLVHandler();
+            DefaultHandler h = new FacesValidatorHandler();
 
 	    // parse the page
 	    SAXParserFactory f = SAXParserFactory.newInstance();
@@ -154,7 +154,7 @@ public class FacesIdTLV extends TagLibraryValidator {
     /**
      * The handler that provides the base of the TLV implementation. 
      */
-    private class FacesIdTLVHandler extends DefaultHandler {
+    private class FacesValidatorHandler extends DefaultHandler {
 
         /**
          * Parse the starting element. If it is a specific JSTL tag

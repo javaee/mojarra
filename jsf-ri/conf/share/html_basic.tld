@@ -25,6 +25,16 @@
     JSF milestone.  This tld is lifted from the struts tld.
   </description>
 
+  <!-- ============== Tag Library Validator ============= -->
+
+  <!-- This TLV verifies that a Faces tag has an ID if it is a
+	child or sibling of a JSTL conditional or iterator tag  -->
+  <validator>
+    <validator-class>
+      com.sun.faces.taglib.FacesValidator
+    </validator-class>
+  </validator>
+
   <!-- ===================== HTML 4.0 basic tags ====================== -->
   <tag>
     <name>form</name>
