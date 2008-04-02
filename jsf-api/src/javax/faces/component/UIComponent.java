@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.146 2006/05/17 19:00:43 rlubke Exp $
+ * $Id: UIComponent.java,v 1.147 2006/08/07 14:28:56 rogerk Exp $
  */
 
 /*
@@ -831,7 +831,10 @@ private void doFind(FacesContext context, String clientId) {
      * 
      * <p>If a {@link Renderer} is associated with this {@link UIComponent}, 
      * the actual encoding will be delegated to 
-     * {@link Renderer#encodeChildren(FacesContext, UIComponent)}.</p> 
+     * {@link Renderer#encodeChildren(FacesContext, UIComponent)}.
+     * Otherwise, render the child components of this {@link UIComponent},
+     * following the rules described for <code>encodeBegin()</code> to
+     * acquire the appropriate value to be rendered.</p> 
      *
      * @param context {@link FacesContext} for the response we are creating
      *

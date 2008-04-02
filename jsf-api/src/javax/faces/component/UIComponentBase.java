@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.135 2006/07/12 22:51:38 rlubke Exp $
+ * $Id: UIComponentBase.java,v 1.136 2006/08/07 14:28:56 rogerk Exp $
  */
 
 /*
@@ -826,8 +826,13 @@ public abstract class UIComponentBase extends UIComponent {
         String rendererType = getRendererType();
         if (rendererType != null) {
             getRenderer(context).encodeChildren(context, this);
-        }
-
+        } else if (getChildCount() > 0) {
+            Iterator<UIComponent> kids = getChildren().iterator();
+            while (kids.hasNext()) {
+                UIComponent kid = kids.next();
+                kid.encodeAll(context);
+            }
+        } 
     }
 
 
