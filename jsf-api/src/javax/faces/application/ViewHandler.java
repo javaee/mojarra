@@ -1,5 +1,5 @@
 /*
- * $Id: ViewHandler.java,v 1.22 2003/10/22 22:17:27 eburns Exp $
+ * $Id: ViewHandler.java,v 1.23 2003/10/24 17:55:27 eburns Exp $
  */
 
 /*
@@ -112,11 +112,12 @@ public interface ViewHandler {
      * designed for Faces pages written as JSPs, must cause the response
      * <code>Locale</code> to be set to that of the {@link UIViewRoot}
      * during the <code>doStartTag()</code> method for the
-     * <code>&lt;f:view&gt;</code> tag.  The default implementation must
-     * also call <code>getCharacterEncoding()</code> on the
-     * <code>ServletResponse</code> and store the result in the session
-     * (if one is present already) under the key with the name equal to
-     * the default value of the constant {@link
+     * <code>&lt;f:view&gt;</code> tag.  This must be done by calling
+     * the <code>setLocale()</code> method on the response.  The default
+     * implementation must also call <code>getCharacterEncoding()</code>
+     * on the <code>ServletResponse</code> and store the result in the
+     * session (if one is present already) under the key with the name
+     * equal to the default value of the constant {@link
      * #CHARACTER_ENCODING_KEY}.  This must happen during the
      * <code>doEndTag()</code> method for the
      * <code>&lt;f:view&gt;</code> tag.</p>
