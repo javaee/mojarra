@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContextImpl.java,v 1.70 2005/07/18 19:28:53 rlubke Exp $
+ * $Id: FacesContextImpl.java,v 1.71 2005/08/13 16:23:03 edburns Exp $
  */
 
 /*
@@ -34,6 +34,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Locale;
 import java.util.List;
 import java.util.Map;
 import java.util.LinkedHashMap;
@@ -142,6 +143,7 @@ public class FacesContextImpl extends FacesContext {
         if (elContext == null) {
             elContext = new ELContextImpl(getApplication().getELResolver());
             elContext.putContext(FacesContext.class, this);
+            elContext.setLocale(this.getViewRoot().getLocale());
         }
         return elContext;
     }

@@ -1,5 +1,5 @@
 /*
- * $Id: UIViewRoot.java,v 1.36 2005/07/22 13:51:39 edburns Exp $
+ * $Id: UIViewRoot.java,v 1.37 2005/08/13 16:23:03 edburns Exp $
  */
 
 /*
@@ -871,6 +871,8 @@ public class UIViewRoot extends UIComponentBase {
      */
     public void setLocale(Locale locale) {
         this.locale = locale;
+        // Make sure to appraise the EL of this switch in Locale.
+        FacesContext.getCurrentInstance().getELContext().setLocale(locale);
     }
     
     // ----------------------------------------------------- StateHolder Methods
