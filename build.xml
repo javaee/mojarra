@@ -56,10 +56,7 @@
                 </filelist>    
                 <filelist dir="${impl.dir}">
                     <file name="build.xml"/>
-                </filelist>
-                <filelist dir="${demo.dir}">
-                    <file name="build.xml"/>
-                </filelist>
+                </filelist>              
             </subant>
         </sequential>
     </macrodef>
@@ -98,7 +95,7 @@
         <zip destfile="${dist.dir}/javaserverfaces_source.zip">
 
             <zipfileset dir="${basedir}"
-                        excludes="**/CVS/**, **/build/**, **/dist/**, **/www/**, **/jsf-portlet/**,
+                        excludes="**/build.properties/**, **/CVS/**, **/build/**, **/dist/**, **/www/**, **/jsf-portlet/**,
           **/jsf-demo/**, **/test-sqe/**" prefix="javaserverfaces_sources"/>
 
         </zip>
