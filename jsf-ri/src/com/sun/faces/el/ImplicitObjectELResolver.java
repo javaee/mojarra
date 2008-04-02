@@ -1,5 +1,5 @@
 /*
- * $Id: ImplicitObjectELResolver.java,v 1.2 2005/06/01 14:03:34 rlubke Exp $
+ * $Id: ImplicitObjectELResolver.java,v 1.3 2005/06/16 19:54:06 rlubke Exp $
  */
 /*
  * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
@@ -118,7 +118,7 @@ public class ImplicitObjectELResolver extends ELResolver implements ELConstants{
         }
         
         int index = Arrays.binarySearch(IMPLICIT_OBJECTS, property);
-        if (index > 0) {
+        if (index >= 0) {
             throw new PropertyNotWritableException((String)property);
         }
     }
@@ -136,11 +136,11 @@ public class ImplicitObjectELResolver extends ELResolver implements ELConstants{
         }
         
         int index = Arrays.binarySearch(IMPLICIT_OBJECTS, property);
-        if (index > 0) {
+        if (index >= 0) {
             context.setPropertyResolved(true);
             return true;
         }                          
-        return false;	
+        return false;
     }
 
     public Class getType(ELContext context, Object base, Object property) 
@@ -156,7 +156,7 @@ public class ImplicitObjectELResolver extends ELResolver implements ELConstants{
         }
         
         int index = Arrays.binarySearch(IMPLICIT_OBJECTS, property);
-        if (index > 0) {
+        if (index >= 0) {
             context.setPropertyResolved(true);
         }
         return null;
