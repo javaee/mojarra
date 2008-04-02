@@ -106,9 +106,6 @@ public class AreaRenderer extends BaseRenderer {
         } 
         String contextPath = context.getExternalContext().getRequestContextPath();
 	String imagePath = null;
-        if ( !contextPath.endsWith("/")) {
-            contextPath = contextPath + "/";
-        }
 
         ResponseWriter writer = context.getResponseWriter();
         writer.write("<area shape=\"");
