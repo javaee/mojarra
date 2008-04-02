@@ -2115,18 +2115,17 @@
 
       <ul>
 
-      <p>Render an HTML "select" element.  Render the clientId of
-      the component as the value of the "name" attribute.  If the "styleClass" 
-      attribute is specified, render its value as the value of the "class" 
-      attribute on the "select" element. If the component
+      <p>Render an HTML "select" element.  Render the clientId of the
+      component as the value of the "name" attribute.  If the
+      "styleClass" attribute is specified, render its value as the value
+      of the "class" attribute on the "select" element. If the component
       to be rendered is a UISelectMany, render "true" as the value of
-      the "multiple" attribute.  If the "size" attribute is specified,
-      render its value as the value of the "size" attribute.  Otherwise
-      use the number of items as the value of the "size" attribute.  See
-      the <a href="javax.faces.SelectManyjavax.faces.Listbox.html#options">"Rendering the option
-      elements" </a> specification for <code>ListboxRenderer</code> for
-      more detail on how to render the "option" elements in this
-      renderer.</p>
+      the "multiple" attribute.  Use the number of items as the value of
+      the "size" attribute.  See the <a
+      href="javax.faces.SelectManyjavax.faces.Listbox.html#options">"Rendering
+      the option elements" </a> specification for
+      <code>ListboxRenderer</code> for more detail on how to render the
+      "option" elements in this renderer.</p>
 
       </ul>
 
