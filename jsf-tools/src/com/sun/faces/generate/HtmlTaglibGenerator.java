@@ -592,7 +592,12 @@ public class HtmlTaglibGenerator extends GenerateTagBase implements TaglibGenera
 			" for:"+type);
 		}
 	    }
-	    int idx = evaluateExpressionsAttributes.indexOf(attributeName);
+            int idx = -1;
+            if (attributeName.equals("for")) {
+	        idx = evaluateExpressionsAttributes.indexOf("_"+attributeName);
+	    } else {
+	        idx = evaluateExpressionsAttributes.indexOf(attributeName);
+	    }
 	    if (idx < 0) {
 	        continue;
 	    }
