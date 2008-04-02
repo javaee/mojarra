@@ -1,5 +1,5 @@
 /*
- * $Id: ResponseStateManagerImpl.java,v 1.39 2006/11/29 22:36:56 rlubke Exp $
+ * $Id: ResponseStateManagerImpl.java,v 1.40 2007/02/20 19:27:05 rlubke Exp $
  */
 
 /*
@@ -30,6 +30,16 @@
 
 package com.sun.faces.renderkit;
 
+import com.sun.faces.config.WebConfiguration;
+import com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
+import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
+import com.sun.faces.config.WebConfiguration.WebEnvironmentEntry;
+import com.sun.faces.io.Base64InputStream;
+import com.sun.faces.io.Base64OutputStreamWriter;
+import com.sun.faces.spi.SerializationProvider;
+import com.sun.faces.spi.SerializationProviderFactory;
+import com.sun.faces.util.Util;
+
 import javax.crypto.CipherInputStream;
 import javax.crypto.CipherOutputStream;
 import javax.faces.FacesException;
@@ -51,16 +61,6 @@ import java.util.logging.Logger;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
-import com.sun.faces.config.WebConfiguration;
-import com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
-import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
-import com.sun.faces.config.WebConfiguration.WebEnvironmentEntry;
-import com.sun.faces.io.Base64InputStream;
-import com.sun.faces.io.Base64OutputStreamWriter;
-import com.sun.faces.spi.SerializationProvider;
-import com.sun.faces.spi.SerializationProviderFactory;
-import com.sun.faces.util.Util;
-
 
 /**
  * <p>A <code>ResonseStateManager</code> implementation
@@ -73,7 +73,9 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
           Util.getLogger(Util.FACES_LOGGER + Util.RENDERKIT_LOGGER);
 
     private static final String FACES_VIEW_STATE =
-           "com.sun.faces.FACES_VIEW_STATE"; 
+           "com.sun.faces.FACES_VIEW_STATE";
+    private static final String FACES_VIEW_STRUCTURE =
+           "com.sun.faces.FACES_VIEW_STRUCTURE";
 
     private static final char[] STATE_FIELD_START =
           ("<input type=\"hidden\" name=\""
@@ -104,7 +106,7 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
     public Object getComponentStateToRestore(FacesContext context) {
                  
         return context.getExternalContext().getRequestMap()
-              .remove(FACES_VIEW_STATE);
+              .get(FACES_VIEW_STATE);
 
     }
 
@@ -125,6 +127,12 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
     @SuppressWarnings("deprecation")
     public Object getTreeStructureToRestore(FacesContext context,
                                             String treeId) {
+
+        Object s =
+             context.getExternalContext().getRequestMap().get(FACES_VIEW_STRUCTURE);
+        if (s != null) {
+            return s;
+        }
 
         if (serialProvider == null) {
             serialProvider = SerializationProviderFactory
@@ -162,7 +170,8 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
                 }
                 Object structure = ois.readObject();
                 Object state = ois.readObject();
-                storeStateInRequest(context, state);                                       
+                storeStateInRequest(context, state);
+                storeStructureInRequest(context, structure);
                 return structure;
 
             } catch (java.io.OptionalDataException ode) {
@@ -229,7 +238,9 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
                                 1024));
                 }
 
+                //noinspection NonSerializableObjectPassedToObjectStream
                 oos.writeObject(view.getStructure());
+                //noinspection NonSerializableObjectPassedToObjectStream
                 oos.writeObject(view.getState());
                 oos.flush();
                 oos.close();
@@ -270,7 +281,8 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
      * @param context the <code>FacesContext</code> of the current request
      * @param state   the view state
      */
-    private void storeStateInRequest(FacesContext context, Object state) {
+    private static void storeStateInRequest(FacesContext context,
+                                            Object state) {
 
         // store the state object temporarily in request scope
         // until it is processed by getComponentStateToRestore
@@ -278,6 +290,14 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
         context.getExternalContext().getRequestMap()
               .put(FACES_VIEW_STATE, state);
 
+    }
+
+    private static void storeStructureInRequest(FacesContext context,
+                                                Object structure) {
+
+        context.getExternalContext().getRequestMap()
+             .put(FACES_VIEW_STRUCTURE, structure);
+        
     }
 
 
@@ -290,8 +310,8 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
      *
      * @throws IOException if an error occurs
      */
-    private void writeRenderKitIdField(FacesContext context,
-                                       ResponseWriter writer)
+    private static void writeRenderKitIdField(FacesContext context,
+                                              ResponseWriter writer)
           throws IOException {
         String result = context.getApplication().getDefaultRenderKitId();
         if (result != null &&
@@ -315,7 +335,7 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
      *
      * @return the view state from this request
      */
-    private String getStateParam(FacesContext context) {
+    private static String getStateParam(FacesContext context) {
 
         return context.getExternalContext().getRequestParameterMap().get(
               ResponseStateManager.VIEW_STATE_PARAM);
