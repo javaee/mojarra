@@ -1,5 +1,5 @@
 /*
- * $Id: ManagedBeanFactory.java,v 1.34 2005/08/22 22:10:10 ofung Exp $
+ * $Id: ManagedBeanFactoryImpl.java,v 1.1 2005/08/24 16:13:33 edburns Exp $
  */
 
 /*
@@ -45,6 +45,7 @@ import javax.faces.el.PropertyNotFoundException;
 import javax.faces.el.ReferenceSyntaxException;
 
 import com.sun.faces.RIConstants;
+import com.sun.faces.spi.ManagedBeanFactory;
 import com.sun.faces.config.beans.DescriptionBean;
 import com.sun.faces.config.beans.ListEntriesBean;
 import com.sun.faces.config.beans.ManagedBeanBean;
@@ -66,18 +67,11 @@ import java.util.logging.Level;
  * <p>The Application implementation instantiated the beans as required and
  * stores them in the appropriate scope.</p>
  */
-public class ManagedBeanFactory extends Object {
+public class ManagedBeanFactoryImpl extends ManagedBeanFactory {
 
     //
     // class variables
     //
-
-    /**
-     * <p>Used to determine the shortest scope in a mixed value
-     * expression.</p>
-     */
-
-    private static Map scopeMap = null;
 
     //
     // Protected Constants
@@ -130,7 +124,7 @@ public class ManagedBeanFactory extends Object {
     // Attribute Instance Variables
 
     ManagedBeanBean managedBean;
-    String scope;
+    Scope scope = Scope.NONE;
 
     // Relationship Instance Variables
 
@@ -149,17 +143,27 @@ public class ManagedBeanFactory extends Object {
     /**
      * Constructor
      */
-    public ManagedBeanFactory(ManagedBeanBean managedBean) {
+    public ManagedBeanFactoryImpl(ManagedBeanBean managedBean) {
         //ManagedBeanBean clone method implemented to return deep copy
         this.managedBean = managedBean; // (ManagedBeanBean) managedBean.clone();
         //set the scope
-        scope = managedBean.getManagedBeanScope();
-	if (null == scopeMap) {
-	    scopeMap = new HashMap(3);
-	    scopeMap.put(RIConstants.REQUEST, new Integer(1));
-	    scopeMap.put(RIConstants.SESSION, new Integer(2));
-	    scopeMap.put(RIConstants.APPLICATION, new Integer(3));
+        scope = getScopeFromString(managedBean.getManagedBeanScope());
+    }
+    
+    private Scope getScopeFromString(String scopeString) {
+        Scope result = Scope.NONE;
+	if (null != scopeString) {
+            if (scopeString.equalsIgnoreCase(RIConstants.REQUEST)) {
+                result = Scope.REQUEST;
+            }
+            else if (scopeString.equalsIgnoreCase(RIConstants.SESSION)) {
+                result = Scope.SESSION;
+            }
+            else if (scopeString.equalsIgnoreCase(RIConstants.APPLICATION)) {
+                result = Scope.APPLICATION;
+            }
 	}
+        return result;
     }
 
 
@@ -168,7 +172,7 @@ public class ManagedBeanFactory extends Object {
             //ManagedBeanBean clone method implemented to return deep copy
             this.managedBean = newBean; // (ManagedBeanBean) newBean.clone();
             //set the scope
-            scope = managedBean.getManagedBeanScope();
+            scope = getScopeFromString(managedBean.getManagedBeanScope());
         }
     }
     
@@ -926,7 +930,7 @@ public class ManagedBeanFactory extends Object {
     }
 
 
-    public String getScope() {
+    public Scope getScope() {
         return scope;
     }
 
@@ -967,7 +971,7 @@ public class ManagedBeanFactory extends Object {
 
 
     private boolean hasValidLifespan(String value) throws EvaluationException, ReferenceSyntaxException {
-	String valueScope = null;
+	Scope valueScope = null;
 
 	if (Util.isMixedVBExpression(value)) {
 	    valueScope = getNarrowestScopeFromExpression(value);
@@ -978,39 +982,35 @@ public class ManagedBeanFactory extends Object {
 
         //if the managed bean's scope is "none" but the scope of the
         //referenced object is not "none", scope is invalid
-        if (scope == null || scope.equalsIgnoreCase(RIConstants.NONE)) {
-            if (valueScope != null && 
-                !(valueScope.equalsIgnoreCase(RIConstants.NONE))) {
+        if (scope == Scope.NONE) {
+            if (valueScope != Scope.NONE) {
                 return false;
             }
-            return true;
+            else {
+                return true;
+            }
         }
        
         //if the managed bean's scope is "request" it is able to refer
         //to objects in any scope
-        if (scope.equalsIgnoreCase(RIConstants.REQUEST)) {
+        if (scope == Scope.REQUEST) {
             return true;
         }
 
         //if the managed bean's scope is "session" it is able to refer
         //to objects in other "session", "application", or "none" scopes
-        if (scope.equalsIgnoreCase(RIConstants.SESSION)) {
-            if (valueScope != null) {
-                if (valueScope.equalsIgnoreCase(RIConstants.REQUEST)) {
+        if (scope == Scope.SESSION) {
+            if (valueScope == Scope.REQUEST) {
                     return false;
-                }
             }
             return true;
         }
 
         //if the managed bean's scope is "application" it is able to refer
         //to objects in other "application", or "none" scopes
-        if (scope.equalsIgnoreCase(RIConstants.APPLICATION)) {
-            if (valueScope != null) {
-                if (valueScope.equalsIgnoreCase(RIConstants.REQUEST) ||
-                    valueScope.equalsIgnoreCase(RIConstants.SESSION)) {
-                    return false;
-                }
+        if (scope == Scope.APPLICATION) {
+            if (valueScope == Scope.REQUEST || valueScope == Scope.SESSION) {
+                return false;
             }
             return true;
         }
@@ -1022,58 +1022,58 @@ public class ManagedBeanFactory extends Object {
         return false;
     }
 
-    private String getScopeForSingleExpression(String value) throws ReferenceSyntaxException, EvaluationException {
+    private Scope getScopeForSingleExpression(String value) throws ReferenceSyntaxException, EvaluationException {
 	String [] firstSegment = new String[1];
-        String valueScope = Util.getScope(value, firstSegment);
+        Scope valueScope = Util.getScope(value, firstSegment);
 	
 	if (null == valueScope) {
 	    // Perhaps the bean hasn't been created yet.  See what its
 	    // scope would be when it is created.
-	    ManagedBeanFactory otherFactory = null;
+	    ManagedBeanFactoryImpl otherFactory = null;
 	    if (null != firstSegment[0] &&
-		null != (otherFactory = (ManagedBeanFactory)
+		null != (otherFactory = (ManagedBeanFactoryImpl)
 			 getManagedBeanFactoryMap().get(firstSegment[0]))) {
 		valueScope = otherFactory.getScope();
 	    }
 	    else {
 		// we are referring to a bean that doesn't exist in the
 		// configuration file.  Give it a wide scope...
-                valueScope = RIConstants.APPLICATION;
+                valueScope = Scope.APPLICATION;
 	    }
 	}
 	return valueScope;
     }
 
-    private String getNarrowestScopeFromExpression(String expression) throws ReferenceSyntaxException {
+    private Scope getNarrowestScopeFromExpression(String expression) throws ReferenceSyntaxException {
 	// break the argument expression up into its component
 	// expressions, ignoring literals.
 	List expressions = Util.getExpressionsFromString(expression);
 	Iterator iter = expressions.iterator();
-	Integer 
-	    shortestScope = null,
-	    currentScope = null;
-	String 
-	    scope = null,
-	    result = null;
+	int 
+	    shortestScope = Scope.NONE.ordinal(),
+	    currentScope = Scope.NONE.ordinal();
+	Scope 
+	    scope = Scope.NONE,
+	    result = Scope.NONE;
 	
 	// loop over the expressions 
 	while (iter.hasNext()) {
 	    scope = getScopeForSingleExpression((String)iter.next());
 	    // don't consider none
-	    if (null == scope || scope.equalsIgnoreCase(RIConstants.NONE)) {
+	    if (null == scope || scope == Scope.NONE) {
 		continue;
 	    }
-	    // look up the scope for the current expression in scopeMap
-	    currentScope = (Integer) scopeMap.get(scope);
+
+	    currentScope = scope.ordinal();
 	    
 	    // if we have no basis for comparison
-	    if (null == shortestScope) {
+	    if (Scope.NONE.ordinal() == shortestScope) {
 		shortestScope = currentScope;
 		result = scope;
 	    }
 	    else {
 		// we have a basis for comparison
-		if (currentScope.intValue() < shortestScope.intValue()) {
+		if (currentScope < shortestScope) {
 		    shortestScope = currentScope;
 		    result = scope;
 		}

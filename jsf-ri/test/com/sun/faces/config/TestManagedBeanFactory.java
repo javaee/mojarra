@@ -1,5 +1,5 @@
 /*
- * $Id: TestManagedBeanFactory.java,v 1.26 2005/08/22 22:11:12 ofung Exp $
+ * $Id: TestManagedBeanFactory.java,v 1.27 2005/08/24 16:13:36 edburns Exp $
  */
 
 /*
@@ -36,13 +36,11 @@ import com.sun.faces.config.beans.ManagedBeanBean;
 import com.sun.faces.config.beans.ManagedPropertyBean;
 import com.sun.faces.config.beans.MapEntriesBean;
 import com.sun.faces.config.beans.MapEntryBean;
+import com.sun.faces.spi.ManagedBeanFactory.Scope;
+
+import javax.el.ValueExpression;
 
 import javax.faces.FacesException;
-import javax.faces.FactoryFinder;
-import javax.faces.application.ApplicationFactory;
-import javax.faces.application.Application;
-import javax.el.ValueExpression;
-import javax.faces.el.PropertyNotFoundException;
 
 import com.sun.faces.util.Util;
 import java.util.ArrayList;
@@ -65,7 +63,7 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
     ListEntriesBean listEntries;
     MapEntriesBean mapEntries;
     MapEntryBean mapEntry;
-    ManagedBeanFactory mbf;
+    ManagedBeanFactoryImpl mbf;
     TestBean testBean;
 
     // ----------------------------------------------------------- Constructors
@@ -105,13 +103,13 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
         bean.setManagedBeanClass(beanName);
         bean.setManagedBeanScope("session");
 
-        mbf = new ManagedBeanFactory(bean);
+        mbf = new ManagedBeanFactoryImpl(bean);
 
         assertNotNull(mbf.newInstance(getFacesContext()));
 
 	bean.setManagedBeanScope("request");
 	mbf.setManagedBeanBean(bean);
-        assertTrue(mbf.getScope().equals("request"));
+        assertTrue(mbf.getScope() == Scope.REQUEST);
     }
 
 
@@ -127,7 +125,7 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
 
         bean.addManagedProperty(property);
 
-        mbf = new ManagedBeanFactory(bean);
+        mbf = new ManagedBeanFactoryImpl(bean);
 
         //testing with a property set
         assertNotNull(testBean = (TestBean) mbf.newInstance(getFacesContext()));
@@ -136,7 +134,7 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
         assertTrue(testBean.getOne().equals("one"));
 
         //make sure scope is stored properly
-        assertTrue(mbf.getScope().equals("session"));
+        assertTrue(mbf.getScope() == Scope.SESSION);
     }
 
 
@@ -194,7 +192,7 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
         property.setValue(Short.toString(testShort));
         bean.addManagedProperty(property);
 
-        mbf = new ManagedBeanFactory(bean);
+        mbf = new ManagedBeanFactoryImpl(bean);
 
         //testing with a property set
         assertNotNull(testBean = (TestBean) mbf.newInstance(getFacesContext()));
@@ -210,7 +208,7 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
         assertTrue(testBean.getShortProp() == testShort);
 
         //make sure scope is stored properly
-        assertTrue(mbf.getScope().equals("session"));
+        assertTrue(mbf.getScope() == Scope.SESSION);
     }
 
 
@@ -234,7 +232,7 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
         bean.addManagedProperty(property);
         bean.addManagedProperty(property2);
 
-        mbf = new ManagedBeanFactory(bean);
+        mbf = new ManagedBeanFactoryImpl(bean);
 
         //testing with a property set
         assertNotNull(testBean = (TestBean) mbf.newInstance(getFacesContext()));
@@ -251,7 +249,7 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
         assertTrue(testBean.getListNullSetterCalled());
 
         //make sure scope is stored properly
-        assertTrue(mbf.getScope().equals("session"));
+        assertTrue(mbf.getScope() == Scope.SESSION);
     }
 
 
@@ -277,7 +275,7 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
 
         bean.addManagedProperty(property);
         bean.addManagedProperty(property2);
-        mbf = new ManagedBeanFactory(bean);
+        mbf = new ManagedBeanFactoryImpl(bean);
 
         //testing with a property set
         assertNotNull(testBean = (TestBean) mbf.newInstance(getFacesContext()));
@@ -294,7 +292,7 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
         assertTrue(testBean.getMapPropertyNullSetterCalled());
 
         //make sure scope is stored properly
-        assertTrue(mbf.getScope().equals("session"));
+        assertTrue(mbf.getScope() == Scope.SESSION);
     }
 
 
@@ -312,7 +310,7 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
 
         bean.addManagedProperty(property);
 
-        mbf = new ManagedBeanFactory(bean);
+        mbf = new ManagedBeanFactoryImpl(bean);
 
         //testing with a property set
         assertNotNull(testBean = (TestBean) mbf.newInstance(getFacesContext()));
@@ -346,7 +344,7 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
         property.setMapEntries(mapEntries);
 
         bean.addManagedProperty(property);
-        mbf = new ManagedBeanFactory(bean);
+        mbf = new ManagedBeanFactoryImpl(bean);
 
         //testing with a property set
         assertNotNull(testBean = (TestBean) mbf.newInstance(getFacesContext()));
@@ -361,7 +359,7 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
         assertTrue(mapProperty.get("name").equals(integer));
 
         //make sure scope is stored properly
-        assertTrue(mbf.getScope().equals("session"));
+        assertTrue(mbf.getScope() == Scope.SESSION);
     }
 
 
@@ -384,7 +382,7 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
         property.setValue("#{TestRefBean.one}");
         bean.addManagedProperty(property);
 
-        mbf = new ManagedBeanFactory(bean);
+        mbf = new ManagedBeanFactoryImpl(bean);
 
         //testing with a property set
         assertNotNull(testBean = (TestBean) mbf.newInstance(getFacesContext()));
@@ -393,7 +391,7 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
         assertTrue(testBean.getOne().equals("one"));
 
         //make sure scope is stored properly
-        assertTrue(mbf.getScope().equals("session"));
+        assertTrue(mbf.getScope() == Scope.SESSION);
 
     }
 
@@ -423,7 +421,7 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
         property.setValue("#{TestRefBean.one}");
         bean.addManagedProperty(property);
 
-        mbf = new ManagedBeanFactory(bean);
+        mbf = new ManagedBeanFactoryImpl(bean);
 
         //testing with an application scope property set in a session scope bean
         assertNotNull(testBean = (TestBean) mbf.newInstance(getFacesContext()));
@@ -432,7 +430,7 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
         assertTrue(testBean.getOne().equals("one"));
 
         //make sure scope is stored properly
-        assertTrue(mbf.getScope().equals("session"));
+        assertTrue(mbf.getScope() == Scope.SESSION);
 
 
         //testing with:
@@ -454,7 +452,7 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
 
         bean.addManagedProperty(property);
 
-        mbf = new ManagedBeanFactory(bean);
+        mbf = new ManagedBeanFactoryImpl(bean);
 
         exceptionThrown = false;
         try {
@@ -466,7 +464,7 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
         assertTrue(exceptionThrown);
 
         //make sure scope is stored properly
-        assertTrue(mbf.getScope().equals("application"));
+        assertTrue(mbf.getScope() == Scope.APPLICATION);
 
         //cleanup
         getFacesContext().getExternalContext().getRequestMap().remove(
@@ -490,7 +488,7 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
         property.setValue("#{sessionScope.TestRefBean.one}");
         bean.addManagedProperty(property);
 
-        mbf = new ManagedBeanFactory(bean);
+        mbf = new ManagedBeanFactoryImpl(bean);
 
         exceptionThrown = false;
         try {
@@ -502,7 +500,7 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
         assertTrue(exceptionThrown);
 
         //make sure scope is stored properly
-        assertTrue(mbf.getScope() == null);
+        assertTrue(mbf.getScope() == Scope.NONE);
     }
     
     public void testNoneScope() throws Exception {
@@ -529,7 +527,7 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
 
         bean.addManagedProperty(property);
 
-        mbf = new ManagedBeanFactory(bean);
+        mbf = new ManagedBeanFactoryImpl(bean);
 
         exceptionThrown = false;
         try {
@@ -541,7 +539,7 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
         assertTrue(exceptionThrown);
 
         //make sure scope is stored properly
-        assertTrue(mbf.getScope().equals("none"));
+        assertTrue(mbf.getScope() == Scope.NONE);
 
         //cleanup
         getFacesContext().getExternalContext().getRequestMap().remove(

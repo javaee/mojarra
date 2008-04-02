@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListener.java,v 1.49 2005/08/22 22:10:09 ofung Exp $
+ * $Id: ConfigureListener.java,v 1.50 2005/08/24 16:13:32 edburns Exp $
  */
 /*
  * The contents of this file are subject to the terms
@@ -77,6 +77,7 @@ import javax.xml.parsers.SAXParserFactory;
 import com.sun.faces.RIConstants;
 import com.sun.faces.application.ApplicationAssociate;
 import com.sun.faces.application.ConfigNavigationCase;
+import com.sun.faces.spi.ManagedBeanFactory;
 import com.sun.faces.config.beans.ApplicationBean;
 import com.sun.faces.config.beans.ComponentBean;
 import com.sun.faces.config.beans.ConverterBean;
@@ -183,6 +184,13 @@ public class ConfigureListener implements ServletContextListener {
      */
     protected static final String ENABLE_HTML_TLV =
         RIConstants.FACES_PREFIX + "enableHtmlTagLibValidator";
+    
+    /**
+     * <p>The context initialization parameter that lists a fully
+     * qualified Java class name to a ManagedBeanFactory.</p>
+     */
+    protected static final String MANAGED_BEAN_FACTORY_DECORATOR_CLASS =
+        RIConstants.FACES_PREFIX + "managedBeanFactoryDecoratorClass";        
 
     /**
      * <p>All known factory names.</p>
@@ -477,7 +485,7 @@ public class ConfigureListener implements ServletContextListener {
         configure(config.getComponents());
         configure(config.getConvertersByClass());
         configure(config.getConvertersById());
-        configure(config.getManagedBeans());
+        configure(context, config.getManagedBeans());
         configure(config.getNavigationRules());
         configure(config.getRenderKits());
         configure(config.getValidators());
@@ -884,7 +892,7 @@ public class ConfigureListener implements ServletContextListener {
     // PENDING - the code below is a start at converting new-style config beans
     // back to old style ones so we don't have to modify the functional code.
     // It is not clear that this is the lower-effort choice, however.
-    private void configure(ManagedBeanBean[] config) throws Exception {
+    private void configure(ServletContext context, ManagedBeanBean[] config) throws Exception {
         if (config == null) {
             return;
         }
@@ -901,7 +909,19 @@ public class ConfigureListener implements ServletContextListener {
                           config[i].getManagedBeanName() + ',' +
                           config[i].getManagedBeanClass() + ')');
             }
-            ManagedBeanFactory mbf = new ManagedBeanFactory(config[i]);
+            ManagedBeanFactory mbf = new ManagedBeanFactoryImpl(config[i]);
+            
+            // See if the RI specific MANAGED_BEAN_FACTORY_DECORATOR is available
+            String mbfdClassName = null;
+            if (null != (mbfdClassName = 
+                    context.getInitParameter(MANAGED_BEAN_FACTORY_DECORATOR_CLASS))) {
+                ManagedBeanFactory newMbf = 
+                        (ManagedBeanFactory) Util.createInstance(mbfdClassName, 
+                            ManagedBeanFactory.class, mbf);
+                if (null != newMbf) {
+                    mbf = newMbf;
+                }
+            }
 	    associate.addManagedBeanFactory(config[i].getManagedBeanName(),
 					    mbf);
         }

@@ -1,5 +1,5 @@
 /*
- * $Id: TestVariableResolverImpl.java,v 1.21 2005/08/22 22:11:16 ofung Exp $
+ * $Id: TestVariableResolverImpl.java,v 1.22 2005/08/24 16:13:37 edburns Exp $
  */
 
 /*
@@ -36,7 +36,7 @@ import com.sun.faces.TestBean;
 import com.sun.faces.TestBean.InnerBean;
 import com.sun.faces.application.ApplicationImpl;
 import com.sun.faces.application.ApplicationAssociate;
-import com.sun.faces.config.ManagedBeanFactory;
+import com.sun.faces.config.ManagedBeanFactoryImpl;
 import com.sun.faces.config.beans.ManagedBeanBean;
 import com.sun.faces.util.Util;
 
@@ -51,7 +51,7 @@ import javax.faces.el.VariableResolver;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestVariableResolverImpl.java,v 1.21 2005/08/22 22:11:16 ofung Exp $
+ * @version $Id: TestVariableResolverImpl.java,v 1.22 2005/08/24 16:13:37 edburns Exp $
  */
 
 public class TestVariableResolverImpl extends ServletFacesTestCase {
@@ -274,7 +274,7 @@ public class TestVariableResolverImpl extends ServletFacesTestCase {
         cmb.setManagedBeanClass(beanName);
         cmb.setManagedBeanScope("session");
 
-        ManagedBeanFactory mbf = new ManagedBeanFactory(cmb);
+        ManagedBeanFactoryImpl mbf = new ManagedBeanFactoryImpl(cmb);
 
         ApplicationFactory aFactory = (ApplicationFactory) FactoryFinder.getFactory(
             FactoryFinder.APPLICATION_FACTORY);

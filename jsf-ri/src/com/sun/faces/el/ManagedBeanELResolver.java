@@ -1,5 +1,5 @@
 /*
- * $Id: ManagedBeanELResolver.java,v 1.7 2005/08/22 22:10:13 ofung Exp $
+ * $Id: ManagedBeanELResolver.java,v 1.8 2005/08/24 16:13:33 edburns Exp $
  */
 /*
  * The contents of this file are subject to the terms
@@ -42,7 +42,7 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 
 import com.sun.faces.application.ApplicationAssociate;
-import com.sun.faces.config.ManagedBeanFactory;
+import com.sun.faces.config.ManagedBeanFactoryImpl;
 import com.sun.faces.config.beans.DescriptionBean;
 import com.sun.faces.config.beans.DisplayNameBean;
 import com.sun.faces.config.beans.ManagedBeanBean;
@@ -143,7 +143,7 @@ public class ManagedBeanELResolver extends ELResolver {
             (FacesContext) context.getContext(FacesContext.class);
         ApplicationAssociate associate = 
             ApplicationAssociate.getInstance(facesContext.getExternalContext());
-        Map mbMap = associate.getManagedBeanFactoriesMap();
+        Map mbMap = associate.getManagedBeanFactoryMap();
         if (mbMap == null) {
             return list.iterator();
         }
@@ -151,7 +151,7 @@ public class ManagedBeanELResolver extends ELResolver {
         for (Iterator i = mbMap.entrySet().iterator(); i.hasNext(); ) {
             Map.Entry entry = (Map.Entry) i.next();
             String managedBeanName = (String) entry.getKey();
-            ManagedBeanFactory managedBeanFactory = (ManagedBeanFactory)
+            ManagedBeanFactoryImpl managedBeanFactory = (ManagedBeanFactoryImpl)
                 entry.getValue();
             ManagedBeanBean managedBean = managedBeanFactory.getManagedBeanBean();
             

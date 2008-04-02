@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationAssociate.java,v 1.19 2005/08/22 22:10:07 ofung Exp $
+ * $Id: ApplicationAssociate.java,v 1.20 2005/08/24 16:13:32 edburns Exp $
  */
 
 /*
@@ -49,7 +49,9 @@ import javax.faces.el.VariableResolver;
 
 import com.sun.faces.RIConstants;
 import com.sun.faces.config.ConfigureListener;
-import com.sun.faces.config.ManagedBeanFactory;
+import com.sun.faces.config.ManagedBeanFactoryImpl;
+import com.sun.faces.spi.ManagedBeanFactory;
+import com.sun.faces.spi.ManagedBeanFactory.Scope;
 import com.sun.faces.config.beans.ResourceBundleBean;
 import com.sun.faces.util.Util;
 import java.util.Locale;
@@ -79,7 +81,7 @@ public class ApplicationAssociate extends Object {
     // This map stores "managed bean name" | "managed bean factory"
     // mappings.
     //
-    private Map managedBeanFactoriesMap = null;
+    private Map<String, ManagedBeanFactory> managedBeanFactoriesMap = null;
 
     // These maps stores "navigation rule" mappings.
     //
@@ -139,7 +141,7 @@ public class ApplicationAssociate extends Object {
                     Util.APPLICATION_ASSOCIATE_EXISTS_ID));
         }
         externalContext.getApplicationMap().put(ASSOCIATE_KEY, this);
-        managedBeanFactoriesMap = new HashMap();
+        managedBeanFactoriesMap = new HashMap<String, ManagedBeanFactory>();
         caseListMap = new HashMap();
         wildcardMatchList = new TreeSet(new SortIt());
 
@@ -386,7 +388,7 @@ public class ApplicationAssociate extends Object {
         }
     }
     
-    public Map getManagedBeanFactoriesMap() {
+    public Map getManagedBeanFactoryMap() {
         return managedBeanFactoriesMap;
     }
 
@@ -394,10 +396,10 @@ public class ApplicationAssociate extends Object {
 
     /**
      * <p>The managedBeanFactories HashMap has been populated
-     * with ManagedBeanFactory object keyed by the bean name.
-     * Find the ManagedBeanFactory object and if it exists instantiate
+     * with ManagedBeanFactoryImpl object keyed by the bean name.
+     * Find the ManagedBeanFactoryImpl object and if it exists instantiate
      * the bean and store it in the appropriate scope, if any.</p>
-     *
+     * 
      * @param context         The Faces context.
      * @param managedBeanName The name identifying the managed bean.
      * @return The managed bean.
@@ -406,8 +408,7 @@ public class ApplicationAssociate extends Object {
      */
     public Object createAndMaybeStoreManagedBeans(FacesContext context,
         String managedBeanName) throws FacesException {
-        ManagedBeanFactory managedBean = (ManagedBeanFactory)
-            managedBeanFactoriesMap.get(managedBeanName);
+        ManagedBeanFactory managedBean = managedBeanFactoriesMap.get(managedBeanName);
         if (managedBean == null) {
             if (logger.isLoggable(Level.FINE)) {
                 logger.fine("Couldn't find a factory for " + managedBeanName);
@@ -416,16 +417,15 @@ public class ApplicationAssociate extends Object {
         }
         
         Object bean = null;
-        String scope = managedBean.getScope();
+        Scope scope = managedBean.getScope();
         
         boolean
             scopeIsApplication = false,
             scopeIsSession = false,
             scopeIsRequest = false;
 
-        if ((scopeIsApplication = 
-            scope.equalsIgnoreCase(RIConstants.APPLICATION)) ||
-            (scopeIsSession = scope.equalsIgnoreCase(RIConstants.SESSION))) {
+        if ((scopeIsApplication = (scope == Scope.APPLICATION)) || 
+            (scopeIsSession = (scope == Scope.SESSION))) {
             if (scopeIsApplication) {
                 Map applicationMap = context.getExternalContext().
                         getApplicationMap();
@@ -469,7 +469,7 @@ public class ApplicationAssociate extends Object {
                 }
             }              
         } else {
-            scopeIsRequest = scope.equalsIgnoreCase(RIConstants.REQUEST);
+            scopeIsRequest = (scope == Scope.REQUEST);
             try {
                 bean = managedBean.newInstance(context);
                 if (logger.isLoggable(Level.FINE)) {

@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.171 2005/08/22 22:10:29 ofung Exp $
+ * $Id: Util.java,v 1.172 2005/08/24 16:13:34 edburns Exp $
  */
 
 /*
@@ -81,12 +81,14 @@ import java.text.MessageFormat;
 import javax.el.ELResolver;
 import javax.faces.component.UIViewRoot;
 
+import com.sun.faces.spi.ManagedBeanFactory.Scope;
+
 /**
  * <B>Util</B> is a class ...
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.171 2005/08/22 22:10:29 ofung Exp $
+ * @version $Id: Util.java,v 1.172 2005/08/24 16:13:34 edburns Exp $
  */
 
 public class Util extends Object {
@@ -1515,7 +1517,7 @@ public class Util extends Object {
      *
      * @return the scope of the expression
      */
-    public static String getScope(String valueBinding,
+    public static Scope getScope(String valueBinding,
 				  String [] outString) throws ReferenceSyntaxException {
         if (valueBinding == null || 0 == valueBinding.length()) {
             return null;
@@ -1541,39 +1543,39 @@ public class Util extends Object {
 	    outString[0] = identifier;
 	}
         if (identifier.equalsIgnoreCase(RIConstants.REQUEST_SCOPE)) {
-            return RIConstants.REQUEST;
+            return Scope.REQUEST;
         }
         if (identifier.equalsIgnoreCase(RIConstants.SESSION_SCOPE)) {
-            return RIConstants.SESSION;
+            return Scope.SESSION;
         }
         if (identifier.equalsIgnoreCase(RIConstants.APPLICATION_SCOPE)) {
-            return RIConstants.APPLICATION;
+            return Scope.APPLICATION;
         }
 
 	// handle implicit objects
         if (identifier.equalsIgnoreCase(RIConstants.INIT_PARAM_IMPLICIT_OBJ)) {
-	    return RIConstants.APPLICATION;
+	    return Scope.APPLICATION;
         }	
         if (identifier.equalsIgnoreCase(RIConstants.COOKIE_IMPLICIT_OBJ)) {
-	    return RIConstants.REQUEST;
+	    return Scope.REQUEST;
         }	
         if (identifier.equalsIgnoreCase(RIConstants.FACES_CONTEXT_IMPLICIT_OBJ)) {
-	    return RIConstants.REQUEST;
+	    return Scope.REQUEST;
         }	
         if (identifier.equalsIgnoreCase(RIConstants.HEADER_IMPLICIT_OBJ)) {
-	    return RIConstants.REQUEST;
+	    return Scope.REQUEST;
         }	
         if (identifier.equalsIgnoreCase(RIConstants.HEADER_VALUES_IMPLICIT_OBJ)) {
-	    return RIConstants.REQUEST;
+	    return Scope.REQUEST;
         }
         if (identifier.equalsIgnoreCase(RIConstants.PARAM_IMPLICIT_OBJ)) {
-	    return RIConstants.REQUEST;
+	    return Scope.REQUEST;
         }
         if (identifier.equalsIgnoreCase(RIConstants.PARAM_VALUES_IMPLICIT_OBJ)) {
-	    return RIConstants.REQUEST;
+	    return Scope.REQUEST;
         }
         if (identifier.equalsIgnoreCase(RIConstants.VIEW_IMPLICIT_OBJ)) {
-	    return RIConstants.REQUEST;
+	    return Scope.REQUEST;
         }
 
         //No scope was provided in the expression so check for the 
@@ -1581,13 +1583,13 @@ public class Util extends Object {
         //segment.
 
         if (ec.getRequestMap().get(identifier) != null) {
-            return RIConstants.REQUEST;
+            return Scope.REQUEST;
         }
         if (Util.getSessionMap(context).get(identifier) != null) {
-            return RIConstants.SESSION;
+            return Scope.SESSION;
         }
         if (ec.getApplicationMap().get(identifier) != null) {
-            return RIConstants.APPLICATION;
+            return Scope.APPLICATION;
         }
 
         //not present in any scope
