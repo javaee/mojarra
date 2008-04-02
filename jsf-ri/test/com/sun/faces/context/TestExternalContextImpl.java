@@ -1,5 +1,5 @@
 /*
- * $Id: TestExternalContextImpl.java,v 1.19 2005/12/14 22:28:00 rlubke Exp $
+ * $Id: TestExternalContextImpl.java,v 1.20 2006/01/13 19:07:23 rogerk Exp $
  */
 
 /*
@@ -57,7 +57,7 @@ import java.util.Collection;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestExternalContextImpl.java,v 1.19 2005/12/14 22:28:00 rlubke Exp $
+ * @version $Id: TestExternalContextImpl.java,v 1.20 2006/01/13 19:07:23 rogerk Exp $
  */
 
 public class TestExternalContextImpl extends ServletFacesTestCase {
@@ -1227,11 +1227,11 @@ public class TestExternalContextImpl extends ServletFacesTestCase {
 
         System.out.println(
             "    Testing supported methods of RequesHeaderValuesMap...");
-        assertTrue(requestHeaderValuesMap.get("One") instanceof Enumeration);
-        Enumeration iter = (Enumeration) requestHeaderValuesMap.get("foo");
+        assertTrue(requestHeaderValuesMap.get("One") instanceof String[]);
+        String[] mapValues = (String[])requestHeaderValuesMap.get("foo");
         String returnValues = null;
-        while (iter.hasMoreElements()) {
-            returnValues = (String) iter.nextElement();
+        for (int k=0; k<mapValues.length; k++) {
+            returnValues = mapValues[k];
         }
 
         String value = "one,two,three";
@@ -1258,10 +1258,10 @@ public class TestExternalContextImpl extends ServletFacesTestCase {
             getFacesContext().getExternalContext().getRequestHeaderValuesMap()
             .hashCode());
         // PENDING (visvan) Fix this test
-        /*assertTrue(
+        assertTrue(
             requestHeaderValuesMap.equals(
                 getFacesContext().getExternalContext()
-                .getRequestHeaderValuesMap())); */
+                .getRequestHeaderValuesMap()));
         assertTrue(!requestHeaderValuesMap.equals(null));
         assertTrue(!requestHeaderValuesMap.equals(new HashMap()));
 
