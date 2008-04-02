@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.140 2006/10/03 23:32:07 rlubke Exp $
+ * $Id: UIComponentBase.java,v 1.141 2007/01/25 22:51:43 jdlee Exp $
  */
 
 /*
@@ -789,7 +789,13 @@ public abstract class UIComponentBase extends UIComponent {
         }
         String rendererType = getRendererType();
         if (rendererType != null) {
-            getRenderer(context).encodeBegin(context, this);
+            Renderer renderer = this.getRenderer(context);
+            if (renderer != null) {
+                renderer.encodeBegin(context, this);
+            } else {
+                // TODO: i18n
+                log.fine("Can't get Renderer for type " + rendererType);
+            }
         }
 
     }
@@ -807,7 +813,12 @@ public abstract class UIComponentBase extends UIComponent {
         }
         String rendererType = getRendererType();
         if (rendererType != null) {
-            getRenderer(context).encodeChildren(context, this);
+            Renderer renderer = this.getRenderer(context);
+            if (renderer != null) {
+                renderer.encodeChildren(context, this);
+            } else {
+                // We've already logged for this component
+            }
         } 
     }
 
@@ -826,7 +837,12 @@ public abstract class UIComponentBase extends UIComponent {
         }
         String rendererType = getRendererType();
         if (rendererType != null) {
-            getRenderer(context).encodeEnd(context, this);
+            Renderer renderer = this.getRenderer(context);
+            if (renderer != null) {
+                renderer.encodeEnd(context, this);
+            } else {
+                // We've already logged for this component
+            }
         }
 
     }
@@ -1570,7 +1586,8 @@ public abstract class UIComponentBase extends UIComponent {
                         writeMethod.invoke
                             (component, value);
                     } else {
-                        throw new IllegalArgumentException();
+                        // TODO: i18n
+                        throw new IllegalArgumentException("Setter not found for property " + keyValue);
                     }
                     return (result);
                 } catch (IllegalAccessException e) {
