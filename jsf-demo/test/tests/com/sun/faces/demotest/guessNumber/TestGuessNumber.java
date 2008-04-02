@@ -1,5 +1,5 @@
 /*
- * $Id: TestGuessNumber.java,v 1.5 2003/10/08 00:39:27 rlubke Exp $
+ * $Id: TestGuessNumber.java,v 1.6 2003/10/23 20:28:29 eburns Exp $
  */
 
 /*
@@ -149,7 +149,7 @@ public class TestGuessNumber extends HtmlUnitTestCase {
             HtmlElement element = (HtmlElement) iter.next();
             if (element.getTagName().equalsIgnoreCase("font")) {
                 assertTrue(element.getAttributeValue("color").equals("RED"));
-                assertTrue(element.asText().trim().equals("Validation Error: Value is less than allowable minimum of '0'."));
+                assertTrue(element.asText().trim().startsWith("Validation Error"));
             }
         }  
         
@@ -168,7 +168,7 @@ public class TestGuessNumber extends HtmlUnitTestCase {
             HtmlElement element = (HtmlElement) iter.next();
             if (element.getTagName().equalsIgnoreCase("font")) {
                 assertTrue(element.getAttributeValue("color").equals("RED"));
-                assertTrue(element.asText().trim().equals("Validation Error: Value is greater than allowable maximum of '10'."));
+                assertTrue(element.asText().trim().startsWith("Validation Error:"));
             }
         }  
         
