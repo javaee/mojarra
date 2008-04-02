@@ -1,5 +1,5 @@
 /* 
- * $Id: StateManagerImpl.java,v 1.21 2004/05/10 19:56:00 jvisvanathan Exp $ 
+ * $Id: StateManagerImpl.java,v 1.22 2004/06/01 17:06:26 eburns Exp $ 
  */ 
 
 
@@ -35,7 +35,7 @@ import java.util.Set;
  * <B>StateManagerImpl</B> is the default implementation class for
  * StateManager.
  *
- * @version $Id: StateManagerImpl.java,v 1.21 2004/05/10 19:56:00 jvisvanathan Exp $
+ * @version $Id: StateManagerImpl.java,v 1.22 2004/06/01 17:06:26 eburns Exp $
  * @see javax.faces.application.ViewHandler
  */
 public class StateManagerImpl extends StateManager {
@@ -81,10 +81,22 @@ public class StateManagerImpl extends StateManager {
                 if (viewList == null) {
                     viewList = new ArrayList();
                 }
-                // save the viewId in the viewList, so that we can keep track how
-                // many views are stored in session. If the number exceeds the
-                // limit, restoreView will remove the oldest view upon postback.
-                viewList.add(viewRoot.getViewId());
+                // save the viewId in the viewList, so that we can keep
+                // track how many views are stored in session. If the
+                // number exceeds the limit, restoreView will remove the
+                // oldest view upon postback.
+		
+		// only save unique view ids
+		boolean foundMatch = false;
+		for (int i = 0, size = viewList.size(); i < size; i++) {
+		    if (viewList.get(i).equals(viewRoot.getViewId())) {
+			foundMatch = true;
+			break;
+		    }
+		}
+		if (!foundMatch) {
+		    viewList.add(viewRoot.getViewId());
+		}
                 sessionMap.put(viewRoot.getViewId(), viewRoot);
                 sessionMap.put(FACES_VIEW_LIST, viewList);
             }
