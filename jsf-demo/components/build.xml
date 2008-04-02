@@ -81,6 +81,7 @@
     <fileset dir="${build}/${webapp}/WEB-INF/lib" includes="*.jar" />
     <pathelement location="${build}/classes"/>
     <pathelement location="${servlet23.jar}"/>
+    <pathelement location="${standard.jar}"/>
   </path>
 
 
@@ -172,7 +173,7 @@
   </target>
 
   <target name="install" description="Install web application"
-          depends="build">
+          depends="build,build.jar">
     <install url="${url}" username="${username}" password="${password}"
           path="${context.path}"  war="file://${build}/${webapp}" />
   </target>
