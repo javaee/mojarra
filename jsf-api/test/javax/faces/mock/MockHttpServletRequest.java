@@ -1,5 +1,5 @@
 /*
- * $Id: MockHttpServletRequest.java,v 1.3 2003/03/13 06:06:16 craigmcc Exp $
+ * $Id: MockHttpServletRequest.java,v 1.4 2003/04/29 18:13:05 eburns Exp $
  */
 
 /*
@@ -24,7 +24,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 
-// Mock Object for HttpServletRequest (Version 2.3)
+// Mock Object for HttpServletRequest (Version 2.4)
 public class MockHttpServletRequest implements HttpServletRequest {
 
 
@@ -301,11 +301,29 @@ public class MockHttpServletRequest implements HttpServletRequest {
         return (locale);
     }
 
+    //
+    // Servlet 2.4 methods
+    // 
+
+    public int getRemotePort() {
+        throw new UnsupportedOperationException();
+    }
+
+    public String getLocalName() {
+        throw new UnsupportedOperationException();
+    }
+
+    public String getLocalAddr() {
+        throw new UnsupportedOperationException();
+    }
+
+    public int getLocalPort() {
+        throw new UnsupportedOperationException();
+    }
 
     public Enumeration getLocales() {
         throw new UnsupportedOperationException();
     }
-
 
     public String getParameter(String name) {
         String values[] = (String[]) parameters.get(name);

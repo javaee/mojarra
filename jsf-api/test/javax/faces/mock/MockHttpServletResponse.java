@@ -1,5 +1,5 @@
 /*
- * $Id: MockHttpServletResponse.java,v 1.1 2003/03/13 06:06:16 craigmcc Exp $
+ * $Id: MockHttpServletResponse.java,v 1.2 2003/04/29 18:13:05 eburns Exp $
  */
 
 /*
@@ -129,6 +129,9 @@ public class MockHttpServletResponse implements HttpServletResponse {
         throw new UnsupportedOperationException();
     }
 
+    public String getContentType() {
+        throw new UnsupportedOperationException();
+    }
 
     public Locale getLocale() {
         throw new UnsupportedOperationException();
@@ -164,6 +167,9 @@ public class MockHttpServletResponse implements HttpServletResponse {
         throw new UnsupportedOperationException();
     }
 
+    public void setCharacterEncoding(String charset) {
+        throw new UnsupportedOperationException();
+    }
 
     public void setContentLength(int length) {
         throw new UnsupportedOperationException();

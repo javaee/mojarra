@@ -1,5 +1,5 @@
 /*
- * $Id: MockPageContext.java,v 1.2 2003/03/13 22:02:35 craigmcc Exp $
+ * $Id: MockPageContext.jsp2,v 1.1 2003/04/29 18:13:07 eburns Exp $
  */
 
 /*
@@ -24,6 +24,9 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.BodyContent;
+import javax.servlet.jsp.el.VariableResolver;
+import javax.servlet.jsp.el.ExpressionEvaluator;
+
 
 
 // Mock Object for PageContext
@@ -193,6 +196,10 @@ public class MockPageContext extends PageContext {
 
     }
 
+    public void include(String relativeUrlPath,  boolean flush)
+	throws ServletException, IOException {
+        throw new UnsupportedOperationException();
+    }
 
     public void handlePageException(Exception e) throws IOException, ServletException {
 
@@ -249,6 +256,15 @@ public class MockPageContext extends PageContext {
         setAttribute(PAGECONTEXT, this);
         setAttribute(APPLICATION, context);
 
+    }
+
+
+    public VariableResolver getVariableResolver() {
+        throw new UnsupportedOperationException();
+    }
+
+    public  ExpressionEvaluator getExpressionEvaluator() {
+        throw new UnsupportedOperationException();
     }
 
 

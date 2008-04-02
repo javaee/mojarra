@@ -112,13 +112,41 @@
 
   </target>
 
+  <!--
+       ===================================================================
+         Handle incompatibilities between JSP 2.0 and previous
+       ===================================================================
+  -->
+
+
+  <target name="prepare.test" 
+          depends="discover.jsp.level,prepare.test.jsp2,prepare.test.jsp12"/>
+
+  <target name="discover.jsp.level">
+    <echo message="jsp.jar is ${jsp.jar}"/>
+    <available classpath="${jsp.jar}" 
+               classname="javax.servlet.jsp.el.VariableResolver"
+               property="is.jsp2"/>
+    <echo message="${is.jsp2}"/>
+  </target>
+
+  <target name="prepare.test.jsp2" if="is.jsp2">
+    <copy file="${basedir}/test/javax/faces/mock/MockPageContext.jsp2"
+          tofile="${basedir}/test/javax/faces/mock/MockPageContext.java"/>
+  </target>
+
+  <target name="prepare.test.jsp12" unless="is.jsp2">
+    <copy file="${basedir}/test/javax/faces/mock/MockPageContext.jsp12"
+          tofile="${basedir}/test/javax/faces/mock/MockPageContext.java"/>
+  </target>
 
   <!--
        ===================================================================
          Build the test code
        ===================================================================
   -->
-  <target name="build.test" depends="build">
+
+  <target name="build.test" depends="build,prepare.test">
     <mkdir dir="${build.dir}"/>
     <mkdir dir="${build.test}"/>
 
@@ -129,6 +157,8 @@
            optimize="${optimize}" >
       <classpath refid="test.classpath" />
     </javac>
+
+    <delete file="${basedir}/test/javax/faces/mock/MockPageContext.java"/>
 
     <copy todir="${build.test}">
       <fileset dir="${test.dir}">
@@ -364,6 +394,8 @@
       <fileset dir="." includes="**/.nbattrs" defaultexcludes="no"/>
       <fileset dir="." includes="**/*~" defaultexcludes="no"/>
     </delete>
+    <!-- delete this file since it's copied from another file based on JSP level -->
+    <delete file="${basedir}/test/javax/faces/mock/MockPageContext.java"/>
     <delete dir="${dist.dir}"/>
   </target>
 
