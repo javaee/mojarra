@@ -877,6 +877,12 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.2//EN"
                 <![CDATA[The current value of this component.]]>
             </description>
         </attribute>
+        <attribute>
+            <name>binding</name>
+            <required>false</required>
+            <rtexprvalue>false</rtexprvalue>
+            <description>The ValueExpression linking this component to a property in a backing bean</description>
+        </attribute>
 
         <!--  TODO:  Add correct descriptions -->
         <attribute>
@@ -1127,6 +1133,12 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.2//EN"
             </description>
         </attribute>
         <attribute>
+            <name>binding</name>
+            <required>false</required>
+            <rtexprvalue>false</rtexprvalue>
+            <description>The ValueExpression linking this component to a property in a backing bean</description>
+        </attribute>
+        <attribute>
             <name>width</name>
             <required>false</required>
             <rtexprvalue>false</rtexprvalue>
@@ -1220,6 +1232,12 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.2//EN"
             </description>
         </attribute>
         <attribute>
+            <name>binding</name>
+            <required>false</required>
+            <rtexprvalue>false</rtexprvalue>
+            <description>The ValueExpression linking this component to a property in a backing bean</description>
+        </attribute>
+        <attribute>
             <name>width</name>
             <required>false</required>
             <rtexprvalue>false</rtexprvalue>
@@ -1279,6 +1297,12 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.2//EN"
             </description>
         </attribute>
         <attribute>
+            <name>binding</name>
+            <required>false</required>
+            <rtexprvalue>false</rtexprvalue>
+            <description>The ValueExpression linking this component to a property in a backing bean</description>
+        </attribute>
+        <attribute>
             <name>width</name>
             <required>false</required>
             <rtexprvalue>false</rtexprvalue>
@@ -1304,6 +1328,12 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.2//EN"
             <required>false</required>
             <rtexprvalue>false</rtexprvalue>
             <description><![CDATA[ ]]></description>
+        </attribute>
+        <attribute>
+            <name>binding</name>
+            <required>false</required>
+            <rtexprvalue>false</rtexprvalue>
+            <description>The ValueExpression linking this component to a property in a backing bean</description>
         </attribute>
         <attribute>
             <name>data</name>
@@ -1395,6 +1425,12 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.2//EN"
                 Once 'OK' is clicked, the files will be uploaded, with no chance
                 to add more or remove any files.</p>]]>
             </description>
+        </attribute>
+        <attribute>
+            <name>binding</name>
+            <required>false</required>
+            <rtexprvalue>false</rtexprvalue>
+            <description>The ValueExpression linking this component to a property in a backing bean</description>
         </attribute>
         <attribute>
             <name>fileHolder</name>
