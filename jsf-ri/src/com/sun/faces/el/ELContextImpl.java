@@ -1,5 +1,5 @@
 /*
- * $Id: ELContextImpl.java,v 1.8 2007/02/02 19:38:09 rlubke Exp $
+ * $Id: ELContextImpl.java,v 1.9 2007/02/02 19:41:29 rlubke Exp $
  */
 
 /*
@@ -46,7 +46,7 @@ import java.lang.reflect.Method;
  */
 public class ELContextImpl extends ELContext {
     
-    private static FunctionMapper functionMapper = new NoopFunctionMapper();
+    private static final FunctionMapper functionMapper = new NoopFunctionMapper();
     private VariableMapper variableMapper;
     private ELResolver resolver;
 
