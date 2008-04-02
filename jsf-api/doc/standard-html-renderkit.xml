@@ -4294,138 +4294,6 @@
 
     <property>
       <description>
-          Javascript code executed when a pointer button is
-          clicked over this element.
-        </description>
-      <display-name>Button Click Script</display-name>
-      <icon/>
-      <property-name>onclick</property-name>
-      <property-class>java.lang.String</property-class>
-      <property-extension>
-        <pass-through>true</pass-through>
-      </property-extension>
-    </property>
-    <property>
-      <description>
-          Javascript code executed when a pointer button is
-          double clicked over this element.
-        </description>
-      <display-name>Double Click Script</display-name>
-      <icon/>
-      <property-name>ondblclick</property-name>
-      <property-class>java.lang.String</property-class>
-      <property-extension>
-        <pass-through>true</pass-through>
-      </property-extension>
-    </property>
-    <property>
-      <description>
-          Javascript code executed when a pointer button is
-          pressed down over this element.
-        </description>
-      <display-name>Mouse Down Script</display-name>
-      <icon/>
-      <property-name>onmousedown</property-name>
-      <property-class>java.lang.String</property-class>
-      <property-extension>
-        <pass-through>true</pass-through>
-      </property-extension>
-    </property>
-    <property>
-      <description>
-          Javascript code executed when a pointer button is
-          released over this element.
-        </description>
-      <display-name>Mouse Up Script</display-name>
-      <icon/>
-      <property-name>onmouseup</property-name>
-      <property-class>java.lang.String</property-class>
-      <property-extension>
-        <pass-through>true</pass-through>
-      </property-extension>
-    </property>
-    <property>
-      <description>
-          Javascript code executed when a pointer button is
-          moved onto this element.
-        </description>
-      <display-name>Mouse Over Script</display-name>
-      <icon/>
-      <property-name>onmouseover</property-name>
-      <property-class>java.lang.String</property-class>
-      <property-extension>
-        <pass-through>true</pass-through>
-      </property-extension>
-    </property>
-    <property>
-      <description>
-          Javascript code executed when a pointer button is
-          moved within this element.
-        </description>
-      <display-name>Mouse Move Script</display-name>
-      <icon/>
-      <property-name>onmousemove</property-name>
-      <property-class>java.lang.String</property-class>
-      <property-extension>
-        <pass-through>true</pass-through>
-      </property-extension>
-    </property>
-    <property>
-      <description>
-          Javascript code executed when a pointer button is
-          moved away from this element.
-        </description>
-      <display-name>Mouse Out Script</display-name>
-      <icon/>
-      <property-name>onmouseout</property-name>
-      <property-class>java.lang.String</property-class>
-      <property-extension>
-        <pass-through>true</pass-through>
-      </property-extension>
-    </property>
-    <property>
-      <description>
-          Javascript code executed when a key is
-          pressed and released over this element.
-        </description>
-      <display-name>Key Press Script</display-name>
-      <icon/>
-      <property-name>onkeypress</property-name>
-      <property-class>java.lang.String</property-class>
-      <property-extension>
-        <pass-through>true</pass-through>
-      </property-extension>
-    </property>
-    <property>
-      <description>
-          Javascript code executed when a key is
-          pressed down over this element.
-        </description>
-      <display-name>Key Down Script</display-name>
-      <icon/>
-      <property-name>onkeydown</property-name>
-      <property-class>java.lang.String</property-class>
-      <property-extension>
-        <pass-through>true</pass-through>
-      </property-extension>
-    </property>
-    <property>
-      <description>
-          Javascript code executed when a key is
-          released over this element.
-        </description>
-      <display-name>Key Up Script</display-name>
-      <icon/>
-      <property-name>onkeyup</property-name>
-      <property-class>java.lang.String</property-class>
-      <property-extension>
-        <pass-through>true</pass-through>
-      </property-extension>
-    </property>
-
-
-    <property>
-      <description>
           Access key that, when pressed, transfers focus
           to this element.
         </description>
@@ -4600,6 +4468,136 @@
       <icon/>
       <property-name>image</property-name>
       <property-class>java.lang.String</property-class>
+    </property>
+    <property>
+      <description>
+          Javascript code executed when a pointer button is
+          clicked over this element.
+        </description>
+      <display-name>Button Click Script</display-name>
+      <icon/>
+      <property-name>onclick</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>false</pass-through>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Javascript code executed when a pointer button is
+          double clicked over this element.
+        </description>
+      <display-name>Double Click Script</display-name>
+      <icon/>
+      <property-name>ondblclick</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Javascript code executed when a pointer button is
+          pressed down over this element.
+        </description>
+      <display-name>Mouse Down Script</display-name>
+      <icon/>
+      <property-name>onmousedown</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Javascript code executed when a pointer button is
+          released over this element.
+        </description>
+      <display-name>Mouse Up Script</display-name>
+      <icon/>
+      <property-name>onmouseup</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Javascript code executed when a pointer button is
+          moved onto this element.
+        </description>
+      <display-name>Mouse Over Script</display-name>
+      <icon/>
+      <property-name>onmouseover</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Javascript code executed when a pointer button is
+          moved within this element.
+        </description>
+      <display-name>Mouse Move Script</display-name>
+      <icon/>
+      <property-name>onmousemove</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Javascript code executed when a pointer button is
+          moved away from this element.
+        </description>
+      <display-name>Mouse Out Script</display-name>
+      <icon/>
+      <property-name>onmouseout</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Javascript code executed when a key is
+          pressed and released over this element.
+        </description>
+      <display-name>Key Press Script</display-name>
+      <icon/>
+      <property-name>onkeypress</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Javascript code executed when a key is
+          pressed down over this element.
+        </description>
+      <display-name>Key Down Script</display-name>
+      <icon/>
+      <property-name>onkeydown</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Javascript code executed when a key is
+          released over this element.
+        </description>
+      <display-name>Key Up Script</display-name>
+      <icon/>
+      <property-name>onkeyup</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+      </property-extension>
     </property>
     <property>
       <description>
@@ -4871,138 +4869,6 @@
 
     <property>
       <description>
-          Javascript code executed when a pointer button is
-          clicked over this element.
-        </description>
-      <display-name>Button Click Script</display-name>
-      <icon/>
-      <property-name>onclick</property-name>
-      <property-class>java.lang.String</property-class>
-      <property-extension>
-        <pass-through>true</pass-through>
-      </property-extension>
-    </property>
-    <property>
-      <description>
-          Javascript code executed when a pointer button is
-          double clicked over this element.
-        </description>
-      <display-name>Double Click Script</display-name>
-      <icon/>
-      <property-name>ondblclick</property-name>
-      <property-class>java.lang.String</property-class>
-      <property-extension>
-        <pass-through>true</pass-through>
-      </property-extension>
-    </property>
-    <property>
-      <description>
-          Javascript code executed when a pointer button is
-          pressed down over this element.
-        </description>
-      <display-name>Mouse Down Script</display-name>
-      <icon/>
-      <property-name>onmousedown</property-name>
-      <property-class>java.lang.String</property-class>
-      <property-extension>
-        <pass-through>true</pass-through>
-      </property-extension>
-    </property>
-    <property>
-      <description>
-          Javascript code executed when a pointer button is
-          released over this element.
-        </description>
-      <display-name>Mouse Up Script</display-name>
-      <icon/>
-      <property-name>onmouseup</property-name>
-      <property-class>java.lang.String</property-class>
-      <property-extension>
-        <pass-through>true</pass-through>
-      </property-extension>
-    </property>
-    <property>
-      <description>
-          Javascript code executed when a pointer button is
-          moved onto this element.
-        </description>
-      <display-name>Mouse Over Script</display-name>
-      <icon/>
-      <property-name>onmouseover</property-name>
-      <property-class>java.lang.String</property-class>
-      <property-extension>
-        <pass-through>true</pass-through>
-      </property-extension>
-    </property>
-    <property>
-      <description>
-          Javascript code executed when a pointer button is
-          moved within this element.
-        </description>
-      <display-name>Mouse Move Script</display-name>
-      <icon/>
-      <property-name>onmousemove</property-name>
-      <property-class>java.lang.String</property-class>
-      <property-extension>
-        <pass-through>true</pass-through>
-      </property-extension>
-    </property>
-    <property>
-      <description>
-          Javascript code executed when a pointer button is
-          moved away from this element.
-        </description>
-      <display-name>Mouse Out Script</display-name>
-      <icon/>
-      <property-name>onmouseout</property-name>
-      <property-class>java.lang.String</property-class>
-      <property-extension>
-        <pass-through>true</pass-through>
-      </property-extension>
-    </property>
-    <property>
-      <description>
-          Javascript code executed when a key is
-          pressed and released over this element.
-        </description>
-      <display-name>Key Press Script</display-name>
-      <icon/>
-      <property-name>onkeypress</property-name>
-      <property-class>java.lang.String</property-class>
-      <property-extension>
-        <pass-through>true</pass-through>
-      </property-extension>
-    </property>
-    <property>
-      <description>
-          Javascript code executed when a key is
-          pressed down over this element.
-        </description>
-      <display-name>Key Down Script</display-name>
-      <icon/>
-      <property-name>onkeydown</property-name>
-      <property-class>java.lang.String</property-class>
-      <property-extension>
-        <pass-through>true</pass-through>
-      </property-extension>
-    </property>
-    <property>
-      <description>
-          Javascript code executed when a key is
-          released over this element.
-        </description>
-      <display-name>Key Up Script</display-name>
-      <icon/>
-      <property-name>onkeyup</property-name>
-      <property-class>java.lang.String</property-class>
-      <property-extension>
-        <pass-through>true</pass-through>
-      </property-extension>
-    </property>
-
-
-    <property>
-      <description>
           Access key that, when pressed, transfers focus
           to this element.
         </description>
@@ -5204,6 +5070,136 @@
       <icon/>
       <property-name>disabled</property-name>
       <property-class>boolean</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Javascript code executed when a pointer button is
+          clicked over this element.
+        </description>
+      <display-name>Button Click Script</display-name>
+      <icon/>
+      <property-name>onclick</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>false</pass-through>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Javascript code executed when a pointer button is
+          double clicked over this element.
+        </description>
+      <display-name>Double Click Script</display-name>
+      <icon/>
+      <property-name>ondblclick</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Javascript code executed when a pointer button is
+          pressed down over this element.
+        </description>
+      <display-name>Mouse Down Script</display-name>
+      <icon/>
+      <property-name>onmousedown</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Javascript code executed when a pointer button is
+          released over this element.
+        </description>
+      <display-name>Mouse Up Script</display-name>
+      <icon/>
+      <property-name>onmouseup</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Javascript code executed when a pointer button is
+          moved onto this element.
+        </description>
+      <display-name>Mouse Over Script</display-name>
+      <icon/>
+      <property-name>onmouseover</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Javascript code executed when a pointer button is
+          moved within this element.
+        </description>
+      <display-name>Mouse Move Script</display-name>
+      <icon/>
+      <property-name>onmousemove</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Javascript code executed when a pointer button is
+          moved away from this element.
+        </description>
+      <display-name>Mouse Out Script</display-name>
+      <icon/>
+      <property-name>onmouseout</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Javascript code executed when a key is
+          pressed and released over this element.
+        </description>
+      <display-name>Key Press Script</display-name>
+      <icon/>
+      <property-name>onkeypress</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Javascript code executed when a key is
+          pressed down over this element.
+        </description>
+      <display-name>Key Down Script</display-name>
+      <icon/>
+      <property-name>onkeydown</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Javascript code executed when a key is
+          released over this element.
+        </description>
+      <display-name>Key Up Script</display-name>
+      <icon/>
+      <property-name>onkeyup</property-name>
+      <property-class>java.lang.String</property-class>
       <property-extension>
         <pass-through>true</pass-through>
       </property-extension>
@@ -11253,6 +11249,136 @@
         <pass-through>true</pass-through>
       </property-extension>
     </property>
+    <property>
+      <description>
+          Javascript code executed when a pointer button is
+          clicked over this element.
+        </description>
+      <display-name>Button Click Script</display-name>
+      <icon/>
+      <property-name>onclick</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>false</pass-through>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Javascript code executed when a pointer button is
+          double clicked over this element.
+        </description>
+      <display-name>Double Click Script</display-name>
+      <icon/>
+      <property-name>ondblclick</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Javascript code executed when a pointer button is
+          pressed down over this element.
+        </description>
+      <display-name>Mouse Down Script</display-name>
+      <icon/>
+      <property-name>onmousedown</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Javascript code executed when a pointer button is
+          released over this element.
+        </description>
+      <display-name>Mouse Up Script</display-name>
+      <icon/>
+      <property-name>onmouseup</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Javascript code executed when a pointer button is
+          moved onto this element.
+        </description>
+      <display-name>Mouse Over Script</display-name>
+      <icon/>
+      <property-name>onmouseover</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Javascript code executed when a pointer button is
+          moved within this element.
+        </description>
+      <display-name>Mouse Move Script</display-name>
+      <icon/>
+      <property-name>onmousemove</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Javascript code executed when a pointer button is
+          moved away from this element.
+        </description>
+      <display-name>Mouse Out Script</display-name>
+      <icon/>
+      <property-name>onmouseout</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Javascript code executed when a key is
+          pressed and released over this element.
+        </description>
+      <display-name>Key Press Script</display-name>
+      <icon/>
+      <property-name>onkeypress</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Javascript code executed when a key is
+          pressed down over this element.
+        </description>
+      <display-name>Key Down Script</display-name>
+      <icon/>
+      <property-name>onkeydown</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Javascript code executed when a key is
+          released over this element.
+        </description>
+      <display-name>Key Up Script</display-name>
+      <icon/>
+      <property-name>onkeyup</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <pass-through>true</pass-through>
+      </property-extension>
+    </property>
 
     <component-extension>
       <base-component-type>javax.faces.Output</base-component-type>
@@ -17271,7 +17397,9 @@
       attribute, the value must not be escaped.  For example,
       <code>&</code> must not be turned into <code>&amp;amp;</code>.  If the
       "styleClass" attribute is specified, render its value as the value
-      of the "class" attribute.</p>
+      of the "class" attribute.  If the user has specified an "onclick"
+      attribute, append that JavaScript to any existing JavaScript before
+      rendering.</p>
 
       </ul>
             ]]></description>
@@ -17315,138 +17443,6 @@
         <display-name>Advisory Title</display-name>
         <icon/>
         <attribute-name>title</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-        <attribute-extension>
-          <pass-through>true</pass-through>
-        </attribute-extension>
-      </attribute>
-
-
-      <attribute>
-        <description>
-          Javascript code executed when a pointer button is
-          clicked over this element.
-        </description>
-        <display-name>Button Click Script</display-name>
-        <icon/>
-        <attribute-name>onclick</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-        <attribute-extension>
-          <pass-through>true</pass-through>
-        </attribute-extension>
-      </attribute>
-      <attribute>
-        <description>
-          Javascript code executed when a pointer button is
-          double clicked over this element.
-        </description>
-        <display-name>Double Click Script</display-name>
-        <icon/>
-        <attribute-name>ondblclick</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-        <attribute-extension>
-          <pass-through>true</pass-through>
-        </attribute-extension>
-      </attribute>
-      <attribute>
-        <description>
-          Javascript code executed when a pointer button is
-          pressed down over this element.
-        </description>
-        <display-name>Mouse Down Script</display-name>
-        <icon/>
-        <attribute-name>onmousedown</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-        <attribute-extension>
-          <pass-through>true</pass-through>
-        </attribute-extension>
-      </attribute>
-      <attribute>
-        <description>
-          Javascript code executed when a pointer button is
-          released over this element.
-        </description>
-        <display-name>Mouse Up Script</display-name>
-        <icon/>
-        <attribute-name>onmouseup</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-        <attribute-extension>
-          <pass-through>true</pass-through>
-        </attribute-extension>
-      </attribute>
-      <attribute>
-        <description>
-          Javascript code executed when a pointer button is
-          moved onto this element.
-        </description>
-        <display-name>Mouse Over Script</display-name>
-        <icon/>
-        <attribute-name>onmouseover</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-        <attribute-extension>
-          <pass-through>true</pass-through>
-        </attribute-extension>
-      </attribute>
-      <attribute>
-        <description>
-          Javascript code executed when a pointer button is
-          moved within this element.
-        </description>
-        <display-name>Mouse Move Script</display-name>
-        <icon/>
-        <attribute-name>onmousemove</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-        <attribute-extension>
-          <pass-through>true</pass-through>
-        </attribute-extension>
-      </attribute>
-      <attribute>
-        <description>
-          Javascript code executed when a pointer button is
-          moved away from this element.
-        </description>
-        <display-name>Mouse Out Script</display-name>
-        <icon/>
-        <attribute-name>onmouseout</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-        <attribute-extension>
-          <pass-through>true</pass-through>
-        </attribute-extension>
-      </attribute>
-      <attribute>
-        <description>
-          Javascript code executed when a key is
-          pressed and released over this element.
-        </description>
-        <display-name>Key Press Script</display-name>
-        <icon/>
-        <attribute-name>onkeypress</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-        <attribute-extension>
-          <pass-through>true</pass-through>
-        </attribute-extension>
-      </attribute>
-      <attribute>
-        <description>
-          Javascript code executed when a key is
-          pressed down over this element.
-        </description>
-        <display-name>Key Down Script</display-name>
-        <icon/>
-        <attribute-name>onkeydown</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-        <attribute-extension>
-          <pass-through>true</pass-through>
-        </attribute-extension>
-      </attribute>
-      <attribute>
-        <description>
-          Javascript code executed when a key is
-          released over this element.
-        </description>
-        <display-name>Key Up Script</display-name>
-        <icon/>
-        <attribute-name>onkeyup</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
@@ -17633,157 +17629,6 @@
       </attribute>
       <attribute>
         <description>
-         Type of button to create.  Valid values are "submit" and
-         "reset".  If not specified, or not a valid value, the default
-         value is "submit".
-      </description>
-        <display-name>Button Type</display-name>
-        <icon/>
-        <attribute-name>type</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-        <attribute-extension>
-          <default-value>"submit"</default-value>
-        </attribute-extension>
-      </attribute>
-
-      <renderer-extension>
-        <renders-children>true</renders-children>
-      </renderer-extension>
-    </renderer>
-    <renderer>
-      <description><![CDATA[<p>Render an HTML "a" anchor element that acts like a
-      form submit button when clicked.</p>
-
-      <p>General Behaviour</p>
-
-      <p>Both the encode and decode behavior require the ability to get
-      the id/name for a hidden field whose value is set by the
-      JavaScript form submit.  This name must be constructed as
-      follows:</p>
-
-      <ul>
-
-      <li><p>Get the clientId for the form of which this component is a
-      child.</p></li>
-
-      <li><p>Append
-      <code>NamingContainer.SEPARATOR_CHAR</code>.</p></li>
-
-      <li><p>Append a constant string that is the same for all command
-      link components in the tree.</p></li>
-
-      </ul>
-
-      <p>In the following text, this String is called
-      hiddenFieldName.</p>
-
-      <p>Decode Behavior</p>
-
-      <ul>
-
-      <p>Obtain the "clientId" property of the component.  Obtain the
-      <code>Map</code> from the "requestParameterMap" property of the
-      <code>ExternalContext</code>.  Derive hiddenFieldName as above.
-      Get the entry in the <code>Map</code> under the key that is the
-      hiddenFieldName.  If the there is no entry, or the entry is the
-      empty String, or the entry is not equal to the value of the
-      "clientId" property, return immediately.  If there is an entry,
-      and its value is equal to the value of the "clientId" property,
-      create a new <code>javax.faces.event.ActionEvent</code> instance
-      around the component and call <code>queueActionEvent()</code> on
-      the component, passing the event.</p>
-
-      </ul>
-
-
-      <p>Encode Behavior</p>
-
-      <ul>
-
-      <p>Render "#" as the value of the "href" attribute. Render the current
-      value of the component as the link text if it is specified. Render
-      javascript that is functionally equivalent to the following as the value
-      of the "onclick" attribute:</p>
-
-      <p><code>document.forms['CLIENT_ID']['hiddenFieldName'].value='CLIENT_ID';
-      document.forms['CLIENT_ID']['PARAM1_NAME'].value='PARAM1_VALUE';
-      document.forms['CLIENT_ID']['PARAM2_NAME'].value='PARAM2_VALUE';
-      return false;</code></p>
-
-      <p>document.forms['CLIENT_ID'].submit()" where hiddenFieldName is
-      as described above, CLIENT_ID is the clientId of the UICommand
-      component, PARAM*_NAME and PARAM*_VALUE are the names and values,
-      respectively, of any nested UIParameter children.  The name and
-      the value must be URLEncoded.  If the "styleClass" attribute is
-      specified, render its value as the value of the "class" attribute.
-      Render any non-UIParameter output children as normal inside of the
-      "a" element.  These will appear as the link text.  Allow the form
-      renderer to output a single "input" element (for the entire page,
-      regardless of how many command link components are in the page) of
-      "type" "hidden" whose "name" is the value of hiddenFieldName, and
-      which must not have a "value" attribute.  Multiple occurrences of
-      command link components in the tree should not cause multiple
-      hiddenFieldName hidden fields.  Allow the form renderer to output
-      an "input" element of "type" "hidden" for each of the nested
-      UIParameter children, taking the name property (but not the value)
-      from each one in turn.  If the "disabled" attribute is specified,
-      do not render the HTML "a" anchor element or its "href" attribute.
-      Instead, render a "span" element.  If the "styleClass" attribute
-      is specified, render its value as the value of the "class"
-      attribute on the "span".  Render any pass-through attributes on
-      the "span".  The content of the span element comes from the value
-      of the component or its children as specified above.</p>
-
-      </ul>]]></description>
-      <component-family>javax.faces.Command</component-family>
-      <renderer-type>javax.faces.Link</renderer-type>
-      <renderer-class>
-        com.sun.faces.renderkit.html_basic.CommandLinkRenderer
-    </renderer-class>
-
-      <attribute>
-        <description>
-          CSS style(s) to be applied when this component is rendered.
-        </description>
-        <display-name>CSS Styles</display-name>
-        <icon/>
-        <attribute-name>style</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-        <attribute-extension>
-          <pass-through>true</pass-through>
-        </attribute-extension>
-      </attribute>
-      <attribute>
-        <description>
-          Space-separated list of CSS style class(es) to be applied when
-          this element is rendered.  This value must be passed through
-          as the "class" attribute on generated markup.
-        </description>
-        <display-name>CSS Style Classes</display-name>
-        <icon/>
-        <attribute-name>styleClass</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-        <attribute-extension>
-          <pass-through>false</pass-through>
-        </attribute-extension>
-      </attribute>
-      <attribute>
-        <description>
-          Advisory title information about markup elements generated
-          for this component.
-        </description>
-        <display-name>Advisory Title</display-name>
-        <icon/>
-        <attribute-name>title</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-        <attribute-extension>
-          <pass-through>true</pass-through>
-        </attribute-extension>
-      </attribute>
-
-
-      <attribute>
-        <description>
           Javascript code executed when a pointer button is
           clicked over this element.
         </description>
@@ -17792,7 +17637,7 @@
         <attribute-name>onclick</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
-          <pass-through>true</pass-through>
+          <pass-through>false</pass-through>
         </attribute-extension>
       </attribute>
       <attribute>
@@ -17907,6 +17752,169 @@
         <display-name>Key Up Script</display-name>
         <icon/>
         <attribute-name>onkeyup</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+         Type of button to create.  Valid values are "submit" and
+         "reset".  If not specified, or not a valid value, the default
+         value is "submit".
+      </description>
+        <display-name>Button Type</display-name>
+        <icon/>
+        <attribute-name>type</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <default-value>"submit"</default-value>
+        </attribute-extension>
+      </attribute>
+
+      <renderer-extension>
+        <renders-children>true</renders-children>
+      </renderer-extension>
+    </renderer>
+    <renderer>
+      <description><![CDATA[<p>Render an HTML "a" anchor element that acts like a
+      form submit button when clicked.</p>
+
+      <p>General Behaviour</p>
+
+      <p>Both the encode and decode behavior require the ability to get
+      the id/name for a hidden field whose value is set by the
+      JavaScript form submit.  This name must be constructed as
+      follows:</p>
+
+      <ul>
+
+      <li><p>Get the clientId for the form of which this component is a
+      child.</p></li>
+
+      <li><p>Append
+      <code>NamingContainer.SEPARATOR_CHAR</code>.</p></li>
+
+      <li><p>Append a constant string that is the same for all command
+      link components in the tree.</p></li>
+
+      </ul>
+
+      <p>In the following text, this String is called
+      hiddenFieldName.</p>
+
+      <p>Decode Behavior</p>
+
+      <ul>
+
+      <p>Obtain the "clientId" property of the component.  Obtain the
+      <code>Map</code> from the "requestParameterMap" property of the
+      <code>ExternalContext</code>.  Derive hiddenFieldName as above.
+      Get the entry in the <code>Map</code> under the key that is the
+      hiddenFieldName.  If the there is no entry, or the entry is the
+      empty String, or the entry is not equal to the value of the
+      "clientId" property, return immediately.  If there is an entry,
+      and its value is equal to the value of the "clientId" property,
+      create a new <code>javax.faces.event.ActionEvent</code> instance
+      around the component and call <code>queueActionEvent()</code> on
+      the component, passing the event.</p>
+
+      </ul>
+
+
+      <p>Encode Behavior</p>
+
+      <ul>
+
+      <p>Render "#" as the value of the "href" attribute. Render the current
+      value of the component as the link text if it is specified. Render
+      JavaScript that is functionally equivalent to the following as the value
+      of the "onclick" attribute:</p>
+
+      <p><code>document.forms['CLIENT_ID']['hiddenFieldName'].value='CLIENT_ID';
+      document.forms['CLIENT_ID']['PARAM1_NAME'].value='PARAM1_VALUE';
+      document.forms['CLIENT_ID']['PARAM2_NAME'].value='PARAM2_VALUE';
+      return false;</code></p>
+
+      <p>document.forms['CLIENT_ID'].submit()" where hiddenFieldName is
+      as described above, CLIENT_ID is the clientId of the UICommand
+      component, PARAM*_NAME and PARAM*_VALUE are the names and values,
+      respectively, of any nested UIParameter children.  The name and
+      the value must be URLEncoded.  If an "onclick" attribute was 
+      specified by the user, render this JavaScript in a function,
+      and render the user's JavaScript in a function.  Render both functions
+      in a choice function as follows:</p>
+
+      <p><code>var a=function(){#USER_FUNCTION#};
+      var b=function(){#JSF_FUNCTION#};
+      return (a()==false) ? false : b();</code></p>
+      
+      <p>where #USER_FUNCTION# is the user's JavaScript and #JSF_FUNCTION#
+      is the JavaScript rendered by JSF.  The choice function should operate 
+      such that if the user's JavaScript returns true, then the rendered JavaScript
+      will also execute. 
+ 
+      If the "styleClass" attribute is
+      specified, render its value as the value of the "class" attribute.
+      Render any non-UIParameter output children as normal inside of the
+      "a" element.  These will appear as the link text.  Allow the form
+      renderer to output a single "input" element (for the entire page,
+      regardless of how many command link components are in the page) of
+      "type" "hidden" whose "name" is the value of hiddenFieldName, and
+      which must not have a "value" attribute.  Multiple occurrences of
+      command link components in the tree should not cause multiple
+      hiddenFieldName hidden fields.  Allow the form renderer to output
+      an "input" element of "type" "hidden" for each of the nested
+      UIParameter children, taking the name property (but not the value)
+      from each one in turn.  If the "disabled" attribute is specified,
+      do not render the HTML "a" anchor element or its "href" attribute.
+      Instead, render a "span" element.  If the "styleClass" attribute
+      is specified, render its value as the value of the "class"
+      attribute on the "span".  Render any pass-through attributes on
+      the "span".  The content of the span element comes from the value
+      of the component or its children as specified above.</p>
+
+      </ul>]]></description>
+      <component-family>javax.faces.Command</component-family>
+      <renderer-type>javax.faces.Link</renderer-type>
+      <renderer-class>
+        com.sun.faces.renderkit.html_basic.CommandLinkRenderer
+    </renderer-class>
+
+      <attribute>
+        <description>
+          CSS style(s) to be applied when this component is rendered.
+        </description>
+        <display-name>CSS Styles</display-name>
+        <icon/>
+        <attribute-name>style</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          Space-separated list of CSS style class(es) to be applied when
+          this element is rendered.  This value must be passed through
+          as the "class" attribute on generated markup.
+        </description>
+        <display-name>CSS Style Classes</display-name>
+        <icon/>
+        <attribute-name>styleClass</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>false</pass-through>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          Advisory title information about markup elements generated
+          for this component.
+        </description>
+        <display-name>Advisory Title</display-name>
+        <icon/>
+        <attribute-name>title</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
@@ -18117,6 +18125,136 @@
         <icon/>
         <attribute-name>disabled</attribute-name>
         <attribute-class>boolean</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          Javascript code executed when a pointer button is
+          clicked over this element.
+        </description>
+        <display-name>Button Click Script</display-name>
+        <icon/>
+        <attribute-name>onclick</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>false</pass-through>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          Javascript code executed when a pointer button is
+          double clicked over this element.
+        </description>
+        <display-name>Double Click Script</display-name>
+        <icon/>
+        <attribute-name>ondblclick</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          Javascript code executed when a pointer button is
+          pressed down over this element.
+        </description>
+        <display-name>Mouse Down Script</display-name>
+        <icon/>
+        <attribute-name>onmousedown</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          Javascript code executed when a pointer button is
+          released over this element.
+        </description>
+        <display-name>Mouse Up Script</display-name>
+        <icon/>
+        <attribute-name>onmouseup</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          Javascript code executed when a pointer button is
+          moved onto this element.
+        </description>
+        <display-name>Mouse Over Script</display-name>
+        <icon/>
+        <attribute-name>onmouseover</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          Javascript code executed when a pointer button is
+          moved within this element.
+        </description>
+        <display-name>Mouse Move Script</display-name>
+        <icon/>
+        <attribute-name>onmousemove</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          Javascript code executed when a pointer button is
+          moved away from this element.
+        </description>
+        <display-name>Mouse Out Script</display-name>
+        <icon/>
+        <attribute-name>onmouseout</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          Javascript code executed when a key is
+          pressed and released over this element.
+        </description>
+        <display-name>Key Press Script</display-name>
+        <icon/>
+        <attribute-name>onkeypress</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          Javascript code executed when a key is
+          pressed down over this element.
+        </description>
+        <display-name>Key Down Script</display-name>
+        <icon/>
+        <attribute-name>onkeydown</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          Javascript code executed when a key is
+          released over this element.
+        </description>
+        <display-name>Key Up Script</display-name>
+        <icon/>
+        <attribute-name>onkeyup</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
         </attribute-extension>
@@ -21751,6 +21889,136 @@
         <icon/>
         <attribute-name>disabled</attribute-name>
         <attribute-class>boolean</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          Javascript code executed when a pointer button is
+          clicked over this element.
+        </description>
+        <display-name>Button Click Script</display-name>
+        <icon/>
+        <attribute-name>onclick</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>false</pass-through>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          Javascript code executed when a pointer button is
+          double clicked over this element.
+        </description>
+        <display-name>Double Click Script</display-name>
+        <icon/>
+        <attribute-name>ondblclick</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          Javascript code executed when a pointer button is
+          pressed down over this element.
+        </description>
+        <display-name>Mouse Down Script</display-name>
+        <icon/>
+        <attribute-name>onmousedown</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          Javascript code executed when a pointer button is
+          released over this element.
+        </description>
+        <display-name>Mouse Up Script</display-name>
+        <icon/>
+        <attribute-name>onmouseup</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          Javascript code executed when a pointer button is
+          moved onto this element.
+        </description>
+        <display-name>Mouse Over Script</display-name>
+        <icon/>
+        <attribute-name>onmouseover</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          Javascript code executed when a pointer button is
+          moved within this element.
+        </description>
+        <display-name>Mouse Move Script</display-name>
+        <icon/>
+        <attribute-name>onmousemove</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          Javascript code executed when a pointer button is
+          moved away from this element.
+        </description>
+        <display-name>Mouse Out Script</display-name>
+        <icon/>
+        <attribute-name>onmouseout</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          Javascript code executed when a key is
+          pressed and released over this element.
+        </description>
+        <display-name>Key Press Script</display-name>
+        <icon/>
+        <attribute-name>onkeypress</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          Javascript code executed when a key is
+          pressed down over this element.
+        </description>
+        <display-name>Key Down Script</display-name>
+        <icon/>
+        <attribute-name>onkeydown</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+        <attribute-extension>
+          <pass-through>true</pass-through>
+        </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          Javascript code executed when a key is
+          released over this element.
+        </description>
+        <display-name>Key Up Script</display-name>
+        <icon/>
+        <attribute-name>onkeyup</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
         <attribute-extension>
           <pass-through>true</pass-through>
         </attribute-extension>

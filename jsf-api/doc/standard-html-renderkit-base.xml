@@ -322,7 +322,6 @@
 
         <xi:include href="uicommand-props.xml" xpointer="xpointer(/root/*)"/>
         <xi:include href="core-props.xml" xpointer="xpointer(/root/*)"/>
-        <xi:include href="events-props.xml" xpointer="xpointer(/root/*)"/>
         <xi:include href="focus-props.xml" xpointer="xpointer(/root/*)"/>
         <xi:include href="i18n-props.xml" xpointer="xpointer(/root/*)"/>
         <xi:include href="input-props.xml" xpointer="xpointer(/root/*)"/>
@@ -348,7 +347,6 @@
 
         <xi:include href="uicommand-props.xml" xpointer="xpointer(/root/*)"/>
         <xi:include href="core-props.xml" xpointer="xpointer(/root/*)"/>
-        <xi:include href="events-props.xml" xpointer="xpointer(/root/*)"/>
         <xi:include href="focus-props.xml" xpointer="xpointer(/root/*)"/>
         <xi:include href="i18n-props.xml" xpointer="xpointer(/root/*)"/>
         <xi:include href="link-props.xml" xpointer="xpointer(/root/*)"/>
@@ -1045,7 +1043,9 @@
       attribute, the value must not be escaped.  For example,
       <code>&</code> must not be turned into <code>&amp;amp;</code>.  If the
       "styleClass" attribute is specified, render its value as the value
-      of the "class" attribute.</p>
+      of the "class" attribute.  If the user has specified an "onclick"
+      attribute, append that JavaScript to any existing JavaScript before
+      rendering.</p>
 
       </ul>
             ]]>
@@ -1057,7 +1057,6 @@
             </renderer-class>
 
             <xi:include href="core-attrs.xml" xpointer="xpointer(/root/*)"/>
-            <xi:include href="events-attrs.xml" xpointer="xpointer(/root/*)"/>
             <xi:include href="focus-attrs.xml" xpointer="xpointer(/root/*)"/>
             <xi:include href="i18n-attrs.xml" xpointer="xpointer(/root/*)"/>
             <xi:include href="input-attrs.xml" xpointer="xpointer(/root/*)"/>
@@ -1122,7 +1121,7 @@
 
       <p>Render "#" as the value of the "href" attribute. Render the current
       value of the component as the link text if it is specified. Render
-      javascript that is functionally equivalent to the following as the value
+      JavaScript that is functionally equivalent to the following as the value
       of the "onclick" attribute:</p>
 
       <p><code>document.forms['CLIENT_ID']['hiddenFieldName'].value='CLIENT_ID';
@@ -1134,7 +1133,21 @@
       as described above, CLIENT_ID is the clientId of the UICommand
       component, PARAM*_NAME and PARAM*_VALUE are the names and values,
       respectively, of any nested UIParameter children.  The name and
-      the value must be URLEncoded.  If the "styleClass" attribute is
+      the value must be URLEncoded.  If an "onclick" attribute was 
+      specified by the user, render this JavaScript in a function,
+      and render the user's JavaScript in a function.  Render both functions
+      in a choice function as follows:</p>
+
+      <p><code>var a=function(){#USER_FUNCTION#};
+      var b=function(){#JSF_FUNCTION#};
+      return (a()==false) ? false : b();</code></p>
+      
+      <p>where #USER_FUNCTION# is the user's JavaScript and #JSF_FUNCTION#
+      is the JavaScript rendered by JSF.  The choice function should operate 
+      such that if the user's JavaScript returns true, then the rendered JavaScript
+      will also execute. 
+ 
+      If the "styleClass" attribute is
       specified, render its value as the value of the "class" attribute.
       Render any non-UIParameter output children as normal inside of the
       "a" element.  These will appear as the link text.  Allow the form
@@ -1163,7 +1176,6 @@
             </renderer-class>
 
             <xi:include href="core-attrs.xml" xpointer="xpointer(/root/*)"/>
-            <xi:include href="events-attrs.xml" xpointer="xpointer(/root/*)"/>
             <xi:include href="focus-attrs.xml" xpointer="xpointer(/root/*)"/>
             <xi:include href="i18n-attrs.xml" xpointer="xpointer(/root/*)"/>
             <xi:include href="link-attrs.xml" xpointer="xpointer(/root/*)"/>
