@@ -1,5 +1,5 @@
 /*
- * $Id: Input_HiddenTag.java,v 1.14 2003/08/19 19:31:27 rlubke Exp $
+ * $Id: Input_HiddenTag.java,v 1.15 2003/08/29 16:03:27 rlubke Exp $
  */
 
 /*
@@ -11,6 +11,7 @@ package com.sun.faces.taglib.html_basic;
 
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
+import javax.faces.convert.Converter;
 
 import com.sun.faces.taglib.FacesTag;
 
@@ -36,7 +37,7 @@ public class Input_HiddenTag extends FacesTag
 
     // Attribute Instance Variables
 
-    private String converter = null;
+    private Converter converter = null;
 
     // Relationship Instance Variables
 
@@ -56,7 +57,7 @@ public class Input_HiddenTag extends FacesTag
     // 
     // Accessors
     //
-    public void setConverter(String converter) {
+    public void setConverter(Converter converter) {
         this.converter = converter;
     }
 
@@ -74,9 +75,8 @@ public class Input_HiddenTag extends FacesTag
     protected void overrideProperties(UIComponent component) {
 	super.overrideProperties(component);
         UIInput uiInput = (UIInput)component;
-        if (converter != null) {
-            // PENDING (rlubke) CORRECT IMPLEMENTATION
-            //uiInput.setConverter(converter);
+        if (converter != null) {            
+            uiInput.setConverter(converter);
         }
     }
     

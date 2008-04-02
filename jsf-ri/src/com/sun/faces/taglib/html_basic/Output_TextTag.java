@@ -1,5 +1,5 @@
 /*
- * $Id: Output_TextTag.java,v 1.47 2003/08/15 19:15:14 rlubke Exp $
+ * $Id: Output_TextTag.java,v 1.48 2003/08/29 16:03:28 rlubke Exp $
  */
 
 /*
@@ -11,6 +11,7 @@ package com.sun.faces.taglib.html_basic;
 
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIOutput;
+import javax.faces.convert.Converter;
 
 import com.sun.faces.taglib.FacesTag;
 
@@ -35,7 +36,7 @@ public class Output_TextTag extends FacesTag
 
     // Attribute Instance Variables
 
-    private String converter = null;
+    private Converter converter = null;
 
     // Relationship Instance Variables
 
@@ -55,7 +56,7 @@ public class Output_TextTag extends FacesTag
     // 
     // Accessors
     //
-    public void setConverter(String converter) {
+    public void setConverter(Converter converter) {
         this.converter = converter;
     }
 
@@ -74,7 +75,7 @@ public class Output_TextTag extends FacesTag
 	super.overrideProperties(component);
 	UIOutput textOutput = (UIOutput) component;
         if (converter != null) {
-            component.setAttribute("converter", converter);
+            textOutput.setConverter(converter);
         }
     }
     

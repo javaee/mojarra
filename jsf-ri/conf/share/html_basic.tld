@@ -626,7 +626,8 @@
     <attribute>
         <name>converter</name>
         <required>false</required>
-        <rtexprvalue>false</rtexprvalue>
+        <rtexprvalue>true</rtexprvalue>
+        <type>javax.faces.convert.Converter</type>
     </attribute>
     <attribute>
       <name>rendered</name>
@@ -948,7 +949,8 @@
     <attribute>
         <name>converter</name>
         <required>false</required>
-        <rtexprvalue>false</rtexprvalue>
+        <rtexprvalue>true</rtexprvalue>
+        <type>javax.faces.convert.Converter</type>
     </attribute>
     <attribute>
       <name>rendered</name>
@@ -1105,7 +1107,8 @@
     <attribute>
         <name>converter</name>
         <required>false</required>
-        <rtexprvalue>false</rtexprvalue>
+        <rtexprvalue>true</rtexprvalue>
+        <type>javax.faces.convert.Converter</type>
     </attribute>
     <attribute>
       <name>rendered</name>
@@ -1594,7 +1597,8 @@
     <attribute>
       <name>converter</name>
       <required>false</required>
-      <rtexprvalue>false</rtexprvalue>
+      <rtexprvalue>true</rtexprvalue>
+      <type>javax.faces.convert.Converter</type>
     </attribute>
     <attribute>
       <name>value</name>
@@ -1647,7 +1651,8 @@
     <attribute>
       <name>converter</name>
       <required>false</required>
-      <rtexprvalue>false</rtexprvalue>
+      <rtexprvalue>true</rtexprvalue>
+      <type>javax.faces.convert.Converter</type>
     </attribute>
     <!-- HTML 4.0 Attributes  -->
     <attribute>
@@ -1826,7 +1831,8 @@
     <attribute>
       <name>converter</name>
       <required>false</required>
-      <rtexprvalue>false</rtexprvalue>
+      <rtexprvalue>true</rtexprvalue>
+      <type>javax.faces.convert.Converter</type>
     </attribute>
     <!-- HTML 4.0 Attributes  -->
     <attribute>
@@ -2444,7 +2450,8 @@
     <attribute>
         <name>converter</name>
         <required>false</required>
-        <rtexprvalue>false</rtexprvalue>
+        <rtexprvalue>true</rtexprvalue>
+        <type>javax.faces.convert.Converter</type>
     </attribute>
     <attribute>
       <name>rendered</name>
@@ -2596,7 +2603,8 @@
     <attribute>
         <name>converter</name>
         <required>false</required>
-        <rtexprvalue>false</rtexprvalue>
+        <rtexprvalue>true</rtexprvalue>
+        <type>javax.faces.convert.Converter</type>
     </attribute>
     <attribute>
       <name>rendered</name>
@@ -2743,7 +2751,8 @@
     <attribute>
         <name>converter</name>
         <required>false</required>
-        <rtexprvalue>false</rtexprvalue>
+        <rtexprvalue>true</rtexprvalue>
+        <type>javax.faces.convert.Conveter</type>
     </attribute>
     <attribute>
       <name>rendered</name>
@@ -3040,7 +3049,8 @@
       <attribute>
         <name>converter</name>
         <required>false</required>
-        <rtexprvalue>false</rtexprvalue>
+        <rtexprvalue>true</rtexprvalue>
+        <type>javax.faces.convert.Converter</type>
       </attribute>
       <attribute>
         <name>required</name>

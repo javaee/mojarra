@@ -4,7 +4,7 @@
  Copyright 2003 Sun Microsystems, Inc. All rights reserved.
  SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 
- $Id: build-tests.xml,v 1.19 2003/08/26 19:14:56 rlubke Exp $
+ $Id: build-tests.xml,v 1.20 2003/08/29 16:03:30 rlubke Exp $
 -->
 
 
@@ -55,6 +55,7 @@
                 test.message,
                 test.converter,
                 test.converter01,
+                test.converter02,
                 test.validator,
                 test.validator01,
                 test.component,
@@ -242,6 +243,14 @@
     <tester host="${host}" port="${port}" protocol="${protocol}"
          request="${context.path}/faces/converter01.jsp"
       outContent="/converter01.jsp PASSED"/>
+  </target>
+
+  <target name="test.converter02"
+   description="Test passing Converter instances to component tag">
+   
+   <tester host="${host}" port="${port}" protocol="${protocol}"
+        request="${context.path}/faces/converter02.jsp"
+        golden="${golden.path}/standard/converter02.txt"/>
   </target>
   
   <target name="test.validator"

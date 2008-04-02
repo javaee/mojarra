@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTag.java,v 1.44 2003/08/26 19:14:53 rlubke Exp $
+ * $Id: FacesTag.java,v 1.45 2003/08/29 16:03:23 rlubke Exp $
  */
 
 /*
@@ -22,6 +22,7 @@ import org.apache.commons.logging.LogFactory;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
 import javax.faces.component.UIOutput;
+import javax.faces.convert.Converter;
 import javax.servlet.jsp.JspException;
 
 /**
@@ -30,7 +31,7 @@ import javax.servlet.jsp.JspException;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: FacesTag.java,v 1.44 2003/08/26 19:14:53 rlubke Exp $
+ * @version $Id: FacesTag.java,v 1.45 2003/08/29 16:03:23 rlubke Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -148,7 +149,7 @@ public abstract class FacesTag extends javax.faces.webapp.UIComponentTag
     protected String cellpadding = null;
 
     protected String valueRef = null;
-    protected String converter = null;
+    protected Converter converter = null;
      // Relationship Instance Variables
 
     //
@@ -181,8 +182,8 @@ public abstract class FacesTag extends javax.faces.webapp.UIComponentTag
 	valueRef = newValueRef;
     }
     
-    public void setConverter(String newConverter) {
-        this.converter = newConverter;
+    public void setConverter(Converter converter) {
+        this.converter = converter;
     }
 
   
@@ -1196,9 +1197,8 @@ protected void overrideProperties(UIComponent component)
 	if (null != value) {
 	    output.setValue(value);
 	}
-        if (null != converter) {
-            // PENDING (rlubke) CORRECT IMPELMENTATION
-            //output.setConverter(converter);
+        if (null != converter) {           
+            output.setConverter(converter);
         }
     }    
 

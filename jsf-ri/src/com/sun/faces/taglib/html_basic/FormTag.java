@@ -1,5 +1,5 @@
 /*
- * $Id: FormTag.java,v 1.43 2003/08/23 00:39:10 jvisvanathan Exp $
+ * $Id: FormTag.java,v 1.44 2003/08/29 16:03:24 rlubke Exp $
  */
 
 /*
@@ -83,26 +83,25 @@ public class FormTag extends FacesTag
 
     protected void overrideProperties(UIComponent component) {
 	super.overrideProperties(component);
-	UIForm form = (UIForm) component;
 
-        // PENDING (rlubke) CORRECT IMPLEMENTATION
-//	if (null == formName) {
-//	    form.setFormName(formName);
-//             // we set the bundle attribute on the root component here  
-//             // so that we don't set it again during postback. 
-//             // This cannot be done in FacesTag since this is specific
-//             // to FormTag. Since formName is a required attribute,
-//             // we can be sure that these statements will be executed
-//             // the first time the tags are processed.
-//            if ( bundle != null) { 
-//                // set it as an attribute on the root component so that
-//                // it is available to children and doesn't have to be repeated
-//                // in every tag.
-//                FacesContext context = FacesContext.getCurrentInstance();
-//                UIComponent root = context.getViewRoot();
-//                root.setAttribute(RIConstants.BUNDLE_ATTR, bundle);
-//            }
-//	}
+        if (formName != null) {
+            // we set the bundle attribute on the root component here  
+            // so that we don't set it again during postback. 
+            // This cannot be done in FacesTag since this is specific
+            // to FormTag. Since formName is a required attribute,
+            // we can be sure that these statements will be executed
+            // the first time the tags are processed.
+            if (bundle != null) {
+                // set it as an attribute on the root component so that
+                // it is available to children and doesn't have to be repeated
+                // in every tag.
+                FacesContext context = FacesContext.getCurrentInstance();
+                UIComponent root = context.getViewRoot();
+                root.setAttribute(RIConstants.BUNDLE_ATTR, bundle);    
+            }
+            component.setAttribute("name", formName);
+        }
+        
         // action, method, enctype, acceptcharset, accept, target, onsubmit, 
         // onreset
         if (onsubmit != null ) {

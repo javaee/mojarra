@@ -1,5 +1,5 @@
 /*
- * $Id: Input_TextTag.java,v 1.12 2003/08/19 19:31:27 rlubke Exp $
+ * $Id: Input_TextTag.java,v 1.13 2003/08/29 16:03:27 rlubke Exp $
  */
 
 /*
@@ -11,6 +11,7 @@ package com.sun.faces.taglib.html_basic;
 
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
+import javax.faces.convert.Converter;
 
 
 /**
@@ -31,7 +32,7 @@ public class Input_TextTag extends InputTag
     //
     // Instance Variables
     //
-    private String converter = null;
+    private Converter converter = null;
 
     // Attribute Instance Variables
 
@@ -47,7 +48,7 @@ public class Input_TextTag extends InputTag
     //
     // Accessors
     //
-    public void setConverter(String converter) {
+    public void setConverter(Converter converter) {
         this.converter = converter;
     }
 
@@ -64,9 +65,8 @@ public class Input_TextTag extends InputTag
     protected void overrideProperties(UIComponent component) {
         super.overrideProperties(component);
         UIInput input = (UIInput) component;
-        if (converter != null) {
-            // PENDING (rlubke) CORRECT IMPLEMENTATION
-            //input.setConverter(converter);
+        if (converter != null) {           
+            input.setConverter(converter);
         }
     }
 
