@@ -21,26 +21,26 @@
 				<tr>
 					<td>Multi-select listmodel:</td>
 					<td><h:selectmany_listbox id="listmodel"
-						valueRef="LoginBean.currentOptions">
+						value="#{LoginBean.currentOptions}">
 						<f:selectitems id="listmodelitems"
-							valueRef="LoginBean.options" />
+							value="#{LoginBean.options}" />
 					</h:selectmany_listbox></td>
 				</tr>
 
                                 <tr>
 					<td>Multi-select listmodel with options of type java.lang.Long:</td>
 					<td><h:selectmany_listbox id="longlistmodel"
-						valueRef="LoginBean.currentLongOptions">
+						value="#{LoginBean.currentLongOptions}">
 						<f:selectitems id="longlistmodelitems"
-							valueRef="LoginBean.longList" />
+							value="#{LoginBean.longList}" />
 					</h:selectmany_listbox></td>
 				</tr>
 
                                 <tr>
 					<td>Multi-select listmodel Group:</td>
 					<td><h:selectmany_listbox id="listmodelGroup"
-						valueRef="LoginBean.currentOptions">
+						value="#{LoginBean.currentOptions}">
 						<f:selectitems id="listmodelitemsGroup"
-							valueRef="LoginBean.optionsGroup" />
+							value="#{LoginBean.optionsGroup}" />
 					</h:selectmany_listbox></td>
 				</tr>

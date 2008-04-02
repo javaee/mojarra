@@ -49,10 +49,10 @@
 
              <td>
                 <h:selectone_listbox id="Listbox"
-                             valueRef="LoginBean.currentOption">
+                             value="#{LoginBean.currentOption}">
 
                 <f:selectitems id="listboxOptions"
-                                   valueRef="LoginBean.options"/>
+                                   value="#{LoginBean.options}"/>
 
               </h:selectone_listbox>
 
@@ -71,10 +71,10 @@
 
              <td>
                 <h:selectone_listbox id="longListbox" 
-                             valueRef="LoginBean.currentLongOption">
+                             value="#{LoginBean.currentLongOption}">
                     
                 <f:selectitems id="listboxLongOptions"
-                                   valueRef="LoginBean.longList"/>
+                                   value="#{LoginBean.longList}"/>
 
               </h:selectone_listbox>
 

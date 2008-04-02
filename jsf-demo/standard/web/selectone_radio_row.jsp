@@ -55,11 +55,11 @@
 
              <td>
                  <h:selectone_radio id="radioFromModel"
-                       valueRef="LoginBean.currentOption"
+                       value="#{LoginBean.currentOption}"
                        title="options come from model"
                        layout="LINE_DIRECTION" >
 
-                 <f:selectitems id="radioOptions" valueRef="LoginBean.options"/>
+                 <f:selectitems id="radioOptions" value="#{LoginBean.options}"/>
                 </h:selectone_radio>
 
              </td>
@@ -77,11 +77,11 @@
 
              <td>
                  <h:selectone_radio id="radioLongOptions"
-                       valueRef="LoginBean.currentLongOption"
+                       value="#{LoginBean.currentLongOption}"
                        title="options come from model"
                        layout="LINE_DIRECTION">
                  
-                <f:selectitems id="longItemOptions" valueRef="LoginBean.longList"/>
+                <f:selectitems id="longItemOptions" value="#{LoginBean.longList}"/>
                 </h:selectone_radio>
 
              </td>
@@ -91,10 +91,10 @@
             <tr>
 	         <td>Single-select radiomodel - modelType Boolean:</td>
 	         <td><h:selectone_radio id="oneLongradiomodel"
-                            valueRef="LoginBean.currentBooleanOption">
+                            value="#{LoginBean.currentBooleanOption}">
                            
 		         <f:selectitems id="oneRadiomodelitems"
-				valueRef="LoginBean.booleanList" />
+				value="#{LoginBean.booleanList}" />
 		    </h:selectone_radio></td>
 	   </tr>
 
@@ -108,11 +108,11 @@
 
              <td>
                  <h:selectone_radio id="radioFromModelGroup"
-                       valueRef="LoginBean.currentOption"
+                       value="#{LoginBean.currentOption}"
                        title="options come from model"
                        layout="LINE_DIRECTION" >
 
-                 <f:selectitems id="radioOptionsGroup" valueRef="LoginBean.optionsGroup"/>
+                 <f:selectitems id="radioOptionsGroup" value="#{LoginBean.optionsGroup}"/>
                 </h:selectone_radio>
 
              </td>

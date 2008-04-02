@@ -37,27 +37,27 @@
 				<tr>
 					<td>Multi-select checklistmodel:</td>
 					<td><h:selectmany_checkboxlist id="checklistmodel"
-						valueRef="LoginBean.currentOptions">
+						value="#{LoginBean.currentOptions}">
 						<f:selectitems id="checklistmodelitems"
-							valueRef="LoginBean.options" />
+							value="#{LoginBean.options}" />
 					</h:selectmany_checkboxlist></td>
 				</tr>
 
                                 <tr>
 					<td>Multi-select checklistmodel with options of the type java.lang.Long:</td>
 					<td><h:selectmany_checkboxlist id="checkLonglistmodel"
-						valueRef="LoginBean.currentLongOptions">
+						value="#{LoginBean.currentLongOptions}">
                                                  
 						<f:selectitems id="checkLonglistmodelitems"
-							valueRef="LoginBean.longList" />
+							value="#{LoginBean.longList}" />
 					</h:selectmany_checkboxlist></td>
 				</tr>
 
                                 <tr>
 					<td>Multi-select checklistmodelGroup:</td>
 					<td><h:selectmany_checkboxlist id="checklistmodelGroup"
-						valueRef="LoginBean.currentOptions">
+						value="#{LoginBean.currentOptions}">
 						<f:selectitems id="checklistmodelitemsGroup"
-							valueRef="LoginBean.optionsGroup" />
+							value="#{LoginBean.optionsGroup}" />
 					</h:selectmany_checkboxlist></td>
 				</tr

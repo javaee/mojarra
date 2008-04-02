@@ -22,25 +22,25 @@
 					<td>Multi-select menumodel:</td>
 					<td><h:selectmany_menu id="menumodel" size="3">
 						<f:selectitems id="menumodelitems"
-							valueRef="LoginBean.options" />
+							value="#{LoginBean.options}" />
 					</h:selectmany_menu></td>
 				</tr>
 
                                 <tr>
 					<td>Multi-select menumodel with options of the type java.lang.Long:</td>
 					<td><h:selectmany_menu id="menuLongmodel" size="3"
-                                               valueRef="LoginBean.currentLongOptions">
+                                               value="#{LoginBean.currentLongOptions}">
                                                
 						<f:selectitems id="menumodelonglitems"
-							valueRef="LoginBean.longList" />
+							value="#{LoginBean.longList}" />
 					</h:selectmany_menu></td>
 				</tr>
 
                                 <tr>
 					<td>Multi-select menumodel Group:</td>
 					<td><h:selectmany_menu id="listGroup" size="3"
-                                                valueRef="LoginBean.currentOptions">
+                                                value="#{LoginBean.currentOptions}">
 						<f:selectitems id="menumodelitemsGroup"
-							valueRef="LoginBean.optionsGroup" />
+							value="#{LoginBean.optionsGroup}" />
 					</h:selectmany_menu></td>
 				</tr>

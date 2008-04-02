@@ -35,7 +35,7 @@
              <td>
 
                <h:command_button id="commandButton6" action="success"
-                   valueRef="model.label">
+                   value="#{model.label}">
                  <f:action_listener type="standard.DefaultListener"/>
                </h:command_button>
 
