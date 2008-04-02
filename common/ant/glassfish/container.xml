@@ -137,7 +137,7 @@ grant {
     </target>
     
     <target name="update.impl.manifest">
-        <echo message="PENDING = Please implement"/>
+        <echo message="PENDING - Please implement"/>
     </target>
 
     <macrodef name="container.deploy"
