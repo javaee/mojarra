@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTag.java,v 1.23 2003/10/23 00:37:56 craigmcc Exp $
+ * $Id: UIComponentTag.java,v 1.24 2003/10/23 06:05:06 jvisvanathan Exp $
  */
 
 /*
@@ -656,21 +656,22 @@ public abstract class UIComponentTag implements Tag {
             return (component);
         }
 
-        // Step 3 -- Create or return a facet with the specified name (if any)
+        // Step 3 -- Calculate the component identifier for this component
+        String newId = this.id;
+        if (newId == null) {
+            newId = createId();
+        }
+        
+        // Step 4 -- Create or return a facet with the specified name (if any)
         String facetName = getFacetName();
         if (facetName != null) {
             component = (UIComponent)
                 parentComponent.getFacets().get(facetName);
             if (component == null) {
-                component = createFacet(context, parentComponent, facetName);
+                component = createFacet(context, parentComponent, facetName,
+                        newId);
             }
             return (component);
-        }
-
-        // Step 4 -- Calculate the component identifier for this component
-        String newId = this.id;
-        if (newId == null) {
-            newId = createId();
         }
 
         // Step 5 -- Create or return a child with the specified id
@@ -953,16 +954,15 @@ public abstract class UIComponentTag implements Tag {
      * @param context {@link FacesContext} for the current request
      * @param parent Parent {@link UIComponent} of the new facet
      * @param name Name of the new facet
+     * @param newId id of the new facet
      */
     private UIComponent createFacet(FacesContext context, UIComponent parent,
-                                    String name) {
+                                    String name, String newId) {
 
         UIComponent component =
             context.getApplication().createComponent(getComponentType());
         overrideProperties(component);
-        if (component.getId() == null) {
-            component.setId(createId());
-        }
+        component.setId(newId);
         parent.getFacets().put(name, component);
         created = true;
         return (component);
