@@ -25,8 +25,8 @@
 
 package com.sun.faces.spi;
 
-import java.util.logging.Logger;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import com.sun.faces.RIConstants;
 import com.sun.faces.util.Util;
@@ -64,9 +64,29 @@ public class InjectionProviderFactory {
      *  interfaces
      */
     public static InjectionProvider createInstance() {
-        String className = System.getProperty(INJECTION_PROVIDER_PROPERTY);
+
+        InjectionProvider provider =
+              getProviderInstance(System.getProperty(INJECTION_PROVIDER_PROPERTY));
+
+        if (provider.getClass() != NoopInjectionProvider.class) {
+            if (LOGGER.isLoggable(Level.INFO)) {
+                LOGGER.log(Level.INFO,
+                           "jsf.spi.injection.provider_configured",
+                           new Object[]{provider.getClass().getName()});
+            }
+        } else {
+            if (LOGGER.isLoggable(Level.INFO)) {
+                LOGGER.log(Level.INFO, "jsf.spi.injection.no_injection");
+            }
+        }
+        return provider;
+        
+    }
+    
+
+    private static InjectionProvider getProviderInstance(String className) {
         InjectionProvider provider = NOOP_PROVIDER;
-        if (className != null) {            
+        if (className != null) {
             try {
                 Class<?> clazz = Util.loadClass(className, InjectionProviderFactory.class);
                 if (implementsInjectionProvider(clazz)) {
@@ -77,12 +97,12 @@ public class InjectionProviderFactory {
                                    "jsf.spi.injection.provider_not_implemented",
                                    new Object[]{ className });
                     }
-                }                                                 
+                }
             } catch (ClassNotFoundException cnfe) {
                 if (LOGGER.isLoggable(Level.SEVERE)) {
                    LOGGER.log(Level.SEVERE,
-                                   "jsf.spi.injection.provider_not_found",
-                                   new Object[]{ className });
+                              "jsf.spi.injection.provider_not_found",
+                              new Object[]{ className });
                 }
             } catch (InstantiationException ie) {
                 if (LOGGER.isLoggable(Level.SEVERE)) {
@@ -99,19 +119,15 @@ public class InjectionProviderFactory {
                     LOGGER.log(Level.SEVERE, "", iae);
                 }
             }
-        }
-        
-        if (provider.getClass() != NoopInjectionProvider.class) {
-            if (LOGGER.isLoggable(Level.INFO)) {
-                LOGGER.log(Level.INFO,
-                           "jsf.spi.injection.provider_configured",
-                           new Object[] { className });
-            }
         } else {
-            if (LOGGER.isLoggable(Level.INFO)) {
-                LOGGER.log(Level.INFO,
-                           "jsf.spi.injection.no_injection",
-                           new Object[] { className });
+            // added magic for GlassFish
+            try {
+                if (Class.forName("com.sun.enterprise.util.InjectionManagerImpl") != null) {
+                    provider = 
+                          getProviderInstance("com.sun.faces.vendor.GlassFishInjectionProvider");   
+                }
+            } catch (ClassNotFoundException cnfe) {
+                provider = NOOP_PROVIDER;
             }
         }
         return provider;
@@ -124,7 +140,7 @@ public class InjectionProviderFactory {
      * @return <code>true</code> if <code>clazz</code> implements
      *  the <code>InjectionProvider</code> interface
      */
-    private static boolean implementsInjectionProvider(Class<?> clazz) {        
+    private static boolean implementsInjectionProvider(Class<?> clazz) {
         return InjectionProvider.class.isAssignableFrom(clazz);
     }
 
