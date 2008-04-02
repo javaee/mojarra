@@ -26,9 +26,9 @@
             <required>
                 false
             </required>
-            <rtexprvalue>
-                false
-            </rtexprvalue>
+            <deferred-value>
+                <type>java.lang.Boolean</type>
+            </deferred-value>
         </attribute>
         <attribute>
             <description>
@@ -40,12 +40,9 @@
             <required>
                 false
             </required>
-            <rtexprvalue>
-                false
-            </rtexprvalue>
-            <type>
-                java.lang.String
-            </type>
+            <deferred-value>
+                <type>javax.faces.UIComponent</type>
+            </deferred-value>
         </attribute>
         <attribute>
             <description>

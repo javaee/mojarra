@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.129 2005/04/21 18:55:29 edburns Exp $
+ * $Id: UIComponent.java,v 1.130 2005/05/05 20:51:03 edburns Exp $
  */
 
 /*
@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import javax.el.ValueExpression;
 import javax.faces.context.FacesContext;
 import javax.faces.el.ValueBinding;
 import javax.faces.event.AbortProcessingException;
@@ -86,21 +87,29 @@ public abstract class UIComponent implements StateHolder {
 
 
     /**
-     * <p>Return the {@link ValueBinding} used to calculate the value for the
-     * specified attribute or property name, if any.</p>
+     *
+     * <p>Call through to {@link #getValueExpression} and examine the
+     * result.  If the result is an instance of the wrapper class
+     * mandated in {@link #setValueBinding}, extract the
+     * <code>ValueBinding</code> instance and return it.  Otherwise,
+     * wrap the result in an implementation of
+     * <code>ValueBinding</code>, and return it.</p>
      *
      * @param name Name of the attribute or property for which to retrieve a
      *  {@link ValueBinding}
      *
      * @exception NullPointerException if <code>name</code>
      *  is <code>null</code>
+     *
+     * @deprecated This has been replaced by {@link #getValueExpression}.
      */
     public abstract ValueBinding getValueBinding(String name);
 
 
     /**
-     * <p>Set the {@link ValueBinding} used to calculate the value for the
-     * specified attribute or property name, if any.</p>
+     * <p>Wrap the argument <code>binding</code> in an implementation of
+     * {@link ValueExpression} and call through to {@link
+     * #setValueExpression}.</p>
      *
      * @param name Name of the attribute or property for which to set a
      *  {@link ValueBinding}
@@ -111,9 +120,59 @@ public abstract class UIComponent implements StateHolder {
      *  <code>id</code> or <code>parent</code>
      * @exception NullPointerException if <code>name</code>
      *  is <code>null</code>
+     *
+     * @deprecated This has been replaced by {@link #setValueExpression}.
      */
     public abstract void setValueBinding(String name, ValueBinding binding);
 
+    /**
+     * <p>Return the {@link ValueExpression} used to calculate the value for the
+     * specified attribute or property name, if any.</p>
+     *
+     * @since 1.2
+     *
+     * @param name Name of the attribute or property for which to retrieve a
+     *  {@link ValueExpression}
+     *
+     * @exception NullPointerException if <code>name</code>
+     *  is <code>null</code>
+     *
+     */
+    public abstract ValueExpression getValueExpression(String name);
+
+    /**
+     * <p>Set the {@link ValueExpression} used to calculate the value
+     * for the specified attribute or property name, if any.</p>
+     *
+     * <p>The implementation must call {@link
+     * ValueExpression#isLiteralText} on the argument
+     * <code>expression</code>.  If <code>isLiteralText()</code> returns
+     * <code>true</code>, invoke {@link ValueExpression#getValue} on the
+     * argument expression and pass the result as the <code>value</code>
+     * parameter in a call to <code>this.{@link
+     * #getAttributes()}.put(name, value)</code> where <code>name</code>
+     * is the argument <code>name</code>.  If an exception is thrown as
+     * a result of calling {@link ValueExpression#getValue}, wrap it in
+     * a {@link javax.faces.FacesException} and re-throw it.  If
+     * <code>isLiteralText()</code> returns <code>false</code>, simply
+     * store the un-evaluated <code>expression</code> argument in the
+     * collection of <code>ValueExpression</code>s under the key given
+     * by the argument <code>name</code>.</p>
+     *
+     * @since 1.2
+     *
+     * @param name Name of the attribute or property for which to set a
+     *  {@link ValueExpression}
+     * @param expression The {@link ValueExpression} to set, or <code>null</code>
+     *  to remove any currently set {@link ValueExpression}
+     *
+     * @exception IllegalArgumentException if <code>name</code> is one of
+     *  <code>id</code> or <code>parent</code>
+     * @exception NullPointerException if <code>name</code>
+     *  is <code>null</code>
+     *
+     */
+    public abstract void setValueExpression(String name, ValueExpression expression);
 
     // -------------------------------------------------------------- Properties
 

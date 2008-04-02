@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBaseTestCase.java,v 1.25 2004/04/07 17:39:25 rkitain Exp $
+ * $Id: UIComponentBaseTestCase.java,v 1.26 2005/05/05 20:51:14 edburns Exp $
  */
 
 /*
@@ -13,11 +13,14 @@ package javax.faces.component;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.Map;
+import java.lang.reflect.InvocationTargetException;
 import javax.faces.FactoryFinder;
 import javax.faces.application.Application;
 import javax.faces.application.ApplicationFactory;
+import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.el.ValueBinding;
+import javax.el.ValueExpression;
 import javax.faces.event.FacesEvent;
 import javax.faces.mock.MockApplication;
 import javax.faces.mock.MockExternalContext;
@@ -35,6 +38,8 @@ import javax.faces.TestUtil;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
 import javax.faces.validator.Validator;
+import javax.faces.validator.ValidatorException;
+import javax.faces.event.AbortProcessingException;
 import junit.framework.TestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -405,8 +410,132 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
 
     }
 
+    public void testValueExpressions() throws Exception {
 
-    // --------------------------------------------------------- Support Methods
+	UIComponentBase test = (UIComponentBase) component;
+
+	// generic attributes
+	request.setAttribute("foo", "bar");
+	test.getAttributes().clear();
+	assertNull(test.getAttributes().get("baz"));
+	test.setValueExpression("baz", application.getExpressionFactory().createValueExpression(facesContext.getELContext(), "#{foo}", String.class));
+	assertEquals("bar", test.getAttributes().get("baz"));
+	test.getAttributes().put("baz", "bop");
+	assertEquals("bop", test.getAttributes().get("baz"));
+	test.getAttributes().remove("baz");
+	assertEquals("bar", test.getAttributes().get("baz"));
+	test.setValueExpression("baz", null);
+	assertNull(test.getAttributes().get("baz"));
+
+        // "id" property
+        try {
+            test.setValueExpression("id",
+                                 application.getExpressionFactory().createValueExpression(facesContext.getELContext(), "#{foo}", String.class));
+            fail("Should have thrown IllegalArgumentException");
+        } catch (IllegalArgumentException e) {
+            ; // Expected response
+        }
+
+        // "parent" property
+        try {
+            test.setValueExpression("parent",
+                                 application.getExpressionFactory().createValueExpression(facesContext.getELContext(), "#{foo}", UIComponent.class));
+            fail("Should have thrown IllegalArgumentException");
+        } catch (IllegalArgumentException e) {
+            ; // Expected response
+        }
+
+	// "rendered" property
+	request.setAttribute("foo", Boolean.FALSE);
+	test.setValueExpression("rendered", null);
+	boolean initial = test.isRendered();
+	if (initial) {
+	    request.setAttribute("foo", Boolean.FALSE);
+	} else {
+	    request.setAttribute("foo", Boolean.TRUE);
+	}
+	test.setValueExpression("rendered", application.getExpressionFactory().createValueExpression(facesContext.getELContext(), "#{foo}", Boolean.class));
+	assertEquals(!initial, test.isRendered());
+	test.setRendered(initial);
+	assertEquals(initial, test.isRendered());
+	assertNotNull(test.getValueExpression("rendered"));
+
+	// "rendererType" property
+	request.setAttribute("foo", "bar");
+	test.setRendererType(null);
+	assertNull(test.getRendererType());
+	test.setValueExpression("rendererType", application.getExpressionFactory().createValueExpression(facesContext.getELContext(),"#{foo}", String.class));
+	assertNotNull(test.getValueExpression("rendererType"));
+	assertEquals("bar", test.getRendererType());
+	test.setRendererType("baz");
+	assertEquals("baz", test.getRendererType());
+	test.setRendererType(null);
+	assertEquals("bar", test.getRendererType());
+	test.setValueExpression("rendererType", null);
+	assertNull(test.getValueExpression("rendererType"));
+	assertNull(test.getRendererType());
+
+    }
+
+    public void testValueExpressionValueBindingIdempotency() throws Exception{
+
+	UIComponentBase test = (UIComponentBase) component;
+
+	request.setAttribute("foo", "bar");
+	test.getAttributes().clear();
+	assertNull(test.getAttributes().get("baz"));
+	ValueBinding binding = null;
+	ValueExpression expression = null;
+	
+	binding = application.createValueBinding("#{foo}");
+	test.setValueBinding("baz", binding);
+	expression = test.getValueExpression("baz");
+	
+	assertEquals(binding.getExpressionString(), 
+		     expression.getExpressionString());
+	test.setValueBinding("baz", null);
+
+	expression = application.getExpressionFactory().createValueExpression(facesContext.getELContext(),"#{foo}", String.class);
+	test.setValueExpression("baz", expression);
+	binding = test.getValueBinding("baz");
+	assertEquals(binding.getExpressionString(), 
+		     expression.getExpressionString());
+	test.setValueBinding("baz", null);
+	
+    }
+
+    public void testMethodBindingAdapterBaseException() throws Exception {
+	IllegalThreadStateException itse = new IllegalThreadStateException("The root cause!");
+	AbortProcessingException ape = new AbortProcessingException(itse);
+	InvocationTargetException ite1 = new InvocationTargetException(ape);
+	InvocationTargetException ite2 = new InvocationTargetException(ite1);
+	InvocationTargetException ite3 = new InvocationTargetException(ite2);
+	MethodBindingValueChangeListener mbvcl = 
+	    new MethodBindingValueChangeListener();
+	Throwable expected = 
+	    mbvcl.getExpectedCause(AbortProcessingException.class, ite3);
+	assertEquals(expected, ape);
+
+	MethodBindingActionListener mbal = 
+	    new MethodBindingActionListener();
+	expected = 
+	    mbal.getExpectedCause(AbortProcessingException.class, ite3);
+	assertEquals(expected, ape);
+
+	ValidatorException ve = new ValidatorException(new FacesMessage(), 
+						       itse);
+	ite1 = new InvocationTargetException(ve);
+	ite2 = new InvocationTargetException(ite1);
+	ite3 = new InvocationTargetException(ite2);
+
+	MethodBindingValidator mbv = new MethodBindingValidator();
+	expected = 
+	    mbv.getExpectedCause(ValidatorException.class, ite3);
+	assertEquals(expected, ve);	
+    }
+
+
+    // --------------------------------------------------------- support Methods
 
 
     // Check that the attributes on the specified components are equal

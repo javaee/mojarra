@@ -1,5 +1,5 @@
 /*
- * $Id: TaglibGenTask.java,v 1.3 2004/12/13 19:07:48 rlubke Exp $
+ * $Id: TaglibGenTask.java,v 1.4 2005/05/05 20:51:34 edburns Exp $
  */
 
 /*
@@ -16,8 +16,11 @@ import org.apache.tools.ant.BuildException;
  */
 public class TaglibGenTask extends AbstractGeneratorTask {
 
-    private static final String GENERATOR_CLASS =
-        "com.sun.faces.generate.HtmlTaglibGenerator";
+    private static final String GENERATOR_12_CLASS =
+        "com.sun.faces.generate.HtmlTaglib12Generator";
+
+    private static final String GENERATOR_21_CLASS =
+        "com.sun.faces.generate.HtmlTaglib21Generator";
 
 
     // ---------------------------------------------------------- Public Methods
@@ -25,7 +28,11 @@ public class TaglibGenTask extends AbstractGeneratorTask {
 
     public void execute() throws BuildException {
 
-        setGeneratorClass(GENERATOR_CLASS);
+        if (generatorConfig.indexOf("12") > -1) {
+            setGeneratorClass(GENERATOR_12_CLASS);
+        } else {
+           setGeneratorClass(GENERATOR_21_CLASS);
+        }
 
         super.execute();
 

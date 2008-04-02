@@ -1,5 +1,5 @@
 /*
- * $Id: ValidateLengthTag.java,v 1.12 2004/12/20 21:26:35 rogerk Exp $
+ * $Id: ValidateLengthTag.java,v 1.13 2005/05/05 20:51:27 edburns Exp $
  */
 
 /*
@@ -11,11 +11,15 @@
 
 package com.sun.faces.taglib.jsf_core;
 
-import com.sun.faces.util.Util;
-
+import javax.el.ELContext;
+import javax.el.ValueExpression;
+import javax.el.ExpressionFactory;
+import javax.faces.context.FacesContext;
 import javax.faces.validator.LengthValidator;
 import javax.faces.validator.Validator;
 import javax.servlet.jsp.JspException;
+
+import com.sun.faces.util.Util;
 
 /**
  * ValidateLengthTag is the tag handler class for
@@ -24,33 +28,33 @@ import javax.servlet.jsp.JspException;
 
 public class ValidateLengthTag extends MaxMinValidatorTag {
 
-//
-// Protected Constants
-//
+    private static ValueExpression VALIDATOR_ID_EXPR = null;
 
-//
-// Class Variables
-//
-
-//
-// Instance Variables
-//
 
 // Attribute Instance Variables
-    protected String maximum_ = null;
+    protected ValueExpression maximumExpression = null;
+    protected ValueExpression minimumExpression = null;
+
     protected int maximum = 0;
-    protected String minimum_ = null;
     protected int minimum = 0;
 
 
 // Relationship Instance Variables
 
 //
-// Constructors and Initializers    
+// Constructors and Initializers
 //
 
     public ValidateLengthTag() {
         super();
+        if (VALIDATOR_ID_EXPR == null) {
+            FacesContext context = FacesContext.getCurrentInstance();
+            ExpressionFactory factory = context.getApplication().
+                    getExpressionFactory();
+            VALIDATOR_ID_EXPR =
+                factory.createValueExpression(context.getELContext(), 
+                    "javax.faces.Length", String.class);
+        }
     }
 
 //
@@ -61,65 +65,70 @@ public class ValidateLengthTag extends MaxMinValidatorTag {
 // General Methods
 //
 
-    public void setMaximum(String newMaximum) {
+    public void setMaximum(ValueExpression newMaximum) {
         maximumSet = true;
-        maximum_ = newMaximum;
+        maximumExpression = newMaximum;
     }
 
 
-    public void setMinimum(String newMinimum) {
+    public void setMinimum(ValueExpression newMinimum) {
         minimumSet = true;
-        minimum_ = newMinimum;
+        minimumExpression = newMinimum;
     }
 
     public int doStartTag() throws JspException {
-        super.setValidatorId("javax.faces.Length");
-	return super.doStartTag();
+        super.setValidatorId(VALIDATOR_ID_EXPR);
+        return super.doStartTag();
     }
 
 
-// 
+//
 // Methods from ValidatorTag
 //
 
     protected Validator createValidator() throws JspException {
-        LengthValidator result = null;
 
-        result = (LengthValidator) super.createValidator();
+        LengthValidator result = (LengthValidator)
+            super.createValidator();
+        assert (null != result);
 
-        if (result != null) {
-            evaluateExpressions();
-            if (maximumSet) {
-                result.setMaximum(maximum);
-            }
+        evaluateExpressions();
+        if (maximumSet) {
+            result.setMaximum(maximum);
+        }
 
-            if (minimumSet) {
-                result.setMinimum(minimum);
-            }
+        if (minimumSet) {
+            result.setMinimum(minimum);
         }
 
         return result;
     }
 
 /* Evaluates expressions as necessary */
-    private void evaluateExpressions() throws JspException {
+    private void evaluateExpressions() {
 
-        if (minimum_ != null) {
-            if (Util.isVBExpression(minimum_)) {
-                Number numberObj = (Number) Util.evaluateVBExpression(minimum_);
-                assert (null != numberObj);
-                minimum = numberObj.intValue();
+        ELContext context = FacesContext.getCurrentInstance().getELContext();
+
+        if (minimumExpression != null) {
+            if (!minimumExpression.isLiteralText()) {
+                minimum = ((Number)
+                              Util.evaluateValueExpression(minimumExpression,
+                                  context)).intValue();
             } else {
-                minimum = new Integer(minimum_).intValue();
+                minimum =
+                Integer.valueOf(minimumExpression.getExpressionString()).
+                    intValue();
             }
         }
-        if (maximum_ != null) {
-            if (Util.isVBExpression(maximum_)) {
-                Number numberObj = (Number) Util.evaluateVBExpression(maximum_);
-                assert (null != numberObj);
-                maximum = numberObj.intValue();
+        if (maximumExpression != null) {
+            if (!maximumExpression.isLiteralText()) {
+                maximum = ((Number)
+                              Util.evaluateValueExpression(maximumExpression,
+                                  context)).intValue();
             } else {
-                maximum = new Integer(maximum_).intValue();
+                maximum =
+                Integer.valueOf(maximumExpression.getExpressionString()).
+                    intValue();
             }
         }
     }

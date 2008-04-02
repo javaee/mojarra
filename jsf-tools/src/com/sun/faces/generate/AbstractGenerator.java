@@ -1,5 +1,5 @@
 /*
- * $Id: AbstractGenerator.java,v 1.9 2005/04/04 18:34:39 edburns Exp $
+ * $Id: AbstractGenerator.java,v 1.10 2005/05/05 20:51:37 edburns Exp $
  */
 
 /*
@@ -113,34 +113,6 @@ public abstract class AbstractGenerator implements Generator {
     }
 
 
-    // The set of unwrapper methods for primitives, keyed by the primitive type
-    protected static Map UNWRAPPERS = new HashMap();
-    static {
-        UNWRAPPERS.put("boolean", "booleanValue");
-        UNWRAPPERS.put("byte", "byteValue");
-        UNWRAPPERS.put("char", "charValue");
-        UNWRAPPERS.put("double", "doubleValue");
-        UNWRAPPERS.put("float", "floatValue");
-        UNWRAPPERS.put("int", "intValue");
-        UNWRAPPERS.put("long", "longValue");
-        UNWRAPPERS.put("short", "shortValue");
-    }
-
-
-    // The set of wrapper classes for primitives, keyed by the primitive type
-    protected static Map WRAPPERS = new HashMap();
-    static {
-        WRAPPERS.put("boolean", "Boolean");
-        WRAPPERS.put("byte", "Byte");
-        WRAPPERS.put("char", "Character");
-        WRAPPERS.put("double", "Double");
-        WRAPPERS.put("float", "Float");
-        WRAPPERS.put("int", "Integer");
-        WRAPPERS.put("long", "Long");
-        WRAPPERS.put("short", "Short");
-    }
-
-
     // ------------------------------------------------------- Protected Methods
 
 
@@ -208,7 +180,7 @@ public abstract class AbstractGenerator implements Generator {
      */
     protected static boolean primitive(String type) {
 
-        return (WRAPPERS.containsKey(type));
+        return ((GeneratorUtil.convertToPrimitive(type) != null) ? true : false);
 
     }
 
@@ -298,13 +270,24 @@ public abstract class AbstractGenerator implements Generator {
         public void writePublicClassDeclaration(String className,
                                                 String extendsClass,
                                                 String[] implementsClasses,
-                                                boolean isAbstract)
+                                                boolean isAbstract,
+                                                boolean isFinal)
         throws IOException {
+
+            if (isAbstract && isFinal) {
+                throw new IllegalArgumentException("Cannot have a class" +
+                    " declaration be both abstract and final.");
+            }
 
             StringBuffer sb = new StringBuffer("public");
             if (isAbstract) {
                 sb.append(" abstract");
             }
+
+            if (isFinal) {
+                sb.append(" final");
+            }
+
             sb.append(" class ").append(className);
 
             if (extendsClass != null && extendsClass.length() > 0) {

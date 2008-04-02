@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationAssociate.java,v 1.9 2005/04/05 20:25:13 jayashri Exp $
+ * $Id: ApplicationAssociate.java,v 1.10 2005/05/05 20:51:19 edburns Exp $
  */
 
 /*
@@ -9,6 +9,24 @@
 
 package com.sun.faces.application;
 
+import java.util.logging.Logger;
+import java.util.logging.Level;
+
+import com.sun.faces.RIConstants;
+import com.sun.faces.config.ConfigureListener;
+import com.sun.faces.config.ManagedBeanFactory;
+import com.sun.faces.util.Util;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+import javax.faces.FacesException;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
+
+import javax.faces.el.VariableResolver;
+import javax.faces.el.PropertyResolver;
+import javax.el.ExpressionFactory;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -16,18 +34,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeSet;
-import java.util.logging.Logger;
-import java.util.logging.Level;
-
-import javax.faces.FacesException;
-import javax.faces.context.ExternalContext;
-import javax.faces.context.FacesContext;
-
-import com.sun.faces.RIConstants;
-import com.sun.faces.config.ConfigureListener;
-import com.sun.faces.config.ManagedBeanFactory;
-import com.sun.faces.util.Util;
-
 
 /**
  * <p>Break out the things that are associated with the Application, but
@@ -35,7 +41,7 @@ import com.sun.faces.util.Util;
  * instance.</p>
  * 
  * <p>For example: the user replaces ApplicationFactory, and wants to
- * intercept calls to createValueBinding() and createMethodBinding() for
+ * intercept calls to createValueExpression() and createMethodExpression() for
  * certain kinds of expressions, but allow the existing application to
  * handle the rest.</p>
  */
@@ -47,6 +53,8 @@ public class ApplicationAssociate extends Object {
     static {
         logger = Util.getLogger(Util.FACES_LOGGER);
     }
+
+    private ApplicationImpl app = null;
     
     //
     // This map stores "managed bean name" | "managed bean factory"
@@ -86,8 +94,16 @@ public class ApplicationAssociate extends Object {
     private static final String ASSOCIATE_KEY = RIConstants.FACES_PREFIX + 
         "ApplicationAssociate";
 
+    private ArrayList elResolversFromFacesConfig = null;
+    private VariableResolver legacyVRChainHead = null;
+    private PropertyResolver legacyPRChainHead = null;
+    private ExpressionFactory expressionFactory = null;
+    
+    private PropertyResolver legacyPropertyResolver = null;
+    private VariableResolver legacyVariableResolver = null;
 
-    public ApplicationAssociate() {
+    public ApplicationAssociate(ApplicationImpl appImpl) {
+	app = appImpl;
         
         ExternalContext externalContext;
         if (null == (externalContext =
@@ -123,6 +139,75 @@ public class ApplicationAssociate extends Object {
     }
 
     
+    public void setLegacyVRChainHead(VariableResolver resolver) {
+        this.legacyVRChainHead = resolver;   
+    }
+    
+    public void setLegacyPRChainHead(PropertyResolver resolver) {
+        this.legacyPRChainHead = resolver;   
+    }
+    
+    public void setELResolversFromFacesConfig(ArrayList resolvers) {
+        this.elResolversFromFacesConfig = resolvers;
+    }
+    
+    public VariableResolver getLegacyVRChainHead() {
+        return legacyVRChainHead;
+    }
+    
+    public PropertyResolver getLegacyPRChainHead() {
+        return legacyPRChainHead;
+    }
+    
+    public ArrayList geELResolversFromFacesConfig() {
+         return elResolversFromFacesConfig;
+    }
+    
+    public void setExpressionFactory(ExpressionFactory expressionFactory) {
+        this.expressionFactory = expressionFactory;
+    }
+    
+    public ExpressionFactory getExpressionFactory() {
+        return this.expressionFactory;
+    }
+    
+    public ArrayList getApplicationELResolvers() {
+        return app.getApplicationELResolvers();
+    }
+    
+    /**
+     * Maintains the PropertyResolver called through 
+     * Application.setPropertyResolver()
+     */
+    public void setLegacyPropertyResolver(PropertyResolver resolver){
+        this.legacyPropertyResolver = resolver;
+    }
+    
+    /**
+     * Maintains the PropertyResolver called through 
+     * Application.setVariableResolver()
+     */
+    public void setLegacyVariableResolver(VariableResolver resolver){
+        this.legacyVariableResolver = resolver;
+    }
+    
+    /**
+     * Returns the PropertyResolver called through 
+     * Application.getPropertyResolver()
+     */
+    public PropertyResolver getLegacyPropertyResolver(){
+        return legacyPropertyResolver;
+    }
+    
+    /**
+     * Returns the VariableResolver called through 
+     * Application.getVariableResolver()
+     */
+    public VariableResolver getLegacyVariableResolver(){
+        return legacyVariableResolver;
+    }
+    
+
     /**
      * Add a navigation case to the internal case list.  If a case list
      * does not already exist in the case list map containing this case
@@ -218,8 +303,10 @@ public class ApplicationAssociate extends Object {
                     " for" + managedBeanName);
         }
     }
-
-
+    
+    public Map getManagedBeanFactoriesMap() {
+        return managedBeanFactoriesMap;
+    }
 
 
 

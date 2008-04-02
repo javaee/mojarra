@@ -1,5 +1,5 @@
 /*
- * $Id: MethodBinding.java,v 1.9 2004/04/06 15:58:16 eburns Exp $
+ * $Id: MethodBinding.java,v 1.10 2005/05/05 20:51:10 edburns Exp $
  */
 
 /*
@@ -23,6 +23,9 @@ import javax.faces.context.FacesContext;
  * <code>createMethodBinding()</code> method of the
  * {@link javax.faces.application.Application} instance for this web
  * application.</p>
+ *
+ *
+ * @deprecated This has been replaced by {@link javax.el.MethodExpression}.
  */
 
 public abstract class MethodBinding {

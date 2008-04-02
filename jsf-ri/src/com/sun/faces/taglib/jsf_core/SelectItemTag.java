@@ -1,5 +1,5 @@
 /*
- * $Id: SelectItemTag.java,v 1.10 2004/02/26 20:33:18 eburns Exp $
+ * $Id: SelectItemTag.java,v 1.11 2005/05/05 20:51:26 edburns Exp $
  */
 
 /*
@@ -9,11 +9,11 @@
 
 package com.sun.faces.taglib.jsf_core;
 
-import com.sun.faces.taglib.BaseComponentTag;
-import com.sun.faces.util.Util;
-
+import javax.el.ValueExpression;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UISelectItem;
+import javax.faces.webapp.UIComponentELTag;
+import javax.servlet.jsp.JspException;
 
 
 /**
@@ -21,7 +21,7 @@ import javax.faces.component.UISelectItem;
  * <code>selectitem</code> custom tag.
  */
 
-public class SelectItemTag extends BaseComponentTag {
+public class SelectItemTag extends UIComponentELTag {
 
     //
     // Protected Constants
@@ -37,11 +37,12 @@ public class SelectItemTag extends BaseComponentTag {
 
     // Attribute Instance Variables
 
-    protected String itemValue = null;
-    protected String itemLabel = null;
-    protected String itemDescription = null;
-    protected String itemDisabled = null;
-   
+    protected ValueExpression itemValue;
+    protected ValueExpression itemLabel;
+    protected ValueExpression itemDescription;
+    protected ValueExpression itemDisabled;
+    protected ValueExpression value;
+
     // Relationship Instance Variables
 
     //
@@ -60,23 +61,29 @@ public class SelectItemTag extends BaseComponentTag {
     // Accessors
     //
 
-    public void setItemValue(String value) {
+    public void setItemValue(ValueExpression value) {
         this.itemValue = value;
     }
 
 
-    public void setItemLabel(String label) {
+    public void setItemLabel(ValueExpression label) {
         this.itemLabel = label;
     }
 
 
-    public void setItemDescription(String itemDescription) {
+    public void setItemDescription(ValueExpression itemDescription) {
         this.itemDescription = itemDescription;
     }
 
-    public void setItemDisabled(String itemDisabled) {
+    public void setItemDisabled(ValueExpression itemDisabled) {
         this.itemDisabled = itemDisabled;
     }
+
+
+    public void setValue(ValueExpression value) {
+        this.value = value;
+    }
+
 
     //
     // General Methods
@@ -99,50 +106,45 @@ public class SelectItemTag extends BaseComponentTag {
         UISelectItem selectItem = (UISelectItem) component;
 
         if (null != value) {
-            if (isValueReference(value)) {
-                component.setValueBinding("value",
-                                          Util.getValueBinding(value));
+            if (!value.isLiteralText()) {
+                selectItem.setValueExpression("value", value);
             } else {
-                selectItem.setValue(value);
+                selectItem.setValue(value.getExpressionString());
             }
         }
 
         if (null != itemValue) {
-            if (isValueReference(itemValue)) {
-                selectItem.setValueBinding("itemValue",
-                                           Util.getValueBinding(itemValue));
+            if (!itemValue.isLiteralText()) {
+                selectItem.setValueExpression("itemValue", itemValue);
             } else {
-                selectItem.setItemValue(itemValue);
+                selectItem.setItemValue(itemValue.getExpressionString());
             }
         }
         if (null != itemLabel) {
-            if (isValueReference(itemLabel)) {
-                selectItem.setValueBinding("itemLabel",
-                                           Util.getValueBinding(itemLabel));
+            if (!itemLabel.isLiteralText()) {
+                selectItem.setValueExpression("itemLabel", itemLabel);
             } else {
-                selectItem.setItemLabel(itemLabel);
+                selectItem.setItemLabel(itemLabel.getExpressionString());
             }
         }
         if (null != itemDescription) {
-            if (isValueReference(itemDescription)) {
-                selectItem.setValueBinding("itemDescription",
-                                           Util.getValueBinding(itemDescription));
+            if (!itemDescription.isLiteralText()) {
+                selectItem.setValueExpression("itemDescription",
+                                              itemDescription);
             } else {
-                selectItem.setItemDescription(itemDescription);
+                selectItem.setItemDescription(
+                    itemDescription.getExpressionString());
             }
         }
-
-
         if (null != itemDisabled) {
-            if (isValueReference(itemDisabled)) {
-                selectItem.setValueBinding("itemDisabled",
-                                           Util.getValueBinding(itemDisabled));
+            if (!itemDisabled.isLiteralText()) {
+                selectItem.setValueExpression("itemDisabled", itemDisabled);
             } else {
-                selectItem.setItemDisabled((Boolean.valueOf(itemDisabled)).
-                                           booleanValue());
+                selectItem.setItemDisabled(
+                    Boolean.valueOf(itemDisabled.getExpressionString()).
+                        booleanValue());
             }
         }
-
 
     }
 

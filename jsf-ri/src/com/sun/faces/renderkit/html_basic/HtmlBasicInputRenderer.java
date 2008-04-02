@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicInputRenderer.java,v 1.26 2004/06/11 15:00:25 rogerk Exp $
+ * $Id: HtmlBasicInputRenderer.java,v 1.27 2005/05/05 20:51:25 edburns Exp $
  */
 
 /*
@@ -23,7 +23,7 @@ import javax.faces.component.ValueHolder;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.ConverterException;
-import javax.faces.el.ValueBinding;
+import javax.el.ValueExpression;
 
 /**
  * <B>HtmlBasicInputRenderer</B> is a base class for implementing renderers
@@ -95,8 +95,8 @@ public abstract class HtmlBasicInputRenderer extends HtmlBasicRenderer {
         throws ConverterException {
 
         String newValue = (String) submittedValue;
-        // if we have no local value, try to get the valueBinding.
-        ValueBinding valueBinding = component.getValueBinding("value");
+        // if we have no local value, try to get the valueExpression.
+        ValueExpression valueExpression = component.getValueExpression("value");
 
         Converter converter = null;
         Object result = null;
@@ -107,8 +107,8 @@ public abstract class HtmlBasicInputRenderer extends HtmlBasicRenderer {
             converter = ((ValueHolder) component).getConverter();
         }
 
-        if (null == converter && null != valueBinding) {
-            Class converterType = valueBinding.getType(context);
+        if (null == converter && null != valueExpression) {
+            Class converterType = valueExpression.getType(context.getELContext());
            // if converterType is null, assume the modelType is "String".
             if (converterType == null ||
                 converterType == String.class ||
@@ -141,12 +141,12 @@ public abstract class HtmlBasicInputRenderer extends HtmlBasicRenderer {
                 }
                 return (null);
             }
-        } else if (converter == null && valueBinding == null) {
-        // if there is no valueBinding and converter attribute set,
+        } else if (converter == null && valueExpression == null) {
+        // if there is no valueExpression and converter attribute set,
         // assume the modelType as "String" since we have no way of
         // figuring out the type. So for the selectOne and
         // selectMany, converter has to be set if there is no
-        // valueBinding attribute set on the component.
+        // valueExpression attribute set on the component.
             if (log.isDebugEnabled()) {
                 log.debug("No conversion necessary for " + submittedValue +
                           " while decoding component " + component.getId() +

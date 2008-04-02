@@ -1,5 +1,5 @@
 /*
- * $Id: UIViewRootTestCase.java,v 1.19 2005/04/18 16:13:37 edburns Exp $
+ * $Id: UIViewRootTestCase.java,v 1.20 2005/05/05 20:51:14 edburns Exp $
  */
 
 /*
@@ -28,8 +28,6 @@ import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
 import javax.faces.component.UIInput;
 import javax.faces.event.PhaseId;
-import javax.faces.el.ValueBinding;
-import javax.faces.el.MethodBinding;
 import junit.framework.TestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -41,6 +39,10 @@ import javax.faces.mock.MockHttpServletResponse;
 import javax.faces.mock.MockLifecycle;
 import javax.faces.mock.MockServletContext;
 import javax.faces.TestUtil;
+
+import javax.el.ValueExpression;
+import javax.el.MethodExpression;
+
 
 /**
  * <p>Test case for the <strong>javax.faces.UIViewRoot</strong>
@@ -191,10 +193,11 @@ public class UIViewRootTestCase extends UIComponentBaseTestCase {
 
     public void testLocaleFromVB() throws Exception {
 	UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
-	ValueBinding binding = application.createValueBinding("locale");
+	ValueExpression expression = application.getExpressionFactory().createValueExpression(facesContext.getELContext(),
+											      "#{locale}", java.util.Locale.class);
 	request.setAttribute("locale", Locale.CHINESE);
 	assertEquals(Locale.getDefault(), root.getLocale());
-	root.setValueBinding("locale", binding);
+	root.setValueExpression("locale", expression);
 	assertEquals(Locale.CHINESE, root.getLocale());
 	root.setLocale(Locale.CANADA_FRENCH);
 	assertEquals(Locale.CANADA_FRENCH, root.getLocale());
@@ -208,14 +211,14 @@ public class UIViewRootTestCase extends UIComponentBaseTestCase {
 	
     }
 
-    public void testPhaseMethBinding() throws Exception {
+    public void testPhaseMethExpression() throws Exception {
 	UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
-	doTestPhaseMethodBinding(root, false);
+	doTestPhaseMethodExpression(root, false);
     }
 
-    public void testPhaseMethBindingSkipping() throws Exception {
+    public void testPhaseMethExpressionSkipping() throws Exception {
 	UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
-	doTestPhaseMethodBinding(root, true);
+	doTestPhaseMethodExpression(root, true);
     }
 
     public void testPhaseListener() throws Exception {
@@ -228,23 +231,23 @@ public class UIViewRootTestCase extends UIComponentBaseTestCase {
 	doTestPhaseListener(root, true);
     }
 
-    public void testPhaseMethodBindingAndListener() throws Exception {
+    public void testPhaseMethodExpressionAndListener() throws Exception {
 	UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
-	doTestPhaseMethodBindingAndListener(root, false);
+	doTestPhaseMethodExpressionAndListener(root, false);
     }
 
-    public void testPhaseMethodBindingAndListenerSkipping() throws Exception {
+    public void testPhaseMethodExpressionAndListenerSkipping() throws Exception {
 	UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
-	doTestPhaseMethodBindingAndListener(root, true);
+	doTestPhaseMethodExpressionAndListener(root, true);
     }
 
-    public void testPhaseMethBindingState() throws Exception {
+    public void testPhaseMethExpressionState() throws Exception {
 	UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
 	Object state = root.saveState(facesContext);
 	root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
 	root.restoreState(facesContext, state);
 
-	doTestPhaseMethodBinding(root, false);
+	doTestPhaseMethodExpression(root, false);
     }
 
     public void testPhaseListenerState() throws Exception {
@@ -256,18 +259,18 @@ public class UIViewRootTestCase extends UIComponentBaseTestCase {
 	doTestPhaseListener(root, false);
     }
 
-    public void testPhaseMethodBindingAndListenerState() throws Exception {
+    public void testPhaseMethodExpressionAndListenerState() throws Exception {
 	UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
 	Object state = root.saveState(facesContext);
 	root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
 	root.restoreState(facesContext, state);
 
-	doTestPhaseMethodBindingAndListener(root, false);
+	doTestPhaseMethodExpressionAndListener(root, false);
     }
 
 
 	
-    public void doTestPhaseMethodBinding(UIViewRoot root, 
+    public void doTestPhaseMethodExpression(UIViewRoot root, 
 					 boolean skipping) throws Exception {
 	PhaseSkipTestComponent comp = null;
 	if (skipping) {
@@ -275,38 +278,42 @@ public class UIViewRootTestCase extends UIComponentBaseTestCase {
 	    root.getChildren().add(comp);
 	    facesContext.responseComplete();
 	}
-	doTestPhaseMethodBindingWithPhaseId(root, 
+	doTestPhaseMethodExpressionWithPhaseId(root, 
 					    PhaseId.APPLY_REQUEST_VALUES);
 	if (skipping) {
 	    assertTrue(!comp.isDecodeCalled());
 	}
-	doTestPhaseMethodBindingWithPhaseId(root, PhaseId.PROCESS_VALIDATIONS);
+	doTestPhaseMethodExpressionWithPhaseId(root, PhaseId.PROCESS_VALIDATIONS);
 	if (skipping) {
 	    assertTrue(!comp.isProcessValidatorsCalled());
 	}
-	doTestPhaseMethodBindingWithPhaseId(root, PhaseId.UPDATE_MODEL_VALUES);
+	doTestPhaseMethodExpressionWithPhaseId(root, PhaseId.UPDATE_MODEL_VALUES);
 	if (skipping) {
 	    assertTrue(!comp.isProcessUpdatesCalled());
 	}
-	doTestPhaseMethodBindingWithPhaseId(root, PhaseId.INVOKE_APPLICATION);
-	doTestPhaseMethodBindingWithPhaseId(root, PhaseId.RENDER_RESPONSE);
+	doTestPhaseMethodExpressionWithPhaseId(root, PhaseId.INVOKE_APPLICATION);
+	doTestPhaseMethodExpressionWithPhaseId(root, PhaseId.RENDER_RESPONSE);
 	if (skipping) {
 	    assertTrue(!comp.isEncodeBeginCalled());
 	}
 	
     }
 
-    public void doTestPhaseMethodBindingWithPhaseId(UIViewRoot root, 
+    public void doTestPhaseMethodExpressionWithPhaseId(UIViewRoot root, 
 						    PhaseId phaseId) throws Exception {
 	PhaseListenerBean phaseListenerBean = new PhaseListenerBean(phaseId);
 	facesContext.getExternalContext().getRequestMap().put("bean",
 							    phaseListenerBean);
 	Class [] args = new Class [] { PhaseEvent.class };
-	MethodBinding 
-	    beforeBinding = facesContext.getApplication().createMethodBinding("#{bean.beforePhase}", args),
-	    afterBinding = facesContext.getApplication().createMethodBinding("#{bean.afterPhase}", args);
-	root.setBeforePhaseListener(beforeBinding);
-	root.setAfterPhaseListener(afterBinding);
+	MethodExpression 
+	    beforeExpression = facesContext.getApplication().getExpressionFactory().createMethodExpression(facesContext.getELContext(),
+										    "#{bean.beforePhase}", null,
+										    args),
+	    afterExpression = facesContext.getApplication().getExpressionFactory().createMethodExpression(facesContext.getELContext(),
+										   "#{bean.afterPhase}", null, 
+										   args);
+	root.setBeforePhaseListener(beforeExpression);
+	root.setAfterPhaseListener(afterExpression);
 
 	callRightLifecycleMethodGivenPhaseId(root, phaseId);
 
@@ -360,7 +367,7 @@ public class UIViewRootTestCase extends UIComponentBaseTestCase {
     }
 
 
-    public void doTestPhaseMethodBindingAndListener(UIViewRoot root, 
+    public void doTestPhaseMethodExpressionAndListener(UIViewRoot root, 
 						    boolean skipping) throws Exception {
 	PhaseSkipTestComponent comp = null;
 	if (skipping) {
@@ -368,24 +375,24 @@ public class UIViewRootTestCase extends UIComponentBaseTestCase {
 	    root.getChildren().add(comp);
 	    facesContext.responseComplete();
 	}
-	doTestPhaseMethodBindingAndListenerWithPhaseId(root, 
+	doTestPhaseMethodExpressionAndListenerWithPhaseId(root, 
 						       PhaseId.APPLY_REQUEST_VALUES);
 	if (skipping) {
 	    assertTrue(!comp.isDecodeCalled());
 	}
-	doTestPhaseMethodBindingAndListenerWithPhaseId(root, 
+	doTestPhaseMethodExpressionAndListenerWithPhaseId(root, 
 						       PhaseId.PROCESS_VALIDATIONS);
 	if (skipping) {
 	    assertTrue(!comp.isProcessValidatorsCalled());
 	}
-	doTestPhaseMethodBindingAndListenerWithPhaseId(root, 
+	doTestPhaseMethodExpressionAndListenerWithPhaseId(root, 
 						       PhaseId.UPDATE_MODEL_VALUES);
 	if (skipping) {
 	    assertTrue(!comp.isProcessUpdatesCalled());
 	}
-	doTestPhaseMethodBindingAndListenerWithPhaseId(root, 
+	doTestPhaseMethodExpressionAndListenerWithPhaseId(root, 
 						       PhaseId.INVOKE_APPLICATION);
-	doTestPhaseMethodBindingAndListenerWithPhaseId(root, 
+	doTestPhaseMethodExpressionAndListenerWithPhaseId(root, 
 						       PhaseId.RENDER_RESPONSE);
 	if (skipping) {
 	    assertTrue(!comp.isEncodeBeginCalled());
@@ -393,18 +400,22 @@ public class UIViewRootTestCase extends UIComponentBaseTestCase {
 
     }
 
-    public void doTestPhaseMethodBindingAndListenerWithPhaseId(UIViewRoot root,
+    public void doTestPhaseMethodExpressionAndListenerWithPhaseId(UIViewRoot root,
 							       PhaseId phaseId) throws Exception {
 	PhaseListenerBean phaseListener = new PhaseListenerBean(phaseId);
 	PhaseListenerBean phaseListenerBean = new PhaseListenerBean(phaseId);
 	facesContext.getExternalContext().getRequestMap().put("bean",
 							    phaseListenerBean);
 	Class [] args = new Class [] { PhaseEvent.class };
-	MethodBinding 
-	    beforeBinding = facesContext.getApplication().createMethodBinding("#{bean.beforePhase}", args),
-	    afterBinding = facesContext.getApplication().createMethodBinding("#{bean.afterPhase}", args);
-	root.setBeforePhaseListener(beforeBinding);
-	root.setAfterPhaseListener(afterBinding);
+	MethodExpression 
+	    beforeExpression = facesContext.getApplication().getExpressionFactory().createMethodExpression(facesContext.getELContext(),
+													   "#{bean.beforePhase}", null,
+													   args),
+	    afterExpression = facesContext.getApplication().getExpressionFactory().createMethodExpression(facesContext.getELContext(),
+													  "#{bean.afterPhase}", null,
+													  args);
+	root.setBeforePhaseListener(beforeExpression);
+	root.setAfterPhaseListener(afterExpression);
 	root.addPhaseListener(phaseListener);
 
 	callRightLifecycleMethodGivenPhaseId(root, phaseId);

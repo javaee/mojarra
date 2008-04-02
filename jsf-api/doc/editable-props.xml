@@ -45,6 +45,9 @@
         <icon></icon>
         <property-name>required</property-name>
         <property-class>boolean</property-class>
+        <property-extension>
+            <value-expression-enabled>true</value-expression-enabled>
+        </property-extension>
     </property>
 
     <property>
@@ -72,7 +75,12 @@
         <display-name>Validator</display-name>
         <icon></icon>
         <property-name>validator</property-name>
-        <property-class>javax.faces.el.MethodBinding</property-class>
+        <property-class>javax.el.MethodExpression</property-class>
+        <property-extension>
+            <method-signature>
+                void validate(javax.faces.context.FacesContext, javax.faces.component.UIComponent, java.lang.Object)
+            </method-signature>
+        </property-extension>
     </property>
 
     <property>
@@ -85,7 +93,12 @@
         <display-name>Value Change Listener</display-name>
         <icon></icon>
         <property-name>valueChangeListener</property-name>
-        <property-class>javax.faces.el.MethodBinding</property-class>
+        <property-class>javax.el.MethodExpression</property-class>
+        <property-extension>
+            <method-signature>
+                void valueChange(javax.faces.event.ValueChangeEvent)
+            </method-signature>
+        </property-extension>
     </property>
 
     <property>
@@ -99,6 +112,9 @@
         <icon></icon>
         <property-name>immediate</property-name>
         <property-class>boolean</property-class>
+        <property-extension>
+            <value-expression-enabled>true</value-expression-enabled>
+        </property-extension>
     </property>
 
     <property>

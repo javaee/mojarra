@@ -1,5 +1,5 @@
 /*
- * $Id: GeneratorUtil.java,v 1.1 2004/12/13 19:07:49 rlubke Exp $
+ * $Id: GeneratorUtil.java,v 1.2 2005/05/05 20:51:37 edburns Exp $
  */
 
 /*
@@ -12,6 +12,7 @@ package com.sun.faces.generate;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.io.InputStream;
 import java.io.File;
 import java.io.BufferedInputStream;
@@ -35,8 +36,48 @@ public class GeneratorUtil {
     private static final String PREFIX = "javax.faces.";
 
 
+     // The set of unwrapper methods for primitives, keyed by the primitive type
+    private static Map UNWRAPPERS = new HashMap();
+    static {
+        UNWRAPPERS.put("boolean", "booleanValue");
+        UNWRAPPERS.put("byte", "byteValue");
+        UNWRAPPERS.put("char", "charValue");
+        UNWRAPPERS.put("double", "doubleValue");
+        UNWRAPPERS.put("float", "floatValue");
+        UNWRAPPERS.put("int", "intValue");
+        UNWRAPPERS.put("long", "longValue");
+        UNWRAPPERS.put("short", "shortValue");
+    }
+
+
+    // The set of wrapper classes for primitives, keyed by the primitive type
+    private static Map WRAPPERS = new HashMap();
+    static {
+        WRAPPERS.put("boolean", "java.lang.Boolean");
+        WRAPPERS.put("byte", "java.lang.Byte");
+        WRAPPERS.put("char", "java.lang.Character");
+        WRAPPERS.put("double", "java.lang.Double");
+        WRAPPERS.put("float", "java.lang.Float");
+        WRAPPERS.put("int", "java.lang.Integer");
+        WRAPPERS.put("long", "java.lang.Long");
+        WRAPPERS.put("short", "java.lang.Short");
+    }
+
+
     // ---------------------------------------------------------- Public Methods
 
+    public static String convertToPrimitive(String objectType) {
+
+        return (String) UNWRAPPERS.get(objectType);
+
+    }
+
+
+    public static String convertToObject(String primitiveType) {
+
+        return (String) WRAPPERS.get(primitiveType);
+
+    }
 
     /**
      * Obtain an instance of JspTldGenerator based on the JSP version
@@ -45,7 +86,7 @@ public class GeneratorUtil {
     public static JspTLDGenerator getTldGenerator(PropertyManager propManager) {
 
         String version =
-            propManager.getProperty(PropertyManager.JSP_VERSION_PROPERTY)[0];
+            propManager.getProperty(PropertyManager.JSP_VERSION_PROPERTY);
         if ("1.2".equals(version)) {
             return new JspTLD12Generator(propManager);
         } else if ("2.1".equals(version)) {
@@ -196,7 +237,7 @@ public class GeneratorUtil {
 
     } // END getConfigBean
 
-
+    
     // --------------------------------------------------------- Private Methods
 
 

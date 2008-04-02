@@ -1,5 +1,5 @@
 /*
- * $Id: AttributeTag.java,v 1.13 2005/04/21 18:55:30 edburns Exp $
+ * $Id: AttributeTag.java,v 1.14 2005/05/05 20:51:13 edburns Exp $
  */
 
 /*
@@ -10,11 +10,11 @@
 package javax.faces.webapp;
 
 
+import javax.el.ELContext;
+import javax.el.ExpressionFactory;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
-import javax.faces.el.ValueBinding;
 import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.tagext.Tag;
 import javax.servlet.jsp.tagext.TagSupport;
 
 
@@ -97,21 +97,19 @@ public class AttributeTag extends TagSupport {
         if (component == null) { // PENDING - i18n
             throw new JspException("No component associated with UIComponentTag");
         }
-        String nameVal = name;
 
-	FacesContext context = FacesContext.getCurrentInstance();
+        FacesContext context = FacesContext.getCurrentInstance();
+        ExpressionFactory exprFactory =
+            context.getApplication().getExpressionFactory();
+        ELContext elContext = context.getELContext();
 
-        if (UIComponentTag.isValueReference(name)) {
-            ValueBinding vb =
-                context.getApplication().createValueBinding(name);
-            nameVal = (String) vb.getValue(context);
-        }
-        Object valueVal = value;
-        if (UIComponentTag.isValueReference(value)) {
-            ValueBinding vb =
-                context.getApplication().createValueBinding(value);
-            valueVal = vb.getValue(context);
-        }
+        String nameVal = (String) 
+                  exprFactory.createValueExpression(elContext, name, String.class)
+                      .getValue(elContext);
+        Object valueVal =
+                exprFactory.createValueExpression(elContext, value, Object.class)
+                    .getValue(elContext);
+
         if (component.getAttributes().get(nameVal) == null) {
             component.getAttributes().put(nameVal, valueVal);
         }

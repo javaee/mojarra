@@ -44,7 +44,8 @@
         <property-name>rows</property-name>
         <property-class>int</property-class>
         <property-extension>
-            <pass-through>true</pass-through>
+            <pass-through>true</pass-through>            
+            <value-expression-enabled>true</value-expression-enabled>
         </property-extension>
     </property>
 </root>

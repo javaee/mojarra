@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListener.java,v 1.31 2005/05/02 12:49:55 edburns Exp $
+ * $Id: ConfigureListener.java,v 1.32 2005/05/05 20:51:20 edburns Exp $
  */
 /*
  * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
@@ -24,6 +24,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
+import javax.el.CompositeELResolver;
+import javax.el.ELResolver;
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.application.Application;
@@ -45,6 +47,9 @@ import javax.faces.webapp.FacesServlet;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
+import javax.servlet.jsp.JspApplicationContext;
+import javax.servlet.jsp.JspFactory;
+
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
@@ -65,6 +70,13 @@ import com.sun.faces.config.beans.RenderKitBean;
 import com.sun.faces.config.beans.RendererBean;
 import com.sun.faces.config.beans.ValidatorBean;
 import com.sun.faces.config.rules.FacesConfigRuleSet;
+import com.sun.faces.el.FacesCompositeELResolver;
+import com.sun.faces.el.ImplicitObjectELResolverForJsp;
+import com.sun.faces.el.ManagedBeanELResolver;
+import com.sun.faces.el.PropertyResolverChainWrapper;
+import com.sun.faces.el.VariableResolverChainWrapper;
+import com.sun.faces.el.DummyPropertyResolverImpl;
+import com.sun.faces.el.DummyVariableResolverImpl;
 import com.sun.faces.util.Util;
 
 import org.apache.commons.digester.Digester;
@@ -194,7 +206,10 @@ public class ConfigureListener implements ServletContextListener {
      */
     private static Log log = LogFactory.getLog(ConfigureListener.class);
 
-
+    private VariableResolver legacyVRChainHead = null;
+    private PropertyResolver legacyPRChainHead = null;
+    private ArrayList elResolversFromFacesConfig = null;
+    
     // ------------------------------------------ ServletContextListener Methods
 
     /**
@@ -367,6 +382,11 @@ public class ConfigureListener implements ServletContextListener {
             verifyObjects(context, fcb);
         }
 
+        // step 8, register ElContextListenerImpl with JSP so that it can be
+        // notified when a ELContext is created. 
+        // Register CompositeELResolver with JSP.
+        registerELResolverandListenerWithJsp(context);
+        
 	tlsExternalContext.set(null);
     }
 
@@ -447,7 +467,11 @@ public class ConfigureListener implements ServletContextListener {
             return;
         }
         Application application = application();
+        ApplicationAssociate associate =
+                ApplicationAssociate.getInstance(getExternalContextDuringInitialize());
+        
         Object instance;
+        Object prevInChain = null;
         String value;
         String[] values;
 
@@ -506,18 +530,44 @@ public class ConfigureListener implements ServletContextListener {
 
         values = config.getPropertyResolvers();
         if ((values != null) && (values.length > 0)) {
+            // initialize the prevInChain to any PropertyResolver set via
+            // Application.setPropertyResolver. If none was set, initialize it
+            // to DummyPropertyResolver instance to satisfy decorator pattern
+            prevInChain = associate.getLegacyPropertyResolver();
+            if (prevInChain == null ) {
+                prevInChain = new DummyPropertyResolverImpl();
+            }
             for (int i = 0; i < values.length; i++) {
                 if (log.isTraceEnabled()) {
                     log.trace("setPropertyResolver(" + values[i] + ')');
                 }
-                instance = Util.createInstance
-                    (values[i], PropertyResolver.class,
-                     application.getPropertyResolver());
-                if (instance != null) {
-                    application.setPropertyResolver
-                        ((PropertyResolver) instance);
-                }
+                instance = Util.createInstance(values[i],
+                        PropertyResolver.class, prevInChain);
+                prevInChain = instance;
             }
+            // place DummyPropertyResolver at the chain that sets the
+            // propertyResolved to true to satisfy the requirements of new EL.
+            instance = Util.createInstance(
+                    "com.sun.faces.el.DummyPropertyResolverImpl",
+                    PropertyResolver.class, prevInChain);
+            legacyPRChainHead = (PropertyResolver) instance;
+            associate.setLegacyPRChainHead(legacyPRChainHead);
+        }
+        
+        // process custom el-resolver elements if any
+        values = config.getELResolvers();
+        if ((values != null) && (values.length > 0)) {
+            for (int i = 0; i < values.length; i++) {
+                if (log.isTraceEnabled()) {
+                    log.trace("setELResolver(" + values[i] + ')');
+                }
+                instance = Util.createInstance(values[i]);
+                if (elResolversFromFacesConfig == null) {
+                    elResolversFromFacesConfig = new ArrayList(values.length);
+                }
+                elResolversFromFacesConfig.add(instance);
+            }
+            associate.setELResolversFromFacesConfig(elResolversFromFacesConfig);
         }
 
         values = config.getStateManagers();
@@ -535,21 +585,32 @@ public class ConfigureListener implements ServletContextListener {
                 }
             }
         }
-
+        
+        prevInChain = null;
         values = config.getVariableResolvers();
         if ((values != null) && (values.length > 0)) {
+            // initialize the prevInChain to any VariableResolver set via
+            // Application.setVariableResolver. If none was set, initialize it
+            // to DummyVariableResolver instance to satisfy decorator pattern
+            prevInChain = associate.getLegacyVariableResolver();
+            if (prevInChain == null ) {
+                prevInChain = new DummyVariableResolverImpl();
+            }
             for (int i = 0; i < values.length; i++) {
                 if (log.isTraceEnabled()) {
                     log.trace("setVariableResolver(" + values[i] + ')');
                 }
                 instance = Util.createInstance
-                    (values[i], VariableResolver.class,
-                     application.getVariableResolver());
-                if (instance != null) {
-                    application.setVariableResolver
-                        ((VariableResolver) instance);
-                }
+                        (values[i], VariableResolver.class, prevInChain);
+                prevInChain = instance;
             }
+            // place DummyVariableResolver at the chain that sets the
+            // propertyResolved to true to satisfy the requirements of new EL.
+            instance = Util.createInstance(
+                    "com.sun.faces.el.DummyVariableResolverImpl",
+                    VariableResolver.class, prevInChain);
+            legacyVRChainHead = (VariableResolver) instance;
+            associate.setLegacyVRChainHead(legacyVRChainHead);
         }
 
         values = config.getViewHandlers();
@@ -1272,6 +1333,66 @@ public class ConfigureListener implements ServletContextListener {
         }
     }
 
+    public void registerELResolverandListenerWithJsp(ServletContext context) {
+        
+        if (JspFactory.getDefaultFactory() == null || (JspFactory.getDefaultFactory().
+            getJspApplicationContext(context)) == null) {
+            return;
+        }
+        ApplicationAssociate appAssociate =  
+         ApplicationAssociate.getInstance(getExternalContextDuringInitialize());
+        
+        CompositeELResolver compositeELResolverForJsp = 
+            new FacesCompositeELResolver();    
+        compositeELResolverForJsp.add(new ImplicitObjectELResolverForJsp());
+        compositeELResolverForJsp.add(new ManagedBeanELResolver());
+        
+        // add ELResolvers from faces-config.xml
+        if (elResolversFromFacesConfig != null) {
+            Iterator it = elResolversFromFacesConfig.iterator();
+            while (it.hasNext()) {
+                compositeELResolverForJsp.add((ELResolver) it.next());
+            }
+        }
+        // add legacy VariableResolvers.
+        // wrap the head of the legacyVR in ELResolver and add it to the
+        // compositeELResolver.
+        if (legacyVRChainHead != null) {
+            compositeELResolverForJsp.add(
+                new VariableResolverChainWrapper(legacyVRChainHead));
+        }
+        // add legacy PropertyResolvers.
+        if (legacyPRChainHead != null) {
+            compositeELResolverForJsp.add(
+                new PropertyResolverChainWrapper(legacyPRChainHead));
+        }
+
+        // add ELResolvers added via Application.addELResolver()
+        ArrayList elResolversFromApplication = 
+            appAssociate.getApplicationELResolvers();
+        if (elResolversFromApplication != null) {
+            Iterator it = elResolversFromApplication.iterator();
+            while (it.hasNext()) {
+                compositeELResolverForJsp.add((ELResolver) it.next());
+            }
+        }
+        
+        // get JspApplicationContext.
+        JspApplicationContext jspAppContext = JspFactory.getDefaultFactory().
+            getJspApplicationContext(context);
+        
+        // register compositeELResolver with JSP
+        jspAppContext.addELResolver(compositeELResolverForJsp);
+        
+        //register JSF ELContextListenerImpl with Jsp
+        ELContextListenerImpl elContextListener = new ELContextListenerImpl();
+        jspAppContext.addELContextListener(elContextListener);
+        
+        
+        // cache the ExpressionFactory instance in ApplicationAssociate
+        appAssociate.
+            setExpressionFactory(jspAppContext.getExpressionFactory());
+    }
 
     /**
      * <p>Release the mark that this web application has been initialized.</p>

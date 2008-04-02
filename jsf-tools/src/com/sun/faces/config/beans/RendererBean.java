@@ -1,5 +1,5 @@
 /*
- * $Id: RendererBean.java,v 1.4 2004/02/04 23:46:09 ofung Exp $
+ * $Id: RendererBean.java,v 1.5 2005/05/05 20:51:35 edburns Exp $
  */
 
 /*
@@ -53,13 +53,17 @@ public class RendererBean extends FeatureBean implements AttributeHolder {
 
     private String excludeAttributes;
     public String getExcludeAttributes() {
-	return excludeAttributes;
+        return excludeAttributes;
     }
     public void setExcludeAttributes(String newExcludeAttributes) {
-	excludeAttributes = newExcludeAttributes;
+        excludeAttributes = newExcludeAttributes;
     }
 
-
+    // true if the tag handler for this renderer should be a BodyTag
+    // [default=false]
+    public boolean bodyTag = false;
+    public boolean isBodyTag() { return bodyTag; }
+    public void setBodyTag(boolean bodyTag) { this.bodyTag = bodyTag; }
 
     // Tag name (if it doesn't follow the standard convention)
     private String tagName;

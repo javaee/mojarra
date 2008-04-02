@@ -40,15 +40,9 @@
     <navigation-handler>
       com.sun.faces.application.NavigationHandlerImpl
     </navigation-handler>
-    <property-resolver>
-      com.sun.faces.el.PropertyResolverImpl
-    </property-resolver>
     <state-manager>
       com.sun.faces.application.StateManagerImpl
     </state-manager>
-    <variable-resolver>
-      com.sun.faces.el.VariableResolverImpl
-    </variable-resolver>
     <view-handler>
       com.sun.faces.application.ViewHandlerImpl
     </view-handler>

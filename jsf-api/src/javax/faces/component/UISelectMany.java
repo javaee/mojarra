@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectMany.java,v 1.53 2005/03/07 21:50:27 rogerk Exp $
+ * $Id: UISelectMany.java,v 1.54 2005/05/05 20:51:04 edburns Exp $
  */
 
 /*
@@ -14,6 +14,7 @@ import java.lang.reflect.Array;
 import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
+import javax.el.ValueExpression;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.el.ValueBinding;
@@ -47,8 +48,10 @@ import javax.faces.model.SelectItemGroup;
  *
  * <p>If the component has an attached {@link javax.faces.convert.Converter}, use it.</p>
  *
- * <p>If not, look for a {@link ValueBinding} for <code>value</code> (if any).
- * The {@link ValueBinding} must point to something that is:</p>
+ * <p>If not, look for a {@link ValueExpression} for <code>value</code>
+ * (if any).  The {@link ValueExpression} must point to something that
+ * is:</p>
+ *
  * <ul>
  * <li>An array of primitives (such as <code>int[]</code>).  Look up the
  *     registered by-class {@link javax.faces.convert.Converter} for this primitive type.</li>
@@ -159,15 +162,22 @@ public class UISelectMany extends UIInput {
 
 
     /**
-     * <p>Return any {@link ValueBinding} set for <code>value</code> if a
-     * {@link ValueBinding} for <code>selectedValues</code> is requested;
-     * otherwise, perform the default superclass processing for this method.</p>
+     * <p>Return any {@link ValueBinding} set for <code>value</code> if
+     * a {@link ValueBinding} for <code>selectedValues</code> is
+     * requested; otherwise, perform the default superclass processing
+     * for this method.</p>
+     *
+     * <p>This method relies on the superclass to provide the
+     * <code>ValueExpression</code> to <code>ValueBinding</code>
+     * wrapping.</p>
      *
      * @param name Name of the attribute or property for which to retrieve
      *  a {@link ValueBinding}
      *
      * @exception NullPointerException if <code>name</code>
      *  is <code>null</code>
+     *
+     * @deprecated this has been replaced by {@link #getValueExpression(java.lang.String)}.
      */
     public ValueBinding getValueBinding(String name) {
 
@@ -183,7 +193,11 @@ public class UISelectMany extends UIInput {
     /**
      * <p>Store any {@link ValueBinding} specified for
      * <code>selectedValues</code> under <code>value</code> instead;
-     * otherwise, perform the default superclass processing for this method.</p>
+     * otherwise, perform the default superclass processing for this
+     * method.</p>
+     *
+     * <p>This method relies on the superclass to wrap the argument
+     * <code>ValueBinding</code> in a <code>ValueExpression</code>.</p>
      *
      * @param name Name of the attribute or property for which to set
      *  a {@link ValueBinding}
@@ -192,6 +206,8 @@ public class UISelectMany extends UIInput {
      *
      * @exception NullPointerException if <code>name</code>
      *  is <code>null</code>
+     *
+     * @deprecated This has been replaced by {@link #setValueExpression(java.lang.String, javax.el.ValueExpression)}.
      */
     public void setValueBinding(String name, ValueBinding binding) {
 
@@ -203,7 +219,52 @@ public class UISelectMany extends UIInput {
 
     }
 
+    /**
+     * <p>Return any {@link ValueExpression} set for <code>value</code> if a
+     * {@link ValueExpression} for <code>selectedValues</code> is requested;
+     * otherwise, perform the default superclass processing for this method.</p>
+     *
+     * @param name Name of the attribute or property for which to retrieve
+     *  a {@link ValueExpression}
+     *
+     * @exception NullPointerException if <code>name</code>
+     *  is <code>null</code>
+     * @since 1.2
+     */
+    public ValueExpression getValueExpression(String name) {
 
+        if ("selectedValues".equals(name)) {
+            return (super.getValueExpression("value"));
+        } else {
+            return (super.getValueExpression(name));
+        }
+
+    }
+    
+    /**
+     * <p>Store any {@link ValueExpression} specified for
+     * <code>selectedValues</code> under <code>value</code> instead;
+     * otherwise, perform the default superclass processing for this method.</p>
+     *
+     * @param name Name of the attribute or property for which to set
+     *  a {@link ValueExpression}
+     * @param binding The {@link ValueExpression} to set, or <code>null</code>
+     *  to remove any currently set {@link ValueExpression}
+     *
+     * @exception NullPointerException if <code>name</code>
+     *  is <code>null</code>
+     * @since 1.2
+     */
+    public void setValueExpression(String name, ValueExpression binding) {
+
+        if ("selectedValues".equals(name)) {
+            super.setValueExpression("value", binding);
+        } else {
+            super.setValueExpression(name, binding);
+        }
+
+    }
+    
     // --------------------------------------------------------- UIInput Methods
 
 
@@ -408,10 +469,14 @@ public class UISelectMany extends UIInput {
                         return (true);
                     }
                 }
-            } else if ((value == null) && (item.getValue() == null)) {
-                return (true);
-            } else if (value.equals(item.getValue())) {
-                return (true);
+            } else {
+                //Coerce the item value type before comparing values.
+                Class type = value.getClass();
+                Object newValue = getFacesContext().getApplication().
+                    getExpressionFactory().coerceToType(item.getValue(), type);
+                if (value.equals(newValue)) {
+                    return (true);
+                }
             }
         }
         return (false);

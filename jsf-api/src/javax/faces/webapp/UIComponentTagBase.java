@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTagBase.java,v 1.2 2005/04/21 18:55:31 edburns Exp $
+ * $Id: UIComponentTagBase.java,v 1.3 2005/05/05 20:51:14 edburns Exp $
  */
 
 /*
@@ -9,6 +9,7 @@
 
 package javax.faces.webapp;
 
+import javax.el.ELContext;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.servlet.jsp.tagext.JspTag;
@@ -31,6 +32,24 @@ public abstract class UIComponentTagBase extends Object implements JspTag {
      * <code>doEndTag()</code> for each tag instance.</p>
      */
     protected abstract FacesContext getFacesContext();
+
+    /**
+     * <p>Return the {@link ELContext} for the {@link FacesContext} for
+     * this request.</p>
+     *
+     * <p>This is a convenience for
+     * <code>getFacesContext().getELContext()</code>.</p>
+     */
+
+    protected ELContext getELContext() {
+	FacesContext fc = getFacesContext();
+	ELContext result = null;
+	if (null != fc) {
+	    result = fc.getELContext();
+	}
+	return result;
+    }
+
 
     /**
      * <p>Add the component identifier of the specified {@link UIComponent}

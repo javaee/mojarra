@@ -1,5 +1,5 @@
 /*
- * $Id: ConverterTag.java,v 1.14 2005/04/21 18:55:30 edburns Exp $
+ * $Id: ConverterTag.java,v 1.15 2005/05/05 20:51:13 edburns Exp $
  */
 
 /*
@@ -9,18 +9,13 @@
 
 package javax.faces.webapp;
 
-import javax.faces.FactoryFinder;
-import javax.faces.application.Application;
-import javax.faces.application.ApplicationFactory;
-import javax.faces.application.FacesMessage;
+import javax.el.ValueExpression;
 import javax.faces.component.UIComponent;
 import javax.faces.component.ValueHolder;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.ConverterException;
-import javax.faces.el.ValueBinding;
 import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.tagext.Tag;
 import javax.servlet.jsp.tagext.TagSupport;
 
 
@@ -74,7 +69,7 @@ public class ConverterTag extends TagSupport {
     private String converterId = null;
     
     /**
-     * <p>The {@link ValueBinding} expression that evaluates to an object that 
+     * <p>The {@link ValueExpression} that evaluates to an object that 
      * implements {@link Converter}.</p>
      */
     private String binding = null;
@@ -91,10 +86,12 @@ public class ConverterTag extends TagSupport {
 
     }
 
-    /*
-     * <p>Set the value binding expression of the {@link Converter} instance to be created.</p>
+    /**
+     * <p>Set the expression that will be used to create a {@link ValueExpression}
+     * that references a backing bean property of the {@link Converter} instance to 
+     * be created.</p>
      *
-     * @param binding The new value binding expression
+     * @param binding The new expression
      *
      * @throws JspException if a JSP error occurs
      */
@@ -216,20 +213,21 @@ public class ConverterTag extends TagSupport {
 
         FacesContext context = FacesContext.getCurrentInstance();
         Converter converter = null;
-        ValueBinding vb = null;
+        ValueExpression vb = null;
         
         // If "binding" is set, use it to create a converter instance.
         if (binding != null) {
-            vb = context.getApplication().createValueBinding(binding);
-            if (vb != null) {
-                try {
-                    converter = (Converter)vb.getValue(context);
+            try {
+		vb = 
+                context.getApplication().getExpressionFactory().createValueExpression(context.getELContext(), binding, Object.class);
+		if (vb != null) {
+                    converter = (Converter)vb.getValue(context.getELContext());
                     if (converter != null) {
                         return converter;
                     }
-                } catch (Exception e) {
-                    throw new JspException(e);
                 }
+            } catch (Exception e) {
+                throw new JspException(e);
             }
         }
         // If "converterId" is set, use it to create the converter
@@ -240,14 +238,14 @@ public class ConverterTag extends TagSupport {
             try {
                 String converterIdVal = converterId;
                 if (UIComponentTag.isValueReference(converterId)) {
-                    ValueBinding idBinding =
-                        context.getApplication().createValueBinding(converterId);
-                    converterIdVal = (String) idBinding.getValue(context);
+                    ValueExpression idBinding =
+                        context.getApplication().getExpressionFactory().createValueExpression(context.getELContext(), converterId, Object.class);
+                    converterIdVal = (String) idBinding.getValue(context.getELContext());
                 }
                 converter = context.getApplication().createConverter(converterIdVal);
                 if (converter != null) {
                     if (vb != null) {
-                        vb.setValue(context, converter);
+                        vb.setValue(context.getELContext(), converter);
                     }
                 }
             } catch (Exception e) {

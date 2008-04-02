@@ -1,5 +1,5 @@
 /*
- * $Id: UIViewRoot.java,v 1.34 2005/04/18 16:13:36 edburns Exp $
+ * $Id: UIViewRoot.java,v 1.35 2005/05/05 20:51:05 edburns Exp $
  */
 
 /*
@@ -27,9 +27,11 @@ import javax.faces.event.PhaseEvent;
 import javax.faces.event.PhaseListener;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
-import javax.faces.el.ValueBinding;
-import javax.faces.el.MethodBinding;
 import javax.faces.webapp.FacesServlet;
+
+import javax.el.ValueExpression;
+import javax.el.MethodExpression;
+import javax.el.ELException;
 
 
 /**
@@ -186,10 +188,16 @@ public class UIViewRoot extends UIComponentBase {
 	    result = this.renderKitId;
 	}
 	else {
-	    ValueBinding vb = getValueBinding("renderKitId");
+	    ValueExpression vb = getValueExpression("renderKitId");
 	    FacesContext context = getFacesContext();
 	    if (vb != null) {
-		result = (String) vb.getValue(context);
+		try {
+		    result = (String) vb.getValue(context.getELContext());
+		}
+		catch (ELException e) {
+		    // PENDING(edburns): log this
+		    result = null;
+		}
 	    } 
 	    else {
 	        result = null;
@@ -248,16 +256,16 @@ public class UIViewRoot extends UIComponentBase {
 
     // ------------------------------------------------ Event Management Methods
 
-    private MethodBinding beforePhase = null;
-    private MethodBinding afterPhase = null;
+    private MethodExpression beforePhase = null;
+    private MethodExpression afterPhase = null;
 
     /**
-     * @return the {@link MethodBinding} that will be invoked before
+     * @return the {@link MethodExpression} that will be invoked before
      * this view is rendered.
      *
      */
 
-    public MethodBinding getBeforePhaseListener() {
+    public MethodExpression getBeforePhaseListener() {
 	return beforePhase;
     }
 
@@ -272,22 +280,22 @@ public class UIViewRoot extends UIComponentBase {
      * <p>The method must conform to the signature of {@link
      * PhaseListener#beforePhase}.</p>
      *
-     * @param newBeforePhase the {@link MethodBinding} that will be
+     * @param newBeforePhase the {@link MethodExpression} that will be
      * invoked before this view is rendered.
      *
      */
 
-    public void setBeforePhaseListener(MethodBinding newBeforePhase) {
+    public void setBeforePhaseListener(MethodExpression newBeforePhase) {
 	beforePhase = newBeforePhase;
     }
 
     /**
-     * @return the {@link MethodBinding} that will be invoked after
+     * @return the {@link MethodExpression} that will be invoked after
      * this view is rendered.
      *
      */
 
-    public MethodBinding getAfterPhaseListener() {
+    public MethodExpression getAfterPhaseListener() {
 	return afterPhase;
     }
 
@@ -302,12 +310,12 @@ public class UIViewRoot extends UIComponentBase {
      * <p>The method must conform to the signature of {@link
      * PhaseListener#afterPhase}.</p>
      *
-     * @param newAfterPhase the {@link MethodBinding} that will be
+     * @param newAfterPhase the {@link MethodExpression} that will be
      * invoked after this view is rendered.  
      *
      */
 
-    public void setAfterPhaseListener(MethodBinding newAfterPhase) {
+    public void setAfterPhaseListener(MethodExpression newAfterPhase) {
 	afterPhase = newAfterPhase;
     }
 
@@ -543,7 +551,7 @@ public class UIViewRoot extends UIComponentBase {
 
     /**
      * <p>Utility method that notifies phaseListeners for the given
-     * phaseId.  Assumes that either or both the MethodBinding or
+     * phaseId.  Assumes that either or both the MethodExpression or
      * phaseListeners data structure are non-null.</p>
      *
      * @param context the context for this request
@@ -559,14 +567,14 @@ public class UIViewRoot extends UIComponentBase {
 				      boolean isBefore) {
 	PhaseEvent event = createPhaseEvent(context, phaseId);
 	
-	boolean hasPhaseMethodBinding = 
+	boolean hasPhaseMethodExpression = 
 	    (isBefore && (null != beforePhase)) ||
 	    (!isBefore && (null != afterPhase));
-	MethodBinding binding = isBefore ? beforePhase : afterPhase;
+	MethodExpression expression = isBefore ? beforePhase : afterPhase;
 
-	if (hasPhaseMethodBinding) {
+	if (hasPhaseMethodExpression) {
 	    try {
-		binding.invoke(context, new Object [] { event });
+		expression.invoke(context.getELContext(), new Object [] { event });
 		skipPhase = context.getResponseComplete() ||
 		    context.getRenderResponse();
 	    }
@@ -773,13 +781,13 @@ public class UIViewRoot extends UIComponentBase {
      * <p>Algorithm:</p>
      *
      * <p>If we have a <code>locale</code> ivar, return it.  If we have
-     * a value binding for "locale", get its value.  If the value is
+     * a value expression for "locale", get its value.  If the value is
      * <code>null</code>, return the result of calling {@link
      * javax.faces.application.ViewHandler#calculateLocale}.  If the
      * value is an instance of <code>java.util.Locale</code> return it.
      * If the value is a String, convert it to a
      * <code>java.util.Locale</code> and return it.  If there is no
-     * value binding for "locale", return the result of calling {@link
+     * value expression for "locale", return the result of calling {@link
      * javax.faces.application.ViewHandler#calculateLocale}.</p>
      *
      * @return The current <code>Locale</code> obtained by executing the
@@ -791,10 +799,18 @@ public class UIViewRoot extends UIComponentBase {
 	    result = this.locale;
 	}
 	else {
-	    ValueBinding vb = getValueBinding("locale");
+	    ValueExpression vb = getValueExpression("locale");
 	    FacesContext context = getFacesContext();
 	    if (vb != null) {
-                Object resultLocale = vb.getValue(context);
+                Object resultLocale = null;
+
+		try {
+		    resultLocale = vb.getValue(context.getELContext());
+		}
+		catch (ELException e) {
+		    // PENDING(edburns): log this
+		}
+
 		if (null == resultLocale) {
 		    result = 
 			context.getApplication().getViewHandler().calculateLocale(context);
@@ -883,8 +899,8 @@ public class UIViewRoot extends UIComponentBase {
         renderKitId = (String) values[1];
         viewId = (String) values[2];
         locale = (Locale)values[3];
-	beforePhase = (MethodBinding) restoreAttachedState(context, values[4]);
-	afterPhase = (MethodBinding) restoreAttachedState(context, values[5]);
+	beforePhase = (MethodExpression) restoreAttachedState(context, values[4]);
+	afterPhase = (MethodExpression) restoreAttachedState(context, values[5]);
 	phaseListeners = (List) restoreAttachedState(context, values[6]);
 
     }

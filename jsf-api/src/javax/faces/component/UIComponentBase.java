@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.106 2005/04/26 19:36:16 edburns Exp $
+ * $Id: UIComponentBase.java,v 1.107 2005/05/05 20:51:03 edburns Exp $
  */
 
 /*
@@ -28,6 +28,9 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.WeakHashMap;
+import javax.el.ValueExpression;
+import javax.el.ELContext;
+import javax.el.ELException;
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.context.FacesContext;
@@ -165,26 +168,37 @@ public abstract class UIComponentBase extends UIComponent {
     // ---------------------------------------------------------------- Bindings
 
 
-    // The set of ValueBindings for this component, keyed by property name
-    // This collection is lazily instantiated
+    // The set of ValueExpressions for this component, keyed by property
+    // name This collection is lazily instantiated
     private Map bindings = null;
 
 
     /**
      * {@inheritDoc}
      * @exception NullPointerException {@inheritDoc}
+     * @deprecated This has been replaced by {@link #getValueExpression}.
      */ 
     public ValueBinding getValueBinding(String name) {
 
 	if (name == null) {
 	    throw new NullPointerException();
 	}
-	if (bindings == null) {
-	    return (null);
-	} else {
-	    return ((ValueBinding) bindings.get(name));
-	}
+	ValueBinding result = null;
+	ValueExpression ve = null;
 
+	if (null != (ve = getValueExpression(name))) {
+	    // if the ValueExpression is an instance of our private
+	    // wrapper class.
+	    if (ve.getClass() == ValueExpressionValueBindingAdapter.class) {
+		result = ((ValueExpressionValueBindingAdapter)ve).getWrapped();
+	    }
+	    else {
+		// otherwise, this is a real ValueExpression.  Wrap it
+		// in a ValueBinding.
+		result = new ValueBindingValueExpressionAdapter(ve);
+	    }
+	}
+	return result;
     }
 
 
@@ -192,32 +206,79 @@ public abstract class UIComponentBase extends UIComponent {
      * {@inheritDoc}
      * @exception IllegalArgumentException {@inheritDoc}
      * @exception NullPointerException {@inheritDoc}
+     * @deprecated This has been replaced by {@link #setValueExpression}.
      */ 
     public void setValueBinding(String name, ValueBinding binding) {
-
 	if (name == null) {
 	    throw new NullPointerException();
-	} else if ("id".equals(name) || "parent".equals(name)) {
-            throw new IllegalArgumentException();
-	}
+	} 
 	if (binding != null) {
-	    if (bindings == null) {
-		bindings = new HashMap();
-	    }
-	    bindings.put(name, binding);
+	    ValueExpressionValueBindingAdapter adapter = 
+		new ValueExpressionValueBindingAdapter(binding);
+	    setValueExpression(name, adapter);
 	} else {
-	    if (bindings != null) {
-		bindings.remove(name);
-		if (bindings.size() == 0) {
-		    bindings = null;
-		}
-	    }
+	    setValueExpression(name, null);
 	}
 
     }
 
+    /**
+     * {@inheritDoc}
+     * @since 1.2
+     * @exception NullPointerException {@inheritDoc}
+     */ 
+    public ValueExpression getValueExpression(String name) {
 
+        if (name == null) {
+            throw new NullPointerException();
+        }
+        if (bindings == null) {
+            return (null);
+        } else {
+            return ((ValueExpression) bindings.get(name));
+        }
 
+    }
+
+    /**
+     * {@inheritDoc}
+     * @since 1.2
+     * @exception IllegalArgumentException {@inheritDoc}
+     * @exception NullPointerException {@inheritDoc}
+     */ 
+    public void setValueExpression(String name, ValueExpression binding) {
+
+        if (name == null) {
+            throw new NullPointerException();
+        } else if ("id".equals(name) || "parent".equals(name)) {
+            throw new IllegalArgumentException();
+        }
+        if (binding != null) {
+            if (!binding.isLiteralText()) {
+                if (bindings == null) {
+                    bindings = new HashMap();
+                }
+                bindings.put(name, binding);
+            } else {
+                ELContext context =
+                    FacesContext.getCurrentInstance().getELContext();
+                try {
+                    getAttributes().put(name, binding.getValue(context));
+                } catch (ELException ele) {
+                    throw new FacesException(ele);
+                }
+            }
+        } else {
+            if (bindings != null) {
+                bindings.remove(name);
+                if (bindings.size() == 0) {
+                    bindings = null;
+                }
+            }
+        }
+
+    }
+    
     // -------------------------------------------------------------- Properties
 
 
@@ -349,9 +410,16 @@ public abstract class UIComponentBase extends UIComponent {
 	if (renderedSet) {
 	    return (rendered);
 	}
-	ValueBinding vb = getValueBinding("rendered");
-	if (vb != null) {
-	    return (!Boolean.FALSE.equals(vb.getValue(getFacesContext())));
+	ValueExpression ve = getValueExpression("rendered");
+	if (ve != null) {
+	    boolean result = false;
+	    try {
+		result = !Boolean.FALSE.equals(ve.getValue(getFacesContext().getELContext()));
+	    }
+	    catch (ELException e) {
+		throw new FacesException(e);
+	    }
+	    return result;
 	} else {
 	    return (this.rendered);
 	}
@@ -378,9 +446,16 @@ public abstract class UIComponentBase extends UIComponent {
 	if (this.rendererType != null) {
 	    return (this.rendererType);
 	}
-	ValueBinding vb = getValueBinding("rendererType");
-	if (vb != null) {
-	    return ((String) vb.getValue(getFacesContext()));
+	ValueExpression ve = getValueExpression("rendererType");
+	if (ve != null) {
+	    String result = null;
+	    try {
+		result = (String)ve.getValue(getFacesContext().getELContext());
+	    }
+	    catch (ELException e) {
+		throw new FacesException(e);
+	    }
+	    return result;
 	} else {
 	    return (null);
 	}
@@ -1232,19 +1307,10 @@ public abstract class UIComponentBase extends UIComponent {
         rendered = ((Boolean) values[4]).booleanValue();
         renderedSet = ((Boolean) values[5]).booleanValue();
         rendererType = (String) values[6];
-        List restoredListeners = null;
-        if (null != (restoredListeners = (List)
-                     restoreAttachedState(context, values[7]))) {
-            // if there were some listeners registered prior to this
-            // method being invoked, merge them with the list to be
-            // restored.
-            if (null != listeners) {
-		listeners.addAll(restoredListeners);
-            }
-            else {
-                listeners = restoredListeners;
-            }
-        }
+        // if there were some listeners registered prior to this
+        // method being invoked, override them with the list to be
+        // restored in order to prevent accumulation.
+        listeners = (List) restoreAttachedState(context, values[7]);
     }
 
 
@@ -1423,7 +1489,7 @@ public abstract class UIComponentBase extends UIComponent {
 	Iterator keys = bindings.keySet().iterator();
 	while (keys.hasNext()) {
 	    String key = (String) keys.next();
-	    ValueBinding binding = (ValueBinding) bindings.get(key);
+	    ValueExpression binding = (ValueExpression) bindings.get(key);
 	    names.add(key);
 	    states.add(saveAttachedState(context, binding));
 	}
@@ -1477,9 +1543,16 @@ public abstract class UIComponentBase extends UIComponent {
             } else if (super.containsKey(name)) {
                 return (super.get(key));
             }
-            ValueBinding vb = getValueBinding(name);
-            if (vb != null) {
-                return (vb.getValue(getFacesContext()));
+            ValueExpression ve = getValueExpression(name);
+            if (ve != null) {
+		Object result = null;
+		try {
+		    result = ve.getValue(getFacesContext().getELContext());
+		    return result;
+		}
+		catch (ELException e) {
+		    throw new FacesException(e);
+		}
             }
             return (null);
         }

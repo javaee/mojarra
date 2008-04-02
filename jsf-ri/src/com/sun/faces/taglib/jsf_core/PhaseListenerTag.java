@@ -1,5 +1,5 @@
 /*
- * $Id: PhaseListenerTag.java,v 1.1 2004/12/08 15:10:26 edburns Exp $
+ * $Id: PhaseListenerTag.java,v 1.2 2005/05/05 20:51:26 edburns Exp $
  */
 
 /*
@@ -14,13 +14,15 @@ import com.sun.faces.util.Util;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
-import javax.faces.el.ValueBinding;
 import javax.faces.event.PhaseListener;
 import javax.faces.webapp.UIComponentTag;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.TagSupport;
 import javax.servlet.jsp.tagext.Tag;
 
+import javax.el.ValueExpression;
+import javax.el.MethodExpression;
+import javax.el.ELException;
 
 /**
  * <p>Tag implementation that creates a {@link PhaseListener} instance
@@ -41,16 +43,14 @@ public class PhaseListenerTag extends TagSupport {
      * <p>The fully qualified class name of the {@link PhaseListener}
      * instance to be created.</p>
      */
-    private String type = null;
-    private String type_ = null;
+    private ValueExpression type = null;
 
     /**
-     * <p>The value binding expression used to create a listener instance and it is 
-     * also used to wire up this listener to an {@link PhaseListener} property 
-     * of a JavaBean class.</p>
+     * <p>The value binding expression used to create a listener
+     * instance and it is also used to wire up this listener to an
+     * {@link PhaseListener} property of a JavaBean class.</p>
      */
-    private String binding= null;
-    private String binding_ = null;
+    private ValueExpression binding= null;
 
     /**
      * <p>Set the fully qualified class name of the
@@ -58,9 +58,9 @@ public class PhaseListenerTag extends TagSupport {
      *
      * @param type The new class name
      */
-    public void setType(String type) {
+    public void setType(ValueExpression type) {
 
-        this.type_ = type;
+        this.type = type;
 
     }
 
@@ -71,14 +71,8 @@ public class PhaseListenerTag extends TagSupport {
      *
      * @throws JspException if a JSP error occurs
      */
-    public void setBinding(String binding) 
-        throws JspException {
-        if (binding != null && !Util.isValueReference(binding)) {
-            Object[] params = {binding};
-            throw new JspException(
-                Util.getExceptionMessageString(Util.INVALID_EXPRESSION_ID, params));
-        }
-        this.binding_ = binding;
+    public void setBinding(ValueExpression binding) {
+        this.binding = binding;
     }
 
     // --------------------------------------------------------- Public Methods
@@ -96,9 +90,7 @@ public class PhaseListenerTag extends TagSupport {
     public int doStartTag() throws JspException {
 
         PhaseListener handler = null;
-
-        // Refers to the handler that could not be created.
-        String handlerError = null;
+	ValueExpression handlerError = null;
 
 	// find the viewTag
 	Tag parent = this;
@@ -130,40 +122,36 @@ public class PhaseListenerTag extends TagSupport {
         // If "binding" is set use it to create a listener instance.
         
         FacesContext context = FacesContext.getCurrentInstance();
-        ValueBinding vb = null;
-        if (null != binding_) {
-            handlerError = binding_;
-            vb = Util.getValueBinding(binding_);
-            if (vb != null) {
-                try {
-                    handler = (PhaseListener)vb.getValue(context);
-                    if (handler != null) {
-			// we ignore the type in this case, even though
-			// it may have been set.
-                        viewRoot.addPhaseListener(handler);
-                        return (SKIP_BODY);
-                    }
-                } catch (Exception e) {
-                    throw new JspException(e);
-                }
-            }
-        }
+        if (null != binding) {
+	    handlerError = binding;
+	    try {
+		handler = 
+		    (PhaseListener)binding.getValue(context.getELContext());
+		if (handler != null) {
+		    // we ignore the type in this case, even though
+		    // it may have been set.
+		    viewRoot.addPhaseListener(handler);
+		    return (SKIP_BODY);
+		}
+	    } catch (ELException e) {
+		throw new JspException(e);
+	    }
+	}
         // If "type" is set, use it to create the listener
         // instance.  
 
-        if (null != type_) {
-            handlerError = type_;
-            type = (String) Util.evaluateVBExpression(type_);
-            handler = createPhaseListener();
+        if (null != type) {
+	    handlerError = type;
+            handler = createPhaseListener(context);
             if (handler != null) {
-		if (vb != null) {
+		if (binding != null) {
 		    // If "type" and "binding" are both set, store the listener
 		    // instance in the value of the property represented by the
 		    // value binding expression.
 		    
 		    try {
-			vb.setValue(context, handler);
-		    } catch (Exception e) {
+			binding.setValue(context.getELContext(), handler);
+		    } catch (ELException e) {
 			throw new JspException(e);
 		    }
                 }
@@ -171,7 +159,8 @@ public class PhaseListenerTag extends TagSupport {
         }
        
         if (handler == null) {
-            Object params [] = {"javax.faces.event.PhaseListener",handlerError};
+            Object params [] = {"javax.faces.event.PhaseListener",
+				handlerError.getExpressionString()};
             throw new JspException(
                 Util.getExceptionMessageString(
                     Util.CANT_CREATE_CLASS_ERROR_ID, params));
@@ -206,11 +195,14 @@ public class PhaseListenerTag extends TagSupport {
      *
      * @throws JspException if a new instance cannot be created
      */
-    protected PhaseListener createPhaseListener()
+    protected PhaseListener createPhaseListener(FacesContext context)
         throws JspException {
-
+	
         try {
-            Class clazz = Util.loadClass(type, this);
+	    String className = 
+		type.getValue(context.getELContext()).toString();
+	    
+            Class clazz = Util.loadClass(className, this);
             return ((PhaseListener) clazz.newInstance());
         } catch (Exception e) {
             throw new JspException(e);

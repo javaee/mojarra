@@ -1,5 +1,5 @@
 /*
- * $Id: ValueBindingImpl.java,v 1.37 2004/11/09 04:23:11 jhook Exp $
+ * $Id: ValueBindingImpl.java,v 1.38 2005/05/05 20:51:24 edburns Exp $
  */
 
 /*
@@ -18,226 +18,107 @@ import javax.faces.el.PropertyNotFoundException;
 import javax.faces.el.ReferenceSyntaxException;
 import javax.faces.el.ValueBinding;
 
-import com.sun.faces.el.impl.JsfParser;
-import com.sun.faces.el.impl.ELSupport;
-import com.sun.faces.el.impl.Node;
-import com.sun.faces.el.impl.ParseException;
-import com.sun.faces.el.impl.ValueGetVisitor;
-import com.sun.faces.el.impl.ValueReadOnlyVisitor;
-import com.sun.faces.el.impl.ValueSetVisitor;
-import com.sun.faces.el.impl.ValueTypeVisitor;
+import javax.el.ValueExpression;
+import javax.el.ELException;
 
+import com.sun.faces.el.impl.Node;
 
 /**
  * @author Jacob Hookom
  */
-public class ValueBindingImpl extends ValueBinding implements StateHolder, Serializable
-{
-    protected String ref;
-    protected transient Node node;
-    protected boolean tranzient;
-    
-    
-    public ValueBindingImpl()
-    {
-        
-    }
-    
-    public ValueBindingImpl(String ref)
-    {
-        this.ref = ref;
-    }
-    
-    /**
-     * 
-     */
-    public ValueBindingImpl(String ref, Node node)
-    {
-        this.ref = ref;
-        this.node = node;
-    }
-    
-    protected Node getNode() throws ReferenceSyntaxException
-    {
-        if (this.node == null)
-        {
-            try
-            {
-                this.node = JsfParser.parse(this.ref);
-            }
-            catch (ParseException pe)
-            {
-                throw new ReferenceSyntaxException(ELSupport.msg("el.error.factory.value",ref,pe.getMessage()));
-            }
-        }
-        return this.node;
-    }
+public class ValueBindingImpl extends ValueBinding implements StateHolder, 
+    Serializable {
+   
+    private ValueExpression valueExpression= null;
+    private boolean tranzient;
 
+    public ValueBindingImpl() {} // must have for StateHolder
+    
+    public ValueBindingImpl(ValueExpression valueExpression) {
+        this.valueExpression = valueExpression;    
+    }
+    
+    // PENDING (visvan) we don't need this constrcutor anymore. Remove
+    // this once the  ValueBindingFactory is CVS removed
+    public ValueBindingImpl(String ref, Node node) {
+    }
+   
     /* (non-Javadoc)
      * @see javax.faces.el.ValueBinding#getExpressionString()
      */
-    public String getExpressionString()
-    {
-        return this.ref;
+    public String getExpressionString() {
+        // PENDING (visvan) is there a way to get hold of ExpressionString
+        return null;
     }
 
     /* (non-Javadoc)
      * @see javax.faces.el.ValueBinding#getType(javax.faces.context.FacesContext)
      */
     public Class getType(FacesContext context) throws EvaluationException,
-            PropertyNotFoundException
-    {
-        ValueTypeVisitor visitor = new ValueTypeVisitor(context);
-        try
-        {
-            return (Class) this.getNode().jjtAccept(visitor, null);
+            PropertyNotFoundException {
+        Class result = null;
+        try {
+            result = valueExpression.getType(context.getELContext());
+        } catch (ELException elex) {
+            throw new EvaluationException(elex);
         }
-        catch (PropertyNotFoundException pe)
-        {
-            rethrow("el.error.value.type",pe);
-        }
-        catch (ReferenceSyntaxException rse)
-        {
-            rethrow("el.error.value.type",rse);
-        }
-        catch (EvaluationException ee)
-        {
-            rethrow("el.error.value.type",ee);
-        }
-        return null;
+        return result;
     }
 
     /* (non-Javadoc)
      * @see javax.faces.el.ValueBinding#getValue(javax.faces.context.FacesContext)
      */
     public Object getValue(FacesContext context) throws EvaluationException,
-            PropertyNotFoundException
-    {
-        ValueGetVisitor visitor = new ValueGetVisitor(context);
-        try
-        {
-            return this.getNode().jjtAccept(visitor, null);
+            PropertyNotFoundException {
+        Object result = null;
+        try {
+            result = valueExpression.getValue(context.getELContext());
+        } catch (ELException elex) {
+            throw new EvaluationException(elex);
         }
-        catch (PropertyNotFoundException pe)
-        {
-            rethrow("el.error.value.get",pe);
-        }
-        catch (ReferenceSyntaxException rse)
-        {
-            rethrow("el.error.value.get",rse);
-        }
-        catch (EvaluationException ee)
-        {
-            rethrow("el.error.value.get",ee);
-        }
-        return null;
+        return result;
     }
 
     /* (non-Javadoc)
      * @see javax.faces.el.ValueBinding#isReadOnly(javax.faces.context.FacesContext)
      */
     public boolean isReadOnly(FacesContext context) throws EvaluationException,
-            PropertyNotFoundException
-    {
-        ValueReadOnlyVisitor visitor = new ValueReadOnlyVisitor(context);
-        try
-        {
-            return ((Boolean) this.getNode().jjtAccept(visitor, null)).booleanValue();
+            PropertyNotFoundException {
+        boolean result = false;
+        try {
+            result = valueExpression.isReadOnly(context.getELContext());
+        } catch (ELException elex) {
+            throw new EvaluationException(elex);
         }
-        catch (PropertyNotFoundException pe)
-        {
-            rethrow("el.error.value.readOnly",pe);
-        }
-        catch (ReferenceSyntaxException rse)
-        {
-            rethrow("el.error.value.readOnly",rse);
-        }
-        catch (EvaluationException ee)
-        {
-            rethrow("el.error.value.readOnly",ee);
-        }
-        return true;
+        return result;
     }
     
-    protected void rethrow(String key, ReferenceSyntaxException rse) throws ReferenceSyntaxException
-    {
-        throw new ReferenceSyntaxException(ELSupport.msg(key,this.ref,rse.getMessage()), (rse.getCause() != null) ? rse.getCause() : rse);
-    }
     
-    protected void rethrow(String key, EvaluationException ee) throws EvaluationException
-    {
-        throw new EvaluationException(ELSupport.msg(key,this.ref,ee.getMessage()), (ee.getCause() != null) ? ee.getCause() : ee);
-    }
-    
-    protected void rethrow(String key, PropertyNotFoundException pe) throws PropertyNotFoundException
-    {
-        throw new PropertyNotFoundException(ELSupport.msg(key,this.ref,pe.getMessage()), (pe.getCause() != null) ? pe.getCause() : pe);
-    }
 
     /* (non-Javadoc)
      * @see javax.faces.el.ValueBinding#setValue(javax.faces.context.FacesContext, java.lang.Object)
      */
     public void setValue(FacesContext context, Object value)
-            throws EvaluationException, PropertyNotFoundException
-    {
-        ValueSetVisitor visitor = new ValueSetVisitor(context, value);
-        try
-        {
-            this.getNode().jjtAccept(visitor, null);
-        }
-        catch (PropertyNotFoundException pe)
-        {
-            rethrow("el.error.value.set",pe);
-        }
-        catch (ReferenceSyntaxException rse)
-        {
-            rethrow("el.error.value.set",rse);
-        }
-        catch (EvaluationException ee)
-        {
-            rethrow("el.error.value.set",ee);
+            throws EvaluationException, PropertyNotFoundException {
+        try {
+            valueExpression.setValue(context.getELContext(), value);
+        } catch (ELException elex) {
+            throw new EvaluationException(elex);
         }
     }
     
-    public boolean isTransient()
-    {
+    public boolean isTransient() {
         return this.tranzient;
     }
-    public void restoreState(FacesContext context, Object obj)
-    {
-        this.ref = (String) obj;
-    }
-    public Object saveState(FacesContext context)
-    {
-        return this.ref;
-    }
-    public void setTransient(boolean tranzient)
-    {
+    
+    public void setTransient(boolean tranzient) {
         this.tranzient = tranzient;
     }
     
-    /* (non-Javadoc)
-     * @see java.lang.Object#equals(java.lang.Object)
-     */
-    public boolean equals(Object obj)
-    {
-        if (obj instanceof ValueBinding) {
-            return this.getExpressionString().equals(((ValueBinding) obj).getExpressionString());
-        }
-        return false;
+    public void restoreState(FacesContext context, Object obj) {
     }
-    /* (non-Javadoc)
-     * @see java.lang.Object#hashCode()
-     */
-    public int hashCode()
-    {
-        return this.getExpressionString().hashCode();
-    }
-    /* (non-Javadoc)
-     * @see java.lang.Object#toString()
-     */
-    public String toString()
-    {
-        return "ValueBinding["+this.getExpressionString()+"]";
+
+    public Object saveState(FacesContext context){
+        return null;
     }
 }

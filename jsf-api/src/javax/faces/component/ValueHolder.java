@@ -1,5 +1,5 @@
 /*
- * $Id: ValueHolder.java,v 1.15 2004/02/26 20:30:36 eburns Exp $
+ * $Id: ValueHolder.java,v 1.16 2005/05/05 20:51:05 edburns Exp $
  */
 
 /*
@@ -12,14 +12,14 @@ package javax.faces.component;
 
 import javax.faces.application.Application;
 import javax.faces.convert.Converter;
-import javax.faces.el.ValueBinding;
+import javax.el.ValueExpression;
 
 
 /**
  * <p><strong>ValueHolder</strong> is an interface that may be implemented
  * by any concrete {@link UIComponent} that wishes to support a local
  * value, as well as access data in the model tier via a <em>value
- * binding expression</em>, and support conversion 
+ * expression</em>, and support conversion 
  * between String and the model tier data's native data type.
  */
 
@@ -30,7 +30,7 @@ public interface ValueHolder {
 
     /**
      * <p>Return the local value of this {@link UIComponent} (if any),
-     * without evaluating any associated {@link ValueBinding}.</p>
+     * without evaluating any associated {@link ValueExpression}.</p>
      */
     public Object getLocalValue();
 
@@ -39,9 +39,13 @@ public interface ValueHolder {
      * <p>Gets the value of this {@link UIComponent}.  First, consult
      * the local value property of this component.  If
      * non-<code>null</code> return it.  If non-null, see if we have a
-     * {@link javax.faces.el.ValueBinding} for the <code>value</code>
-     * property.  If so, return the result of evaluating the
-     * property, otherwise return null.</p>
+     * {@link ValueExpression} for the <code>value</code> property.  If
+     * so, return the result of evaluating the property, otherwise
+     * return null.  Note that because the specification for {@link
+     * UIComponent#setValueBinding} requires a
+     * call through to {@link
+     * UIComponent#setValueExpression}, legacy
+     * tags will continue to work.</p>
      */
     public Object getValue();
 

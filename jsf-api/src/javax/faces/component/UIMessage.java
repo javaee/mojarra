@@ -1,5 +1,5 @@
 /*
- * $Id: UIMessage.java,v 1.15 2004/04/06 16:14:33 eburns Exp $
+ * $Id: UIMessage.java,v 1.16 2005/05/05 20:51:03 edburns Exp $
  */
 
 /*
@@ -10,7 +10,10 @@
 package javax.faces.component;
 
 import javax.faces.context.FacesContext;
-import javax.faces.el.ValueBinding;
+import javax.faces.FacesException;
+import javax.el.ELException;
+import javax.el.ValueExpression;
+
 
 /**
  * <p>This component is responsible for displaying messages for a specific
@@ -86,9 +89,14 @@ public class UIMessage extends UIComponentBase {
 	if (this.forVal != null) {
 	    return (this.forVal);
 	}
-	ValueBinding vb = getValueBinding("for");
-	if (vb != null) {
-	    return ((String) vb.getValue(getFacesContext()));
+	ValueExpression ve = getValueExpression("for");
+	if (ve != null) {
+	    try {
+		return ((String) ve.getValue(getFacesContext().getELContext()));
+	    }
+	    catch (ELException e) {
+		throw new FacesException(e);
+	    }
 	} else {
 	    return (null);
 	}
@@ -120,9 +128,14 @@ public class UIMessage extends UIComponentBase {
 	if (this.showDetailSet){
 	    return (this.showDetail);
 	}
-	ValueBinding vb = getValueBinding("showDetail");
-	if (vb != null) {
-	    return (Boolean.TRUE.equals(vb.getValue(getFacesContext())));
+	ValueExpression ve = getValueExpression("showDetail");
+	if (ve != null) {
+	    try {
+		return (Boolean.TRUE.equals(ve.getValue(getFacesContext().getELContext())));
+	    }
+	    catch (ELException e) {
+		throw new FacesException(e);
+	    }
 	} else {
 	    return (this.showDetail);
 	}
@@ -154,9 +167,14 @@ public class UIMessage extends UIComponentBase {
 	if (this.showSummarySet) {
 	    return (this.showSummary);
 	}
-	ValueBinding vb = getValueBinding("showSummary");
-	if (vb != null) {
-	    return (!Boolean.FALSE.equals(vb.getValue(getFacesContext())));
+	ValueExpression ve = getValueExpression("showSummary");
+	if (ve != null) {
+	    try {
+		return (!Boolean.FALSE.equals(ve.getValue(getFacesContext().getELContext())));
+	    }
+	    catch (ELException e) {
+		throw new FacesException(e);
+	    }
 	} else {
 	    return (this.showSummary);
 	}

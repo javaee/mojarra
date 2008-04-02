@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContext.java,v 1.61 2005/03/11 21:05:23 edburns Exp $
+ * $Id: FacesContext.java,v 1.62 2005/05/05 20:51:05 edburns Exp $
  */
 
 /*
@@ -19,6 +19,8 @@ import javax.faces.application.FacesMessage.Severity;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
 import javax.faces.render.RenderKit;
+
+import javax.el.ELContext;
 
 
 /**
@@ -68,6 +70,38 @@ public abstract class FacesContext {
      */
     public abstract Iterator getClientIdsWithMessages();
 
+    /**
+     * <p>Return the <code>ELContext</code> instance for this
+     * <code>FacesContext</code> instance.  This <code>ELContext</code>
+     * instance has the same lifetime and scope as the
+     * <code>FacesContext</code> instance with which it is associated,
+     * and may be created lazily the first time this method is called
+     * for a given <code>FacesContext</code> instance.  Upon creation of
+     * the ELContext instance, the implementation must take the
+     * following action: </p>
+     *
+     *	<ul>
+     *
+     *	  <li><p>Call the {@link ELContext#putContext} method on the
+     *	  instance, passing in <code>FacesContext.class</code> and the
+     *	  <code>this</code> reference for the <code>FacesContext</code>
+     *    instance itself.</p></li>
+     *
+     *    <li><p>If the <code>Collection</code> returned by {@link
+     *    javax.faces.application.Application#getELContextListeners} is
+     *    non-empty, create an instance of {@link
+     *    javax.el.ELContextEvent} and pass it to each {@link
+     *    javax.el.ELContextListener} instance in the
+     *    <code>Collection</code> by calling the {@link
+     *    javax.el.ELContextListener#contextCreated} method.</p></li>
+     *
+     * </ul>
+     *
+     * @exception IllegalStateException if this method is called after
+     *  this instance has been released
+     */ 
+
+    public abstract ELContext getELContext();
 
     /**
      * <p>Return the {@link ExternalContext} instance for this

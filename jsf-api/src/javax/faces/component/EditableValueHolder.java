@@ -1,5 +1,5 @@
 /*
- * $Id: EditableValueHolder.java,v 1.9 2004/04/06 16:50:51 eburns Exp $
+ * $Id: EditableValueHolder.java,v 1.10 2005/05/05 20:51:01 edburns Exp $
  */
 
 /*
@@ -103,22 +103,33 @@ public interface EditableValueHolder extends ValueHolder {
     public void setImmediate(boolean immediate);
 
     /**
-     * <p>Return a <code>MethodBinding</code> pointing at a
-     * method that will be used to validate the current
-     * value of this component.   This method will be called during
-     * the <em>Process Validations</em>
-     * or <em>Apply Request Values</em> phases (depending on the
-     * value of the <code>immediate</code> property). </p>
+     * <p>If {@link #setValidator} was not previously called for this
+     * instance, this method must return <code>null</code>.  If it was
+     * called, this method must return the exact
+     * <code>MethodBinding</code> instance that was passed to {@link
+     * #setValidator}.</p>
+     *
+     * <p>This method will be called during the <em>Process
+     * Validations</em> or <em>Apply Request Values</em> phases
+     * (depending on the value of the <code>immediate</code>
+     * property). </p>
+     *
+     * @deprecated {@link #getValidators} should be used instead.
      */
     public MethodBinding getValidator();
 
     /**
-     * <p>Set a <code>MethodBinding</code> pointing at a
-     * method that will be used to validate the current
-     * value of this component.
-     * This method will be called during the <em>Process Validations</em>
-     * or <em>Apply Request Values</em> phases (depending on the
-     * value of the <code>immediate</code> property). </p>
+     * <p>Wrap the argument <code>validatorBinding</code> in an
+     * implementation of {@link javax.faces.validator.Validator} and
+     * store it in the internal data structure that backs the {@link
+     * #getValidators} method, taking care to over-write any instance
+     * that was stored by a previous call to <code>setValidator</code>.
+     * </p>
+     *
+     * <p>The argument method will be called during the <em>Process
+     * Validations</em> or <em>Apply Request Values</em> phases
+     * (depending on the value of the <code>immediate</code>
+     * property). </p>
      *
      * <p>Any method referenced by such an expression must be public,
      * with a return type of <code>void</code>, and accept parameters of
@@ -126,29 +137,46 @@ public interface EditableValueHolder extends ValueHolder {
      * UIComponent}, and <code>Object</code>.</p>
      *
      * @param validatorBinding The new <code>MethodBinding</code> instance
+     * 
+     * @deprecated Use {@link #addValidator} instead, obtaining the
+     * argument {@link Validator} by creating an instance of {@link
+     * javax.faces.validator.MethodExpressionValidator}.
      */
     public void setValidator(MethodBinding validatorBinding);
 
     /**
-     * <p>Return a <code>MethodBinding</code> instance 
-     * method that will be called after any registered
-     * {@link ValueChangeListener}s have been notified of a value change.
-     * This method will be called during
-     * the <em>Process Validations</em>
-     * or <em>Apply Request Values</em> phases (depending on the
-     * value of the <code>immediate</code> property). </p>
+     * <p>If {@link #setValueChangeListener} was not previously called
+     * for this instance, this method must return <code>null</code>.  If
+     * it was called, this method must return the exact
+     * <code>MethodBinding</code> instance that was passed to {@link
+     * #setValueChangeListener}.</p>
+     *
+     * @deprecated Use {@link #getValueChangeListeners} instead.
      */
     public MethodBinding getValueChangeListener();
 
     /**
-     * <p>Set a <code>MethodBinding</code> instance 
-     * method that will be called after any registered
-     * {@link ValueChangeListener}s have been notified of a value change.
-     * This method will be called during the <em>Process Validations</em>
-     * or <em>Apply Request Values</em> phases (depending on the
-     * value of the <code>immediate</code> property). </p>
-
+     * <p>Wrap the argument <code>valueChangeMethod</code> in an
+     * implementation of {@link ValueChangeListener}
+     * and store it in the internal data structure that backs the {@link
+     * #getValueChangeListeners} method, taking care to over-write any
+     * instance that was stored by a previous call to
+     * <code>setValueChangeListener</code>.</p>
+     *
+     * <p>This argument method will be called during the <em>Process
+     * Validations</em> or <em>Apply Request Values</em> phases
+     * (depending on the value of the <code>immediate</code>
+     * property). </p>
+     *
+     * <p>Any method referenced by such an expression must be public,
+     * with a return type of <code>void</code>, and accept a parameter
+     * of type {@link javax.faces.event.ValueChangeEvent}.</p>
+     *
      * @param valueChangeMethod The new method binding instance 
+     *
+     * @deprecated Use {@link #addValueChangeListener} instead, obtaining the
+     * argument {@link ValueChangeListener} by creating an instance of {@link
+     * javax.faces.event.MethodExpressionValueChangeListener}.
      */
     public void setValueChangeListener(MethodBinding valueChangeMethod);
 

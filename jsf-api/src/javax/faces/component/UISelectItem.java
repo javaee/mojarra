@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectItem.java,v 1.35 2004/02/26 20:30:34 eburns Exp $
+ * $Id: UISelectItem.java,v 1.36 2005/05/05 20:51:04 edburns Exp $
  */
 
 /*
@@ -11,10 +11,14 @@ package javax.faces.component;
 
 
 import java.io.IOException;
+import javax.el.ValueExpression;
 import javax.faces.application.Application;
 import javax.faces.context.FacesContext;
-import javax.faces.el.ValueBinding;
 import javax.faces.model.SelectItem;
+import javax.faces.FacesException;
+import javax.el.ELException;
+import javax.el.ValueExpression;
+
 
 
 /**
@@ -26,7 +30,7 @@ import javax.faces.model.SelectItem;
  * <ul>
  * <li>The <code>value</code> attribute's value is an instance of
  *     {@link SelectItem}.</li>
- * <li>The associated {@link ValueBinding} points at a model data
+ * <li>The associated {@link javax.el.ValueExpression} points at a model data
  *     item of type {@link SelectItem}.</li>
  * <li>A new {@link SelectItem} instance is synthesized from the values
  *     of the <code>itemDescription</code>, <code>itemDisabled</code>,
@@ -96,9 +100,14 @@ public class UISelectItem extends UIComponentBase {
 	if (this.itemDescription != null) {
 	    return (this.itemDescription);
 	}
-	ValueBinding vb = getValueBinding("itemDescription");
-	if (vb != null) {
-	    return ((String) vb.getValue(getFacesContext()));
+	ValueExpression ve = getValueExpression("itemDescription");
+	if (ve != null) {
+	    try {
+		return ((String) ve.getValue(getFacesContext().getELContext()));
+	    }
+	    catch (ELException e) {
+		throw new FacesException(e);
+	    }
 	} else {
 	    return (null);
 	}
@@ -125,9 +134,14 @@ public class UISelectItem extends UIComponentBase {
 	if (this.itemDisabledSet) {
 	    return (this.itemDisabled);
 	}
-	ValueBinding vb = getValueBinding("itemDisabled");
-	if (vb != null) {
-	    return (Boolean.TRUE.equals(vb.getValue(getFacesContext())));
+	ValueExpression ve = getValueExpression("itemDisabled");
+	if (ve != null) {
+	    try {
+		return (Boolean.TRUE.equals(ve.getValue(getFacesContext().getELContext())));
+	    }
+	    catch (ELException e) {
+		throw new FacesException(e);
+	    }
 	} else {
 	    return (this.itemDisabled);
 	}
@@ -154,9 +168,14 @@ public class UISelectItem extends UIComponentBase {
 	if (this.itemLabel != null) {
 	    return (this.itemLabel);
 	}
-	ValueBinding vb = getValueBinding("itemLabel");
-	if (vb != null) {
-	    return ((String) vb.getValue(getFacesContext()));
+	ValueExpression ve = getValueExpression("itemLabel");
+	if (ve != null) {
+	    try {
+		return ((String) ve.getValue(getFacesContext().getELContext()));
+	    }
+	    catch (ELException e) {
+		throw new FacesException(e);
+	    }
 	} else {
 	    return (null);
 	}
@@ -184,9 +203,14 @@ public class UISelectItem extends UIComponentBase {
 	if (this.itemValue != null) {
 	    return (this.itemValue);
 	}
-	ValueBinding vb = getValueBinding("itemValue");
-	if (vb != null) {
-	    return vb.getValue(getFacesContext());
+	ValueExpression ve = getValueExpression("itemValue");
+	if (ve != null) {
+	    try {
+		return ve.getValue(getFacesContext().getELContext());
+	    }
+	    catch (ELException e) {
+		throw new FacesException(e);
+	    }
 	} else {
 	    return (null);
 	}
@@ -216,9 +240,14 @@ public class UISelectItem extends UIComponentBase {
 	if (this.value != null) {
 	    return (this.value);
 	}
-	ValueBinding vb = getValueBinding("value");
-	if (vb != null) {
-	    return (vb.getValue(getFacesContext()));
+	ValueExpression ve = getValueExpression("value");
+	if (ve != null) {
+	    try {
+		return (ve.getValue(getFacesContext().getELContext()));
+	    }
+	    catch (ELException e) {
+		throw new FacesException(e);
+	    }
 	} else {
 	    return (null);
 	}

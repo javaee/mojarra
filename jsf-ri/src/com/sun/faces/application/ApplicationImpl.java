@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationImpl.java,v 1.59 2005/04/05 20:25:13 jayashri Exp $
+ * $Id: ApplicationImpl.java,v 1.60 2005/05/05 20:51:19 edburns Exp $
  */
 
 /*
@@ -17,6 +17,17 @@ import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
 
+import javax.el.ArrayELResolver;
+import javax.el.BeanELResolver;
+import javax.el.CompositeELResolver;
+import javax.el.ELContextListener;
+import javax.el.ELException;
+import javax.el.ELResolver;
+import javax.el.ExpressionFactory;
+import javax.el.ListELResolver;
+import javax.el.MapELResolver;
+import javax.el.MethodExpression;
+import javax.el.ValueExpression;
 import javax.faces.FacesException;
 import javax.faces.application.Application;
 import javax.faces.application.NavigationHandler;
@@ -33,9 +44,13 @@ import javax.faces.el.VariableResolver;
 import javax.faces.event.ActionListener;
 import javax.faces.validator.Validator;
 
-import com.sun.faces.el.MethodBindingFactory;
+import com.sun.faces.el.FacesCompositeELResolver;
+import com.sun.faces.el.ImplicitObjectELResolver;
+import com.sun.faces.el.ManagedBeanELResolver;
+import com.sun.faces.el.PropertyResolverChainWrapper;
 import com.sun.faces.el.PropertyResolverImpl;
-import com.sun.faces.el.ValueBindingFactory;
+import com.sun.faces.el.ScopedAttributeELResolver;
+import com.sun.faces.el.VariableResolverChainWrapper;
 import com.sun.faces.el.VariableResolverImpl;
 import com.sun.faces.util.Util;
 
@@ -58,6 +73,8 @@ public class ApplicationImpl extends Application {
         logger = Util.getLogger(Util.FACES_LOGGER);
     }
 
+    private static final ELContextListener[] EMPTY_EL_CTX_LIST_ARRAY = { };
+
     // Relationship Instance Variables
 
     private ApplicationAssociate associate = null;
@@ -72,7 +89,7 @@ public class ApplicationImpl extends Application {
     // This map stores reference expression | value binding instance
     // mappings.
     //
-    private Map valueBindingMap;
+    
     //
     // These three maps store store "identifier" | "class name"
     // mappings.
@@ -82,34 +99,162 @@ public class ApplicationImpl extends Application {
     private Map converterTypeMap = null;
     private Map validatorMap = null;
     private String messageBundle = null;
-    // EL Operations delegated to factories
-    private ValueBindingFactory valueBindingFactory = null;
-    private MethodBindingFactory methodBindingFactory = null;
 
-//
-// Constructors and Initializers
-//
+    private ArrayList elContextListeners = null;
+    private ExpressionFactory expressionFactory = null;
+    private ArrayList elResolvers = null;
+    private CompositeELResolver compositeELResolver = null;
 
     /**
      * Constructor
      */
     public ApplicationImpl() {
         super();
-	associate = new ApplicationAssociate();
-        valueBindingMap = new HashMap();
+	associate = new ApplicationAssociate(this);
         componentMap = new HashMap();
         converterIdMap = new HashMap();
         converterTypeMap = new HashMap();
         validatorMap = new HashMap();
-        valueBindingFactory = new ValueBindingFactory();
-        methodBindingFactory = new MethodBindingFactory();
 
         if (logger.isLoggable(Level.FINE)) {
             logger.log(Level.FINE, "Created Application instance ");
         }
     }
 
+    public void addELContextListener(ELContextListener listener) {
+        if (listener != null) {
+            if (elContextListeners == null) {
+                elContextListeners = new ArrayList();
+            }
+            elContextListeners.add(listener);
+        }
+    }
+    
+    public void removeELContextListener(ELContextListener listener) {
+        if (listener != null && elContextListeners != null) {
+            elContextListeners.remove(listener);
+        }
+    }
+    
+    public ELContextListener [] getELContextListeners() {
+        if (elContextListeners != null ) {
+            return ((ELContextListener[])
+                       elContextListeners.toArray(
+                           new ELContextListener[elContextListeners.size()]));
+        } else {
+            return (EMPTY_EL_CTX_LIST_ARRAY);
+        }
+    }
+   
+    public ExpressionFactory getExpressionFactory() {
+        return associate.getExpressionFactory();
+    }
 
+    public Object evaluateExpressionGet(FacesContext context, 
+        String expression, Class expectedType) throws ELException {
+        ValueExpression ve = 
+          getExpressionFactory().createValueExpression(context.getELContext(), 
+                expression,expectedType);     
+        return (ve.getValue(context.getELContext()));
+    }
+    
+    public UIComponent createComponent(ValueExpression componentExpression,
+        FacesContext context, String componentType) throws FacesException {
+        if (null == componentExpression || null == context ||
+            null == componentType) {
+            String message = Util.getExceptionMessageString
+                (Util.NULL_PARAMETERS_ERROR_MESSAGE_ID);
+            message = message +" componentExpression " + componentExpression +
+                " context " + context + " componentType " + componentType;
+            throw new NullPointerException(message);
+        }
+
+        Object result = null;
+        boolean createOne = false;
+
+        try {
+            if (null != (result = 
+                componentExpression.getValue(context.getELContext()))) {
+                // if the result is not an instance of UIComponent
+                createOne = (!(result instanceof UIComponent));
+                // we have to create one.
+            }
+            if (null == result || createOne) {
+                result = this.createComponent(componentType);
+                componentExpression.setValue((context.getELContext()), result);
+            }
+        } catch (ELException elex) {
+            throw new FacesException(elex);
+        }
+
+        return (UIComponent) result;    
+    }
+
+    public ELResolver getELResolver() {
+        if (compositeELResolver != null) {
+            return compositeELResolver;
+        }
+        compositeELResolver = 
+            new FacesCompositeELResolver();    
+        compositeELResolver.add(new ImplicitObjectELResolver());
+       
+        Iterator it = null;
+        ArrayList resolvers = associate.geELResolversFromFacesConfig();
+        // add ELResolvers from faces-config.xml
+        if (resolvers != null) {
+            it = resolvers.iterator();
+            while (it.hasNext()) {
+                compositeELResolver.add((ELResolver) it.next());
+            }
+        }
+        // add legacy VariableResolvers if any.
+        // wrap the head of the legacyVR in ELResolver and add it to the
+        // compositeELResolver.
+        VariableResolver VR = associate.getLegacyVRChainHead();
+        if (VR != null) {
+            compositeELResolver.add(new VariableResolverChainWrapper(VR));
+        }
+        
+        // add legacy PropertyResolvers if any.
+        PropertyResolver PR = associate.getLegacyPRChainHead();
+        if ( PR!= null) {
+            compositeELResolver.add(new PropertyResolverChainWrapper(PR));
+        }
+        
+        if (elResolvers != null) {
+            it = elResolvers.iterator();
+            while (it.hasNext()) {
+                compositeELResolver.add((ELResolver) it.next());
+            }
+        }
+        
+        compositeELResolver.add(new ManagedBeanELResolver());
+        compositeELResolver.add(new MapELResolver());
+        compositeELResolver.add(new ListELResolver());
+        compositeELResolver.add(new ArrayELResolver());
+        compositeELResolver.add(new BeanELResolver());
+        compositeELResolver.add(new ScopedAttributeELResolver());
+        return compositeELResolver;
+    }
+    
+    public void addELResolver(ELResolver resolver) {
+        // Throw Illegal State Exception if  ELResolvers are added after 
+        // application initialization has completed. 
+        if (FacesContext.getCurrentInstance() != null) {
+            throw new IllegalStateException(
+                    Util.getExceptionMessageString(
+                    Util.APPLICATION_INIT_COMPLETE_ERROR_ID));
+        }
+        if (elResolvers == null) {
+            elResolvers = new ArrayList();
+        }
+        elResolvers.add(resolver);
+    }
+    
+    public ArrayList getApplicationELResolvers() {
+        return elResolvers;
+    }
+    
     public ActionListener getActionListener() {
         return actionListener;
     }
@@ -233,7 +378,8 @@ public class ApplicationImpl extends Application {
     public PropertyResolver getPropertyResolver() {
         synchronized (this) {
             if (null == propertyResolver) {
-                propertyResolver = new PropertyResolverImpl();
+                propertyResolver = 
+                    new PropertyResolverImpl(getELResolver());
             }
         }
         return propertyResolver;
@@ -248,7 +394,7 @@ public class ApplicationImpl extends Application {
             throw new NullPointerException(message);
         }
         synchronized (this) {
-            this.propertyResolver = resolver;
+            associate.setLegacyPropertyResolver(resolver); 
         }
         if (logger.isLoggable(Level.FINE)) {
             logger.fine("set PropertyResolver Instance to " + propertyResolver);
@@ -256,23 +402,64 @@ public class ApplicationImpl extends Application {
     }
 
 
-    public MethodBinding createMethodBinding(String ref, Class[] params) {
-
-        return this.methodBindingFactory.createMethodBinding(ref, params);
-
+    public MethodBinding createMethodBinding(String ref, Class params[]) {
+        MethodExpression result = null;
+        if (ref == null) {
+            String message = Util.getExceptionMessageString
+                (Util.NULL_PARAMETERS_ERROR_MESSAGE_ID);
+            message = message +" ref " + ref;
+            throw new NullPointerException(message);
+        }
+        if (!(ref.startsWith("#{") && ref.endsWith("}"))) {
+            if (logger.isLoggable(Level.FINE)) {
+                logger.fine(" Expression " + ref +
+                  " does not follow the syntax #{...}");
+            }
+            throw new ReferenceSyntaxException(ref);
+        }
+        FacesContext context = FacesContext.getCurrentInstance();
+        try {
+            // return a MethodBinding that wraps a MethodExpression.
+	    if (null == params) {
+		params = new Class[0];
+	    }
+            result = 
+                getExpressionFactory().
+                    createMethodExpression(context.getELContext(), ref, null,
+                    params);
+        } catch (ELException elex) {
+            throw new ReferenceSyntaxException(elex);
+        }
+        return (new MethodBindingMethodExpressionAdapter(result));
     }
 
 
     public ValueBinding createValueBinding(String ref)
         throws ReferenceSyntaxException {
-        return this.valueBindingFactory.createValueBinding(ref);
+        if (ref == null) {
+            String message = Util.getExceptionMessageString
+                (Util.NULL_PARAMETERS_ERROR_MESSAGE_ID);
+            message = message +" ref " + ref;
+            throw new NullPointerException(message);
+        }
+        ValueExpression result = null;
+        FacesContext context = FacesContext.getCurrentInstance();
+         // return a ValueBinding that wraps a ValueExpression.
+         try {
+             result= getExpressionFactory().
+                     createValueExpression(context.getELContext(),ref,
+                     Object.class);     
+         } catch (ELException elex) {
+            throw new ReferenceSyntaxException(elex);
+         } 
+         return (new ValueBindingValueExpressionAdapter(result));
     }
 
 
     public VariableResolver getVariableResolver() {
         synchronized (this) {
             if (null == variableResolver) {
-                variableResolver = new VariableResolverImpl();
+                variableResolver = new VariableResolverImpl(getELResolver());
             }
         }
         return variableResolver;
@@ -287,7 +474,7 @@ public class ApplicationImpl extends Application {
             throw new NullPointerException(message);
         }
         synchronized (this) {
-            this.variableResolver = resolver;
+            associate.setLegacyVariableResolver(resolver); 
         }
         if (logger.isLoggable(Level.FINE)) {
             logger.fine("set VariableResolver Instance to " + variableResolver);
@@ -445,20 +632,47 @@ public class ApplicationImpl extends Application {
             message = message +" targetClass " + targetClass;
             throw new NullPointerException(message);
         }
-        Converter result = createConverterBasedOnClass(targetClass);
-        if (result == null) {
-            Object[] params = {targetClass.getName()};
-            if (logger.isLoggable(Level.SEVERE)) {
-                logger.log(Level.SEVERE, 
-                        "jsf.cannot_instantiate_converter_error", 
-                        targetClass.getName());
+        Converter returnVal = (Converter) newThing(targetClass,
+                                                   converterTypeMap);
+        if (returnVal != null) {
+            if (logger.isLoggable(Level.FINE)) {
+                logger.fine("Created converter of type " + 
+                        returnVal.getClass().getName());
             }
-            throw new FacesException(Util.getExceptionMessageString(
-                Util.NAMED_OBJECT_NOT_FOUND_ERROR_MESSAGE_ID, params));
+            return returnVal;
         } 
-        return result;
+
+        //Search for converters registered to interfaces implemented by
+        //targetClass
+        Class[] interfaces = targetClass.getInterfaces();
+        if (interfaces != null) {
+            for (int i = 0; i < interfaces.length; i++) {
+                returnVal = createConverterBasedOnClass(interfaces[i]);
+                if (returnVal != null) {
+                   if (logger.isLoggable(Level.FINE)) {
+                       logger.fine("Created converter of type " +
+                                  returnVal.getClass().getName());
+                    }
+                    return returnVal;
+                }
+            }
+        }
+
+        //Search for converters registered to superclasses of targetClass
+        Class superclass = targetClass.getSuperclass();
+        if (superclass != null) {
+            returnVal = (Converter) createConverterBasedOnClass(superclass);
+            if (returnVal != null) {
+                if (logger.isLoggable(Level.FINE)) {
+                    logger.fine("Created converter of type " +
+                              returnVal.getClass().getName());
+                }
+                return returnVal;
+            }
+        } 
+        return returnVal;
     }
-    
+
     protected Converter createConverterBasedOnClass(Class targetClass) {
         
         Converter returnVal = (Converter) newThing(targetClass,
@@ -501,7 +715,6 @@ public class ApplicationImpl extends Application {
         } 
         return returnVal;
     }
-
 
     public Iterator getConverterIds() {
         Iterator result = Collections.EMPTY_LIST.iterator();

@@ -5,8 +5,9 @@
 
 package javax.faces.component;
 
-
-import java.io.IOException;
+import javax.el.ValueExpression;
+import javax.el.ELException;
+import javax.faces.FacesException;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.el.ValueBinding;
@@ -21,6 +22,7 @@ import javax.faces.model.ResultDataModel;
 import javax.faces.model.ResultSetDataModel;
 import javax.faces.model.ScalarDataModel;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.sql.ResultSet;
 import java.util.Collections;
@@ -35,7 +37,7 @@ import javax.servlet.jsp.jstl.sql.Result;
  * <p><strong>UIData</strong> is a {@link UIComponent} that supports
  * data binding to a collection of data objects represented by a
  * {@link DataModel} instance, which is the current value of this component
- * itself (typically established via a {@link ValueBinding}).
+ * itself (typically established via a {@link ValueExpression}).
  * During iterative processing over the rows of data in the data model,
  * the object for the current row is exposed as a request attribute
  * under the key specified by the <code>var</code> property.</p>
@@ -158,9 +160,15 @@ public class UIData extends UIComponentBase
 	if (this.firstSet) {
 	    return (this.first);
 	}
-	ValueBinding vb = getValueBinding("first");
-	if (vb != null) {
-	    Integer value = (Integer) vb.getValue(getFacesContext());
+	ValueExpression ve = getValueExpression("first");
+	if (ve != null) {
+	    Integer value = null;
+	    try {
+		value = (Integer) ve.getValue(getFacesContext().getELContext());
+	    }
+	    catch (ELException e) {
+		throw new FacesException(e);
+	    }
 	    if (null == value) {
 		return first;
 	    }
@@ -408,9 +416,16 @@ public class UIData extends UIComponentBase
 	if (this.rowsSet) {
 	    return (this.rows);
 	}
-	ValueBinding vb = getValueBinding("rows");
-	if (vb != null) {
-	    Integer value = (Integer) vb.getValue(getFacesContext());
+	ValueExpression ve = getValueExpression("rows");
+	if (ve != null) {
+	    Integer value = null;
+	    try {
+		value = (Integer) ve.getValue(getFacesContext().getELContext());
+	    }
+	    catch (ELException e) {
+		throw new FacesException(e);
+	    }
+
 	    if (null == value) {
 		return rows;
 	    }
@@ -522,9 +537,15 @@ public class UIData extends UIComponentBase
 	if (this.value != null) {
 	    return (this.value);
 	}
-	ValueBinding vb = getValueBinding("value");
-	if (vb != null) {
-	    return (vb.getValue(getFacesContext()));
+	ValueExpression ve = getValueExpression("value");
+	if (ve != null) {
+	    try {
+		return (ve.getValue(getFacesContext().getELContext()));
+	    }
+	    catch (ELException e) {
+		throw new FacesException(e);
+	    }
+
 	} else {
 	    return (null);
 	}
@@ -550,11 +571,9 @@ public class UIData extends UIComponentBase
 
 
     /**
-     * <p>Set the {@link ValueBinding} used to calculate the value for the
-     * specified attribute or property name, if any.  In addition, if a
-     * {@link ValueBinding} is set for the <code>value</code> property,
-     * remove any synthesized {@link DataModel} for the data previously
-     * bound to this component.</p>
+     * <p>If "name" is something other than "value", "var", or
+     * "rowIndex", rely on the superclass conversion from
+     * <code>ValueBinding</code> to <code>ValueExpression</code>.</p>
      *
      * @param name Name of the attribute or property for which to set a
      *  {@link ValueBinding}
@@ -566,6 +585,9 @@ public class UIData extends UIComponentBase
      *  <code>rowIndex</code>
      * @exception NullPointerException if <code>name</code>
      *  is <code>null</code>
+     *
+     * @deprecated This has been replaced by {@link
+     * #setValueExpression(java.lang.String, javax.el.ValueExpression)}.
      */
     public void setValueBinding(String name, ValueBinding binding) {
         
@@ -576,6 +598,62 @@ public class UIData extends UIComponentBase
         }
         super.setValueBinding(name, binding);
         
+    }
+    
+   /**
+     * <p>Set the {@link ValueExpression} used to calculate the value for the
+     * specified attribute or property name, if any.  In addition, if a
+     * {@link ValueExpression} is set for the <code>value</code> property,
+     * remove any synthesized {@link DataModel} for the data previously
+     * bound to this component.</p>
+     *
+     * @param name Name of the attribute or property for which to set a
+     *  {@link ValueExpression}
+     * @param binding The {@link ValueExpression} to set, or <code>null</code>
+     *  to remove any currently set {@link ValueExpression}
+     *
+     * @exception IllegalArgumentException if <code>name</code> is one of
+     *  <code>id</code>, <code>parent</code>, <code>var</code>, or
+     *  <code>rowIndex</code>
+     * @exception NullPointerException if <code>name</code>
+     *  is <code>null</code>
+     * @since 1.2
+     */
+    public void setValueExpression(String name, ValueExpression binding) {
+        
+        if ("value".equals(name)) {
+            this.model = null;
+        } else if ("var".equals(name) || "rowIndex".equals(name)) {
+            throw new IllegalArgumentException();
+        }
+        super.setValueExpression(name, binding);
+        
+    }
+
+    /**
+     * <p>Return a client identifier for this component that includes the
+     * current value of the <code>rowIndex</code> property, if it is not
+     * set to -1.  This implies that multiple calls to
+     * <code>getClientId()</code> may return different results,
+     * but ensures that child components can themselves generate
+     * row-specific client identifiers (since {@link UIData} is a
+     * {@link NamingContainer}).</p>
+     *
+     * @exception NullPointerException if <code>context</code>
+     *  is <code>null</code>
+     */
+    public String getClientId(FacesContext context) {
+
+        if (context == null) {
+            throw new NullPointerException();
+        }
+	String baseClientId = super.getClientId(context);
+        if (rowIndex >= 0) {
+            return (baseClientId + NamingContainer.SEPARATOR_CHAR + rowIndex);
+        } else {
+            return (baseClientId);
+        }
+
     }
 
 

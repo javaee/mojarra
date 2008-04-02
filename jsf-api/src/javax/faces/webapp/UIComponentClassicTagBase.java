@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentClassicTagBase.java,v 1.2 2005/04/26 16:41:37 jayashri Exp $
+ * $Id: UIComponentClassicTagBase.java,v 1.3 2005/05/05 20:51:13 edburns Exp $
  */
 
 /*
@@ -9,6 +9,7 @@
 
 package javax.faces.webapp;
 
+import javax.el.ELContext;
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.application.Application;
@@ -16,10 +17,10 @@ import javax.faces.component.UIComponent;
 import javax.faces.component.UIOutput;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
-import javax.faces.context.ExternalContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
+import javax.servlet.jsp.tagext.JspIdConsumer;
 import javax.servlet.jsp.tagext.JspTag;
 import javax.servlet.jsp.tagext.Tag;
 import javax.servlet.jsp.tagext.BodyTag;
@@ -119,10 +120,9 @@ import java.io.Writer;
  *
  */
 
-public abstract class UIComponentClassicTagBase extends UIComponentTagBase implements BodyTag {
+public abstract class UIComponentClassicTagBase extends UIComponentTagBase implements JspIdConsumer, BodyTag {
 
     // ------------------------------------------------------ Manifest Constants
-
     /**
      * <p>The request scope attribute under which a component tag stack
      * for the current request will be maintained.</p>
@@ -554,30 +554,16 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
                 parentComponent.getAttributes().put(CURRENT_VIEW_ROOT, 
                                                     CURRENT_VIEW_ROOT);
             }
-            else {
-		if (hasBinding()) {
-		    try {
-			setProperties(parentComponent);
-		    }
-		    catch (FacesException e) {
-			if (e.getCause() instanceof JspException) {
-			    throw ((JspException)e.getCause());
-			}
-			throw e;
-		    }
+            else if (hasBinding()) {
+		try {
+		    setProperties(parentComponent);
 		}
-		else {
-		    // PENDING(edburns): TCCI HACK until JspIdConsumer
-		    // is available
-		    if (null == this.id) {
-			// if this is a postback, and we have no manual
-			// id, make sure to increment the counter so the
-			// id layout remains in synch.
-			((UIViewRoot)parentComponent).createUniqueId();
+		catch (FacesException e) {
+		    if (e.getCause() instanceof JspException) {
+			throw ((JspException)e.getCause());
 		    }
+		    throw e;
 		}
-
-		    
             }
 
 	    // this is not the first time this tag instance is trying to
@@ -859,126 +845,17 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
      * <p><code>id</code> is
      * <code>FacesContext.getViewRoot().createUniqueId()</code></p>
      *
-     *
-     * <p>This implementation includes a hack to work around the absence
-     * of JspIdConsumer in non JSP 2.1 containers.  PENDING(edburns):
-     * remove this hack when we get to JSP 2.1</p>
-     *
      */
 
     protected UIOutput createVerbatimComponent() {
 	assert(null != context);
-
-	/*
-	 * <p>The name of the attribute in the ViewRoot's attribute set
-	 * under which we store the list of verbatim ids, so they can be
-	 * applied properly on postback.  PENDING(edburns): remove this when
-	 * we have JspIdConsumer implementod on jsf-trunk.</p>
-	 */
-	final String VERBATIM_ID_LIST_ATTR = 
-	    "javax.faces.webapp.VERBATIM_ID_LIST";
-
-	ExternalContext extContext = context.getExternalContext();
-	Map requestMap = extContext.getRequestMap();
 	UIOutput verbatim = null;
-	UIViewRoot root = context.getViewRoot();
-	List verbatimIdList = (List) 
-	    root.getAttributes().get(VERBATIM_ID_LIST_ATTR);
 	Application application = context.getApplication();
 	verbatim = (UIOutput)
 	    application.createComponent("javax.faces.HtmlOutputText");
 	verbatim.setTransient(true);
 	verbatim.getAttributes().put("escape", Boolean.FALSE);
-
-	// Get the id for this verbatim component.  Authored as an
-	// inline "function" to localize source code impact.
-	String verbatimId = null;
-	{	
-
-	    // Discover if this is an initial request or a postback.
-	    // Authored as an inline "function" to localize source code
-	    // impact.
-	    boolean isFillingVerbatimIdList = false;
-	    {
-		final String INITIAL_REQUEST_ATTR = 
-		    "javax.faces.webapp.INITIAL_REQUEST_FLAG";
-		// first, look for the request attribute we'll later
-		// set, if not found.
-		Boolean isPostbackBoolean = (Boolean)
-		    requestMap.get(INITIAL_REQUEST_ATTR);
-		if (null == isPostbackBoolean) {
-		    RenderKitFactory renderKitFactory = (RenderKitFactory)
-		    FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
-		    RenderKit renderKit = 
-			renderKitFactory.getRenderKit(context, 
-						      root.getRenderKitId());
-		    isPostbackBoolean = 
-		       renderKit.getResponseStateManager().isPostback(context)?
-			Boolean.TRUE : Boolean.FALSE;
-		    requestMap.put(INITIAL_REQUEST_ATTR, isPostbackBoolean);
-		}
-		if (isPostbackBoolean.booleanValue()) {
-		    // if this a postback, do an additional test to see
-		    // if this is an initial request: Are we currently
-		    // in the process of filling the list?  
-		    final String FILLING_LIST_ATTR = 
-			"javax.faces.webapp.FILLING_LIST";
-		    if (null == requestMap.get(FILLING_LIST_ATTR)) {
-			isFillingVerbatimIdList = !root.getAttributes().containsKey(VERBATIM_ID_LIST_ATTR);
-			if (isFillingVerbatimIdList) {
-			    requestMap.put(FILLING_LIST_ATTR, 
-					   FILLING_LIST_ATTR);
-			}
-		    }
-		    else {
-			isFillingVerbatimIdList = true;
-		    }
-		}
-		else {
-		    isFillingVerbatimIdList = true;
-		}
-	    }
-	    
-	    if (isFillingVerbatimIdList) {
-		// if this is an initial request, call root.createUniqueId()
-		// and add it to the VERBATIM_ID_LIST at the end of the list
-		
-		if (null == verbatimIdList) {
-		    verbatimIdList = new ArrayList();
-		    root.getAttributes().put(VERBATIM_ID_LIST_ATTR, 
-					     verbatimIdList);
-		}
-		
-		verbatimId = root.createUniqueId();
-		verbatimIdList.add(verbatimId);
-	    }
-	    else {
-		// if this is a postback, remove element i from
-		// VERBATIM_ID_LIST and use it as the id.
-		
-		// i is kept as a request attribute
-		int i = 0;
-		final String VERBATIM_ID_LIST_INDEX_ATTR = 
-		    "javax.faces.webapp.VERBATIM_ID_LIST_INDEX";
-		Integer iInteger = (Integer)
-		    requestMap.get(VERBATIM_ID_LIST_INDEX_ATTR);
-		if (null != iInteger) {
-		    i = iInteger.intValue();
-		}
-		
-		assert(null != verbatimIdList);
-		verbatimId = verbatimIdList.get(i++).toString();
-
-		// increment the counter to keep things in synch
-		root.createUniqueId();
-
-		iInteger = new Integer(i);
-		requestMap.put(VERBATIM_ID_LIST_INDEX_ATTR, iInteger);
-	    }
-	}
-	assert(null != verbatimId);
-	
-	verbatim.setId(verbatimId);
+	verbatim.setId(context.getViewRoot().createUniqueId());
 	return verbatim;
     }
 

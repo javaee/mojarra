@@ -114,6 +114,7 @@
     <pathelement location="${servlet.jar}"/>
     <pathelement location="${jsp.jar}"/> 
     <pathelement location="${jstl.jar}"/>
+    <pathelement location="${el-api.jar}"/>
   </path>
 
   <path id="catalina-ant.classpath">
@@ -133,6 +134,7 @@
     <pathelement location="${junit.jar}"/>
     <pathelement location="${servlet.jar}"/>
     <pathelement location="${standard.jar}"/>
+    <pathelement location="${el-api.jar}"/>
   </path>
 
   <!-- Custom Tomcat Integration -->
@@ -215,6 +217,16 @@ must exist.  This is necessary for the MessageFactory class.
           todir="${build.generate}/com/sun/faces/util"
           filtering="true"/>
 
+    <filter token="protection" value="public"/>
+
+    <filter token="package" value="com.sun.faces.application"/>
+    <copy todir="${build.generate}/com/sun/faces/application"
+          filtering="true">
+      <fileset dir="${jsf-api.home}/template-src">
+        <include name="*Adapter.java" />
+      </fileset>
+    </copy>
+
   </target>
 
   <target name="check.taglib.generation.necessity" if="jsf-tools">
@@ -240,7 +252,16 @@ must exist.  This is necessary for the MessageFactory class.
 
     <ant dir="${jsf-tools.dir}" inheritall="false" target="clean.generated.taglib"/>
 
-    <ant dir="${jsf-tools.dir}" inheritall="false" target="generate.taglib"/>
+    <ant dir="${jsf-tools.dir}" inheritall="false" target="generate.taglib">
+      <property name="tomcat.home" value="${tomcat.home}" />
+      <property name="commons-beanutils.jar" value="${commons-beanutils.jar}" />
+      <property name="commons-digester.jar" value="${commons-digester.jar}" />
+      <property name="commons-logging.jar" value="${commons-logging.jar}" />
+      <property name="commons-collections.jar" value="${commons-collections.jar}" />
+      <property name="xerces.jar" value="${xerces.jar}" />
+      <property name="dom.jar.dir" value="${dom.jar.dir}" />
+      <property name="dom.jar" value="${dom.jar}" />
+    </ant>
 
     <copy todir="${build.generate}">
 

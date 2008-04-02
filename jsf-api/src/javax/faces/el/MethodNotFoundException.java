@@ -1,5 +1,5 @@
 /*
- * $Id: MethodNotFoundException.java,v 1.3 2004/02/26 20:30:56 eburns Exp $
+ * $Id: MethodNotFoundException.java,v 1.4 2005/05/05 20:51:10 edburns Exp $
  */
 
 /*
@@ -14,6 +14,9 @@ package javax.faces.el;
 /**
  * <p>An exception caused by a method name that cannot be resolved
  * against a base object.</p>
+ *
+ * @deprecated This has been replaced by {@link
+ * javax.el.MethodNotFoundException}.
  */
 
 public class MethodNotFoundException extends EvaluationException {

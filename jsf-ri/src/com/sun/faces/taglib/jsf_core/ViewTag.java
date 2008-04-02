@@ -1,5 +1,5 @@
 /*
- * $Id: ViewTag.java,v 1.34 2005/05/02 14:58:45 rogerk Exp $
+ * $Id: ViewTag.java,v 1.35 2005/05/05 20:51:28 edburns Exp $
  */
 
 /*
@@ -9,34 +9,36 @@
 
 package com.sun.faces.taglib.jsf_core;
 
-import com.sun.faces.RIConstants;
-import com.sun.faces.util.Util;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.io.IOException;
+import java.util.Locale;
 
+import javax.el.ELException;
+import javax.el.ELContext;
+import javax.el.ValueExpression;
+import javax.el.MethodExpression;
+import javax.faces.FacesException;
 import javax.faces.application.ViewHandler;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
 import javax.faces.component.UIOutput;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
-import javax.faces.el.ValueBinding;
-import javax.faces.el.MethodBinding;
-import javax.faces.event.PhaseEvent;
 import javax.faces.render.RenderKitFactory;
 import javax.faces.webapp.UIComponentTag;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.faces.webapp.UIComponentELTag;
 import javax.servlet.http.HttpSession;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.jstl.core.Config;
 import javax.servlet.jsp.tagext.BodyContent;
 import javax.servlet.jsp.tagext.BodyTag;
 
-import java.io.IOException;
-import java.util.Locale;
-import com.sun.faces.application.ViewHandlerResponseWrapper;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
+import com.sun.faces.application.ViewHandlerResponseWrapper;
+import com.sun.faces.util.Util;
 
 /**
  * All JSF component tags must be nested within a f:view tag.  This tag
@@ -44,10 +46,10 @@ import com.sun.faces.application.ViewHandlerResponseWrapper;
  * Renderer. It exists mainly to provide a guarantee that all faces
  * components reside inside of this tag.
  *
- * @version $Id: ViewTag.java,v 1.34 2005/05/02 14:58:45 rogerk Exp $
+ * @version $Id: ViewTag.java,v 1.35 2005/05/05 20:51:28 edburns Exp $
  */
 
-public class ViewTag extends UIComponentTag {
+public class ViewTag extends UIComponentELTag {
 
     //
     // Protected Constants
@@ -65,27 +67,27 @@ public class ViewTag extends UIComponentTag {
 
     // Attribute Instance Variables
 
-    protected String renderKitId = null;
+    protected ValueExpression renderKitId = null;
                                                                                          
-    public void setRenderKitId(String renderKitId) {
+    public void setRenderKitId(ValueExpression renderKitId) {
         this.renderKitId = renderKitId;
     }
 
-    protected String locale = null;
+    protected ValueExpression locale = null;
 
-    public void setLocale(String newLocale) {
+    public void setLocale(ValueExpression newLocale) {
         locale = newLocale;
     }
 
-    protected String beforePhase = null;
+    protected MethodExpression beforePhase = null;
 
-    public void setBeforePhase(String newBeforePhase) {
+    public void setBeforePhase(MethodExpression newBeforePhase) {
 	beforePhase = newBeforePhase;
     }
 
-    protected String afterPhase = null;
+    protected MethodExpression afterPhase = null;
 
-    public void setAfterPhase(String newAfterPhase) {
+    public void setAfterPhase(MethodExpression newAfterPhase) {
 	afterPhase = newAfterPhase;
     }
 
@@ -253,70 +255,82 @@ public class ViewTag extends UIComponentTag {
     protected void setProperties(UIComponent component) {
         super.setProperties(component);
         Locale viewLocale = null;
-        ValueBinding vb = null;
-        MethodBinding mb = null;
 	UIViewRoot viewRoot = (UIViewRoot) component;
+	FacesContext context = FacesContext.getCurrentInstance();
+	ELContext elContext = context.getELContext();
+	try {
+	    
+	    if (null != renderKitId) {
+		if (renderKitId.isLiteralText()) {
+		    // PENDING(edburns): better error message than NPE
+		    // possible here.
+		    viewRoot.setRenderKitId(renderKitId.getValue(elContext).toString());
+		} else {
+		    // clear out the literal value to force using the
+		    // expression
+		    viewRoot.setRenderKitId(null);
+		    viewRoot.setValueExpression("renderKitId", renderKitId);
+		}
+	    } 
+	    else if (viewRoot.getRenderKitId() == null) {
+		String renderKitIdString = 
+		    context.getApplication().getDefaultRenderKitId();
+		if (null == renderKitIdString) {
+		    renderKitIdString = RenderKitFactory.HTML_BASIC_RENDER_KIT;
+		}
+		viewRoot.setRenderKitId(renderKitIdString);
+	    }
+	    
+	    if (null != locale) {
+		if (locale.isLiteralText()) {
+		    // PENDING(edburns): better error message than NPE
+		    // possible here.
+		    viewLocale = 
+			getLocaleFromString(locale.getValue(elContext).toString());
+		} 
+		else {
+		    component.setValueExpression("locale", locale);
+                    Object result = locale.getValue(context.getELContext());
+                    if (result instanceof Locale) {
+                        viewLocale = (Locale) result;
+                    } else if (result instanceof String) {
+                        viewLocale = getLocaleFromString((String) result);
+                    }
+		}
 
-        if (null != renderKitId) {
-            if (isValueReference(renderKitId)) {
-                viewRoot.setValueBinding("renderKitId", 
-                    vb = Util.getValueBinding(renderKitId));
-            } else {
-                viewRoot.setRenderKitId(renderKitId);
-            }
-        } else if (viewRoot.getRenderKitId() == null) {
-            String renderKitIdString = FacesContext.getCurrentInstance().
-                getApplication().getDefaultRenderKitId();
-            if (null == renderKitIdString) {
-                renderKitIdString = RenderKitFactory.HTML_BASIC_RENDER_KIT;
-            }
-            viewRoot.setRenderKitId(renderKitIdString);
-        }
+		assert(null != viewLocale);
+		
+		((UIViewRoot) component).setLocale(viewLocale);
+		// update the JSTL locale attribute in request scope so that
+		// JSTL picks up the locale from viewRoot. This attribute
+		// must be updated before the JSTL setBundle tag is called
+		// because that is when the new LocalizationContext object
+		// is created based on the locale.
+		Config.set(pageContext.getRequest(),Config.FMT_LOCALE, viewLocale);
+	    }
 
-        if (null != locale) {
-            if (isValueReference(locale)) {
-                viewRoot.setValueBinding("locale",
-					 vb = Util.getValueBinding(locale));
-                Object resultLocale =
-                    vb.getValue(FacesContext.getCurrentInstance());
-                if (resultLocale instanceof Locale) {
-                    viewLocale = (Locale) resultLocale;
-                } else if (resultLocale instanceof String) {
-                    viewLocale = getLocaleFromString((String) resultLocale);
-                }
-            } else {
-                viewLocale = getLocaleFromString(locale);
-            }
-            viewRoot.setLocale(viewLocale);
-            // update the JSTL locale attribute in request scope so that
-            // JSTL picks up the locale from viewRoot. This attribute
-            // must be updated before the JSTL setBundle tag is called
-            // because that is when the new LocalizationContext object
-            // is created based on the locale.
-            Config.set(pageContext.getRequest(),Config.FMT_LOCALE, viewLocale);
-        }
-        if (null != beforePhase) {
-            if (isValueReference(beforePhase)) {
-                Class args[] = { PhaseEvent.class };
-                mb = FacesContext.getCurrentInstance().getApplication().createMethodBinding(beforePhase, args);
-                viewRoot.setBeforePhaseListener(mb);
-		
-            } else {
-		Object params [] = {beforePhase};
-		throw new javax.faces.FacesException(Util.getExceptionMessageString(Util.INVALID_EXPRESSION_ID, params));
-            }
-        }
-        if (null != afterPhase) {
-            if (isValueReference(afterPhase)) {
-                Class args[] = { PhaseEvent.class };
-                mb = FacesContext.getCurrentInstance().getApplication().createMethodBinding(afterPhase, args);
-                viewRoot.setAfterPhaseListener(mb);
-		
-            } else {
-		Object params [] = {afterPhase};
-		throw new javax.faces.FacesException(Util.getExceptionMessageString(Util.INVALID_EXPRESSION_ID, params));
-            }
-        }
+	    if (null != beforePhase) {
+		if (beforePhase.isLiteralText()) {
+		    Object params [] = {beforePhase};
+		    throw new javax.faces.FacesException(Util.getExceptionMessageString(Util.INVALID_EXPRESSION_ID, params));
+		}
+		else {
+		    viewRoot.setBeforePhaseListener(beforePhase);
+		    
+		}
+	    }
+	    if (null != afterPhase) {
+		if (afterPhase.isLiteralText()) {
+		    Object params [] = {afterPhase};
+		    throw new javax.faces.FacesException(Util.getExceptionMessageString(Util.INVALID_EXPRESSION_ID, params));
+		}
+		else {
+		    viewRoot.setAfterPhaseListener(afterPhase);
+		}
+	    }
+	} catch (ELException ele) {
+	    throw new FacesException(ele);
+	}
     }
 
 

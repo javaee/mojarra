@@ -5,1022 +5,1075 @@
  SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 -->
 
-<!DOCTYPE taglib
-  PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.2//EN"
-  "http://java.sun.com/dtd/web-jsptaglibrary_1_2.dtd">
+
+<taglib xmlns="http://java.sun.com/xml/ns/j2ee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_1.xsd"
+    version="2.1">
 
 
-<taglib>
+    <!-- ========== Tag Library Description Elements ========================= -->
 
-
-  <!-- ========== Tag Library Description Elements ========================= -->
-
-
-  <tlib-version>1.0</tlib-version>
-  <jsp-version>1.2</jsp-version>
-  <short-name>f</short-name>
-  <uri>http://java.sun.com/jsf/core</uri>
-  <description>
-    The core JavaServer Faces custom actions that are independent of
-    any particular RenderKit.
-  </description>
-
-
-  <!-- ========== Tag Library Validator ==================================== -->
-
-
-  <!-- This TLV verifies that a Faces tag has an ID if it is a 
-       child or sibling of a JSTL conditional or iterator tag  -->
-  <validator>
-    <validator-class>
-      com.sun.faces.taglib.jsf_core.CoreValidator
-    </validator-class>
     <description>
+        The core JavaServer Faces custom actions that are independent of
+        any particular RenderKit.
+    </description>
+    <tlib-version>1.0</tlib-version>
+    <short-name>f</short-name>
+    <uri>http://java.sun.com/jsf/core</uri>
+
+
+
+    <!-- ========== Tag Library Validator ==================================== -->
+
+
+    <!-- This TLV verifies that a Faces tag has an ID if it is a
+         child or sibling of a JSTL conditional or iterator tag  -->
+ <validator>
+   <description>
       This tag library validator verifies certain semantic restrictions on the
       use of JavaServer Faces component actions, including the requirement that
       component tags nested inside a JSTL conditional tag must have a value
       specified for the "id" attribute.
-    </description>
-  </validator>
+   </description>
+     <validator-class>
+      com.sun.faces.taglib.jsf_core.CoreValidator
+     </validator-class>
+ </validator>
 
 
-  <!-- ============== Configuration Listener ============== -->
+    <!-- ============== Configuration Listener ============== -->
 
 
-  <!--
-        This ServletContextListener initializes the runtime environment
-        of the JavaServer Faces Reference Implementation when a web
-        application including it is initialized by the container.
-  -->
-  <listener>
-    <listener-class>com.sun.faces.config.ConfigureListener</listener-class>
-  </listener>
+    <!--
+          This ServletContextListener initializes the runtime environment
+          of the JavaServer Faces Reference Implementation when a web
+          application including it is initialized by the container.
+    -->
+ <listener>
+     <listener-class>com.sun.faces.config.ConfigureListener</listener-class>
+ </listener>
 
 
-  <!-- ========== Tag Descriptions ========================================= -->
+    <!-- ========== Tag Descriptions ========================================= -->
 
 
-  <tag>
+ <tag>
+     <description>
+        Register an ActionListener instance on the UIComponent associated
+        with the closest parent UIComponent custom action.
+     </description>
+     <name>actionListener</name>
+     <tag-class>com.sun.faces.taglib.jsf_core.ActionListenerTag</tag-class>
+     <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
+     <body-content>empty</body-content>
 
-    <name>actionListener</name>
-    <tag-class>com.sun.faces.taglib.jsf_core.ActionListenerTag</tag-class>
-    <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
-    <body-content>empty</body-content>
-    <description>
-      Register an ActionListener instance on the UIComponent associated
-      with the closest parent UIComponent custom action.
-    </description>
+     <attribute>
+         <description>
+            Fully qualified Java class name of an ActionListener to be
+            created and registered.
+         </description>
+         <name>type</name>
+         <required>true</required>
+         <deferred-value>
+             <type>java.lang.String</type>
+         </deferred-value>         
+
+     </attribute>
 
     <attribute>
-      <name>type</name>
-      <required>false</required>
-      <rtexprvalue>false</rtexprvalue>
-      <description>
-        Fully qualified Java class name of an ActionListener to be
-        created and registered.
-      </description>
-    </attribute>
-
-    <attribute>
-      <name>binding</name>
-      <required>false</required>
-      <rtexprvalue>false</rtexprvalue>
       <description>
         Value binding expression that evaluates to an object that 
         implements javax.faces.event.ActionListener.
       </description>
-    </attribute>
-  </tag>
-
-
-  <tag>
-
-    <name>attribute</name>
-    <tag-class>com.sun.faces.taglib.jsf_core.AttributeTag</tag-class>
-    <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
-    <body-content>empty</body-content>
-    <description>
-      Add an attribute to the UIComponent associated with the closest
-      parent UIComponent custom action.
-    </description>
-
-    <attribute>
-      <name>name</name>
-      <required>true</required>
-      <rtexprvalue>false</rtexprvalue>
-      <description>
-        The name of the component attribute to be set.
-      </description>
-    </attribute>
-
-    <attribute>
-      <name>value</name>
-      <required>true</required>
-      <rtexprvalue>false</rtexprvalue>
-      <description>
-        The value of the component attribute to be set.
-      </description>
-    </attribute>
-
-  </tag>
-
-
-  <tag>
-
-    <name>convertDateTime</name>
-    <tag-class>com.sun.faces.taglib.jsf_core.ConvertDateTimeTag</tag-class>
-    <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
-    <body-content>empty</body-content>
-    <description>
-      Register a DateTimeConverter instance on the UIComponent associated
-      with the closest parent UIComponent custom action.
-    </description>
-
-    <attribute>
-      <name>dateStyle</name>
-      <required>false</required>
-      <rtexprvalue>false</rtexprvalue>
-      <description>
-        Predefined formatting style which determines how the date
-        component of a date string is to be formatted and parsed.
-        Applied only if type is "date" or "both".  Valid values
-        are "default", "short", "medium", "long", and "full".
-        Default value is "default".
-      </description>
-    </attribute>
-
-    <attribute>
-      <name>locale</name>
-      <required>false</required>
-      <rtexprvalue>false</rtexprvalue>
-      <description>
-        Locale whose predefined styles for dates and times are used
-        during formatting or parsing.  If not specified, the Locale
-        returned by FacesContext.getViewRoot().getLocale() will be used.
-        Value must be either a VB expression that evaluates to a
-        java.util.Locale instance, or a String that is valid to pass as
-        the first argument to the constructor java.util.Locale(String
-        language, String country).  The empty string is passed as the
-        second argument.
-      </description>
-    </attribute>
-
-    <attribute>
-      <name>pattern</name>
-      <required>false</required>
-      <rtexprvalue>false</rtexprvalue>
-      <description>
-        Custom formatting pattern which determines how the
-        date/time string should be formatted and parsed.
-      </description>
-    </attribute>
-
-    <attribute>
-      <name>timeStyle</name>
-      <required>false</required>
-      <rtexprvalue>false</rtexprvalue>
-      <description>
-        Predefined formatting style which determines how the
-        time component of a date string is to be formatted and
-        parsed.  Applied only if type is "time" or "both".
-        Valid values are "default", "short", "medium", "long",
-        and "full".  Default value is "default".
-      </description>
-    </attribute>
-
-    <attribute>
-      <name>timeZone</name>
-      <required>false</required>
-      <rtexprvalue>false</rtexprvalue>
-      <description>
-        Time zone in which to interpret any time information in the date
-        String.  Value must be either a VB expression that evaluates to
-        a java.util.TimeVone instance, or a String that is a timezone ID
-        as described in the javadocs for
-        java.util.TimeZone.getTimeZone().
-      </description>
-    </attribute>
-
-    <attribute>
-      <name>type</name>
-      <required>false</required>
-      <rtexprvalue>false</rtexprvalue>
-      <description>
-        Specifies what contents the string value will be
-        formatted to include, or parsed expecting.  Valid
-        values are "date", "time", and "both".  Default
-        value is "date".
-      </description>
-    </attribute>
-
-    <attribute>
       <name>binding</name>
       <required>false</required>
-      <rtexprvalue>false</rtexprvalue>
-      <description>
-        Value binding expression that evaluates to an object that 
-        implements javax.faces.convert.Converter.
-      </description>
+      <deferred-value>
+          <type>javax.faces.event.ActionListener</type>
+      </deferred-value>         
+
     </attribute>
 
-  </tag>
+
+ </tag>
+
+
+    <tag>
+        <description>
+            Add an attribute to the UIComponent associated with the closest
+            parent UIComponent custom action.
+        </description>
+        <name>attribute</name>
+        <tag-class>com.sun.faces.taglib.jsf_core.AttributeTag</tag-class>
+        <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
+        <body-content>empty</body-content>
+
+        <attribute>
+            <description>
+                The name of the component attribute to be set.
+            </description>
+            <name>name</name>
+            <deferred-value>
+                <type>java.lang.String</type>
+            </deferred-value>
+        </attribute>
+
+        <attribute>
+            <description>
+                The value of the component attribute to be set.
+            </description>
+            <name>value</name>
+                <deferred-value>
+                    <type>java.lang.Object</type>
+                </deferred-value>
+        </attribute>
+    </tag>
+
+
+    <tag>
+        <description>
+            Register a DateTimeConverter instance on the UIComponent associated
+            with the closest parent UIComponent custom action.
+        </description>
+        <name>convertDateTime</name>
+        <tag-class>com.sun.faces.taglib.jsf_core.ConvertDateTimeTag</tag-class>
+        <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
+        <body-content>empty</body-content>
+
+        <attribute>
+            <description>
+                Predefined formatting style which determines how the date
+                component of a date string is to be formatted and parsed.
+                Applied only if type is "date" or "both".  Valid values
+                are "default", "short", "medium", "long", and "full".
+                Default value is "default".
+            </description>
+            <name>dateStyle</name>
+            <deferred-value>
+                <type>java.lang.String</type>
+            </deferred-value>
+        </attribute>
+
+        <attribute>
+            <description>
+                Locale whose predefined styles for dates and times are used
+                during formatting or parsing.  If not specified, the Locale
+                returned by FacesContext.getViewRoot().getLocale() will be used.
+                Value must be either a VB expression that evaluates to a
+                java.util.Locale instance, or a String that is valid to pass as
+                the first argument to the constructor java.util.Locale(String
+                language, String country).  The empty string is passed as the
+                second argument.
+            </description>
+            <name>locale</name>
+            <required>false</required>
+            <deferred-value>
+                <type>java.util.Locale</type>
+            </deferred-value>
+        </attribute>
+
+        <attribute>
+            <description>
+                Custom formatting pattern which determines how the
+                date/time string should be formatted and parsed.
+            </description>
+            <name>pattern</name>
+            <deferred-value>
+                <type>java.lang.String</type>
+            </deferred-value>
+        </attribute>
+
+        <attribute>
+            <description>
+                Predefined formatting style which determines how the
+                time component of a date string is to be formatted and
+                parsed.  Applied only if type is "time" or "both".
+                Valid values are "default", "short", "medium", "long",
+                and "full".  Default value is "default".
+            </description>
+            <name>timeStyle</name>
+            <deferred-value>
+                <type>java.lang.String</type>
+            </deferred-value>
+        </attribute>
+
+        <attribute>
+            <description>
+                Time zone in which to interpret any time information in the date
+                String.  Value must be either a VB expression that evaluates to
+                a java.util.TimeVone instance, or a String that is a timezone ID
+                as described in the javadocs for
+                java.util.TimeZone.getTimeZone().
+            </description>
+            <name>timeZone</name>
+            <deferred-value>
+                <type>java.util.TimeZone</type>
+            </deferred-value>
+        </attribute>
+
+        <attribute>
+            <description>
+                Specifies what contents the string value will be
+                formatted to include, or parsed expecting.  Valid
+                values are "date", "time", and "both".  Default
+                value is "date".
+            </description>
+            <name>type</name>
+            <deferred-value>
+                <type>java.lang.String</type>
+            </deferred-value>
+        </attribute>
+
+        <attribute>
+            <description>
+                A ValueExpression that evaluates to an instance of
+                javax.faces.convert.DateTimeConverter.
+            </description>
+            <name>binding</name>
+            <deferred-value>
+                <type>javax.faces.convert.DateTimeConverter</type>
+            </deferred-value>
+        </attribute>
+
+    </tag>
+
+    <tag>
+        <description>
+            Register a NumberConverter instance on the UIComponent associated
+            with the closest parent UIComponent custom action.
+        </description>
+        <name>convertNumber</name>
+        <tag-class>com.sun.faces.taglib.jsf_core.ConvertNumberTag</tag-class>
+        <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
+        <body-content>empty</body-content>
+
+        <attribute>
+            <description>
+                ISO 4217 currency code, applied only when
+                formatting currencies.
+            </description>
+            <name>currencyCode</name>
+            <deferred-value>
+                <type>java.lang.String</type>
+            </deferred-value>
+        </attribute>
+
+        <attribute>
+            <description>
+                Currency symbol, applied only when formatting
+                currencies.
+            </description>
+            <name>currencySymbol</name>
+            <deferred-value>
+                <type>java.lang.String</type>
+            </deferred-value>
+        </attribute>
+
+        <attribute>
+            <description>
+                Flag specifying whether formatted output will
+                contain grouping separators.  Expressions must
+                evaluate to a boolean.  Default value
+                is true.
+            </description>
+            <name>groupingUsed</name>
+            <deferred-value>
+                <type>java.lang.Boolean</type>
+            </deferred-value>
+        </attribute>
+
+        <attribute>
+            <description>
+                Flag specifying whether only the integer part
+                of the value will be formatted and parsed.
+                Expressions must evaluate to a boolean.
+                Default value is false.
+            </description>
+            <name>integerOnly</name>
+            <deferred-value>
+                <type>java.lang.Boolean</type>
+            </deferred-value>
+        </attribute>
+
+        <attribute>
+            <description>
+                Locale whose predefined styles for numbers
+                are used during formatting and parsing.  If
+                not specified, the Locale returned by
+                FacesContext.getViewRoot().getLocale()
+                will be used.  Expressions must evaluate to
+                a java.util.Locale.
+            </description>
+            <name>locale</name>
+            <deferred-value>
+                <type>java.util.Locale</type>
+            </deferred-value>
+        </attribute>
+
+        <attribute>
+            <description>
+                Maximum number of digits that will be formatted
+                in the fractional portion of the output.  Expressions
+                must evaluate to an int.
+            </description>
+            <name>maxFractionDigits</name>
+            <deferred-value>
+                <type>java.lang.Integer</type>
+            </deferred-value>
+        </attribute>
+
+        <attribute>
+            <description>
+                Maximum number of digits that will be formatted
+                in the integer portion of the output.  Expressions
+                must evaluate to an int.
+            </description>
+            <name>maxIntegerDigits</name>
+            <deferred-value>
+                <type>java.lang.Integer</type>
+            </deferred-value>
+        </attribute>
+
+        <attribute>
+            <description>
+                Minimum number of digits that will be formatted
+                in the fractional portion of the output.  Expressions
+                must evaluate to an int.
+            </description>
+            <name>minFractionDigits</name>
+            <deferred-value>
+                <type>java.lang.Integer</type>
+            </deferred-value>
+        </attribute>
+
+        <attribute>
+            <description>
+                Minimum number of digits that will be formatted
+                in the integer portion of the output.  Expressions
+                must evaluate to an int.
+            </description>
+            <name>minIntegerDigits</name>
+            <deferred-value>
+                <type>java.lang.Integer</type>
+            </deferred-value>
+        </attribute>
+
+        <attribute>
+            <description>
+                Custom formatting pattern which determins how the
+                number string should be formatted and parsed.
+            </description>
+            <name>pattern</name>
+            <deferred-value>
+                <type>java.lang.String</type>
+            </deferred-value>
+        </attribute>
+
+        <attribute>
+            <description>
+                Specifies how the number string will be formatted
+                and parsed.  Valid values are "number", "currency",
+                and "percentage".  Default value is "number".
+            </description>
+            <name>type</name>
+            <deferred-value>
+                <type>java.lang.String</type>
+            </deferred-value>
+        </attribute>
+
+        <attribute>
+            <description>
+                A ValueExpression that evaluates to an instance of
+                javax.faces.convert.NumberConverter.
+            </description>
+            <name>binding</name>
+            <deferred-value>
+                <type>javax.faces.convert.NumberConverter</type>
+            </deferred-value>
+        </attribute>
+
+    </tag>
+
+    <tag>
+        <description>
+            Register a named Converter instance on the UIComponent
+            associated with the closest parent UIComponent custom action.
+        </description>
+        <name>converter</name>
+        <tag-class>com.sun.faces.taglib.jsf_core.ConverterTag</tag-class>
+        <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
+        <body-content>empty</body-content>
+
+        <attribute>
+            <description>
+                Converter identifier of the Converter instance to be
+                created and registered.
+            </description>
+            <name>converterId</name>
+            <deferred-value>
+                <type>java.lang.String</type>
+            </deferred-value>
+        </attribute>
+
+        <attribute>
+            <description>
+                A ValueExpression that evaluates to an object that
+                implements javax.faces.convert.Converter.
+            </description>
+            <name>binding</name>
+            <deferred-value>
+                <type>javax.faces.convert.Converter</type>
+            </deferred-value>
+        </attribute>
+
+    </tag>
+
+
+    <tag>
+        <description>
+            Register a named facet on the UIComponent associated with
+            the closest parent UIComponent custom action.
+        </description>
+        <name>facet</name>
+        <tag-class>javax.faces.webapp.FacetTag</tag-class>
+        <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
+        <body-content>JSP</body-content>
+
+        <attribute>
+            <description>
+                Name of the facet to be created.
+            </description>
+            <name>name</name>
+            <deferred-value>
+                <type>java.lang.String</type>
+            </deferred-value>
+        </attribute>
+
+    </tag>
+
+
+    <tag>
+        <description>
+            Load a resource bundle localized for the Locale of the current
+            view, and expose it as a java.util.Map in the request attributes
+            of the current request under the key specified by the value of the
+            "var" attribute of this tag.  The Map must behave such that if a
+            get() call is made for a key that does not exist in the Map, the
+            literal string ???KEY??? is returned from the Map, where KEY is
+            the key being looked up in the Map, instead of a
+            MissingResourceException being thrown.  If the ResourceBundle does
+            not exist, a JspException must be thrown.
+        </description>
+        <name>loadBundle</name>
+        <tag-class>com.sun.faces.taglib.jsf_core.LoadBundleTag</tag-class>
+        <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
+        <body-content>empty</body-content>
+
+        <attribute>
+            <description>
+                Base name of the resource bundle
+                to be loaded.
+            </description>
+            <name>basename</name>
+            <deferred-value>
+                <type>java.lang.String</type>
+            </deferred-value>
+        </attribute>
+
+        <attribute>
+            <description>
+                Name of a request scope attribute under which
+                the resource bundle will be exposed as a Map.
+            </description>
+            <name>var</name>
+            <required>true</required>
+            <rtexprvalue>false</rtexprvalue>
+        </attribute>
+    </tag>
+
+
+    <tag>
+        <description>
+            Add a child UIParameter component to the UIComponent
+            associated with the closed parent UIComponent custom
+            action.
+        </description>
+        <name>param</name>
+        <tag-class>com.sun.faces.taglib.jsf_core.ParameterTag</tag-class>
+        <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
+        <body-content>JSP</body-content>
+
+        <attribute>
+             <description>
+                ValueExpression to a backing bean
+                property bound to the component instance for
+                the UIComponent created by this custom action.
+            </description>
+            <name>binding</name>
+            <deferred-value>
+                <type>javax.faces.component.UIComponent</type>
+            </deferred-value>
+        </attribute>
+
+        <attribute>
+            <description>
+                Component identifier of the UIParameter component
+                to be created.
+            </description>
+            <name>id</name>
+            <required>false</required>
+            <rtexprvalue>false</rtexprvalue>
+        </attribute>
+
+        <attribute>
+            <description>
+                Name of the parameter to be created.
+            </description>
+            <name>name</name>
+            <deferred-value>
+                <type>java.lang.String</type>
+            </deferred-value>
+        </attribute>
+
+        <attribute>
+            <description>
+                Value of the parameter to be set.
+            </description>
+            <name>value</name>
+            <deferred-value/>
+        </attribute>
+
+    </tag>
 
   <tag>
 
-    <name>convertNumber</name>
-    <tag-class>com.sun.faces.taglib.jsf_core.ConvertNumberTag</tag-class>
-    <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
-    <body-content>empty</body-content>
-    <description>
-      Register a NumberConverter instance on the UIComponent associated
-      with the closest parent UIComponent custom action.
-    </description>
-
-    <attribute>
-      <name>currencyCode</name>
-      <required>false</required>
-      <rtexprvalue>false</rtexprvalue>
-      <description>
-        ISO 4217 currency code, applied only when
-        formatting currencies.
-      </description>
-    </attribute>
-
-    <attribute>
-      <name>currencySymbol</name>
-      <required>false</required>
-      <rtexprvalue>false</rtexprvalue>
-      <description>
-        Currency symbol, applied only when formatting
-        currencies.
-      </description>
-    </attribute>
-
-    <attribute>
-      <name>groupingUsed</name>
-      <required>false</required>
-      <rtexprvalue>false</rtexprvalue>
-      <description>
-        Flag specifying whether formatted output will
-        contain grouping separators.  Expressions must
-        evaluate to a boolean.  Default value
-        is true.
-      </description>
-    </attribute>
-
-    <attribute>
-      <name>integerOnly</name>
-      <required>false</required>
-      <rtexprvalue>false</rtexprvalue>
-      <description>
-        Flag specifying whether only the integer part
-        of the value will be formatted and parsed.
-        Expressions must evaluate to a boolean.
-        Default value is false.
-      </description>
-    </attribute>
-
-    <attribute>
-      <name>locale</name>
-      <required>false</required>
-      <rtexprvalue>false</rtexprvalue>
-      <description>
-        Locale whose predefined styles for numbers
-        are used during formatting and parsing.  If
-        not specified, the Locale returned by
-        FacesContext.getViewRoot().getLocale()
-        will be used.  Expressions must evaluate to
-        a java.util.Locale.
-      </description>
-    </attribute>
-
-    <attribute>
-      <name>maxFractionDigits</name>
-      <required>false</required>
-      <rtexprvalue>false</rtexprvalue>
-      <description>
-        Maximum number of digits that will be formatted
-        in the fractional portion of the output.  Expressions
-        must evaluate to an int.
-      </description>
-    </attribute>
-
-    <attribute>
-      <name>maxIntegerDigits</name>
-      <required>false</required>
-      <rtexprvalue>false</rtexprvalue>
-      <description>
-        Maximum number of digits that will be formatted
-        in the integer portion of the output.  Expressions
-        must evaluate to an int.
-      </description>
-    </attribute>
-
-    <attribute>
-      <name>minFractionDigits</name>
-      <required>false</required>
-      <rtexprvalue>false</rtexprvalue>
-      <description>
-        Minimum number of digits that will be formatted
-        in the fractional portion of the output.  Expressions
-        must evaluate to an int.
-      </description>
-    </attribute>
-
-    <attribute>
-      <name>minIntegerDigits</name>
-      <required>false</required>
-      <rtexprvalue>false</rtexprvalue>
-      <description>
-        Minimum number of digits that will be formatted
-        in the integer portion of the output.  Expressions
-        must evaluate to an int.
-      </description>
-    </attribute>
-
-    <attribute>
-      <name>pattern</name>
-      <required>false</required>
-      <rtexprvalue>false</rtexprvalue>
-      <description>
-        Custom formatting pattern which determins how the
-        number string should be formatted and parsed.
-      </description>
-    </attribute>
-
-    <attribute>
-      <name>type</name>
-      <required>false</required>
-      <rtexprvalue>false</rtexprvalue>
-      <description>
-        Specifies how the number string will be formatted
-        and parsed.  Valid values are "number", "currency",
-        and "percentage".  Default value is "number".
-      </description>
-    </attribute>
-
-    <attribute>
-      <name>binding</name>
-      <required>false</required>
-      <rtexprvalue>false</rtexprvalue>
-      <description>
-        Value binding expression that evaluates to an object that 
-        implements javax.faces.convert.Converter.
-      </description>
-    </attribute>
-
-  </tag>
-
-
-  <tag>
-
-    <name>converter</name>
-    <tag-class>javax.faces.webapp.ConverterTag</tag-class>
-    <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
-    <body-content>empty</body-content>
-    <description>
-      Register a named Converter instance on the UIComponent
-      associated with the closest parent UIComponent custom action.
-    </description>
-
-    <attribute>
-      <name>converterId</name>
-      <required>false</required>
-      <rtexprvalue>false</rtexprvalue>
-      <description>
-        Converter identifier of the Converter instance to be
-        created and registered.
-      </description>
-    </attribute>
-
-    <attribute>
-      <name>binding</name>
-      <required>false</required>
-      <rtexprvalue>false</rtexprvalue>
-      <description>
-        Value binding expression that evaluates to an object that 
-        implements javax.faces.convert.Converter.
-      </description>
-    </attribute>
-
-  </tag>
-
-
-  <tag>
-
-    <name>facet</name>
-    <tag-class>javax.faces.webapp.FacetTag</tag-class>
-    <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
-    <body-content>JSP</body-content>
-    <description>
-      Register a named facet on the UIComponent associated with
-      the closest parent UIComponent custom action.
-    </description>
-
-    <attribute>
-      <name>name</name>
-      <required>true</required>
-      <rtexprvalue>false</rtexprvalue>
-      <description>
-        Name of the facet to be created.
-      </description>
-    </attribute>
-
-  </tag>
-
-
-  <tag>
-
-    <name>loadBundle</name>
-    <tag-class>com.sun.faces.taglib.jsf_core.LoadBundleTag</tag-class>
-    <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
-    <body-content>empty</body-content>
-    <description>
-      Load a resource bundle localized for the Locale of the current
-      view, and expose it as a java.util.Map in the request attributes
-      of the current request under the key specified by the value of the
-      "var" attribute of this tag.  The Map must behave such that if a
-      get() call is made for a key that does not exist in the Map, the
-      literal string ???KEY??? is returned from the Map, where KEY is
-      the key being looked up in the Map, instead of a
-      MissingResourceException being thrown.  If the ResourceBundle does
-      not exist, a JspException must be thrown.
-    </description>
-
-    <attribute>
-      <name>basename</name>
-      <required>true</required>
-      <rtexprvalue>false</rtexprvalue>
-      <description>
-        Base name of the resource bundle
-        to be loaded.
-      </description>
-    </attribute>
-
-    <attribute>
-      <name>var</name>
-      <required>true</required>
-      <rtexprvalue>false</rtexprvalue>
-      <description>
-        Name of a request scope attribute under which
-        the resource bundle will be exposed as a Map.
-      </description>
-    </attribute>
-  </tag>
-
-
-  <tag>
-
-    <name>param</name>
-    <tag-class>com.sun.faces.taglib.jsf_core.ParameterTag</tag-class>
-    <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
-    <body-content>JSP</body-content>
-    <description>
-      Add a child UIParameter component to the UIComponent
-      associated with the closed parent UIComponent custom
-      action.
-    </description>
-
-    <attribute>
-      <name>binding</name>
-      <required>false</required>
-      <rtexprvalue>false</rtexprvalue>
-      <description>
-        Value binding expression to a backing bean
-        property bound to the component instance for
-        the UIComponent created by this custom action.
-      </description>
-    </attribute>
-
-    <attribute>
-      <name>id</name>
-      <required>false</required>
-      <rtexprvalue>false</rtexprvalue>
-      <description>
-        Component identifier of the UIParameter component
-        to be created.
-      </description>
-    </attribute>
-
-    <attribute>
-      <name>name</name>
-      <required>false</required>
-      <rtexprvalue>false</rtexprvalue>
-      <description>
-        Name of the parameter to be created.
-      </description>
-    </attribute>
-
-    <attribute>
-      <name>value</name>
-      <required>true</required>
-      <rtexprvalue>false</rtexprvalue>
-      <description>
-        Value of the parameter to be set.
-      </description>
-    </attribute>
-
-  </tag>
-
-  <tag>
-
-    <name>phaseListener</name>
-    <tag-class>com.sun.faces.taglib.jsf_core.PhaseListenerTag</tag-class>
-    <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
-    <body-content>empty</body-content>
     <description>
       Register a PhaseListener instance on the UIViewRoot in which
       this tag is nested.
     </description>
+    <name>phaseListener</name>
+    <tag-class>com.sun.faces.taglib.jsf_core.PhaseListenerTag</tag-class>
+    <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
+    <body-content>empty</body-content>
 
     <attribute>
-      <name>type</name>
-      <required>false</required>
-      <rtexprvalue>false</rtexprvalue>
       <description>
         Fully qualified Java class name of an PhaseListener to be
         created and registered.
       </description>
+      <name>type</name>
+      <required>false</required>
+      <deferred-value>
+          <type>java.lang.String</type>
+      </deferred-value>
+
     </attribute>
 
     <attribute>
-      <name>binding</name>
-      <required>false</required>
-      <rtexprvalue>false</rtexprvalue>
       <description>
         Value binding expression that evaluates to an object that 
         implements javax.faces.event.PhaseListener.
       </description>
-    </attribute>
-  </tag>
-
-
-  <tag>
-
-    <name>selectItem</name>
-    <tag-class>com.sun.faces.taglib.jsf_core.SelectItemTag</tag-class>
-    <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
-    <body-content>empty</body-content>
-    <description>
-      Add a child UISelectItem component to the UIComponent
-      associated with the closed parent UIComponent custom
-      action.
-    </description>
-
-    <attribute>
       <name>binding</name>
       <required>false</required>
-      <rtexprvalue>false</rtexprvalue>
-      <description>
-        Value binding expression to a backing bean
-        property bound to the component instance for
-        the UIComponent created by this custom action.
-      </description>
-    </attribute>
+      <deferred-value>
+          <type>javax.faces.event.PhaseListener</type>
+      </deferred-value>
 
-    <attribute>
-      <name>id</name>
-      <required>false</required>
-      <rtexprvalue>false</rtexprvalue>
-      <description>
-        Component identifier of the UISelectItem
-        component to be created.
-      </description>
-    </attribute>
-
-    <attribute>
-      <name>itemDescription</name>
-      <required>false</required>
-      <rtexprvalue>false</rtexprvalue>
-      <description>
-        Description of this option, for use in
-        development tools.
-      </description>
-    </attribute>
-
-    <attribute>
-      <name>itemDisabled</name>
-      <required>false</required>
-      <rtexprvalue>false</rtexprvalue>
-      <description>
-        Flag indicating whether the option created
-        by this component is disabled.  Expressions
-        must evaluate to a boolean.  Default value
-        is false.
-      </description>
-    </attribute>
-
-    <attribute>
-      <name>itemLabel</name>
-      <required>false</required>
-      <rtexprvalue>false</rtexprvalue>
-      <description>
-        Label to be displayed to the user
-        for this option.
-      </description>
-    </attribute>
-
-    <attribute>
-      <name>itemValue</name>
-      <required>false</required>
-      <rtexprvalue>false</rtexprvalue>
-      <description>
-        Value to be returned to the server if this
-        option is selected by the user.
-      </description>
-    </attribute>
-
-    <attribute>
-      <name>value</name>
-      <required>false</required>
-      <rtexprvalue>false</rtexprvalue>
-      <description>
-        Value binding expression pointing at a
-        SelectItem instance containing the
-        information for this option.
-      </description>
-    </attribute>
-
-  </tag>
-
-
-  <tag>
-
-    <name>selectItems</name>
-    <tag-class>com.sun.faces.taglib.jsf_core.SelectItemsTag</tag-class>
-    <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
-    <body-content>empty</body-content>
-    <description>
-      Add a child UISelectItems component to the UIComponent
-      associated with the closed parent UIComponent custom
-      action.
-    </description>
-
-    <attribute>
-      <name>binding</name>
-      <required>false</required>
-      <rtexprvalue>false</rtexprvalue>
-      <description>
-        Value binding expression to a backing bean
-        property bound to the component instance for
-        the UIComponent created by this custom action.
-      </description>
-    </attribute>
-
-    <attribute>
-      <name>id</name>
-      <required>false</required>
-      <rtexprvalue>false</rtexprvalue>
-      <description>
-        Component identifier of the UISelectItems
-        component to be created.
-      </description>
-    </attribute>
-
-    <attribute>
-      <name>value</name>
-      <required>false</required>
-      <rtexprvalue>false</rtexprvalue>
-      <description>
-        Value binding expression pointing at a List
-        or array of SelectItem instances containing the
-        information for these options.
-      </description>
-    </attribute>
-
-  </tag>
-
-
-  <tag>
-
-    <name>subview</name>
-    <tag-class>com.sun.faces.taglib.jsf_core.SubviewTag</tag-class>
-    <body-content>JSP</body-content>
-    <description>
-      Container action for all JavaServer Faces core and
-      custom component actions used on a nested page via
-      "jsp:include" or any custom action that dynamically
-      includes another page from the same web application,
-      such as JSTL's "c:import".
-    </description>
-
-    <attribute>
-      <name>binding</name>
-      <required>false</required>
-      <rtexprvalue>false</rtexprvalue>
-      <description>
-        Value binding expression to a backing bean
-        property bound to the component instance for
-        the UIComponent created by this custom action.
-      </description>
-    </attribute>
-
-    <attribute>
-      <name>id</name>
-      <required>true</required>
-      <rtexprvalue>false</rtexprvalue>
-      <description>
-        Component identifier of the UINamingContainer
-        component to be created.
-      </description>
-    </attribute>
-
-    <attribute>
-      <name>rendered</name>
-      <required>false</required>
-      <rtexprvalue>false</rtexprvalue>
-      <description>
-        Flag indicating whether this component (and its
-        children) should be rendered.  Expressions must
-        evaluate to a boolean.
-      </description>
-    </attribute>
-
-  </tag>
-
-
-  <tag>
-
-    <name>validateDoubleRange</name>
-    <tag-class>com.sun.faces.taglib.jsf_core.ValidateDoubleRangeTag</tag-class>
-      <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
-    <body-content>JSP</body-content>
-    <description>
-      Register a DoubleRangeValidator instance on the
-      UIComponent associated with the closest parent
-      UIComponent custom action.
-    </description>
-
-    <attribute>
-      <name>binding</name>
-      <required>false</required>
-      <rtexprvalue>false</rtexprvalue>
-      <description>
-        Value binding expression that evaluates to an object that 
-        implements javax.faces.validator.Validator.
-      </description>
-    </attribute>
-
-    <attribute>
-      <name>maximum</name>
-      <required>false</required>
-      <rtexprvalue>false</rtexprvalue>
-      <description>
-        Maximum value allowed for this component.
-      </description>
-    </attribute>
-
-    <attribute>
-      <name>minimum</name>
-      <required>false</required>
-      <rtexprvalue>false</rtexprvalue>
-      <description>
-        Minimum value allowed for this component.
-      </description>
-    </attribute>
-
-
-  </tag>
-
-
-  <tag>
-
-    <name>validateLength</name>
-    <tag-class>com.sun.faces.taglib.jsf_core.ValidateLengthTag</tag-class>
-    <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
-    <body-content>JSP</body-content>
-    <description>
-      Register a LengthValidator instance on the
-      UIComponent associated with the closest parent
-      UIComponent custom action.
-    </description>
-
-    <attribute>
-      <name>binding</name>
-      <required>false</required>
-      <rtexprvalue>false</rtexprvalue>
-      <description>
-        Value binding expression that evaluates to an object that 
-        implements javax.faces.validator.Validator.
-      </description>
-    </attribute>
-
-    <attribute>
-      <name>maximum</name>
-      <required>false</required>
-      <rtexprvalue>false</rtexprvalue>
-      <description>
-        Maximum length allowed for this component.
-      </description>
-    </attribute>
-
-    <attribute>
-      <name>minimum</name>
-      <required>false</required>
-      <rtexprvalue>false</rtexprvalue>
-      <description>
-        Minimum length allowed for this component.
-      </description>
-    </attribute>
-
-  </tag>
-
-
-  <tag>
-
-    <name>validateLongRange</name>
-    <tag-class>com.sun.faces.taglib.jsf_core.ValidateLongRangeTag</tag-class>
-    <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
-    <body-content>JSP</body-content>
-    <description>
-      Register a LongRangeValidator instance on the
-      UIComponent associated with the closest parent
-      UIComponent custom action.
-    </description>
-
-    <attribute>
-      <name>binding</name>
-      <required>false</required>
-      <rtexprvalue>false</rtexprvalue>
-      <description>
-        Value binding expression that evaluates to an object that
-        implements javax.faces.validator.Validator.
-      </description>
-    </attribute>
-
-    <attribute>
-      <name>maximum</name>
-      <required>false</required>
-      <rtexprvalue>false</rtexprvalue>
-      <description>
-        Maximum value allowed for this component.
-      </description>
-    </attribute>
-
-    <attribute>
-      <name>minimum</name>
-      <required>false</required>
-      <rtexprvalue>false</rtexprvalue>
-      <description>
-        Minimum value allowed for this component.
-      </description>
-    </attribute>
-
-  </tag>
-
-
-  <tag>
-
-    <name>validator</name>
-    <tag-class>javax.faces.webapp.ValidatorTag</tag-class>
-    <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
-    <body-content>empty</body-content>
-    <description>
-      Register a named Validator instance on the
-      UIComponent associated with the closest parent
-      UIComponent custom action.
-    </description>
-
-    <attribute>
-      <name>validatorId</name>
-      <required>false</required>
-      <rtexprvalue>false</rtexprvalue>
-      <description>
-        Validator identifier of the Validator
-        to be created and registered.
-      </description>
-    </attribute>
-
-    <attribute>
-      <name>binding</name>
-      <required>false</required>
-      <rtexprvalue>false</rtexprvalue>
-      <description>
-        Value binding expression that evaluates to an object that 
-        implements javax.faces.validator.Validator.
-      </description>
     </attribute>
   </tag>
 
+    <tag>
+        <description>
+            Add a child UISelectItem component to the UIComponent
+            associated with the closed parent UIComponent custom
+            action.
+        </description>
+        <name>selectItem</name>
+        <tag-class>com.sun.faces.taglib.jsf_core.SelectItemTag</tag-class>
+        <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
+        <body-content>empty</body-content>
 
-  <tag>
+        <attribute>
+            <description>
+                Value binding expression to a backing bean
+                property bound to the component instance for
+                the UIComponent created by this custom action.
+            </description>
+            <name>binding</name>
+            <deferred-value>
+                <type>javax.faces.component.UIComponent</type>
+            </deferred-value>
+        </attribute>
 
-    <name>valueChangeListener</name>
-    <tag-class>com.sun.faces.taglib.jsf_core.ValueChangeListenerTag</tag-class>
-    <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
-    <body-content>empty</body-content>
-    <description>
-      Register an ValueChangeListener instance on the UIComponent associated
-      with the closest parent UIComponent custom action.
-    </description>
+        <attribute>
+            <description>
+                Component identifier of the UISelectItem
+                component to be created.
+            </description>
+            <name>id</name>
+            <required>false</required>
+            <rtexprvalue>false</rtexprvalue>
+        </attribute>
 
-    <attribute>
-      <name>type</name>
-      <required>false</required>
-      <rtexprvalue>false</rtexprvalue>
-      <description>
-        Fully qualified Java class name of a
-        ValueChangeListener to be created and registered.
-      </description>
+        <attribute>
+            <description>
+                Description of this option, for use in
+                development tools.
+            </description>
+            <name>itemDescription</name>
+            <deferred-value>
+                <type>java.lang.String</type>
+            </deferred-value>
+        </attribute>
+
+        <attribute>
+            <description>
+                Flag indicating whether the option created
+                by this component is disabled.  Expressions
+                must evaluate to a boolean.  Default value
+                is false.
+            </description>
+            <name>itemDisabled</name>
+            <deferred-value>
+                <type>java.lang.Boolean</type>
+            </deferred-value>
+        </attribute>
+
+        <attribute>
+            <description>
+                Label to be displayed to the user
+                for this option.
+            </description>
+            <name>itemLabel</name>
+            <deferred-value>
+                <type>java.lang.String</type>
+            </deferred-value>
+        </attribute>
+
+        <attribute>
+            <description>
+                Value to be returned to the server if this
+                option is selected by the user.
+            </description>
+            <name>itemValue</name>
+            <deferred-value/>
+        </attribute>
+
+        <attribute>
+            <description>
+                Value binding expression pointing at a
+                SelectItem instance containing the
+                information for this option.
+            </description>
+            <name>value</name>
+            <deferred-value>
+                <type>javax.faces.component.UIComponent</type>
+            </deferred-value>
+        </attribute>
+
+    </tag>
+
+
+    <tag>
+        <description>
+            Add a child UISelectItems component to the UIComponent
+            associated with the closed parent UIComponent custom
+            action.
+        </description>
+        <name>selectItems</name>
+        <tag-class>com.sun.faces.taglib.jsf_core.SelectItemsTag</tag-class>
+        <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
+        <body-content>empty</body-content>
+
+        <attribute>
+            <description>
+                Value binding expression to a backing bean
+                property bound to the component instance for
+                the UIComponent created by this custom action.
+            </description>
+            <name>binding</name>
+            <deferred-value>
+                <type>javax.faces.component.UIComponent</type>
+            </deferred-value>
+        </attribute>
+
+        <attribute>
+            <description>
+                Component identifier of the UISelectItems
+                component to be created.
+            </description>
+            <name>id</name>
+            <required>false</required>
+            <rtexprvalue>false</rtexprvalue>
+        </attribute>
+
+        <attribute>
+            <description>
+                Value binding expression pointing at a List
+                or array of SelectItem instances containing the
+                information for these options.
+            </description>
+            <name>value</name>
+            <deferred-value/>
+        </attribute>
+
+    </tag>
+
+
+    <tag>
+        <description>
+            Container action for all JavaServer Faces core and
+            custom component actions used on a nested page via
+            "jsp:include" or any custom action that dynamically
+            includes another page from the same web application,
+            such as JSTL's "c:import".
+        </description>
+        <name>subview</name>
+        <tag-class>com.sun.faces.taglib.jsf_core.SubviewTag</tag-class>
+        <body-content>JSP</body-content>
+
+
+        <attribute>
+            <description>
+                Value binding expression to a backing bean
+                property bound to the component instance for
+                the UIComponent created by this custom action.
+            </description>
+            <name>binding</name>
+            <deferred-value>
+                <type>javax.faces.component.UIComponent</type>
+            </deferred-value>
+        </attribute>
+
+        <attribute>
+            <description>
+                Component identifier of the UINamingContainer
+                component to be created.
+            </description>
+            <name>id</name>
+            <required>true</required>
+            <rtexprvalue>false</rtexprvalue>
+        </attribute>
+
+        <attribute>
+            <description>
+                Flag indicating whether this component (and its
+                children) should be rendered.  Expressions must
+                evaluate to a boolean.
+            </description>
+            <name>rendered</name>
+            <deferred-value>
+                <type>java.lang.Boolean</type>
+            </deferred-value>
+        </attribute>
+
+    </tag>
+
+
+    <tag>
+        <description>
+            Register a DoubleRangeValidator instance on the
+            UIComponent associated with the closest parent
+            UIComponent custom action.
+        </description>
+        <name>validateDoubleRange</name>
+        <tag-class>com.sun.faces.taglib.jsf_core.ValidateDoubleRangeTag</tag-class>
+        <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
+        <body-content>JSP</body-content>
+
+        <attribute>
+            <description>
+                Maximum value allowed for this component.
+            </description>
+            <name>maximum</name>
+            <deferred-value>
+                <type>java.lang.Double</type>
+            </deferred-value>
+        </attribute>
+
+        <attribute>
+            <description>
+                Minimum value allowed for this component.
+            </description>
+            <name>minimum</name>
+            <deferred-value>
+                <type>java.lang.Double</type>
+            </deferred-value>
+        </attribute>
+
+        <attribute>
+            <description>
+                A ValueExpression that evaluates to an instance of
+                DoubleRangeValidator.
+            </description>
+            <name>binding</name>
+            <deferred-value>
+                <type>javax.faces.validator.DoubleRangeValidator</type>
+            </deferred-value>
+        </attribute>
+
+    </tag>
+
+
+    <tag>
+        <description>
+            Register a LengthValidator instance on the
+            UIComponent associated with the closest parent
+            UIComponent custom action.
+        </description>
+        <name>validateLength</name>
+        <tag-class>com.sun.faces.taglib.jsf_core.ValidateLengthTag</tag-class>
+        <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
+        <body-content>JSP</body-content>
+
+        <attribute>
+            <description>
+                Maximum length allowed for this component.
+            </description>
+            <name>maximum</name>
+            <deferred-value>
+                <type>java.lang.Integer</type>
+            </deferred-value>
+
+        </attribute>
+
+        <attribute>
+            <description>
+                Minimum length allowed for this component.
+            </description>
+            <name>minimum</name>
+            <deferred-value>
+                <type>java.lang.Integer</type>
+            </deferred-value>
+        </attribute>
+
+        <attribute>
+            <description>
+                A ValueExpression that evaluates to an instance of
+                LenghtValidator.
+            </description>
+            <name>binding</name>
+            <deferred-value>
+                <type>javax.faces.validator.LengthValidator</type>
+            </deferred-value>
+        </attribute>
+
+    </tag>
+
+
+    <tag>
+         <description>
+            Register a LongRangeValidator instance on the
+            UIComponent associated with the closest parent
+            UIComponent custom action.
+        </description>
+        <name>validateLongRange</name>
+        <tag-class>com.sun.faces.taglib.jsf_core.ValidateLongRangeTag</tag-class>
+        <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
+        <body-content>JSP</body-content>
+
+        <attribute>
+            <description>
+                Maximum value allowed for this component.
+            </description>
+            <name>maximum</name>
+            <deferred-value>
+                <type>java.lang.Long</type>
+            </deferred-value>
+
+        </attribute>
+
+        <attribute>
+            <description>
+                Minimum value allowed for this component.
+            </description>
+            <name>minimum</name>
+            <deferred-value>
+                <type>java.lang.Long</type>
+            </deferred-value>
+        </attribute>
+
+        <attribute>
+            <description>
+                A ValueExpression that evaluates to an instance of
+                LongRangeValidator.
+            </description>
+            <name>binding</name>
+            <deferred-value>
+                <type>javax.faces.validator.LongRangeValidator</type>
+            </deferred-value>
+        </attribute>
+
+    </tag>
+
+
+    <tag>
+        <description>
+            Register a named Validator instance on the
+            UIComponent associated with the closest parent
+            UIComponent custom action.
+        </description>
+        <name>validator</name>
+        <tag-class>com.sun.faces.taglib.jsf_core.ValidatorTag</tag-class>
+        <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
+        <body-content>empty</body-content>
+
+        <attribute>
+             <description>
+                Validator identifier of the Validator
+                to be created and registered.
+            </description>
+            <name>validatorId</name>
+            <deferred-value>
+                <type>java.lang.String</type>
+            </deferred-value>
+        </attribute>
+
+        <attribute>
+            <description>
+                A ValueExpression that evaluates to an object that implements
+                the javax.faces.validator.Validator interface.
+            </description>
+            <name>binding</name>
+            <deferred-value>
+                <type>javax.faces.validator.Validator</type>
+            </deferred-value>
+        </attribute>
+
+    </tag>
+
+
+    <tag>
+        <description>
+            Register an ValueChangeListener instance on the UIComponent associated
+            with the closest parent UIComponent custom action.
+        </description>
+        <name>valueChangeListener</name>
+        <tag-class>com.sun.faces.taglib.jsf_core.ValueChangeListenerTag</tag-class>
+        <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
+        <body-content>empty</body-content>
+
+        <attribute>
+            <description>
+                Fully qualified Java class name of a
+                ValueChangeListener to be created and registered.
+            </description>
+            <name>type</name>
+            <deferred-value>
+                <type>java.lang.String</type>
+            </deferred-value>
+
+        </attribute>
+
+       <attribute>
+         <description>
+           Value binding expression that evaluates to an object that 
+           implements javax.faces.event.ValueChangeListener.
+         </description>
+         <name>binding</name>
+         <required>false</required>
+         <deferred-value>
+           <type>javax.faces.event.ValueChangeListener</type>
+         </deferred-value>
     </attribute>
 
+
+    </tag>
+
+
+    <tag>
+        <description>
+            Create and register a child UIOutput component
+            associated with the closest parent UIComponent
+            custom action, which renders nested body content.
+        </description>
+        <name>verbatim</name>
+        <tag-class>com.sun.faces.taglib.jsf_core.VerbatimTag</tag-class>
+        <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
+        <body-content>JSP</body-content>
+
+        <attribute>
+            <description>
+                Flag indicating that generated markup must
+                be escaped in a manner that is appropriate
+                for the markup language to be rendered.
+                Expressions must evaluate to a boolean.
+                Default value is false.
+            </description>
+            <name>escape</name>
+            <deferred-value>
+                <type>java.lang.Boolean</type>
+            </deferred-value>
+        </attribute>
+
+    </tag>
+
+
+    <tag>
+        <description>
+            Container for all JavaServer Faces core and custom
+            component actions used on a page.
+        </description>
+        <name>view</name>
+        <tag-class>com.sun.faces.taglib.jsf_core.ViewTag</tag-class>
+        <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
+        <body-content>JSP</body-content>
+
+        <attribute>
+            <description>
+                Locale to use for localizing this page.  Expressions
+                must evaluate to a java.util.Locale or to a String
+                that is converted to a Locale.
+            </description>
+            <name>locale</name>
+            <deferred-value>
+                <type>java.lang.Object</type>
+            </deferred-value>
+        </attribute>
+
     <attribute>
-      <name>binding</name>
-      <required>false</required>
-      <rtexprvalue>false</rtexprvalue>
-      <description>
-        Value binding expression that evaluates to an object that 
-        implements javax.faces.event.ValueChangeListener.
-      </description>
-    </attribute>
-  </tag>
-
-
-  <tag>
-
-    <name>verbatim</name>
-    <tag-class>com.sun.faces.taglib.jsf_core.VerbatimTag</tag-class>
-    <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
-    <body-content>JSP</body-content>
-    <description>
-      Create and register a child UIOutput component
-      associated with the closest parent UIComponent
-      custom action, which renders nested body content.
-    </description>
-
-    <attribute>
-      <name>escape</name>
-      <required>false</required>
-      <rtexprvalue>false</rtexprvalue>
-      <description>
-        Flag indicating that generated markup must
-        be escaped in a manner that is appropriate
-        for the markup language to be rendered.
-        Expressions must evaluate to a boolean.
-        Default value is false.
-      </description>
-    </attribute>
-
-  </tag>
-
-
-  <tag>
-
-    <name>view</name>
-    <tag-class>com.sun.faces.taglib.jsf_core.ViewTag</tag-class>
-      <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
-    <body-content>JSP</body-content>
-    <description>
-      Container for all JavaServer Faces core and custom
-      component actions used on a page.
-    </description>
-
-    <attribute>
-      <name>renderKitId</name>
-      <required>false</required>
-      <rtexprvalue>false</rtexprvalue>
       <description>
         Identifier for the RenderKit to use for
         rendering this page.
       </description>
+      <name>renderKitId</name>
+      <required>false</required>
+      <deferred-value>
+           <type>java.lang.String</type>
+      </deferred-value>
+
     </attribute>
 
     <attribute>
-      <name>locale</name>
-      <required>false</required>
-      <rtexprvalue>false</rtexprvalue>
-      <description>
-        Locale to use for localizing this page.  Expressions
-        must evaluate to a java.util.Locale or to a String
-        that is converted to a Locale.
-      </description>
-    </attribute>
-
-    <attribute>
-      <name>beforePhase</name>
-      <required>false</required>
-      <rtexprvalue>false</rtexprvalue>
       <description>
 
           MethodBinding pointing to a method that takes a
           javax.faces.event.PhaseEvent and returns void.  This method
           will be called before every phase except for restore view.
       </description>
+      <name>beforePhase</name>
+      <required>false</required>
+      <deferred-method>
+           <method-signature>void beforePhase(javax.faces.event.PhaseEvent)</method-signature>
+      </deferred-method>
     </attribute>
 
     <attribute>
-      <name>afterPhase</name>
-      <required>false</required>
-      <rtexprvalue>false</rtexprvalue>
       <description>
 
           MethodBinding pointing to a method that takes a
           javax.faces.event.PhaseEvent and returns void.  This method
           will be called after every phase except for restore view.
       </description>
+      <name>afterPhase</name>
+      <required>false</required>
+      <deferred-method>
+           <method-signature>void afterPhase(javax.faces.event.PhaseEvent)</method-signature>
+      </deferred-method>
     </attribute>
 
-  </tag>
+    </tag>
 
 
 </taglib>

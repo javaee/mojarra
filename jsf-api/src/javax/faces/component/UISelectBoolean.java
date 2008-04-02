@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectBoolean.java,v 1.36 2004/02/26 20:30:34 eburns Exp $
+ * $Id: UISelectBoolean.java,v 1.37 2005/05/05 20:51:04 edburns Exp $
  */
 
 /*
@@ -9,7 +9,7 @@
 
 package javax.faces.component;
 
-
+import javax.el.ValueExpression;
 import javax.faces.el.ValueBinding;
 
 
@@ -107,11 +107,17 @@ public class UISelectBoolean extends UIInput {
      * {@link ValueBinding} for <code>selected</code> is requested; otherwise,
      * perform the default superclass processing for this method.</p>
      *
+     * <p>Rely on the superclass implementation to wrap the returned
+     * <code>ValueExpression</code> in a <code>ValueBinding</code>.</p>
+     *
      * @param name Name of the attribute or property for which to retrieve
      *  a {@link ValueBinding}
      *
      * @exception NullPointerException if <code>name</code>
      *  is <code>null</code>
+     *
+     * @deprecated This has been replaced by {@link
+     * #getValueExpression}.
      */
     public ValueBinding getValueBinding(String name) {
 
@@ -129,6 +135,9 @@ public class UISelectBoolean extends UIInput {
      * under <code>value</code> instead; otherwise, perform the default
      * superclass processing for this method.</p>
      *
+     * <p>Rely on the superclass implementation to wrap the argument
+     * <code>ValueBinding</code> in a <code>ValueExpression</code>.</p>
+     *
      * @param name Name of the attribute or property for which to set
      *  a {@link ValueBinding}
      * @param binding The {@link ValueBinding} to set, or <code>null</code>
@@ -136,6 +145,8 @@ public class UISelectBoolean extends UIInput {
      *
      * @exception NullPointerException if <code>name</code>
      *  is <code>null</code>
+     *
+     * @deprecated This has been replaced by {@link #setValueExpression}.
      */
     public void setValueBinding(String name, ValueBinding binding) {
 
@@ -143,6 +154,53 @@ public class UISelectBoolean extends UIInput {
             super.setValueBinding("value", binding);
         } else {
             super.setValueBinding(name, binding);
+        }
+
+    }
+
+    /**
+     * <p>Return any {@link ValueExpression} set for <code>value</code>
+     * if a {@link ValueExpression} for <code>selected</code> is
+     * requested; otherwise, perform the default superclass processing
+     * for this method.</p>
+     *
+     * @param name Name of the attribute or property for which to retrieve
+     *  a {@link ValueExpression}
+     *
+     * @exception NullPointerException if <code>name</code>
+     *  is <code>null</code>
+     * @since 1.2
+     */
+    public ValueExpression getValueExpression(String name) {
+
+        if ("selected".equals(name)) {
+            return (super.getValueExpression("value"));
+        } else {
+            return (super.getValueExpression(name));
+        }
+
+    }
+    
+    /**
+     * <p>Store any {@link ValueExpression} specified for <code>selected</code>
+     * under <code>value</code> instead; otherwise, perform the default
+     * superclass processing for this method.</p>
+     *
+     * @param name Name of the attribute or property for which to set
+     *  a {@link ValueExpression}
+     * @param binding The {@link ValueExpression} to set, or <code>null</code>
+     *  to remove any currently set {@link ValueExpression}
+     *
+     * @exception NullPointerException if <code>name</code>
+     *  is <code>null</code>
+     * @since 1.2
+     */
+    public void setValueExpression(String name, ValueExpression binding) {
+
+        if ("selected".equals(name)) {
+            super.setValueExpression("value", binding);
+        } else {
+            super.setValueExpression(name, binding);
         }
 
     }

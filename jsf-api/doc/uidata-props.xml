@@ -33,6 +33,9 @@
         <icon></icon>
         <property-name>first</property-name>
         <property-class>int</property-class>
+        <property-extension>
+            <value-expression-enabled>true</value-expression-enabled>
+        </property-extension>
     </property>
 
     <property>
@@ -92,6 +95,7 @@
         <property-class>int</property-class>
         <property-extension>
             <tag-attribute>false</tag-attribute>
+            <value-expression-enabled>true</value-expression-enabled>        
         </property-extension>
     </property>
 
@@ -105,6 +109,9 @@
         <icon></icon>
         <property-name>rows</property-name>
         <property-class>int</property-class>
+        <property-extension>
+            <value-expression-enabled>true</value-expression-enabled>
+        </property-extension>
     </property>
 
     <property>
@@ -115,6 +122,9 @@
         <icon></icon>
         <property-name>value</property-name>
         <property-class>java.lang.Object</property-class>
+        <property-extension>
+            <value-expression-enabled>true</value-expression-enabled>
+        </property-extension>
     </property>
 
     <property>

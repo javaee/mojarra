@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+ Copyright 2004 Sun Microsystems, Inc. All rights reserved.
+ SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+-->
+
+<!-- ========== ActionSource Properties ==================================== -->
+
+
+<!-- template
+
+      <property>
+        <description>
+        </description>
+        <display-name></display-name>
+        <icon></icon>
+        <property-name></property-name>
+        <property-class>java.lang.String</property-class>
+      </property>
+
+-->
+<root>
+    <property>
+        <description>
+          MethodExpression representing the application action to invoke when
+          this component is activated by the user.  The expression must
+          evaluate to a public method that takes no parameters, and returns
+          a String (the logical outcome) which is passed to the
+          NavigationHandler for this application.
+        </description>
+        <display-name>Application Action</display-name>
+        <icon></icon>
+        <property-name>actionExpression</property-name>
+        <property-class>javax.el.MethodExpression</property-class>
+        <property-extension>
+            <method-signature>
+                java.lang.String action()
+            </method-signature>
+        </property-extension>
+    </property>
+</root>

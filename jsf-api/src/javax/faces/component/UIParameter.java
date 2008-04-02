@@ -1,5 +1,5 @@
 /*
- * $Id: UIParameter.java,v 1.26 2004/02/26 20:30:34 eburns Exp $
+ * $Id: UIParameter.java,v 1.27 2005/05/05 20:51:04 edburns Exp $
  */
 
 /*
@@ -13,7 +13,10 @@ package javax.faces.component;
 import java.io.IOException;
 import javax.faces.application.Application;
 import javax.faces.context.FacesContext;
-import javax.faces.el.ValueBinding;
+import javax.faces.FacesException;
+import javax.el.ValueExpression;
+import javax.el.ELException;
+
 
 
 /**
@@ -91,9 +94,14 @@ public class UIParameter extends UIComponentBase {
 	if (this.name != null) {
 	    return (this.name);
 	}
-	ValueBinding vb = getValueBinding("name");
-	if (vb != null) {
-	    return ((String) vb.getValue(getFacesContext()));
+	ValueExpression ve = getValueExpression("name");
+	if (ve != null) {
+	    try {
+		return ((String) ve.getValue(getFacesContext().getELContext()));
+	    }
+	    catch (ELException e) {
+		throw new FacesException(e);
+	    }
 	} else {
 	    return (null);
 	}
@@ -124,9 +132,14 @@ public class UIParameter extends UIComponentBase {
 	if (this.value != null) {
 	    return (this.value);
 	}
-	ValueBinding vb = getValueBinding("value");
-	if (vb != null) {
-	    return (vb.getValue(getFacesContext()));
+	ValueExpression ve = getValueExpression("value");
+	if (ve != null) {
+	    try {
+		return (ve.getValue(getFacesContext().getELContext()));
+	    }
+	    catch (ELException e) {
+		throw new FacesException(e);
+	    }
 	} else {
 	    return (null);
 	}

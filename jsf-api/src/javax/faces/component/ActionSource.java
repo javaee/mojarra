@@ -1,5 +1,5 @@
 /*
- * $Id: ActionSource.java,v 1.11 2004/02/26 20:30:28 eburns Exp $
+ * $Id: ActionSource.java,v 1.12 2005/05/05 20:51:00 edburns Exp $
  */
 
 /*
@@ -31,55 +31,89 @@ public interface ActionSource {
 
 
     /**
-     * <p>Return the {@link MethodBinding}pointing at the application
-     * action to be invoked, if this {@link UIComponent} is activated by
-     * the user, during the <em>Apply Request Values</em> or <em>Invoke
-     * Application</em> phase of the request processing lifecycle,
-     * depending on the value of the <code>immediate</code>
-     * property.</p>
+     * <p>If the implementing class also implements {@link
+     * ActionSource2}, the implementation of this method must call
+     * through to {@link ActionSource2#getActionExpression} and examine
+     * the result.  If the result came from a previous call to {@link
+     * #setAction}, extract the <code>MethodBinding</code> from it and
+     * return it.  Otherwise, wrap the returned {@link
+     * javax.el.MethodExpression} in a <code>MethodBinding</code>
+     * implementation, and return it.</p>
+     * 
+     * <p>If the implementing class does not implement
+     * <code>ActionSource2</code>, return the {@link
+     * MethodBinding}pointing at the application action to be invoked,
+     * if this {@link UIComponent} is activated by the user, during the
+     * <em>Apply Request Values</em> or <em>Invoke Application</em>
+     * phase of the request processing lifecycle, depending on the value
+     * of the <code>immediate</code> property.</p>
+     *
+     * @deprecated This has been replaced by {@link
+     * ActionSource2#getActionExpression}.
      */
     public MethodBinding getAction();
 
     /**
-     * <p>Set the {@link MethodBinding} pointing at the appication
-     * action to be invoked, if this {@link UIComponent} is activated by
-     * the user, during the <em>Apply Request Values</em> or <em>Invoke
-     * Application</em> phase of the request processing lifecycle,
-     * depending on the value of the <code>immediate</code>
-     * property.</p>
+     * <p>If the implementing class also implements {@link
+     * ActionSource2}, the implementation of this method must wrap the
+     * argument <code>action</code> in a class that implements {@link
+     * javax.el.MethodExpression} and call through to {@link
+     * ActionSource2#setActionExpression}, passing the wrapped
+     * <code>action</code>.</p>
+     *
+     * <p>If the implementing class does not implement
+     * <code>ActionSource2</code>, set the {@link MethodBinding}
+     * pointing at the appication action to be invoked, if this {@link
+     * UIComponent} is activated by the user, during the <em>Apply
+     * Request Values</em> or <em>Invoke Application</em> phase of the
+     * request processing lifecycle, depending on the value of the
+     * <code>immediate</code> property.</p>
      *
      * <p>Any method referenced by such an expression must be public, with
      * a return type of <code>String</code>, and accept no parameters.</p>
      *
      * @param action The new MethodBinding expression
+     *
+     * @deprecated This has been replaced by {@link
+     * ActionSource2#setActionExpression(javax.el.MethodExpression)}.
      */
     public void setAction(MethodBinding action);
 
 
     /**
-     * <p>Return the {@link MethodBinding} pointing at an action
-     * listener method to be invoked, if this {@link UIComponent} is
-     * activated by the user, during the <em>Apply Request Values</em>
-     * or <em>Invoke Application</em> phase of the request processing
-     * lifecycle, depending upon the value of the <code>immediate</code>
-     * property.</p>
+     * <p>If {@link #setActionListener} was not previously called
+     * for this instance, this method must return <code>null</code>.  If
+     * it was called, this method must return the exact
+     * <code>MethodBinding</code> instance that was passed to {@link
+     * #setActionListener}.</p>
+     *
+     * <p> The method to be invoked, if this {@link UIComponent} is
+     * activated by the user, will be called during the <em>Apply
+     * Request Values</em> or <em>Invoke Application</em> phase of the
+     * request processing lifecycle, depending upon the value of the
+     * <code>immediate</code> property.</p>
+     *
+     * @deprecated Use {@link #getActionListeners} instead.
      */
     public MethodBinding getActionListener();
 
 
     /**
-     * <p>Set the {@link MethodBinding} pointing at an action listener
-     * method to be invoked, if this {@link UIComponent} is activated by
-     * the user, during the <em>Apply Request Values</em> or <em>Invoke
-     * Application</em> phase of the request processing lifecycle,
-     * depending upon the value of the <code>immmediate</code>
-     * property.</p>
+     * <p>Wrap the argument <code>actionListener</code> in an
+     * implementation of {@link ActionListener}
+     * and store it in the internal data structure that backs the {@link
+     * #getActionListeners} method, taking care to over-write any
+     * instance that was stored by a previous call to
+     * <code>setActionListener</code>.</p>
      *
      * <p>Any method referenced by such an expression must be public, with
      * a return type of <code>void</code>, and accept a single parameter of
      * type <code>ActionEvent</code>.</p>
      *
      * @param actionListener The new method binding expression
+     *
+     * @deprecated This has been replaced by {@link
+     * #addActionListener(javax.faces.event.ActionListener)}.
      */
     public void setActionListener(MethodBinding actionListener);
 

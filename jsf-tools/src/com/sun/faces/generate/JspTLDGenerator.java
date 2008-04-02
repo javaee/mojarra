@@ -1,5 +1,5 @@
 /*
- * $Id: JspTLDGenerator.java,v 1.1 2004/12/13 19:07:49 rlubke Exp $
+ * $Id: JspTLDGenerator.java,v 1.2 2005/05/05 20:51:39 edburns Exp $
  */
 
 /*
@@ -31,8 +31,8 @@ public abstract class JspTLDGenerator implements Generator {
 
     // Defaults
     private static final String TEICLASS = "com.sun.faces.taglib.FacesTagExtraInfo";
-    private static final String BODYCONTENT = "JSP";
-    private static final String RTEXPRVALUE = "false";
+    private static final String DEFAULT_BODY_CONTENT = "JSP";
+    private static final String DEFAULT_RTEXPRVALUE = "false";
 
     protected XMLWriter writer;
     protected FacesConfigBean configBean;
@@ -50,7 +50,7 @@ public abstract class JspTLDGenerator implements Generator {
         
         File outputDir =
             new File(System.getProperty("user.dir") + File.separatorChar +
-            propManager.getProperty(PropertyManager.BASE_OUTPUT_DIR)[0] +
+            propManager.getProperty(PropertyManager.BASE_OUTPUT_DIR) +
             File.separatorChar + "conf" + File.separatorChar + "share");
 
         if (!outputDir.exists()) {
@@ -58,7 +58,7 @@ public abstract class JspTLDGenerator implements Generator {
         }
 
         outputFile = outputDir.toString() + File.separatorChar +
-            propManager.getProperty(PropertyManager.TAGLIB_FILE_NAME)[0];
+            propManager.getProperty(PropertyManager.TAGLIB_FILE_NAME);
 
     }
 
@@ -90,13 +90,14 @@ public abstract class JspTLDGenerator implements Generator {
         writeTags();
         endDocument();
 
-    }
+    } // END writeDocument
+
 
     protected void writeProlog() throws IOException {
 
         writer.writeProlog();
 
-    }
+    } // END writeProlog
 
     protected abstract void writeTldDescription() throws IOException;
 
@@ -108,7 +109,7 @@ public abstract class JspTLDGenerator implements Generator {
         writer.flush();
         writer.close();
 
-    }
+    } // END endDocument
 
     protected void writeValidators() throws IOException {
 
@@ -128,7 +129,6 @@ public abstract class JspTLDGenerator implements Generator {
         writer = new XMLWriter(new FileOutputStream(outputFile));
 
     } // END initWriter
-
 
 
     // --------------------------------------------------------- Utility Methods
@@ -191,14 +191,14 @@ public abstract class JspTLDGenerator implements Generator {
      * Return the tag body content information (if any) for a given tag.
      */
     protected String getBodyContent(String tagName) {
-        return BODYCONTENT;
+        return DEFAULT_BODY_CONTENT;
     }
 
     /**
      * Return the "rtexprvalue" element value for the tag attribute.
      */
     protected String getRtexprvalue(String tagName, String attributeName) {
-        return RTEXPRVALUE;
+        return DEFAULT_RTEXPRVALUE;
     }
 
 
@@ -210,7 +210,7 @@ public abstract class JspTLDGenerator implements Generator {
     protected String loadOptionalTags() throws IOException {
 
         String path =
-            propManager.getProperty(PropertyManager.TAGLIB_INCLUDE)[0];
+            propManager.getProperty(PropertyManager.TAGLIB_INCLUDE);
 
         if (path != null) {
             if (path.charAt(0) == '/' || path.charAt(1) == ':') {

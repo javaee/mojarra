@@ -1,5 +1,5 @@
 /*
- * $Id: UIOutput.java,v 1.50 2004/02/26 20:30:33 eburns Exp $
+ * $Id: UIOutput.java,v 1.51 2005/05/05 20:51:04 edburns Exp $
  */
 
 /*
@@ -12,17 +12,20 @@ package javax.faces.component;
 
 import java.io.IOException;
 
+import javax.el.ValueExpression;
+import javax.el.ELException;
+import javax.faces.FacesException;
 import javax.faces.application.Application;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
-import javax.faces.el.ValueBinding;
+
 
 
 /**
  * <p><strong>UIOutput</strong> is a {@link UIComponent} that has a
- * value, optionally retrieved from a model tier bean via a value binding
- * expression, that is displayed to the user.  The user cannot directly modify
- * the rendered value; it is for display purposes only.</p>
+ * value, optionally retrieved from a model tier bean via a value
+ * expression, that is displayed to the user.  The user cannot directly
+ * modify the rendered value; it is for display purposes only.</p>
  *
  * <p>During the <em>Render Response</em> phase of the request processing
  * lifecycle, the current value of this component must be
@@ -112,9 +115,14 @@ public class UIOutput extends UIComponentBase
 	if (this.converter != null) {
 	    return (this.converter);
 	}
-	ValueBinding vb = getValueBinding("converter");
-	if (vb != null) {
-	    return ((Converter) vb.getValue(getFacesContext()));
+	ValueExpression ve = getValueExpression("converter");
+	if (ve != null) {
+	    try {
+		return ((Converter) ve.getValue(getFacesContext().getELContext()));
+	    }
+	    catch (ELException e) {
+		throw new FacesException(e);
+	    }
 	} else {
 	    return (null);
 	}
@@ -142,9 +150,14 @@ public class UIOutput extends UIComponentBase
 	if (this.value != null) {
 	    return (this.value);
 	}
-	ValueBinding vb = getValueBinding("value");
-	if (vb != null) {
-	    return (vb.getValue(getFacesContext()));
+	ValueExpression ve = getValueExpression("value");
+	if (ve != null) {
+	    try {
+		return (ve.getValue(getFacesContext().getELContext()));
+	    }
+	    catch (ELException e) {
+		throw new FacesException(e);
+	    }
 	} else {
 	    return (null);
 	}

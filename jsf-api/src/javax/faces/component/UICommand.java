@@ -1,5 +1,5 @@
 /*
- * $Id: UICommand.java,v 1.71 2005/03/11 21:05:22 edburns Exp $
+ * $Id: UICommand.java,v 1.72 2005/05/05 20:51:02 edburns Exp $
  */
 
 /*
@@ -9,16 +9,24 @@
 
 package javax.faces.component;
 
+import javax.el.MethodExpression;
+import javax.el.ValueExpression;
+import javax.el.ELException;
+import javax.faces.FacesException;
+import javax.faces.application.Application;
 import javax.faces.context.FacesContext;
-import javax.faces.el.EvaluationException;
 import javax.faces.el.MethodBinding;
-import javax.faces.el.ValueBinding;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.ActionListener;
 import javax.faces.event.FacesEvent;
+import javax.faces.event.FacesListener;
 import javax.faces.event.PhaseId;
+import javax.faces.render.Renderer;
 
+import java.io.IOException;
+import java.util.Iterator;
+import java.util.List;
 
 
 /**
@@ -27,20 +35,20 @@ import javax.faces.event.PhaseId;
  * an application specific "command" or "action".  Such a component is
  * typically rendered as a push button, a menu item, or a hyperlink.</p>
  *
- * <p>When the <code>decode()</code> method of this {@link UICommand},
- * or its corresponding {@link javax.faces.render.Renderer}, detects
- * that this control has been activated, it will queue an {@link
- * ActionEvent}.  Later on, the <code>broadcast()</code> method will
- * ensure that this event is broadcast to all interested listeners.</p>
+ * <p>When the <code>decode()</code> method of this {@link UICommand}, or
+ * its corresponding {@link Renderer}, detects that this control has been
+ * activated, it will queue an {@link ActionEvent}.
+ * Later on, the <code>broadcast()</code> method will ensure that this
+ * event is broadcast to all interested listeners.</p>
  * 
  * <p>Listeners will be invoked in the following order:
  * <ol>
- *  <li>{@link ActionListener}s, in the order in which they were
- *  registered.</li>
- *  <li>The "actionListener" {@link MethodBinding}</li>
- *  <li>The default {@link ActionListener}, retrieved from the {@link
- *  javax.faces.application.Application} - and therefore, any attached
- *  "action" {@link MethodBinding}.</li>
+ *  <li>{@link ActionListener}s, in the order in which they were registered.
+ *  <li>The "actionListener" {@link MethodExpression} (which will cover
+ *  the "actionListener" that was set as a <code>MethodBinding</code>).
+ *  <li>The default {@link ActionListener}, retrieved from the
+ *      {@link Application} - and therefore, any attached "action"
+ *      {@link MethodExpression}.
  * </ol>
  * </p>
  * <p>By default, the <code>rendererType</code> property must be set to
@@ -49,7 +57,7 @@ import javax.faces.event.PhaseId;
  */
 
 public class UICommand extends UIComponentBase
-    implements ActionSource {
+    implements ActionSource2 {
 
 
     // ------------------------------------------------------ Manifest Constants
@@ -98,43 +106,102 @@ public class UICommand extends UIComponentBase
     }
 
 
-    // ------------------------------------------------- ActionSource Properties
+    // ------------------------------------------------- ActionSource/ActionSource2 Properties
 
 
     /**
-     * <p>The {@link MethodBinding} that, when invoked, yields the
-     * literal outcome value.</p>
+     * {@inheritDoc}
+     * @deprecated This has been replaced by {@link #getActionExpression}.
      */
-    private MethodBinding action = null;
-
-
     public MethodBinding getAction() {
-	return action;
+	MethodBinding result = null;
+	MethodExpression me = null;
+
+	if (null != (me = getActionExpression())) {
+	    // if the MethodExpression is an instance of our private
+	    // wrapper class.
+	    if (me.getClass() == MethodExpressionMethodBindingAdapter.class) {
+		result = ((MethodExpressionMethodBindingAdapter)me).getWrapped();
+	    }
+	    else {
+		// otherwise, this is a real MethodExpression.  Wrap it
+		// in a MethodBinding.
+		result = new MethodBindingMethodExpressionAdapter(me);
+	    }
+	}
+	return result;
+	    
     }
-
-
-    public void setAction(MethodBinding action) {
-        this.action = action;
-    }
-
 
     /**
-     * <p>The action listener {@link MethodBinding}.</p>
+     * {@inheritDoc}
+     * @deprecated This has been replaced by {@link #setActionExpression(javax.el.MethodExpression)}.
      */
-    private MethodBinding actionListener = null;
-
-
+    public void setAction(MethodBinding action) {
+	MethodExpressionMethodBindingAdapter adapter = null;
+	if (null != action) {
+	    adapter = new MethodExpressionMethodBindingAdapter(action);
+	    setActionExpression(adapter);
+	}
+	else {
+	    setActionExpression(null);
+	}
+    }
+    
+    /**
+     * {@inheritDoc}
+     * @deprecated Use {@link #getActionListeners} instead.
+     */
     public MethodBinding getActionListener() {
+	MethodBinding result = null;
 
-        return (this.actionListener);
-
+	ActionListener [] curListeners = getActionListeners();
+	// go through our lisetners list and find the one and only
+	// MethodBindingActionListener instance, if present.
+	if (null != curListeners) {
+	    for (int i = 0; i < curListeners.length; i++) {
+		// We are guaranteed to have at most one instance of
+		// MethodBindingActionListener in the curListeners list.
+		if (MethodBindingActionListener.class ==
+		    curListeners[i].getClass()) {
+		    result = ((MethodBindingActionListener)curListeners[i]).
+			getWrapped();
+		    break;
+		}
+	    }
+	}
+	return result;
     }
 
-
+    /**
+     * {@inheritDoc}
+     * @deprecated This has been replaced by {@link #addActionListener(javax.faces.event.ActionListener)}.
+     */
     public void setActionListener(MethodBinding actionListener) {
 
-        this.actionListener = actionListener;
-
+	ActionListener [] curListeners = getActionListeners();
+	// see if we need to null-out, or replace an existing listener
+	if (null != curListeners) {
+	    for (int i = 0; i < curListeners.length; i++) {
+		// if we want to remove the actionListener
+		if (null == actionListener) {
+		    // We are guaranteed to have at most one instance of
+		    // MethodBindingActionListener in the curListeners
+		    // list.
+		    if (MethodBindingActionListener.class ==
+			curListeners[i].getClass()) {
+			removeFacesListener(curListeners[i]);
+			return;
+		    }
+		}
+		// if we want to replace the actionListener
+		else if (actionListener == curListeners[i]) {
+		    removeFacesListener(curListeners[i]);
+		    break;
+		}
+	    }
+	}
+	addActionListener(new MethodBindingActionListener(actionListener));
     }
 
     /**
@@ -149,9 +216,14 @@ public class UICommand extends UIComponentBase
 	if (this.immediateSet) {
 	    return (this.immediate);
 	}
-	ValueBinding vb = getValueBinding("immediate");
-	if (vb != null) {
-	    return (Boolean.TRUE.equals(vb.getValue(getFacesContext())));
+	ValueExpression ve = getValueExpression("immediate");
+	if (ve != null) {
+	    try {
+		return (Boolean.TRUE.equals(ve.getValue(getFacesContext().getELContext())));
+	    }
+	    catch (ELException e) {
+		throw new FacesException(e);
+	    }
 	} else {
 	    return (this.immediate);
 	}
@@ -180,9 +252,15 @@ public class UICommand extends UIComponentBase
 	if (this.value != null) {
 	    return (this.value);
 	}
-	ValueBinding vb = getValueBinding("value");
-	if (vb != null) {
-	    return (vb.getValue(getFacesContext()));
+	ValueExpression ve = getValueExpression("value");
+	if (ve != null) {
+	    try {
+		return (ve.getValue(getFacesContext().getELContext()));
+	    }
+	    catch (ELException e) {
+		throw new FacesException(e);
+	    }
+
 	} else {
 	    return (null);
 	}
@@ -203,9 +281,23 @@ public class UICommand extends UIComponentBase
     }
 
 
-    // ---------------------------------------------------- ActionSource Methods
+    // ---------------------------------------------------- ActionSource / ActionSource2 Methods
 
-
+    
+    /**
+     * <p>The {@link MethodExpression} that, when invoked, yields the
+     * literal outcome value.</p>
+     */
+    private MethodExpression actionExpression = null;
+    
+    public MethodExpression getActionExpression() {
+        return actionExpression;
+    }
+    
+    public void setActionExpression(MethodExpression actionExpression) {
+        this.actionExpression = actionExpression;    
+    }
+    
     /** 
      * @exception NullPointerException {@inheritDoc}
      */ 
@@ -214,8 +306,7 @@ public class UICommand extends UIComponentBase
         addFacesListener(listener);
 
     }
-
-
+    
     public ActionListener[] getActionListeners() {
 
         ActionListener al[] = (ActionListener [])
@@ -241,13 +332,13 @@ public class UICommand extends UIComponentBase
 
     public Object saveState(FacesContext context) {
 
-        Object values[] = new Object[6];
+        Object values[] = new Object[5];
         values[0] = super.saveState(context);
-        values[1] = saveAttachedState(context, action);
-        values[2] = saveAttachedState(context, actionListener);
-        values[3] = immediate ? Boolean.TRUE : Boolean.FALSE;
-        values[4] = immediateSet ? Boolean.TRUE : Boolean.FALSE;
-        values[5] = value;
+        values[1] = saveAttachedState(context, actionExpression);
+        values[2] = immediate ? Boolean.TRUE : Boolean.FALSE;
+        values[3] = immediateSet ? Boolean.TRUE : Boolean.FALSE;
+        values[4] = value;
+        
         return (values);
 
     }
@@ -256,12 +347,13 @@ public class UICommand extends UIComponentBase
     public void restoreState(FacesContext context, Object state) {
         Object values[] = (Object[]) state;
         super.restoreState(context, values[0]);
-        action = (MethodBinding) restoreAttachedState(context, values[1]);
-        actionListener = (MethodBinding) restoreAttachedState(context, 
-							      values[2]);
-        immediate = ((Boolean) values[3]).booleanValue();
-        immediateSet = ((Boolean) values[4]).booleanValue();
-        value = values[5];
+        actionExpression = 
+	    (MethodExpression) restoreAttachedState(context, values[1]);
+        immediate = ((Boolean) values[2]).booleanValue();
+        immediateSet = ((Boolean) values[3]).booleanValue();
+        value = values[4];
+        
+        //PENDING add restoring of "ActionExpression" MethodExpression
     }
 
 
@@ -287,29 +379,15 @@ public class UICommand extends UIComponentBase
      */
     public void broadcast(FacesEvent event) throws AbortProcessingException {
 
-        // Perform standard superclass processing
+        // Perform standard superclass processing (including calling our
+        // ActionListeners)
         super.broadcast(event);
 
         if (event instanceof ActionEvent) {
             FacesContext context = getFacesContext();
 
-            // Notify the specified action listener method (if any)
-            try { 
-                MethodBinding mb = getActionListener();
-                if (mb != null) {
-                    mb.invoke(context, new Object[] { event });
-                }
-            } catch (EvaluationException ee) {
-                Throwable cause = ee.getCause();
-                if (cause != null && 
-                        cause instanceof AbortProcessingException) {
-                    throw  ((AbortProcessingException) cause);
-                }
-                if (cause != null && cause instanceof RuntimeException) {
-                    throw ((RuntimeException) cause);
-                }
-                throw new IllegalStateException(ee.getMessage());
-            }
+	    // no need to call our method based ActionListener, since it
+	    // is handled by the superclass processing.
 
             // Invoke the default ActionListener
             ActionListener listener =

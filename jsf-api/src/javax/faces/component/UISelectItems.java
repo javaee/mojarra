@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectItems.java,v 1.27 2004/02/26 20:30:35 eburns Exp $
+ * $Id: UISelectItems.java,v 1.28 2005/05/05 20:51:04 edburns Exp $
  */
 
 /*
@@ -9,12 +9,13 @@
 
 package javax.faces.component;
 
-
 import java.io.IOException;
 import javax.faces.application.Application;
 import javax.faces.context.FacesContext;
-import javax.faces.el.ValueBinding;
 import javax.faces.model.SelectItem;
+import javax.faces.FacesException;
+import javax.el.ELException;
+import javax.el.ValueExpression;
 
 
 /**
@@ -23,7 +24,7 @@ import javax.faces.model.SelectItem;
  * causes the addition of one or more {@link SelectItem} instances to the
  * list of available options in the parent component.  The
  * <code>value</code> of this component (set either directly, or acquired
- * indirectly a {@link ValueBinding}, can be of any
+ * indirectly a {@link javax.el.ValueExpression}, can be of any
  * of the following types:</p>
  * <ul>
  * <li><em>Single instance of {@link SelectItem}</em> - This instance is
@@ -105,9 +106,14 @@ public class UISelectItems extends UIComponentBase {
 	if (this.value != null) {
 	    return (this.value);
 	}
-	ValueBinding vb = getValueBinding("value");
-	if (vb != null) {
-	    return (vb.getValue(getFacesContext()));
+	ValueExpression ve = getValueExpression("value");
+	if (ve != null) {
+	    try {
+		return (ve.getValue(getFacesContext().getELContext()));
+	    }
+	    catch (ELException e) {
+		throw new FacesException(e);
+	    }
 	} else {
 	    return (null);
 	}

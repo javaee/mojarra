@@ -1,5 +1,5 @@
 /*
- * $Id: ConvertNumberTag.java,v 1.12 2004/12/20 21:26:35 rogerk Exp $
+ * $Id: ConvertNumberTag.java,v 1.13 2005/05/05 20:51:26 edburns Exp $
  */
 
 /*
@@ -9,62 +9,61 @@
 
 package com.sun.faces.taglib.jsf_core;
 
-import com.sun.faces.util.Util;
+import java.util.Locale;
 
+import javax.el.ELContext;
+import javax.el.ValueExpression;
+import javax.el.ExpressionFactory;
+import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.NumberConverter;
-import javax.faces.webapp.ConverterTag;
 import javax.servlet.jsp.JspException;
 
-import java.util.Locale;
+import com.sun.faces.util.Util;
 
 /**
  * <p>ConvertNumberTag is a ConverterTag implementation for
  * javax.faces.convert.NumberConverter</p>
  *
- * @version $Id: ConvertNumberTag.java,v 1.12 2004/12/20 21:26:35 rogerk Exp $
+ * @version $Id: ConvertNumberTag.java,v 1.13 2005/05/05 20:51:26 edburns Exp $
  */
 
 public class ConvertNumberTag extends ConverterTag {
 
-    //
-    // Protected Constants
-    //
-
-    //
-    // Class Variables
-    //
+    private static ValueExpression CONVERTER_ID_EXPR = null;
 
     //
     // Instance Variables
     //
+
+    private ValueExpression currencyCodeExpression;
+    private ValueExpression currencySymbolExpression;
+    private ValueExpression groupingUsedExpression;
+    private ValueExpression integerOnlyExpression;
+    private ValueExpression maxFractionDigitsExpression;
+    private ValueExpression maxIntegerDigitsExpression;
+    private ValueExpression minFractionDigitsExpression;
+    private ValueExpression minIntegerDigitsExpression;
+    private ValueExpression localeExpression;
+    private ValueExpression patternExpression;
+    private ValueExpression typeExpression;
+
     private String currencyCode;
-    private String currencyCode_;
     private String currencySymbol;
-    private String currencySymbol_;
     private boolean groupingUsed;
-    private String groupingUsed_;
     private boolean integerOnly;
-    private String integerOnly_;
     private int maxFractionDigits;
-    private String maxFractionDigits_;
-    private boolean maxFractionDigitsSpecified;
     private int maxIntegerDigits;
-    private String maxIntegerDigits_;
-    private boolean maxIntegerDigitsSpecified;
     private int minFractionDigits;
-    private String minFractionDigits_;
-    private boolean minFractionDigitsSpecified;
     private int minIntegerDigits;
-    private String minIntegerDigits_;
-    private boolean minIntegerDigitsSpecified;
-    private String locale_;
     private Locale locale;
     private String pattern;
-    private String pattern_;
     private String type;
-    private String type_;
 
+    private boolean maxFractionDigitsSpecified;
+    private boolean maxIntegerDigitsSpecified;
+    private boolean minFractionDigitsSpecified;
+    private boolean minIntegerDigitsSpecified;
 
     // Attribute Instance Variables
     
@@ -87,31 +86,39 @@ public class ConvertNumberTag extends ConverterTag {
 
     private void init() {
         currencyCode = null;
-        currencyCode_ = null;
+        currencyCodeExpression = null;
         currencySymbol = null;
-        currencySymbol_ = null;
+        currencySymbolExpression = null;
         groupingUsed = true;
-        groupingUsed_ = null;
+        groupingUsedExpression = null;
         integerOnly = false;
-        integerOnly_ = null;
+        integerOnlyExpression = null;
         maxFractionDigits = 0;
-        maxFractionDigits_ = null;
+        maxFractionDigitsExpression = null;
         maxFractionDigitsSpecified = false;
         maxIntegerDigits = 0;
-        maxIntegerDigits_ = null;
+        maxIntegerDigitsExpression = null;
         maxIntegerDigitsSpecified = false;
         minFractionDigits = 0;
-        minFractionDigits_ = null;
+        minFractionDigitsExpression = null;
         minFractionDigitsSpecified = false;
         minIntegerDigits = 0;
-        minIntegerDigits_ = null;
+        minIntegerDigitsExpression = null;
         minIntegerDigitsSpecified = false;
         locale = null;
-        locale_ = null;
+        localeExpression = null;
         pattern = null;
-        pattern_ = null;
+        patternExpression = null;
         type = "number";
-        type_ = "number";
+        typeExpression = null;
+        if (CONVERTER_ID_EXPR == null) {
+            FacesContext context = FacesContext.getCurrentInstance();
+            ExpressionFactory factory =
+                context.getApplication().getExpressionFactory();
+            CONVERTER_ID_EXPR =
+                factory.createValueExpression(context.getELContext(), 
+                    "javax.faces.Number", String.class);
+        }
     }
 
 
@@ -123,66 +130,66 @@ public class ConvertNumberTag extends ConverterTag {
     // General Methods
     //
 
-    public void setCurrencyCode(String currencyCode) {
-        this.currencyCode_ = currencyCode;
+    public void setCurrencyCode(ValueExpression currencyCode) {
+        this.currencyCodeExpression = currencyCode;
     }
 
 
-    public void setCurrencySymbol(String currencySymbol) {
-        this.currencySymbol_ = currencySymbol;
+    public void setCurrencySymbol(ValueExpression currencySymbol) {
+        this.currencySymbolExpression = currencySymbol;
     }
 
 
-    public void setGroupingUsed(String groupingUsed) {
-        this.groupingUsed_ = groupingUsed;
+    public void setGroupingUsed(ValueExpression groupingUsed) {
+        this.groupingUsedExpression = groupingUsed;
     }
 
 
-    public void setIntegerOnly(String integerOnly) {
-        this.integerOnly_ = integerOnly;
+    public void setIntegerOnly(ValueExpression integerOnly) {
+        this.integerOnlyExpression = integerOnly;
     }
 
 
-    public void setMaxFractionDigits(String maxFractionDigits) {
-        this.maxFractionDigits_ = maxFractionDigits;
+    public void setMaxFractionDigits(ValueExpression maxFractionDigits) {
+        this.maxFractionDigitsExpression = maxFractionDigits;
         this.maxFractionDigitsSpecified = true;
     }
 
 
-    public void setMaxIntegerDigits(String maxIntegerDigits) {
-        this.maxIntegerDigits_ = maxIntegerDigits;
+    public void setMaxIntegerDigits(ValueExpression maxIntegerDigits) {
+        this.maxIntegerDigitsExpression = maxIntegerDigits;
         this.maxIntegerDigitsSpecified = true;
     }
 
 
-    public void setMinFractionDigits(String minFractionDigits) {
-        this.minFractionDigits_ = minFractionDigits;
+    public void setMinFractionDigits(ValueExpression minFractionDigits) {
+        this.minFractionDigitsExpression = minFractionDigits;
         this.minFractionDigitsSpecified = true;
     }
 
 
-    public void setMinIntegerDigits(String minIntegerDigits) {
-        this.minIntegerDigits_ = minIntegerDigits;
+    public void setMinIntegerDigits(ValueExpression minIntegerDigits) {
+        this.minIntegerDigitsExpression = minIntegerDigits;
     }
 
 
-    public void setLocale(String locale) {
-        this.locale_ = locale;
+    public void setLocale(ValueExpression locale) {
+        this.localeExpression = locale;
     }
 
 
-    public void setPattern(String pattern) {
-        this.pattern_ = pattern;
+    public void setPattern(ValueExpression pattern) {
+        this.patternExpression = pattern;
     }
 
 
-    public void setType(String type) {
-        this.type_ = type;
+    public void setType(ValueExpression type) {
+        this.typeExpression = type;
     }
 
     public int doStartTag() throws JspException {
-        super.setConverterId("javax.faces.Number");
-	return super.doStartTag();
+        super.setConverterId(CONVERTER_ID_EXPR);
+        return super.doStartTag();
     }
 
     // 
@@ -191,117 +198,145 @@ public class ConvertNumberTag extends ConverterTag {
 
     protected Converter createConverter() throws JspException {
 
-        NumberConverter result = null;
+        NumberConverter result = (NumberConverter) super.createConverter();
+        assert (null != result);
 
-        result = (NumberConverter) super.createConverter();
-
-	if (result != null) {
-            evaluateExpressions();
-            result.setCurrencyCode(currencyCode);
-            result.setCurrencySymbol(currencySymbol);
-            result.setGroupingUsed(groupingUsed);
-            result.setIntegerOnly(integerOnly);
-            if (maxFractionDigitsSpecified) {
-                result.setMaxFractionDigits(maxFractionDigits);
-            }
-            if (maxIntegerDigitsSpecified) {
-                result.setMaxIntegerDigits(maxIntegerDigits);
-            }
-            if (minFractionDigitsSpecified) {
-                result.setMinFractionDigits(minFractionDigits);
-            }
-            if (minIntegerDigitsSpecified) {
-                result.setMinIntegerDigits(minIntegerDigits);
-            }
-            result.setLocale(locale);
-            result.setPattern(pattern);
-            result.setType(type);
+        evaluateExpressions();
+        result.setCurrencyCode(currencyCode);
+        result.setCurrencySymbol(currencySymbol);
+        result.setGroupingUsed(groupingUsed);
+        result.setIntegerOnly(integerOnly);
+        if (maxFractionDigitsSpecified) {
+            result.setMaxFractionDigits(maxFractionDigits);
         }
+        if (maxIntegerDigitsSpecified) {
+            result.setMaxIntegerDigits(maxIntegerDigits);
+        }
+        if (minFractionDigitsSpecified) {
+            result.setMinFractionDigits(minFractionDigits);
+        }
+        if (minIntegerDigitsSpecified) {
+            result.setMinIntegerDigits(minIntegerDigits);
+        }
+        result.setLocale(locale);
+        result.setPattern(pattern);
+        result.setType(type);
 
         return result;
     }
 
 
     /* Evaluates expressions as necessary */
-    private void evaluateExpressions() throws JspException {
-        Integer intObj = null;
+    private void evaluateExpressions() {
 
-        if (currencyCode_ != null) {
-            currencyCode = (String) Util.evaluateVBExpression(currencyCode_);
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        ELContext elContext = facesContext.getELContext();
+
+        if (currencyCodeExpression != null) {
+            currencyCode = (String)
+            Util.evaluateValueExpression(currencyCodeExpression,
+                elContext);
         }
-        if (currencySymbol_ != null) {
-            currencySymbol =
-                (String) Util.evaluateVBExpression(currencySymbol_);
+        if (currencySymbolExpression != null) {
+            currencySymbol = (String)
+            Util.evaluateValueExpression(currencySymbolExpression,
+                elContext);
         }
-        if (pattern_ != null) {
-            pattern = (String) Util.evaluateVBExpression(pattern_);
+        if (patternExpression != null) {
+            pattern = (String)
+            Util.evaluateValueExpression(patternExpression,
+                elContext);
         }
-        if (type_ != null) {
-            type = (String) Util.evaluateVBExpression(type_);
+        if (typeExpression != null) {
+            type = (String)
+            Util.evaluateValueExpression(typeExpression,
+                elContext);
         }
-        if (groupingUsed_ != null) {
-            if (Util.isVBExpression(groupingUsed_)) {
-                Boolean booleanObj = (Boolean) Util.evaluateVBExpression(
-                    groupingUsed_);
-                assert (null != booleanObj);
-                groupingUsed = booleanObj.booleanValue();
+        if (groupingUsedExpression != null) {
+            if (groupingUsedExpression.isLiteralText()) {
+                groupingUsed =
+                Boolean.valueOf(
+                    groupingUsedExpression.getExpressionString()).
+                    booleanValue();
             } else {
-                groupingUsed = new Boolean(groupingUsed_).booleanValue();
+                groupingUsed = ((Boolean)
+                                   Util.evaluateValueExpression(groupingUsedExpression,
+                                       elContext)).booleanValue();
             }
         }
-        if (integerOnly_ != null) {
-            if (Util.isVBExpression(integerOnly_)) {
-                Boolean booleanObj = (Boolean) Util.evaluateVBExpression(
-                    integerOnly_);
-                assert (null != booleanObj);
-                integerOnly = booleanObj.booleanValue();
+        if (integerOnlyExpression != null) {
+            if (integerOnlyExpression.isLiteralText()) {
+                integerOnly =
+                Boolean.valueOf(
+                    integerOnlyExpression.getExpressionString()).
+                    booleanValue();
             } else {
-                integerOnly = new Boolean(integerOnly_).booleanValue();
+                integerOnly = ((Boolean)
+                                  Util.evaluateValueExpression(integerOnlyExpression,
+                                      elContext)).booleanValue();
             }
         }
-        if (maxFractionDigits_ != null) {
-            if (Util.isVBExpression(maxFractionDigits_)) {
-                intObj =
-                    (Integer) Util.evaluateVBExpression(maxFractionDigits_);
-                assert (null != intObj);
-                maxFractionDigits = intObj.intValue();
+        if (maxFractionDigitsExpression != null) {
+            if (maxFractionDigitsExpression.isLiteralText()) {
+                maxFractionDigits =
+                Integer.valueOf(
+                    maxFractionDigitsExpression.getExpressionString()).
+                    intValue();
             } else {
-                maxFractionDigits = new Integer(maxFractionDigits_).intValue();
+                maxFractionDigits = ((Integer)
+                                        Util.evaluateValueExpression(maxFractionDigitsExpression,
+                                            elContext)).intValue();
             }
         }
-        if (maxIntegerDigits_ != null) {
-            if (Util.isVBExpression(maxIntegerDigits_)) {
-                intObj = (Integer) Util.evaluateVBExpression(maxIntegerDigits_);
-                assert (null != intObj);
-                maxIntegerDigits = intObj.intValue();
+        if (maxIntegerDigitsExpression != null) {
+            if (maxIntegerDigitsExpression.isLiteralText()) {
+                maxIntegerDigits =
+                Integer.valueOf(
+                    maxIntegerDigitsExpression.getExpressionString()).
+                    intValue();
             } else {
-                maxIntegerDigits = new Integer(maxIntegerDigits_).intValue();
+                maxIntegerDigits = ((Integer)
+                                       Util.evaluateValueExpression(maxIntegerDigitsExpression,
+                                           elContext)).intValue();
             }
         }
-        if (minFractionDigits_ != null) {
-            if (Util.isVBExpression(minFractionDigits_)) {
-                intObj =
-                    (Integer) Util.evaluateVBExpression(minFractionDigits_);
-                assert (null != intObj);
-                minFractionDigits = intObj.intValue();
+        if (minFractionDigitsExpression != null) {
+            if (minFractionDigitsExpression.isLiteralText()) {
+                minFractionDigits =
+                Integer.valueOf(
+                    minFractionDigitsExpression.getExpressionString()).
+                    intValue();
             } else {
-                minFractionDigits = new Integer(minFractionDigits_).intValue();
+                minFractionDigits = ((Integer)
+                                        Util.evaluateValueExpression(minFractionDigitsExpression,
+                                            elContext)).intValue();
             }
         }
-        if (minIntegerDigits_ != null) {
-            if (Util.isVBExpression(minIntegerDigits_)) {
-                intObj = (Integer) Util.evaluateVBExpression(minIntegerDigits_);
-                assert (null != intObj);
-                minIntegerDigits = intObj.intValue();
+        if (minIntegerDigitsExpression != null) {
+            if (minIntegerDigitsExpression.isLiteralText()) {
+                minIntegerDigits =
+                Integer.valueOf(
+                    minIntegerDigitsExpression.getExpressionString()).
+                    intValue();
             } else {
-                minIntegerDigits = new Integer(minIntegerDigits_).intValue();
+                minIntegerDigits = ((Integer)
+                                       Util.evaluateValueExpression(minIntegerDigitsExpression,
+                                           elContext)).intValue();
             }
         }
-        if (locale_ != null) {
-            if (Util.isVBExpression(locale_)) {
-                locale = (Locale) Util.evaluateVBExpression(locale_);
+        if (localeExpression != null) {
+            if (localeExpression.isLiteralText()) {
+                locale = new Locale(localeExpression.getExpressionString(),
+                    "");
             } else {
-                locale = new Locale(locale_, "");
+                Locale loc = (Locale)
+                Util.evaluateValueExpression(localeExpression,
+                    elContext);
+                if (loc != null) {
+                    locale = loc;
+                } else {
+                    locale = facesContext.getViewRoot().getLocale();
+                }
             }
         }
     }

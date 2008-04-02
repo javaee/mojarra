@@ -29,6 +29,9 @@
         <icon></icon>
         <property-name>converter</property-name>
         <property-class>javax.faces.convert.Converter</property-class>
+        <property-extension>
+            <value-expression-enabled>true</value-expression-enabled>
+        </property-extension>
     </property>
 
     <property>
@@ -56,5 +59,8 @@
         <icon></icon>
         <property-name>value</property-name>
         <property-class>java.lang.Object</property-class>
+        <property-extension>
+            <value-expression-enabled>true</value-expression-enabled>
+        </property-extension>
     </property>
 </root>

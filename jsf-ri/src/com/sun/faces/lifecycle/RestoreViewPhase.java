@@ -1,5 +1,5 @@
 /*
- * $Id: RestoreViewPhase.java,v 1.21 2005/04/11 18:03:57 jayashri Exp $
+ * $Id: RestoreViewPhase.java,v 1.22 2005/05/05 20:51:24 edburns Exp $
  */
 
 /*
@@ -21,7 +21,7 @@ import javax.faces.application.ApplicationFactory;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
-import javax.faces.el.ValueBinding;
+import javax.el.ValueExpression;
 import javax.faces.event.ActionListener;
 import javax.faces.event.PhaseId;
 import javax.faces.render.ResponseStateManager;
@@ -36,7 +36,7 @@ import java.util.Map;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: RestoreViewPhase.java,v 1.21 2005/04/11 18:03:57 jayashri Exp $
+ * @version $Id: RestoreViewPhase.java,v 1.22 2005/05/05 20:51:24 edburns Exp $
  */
 
 public class RestoreViewPhase extends Phase {
@@ -206,10 +206,10 @@ public class RestoreViewPhase extends Phase {
      */
     protected void doPerComponentActions(FacesContext context, UIComponent uic) {
         // if this component has a component value reference expression,
-        // make sure to populate the ValueBinding for it.
-        ValueBinding valueBinding = null;
-        if (null != (valueBinding = uic.getValueBinding("binding"))) {
-            valueBinding.setValue(context, uic);
+        // make sure to populate the ValueExpression for it.
+        ValueExpression valueExpression = null;
+        if (null != (valueExpression = uic.getValueExpression("binding"))) {
+            valueExpression.setValue(context.getELContext(), uic);
         }
 
         Iterator kids = uic.getFacetsAndChildren();

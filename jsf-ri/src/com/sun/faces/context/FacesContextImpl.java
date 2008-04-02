@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContextImpl.java,v 1.67 2004/10/12 14:39:49 rlubke Exp $
+ * $Id: FacesContextImpl.java,v 1.68 2005/05/05 20:51:21 edburns Exp $
  */
 
 /*
@@ -36,6 +36,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.el.ELContext;
+import com.sun.faces.el.ELContextImpl;
+
 public class FacesContextImpl extends FacesContext {
 
     //
@@ -60,6 +63,7 @@ public class FacesContextImpl extends FacesContext {
     private ExternalContext externalContext = null;
     private Application application = null;
     private UIViewRoot viewRoot = null;
+    private ELContext elContext = null;
 
     /**
      * Store mapping of clientId to ArrayList of FacesMessage
@@ -129,7 +133,15 @@ public class FacesContextImpl extends FacesContext {
         return application;
     }
 
-
+    public ELContext getELContext() {
+        assertNotReleased();
+        if (elContext == null) {
+            elContext = new ELContextImpl(getApplication().getELResolver());
+            elContext.putContext(FacesContext.class, this);
+        }
+        return elContext;
+    }
+    
     public Iterator getClientIdsWithMessages() {
         assertNotReleased();
         Iterator result = null;

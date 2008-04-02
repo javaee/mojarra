@@ -1,5 +1,5 @@
 /*
- * $Id: EvaluationException.java,v 1.5 2004/02/26 20:30:55 eburns Exp $
+ * $Id: EvaluationException.java,v 1.6 2005/05/05 20:51:09 edburns Exp $
  */
 
 /*
@@ -17,6 +17,8 @@ import javax.faces.FacesException;
 /**
  * <p>An exception reporting an error that occurred during the evaluation
  * of an expression in a {@link MethodBinding} or {@link ValueBinding}.</p>
+ *
+ * @deprecated This has been replaced by {@link javax.el.ELException}.
  */
 
 public class EvaluationException extends FacesException {

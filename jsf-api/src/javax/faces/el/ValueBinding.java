@@ -1,5 +1,5 @@
 /*
- * $Id: ValueBinding.java,v 1.11 2004/02/26 20:30:57 eburns Exp $
+ * $Id: ValueBinding.java,v 1.12 2005/05/05 20:51:10 edburns Exp $
  */
 
 /*
@@ -21,6 +21,8 @@ import javax.faces.context.FacesContext;
  * can be acquired by calling the <code>createValueBinding()</code> method of
  * the {@link javax.faces.application.Application} instance for this web
  * application.</p>
+ *
+ * @deprecated This has been replaced by {@link javax.el.ValueExpression}.
  */
 
 public abstract class ValueBinding {

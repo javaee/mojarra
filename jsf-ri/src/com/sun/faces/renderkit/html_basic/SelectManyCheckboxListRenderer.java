@@ -5,7 +5,7 @@
 
 
 /**
- * $Id: SelectManyCheckboxListRenderer.java,v 1.39 2004/12/16 17:56:38 edburns Exp $
+ * $Id: SelectManyCheckboxListRenderer.java,v 1.40 2005/05/05 20:51:25 edburns Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -205,16 +205,29 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
                                                curItem.getValue());
         writer.writeAttribute("value", valueString, "value");
         writer.writeAttribute("type", "checkbox", null);
-        boolean isSelected;
+
         Object submittedValues[] = getSubmittedSelectedValues(context,
                                                               component);
+        boolean isSelected;
+        
+        Class type = String.class;
+        Object valuesArray = null;
+        Object itemValue = null;
         if (submittedValues != null) {
-            isSelected = isSelected(valueString, submittedValues);
+            valuesArray = submittedValues;
+            itemValue = valueString;
         } else {
-            Object selectedValues = getCurrentSelectedValues(context,
-                                                             component);
-            isSelected = isSelected(curItem.getValue(), selectedValues);
+            valuesArray = getCurrentSelectedValues(context, component);
+            itemValue = curItem.getValue();
         }
+        if (valuesArray != null) {
+            type = valuesArray.getClass().getComponentType();
+        } 
+
+        Object newValue = context.getApplication().getExpressionFactory().
+            coerceToType(itemValue, type);
+
+        isSelected = isSelected(newValue, valuesArray);
 
         if (isSelected) {
             writer.writeAttribute(getSelectedTextString(), Boolean.TRUE, null);

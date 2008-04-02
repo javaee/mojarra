@@ -1,13 +1,12 @@
 package com.sun.faces.generate;
 
-import java.util.Properties;
-import java.util.Arrays;
+import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.BufferedInputStream;
-import java.io.FileNotFoundException;
 import java.io.PrintStream;
-import java.io.ByteArrayOutputStream;
+import java.util.Arrays;
+import java.util.Properties;
 
 /**
  * <p>This class manages properties common to <code>jsf-tools</code>
@@ -33,14 +32,7 @@ public class PropertyManager {
     /**
      * <p>The description of the tag library (may be <code>null</code>).</p>
      */
-    public static final String TAGLIB_DESCRIPTION = "taglib.description";
-
-    /**
-     * <p>Tags which must be generated as <code>BodyTag</code> instances.
-     * This property may have multiple values delimited by
-     * commas (may be <code>null</code>).
-     */
-    public static final String TAGLIB_BODY_TAGS = "taglib.body.tags";
+    public static final String TAGLIB_DESCRIPTION = "taglib.description";    
 
     /**
      * <p>The file name of the generated tag library descriptor.</p>
@@ -52,28 +44,6 @@ public class PropertyManager {
      * library generation process (may be <code>null</code>).</p>
      */
     public static final String TAGLIB_INCLUDE = "taglib.include";
-
-    /**
-     * <p>Components which are instances of <code>ValueHolder</code>
-     * or <code>ConvertibleValueHolder</code>.  This property may have multiple
-     * values delimited by pipes ('|') (may be <code>null</code>).
-     */
-    public static final String VALUE_HOLDER_COMPONENTS =
-        "value.holder.components";
-
-    /**
-     * <p>Properties which accept <code>ValueBinding</code>s.  This property
-     * may have multiple values delimited by pipes ('|') (may be <code>null<code>).
-     */
-    public static final String VALUE_BINDING_PROPERTIES =
-        "value.binding.properties";
-
-    /**
-     * <p>Properties which accept <code>MethodBinding</code>s.  This property
-     * may have multiple values delimited by pipes ('|') (may be <code>null</code>).
-     */
-    public static final String METHOD_BINDING_PROPERTIES =
-        "method.binding.properties";
 
     /**
      * <p>A copyright to be included at the beginning of any generated file
@@ -109,10 +79,6 @@ public class PropertyManager {
         COPYRIGHT,
         RENDERKIT_ID,
         TARGET_PACKAGE,
-        TAGLIB_BODY_TAGS,
-        VALUE_BINDING_PROPERTIES,
-        METHOD_BINDING_PROPERTIES,
-        VALUE_HOLDER_COMPONENTS,
         TAGLIB_FILE_NAME,
         TAGLIB_INCLUDE,
         BASE_OUTPUT_DIR,
@@ -124,10 +90,6 @@ public class PropertyManager {
     private static final String[] NULLABLE_PROPS = {
         COPYRIGHT,
         TAGLIB_DESCRIPTION,
-        TAGLIB_BODY_TAGS,
-        VALUE_BINDING_PROPERTIES,
-        METHOD_BINDING_PROPERTIES,
-        VALUE_HOLDER_COMPONENTS,
         TAGLIB_INCLUDE,
     };
 
@@ -187,7 +149,7 @@ public class PropertyManager {
     /**
      * <p>Return the property specified by <code>propertyName</code>.</p>
      * @param propertyName - the property name
-     * @return the value(s) of the property or <code>null</code> if no value
+     * @return the value of the property or <code>null</code> if no value
      *  is defined
      *
      * @throws IllegalArgumentException of <code>propertyName</code> isn't
@@ -195,14 +157,14 @@ public class PropertyManager {
      * @throws IllegalStateException if <code>propertyName</code> illegally
      *  has no value
      */
-    public String[] getProperty(String propertyName) {
+    public String getProperty(String propertyName) {
 
         if (Arrays.binarySearch(VALID_PROPS, propertyName) < 0) {
             throw new IllegalArgumentException("Unknown Property '" +
                 propertyName + '\'');
         }
 
-        String propValue = props.getProperty(propertyName).trim();
+        String propValue = props.getProperty(propertyName);
 
         if (propValue == null) {
             if (Arrays.binarySearch(NULLABLE_PROPS, propertyName) >= 0) {
@@ -213,7 +175,7 @@ public class PropertyManager {
             }
         }
 
-        return propValue.split("\\|");
+        return propValue.trim();
 
     } // END getProperty
 

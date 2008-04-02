@@ -32,7 +32,12 @@
         <display-name>Application Action</display-name>
         <icon></icon>
         <property-name>action</property-name>
-        <property-class>javax.faces.el.MethodBinding</property-class>
+        <property-class>javax.el.MethodBinding</property-class>
+        <property-extension>
+            <method-signature>
+                java.lang.String action()
+            </method-signature>
+        </property-extension>
     </property>
 
     <property>
@@ -45,7 +50,12 @@
         <display-name>Action Listener</display-name>
         <icon></icon>
         <property-name>actionListener</property-name>
-        <property-class>javax.faces.el.MethodBinding</property-class>
+        <property-class>javax.el.MethodExpression</property-class>
+        <property-extension>
+            <method-signature>
+                void actionListener(javax.faces.event.ActionEvent)
+            </method-signature>
+        </property-extension>
     </property>
 
     <property>
@@ -59,5 +69,8 @@
         <icon></icon>
         <property-name>immediate</property-name>
         <property-class>boolean</property-class>
+        <property-extension>
+            <value-expression-enabled>true</value-expression-enabled>
+        </property-extension>
     </property>
 </root>

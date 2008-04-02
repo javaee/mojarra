@@ -1,5 +1,5 @@
 /*
- * $Id: ConvertDateTimeTag.java,v 1.14 2004/12/20 21:26:35 rogerk Exp $
+ * $Id: ConvertDateTimeTag.java,v 1.15 2005/05/05 20:51:26 edburns Exp $
  */
 
 /*
@@ -9,49 +9,49 @@
 
 package com.sun.faces.taglib.jsf_core;
 
-import com.sun.faces.util.Util;
-
-import javax.faces.convert.Converter;
-import javax.faces.convert.DateTimeConverter;
-import javax.faces.webapp.ConverterTag;
-import javax.servlet.jsp.JspException;
-
 import java.util.Locale;
 import java.util.TimeZone;
+
+import javax.el.ELContext;
+import javax.el.ValueExpression;
+import javax.el.ExpressionFactory;
+import javax.faces.context.FacesContext;
+import javax.faces.convert.Converter;
+import javax.faces.convert.DateTimeConverter;
+import javax.servlet.jsp.JspException;
+
+import com.sun.faces.util.Util;
 
 
 /**
  * <p>ConvertDateTimeTag is a ConverterTag implementation for
  * javax.faces.convert.DateTimeConverter</p>
  *
- * @version $Id: ConvertDateTimeTag.java,v 1.14 2004/12/20 21:26:35 rogerk Exp $
+ * @version $Id: ConvertDateTimeTag.java,v 1.15 2005/05/05 20:51:26 edburns Exp $
  */
 
 public class ConvertDateTimeTag extends ConverterTag {
 
-    //
-    // Protected Constants
-    //
-
-    //
-    // Class Variables
-    //
+    private static ValueExpression CONVERTER_ID_EXPR = null;
 
     //
     // Instance Variables
     //
+
+    private ValueExpression dateStyleExpression;
+    private ValueExpression localeExpression;
+    private ValueExpression patternExpression;
+    private ValueExpression timeStyleExpression;
+    private ValueExpression timeZoneExpression;
+    private ValueExpression typeExpression;
+
     private String dateStyle;
-    private String dateStyle_;
-    private String locale_;
     private Locale locale;
     private String pattern;
-    private String pattern_;
     private String timeStyle;
-    private String timeStyle_;
-    private String timeZone_;
     private TimeZone timeZone;
     private String type;
-    private String type_;
+
 
     // Attribute Instance Variables
     
@@ -74,17 +74,24 @@ public class ConvertDateTimeTag extends ConverterTag {
 
     private void init() {
         dateStyle = "default";
-        dateStyle_ = null;
+        dateStyleExpression = null;
         locale = null;
-        locale_ = null;
+        localeExpression = null;
         pattern = null;
-        pattern_ = null;
+        patternExpression = null;
         timeStyle = "default";
-        timeStyle_ = null;
+        timeStyleExpression = null;
         timeZone = null;
-        timeZone_ = null;
+        timeZoneExpression = null;
         type = "date";
-        type_ = null;
+        typeExpression = null;
+        if (CONVERTER_ID_EXPR == null) {
+            FacesContext context = FacesContext.getCurrentInstance();
+            ExpressionFactory factory = context.getApplication().
+                    getExpressionFactory();
+            CONVERTER_ID_EXPR = factory.createValueExpression(
+                    context.getELContext(),"javax.faces.DateTime",String.class);
+        }
     }
 
     //
@@ -95,80 +102,85 @@ public class ConvertDateTimeTag extends ConverterTag {
     // General Methods
     //
 
-    public void setDateStyle(String dateStyle) {
-        this.dateStyle_ = dateStyle;
+    public void setDateStyle(ValueExpression dateStyle) {
+        this.dateStyleExpression = dateStyle;
     }
 
 
-    public void setLocale(String locale) {
-        this.locale_ = locale;
+    public void setLocale(ValueExpression locale) {
+        this.localeExpression = locale;
     }
 
 
-    public void setPattern(String pattern) {
-        this.pattern_ = pattern;
+    public void setPattern(ValueExpression pattern) {
+        this.patternExpression = pattern;
     }
 
 
-    public void setTimeStyle(String timeStyle) {
-        this.timeStyle_ = timeStyle;
+    public void setTimeStyle(ValueExpression timeStyle) {
+        this.timeStyleExpression = timeStyle;
     }
 
 
-    public void setTimeZone(String timeZone) {
-        this.timeZone_ = timeZone;
+    public void setTimeZone(ValueExpression timeZone) {
+        this.timeZoneExpression = timeZone;
     }
 
 
-    public void setType(String type) {
-        this.type_ = type;
+    public void setType(ValueExpression type) {
+        this.typeExpression = type;
     }
 
     public int doStartTag() throws JspException {
-        super.setConverterId("javax.faces.DateTime");
-	return super.doStartTag();
+        super.setConverterId(CONVERTER_ID_EXPR);
+        return super.doStartTag();
     }
 
-    // 
+    //
     // Methods from ConverterTag
-    // 
+    //
 
     protected Converter createConverter() throws JspException {
 
-        DateTimeConverter result = null;
+        DateTimeConverter result = (DateTimeConverter) super.createConverter();
+        assert (null != result);
 
-        result = (DateTimeConverter) super.createConverter();
-
-        if (result != null) {
-            evaluateExpressions();
-            result.setDateStyle(dateStyle);
-            result.setLocale(locale);
-            result.setPattern(pattern);
-            result.setTimeStyle(timeStyle);
-            result.setTimeZone(timeZone);
-            result.setType(type);
-        }
+        evaluateExpressions();
+        result.setDateStyle(dateStyle);
+        result.setLocale(locale);
+        result.setPattern(pattern);
+        result.setTimeStyle(timeStyle);
+        result.setTimeZone(timeZone);
+        result.setType(type);
 
         return result;
     }
 
 
     /* Evaluates expressions as necessary */
-    private void evaluateExpressions() throws JspException {
-        if (dateStyle_ != null) {
-            dateStyle = (String) Util.evaluateVBExpression(dateStyle_);
+    private void evaluateExpressions() {
+
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        ELContext elContext = facesContext.getELContext();
+
+        if (dateStyleExpression != null) {
+            dateStyle = (String)
+            Util.evaluateValueExpression(dateStyleExpression, elContext);
         }
-        if (pattern_ != null) {
-            pattern = (String) Util.evaluateVBExpression(pattern_);
+        if (patternExpression != null) {
+            pattern = (String)
+            Util.evaluateValueExpression(patternExpression, elContext);
         }
-        if (timeStyle_ != null) {
-            timeStyle = (String) Util.evaluateVBExpression(timeStyle_);
+        if (timeStyleExpression != null) {
+            timeStyle = (String)
+            Util.evaluateValueExpression(timeStyleExpression, elContext);
         }
-        if (type_ != null) {
-            type = (String) Util.evaluateVBExpression(type_);
+        if (typeExpression != null) {
+            type = (String)
+            Util.evaluateValueExpression(typeExpression, elContext);
         } else {
-            if (timeStyle_ != null) {
-                if (dateStyle_ != null) {
+            if (timeStyleExpression != null) {
+                if (dateStyleExpression != null) {
                     type = "both";
                 } else {
                     type = "time";
@@ -177,18 +189,30 @@ public class ConvertDateTimeTag extends ConverterTag {
                 type = "date";
             }
         }
-        if (locale_ != null) {
-            if (Util.isVBExpression(locale_)) {
-                locale = (Locale) Util.evaluateVBExpression(locale_);
+        if (localeExpression != null) {
+            if (localeExpression.isLiteralText()) {
+                locale =
+                new Locale(localeExpression.getExpressionString(), "");
             } else {
-                locale = new Locale(locale_, "");
+                Locale loc = (Locale)
+                Util.evaluateValueExpression(localeExpression,
+                    elContext);
+                if (loc != null) {
+                    locale = loc;
+                } else {
+                    locale = facesContext.getViewRoot().getLocale();
+                }
             }
         }
-        if (timeZone_ != null) {
-            if (Util.isVBExpression(timeZone_)) {
-                timeZone = (TimeZone) Util.evaluateVBExpression(timeZone_);
+        if (timeZoneExpression != null) {
+            if (timeZoneExpression.isLiteralText()) {
+                timeZone =
+                TimeZone.getTimeZone(
+                    timeZoneExpression.getExpressionString());
             } else {
-                timeZone = TimeZone.getTimeZone(timeZone_);
+                timeZone = (TimeZone)
+                Util.evaluateValueExpression(timeZoneExpression,
+                    elContext);
             }
         }
     }

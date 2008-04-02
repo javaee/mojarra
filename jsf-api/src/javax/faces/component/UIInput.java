@@ -1,5 +1,5 @@
 /*
- * $Id: UIInput.java,v 1.78 2005/03/22 20:38:51 edburns Exp $
+ * $Id: UIInput.java,v 1.79 2005/05/05 20:51:03 edburns Exp $
  */
 
 /*
@@ -9,7 +9,9 @@
 
 package javax.faces.component;
 
-
+import javax.el.MethodExpression;
+import javax.el.ValueExpression;
+import javax.el.ELException;
 import javax.faces.FacesException;
 import javax.faces.application.Application;
 import javax.faces.application.FacesMessage;
@@ -18,7 +20,6 @@ import javax.faces.convert.Converter;
 import javax.faces.convert.ConverterException;
 import javax.faces.el.EvaluationException;
 import javax.faces.el.MethodBinding;
-import javax.faces.el.ValueBinding;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.FacesEvent;
 import javax.faces.event.FacesListener;
@@ -241,9 +242,14 @@ public class UIInput extends UIOutput implements EditableValueHolder {
 	if (this.requiredSet) {
 	    return (this.required);
 	}
-	ValueBinding vb = getValueBinding("required");
-	if (vb != null) {
-	    return (Boolean.TRUE.equals(vb.getValue(getFacesContext())));
+	ValueExpression ve = getValueExpression("required");
+	if (ve != null) {
+	    try {
+		return (Boolean.TRUE.equals(ve.getValue(getFacesContext().getELContext())));
+	    }
+	    catch (ELException e) {
+		throw new FacesException(e);
+	    }
 	} else {
 	    return (this.required);
 	}
@@ -292,9 +298,15 @@ public class UIInput extends UIOutput implements EditableValueHolder {
 	if (this.immediateSet) {
 	    return (this.immediate);
 	}
-	ValueBinding vb = getValueBinding("immediate");
-	if (vb != null) {
-	    return (Boolean.TRUE.equals(vb.getValue(getFacesContext())));
+	ValueExpression ve = getValueExpression("immediate");
+	if (ve != null) {
+	    try {
+		return (Boolean.TRUE.equals(ve.getValue(getFacesContext().getELContext())));
+	    }
+	    catch (ELException e) {
+		throw new FacesException(e);
+	    }
+
 	} else {
 	    return (this.immediate);
 	}
@@ -313,20 +325,33 @@ public class UIInput extends UIOutput implements EditableValueHolder {
     }
 
 
-
-    private MethodBinding validatorBinding = null;
-
-
     /**
      * <p>Return a <code>MethodBinding</code> pointing at a
      * method that will be called during <em>Process Validations</em>
      * phase of the request processing lifecycle, to validate the current
      * value of this component.</p>
+     * @deprecated {@link #getValidators} should be used instead.
      */
     public MethodBinding getValidator() {
+	MethodBinding result = null;
 
-        return (this.validatorBinding);
-
+	Validator [] curValidators = getValidators();
+	// go through our lisetners list and find the one and only
+	// MethodBindingValidator instance, if present.
+	if (null != curValidators) {
+	    for (int i = 0; i < curValidators.length; i++) {
+		// We are guaranteed to have at most one instance of
+		// MethodBindingValidator in the curValidators list.
+		if (MethodBindingValidator.class ==
+		    curValidators[i].getClass()) {
+		    result = ((MethodBindingValidator)curValidators[i]).
+			getWrapped();
+		    break;
+		}
+	    }
+	}
+	return result;
+	
     }
 
 
@@ -341,45 +366,94 @@ public class UIInput extends UIOutput implements EditableValueHolder {
      * {@link FacesContext}, {@link UIComponent}, and <code>Object</code>.</p>
      *
      * @param validatorBinding The new <code>MethodBinding</code> instance
+     *
+     * @deprecated Use {@link #addValidator} instead, obtaining the
+     * argument {@link Validator} by creating an instance of {@link
+     * javax.faces.validator.MethodExpressionValidator}.
      */
     public void setValidator(MethodBinding validatorBinding) {
-
-        this.validatorBinding = validatorBinding;
+	Validator [] curValidators = getValidators();
+	// see if we need to null-out, or replace an existing validator
+	if (null != curValidators) {
+	    for (int i = 0; i < curValidators.length; i++) {
+		// if we want to remove the validatorBinding
+		if (null == validatorBinding) {
+		    // We are guaranteed to have at most one instance of
+		    // MethodBindingValidator in the curValidators
+		    // list.
+		    if (MethodBindingValidator.class ==
+			curValidators[i].getClass()) {
+			removeValidator(curValidators[i]);
+			return;
+		    }
+		}
+		// if we want to replace the validatorBinding
+		else if (validatorBinding == curValidators[i]) {
+		    removeValidator(curValidators[i]);
+		    break;
+		}
+	    }
+	}
+	addValidator(new MethodBindingValidator(validatorBinding));
 
     }
 
-
-   private MethodBinding valueChangeMethod = null;
-
-
-    /**
-     * <p>Return a <code>MethodBinding </code> instance 
-     * method that will be called during <em>Process Validations</em>
-     * phase of he request processing lifecycle, after any registered
-     * {@link ValueChangeListener}s have been notified of a value change.</p>
-     */
     public MethodBinding getValueChangeListener() {
+	MethodBinding result = null;
 
-        return (this.valueChangeMethod);
-
+	ValueChangeListener [] curListeners = getValueChangeListeners();
+	// go through our lisetners list and find the one and only
+	// MethodBindingValueChangeListener instance, if present.
+	if (null != curListeners) {
+	    for (int i = 0; i < curListeners.length; i++) {
+		// We are guaranteed to have at most one instance of
+		// MethodBindingValueChangeListener in the curListeners list.
+		if (MethodBindingValueChangeListener.class ==
+		    curListeners[i].getClass()) {
+		    result = ((MethodBindingValueChangeListener)curListeners[i]).
+			getWrapped();
+		    break;
+		}
+	    }
+	}
+	return result;
     }
 
 
     /**
-     * <p>Set a <code>MethodBinding</code> instance  a
-     * that will be called during <em>Process Validations</em>
-     * phase of he request processing lifecycle, after any registered
-     * {@link ValueChangeListener}s have been notified of a value change.</p>
-     *
-     * @param valueChangeMethod The new method binding instance 
+     * {@inheritDoc}
+     * @deprecated Use {@link #addValueChangeListener} instead, obtaining the
+     * argument {@link ValueChangeListener} by creating an instance of {@link
+     * javax.faces.event.MethodExpressionValueChangeListener}.
      */
-    public void setValueChangeListener(MethodBinding valueChangeMethod) {
+    public void setValueChangeListener(MethodBinding valueChangeListener) {
 
-        this.valueChangeMethod = valueChangeMethod;
-
+	ValueChangeListener [] curListeners = getValueChangeListeners();
+	// see if we need to null-out, or replace an existing listener
+	if (null != curListeners) {
+	    for (int i = 0; i < curListeners.length; i++) {
+		// if we want to remove the valueChangeListener
+		if (null == valueChangeListener) {
+		    // We are guaranteed to have at most one instance of
+		    // MethodBindingValueChangeListener in the curListeners
+		    // list.
+		    if (MethodBindingValueChangeListener.class ==
+			curListeners[i].getClass()) {
+			removeFacesListener(curListeners[i]);
+			return;
+		    }
+		}
+		// if we want to replace the valueChangeListener
+		else if (valueChangeListener == curListeners[i]) {
+		    removeFacesListener(curListeners[i]);
+		    break;
+		}
+	    }
+	}
+	addValueChangeListener(new MethodBindingValueChangeListener(valueChangeListener));
     }
 
-
+    
     // ----------------------------------------------------- UIComponent Methods
 
     /**
@@ -491,50 +565,6 @@ public class UIInput extends UIOutput implements EditableValueHolder {
     }
 
     /**
-     * <p>In addition to to the default {@link UIComponent#broadcast}
-     * processing, pass the {@link ValueChangeEvent} being broadcast to the
-     * method referenced by <code>valueChangeListener</code> (if any).</p>
-     *
-     * @param event {@link FacesEvent} to be broadcast
-     *
-     * @exception AbortProcessingException Signal the JavaServer Faces
-     *  implementation that no further processing on the current event
-     *  should be performed
-     * @exception IllegalArgumentException if the implementation class
-     *  of this {@link FacesEvent} is not supported by this component
-     * @exception NullPointerException if <code>event</code> is
-     * <code>null</code>
-     */
-    public void broadcast(FacesEvent event)
-        throws AbortProcessingException {
-
-        // Perform standard superclass processing
-        super.broadcast(event);
-
-        if (event instanceof ValueChangeEvent) {
-            MethodBinding method = getValueChangeListener();
-            if (method != null) {
-                FacesContext context = getFacesContext();
-                try {
-                    method.invoke(context, new Object[] { event });
-                } catch (EvaluationException ee) {
-                    Throwable cause = ee.getCause();
-                    if (cause != null && 
-                            cause instanceof AbortProcessingException) {
-                        throw  ((AbortProcessingException) cause);
-                    }
-                    if (cause != null && cause instanceof RuntimeException) {
-                        throw ((RuntimeException) cause);
-                    }
-                    throw new IllegalStateException(ee.getMessage());
-                }
-            }
-        }
-
-    }
-
-
-    /**
      * <p>Perform the following algorithm to update the model data
      * associated with this {@link UIInput}, if any, as appropriate.</p>
      * <ul>
@@ -542,10 +572,10 @@ public class UIInput extends UIOutput implements EditableValueHolder {
      *     <code>false</code>, take no further action.</li>
      * <li>If the <code>localValueSet</code> property of this component is
      *     <code>false</code>, take no further action.</li>
-     * <li>If no {@link ValueBinding} for <code>value</code> exists,
+     * <li>If no {@link ValueExpression} for <code>value</code> exists,
      *     take no further action.</li>
-     * <li>Call <code>setValue()</code> method of the {@link ValueBinding}
-     *      to update the value that the {@link ValueBinding} points at.</li>
+     * <li>Call <code>setValue()</code> method of the {@link ValueExpression}
+     *      to update the value that the {@link ValueExpression} points at.</li>
      * <li>If the <code>setValue()</code> method returns successfully:
      *     <ul>
      *     <li>Clear the local value of this {@link UIInput}.</li>
@@ -575,15 +605,14 @@ public class UIInput extends UIOutput implements EditableValueHolder {
         if (!isValid() || !isLocalValueSet()) {
             return;
         }
-
-	ValueBinding vb = getValueBinding("value");
-	if (vb != null) {
+	ValueExpression ve = getValueExpression("value");
+	if (ve != null) {
 	    try {
-		vb.setValue(context, getLocalValue());
+		ve.setValue(context.getELContext(), getLocalValue());
 		setValue(null);
 		setLocalValueSet(false);
 		return;
-	    } catch (EvaluationException e) {
+	    } catch (ELException e) {
 		String messageStr = e.getMessage();
 		FacesMessage message = null;
 		if (null == messageStr) {
@@ -840,30 +869,6 @@ public class UIInput extends UIOutput implements EditableValueHolder {
                     }
 		}
 	    }
-            if (validatorBinding != null) {
-                try {
-                    validatorBinding.invoke(context,
-                              new Object[] { context, this, newValue});
-                }
-                catch (EvaluationException ee) {
-                    if (ee.getCause() instanceof ValidatorException) {
-                        ValidatorException ve =
-                            (ValidatorException) ee.getCause();
-
-                        // If the validator throws an exception, we're
-                        // invalid, and we need to add a message
-                        setValid(false);
-                        FacesMessage message = ve.getFacesMessage();
-                        if (message != null) {
-			    message.setSeverity(FacesMessage.SEVERITY_ERROR);
-                            context.addMessage(getClientId(context), message);
-                        }
-                    } else {
-                        // Otherwise, rethrow the EvaluationException
-                        throw ee;
-                    }
-                }
-            }
 	}
     }
 
@@ -1043,7 +1048,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
 
     public Object saveState(FacesContext context) {
 
-        Object values[] = new Object[10];
+        Object values[] = new Object[8];
         values[0] = super.saveState(context);
         values[1] = localValueSet ? Boolean.TRUE : Boolean.FALSE;
         values[2] = required ? Boolean.TRUE : Boolean.FALSE;
@@ -1052,8 +1057,6 @@ public class UIInput extends UIOutput implements EditableValueHolder {
         values[5] = immediate ? Boolean.TRUE : Boolean.FALSE;
         values[6] = immediateSet ? Boolean.TRUE : Boolean.FALSE;
         values[7] = saveAttachedState(context, validators);
-        values[8] = saveAttachedState(context, validatorBinding);
-        values[9] = saveAttachedState(context, valueChangeMethod);
         return (values);
 
     }
@@ -1088,12 +1091,6 @@ public class UIInput extends UIOutput implements EditableValueHolder {
 	    }
 	}
 
-        validatorBinding = (MethodBinding) restoreAttachedState(context,
-								values[8]);
-        valueChangeMethod = (MethodBinding) restoreAttachedState(context,
-								 values[9]);
-
-
     }
 
     private Converter getConverterWithType(FacesContext context) {
@@ -1102,12 +1099,19 @@ public class UIInput extends UIOutput implements EditableValueHolder {
             return converter;
         }
 
-        ValueBinding valueBinding = getValueBinding("value");
-        if (valueBinding == null) {
+        ValueExpression valueExpression = getValueExpression("value");
+        if (valueExpression == null) {
             return null;
         }
 
-        Class converterType = valueBinding.getType(context);
+        Class converterType = null;
+	try {
+	    converterType = valueExpression.getType(context.getELContext());
+	}
+	catch (ELException e) {
+	    throw new FacesException(e);
+	}
+	
         // if converterType is null, String, or Object, assume
         // no conversion is needed
         if (converterType == null || 
@@ -1130,8 +1134,8 @@ public class UIInput extends UIOutput implements EditableValueHolder {
             ConverterException ce, Object value) {
         FacesMessage message = ce.getFacesMessage();
         if (message == null) {
-            message = MessageFactory.getMessage(context, CONVERSION_MESSAGE_ID,
-                new Object[] {MessageFactory.getLabel(context, this)});
+            message = MessageFactory.getMessage(context,
+                                                CONVERSION_MESSAGE_ID);
             if (message.getDetail() == null) {
                 message.setDetail(ce.getMessage());
             }

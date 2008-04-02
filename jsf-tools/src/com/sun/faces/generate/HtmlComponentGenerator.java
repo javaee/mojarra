@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlComponentGenerator.java,v 1.12 2004/12/13 19:07:49 rlubke Exp $
+ * $Id: HtmlComponentGenerator.java,v 1.13 2005/05/05 20:51:37 edburns Exp $
  */
 
 /*
@@ -108,7 +108,7 @@ public class HtmlComponentGenerator extends AbstractGenerator {
         String packagePath = compPackage.replace('.', File.separatorChar);
         File dir = new File(System.getProperty("user.dir") +
             File.separatorChar +
-            propManager.getProperty(PropertyManager.BASE_OUTPUT_DIR)[0] +
+            propManager.getProperty(PropertyManager.BASE_OUTPUT_DIR) +
             File.separatorChar + packagePath);
         ComponentBean[] cbs = configBean.getComponents();
         for (int i = 0; i < cbs.length; i++) {
@@ -164,7 +164,7 @@ public class HtmlComponentGenerator extends AbstractGenerator {
 
         // Generate the copyright information
         writer.writeJavadocComment(
-            propManager.getProperty(PropertyManager.COPYRIGHT)[0]);
+            propManager.getProperty(PropertyManager.COPYRIGHT));
 
         // Generate the package declaration
         writer.writePackage("javax.faces.component.html");
@@ -192,6 +192,9 @@ public class HtmlComponentGenerator extends AbstractGenerator {
         }
 
         if (rendererType != null) {
+            if (description == null) {
+                description = "";
+            }
             description +=
             "\n<p>By default, the <code>rendererType</code> property must be set to \"<code>" +
                 rendererType +
@@ -205,7 +208,7 @@ public class HtmlComponentGenerator extends AbstractGenerator {
         // Generate the class declaration
         writer.writePublicClassDeclaration(shortName(cb.getComponentClass()),
                                            base.getComponentClass(),
-                                           null, false);
+                                           null, false, false);
 
         writer.write("\n\n");
 
@@ -338,9 +341,9 @@ public class HtmlComponentGenerator extends AbstractGenerator {
                 writer.fwrite("} else {\n");
                 writer.indent();
                 writer.fwrite("return ((");
-                writer.write((String) WRAPPERS.get(type));
+                writer.write(GeneratorUtil.convertToObject(type));
                 writer.write(") _result).");
-                writer.write((String) UNWRAPPERS.get(type));
+                writer.write(GeneratorUtil.convertToPrimitive(type));
                 writer.write("();\n");
                 writer.outdent();
                 writer.fwrite("}\n");
@@ -432,7 +435,7 @@ public class HtmlComponentGenerator extends AbstractGenerator {
                 writer.write(" ? Boolean.TRUE : Boolean.FALSE");
             } else if (primitive(type)) {
                 writer.write("new ");
-                writer.write((String) WRAPPERS.get(type));
+                writer.write(GeneratorUtil.convertToObject(type));
                 writer.write("(this.");
                 writer.write(name);
                 writer.write(")");
@@ -468,11 +471,11 @@ public class HtmlComponentGenerator extends AbstractGenerator {
             writer.write(" = ");
             if (primitive(type)) {
                 writer.write("((");
-                writer.write((String) WRAPPERS.get(type));
+                writer.write(GeneratorUtil.convertToObject(type));
                 writer.write(") _values[");
                 writer.write("" + n++);
                 writer.write("]).");
-                writer.write((String) UNWRAPPERS.get(type));
+                writer.write(GeneratorUtil.convertToPrimitive(type));
                 writer.write("()");
             } else {
                 writer.write("(");

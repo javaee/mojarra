@@ -1,5 +1,5 @@
 /*
- * $Id: MockApplication.java,v 1.22 2004/05/12 02:00:47 eburns Exp $
+ * $Id: MockApplication.java,v 1.23 2005/05/05 20:51:15 edburns Exp $
  */
 
 /*
@@ -37,6 +37,17 @@ import javax.faces.event.ActionEvent;
 import javax.faces.event.PhaseId;
 import javax.faces.validator.Validator;
 
+import javax.servlet.jsp.JspFactory;
+import javax.servlet.ServletContext;
+
+import javax.el.ELResolver;
+import javax.el.ExpressionFactory;
+import javax.el.ValueExpression;
+import javax.el.MethodExpression;
+import javax.el.ELException;
+import javax.el.ELContextListener;
+
+import org.apache.commons.el.ExpressionFactoryImpl;
 
 public class MockApplication extends Application {
 
@@ -53,8 +64,10 @@ public class MockApplication extends Application {
         addConverter("javax.faces.Long", 
 		     "javax.faces.convert.LongConverter");
         addValidator("Length", "javax.faces.validator.LengthValidator");
+	servletContext = new MockServletContext();
     }
 
+    private ServletContext servletContext = null;
 
     private ActionListener actionListener = null;
     private static boolean processActionCalled = false;
@@ -126,6 +139,34 @@ public class MockApplication extends Application {
         }
     }
 
+    // PENDING(edburns): implement
+
+    public void addELResolver(ELResolver resolver) {
+    }
+
+    // PENDING(edburns): implement
+
+    public ELResolver getELResolver() {
+	return null;
+    }
+
+    private ExpressionFactory expressionFactory = null;
+
+    public ExpressionFactory getExpressionFactory() {
+	if (null == expressionFactory) {
+	    expressionFactory = new ExpressionFactoryImpl();
+	}
+	return expressionFactory;
+    }
+    
+    public Object evaluateExpressionGet(FacesContext context,
+					String expression, 
+					Class expectedType) throws ELException{
+	ValueExpression ve = getExpressionFactory().createValueExpression(context.getELContext(),expression, expectedType);
+	return ve.getValue(context.getELContext());
+    }
+    
+    
 
     private VariableResolver variableResolver = null;
     public VariableResolver getVariableResolver() {
@@ -180,6 +221,13 @@ public class MockApplication extends Application {
         throws FacesException {
 	throw new FacesException(new UnsupportedOperationException());
     }
+    public UIComponent createComponent(ValueExpression componentExpression,
+                                                FacesContext context,
+                                                String componentType) 
+	throws FacesException {
+	throw new FacesException(new UnsupportedOperationException());
+    }
+    
     public Iterator getComponentTypes() {
         return (components.keySet().iterator());
     }
@@ -242,6 +290,20 @@ public class MockApplication extends Application {
     }
 
     public void setSupportedLocales(Collection newLocales) {
+    }
+
+    public void addELContextListener(ELContextListener listener) {
+	// PENDING(edburns): maybe implement
+    }
+
+    public void removeELContextListener(ELContextListener listener) {
+	// PENDING(edburns): maybe implement
+    }
+
+    public ELContextListener [] getELContextListeners() {
+	// PENDING(edburns): maybe implement
+	return (ELContextListener []) java.lang.reflect.Array.newInstance(ELContextListener.class,
+						   0);
     }
 
     public Locale getDefaultLocale(){

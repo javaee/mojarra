@@ -35,6 +35,7 @@
         <property-class>boolean</property-class>
         <property-extension>
             <default-value>false</default-value>
+            <value-expression-enabled>true</value-expression-enabled>
         </property-extension>
     </property>
 
@@ -49,6 +50,7 @@
         <property-class>boolean</property-class>
         <property-extension>
             <default-value>false</default-value>
+            <value-expression-enabled>true</value-expression-enabled>
         </property-extension>
     </property>
 
@@ -63,6 +65,7 @@
         <property-class>boolean</property-class>
         <property-extension>
             <default-value>true</default-value>
+            <value-expression-enabled>true</value-expression-enabled>
         </property-extension>
     </property>
 </root>

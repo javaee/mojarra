@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectOne.java,v 1.46 2005/03/07 21:50:27 rogerk Exp $
+ * $Id: UISelectOne.java,v 1.47 2005/05/05 20:51:04 edburns Exp $
  */
 
 /*
@@ -148,10 +148,14 @@ public class UISelectOne extends UIInput {
                         return (true);
                     }
                 }
-            } else if ((value == null) && (item.getValue() == null)) {
-                return (true);
-            } else if (value.equals(item.getValue())) {
-                return (true);
+            } else {
+                //Coerce the item value type before comparing values.
+                Class type = value.getClass();
+                Object newValue = getFacesContext().getApplication().
+                    getExpressionFactory().coerceToType(item.getValue(), type);
+                if (value.equals(newValue)) {
+                    return (true);
+                }
             }
         }
         return (false);

@@ -1,5 +1,5 @@
 /*
- * $Id: PropertyBean.java,v 1.3 2004/02/04 23:46:09 ofung Exp $
+ * $Id: PropertyBean.java,v 1.4 2005/05/05 20:51:35 edburns Exp $
  */
 
 /*
@@ -73,6 +73,38 @@ public class PropertyBean extends FeatureBean {
     public boolean isTagAttribute() { return tagAttribute; }
     public void setTagAttribute(boolean tagAttribute)
     { this.tagAttribute = tagAttribute; }
+
+    // Set to TRUE if property-extension contains method-signature element
+    // [default=false]
+    private boolean methodExpressionEnabled = false;
+    public boolean isMethodExpressionEnabled() {
+        return methodExpressionEnabled;
+    }
+    public void setMethodExpressionEnabled(boolean methodExpressionEnabled) {
+        this.methodExpressionEnabled = methodExpressionEnabled;
+    }
+
+    private String methodSignature;
+    public String getMethodSignature() { return methodSignature; }
+    public void setMethodSignature(String methodSignature) {
+        if (methodSignature != null) {
+            methodSignature = methodSignature.trim();
+            if (methodSignature.length() > 0) {
+                setMethodExpressionEnabled(true);
+                this.methodSignature = methodSignature.trim();
+            }
+        }
+    }
+
+    // value-expression-enabled - if the property can accept ValueExpressions
+    // [default=false]
+    private boolean valueExpressionEnabled = false;
+    public boolean isValueExpressionEnabled() {
+        return valueExpressionEnabled;
+    }
+    public void setValueExpressionEnabled(boolean valueExpressionEnabled) {
+        this.valueExpressionEnabled = valueExpressionEnabled;
+    }
 
 
     // ----------------------------------------------------------------- Methods

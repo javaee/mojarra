@@ -4,7 +4,7 @@
  */
 
 /*
- * $Id: MenuRenderer.java,v 1.56 2005/04/21 18:55:36 edburns Exp $
+ * $Id: MenuRenderer.java,v 1.57 2005/05/05 20:51:25 edburns Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -16,11 +16,14 @@
 
 package com.sun.faces.renderkit.html_basic;
 
-import com.sun.faces.util.Util;
-import com.sun.faces.RIConstants;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.io.IOException;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
+import javax.el.ValueExpression;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UISelectMany;
 import javax.faces.component.UISelectOne;
@@ -28,16 +31,14 @@ import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.convert.Converter;
 import javax.faces.convert.ConverterException;
-import javax.faces.el.ValueBinding;
 import javax.faces.model.SelectItem;
 import javax.faces.model.SelectItemGroup;
 
-import java.io.IOException;
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import com.sun.faces.RIConstants;
+import com.sun.faces.util.Util;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  * <B>MenuRenderer</B> is a class that renders the current value of
@@ -196,17 +197,17 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
                                          UISelectMany uiSelectMany,
                                          String[] newValues)
         throws ConverterException {
-        // if we have no local value, try to get the valueBinding.
-        ValueBinding valueBinding = uiSelectMany.getValueBinding("value");
+        // if we have no local value, try to get the valueExpression.
+        ValueExpression valueExpression = uiSelectMany.getValueExpression("value");
 
         Object result = newValues; // default case, set local value
         Class modelType = null;
 	boolean throwException = false;
 
-        // If we have a ValueBinding
-        if (null != valueBinding) {
-            modelType = valueBinding.getType(context);
-            // Does the valueBinding resolve properly to something with
+        // If we have a ValueExpression
+        if (null != valueExpression) {
+            modelType = valueExpression.getType(context.getELContext());
+            // Does the valueExpression resolve properly to something with
             // a type?
             if (null != modelType) {
                 if (modelType.isArray()) {
@@ -221,7 +222,7 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
 		throwException = true;
             }
         } else {
-            // No ValueBinding, just use Object array.
+            // No ValueExpression, just use Object array.
             Object[] convertedValues = new Object[1];
             result = handleArrayCase(context, uiSelectMany,
                                      convertedValues.getClass(),
@@ -236,7 +237,7 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
 	    }
 	    Object [] params = {
 		values,
-		valueBinding.getExpressionString()
+		valueExpression.getExpressionString()
 	    };
 	    throw new ConverterException
 		(Util.getExceptionMessage(Util.CONVERSION_ERROR_MESSAGE_ID,
@@ -464,8 +465,13 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
             writeDefaultSize(writer, itemCount);
         }
 
+	// PENDING(edburns): not sure about this.  Maybe take the one
+	// from wta-head?
         Util.renderPassThruAttributes(context, writer, component);
-        Util.renderBooleanPassThruAttributes(writer, component);
+	// don't render disabled here, because it is dealt with in a
+	// special fashin further down the callstack.
+        Util.renderBooleanPassThruAttributes(writer, component, 
+					     new String [] {"disabled"});
 
         // Now, render the "options" portion...
         renderOptions(context, component);

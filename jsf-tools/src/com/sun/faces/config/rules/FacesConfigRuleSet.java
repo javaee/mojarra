@@ -1,5 +1,5 @@
 /*
- * $Id: FacesConfigRuleSet.java,v 1.6 2005/02/09 17:53:01 jayashri Exp $
+ * $Id: FacesConfigRuleSet.java,v 1.7 2005/05/05 20:51:36 edburns Exp $
  */
 
 /*
@@ -309,9 +309,13 @@ public class FacesConfigRuleSet extends RuleSetBase {
                 ("faces-config/render-kit/renderer/renderer-extension/exclude-attributes",
                  "setExcludeAttributes", 0);
 
-	    digester.addCallMethod
-		("faces-config/render-kit/renderer/renderer-extension/tag-name",
-		 "setTagName", 0);
+            digester.addCallMethod
+                ("faces-config/render-kit/renderer/renderer-extension/tag-name",
+                "setTagName", 0);
+
+            digester.addCallMethod
+                 ("faces-config/render-kit/renderer/renderer-extension/body-tag",
+                  "setBodyTag", 0, new String[] { "java.lang.Boolean" });
         }
 
         // faces-config/validator
@@ -478,6 +482,12 @@ public class FacesConfigRuleSet extends RuleSetBase {
         digester.addCallMethod
             (prefix + "/property/property-extension/tag-attribute",
              "setTagAttribute", 0, new String[] { "java.lang.Boolean" });
+        digester.addCallMethod
+            (prefix + "/property/property-extension/method-signature",
+             "setMethodSignature", 0, new String[] { "java.lang.String" });
+        digester.addCallMethod
+            (prefix + "/property/property-extension/value-expression-enabled",
+            "setValueExpressionEnabled", 0, new String[] { "java.lang.Boolean" });
 
     }
 

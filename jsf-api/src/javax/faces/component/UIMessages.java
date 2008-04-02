@@ -1,5 +1,5 @@
 /*
- * $Id: UIMessages.java,v 1.14 2004/02/26 20:30:33 eburns Exp $
+ * $Id: UIMessages.java,v 1.15 2005/05/05 20:51:03 edburns Exp $
  */
 
 /*
@@ -10,7 +10,9 @@
 package javax.faces.component;
 
 import javax.faces.context.FacesContext;
-import javax.faces.el.ValueBinding;
+import javax.faces.FacesException;
+import javax.el.ELException;
+import javax.el.ValueExpression;
 
 /**
  * <p>The renderer for this component is responsible for obtaining the
@@ -89,9 +91,14 @@ public class UIMessages extends UIComponentBase {
 	if (this.globalOnlySet) {
 	    return (this.globalOnly);
 	}
-	ValueBinding vb = getValueBinding("globalOnly");
-	if (vb != null) {
-	    return (Boolean.TRUE.equals(vb.getValue(getFacesContext())));
+	ValueExpression ve = getValueExpression("globalOnly");
+	if (ve != null) {
+	    try {
+		return (Boolean.TRUE.equals(ve.getValue(getFacesContext().getELContext())));
+	    }
+	    catch (ELException e) {
+		throw new FacesException(e);
+	    }
 	} else {
 	    return (this.globalOnly);
 	}
@@ -122,9 +129,14 @@ public class UIMessages extends UIComponentBase {
 	if (this.showDetailSet){
 	    return (this.showDetail);
 	}
-	ValueBinding vb = getValueBinding("showDetail");
-	if (vb != null) {
-	    return (Boolean.TRUE.equals(vb.getValue(getFacesContext())));
+	ValueExpression ve = getValueExpression("showDetail");
+	if (ve != null) {
+	    try {
+		return (Boolean.TRUE.equals(ve.getValue(getFacesContext().getELContext())));
+	    }
+	    catch (ELException e) {
+		throw new FacesException(e);
+	    }
 	} else {
 	    return (this.showDetail);
 	}
@@ -156,9 +168,14 @@ public class UIMessages extends UIComponentBase {
 	if (this.showSummarySet) {
 	    return (this.showSummary);
 	}
-	ValueBinding vb = getValueBinding("showSummary");
-	if (vb != null) {
-	    return (!Boolean.FALSE.equals(vb.getValue(getFacesContext())));
+	ValueExpression ve = getValueExpression("showSummary");
+	if (ve != null) {
+	    try {
+		return (!Boolean.FALSE.equals(ve.getValue(getFacesContext().getELContext())));
+	    }
+	    catch (ELException e) {
+		throw new FacesException(e);
+	    }
 	} else {
 	    return (this.showSummary);
 	}

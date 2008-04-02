@@ -1,22 +1,22 @@
 /*
- * $Id: AttributeTag.java,v 1.3 2005/04/21 18:55:38 edburns Exp $
+ * $Id: AttributeTag.java,v 1.4 2005/05/05 20:51:26 edburns Exp $
  */
 
 /*
- * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2005 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
 package com.sun.faces.taglib.jsf_core;
 
 
+import javax.el.ELContext;
+import javax.el.ValueExpression;
 import javax.faces.component.UIComponent;
-import javax.faces.webapp.UIComponentTag;
-import javax.faces.webapp.UIComponentClassicTagBase;
 import javax.faces.context.FacesContext;
-import javax.faces.el.ValueBinding;
+import javax.faces.webapp.UIComponentELTag;
+import javax.faces.webapp.UIComponentClassicTagBase;
 import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.tagext.Tag;
 import javax.servlet.jsp.tagext.TagSupport;
 
 
@@ -38,7 +38,7 @@ public class AttributeTag extends TagSupport {
     /**
      * <p>The name of the attribute to be created, if not already present.
      */
-    private String name = null;
+    private ValueExpression name = null;
 
 
     /**
@@ -46,7 +46,7 @@ public class AttributeTag extends TagSupport {
      *
      * @param name The new attribute name
      */
-    public void setName(String name) {
+    public void setName(ValueExpression name) {
 
         this.name = name;
 
@@ -56,7 +56,7 @@ public class AttributeTag extends TagSupport {
     /**
      * <p>The value to be associated with this attribute, if it is created.</p>
      */
-    private String value = null;
+    private ValueExpression value = null;
 
 
 
@@ -65,21 +65,22 @@ public class AttributeTag extends TagSupport {
      *
      * @param value The new attribute value
      */
-    public void setValue(String value) {
+    public void setValue(ValueExpression value) {
 
         this.value = value;
 
     }
 
 
-    // --------------------------------------------------------- Public Methods
+    // -------------------------------------------------------- Methods from Tag
 
 
     /**
      * <p>Register the specified attribute name and value with the
      * {@link UIComponent} instance associated with our most immediately
-     * surrounding {@link UIComponentTag} instance, if this {@link UIComponent}
-     * does not already have a value for the specified attribute name.</p>
+     * surrounding {@link UIComponentTagBase} instance, if this
+     * {@link UIComponent} does not already have a value for the
+     * specified attribute name.</p>
      *
      * @exception JspException if a JSP error occurs
      */
@@ -87,7 +88,7 @@ public class AttributeTag extends TagSupport {
 
         // Locate our parent UIComponentTagBase
         UIComponentClassicTagBase tag =
-            UIComponentClassicTagBase.getParentUIComponentClassicTagBase(pageContext);
+            UIComponentELTag.getParentUIComponentClassicTagBase(pageContext);
         if (tag == null) { // PENDING - i18n
             throw new JspException("Not nested in a UIComponentTag");
         }
@@ -97,26 +98,32 @@ public class AttributeTag extends TagSupport {
         if (component == null) { // PENDING - i18n
             throw new JspException("No component associated with UIComponentTag");
         }
-        String nameVal = name;
 
-	FacesContext context = FacesContext.getCurrentInstance();
+        FacesContext context = FacesContext.getCurrentInstance();
+        ELContext elContext = context.getELContext();
 
-        if (UIComponentTag.isValueReference(name)) {
-            ValueBinding vb =
-                context.getApplication().createValueBinding(name);
-            nameVal = (String) vb.getValue(context);
+        String nameVal = null;
+        Object valueVal = null;
+	boolean isLiteral = false;
+
+        if (name != null) {
+            nameVal = (String) name.getValue(elContext);
         }
-        if (null != component.getAttributes().get(nameVal)) {
-	    return (SKIP_BODY);
-	}
-        if (UIComponentTag.isValueReference(value)) {
-            ValueBinding vb =
-                context.getApplication().createValueBinding(value);
-	    component.setValueBinding(nameVal, vb);
+
+        if (value != null) {
+	    if (isLiteral = value.isLiteralText()) {
+		valueVal = value.getValue(elContext);
+	    }
         }
-	else {
-            component.getAttributes().put(nameVal, value);
-	}
+	
+        if (component.getAttributes().get(nameVal) == null) {
+	    if (isLiteral) {
+		component.getAttributes().put(nameVal, valueVal);
+	    }
+	    else {
+		component.setValueExpression(nameVal, value);
+	    }
+        }
         return (SKIP_BODY);
 
     }
@@ -134,6 +141,7 @@ public class AttributeTag extends TagSupport {
 
         this.name = null;
         this.value = null;
-    }
+
+    } // END release
 
 }

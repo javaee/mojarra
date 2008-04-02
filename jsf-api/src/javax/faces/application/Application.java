@@ -1,5 +1,5 @@
 /*
- * $Id: Application.java,v 1.30 2004/02/26 20:30:23 eburns Exp $
+ * $Id: Application.java,v 1.31 2005/05/05 20:50:58 edburns Exp $
  */
 
 /*
@@ -15,7 +15,6 @@ import java.util.Collection;
 import java.util.Locale;
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
-import javax.faces.component.ActionSource;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
@@ -27,6 +26,13 @@ import javax.faces.el.VariableResolver;
 import javax.faces.event.ActionListener;
 import javax.faces.render.RenderKit;
 import javax.faces.validator.Validator;
+
+import javax.el.ELContextListener;
+import javax.el.ExpressionFactory;
+import javax.el.MethodExpression;
+import javax.el.ValueExpression;
+import javax.el.ELException;
+import javax.el.ELResolver;
 
 
 
@@ -47,9 +53,7 @@ import javax.faces.validator.Validator;
  * <p>The application also acts as a factory for several types of
  * Objects specified in the Faces Configuration file.  Please see {@link
  * Application#createComponent}, {@link Application#createConverter},
- * {@link Application#createMethodBinding},
- * {@link Application#createValidator}, and
- * {@link Application#createValueBinding}. </p>
+ * and {@link Application#createValidator}. </p>
  */
 
 public abstract class Application {
@@ -59,9 +63,11 @@ public abstract class Application {
 
 
     /**
-     * <p>Return the default {@link ActionListener} to be registered for all
-     * {@link ActionSource} components in this appication.  If not explicitly
-     * set, a default implementation must be provided that performs the
+     * <p>Return the default {@link ActionListener} to be registered for
+     * all {@link javax.faces.component.ActionSource} components in this
+     * appication.  If not explicitly set, a default implementation must
+     * be provided that performs the
+     *
      * following functions:</p>
      * <ul>
      * <li>The <code>processAction()</code> method must first call
@@ -99,13 +105,22 @@ public abstract class Application {
      *
      *     </li>
      * </ul>
+     *
+     * <p>Note that the specification for the default
+     * <code>ActionListener</code> contiues to call for the use of a
+     * <strong>deprecated</strong> property (<code>action</code>) and
+     * class (<code>MethodBinding</code>).  Unfortunately, this is
+     * necessary because the default <code>ActionListener</code> must
+     * continue to work with components that do not implement {@link
+     * javax.faces.component.ActionSource2}, and only implement {@link
+     * javax.faces.component.ActionSource}.</p>
      */
     public abstract ActionListener getActionListener();
 
 
     /**
      * <p>Set the default {@link ActionListener} to be registered for all
-     * {@link ActionSource} components.</p>
+     * {@link javax.faces.component.ActionSource} components.</p>
      * </p>
      *
      * @param listener The new default {@link ActionListener}
@@ -200,12 +215,21 @@ public abstract class Application {
      */
     public abstract void setNavigationHandler(NavigationHandler handler);
 
+    
+
 
     /**
-     * <p>Return the {@link PropertyResolver} instance that will be utilized
-     * to resolve method and value bindings.  If not explicitly set, a default
-     * implementation must be provided that performs the functions described in
-     * the {@link PropertyResolver} class description.</p>
+     * <p>Return a {@link PropertyResolver} instance that wraps the
+     * {@link ELResolver} instance that Faces provides to the unified EL
+     * for the resolution of expressions that appear programmatically in
+     * an application.</p>
+     *
+     * <p>Note that this no longer returns the default
+     * <code>PropertyResolver</code> since that class is now a no-op
+     * that aids in allowing custom <code>PropertyResolver</code>s to
+     * affect the EL resolution process.</p>
+     *
+     * @deprecated This has been replaced by {@link #getELResolver}.  
      */
     public abstract PropertyResolver getPropertyResolver();
 
@@ -218,15 +242,33 @@ public abstract class Application {
      *
      * @exception NullPointerException if <code>resolver</code>
      *  is <code>null</code>
+     *
+     * @deprecated The recommended way to affect the execution of the EL
+     * is to provide an <code>&lt;el-resolver&gt;</code> element at the
+     * right place in the application configuration resources which will
+     * be considered in the normal course of expression evaluation.
+     * This method now will cause the argument <code>resolver</code> to
+     * be wrapped inside an implementation of {@link ELResolver} and
+     * exposed to the EL resolution system as if the user had called
+     * {@link #addELResolver}.
      */
     public abstract void setPropertyResolver(PropertyResolver resolver);
 
 
     /**
-     * <p>Return the {@link VariableResolver} instance that will be utilized
-     * to resolve method and value bindings.  If not explicitly set, a default
-     * implementation must be provided that performs the functions described in
-     * the {@link VariableResolver} class description.</p>
+     * <p>Return the {@link VariableResolver} that wraps the {@link
+     * ELResolver} instance that Faces provides to the unified EL for
+     * the resolution of expressions that appear programmatically in an
+     * application.  The implementation must pass <code>null</code> as
+     * the base argument for any methods invoked on the underlying
+     * <code>ELResolver</code>.</p>
+     *
+     * <p>Note that this method no longer returns the default
+     * <code>VariableResolver</code>, since that class now is a no-op
+     * that aids in allowing custom <code>VariableResolver</code>s to
+     * affect the EL resolution process.</p>
+     *
+     * @deprecated This has been replaced by {@link #getELResolver}.  
      */
     public abstract VariableResolver getVariableResolver();
 
@@ -239,8 +281,75 @@ public abstract class Application {
      *
      * @exception NullPointerException if <code>resolver</code>
      *  is <code>null</code>
+     *
+     * @deprecated The recommended way to affect the execution of the EL
+     * is to provide an <code>&lt;el-resolver&gt;</code> element at the
+     * right place in the application configuration resources which will
+     * be considered in the normal course of expression evaluation.
+     * This method now will cause the argument <code>resolver</code> to
+     * be wrapped inside an implementation of {@link ELResolver} and
+     * exposed to the EL resolution system as if the user had called
+     * {@link #addELResolver}.
      */
     public abstract void setVariableResolver(VariableResolver resolver);
+
+    /**
+     * <p>Cause an the argument <code>resolver</code> to be added to the
+     * resolver chain as specified in section 5.5.1 of the JavaServer
+     * Faces Specification.</p>
+     *
+     * <p>It is not possible to remove an <code>ELResolver</code>
+     * registered with this method, once it has been registered.</p>
+     *
+     *  <p>It is illegal to register an <code>ELResolver</code> after
+     * the application has received any requests from the client.  If an
+     * attempt is made to register a listener after that time, an
+     * <code>IllegalStateException</code> is thrown. This restriction is
+     * in place to allow the JSP container to optimize for the common
+     * case where no additional <code>ELResolver</code>s are in the
+     * chain, aside from the standard ones. It is permissible to add
+     * <code>ELResolver</code>s before or after initialization to a
+     * <code>CompositeELResolver</code> that is already in the
+     * chain.</p>
+
+     *
+     * @since 1.2
+     */
+
+    public abstract void addELResolver(ELResolver resolver);
+
+    /**
+     * <p>Return the singleton {@link ELResolver} instance to be used
+     * for all EL resolution.  This is actually an instance of {@link
+     * javax.el.CompositeELResolver} that must contain the following
+     * <code>ELResolver</code> instances in the following order:</p>
+     *
+     * 	<ol>
+     *
+     *	  <li><p><code>ELResolver</code> instances declared using the
+     *	  &lt;el-resolver&gt; element in the application configuration
+     *	  resources.  </p></li>
+     *
+     *	  <li><p>An <code>implementation</code> that wraps the head of
+     *	  the legacy <code>VariableResolver</code> chain, as per section
+     *	  <i>VariableResolver ChainWrapper</i> in Chapter 5 in the spec
+     *	  document.</p></li>
+     *
+     *	  <li><p>An <code>implementation</code> that wraps the head of
+     *	  the legacy <code>PropertyResolver</code> chain, as per section
+     *	  <i>PropertyResolver ChainWrapper</i> in Chapter 5 in the spec
+     *	  document.</p></li>
+     *
+     *	  <li><p>Any <code>ELResolver</code> instances added by calls to
+     *	  {@link #addELResolver}.</p></li>
+     *
+     *	</ol>
+     *
+     *
+     * @since 1.2
+     */
+
+    public abstract ELResolver getELResolver();
 
 
     /**
@@ -336,12 +445,10 @@ public abstract class Application {
 
 
     /**
-     * <p>Call the <code>getValue()</code> method on the specified
-     * {@link ValueBinding}.  If it returns a {@link UIComponent} instance,
-     * return it as the value of this method.  If it does not, instantiate
-     * a new {@link UIComponent} instance of the specified component type,
-     * pass the new component to the <code>setValue()</code> method of the
-     * specified {@link ValueBinding}, and return it.</p>
+     * <p>Wrap the argument <code>componentBinding</code> in an
+     * implementation of {@link ValueExpression} and call through to
+     * {@link
+     * #createComponent(javax.el.ValueExpression,javax.faces.context.FacesContext,java.lang.String)}.</p>
      *
      * @param componentBinding {@link ValueBinding} representing a
      * component value binding expression (typically specified by the
@@ -352,8 +459,38 @@ public abstract class Application {
      *
      * @exception FacesException if a {@link UIComponent} cannot be created
      * @exception NullPointerException if any parameter is <code>null</code>
+     *
+     *
+     * @deprecated This has been replaced by {@link
+     * #createComponent(javax.el.ValueExpression,javax.faces.context.FacesContext,java.lang.String)}.
      */
     public abstract UIComponent createComponent(ValueBinding componentBinding,
+                                                FacesContext context,
+                                                String componentType)
+	throws FacesException;
+
+    /**
+     * <p>Call the <code>getValue()</code> method on the specified
+     * {@link ValueExpression}.  If it returns a {@link
+     * UIComponent} instance, return it as the value of this method.  If
+     * it does not, instantiate a new {@link UIComponent} instance of
+     * the specified component type, pass the new component to the
+     * <code>setValue()</code> method of the specified {@link
+     * ValueExpression}, and return it.</p>
+     *
+     * @param componentExpression {@link ValueExpression} representing a
+     * component value expression (typically specified by the
+     * <code>component</code> attribute of a custom tag)
+     * @param context {@link FacesContext} for the current request
+     * @param componentType Component type to create if the {@link
+     * ValueExpression} does not return a component instance
+     *
+     * @exception FacesException if a {@link UIComponent} cannot be created
+     * @exception NullPointerException if any parameter is <code>null</code>
+     * 
+     * @since 1.2
+     */
+    public abstract UIComponent createComponent(ValueExpression componentExpression,
                                                 FacesContext context,
                                                 String componentType)
 	throws FacesException;
@@ -458,11 +595,40 @@ public abstract class Application {
      */
     public abstract Iterator getConverterTypes();
 
+    /**
+     * <p>Return the {@link ExpressionFactory} instance for this
+     * application.  This instance is used by the convenience method
+     * {@link #evaluateExpressionGet}.</p>
+     *
+     * <p>The default implementation will simply return the
+     * <code>ExpressionFactory</code> from the JSP container by calling
+     * <code>JspFactory.getDefaultFactory().getJspApplicationContext(servletContext).getExpressionFactory()</code>. </p>
+     *
+     * @since 1.2
+     */
+
+    public abstract ExpressionFactory getExpressionFactory();
 
     /**
-     * <p>Instantiate and return a new {@link MethodBinding} for the specified
-     * method binding expression, which may be used to call the corresponding
-     * method later.</p>
+     * <p>Get a value by evaluating an expression.</p>
+     *
+     * <p>Call {@link #getExpressionFactory} then call {@link
+     * ExpressionFactory#createValueExpression} passing the argument
+     * <code>expression</code> and <code>expectedType</code>.  Call
+     * {@link FacesContext#getELContext} and pass it to {@link
+     * ValueExpression#getValue}, returning the result.</p>
+     *
+     */
+    
+    public abstract Object evaluateExpressionGet(FacesContext context,
+						 String expression, 
+						 Class expectedType) throws ELException;
+
+    /**
+     * <p>Call {@link #getExpressionFactory} then call {@link
+     * ExpressionFactory#createMethodExpression}, passing the given
+     * arguments, and wrap the result in a <code>MethodBinding</code>
+     * implementation, returning it.</p>
      *
      * @param ref Method binding expression for which to return a
      *  {@link MethodBinding} instance
@@ -474,6 +640,10 @@ public abstract class Application {
      *  is <code>null</code>
      * @exception ReferenceSyntaxException if the specified <code>ref</code>
      *  has invalid syntax
+     *
+     * @deprecated This has been replaced by calling {@link
+     * #getExpressionFactory} then {@link
+     * ExpressionFactory#createMethodExpression}.
      */
     public abstract MethodBinding createMethodBinding(String ref,
                                                       Class params[])
@@ -499,6 +669,41 @@ public abstract class Application {
      *
      */ 
     public abstract void setSupportedLocales(Collection locales);
+
+    /**
+     * <p>Provide a way for Faces applications to register an
+     * <code>ELContextListener</code> that will be notified on creation
+     * of <code>ELContext</code> instances.  This listener will be
+     * called once per request.</p>
+     * 
+     * @since 1.2
+     */
+
+    public abstract void addELContextListener(ELContextListener listener);
+
+    /**
+     * <p>Remove the argument <code>listener</code> from the list of
+     * {@link ELContextListener}s.  If <code>listener</code> is null, no
+     * exception is thrown and no action is performed.  If
+     * <code>listener</code> is not in the list, no exception is thrown
+     * and no action is performed.</p>
+     * 
+     * @since 1.2
+     */
+
+    public abstract void removeELContextListener(ELContextListener listener);
+
+
+    /**
+     * <p>If no calls have been made to {@link #addELContextListener},
+     * this method must return an empty array.</p>
+     *
+     * <p>Otherwise, return an array representing the list of listeners
+     * added by calls to {@link #addELContextListener}.</p>
+     *
+     */
+
+    public abstract ELContextListener [] getELContextListeners();
 
 
     /**
@@ -543,9 +748,11 @@ public abstract class Application {
 
 
     /**
-     * <p>Instantiate and return a new {@link ValueBinding} for the specified
-     * value binding expression, which may be used to manipulate the
-     * corresponding property value later.</p>
+     * <p>Call {@link #getExpressionFactory} then call {@link
+     * ExpressionFactory#createValueExpression}, passing the argument
+     * <code>ref</code>, <code>Object.class</code> for the expectedType,
+     * and <code>null</code>, for the fnMapper.</p>
+     *
      *
      * @param ref Value binding expression for which to return a
      *  {@link ValueBinding} instance
@@ -554,6 +761,10 @@ public abstract class Application {
      *  is <code>null</code>
      * @exception ReferenceSyntaxException if the specified <code>ref</code>
      *  has invalid syntax
+     *
+     * @deprecated This has been replaced by calling {@link
+     * #getExpressionFactory} then {@link
+     * ExpressionFactory#createValueExpression}.
      */
     public abstract ValueBinding createValueBinding(String ref)
         throws ReferenceSyntaxException;

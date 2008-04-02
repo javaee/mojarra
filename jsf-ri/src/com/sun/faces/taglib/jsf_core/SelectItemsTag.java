@@ -1,5 +1,5 @@
 /*
- * $Id: SelectItemsTag.java,v 1.7 2004/02/26 20:33:18 eburns Exp $
+ * $Id: SelectItemsTag.java,v 1.8 2005/05/05 20:51:27 edburns Exp $
  */
 
 /*
@@ -9,18 +9,18 @@
 
 package com.sun.faces.taglib.jsf_core;
 
-import com.sun.faces.taglib.BaseComponentTag;
-import com.sun.faces.util.Util;
-
+import javax.el.ValueExpression;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UISelectItems;
+import javax.faces.webapp.UIComponentELTag;
+import javax.servlet.jsp.JspException;
 
 /**
  * This class is the tag handler that evaluates the
  * <code>selectitems</code> custom tag.
  */
 
-public class SelectItemsTag extends BaseComponentTag {
+public class SelectItemsTag extends UIComponentELTag {
 
     //
     // Protected Constants
@@ -33,7 +33,8 @@ public class SelectItemsTag extends BaseComponentTag {
     //
     // Instance Variables
     //
-   
+    private ValueExpression value;
+
     // Attribute Instance Variables
 
     // Relationship Instance Variables
@@ -53,7 +54,12 @@ public class SelectItemsTag extends BaseComponentTag {
     // 
     // Accessors
     //
-    
+
+    public void setValue(ValueExpression value) {
+        this.value = value;
+    }
+
+
     //
     // General Methods
     //
@@ -72,14 +78,13 @@ public class SelectItemsTag extends BaseComponentTag {
     //
     protected void setProperties(UIComponent component) {
         super.setProperties(component);
-        UISelectItems selectItems = (UISelectItems) component;
-
+        
         if (null != value) {
-            if (isValueReference(value)) {
-                component.setValueBinding("value",
-                                          Util.getValueBinding(value));
+            if (!value.isLiteralText()) {
+                component.setValueExpression("value", value);
             } else {
-                selectItems.setValue(value);
+                ((UISelectItems) component).setValue(
+                    value.getExpressionString());
             }
         }
     }

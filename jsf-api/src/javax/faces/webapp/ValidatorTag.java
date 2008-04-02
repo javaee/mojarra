@@ -1,5 +1,5 @@
 /*
- * $Id: ValidatorTag.java,v 1.20 2005/04/21 18:55:31 edburns Exp $
+ * $Id: ValidatorTag.java,v 1.21 2005/05/05 20:51:14 edburns Exp $
  */
 
 /*
@@ -9,18 +9,12 @@
 
 package javax.faces.webapp;
 
-import javax.faces.FactoryFinder;
-import javax.faces.application.Application;
-import javax.faces.application.ApplicationFactory;
-import javax.faces.application.FacesMessage;
+import javax.el.ValueExpression;
 import javax.faces.component.EditableValueHolder;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
-import javax.faces.el.ValueBinding;
 import javax.faces.validator.Validator;
-import javax.faces.webapp.UIComponentTag;
 import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.tagext.Tag;
 import javax.servlet.jsp.tagext.TagSupport;
 
 
@@ -71,7 +65,7 @@ public class ValidatorTag extends TagSupport {
     private String validatorId = null;
     
     /**
-     * <p>The {@link ValueBinding} expression that evaluates to an object that 
+     * <p>The {@link ValueExpression} that evaluates to an object that 
      * implements {@link Validator}.</p>
      */
     private String binding = null;
@@ -88,11 +82,12 @@ public class ValidatorTag extends TagSupport {
 
     }
 
-    /*
-     * <p>Set the value binding expression of the {@link Validator} instance 
-     * to be created.</p>
+    /**
+     * <p>Set the expression that will be used to create a {@link ValueExpression} 
+     * that references a backing bean property of the {@link Validator} instance to 
+     * be created.</p>
      *
-     * @param binding The new value binding expression
+     * @param binding The new expression 
      *
      * @throws JspException if a JSP error occurs
      */
@@ -198,20 +193,21 @@ public class ValidatorTag extends TagSupport {
         
         FacesContext context = FacesContext.getCurrentInstance();
         Validator validator = null;
-        ValueBinding vb = null;
+        ValueExpression vb = null;
         
         // If "binding" is set, use it to create a validator instance.
         if (binding != null) {
-            vb = context.getApplication().createValueBinding(binding);
-            if (vb != null) {
-                try {
-                    validator = (Validator)vb.getValue(context);
+            try {
+                vb = context.getApplication().getExpressionFactory().createValueExpression(context.getELContext(), 
+                        binding, Object.class);
+                if (vb != null) {
+                    validator = (Validator)vb.getValue(context.getELContext());
                     if (validator != null) {
                         return validator;
                     }
-                } catch (Exception e) {
-                    throw new JspException(e);
                 }
+            } catch (Exception e) {
+                throw new JspException(e);
             }
         } 
         // If "validatorId" is set, use it to create the validator
@@ -222,13 +218,15 @@ public class ValidatorTag extends TagSupport {
             try {
                 String validatorIdVal = validatorId;
                 if (UIComponentTag.isValueReference(validatorId)) {
-                    ValueBinding idBinding = context.getApplication().createValueBinding(validatorId);
-                    validatorIdVal = (String)idBinding.getValue(context);
+                    ValueExpression idBinding = context.getApplication().
+                        getExpressionFactory().createValueExpression(context.getELContext(), 
+                            validatorId, Object.class);
+                    validatorIdVal = (String)idBinding.getValue(context.getELContext());
                 }
                 validator = context.getApplication().createValidator(validatorIdVal);
                 if (validator != null) { 
                     if (vb != null) {
-                        vb.setValue(context, validator);
+                        vb.setValue(context.getELContext(), validator);
                     }
                 }
             } catch (Exception e) {

@@ -1,5 +1,5 @@
 /*
- * $Id: VariableResolver.java,v 1.5 2004/02/26 20:30:57 eburns Exp $
+ * $Id: VariableResolver.java,v 1.6 2005/05/05 20:51:10 edburns Exp $
  */
 
 /*
@@ -17,6 +17,9 @@ import javax.faces.context.FacesContext;
 /**
  * <p><strong>VariableResolver</strong> represents a pluggable mechanism
  * for resolving a top-level variable reference at evaluation time.</p>
+ *
+ * @deprecated This has been replaced by {@link javax.el.ELResolver}
+ * when operating with a <code>null</code> <code>base</code> argument.
  */
 
 public abstract class VariableResolver {

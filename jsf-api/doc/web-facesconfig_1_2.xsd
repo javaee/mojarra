@@ -10,7 +10,7 @@
 
     <xsd:annotation>
         <xsd:documentation>
-            $Id: web-facesconfig_1_2.xsd,v 1.2 2004/11/03 17:00:20 rlubke Exp $
+            $Id: web-facesconfig_1_2.xsd,v 1.3 2005/05/05 20:50:58 edburns Exp $
         </xsd:documentation>
     </xsd:annotation>
 
@@ -290,6 +290,20 @@
                             request processing lifecycle.  The faces 
                             implementation must provide a default implementation 
                             of this class
+                            
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="el-resolver"
+                         type="j2ee:fully-qualified-classType">
+                <xsd:annotation>
+                    <xsd:documentation>
+                            
+                            The "el-resolver" element contains the fully
+                            qualified class name of the concrete
+                            javax.el.ELResolver implementation class
+                            that will be used during the processing of
+                            EL expressions.
                             
                     </xsd:documentation>
                 </xsd:annotation>

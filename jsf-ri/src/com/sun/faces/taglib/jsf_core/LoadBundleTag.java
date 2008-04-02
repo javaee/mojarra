@@ -1,5 +1,5 @@
 /*
- * $Id: LoadBundleTag.java,v 1.9 2005/04/21 18:55:38 edburns Exp $
+ * $Id: LoadBundleTag.java,v 1.10 2005/05/05 20:51:26 edburns Exp $
  */
 
 /*
@@ -9,12 +9,6 @@
 
 package com.sun.faces.taglib.jsf_core;
 
-import com.sun.faces.util.Util;
-
-import javax.faces.context.FacesContext;
-import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.tagext.TagSupport;
-
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -23,6 +17,13 @@ import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import java.util.Set;
+
+import javax.el.ValueExpression;
+import javax.faces.context.FacesContext;
+import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.tagext.TagSupport;
+
+import com.sun.faces.util.Util;
 
 /**
  * <p>Tag action that loads the specified ResourceBundle as a Map into
@@ -42,16 +43,15 @@ public class LoadBundleTag extends TagSupport {
 
     // ------------------------------------------------------------- Attributes
 
-    private String basename;
-    private String basename_;
+    private ValueExpression basenameExpression;
 
 
     /**
      * <p>Set the base name of the <code>ResourceBundle</code> to be
      * loaded.</p>
      */
-    public void setBasename(String newBasename) {
-        basename_ = newBasename;
+    public void setBasename(ValueExpression basename) {
+        this.basenameExpression = basename;
     }
 
 
@@ -83,16 +83,20 @@ public class LoadBundleTag extends TagSupport {
      */
     public int doStartTag() throws JspException {
 
+        FacesContext context = FacesContext.getCurrentInstance();
+
         // evaluate any VB expression that we were passed
-        basename = (String) Util.evaluateVBExpression(basename_);
+        String basename;
+
+        basename = (String)
+            Util.evaluateValueExpression(basenameExpression,
+                                         context.getELContext());
+
 
         if (null == basename || null == var) { // PENDING - i18n
             throw new JspException("The 'basename' or 'var' attributes" +
                 " evaluated to null.");
         }
-
-        Map toStore = null;
-        FacesContext context = FacesContext.getCurrentInstance();
 
         final ResourceBundle bundle =
             ResourceBundle.getBundle(basename,
@@ -102,7 +106,7 @@ public class LoadBundleTag extends TagSupport {
             throw new JspException("null ResourceBundle for " + basename);
         }
 
-        toStore =
+        Map toStore =
             new Map() {
                 // this is an immutable Map
 
@@ -251,7 +255,7 @@ public class LoadBundleTag extends TagSupport {
      */
     public void release() {
 
-        this.basename = null;
+        this.basenameExpression = null;
         this.var = null;
 
     }

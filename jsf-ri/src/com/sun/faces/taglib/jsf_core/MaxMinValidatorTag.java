@@ -1,5 +1,5 @@
 /*
- * $Id: MaxMinValidatorTag.java,v 1.5 2004/02/26 20:33:18 eburns Exp $
+ * $Id: MaxMinValidatorTag.java,v 1.6 2005/05/05 20:51:26 edburns Exp $
  */
 
 /*
@@ -11,14 +11,12 @@
 
 package com.sun.faces.taglib.jsf_core;
 
-import javax.faces.webapp.ValidatorTag;
-
 /**
  * <B>MaxMinValidatorTag</B> contains ivars for maximumSet and minimumSet.
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: MaxMinValidatorTag.java,v 1.5 2004/02/26 20:33:18 eburns Exp $
+ * @version $Id: MaxMinValidatorTag.java,v 1.6 2005/05/05 20:51:26 edburns Exp $
  */
 
 public abstract class MaxMinValidatorTag extends ValidatorTag {

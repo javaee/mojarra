@@ -1,5 +1,5 @@
 /*
- * $Id: VariableResolverImpl.java,v 1.21 2004/11/09 04:23:11 jhook Exp $
+ * $Id: VariableResolverImpl.java,v 1.22 2005/05/05 20:51:24 edburns Exp $
  */
 
 /*
@@ -22,95 +22,49 @@ import javax.faces.context.FacesContext;
 import javax.faces.el.EvaluationException;
 import javax.faces.el.VariableResolver;
 
+import javax.el.ELResolver;
+import javax.el.ELContext;
+import javax.el.ELException;
+
+import com.sun.faces.util.Util;
+
 /**
  * <p>
  * Concrete implementation of <code>VariableResolver</code>.
  * </p>
  */
 
-public class VariableResolverImpl extends VariableResolver implements ELConstants
-{
+public class VariableResolverImpl extends VariableResolver {
+    
     private static final Log log = LogFactory
             .getLog(VariableResolverImpl.class);
+    
+    private ELResolver elResolver = null;
 
+    public VariableResolverImpl(ELResolver resolver ) {
+        this.elResolver = resolver;
+    }
+    
     //
     // Relationship Instance Variables
     // 
 
     // Specified by javax.faces.el.VariableResolver.resolveVariable()
     public Object resolveVariable(FacesContext context, String name)
-            throws EvaluationException
-    {
-
-        ExternalContext extCtx = context.getExternalContext();
-
-        int index = Arrays.binarySearch(IMPLICIT_OBJECTS, name);
-
-        if (index < 0)
-        {
-            Object value = extCtx.getRequestParameterMap().get(name);
-            if (value == null)
-            {
-                value = extCtx.getRequestMap().get(name);
-                if (value == null)
-                {
-                    value = extCtx.getSessionMap().get(name);
-                    if (value == null)
-                    {
-                        value = extCtx.getApplicationMap().get(name);
-                        if (value == null)
-                        {
-                            // if it's a managed bean try and create it
-                            ApplicationAssociate associate = ApplicationAssociate
-                                    .getInstance(context.getExternalContext());
-
-                            if (null != associate)
-                            {
-                                value = associate
-                                        .createAndMaybeStoreManagedBeans(
-                                                context, name);
-                            }
-                        }
-                    }
-                }
-            }
-            return value;
+            throws EvaluationException {
+        Object result = null;
+        if (context == null || name == null) {
+            String message = Util.getExceptionMessageString
+                (Util.NULL_PARAMETERS_ERROR_MESSAGE_ID);
+            message = message + " context " + context + " name " + name;
+            throw new NullPointerException(message);
         }
-        else
-        {
-            switch (index)
-            {
-                case APPLICATION:
-                    return extCtx.getContext();
-                case APPLICATION_SCOPE:
-                    return extCtx.getApplicationMap();
-                case COOKIE:
-                    return extCtx.getRequestCookieMap();
-                case FACES_CONTEXT:
-                    return context;
-                case HEADER:
-                    return extCtx.getRequestHeaderMap();
-                case HEADER_VALUES:
-                    return extCtx.getRequestHeaderValuesMap();
-                case INIT_PARAM:
-                    return extCtx.getInitParameterMap();
-                case PARAM:
-                    return extCtx.getRequestParameterMap();
-                case PARAM_VALUES:
-                    return extCtx.getRequestParameterValuesMap();
-                case REQUEST:
-                    return extCtx.getRequest();
-                case REQUEST_SCOPE:
-                    return extCtx.getRequestMap();
-                case SESSION:
-                    return extCtx.getSession(true);
-                case SESSION_SCOPE:
-                    return extCtx.getSessionMap();
-                case VIEW:
-                    return context.getViewRoot();
-                default:
-                    return null;
-            }
+        
+        try {
+            result = elResolver.getValue(context.getELContext(), null, name);
+        } catch (ELException elex) {
+            throw new EvaluationException(elex);
         }
+        return result;
     }
 }

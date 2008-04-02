@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKitSpecificationGenerator.java,v 1.6 2004/12/13 19:07:50 rlubke Exp $
+ * $Id: RenderKitSpecificationGenerator.java,v 1.7 2005/05/05 20:51:39 edburns Exp $
  */
 
 /*
@@ -60,12 +60,12 @@ public class RenderKitSpecificationGenerator implements Generator {
     public RenderKitSpecificationGenerator(PropertyManager propManager) {
 
         this.renderKitId =
-            propManager.getProperty(PropertyManager.RENDERKIT_ID)[0];
+            propManager.getProperty(PropertyManager.RENDERKIT_ID);
 
         baseDirectory =
             new File(System.getProperty("user.dir") +
             File.separatorChar +
-            propManager.getProperty(PropertyManager.BASE_OUTPUT_DIR)[0] +
+            propManager.getProperty(PropertyManager.BASE_OUTPUT_DIR) +
             File.separatorChar + "facesdoc");
 
         if (!baseDirectory.exists()) {

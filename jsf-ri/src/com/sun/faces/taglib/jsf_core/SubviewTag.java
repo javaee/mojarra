@@ -1,5 +1,5 @@
 /*
- * $Id: SubviewTag.java,v 1.5 2004/02/26 20:33:18 eburns Exp $
+ * $Id: SubviewTag.java,v 1.6 2005/05/05 20:51:27 edburns Exp $
  */
 
 /*
@@ -9,9 +9,9 @@
 
 package com.sun.faces.taglib.jsf_core;
 
-import javax.faces.webapp.UIComponentTag;
+import javax.faces.webapp.UIComponentELTag;
 
-public class SubviewTag extends UIComponentTag {
+public class SubviewTag extends UIComponentELTag {
 
     //
     // Protected Constants

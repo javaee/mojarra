@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.157 2005/05/02 12:49:57 edburns Exp $
+ * $Id: Util.java,v 1.158 2005/05/05 20:51:28 edburns Exp $
  */
 
 /*
@@ -31,13 +31,15 @@ import javax.faces.context.ResponseWriter;
 import javax.faces.convert.Converter;
 import javax.faces.el.MethodBinding;
 import javax.faces.el.ReferenceSyntaxException;
-import javax.faces.el.ValueBinding;
+import javax.el.ValueExpression;
+import javax.el.ELContext;
 import javax.faces.lifecycle.LifecycleFactory;
 import javax.faces.model.SelectItem;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
 import javax.faces.render.ResponseStateManager;
 import javax.servlet.ServletContext;
+import javax.faces.el.ValueBinding;
 import javax.servlet.jsp.jstl.fmt.LocalizationContext;
 
 import java.io.IOException;
@@ -61,7 +63,7 @@ import java.text.MessageFormat;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.157 2005/05/02 12:49:57 edburns Exp $
+ * @version $Id: Util.java,v 1.158 2005/05/05 20:51:28 edburns Exp $
  */
 
 public class Util extends Object {
@@ -316,6 +318,11 @@ public class Util extends Object {
     public static final String APPLICATION_ASSOCIATE_EXISTS_ID =
         "com.sun.faces.APPLICATION_ASSOCIATE_EXISTS";
 
+    public static final String OBJECT_IS_READONLY =
+        "com.sun.faces.OBJECT_IS_READONLY";
+
+    public static final String APPLICATION_INIT_COMPLETE_ERROR_ID = 
+            "com.sun.faces.APPLICATION_INIT_COMPLETE_ERROR_ID";
 
 // README - make sure to add the message identifier constant
 // (ex: Util.CONVERSION_ERROR_MESSAGE_ID) and the number of substitution
@@ -713,9 +720,11 @@ public class Util extends Object {
         if (null !=
             (bundleName = (String) component.getAttributes().get(bundleAttr))) {
             // verify there is a Locale for this localizationContext
-            LocalizationContext locCtx = (LocalizationContext)
-                Util.getValueBinding(bundleName).getValue(context);
-            if (locCtx != null) {
+            LocalizationContext locCtx = null;
+            if (null != (locCtx =
+                (javax.servlet.jsp.jstl.fmt.LocalizationContext)
+                (Util.getValueExpression(bundleName)).
+                getValue(context.getELContext()))) {
                 result = locCtx.getLocale();
                 assert (null != result);
             }
@@ -974,6 +983,15 @@ public class Util extends Object {
         return result.toString();
     }
 
+    public static Object evaluateValueExpression(ValueExpression expression,
+                                                 ELContext elContext) {
+           if (expression.isLiteralText()) {
+               return expression.getExpressionString();
+           } else {
+               return expression.getValue(elContext);
+           }
+       }
+
 
     public static Object evaluateVBExpression(String expression) {
         if (expression == null || (!isVBExpression(expression))) {
@@ -981,8 +999,7 @@ public class Util extends Object {
         }
         FacesContext context = FacesContext.getCurrentInstance();
         Object result =
-            context.getApplication().createValueBinding(expression).getValue(
-                context);
+            getValueExpression(expression).getValue(context.getELContext());
         return result;
 
     }
@@ -995,6 +1012,17 @@ public class Util extends Object {
         FacesContext context = FacesContext.getCurrentInstance();
         vb = context.getApplication().createValueBinding(valueRef);
         return vb;
+    }
+
+    public static ValueExpression getValueExpression(String valueRef) {
+        ValueExpression ve = null;
+        // Must parse the value to see if it contains more than
+        // one expression
+        FacesContext context = FacesContext.getCurrentInstance();
+        ve = context.getApplication().getExpressionFactory().
+            createValueExpression(context.getELContext(), valueRef, 
+                Object.class);
+        return ve;
     }
 
 
@@ -1324,6 +1352,7 @@ public class Util extends Object {
     public static String stripBracketsIfNecessary(String expression)
         throws ReferenceSyntaxException {
         assert (null != expression);
+        int len = 0;
         // look for invalid expressions
         if ('#' == expression.charAt(0)) {
             if ('{' != expression.charAt(1)) {
@@ -1331,8 +1360,6 @@ public class Util extends Object {
                     Util.INVALID_EXPRESSION_ID,
                     new Object[]{expression}));
             }
-
-            int len;
             if ('}' != expression.charAt((len = expression.length()) - 1)) {
                 throw new ReferenceSyntaxException(Util.getExceptionMessageString(
                     Util.INVALID_EXPRESSION_ID,
@@ -1374,7 +1401,7 @@ public class Util extends Object {
      * <code>sessionScope.TestBean.one</code> should return "session" 
      * as the scope.</p>
      *
-     * @param valueBinding the expression
+     * @param ValueExpression the expression
      *
      * @param outString an allocated String Array into which we put the
      * first segment.
@@ -1483,28 +1510,6 @@ public class Util extends Object {
 	}
 	return result;
     }
-
-    /**
-     * <p>Return <code>true</code> if the specified value conforms to the
-     * syntax requirements of a value binding expression. </p> 
-     *
-     * @param value The value to evaluate
-     *
-     * @exception NullPointerException if <code>value</code> is
-     *  <code>null</code>
-     */
-    public static boolean isValueReference(String value) {
-                                                                                
-        if (value == null) {
-            throw new NullPointerException();
-        }
-        if ((value.indexOf("#{") != -1) &&
-            (value.indexOf("#{") < value.indexOf('}'))) {
-            return true;
-        }
-        return false;
-    }
-
 
     /**
      * <p/>

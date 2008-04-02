@@ -1,5 +1,5 @@
 /*
- * $Id: ValidateRequiredTag.java,v 1.11 2004/04/06 15:02:04 eburns Exp $
+ * $Id: ValidateRequiredTag.java,v 1.12 2005/05/05 20:51:27 edburns Exp $
  */
 
 /*
@@ -11,8 +11,10 @@
 
 package com.sun.faces.taglib.jsf_core;
 
-import javax.faces.webapp.ValidatorTag;
+import javax.faces.context.FacesContext;
 import javax.servlet.jsp.JspException;
+import javax.el.ValueExpression;
+import javax.el.ExpressionFactory;
 
 
 /**
@@ -20,27 +22,12 @@ import javax.servlet.jsp.JspException;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ValidateRequiredTag.java,v 1.11 2004/04/06 15:02:04 eburns Exp $
+ * @version $Id: ValidateRequiredTag.java,v 1.12 2005/05/05 20:51:27 edburns Exp $
  */
 
 public class ValidateRequiredTag extends ValidatorTag {
 
-//
-// Protected Constants
-//
-
-//
-// Class Variables
-//
-
-//
-// Instance Variables
-//
-
-// Attribute Instance Variables
-
-
-// Relationship Instance Variables
+   private static ValueExpression VALIDATOR_ID_EXPR = null;
 
 //
 // Constructors and Initializers    
@@ -48,6 +35,14 @@ public class ValidateRequiredTag extends ValidatorTag {
 
     public ValidateRequiredTag() {
         super();
+        if (VALIDATOR_ID_EXPR == null) {
+            FacesContext context = FacesContext.getCurrentInstance();
+            ExpressionFactory factory = context.getApplication().
+                    getExpressionFactory();
+            VALIDATOR_ID_EXPR =
+                factory.createValueExpression(context.getELContext(), 
+                    "javax.faces.Required", String.class);
+        }
     }
 
 //
@@ -59,8 +54,8 @@ public class ValidateRequiredTag extends ValidatorTag {
 //
 
     public int doStartTag() throws JspException {
-        super.setValidatorId("javax.faces.Required");
-	return super.doStartTag();
+        super.setValidatorId(VALIDATOR_ID_EXPR);
+        return super.doStartTag();
     }
 
 

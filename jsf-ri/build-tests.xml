@@ -120,6 +120,7 @@
       <!-- For cactus.properties -->
       <pathelement location="${conf.test.dir}"/>
       <pathelement location="${jstl.jar}"/>
+      <pathelement location="${el-api.jar}"/>
     </path>
 
     <path id="catalina-ant.classpath">
@@ -164,9 +165,10 @@
 <!-- 
         Create directories and copy files for the struts tests
 -->
-    <target name="prepare.test" 
+    <target name="prepare.test" depends="init">
+    <!--
             depends="init,discover.jsp.level,prepare.test.jsp2,prepare.test.jsp12">
-
+-->
         <!-- Create target directories for classes -->
         <mkdir dir="${out.test.dir}/WEB-INF/classes"/>
 
@@ -176,6 +178,7 @@
 
     </target>
 
+    <!--
   <target name="discover.jsp.level">
     <echo message="jsp.jar is ${jsp.jar}"/>
     <available classpath="${jsp.jar}" 
@@ -193,6 +196,7 @@
     <copy file="${basedir}/test/com/sun/faces/el/impl/PageContextImpl.jsp12"
           tofile="${basedir}/test/com/sun/faces/el/impl/PageContextImpl.java"/>
   </target>
+  -->
 
 <!-- 
         Compile unit tests
@@ -325,9 +329,15 @@
             <test todir="${test.results.dir}" name="com.sun.faces.context.TestFacesContextImpl"/> 
             <test todir="${test.results.dir}" name="com.sun.faces.convert.TestConverters"/>
             <test todir="${test.results.dir}" name="com.sun.faces.el.impl.TestELImpl"/>
+            <test todir="${test.results.dir}" name="com.sun.faces.el.impl.TestUnifiedELImpl"/>
             <test todir="${test.results.dir}" name="com.sun.faces.el.TestPropertyResolverImpl"/>
-            <test todir="${test.results.dir}" name="com.sun.faces.el.TestValueBindingImpl"/>
+            <test todir="${test.results.dir}" name="com.sun.faces.el.TestValueBindingImpl"/> 
+            <test todir="${test.results.dir}" name="com.sun.faces.el.TestValueExpressionImpl"/> 
+            <test todir="${test.results.dir}" name="com.sun.faces.el.TestValueBindingImpl_Model"/> 
+            <test todir="${test.results.dir}" name="com.sun.faces.el.TestValueExpressionImpl_Model"/> 
             <test todir="${test.results.dir}" name="com.sun.faces.el.TestVariableResolverImpl"/>
+            <test todir="${test.results.dir}" name="com.sun.faces.el.TestMethodRef"/>
+            <test todir="${test.results.dir}" name="com.sun.faces.el.TestMethodExpressionImpl"/>
             <test todir="${test.results.dir}" name="com.sun.faces.lifecycle.TestApplyRequestValuesPhase"/>
             <test todir="${test.results.dir}" name="com.sun.faces.lifecycle.TestInvokeApplicationPhase"/>
             <test todir="${test.results.dir}" name="com.sun.faces.lifecycle.TestLifecycleFactoryImpl"/>

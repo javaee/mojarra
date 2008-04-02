@@ -1,5 +1,5 @@
 /*
- * $Id: MockFacesContext.java,v 1.21 2005/03/18 14:52:08 rogerk Exp $
+ * $Id: MockFacesContext.java,v 1.22 2005/05/05 20:51:16 edburns Exp $
  */
 
 /*
@@ -30,6 +30,8 @@ import javax.faces.lifecycle.Lifecycle;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
 
+import javax.el.ELContext;
+
 
 // Mock Object for FacesContext
 public class MockFacesContext extends FacesContext {
@@ -47,6 +49,8 @@ public class MockFacesContext extends FacesContext {
     public MockFacesContext(ExternalContext externalContext) {
         setExternalContext(externalContext);
         setCurrentInstance(this);
+	elContext = new MockELContext(new MockELResolver());
+	elContext.putContext(FacesContext.class, this);
     }
 
 
@@ -73,6 +77,10 @@ public class MockFacesContext extends FacesContext {
         return (messages.keySet().iterator());
     }
 
+    private ELContext elContext = null;
+    public ELContext getELContext() {
+	return (this.elContext);
+    }
 
     // externalContext
     private ExternalContext externalContext = null;

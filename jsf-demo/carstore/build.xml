@@ -80,6 +80,7 @@
     <pathelement location="${build}/WEB-INF/classes"/>
     <pathelement location="${servlet.jar}"/>
     <pathelement location="${jsp.jar}" />
+    <pathelement location="${el-api.jar}" />
   </path>
 
   <path id="catalina-ant.classpath">

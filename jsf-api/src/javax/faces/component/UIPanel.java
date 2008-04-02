@@ -1,5 +1,5 @@
 /*
- * $Id: UIPanel.java,v 1.29 2004/02/26 20:30:34 eburns Exp $
+ * $Id: UIPanel.java,v 1.30 2005/05/05 20:51:04 edburns Exp $
  */
 
 /*
@@ -13,7 +13,6 @@ package javax.faces.component;
 import java.io.IOException;
 import javax.faces.application.Application;
 import javax.faces.context.FacesContext;
-import javax.faces.el.ValueBinding;
 
 
 /**

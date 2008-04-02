@@ -1,5 +1,5 @@
 /*
- * $Id: JspTLD21Generator.java,v 1.1 2004/12/13 19:07:49 rlubke Exp $
+ * $Id: JspTLD21Generator.java,v 1.2 2005/05/05 20:51:39 edburns Exp $
  */
 
 /*
@@ -9,41 +9,39 @@
 
 package com.sun.faces.generate;
 
-import java.util.List;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.HashMap;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
-import com.sun.faces.config.beans.DescriptionBean;
-import com.sun.faces.config.beans.RendererBean;
-import com.sun.faces.config.beans.ComponentBean;
-import com.sun.faces.config.beans.PropertyBean;
 import com.sun.faces.config.beans.AttributeBean;
+import com.sun.faces.config.beans.ComponentBean;
+import com.sun.faces.config.beans.DescriptionBean;
+import com.sun.faces.config.beans.PropertyBean;
+import com.sun.faces.config.beans.RendererBean;
 
 /**
  * <p>A <code>JspTldGenerator</code> specific for JSP 2.1 style TLDs.</p>
  */
 public class JspTLD21Generator extends JspTLDGenerator {
 
-    // PENDING - Modify once 2.1 is available
-    private static final String JSP_VERSION = "2.0";
+    private static final String JSP_VERSION = "2.1";
     private static final String JSF_TLIB_VERSION = "1.2";
 
     /**
      * <p>Schema related attributes.</p>
      */
-    private static Map TAG_LIB_SCHEMA_ATTRIBUTES = new HashMap(4);
+    private static Map TAG_LIB_SCHEMA_ATTRIBUTES = new HashMap();
     static {
         TAG_LIB_SCHEMA_ATTRIBUTES.put("xmlns",
             "http://java.sun.com/xml/ns/j2ee");
         TAG_LIB_SCHEMA_ATTRIBUTES.put("xmlns:xsi",
             "http://www.w3.org/2001/XMLSchema-instance");
         TAG_LIB_SCHEMA_ATTRIBUTES.put("xsi:schemaLocation",
-            "http://java.sun.com/xml/ns/j2ee web-jsptaglibrary_2_0.xsd");
+            "http://java.sun.com/xml/ns/j2ee web-jsptaglibrary_2_1.xsd");
         TAG_LIB_SCHEMA_ATTRIBUTES.put("version", JSP_VERSION);
     }
-
 
     // ------------------------------------------------------------ Constructors
 
@@ -52,7 +50,7 @@ public class JspTLD21Generator extends JspTLDGenerator {
 
         super(propManager);
 
-    }
+    } // END JspTLD21Generator
 
 
     // ------------------------------------------------------- Protected Methods
@@ -69,7 +67,7 @@ public class JspTLD21Generator extends JspTLDGenerator {
 
         writer.startElement("description");
         writer.writeText(
-            propManager.getProperty(PropertyManager.TAGLIB_DESCRIPTION)[0]);
+            propManager.getProperty(PropertyManager.TAGLIB_DESCRIPTION));
         writer.closeElement();
 
         writer.startElement("tlib-version");
@@ -78,11 +76,11 @@ public class JspTLD21Generator extends JspTLDGenerator {
 
         writer.startElement("short-name");
         writer.writeText(
-            propManager.getProperty(PropertyManager.TAGLIB_SHORT_NAME)[0]);
+            propManager.getProperty(PropertyManager.TAGLIB_SHORT_NAME));
         writer.closeElement();
 
         writer.startElement("uri");
-        writer.writeText(propManager.getProperty(PropertyManager.TAGLIB_URI)[0]);
+        writer.writeText(propManager.getProperty(PropertyManager.TAGLIB_URI));
         writer.closeElement();
 
     } // end tldDescription
@@ -99,12 +97,11 @@ public class JspTLD21Generator extends JspTLDGenerator {
             GeneratorUtil.getComponentFamilyComponentMap(configBean);
         Map renderersByComponentFamily =
             GeneratorUtil.getComponentFamilyRendererMap(configBean,
-                propManager.getProperty(PropertyManager.RENDERKIT_ID)[0]);
+                propManager.getProperty(PropertyManager.RENDERKIT_ID));
         String targetPackage =
-            propManager.getProperty(PropertyManager.TARGET_PACKAGE)[0];
+            propManager.getProperty(PropertyManager.TARGET_PACKAGE);
 
-        for (Iterator keyIter = renderersByComponentFamily.keySet()
-            .iterator();
+        for (Iterator keyIter = renderersByComponentFamily.keySet().iterator();
              keyIter.hasNext();) {
 
             String componentFamily = (String) keyIter.next();
@@ -206,8 +203,10 @@ public class JspTLD21Generator extends JspTLDGenerator {
                         }
                     }
 
+                    String propertyName = property.getPropertyName();
+
                     writer.startElement("name");
-                    writer.writeText(property.getPropertyName());
+                    writer.writeText(propertyName);
                     writer.closeElement();
 
                     writer.startElement("required");
@@ -216,10 +215,33 @@ public class JspTLD21Generator extends JspTLDGenerator {
                                      Boolean.FALSE.toString());
                     writer.closeElement();
 
-                    writer.startElement("rtexprvalue");
-                    writer.writeText(getRtexprvalue(tagName,
-                        property.getPropertyName()));
-                    writer.closeElement();
+                    if (!"id".equals(propertyName)) {
+
+                        if (property.isMethodExpressionEnabled()) {
+                            writer.startElement("deferred-method");
+                            writer.startElement("method-signature");
+                            writer.writeText(
+                                property.getMethodSignature());
+                            writer.closeElement(2);
+                        } else {
+                            // PENDING FIX ME
+                            String type = property.getPropertyClass();
+//                            String wrapperType = (String)
+//                                GeneratorUtil.convertToPrimitive(type);
+//                            if (wrapperType != null) {
+//                                type = wrapperType;
+//                            }
+                            writer.startElement("deferred-value");
+                            writer.startElement("type");
+                            writer.writeText(type);
+                            writer.closeElement(2);
+                        }
+
+                    } else {
+                        writer.startElement("rtexprvalue");
+                        writer.writeText(getRtexprvalue(tagName, propertyName));
+                        writer.closeElement();
+                    }
 
                     writer.closeElement(); // closes attribute element above
 
@@ -260,8 +282,10 @@ public class JspTLD21Generator extends JspTLDGenerator {
                         }
                     }
 
+                    String attributeName = attribute.getAttributeName();
+
                     writer.startElement("name");
-                    writer.writeText(attribute.getAttributeName());
+                    writer.writeText(attributeName);
                     writer.closeElement();
 
                     writer.startElement("required");
@@ -270,10 +294,24 @@ public class JspTLD21Generator extends JspTLDGenerator {
                                      Boolean.FALSE.toString());
                     writer.closeElement();
 
-                    writer.startElement("rtexprvalue");
-                    writer.writeText(getRtexprvalue(tagName,
-                        attribute.getAttributeName()));
-                    writer.closeElement();
+                    if (!"id".equals(attributeName)) {
+                        // PENDING FIX ME
+                        String type = attribute.getAttributeClass();
+                        //String wrapperType = (String)
+                        //  GeneratorUtil.convertToPrimitive(type);
+                        //if (wrapperType != null) {
+                        //    type = wrapperType;
+                        //}
+                        writer.startElement("deferred-value");
+                        writer.startElement("type");
+                        writer.writeText(type);
+                        writer.closeElement(2);
+
+                    } else {
+                        writer.startElement("rtexprvalue");
+                        writer.writeText(getRtexprvalue(tagName, attributeName));
+                        writer.closeElement();
+                    }
 
                     writer.closeElement(); // closes attribute element above
 
@@ -284,7 +322,7 @@ public class JspTLD21Generator extends JspTLDGenerator {
 
                 writer.startElement("description");
                 writer.writeText(
-                    "The value binding expression linking this component to a property in a backing bean");
+                    "The ValueExpression linking this component to a property in a backing bean");
                 writer.closeElement();
 
                 writer.startElement("name");
@@ -295,12 +333,14 @@ public class JspTLD21Generator extends JspTLDGenerator {
                 writer.writeText("false");
                 writer.closeElement();
 
-                writer.startElement("rtexprvalue");
-                writer.writeText("false");
+                writer.startElement("deferred-value");
+                writer.startElement("type");
+                writer.writeText("javax.faces.component.UIComponent");
+                writer.closeElement(2);
 
-                // close the most recent rtexprvalue, attribute, and tag
+                // close the most recent attribute, and tag
                 // elements
-                writer.closeElement(3);
+                writer.closeElement(2);
 
             }
         }
@@ -313,6 +353,6 @@ public class JspTLD21Generator extends JspTLDGenerator {
             writer.write(tagDef);
         }
 
-    }
+    } // END writeTags   
 
 }

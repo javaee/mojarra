@@ -1,5 +1,5 @@
 /*
- * $Id: PropertyResolver.java,v 1.10 2004/10/01 14:25:10 edburns Exp $
+ * $Id: PropertyResolver.java,v 1.11 2005/05/05 20:51:10 edburns Exp $
  */
 
 /*
@@ -14,15 +14,17 @@ package javax.faces.el;
 /**
  * <p><strong>PropertyResolver</strong> represents a pluggable mechanism
  * for accessing a "property" of an underlying Java object instance.
- * Different {@link PropertyResolver} implementations can support property
- * resolution on instances of different Java classes (such as
+ * Different {@link PropertyResolver} implementations can support
+ * property resolution on instances of different Java classes (such as
  * introspection-based access to properties of a JavaBeans component, or
  * <code>get()</code> and <code>put()</code> calls on a
  * <code>java.util.Map</code> instance).</p>
  * <p>All implementations must respect the rules for JavaBeans component,
  * <code>java.util.Map</code>, <code>java.util.List</code> and array
- * instances defined for each method but are allowed to add custom semantics
- * for other types.</p>
+ * instances defined for each method but are allowed to add custom
+ * semantics for other types.</p>
+ *
+ * @deprecated This has been replaced by {@link javax.el.ELResolver}.  
  */
 
 public abstract class PropertyResolver {

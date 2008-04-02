@@ -1,5 +1,5 @@
 /*
- * $Id: ParameterTag.java,v 1.15 2004/02/26 20:33:18 eburns Exp $
+ * $Id: ParameterTag.java,v 1.16 2005/05/05 20:51:26 edburns Exp $
  */
 
 /*
@@ -11,13 +11,13 @@
 
 package com.sun.faces.taglib.jsf_core;
 
-import com.sun.faces.taglib.BaseComponentTag;
-import com.sun.faces.util.Util;
-
+import javax.el.ValueExpression;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIParameter;
+import javax.faces.webapp.UIComponentELTag;
+import javax.servlet.jsp.JspException;
 
-public class ParameterTag extends BaseComponentTag {
+public class ParameterTag extends UIComponentELTag {
 
 //
 // Protected Constants
@@ -30,6 +30,8 @@ public class ParameterTag extends BaseComponentTag {
 //
 // Instance Variables
 //
+    private ValueExpression name;
+    private ValueExpression value;
 
 // Attribute Instance Variables
 
@@ -51,6 +53,14 @@ public class ParameterTag extends BaseComponentTag {
 //
 // Accessors
 //
+    public void setName(ValueExpression name) {
+        this.name = name;
+    }
+
+
+    public void setValue(ValueExpression value) {
+        this.value = value;
+    }
 
 //
 // General Methods
@@ -71,20 +81,18 @@ public class ParameterTag extends BaseComponentTag {
         UIParameter parameter = (UIParameter) component;
 
         if (name != null) {
-            if (isValueReference(name)) {
-                component.setValueBinding("name",
-                                          Util.getValueBinding(name));
+            if (!name.isLiteralText()) {
+                parameter.setValueExpression("name", name);
             } else {
-                parameter.setName(name);
+                parameter.setName(name.getExpressionString());
             }
         }
         // if component has non null value, do not call setValue().
         if (value != null) {
-            if (isValueReference(value)) {
-                component.setValueBinding("value",
-                                          Util.getValueBinding(value));
+            if (!value.isLiteralText()) {
+                component.setValueExpression("value", value);
             } else {
-                parameter.setValue(value);
+                parameter.setValue(value.getExpressionString());
             }
         }
     }

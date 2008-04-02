@@ -1,5 +1,5 @@
 /*
- * $Id: VerbatimTag.java,v 1.11 2005/04/21 18:55:38 edburns Exp $
+ * $Id: VerbatimTag.java,v 1.12 2005/05/05 20:51:27 edburns Exp $
  */
 
 /*
@@ -9,11 +9,10 @@
 
 package com.sun.faces.taglib.jsf_core;
 
+import javax.el.ValueExpression;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIOutput;
-import javax.faces.context.FacesContext;
-import javax.faces.el.ValueBinding;
-import javax.faces.webapp.UIComponentTag;
+import javax.faces.webapp.UIComponentELTag;
 import javax.servlet.jsp.JspException;
 
 /**
@@ -21,16 +20,16 @@ import javax.servlet.jsp.JspException;
  * and allows the user to write raw markup.</p>
  */
 
-public class VerbatimTag extends UIComponentTag {
+public class VerbatimTag extends UIComponentELTag {
 
 
     // ------------------------------------------------------------- Attributes
 
 
-    private String escape = null;
+    private ValueExpression escape = null;
 
 
-    public void setEscape(String escape) {
+    public void setEscape(ValueExpression escape) {
         this.escape = escape;
     }
 
@@ -52,16 +51,7 @@ public class VerbatimTag extends UIComponentTag {
 
         super.setProperties(component);
         if (null != escape) {
-            if (isValueReference(escape)) {
-                ValueBinding vb =
-                    FacesContext.getCurrentInstance().getApplication().
-                    createValueBinding(escape);
-                component.setValueBinding("escape", vb);
-            } else {
-                boolean _escape = Boolean.valueOf(escape).booleanValue();
-                component.getAttributes().put
-                    ("escape", _escape ? Boolean.TRUE : Boolean.FALSE);
-            }
+                component.setValueExpression("escape", escape);
         } else {
             component.getAttributes().put("escape", Boolean.FALSE);
         }

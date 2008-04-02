@@ -1,5 +1,5 @@
 /*
- * $Id: ActionListenerTag.java,v 1.18 2004/12/20 21:26:35 rogerk Exp $
+ * $Id: ActionListenerTag.java,v 1.19 2005/05/05 20:51:25 edburns Exp $
  */
 
 /*
@@ -9,28 +9,30 @@
 
 package com.sun.faces.taglib.jsf_core;
 
-import com.sun.faces.util.Util;
-
+import javax.el.ValueExpression;
+import javax.el.ELException;
 import javax.faces.component.ActionSource;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
-import javax.faces.el.ValueBinding;
 import javax.faces.event.ActionListener;
 import javax.faces.webapp.UIComponentTag;
+import javax.faces.webapp.UIComponentClassicTagBase;
+import javax.faces.webapp.UIComponentELTag;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.TagSupport;
 
+import com.sun.faces.util.Util;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 
 
 /**
  * <p>Tag implementation that creates a {@link ActionListener} instance
  * and registers it on the {@link UIComponent} associated with our most
  * immediate surrounding instance of a tag whose implementation class
- * is a subclass of {@link UIComponentTag}.  This tag creates no output to the
- * page currently being created.</p>
+ * is a subclass of {@link UIComponentTag}.  This tag creates no output to
+ * the page currently being created.</p>
  * <p/>
  * <p>This class may be used directly to implement a generic event handler
  * registration tag (based on the fully qualified Java class name specified
@@ -62,16 +64,14 @@ public class ActionListenerTag extends TagSupport {
      * <p>The fully qualified class name of the {@link ActionListener}
      * instance to be created.</p>
      */
-    private String type = null;
-    private String type_ = null;
+    private ValueExpression type = null;
 
     /**
-     * <p>The value binding expression used to create a listener instance and it is 
+     * <p>The value expression used to create a listener instance and it is 
      * also used to wire up this listener to an {@link ActionListener} property 
      * of a JavaBean class.</p>
      */
-    private String binding= null;
-    private String binding_ = null;
+    private ValueExpression binding = null;
 
     /**
      * <p>Set the fully qualified class name of the
@@ -79,9 +79,9 @@ public class ActionListenerTag extends TagSupport {
      *
      * @param type The new class name
      */
-    public void setType(String type) {
+    public void setType(ValueExpression type) {
 
-        this.type_ = type;
+        this.type = type;
 
     }
 
@@ -92,14 +92,8 @@ public class ActionListenerTag extends TagSupport {
      *
      * @throws JspException if a JSP error occurs
      */
-    public void setBinding(String binding) 
-        throws JspException {
-        if (binding != null && !Util.isValueReference(binding)) {
-            Object[] params = {binding};
-            throw new JspException(
-                Util.getExceptionMessageString(Util.INVALID_EXPRESSION_ID, params));
-        }
-        this.binding_ = binding;
+    public void setBinding(ValueExpression binding) {
+	this.binding = binding;
     }
 
     // --------------------------------------------------------- Public Methods
@@ -108,9 +102,9 @@ public class ActionListenerTag extends TagSupport {
     /**
      * <p>Create a new instance of the specified {@link ActionListener}
      * class, and register it with the {@link UIComponent} instance associated
-     * with our most immediately surrounding {@link UIComponentTag} instance, if
-     * the {@link UIComponent} instance was created by this execution of the
-     * containing JSP page.</p>
+     * with our most immediately surrounding {@link UIComponentTagBase}
+     * instance, if the {@link UIComponent} instance was created by this
+     * execution of the containing JSP page.</p>
      *
      * @throws JspException if a JSP error occurs
      */
@@ -118,12 +112,9 @@ public class ActionListenerTag extends TagSupport {
 
         ActionListener handler = null;
 
-        // Refers to the handler that could not be created.
-        String handlerError = null;
-     
         // Locate our parent UIComponentTag
-        UIComponentTag tag =
-            UIComponentTag.getParentUIComponentTag(pageContext);
+        UIComponentClassicTagBase tag =
+            UIComponentELTag.getParentUIComponentClassicTagBase(pageContext);
         if (tag == null) {
             Object params [] = {this.getClass().getName()};
             throw new JspException(
@@ -135,7 +126,8 @@ public class ActionListenerTag extends TagSupport {
         if (!tag.getCreated()) {
             return (SKIP_BODY);
         }
-        
+        FacesContext context = FacesContext.getCurrentInstance();
+
         UIComponent component = tag.getComponentInstance();
         if (component == null) {
             throw new JspException(
@@ -150,44 +142,34 @@ public class ActionListenerTag extends TagSupport {
         
         // If "binding" is set, use it to create a listener instance.
         
-        FacesContext context = FacesContext.getCurrentInstance();
-        ValueBinding vb = null;
-        if (binding_ != null) {
-            handlerError = binding_;
-            vb = Util.getValueBinding(binding_);
-            if (vb != null) {
-                try {
-                    handler = (ActionListener)vb.getValue(context);
-                    if (handler != null) {
-			// we ignore the type in this case, even though
-			// it may have been set.
-                        ((ActionSource)component).addActionListener(handler);
-                        return (SKIP_BODY);
-                    }
-                } catch (Exception e) {
-                    throw new JspException(e);
-                }
-            }
-        }
+        if (null != binding) {
+	    try {
+		handler = (ActionListener)binding.getValue(context.getELContext());
+		if (handler != null) {
+		    // we ignore the type in this case, even though
+		    // it may have been set.
+		    ((ActionSource)component).addActionListener(handler);
+		    return (SKIP_BODY);
+		}
+	    } catch (ELException e) {
+		throw new JspException(e);
+	    }
+	}
         // If "type" is set, use it to create the listener
         // instance.  If "type" and "binding" are both set, store the 
         // listener instance in the value of the property represented by
         // the value binding expression.
-        if (type_ != null) {
-            handlerError = type_;
-            type = (String) Util.evaluateVBExpression(type_);
-            handler = createActionListener();
-            if (handler != null) {
-                if (vb != null) {
-                    try {
-                        vb.setValue(context, handler);
-                    } catch (Exception e) {
-                        throw new JspException(e);
-                    }
-                }
+        if (type != null) {
+            handler = createActionListener(context);
+            if (handler != null && binding != null) {
+		try {
+		    binding.setValue(context.getELContext(), handler);
+		} catch (ELException e) {
+		    throw new JspException(e);
+		}
             }
         }
-       
+	
         // We need to cast here because addActionListener
         // method does not apply to all components (it is not a method on
         // UIComponent/UIComponentBase).
@@ -195,7 +177,7 @@ public class ActionListenerTag extends TagSupport {
             ((ActionSource)component).addActionListener(handler);
         } else {
             if (log.isDebugEnabled()) {
-                if (binding_ == null && type_ == null) {
+                if (binding == null && type == null) {
                     log.debug("'handler' was not created because both 'binding' and 'type' were null.");
                 } else {
                     log.debug("'handler' was not created.");
@@ -228,11 +210,16 @@ public class ActionListenerTag extends TagSupport {
      *
      * @throws JspException if a new instance cannot be created
      */
-    protected ActionListener createActionListener()
+    protected ActionListener createActionListener(FacesContext context)
         throws JspException {
 
         try {
-            Class clazz = Util.loadClass(type, this);
+	    // PENDING(edburns): log potential NPE with a good error
+	    // message.
+	    String className = 
+		type.getValue(context.getELContext()).toString();
+	    
+            Class clazz = Util.loadClass(className, this);
             return ((ActionListener) clazz.newInstance());
         } catch (Exception e) {
             throw new JspException(e);

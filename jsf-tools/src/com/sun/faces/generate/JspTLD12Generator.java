@@ -1,5 +1,5 @@
 /*
- * $Id: JspTLD12Generator.java,v 1.1 2004/12/13 19:07:49 rlubke Exp $
+ * $Id: JspTLD12Generator.java,v 1.2 2005/05/05 20:51:38 edburns Exp $
  */
 
 /*
@@ -68,15 +68,15 @@ public class JspTLD12Generator extends JspTLDGenerator {
 
         writer.startElement("short-name");
         writer.writeText(
-            propManager.getProperty(PropertyManager.TAGLIB_SHORT_NAME)[0]);
+            propManager.getProperty(PropertyManager.TAGLIB_SHORT_NAME));
         writer.closeElement();
 
         writer.startElement("uri");
-        writer.writeText(propManager.getProperty(PropertyManager.TAGLIB_URI)[0]);
+        writer.writeText(propManager.getProperty(PropertyManager.TAGLIB_URI));
         writer.closeElement();
 
         String description =
-            propManager.getProperty(PropertyManager.TAGLIB_DESCRIPTION)[0];
+            propManager.getProperty(PropertyManager.TAGLIB_DESCRIPTION);
         if (description != null && description.length() > 0) {
             writer.startElement("description");
             writer.writeText(description);
@@ -97,9 +97,9 @@ public class JspTLD12Generator extends JspTLDGenerator {
             GeneratorUtil.getComponentFamilyComponentMap(configBean);
         Map renderersByComponentFamily =
             GeneratorUtil.getComponentFamilyRendererMap(configBean,
-                propManager.getProperty(PropertyManager.RENDERKIT_ID)[0]);
+                propManager.getProperty(PropertyManager.RENDERKIT_ID));
         String targetPackage =
-            propManager.getProperty(PropertyManager.TARGET_PACKAGE)[0];
+            propManager.getProperty(PropertyManager.TARGET_PACKAGE);
 
         for (Iterator keyIter = renderersByComponentFamily.keySet()
             .iterator();

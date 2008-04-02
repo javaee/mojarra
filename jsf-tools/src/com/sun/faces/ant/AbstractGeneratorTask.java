@@ -1,5 +1,5 @@
 /*
- * $Id: AbstractGeneratorTask.java,v 1.1 2004/12/13 19:07:47 rlubke Exp $
+ * $Id: AbstractGeneratorTask.java,v 1.2 2005/05/05 20:51:34 edburns Exp $
  */
 
 /*
@@ -18,15 +18,15 @@ import org.apache.tools.ant.BuildException;
 public abstract class AbstractGeneratorTask extends Java {
 
     /**
-     * <p>The fully qualified <code>Generator</code class.</p>
-     */
-    private String generatorClass;
-
-    /**
      * <p>The fully qualified path to the properties file to drive the
      * Generator.</p>
      */
-    private String generatorConfig;
+    protected String generatorConfig;
+
+    /**
+     * <p>The fully qualified <code>Generator</code class.</p>
+     */
+    private String generatorClass;
 
     /**
      * <p>The fully qualified path to the faces-config.xml to serve
