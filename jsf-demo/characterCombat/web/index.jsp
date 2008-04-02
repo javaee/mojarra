@@ -1,5 +1,7 @@
 <html>
 <head>
+  <link rel="stylesheet" type="text/css"
+    href='<%= request.getContextPath() + "/stylesheet.css" %>'>
 </head>
 <body>
 

@@ -15,11 +15,11 @@
   </managed-bean>
 
   <navigation-rule>
-    <from-view-id>/secondSelection.jsp</from-view-id>
+    <from-view-id>/main.jsp</from-view-id>
     <navigation-case>
       <description>
         If the action returns "success", goto
-        secondSelection.jsp
+        firstSelection.jsp
       </description>
       <from-outcome>success</from-outcome>
       <to-view-id>/firstSelection.jsp</to-view-id>
@@ -35,6 +35,18 @@
       </description>
       <from-outcome>success</from-outcome>
       <to-view-id>/secondSelection.jsp</to-view-id>
+    </navigation-case>
+  </navigation-rule>
+
+  <navigation-rule>
+    <from-view-id>/secondSelection.jsp</from-view-id>
+    <navigation-case>
+      <description>
+        If the action returns "success", goto
+        results.jsp
+      </description>
+      <from-outcome>success</from-outcome>
+      <to-view-id>/results.jsp</to-view-id>
     </navigation-case>
   </navigation-rule>
 

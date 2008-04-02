@@ -1,55 +1,48 @@
 package characterCombat;
 
-
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.HashMap;
-
+/**
+ * <p>CharacterBean represents the data of an individual character</p>
+ */
 public class CharacterBean {
 
     String name = null;
 
+    /**
+     * <p>Get the character name</p>
+     *
+     * @return character name String
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * <p>Set the character name</p>
+     *
+     * @param character name String
+     */
     public void setName(String name) {
         this.name = name;
     }
-    
 
-    String species = null;
+    SpeciesBean species = null;
 
-    public String getSpecies() {
+    /**
+     * <p>Get the species bean</p>
+     *
+     * @return species SpeciesBean
+     */
+    public SpeciesBean getSpecies() {
         return species;
     }
 
-    public void setSpecies(String species) {
+    /**
+     * <p>Set the species bean</p>
+     *
+     * @param species SpeciesBean
+     */
+    public void setSpecies(SpeciesBean species) {
         this.species = species;
     }
-    
-
-    String language = null;
-
-    public String getLanguage() {
-        return language;
-    }
-
-    public void setLanguage(String language) {
-        this.language = language;
-    }
-
-
-    boolean immortal = false;
-
-    public boolean isImmortal() {
-        return immortal;
-    }
-
-    public void setImmortal(boolean immortal) {
-        this.immortal = immortal;
-    }
-
 
 }

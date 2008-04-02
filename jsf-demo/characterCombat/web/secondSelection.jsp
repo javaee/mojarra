@@ -5,19 +5,30 @@
 <html>
 <head>
   <title>
+    Second Selection Page
   </title>
+  <link rel="stylesheet" type="text/css"
+    href='<%= request.getContextPath() + "/stylesheet.css" %>'>
 </head>
 
 <body>
+  <h2>Second Selection Page</h2>
+
+  <p>This page displays the same data as the previous page except it
+     does not include the user's first combat choice so that character
+     will not be picked twice.</p>
+
+  <p>You may now choose your second character that will be waging in magical
+     combat with the first.</p>
+
 
   <h:form>
 
     <h:panelGrid columns="1">
 
-      <h:outputText value="Second Pick!"/>
-        <h:selectOneRadio
-          layout="pageDirection" 
-          value="#{modelBean.secondSelection}">
+      <h:selectOneRadio
+        layout="pageDirection" 
+        value="#{modelBean.currentSelection}">
         <f:selectItems
           value="#{modelBean.charactersToSelect}" />
       </h:selectOneRadio>
@@ -25,7 +36,7 @@
     </h:panelGrid>
 
     <h:commandButton
-      action="success"
+      action="#{modelBean.addSecondSelection}"
       value="Submit Second Character Selection"/>
 
   </h:form>
