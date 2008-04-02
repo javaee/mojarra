@@ -38,15 +38,15 @@
 
     <property>
         <description>
-        If false, the browser should disable its autocomplete feature
-        for this component.  This is useful for components that perform
-        autocompletion and do not want the browser interfering.  If not
-        set, defaults to true.
+        If the value of this attribute is "off", the browser should
+        disable its autocomplete feature for this component.  This is
+        useful for components that perform autocompletion and do not
+        want the browser interfering.  If not set, defaults to "on".
         </description>
         <display-name>Enable or disable browser autocompletion.</display-name>
         <icon></icon>
         <property-name>autocomplete</property-name>
-        <property-class>boolean</property-class>
+        <property-class>java.lang.String</property-class>
     </property>
 
     <property>
