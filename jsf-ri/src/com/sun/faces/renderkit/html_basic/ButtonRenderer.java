@@ -1,5 +1,5 @@
 /*
- * $Id: ButtonRenderer.java,v 1.48 2003/04/29 20:51:48 eburns Exp $
+ * $Id: ButtonRenderer.java,v 1.49 2003/05/13 22:05:13 eburns Exp $
  */
 
 /*
@@ -50,7 +50,7 @@ import javax.servlet.http.HttpServletRequest;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ButtonRenderer.java,v 1.48 2003/04/29 20:51:48 eburns Exp $
+ * @version $Id: ButtonRenderer.java,v 1.49 2003/05/13 22:05:13 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -182,7 +182,7 @@ public class ButtonRenderer extends HtmlBasicRenderer {
         }
 
         String type = (String) component.getAttribute("type");
-        if ((type == null) || (type.toLowerCase().equals("reset")) ) {
+        if ((type != null) || (type.toLowerCase().equals("reset")) ) {
             component.setValid(true);
             return;
         }
