@@ -1,5 +1,5 @@
 /*
- * $Id: TableRenderer.java,v 1.29 2005/08/26 15:27:17 rlubke Exp $
+ * $Id: TableRenderer.java,v 1.30 2005/09/30 20:30:56 rlubke Exp $
  */
 
 /*
@@ -90,6 +90,22 @@ public class TableRenderer extends HtmlBasicRenderer {
         Util.renderPassThruAttributes(context, writer, component,
                                       new String[]{"rows"});
         writer.writeText("\n", null);
+        
+        UIComponent caption = getFacet(data, "caption");
+        if (caption != null) {
+            String captionClass = (String) data.getAttributes().get("captionClass");
+            String captionStyle = (String)
+                data.getAttributes().get("captionStyle");
+            writer.startElement("caption", data);
+            if (captionClass != null) {
+                writer.writeAttribute("class", captionClass, "captionClass");
+            }
+            if (captionStyle != null) {
+                writer.writeAttribute("style", captionStyle, "captionStyle");
+            }
+            encodeRecursive(context, caption);
+            writer.endElement("caption");
+        }
 
         // Render the header facets (if any)
         UIComponent header = getFacet(data, "header");
