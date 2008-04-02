@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.26 2002/09/21 22:24:32 craigmcc Exp $
+ * $Id: UIComponentBase.java,v 1.27 2002/10/07 18:39:32 craigmcc Exp $
  */
 
 /*
@@ -217,7 +217,19 @@ public abstract class UIComponentBase implements UIComponent {
         if (componentId == null) {
             throw new NullPointerException("setComponentId");
         }
-        // FIXME - validate length>0 and valid characters
+        if (componentId.length() <= 0) {
+            throw new IllegalArgumentException("'" + componentId + "'");
+        }
+        if (!Character.isLetter(componentId.charAt(0))) {
+            throw new IllegalArgumentException("'" + componentId + "'");
+        }
+        for (int i = 1; i < componentId.length(); i++) {
+            char ch = componentId.charAt(i);
+            if (!Character.isLetterOrDigit(ch) &&
+                (ch != '-') && (ch != '_')) {
+                throw new IllegalArgumentException("'" + componentId + "'");
+            }
+        }
         setAttribute("componentId", componentId);
 
     }

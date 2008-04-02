@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTestCase.java,v 1.12 2002/08/30 20:11:24 craigmcc Exp $
+ * $Id: UIComponentTestCase.java,v 1.13 2002/10/07 18:39:32 craigmcc Exp $
  */
 
 /*
@@ -486,14 +486,33 @@ public class UIComponentTestCase extends TestCase {
         } catch (NullPointerException e) {
             ; // Expected result
         }
-        /** FIXME - checking valid characters not yet implemented
         try {
-            component.setComponentId("*");
-            fail("setComponentId did not throw IAE");
+            component.setComponentId("");
+            fail("setComponentId did not throw IAE 1");
         } catch (IllegalArgumentException e) {
             ; // Expected result
         }
-        */
+
+        try {
+            component.setComponentId("*");
+            fail("setComponentId did not throw IAE 2");
+        } catch (IllegalArgumentException e) {
+            ; // Expected result
+        }
+
+        try {
+            component.setComponentId("3a");
+            fail("setComponentId did not throw IAE 3");
+        } catch (IllegalArgumentException e) {
+            ; // Expected result
+        }
+
+        try {
+            component.setComponentId("a3#");
+            fail("setComponentId did not throw IAE 4");
+        } catch (IllegalArgumentException e) {
+            ; // Expected result
+        }
 
         // [3.1.7] setAttribute()
         try {
