@@ -1,5 +1,5 @@
 /*
- * $Id: UICommandBaseTestCase.java,v 1.11 2003/08/30 00:31:40 craigmcc Exp $
+ * $Id: UICommandBaseTestCase.java,v 1.12 2003/09/04 03:52:53 eburns Exp $
  */
 
 /*
@@ -117,8 +117,8 @@ public class UICommandBaseTestCase extends ValueHolderTestCaseBase {
 
         // Fire events and evaluate results
         TestActionListener.trace(null);
-        assertTrue(!command.broadcast(event, PhaseId.APPLY_REQUEST_VALUES));
-        assertTrue(!command.broadcast(event, PhaseId.PROCESS_VALIDATIONS));
+        assertTrue(command.broadcast(event, PhaseId.APPLY_REQUEST_VALUES));
+        assertTrue(command.broadcast(event, PhaseId.PROCESS_VALIDATIONS));
         assertTrue(!command.broadcast(event, PhaseId.INVOKE_APPLICATION));
         assertEquals("/AP0/AP1/AP2/AP0/AP1/AP2/AP0/AP1/AP2",
                      TestActionListener.trace());
@@ -143,7 +143,7 @@ public class UICommandBaseTestCase extends ValueHolderTestCaseBase {
         // Fire events and evaluate results
         TestActionListener.trace(null);
         assertTrue(command.broadcast(event, PhaseId.APPLY_REQUEST_VALUES));
-        assertTrue(!command.broadcast(event, PhaseId.PROCESS_VALIDATIONS));
+        assertTrue(command.broadcast(event, PhaseId.PROCESS_VALIDATIONS));
         assertTrue(!command.broadcast(event, PhaseId.INVOKE_APPLICATION));
         assertEquals("/AP/ARV/AP/PV/AP",
                      TestActionListener.trace());
@@ -173,8 +173,8 @@ public class UICommandBaseTestCase extends ValueHolderTestCaseBase {
         TestActionListener.trace(null);
         assertTrue(command.broadcast(event, PhaseId.RESTORE_VIEW));
         assertTrue(command.broadcast(event, PhaseId.APPLY_REQUEST_VALUES));
-        assertTrue(!command.broadcast(event, PhaseId.PROCESS_VALIDATIONS));
-        assertTrue(!command.broadcast(event, PhaseId.UPDATE_MODEL_VALUES));
+        assertTrue(command.broadcast(event, PhaseId.PROCESS_VALIDATIONS));
+        assertTrue(command.broadcast(event, PhaseId.UPDATE_MODEL_VALUES));
         assertTrue(!command.broadcast(event, PhaseId.INVOKE_APPLICATION));
         assertEquals("/ARV0/ARV1/PV0/PV1/PV2",
                      TestActionListener.trace());
@@ -386,6 +386,39 @@ public class UICommandBaseTestCase extends ValueHolderTestCaseBase {
 
 
     }
+
+    public void testImmediate() throws Exception {
+	List [] listeners = null;
+	UICommandSub command = new UICommandSub();
+	assertTrue(!command.isImmediate());
+
+	// if there is a change in the immediate flag, from false to
+	// true, the default action listener should be replaced with an
+	// instance of WrapperActionListener.
+	command.setImmediate(true);
+	assertTrue(command.isImmediate());
+	listeners = command.getListeners();
+	// we should have one listener for APPLY_REQUEST_VALUES
+	assertTrue(1 == 
+		   ((List)listeners[PhaseId.APPLY_REQUEST_VALUES.getOrdinal()]).size());
+	// we should have no listeners for INVOKE_APPLICATION
+	assertTrue(0 == 
+		   ((List)listeners[PhaseId.INVOKE_APPLICATION.getOrdinal()]).size());
+	
+	// if there is a change in the immediate flag, from true to
+	// false, the default action listener should be restored.
+	command.setImmediate(false);
+	assertTrue(!command.isImmediate());
+	listeners = command.getListeners();
+	// we should have one listener for INVOKE_APPLICATION
+	assertTrue(1 == 
+		   ((List)listeners[PhaseId.INVOKE_APPLICATION.getOrdinal()]).size());
+	// we should have no listeners for APPLY_REQUEST_VALUES
+	assertTrue(0 == 
+		   ((List)listeners[PhaseId.APPLY_REQUEST_VALUES.getOrdinal()]).size());
+
+    }
+
 
     // -------------------------------------------------------- Support Methods
 

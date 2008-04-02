@@ -1,5 +1,5 @@
 /*
- * $Id: StateManager.java,v 1.11 2003/08/27 00:56:48 craigmcc Exp $
+ * $Id: StateManager.java,v 1.12 2003/09/04 03:52:46 eburns Exp $
  */
 
 /*
@@ -16,9 +16,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
 
 import java.io.IOException;
-import java.io.Reader;
 import java.io.Writer;
-import java.io.Serializable;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -140,7 +138,10 @@ public abstract class StateManager {
      * <p>The implementation must save the tree structure, from the root
      * of the component tree, to a <code>Serializable</code> Object.
      * Tree structure is comprised of parent child relationships,
-     * including Facets.</p>
+     * including Facets, as well as the <code>id</code> for each
+     * component.  It is necessary to save the <code>id</code> of each
+     * component to allow the naming containers to be correctly
+     * populated as the tree is constructed.</p>
      *
      * <p>Note that associations to {@link
      * javax.faces.validator.Validator}s, {@link
@@ -252,7 +253,9 @@ public abstract class StateManager {
      *
      * <p>In JSP applications, this method must be called from the
      * <code>doAfterBody()</code> method of the tag handler for the
-     * {@link UIViewRoot} component.</p>
+     * {@link UIViewRoot} component.  The type of the returned
+     * <code>Object</code> depends on the rendering technology used.  In
+     * JSP applications, this type is <code>String</code>.</p>
      *
      * @param context the {@link FacesContext} for this view.
      * This is used to obtain the {@link
@@ -263,11 +266,11 @@ public abstract class StateManager {
      *
      * @param state the state of the rendered view, obtained from
      * {@link #getSerializedView}.
+     * @return Object response to be sent to client.
      *
      */
-
-    public abstract void saveView(FacesContext context, Reader content, 
-				  SerializedView state);
+    public abstract Object saveView(FacesContext context, Object content, 
+				    SerializedView state);
 
     // ---------------------- Methods used in restoring the view
 
@@ -481,8 +484,10 @@ public abstract class StateManager {
 		// Iteratate over the attachedObjects
 		while (iter.hasNext()) {
 		    curAttachedObject = iter.next();
-		    innerList[j] = 
-			new StateHolderSaver(context, curAttachedObject);
+		    if (null != curAttachedObject) {
+			innerList[j] = 
+			    new StateHolderSaver(context, curAttachedObject);
+		    }
 		    j++;
 		}
 		// at this point, innerList has the state of all the
@@ -569,101 +574,16 @@ public abstract class StateManager {
 		result[i] = curList = new ArrayList();
 		// create the attachedObjects for this List
 		for (j = 0; j < innerLen; j++) {
-		    curAttachedObject = innerArray[j].restore(context);
-		    if (null != curAttachedObject) {
-			curList.add(curAttachedObject);
+		    if (null != innerArray[j]) {
+			curAttachedObject = innerArray[j].restore(context);
+			if (null != curAttachedObject) {
+			    curList.add(curAttachedObject);
+			}
 		    }
 		}
 	    }
 	}
 	return result;
     }
-
-    /**
-     * <p>Helper class for saving and restoring attached objects.</p>
-     *
-     */
-    protected class StateHolderSaver extends Object implements Serializable {
-	protected String className = null;
-	protected Object savedState = null;
-
-	StateHolderSaver(FacesContext context, Object toSave) {
-
-            // PENDING(craigmcc) - causes NPE if toSave is null
-            /*
-	    className = toSave.getClass().getName();
-	    if (toSave instanceof StateHolder) {
-		if (!((StateHolder)toSave).isTransient()) {
-		    savedState = ((StateHolder)toSave).getState(context);
-		}
-	    }
-            */
-
-            // Replacement that deals with null objects to be saved
-            if (toSave != null) {
-                className = toSave.getClass().getName();
-                if (toSave instanceof StateHolder) {
-                    if (!((StateHolder)toSave).isTransient()) {
-                        savedState = ((StateHolder)toSave).getState(context);
-                    }
-                }
-            }
-
-	}
-
-
-	/**
-	 *
-	 * @return the restored {@link StateHolder} instance.
-	 */
-
-	Object restore(FacesContext context) throws IOException {
-
-            if (className == null) {
-                return (null);
-            }
-
-	    Object result = null;
-	    Class toRestoreClass = null;
-	    try {
-		toRestoreClass = 
-		    StateManager.loadClass(className, this);
-	    }
-	    catch (ClassNotFoundException e) {
-		toRestoreClass = null;
-	    }
-	    
-	    if (null != toRestoreClass) {
-		try {
-		    result = toRestoreClass.newInstance();
-		}
-		catch (InstantiationException e) {
-		    throw new IOException(e.getMessage());
-		}
-		catch (IllegalAccessException a) {
-		    throw new IOException(a.getMessage());
-		}
-	    }
-	    
-	    if (null != result && null != savedState && 
-		result instanceof StateHolder) {
-		// don't need to check transient, since that was done on
-		// the saving side.
-		((StateHolder)result).restoreState(context, savedState);
-	    }
-	    return result;
-	}
-    }
-
-    private static Class loadClass(String name, 
-				   Object fallbackClass) throws ClassNotFoundException {
-	ClassLoader loader =
-	    Thread.currentThread().getContextClassLoader();
-	if (loader == null) {
-	    loader = fallbackClass.getClass().getClassLoader();
-	}
-	return loader.loadClass(name);
-    }
-
 
 }

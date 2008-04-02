@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.8 2003/08/27 21:16:30 craigmcc Exp $
+ * $Id: UIComponentBase.java,v 1.9 2003/09/04 03:52:49 eburns Exp $
  */
 
 /*
@@ -1217,17 +1217,16 @@ public abstract class UIComponentBase implements UIComponent {
 
     public Object getState(FacesContext context) {
 
-        Object values[] = new Object[8];
+        Object values[] = new Object[7];
         values[0] = attributes;
         values[1] = getClientId(context);
         values[2] = componentRef;
-        values[3] = id;
-        values[4] = rendered ? Boolean.TRUE : Boolean.FALSE;
-        values[5] = rendererType;
-        values[6] =
+        values[3] = rendered ? Boolean.TRUE : Boolean.FALSE;
+        values[4] = rendererType;
+        values[5] =
             context.getApplication().getViewHandler().getStateManager().
             getAttachedObjectState(context, this, null, listeners);
-        values[7] = transientFlag ? Boolean.TRUE : Boolean.FALSE;
+        values[6] = transientFlag ? Boolean.TRUE : Boolean.FALSE;
         return (values);
 
     }
@@ -1240,13 +1239,12 @@ public abstract class UIComponentBase implements UIComponent {
         attributes = (HashMap) values[0];
         clientId = (String) values[1];
         componentRef = (String) values[2];
-        id = (String) values[3];
-        rendered = ((Boolean) values[4]).booleanValue();
-        rendererType = (String) values[5];
+        rendered = ((Boolean) values[3]).booleanValue();
+        rendererType = (String) values[4];
         listeners = (List[])
             context.getApplication().getViewHandler().getStateManager().
-            restoreAttachedObjectState(context, values[6]);
-        transientFlag = ((Boolean) values[7]).booleanValue();
+            restoreAttachedObjectState(context, values[5]);
+        transientFlag = ((Boolean) values[6]).booleanValue();
 
     }
 

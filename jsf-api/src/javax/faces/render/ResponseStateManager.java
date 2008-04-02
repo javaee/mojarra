@@ -1,5 +1,5 @@
 /*
- * $Id: ResponseStateManager.java,v 1.5 2003/08/22 14:03:20 eburns Exp $
+ * $Id: ResponseStateManager.java,v 1.6 2003/09/04 03:52:52 eburns Exp $
  */
 
 /*
@@ -53,11 +53,13 @@ public abstract class ResponseStateManager {
     * fields, the implementation must take care to make all necessary
     * character replacements to make the Strings suitable for inclusion
     * as an HTTP request paramater.</p>
+    *
+    * @return the written state.  In the case of JSP, this is a
+    * <code>String</code>.
 
     */
-
-    public abstract void writeState(Reader content, Writer out,
-				    Object structure, Object state);
+    public abstract Object writeState(Object content, Writer out,
+				      Object structure, Object state);
 
     /**
 

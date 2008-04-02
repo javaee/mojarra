@@ -1,5 +1,5 @@
 /*
- * $Id: UICommandBase.java,v 1.9 2003/08/30 00:31:35 craigmcc Exp $
+ * $Id: UICommandBase.java,v 1.10 2003/09/04 03:52:48 eburns Exp $
  */
 
 /*
@@ -46,7 +46,9 @@ public class UICommandBase extends UIComponentBase implements UICommand {
 
         super();
         setRendererType("Button");
-
+        // add the default action listener
+        FacesContext context = FacesContext.getCurrentInstance();
+	addDefaultActionListener(context);
     }
 
 
@@ -128,9 +130,14 @@ public class UICommandBase extends UIComponentBase implements UICommand {
 
 
     public void setImmediate(boolean immediate) {
-
-        this.immediate = immediate;
-
+	// if the immediate value is changing.
+	if (immediate != this.immediate) {
+	    FacesContext context = FacesContext.getCurrentInstance();
+	    // remove the current default action listener
+	    removeDefaultActionListener(context);
+	    this.immediate = immediate;
+	    addDefaultActionListener(context);
+	}
     }
 
 
@@ -245,6 +252,7 @@ public class UICommandBase extends UIComponentBase implements UICommand {
 
     public void restoreState(FacesContext context, Object state)
         throws IOException {
+        removeDefaultActionListener(context);
 
         Object values[] = (Object[]) state;
         super.restoreState(context, values[0]);

@@ -1,5 +1,5 @@
 /*
- * $Id: NamingContainerSupport.java,v 1.6 2003/08/27 00:56:49 craigmcc Exp $
+ * $Id: NamingContainerSupport.java,v 1.7 2003/09/04 03:52:48 eburns Exp $
  */
 
 /*
@@ -15,7 +15,6 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.faces.component.NamingContainer;
 import javax.faces.component.UIComponent;
-import javax.faces.component.StateHolder;
 import java.io.IOException;
 import java.util.Iterator;
 
@@ -55,7 +54,7 @@ import java.util.Iterator;
  * </pre>
  */
 
-public class NamingContainerSupport implements NamingContainer, StateHolder {
+public class NamingContainerSupport implements NamingContainer {
 
 
     // ------------------------------------------------------ Instance Variables
@@ -212,48 +211,5 @@ public class NamingContainerSupport implements NamingContainer, StateHolder {
         }
 
     }
-
-
-    // ----------------------------------------------------- StateHolder Methods
-
-
-    public Object getState(FacesContext context) {
-
-        Object values[] = new Object[3];
-        // PENDING(craigmcc) - Seems likely to fail on save in client?
-        values[0] = (namespace != null) ? namespace.clone() : null;
-        values[1] = new Integer(serialNumber);
-        values[2] = transientFlag ? Boolean.TRUE : Boolean.FALSE;
-        return (values);
-
-    }
-
-
-    public void restoreState(FacesContext context, Object state)
-        throws IOException {
-
-        Object values[] = (Object[]) state;
-        namespace = (HashMap) values[0];
-        serialNumber = ((Integer) values[1]).intValue();
-        transientFlag = ((Boolean) values[2]).booleanValue();
-
-    }
-
-
-    private boolean transientFlag = false;
-
-
-    public boolean isTransient() {
-
-        return (transientFlag);
-
-    }
-
-    public void setTransient(boolean transientFlag) {
-
-        this.transientFlag = transientFlag;
-
-    }
-
 
 }

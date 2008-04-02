@@ -1,5 +1,5 @@
 /*
- * $Id: UINamingContainerBase.java,v 1.4 2003/08/27 00:56:51 craigmcc Exp $
+ * $Id: UINamingContainerBase.java,v 1.5 2003/09/04 03:52:50 eburns Exp $
  */
 
 /*
@@ -12,7 +12,6 @@ package javax.faces.component.base;
 
 import javax.faces.component.NamingContainer;
 import javax.faces.component.UIComponent;
-import javax.faces.component.StateHolder;
 import javax.faces.context.FacesContext;
 import java.io.IOException;
 
@@ -55,29 +54,5 @@ public class UINamingContainerBase extends UIComponentBase
     public void removeComponentFromNamespace(UIComponent namedComponent) {
 	namespace.removeComponentFromNamespace(namedComponent);
     }
-
-
-    // ----------------------------------------------------- StateHolder Methods
-
-
-    public Object getState(FacesContext context) {
-
-        Object values[] = new Object[2];
-        values[0] = super.getState(context);
-        values[1] = namespace.getState(context);
-        return (values);
-
-    }
-
-
-    public void restoreState(FacesContext context, Object state)
-        throws IOException {
-
-        Object values[] = (Object[]) state;
-        super.restoreState(context, values[0]);
-        namespace.restoreState(context, values[1]);
-
-    }
-
 
 }
