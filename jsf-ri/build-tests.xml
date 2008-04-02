@@ -85,10 +85,10 @@
       <pathelement location="${httpclient.jar}"/>
       <pathelement location="${aspectjrt.jar}"/>
       <pathelement location="${jsf-api.jar}"/>
-      <pathelement location="${commons-beanutils.jar}"/>
-      <pathelement location="${commons-collections.jar}"/>
-      <pathelement location="${commons-digester.jar}"/>
-      <pathelement location="${commons-logging.jar}"/>      
+      <pathelement location="${commons.beanutils.jar}"/>
+      <pathelement location="${commons.collections.jar}"/>
+      <pathelement location="${commons.digester.jar}"/>
+      <pathelement location="${commons.logging.jar}"/>      
       <pathelement location="${build.home}/classes"/>
       <pathelement location="${xerces.jar}"/>
       <pathelement location="${tomcat.home}/bin/bootstrap.jar"/>
@@ -141,7 +141,7 @@
         <javac srcdir="${src.test.dir}"
             destdir="${out.test.dir}/classes"
             debug="${compile.debug}"
-            includes="com/sun/faces/application/*.java,com/sun/faces/*.java,com/sun/faces/el/*.java,com/sun/faces/context/*.java,com/sun/faces/util/*.java,com/sun/faces/renderkit/html_basic/*.java,com/sun/faces/convert/*.java,com/sun/faces/renderkit/*.java"
+            includes="com/sun/faces/application/*.java,com/sun/faces/*.java,com/sun/faces/lifecycle/*.java,com/sun/faces/el/*.java,com/sun/faces/context/*.java,com/sun/faces/util/*.java,com/sun/faces/renderkit/html_basic/*.java,com/sun/faces/convert/*.java,com/sun/faces/renderkit/*.java,com/sun/faces/taglib/jsf_core/*.java,com/sun/faces/taglib/html_basic/*.java,javax/faces/validator/*.java"
             excludes="com/sun/faces/context/TestFacesContextImpl_EL.java,com/sun/faces/context/TestFacesContextImpl_Model.java"
             optimize="${compile.optimize}"
             deprecation="${compile.deprecation}">
@@ -164,10 +164,10 @@
         <copy file="${junit.jar}" todir="${out.test.dir}/lib"/>
         <copy file="${cactus.jar}" todir="${out.test.dir}/lib"/>
         <copy file="${aspectjrt.jar}" todir="${out.test.dir}/lib"/>
-        <copy file="${commons-beanutils.jar}" todir="${out.test.dir}/lib"/>
-        <copy file="${commons-collections.jar}" todir="${out.test.dir}/lib"/>
-        <copy file="${commons-digester.jar}" todir="${out.test.dir}/lib"/>
-        <copy file="${commons-logging.jar}" todir="${out.test.dir}/lib"/>
+        <copy file="${commons.beanutils.jar}" todir="${out.test.dir}/lib"/>
+        <copy file="${commons.collections.jar}" todir="${out.test.dir}/lib"/>
+        <copy file="${commons.digester.jar}" todir="${out.test.dir}/lib"/>
+        <copy file="${commons.logging.jar}" todir="${out.test.dir}/lib"/>
         <copy file="${jsf-api.jar}" todir="${out.test.dir}/lib"/>
         <copy file="${jstl.jar}" todir="${out.test.dir}/lib"/>
         <copy file="${standard.jar}" todir="${out.test.dir}/lib"/>
@@ -317,11 +317,22 @@
             <test name="com.sun.faces.context.TestExternalContextImpl"/>
             <test name="com.sun.faces.context.TestFacesContextImpl"/>
             <test name="com.sun.faces.context.TestFacesContextFactoryImpl"/>
+            <test name="com.sun.faces.context.TestMessageResourcesImpl"/>
+            <test name="com.sun.faces.context.TestMessageResourcesFactoryImpl"/>
+            <test name="com.sun.faces.convert.TestConverterFactory"/>
+            <test name="com.sun.faces.convert.TestConverters"/>
             <test name="com.sun.faces.el.TestValueBindingImpl_Model"/>
             <test name="com.sun.faces.el.TestValueBindingImpl"/>
             <test name="com.sun.faces.el.TestVariableResolverImpl"/>
             <test name="com.sun.faces.el.TestPropertyResolverImpl"/>
-            <test name="com.sun.faces.util.TestUtil_messages"/>
+            <test name="com.sun.faces.lifecycle.TestPhase"/> 
+            <test name="com.sun.faces.lifecycle.TestReconstituteComponentTreePhase"/>
+            <test name="com.sun.faces.lifecycle.TestApplyRequestValuesPhase"/>
+            <test name="com.sun.faces.lifecycle.TestProcessValidationsPhase"/>
+            <test name="com.sun.faces.lifecycle.TestUpdateModelValuesPhase"/>
+            <test name="com.sun.faces.lifecycle.TestInvokeApplicationPhase"/>
+            <test name="com.sun.faces.lifecycle.TestProcessEvents"/>
+            <test name="com.sun.faces.lifecycle.TestLifecycleFactoryImpl"/>
             <test name="com.sun.faces.renderkit.TestRenderKitFactory"/>
             <test name="com.sun.faces.renderkit.html_basic.TestRenderers_1"/>
             <test name="com.sun.faces.renderkit.html_basic.TestRenderers_2"/>
@@ -331,28 +342,14 @@
             <test name="com.sun.faces.renderkit.html_basic.TestComponentType"/>
             <test name="com.sun.faces.renderkit.TestFormatPoolImpl"/>
             <test name="com.sun.faces.renderkit.html_basic.TestRendererAttributes"/>
-            <test name="com.sun.faces.convert.TestConverterFactory"/>
-            <test name="com.sun.faces.convert.TestConverters"/>
-<!--
             <test name="com.sun.faces.util.TestUtil"/>
-
-            <test name="com.sun.faces.lifecycle.TestPhase"/> 
-            <test name="com.sun.faces.lifecycle.TestApplyRequestValuesPhase"/>
-            <test name="com.sun.faces.lifecycle.TestProcessValidationsPhase"/>
-            <test name="com.sun.faces.lifecycle.TestUpdateModelValuesPhase"/>
-            <test name="com.sun.faces.lifecycle.TestInvokeApplicationPhase"/>
-            <test name="com.sun.faces.lifecycle.TestProcessEvents"/>
-            <test name="com.sun.faces.lifecycle.TestLifecycleFactoryImpl"/>
-
-            <test name="com.sun.faces.context.TestMessageResourcesImpl"/>
-            <test name="com.sun.faces.context.TestMessageResourcesFactoryImpl"/>
-            <test name="com.sun.faces.taglib.jsf_core.TestValidatorTags"/>
-
-            <test name="com.sun.faces.lifecycle.TestReconstituteComponentTreePhase"/>
-            <test name="com.sun.faces.lifecycle.TestRenderResponsePhase"/>
+            <test name="com.sun.faces.util.TestUtil_messages"/>
             <test name="javax.faces.validator.RequiredValidatorTestCase"/>
+<!--
+            <test name="com.sun.faces.lifecycle.TestRenderResponsePhase"/>
             <test name="com.sun.faces.taglib.html_basic.TestHtmlBasicValidator"/>
             <test name="com.sun.faces.taglib.jsf_core.TestCoreValidator"/>
+            <test name="com.sun.faces.taglib.jsf_core.TestValidatorTags"/>
 -->
             <!-- To run the following tests, comment last 3 tests, uncomment
                  following tests and set saveStateInClient property in 
