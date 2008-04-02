@@ -39,52 +39,79 @@
 
 package demo.model;
 
+
+import components.components.AreaSelectedEvent;
+import components.components.AreaSelectedListener;
+import components.components.MapComponent;
+import java.util.HashMap;
 import java.util.Locale;
-import java.util.Hashtable;
+import java.util.Map;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIOutput;
-import javax.faces.event.PhaseId;
 import javax.faces.context.FacesContext;
-import javax.faces.event.ActionListener;
-import javax.faces.event.ActionEvent;
+import javax.faces.event.PhaseId;
 
-import components.components.UIMap;
+
 
 /**
- * The listener interface for handling the ActionEvent generated
- * by the map component. 
+ * <p>Handle changes in the currently selected area by switching the
+ * request locale accordingly.</p>
  */
-public class ImageMapEventHandler implements ActionListener {
 
-    Hashtable localeTable = new Hashtable();
+public class AreaSelectedHandler implements AreaSelectedListener {
 
-    public ImageMapEventHandler ( ) {
 
-    	localeTable.put("NAmericas", Locale.ENGLISH);
-	localeTable.put("SAmericas", new Locale("es","es"));
-	localeTable.put("Germany", Locale.GERMAN);
-	localeTable.put("Finland", new Locale("fi","fi"));
-	localeTable.put("France", Locale.FRENCH); 	
+    // ------------------------------------------------------------ Constructors
+
+
+    /**
+     * <p>Construct a new instance of this event listener.</p>
+     */
+    public AreaSelectedHandler ( ) {
+
+        locales = new HashMap();
+    	locales.put("NAmericas", Locale.ENGLISH);
+	locales.put("SAmericas", new Locale("es","es"));
+	locales.put("Germany", Locale.GERMAN);
+	locales.put("Finland", new Locale("fi","fi"));
+	locales.put("France", Locale.FRENCH); 	
 
     }
 
-    // This listener will handle events after the phase specified
-    // as the return value;
 
+    // ------------------------------------------------------ Instance Variables
+
+
+    /**
+     * <p>The locales to be selected for each hotspot, keyed by the
+     * alternate text for that area.</p>
+     */
+    private Map locales = null;
+
+
+    // -------------------------------------------- AreaSelectedListener Methods
+
+
+    /**
+     * <p>Return the phase identifier for when we wish to process events.</p>
+     */
     public PhaseId getPhaseId() {
-        return PhaseId.ANY_PHASE;
+        return (PhaseId.APPLY_REQUEST_VALUES);
     }
 
-// Processes the event queued on the specified component.
-    public void processAction(ActionEvent event) {
 
-	UIMap map = (UIMap)event.getSource();
-	String value = (String) map.getAttribute("currentArea");
-	UIOutput welcome = (UIOutput) map.findComponent("welcomeLabel");
-	Locale curLocale = (Locale) localeTable.get(value);
-       
+    /**
+     * <p>Select a new Locale based on this event.</p>
+     *
+     * @param event The {@link AreaSelectedEvent} that has occurred
+     */
+    public void processAreaSelected(AreaSelectedEvent event) {
+
+        String current = event.getMapComponent().getCurrent();
         FacesContext context = FacesContext.getCurrentInstance();
-	context.setLocale(curLocale);
+        context.setLocale((Locale) locales.get(current));
+
     }
+
     
 }

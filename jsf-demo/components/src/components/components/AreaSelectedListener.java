@@ -1,4 +1,8 @@
 /*
+ * $Id: AreaSelectedListener.java,v 1.1 2003/08/26 18:40:44 craigmcc Exp $
+ */
+
+/*
  * Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
  * 
  * Redistribution and use in source and binary forms, with or
@@ -39,16 +43,25 @@
 package components.components;
 
 
-import javax.faces.component.base.UIOutputBase;
+import javax.faces.component.UIComponent;
+import javax.faces.event.FacesEvent;
+import javax.faces.event.FacesListener;
 
 
 /**
- * This class represents the <code>UIArea</code> component, which corresponds
- * to the <code>area</code> tag.  An <code>area</code> tag specifies the
- * geometric regions of an image map. 
-*/
+ * <p>{@link AreaSelectedListener} defines an event listener interested in
+ * {@link AreaSelecteEvent}s from a {@link MapComponent}.</p>
+ */
 
-// PENDING(craigmcc) - just use UIOutputBase directly?
-public class UIArea extends UIOutputBase {
+public interface AreaSelectedListener extends FacesListener {
+
+
+    /**
+     * <p>Process the specified event.</p>
+     *
+     * @param event The event to be processed
+     */
+    public void processAreaSelected(AreaSelectedEvent event);
+
 
 }

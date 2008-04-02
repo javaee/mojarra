@@ -39,32 +39,27 @@
 package components.renderkit;
 
 
-import components.components.AreaComponent;
 import components.components.MapComponent;
-import components.model.ImageArea;
 import java.io.IOException;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
-import javax.faces.el.ValueBinding;
 import javax.faces.render.Renderer;
 
 
 /**
- * This class converts the internal representation of a <code>UIArea</code>
- * component into the output stream associated with the response to a
- * particular request.
- *
+ * <p>Renderer for {@link MapComponent} in an HTML environment.</p>
  */
 
-public class AreaRenderer extends BaseRenderer {
+public class MapRenderer extends BaseRenderer {
 
 
     // -------------------------------------------------------- Renderer Methods
 
 
     /**
-     * <p>No decoding is required.</p>
+     * <p>Decode the incoming request parameters to determine which
+     * hotspot (if any) has been selected.</p>
      *
      * @param context <code>FacesContext</code>for the current request
      * @param component <code>UIComponent</code> to be decoded
@@ -75,12 +70,20 @@ public class AreaRenderer extends BaseRenderer {
         if ((context == null) || (component == null)) {
             throw new NullPointerException();
         }
+        MapComponent map = (MapComponent) component;
+
+        String key = getName(context, map);
+        String value = (String)
+            context.getExternalContext().getRequestParameterMap().get(key);
+        if (value != null) {
+            map.setCurrent(value);
+        }
 
     }
 
 
     /**
-     * <p>No begin encoding is required.</p>
+     * <p>Encode the beginning of this component.</p>
      *
      * @param context <code>FacesContext</code>for the current request
      * @param component <code>UIComponent</code> to be decoded
@@ -91,12 +94,20 @@ public class AreaRenderer extends BaseRenderer {
         if ((context == null) || (component == null)) {
             throw new NullPointerException();
         }
+        MapComponent map = (MapComponent) component;
+        ResponseWriter writer = context.getResponseWriter();
+
+        writer.startElement("form", map);
+        writer.writeAttribute("method", "post", null);
+        writer.writeURIAttribute("action", getURI(context), null);
+        writer.startElement("map", map);
+        writer.writeAttribute("name", map.getId(), "id");
 
     }
 
 
     /**
-     * <p>No children encoding is required.</p>
+     * <p>Encode the children of this component.</p>
      *
      * @param context <code>FacesContext</code>for the current request
      * @param component <code>UIComponent</code> to be decoded
@@ -112,7 +123,7 @@ public class AreaRenderer extends BaseRenderer {
 
 
     /**
-     * <p>Encode this component.</p>
+     * <p>Encode the ending of this component.</p>
      *
      * @param context <code>FacesContext</code>for the current request
      * @param component <code>UIComponent</code> to be decoded
@@ -123,33 +134,15 @@ public class AreaRenderer extends BaseRenderer {
         if ((context == null) || (component == null)) {
             throw new NullPointerException();
         }
-        AreaComponent area = (AreaComponent) component;
-        ImageArea iarea = (ImageArea) area.currentValue(context);
+        MapComponent map = (MapComponent) component;
         ResponseWriter writer = context.getResponseWriter();
-        StringBuffer sb = null;
 
-        writer.startElement("area", area);
-        writer.writeAttribute("alt", iarea.getAlt(), "alt");
-        writer.writeAttribute("coords", iarea.getCoords(), "coords");
-        writer.writeAttribute("shape", iarea.getShape(), "shape");
-        // PENDING(craigmcc) - onmouseout only works on first form of a page
-        sb = new StringBuffer("document.forms[0].mapImage.src='");
-        sb.append(getURI(context, (String) area.getAttribute("onmouseout")));
-        sb.append("'");
-        writer.writeAttribute("onmouseout", sb.toString(), "onmouseout");
-        // PENDING(craigmcc) - onmouseover only works on first form of a page
-        sb = new StringBuffer("document.forms[0].mapImage.src='");
-        sb.append(getURI(context, (String) area.getAttribute("onmouseover")));
-        sb.append("'");
-        writer.writeAttribute("onmouseover", sb.toString(), "onmouseover");
-        // PENDING(craigmcc) - onclick only works on first form of a page
-        sb = new StringBuffer("document.forms[0].");
-        sb.append(getName(context, area));
-        sb.append(".value='");
-        sb.append(iarea.getAlt());
-        sb.append("'; document.forms[0].submit()");
-        writer.writeAttribute("onclick", sb.toString(), "value");
-        writer.endElement("area");
+        writer.startElement("input", map);
+        writer.writeAttribute("type", "hidden", null);
+        writer.writeAttribute("name", getName(context, map), "clientId");
+        writer.endElement("input");
+        writer.endElement("map");
+        writer.endElement("form");
 
     }
 
@@ -164,32 +157,25 @@ public class AreaRenderer extends BaseRenderer {
      * @param component Component we are rendering
      */
     private String getName(FacesContext context, UIComponent component) {
-        while (component != null) {
-            if (component instanceof MapComponent) {
-                return (component.getId() + "_current");
-            }
-            component = component.getParent();
-        }
-        throw new IllegalArgumentException();
+        return (component.getId() + "_current");
     }
 
 
     /**
-     * <p>Return the path to be passed into JavaScript for the specified
-     * value.</p>
+     * <p>Return the context-relative path for the current page.</p>
      *
      * @param context Context for the current request
-     * @param value Partial path to be (potentially) modified
      */
-    private String getURI(FacesContext context, String value) {
-        if (value.startsWith("/")) {
-            return (context.getExternalContext().getRequestContextPath() +
-                    value);
-        } else {
-            return (value);
-        }
-    }
+    private String getURI(FacesContext context) {
 
+        StringBuffer sb = new StringBuffer();
+        sb.append(context.getExternalContext().getRequestContextPath());
+        // PENDING(craigmcc) - will need to change if this is generalized
+        sb.append("/faces");
+        sb.append(context.getViewRoot().getViewId());
+        return (sb.toString());
+
+    }
 
 
 }

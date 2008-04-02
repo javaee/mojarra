@@ -61,29 +61,113 @@
 
     <name>area</name>
     <tag-class>components.taglib.AreaTag</tag-class>
+    <body-content>empty</body-content>
+    <description>
+      Description of a single hotspot in a client side image map.  This
+      tag MUST be nested inside a &lt;map&gt; tag.  To specify the hotspot
+      characteristics, you must specify EITHER a valueRef OR the
+      alt, coords, and shape attributes.
+    </description>
 
     <attribute>
-      <name>id</name>
-      <required>true</required>
+      <name>alt</name>
+      <required>false</required>
       <rtexprvalue>false</rtexprvalue>
+      <description>
+        Alternate text for a synthesized ImageArea bean.  The set of
+        alt values for all hotspots in a particular map must be unique.
+      </description>
     </attribute>
 
     <attribute>
-      <name>valueRef</name>
-      <required>true</required>
+      <name>coords</name>
+      <required>false</required>
       <rtexprvalue>false</rtexprvalue>
+      <description>
+        Hotspot coordinates for a synthesized ImageArea bean.
+      </description>
+    </attribute>
+
+    <attribute>
+      <name>id</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Component id of this component.
+      </description>
     </attribute>
 
     <attribute>
       <name>onmouseout</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
+      <description>
+        Context-relative path to the image to be displayed for this
+        hotspot when the mouse is not hovering over it.
+      </description>
     </attribute>    
 
     <attribute>
       <name>onmouseover</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
+      <description>
+        Context-relative path to the image to be displayed for this
+        hotspot when the mouse is hovering over it.
+      </description>
+    </attribute>
+
+    <attribute>
+      <name>shape</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Shape for a synthesized ImageArea bean (default, rect, circle, poly).
+      </description>
+    </attribute>
+
+    <attribute>
+      <name>styleClass</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        CSS style class to use when rendering this element.
+      </description>
+    </attribute>
+
+    <attribute>
+      <name>valueRef</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Value reference expression pointing at an ImageArea bean describing
+        the characteristics of this hotspot.  If not present, an ImageArea
+        bean will be synthesized from the values of the alt, coords, and
+        shape attributes.
+      </description>
+    </attribute>
+
+  </tag>
+
+
+  <tag>
+
+    <name>area_selected</name>
+    <tag-class>components.taglib.AreaSelectedTag</tag-class>
+    <body-content>empty</body-content>
+    <description>
+      Register an AreaSelectedListener, of the class specified by the
+      type attribute, with the parent MapComponent in which we are nested.
+    </description>
+
+    <attribute>
+      <name>type</name>
+      <required>true</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Fully qualified name of a JavaBean class (which must implement
+        components.components.AreaSelectedListener) to be registered.
+      </description>
     </attribute>
 
   </tag>
@@ -365,17 +449,38 @@
 
     <name>map</name>
     <tag-class>components.taglib.MapTag</tag-class>
+    <description>
+      Component representing a client-side image map, with which the user
+      can click on hotspots to activate selections, and see changes in the
+      displayed image when the mouse is hovered over hotspots.  Only
+      &lt;area&gt; components may be nested inside this component.
+    </description>
 
     <attribute>
-      <name>currentArea</name>
-      <required>true</required>
+      <name>current</name>
+      <required>false</required>
       <rtexprvalue>false</rtexprvalue>
+      <description>
+        Alternate text for the currently selected area child.
+      </description>
     </attribute>
 
     <attribute>
       <name>id</name>
-      <required>true</required>
+      <required>false</required>
       <rtexprvalue>false</rtexprvalue>
+      <description>
+        Component identifier of this component.
+      </description>
+    </attribute>
+
+    <attribute>
+      <name>styleClass</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        CSS style class to use when rendering this element.
+      </description>
     </attribute>
 
   </tag>

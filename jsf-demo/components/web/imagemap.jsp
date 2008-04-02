@@ -36,46 +36,82 @@
  maintenance of any nuclear facility.
 -->
 
-<HTML>
-    <HEAD> <TITLE> Welcome to JavaServer Faces </TITLE> 
-    </HEAD>
-    <%@ taglib uri="http://java.sun.com/jstl/fmt" prefix="fmt" %>
-    <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
-    <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
-    <%@ taglib uri="http://java.sun.com/jsf/demo/components" prefix="d" %>
+<%@ taglib uri="http://java.sun.com/jstl/fmt" prefix="fmt" %>
+<%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
+<%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
+<%@ taglib uri="http://java.sun.com/jsf/demo/components" prefix="d" %>
 
-     <fmt:setBundle
-	    basename="demo.model.Resources"
-	    scope="session" var="mapBundle"/>
-      <f:view>
-        <h:form id="mapForm" formName="mapForm" bundle="mapBundle" >
+<f:view>
 
-	<table> 
-             <tr> 
-              <td> <h:output_text id="welcomeLabel" key="welcomeLabel" 
-                                      bundle="mapBundle" /> </td>
-	     </tr>
-             <tr>
-              <TD>
-		<h:graphic_image id="mapImage" url="/images/world.gif" usemap="#worldMap" />	
-		<d:map id="worldMap" currentArea="NAmericas" >	
-                    <f:action_listener type="demo.model.ImageMapEventHandler"/>
-       			<d:area id="NAmericas" valueRef="NA" onmouseover="/images/world_namer.gif" onmouseout="/images/world.gif" />
-			<d:area id="SAmericas" valueRef="SA" onmouseover="/images/world_samer.gif" onmouseout="/images/world.gif" />
-			<d:area id="Finland" valueRef="finA" onmouseover="/images/world_finland.gif" onmouseout="/images/world.gif"  />
-			<d:area id="Germany" valueRef="gerA" onmouseover="/images/world_germany.gif" onmouseout="/images/world.gif" />
-       			<d:area id="France" valueRef="fraA" onmouseover="/images/world_france.gif" onmouseout="/images/world.gif" />
-		</d:map>
-	     </TD></TR>
-	</TABLE>
+<html>
+<head>
+<title>Welcome to JavaServer Faces</title>
+</head>
+<body>
+
+  <fmt:setBundle basename="demo.model.Resources"
+	            scope="session" var="mapBundle"/>
+
+  <table>
+
+    <tr><td>
+      <h:output_text  id="welcomeLabel" key="welcomeLabel" 
+                                    bundle="mapBundle" />
+    </td></tr>
+
+    <tr><td>
+
+      <h:graphic_image id="mapImage"
+                      url="/images/world.gif"
+                   usemap="#worldMap"/>
+
+      <d:map           id="worldMap"
+                  current="NAmericas">
+
+        <d:area_selected
+                     type="demo.model.AreaSelectedHandler"/>
+
+        <d:area        id="NAmericas"
+                 valueRef="NA"
+              onmouseover="/images/world_namer.gif"
+               onmouseout="/images/world.gif"/>
+
+        <d:area        id="SAmericas"
+                 valueRef="SA"
+              onmouseover="/images/world_samer.gif"
+               onmouseout="/images/world.gif"/>
+
+        <d:area        id="Finland"
+                 valueRef="finA"
+              onmouseover="/images/world_finland.gif"
+               onmouseout="/images/world.gif"/>
+
+        <d:area        id="Germany"
+                 valueRef="gerA"
+              onmouseover="/images/world_germany.gif"
+               onmouseout="/images/world.gif"/>
+
+        <d:area        id="France"
+                 valueRef="fraA"
+              onmouseover="/images/world_france.gif"
+               onmouseout="/images/world.gif"/>
+
+      </d:map>
+
+    </td></tr>
+
+  </table>
+
 <hr>
-	</h:form>
+
 
 <a href='<%= request.getContextPath() + "/index.jsp" %>'>Back</a> to home page.
 
 <h1>How to Use this Component</h1>
 
-<p>This component renders a clickable image map of the world and regions can be selected to change the locale.</p>
+<p>This component renders a clickable image map of the world and regions
+can be selected to change the locale.</p>
+
 <p>You can mouse over and click on some parts of the world that speak
 U.S. English, French, German, Finnish, and Latin American Spanish.  This
 will cause the appropriate Locale to be set into the application,
@@ -83,10 +119,20 @@ causing the proper ResourceBundle lookup.</p>
 
 <h1>Custom Tags / Components</h1>
 
-<p>The <code>UIMap</code> component is driven by the <code>map</code> tag, and it keeps track of the the selected area on the map.  It determines the selected area from the incoming request.</p>
+<p>The <code>MapComponent</code> component is driven by the <code>map</code>
+tag, and it keeps track of the the selected area on the map.  It determines
+the selected area from the incoming request, and fires an
+<code>AreaSelectedEvent</code> whenver the selected area is changed.  You
+can use the <code>&lt;d:area_selected&gt;</code> tag to specify an event
+listener to respond to these events.</p>
 
-<p>The <code>UIArea</code> component is driven by the <code>area</code> tag. It uses Javascript events to visually show the selected area, and it sends the identifier of the selected area as part of the request.  This tag must be nested within the <code>map</code> tag.</p>
+<p>The <code>AreaComponent</code> component is driven by the <code>area</code>
+tag. It uses Javascript events to visually show the selected area, and it sends
+the identifier of the selected area as part of the request.  This tag must be
+nested within an <code>&lt;d:map&gt;</code> tag.</p>
 
 <hr>
-</HTML>
+
+</body>
+</html>
 </f:view>

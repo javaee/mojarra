@@ -74,12 +74,18 @@ Faces technology.</p>
 </td>
 
 <td>
-<a href="ShowSource.jsp?filename=/src/components/taglib/MapTag.java">components/taglib/MapTag.java</a><br>
-<a href="ShowSource.jsp?filename=/src/components/taglib/AreaTag.java">components/taglib/AreaTag.java</a><br>
-<a href="ShowSource.jsp?filename=/src/components/components/UIArea.java">components/components/UIArea.java</a><br>
-<a href="ShowSource.jsp?filename=/src/components/components/UIMap.java">components/components/UIMap.java</a><br>
+<a href="ShowSource.jsp?filename=/src/components/components/AreaComponent.java">components/components/AreaComponent.java</a><br>
+<a href="ShowSource.jsp?filename=/src/components/components/AreaSelectedEvent.java">components/components/AreaSelectedEvent.java</a><br>
+<a href="ShowSource.jsp?filename=/src/components/components/AreaSelectedListener.java">components/components/AreaSelectedListener.java</a><br>
+<a href="ShowSource.jsp?filename=/src/components/components/MapComponent.java">components/components/MapComponent.java</a><br>
 <a href="ShowSource.jsp?filename=/src/components/model/ImageArea.java">components/model/ImageArea.java</a><br>
 <a href="ShowSource.jsp?filename=/src/components/renderkit/AreaRenderer.java">components/renderkit/AreaRenderer.java</a><br>
+<a href="ShowSource.jsp?filename=/src/components/renderkit/MapRenderer.java">components/renderkit/MapRenderer.java</a><br>
+<a href="ShowSource.jsp?filename=/src/components/taglib/AreaTag.java">components/taglib/AreaTag.java</a><br>
+<a href="ShowSource.jsp?filename=/src/components/taglib/AreaSelectedTag.java">components/taglib/AreaSelectedTag.java</a><br>
+<a href="ShowSource.jsp?filename=/src/components/taglib/MapTag.java">components/taglib/MapTag.java</a><br>
+
+
 
 </td>
 

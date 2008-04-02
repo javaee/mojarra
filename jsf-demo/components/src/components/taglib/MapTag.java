@@ -1,4 +1,3 @@
- 
 /*
  * Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
  * 
@@ -40,48 +39,57 @@
 package components.taglib;
 
 
+import components.components.MapComponent;
 import javax.faces.component.UIComponent;
 import javax.faces.webapp.UIComponentTag;
 
 
+
 /**
- * This class is the tag handler that evaluates the <code>map</code>
- * custom tag.
+ * <p>{@link UIComponentTag} for an image map.</p>
  */
  
 public class MapTag extends UIComponentTag {
 
 
-    private String currentArea = null;
-    public void setCurrentArea(String area) {
-    	currentArea = area;
+    private String current = null;
+    public void setCurrent(String current) {
+        this.current = current;
+    }
+
+
+    private String styleClass = null;
+    public void setStyleClass(String styleClass) {
+        this.styleClass = styleClass;
     }
 
 
     public String getComponentType() {
-        return ("Map");
+        return ("DemoMap");
     }
 
 
     public String getRendererType() {
-        return (null);
+        return ("DemoMap");
     }
 
 
     public void release() {
         super.release();
-        currentArea = null;
+        current = null;
+        styleClass = null;
     }
 
 
     protected void overrideProperties(UIComponent component) {
-
         super.overrideProperties(component);
-
-        if (currentArea != null) {
-            component.setAttribute("currentArea", currentArea);
+        MapComponent map = (MapComponent) component;
+        if (current != null) {
+            map.setCurrent(current);
         }
-
+        if (styleClass != null) {
+            map.setAttribute("styleClass", styleClass);
+        }
     }
 
     

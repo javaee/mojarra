@@ -1,4 +1,8 @@
 /*
+ * $Id: AreaSelectedEvent.java,v 1.1 2003/08/26 18:40:43 craigmcc Exp $
+ */
+
+/*
  * Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
  * 
  * Redistribution and use in source and binary forms, with or
@@ -36,109 +40,82 @@
  * maintenance of any nuclear facility.
  */
 
-package components.model;
+package components.components;
 
 
-import java.io.Serializable;
+import javax.faces.event.FacesEvent;
+import javax.faces.event.FacesListener;
 
 
 /**
- * <p>{@link ImageArea} is a JavaBean that represents a hotspot in an
- * image map.  Within a particular image map, no two hotspots may have
- * the same alternate text, because this is treated as a key.</p>
+ * <p>A {@link FacesEvent} indicating that the specified {@link AreaComponent}
+ * has just become the currently selected hotspot within the source
+ * {@link MapComponent}.</p>
  */
 
-public class ImageArea implements Serializable {
+public class AreaSelectedEvent extends FacesEvent {
 
 
     // ------------------------------------------------------------ Constructors
 
 
     /**
-     * <p>Construct an uninitialized {@link ImageArea} instance.</p>
-     */
-    public ImageArea() {
-    }
-
-
-    /**
-     * <p>Construct an {@link ImageArea} initialized with the specified
-     * property values.</p>
+     * <p>Construct a new {@link AreaSelectedEvent} from the specified
+     * source map, selecting the specified area.</p>
      *
-     * @param alt Alternate text for this hotspot
-     * @param coords Coordinate positions for this hotspot
-     * @param shape Shape of this hotspot (default, rect, circle, poly)
+     * @param map The {@link MapComponent} originating this event
+     * @param area The {@link AreaComponent} that was selected (may be null)
      */
-    public ImageArea(String alt, String coords, String shape) {
-        setAlt(alt);
-        setCoords(coords);
-        setShape(shape);
+    public AreaSelectedEvent(MapComponent map, AreaComponent area) {
+        super(map);
+        this.areaComponent = area;
     }
 
 
     // -------------------------------------------------------------- Properties
 
 
-    private String alt = null;
+    private AreaComponent areaComponent = null;
 
 
     /**
-     * <p>Return the alternate text for this hotspot.</p>
+     * <p>Return the {@link AreaComponent} of the selected area.</p>
      */
-    public String getAlt() {
-        return (this.alt);
+    public AreaComponent getAreaComponent() {
+        return (this.areaComponent);
     }
 
 
     /**
-     * <p>Set the alternate text for this hotspot.</p>
+     * <p>Return the {@link MapComponent} of the map for which an area
+     * was selected.</p>
+     */
+    public MapComponent getMapComponent() {
+        return ((MapComponent) getComponent());
+    }
+
+
+    // ------------------------------------------------------ FacesEvent Methods
+
+
+    /**
+     * <p>Return <code>true</code> if the specified listener is
+     * appropriate for this type of event.</p>
      *
-     * @param alt The new alternate text
+     * @param listener {@link FacesListener} to be validated
      */
-    public void setAlt(String alt) {
-        this.alt = alt;
-    }
-
-
-    private String coords = null;
-
-
-    /**
-     * <p>Return the coordinate positions for this hotspot.</p>
-     */
-    public String getCoords() {
-        return (this.coords);
+    public boolean isAppropriateListener(FacesListener listener) {
+        return (listener instanceof AreaSelectedListener);
     }
 
 
     /**
-     * <p>Set the coordinate positions for this hotspot.</p>
+     * <p>Forward this event to the specified listener.</p>
      *
-     * @param coords The new coordinate positions
+     * @param listener {@link FacesListener} to receive this event
      */
-    public void setCoords(String coords) {
-        this.coords = coords;
-    }
-
-
-    private String shape = null;
-
-
-    /**
-     * <p>Return the shape for this hotspot.</p>
-     */
-    public String getShape() {
-        return (this.shape);
-    }
-
-
-    /**
-     * <p>Set the shape for this hotspot.</p>
-     *
-     * @param shape The new shape
-     */
-    public void setShape(String shape) {
-        this.shape = shape;
+    public void processListener(FacesListener listener) {
+        ((AreaSelectedListener) listener).processAreaSelected(this);
     }
 
 

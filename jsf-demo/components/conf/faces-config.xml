@@ -16,8 +16,29 @@
   <!-- Custom Components -->
 
   <component>
-    <component-type>Area</component-type>
-    <component-class>components.components.UIArea</component-class>
+    <component-type>DemoArea</component-type>
+    <component-class>components.components.AreaComponent</component-class>
+    <property>
+      <description>
+        Alternate text if we synthesize an ImageArea bean.
+      </description>
+      <property-name>alt</property-name>
+      <property-class>java.lang.String</property-class>
+    </property>
+    <property>
+      <description>
+        Hotspot coordinates if we synthesize an ImageArea bean.
+      </description>
+      <property-name>coords</property-name>
+      <property-class>java.lang.String</property-class>
+    </property>
+    <property>
+      <description>
+        Shape (default, rect, circle, poly) if we synthesize an ImageArea bean.
+      </description>
+      <property-name>shape</property-name>
+      <property-class>java.lang.String</property-class>
+    </property>
   </component>
 
   <component>
@@ -26,8 +47,15 @@
   </component>
 
   <component>
-    <component-type>Map</component-type>
-    <component-class>components.components.UIMap</component-class>
+    <component-type>DemoMap</component-type>
+    <component-class>components.components.MapComponent</component-class>
+    <property>
+      <description>
+        Alternate text for the currently selected child AreaComponent.
+      </description>
+      <property-name>current</property-name>
+      <property-class>java.lang.String</property-class>
+    </property>
   </component>
 
   <component>
@@ -38,38 +66,89 @@
   <!-- Custom Renderers -->
 
   <render-kit>
+
+    <renderer>
+      <description>
+        Renderer for a components.components.AreaComponent component.
+      </description>
+      <renderer-type>DemoArea</renderer-type>
+      <renderer-class>components.renderkit.AreaRenderer</renderer-class>
+      <attribute>
+        <description>
+          Context-relative path to an image to be displayed when the
+          mouse is not hovering over this hotspot.
+        </description>
+        <attribute-name>onmouseout</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+      <attribute>
+        <description>
+          Context-relative path to an image to be displayed when the
+          mouse is hovering over this hotspot.
+        </description>
+        <attribute-name>onmouseover</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+      <attribute>
+        <description>
+          CSS style class to use when rendering this component.
+        </description>
+        <attribute-name>styleClass</attribute-name>
+      </attribute>
+      <component-class>components.components.AreaComponent</component-class>
+    </renderer>
+
+    <renderer>
+      <description>
+        Renderer for a components.components.MapComponent component.
+      </description>
+      <renderer-type>DemoMap</renderer-type>
+      <renderer-class>components.renderkit.MapRenderer</renderer-class>
+      <attribute>
+        <description>
+          CSS style class to use when rendering this component.
+        </description>
+        <attribute-name>styleClass</attribute-name>
+      </attribute>
+      <component-class>components.components.MapComponent</component-class>
+    </renderer>
+
     <renderer>
       <renderer-type>MenuBar</renderer-type>
       <renderer-class>components.renderkit.MenuBarRenderer</renderer-class>
     </renderer>
+
     <renderer>
       <renderer-type>MenuTree</renderer-type>
       <renderer-class>components.renderkit.MenuTreeRenderer</renderer-class>
     </renderer>
+
     <renderer>
       <renderer-type>ResultSet</renderer-type>
       <renderer-class>components.renderkit.ResultSetRenderer</renderer-class>
     </renderer>
+
     <renderer>
       <renderer-type>Stylesheet</renderer-type>
       <renderer-class>components.renderkit.StylesheetRenderer</renderer-class>
     </renderer>
-    <renderer>
-      <renderer-type>Area</renderer-type>
-      <renderer-class>components.renderkit.AreaRenderer</renderer-class>
-    </renderer>
+
     <renderer>
       <renderer-type>TabLabel</renderer-type>
       <renderer-class>components.renderkit.TabLabelRenderer</renderer-class>
     </renderer>
+
     <renderer>
       <renderer-type>Tab</renderer-type>
       <renderer-class>components.renderkit.TabRenderer</renderer-class>
     </renderer>
+
     <renderer>
       <renderer-type>Tabbed</renderer-type>
       <renderer-class>components.renderkit.TabbedRenderer</renderer-class>
     </renderer>
+
   </render-kit>
+
 
 </faces-config>

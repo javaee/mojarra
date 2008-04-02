@@ -39,19 +39,30 @@
 package components.taglib;
 
 
-import components.components.UIArea;
+import components.components.AreaComponent;
 import javax.faces.component.UIComponent;
 import javax.faces.webapp.UIComponentTag;
 
 
 /**
- * This class is the tag handler that evaluates the <code>area</code>
- * custom tag.
+ * <p>{@link UIComponentTag} for an image map hotspot.</p>
  */
 
 public class AreaTag extends UIComponentTag {
 
     
+    private String alt = null;
+    public void setAlt(String alt) {
+        this.alt = alt;
+    }
+
+
+    private String coords = null;
+    public void setCoords(String coords) {
+        this.coords = coords;
+    }
+
+
     private String onmouseout = null;
     public void setOnmouseout(String newonmouseout) {
         onmouseout = newonmouseout;
@@ -64,6 +75,18 @@ public class AreaTag extends UIComponentTag {
     }
 
 
+    private String shape = null;
+    public void setShape(String shape) {
+        this.shape = shape;
+    }
+
+
+    private String styleClass = null;
+    public void setStyleClass(String styleClass) {
+        this.styleClass = styleClass;
+    }
+
+
     private String valueRef = null;
     public void setValueRef(String newValueRef) {
 	valueRef = newValueRef;
@@ -71,27 +94,50 @@ public class AreaTag extends UIComponentTag {
 
 
     public String getComponentType() {
-            return ("Area");
+            return ("DemoArea");
     }
 
     
     public String getRendererType() {
-        return "Area";
+        return ("DemoArea");
     } 
     
 
+    public void release() {
+        super.release();
+        this.alt = null;
+        this.coords = null;
+        this.onmouseout = null;
+        this.onmouseover = null;
+        this.shape = null;
+        this.styleClass = null;
+        this.valueRef = null;
+    }
+
+
     protected void overrideProperties(UIComponent component) {
-
         super.overrideProperties(component);
-
-        if (onmouseover != null) {
-            component.setAttribute("onmouseover", onmouseover);
+        AreaComponent area = (AreaComponent) component;
+        if (alt != null) {
+            area.setAlt(alt);
+        }
+        if (coords != null) {
+            area.setCoords(coords);
         }
         if (onmouseout != null) {
-            component.setAttribute("onmouseout", onmouseout);
+            area.setAttribute("onmouseout", onmouseout);
+        }
+        if (onmouseover != null) {
+            area.setAttribute("onmouseover", onmouseover);
+        }
+        if (shape != null) {
+            area.setShape(shape);
+        }
+        if (styleClass != null) {
+            area.setAttribute("styleClass", styleClass);
         }
         if (valueRef != null) {
-            ((UIArea) component).setValueRef(valueRef);
+            area.setValueRef(valueRef);
         }
 
     }
