@@ -47,44 +47,57 @@
             value="${jsf.ri.home}/build/lib/jsf-ri.jar" />
   <property name="webapp" value="demo" />
 
-  <target name="clean">
+  <target name="call.clean">
     
     <ant target="clean" dir="templateDemo"/>
+
+    <ant target="clean" dir="helloDuke"/>
+
+    <ant target="clean" dir="guessNumber"/>
+
+    <ant target="clean" dir="components"/>
+
+    <ant target="clean" dir="cardemo"/>
+
+    <ant target="clean" dir="nonjsp"/>
+
+    <ant target="clean" dir="imageMap"/>
+ 
+    <ant target="clean" dir="imageMapRender"/>
+
+
+  </target>
+
+  <target name="clean" depends="call.clean">
+    
     <antcall target="deleteJarsFromDemo">
       <param name="demoDir" value="templateDemo"/>
     </antcall>
 
-    <ant target="clean" dir="helloDuke"/>
     <antcall target="deleteJarsFromDemo">
       <param name="demoDir" value="helloDuke"/>
     </antcall>
 
-    <ant target="clean" dir="guessNumber"/>
     <antcall target="deleteJarsFromDemo">
       <param name="demoDir" value="guessNumber"/>
     </antcall>
 
-    <ant target="clean" dir="components"/>
     <antcall target="deleteJarsFromDemo">
       <param name="demoDir" value="components"/>
     </antcall>
 
-    <ant target="clean" dir="cardemo"/>
     <antcall target="deleteJarsFromDemo">
       <param name="demoDir" value="cardemo"/>
     </antcall>
 
-    <ant target="clean" dir="imageMap"/>
     <antcall target="deleteJarsFromDemo">
       <param name="demoDir" value="imageMap"/>
     </antcall>
  
-    <ant target="clean" dir="imageMapRender"/>
     <antcall target="deleteJarsFromDemo">
       <param name="demoDir" value="imageMapRender"/>
     </antcall>
 
-    <ant target="clean" dir="nonjsp"/>
     <antcall target="deleteJarsFromDemo">
 	<param name="demoDir" value="nonjsp"/>
     </antcall>
@@ -166,13 +179,13 @@
 
   <target name="build-all" depends="verifyPreconditions,copyJarsToDemos">
 
-    <ant inheritAll="false" dir="${basedir}/helloDuke"/>
-    <ant inheritAll="false" dir="${basedir}/guessNumber"/>
     <ant inheritAll="false" dir="${basedir}/components"/>
     <copy todir="cardemo/web/WEB-INF/lib" 
           file="components/build/${webapp}/WEB-INF/lib/demo-components.jar"/>
     <copy todir="imageMapRender/web/WEB-INF/lib" 
           file="components/build/${webapp}/WEB-INF/lib/demo-components.jar"/>
+    <ant inheritAll="false" dir="${basedir}/helloDuke"/>
+    <ant inheritAll="false" dir="${basedir}/guessNumber"/>
     <ant inheritAll="false" dir="${basedir}/cardemo"/>
     <ant inheritAll="false" dir="${basedir}/imageMap"/>
     <ant inheritAll="false" dir="${basedir}/imageMapRender"/>

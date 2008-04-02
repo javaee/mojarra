@@ -37,8 +37,8 @@
   
 -->
 
-<project name="nonjsp" default="build" basedir=".">
-  <target name="init">
+<project name="nonjsp" default="build.war" basedir=".">
+  <target name="init" depends="verifyPreconditions">
       <tstamp/>
   </target>
 
@@ -229,6 +229,15 @@
     <!-- create a war file for distribution -->
     <mkdir dir="${dist}" />
     <jar jarfile="${dist}/${example}.war" basedir="${build}"/> 
+  </target>
+
+  <target name="checkRequiredFile">
+    <available file="${file}" property="requirement.satisfied"/>
+    <antcall target="checkRequired.fail"/>
+  </target>
+
+  <target name="checkRequired.fail" unless="requirement.satisfied">
+    <fail message="${fail.message}"/>
   </target>
 
 </project>

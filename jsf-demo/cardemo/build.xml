@@ -38,8 +38,8 @@
   
 -->
 
-<project name="cardemo" default="build" basedir=".">
-  <target name="init">
+<project name="cardemo" default="build.war" basedir=".">
+  <target name="init" depends="verifyPreconditions">
       <tstamp/>
   </target>
 
@@ -149,6 +149,15 @@
 
   </target>
 
+  <target name="checkRequiredFile">
+    <available file="${file}" property="requirement.satisfied"/>
+    <antcall target="checkRequired.fail"/>
+  </target>
+
+  <target name="checkRequired.fail" unless="requirement.satisfied">
+    <fail message="${fail.message}"/>
+  </target>
+
   <target name="prepare" depends="init"
    	description="Create build directories.">
     <mkdir dir="${build}" />
@@ -226,6 +235,8 @@
   <target name="build.war" depends="build">
     <!-- create a war file for distribution -->
     <jar jarfile="${example}.war" basedir="${build}"/> 
+    <copy todir="${build}" file="${example}.war" />
+    <delete file="${example}.war" />
   </target>
 
 </project>

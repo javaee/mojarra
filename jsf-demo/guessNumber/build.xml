@@ -39,7 +39,7 @@
 -->
 
 <project name="guessNumber" default="build" basedir=".">
-  <target name="init">
+  <target name="init" depends="verifyPreconditions">
       <tstamp/>
   </target>
 
@@ -208,7 +208,20 @@
          <include name="*properties"/>
       </fileset>
     </copy>
+
+    <jar jarfile="${example}.war" basedir="${build}"/>
+    <copy todir="${build}" file="${example}.war" />
+    <delete file="${example}.war" />
   </target>	 
- 
+
+  <target name="checkRequiredFile">
+    <available file="${file}" property="requirement.satisfied"/>
+    <antcall target="checkRequired.fail"/>
+  </target>
+
+  <target name="checkRequired.fail" unless="requirement.satisfied">
+    <fail message="${fail.message}"/>
+  </target>
+
 </project>
 

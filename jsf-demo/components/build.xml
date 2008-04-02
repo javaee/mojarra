@@ -39,7 +39,7 @@
 -->
 
 <project name="components" default="build" basedir=".">
-  <target name="init">
+  <target name="init" depends="verifyPreconditions">
       <tstamp/>
   </target>
 
@@ -235,7 +235,21 @@
     <jar jarfile="${build}/${webapp}/WEB-INF/lib/demo-${example}.jar" 
 	 basedir="${build}/classes/${example}"/>
 
+    <jar jarfile="${build}/${example}.war" 
+	 basedir="${build}/${webapp}"/>
+
+
+
   </target>	
+
+  <target name="checkRequiredFile">
+    <available file="${file}" property="requirement.satisfied"/>
+    <antcall target="checkRequired.fail"/>
+  </target>
+
+  <target name="checkRequired.fail" unless="requirement.satisfied">
+    <fail message="${fail.message}"/>
+  </target>
 
 </project>
 
