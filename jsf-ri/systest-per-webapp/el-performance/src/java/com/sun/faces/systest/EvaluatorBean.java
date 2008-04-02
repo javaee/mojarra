@@ -1,5 +1,5 @@
 /*
- * $Id: EvaluatorBean.java,v 1.2 2004/05/10 18:54:59 eburns Exp $
+ * $Id: EvaluatorBean.java,v 1.3 2004/10/14 19:53:41 edburns Exp $
  */
 
 /*
@@ -13,14 +13,27 @@ import javax.faces.event.ActionEvent;
 import javax.faces.context.FacesContext;
 import javax.faces.component.NamingContainer;
 import javax.faces.component.UIOutput;
+import javax.faces.component.UIComponent;
 import javax.faces.el.ValueBinding;
 
 import java.util.Date;
+import java.util.Random;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.BitSet;
 import java.text.SimpleDateFormat;
+
+import java.io.PrintStream;
+
+import com.sun.faces.util.MultiThreadTestRunner;
 
 public class EvaluatorBean extends Object {
 
-    public EvaluatorBean() {}
+    public EvaluatorBean() {
+	random = new Random(32714);
+    }
+
+    Random random = null;
 
     protected int reps = 30000;
     public int getReps() {
@@ -29,6 +42,24 @@ public class EvaluatorBean extends Object {
 
     public void setReps(int newReps) {
 	reps = newReps;
+    }
+
+    protected int numThreads = 1;
+    public int getNumThreads() {
+	return numThreads;
+    }
+
+    public void setNumThreads(int newNumThreads) {
+	numThreads = newNumThreads;
+    }
+
+    protected Object [] threadOutcomes;
+    public Object [] getThreadOutcomes() {
+	return threadOutcomes;
+    }
+
+    public void setThreadOutcomes(Object [] newThreadOutcomes) {
+	threadOutcomes = newThreadOutcomes;
     }
 
     private long start = 0;
@@ -70,6 +101,47 @@ public class EvaluatorBean extends Object {
 	end = System.currentTimeMillis();
     }
 
+    public void doAttributeMapGet(ActionEvent event) throws Exception {
+	int i = 0;
+	FacesContext context = FacesContext.getCurrentInstance();
+
+	// Create numThreads Threads passing in a new UIComponent with an
+	// attribute "foo" value "bar" to the ctor.
+
+	Thread threads[] = new Thread[numThreads];
+	UIComponent curInput = null;
+	threadOutcomes = new Object[numThreads];
+	Runnable runnable = null;
+
+	// initialize threads array
+	for (i = 0; i < numThreads; i++) {
+	    curInput = 
+		context.getApplication().createComponent("javax.faces.Input");
+	    curInput.getAttributes().put("foo", "bar");
+	    runnable = new AttributeGetRunnable(curInput, getReps(), "foo", 
+						random, i, 
+						numThreads == 1 ? false: true,
+						System.out,
+						this);
+
+	    threads[i] = new Thread(runnable, "TestThread" + i);
+	}
+
+	MultiThreadTestRunner runner = 
+	    new MultiThreadTestRunner(threads, threadOutcomes);
+
+	// if the user wants to show results
+	if (showResults) {
+	    // clear the buffer for the new results
+	    results = new StringBuffer();
+	}
+	// evaluate it as a get, reps number of times 
+	start = System.currentTimeMillis();
+	boolean foundFailedThread = false;
+	foundFailedThread = runner.runThreadsAndOutputResults(System.out);
+	end = System.currentTimeMillis();
+    }
+
     protected boolean showResults = false;
     public boolean isShowResults() {
 	return showResults;
@@ -97,6 +169,69 @@ public class EvaluatorBean extends Object {
     public void setResults(String newResults) {
 	results = new StringBuffer(newResults);
     }
-    
+
+    // Each Thread has an index assigned to it and does reps get()
+    // operations on the attribute map for key, pausing for a Random
+    // amount of millis between each get.  EvaluatorBean maintains an
+    // Object array property threadOutcomes of length numThreads that
+    // stores the outcomes of the Threads.  Each Thread writes its
+    // outcome to the entry at the Thread's index into the
+    // threadOutcomes array.  If an exception is thrown, it is written
+    // to the array.  If the Thread executes successfully, a success
+    // message is written to the threadOutcomes array.
+
+    public static class AttributeGetRunnable extends Object implements Runnable {
+	UIComponent component = null;
+	int reps = 1;
+	Object key = null;
+	Random random = null;
+	boolean sleepBetweenGets = true;
+	int index = 0;
+	EvaluatorBean host = null;
+	PrintStream out = null;
+	
+	public AttributeGetRunnable(UIComponent component, int reps, 
+				    Object key, Random random, int index, 
+				    boolean sleepBetweenGets,
+				    PrintStream out,
+				    EvaluatorBean host) {
+	    this.component = component;
+	    this.reps = reps;
+	    this.key = key;
+	    this.random = random;
+	    this.index = index;
+	    this.sleepBetweenGets = sleepBetweenGets;
+	    this.out = out;
+	    this.host = host;
+	}
+
+	public void run() {
+	    String name = Thread.currentThread().getName();
+	    
+	    for (int i = 0; i < reps; i++) {
+		try {
+		    component.getAttributes().get(key);
+		}
+		catch (Exception e) {
+		    host.getThreadOutcomes()[index] = e;
+		    System.out.println("index: " + index + " exception on get(): " + e.getMessage());
+		    return;
+		}   
+		
+		if (sleepBetweenGets) {
+		    try {
+			Thread.sleep(Math.abs(random.nextLong()) % 10);
+		    }
+		    catch (InterruptedException e) {
+			host.getThreadOutcomes()[index] = e;
+			return;
+		    }
+		}
+	    }
+	    
+	    host.getThreadOutcomes()[index] = name + " executed successfully.";
+
+	}
+    }
 
 }
