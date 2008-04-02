@@ -1,5 +1,5 @@
 /*
- * $Id: HiddenRenderer.java,v 1.21 2004/10/12 14:39:52 rlubke Exp $
+ * $Id: HiddenRenderer.java,v 1.22 2005/03/14 23:41:08 jayashri Exp $
  */
 
 /*
@@ -97,8 +97,6 @@ public class HiddenRenderer extends HtmlBasicInputRenderer {
             writer.writeAttribute("value", currentValue, "value");
         }
         writer.endElement("input");
-
-        FormRenderer.addRenderedHiddenField(context, clientId);
     }
     
     // The testcase for this class is TestRenderers_3.java 
