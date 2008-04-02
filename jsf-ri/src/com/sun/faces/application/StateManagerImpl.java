@@ -1,5 +1,5 @@
 /* 
- * $Id: StateManagerImpl.java,v 1.41 2006/01/17 22:44:33 rlubke Exp $ 
+ * $Id: StateManagerImpl.java,v 1.42 2006/01/19 21:28:22 rlubke Exp $ 
  */ 
 
 
@@ -61,13 +61,13 @@ import javax.faces.component.NamingContainer;
  * <B>StateManagerImpl</B> is the default implementation class for
  * StateManager.
  *
- * @version $Id: StateManagerImpl.java,v 1.41 2006/01/17 22:44:33 rlubke Exp $
+ * @version $Id: StateManagerImpl.java,v 1.42 2006/01/19 21:28:22 rlubke Exp $
  * @see javax.faces.application.ViewHandler
  */
 public class StateManagerImpl extends StateManager {
 
     // Log instance for this class
-    private static Logger logger = Util.getLogger(Util.FACES_LOGGER 
+    private static final Logger LOGGER = Util.getLogger(Util.FACES_LOGGER 
             + Util.APPLICATION_LOGGER);
     
     private static final String NUMBER_OF_VIEWS_IN_SESSION =
@@ -81,8 +81,8 @@ public class StateManagerImpl extends StateManager {
     /**
      * Number of views in logical view to be saved in session.
      */
-    int noOfViews = 0;
-    int noOfViewsInLogicalView = 0;
+    private int noOfViews = 0;
+    private int noOfViewsInLogicalView = 0;
     
     /**
      * Keyed by renderKitId, this Map contains a boolean that
@@ -96,6 +96,7 @@ public class StateManagerImpl extends StateManager {
         return ( super.saveView(context) );
     }
     
+    @SuppressWarnings("deprecation")
     public SerializedView saveSerializedView(FacesContext context) 
         throws IllegalStateException{
         SerializedView result = null;
@@ -112,16 +113,16 @@ public class StateManagerImpl extends StateManager {
 	checkIdUniqueness(context, viewRoot, new HashSet<String>());
 
 	
- 	if (logger.isLoggable(Level.FINE)) {
-            logger.fine("Begin creating serialized view for " 
+ 	if (LOGGER.isLoggable(Level.FINE)) {
+            LOGGER.fine("Begin creating serialized view for " 
                     + viewRoot.getViewId());
  	}
 	result = new SerializedView(treeStructure = 
 				    getTreeStructureToSave(context),
 				    componentState =
 				    getComponentStateToSave(context));
- 	if (logger.isLoggable(Level.FINE)) {
-            logger.fine("End creating serialized view " + viewRoot.getViewId());
+ 	if (LOGGER.isLoggable(Level.FINE)) {
+            LOGGER.fine("End creating serialized view " + viewRoot.getViewId());
  	}
         if (!isSavingStateInClient(context)) {
             //
@@ -139,50 +140,52 @@ public class StateManagerImpl extends StateManager {
             // parameter.  
             //
             // The motivation for this is to allow better memory tuning for 
-            // apps that need this multi-window behavior.
+            // apps that need this multi-window behavior.                                                     
+            int logicalMapSize = getNumberOfViewsParameter(context);
+            int actualMapSize = getNumberOfViewsInLogicalViewParameter(context);
             
-            String id = null,
-                   idInActualMap = null,
-                   idInLogicalMap = (String)
-                context.getExternalContext().getRequestMap().get(RIConstants.LOGICAL_VIEW_MAP);
-            LRUMap logicalMap = null, actualMap = null;
-            int 
-                logicalMapSize = getNumberOfViewsParameter(context),
-                actualMapSize = getNumberOfViewsInLogicalViewParameter(context);
-            
-            Object stateArray[] = { treeStructure, componentState };
+            Object stateArray[] = { treeStructure, componentState };            
+            ExternalContext externalContext = context.getExternalContext();
+            Object sessionObj = externalContext.getSession(true);
             Map<String,Object> sessionMap = Util.getSessionMap(context);
-            
- 	    synchronized (this) {
-                if (null == (logicalMap = (LRUMap) sessionMap.get(RIConstants.LOGICAL_VIEW_MAP))) {
-                    logicalMap = new LRUMap(logicalMapSize);
- 		    sessionMap.put(RIConstants.LOGICAL_VIEW_MAP, logicalMap);
-                }
-                assert(null != logicalMap); 
 
+            
+            synchronized (sessionObj) {
+                LRUMap<String,LRUMap<String,Object[]>> logicalMap;
+                LRUMap<String,Object[]> actualMap;
+                if (null == (logicalMap =
+                      (LRUMap<String, LRUMap<String, Object[]>>) sessionMap
+                            .get(RIConstants.LOGICAL_VIEW_MAP))) {
+                    logicalMap = 
+                        new LRUMap<String, LRUMap<String, Object[]>>(logicalMapSize);
+                    sessionMap.put(RIConstants.LOGICAL_VIEW_MAP, logicalMap);
+                }
+
+                String idInLogicalMap = (String)
+                      externalContext.getRequestMap()
+                            .get(RIConstants.LOGICAL_VIEW_MAP);
                 if (null == idInLogicalMap) {
                     idInLogicalMap = createUniqueRequestId();
                 }
                 assert(null != idInLogicalMap);
- 
-                idInActualMap = createUniqueRequestId();
- 		if (null == (actualMap = (LRUMap) 
-                        logicalMap.get(idInLogicalMap))) {
-		    actualMap = new LRUMap(actualMapSize);
+
+                String idInActualMap = createUniqueRequestId();
+                if (null == (actualMap = logicalMap.get(idInLogicalMap))) {
+                    actualMap = new LRUMap<String, Object[]>(actualMapSize);
                     logicalMap.put(idInLogicalMap, actualMap);
- 		}
-                id = idInLogicalMap + NamingContainer.SEPARATOR_CHAR + 
-                        idInActualMap;
-		result = new SerializedView(id, null);
+                }
+                String id = idInLogicalMap + NamingContainer.SEPARATOR_CHAR +
+                     idInActualMap;
+                result = new SerializedView(id, null);
                 actualMap.put(idInActualMap, stateArray);
- 	    }
+            }
  	}
 	
         return result;
     }
 
 
-    char requestIdSerial = 0;
+    private char requestIdSerial = 0;
 
     private String createUniqueRequestId() {
 	if (requestIdSerial++ == Character.MAX_VALUE) {
@@ -207,8 +210,8 @@ public class StateManagerImpl extends StateManager {
             if (componentIds.add(id)) {
                 checkIdUniqueness(context, kid, componentIds);
             } else {
-                if (logger.isLoggable(Level.SEVERE)) {
-                    logger.log(Level.SEVERE,
+                if (LOGGER.isLoggable(Level.SEVERE)) {
+                    LOGGER.log(Level.SEVERE,
                                "jsf.duplicate_component_id_error",
                                id);
                 }
@@ -219,12 +222,12 @@ public class StateManagerImpl extends StateManager {
         }
     }
 
-
+    @SuppressWarnings("deprecation")
     protected Object getComponentStateToSave(FacesContext context) {
 	return context.getViewRoot().processSaveState(context);
     }
 
-
+    @SuppressWarnings("deprecation")
     protected Object getTreeStructureToSave(FacesContext context) {
         TreeStructure structRoot = null;
         UIComponent viewRoot = context.getViewRoot();
@@ -235,7 +238,7 @@ public class StateManagerImpl extends StateManager {
         return structRoot;
     }
 
-
+    @SuppressWarnings("deprecation")
     public UIViewRoot restoreView(FacesContext context, String viewId,
                                   String renderKitId) {
         if (null == renderKitId) {
@@ -248,21 +251,21 @@ public class StateManagerImpl extends StateManager {
         UIViewRoot viewRoot = null;
         if (isSavingStateInClient(context)) {
             // restore view from response.
-           if (logger.isLoggable(Level.FINE)) {
-                logger.log(Level.FINE, "Begin restoring view from response " 
+           if (LOGGER.isLoggable(Level.FINE)) {
+                LOGGER.log(Level.FINE, "Begin restoring view from response " 
                         + viewId);
             }
             viewRoot = restoreTreeStructure(context, viewId, renderKitId);
             if (viewRoot != null) {
                 restoreComponentState(context, viewRoot, renderKitId);
             } else {
-                if (logger.isLoggable(Level.FINE)) {
-                    logger.fine("Possibly a new request. Tree structure could not "
+                if (LOGGER.isLoggable(Level.FINE)) {
+                    LOGGER.fine("Possibly a new request. Tree structure could not "
                             + " be restored for " + viewId);
                 }
             }
-            if (logger.isLoggable(Level.FINE)) {
-                logger.fine("End restoring view from response " + viewId);
+            if (LOGGER.isLoggable(Level.FINE)) {
+                LOGGER.fine("End restoring view from response " + viewId);
             }
         } else {
             // restore tree from session.
@@ -278,8 +281,8 @@ public class StateManagerImpl extends StateManager {
             }
 
 	    if (null != id) {
-	        if (logger.isLoggable(Level.FINE)) {
-                    logger.fine( "Begin restoring view in session for viewId " 
+	        if (LOGGER.isLoggable(Level.FINE)) {
+                    LOGGER.fine( "Begin restoring view in session for viewId " 
                             + viewId);
 		}
                 String idString = (String) id,
@@ -298,23 +301,20 @@ public class StateManagerImpl extends StateManager {
                 
                 // stop evaluating if the session is not available
                 if (sessionObj == null) {
-                    if (logger.isLoggable(Level.FINE)) {
-                        logger.fine( "Can't Restore Server View State, session expired for viewId: "
+                    if (LOGGER.isLoggable(Level.FINE)) {
+                        LOGGER.fine( "Can't Restore Server View State, session expired for viewId: "
                                 + viewId);
                     }
                     return null;
                 }
-                
-                Map logicalMap = null,
-                actualMap = null,
-                sessionMap = externalCtx.getSessionMap();
+                                                               
                 
 		TreeStructure structRoot = null;
 		Object [] stateArray = null;
 		synchronized (sessionObj) {
-		    logicalMap = (Map) sessionMap.get(RIConstants.LOGICAL_VIEW_MAP);
+		    Map logicalMap = (Map) externalCtx.getSessionMap().get(RIConstants.LOGICAL_VIEW_MAP);
                     if (logicalMap != null) {
-                        actualMap = (Map) logicalMap.get(idInLogicalMap);
+                        Map actualMap = (Map) logicalMap.get(idInLogicalMap);
                         if (actualMap != null) {
                             context.getExternalContext().getRequestMap().put(RIConstants.LOGICAL_VIEW_MAP, 
                                 idInLogicalMap);
@@ -323,8 +323,8 @@ public class StateManagerImpl extends StateManager {
                     }
 		}
                 if (stateArray == null) {
-                    if (logger.isLoggable(Level.FINE)) {
-                        logger.fine( "Session Available, but View State does not exist for viewId: "
+                    if (LOGGER.isLoggable(Level.FINE)) {
+                        LOGGER.fine( "Session Available, but View State does not exist for viewId: "
                             + viewId);
                     }
                     return null;
@@ -335,8 +335,8 @@ public class StateManagerImpl extends StateManager {
 		
 		viewRoot.processRestoreState(context, stateArray[1]);
 		
-		if (logger.isLoggable(Level.FINE)) {
-                    logger.fine("End restoring view in session for viewId " 
+		if (LOGGER.isLoggable(Level.FINE)) {
+                    LOGGER.fine("End restoring view in session for viewId " 
                             + viewId);
 		}
 	    }
@@ -344,7 +344,7 @@ public class StateManagerImpl extends StateManager {
         return viewRoot;
     }
 
-
+    @SuppressWarnings("deprecation")
     protected void restoreComponentState(FacesContext context,
                                          UIViewRoot root, String renderKitId) {
         if (null == renderKitId) {
@@ -364,7 +364,7 @@ public class StateManagerImpl extends StateManager {
         root.processRestoreState(context, state);
     }
 
-
+    @SuppressWarnings("deprecation")
     protected UIViewRoot restoreTreeStructure(FacesContext context,
                                               String viewId, String renderKitId) {
         if (null == renderKitId) {
@@ -395,6 +395,7 @@ public class StateManagerImpl extends StateManager {
         super.writeState(context, state);
     }
     
+    @SuppressWarnings("deprecation")
     public void writeState(FacesContext context, SerializedView state)
         throws IOException {
         String renderKitId = context.getViewRoot().getRenderKitId();
@@ -435,14 +436,13 @@ public class StateManagerImpl extends StateManager {
 	    // check for id uniqueness
 	    id = kid.getClientId(context);
 	    if (id != null && !componentIds.add(id)) {
-                if (logger.isLoggable(Level.SEVERE)) {
-                    logger.log(Level.SEVERE,"jsf.duplicate_component_id_error",id);
+                if (LOGGER.isLoggable(Level.SEVERE)) {
+                    LOGGER.log(Level.SEVERE,"jsf.duplicate_component_id_error",id);
                 }
 		throw new IllegalStateException(MessageUtils.getExceptionMessageString(
-                        MessageUtils.DUPLICATE_COMPONENT_ID_ERROR_ID,
-                        new Object[]{id}));
-	    }
-            
+                        MessageUtils.DUPLICATE_COMPONENT_ID_ERROR_ID, id));
+        }
+
             // if a component is marked transient do not persist its state as
             // well as its children.
             if (!kid.isTransient()) {
@@ -455,29 +455,26 @@ public class StateManagerImpl extends StateManager {
 
         // save structure info of the facets of the component currenly being 
         // processed.
-        Iterator<String> facets = component.getFacets().keySet().iterator();
-        while (facets.hasNext()) {
-            String facetName = facets.next();
+        for (String facetName : component.getFacets().keySet()) {
             UIComponent facetComponent = component.getFacets().
-                get(facetName);
+                  get(facetName);
 
-	    // check for id uniqueness
-	    id = facetComponent.getClientId(context);
-	    if (id != null && !componentIds.add(id)) {
-                if (logger.isLoggable(Level.SEVERE)) {
-                    logger.log(Level.SEVERE,"jsf.duplicate_component_id_error",
-                            id);
+            // check for id uniqueness
+            id = facetComponent.getClientId(context);
+            if (id != null && !componentIds.add(id)) {
+                if (LOGGER.isLoggable(Level.SEVERE)) {
+                    LOGGER.log(Level.SEVERE, "jsf.duplicate_component_id_error",
+                               id);
                 }
-		throw new IllegalStateException(MessageUtils.getExceptionMessageString(
-                        MessageUtils.DUPLICATE_COMPONENT_ID_ERROR_ID,
-                        new Object[]{id}));
-	    }
-            
+                throw new IllegalStateException(MessageUtils.getExceptionMessageString(
+                      MessageUtils.DUPLICATE_COMPONENT_ID_ERROR_ID, id));
+            }
+
             // if a facet is marked transient do not persist its state as well as
             // its children.
             if (!(facetComponent.isTransient())) {
                 TreeStructure treeStructureFacet =
-                    new TreeStructure(facetComponent);
+                      new TreeStructure(facetComponent);
                 treeStructure.addFacet(facetName, treeStructureFacet);
                 // process children of facet.
                 buildTreeStructureToSave(context,
@@ -521,11 +518,12 @@ public class StateManagerImpl extends StateManager {
      * Returns the <code> UIViewRoot</code> corresponding the 
      * <code> viewId </code> by restoring the view structure and state.
      */
+    @SuppressWarnings("deprecation")
     protected UIViewRoot restoreSerializedView(FacesContext context, 
         SerializedView sv, String viewId) {
         if ( sv == null) {
-            if (logger.isLoggable(Level.FINE)) {
-                logger.fine( "Possibly a new request. Tree structure could not "
+            if (LOGGER.isLoggable(Level.FINE)) {
+                LOGGER.fine( "Possibly a new request. Tree structure could not "
                         + " be restored for " + viewId);
             }
             return null;
@@ -559,8 +557,8 @@ public class StateManagerImpl extends StateManager {
             try {
                 noOfViews = Integer.valueOf(noOfViewsStr).intValue();
             } catch (NumberFormatException nfe) {
-                if (logger.isLoggable(Level.FINE)) {
-                    logger.fine("Error parsing the servetInitParameter " +
+                if (LOGGER.isLoggable(Level.FINE)) {
+                    LOGGER.fine("Error parsing the servetInitParameter " +
                             NUMBER_OF_VIEWS_IN_SESSION + ". Using default " + 
                             noOfViews);
                 }
@@ -585,8 +583,8 @@ public class StateManagerImpl extends StateManager {
             try {
                 noOfViewsInLogicalView = Integer.valueOf(noOfViewsStr).intValue();
             } catch (NumberFormatException nfe) {
-                if (logger.isLoggable(Level.FINE)) {
-                    logger.fine("Error parsing the servetInitParameter " +
+                if (LOGGER.isLoggable(Level.FINE)) {
+                    LOGGER.fine("Error parsing the servetInitParameter " +
                             NUMBER_OF_VIEWS_IN_LOGICAL_VIEW_IN_SESSION + ". Using default " + 
                             noOfViewsInLogicalView);
                 }

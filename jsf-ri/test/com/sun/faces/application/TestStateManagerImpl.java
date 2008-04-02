@@ -1,6 +1,6 @@
 
 /*
- * $Id: TestStateManagerImpl.java,v 1.14 2005/10/19 19:51:29 edburns Exp $
+ * $Id: TestStateManagerImpl.java,v 1.15 2006/01/19 21:28:23 rlubke Exp $
  */
 
 /*
@@ -31,6 +31,7 @@
 package com.sun.faces.application;
 import com.sun.faces.RIConstants;
 import com.sun.faces.cactus.ServletFacesTestCase;
+import com.sun.faces.cactus.TestingUtil;
 import com.sun.faces.util.Util;
 import java.util.Map;
 import javax.faces.application.StateManager.SerializedView;
@@ -231,7 +232,14 @@ public class TestStateManagerImpl extends ServletFacesTestCase {
     }
 
     public static void resetStateManagerRequestIdSerialNumber(FacesContext context) {
-	((StateManagerImpl) Util.getStateManager(context)).requestIdSerial = 0;
+	//((StateManagerImpl) Util.getStateManager(context)).requestIdSerial = 0;
+        StateManagerImpl stateManager = 
+              ((StateManagerImpl) Util.getStateManager(context));
+        TestingUtil.setPrivateField("reqeustIdSerial",
+                                    Integer.TYPE,
+                                    stateManager,
+                                    0);
+        
 	
     }
     
