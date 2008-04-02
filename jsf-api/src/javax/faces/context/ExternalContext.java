@@ -1,5 +1,5 @@
 /*
- * $Id: ExternalContext.java,v 1.4 2003/08/22 14:03:17 eburns Exp $
+ * $Id: ExternalContext.java,v 1.5 2003/08/28 18:19:04 craigmcc Exp $
  */
  
 /*
@@ -321,4 +321,23 @@ public abstract class ExternalContext {
 
     public abstract void dispatchMessage(String requestURI) throws IOException, FacesException;
     
+
+    /**
+     * <p>Log the specified message to the appropriate context.</p>
+     *
+     * @param message Message to be logged
+     */
+    public abstract void log(String message);
+
+
+    /**
+     * <p>Log the specified message, and a stack trace for the specified
+     * exception, to the appropriate context.</p>
+     *
+     * @param message Message to be logged
+     * @param throwable Exception to be logged
+     */
+    public abstract void log(String message, Throwable throwable);
+
+
 }

@@ -1,5 +1,5 @@
 /*
- * $Id: MockExternalContext.java,v 1.3 2003/07/28 22:22:33 eburns Exp $
+ * $Id: MockExternalContext.java,v 1.4 2003/08/28 18:19:05 craigmcc Exp $
  */
 
 /*
@@ -190,4 +190,14 @@ public class MockExternalContext extends ExternalContext {
     }
 
     
+    public void log(String message) {
+        context.log(message);
+    }
+
+
+    public void log(String message, Throwable throwable) {
+        context.log(message, throwable);
+    }
+
+
 }
