@@ -36,7 +36,7 @@
              <td>
 
 	      <h:command_link id="valueRefLink" action="success">
-                 <h:output_text valueRef="model.label"/>
+                 <h:output_text value="model.label"/>
                  <f:action_listener type="standard.DefaultListener"/>
               </h:command_link>
 

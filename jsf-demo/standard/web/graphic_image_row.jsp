@@ -58,7 +58,7 @@
              <td>
 
                <h:graphic_image id="outputGraphic3" 
-	                            valueRef="LoginBean.imagePath"
+	                            value="LoginBean.imagePath"
 	                            alt="output_graphic with path from model"
                                 title="output_graphic with path from model"
                />
