@@ -259,8 +259,8 @@
    
   <target name="build.war"> 
   
-      <!-- edburns: remove this deletion when the glassfish regression is fixed -->
-      <delete file="${build.home}/WEB-INF/sun-web.xml" />
+      <!-- edburns: remove this deletion when the glassfish regression is fixed 
+      <delete file="${build.home}/WEB-INF/sun-web.xml" /> -->
 
       <jar jarfile="${dist.home}/jsf-systest.war" basedir="${build.home}"/>
   </target>

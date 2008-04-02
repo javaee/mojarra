@@ -7,7 +7,7 @@
     <session-manager/>
   </session-config>
   <resource-ref>
-     <res-ref-name>ds1</res-ref-name>
+     <res-ref-name>com.sun.faces.systest.model.ResourceInjectionBean/ds1</res-ref-name>
      <jndi-name>jdbc/__default</jndi-name>
   </resource-ref>
   <resource-ref>

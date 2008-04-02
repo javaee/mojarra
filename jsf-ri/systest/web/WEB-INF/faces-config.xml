@@ -89,6 +89,14 @@
     </managed-bean-class>
     <managed-bean-scope>request</managed-bean-scope>
   </managed-bean>
+  
+  <managed-bean>
+    <managed-bean-name>forEachBean1</managed-bean-name>
+    <managed-bean-class>
+      com.sun.faces.systest.model.TestBean
+    </managed-bean-class>
+    <managed-bean-scope>session</managed-bean-scope>
+  </managed-bean>
 
 
   <!-- Managed Bean #2, Primitive Property Overrides -->
@@ -462,6 +470,5 @@
       <to-view-id>/renderkit04.jsp</to-view-id>
     </navigation-case>
   </navigation-rule>
-
 
 </faces-config>

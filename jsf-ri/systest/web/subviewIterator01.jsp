@@ -13,6 +13,7 @@
   <c:forEach var="i" begin="0" end="3" varStatus="status">
     Array[<c:out value="${i}"/>]: 
     <h:outputText value="This component has no ID " /><br>
+    <h:inputText value="This component has no ID " /><br>
   </c:forEach>
 
 </f:subview>

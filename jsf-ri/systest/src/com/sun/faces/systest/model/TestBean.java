@@ -1,5 +1,5 @@
 /*
- * $Id: TestBean.java,v 1.16 2005/07/26 14:09:30 edburns Exp $
+ * $Id: TestBean.java,v 1.17 2005/08/15 19:00:12 jayashri Exp $
  */
 
 /*
@@ -36,6 +36,8 @@ import java.util.Random;
 public class TestBean {
 
     private Random random;
+    private ArrayList newList1= new ArrayList();
+    private ArrayList newList2= new ArrayList();
 
     public TestBean() {
 	random = new Random(4143);
@@ -464,6 +466,30 @@ public class TestBean {
 
         return this.converterMessage;
     }
+    
+    public ArrayList getNewList1() {
+        return newList1;
+    }
+    
+    public ArrayList getNewList2() {
+        return newList2;
+    }
+    
+   public void valueChange1(ValueChangeEvent vce) {
+        String newValue = vce.getNewValue().toString();
+        if (newList1.size() == 3){
+            newList1.clear();
+        }
+        newList1.add(newValue);
+   }
+   
+   public void valueChange2(ValueChangeEvent vce) {
+        String newValue = vce.getNewValue().toString();
+        if (newList2.size() == 3){
+            newList2.clear();
+        }
+        newList2.add(newValue);
+   }
 
 	
 }

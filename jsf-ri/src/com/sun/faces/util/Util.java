@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.169 2005/08/10 13:35:39 rogerk Exp $
+ * $Id: Util.java,v 1.170 2005/08/15 19:00:10 jayashri Exp $
  */
 
 /*
@@ -66,7 +66,7 @@ import javax.faces.component.UIViewRoot;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.169 2005/08/10 13:35:39 rogerk Exp $
+ * @version $Id: Util.java,v 1.170 2005/08/15 19:00:10 jayashri Exp $
  */
 
 public class Util extends Object {
@@ -1326,8 +1326,8 @@ public class Util extends Object {
                 params[0] = className;                
                 String msg = Util.getExceptionMessageString(
                     Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, params);
-                if ( logger.isLoggable(Level.SEVERE)) {
-                    logger.log(Level.SEVERE, msg, e);
+                if ( logger.isLoggable(Level.FINE)) {
+                    logger.log(Level.FINE, msg, e);
                 }
             }
         }

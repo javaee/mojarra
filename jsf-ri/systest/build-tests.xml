@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 
 <!--
- $Id: build-tests.xml,v 1.88 2005/08/10 21:23:16 rlubke Exp $
+ $Id: build-tests.xml,v 1.89 2005/08/15 19:00:11 jayashri Exp $
 -->
 
 <!--
@@ -233,8 +233,8 @@
                  value="true"/>
 -->
       <batchtest todir="${test.results.dir}">
-        <fileset    dir="${basedir}/build/WEB-INF/classes"
-               includes="com/sun/faces/jsptest/SetPropertyTestCase.class,com/sun/faces/jsptest/JspIntegrationTestCase.class,com/sun/faces/jsptest/ValidatorTestCase.class"/>
+        <fileset    dir="${basedir}/build/WEB-INF/classes"              
+               includes="com/sun/faces/jsptest/*TestCase.class"/>
       </batchtest> 
 
     </junit>
@@ -406,15 +406,13 @@
          ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
             request="${context.path}/faces/managed07.jsp"
              status="500" failonerror="${failonerror}"/> 
-            
-<!-- RETURN TO RUNNING
+    
    <tester host="${host}" port="${port}" protocol="${protocol}"
         request="${context.path}/faces/resourceInjection01.jsp"
         golden="${golden.path}/resourceInjection01.txt"
         ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
         recordGolden="${local.golden.path}/resourceInjection01.txt"
         failonerror="${failonerror}"/> 
--->
         
   </target>
 
@@ -826,7 +824,6 @@
          recordGolden="${local.golden.path}/subview04.txt"
          golden="${golden.path}/subview04.txt" failonerror="${failonerror}"/>
 
-     <!-- PENDING(visvan) c:forEach tests.
      <tester host="${host}" port="${port}" protocol="${protocol}"
          request="${context.path}/faces/subview05.jsp"
          recordGolden="${local.golden.path}/subview05.txt"
@@ -835,7 +832,7 @@
      <tester host="${host}" port="${port}" protocol="${protocol}"
          request="${context.path}/faces/subview06.jsp"
          recordGolden="${local.golden.path}/subview06.txt"
-         golden="${golden.path}/subview06.txt" failonerror="${failonerror}"/> -->
+         golden="${golden.path}/subview06.txt" failonerror="${failonerror}"/> 
 
   </target>
   
