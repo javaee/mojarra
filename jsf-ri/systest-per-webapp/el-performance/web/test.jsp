@@ -34,6 +34,8 @@
 
     <hr />
 
+    <p>Elapsed time: <h:outputText value="#{evaluator.elapsedTime}" /></p>
+
     <p>
 
     <h:outputText rendered="#{evaluator.showResults}" value="Results:" />

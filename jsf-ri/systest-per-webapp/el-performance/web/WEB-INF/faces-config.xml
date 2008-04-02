@@ -164,7 +164,7 @@
     <managed-bean-scope>request</managed-bean-scope>
     <managed-property>
       <property-name>reps</property-name>
-      <value>3000</value>
+      <value>30000</value>
     </managed-property>
     <managed-property>
       <property-name>expressions</property-name>

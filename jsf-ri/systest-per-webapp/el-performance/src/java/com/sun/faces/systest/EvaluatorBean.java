@@ -1,5 +1,5 @@
 /*
- * $Id: EvaluatorBean.java,v 1.1 2004/05/08 17:00:48 eburns Exp $
+ * $Id: EvaluatorBean.java,v 1.2 2004/05/10 18:54:59 eburns Exp $
  */
 
 /*
@@ -15,17 +15,30 @@ import javax.faces.component.NamingContainer;
 import javax.faces.component.UIOutput;
 import javax.faces.el.ValueBinding;
 
+import java.util.Date;
+import java.text.SimpleDateFormat;
+
 public class EvaluatorBean extends Object {
 
     public EvaluatorBean() {}
 
-    protected int reps = 3000;
+    protected int reps = 30000;
     public int getReps() {
 	return reps;
     }
 
     public void setReps(int newReps) {
 	reps = newReps;
+    }
+
+    private long start = 0;
+    private long end = 0;
+    private SimpleDateFormat formatter = new SimpleDateFormat("mm:ss:SS");
+
+    public String getElapsedTime() {
+	long elapsedSeconds = end - start;
+	end = start = 0;
+	return formatter.format(new Date(elapsedSeconds));
     }
 
     public void doGet(ActionEvent event) {
@@ -45,6 +58,7 @@ public class EvaluatorBean extends Object {
 	    results = new StringBuffer();
 	}
 	// evaluate it as a get, reps number of times 
+	start = System.currentTimeMillis();
 	for (i = 0; i < reps; i++) {
 	    if (showResults) {
 		results.append(vb.getValue(context) + "\n");
@@ -53,6 +67,7 @@ public class EvaluatorBean extends Object {
 		vb.getValue(context);
 	    }
 	}
+	end = System.currentTimeMillis();
     }
 
     protected boolean showResults = false;
