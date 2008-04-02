@@ -1,5 +1,5 @@
 /*
- * $Id: TestApplicationImpl_Config.java,v 1.27 2003/12/22 23:25:58 eburns Exp $
+ * $Id: TestApplicationImpl_Config.java,v 1.28 2004/01/05 23:14:28 eburns Exp $
  */
 
 /*
@@ -57,7 +57,7 @@ import java.util.Locale;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestApplicationImpl_Config.java,v 1.27 2003/12/22 23:25:58 eburns Exp $
+ * @version $Id: TestApplicationImpl_Config.java,v 1.28 2004/01/05 23:14:28 eburns Exp $
  */
 
 public class TestApplicationImpl_Config extends ServletFacesTestCase {
@@ -442,8 +442,8 @@ public class TestApplicationImpl_Config extends ServletFacesTestCase {
 
 	assertTrue(null != (propResolver = 
 			    application.getPropertyResolver()));
-	assertTrue(propResolver instanceof com.sun.faces.TestPropertyResolver);
-
+        assertTrue(application.getPropertyResolver() instanceof com.sun.faces.AdapterPropertyResolver);
+        assertTrue(((com.sun.faces.AdapterPropertyResolver) application.getPropertyResolver()).getRoot() instanceof com.sun.faces.TestPropertyResolver);
 	assertTrue(null != (varResolver = 
 			    application.getVariableResolver()));
 	assertTrue(varResolver instanceof com.sun.faces.TestVariableResolver);

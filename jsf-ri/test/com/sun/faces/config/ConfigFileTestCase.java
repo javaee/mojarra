@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigFileTestCase.java,v 1.49 2003/12/17 23:26:06 eburns Exp $
+ * $Id: ConfigFileTestCase.java,v 1.50 2004/01/05 23:14:29 eburns Exp $
  */
 
 /*
@@ -112,8 +112,10 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
         // <application>
         assertTrue(application.getActionListener() instanceof com.sun.faces.TestActionListener);
         assertTrue(application.getNavigationHandler() instanceof com.sun.faces.TestNavigationHandler);
-        assertTrue(application.getPropertyResolver() instanceof com.sun.faces.TestPropertyResolver);
+        assertTrue(application.getPropertyResolver() instanceof com.sun.faces.AdapterPropertyResolver);
+        assertTrue(((com.sun.faces.AdapterPropertyResolver) application.getPropertyResolver()).getRoot() instanceof com.sun.faces.TestPropertyResolver);
         assertTrue(application.getVariableResolver() instanceof com.sun.faces.TestVariableResolver);
+        assertTrue(application.getViewHandler() instanceof com.sun.faces.TestViewHandler);
 
         // <component>
 

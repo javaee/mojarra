@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigParser.java,v 1.49 2003/12/22 23:25:51 eburns Exp $
+ * $Id: ConfigParser.java,v 1.50 2004/01/05 23:14:22 eburns Exp $
  */
 
 /*
@@ -934,7 +934,9 @@ final class ApplicationRule extends Rule {
         Application application = aFactory.getApplication();
 	Util.doAssert(null != application);
 	
-	Object returnObject = Util.createInstance(ca.getActionListener());
+	Object returnObject = Util.createInstance(ca.getActionListener(),
+                                                  ActionListener.class,
+                                                  application.getActionListener());
 	if (returnObject != null) {
 	    application.setActionListener((ActionListener)returnObject);
 	}
@@ -943,34 +945,46 @@ final class ApplicationRule extends Rule {
 	    application.setMessageBundle(ca.getMessageBundle());
 	}
 	
-	returnObject = Util.createInstance(ca.getNavigationHandler());
+	returnObject = Util.createInstance(ca.getNavigationHandler(),
+                                           NavigationHandler.class,
+                                           application.getNavigationHandler());
 	if (returnObject != null) {
 	    application.setNavigationHandler((NavigationHandler)returnObject);
 	}
 	
-	returnObject = Util.createInstance(ca.getPropertyResolver());
+	returnObject = Util.createInstance(ca.getPropertyResolver(),
+                                           PropertyResolver.class,
+                                           application.getPropertyResolver());
 	if (returnObject != null) {
 	    application.setPropertyResolver((PropertyResolver)returnObject);
 	}
 	
-	returnObject = Util.createInstance(ca.getVariableResolver());
+	returnObject = Util.createInstance(ca.getVariableResolver(),
+                                           VariableResolver.class,
+                                           application.getVariableResolver());
 	if (returnObject != null) {
 	    application.setVariableResolver((VariableResolver)returnObject);
 	}
 	
-	returnObject = Util.createInstance(ca.getViewHandler());
+	returnObject = Util.createInstance(ca.getViewHandler(),
+                                           ViewHandler.class,
+                                           application.getViewHandler());
 	ViewHandler viewHandler;
 	if (returnObject != null) {
 	    viewHandler = (ViewHandler) returnObject;
 	} else {
-	    viewHandler = new ViewHandlerImpl();	    
+            viewHandler = application.getViewHandler();
+            if (null == viewHandler)
+                viewHandler = new ViewHandlerImpl();	    
 	} 
 	if (viewHandler instanceof ViewHandlerImpl) {
 	    ((ViewHandlerImpl) viewHandler).setFacesMapping(mappings);
 	}    
 	application.setViewHandler(viewHandler);
 
-	returnObject = Util.createInstance(ca.getStateManager());
+	returnObject = Util.createInstance(ca.getStateManager(),
+                                           StateManager.class,
+                                           application.getStateManager());
 	if (returnObject != null) {
 	    application.setStateManager((StateManager)returnObject);
 	}
@@ -989,8 +1003,9 @@ final class ApplicationRule extends Rule {
 		supportedLocales.add(Util.getLocaleFromString(localeStr));
 	    }
 	}
-	application.setSupportedLocales(supportedLocales);
-		
+        if (!supportedLocales.isEmpty()) {
+            application.setSupportedLocales(supportedLocales);
+        }
     }
 }
 

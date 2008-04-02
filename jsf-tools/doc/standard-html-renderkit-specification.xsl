@@ -1,26 +1,56 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<xsl:stylesheet version="1.0"
+xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
-<!--
- Copyright 2003 Sun Microsystems, Inc. All rights reserved.
- SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
--->
+<xsl:output method="xml"/>
 
-<!-- Content Stylesheet for Outstanding Issues Detail List -->
-<!-- $Id: standard-html-renderkit-specification.xsl,v 1.1 2003/12/24 18:20:23 eburns Exp $ -->
+<xsl:template match="/">
+  <fo:root xmlns:fo="http://www.w3.org/1999/XSL/Format">
+    <fo:layout-master-set>
+      <fo:simple-page-master master-name="content"
+	page-width="210mm" page-height="297mm">
+	<fo:region-body/>
+      </fo:simple-page-master>
+    </fo:layout-master-set>
+    <fo:page-sequence master-reference="content">
+      <fo:flow flow-name="xsl-region-body">
+	<fo:table border-width="0.5pt" border-color="black">
+	  <fo:table-column column-width="30mm"/>
+	  <fo:table-column column-width="100mm"/>
+	  <fo:table-body>
+	    <fo:table-row>
+	      <fo:table-cell>
+		<fo:block>renderer-type</fo:block>
+	      </fo:table-cell>
+	      <fo:table-cell>
+		<fo:block>description</fo:block>
+	      </fo:table-cell>
+	    </fo:table-row>
 
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-                version="1.0">
+            <xsl:for-each select="render-kit/renderer">
+	    <fo:table-row>
+	      <fo:table-cell>
+		<fo:block><xsl:value-of select="renderer-type"/></fo:block>
+	      </fo:table-cell>
+	      <fo:table-cell>
+		<fo:block><xsl:value-of select="description"/></fo:block>
+	      </fo:table-cell>
+	    </fo:table-row>
+	    <fo:table-row>
+	      <fo:table-cell>
+		<fo:block>__</fo:block>
+	      </fo:table-cell>
+	      <fo:table-cell>
+		<fo:block>__</fo:block>
+	      </fo:table-cell>
+	    </fo:table-row>
+            </xsl:for-each>
+	  </fo:table-body>
+	</fo:table>
+      </fo:flow>
+    </fo:page-sequence>
+  </fo:root>
 
-  <xsl:output method="text"/>
-
-  <xsl:template match="/">
-renderer-type,description
-<xsl:apply-templates/>
-  </xsl:template>
-
-  <xsl:template match="renderer">
-<xsl:value-of select="renderer-type" />,<xsl:value-of select="description" />
-  </xsl:template>
-
+</xsl:template>
 
 </xsl:stylesheet>

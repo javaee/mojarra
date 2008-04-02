@@ -1,5 +1,5 @@
 /* 
- * $Id: StateManagerImpl.java,v 1.10 2003/12/17 15:13:23 rkitain Exp $ 
+ * $Id: StateManagerImpl.java,v 1.11 2004/01/05 23:14:21 eburns Exp $ 
  */ 
 
 
@@ -35,7 +35,7 @@ import org.apache.commons.logging.LogFactory;
 /** 
  * <B>StateManagerImpl</B> is the default implementation class for
  * StateManager.
- * @version $Id: StateManagerImpl.java,v 1.10 2003/12/17 15:13:23 rkitain Exp $ 
+ * @version $Id: StateManagerImpl.java,v 1.11 2004/01/05 23:14:21 eburns Exp $ 
  * 
  * @see javax.faces.application.ViewHandler 
  * 
@@ -206,7 +206,10 @@ public class StateManagerImpl extends StateManager  {
     }
     
     public void writeState(FacesContext context, SerializedView state) throws IOException {
-	Util.getResponseStateManager(context).writeState(context, state);
+	// only call thru on client case.
+	if (isSavingStateInClient(context)) {
+	    Util.getResponseStateManager(context).writeState(context, state);
+	}
     }
     
     /**

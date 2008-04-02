@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.118 2003/12/22 23:25:53 eburns Exp $
+ * $Id: Util.java,v 1.119 2004/01/05 23:14:23 eburns Exp $
  */
 
 /*
@@ -17,6 +17,7 @@ import com.sun.faces.el.impl.ExpressionEvaluatorImpl;
 import com.sun.faces.renderkit.RenderKitImpl;
 
 import java.io.IOException;
+import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -66,7 +67,7 @@ import com.sun.faces.el.impl.JspVariableResolver;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.118 2003/12/22 23:25:53 eburns Exp $ 
+ * @version $Id: Util.java,v 1.119 2004/01/05 23:14:23 eburns Exp $ 
  */
 
 public class Util extends Object
@@ -1067,13 +1068,35 @@ private Util()
     }
 
     public static Object createInstance(String className) {
+        return createInstance(className, null, null);
+    }
+
+    public static Object createInstance(String className,
+                                        Class  rootType,
+                                        Object root) {
 	Class clazz = null;
 	Object returnObject = null;
 	if (className != null) {
             try {
 	        clazz = Util.loadClass(className, returnObject);
 	        if (clazz != null) {
-	            returnObject = clazz.newInstance();
+                    // Look for an adapter constructor if we've got
+                    // an object to adapt
+                    if ((rootType != null ) && (root != null)) {
+                        try {
+                           Class[] parameterTypes = new Class[]{rootType};
+                           Constructor construct =
+                               clazz.getConstructor(parameterTypes);
+                           Object[] parameters = new Object[]{root};
+                           returnObject = construct.newInstance(parameters);
+                        } catch (NoSuchMethodException nsme) {
+                            // OK - there's no adapter constructor
+                        }
+                    }
+
+                    if (returnObject == null) {
+                        returnObject = clazz.newInstance();
+                    }
 	        }
 	    } catch (Exception e) {
 	        Object[] params = new Object[1];
