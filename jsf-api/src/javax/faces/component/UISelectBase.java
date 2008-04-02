@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectBase.java,v 1.7 2003/02/03 23:54:04 craigmcc Exp $
+ * $Id: UISelectBase.java,v 1.8 2003/02/04 01:13:38 craigmcc Exp $
  */
 
 /*
@@ -51,6 +51,8 @@ abstract class UISelectBase extends UIInput implements NamingContainer {
      *
      * @param context The {@link FacesContext} for the current request
      *
+     * @exception IllegalArgumentException if the value of a
+     *  {@link UISelectItem} or {@link UISelectItems} is of the wrong type
      * @exception NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
@@ -69,6 +71,9 @@ abstract class UISelectBase extends UIInput implements NamingContainer {
                                             item.getItemDescription()));
                 } else if (value instanceof SelectItem) {
                     list.add(value);
+                } else {
+                    throw new IllegalArgumentException // FIXME - i18n
+                        ("Value is not a SelectItem");
                 }
             } else if (kid instanceof UISelectItems) {
                 Object value = kid.currentValue(context);
@@ -98,6 +103,9 @@ abstract class UISelectBase extends UIInput implements NamingContainer {
                         list.add(new SelectItem(val.toString(), key.toString(),
                                                 null));
                     }
+                } else {
+                    throw new IllegalArgumentException // FIXME - i18n
+                        ("Value is not a SelectItem, SelectItem[], Collection, or Map");
                 }
             }
         }
