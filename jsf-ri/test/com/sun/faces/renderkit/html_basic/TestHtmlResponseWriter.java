@@ -1,5 +1,5 @@
 /*
- * $Id: TestHtmlResponseWriter.java,v 1.21 2006/05/17 17:31:32 rlubke Exp $
+ * $Id: TestHtmlResponseWriter.java,v 1.22 2006/10/06 20:36:06 rlubke Exp $
  */
 
 /*
@@ -48,7 +48,7 @@ import com.sun.faces.cactus.ServletFacesTestCase;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestHtmlResponseWriter.java,v 1.21 2006/05/17 17:31:32 rlubke Exp $
+ * @version $Id: TestHtmlResponseWriter.java,v 1.22 2006/10/06 20:36:06 rlubke Exp $
  */
 
 public class TestHtmlResponseWriter extends ServletFacesTestCase // ServletTestCase
@@ -264,6 +264,31 @@ public class TestHtmlResponseWriter extends ServletFacesTestCase // ServletTestC
         } catch (IOException e) {
             assertTrue(false);
         }
+    }
+
+    public void testWriteScriptElement() throws Exception {
+        StringWriter sw = new StringWriter();
+        StringWriter swx = new StringWriter();
+        writer = renderKit.createResponseWriter(sw, "text/html", "ISO-8859-1");
+        ResponseWriter xmlWriter = renderKit.createResponseWriter(swx, "application/xhtml+xml", "UTF-8");
+        UIOutput output = new UIOutput();
+        writer.startElement("script", output);
+        writer.writeAttribute("src", "http://foo.net/some.js", "src");
+        writer.writeAttribute("type", "text/javascript", "type");
+        writer.writeAttribute("language", "Javascript", "language");
+        writer.endElement("script");
+        String result = sw.toString();
+        System.out.println(result);
+        assertTrue((!result.contains("<!--") && !result.contains("-->")));
+
+        xmlWriter.startElement("script", output);
+        xmlWriter.writeAttribute("src", "http://foo.net/some.js", "src");
+        xmlWriter.writeAttribute("type", "text/javascript", "type");
+        xmlWriter.writeAttribute("language", "Javascript", "language");
+        xmlWriter.endElement("script");
+        result = swx.toString();
+        System.out.println(result);
+        assertTrue((!result.contains("<[CDATA[") && !result.contains("]]>")));
     }
 
 
