@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleFactoryImpl.java,v 1.11 2003/03/12 19:51:06 rkitain Exp $
+ * $Id: LifecycleFactoryImpl.java,v 1.12 2003/03/13 01:06:27 eburns Exp $
  */
 
 /*
@@ -29,7 +29,7 @@ import java.util.HashMap;
  *  in the JSF RI. <P>
  *
  *
- * @version $Id: LifecycleFactoryImpl.java,v 1.11 2003/03/12 19:51:06 rkitain Exp $
+ * @version $Id: LifecycleFactoryImpl.java,v 1.12 2003/03/13 01:06:27 eburns Exp $
  * 
  * @see	javax.faces.lifecycle.LifecycleFactory
  *
@@ -109,24 +109,25 @@ Lifecycle verifyRegisterArgs(String lifecycleId,
 {
     LifecycleWrapper wrapper = null;
     Lifecycle result = null;
+    Object [] params = { lifecycleId };
     if (null == lifecycleId || null == phase) {
-	throw new NullPointerException("null lifecycleId || null phase");
+	throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
     }
 
     if (null == (wrapper = (LifecycleWrapper) lifecycleMap.get(lifecycleId))) {
-	throw new IllegalArgumentException("lifecycleId " + lifecycleId + 
-					   " not found");
+	throw new IllegalArgumentException(Util.getExceptionMessage(Util.LIFECYCLE_ID_NOT_FOUND_ERROR_MESSAGE_ID, params));
     }
     result = wrapper.instance;
     Assert.assert_it(null != result);
     
     if (alreadyCreated(lifecycleId)) {
-	throw new IllegalStateException(lifecycleId + " already created");
+	throw new IllegalStateException(Util.getExceptionMessage(Util.LIFECYCLE_ID_ALREADY_ADDED_ID, params));
     }
     
     if (!((FIRST_PHASE <= phaseId) &&
 	  (phaseId <= LAST_PHASE))) {
-	throw new IllegalArgumentException("phaseId " + phaseId + " out of bounds");
+	params = new Object [] { Integer.toString(phaseId) };
+	throw new IllegalArgumentException(Util.getExceptionMessage(Util.PHASE_ID_OUT_OF_BOUNDS_ERROR_MESSAGE_ID, params));
     }
     return result;
 }
@@ -163,7 +164,9 @@ public Lifecycle getLifecycle(String lifecycleId) throws FacesException
 	wrapper.created = true;
     }
     catch (Throwable e) {
-	throw new FacesException("Can't create lifecycle for " +lifecycleId,e);
+	Object [] params = { lifecycleId };
+	throw new FacesException(Util.getExceptionMessage(Util.CANT_CREATE_LIFECYCLE_ERROR_MESSAGE_ID, params),
+				 e);
     }
 
     return result;

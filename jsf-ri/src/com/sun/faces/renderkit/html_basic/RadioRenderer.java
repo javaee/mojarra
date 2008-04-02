@@ -1,5 +1,5 @@
 /*
- * $Id: RadioRenderer.java,v 1.37 2003/02/20 22:49:01 ofung Exp $
+ * $Id: RadioRenderer.java,v 1.38 2003/03/13 01:06:33 eburns Exp $
  */
 
 /*
@@ -46,7 +46,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: RadioRenderer.java,v 1.37 2003/02/20 22:49:01 ofung Exp $
+ * @version $Id: RadioRenderer.java,v 1.38 2003/03/13 01:06:33 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -107,7 +107,7 @@ public class RadioRenderer extends HtmlBasicRenderer {
 
     public void encodeChildren(FacesContext context, UIComponent component) {
         if (context == null || component == null) {
-            throw new NullPointerException("context or component argument is null.");
+            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
     }
 

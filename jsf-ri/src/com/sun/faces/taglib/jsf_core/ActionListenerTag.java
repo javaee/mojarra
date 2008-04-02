@@ -1,5 +1,5 @@
 /*
- * $Id: ActionListenerTag.java,v 1.3 2003/03/12 04:57:49 eburns Exp $
+ * $Id: ActionListenerTag.java,v 1.4 2003/03/13 01:06:35 eburns Exp $
  */
 
 /*
@@ -90,8 +90,9 @@ public class ActionListenerTag extends TagSupport {
         while ((tag != null) && !(tag instanceof FacesTag)) {
             tag = tag.getParent();
         }
-        if (tag == null) { // FIXME - i18n
-            throw new JspException("Not nested in a FacesTag");
+        if (tag == null) { 
+	    Object params [] = { this.getClass().getName() };
+            throw new JspException(Util.getExceptionMessage(Util.NOT_NESTED_IN_FACES_TAG_ERROR_MESSAGE_ID, params));
         }
         FacesTag facesTag = (FacesTag) tag;
 

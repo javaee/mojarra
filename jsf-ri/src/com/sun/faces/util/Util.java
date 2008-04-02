@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.45 2003/03/12 04:57:51 eburns Exp $
+ * $Id: Util.java,v 1.46 2003/03/13 01:06:38 eburns Exp $
  */
 
 /*
@@ -51,7 +51,7 @@ import java.util.StringTokenizer;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.45 2003/03/12 04:57:51 eburns Exp $
+ * @version $Id: Util.java,v 1.46 2003/03/13 01:06:38 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -133,11 +133,51 @@ public class Util extends Object
     public static final String LIFECYCLE_ID_ALREADY_ADDED_ID =
         "com.sun.faces.LIFECYCLE_ID_ALREADY_ADDED";
 
+    public static final String LIFECYCLE_ID_NOT_FOUND_ERROR_MESSAGE_ID =
+        "com.sun.faces.LIFECYCLE_ID_NOT_FOUND";
+
+    public static final String PHASE_ID_OUT_OF_BOUNDS_ERROR_MESSAGE_ID =
+        "com.sun.faces.PHASE_ID_OUT_OF_BOUNDS";
+
+    public static final String CANT_CREATE_LIFECYCLE_ERROR_MESSAGE_ID =
+        "com.sun.faces.CANT_CREATE_LIFECYCLE_ERROR";
+
     public static final String ILLEGAL_MODEL_REFERENCE_ID =
         "com.sun.faces.ILLEGAL_MODEL_REFERENCE";
     
      public static final String ATTRIBUTE_NOT_SUPORTED_ERROR_MESSAGE_ID =
          "com.sun.faces.ATTRIBUTE_NOT_SUPORTED";
+
+   public static final String FILE_NOT_FOUND_ERROR_MESSAGE_ID =
+         "com.sun.faces.FILE_NOT_FOUND";
+
+   public static final String CANT_PARSE_FILE_ERROR_MESSAGE_ID =
+         "com.sun.faces.CANT_PARSE_FILE";
+
+   public static final String CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID =
+         "com.sun.faces.CANT_INSTANTIATE_CLASS";
+
+   public static final String ILLEGAL_CHARACTERS_ERROR_MESSAGE_ID =
+         "com.sun.faces.ILLEGAL_CHARACTERS_ERROR";
+
+   public static final String NOT_NESTED_IN_FACES_TAG_ERROR_MESSAGE_ID =
+         "com.sun.faces.NOT_NESTED_IN_FACES_TAG_ERROR";
+
+   public static final String NULL_BODY_CONTENT_ERROR_MESSAGE_ID =
+         "com.sun.faces.NULL_BODY_CONTENT_ERROR";
+
+   public static final String SAVING_STATE_ERROR_MESSAGE_ID =
+         "com.sun.faces.SAVING_STATE_ERROR";
+
+   public static final String RENDERER_ALREADY_EXISTS_ERROR_MESSAGE_ID =
+         "com.sun.faces.RENDERER_ALREADY_EXISTS";
+
+   public static final String RENDERER_NOT_FOUND_ERROR_MESSAGE_ID =
+         "com.sun.faces.RENDERER_NOT_FOUND";
+
+   public static final String MAXIMUM_EVENTS_REACHED_ERROR_MESSAGE_ID =
+         "com.sun.faces.MAXIMUM_EVETS_REACHED";
+
 
 //
 // Class Variables

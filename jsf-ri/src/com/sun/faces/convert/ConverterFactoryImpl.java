@@ -1,5 +1,5 @@
 /*
- * $Id: ConverterFactoryImpl.java,v 1.6 2003/03/12 04:57:45 eburns Exp $
+ * $Id: ConverterFactoryImpl.java,v 1.7 2003/03/13 01:06:26 eburns Exp $
  */
 
 /*
@@ -184,6 +184,7 @@ public class ConverterFactoryImpl extends ConverterFactory {
     public Converter getConverter(String converterId)
         throws FacesException {
 
+	Object [] params;
         if (converterId == null) {
             throw new NullPointerException(Util.getExceptionMessage(
                 Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
@@ -211,7 +212,8 @@ public class ConverterFactoryImpl extends ConverterFactory {
             in = this.getClass().getClassLoader().getResourceAsStream(
                 fileName);
         } catch (Throwable t) {
-            throw new RuntimeException("Error Opening File:"+fileName);
+	    params = new Object [] { fileName };
+            throw new RuntimeException(Util.getExceptionMessage(Util.FILE_NOT_FOUND_ERROR_MESSAGE_ID, params));
         }
         
         try {
@@ -219,8 +221,8 @@ public class ConverterFactoryImpl extends ConverterFactory {
             digester.parse(in);
             in.close();
         } catch (Throwable t) {
-            throw new IllegalStateException(
-                "Unable to parse file:"+t.getMessage());
+	    params = new Object [] { t.getMessage() };
+            throw new IllegalStateException(Util.getExceptionMessage(Util.CANT_PARSE_FILE_ERROR_MESSAGE_ID, params));
         }
 
         Assert.assert_it(className != null);
@@ -231,13 +233,13 @@ public class ConverterFactoryImpl extends ConverterFactory {
             Class converterClass = Util.loadClass(className, this);
             converter = (Converter)converterClass.newInstance();
         } catch (ClassNotFoundException cnf) {
-            throw new RuntimeException("Class Not Found:"+cnf.getMessage());
+	    params = new Object [] { cnf.getMessage() };
+            throw new RuntimeException(Util.getExceptionMessage(Util.MISSING_CLASS_ERROR_MESSAGE_ID, params));
         } catch (InstantiationException ie) {
-            throw new RuntimeException("Class Instantiation Exception:"+
-                ie.getMessage());
+	    params = new Object [] { ie.getMessage() };
+            throw new RuntimeException(Util.getExceptionMessage(Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, params));
         } catch (IllegalAccessException ia) {
-            throw new RuntimeException("Illegal Access Exception:"+
-                ia.getMessage());
+            throw new RuntimeException(ia.getMessage());
         }
 
         // Add the newly created converter to the table.

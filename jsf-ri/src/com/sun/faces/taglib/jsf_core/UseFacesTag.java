@@ -1,5 +1,5 @@
 /*
- * $Id: UseFacesTag.java,v 1.5 2003/02/20 22:49:33 ofung Exp $
+ * $Id: UseFacesTag.java,v 1.6 2003/03/13 01:06:35 eburns Exp $
  */
 
 /*
@@ -23,6 +23,7 @@ import javax.servlet.http.HttpSession;
 import com.sun.faces.RIConstants;
 
 import com.sun.faces.util.Base64;
+import com.sun.faces.util.Util;
 import java.io.IOException;
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectOutputStream;
@@ -42,7 +43,7 @@ import javax.servlet.jsp.tagext.BodyTag;
  * does not have any renderers or attributes. It exists mainly to
  * save the state of the response tree once all tags have been rendered.
  *
- * @version $Id: UseFacesTag.java,v 1.5 2003/02/20 22:49:33 ofung Exp $
+ * @version $Id: UseFacesTag.java,v 1.6 2003/03/13 01:06:35 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -102,8 +103,8 @@ public class UseFacesTag extends FacesBodyTag
         FacesContext facesContext = (FacesContext)
             pageContext.getAttribute(FacesContext.FACES_CONTEXT_ATTR,
                                      PageContext.REQUEST_SCOPE);
-        if (facesContext == null) { // FIXME - i18n
-            throw new JspException("Cannot find FacesContext");
+        if (facesContext == null) { 
+            throw new JspException(Util.getExceptionMessage(Util.NULL_CONTEXT_ERROR_MESSAGE_ID));
         }
         
         // look up saveStateInClient parameter to check whether to save
@@ -141,7 +142,8 @@ public class UseFacesTag extends FacesBodyTag
     protected void saveStateInPage(FacesContext facesContext ) throws JspException {
         try {
             if ( getBodyContent() == null ) {
-                throw new JspException("BodyContent is null ");
+		Object params [] = { this.getClass().getName() };
+                throw new JspException(Util.getExceptionMessage(Util.NULL_BODY_CONTENT_ERROR_MESSAGE_ID, params));
             }    
             // long beginTime = System.currentTimeMillis();
             // replace the marker in the buffered response, with response tree's
@@ -178,8 +180,8 @@ public class UseFacesTag extends FacesBodyTag
             // System.out.println("Time to render output " + (endTime-beginTime));
         } catch (IOException iox) {
             iox.printStackTrace();
-            throw new JspException("Error while saving state in session : " + 
-                    iox.getMessage());
+	    Object [] params = { "session", iox.getMessage() };
+            throw new JspException(Util.getExceptionMessage(Util.SAVING_STATE_ERROR_MESSAGE_ID, params));
         }  
     }    
     

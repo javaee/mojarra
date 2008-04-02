@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderKit.java,v 1.40 2003/03/12 04:57:47 eburns Exp $
+ * $Id: HtmlBasicRenderKit.java,v 1.41 2003/03/13 01:06:32 eburns Exp $
  */
 
 /*
@@ -45,7 +45,7 @@ import javax.faces.render.Renderer;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HtmlBasicRenderKit.java,v 1.40 2003/03/12 04:57:47 eburns Exp $
+ * @version $Id: HtmlBasicRenderKit.java,v 1.41 2003/03/13 01:06:32 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -161,13 +161,15 @@ public class HtmlBasicRenderKit extends RenderKit
         String fileName = "com/sun/faces/renderkit/html_basic/HtmlBasicRenderKit.xml";
         InputSource is = null;
 	java.net.URL url = null;
+	Object [] params = null;
         try {
 	    url = this.getClass().getClassLoader().getResource(fileName);
             is = new InputSource(Util.replaceOccurrences(url.toExternalForm(),
 							 " ", "%20"));
 	    is.setByteStream(this.getClass().getClassLoader().getResourceAsStream(fileName));
         } catch (Throwable t) {
-            throw new RuntimeException("Error Opening File:"+fileName);
+	    params = new Object [] { fileName };
+            throw new RuntimeException(Util.getExceptionMessage(Util.FILE_NOT_FOUND_ERROR_MESSAGE_ID, params));
         }
         try {
             parse_digester.push(this);
@@ -176,8 +178,8 @@ public class HtmlBasicRenderKit extends RenderKit
 	    if (null != t) {
 		t.printStackTrace();
 	    }
-            throw new IllegalStateException(
-                "Unable to parse file:"+t.getMessage());
+	    params = new Object [] { t.getMessage() };
+            throw new IllegalStateException(Util.getExceptionMessage(Util.CANT_PARSE_FILE_ERROR_MESSAGE_ID, params));
         }
     }
 
@@ -222,8 +224,8 @@ public class HtmlBasicRenderKit extends RenderKit
 		addComponentClass(Util.loadClass(componentType, this));
             } 
 	    catch (ClassNotFoundException cnf) {
-                throw new RuntimeException("Class Not Found:"+
-					   cnf.getMessage());
+		Object [] params = { cnf.getMessage() };
+                throw new RuntimeException(Util.getExceptionMessage(Util.MISSING_CLASS_ERROR_MESSAGE_ID, params));
             } 
 	    
             renderersByComponentType.put(componentType, 
@@ -265,6 +267,7 @@ public class HtmlBasicRenderKit extends RenderKit
 	ParameterCheck.nonNull(className);
 
 	HtmlBasicRenderer curRenderer = null;
+	Object [] params;
 
 	// Only add the renderer for this rendererType once
 	if (null == (curRenderer = (HtmlBasicRenderer)
@@ -273,13 +276,13 @@ public class HtmlBasicRenderKit extends RenderKit
 		Class rendererClass = Util.loadClass(className, this);
 		curRenderer = (HtmlBasicRenderer)rendererClass.newInstance();
 	    } catch (ClassNotFoundException cnf) {
-		throw new RuntimeException("Class Not Found:"+cnf.getMessage());
+		params = new Object [] { cnf.getMessage() };
+                throw new RuntimeException(Util.getExceptionMessage(Util.MISSING_CLASS_ERROR_MESSAGE_ID, params));
 	    } catch (InstantiationException ie) {
-		throw new RuntimeException("Class Instantiation Exception:"+
-					   ie.getMessage());
+		params = new Object [] { ie.getMessage() };
+                throw new RuntimeException(Util.getExceptionMessage(Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, params));
 	    } catch (IllegalAccessException ia) {
-		throw new RuntimeException("Illegal Access Exception:"+
-					   ia.getMessage());
+		throw new RuntimeException(ia.getMessage());
 	    }
 	    renderersByRendererType.put(rendererType, curRenderer);
 	}
@@ -347,8 +350,8 @@ public class HtmlBasicRenderKit extends RenderKit
         }
 
 	if (null != renderersByRendererType.get(rendererType)) {
-	    throw new IllegalArgumentException("Renderer for " + rendererType +
-					       " already exists");
+	    Object params [] = { rendererType };
+	    throw new IllegalArgumentException(Util.getExceptionMessage(Util.RENDERER_ALREADY_EXISTS_ERROR_MESSAGE_ID, params));
 	}
 	renderersByRendererType.put(rendererType, renderer);
     }
@@ -375,8 +378,8 @@ public class HtmlBasicRenderKit extends RenderKit
 
         Renderer renderer = (Renderer)renderersByRendererType.get(rendererType);
         if (renderer == null) {
-            throw new FacesException("Renderer Not Found For Renderer Type:"+
-                rendererType);
+	    Object [] params = { rendererType };
+            throw new FacesException(Util.getExceptionMessage(Util.MAXIMUM_EVENTS_REACHED_ERROR_MESSAGE_ID, params));
         }
 
         return renderer;

@@ -1,5 +1,5 @@
 /*
- * $Id: ReconstituteComponentTreePhase.java,v 1.2 2003/03/12 19:51:06 rkitain Exp $
+ * $Id: ReconstituteComponentTreePhase.java,v 1.3 2003/03/13 01:06:28 eburns Exp $
  */
 
 /*
@@ -33,13 +33,14 @@ import java.io.ObjectInputStream;
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import com.sun.faces.util.DebugUtil;
+import com.sun.faces.util.Util;
 
 /**
 
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: ReconstituteComponentTreePhase.java,v 1.2 2003/03/12 19:51:06 rkitain Exp $
+ * @version $Id: ReconstituteComponentTreePhase.java,v 1.3 2003/03/13 01:06:28 eburns Exp $
  * 
  */
 
@@ -100,8 +101,7 @@ public int getId() {
 public void execute(FacesContext facesContext) throws FacesException
 {
     if (null == facesContext) {
-        // PENDING (visvan) localize
-	throw new FacesException("null FacesContext");
+	throw new FacesException(Util.getExceptionMessage(Util.NULL_CONTEXT_ERROR_MESSAGE_ID));
     }
 
     // Create the requested component tree

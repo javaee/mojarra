@@ -1,5 +1,5 @@
 /*
- * $Id: BuildComponentFromTagImpl.java,v 1.11 2003/03/12 04:57:50 eburns Exp $
+ * $Id: BuildComponentFromTagImpl.java,v 1.12 2003/03/13 01:06:37 eburns Exp $
  */
 
 /*
@@ -36,7 +36,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: BuildComponentFromTagImpl.java,v 1.11 2003/03/12 04:57:50 eburns Exp $
+ * @version $Id: BuildComponentFromTagImpl.java,v 1.12 2003/03/13 01:06:37 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -245,6 +245,7 @@ public UIComponent createComponentForTag(String shortTagName)
     String className = (String) classMap.get(shortTagName);
     Class componentClass;
     Assert.assert_it(null != className);
+    Object [] params = { className };
 
     // PENDING(edburns): this can be way optimized
     try {
@@ -252,16 +253,13 @@ public UIComponent createComponentForTag(String shortTagName)
 	result = (UIComponent) componentClass.newInstance();
     }
     catch (IllegalAccessException iae) {
-	throw new RuntimeException("Can't create instance for " +
-				   className + ": " + iae.getMessage());
+	throw new RuntimeException(Util.getExceptionMessage(Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, params));
     }
     catch (InstantiationException ie) {
-	throw new RuntimeException("Can't create instance for " +
-				   className + ": " + ie.getMessage());
+	throw new RuntimeException(Util.getExceptionMessage(Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, params));
     }
     catch (ClassNotFoundException e) {
-	throw new RuntimeException("Can't find class for " + 
-				   className + ": " + e.getMessage());
+	throw new RuntimeException(Util.getExceptionMessage(Util.MISSING_CLASS_ERROR_MESSAGE_ID, params));
     }
     
     return result;

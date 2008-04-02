@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleImpl.java,v 1.20 2003/03/12 19:51:06 rkitain Exp $
+ * $Id: LifecycleImpl.java,v 1.21 2003/03/13 01:06:28 eburns Exp $
  */
 
 /*
@@ -37,7 +37,7 @@ import java.util.HashMap;
  *  Lifecycle in the JSF RI. <P>
  *
  *
- * @version $Id: LifecycleImpl.java,v 1.20 2003/03/12 19:51:06 rkitain Exp $
+ * @version $Id: LifecycleImpl.java,v 1.21 2003/03/13 01:06:28 eburns Exp $
  * 
  * @see	javax.faces.lifecycle.Lifecycle
  *
@@ -238,8 +238,8 @@ private void processEvents(FacesContext context, PhaseId phaseId) {
         if (!source.broadcast(event, phaseId)) {
             iter.remove();
             if (limitReached(source, eventsProcessed)) {
-                throw new RuntimeException("Maximum number of events ("+
-                    eventLimit+") processed");
+		Object [] params = { Integer.toString(eventLimit) };
+                throw new RuntimeException(Util.getExceptionMessage(Util.MAXIMUM_EVENTS_REACHED_ERROR_MESSAGE_ID, params));
             }
 
         }

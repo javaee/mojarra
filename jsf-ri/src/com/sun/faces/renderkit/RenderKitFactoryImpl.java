@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKitFactoryImpl.java,v 1.9 2003/03/12 04:57:46 eburns Exp $
+ * $Id: RenderKitFactoryImpl.java,v 1.10 2003/03/13 01:06:30 eburns Exp $
  */
 
 /*
@@ -116,11 +116,13 @@ public class RenderKitFactoryImpl extends RenderKitFactory {
 
         String fileName = "com/sun/faces/renderkit/RenderKitConfig.xml";
         InputStream in;
+	Object [] params;
         try {
             in = this.getClass().getClassLoader().getResourceAsStream(
                 fileName);
         } catch (Throwable t) {
-            throw new RuntimeException("Error Opening File:"+fileName);
+	    params = new Object [] { fileName };
+            throw new RuntimeException(Util.getExceptionMessage(Util.FILE_NOT_FOUND_ERROR_MESSAGE_ID, params));
         }
         
         try {
@@ -128,8 +130,8 @@ public class RenderKitFactoryImpl extends RenderKitFactory {
             digester.parse(in);
             in.close();
         } catch (Throwable t) {
-            throw new IllegalStateException(
-                "Unable to parse file:"+t.getMessage());
+	    params = new Object [] { t.getMessage() };
+            throw new IllegalStateException(Util.getExceptionMessage(Util.CANT_PARSE_FILE_ERROR_MESSAGE_ID, params));
         }
 
         Assert.assert_it(className != null);
@@ -140,13 +142,13 @@ public class RenderKitFactoryImpl extends RenderKitFactory {
             Class kitClass = Util.loadClass(className, this);
             renderKit = (RenderKit)kitClass.newInstance();
         } catch (ClassNotFoundException cnf) {
-            throw new RuntimeException("Class Not Found:"+cnf.getMessage());
+	    params = new Object [] { cnf.getMessage() };
+            throw new RuntimeException(Util.getExceptionMessage(Util.MISSING_CLASS_ERROR_MESSAGE_ID, params));
         } catch (InstantiationException ie) {
-            throw new RuntimeException("Class Instantiation Exception:"+
-                ie.getMessage());
+	    params = new Object [] { ie.getMessage() };
+            throw new RuntimeException(Util.getExceptionMessage(Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, params));
         } catch (IllegalAccessException ia) {
-            throw new RuntimeException("Illegal Access Exception:"+
-                ia.getMessage());
+            throw new RuntimeException(ia.getMessage());
         }
 
         // Add the newly created renderkit to the table.
