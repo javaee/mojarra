@@ -1,5 +1,5 @@
 /*
- * $Id: MockApplication.java,v 1.11 2003/09/04 03:56:44 eburns Exp $
+ * $Id: MockApplication.java,v 1.12 2003/10/15 02:03:26 eburns Exp $
  */
 
 /*
@@ -9,9 +9,12 @@
 
 package javax.faces.mock;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Locale;
 
 import javax.faces.FacesException;
 import javax.faces.application.Application;
@@ -213,7 +216,19 @@ public class MockApplication extends Application {
         return (validators.keySet().iterator());
     }
 
+    public Iterator getSupportedLocales() {
+	return Collections.EMPTY_LIST.iterator();
+    }
 
+    public void setSupportedLocales(Collection newLocales) {
+    }
+
+    public Locale getDefaultLocale(){
+	return Locale.getDefault();
+    }
+
+    public void setDefaultLocale(Locale newLocale) {
+    }
 
 
 

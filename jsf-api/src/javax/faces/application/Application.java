@@ -1,5 +1,5 @@
 /*
- * $Id: Application.java,v 1.12 2003/08/27 22:34:00 craigmcc Exp $
+ * $Id: Application.java,v 1.13 2003/10/15 02:03:25 eburns Exp $
  */
 
 /*
@@ -11,6 +11,8 @@ package javax.faces.application;
 
 
 import java.util.Iterator;
+import java.util.Collection;
+import java.util.Locale;
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.component.UIComponent;
@@ -378,6 +380,45 @@ public abstract class Application {
      */
     public abstract Iterator getConverterTypes();
 
+    /**
+     * <p>Return an <code>Iterator</code> over the supported
+     * <code>Locale</code> instances specified in the application
+     * configuration resources.</p>
+     *
+     */ 
+
+    public abstract Iterator getSupportedLocales();
+
+    /**
+     * <p>Make it so the <code>Locale</code> instances in the argument
+     * <code>newLocales</code> are returned the next time {@link
+     * #getSupportedLocales} is called.</p>
+     *
+     * @exception NullPointerException if the argument
+     * <code>newLocales</code> is <code>null</code>.
+     *
+     */ 
+    public abstract void setSupportedLocales(Collection newLocales);
+
+    /**
+     * <p>Return the default <code>Locale</code> that was given in the
+     * application configuration resources.</p>
+     *
+     */ 
+
+    public abstract Locale getDefaultLocale();
+
+    /**
+     *
+     * <p>Make it so the argument <code>newLocale</code> is returned the
+     * next time {@link #getDefaultLocale} is called.</p>
+     *
+     * @exception NullPointerException if the argument
+     * <code>newLocale</code> is <code>null</code>.
+     *
+     */
+
+    public abstract void setDefaultLocale(Locale newLocale);
 
     /**
      * <p>Register a new mapping of message resources id to the name of the
