@@ -1,5 +1,5 @@
 /*
- * $Id: TestValidatorTags.java,v 1.10 2003/08/13 17:52:13 jvisvanathan Exp $
+ * $Id: TestValidatorTags.java,v 1.11 2003/08/13 21:06:00 rkitain Exp $
  */
 
 /*
@@ -20,10 +20,8 @@ import javax.faces.context.FacesContext;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.component.UIComponent;
 
-import com.sun.faces.context.FacesContextImpl;
 import com.sun.faces.JspFacesTestCase;
 import com.sun.faces.RIConstants;
-import com.sun.faces.context.FacesContextImpl;
 import com.sun.faces.lifecycle.ApplyRequestValuesPhase;
 import com.sun.faces.lifecycle.LifecycleImpl;
 import com.sun.faces.lifecycle.Phase;
@@ -42,7 +40,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestValidatorTags.java,v 1.10 2003/08/13 17:52:13 jvisvanathan Exp $
+ * @version $Id: TestValidatorTags.java,v 1.11 2003/08/13 21:06:00 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -161,18 +159,18 @@ public void testValidators()
 
     // This builds the tree, and usefaces saves it in the session
     renderResponse.execute(getFacesContext());
-    assertTrue(!((FacesContextImpl)getFacesContext()).getRenderResponse() &&
-        !((FacesContextImpl)getFacesContext()).getResponseComplete());
+    assertTrue(!(getFacesContext().getRenderResponse()) &&
+        !(getFacesContext().getResponseComplete()));
 
     // This causes the components to be set to valid
     applyRequestValues.execute(getFacesContext());
-    assertTrue(!((FacesContextImpl)getFacesContext()).getRenderResponse() &&
-        !((FacesContextImpl)getFacesContext()).getResponseComplete());
+    assertTrue(!(getFacesContext().getRenderResponse()) &&
+        !(getFacesContext().getResponseComplete()));
     
     // process the validations
     processValidations.execute(getFacesContext());
     // We know there are validation errors on the page
-    assertTrue(((FacesContextImpl)getFacesContext()).getRenderResponse());
+    assertTrue(getFacesContext().getRenderResponse());
 
     // verify the messages have been added correctly.
     UIComponent comp = null;
