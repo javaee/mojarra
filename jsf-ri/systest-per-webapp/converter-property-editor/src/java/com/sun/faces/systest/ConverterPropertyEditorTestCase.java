@@ -1,5 +1,5 @@
 /*
- * $Id: ConverterPropertyEditorTestCase.java,v 1.1 2006/08/11 20:30:52 edburns Exp $
+ * $Id: ConverterPropertyEditorTestCase.java,v 1.2 2006/09/14 22:38:42 tony_robertson Exp $
  */
 
 /*
@@ -125,16 +125,35 @@ public class ConverterPropertyEditorTestCase extends AbstractTestCase {
 	button = (HtmlSubmitInput) list.get(0);
 	page = (HtmlPage) button.click();
 
-	assertTrue(-1 != page.asText().indexOf("This selectOneMenu is bound to a list test.Payment"));
+	assertTrue(-1 != page.asText().indexOf("This selectOneMenu is bound to a list of test.Payment"));
 
-	page = getPage("/faces/selectmany.jsp");
-	list = getAllElementsOfGivenClass(page, null, 
-					  HtmlSubmitInput.class); 
+	page = getPage("/faces/selectoneRadio.jsp");
+	list = getAllElementsOfGivenClass(page, null, HtmlSubmitInput.class); 
 	button = (HtmlSubmitInput) list.get(0);
 	page = (HtmlPage) button.click();
 
-	assertTrue(-1 != page.asText().indexOf("This selectManyMenu is bound to a list test.Payment"));
+	assertTrue(-1 != page.asText().indexOf("This selectOneRadio is bound to a list of test.Payment"));
 
+	page = getPage("/faces/selectmany.jsp");
+	list = getAllElementsOfGivenClass(page, null, HtmlSubmitInput.class); 
+	button = (HtmlSubmitInput) list.get(0);
+	page = (HtmlPage) button.click();
+
+	assertTrue(-1 != page.asText().indexOf("This selectManyMenu is bound to a list of test.Payment"));
+
+        page = getPage("/faces/selectmanyListbox.jsp");
+        list = getAllElementsOfGivenClass(page, null, HtmlSubmitInput.class); 
+        button = (HtmlSubmitInput) list.get(0);
+        page = (HtmlPage) button.click();
+
+        assertTrue(-1 != page.asText().indexOf("This selectManyListbox is bound to a list of test.Payment"));
+
+        page = getPage("/faces/selectmanyCheckbox.jsp");
+        list = getAllElementsOfGivenClass(page, null, HtmlSubmitInput.class); 
+        button = (HtmlSubmitInput) list.get(0);
+        page = (HtmlPage) button.click();
+
+        assertTrue(-1 != page.asText().indexOf("This selectManyCheckbox is bound to a list of test.Payment"));
 
     }
 

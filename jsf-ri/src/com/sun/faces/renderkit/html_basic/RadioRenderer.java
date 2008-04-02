@@ -1,5 +1,5 @@
 /*
- * $Id: RadioRenderer.java,v 1.79 2006/09/01 17:30:55 rlubke Exp $
+ * $Id: RadioRenderer.java,v 1.80 2006/09/14 22:38:41 tony_robertson Exp $
  */
 
 /*
@@ -39,7 +39,9 @@ import javax.faces.context.ResponseWriter;
 import javax.faces.model.SelectItem;
 
 import java.io.IOException;
+import java.util.Map;
 
+import com.sun.faces.application.ConverterPropertyEditorBase;
 import com.sun.faces.renderkit.RenderKitUtils;
 import com.sun.faces.util.Util;
 
@@ -79,6 +81,9 @@ public class RadioRenderer extends SelectManyCheckboxListRenderer {
             type = curValue.getClass();
         }
         Object itemValue = curItem.getValue();
+        Map<String, Object> requestMap = context.getExternalContext().getRequestMap();
+        requestMap.put(ConverterPropertyEditorBase.TARGET_COMPONENT_ATTRIBUTE_NAME, 
+                component);
         Object newValue = context.getApplication().getExpressionFactory().
               coerceToType(itemValue, type);
 

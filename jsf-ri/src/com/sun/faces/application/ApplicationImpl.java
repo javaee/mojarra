@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationImpl.java,v 1.82 2006/09/11 20:45:55 rlubke Exp $
+ * $Id: ApplicationImpl.java,v 1.83 2006/09/14 22:38:39 tony_robertson Exp $
  */
 
 /*
@@ -96,7 +96,7 @@ import com.sun.faces.util.Util;
 public class ApplicationImpl extends Application {
 
     // Log instance for this class
-    private static Logger logger = Util.getLogger(Util.FACES_LOGGER 
+    private static final Logger logger = Util.getLogger(Util.FACES_LOGGER 
             + Util.APPLICATION_LOGGER);
 
     private static final ELContextListener[] EMPTY_EL_CTX_LIST_ARRAY = { };
@@ -707,13 +707,20 @@ public class ApplicationImpl extends Application {
         }
         String className = targetClass.getName();
         // Don't add a PropertyEditor for the standard by-type converters.
+        if (targetClass.isPrimitive()) {
+            return;
+        }
         for (String standardClass : STANDARD_BY_TYPE_CONVERTER_CLASSES) {
             if (-1 != standardClass.indexOf(className)) {
                 return;
             }
         }
-        PropertyEditorManager.registerEditor(targetClass, 
-                ConverterPropertyEditor.class);
+        Class editorClass = ConverterPropertyEditorFactory.getDefaultInstance().definePropertyEditorClassFor(targetClass);
+        if (editorClass != null) {
+            PropertyEditorManager.registerEditor(targetClass, editorClass);
+        } else {
+            logger.warning("definePropertyEditorClassFor(" + targetClass.getName() + ") returned null.");
+        }
     }
 
 

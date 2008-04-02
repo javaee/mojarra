@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderer.java,v 1.116 2006/09/05 22:52:32 rlubke Exp $
+ * $Id: HtmlBasicRenderer.java,v 1.117 2006/09/14 22:38:41 tony_robertson Exp $
  */
 
 /*
@@ -712,7 +712,7 @@ public abstract class HtmlBasicRenderer extends Renderer {
         private void update() {
 
             while (childIterator.hasNext()) {
-                UIComponent comp = (UIComponent) childIterator.next();
+                UIComponent comp = childIterator.next();
                 if (comp.isRendered()) {
                     child = comp;
                     hasNext = true;

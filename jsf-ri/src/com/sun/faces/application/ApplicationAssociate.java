@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationAssociate.java,v 1.33 2006/08/29 06:12:58 tony_robertson Exp $
+ * $Id: ApplicationAssociate.java,v 1.34 2006/09/14 22:38:39 tony_robertson Exp $
  */
 
 /*
@@ -457,11 +457,10 @@ public class ApplicationAssociate {
 
         boolean
             scopeIsApplication = false,
-            scopeIsSession = false,
             scopeIsRequest = false;
 
         if ((scopeIsApplication = (scope == Scope.APPLICATION)) ||
-            (scopeIsSession = (scope == Scope.SESSION))) {
+            ((scope == Scope.SESSION))) {
             if (scopeIsApplication) {
                 Map<String,Object> applicationMap = context.getExternalContext().
                         getApplicationMap();

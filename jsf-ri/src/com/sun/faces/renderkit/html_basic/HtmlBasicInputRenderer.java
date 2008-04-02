@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicInputRenderer.java,v 1.36 2006/09/01 17:30:56 rlubke Exp $
+ * $Id: HtmlBasicInputRenderer.java,v 1.37 2006/09/14 22:38:41 tony_robertson Exp $
  */
 
 /*
@@ -31,6 +31,8 @@
 
 package com.sun.faces.renderkit.html_basic;
 
+import java.util.Map;
+import java.util.logging.Level;
 import javax.el.ValueExpression;
 import javax.faces.application.Application;
 import javax.faces.component.UIComponent;
@@ -39,11 +41,7 @@ import javax.faces.component.ValueHolder;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.ConverterException;
-
-import java.util.Map;
-import java.util.logging.Level;
-
-import com.sun.faces.application.ConverterPropertyEditor;
+import com.sun.faces.application.ConverterPropertyEditorBase;
 import com.sun.faces.util.MessageFactory;
 import com.sun.faces.util.MessageUtils;
 
@@ -149,14 +147,8 @@ public abstract class HtmlBasicInputRenderer extends HtmlBasicRenderer {
         if (converter != null) {
             // If the conversion eventually falls to needing to use EL type coercion,
             // make sure our special ConverterPropertyEditor knows about this value.
-            Map<String, Object> requestMap =
-                  context.getExternalContext().getRequestMap();
-            requestMap.put(ConverterPropertyEditor.TARGET_CLASS_ATTRIBUTE_NAME,
-                           converterType);
-            requestMap
-                  .put(ConverterPropertyEditor.TARGET_COMPONENT_ATTRIBUTE_NAME,
-                       component);
-
+            Map<String, Object> requestMap = context.getExternalContext().getRequestMap();
+            requestMap.put(ConverterPropertyEditorBase.TARGET_COMPONENT_ATTRIBUTE_NAME, component);
             result = converter.getAsObject(context, component, newValue);
             return result;
         } else {

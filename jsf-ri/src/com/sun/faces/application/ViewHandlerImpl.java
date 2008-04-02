@@ -1,5 +1,5 @@
 /* 
- * $Id: ViewHandlerImpl.java,v 1.83 2006/09/11 20:45:55 rlubke Exp $ 
+ * $Id: ViewHandlerImpl.java,v 1.84 2006/09/14 22:38:39 tony_robertson Exp $ 
  */ 
 
 
@@ -68,13 +68,13 @@ import com.sun.faces.util.Util;
 /**
  * <B>ViewHandlerImpl</B> is the default implementation class for ViewHandler.
  *
- * @version $Id: ViewHandlerImpl.java,v 1.83 2006/09/11 20:45:55 rlubke Exp $
+ * @version $Id: ViewHandlerImpl.java,v 1.84 2006/09/14 22:38:39 tony_robertson Exp $
  * @see javax.faces.application.ViewHandler
  */
 public class ViewHandlerImpl extends ViewHandler {
 
     // Log instance for this class
-    private static Logger logger = Util.getLogger(Util.FACES_LOGGER
+    private static final Logger logger = Util.getLogger(Util.FACES_LOGGER
                                                   + Util.APPLICATION_LOGGER);
 
     private static final String AFTER_VIEW_CONTENT = RIConstants.FACES_PREFIX+

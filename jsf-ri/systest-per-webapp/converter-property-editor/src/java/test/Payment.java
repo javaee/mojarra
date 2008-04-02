@@ -10,11 +10,10 @@ package test;
 import java.math.BigDecimal;
 
 public class Payment {
-    
+
     private String value;
     private String label;
-    
-    
+
     public Payment() {
     }
 
@@ -34,5 +33,16 @@ public class Payment {
         this.value = value;
     }
 
-   
+    public String toString() {
+        return "Payment[" + getLabel() + ": " + getValue() + "]";
+    }
+
+    public boolean equals(Object rhs) {
+        if (!(rhs instanceof Payment)) {
+            return false;
+        }
+        String rv = ((Payment) rhs).getValue();
+        return getValue() == rv || getValue() != null &&
+            getValue().equals(((Payment) rhs).getValue());
+    }
 }

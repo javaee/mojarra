@@ -5,8 +5,6 @@
 
 package test;
 
-import java.util.ArrayList;
-import java.util.List;
 import javax.faces.model.SelectItem;
 
 
@@ -15,9 +13,9 @@ import javax.faces.model.SelectItem;
  * @author agori
  */
 public class TestBean {
-    
+
     private Payment payment;
-    
+    private Payment[] payments = new Payment[0];
 
     public Payment getPayment() {
         return payment;
@@ -27,7 +25,12 @@ public class TestBean {
         this.payment = payment;
     }
 
-  
-    
-    
+    public Payment[] getPayments() {
+        return payments;
+    }
+
+    public void setPayments(Payment[] payments) {
+        System.out.println(this + " setting payments to " + java.util.Arrays.asList(payments));
+        this.payments = payments;
+    }
 }

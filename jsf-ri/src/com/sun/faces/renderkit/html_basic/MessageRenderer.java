@@ -1,5 +1,5 @@
 /*
- * $Id: MessageRenderer.java,v 1.63 2006/09/01 17:30:56 rlubke Exp $
+ * $Id: MessageRenderer.java,v 1.64 2006/09/14 22:38:41 tony_robertson Exp $
  */
 
 /*
@@ -238,8 +238,6 @@ public class MessageRenderer extends HtmlBasicRenderer {
         //Done intializing local variables. Move on to rendering.
 
         boolean wroteSpan = false;
-        boolean wroteTable = false;
-
         if (styleClass != null || style != null ||
             shouldWriteIdAttribute(component) ||
             RenderKitUtils.hasPassThruAttributes(component)) {

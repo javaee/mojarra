@@ -17,6 +17,37 @@
         <managed-bean-class>test.TestBean</managed-bean-class>
         <managed-bean-scope>session</managed-bean-scope>
     </managed-bean>
+
+    <managed-bean>
+        <managed-bean-name>payment4</managed-bean-name>
+        <managed-bean-class>test.Payment</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+        <managed-property>
+	        <property-name>label</property-name>
+	        <value>Credit Card 4</value>
+        </managed-property>
+        <managed-property>
+	        <property-name>value</property-name>
+	        <value>4</value>
+        </managed-property>
+    </managed-bean>
     
+    <managed-bean>
+        <managed-bean-name>testBean2</managed-bean-name>
+        <managed-bean-class>test.TestBean</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+        <managed-property>
+            <property-name>payment</property-name>
+            <property-class>test.Payment</property-class>
+            <value>#{payment4}</value>
+        </managed-property>
+        <managed-property>
+            <property-name>payments</property-name>
+            <list-entries>
+                <value-class>test.Payment</value-class>
+                <value>#{payment4}</value>
+            </list-entries>
+        </managed-property>
+    </managed-bean>
     
 </faces-config>

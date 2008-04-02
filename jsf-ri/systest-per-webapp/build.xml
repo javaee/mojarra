@@ -117,6 +117,9 @@
                                 prefix="WEB-INF/classes"/>
                 </archive-elements>
             </jsf.war>
+            <mkdir dir="@{base-app-dir}/build/jsf-@{appname}" />
+            <unwar src="@{base-app-dir}/build/jsf-@{appname}.war"
+                   dest="@{base-app-dir}/build/jsf-@{appname}" />
         </sequential>
     </macrodef>
 
@@ -173,8 +176,6 @@
 
     </target>
 
-   
-
     <target name="remove">
         
         <for list="${applications}" param="app" trim="true">
@@ -204,7 +205,9 @@
     <target name="test" depends="install"
             description="Execute all tests against installed /jsf-* applications">
 
-        <ant antfile="build-tests.xml" target="test"/>
+        <ant antfile="build-tests.xml" target="test">
+          <property name="applications" value="${applications}" />
+        </ant>
 
     </target>    
         

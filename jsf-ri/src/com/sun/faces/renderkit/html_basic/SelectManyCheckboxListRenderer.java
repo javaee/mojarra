@@ -24,7 +24,7 @@
  */
 
 /**
- * $Id: SelectManyCheckboxListRenderer.java,v 1.50 2006/09/01 17:30:55 rlubke Exp $
+ * $Id: SelectManyCheckboxListRenderer.java,v 1.51 2006/09/14 22:38:41 tony_robertson Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -45,7 +45,9 @@ import javax.faces.model.SelectItemGroup;
 
 import java.io.IOException;
 import java.util.Iterator;
+import java.util.Map;
 
+import com.sun.faces.application.ConverterPropertyEditorBase;
 import com.sun.faces.renderkit.RenderKitUtils;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
@@ -267,6 +269,9 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
             type = valuesArray.getClass().getComponentType();
         }
 
+        Map<String, Object> requestMap = context.getExternalContext().getRequestMap();
+        requestMap.put(ConverterPropertyEditorBase.TARGET_COMPONENT_ATTRIBUTE_NAME, 
+                component);
         Object newValue = context.getApplication().getExpressionFactory().
               coerceToType(itemValue, type);
 

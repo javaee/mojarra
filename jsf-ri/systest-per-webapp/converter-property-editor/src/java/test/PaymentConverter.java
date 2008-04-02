@@ -13,10 +13,15 @@ import javax.faces.convert.Converter;
 import javax.faces.convert.ConverterException;
 
 public class PaymentConverter  implements Converter {
-    
+
     public String getAsString(FacesContext context, UIComponent component,
             Object object) throws ConverterException {
-        
+        System.out.println("CONVERTER CALLED!!!!!!!! getAsString(component=" +
+            component + ", object=" + object + ")");
+
+        if (context == null || component == null) {
+            throw new NullPointerException();
+        }
         if(object == null) {
             return null;
         }
@@ -26,19 +31,24 @@ public class PaymentConverter  implements Converter {
         Payment payment = (Payment) object;
         return payment.getValue();
     }
-    
+
     public Object getAsObject(FacesContext context, UIComponent component,
             String value) throws ConverterException {
-        System.out.println("CONVERTER CALLED!!!!!!!!");
-        
+        System.out.println("CONVERTER CALLED!!!!!!!! getAsObject(component=" +
+            component + ", id=" + (component != null ? component.getId() : "null") +
+            ", value=" + value + ")");
+
+        if (context == null || component == null) {
+            throw new NullPointerException();
+        }
         if (value == null || value.equals("")) {
             return null;
         }
-        
+
         Payment p = new Payment();
         p.setLabel("credit card " + value);
         p.setValue(value);
-        
+
         return p;
     }
 }

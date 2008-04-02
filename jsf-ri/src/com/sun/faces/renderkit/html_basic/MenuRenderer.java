@@ -24,7 +24,7 @@
  */
 
 /*
- * $Id: MenuRenderer.java,v 1.80 2006/09/01 17:30:54 rlubke Exp $
+ * $Id: MenuRenderer.java,v 1.81 2006/09/14 22:38:41 tony_robertson Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -36,6 +36,14 @@
 
 package com.sun.faces.renderkit.html_basic;
 
+import java.io.IOException;
+import java.lang.reflect.Array;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
 import javax.el.ValueExpression;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UISelectMany;
@@ -46,16 +54,8 @@ import javax.faces.convert.Converter;
 import javax.faces.convert.ConverterException;
 import javax.faces.model.SelectItem;
 import javax.faces.model.SelectItemGroup;
-
-import java.io.IOException;
-import java.lang.reflect.Array;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.logging.Level;
-
 import com.sun.faces.RIConstants;
+import com.sun.faces.application.ConverterPropertyEditorBase;
 import com.sun.faces.renderkit.RenderKitUtils;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
@@ -170,7 +170,6 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
         return convertedValue;
 
     }
-
 
     public void decode(FacesContext context, UIComponent component) {
 
@@ -314,6 +313,12 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
           throws ConverterException {
 
         if (component instanceof UISelectMany) {
+            // need to set the 'TARGET_COMPONENT_ATTRIBUTE_NAME' request attr so the
+            // coerce-value call in the jsf-api UISelectMany.matchValue will work
+            // (need a better way to determine the currently processing UIComponent ...)
+            Map<String, Object> requestMap = context.getExternalContext().getRequestMap();
+            requestMap.put(ConverterPropertyEditorBase.TARGET_COMPONENT_ATTRIBUTE_NAME, 
+                    component);
             return convertSelectManyValue(context,
                                           ((UISelectMany) component),
                                           (String[]) submittedValue);
@@ -488,8 +493,11 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
         }
         if (valuesArray != null) {
             type = valuesArray.getClass().getComponentType();
-        }
-
+        } 
+        
+        Map<String, Object> requestMap = context.getExternalContext().getRequestMap();
+        requestMap.put(ConverterPropertyEditorBase.TARGET_COMPONENT_ATTRIBUTE_NAME, 
+                component);
         Object newValue = context.getApplication().getExpressionFactory().
               coerceToType(itemValue, type);
 
@@ -570,20 +578,25 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
         if (component instanceof UISelectMany) {
             UISelectMany select = (UISelectMany) component;
             Object value = select.getValue();
-            if (value instanceof List) {
+            if (value instanceof Collection) {
 
-                List<?> list = (List) value;
+                Collection<?> list = (Collection) value;
                 int size = list.size();
                 if (size > 0) {
                     // get the type of the first element - Should
                     // we assume that all elements of the List are
                     // the same type?
                     return list.toArray((Object[]) Array
-                          .newInstance(list.get(0).getClass(),
+                          .newInstance(list.iterator().next().getClass(),
                                        size));
                 } else {
-                    return ((List) value).toArray();
+                    return ((Collection) value).toArray();
                 }
+            }
+            else if (value != null && !value.getClass().isArray()) {
+                logger.warning(
+                    "The UISelectMany value should be an array or a collection type, the actual type is " +
+                    value.getClass().getName());
             }
 
             return value;
@@ -652,6 +665,11 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
     boolean isSelected(Object itemValue, Object valueArray) {
 
         if (null != valueArray) {
+            if (!valueArray.getClass().isArray()) {
+                logger.warning("valueArray is not an array, the actual type is " +
+                    valueArray.getClass());
+                return valueArray.equals(itemValue);
+            }
             int len = Array.getLength(valueArray);
             for (int i = 0; i < len; i++) {
                 Object value = Array.get(valueArray, i);

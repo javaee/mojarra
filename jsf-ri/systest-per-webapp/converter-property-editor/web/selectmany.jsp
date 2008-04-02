@@ -16,7 +16,7 @@
         <f:view>
             <h:form>
 
-<p>This selectManyMenu is bound to a list test.Payment instances.  There
+<p>This selectManyMenu is bound to a list of test.Payment instances.  There
 is a converter-for-class registered for the test.Payment class.  This
 will cause the EL coerceToType to be called to coerce the value from a
 String to a test.Payment instance.  The EL uses JavaBeans PropertyEditor
@@ -26,11 +26,18 @@ instances to do this. </p>
 called by the EL coerceToType via the ConverterPropertyEditor class in
 Sun's JSF Impl.</p>
 
-                <h:selectManyMenu value="#{testBean.payment}">
+<p>                <h:selectManyMenu value="#{testBean.payments}">
                     <f:selectItem itemLabel="cc1" itemValue="1"/>
                     <f:selectItem itemLabel="cc2" itemValue="2"/>
+                </h:selectManyMenu></p>
+<p>                <h:selectManyMenu value="#{testBean2.payments}">
+                    <f:selectItem itemLabel="cc3" itemValue="3"/>
+                    <f:selectItem itemLabel="cc4" itemValue="4"/></p>
                 </h:selectManyMenu>
-                <h:commandButton id="press" value="submit" />
+
+<p>Messages: <h:messages /> </p>
+
+<p>                <h:commandButton id="press" value="submit" /></p>
             </h:form>
         </f:view>
     </body>
