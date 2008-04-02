@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlResponseWriter.java,v 1.4 2003/08/13 03:04:53 eburns Exp $
+ * $Id: HtmlResponseWriter.java,v 1.5 2003/08/14 23:14:43 horwat Exp $
  */
 
 /*
@@ -142,7 +142,9 @@ public class HtmlResponseWriter extends ResponseWriter {
         // close any previously started element, if necessary
         closeStartIfNecessary();
         
-        writer.write('<');
+        //PENDING (horwat) using String as a result of Tomcat char writer
+        //         ArrayIndexOutOfBoundsException (3584)
+        writer.write("<");
         writer.write(name);
         closeStart = true;
     }
@@ -179,7 +181,9 @@ public class HtmlResponseWriter extends ResponseWriter {
     
         writer.write("</");
         writer.write(name);
-        writer.write('>');
+        //PENDING (horwat) using String as a result of Tomcat char writer
+        //         ArrayIndexOutOfBoundsException (3584)
+        writer.write(">");
     }
 
     /**
@@ -210,7 +214,9 @@ public class HtmlResponseWriter extends ResponseWriter {
         // Output Boolean values specially
         if (valueClass == Boolean.class) {
             if (Boolean.TRUE.equals(value)) {
-                writer.write(' ');
+                   //PENDING (horwat) using String as a result of 
+                   //Tomcat char writer ArrayIndexOutOfBoundsException (3584)
+                writer.write(" ");
                 writer.write(name);
             } else {
                 // Don't write anything for "false" booleans
@@ -222,7 +228,9 @@ public class HtmlResponseWriter extends ResponseWriter {
             
             // write the attribute value
             HtmlUtils.writeAttribute(writer, buffer, value.toString());
-            writer.write('"');
+            //PENDING (horwat) using String as a result of Tomcat char 
+            //        writer ArrayIndexOutOfBoundsException (3584)
+            writer.write("\"");
         }
     }
 
@@ -248,7 +256,9 @@ public class HtmlResponseWriter extends ResponseWriter {
 	        Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
 	}
 
-        writer.write(' ');
+        //PENDING (horwat) using String as a result of Tomcat char writer
+        //         ArrayIndexOutOfBoundsException (3584)
+        writer.write(" ");
         writer.write(name);
         writer.write("=\"");
         
@@ -261,7 +271,9 @@ public class HtmlResponseWriter extends ResponseWriter {
             HtmlUtils.writeURL(writer, stringValue, encoding);
 	}
         
-        writer.write('"');
+        //PENDING (horwat) using String as a result of Tomcat char writer
+        //         ArrayIndexOutOfBoundsException (3584)
+        writer.write("\"");
     }
 
     /**
@@ -423,7 +435,9 @@ public class HtmlResponseWriter extends ResponseWriter {
      */
     private void closeStartIfNecessary() throws IOException {
         if (closeStart) {
-            writer.write('>');
+            //PENDING (horwat) using String as a result of Tomcat char 
+            //         writer ArrayIndexOutOfBoundsException (3584)
+            writer.write(">");
             closeStart = false;
         }
     }
