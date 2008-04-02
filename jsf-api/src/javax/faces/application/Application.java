@@ -1,5 +1,5 @@
 /*
- * $Id: Application.java,v 1.32 2005/05/10 18:47:11 edburns Exp $
+ * $Id: Application.java,v 1.33 2005/06/09 13:38:28 edburns Exp $
  */
 
 /*
@@ -235,6 +235,11 @@ public abstract class Application {
      * <p>Set the {@link PropertyResolver} instance that will be utilized
      * to resolve method and value bindings.</p>
      *
+     * <p>This method is now deprecated but the implementation must
+     * cause the argument to be set as the head of the legacy
+     * <code>PropertyResolver</code> chain, replacing any existing value
+     * that was set from the application configuration resources.</p>
+     *
      * @param resolver The new {@link PropertyResolver} instance
      *
      * @exception NullPointerException if <code>resolver</code>
@@ -256,8 +261,9 @@ public abstract class Application {
      * <p>Return the {@link VariableResolver} that wraps the {@link
      * ELResolver} instance that Faces provides to the unified EL for
      * the resolution of expressions that appear programmatically in an
-     * application.  The implementation must pass <code>null</code> as
-     * the base argument for any methods invoked on the underlying
+     * application.  The implementation of the
+     * <code>VariableResolver</code>must pass <code>null</code> as the
+     * base argument for any methods invoked on the underlying
      * <code>ELResolver</code>.</p>
      *
      * <p>Note that this method no longer returns the default
@@ -271,8 +277,13 @@ public abstract class Application {
 
 
     /**
-     * <p>Set the {@link VariableResolver} instance that will be utilized
+     * <p>Set the {@link VariableResolver} instance that will be consulted
      * to resolve method and value bindings.</p>
+     *
+     * <p>This method is now deprecated but the implementation must
+     * cause the argument to be set as the head of the legacy
+     * <code>VariableResolver</code> chain, replacing any existing value
+     * that was set from the application configuration resources.</p>
      *
      * @param resolver The new {@link VariableResolver} instance
      *
