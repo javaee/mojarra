@@ -139,9 +139,7 @@
              <td>
 
                <h:input_text id="inputNumber5" 
-                                 value="9"
                                  size="2" maxlength="10"
-                                 valueRef="LoginBean.char"
                                  alt="input_number integer with valueRef"
                                  accesskey="d"
                                title="input_number integer with valueRef">

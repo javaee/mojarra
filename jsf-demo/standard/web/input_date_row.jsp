@@ -16,9 +16,8 @@
 
              <td>
 
-               <h:input_text id="inputDate1"
-                                 value="Jan 12, 1952" 
-                                 valueRef="model.date1"
+               <h:input_text id="inputDate1" 
+                                 value="#{model.date1}"
                                  readonly="true"
                                  size="10" maxlength="20"
                                  alt="input_date medium readonly"
@@ -44,8 +43,8 @@
 
              <td>
 
-               <h:input_text id="inputDate2" value="Jan 12, 1952" 
-                                 valueRef="model.date2"
+               <h:input_text id="inputDate2"
+                                 value="#{model.date2}"
                                  alt="input_date medium"
                                   title="input_date medium">
                    <f:convert_datetime type="date" dateStyle="medium"/>
@@ -75,8 +74,8 @@
 
              <td>
 
-               <h:input_text id="inputDate3" value="01/12/1952" 
-                                 valueRef="model.date3"
+               <h:input_text id="inputDate3" 
+                                 value="#{model.date3}"
                                  size="10"
                                  alt="input_date short"
                                   title="input_date short">
@@ -108,8 +107,7 @@
              <td>
 
                <h:input_text id="inputDate4" 
-                                 value="January 12, 1952" 
-                                 valueRef="model.date4"
+                                 value="#{model.date4}"
                                  size="20" maxlength="40"
                                  alt="input_date long"
                                  accesskey="d"

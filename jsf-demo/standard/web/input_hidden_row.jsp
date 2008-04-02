@@ -6,7 +6,7 @@
             <tr>
               <td><b><h:output_text id="dateconvertLabel"
                          value="Date [MMM DD, YYYY Format]: " /></b></td>
-              <td><h:input_hidden id="datetextHidden" valueRef="LoginBean.date">
+              <td><h:input_hidden id="datetextHidden" value="LoginBean.date">
                       <f:convert_datetime type="date"/>
                   </h:input_hidden></td>
               <td><h:messages id="dateErr"
@@ -16,7 +16,7 @@
               <td><b><h:output_text id="timeconvertLabel"
                          value="Time [HH:MI:SS (AM/PM) Format]: " /></b></td>
               <td><h:input_hidden id="timetextHidden" 
-                      valueRef="LoginBean.time">
+                      value="LoginBean.time">
                       <f:convert_datetime type="time" /> 
                   </h:input_hidden></td>
               <td><h:messages id="timeErr"
@@ -26,7 +26,7 @@
               <td><b><h:output_text id="datetimeconvertLabel"
                          value="Date/Time [MMM DD, YYYY HH:MI:SS (AM/PM) Format]: " /></b></td>
               <td><h:input_hidden id="datetimetextHidden" 
-                      valueRef="LoginBean.dateTime">
+                      value="LoginBean.dateTime">
                       <f:convert_datetime type="both"/>
                   </h:input_hidden></td>
               <td><h:messages id="datetimeErr"
@@ -42,7 +42,7 @@
                            value="Currency Format:"/></b></td>
                 <td>
                     <h:input_hidden id="currencyinputHidden"
-                        valueRef="LoginBean.double">                        
+                        value="LoginBean.double">                        
                         <f:convert_number type="currency"/>
                     </h:input_hidden>
                 </td>

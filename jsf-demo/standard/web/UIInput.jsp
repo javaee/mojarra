@@ -3,7 +3,7 @@
  SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 -->
 
-<%-- $Id: UIInput.jsp,v 1.6 2003/11/11 01:22:47 eburns Exp $ --%>
+<%-- $Id: UIInput.jsp,v 1.7 2003/11/11 05:26:17 rkitain Exp $ --%>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
@@ -17,6 +17,7 @@
 
     <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
     <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
+    <%@ taglib uri="http://java.sun.com/jstl/core" prefix="c" %>
 
      <f:loadBundle basename="standard.Resources" var="standardBundle"/>
 

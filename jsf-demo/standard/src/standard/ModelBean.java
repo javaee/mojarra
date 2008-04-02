@@ -1,5 +1,5 @@
 /*
- * $Id: ModelBean.java,v 1.4 2003/10/27 04:15:58 craigmcc Exp $
+ * $Id: ModelBean.java,v 1.5 2003/11/11 05:26:16 rkitain Exp $
  */
 
 /*
@@ -15,7 +15,7 @@ import java.util.Date;
 /**
  * Simple bean for Model value demonstration. 
  *
- * @version $Id: ModelBean.java,v 1.4 2003/10/27 04:15:58 craigmcc Exp $
+ * @version $Id: ModelBean.java,v 1.5 2003/11/11 05:26:16 rkitain Exp $
  */
 
 public class ModelBean {
@@ -34,7 +34,7 @@ public class ModelBean {
         this.label = label;
     }
     
-    protected Date date1;
+    protected Date date1 = new Date(System.currentTimeMillis());
     public Date getDate1() {
         return date1;
     }
@@ -43,7 +43,7 @@ public class ModelBean {
         date1 = newDate;
     }
 
-    protected Date date2;
+    protected Date date2 = new Date(System.currentTimeMillis());
     public Date getDate2() {
         return date2;
     }
@@ -53,7 +53,7 @@ public class ModelBean {
 	System.out.println("date2: " + date2);
     }
 
-    protected Date date3;
+    protected Date date3 = new Date(System.currentTimeMillis());
     public Date getDate3() {
         return date3;
     }
@@ -62,7 +62,7 @@ public class ModelBean {
         date3 = newDate;
     }
 
-    protected Date date4;
+    protected Date date4 = new Date(System.currentTimeMillis());
     public Date getDate4() {
         return date4;
     }
