@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTag.java,v 1.52 2004/10/13 21:11:12 jayashri Exp $
+ * $Id: UIComponentTag.java,v 1.53 2004/12/08 15:59:37 edburns Exp $
  */
 
 /*
@@ -711,9 +711,11 @@ public abstract class UIComponentTag implements Tag {
                 }
                 parentComponent.getAttributes().put(CURRENT_VIEW_ROOT, 
                                                     CURRENT_VIEW_ROOT);
+		created = true;
             }
             else if (binding == null) {
                 setProperties(parentComponent);
+		created = false;
             }
 
 	    // this is not the first time this tag instance is trying to
