@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTag.java,v 1.46 2004/03/30 22:07:18 eburns Exp $
+ * $Id: UIComponentTag.java,v 1.47 2004/04/06 18:38:49 eburns Exp $
  */
 
 /*
@@ -869,14 +869,8 @@ public abstract class UIComponentTag implements Tag {
      *
      * <p>The default implementation overrides the following properties:</p>
      * <ul>
-     * <li><code>componentId</code> - Set if a value for the
-     *     <code>id</code> property is specified for
-     *     this tag handler instance.</li>
-     * <li><code>component</code> - Set if a value for the
-     *     <code>component</code> property is specified for
-     *     this tag handler instance.</li>
      * <li><code>rendered</code> - Set if a value for the
-     *     <code>rendererd</code> property is specified for
+     *     <code>rendered</code> property is specified for
      *     this tag handler instance.</li>
      * <li><code>rendererType</code> - Set if the <code>getRendererType()</code>
      *     method returns a non-null value.</li>
