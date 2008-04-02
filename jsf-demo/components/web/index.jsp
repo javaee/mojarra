@@ -38,9 +38,7 @@ Faces technology.</p>
 <td>
 <a href="ShowSource.jsp?filename=/src/components/taglib/MapTag.java">components/taglib/MapTag.java</a><br>
 <a href="ShowSource.jsp?filename=/src/components/taglib/AreaTag.java">components/taglib/AreaTag.java</a><br>
-<a href="ShowSource.jsp?filename=/src/components/taglib/ImageTag.java">components/taglib/ImageTag.java</a><br>
 <a href="ShowSource.jsp?filename=/src/components/components/UIArea.java">components/components/UIArea.java</a><br>
-<a href="ShowSource.jsp?filename=/src/components/components/UIImage.java">components/components/UIImage.java</a><br>
 <a href="ShowSource.jsp?filename=/src/components/components/UIMap.java">components/components/UIMap.java</a><br>
 <a href="ShowSource.jsp?filename=/src/components/model/ImageArea.java">components/model/ImageArea.java</a><br>
 <a href="ShowSource.jsp?filename=/src/components/renderkit/AreaRenderer.java">components/renderkit/AreaRenderer.java</a><br>

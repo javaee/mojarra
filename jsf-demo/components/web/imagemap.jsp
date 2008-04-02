@@ -63,7 +63,7 @@ causing the proper ResourceBundle lookup.</p>
 	     </tr>
              <tr>
               <TD>
-		<d:image id="mapImage" url="/images/world.gif" usemap="#worldMap" />	
+		<h:graphic_image id="mapImage" url="/images/world.gif" usemap="#worldMap" />	
 		<d:map id="worldMap" currentArea="NAmericas" >	
                     <f:action_listener type="demo.model.ImageMapEventHandler"/>
        			<d:area id="NAmericas" modelReference="NA" onmouseover="images/world_namer.gif" onmouseout="images/world.gif" />

@@ -57,7 +57,7 @@
 	     </tr>
              <tr>
               <TD>
-		<imageMap:image id="mapImage" url="/world.gif" usemap="#worldMap" />	
+		<h:graphic_image id="mapImage" url="/world.gif" usemap="#worldMap" />	
 		<imageMap:map id="worldMap" currentArea="NAmericas" >
                     <f:action_listener type="imageMap.ImageMapEventHandler"/> 	
        			<imageMap:area id="NAmericas" modelReference="NA" onmouseover="/imageMap/world_namer.gif" onmouseout="/imageMap/world.gif" />

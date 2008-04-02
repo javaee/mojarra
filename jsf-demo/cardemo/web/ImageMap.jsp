@@ -57,7 +57,7 @@
     <p><font color="blue"><h:output_text id="chooseLocale" key="chooseLocale" bundle="carDemoBundle" /></font> </p>
     <table>
           <tr> <td> 
-          <d:image id="mapImage" url="/world.jpg" usemap="#worldMap" />
+          <h:graphic_image id="mapImage" url="/world.jpg" usemap="#worldMap" />
                 <d:map id="worldMap" currentArea="NAmericas" >
                     <f:action_listener type="cardemo.ImageMapEventHandler"/> 
                         <d:area id="NAmericas" modelReference="NA" onmouseover="/cardemo/world_namer.jpg" onmouseout="/cardemo/world.jpg" />

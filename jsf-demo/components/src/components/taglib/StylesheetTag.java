@@ -45,7 +45,6 @@ import javax.faces.component.UIOutput;
 import javax.faces.webapp.FacesTag;
 import javax.faces.component.UIGraphic;
 
-import components.components.UIImage;
 
 /**
  * This class is the tag handler that evaluates the <code>stylesheet</code>

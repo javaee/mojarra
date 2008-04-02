@@ -22,25 +22,6 @@
   </description>
 
   <!-- ===================== ImageMap tags ====================== -->
-  <tag>
-    <name>image</name>
-    <tag-class>imageMapRender.ImageTag</tag-class>
-      <attribute>
-        <name>id</name>
-	<required>true</required>
-	<rtexprvalue>false</rtexprvalue>
-      </attribute>
-      <attribute>
-        <name>url</name>
-	<required>true</required>
-	<rtexprvalue>false</rtexprvalue>
-      </attribute>
-      <attribute>
-        <name>usemap</name>
-	<required>true</required>
-	<rtexprvalue>false</rtexprvalue>
-      </attribute>
-  </tag>
  <tag>
     <name>map</name>
     <tag-class>imageMapRender.MapTag</tag-class>

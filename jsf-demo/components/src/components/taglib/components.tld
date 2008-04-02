@@ -333,31 +333,6 @@
   </tag>
 
 
-  <tag>
-
-    <name>image</name>
-    <tag-class>components.taglib.ImageTag</tag-class>
-
-    <attribute>
-      <name>id</name>
-      <required>true</required>
-      <rtexprvalue>false</rtexprvalue>
-    </attribute>
-
-    <attribute>
-      <name>url</name>
-      <required>true</required>
-      <rtexprvalue>false</rtexprvalue>
-    </attribute>
-
-    <attribute>
-      <name>usemap</name>
-      <required>true</required>
-      <rtexprvalue>false</rtexprvalue>
-    </attribute>
-
-  </tag>
-
 
   <tag>
 
