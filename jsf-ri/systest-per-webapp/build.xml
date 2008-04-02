@@ -231,6 +231,10 @@
     </antcall>
 
     <antcall target="safe.remove.one">
+      <param name="context.path" value="/jsf-command-link-back-button"/>
+    </antcall>
+
+    <antcall target="safe.remove.one">
       <param name="context.path" value="/jsf-unique-view-id"/>
     </antcall>
 
@@ -269,6 +273,17 @@
       <param name="source.home" 
              value="${basedir}/command-link-redirect/src/java" />
       <param name="context.path" value="/jsf-command-link-redirect"/>
+
+    </antcall>
+
+    <antcall target="install.one">
+      <param name="webapp.build.home" 
+             value="${basedir}/command-link-back-button/build" />
+      <param name="webapp.web.home" 
+             value="${basedir}/command-link-back-button/web" />
+      <param name="source.home" 
+             value="${basedir}/command-link-back-button/src/java" />
+      <param name="context.path" value="/jsf-command-link-back-button"/>
 
     </antcall>
 
@@ -334,6 +349,17 @@
 
     <antcall target="reload.one">
       <param name="webapp.build.home" 
+             value="${basedir}/command-link-back-button/build" />
+      <param name="webapp.web.home" 
+             value="${basedir}/command-link-back-button/web" />
+      <param name="source.home" 
+             value="${basedir}/command-link-back-button/src/java" />
+      <param name="context.path" value="/jsf-command-link-back-button"/>
+
+    </antcall>
+
+    <antcall target="reload.one">
+      <param name="webapp.build.home" 
              value="${basedir}/unique-view-id/build" />
       <param name="webapp.web.home" 
              value="${basedir}/unique-view-id/web" />
@@ -365,6 +391,9 @@
     </antcall>
     <antcall target="safe.remove.one">
       <param name="context.path" value="/jsf-command-link-redirect"/>
+    </antcall>
+    <antcall target="safe.remove.one">
+      <param name="context.path" value="/jsf-command-link-back-button"/>
     </antcall>
     <antcall target="safe.remove.one">
       <param name="context.path" value="/jsf-unique-view-id"/>
@@ -402,6 +431,7 @@
     <delete    dir="${basedir}/replace-application/build"/>
     <delete    dir="${basedir}/el-performance/build"/>
     <delete    dir="${basedir}/command-link-redirect/build"/>
+    <delete    dir="${basedir}/command-link-back-button/build"/>
     <delete    dir="${basedir}/unique-view-id/build"/>
     <delete    dir="${basedir}/nested-datatables/build"/>
   </target>
