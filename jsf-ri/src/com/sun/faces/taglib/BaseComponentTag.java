@@ -1,5 +1,5 @@
 /*
- * $Id: BaseComponentTag.java,v 1.17 2004/01/08 21:21:36 eburns Exp $
+ * $Id: BaseComponentTag.java,v 1.18 2004/01/17 05:20:54 craigmcc Exp $
  */
 
 /*
@@ -32,7 +32,7 @@ import javax.servlet.jsp.JspException;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: BaseComponentTag.java,v 1.17 2004/01/08 21:21:36 eburns Exp $ 
+ * @version $Id: BaseComponentTag.java,v 1.18 2004/01/17 05:20:54 craigmcc Exp $ 
  */
 
 public abstract class BaseComponentTag extends UIComponentTag
@@ -907,7 +907,7 @@ public abstract class BaseComponentTag extends UIComponentTag
 
     protected String getDebugString() {
         String result = 
-	    "id: " + this.id + "\n " +
+	    "id: " + getId() + "\n " +
 	    "class: " + this.getClass().getName() + "\n ";
         return result;
     }

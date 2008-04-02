@@ -1,5 +1,5 @@
 /*
- * $Id: ViewTag.java,v 1.15 2004/01/15 21:34:03 eburns Exp $
+ * $Id: ViewTag.java,v 1.16 2004/01/17 05:20:55 craigmcc Exp $
  */
 
 /*
@@ -45,7 +45,7 @@ import com.sun.faces.util.Util;
  *  any renderers or attributes. It exists mainly to save the state of
  *  the response tree once all tags have been rendered.
  *
- * @version $Id: ViewTag.java,v 1.15 2004/01/15 21:34:03 eburns Exp $
+ * @version $Id: ViewTag.java,v 1.16 2004/01/17 05:20:55 craigmcc Exp $
  * 
  *
  */
@@ -292,7 +292,7 @@ public class ViewTag extends UIComponentBodyTag
 	    // must be updated before the JSTL setBundle tag is called
 	    // because that is when the new LocalizationContext object
 	    // is created based on the locale.
-	    Config.set((ServletRequest) context.getExternalContext().getRequest(), 
+	    Config.set((ServletRequest) getFacesContext().getExternalContext().getRequest(), 
 		       Config.FMT_LOCALE, viewLocale);
         }
 

@@ -1,5 +1,5 @@
 /*
- * $Id: PaneTabLabelTag.java,v 1.6 2003/12/17 15:19:15 rkitain Exp $
+ * $Id: PaneTabLabelTag.java,v 1.7 2004/01/17 05:20:21 craigmcc Exp $
  */
 
 /*
@@ -102,7 +102,8 @@ public class PaneTabLabelTag extends UIComponentTag {
         if (commandName != null) {
             if (isValueReference(commandName)) {
                 ValueBinding vb =
-                    context.getApplication().createValueBinding(commandName);
+                    getFacesContext().getApplication().
+		    createValueBinding(commandName);
                 component.setValueBinding("commandName", vb);
             } else {
                 component.getAttributes().put("commandName", commandName);
@@ -112,7 +113,8 @@ public class PaneTabLabelTag extends UIComponentTag {
         if (image != null) {
             if (isValueReference(image)) {
                 ValueBinding vb =
-                    context.getApplication().createValueBinding(image);
+                    getFacesContext().getApplication().
+		    createValueBinding(image);
                 component.setValueBinding("image", vb);
             } else {
                 component.getAttributes().put("image", image);
@@ -122,7 +124,8 @@ public class PaneTabLabelTag extends UIComponentTag {
         if (label != null) {
             if (isValueReference(label)) {
                 ValueBinding vb =
-                    context.getApplication().createValueBinding(label);
+                    getFacesContext().getApplication().
+		    createValueBinding(label);
                 component.setValueBinding("label", vb);
             } else {
                 component.getAttributes().put("label", label);

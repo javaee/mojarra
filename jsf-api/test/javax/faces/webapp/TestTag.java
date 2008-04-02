@@ -1,5 +1,5 @@
 /*
- * $Id: TestTag.java,v 1.4 2003/12/17 15:11:32 rkitain Exp $
+ * $Id: TestTag.java,v 1.5 2004/01/17 05:19:18 craigmcc Exp $
  */
 
 /*
@@ -69,7 +69,8 @@ public class TestTag extends UIComponentTag {
         if (label != null) {
             if (isValueReference(label)) {
                 ValueBinding vb =
-                    context.getApplication().createValueBinding(label);
+                    getFacesContext().getApplication().
+		    createValueBinding(label);
                 component.setValueBinding("label", vb);
             } else {
                 ((TestComponent) component).setLabel(label);

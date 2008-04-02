@@ -1,5 +1,5 @@
 /*
- * $Id: FacetTagTestCase.java,v 1.3 2004/01/08 21:21:28 eburns Exp $
+ * $Id: FacetTagTestCase.java,v 1.4 2004/01/17 05:19:18 craigmcc Exp $
  */
 
 /*
@@ -140,28 +140,6 @@ public class FacetTagTestCase extends TagTestCaseBase {
 
         rtag.doStartTag();
         ftag.setName("foo");
-        ftag.doStartTag();
-        ctag.doStartTag();
-
-        UIComponent component = rtag.getComponentInstance();
-        assertNotNull(component);
-        UIComponent facet = component.getFacet("foo");
-        assertNotNull(facet);
-        assertTrue(facet instanceof UIOutput);
-        
-        ctag.doEndTag();
-        ftag.doEndTag();
-        rtag.doEndTag();
-
-    }
-
-
-    // Test expression facet name
-    public void testExpression() throws Exception {
-
-        rtag.doStartTag();
-        ftag.setName("#{fooValue}");
-        request.setAttribute("fooValue", "foo");
         ftag.doStartTag();
         ctag.doStartTag();
 

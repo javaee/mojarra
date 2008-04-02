@@ -1,5 +1,5 @@
 /*
- * $Id: DataRepeaterTag.java,v 1.2 2003/12/17 15:19:14 rkitain Exp $
+ * $Id: DataRepeaterTag.java,v 1.3 2004/01/17 05:20:21 craigmcc Exp $
  */
 
 /*
@@ -119,7 +119,8 @@ public class DataRepeaterTag extends UIComponentTag {
         if (first != null) {
             if (isValueReference(first)) {
                 ValueBinding vb =
-                    context.getApplication().createValueBinding(first);
+                    getFacesContext().getApplication().
+		    createValueBinding(first);
                 component.setValueBinding("first", vb);
             } else {
                 ((UIData) component).setFirst(Integer.parseInt(first));
@@ -129,7 +130,8 @@ public class DataRepeaterTag extends UIComponentTag {
         if (rows != null) {
             if (isValueReference(rows)) {
                 ValueBinding vb =
-                    context.getApplication().createValueBinding(rows);
+                    getFacesContext().getApplication().
+		    createValueBinding(rows);
                 component.setValueBinding("rows", vb);
             } else {
                 ((UIData) component).setRows(Integer.parseInt(rows));
@@ -139,7 +141,8 @@ public class DataRepeaterTag extends UIComponentTag {
         if (styleClass != null) {
             if (isValueReference(styleClass)) {
                 ValueBinding vb =
-                    context.getApplication().createValueBinding(styleClass);
+                    getFacesContext().getApplication().
+		    createValueBinding(styleClass);
                 component.setValueBinding("styleClass", vb);
             } else {
                 component.getAttributes().put("styleClass", styleClass);
@@ -149,7 +152,8 @@ public class DataRepeaterTag extends UIComponentTag {
         if (value != null) {
             if (isValueReference(value)) {
                 ValueBinding vb =
-                    context.getApplication().createValueBinding(value);
+                    getFacesContext().getApplication().
+		    createValueBinding(value);
                 component.setValueBinding("value", vb);
             } else {
                 ((UIData) component).setValue(value);
@@ -159,7 +163,8 @@ public class DataRepeaterTag extends UIComponentTag {
         if (var != null) {
             if (isValueReference(var)) {
                 ValueBinding vb =
-                    context.getApplication().createValueBinding(var);
+                    getFacesContext().getApplication().
+		    createValueBinding(var);
                 component.setValueBinding("var", vb);
             } else {
                 ((UIData) component).setVar(var);

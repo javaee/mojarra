@@ -1,5 +1,5 @@
 /*
- * $Id: GenerateTaglib.java,v 1.8 2003/12/17 15:16:37 rkitain Exp $
+ * $Id: GenerateTaglib.java,v 1.9 2004/01/17 05:22:42 craigmcc Exp $
  */
 
 /*
@@ -376,10 +376,6 @@ public class GenerateTaglib extends GenerateTagBase {
 	result.append("        return result;\n");
 	result.append("    }\n\n");
 
-	result.append("    public String getId() {\n");
-	result.append("        return id;\n");
-	result.append("    }\n"); 
-
 	result.append("}\n");
 	    
 	return result.toString();
@@ -688,10 +684,6 @@ public class GenerateTaglib extends GenerateTagBase {
 	    result.append("        String result = "+res+";\n");
 	    result.append("        return result;\n");
 	    result.append("    }\n\n");
-
-	    result.append("    public String getId() {\n");
-	    result.append("        return id;\n");
-	    result.append("    }\n"); 
 
 	    result.append("}\n\n");
 

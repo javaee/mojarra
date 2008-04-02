@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTag.java,v 1.37 2004/01/15 23:13:28 eburns Exp $
+ * $Id: UIComponentTag.java,v 1.38 2004/01/17 05:19:16 craigmcc Exp $
  */
 
 /*
@@ -110,7 +110,7 @@ public abstract class UIComponentTag implements Tag {
      * <p>The {@link FacesContext} for the request being processed, if any.
      * </p>
      */
-    protected FacesContext context = null;
+    private FacesContext context = null;
 
 
     /**
@@ -138,7 +138,7 @@ public abstract class UIComponentTag implements Tag {
     /**
      * <p>The JSP <code>PageContext</code> for the page we are embedded in.</p>
      */
-    protected PageContext pageContext = null;
+    private PageContext pageContext = null;
 
 
     /**
@@ -177,7 +177,7 @@ public abstract class UIComponentTag implements Tag {
     /**
      * <p>The component identifier for the associated component.</p>
      */
-    protected String id = null;
+    private String id = null;
 
 
     /**
@@ -207,7 +207,7 @@ public abstract class UIComponentTag implements Tag {
      * <p>An override for the rendered attribute associated with our
      * {@link UIComponent}.</p>
      */
-    protected String rendered = null;
+    private String rendered = null;
 
 
     /**
@@ -767,6 +767,19 @@ public abstract class UIComponentTag implements Tag {
 
 
     /**
+     * <p>Return the {@link FacesContext} instance for the current
+     * request.  This value will be non-<code>null</code> only from the
+     * beginning of <code>doStartTag()</code> through the end of
+     * <code>doEndTag()</code> for each tag instance.</p>
+     */
+    protected FacesContext getFacesContext() {
+
+	return (context);
+
+    }
+
+
+    /**
      * <p>Return the facet name that we should be stored under, if any;
      * otherwise, return null (indicating that we will be a child component).
      * </p>
@@ -779,6 +792,16 @@ public abstract class UIComponentTag implements Tag {
         } else {
             return (null);
         }
+
+    }
+
+
+    /**
+     * <p>Return the <code>id</code> value assigned by the page author.</p>
+     */
+    protected String getId() {
+
+	return (id);
 
     }
 

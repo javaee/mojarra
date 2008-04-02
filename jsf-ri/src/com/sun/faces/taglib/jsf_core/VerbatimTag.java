@@ -1,5 +1,5 @@
 /*
- * $Id: VerbatimTag.java,v 1.4 2003/12/17 15:14:15 rkitain Exp $
+ * $Id: VerbatimTag.java,v 1.5 2004/01/17 05:20:55 craigmcc Exp $
  */
 
 /*
@@ -56,6 +56,7 @@ public class VerbatimTag extends UIComponentBodyTag {
 		component.getAttributes().put("escape", _escape ? Boolean.TRUE : Boolean.FALSE);
 	    }
 	}
+	component.setTransient(true);
     }    
 
     /**

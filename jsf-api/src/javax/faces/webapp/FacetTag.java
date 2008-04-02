@@ -1,5 +1,5 @@
 /*
- * $Id: FacetTag.java,v 1.9 2003/12/17 15:11:06 rkitain Exp $
+ * $Id: FacetTag.java,v 1.10 2004/01/17 05:19:16 craigmcc Exp $
  */
 
 /*
@@ -46,13 +46,7 @@ public class FacetTag extends TagSupport {
      */
     public String getName() {
 
-        if (UIComponentTag.isValueReference(name)) {
-            FacesContext context = FacesContext.getCurrentInstance();
-            ValueBinding vb = context.getApplication().createValueBinding(name);
-            return ((String) vb.getValue(context));
-        } else {
-            return (name);
-        }
+	return (name);
 
     }
     
