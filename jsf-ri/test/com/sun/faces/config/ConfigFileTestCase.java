@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigFileTestCase.java,v 1.13 2003/05/06 02:37:37 craigmcc Exp $
+ * $Id: ConfigFileTestCase.java,v 1.14 2003/05/06 03:30:46 eburns Exp $
  */
 
 /*
@@ -66,8 +66,6 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
     // --------------------------------------------------- Overall Test Methods
 
 
-    public void tearDown() {
-    }
 
 
     // ------------------------------------------------ Individual Test Methods
@@ -337,6 +335,9 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
     public void testInitParams() {
 	// clear out the attr that was set in the servletcontext attr set.
 	config.getServletContext().removeAttribute(RIConstants.CONFIG_ATTR);
+	// clear out the renderKit factory
+	FactoryFinder.releaseFactories();
+
 	final String paramVal = "config1.xml,config2.xml,/WEB-INF/faces-config.xml";
 
 	// work around a bug in cactus where calling
