@@ -1,5 +1,5 @@
 /*
- * $Id: LoginBean.java,v 1.7 2003/12/23 21:32:59 rkitain Exp $
+ * $Id: LoginBean.java,v 1.8 2004/02/03 21:44:41 jvisvanathan Exp $
  */
 
 /*
@@ -57,7 +57,7 @@ public class LoginBean {
     private ArrayList options = null;
     private ArrayList optionsGroup = null;
     
-    private Object currentOption = defaultOptions[4];
+    private String currentOption = defaultOptions[4];
     private Date date = new Date(System.currentTimeMillis());
     private String currentShipment = "nextMonth";
     private char charVal = 'e';
@@ -257,12 +257,12 @@ System.out.println("SETTING CURRENT OPTIONS IN CONSTRUCTOR...");
         optionsGroup = new ArrayList(newGroupOptions);
     }
 
-    public Object getCurrentOption() {
+    public String getCurrentOption() {
         System.out.println("get current option " + currentOption.toString());
         return currentOption;
     }
 
-    public void setCurrentOption(Object newCurrentOption) {
+    public void setCurrentOption(String newCurrentOption) {
         currentOption = newCurrentOption;
         System.out.println("set current option " + currentOption.toString());
     }

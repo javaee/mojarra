@@ -54,7 +54,7 @@
 
   <td>
     <h:selectManyMenu         id="disabledsMenu"
-                           value="#{SelectItemsData.disabled}">
+                           value="#{SelectItemsData.disabledSelected}">
       <f:selectItems       value="#{SelectItemsData.disableds}"/>
     </h:selectManyMenu>
   </td>
@@ -71,7 +71,7 @@
 
   <td>
     <h:selectManyMenu         id="nestedsMenu"
-                           value="#{SelectItemsData.nested}">
+                           value="#{SelectItemsData.nestedSelected}">
       <f:selectItems       value="#{SelectItemsData.nesteds}"/>
     </h:selectManyMenu>
   </td>

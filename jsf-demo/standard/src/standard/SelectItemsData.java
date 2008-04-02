@@ -1,5 +1,5 @@
 /*
- * $Id: SelectItemsData.java,v 1.1 2004/01/30 07:43:14 craigmcc Exp $
+ * $Id: SelectItemsData.java,v 1.2 2004/02/03 21:44:41 jvisvanathan Exp $
  */
 
 /*
@@ -90,6 +90,18 @@ public class SelectItemsData {
     private String nested;
     public String getNested() { return nested; }
     public void setNested(String nested) { this.nested = nested; }
+    
+    private String[] disabledSelected;
+    public String[] getDisabledSelected() { 
+        return disabledSelected; 
+    }
+    public void setDisabledSelected(String[] disabledSelected) { 
+        this.disabledSelected = disabledSelected; 
+    }
 
+
+    private String[] nestedSelected;
+    public String[] getNestedSelected() { return nestedSelected; }
+    public void setNestedSelected(String[] nested) { this.nestedSelected = nestedSelected; }
 
 }

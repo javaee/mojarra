@@ -55,7 +55,7 @@
 
   <td>
     <h:selectManyListbox      id="disabledsListbox"
-                           value="#{SelectItemsData.disabled}">
+                           value="#{SelectItemsData.disabledSelected}">
       <f:selectItems       value="#{SelectItemsData.disableds}"/>
     </h:selectManyListbox>
   </td>
@@ -72,7 +72,7 @@
 
   <td>
     <h:selectManyListbox      id="nestedsListbox"
-                           value="#{SelectItemsData.nested}">
+                           value="#{SelectItemsData.nestedSelected}">
       <f:selectItems       value="#{SelectItemsData.nesteds}"/>
     </h:selectManyListbox>
   </td>

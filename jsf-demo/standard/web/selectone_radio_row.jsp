@@ -13,7 +13,7 @@
 
 
              <td>
-                 <h:selectOneRadio id="shipType" layout="LINE_DIRECTION" 
+                 <h:selectOneRadio id="shipType" layout="lineDirection" 
                     value="nextDay" tabindex="30" title="shipType">
                 <f:selectItem itemValue="nextDay" itemLabel="Next Day"/>
                 <f:selectItem itemValue="nextWeek" itemLabel="Next Week" />
@@ -56,8 +56,7 @@
              <td>
                  <h:selectOneRadio id="radioFromModel"
                        value="#{LoginBean.currentOption}"
-                       title="options come from model"
-                       layout="LINE_DIRECTION" >
+                       title="options come from model">
 
                  <f:selectItems id="radioOptions" value="#{LoginBean.options}"/>
                 </h:selectOneRadio>
@@ -78,8 +77,7 @@
              <td>
                  <h:selectOneRadio id="radioLongOptions"
                        value="#{LoginBean.currentLongOption}"
-                       title="options come from model"
-                       layout="LINE_DIRECTION">
+                       title="options come from model">
                  
                 <f:selectItems id="longItemOptions" value="#{LoginBean.longList}"/>
                 </h:selectOneRadio>
@@ -109,8 +107,7 @@
              <td>
                  <h:selectOneRadio id="radioFromModelGroup"
                        value="#{LoginBean.currentOption}"
-                       title="options come from model"
-                       layout="LINE_DIRECTION" >
+                       title="options come from model">
 
                  <f:selectItems id="radioOptionsGroup" value="#{LoginBean.optionsGroup}"/>
                 </h:selectOneRadio>
@@ -139,12 +136,12 @@
 <tr>
 
   <td>
-    <h:outputText             id="nestedsRadioLabel"
+    <h:outputText             id="nestedsRadioLabel" 
                            value="Radio Buttons with nested options"/>
   </td>
 
   <td>
-    <h:selectOneRadio         id="nestedsRadio"
+    <h:selectOneRadio         id="nestedsRadio" layout="pageDirection"
                            value="#{SelectItemsData.nested}">
       <f:selectItems       value="#{SelectItemsData.nesteds}"/>
     </h:selectOneRadio>

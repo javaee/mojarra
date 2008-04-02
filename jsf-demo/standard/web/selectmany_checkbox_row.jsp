@@ -89,7 +89,7 @@
 
   <td>
     <h:selectManyCheckbox     id="disabledsCheckbox"
-                           value="#{SelectItemsData.disabled}">
+                           value="#{SelectItemsData.disabledSelected}">
       <f:selectItems       value="#{SelectItemsData.disableds}"/>
     </h:selectManyCheckbox>
   </td>
@@ -109,8 +109,8 @@
   </td>
 
   <td>
-    <h:selectManyCheckbox     id="nestedsCheckbox"
-                           value="#{SelectItemsData.nested}">
+    <h:selectManyCheckbox     id="nestedsCheckbox" layout="pageDirection"
+                           value="#{SelectItemsData.nestedSelected}">
       <f:selectItems       value="#{SelectItemsData.nesteds}"/>
     </h:selectManyCheckbox>
   </td>
