@@ -1,5 +1,5 @@
 /*
- * $Id: TestLifecycleImpl.java,v 1.23 2003/12/17 15:15:25 rkitain Exp $
+ * $Id: TestLifecycleImpl.java,v 1.24 2004/01/16 21:31:06 craigmcc Exp $
  */
 
 /*
@@ -41,7 +41,7 @@ import com.sun.faces.JspFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestLifecycleImpl.java,v 1.23 2003/12/17 15:15:25 rkitain Exp $
+ * @version $Id: TestLifecycleImpl.java,v 1.24 2004/01/16 21:31:06 craigmcc Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -141,6 +141,7 @@ public void testAnyPhaseWithListenerAndValidationFailure() {
 
     try {
 	life.execute(getFacesContext());
+	life.render(getFacesContext());
     }
     catch (Throwable e) {
 	e.printStackTrace();
@@ -182,6 +183,7 @@ public void testAnyPhaseWithListener() {
 
     try {
 	life.execute(getFacesContext());
+	life.render(getFacesContext());
     }
     catch (Throwable e) {
 	e.printStackTrace();
@@ -208,6 +210,7 @@ public void testAnyPhaseWithoutListener() {
 
     try {
 	life.execute(getFacesContext());
+	life.render(getFacesContext());
     }
     catch (Throwable e) {
 	e.printStackTrace();
@@ -240,6 +243,7 @@ public void testValidateWithListener() {
 
     try {
 	life.execute(getFacesContext());
+	life.render(getFacesContext());
     }
     catch (Throwable e) {
 	e.printStackTrace();
@@ -271,6 +275,7 @@ public void testValidateWithoutListener() {
 
     try {
 	life.execute(getFacesContext());
+	life.render(getFacesContext());
     }
     catch (Throwable e) {
 	e.printStackTrace();

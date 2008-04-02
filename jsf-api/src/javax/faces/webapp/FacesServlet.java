@@ -1,5 +1,5 @@
 /*
- * $Id: FacesServlet.java,v 1.17 2004/01/10 23:07:26 eburns Exp $
+ * $Id: FacesServlet.java,v 1.18 2004/01/16 21:30:15 craigmcc Exp $
  */
 
 /*
@@ -82,6 +82,7 @@ public final class FacesServlet implements Servlet {
      */
     public void destroy() {
 
+	application = null;
         facesContextFactory = null;
         lifecycle = null;
         servletConfig = null;
@@ -194,6 +195,7 @@ public final class FacesServlet implements Servlet {
         // Execute the request processing lifecycle for this request
         try {
             lifecycle.execute(context);
+	    lifecycle.render(context);
         } catch (FacesException e) {
             Throwable t = ((FacesException) e).getCause();
             if (t == null) {

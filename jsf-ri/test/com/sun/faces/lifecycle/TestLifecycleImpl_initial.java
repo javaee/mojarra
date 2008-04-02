@@ -1,5 +1,5 @@
 /*
- * $Id: TestLifecycleImpl_initial.java,v 1.20 2004/01/14 17:13:15 eburns Exp $
+ * $Id: TestLifecycleImpl_initial.java,v 1.21 2004/01/16 21:31:07 craigmcc Exp $
  */
 
 /*
@@ -22,7 +22,7 @@ import javax.faces.FacesException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestLifecycleImpl_initial.java,v 1.20 2004/01/14 17:13:15 eburns Exp $ 
+ * @version $Id: TestLifecycleImpl_initial.java,v 1.21 2004/01/16 21:31:07 craigmcc Exp $ 
  */
 
 public class TestLifecycleImpl_initial extends JspFacesTestCase
@@ -95,6 +95,7 @@ public void testExecuteInitial()
 
     try {
 	life.execute(getFacesContext());
+	life.render(getFacesContext());
     }
     catch (FacesException e) {
 	System.err.println("Root Cause: " + e.getCause());

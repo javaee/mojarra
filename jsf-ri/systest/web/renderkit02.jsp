@@ -47,6 +47,7 @@
     facesContext.renderResponse();
 
     lifecycle.execute(facesContext);
+    lifecycle.render(facesContext);
 
     // All tests passed
     //

@@ -49,6 +49,7 @@
     PhaseListener phaseListener = new ReloadPhaseListenerImpl(PhaseId.ANY_PHASE);
     lifecycle.addPhaseListener(phaseListener);
     lifecycle.execute(facesContext);
+    lifecycle.render(facesContext);
 
     String pageRefresh = System.getProperty("PageRefreshPhases");
     // All tests passed

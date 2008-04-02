@@ -42,6 +42,7 @@
     facesContext.renderResponse();
 
     lifecycle.execute(facesContext);
+    lifecycle.render(facesContext);
 
     // All tests passed
     out.println("/renderkit03.jsp PASSED");

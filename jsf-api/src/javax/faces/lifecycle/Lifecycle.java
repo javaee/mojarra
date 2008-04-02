@@ -1,5 +1,5 @@
 /*
- * $Id: Lifecycle.java,v 1.25 2003/10/30 23:04:57 craigmcc Exp $
+ * $Id: Lifecycle.java,v 1.26 2004/01/16 21:30:14 craigmcc Exp $
  */
 
 /*
@@ -50,6 +50,7 @@ public abstract class Lifecycle {
 
     /**
      * <p>Execute all of the phases of the request processing lifecycle,
+     * up to but not including the <em>Render Response</em> phase,
      * as described in the JavaServer Faces Specification, in the specified
      * order.  The processing flow can be affected (by the application,
      * by components, or by event listeners) by calls to the
@@ -86,6 +87,22 @@ public abstract class Lifecycle {
      *  is <code>null</code>
      */
     public abstract void removePhaseListener(PhaseListener listener);
+
+
+    /**
+     * <p>Execute the <em>Render Response</em> phase of the request
+     * processing lifecycle, unless the <code>responseComplete()</code>
+     * method has been called on the {@link FacesContext} instance
+     * associated with the current request.</p>
+     *
+     * @param context FacesContext for the request being processed
+     *
+     * @exception FacesException if an exception is thrown during the execution
+     *  of the request processing lifecycle
+     * @exception NullPointerException if <code>context</code>
+     *  is <code>null</code>
+     */
+    public abstract void render(FacesContext context) throws FacesException;
 
 
 }

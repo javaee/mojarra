@@ -1,5 +1,5 @@
 /*
- * $Id: ExternalContextImpl.java,v 1.19 2004/01/09 02:23:06 eburns Exp $
+ * $Id: ExternalContextImpl.java,v 1.20 2004/01/16 21:31:02 craigmcc Exp $
  */
 
 /*
@@ -22,6 +22,8 @@ import java.util.AbstractMap;
 
 import javax.faces.FacesException;
 import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
+
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -44,7 +46,7 @@ import com.sun.faces.util.Util;
  * servlet implementation.
  *
  * @author Brendan Murray
- * @version $Id: ExternalContextImpl.java,v 1.19 2004/01/09 02:23:06 eburns Exp $
+ * @version $Id: ExternalContextImpl.java,v 1.20 2004/01/16 21:31:02 craigmcc Exp $
  *
  */
 public class ExternalContextImpl extends ExternalContext {
@@ -205,6 +207,12 @@ public class ExternalContextImpl extends ExternalContext {
         return request.getLocale();
     }
 
+
+    public Iterator getRequestLocales() {
+        return (new LocalesIterator(request.getLocales()));
+    }
+
+
     public String getRequestPathInfo() {
         return (((HttpServletRequest) request).getPathInfo());
     }
@@ -293,6 +301,11 @@ public class ExternalContextImpl extends ExternalContext {
         }
     }
 
+    public void redirectMessage(String requestURI) throws IOException {
+	((HttpServletResponse) response).sendRedirect(requestURI);
+	FacesContext.getCurrentInstance().responseComplete();
+    }
+
     public void log(String message) {
         servletContext.log(message);
     }
@@ -316,6 +329,20 @@ public class ExternalContextImpl extends ExternalContext {
 
     public boolean isUserInRole(String role) {
 	return ((HttpServletRequest)request).isUserInRole(role);
+    }
+
+
+    private class LocalesIterator implements Iterator {
+
+	public LocalesIterator(Enumeration locales) {
+	    this.locales = locales;
+	}
+	private Enumeration locales;
+
+	public boolean hasNext() { return locales.hasMoreElements(); }
+	public Object next() { return locales.nextElement(); }
+	public void remove() { throw new UnsupportedOperationException(); }
+
     }
 
 

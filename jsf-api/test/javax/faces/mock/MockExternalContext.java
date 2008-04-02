@@ -1,5 +1,5 @@
 /*
- * $Id: MockExternalContext.java,v 1.8 2003/10/22 23:25:43 craigmcc Exp $
+ * $Id: MockExternalContext.java,v 1.9 2004/01/16 21:30:16 craigmcc Exp $
  */
 
 /*
@@ -11,6 +11,9 @@ package javax.faces.mock;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.Set;
@@ -134,6 +137,11 @@ public class MockExternalContext extends ExternalContext {
     }
     
 
+    public Iterator getRequestLocales() {
+        return (new LocalesIterator(request.getLocales()));
+    }
+    
+
     public String getRequestPathInfo() {
         throw new UnsupportedOperationException();
     }
@@ -144,11 +152,6 @@ public class MockExternalContext extends ExternalContext {
     }
 
     public String getRequestServletPath() {
-        throw new UnsupportedOperationException();
-    }
-
-
-    public Cookie[] getRequestCookies() {
         throw new UnsupportedOperationException();
     }
 
@@ -167,6 +170,11 @@ public class MockExternalContext extends ExternalContext {
 
 
     public Set getResourcePaths(String path) {
+        throw new UnsupportedOperationException();
+    }
+
+
+    public URL getResource(String path) throws MalformedURLException {
         throw new UnsupportedOperationException();
     }
 
@@ -197,6 +205,12 @@ public class MockExternalContext extends ExternalContext {
     }
 
     
+    public void redirectMessage(String requestURI)
+        throws IOException {
+        throw new UnsupportedOperationException();
+    }
+
+    
     public void log(String message) {
         context.log(message);
     }
@@ -221,6 +235,23 @@ public class MockExternalContext extends ExternalContext {
 
     public boolean isUserInRole(String role) {
         return (((HttpServletRequest) request).isUserInRole(role));
+    }
+
+
+    private class LocalesIterator implements Iterator {
+
+	public LocalesIterator(Enumeration locales) {
+	    this.locales = locales;
+	}
+
+	private Enumeration locales;
+
+	public boolean hasNext() { return locales.hasMoreElements(); }
+
+	public Object next() { return locales.nextElement(); }
+
+	public void remove() { throw new UnsupportedOperationException(); }
+
     }
 
 
