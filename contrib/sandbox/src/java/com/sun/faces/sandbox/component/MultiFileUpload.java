@@ -31,7 +31,7 @@ public class MultiFileUpload extends UIOutput {
     private Object[] _state = null;
     protected String buttonText = "Upload Files";
     protected String destinationUrl;
-    protected String fileFilter = "Text Files|txt";
+    protected String fileFilter = "";
     protected FileHolder fileHolder;
     protected String height = "250px";
     protected String maxFileSize = "0";

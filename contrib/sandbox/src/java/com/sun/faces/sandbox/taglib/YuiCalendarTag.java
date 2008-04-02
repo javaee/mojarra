@@ -142,7 +142,7 @@ public class YuiCalendarTag extends UIComponentTag {
     
     protected void setProperties(UIComponent component) {
         super.setProperties(component);
-        if (!(component instanceof YuiTree)) {
+        if (!(component instanceof YuiCalendar)) {
             throw new IllegalStateException("Component " + component.toString() + " not expected type.  Expected: com.sun.faces.sandbox.component.YuiTree.  Perhaps you're missing a tag?");
         }
         YuiCalendar cal = (YuiCalendar)component;

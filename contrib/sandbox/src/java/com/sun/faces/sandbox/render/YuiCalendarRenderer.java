@@ -86,7 +86,7 @@ public class YuiCalendarRenderer extends Renderer {
         YuiCalendar cal = (YuiCalendar) component;
         Date date = (Date) cal.getValue();
 
-        String javaScript = String.format("new YUISF.calendar('%sContainer','%sTrigger','%s','%s','%s',%s,%s,%s,%s,%s);",
+        String javaScript = String.format("new RISANDBOX.calendar('%sContainer','%sTrigger','%s','%s','%s',%s,%s,%s,%s,%s);",
                 component.getId(), component.getId(), clientId,
                 (date != null) ? new SimpleDateFormat("MM/yyyy").format(date) : "null",
                 (date != null) ? new SimpleDateFormat("MM/dd/yyyy").format(date) : "null",

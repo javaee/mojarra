@@ -1,8 +1,8 @@
-if (typeof YUISF == "undefined") {
-    YUISF = YAHOO.namespace("YUISF");
+if (typeof RISANDBOX == "undefined") {
+    RISANDBOX = YAHOO.namespace("RISANDBOX");
 }
 
-YUISF.calendar = function(divId, trigger, clientId, startMonth, selectedDate, multiSelect, showWeekdays,
+RISANDBOX.calendar = function(divId, trigger, clientId, startMonth, selectedDate, multiSelect, showWeekdays,
         startWeekday, showWeekHeader, showWeekFooter, hideBlankWeeks) {
     this.divId = divId;
     this.clientId = clientId;
@@ -35,7 +35,7 @@ YUISF.calendar = function(divId, trigger, clientId, startMonth, selectedDate, mu
     YAHOO.util.Event.addListener(trigger, "click", this.show, this, true);
 }
 
-YUISF.calendar.prototype.show = function() {
+RISANDBOX.calendar.prototype.show = function() {
     if (this.hidden == true) {
         this.calendar.show();
         this.hidden = false;

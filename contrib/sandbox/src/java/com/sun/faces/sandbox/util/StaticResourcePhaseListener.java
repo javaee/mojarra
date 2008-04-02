@@ -83,9 +83,9 @@ public class StaticResourcePhaseListener implements PhaseListener {
                                         os.write(buffer, 0, count);
                                     }
                                 }
-                                is.close();
-                                context.responseComplete();
                             }
+                            is.close();
+                            context.responseComplete();
                         } else {
                             response.sendError(404);
                         }

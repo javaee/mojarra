@@ -4,7 +4,7 @@
   "http://java.sun.com/dtd/facelet-taglib_1_0.dtd">
 
 <facelet-taglib>
-    <namespace>http://foo.com/foo</namespace>
+    <namespace>http://java.sun.com/jsf/ri/sandbox</namespace>
     <tag>
         <tag-name>dataTable</tag-name>
         <component>
