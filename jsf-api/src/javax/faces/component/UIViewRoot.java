@@ -1,5 +1,5 @@
 /*
- * $Id: UIViewRoot.java,v 1.21 2004/01/21 07:23:00 eburns Exp $
+ * $Id: UIViewRoot.java,v 1.22 2004/01/21 19:28:09 craigmcc Exp $
  */
 
 /*
@@ -32,14 +32,28 @@ import javax.faces.el.ValueBinding;
 public class UIViewRoot extends UIComponentBase {
 
 
-    // ------------------------------------------------------ Constants
+    // ------------------------------------------------------ Manifest Constants
     
+
+    /**
+     * <p>The standard component type for this component.</p>
+     */
+    public static final String COMPONENT_TYPE = "javax.faces.ViewRoot";
+
+
+    /**
+     * <p>The standard component family for this component.</p>
+     */
+    public static final String COMPONENT_FAMILY = "javax.faces.ViewRoot";
+
+
     /**
      * <p>The prefix that will be used for identifiers generated
      * by the <code>createUniqueId()</code> method.
      */
     static public final String UNIQUE_ID_PREFIX = "_id";
     
+
     // ------------------------------------------------------------ Constructors
 
 
