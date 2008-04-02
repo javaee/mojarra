@@ -38,16 +38,22 @@
 
 package components.renderkit;
 
-import java.util.Locale;
+
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 import javax.faces.component.UIComponent;
-import javax.faces.component.UIViewRoot;
 import javax.faces.component.UIForm;
-import javax.faces.context.ResponseWriter;
+import javax.faces.component.UIInput;
+import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
+import javax.faces.context.ResponseWriter;
+import javax.faces.convert.DateTimeConverter;
+
+import components.components.CalendarComponent;
+
 
 /**
  * <p>Renderer for {@link CalendarComponent} in an HTML environment.</p>
@@ -55,43 +61,30 @@ import javax.faces.context.FacesContext;
 
 public class CalendarRenderer extends BaseRenderer {
     
+
+    // -------------------------------------------------------- Renderer Methods
+
+
     /**
-     * Calendar dynamically generates children components for which
-     * it is responsible.
+     * <p>{@link CalendarComponent}  dynamically generates children components
+     * for which it is responsible.</p>
      */
     public boolean getRendersChildren() {
-        return true;
+
+        return (true);
+
     }
     
-    //**************************************************************************
-    // Rendering methods
     
     public void encodeBegin(FacesContext context, UIComponent component)
-    throws IOException {
+        throws IOException {
+
         super.encodeBegin(context, component);
-        //com.sun.faces.util.DebugUtil.printTree(component.getParent(), System.out);
         
         UIComponent calendar = component;
         ResponseWriter writer = context.getResponseWriter();
-        String contextPath = context.getExternalContext().getRequestContextPath();
-        contextPath = contextPath + "/";
-        
-        // <link rel="STYLESHEET" type="text/css" href="styles/calendar.css"/>
-        // FIXME --> Ideally should only appear once on a page if multiple calendar tags
-        writer.startElement("link", calendar);
-        writer.writeAttribute("rel", "STYLESHEET", null);
-        writer.writeAttribute("type", "text/css", null);
-        writer.writeURIAttribute("href", contextPath + "images/calendar.css", null);
-        writer.endElement("link");
-        
-        // <script language="JavaScript" src="javascript/simplecalendar.js" type="text/javascript"/>
-        // FIXME --> Ideally should only appear once on a page if multiple calendar tags
-        writer.startElement("script", calendar);
-        writer.writeAttribute("language", "JavaScript", null);
-        writer.writeAttribute("type", "text/javascript", null);
-        writer.writeURIAttribute("src", contextPath + "images/simplecalendar.js", null);
-        writer.endElement("script");
-        
+
+        // Render the pre-field markup
         // <table border="0" cellspacing="0" cellpadding="0">
         //   <tr>
         //     <td>
@@ -103,8 +96,16 @@ public class CalendarRenderer extends BaseRenderer {
         writer.startElement("td", calendar);
         
         // The child UIInput component will be rendered under this <td>
+
+        // Update the Locale of the converter for our date component
+        UIInput date = (UIInput) component.findComponent("date");
+        DateTimeConverter conv = (DateTimeConverter) date.getConverter();
+        conv.setLocale(context.getViewRoot().getLocale());
+        date.setSubmittedValue(null);
+
     }
     
+
     public void encodeEnd(FacesContext context, UIComponent component)
     throws IOException {
         super.encodeEnd(context, component);
@@ -112,12 +113,11 @@ public class CalendarRenderer extends BaseRenderer {
         UIComponent calendar = component;
         ResponseWriter writer = context.getResponseWriter();
         String contextPath = context.getExternalContext().getRequestContextPath();
-        contextPath = contextPath + "/";
         
         // Get formatting used according to locale so we can set the
         // DHTML to the same.
         Locale locale = context.getViewRoot().getLocale();
-        String dateFormatPattern = "MM/dd/yy";
+        String dateFormatPattern = "MM/dd/yyyy";
         DateFormat format = DateFormat.getDateInstance(DateFormat.SHORT, locale);
         if (format instanceof SimpleDateFormat) {
             dateFormatPattern = ((SimpleDateFormat)format).toLocalizedPattern();
@@ -129,7 +129,7 @@ public class CalendarRenderer extends BaseRenderer {
         
         // <td>
         //   <a href="javascript: void(0);"
-        //      onClick="g_Calendar.show(event, form_o_date, false); return false;">
+        //      onclick="g_Calendar.show(event, form_o_date, false); return false;">
         //   <img src="..." ... />
         //   </a>
         // </td>
@@ -142,9 +142,10 @@ public class CalendarRenderer extends BaseRenderer {
         writer.startElement("td", calendar);
         writer.startElement("a", calendar);
         writer.writeAttribute("href", "javascript: void(0);", null);
-        writer.writeAttribute("onClick", "g_Calendar.show(event, document." + formName + "[\"" + dateName + "\"], false, '" + dateFormatPattern + "'); return false;", null);//FIXME
+        // writer.writeAttribute("onclick", "g_Calendar.show(event, document." + formName + "[\"" + dateName + "\"], false, '" + dateFormatPattern + "'); return false;", null);//FIXME
+        writer.writeAttribute("onclick", "g_Calendar.show(event, document." + formName + "['" + dateName + "'], false, '" + dateFormatPattern + "'); return false;", null);//FIXME
         writer.startElement("img", calendar);
-        writer.writeURIAttribute("src", contextPath + "images/calendar.gif", null);
+        writer.writeURIAttribute("src", contextPath + "/images/calendar.gif", null);
         writer.writeAttribute("name", "imgCalendar", null);
         writer.writeAttribute("width", "34", null);
         writer.writeAttribute("height", "21", null);
@@ -160,17 +161,6 @@ public class CalendarRenderer extends BaseRenderer {
         writer.endElement("table");
     }
     
-    //**************************************************************************
-    // Utility methods
-    
-    protected UIForm getMyForm(FacesContext context, UIComponent component) {
-        UIComponent parent = component.getParent();
-        while (parent != null) {
-            if (parent instanceof UIForm) {
-                break;
-            }
-            parent = parent.getParent();
-        }
-        return (UIForm) parent;
-    }
+
+
 }

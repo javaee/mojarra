@@ -248,25 +248,16 @@
 
     <!-- copy the java source to the webapp for viewing by the user -->
     <copy todir="${build}/${webapp}/src/components">
-      <fileset dir="src/components" excludes="components/CalendarComponent.java,
-              taglib/CalendarTag.java,renderkit/CalendarRenderer.java" />
+      <fileset dir="src/components"/>
     </copy>
     <copy todir="${build}/${webapp}/src/demo">
-      <fileset dir="src/demo" excludes="model/CalendarBean.java"/>    
-   </copy>
+      <fileset dir="src/demo"/>    
+    </copy>
     <copy todir="${build}/${webapp}/WEB-INF" file="src/demo/taglib/demo.tld"/>
 
-     <copy todir="${build}/${webapp}">
-         <fileset dir="web" excludes="calendar.jsp,images/calendar.css,
-              images/calendar.gif,images/simplecalendar.js,images/up.gif,
-              images/down.gif"/> 
-     </copy>
-
-     <!-- Remove All calendar demo class files -->
-     <delete file="${build}/classes/components/components/components/CalendarComponent.class" />
-     <delete file="${build}/classes/components/components/renderkit/CalendarRenderer.class" />
-     <delete file="${build}/classes/components/components/taglib/CalendarTag.class" />
-     <delete file="${build}/${webapp}/WEB-INF/classes/demo/model/CalendarBean.class" />
+    <copy todir="${build}/${webapp}">
+      <fileset dir="web"/> 
+    </copy>
         
     <jar jarfile="${build}/${webapp}/WEB-INF/lib/demo-components.jar" 
 	 basedir="${build}/classes/components"/>

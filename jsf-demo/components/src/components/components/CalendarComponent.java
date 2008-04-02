@@ -38,6 +38,7 @@
 
 package components.components;
 
+
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
@@ -45,17 +46,16 @@ import java.util.Set;
 import javax.faces.component.UIComponentBase;
 import javax.faces.context.FacesContext;
 
+
 /**
- * <p>CalendarComponent is a JavaServer Faces component that is essentially
- * a UIInput component specialized for dates and augmented
- * with a graphical representation of a calendar to ease the selection of
- * a specific date.<p>
+ * <p>CalendarComponent is a JavaServer Faces component that accepts date
+ * input either via a text box or a JavaScript enabled graphical representation
+ * of a month-view calendar.</p>
  */
 
 public class CalendarComponent extends UIComponentBase {
-    
-    // FIXME: eventually, we'll have more properties here...
-    
+
+
     /**
      * <p>Return the component family for this component.</p>
      */

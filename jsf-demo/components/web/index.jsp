@@ -67,6 +67,29 @@ Faces technology.</p>
 <th>Execute JSP</th></tr>
 
 <tr>
+
+<td>Calendar
+</td>
+
+<td>
+<a href="ShowSource.jsp?filename=/calendar.jsp"><img src="images/code.gif" width="24" height="24" border="0"></a>
+<a href="ShowSource.jsp?filename=/images/calendar.css"><img src="images/code.gif" width="24" height="24" border="0"></a>
+<a href="ShowSource.jsp?filename=/images/simplecalendar.js"><img src="images/code.gif" width="24" height="24" border="0"></a>
+</td>
+
+<td>
+<a href="ShowSource.jsp?filename=/src/components/components/CalendarComponent.java">components/components/CalendarComponent.java</a><br>
+<a href="ShowSource.jsp?filename=/src/components/renderkit/CalendarRenderer.java">components/renderkit/CalendarRenderer.java</a><br>
+<a href="ShowSource.jsp?filename=/src/components/taglib/CalendarTag.java">components/taglib/CalendarTag.java</a><br>
+<a href="ShowSource.jsp?filename=/src/demo/model/CalendarBean.java">demo/model/CalendarBean.java</a>
+</td>
+
+<td><a href="calendar.jsf"><img src="images/execute.gif" width="24" height="24" border="0"></a>
+</td>
+
+</tr>
+
+<tr>
 <td>Image Map
 </td>
 

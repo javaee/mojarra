@@ -38,6 +38,7 @@
 
 package demo.model;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.ResourceBundle;
 import java.util.Locale;
@@ -49,6 +50,8 @@ import javax.servlet.jsp.jstl.fmt.LocaleSupport;
 import javax.faces.context.FacesContext;
 import javax.faces.application.FacesMessage;
 
+import components.components.CalendarComponent;
+
 /**
  * <p>Backing file for the Calendar demo.</p>
  * The model simply consists in a Date object, and we
@@ -56,7 +59,7 @@ import javax.faces.application.FacesMessage;
  * as well as set the locale.</p>
  */
 
-public class CalendarBean {
+public class CalendarBean implements Serializable {
     
     //**************************************************************************
     // Constructor
@@ -67,6 +70,13 @@ public class CalendarBean {
     public CalendarBean() {
         this.date = new Date();
     }
+
+    //**************************************************************************
+    // Component binding
+    private transient CalendarComponent calendar = null;
+    public CalendarComponent getCalendar() { return calendar; }
+    public void setCalendar(CalendarComponent calendar)
+    { this.calendar = calendar; }
 
     //**************************************************************************
     // Model processing
@@ -113,8 +123,10 @@ public class CalendarBean {
     // Utility methods
     
     private void setLocale(String locale) {
+        Date date = getDate();
         FacesContext context = FacesContext.getCurrentInstance();
         context.getViewRoot().setLocale(new Locale(locale, ""));
+        setDate(date);
     }
 
     /**

@@ -1,23 +1,53 @@
-	/*
-	*****************************************************************************************************
-	Author : Lea Smart
-	Source : www.totallysmartit.com
-	Date : 7/3/2001
-	DHTML Calendar
-	Version 1.2
+/* ****************************************************************************
+
+Copyright (c) 2001-2004 Lea Smart. All Rights Reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+- Redistribution of source code must retain the above copyright notice,
+  this list of conditions and the following disclaimer.
+
+- Redistribution in binary form must reproduce the above copyright notice,
+  this list of conditions and the following disclaimer in the documentation
+  and/or other materials provided with the distribution.
+
+This software is provided "AS IS," without a warranty of any kind. ALL
+EXPRESS OR IMPLIED CONDITIONS, REPRESENTATIONS AND WARRANTIES, INCLUDING ANY
+IMPLIED WARRANTY OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE OR
+NON-INFRINGEMENT, ARE HEREBY EXCLUDED. THE AUTHOR OF THIS SOFTWARE SHALL
+NOT BE LIABLE FOR ANY DAMAGES SUFFERED BY LICENSEE AS A RESULT OF USING,
+MODIFYING OR DISTRIBUTING THIS SOFTWARE OR ITS DERIVATIVES. IN NO EVENT
+WILL  THE AUTHOR OF THIS SOFTWARE HIS LICENSORS BE LIABLE FOR ANY LOST
+REVENUE, PROFIT OR DATA, OR FOR DIRECT, INDIRECT, SPECIAL, CONSEQUENTIAL,
+INCIDENTAL OR PUNITIVE DAMAGES, HOWEVER CAUSED AND REGARDLESS OF THE
+THEORY OF LIABILITY, ARISING OUT OF THE USE OF OR INABILITY TO USE THIS
+SOFTWARE, EVEN IF  THE AUTHOR OF THIS SOFTWARE  HAS BEEN ADVISED OF THE
+POSSIBILITY OF SUCH DAMAGES. 
+
+You acknowledge that this software is not designed, licensed or intended
+for use in the design, construction, operation or maintenance of any nuclear
+facility.
+
+********************************************************************************
+
+Author : Lea Smart
+Source : www.totallysmartit.com
+Date : 7/3/2001
+DHTML Calendar
+Version 1.2
 	
-	You are free to use this code if you retain this header.
-	You do not need to link to my site (be nice though!)
-	
-	Amendments
-	22 Jan 2002; Added ns resize bug code; rewrote date functions into Date 'class';
-				 Added support for yyyy-mm-dd date format
-				 Added support for calendar beginning on any day
-	7th Feb 2002 Fixed day highlight when year wasn't current year bug
-	9th Jun 2002 Fixed bug with weekend colour
-				 Amended the code for the date functions extensions.  Shortened addDays code considerably
-	*****************************************************************************************************
-	*/
+Amendments
+22 Jan 2002; Added ns resize bug code; rewrote date functions into Date 'class';
+	     Added support for yyyy-mm-dd date format
+	     Added support for calendar beginning on any day
+7th Feb 2002 Fixed day highlight when year wasn't current year bug
+9th Jun 2002 Fixed bug with weekend colour
+	     Amended the code for the date functions extensions.  Shortened
+             addDays code considerably
+
+***************************************************************************** */
+
 	var timeoutDelay = 2000; // milliseconds, change this if you like, set to 0 for the calendar to never auto disappear
 	var g_startDay = 0// 0=sunday, 1=monday
 	
@@ -136,7 +166,10 @@
 	}
 	 
 	Calendar.prototype.buildString = function(){
+          /*
 	  var tmpStr = '<form onSubmit="this.year.blur();return false;"><table width="100%" border="0" cellspacing="0" cellpadding="2" class="calBorderColor"><tr><td valign="top"><table width="100%" border="0" cellspacing="0" cellpadding="1" class="calBgColor">';
+          */
+	  var tmpStr = '<table width="100%" border="0" cellspacing="0" cellpadding="2" class="calBorderColor"><tr><td valign="top"><table width="100%" border="0" cellspacing="0" cellpadding="1" class="calBgColor">';
 	  tmpStr += '<tr>';
 	  tmpStr += '<td width="60%" class="cal" align="left">';
 	  if (this.hasDropDown) {
@@ -209,7 +242,10 @@
 		 }
 		 tmpStr += '</tr>'
 	  }
+          /*
 	  tmpStr += '</table></td></tr></table></form>'
+          */
+	  tmpStr += '</table></td></tr></table>'
 	  return tmpStr;
 	}
 	
@@ -257,7 +293,6 @@
 	}
 	Calendar.prototype.formatDateAsString = function(day, month, year){
 	  var delim = eval('/\\' + this.dateDelim + '/g');
-           //alert(this.dateFormat.replace(delim,""));
 	   switch (this.dateFormat.replace(delim,"")){
 	     case 'ddmmmyyyy': return padZero(day) + this.dateDelim + this.monthsLoc[this.langId][month].substr(0,3) + this.dateDelim + year;
 		 case 'ddmmyyyy': return padZero(day) + this.dateDelim + padZero(month+1) + this.dateDelim + year;

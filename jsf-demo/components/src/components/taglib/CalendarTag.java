@@ -64,12 +64,15 @@ public class CalendarTag extends UIComponentTag {
     }
     
     private void init() {
-        value = null;
-        displayStyle = null;
-        requiredSpecified = false;
         dateStyle = null;
-        locale = null;
+        immediateSpecified = false;
+        maxlengthSpecified = false;
         pattern = null;
+        requiredSpecified = false;
+        sizeSpecified = false;
+        style = null;
+        styleClass = null;
+        value = null;
     }
     
     public void release() {
@@ -80,14 +83,28 @@ public class CalendarTag extends UIComponentTag {
     //*********************************************************************
     // Tag attributes and their setters
     
-    private String value;
-    public void setValue(String value) {
-        this.value = value;
+    private String dateStyle;
+    public void setDateStyle(String dateStyle) {
+        this.dateStyle = dateStyle;
     }
     
-    private String displayStyle;
-    public void setDisplayStyle(String displayStyle) {
-        this.displayStyle = displayStyle;
+    private boolean immediate;
+    private boolean immediateSpecified = false;
+    public void setImmediate(boolean immediate) {
+        this.immediate = immediate;
+        immediateSpecified = true;
+    }
+
+    private int maxlength;
+    private boolean maxlengthSpecified = false;
+    public void setMaxlength(int maxlength) {
+        this.maxlength = maxlength;
+        maxlengthSpecified = true;
+    }
+
+    private String pattern = null;
+    public void setPattern(String pattern) {
+        this.pattern = pattern;
     }
     
     private boolean required;
@@ -97,19 +114,26 @@ public class CalendarTag extends UIComponentTag {
         requiredSpecified = true;
     }
     
-    private String dateStyle;
-    public void setDateStyle(String dateStyle) {
-        this.dateStyle = dateStyle;
+    private int size;
+    private boolean sizeSpecified = false;
+    public void setSize(int size) {
+        this.size = size;
+        sizeSpecified = true;
     }
-    
-    private Locale locale = null;
-    public void setLocale(Locale locale) {
-        this.locale = locale;
+
+    private String style = null;
+    public void setStyle(String style) {
+        this.style = style;
     }
-    
-    private String pattern = null;
-    public void setPattern(String pattern) {
-        this.pattern = pattern;
+
+    public String styleClass = null;
+    public void setStyleClass(String styleClass) {
+        this.styleClass = styleClass;
+    }
+
+    private String value;
+    public void setValue(String value) {
+        this.value = value;
     }
     
     //*********************************************************************
@@ -139,37 +163,47 @@ public class CalendarTag extends UIComponentTag {
             // We add the UIInput component to the tree only if it does not
             // already exist.
             textComp = new UIInput();
-            textComp.setRendererType("Text");  
-            textComp.getAttributes().put("id", "date"); //FIXME -> id
+            textComp.setRendererType("javax.faces.Text");  
+            textComp.setId("date");
             DateTimeConverter converter = (DateTimeConverter)
-            FacesContext.getCurrentInstance().getApplication().createConverter("DateTime");
+                FacesContext.getCurrentInstance().getApplication().
+                createConverter("javax.faces.DateTime");
             textComp.setConverter(converter);
             component.getChildren().add(textComp);
         }
         
-        // Calendar
-        processAttribute(component, "displayStyle", displayStyle);
+        // Calendar attributes from tag attributes
         
-        // UIInput from tag attributes
-        processAttributeRef(textComp, "value", value);        
-        processAttribute(textComp, "required", new Boolean(required), requiredSpecified);
-
-        // UIInput properties 'hard coded'
+        // UIInput attributes with hard coded defaults
         textComp.getAttributes().put("size", new Integer(8));
         textComp.getAttributes().put("maxlength", new Integer(8));
         
-        // DateTimeConverter properties from tag attributes
-        DateTimeConverter converter = (DateTimeConverter)textComp.getConverter();
-        /* FIXME to allow more flexibility
-        if (dateStyle != null) {
-            converter.setDateStyle(dateStyle);
-        }
-         */
+        // UIInput attributes from tag attributes (VB-enabled)
+        processAttributeRef(textComp, "style", style);
+        processAttributeRef(textComp, "styleClass", styleClass);
+        processAttributeRef(textComp, "value", value);        
+
+        // UIInput attributes from tag attributes (PENDING: not VB enabled)
+        processAttribute(textComp, "immediate",
+                         new Boolean(immediate), immediateSpecified);
+        processAttribute(textComp, "maxlength",
+                         new Integer(maxlength), maxlengthSpecified);
+        processAttribute(textComp, "required",
+                         new Boolean(required), requiredSpecified);
+        processAttribute(textComp, "size",
+                         new Integer(size), sizeSpecified);
+
+        // DateTimeConverter properties with hard coded defaults
+        DateTimeConverter converter = (DateTimeConverter)
+            textComp.getConverter();
         converter.setDateStyle("short");
+        converter.setType("date");
         TimeZone tz = TimeZone.getTimeZone("PST");
         converter.setTimeZone(tz);
-        if (locale != null) {
-            converter.setLocale(locale);
+
+        // DateTimeConverter properties from tag attributes (not VB-enabled)
+        if (dateStyle != null) {
+            converter.setDateStyle(dateStyle);
         }
         if (pattern != null) {
             converter.setPattern(pattern);

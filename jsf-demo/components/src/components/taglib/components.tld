@@ -74,7 +74,7 @@
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
       <description>
-        Component reference expression for this component.
+        Value binding expression to bind this component to a backing bean.
       </description>
     </attribute>
 
@@ -158,7 +158,7 @@
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
       <description>
-        Value reference expression pointing at an ImageArea bean describing
+        Value binding expression pointing at an ImageArea bean describing
         the characteristics of this hotspot.  If not present, an ImageArea
         bean will be synthesized from the values of the alt, coords, and
         shape attributes.
@@ -183,7 +183,7 @@
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
       <description>
-        Component reference expression for this component.
+        Value binding expression to bind this component to a backing bean.
       </description>
     </attribute>
 
@@ -194,6 +194,141 @@
       <description>
         Fully qualified name of a JavaBean class (which must implement
         components.components.AreaSelectedListener) to be registered.
+      </description>
+    </attribute>
+
+  </tag>
+
+
+  <tag>
+
+    <name>calendar</name>
+    <tag-class>components.taglib.CalendarTag</tag-class>
+    <body-content>JSP</body-content>
+    <description>
+      This tag creates a calendar component that accepts data input
+      from either a textbox or a JavaScript enabled graphical representation
+      of a month-at-a-time calendar.
+    </description>
+
+    <attribute>
+      <name>binding</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Value binding expression to bind this component to a backing bean.
+      </description>
+    </attribute>
+
+    <attribute>
+      <name>dateStyle</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        The dateStyle to be used for rendering the date in the text box.
+        Valid values are "default", "short", "medium", "long", and "full".
+        Default value is "short".
+      </description>
+    </attribute>
+
+    <attribute>
+      <name>id</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Component id of this component.
+      </description>
+    </attribute>
+
+    <attribute>
+      <name>immediate</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Flag indicating that conversion and validation (if any) of this
+        component should happen immediately (that is, during the Apply
+        Request Values phase of the request processing lifecycle), instead
+        of waiting for Process Validations phase.  The default value of this
+        property is false.
+      </description>
+    </attribute>
+    
+    <attribute>
+      <name>maxlength</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        The maximum length of input allowed for the text field.  If not
+        specified, the default value is 8.
+      </description>
+    </attribute>
+    
+    <attribute>
+      <name>pattern</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Formatting pattern to be used for rendering the date in the text box.
+        Valid values are those accepted by javax.text.SimpleDateFormat.  If
+        not specified, the "dateStyle" attribute controls formatting.
+      </description>
+    </attribute>
+
+    <attribute>
+      <name>rendered</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Flag indicating whether or not this component should be rendered.
+        If not specified, the default value is "true".
+      </description>
+    </attribute>
+
+    <attribute>
+      <name>required</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Flag indicating that the user is required to select
+        a value for this component.
+      </description>
+    </attribute>
+
+    <attribute>
+      <name>size</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        The character width of the text field.  If not
+        specified, the default value is 8.
+      </description>
+    </attribute>
+    
+    <attribute>
+      <name>style</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        CSS style(s) to be applied to this component.
+      </description>
+    </attribute>
+
+    <attribute>
+      <name>styleClass</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        CSS style class(es) to be applied to this component.
+      </description>
+    </attribute>
+
+    <attribute>
+      <name>value</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Value or value binding expression pointing at a
+        java.util.Date instance.
       </description>
     </attribute>
 
@@ -217,7 +352,7 @@
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
       <description>
-        Component reference expression for this component.
+        Value binding expression to bind this component to a backing bean.
       </description>
     </attribute>
 
@@ -276,7 +411,7 @@
       <required>true</required>
       <rtexprvalue>false</rtexprvalue>
       <description>
-        Value reference expression pointing at (a) a DataModel instance,
+        Value binding expression pointing at (a) a DataModel instance,
         (b) an array of objects, (c) a List of objects, (d) a
         java.sql.ResultSet (or RowSet), (d) a javax.servlet.jsp.jstl.sql.Result
         object, or (e) a JavaBean (which will be treated as a one-row dataset).
@@ -303,7 +438,7 @@
     <tag-class>components.taglib.GraphMenuBarTag</tag-class>
     <body-content>JSP</body-content>
     <description>
-      Render a components.model.Graph (referenced by the current value of a
+      Render a components.model.Graph (bindingd by the current value of a
       UIOutput component) as a menu bar (whose items are from the children
       of the root node of the graph), with expanded menus (and submenus)
       underneath.
@@ -314,7 +449,7 @@
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
       <description>
-        Component reference expression for this component.
+        Value binding expression to bind this component to a backing bean.
       </description>
     </attribute>
 
@@ -323,7 +458,7 @@
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
       <description>
-         Optional method binding reference to handle tree expansion and contraction events.
+         Optional method binding binding to handle tree expansion and contraction events.
       </description>
     </attribute>
 
@@ -404,7 +539,7 @@
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
       <description>
-        Component reference expression for this component.
+        Value binding expression to bind this component to a backing bean.
       </description>
     </attribute>
 
@@ -452,7 +587,7 @@
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
       <description>
-        Model reference expression pointing at a components.model.Graph instance.
+        Model binding expression pointing at a components.model.Graph instance.
       </description>
     </attribute>
 
@@ -490,7 +625,7 @@
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
       <description>
-        Component reference expression for this component.
+        Value binding expression to bind this component to a backing bean.
       </description>
     </attribute>
 
@@ -566,7 +701,7 @@
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
       <description>
-        Component reference expression for this component.
+        Value binding expression to bind this component to a backing bean.
       </description>
     </attribute>
 
@@ -645,7 +780,7 @@
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
       <description>
-        Component reference expression for this component.
+        Value binding expression to bind this component to a backing bean.
       </description>
     </attribute>
 
@@ -717,7 +852,7 @@
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
       <description>
-        Component reference expression for this component.
+        Value binding expression to bind this component to a backing bean.
       </description>
     </attribute>
 
@@ -777,7 +912,7 @@
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
       <description>
-        Component reference expression for this component.
+        Value binding expression to bind this component to a backing bean.
       </description>
     </attribute>
 
@@ -827,7 +962,7 @@
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
       <description>
-        Component reference expression for this component.
+        Value binding expression to bind this component to a backing bean.
       </description>
     </attribute>
 
@@ -899,7 +1034,7 @@
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
       <description>
-        Component reference expression for this component.
+        Value binding expression to bind this component to a backing bean.
       </description>
     </attribute>
 
@@ -966,7 +1101,7 @@
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
       <description>
-        Component reference expression for this component.
+        Value binding expression to bind this component to a backing bean.
       </description>
     </attribute>
 
